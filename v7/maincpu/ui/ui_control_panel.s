@@ -535,7 +535,7 @@ AcFileSfx_HandleSfxEvent:
 	ldw (xsp + 4), 0x1
 
 AcFileSfx_DrawLoop:
-	lda xhl, (AcFileSfx_DrawLoop_PtrTable:24)
+	lda xhl, (AcFileSfx_BitLabelPtrs:24)
 	ld xwa, (xsp + 8)
 	lda xix, (xwa + 22)
 	lda xwa, (xsp + 16)

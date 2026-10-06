@@ -103,6 +103,35 @@ extern const char VwBoxProc;
 /* ChangeWall_WallpaperRecords's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* TitleProc_EasySetHold0Tail's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* TitleProc_EasySetHold1to11's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* AcFileSfx_BitLabels's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* PsTrkSw_AssignNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaMode_InitRecord's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Title_RecordTemplate's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t title_proc_id;
+    uint32_t start_screen;
+    int16_t user_id;
+    uint32_t name;
+    uint32_t return_screen;
+    int16_t interrupt_prev;
+    int16_t interrupt_next;
+} Title_RecordTemplate_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t mode_proc;
+    int32_t start_title;
+    int16_t user_id;
+    uint32_t name;
+} NakaMode_InitRecord_t;
+
+typedef struct __attribute__((packed)) {
+    char text[4];
+} PsTrkSw_AssignNames_t;
+
+typedef struct __attribute__((packed)) {
+    char text[14];
+} AcFileSfx_BitLabels_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t title_id;
     uint32_t title_event;
@@ -191,7 +220,7 @@ typedef struct __attribute__((packed)) {
     char txt_Prioritat_wenn_eine_Diskette[62];
     char WhenDiskContainsTechnics_str_5[44];
     /* JumpInsert_DispatchBody_PtrTable: 5 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
-    uint32_t JumpInsert_DispatchBody_PtrTable[5];
+    uint32_t JumpInsert_ValueNames[5];
     char SongMedley_str[14];
     char DirectPlay_str[14];
     char Load_str[14];
@@ -213,16 +242,10 @@ typedef struct __attribute__((packed)) {
     char BitteWarten_str[28];
     char PleaseWait_str_2[26];
     /* AcFileSfx_DrawLoop_PtrTable: 9 pointers (cut from ptrs_7 by split_naka_pointer_arrays.py) */
-    uint32_t AcFileSfx_DrawLoop_PtrTable[9];
-    char UserMidi_str[14];
-    char RhythmCustom_str[14];
-    char Msp_str[14];
-    char SoundMemory_str[14];
-    char Composer_str[14];
-    char Sequencer_str[14];
-    char PanelMemory_str[14];
-    char CurrentPanel_str[14];
-    char str_60[14];
+    /* [0] = blank label for a clear bit, [1..8] = label of EVT_SET_FILE_SFX mask bit 0..7 (CURRENT PANEL .. USER MIDI) */
+    uint32_t AcFileSfx_BitLabelPtrs[9];
+    /* the 9 row texts, 13 characters + NUL each, in reverse order: [0] = bit 7 "  USER MIDI  " .. [7] = bit 0 "CURRENT PANEL", [8] = blank */
+    AcFileSfx_BitLabels_t AcFileSfx_BitLabels[9];
     char Shot_str[6];
     char ISC_str[4];
     char ISD_str[4];
@@ -379,136 +402,102 @@ typedef struct __attribute__((packed)) {
     /* WindowProc_CaseTable: 10 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t WindowProc_CaseTable[10];
     /* WndScroll_SendSelectionEvents_PtrTable: 3 pointers (cut from ptrs_10 by split_naka_pointer_arrays.py) */
-    uint32_t WndScroll_SendSelectionEvents_PtrTable[3];
-    char str_113[14];
-    char Abc_str[14];
-    char Abc_str_2[14];
-    uint32_t ptrs_11[39];  /* 39 pointers */
-    char str_116[2];
-    char SPC_str[4];
-    char str_118[2];
-    char str_119[2];
-    char str_120[2];
-    char str_121[2];
-    char str_122[2];
-    char str_123[2];
-    char str_124[2];
-    char str_125[2];
-    char str_126[2];
-    char str_127[2];
-    char __str_2[2];
-    char Z_str_2[2];
-    char Y_str[2];
-    char X_str[2];
-    char W_str_2[2];
-    char V_str[2];
-    char U_str_2[2];
-    char T_str[2];
-    char S_str_2[2];
-    char R_str_2[2];
-    char Q_str[2];
-    char P_str_2[2];
-    char O_str[2];
-    char N_str[2];
-    char M_str[2];
-    char L_str[2];
-    char K_str_3[2];
-    char J_str[2];
-    char I_str[2];
-    char H_str[2];
-    char G_str_2[2];
-    char F_str_3[2];
-    char E_str[2];
-    char D_str[2];
-    char C_str[2];
-    char B_str[2];
-    char A_str_3[2];
-    uint32_t ptrs_12[39];  /* 39 pointers */
-    char str_155[2];
-    char SPC_str_2[4];
-    char str_157[2];
-    char str_158[2];
-    char str_159[2];
-    char str_160[2];
-    char str_161[2];
-    char str_162[2];
-    char str_163[2];
-    char str_164[2];
-    char str_165[2];
-    char str_166[2];
-    char __str_3[2];
-    char z_str[2];
-    char y_str[2];
-    char x_str[2];
-    char w_str[2];
-    char v_str[2];
-    char u_str[2];
-    char t_str[2];
-    char s_str_2[2];
-    char r_str[2];
-    char q_str_2[2];
-    char p_str[2];
-    char o_str[2];
-    char n_str[2];
-    char m_str[2];
-    char l_str_2[2];
-    char k_str[2];
-    char j_str[2];
-    char i_str_2[2];
-    char h_str_2[2];
-    char g_str[2];
-    char f_str[2];
-    char e_str[2];
-    char d_str_2[2];
-    char c_str[2];
-    char b_str[2];
-    char a_str[2];
+    /* 39 pointers */
+    /* 39 pointers */
+    /* caption of each naming-window character set: 0 "ABC...123...", 1 "abc...123...", 2 " !#$%&?.... " */
+    uint32_t WndScroll_CharSetCaptions[3];
+    /* " !#$%&?.... ", "abc...123...", "ABC...123..." (+ 0xFF fill) */
+    char WndScroll_CharSetCaptionText[42];
+    /* character set 0 (upper case): "A".."Z", "_", "0".."9", "SPC", end "" */
+    uint32_t WndScroll_UpperCharTable[39];
+    /* "", "SPC", "9".."0", "_", "Z".."A": the strings WndScroll_UpperCharTable points at */
+    char WndScroll_UpperCharText[80];
+    /* character set 1 (lower case): "a".."z", "_", "0".."9", "SPC", end "" */
+    uint32_t WndScroll_LowerCharTable[39];
+    /* "", "SPC", "9".."0", "_", "z".."a": the strings WndScroll_LowerCharTable points at */
+    char WndScroll_LowerCharText[80];
     /* WndScroll_SearchCharTable_PtrTable: 33 pointers (cut from ptrs_13 by split_naka_pointer_arrays.py) */
-    uint32_t WndScroll_SearchCharTable_PtrTable[33];
-    char str_194[2];
-    char str_195[2];
-    char str_196[2];
-    char str_197[2];
-    char str_198[2];
-    char str_199[2];
-    char str_200[2];
-    char str_201[2];
-    char str_202[2];
-    char str_203[4];
-    char str_204[4];
-    char str_205[2];
-    char str_206[2];
-    char str_207[2];
-    char str_208[2];
-    char str_209[2];
-    char str_210[2];
-    char str_211[2];
-    char str_212[2];
-    char str_213[2];
-    char str_214[2];
-    char str_215[4];
-    char str_216[4];
-    char str_217[2];
-    char str_218[2];
-    char str_219[4];
-    char str_220[4];
-    char str_221[2];
-    char str_222[2];
-    char str_223[2];
-    char str_224[2];
-    char str_225[2];
-    char str_226[2];
-    uint32_t Data_SoundEditorCharsLayout[3];  /* 3 pointers */
-    char WndScroll_ItemCountCheck_Str_Chr25[2];
+    /* character-entry page 2 (symbols): [i] = text of symbol i, "~XX" = character code 0xXX (ConvertStrings); [32] = "" */
+    uint32_t WndScroll_SymbolPageChars[33];
+    /* "" + 0xFF fill: entry 32 of WndScroll_SymbolPageChars (not reached by the search) */
+    char WndScroll_Sym_End[2];
+    /* "}": symbol 31 of page 2 */
+    char WndScroll_Sym_RBrace[2];
+    /* "{": symbol 30 of page 2 */
+    char WndScroll_Sym_LBrace[2];
+    /* "]": symbol 29 of page 2 */
+    char WndScroll_Sym_RBracket[2];
+    /* "[": symbol 28 of page 2 */
+    char WndScroll_Sym_LBracket[2];
+    /* ">": symbol 27 of page 2 */
+    char WndScroll_Sym_Greater[2];
+    /* "<": symbol 26 of page 2 */
+    char WndScroll_Sym_Less[2];
+    /* ")": symbol 25 of page 2 */
+    char WndScroll_Sym_RParen[2];
+    /* "(": symbol 24 of page 2 */
+    char WndScroll_Sym_LParen[2];
+    /* "~8d": symbol 23 of page 2, character code 0x8D */
+    char WndScroll_Sym_Code8D[4];
+    /* "~8b": symbol 22 of page 2, character code 0x8B */
+    char WndScroll_Sym_Code8B[4];
+    /* "=": symbol 21 of page 2 */
+    char WndScroll_Sym_Equals[2];
+    /* "/": symbol 20 of page 2 */
+    char WndScroll_Sym_Slash[2];
+    /* "*": symbol 19 of page 2 */
+    char WndScroll_Sym_Asterisk[2];
+    /* "-": symbol 18 of page 2 */
+    char WndScroll_Sym_Minus[2];
+    /* "+": symbol 17 of page 2 */
+    char WndScroll_Sym_Plus[2];
+    /* ";": symbol 16 of page 2 */
+    char WndScroll_Sym_Semicolon[2];
+    /* ":": symbol 15 of page 2 */
+    char WndScroll_Sym_Colon[2];
+    /* ".": symbol 14 of page 2 */
+    char WndScroll_Sym_Period[2];
+    /* ",": symbol 13 of page 2 */
+    char WndScroll_Sym_Comma[2];
+    /* "`": symbol 12 of page 2 */
+    char WndScroll_Sym_Backquote[2];
+    /* "~27": symbol 11 of page 2, character code 0x27 */
+    char WndScroll_Sym_SQuote[4];
+    /* "~22": symbol 10 of page 2, character code 0x22 */
+    char WndScroll_Sym_DQuote[4];
+    /* "|": symbol 9 of page 2 */
+    char WndScroll_Sym_Bar[2];
+    /* "^": symbol 8 of page 2 */
+    char WndScroll_Sym_Caret[2];
+    /* "~5c": symbol 7 of page 2, character code 0x5C */
+    char WndScroll_Sym_Code5C[4];
+    /* "~40": symbol 6 of page 2, character code 0x40 */
+    char WndScroll_Sym_At[4];
+    /* "?": symbol 5 of page 2 */
+    char WndScroll_Sym_Question[2];
+    /* "&": symbol 4 of page 2 */
+    char WndScroll_Sym_Ampersand[2];
+    /* "%": symbol 3 of page 2 */
+    char WndScroll_Sym_Percent[2];
+    /* "$": symbol 2 of page 2 */
+    char WndScroll_Sym_Dollar[2];
+    /* "#": symbol 1 of page 2 */
+    char WndScroll_Sym_Hash[2];
+    /* "!": symbol 0 of page 2 */
+    char WndScroll_Sym_Exclam[2];
+    uint32_t AcNaming_PageCharLists[3];  /* 3 pointers */
+    char WndScroll_NamingPageLastIndex[2];
     char str_228[2];
     uint16_t field_1236;
     char str_229[2];
     char str_230[2];
     uint16_t field_123c;
-    uint32_t ptr_123e;
-    uint32_t ptr_1242;
-    char __str_4[2];
-    char str_232[2];
+    /* fill character of the naming window per naming mode: 0 " " (space), 1 "_" */
+    uint32_t AcNaming_FillCharByMode[2];
+    /* "_": the fill character of naming mode 1 */
+    char AcNaming_FillCharUnderscore[2];
+    /* " ": the fill character of naming mode 0 */
+    char AcNaming_FillCharSpace[2];
     /* WndEvt_DispatchByEventCode_CaseTable: 9 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t WndEvt_DispatchByEventCode_CaseTable[9];
     char ModeEdit_HandlePaint_Data[12];
@@ -546,10 +535,12 @@ typedef struct __attribute__((packed)) {
     uint32_t Active_str_ptr;
     char Active_str[8];
     char PASSIVE_str[8];
-    uint32_t ptr_15ee;
-    uint32_t On_str_ptr;
-    char On_str[4];
-    char OFF_str[4];
+    /* text of an AcOnOffBox value: [0] = "OFF", [1] = "ON " */
+    uint32_t AcOnOff_ValueTexts[2];
+    /* "ON ": text of value 1 */
+    char AcOnOff_OnText[4];
+    /* "OFF": text of value 0 */
+    char AcOnOff_OffText[4];
     char AcNumEdit_GetText_Str_Chr25[2];
     char AcNumEdit_GetText_Str_Fmtd[4];
     char AcNumEdit_GetText_Str_d[2];
@@ -672,46 +663,26 @@ typedef struct __attribute__((packed)) {
     /* Memory-dump debugger address steps for edit switches 2..7: 0x100000, 0x10000, 0x1000, 0x100, 0x10, 1 */
     uint32_t DbMemDump_StepTable[6];
     /* DbDebugMenu_Confirm_PtrTable: 4 pointers (cut from ptrs_16 by split_naka_pointer_arrays.py) */
-    uint32_t DbDebugMenu_Confirm_PtrTable[4];
-    char str_359[2];
-    char Debug3_str[10];
-    char Memo_str[8];
-    char MemoryDump_str[14];
-    char DbDebugMenu_Init_Str_N1[2];
+    /* debug menu page titles by page index: "-MEMORY DUMP-", "-MEMO-", "-DEBUG3-", then "" (wrap to page 0) */
+    uint32_t DbDebugMenu_PageTitles[4];
+    /* "", "-DEBUG3-", "-MEMO-", "-MEMORY DUMP-" (+ 0xFF fill): the strings DbDebugMenu_PageTitles points at */
+    char DbDebugMenu_PageTitleText[34];
+    char DbDebugMenu_PageWindowIds[2];
     uint8_t pad_184[2];  /* zero padding */
     uint16_t field_1a9c;
     uint8_t pad_185[2];  /* zero padding */
     uint16_t field_1aa0;
     uint16_t field_1aa2;
     /* PsTrackSwitchProc_PtrTable: 20 pointers (cut from ptrs_17 by split_naka_pointer_arrays.py) */
-    uint32_t PsTrackSwitchProc_PtrTable[20];
-    char P15_str[4];
-    char P14_str[4];
-    char P13_str[4];
-    char RHY_str[4];
-    char CTL_str[4];
-    char APC_str[4];
-    char CHD_str[4];
-    char DRM_str[4];
-    char P_str_4[4];
-    char P_str_5[4];
-    char P_str_6[4];
-    char P_str_7[4];
-    char P12_str[4];
-    char P11_str[4];
-    char P10_str[4];
-    char P_str_8[4];
-    char P_str_9[4];
-    char RT2_str_2[4];
-    char LFT_str[4];
-    char RT1_str_2[4];
+    /* name drawn under a track switch for its assignment value 0..19: RT1, LFT, RT2, P 8, P 9, P10, P11, P12, P 5, P 6, P 7, P 4, DRM, CHD, APC, CTL, RHY, P13, P14, P15 */
+    uint32_t PsTrkSw_AssignNamePtrs[20];
+    /* the 20 assignment names, 3 characters + NUL, element k = value 19-k (P15, P14, P13, RHY, ... LFT, RT1) */
+    PsTrkSw_AssignNames_t PsTrkSw_AssignNames[20];
     /* PsTrackSwitchProc_PtrTable_2: 5 pointers (cut from ptrs_18 by split_naka_pointer_arrays.py) */
-    uint32_t PsTrackSwitchProc_PtrTable_2[5];
-    char CLR_str[4];
-    char MUTE_str_2[6];
-    char PLAY_str[6];
-    char REC_str[4];
-    char str_388[2];
+    /* track-switch label per select state 0-4: "", "REC", "PLAY", "MUTE", "CLR" */
+    uint32_t PsTrkSw_SelectStateLabels[5];
+    /* "CLR", "MUTE", "PLAY", "REC", "" (+ 0xFF fill): the strings PsTrkSw_SelectStateLabels points at */
+    char PsTrkSw_SelectStateLabelText[22];
     /* DrawBox colour of a track switch for selection state 0-4 (parallel to the 5 strings of PsTrackSwitchProc_PtrTable_2) */
     uint16_t PsTrkSw_SelectStateColor[5];
     char PsTrkSw_Confirm_DrawGeometry_Str_Fmtd[4];
@@ -719,7 +690,7 @@ typedef struct __attribute__((packed)) {
     char PsTextBox_code[10];
     char AcLanguageText_name[16];
     /* LanguageCheck_PtrTable: 6 pointers (cut from ptrs_19 by split_naka_pointer_arrays.py) */
-    uint32_t LanguageCheck_PtrTable[6];
+    uint32_t LanguageCheck_LanguageNames[6];
     char Indonesian_code[12];
     char Italian_name[8];
     char Spanish_code[8];
@@ -732,20 +703,17 @@ typedef struct __attribute__((packed)) {
     char ObjectProc_Evt1E00018_Str_Empty[2];
     /* ObjectProc_CaseTable: 20 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t ObjectProc_CaseTable[20];
-    uint8_t pad_187[2];  /* zero padding */
-    uint16_t field_1c22;
-    uint16_t field_1c24;
-    uint16_t field_1c26;
-    uint16_t field_1c28;
-    uint32_t ptr_1c2a;
-    char str_398[2];
-    uint8_t pad_188[2];  /* zero padding */
-    uint16_t field_1c32;
-    uint16_t field_1c34;
-    uint16_t field_1c36;
-    uint16_t field_1c38;
-    uint32_t ptrs_20[3];  /* 3 pointers */
-    char str_399[2];
+    /* zero padding */
+    /* initial contents of each of the 32 Mode objects: proc NAKA_APFUNC_DefaultFunction (0x1200000), start title -1, user id -1, name "" */
+    NakaMode_InitRecord_t NakaMode_InitRecord;
+    /* "" + 0xFF fill: name of a blank Mode object */
+    char NakaMode_InitName[2];
+    /* zero padding */
+    /* 3 pointers */
+    /* default title record copied over all 256 entries of the Title table (RAM 0x32ABC): proc 0x01200000, start screen none, user -1, name "" */
+    Title_RecordTemplate_t Title_RecordTemplate;
+    /* "" + 0xFF fill: the name of Title_RecordTemplate */
+    char Title_RecordTemplateName[2];
     /* "" + 0xFF pad: the name RegisterObject gives a newly registered object */
     char RegisterObject_Str_EmptyName[2];
     /* "" (+ 0xFF alignment byte): the name UnRegisterObject gives a freed object's slot */
@@ -913,35 +881,40 @@ typedef struct __attribute__((packed)) {
     uint32_t TextStyle_FontTable[64];
     /* text style nibble (record byte +6 & 15) -> font number; all 3 (6x8 font) except style 12 -> 4 (11x16 font) */
     uint8_t TextStyle_NibbleFontTable[16];
-    uint8_t pad_216[4];  /* zero padding */
-    uint32_t ptrs_23[1];
+    /* zero padding */
+    /* DrawText_ExtendedLayout_ClipRect: clip rectangle {0, 0, 319, 239}, the whole 320 x 240 screen */
+    int16_t DrawText_ExtendedLayout_ClipRect[4];
     /* DrawText_ExtLayout_Variant1_Data: 2 pointers (cut from ptrs_23 by split_naka_pointer_arrays.py) */
-    uint32_t DrawText_ExtLayout_Variant1_Data[2];
+    uint32_t SeGfx_BoundOp07_ClipBox[2];
     /* DrawFunc_Init_Data: 2 pointers (cut from ptrs_23 by split_naka_pointer_arrays.py) */
-    uint32_t DrawFunc_Init_Data[2];
+    uint32_t SeGfx_BoundOp00_ClipBox[2];
     char DrawFunc_Init_SkipShift_Str_Fmt1d[4];
     char DrawFunc_Init_FontTable2_Str_Fmt2d[4];
     char DrawFunc_Init_FontTable0_Str_Fmt3d[4];
-    uint8_t pad_217[4];  /* zero padding */
-    uint32_t Naka_PresentationRootState_ptr;
+    /* zero padding */
+    /* DrawFunc_Init_Variant1_ClipRect: clip rectangle {0, 0, 319, 239}, the whole 320 x 240 screen */
+    int16_t DrawFunc_Init_Variant1_ClipRect[4];
     char DrawFunc_Init_Variant1_Str_Fmt1d[4];
     char DrawFunc_Init_Variant1_Str_Fmt2d[4];
     char DrawFunc_Init_Variant1_Str_Fmt3d[4];
     char DrawFunc_Init_Entry_Str_Fmt2d[4];
     char DrawFunc_Init_Entry_Str_Fmt3d[4];
     char DrawFunc_Init_Entry_Str_Fmt4d[4];
-    uint8_t pad_218[4];  /* zero padding */
-    uint32_t Naka_PresentationRootState_ptr_2;
+    /* zero padding */
+    /* SeGfx_BoundOp06_ClipRect: clip rectangle {0, 0, 319, 239}, the whole 320 x 240 screen */
+    int16_t SeGfx_BoundOp06_ClipRect[4];
     char DrawFunc_Init_Entry_Str_Fmt1d[4];
     char DrawFunc_Init_Entry2_Str_Fmt2d[4];
     char DrawFunc_Init_Entry3_Str_Fmt3d[4];
-    uint8_t pad_219[4];  /* zero padding */
-    uint32_t Naka_PresentationRootState_ptr_3;
+    /* zero padding */
+    /* SeGfx_BoundOp09_ClipRect: clip rectangle {0, 0, 319, 239}, the whole 320 x 240 screen */
+    int16_t SeGfx_BoundOp09_ClipRect[4];
     char DrawFunc_Init_Entry3_Str_Fmt1d[4];
     char DrawFunc_Init_Entry3_Str_Fmt2d[4];
     char DrawFunc_Init_Entry3_Str_Fmt3d_2[4];
-    uint8_t pad_220[4];  /* zero padding */
-    uint32_t Naka_PresentationRootState_ptr_4;
+    /* zero padding */
+    /* SeGfx_BoundOp0B_ClipRect: clip rectangle {0, 0, 319, 239}, the whole 320 x 240 screen */
+    int16_t SeGfx_BoundOp0B_ClipRect[4];
     char DrawFunc_Init_Entry3_Str_Fmt1d_2[4];
     /* FmtStr_pct2d: text (the asm slice of the same name) */
     char FmtStr_pct2d[4];
@@ -949,8 +922,9 @@ typedef struct __attribute__((packed)) {
     char DrawFunc_Init_Entry5_Str_Fmt2d[4];
     char DrawFunc_Init_Entry5_Str_Fmt3d[4];
     char DrawFunc_Init_Entry5_Str_Fmt4d[4];
-    uint8_t pad_221[4];  /* zero padding */
-    uint32_t Naka_PresentationRootState_ptr_5;
+    /* zero padding */
+    /* SeGfx_BoundOp0A_ClipRect: clip rectangle {0, 0, 319, 239}, the whole 320 x 240 screen */
+    int16_t SeGfx_BoundOp0A_ClipRect[4];
     char DrawFunc_Init_Entry5_Str_Fmt1d[4];
     char DrawFunc_Init_Entry5_Str_Fmt2d_2[4];
     char DrawFunc_Init_Entry5_Str_Fmt3d_2[4];
@@ -1704,7 +1678,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .WhenDiskContainsTechnics_str_5 = ALIGNED_STRING("When a disk contains Technics & SMF files."),
 
-    .JumpInsert_DispatchBody_PtrTable = {
+    .JumpInsert_ValueNames = {
         SELF(Off_str),
         SELF(DiskMenu_str),
         SELF(Load_str),
@@ -1758,35 +1732,23 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .PleaseWait_str_2 = ALIGNED_STRING("PLEASE WAIT!............"),
 
-    .AcFileSfx_DrawLoop_PtrTable = {
-        SELF(str_60),
-        SELF(CurrentPanel_str),
-        SELF(PanelMemory_str),
-        SELF(Sequencer_str),
-        SELF(Composer_str),
-        SELF(SoundMemory_str),
-        SELF(Msp_str),
-        SELF(RhythmCustom_str),
-        SELF(UserMidi_str),
+    .AcFileSfx_BitLabelPtrs = {
+        SELF(AcFileSfx_BitLabels[8]), SELF(AcFileSfx_BitLabels[7]), SELF(AcFileSfx_BitLabels[6]), SELF(AcFileSfx_BitLabels[5]),
+        SELF(AcFileSfx_BitLabels[4]), SELF(AcFileSfx_BitLabels[3]), SELF(AcFileSfx_BitLabels[2]), SELF(AcFileSfx_BitLabels[1]),
+        SELF(AcFileSfx_BitLabels),
     },
 
-    .UserMidi_str = "  USER MIDI  ",
-
-    .RhythmCustom_str = "RHYTHM CUSTOM",
-
-    .Msp_str = "     MSP     ",
-
-    .SoundMemory_str = "SOUND MEMORY ",
-
-    .Composer_str = "  COMPOSER   ",
-
-    .Sequencer_str = "  SEQUENCER  ",
-
-    .PanelMemory_str = "PANEL MEMORY ",
-
-    .CurrentPanel_str = "CURRENT PANEL",
-
-    .str_60 = "             ",
+    .AcFileSfx_BitLabels = {
+        { "  USER MIDI  " },
+        { "RHYTHM CUSTOM" },
+        { "     MSP     " },
+        { "SOUND MEMORY " },
+        { "  COMPOSER   " },
+        { "  SEQUENCER  " },
+        { "PANEL MEMORY " },
+        { "CURRENT PANEL" },
+        { "             " },
+    },
 
     .Shot_str = "1shot",
 
@@ -1990,367 +1952,127 @@ const naka_disk_warning_t naka_disk_warning_data
         0x024F, 0x01E8,
     },
 
-    .WndScroll_SendSelectionEvents_PtrTable = {
-        SELF(Abc_str_2),
-        SELF(Abc_str),
-        SELF(str_113),
+    .WndScroll_CharSetCaptions = {
+        SELF(WndScroll_CharSetCaptionText[28]), SELF(WndScroll_CharSetCaptionText[14]), SELF(WndScroll_CharSetCaptionText),
     },
 
-    .str_113 = ALIGNED_STRING(" !#$%&?.... "),
+    .WndScroll_CharSetCaptionText = " !#$%&?.... \x00\xFF" "abc...123...\x00\xFF" "ABC...123...\x00\xFF",
 
-    .Abc_str = ALIGNED_STRING("abc...123..."),
-
-    .Abc_str_2 = ALIGNED_STRING("ABC...123..."),
-
-    .ptrs_11 = {
-        SELF(A_str_3),
-        SELF(B_str),
-        SELF(C_str),
-        SELF(D_str),
-        SELF(E_str),
-        SELF(F_str_3),
-        SELF(G_str_2),
-        SELF(H_str),
-        SELF(I_str),
-        SELF(J_str),
-        SELF(K_str_3),
-        SELF(L_str),
-        SELF(M_str),
-        SELF(N_str),
-        SELF(O_str),
-        SELF(P_str_2),
-        SELF(Q_str),
-        SELF(R_str_2),
-        SELF(S_str_2),
-        SELF(T_str),
-        SELF(U_str_2),
-        SELF(V_str),
-        SELF(W_str_2),
-        SELF(X_str),
-        SELF(Y_str),
-        SELF(Z_str_2),
-        SELF(__str_2),
-        SELF(str_127),
-        SELF(str_126),
-        SELF(str_125),
-        SELF(str_124),
-        SELF(str_123),
-        SELF(str_122),
-        SELF(str_121),
-        SELF(str_120),
-        SELF(str_119),
-        SELF(str_118),
-        SELF(SPC_str),
-        SELF(str_116),
+    .WndScroll_UpperCharTable = {
+        SELF(WndScroll_UpperCharText[78]), SELF(WndScroll_UpperCharText[76]), SELF(WndScroll_UpperCharText[74]), SELF(WndScroll_UpperCharText[72]),
+        SELF(WndScroll_UpperCharText[70]), SELF(WndScroll_UpperCharText[68]), SELF(WndScroll_UpperCharText[66]), SELF(WndScroll_UpperCharText[64]),
+        SELF(WndScroll_UpperCharText[62]), SELF(WndScroll_UpperCharText[60]), SELF(WndScroll_UpperCharText[58]), SELF(WndScroll_UpperCharText[56]),
+        SELF(WndScroll_UpperCharText[54]), SELF(WndScroll_UpperCharText[52]), SELF(WndScroll_UpperCharText[50]), SELF(WndScroll_UpperCharText[48]),
+        SELF(WndScroll_UpperCharText[46]), SELF(WndScroll_UpperCharText[44]), SELF(WndScroll_UpperCharText[42]), SELF(WndScroll_UpperCharText[40]),
+        SELF(WndScroll_UpperCharText[38]), SELF(WndScroll_UpperCharText[36]), SELF(WndScroll_UpperCharText[34]), SELF(WndScroll_UpperCharText[32]),
+        SELF(WndScroll_UpperCharText[30]), SELF(WndScroll_UpperCharText[28]), SELF(WndScroll_UpperCharText[26]), SELF(WndScroll_UpperCharText[24]),
+        SELF(WndScroll_UpperCharText[22]), SELF(WndScroll_UpperCharText[20]), SELF(WndScroll_UpperCharText[18]), SELF(WndScroll_UpperCharText[16]),
+        SELF(WndScroll_UpperCharText[14]), SELF(WndScroll_UpperCharText[12]), SELF(WndScroll_UpperCharText[10]), SELF(WndScroll_UpperCharText[8]),
+        SELF(WndScroll_UpperCharText[6]), SELF(WndScroll_UpperCharText[2]), SELF(WndScroll_UpperCharText),
     },
 
-    .str_116 = ALIGNED_STRING(""),
+    .WndScroll_UpperCharText = "\x00\xFFSPC\x00" "9\x00" "8\x00" "7\x00" "6\x00" "5\x00" "4\x00" "3\x00" "2\x00" "1\x00" "0\x00_\x00Z\x00Y\x00X\x00W\x00V\x00U\x00T\x00S\x00R\x00Q\x00P\x00O\x00N\x00M\x00L\x00K\x00J\x00I\x00H\x00G\x00" "F\x00" "E\x00" "D\x00" "C\x00" "B\x00" "A",
 
-    .SPC_str = "SPC",
-
-    .str_118 = "9",
-
-    .str_119 = "8",
-
-    .str_120 = "7",
-
-    .str_121 = "6",
-
-    .str_122 = "5",
-
-    .str_123 = "4",
-
-    .str_124 = "3",
-
-    .str_125 = "2",
-
-    .str_126 = "1",
-
-    .str_127 = "0",
-
-    .__str_2 = "_",
-
-    .Z_str_2 = "Z",
-
-    .Y_str = "Y",
-
-    .X_str = "X",
-
-    .W_str_2 = "W",
-
-    .V_str = "V",
-
-    .U_str_2 = "U",
-
-    .T_str = "T",
-
-    .S_str_2 = "S",
-
-    .R_str_2 = "R",
-
-    .Q_str = "Q",
-
-    .P_str_2 = "P",
-
-    .O_str = "O",
-
-    .N_str = "N",
-
-    .M_str = "M",
-
-    .L_str = "L",
-
-    .K_str_3 = "K",
-
-    .J_str = "J",
-
-    .I_str = "I",
-
-    .H_str = "H",
-
-    .G_str_2 = "G",
-
-    .F_str_3 = "F",
-
-    .E_str = "E",
-
-    .D_str = "D",
-
-    .C_str = "C",
-
-    .B_str = "B",
-
-    .A_str_3 = "A",
-
-    .ptrs_12 = {
-        SELF(a_str),
-        SELF(b_str),
-        SELF(c_str),
-        SELF(d_str_2),
-        SELF(e_str),
-        SELF(f_str),
-        SELF(g_str),
-        SELF(h_str_2),
-        SELF(i_str_2),
-        SELF(j_str),
-        SELF(k_str),
-        SELF(l_str_2),
-        SELF(m_str),
-        SELF(n_str),
-        SELF(o_str),
-        SELF(p_str),
-        SELF(q_str_2),
-        SELF(r_str),
-        SELF(s_str_2),
-        SELF(t_str),
-        SELF(u_str),
-        SELF(v_str),
-        SELF(w_str),
-        SELF(x_str),
-        SELF(y_str),
-        SELF(z_str),
-        SELF(__str_3),
-        SELF(str_166),
-        SELF(str_165),
-        SELF(str_164),
-        SELF(str_163),
-        SELF(str_162),
-        SELF(str_161),
-        SELF(str_160),
-        SELF(str_159),
-        SELF(str_158),
-        SELF(str_157),
-        SELF(SPC_str_2),
-        SELF(str_155),
+    .WndScroll_LowerCharTable = {
+        SELF(WndScroll_LowerCharText[78]), SELF(WndScroll_LowerCharText[76]), SELF(WndScroll_LowerCharText[74]), SELF(WndScroll_LowerCharText[72]),
+        SELF(WndScroll_LowerCharText[70]), SELF(WndScroll_LowerCharText[68]), SELF(WndScroll_LowerCharText[66]), SELF(WndScroll_LowerCharText[64]),
+        SELF(WndScroll_LowerCharText[62]), SELF(WndScroll_LowerCharText[60]), SELF(WndScroll_LowerCharText[58]), SELF(WndScroll_LowerCharText[56]),
+        SELF(WndScroll_LowerCharText[54]), SELF(WndScroll_LowerCharText[52]), SELF(WndScroll_LowerCharText[50]), SELF(WndScroll_LowerCharText[48]),
+        SELF(WndScroll_LowerCharText[46]), SELF(WndScroll_LowerCharText[44]), SELF(WndScroll_LowerCharText[42]), SELF(WndScroll_LowerCharText[40]),
+        SELF(WndScroll_LowerCharText[38]), SELF(WndScroll_LowerCharText[36]), SELF(WndScroll_LowerCharText[34]), SELF(WndScroll_LowerCharText[32]),
+        SELF(WndScroll_LowerCharText[30]), SELF(WndScroll_LowerCharText[28]), SELF(WndScroll_LowerCharText[26]), SELF(WndScroll_LowerCharText[24]),
+        SELF(WndScroll_LowerCharText[22]), SELF(WndScroll_LowerCharText[20]), SELF(WndScroll_LowerCharText[18]), SELF(WndScroll_LowerCharText[16]),
+        SELF(WndScroll_LowerCharText[14]), SELF(WndScroll_LowerCharText[12]), SELF(WndScroll_LowerCharText[10]), SELF(WndScroll_LowerCharText[8]),
+        SELF(WndScroll_LowerCharText[6]), SELF(WndScroll_LowerCharText[2]), SELF(WndScroll_LowerCharText),
     },
 
-    .str_155 = ALIGNED_STRING(""),
+    .WndScroll_LowerCharText = "\x00\xFFSPC\x00" "9\x00" "8\x00" "7\x00" "6\x00" "5\x00" "4\x00" "3\x00" "2\x00" "1\x00" "0\x00_\x00z\x00y\x00x\x00w\x00v\x00u\x00t\x00s\x00r\x00q\x00p\x00o\x00n\x00m\x00l\x00k\x00j\x00i\x00h\x00g\x00" "f\x00" "e\x00" "d\x00" "c\x00" "b\x00" "a",
 
-    .SPC_str_2 = "SPC",
-
-    .str_157 = "9",
-
-    .str_158 = "8",
-
-    .str_159 = "7",
-
-    .str_160 = "6",
-
-    .str_161 = "5",
-
-    .str_162 = "4",
-
-    .str_163 = "3",
-
-    .str_164 = "2",
-
-    .str_165 = "1",
-
-    .str_166 = "0",
-
-    .__str_3 = "_",
-
-    .z_str = "z",
-
-    .y_str = "y",
-
-    .x_str = "x",
-
-    .w_str = "w",
-
-    .v_str = "v",
-
-    .u_str = "u",
-
-    .t_str = "t",
-
-    .s_str_2 = "s",
-
-    .r_str = "r",
-
-    .q_str_2 = "q",
-
-    .p_str = "p",
-
-    .o_str = "o",
-
-    .n_str = "n",
-
-    .m_str = "m",
-
-    .l_str_2 = "l",
-
-    .k_str = "k",
-
-    .j_str = "j",
-
-    .i_str_2 = "i",
-
-    .h_str_2 = "h",
-
-    .g_str = "g",
-
-    .f_str = "f",
-
-    .e_str = "e",
-
-    .d_str_2 = "d",
-
-    .c_str = "c",
-
-    .b_str = "b",
-
-    .a_str = "a",
-
-    .WndScroll_SearchCharTable_PtrTable = {
-        SELF(str_226),
-        SELF(str_225),
-        SELF(str_224),
-        SELF(str_223),
-        SELF(str_222),
-        SELF(str_221),
-        SELF(str_220),
-        SELF(str_219),
-        SELF(str_218),
-        SELF(str_217),
-        SELF(str_216),
-        SELF(str_215),
-        SELF(str_214),
-        SELF(str_213),
-        SELF(str_212),
-        SELF(str_211),
-        SELF(str_210),
-        SELF(str_209),
-        SELF(str_208),
-        SELF(str_207),
-        SELF(str_206),
-        SELF(str_205),
-        SELF(str_204),
-        SELF(str_203),
-        SELF(str_202),
-        SELF(str_201),
-        SELF(str_200),
-        SELF(str_199),
-        SELF(str_198),
-        SELF(str_197),
-        SELF(str_196),
-        SELF(str_195),
-        SELF(str_194),
+    .WndScroll_SymbolPageChars = {
+        SELF(WndScroll_Sym_Exclam), SELF(WndScroll_Sym_Hash), SELF(WndScroll_Sym_Dollar), SELF(WndScroll_Sym_Percent),
+        SELF(WndScroll_Sym_Ampersand), SELF(WndScroll_Sym_Question), SELF(WndScroll_Sym_At), SELF(WndScroll_Sym_Code5C),
+        SELF(WndScroll_Sym_Caret), SELF(WndScroll_Sym_Bar), SELF(WndScroll_Sym_DQuote), SELF(WndScroll_Sym_SQuote),
+        SELF(WndScroll_Sym_Backquote), SELF(WndScroll_Sym_Comma), SELF(WndScroll_Sym_Period), SELF(WndScroll_Sym_Colon),
+        SELF(WndScroll_Sym_Semicolon), SELF(WndScroll_Sym_Plus), SELF(WndScroll_Sym_Minus), SELF(WndScroll_Sym_Asterisk),
+        SELF(WndScroll_Sym_Slash), SELF(WndScroll_Sym_Equals), SELF(WndScroll_Sym_Code8B), SELF(WndScroll_Sym_Code8D),
+        SELF(WndScroll_Sym_LParen), SELF(WndScroll_Sym_RParen), SELF(WndScroll_Sym_Less), SELF(WndScroll_Sym_Greater),
+        SELF(WndScroll_Sym_LBracket), SELF(WndScroll_Sym_RBracket), SELF(WndScroll_Sym_LBrace), SELF(WndScroll_Sym_RBrace),
+        SELF(WndScroll_Sym_End),
     },
 
-    .str_194 = ALIGNED_STRING(""),
+    .WndScroll_Sym_End = "\x00\xFF",
 
-    .str_195 = "}",
+    .WndScroll_Sym_RBrace = "}",
 
-    .str_196 = "{",
+    .WndScroll_Sym_LBrace = "{",
 
-    .str_197 = "]",
+    .WndScroll_Sym_RBracket = "]",
 
-    .str_198 = "[",
+    .WndScroll_Sym_LBracket = "[",
 
-    .str_199 = ">",
+    .WndScroll_Sym_Greater = ">",
 
-    .str_200 = "<",
+    .WndScroll_Sym_Less = "<",
 
-    .str_201 = ")",
+    .WndScroll_Sym_RParen = ")",
 
-    .str_202 = "(",
+    .WndScroll_Sym_LParen = "(",
 
-    .str_203 = "~8d",
+    .WndScroll_Sym_Code8D = "~8d",
 
-    .str_204 = "~8b",
+    .WndScroll_Sym_Code8B = "~8b",
 
-    .str_205 = "=",
+    .WndScroll_Sym_Equals = "=",
 
-    .str_206 = "/",
+    .WndScroll_Sym_Slash = "/",
 
-    .str_207 = "*",
+    .WndScroll_Sym_Asterisk = "*",
 
-    .str_208 = "-",
+    .WndScroll_Sym_Minus = "-",
 
-    .str_209 = "+",
+    .WndScroll_Sym_Plus = "+",
 
-    .str_210 = ";",
+    .WndScroll_Sym_Semicolon = ";",
 
-    .str_211 = ":",
+    .WndScroll_Sym_Colon = ":",
 
-    .str_212 = ".",
+    .WndScroll_Sym_Period = ".",
 
-    .str_213 = ",",
+    .WndScroll_Sym_Comma = ",",
 
-    .str_214 = "`",
+    .WndScroll_Sym_Backquote = "`",
 
-    .str_215 = "~27",
+    .WndScroll_Sym_SQuote = "~27",
 
-    .str_216 = "~22",
+    .WndScroll_Sym_DQuote = "~22",
 
-    .str_217 = "|",
+    .WndScroll_Sym_Bar = "|",
 
-    .str_218 = "^",
+    .WndScroll_Sym_Caret = "^",
 
-    .str_219 = "~5c",
+    .WndScroll_Sym_Code5C = "~5c",
 
-    .str_220 = "~40",
+    .WndScroll_Sym_At = "~40",
 
-    .str_221 = "?",
+    .WndScroll_Sym_Question = "?",
 
-    .str_222 = "&",
+    .WndScroll_Sym_Ampersand = "&",
 
-    .str_223 = "%",
+    .WndScroll_Sym_Percent = "%",
 
-    .str_224 = "$",
+    .WndScroll_Sym_Dollar = "$",
 
-    .str_225 = "#",
+    .WndScroll_Sym_Hash = "#",
 
-    .str_226 = "!",
+    .WndScroll_Sym_Exclam = "!",
 
-    .Data_SoundEditorCharsLayout = {
-        SELF(ptrs_11),
-        SELF(ptrs_12),
-        SELF(WndScroll_SearchCharTable_PtrTable),
+    .AcNaming_PageCharLists = {
+        SELF(WndScroll_UpperCharTable),
+        SELF(WndScroll_LowerCharTable),
+        SELF(WndScroll_SymbolPageChars),
     },
 
-    .WndScroll_ItemCountCheck_Str_Chr25 = "%",
+    .WndScroll_NamingPageLastIndex = "%",
 
     .str_228 = "%",
 
@@ -2362,13 +2084,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_123c = 0x001F,
 
-    .ptr_123e = SELF(str_232),
+    .AcNaming_FillCharByMode = {
+        SELF(AcNaming_FillCharSpace), SELF(AcNaming_FillCharUnderscore),
+    },
 
-    .ptr_1242 = SELF(__str_4),
+    .AcNaming_FillCharUnderscore = "_",
 
-    .__str_4 = "_",
-
-    .str_232 = " ",
+    .AcNaming_FillCharSpace = " ",
 
     .WndEvt_DispatchByEventCode_CaseTable = {
         0x0000, 0x002D, 0x0061, 0x00DD, 0x02AE, 0x0369, 0x03DF, 0x0455,
@@ -2466,13 +2188,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .PASSIVE_str = "PASSIVE",
 
-    .ptr_15ee = SELF(OFF_str),
+    .AcOnOff_ValueTexts = {
+        SELF(AcOnOff_OffText), SELF(AcOnOff_OnText),
+    },
 
-    .On_str_ptr = SELF(On_str),
+    .AcOnOff_OnText = "ON ",
 
-    .On_str = "ON ",
-
-    .OFF_str = "OFF",
+    .AcOnOff_OffText = "OFF",
 
     .AcNumEdit_GetText_Str_Chr25 = "%",
 
@@ -2735,22 +2457,13 @@ const naka_disk_warning_t naka_disk_warning_data
         0x00000010, 0x00000001,
     },
 
-    .DbDebugMenu_Confirm_PtrTable = {
-        SELF(MemoryDump_str),
-        SELF(Memo_str),
-        SELF(Debug3_str),
-        SELF(str_359),
+    .DbDebugMenu_PageTitles = {
+        SELF(DbDebugMenu_PageTitleText[20]), SELF(DbDebugMenu_PageTitleText[12]), SELF(DbDebugMenu_PageTitleText[2]), SELF(DbDebugMenu_PageTitleText),
     },
 
-    .str_359 = ALIGNED_STRING(""),
+    .DbDebugMenu_PageTitleText = "\x00\xFF-DEBUG3-\x00\xFF-MEMO-\x00\xFF-MEMORY DUMP-",
 
-    .Debug3_str = ALIGNED_STRING("-DEBUG3-"),
-
-    .Memo_str = ALIGNED_STRING("-MEMO-"),
-
-    .MemoryDump_str = "-MEMORY DUMP-",
-
-    .DbDebugMenu_Init_Str_N1 = "1",
+    .DbDebugMenu_PageWindowIds = "1",
 
     .pad_184 = { 0 },
 
@@ -2762,86 +2475,43 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_1aa2 = NAKA_NONE,
 
-    .PsTrackSwitchProc_PtrTable = {
-        SELF(RT1_str_2),
-        SELF(LFT_str),
-        SELF(RT2_str_2),
-        SELF(P_str_9),
-        SELF(P_str_8),
-        SELF(P10_str),
-        SELF(P11_str),
-        SELF(P12_str),
-        SELF(P_str_7),
-        SELF(P_str_6),
-        SELF(P_str_5),
-        SELF(P_str_4),
-        SELF(DRM_str),
-        SELF(CHD_str),
-        SELF(APC_str),
-        SELF(CTL_str),
-        SELF(RHY_str),
-        SELF(P13_str),
-        SELF(P14_str),
-        SELF(P15_str),
+    .PsTrkSw_AssignNamePtrs = {
+        SELF(PsTrkSw_AssignNames[19]), SELF(PsTrkSw_AssignNames[18]), SELF(PsTrkSw_AssignNames[17]), SELF(PsTrkSw_AssignNames[16]),
+        SELF(PsTrkSw_AssignNames[15]), SELF(PsTrkSw_AssignNames[14]), SELF(PsTrkSw_AssignNames[13]), SELF(PsTrkSw_AssignNames[12]),
+        SELF(PsTrkSw_AssignNames[11]), SELF(PsTrkSw_AssignNames[10]), SELF(PsTrkSw_AssignNames[9]), SELF(PsTrkSw_AssignNames[8]),
+        SELF(PsTrkSw_AssignNames[7]), SELF(PsTrkSw_AssignNames[6]), SELF(PsTrkSw_AssignNames[5]), SELF(PsTrkSw_AssignNames[4]),
+        SELF(PsTrkSw_AssignNames[3]), SELF(PsTrkSw_AssignNames[2]), SELF(PsTrkSw_AssignNames[1]), SELF(PsTrkSw_AssignNames),
     },
 
-    .P15_str = "P15",
-
-    .P14_str = "P14",
-
-    .P13_str = "P13",
-
-    .RHY_str = "RHY",
-
-    .CTL_str = "CTL",
-
-    .APC_str = "APC",
-
-    .CHD_str = "CHD",
-
-    .DRM_str = "DRM",
-
-    .P_str_4 = "P 4",
-
-    .P_str_5 = "P 7",
-
-    .P_str_6 = "P 6",
-
-    .P_str_7 = "P 5",
-
-    .P12_str = "P12",
-
-    .P11_str = "P11",
-
-    .P10_str = "P10",
-
-    .P_str_8 = "P 9",
-
-    .P_str_9 = "P 8",
-
-    .RT2_str_2 = "RT2",
-
-    .LFT_str = "LFT",
-
-    .RT1_str_2 = "RT1",
-
-    .PsTrackSwitchProc_PtrTable_2 = {
-        SELF(str_388),
-        SELF(REC_str),
-        SELF(PLAY_str),
-        SELF(MUTE_str_2),
-        SELF(CLR_str),
+    .PsTrkSw_AssignNames = {
+        { "P15" },
+        { "P14" },
+        { "P13" },
+        { "RHY" },
+        { "CTL" },
+        { "APC" },
+        { "CHD" },
+        { "DRM" },
+        { "P 4" },
+        { "P 7" },
+        { "P 6" },
+        { "P 5" },
+        { "P12" },
+        { "P11" },
+        { "P10" },
+        { "P 9" },
+        { "P 8" },
+        { "RT2" },
+        { "LFT" },
+        { "RT1" },
     },
 
-    .CLR_str = "CLR",
+    .PsTrkSw_SelectStateLabels = {
+        SELF(PsTrkSw_SelectStateLabelText[20]), SELF(PsTrkSw_SelectStateLabelText[16]), SELF(PsTrkSw_SelectStateLabelText[10]), SELF(PsTrkSw_SelectStateLabelText[4]),
+        SELF(PsTrkSw_SelectStateLabelText),
+    },
 
-    .MUTE_str_2 = ALIGNED_STRING("MUTE"),
-
-    .PLAY_str = ALIGNED_STRING("PLAY"),
-
-    .REC_str = "REC",
-
-    .str_388 = ALIGNED_STRING(""),
+    .PsTrkSw_SelectStateLabelText = "CLR\x00MUTE\x00\xFFPLAY\x00\xFFREC\x00\x00\xFF",
 
     .PsTrkSw_SelectStateColor = {
         0x00F5, 0x000A, 0x000D, 0x00FF, 0x00FF,
@@ -2855,7 +2525,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .AcLanguageText_name = ALIGNED_STRING("AcLanguageText"),
 
-    .LanguageCheck_PtrTable = {
+    .LanguageCheck_LanguageNames = {
         SELF(English_name),
         SELF(German_code),
         SELF(French_name),
@@ -2890,37 +2560,13 @@ const naka_disk_warning_t naka_disk_warning_data
         0x025D, 0x0023, 0x026E, 0x028D,
     },
 
-    .pad_187 = { 0 },
+    .NakaMode_InitRecord = { 0x01200000, -1, -1, SELF(NakaMode_InitName) },
 
-    .field_1c22 = 0x0120,
+    .NakaMode_InitName = "\x00\xFF",
 
-    .field_1c24 = NAKA_NONE,
+    .Title_RecordTemplate = { 0x01200000, 0xFFFFFFFF, -1, SELF(Title_RecordTemplateName), 0x00000000, 0, 0 },
 
-    .field_1c26 = NAKA_NONE,
-
-    .field_1c28 = NAKA_NONE,
-
-    .ptr_1c2a = SELF(str_398),
-
-    .str_398 = ALIGNED_STRING(""),
-
-    .pad_188 = { 0 },
-
-    .field_1c32 = 0x0120,
-
-    .field_1c34 = NAKA_NONE,
-
-    .field_1c36 = NAKA_NONE,
-
-    .field_1c38 = NAKA_NONE,
-
-    .ptrs_20 = {
-        SELF(str_399),
-        0x00000000,
-        0x00000000,
-    },
-
-    .str_399 = ALIGNED_STRING(""),
+    .Title_RecordTemplateName = "\x00\xFF",
 
     .RegisterObject_Str_EmptyName = "\x00\xFF",
 
@@ -3246,18 +2892,16 @@ const naka_disk_warning_t naka_disk_warning_data
         0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x04, 0x03, 0x03, 0x03,
     },
 
-    .pad_216 = { 0 },
-
-    .ptrs_23 = {
-        NAKA_ADDR(Naka_PresentationRootState),
+    .DrawText_ExtendedLayout_ClipRect = {
+        0, 0, 319, 239,
     },
 
-    .DrawText_ExtLayout_Variant1_Data = {
+    .SeGfx_BoundOp07_ClipBox = {
         0x00000000,
         NAKA_ADDR(Naka_PresentationRootState),
     },
 
-    .DrawFunc_Init_Data = {
+    .SeGfx_BoundOp00_ClipBox = {
         0x00000000,
         NAKA_ADDR(Naka_PresentationRootState),
     },
@@ -3268,9 +2912,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DrawFunc_Init_FontTable0_Str_Fmt3d = "%3d",
 
-    .pad_217 = { 0 },
-
-    .Naka_PresentationRootState_ptr = NAKA_ADDR(Naka_PresentationRootState),
+    .DrawFunc_Init_Variant1_ClipRect = {
+        0, 0, 319, 239,
+    },
 
     .DrawFunc_Init_Variant1_Str_Fmt1d = "%1d",
 
@@ -3284,9 +2928,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DrawFunc_Init_Entry_Str_Fmt4d = "%4d",
 
-    .pad_218 = { 0 },
-
-    .Naka_PresentationRootState_ptr_2 = NAKA_ADDR(Naka_PresentationRootState),
+    .SeGfx_BoundOp06_ClipRect = {
+        0, 0, 319, 239,
+    },
 
     .DrawFunc_Init_Entry_Str_Fmt1d = "%1d",
 
@@ -3294,9 +2938,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DrawFunc_Init_Entry3_Str_Fmt3d = "%3d",
 
-    .pad_219 = { 0 },
-
-    .Naka_PresentationRootState_ptr_3 = NAKA_ADDR(Naka_PresentationRootState),
+    .SeGfx_BoundOp09_ClipRect = {
+        0, 0, 319, 239,
+    },
 
     .DrawFunc_Init_Entry3_Str_Fmt1d = "%1d",
 
@@ -3304,9 +2948,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DrawFunc_Init_Entry3_Str_Fmt3d_2 = "%3d",
 
-    .pad_220 = { 0 },
-
-    .Naka_PresentationRootState_ptr_4 = NAKA_ADDR(Naka_PresentationRootState),
+    .SeGfx_BoundOp0B_ClipRect = {
+        0, 0, 319, 239,
+    },
 
     .DrawFunc_Init_Entry3_Str_Fmt1d_2 = "%1d",
 
@@ -3320,9 +2964,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DrawFunc_Init_Entry5_Str_Fmt4d = "%4d",
 
-    .pad_221 = { 0 },
-
-    .Naka_PresentationRootState_ptr_5 = NAKA_ADDR(Naka_PresentationRootState),
+    .SeGfx_BoundOp0A_ClipRect = {
+        0, 0, 319, 239,
+    },
 
     .DrawFunc_Init_Entry5_Str_Fmt1d = "%1d",
 

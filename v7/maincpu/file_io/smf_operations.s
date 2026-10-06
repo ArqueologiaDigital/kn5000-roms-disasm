@@ -381,7 +381,7 @@ SmfLoadAs_Apply:
 	ld	a, (34986:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SmfLoadAs_Apply_PtrTable:24)
+	lda	xbc, (SmfLoadAs_ModeTexts:24)
 	ld	xde, (xbc+wa)
 	ld	xwa, (33024:16)
 	ld	xbc, EVT_PARA_DRAW

@@ -699,5 +699,5 @@ Suna_FunctionTable_104:
 ; Registered by InitializeSuna (storage/flash_floppy_handlers.s:5319): `RegObjTabl 0x1600001, 0xfa48a9, 0x1, 0xe176dc, 0x404`
 ; = class 0x1600001 (FunctionProc), 1 entries (immediate count), id 0x404.
 Suna_FunctionTable_404:
-	.long NakaStr_PaintArrowProc_Empty + 2	; -> "PaintArrowProc" name string
-	.long NakaStr_PaintArrowProc_Empty	; -> "", the end of the list
+	.long Suna_FunctionNameListEnd + 2	; -> "PaintArrowProc" name string
+	.long Suna_FunctionNameListEnd	; -> "", the end of the list

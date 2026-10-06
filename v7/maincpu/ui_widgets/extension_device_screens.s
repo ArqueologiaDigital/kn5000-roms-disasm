@@ -1019,12 +1019,16 @@ PanelButton_ActionLists:	.incbin "includes/generated/naka_extension_device.bin",
 ; PanelButton_HelpModeActionLists -- the same, used instead in mode 20 (MD_HELP): every button but the LCD
 ; ones and HELP goes to PanelButton_HelpMode.
 PanelButton_HelpModeActionLists:	.incbin "includes/generated/naka_extension_device.bin", 0x34D2, 0x80
-; [nakarest] SoundParam_EncoderMappingData  +0x3552..+0x3860 (0xed9d1e, 782 B)
-; [nakarest] purpose not established: layout of 782 B at 0xed9d1e not derived; readers below
-; [nakarest] Readers: source references SystemConfig_PointerTable (ui_widgets/widget_dispatch.s:
-; [nakarest] `.long SoundParam_EncoderMappingData`); 1 data word in SystemConfig_PointerTable
-; [nakarest] (at 0xee8ca6).
-SoundParam_EncoderMappingData:			.incbin "includes/generated/naka_extension_device.bin", 0x3552, 0x12
+; PanelEvent_InitPhaseHandlers -- 4 x u32: the panel-event subsystem's handlers for init phases 0-3 (entry 10 of
+; Subsys_HandlerTableList). ScreenGroup_Dispatch / VoiceInit_Dispatch (boot/screen_group_dispatch.s) call entry
+; [phase] of every subsystem table. Phase 0 (Encoder_MarkInvalid) stores 0xFF at RAM 0xC039, the first id of the
+; PanelEvent_Post queue (= empty); phases 1-3 (Encoder_Stub1..3) only return.
+PanelEvent_InitPhaseHandlers:	.incbin "includes/generated/naka_extension_device.bin", 0x3552, 0x10
+; PanelButton_ModeKeyCodes -- 2 x u8 (0x0E, 0x11): start of the byte map PanelButton_ModeKey (audio/audio_control_engine.s)
+; reads. For panel event index 1 (RAM 0x8E90) it loads this address (an instruction now spelled as .ascii there:
+; 40 2E 9D ED 00 = ld xwa, 0x00ED9D2E), for indices 3, 10, 15, 16, 21 FileIO_BytecodeData_Data.._5 (2 bytes apart),
+; and replaces the event's button byte with map[lowest set bit] (`ld a, (xwa+hl)`). The windows overlap.
+PanelButton_ModeKeyCodes:	.incbin "includes/generated/naka_extension_device.bin", 0x3562, 0x2
 FileIO_BytecodeData_Data:			.incbin "includes/generated/naka_extension_device.bin", 0x3564, 0x2
 FileIO_BytecodeData_Data_2:			.incbin "includes/generated/naka_extension_device.bin", 0x3566, 0x2
 FileIO_BytecodeData_Data_3:			.incbin "includes/generated/naka_extension_device.bin", 0x3568, 0x2
@@ -1046,7 +1050,11 @@ FileIO_BytecodeData_Data_16:			.incbin "includes/generated/naka_extension_device
 FileIO_BytecodeData_Code_Entry8_PtrTable_3:	.incbin "includes/generated/naka_extension_device.bin", 0x36D8, 0xB0	; 22 x 32-bit pointer
 ExtDevScreen_UserInitWallpaper_Flag:		.incbin "includes/generated/naka_extension_device.bin", 0x3788, 0x8
 ExtDevScreen_UserInitWallpaper_Data:		.incbin "includes/generated/naka_extension_device.bin", 0x3790, 0x48
-ExtDev_SndParam_DispatchComplex_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x37D8, 0x7C	; 8 x 32-bit pointer
+; PanelButton_HelpCodeMaps -- 31 x pointer (NULL = none): per panel event index 0-30, an 8-byte map from changed-bit number to the
+; code PanelButton_HelpMode posts in MD_HELP (0xFF = nothing). PanelButton_HelpMode (audio/audio_control_engine.s) takes the lowest
+; set bit of the action's masked change byte, indexes this table with the event index at RAM 0x8E90 (x4), replaces that byte with
+; map[bit] and posts the panel event with byte +3 = 0xFF. The maps lie just before, inside PanelEvent_InitPhaseHandlers.
+PanelButton_HelpCodeMaps:	.incbin "includes/generated/naka_extension_device.bin", 0x37D8, 0x7C
 ; PanelInput_PedalRecordDefaults -- 3 x {u8 event index, u8 raw, u8 previous raw, u8 state}: pedal-port records
 ; PanelInput_InitPedalRecords copies them to RAM 0x8EB6/0x8EBA/0x8EBE; PanelInput_ScanPedalPorts feeds PG.3-2, PG.7-4
 ; and PD.6 to PanelInput_UpdatePedalRecord, which queues {index, state, changed bits} when the debounced state changes.

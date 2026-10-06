@@ -388,10 +388,10 @@ Naka_EventDispatch_Table:	.incbin "includes/generated/naka_sound_menu_drawbar.bi
 ; [nakarest] InitializeMurai): "EV_MPVERSION", "EV_TONEMODE", "EV_EXECPRESENTATION",
 ; [nakarest] "EV_ENDSONG", "EV_STARTSONG", "EV_ALLINITIAL", ....
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x32E, 0x94
-; [nakarest] naka_sound_menu_drawbar+0x3c2  +0x3c2..+0x3c4 (0xe813a4, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xe813a4 not derived; readers below
-; [nakarest] Readers: source references InitializeMurai (ui/drawbar_panel_ui.s: `ld wa,
-; [nakarest] (0xe813a4:24)`).
+; Murai_ResEventCount_1C1 -- 1 x uint16_t = 10: entry count of InitializeMurai's ResEvent table (registry slot 0x1c1, Murai_ResEventTable_1C1)
+; InitializeMurai `RegObjTable` passes this address as the count; the macro loads it with `ld wa, (count:24)` and
+; RegisterObjectTable stores it at +8 of the 14-byte registry record (0x27ed2 + 14 * slot).
+; The table holds 10 event-name pointers "EV_ACCORDIONTAB" .. "EV_MPVERSION" and a 0 end word.
 Murai_ResEventCount_1C1:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x3C2, 0x2
 ; [nakarest] Naka_Event_Table3  +0x3c4..+0x404 (0xe813a6, 64 B)
 ; [nakarest] the table itself: ResMethod slot 0x1e1 (table 0xe813a6, 15 entries,
@@ -421,10 +421,10 @@ Murai_FunctionTable_401:	.incbin "includes/generated/naka_sound_menu_drawbar.bin
 ; [nakarest] InitializeMurai), 37 entry pointers x 4 bytes (starts 0xe8158c, 144 of its 148
 ; [nakarest] bytes are here or later).
 Naka_Event_Table2:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x5AE, 0x94
-; [nakarest] NakaInst_EmptyString  +0x642..+0x644 (0xe81624, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xe81624 not derived; readers below
-; [nakarest] Readers: 1 data word in Naka_Event_Table2 (at 0xe81620).
-NakaInst_EmptyString:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x642, 0x2
+; Murai_FunctionNameListEnd -- 1 x char[2]: "" + 0xFF pad, entry 37 (one past the count) of Murai_FunctionTable_401
+; Murai_FunctionTable_401 (registry slot 0x401 = 0x101 + 0x300, 37 entries, InitializeMurai) names the procedures
+; of Murai_FunctionTable_101, whose entry 37 is the NULL end; FunctionProc answers EVT_GET_NAME with names[index].
+Murai_FunctionNameListEnd:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x642, 0x2
 ; [nakarest] naka_sound_menu_drawbar+0x644  +0x644..+0x8c0 (0xe81626, 636 B)
 ; [nakarest] name strings, entries 1-36 of Function slot 0x401 (table 0xe8158c, 37 entries,
 ; [nakarest] InitializeMurai) (names for Function slot 0x101): "IvMPverProc",

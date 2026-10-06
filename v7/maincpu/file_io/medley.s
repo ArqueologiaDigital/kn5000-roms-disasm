@@ -4782,7 +4782,7 @@ CheckNo_HandleConfirm:
 DiskAttention:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CheckNo_Type1
-	lda xhl, (DiskAttention_PtrTable:24)
+	lda xhl, (DiskAttention_TextByLanguage:24)
 	ret
 
 CheckNo_Type1:

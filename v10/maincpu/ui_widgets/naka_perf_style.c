@@ -1957,13 +1957,20 @@ typedef struct __attribute__((packed)) {
     char BassPortSpeaker_str_2[18];
     char BassPortSpeaker_str_3[18];
     /* NAKA_InitDataBlock_PtrTable_2: 6 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
-    uint32_t NAKA_InitDataBlock_PtrTable_2[6];
-    char str_875[2];
-    char str_876[2];
-    char txt_Altavoz_con_porton_para_bajos[30];
-    char str_878[2];
-    char str_879[2];
-    char str_880[2];
+    /* a heading text that only Spanish fills ("Altavoz con port\xF3n para bajos"); the other five are "", one pointer per language (0 English, 1 German, 2 French, 3 Spanish, 4 Italian, 5 Indonesian) */
+    uint32_t FDemo_BassPortSpanishHeading_Texts[6];
+    /* "" + 0xFF fill: Indonesian entry of FDemo_BassPortSpanishHeading_Texts */
+    char FDemo_BassPortSpanishHeading_Indonesian[2];
+    /* "" + 0xFF fill: Italian entry of FDemo_BassPortSpanishHeading_Texts */
+    char FDemo_BassPortSpanishHeading_Italian[2];
+    /* "Altavoz con portón para bajos": Spanish entry of FDemo_BassPortSpanishHeading_Texts */
+    char FDemo_BassPortSpanishHeading_Spanish[30];
+    /* "" + 0xFF fill: French entry of FDemo_BassPortSpanishHeading_Texts */
+    char FDemo_BassPortSpanishHeading_French[2];
+    /* "" + 0xFF fill: German entry of FDemo_BassPortSpanishHeading_Texts */
+    char FDemo_BassPortSpanishHeading_German[2];
+    /* "" + 0xFF fill: English entry of FDemo_BassPortSpanishHeading_Texts */
+    char FDemo_BassPortSpanishHeading_English[2];
     /* NAKA_InitDataBlock_PtrTable_3: 6 pointers (cut from ptrs_3 by split_naka_pointer_arrays.py) */
     uint32_t NAKA_InitDataBlock_PtrTable_3[6];
     char SpecialWooferDanBass_str[96];
@@ -2100,7 +2107,7 @@ typedef struct __attribute__((packed)) {
     char HugeStylesG_str[16];
     char HugeStyles_str_6[12];
     /* NAKA_InitDataBlock_PtrTable_17: 6 pointers (cut from ptrs_17 by split_naka_pointer_arrays.py) */
-    uint32_t NAKA_InitDataBlock_PtrTable_17[6];
+    uint32_t FtLangText16_LangStrings[6];
     char HugeStyles_str_7[12];
     char Italian_str_16[8];
     char HugeStyles_str_8[12];
@@ -2108,7 +2115,7 @@ typedef struct __attribute__((packed)) {
     char HugeStylesG_str_2[16];
     char HugeStyles_str_10[12];
     /* NAKA_InitDataBlock_PtrTable_18: 6 pointers (cut from ptrs_18 by split_naka_pointer_arrays.py) */
-    uint32_t NAKA_InitDataBlock_PtrTable_18[6];
+    uint32_t FtLangText17_Texts[6];
     char HugeStyles_str_11[12];
     char Italian_str_17[8];
     char HugeStyles_str_12[12];
@@ -11048,26 +11055,22 @@ const naka_perf_style_t naka_perf_style_data
 
     .BassPortSpeaker_str_3 = "Bass Port Speaker",
 
-    .NAKA_InitDataBlock_PtrTable_2 = {
-        SELF(str_880),
-        SELF(str_879),
-        SELF(str_878),
-        SELF(txt_Altavoz_con_porton_para_bajos),
-        SELF(str_876),
-        SELF(str_875),
+    .FDemo_BassPortSpanishHeading_Texts = {
+        SELF(FDemo_BassPortSpanishHeading_English), SELF(FDemo_BassPortSpanishHeading_German), SELF(FDemo_BassPortSpanishHeading_French), SELF(FDemo_BassPortSpanishHeading_Spanish),
+        SELF(FDemo_BassPortSpanishHeading_Italian), SELF(FDemo_BassPortSpanishHeading_Indonesian),
     },
 
-    .str_875 = ALIGNED_STRING(""),
+    .FDemo_BassPortSpanishHeading_Indonesian = "\x00\xFF",
 
-    .str_876 = ALIGNED_STRING(""),
+    .FDemo_BassPortSpanishHeading_Italian = "\x00\xFF",
 
-    .txt_Altavoz_con_porton_para_bajos = "Altavoz con port\363n para bajos\0",
+    .FDemo_BassPortSpanishHeading_Spanish = "Altavoz con port\xF3n para bajos",
 
-    .str_878 = ALIGNED_STRING(""),
+    .FDemo_BassPortSpanishHeading_French = "\x00\xFF",
 
-    .str_879 = ALIGNED_STRING(""),
+    .FDemo_BassPortSpanishHeading_German = "\x00\xFF",
 
-    .str_880 = ALIGNED_STRING(""),
+    .FDemo_BassPortSpanishHeading_English = "\x00\xFF",
 
     .NAKA_InitDataBlock_PtrTable_3 = {
         SELF(TheKn5000SpecialWoofer_str),
@@ -11409,7 +11412,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .HugeStyles_str_6 = "Huge Styles",
 
-    .NAKA_InitDataBlock_PtrTable_17 = {
+    .FtLangText16_LangStrings = {
         SELF(HugeStyles_str_10),
         SELF(HugeStylesG_str_2),
         SELF(HugeStyles_str_9),
@@ -11430,7 +11433,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .HugeStyles_str_10 = "Huge Styles",
 
-    .NAKA_InitDataBlock_PtrTable_18 = {
+    .FtLangText17_Texts = {
         SELF(HugeStyles_str_14),
         SELF(HugeStylesG_str_3),
         SELF(HugeStyles_str_13),

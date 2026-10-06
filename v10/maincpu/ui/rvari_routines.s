@@ -947,7 +947,7 @@ RVari_Confirm_TypeF_SubItems:
 	ld c, (xsp + 8)
 	extz bc
 	sla bc, 2
-	lda xhl, (RVari_Select_CheckSameBank_PtrTable:24)
+	lda xhl, (RVari_MemoryBankNames:24)
 	ld	xhl, (xhl+bc)
 	ld xbc, 1:i3
 	push xbc

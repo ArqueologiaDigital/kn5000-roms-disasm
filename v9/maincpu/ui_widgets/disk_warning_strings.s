@@ -85,11 +85,11 @@ InsertOptionText_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0
 ; [nakarest] points into it; reached through source references TypePriorityText
 ; [nakarest] (file_io/medley.s: `lda xhl, (TypePriorityText_PtrTable:24)`).
 TypePriorityText_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x8AC, 0x132	; 6 x 32-bit pointer
-; [nakarest] naka_disk_warning+0x9de  +0x9de..+0xa38 (0xea968a, 90 B)
-; [nakarest] purpose not established: layout of 90 B at 0xea968a not derived; readers below
-; [nakarest] Readers: source references JumpInsert_DispatchBody (file_io/misc_ui.s: `ld xbc,
-; [nakarest] JumpInsert_DispatchBody_PtrTable`).
-JumpInsert_DispatchBody_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x9DE, 0x5A	; 5 x 32-bit pointer
+; JumpInsert_ValueNames -- 5 x uint32_t + 5 x char[14]: display text of the Jump-Insert setting values 0-4
+; {"OFF", "DISK MENU", "LOAD", "DIRECT PLAY", "SONG MEDLEY"} (centred in 13 columns), strings stored in reverse.
+; JumpInsertFunc (file_io/misc_ui.s), EVT_GET_RAM_STRING: copies entry [value] into the caller's buffer; the value
+; byte is RAM 0x340f2 (EVT_GET_RAM_ADDRESS), range 0..4 (EVT_GET_MAX = 4). 0 = do nothing when a disk is inserted.
+JumpInsert_ValueNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x9DE, 0x5A
 ; [nakarest] naka_disk_warning+0xa38  +0xa38..+0xa4c (0xea96e4, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xea96e4 not derived; readers below
 ; [nakarest] Readers: source references JumpInsertFunc (file_io/misc_ui.s: `add xbc,
@@ -105,22 +105,25 @@ JumpInsertFunc_CaseTable:
 	.short	JumpInsertFunc_OnGetRamAddress - JumpInsert_DispatchBody
 	.short	JumpInsertFunc_OnGetLargeStep - JumpInsert_DispatchBody
 	.short	JumpInsert_DispatchBody - JumpInsert_DispatchBody
-; [nakarest] naka_disk_warning+0xa4c  +0xa4c..+0xa6c (0xea96f8, 32 B)
-; [nakarest] purpose not established: layout of 32 B at 0xea96f8 not derived; readers below
-; [nakarest] Readers: source references FilePriorityFunc (file_io/misc_ui.s: `lda xbc,
-; [nakarest] (FilePriorityFunc_PtrTable:24)`).
-FilePriorityFunc_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0xA4C, 0x20	; 2 x 32-bit pointer
+; FilePriority_SettingNames -- 2 x pointer + 2 x char[12]: text of the file-priority bit: [0] " TECHNICS ", [1] "   SMF    "
+; FilePriorityFunc (file_io/misc_ui.s) answers EVT_GET_BIT_STRING with entry [bit & 1], Strcpy'd to the caller's buffer;
+; the bit is bit 0 of RAM 0x340F4 (its EVT_GET_BIT_ADDRESS), which FileIO_DiskEventDispatch tests for floppy/HD media.
+FilePriority_SettingNames:	.incbin "includes/generated/naka_disk_warning.bin", 0xA4C, 0x20
 ; [nakarest] naka_disk_warning+0xa6c  +0xa6c..+0xb46 (0xea9718, 218 B)
 ; [nakarest] A table of 6 pointers into this piece (218 B at 0xea9718), then text; entry 0
 ; [nakarest] points at "PLEASE WAIT!............"; no registered NAKA table points into it;
 ; [nakarest] reached through source references WaitingFunc_DrawMessage (file_io/misc_ui.s: `lda
 ; [nakarest] xbc, (WaitingFunc_DrawMessage_PtrTable:24)`).
 WaitingFunc_DrawMessage_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0xA6C, 0xDA	; 6 x 32-bit pointer
-; [nakarest] naka_disk_warning+0xb46  +0xb46..+0xbfa (0xea97f2, 180 B)
-; [nakarest] purpose not established: layout of 180 B at 0xea97f2 not derived; readers below
-; [nakarest] Readers: source references AcFileSfx_DrawLoop (ui/ui_control_panel.s: `lda xhl,
-; [nakarest] (AcFileSfx_DrawLoop_PtrTable:24)`).
-AcFileSfx_DrawLoop_PtrTable:		.incbin "includes/generated/naka_disk_warning.bin", 0xB46, 0xA2	; 9 x 32-bit pointer
+; AcFileSfx_BitLabelPtrs -- 9 x u32: text of each row of the file-suffix box; [k] = label of mask bit k-1, [0] = blank
+; AcFileSfxBoxProc (ui/ui_control_panel.s) on EVT_SET_FILE_SFX draws 8 rows, k = 1..8: bit 0 of the mask
+; parameter set -> entry [k], clear -> entry [0] (13 spaces); the mask is shifted right once per row.
+; Bits 0..7: CURRENT PANEL, PANEL MEMORY, SEQUENCER, COMPOSER, SOUND MEMORY, MSP, RHYTHM CUSTOM, USER MIDI.
+AcFileSfx_BitLabelPtrs:	.incbin "includes/generated/naka_disk_warning.bin", 0xB46, 0x24
+; AcFileSfx_BitLabels -- 9 x char[14]: the row texts AcFileSfx_BitLabelPtrs points at, 13 characters + NUL each
+; in reverse order: [0] bit 7 "  USER MIDI  " .. [7] bit 0 "CURRENT PANEL", [8] 13 spaces (bit clear);
+; drawn with DrawString by AcFileSfx_DrawLoop (ui/ui_control_panel.s).
+AcFileSfx_BitLabels:	.incbin "includes/generated/naka_disk_warning.bin", 0xB6A, 0x7E
 IvTimer_HandleEvent3A_Str_N1shot:	.incbin "includes/generated/naka_disk_warning.bin", 0xBE8, 0x6	; "1shot"
 IvIndexSwCtrlProc_Str_ISC:		.incbin "includes/generated/naka_disk_warning.bin", 0xBEE, 0x4	; "ISC"
 IvIndexSwDelayProc_Str_ISD:		.incbin "includes/generated/naka_disk_warning.bin", 0xBF2, 0x4	; "ISD"
@@ -320,11 +323,11 @@ IvDirmdScreenProc_Str_K:
 	.short	TaskWake_ZeroReturn - DirmdEmu_CaseB
 	.short	TaskWake_ZeroReturn - DirmdEmu_CaseB
 	.short	IvDirmdScreenProc_OnParaDraw - DirmdEmu_CaseB
-; [nakarest] naka_disk_warning+0xeb4  +0xeb4..+0xec4 (0xea9b60, 16 B)
-; [nakarest] purpose not established: layout of 16 B at 0xea9b60 not derived; readers below
-; [nakarest] Readers: source references DirmdTitleFunc (audio/presentation_sound_nav.s: `ld xiy,
-; [nakarest] DirmdTitleFunc_PtrTable`).
-DirmdTitleFunc_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0xEB4, 0x10	; 4 x 32-bit pointer
+; DirmdTitle_EmulatorMethods -- 4 x uint32_t: code pointers {New, Old, ESw, Cur} of the DirmdTitle emulator record
+; DirmdTitleFunc (audio/presentation_sound_nav.s) copies the 16 bytes to its stack frame and passes that copy to
+; DirmdEmulator, which calls [0] on EVT_ALL_PAINT / EVT_PARA_DRAW, [1] on EVT_HIDE and [2](switch & 31, bit 7) on
+; EVT_SW_IN; [3] is not called there. Each posts a trace memo "DirmdTitleNew();", "...Old();", "...ESw(%d, %d);", "...Cur();".
+DirmdTitle_EmulatorMethods:	.incbin "includes/generated/naka_disk_warning.bin", 0xEB4, 0x10
 ; [nakarest] naka_disk_warning+0xec4  +0xec4..+0xed6 (0xea9b70, 18 B)
 ; [nakarest] Text (18 B at 0xea9b70), first string "DirmdTitleNew();"; no registered NAKA table
 ; [nakarest] points into it; reached through source references PostTitle_Function_Skip
@@ -376,48 +379,151 @@ WindowProc_CaseTable:
 	.short	WindowProc_OnSwIn - WindowProc_EventDispatch
 	.short	WindowProc_OnSwIn - WindowProc_EventDispatch
 	.short	WindowProc_OnAllPaint - WindowProc_EventDispatch
-; [nakarest] naka_disk_warning+0xf46  +0xf46..+0x1154 (0xea9bf2, 526 B)
-; [nakarest] purpose not established: layout of 526 B at 0xea9bf2 not derived; readers below
-; [nakarest] Readers: source references WndScroll_SendSelectionEvents (ui/ui_window_procs.s: `ld
-; [nakarest] xbc, WndScroll_SendSelectionEvents_PtrTable`); 2 data words in
-; [nakarest] Data_SoundEditorCharsLayout (at 0xea9ed2, 0xea9ed6), which is read by
-; [nakarest] WndEvt_EventCodeDispatch (ui/ui_window_procs.s: `ld xde,
-; [nakarest] Data_SoundEditorCharsLayout`), WndEvt_EventCodeDispatch_Join (ui/ui_window_procs.s:
-; [nakarest] `ld xde, Data_SoundEditorCharsLayout`), 4 more.
-WndScroll_SendSelectionEvents_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0xF46, 0x20E	; 3 x 32-bit pointer
-; [nakarest] naka_disk_warning+0x1154  +0x1154..+0x1226 (0xea9e00, 210 B)
-; [nakarest] purpose not established: layout of 210 B at 0xea9e00 not derived; readers below
-; [nakarest] Readers: source references WndScroll_SearchCharTable (ui/ui_window_procs.s: `lda
-; [nakarest] xwa, (WndScroll_SearchCharTable_PtrTable:24)`); 1 data word in
-; [nakarest] Data_SoundEditorCharsLayout (at 0xea9eda), which is read by
-; [nakarest] WndEvt_EventCodeDispatch (ui/ui_window_procs.s: `ld xde,
-; [nakarest] Data_SoundEditorCharsLayout`), WndEvt_EventCodeDispatch_Join (ui/ui_window_procs.s:
-; [nakarest] `ld xde, Data_SoundEditorCharsLayout`), 4 more.
-WndScroll_SearchCharTable_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x1154, 0xD2	; 33 x 32-bit pointer
-; [nakarest] Data_SoundEditorCharsLayout  +0x1226..+0x1232 (0xea9ed2, 12 B)
-; [nakarest] purpose not established: layout of 12 B at 0xea9ed2 not derived; readers below
-; [nakarest] Readers: source references WndEvt_EventCodeDispatch (ui/ui_window_procs.s: `ld xde,
-; [nakarest] Data_SoundEditorCharsLayout`), WndEvt_EventCodeDispatch_Join (ui/ui_window_procs.s:
-; [nakarest] `ld xde, Data_SoundEditorCharsLayout`), WndEvt_EventCodeDispatch_Skip4
-; [nakarest] (ui/ui_window_procs.s: `.long Data_SoundEditorCharsLayout`),
-; [nakarest] WndScroll_ClampPageCount (ui/ui_window_procs.s: `ld xbc,
-; [nakarest] Data_SoundEditorCharsLayout`), 2 more.
-Data_SoundEditorCharsLayout:	.incbin "includes/generated/naka_disk_warning.bin", 0x1226, 0xC
-; [nakarest] naka_disk_warning+0x1232  +0x1232..+0x123e (0xea9ede, 12 B)
-; [nakarest] purpose not established: layout of 12 B at 0xea9ede not derived; readers below
-; [nakarest] Readers: source references WndEvt_EventCodeDispatch_Join (ui/ui_window_procs.s: `ld
-; [nakarest] xbc, WndScroll_ItemCountCheck_Str_Chr25`), WndEvt_EventCodeDispatch_OnIndexswDownAny
-; [nakarest] (ui/ui_window_procs.s: `lda xde, (WndScroll_ItemCountCheck_Str_Chr25:24)`),
-; [nakarest] WndScroll_CheckTableEnd (ui/ui_window_procs.s: `ld xbc,
-; [nakarest] WndScroll_ItemCountCheck_Str_Chr25`), WndScroll_HandleDialPage (ui/ui_window_procs.s:
-; [nakarest] `ld xwa, WndScroll_ItemCountCheck_Str_Chr25`), 1 more.
-WndScroll_ItemCountCheck_Str_Chr25:	.incbin "includes/generated/naka_disk_warning.bin", 0x1232, 0x2	; "%"
-	.incbin "includes/generated/naka_disk_warning.bin", 0x1234, 0xA	; 10 bytes after WndScroll_ItemCountCheck_Str_Chr25's string; unnamed (they sat under its label until 2026-10-03)
-; [nakarest] naka_disk_warning+0x123e  +0x123e..+0x124a (0xea9eea, 12 B)
-; [nakarest] purpose not established: layout of 12 B at 0xea9eea not derived; readers below
-; [nakarest] Readers: source references AcNaming_QueryCharSet (audio/presentation_sound_nav.s:
-; [nakarest] `ld xbc, AcNaming_QueryCharSet_PtrTable`).
-AcNaming_QueryCharSet_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x123E, 0xC	; 2 x 32-bit pointer
+; WndScroll_CharSetCaptions -- 3 x u32: the caption of each character set of the naming window, indexed by the set
+; number in RAM 0x274DA (0 upper case, 1 lower case, 2 symbols, the order of AcNaming_PageCharLists).
+; WndScroll_SendSelectionEvents (ui/ui_window_procs.s) scales the set by 4 and sends the string to view 0x1D
+; with EVT_PARA_DRAW.
+WndScroll_CharSetCaptions:	.incbin "includes/generated/naka_disk_warning.bin", 0xF46, 0xC
+; WndScroll_CharSetCaptionText -- 42 x char: " !#$%&?.... ", "abc...123...", "ABC...123..." (NUL + 0xFF each),
+; the strings WndScroll_CharSetCaptions points at.
+WndScroll_CharSetCaptionText:	.incbin "includes/generated/naka_disk_warning.bin", 0xF52, 0x2A
+; WndScroll_UpperCharTable -- 39 x u32: character set 0 of the naming window, one string per selectable item:
+; "A".."Z", "_", "0".."9", "SPC" (inserts the fill character), then "". AcNaming_PageCharLists[0] points here;
+; the WndScroll/WndEvt routines (ui/ui_window_procs.s) index it by the item number * 4 and draw or convert the string;
+; the last item number per set comes from WndScroll_NamingPageLastIndex.
+WndScroll_UpperCharTable:	.incbin "includes/generated/naka_disk_warning.bin", 0xF7C, 0x9C
+; WndScroll_UpperCharText -- 80 x char: "" (+0xFF), "SPC", then "9".."0", "_", "Z".."A" as 2-byte strings,
+; the items WndScroll_UpperCharTable points at.
+WndScroll_UpperCharText:	.incbin "includes/generated/naka_disk_warning.bin", 0x1018, 0x50
+; WndScroll_LowerCharTable -- 39 x u32: character set 1 of the naming window: "a".."z", "_", "0".."9", "SPC", "".
+; AcNaming_PageCharLists[1] points here; read like WndScroll_UpperCharTable (ui/ui_window_procs.s).
+WndScroll_LowerCharTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x1068, 0x9C
+; WndScroll_LowerCharText -- 80 x char: "" (+0xFF), "SPC", then "9".."0", "_", "z".."a" as 2-byte strings,
+; the items WndScroll_LowerCharTable points at.
+WndScroll_LowerCharText:	.incbin "includes/generated/naka_disk_warning.bin", 0x1104, 0x50
+; WndScroll_SymbolPageChars -- 33 x u32: page 2 (symbols) of the name-entry character pages; [i] = symbol i as text,
+; "~XX" meaning character code 0xXX (ConvertStrings).  Entry 2 of AcNaming_PageCharLists (one table per page,
+; RAM 0x274DA = page).  WndScroll_SearchCharTable (ui/ui_window_procs.s) converts entries 0..31 and compares each
+; with the character under the cursor to find its page/index; [32] = "" is past the search bound (31).
+WndScroll_SymbolPageChars:	.incbin "includes/generated/naka_disk_warning.bin", 0x1154, 0x84
+; WndScroll_Sym_End -- 2 x char: "" + 0xFF fill, entry 32 of WndScroll_SymbolPageChars (not reached by the search)
+; WndScroll_SymbolPageChars[32] points here.
+WndScroll_Sym_End:	.incbin "includes/generated/naka_disk_warning.bin", 0x11D8, 0x2
+; WndScroll_Sym_RBrace -- 2 x char: "}", symbol 31 of page 2
+; WndScroll_SymbolPageChars[31] points here.
+WndScroll_Sym_RBrace:	.incbin "includes/generated/naka_disk_warning.bin", 0x11DA, 0x2
+; WndScroll_Sym_LBrace -- 2 x char: "{", symbol 30 of page 2
+; WndScroll_SymbolPageChars[30] points here.
+WndScroll_Sym_LBrace:	.incbin "includes/generated/naka_disk_warning.bin", 0x11DC, 0x2
+; WndScroll_Sym_RBracket -- 2 x char: "]", symbol 29 of page 2
+; WndScroll_SymbolPageChars[29] points here.
+WndScroll_Sym_RBracket:	.incbin "includes/generated/naka_disk_warning.bin", 0x11DE, 0x2
+; WndScroll_Sym_LBracket -- 2 x char: "[", symbol 28 of page 2
+; WndScroll_SymbolPageChars[28] points here.
+WndScroll_Sym_LBracket:	.incbin "includes/generated/naka_disk_warning.bin", 0x11E0, 0x2
+; WndScroll_Sym_Greater -- 2 x char: ">", symbol 27 of page 2
+; WndScroll_SymbolPageChars[27] points here.
+WndScroll_Sym_Greater:	.incbin "includes/generated/naka_disk_warning.bin", 0x11E2, 0x2
+; WndScroll_Sym_Less -- 2 x char: "<", symbol 26 of page 2
+; WndScroll_SymbolPageChars[26] points here.
+WndScroll_Sym_Less:	.incbin "includes/generated/naka_disk_warning.bin", 0x11E4, 0x2
+; WndScroll_Sym_RParen -- 2 x char: ")", symbol 25 of page 2
+; WndScroll_SymbolPageChars[25] points here.
+WndScroll_Sym_RParen:	.incbin "includes/generated/naka_disk_warning.bin", 0x11E6, 0x2
+; WndScroll_Sym_LParen -- 2 x char: "(", symbol 24 of page 2
+; WndScroll_SymbolPageChars[24] points here.
+WndScroll_Sym_LParen:	.incbin "includes/generated/naka_disk_warning.bin", 0x11E8, 0x2
+; WndScroll_Sym_Code8D -- 4 x char: "~8d", symbol 23 of page 2, character code 0x8D
+; WndScroll_SymbolPageChars[23] points here.
+WndScroll_Sym_Code8D:	.incbin "includes/generated/naka_disk_warning.bin", 0x11EA, 0x4
+; WndScroll_Sym_Code8B -- 4 x char: "~8b", symbol 22 of page 2, character code 0x8B
+; WndScroll_SymbolPageChars[22] points here.
+WndScroll_Sym_Code8B:	.incbin "includes/generated/naka_disk_warning.bin", 0x11EE, 0x4
+; WndScroll_Sym_Equals -- 2 x char: "=", symbol 21 of page 2
+; WndScroll_SymbolPageChars[21] points here.
+WndScroll_Sym_Equals:	.incbin "includes/generated/naka_disk_warning.bin", 0x11F2, 0x2
+; WndScroll_Sym_Slash -- 2 x char: "/", symbol 20 of page 2
+; WndScroll_SymbolPageChars[20] points here.
+WndScroll_Sym_Slash:	.incbin "includes/generated/naka_disk_warning.bin", 0x11F4, 0x2
+; WndScroll_Sym_Asterisk -- 2 x char: "*", symbol 19 of page 2
+; WndScroll_SymbolPageChars[19] points here.
+WndScroll_Sym_Asterisk:	.incbin "includes/generated/naka_disk_warning.bin", 0x11F6, 0x2
+; WndScroll_Sym_Minus -- 2 x char: "-", symbol 18 of page 2
+; WndScroll_SymbolPageChars[18] points here.
+WndScroll_Sym_Minus:	.incbin "includes/generated/naka_disk_warning.bin", 0x11F8, 0x2
+; WndScroll_Sym_Plus -- 2 x char: "+", symbol 17 of page 2
+; WndScroll_SymbolPageChars[17] points here.
+WndScroll_Sym_Plus:	.incbin "includes/generated/naka_disk_warning.bin", 0x11FA, 0x2
+; WndScroll_Sym_Semicolon -- 2 x char: ";", symbol 16 of page 2
+; WndScroll_SymbolPageChars[16] points here.
+WndScroll_Sym_Semicolon:	.incbin "includes/generated/naka_disk_warning.bin", 0x11FC, 0x2
+; WndScroll_Sym_Colon -- 2 x char: ":", symbol 15 of page 2
+; WndScroll_SymbolPageChars[15] points here.
+WndScroll_Sym_Colon:	.incbin "includes/generated/naka_disk_warning.bin", 0x11FE, 0x2
+; WndScroll_Sym_Period -- 2 x char: ".", symbol 14 of page 2
+; WndScroll_SymbolPageChars[14] points here.
+WndScroll_Sym_Period:	.incbin "includes/generated/naka_disk_warning.bin", 0x1200, 0x2
+; WndScroll_Sym_Comma -- 2 x char: ",", symbol 13 of page 2
+; WndScroll_SymbolPageChars[13] points here.
+WndScroll_Sym_Comma:	.incbin "includes/generated/naka_disk_warning.bin", 0x1202, 0x2
+; WndScroll_Sym_Backquote -- 2 x char: "`", symbol 12 of page 2
+; WndScroll_SymbolPageChars[12] points here.
+WndScroll_Sym_Backquote:	.incbin "includes/generated/naka_disk_warning.bin", 0x1204, 0x2
+; WndScroll_Sym_SQuote -- 4 x char: "~27", symbol 11 of page 2, character code 0x27
+; WndScroll_SymbolPageChars[11] points here.
+WndScroll_Sym_SQuote:	.incbin "includes/generated/naka_disk_warning.bin", 0x1206, 0x4
+; WndScroll_Sym_DQuote -- 4 x char: "~22", symbol 10 of page 2, character code 0x22
+; WndScroll_SymbolPageChars[10] points here.
+WndScroll_Sym_DQuote:	.incbin "includes/generated/naka_disk_warning.bin", 0x120A, 0x4
+; WndScroll_Sym_Bar -- 2 x char: "|", symbol 9 of page 2
+; WndScroll_SymbolPageChars[9] points here.
+WndScroll_Sym_Bar:	.incbin "includes/generated/naka_disk_warning.bin", 0x120E, 0x2
+; WndScroll_Sym_Caret -- 2 x char: "^", symbol 8 of page 2
+; WndScroll_SymbolPageChars[8] points here.
+WndScroll_Sym_Caret:	.incbin "includes/generated/naka_disk_warning.bin", 0x1210, 0x2
+; WndScroll_Sym_Code5C -- 4 x char: "~5c", symbol 7 of page 2, character code 0x5C
+; WndScroll_SymbolPageChars[7] points here.
+WndScroll_Sym_Code5C:	.incbin "includes/generated/naka_disk_warning.bin", 0x1212, 0x4
+; WndScroll_Sym_At -- 4 x char: "~40", symbol 6 of page 2, character code 0x40
+; WndScroll_SymbolPageChars[6] points here.
+WndScroll_Sym_At:	.incbin "includes/generated/naka_disk_warning.bin", 0x1216, 0x4
+; WndScroll_Sym_Question -- 2 x char: "?", symbol 5 of page 2
+; WndScroll_SymbolPageChars[5] points here.
+WndScroll_Sym_Question:	.incbin "includes/generated/naka_disk_warning.bin", 0x121A, 0x2
+; WndScroll_Sym_Ampersand -- 2 x char: "&", symbol 4 of page 2
+; WndScroll_SymbolPageChars[4] points here.
+WndScroll_Sym_Ampersand:	.incbin "includes/generated/naka_disk_warning.bin", 0x121C, 0x2
+; WndScroll_Sym_Percent -- 2 x char: "%", symbol 3 of page 2
+; WndScroll_SymbolPageChars[3] points here.
+WndScroll_Sym_Percent:	.incbin "includes/generated/naka_disk_warning.bin", 0x121E, 0x2
+; WndScroll_Sym_Dollar -- 2 x char: "$", symbol 2 of page 2
+; WndScroll_SymbolPageChars[2] points here.
+WndScroll_Sym_Dollar:	.incbin "includes/generated/naka_disk_warning.bin", 0x1220, 0x2
+; WndScroll_Sym_Hash -- 2 x char: "#", symbol 1 of page 2
+; WndScroll_SymbolPageChars[1] points here.
+WndScroll_Sym_Hash:	.incbin "includes/generated/naka_disk_warning.bin", 0x1222, 0x2
+; WndScroll_Sym_Exclam -- 2 x char: "!", symbol 0 of page 2
+; WndScroll_SymbolPageChars[0] points here.
+WndScroll_Sym_Exclam:	.incbin "includes/generated/naka_disk_warning.bin", 0x1224, 0x2
+; AcNaming_PageCharLists -- 3 x pointer: the key-label list of each character page of the naming window (AcNamingWindowProc)
+; [0] A-Z _ 0-9 SPC, [1] a-z _ 0-9 SPC (39 labels, then ""), [2] the 32 symbols of WndScroll_SymbolPageChars (then "").
+; The window code takes entry [page] (RAM 0x274DA, x4), then label [item] (x4) and ConvertStrings it; the label "SPC" enters a space.
+AcNaming_PageCharLists:	.incbin "includes/generated/naka_disk_warning.bin", 0x1226, 0xC
+; WndScroll_NamingPageLastIndex -- 2 x 3 uint16_t = {{37,37,31},{36,36,31}}: last selectable entry of each naming
+; character page (0 = A-Z _ 0-9 SPC, 1 = a-z _ 0-9 SPC, 2 = symbols) per naming mode (EVT_GET_NAMING_MODE, RAM 0x274e2);
+; mode 1 stops at '9', leaving out SPC. Read in ui/ui_window_procs.s at [(0x274e2)*3 + page (0x274da)] to bound the
+; drawn/scrolled character index. This slice is element [0][0]; the other 5 words are the unnamed 10 bytes after it.
+WndScroll_NamingPageLastIndex:	.incbin "includes/generated/naka_disk_warning.bin", 0x1232, 0x2
+	.incbin "includes/generated/naka_disk_warning.bin", 0x1234, 0xA	; 10 bytes after WndScroll_NamingPageLastIndex's string; unnamed (they sat under its label until 2026-10-03)
+; AcNaming_FillCharByMode -- 2 x u32: the blank/fill character of the naming window per naming mode, 0 -> " ", 1 -> "_"
+; AcNaming_QueryCharSet (audio/presentation_sound_nav.s) gets the mode with EVT_GET_NAMING_MODE, stores it at RAM
+; 0x274E2 and stores entry[mode] at RAM 0x274E4; ui/ui_window_procs.s fills and erases the name buffer with its
+; first byte and inserts it for the SPC item.
+AcNaming_FillCharByMode:	.incbin "includes/generated/naka_disk_warning.bin", 0x123E, 0x8
+; AcNaming_FillCharUnderscore -- 2 x char: "_", AcNaming_FillCharByMode[1] (naming mode 1)
+AcNaming_FillCharUnderscore:	.incbin "includes/generated/naka_disk_warning.bin", 0x1246, 0x2
+; AcNaming_FillCharSpace -- 2 x char: " ", AcNaming_FillCharByMode[0] (naming mode 0)
+AcNaming_FillCharSpace:	.incbin "includes/generated/naka_disk_warning.bin", 0x1248, 0x2
 ; [nakarest] naka_disk_warning+0x124a  +0x124a..+0x1274 (0xea9ef6, 42 B)
 ; [nakarest] purpose not established: layout of 42 B at 0xea9ef6 not derived; readers below
 ; [nakarest] Readers: source references WndEvt_DispatchByEventCode (ui/ui_window_procs.s: `add
@@ -527,16 +633,20 @@ GridCheck_CaseTable:
 PsNumEditBox_Confirm_Str_Chr25:	.incbin "includes/generated/naka_disk_warning.bin", 0x15CE, 0x2	; "%"
 PsNumEditBox_Confirm_Str_Fmtd:	.incbin "includes/generated/naka_disk_warning.bin", 0x15D0, 0x4	; "%d"
 PsNumEditBox_Confirm_Str_d:	.incbin "includes/generated/naka_disk_warning.bin", 0x15D4, 0x2	; "d"
-; [nakarest] naka_disk_warning+0x15d6  +0x15d6..+0x15ee (0xeaa282, 24 B)
-; [nakarest] purpose not established: layout of 24 B at 0xeaa282 not derived; readers below
-; [nakarest] Readers: source references PasTableCheck (ui/ui_widget_defs.s: `ld xbc,
-; [nakarest] PasTableCheck_PtrTable`).
-PasTableCheck_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x15D6, 0x18	; 2 x 32-bit pointer
-; [nakarest] naka_disk_warning+0x15ee  +0x15ee..+0x160e (0xeaa29a, 32 B)
-; [nakarest] purpose not established: layout of 32 B at 0xeaa29a not derived; readers below
-; [nakarest] Readers: source references AcOnOff_GetText (ui/ui_widget_defs.s: `ld xbc,
-; [nakarest] AcOnOff_GetText_PtrTable`).
-AcOnOff_GetText_PtrTable:		.incbin "includes/generated/naka_disk_warning.bin", 0x15EE, 0x10	; 2 x 32-bit pointer
+; PasTableCheck_StateNames -- 2 x pointer + 2 x char[8]: [0] "PASSIVE", [1] "ACTIVE "
+; PasTableCheck (ui/ui_widget_defs.s, NAKA_APFUNC_PasTableCheck) answers EVT_GET_TABLE_STRING with entry [the u32 at the
+; event buffer] (x4), Strcpy'd back over that buffer.
+PasTableCheck_StateNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x15D6, 0x18
+; AcOnOff_ValueTexts -- 2 x u32: text of an on/off box's value, [0] "OFF", [1] "ON "
+; AcOnOff_GetText (ui/ui_widget_defs.s), EVT_GET_STRING: the 16-bit value at the instance's +50 pointer, x4,
+; selects the entry, which is Strcpy'd into the caller's buffer.
+AcOnOff_ValueTexts:	.incbin "includes/generated/naka_disk_warning.bin", 0x15EE, 0x8
+; AcOnOff_OnText -- 4 x char: "ON ", text of value 1
+; AcOnOff_ValueTexts[1] points here.
+AcOnOff_OnText:	.incbin "includes/generated/naka_disk_warning.bin", 0x15F6, 0x4
+; AcOnOff_OffText -- 4 x char: "OFF", text of value 0
+; AcOnOff_ValueTexts[0] points here.
+AcOnOff_OffText:	.incbin "includes/generated/naka_disk_warning.bin", 0x15FA, 0x4
 AcNumEdit_GetText_Str_Chr25:		.incbin "includes/generated/naka_disk_warning.bin", 0x15FE, 0x2	; "%"
 AcNumEdit_GetText_Str_Fmtd:		.incbin "includes/generated/naka_disk_warning.bin", 0x1600, 0x4	; "%d"
 AcNumEdit_GetText_Str_d:		.incbin "includes/generated/naka_disk_warning.bin", 0x1604, 0x2	; "d"
@@ -557,11 +667,10 @@ RamEditCheck_CaseTable:
 	.short	RamEditCheck_OnGetRamAddress - RamEditCheck_JumpStart
 	.short	RamEditCheck_OnGetLargeStep - RamEditCheck_JumpStart
 	.short	RamEditCheck_JumpStart - RamEditCheck_JumpStart
-; [nakarest] naka_disk_warning+0x1622  +0x1622..+0x1636 (0xeaa2ce, 20 B)
-; [nakarest] purpose not established: layout of 20 B at 0xeaa2ce not derived; readers below
-; [nakarest] Readers: source references BitEditCheck (ui/ui_widget_defs.s: `lda xbc,
-; [nakarest] (BitEditCheck_PtrTable:24)`).
-BitEditCheck_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x1622, 0x14	; 2 x 32-bit pointer
+; BitEditCheck_FalseTrueNames -- 2 x uint32_t + 2 x char[6]: {"FALSE", "TRUE "}, indexed by the bit's value (0/1)
+; BitEditCheck (ui/ui_widget_defs.s), EVT_GET_BIT_STRING: (value & 1) * 4 selects the entry and Strcpy copies it
+; to the caller's buffer; the bit is mask 0x8000 (EVT_GET_BIT) of RAM 0x276ce (EVT_GET_BIT_ADDRESS).
+BitEditCheck_FalseTrueNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x1622, 0x14
 ; [nakarest] naka_disk_warning+0x1636  +0x1636..+0x163a (0xeaa2e2, 4 B)
 ; [nakarest] Text (4 B at 0xeaa2e2), first string "ON"; no registered NAKA table points into it;
 ; [nakarest] reached through source references ButtonState_Paint_Default (ui/ui_widget_defs.s:
@@ -750,35 +859,39 @@ DbMemDump_Confirm_RowLoop_Str_Fmt2X_Fmt2X_Fmt2X_Fmt2X_Fmt2X:	.incbin "includes/g
 ; DbMemDump_OK: index = edit switch - 2 (0..5); the step is added (or subtracted, bit 7 of the param)
 ; to the dump address, which is then masked with NakaData_RomEnd.  Switch 0x10 steps 0x80 instead.
 DbMemDump_StepTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x1A4E, 0x18
-; [nakarest] naka_disk_warning+0x1a66  +0x1a66..+0x1a98 (0xeaa712, 50 B)
-; [nakarest] purpose not established: layout of 50 B at 0xeaa712 not derived; readers below
-; [nakarest] Readers: source references DbDebugMenu_Confirm (ui/ui_widget_defs.s: `lda xhl,
-; [nakarest] (DbDebugMenu_Confirm_PtrTable:24)`), DbDebugMenu_OK_Advance (ui/ui_widget_defs.s: `lda xhl,
-; [nakarest] (DbDebugMenu_Confirm_PtrTable:24)`).
-DbDebugMenu_Confirm_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x1A66, 0x32	; 4 x 32-bit pointer
-; [nakarest] naka_disk_warning+0x1a98  +0x1a98..+0x1aa4 (0xeaa744, 12 B)
-; [nakarest] purpose not established: layout of 12 B at 0xeaa744 not derived; readers below
-; [nakarest] Readers: source references DbDebugMenu_Close (ui/ui_widget_defs.s: `lda xde,
-; [nakarest] (DbDebugMenu_Init_Str_N1:24)`), DbDebugMenu_Init (ui/ui_widget_defs.s: `lda xde,
-; [nakarest] (DbDebugMenu_Init_Str_N1:24)`), DbDebugMenu_OK (ui/ui_widget_defs.s: `lda xde,
-; [nakarest] (DbDebugMenu_Init_Str_N1:24)`), DbDebugMenu_OK_CheckValid (ui/ui_widget_defs.s: `lda xbc,
-; [nakarest] (DbDebugMenu_Init_Str_N1:24)`).
-DbDebugMenu_Init_Str_N1:	.incbin "includes/generated/naka_disk_warning.bin", 0x1A98, 0x2	; "1"
-	.incbin "includes/generated/naka_disk_warning.bin", 0x1A9A, 0xA	; 10 bytes after DbDebugMenu_Init_Str_N1's string; unnamed (they sat under its label until 2026-10-03)
-; [nakarest] naka_disk_warning+0x1aa4  +0x1aa4..+0x1b44 (0xeaa750, 160 B)
-; [nakarest] purpose not established: layout of 160 B at 0xeaa750 not derived; readers below
-; [nakarest] Readers: source references PsTrackSwitchProc (ui/ui_widget_defs.s: `ld xiy,
-; [nakarest] PsTrackSwitchProc_PtrTable`).
-PsTrackSwitchProc_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x1AA4, 0xA0	; 20 x 32-bit pointer
-; [nakarest] naka_disk_warning+0x1b44  +0x1b44..+0x1b6e (0xeaa7f0, 42 B)
-; [nakarest] purpose not established: layout of 42 B at 0xeaa7f0 not derived; readers below
-; [nakarest] Readers: source references PsTrackSwitchProc (ui/ui_widget_defs.s: `ld xiy,
-; [nakarest] PsTrackSwitchProc_PtrTable_2`).
-PsTrackSwitchProc_PtrTable_2:	.incbin "includes/generated/naka_disk_warning.bin", 0x1B44, 0x2A	; 5 x 32-bit pointer
+; DbDebugMenu_PageTitles -- 4 x u32: debug-menu page titles by page index (word at *(instance+42)): 0 "-MEMORY DUMP-",
+; 1 "-MEMO-", 2 "-DEBUG3-", 3 "" = end. DbDebugMenu_Confirm (ui/ui_widget_defs.s) draws title[page] centred;
+; DbDebugMenu_OK_Advance increments the page and sets it back to 0 when the title's first byte is 0.
+DbDebugMenu_PageTitles:	.incbin "includes/generated/naka_disk_warning.bin", 0x1A66, 0x10
+; DbDebugMenu_PageTitleText -- 34 x char: "", "-DEBUG3-", "-MEMO-", "-MEMORY DUMP-" (NUL-terminated, 0xFF-padded),
+; the strings DbDebugMenu_PageTitles points at.
+DbDebugMenu_PageTitleText:	.incbin "includes/generated/naka_disk_warning.bin", 0x1A76, 0x22
+; DbDebugMenu_PageWindowIds -- 3 x uint32_t (this 2-byte slice + the 10 unnamed bytes after it): NAKA view id opened by each page
+; of the debug menu: [0] 0x31 MemDumpWindow ("-MEMORY DUMP-"), [1] 0x1E MemoWindow ("-MEMO-"), [2] 0xFFFFFFFF none ("-DEBUG3-").
+; DbDebugMenuProc takes entry [page] (u16 at *(instance +42), x4) and sends EVT_SHOW / EVT_HIDE to it unless it is 0xFFFFFFFF;
+; the page titles are DbDebugMenu_PageTitles, whose empty 4th title wraps the page back to 0.
+DbDebugMenu_PageWindowIds:	.incbin "includes/generated/naka_disk_warning.bin", 0x1A98, 0x2
+	.incbin "includes/generated/naka_disk_warning.bin", 0x1A9A, 0xA	; 10 bytes after DbDebugMenu_PageWindowIds's string; unnamed (they sat under its label until 2026-10-03)
+; PsTrkSw_AssignNamePtrs -- 20 x u32: 3-character name drawn for a track switch's assignment value 0..19
+; PsTrackSwitchProc (ui/ui_widget_defs.s) copies the 20 pointers (0x28 words) to its frame; on EVT_PARA_DRAW
+; it draws entry [value at the instance's +28 pointer] (the parameter's low 16 bits) with DrawStringCentered.
+; 0 RT1, 1 LFT, 2 RT2, 3 P 8, 4 P 9, 5 P10, 6 P11, 7 P12, 8 P 5, 9 P 6, 10 P 7, 11 P 4, 12 DRM, 13 CHD, 14 APC,
+; 15 CTL, 16 RHY, 17 P13, 18 P14, 19 P15 (the names are stored after it in reverse order).
+PsTrkSw_AssignNamePtrs:	.incbin "includes/generated/naka_disk_warning.bin", 0x1AA4, 0x50
+; PsTrkSw_AssignNames -- 20 x char[4]: the names PsTrkSw_AssignNamePtrs points at, element k = value 19-k
+; ("P15" first, "RT1" last); drawn by PsTrkSw_Confirm_DrawSecondary (ui/ui_widget_defs.s).
+PsTrkSw_AssignNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x1AF4, 0x50
+; PsTrkSw_SelectStateLabels -- 5 x u32: track-switch label per select state 0-4: "", "REC", "PLAY", "MUTE", "CLR"
+; PsTrackSwitchProc (ui/ui_widget_defs.s) copies it (10 words) to a local; on EVT_SELE_DRAW it indexes the copy by the
+; state word *(instance+32) * 4 and draws the string centred, in the box coloured from PsTrkSw_SelectStateColor.
+PsTrkSw_SelectStateLabels:	.incbin "includes/generated/naka_disk_warning.bin", 0x1B44, 0x14
+; PsTrkSw_SelectStateLabelText -- 22 x char: "CLR", "MUTE", "PLAY", "REC", "" (NUL-terminated, 0xFF-padded),
+; the strings PsTrkSw_SelectStateLabels points at.
+PsTrkSw_SelectStateLabelText:	.incbin "includes/generated/naka_disk_warning.bin", 0x1B58, 0x16
 ; PsTrkSw_SelectStateColor -- 5 x uint16_t: DrawBox colour per select state 0-4
 ; PsTrackSwitchProc (ui/ui_widget_defs.s) copies it to a local (5 words); on EVT_SELE_DRAW it indexes it
 ; by the state word *(instance+32) (`sla bc, 1`) and passes the word to DrawBox as the colour;
-; the same state indexes the 5 strings copied from PsTrackSwitchProc_PtrTable_2
+; the same state indexes the 5 strings copied from PsTrkSw_SelectStateLabels
 PsTrkSw_SelectStateColor:	.incbin "includes/generated/naka_disk_warning.bin", 0x1B6E, 0xA
 PsTrkSw_Confirm_DrawGeometry_Str_Fmtd:	.incbin "includes/generated/naka_disk_warning.bin", 0x1B78, 0x4	; "%d"
 AcTrkSw_Select_Data:			.incbin "includes/generated/naka_disk_warning.bin", 0x1B7C, 0x2
@@ -792,11 +905,11 @@ AcTrkSw_Select_HighTrack_Str_PsTextBox:	.incbin "includes/generated/naka_disk_wa
 ; [nakarest] points into it; reached through source references AcTrkSw_ShowHide_CheckDirty
 ; [nakarest] (ui/ui_widget_defs.s: `lda xhl, (AcTrkSw_ShowHide_CheckDirty_Str_AcLanguageText:24)`).
 AcTrkSw_ShowHide_CheckDirty_Str_AcLanguageText:	.incbin "includes/generated/naka_disk_warning.bin", 0x1B88, 0x10	; "AcLanguageText"
-; [nakarest] naka_disk_warning+0x1b98  +0x1b98..+0x1bf8 (0xeaa844, 96 B)
-; [nakarest] purpose not established: layout of 96 B at 0xeaa844 not derived; readers below
-; [nakarest] Readers: source references LanguageCheck (ui/ui_widget_defs.s: `lda xhl,
-; [nakarest] (LanguageCheck_PtrTable:24)`).
-LanguageCheck_PtrTable:			.incbin "includes/generated/naka_disk_warning.bin", 0x1B98, 0x4C	; 6 x 32-bit pointer
+; LanguageCheck_LanguageNames -- 6 x uint32_t + strings: name of each help language, index = language
+; {"English", "German", "French", "Spanish", "Italian", "Indonesian"} (strings stored in reverse order).
+; LanguageCheck (ui/ui_widget_defs.s) returns the table for EVT_GET_LANGUAGE_PTR; AcLanguageTextProc draws
+; entry [help language byte 0x340e4] with EVT_PARA_DRAW.
+LanguageCheck_LanguageNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x1B98, 0x4C
 ObjectProc_OnGetPropString_Str_YZ:		.incbin "includes/generated/naka_disk_warning.bin", 0x1BE4, 0x4	; "YZ"
 ObjectProc_OnGetPropName_Str_name:		.incbin "includes/generated/naka_disk_warning.bin", 0x1BE8, 0x6	; "name"
 ObjectProc_OnGetPropName_Str_romram:	.incbin "includes/generated/naka_disk_warning.bin", 0x1BEE, 0x8	; "romram"
@@ -826,16 +939,22 @@ ObjectProc_CaseTable:
 	.short	ObjectProc_OnGetInstanceSize - AcTrkSw_Return
 	.short	ObjectProc_OnGetPropChar - AcTrkSw_Return
 	.short	ObjectProc_OnAutoFree - AcTrkSw_Return
-; [nakarest] naka_disk_warning+0x1c20  +0x1c20..+0x1c30 (0xeaa8cc, 16 B)
-; [nakarest] purpose not established: layout of 16 B at 0xeaa8cc not derived; readers below
-; [nakarest] Readers: source references ExitWindow_Confirm (ui/ui_widget_defs.s: `ld xiy,
-; [nakarest] ExitWindow_Confirm_Data`).
-ExitWindow_Confirm_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C20, 0x10
-; [nakarest] naka_disk_warning+0x1c30  +0x1c30..+0x1c48 (0xeaa8dc, 24 B)
-; [nakarest] purpose not established: layout of 24 B at 0xeaa8dc not derived; readers below
-; [nakarest] Readers: source references ExitWindow_OK (ui/ui_widget_defs.s: `ld xiy,
-; [nakarest] ExitWindow_OK_Data`).
-ExitWindow_OK_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C30, 0x18
+; NakaMode_InitRecord -- 1 x 14-byte struct {u32 mode_proc, s32 start_title, s16 user_id, u32 name}: blank Mode object
+; InitializeObjectTable (ui/ui_widget_defs.s, loop ExitWindow_Confirm) copies it (7 words) into all 32 records at
+; RAM 0x328FC, then registers them as class Mode.  ModeProc reads +0 (GET_MODE_PROC/_ID), +4 (GET_START_TITLE),
+; +8 (GET_USER_ID, sign-extended), +10 (GET_NAME).  Values: NAKA_APFUNC_DefaultFunction, -1, -1, "".
+NakaMode_InitRecord:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C20, 0xE
+; NakaMode_InitName -- 2 x char: "" + 0xFF fill, name of a blank Mode object
+; NakaMode_InitRecord.name points here.
+NakaMode_InitName:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C2E, 0x2
+; Title_RecordTemplate -- 1 x 22-byte title record: the default copied into each of the 256 Title records at RAM 0x32ABC
+; {u32 title proc id 0x01200000, u32 start screen 0xFFFFFFFF (none), s16 user id -1 (iduNone), u32 name -> "",
+; u32 return screen, s16 interrupt prev, s16 interrupt next (title numbers relative to TITLE_PS)}.
+; InitializeObjectTable (ui/ui_widget_defs.s, loop at ExitWindow_OK) copies it 11 words at a time, then registers
+; the table as class Title (TitleProc, 0x100 records, slot 0x1A0); TitleProc reads the fields.
+Title_RecordTemplate:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C30, 0x16
+; Title_RecordTemplateName -- 2 x char: "" + 0xFF fill, the name (+10) of Title_RecordTemplate
+Title_RecordTemplateName:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C46, 0x2
 ; RegisterObject_Str_EmptyName -- 1 x char[2]: "" + 0xFF alignment pad
 ; RegisterObject (ui/ui_widget_defs.s) stores its address in the name table (registry slot + 0x300) entry
 ; of the element it allocates, so a dynamically registered object starts with an empty name
@@ -1239,36 +1358,35 @@ GraphicsRender_Start_PtrTable:
 	.long	SeGfx_BoundOp09_FormatNumber
 	.long	SeGfx_BoundOp0A_FormatNumber
 	.long	SeGfx_BoundOp0B_FormatNumber
-; [nakarest] naka_disk_warning+0x2328  +0x2328..+0x2330 (0xeaafd4, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeaafd4 not derived; readers below
-; [nakarest] Readers: source references SeGfx_StaticOp06_CellTextFont0 (display/graphics_text_vga.s:
-; [nakarest] `ld xiy, DrawText_LayoutAndRender_Data`).
-DrawText_LayoutAndRender_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x2328, 0x8
-; [nakarest] naka_disk_warning+0x2330  +0x2330..+0x2338 (0xeaafdc, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeaafdc not derived; readers below
-; [nakarest] Readers: source references SeGfx_StaticOp07_CellTextFont1
-; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data`).
-DrawText_LayoutAndRender_Variant1_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x2330, 0x8
-; [nakarest] naka_disk_warning+0x2338  +0x2338..+0x2340 (0xeaafe4, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeaafe4 not derived; readers below
-; [nakarest] Readers: source references SeGfx_StaticOp07_CellTextFont1
-; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data_2`).
-DrawText_LayoutAndRender_Variant1_Data_2:	.incbin "includes/generated/naka_disk_warning.bin", 0x2338, 0x8
-; [nakarest] naka_disk_warning+0x2340  +0x2340..+0x2348 (0xeaafec, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeaafec not derived; readers below
-; [nakarest] Readers: source references SeGfx_StaticOp07_CellTextFont1
-; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data_3`).
-DrawText_LayoutAndRender_Variant1_Data_3:	.incbin "includes/generated/naka_disk_warning.bin", 0x2340, 0x8
-; [nakarest] naka_disk_warning+0x2348  +0x2348..+0x2350 (0xeaaff4, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeaaff4 not derived; readers below
-; [nakarest] Readers: source references SeGfx_StaticOp07_CellTextFont1
-; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data_4`).
-DrawText_LayoutAndRender_Variant1_Data_4:	.incbin "includes/generated/naka_disk_warning.bin", 0x2348, 0x8
-; [nakarest] naka_disk_warning+0x2350  +0x2350..+0x2358 (0xeaaffc, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeaaffc not derived; readers below
-; [nakarest] Readers: source references DrawText_LayoutAndRender_Variant1_Loop
-; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data_5`).
-DrawText_LayoutAndRender_Variant1_Data_5:	.incbin "includes/generated/naka_disk_warning.bin", 0x2350, 0x8
+; SeGfx_StaticOp06_ClipBox -- 4 x uint16_t {x1, y1, x2, y2} = {0, 0, 319, 239}: text clip box of static display op 06 (the whole 320 x 240 screen)
+; SeGfx_StaticOp06_CellTextFont0 copies it with `ldirw` (4 words) into its frame and passes that copy as the box argument (XWA) of
+; DrawText_QueueOrDirect, whose TextRender_BeginDraw clamps x2 to 319 and y2 to 239. Entry 0 of SeGfx_TextClipBoxes[6][4] in C.
+SeGfx_StaticOp06_ClipBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x2328, 0x8
+; SeGfx_StaticOp07_ClipBox -- 4 x int16_t {x1, y1, x2, y2} = {0, 0, 319, 239}: the whole 320 x 240 screen, text clip box
+; SeGfx_StaticOp07_CellTextFont1 (display/graphics_text_vga.s), static display-record op 07 (cell text, font 1): copies the 8 bytes to its frame with ldirw and
+; passes that copy as the clip rectangle (XWA) to DrawText_QueueOrDirect -> TextRender_BeginDraw, which
+; clamps x1/y1 to >= 0, x2 to <= 319 and y2 to <= 239.
+SeGfx_StaticOp07_ClipBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x2330, 0x8
+; SeGfx_StaticOp08_ClipBox -- 4 x uint16_t {x1, y1, x2, y2} = {0, 0, 319, 239}: text clip box of static display op 08 (the whole 320 x 240 screen)
+; SeGfx_StaticOp08_CellTextFont2 copies it with `ldirw` (4 words) into its frame and passes that copy as the box argument (XWA) of
+; DrawText_QueueOrDirect, whose TextRender_BeginDraw clamps x2 to 319 and y2 to 239. Entry 2 of SeGfx_TextClipBoxes[6][4] in C.
+; The note's reader (SeGfx_StaticOp07_CellTextFont1) is wrong: op 07 reads the box before this one.
+SeGfx_StaticOp08_ClipBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x2338, 0x8
+; SeGfx_StaticOp17_ClipBox -- 4 x int16_t {x1, y1, x2, y2} = {0, 0, 319, 239}: the whole 320 x 240 screen, text clip box
+; SeGfx_StaticOp17_PixelTextFont3 (display/graphics_text_vga.s), static display-record op 17 (pixel-positioned text): copies the 8 bytes to its frame with ldirw and
+; passes that copy as the clip rectangle (XWA) to DrawText_QueueOrDirect -> TextRender_BeginDraw, which
+; clamps x1/y1 to >= 0, x2 to <= 319 and y2 to <= 239.
+SeGfx_StaticOp17_ClipBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x2340, 0x8
+; SeGfx_StaticOp1C_ClipBox -- 4 x uint16_t {x1, y1, x2, y2} = {0, 0, 319, 239}: text clip box of static display op 1C (the whole 320 x 240 screen)
+; SeGfx_StaticOp1C_PixelTextFont4 copies it with `ldirw` (4 words) into its frame and passes that copy as the box argument (XWA) of
+; DrawText_QueueOrDirect, whose TextRender_BeginDraw clamps x2 to 319 and y2 to 239. Entry 4 of SeGfx_TextClipBoxes[6][4] in C.
+; The note's reader (SeGfx_StaticOp07_CellTextFont1) is wrong.
+SeGfx_StaticOp1C_ClipBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x2348, 0x8
+; SeGfx_StaticOp20_ClipBox -- 4 x int16_t {x1, y1, x2, y2} = {0, 0, 319, 239}: the whole 320 x 240 screen, text clip box
+; SeGfx_StaticOp20_CellTextFont6 (display/graphics_text_vga.s), static display-record op 20 (cell text, font 6): copies the 8 bytes to its frame with ldirw and
+; passes that copy as the clip rectangle (XWA) to DrawText_QueueOrDirect -> TextRender_BeginDraw, which
+; clamps x1/y1 to >= 0, x2 to <= 319 and y2 to <= 239.
+SeGfx_StaticOp20_ClipBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x2350, 0x8
 ; TextStyle_FontTable -- 64 x u32, text style (record byte & 0x3f) -> font index (table_data/fonts.s);
 ; the readers in display/graphics_text_vga.s pass the entry to DrawText_QueueOrDirect as the font.
 ; Typed in ui_widgets/naka_disk_warning.c (scripts/converters/text_tables_retype.py).
@@ -1279,21 +1397,19 @@ TextStyle_FontTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x2358,
 ; CONFLICT: four readers in display/scoop_display.s index the same address with `sla wa, 2` / `ld xix, (xbc+wa)` (32-bit stride),
 ; which would fetch 0x03030303-style values; that Scoop path cannot be using a valid font from this table.
 TextStyle_NibbleFontTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x2458, 0x10
-; [nakarest] naka_disk_warning+0x2468  +0x2468..+0x2470 (0xeab114, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeab114 not derived; readers below
-; [nakarest] Readers: source references DrawText_ExtendedLayout (display/graphics_text_vga.s:
-; [nakarest] `ld xiy, DrawText_ExtendedLayout_Data`).
-DrawText_ExtendedLayout_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x2468, 0x8
-; [nakarest] naka_disk_warning+0x2470  +0x2470..+0x2478 (0xeab11c, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeab11c not derived; readers below
-; [nakarest] Readers: source references DrawText_ExtLayout_Variant1
-; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_ExtLayout_Variant1_Data`).
-DrawText_ExtLayout_Variant1_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x2470, 0x8
-; [nakarest] naka_disk_warning+0x2478  +0x2478..+0x2480 (0xeab124, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeab124 not derived; readers below
-; [nakarest] Readers: source references DrawFunc_Init (display/graphics_text_vga.s: `ld xiy,
-; [nakarest] DrawFunc_Init_Data`).
-DrawFunc_Init_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x2478, 0x8
+; DrawText_ExtendedLayout_ClipRect -- 4 x int16_t: clip rectangle {x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen
+; DrawText_ExtendedLayout (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to
+; DrawText_QueueOrDirect as the clip rectangle.  The old C read its last 4 bytes (3F 01 EF 00) as a pointer.
+DrawText_ExtendedLayout_ClipRect:	.incbin "includes/generated/naka_disk_warning.bin", 0x2468, 0x8
+; SeGfx_BoundOp07_ClipBox -- 4 x uint16_t {x1, y1, x2, y2} = {0, 0, 319, 239}: text clip box of bound display op 07 (the whole 320 x 240 screen)
+; DrawText_ExtLayout_Variant1 copies it with `ldirw` (4 words) into its frame and passes that copy as the box argument (XWA) of
+; DrawText_QueueOrDirect, whose TextRender_BeginDraw clamps x2 to 319 and y2 to 239.
+SeGfx_BoundOp07_ClipBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x2470, 0x8
+; SeGfx_BoundOp00_ClipBox -- 4 x int16_t {x1, y1, x2, y2} = {0, 0, 319, 239}: the whole 320 x 240 screen, text clip box
+; DrawFunc_Init (display/graphics_text_vga.s), bound display-record op 00 (GraphicsRender_Start_PtrTable[0]: a RAM byte field printed with %1d/%2d/%3d): copies the 8 bytes to its frame with ldirw and
+; passes that copy as the clip rectangle (XWA) to DrawText_QueueOrDirect -> TextRender_BeginDraw, which
+; clamps x1/y1 to >= 0, x2 to <= 319 and y2 to <= 239.
+SeGfx_BoundOp00_ClipBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x2478, 0x8
 ; [nakarest] naka_disk_warning+0x2480  +0x2480..+0x2484 (0xeab12c, 4 B)
 ; [nakarest] Text (4 B at 0xeab12c), first string "%1d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references DrawFunc_Init_SkipShift
@@ -1309,11 +1425,10 @@ DrawFunc_Init_FontTable2_Str_Fmt2d:	.incbin "includes/generated/naka_disk_warnin
 ; [nakarest] it; reached through source references DrawFunc_Init_FontTable0
 ; [nakarest] (display/graphics_text_vga.s: `ld xwa, DrawFunc_Init_FontTable0_Str_Fmt3d`).
 DrawFunc_Init_FontTable0_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.bin", 0x2488, 0x4	; "%3d"
-; [nakarest] naka_disk_warning+0x248c  +0x248c..+0x2494 (0xeab138, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeab138 not derived; readers below
-; [nakarest] Readers: source references DrawFunc_Init_Variant1 (display/graphics_text_vga.s: `ld
-; [nakarest] xiy, DrawFunc_Init_Variant1_Data`).
-DrawFunc_Init_Variant1_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x248C, 0x8
+; DrawFunc_Init_Variant1_ClipRect -- 4 x int16_t: clip rectangle {x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen
+; DrawFunc_Init_Variant1 (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to
+; DrawText_QueueOrDirect as the clip rectangle.  The old C read its last 4 bytes (3F 01 EF 00) as a pointer.
+DrawFunc_Init_Variant1_ClipRect:	.incbin "includes/generated/naka_disk_warning.bin", 0x248C, 0x8
 ; [nakarest] naka_disk_warning+0x2494  +0x2494..+0x24a0 (0xeab140, 12 B)
 ; [nakarest] Text (12 B at 0xeab140), first string "%1d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references DrawFunc_Init_Join
@@ -1336,11 +1451,10 @@ DrawFunc_Init_Entry_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.bin
 ; [nakarest] it; reached through source references DrawFunc_Init_Skip6
 ; [nakarest] (display/graphics_text_vga.s: `ld xwa, DrawFunc_Init_Entry_Str_Fmt4d`).
 DrawFunc_Init_Entry_Str_Fmt4d:	.incbin "includes/generated/naka_disk_warning.bin", 0x24A8, 0x4	; "%4d"
-; [nakarest] naka_disk_warning+0x24ac  +0x24ac..+0x24b4 (0xeab158, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeab158 not derived; readers below
-; [nakarest] Readers: source references DrawFunc_Init_Join2 (display/graphics_text_vga.s: `ld
-; [nakarest] xiy, DrawFunc_Init_Entry_Data`).
-DrawFunc_Init_Entry_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x24AC, 0x8
+; SeGfx_BoundOp06_ClipRect -- 4 x int16_t: clip rectangle {x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen
+; SeGfx_BoundOp06_Helper (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to
+; DrawText_QueueOrDirect as the clip rectangle.  The old C read its last 4 bytes (3F 01 EF 00) as a pointer.
+SeGfx_BoundOp06_ClipRect:	.incbin "includes/generated/naka_disk_warning.bin", 0x24AC, 0x8
 ; [nakarest] naka_disk_warning+0x24b4  +0x24b4..+0x24b8 (0xeab160, 4 B)
 ; [nakarest] Text (4 B at 0xeab160), first string "%1d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references DrawFunc_Init_Join2
@@ -1356,11 +1470,10 @@ DrawFunc_Init_Entry2_Str_Fmt2d:	.incbin "includes/generated/naka_disk_warning.bi
 ; [nakarest] it; reached through source references DrawFunc_Init_Entry3
 ; [nakarest] (display/graphics_text_vga.s: `ld xwa, DrawFunc_Init_Entry3_Str_Fmt3d`).
 DrawFunc_Init_Entry3_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.bin", 0x24BC, 0x4	; "%3d"
-; [nakarest] naka_disk_warning+0x24c0  +0x24c0..+0x24c8 (0xeab16c, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeab16c not derived; readers below
-; [nakarest] Readers: source references DrawFunc_Init_Join3 (display/graphics_text_vga.s: `ld
-; [nakarest] xiy, DrawFunc_Init_Entry3_Data`).
-DrawFunc_Init_Entry3_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x24C0, 0x8
+; SeGfx_BoundOp09_ClipRect -- 4 x int16_t: clip rectangle {x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen
+; SeGfx_BoundOp09_FormatNumber (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to
+; DrawText_QueueOrDirect as the clip rectangle.  The old C read its last 4 bytes (3F 01 EF 00) as a pointer.
+SeGfx_BoundOp09_ClipRect:	.incbin "includes/generated/naka_disk_warning.bin", 0x24C0, 0x8
 ; [nakarest] naka_disk_warning+0x24c8  +0x24c8..+0x24cc (0xeab174, 4 B)
 ; [nakarest] Text (4 B at 0xeab174), first string "%1d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references DrawFunc_Init_Join3
@@ -1376,11 +1489,10 @@ DrawFunc_Init_Entry3_Str_Fmt2d:	.incbin "includes/generated/naka_disk_warning.bi
 ; [nakarest] it; reached through source references DrawFunc_Init_Join3
 ; [nakarest] (display/graphics_text_vga.s: `ld xwa, DrawFunc_Init_Entry3_Str_Fmt3d_2`).
 DrawFunc_Init_Entry3_Str_Fmt3d_2:	.incbin "includes/generated/naka_disk_warning.bin", 0x24D0, 0x4	; "%3d"
-; [nakarest] naka_disk_warning+0x24d4  +0x24d4..+0x24dc (0xeab180, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeab180 not derived; readers below
-; [nakarest] Readers: source references DrawFunc_Init_Join4 (display/graphics_text_vga.s: `ld
-; [nakarest] xiy, DrawFunc_Init_Entry3_Data_2`).
-DrawFunc_Init_Entry3_Data_2:	.incbin "includes/generated/naka_disk_warning.bin", 0x24D4, 0x8
+; SeGfx_BoundOp0B_ClipRect -- 4 x int16_t: clip rectangle {x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen
+; SeGfx_BoundOp0B_FormatNumber (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to
+; DrawText_QueueOrDirect as the clip rectangle.  The old C read its last 4 bytes (3F 01 EF 00) as a pointer.
+SeGfx_BoundOp0B_ClipRect:	.incbin "includes/generated/naka_disk_warning.bin", 0x24D4, 0x8
 ; [nakarest] naka_disk_warning+0x24dc  +0x24dc..+0x24e0 (0xeab188, 4 B)
 ; [nakarest] Text (4 B at 0xeab188), first string "%1d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references DrawFunc_Init_Join5
@@ -1411,11 +1523,10 @@ DrawFunc_Init_Entry5_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.bi
 ; [nakarest] it; reached through source references DrawFunc_Init_Skip11
 ; [nakarest] (display/graphics_text_vga.s: `ld xwa, DrawFunc_Init_Entry5_Str_Fmt4d`).
 DrawFunc_Init_Entry5_Str_Fmt4d:	.incbin "includes/generated/naka_disk_warning.bin", 0x24F0, 0x4	; "%4d"
-; [nakarest] Data_CharMapFormatBlock  +0x24f4..+0x24fc (0xeab1a0, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xeab1a0 not derived; readers below
-; [nakarest] Readers: source references DrawFunc_Init_Join6 (display/graphics_text_vga.s: `.long
-; [nakarest] Data_CharMapFormatBlock`).
-Data_CharMapFormatBlock:	.incbin "includes/generated/naka_disk_warning.bin", 0x24F4, 0x8
+; SeGfx_BoundOp0A_ClipRect -- 4 x int16_t: clip rectangle {x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen
+; SeGfx_BoundOp0A_FormatNumber (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to
+; DrawText_QueueOrDirect as the clip rectangle.  The old C read its last 4 bytes (3F 01 EF 00) as a pointer.
+SeGfx_BoundOp0A_ClipRect:	.incbin "includes/generated/naka_disk_warning.bin", 0x24F4, 0x8
 ; [nakarest] naka_disk_warning+0x24fc  +0x24fc..+0x2504 (0xeab1a8, 8 B)
 ; [nakarest] Text (8 B at 0xeab1a8), first string "%1d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references DrawFunc_Init_Join6

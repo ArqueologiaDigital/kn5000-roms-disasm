@@ -2787,17 +2787,20 @@ typedef struct __attribute__((packed)) {
     char PasswordOk_Str_Query_Query[4];
     char CheckPasswordOk_Str_Query_Query[4];
     /* DiskAttention_PtrTable: 6 pointers (cut from ptrs_18 by split_naka_pointer_arrays.py) */
-    uint32_t DiskAttention_PtrTable[6];
-    char Perhatian_str[12];
-    char Attention_str[12];
-    uint16_t field_7862;
-    uint16_t field_7864;
-    uint16_t field_7866;
-    uint16_t field_7868;
-    char N_str[4];
-    char Attention_str_2[12];
-    char Achtung_str[10];
-    char Attention_str_3[12];
+    /* the DiskAttention heading text ("ATTENTION!"), one pointer per language (0 English, 1 German, 2 French, 3 Spanish, 4 Italian, 5 Indonesian); Italian holds the English text */
+    uint32_t DiskAttention_TextByLanguage[6];
+    /* "Perhatian !": Indonesian entry of DiskAttention_TextByLanguage */
+    char DiskAttention_Text_Indonesian[12];
+    /* "ATTENTION!" + 0xFF fill: Italian entry of DiskAttention_TextByLanguage */
+    char DiskAttention_Text_Italian[12];
+    /* "¡ATENCIÓN!" + 0xFF fill: Spanish entry of DiskAttention_TextByLanguage */
+    char DiskAttention_Text_Spanish[12];
+    /* "ATTENTION!" + 0xFF fill: French entry of DiskAttention_TextByLanguage */
+    char DiskAttention_Text_French[12];
+    /* "ACHTUNG !": German entry of DiskAttention_TextByLanguage */
+    char DiskAttention_Text_German[10];
+    /* "ATTENTION!" + 0xFF fill: English entry of DiskAttention_TextByLanguage */
+    char DiskAttention_Text_English[12];
     /* DiskSure_PtrTable: 6 pointers (cut from ptrs_19 by split_naka_pointer_arrays.py) */
     uint32_t DiskSure_PtrTable[6];
     char ApakahYakinAkanDihapus_str[28];
@@ -14019,34 +14022,22 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .CheckPasswordOk_Str_Query_Query = ALIGNED_STRING("??"),
 
-    .DiskAttention_PtrTable = {
-        SELF(Attention_str_3),
-        SELF(Achtung_str),
-        SELF(Attention_str_2),
-        SELF(field_7862),
-        SELF(Attention_str),
-        SELF(Perhatian_str),
+    .DiskAttention_TextByLanguage = {
+        SELF(DiskAttention_Text_English), SELF(DiskAttention_Text_German), SELF(DiskAttention_Text_French), SELF(DiskAttention_Text_Spanish),
+        SELF(DiskAttention_Text_Italian), SELF(DiskAttention_Text_Indonesian),
     },
 
-    .Perhatian_str = "Perhatian !",
+    .DiskAttention_Text_Indonesian = "Perhatian !",
 
-    .Attention_str = ALIGNED_STRING("ATTENTION!"),
+    .DiskAttention_Text_Italian = "ATTENTION!\x00\xFF",
 
-    .field_7862 = 0x41A1,
+    .DiskAttention_Text_Spanish = "\xA1" "ATENCI\xD3N!\x00\xFF",
 
-    .field_7864 = 0x4554,
+    .DiskAttention_Text_French = "ATTENTION!\x00\xFF",
 
-    .field_7866 = 0x434E,
+    .DiskAttention_Text_German = "ACHTUNG !",
 
-    .field_7868 = 0xD349,
-
-    .N_str = ALIGNED_STRING("N!"),
-
-    .Attention_str_2 = ALIGNED_STRING("ATTENTION!"),
-
-    .Achtung_str = "ACHTUNG !",
-
-    .Attention_str_3 = ALIGNED_STRING("ATTENTION!"),
+    .DiskAttention_Text_English = "ATTENTION!\x00\xFF",
 
     .DiskSure_PtrTable = {
         0x00EA8CCE,

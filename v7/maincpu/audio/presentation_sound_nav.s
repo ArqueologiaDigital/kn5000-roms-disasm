@@ -1900,7 +1900,7 @@ AcNaming_QueryCharSet:
 	ld wa, hl
 	extz xwa
 	sll xwa, 2
-	ld xbc, AcNaming_QueryCharSet_PtrTable
+	ld xbc, AcNaming_FillCharByMode
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (0x0274e4:24), xwa

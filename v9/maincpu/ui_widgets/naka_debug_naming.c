@@ -37,6 +37,7 @@ extern const char SeqByteBlock_PathNormalize;
 extern const char WidgetCharMap_DataEntry1;
 extern const char WidgetName_PtrBlock_G;
 extern const char WidgetName_PtrBlock_I1;
+extern const char NakaInst_iduRoot;
 
 #define BASE  0x00EB2AFEu
 
@@ -75,6 +76,78 @@ extern const char WidgetName_PtrBlock_I1;
 /* NakaInst_RECTW_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* NakaInst_PointY_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* NakaInst_String_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_Bool_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_ObjectID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_BorderID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_ModeID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_EditSwID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_EditSwStyleID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_ViewFlag_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_ColorID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_FontID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_AlignmentID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_MainFuncID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_UserID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_UserID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_MainFuncID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_AlignmentID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_FontID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_ColorID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_ViewFlag_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    int32_t value;
+} NakaInst_EditSwStyleID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    int32_t value;
+} NakaInst_EditSwID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    int32_t value;
+} NakaInst_ModeID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    int32_t value;
+} NakaInst_BorderID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    int32_t value;
+} NakaInst_ObjectID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    int32_t value;
+} NakaInst_Bool_EnumTable_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t name;
     uint32_t value;
@@ -878,17 +951,21 @@ typedef struct __attribute__((packed)) {
     NakaInst_ulong_EnumTable_t NakaInst_ulong_EnumTable[1];
     /* "" (NUL + 0xFF alignment pad): name of the terminator entry of the ulong enum table */
     char NakaInst_ulong_EmptyStr[2];
-    uint8_t field_3d1c;
-    uint16_t field_3d1d;
-    uint16_t field_3d1f;
-    uint8_t pad_81[3];  /* zero padding */
-    uint32_t ptrs_6[4];  /* 4 pointers */
-    char w26_code[2];
-    char False_name[6];
-    char True_str[6];
-    uint32_t ptr_3d42;
-    uint8_t pad_82[5];  /* zero padding */
-    uint8_t field_3d4b;
+    /* zero padding */
+    /* 4 pointers */
+    /* zero padding */
+    /* Bool property value names {name, value}: 2 named values + the {"", 0} end entry (SupportClass record 6, boolProc) */
+    NakaInst_Bool_EnumTable_t NakaInst_Bool_EnumTable[3];
+    /* "" + 0xFF fill: name of the end entry of NakaInst_Bool_EnumTable */
+    char NakaInst_Bool_EmptyStr[2];
+    /* "False": name of Bool value 0 */
+    char NakaInst_Bool_False_Str[6];
+    /* "True" + 0xFF fill: name of Bool value 1 */
+    char NakaInst_Bool_True_Str[6];
+    /* ObjectID property value names: only the {"", 0} end entry (SupportClass record 7, ObjectIDProc, count 0) */
+    NakaInst_ObjectID_EnumTable_t NakaInst_ObjectID_EnumTable[1];
+    /* "" + 0xFF fill: name of the end entry of NakaInst_ObjectID_EnumTable */
+    char NakaInst_ObjectID_EmptyStr[2];
     /* zero padding */
     /* zero padding */
     /* pFunc property enum: only the end entry {"", 0} (count 0: values are plain integers) */
@@ -964,236 +1041,125 @@ typedef struct __attribute__((packed)) {
     /* zero padding */
     /* ViewIDProc's value-name list: count 0 (SupportClass entry 26, word +4), so only the terminator {"", 0} and its own "" string */
     SupportClass_ViewIDValueNames_t SupportClass_ViewIDValueNames;
-    uint8_t field_3e2e;
-    uint16_t field_3e2f;
-    uint8_t pad_104[5];  /* zero padding */
-    uint32_t VF_Invisible_str_ptr;
-    uint16_t field_3e3a;
-    uint8_t pad_105[2];  /* zero padding */
-    uint32_t VF_Fixed_str_ptr;
-    uint16_t field_3e42;
-    uint8_t pad_106[2];  /* zero padding */
-    uint32_t VF_Change_str_ptr;
-    uint16_t field_3e4a;
-    uint8_t pad_107[2];  /* zero padding */
-    uint32_t VF_Const_str_ptr;
-    uint16_t field_3e52;
-    uint8_t pad_108[2];  /* zero padding */
-    uint32_t ptr_3e56;
-    uint16_t field_3e5a;
-    uint8_t pad_109[2];  /* zero padding */
-    uint32_t ptr_3e5e;
-    uint8_t pad_110[5];  /* zero padding */
-    uint16_t field_3e67;
-    char F_InvisibleBox_str[15];
-    char VF_Const_str[10];
-    char VF_Change_str[10];
-    char VF_Fixed_str[10];
-    char VF_Invisible_str[14];
-    char VF_None_str[8];
-    uint32_t ptrs_7[3];  /* 3 pointers */
-    uint16_t field_3eb8;
-    uint8_t pad_111[2];  /* zero padding */
-    uint32_t CL_Green_str_ptr;
-    uint16_t field_3ec0;
-    uint8_t pad_112[2];  /* zero padding */
-    uint32_t CL_Olive_str_ptr;
-    uint16_t field_3ec8;
-    uint8_t pad_113[2];  /* zero padding */
-    uint32_t CL_Navy_str_ptr;
-    uint16_t field_3ed0;
-    uint8_t pad_114[2];  /* zero padding */
-    uint32_t CL_Purple_str_ptr;
-    uint16_t field_3ed8;
-    uint8_t pad_115[2];  /* zero padding */
-    uint32_t CL_Teal_str_ptr;
-    uint16_t field_3ee0;
-    uint8_t pad_116[2];  /* zero padding */
-    uint32_t CL_DarkGray_str_ptr;
-    uint16_t field_3ee8;
-    uint8_t pad_117[2];  /* zero padding */
-    uint32_t CL_Gray_str_ptr;
-    uint16_t field_3ef0;
-    uint8_t pad_118[2];  /* zero padding */
-    uint32_t CL_Silver_str_ptr;
-    uint16_t field_3ef8;
-    uint8_t pad_119[2];  /* zero padding */
-    uint32_t CL_Red_str_ptr;
-    uint16_t field_3f00;
-    uint8_t pad_120[2];  /* zero padding */
-    uint32_t CL_Lime_str_ptr;
-    uint16_t field_3f08;
-    uint8_t pad_121[2];  /* zero padding */
-    uint32_t CL_Yellow_str_ptr;
-    uint16_t field_3f10;
-    uint8_t pad_122[2];  /* zero padding */
-    uint32_t CL_Blue_str_ptr;
-    uint16_t field_3f18;
-    uint8_t pad_123[2];  /* zero padding */
-    uint32_t CL_Fuchsia_str_ptr;
-    uint16_t field_3f20;
-    uint8_t pad_124[2];  /* zero padding */
-    uint32_t CL_Aqua_str_ptr;
-    uint16_t field_3f28;
-    uint8_t pad_125[2];  /* zero padding */
-    uint32_t CL_Orange_str_ptr;
-    uint16_t field_3f30;
-    uint8_t pad_126[2];  /* zero padding */
-    uint32_t CL_FireRed_str_ptr;
-    uint16_t field_3f38;
-    uint8_t pad_127[2];  /* zero padding */
-    uint32_t CL_DarkYellow_str_ptr;
-    uint16_t field_3f40;
-    uint8_t pad_128[2];  /* zero padding */
-    uint32_t CL_LightGreen_str_ptr;
-    uint16_t field_3f48;
-    uint8_t pad_129[2];  /* zero padding */
-    uint32_t CL_White_str_ptr;
-    uint16_t field_3f50;
-    uint8_t pad_130[2];  /* zero padding */
-    uint32_t CL_IconBack_str_ptr;
-    uint16_t field_3f58;
-    uint8_t pad_131[2];  /* zero padding */
-    uint32_t CL_Text_str_ptr;
-    uint16_t field_3f60;
-    uint8_t pad_132[2];  /* zero padding */
-    uint32_t CL_Selected_str_ptr;
-    uint16_t field_3f68;
-    uint8_t pad_133[2];  /* zero padding */
-    uint32_t CL_PageBack_str_ptr;
-    uint16_t field_3f70;
-    uint8_t pad_134[2];  /* zero padding */
-    uint32_t CL_EditSw_str_ptr;
-    uint16_t field_3f78;
-    uint8_t pad_135[2];  /* zero padding */
-    uint32_t CL_Transparent_str_ptr;
-    uint16_t field_3f80;
-    uint8_t pad_136[2];  /* zero padding */
-    uint32_t ptr_3f84;
-    uint16_t field_3f88;
-    uint8_t pad_137[2];  /* zero padding */
-    uint32_t ptr_3f8c;
-    uint16_t field_3f90;
-    uint8_t pad_138[2];  /* zero padding */
-    uint32_t ptr_3f94;
-    uint8_t pad_139[5];  /* zero padding */
-    uint16_t field_3f9d;
-    char L_WallPattern_str[14];
-    uint16_t field_3fad;
-    char L_HairLine_str[11];
-    char CL_Transparent_str[16];
-    char CL_EditSw_str[10];
-    char CL_PageBack_str[12];
-    char CL_Selected_str[12];
-    char CL_Text_str[8];
-    char CL_IconBack_str[12];
-    char CL_White_str[10];
-    char CL_LightGreen_str[14];
-    char CL_DarkYellow_str[14];
-    char CL_FireRed_str[12];
-    char CL_Orange_str[10];
-    char CL_Aqua_str[8];
-    char CL_Fuchsia_str[12];
-    char CL_Blue_str[8];
-    char CL_Yellow_str[10];
-    char CL_Lime_str[8];
-    char CL_Red_str[8];
-    char CL_Silver_str[10];
-    char CL_Gray_str[8];
-    char CL_DarkGray_str[12];
-    char CL_Teal_str[8];
-    char CL_Purple_str[10];
-    char CL_Navy_str[8];
-    char CL_Olive_str[10];
-    char CL_Green_str[10];
-    char CL_Maroon_str[10];
-    char CL_Black_str[10];
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* 3 pointers */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* ViewFlag property value names {name, value}: VF_None 0, VF_Invisible 1, VF_Fixed 2, VF_Change 4, VF_Const 8, VF_InvisibleBox 0x10, end {"", 0}; walked by CommonIDProc */
+    NakaInst_ViewFlag_EnumTable_t NakaInst_ViewFlag_EnumTable[7];
+    /* "" + 0xFF fill: the name of the end entry of NakaInst_ViewFlag_EnumTable */
+    char NakaInst_ViewFlag_EmptyStr[2];
+    /* the six ViewFlag value names, NUL-terminated, 0xFF-padded to even length; NakaInst_ViewFlag_EnumTable points into it */
+    char NakaInst_ViewFlag_NameStrings[68];
+    /* ColorID property value names {name, palette index}: CL_Black 0 .. CL_LightGreen 13, CL_IconBack 0xF0 .. CL_White 0xFF, end {"", 0}; walked by CommonIDProc */
+    NakaInst_ColorID_EnumTable_t NakaInst_ColorID_EnumTable[30];
+    /* "" + 0xFF fill: the name of the end entry of NakaInst_ColorID_EnumTable */
+    char NakaInst_ColorID_EmptyStr[2];
+    /* the 29 ColorID value names CL_WallPattern .. CL_Black, NUL-terminated, 0xFF-padded to even length; NakaInst_ColorID_EnumTable points into it */
+    char NakaInst_ColorID_NameStrings[308];
     /* NakaProp_BorderDefs: 3 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
-    uint32_t NakaProp_BorderDefs[3];
-    uint16_t field_40de;
-    uint8_t pad_140[2];  /* zero padding */
-    uint32_t BD_Single2_str_ptr;
-    uint16_t field_40e6;
-    uint8_t pad_141[2];  /* zero padding */
-    uint32_t BD_Double1_str_ptr;
-    uint16_t field_40ee;
-    uint8_t pad_142[2];  /* zero padding */
-    uint32_t BD_Shadow1_str_ptr;
-    uint16_t field_40f6;
-    uint8_t pad_143[2];  /* zero padding */
-    uint32_t BD_Shadow2_str_ptr;
-    uint16_t field_40fe;
-    uint8_t pad_144[2];  /* zero padding */
-    uint32_t BD_Round0_str_ptr;
-    uint16_t field_4106;
-    uint8_t pad_145[2];  /* zero padding */
-    uint32_t BD_Round1_str_ptr;
-    uint16_t field_410e;
-    uint8_t pad_146[3];  /* zero padding */
-    uint16_t field_4113;
-    uint16_t field_4115;
-    uint8_t pad_147[3];  /* zero padding */
-    uint32_t BD_Round5_str_ptr;
-    uint16_t field_411e;
-    uint8_t pad_148[2];  /* zero padding */
-    uint32_t BD_Round9_str_ptr;
-    uint16_t field_4126;
-    uint8_t pad_149[2];  /* zero padding */
-    uint32_t BD_Round14_str_ptr;
-    uint16_t field_412e;
-    uint8_t pad_150[2];  /* zero padding */
-    uint32_t BD_3D_UP1_str_ptr;
-    uint16_t field_4136;
-    uint8_t pad_151[2];  /* zero padding */
-    uint32_t BD_3D_UP2_str_ptr;
-    uint16_t field_413e;
-    uint8_t pad_152[2];  /* zero padding */
-    uint32_t BD_3D_DOWN1_str_ptr;
-    uint16_t field_4146;
-    uint8_t pad_153[2];  /* zero padding */
-    uint32_t BD_3D_DOWN2_str_ptr;
-    uint16_t field_414e;
-    uint8_t pad_154[2];  /* zero padding */
-    uint32_t BD_EditSwitch_str_ptr;
-    uint16_t field_4156;
-    uint8_t pad_155[2];  /* zero padding */
-    uint32_t ptr_415a;
-    uint16_t field_415e;
-    uint8_t pad_156[2];  /* zero padding */
-    uint32_t ptr_4162;
-    uint16_t field_4166;
-    uint8_t pad_157[2];  /* zero padding */
-    uint32_t ptr_416a;
-    uint16_t field_416e;
-    uint8_t pad_158[2];  /* zero padding */
-    uint32_t ptr_4172;
-    uint8_t pad_159[5];  /* zero padding */
-    uint16_t field_417b;
-    char D_TrackSwDown_str[14];
-    uint16_t field_418b;
-    char D_TrackSwUp_str[12];
-    uint16_t field_4199;
-    char D_EditSwDown_str[13];
-    char BD_EditSwitch_str[14];
-    char BD_3D_DOWN2_str[12];
-    char BD_3D_DOWN1_str[12];
-    char BD_3D_UP2_str[10];
-    char BD_3D_UP1_str[10];
-    char BD_Round14_str[12];
-    char BD_Round9_str[10];
-    char BD_Round5_str[10];
-    char BD_Round2_str[10];
-    char BD_Round1_str[10];
-    char BD_Round0_str[10];
-    char BD_Shadow2_str[12];
-    char BD_Shadow1_str[12];
-    char BD_Double1_str[12];
-    char BD_Single2_str[12];
-    char BD_Single1_str[12];
-    char BD_None_str[8];
-    uint32_t ptr_4264;
-    uint8_t pad_160[5];  /* zero padding */
-    uint8_t field_426d;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* BorderID property value names {name, value}: 20 named values + the {"", 0} end entry (SupportClass record 30, BorderIDProc) */
+    NakaInst_BorderID_EnumTable_t NakaInst_BorderID_EnumTable[21];
+    /* "" + 0xFF fill: name of the end entry of NakaInst_BorderID_EnumTable */
+    char NakaInst_BorderID_EmptyStr[2];
+    /* "BD_TrackSwDown" + 0xFF fill: name of BorderID value 0xCC */
+    char NakaInst_BD_TrackSwDown_Str[16];
+    /* "BD_TrackSwUp" + 0xFF fill: name of BorderID value 0xCB */
+    char NakaInst_BD_TrackSwUp_Str[14];
+    /* "BD_EditSwDown": name of BorderID value 0xCA */
+    char NakaInst_BD_EditSwDown_Str[14];
+    /* "BD_EditSwitch": name of BorderID value 0xC9 */
+    char NakaInst_BD_EditSwitch_Str[14];
+    /* "BD_3D_DOWN2": name of BorderID value 0xC3 */
+    char NakaInst_BD_3D_DOWN2_Str[12];
+    /* "BD_3D_DOWN1": name of BorderID value 0xC2 */
+    char NakaInst_BD_3D_DOWN1_Str[12];
+    /* "BD_3D_UP2": name of BorderID value 0xC1 */
+    char NakaInst_BD_3D_UP2_Str[10];
+    /* "BD_3D_UP1": name of BorderID value 0xC0 */
+    char NakaInst_BD_3D_UP1_Str[10];
+    /* "BD_Round14" + 0xFF fill: name of BorderID value 0x0B */
+    char NakaInst_BD_Round14_Str[12];
+    /* "BD_Round9": name of BorderID value 0x0A */
+    char NakaInst_BD_Round9_Str[10];
+    /* "BD_Round5": name of BorderID value 9 */
+    char NakaInst_BD_Round5_Str[10];
+    /* "BD_Round2": name of BorderID value 8 */
+    char NakaInst_BD_Round2_Str[10];
+    /* "BD_Round1": name of BorderID value 7 */
+    char NakaInst_BD_Round1_Str[10];
+    /* "BD_Round0": name of BorderID value 6 */
+    char NakaInst_BD_Round0_Str[10];
+    /* "BD_Shadow2" + 0xFF fill: name of BorderID value 5 */
+    char NakaInst_BD_Shadow2_Str[12];
+    /* "BD_Shadow1" + 0xFF fill: name of BorderID value 4 */
+    char NakaInst_BD_Shadow1_Str[12];
+    /* "BD_Double1" + 0xFF fill: name of BorderID value 3 */
+    char NakaInst_BD_Double1_Str[12];
+    /* "BD_Single2" + 0xFF fill: name of BorderID value 2 */
+    char NakaInst_BD_Single2_Str[12];
+    /* "BD_Single1" + 0xFF fill: name of BorderID value 1 */
+    char NakaInst_BD_Single1_Str[12];
+    /* "BD_None": name of BorderID value 0 */
+    char NakaInst_BD_None_Str[8];
+    /* ModeID property value names: only the {"", 0} end entry (SupportClass record 31, ModeIDProc, count 0) */
+    NakaInst_ModeID_EnumTable_t NakaInst_ModeID_EnumTable[1];
+    /* "" + 0xFF fill: name of the end entry of NakaInst_ModeID_EnumTable */
+    char NakaInst_ModeID_EmptyStr[2];
     /* zero padding */
     /* zero padding */
     /* TitleID property enum: only the end entry {"", 0} (count 0: values are plain integers) */
@@ -1204,173 +1170,142 @@ typedef struct __attribute__((packed)) {
     NakaInst_IconID_EnumTable_t NakaInst_IconID_EnumTable[1];
     /* "" naming the end entry of NakaInst_IconID_EnumTable, plus 0xFF fill */
     char NakaInst_IconID_EmptyStr[2];
-    uint8_t field_4282;
-    uint16_t field_4283;
-    uint8_t pad_163[6];  /* zero padding */
-    uint16_t field_428b;
-    uint16_t field_428d;
-    uint8_t pad_164[5];  /* zero padding */
-    uint32_t AL_LeftJustify_str_ptr;
-    uint16_t field_4298;
-    uint8_t pad_165[2];  /* zero padding */
-    uint32_t ptr_429c;
-    uint16_t field_42a0;
-    uint8_t pad_166[2];  /* zero padding */
-    uint32_t ptr_42a4;
-    uint8_t pad_167[5];  /* zero padding */
-    uint16_t field_42ad;
-    char L_RightJustify_str[15];
-    char AL_LeftJustify_str[16];
-    char AL_Center_str[10];
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* FontID property enum: only the end entry {"", 0} (count 0: FontIDProc names fonts itself) */
+    NakaInst_FontID_EnumTable_t NakaInst_FontID_EnumTable[1];
+    /* "" + 0xFF fill: the name of the end entry of NakaInst_FontID_EnumTable */
+    char NakaInst_FontID_EmptyStr[2];
+    /* AlignmentID property value names: AL_Center 0, AL_LeftJustify 1, AL_RightJustify 2, end {"", 0}; walked by CommonIDProc */
+    NakaInst_AlignmentID_EnumTable_t NakaInst_AlignmentID_EnumTable[4];
+    /* "" + 0xFF fill: the name of the end entry of NakaInst_AlignmentID_EnumTable */
+    char NakaInst_AlignmentID_EmptyStr[2];
+    /* AL_RightJustify, AL_LeftJustify, AL_Center (NUL-terminated, 0xFF-padded); NakaInst_AlignmentID_EnumTable points into it */
+    char NakaInst_AlignmentID_NameStrings[42];
     /* NakaProp_EditSwitch_Chain: 3 pointers (cut from ptrs_9 by split_naka_pointer_arrays.py) */
-    uint32_t NakaProp_EditSwitch_Chain[3];
-    uint16_t field_42e4;
-    uint8_t pad_168[2];  /* zero padding */
-    uint32_t ES_Bottom3_str_ptr;
-    uint16_t field_42ec;
-    uint8_t pad_169[2];  /* zero padding */
-    uint32_t ES_Bottom4_str_ptr;
-    uint16_t field_42f4;
-    uint8_t pad_170[2];  /* zero padding */
-    uint32_t ES_Bottom5_str_ptr;
-    uint16_t field_42fc;
-    uint8_t pad_171[2];  /* zero padding */
-    uint32_t ES_Bottom6_str_ptr;
-    uint16_t field_4304;
-    uint8_t pad_172[3];  /* zero padding */
-    uint16_t field_4309;
-    uint16_t field_430b;
-    uint8_t pad_173[3];  /* zero padding */
-    uint32_t ES_Bottom8_str_ptr;
-    uint16_t field_4314;
-    uint8_t pad_174[2];  /* zero padding */
-    uint32_t ES_Left1_str_ptr;
-    uint16_t field_431c;
-    uint8_t pad_175[2];  /* zero padding */
-    uint32_t ES_Left2_str_ptr;
-    uint16_t field_4324;
-    uint8_t pad_176[2];  /* zero padding */
-    uint32_t ES_Left3_str_ptr;
-    uint16_t field_432c;
-    uint8_t pad_177[2];  /* zero padding */
-    uint32_t ES_Left4_str_ptr;
-    uint16_t field_4334;
-    uint8_t pad_178[2];  /* zero padding */
-    uint32_t ES_Left5_str_ptr;
-    uint16_t field_433c;
-    uint8_t pad_179[2];  /* zero padding */
-    uint32_t ES_Right1_str_ptr;
-    uint16_t field_4344;
-    uint8_t pad_180[2];  /* zero padding */
-    uint32_t ES_Right2_str_ptr;
-    uint16_t field_434c;
-    uint8_t pad_181[2];  /* zero padding */
-    uint32_t ES_Right3_str_ptr;
-    uint16_t field_4354;
-    uint8_t pad_182[2];  /* zero padding */
-    uint32_t ES_Right4_str_ptr;
-    uint16_t field_435c;
-    uint8_t pad_183[2];  /* zero padding */
-    uint32_t ES_Right5_str_ptr;
-    uint16_t field_4364;
-    uint8_t pad_184[2];  /* zero padding */
-    uint32_t ES_Exit_str_ptr;
-    uint16_t field_436c;
-    uint8_t pad_185[2];  /* zero padding */
-    uint32_t ptr_4370;
-    uint16_t field_4374;
-    uint8_t pad_186[2];  /* zero padding */
-    uint32_t ptr_4378;
-    uint8_t pad_187[5];  /* zero padding */
-    uint16_t field_4381;
-    char S_None_str[7];
-    char ES_Exit_str[8];
-    char ES_Right5_str[10];
-    char ES_Right4_str[10];
-    char ES_Right3_str[10];
-    char ES_Right2_str[10];
-    char ES_Right1_str[10];
-    char ES_Left5_str[10];
-    char ES_Left4_str[10];
-    char ES_Left3_str[10];
-    char ES_Left2_str[10];
-    char ES_Left1_str[10];
-    char ES_Bottom8_str[12];
-    char ES_Bottom7_str[12];
-    char ES_Bottom6_str[12];
-    char ES_Bottom5_str[12];
-    char ES_Bottom4_str[12];
-    char ES_Bottom3_str[12];
-    char ES_Bottom2_str[12];
-    char ES_Bottom1_str[12];
-    uint32_t ptrs_10[3];  /* 3 pointers */
-    uint16_t field_4462;
-    uint8_t pad_188[2];  /* zero padding */
-    uint32_t SS_Down_str_ptr;
-    uint16_t field_446a;
-    uint8_t pad_189[2];  /* zero padding */
-    uint32_t SS_UpDown_str_ptr;
-    uint16_t field_4472;
-    uint8_t pad_190[2];  /* zero padding */
-    uint32_t SS_On_str_ptr;
-    uint16_t field_447a;
-    uint8_t pad_191[2];  /* zero padding */
-    uint32_t SS_Off_str_ptr;
-    uint16_t field_4482;
-    uint8_t pad_192[2];  /* zero padding */
-    uint32_t SS_OK_str_ptr;
-    uint16_t field_448a;
-    uint8_t pad_193[2];  /* zero padding */
-    uint32_t SS_Left_str_ptr;
-    uint16_t field_4492;
-    uint8_t pad_194[2];  /* zero padding */
-    uint32_t SS_Right_str_ptr;
-    uint16_t field_449a;
-    uint8_t pad_195[2];  /* zero padding */
-    uint32_t SS_Yes_str_ptr;
-    uint16_t field_44a2;
-    uint8_t pad_196[2];  /* zero padding */
-    uint32_t SS_No_str_ptr;
-    uint16_t field_44aa;
-    uint8_t pad_197[2];  /* zero padding */
-    uint32_t SS_OnOff_str_ptr;
-    uint16_t field_44b2;
-    uint8_t pad_198[2];  /* zero padding */
-    uint32_t SS_Up2_str_ptr;
-    uint16_t field_44ba;
-    uint8_t pad_199[2];  /* zero padding */
-    uint32_t SS_Down2_str_ptr;
-    uint16_t field_44c2;
-    uint8_t pad_200[2];  /* zero padding */
-    uint32_t SS_UpDown2_str_ptr;
-    uint16_t field_44ca;
-    uint8_t pad_201[2];  /* zero padding */
-    uint32_t SS_Left2_str_ptr;
-    uint16_t field_44d2;
-    uint8_t pad_202[2];  /* zero padding */
-    uint32_t ptr_44d6;
-    uint16_t field_44da;
-    uint8_t pad_203[2];  /* zero padding */
-    uint32_t ptr_44de;
-    uint8_t pad_204[5];  /* zero padding */
-    uint16_t field_44e7;
-    char S_Right2_str[9];
-    char SS_Left2_str[10];
-    char SS_UpDown2_str[12];
-    char SS_Down2_str[10];
-    char SS_Up2_str[8];
-    char SS_OnOff_str[10];
-    char SS_No_str[6];
-    char SS_Yes_str[8];
-    char SS_Right_str[10];
-    char SS_Left_str[8];
-    char SS_OK_str[6];
-    char SS_Off_str[8];
-    char SS_On_str[6];
-    char SS_UpDown_str[10];
-    char SS_Down_str[8];
-    char SS_Up_str[6];
-    char SS_Special_str[12];
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* 3 pointers */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* EditSwID property value names {name, value}: 20 named values + the {"", 0} end entry (SupportClass record 36, EditSwIDProc) */
+    NakaInst_EditSwID_EnumTable_t NakaInst_EditSwID_EnumTable[21];
+    /* "" + 0xFF fill: name of the end entry of NakaInst_EditSwID_EnumTable */
+    char NakaInst_EditSwID_EmptyStr[2];
+    /* "ES_None": name of EditSwID value 0xFF */
+    char NakaInst_ES_None_Str[8];
+    /* "ES_Exit": name of EditSwID value 0x0F */
+    char NakaInst_ES_Exit_Str[8];
+    /* "ES_Right5": name of EditSwID value 0x0C */
+    char NakaInst_ES_Right5_Str[10];
+    /* "ES_Right4": name of EditSwID value 0x0B */
+    char NakaInst_ES_Right4_Str[10];
+    /* "ES_Right3": name of EditSwID value 0x0A */
+    char NakaInst_ES_Right3_Str[10];
+    /* "ES_Right2": name of EditSwID value 9 */
+    char NakaInst_ES_Right2_Str[10];
+    /* "ES_Right1": name of EditSwID value 8 */
+    char NakaInst_ES_Right1_Str[10];
+    /* "ES_Left5" + 0xFF fill: name of EditSwID value 0x8C */
+    char NakaInst_ES_Left5_Str[10];
+    /* "ES_Left4" + 0xFF fill: name of EditSwID value 0x8B */
+    char NakaInst_ES_Left4_Str[10];
+    /* "ES_Left3" + 0xFF fill: name of EditSwID value 0x8A */
+    char NakaInst_ES_Left3_Str[10];
+    /* "ES_Left2" + 0xFF fill: name of EditSwID value 0x89 */
+    char NakaInst_ES_Left2_Str[10];
+    /* "ES_Left1" + 0xFF fill: name of EditSwID value 0x88 */
+    char NakaInst_ES_Left1_Str[10];
+    /* "ES_Bottom8" + 0xFF fill: name of EditSwID value 7 */
+    char NakaInst_ES_Bottom8_Str[12];
+    /* "ES_Bottom7" + 0xFF fill: name of EditSwID value 6 */
+    char NakaInst_ES_Bottom7_Str[12];
+    /* "ES_Bottom6" + 0xFF fill: name of EditSwID value 5 */
+    char NakaInst_ES_Bottom6_Str[12];
+    /* "ES_Bottom5" + 0xFF fill: name of EditSwID value 4 */
+    char NakaInst_ES_Bottom5_Str[12];
+    /* "ES_Bottom4" + 0xFF fill: name of EditSwID value 3 */
+    char NakaInst_ES_Bottom4_Str[12];
+    /* "ES_Bottom3" + 0xFF fill: name of EditSwID value 2 */
+    char NakaInst_ES_Bottom3_Str[12];
+    /* "ES_Bottom2" + 0xFF fill: name of EditSwID value 1 */
+    char NakaInst_ES_Bottom2_Str[12];
+    /* "ES_Bottom1" + 0xFF fill: name of EditSwID value 0 */
+    char NakaInst_ES_Bottom1_Str[12];
+    /* EditSwStyleID property value names {name, value}: 17 named values + the {"", 0} end entry (SupportClass record 37, EditSwStyleIDProc) */
+    NakaInst_EditSwStyleID_EnumTable_t NakaInst_EditSwStyleID_EnumTable[18];
+    /* "" + 0xFF fill: name of the end entry of NakaInst_EditSwStyleID_EnumTable */
+    char NakaInst_EditSwStyleID_EmptyStr[2];
+    /* "SS_Right2": name of EditSwStyleID value 0x10 */
+    char NakaInst_SS_Right2_Str[10];
+    /* "SS_Left2" + 0xFF fill: name of EditSwStyleID value 0x0F */
+    char NakaInst_SS_Left2_Str[10];
+    /* "SS_UpDown2" + 0xFF fill: name of EditSwStyleID value 0x0E */
+    char NakaInst_SS_UpDown2_Str[12];
+    /* "SS_Down2" + 0xFF fill: name of EditSwStyleID value 0x0D */
+    char NakaInst_SS_Down2_Str[10];
+    /* "SS_Up2" + 0xFF fill: name of EditSwStyleID value 0x0C */
+    char NakaInst_SS_Up2_Str[8];
+    /* "SS_OnOff" + 0xFF fill: name of EditSwStyleID value 0x0B */
+    char NakaInst_SS_OnOff_Str[10];
+    /* "SS_No": name of EditSwStyleID value 0x0A */
+    char NakaInst_SS_No_Str[6];
+    /* "SS_Yes" + 0xFF fill: name of EditSwStyleID value 9 */
+    char NakaInst_SS_Yes_Str[8];
+    /* "SS_Right" + 0xFF fill: name of EditSwStyleID value 8 */
+    char NakaInst_SS_Right_Str[10];
+    /* "SS_Left": name of EditSwStyleID value 7 */
+    char NakaInst_SS_Left_Str[8];
+    /* "SS_OK": name of EditSwStyleID value 6 */
+    char NakaInst_SS_OK_Str[6];
+    /* "SS_Off" + 0xFF fill: name of EditSwStyleID value 5 */
+    char NakaInst_SS_Off_Str[8];
+    /* "SS_On": name of EditSwStyleID value 4 */
+    char NakaInst_SS_On_Str[6];
+    /* "SS_UpDown": name of EditSwStyleID value 3 */
+    char NakaInst_SS_UpDown_Str[10];
+    /* "SS_Down": name of EditSwStyleID value 2 */
+    char NakaInst_SS_Down_Str[8];
+    /* "SS_Up": name of EditSwStyleID value 1 */
+    char NakaInst_SS_Up_Str[6];
+    /* "SS_Special" + 0xFF fill: name of EditSwStyleID value 0 */
+    char NakaInst_SS_Special_Str[12];
     /* NakaInst_LM_RightDown: 3 pointers (cut from ptrs_11 by split_naka_pointer_arrays.py) */
     /* zero padding */
     /* zero padding */
@@ -1399,61 +1334,30 @@ typedef struct __attribute__((packed)) {
     SupportClass_BitmapIDValueNames_t SupportClass_BitmapIDValueNames;
     /* value-name list of SupportClass ApFuncIDProc (entry 41, named-value count 0): only the end entry {end_text, 0}, end_text = "" + 0xFF pad (end_name points at it, +8) */
     SupportClass_ApFuncIDValueNames_t SupportClass_ApFuncIDValueNames;
-    uint8_t field_45f0;
-    uint16_t field_45f1;
-    uint8_t pad_212[6];  /* zero padding */
-    uint16_t field_45f9;
-    uint16_t field_45fb;
-    uint8_t pad_213[5];  /* zero padding */
-    uint32_t NakaInst_iduMurai_ptr;
-    uint16_t field_4606;
-    uint8_t pad_214[2];  /* zero padding */
-    uint32_t NakaData_StyleBitmaps_ptr;
-    uint16_t field_460e;
-    uint8_t pad_215[2];  /* zero padding */
-    uint32_t iduEast_str_ptr;
-    uint16_t field_4616;
-    uint8_t pad_216[2];  /* zero padding */
-    uint32_t iduSuna_str_ptr;
-    uint16_t field_461e;
-    uint8_t pad_217[2];  /* zero padding */
-    uint32_t iduCheap_str_ptr;
-    uint16_t field_4626;
-    uint8_t pad_218[2];  /* zero padding */
-    uint32_t iduScoop_str_ptr;
-    uint16_t field_462e;
-    uint8_t pad_219[2];  /* zero padding */
-    uint32_t iduYoko_str_ptr;
-    uint16_t field_4636;
-    uint8_t pad_220[2];  /* zero padding */
-    uint32_t iduKubo_str_ptr;
-    uint16_t field_463e;
-    uint8_t pad_221[2];  /* zero padding */
-    uint32_t iduHama_str_ptr;
-    uint16_t field_4646;
-    uint8_t pad_222[2];  /* zero padding */
-    uint32_t iduKSS_str_ptr;
-    uint16_t field_464e;
-    uint8_t pad_223[2];  /* zero padding */
-    uint32_t iduNaka_str_ptr;
-    uint16_t field_4656;
-    uint8_t pad_224[2];  /* zero padding */
-    uint32_t ptr_465a;
-    uint16_t field_465e;
-    uint16_t field_4660;
-    uint32_t ptr_4662;
-    uint8_t pad_225[5];  /* zero padding */
-    uint16_t field_466b;
-    char duNone_str[7];
-    char iduNaka_str[8];
-    char iduKSS_str[8];
-    char iduHama_str[8];
-    char iduKubo_str[8];
-    char iduYoko_str[8];
-    char iduScoop_str[10];
-    char iduCheap_str[10];
-    char iduSuna_str[8];
-    char iduEast_str[8];
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* MainFuncID property enum: only the end entry {"", 0} (count 0: MainFuncIDProc names main functions itself) */
+    NakaInst_MainFuncID_EnumTable_t NakaInst_MainFuncID_EnumTable[1];
+    /* "" + 0xFF fill: the name of the end entry of NakaInst_MainFuncID_EnumTable */
+    char NakaInst_MainFuncID_EmptyStr[2];
+    /* UserID property value names: iduRoot 0, iduMurai 1, iduToshi 2, iduEast 3 .. iduNaka 11, iduNone -1, end {"", 0}; walked by CommonIDProc */
+    NakaInst_UserID_EnumTable_t NakaInst_UserID_EnumTable[14];
+    /* "" + 0xFF fill: the name of the end entry of NakaInst_UserID_EnumTable */
+    char NakaInst_UserID_EmptyStr[2];
+    /* UserID value names iduNone .. iduEast (NUL-terminated, 0xFF-padded); iduToshi, iduMurai, iduRoot follow in naka_style_bitmaps */
+    char NakaInst_UserID_NameStrings[84];
 } naka_debug_naming_t;
 
 #define SELF(field) \
@@ -5808,32 +5712,23 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .NakaInst_ulong_EmptyStr = "\x00\xFF",
 
-    .field_3d1c = 0x3A,
-
-    .field_3d1d = 0xEB68,
-
-    .field_3d1f = 0x0100,
-
-    .pad_81 = { 0 },
-
-    .ptrs_6 = {
-        SELF(False_name),
-        0x00000000,
-        SELF(w26_code),
-        0x00000000,
+    .NakaInst_Bool_EnumTable = {
+        { SELF(NakaInst_Bool_True_Str), 1 },
+        { SELF(NakaInst_Bool_False_Str), 0 },
+        { SELF(NakaInst_Bool_EmptyStr), 0 },
     },
 
-    .w26_code = ALIGNED_STRING(""),
+    .NakaInst_Bool_EmptyStr = "\x00\xFF",
 
-    .False_name = "False",
+    .NakaInst_Bool_False_Str = "False",
 
-    .True_str = ALIGNED_STRING("True"),
+    .NakaInst_Bool_True_Str = "True\x00\xFF",
 
-    .ptr_3d42 = 0x00EB6848,
+    .NakaInst_ObjectID_EnumTable = {
+        { SELF(NakaInst_ObjectID_EmptyStr), 0 },
+    },
 
-    .pad_82 = { 0 },
-
-    .field_3d4b = 0xFF,
+    .NakaInst_ObjectID_EmptyStr = "\x00\xFF",
 
     .NakaInst_pFunc_EnumTable = {
         { SELF(NakaInst_pFunc_EmptyStr), 0 },
@@ -5905,471 +5800,128 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .SupportClass_ViewIDValueNames = { SELF(SupportClass_ViewIDValueNames.end_name), 0x00000000, "\x00\xFF" },
 
-    .field_3e2e = 0xA2,
-
-    .field_3e2f = 0xEB69,
-
-    .pad_104 = { 0 },
-
-    .VF_Invisible_str_ptr = SELF(VF_Invisible_str),
-
-    .field_3e3a = 0x0001,
-
-    .pad_105 = { 0 },
-
-    .VF_Fixed_str_ptr = SELF(VF_Fixed_str),
-
-    .field_3e42 = 0x0002,
-
-    .pad_106 = { 0 },
-
-    .VF_Change_str_ptr = SELF(VF_Change_str),
-
-    .field_3e4a = 0x0004,
-
-    .pad_107 = { 0 },
-
-    .VF_Const_str_ptr = SELF(VF_Const_str),
-
-    .field_3e52 = 0x0008,
-
-    .pad_108 = { 0 },
-
-    .ptr_3e56 = 0x00EB6966,
-
-    .field_3e5a = 0x0010,
-
-    .pad_109 = { 0 },
-
-    .ptr_3e5e = 0x00EB6964,
-
-    .pad_110 = { 0 },
-
-    .field_3e67 = 0x56FF,
-
-    .F_InvisibleBox_str = ALIGNED_STRING("F_InvisibleBox"),
-
-    .VF_Const_str = ALIGNED_STRING("VF_Const"),
-
-    .VF_Change_str = "VF_Change",
-
-    .VF_Fixed_str = ALIGNED_STRING("VF_Fixed"),
-
-    .VF_Invisible_str = ALIGNED_STRING("VF_Invisible"),
-
-    .VF_None_str = "VF_None",
-
-    .ptrs_7 = {
-        SELF(CL_Black_str),
-        0x00000000,
-        SELF(CL_Maroon_str),
+    .NakaInst_ViewFlag_EnumTable = {
+        { SELF(NakaInst_ViewFlag_NameStrings[60]), 0 },
+        { SELF(NakaInst_ViewFlag_NameStrings[46]), 1 },
+        { SELF(NakaInst_ViewFlag_NameStrings[36]), 2 },
+        { SELF(NakaInst_ViewFlag_NameStrings[26]), 4 },
+        { SELF(NakaInst_ViewFlag_NameStrings[16]), 8 },
+        { SELF(NakaInst_ViewFlag_NameStrings), 16 },
+        { SELF(NakaInst_ViewFlag_EmptyStr), 0 },
     },
 
-    .field_3eb8 = 0x0001,
-
-    .pad_111 = { 0 },
-
-    .CL_Green_str_ptr = SELF(CL_Green_str),
-
-    .field_3ec0 = 0x0002,
-
-    .pad_112 = { 0 },
-
-    .CL_Olive_str_ptr = SELF(CL_Olive_str),
-
-    .field_3ec8 = 0x0003,
-
-    .pad_113 = { 0 },
-
-    .CL_Navy_str_ptr = SELF(CL_Navy_str),
-
-    .field_3ed0 = 0x0004,
-
-    .pad_114 = { 0 },
-
-    .CL_Purple_str_ptr = SELF(CL_Purple_str),
-
-    .field_3ed8 = 0x0005,
-
-    .pad_115 = { 0 },
-
-    .CL_Teal_str_ptr = SELF(CL_Teal_str),
-
-    .field_3ee0 = 0x0006,
-
-    .pad_116 = { 0 },
-
-    .CL_DarkGray_str_ptr = SELF(CL_DarkGray_str),
-
-    .field_3ee8 = 0x0008,
-
-    .pad_117 = { 0 },
-
-    .CL_Gray_str_ptr = SELF(CL_Gray_str),
-
-    .field_3ef0 = 0x00F8,
-
-    .pad_118 = { 0 },
-
-    .CL_Silver_str_ptr = SELF(CL_Silver_str),
-
-    .field_3ef8 = 0x0007,
-
-    .pad_119 = { 0 },
-
-    .CL_Red_str_ptr = SELF(CL_Red_str),
-
-    .field_3f00 = 0x00F9,
-
-    .pad_120 = { 0 },
-
-    .CL_Lime_str_ptr = SELF(CL_Lime_str),
-
-    .field_3f08 = 0x00FA,
-
-    .pad_121 = { 0 },
-
-    .CL_Yellow_str_ptr = SELF(CL_Yellow_str),
-
-    .field_3f10 = 0x00FB,
-
-    .pad_122 = { 0 },
-
-    .CL_Blue_str_ptr = SELF(CL_Blue_str),
-
-    .field_3f18 = 0x00FC,
-
-    .pad_123 = { 0 },
-
-    .CL_Fuchsia_str_ptr = SELF(CL_Fuchsia_str),
-
-    .field_3f20 = 0x00FD,
-
-    .pad_124 = { 0 },
-
-    .CL_Aqua_str_ptr = SELF(CL_Aqua_str),
-
-    .field_3f28 = 0x00FE,
-
-    .pad_125 = { 0 },
-
-    .CL_Orange_str_ptr = SELF(CL_Orange_str),
-
-    .field_3f30 = 0x0009,
-
-    .pad_126 = { 0 },
-
-    .CL_FireRed_str_ptr = SELF(CL_FireRed_str),
-
-    .field_3f38 = 0x000A,
-
-    .pad_127 = { 0 },
-
-    .CL_DarkYellow_str_ptr = SELF(CL_DarkYellow_str),
-
-    .field_3f40 = 0x000C,
-
-    .pad_128 = { 0 },
-
-    .CL_LightGreen_str_ptr = SELF(CL_LightGreen_str),
-
-    .field_3f48 = 0x000D,
-
-    .pad_129 = { 0 },
-
-    .CL_White_str_ptr = SELF(CL_White_str),
-
-    .field_3f50 = 0x00FF,
-
-    .pad_130 = { 0 },
-
-    .CL_IconBack_str_ptr = SELF(CL_IconBack_str),
-
-    .field_3f58 = 0x00F0,
-
-    .pad_131 = { 0 },
-
-    .CL_Text_str_ptr = SELF(CL_Text_str),
-
-    .field_3f60 = 0x00F1,
-
-    .pad_132 = { 0 },
-
-    .CL_Selected_str_ptr = SELF(CL_Selected_str),
-
-    .field_3f68 = 0x00F2,
-
-    .pad_133 = { 0 },
-
-    .CL_PageBack_str_ptr = SELF(CL_PageBack_str),
-
-    .field_3f70 = 0x00F3,
-
-    .pad_134 = { 0 },
-
-    .CL_EditSw_str_ptr = SELF(CL_EditSw_str),
-
-    .field_3f78 = 0x00F4,
-
-    .pad_135 = { 0 },
-
-    .CL_Transparent_str_ptr = SELF(CL_Transparent_str),
-
-    .field_3f80 = 0x00F7,
-
-    .pad_136 = { 0 },
-
-    .ptr_3f84 = 0x00EB6AAC,
-
-    .field_3f88 = 0x000B,
-
-    .pad_137 = { 0 },
-
-    .ptr_3f8c = 0x00EB6A9C,
-
-    .field_3f90 = 0x00F5,
-
-    .pad_138 = { 0 },
-
-    .ptr_3f94 = 0x00EB6A9A,
-
-    .pad_139 = { 0 },
-
-    .field_3f9d = 0x43FF,
-
-    .L_WallPattern_str = "L_WallPattern",
-
-    .field_3fad = 0x43FF,
-
-    .L_HairLine_str = ALIGNED_STRING("L_HairLine"),
-
-    .CL_Transparent_str = ALIGNED_STRING("CL_Transparent"),
-
-    .CL_EditSw_str = "CL_EditSw",
-
-    .CL_PageBack_str = "CL_PageBack",
-
-    .CL_Selected_str = "CL_Selected",
-
-    .CL_Text_str = "CL_Text",
-
-    .CL_IconBack_str = "CL_IconBack",
-
-    .CL_White_str = ALIGNED_STRING("CL_White"),
-
-    .CL_LightGreen_str = "CL_LightGreen",
-
-    .CL_DarkYellow_str = "CL_DarkYellow",
-
-    .CL_FireRed_str = ALIGNED_STRING("CL_FireRed"),
-
-    .CL_Orange_str = "CL_Orange",
-
-    .CL_Aqua_str = "CL_Aqua",
-
-    .CL_Fuchsia_str = ALIGNED_STRING("CL_Fuchsia"),
-
-    .CL_Blue_str = "CL_Blue",
-
-    .CL_Yellow_str = "CL_Yellow",
-
-    .CL_Lime_str = "CL_Lime",
-
-    .CL_Red_str = ALIGNED_STRING("CL_Red"),
-
-    .CL_Silver_str = "CL_Silver",
-
-    .CL_Gray_str = "CL_Gray",
-
-    .CL_DarkGray_str = "CL_DarkGray",
-
-    .CL_Teal_str = "CL_Teal",
-
-    .CL_Purple_str = "CL_Purple",
-
-    .CL_Navy_str = "CL_Navy",
-
-    .CL_Olive_str = ALIGNED_STRING("CL_Olive"),
-
-    .CL_Green_str = ALIGNED_STRING("CL_Green"),
-
-    .CL_Maroon_str = "CL_Maroon",
-
-    .CL_Black_str = ALIGNED_STRING("CL_Black"),
-
-    .NakaProp_BorderDefs = {
-        SELF(BD_None_str),
-        0x00000000,
-        SELF(BD_Single1_str),
+    .NakaInst_ViewFlag_EmptyStr = "\x00\xFF",
+
+    .NakaInst_ViewFlag_NameStrings = "VF_InvisibleBox\x00VF_Const\x00\xFFVF_Change\x00VF_Fixed\x00\xFFVF_Invisible\x00\xFFVF_None",
+
+    .NakaInst_ColorID_EnumTable = {
+        { SELF(NakaInst_ColorID_NameStrings[298]), 0 },
+        { SELF(NakaInst_ColorID_NameStrings[288]), 1 },
+        { SELF(NakaInst_ColorID_NameStrings[278]), 2 },
+        { SELF(NakaInst_ColorID_NameStrings[268]), 3 },
+        { SELF(NakaInst_ColorID_NameStrings[260]), 4 },
+        { SELF(NakaInst_ColorID_NameStrings[250]), 5 },
+        { SELF(NakaInst_ColorID_NameStrings[242]), 6 },
+        { SELF(NakaInst_ColorID_NameStrings[230]), 8 },
+        { SELF(NakaInst_ColorID_NameStrings[222]), 248 },
+        { SELF(NakaInst_ColorID_NameStrings[212]), 7 },
+        { SELF(NakaInst_ColorID_NameStrings[204]), 249 },
+        { SELF(NakaInst_ColorID_NameStrings[196]), 250 },
+        { SELF(NakaInst_ColorID_NameStrings[186]), 251 },
+        { SELF(NakaInst_ColorID_NameStrings[178]), 252 },
+        { SELF(NakaInst_ColorID_NameStrings[166]), 253 },
+        { SELF(NakaInst_ColorID_NameStrings[158]), 254 },
+        { SELF(NakaInst_ColorID_NameStrings[148]), 9 },
+        { SELF(NakaInst_ColorID_NameStrings[136]), 10 },
+        { SELF(NakaInst_ColorID_NameStrings[122]), 12 },
+        { SELF(NakaInst_ColorID_NameStrings[108]), 13 },
+        { SELF(NakaInst_ColorID_NameStrings[98]), 255 },
+        { SELF(NakaInst_ColorID_NameStrings[86]), 240 },
+        { SELF(NakaInst_ColorID_NameStrings[78]), 241 },
+        { SELF(NakaInst_ColorID_NameStrings[66]), 242 },
+        { SELF(NakaInst_ColorID_NameStrings[54]), 243 },
+        { SELF(NakaInst_ColorID_NameStrings[44]), 244 },
+        { SELF(NakaInst_ColorID_NameStrings[28]), 247 },
+        { SELF(NakaInst_ColorID_NameStrings[16]), 11 },
+        { SELF(NakaInst_ColorID_NameStrings), 245 },
+        { SELF(NakaInst_ColorID_EmptyStr), 0 },
     },
 
-    .field_40de = 0x0001,
+    .NakaInst_ColorID_EmptyStr = "\x00\xFF",
 
-    .pad_140 = { 0 },
+    .NakaInst_ColorID_NameStrings = "CL_WallPattern\x00\xFF" "CL_HairLine\x00" "CL_Transparent\x00\xFF" "CL_EditSw\x00" "CL_PageBack\x00" "CL_Selected\x00" "CL_Text\x00" "CL_IconBack\x00" "CL_White\x00\xFF" "CL_LightGreen\x00" "CL_DarkYellow\x00" "CL_FireRed\x00\xFF" "CL_Orange\x00" "CL_Aqua\x00" "CL_Fuchsia\x00\xFF" "CL_Blue\x00" "CL_Yellow\x00" "CL_Lime\x00" "CL_Red\x00\xFF" "CL_Silver\x00" "CL_Gray\x00" "CL_DarkGray\x00" "CL_Teal\x00" "CL_Purple\x00" "CL_Navy\x00" "CL_Olive\x00\xFF" "CL_Green\x00\xFF" "CL_Maroon\x00" "CL_Black\x00\xFF",
 
-    .BD_Single2_str_ptr = SELF(BD_Single2_str),
+    .NakaInst_BorderID_EnumTable = {
+        { SELF(NakaInst_BD_None_Str), 0 },
+        { SELF(NakaInst_BD_Single1_Str), 1 },
+        { SELF(NakaInst_BD_Single2_Str), 2 },
+        { SELF(NakaInst_BD_Double1_Str), 3 },
+        { SELF(NakaInst_BD_Shadow1_Str), 4 },
+        { SELF(NakaInst_BD_Shadow2_Str), 5 },
+        { SELF(NakaInst_BD_Round0_Str), 6 },
+        { SELF(NakaInst_BD_Round1_Str), 7 },
+        { SELF(NakaInst_BD_Round2_Str), 8 },
+        { SELF(NakaInst_BD_Round5_Str), 9 },
+        { SELF(NakaInst_BD_Round9_Str), 10 },
+        { SELF(NakaInst_BD_Round14_Str), 11 },
+        { SELF(NakaInst_BD_3D_UP1_Str), 192 },
+        { SELF(NakaInst_BD_3D_UP2_Str), 193 },
+        { SELF(NakaInst_BD_3D_DOWN1_Str), 194 },
+        { SELF(NakaInst_BD_3D_DOWN2_Str), 195 },
+        { SELF(NakaInst_BD_EditSwitch_Str), 201 },
+        { SELF(NakaInst_BD_EditSwDown_Str), 202 },
+        { SELF(NakaInst_BD_TrackSwUp_Str), 203 },
+        { SELF(NakaInst_BD_TrackSwDown_Str), 204 },
+        { SELF(NakaInst_BorderID_EmptyStr), 0 },
+    },
 
-    .field_40e6 = 0x0002,
+    .NakaInst_BorderID_EmptyStr = "\x00\xFF",
 
-    .pad_141 = { 0 },
+    .NakaInst_BD_TrackSwDown_Str = "BD_TrackSwDown\x00\xFF",
 
-    .BD_Double1_str_ptr = SELF(BD_Double1_str),
+    .NakaInst_BD_TrackSwUp_Str = "BD_TrackSwUp\x00\xFF",
 
-    .field_40ee = 0x0003,
+    .NakaInst_BD_EditSwDown_Str = "BD_EditSwDown",
 
-    .pad_142 = { 0 },
+    .NakaInst_BD_EditSwitch_Str = "BD_EditSwitch",
 
-    .BD_Shadow1_str_ptr = SELF(BD_Shadow1_str),
+    .NakaInst_BD_3D_DOWN2_Str = "BD_3D_DOWN2",
 
-    .field_40f6 = 0x0004,
+    .NakaInst_BD_3D_DOWN1_Str = "BD_3D_DOWN1",
 
-    .pad_143 = { 0 },
+    .NakaInst_BD_3D_UP2_Str = "BD_3D_UP2",
 
-    .BD_Shadow2_str_ptr = SELF(BD_Shadow2_str),
+    .NakaInst_BD_3D_UP1_Str = "BD_3D_UP1",
 
-    .field_40fe = 0x0005,
+    .NakaInst_BD_Round14_Str = "BD_Round14\x00\xFF",
 
-    .pad_144 = { 0 },
+    .NakaInst_BD_Round9_Str = "BD_Round9",
 
-    .BD_Round0_str_ptr = SELF(BD_Round0_str),
+    .NakaInst_BD_Round5_Str = "BD_Round5",
 
-    .field_4106 = 0x0006,
+    .NakaInst_BD_Round2_Str = "BD_Round2",
 
-    .pad_145 = { 0 },
+    .NakaInst_BD_Round1_Str = "BD_Round1",
 
-    .BD_Round1_str_ptr = SELF(BD_Round1_str),
+    .NakaInst_BD_Round0_Str = "BD_Round0",
 
-    .field_410e = 0x0007,
+    .NakaInst_BD_Shadow2_Str = "BD_Shadow2\x00\xFF",
 
-    .pad_146 = { 0 },
+    .NakaInst_BD_Shadow1_Str = "BD_Shadow1\x00\xFF",
 
-    .field_4113 = 0xEB6D,
+    .NakaInst_BD_Double1_Str = "BD_Double1\x00\xFF",
 
-    .field_4115 = 0x0800,
+    .NakaInst_BD_Single2_Str = "BD_Single2\x00\xFF",
 
-    .pad_147 = { 0 },
+    .NakaInst_BD_Single1_Str = "BD_Single1\x00\xFF",
 
-    .BD_Round5_str_ptr = SELF(BD_Round5_str),
+    .NakaInst_BD_None_Str = "BD_None",
 
-    .field_411e = 0x0009,
+    .NakaInst_ModeID_EnumTable = {
+        { SELF(NakaInst_ModeID_EmptyStr), 0 },
+    },
 
-    .pad_148 = { 0 },
-
-    .BD_Round9_str_ptr = SELF(BD_Round9_str),
-
-    .field_4126 = 0x000A,
-
-    .pad_149 = { 0 },
-
-    .BD_Round14_str_ptr = SELF(BD_Round14_str),
-
-    .field_412e = 0x000B,
-
-    .pad_150 = { 0 },
-
-    .BD_3D_UP1_str_ptr = SELF(BD_3D_UP1_str),
-
-    .field_4136 = 0x00C0,
-
-    .pad_151 = { 0 },
-
-    .BD_3D_UP2_str_ptr = SELF(BD_3D_UP2_str),
-
-    .field_413e = 0x00C1,
-
-    .pad_152 = { 0 },
-
-    .BD_3D_DOWN1_str_ptr = SELF(BD_3D_DOWN1_str),
-
-    .field_4146 = 0x00C2,
-
-    .pad_153 = { 0 },
-
-    .BD_3D_DOWN2_str_ptr = SELF(BD_3D_DOWN2_str),
-
-    .field_414e = 0x00C3,
-
-    .pad_154 = { 0 },
-
-    .BD_EditSwitch_str_ptr = SELF(BD_EditSwitch_str),
-
-    .field_4156 = 0x00C9,
-
-    .pad_155 = { 0 },
-
-    .ptr_415a = 0x00EB6C98,
-
-    .field_415e = 0x00CA,
-
-    .pad_156 = { 0 },
-
-    .ptr_4162 = 0x00EB6C8A,
-
-    .field_4166 = 0x00CB,
-
-    .pad_157 = { 0 },
-
-    .ptr_416a = 0x00EB6C7A,
-
-    .field_416e = 0x00CC,
-
-    .pad_158 = { 0 },
-
-    .ptr_4172 = 0x00EB6C78,
-
-    .pad_159 = { 0 },
-
-    .field_417b = 0x42FF,
-
-    .D_TrackSwDown_str = "D_TrackSwDown",
-
-    .field_418b = 0x42FF,
-
-    .D_TrackSwUp_str = "D_TrackSwUp",
-
-    .field_4199 = 0x42FF,
-
-    .D_EditSwDown_str = ALIGNED_STRING("D_EditSwDown"),
-
-    .BD_EditSwitch_str = "BD_EditSwitch",
-
-    .BD_3D_DOWN2_str = "BD_3D_DOWN2",
-
-    .BD_3D_DOWN1_str = "BD_3D_DOWN1",
-
-    .BD_3D_UP2_str = "BD_3D_UP2",
-
-    .BD_3D_UP1_str = "BD_3D_UP1",
-
-    .BD_Round14_str = ALIGNED_STRING("BD_Round14"),
-
-    .BD_Round9_str = "BD_Round9",
-
-    .BD_Round5_str = "BD_Round5",
-
-    .BD_Round2_str = "BD_Round2",
-
-    .BD_Round1_str = "BD_Round1",
-
-    .BD_Round0_str = "BD_Round0",
-
-    .BD_Shadow2_str = ALIGNED_STRING("BD_Shadow2"),
-
-    .BD_Shadow1_str = ALIGNED_STRING("BD_Shadow1"),
-
-    .BD_Double1_str = ALIGNED_STRING("BD_Double1"),
-
-    .BD_Single2_str = ALIGNED_STRING("BD_Single2"),
-
-    .BD_Single1_str = ALIGNED_STRING("BD_Single1"),
-
-    .BD_None_str = "BD_None",
-
-    .ptr_4264 = 0x00EB6D6A,
-
-    .pad_160 = { 0 },
-
-    .field_426d = 0xFF,
+    .NakaInst_ModeID_EmptyStr = "\x00\xFF",
 
     .NakaInst_TitleID_EnumTable = {
         { SELF(NakaInst_TitleID_EmptyStr), 0 },
@@ -6383,345 +5935,145 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .NakaInst_IconID_EmptyStr = "\x00\xFF",
 
-    .field_4282 = 0x88,
-
-    .field_4283 = 0xEB6D,
-
-    .pad_163 = { 0 },
-
-    .field_428b = 0xCCFF,
-
-    .field_428d = 0xEB6D,
-
-    .pad_164 = { 0 },
-
-    .AL_LeftJustify_str_ptr = SELF(AL_LeftJustify_str),
-
-    .field_4298 = 0x0001,
-
-    .pad_165 = { 0 },
-
-    .ptr_429c = 0x00EB6DAC,
-
-    .field_42a0 = 0x0002,
-
-    .pad_166 = { 0 },
-
-    .ptr_42a4 = 0x00EB6DAA,
-
-    .pad_167 = { 0 },
-
-    .field_42ad = 0x41FF,
-
-    .L_RightJustify_str = ALIGNED_STRING("L_RightJustify"),
-
-    .AL_LeftJustify_str = ALIGNED_STRING("AL_LeftJustify"),
-
-    .AL_Center_str = "AL_Center",
-
-    .NakaProp_EditSwitch_Chain = {
-        SELF(ES_Bottom1_str),
-        0x00000000,
-        SELF(ES_Bottom2_str),
+    .NakaInst_FontID_EnumTable = {
+        { SELF(NakaInst_FontID_EmptyStr), 0 },
     },
 
-    .field_42e4 = 0x0001,
-
-    .pad_168 = { 0 },
-
-    .ES_Bottom3_str_ptr = SELF(ES_Bottom3_str),
-
-    .field_42ec = 0x0002,
-
-    .pad_169 = { 0 },
-
-    .ES_Bottom4_str_ptr = SELF(ES_Bottom4_str),
-
-    .field_42f4 = 0x0003,
-
-    .pad_170 = { 0 },
-
-    .ES_Bottom5_str_ptr = SELF(ES_Bottom5_str),
-
-    .field_42fc = 0x0004,
-
-    .pad_171 = { 0 },
-
-    .ES_Bottom6_str_ptr = SELF(ES_Bottom6_str),
-
-    .field_4304 = 0x0005,
-
-    .pad_172 = { 0 },
-
-    .field_4309 = 0xEB6F,
-
-    .field_430b = 0x0600,
-
-    .pad_173 = { 0 },
-
-    .ES_Bottom8_str_ptr = SELF(ES_Bottom8_str),
-
-    .field_4314 = 0x0007,
-
-    .pad_174 = { 0 },
-
-    .ES_Left1_str_ptr = SELF(ES_Left1_str),
-
-    .field_431c = 0x0088,
-
-    .pad_175 = { 0 },
-
-    .ES_Left2_str_ptr = SELF(ES_Left2_str),
-
-    .field_4324 = 0x0089,
-
-    .pad_176 = { 0 },
-
-    .ES_Left3_str_ptr = SELF(ES_Left3_str),
-
-    .field_432c = 0x008A,
-
-    .pad_177 = { 0 },
-
-    .ES_Left4_str_ptr = SELF(ES_Left4_str),
-
-    .field_4334 = 0x008B,
-
-    .pad_178 = { 0 },
-
-    .ES_Left5_str_ptr = SELF(ES_Left5_str),
-
-    .field_433c = 0x008C,
-
-    .pad_179 = { 0 },
-
-    .ES_Right1_str_ptr = SELF(ES_Right1_str),
-
-    .field_4344 = 0x0008,
-
-    .pad_180 = { 0 },
-
-    .ES_Right2_str_ptr = SELF(ES_Right2_str),
-
-    .field_434c = 0x0009,
-
-    .pad_181 = { 0 },
-
-    .ES_Right3_str_ptr = SELF(ES_Right3_str),
-
-    .field_4354 = 0x000A,
-
-    .pad_182 = { 0 },
-
-    .ES_Right4_str_ptr = SELF(ES_Right4_str),
-
-    .field_435c = 0x000B,
-
-    .pad_183 = { 0 },
-
-    .ES_Right5_str_ptr = SELF(ES_Right5_str),
-
-    .field_4364 = 0x000C,
-
-    .pad_184 = { 0 },
-
-    .ES_Exit_str_ptr = SELF(ES_Exit_str),
-
-    .field_436c = 0x000F,
-
-    .pad_185 = { 0 },
-
-    .ptr_4370 = 0x00EB6E80,
-
-    .field_4374 = 0x00FF,
-
-    .pad_186 = { 0 },
-
-    .ptr_4378 = 0x00EB6E7E,
-
-    .pad_187 = { 0 },
-
-    .field_4381 = 0x45FF,
-
-    .S_None_str = ALIGNED_STRING("S_None"),
-
-    .ES_Exit_str = "ES_Exit",
-
-    .ES_Right5_str = "ES_Right5",
-
-    .ES_Right4_str = "ES_Right4",
-
-    .ES_Right3_str = "ES_Right3",
-
-    .ES_Right2_str = "ES_Right2",
-
-    .ES_Right1_str = "ES_Right1",
-
-    .ES_Left5_str = ALIGNED_STRING("ES_Left5"),
-
-    .ES_Left4_str = ALIGNED_STRING("ES_Left4"),
-
-    .ES_Left3_str = ALIGNED_STRING("ES_Left3"),
-
-    .ES_Left2_str = ALIGNED_STRING("ES_Left2"),
-
-    .ES_Left1_str = ALIGNED_STRING("ES_Left1"),
-
-    .ES_Bottom8_str = ALIGNED_STRING("ES_Bottom8"),
-
-    .ES_Bottom7_str = ALIGNED_STRING("ES_Bottom7"),
-
-    .ES_Bottom6_str = ALIGNED_STRING("ES_Bottom6"),
-
-    .ES_Bottom5_str = ALIGNED_STRING("ES_Bottom5"),
-
-    .ES_Bottom4_str = ALIGNED_STRING("ES_Bottom4"),
-
-    .ES_Bottom3_str = ALIGNED_STRING("ES_Bottom3"),
-
-    .ES_Bottom2_str = ALIGNED_STRING("ES_Bottom2"),
-
-    .ES_Bottom1_str = ALIGNED_STRING("ES_Bottom1"),
-
-    .ptrs_10 = {
-        SELF(SS_Special_str),
-        0x00000000,
-        SELF(SS_Up_str),
+    .NakaInst_FontID_EmptyStr = "\x00\xFF",
+
+    .NakaInst_AlignmentID_EnumTable = {
+        { SELF(NakaInst_AlignmentID_NameStrings[32]), 0 },
+        { SELF(NakaInst_AlignmentID_NameStrings[16]), 1 },
+        { SELF(NakaInst_AlignmentID_NameStrings), 2 },
+        { SELF(NakaInst_AlignmentID_EmptyStr), 0 },
     },
 
-    .field_4462 = 0x0001,
+    .NakaInst_AlignmentID_EmptyStr = "\x00\xFF",
 
-    .pad_188 = { 0 },
+    .NakaInst_AlignmentID_NameStrings = "AL_RightJustify\x00" "AL_LeftJustify\x00\xFF" "AL_Center",
 
-    .SS_Down_str_ptr = SELF(SS_Down_str),
+    .NakaInst_EditSwID_EnumTable = {
+        { SELF(NakaInst_ES_Bottom1_Str), 0 },
+        { SELF(NakaInst_ES_Bottom2_Str), 1 },
+        { SELF(NakaInst_ES_Bottom3_Str), 2 },
+        { SELF(NakaInst_ES_Bottom4_Str), 3 },
+        { SELF(NakaInst_ES_Bottom5_Str), 4 },
+        { SELF(NakaInst_ES_Bottom6_Str), 5 },
+        { SELF(NakaInst_ES_Bottom7_Str), 6 },
+        { SELF(NakaInst_ES_Bottom8_Str), 7 },
+        { SELF(NakaInst_ES_Left1_Str), 136 },
+        { SELF(NakaInst_ES_Left2_Str), 137 },
+        { SELF(NakaInst_ES_Left3_Str), 138 },
+        { SELF(NakaInst_ES_Left4_Str), 139 },
+        { SELF(NakaInst_ES_Left5_Str), 140 },
+        { SELF(NakaInst_ES_Right1_Str), 8 },
+        { SELF(NakaInst_ES_Right2_Str), 9 },
+        { SELF(NakaInst_ES_Right3_Str), 10 },
+        { SELF(NakaInst_ES_Right4_Str), 11 },
+        { SELF(NakaInst_ES_Right5_Str), 12 },
+        { SELF(NakaInst_ES_Exit_Str), 15 },
+        { SELF(NakaInst_ES_None_Str), 255 },
+        { SELF(NakaInst_EditSwID_EmptyStr), 0 },
+    },
 
-    .field_446a = 0x0002,
+    .NakaInst_EditSwID_EmptyStr = "\x00\xFF",
 
-    .pad_189 = { 0 },
+    .NakaInst_ES_None_Str = "ES_None",
 
-    .SS_UpDown_str_ptr = SELF(SS_UpDown_str),
+    .NakaInst_ES_Exit_Str = "ES_Exit",
 
-    .field_4472 = 0x0003,
+    .NakaInst_ES_Right5_Str = "ES_Right5",
 
-    .pad_190 = { 0 },
+    .NakaInst_ES_Right4_Str = "ES_Right4",
 
-    .SS_On_str_ptr = SELF(SS_On_str),
+    .NakaInst_ES_Right3_Str = "ES_Right3",
 
-    .field_447a = 0x0004,
+    .NakaInst_ES_Right2_Str = "ES_Right2",
 
-    .pad_191 = { 0 },
+    .NakaInst_ES_Right1_Str = "ES_Right1",
 
-    .SS_Off_str_ptr = SELF(SS_Off_str),
+    .NakaInst_ES_Left5_Str = "ES_Left5\x00\xFF",
 
-    .field_4482 = 0x0005,
+    .NakaInst_ES_Left4_Str = "ES_Left4\x00\xFF",
 
-    .pad_192 = { 0 },
+    .NakaInst_ES_Left3_Str = "ES_Left3\x00\xFF",
 
-    .SS_OK_str_ptr = SELF(SS_OK_str),
+    .NakaInst_ES_Left2_Str = "ES_Left2\x00\xFF",
 
-    .field_448a = 0x0006,
+    .NakaInst_ES_Left1_Str = "ES_Left1\x00\xFF",
 
-    .pad_193 = { 0 },
+    .NakaInst_ES_Bottom8_Str = "ES_Bottom8\x00\xFF",
 
-    .SS_Left_str_ptr = SELF(SS_Left_str),
+    .NakaInst_ES_Bottom7_Str = "ES_Bottom7\x00\xFF",
 
-    .field_4492 = 0x0007,
+    .NakaInst_ES_Bottom6_Str = "ES_Bottom6\x00\xFF",
 
-    .pad_194 = { 0 },
+    .NakaInst_ES_Bottom5_Str = "ES_Bottom5\x00\xFF",
 
-    .SS_Right_str_ptr = SELF(SS_Right_str),
+    .NakaInst_ES_Bottom4_Str = "ES_Bottom4\x00\xFF",
 
-    .field_449a = 0x0008,
+    .NakaInst_ES_Bottom3_Str = "ES_Bottom3\x00\xFF",
 
-    .pad_195 = { 0 },
+    .NakaInst_ES_Bottom2_Str = "ES_Bottom2\x00\xFF",
 
-    .SS_Yes_str_ptr = SELF(SS_Yes_str),
+    .NakaInst_ES_Bottom1_Str = "ES_Bottom1\x00\xFF",
 
-    .field_44a2 = 0x0009,
+    .NakaInst_EditSwStyleID_EnumTable = {
+        { SELF(NakaInst_SS_Special_Str), 0 },
+        { SELF(NakaInst_SS_Up_Str), 1 },
+        { SELF(NakaInst_SS_Down_Str), 2 },
+        { SELF(NakaInst_SS_UpDown_Str), 3 },
+        { SELF(NakaInst_SS_On_Str), 4 },
+        { SELF(NakaInst_SS_Off_Str), 5 },
+        { SELF(NakaInst_SS_OK_Str), 6 },
+        { SELF(NakaInst_SS_Left_Str), 7 },
+        { SELF(NakaInst_SS_Right_Str), 8 },
+        { SELF(NakaInst_SS_Yes_Str), 9 },
+        { SELF(NakaInst_SS_No_Str), 10 },
+        { SELF(NakaInst_SS_OnOff_Str), 11 },
+        { SELF(NakaInst_SS_Up2_Str), 12 },
+        { SELF(NakaInst_SS_Down2_Str), 13 },
+        { SELF(NakaInst_SS_UpDown2_Str), 14 },
+        { SELF(NakaInst_SS_Left2_Str), 15 },
+        { SELF(NakaInst_SS_Right2_Str), 16 },
+        { SELF(NakaInst_EditSwStyleID_EmptyStr), 0 },
+    },
 
-    .pad_196 = { 0 },
+    .NakaInst_EditSwStyleID_EmptyStr = "\x00\xFF",
 
-    .SS_No_str_ptr = SELF(SS_No_str),
+    .NakaInst_SS_Right2_Str = "SS_Right2",
 
-    .field_44aa = 0x000A,
+    .NakaInst_SS_Left2_Str = "SS_Left2\x00\xFF",
 
-    .pad_197 = { 0 },
+    .NakaInst_SS_UpDown2_Str = "SS_UpDown2\x00\xFF",
 
-    .SS_OnOff_str_ptr = SELF(SS_OnOff_str),
+    .NakaInst_SS_Down2_Str = "SS_Down2\x00\xFF",
 
-    .field_44b2 = 0x000B,
+    .NakaInst_SS_Up2_Str = "SS_Up2\x00\xFF",
 
-    .pad_198 = { 0 },
+    .NakaInst_SS_OnOff_Str = "SS_OnOff\x00\xFF",
 
-    .SS_Up2_str_ptr = SELF(SS_Up2_str),
+    .NakaInst_SS_No_Str = "SS_No",
 
-    .field_44ba = 0x000C,
+    .NakaInst_SS_Yes_Str = "SS_Yes\x00\xFF",
 
-    .pad_199 = { 0 },
+    .NakaInst_SS_Right_Str = "SS_Right\x00\xFF",
 
-    .SS_Down2_str_ptr = SELF(SS_Down2_str),
+    .NakaInst_SS_Left_Str = "SS_Left",
 
-    .field_44c2 = 0x000D,
+    .NakaInst_SS_OK_Str = "SS_OK",
 
-    .pad_200 = { 0 },
+    .NakaInst_SS_Off_Str = "SS_Off\x00\xFF",
 
-    .SS_UpDown2_str_ptr = SELF(SS_UpDown2_str),
+    .NakaInst_SS_On_Str = "SS_On",
 
-    .field_44ca = 0x000E,
+    .NakaInst_SS_UpDown_Str = "SS_UpDown",
 
-    .pad_201 = { 0 },
+    .NakaInst_SS_Down_Str = "SS_Down",
 
-    .SS_Left2_str_ptr = SELF(SS_Left2_str),
+    .NakaInst_SS_Up_Str = "SS_Up",
 
-    .field_44d2 = 0x000F,
-
-    .pad_202 = { 0 },
-
-    .ptr_44d6 = 0x00EB6FE6,
-
-    .field_44da = 0x0010,
-
-    .pad_203 = { 0 },
-
-    .ptr_44de = 0x00EB6FE4,
-
-    .pad_204 = { 0 },
-
-    .field_44e7 = 0x53FF,
-
-    .S_Right2_str = ALIGNED_STRING("S_Right2"),
-
-    .SS_Left2_str = ALIGNED_STRING("SS_Left2"),
-
-    .SS_UpDown2_str = ALIGNED_STRING("SS_UpDown2"),
-
-    .SS_Down2_str = ALIGNED_STRING("SS_Down2"),
-
-    .SS_Up2_str = ALIGNED_STRING("SS_Up2"),
-
-    .SS_OnOff_str = ALIGNED_STRING("SS_OnOff"),
-
-    .SS_No_str = "SS_No",
-
-    .SS_Yes_str = ALIGNED_STRING("SS_Yes"),
-
-    .SS_Right_str = ALIGNED_STRING("SS_Right"),
-
-    .SS_Left_str = "SS_Left",
-
-    .SS_OK_str = "SS_OK",
-
-    .SS_Off_str = ALIGNED_STRING("SS_Off"),
-
-    .SS_On_str = "SS_On",
-
-    .SS_UpDown_str = "SS_UpDown",
-
-    .SS_Down_str = "SS_Down",
-
-    .SS_Up_str = "SS_Up",
-
-    .SS_Special_str = ALIGNED_STRING("SS_Special"),
+    .NakaInst_SS_Special_Str = "SS_Special\x00\xFF",
 
     .NakaInst_LineModeID_EnumTable = {
         { SELF(NakaInst_LM_RightUp), 0 },
@@ -6751,115 +6103,32 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .SupportClass_ApFuncIDValueNames = { SELF(SupportClass_ApFuncIDValueNames.end_text), 0, "\x00\xFF" },
 
-    .field_45f0 = 0xF6,
+    .NakaInst_MainFuncID_EnumTable = {
+        { SELF(NakaInst_MainFuncID_EmptyStr), 0 },
+    },
 
-    .field_45f1 = 0xEB70,
+    .NakaInst_MainFuncID_EmptyStr = "\x00\xFF",
 
-    .pad_212 = { 0 },
+    .NakaInst_UserID_EnumTable = {
+        { NAKA_ADDR(NakaInst_iduRoot), 0 },
+        { NAKA_ADDR(NakaInst_iduMurai), 1 },
+        { NAKA_ADDR(NakaData_StyleBitmaps), 2 },
+        { SELF(NakaInst_UserID_NameStrings[76]), 3 },
+        { SELF(NakaInst_UserID_NameStrings[68]), 4 },
+        { SELF(NakaInst_UserID_NameStrings[58]), 5 },
+        { SELF(NakaInst_UserID_NameStrings[48]), 6 },
+        { SELF(NakaInst_UserID_NameStrings[40]), 7 },
+        { SELF(NakaInst_UserID_NameStrings[32]), 8 },
+        { SELF(NakaInst_UserID_NameStrings[24]), 9 },
+        { SELF(NakaInst_UserID_NameStrings[16]), 10 },
+        { SELF(NakaInst_UserID_NameStrings[8]), 11 },
+        { SELF(NakaInst_UserID_NameStrings), -1 },
+        { SELF(NakaInst_UserID_EmptyStr), 0 },
+    },
 
-    .field_45f9 = 0xD2FF,
+    .NakaInst_UserID_EmptyStr = "\x00\xFF",
 
-    .field_45fb = 0xEB71,
-
-    .pad_213 = { 0 },
-
-    .NakaInst_iduMurai_ptr = NAKA_ADDR(NakaInst_iduMurai),
-
-    .field_4606 = 0x0001,
-
-    .pad_214 = { 0 },
-
-    .NakaData_StyleBitmaps_ptr = NAKA_ADDR(NakaData_StyleBitmaps),
-
-    .field_460e = 0x0002,
-
-    .pad_215 = { 0 },
-
-    .iduEast_str_ptr = SELF(iduEast_str),
-
-    .field_4616 = 0x0003,
-
-    .pad_216 = { 0 },
-
-    .iduSuna_str_ptr = SELF(iduSuna_str),
-
-    .field_461e = 0x0004,
-
-    .pad_217 = { 0 },
-
-    .iduCheap_str_ptr = SELF(iduCheap_str),
-
-    .field_4626 = 0x0005,
-
-    .pad_218 = { 0 },
-
-    .iduScoop_str_ptr = SELF(iduScoop_str),
-
-    .field_462e = 0x0006,
-
-    .pad_219 = { 0 },
-
-    .iduYoko_str_ptr = SELF(iduYoko_str),
-
-    .field_4636 = 0x0007,
-
-    .pad_220 = { 0 },
-
-    .iduKubo_str_ptr = SELF(iduKubo_str),
-
-    .field_463e = 0x0008,
-
-    .pad_221 = { 0 },
-
-    .iduHama_str_ptr = SELF(iduHama_str),
-
-    .field_4646 = 0x0009,
-
-    .pad_222 = { 0 },
-
-    .iduKSS_str_ptr = SELF(iduKSS_str),
-
-    .field_464e = 0x000A,
-
-    .pad_223 = { 0 },
-
-    .iduNaka_str_ptr = SELF(iduNaka_str),
-
-    .field_4656 = 0x000B,
-
-    .pad_224 = { 0 },
-
-    .ptr_465a = 0x00EB716A,
-
-    .field_465e = NAKA_NONE,
-
-    .field_4660 = NAKA_NONE,
-
-    .ptr_4662 = 0x00EB7168,
-
-    .pad_225 = { 0 },
-
-    .field_466b = 0x69FF,
-
-    .duNone_str = ALIGNED_STRING("duNone"),
-
-    .iduNaka_str = "iduNaka",
-
-    .iduKSS_str = ALIGNED_STRING("iduKSS"),
-
-    .iduHama_str = "iduHama",
-
-    .iduKubo_str = "iduKubo",
-
-    .iduYoko_str = "iduYoko",
-
-    .iduScoop_str = ALIGNED_STRING("iduScoop"),
-
-    .iduCheap_str = ALIGNED_STRING("iduCheap"),
-
-    .iduSuna_str = "iduSuna",
-
-    .iduEast_str = "iduEast",
+    .NakaInst_UserID_NameStrings = "iduNone\x00iduNaka\x00iduKSS\x00\xFFiduHama\x00iduKubo\x00iduYoko\x00iduScoop\x00\xFFiduCheap\x00\xFFiduSuna\x00iduEast",
 
 };
 

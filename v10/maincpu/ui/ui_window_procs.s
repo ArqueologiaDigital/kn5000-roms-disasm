@@ -80,7 +80,7 @@ WndScroll_HandleSelectionChange:
 	ld wa, (0x0274da:24)
 	extz xwa
 	sll xwa, 2
-	ld xbc, Data_SoundEditorCharsLayout
+	ld xbc, AcNaming_PageCharLists
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (xsp + 4), xwa
@@ -191,7 +191,7 @@ WndScroll_RepaintAll:
 	ld wa, (0x0274da:24)
 	extz xwa
 	sll xwa, 2
-	ld xbc, Data_SoundEditorCharsLayout
+	ld xbc, AcNaming_PageCharLists
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (xsp + 4), xwa
@@ -238,7 +238,7 @@ WndScroll_ItemCountCheck:
 	add bc, wa
 	extz xbc
 	add xbc, xbc
-	ld xde, WndScroll_ItemCountCheck_Str_Chr25
+	ld xde, WndScroll_NamingPageLastIndex
 	add xde, xbc
 	cp iz, (xde)
 	jr ule, WndScroll_DrawSingleItem
@@ -314,7 +314,7 @@ WndEvt_DispatchByEventCode_Case2:
 	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2
-	ld	xde, Data_SoundEditorCharsLayout
+	ld	xde, AcNaming_PageCharLists
 	add	xde, xwa
 	ld	xwa, (xde)
 	ld	(xsp+4), xwa
@@ -347,7 +347,7 @@ WndEvt_DispatchByEventCode_Case2:
 	ld	xde, (xsp+42)
 	jrl	WndEvt_EventCodeDispatch_Join3
 WndEvt_DispatchByEventCode_Case3:
-	lda	xde, (Data_SoundEditorCharsLayout:24)
+	lda	xde, (AcNaming_PageCharLists:24)
 	lda	xwa, (xsp+12)
 	ld	(xsp+8), xwa
 	ld	xwa, (xsp+46)
@@ -415,7 +415,7 @@ WndEvt_EventCodeDispatch_OnIndexswDownAny:
 	add	wa, (0x0274da:24)
 	extz	xwa
 	add	xwa, xwa
-	lda	xde, (WndScroll_ItemCountCheck_Str_Chr25:24)
+	lda	xde, (WndScroll_NamingPageLastIndex:24)
 	ld	xbc, xde
 	add	xbc, xwa
 	ld	wa, (0x0274de:24)
@@ -450,7 +450,7 @@ WndEvt_EventCodeDispatch_Skip4:
 	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2
-	ld	xde, Data_SoundEditorCharsLayout
+	ld	xde, AcNaming_PageCharLists
 	add	xde, xwa
 	ld	xwa, (xde)
 	ld	(xsp+4), xwa
@@ -500,7 +500,7 @@ WndEvt_DispatchByEventCode_Case4:
 	ld	wa, bc
 	extz	xwa
 	sll	xwa, 2
-	ld	xde, Data_SoundEditorCharsLayout
+	ld	xde, AcNaming_PageCharLists
 	add	xde, xwa
 	ld	xwa, (xde)
 	ld	(xsp+4), xwa
@@ -509,7 +509,7 @@ WndEvt_DispatchByEventCode_Case4:
 	add	wa, bc
 	extz	xwa
 	add	xwa, xwa
-	ld	xbc, WndScroll_ItemCountCheck_Str_Chr25
+	ld	xbc, WndScroll_NamingPageLastIndex
 	add	xbc, xwa
 	ld	wa, (0x0274de:24)
 	ld	de, wa
@@ -847,7 +847,7 @@ WndScroll_SendSelectionEvents:
 	ld wa, (0x0274da:24)
 	extz xwa
 	sll xwa, 2
-	ld xbc, WndScroll_SendSelectionEvents_PtrTable
+	ld xbc, WndScroll_CharSetCaptions
 	add xbc, xwa
 	ld xde, (xbc)
 	ld xwa, 0x1d
@@ -934,7 +934,7 @@ WndScroll_SetUnderscoreOffset:
 	jr WndScroll_SendPageEvents
 
 WndScroll_SearchCharTable:
-	lda xwa, (WndScroll_SearchCharTable_PtrTable:24)
+	lda xwa, (WndScroll_SymbolPageChars:24)
 	ld (xsp + 8), xwa
 	ld iz, 0:i3
 	jr WndScroll_CheckTableEnd
@@ -966,7 +966,7 @@ WndScroll_CheckTableEnd:
 	inc 2, wa
 	extz xwa
 	add xwa, xwa
-	ld xbc, WndScroll_ItemCountCheck_Str_Chr25
+	ld xbc, WndScroll_NamingPageLastIndex
 	add xbc, xwa
 	cp iz, (xbc)
 	jr ule, WndScroll_CompareCharLoop
@@ -1018,7 +1018,7 @@ WndScroll_HandleDialPage:
 	ld bc, wa
 	extz xbc
 	add xbc, xbc
-	ld xwa, WndScroll_ItemCountCheck_Str_Chr25
+	ld xwa, WndScroll_NamingPageLastIndex
 	add xwa, xbc
 	ld wa, (xwa)
 	cp (0x0274de:24), wa
@@ -1029,7 +1029,7 @@ WndScroll_ClampPageCount:
 	ld wa, (0x0274da:24)
 	extz xwa
 	sll xwa, 2
-	ld xbc, Data_SoundEditorCharsLayout
+	ld xbc, AcNaming_PageCharLists
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (xsp + 4), xwa

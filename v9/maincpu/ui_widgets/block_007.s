@@ -38,9 +38,11 @@
 ; {class, proc, count, table} at 0x27ed2 + 14*0x163.
 ; -----------------------------------------------------------------------------
 
-; [nakarest] NakaData_Block007  +0x0..+0x14 (0xe55a36, 20 B)
-; [nakarest] purpose not established: 20 B at 0xe55a36 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
-NakaData_Block007:	.incbin "includes/generated/naka_block_007.bin", 0x0, 0x14
+; East_ClassDef_AcSendEditSw_Parent -- 1 x {u32 parent, u16 allsize, u16 selfsize, u32 name, u32 propdata, u32 propname}: fields +4..+23 of class definition 3 (AcSendEditSw) of Class slot 0x163
+; Not an object of its own: definition 3 of East_ClassTable_163 starts 4 bytes earlier with its proc pointer, and ClassProc reaches it
+; as table + 24 * (class id & 0xFFFF). parent 0x0160001E (Root class 30, PsEditSwBox), allsize 52, selfsize 14, name "AcSendEditSw", propdata "fjXn".
+; NOTE: ui_widgets/block_007.s is not .included by kn5000_v10_program.s; in the built ROM these bytes are East_ClassTable_163 + 76 (widget_descriptors.s).
+East_ClassDef_AcSendEditSw_Parent:	.incbin "includes/generated/naka_block_007.bin", 0x0, 0x14
 ; [nakarest] naka_block_007+0x14  +0x14..+0x14c (0xe55a4a, 312 B)
 ; [nakarest] class definition entries 4-15 of Class slot 0x163 (table 0xe559ea, 16 entries,
 ; [nakarest] InitializeEast) (24 bytes each: proc, parent, allsize, selfsize, name, propdata,

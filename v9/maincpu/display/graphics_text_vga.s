@@ -324,7 +324,7 @@ GraphicsRender_Start_Done:
 SeGfx_StaticOp06_CellTextFont0:
 	lda xsp, (xsp-274)
 	push xiz
-	ld xiy, DrawText_LayoutAndRender_Data
+	ld xiy, SeGfx_StaticOp06_ClipBox
 	lda xix, (xsp+270)
 	ld bc, 4:i3
 	ldirw
@@ -386,7 +386,7 @@ DrawText_NullTerminate:
 SeGfx_StaticOp07_CellTextFont1:
 	lda xsp, (xsp-274)
 	push	xiz
-	ld	xiy, DrawText_LayoutAndRender_Variant1_Data
+	ld	xiy, SeGfx_StaticOp07_ClipBox
 	lda	xix, (xsp+270)
 	ld	bc, 4:i3
 	ldirw
@@ -445,7 +445,7 @@ DrawText_LayoutAndRender_Variant1_Skip:
 SeGfx_StaticOp08_CellTextFont2:
 	lda xsp, (xsp-274)
 	push	xiz
-	ld	xiy, DrawText_LayoutAndRender_Variant1_Data_2
+	ld	xiy, SeGfx_StaticOp08_ClipBox
 	lda	xix, (xsp+270)
 	ld	bc, 4:i3
 	ldirw
@@ -504,7 +504,7 @@ DrawText_LayoutAndRender_Variant1_Skip2:
 SeGfx_StaticOp17_PixelTextFont3:
 	lda xsp, (xsp-274)
 	push	xiz
-	ld	xiy, DrawText_LayoutAndRender_Variant1_Data_3
+	ld	xiy, SeGfx_StaticOp17_ClipBox
 	lda	xix, (xsp+270)
 	ld	bc, 4:i3
 	ldirw
@@ -558,7 +558,7 @@ DrawText_LayoutAndRender_Variant1_Skip3:
 SeGfx_StaticOp1C_PixelTextFont4:
 	lda xsp, (xsp-274)
 	push	xiz
-	ld	xiy, DrawText_LayoutAndRender_Variant1_Data_4
+	ld	xiy, SeGfx_StaticOp1C_ClipBox
 	lda	xix, (xsp+270)
 	ld	bc, 4:i3
 	ldirw
@@ -612,7 +612,7 @@ DrawText_LayoutAndRender_Variant1_Skip4:
 SeGfx_StaticOp20_CellTextFont6:
 	lda xsp, (xsp-274)
 	push	xiz
-	ld	xiy, DrawText_LayoutAndRender_Variant1_Data_5
+	ld	xiy, SeGfx_StaticOp20_ClipBox
 	lda	xix, (xsp+270)
 	ld	bc, 4:i3
 	ldirw
@@ -1132,7 +1132,7 @@ DrawText_ExtendedLayout:
 	lda xsp, (xsp-284)
 	push xiz
 	ld	(xsp+284), xwa
-	ld xiy, DrawText_ExtendedLayout_Data
+	ld xiy, DrawText_ExtendedLayout_ClipRect
 	lda xix, (xsp+276)
 	ld bc, 4:i3
 	ldirw
@@ -1225,7 +1225,7 @@ DrawText_ExtLayout_Variant1:
 	lda	xsp, (xsp-284)
 	push	xiz
 	ld	(xsp+284), xwa
-	ld	xiy, DrawText_ExtLayout_Variant1_Data
+	ld	xiy, SeGfx_BoundOp07_ClipBox
 	lda	xix, (xsp+276)
 	ld	bc, 4:i3
 	ldirw
@@ -1309,7 +1309,7 @@ DrawFunc_Init:
 	lda xsp, (xsp-268)
 	push xiz
 	ld xiz, xwa
-	ld xiy, DrawFunc_Init_Data
+	ld xiy, SeGfx_BoundOp00_ClipBox
 	lda xix, (xsp+264)
 	ld bc, 4:i3
 	ldirw
@@ -1381,7 +1381,7 @@ DrawFunc_Init_Variant1:
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, DrawFunc_Init_Variant1_Data
+	ld	xiy, DrawFunc_Init_Variant1_ClipRect
 	lda	xix, (xsp+264)
 	ld	bc, 4:i3
 	ldirw
@@ -1491,7 +1491,7 @@ SeGfx_BoundOp06_Helper:
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, DrawFunc_Init_Entry_Data
+	ld	xiy, SeGfx_BoundOp06_ClipRect
 	lda	xix, (xsp+264)
 	ld	bc, 4:i3
 	ldirw
@@ -1549,7 +1549,7 @@ SeGfx_BoundOp09_FormatNumber:
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, DrawFunc_Init_Entry3_Data
+	ld	xiy, SeGfx_BoundOp09_ClipRect
 	lda	xix, (xsp+264)
 	ld	bc, 4:i3
 	ldirw
@@ -1610,7 +1610,7 @@ SeGfx_BoundOp0B_FormatNumber:
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, DrawFunc_Init_Entry3_Data_2
+	ld	xiy, SeGfx_BoundOp0B_ClipRect
 	lda	xix, (xsp+264)
 	ld	bc, 4:i3
 	ldirw
@@ -1710,7 +1710,7 @@ SeGfx_BoundOp0A_FormatNumber:
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, Data_CharMapFormatBlock
+	ld	xiy, SeGfx_BoundOp0A_ClipRect
 	lda	xix, (xsp+264)
 	ld	bc, 4:i3
 	ldirw

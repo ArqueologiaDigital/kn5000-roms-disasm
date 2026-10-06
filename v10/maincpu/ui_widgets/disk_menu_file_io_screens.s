@@ -1440,11 +1440,29 @@ CheckPwd_Type2_PtrTable:	.incbin "includes/generated/naka_disk_menu_file_io.bin"
 WakeUp_HandleDirect_Str_CcEv:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7824, 0x6	; "CcEv"
 PasswordOk_Str_Query_Query:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x782A, 0x4	; "??"
 CheckPasswordOk_Str_Query_Query:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x782E, 0x4	; "??"
-; [nakarest] naka_disk_menu_file_io+0x7832  +0x7832..+0x7890 (0xea8bfe, 94 B)
-; [nakarest] purpose not established: layout of 94 B at 0xea8bfe not derived; readers below
-; [nakarest] Readers: source references DiskAttention (file_io/medley.s: `lda xhl,
-; [nakarest] (DiskAttention_PtrTable:24)`).
-DiskAttention_PtrTable:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7832, 0x5E	; 6 x 32-bit pointer
+; DiskAttention_TextByLanguage -- 6 x u32: the DiskAttention heading text ("ATTENTION!"), indexed by the language number (RAM 0x340E4)
+; DiskAttention (file_io/medley.s) returns it for EVT_GET_LANGUAGE_PTR; AcLanguageTextProc (ui/ui_widget_defs.s) draws entry
+; [language] with EVT_PARA_DRAW.  Order 0 English, 1 German, 2 French, 3 Spanish, 4 Italian, 5 Indonesian
+; (CheckLanguage_LangNames); the strings follow in reverse order.
+DiskAttention_TextByLanguage:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7832, 0x18
+; DiskAttention_Text_Indonesian -- 12 x char: "Perhatian !", Indonesian entry of DiskAttention_TextByLanguage
+; DiskAttention_TextByLanguage[5] points here.
+DiskAttention_Text_Indonesian:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x784A, 0xC
+; DiskAttention_Text_Italian -- 12 x char: "ATTENTION!" + 0xFF fill, Italian entry of DiskAttention_TextByLanguage
+; DiskAttention_TextByLanguage[4] points here.
+DiskAttention_Text_Italian:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7856, 0xC
+; DiskAttention_Text_Spanish -- 12 x char: "¡ATENCIÓN!" + 0xFF fill, Spanish entry of DiskAttention_TextByLanguage
+; DiskAttention_TextByLanguage[3] points here.
+DiskAttention_Text_Spanish:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7862, 0xC
+; DiskAttention_Text_French -- 12 x char: "ATTENTION!" + 0xFF fill, French entry of DiskAttention_TextByLanguage
+; DiskAttention_TextByLanguage[2] points here.
+DiskAttention_Text_French:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x786E, 0xC
+; DiskAttention_Text_German -- 10 x char: "ACHTUNG !", German entry of DiskAttention_TextByLanguage
+; DiskAttention_TextByLanguage[1] points here.
+DiskAttention_Text_German:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x787A, 0xA
+; DiskAttention_Text_English -- 12 x char: "ATTENTION!" + 0xFF fill, English entry of DiskAttention_TextByLanguage
+; DiskAttention_TextByLanguage[0] points here.
+DiskAttention_Text_English:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7884, 0xC
 ; [nakarest] naka_disk_menu_file_io+0x7890  +0x7890..+0x78e0 (0xea8c5c, 80 B)
 ; [nakarest] purpose not established: layout of 80 B at 0xea8c5c not derived; readers below
 ; [nakarest] Readers: source references DiskSure (file_io/medley.s: `lda xhl,

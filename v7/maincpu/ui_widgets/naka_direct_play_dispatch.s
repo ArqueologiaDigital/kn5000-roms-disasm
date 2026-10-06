@@ -328,4 +328,4 @@ Yoko_FunctionTable_107:
 ; v7 names this label's address (0xE21074) as a 24-bit operand at 0xF29F44.
 Yoko_FunctionTable_407:
 	.long FuncName_PsSongSelBoxProc	; -> "PsSongSelBoxProc" name string (next file)
-	.long NakaBoxData_PsSongSelBox
+	.long Yoko_FunctionNameTable_407_EndName

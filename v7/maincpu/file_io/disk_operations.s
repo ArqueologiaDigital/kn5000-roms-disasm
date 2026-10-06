@@ -806,7 +806,7 @@ FmmSaveTtl_SlotLoop:
 	ld	wa, 7:i3
 	call	FileIO_BuildRecordPath_Return
 	call	FileIO_SetModeFlag_Reading
-	ld	xiy, ResetProgressIndication_Data
+	ld	xiy, FmmPassword_StateInit
 	ld	xix, 35184
 	ldiw
 FmmSaveTtl_CommitSave:
@@ -998,7 +998,7 @@ DiskInfo_RenderStrings:
 	ld	(xsp+4), xbc
 	ld	wa, (33892:16)
 	sla	wa, 2
-	lda	xbc, (DiskType_CodeTable:24)
+	lda	xbc, (DiskInfo_MediaTypeNames:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, 34610
 	call	FileIO_CopyString

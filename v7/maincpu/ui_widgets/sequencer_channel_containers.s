@@ -86,7 +86,7 @@ Naka_DrawbarControl_Table:
 ; [nakarest] that copy was found.
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xD54, 0x8
 MidiPart_ConfigNameTable:
-	.long MidiParam_PanelCfgTable
+	.long PsMixer_BootDefaultRows
 	.long PsMixer_DefaultGridPartRows
 	.long PartName6_Right1
 	.long PartName6_Right2
@@ -243,7 +243,7 @@ Naka_DrawbarReg_Table:
 	.long NakaColor_Palette7
 	.long NakaColor_PaletteBlank
 	.long NakaColor_PaletteBlank
-	.long SeqChan_Map_2ch
+	.long EditSw_PageMap2
 	.long EditSw_PageMap4
 	.long VariScreen_EditSwLayout6
 	.long VariScreen_EditSwLayout8

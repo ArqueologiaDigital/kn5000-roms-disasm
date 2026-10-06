@@ -7715,7 +7715,7 @@ ClassProps_AcMidiPartGridBox:	.incbin "includes/generated/naka_widget_descriptor
 ; -----------------------------------------------------------------------------
 East_ClassTable_163:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B8A, 0x180
-	.set NakaData_Block007, East_ClassTable_163 + 76	; historical label, used by other files
+	.set East_ClassDef_AcSendEditSw_Parent, East_ClassTable_163 + 76	; historical label, used by other files
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] East_ClassTable_163_Tail
 ; East_ClassTable_163_Tail -- 94 bytes after East_ClassTable_163: the all-zero

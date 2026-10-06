@@ -36,3 +36,4 @@ SeqByteBlock_PathNormalize = 0x00F500D7;
 WidgetCharMap_DataEntry1 = 0x00EB00D8;
 WidgetName_PtrBlock_G = 0x00EB00A4;
 WidgetName_PtrBlock_I1 = 0x00EB00C4;
+NakaInst_iduRoot = 0x00EB71D2;

@@ -353,11 +353,28 @@ NakaInst_slong_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x3
 NakaInst_ulong_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x3D12, 0x8
 ; NakaInst_ulong_EmptyStr -- 2 x char: "" plus a 0xFF alignment pad, the name of the ulong enum table's terminator.
 NakaInst_ulong_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x3D1A, 0x2
-; [nakarest] NakaInst_False  +0x3d1c..+0x3d4c (0xeb681a, 48 B)
-; [nakarest] purpose not established: layout of 48 B at 0xeb681a not derived; readers below
-; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb76e0, 0xeb76ec), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
-NakaInst_False:	.incbin "includes/generated/naka_debug_naming.bin", 0x3D1C, 0x30
+; NakaInst_Bool_EnumTable -- 3 x {u32 name, s32 value}: value names of the Bool property type (2 named + "" end entry)
+; Word +8 of SupportClass record 6 (boolProc, count 2) in ExitWindow_OK_Data_2, the 55 x 12-byte table
+; ExitWindow_OK registers as class SupportClass.  CommonIDProc (ui/ui_widget_defs.s) walks it in 8-byte steps:
+; DUMP_PROPERTY_EX matches the 32-bit value and Strcpy's the name, SET_PROPERTY_EX Strcmp's the names; "" ends it.
+; True=1, False=0
+NakaInst_Bool_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x3D1C, 0x18
+; NakaInst_Bool_EmptyStr -- 2 x char: "" + 0xFF fill, name of the end entry of NakaInst_Bool_EnumTable
+; NakaInst_Bool_EnumTable's last entry {"", 0} points here; CommonIDProc stops at a name whose first byte is 0.
+NakaInst_Bool_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x3D34, 0x2
+; NakaInst_Bool_False_Str -- 6 x char: "False", name of Bool value 0
+; Entry 1 of NakaInst_Bool_EnumTable points here.
+NakaInst_Bool_False_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x3D36, 0x6
+; NakaInst_Bool_True_Str -- 6 x char: "True" + 0xFF fill, name of Bool value 1
+; Entry 0 of NakaInst_Bool_EnumTable points here.
+NakaInst_Bool_True_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x3D3C, 0x6
+; NakaInst_ObjectID_EnumTable -- 1 x {u32 name, s32 value}: empty value-name list of the ObjectID property type, only the "" end entry
+; Word +8 of SupportClass record 7 (ObjectIDProc) in ExitWindow_OK_Data_2; its count word (+4) is 0, so
+; CommonIDProc (ui/ui_widget_defs.s) does not search it, and its SET_PROPERTY_EX falls back to ParseInt32.
+NakaInst_ObjectID_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x3D42, 0x8
+; NakaInst_ObjectID_EmptyStr -- 2 x char: "" + 0xFF fill, name of the end entry of NakaInst_ObjectID_EnumTable
+; NakaInst_ObjectID_EnumTable's only entry {"", 0} points here.
+NakaInst_ObjectID_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x3D4A, 0x2
 ; NakaInst_pFunc_EnumTable -- 1 x {char *name; int32 value}: empty pFunc enum, only the {"", 0} end entry
 ; +8 of the pFuncProc SupportClass record (0xEB76F0) in ExitWindow_OK_Data_2, whose count is 0;
 ; CommonIDProc (ui/ui_widget_defs.s) stops at once on the empty name.
@@ -461,16 +478,106 @@ SupportClass_ConstFlagValueNames:	.incbin "includes/generated/naka_debug_naming.
 ; Entry 26 of ExitWindow_OK_Data_2 (the SupportClass table) points here with value count 0;
 ; CommonIDProc walks such lists 8 bytes at a time until a name's first byte is 0.
 SupportClass_ViewIDValueNames:	.incbin "includes/generated/naka_debug_naming.bin", 0x3E24, 0xA
-; [nakarest] NakaProp_VisFlag_Chain  +0x3e2e..+0x40d2 (0xeb692c, 676 B)
-; [nakarest] purpose not established: layout of 676 B at 0xeb692c not derived; readers below
-; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb77e8, 0xeb77f4), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
-NakaProp_VisFlag_Chain:	.incbin "includes/generated/naka_debug_naming.bin", 0x3E2E, 0x2A4
-; [nakarest] NakaProp_BorderDefs  +0x40d2..+0x426e (0xeb6bd0, 412 B)
-; [nakarest] purpose not established: layout of 412 B at 0xeb6bd0 not derived; readers below
-; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7800, 0xeb780c), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
-NakaProp_BorderDefs:	.incbin "includes/generated/naka_debug_naming.bin", 0x40D2, 0x19C
+; NakaInst_ViewFlag_EnumTable -- 7 x {u32 name_ptr, s32 value}: ViewFlag property value names, ended by {"", 0}
+; VF_None 0, VF_Invisible 1, VF_Fixed 2, VF_Change 4, VF_Const 8, VF_InvisibleBox 0x10. +8 of the ViewFlagProc
+; SupportClass record (entry 28 of ExitWindow_OK_Data_2, count 6). CommonIDProc (ui/ui_widget_defs.s) walks it in
+; 8-byte steps until the name is "": value -> name for DUMP_PROPERTY_EX, name -> value for SET_PROPERTY_EX.
+NakaInst_ViewFlag_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x3E2E, 0x38
+; NakaInst_ViewFlag_EmptyStr -- 2 x char: "" + 0xFF fill, the name of the {"", 0} end entry of NakaInst_ViewFlag_EnumTable;
+; CommonIDProc (ui/ui_widget_defs.s) stops its walk at this empty name.
+NakaInst_ViewFlag_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x3E66, 0x2
+; NakaInst_ViewFlag_NameStrings -- 68 x char: the ViewFlag value names VF_InvisibleBox, VF_Const, VF_Change, VF_Fixed,
+; VF_Invisible, VF_None (NUL-terminated, 0xFF-padded to even length); the name_ptr fields of
+; NakaInst_ViewFlag_EnumTable point at them.
+NakaInst_ViewFlag_NameStrings:	.incbin "includes/generated/naka_debug_naming.bin", 0x3E68, 0x44
+; NakaInst_ColorID_EnumTable -- 30 x {u32 name_ptr, s32 value}: ColorID property value names (palette colour numbers), ended by {"", 0}
+; CL_Black 0, CL_Maroon 1 .. CL_Teal 6, CL_Silver 7, CL_DarkGray 8, CL_Orange 9, CL_FireRed 10, CL_HairLine 11, CL_DarkYellow 12,
+; CL_LightGreen 13, CL_IconBack 0xF0, CL_Text 0xF1, CL_Selected 0xF2, CL_PageBack 0xF3, CL_EditSw 0xF4, CL_WallPattern 0xF5,
+; CL_Transparent 0xF7, CL_Gray 0xF8, CL_Red 0xF9 .. CL_Aqua 0xFE, CL_White 0xFF. +8 of the ColorIDProc SupportClass record
+; (entry 29 of ExitWindow_OK_Data_2, count 29); CommonIDProc (ui/ui_widget_defs.s) walks it in 8-byte steps.
+NakaInst_ColorID_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x3EAC, 0xF0
+; NakaInst_ColorID_EmptyStr -- 2 x char: "" + 0xFF fill, the name of the {"", 0} end entry of NakaInst_ColorID_EnumTable;
+; CommonIDProc (ui/ui_widget_defs.s) stops its walk at this empty name.
+NakaInst_ColorID_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x3F9C, 0x2
+; NakaInst_ColorID_NameStrings -- 308 x char: the 29 ColorID value names, CL_WallPattern first and CL_Black last
+; (NUL-terminated, 0xFF-padded to even length); the name_ptr fields of NakaInst_ColorID_EnumTable point at them.
+NakaInst_ColorID_NameStrings:	.incbin "includes/generated/naka_debug_naming.bin", 0x3F9E, 0x134
+; NakaInst_BorderID_EnumTable -- 21 x {u32 name, s32 value}: value names of the BorderID property type (20 named + "" end entry)
+; Word +8 of SupportClass record 30 (BorderIDProc, count 20) in ExitWindow_OK_Data_2, the 55 x 12-byte table
+; ExitWindow_OK registers as class SupportClass.  CommonIDProc (ui/ui_widget_defs.s) walks it in 8-byte steps:
+; DUMP_PROPERTY_EX matches the 32-bit value and Strcpy's the name, SET_PROPERTY_EX Strcmp's the names; "" ends it.
+; BD_None=0, BD_Single1=1, BD_Single2=2, BD_Double1=3, BD_Shadow1=4, BD_Shadow2=5, BD_Round0=6, BD_Round1=7, BD_Round2=8, BD_Round5=9, ... (10 more)
+NakaInst_BorderID_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x40D2, 0xA8
+; NakaInst_BorderID_EmptyStr -- 2 x char: "" + 0xFF fill, name of the end entry of NakaInst_BorderID_EnumTable
+; NakaInst_BorderID_EnumTable's last entry {"", 0} points here; CommonIDProc stops at a name whose first byte is 0.
+NakaInst_BorderID_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x417A, 0x2
+; NakaInst_BD_TrackSwDown_Str -- 16 x char: "BD_TrackSwDown" + 0xFF fill, name of BorderID value 0xCC
+; Entry 19 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_TrackSwDown_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x417C, 0x10
+; NakaInst_BD_TrackSwUp_Str -- 14 x char: "BD_TrackSwUp" + 0xFF fill, name of BorderID value 0xCB
+; Entry 18 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_TrackSwUp_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x418C, 0xE
+; NakaInst_BD_EditSwDown_Str -- 14 x char: "BD_EditSwDown", name of BorderID value 0xCA
+; Entry 17 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_EditSwDown_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x419A, 0xE
+; NakaInst_BD_EditSwitch_Str -- 14 x char: "BD_EditSwitch", name of BorderID value 0xC9
+; Entry 16 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_EditSwitch_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x41A8, 0xE
+; NakaInst_BD_3D_DOWN2_Str -- 12 x char: "BD_3D_DOWN2", name of BorderID value 0xC3
+; Entry 15 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_3D_DOWN2_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x41B6, 0xC
+; NakaInst_BD_3D_DOWN1_Str -- 12 x char: "BD_3D_DOWN1", name of BorderID value 0xC2
+; Entry 14 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_3D_DOWN1_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x41C2, 0xC
+; NakaInst_BD_3D_UP2_Str -- 10 x char: "BD_3D_UP2", name of BorderID value 0xC1
+; Entry 13 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_3D_UP2_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x41CE, 0xA
+; NakaInst_BD_3D_UP1_Str -- 10 x char: "BD_3D_UP1", name of BorderID value 0xC0
+; Entry 12 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_3D_UP1_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x41D8, 0xA
+; NakaInst_BD_Round14_Str -- 12 x char: "BD_Round14" + 0xFF fill, name of BorderID value 0x0B
+; Entry 11 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_Round14_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x41E2, 0xC
+; NakaInst_BD_Round9_Str -- 10 x char: "BD_Round9", name of BorderID value 0x0A
+; Entry 10 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_Round9_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x41EE, 0xA
+; NakaInst_BD_Round5_Str -- 10 x char: "BD_Round5", name of BorderID value 9
+; Entry 9 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_Round5_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x41F8, 0xA
+; NakaInst_BD_Round2_Str -- 10 x char: "BD_Round2", name of BorderID value 8
+; Entry 8 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_Round2_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4202, 0xA
+; NakaInst_BD_Round1_Str -- 10 x char: "BD_Round1", name of BorderID value 7
+; Entry 7 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_Round1_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x420C, 0xA
+; NakaInst_BD_Round0_Str -- 10 x char: "BD_Round0", name of BorderID value 6
+; Entry 6 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_Round0_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4216, 0xA
+; NakaInst_BD_Shadow2_Str -- 12 x char: "BD_Shadow2" + 0xFF fill, name of BorderID value 5
+; Entry 5 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_Shadow2_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4220, 0xC
+; NakaInst_BD_Shadow1_Str -- 12 x char: "BD_Shadow1" + 0xFF fill, name of BorderID value 4
+; Entry 4 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_Shadow1_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x422C, 0xC
+; NakaInst_BD_Double1_Str -- 12 x char: "BD_Double1" + 0xFF fill, name of BorderID value 3
+; Entry 3 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_Double1_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4238, 0xC
+; NakaInst_BD_Single2_Str -- 12 x char: "BD_Single2" + 0xFF fill, name of BorderID value 2
+; Entry 2 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_Single2_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4244, 0xC
+; NakaInst_BD_Single1_Str -- 12 x char: "BD_Single1" + 0xFF fill, name of BorderID value 1
+; Entry 1 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_Single1_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4250, 0xC
+; NakaInst_BD_None_Str -- 8 x char: "BD_None", name of BorderID value 0
+; Entry 0 of NakaInst_BorderID_EnumTable points here.
+NakaInst_BD_None_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x425C, 0x8
+; NakaInst_ModeID_EnumTable -- 1 x {u32 name, s32 value}: empty value-name list of the ModeID property type, only the "" end entry
+; Word +8 of SupportClass record 31 (ModeIDProc) in ExitWindow_OK_Data_2; its count word (+4) is 0, so
+; CommonIDProc (ui/ui_widget_defs.s) does not search it, and its SET_PROPERTY_EX falls back to ParseInt32.
+NakaInst_ModeID_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x4264, 0x8
+; NakaInst_ModeID_EmptyStr -- 2 x char: "" + 0xFF fill, name of the end entry of NakaInst_ModeID_EnumTable
+; NakaInst_ModeID_EnumTable's only entry {"", 0} points here.
+NakaInst_ModeID_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x426C, 0x2
 ; NakaInst_TitleID_EnumTable -- 1 x {char *name; int32 value}: empty TitleID enum, only the {"", 0} end entry
 ; +8 of the TitleIDProc SupportClass record (0xEB7810) in ExitWindow_OK_Data_2, whose count is 0;
 ; CommonIDProc (ui/ui_widget_defs.s) stops at once on the empty name.
@@ -483,16 +590,151 @@ NakaInst_TitleID_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0
 NakaInst_IconID_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x4278, 0x8
 ; NakaInst_IconID_EmptyStr -- 2 x char: "" + 0xFF fill, name of the end entry of NakaInst_IconID_EnumTable
 NakaInst_IconID_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x4280, 0x2
-; [nakarest] NakaProp_Align_PtrEntry  +0x4282..+0x42d8 (0xeb6d80, 86 B)
-; [nakarest] purpose not established: layout of 86 B at 0xeb6d80 not derived; readers below
-; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7830, 0xeb783c), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
-NakaProp_Align_PtrEntry:	.incbin "includes/generated/naka_debug_naming.bin", 0x4282, 0x56
-; [nakarest] NakaProp_EditSwitch_Chain  +0x42d8..+0x457c (0xeb6dd6, 676 B)
-; [nakarest] purpose not established: layout of 676 B at 0xeb6dd6 not derived; readers below
-; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7848, 0xeb7854), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
-NakaProp_EditSwitch_Chain:	.incbin "includes/generated/naka_debug_naming.bin", 0x42D8, 0x2A4
+; NakaInst_FontID_EnumTable -- 1 x {u32 name_ptr, s32 value}: the FontID value-name list, only its {"", 0} end entry
+; +8 of the FontIDProc SupportClass record (entry 34 of ExitWindow_OK_Data_2, count 0); FontIDProc handles font names
+; itself and passes other events to CommonIDProc (ui/ui_widget_defs.s), which stops at once on the empty name.
+NakaInst_FontID_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x4282, 0x8
+; NakaInst_FontID_EmptyStr -- 2 x char: "" + 0xFF fill, the name of the end entry of NakaInst_FontID_EnumTable
+NakaInst_FontID_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x428A, 0x2
+; NakaInst_AlignmentID_EnumTable -- 4 x {u32 name_ptr, s32 value}: AlignmentID value names, ended by {"", 0}
+; AL_Center 0, AL_LeftJustify 1, AL_RightJustify 2. +8 of the AlignmentIDProc SupportClass record (entry 35 of
+; ExitWindow_OK_Data_2, count 3, 1-byte data); AlignmentIDProc reads the byte and CommonIDProc (ui/ui_widget_defs.s)
+; maps value <-> name through this list.
+NakaInst_AlignmentID_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x428C, 0x20
+; NakaInst_AlignmentID_EmptyStr -- 2 x char: "" + 0xFF fill, the name of the end entry of NakaInst_AlignmentID_EnumTable
+NakaInst_AlignmentID_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x42AC, 0x2
+; NakaInst_AlignmentID_NameStrings -- 42 x char: the AlignmentID value names AL_RightJustify, AL_LeftJustify, AL_Center
+; (NUL-terminated, 0xFF-padded to even length); the name_ptr fields of NakaInst_AlignmentID_EnumTable point at them.
+NakaInst_AlignmentID_NameStrings:	.incbin "includes/generated/naka_debug_naming.bin", 0x42AE, 0x2A
+; NakaInst_EditSwID_EnumTable -- 21 x {u32 name, s32 value}: value names of the EditSwID property type (20 named + "" end entry)
+; Word +8 of SupportClass record 36 (EditSwIDProc, count 20) in ExitWindow_OK_Data_2, the 55 x 12-byte table
+; ExitWindow_OK registers as class SupportClass.  CommonIDProc (ui/ui_widget_defs.s) walks it in 8-byte steps:
+; DUMP_PROPERTY_EX matches the 32-bit value and Strcpy's the name, SET_PROPERTY_EX Strcmp's the names; "" ends it.
+; ES_Bottom1=0, ES_Bottom2=1, ES_Bottom3=2, ES_Bottom4=3, ES_Bottom5=4, ES_Bottom6=5, ES_Bottom7=6, ES_Bottom8=7, ES_Left1=0x88, ES_Left2=0x89, ... (10 more)
+NakaInst_EditSwID_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x42D8, 0xA8
+; NakaInst_EditSwID_EmptyStr -- 2 x char: "" + 0xFF fill, name of the end entry of NakaInst_EditSwID_EnumTable
+; NakaInst_EditSwID_EnumTable's last entry {"", 0} points here; CommonIDProc stops at a name whose first byte is 0.
+NakaInst_EditSwID_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x4380, 0x2
+; NakaInst_ES_None_Str -- 8 x char: "ES_None", name of EditSwID value 0xFF
+; Entry 19 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_None_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4382, 0x8
+; NakaInst_ES_Exit_Str -- 8 x char: "ES_Exit", name of EditSwID value 0x0F
+; Entry 18 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Exit_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x438A, 0x8
+; NakaInst_ES_Right5_Str -- 10 x char: "ES_Right5", name of EditSwID value 0x0C
+; Entry 17 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Right5_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4392, 0xA
+; NakaInst_ES_Right4_Str -- 10 x char: "ES_Right4", name of EditSwID value 0x0B
+; Entry 16 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Right4_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x439C, 0xA
+; NakaInst_ES_Right3_Str -- 10 x char: "ES_Right3", name of EditSwID value 0x0A
+; Entry 15 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Right3_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x43A6, 0xA
+; NakaInst_ES_Right2_Str -- 10 x char: "ES_Right2", name of EditSwID value 9
+; Entry 14 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Right2_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x43B0, 0xA
+; NakaInst_ES_Right1_Str -- 10 x char: "ES_Right1", name of EditSwID value 8
+; Entry 13 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Right1_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x43BA, 0xA
+; NakaInst_ES_Left5_Str -- 10 x char: "ES_Left5" + 0xFF fill, name of EditSwID value 0x8C
+; Entry 12 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Left5_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x43C4, 0xA
+; NakaInst_ES_Left4_Str -- 10 x char: "ES_Left4" + 0xFF fill, name of EditSwID value 0x8B
+; Entry 11 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Left4_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x43CE, 0xA
+; NakaInst_ES_Left3_Str -- 10 x char: "ES_Left3" + 0xFF fill, name of EditSwID value 0x8A
+; Entry 10 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Left3_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x43D8, 0xA
+; NakaInst_ES_Left2_Str -- 10 x char: "ES_Left2" + 0xFF fill, name of EditSwID value 0x89
+; Entry 9 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Left2_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x43E2, 0xA
+; NakaInst_ES_Left1_Str -- 10 x char: "ES_Left1" + 0xFF fill, name of EditSwID value 0x88
+; Entry 8 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Left1_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x43EC, 0xA
+; NakaInst_ES_Bottom8_Str -- 12 x char: "ES_Bottom8" + 0xFF fill, name of EditSwID value 7
+; Entry 7 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Bottom8_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x43F6, 0xC
+; NakaInst_ES_Bottom7_Str -- 12 x char: "ES_Bottom7" + 0xFF fill, name of EditSwID value 6
+; Entry 6 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Bottom7_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4402, 0xC
+; NakaInst_ES_Bottom6_Str -- 12 x char: "ES_Bottom6" + 0xFF fill, name of EditSwID value 5
+; Entry 5 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Bottom6_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x440E, 0xC
+; NakaInst_ES_Bottom5_Str -- 12 x char: "ES_Bottom5" + 0xFF fill, name of EditSwID value 4
+; Entry 4 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Bottom5_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x441A, 0xC
+; NakaInst_ES_Bottom4_Str -- 12 x char: "ES_Bottom4" + 0xFF fill, name of EditSwID value 3
+; Entry 3 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Bottom4_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4426, 0xC
+; NakaInst_ES_Bottom3_Str -- 12 x char: "ES_Bottom3" + 0xFF fill, name of EditSwID value 2
+; Entry 2 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Bottom3_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4432, 0xC
+; NakaInst_ES_Bottom2_Str -- 12 x char: "ES_Bottom2" + 0xFF fill, name of EditSwID value 1
+; Entry 1 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Bottom2_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x443E, 0xC
+; NakaInst_ES_Bottom1_Str -- 12 x char: "ES_Bottom1" + 0xFF fill, name of EditSwID value 0
+; Entry 0 of NakaInst_EditSwID_EnumTable points here.
+NakaInst_ES_Bottom1_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x444A, 0xC
+; NakaInst_EditSwStyleID_EnumTable -- 18 x {u32 name, s32 value}: value names of the EditSwStyleID property type (17 named + "" end entry)
+; Word +8 of SupportClass record 37 (EditSwStyleIDProc, count 17) in ExitWindow_OK_Data_2, the 55 x 12-byte table
+; ExitWindow_OK registers as class SupportClass.  CommonIDProc (ui/ui_widget_defs.s) walks it in 8-byte steps:
+; DUMP_PROPERTY_EX matches the 32-bit value and Strcpy's the name, SET_PROPERTY_EX Strcmp's the names; "" ends it.
+; SS_Special=0, SS_Up=1, SS_Down=2, SS_UpDown=3, SS_On=4, SS_Off=5, SS_OK=6, SS_Left=7, SS_Right=8, SS_Yes=9, SS_No=0x0A, SS_OnOff=0x0B, ... (5 more)
+NakaInst_EditSwStyleID_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x4456, 0x90
+; NakaInst_EditSwStyleID_EmptyStr -- 2 x char: "" + 0xFF fill, name of the end entry of NakaInst_EditSwStyleID_EnumTable
+; NakaInst_EditSwStyleID_EnumTable's last entry {"", 0} points here; CommonIDProc stops at a name whose first byte is 0.
+NakaInst_EditSwStyleID_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x44E6, 0x2
+; NakaInst_SS_Right2_Str -- 10 x char: "SS_Right2", name of EditSwStyleID value 0x10
+; Entry 16 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_Right2_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x44E8, 0xA
+; NakaInst_SS_Left2_Str -- 10 x char: "SS_Left2" + 0xFF fill, name of EditSwStyleID value 0x0F
+; Entry 15 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_Left2_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x44F2, 0xA
+; NakaInst_SS_UpDown2_Str -- 12 x char: "SS_UpDown2" + 0xFF fill, name of EditSwStyleID value 0x0E
+; Entry 14 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_UpDown2_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x44FC, 0xC
+; NakaInst_SS_Down2_Str -- 10 x char: "SS_Down2" + 0xFF fill, name of EditSwStyleID value 0x0D
+; Entry 13 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_Down2_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4508, 0xA
+; NakaInst_SS_Up2_Str -- 8 x char: "SS_Up2" + 0xFF fill, name of EditSwStyleID value 0x0C
+; Entry 12 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_Up2_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4512, 0x8
+; NakaInst_SS_OnOff_Str -- 10 x char: "SS_OnOff" + 0xFF fill, name of EditSwStyleID value 0x0B
+; Entry 11 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_OnOff_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x451A, 0xA
+; NakaInst_SS_No_Str -- 6 x char: "SS_No", name of EditSwStyleID value 0x0A
+; Entry 10 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_No_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4524, 0x6
+; NakaInst_SS_Yes_Str -- 8 x char: "SS_Yes" + 0xFF fill, name of EditSwStyleID value 9
+; Entry 9 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_Yes_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x452A, 0x8
+; NakaInst_SS_Right_Str -- 10 x char: "SS_Right" + 0xFF fill, name of EditSwStyleID value 8
+; Entry 8 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_Right_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4532, 0xA
+; NakaInst_SS_Left_Str -- 8 x char: "SS_Left", name of EditSwStyleID value 7
+; Entry 7 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_Left_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x453C, 0x8
+; NakaInst_SS_OK_Str -- 6 x char: "SS_OK", name of EditSwStyleID value 6
+; Entry 6 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_OK_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4544, 0x6
+; NakaInst_SS_Off_Str -- 8 x char: "SS_Off" + 0xFF fill, name of EditSwStyleID value 5
+; Entry 5 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_Off_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x454A, 0x8
+; NakaInst_SS_On_Str -- 6 x char: "SS_On", name of EditSwStyleID value 4
+; Entry 4 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_On_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4552, 0x6
+; NakaInst_SS_UpDown_Str -- 10 x char: "SS_UpDown", name of EditSwStyleID value 3
+; Entry 3 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_UpDown_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4558, 0xA
+; NakaInst_SS_Down_Str -- 8 x char: "SS_Down", name of EditSwStyleID value 2
+; Entry 2 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_Down_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4562, 0x8
+; NakaInst_SS_Up_Str -- 6 x char: "SS_Up", name of EditSwStyleID value 1
+; Entry 1 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_Up_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x456A, 0x6
+; NakaInst_SS_Special_Str -- 12 x char: "SS_Special" + 0xFF fill, name of EditSwStyleID value 0
+; Entry 0 of NakaInst_EditSwStyleID_EnumTable points here.
+NakaInst_SS_Special_Str:	.incbin "includes/generated/naka_debug_naming.bin", 0x4570, 0xC
 ; NakaInst_LineModeID_EnumTable -- 3 x {char *name; int32 value}: LineModeID enum, ""-terminated
 ; {"LM_RightUp", 0}, {"LM_RightDown", 1}, {"", 0}. +8 of the LineModeIDProc SupportClass record in
 ; ExitWindow_OK_Data_2 (count 2); CommonIDProc (ui/ui_widget_defs.s) maps value <-> name through it.
@@ -523,9 +765,22 @@ SupportClass_BitmapIDValueNames:	.incbin "includes/generated/naka_debug_naming.b
 ; list format read by CommonIDProc (ui/ui_widget_defs.s): 8-byte {name ptr, s32 value} entries ended
 ; by an entry whose name is "" -- here only that end entry, then the "" it points at (00 FF)
 SupportClass_ApFuncIDValueNames:	.incbin "includes/generated/naka_debug_naming.bin", 0x45E6, 0xA
-; [nakarest] NakaProp_Frame_Chain  +0x45f0..+0x46c0 (0xeb70ee, 208 B)
-; [nakarest] purpose not established: layout of 208 B at 0xeb70ee not derived; readers below
-; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7890, 0xeb789c), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
-NakaProp_Frame_Chain:	.incbin "includes/generated/naka_debug_naming.bin", 0x45F0, 0xD0
+; NakaInst_MainFuncID_EnumTable -- 1 x {u32 name_ptr, s32 value}: the MainFuncID value-name list, only its {"", 0} end entry
+; +8 of the MainFuncIDProc SupportClass record (entry 42 of ExitWindow_OK_Data_2, count 0); MainFuncIDProc names main
+; functions itself and passes other events to CommonIDProc (ui/ui_widget_defs.s), which stops at the empty name.
+NakaInst_MainFuncID_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x45F0, 0x8
+; NakaInst_MainFuncID_EmptyStr -- 2 x char: "" + 0xFF fill, the name of the end entry of NakaInst_MainFuncID_EnumTable
+NakaInst_MainFuncID_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x45F8, 0x2
+; NakaInst_UserID_EnumTable -- 14 x {u32 name_ptr, s32 value}: UserID value names, ended by {"", 0}: iduRoot 0, iduMurai 1,
+; iduToshi 2, iduEast 3, iduSuna 4, iduCheap 5, iduScoop 6, iduYoko 7, iduKubo 8, iduHama 9, iduKSS 10, iduNaka 11, iduNone -1
+; (the first three names are in naka_style_bitmaps). +8 of the UserIDProc SupportClass record (entry 43 of
+; ExitWindow_OK_Data_2, count 13); UserIDProc sign-extends the 16-bit value (-1 = iduNone) and CommonIDProc maps it.
+; A title record's +8 is such a user id (TitleProc_OnGetUserId; Title_RecordTemplate holds -1).
+NakaInst_UserID_EnumTable:	.incbin "includes/generated/naka_debug_naming.bin", 0x45FA, 0x70
+; NakaInst_UserID_EmptyStr -- 2 x char: "" + 0xFF fill, the name of the end entry of NakaInst_UserID_EnumTable
+NakaInst_UserID_EmptyStr:	.incbin "includes/generated/naka_debug_naming.bin", 0x466A, 0x2
+; NakaInst_UserID_NameStrings -- 84 x char: UserID value names iduNone, iduNaka, iduKSS, iduHama, iduKubo, iduYoko,
+; iduScoop, iduCheap, iduSuna, iduEast (NUL-terminated, 0xFF-padded to even length); the list continues past the blob
+; end with iduToshi, iduMurai, iduRoot (NakaData_StyleBitmaps, NakaInst_iduMurai, NakaInst_iduRoot).
+NakaInst_UserID_NameStrings:	.incbin "includes/generated/naka_debug_naming.bin", 0x466C, 0x54
 ; External label offsets within the binary blob above.

@@ -9284,7 +9284,7 @@ PleaseWait_GetText:
 	ld a, (0x0340e4:24)
 	extz WA
 	sla WA, 0x02
-	lda xbc, (PleaseWait_GetText_PtrTable:24)
+	lda xbc, (PleaseWait_LangTexts:24)
 	ld	xwa, (xbc+wa)
 	push XWA
 	call Strlen
@@ -9311,7 +9311,7 @@ PleaseWait_BuildScrollStr:
 	ldto_werp HL, 0xe2
 	ld a, (0x0340e4:24)
 	extz wa
-	lda xbc, (PleaseWait_GetText_PtrTable:24)
+	lda xbc, (PleaseWait_LangTexts:24)
 	sla wa, 2
 	ld	xwa, (xbc+wa)
 	cp hl, de
@@ -9396,7 +9396,7 @@ CheckLang_GetTextStr:
 	ld	a, (213220:24)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_PleaseWait_Multilingual:24)
+	lda	xbc, (CheckLanguage_LangNames:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xde+18)
@@ -9529,15 +9529,15 @@ MsgText_CheckLanguage:
 	ret
 
 MsgText_Lang1:
-	ld xhl, StrTable_DiskErr24_Chord
+	ld xhl, MsgText_ChordTrackExistsTexts
 	jr MsgText_Return
 
 MsgText_Lang2:
-	ld xhl, MsgText_Lang2_PtrTable
+	ld xhl, MsgText_Err24ControlTrack
 	jr MsgText_Return
 
 MsgText_Lang3:
-	ld xhl, MsgText_Lang3_PtrTable
+	ld xhl, MsgText_ApcTrackExistsTexts
 
 MsgText_Return:
 	ret
@@ -10398,7 +10398,7 @@ LswOrchestrator:
 	cp bc, 0xff
 	jr z, LswOrch_StrDefault
 	sla bc, 2
-	lda xde, (Naka_TechniChord1_Screens:24)
+	lda xde, (LswOrchestrator_PartNames:24)
 	ld	xbc, (xde+bc)
 	push xbc
 	jr LswOrch_StrCopyReturn
@@ -10932,7 +10932,7 @@ LswScalingType:
 	cp hl, 0xffff
 	jr z, LswScaleType_StrDefault
 	sla hl, 2
-	lda xwa, (Naka_Scale2_Screens:24)
+	lda xwa, (LswScalingType_TypeNames:24)
 	ld	xwa, (xwa+hl)
 	push xwa
 	jr LswScaleType_StrCopyReturn
@@ -10984,7 +10984,7 @@ LswScalingShift:
 	jr	nz, LswScaleShift_ReturnZero	; -> 0xF7ED65
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (Scale_Arabic2_NameTable:24)
+	lda	xbc, (LswScalingShift_ValueNames:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xde+8)
@@ -11029,7 +11029,7 @@ LswScalingShift2:
 	jr	nz, LswScaleShift2_ReturnZero	; -> 0xF7EDCA
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (Scale_Names_Table:24)
+	lda	xbc, (LswScalingShift2_KeyNames:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xde+8)
@@ -11074,7 +11074,7 @@ LswScalingMode:
 	jr	nz, LswScaleMode_ReturnZero	; -> 0xF7EE2F
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (LswScalingMode_PtrTable:24)
+	lda	xbc, (LswScalingMode_ValueNames:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xde+8)
@@ -13044,7 +13044,7 @@ AcPartMixerProc:
 	jr PartMixer_Epilogue
 
 PartMixer_Init:
-	ld xwa, PartMixer_Init_Data
+	ld xwa, PartMixer_RowTable
 	calr Util_StorePartArrayBase
 	ld xwa, PartMixer_ColumnPartMap
 	calr Util_StoreGridArrayBase
@@ -13085,7 +13085,7 @@ AcTrackMixerProc:
 	jrl TrackMixer_Epilogue
 
 TrackMixer_Init:
-	ld xwa, TrackMixer_Init_Data
+	ld xwa, TrackMixer_Rows
 	calr Util_StorePartArrayBase
 	ld xwa, 0x3ebe8
 	calr Util_StoreGridArrayBase
@@ -16814,7 +16814,7 @@ LswPercDecay:
 	jr	nz, LswPercDecay_Return	; -> 0xF82C76
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (KeyShift_DisplayStrTable:24)
+	lda	xbc, (LswDrawbar_Signed4BitNames:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xde+8)
@@ -16930,7 +16930,7 @@ LswPercLevel:
 	jr	nz, LswPercLevel_Return	; -> 0xF82D85
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (KeyShift_DisplayStrTable:24)
+	lda	xbc, (LswDrawbar_Signed4BitNames:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xde+8)
@@ -17016,7 +17016,7 @@ LswDrawAttack:
 	jr	nz, LswDrawAttack_Return	; -> 0xF82E66
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (KeyShift_DisplayStrTable:24)
+	lda	xbc, (LswDrawbar_Signed4BitNames:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xde+8)
@@ -17102,7 +17102,7 @@ LswDrawRelease:
 	jr	nz, LswDrawRelease_Return	; -> 0xF82F47
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (KeyShift_DisplayStrTable:24)
+	lda	xbc, (LswDrawbar_Signed4BitNames:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xde+8)

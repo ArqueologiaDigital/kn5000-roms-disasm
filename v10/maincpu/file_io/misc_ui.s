@@ -29,7 +29,7 @@ JumpInsertFunc:
 JumpInsert_DispatchBody:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, JumpInsert_DispatchBody_PtrTable
+	ld	xbc, JumpInsert_ValueNames
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -70,7 +70,7 @@ FilePriorityFunc:
 	ld wa, (xde + 8)
 	and wa, 0x1
 	sla wa, 2
-	lda xbc, (FilePriorityFunc_PtrTable:24)
+	lda xbc, (FilePriority_SettingNames:24)
 	ld	xwa, (xbc+wa)
 	push xwa
 	ld xwa, (xde + 10)

@@ -39,23 +39,31 @@
 
 ; [nakarest] NakaData_StyleBitmaps  +0x0..+0xa (0xeb71be, 10 B)
 ; [nakarest] Text (10 B at 0xeb71be), first string "iduToshi"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in NakaProp_Frame_Chain (at 0xeb7108).
+; [nakarest] into it; reached through 1 data word in NakaInst_MainFuncID_EnumTable (at 0xeb7108).
 NakaData_StyleBitmaps:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x0, 0xA
 ; [nakarest] NakaInst_iduMurai  +0xa..+0x14 (0xeb71c8, 10 B)
 ; [nakarest] Text (10 B at 0xeb71c8), first string "iduMurai"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in NakaProp_Frame_Chain (at 0xeb7100).
+; [nakarest] into it; reached through 1 data word in NakaInst_MainFuncID_EnumTable (at 0xeb7100).
 NakaInst_iduMurai:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA, 0xA
 ; [nakarest] NakaInst_iduRoot  +0x14..+0x1c (0xeb71d2, 8 B)
 ; [nakarest] Text (8 B at 0xeb71d2), first string "iduRoot"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in NakaProp_Frame_Chain (at 0xeb70f8).
+; [nakarest] into it; reached through 1 data word in NakaInst_MainFuncID_EnumTable (at 0xeb70f8).
 NakaInst_iduRoot:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14, 0x8
-; [nakarest] NakaInst_False_EB71DA  +0x1c..+0x4a (0xeb71da, 46 B)
-; [nakarest] purpose not established: layout of 46 B at 0xeb71da not derived; readers below
-; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb78a8, 0xeb78b4), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
-NakaInst_False_EB71DA:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1C, 0x2E
+; NakaInst_pBool_EnumTable -- 3 x {u32 name_ptr, s32 value}: pBool value names {"True", 1}, {"False", 0}, end {"", 0}
+; +8 of the pBoolProc SupportClass record (entry 44 of ExitWindow_OK_Data_2, count 2); pBoolProc reads the word through
+; the property pointer and CommonIDProc (ui/ui_widget_defs.s) maps value <-> name through this list.
+NakaInst_pBool_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1C, 0x18
+; NakaInst_pBool_EmptyStr -- 2 x char: "" + 0xFF fill, the name of the end entry of NakaInst_pBool_EnumTable
+NakaInst_pBool_EmptyStr:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x34, 0x2
+; NakaInst_pBool_NameStrings -- 12 x char: "False" and "True" (NUL-terminated, 0xFF-padded to even length),
+; the names of pBool values 0 and 1 in NakaInst_pBool_EnumTable.
+NakaInst_pBool_NameStrings:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x36, 0xC
+; NakaInst_pSword_EnumTable -- 1 x {u32 name_ptr, s32 value}: the pSword value-name list, only its {"", 0} end entry
+; (name = NakaInst_pSword_EmptyStr, next). +8 of the pSwordProc SupportClass record (entry 45 of ExitWindow_OK_Data_2,
+; count 0); CommonIDProc (ui/ui_widget_defs.s) stops at once on the empty name.
+NakaInst_pSword_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x42, 0x8
 ; NakaInst_pSword_EmptyStr -- 2 x char: "" + 0xFF fill, name of the {"", 0} end entry of the pSword enum table
-; That table (0xEB7200, inside NakaInst_False_EB71DA) is +8 of the pSwordProc SupportClass record in
+; That table (0xEB7200, inside NakaInst_pBool_EnumTable) is +8 of the pSwordProc SupportClass record in
 ; ExitWindow_OK_Data_2 (count 0); CommonIDProc (ui/ui_widget_defs.s) stops on this empty name.
 NakaInst_pSword_EmptyStr:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4A, 0x2
 ; NakaInst_pUword_EnumTable -- 1 x {char *name, u32 value}: the enum table of property type "pUword", holding only its {"", 0} terminator.
@@ -242,15 +250,10 @@ ExitWindow_OK_Data_2:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4D2
 ; [nakarest] Readers: source references FileIO_ByteBlock_DemoProc1_Skip16
 ; [nakarest] (demo/file_demo_proc.s: `.long NakaInst_WindowID_Cont`).
 NakaInst_WindowID_Cont:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x741, 0x33
-; [nakarest] WidgetStyleDataTable  +0x774..+0x784 (0xeb7932, 16 B)
-; [nakarest] purpose not established: layout of 16 B at 0xeb7932 not derived; readers below
-; [nakarest] Readers: source references SystemConfig_PointerTable (ui_widgets/widget_dispatch.s:
-; [nakarest] `.long WidgetStyleDataTable`), Test_Video_RAM_IC207 (ui/ui_mode_handlers.s: `ld
-; [nakarest] xhl, (WidgetStyleDataTable:24)`); 1 data word in SystemConfig_PointerTable (at
-; [nakarest] 0xee8c9e), which is read by ScreenGroup_WidgetLoop (boot/screen_group_dispatch.s:
-; [nakarest] `ld xbc, SystemConfig_PointerTable`), VoiceInit_Dispatch
-; [nakarest] (boot/screen_group_dispatch.s: `ld xbc, SystemConfig_PointerTable`).
-WidgetStyleDataTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x774, 0x10
+; VGA_InitFuncTable -- 4 x pointer: the display (VGA) subsystem's handler for boot phases 0-3: VGA_Initialize, then VGA_Stub_1..3 (ret)
+; Entry 8 of Subsys_HandlerTableList (SystemConfig_PointerTable): VoiceInit_Dispatch calls entry [phase] of every listed table
+; for each ScreenGroup_Dispatch phase. Test_Video_RAM_IC207 calls entry 0 directly before its VRAM test.
+VGA_InitFuncTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x774, 0x10
 ; PanelMemory_SlotAddresses -- 81 u32 RAM addresses, one per panel-memory slot: 0..79 = the 80 panel
 ; memories at 0x1ED400 + 960*n, 80 = RAM 0x3C2C4, the Music Stylist record's mirror of the panel stream (slot
 ; code 0x80 is read as 80).  Indexed by slot by PanelMemory_Recall_Slot, PanelMemory_CopySlotToLivePanel,
@@ -315,11 +318,18 @@ PanelButton_LedMap:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCCE, 
 ; EffectMode_SetAllLEDs (ui/ui_mode_handlers.s) calls Set_LEDs(row = word >> 8, C = low byte) per entry;
 ; LED_SetAll_WithBlank walks the same rows with pattern 0. Rows 3/5/11/12/13/14 have 6/1/4/2/4/4 LEDs.
 LED_AllOnPatternByRow:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE2E, 0x20
-; [nakarest] naka_style_bitmaps+0xe4e  +0xe4e..+0xe70 (0xeb800c, 34 B)
-; [nakarest] purpose not established: layout of 34 B at 0xeb800c not derived; readers below
-; [nakarest] Readers: source references RhythmRomTest_Compare (ui/ui_mode_handlers.s: `lda xix,
-; [nakarest] (RhythmRomTest_Compare_Data:24)`).
-RhythmRomTest_Compare_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE4E, 0x22
+; RomTest_RhythmRomSignature -- 1 x {u32 rom_addr, u8 expect[4], u8 fail_bit, u8 0}: rhythm data ROM (IC14) signature check
+; Test_Rhythm_data_ROM_IC14 (ui/ui_mode_handlers.s) compares the 4 bytes at rom_addr (0x400000) with expect
+; (00 01 04 05) and ORs fail_bit (0x01) into its result on a mismatch.  Same 10-byte shape as the two records
+; at +14 and as DramTest_IC10IC9_Regions / SramTest_IC21Regions after it.
+RomTest_RhythmRomSignature:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE4E, 0xA
+; RomTest_ProgramSignatureText -- 4 x char: "hkpr" with no NUL; record 0 of RomTest_RomSignatures points at
+; these very bytes and expects "hkpr", so that check always passes.  No other reference.
+RomTest_ProgramSignatureText:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE58, 0x4
+; RomTest_RomSignatures -- 2 x {u32 rom_addr, char expect[4], u8 fail_bit, u8 0}: signature checks in the shape of
+; RomTest_RhythmRomSignature, with no reader found in v10: {RomTest_ProgramSignatureText, "hkpr", 0x01} and
+; {0x9FFFC0, "hkt_", 0x02}; the table data ROM holds "hkt_87.ssf" at 0x9FFFC0 (original_ROMs/kn5000_table_data.rom).
+RomTest_RomSignatures:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE5C, 0x14
 ; DramTest_IC10IC9_Regions -- 1 x {u32 start, u32 length, u8 low_half_fail_bit, u8 high_half_fail_bit}: start 0x4000, length 0x80000.
 ; Test_DRAM_IC10_and_IC9 (ui/ui_mode_handlers.s) writes 0x5A5A5A5A then 0xA5A5A5A5 to each 32-bit word, length/8 iterations
 ; of two words, and ORs bit +8 into its result when the low 16-bit half reads back wrong, bit +9 for the high half.
@@ -3472,12 +3482,11 @@ RVari_SubItemEditSw:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BE
 ; instance (+48, +44) and passes the byte to GetEditSwPoint to place the highlight frames
 ; MsaMode_OK is the inverse: edit switch 0x89/0x8A/0x8B -> MainLswPut(0x401, 1/2/3)
 MsaMode_EditSwByValue:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BF2, 0x4
-; [nakarest] naka_style_bitmaps+0x18bf6  +0x18bf6..+0x18bf8 (0xecfdb4, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xecfdb4 not derived; readers below
-; [nakarest] Readers: source references PmemMode_Select (ui/ui_mode_handlers.s: `lda xbc,
-; [nakarest] (PmemMode_Select_Data:24)`), PmemMode_Select_DrawHighlight1
-; [nakarest] (ui/ui_mode_handlers.s: `lda xbc, (PmemMode_Select_Data:24)`).
-PmemMode_Select_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BF6, 0x2
+; PmemMode_ValueToEditSw -- 2 x uint8_t = {0x89, 0x8b}: panel edit-switch code that shows setting value 0 / 1
+; PmemMode_Select (ui/ui_mode_handlers.s) reads a byte at [the 16-bit value its view instance points to at +40,
+; then at +36], passes it to GetEditSwPoint for that switch's screen position and frames it with DrawDesignFrame
+; (left column, x 8..0x9c); 0x89 and 0x8b are the 2nd and 4th left-hand edit switches.
+PmemMode_ValueToEditSw:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BF6, 0x2
 ; EditSw_SplitMap10 -- 10 x u8: item index -> edit-switch number for a 10-item list split over the two display button columns.
 ; Items 0-4 -> left buttons 0x88-0x8C (x 0), items 5-9 -> right buttons 8-12 (x 319), top to bottom (GetEditSwPoint).
 ; PmBank_Select / PmBank_BankChanged_Lookup (display/graphics_text_vga.s) map the PM bank number with it before
@@ -3498,38 +3507,35 @@ VariScreen_EditSwLayout6:	.incbin "includes/generated/naka_style_bitmaps.bin", 0
 ; Entry 13 of Naka_DrawbarReg_Table, copied with the work-RAM image to RAM 0x3F218; the RVari screens pick
 ; map[(visible items - 1) >> 1] from RAM 0x3F214 and index it with the item's position mod 10.
 EditSw_PageMap4:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C10, 0x4
-; [nakarest] SeqChan_Map_2ch  +0x18c14..+0x18c16 (0xecfdd2, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xecfdd2 not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long SeqChan_Map_2ch`); 1 data word
-; [nakarest] in Naka_DrawbarReg_Table (at 0xeef5b8).
-SeqChan_Map_2ch:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C14, 0x2
-; [nakarest] naka_style_bitmaps+0x18c16  +0x18c16..+0x18c22 (0xecfdd4, 12 B)
-; [nakarest] purpose not established: layout of 12 B at 0xecfdd4 not derived; readers below
-; [nakarest] Readers: source references RVari_Confirm_TypeF_SubItems (ui/rvari_routines.s: `lda
-; [nakarest] xhl, (RVari_Select_CheckSameBank_PtrTable:24)`), RVari_Select_CheckSameBank (ui/ui_mode_handlers.s:
-; [nakarest] `lda xhl, (RVari_Select_CheckSameBank_PtrTable:24)`).
-RVari_Select_CheckSameBank_PtrTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C16, 0xC	; 3 x 32-bit pointer
+; EditSw_PageMap2 -- 2 x uint8_t {0x88, 0x08}: LCD edit-switch code of each item of a page of 1-2 items
+; 0x88 = left-column switch 0 (x 0), 0x08 = right-column switch 0 (x 319), per GetEditSwPoint. Entry 12 of Naka_DrawbarReg_Table,
+; which Boot_InitWorkRAM copies to RAM 0x3F1E4, so its pointer sits at RAM 0x3F214: the RVari screens take map[(items - 1) >> 1] there
+; (the 2/4/6/8/10-item maps: this, EditSw_PageMap4, VariScreen_EditSwLayout6, VariScreen_EditSwLayout8, EditSw_SplitMap10) and read a byte.
+EditSw_PageMap2:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C14, 0x2
+; RVari_MemoryBankNames -- 3 x uint32_t: name of memory bank 0-2 {"MEMORY-A", "MEMORY-B", "MEMORY-C"}
+; RVari_Confirm_TypeF_SubItems (ui/rvari_routines.s) draws all three in a loop; RVari_Select_CheckSameBank
+; (ui/ui_mode_handlers.s) draws entry [selection >> 2] (4 items per bank) with DrawStringLeftJustify.
+RVari_MemoryBankNames:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C16, 0xC
 ; [nakarest] NakaInst_MEMORY_C_ECFDE0  +0x18c22..+0x18c2c (0xecfde0, 10 B)
 ; [nakarest] Text (10 B at 0xecfde0), first string "MEMORY-C"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in RVari_Select_CheckSameBank_PtrTable (at 0xecfddc), which is
+; [nakarest] into it; reached through 1 data word in RVari_MemoryBankNames (at 0xecfddc), which is
 ; [nakarest] read by RVari_Confirm_TypeF_SubItems (ui/rvari_routines.s: `lda xhl,
-; [nakarest] (RVari_Select_CheckSameBank_PtrTable:24)`), RVari_Select_CheckSameBank (ui/ui_mode_handlers.s: `lda
-; [nakarest] xhl, (RVari_Select_CheckSameBank_PtrTable:24)`).
+; [nakarest] (RVari_MemoryBankNames:24)`), RVari_Select_CheckSameBank (ui/ui_mode_handlers.s: `lda
+; [nakarest] xhl, (RVari_MemoryBankNames:24)`).
 NakaInst_MEMORY_C_ECFDE0:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C22, 0xA
 ; [nakarest] NakaInst_MEMORY_B_ECFDEA  +0x18c2c..+0x18c36 (0xecfdea, 10 B)
 ; [nakarest] Text (10 B at 0xecfdea), first string "MEMORY-B"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in RVari_Select_CheckSameBank_PtrTable (at 0xecfdd8), which is
+; [nakarest] into it; reached through 1 data word in RVari_MemoryBankNames (at 0xecfdd8), which is
 ; [nakarest] read by RVari_Confirm_TypeF_SubItems (ui/rvari_routines.s: `lda xhl,
-; [nakarest] (RVari_Select_CheckSameBank_PtrTable:24)`), RVari_Select_CheckSameBank (ui/ui_mode_handlers.s: `lda
-; [nakarest] xhl, (RVari_Select_CheckSameBank_PtrTable:24)`).
+; [nakarest] (RVari_MemoryBankNames:24)`), RVari_Select_CheckSameBank (ui/ui_mode_handlers.s: `lda
+; [nakarest] xhl, (RVari_MemoryBankNames:24)`).
 NakaInst_MEMORY_B_ECFDEA:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C2C, 0xA
 ; [nakarest] NakaInst_MEMORY_A_ECFDF4  +0x18c36..+0x18c40 (0xecfdf4, 10 B)
 ; [nakarest] Text (10 B at 0xecfdf4), first string "MEMORY-A"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in RVari_Select_CheckSameBank_PtrTable (at 0xecfdd4), which is
+; [nakarest] into it; reached through 1 data word in RVari_MemoryBankNames (at 0xecfdd4), which is
 ; [nakarest] read by RVari_Confirm_TypeF_SubItems (ui/rvari_routines.s: `lda xhl,
-; [nakarest] (RVari_Select_CheckSameBank_PtrTable:24)`), RVari_Select_CheckSameBank (ui/ui_mode_handlers.s: `lda
-; [nakarest] xhl, (RVari_Select_CheckSameBank_PtrTable:24)`).
+; [nakarest] (RVari_MemoryBankNames:24)`), RVari_Select_CheckSameBank (ui/ui_mode_handlers.s: `lda
+; [nakarest] xhl, (RVari_MemoryBankNames:24)`).
 NakaInst_MEMORY_A_ECFDF4:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C36, 0xA
 ; [nakarest] naka_style_bitmaps+0x18c40  +0x18c40..+0x18d22 (0xecfdfe, 226 B)
 ; [nakarest] Text (226 B at 0xecfdfe), first string "RIGHT1 RIGHT2 LEFT PART4 PART5 PART6 PART7
@@ -3537,96 +3543,96 @@ NakaInst_MEMORY_A_ECFDF4:	.incbin "includes/generated/naka_style_bitmaps.bin", 0
 ; [nakarest] VariScreenProc_OnDraw (ui/ui_mode_handlers.s: `lda xhl,
 ; [nakarest] (VariScreen_HandlePaint_Data:24)`).
 VariScreen_HandlePaint_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C40, 0xE2
-; [nakarest] Naka_MemoryC_Screens  +0x18d22..+0x18d62 (0xecfee0, 64 B)
-; [nakarest] purpose not established: layout of 64 B at 0xecfee0 not derived; readers below
-; [nakarest] Readers: source references MainChordPre (kn5000_v9_program.s: `lda xbc,
-; [nakarest] (Naka_MemoryC_Screens:24)`).
-Naka_MemoryC_Screens:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D22, 0x40
+; MainChordPre_RootNames -- 16 x pointer: chord-root display name by root code (RAM byte 0x8D40): 0 "  ", 1 "C ", 2 "D~a0" (Db),
+; 3 "D ", 4 "E~a0", 5 "E ", 6 "F ", 7 "F~9e" (F#), 8 "G ", 9 "A~a0", 10 "A ", 11 "B~a0", 12 "B ", 13-15 "  "
+; MainChordPre (EVT_CHORD_PRE) Strcats entry [0x8D40], then the chord-type name of RAM 0x8D42 (MainChordPre_ChordTypeNames), into a
+; Malloc'd buffer; ~a0 is the flat glyph escape, ~9e the sharp one.
+MainChordPre_RootNames:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D22, 0x40
 ; [nakarest] MemScreen_Space1  +0x18d62..+0x18d66 (0xecff20, 4 B)
 ; [nakarest] Text (4 B at 0xecff20), first string " "; no registered NAKA table points into it;
-; [nakarest] reached through 1 data word in Naka_MemoryC_Screens (at 0xecff1c), which is read by
-; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] reached through 1 data word in MainChordPre_RootNames (at 0xecff1c), which is read by
+; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 MemScreen_Space1:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D62, 0x4
 ; [nakarest] MemScreen_Space2  +0x18d66..+0x18d6a (0xecff24, 4 B)
 ; [nakarest] Text (4 B at 0xecff24), first string " "; no registered NAKA table points into it;
-; [nakarest] reached through 1 data word in Naka_MemoryC_Screens (at 0xecff18), which is read by
-; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] reached through 1 data word in MainChordPre_RootNames (at 0xecff18), which is read by
+; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 MemScreen_Space2:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D66, 0x4
 ; [nakarest] MemScreen_Space3  +0x18d6a..+0x18d6e (0xecff28, 4 B)
 ; [nakarest] Text (4 B at 0xecff28), first string " "; no registered NAKA table points into it;
-; [nakarest] reached through 1 data word in Naka_MemoryC_Screens (at 0xecff14), which is read by
-; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] reached through 1 data word in MainChordPre_RootNames (at 0xecff14), which is read by
+; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 MemScreen_Space3:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D6A, 0x4
 ; [nakarest] MemScreen_NoteB  +0x18d6e..+0x18d72 (0xecff2c, 4 B)
 ; [nakarest] Text (4 B at 0xecff2c), first string "B "; no registered NAKA table points into it;
-; [nakarest] reached through 1 data word in Naka_MemoryC_Screens (at 0xecff10), which is read by
-; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] reached through 1 data word in MainChordPre_RootNames (at 0xecff10), which is read by
+; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 MemScreen_NoteB:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D6E, 0x4
 ; [nakarest] NakaInst_B_a0  +0x18d72..+0x18d78 (0xecff30, 6 B)
 ; [nakarest] Text (6 B at 0xecff30), first string "B~a0"; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in Naka_MemoryC_Screens (at 0xecff0c), which is
-; [nakarest] read by MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] it; reached through 1 data word in MainChordPre_RootNames (at 0xecff0c), which is
+; [nakarest] read by MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 NakaInst_B_a0:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D72, 0x6
 ; [nakarest] MemScreen_NoteA_Str  +0x18d78..+0x18d7c (0xecff36, 4 B)
 ; [nakarest] Text (4 B at 0xecff36), first string "A "; no registered NAKA table points into it;
-; [nakarest] reached through 1 data word in Naka_MemoryC_Screens (at 0xecff08), which is read by
-; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] reached through 1 data word in MainChordPre_RootNames (at 0xecff08), which is read by
+; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 MemScreen_NoteA_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D78, 0x4
 ; [nakarest] NakaInst_A_a0  +0x18d7c..+0x18d82 (0xecff3a, 6 B)
 ; [nakarest] Text (6 B at 0xecff3a), first string "A~a0"; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in Naka_MemoryC_Screens (at 0xecff04), which is
-; [nakarest] read by MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] it; reached through 1 data word in MainChordPre_RootNames (at 0xecff04), which is
+; [nakarest] read by MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 NakaInst_A_a0:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D7C, 0x6
 ; [nakarest] MemScreen_NoteG  +0x18d82..+0x18d86 (0xecff40, 4 B)
 ; [nakarest] Text (4 B at 0xecff40), first string "G "; no registered NAKA table points into it;
-; [nakarest] reached through 1 data word in Naka_MemoryC_Screens (at 0xecff00), which is read by
-; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] reached through 1 data word in MainChordPre_RootNames (at 0xecff00), which is read by
+; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 MemScreen_NoteG:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D82, 0x4
 ; [nakarest] NakaInst_F_9e_ECFF44  +0x18d86..+0x18d8c (0xecff44, 6 B)
 ; [nakarest] Text (6 B at 0xecff44), first string "F~9e"; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in Naka_MemoryC_Screens (at 0xecfefc), which is
-; [nakarest] read by MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] it; reached through 1 data word in MainChordPre_RootNames (at 0xecfefc), which is
+; [nakarest] read by MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 NakaInst_F_9e_ECFF44:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D86, 0x6
 ; [nakarest] MemScreen_NoteF  +0x18d8c..+0x18d90 (0xecff4a, 4 B)
 ; [nakarest] Text (4 B at 0xecff4a), first string "F "; no registered NAKA table points into it;
-; [nakarest] reached through 1 data word in Naka_MemoryC_Screens (at 0xecfef8), which is read by
-; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] reached through 1 data word in MainChordPre_RootNames (at 0xecfef8), which is read by
+; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 MemScreen_NoteF:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D8C, 0x4
 ; [nakarest] MemScreen_NoteE_Str  +0x18d90..+0x18d94 (0xecff4e, 4 B)
 ; [nakarest] Text (4 B at 0xecff4e), first string "E "; no registered NAKA table points into it;
-; [nakarest] reached through 1 data word in Naka_MemoryC_Screens (at 0xecfef4), which is read by
-; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] reached through 1 data word in MainChordPre_RootNames (at 0xecfef4), which is read by
+; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 MemScreen_NoteE_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D90, 0x4
 ; [nakarest] NakaInst_E_a0_ECFF52  +0x18d94..+0x18d9a (0xecff52, 6 B)
 ; [nakarest] Text (6 B at 0xecff52), first string "E~a0"; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in Naka_MemoryC_Screens (at 0xecfef0), which is
-; [nakarest] read by MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] it; reached through 1 data word in MainChordPre_RootNames (at 0xecfef0), which is
+; [nakarest] read by MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 NakaInst_E_a0_ECFF52:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D94, 0x6
 ; [nakarest] MemScreen_NoteD  +0x18d9a..+0x18d9e (0xecff58, 4 B)
 ; [nakarest] Text (4 B at 0xecff58), first string "D "; no registered NAKA table points into it;
-; [nakarest] reached through 1 data word in Naka_MemoryC_Screens (at 0xecfeec), which is read by
-; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] reached through 1 data word in MainChordPre_RootNames (at 0xecfeec), which is read by
+; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 MemScreen_NoteD:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D9A, 0x4
 ; [nakarest] NakaInst_D_a0_ECFF5C  +0x18d9e..+0x18da4 (0xecff5c, 6 B)
 ; [nakarest] Text (6 B at 0xecff5c), first string "D~a0"; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in Naka_MemoryC_Screens (at 0xecfee8), which is
-; [nakarest] read by MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] it; reached through 1 data word in MainChordPre_RootNames (at 0xecfee8), which is
+; [nakarest] read by MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 NakaInst_D_a0_ECFF5C:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D9E, 0x6
 ; [nakarest] MemScreen_NoteC  +0x18da4..+0x18da8 (0xecff62, 4 B)
 ; [nakarest] Text (4 B at 0xecff62), first string "C "; no registered NAKA table points into it;
-; [nakarest] reached through 1 data word in Naka_MemoryC_Screens (at 0xecfee4), which is read by
-; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] reached through 1 data word in MainChordPre_RootNames (at 0xecfee4), which is read by
+; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 MemScreen_NoteC:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18DA4, 0x4
 ; [nakarest] MemScreen_Blank  +0x18da8..+0x18dac (0xecff66, 4 B)
 ; [nakarest] Text (4 B at 0xecff66), first string " "; no registered NAKA table points into it;
-; [nakarest] reached through 1 data word in Naka_MemoryC_Screens (at 0xecfee0), which is read by
-; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`).
+; [nakarest] reached through 1 data word in MainChordPre_RootNames (at 0xecfee0), which is read by
+; [nakarest] MainChordPre (kn5000_v9_program.s: `lda xbc, (MainChordPre_RootNames:24)`).
 MemScreen_Blank:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18DA8, 0x4
-; [nakarest] naka_style_bitmaps+0x18dac  +0x18dac..+0x18e42 (0xecff6a, 150 B)
-; [nakarest] purpose not established: layout of 150 B at 0xecff6a not derived; readers below
-; [nakarest] Readers: source references MainChordPre (kn5000_v9_program.s: `lda xbc,
-; [nakarest] (0xecff6a:24)`).
-MainChordPre_PtrTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18DAC, 0x96	; 64 x 32-bit pointer
+; MainChordPre_ChordTypeNames -- 64 x uint32_t: name of chord type 0-63 ("     ", "     ", "7    ", "Maj7 ", "aug  ",
+; "min  ", ...; 42-63 blank); this slice is entries 0-36 and the low half of 37, the table runs on past 0xed0000
+; into extensions/extension_data.s. MainChordPre (kn5000_v10_program.s), EVT_CHORD_PRE, Strcats the root name
+; [RAM byte 0x8d40] and then entry [chord type, RAM byte 0x8d42] into the chord display string.
+MainChordPre_ChordTypeNames:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18DAC, 0x96
 ; [nakarest] naka_style_bitmaps+0x18e42  +0x18e42..+0x18e4a (0xed0000, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xed0000 not derived; readers below
 ; [nakarest] Readers: source references InitializeSuna (storage/flash_floppy_handlers.s:

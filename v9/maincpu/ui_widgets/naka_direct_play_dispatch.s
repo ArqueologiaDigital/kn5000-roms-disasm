@@ -321,4 +321,4 @@ Yoko_FunctionTable_107:
 ; = class 0x1600001 (FunctionProc), 1 entries (immediate count), id 0x407.
 Yoko_FunctionTable_407:
 	.long FuncName_PsSongSelBoxProc	; -> "PsSongSelBoxProc" name string (next file)
-	.long NakaBoxData_PsSongSelBox
+	.long Yoko_FunctionNameTable_407_EndName

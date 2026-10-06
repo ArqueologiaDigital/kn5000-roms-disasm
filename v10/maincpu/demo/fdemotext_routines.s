@@ -1459,7 +1459,7 @@ FDemoText_ProcessMarkup_LookupTag:
 	push xwa
 	ld bc, (xsp + 26)
 	sla bc, 3
-	lda xwa, (FDemoText_ProcessMarkup_LookupTag_PtrTable:24)
+	lda xwa, (FDemoText_MarkupTagTable:24)
 	ld	xwa, (xwa+bc)
 	push xwa
 	call String_Compare
@@ -1468,7 +1468,7 @@ FDemoText_ProcessMarkup_LookupTag:
 	jrl nz, FDemoText_ProcessMarkup_NextTag
 	ld bc, (xsp + 16)
 	sla bc, 3
-	lda xwa, (FDemoText_ProcessMarkup_LookupTag_PtrTable_2:24)
+	lda xwa, (FDemoText_MarkupTag_HandlerColumn:24)
 	ld	xwa, (xwa+bc)
 	ld (xsp + 4), xwa
 	or xwa, xwa
@@ -1604,7 +1604,7 @@ FDemoText_ProcessMarkup_NextTag:
 FDemoText_ProcessMarkup_TagTableLoop:
 	ld bc, (xsp + 16)
 	sla bc, 3
-	lda xwa, (FDemoText_ProcessMarkup_LookupTag_PtrTable:24)
+	lda xwa, (FDemoText_MarkupTagTable:24)
 	exts xbc
 	add xbc, xwa
 	ld xwa, (xbc)
@@ -1851,7 +1851,7 @@ FDemoText_TextDispatch_Join:
 FDemoText_TextDispatch_Join2:
 	ld bc, qiz
 	sla bc, 2
-	lda	xwa, (FileType_NameTable:24)
+	lda	xwa, (FDemoText_ExecTagAttrNames:24)
 	ld	xbc, (xwa+bc)
 	cp	(xbc), 0
 	jr	nz, FDemoText_TextDispatch_Loop5
@@ -1995,7 +1995,7 @@ FDemoText_TextDispatch_Join3:
 FDemoText_TextDispatch_Join7:
 	ld bc, qiz
 	sla bc, 2
-	lda	xwa, (FDemoText_ByteData_LayoutEngine_PtrTable:24)
+	lda	xwa, (FDemoText_ActTag_AttrNames:24)
 	ld	xwa, (xwa+bc)
 	cp	(xwa), 0
 	jr	nz, FDemoText_TextDispatch_Loop7
@@ -2161,7 +2161,7 @@ FDemoText_TextDispatch_Skip8:
 FDemoText_TextDispatch_Join8:
 	ld bc, qiz
 	sla bc, 2
-	lda	xwa, (FDemoText_ByteData_LayoutEngine_PtrTable_2:24)
+	lda	xwa, (FDemoText_FontTagAttrNames:24)
 	ld	xwa, (xwa+bc)
 	cp	(xwa), 0
 	jr	nz, FDemoText_TextDispatch_Loop9

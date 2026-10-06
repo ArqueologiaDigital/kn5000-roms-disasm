@@ -16,7 +16,8 @@ recorded (analysis/nakarest-slices/README.md).
 This script applies every reading with verdict "type", per tree:
   * finds the slice in the tree by its CURRENT label (each tree's own offset; v7's can differ), requires the same
     size as recorded, and evaluates `check` on the tree's own bytes -- a tree whose bytes fail is skipped;
-  * retypes the C members covering it (nakarest_c_model.retype) as the recorded type with the tree's own values:
+  * retypes the C members covering it (nakarest_c_model.retype) as the recorded type with the tree's own values
+    (a record with "false_pointers": true may drop NAKA_ADDR/SELF initializers its reading shows are not pointers):
     scalar arrays, `char` strings, or a packed struct typedef `<Name>_t` placed before the blob struct.  A range
     holding a symbolic initializer (a pointer) is refused, and so is a SELF() into the middle of an element;
   * replaces the `[nakarest]` note above the asm label with the recorded header and, when the reading splits the
@@ -157,6 +158,21 @@ def new_members(p, b):
     return [M.NewMember(ctype, name, dims, len(b), init_array(ctype, dims, b, p.get("radix")), pre)]
 
 
+class KeepC(Exception):
+    """verdict "name": the C stays as it is."""
+
+
+_LD = {}
+
+
+def LDSYMS(ld):
+    """name -> value of a link script's `Name = 0x...;` lines."""
+    if ld not in _LD:
+        _LD[ld] = {m.group(1): int(m.group(2), 16) for m in re.finditer(r'^(\w+)\s*=\s*0x([0-9A-Fa-f]+);', 
+                   open(ld, encoding="latin-1").read() if os.path.exists(ld) else "", re.M)}
+    return _LD[ld]
+
+
 def tree_symbols(tree):
     """address -> the name to use for a pointer to it (a non-local, non-generic name first)."""
     out = {}
@@ -209,7 +225,7 @@ def designator(cb, off):
     return mb.name + "".join("[%d]" % i for i in idx) + field
 
 
-def resolve_pointers(cb, syms, externs, numeric):
+def resolve_pointers(cb, syms, externs, numeric, prefer=None):
     """@PTR(v) markers in the initializers -> SELF(member) inside the blob, NAKA_ADDR(label) for a labelled
     ROM address (recorded in `externs`), else the plain number (recorded in `numeric`)."""
     base = cb.base()
@@ -220,9 +236,10 @@ def resolve_pointers(cb, syms, externs, numeric):
             d = designator(cb, v - base)
             if d:
                 return "SELF(%s)" % d
-        elif v in syms:
-            externs[syms[v]] = v
-            return "NAKA_ADDR(%s)" % syms[v]
+        elif v in (prefer or {}) or v in syms:
+            n = (prefer or {}).get(v) or syms[v]
+            externs[n] = v
+            return "NAKA_ADDR(%s)" % n
         numeric.append(v)
         return m.group(1)
     for e in cb.entries:
@@ -270,7 +287,8 @@ def typedef_text(p):
 def pieces(r):
     if r.get("pieces"):
         return r["pieces"]
-    p = {k: r[k] for k in r if k in ("new_label", "ctype", "dims", "struct_fields", "cdoc", "header", "check", "radix")}
+    p = {k: r[k] for k in r if k in ("new_label", "ctype", "dims", "struct_fields", "cdoc", "header", "check", "radix",
+                                     "check_on")}
     p.update(off_in_slice=0, size=r["size"])
     return [p]
 
@@ -288,10 +306,10 @@ def find_slice(tree, rel, label):
 def main():
     recs = []
     for f in FILES:
-        recs += [r for r in json.load(open(f)) if r.get("verdict") == "type"]
+        recs += [r for r in json.load(open(f)) if r.get("verdict") in ("type", "name")]
     for r in recs:
         for p in pieces(r):
-            if p["ctype"] == "struct":
+            if p.get("ctype") == "struct":
                 register_struct(p)
     names = [p["new_label"] for r in recs for p in pieces(r)]
     dup = {n for n in names if names.count(n) > 1}
@@ -313,6 +331,9 @@ def main():
             path, L, k, blob, off, size = find_slice(tree, r["asm"], r["label"])
             if k is None:
                 skipped.append((r["label"], "label not found"))
+                continue
+            if ps[0]["header"] and ps[0]["header"][0] in L[max(0, k - 12):k]:
+                skipped.append((r["label"], "already applied (its header is above the label)"))
                 continue
             if size != r["size"]:
                 skipped.append((r["label"], "size %d != %d" % (size, r["size"])))
@@ -340,25 +361,46 @@ def main():
                 skipped.append((r["label"], bad))
                 continue
             c = os.path.join(tdir, "ui_widgets", blob + ".c")
+            if r.get("verdict") == "name":          # the C is already typed: header and name only
+                if c not in cbs:
+                    cbs[c] = [open(c, "rb").read().decode("latin-1"), None]
+                if re.search(r'\b%s\b' % re.escape(ps[0]["new_label"]), cbs[c][0]) and ps[0]["new_label"] != r["label"]:
+                    skipped.append((r["label"], "C name taken"))
+                    continue
+                ps = [dict(p, header=p["header"]) for p in ps]
             if c not in cbs:
                 cbs[c] = [open(c, "rb").read().decode("latin-1"), None]
             # C: typedefs first (they must precede the blob struct), then the retype on a fresh parse
             text = cbs[c][0]
-            for p in ps:
+            if r.get("verdict") == "name":
+                ps_c = []
+            else:
+                ps_c = ps
+            for p in ps_c:
                 if p["ctype"] == "struct" and ("} %s_t;" % p["new_label"]) not in text:
                     kk = text.index("typedef struct __attribute__((packed)) {\n", text.index("#define BASE"))
                     text = text[:kk] + typedef_text(p) + text[kk:]
             M.register_local_types(text)
             open(c + ".probe", "wb").write(text.encode("latin-1"))
             try:
+                if not ps_c:
+                    raise KeepC()
                 cb = M.CBlob(c + ".probe")
                 inside = {x.name for x in cb.members if off <= x.offset < off + size}
                 if any(p["new_label"] in cb.by_name and p["new_label"] not in inside for p in ps):
                     raise SystemExit("C member name taken")
                 sym = [x.name for x in cb.members if off <= x.offset < off + size
                        and M.SYMBOLIC_RE.search(cb.entries[cb.by_name[x.name]].expr)]
-                if sym:
-                    raise SystemExit("symbolic members %s" % sym[:4])
+                # a range holding pointers may be retyped only if every pointer comes out symbolic again; the
+                # old NAKA_ADDR names are preferred for their addresses
+                old_syms = sum(len(re.findall(r'NAKA_ADDR\(|SELF\(', cb.entries[cb.by_name[x]].expr)) for x in sym)
+                prefer = {}
+                byname = {n: a for a, n in syms.items()}
+                for x in sym:
+                    for n in re.findall(r'NAKA_ADDR\((\w+)\)', cb.entries[cb.by_name[x]].expr):
+                        a = byname.get(n) or LDSYMS(c[:-2] + "_link.ld").get(n)
+                        if a is not None:
+                            prefer[a] = n
                 nm = []
                 for p in ps:
                     b = raw[off + p["off_in_slice"]:off + p["off_in_slice"] + p["size"]]
@@ -380,7 +422,9 @@ def main():
                         t = re.search(r'/\*.*?\*/|//.*', x.tail)
                         if t:
                             ordered.append("    " + t.group(0))
-                cb.retype(off, off + size, nm, raw)
+                cb.retype(off, off + size, nm, raw, false_pointers=sym)
+                if r.get("false_pointers"):     # the reading says the old pointers were not pointers (its evidence)
+                    sym, old_syms = [], 0
                 first = cb.members[cb.by_name[nm[0].name]]
                 first.pre = ordered + list(nm[0].pre_lines)
                 if init_comments:
@@ -388,7 +432,12 @@ def main():
                     fe.pre = fe.pre.rstrip(" ") + "\n    ".join(init_comments) + "\n    "
                     kept_init_comments.extend(init_comments)
                 externs, numeric = {}, []
-                resolve_pointers(cb, syms, externs, numeric)
+                resolve_pointers(cb, syms, externs, numeric, prefer)
+                if sym:
+                    new_syms = sum(len(re.findall(r'NAKA_ADDR\(|SELF\(', cb.entries[cb.by_name[x.name]].expr)) for x in nm)
+                    if numeric or new_syms < old_syms:
+                        raise SystemExit("pointers not all symbolic again (%d before, %d after, %d numeric)"
+                                         % (old_syms, new_syms, len(numeric)))
                 numeric_all += [(r["label"], v) for v in numeric]
                 # a generated `<X>_Tail: the last bytes of the asm slice <Y>` note whose member the retype absorbed
                 # describes nothing any more (comment gate: --allow TAIL_NOTE)
@@ -399,6 +448,8 @@ def main():
                     text, ldt = add_externs(text, ld, dict(lds.get(ld, {}), **externs))
                     lds.setdefault(ld, {}).update(externs)
                 cbs[c][0] = text
+            except KeepC:
+                pass
             except SystemExit as e:
                 skipped.append((r["label"], "C: %s" % e))
                 continue

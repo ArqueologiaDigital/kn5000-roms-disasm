@@ -1331,7 +1331,7 @@ typedef struct __attribute__((packed)) {
     char InitializeRoot_str[16];
     uint16_t IconIDProc_EntryCount;
     /* IconIDProc_PtrTable: 256 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
-    uint32_t IconIDProc_PtrTable[256];
+    uint32_t IconIDProc_NameTable[256];
     /* "" (+ 0xFF alignment byte): name of icon-table entry 176, one past IconIDProc_EntryCount (176); a NULL pointer follows it */
     char IconName_Empty[2];
     char i173_str[6];
@@ -5111,7 +5111,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .IconIDProc_EntryCount = 0x00B0,
 
-    .IconIDProc_PtrTable = {
+    .IconIDProc_NameTable = {
         SELF(None_str),
         SELF(Default_name),
         SELF(I0_code),

@@ -34,7 +34,7 @@ extern const char NakaStr_Chara3Fnt;
 extern const char NakaStr_Chara2Fnt;
 extern const char NakaStr_Chara1Fnt;
 extern const char NakaData_RomEnd;
-extern const char MidiParam_PanelCfgTable;
+extern const char PsMixer_BootDefaultRows;
 extern const char PsMixer_DefaultGridPartRows;
 extern const char MixerPartTable_Start;
 extern const char NakaColor_Palette1;
@@ -89,7 +89,7 @@ extern const char NakaInst_PART_9;
 extern const char NakaInst_RIGHT_1_E9D9B0;
 extern const char NakaInst_RIGHT_2_E9D9A6;
 extern const char NakaInst_R_BASS;
-extern const char NakaInst_ara6_fnt;
+extern const char NakaStr_Chara6Fnt;
 extern const char NakaInst_chara1w_fnt;
 extern const char NakaInst_chara2w_fnt;
 extern const char NakaInst_chara5w_fnt;
@@ -169,7 +169,7 @@ extern const char SeqChan_ByteBlockE;
 extern const char SeqChan_ByteBlockF;
 extern const char SeqChan_InitChannelState;
 extern const char EditSw_SplitMap10;
-extern const char SeqChan_Map_2ch;
+extern const char EditSw_PageMap2;
 extern const char EditSw_PageMap4;
 extern const char VariScreen_EditSwLayout6;
 extern const char VariScreen_EditSwLayout8;
@@ -5840,7 +5840,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
     .field_0d5a = NAKA_NONE,
 
     .MidiPart_ConfigNameTable = {
-        NAKA_ADDR(MidiParam_PanelCfgTable),
+        NAKA_ADDR(PsMixer_BootDefaultRows),
         NAKA_ADDR(PsMixer_DefaultGridPartRows),
         NAKA_ADDR(PartName6_Right1),
         NAKA_ADDR(PartName6_Right2),
@@ -6850,7 +6850,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
         NAKA_ADDR(NakaStr_Chara4Fnt),
         NAKA_ADDR(NakaStr_Chara5Fnt),
         NAKA_ADDR(NakaStr_Chara1pFnt),
-        NAKA_ADDR(NakaInst_ara6_fnt),
+        NAKA_ADDR(NakaStr_Chara6Fnt),
         NAKA_ADDR(NakaInst_chara1w_fnt),
         NAKA_ADDR(NakaInst_chara2w_fnt),
         NAKA_ADDR(NakaInst_chara5w_fnt),
@@ -7145,7 +7145,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
         NAKA_ADDR(NakaColor_Palette7),
         NAKA_ADDR(NakaColor_PaletteBlank),
         NAKA_ADDR(NakaColor_PaletteBlank),
-        NAKA_ADDR(SeqChan_Map_2ch),
+        NAKA_ADDR(EditSw_PageMap2),
         NAKA_ADDR(EditSw_PageMap4),
         NAKA_ADDR(VariScreen_EditSwLayout6),
         NAKA_ADDR(VariScreen_EditSwLayout8),

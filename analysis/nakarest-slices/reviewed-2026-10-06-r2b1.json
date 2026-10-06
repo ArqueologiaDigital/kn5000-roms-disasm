@@ -1,0 +1,2982 @@
+[
+ {
+  "label": "NakaInst_False",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 24,
+    "new_label": "NakaInst_Bool_EnumTable",
+    "ctype": "struct",
+    "dims": "[3]",
+    "struct_fields": [
+     {
+      "name": "name",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "Bool property value names {name, value}: 2 named values + the {\"\", 0} end entry (SupportClass record 6, boolProc)",
+    "header": [
+     "; NakaInst_Bool_EnumTable -- 3 x {u32 name, s32 value}: value names of the Bool property type (2 named + \"\" end entry)",
+     "; Word +8 of SupportClass record 6 (boolProc, count 2) in ExitWindow_OK_Data_2, the 55 x 12-byte table",
+     "; ExitWindow_OK registers as class SupportClass.  CommonIDProc (ui/ui_widget_defs.s) walks it in 8-byte steps:",
+     "; DUMP_PROPERTY_EX matches the 32-bit value and Strcpy's the name, SET_PROPERTY_EX Strcmp's the names; \"\" ends it.",
+     "; True=1, False=0"
+    ],
+    "check": "len(b)==24 and list(struct.unpack('<6i',b)[1::2])==[1, 0, 0] and [x-struct.unpack_from('<I',b,16)[0] for x in struct.unpack('<6i',b)[0::2]]==[8, 2, 0]"
+   },
+   {
+    "off_in_slice": 24,
+    "size": 2,
+    "new_label": "NakaInst_Bool_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: name of the end entry of NakaInst_Bool_EnumTable",
+    "header": [
+     "; NakaInst_Bool_EmptyStr -- 2 x char: \"\" + 0xFF fill, name of the end entry of NakaInst_Bool_EnumTable",
+     "; NakaInst_Bool_EnumTable's last entry {\"\", 0} points here; CommonIDProc stops at a name whose first byte is 0."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 26,
+    "size": 6,
+    "new_label": "NakaInst_Bool_False_Str",
+    "ctype": "char",
+    "dims": "[6]",
+    "cdoc": "\"False\": name of Bool value 0",
+    "header": [
+     "; NakaInst_Bool_False_Str -- 6 x char: \"False\", name of Bool value 0",
+     "; Entry 1 of NakaInst_Bool_EnumTable points here."
+    ],
+    "check": "b==b'False\\x00'"
+   },
+   {
+    "off_in_slice": 32,
+    "size": 6,
+    "new_label": "NakaInst_Bool_True_Str",
+    "ctype": "char",
+    "dims": "[6]",
+    "cdoc": "\"True\" + 0xFF fill: name of Bool value 1",
+    "header": [
+     "; NakaInst_Bool_True_Str -- 6 x char: \"True\" + 0xFF fill, name of Bool value 1",
+     "; Entry 0 of NakaInst_Bool_EnumTable points here."
+    ],
+    "check": "b==b'True\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 38,
+    "size": 8,
+    "new_label": "NakaInst_ObjectID_EnumTable",
+    "ctype": "struct",
+    "dims": "[1]",
+    "struct_fields": [
+     {
+      "name": "name",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "ObjectID property value names: only the {\"\", 0} end entry (SupportClass record 7, ObjectIDProc, count 0)",
+    "header": [
+     "; NakaInst_ObjectID_EnumTable -- 1 x {u32 name, s32 value}: empty value-name list of the ObjectID property type, only the \"\" end entry",
+     "; Word +8 of SupportClass record 7 (ObjectIDProc) in ExitWindow_OK_Data_2; its count word (+4) is 0, so",
+     "; CommonIDProc (ui/ui_widget_defs.s) does not search it, and its SET_PROPERTY_EX falls back to ParseInt32."
+    ],
+    "check": "len(b)==8 and struct.unpack('<i',b[4:])[0]==0"
+   },
+   {
+    "off_in_slice": 46,
+    "size": 2,
+    "new_label": "NakaInst_ObjectID_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: name of the end entry of NakaInst_ObjectID_EnumTable",
+    "header": [
+     "; NakaInst_ObjectID_EmptyStr -- 2 x char: \"\" + 0xFF fill, name of the end entry of NakaInst_ObjectID_EnumTable",
+     "; NakaInst_ObjectID_EnumTable's only entry {\"\", 0} points here."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:8713 `ldw (xbc + 8), 0x37` -- ExitWindow_OK registers 55 SupportClass objects",
+   "ui/ui_widget_defs.s:8714 `lda xwa, (ExitWindow_OK_Data_2:24)` -- their 12-byte records {u32 proc, u16 count, u16 size, u32 value-name list}",
+   "ui/ui_widget_defs.s:17428 `ld xbc, EVT_GET_INSTANCE` -- CommonIDProc gets the object's SupportClass record",
+   "ui/ui_widget_defs.s:17502 `cpw (xwa + 4), 0x0` -- record +4 = number of named values (0: no name search)",
+   "ui/ui_widget_defs.s:17505 `ld xbc, (xwa + 8)` -- record +8 = the value-name list",
+   "ui/ui_widget_defs.s:17512 `cp xwa, (xhl + 4)` -- entry +4 = 32-bit value compared with the property value",
+   "ui/ui_widget_defs.s:17514 `ld xwa, (xhl)` -- entry +0 = name pointer, Strcpy'd out on a match",
+   "ui/ui_widget_defs.s:17525 `inc 8, xde` -- 8-byte entries",
+   "ui/ui_widget_defs.s:17531 `cp (xix), 0x0` -- the list ends at the entry whose name is \"\"",
+   "ui/ui_widget_defs.s:17553 `call Strcmp` -- SET_PROPERTY_EX matches the text against each name; 17563 `ld xbc, (xbc + 4)` stores that entry's value",
+   "ui/ui_widget_defs.s:12510 `ld bc, (xhl)` / 12511 `exts xbc` -- boolProc reads a 16-bit value, sign-extended, before CommonIDProc (12519)",
+   "ExitWindow_OK_Data_2 record 6 = {boolProc, count 2, size 2, list 0xEB681A (this slice)}, record 7 = {ObjectIDProc, 0, 4, 0xEB6840 (slice+38)}",
+   "ui/ui_widget_defs.s:17404 `jrl slongProc` -- ObjectIDProc is slongProc, which calls CommonIDProc (12420)"
+  ],
+  "note": "Two lists: boolProc's {True,1},{False,0},{\"\",0} and the empty list of ObjectIDProc at +38.",
+  "asm": "ui_widgets/debug_naming_panel_sim.s",
+  "size": 48,
+  "blob": "naka_debug_naming",
+  "off_v10": 15644,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "NakaProp_BorderDefs",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 168,
+    "new_label": "NakaInst_BorderID_EnumTable",
+    "ctype": "struct",
+    "dims": "[21]",
+    "struct_fields": [
+     {
+      "name": "name",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "BorderID property value names {name, value}: 20 named values + the {\"\", 0} end entry (SupportClass record 30, BorderIDProc)",
+    "header": [
+     "; NakaInst_BorderID_EnumTable -- 21 x {u32 name, s32 value}: value names of the BorderID property type (20 named + \"\" end entry)",
+     "; Word +8 of SupportClass record 30 (BorderIDProc, count 20) in ExitWindow_OK_Data_2, the 55 x 12-byte table",
+     "; ExitWindow_OK registers as class SupportClass.  CommonIDProc (ui/ui_widget_defs.s) walks it in 8-byte steps:",
+     "; DUMP_PROPERTY_EX matches the 32-bit value and Strcpy's the name, SET_PROPERTY_EX Strcmp's the names; \"\" ends it.",
+     "; BD_None=0, BD_Single1=1, BD_Single2=2, BD_Double1=3, BD_Shadow1=4, BD_Shadow2=5, BD_Round0=6, BD_Round1=7, BD_Round2=8, BD_Round5=9, ... (10 more)"
+    ],
+    "check": "len(b)==168 and list(struct.unpack('<42i',b)[1::2])==[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 192, 193, 194, 195, 201, 202, 203, 204, 0] and [x-struct.unpack_from('<I',b,160)[0] for x in struct.unpack('<42i',b)[0::2]]==[226, 214, 202, 190, 178, 166, 156, 146, 136, 126, 116, 104, 94, 84, 72, 60, 46, 32, 18, 2, 0]"
+   },
+   {
+    "off_in_slice": 168,
+    "size": 2,
+    "new_label": "NakaInst_BorderID_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: name of the end entry of NakaInst_BorderID_EnumTable",
+    "header": [
+     "; NakaInst_BorderID_EmptyStr -- 2 x char: \"\" + 0xFF fill, name of the end entry of NakaInst_BorderID_EnumTable",
+     "; NakaInst_BorderID_EnumTable's last entry {\"\", 0} points here; CommonIDProc stops at a name whose first byte is 0."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 170,
+    "size": 16,
+    "new_label": "NakaInst_BD_TrackSwDown_Str",
+    "ctype": "char",
+    "dims": "[16]",
+    "cdoc": "\"BD_TrackSwDown\" + 0xFF fill: name of BorderID value 0xCC",
+    "header": [
+     "; NakaInst_BD_TrackSwDown_Str -- 16 x char: \"BD_TrackSwDown\" + 0xFF fill, name of BorderID value 0xCC",
+     "; Entry 19 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_TrackSwDown\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 186,
+    "size": 14,
+    "new_label": "NakaInst_BD_TrackSwUp_Str",
+    "ctype": "char",
+    "dims": "[14]",
+    "cdoc": "\"BD_TrackSwUp\" + 0xFF fill: name of BorderID value 0xCB",
+    "header": [
+     "; NakaInst_BD_TrackSwUp_Str -- 14 x char: \"BD_TrackSwUp\" + 0xFF fill, name of BorderID value 0xCB",
+     "; Entry 18 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_TrackSwUp\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 200,
+    "size": 14,
+    "new_label": "NakaInst_BD_EditSwDown_Str",
+    "ctype": "char",
+    "dims": "[14]",
+    "cdoc": "\"BD_EditSwDown\": name of BorderID value 0xCA",
+    "header": [
+     "; NakaInst_BD_EditSwDown_Str -- 14 x char: \"BD_EditSwDown\", name of BorderID value 0xCA",
+     "; Entry 17 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_EditSwDown\\x00'"
+   },
+   {
+    "off_in_slice": 214,
+    "size": 14,
+    "new_label": "NakaInst_BD_EditSwitch_Str",
+    "ctype": "char",
+    "dims": "[14]",
+    "cdoc": "\"BD_EditSwitch\": name of BorderID value 0xC9",
+    "header": [
+     "; NakaInst_BD_EditSwitch_Str -- 14 x char: \"BD_EditSwitch\", name of BorderID value 0xC9",
+     "; Entry 16 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_EditSwitch\\x00'"
+   },
+   {
+    "off_in_slice": 228,
+    "size": 12,
+    "new_label": "NakaInst_BD_3D_DOWN2_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"BD_3D_DOWN2\": name of BorderID value 0xC3",
+    "header": [
+     "; NakaInst_BD_3D_DOWN2_Str -- 12 x char: \"BD_3D_DOWN2\", name of BorderID value 0xC3",
+     "; Entry 15 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_3D_DOWN2\\x00'"
+   },
+   {
+    "off_in_slice": 240,
+    "size": 12,
+    "new_label": "NakaInst_BD_3D_DOWN1_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"BD_3D_DOWN1\": name of BorderID value 0xC2",
+    "header": [
+     "; NakaInst_BD_3D_DOWN1_Str -- 12 x char: \"BD_3D_DOWN1\", name of BorderID value 0xC2",
+     "; Entry 14 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_3D_DOWN1\\x00'"
+   },
+   {
+    "off_in_slice": 252,
+    "size": 10,
+    "new_label": "NakaInst_BD_3D_UP2_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"BD_3D_UP2\": name of BorderID value 0xC1",
+    "header": [
+     "; NakaInst_BD_3D_UP2_Str -- 10 x char: \"BD_3D_UP2\", name of BorderID value 0xC1",
+     "; Entry 13 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_3D_UP2\\x00'"
+   },
+   {
+    "off_in_slice": 262,
+    "size": 10,
+    "new_label": "NakaInst_BD_3D_UP1_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"BD_3D_UP1\": name of BorderID value 0xC0",
+    "header": [
+     "; NakaInst_BD_3D_UP1_Str -- 10 x char: \"BD_3D_UP1\", name of BorderID value 0xC0",
+     "; Entry 12 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_3D_UP1\\x00'"
+   },
+   {
+    "off_in_slice": 272,
+    "size": 12,
+    "new_label": "NakaInst_BD_Round14_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"BD_Round14\" + 0xFF fill: name of BorderID value 0x0B",
+    "header": [
+     "; NakaInst_BD_Round14_Str -- 12 x char: \"BD_Round14\" + 0xFF fill, name of BorderID value 0x0B",
+     "; Entry 11 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_Round14\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 284,
+    "size": 10,
+    "new_label": "NakaInst_BD_Round9_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"BD_Round9\": name of BorderID value 0x0A",
+    "header": [
+     "; NakaInst_BD_Round9_Str -- 10 x char: \"BD_Round9\", name of BorderID value 0x0A",
+     "; Entry 10 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_Round9\\x00'"
+   },
+   {
+    "off_in_slice": 294,
+    "size": 10,
+    "new_label": "NakaInst_BD_Round5_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"BD_Round5\": name of BorderID value 9",
+    "header": [
+     "; NakaInst_BD_Round5_Str -- 10 x char: \"BD_Round5\", name of BorderID value 9",
+     "; Entry 9 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_Round5\\x00'"
+   },
+   {
+    "off_in_slice": 304,
+    "size": 10,
+    "new_label": "NakaInst_BD_Round2_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"BD_Round2\": name of BorderID value 8",
+    "header": [
+     "; NakaInst_BD_Round2_Str -- 10 x char: \"BD_Round2\", name of BorderID value 8",
+     "; Entry 8 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_Round2\\x00'"
+   },
+   {
+    "off_in_slice": 314,
+    "size": 10,
+    "new_label": "NakaInst_BD_Round1_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"BD_Round1\": name of BorderID value 7",
+    "header": [
+     "; NakaInst_BD_Round1_Str -- 10 x char: \"BD_Round1\", name of BorderID value 7",
+     "; Entry 7 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_Round1\\x00'"
+   },
+   {
+    "off_in_slice": 324,
+    "size": 10,
+    "new_label": "NakaInst_BD_Round0_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"BD_Round0\": name of BorderID value 6",
+    "header": [
+     "; NakaInst_BD_Round0_Str -- 10 x char: \"BD_Round0\", name of BorderID value 6",
+     "; Entry 6 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_Round0\\x00'"
+   },
+   {
+    "off_in_slice": 334,
+    "size": 12,
+    "new_label": "NakaInst_BD_Shadow2_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"BD_Shadow2\" + 0xFF fill: name of BorderID value 5",
+    "header": [
+     "; NakaInst_BD_Shadow2_Str -- 12 x char: \"BD_Shadow2\" + 0xFF fill, name of BorderID value 5",
+     "; Entry 5 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_Shadow2\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 346,
+    "size": 12,
+    "new_label": "NakaInst_BD_Shadow1_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"BD_Shadow1\" + 0xFF fill: name of BorderID value 4",
+    "header": [
+     "; NakaInst_BD_Shadow1_Str -- 12 x char: \"BD_Shadow1\" + 0xFF fill, name of BorderID value 4",
+     "; Entry 4 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_Shadow1\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 358,
+    "size": 12,
+    "new_label": "NakaInst_BD_Double1_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"BD_Double1\" + 0xFF fill: name of BorderID value 3",
+    "header": [
+     "; NakaInst_BD_Double1_Str -- 12 x char: \"BD_Double1\" + 0xFF fill, name of BorderID value 3",
+     "; Entry 3 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_Double1\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 370,
+    "size": 12,
+    "new_label": "NakaInst_BD_Single2_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"BD_Single2\" + 0xFF fill: name of BorderID value 2",
+    "header": [
+     "; NakaInst_BD_Single2_Str -- 12 x char: \"BD_Single2\" + 0xFF fill, name of BorderID value 2",
+     "; Entry 2 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_Single2\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 382,
+    "size": 12,
+    "new_label": "NakaInst_BD_Single1_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"BD_Single1\" + 0xFF fill: name of BorderID value 1",
+    "header": [
+     "; NakaInst_BD_Single1_Str -- 12 x char: \"BD_Single1\" + 0xFF fill, name of BorderID value 1",
+     "; Entry 1 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_Single1\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 394,
+    "size": 8,
+    "new_label": "NakaInst_BD_None_Str",
+    "ctype": "char",
+    "dims": "[8]",
+    "cdoc": "\"BD_None\": name of BorderID value 0",
+    "header": [
+     "; NakaInst_BD_None_Str -- 8 x char: \"BD_None\", name of BorderID value 0",
+     "; Entry 0 of NakaInst_BorderID_EnumTable points here."
+    ],
+    "check": "b==b'BD_None\\x00'"
+   },
+   {
+    "off_in_slice": 402,
+    "size": 8,
+    "new_label": "NakaInst_ModeID_EnumTable",
+    "ctype": "struct",
+    "dims": "[1]",
+    "struct_fields": [
+     {
+      "name": "name",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "ModeID property value names: only the {\"\", 0} end entry (SupportClass record 31, ModeIDProc, count 0)",
+    "header": [
+     "; NakaInst_ModeID_EnumTable -- 1 x {u32 name, s32 value}: empty value-name list of the ModeID property type, only the \"\" end entry",
+     "; Word +8 of SupportClass record 31 (ModeIDProc) in ExitWindow_OK_Data_2; its count word (+4) is 0, so",
+     "; CommonIDProc (ui/ui_widget_defs.s) does not search it, and its SET_PROPERTY_EX falls back to ParseInt32."
+    ],
+    "check": "len(b)==8 and struct.unpack('<i',b[4:])[0]==0"
+   },
+   {
+    "off_in_slice": 410,
+    "size": 2,
+    "new_label": "NakaInst_ModeID_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: name of the end entry of NakaInst_ModeID_EnumTable",
+    "header": [
+     "; NakaInst_ModeID_EmptyStr -- 2 x char: \"\" + 0xFF fill, name of the end entry of NakaInst_ModeID_EnumTable",
+     "; NakaInst_ModeID_EnumTable's only entry {\"\", 0} points here."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:8713 `ldw (xbc + 8), 0x37` -- ExitWindow_OK registers 55 SupportClass objects",
+   "ui/ui_widget_defs.s:8714 `lda xwa, (ExitWindow_OK_Data_2:24)` -- their 12-byte records {u32 proc, u16 count, u16 size, u32 value-name list}",
+   "ui/ui_widget_defs.s:17428 `ld xbc, EVT_GET_INSTANCE` -- CommonIDProc gets the object's SupportClass record",
+   "ui/ui_widget_defs.s:17502 `cpw (xwa + 4), 0x0` -- record +4 = number of named values (0: no name search)",
+   "ui/ui_widget_defs.s:17505 `ld xbc, (xwa + 8)` -- record +8 = the value-name list",
+   "ui/ui_widget_defs.s:17512 `cp xwa, (xhl + 4)` -- entry +4 = 32-bit value compared with the property value",
+   "ui/ui_widget_defs.s:17514 `ld xwa, (xhl)` -- entry +0 = name pointer, Strcpy'd out on a match",
+   "ui/ui_widget_defs.s:17525 `inc 8, xde` -- 8-byte entries",
+   "ui/ui_widget_defs.s:17531 `cp (xix), 0x0` -- the list ends at the entry whose name is \"\"",
+   "ui/ui_widget_defs.s:17553 `call Strcmp` -- SET_PROPERTY_EX matches the text against each name; 17563 `ld xbc, (xbc + 4)` stores that entry's value",
+   "ui/ui_widget_defs.s:14352 `ld bc, (xhl)` / 14353 `exts xbc` -- BorderIDProc: 16-bit property, sign-extended, then CommonIDProc (14361)",
+   "ExitWindow_OK_Data_2 record 30 = {BorderIDProc, count 20, size 2, list 0xEB6BD0 (this slice)}, record 31 = {ModeIDProc, 0, 4, 0xEB6D62 (slice+402)}",
+   "ui/ui_widget_defs.s:16824 `calr CommonIDProc` -- ModeIDProc's default path"
+  ],
+  "note": "BorderID values: 0..11 (None, Single1/2, Double1, Shadow1/2, Round0/1/2/5/9/14), 0xC0..0xC3 (3D_UP1/2, 3D_DOWN1/2), 0xC9..0xCC (EditSwitch, EditSwDown, TrackSwUp, TrackSwDown).",
+  "asm": "ui_widgets/debug_naming_panel_sim.s",
+  "size": 412,
+  "blob": "naka_debug_naming",
+  "off_v10": 16594,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "NakaProp_EditSwitch_Chain",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 168,
+    "new_label": "NakaInst_EditSwID_EnumTable",
+    "ctype": "struct",
+    "dims": "[21]",
+    "struct_fields": [
+     {
+      "name": "name",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "EditSwID property value names {name, value}: 20 named values + the {\"\", 0} end entry (SupportClass record 36, EditSwIDProc)",
+    "header": [
+     "; NakaInst_EditSwID_EnumTable -- 21 x {u32 name, s32 value}: value names of the EditSwID property type (20 named + \"\" end entry)",
+     "; Word +8 of SupportClass record 36 (EditSwIDProc, count 20) in ExitWindow_OK_Data_2, the 55 x 12-byte table",
+     "; ExitWindow_OK registers as class SupportClass.  CommonIDProc (ui/ui_widget_defs.s) walks it in 8-byte steps:",
+     "; DUMP_PROPERTY_EX matches the 32-bit value and Strcpy's the name, SET_PROPERTY_EX Strcmp's the names; \"\" ends it.",
+     "; ES_Bottom1=0, ES_Bottom2=1, ES_Bottom3=2, ES_Bottom4=3, ES_Bottom5=4, ES_Bottom6=5, ES_Bottom7=6, ES_Bottom8=7, ES_Left1=0x88, ES_Left2=0x89, ... (10 more)"
+    ],
+    "check": "len(b)==168 and list(struct.unpack('<42i',b)[1::2])==[0, 1, 2, 3, 4, 5, 6, 7, 136, 137, 138, 139, 140, 8, 9, 10, 11, 12, 15, 255, 0] and [x-struct.unpack_from('<I',b,160)[0] for x in struct.unpack('<42i',b)[0::2]]==[202, 190, 178, 166, 154, 142, 130, 118, 108, 98, 88, 78, 68, 58, 48, 38, 28, 18, 10, 2, 0]"
+   },
+   {
+    "off_in_slice": 168,
+    "size": 2,
+    "new_label": "NakaInst_EditSwID_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: name of the end entry of NakaInst_EditSwID_EnumTable",
+    "header": [
+     "; NakaInst_EditSwID_EmptyStr -- 2 x char: \"\" + 0xFF fill, name of the end entry of NakaInst_EditSwID_EnumTable",
+     "; NakaInst_EditSwID_EnumTable's last entry {\"\", 0} points here; CommonIDProc stops at a name whose first byte is 0."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 170,
+    "size": 8,
+    "new_label": "NakaInst_ES_None_Str",
+    "ctype": "char",
+    "dims": "[8]",
+    "cdoc": "\"ES_None\": name of EditSwID value 0xFF",
+    "header": [
+     "; NakaInst_ES_None_Str -- 8 x char: \"ES_None\", name of EditSwID value 0xFF",
+     "; Entry 19 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_None\\x00'"
+   },
+   {
+    "off_in_slice": 178,
+    "size": 8,
+    "new_label": "NakaInst_ES_Exit_Str",
+    "ctype": "char",
+    "dims": "[8]",
+    "cdoc": "\"ES_Exit\": name of EditSwID value 0x0F",
+    "header": [
+     "; NakaInst_ES_Exit_Str -- 8 x char: \"ES_Exit\", name of EditSwID value 0x0F",
+     "; Entry 18 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Exit\\x00'"
+   },
+   {
+    "off_in_slice": 186,
+    "size": 10,
+    "new_label": "NakaInst_ES_Right5_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"ES_Right5\": name of EditSwID value 0x0C",
+    "header": [
+     "; NakaInst_ES_Right5_Str -- 10 x char: \"ES_Right5\", name of EditSwID value 0x0C",
+     "; Entry 17 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Right5\\x00'"
+   },
+   {
+    "off_in_slice": 196,
+    "size": 10,
+    "new_label": "NakaInst_ES_Right4_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"ES_Right4\": name of EditSwID value 0x0B",
+    "header": [
+     "; NakaInst_ES_Right4_Str -- 10 x char: \"ES_Right4\", name of EditSwID value 0x0B",
+     "; Entry 16 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Right4\\x00'"
+   },
+   {
+    "off_in_slice": 206,
+    "size": 10,
+    "new_label": "NakaInst_ES_Right3_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"ES_Right3\": name of EditSwID value 0x0A",
+    "header": [
+     "; NakaInst_ES_Right3_Str -- 10 x char: \"ES_Right3\", name of EditSwID value 0x0A",
+     "; Entry 15 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Right3\\x00'"
+   },
+   {
+    "off_in_slice": 216,
+    "size": 10,
+    "new_label": "NakaInst_ES_Right2_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"ES_Right2\": name of EditSwID value 9",
+    "header": [
+     "; NakaInst_ES_Right2_Str -- 10 x char: \"ES_Right2\", name of EditSwID value 9",
+     "; Entry 14 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Right2\\x00'"
+   },
+   {
+    "off_in_slice": 226,
+    "size": 10,
+    "new_label": "NakaInst_ES_Right1_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"ES_Right1\": name of EditSwID value 8",
+    "header": [
+     "; NakaInst_ES_Right1_Str -- 10 x char: \"ES_Right1\", name of EditSwID value 8",
+     "; Entry 13 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Right1\\x00'"
+   },
+   {
+    "off_in_slice": 236,
+    "size": 10,
+    "new_label": "NakaInst_ES_Left5_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"ES_Left5\" + 0xFF fill: name of EditSwID value 0x8C",
+    "header": [
+     "; NakaInst_ES_Left5_Str -- 10 x char: \"ES_Left5\" + 0xFF fill, name of EditSwID value 0x8C",
+     "; Entry 12 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Left5\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 246,
+    "size": 10,
+    "new_label": "NakaInst_ES_Left4_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"ES_Left4\" + 0xFF fill: name of EditSwID value 0x8B",
+    "header": [
+     "; NakaInst_ES_Left4_Str -- 10 x char: \"ES_Left4\" + 0xFF fill, name of EditSwID value 0x8B",
+     "; Entry 11 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Left4\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 256,
+    "size": 10,
+    "new_label": "NakaInst_ES_Left3_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"ES_Left3\" + 0xFF fill: name of EditSwID value 0x8A",
+    "header": [
+     "; NakaInst_ES_Left3_Str -- 10 x char: \"ES_Left3\" + 0xFF fill, name of EditSwID value 0x8A",
+     "; Entry 10 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Left3\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 266,
+    "size": 10,
+    "new_label": "NakaInst_ES_Left2_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"ES_Left2\" + 0xFF fill: name of EditSwID value 0x89",
+    "header": [
+     "; NakaInst_ES_Left2_Str -- 10 x char: \"ES_Left2\" + 0xFF fill, name of EditSwID value 0x89",
+     "; Entry 9 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Left2\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 276,
+    "size": 10,
+    "new_label": "NakaInst_ES_Left1_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"ES_Left1\" + 0xFF fill: name of EditSwID value 0x88",
+    "header": [
+     "; NakaInst_ES_Left1_Str -- 10 x char: \"ES_Left1\" + 0xFF fill, name of EditSwID value 0x88",
+     "; Entry 8 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Left1\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 286,
+    "size": 12,
+    "new_label": "NakaInst_ES_Bottom8_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"ES_Bottom8\" + 0xFF fill: name of EditSwID value 7",
+    "header": [
+     "; NakaInst_ES_Bottom8_Str -- 12 x char: \"ES_Bottom8\" + 0xFF fill, name of EditSwID value 7",
+     "; Entry 7 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Bottom8\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 298,
+    "size": 12,
+    "new_label": "NakaInst_ES_Bottom7_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"ES_Bottom7\" + 0xFF fill: name of EditSwID value 6",
+    "header": [
+     "; NakaInst_ES_Bottom7_Str -- 12 x char: \"ES_Bottom7\" + 0xFF fill, name of EditSwID value 6",
+     "; Entry 6 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Bottom7\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 310,
+    "size": 12,
+    "new_label": "NakaInst_ES_Bottom6_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"ES_Bottom6\" + 0xFF fill: name of EditSwID value 5",
+    "header": [
+     "; NakaInst_ES_Bottom6_Str -- 12 x char: \"ES_Bottom6\" + 0xFF fill, name of EditSwID value 5",
+     "; Entry 5 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Bottom6\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 322,
+    "size": 12,
+    "new_label": "NakaInst_ES_Bottom5_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"ES_Bottom5\" + 0xFF fill: name of EditSwID value 4",
+    "header": [
+     "; NakaInst_ES_Bottom5_Str -- 12 x char: \"ES_Bottom5\" + 0xFF fill, name of EditSwID value 4",
+     "; Entry 4 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Bottom5\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 334,
+    "size": 12,
+    "new_label": "NakaInst_ES_Bottom4_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"ES_Bottom4\" + 0xFF fill: name of EditSwID value 3",
+    "header": [
+     "; NakaInst_ES_Bottom4_Str -- 12 x char: \"ES_Bottom4\" + 0xFF fill, name of EditSwID value 3",
+     "; Entry 3 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Bottom4\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 346,
+    "size": 12,
+    "new_label": "NakaInst_ES_Bottom3_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"ES_Bottom3\" + 0xFF fill: name of EditSwID value 2",
+    "header": [
+     "; NakaInst_ES_Bottom3_Str -- 12 x char: \"ES_Bottom3\" + 0xFF fill, name of EditSwID value 2",
+     "; Entry 2 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Bottom3\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 358,
+    "size": 12,
+    "new_label": "NakaInst_ES_Bottom2_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"ES_Bottom2\" + 0xFF fill: name of EditSwID value 1",
+    "header": [
+     "; NakaInst_ES_Bottom2_Str -- 12 x char: \"ES_Bottom2\" + 0xFF fill, name of EditSwID value 1",
+     "; Entry 1 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Bottom2\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 370,
+    "size": 12,
+    "new_label": "NakaInst_ES_Bottom1_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"ES_Bottom1\" + 0xFF fill: name of EditSwID value 0",
+    "header": [
+     "; NakaInst_ES_Bottom1_Str -- 12 x char: \"ES_Bottom1\" + 0xFF fill, name of EditSwID value 0",
+     "; Entry 0 of NakaInst_EditSwID_EnumTable points here."
+    ],
+    "check": "b==b'ES_Bottom1\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 382,
+    "size": 144,
+    "new_label": "NakaInst_EditSwStyleID_EnumTable",
+    "ctype": "struct",
+    "dims": "[18]",
+    "struct_fields": [
+     {
+      "name": "name",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "EditSwStyleID property value names {name, value}: 17 named values + the {\"\", 0} end entry (SupportClass record 37, EditSwStyleIDProc)",
+    "header": [
+     "; NakaInst_EditSwStyleID_EnumTable -- 18 x {u32 name, s32 value}: value names of the EditSwStyleID property type (17 named + \"\" end entry)",
+     "; Word +8 of SupportClass record 37 (EditSwStyleIDProc, count 17) in ExitWindow_OK_Data_2, the 55 x 12-byte table",
+     "; ExitWindow_OK registers as class SupportClass.  CommonIDProc (ui/ui_widget_defs.s) walks it in 8-byte steps:",
+     "; DUMP_PROPERTY_EX matches the 32-bit value and Strcpy's the name, SET_PROPERTY_EX Strcmp's the names; \"\" ends it.",
+     "; SS_Special=0, SS_Up=1, SS_Down=2, SS_UpDown=3, SS_On=4, SS_Off=5, SS_OK=6, SS_Left=7, SS_Right=8, SS_Yes=9, SS_No=0x0A, SS_OnOff=0x0B, ... (5 more)"
+    ],
+    "check": "len(b)==144 and list(struct.unpack('<36i',b)[1::2])==[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 0] and [x-struct.unpack_from('<I',b,136)[0] for x in struct.unpack('<36i',b)[0::2]]==[138, 132, 124, 114, 108, 100, 94, 86, 76, 68, 62, 52, 44, 34, 22, 12, 2, 0]"
+   },
+   {
+    "off_in_slice": 526,
+    "size": 2,
+    "new_label": "NakaInst_EditSwStyleID_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: name of the end entry of NakaInst_EditSwStyleID_EnumTable",
+    "header": [
+     "; NakaInst_EditSwStyleID_EmptyStr -- 2 x char: \"\" + 0xFF fill, name of the end entry of NakaInst_EditSwStyleID_EnumTable",
+     "; NakaInst_EditSwStyleID_EnumTable's last entry {\"\", 0} points here; CommonIDProc stops at a name whose first byte is 0."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 528,
+    "size": 10,
+    "new_label": "NakaInst_SS_Right2_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"SS_Right2\": name of EditSwStyleID value 0x10",
+    "header": [
+     "; NakaInst_SS_Right2_Str -- 10 x char: \"SS_Right2\", name of EditSwStyleID value 0x10",
+     "; Entry 16 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_Right2\\x00'"
+   },
+   {
+    "off_in_slice": 538,
+    "size": 10,
+    "new_label": "NakaInst_SS_Left2_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"SS_Left2\" + 0xFF fill: name of EditSwStyleID value 0x0F",
+    "header": [
+     "; NakaInst_SS_Left2_Str -- 10 x char: \"SS_Left2\" + 0xFF fill, name of EditSwStyleID value 0x0F",
+     "; Entry 15 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_Left2\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 548,
+    "size": 12,
+    "new_label": "NakaInst_SS_UpDown2_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"SS_UpDown2\" + 0xFF fill: name of EditSwStyleID value 0x0E",
+    "header": [
+     "; NakaInst_SS_UpDown2_Str -- 12 x char: \"SS_UpDown2\" + 0xFF fill, name of EditSwStyleID value 0x0E",
+     "; Entry 14 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_UpDown2\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 560,
+    "size": 10,
+    "new_label": "NakaInst_SS_Down2_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"SS_Down2\" + 0xFF fill: name of EditSwStyleID value 0x0D",
+    "header": [
+     "; NakaInst_SS_Down2_Str -- 10 x char: \"SS_Down2\" + 0xFF fill, name of EditSwStyleID value 0x0D",
+     "; Entry 13 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_Down2\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 570,
+    "size": 8,
+    "new_label": "NakaInst_SS_Up2_Str",
+    "ctype": "char",
+    "dims": "[8]",
+    "cdoc": "\"SS_Up2\" + 0xFF fill: name of EditSwStyleID value 0x0C",
+    "header": [
+     "; NakaInst_SS_Up2_Str -- 8 x char: \"SS_Up2\" + 0xFF fill, name of EditSwStyleID value 0x0C",
+     "; Entry 12 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_Up2\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 578,
+    "size": 10,
+    "new_label": "NakaInst_SS_OnOff_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"SS_OnOff\" + 0xFF fill: name of EditSwStyleID value 0x0B",
+    "header": [
+     "; NakaInst_SS_OnOff_Str -- 10 x char: \"SS_OnOff\" + 0xFF fill, name of EditSwStyleID value 0x0B",
+     "; Entry 11 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_OnOff\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 588,
+    "size": 6,
+    "new_label": "NakaInst_SS_No_Str",
+    "ctype": "char",
+    "dims": "[6]",
+    "cdoc": "\"SS_No\": name of EditSwStyleID value 0x0A",
+    "header": [
+     "; NakaInst_SS_No_Str -- 6 x char: \"SS_No\", name of EditSwStyleID value 0x0A",
+     "; Entry 10 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_No\\x00'"
+   },
+   {
+    "off_in_slice": 594,
+    "size": 8,
+    "new_label": "NakaInst_SS_Yes_Str",
+    "ctype": "char",
+    "dims": "[8]",
+    "cdoc": "\"SS_Yes\" + 0xFF fill: name of EditSwStyleID value 9",
+    "header": [
+     "; NakaInst_SS_Yes_Str -- 8 x char: \"SS_Yes\" + 0xFF fill, name of EditSwStyleID value 9",
+     "; Entry 9 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_Yes\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 602,
+    "size": 10,
+    "new_label": "NakaInst_SS_Right_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"SS_Right\" + 0xFF fill: name of EditSwStyleID value 8",
+    "header": [
+     "; NakaInst_SS_Right_Str -- 10 x char: \"SS_Right\" + 0xFF fill, name of EditSwStyleID value 8",
+     "; Entry 8 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_Right\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 612,
+    "size": 8,
+    "new_label": "NakaInst_SS_Left_Str",
+    "ctype": "char",
+    "dims": "[8]",
+    "cdoc": "\"SS_Left\": name of EditSwStyleID value 7",
+    "header": [
+     "; NakaInst_SS_Left_Str -- 8 x char: \"SS_Left\", name of EditSwStyleID value 7",
+     "; Entry 7 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_Left\\x00'"
+   },
+   {
+    "off_in_slice": 620,
+    "size": 6,
+    "new_label": "NakaInst_SS_OK_Str",
+    "ctype": "char",
+    "dims": "[6]",
+    "cdoc": "\"SS_OK\": name of EditSwStyleID value 6",
+    "header": [
+     "; NakaInst_SS_OK_Str -- 6 x char: \"SS_OK\", name of EditSwStyleID value 6",
+     "; Entry 6 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_OK\\x00'"
+   },
+   {
+    "off_in_slice": 626,
+    "size": 8,
+    "new_label": "NakaInst_SS_Off_Str",
+    "ctype": "char",
+    "dims": "[8]",
+    "cdoc": "\"SS_Off\" + 0xFF fill: name of EditSwStyleID value 5",
+    "header": [
+     "; NakaInst_SS_Off_Str -- 8 x char: \"SS_Off\" + 0xFF fill, name of EditSwStyleID value 5",
+     "; Entry 5 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_Off\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 634,
+    "size": 6,
+    "new_label": "NakaInst_SS_On_Str",
+    "ctype": "char",
+    "dims": "[6]",
+    "cdoc": "\"SS_On\": name of EditSwStyleID value 4",
+    "header": [
+     "; NakaInst_SS_On_Str -- 6 x char: \"SS_On\", name of EditSwStyleID value 4",
+     "; Entry 4 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_On\\x00'"
+   },
+   {
+    "off_in_slice": 640,
+    "size": 10,
+    "new_label": "NakaInst_SS_UpDown_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"SS_UpDown\": name of EditSwStyleID value 3",
+    "header": [
+     "; NakaInst_SS_UpDown_Str -- 10 x char: \"SS_UpDown\", name of EditSwStyleID value 3",
+     "; Entry 3 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_UpDown\\x00'"
+   },
+   {
+    "off_in_slice": 650,
+    "size": 8,
+    "new_label": "NakaInst_SS_Down_Str",
+    "ctype": "char",
+    "dims": "[8]",
+    "cdoc": "\"SS_Down\": name of EditSwStyleID value 2",
+    "header": [
+     "; NakaInst_SS_Down_Str -- 8 x char: \"SS_Down\", name of EditSwStyleID value 2",
+     "; Entry 2 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_Down\\x00'"
+   },
+   {
+    "off_in_slice": 658,
+    "size": 6,
+    "new_label": "NakaInst_SS_Up_Str",
+    "ctype": "char",
+    "dims": "[6]",
+    "cdoc": "\"SS_Up\": name of EditSwStyleID value 1",
+    "header": [
+     "; NakaInst_SS_Up_Str -- 6 x char: \"SS_Up\", name of EditSwStyleID value 1",
+     "; Entry 1 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_Up\\x00'"
+   },
+   {
+    "off_in_slice": 664,
+    "size": 12,
+    "new_label": "NakaInst_SS_Special_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"SS_Special\" + 0xFF fill: name of EditSwStyleID value 0",
+    "header": [
+     "; NakaInst_SS_Special_Str -- 12 x char: \"SS_Special\" + 0xFF fill, name of EditSwStyleID value 0",
+     "; Entry 0 of NakaInst_EditSwStyleID_EnumTable points here."
+    ],
+    "check": "b==b'SS_Special\\x00\\xff'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:8713 `ldw (xbc + 8), 0x37` -- ExitWindow_OK registers 55 SupportClass objects",
+   "ui/ui_widget_defs.s:8714 `lda xwa, (ExitWindow_OK_Data_2:24)` -- their 12-byte records {u32 proc, u16 count, u16 size, u32 value-name list}",
+   "ui/ui_widget_defs.s:17428 `ld xbc, EVT_GET_INSTANCE` -- CommonIDProc gets the object's SupportClass record",
+   "ui/ui_widget_defs.s:17502 `cpw (xwa + 4), 0x0` -- record +4 = number of named values (0: no name search)",
+   "ui/ui_widget_defs.s:17505 `ld xbc, (xwa + 8)` -- record +8 = the value-name list",
+   "ui/ui_widget_defs.s:17512 `cp xwa, (xhl + 4)` -- entry +4 = 32-bit value compared with the property value",
+   "ui/ui_widget_defs.s:17514 `ld xwa, (xhl)` -- entry +0 = name pointer, Strcpy'd out on a match",
+   "ui/ui_widget_defs.s:17525 `inc 8, xde` -- 8-byte entries",
+   "ui/ui_widget_defs.s:17531 `cp (xix), 0x0` -- the list ends at the entry whose name is \"\"",
+   "ui/ui_widget_defs.s:17553 `call Strcmp` -- SET_PROPERTY_EX matches the text against each name; 17563 `ld xbc, (xbc + 4)` stores that entry's value",
+   "ui/ui_widget_defs.s:14504 `ld bc, (xhl)` / 14505 `extz xbc` -- EditSwIDProc: 16-bit property, zero-extended, then CommonIDProc (14513)",
+   "ui/ui_widget_defs.s:14453 `ld c, (xhl)` -- EditSwStyleIDProc: 8-bit property (record size 1), then CommonIDProc (14461)",
+   "ExitWindow_OK_Data_2 record 36 = {EditSwIDProc, count 20, size 2, list 0xEB6DD6 (this slice)}, record 37 = {EditSwStyleIDProc, 17, 1, 0xEB6F54 (slice+382)}"
+  ],
+  "note": "Two lists: EditSwID (ES_Bottom1..8 = 0..7, ES_Right1..5 = 8..0x0C, ES_Left1..5 = 0x88..0x8C, ES_Exit = 0x0F, ES_None = 0xFF) and EditSwStyleID (SS_Special .. SS_Right2 = 0..0x10).",
+  "asm": "ui_widgets/debug_naming_panel_sim.s",
+  "size": 676,
+  "blob": "naka_debug_naming",
+  "off_v10": 17112,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "DiskAttention_PtrTable",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 24,
+    "new_label": "DiskAttention_TextByLanguage",
+    "ctype": "uint32_t",
+    "dims": "[6]",
+    "cdoc": "the DiskAttention heading text (\"ATTENTION!\"), one pointer per language (0 English, 1 German, 2 French, 3 Spanish, 4 Italian, 5 Indonesian); Italian holds the English text",
+    "header": [
+     "; DiskAttention_TextByLanguage -- 6 x u32: the DiskAttention heading text (\"ATTENTION!\"), indexed by the language number (RAM 0x340E4)",
+     "; DiskAttention (file_io/medley.s) returns it for EVT_GET_LANGUAGE_PTR; AcLanguageTextProc (ui/ui_widget_defs.s) draws entry",
+     "; [language] with EVT_PARA_DRAW.  Order 0 English, 1 German, 2 French, 3 Spanish, 4 Italian, 5 Indonesian",
+     "; (Str_PleaseWait_Multilingual); the strings follow in reverse order."
+    ],
+    "check": "len(b)==24 and [x-struct.unpack_from('<I',b,0)[0] for x in struct.unpack('<6I',b)]==[0, -10, -22, -34, -46, -58]"
+   },
+   {
+    "off_in_slice": 24,
+    "size": 12,
+    "new_label": "DiskAttention_Text_Indonesian",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"Perhatian !\": Indonesian entry of DiskAttention_TextByLanguage",
+    "header": [
+     "; DiskAttention_Text_Indonesian -- 12 x char: \"Perhatian !\", Indonesian entry of DiskAttention_TextByLanguage",
+     "; DiskAttention_TextByLanguage[5] points here."
+    ],
+    "check": "b==b'Perhatian !\\x00'"
+   },
+   {
+    "off_in_slice": 36,
+    "size": 12,
+    "new_label": "DiskAttention_Text_Italian",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"ATTENTION!\" + 0xFF fill: Italian entry of DiskAttention_TextByLanguage",
+    "header": [
+     "; DiskAttention_Text_Italian -- 12 x char: \"ATTENTION!\" + 0xFF fill, Italian entry of DiskAttention_TextByLanguage",
+     "; DiskAttention_TextByLanguage[4] points here."
+    ],
+    "check": "b==b'ATTENTION!\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 48,
+    "size": 12,
+    "new_label": "DiskAttention_Text_Spanish",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"\u00a1ATENCI\u00d3N!\" + 0xFF fill: Spanish entry of DiskAttention_TextByLanguage",
+    "header": [
+     "; DiskAttention_Text_Spanish -- 12 x char: \"\u00a1ATENCI\u00d3N!\" + 0xFF fill, Spanish entry of DiskAttention_TextByLanguage",
+     "; DiskAttention_TextByLanguage[3] points here."
+    ],
+    "check": "b==b'\\xa1ATENCI\\xd3N!\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 60,
+    "size": 12,
+    "new_label": "DiskAttention_Text_French",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"ATTENTION!\" + 0xFF fill: French entry of DiskAttention_TextByLanguage",
+    "header": [
+     "; DiskAttention_Text_French -- 12 x char: \"ATTENTION!\" + 0xFF fill, French entry of DiskAttention_TextByLanguage",
+     "; DiskAttention_TextByLanguage[2] points here."
+    ],
+    "check": "b==b'ATTENTION!\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 72,
+    "size": 10,
+    "new_label": "DiskAttention_Text_German",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"ACHTUNG !\": German entry of DiskAttention_TextByLanguage",
+    "header": [
+     "; DiskAttention_Text_German -- 10 x char: \"ACHTUNG !\", German entry of DiskAttention_TextByLanguage",
+     "; DiskAttention_TextByLanguage[1] points here."
+    ],
+    "check": "b==b'ACHTUNG !\\x00'"
+   },
+   {
+    "off_in_slice": 82,
+    "size": 12,
+    "new_label": "DiskAttention_Text_English",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"ATTENTION!\" + 0xFF fill: English entry of DiskAttention_TextByLanguage",
+    "header": [
+     "; DiskAttention_Text_English -- 12 x char: \"ATTENTION!\" + 0xFF fill, English entry of DiskAttention_TextByLanguage",
+     "; DiskAttention_TextByLanguage[0] points here."
+    ],
+    "check": "b==b'ATTENTION!\\x00\\xff'"
+   }
+  ],
+  "evidence": [
+   "file_io/medley.s:4546 `cp xbc, EVT_GET_LANGUAGE_PTR` / 4548 `lda xhl, (DiskAttention_PtrTable:24)` -- the table is DiskAttention's answer to EVT_GET_LANGUAGE_PTR",
+   "ui/ui_widget_defs.s:8337 `ld xbc, EVT_GET_LANGUAGE_PTR` / 8339 `call ApFuncCall` -- AcLanguageTextProc asks its function for the table",
+   "ui/ui_widget_defs.s:8340 `ld a, (0x0340e4:24)` / 8342 `sla wa, 2` / 8343 `ld xde, (xhl+wa)` -- 32-bit entry [current language]",
+   "ui/ui_widget_defs.s:8345 `ld xbc, EVT_PARA_DRAW` -- the entry is the string drawn",
+   "ui/drawbar_panel_ui.s:9030 `lda xbc, (Str_PleaseWait_Multilingual:24)` -- the same index picks the language name: 0 English, 1 German, 2 French, 3 Spanish, 4 Italian, 5 Indonesian (ui_widgets/naka_technichord_strings.c:8900)",
+   "ui/drawbar_panel_ui.s:8999 `cp a, 4:i3` -- CheckLanguage steps over language 4 (Italian) in the selector"
+  ],
+  "note": "English/French/Italian \"ATTENTION!\", German \"ACHTUNG !\", Spanish \"\\xA1ATENCI\\xD3N!\" (Latin-1), Indonesian \"Perhatian !\".",
+  "asm": "ui_widgets/disk_menu_file_io_screens.s",
+  "size": 94,
+  "blob": "naka_disk_menu_file_io",
+  "off_v10": 30770,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "AcFileSfx_DrawLoop_PtrTable",
+  "verdict": "type",
+  "basis": "reader code",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 36,
+    "new_label": "AcFileSfx_BitLabelPtrs",
+    "ctype": "uint32_t",
+    "dims": "[9]",
+    "cdoc": "[0] = blank label for a clear bit, [1..8] = label of EVT_SET_FILE_SFX mask bit 0..7 (CURRENT PANEL .. USER MIDI)",
+    "header": [
+     "; AcFileSfx_BitLabelPtrs -- 9 x u32: text of each row of the file-suffix box; [k] = label of mask bit k-1, [0] = blank",
+     "; AcFileSfxBoxProc (ui/ui_control_panel.s) on EVT_SET_FILE_SFX draws 8 rows, k = 1..8: bit 0 of the mask",
+     "; parameter set -> entry [k], clear -> entry [0] (13 spaces); the mask is shifted right once per row.",
+     "; Bits 0..7: CURRENT PANEL, PANEL MEMORY, SEQUENCER, COMPOSER, SOUND MEMORY, MSP, RHYTHM CUSTOM, USER MIDI."
+    ],
+    "check": "len(b)==36 and [x-struct.unpack_from('<I',b,0)[0] for x in struct.unpack('<9I',b)]==[0, -14, -28, -42, -56, -70, -84, -98, -112]"
+   },
+   {
+    "off_in_slice": 36,
+    "size": 126,
+    "new_label": "AcFileSfx_BitLabels",
+    "ctype": "struct",
+    "dims": "[9]",
+    "struct_fields": [
+     {
+      "name": "text",
+      "ctype": "char",
+      "dims": "[14]"
+     }
+    ],
+    "cdoc": "the 9 row texts, 13 characters + NUL each, in reverse order: [0] = bit 7 \"  USER MIDI  \" .. [7] = bit 0 \"CURRENT PANEL\", [8] = blank",
+    "header": [
+     "; AcFileSfx_BitLabels -- 9 x char[14]: the row texts AcFileSfx_BitLabelPtrs points at, 13 characters + NUL each",
+     "; in reverse order: [0] bit 7 \"  USER MIDI  \" .. [7] bit 0 \"CURRENT PANEL\", [8] 13 spaces (bit clear);",
+     "; drawn with DrawString by AcFileSfx_DrawLoop (ui/ui_control_panel.s)."
+    ],
+    "check": "len(b)==126 and all(b[14*k+13]==0 for k in range(9)) and b[112:126]==b' '*13+b'\\x00' and b[98:112]==b'CURRENT PANEL\\x00'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_control_panel.s:458 `cp xiz, EVT_SET_FILE_SFX` / 459 `jr z, AcFileSfx_HandleSfxEvent` -- reached on EVT_SET_FILE_SFX",
+   "ui/ui_control_panel.s:524 `ldw (xsp + 4), 0x1` -- row counter k starts at 1",
+   "ui/ui_control_panel.s:527 `lda xhl, (AcFileSfx_DrawLoop_PtrTable:24)` / 533 `bit 0, de` / 537 `sll xde, 2` / 538 `add xhl, xde` / 539 `ld xde, (xhl)` -- mask bit set: 32-bit entry [k]",
+   "ui/ui_control_panel.s:547 `ld xde, (xhl)` -- mask bit clear: entry [0]",
+   "ui/ui_control_panel.s:554 `call DrawString` / 558 `srl xwa, 1` / 561 `cpw (xsp + 4), 0x9` -- the entry is the row text; the mask shifts right once per row, rows 1..8"
+  ],
+  "note": "The [nakarest] note's 180 B is stale; the slice is 162 B and ends with the blank text.",
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 162,
+  "blob": "naka_disk_warning",
+  "off_v10": 2886,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "WndScroll_SearchCharTable_PtrTable",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 132,
+    "new_label": "WndScroll_SymbolPageChars",
+    "ctype": "uint32_t",
+    "dims": "[33]",
+    "cdoc": "character-entry page 2 (symbols): [i] = text of symbol i, \"~XX\" = character code 0xXX (ConvertStrings); [32] = \"\"",
+    "header": [
+     "; WndScroll_SymbolPageChars -- 33 x u32: page 2 (symbols) of the name-entry character pages; [i] = symbol i as text,",
+     "; \"~XX\" meaning character code 0xXX (ConvertStrings).  Entry 2 of Data_SoundEditorCharsLayout (one table per page,",
+     "; RAM 0x274DA = page).  WndScroll_SearchCharTable (ui/ui_window_procs.s) converts entries 0..31 and compares each",
+     "; with the character under the cursor to find its page/index; [32] = \"\" is past the search bound (31)."
+    ],
+    "check": "len(b)==132 and [x-struct.unpack_from('<I',b,128)[0] for x in struct.unpack('<33I',b)]==[76, 74, 72, 70, 68, 66, 62, 58, 56, 54, 50, 46, 44, 42, 40, 38, 36, 34, 32, 30, 28, 26, 22, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0]"
+   },
+   {
+    "off_in_slice": 132,
+    "size": 2,
+    "new_label": "WndScroll_Sym_End",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: entry 32 of WndScroll_SymbolPageChars (not reached by the search)",
+    "header": [
+     "; WndScroll_Sym_End -- 2 x char: \"\" + 0xFF fill, entry 32 of WndScroll_SymbolPageChars (not reached by the search)",
+     "; WndScroll_SymbolPageChars[32] points here."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 134,
+    "size": 2,
+    "new_label": "WndScroll_Sym_RBrace",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"}\": symbol 31 of page 2",
+    "header": [
+     "; WndScroll_Sym_RBrace -- 2 x char: \"}\", symbol 31 of page 2",
+     "; WndScroll_SymbolPageChars[31] points here."
+    ],
+    "check": "b==b'}\\x00'"
+   },
+   {
+    "off_in_slice": 136,
+    "size": 2,
+    "new_label": "WndScroll_Sym_LBrace",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"{\": symbol 30 of page 2",
+    "header": [
+     "; WndScroll_Sym_LBrace -- 2 x char: \"{\", symbol 30 of page 2",
+     "; WndScroll_SymbolPageChars[30] points here."
+    ],
+    "check": "b==b'{\\x00'"
+   },
+   {
+    "off_in_slice": 138,
+    "size": 2,
+    "new_label": "WndScroll_Sym_RBracket",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"]\": symbol 29 of page 2",
+    "header": [
+     "; WndScroll_Sym_RBracket -- 2 x char: \"]\", symbol 29 of page 2",
+     "; WndScroll_SymbolPageChars[29] points here."
+    ],
+    "check": "b==b']\\x00'"
+   },
+   {
+    "off_in_slice": 140,
+    "size": 2,
+    "new_label": "WndScroll_Sym_LBracket",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"[\": symbol 28 of page 2",
+    "header": [
+     "; WndScroll_Sym_LBracket -- 2 x char: \"[\", symbol 28 of page 2",
+     "; WndScroll_SymbolPageChars[28] points here."
+    ],
+    "check": "b==b'[\\x00'"
+   },
+   {
+    "off_in_slice": 142,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Greater",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\">\": symbol 27 of page 2",
+    "header": [
+     "; WndScroll_Sym_Greater -- 2 x char: \">\", symbol 27 of page 2",
+     "; WndScroll_SymbolPageChars[27] points here."
+    ],
+    "check": "b==b'>\\x00'"
+   },
+   {
+    "off_in_slice": 144,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Less",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"<\": symbol 26 of page 2",
+    "header": [
+     "; WndScroll_Sym_Less -- 2 x char: \"<\", symbol 26 of page 2",
+     "; WndScroll_SymbolPageChars[26] points here."
+    ],
+    "check": "b==b'<\\x00'"
+   },
+   {
+    "off_in_slice": 146,
+    "size": 2,
+    "new_label": "WndScroll_Sym_RParen",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\")\": symbol 25 of page 2",
+    "header": [
+     "; WndScroll_Sym_RParen -- 2 x char: \")\", symbol 25 of page 2",
+     "; WndScroll_SymbolPageChars[25] points here."
+    ],
+    "check": "b==b')\\x00'"
+   },
+   {
+    "off_in_slice": 148,
+    "size": 2,
+    "new_label": "WndScroll_Sym_LParen",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"(\": symbol 24 of page 2",
+    "header": [
+     "; WndScroll_Sym_LParen -- 2 x char: \"(\", symbol 24 of page 2",
+     "; WndScroll_SymbolPageChars[24] points here."
+    ],
+    "check": "b==b'(\\x00'"
+   },
+   {
+    "off_in_slice": 150,
+    "size": 4,
+    "new_label": "WndScroll_Sym_Code8D",
+    "ctype": "char",
+    "dims": "[4]",
+    "cdoc": "\"~8d\": symbol 23 of page 2, character code 0x8D",
+    "header": [
+     "; WndScroll_Sym_Code8D -- 4 x char: \"~8d\", symbol 23 of page 2, character code 0x8D",
+     "; WndScroll_SymbolPageChars[23] points here."
+    ],
+    "check": "b==b'~8d\\x00'"
+   },
+   {
+    "off_in_slice": 154,
+    "size": 4,
+    "new_label": "WndScroll_Sym_Code8B",
+    "ctype": "char",
+    "dims": "[4]",
+    "cdoc": "\"~8b\": symbol 22 of page 2, character code 0x8B",
+    "header": [
+     "; WndScroll_Sym_Code8B -- 4 x char: \"~8b\", symbol 22 of page 2, character code 0x8B",
+     "; WndScroll_SymbolPageChars[22] points here."
+    ],
+    "check": "b==b'~8b\\x00'"
+   },
+   {
+    "off_in_slice": 158,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Equals",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"=\": symbol 21 of page 2",
+    "header": [
+     "; WndScroll_Sym_Equals -- 2 x char: \"=\", symbol 21 of page 2",
+     "; WndScroll_SymbolPageChars[21] points here."
+    ],
+    "check": "b==b'=\\x00'"
+   },
+   {
+    "off_in_slice": 160,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Slash",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"/\": symbol 20 of page 2",
+    "header": [
+     "; WndScroll_Sym_Slash -- 2 x char: \"/\", symbol 20 of page 2",
+     "; WndScroll_SymbolPageChars[20] points here."
+    ],
+    "check": "b==b'/\\x00'"
+   },
+   {
+    "off_in_slice": 162,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Asterisk",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"*\": symbol 19 of page 2",
+    "header": [
+     "; WndScroll_Sym_Asterisk -- 2 x char: \"*\", symbol 19 of page 2",
+     "; WndScroll_SymbolPageChars[19] points here."
+    ],
+    "check": "b==b'*\\x00'"
+   },
+   {
+    "off_in_slice": 164,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Minus",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"-\": symbol 18 of page 2",
+    "header": [
+     "; WndScroll_Sym_Minus -- 2 x char: \"-\", symbol 18 of page 2",
+     "; WndScroll_SymbolPageChars[18] points here."
+    ],
+    "check": "b==b'-\\x00'"
+   },
+   {
+    "off_in_slice": 166,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Plus",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"+\": symbol 17 of page 2",
+    "header": [
+     "; WndScroll_Sym_Plus -- 2 x char: \"+\", symbol 17 of page 2",
+     "; WndScroll_SymbolPageChars[17] points here."
+    ],
+    "check": "b==b'+\\x00'"
+   },
+   {
+    "off_in_slice": 168,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Semicolon",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\";\": symbol 16 of page 2",
+    "header": [
+     "; WndScroll_Sym_Semicolon -- 2 x char: \";\", symbol 16 of page 2",
+     "; WndScroll_SymbolPageChars[16] points here."
+    ],
+    "check": "b==b';\\x00'"
+   },
+   {
+    "off_in_slice": 170,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Colon",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\":\": symbol 15 of page 2",
+    "header": [
+     "; WndScroll_Sym_Colon -- 2 x char: \":\", symbol 15 of page 2",
+     "; WndScroll_SymbolPageChars[15] points here."
+    ],
+    "check": "b==b':\\x00'"
+   },
+   {
+    "off_in_slice": 172,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Period",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\".\": symbol 14 of page 2",
+    "header": [
+     "; WndScroll_Sym_Period -- 2 x char: \".\", symbol 14 of page 2",
+     "; WndScroll_SymbolPageChars[14] points here."
+    ],
+    "check": "b==b'.\\x00'"
+   },
+   {
+    "off_in_slice": 174,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Comma",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\",\": symbol 13 of page 2",
+    "header": [
+     "; WndScroll_Sym_Comma -- 2 x char: \",\", symbol 13 of page 2",
+     "; WndScroll_SymbolPageChars[13] points here."
+    ],
+    "check": "b==b',\\x00'"
+   },
+   {
+    "off_in_slice": 176,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Backquote",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"`\": symbol 12 of page 2",
+    "header": [
+     "; WndScroll_Sym_Backquote -- 2 x char: \"`\", symbol 12 of page 2",
+     "; WndScroll_SymbolPageChars[12] points here."
+    ],
+    "check": "b==b'`\\x00'"
+   },
+   {
+    "off_in_slice": 178,
+    "size": 4,
+    "new_label": "WndScroll_Sym_SQuote",
+    "ctype": "char",
+    "dims": "[4]",
+    "cdoc": "\"~27\": symbol 11 of page 2, character code 0x27",
+    "header": [
+     "; WndScroll_Sym_SQuote -- 4 x char: \"~27\", symbol 11 of page 2, character code 0x27",
+     "; WndScroll_SymbolPageChars[11] points here."
+    ],
+    "check": "b==b'~27\\x00'"
+   },
+   {
+    "off_in_slice": 182,
+    "size": 4,
+    "new_label": "WndScroll_Sym_DQuote",
+    "ctype": "char",
+    "dims": "[4]",
+    "cdoc": "\"~22\": symbol 10 of page 2, character code 0x22",
+    "header": [
+     "; WndScroll_Sym_DQuote -- 4 x char: \"~22\", symbol 10 of page 2, character code 0x22",
+     "; WndScroll_SymbolPageChars[10] points here."
+    ],
+    "check": "b==b'~22\\x00'"
+   },
+   {
+    "off_in_slice": 186,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Bar",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"|\": symbol 9 of page 2",
+    "header": [
+     "; WndScroll_Sym_Bar -- 2 x char: \"|\", symbol 9 of page 2",
+     "; WndScroll_SymbolPageChars[9] points here."
+    ],
+    "check": "b==b'|\\x00'"
+   },
+   {
+    "off_in_slice": 188,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Caret",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"^\": symbol 8 of page 2",
+    "header": [
+     "; WndScroll_Sym_Caret -- 2 x char: \"^\", symbol 8 of page 2",
+     "; WndScroll_SymbolPageChars[8] points here."
+    ],
+    "check": "b==b'^\\x00'"
+   },
+   {
+    "off_in_slice": 190,
+    "size": 4,
+    "new_label": "WndScroll_Sym_Code5C",
+    "ctype": "char",
+    "dims": "[4]",
+    "cdoc": "\"~5c\": symbol 7 of page 2, character code 0x5C",
+    "header": [
+     "; WndScroll_Sym_Code5C -- 4 x char: \"~5c\", symbol 7 of page 2, character code 0x5C",
+     "; WndScroll_SymbolPageChars[7] points here."
+    ],
+    "check": "b==b'~5c\\x00'"
+   },
+   {
+    "off_in_slice": 194,
+    "size": 4,
+    "new_label": "WndScroll_Sym_At",
+    "ctype": "char",
+    "dims": "[4]",
+    "cdoc": "\"~40\": symbol 6 of page 2, character code 0x40",
+    "header": [
+     "; WndScroll_Sym_At -- 4 x char: \"~40\", symbol 6 of page 2, character code 0x40",
+     "; WndScroll_SymbolPageChars[6] points here."
+    ],
+    "check": "b==b'~40\\x00'"
+   },
+   {
+    "off_in_slice": 198,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Question",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"?\": symbol 5 of page 2",
+    "header": [
+     "; WndScroll_Sym_Question -- 2 x char: \"?\", symbol 5 of page 2",
+     "; WndScroll_SymbolPageChars[5] points here."
+    ],
+    "check": "b==b'?\\x00'"
+   },
+   {
+    "off_in_slice": 200,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Ampersand",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"&\": symbol 4 of page 2",
+    "header": [
+     "; WndScroll_Sym_Ampersand -- 2 x char: \"&\", symbol 4 of page 2",
+     "; WndScroll_SymbolPageChars[4] points here."
+    ],
+    "check": "b==b'&\\x00'"
+   },
+   {
+    "off_in_slice": 202,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Percent",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"%\": symbol 3 of page 2",
+    "header": [
+     "; WndScroll_Sym_Percent -- 2 x char: \"%\", symbol 3 of page 2",
+     "; WndScroll_SymbolPageChars[3] points here."
+    ],
+    "check": "b==b'%\\x00'"
+   },
+   {
+    "off_in_slice": 204,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Dollar",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"$\": symbol 2 of page 2",
+    "header": [
+     "; WndScroll_Sym_Dollar -- 2 x char: \"$\", symbol 2 of page 2",
+     "; WndScroll_SymbolPageChars[2] points here."
+    ],
+    "check": "b==b'$\\x00'"
+   },
+   {
+    "off_in_slice": 206,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Hash",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"#\": symbol 1 of page 2",
+    "header": [
+     "; WndScroll_Sym_Hash -- 2 x char: \"#\", symbol 1 of page 2",
+     "; WndScroll_SymbolPageChars[1] points here."
+    ],
+    "check": "b==b'#\\x00'"
+   },
+   {
+    "off_in_slice": 208,
+    "size": 2,
+    "new_label": "WndScroll_Sym_Exclam",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"!\": symbol 0 of page 2",
+    "header": [
+     "; WndScroll_Sym_Exclam -- 2 x char: \"!\", symbol 0 of page 2",
+     "; WndScroll_SymbolPageChars[0] points here."
+    ],
+    "check": "b==b'!\\x00'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_window_procs.s:937 `lda xwa, (WndScroll_SearchCharTable_PtrTable:24)` -- table base",
+   "ui/ui_window_procs.s:945 `sll xwa, 2` / 948 `ld xwa, (xwa)` / 949 `call ConvertStrings` -- 32-bit entry [iz] is text; ConvertStrings (display/graphics_text_vga.s) turns \"~XX\" into character 0xXX",
+   "ui/ui_window_procs.s:954 `ld a, (xbc)` / 955 `cp a, (xsp + 12)` / 957 `ldw (0x0274da:24), 0x0002` / 958 `ld (0x0274de:24), iz` -- compared with the character at the cursor (RAM 0x274B0 + cursor); a match selects page 2, index iz",
+   "ui/ui_window_procs.s:965 `mul wa, 0x3` / 971 `cp iz, (xbc)` -- bound = WndScroll_ItemCountCheck_Str_Chr25[mode*3 + 2] = 31: entries 0..31 are searched",
+   "ui/ui_window_procs.s:314 `ld wa, (0x0274da:24)` / 316 `sll xwa, 2` / 317 `ld xde, Data_SoundEditorCharsLayout` / 318 `add xde, xwa` / 319 `ld xwa, (xde)` -- the per-page table pointers, index = page; entry 2 of Data_SoundEditorCharsLayout is this table"
+  ],
+  "note": "33 string pieces follow the table (in reverse index order).  0x5C is named Code5C rather than Backslash: the glyph in the KN5000 font was not checked.",
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 210,
+  "blob": "naka_disk_warning",
+  "off_v10": 4436,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "AcOnOff_GetText_PtrTable",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 8,
+    "new_label": "AcOnOff_ValueTexts",
+    "ctype": "uint32_t",
+    "dims": "[2]",
+    "cdoc": "text of an AcOnOffBox value: [0] = \"OFF\", [1] = \"ON \"",
+    "header": [
+     "; AcOnOff_ValueTexts -- 2 x u32: text of an on/off box's value, [0] \"OFF\", [1] \"ON \"",
+     "; AcOnOff_GetText (ui/ui_widget_defs.s), EVT_GET_STRING: the 16-bit value at the instance's +50 pointer, x4,",
+     "; selects the entry, which is Strcpy'd into the caller's buffer."
+    ],
+    "check": "len(b)==8 and struct.unpack('<2I',b)[0]-struct.unpack('<2I',b)[1]==4"
+   },
+   {
+    "off_in_slice": 8,
+    "size": 4,
+    "new_label": "AcOnOff_OnText",
+    "ctype": "char",
+    "dims": "[4]",
+    "cdoc": "\"ON \": text of value 1",
+    "header": [
+     "; AcOnOff_OnText -- 4 x char: \"ON \", text of value 1",
+     "; AcOnOff_ValueTexts[1] points here."
+    ],
+    "check": "b==b'ON \\x00'"
+   },
+   {
+    "off_in_slice": 12,
+    "size": 4,
+    "new_label": "AcOnOff_OffText",
+    "ctype": "char",
+    "dims": "[4]",
+    "cdoc": "\"OFF\": text of value 0",
+    "header": [
+     "; AcOnOff_OffText -- 4 x char: \"OFF\", text of value 0",
+     "; AcOnOff_ValueTexts[0] points here."
+    ],
+    "check": "b==b'OFF\\x00'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:783 `cp xbc, EVT_GET_STRING` / 784 `jr z, AcOnOff_GetText` -- on EVT_GET_STRING",
+   "ui/ui_widget_defs.s:798 `ld xwa, (xhl + 50)` / 799 `ld wa, (xwa)` / 801 `sll xwa, 2` / 802 `ld xbc, AcOnOff_GetText_PtrTable` / 803 `add xbc, xwa` / 804 `ld xwa, (xbc)` -- 16-bit value behind the instance's +50 pointer selects a 32-bit entry",
+   "ui/ui_widget_defs.s:808 `call Strcpy` -- the entry is a string copied to the caller's buffer"
+  ],
+  "note": "The [nakarest] note's 32 B is stale; the slice is 16 B.",
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 16,
+  "blob": "naka_disk_warning",
+  "off_v10": 5614,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "PsTrackSwitchProc_PtrTable",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 80,
+    "new_label": "PsTrkSw_AssignNamePtrs",
+    "ctype": "uint32_t",
+    "dims": "[20]",
+    "cdoc": "name drawn under a track switch for its assignment value 0..19: RT1, LFT, RT2, P 8, P 9, P10, P11, P12, P 5, P 6, P 7, P 4, DRM, CHD, APC, CTL, RHY, P13, P14, P15",
+    "header": [
+     "; PsTrkSw_AssignNamePtrs -- 20 x u32: 3-character name drawn for a track switch's assignment value 0..19",
+     "; PsTrackSwitchProc (ui/ui_widget_defs.s) copies the 20 pointers (0x28 words) to its frame; on EVT_PARA_DRAW",
+     "; it draws entry [value at the instance's +28 pointer] (the parameter's low 16 bits) with DrawStringCentered.",
+     "; 0 RT1, 1 LFT, 2 RT2, 3 P 8, 4 P 9, 5 P10, 6 P11, 7 P12, 8 P 5, 9 P 6, 10 P 7, 11 P 4, 12 DRM, 13 CHD, 14 APC,",
+     "; 15 CTL, 16 RHY, 17 P13, 18 P14, 19 P15 (the names are stored after it in reverse order)."
+    ],
+    "check": "len(b)==80 and [x-struct.unpack_from('<I',b,76)[0] for x in struct.unpack('<20I',b)]==[76, 72, 68, 64, 60, 56, 52, 48, 44, 40, 36, 32, 28, 24, 20, 16, 12, 8, 4, 0]"
+   },
+   {
+    "off_in_slice": 80,
+    "size": 80,
+    "new_label": "PsTrkSw_AssignNames",
+    "ctype": "struct",
+    "dims": "[20]",
+    "struct_fields": [
+     {
+      "name": "text",
+      "ctype": "char",
+      "dims": "[4]"
+     }
+    ],
+    "cdoc": "the 20 assignment names, 3 characters + NUL, element k = value 19-k (P15, P14, P13, RHY, ... LFT, RT1)",
+    "header": [
+     "; PsTrkSw_AssignNames -- 20 x char[4]: the names PsTrkSw_AssignNamePtrs points at, element k = value 19-k",
+     "; (\"P15\" first, \"RT1\" last); drawn by PsTrkSw_Confirm_DrawSecondary (ui/ui_widget_defs.s)."
+    ],
+    "check": "len(b)==80 and all(b[4*k+3]==0 for k in range(20)) and b[76:80]==b'RT1\\x00' and b[0:4]==b'P15\\x00'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:7655 `ld xiy, PsTrackSwitchProc_PtrTable` / 7656 `lda xix, (xsp + 38)` / 7657 `ldw bc, 0x28` / 7658 `ldirw` -- 20 pointers copied to the frame at +38",
+   "ui/ui_widget_defs.s:7725 `srl xwa, 16` / 7731 `ld xwa, (xwa + 24)` -- EVT_PARA_DRAW: the parameter's high 16 bits go to the value behind +24",
+   "ui/ui_widget_defs.s:7739 `ld xwa, (xwa + 28)` / 7740 `ld (xwa), bc` -- and the low 16 bits to the value behind +28",
+   "ui/ui_widget_defs.s:7885 `ld xde, (xde + 28)` / 7886 `ld de, (xde)` / 7887 `sla de, 2` / 7888 `lda xhl, (xsp + 38)` / 7889 `ld xde, (xhl+de)` -- index = the +28 value, x4, into the copied table",
+   "ui/ui_widget_defs.s:7955 `call DrawStringCentered` -- the entry is drawn as text"
+  ],
+  "note": "The value meaning (a part / channel assignment) is inferred from the strings only; the header states what the code shows.",
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 160,
+  "blob": "naka_disk_warning",
+  "off_v10": 6820,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "ExitWindow_Confirm_Data",
+  "verdict": "type",
+  "basis": "reader code",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 14,
+    "new_label": "NakaMode_InitRecord",
+    "ctype": "struct",
+    "dims": "",
+    "struct_fields": [
+     {
+      "name": "mode_proc",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "start_title",
+      "ctype": "int32_t",
+      "dims": ""
+     },
+     {
+      "name": "user_id",
+      "ctype": "int16_t",
+      "dims": ""
+     },
+     {
+      "name": "name",
+      "ctype": "uint32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "initial contents of each of the 32 Mode objects: proc NAKA_APFUNC_DefaultFunction (0x1200000), start title -1, user id -1, name \"\"",
+    "header": [
+     "; NakaMode_InitRecord -- 1 x 14-byte struct {u32 mode_proc, s32 start_title, s16 user_id, u32 name}: blank Mode object",
+     "; InitializeObjectTable (ui/ui_widget_defs.s, loop ExitWindow_Confirm) copies it (7 words) into all 32 records at",
+     "; RAM 0x328FC, then registers them as class Mode.  ModeProc reads +0 (GET_MODE_PROC/_ID), +4 (GET_START_TITLE),",
+     "; +8 (GET_USER_ID, sign-extended), +10 (GET_NAME).  Values: NAKA_APFUNC_DefaultFunction, -1, -1, \"\"."
+    ],
+    "check": "len(b)==14 and struct.unpack('<Iih',b[:10])==(0x1200000,-1,-1)"
+   },
+   {
+    "off_in_slice": 14,
+    "size": 2,
+    "new_label": "NakaMode_InitName",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: name of a blank Mode object",
+    "header": [
+     "; NakaMode_InitName -- 2 x char: \"\" + 0xFF fill, name of a blank Mode object",
+     "; NakaMode_InitRecord.name points here."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:8684 `lda xbc, (0x0328fc:24)` / 8686 `lda xde, (xbc+448)` -- 32 x 14-byte records at RAM 0x328FC",
+   "ui/ui_widget_defs.s:8689 `ld xiy, ExitWindow_Confirm_Data` / 8691 `ld bc, 7:i3` / 8692 `ldirw` / 8693 `lda xwa, (xwa + 14)` -- this 14-byte record copied into each",
+   "ui/ui_widget_defs.s:8719 `ld xwa, NAKA_CLASS_Mode` / 8721 `lda xwa, (ModeProc:24)` / 8723 `ldw (xbc + 8), 0x20` / 8724 `lda xwa, (0x0328fc:24)` -- registered as 32 objects of class Mode, handled by ModeProc",
+   "ui/ui_widget_defs.s:9729 `cp xiz, EVT_GET_NAME` / 9730 `jrl z, ObjectEnum_Init` -- GET_NAME goes to ObjectEnum_Init",
+   "ui/ui_widget_defs.s:9784 `sll xbc, 3` / 9785 `sub xbc, xwa` / 9786 `add xbc, xbc` / 9788 `ld xhl, (xbc)` -- record = base + 14*index; +0 = mode proc id, 32-bit",
+   "ui/ui_widget_defs.s:9798 `ld xhl, (xbc + 4)` -- +4 = start title, 32-bit",
+   "ui/ui_widget_defs.s:9808 `ld hl, (xbc + 8)` / 9809 `exts xhl` -- +8 = user id, signed 16-bit",
+   "ui/ui_widget_defs.s:9820 `ld xhl, (xbc + 10)` -- +10 = name pointer",
+   "shared/event_codes.s:373 `.equ NAKA_APFUNC_DefaultFunction, 0x1200000` -- the +0 value"
+  ],
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 16,
+  "blob": "naka_disk_warning",
+  "off_v10": 7200,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "DrawText_ExtendedLayout_Data",
+  "verdict": "refuse",
+  "basis": "reader code",
+  "why_refused": "The 8 bytes are one RECT {s16 x1, s16 y1, s16 x2, s16 y2} = {0, 0, 319, 239}, the whole 320 x 240 screen: DrawText_ExtendedLayout copies them (4 words) into its frame and passes that copy as XWA, the rectangle, to DrawText_QueueOrDirect.  The sound typing is int16_t[4] (or a 4 x s16 struct), but the C member at +4 is `uint32_t ... = NAKA_ADDR(Naka_PresentationRootState)`: a false pointer, 0x00EF013F = x2 319 | y2 239 << 16. Typing the rectangle splits that old pointer into two int16 fields, which this pass must not do.  Remove the false NAKA_ADDR first (it is the same pattern in all three of DrawText_ExtendedLayout_Data, DrawFunc_Init_Entry_Data, DrawFunc_Init_Entry3_Data_2), then type it as int16_t[4], e.g. TextDraw_FullScreenRect.",
+  "proposed_after_fix": {
+   "ctype": "int16_t",
+   "dims": "[4]",
+   "values": [
+    0,
+    0,
+    319,
+    239
+   ]
+  },
+  "evidence": [
+   "display/graphics_text_vga.s:1135 `ld xiy, DrawText_ExtendedLayout_Data` / 1136 `lda xix, (xsp+276)` / 1137 `ld bc, 4:i3` / 1138 `ldirw` -- 8 bytes (4 words) copied to the frame",
+   "display/graphics_text_vga.s:1213 `lda xwa, (xsp+276)` / 1219 `calr DrawText_QueueOrDirect` -- the frame copy is passed as XWA (rectangle) to the text renderer",
+   "kn5000_v10_program.s:2651 `ld xwa, (xsp + 16)` / 2652 `ld xiy, xwa` / 2653 `lda xix, (xhl + 4)` / 2654 `ld bc, 4:i3` / 2655 `ldirw` -- DrawText_QueueOrDirect stores the 4 words of XWA in the queued draw command"
+  ],
+  "check": "len(b)==8 and struct.unpack('<4h',b)==(0,0,319,239)",
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 8,
+  "blob": "naka_disk_warning",
+  "off_v10": 9320,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "DrawFunc_Init_Entry_Data",
+  "verdict": "refuse",
+  "basis": "reader code",
+  "why_refused": "The 8 bytes are one RECT {s16 x1, s16 y1, s16 x2, s16 y2} = {0, 0, 319, 239}, the whole 320 x 240 screen: SeGfx_BoundOp06_Helper copies them (4 words) into its frame and passes that copy as XWA, the rectangle, to DrawText_QueueOrDirect.  The sound typing is int16_t[4] (or a 4 x s16 struct), but the C member at +4 is `uint32_t ... = NAKA_ADDR(Naka_PresentationRootState)`: a false pointer, 0x00EF013F = x2 319 | y2 239 << 16. Typing the rectangle splits that old pointer into two int16 fields, which this pass must not do.  Remove the false NAKA_ADDR first (it is the same pattern in all three of DrawText_ExtendedLayout_Data, DrawFunc_Init_Entry_Data, DrawFunc_Init_Entry3_Data_2), then type it as int16_t[4], e.g. TextDraw_FullScreenRect.",
+  "proposed_after_fix": {
+   "ctype": "int16_t",
+   "dims": "[4]",
+   "values": [
+    0,
+    0,
+    319,
+    239
+   ]
+  },
+  "evidence": [
+   "display/graphics_text_vga.s:1494 `ld xiy, DrawFunc_Init_Entry_Data` / 1495 `lda xix, (xsp+264)` / 1496 `ld bc, 4:i3` / 1497 `ldirw` -- 8 bytes (4 words) copied to the frame",
+   "display/graphics_text_vga.s:1538 `lda xwa, (xsp+264)` / 1544 `calr DrawText_QueueOrDirect` -- the frame copy is passed as XWA (rectangle) to the text renderer",
+   "kn5000_v10_program.s:2651 `ld xwa, (xsp + 16)` / 2652 `ld xiy, xwa` / 2653 `lda xix, (xhl + 4)` / 2654 `ld bc, 4:i3` / 2655 `ldirw` -- DrawText_QueueOrDirect stores the 4 words of XWA in the queued draw command"
+  ],
+  "check": "len(b)==8 and struct.unpack('<4h',b)==(0,0,319,239)",
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 8,
+  "blob": "naka_disk_warning",
+  "off_v10": 9388,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "DrawFunc_Init_Entry3_Data_2",
+  "verdict": "refuse",
+  "basis": "reader code",
+  "why_refused": "The 8 bytes are one RECT {s16 x1, s16 y1, s16 x2, s16 y2} = {0, 0, 319, 239}, the whole 320 x 240 screen: SeGfx_BoundOp0B_FormatNumber copies them (4 words) into its frame and passes that copy as XWA, the rectangle, to DrawText_QueueOrDirect.  The sound typing is int16_t[4] (or a 4 x s16 struct), but the C member at +4 is `uint32_t ... = NAKA_ADDR(Naka_PresentationRootState)`: a false pointer, 0x00EF013F = x2 319 | y2 239 << 16. Typing the rectangle splits that old pointer into two int16 fields, which this pass must not do.  Remove the false NAKA_ADDR first (it is the same pattern in all three of DrawText_ExtendedLayout_Data, DrawFunc_Init_Entry_Data, DrawFunc_Init_Entry3_Data_2), then type it as int16_t[4], e.g. TextDraw_FullScreenRect.",
+  "proposed_after_fix": {
+   "ctype": "int16_t",
+   "dims": "[4]",
+   "values": [
+    0,
+    0,
+    319,
+    239
+   ]
+  },
+  "evidence": [
+   "display/graphics_text_vga.s:1613 `ld xiy, DrawFunc_Init_Entry3_Data_2` / 1614 `lda xix, (xsp+264)` / 1615 `ld bc, 4:i3` / 1616 `ldirw` -- 8 bytes (4 words) copied to the frame",
+   "display/graphics_text_vga.s:1699 `lda xwa, (xsp+264)` / 1705 `calr DrawText_QueueOrDirect` -- the frame copy is passed as XWA (rectangle) to the text renderer",
+   "kn5000_v10_program.s:2651 `ld xwa, (xsp + 16)` / 2652 `ld xiy, xwa` / 2653 `lda xix, (xhl + 4)` / 2654 `ld bc, 4:i3` / 2655 `ldirw` -- DrawText_QueueOrDirect stores the 4 words of XWA in the queued draw command"
+  ],
+  "check": "len(b)==8 and struct.unpack('<4h',b)==(0,0,319,239)",
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 8,
+  "blob": "naka_disk_warning",
+  "off_v10": 9428,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "Equalizer_DispatchA_Data",
+  "verdict": "refuse",
+  "basis": "reader code",
+  "why_refused": "The 56 bytes are 28 x uint16_t display positions 0x30, 0x37 .. 0xE6 (step 7, the last value repeated): EqualizerCngFunc answers EVT_GET_DISP_POS for the EQ items whose value sits at RAM 0x297C, 0x2980, 0x2984 (and the default, 0x2978) with table[value] (16-bit, index x2); the other items use Equalizer_DispatchA_Data_2.  Two things block a typing in this pass: the C member at +50 is `uint32_t NakaData_DescriptorZero_ptr = NAKA_ADDR(NakaData_DescriptorZero)`, a false pointer (0x00E600DF = entries 25 and 26), which a uint16_t[28] would split; and the slice's first 2 bytes (entry 0 = 0x0030) are the tail of the C member `char A0BcA0Bc_str[1154]`.  After removing the false NAKA_ADDR and cutting that string member at the slice start, type it uint16_t[28], e.g. Equalizer_DispPosByValue_A.",
+  "proposed_after_fix": {
+   "ctype": "uint16_t",
+   "dims": "[28]"
+  },
+  "evidence": [
+   "sequencer/sequencer_ui.s:15492 `cp xbc, EVT_GET_DISP_POS` / 15493 `jr z, Equalizer_DispatchA` -- EVT_GET_DISP_POS",
+   "sequencer/sequencer_ui.s:15510 `lda xbc, (Equalizer_DispatchA_Data_2:24)` / 15511 `lda xde, (Equalizer_DispatchA_Data:24)` -- two tables, XBC and XDE",
+   "sequencer/sequencer_ui.s:15538 `ld wa, (0x297c:16)` / 15540 `add xwa, xwa` / 15541 `add xde, xwa` / 15542 `ld hl, (xde)` -- 16-bit entry [value] of this table",
+   "sequencer/sequencer_ui.s:15587 `ld wa, (0x2978:16)` / 15589 `add xwa, xwa` / 15590 `add xde, xwa` / 15591 `ld hl, (xde)` -- default path, same table"
+  ],
+  "check": "len(b)==56 and list(struct.unpack('<28H',b))==[0x30+7*i for i in range(27)]+[0xe6]",
+  "asm": "ui_widgets/effects_sequencer_screens.s",
+  "size": 56,
+  "blob": "naka_effects_seq",
+  "off_v10": 36386,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "NAKA_InitDataBlock_PtrTable_2",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 24,
+    "new_label": "FDemo_BassPortSpanishHeading_Texts",
+    "ctype": "uint32_t",
+    "dims": "[6]",
+    "cdoc": "a heading text that only Spanish fills (\"Altavoz con port\\xF3n para bajos\"); the other five are \"\", one pointer per language (0 English, 1 German, 2 French, 3 Spanish, 4 Italian, 5 Indonesian)",
+    "header": [
+     "; FDemo_BassPortSpanishHeading_Texts -- 6 x u32: a heading text that only Spanish fills (\"Altavoz con port\\xF3n para bajos\"); the other five are \"\", indexed by the language number (RAM 0x340E4)",
+     "; The ApFunction after InitializeNaka_Skip (storage/flash_floppy_handlers.s) returns it for EVT_GET_LANGUAGE_PTR; AcLanguageTextProc (ui/ui_widget_defs.s) draws entry",
+     "; [language] with EVT_PARA_DRAW.  Order 0 English, 1 German, 2 French, 3 Spanish, 4 Italian, 5 Indonesian",
+     "; (Str_PleaseWait_Multilingual); the strings follow in reverse order."
+    ],
+    "check": "len(b)==24 and [x-struct.unpack_from('<I',b,0)[0] for x in struct.unpack('<6I',b)]==[0, -2, -4, -34, -36, -38]"
+   },
+   {
+    "off_in_slice": 24,
+    "size": 2,
+    "new_label": "FDemo_BassPortSpanishHeading_Indonesian",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: Indonesian entry of FDemo_BassPortSpanishHeading_Texts",
+    "header": [
+     "; FDemo_BassPortSpanishHeading_Indonesian -- 2 x char: \"\" + 0xFF fill, Indonesian entry of FDemo_BassPortSpanishHeading_Texts",
+     "; FDemo_BassPortSpanishHeading_Texts[5] points here."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 26,
+    "size": 2,
+    "new_label": "FDemo_BassPortSpanishHeading_Italian",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: Italian entry of FDemo_BassPortSpanishHeading_Texts",
+    "header": [
+     "; FDemo_BassPortSpanishHeading_Italian -- 2 x char: \"\" + 0xFF fill, Italian entry of FDemo_BassPortSpanishHeading_Texts",
+     "; FDemo_BassPortSpanishHeading_Texts[4] points here."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 28,
+    "size": 30,
+    "new_label": "FDemo_BassPortSpanishHeading_Spanish",
+    "ctype": "char",
+    "dims": "[30]",
+    "cdoc": "\"Altavoz con port\u00f3n para bajos\": Spanish entry of FDemo_BassPortSpanishHeading_Texts",
+    "header": [
+     "; FDemo_BassPortSpanishHeading_Spanish -- 30 x char: \"Altavoz con port\u00f3n para bajos\", Spanish entry of FDemo_BassPortSpanishHeading_Texts",
+     "; FDemo_BassPortSpanishHeading_Texts[3] points here."
+    ],
+    "check": "b==b'Altavoz con port\\xf3n para bajos\\x00'"
+   },
+   {
+    "off_in_slice": 58,
+    "size": 2,
+    "new_label": "FDemo_BassPortSpanishHeading_French",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: French entry of FDemo_BassPortSpanishHeading_Texts",
+    "header": [
+     "; FDemo_BassPortSpanishHeading_French -- 2 x char: \"\" + 0xFF fill, French entry of FDemo_BassPortSpanishHeading_Texts",
+     "; FDemo_BassPortSpanishHeading_Texts[2] points here."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 60,
+    "size": 2,
+    "new_label": "FDemo_BassPortSpanishHeading_German",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: German entry of FDemo_BassPortSpanishHeading_Texts",
+    "header": [
+     "; FDemo_BassPortSpanishHeading_German -- 2 x char: \"\" + 0xFF fill, German entry of FDemo_BassPortSpanishHeading_Texts",
+     "; FDemo_BassPortSpanishHeading_Texts[1] points here."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 62,
+    "size": 2,
+    "new_label": "FDemo_BassPortSpanishHeading_English",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: English entry of FDemo_BassPortSpanishHeading_Texts",
+    "header": [
+     "; FDemo_BassPortSpanishHeading_English -- 2 x char: \"\" + 0xFF fill, English entry of FDemo_BassPortSpanishHeading_Texts",
+     "; FDemo_BassPortSpanishHeading_Texts[0] points here."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   }
+  ],
+  "evidence": [
+   "storage/flash_floppy_handlers.s:954 `ret` / 955 `cp xbc, EVT_GET_LANGUAGE_PTR` / 956 `jr nz, InitializeNaka_Skip2` / 957 `lda xhl, (NAKA_InitDataBlock_PtrTable_2:24)` -- an unlabelled ApFunction (it starts after InitializeNaka_Skip's ret) answers EVT_GET_LANGUAGE_PTR with this table",
+   "ui/ui_widget_defs.s:8337 `ld xbc, EVT_GET_LANGUAGE_PTR` / 8339 `call ApFuncCall` -- AcLanguageTextProc asks its function for the table",
+   "ui/ui_widget_defs.s:8340 `ld a, (0x0340e4:24)` / 8342 `sla wa, 2` / 8343 `ld xde, (xhl+wa)` -- 32-bit entry [current language]",
+   "ui/ui_widget_defs.s:8345 `ld xbc, EVT_PARA_DRAW` -- the entry is the string drawn",
+   "ui/drawbar_panel_ui.s:9030 `lda xbc, (Str_PleaseWait_Multilingual:24)` -- the same index picks the language name: 0 English, 1 German, 2 French, 3 Spanish, 4 Italian, 5 Indonesian (ui_widgets/naka_technichord_strings.c:8900)",
+   "storage/flash_floppy_handlers.s:950 `lda xhl, (NAKA_InitDataBlock_PtrTable:24)` -- the previous function's table: \"Bass Port Speaker\" (English, German, Indonesian), \"Amplification des graves\" (French), \"Italian\", and \"\" for Spanish -- this table carries the Spanish heading instead"
+  ],
+  "note": "Only entry 3 (Spanish) is non-empty; the neighbouring table NAKA_InitDataBlock_PtrTable has \"\" for Spanish, so the Spanish heading of the bass-port page is drawn by this second text view.  The FDemo_ prefix rests on the text content (bass-port speaker feature text), not on a traced view registration.",
+  "asm": "ui_widgets/performance_style_screens.s",
+  "size": 64,
+  "blob": "naka_perf_style",
+  "off_v10": 24364,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "NakaInst_PartID_EnumTable",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 240,
+    "new_label": "NakaInst_PartID_EnumTable",
+    "ctype": "struct",
+    "dims": "[30]",
+    "struct_fields": [
+     {
+      "name": "name",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "PartID property value names {name, value}: 29 named values + the {\"\", 0} end entry (SupportClass record 52, PartIDProc)",
+    "header": [
+     "; NakaInst_PartID_EnumTable -- 30 x {u32 name, s32 value}: value names of the PartID property type (29 named + \"\" end entry)",
+     "; Word +8 of SupportClass record 52 (PartIDProc, count 29) in ExitWindow_OK_Data_2, the 55 x 12-byte table",
+     "; ExitWindow_OK registers as class SupportClass.  CommonIDProc (ui/ui_widget_defs.s) walks it in 8-byte steps:",
+     "; DUMP_PROPERTY_EX matches the 32-bit value and Strcpy's the name, SET_PROPERTY_EX Strcmp's the names; \"\" ends it.",
+     "; PT_Part1=0, PT_Part2=1, PT_Part3=2, PT_Part4=3, PT_Part5=4, PT_Part6=5, PT_Part7=6, PT_Part8=7, PT_Part9=8, PT_Part10=9, PT_Part11=0x0A, ... (18 more)"
+    ],
+    "check": "len(b)==240 and list(struct.unpack('<60i',b)[1::2])==[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 255, 0] and [x-struct.unpack_from('<I',b,232)[0] for x in struct.unpack('<60i',b)[0::2]]==[296, 286, 276, 266, 256, 246, 236, 226, 216, 206, 196, 186, 176, 166, 156, 146, 134, 122, 110, 102, 94, 84, 72, 64, 56, 44, 30, 16, 2, 0]"
+   },
+   {
+    "off_in_slice": 240,
+    "size": 2,
+    "new_label": "NakaInst_PartID_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: name of the end entry of NakaInst_PartID_EnumTable",
+    "header": [
+     "; NakaInst_PartID_EmptyStr -- 2 x char: \"\" + 0xFF fill, name of the end entry of NakaInst_PartID_EnumTable",
+     "; NakaInst_PartID_EnumTable's last entry {\"\", 0} points here; CommonIDProc stops at a name whose first byte is 0."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 242,
+    "size": 14,
+    "new_label": "NakaInst_PT_PartSelect_Str",
+    "ctype": "char",
+    "dims": "[14]",
+    "cdoc": "\"PT_PartSelect\": name of PartID value 0xFF",
+    "header": [
+     "; NakaInst_PT_PartSelect_Str -- 14 x char: \"PT_PartSelect\", name of PartID value 0xFF",
+     "; Entry 28 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_PartSelect\\x00'"
+   },
+   {
+    "off_in_slice": 256,
+    "size": 14,
+    "new_label": "NakaInst_PT_Microphone_Str",
+    "ctype": "char",
+    "dims": "[14]",
+    "cdoc": "\"PT_Microphone\": name of PartID value 0x1B",
+    "header": [
+     "; NakaInst_PT_Microphone_Str -- 14 x char: \"PT_Microphone\", name of PartID value 0x1B",
+     "; Entry 27 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Microphone\\x00'"
+   },
+   {
+    "off_in_slice": 270,
+    "size": 14,
+    "new_label": "NakaInst_PT_Metronome_Str",
+    "ctype": "char",
+    "dims": "[14]",
+    "cdoc": "\"PT_Metronome\" + 0xFF fill: name of PartID value 0x1A",
+    "header": [
+     "; NakaInst_PT_Metronome_Str -- 14 x char: \"PT_Metronome\" + 0xFF fill, name of PartID value 0x1A",
+     "; Entry 26 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Metronome\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 284,
+    "size": 12,
+    "new_label": "NakaInst_PT_Control_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"PT_Control\" + 0xFF fill: name of PartID value 0x19",
+    "header": [
+     "; NakaInst_PT_Control_Str -- 12 x char: \"PT_Control\" + 0xFF fill, name of PartID value 0x19",
+     "; Entry 25 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Control\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 296,
+    "size": 8,
+    "new_label": "NakaInst_PT_Msp2_Str",
+    "ctype": "char",
+    "dims": "[8]",
+    "cdoc": "\"PT_Msp2\": name of PartID value 0x18",
+    "header": [
+     "; NakaInst_PT_Msp2_Str -- 8 x char: \"PT_Msp2\", name of PartID value 0x18",
+     "; Entry 24 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Msp2\\x00'"
+   },
+   {
+    "off_in_slice": 304,
+    "size": 8,
+    "new_label": "NakaInst_PT_Msp1_Str",
+    "ctype": "char",
+    "dims": "[8]",
+    "cdoc": "\"PT_Msp1\": name of PartID value 0x17",
+    "header": [
+     "; NakaInst_PT_Msp1_Str -- 8 x char: \"PT_Msp1\", name of PartID value 0x17",
+     "; Entry 23 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Msp1\\x00'"
+   },
+   {
+    "off_in_slice": 312,
+    "size": 12,
+    "new_label": "NakaInst_PT_RootBass_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"PT_RootBass\": name of PartID value 0x16",
+    "header": [
+     "; NakaInst_PT_RootBass_Str -- 12 x char: \"PT_RootBass\", name of PartID value 0x16",
+     "; Entry 22 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_RootBass\\x00'"
+   },
+   {
+    "off_in_slice": 324,
+    "size": 10,
+    "new_label": "NakaInst_PT_Chord_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Chord\" + 0xFF fill: name of PartID value 0x15",
+    "header": [
+     "; NakaInst_PT_Chord_Str -- 10 x char: \"PT_Chord\" + 0xFF fill, name of PartID value 0x15",
+     "; Entry 21 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Chord\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 334,
+    "size": 8,
+    "new_label": "NakaInst_PT_Drum_Str",
+    "ctype": "char",
+    "dims": "[8]",
+    "cdoc": "\"PT_Drum\": name of PartID value 0x14",
+    "header": [
+     "; NakaInst_PT_Drum_Str -- 8 x char: \"PT_Drum\", name of PartID value 0x14",
+     "; Entry 20 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Drum\\x00'"
+   },
+   {
+    "off_in_slice": 342,
+    "size": 8,
+    "new_label": "NakaInst_PT_Bass_Str",
+    "ctype": "char",
+    "dims": "[8]",
+    "cdoc": "\"PT_Bass\": name of PartID value 0x13",
+    "header": [
+     "; NakaInst_PT_Bass_Str -- 8 x char: \"PT_Bass\", name of PartID value 0x13",
+     "; Entry 19 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Bass\\x00'"
+   },
+   {
+    "off_in_slice": 350,
+    "size": 12,
+    "new_label": "NakaInst_PT_Accomp3_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"PT_Accomp3\" + 0xFF fill: name of PartID value 0x12",
+    "header": [
+     "; NakaInst_PT_Accomp3_Str -- 12 x char: \"PT_Accomp3\" + 0xFF fill, name of PartID value 0x12",
+     "; Entry 18 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Accomp3\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 362,
+    "size": 12,
+    "new_label": "NakaInst_PT_Accomp2_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"PT_Accomp2\" + 0xFF fill: name of PartID value 0x11",
+    "header": [
+     "; NakaInst_PT_Accomp2_Str -- 12 x char: \"PT_Accomp2\" + 0xFF fill, name of PartID value 0x11",
+     "; Entry 17 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Accomp2\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 374,
+    "size": 12,
+    "new_label": "NakaInst_PT_Accomp1_Str",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"PT_Accomp1\" + 0xFF fill: name of PartID value 0x10",
+    "header": [
+     "; NakaInst_PT_Accomp1_Str -- 12 x char: \"PT_Accomp1\" + 0xFF fill, name of PartID value 0x10",
+     "; Entry 16 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Accomp1\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 386,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part16_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part16\": name of PartID value 0x0F",
+    "header": [
+     "; NakaInst_PT_Part16_Str -- 10 x char: \"PT_Part16\", name of PartID value 0x0F",
+     "; Entry 15 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part16\\x00'"
+   },
+   {
+    "off_in_slice": 396,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part15_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part15\": name of PartID value 0x0E",
+    "header": [
+     "; NakaInst_PT_Part15_Str -- 10 x char: \"PT_Part15\", name of PartID value 0x0E",
+     "; Entry 14 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part15\\x00'"
+   },
+   {
+    "off_in_slice": 406,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part14_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part14\": name of PartID value 0x0D",
+    "header": [
+     "; NakaInst_PT_Part14_Str -- 10 x char: \"PT_Part14\", name of PartID value 0x0D",
+     "; Entry 13 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part14\\x00'"
+   },
+   {
+    "off_in_slice": 416,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part13_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part13\": name of PartID value 0x0C",
+    "header": [
+     "; NakaInst_PT_Part13_Str -- 10 x char: \"PT_Part13\", name of PartID value 0x0C",
+     "; Entry 12 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part13\\x00'"
+   },
+   {
+    "off_in_slice": 426,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part12_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part12\": name of PartID value 0x0B",
+    "header": [
+     "; NakaInst_PT_Part12_Str -- 10 x char: \"PT_Part12\", name of PartID value 0x0B",
+     "; Entry 11 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part12\\x00'"
+   },
+   {
+    "off_in_slice": 436,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part11_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part11\": name of PartID value 0x0A",
+    "header": [
+     "; NakaInst_PT_Part11_Str -- 10 x char: \"PT_Part11\", name of PartID value 0x0A",
+     "; Entry 10 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part11\\x00'"
+   },
+   {
+    "off_in_slice": 446,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part10_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part10\": name of PartID value 9",
+    "header": [
+     "; NakaInst_PT_Part10_Str -- 10 x char: \"PT_Part10\", name of PartID value 9",
+     "; Entry 9 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part10\\x00'"
+   },
+   {
+    "off_in_slice": 456,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part9_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part9\" + 0xFF fill: name of PartID value 8",
+    "header": [
+     "; NakaInst_PT_Part9_Str -- 10 x char: \"PT_Part9\" + 0xFF fill, name of PartID value 8",
+     "; Entry 8 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part9\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 466,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part8_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part8\" + 0xFF fill: name of PartID value 7",
+    "header": [
+     "; NakaInst_PT_Part8_Str -- 10 x char: \"PT_Part8\" + 0xFF fill, name of PartID value 7",
+     "; Entry 7 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part8\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 476,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part7_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part7\" + 0xFF fill: name of PartID value 6",
+    "header": [
+     "; NakaInst_PT_Part7_Str -- 10 x char: \"PT_Part7\" + 0xFF fill, name of PartID value 6",
+     "; Entry 6 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part7\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 486,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part6_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part6\" + 0xFF fill: name of PartID value 5",
+    "header": [
+     "; NakaInst_PT_Part6_Str -- 10 x char: \"PT_Part6\" + 0xFF fill, name of PartID value 5",
+     "; Entry 5 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part6\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 496,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part5_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part5\" + 0xFF fill: name of PartID value 4",
+    "header": [
+     "; NakaInst_PT_Part5_Str -- 10 x char: \"PT_Part5\" + 0xFF fill, name of PartID value 4",
+     "; Entry 4 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part5\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 506,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part4_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part4\" + 0xFF fill: name of PartID value 3",
+    "header": [
+     "; NakaInst_PT_Part4_Str -- 10 x char: \"PT_Part4\" + 0xFF fill, name of PartID value 3",
+     "; Entry 3 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part4\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 516,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part3_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part3\" + 0xFF fill: name of PartID value 2",
+    "header": [
+     "; NakaInst_PT_Part3_Str -- 10 x char: \"PT_Part3\" + 0xFF fill, name of PartID value 2",
+     "; Entry 2 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part3\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 526,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part2_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part2\" + 0xFF fill: name of PartID value 1",
+    "header": [
+     "; NakaInst_PT_Part2_Str -- 10 x char: \"PT_Part2\" + 0xFF fill, name of PartID value 1",
+     "; Entry 1 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part2\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 536,
+    "size": 10,
+    "new_label": "NakaInst_PT_Part1_Str",
+    "ctype": "char",
+    "dims": "[10]",
+    "cdoc": "\"PT_Part1\" + 0xFF fill: name of PartID value 0",
+    "header": [
+     "; NakaInst_PT_Part1_Str -- 10 x char: \"PT_Part1\" + 0xFF fill, name of PartID value 0",
+     "; Entry 0 of NakaInst_PartID_EnumTable points here."
+    ],
+    "check": "b==b'PT_Part1\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 546,
+    "size": 144,
+    "new_label": "NakaInst_TrackID_EnumTable",
+    "ctype": "struct",
+    "dims": "[18]",
+    "struct_fields": [
+     {
+      "name": "name",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "TrackID property value names {name, value}: TR_Track1..16 = 0..15, TR_All = 0xFF, then the {\"\", 0} end entry (SupportClass record 53, TrackIDProc)",
+    "header": [
+     "; NakaInst_TrackID_EnumTable -- 18 x {u32 name, s32 value}: value names of the TrackID property type (17 named + \"\" end entry)",
+     "; Word +8 of SupportClass record 53 (TrackIDProc, count 17) in ExitWindow_OK_Data_2; read by CommonIDProc",
+     "; (ui/ui_widget_defs.s) like every value-name list.  TR_Track1..TR_Track16 = 0..15, TR_All = 0xFF; the names",
+     "; follow this slice (TrackIDProc_NameListEnd is the \"\" of the end entry, then NakaInst_TR_All .. NakaInst_TR_Track1)."
+    ],
+    "check": "len(b)==144 and list(struct.unpack('<36i',b)[1::2])==[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255, 0] and [x-struct.unpack_from('<I',b,136)[0] for x in struct.unpack('<36I',b)[0::2]]==[174, 164, 154, 144, 134, 124, 114, 104, 94, 82, 70, 58, 46, 34, 22, 10, 2, 0]"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:8713 `ldw (xbc + 8), 0x37` -- ExitWindow_OK registers 55 SupportClass objects",
+   "ui/ui_widget_defs.s:8714 `lda xwa, (ExitWindow_OK_Data_2:24)` -- their 12-byte records {u32 proc, u16 count, u16 size, u32 value-name list}",
+   "ui/ui_widget_defs.s:17428 `ld xbc, EVT_GET_INSTANCE` -- CommonIDProc gets the object's SupportClass record",
+   "ui/ui_widget_defs.s:17502 `cpw (xwa + 4), 0x0` -- record +4 = number of named values (0: no name search)",
+   "ui/ui_widget_defs.s:17505 `ld xbc, (xwa + 8)` -- record +8 = the value-name list",
+   "ui/ui_widget_defs.s:17512 `cp xwa, (xhl + 4)` -- entry +4 = 32-bit value compared with the property value",
+   "ui/ui_widget_defs.s:17514 `ld xwa, (xhl)` -- entry +0 = name pointer, Strcpy'd out on a match",
+   "ui/ui_widget_defs.s:17525 `inc 8, xde` -- 8-byte entries",
+   "ui/ui_widget_defs.s:17531 `cp (xix), 0x0` -- the list ends at the entry whose name is \"\"",
+   "ui/ui_widget_defs.s:17553 `call Strcmp` -- SET_PROPERTY_EX matches the text against each name; 17563 `ld xbc, (xbc + 4)` stores that entry's value",
+   "ui/ui_widget_defs.s:14730 `ld bc, (xhl)` / 14731 `extz xbc` -- PartIDProc: 16-bit property, then CommonIDProc (14739)",
+   "ui/ui_widget_defs.s:14780 `ld bc, (xhl)` / 14781 `extz xbc` -- TrackIDProc: 16-bit property, then CommonIDProc (14789)",
+   "ExitWindow_OK_Data_2 record 52 = {PartIDProc, count 29, size 2, list 0xEB7246 (this slice)}, record 53 = {TrackIDProc, 17, 2, 0xEB7468 (slice+546)}"
+  ],
+  "note": "The current label NakaInst_PartID_EnumTable is kept for the first piece.  The PartID list is 30 entries; the TrackID list (18 entries) closes the slice and its strings lie in the following [nakarest] Text slices.  CONVERTER BLOCKER (found by a dry run of scripts/converters/nakarest_reviewed_slices.py on a scratch copy): TrackID entries 8-15 point at TR_Track9..TR_Track16, whose C members in naka_style_bitmaps.c start one byte early (field_0397, field_038b .. field_0343 begin on the previous string's 0xFF pad), so those 8 pointers cannot be made SELF() and the converter skips the slice ('8 numeric').  Re-cut those 8 string members at their 'T' (the asm slices NakaInst_TR_Track9..16 are already cut correctly) and the typing applies as proposed.",
+  "asm": "ui_widgets/style_bitmaps.s",
+  "size": 690,
+  "blob": "naka_style_bitmaps",
+  "off_v10": 136,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "ExitWindow_OK_Data_2",
+  "verdict": "refuse",
+  "basis": "reader code",
+  "why_refused": "This is the SupportClass object table: 55 x 12-byte records {u32 proc, u16 named_value_count, u16 property_size, u32 value_names} (ExitWindow_OK registers it as class SupportClass, 0x37 objects, slot 0x260; CommonIDProc reads +4 and +8, SupportClassProc_OnGetPropSize +6).  The table is 660 B (0xEB7690..0xEB7923) but this slice is 623 B: it ends 3 bytes into record 51's value_names pointer (WindowIDProc -> 0xEB723C = NakaInst_WindowID_EnumTable, bytes 0xEB78FC..0xEB78FF), and NakaInst_WindowID_Cont (0xEB78FF, 51 B) starts on that pointer's last byte and holds records 52-54 (PartIDProc, TrackIDProc, IntTimeIDProc).  Any typing of this slice must split that pointer.  Fix first: make the table one object -- move the NakaInst_WindowID_Cont label to 0xEB7924 (its [nakarest] reader `.long NakaInst_WindowID_Cont` no longer exists in v10) or merge the two slices -- then type SupportClass_Table as struct[55] {proc, named_count, prop_size, value_names}.",
+  "proposed_after_fix": {
+   "new_label": "SupportClass_Table",
+   "ctype": "struct",
+   "dims": "[55]",
+   "struct_fields": [
+    {
+     "name": "proc",
+     "ctype": "uint32_t",
+     "dims": ""
+    },
+    {
+     "name": "named_count",
+     "ctype": "uint16_t",
+     "dims": ""
+    },
+    {
+     "name": "prop_size",
+     "ctype": "uint16_t",
+     "dims": ""
+    },
+    {
+     "name": "value_names",
+     "ctype": "uint32_t",
+     "dims": ""
+    }
+   ]
+  },
+  "evidence": [
+   "ui/ui_widget_defs.s:8709 `ld xwa, NAKA_CLASS_SupportClass` / 8711 `lda xwa, (SupportClassProc:24)` / 8713 `ldw (xbc + 8), 0x37` / 8714 `lda xwa, (ExitWindow_OK_Data_2:24)` / 8716 `ldw wa, 0x260` / 8717 `calr RegisterObjectTable` -- 55 SupportClass objects, this table",
+   "ui/ui_widget_defs.s:9476 `ld hl, (xhl + 6)` -- record +6 = property size",
+   "ui/ui_widget_defs.s:17502 `cpw (xwa + 4), 0x0` / 17504 `ld iz, 0:i3` / 17505 `ld xbc, (xwa + 8)` -- record +4 = named-value count, +8 = value-name list",
+   "bytes: record k at slice + 12k; record 51 = {WindowIDProc, 0, 4, 0xEB723C} occupies slice +612..+623, one byte past the slice end"
+  ],
+  "check": "len(b)==623 and all(struct.unpack_from('<I',b,12*k)[0]>>16==0xfa for k in range(52)) and struct.unpack_from('<HH',b,616)==(0,4)",
+  "asm": "ui_widgets/style_bitmaps.s",
+  "size": 623,
+  "blob": "naka_style_bitmaps",
+  "off_v10": 1234,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "RhythmRomTest_Compare_Data",
+  "verdict": "type",
+  "basis": "reader code (record 0); shape + ROM contents (records 1-2)",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 10,
+    "new_label": "RomTest_RhythmRomSignature",
+    "ctype": "struct",
+    "dims": "",
+    "struct_fields": [
+     {
+      "name": "rom_addr",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "expect",
+      "ctype": "uint8_t",
+      "dims": "[4]"
+     },
+     {
+      "name": "fail_bit",
+      "ctype": "uint8_t",
+      "dims": ""
+     },
+     {
+      "name": "pad",
+      "ctype": "uint8_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "rhythm data ROM check: the 4 bytes at 0x400000 must read 00 01 04 05, else fail bit 0x01",
+    "header": [
+     "; RomTest_RhythmRomSignature -- 1 x {u32 rom_addr, u8 expect[4], u8 fail_bit, u8 0}: rhythm data ROM (IC14) signature check",
+     "; Test_Rhythm_data_ROM_IC14 (ui/ui_mode_handlers.s) compares the 4 bytes at rom_addr (0x400000) with expect",
+     "; (00 01 04 05) and ORs fail_bit (0x01) into its result on a mismatch.  Same 10-byte shape as the two records",
+     "; at +14 and as DramTest_IC10IC9_Regions / SramTest_IC21Regions after it."
+    ],
+    "check": "len(b)==10 and struct.unpack('<I',b[:4])[0]==0x400000 and b[4:8]==bytes([0,1,4,5]) and b[8:10]==bytes([1,0])"
+   },
+   {
+    "off_in_slice": 10,
+    "size": 4,
+    "new_label": "RomTest_ProgramSignatureText",
+    "ctype": "char",
+    "dims": "[4]",
+    "cdoc": "\"hkpr\" (4 characters, no NUL): the bytes the record at +14 points at and expects",
+    "header": [
+     "; RomTest_ProgramSignatureText -- 4 x char: \"hkpr\" with no NUL; record 0 of RomTest_RomSignatures points at",
+     "; these very bytes and expects \"hkpr\", so that check always passes.  No other reference."
+    ],
+    "check": "b==b'hkpr'"
+   },
+   {
+    "off_in_slice": 14,
+    "size": 20,
+    "new_label": "RomTest_RomSignatures",
+    "ctype": "struct",
+    "dims": "[2]",
+    "struct_fields": [
+     {
+      "name": "rom_addr",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "expect",
+      "ctype": "char",
+      "dims": "[4]"
+     },
+     {
+      "name": "fail_bit",
+      "ctype": "uint8_t",
+      "dims": ""
+     },
+     {
+      "name": "pad",
+      "ctype": "uint8_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "two more signature checks of the same shape, no reader found: {&\"hkpr\", \"hkpr\", 0x01}, {0x9FFFC0, \"hkt_\", 0x02}",
+    "header": [
+     "; RomTest_RomSignatures -- 2 x {u32 rom_addr, char expect[4], u8 fail_bit, u8 0}: signature checks in the shape of",
+     "; RomTest_RhythmRomSignature, with no reader found in v10: {RomTest_ProgramSignatureText, \"hkpr\", 0x01} and",
+     "; {0x9FFFC0, \"hkt_\", 0x02}; the table data ROM holds \"hkt_87.ssf\" at 0x9FFFC0 (original_ROMs/kn5000_table_data.rom)."
+    ],
+    "check": "len(b)==20 and b[4:10]==b'hkpr\\x01\\x00' and struct.unpack('<I',b[10:14])[0]==0x9fffc0 and b[14:20]==b'hkt_\\x02\\x00'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_mode_handlers.s:1351 `ld xiy, 0x400000` -- Test_Rhythm_data_ROM_IC14 checksums the rhythm ROM from 0x400000",
+   "ui/ui_mode_handlers.s:1376 `lda xix, (RhythmRomTest_Compare_Data:24)` / 1377 `ld xiy, (xix)` / 1378 `lda xbc, (xix + 4)` / 1379 `ld xde, xbc` / 1380 `lda xhl, (xbc + 4)` -- +0 = 32-bit address to read, +4..+7 = expected bytes",
+   "ui/ui_mode_handlers.s:1383 `ld c, (xiy)` / 1384 `cp c, (xde)` / 1386 `or a, (xix + 8)` -- byte compare; +8 = fail bit OR'd into the result",
+   "original_ROMs/kn5000_table_data.rom offset 0x1FFFC0 = \"hkt_87.ssf\" -- record 2's {0x9FFFC0, \"hkt_\"} matches the table data ROM"
+  ],
+  "note": "Only the first 10 bytes have a reader.  The 34 B are {rhythm check}, \"hkpr\", {check of &\"hkpr\"}, {check of 0x9FFFC0}.",
+  "asm": "ui_widgets/style_bitmaps.s",
+  "size": 34,
+  "blob": "naka_style_bitmaps",
+  "off_v10": 3662,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "PartMixer_Init_Data",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 180,
+    "new_label": "PartMixer_RowTable",
+    "ctype": "struct",
+    "dims": "[15]",
+    "struct_fields": [
+     {
+      "name": "kind",
+      "ctype": "uint16_t",
+      "dims": ""
+     },
+     {
+      "name": "ctl_type",
+      "ctype": "uint16_t",
+      "dims": ""
+     },
+     {
+      "name": "band_dy",
+      "ctype": "int16_t",
+      "dims": ""
+     },
+     {
+      "name": "initial_row",
+      "ctype": "uint16_t",
+      "dims": ""
+     },
+     {
+      "name": "caption",
+      "ctype": "uint32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "Part Mixer rows: {kind (PsMixer_RowKindApFuncId index), control type (PsMixer_CtlTypeProc n), y shift of the row band, 1 = row selected on entry, caption}",
+    "header": [
+     "; PartMixer_RowTable -- 15 x {u16 kind, u16 ctl_type, s16 band_dy, u16 initial_row, u32 caption}: the Part Mixer's rows",
+     "; PartMixer_Init stores it at RAM 0x3EA30 (Util_StorePartArrayBase); row r = base + 12*r (Util_SignExtendAndDouble).",
+     "; kind -> PsMixer_RowKindApFuncId (31 SOUND, 14 PAN, 15 VOLUME, 13 REVERB, 12 DSP EFF, 3 DIGITAL EFF, 9 KEY SHIFT,",
+     "; 1 MIDI, 0 LOCAL, 32 blank); ctl_type -> PsMixer_CtlTypeProc<n>; band_dy shifts PsMixer_CalcRowBandRect's band;",
+     "; initial_row = 1 marks the row the cursor starts on in each page of 5; caption is drawn by PsMixer_DrawCaptionFrame."
+    ],
+    "check": "len(b)==180 and [struct.unpack_from('<HHhH',b,12*i) for i in range(15)]==[(32, 0, 0, 0), (31, 1, -16, 0), (14, 3, -16, 0), (15, 2, -16, 1), (32, 5, 0, 0), (13, 3, 4, 1), (12, 3, 4, 0), (3, 4, 4, 0), (9, 7, 4, 0), (32, 5, 0, 0), (32, 0, 0, 0), (32, 0, 0, 0), (1, 8, 0, 1), (0, 4, 0, 0), (32, 5, 0, 0)]"
+   }
+  ],
+  "evidence": [
+   "ui/drawbar_panel_ui.s:12707 `ld xwa, PartMixer_Init_Data` / 12708 `calr Util_StorePartArrayBase` -- AcPartMixerProc on EVT_SHOW installs the row table",
+   "ui/drawbar_panel_ui.s:12856 `ld xhl, xwa` / 12857 `add xhl, xhl` / 12858 `add xhl, xwa` / 12859 `sll xhl, 2` / 12860 `add xhl, (0x3ea30:24)` -- row = (RAM 0x3EA30) + 12*index",
+   "ui/drawbar_panel_ui.s:12864 `ld (0x03ea30:24), xwa` -- the table pointer",
+   "ui/drawbar_panel_ui.s:13256 `ld wa, (xiz)` / 13257 `sla wa, 2` / 13258 `lda xbc, (PsMixer_RowKindApFuncId:24)` / 13259 `ld xwa, (xbc+wa)` -- +0 = kind, index of a 32-bit ApFunction id",
+   "ui/drawbar_panel_ui.s:11742 `ld wa, (xwa + 2)` / 11743 `sla wa, 2` / 11757 `lda xbc, (PsMixer_ControlHelper_Data:24)` -- +2 = control type, index of PsMixer_ControlHelper_Data (PsMixer_CtlTypeProc0..10)",
+   "ui/drawbar_panel_ui.s:13055 `add xbc, (0x3ea30:24)` / 13056 `ld wa, (xbc+4)` -- +4 = signed y shift of the row band",
+   "ui/drawbar_panel_ui.s:11847 `cpw (xwa + 6), 0x1` / 11850 `ld (0x024792:24), wa` -- +6 = 1 marks the starting row (searched over the 5 rows of a page)",
+   "ui/drawbar_panel_ui.s:13832 `calr Util_SignExtendAndDouble` / 13841 `ld xde, (xiz+8)` / 13842 `calr PsMixer_DrawCaptionFrame` -- +8 = caption string"
+  ],
+  "note": "Same 12-byte record as TrackMixer_Init_Data and MidiParam_PanelCfgTable (both still untyped).",
+  "asm": "ui_widgets/technichord_string_data.s",
+  "size": 180,
+  "blob": "naka_technichord_strings",
+  "off_v10": 104046,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py; reader code read again by the reviewer and found to say what the evidence says"
+ },
+ {
+  "label": "FileIO_CheckSig_LoopTest_Data",
+  "verdict": "refuse",
+  "basis": "reader code",
+  "why_refused": "The data is a table of 8 x 8-byte records {u32 signature, u16 file_offset, u16 length} at 0xEA0104..0xEA0143 (one per region / file type; FileIO_CheckRegionSignature indexes all three columns with type*8): FileIO_CheckSig_ReadLoop_Data (0xEA0104) is record 0's signature pointer, FileIO_CheckRegionSignature_Data (0xEA0108) its file offset and this label (0xEA010A) its length -- each reader uses its own column label as base.  This 53-byte slice is record 0's length + records 1-6 + the first 3 bytes of record 7's signature pointer (0xEA013C, C member `HK_str_ptr = SELF(HK_str)`); Presentation_TagTableEnd starts on that pointer's last byte.  A typing would split the pointer.  Fix first: one 64-byte table at FileIO_CheckSig_ReadLoop_Data (the other two labels as .set +4 / +6 column aliases, Presentation_TagTableEnd moved to 0xEA0144), then struct[8] {sig, file_offset, sig_len}.  Records: {\"HK\",4,2}, {\"HK\",0,2}, {01 08,5,2}, {\"H\\0K\",0,3}, {\"KN5000 SOUND RAM\",0,16}, {\"H\\0K\",0,3}, {\"H\\0K\",0,3}, {\"HK\",0,2}.",
+  "proposed_after_fix": {
+   "new_label": "FileIO_RegionSignatures",
+   "ctype": "struct",
+   "dims": "[8]",
+   "struct_fields": [
+    {
+     "name": "sig",
+     "ctype": "uint32_t",
+     "dims": ""
+    },
+    {
+     "name": "file_offset",
+     "ctype": "uint16_t",
+     "dims": ""
+    },
+    {
+     "name": "sig_len",
+     "ctype": "uint16_t",
+     "dims": ""
+    }
+   ]
+  },
+  "evidence": [
+   "demo/file_demo_proc.s:1402 `sla wa, 3` / 1403 `lda xbc, (FileIO_CheckRegionSignature_Data:24)` / 1404 `ld wa, (xbc+wa)` / 1407 `call FileIO_SeekAndReadBlock` -- column +4: 16-bit file offset to seek to, stride 8",
+   "demo/file_demo_proc.s:1418 `sla wa, 3` / 1419 `lda xbc, (FileIO_CheckSig_ReadLoop_Data:24)` / 1420 `ld xwa, (xbc+wa)` / 1421 `ld a, (xwa+iz)` / 1422 `cp l, a` -- column +0: 32-bit pointer to the expected bytes, compared with each byte read",
+   "demo/file_demo_proc.s:1435 `sla wa, 3` / 1436 `lda xbc, (FileIO_CheckSig_LoopTest_Data:24)` / 1438 `cp de, (xbc+wa)` -- column +6: 16-bit length, the loop bound",
+   "bytes: record 7's signature pointer occupies slice +50..+53, one byte past the 53-byte slice"
+  ],
+  "check": "len(b)==53 and [struct.unpack_from('<H',b,8*i)[0] for i in range(7)]==[2,2,2,3,16,3,3]",
+  "asm": "ui_widgets/technichord_string_data.s",
+  "size": 53,
+  "blob": "naka_technichord_strings",
+  "off_v10": 106940,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "FileDemo_RecordCallback_Data_2",
+  "verdict": "type",
+  "basis": "reader code",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 4,
+    "new_label": "FileIO_TypeLoaderColumn",
+    "ctype": "uint32_t",
+    "dims": "",
+    "cdoc": "loader of record 0 (file type 4: FileIO_LoadRegion4_VRAM); FileDemo_RecordCallback uses this address as the base of the loader column (stride 6)",
+    "header": [
+     "; FileIO_TypeLoaderColumn -- 1 x u32: loader of record 0 of the 8 x 6-byte {u8 type, u8 0, u32 loader} table that",
+     "; starts 2 B earlier at FileDemo_RecordCallback_Data (record 0's type, 4).  FileDemo_RecordCallback",
+     "; (demo/file_demo_proc.s) adds 6*i to this address and calls the loader of record i for i = 0..7."
+    ],
+    "check": "len(b)==4"
+   },
+   {
+    "off_in_slice": 4,
+    "size": 42,
+    "new_label": "FileIO_TypeLoaderRecords",
+    "ctype": "struct",
+    "dims": "[7]",
+    "struct_fields": [
+     {
+      "name": "type",
+      "ctype": "uint8_t",
+      "dims": ""
+     },
+     {
+      "name": "pad",
+      "ctype": "uint8_t",
+      "dims": ""
+     },
+     {
+      "name": "loader",
+      "ctype": "uint32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "records 1-7 {file type, 0, loader}: types 0, 1, 5, 3, 2, 6, 7 -> FileIO_LoadRegion0_VRAM .. FileIO_LoadRegion7_Flash",
+    "header": [
+     "; FileIO_TypeLoaderRecords -- 7 x {u8 type, u8 0, u32 loader}: records 1-7 of the file-type loader table",
+     "; FileDemo_RecordCallback (demo/file_demo_proc.s) passes type (byte) to FileIO_WriteRecordName_Done and",
+     "; FileIO_CheckRecordValid (bit 1<<type of the file's type mask) and, when both agree, calls the loader.",
+     "; Types 0, 1, 5, 3, 2, 6, 7 -> FileIO_LoadRegion0/1/5_VRAM, 3/2_ExtMem, 6_Simple, 7_Flash."
+    ],
+    "check": "len(b)==42 and [b[6*i] for i in range(7)]==[0,1,5,3,2,6,7] and all(b[6*i+1]==0 for i in range(7))"
+   }
+  ],
+  "evidence": [
+   "demo/file_demo_proc.s:2337 `muls wa, 0x6` / 2338 `lda xbc, (FileDemo_RecordCallback_Data:24)` / 2339 `ld a, (xbc+wa)` / 2340 `call FileIO_WriteRecordName_Done` -- record i's type byte at Data + 6i",
+   "demo/file_demo_proc.s:2347 `call FileIO_CheckRecordValid` / 2353 `lda xde, (FileDemo_RecordCallback_Data_2:24)` / 2355 `add xbc, xde` / 2356 `ld xix, (xbc)` / 2357 `call (xix)` -- the loader at Data_2 + 6i = record +2 is called",
+   "demo/file_demo_proc.s:2370 `cp iz, 0x8` -- 8 records",
+   "demo/file_demo_proc.s:5171 `cp a, 0xa` -- the byte is a file type 0..9; bit (1 << type) of the file entry's mask is tested"
+  ],
+  "note": "Record 0's type byte (4) is the 2-byte slice FileDemo_RecordCallback_Data just before; no pointer is split.",
+  "asm": "ui_widgets/technichord_string_data.s",
+  "size": 46,
+  "blob": "naka_technichord_strings",
+  "off_v10": 107124,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "FileIO_SearchAndLoadFile_Data",
+  "verdict": "type",
+  "basis": "reader code",
+  "new_label": "FileIO_EmptyVolumeName",
+  "ctype": "char",
+  "dims": "[66]",
+  "cdoc": "66 NUL bytes; FileIO_SearchAndLoadFile only uses it as the empty string \"\" (byte 0)",
+  "header": [
+   "; FileIO_EmptyVolumeName -- 66 x char, all NUL: the \"\" FileIO_SearchAndLoadFile compares names with",
+   "; FileIO_SearchFile (a strcmp, demo/file_demo_proc.s) of the name buffer at RAM 0x25D74 and then of",
+   "; GetVolumeLabel's result against it: non-empty -> kept / copied, else \"___________\" is used.",
+   "; Only byte 0 is ever read; the 66-byte size is the compiled object's, not shown by the reader."
+  ],
+  "evidence": [
+   "demo/file_demo_proc.s:5362 `lda xwa, (0x025d74:24)` / 5363 `lda xbc, (FileIO_SearchAndLoadFile_Data:24)` / 5364 `calr FileIO_SearchFile` / 5366 `jr nz, SearchLoad_Return` -- the name buffer is kept unless it equals this string",
+   "demo/file_demo_proc.s:5367 `call GetVolumeLabel` / 5372 `lda xbc, (FileIO_SearchAndLoadFile_Data:24)` / 5373 `calr FileIO_SearchFile` -- the volume label is compared with it too",
+   "demo/file_demo_proc.s:5378 `ld xiz, SearchLoad_DefaultVolume_Str_Under_Under_Under_Under` -- fallback \"___________\"",
+   "demo/file_demo_proc.s:4796 `ld e, (xhl)` / 4797 `cp (xbc), e` -- FileIO_SearchFile compares byte by byte",
+   "demo/file_demo_proc.s:4785 `cp e, 0:i3` -- and stops at NUL: only byte 0 of this object is read"
+  ],
+  "check": "b==bytes(66)",
+  "asm": "ui_widgets/technichord_string_data.s",
+  "size": 66,
+  "blob": "naka_technichord_strings",
+  "off_v10": 107594,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "UpdateFileEntry_Data_2",
+  "verdict": "type",
+  "basis": "reader code",
+  "new_label": "UpdateFileEntry_FileNameInit",
+  "ctype": "char",
+  "dims": "[16]",
+  "cdoc": "all-NUL initializer of UpdateFileEntry's 16-char file-name buffer (frame xsp+4)",
+  "header": [
+   "; UpdateFileEntry_FileNameInit -- 16 x char, all NUL: initializer of UpdateFileEntry's file-name buffer (frame xsp+4)",
+   "; UpdateFileEntry (demo/file_demo_proc.s) copies it (8 words); FileIO_ReadHeader then writes base name + \".\" +",
+   "; the type's extension (SeqFileType_CodeTable) into it, and _findfirst looks that name up.",
+   "; Pair of UpdateFileEntry_BaseNameInit (the base-name buffer at xsp+20)."
+  ],
+  "evidence": [
+   "demo/file_demo_proc.s:5491 `ld xiy, UpdateFileEntry_Data_2` / 5492 `lda xix, (xsp + 4)` / 5493 `ldw bc, 0x8` / 5494 `ldirw` -- 16 bytes copied to the frame at +4",
+   "demo/file_demo_proc.s:5511 `lda xwa, (xsp + 4)` / 5512 `calr FileIO_ReadHeader` -- the buffer is FileIO_ReadHeader's destination",
+   "demo/file_demo_proc.s:4868 `calr FileIO_CopyString` / 4870 `ld xbc, FileIO_ReadHeader_Str_Dot` / 4875 `lda xbc, (SeqFileType_CodeTable:24)` -- destination = base name + \".\" + the type's extension",
+   "demo/file_demo_proc.s:5511 `lda xwa, (xsp + 4)` / 5515 `call _findfirst` -- the built name is looked up"
+  ],
+  "check": "b==bytes(16)",
+  "asm": "ui_widgets/technichord_string_data.s",
+  "size": 16,
+  "blob": "naka_technichord_strings",
+  "off_v10": 107824,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ }
+]

@@ -532,7 +532,7 @@ WP_GetPresetName1:
 	ld wa, bc
 	extz xwa
 	sll xwa, 2	; index * 4 (pointer size)
-	ld xbc, WP_GetPresetName1_PtrTable	; ROM table address
+	ld xbc, SingleLoad_MemoryBankNames	; ROM table address
 	add xbc, xwa
 	ld xbc, (xbc)	; Get string pointer
 	ld xwa, xiz
@@ -579,7 +579,7 @@ WP_GetBankMemName:
 WP_GetBankMemName_FromROM:
 	extz xde
 	sll xde, 2
-	ld xbc, WP_GetBankMemName_FromROM_PtrTable	; ROM table address
+	ld xbc, WP_SectionNameTable	; ROM table address
 	add xbc, xde
 	ld xbc, (xbc)
 	ld xwa, xiz

@@ -174,14 +174,11 @@
 ; 14*0x404.
 ; -----------------------------------------------------------------------------
 
-; [nakarest] NakaStr_PaintArrowProc_Empty  +0x0..+0x2 (0xe176e4, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xe176e4 not derived; readers below
-; [nakarest] Readers: source references MTStr_CmpNameSet
-; [nakarest] (ui_widgets/naka_property_descriptors.s: `.long NakaStr_PaintArrowProc_Empty + 2`);
-; [nakarest] 1 data word in MTStr_CmpNameSet (at 0xe176e0), which is read by
-; [nakarest] NakaMethodTable_PtrsStart (ui_widgets/naka_property_descriptors.s: `.long
-; [nakarest] MTStr_CmpNameSet`).
-NakaStr_PaintArrowProc_Empty:	.incbin "includes/generated/naka_composer_style.bin", 0x0, 0x2
+; Suna_FunctionNameListEnd -- 1 x char[2]: "" + 0xFF pad, entry 1 (one past the count) of Suna_FunctionTable_404
+; Suna_FunctionTable_404 is the name list (registry slot 0x404 = 0x104 + 0x300) of Suna_FunctionTable_104 {proc, 0};
+; FunctionProc answers EVT_GET_NAME with names[index], so this "" pairs with the NULL that ends the procedure list.
+; Suna_FunctionTable_404[0] is this label + 2, the "PaintArrowProc" string that follows.
+Suna_FunctionNameListEnd:	.incbin "includes/generated/naka_composer_style.bin", 0x0, 0x2
 ; [nakarest] naka_composer_style+0x2  +0x2..+0x12 (0xe176e6, 16 B)
 ; [nakarest] name string, entry 0 of Function slot 0x404 (table 0xe176dc, 1 entries,
 ; [nakarest] InitializeSuna) (names for Function slot 0x104): "PaintArrowProc".

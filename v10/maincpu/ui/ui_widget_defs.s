@@ -755,7 +755,7 @@ PasTableCheck:
 	jr nz, PasTableCheck_Return
 	ld xwa, (xde)
 	sll xwa, 2
-	ld xbc, PasTableCheck_PtrTable
+	ld xbc, PasTableCheck_StateNames
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -799,7 +799,7 @@ AcOnOff_GetText:
 	ld wa, (xwa)
 	extz xwa
 	sll xwa, 2
-	ld xbc, AcOnOff_GetText_PtrTable
+	ld xbc, AcOnOff_ValueTexts
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -2265,7 +2265,7 @@ BitEditCheck:
 	ld wa, (xde + 8)
 	and wa, 0x1
 	sla wa, 2
-	lda xbc, (BitEditCheck_PtrTable:24)
+	lda xbc, (BitEditCheck_FalseTrueNames:24)
 	ld	xwa, (xbc+wa)
 	push xwa
 	ld xwa, (xde + 10)
@@ -7479,7 +7479,7 @@ DbDebugMenu_Init:
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	sla wa, 2
-	lda xde, (DbDebugMenu_Init_Str_N1:24)
+	lda xde, (DbDebugMenu_PageWindowIds:24)
 	ld	xwa, (xde+wa)
 	cp xwa, 0xffffffff
 	jrl z, PsMenuBox_ZeroReturn
@@ -7498,7 +7498,7 @@ DbDebugMenu_Close:
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	sla wa, 2
-	lda xde, (DbDebugMenu_Init_Str_N1:24)
+	lda xde, (DbDebugMenu_PageWindowIds:24)
 	ld	xwa, (xde+wa)
 	cp xwa, 0xffffffff
 	jr z, DbDebugMenu_Close_CallMenu
@@ -7543,7 +7543,7 @@ DbDebugMenu_Confirm:
 	ld xde, (xde + 42)
 	ld de, (xde)
 	sla de, 2
-	lda xhl, (DbDebugMenu_Confirm_PtrTable:24)
+	lda xhl, (DbDebugMenu_PageTitles:24)
 	ld	xde, (xhl+de)
 	ld xhl, 3:i3
 	push xhl
@@ -7567,7 +7567,7 @@ DbDebugMenu_OK:
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	sla wa, 2
-	lda xde, (DbDebugMenu_Init_Str_N1:24)
+	lda xde, (DbDebugMenu_PageWindowIds:24)
 	ld	xwa, (xde+wa)
 	cp xwa, 0xffffffff
 	jr z, DbDebugMenu_OK_Advance
@@ -7588,7 +7588,7 @@ DbDebugMenu_OK_Advance:
 	ld xbc, (xwa)
 	ld wa, (xbc)
 	sla wa, 2
-	lda xhl, (DbDebugMenu_Confirm_PtrTable:24)
+	lda xhl, (DbDebugMenu_PageTitles:24)
 	ld	xwa, (xhl+wa)
 	cp (xwa), 0x0
 	jr nz, DbDebugMenu_OK_CheckValid
@@ -7598,7 +7598,7 @@ DbDebugMenu_OK_CheckValid:
 	ld xwa, (xde)
 	ld wa, (xwa)
 	sla wa, 2
-	lda xbc, (DbDebugMenu_Init_Str_N1:24)
+	lda xbc, (DbDebugMenu_PageWindowIds:24)
 	lda	xbc, (xbc+wa)
 	ld xwa, (xbc)
 	cp xwa, 0xffffffff
@@ -7652,11 +7652,11 @@ PsTrackSwitchProc:
 	ld	(xsp+174), xde
 	ld xde, xbc
 	ld	(xsp+178), xwa
-	ld xiy, PsTrackSwitchProc_PtrTable
+	ld xiy, PsTrkSw_AssignNamePtrs
 	lda xix, (xsp + 38)
 	ldw bc, 0x28
 	ldirw
-	ld xiy, PsTrackSwitchProc_PtrTable_2
+	ld xiy, PsTrkSw_SelectStateLabels
 	lda xix, (xsp + 18)
 	ldw bc, 0xa
 	ldirw
@@ -8357,7 +8357,7 @@ AcTrkSw_ShowHide_Refresh:
 LanguageCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, ObjectProc_ClassDispatch
-	lda xhl, (LanguageCheck_PtrTable:24)
+	lda xhl, (LanguageCheck_LanguageNames:24)
 	ret
 
 ; ObjectProc class dispatch with dual handler
@@ -8686,7 +8686,7 @@ ExitWindow_Paint:
 	lda xde, (xbc+448)
 
 ExitWindow_Confirm:
-	ld xiy, ExitWindow_Confirm_Data
+	ld xiy, NakaMode_InitRecord
 	ld xix, xwa
 	ld bc, 7:i3
 	ldirw
@@ -8698,7 +8698,7 @@ ExitWindow_Confirm:
 	lda xde, (xbc+5632)
 
 ExitWindow_OK:
-	ld xiy, ExitWindow_OK_Data
+	ld xiy, Title_RecordTemplate
 	ld xix, xwa
 	ldw bc, 0xb
 	ldirw
@@ -15129,7 +15129,7 @@ IconIDProc:
 	ld XWA, (xsp + 0x0108)
 	ld xwa, (xwa + 8)
 	sll xwa, 2
-	ld xbc, IconIDProc_PtrTable
+	ld xbc, IconIDProc_NameTable
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -15166,7 +15166,7 @@ IconIDProc_OnGetOrDumpPropertyEx:
 	ld (xwa), xbc
 	ld xwa, (xwa)
 	sll xwa, 2
-	ld xbc, IconIDProc_PtrTable
+	ld xbc, IconIDProc_NameTable
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -15207,7 +15207,7 @@ IconIDProc_SetProp_NextIndex:
 IconIDProc_SetProp_LoopHead:
 	ld xbc, xiz
 	sll xbc, 2
-	ld xwa, IconIDProc_PtrTable
+	ld xwa, IconIDProc_NameTable
 	add xwa, xbc
 	ld xwa, (xwa)
 	or xwa, xwa

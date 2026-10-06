@@ -1,0 +1,170 @@
+[
+ {
+  "label": "DrawText_ExtendedLayout_Data",
+  "verdict": "type",
+  "new_label": "DrawText_ExtendedLayout_ClipRect",
+  "ctype": "int16_t",
+  "dims": "[4]",
+  "radix": "dec",
+  "cdoc": "DrawText_ExtendedLayout_ClipRect: clip rectangle {0, 0, 319, 239}, the whole 320 x 240 screen",
+  "header": [
+   "; DrawText_ExtendedLayout_ClipRect -- 4 x int16_t: clip rectangle {x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen",
+   "; DrawText_ExtendedLayout (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to",
+   "; DrawText_QueueOrDirect as the clip rectangle.  The old C read its last 4 bytes (3F 01 EF 00) as a pointer."
+  ],
+  "evidence": [
+   "display/graphics_text_vga.s:1135 `ld xiy, DrawText_ExtendedLayout_Data` / 1136 `lda xix, (xsp+276)` / 1137 `ld bc, 4:i3` / 1138 `ldirw` -- 8 bytes (4 words) copied to the frame",
+   "display/graphics_text_vga.s:1213 `lda xwa, (xsp+276)` / 1219 `calr DrawText_QueueOrDirect` -- the frame copy is passed as XWA (rectangle) to the text renderer",
+   "kn5000_v10_program.s:2651 `ld xwa, (xsp + 16)` / 2652 `ld xiy, xwa` / 2653 `lda xix, (xhl + 4)` / 2654 `ld bc, 4:i3` / 2655 `ldirw` -- DrawText_QueueOrDirect stores the 4 words of XWA in the queued draw command"
+  ],
+  "check": "len(b)==8 and struct.unpack('<4h',b)==(0,0,319,239)",
+  "basis": "reader code",
+  "false_pointers": true,
+  "review": "reviewer-authored from the refusal of r2b1 (its reason: the 8 bytes are a RECT, the old NAKA_ADDR is a false pointer)",
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 8,
+  "blob": "naka_disk_warning",
+  "off_v10": 9320
+ },
+ {
+  "label": "DrawFunc_Init_Entry_Data",
+  "verdict": "type",
+  "new_label": "SeGfx_BoundOp06_ClipRect",
+  "ctype": "int16_t",
+  "dims": "[4]",
+  "radix": "dec",
+  "cdoc": "SeGfx_BoundOp06_ClipRect: clip rectangle {0, 0, 319, 239}, the whole 320 x 240 screen",
+  "header": [
+   "; SeGfx_BoundOp06_ClipRect -- 4 x int16_t: clip rectangle {x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen",
+   "; SeGfx_BoundOp06_Helper (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to",
+   "; DrawText_QueueOrDirect as the clip rectangle.  The old C read its last 4 bytes (3F 01 EF 00) as a pointer."
+  ],
+  "evidence": [
+   "display/graphics_text_vga.s:1494 `ld xiy, DrawFunc_Init_Entry_Data` / 1495 `lda xix, (xsp+264)` / 1496 `ld bc, 4:i3` / 1497 `ldirw` -- 8 bytes (4 words) copied to the frame",
+   "display/graphics_text_vga.s:1538 `lda xwa, (xsp+264)` / 1544 `calr DrawText_QueueOrDirect` -- the frame copy is passed as XWA (rectangle) to the text renderer",
+   "kn5000_v10_program.s:2651 `ld xwa, (xsp + 16)` / 2652 `ld xiy, xwa` / 2653 `lda xix, (xhl + 4)` / 2654 `ld bc, 4:i3` / 2655 `ldirw` -- DrawText_QueueOrDirect stores the 4 words of XWA in the queued draw command"
+  ],
+  "check": "len(b)==8 and struct.unpack('<4h',b)==(0,0,319,239)",
+  "basis": "reader code",
+  "false_pointers": true,
+  "review": "reviewer-authored from the refusal of r2b1 (its reason: the 8 bytes are a RECT, the old NAKA_ADDR is a false pointer)",
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 8,
+  "blob": "naka_disk_warning",
+  "off_v10": 9388
+ },
+ {
+  "label": "DrawFunc_Init_Entry3_Data_2",
+  "verdict": "type",
+  "new_label": "SeGfx_BoundOp0B_ClipRect",
+  "ctype": "int16_t",
+  "dims": "[4]",
+  "radix": "dec",
+  "cdoc": "SeGfx_BoundOp0B_ClipRect: clip rectangle {0, 0, 319, 239}, the whole 320 x 240 screen",
+  "header": [
+   "; SeGfx_BoundOp0B_ClipRect -- 4 x int16_t: clip rectangle {x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen",
+   "; SeGfx_BoundOp0B_FormatNumber (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to",
+   "; DrawText_QueueOrDirect as the clip rectangle.  The old C read its last 4 bytes (3F 01 EF 00) as a pointer."
+  ],
+  "evidence": [
+   "display/graphics_text_vga.s:1613 `ld xiy, DrawFunc_Init_Entry3_Data_2` / 1614 `lda xix, (xsp+264)` / 1615 `ld bc, 4:i3` / 1616 `ldirw` -- 8 bytes (4 words) copied to the frame",
+   "display/graphics_text_vga.s:1699 `lda xwa, (xsp+264)` / 1705 `calr DrawText_QueueOrDirect` -- the frame copy is passed as XWA (rectangle) to the text renderer",
+   "kn5000_v10_program.s:2651 `ld xwa, (xsp + 16)` / 2652 `ld xiy, xwa` / 2653 `lda xix, (xhl + 4)` / 2654 `ld bc, 4:i3` / 2655 `ldirw` -- DrawText_QueueOrDirect stores the 4 words of XWA in the queued draw command"
+  ],
+  "check": "len(b)==8 and struct.unpack('<4h',b)==(0,0,319,239)",
+  "basis": "reader code",
+  "false_pointers": true,
+  "review": "reviewer-authored from the refusal of r2b1 (its reason: the 8 bytes are a RECT, the old NAKA_ADDR is a false pointer)",
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 8,
+  "blob": "naka_disk_warning",
+  "off_v10": 9428
+ },
+ {
+  "label": "DrawFunc_Init_Variant1_Data",
+  "verdict": "type",
+  "new_label": "DrawFunc_Init_Variant1_ClipRect",
+  "ctype": "int16_t",
+  "dims": "[4]",
+  "radix": "dec",
+  "cdoc": "DrawFunc_Init_Variant1_ClipRect: clip rectangle {0, 0, 319, 239}, the whole 320 x 240 screen",
+  "header": [
+   "; DrawFunc_Init_Variant1_ClipRect -- 4 x int16_t: clip rectangle {x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen",
+   "; DrawFunc_Init_Variant1 (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to",
+   "; DrawText_QueueOrDirect as the clip rectangle.  The old C read its last 4 bytes (3F 01 EF 00) as a pointer."
+  ],
+  "evidence": [
+   "display/graphics_text_vga.s:1384 `ld xiy, DrawFunc_Init_Variant1_Data` -- source of the 8-byte copy",
+   "display/graphics_text_vga.s:1386 `ld bc, 4:i3` -- 4 words",
+   "display/graphics_text_vga.s:1480 `lda xwa, (xsp+264)` -- the copy is passed as XWA ...",
+   "display/graphics_text_vga.s:1486 `calr DrawText_QueueOrDirect` -- ... the clip rectangle of DrawText_QueueOrDirect",
+   "kn5000_v10_program.s:2654 `ld bc, 4:i3` -- DrawText_QueueOrDirect copies 4 words from XWA into the queued draw record"
+  ],
+  "check": "len(b)==8 and struct.unpack('<4h',b)==(0,0,319,239)",
+  "basis": "reader code",
+  "false_pointers": true,
+  "review": "reviewer-authored from the refusal of r2b2 (its reason: the 8 bytes are a RECT, the old NAKA_ADDR is a false pointer)",
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 8,
+  "blob": "naka_disk_warning",
+  "off_v10": 9356
+ },
+ {
+  "label": "DrawFunc_Init_Entry3_Data",
+  "verdict": "type",
+  "new_label": "SeGfx_BoundOp09_ClipRect",
+  "ctype": "int16_t",
+  "dims": "[4]",
+  "radix": "dec",
+  "cdoc": "SeGfx_BoundOp09_ClipRect: clip rectangle {0, 0, 319, 239}, the whole 320 x 240 screen",
+  "header": [
+   "; SeGfx_BoundOp09_ClipRect -- 4 x int16_t: clip rectangle {x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen",
+   "; SeGfx_BoundOp09_FormatNumber (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to",
+   "; DrawText_QueueOrDirect as the clip rectangle.  The old C read its last 4 bytes (3F 01 EF 00) as a pointer."
+  ],
+  "evidence": [
+   "display/graphics_text_vga.s:1552 `ld xiy, DrawFunc_Init_Entry3_Data` -- source of the 8-byte copy",
+   "display/graphics_text_vga.s:1554 `ld bc, 4:i3` -- 4 words",
+   "display/graphics_text_vga.s:1599 `lda xwa, (xsp+264)` -- the copy is passed as XWA ...",
+   "display/graphics_text_vga.s:1605 `calr DrawText_QueueOrDirect` -- ... the clip rectangle of DrawText_QueueOrDirect",
+   "kn5000_v10_program.s:2654 `ld bc, 4:i3` -- DrawText_QueueOrDirect copies 4 words from XWA into the queued draw record"
+  ],
+  "check": "len(b)==8 and struct.unpack('<4h',b)==(0,0,319,239)",
+  "basis": "reader code",
+  "false_pointers": true,
+  "review": "reviewer-authored from the refusal of r2b2 (its reason: the 8 bytes are a RECT, the old NAKA_ADDR is a false pointer)",
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 8,
+  "blob": "naka_disk_warning",
+  "off_v10": 9408
+ },
+ {
+  "label": "Data_CharMapFormatBlock",
+  "verdict": "type",
+  "new_label": "SeGfx_BoundOp0A_ClipRect",
+  "ctype": "int16_t",
+  "dims": "[4]",
+  "radix": "dec",
+  "cdoc": "SeGfx_BoundOp0A_ClipRect: clip rectangle {0, 0, 319, 239}, the whole 320 x 240 screen",
+  "header": [
+   "; SeGfx_BoundOp0A_ClipRect -- 4 x int16_t: clip rectangle {x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen",
+   "; SeGfx_BoundOp0A_FormatNumber (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to",
+   "; DrawText_QueueOrDirect as the clip rectangle.  The old C read its last 4 bytes (3F 01 EF 00) as a pointer."
+  ],
+  "evidence": [
+   "display/graphics_text_vga.s:1713 `ld xiy, Data_CharMapFormatBlock` -- source of the 8-byte copy",
+   "display/graphics_text_vga.s:1715 `ld bc, 4:i3` -- 4 words",
+   "display/graphics_text_vga.s:1754 `lda xwa, (xsp+264)` -- the copy is passed as XWA ...",
+   "display/graphics_text_vga.s:1760 `calr DrawText_QueueOrDirect` -- ... the clip rectangle of DrawText_QueueOrDirect",
+   "kn5000_v10_program.s:2654 `ld bc, 4:i3` -- DrawText_QueueOrDirect copies 4 words from XWA into the queued draw record"
+  ],
+  "check": "len(b)==8 and struct.unpack('<4h',b)==(0,0,319,239)",
+  "basis": "reader code",
+  "false_pointers": true,
+  "review": "reviewer-authored from the refusal of r2b2 (its reason: the 8 bytes are a RECT, the old NAKA_ADDR is a false pointer)",
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 8,
+  "blob": "naka_disk_warning",
+  "off_v10": 9460
+ }
+]

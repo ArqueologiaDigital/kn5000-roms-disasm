@@ -569,11 +569,29 @@ Naka_MainFunctionTable_44B:	.incbin "includes/generated/naka_perf_style.bin", 0x
 ; [nakarest] through source references NAKA_InitDataBlock (storage/flash_floppy_handlers.s: `lda
 ; [nakarest] xhl, (NAKA_InitDataBlock_PtrTable:24)`).
 NAKA_InitDataBlock_PtrTable:	.incbin "includes/generated/naka_perf_style.bin", 0x5EBA, 0x72	; 6 x 32-bit pointer
-; [nakarest] naka_perf_style+0x5f2c  +0x5f2c..+0x5f6c (0xe148a0, 64 B)
-; [nakarest] purpose not established: layout of 64 B at 0xe148a0 not derived; readers below
-; [nakarest] Readers: source references InitializeNaka_Skip (storage/flash_floppy_handlers.s:
-; [nakarest] `lda xhl, (NAKA_InitDataBlock_PtrTable_2:24)`).
-NAKA_InitDataBlock_PtrTable_2:	.incbin "includes/generated/naka_perf_style.bin", 0x5F2C, 0x40	; 6 x 32-bit pointer
+; FDemo_BassPortSpanishHeading_Texts -- 6 x u32: a heading text that only Spanish fills ("Altavoz con port\xF3n para bajos"); the other five are "", indexed by the language number (RAM 0x340E4)
+; The ApFunction after InitializeNaka_Skip (storage/flash_floppy_handlers.s) returns it for EVT_GET_LANGUAGE_PTR; AcLanguageTextProc (ui/ui_widget_defs.s) draws entry
+; [language] with EVT_PARA_DRAW.  Order 0 English, 1 German, 2 French, 3 Spanish, 4 Italian, 5 Indonesian
+; (CheckLanguage_LangNames); the strings follow in reverse order.
+FDemo_BassPortSpanishHeading_Texts:	.incbin "includes/generated/naka_perf_style.bin", 0x5F2C, 0x18
+; FDemo_BassPortSpanishHeading_Indonesian -- 2 x char: "" + 0xFF fill, Indonesian entry of FDemo_BassPortSpanishHeading_Texts
+; FDemo_BassPortSpanishHeading_Texts[5] points here.
+FDemo_BassPortSpanishHeading_Indonesian:	.incbin "includes/generated/naka_perf_style.bin", 0x5F44, 0x2
+; FDemo_BassPortSpanishHeading_Italian -- 2 x char: "" + 0xFF fill, Italian entry of FDemo_BassPortSpanishHeading_Texts
+; FDemo_BassPortSpanishHeading_Texts[4] points here.
+FDemo_BassPortSpanishHeading_Italian:	.incbin "includes/generated/naka_perf_style.bin", 0x5F46, 0x2
+; FDemo_BassPortSpanishHeading_Spanish -- 30 x char: "Altavoz con portón para bajos", Spanish entry of FDemo_BassPortSpanishHeading_Texts
+; FDemo_BassPortSpanishHeading_Texts[3] points here.
+FDemo_BassPortSpanishHeading_Spanish:	.incbin "includes/generated/naka_perf_style.bin", 0x5F48, 0x1E
+; FDemo_BassPortSpanishHeading_French -- 2 x char: "" + 0xFF fill, French entry of FDemo_BassPortSpanishHeading_Texts
+; FDemo_BassPortSpanishHeading_Texts[2] points here.
+FDemo_BassPortSpanishHeading_French:	.incbin "includes/generated/naka_perf_style.bin", 0x5F66, 0x2
+; FDemo_BassPortSpanishHeading_German -- 2 x char: "" + 0xFF fill, German entry of FDemo_BassPortSpanishHeading_Texts
+; FDemo_BassPortSpanishHeading_Texts[1] points here.
+FDemo_BassPortSpanishHeading_German:	.incbin "includes/generated/naka_perf_style.bin", 0x5F68, 0x2
+; FDemo_BassPortSpanishHeading_English -- 2 x char: "" + 0xFF fill, English entry of FDemo_BassPortSpanishHeading_Texts
+; FDemo_BassPortSpanishHeading_Texts[0] points here.
+FDemo_BassPortSpanishHeading_English:	.incbin "includes/generated/naka_perf_style.bin", 0x5F6A, 0x2
 ; [nakarest] naka_perf_style+0x5f6c  +0x5f6c..+0x615e (0xe148e0, 498 B)
 ; [nakarest] A table of 6 pointers into this piece (498 B at 0xe148e0), then text; entry 0
 ; [nakarest] points at "The KN5000's Special Woofer & Bass Port produce "; no registered NAKA
@@ -660,16 +678,17 @@ NAKA_InitDataBlock_PtrTable_15:	.incbin "includes/generated/naka_perf_style.bin"
 ; [nakarest] references InitializeNaka_Skip15 (storage/flash_floppy_handlers.s: `lda xhl,
 ; [nakarest] (NAKA_InitDataBlock_PtrTable_16:24)`).
 NAKA_InitDataBlock_PtrTable_16:	.incbin "includes/generated/naka_perf_style.bin", 0x6F8C, 0x60	; 6 x 32-bit pointer
-; [nakarest] naka_perf_style+0x6fec  +0x6fec..+0x704c (0xe15960, 96 B)
-; [nakarest] purpose not established: layout of 96 B at 0xe15960 not derived; readers below
-; [nakarest] Readers: source references InitializeNaka_Skip16 (storage/flash_floppy_handlers.s:
-; [nakarest] `lda xhl, (NAKA_InitDataBlock_PtrTable_17:24)`).
-NAKA_InitDataBlock_PtrTable_17:	.incbin "includes/generated/naka_perf_style.bin", 0x6FEC, 0x60	; 6 x 32-bit pointer
-; [nakarest] naka_perf_style+0x704c  +0x704c..+0x70ac (0xe159c0, 96 B)
-; [nakarest] purpose not established: layout of 96 B at 0xe159c0 not derived; readers below
-; [nakarest] Readers: source references InitializeNaka_Skip17 (storage/flash_floppy_handlers.s:
-; [nakarest] `lda xhl, (NAKA_InitDataBlock_PtrTable_18:24)`).
-NAKA_InitDataBlock_PtrTable_18:	.incbin "includes/generated/naka_perf_style.bin", 0x704C, 0x60	; 6 x 32-bit pointer
+; FtLangText16_LangStrings -- 6 x uint32_t + strings: per-language text of the feature-demo ApFunction FtLangText16
+; {"Huge Styles", "Huge Styles(G)", "Huge Styles", "Huge Styles", "Italian", "Huge Styles"}, index = help language
+; (0x340e4: English, German, French, Spanish, Italian, Indonesian); the Italian entry is the placeholder "Italian".
+; The FtLangText16 handler (ApFunction slot 0x12b entry 16, storage/flash_floppy_handlers.s) returns it for
+; EVT_GET_LANGUAGE_PTR; AcLanguageTextProc draws the entry (ftdemo01 element 119).
+FtLangText16_LangStrings:	.incbin "includes/generated/naka_perf_style.bin", 0x6FEC, 0x60
+; FtLangText17_Texts -- 6 x pointer + their 6 strings: per-language text of feature-demo language text 17, by help language
+; (RAM 0x340E4): 0 English "Huge Styles", 1 German "Huge Styles(G)", 2 French, 3 Spanish, 4 the placeholder "Italian", 5 Indonesian.
+; The handler of ApFunction FtLangText17 (unlabelled, just before InitializeNaka_Skip18) returns it for EVT_GET_LANGUAGE_PTR;
+; AcLanguageTextProc then draws entry [0x340E4].
+FtLangText17_Texts:	.incbin "includes/generated/naka_perf_style.bin", 0x704C, 0x60
 ; NoteEvent_DefaultPatternSlot -- 1 x {u8 flags, u16 prev_slot, u16 next_slot, u8 events[251]}: default 256-byte pattern slot
 ; NoteEvent_LoadSoundGenParams (storage/flash_floppy_handlers.s) copies it (ldirw 0x80 words) into all 340
 ; slots at *(0xC72)+0x1400 (0x100 apart, 0..0x153) and clears byte 0 for slots 150 on

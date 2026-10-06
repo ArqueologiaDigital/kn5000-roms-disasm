@@ -1,4 +1,4 @@
-"""merge_proposals.py WORKDIR N ... -- WORKDIR/proposals_batchN.json + WORKDIR/inventory.json -> WORKDIR/reviewed-batchN.json.
+"""merge_proposals.py WORKDIR N|proposals_X.json ... -- WORKDIR/proposals_batchN.json (or proposals_X.json) + WORKDIR/inventory.json -> WORKDIR/reviewed-batchN.json (reviewed-X.json).
 Adds asm, size, blob and off_v10 from the inventory.  A piece check that is false on the piece's own bytes but true on
 the slice's is marked check_on = "slice" (written with slice offsets).  A later piece that kept the slice's old label is
 renamed, because the converter moves the old label to piece 0."""
@@ -7,7 +7,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.a
 os.chdir(sys.argv[1])
 inv = {x["label"]: x for x in json.load(open("inventory.json"))}
 for n in sys.argv[2:]:
-    P = json.load(open("proposals_batch%s.json" % n))
+    src = n if n.endswith(".json") else "proposals_batch%s.json" % n       # a batch number, or a proposals file
+    n = os.path.basename(src)[len("proposals_"):-len(".json")] if n.endswith(".json") else "batch%s" % n
+    P = json.load(open(src))
     out = []
     for r in P:
         x = inv[r["label"]]
@@ -33,5 +35,5 @@ for n in sys.argv[2:]:
                 p["new_label"] = new
                 r.setdefault("review_notes", []).append("piece %d renamed %s: the slice's old label moves to piece 0" % (i, new))
         out.append(r)
-    json.dump(out, open("reviewed-batch%s.json" % n, "w"), indent=1)
+    json.dump(out, open("reviewed-%s.json" % n, "w"), indent=1)
     print(n, len(out), sum(r.get("verdict") == "type" for r in out))

@@ -1373,7 +1373,7 @@ RhythmRomTest_SumLoop:
 	set 0, a
 
 RhythmRomTest_Compare:
-	lda xix, (RhythmRomTest_Compare_Data:24)
+	lda xix, (RomTest_RhythmRomSignature:24)
 	ld xiy, (xix)
 	lda xbc, (xix + 4)
 	ld xde, xbc
@@ -1498,7 +1498,7 @@ LcdTest_Done:
 Test_Video_RAM_IC207:
 	dec 2, xsp
 	ld (xsp), a
-	ld xhl, (WidgetStyleDataTable:24)
+	ld xhl, (VGA_InitFuncTable:24)
 	call (xhl)
 	ldw (0x1a0000:24), 0x5a5a; VRAM self-test pattern 1
 	calr DramTest_Loop
@@ -11178,7 +11178,7 @@ PmemMode_Select:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 40)
-	lda xbc, (PmemMode_Select_Data:24)
+	lda xbc, (PmemMode_ValueToEditSw:24)
 	ld wa, (xwa)
 	ld	a, (xbc+wa)
 	extz wa
@@ -11211,7 +11211,7 @@ PmemMode_Select_DrawHighlight1:
 	call DrawDesignFrame
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 36)
-	lda xbc, (PmemMode_Select_Data:24)
+	lda xbc, (PmemMode_ValueToEditSw:24)
 	ld wa, (xwa)
 	ld	a, (xbc+wa)
 	extz wa
@@ -14171,7 +14171,7 @@ RVari_Select_CheckSameBank:
 	srl e, 2
 	extz de
 	sla de, 2
-	lda xhl, (RVari_Select_CheckSameBank_PtrTable:24)
+	lda xhl, (RVari_MemoryBankNames:24)
 	ld	xde, (xhl+de)
 	ld xhl, 1:i3
 	push xhl
@@ -14216,7 +14216,7 @@ RVari_Select_CheckSameBank:
 	srl e, 2
 	extz de
 	sla de, 2
-	lda xhl, (RVari_Select_CheckSameBank_PtrTable:24)
+	lda xhl, (RVari_MemoryBankNames:24)
 	ld	xde, (xhl+de)
 	ld xhl, 1:i3
 	push xhl

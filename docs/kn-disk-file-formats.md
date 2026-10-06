@@ -107,7 +107,7 @@ extension table at 0xEA038C -- so the framing is [INFERENCE] from data shape, ho
 
 ### The file-type enumeration (settles what the 24 blocks are NOT)
 
-`SeqFileType_CodeTable` at ROM 0xEA0340 is an array of ten LE32 pointers to the extension strings
+`FileIO_TypeExtensions` at ROM 0xEA0340 is an array of ten LE32 pointers to the extension strings
 at 0xEA0368..0xEA038C, terminated by `FF FF FF FF`:
 
     index 0  LSW      index 5  MSP
@@ -143,7 +143,7 @@ the 24 blocks still are not memory slots.
 
 There are exactly three, and together they bound what can be learned here:
 
-1. **0xEA038C** -- the extension string in `SeqFileType_CodeTable` (above).
+1. **0xEA038C** -- the extension string in `FileIO_TypeExtensions` (above).
 2. **0xE1FE24** -- the glob **`A:\HAMA\*.LSW`**, in a factory-test string block alongside
    `TEST Finishd!!`, `init`, `OK`, `NG`. So `.LSW` files are read from a `HAMA` directory during a
    factory test or initialisation pass. (`scripts/analysis/extract_hama.py` already exists in this
@@ -203,16 +203,16 @@ is worth more than the claim was:
 
 **RETRACTED.** The KN5000 handles `.LSW`, and has a dedicated handler for it in every revision. The
 string search above is complete and correct -- and irrelevant, because **the code never names the
-type. It uses the INDEX 0** into `SeqFileType_CodeTable`. A search for `"LSW"` cannot find code that
+type. It uses the INDEX 0** into `FileIO_TypeExtensions`. A search for `"LSW"` cannot find code that
 only ever says `0`.
 
 ### `.LSW` is file type 0, and type 0 has a handler
 
 `FileIO_SaveAllRegions` walks eight 6-byte records at **0xEA0210**
-(`SaveAll_CheckRecordLoop_Data`):
+(`SaveAll_RegionSaveRecs`):
 
-    +0  u16  file-type index into SeqFileType_CodeTable   -- 0 = LSW
-    +2  u32  handler, fetched via FileDemo_ProcessCallback_Data and `call (xhl)`
+    +0  u16  file-type index into FileIO_TypeExtensions   -- 0 = LSW
+    +2  u32  handler, fetched via SaveAll_RegionRecs_HandlerCol and `call (xhl)`
 
 Both offsets come from the code rather than from the shape of the bytes: `_0x10` feeds the type
 index passed to `FileIO_ReadHeader` in `e`, and `_0x12` is loaded into `xhl` and indirectly called

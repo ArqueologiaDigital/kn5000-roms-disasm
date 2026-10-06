@@ -16,11 +16,13 @@ for f in sys.argv[1:]:
     for r in P:
         lab = r["label"]
         x = inv.get(lab)
-        if r.get("verdict") != "type":
+        if r.get("verdict") not in ("type", "name"):
             print("REFUSE %-44s %s" % (lab, (r.get("why_refused") or "")[:110]))
             continue
         b = open(os.path.join(ROOT, "v10/maincpu/includes/generated/%s.bin" % x["blob"]), "rb").read()[x["off"]:x["off"] + x["size"]]
         ps = r.get("pieces") or [dict(r, off_in_slice=0, size=x["size"])]
+        if r.get("verdict") == "name":          # the C is already typed: no size to check
+            ps = [dict(p, ctype="uint8_t", dims="[%d]" % p["size"]) for p in ps]
         probs = []
         for p in ps:
             bb = b[p["off_in_slice"]:p["off_in_slice"] + p["size"]]
@@ -43,5 +45,5 @@ for f in sys.argv[1:]:
             got = " ".join(re.sub(r'\s+', ' ', L[k].split(";")[0].strip().lower()) for k in range(max(0, ln - 3), min(len(L), ln + 2)))
             if want.split(" ")[0] not in got or not any(t in got for t in re.findall(r'[a-z_][\w]+', want)[1:2] or [want]):
                 bad += 1
-        print("%-6s %-44s -> %-44s %s%s" % ("TYPE", lab, ", ".join(p["new_label"] for p in ps)[:44],
+        print("%-6s %-44s -> %-44s %s%s" % (r["verdict"].upper(), lab, ", ".join(p["new_label"] for p in ps)[:44],
               ("ev-miss %d/%d " % (bad, len(r.get("evidence", []))) if bad else ""), "; ".join(probs)))

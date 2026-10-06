@@ -3263,7 +3263,7 @@ MainChordPre:
 	ld a, (36160:16)
 	extz wa
 	sla wa, 2
-	lda xbc, (Naka_MemoryC_Screens:24)
+	lda xbc, (MainChordPre_RootNames:24)
 	ld	xwa, (xbc+wa)
 	push xwa
 	push xiz
@@ -3271,7 +3271,7 @@ MainChordPre:
 	ld a, (36162:16)
 	extz wa
 	sla wa, 2
-	lda xbc, (MainChordPre_PtrTable:24)
+	lda xbc, (MainChordPre_ChordTypeNames:24)
 	ld	xwa, (xbc+wa)
 	push xwa
 	push xiz

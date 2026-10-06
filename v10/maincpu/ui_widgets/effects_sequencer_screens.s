@@ -2513,13 +2513,11 @@ Kubo_MainFunctionTable_448:	.long FuncName_ApEditSyori
 	.long FuncName_HelpFlashFunc
 	.long FuncName_EtmenuTitleFunc
 	.long FuncName_MainPanic
-	.long InitializeKubo_PtrTable_72_EndName
-; [nakarest] naka_effects_seq+0x86e0  +0x86e0..+0x86e2 (0xe30684, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xe30684 not derived; readers below
-; [nakarest] Readers: source references Kubo_MainFunctionTable_148
-; [nakarest] (ui_widgets/effects_sequencer_screens.s: `.long 0x00e30684`); 1 data word in
-; [nakarest] Kubo_MainFunctionTable_148 (at 0xe30680).
-InitializeKubo_PtrTable_72_EndName:	.incbin "includes/generated/naka_effects_seq.bin", 0x86E0, 0x2
+	.long Kubo_MainFunctionNameTable_448_EndName
+; Kubo_MainFunctionNameTable_448_EndName -- 2 x char: "" + 0xFF fill, end-of-table name of MainFunction name slot 0x448
+; Word [44] of Kubo_MainFunctionTable_448 points here, one past the 44 names registered by RegObjTabl ... 0x2c,
+; Kubo_MainFunctionTable_448, 0x448 (InitializeKubo). The note's reader (Kubo_MainFunctionTable_148) is the wrong table.
+Kubo_MainFunctionNameTable_448_EndName:	.incbin "includes/generated/naka_effects_seq.bin", 0x86E0, 0x2
 ; [nakarest] naka_effects_seq+0x86e2  +0x86e2..+0x899a (0xe30686, 696 B)
 ; [nakarest] name strings, entries 0-43 of MainFunction slot 0x448 (table 0xe305d0, 44 entries,
 ; [nakarest] InitializeKubo) (names for MainFunction slot 0x148): "MainPanic",
@@ -2569,11 +2567,11 @@ FuncName_ApPlaySyori_Kubo:	.incbin "includes/generated/naka_effects_seq.bin", 0x
 FuncName_EffEditMain:		.incbin "includes/generated/naka_effects_seq.bin", 0x8976, 0xC
 FuncName_MainExeCall:		.incbin "includes/generated/naka_effects_seq.bin", 0x8982, 0xC
 FuncName_ApEditSyori:		.incbin "includes/generated/naka_effects_seq.bin", 0x898E, 0xC
-; [nakarest] naka_effects_seq+0x899a  +0x899a..+0x89a2 (0xe3093e, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xe3093e not derived; readers below
-; [nakarest] Readers: source references EntertainerGridCheck (sequencer/sequencer_ui.s: `ld xiy,
-; [nakarest] EntertainerGridCheck_Data`).
-EntertainerGridCheck_Data:	.incbin "includes/generated/naka_effects_seq.bin", 0x899A, 0x8
+; EntertainerGridCheck_GridDrawRecInit -- 8 x uint8_t (all 0): initial value of the EVT_GRID_DRAW cell record
+; {int16 col, int16 row, char *text} that EntertainerGridCheck (sequencer/sequencer_ui.s) keeps in its frame;
+; it then stores the cell from EVT_GET_SELECTED_CEL / the event parameter at +0 and +2, its text buffer at +4,
+; and sends EVT_GRID_DRAW with XDE = the record.
+EntertainerGridCheck_GridDrawRecInit:	.incbin "includes/generated/naka_effects_seq.bin", 0x899A, 0x8
 ; [nakarest] naka_effects_seq+0x89a2  +0x89a2..+0x8b86 (0xe30946, 484 B)
 ; [nakarest] Text (484 B at 0xe30946), first string
 ; [nakarest] "~43~2d~32~44~a0~bc~44~2d~32~45~a0~bc~45~2d~32~46"; no registered NAKA table points

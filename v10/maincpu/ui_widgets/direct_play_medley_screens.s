@@ -171,13 +171,11 @@
 ; 14*0x407.
 ; -----------------------------------------------------------------------------
 
-; [nakarest] NakaBoxData_PsSongSelBox  +0x0..+0x2 (0xe2107c, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xe2107c not derived; readers below
-; [nakarest] Readers: source references MtName_SongNameSet
-; [nakarest] (ui_widgets/naka_direct_play_dispatch.s: `.long NakaBoxData_PsSongSelBox`); 1 data
-; [nakarest] word in MtName_SongNameSet (at 0xe21078), which is read by MtName_PtrTable
-; [nakarest] (ui_widgets/naka_direct_play_dispatch.s: `.long MtName_SongNameSet`).
-NakaBoxData_PsSongSelBox:	.incbin "includes/generated/naka_direct_play.bin", 0x0, 0x2
+; Yoko_FunctionNameTable_407_EndName -- 2 x char: "" + 0xFF fill, end-of-table name of Function name slot 0x407
+; Word [1] of Yoko_FunctionTable_407 points here, one past the single name ("PsSongSelBoxProc") registered by
+; RegObjTabl ... 0x1, Yoko_FunctionTable_407, 0x407 (InitializeYoko). The note's 'MtName_SongNameSet' reader is stale:
+; the pointing word is Yoko_FunctionTable_407 + 4.
+Yoko_FunctionNameTable_407_EndName:	.incbin "includes/generated/naka_direct_play.bin", 0x0, 0x2
 ; [nakarest] naka_direct_play+0x2  +0x2..+0x14 (0xe2107e, 18 B)
 ; [nakarest] name string, entry 0 of Function slot 0x407 (table 0xe21074, 1 entries,
 ; [nakarest] InitializeYoko) (names for Function slot 0x107): "PsSongSelBoxProc".

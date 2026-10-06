@@ -114,6 +114,47 @@ extern const char WakeUpPassword;
 /* FileIO_StatusToErrorCode's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* FDemoText_PartialResendBit's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* FDemoText_ImgAltInit's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* PartMixer_RowTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* FileIO_TypeLoaderRecords's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* PsMixer_BootDefaultRows's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* TrackMixer_Rows's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SaveAll_RegionRecsTail's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint8_t region;
+    uint8_t pad;
+    uint32_t save_handler;
+} SaveAll_RegionRecsTail_t;
+
+typedef struct __attribute__((packed)) {
+    uint16_t row_kind;
+    uint16_t control_type;
+    int16_t y_offset;
+    uint16_t page_cursor;
+    uint32_t caption;
+} TrackMixer_Rows_t;
+
+typedef struct __attribute__((packed)) {
+    uint16_t row_kind;
+    uint16_t control_type;
+    int16_t y_offset;
+    uint16_t page_cursor;
+    uint32_t caption;
+} PsMixer_BootDefaultRows_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t type;
+    uint8_t pad;
+    uint32_t loader;
+} FileIO_TypeLoaderRecords_t;
+
+typedef struct __attribute__((packed)) {
+    uint16_t kind;
+    uint16_t ctl_type;
+    int16_t band_dy;
+    uint16_t initial_row;
+    uint32_t caption;
+} PartMixer_RowTable_t;
+
 typedef struct __attribute__((packed)) {
     char alt[65];
     uint8_t align_pad;
@@ -376,7 +417,7 @@ typedef struct __attribute__((packed)) {
     char w35_code[2];
     char Mesage_name[8];
     uint32_t StrTable_WelcomVersion[12];  /* 12 pointers */
-    char Str_Version_Empty1[2];
+    char WelcomVersion_NameListEnd[2];
     char MPver_str[6];
     char Str_Version_Empty2[2];
     char Str_Version_Empty3[2];
@@ -392,7 +433,7 @@ typedef struct __attribute__((packed)) {
     uint32_t Murai_ResNameTable_3F0[1];
     /* StrTable_SoftwareVersionComps: 6 pointers (cut from ptrs_7 by split_naka_pointer_arrays.py) */
     uint32_t StrTable_SoftwareVersionComps[6];
-    char Str_SoftVer_Empty1[2];
+    char Murai_ResNameTable_3F0_EndName[2];
     char w38_code[2];
     char SoundTable_name[12];
     char SubProgram_code[12];
@@ -1063,14 +1104,14 @@ typedef struct __attribute__((packed)) {
     char txt_Vous_avez_deja_choisi_une_piste[100];
     char txt_Es_ist_nicht_moglich_zwei_RHYTHM[92];
     char ARhythmTrackAlready_str[80];
-    uint32_t StrTable_DiskErr24_Chord[6];  /* 6 pointers */
+    uint32_t MsgText_ChordTrackExistsTexts[6];  /* 6 pointers */
     char SatuChordTrackSudah_str[78];
     char Error_str_22[10];
     char YaExisteUnaPista_str_2[76];
     char txt_Vous_avez_deja_choisi_une_piste_2[100];
     char txt_Es_ist_nicht_moglich_zwei_CHORD[92];
     char AChordTrackAlready_str[78];
-    uint32_t MsgText_Lang2_PtrTable[6];  /* 6 pointers */
+    uint32_t MsgText_Err24ControlTrack[6];  /* 6 pointers */
     char SatuControlTrackSudah_str[82];
     char Error_str_23[10];
     char txt_Ya_existe_una_pista_de_ritmo_No[72];
@@ -1078,7 +1119,7 @@ typedef struct __attribute__((packed)) {
     char txt_Vous_avez_deja_choisi_une_piste_3[102];
     char txt_Es_ist_nicht_moglich_zwei[94];
     char AControlTrackAlready_str[82];
-    uint32_t MsgText_Lang3_PtrTable[6];  /* 6 pointers */
+    uint32_t MsgText_ApcTrackExistsTexts[6];  /* 6 pointers */
     char SatuApcTrackSudah_str[74];
     char Error_str_24[10];
     char YaExisteUnaPista_str_3[76];
@@ -1489,7 +1530,7 @@ typedef struct __attribute__((packed)) {
     /* the 6 window object ids `kind` selects: Viewable slot 0xEE elements 0x14 NoMessage, 0x02 Completed, 0x05 Reminder, 0x09 Error, 0x0D Other, 0x16 PleaseWait (all class Window) */
     uint32_t IvMesage_Windows[6];
     char Msg_str[4];
-    uint32_t PleaseWait_GetText_PtrTable[6];  /* 6 pointers */
+    uint32_t PleaseWait_LangTexts[6];  /* 6 pointers */
     char SilahkanTunggu_str_2[18];
     char PleaseWait_str_3[14];
     uint16_t field_178b4;
@@ -1497,7 +1538,7 @@ typedef struct __attribute__((packed)) {
     char VeuillezPatienter_str_2[20];
     char BitteWarten_str_2[14];
     char PleaseWait_str_4[14];
-    uint32_t Str_PleaseWait_Multilingual[6];  /* 6 pointers */
+    uint32_t CheckLanguage_LangNames[6];  /* 6 pointers */
     char Indonesian_code[12];
     char Italian_name[8];
     char Spanish_code[8];
@@ -1542,7 +1583,7 @@ typedef struct __attribute__((packed)) {
     /* The 14 values of LSW setting 0x4202 in on-screen order (value 13 is 4th), 0xFFFF-terminated; INDEX up/down moves 7 places */
     uint16_t Sdtecd1_ValueScreenOrder[15];
     char TeC1_str[6];
-    uint32_t Naka_TechniChord1_Screens[17];  /* 17 pointers */
+    uint32_t LswOrchestrator_PartNames[17];  /* 17 pointers */
     char CONDUCTOR_str[10];
     char Part_str_27[10];
     char Part_str_28[10];
@@ -1571,7 +1612,7 @@ typedef struct __attribute__((packed)) {
     /* zero padding */
     /* 15 scale-tuning type codes + 0xFFFF end; position k selects name k of Naka_Scale2_Screens */
     uint16_t LswScalingType_TypeCodes[16];
-    uint32_t Naka_Scale2_Screens[17];  /* 17 pointers */
+    uint32_t LswScalingType_TypeNames[17];  /* 17 pointers */
     char NoType_str[14];
     char User_str[14];
     char User_str_2[14];
@@ -1590,7 +1631,7 @@ typedef struct __attribute__((packed)) {
     char Random_str[14];
     char Off_str_2[14];
     char NoType_str_2[14];
-    uint32_t Scale_Arabic2_NameTable[12];  /* 12 pointers */
+    uint32_t LswScalingShift_ValueNames[12];  /* 12 pointers */
     char str_749[4];
     char str_750[4];
     char str_751[4];
@@ -1603,7 +1644,7 @@ typedef struct __attribute__((packed)) {
     char str_758[4];
     char str_759[4];
     char str_760[4];
-    uint32_t Scale_Names_Table[12];  /* 12 pointers */
+    uint32_t LswScalingShift2_KeyNames[12];  /* 12 pointers */
     char KeyB_str[10];
     char KeyA_str[10];
     char KeyA_str_2[10];
@@ -1845,71 +1886,22 @@ typedef struct __attribute__((packed)) {
      * because the targets have no labels to name.
      * --------------------------------------------------------------------- */
     uint32_t PsMixer_ControlProcTable[11];
-    char str_1131[2];
-    uint8_t pad_1998[6];  /* zero padding */
-    uint32_t ptr_19202;
-    uint16_t field_19206;
-    uint16_t field_19208;
-    uint16_t field_1920a;
-    uint8_t pad_1999[2];  /* zero padding */
-    uint32_t SOUND_str_2_ptr;
-    uint16_t field_19212;
-    uint16_t field_19214;
-    uint16_t field_19216;
-    uint8_t pad_2000[2];  /* zero padding */
-    uint32_t PAN_str_ptr;
-    uint16_t field_1921e;
-    uint16_t field_19220;
-    uint16_t field_19222;
-    uint16_t field_19224;
-    uint32_t VOLUME_str_ptr;
-    char str_1132[2];
-    uint16_t field_1922c;
-    uint8_t pad_2001[4];  /* zero padding */
-    uint32_t ptr_19232;
-    uint16_t field_19236;
-    uint16_t field_19238;
-    uint16_t field_1923a;
-    uint16_t field_1923c;
-    uint32_t REVERB_str_ptr;
-    uint16_t field_19242;
-    uint16_t field_19244;
-    uint16_t field_19246;
-    uint8_t pad_2002[2];  /* zero padding */
-    uint32_t DspEff_str_ptr;
-    uint16_t field_1924e;
-    uint16_t field_19250;
-    uint16_t field_19252;
-    uint8_t pad_2003[2];  /* zero padding */
-    uint32_t DigitalEff_str_ptr;
-    uint16_t field_1925a;
-    uint16_t field_1925c;
-    uint16_t field_1925e;
-    uint8_t pad_2004[2];  /* zero padding */
-    uint32_t KeyShift_str_ptr;
-    char str_1133[2];
-    uint16_t field_19268;
-    uint8_t pad_2005[4];  /* zero padding */
-    uint32_t ptr_1926e;
-    char str_1134[2];
-    uint8_t pad_2006[6];  /* zero padding */
-    uint32_t ptr_1927a;
-    char str_1135[2];
-    uint8_t pad_2007[6];  /* zero padding */
-    uint32_t ptr_19286;
-    uint16_t field_1928a;
-    uint16_t field_1928c;
-    uint8_t pad_2008[2];  /* zero padding */
-    uint16_t field_19290;
-    uint32_t MIDI_str_ptr;
-    uint8_t pad_2009[2];  /* zero padding */
-    uint16_t field_19298;
-    uint8_t pad_2010[4];  /* zero padding */
-    uint32_t LOCAL_str_ptr;
-    char str_1136[2];
-    uint16_t field_192a4;
-    uint8_t pad_2011[4];  /* zero padding */
-    uint32_t ptr_192aa;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* boot default of the mixer row table (RAM 0x3EA30): 15 rows, 3 pages of 5 {kind, control type, y offset, page cursor, caption} */
+    PsMixer_BootDefaultRows_t PsMixer_BootDefaultRows[15];
     char str_1137[2];
     char LOCAL_str[6];
     char MIDI_str[6];
@@ -2044,71 +2036,22 @@ typedef struct __attribute__((packed)) {
     char RightSoundNameXxxxx_str[26];
     /* PsMixerControlProc_CaseTable: 10 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t PsMixerControlProc_CaseTable[10];
-    char str_1262[2];
-    uint8_t pad_2013[6];  /* zero padding */
-    uint32_t ptr_19676;
-    uint16_t field_1967a;
-    uint16_t field_1967c;
-    uint16_t field_1967e;
-    uint8_t pad_2014[2];  /* zero padding */
-    uint32_t SOUND_str_3_ptr;
-    uint16_t field_19686;
-    uint16_t field_19688;
-    uint16_t field_1968a;
-    uint8_t pad_2015[2];  /* zero padding */
-    uint32_t PAN_str_2_ptr;
-    uint16_t field_19692;
-    uint16_t field_19694;
-    uint16_t field_19696;
-    uint16_t field_19698;
-    uint32_t VOLUME_str_2_ptr;
-    char str_1263[2];
-    uint16_t field_196a0;
-    uint8_t pad_2016[4];  /* zero padding */
-    uint32_t ptr_196a6;
-    uint16_t field_196aa;
-    uint16_t field_196ac;
-    uint16_t field_196ae;
-    uint16_t field_196b0;
-    uint32_t REVERB_str_2_ptr;
-    uint16_t field_196b6;
-    uint16_t field_196b8;
-    uint16_t field_196ba;
-    uint8_t pad_2017[2];  /* zero padding */
-    uint32_t DspEff_str_2_ptr;
-    uint16_t field_196c2;
-    uint16_t field_196c4;
-    uint16_t field_196c6;
-    uint8_t pad_2018[2];  /* zero padding */
-    uint32_t DigitalEff_str_2_ptr;
-    uint16_t field_196ce;
-    uint16_t field_196d0;
-    uint16_t field_196d2;
-    uint8_t pad_2019[2];  /* zero padding */
-    uint32_t KeyShift_str_2_ptr;
-    char str_1264[2];
-    uint16_t field_196dc;
-    uint8_t pad_2020[4];  /* zero padding */
-    uint32_t ptr_196e2;
-    char str_1265[2];
-    uint8_t pad_2021[6];  /* zero padding */
-    uint32_t ptr_196ee;
-    char str_1266[2];
-    uint8_t pad_2022[6];  /* zero padding */
-    uint32_t ptr_196fa;
-    uint16_t field_196fe;
-    uint16_t field_19700;
-    uint8_t pad_2023[2];  /* zero padding */
-    uint16_t field_19704;
-    uint32_t MIDI_str_2_ptr;
-    uint8_t pad_2024[2];  /* zero padding */
-    uint16_t field_1970c;
-    uint8_t pad_2025[4];  /* zero padding */
-    uint32_t LOCAL_str_2_ptr;
-    char str_1267[2];
-    uint16_t field_19718;
-    uint8_t pad_2026[4];  /* zero padding */
-    uint32_t ptr_1971e;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* Part Mixer rows: {kind (PsMixer_RowKindApFuncId index), control type (PsMixer_CtlTypeProc n), y shift of the row band, 1 = row selected on entry, caption} */
+    PartMixer_RowTable_t PartMixer_RowTable[15];
     /* "" (NUL + 0xFF pad): caption of PartMixer_Init_Data row 14 (a blank row, kind 32) */
     char PartMixer_Row14Caption[2];
     char LOCAL_str_2[6];
@@ -2131,71 +2074,22 @@ typedef struct __attribute__((packed)) {
     /* 4 pointers */
     /* part index shown in each mixer column (4 pages x 8); 0x00FF = no column (page end) */
     uint16_t PartMixer_ColumnPartMap[32];
-    char str_1283[2];
-    uint8_t pad_2028[6];  /* zero padding */
-    uint32_t ptr_197ba;
-    uint16_t field_197be;
-    uint16_t field_197c0;
-    uint16_t field_197c2;
-    uint8_t pad_2029[2];  /* zero padding */
-    uint32_t SOUND_str_4_ptr;
-    uint16_t field_197ca;
-    uint16_t field_197cc;
-    uint16_t field_197ce;
-    uint8_t pad_2030[2];  /* zero padding */
-    uint32_t PAN_str_3_ptr;
-    uint16_t field_197d6;
-    uint16_t field_197d8;
-    uint16_t field_197da;
-    uint16_t field_197dc;
-    uint32_t VOLUME_str_3_ptr;
-    char str_1284[2];
-    uint16_t field_197e4;
-    uint8_t pad_2031[4];  /* zero padding */
-    uint32_t ptr_197ea;
-    uint16_t field_197ee;
-    uint16_t field_197f0;
-    uint16_t field_197f2;
-    uint16_t field_197f4;
-    uint32_t REVERB_str_3_ptr;
-    uint16_t field_197fa;
-    uint16_t field_197fc;
-    uint16_t field_197fe;
-    uint8_t pad_2032[2];  /* zero padding */
-    uint32_t DspEff_str_3_ptr;
-    uint16_t field_19806;
-    uint16_t field_19808;
-    uint16_t field_1980a;
-    uint8_t pad_2033[2];  /* zero padding */
-    uint32_t DigitalEff_str_3_ptr;
-    uint16_t field_19812;
-    uint16_t field_19814;
-    uint16_t field_19816;
-    uint8_t pad_2034[2];  /* zero padding */
-    uint32_t KeyShift_str_3_ptr;
-    char str_1285[2];
-    uint16_t field_19820;
-    uint8_t pad_2035[4];  /* zero padding */
-    uint32_t ptr_19826;
-    char str_1286[2];
-    uint8_t pad_2036[6];  /* zero padding */
-    uint32_t ptr_19832;
-    char str_1287[2];
-    uint8_t pad_2037[6];  /* zero padding */
-    uint32_t ptr_1983e;
-    uint16_t field_19842;
-    uint16_t field_19844;
-    uint8_t pad_2038[2];  /* zero padding */
-    uint16_t field_19848;
-    uint32_t MIDI_str_3_ptr;
-    uint8_t pad_2039[2];  /* zero padding */
-    uint16_t field_19850;
-    uint8_t pad_2040[4];  /* zero padding */
-    uint32_t LOCAL_str_3_ptr;
-    char str_1288[2];
-    uint16_t field_1985c;
-    uint8_t pad_2041[4];  /* zero padding */
-    uint32_t ptr_19862;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* track-mixer row table: 15 rows, 3 pages of 5 {kind, control type, y offset, page cursor, caption}; installed at RAM 0x3EA30 by TrackMixer_Init */
+    TrackMixer_Rows_t TrackMixer_Rows[15];
     char str_1289[2];
     char LOCAL_str_3[6];
     char MIDI_str_3[6];
@@ -2228,7 +2122,7 @@ typedef struct __attribute__((packed)) {
     uint16_t IvDrawbar1_DrawbarParamIds[9];
     /* item 0..14 -> LSW (panel-setting) id; items 0-10 are part-relative (+ part*1024), 11-14 are used as-is */
     uint16_t MemDraw_LswIdTable[15];
-    uint32_t KeyShift_DisplayStrTable[16];  /* 16 pointers */
+    uint32_t LswDrawbar_Signed4BitNames[16];  /* 16 pointers */
     char str_1307[4];
     char str_1308[4];
     char str_1309[4];
@@ -2299,7 +2193,7 @@ typedef struct __attribute__((packed)) {
     /* FDemoText_InitFuncTable: 4 pointers (cut from ptrs_256 by split_naka_pointer_arrays.py) */
     uint32_t FDemoText_InitFuncTable[4];
     /* FDemoText_ProcessMarkup_LookupTag_PtrTable: 1 pointers (cut from ptrs_256 by split_naka_pointer_arrays.py) */
-    uint32_t FDemoText_ProcessMarkup_LookupTag_PtrTable[1];
+    uint32_t FDemoText_MarkupTagTable[1];
     /* FDemoText_ProcessMarkup_LookupTag_PtrTable_2: 29 pointers (cut from ptrs_256 by split_naka_pointer_arrays.py) */
     uint32_t FDemoText_ProcessMarkup_LookupTag_PtrTable_2[29];
     char Action_str[8];
@@ -2319,7 +2213,7 @@ typedef struct __attribute__((packed)) {
     char NONE_str[6];
     char FDemoText_ByteData_DisplayRefresh_Str_Fmts_Fmtd[6];
     char ErrorGetInstanceID_str[24];
-    uint32_t FileType_NameTable[4];  /* 4 pointers */
+    uint32_t FDemoText_ExecTagAttrNames[4];  /* 4 pointers */
     /* "" + 0xFF pad: ends FileType_NameTable, the attribute names of the demo-text SONG tag (SONG, SRC, NAME) */
     char SongAttrName_Empty[2];
     char NAME_str[6];
@@ -2335,11 +2229,11 @@ typedef struct __attribute__((packed)) {
     FDemoText_SongSrcInit_t FDemoText_SongSrcInit;
     /* FDemoText_ByteData_LayoutEngine_Str_Fmt8s: text (the asm slice of the same name) */
     char FDemoText_ByteData_LayoutEngine_Str_Fmt8s[4];
-    uint32_t FDemoText_ByteData_LayoutEngine_PtrTable[3];  /* 3 pointers */
+    uint32_t FDemoText_ActTag_AttrNames[3];  /* 3 pointers */
     char str_1356[2];
     char PAN_str_4[4];
     char NO_str[4];
-    uint32_t FDemoText_ByteData_LayoutEngine_PtrTable_2[3];  /* 3 pointers */
+    uint32_t FDemoText_FontTagAttrNames[3];  /* 3 pointers */
     /* "" (+ 0xFF alignment byte): terminator of the {SIZE, COLOR} attribute-name list */
     char FDemoText_SizeColorAttrNamesEnd[2];
     char COLOR_str[6];
@@ -2439,7 +2333,7 @@ typedef struct __attribute__((packed)) {
     /* order in which file types are tried: LSW, PMT, MSP, CMP, TM, SQT, RCM, MD, SQF, SEQ (indexes into SeqFileType_CodeTable) */
     uint8_t FileIO_TypeProbeOrder[10];
     uint32_t HK_str_3_ptr;
-    uint16_t FileIO_CheckRegionSignature_Data;
+    uint16_t FileIO_FileSigRecs_OffsetCol;
     uint16_t field_1a1bc;
     uint32_t HK_str_2_ptr;
     uint8_t pad_2072[2];  /* zero padding */
@@ -2481,8 +2375,10 @@ typedef struct __attribute__((packed)) {
     char H_str_4[2];
     char K_str_5[2];
     char rb_str_4[4];
-    uint32_t ptr_1a238;
-    uint16_t field_1a23c;
+    /* pointer to the byte value (1) the file byte at offset 4 must have; points at FileIO_HeaderAt4_ExpectedByte */
+    uint32_t FileIO_HeaderAt4_ExpectedPtr;
+    /* expected value 1 of the file byte at offset 4, then 0 */
+    uint8_t FileIO_HeaderAt4_ExpectedByte[2];
     char rb_str_5[4];
     char rb_str_6[4];
     char rb_str_7[4];
@@ -2496,22 +2392,12 @@ typedef struct __attribute__((packed)) {
     char rb_str_15[4];
     char rb_str_16[4];
     char rb_str_17[4];
-    uint16_t FileDemo_RecordCallback_Data;
-    uint32_t FileIO_LoadRegion4_VRAM_ptr;
-    uint8_t pad_2078[2];  /* zero padding */
-    uint32_t FileIO_LoadRegion0_VRAM_ptr;
-    uint16_t field_1a27e;
-    uint32_t FileIO_LoadRegion1_VRAM_ptr;
-    uint16_t field_1a284;
-    uint32_t FileIO_LoadRegion5_VRAM_ptr;
-    uint16_t field_1a28a;
-    uint32_t FileIO_LoadRegion3_ExtMem_ptr;
-    uint16_t field_1a290;
-    uint32_t FileIO_LoadRegion2_ExtMem_ptr;
-    uint16_t field_1a296;
-    uint32_t FileIO_LoadRegion6_Simple_ptr;
-    uint16_t field_1a29c;
-    uint32_t FileIO_LoadRegion7_Flash_ptr;
+    uint16_t FileIO_RegionLoaders;
+    /* zero padding */
+    /* loader of record 0 (file type 4: FileIO_LoadRegion4_VRAM); FileDemo_RecordCallback uses this address as the base of the loader column (stride 6) */
+    uint32_t FileIO_TypeLoaderColumn;
+    /* records 1-7 {file type, 0, loader}: types 0, 1, 5, 3, 2, 6, 7 -> FileIO_LoadRegion0_VRAM .. FileIO_LoadRegion7_Flash */
+    FileIO_TypeLoaderRecords_t FileIO_TypeLoaderRecords[7];
     char wb_str[4];
     char wb_str_2[4];
     char wb_str_3[4];
@@ -2520,22 +2406,11 @@ typedef struct __attribute__((packed)) {
     char wb_str_6[4];
     char wb_str_7[4];
     char wb_str_8[4];
-    uint8_t SaveAll_CheckRecordLoop_Data[2];  /* zero padding */
-    uint32_t FileIO_SaveRegion0_VRAM_ptr;
-    uint16_t field_1a2c8;
-    uint32_t FileIO_SaveRegion1_VRAM_ptr;
-    uint16_t field_1a2ce;
-    uint32_t FileIO_SaveRegion5_VRAM_ptr;
-    uint16_t field_1a2d4;
-    uint32_t FileIO_SaveRegion3_ExtMem_ptr;
-    uint16_t field_1a2da;
-    uint32_t FileIO_SaveRegion4_VRAM_ptr;
-    uint16_t field_1a2e0;
-    uint32_t FileIO_SaveRegion2_ExtMem_ptr;
-    uint16_t field_1a2e6;
-    uint32_t FileIO_SaveRegion6_Simple_ptr;
-    uint16_t field_1a2ec;
-    uint32_t FileIO_SaveRegion7_Flash_ptr;
+    uint8_t SaveAll_RegionSaveRecs[2];  /* zero padding */
+    /* save handler of save-all record 0 (FileIO_SaveRegion0_VRAM); the reader uses this address as the base of the handler column (stride 6) */
+    uint32_t SaveAll_RegionRecs_HandlerCol;
+    /* save-all records 1-7 {region, 0, save handler}: regions 1, 5, 3, 4, 2, 6, 7 */
+    SaveAll_RegionRecsTail_t SaveAll_RegionRecsTail[7];
     char rb_str_18[4];
     char wb_str_9[4];
     char wb_str_10[4];
@@ -2546,21 +2421,21 @@ typedef struct __attribute__((packed)) {
     char rb_str_23[4];
     char rb_str_24[4];
     char rb_str_25[4];
-    char FileIO_OpenWithMode_Str_A[4];
+    char FileIO_OpenWithMode_PathInit[4];
     uint8_t pad_2080[124];  /* zero padding */
-    char FileIO_OpenDefault_Str_A[4];
+    char FileIO_OpenDefault_PathInit[4];
     uint8_t pad_2081[12];  /* zero padding */
-    char FileIO_CopyAndOpen_Str_A[4];
+    char FileIO_CopyAndOpen_Path1Init[4];
     uint8_t pad_2082[12];  /* zero padding */
-    char FileIO_CopyAndOpen_Str_A_2[4];
+    char FileIO_CopyAndOpen_PathInitB[4];
     uint8_t pad_2083[12];  /* zero padding */
-    char FileIO_CompareFiles_Str_A[4];
+    char FileIO_CompareFiles_Path2Init[4];
     uint8_t pad_2084[12];  /* zero padding */
-    char FileIO_CompareFiles_Str_A_2[4];
+    char FileIO_CompareFiles_PathInitB[4];
     uint8_t pad_2085[12];  /* zero padding */
     char wb_str_11[4];
     char rb_str_26[4];
-    uint32_t SeqFileType_CodeTable[10];  /* 10 pointers */
+    uint32_t FileIO_TypeExtensions[10];  /* 10 pointers */
     char SEQ_str[4];
     char SQF_str[4];
     char Md_str[4];
@@ -2576,12 +2451,15 @@ typedef struct __attribute__((packed)) {
     /* zero padding */
     /* initial (0 = not yet measured) disk-size field at RAM 0x25D70; word +4 of the 76-byte image FileIO_InitRecordTable copies to 0x25D6C */
     uint32_t FileIO_DiskInfoInit_Capacity;
-    uint8_t bytes_1a44a[66];
-    uint16_t GetDiskSizeInfo_Data;
+    /* 66 NUL bytes; FileIO_SearchAndLoadFile only uses it as the empty string "" (byte 0) */
+    char FileIO_EmptyVolumeName[66];
+    uint16_t FileIO_DiskInfoInit_MediaType;
     /* zero padding */
     /* all-zero image of one 12-byte entry of the 20-entry file table at RAM 0x25DB8 (+2 6-char name, +8 its NUL, +10 size flag) */
     uint8_t FileIO_EmptyFileRecord[12];
-    uint8_t bytes_1a49a[96];
+    /* first 14 bytes (all 0) of the 82-byte blank entry copied over the 60-entry file list at RAM 0x25EB2; bytes 14-81 follow */
+    uint8_t FileIO_DirListEntryTemplate[14];
+    uint8_t bytes_1a4a8[82];
     /* "" (+ 0xFF alignment byte): the name the file-list getters return for an invalid or unreadable entry */
     char FileIO_EmptyEntryName[2];
     uint8_t field_1a4fc;
@@ -2594,7 +2472,8 @@ typedef struct __attribute__((packed)) {
     /* zero padding */
     /* initial value (all NUL) of UpdateFileEntry's 16-byte base file-name buffer */
     char UpdateFileEntry_BaseNameInit[16];
-    uint8_t bytes_1a530[16];
+    /* all-NUL initializer of UpdateFileEntry's 16-char file-name buffer (frame xsp+4) */
+    char UpdateFileEntry_FileNameInit[16];
     char GetEncFileSize_CopyRecordLoop_Str_Star_Dot_Star[4];
     char IndexToRecordLookup_Str_Dot_Star[4];
     char Mid_str_2[6];
@@ -2633,7 +2512,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a604;
     uint16_t field_1a606;
     uint16_t field_1a608;
-    uint32_t DiskType_CodeTable[8];  /* 8 pointers */
+    uint32_t DiskInfo_MediaTypeNames[8];  /* 8 pointers */
     char DOC_str[4];
     char DOC_str_2[4];
     char Pd_str[4];
@@ -2653,7 +2532,7 @@ typedef struct __attribute__((packed)) {
     char Sequencer_str[12];
     uint16_t field_1a696;
     char AnelMemory_str[12];
-    uint32_t SLDstBank_HandleShow_PtrTable[5];  /* 5 pointers */
+    uint32_t SingleLoad_BankCaptionByMode[5];  /* 5 pointers */
     uint16_t field_1a6b8;
     char str_1509[4];
     uint16_t field_1a6be;
@@ -2664,7 +2543,7 @@ typedef struct __attribute__((packed)) {
     char str_1512[4];
     uint16_t field_1a6d0;
     char ANK_str_3[4];
-    uint32_t SLDstMem_HandleShow_PtrTable[5];  /* 5 pointers */
+    uint32_t StorageArea_UnitNames[5];  /* 5 pointers */
     uint16_t field_1a6ea;
     char str_1514[8];
     uint16_t field_1a6f4;
@@ -2675,7 +2554,7 @@ typedef struct __attribute__((packed)) {
     char Song_str[8];
     uint16_t field_1a712;
     char Emory_str_2[8];
-    uint8_t ResetProgressIndication_Data[2];  /* zero padding */
+    uint8_t FmmPassword_StateInit[2];  /* zero padding */
     uint32_t DiskOp_ChannelCfgTable[4];  /* 4 pointers */
     /* zero padding */
     /* zero padding */
@@ -2706,7 +2585,7 @@ typedef struct __attribute__((packed)) {
     char Mid_str_4[6];
     char ToSong_str[12];
     char FromSong_str[12];
-    uint32_t SmfLoadAs_Apply_PtrTable[3];  /* 3 pointers */
+    uint32_t SmfLoadAs_ModeTexts[3];  /* 3 pointers */
     uint16_t field_1a812;
     char GmTech_str[14];
     uint16_t field_1a822;
@@ -2718,13 +2597,15 @@ typedef struct __attribute__((packed)) {
     uint16_t FmmSmfFileNameFunc_CaseTable[6];
     /* Per scan slot 0..3: bit number (1..4) tested in the drive record's flag word and set in the availability mask at RAM 0x89F6 */
     uint8_t WPScan_SlotFlagBits[4];
-    uint32_t WP_GetPresetName1_PtrTable[3];  /* 3 pointers */
+    uint32_t SingleLoad_MemoryBankNames[3];  /* 3 pointers */
     char MemoryC_str[16];
     char MemoryB_str[16];
     char MemoryA_str[16];
     /* PtrTbl_VariationNames: 10 pointers (cut from ptrs_269 by split_naka_pointer_arrays.py) */
+    /* name of each variation slot 0-9 of a single-load bank: "VARI 1".."VARI 4", then six empty names */
     uint32_t PtrTbl_VariationNames[10];
-    char str_1550[2];
+    /* "" + 0xFF fill: PtrTbl_VariationNames[9], an unnamed variation slot */
+    char Str_Variation10_Empty[2];
     /* "" (+ 0xFF alignment byte): entry 8 of PtrTbl_VariationNames (entries 4-9 are empty; 0-3 are "VARI 1".."VARI 4") */
     char WP_VariationName8_Empty[2];
     /* "" (NUL + 0xFF pad): name of variation slot 8 (PtrTbl_VariationNames[7]) */
@@ -2739,7 +2620,7 @@ typedef struct __attribute__((packed)) {
     char Vari_str_2[8];
     char Vari_str_3[8];
     char Vari_str_4[8];
-    uint32_t WP_GetBankMemName_FromROM_PtrTable[10];  /* 10 pointers */
+    uint32_t WP_SectionNameTable[10];  /* 10 pointers */
     char Ending_str[18];
     char Ending_str_2[18];
     char FillIn_str[18];
@@ -2761,40 +2642,40 @@ typedef struct __attribute__((packed)) {
     char SLSrcBankList_FuncBody_Str_Colon[4];
     char SLSrcBankList_FuncBody_Str_Colon_2[4];
     char All_str[18];
-    uint16_t SLSrcBankList_FuncBody_Data;
+    uint16_t SingleLoadSrc_PanelMemBankSize;
     uint16_t field_1aa06;
     uint16_t field_1aa08;
     char SLSrcBankList_FuncBody_Entry_Str_Colon[2];
     char SLSrcBankList_FuncBody_Entry_Str_Colon_2[4];
     char SLSrcBankList_FuncBody_Entry_Str_Colon_3[4];
     char All_str_2[18];
-    uint16_t SLSrcBankList_FuncBody_Entry_Data;
+    uint16_t SLSrcComposer_RowsPerColumn;
     uint16_t SLSrcBankList_FuncBody_Data_3;
     char SLSrcBankList_FuncBody_Entry_Str_Colon_4[4];
     char SLSrcBankList_FuncBody_Entry_Str_Colon_5[4];
     char All_str_3[18];
-    uint16_t SLSrcBankList_FuncBody_Entry_Data_2;
+    uint16_t SingleLoadSrc_SoundMemPageSize;
     uint16_t SLSrcBankList_FuncBody_Data_4;
     uint32_t SLSrc_HandleShow_PtrTable[5];  /* 5 pointers */
     char SLDstBankList_FuncBody_Str_Colon[4];
     char SLDstBankList_FuncBody_Str_Colon_2[4];
     char All_str_4[18];
     char SLDstBankList_FuncBody_Str_Colon_3[4];
-    uint16_t SLDstBankList_FuncBody_Data;
+    uint16_t SingleLoadDst_PanelMemBankSize;
     uint16_t SLDstBankList_FuncBody_Data_5;
-    char SLDstBankList_FuncBody_Str_Colon_4[4];
+    char SLDstMemLabel_ColonSep[4];
     uint16_t SLDstBankList_FuncBody_Data_6;
     char SLDstBankList_FuncBody_Str_Colon_5[4];
     char SLDstBankList_FuncBody_Str_Colon_6[4];
     char All_str_5[18];
-    uint16_t SLDstBankList_FuncBody_Data_2;
+    uint16_t SingleLoadDst_ComposerBankSize;
     uint16_t SLDstBankList_FuncBody_Data_7;
     char str_1591[4];
     char SLDstBankList_FuncBody_Str_Colon_7[4];
     char All_str_6[18];
     char SLDstBankList_FuncBody_Str_Colon_8[4];
     char str_1595[4];
-    uint16_t SLDstBankList_FuncBody_Data_4;
+    uint16_t SLDstSoundMem_RowsPerColumn;
     uint16_t SLDstBankList_FuncBody_Data_8;
     /* SLDst_HandleShow_PtrTable: 5 pointers (cut from ptrs_273 by split_naka_pointer_arrays.py) */
     uint32_t SLDst_HandleShow_PtrTable[5];
@@ -3527,10 +3408,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(Str_Version_Empty3),
         SELF(Str_Version_Empty2),
         SELF(MPver_str),
-        SELF(Str_Version_Empty1),
+        SELF(WelcomVersion_NameListEnd),
     },
 
-    .Str_Version_Empty1 = ALIGNED_STRING(""),
+    .WelcomVersion_NameListEnd = ALIGNED_STRING(""),
 
     .MPver_str = "MPver",
 
@@ -3564,10 +3445,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(SubProgram_code),
         SELF(SoundTable_name),
         SELF(w38_code),
-        SELF(Str_SoftVer_Empty1),
+        SELF(Murai_ResNameTable_3F0_EndName),
     },
 
-    .Str_SoftVer_Empty1 = ALIGNED_STRING(""),
+    .Murai_ResNameTable_3F0_EndName = ALIGNED_STRING(""),
 
     .w38_code = ALIGNED_STRING(""),
 
@@ -7758,7 +7639,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ARhythmTrackAlready_str = "A Rhythm Track already exists. It is impossible to assign two Tracks to Rhythm.",
 
-    .StrTable_DiskErr24_Chord = {
+    .MsgText_ChordTrackExistsTexts = {
         SELF(AChordTrackAlready_str),
         SELF(txt_Es_ist_nicht_moglich_zwei_CHORD),
         SELF(txt_Vous_avez_deja_choisi_une_piste_2),
@@ -7779,7 +7660,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .AChordTrackAlready_str = "A Chord Track already exists. It is impossible to assign two Tracks to Chord.",
 
-    .MsgText_Lang2_PtrTable = {
+    .MsgText_Err24ControlTrack = {
         SELF(AControlTrackAlready_str),
         SELF(txt_Es_ist_nicht_moglich_zwei),
         SELF(txt_Vous_avez_deja_choisi_une_piste_3),
@@ -7802,7 +7683,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .AControlTrackAlready_str = "A Control Track already exists. It is impossible to assign two Tracks to Control.",
 
-    .MsgText_Lang3_PtrTable = {
+    .MsgText_ApcTrackExistsTexts = {
         SELF(AApcTrackAlready_str),
         SELF(txt_Es_ist_nicht_moglich_zwei_APC),
         SELF(txt_Vous_avez_deja_choisi_une_piste_4),
@@ -8874,7 +8755,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Msg_str = "Msg",
 
-    .PleaseWait_GetText_PtrTable = {
+    .PleaseWait_LangTexts = {
         SELF(PleaseWait_str_4),
         SELF(BitteWarten_str_2),
         SELF(VeuillezPatienter_str_2),
@@ -8897,7 +8778,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .PleaseWait_str_4 = ALIGNED_STRING("PLEASE WAIT!"),
 
-    .Str_PleaseWait_Multilingual = {
+    .CheckLanguage_LangNames = {
         SELF(English_name),
         SELF(German_code),
         SELF(French_name),
@@ -8996,7 +8877,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TeC1_str = ALIGNED_STRING("TeC1"),
 
-    .Naka_TechniChord1_Screens = {
+    .LswOrchestrator_PartNames = {
         SELF(Right_str_6),
         SELF(Right_str_5),
         SELF(Left_str_3),
@@ -9078,7 +8959,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
         0x0011, 0x0012, 0x0013, 0x0014, 0x0015, 0x0016, 0x0080, 0xFFFF,
     },
 
-    .Naka_Scale2_Screens = {
+    .LswScalingType_TypeNames = {
         SELF(Off_str_2),
         SELF(Random_str),
         SELF(Piano_str),
@@ -9134,7 +9015,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .NoType_str_2 = ALIGNED_STRING(" NO TYPE !! "),
 
-    .Scale_Arabic2_NameTable = {
+    .LswScalingShift_ValueNames = {
         SELF(str_760),
         SELF(str_759),
         SELF(str_758),
@@ -9173,7 +9054,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_760 = "  0",
 
-    .Scale_Names_Table = {
+    .LswScalingShift2_KeyNames = {
         SELF(KeyC_str_2),
         SELF(KeyC_str),
         SELF(KeyD_str_2),
@@ -9779,135 +9660,23 @@ const naka_technichord_strings_t naka_technichord_strings_data
         0x00F82222,
     },
 
-    .str_1131 = " ",
-
-    .pad_1998 = { 0 },
-
-    .ptr_19202 = SELF(MidiParam_Ctl0Caption),
-
-    .field_19206 = 0x001F,
-
-    .field_19208 = 0x0001,
-
-    .field_1920a = 0xFFF0,
-
-    .pad_1999 = { 0 },
-
-    .SOUND_str_2_ptr = SELF(SOUND_str_2),
-
-    .field_19212 = 0x000E,
-
-    .field_19214 = 0x0003,
-
-    .field_19216 = 0xFFF0,
-
-    .pad_2000 = { 0 },
-
-    .PAN_str_ptr = SELF(PAN_str),
-
-    .field_1921e = 0x000F,
-
-    .field_19220 = 0x0002,
-
-    .field_19222 = 0xFFF0,
-
-    .field_19224 = 0x0001,
-
-    .VOLUME_str_ptr = SELF(VOLUME_str),
-
-    .str_1132 = " ",
-
-    .field_1922c = 0x0005,
-
-    .pad_2001 = { 0 },
-
-    .ptr_19232 = SELF(str_1147),
-
-    .field_19236 = 0x000D,
-
-    .field_19238 = 0x0003,
-
-    .field_1923a = 0x0004,
-
-    .field_1923c = 0x0001,
-
-    .REVERB_str_ptr = SELF(REVERB_str),
-
-    .field_19242 = 0x000C,
-
-    .field_19244 = 0x0003,
-
-    .field_19246 = 0x0004,
-
-    .pad_2002 = { 0 },
-
-    .DspEff_str_ptr = SELF(DspEff_str),
-
-    .field_1924e = 0x0003,
-
-    .field_19250 = 0x0004,
-
-    .field_19252 = 0x0004,
-
-    .pad_2003 = { 0 },
-
-    .DigitalEff_str_ptr = SELF(DigitalEff_str),
-
-    .field_1925a = 0x0009,
-
-    .field_1925c = 0x0007,
-
-    .field_1925e = 0x0004,
-
-    .pad_2004 = { 0 },
-
-    .KeyShift_str_ptr = SELF(KeyShift_str),
-
-    .str_1133 = " ",
-
-    .field_19268 = 0x0005,
-
-    .pad_2005 = { 0 },
-
-    .ptr_1926e = SELF(MidiParamStr1_BlankRow9),
-
-    .str_1134 = " ",
-
-    .pad_2006 = { 0 },
-
-    .ptr_1927a = SELF(MidiParamStr1_BlankRow10),
-
-    .str_1135 = " ",
-
-    .pad_2007 = { 0 },
-
-    .ptr_19286 = SELF(str_1140),
-
-    .field_1928a = 0x0001,
-
-    .field_1928c = 0x0008,
-
-    .pad_2008 = { 0 },
-
-    .field_19290 = 0x0001,
-
-    .MIDI_str_ptr = SELF(MIDI_str),
-
-    .pad_2009 = { 0 },
-
-    .field_19298 = 0x0004,
-
-    .pad_2010 = { 0 },
-
-    .LOCAL_str_ptr = SELF(LOCAL_str),
-
-    .str_1136 = " ",
-
-    .field_192a4 = 0x0005,
-
-    .pad_2011 = { 0 },
-
-    .ptr_192aa = SELF(str_1137),
+    .PsMixer_BootDefaultRows = {
+        { 0x0020, 0x0000, 0, 0x0000, SELF(MidiParam_Ctl0Caption) },
+        { 0x001F, 0x0001, -16, 0x0000, SELF(SOUND_str_2) },
+        { 0x000E, 0x0003, -16, 0x0000, SELF(PAN_str) },
+        { 0x000F, 0x0002, -16, 0x0001, SELF(VOLUME_str) },
+        { 0x0020, 0x0005, 0, 0x0000, SELF(str_1147) },
+        { 0x000D, 0x0003, 4, 0x0001, SELF(REVERB_str) },
+        { 0x000C, 0x0003, 4, 0x0000, SELF(DspEff_str) },
+        { 0x0003, 0x0004, 4, 0x0000, SELF(DigitalEff_str) },
+        { 0x0009, 0x0007, 4, 0x0000, SELF(KeyShift_str) },
+        { 0x0020, 0x0005, 0, 0x0000, SELF(MidiParamStr1_BlankRow9) },
+        { 0x0020, 0x0000, 0, 0x0000, SELF(MidiParamStr1_BlankRow10) },
+        { 0x0020, 0x0000, 0, 0x0000, SELF(str_1140) },
+        { 0x0001, 0x0008, 0, 0x0001, SELF(MIDI_str) },
+        { 0x0000, 0x0004, 0, 0x0000, SELF(LOCAL_str) },
+        { 0x0020, 0x0005, 0, 0x0000, SELF(str_1137) },
+    },
 
     .str_1137 = ALIGNED_STRING(""),
 
@@ -10171,135 +9940,23 @@ const naka_technichord_strings_t naka_technichord_strings_data
         0x0C23, 0x0B47,
     },
 
-    .str_1262 = " ",
-
-    .pad_2013 = { 0 },
-
-    .ptr_19676 = SELF(str_1282),
-
-    .field_1967a = 0x001F,
-
-    .field_1967c = 0x0001,
-
-    .field_1967e = 0xFFF0,
-
-    .pad_2014 = { 0 },
-
-    .SOUND_str_3_ptr = SELF(SOUND_str_3),
-
-    .field_19686 = 0x000E,
-
-    .field_19688 = 0x0003,
-
-    .field_1968a = 0xFFF0,
-
-    .pad_2015 = { 0 },
-
-    .PAN_str_2_ptr = SELF(PAN_str_2),
-
-    .field_19692 = 0x000F,
-
-    .field_19694 = 0x0002,
-
-    .field_19696 = 0xFFF0,
-
-    .field_19698 = 0x0001,
-
-    .VOLUME_str_2_ptr = SELF(VOLUME_str_2),
-
-    .str_1263 = " ",
-
-    .field_196a0 = 0x0005,
-
-    .pad_2016 = { 0 },
-
-    .ptr_196a6 = SELF(str_1278),
-
-    .field_196aa = 0x000D,
-
-    .field_196ac = 0x0003,
-
-    .field_196ae = 0x0004,
-
-    .field_196b0 = 0x0001,
-
-    .REVERB_str_2_ptr = SELF(REVERB_str_2),
-
-    .field_196b6 = 0x000C,
-
-    .field_196b8 = 0x0003,
-
-    .field_196ba = 0x0004,
-
-    .pad_2017 = { 0 },
-
-    .DspEff_str_2_ptr = SELF(DspEff_str_2),
-
-    .field_196c2 = 0x0003,
-
-    .field_196c4 = 0x0004,
-
-    .field_196c6 = 0x0004,
-
-    .pad_2018 = { 0 },
-
-    .DigitalEff_str_2_ptr = SELF(DigitalEff_str_2),
-
-    .field_196ce = 0x0009,
-
-    .field_196d0 = 0x0007,
-
-    .field_196d2 = 0x0004,
-
-    .pad_2019 = { 0 },
-
-    .KeyShift_str_2_ptr = SELF(KeyShift_str_2),
-
-    .str_1264 = " ",
-
-    .field_196dc = 0x0005,
-
-    .pad_2020 = { 0 },
-
-    .ptr_196e2 = SELF(str_1273),
-
-    .str_1265 = " ",
-
-    .pad_2021 = { 0 },
-
-    .ptr_196ee = SELF(PartMixer_Ctl10Caption),
-
-    .str_1266 = " ",
-
-    .pad_2022 = { 0 },
-
-    .ptr_196fa = SELF(PartMixer_Ctl11Caption),
-
-    .field_196fe = 0x0001,
-
-    .field_19700 = 0x0008,
-
-    .pad_2023 = { 0 },
-
-    .field_19704 = 0x0001,
-
-    .MIDI_str_2_ptr = SELF(MIDI_str_2),
-
-    .pad_2024 = { 0 },
-
-    .field_1970c = 0x0004,
-
-    .pad_2025 = { 0 },
-
-    .LOCAL_str_2_ptr = SELF(LOCAL_str_2),
-
-    .str_1267 = " ",
-
-    .field_19718 = 0x0005,
-
-    .pad_2026 = { 0 },
-
-    .ptr_1971e = SELF(PartMixer_Row14Caption),
+    .PartMixer_RowTable = {
+        { 0x0020, 0x0000, 0, 0x0000, SELF(str_1282) },
+        { 0x001F, 0x0001, -16, 0x0000, SELF(SOUND_str_3) },
+        { 0x000E, 0x0003, -16, 0x0000, SELF(PAN_str_2) },
+        { 0x000F, 0x0002, -16, 0x0001, SELF(VOLUME_str_2) },
+        { 0x0020, 0x0005, 0, 0x0000, SELF(str_1278) },
+        { 0x000D, 0x0003, 4, 0x0001, SELF(REVERB_str_2) },
+        { 0x000C, 0x0003, 4, 0x0000, SELF(DspEff_str_2) },
+        { 0x0003, 0x0004, 4, 0x0000, SELF(DigitalEff_str_2) },
+        { 0x0009, 0x0007, 4, 0x0000, SELF(KeyShift_str_2) },
+        { 0x0020, 0x0005, 0, 0x0000, SELF(str_1273) },
+        { 0x0020, 0x0000, 0, 0x0000, SELF(PartMixer_Ctl10Caption) },
+        { 0x0020, 0x0000, 0, 0x0000, SELF(PartMixer_Ctl11Caption) },
+        { 0x0001, 0x0008, 0, 0x0001, SELF(MIDI_str_2) },
+        { 0x0000, 0x0004, 0, 0x0000, SELF(LOCAL_str_2) },
+        { 0x0020, 0x0005, 0, 0x0000, SELF(PartMixer_Row14Caption) },
+    },
 
     .PartMixer_Row14Caption = "\x00\xFF",
 
@@ -10338,135 +9995,23 @@ const naka_technichord_strings_t naka_technichord_strings_data
         0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF,
     },
 
-    .str_1283 = " ",
-
-    .pad_2028 = { 0 },
-
-    .ptr_197ba = SELF(TrackMixer_Ctl0_EmptyCaption),
-
-    .field_197be = 0x001F,
-
-    .field_197c0 = 0x000A,
-
-    .field_197c2 = 0xFFF0,
-
-    .pad_2029 = { 0 },
-
-    .SOUND_str_4_ptr = SELF(SOUND_str_4),
-
-    .field_197ca = 0x000E,
-
-    .field_197cc = 0x0003,
-
-    .field_197ce = 0xFFF0,
-
-    .pad_2030 = { 0 },
-
-    .PAN_str_3_ptr = SELF(PAN_str_3),
-
-    .field_197d6 = 0x000F,
-
-    .field_197d8 = 0x0002,
-
-    .field_197da = 0xFFF0,
-
-    .field_197dc = 0x0001,
-
-    .VOLUME_str_3_ptr = SELF(VOLUME_str_3),
-
-    .str_1284 = " ",
-
-    .field_197e4 = 0x0006,
-
-    .pad_2031 = { 0 },
-
-    .ptr_197ea = SELF(str_1299),
-
-    .field_197ee = 0x000D,
-
-    .field_197f0 = 0x0003,
-
-    .field_197f2 = 0x0004,
-
-    .field_197f4 = 0x0001,
-
-    .REVERB_str_3_ptr = SELF(REVERB_str_3),
-
-    .field_197fa = 0x000C,
-
-    .field_197fc = 0x0003,
-
-    .field_197fe = 0x0004,
-
-    .pad_2032 = { 0 },
-
-    .DspEff_str_3_ptr = SELF(DspEff_str_3),
-
-    .field_19806 = 0x0003,
-
-    .field_19808 = 0x0004,
-
-    .field_1980a = 0x0004,
-
-    .pad_2033 = { 0 },
-
-    .DigitalEff_str_3_ptr = SELF(DigitalEff_str_3),
-
-    .field_19812 = 0x0009,
-
-    .field_19814 = 0x0007,
-
-    .field_19816 = 0x0004,
-
-    .pad_2034 = { 0 },
-
-    .KeyShift_str_3_ptr = SELF(KeyShift_str_3),
-
-    .str_1285 = " ",
-
-    .field_19820 = 0x0006,
-
-    .pad_2035 = { 0 },
-
-    .ptr_19826 = SELF(TrackMixer_Row9Caption),
-
-    .str_1286 = " ",
-
-    .pad_2036 = { 0 },
-
-    .ptr_19832 = SELF(TrackMixer_Row10Caption),
-
-    .str_1287 = " ",
-
-    .pad_2037 = { 0 },
-
-    .ptr_1983e = SELF(str_1292),
-
-    .field_19842 = 0x0001,
-
-    .field_19844 = 0x0008,
-
-    .pad_2038 = { 0 },
-
-    .field_19848 = 0x0001,
-
-    .MIDI_str_3_ptr = SELF(MIDI_str_3),
-
-    .pad_2039 = { 0 },
-
-    .field_19850 = 0x0004,
-
-    .pad_2040 = { 0 },
-
-    .LOCAL_str_3_ptr = SELF(LOCAL_str_3),
-
-    .str_1288 = " ",
-
-    .field_1985c = 0x0006,
-
-    .pad_2041 = { 0 },
-
-    .ptr_19862 = SELF(str_1289),
+    .TrackMixer_Rows = {
+        { 0x0020, 0x0000, 0, 0x0000, SELF(TrackMixer_Ctl0_EmptyCaption) },
+        { 0x001F, 0x000A, -16, 0x0000, SELF(SOUND_str_4) },
+        { 0x000E, 0x0003, -16, 0x0000, SELF(PAN_str_3) },
+        { 0x000F, 0x0002, -16, 0x0001, SELF(VOLUME_str_3) },
+        { 0x0020, 0x0006, 0, 0x0000, SELF(str_1299) },
+        { 0x000D, 0x0003, 4, 0x0001, SELF(REVERB_str_3) },
+        { 0x000C, 0x0003, 4, 0x0000, SELF(DspEff_str_3) },
+        { 0x0003, 0x0004, 4, 0x0000, SELF(DigitalEff_str_3) },
+        { 0x0009, 0x0007, 4, 0x0000, SELF(KeyShift_str_3) },
+        { 0x0020, 0x0006, 0, 0x0000, SELF(TrackMixer_Row9Caption) },
+        { 0x0020, 0x0000, 0, 0x0000, SELF(TrackMixer_Row10Caption) },
+        { 0x0020, 0x0000, 0, 0x0000, SELF(str_1292) },
+        { 0x0001, 0x0008, 0, 0x0001, SELF(MIDI_str_3) },
+        { 0x0000, 0x0004, 0, 0x0000, SELF(LOCAL_str_3) },
+        { 0x0020, 0x0006, 0, 0x0000, SELF(str_1289) },
+    },
 
     .str_1289 = ALIGNED_STRING(""),
 
@@ -10539,7 +10084,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
         0x8288, 0x82C1, 0x82C0, 0x82CC, 0x82CB, 0x8293, 0x8294,
     },
 
-    .KeyShift_DisplayStrTable = {
+    .LswDrawbar_Signed4BitNames = {
         SELF(w46_code),
         SELF(str_1321),
         SELF(str_1320),
@@ -10691,7 +10236,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
         NAKA_ADDR(FDemoText_RescanAllVoices),
     },
 
-    .FDemoText_ProcessMarkup_LookupTag_PtrTable = {
+    .FDemoText_MarkupTagTable = {
         SELF(BR_str),
     },
 
@@ -10761,7 +10306,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ErrorGetInstanceID_str = ALIGNED_STRING("Error! (GetInstanceID)"),
 
-    .FileType_NameTable = {
+    .FDemoText_ExecTagAttrNames = {
         SELF(SONG_str),
         SELF(SRC_str),
         SELF(NAME_str),
@@ -10786,7 +10331,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .FDemoText_ByteData_LayoutEngine_Str_Fmt8s = "%8s",
 
-    .FDemoText_ByteData_LayoutEngine_PtrTable = {
+    .FDemoText_ActTag_AttrNames = {
         SELF(NO_str),
         SELF(PAN_str_4),
         SELF(str_1356),
@@ -10798,7 +10343,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .NO_str = ALIGNED_STRING("NO"),
 
-    .FDemoText_ByteData_LayoutEngine_PtrTable_2 = {
+    .FDemoText_FontTagAttrNames = {
         SELF(SIZE_str),
         SELF(COLOR_str),
         SELF(FDemoText_SizeColorAttrNamesEnd),
@@ -10971,7 +10516,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .HK_str_3_ptr = SELF(HK_str_3),
 
-    .FileIO_CheckRegionSignature_Data = 0x0004,
+    .FileIO_FileSigRecs_OffsetCol = 0x0004,
 
     .field_1a1bc = 0x0002,
 
@@ -11055,9 +10600,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .rb_str_4 = ALIGNED_STRING("rb"),
 
-    .ptr_1a238 = SELF(field_1a23c),
+    .FileIO_HeaderAt4_ExpectedPtr = SELF(FileIO_HeaderAt4_ExpectedByte),
 
-    .field_1a23c = 0x0001,
+    .FileIO_HeaderAt4_ExpectedByte = {
+        0x01, 0x00,
+    },
 
     .rb_str_5 = ALIGNED_STRING("rb"),
 
@@ -11085,37 +10632,19 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .rb_str_17 = ALIGNED_STRING("rb"),
 
-    .FileDemo_RecordCallback_Data = 0x0004,
+    .FileIO_RegionLoaders = 0x0004,
 
-    .FileIO_LoadRegion4_VRAM_ptr = NAKA_ADDR(FileIO_LoadRegion4_VRAM),
+    .FileIO_TypeLoaderColumn = NAKA_ADDR(FileIO_LoadRegion4_VRAM),
 
-    .pad_2078 = { 0 },
-
-    .FileIO_LoadRegion0_VRAM_ptr = NAKA_ADDR(FileIO_LoadRegion0_VRAM),
-
-    .field_1a27e = 0x0001,
-
-    .FileIO_LoadRegion1_VRAM_ptr = NAKA_ADDR(FileIO_LoadRegion1_VRAM),
-
-    .field_1a284 = 0x0005,
-
-    .FileIO_LoadRegion5_VRAM_ptr = NAKA_ADDR(FileIO_LoadRegion5_VRAM),
-
-    .field_1a28a = 0x0003,
-
-    .FileIO_LoadRegion3_ExtMem_ptr = NAKA_ADDR(FileIO_LoadRegion3_ExtMem),
-
-    .field_1a290 = 0x0002,
-
-    .FileIO_LoadRegion2_ExtMem_ptr = NAKA_ADDR(FileIO_LoadRegion2_ExtMem),
-
-    .field_1a296 = 0x0006,
-
-    .FileIO_LoadRegion6_Simple_ptr = NAKA_ADDR(FileIO_LoadRegion6_Simple),
-
-    .field_1a29c = 0x0007,
-
-    .FileIO_LoadRegion7_Flash_ptr = NAKA_ADDR(FileIO_LoadRegion7_Flash),
+    .FileIO_TypeLoaderRecords = {
+        { 0x00, 0x00, NAKA_ADDR(FileIO_LoadRegion0_VRAM) },
+        { 0x01, 0x00, NAKA_ADDR(FileIO_LoadRegion1_VRAM) },
+        { 0x05, 0x00, NAKA_ADDR(FileIO_LoadRegion5_VRAM) },
+        { 0x03, 0x00, NAKA_ADDR(FileIO_LoadRegion3_ExtMem) },
+        { 0x02, 0x00, NAKA_ADDR(FileIO_LoadRegion2_ExtMem) },
+        { 0x06, 0x00, NAKA_ADDR(FileIO_LoadRegion6_Simple) },
+        { 0x07, 0x00, NAKA_ADDR(FileIO_LoadRegion7_Flash) },
+    },
 
     .wb_str = ALIGNED_STRING("wb"),
 
@@ -11133,37 +10662,19 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .wb_str_8 = ALIGNED_STRING("wb"),
 
-    .SaveAll_CheckRecordLoop_Data = { 0 },
+    .SaveAll_RegionSaveRecs = { 0 },
 
-    .FileIO_SaveRegion0_VRAM_ptr = NAKA_ADDR(FileIO_SaveRegion0_VRAM),
+    .SaveAll_RegionRecs_HandlerCol = NAKA_ADDR(FileIO_SaveRegion0_VRAM),
 
-    .field_1a2c8 = 0x0001,
-
-    .FileIO_SaveRegion1_VRAM_ptr = NAKA_ADDR(FileIO_SaveRegion1_VRAM),
-
-    .field_1a2ce = 0x0005,
-
-    .FileIO_SaveRegion5_VRAM_ptr = NAKA_ADDR(FileIO_SaveRegion5_VRAM),
-
-    .field_1a2d4 = 0x0003,
-
-    .FileIO_SaveRegion3_ExtMem_ptr = NAKA_ADDR(FileIO_SaveRegion3_ExtMem),
-
-    .field_1a2da = 0x0004,
-
-    .FileIO_SaveRegion4_VRAM_ptr = NAKA_ADDR(FileIO_SaveRegion4_VRAM),
-
-    .field_1a2e0 = 0x0002,
-
-    .FileIO_SaveRegion2_ExtMem_ptr = NAKA_ADDR(FileIO_SaveRegion2_ExtMem),
-
-    .field_1a2e6 = 0x0006,
-
-    .FileIO_SaveRegion6_Simple_ptr = NAKA_ADDR(FileIO_SaveRegion6_Simple),
-
-    .field_1a2ec = 0x0007,
-
-    .FileIO_SaveRegion7_Flash_ptr = NAKA_ADDR(FileIO_SaveRegion7_Flash),
+    .SaveAll_RegionRecsTail = {
+        { 0x01, 0x00, NAKA_ADDR(FileIO_SaveRegion1_VRAM) },
+        { 0x05, 0x00, NAKA_ADDR(FileIO_SaveRegion5_VRAM) },
+        { 0x03, 0x00, NAKA_ADDR(FileIO_SaveRegion3_ExtMem) },
+        { 0x04, 0x00, NAKA_ADDR(FileIO_SaveRegion4_VRAM) },
+        { 0x02, 0x00, NAKA_ADDR(FileIO_SaveRegion2_ExtMem) },
+        { 0x06, 0x00, NAKA_ADDR(FileIO_SaveRegion6_Simple) },
+        { 0x07, 0x00, NAKA_ADDR(FileIO_SaveRegion7_Flash) },
+    },
 
     .rb_str_18 = ALIGNED_STRING("rb"),
 
@@ -11185,27 +10696,27 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .rb_str_25 = ALIGNED_STRING("rb"),
 
-    .FileIO_OpenWithMode_Str_A = "A:\\",
+    .FileIO_OpenWithMode_PathInit = "A:\\",
 
     .pad_2080 = { 0 },
 
-    .FileIO_OpenDefault_Str_A = "A:\\",
+    .FileIO_OpenDefault_PathInit = "A:\\",
 
     .pad_2081 = { 0 },
 
-    .FileIO_CopyAndOpen_Str_A = "A:\\",
+    .FileIO_CopyAndOpen_Path1Init = "A:\\",
 
     .pad_2082 = { 0 },
 
-    .FileIO_CopyAndOpen_Str_A_2 = "A:\\",
+    .FileIO_CopyAndOpen_PathInitB = "A:\\",
 
     .pad_2083 = { 0 },
 
-    .FileIO_CompareFiles_Str_A = "A:\\",
+    .FileIO_CompareFiles_Path2Init = "A:\\",
 
     .pad_2084 = { 0 },
 
-    .FileIO_CompareFiles_Str_A_2 = "A:\\",
+    .FileIO_CompareFiles_PathInitB = "A:\\",
 
     .pad_2085 = { 0 },
 
@@ -11213,7 +10724,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .rb_str_26 = ALIGNED_STRING("rb"),
 
-    .SeqFileType_CodeTable = {
+    .FileIO_TypeExtensions = {
         SELF(LSW_str),
         SELF(PMT_str),
         SELF(SQT_str),
@@ -11250,15 +10761,19 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .FileIO_DiskInfoInit_Capacity = 0x00000000,
 
-    .bytes_1a44a = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    .FileIO_EmptyVolumeName = "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
 
-    .GetDiskSizeInfo_Data = 0x00FF,
+    .FileIO_DiskInfoInit_MediaType = 0x00FF,
 
     .FileIO_EmptyFileRecord = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
 
-    .bytes_1a49a = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    .FileIO_DirListEntryTemplate = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    },
+
+    .bytes_1a4a8 = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
 
     .FileIO_EmptyEntryName = "\x00\xFF",
 
@@ -11278,7 +10793,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .UpdateFileEntry_BaseNameInit = "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
 
-    .bytes_1a530 = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    .UpdateFileEntry_FileNameInit = "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
 
     .GetEncFileSize_CopyRecordLoop_Str_Star_Dot_Star = "*.*",
 
@@ -11352,7 +10867,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a608 = 0xFF77,
 
-    .DiskType_CodeTable = {
+    .DiskInfo_MediaTypeNames = {
         SELF(str_1503),
         SELF(str_1502),
         SELF(Dd_str_2),
@@ -11407,7 +10922,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .AnelMemory_str = "ANEL MEMORY",
 
-    .SLDstBank_HandleShow_PtrTable = {
+    .SingleLoad_BankCaptionByMode = {
         SELF(field_1a6d0),
         SELF(field_1a6ca),
         SELF(field_1a6c4),
@@ -11435,7 +10950,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ANK_str_3 = "ANK",
 
-    .SLDstMem_HandleShow_PtrTable = {
+    .StorageArea_UnitNames = {
         SELF(field_1a712),
         SELF(field_1a708),
         SELF(field_1a6fe),
@@ -11463,7 +10978,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Emory_str_2 = ALIGNED_STRING("EMORY "),
 
-    .ResetProgressIndication_Data = { 0 },
+    .FmmPassword_StateInit = { 0 },
 
     .DiskOp_ChannelCfgTable = {
         NAKA_ADDR(FileIO_DiskInserted),
@@ -11534,7 +11049,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .FromSong_str = ALIGNED_STRING("FROM SONG:"),
 
-    .SmfLoadAs_Apply_PtrTable = {
+    .SmfLoadAs_ModeTexts = {
         SELF(field_1a832),
         SELF(field_1a822),
         SELF(field_1a812),
@@ -11562,7 +11077,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
         0x01, 0x02, 0x03, 0x04,
     },
 
-    .WP_GetPresetName1_PtrTable = {
+    .SingleLoad_MemoryBankNames = {
         SELF(MemoryA_str),
         SELF(MemoryB_str),
         SELF(MemoryC_str),
@@ -11575,19 +11090,12 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .MemoryA_str = "   MEMORY-A    ",
 
     .PtrTbl_VariationNames = {
-        SELF(Vari_str_4),
-        SELF(Vari_str_3),
-        SELF(Vari_str_2),
-        SELF(Vari_str),
-        SELF(Str_Variation5_Empty),
-        SELF(Str_Variation6_Empty),
-        SELF(Str_Variation7_Empty),
-        SELF(Str_Variation8_Empty),
-        SELF(WP_VariationName8_Empty),
-        SELF(str_1550),
+        SELF(Vari_str_4), SELF(Vari_str_3), SELF(Vari_str_2), SELF(Vari_str),
+        SELF(Str_Variation5_Empty), SELF(Str_Variation6_Empty), SELF(Str_Variation7_Empty), SELF(Str_Variation8_Empty),
+        SELF(WP_VariationName8_Empty), SELF(Str_Variation10_Empty),
     },
 
-    .str_1550 = ALIGNED_STRING(""),
+    .Str_Variation10_Empty = "\x00\xFF",
 
     .WP_VariationName8_Empty = "\x00\xFF",
 
@@ -11607,7 +11115,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Vari_str_4 = ALIGNED_STRING("VARI 1"),
 
-    .WP_GetBankMemName_FromROM_PtrTable = {
+    .WP_SectionNameTable = {
         SELF(Str_BankMem0_Empty),
         SELF(WP_BankMemName1_Empty),
         SELF(WP_SectionName_Vari3Blank),
@@ -11665,7 +11173,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .All_str = ALIGNED_STRING("      ALL       "),
 
-    .SLSrcBankList_FuncBody_Data = 0xFF08,
+    .SingleLoadSrc_PanelMemBankSize = 0xFF08,
 
     .field_1aa06 = 0xFF50,
 
@@ -11679,7 +11187,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .All_str_2 = ALIGNED_STRING("      ALL       "),
 
-    .SLSrcBankList_FuncBody_Entry_Data = 0xFF0A,
+    .SLSrcComposer_RowsPerColumn = 0xFF0A,
 
     .SLSrcBankList_FuncBody_Data_3 = 0xFF1E,
 
@@ -11689,7 +11197,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .All_str_3 = ALIGNED_STRING("      ALL       "),
 
-    .SLSrcBankList_FuncBody_Entry_Data_2 = 0xFF14,
+    .SingleLoadSrc_SoundMemPageSize = 0xFF14,
 
     .SLSrcBankList_FuncBody_Data_4 = 0xFFA8,
 
@@ -11709,11 +11217,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .SLDstBankList_FuncBody_Str_Colon_3 = ALIGNED_STRING(": "),
 
-    .SLDstBankList_FuncBody_Data = 0xFF08,
+    .SingleLoadDst_PanelMemBankSize = 0xFF08,
 
     .SLDstBankList_FuncBody_Data_5 = 0xFF50,
 
-    .SLDstBankList_FuncBody_Str_Colon_4 = ALIGNED_STRING(": "),
+    .SLDstMemLabel_ColonSep = ALIGNED_STRING(": "),
 
     .SLDstBankList_FuncBody_Data_6 = 0xFF0A,
 
@@ -11723,7 +11231,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .All_str_5 = ALIGNED_STRING("      ALL       "),
 
-    .SLDstBankList_FuncBody_Data_2 = 0xFF0A,
+    .SingleLoadDst_ComposerBankSize = 0xFF0A,
 
     .SLDstBankList_FuncBody_Data_7 = 0xFF1E,
 
@@ -11737,7 +11245,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1595 = ALIGNED_STRING(": "),
 
-    .SLDstBankList_FuncBody_Data_4 = 0xFF14,
+    .SLDstSoundMem_RowsPerColumn = 0xFF14,
 
     .SLDstBankList_FuncBody_Data_8 = 0xFFA8,
 

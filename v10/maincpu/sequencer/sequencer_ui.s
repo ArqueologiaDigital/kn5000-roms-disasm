@@ -7562,7 +7562,7 @@ EntertainerGridCheck:
 	lda xix, (xsp + 48)
 	ld bc, 5:i3
 	ldirw
-	ld xiy, EntertainerGridCheck_Data
+	ld xiy, EntertainerGridCheck_GridDrawRecInit
 	lda xix, (xsp + 40)
 	ld bc, 4:i3
 	ldirw

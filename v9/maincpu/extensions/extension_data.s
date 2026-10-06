@@ -65,7 +65,7 @@
 ; ---------------------------------------------------------------------------
 ; Reader: MainChordPre (kn5000_v10_program.s, 0xFC304E) builds the chord
 ; display string with Strcat: the root-note name (RAM byte 0x8D40 x4 into
-; Naka_MemoryC_Screens), then the CHORD-TYPE name -- RAM byte 0x8D42, `sla
+; MainChordPre_RootNames), then the CHORD-TYPE name -- RAM byte 0x8D42, `sla
 ; wa, 2`, `lda xbc, (0xecff6a:24)`, `ld r, (xrr+rr)` -- then "on" or "  "
 ; (ChordStr_On / ChordStr_Blank, loaded as the immediates 0xED1C96 and
 ; 0xED1C9A).  The pointer table it indexes is 64 entries, 0xECFF6A-0xED0069:

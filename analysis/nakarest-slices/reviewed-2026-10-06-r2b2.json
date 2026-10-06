@@ -1,0 +1,1492 @@
+[
+ {
+  "label": "NakaProp_VisFlag_Chain",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "check": "len(b)==676 and [b[56+struct.unpack_from('<I',b,0+8*i)[0]-struct.unpack_from('<I',b,48)[0]:].split(b'\\x00')[0] for i in range(7)]==[b'VF_None', b'VF_Invisible', b'VF_Fixed', b'VF_Change', b'VF_Const', b'VF_InvisibleBox', b''] and [b[366+struct.unpack_from('<I',b,126+8*i)[0]-struct.unpack_from('<I',b,358)[0]:].split(b'\\x00')[0] for i in range(30)]==[b'CL_Black', b'CL_Maroon', b'CL_Green', b'CL_Olive', b'CL_Navy', b'CL_Purple', b'CL_Teal', b'CL_DarkGray', b'CL_Gray', b'CL_Silver', b'CL_Red', b'CL_Lime', b'CL_Yellow', b'CL_Blue', b'CL_Fuchsia', b'CL_Aqua', b'CL_Orange', b'CL_FireRed', b'CL_DarkYellow', b'CL_LightGreen', b'CL_White', b'CL_IconBack', b'CL_Text', b'CL_Selected', b'CL_PageBack', b'CL_EditSw', b'CL_Transparent', b'CL_HairLine', b'CL_WallPattern', b''] and [struct.unpack_from('<i',b,126+8*i+4)[0] for i in range(30)]==[0, 1, 2, 3, 4, 5, 6, 8, 248, 7, 249, 250, 251, 252, 253, 254, 9, 10, 12, 13, 255, 240, 241, 242, 243, 244, 247, 11, 245, 0]",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 56,
+    "new_label": "NakaInst_ViewFlag_EnumTable",
+    "ctype": "struct",
+    "dims": "[7]",
+    "struct_fields": [
+     {
+      "name": "name_ptr",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "ViewFlag property value names {name, value}: VF_None 0, VF_Invisible 1, VF_Fixed 2, VF_Change 4, VF_Const 8, VF_InvisibleBox 0x10, end {\"\", 0}; walked by CommonIDProc",
+    "header": [
+     "; NakaInst_ViewFlag_EnumTable -- 7 x {u32 name_ptr, s32 value}: ViewFlag property value names, ended by {\"\", 0}",
+     "; VF_None 0, VF_Invisible 1, VF_Fixed 2, VF_Change 4, VF_Const 8, VF_InvisibleBox 0x10. +8 of the ViewFlagProc",
+     "; SupportClass record (entry 28 of ExitWindow_OK_Data_2, count 6). CommonIDProc (ui/ui_widget_defs.s) walks it in",
+     "; 8-byte steps until the name is \"\": value -> name for DUMP_PROPERTY_EX, name -> value for SET_PROPERTY_EX."
+    ],
+    "check": "len(b)==56 and [struct.unpack_from('<Ii',b,8*i)[1] for i in range(7)]==[0,1,2,4,8,16,0]"
+   },
+   {
+    "off_in_slice": 56,
+    "size": 2,
+    "new_label": "NakaInst_ViewFlag_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: the name of the end entry of NakaInst_ViewFlag_EnumTable",
+    "header": [
+     "; NakaInst_ViewFlag_EmptyStr -- 2 x char: \"\" + 0xFF fill, the name of the {\"\", 0} end entry of NakaInst_ViewFlag_EnumTable;",
+     "; CommonIDProc (ui/ui_widget_defs.s) stops its walk at this empty name."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 58,
+    "size": 68,
+    "new_label": "NakaInst_ViewFlag_NameStrings",
+    "ctype": "char",
+    "dims": "[68]",
+    "cdoc": "the six ViewFlag value names, NUL-terminated, 0xFF-padded to even length; NakaInst_ViewFlag_EnumTable points into it",
+    "header": [
+     "; NakaInst_ViewFlag_NameStrings -- 68 x char: the ViewFlag value names VF_InvisibleBox, VF_Const, VF_Change, VF_Fixed,",
+     "; VF_Invisible, VF_None (NUL-terminated, 0xFF-padded to even length); the name_ptr fields of",
+     "; NakaInst_ViewFlag_EnumTable point at them."
+    ],
+    "check": "b==b'VF_InvisibleBox\\x00VF_Const\\x00\\xffVF_Change\\x00VF_Fixed\\x00\\xffVF_Invisible\\x00\\xffVF_None\\x00'"
+   },
+   {
+    "off_in_slice": 126,
+    "size": 240,
+    "new_label": "NakaInst_ColorID_EnumTable",
+    "ctype": "struct",
+    "dims": "[30]",
+    "struct_fields": [
+     {
+      "name": "name_ptr",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "ColorID property value names {name, palette index}: CL_Black 0 .. CL_LightGreen 13, CL_IconBack 0xF0 .. CL_White 0xFF, end {\"\", 0}; walked by CommonIDProc",
+    "header": [
+     "; NakaInst_ColorID_EnumTable -- 30 x {u32 name_ptr, s32 value}: ColorID property value names (palette colour numbers), ended by {\"\", 0}",
+     "; CL_Black 0, CL_Maroon 1 .. CL_Teal 6, CL_Silver 7, CL_DarkGray 8, CL_Orange 9, CL_FireRed 10, CL_HairLine 11, CL_DarkYellow 12,",
+     "; CL_LightGreen 13, CL_IconBack 0xF0, CL_Text 0xF1, CL_Selected 0xF2, CL_PageBack 0xF3, CL_EditSw 0xF4, CL_WallPattern 0xF5,",
+     "; CL_Transparent 0xF7, CL_Gray 0xF8, CL_Red 0xF9 .. CL_Aqua 0xFE, CL_White 0xFF. +8 of the ColorIDProc SupportClass record",
+     "; (entry 29 of ExitWindow_OK_Data_2, count 29); CommonIDProc (ui/ui_widget_defs.s) walks it in 8-byte steps."
+    ],
+    "check": "len(b)==240 and [struct.unpack_from('<Ii',b,8*i)[1] for i in range(30)]==[0, 1, 2, 3, 4, 5, 6, 8, 248, 7, 249, 250, 251, 252, 253, 254, 9, 10, 12, 13, 255, 240, 241, 242, 243, 244, 247, 11, 245, 0]"
+   },
+   {
+    "off_in_slice": 366,
+    "size": 2,
+    "new_label": "NakaInst_ColorID_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: the name of the end entry of NakaInst_ColorID_EnumTable",
+    "header": [
+     "; NakaInst_ColorID_EmptyStr -- 2 x char: \"\" + 0xFF fill, the name of the {\"\", 0} end entry of NakaInst_ColorID_EnumTable;",
+     "; CommonIDProc (ui/ui_widget_defs.s) stops its walk at this empty name."
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 368,
+    "size": 308,
+    "new_label": "NakaInst_ColorID_NameStrings",
+    "ctype": "char",
+    "dims": "[308]",
+    "cdoc": "the 29 ColorID value names CL_WallPattern .. CL_Black, NUL-terminated, 0xFF-padded to even length; NakaInst_ColorID_EnumTable points into it",
+    "header": [
+     "; NakaInst_ColorID_NameStrings -- 308 x char: the 29 ColorID value names, CL_WallPattern first and CL_Black last",
+     "; (NUL-terminated, 0xFF-padded to even length); the name_ptr fields of NakaInst_ColorID_EnumTable point at them."
+    ],
+    "check": "b==b'CL_WallPattern\\x00\\xffCL_HairLine\\x00CL_Transparent\\x00\\xffCL_EditSw\\x00CL_PageBack\\x00CL_Selected\\x00CL_Text\\x00CL_IconBack\\x00CL_White\\x00\\xffCL_LightGreen\\x00CL_DarkYellow\\x00CL_FireRed\\x00\\xffCL_Orange\\x00CL_Aqua\\x00CL_Fuchsia\\x00\\xffCL_Blue\\x00CL_Yellow\\x00CL_Lime\\x00CL_Red\\x00\\xffCL_Silver\\x00CL_Gray\\x00CL_DarkGray\\x00CL_Teal\\x00CL_Purple\\x00CL_Navy\\x00CL_Olive\\x00\\xffCL_Green\\x00\\xffCL_Maroon\\x00CL_Black\\x00\\xff'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:8713 `ldw (xbc + 8), 0x37` -- InitializeObjectTable registers 0x37 = 55 SupportClass records (12 B each: proc, u16 count, u16 data size, u32 value-name list) at ExitWindow_OK_Data_2, slot 0x260",
+   "ui/ui_widget_defs.s:17502 `cpw (xwa + 4), 0x0` -- CommonIDProc: the SupportClass record (EVT_GET_INSTANCE) +4 is the value count; 0 = no names, plain number",
+   "ui/ui_widget_defs.s:17505 `ld xbc, (xwa + 8)` -- record +8 is the base of the value-name list",
+   "ui/ui_widget_defs.s:17512 `cp xwa, (xhl + 4)` -- DUMP_PROPERTY_EX: entry +4 is the s32 value compared with the property value; on a match entry +0 (name) is Strcpy-ed out",
+   "ui/ui_widget_defs.s:17525 `inc 8, xde` -- entries are 8 bytes",
+   "ui/ui_widget_defs.s:17531 `cp (xix), 0x0` -- the walk ends at the entry whose name string is empty (\"\")",
+   "ui/ui_widget_defs.s:17553 `call Strcmp` -- SET_PROPERTY_EX: the typed text is compared with entry +0 (name), and the matching entry's +4 value is stored",
+   "ui/ui_widget_defs.s:17464 `sll xbc, 3` -- GET_PROP_DATA_SP: list[index] (index * 8) +0, the name pointer",
+   "ui/ui_widget_defs.s:14261 `calr CommonIDProc` -- ViewFlagProc forwards the event to CommonIDProc with its SupportClass record",
+   "ui/ui_widget_defs.s:14253 `extz xbc` -- ViewFlagProc reads the property value as a 16-bit word (extz) before CommonIDProc compares it",
+   "ui/ui_widget_defs.s:14311 `calr CommonIDProc` -- ColorIDProc forwards the event to CommonIDProc with its SupportClass record",
+   "ui/ui_widget_defs.s:14303 `exts xbc` -- ColorIDProc reads the property value as a 16-bit word (exts) before CommonIDProc compares it"
+  ],
+  "new_label": "NakaInst_ViewFlag_EnumTable",
+  "header": [
+   "; NakaInst_ViewFlag_EnumTable -- 7 x {u32 name_ptr, s32 value}: ViewFlag property value names, ended by {\"\", 0}",
+   "; VF_None 0, VF_Invisible 1, VF_Fixed 2, VF_Change 4, VF_Const 8, VF_InvisibleBox 0x10. +8 of the ViewFlagProc",
+   "; SupportClass record (entry 28 of ExitWindow_OK_Data_2, count 6). CommonIDProc (ui/ui_widget_defs.s) walks it in",
+   "; 8-byte steps until the name is \"\": value -> name for DUMP_PROPERTY_EX, name -> value for SET_PROPERTY_EX."
+  ],
+  "asm": "ui_widgets/debug_naming_panel_sim.s",
+  "size": 676,
+  "blob": "naka_debug_naming",
+  "off_v10": 15918,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "NakaProp_Align_PtrEntry",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "check": "len(b)==86 and struct.unpack_from('<Ii',b,0)[1]==0 and b[8:10]==b'\\x00\\xff' and [b[8+struct.unpack_from('<I',b,10+8*i)[0]-struct.unpack_from('<I',b,0)[0]:].split(b'\\x00')[0] for i in range(4)]==[b'AL_Center',b'AL_LeftJustify',b'AL_RightJustify',b'']",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 8,
+    "new_label": "NakaInst_FontID_EnumTable",
+    "ctype": "struct",
+    "dims": "[1]",
+    "struct_fields": [
+     {
+      "name": "name_ptr",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "FontID property enum: only the end entry {\"\", 0} (count 0: FontIDProc names fonts itself)",
+    "header": [
+     "; NakaInst_FontID_EnumTable -- 1 x {u32 name_ptr, s32 value}: the FontID value-name list, only its {\"\", 0} end entry",
+     "; +8 of the FontIDProc SupportClass record (entry 34 of ExitWindow_OK_Data_2, count 0); FontIDProc handles font names",
+     "; itself and passes other events to CommonIDProc (ui/ui_widget_defs.s), which stops at once on the empty name."
+    ],
+    "check": "len(b)==8 and struct.unpack('<Ii',b)[1]==0"
+   },
+   {
+    "off_in_slice": 8,
+    "size": 2,
+    "new_label": "NakaInst_FontID_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: the name of the end entry of NakaInst_FontID_EnumTable",
+    "header": [
+     "; NakaInst_FontID_EmptyStr -- 2 x char: \"\" + 0xFF fill, the name of the end entry of NakaInst_FontID_EnumTable"
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 10,
+    "size": 32,
+    "new_label": "NakaInst_AlignmentID_EnumTable",
+    "ctype": "struct",
+    "dims": "[4]",
+    "struct_fields": [
+     {
+      "name": "name_ptr",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "AlignmentID property value names: AL_Center 0, AL_LeftJustify 1, AL_RightJustify 2, end {\"\", 0}; walked by CommonIDProc",
+    "header": [
+     "; NakaInst_AlignmentID_EnumTable -- 4 x {u32 name_ptr, s32 value}: AlignmentID value names, ended by {\"\", 0}",
+     "; AL_Center 0, AL_LeftJustify 1, AL_RightJustify 2. +8 of the AlignmentIDProc SupportClass record (entry 35 of",
+     "; ExitWindow_OK_Data_2, count 3, 1-byte data); AlignmentIDProc reads the byte and CommonIDProc (ui/ui_widget_defs.s)",
+     "; maps value <-> name through this list."
+    ],
+    "check": "len(b)==32 and [struct.unpack_from('<Ii',b,8*i)[1] for i in range(4)]==[0,1,2,0]"
+   },
+   {
+    "off_in_slice": 42,
+    "size": 2,
+    "new_label": "NakaInst_AlignmentID_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: the name of the end entry of NakaInst_AlignmentID_EnumTable",
+    "header": [
+     "; NakaInst_AlignmentID_EmptyStr -- 2 x char: \"\" + 0xFF fill, the name of the end entry of NakaInst_AlignmentID_EnumTable"
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 44,
+    "size": 42,
+    "new_label": "NakaInst_AlignmentID_NameStrings",
+    "ctype": "char",
+    "dims": "[42]",
+    "cdoc": "AL_RightJustify, AL_LeftJustify, AL_Center (NUL-terminated, 0xFF-padded); NakaInst_AlignmentID_EnumTable points into it",
+    "header": [
+     "; NakaInst_AlignmentID_NameStrings -- 42 x char: the AlignmentID value names AL_RightJustify, AL_LeftJustify, AL_Center",
+     "; (NUL-terminated, 0xFF-padded to even length); the name_ptr fields of NakaInst_AlignmentID_EnumTable point at them."
+    ],
+    "check": "b==b'AL_RightJustify\\x00AL_LeftJustify\\x00\\xffAL_Center\\x00'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:8713 `ldw (xbc + 8), 0x37` -- InitializeObjectTable registers 0x37 = 55 SupportClass records (12 B each: proc, u16 count, u16 data size, u32 value-name list) at ExitWindow_OK_Data_2, slot 0x260",
+   "ui/ui_widget_defs.s:17502 `cpw (xwa + 4), 0x0` -- CommonIDProc: the SupportClass record (EVT_GET_INSTANCE) +4 is the value count; 0 = no names, plain number",
+   "ui/ui_widget_defs.s:17505 `ld xbc, (xwa + 8)` -- record +8 is the base of the value-name list",
+   "ui/ui_widget_defs.s:17512 `cp xwa, (xhl + 4)` -- DUMP_PROPERTY_EX: entry +4 is the s32 value compared with the property value; on a match entry +0 (name) is Strcpy-ed out",
+   "ui/ui_widget_defs.s:17525 `inc 8, xde` -- entries are 8 bytes",
+   "ui/ui_widget_defs.s:17531 `cp (xix), 0x0` -- the walk ends at the entry whose name string is empty (\"\")",
+   "ui/ui_widget_defs.s:17553 `call Strcmp` -- SET_PROPERTY_EX: the typed text is compared with entry +0 (name), and the matching entry's +4 value is stored",
+   "ui/ui_widget_defs.s:17464 `sll xbc, 3` -- GET_PROP_DATA_SP: list[index] (index * 8) +0, the name pointer",
+   "ui/ui_widget_defs.s:14411 `calr CommonIDProc` -- AlignmentIDProc forwards the event to CommonIDProc with its SupportClass record",
+   "ui/ui_widget_defs.s:14403 `ld c, (xhl)` -- AlignmentIDProc reads the property value as one byte (xbc cleared, then `ld c, (xhl)`)",
+   "ui/ui_widget_defs.s:15106 `calr CommonIDProc` -- FontIDProc passes the events it does not handle itself to CommonIDProc"
+  ],
+  "new_label": "NakaInst_FontID_EnumTable",
+  "header": [
+   "; NakaInst_FontID_EnumTable -- 1 x {u32 name_ptr, s32 value}: the FontID value-name list, only its {\"\", 0} end entry",
+   "; +8 of the FontIDProc SupportClass record (entry 34 of ExitWindow_OK_Data_2, count 0); FontIDProc handles font names",
+   "; itself and passes other events to CommonIDProc (ui/ui_widget_defs.s), which stops at once on the empty name."
+  ],
+  "asm": "ui_widgets/debug_naming_panel_sim.s",
+  "size": 86,
+  "blob": "naka_debug_naming",
+  "off_v10": 17026,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "NakaProp_Frame_Chain",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "check": "len(b)==208 and b[8:10]==b'\\x00\\xff' and [struct.unpack_from('<I',b,10+8*i)[0]-struct.unpack_from('<I',b,0)[0]+8 for i in range(14)]==[228,218,208,200,192,182,172,164,156,148,140,132,124,122] and [b[o:].split(b'\\x00')[0] for o in (124,132,140,148,156,164,172,182,192,200)]==[b'iduNone',b'iduNaka',b'iduKSS',b'iduHama',b'iduKubo',b'iduYoko',b'iduScoop',b'iduCheap',b'iduSuna',b'iduEast']",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 8,
+    "new_label": "NakaInst_MainFuncID_EnumTable",
+    "ctype": "struct",
+    "dims": "[1]",
+    "struct_fields": [
+     {
+      "name": "name_ptr",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "MainFuncID property enum: only the end entry {\"\", 0} (count 0: MainFuncIDProc names main functions itself)",
+    "header": [
+     "; NakaInst_MainFuncID_EnumTable -- 1 x {u32 name_ptr, s32 value}: the MainFuncID value-name list, only its {\"\", 0} end entry",
+     "; +8 of the MainFuncIDProc SupportClass record (entry 42 of ExitWindow_OK_Data_2, count 0); MainFuncIDProc names main",
+     "; functions itself and passes other events to CommonIDProc (ui/ui_widget_defs.s), which stops at the empty name."
+    ],
+    "check": "len(b)==8 and struct.unpack('<Ii',b)[1]==0"
+   },
+   {
+    "off_in_slice": 8,
+    "size": 2,
+    "new_label": "NakaInst_MainFuncID_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: the name of the end entry of NakaInst_MainFuncID_EnumTable",
+    "header": [
+     "; NakaInst_MainFuncID_EmptyStr -- 2 x char: \"\" + 0xFF fill, the name of the end entry of NakaInst_MainFuncID_EnumTable"
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 10,
+    "size": 112,
+    "new_label": "NakaInst_UserID_EnumTable",
+    "ctype": "struct",
+    "dims": "[14]",
+    "struct_fields": [
+     {
+      "name": "name_ptr",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "UserID property value names: iduRoot 0, iduMurai 1, iduToshi 2, iduEast 3 .. iduNaka 11, iduNone -1, end {\"\", 0}; walked by CommonIDProc",
+    "header": [
+     "; NakaInst_UserID_EnumTable -- 14 x {u32 name_ptr, s32 value}: UserID value names, ended by {\"\", 0}: iduRoot 0, iduMurai 1,",
+     "; iduToshi 2, iduEast 3, iduSuna 4, iduCheap 5, iduScoop 6, iduYoko 7, iduKubo 8, iduHama 9, iduKSS 10, iduNaka 11, iduNone -1",
+     "; (the first three names are in naka_style_bitmaps). +8 of the UserIDProc SupportClass record (entry 43 of",
+     "; ExitWindow_OK_Data_2, count 13); UserIDProc sign-extends the 16-bit value (-1 = iduNone) and CommonIDProc maps it.",
+     "; A title record's +8 is such a user id (TitleProc_OnGetUserId; Title_RecordTemplate holds -1)."
+    ],
+    "check": "len(b)==112 and [struct.unpack_from('<Ii',b,8*i)[1] for i in range(14)]==list(range(12))+[-1,0]"
+   },
+   {
+    "off_in_slice": 122,
+    "size": 2,
+    "new_label": "NakaInst_UserID_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: the name of the end entry of NakaInst_UserID_EnumTable",
+    "header": [
+     "; NakaInst_UserID_EmptyStr -- 2 x char: \"\" + 0xFF fill, the name of the end entry of NakaInst_UserID_EnumTable"
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 124,
+    "size": 84,
+    "new_label": "NakaInst_UserID_NameStrings",
+    "ctype": "char",
+    "dims": "[84]",
+    "cdoc": "UserID value names iduNone .. iduEast (NUL-terminated, 0xFF-padded); iduToshi, iduMurai, iduRoot follow in naka_style_bitmaps",
+    "header": [
+     "; NakaInst_UserID_NameStrings -- 84 x char: UserID value names iduNone, iduNaka, iduKSS, iduHama, iduKubo, iduYoko,",
+     "; iduScoop, iduCheap, iduSuna, iduEast (NUL-terminated, 0xFF-padded to even length); the list continues past the blob",
+     "; end with iduToshi, iduMurai, iduRoot (NakaData_StyleBitmaps, NakaInst_iduMurai, NakaInst_iduRoot)."
+    ],
+    "check": "b==b'iduNone\\x00iduNaka\\x00iduKSS\\x00\\xffiduHama\\x00iduKubo\\x00iduYoko\\x00iduScoop\\x00\\xffiduCheap\\x00\\xffiduSuna\\x00iduEast\\x00'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:8713 `ldw (xbc + 8), 0x37` -- InitializeObjectTable registers 0x37 = 55 SupportClass records (12 B each: proc, u16 count, u16 data size, u32 value-name list) at ExitWindow_OK_Data_2, slot 0x260",
+   "ui/ui_widget_defs.s:17502 `cpw (xwa + 4), 0x0` -- CommonIDProc: the SupportClass record (EVT_GET_INSTANCE) +4 is the value count; 0 = no names, plain number",
+   "ui/ui_widget_defs.s:17505 `ld xbc, (xwa + 8)` -- record +8 is the base of the value-name list",
+   "ui/ui_widget_defs.s:17512 `cp xwa, (xhl + 4)` -- DUMP_PROPERTY_EX: entry +4 is the s32 value compared with the property value; on a match entry +0 (name) is Strcpy-ed out",
+   "ui/ui_widget_defs.s:17525 `inc 8, xde` -- entries are 8 bytes",
+   "ui/ui_widget_defs.s:17531 `cp (xix), 0x0` -- the walk ends at the entry whose name string is empty (\"\")",
+   "ui/ui_widget_defs.s:17553 `call Strcmp` -- SET_PROPERTY_EX: the typed text is compared with entry +0 (name), and the matching entry's +4 value is stored",
+   "ui/ui_widget_defs.s:17464 `sll xbc, 3` -- GET_PROP_DATA_SP: list[index] (index * 8) +0, the name pointer",
+   "ui/ui_widget_defs.s:14689 `calr CommonIDProc` -- UserIDProc forwards the event to CommonIDProc with its SupportClass record",
+   "ui/ui_widget_defs.s:14681 `exts xbc` -- UserIDProc reads the property value as a 16-bit word (exts) before CommonIDProc compares it",
+   "ui/ui_widget_defs.s:15746 `calr CommonIDProc` -- MainFuncIDProc passes the events it does not handle itself to CommonIDProc",
+   "ui/ui_widget_defs.s:10198 `ld hl, (xhl + 8)` -- TitleProc_OnGetUserId: a title record's +8 is a 16-bit user id, sign-extended"
+  ],
+  "new_label": "NakaInst_MainFuncID_EnumTable",
+  "header": [
+   "; NakaInst_MainFuncID_EnumTable -- 1 x {u32 name_ptr, s32 value}: the MainFuncID value-name list, only its {\"\", 0} end entry",
+   "; +8 of the MainFuncIDProc SupportClass record (entry 42 of ExitWindow_OK_Data_2, count 0); MainFuncIDProc names main",
+   "; functions itself and passes other events to CommonIDProc (ui/ui_widget_defs.s), which stops at the empty name."
+  ],
+  "asm": "ui_widgets/debug_naming_panel_sim.s",
+  "size": 208,
+  "blob": "naka_debug_naming",
+  "off_v10": 17904,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "DiskSure_PtrTable",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "check": "len(b)==80 and [struct.unpack_from('<I',b,4*i)[0]-struct.unpack_from('<I',b,20)[0] for i in (3,4,5)]==[42,28,0] and all(struct.unpack_from('<I',b,4*i)[0]-struct.unpack_from('<I',b,20)[0]>=56 for i in (0,1,2)) and b[24:]==b'Apakah yakin akan dihapus ?\\x00Are You Sure?\\x00\\xbfEst\\xe1 seguro?\\x00'",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 24,
+    "new_label": "DiskSure_LanguageTable",
+    "ctype": "uint32_t",
+    "dims": "[6]",
+    "cdoc": "\"Are you sure?\" per language number (RAM 0x340E4): 0 English, 1 German, 2 French, 3 Spanish, 4 English again, 5 Indonesian",
+    "header": [
+     "; DiskSure_LanguageTable -- 6 x u32: the \"Are you sure?\" text per language number (RAM 0x340E4): 0 English, 1 German,",
+     "; 2 French (those three in naka_disk_warning), 3 Spanish, 4 English again, 5 Indonesian (the strings below).",
+     "; DiskSure (file_io/medley.s) returns it for EVT_GET_LANGUAGE_PTR; AcLanguageTextProc (ui/ui_widget_defs.s)",
+     "; indexes it with the language byte * 4 and draws the entry with EVT_PARA_DRAW."
+    ],
+    "check": "len(b)==24 and [struct.unpack_from('<I',b,4*i)[0]-struct.unpack_from('<I',b,20)[0] for i in (3,4,5)]==[42,28,0]"
+   },
+   {
+    "off_in_slice": 24,
+    "size": 28,
+    "new_label": "Str_DiskSure_Indonesian",
+    "ctype": "char",
+    "dims": "[28]",
+    "cdoc": "language 5 (Indonesian) entry of DiskSure_LanguageTable",
+    "header": [
+     "; Str_DiskSure_Indonesian -- 28 x char: \"Apakah yakin akan dihapus ?\", DiskSure_LanguageTable[5] (language 5, Indonesian)"
+    ],
+    "check": "b==b'Apakah yakin akan dihapus ?\\x00'"
+   },
+   {
+    "off_in_slice": 52,
+    "size": 14,
+    "new_label": "Str_DiskSure_EnglishSlot4",
+    "ctype": "char",
+    "dims": "[14]",
+    "cdoc": "language 4 entry of DiskSure_LanguageTable: English, a second copy",
+    "header": [
+     "; Str_DiskSure_EnglishSlot4 -- 14 x char: \"Are You Sure?\", DiskSure_LanguageTable[4]; language 4 repeats English",
+     "; (CheckLanguage skips it), so this is a second copy of the language-0 text."
+    ],
+    "check": "b==b'Are You Sure?\\x00'"
+   },
+   {
+    "off_in_slice": 66,
+    "size": 14,
+    "new_label": "Str_DiskSure_Spanish",
+    "ctype": "char",
+    "dims": "[14]",
+    "cdoc": "language 3 (Spanish) entry of DiskSure_LanguageTable, Latin-1",
+    "header": [
+     "; Str_DiskSure_Spanish -- 14 x char: \"\\xbfEst\\xe1 seguro?\" (Latin-1 inverted question mark, a-acute),",
+     "; DiskSure_LanguageTable[3] (language 3, Spanish)."
+    ],
+    "check": "b==b'\\xbfEst\\xe1 seguro?\\x00'"
+   }
+  ],
+  "evidence": [
+   "file_io/medley.s:4558 `lda xhl, (DiskSure_PtrTable:24)` -- DiskSure answers EVT_GET_LANGUAGE_PTR with this table",
+   "ui/ui_widget_defs.s:8337 `ld xbc, EVT_GET_LANGUAGE_PTR` -- AcLanguageTextProc asks the view's ApFunction for its language table",
+   "ui/ui_widget_defs.s:8340 `ld a, (0x0340e4:24)` -- index = the language number byte",
+   "ui/ui_widget_defs.s:8343 `ld xde, (xhl+wa)` -- entry = table[language * 4], a string pointer passed with EVT_PARA_DRAW",
+   "ui/drawbar_panel_ui.s:8999 `cp a, 4:i3` -- CheckLanguage steps over language 4 when cycling the language number (4 = English again; 5 slots of text, 6 entries)"
+  ],
+  "note": "Entry 0 points at 0xEA8CCE (\"Are You Sure?\", naka_disk_warning +0x22), which has a C member but no asm label (it lies inside DiskWarning_GermanConfirm's .incbin). Entry 0 is numeric in the C today, so nakarest_reviewed_slices.py will skip this typing ('pointers not all symbolic again') until DiskWarning_GermanConfirm is cut at +0x12 into the German and English strings.",
+  "new_label": "DiskSure_LanguageTable",
+  "header": [
+   "; DiskSure_LanguageTable -- 6 x u32: the \"Are you sure?\" text per language number (RAM 0x340E4): 0 English, 1 German,",
+   "; 2 French (those three in naka_disk_warning), 3 Spanish, 4 English again, 5 Indonesian (the strings below).",
+   "; DiskSure (file_io/medley.s) returns it for EVT_GET_LANGUAGE_PTR; AcLanguageTextProc (ui/ui_widget_defs.s)",
+   "; indexes it with the language byte * 4 and draws the entry with EVT_PARA_DRAW."
+  ],
+  "asm": "ui_widgets/disk_menu_file_io_screens.s",
+  "size": 80,
+  "blob": "naka_disk_menu_file_io",
+  "off_v10": 30864,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "WndScroll_SendSelectionEvents_PtrTable",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "check": "len(b)==526 and [b[12+struct.unpack_from('<I',b,4*i)[0]-struct.unpack_from('<I',b,8)[0]:].split(b'\\x00')[0] for i in range(3)]==[b'ABC...123...', b'abc...123...', b' !#$%&?.... '] and [b[210+struct.unpack_from('<I',b,54+4*i)[0]-struct.unpack_from('<I',b,206)[0]:].split(b'\\x00')[0] for i in range(39)]==[b'A', b'B', b'C', b'D', b'E', b'F', b'G', b'H', b'I', b'J', b'K', b'L', b'M', b'N', b'O', b'P', b'Q', b'R', b'S', b'T', b'U', b'V', b'W', b'X', b'Y', b'Z', b'_', b'0', b'1', b'2', b'3', b'4', b'5', b'6', b'7', b'8', b'9', b'SPC', b''] and [b[446+struct.unpack_from('<I',b,290+4*i)[0]-struct.unpack_from('<I',b,442)[0]:].split(b'\\x00')[0] for i in range(39)]==[b'a', b'b', b'c', b'd', b'e', b'f', b'g', b'h', b'i', b'j', b'k', b'l', b'm', b'n', b'o', b'p', b'q', b'r', b's', b't', b'u', b'v', b'w', b'x', b'y', b'z', b'_', b'0', b'1', b'2', b'3', b'4', b'5', b'6', b'7', b'8', b'9', b'SPC', b'']",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 12,
+    "new_label": "WndScroll_CharSetCaptions",
+    "ctype": "uint32_t",
+    "dims": "[3]",
+    "cdoc": "caption of each naming-window character set: 0 \"ABC...123...\", 1 \"abc...123...\", 2 \" !#$%&?.... \"",
+    "header": [
+     "; WndScroll_CharSetCaptions -- 3 x u32: the caption of each character set of the naming window, indexed by the set",
+     "; number in RAM 0x274DA (0 upper case, 1 lower case, 2 symbols, the order of Data_SoundEditorCharsLayout).",
+     "; WndScroll_SendSelectionEvents (ui/ui_window_procs.s) scales the set by 4 and sends the string to view 0x1D",
+     "; with EVT_PARA_DRAW."
+    ],
+    "check": "len(b)==12"
+   },
+   {
+    "off_in_slice": 12,
+    "size": 42,
+    "new_label": "WndScroll_CharSetCaptionText",
+    "ctype": "char",
+    "dims": "[42]",
+    "cdoc": "\" !#$%&?.... \", \"abc...123...\", \"ABC...123...\" (+ 0xFF fill)",
+    "header": [
+     "; WndScroll_CharSetCaptionText -- 42 x char: \" !#$%&?.... \", \"abc...123...\", \"ABC...123...\" (NUL + 0xFF each),",
+     "; the strings WndScroll_CharSetCaptions points at."
+    ],
+    "check": "b==b' !#$%&?.... \\x00\\xffabc...123...\\x00\\xffABC...123...\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 54,
+    "size": 156,
+    "new_label": "WndScroll_UpperCharTable",
+    "ctype": "uint32_t",
+    "dims": "[39]",
+    "cdoc": "character set 0 (upper case): \"A\"..\"Z\", \"_\", \"0\"..\"9\", \"SPC\", end \"\"",
+    "header": [
+     "; WndScroll_UpperCharTable -- 39 x u32: character set 0 of the naming window, one string per selectable item:",
+     "; \"A\"..\"Z\", \"_\", \"0\"..\"9\", \"SPC\" (inserts the fill character), then \"\". Data_SoundEditorCharsLayout[0] points here;",
+     "; the WndScroll/WndEvt routines (ui/ui_window_procs.s) index it by the item number * 4 and draw or convert the string;",
+     "; the last item number per set comes from WndScroll_ItemCountCheck_Str_Chr25."
+    ],
+    "check": "len(b)==156"
+   },
+   {
+    "off_in_slice": 210,
+    "size": 80,
+    "new_label": "WndScroll_UpperCharText",
+    "ctype": "char",
+    "dims": "[80]",
+    "cdoc": "\"\", \"SPC\", \"9\"..\"0\", \"_\", \"Z\"..\"A\": the strings WndScroll_UpperCharTable points at",
+    "header": [
+     "; WndScroll_UpperCharText -- 80 x char: \"\" (+0xFF), \"SPC\", then \"9\"..\"0\", \"_\", \"Z\"..\"A\" as 2-byte strings,",
+     "; the items WndScroll_UpperCharTable points at."
+    ],
+    "check": "b==b'\\x00\\xffSPC\\x009\\x008\\x007\\x006\\x005\\x004\\x003\\x002\\x001\\x000\\x00_\\x00Z\\x00Y\\x00X\\x00W\\x00V\\x00U\\x00T\\x00S\\x00R\\x00Q\\x00P\\x00O\\x00N\\x00M\\x00L\\x00K\\x00J\\x00I\\x00H\\x00G\\x00F\\x00E\\x00D\\x00C\\x00B\\x00A\\x00'"
+   },
+   {
+    "off_in_slice": 290,
+    "size": 156,
+    "new_label": "WndScroll_LowerCharTable",
+    "ctype": "uint32_t",
+    "dims": "[39]",
+    "cdoc": "character set 1 (lower case): \"a\"..\"z\", \"_\", \"0\"..\"9\", \"SPC\", end \"\"",
+    "header": [
+     "; WndScroll_LowerCharTable -- 39 x u32: character set 1 of the naming window: \"a\"..\"z\", \"_\", \"0\"..\"9\", \"SPC\", \"\".",
+     "; Data_SoundEditorCharsLayout[1] points here; read like WndScroll_UpperCharTable (ui/ui_window_procs.s)."
+    ],
+    "check": "len(b)==156"
+   },
+   {
+    "off_in_slice": 446,
+    "size": 80,
+    "new_label": "WndScroll_LowerCharText",
+    "ctype": "char",
+    "dims": "[80]",
+    "cdoc": "\"\", \"SPC\", \"9\"..\"0\", \"_\", \"z\"..\"a\": the strings WndScroll_LowerCharTable points at",
+    "header": [
+     "; WndScroll_LowerCharText -- 80 x char: \"\" (+0xFF), \"SPC\", then \"9\"..\"0\", \"_\", \"z\"..\"a\" as 2-byte strings,",
+     "; the items WndScroll_LowerCharTable points at."
+    ],
+    "check": "b==b'\\x00\\xffSPC\\x009\\x008\\x007\\x006\\x005\\x004\\x003\\x002\\x001\\x000\\x00_\\x00z\\x00y\\x00x\\x00w\\x00v\\x00u\\x00t\\x00s\\x00r\\x00q\\x00p\\x00o\\x00n\\x00m\\x00l\\x00k\\x00j\\x00i\\x00h\\x00g\\x00f\\x00e\\x00d\\x00c\\x00b\\x00a\\x00'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_window_procs.s:847 `ld wa, (0x0274da:24)` -- the character-set number",
+   "ui/ui_window_procs.s:850 `ld xbc, WndScroll_SendSelectionEvents_PtrTable` -- set * 4 indexes this table",
+   "ui/ui_window_procs.s:853 `ld xwa, 0x1d` -- the caption string goes to view 0x1D with EVT_PARA_DRAW",
+   "ui/ui_window_procs.s:83 `ld xbc, Data_SoundEditorCharsLayout` -- Data_SoundEditorCharsLayout[set] (0xEA9C28 = +54, 0xEA9D14 = +290, 0xEA9E00) is the item table of the set",
+   "ui/ui_window_procs.s:1034 `ld xwa, (xbc)` -- item table base",
+   "ui/ui_window_procs.s:1042 `call ConvertStrings` -- item = table[item number * 4], a string",
+   "ui/ui_window_procs.s:230 `ld xde, (xhl)` -- WndScroll_RepaintAll draws each item string of the set (DrawString)",
+   "ui/ui_window_procs.s:1047 `cp (xwa + 1), 0x50` -- an item whose string starts \"SP\" (SPC, `cp e, 0x53` just before) inserts the naming mode's fill character instead"
+  ],
+  "new_label": "WndScroll_CharSetCaptions",
+  "header": [
+   "; WndScroll_CharSetCaptions -- 3 x u32: the caption of each character set of the naming window, indexed by the set",
+   "; number in RAM 0x274DA (0 upper case, 1 lower case, 2 symbols, the order of Data_SoundEditorCharsLayout).",
+   "; WndScroll_SendSelectionEvents (ui/ui_window_procs.s) scales the set by 4 and sends the string to view 0x1D",
+   "; with EVT_PARA_DRAW."
+  ],
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 526,
+  "blob": "naka_disk_warning",
+  "off_v10": 3910,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "AcNaming_QueryCharSet_PtrTable",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "check": "len(b)==12 and b[8:]==b'_\\x00 \\x00' and struct.unpack_from('<I',b,0)[0]-struct.unpack_from('<I',b,4)[0]==2",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 8,
+    "new_label": "AcNaming_FillCharByMode",
+    "ctype": "uint32_t",
+    "dims": "[2]",
+    "cdoc": "fill character of the naming window per naming mode: 0 \" \" (space), 1 \"_\"",
+    "header": [
+     "; AcNaming_FillCharByMode -- 2 x u32: the blank/fill character of the naming window per naming mode, 0 -> \" \", 1 -> \"_\"",
+     "; AcNaming_QueryCharSet (audio/presentation_sound_nav.s) gets the mode with EVT_GET_NAMING_MODE, stores it at RAM",
+     "; 0x274E2 and stores entry[mode] at RAM 0x274E4; ui/ui_window_procs.s fills and erases the name buffer with its",
+     "; first byte and inserts it for the SPC item."
+    ],
+    "check": "len(b)==8 and struct.unpack_from('<I',b,0)[0]-struct.unpack_from('<I',b,4)[0]==2"
+   },
+   {
+    "off_in_slice": 8,
+    "size": 2,
+    "new_label": "AcNaming_FillCharUnderscore",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"_\": the fill character of naming mode 1",
+    "header": [
+     "; AcNaming_FillCharUnderscore -- 2 x char: \"_\", AcNaming_FillCharByMode[1] (naming mode 1)"
+    ],
+    "check": "b==b'_\\x00'"
+   },
+   {
+    "off_in_slice": 10,
+    "size": 2,
+    "new_label": "AcNaming_FillCharSpace",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\" \": the fill character of naming mode 0",
+    "header": [
+     "; AcNaming_FillCharSpace -- 2 x char: \" \", AcNaming_FillCharByMode[0] (naming mode 0)"
+    ],
+    "check": "b==b' \\x00'"
+   }
+  ],
+  "evidence": [
+   "audio/presentation_sound_nav.s:1916 `ld xbc, EVT_GET_NAMING_MODE` -- the naming mode comes from the name's ApFunction",
+   "audio/presentation_sound_nav.s:1919 `ld (0x0274e2:24), hl` -- mode kept at RAM 0x274E2",
+   "audio/presentation_sound_nav.s:1923 `ld xbc, AcNaming_QueryCharSet_PtrTable` -- mode * 4 indexes this table",
+   "audio/presentation_sound_nav.s:1926 `ld (0x0274e4:24), xwa` -- the selected string pointer is kept at RAM 0x274E4",
+   "ui/ui_window_procs.s:19 `ld a, (xhl)` -- WndScroll_CopyLoop fills the name buffer (RAM 0x274B0) with the byte at (0x274E4), xhl not advanced",
+   "ui/ui_window_procs.s:1051 `ld e, (xwa)` -- for the SPC item (string starting 0x53 0x50) the fill character at (0x274E4) is sent with EVT_SET_CHARA"
+  ],
+  "new_label": "AcNaming_FillCharByMode",
+  "header": [
+   "; AcNaming_FillCharByMode -- 2 x u32: the blank/fill character of the naming window per naming mode, 0 -> \" \", 1 -> \"_\"",
+   "; AcNaming_QueryCharSet (audio/presentation_sound_nav.s) gets the mode with EVT_GET_NAMING_MODE, stores it at RAM",
+   "; 0x274E2 and stores entry[mode] at RAM 0x274E4; ui/ui_window_procs.s fills and erases the name buffer with its",
+   "; first byte and inserts it for the SPC item."
+  ],
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 12,
+  "blob": "naka_disk_warning",
+  "off_v10": 4670,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "DbDebugMenu_Confirm_PtrTable",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "check": "len(b)==50 and [b[16+struct.unpack_from('<I',b,4*i)[0]-struct.unpack_from('<I',b,12)[0]:].split(b'\\x00')[0] for i in range(4)]==[b'-MEMORY DUMP-',b'-MEMO-',b'-DEBUG3-',b'']",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 16,
+    "new_label": "DbDebugMenu_PageTitles",
+    "ctype": "uint32_t",
+    "dims": "[4]",
+    "cdoc": "debug menu page titles by page index: \"-MEMORY DUMP-\", \"-MEMO-\", \"-DEBUG3-\", then \"\" (wrap to page 0)",
+    "header": [
+     "; DbDebugMenu_PageTitles -- 4 x u32: debug-menu page titles by page index (word at *(instance+42)): 0 \"-MEMORY DUMP-\",",
+     "; 1 \"-MEMO-\", 2 \"-DEBUG3-\", 3 \"\" = end. DbDebugMenu_Confirm (ui/ui_widget_defs.s) draws title[page] centred;",
+     "; DbDebugMenu_OK_Advance increments the page and sets it back to 0 when the title's first byte is 0."
+    ],
+    "check": "len(b)==16"
+   },
+   {
+    "off_in_slice": 16,
+    "size": 34,
+    "new_label": "DbDebugMenu_PageTitleText",
+    "ctype": "char",
+    "dims": "[34]",
+    "cdoc": "\"\", \"-DEBUG3-\", \"-MEMO-\", \"-MEMORY DUMP-\" (+ 0xFF fill): the strings DbDebugMenu_PageTitles points at",
+    "header": [
+     "; DbDebugMenu_PageTitleText -- 34 x char: \"\", \"-DEBUG3-\", \"-MEMO-\", \"-MEMORY DUMP-\" (NUL-terminated, 0xFF-padded),",
+     "; the strings DbDebugMenu_PageTitles points at."
+    ],
+    "check": "b==b'\\x00\\xff-DEBUG3-\\x00\\xff-MEMO-\\x00\\xff-MEMORY DUMP-\\x00'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:7544 `ld de, (xde)` -- the page index word at *(instance+42)",
+   "ui/ui_widget_defs.s:7546 `lda xhl, (DbDebugMenu_Confirm_PtrTable:24)` -- page * 4 (`sla de, 2`) indexes this table",
+   "ui/ui_widget_defs.s:7552 `call DrawStringCentered` -- the title string is drawn centred in the client box",
+   "ui/ui_widget_defs.s:7587 `incw 1, (xbc)` -- OK advances the page index",
+   "ui/ui_widget_defs.s:7593 `cp (xwa), 0x0` -- title[page][0] == 0 (the \"\" end entry) ...",
+   "ui/ui_widget_defs.s:7595 `ldw (xbc), 0x0` -- ... wraps the page index to 0"
+  ],
+  "new_label": "DbDebugMenu_PageTitles",
+  "header": [
+   "; DbDebugMenu_PageTitles -- 4 x u32: debug-menu page titles by page index (word at *(instance+42)): 0 \"-MEMORY DUMP-\",",
+   "; 1 \"-MEMO-\", 2 \"-DEBUG3-\", 3 \"\" = end. DbDebugMenu_Confirm (ui/ui_widget_defs.s) draws title[page] centred;",
+   "; DbDebugMenu_OK_Advance increments the page and sets it back to 0 when the title's first byte is 0."
+  ],
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 50,
+  "blob": "naka_disk_warning",
+  "off_v10": 6758,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "PsTrackSwitchProc_PtrTable_2",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "check": "len(b)==42 and [b[20+struct.unpack_from('<I',b,4*i)[0]-struct.unpack_from('<I',b,16)[0]:].split(b'\\x00')[0] for i in range(5)]==[b'',b'REC',b'PLAY',b'MUTE',b'CLR']",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 20,
+    "new_label": "PsTrkSw_SelectStateLabels",
+    "ctype": "uint32_t",
+    "dims": "[5]",
+    "cdoc": "track-switch label per select state 0-4: \"\", \"REC\", \"PLAY\", \"MUTE\", \"CLR\"",
+    "header": [
+     "; PsTrkSw_SelectStateLabels -- 5 x u32: track-switch label per select state 0-4: \"\", \"REC\", \"PLAY\", \"MUTE\", \"CLR\"",
+     "; PsTrackSwitchProc (ui/ui_widget_defs.s) copies it (10 words) to a local; on EVT_SELE_DRAW it indexes the copy by the",
+     "; state word *(instance+32) * 4 and draws the string centred, in the box coloured from PsTrkSw_SelectStateColor."
+    ],
+    "check": "len(b)==20"
+   },
+   {
+    "off_in_slice": 20,
+    "size": 22,
+    "new_label": "PsTrkSw_SelectStateLabelText",
+    "ctype": "char",
+    "dims": "[22]",
+    "cdoc": "\"CLR\", \"MUTE\", \"PLAY\", \"REC\", \"\" (+ 0xFF fill): the strings PsTrkSw_SelectStateLabels points at",
+    "header": [
+     "; PsTrkSw_SelectStateLabelText -- 22 x char: \"CLR\", \"MUTE\", \"PLAY\", \"REC\", \"\" (NUL-terminated, 0xFF-padded),",
+     "; the strings PsTrkSw_SelectStateLabels points at."
+    ],
+    "check": "b==b'CLR\\x00MUTE\\x00\\xffPLAY\\x00\\xffREC\\x00\\x00\\xff'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:7659 `ld xiy, PsTrackSwitchProc_PtrTable_2` -- copied to the frame at xsp+18 ...",
+   "ui/ui_widget_defs.s:7661 `ldw bc, 0xa` -- ... 10 words = 5 pointers",
+   "ui/ui_widget_defs.s:7935 `ld xbc, (xbc + 32)` -- the select state word *(instance+32) ...",
+   "ui/ui_widget_defs.s:7947 `lda xhl, (xsp + 18)` -- ... * 4 (`sla de, 2`) indexes the copy",
+   "ui/ui_widget_defs.s:7955 `call DrawStringCentered` -- the label is drawn centred"
+  ],
+  "new_label": "PsTrkSw_SelectStateLabels",
+  "header": [
+   "; PsTrkSw_SelectStateLabels -- 5 x u32: track-switch label per select state 0-4: \"\", \"REC\", \"PLAY\", \"MUTE\", \"CLR\"",
+   "; PsTrackSwitchProc (ui/ui_widget_defs.s) copies it (10 words) to a local; on EVT_SELE_DRAW it indexes the copy by the",
+   "; state word *(instance+32) * 4 and draws the string centred, in the box coloured from PsTrkSw_SelectStateColor."
+  ],
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 42,
+  "blob": "naka_disk_warning",
+  "off_v10": 6980,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "ExitWindow_OK_Data",
+  "verdict": "type",
+  "basis": "reader code",
+  "check": "len(b)==24 and struct.unpack_from('<IIhIIhh',b,0)[0]==0x01200000 and struct.unpack_from('<IIhIIhh',b,0)[1]==0xffffffff and struct.unpack_from('<IIhIIhh',b,0)[2]==-1 and struct.unpack_from('<IIhIIhh',b,0)[4:]==(0,0,0) and b[22:]==b'\\x00\\xff'",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 22,
+    "new_label": "Title_RecordTemplate",
+    "ctype": "struct",
+    "dims": "",
+    "struct_fields": [
+     {
+      "name": "title_proc_id",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "start_screen",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "user_id",
+      "ctype": "int16_t",
+      "dims": ""
+     },
+     {
+      "name": "name",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "return_screen",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "interrupt_prev",
+      "ctype": "int16_t",
+      "dims": ""
+     },
+     {
+      "name": "interrupt_next",
+      "ctype": "int16_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "default title record copied over all 256 entries of the Title table (RAM 0x32ABC): proc 0x01200000, start screen none, user -1, name \"\"",
+    "header": [
+     "; Title_RecordTemplate -- 1 x 22-byte title record: the default copied into each of the 256 Title records at RAM 0x32ABC",
+     "; {u32 title proc id 0x01200000, u32 start screen 0xFFFFFFFF (none), s16 user id -1 (iduNone), u32 name -> \"\",",
+     "; u32 return screen, s16 interrupt prev, s16 interrupt next (title numbers relative to TITLE_PS)}.",
+     "; InitializeObjectTable (ui/ui_widget_defs.s, loop at ExitWindow_OK) copies it 11 words at a time, then registers",
+     "; the table as class Title (TitleProc, 0x100 records, slot 0x1A0); TitleProc reads the fields."
+    ],
+    "check": "len(b)==22 and struct.unpack('<IIhIIhh',b)[0]==0x01200000 and struct.unpack('<IIhIIhh',b)[2]==-1"
+   },
+   {
+    "off_in_slice": 22,
+    "size": 2,
+    "new_label": "Title_RecordTemplateName",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: the name of Title_RecordTemplate",
+    "header": [
+     "; Title_RecordTemplateName -- 2 x char: \"\" + 0xFF fill, the name (+10) of Title_RecordTemplate"
+    ],
+    "check": "b==b'\\x00\\xff'"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:8696 `lda xbc, (0x032abc:24)` -- Title table base RAM 0x32ABC ...",
+   "ui/ui_widget_defs.s:8698 `lda xde, (xbc+5632)` -- ... 5632 B = 256 x 22",
+   "ui/ui_widget_defs.s:8701 `ld xiy, ExitWindow_OK_Data` -- the template is copied into each record ...",
+   "ui/ui_widget_defs.s:8703 `ldw bc, 0xb` -- ... 11 words = 22 bytes",
+   "ui/ui_widget_defs.s:8705 `lda xwa, (xwa + 22)` -- record stride 22",
+   "ui/ui_widget_defs.s:8733 `ldw (xbc + 8), 0x100` -- registered as 256 records ...",
+   "ui/ui_widget_defs.s:8731 `lda xwa, (TitleProc:24)` -- ... of class Title",
+   "ui/ui_widget_defs.s:10182 `ld xhl, (xhl)` -- EVT_GET_TITLE_PROC_ID returns record +0",
+   "ui/ui_widget_defs.s:10190 `ld xhl, (xhl + 4)` -- EVT_GET_START_SCREEN returns record +4",
+   "ui/ui_widget_defs.s:10198 `ld hl, (xhl + 8)` -- EVT_GET_USER_ID: +8 is a sign-extended 16-bit user id",
+   "ui/ui_widget_defs.s:10208 `ld xhl, (xhl + 10)` -- EVT_GET_NAME returns the name pointer at +10",
+   "ui/ui_widget_defs.s:10517 `ld (xhl + 14), xwa` -- EVT_SET_RETURN_SCREEN stores +14",
+   "ui/ui_widget_defs.s:10278 `ld wa, (xhl + 18)` -- unlinking an interrupt title: +18 and +20 are 16-bit title numbers added to TITLE_PS, 0xFFFF = none",
+   "ui/ui_widget_defs.s:10282 `ld wa, (xhl + 20)` -- the other link"
+  ],
+  "note": "The old C had ptrs_20[3] at +10/+14/+18; +18 held 0x00000000 (not a pointer). The code reads +18 and +20 as separate 16-bit title links (`ld wa, (xhl + 18)`, `ld wa, (xhl + 20)`), so this typing splits that zero word in two. The only real pointer (+10, name) stays a 32-bit field.",
+  "new_label": "Title_RecordTemplate",
+  "header": [
+   "; Title_RecordTemplate -- 1 x 22-byte title record: the default copied into each of the 256 Title records at RAM 0x32ABC",
+   "; {u32 title proc id 0x01200000, u32 start screen 0xFFFFFFFF (none), s16 user id -1 (iduNone), u32 name -> \"\",",
+   "; u32 return screen, s16 interrupt prev, s16 interrupt next (title numbers relative to TITLE_PS)}.",
+   "; InitializeObjectTable (ui/ui_widget_defs.s, loop at ExitWindow_OK) copies it 11 words at a time, then registers",
+   "; the table as class Title (TitleProc, 0x100 records, slot 0x1A0); TitleProc reads the fields."
+  ],
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 24,
+  "blob": "naka_disk_warning",
+  "off_v10": 7216,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "DrawFunc_Init_Variant1_Data",
+  "verdict": "refuse",
+  "basis": "reader code",
+  "why_refused": "Not a pointer: the last 4 bytes 3F 01 EF 00 are x2 = 319, y2 = 239. The 8 bytes are a clip rectangle {s16 x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen: DrawFunc_Init_Variant1 (display/graphics_text_vga.s) copies them (4 words, `ld bc, 4:i3; ldirw`) to the frame at xsp+264 and passes that address as XWA, the rectangle, to DrawText_QueueOrDirect (kn5000_v10_program.s), whose deferred path copies 4 words of it. v7 keeps the same bytes although its Naka_PresentationRootState is at 0xEF0115 (v9/v10 0xEF013F). The sound typing, int16_t[4] = {0, 0, 319, 239} (precedent: WelcomeScreen_ClearRect), must split the old false pointer NAKA_ADDR(Naka_PresentationRootState), which this batch's rule forbids, and nakarest_reviewed_slices.py would refuse it anyway (one symbolic initializer before, none after). Suggested once a false-pointer path exists: DrawFunc_Init_Variant1_ClipRect -- 4 x s16 clip rectangle.",
+  "evidence": [
+   "display/graphics_text_vga.s:1384 `ld xiy, DrawFunc_Init_Variant1_Data` -- source of the 8-byte copy",
+   "display/graphics_text_vga.s:1386 `ld bc, 4:i3` -- 4 words",
+   "display/graphics_text_vga.s:1480 `lda xwa, (xsp+264)` -- the copy is passed as XWA ...",
+   "display/graphics_text_vga.s:1486 `calr DrawText_QueueOrDirect` -- ... the clip rectangle of DrawText_QueueOrDirect",
+   "kn5000_v10_program.s:2654 `ld bc, 4:i3` -- DrawText_QueueOrDirect copies 4 words from XWA into the queued draw record"
+  ],
+  "suggested": {
+   "ctype": "int16_t",
+   "dims": "[4]",
+   "new_label": "DrawFunc_Init_Variant1_ClipRect",
+   "check": "b==b'\\x00\\x00\\x00\\x00\\x3f\\x01\\xef\\x00'"
+  },
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 8,
+  "blob": "naka_disk_warning",
+  "off_v10": 9356,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "DrawFunc_Init_Entry3_Data",
+  "verdict": "refuse",
+  "basis": "reader code",
+  "why_refused": "Not a pointer: the last 4 bytes 3F 01 EF 00 are x2 = 319, y2 = 239. The 8 bytes are a clip rectangle {s16 x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen: SeGfx_BoundOp09_FormatNumber (display/graphics_text_vga.s) copies them (4 words, `ld bc, 4:i3; ldirw`) to the frame at xsp+264 and passes that address as XWA, the rectangle, to DrawText_QueueOrDirect (kn5000_v10_program.s), whose deferred path copies 4 words of it. v7 keeps the same bytes although its Naka_PresentationRootState is at 0xEF0115 (v9/v10 0xEF013F). The sound typing, int16_t[4] = {0, 0, 319, 239} (precedent: WelcomeScreen_ClearRect), must split the old false pointer NAKA_ADDR(Naka_PresentationRootState), which this batch's rule forbids, and nakarest_reviewed_slices.py would refuse it anyway (one symbolic initializer before, none after). Suggested once a false-pointer path exists: SeGfx_BoundOp09_ClipRect -- 4 x s16 clip rectangle.",
+  "evidence": [
+   "display/graphics_text_vga.s:1552 `ld xiy, DrawFunc_Init_Entry3_Data` -- source of the 8-byte copy",
+   "display/graphics_text_vga.s:1554 `ld bc, 4:i3` -- 4 words",
+   "display/graphics_text_vga.s:1599 `lda xwa, (xsp+264)` -- the copy is passed as XWA ...",
+   "display/graphics_text_vga.s:1605 `calr DrawText_QueueOrDirect` -- ... the clip rectangle of DrawText_QueueOrDirect",
+   "kn5000_v10_program.s:2654 `ld bc, 4:i3` -- DrawText_QueueOrDirect copies 4 words from XWA into the queued draw record"
+  ],
+  "suggested": {
+   "ctype": "int16_t",
+   "dims": "[4]",
+   "new_label": "SeGfx_BoundOp09_ClipRect",
+   "check": "b==b'\\x00\\x00\\x00\\x00\\x3f\\x01\\xef\\x00'"
+  },
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 8,
+  "blob": "naka_disk_warning",
+  "off_v10": 9408,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "Data_CharMapFormatBlock",
+  "verdict": "refuse",
+  "basis": "reader code",
+  "why_refused": "Not a pointer: the last 4 bytes 3F 01 EF 00 are x2 = 319, y2 = 239. The 8 bytes are a clip rectangle {s16 x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen: SeGfx_BoundOp0A_FormatNumber (display/graphics_text_vga.s) copies them (4 words, `ld bc, 4:i3; ldirw`) to the frame at xsp+264 and passes that address as XWA, the rectangle, to DrawText_QueueOrDirect (kn5000_v10_program.s), whose deferred path copies 4 words of it. v7 keeps the same bytes although its Naka_PresentationRootState is at 0xEF0115 (v9/v10 0xEF013F). The sound typing, int16_t[4] = {0, 0, 319, 239} (precedent: WelcomeScreen_ClearRect), must split the old false pointer NAKA_ADDR(Naka_PresentationRootState), which this batch's rule forbids, and nakarest_reviewed_slices.py would refuse it anyway (one symbolic initializer before, none after). Suggested once a false-pointer path exists: SeGfx_BoundOp0A_ClipRect -- 4 x s16 clip rectangle.",
+  "evidence": [
+   "display/graphics_text_vga.s:1713 `ld xiy, Data_CharMapFormatBlock` -- source of the 8-byte copy",
+   "display/graphics_text_vga.s:1715 `ld bc, 4:i3` -- 4 words",
+   "display/graphics_text_vga.s:1754 `lda xwa, (xsp+264)` -- the copy is passed as XWA ...",
+   "display/graphics_text_vga.s:1760 `calr DrawText_QueueOrDirect` -- ... the clip rectangle of DrawText_QueueOrDirect",
+   "kn5000_v10_program.s:2654 `ld bc, 4:i3` -- DrawText_QueueOrDirect copies 4 words from XWA into the queued draw record"
+  ],
+  "suggested": {
+   "ctype": "int16_t",
+   "dims": "[4]",
+   "new_label": "SeGfx_BoundOp0A_ClipRect",
+   "check": "b==b'\\x00\\x00\\x00\\x00\\x3f\\x01\\xef\\x00'"
+  },
+  "asm": "ui_widgets/disk_warning_strings.s",
+  "size": 8,
+  "blob": "naka_disk_warning",
+  "off_v10": 9460,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "SoundParam_EncoderMappingData",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "check": "len(b)==18 and [struct.unpack_from('<I',b,4*i)[0]-struct.unpack_from('<I',b,0)[0] for i in range(4)]==[0,6,7,8] and b[16:]==b'\\x0e\\x11'",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 16,
+    "new_label": "PanelEvent_InitPhaseHandlers",
+    "ctype": "uint32_t",
+    "dims": "[4]",
+    "cdoc": "init-phase handlers 0-3 of the panel-event subsystem: phase 0 empties the panel event queue (0xFF at RAM 0xC039), 1-3 return",
+    "header": [
+     "; PanelEvent_InitPhaseHandlers -- 4 x u32: the panel-event subsystem's handlers for init phases 0-3 (entry 10 of",
+     "; Subsys_HandlerTableList). ScreenGroup_Dispatch / VoiceInit_Dispatch (boot/screen_group_dispatch.s) call entry",
+     "; [phase] of every subsystem table. Phase 0 (Encoder_MarkInvalid) stores 0xFF at RAM 0xC039, the first id of the",
+     "; PanelEvent_Post queue (= empty); phases 1-3 (Encoder_Stub1..3) only return."
+    ],
+    "check": "len(b)==16 and [struct.unpack_from('<I',b,4*i)[0]-struct.unpack_from('<I',b,0)[0] for i in range(4)]==[0,6,7,8]"
+   },
+   {
+    "off_in_slice": 16,
+    "size": 2,
+    "new_label": "PanelButton_ModeKeyCodes",
+    "ctype": "uint8_t",
+    "dims": "[2]",
+    "cdoc": "first bytes of the byte map PanelButton_ModeKey reads: base for panel event index 1, indexed by the lowest set button bit",
+    "header": [
+     "; PanelButton_ModeKeyCodes -- 2 x u8 (0x0E, 0x11): start of the byte map PanelButton_ModeKey (audio/audio_control_engine.s)",
+     "; reads. For panel event index 1 (RAM 0x8E90) it loads this address (an instruction now spelled as .ascii there:",
+     "; 40 2E 9D ED 00 = ld xwa, 0x00ED9D2E), for indices 3, 10, 15, 16, 21 FileIO_BytecodeData_Data.._5 (2 bytes apart),",
+     "; and replaces the event's button byte with map[lowest set bit] (`ld a, (xwa+hl)`). The windows overlap."
+    ],
+    "check": "b==b'\\x0e\\x11'"
+   }
+  ],
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:7089 `.long SoundParam_EncoderMappingData` -- entry 10 of Subsys_HandlerTableList",
+   "boot/screen_group_dispatch.s:50 `sll xde, 2` -- the phase number (iz) * 4 ...",
+   "boot/screen_group_dispatch.s:57 `add xwa, xde` -- ... selects one routine pointer in each subsystem table",
+   "boot/screen_group_dispatch.s:59 `call (xhl)` -- and calls it",
+   "audio/tonegen_fileio_handlers.s:1300 `ld (0xc039:16), 255` -- phase-0 handler: empties the panel event queue at RAM 0xC039",
+   "audio/audio_control_engine.s:158 `call Util_FindLowestSetBit` -- PanelButton_ModeKey: index = lowest set bit of the button byte",
+   "audio/audio_control_engine.s:161 `ld a, (36496:16)` -- base chosen by the panel event index (RAM 0x8E90); for 1 the base is 0xED9D2E, this slice +16",
+   "audio/audio_control_engine.s:192 `ld a, (xwa+hl)` -- byte map[bit] replaces the event byte"
+  ],
+  "new_label": "PanelEvent_InitPhaseHandlers",
+  "header": [
+   "; PanelEvent_InitPhaseHandlers -- 4 x u32: the panel-event subsystem's handlers for init phases 0-3 (entry 10 of",
+   "; Subsys_HandlerTableList). ScreenGroup_Dispatch / VoiceInit_Dispatch (boot/screen_group_dispatch.s) call entry",
+   "; [phase] of every subsystem table. Phase 0 (Encoder_MarkInvalid) stores 0xFF at RAM 0xC039, the first id of the",
+   "; PanelEvent_Post queue (= empty); phases 1-3 (Encoder_Stub1..3) only return."
+  ],
+  "asm": "ui_widgets/extension_device_screens.s",
+  "size": 18,
+  "blob": "naka_extension_device",
+  "off_v10": 13650,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "NakaInst_False_EB71DA",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "check": "len(b)==46 and [b[24+struct.unpack_from('<I',b,8*i)[0]-struct.unpack_from('<I',b,16)[0]:].split(b'\\x00')[0] for i in range(3)]==[b'True',b'False',b''] and struct.unpack_from('<I',b,38)[0]-struct.unpack_from('<I',b,16)[0]==22 and struct.unpack_from('<i',b,42)[0]==0",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 24,
+    "new_label": "NakaInst_pBool_EnumTable",
+    "ctype": "struct",
+    "dims": "[3]",
+    "struct_fields": [
+     {
+      "name": "name_ptr",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "pBool property value names: True 1, False 0, end {\"\", 0}; walked by CommonIDProc",
+    "header": [
+     "; NakaInst_pBool_EnumTable -- 3 x {u32 name_ptr, s32 value}: pBool value names {\"True\", 1}, {\"False\", 0}, end {\"\", 0}",
+     "; +8 of the pBoolProc SupportClass record (entry 44 of ExitWindow_OK_Data_2, count 2); pBoolProc reads the word through",
+     "; the property pointer and CommonIDProc (ui/ui_widget_defs.s) maps value <-> name through this list."
+    ],
+    "check": "len(b)==24 and [struct.unpack_from('<Ii',b,8*i)[1] for i in range(3)]==[1,0,0]"
+   },
+   {
+    "off_in_slice": 24,
+    "size": 2,
+    "new_label": "NakaInst_pBool_EmptyStr",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: the name of the end entry of NakaInst_pBool_EnumTable",
+    "header": [
+     "; NakaInst_pBool_EmptyStr -- 2 x char: \"\" + 0xFF fill, the name of the end entry of NakaInst_pBool_EnumTable"
+    ],
+    "check": "b==b'\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 26,
+    "size": 12,
+    "new_label": "NakaInst_pBool_NameStrings",
+    "ctype": "char",
+    "dims": "[12]",
+    "cdoc": "\"False\", \"True\" (+ 0xFF fill): the names NakaInst_pBool_EnumTable points at",
+    "header": [
+     "; NakaInst_pBool_NameStrings -- 12 x char: \"False\" and \"True\" (NUL-terminated, 0xFF-padded to even length),",
+     "; the names of pBool values 0 and 1 in NakaInst_pBool_EnumTable."
+    ],
+    "check": "b==b'False\\x00True\\x00\\xff'"
+   },
+   {
+    "off_in_slice": 38,
+    "size": 8,
+    "new_label": "NakaInst_pSword_EnumTable",
+    "ctype": "struct",
+    "dims": "[1]",
+    "struct_fields": [
+     {
+      "name": "name_ptr",
+      "ctype": "uint32_t",
+      "dims": ""
+     },
+     {
+      "name": "value",
+      "ctype": "int32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "pSword property enum: only the end entry {\"\", 0} (count 0); its name is NakaInst_pSword_EmptyStr",
+    "header": [
+     "; NakaInst_pSword_EnumTable -- 1 x {u32 name_ptr, s32 value}: the pSword value-name list, only its {\"\", 0} end entry",
+     "; (name = NakaInst_pSword_EmptyStr, next). +8 of the pSwordProc SupportClass record (entry 45 of ExitWindow_OK_Data_2,",
+     "; count 0); CommonIDProc (ui/ui_widget_defs.s) stops at once on the empty name."
+    ],
+    "check": "len(b)==8 and struct.unpack('<Ii',b)[1]==0"
+   }
+  ],
+  "evidence": [
+   "ui/ui_widget_defs.s:8713 `ldw (xbc + 8), 0x37` -- InitializeObjectTable registers 0x37 = 55 SupportClass records (12 B each: proc, u16 count, u16 data size, u32 value-name list) at ExitWindow_OK_Data_2, slot 0x260",
+   "ui/ui_widget_defs.s:17502 `cpw (xwa + 4), 0x0` -- CommonIDProc: the SupportClass record (EVT_GET_INSTANCE) +4 is the value count; 0 = no names, plain number",
+   "ui/ui_widget_defs.s:17505 `ld xbc, (xwa + 8)` -- record +8 is the base of the value-name list",
+   "ui/ui_widget_defs.s:17512 `cp xwa, (xhl + 4)` -- DUMP_PROPERTY_EX: entry +4 is the s32 value compared with the property value; on a match entry +0 (name) is Strcpy-ed out",
+   "ui/ui_widget_defs.s:17525 `inc 8, xde` -- entries are 8 bytes",
+   "ui/ui_widget_defs.s:17531 `cp (xix), 0x0` -- the walk ends at the entry whose name string is empty (\"\")",
+   "ui/ui_widget_defs.s:17553 `call Strcmp` -- SET_PROPERTY_EX: the typed text is compared with entry +0 (name), and the matching entry's +4 value is stored",
+   "ui/ui_widget_defs.s:17464 `sll xbc, 3` -- GET_PROP_DATA_SP: list[index] (index * 8) +0, the name pointer",
+   "ui/ui_widget_defs.s:12640 `calr CommonIDProc` -- pBoolProc (EVT_GET/DUMP paths) forwards to CommonIDProc",
+   "ui/ui_widget_defs.s:12632 `exts xbc` -- pBoolProc reads the 16-bit value through the property pointer and sign-extends it",
+   "ui/ui_widget_defs.s:12762 `calr CommonIDProc` -- pSwordProc forwards to CommonIDProc the same way"
+  ],
+  "new_label": "NakaInst_pBool_EnumTable",
+  "header": [
+   "; NakaInst_pBool_EnumTable -- 3 x {u32 name_ptr, s32 value}: pBool value names {\"True\", 1}, {\"False\", 0}, end {\"\", 0}",
+   "; +8 of the pBoolProc SupportClass record (entry 44 of ExitWindow_OK_Data_2, count 2); pBoolProc reads the word through",
+   "; the property pointer and CommonIDProc (ui/ui_widget_defs.s) maps value <-> name through this list."
+  ],
+  "asm": "ui_widgets/style_bitmaps.s",
+  "size": 46,
+  "blob": "naka_style_bitmaps",
+  "off_v10": 28,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "NakaInst_IntTimeID_EnumTable",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "new_label": "NakaInst_IntTimeID_EnumTable",
+  "ctype": "struct",
+  "dims": "[14]",
+  "struct_fields": [
+   {
+    "name": "name_ptr",
+    "ctype": "uint32_t",
+    "dims": ""
+   },
+   {
+    "name": "value",
+    "ctype": "int32_t",
+    "dims": ""
+   }
+  ],
+  "cdoc": "IntTimeID property value names: IT_Off 0, IT_Default 1, IT_Hold 2, IT_1Sec 3 .. IT_10Sec 12, end {\"\", 0}; walked by CommonIDProc",
+  "header": [
+   "; NakaInst_IntTimeID_EnumTable -- 14 x {u32 name_ptr, s32 value}: IntTimeID value names, ended by {\"\", 0}",
+   "; IT_Off 0, IT_Default 1, IT_Hold 2, IT_1Sec 3 .. IT_10Sec 12 (the strings follow, IT_10Sec first). +8 of the IntTimeIDProc",
+   "; SupportClass record (entry 54, in the bytes of NakaInst_WindowID_Cont, count 13); IntTimeIDProc reads the 16-bit",
+   "; value and CommonIDProc (ui/ui_widget_defs.s) maps value <-> name through this list."
+  ],
+  "check": "len(b)==112 and [struct.unpack_from('<Ii',b,8*i)[1] for i in range(14)]==list(range(13))+[0] and [struct.unpack_from('<I',b,8*i)[0]-struct.unpack_from('<I',b,104)[0] for i in range(14)]==[104,92,84,76,68,60,52,44,36,28,20,12,2,0]",
+  "evidence": [
+   "ui/ui_widget_defs.s:8713 `ldw (xbc + 8), 0x37` -- InitializeObjectTable registers 0x37 = 55 SupportClass records (12 B each: proc, u16 count, u16 data size, u32 value-name list) at ExitWindow_OK_Data_2, slot 0x260",
+   "ui/ui_widget_defs.s:17502 `cpw (xwa + 4), 0x0` -- CommonIDProc: the SupportClass record (EVT_GET_INSTANCE) +4 is the value count; 0 = no names, plain number",
+   "ui/ui_widget_defs.s:17505 `ld xbc, (xwa + 8)` -- record +8 is the base of the value-name list",
+   "ui/ui_widget_defs.s:17512 `cp xwa, (xhl + 4)` -- DUMP_PROPERTY_EX: entry +4 is the s32 value compared with the property value; on a match entry +0 (name) is Strcpy-ed out",
+   "ui/ui_widget_defs.s:17525 `inc 8, xde` -- entries are 8 bytes",
+   "ui/ui_widget_defs.s:17531 `cp (xix), 0x0` -- the walk ends at the entry whose name string is empty (\"\")",
+   "ui/ui_widget_defs.s:17553 `call Strcmp` -- SET_PROPERTY_EX: the typed text is compared with entry +0 (name), and the matching entry's +4 value is stored",
+   "ui/ui_widget_defs.s:17464 `sll xbc, 3` -- GET_PROP_DATA_SP: list[index] (index * 8) +0, the name pointer",
+   "ui/ui_widget_defs.s:14839 `calr CommonIDProc` -- IntTimeIDProc forwards the event to CommonIDProc with its SupportClass record",
+   "ui/ui_widget_defs.s:14831 `extz xbc` -- IntTimeIDProc reads the property value as a 16-bit word (extz) before CommonIDProc compares it"
+  ],
+  "note": "Entry 11's name pointer (IT_9Sec, blob +0x46E) has no C member start to resolve to: the text members there start one byte off (field_046d covers +0x46D..+0x46E, T_9Sec_str starts at +0x46F; likewise field_0464 + T_10Sec_str for IT_10Sec, which does resolve, to field_0464). Until the NakaInst_IT_9Sec / NakaInst_IT_10Sec text members are re-cut at their label offsets, nakarest_reviewed_slices.py will skip this typing with 'pointers not all symbolic again'.",
+  "asm": "ui_widgets/style_bitmaps.s",
+  "size": 112,
+  "blob": "naka_style_bitmaps",
+  "off_v10": 1010,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "NakaInst_WindowID_Cont",
+  "verdict": "refuse",
+  "why_refused": "The label sits 1 byte inside a pointer: 0xEB78FF is the high byte of the value-name pointer (+8) of SupportClass record 51 (WindowIDProc, 0xEB78F4..0xEB78FF, C member ptr_073e at +0x73E..+0x741). Any typing of this slice must split that pointer. Its real content is that last byte, SupportClass records 52-54 (PartIDProc count 29 -> NakaInst_PartID_EnumTable, TrackIDProc count 17 -> 0xEB7468, IntTimeIDProc count 13 -> NakaInst_IntTimeID_EnumTable; 12 B each {u32 proc, u16 count, u16 data size, u32 list}), then 14 bytes 0xEB7924..0xEB7931 (12 zero bytes, 4A 05) that the 55-record table does not cover. The SupportClass table is registered with 0x37 records from ExitWindow_OK_Data_2 (ui/ui_widget_defs.s ExitWindow_OK: `ldw (xbc + 8), 0x37`, `lda xwa, (ExitWindow_OK_Data_2:24)`), so it ends at 0xEB7924. Fix by re-cutting: one 55 x 12-byte array from 0xEB7690 (ExitWindow_OK_Data_2 + these 37 bytes), then a separate 14-byte piece. The listed reader is wrong: FileIO_ByteBlock_DemoProc1_Skip16 (demo/file_demo_proc.s) contains no `.long NakaInst_WindowID_Cont`.",
+  "evidence": [
+   "ui/ui_widget_defs.s:8713 `ldw (xbc + 8), 0x37` -- SupportClass table registered with 55 records of 12 B: 0xEB7690 + 660 = 0xEB7924",
+   "ui/ui_widget_defs.s:8714 `lda xwa, (ExitWindow_OK_Data_2:24)` -- table base 0xEB7690"
+  ],
+  "basis": "reader code",
+  "asm": "ui_widgets/style_bitmaps.s",
+  "size": 51,
+  "blob": "naka_style_bitmaps",
+  "off_v10": 1857,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "MidiParam_PanelCfgTable",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "new_label": "PsMixer_BootDefaultRows",
+  "ctype": "struct",
+  "dims": "[15]",
+  "struct_fields": [
+   {
+    "name": "row_kind",
+    "ctype": "uint16_t",
+    "dims": ""
+   },
+   {
+    "name": "control_type",
+    "ctype": "uint16_t",
+    "dims": ""
+   },
+   {
+    "name": "y_offset",
+    "ctype": "int16_t",
+    "dims": ""
+   },
+   {
+    "name": "page_cursor",
+    "ctype": "uint16_t",
+    "dims": ""
+   },
+   {
+    "name": "caption",
+    "ctype": "uint32_t",
+    "dims": ""
+   }
+  ],
+  "cdoc": "boot default of the mixer row table (RAM 0x3EA30): 15 rows, 3 pages of 5 {kind, control type, y offset, page cursor, caption}",
+  "header": [
+   "; PsMixer_BootDefaultRows -- 15 x 12-byte row record {u16 row kind, u16 control type, s16 y offset, u16 page cursor,",
+   "; u32 caption}: 3 pages x 5 rows: \"\", SOUND, PAN, VOLUME, \"\" / REVERB, DSP EFF, DIGITAL EFF, KEY SHIFT, \"\" / \"\", \"\", MIDI, LOCAL, \"\".",
+   "; MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30, the row-table",
+   "; pointer PsMixer reads (row * 12, ui/drawbar_panel_ui.s); PartMixer_Init / TrackMixer_Init replace it on EVT_SHOW.",
+   "; Kind indexes PsMixer_RowKindApFuncId (0x20 = blank), type the 11 PsMixer_CtlTypeProc entries; rows match PartMixer_Init_Data."
+  ],
+  "check": "len(b)==180 and [struct.unpack_from('<HHhHI',b,12*i)[0] for i in range(15)]==[32,31,14,15,32,13,12,3,9,32,32,32,1,0,32] and [struct.unpack_from('<HHhHI',b,12*i)[2] for i in range(15)]==[0,-16,-16,-16,0,4,4,4,4,0,0,0,0,0,0] and [struct.unpack_from('<HHhHI',b,12*i)[3] for i in range(15)]==[0,0,0,1,0,1,0,0,0,0,0,0,1,0,0] and [struct.unpack_from('<HHhHI',b,12*i)[1] for i in range(15)]==[0, 1, 3, 2, 5, 3, 3, 4, 7, 5, 0, 0, 8, 4, 5] and all(struct.unpack_from('<I',b,12*i+8)[0]>struct.unpack_from('<I',b,12*i+20)[0] for i in range(14))",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:12860 `add xhl, (0x3ea30:24)` -- Util_SignExtendAndDouble: row record = (RAM 0x3EA30) + row * 12 (`add xhl, xhl` / `add xhl, xwa` / `sll xhl, 2`)",
+   "ui/drawbar_panel_ui.s:12294 `lda xbc, (PsMixer_RowKindApFuncId:24)` -- record +0 (row kind) * 4 indexes PsMixer_RowKindApFuncId",
+   "ui/drawbar_panel_ui.s:11977 `cpw (xwa), 0x20` -- row kind 0x20 = blank row",
+   "ui/drawbar_panel_ui.s:12258 `lda xbc, (PsMixer_ControlHelper_Data:24)` -- record +2 (control type) * 4 indexes the 11 PsMixer_CtlTypeProc pointers",
+   "ui/drawbar_panel_ui.s:13056 `ld wa, (xbc+4)` -- PsMixer_CalcRowBandRect: record +4 shifts the row band vertically",
+   "ui/drawbar_panel_ui.s:11847 `cpw (xwa + 6), 0x1` -- page change: the first row of the 5-row page with +6 == 1 becomes the cursor row (RAM 0x24792)",
+   "ui/drawbar_panel_ui.s:13520 `ld xde, (xde+8)` -- record +8 is the caption string PsMixer_DrawCaptionFrame draws",
+   "ui_widgets/sequencer_channel_containers.s:97 `.long MidiParam_PanelCfgTable` -- first word of MidiPart_ConfigNameTable, which lands at RAM 0x3EA30 (WorkRamInit_Image 0xEED8C8 -> 0x3D524)",
+   "boot/system_handlers.s:357 `ld xhl, WorkRamInit_Image` -- Boot_InitWorkRAM copies the image to RAM 0x3D524 (0x219E bytes)",
+   "ui/drawbar_panel_ui.s:12864 `ld (0x03ea30:24), xwa` -- the only writer of RAM 0x3EA30 after boot (Util_StorePartArrayBase, from PartMixer_Init / TrackMixer_Init)"
+  ],
+  "asm": "ui_widgets/technichord_string_data.s",
+  "size": 180,
+  "blob": "naka_technichord_strings",
+  "off_v10": 102906,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "TrackMixer_Init_Data",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "new_label": "TrackMixer_Rows",
+  "ctype": "struct",
+  "dims": "[15]",
+  "struct_fields": [
+   {
+    "name": "row_kind",
+    "ctype": "uint16_t",
+    "dims": ""
+   },
+   {
+    "name": "control_type",
+    "ctype": "uint16_t",
+    "dims": ""
+   },
+   {
+    "name": "y_offset",
+    "ctype": "int16_t",
+    "dims": ""
+   },
+   {
+    "name": "page_cursor",
+    "ctype": "uint16_t",
+    "dims": ""
+   },
+   {
+    "name": "caption",
+    "ctype": "uint32_t",
+    "dims": ""
+   }
+  ],
+  "cdoc": "track-mixer row table: 15 rows, 3 pages of 5 {kind, control type, y offset, page cursor, caption}; installed at RAM 0x3EA30 by TrackMixer_Init",
+  "header": [
+   "; TrackMixer_Rows -- 15 x 12-byte row record {u16 row kind, u16 control type, s16 y offset, u16 page cursor, u32 caption}",
+   "; of the track mixer: 3 pages x 5 rows, the same rows as PartMixer_Init_Data but control type 10 for SOUND and 6 for the",
+   "; blank rows 4, 9, 14. TrackMixer_Init (ui/drawbar_panel_ui.s, EVT_SHOW of AcTrackMixerProc) stores its address at RAM 0x3EA30",
+   "; (Util_StorePartArrayBase); the PsMixer routines read row * 12: kind -> PsMixer_RowKindApFuncId, type -> PsMixer_CtlTypeProc,",
+   "; +4 band y offset, +6 = 1 marks the page's cursor row, +8 caption drawn by PsMixer_DrawCaptionFrame."
+  ],
+  "check": "len(b)==180 and [struct.unpack_from('<HHhHI',b,12*i)[0] for i in range(15)]==[32,31,14,15,32,13,12,3,9,32,32,32,1,0,32] and [struct.unpack_from('<HHhHI',b,12*i)[2] for i in range(15)]==[0,-16,-16,-16,0,4,4,4,4,0,0,0,0,0,0] and [struct.unpack_from('<HHhHI',b,12*i)[3] for i in range(15)]==[0,0,0,1,0,1,0,0,0,0,0,0,1,0,0] and [struct.unpack_from('<HHhHI',b,12*i)[1] for i in range(15)]==[0, 10, 3, 2, 6, 3, 3, 4, 7, 6, 0, 0, 8, 4, 6] and all(struct.unpack_from('<I',b,12*i+8)[0]>struct.unpack_from('<I',b,12*i+20)[0] for i in range(14))",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:12860 `add xhl, (0x3ea30:24)` -- Util_SignExtendAndDouble: row record = (RAM 0x3EA30) + row * 12 (`add xhl, xhl` / `add xhl, xwa` / `sll xhl, 2`)",
+   "ui/drawbar_panel_ui.s:12294 `lda xbc, (PsMixer_RowKindApFuncId:24)` -- record +0 (row kind) * 4 indexes PsMixer_RowKindApFuncId",
+   "ui/drawbar_panel_ui.s:11977 `cpw (xwa), 0x20` -- row kind 0x20 = blank row",
+   "ui/drawbar_panel_ui.s:12258 `lda xbc, (PsMixer_ControlHelper_Data:24)` -- record +2 (control type) * 4 indexes the 11 PsMixer_CtlTypeProc pointers",
+   "ui/drawbar_panel_ui.s:13056 `ld wa, (xbc+4)` -- PsMixer_CalcRowBandRect: record +4 shifts the row band vertically",
+   "ui/drawbar_panel_ui.s:11847 `cpw (xwa + 6), 0x1` -- page change: the first row of the 5-row page with +6 == 1 becomes the cursor row (RAM 0x24792)",
+   "ui/drawbar_panel_ui.s:13520 `ld xde, (xde+8)` -- record +8 is the caption string PsMixer_DrawCaptionFrame draws",
+   "ui/drawbar_panel_ui.s:12748 `ld xwa, TrackMixer_Init_Data` -- TrackMixer_Init installs this table ...",
+   "ui/drawbar_panel_ui.s:12749 `calr Util_StorePartArrayBase` -- ... at RAM 0x3EA30"
+  ],
+  "asm": "ui_widgets/technichord_string_data.s",
+  "size": 180,
+  "blob": "naka_technichord_strings",
+  "off_v10": 104370,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "FileIO_ReadHeaderAt4_Data",
+  "verdict": "type",
+  "basis": "reader code",
+  "check": "len(b)==6 and b[4:]==b'\\x01\\x00'",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 4,
+    "new_label": "FileIO_HeaderAt4_ExpectedPtr",
+    "ctype": "uint32_t",
+    "dims": "",
+    "cdoc": "pointer to the byte value (1) the file byte at offset 4 must have; points at FileIO_HeaderAt4_ExpectedByte",
+    "header": [
+     "; FileIO_HeaderAt4_ExpectedPtr -- 1 x u32: pointer to the expected value of the file's byte 4 (FileIO_HeaderAt4_ExpectedByte, next)",
+     "; FileIO_ReadHeaderAt4 (demo/file_demo_proc.s) seeks to offset 4, reads one byte, loads this pointer and compares the",
+     "; byte with *pointer; equal returns 1. Called after the region-2 signature check (FileIO_ValidateFileWithRegion)."
+    ],
+    "check": "len(b)==4"
+   },
+   {
+    "off_in_slice": 4,
+    "size": 2,
+    "new_label": "FileIO_HeaderAt4_ExpectedByte",
+    "ctype": "uint8_t",
+    "dims": "[2]",
+    "cdoc": "expected value 1 of the file byte at offset 4, then 0",
+    "header": [
+     "; FileIO_HeaderAt4_ExpectedByte -- 2 x u8 {1, 0}: byte 0 is the value FileIO_ReadHeaderAt4 requires at file offset 4"
+    ],
+    "check": "b==b'\\x01\\x00'"
+   }
+  ],
+  "evidence": [
+   "demo/file_demo_proc.s:1587 `ld xwa, 4:i3` -- seek to file offset 4",
+   "demo/file_demo_proc.s:1590 `call FileIO_ReadByte` -- read one byte",
+   "demo/file_demo_proc.s:1593 `ld xwa, (FileIO_ReadHeaderAt4_Data:24)` -- load the 32-bit pointer at +0",
+   "demo/file_demo_proc.s:1594 `ld a, (xwa)` -- the expected byte is read through it (+4 = 0x01)",
+   "demo/file_demo_proc.s:1595 `cp l, a` -- equal -> result 1, else 0"
+  ],
+  "new_label": "FileIO_HeaderAt4_ExpectedPtr",
+  "header": [
+   "; FileIO_HeaderAt4_ExpectedPtr -- 1 x u32: pointer to the expected value of the file's byte 4 (FileIO_HeaderAt4_ExpectedByte, next)",
+   "; FileIO_ReadHeaderAt4 (demo/file_demo_proc.s) seeks to offset 4, reads one byte, loads this pointer and compares the",
+   "; byte with *pointer; equal returns 1. Called after the region-2 signature check (FileIO_ValidateFileWithRegion)."
+  ],
+  "asm": "ui_widgets/technichord_string_data.s",
+  "size": 6,
+  "blob": "naka_technichord_strings",
+  "off_v10": 107064,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "FileDemo_ProcessCallback_Data",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "check": "len(b)==46 and [b[4+6*i] for i in range(7)]==[1,5,3,4,2,6,7] and [b[5+6*i] for i in range(7)]==[0]*7",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 4,
+    "new_label": "SaveAll_RegionRecs_HandlerCol",
+    "ctype": "uint32_t",
+    "dims": "",
+    "cdoc": "save handler of save-all record 0 (FileIO_SaveRegion0_VRAM); the reader uses this address as the base of the handler column (stride 6)",
+    "header": [
+     "; SaveAll_RegionRecs_HandlerCol -- 1 x u32: save handler of record 0 (FileIO_SaveRegion0_VRAM) of the 8 x 6-byte",
+     "; save-all records {u8 region, u8 0, u32 save handler} that start 2 B earlier at SaveAll_CheckRecordLoop_Data.",
+     "; FileIO_SaveAllRegions (demo/file_demo_proc.s) uses this address as the handler column (record * 6) and calls",
+     "; the handler for every record whose region FileIO_FormatName_Return accepts."
+    ],
+    "check": "len(b)==4"
+   },
+   {
+    "off_in_slice": 4,
+    "size": 42,
+    "new_label": "SaveAll_RegionRecsTail",
+    "ctype": "struct",
+    "dims": "[7]",
+    "struct_fields": [
+     {
+      "name": "region",
+      "ctype": "uint8_t",
+      "dims": ""
+     },
+     {
+      "name": "pad",
+      "ctype": "uint8_t",
+      "dims": ""
+     },
+     {
+      "name": "save_handler",
+      "ctype": "uint32_t",
+      "dims": ""
+     }
+    ],
+    "cdoc": "save-all records 1-7 {region, 0, save handler}: regions 1, 5, 3, 4, 2, 6, 7",
+    "header": [
+     "; SaveAll_RegionRecsTail -- 7 x 6-byte struct {u8 region, u8 0, u32 save handler}: save-all records 1-7, regions",
+     "; 1, 5, 3, 4, 2, 6, 7 with handlers FileIO_SaveRegion<region>_*. FileIO_SaveAllRegions (demo/file_demo_proc.s) reads",
+     "; the region byte at SaveAll_CheckRecordLoop_Data + 6k (file name / header type) and calls the handler here."
+    ],
+    "check": "len(b)==42 and [b[6*i] for i in range(7)]==[1,5,3,4,2,6,7] and [b[6*i+1] for i in range(7)]==[0]*7"
+   }
+  ],
+  "evidence": [
+   "demo/file_demo_proc.s:2851 `cp_erpw 0xfa, 0x08, 0x00` -- 8 records (bank-3 counter 0..7)",
+   "demo/file_demo_proc.s:2876 `muls wa, 0x6` -- record stride 6",
+   "demo/file_demo_proc.s:2878 `ld a, (xbc+wa)` -- record +0 (SaveAll_CheckRecordLoop_Data base) is the region byte",
+   "demo/file_demo_proc.s:2885 `lda xde, (FileDemo_ProcessCallback_Data:24)` -- record +2 column (this label) ...",
+   "demo/file_demo_proc.s:2889 `call (xhl)` -- ... holds the save routine, called",
+   "demo/file_demo_proc.s:2916 `ld e, (xde+wa)` -- the region byte also selects the file header type (FileIO_ReadHeader)"
+  ],
+  "new_label": "SaveAll_RegionRecs_HandlerCol",
+  "header": [
+   "; SaveAll_RegionRecs_HandlerCol -- 1 x u32: save handler of record 0 (FileIO_SaveRegion0_VRAM) of the 8 x 6-byte",
+   "; save-all records {u8 region, u8 0, u32 save handler} that start 2 B earlier at SaveAll_CheckRecordLoop_Data.",
+   "; FileIO_SaveAllRegions (demo/file_demo_proc.s) uses this address as the handler column (record * 6) and calls",
+   "; the handler for every record whose region FileIO_FormatName_Return accepts."
+  ],
+  "asm": "ui_widgets/technichord_string_data.s",
+  "size": 46,
+  "blob": "naka_technichord_strings",
+  "off_v10": 107204,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "InitRecordTable_ExtLoop_Data",
+  "verdict": "type",
+  "basis": "reader code",
+  "new_label": "FileIO_DirListEntryTemplate",
+  "ctype": "uint8_t",
+  "dims": "[14]",
+  "cdoc": "first 14 bytes (all 0) of the 82-byte blank entry copied over the 60-entry file list at RAM 0x25EB2; bytes 14-81 follow",
+  "header": [
+   "; FileIO_DirListEntryTemplate -- 14 x u8, all 0: the first 14 bytes of the 82-byte blank entry of the file list at RAM",
+   "; 0x25EB2 (60 x 82 B). FileIO_InitRecordTable, BuildPageRecords, BuildSecondPageRecords and FileIO_InitDirScan",
+   "; (demo/file_demo_proc.s) copy 0x29 words from here over every entry before refilling it; entry +14, the name",
+   "; FileIO_CopyString writes from _findfirst/_findnext, starts at the next label, ProcessRecord_SearchTrackName_Data."
+  ],
+  "check": "b==bytes(14)",
+  "evidence": [
+   "demo/file_demo_proc.s:5300 `ld xiy, InitRecordTable_ExtLoop_Data` -- template source",
+   "demo/file_demo_proc.s:5302 `ldw bc, 0x29` -- 0x29 words = 82 bytes per entry",
+   "demo/file_demo_proc.s:5304 `lda xwa, (xwa + 82)` -- entry stride 82, from RAM 0x25EB2 to +4920 (60 entries)",
+   "demo/file_demo_proc.s:7099 `lda xbc, (0x025ec0:24)` -- entry +14 (0x25EC0 = 0x25EB2 + 14) receives the found file name"
+  ],
+  "note": "The 82-byte template continues in ProcessRecord_SearchTrackName_Data (68 B, also all 0); that label is also used on its own as a string argument of FileIO_SearchFile, so the two labels are kept apart here.",
+  "asm": "ui_widgets/technichord_string_data.s",
+  "size": 14,
+  "blob": "naka_technichord_strings",
+  "off_v10": 107674,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ },
+ {
+  "label": "PtrTbl_VariationNames",
+  "verdict": "type",
+  "basis": "reader code + index meaning",
+  "check": "len(b)==42 and [struct.unpack_from('<I',b,4*i)[0]-struct.unpack_from('<I',b,36)[0] for i in range(10)]==[0x24,0x1c,0x14,0x0c,10,8,6,4,2,0] and b[40:]==b'\\x00\\xff'",
+  "pieces": [
+   {
+    "off_in_slice": 0,
+    "size": 40,
+    "new_label": "PtrTbl_VariationNames",
+    "ctype": "uint32_t",
+    "dims": "[10]",
+    "cdoc": "name of each variation slot 0-9 of a single-load bank: \"VARI 1\"..\"VARI 4\", then six empty names",
+    "header": [
+     "; PtrTbl_VariationNames -- 10 x u32: the name of variation slot 0-9 of a single-load bank: \"VARI 1\"..\"VARI 4\", then",
+     "; six distinct \"\" strings. WP_GetPresetPtr (file_io/wallpaper.s) returns entry [index]; the single-load source and",
+     "; destination bank lists (file_io/single_load.s) pass index = item mod items-per-bank and append the name to the",
+     "; bank path with FileIO_BuildFilePath."
+    ],
+    "check": "len(b)==40 and [struct.unpack_from('<I',b,4*i)[0]-struct.unpack_from('<I',b,36)[0] for i in range(10)]==[0x24,0x1c,0x14,0x0c,10,8,6,4,2,0]"
+   },
+   {
+    "off_in_slice": 40,
+    "size": 2,
+    "new_label": "Str_Variation10_Empty",
+    "ctype": "char",
+    "dims": "[2]",
+    "cdoc": "\"\" + 0xFF fill: PtrTbl_VariationNames[9], an unnamed variation slot",
+    "header": [
+     "; Str_Variation10_Empty -- 2 x char: \"\" + 0xFF fill, PtrTbl_VariationNames[9] (the 10th variation slot, unnamed)"
+    ],
+    "check": "b==b'\\x00\\xff'"
+   }
+  ],
+  "evidence": [
+   "file_io/wallpaper.s:551 `sll xwa, 2` -- index * 4",
+   "file_io/wallpaper.s:552 `ld xbc, PtrTbl_VariationNames` -- table base",
+   "file_io/wallpaper.s:554 `ld xhl, (xbc)` -- returns the string pointer",
+   "file_io/single_load.s:629 `calr WP_GetPresetPtr` -- the remainder of the item number divided by the per-bank count is the index",
+   "file_io/single_load.s:632 `call FileIO_BuildFilePath` -- the name is appended to the bank path"
+  ],
+  "new_label": "PtrTbl_VariationNames",
+  "header": [
+   "; PtrTbl_VariationNames -- 10 x u32: the name of variation slot 0-9 of a single-load bank: \"VARI 1\"..\"VARI 4\", then",
+   "; six distinct \"\" strings. WP_GetPresetPtr (file_io/wallpaper.s) returns entry [index]; the single-load source and",
+   "; destination bank lists (file_io/single_load.s) pass index = item mod items-per-bank and append the name to the",
+   "; bank path with FileIO_BuildFilePath."
+  ],
+  "asm": "ui_widgets/technichord_string_data.s",
+  "size": 42,
+  "blob": "naka_technichord_strings",
+  "off_v10": 108700,
+  "review": "cited lines checked by scripts/analysis/nakarest_review/verify_proposals.py"
+ }
+]

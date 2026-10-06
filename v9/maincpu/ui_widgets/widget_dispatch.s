@@ -7137,10 +7137,10 @@ Subsys_HandlerTableList:
 	.long SeqFormat_ReferenceData
 	.long NakaInst_SoundConfig_LookupTable
 	.long SoundProgram_ParamPtrTable
-	.long DiskOp_ChannelCfgTable
-	.long WidgetStyleDataTable
-	.long EffectMode_DispatchTable
-	.long SoundParam_EncoderMappingData
+	.long FileIO_InitFuncTable
+	.long VGA_InitFuncTable
+	.long PanelInput_InitFuncTable
+	.long PanelEvent_InitPhaseHandlers
 	.long Subsys_HandlerTable11
 	.long WidgetData_CharsetMappingTable
 	.long SeqByteBlock_DispatchJumpTable

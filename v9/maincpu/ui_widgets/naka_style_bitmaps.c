@@ -39,10 +39,10 @@ extern const char IntTimeIDProc;
 extern const char LineModeIDProc;
 extern const char MainFuncIDProc;
 extern const char ModeIDProc;
-extern const char NakaInst_False;
+extern const char NakaInst_Bool_EnumTable;
 extern const char NakaInst_LineModeID_EnumTable;
 extern const char NakaInst_TitleID_EnumTable;
-extern const char NakaProp_Align_PtrEntry;
+extern const char NakaInst_FontID_EnumTable;
 extern const char NakaInst_pFunc_EnumTable;
 extern const char SupportClass_PPropValueNames;
 extern const char SupportClass_ClassIDValueNames;
@@ -51,15 +51,15 @@ extern const char NakaInst_RectX1_EnumTable;
 extern const char SupportClass_RectX2ValueNames;
 extern const char SupportClass_POINTWValueNames;
 extern const char NakaInst_PointY_EnumTable;
-extern const char NakaProp_BorderDefs;
+extern const char NakaInst_BorderID_EnumTable;
 extern const char SupportClass_NameValueNames;
-extern const char NakaProp_EditSwitch_Chain;
+extern const char NakaInst_EditSwID_EnumTable;
 extern const char SupportClass_SwordValueNames;
 extern const char SupportClass_UcharValueNames;
 extern const char NakaInst_slong_EnumTable;
-extern const char NakaProp_Frame_Chain;
+extern const char NakaInst_MainFuncID_EnumTable;
 extern const char SupportClass_BitmapIDValueNames;
-extern const char NakaProp_VisFlag_Chain;
+extern const char NakaInst_ViewFlag_EnumTable;
 extern const char SupportClass_ViewIDValueNames;
 extern const char NameProc;
 extern const char ObjectIDProc;
@@ -123,6 +123,34 @@ extern const char uwordProc;
 /* NakaInst_pUword_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* NakaInst_pSchar_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* DramTest_IC10IC9_Regions's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* RomTest_RhythmRomSignature's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* RomTest_RomSignatures's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_pBool_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_pSword_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_pSword_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_pBool_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t rom_addr;
+    char expect[4];
+    uint8_t fail_bit;
+    uint8_t pad;
+} RomTest_RomSignatures_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t rom_addr;
+    uint8_t expect[4];
+    uint8_t fail_bit;
+    uint8_t pad;
+} RomTest_RhythmRomSignature_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t start;
     uint32_t length;
@@ -220,15 +248,16 @@ typedef struct __attribute__((packed)) {
     char iduToshi_str[10];
     char iduMurai_str[10];
     char iduRoot_str[8];
-    uint32_t True_str_ptr;
-    uint16_t field_0020;
-    uint8_t pad_0[2];  /* zero padding */
-    uint32_t ptrs_0[4];  /* 4 pointers */
-    char w0_code[2];
-    char False_name[6];
-    char True_str[6];
-    uint32_t ptr_0042;
-    uint8_t bytes_0046[4];
+    /* zero padding */
+    /* 4 pointers */
+    /* pBool property value names: True 1, False 0, end {"", 0}; walked by CommonIDProc */
+    NakaInst_pBool_EnumTable_t NakaInst_pBool_EnumTable[3];
+    /* "" + 0xFF fill: the name of the end entry of NakaInst_pBool_EnumTable */
+    char NakaInst_pBool_EmptyStr[2];
+    /* "False", "True" (+ 0xFF fill): the names NakaInst_pBool_EnumTable points at */
+    char NakaInst_pBool_NameStrings[12];
+    /* pSword property enum: only the end entry {"", 0} (count 0); its name is NakaInst_pSword_EmptyStr */
+    NakaInst_pSword_EnumTable_t NakaInst_pSword_EnumTable[1];
     /* zero padding */
     /* "" + 0xFF fill: name of the end entry of the pSword enum table (0xEB7200) */
     char NakaInst_pSword_EmptyStr[2];
@@ -736,7 +765,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0760;
     uint32_t ptrs_3[4];  /* 4 pointers */
     uint16_t field_0772;
-    uint32_t WidgetStyleDataTable[4];  /* 4 pointers */
+    uint32_t VGA_InitFuncTable[4];  /* 4 pointers */
     /* PanelMemory_SlotAddresses: the RAM address of each panel-memory slot, 0x1ED400 + 960*n for n < 80; [80] = the Music Stylist record's mirror (read by PanelMemory_Recall and the other panel-memory routines in ui/bitmap_out_routines.s) */
     uint32_t PanelMemory_SlotAddresses[81];
     /* zero padding */
@@ -855,22 +884,13 @@ typedef struct __attribute__((packed)) {
     uint8_t PanelButton_LedMap[22][8][2];
     /* (row << 8) | all-LEDs-on pattern for panel LED rows 0-14; 0xFFFF terminator */
     uint16_t LED_AllOnPatternByRow[16];
-    uint8_t pad_220[2];  /* zero padding */
-    char str_69[2];
-    uint16_t field_0e52;
-    uint16_t field_0e54;
-    uint16_t field_0e56;
-    uint16_t field_0e58;
-    uint16_t field_0e5a;
-    uint32_t ptr_0e5c;
-    uint16_t field_0e60;
-    uint16_t field_0e62;
-    uint16_t field_0e64;
-    uint16_t field_0e66;
-    uint16_t field_0e68;
-    uint16_t field_0e6a;
-    uint16_t field_0e6c;
-    uint16_t field_0e6e;
+    /* zero padding */
+    /* rhythm data ROM check: the 4 bytes at 0x400000 must read 00 01 04 05, else fail bit 0x01 */
+    RomTest_RhythmRomSignature_t RomTest_RhythmRomSignature;
+    /* "hkpr" (4 characters, no NUL): the bytes the record at +14 points at and expects */
+    char RomTest_ProgramSignatureText[4];
+    /* two more signature checks of the same shape, no reader found: {&"hkpr", "hkpr", 0x01}, {0x9FFFC0, "hkt_", 0x02} */
+    RomTest_RomSignatures_t RomTest_RomSignatures[2];
     /* zero padding */
     /* DRAM region tested by Test_DRAM_IC10_and_IC9: start 0x4000, 0x80000 bytes; result bits 0x01 (low 16-bit half failed) / 0x02 (high half failed) */
     DramTest_IC10IC9_Regions_t DramTest_IC10IC9_Regions[1];
@@ -2831,7 +2851,7 @@ typedef struct __attribute__((packed)) {
     uint8_t RVari_SubItemEditSw[4];
     /* edit-switch code whose position marks MSA mode value 0-3 (LSW 0x401); MsaMode_OK maps 0x89/0x8A/0x8B back to 1/2/3 */
     uint8_t MsaMode_EditSwByValue[4];
-    uint16_t PmemMode_Select_Data;
+    uint16_t PmemMode_ValueToEditSw;
     /* item 0..9 -> edit-switch number: items 0-4 the left display buttons 0x88-0x8C, items 5-9 the right buttons 8-12 */
     uint8_t EditSw_SplitMap10[10];
     /* edit-switch id for item 0..7 of a 8-item side-button list: left rows 0-3 (0x88+r), then right rows 0-3 (0x08+r) */
@@ -2840,13 +2860,13 @@ typedef struct __attribute__((packed)) {
     uint8_t VariScreen_EditSwLayout6[6];
     /* Edit-switch codes for a 3-4 item page: items 0-1 on the left switches 0x88/0x89, items 2-3 on the right switches 0x08/0x09 */
     uint8_t EditSw_PageMap4[4];
-    uint16_t SeqChan_Map_2ch;
-    uint32_t RVari_Select_CheckSameBank_PtrTable[3];  /* 3 pointers */
+    uint16_t EditSw_PageMap2;
+    uint32_t RVari_MemoryBankNames[3];  /* 3 pointers */
     char MemoryC_str[10];
     char MemoryB_str[10];
     char MemoryA_str[10];
     char Right1Right2LeftPart4_str[226];
-    uint32_t Naka_MemoryC_Screens[16];  /* 16 pointers */
+    uint32_t MainChordPre_RootNames[16];  /* 16 pointers */
     char str_2527[4];
     char str_2528[4];
     char str_2529[4];
@@ -2864,7 +2884,7 @@ typedef struct __attribute__((packed)) {
     char MemScreen_NoteC[4];
     char str_2542[4];
     /* MainChordPre_PtrTable: 39 pointers (cut from ptrs_35 by split_naka_pointer_arrays.py) */
-    uint32_t MainChordPre_PtrTable[39];
+    uint32_t MainChordPre_ChordTypeNames[39];
     uint16_t field_18e48;
 } naka_style_bitmaps_t;
 
@@ -2883,28 +2903,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .iduRoot_str = "iduRoot",
 
-    .True_str_ptr = SELF(True_str),
-
-    .field_0020 = 0x0001,
-
-    .pad_0 = { 0 },
-
-    .ptrs_0 = {
-        SELF(False_name),
-        0x00000000,
-        SELF(w0_code),
-        0x00000000,
+    .NakaInst_pBool_EnumTable = {
+        { SELF(NakaInst_pBool_NameStrings[6]), 1 },
+        { SELF(NakaInst_pBool_NameStrings), 0 },
+        { SELF(NakaInst_pBool_EmptyStr), 0 },
     },
 
-    .w0_code = ALIGNED_STRING(""),
+    .NakaInst_pBool_EmptyStr = "\x00\xFF",
 
-    .False_name = "False",
+    .NakaInst_pBool_NameStrings = "False\x00True\x00\xFF",
 
-    .True_str = ALIGNED_STRING("True"),
-
-    .ptr_0042 = 0x00eb7208,
-
-    .bytes_0046 = { 0x00, 0x00, 0x00, 0x00 },
+    .NakaInst_pSword_EnumTable = {
+        { SELF(NakaInst_pSword_EmptyStr), 0 },
+    },
 
     .NakaInst_pSword_EmptyStr = "\x00\xFF",
 
@@ -3500,7 +3511,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0520 = 0x0002,
 
-    .NakaInst_False_ptr = NAKA_ADDR(NakaInst_False),
+    .NakaInst_False_ptr = NAKA_ADDR(NakaInst_Bool_EnumTable),
 
     .ObjectIDProc_ptr = NAKA_ADDR(ObjectIDProc),
 
@@ -3676,7 +3687,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0628 = 0x0002,
 
-    .NakaProp_VisFlag_Chain_ptr = NAKA_ADDR(NakaProp_VisFlag_Chain),
+    .NakaProp_VisFlag_Chain_ptr = NAKA_ADDR(NakaInst_ViewFlag_EnumTable),
 
     .ColorIDProc_ptr = NAKA_ADDR(ColorIDProc),
 
@@ -3692,7 +3703,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0640 = 0x0002,
 
-    .NakaProp_BorderDefs_ptr = NAKA_ADDR(NakaProp_BorderDefs),
+    .NakaProp_BorderDefs_ptr = NAKA_ADDR(NakaInst_BorderID_EnumTable),
 
     .ModeIDProc_ptr = NAKA_ADDR(ModeIDProc),
 
@@ -3724,7 +3735,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0670 = 0x0004,
 
-    .NakaProp_Align_PtrEntry_ptr = NAKA_ADDR(NakaProp_Align_PtrEntry),
+    .NakaProp_Align_PtrEntry_ptr = NAKA_ADDR(NakaInst_FontID_EnumTable),
 
     .AlignmentIDProc_ptr = NAKA_ADDR(AlignmentIDProc),
 
@@ -3740,7 +3751,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0688 = 0x0002,
 
-    .NakaProp_EditSwitch_Chain_ptr = NAKA_ADDR(NakaProp_EditSwitch_Chain),
+    .NakaProp_EditSwitch_Chain_ptr = NAKA_ADDR(NakaInst_EditSwID_EnumTable),
 
     .EditSwStyleIDProc_ptr = NAKA_ADDR(EditSwStyleIDProc),
 
@@ -3788,7 +3799,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_06d0 = 0x0004,
 
-    .NakaProp_Frame_Chain_ptr = NAKA_ADDR(NakaProp_Frame_Chain),
+    .NakaProp_Frame_Chain_ptr = NAKA_ADDR(NakaInst_MainFuncID_EnumTable),
 
     .UserIDProc_ptr = NAKA_ADDR(UserIDProc),
 
@@ -3804,7 +3815,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_06e8 = 0x0004,
 
-    .True_str_ptr_ptr = SELF(True_str_ptr),
+    .True_str_ptr_ptr = SELF(NakaInst_pBool_EnumTable),
 
     .pSwordProc_ptr = NAKA_ADDR(pSwordProc),
 
@@ -3812,7 +3823,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_06f4 = 0x0004,
 
-    .ptr_06f6 = SELF(ptr_0042),
+    .ptr_06f6 = SELF(NakaInst_pSword_EnumTable),
 
     .pUwordProc_ptr = NAKA_ADDR(pUwordProc),
 
@@ -3893,7 +3904,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0772 = 0x0549,
 
-    .WidgetStyleDataTable = {
+    .VGA_InitFuncTable = {
         NAKA_ADDR(VGA_Initialize),
         NAKA_ADDR(VGA_Stub_1),
         NAKA_ADDR(VGA_Stub_2),
@@ -4120,37 +4131,14 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         0x08FF, 0x09FF, 0x0AFF, 0x0B0F, 0x0C03, 0x0D0F, 0x0E0F, 0xFFFF,
     },
 
-    .pad_220 = { 0 },
+    .RomTest_RhythmRomSignature = { 0x00400000, { 0x00, 0x01, 0x04, 0x05 }, 0x01, 0x00 },
 
-    .str_69 = "@",
+    .RomTest_ProgramSignatureText = "hkpr",
 
-    .field_0e52 = 0x0100,
-
-    .field_0e54 = 0x0504,
-
-    .field_0e56 = 0x0001,
-
-    .field_0e58 = 0x6b68,
-
-    .field_0e5a = 0x7270,
-
-    .ptr_0e5c = SELF(field_0e58),
-
-    .field_0e60 = 0x6b68,
-
-    .field_0e62 = 0x7270,
-
-    .field_0e64 = 0x0001,
-
-    .field_0e66 = 0xffc0,
-
-    .field_0e68 = 0x009f,
-
-    .field_0e6a = 0x6b68,
-
-    .field_0e6c = 0x5f74,
-
-    .field_0e6e = 0x0002,
+    .RomTest_RomSignatures = {
+        { SELF(RomTest_ProgramSignatureText), "hkpr", 0x01, 0x00 },
+        { 0x009FFFC0, "hkt_", 0x02, 0x00 },
+    },
 
     .DramTest_IC10IC9_Regions = {
         { 0x00004000, 0x00080000, 0x01, 0x02 },
@@ -11627,7 +11615,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         0x89, 0x89, 0x8A, 0x8B,
     },
 
-    .PmemMode_Select_Data = 0x8b89,
+    .PmemMode_ValueToEditSw = 0x8b89,
 
     .EditSw_SplitMap10 = {
         0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
@@ -11645,9 +11633,9 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         0x88, 0x89, 0x08, 0x09,
     },
 
-    .SeqChan_Map_2ch = 0x0888,
+    .EditSw_PageMap2 = 0x0888,
 
-    .RVari_Select_CheckSameBank_PtrTable = {
+    .RVari_MemoryBankNames = {
         SELF(MemoryA_str),
         SELF(MemoryB_str),
         SELF(MemoryC_str),
@@ -11661,7 +11649,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .Right1Right2LeftPart4_str = ALIGNED_STRING("RIGHT1 RIGHT2 LEFT   PART4  PART5  PART6  PART7  PART8  PART9  PART10 PART11 PART12 PART13 PART14 PART15 PART16 ACCOMP1ACCOMP2ACCOMP3BASS   DRUMS  CHORD  R.BASS MSP    MSP    CONTROLPART27 PART28 PART29 PART30 PART31 PART32 "),
 
-    .Naka_MemoryC_Screens = {
+    .MainChordPre_RootNames = {
         SELF(str_2542),
         SELF(MemScreen_NoteC),
         SELF(NakaInst_D_a0_ECFF5C),
@@ -11712,7 +11700,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .str_2542 = ALIGNED_STRING("  "),
 
-    .MainChordPre_PtrTable = {
+    .MainChordPre_ChordTypeNames = {
         0x00ed020c,
         0x00ed0206,
         0x00ed0200,

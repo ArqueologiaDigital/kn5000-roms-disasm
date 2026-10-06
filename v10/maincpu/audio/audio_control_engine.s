@@ -1893,7 +1893,7 @@ PanelButton_HelpMode:
 	ld	a, (0x8e90:16)
 	extz	wa
 	sla	wa, 2
-	lda	xde, (ExtDev_SndParam_DispatchComplex_PtrTable:24)
+	lda	xde, (PanelButton_HelpCodeMaps:24)
 	ld	xde, (xde+wa)
 	or xde, xde
 	jr	z, PanelButton_HelpMode_Epilogue

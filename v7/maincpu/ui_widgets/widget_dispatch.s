@@ -7139,7 +7139,7 @@ Subsys_HandlerTableList:
 	.long DiskOp_ChannelCfgTable
 	.long WidgetStyleDataTable
 	.long EffectMode_DispatchTable
-	.long SoundParam_EncoderMappingData
+	.long PanelEvent_InitPhaseHandlers
 	.long Subsys_HandlerTable11
 	.long WidgetData_CharsetMappingTable
 	.long SeqByteBlock_DispatchJumpTable

@@ -1310,8 +1310,10 @@ typedef struct __attribute__((packed)) {
     /* PanelButton_HelpModeActionLists: one action list per event index (0..31), used instead in mode 20, MD_HELP */
     uint32_t PanelButton_HelpModeActionLists[32];
     /* the first 4 words of SoundParam_EncoderMappingData (ui_widgets/extension_device_screens.s), as the generator had them */
-    uint32_t SoundParam_EncoderMappingData_Head[4];
-    uint16_t field_3562;
+    /* init-phase handlers 0-3 of the panel-event subsystem: phase 0 empties the panel event queue (0xFF at RAM 0xC039), 1-3 return */
+    uint32_t PanelEvent_InitPhaseHandlers[4];
+    /* first bytes of the byte map PanelButton_ModeKey reads: base for panel event index 1, indexed by the lowest set button bit */
+    uint8_t PanelButton_ModeKeyCodes[2];
     uint16_t FileIO_BytecodeData_Data;
     uint16_t FileIO_BytecodeData_Data_2;
     uint16_t FileIO_BytecodeData_Data_3;
@@ -1562,7 +1564,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_37d2;
     uint16_t field_37d4;
     uint16_t field_37d6;
-    uint32_t ExtDev_SndParam_DispatchComplex_PtrTable[31];  /* 31 pointers */
+    uint32_t PanelButton_HelpCodeMaps[31];  /* 31 pointers */
     /* zero padding */
     /* zero padding */
     /* Initial pedal records copied to RAM 0x8EB6: foot switch (event 28), foot controller (29, raw/state 0x0F = none engaged), PD.6 input (30) */
@@ -6197,14 +6199,13 @@ const naka_extension_device_t naka_extension_device_data
         SELF(PanelActions_Event31),  /* 31 event */
     },
 
-    .SoundParam_EncoderMappingData_Head = {
-        NAKA_ADDR(Encoder_MarkInvalid),
-        NAKA_ADDR(Encoder_Stub1),
-        NAKA_ADDR(Encoder_Stub2),
-        NAKA_ADDR(Encoder_Stub3),
+    .PanelEvent_InitPhaseHandlers = {
+        NAKA_ADDR(Encoder_MarkInvalid), NAKA_ADDR(Encoder_Stub1), NAKA_ADDR(Encoder_Stub2), NAKA_ADDR(Encoder_Stub3),
     },
 
-    .field_3562 = 0x110E,
+    .PanelButton_ModeKeyCodes = {
+        0x0E, 0x11,
+    },
 
     .FileIO_BytecodeData_Data = 0x0F13,
 
@@ -6741,7 +6742,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_37d6 = 0x0808,
 
-    .ExtDev_SndParam_DispatchComplex_PtrTable = {
+    .PanelButton_HelpCodeMaps = {
         SELF(field_3730),
         SELF(field_3738),
         SELF(field_3740),
