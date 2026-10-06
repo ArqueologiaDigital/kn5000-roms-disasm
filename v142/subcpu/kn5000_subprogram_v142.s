@@ -41921,11 +41921,11 @@ DSP_System_Init_Continue:
 	jp Voice_ResetAllControllers
 ; A stray one-byte `ret` immediately after DSP_System_Init's tail-jump.  No caller and no
 ; table reference anywhere in the authoritative source -- alignment padding or dead code.
-; DSP_InitHandler_NullStub: A lone `ret` (spelled `.byte 0x0e`): the do-nothing handler that entries 1-3 of
+; DSP_InitHandler_NullStub: A lone `ret`: the do-nothing handler that entries 1-3 of
 ;   DSP_InitHandler_Pointers point to beside entry 0 = DSP_System_Init -- same shape as DSP2_InitTask_NullStub /
 ;   DSP_ResetTask_NullStub. Basis: table + body; the old header's 'no caller and no table reference' is wrong.
 DSP_InitHandler_NullStub:
-	.byte 0x0e
+	ret
 
 ; The per-tick audio housekeeping alternator.  Already named in the reference file.
 ; Reads the global byte 0x041342 and runs ONE of two halves per call, then flips every bit of
@@ -53165,7 +53165,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	ld de, (xsp + 94)
 	call DSP_WriteCoeffData_5B_Direct
 	lda xbc, (xsp + 70)
-	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152_2:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_Q21One_2:24)
 	lda xwa, (xsp + 6)
 	call FP_fmul
 	lda xbc, (xsp + 6)
@@ -53176,7 +53176,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	ld de, (xsp + 94)
 	call DSP_WriteCoeffData_5B_Direct
 	lda xbc, (xsp + 66)
-	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152_3:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_Q21One_3:24)
 	lda xwa, (xsp + 6)
 	call FP_fmul
 	lda xbc, (xsp + 6)
@@ -54756,7 +54756,7 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	call DSP_WriteOscParam
 	ld iz, hl
 	lda xbc, (xsp+190:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_2:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q22One_2:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -54768,7 +54768,7 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	lda xbc, (xsp+182:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_3:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q22One_3:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -54780,7 +54780,7 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	lda xbc, (xsp+178:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_4:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q22One_4:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -54899,7 +54899,7 @@ DSP_BiquadCoeff_Algo1:
 	call DSP_WriteOscParam
 	ld iz, hl
 	lda xbc, (xsp+190:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_4194304_2:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_Q22One_2:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -54911,7 +54911,7 @@ DSP_BiquadCoeff_Algo1:
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	lda xbc, (xsp+182:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_4194304_3:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_Q22One_3:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -54923,7 +54923,7 @@ DSP_BiquadCoeff_Algo1:
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	lda xbc, (xsp+178:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_4194304_4:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_Q22One_4:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55234,7 +55234,7 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	call DSP_WriteOscParam
 	ld iz, hl
 	lda xbc, (xsp+182:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_2:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q22One_2:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55256,7 +55256,7 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	call DSP_WriteParamWord
 	ld iz, hl
 	lda xbc, (xsp+190:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_3:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q22One_3:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55267,7 +55267,7 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	call DSP_WriteParamWord
 	ld iz, hl
 	lda xbc, (xsp+178:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_4:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q22One_4:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55682,7 +55682,7 @@ DSP_SOS_Algo0_FinalChain:
 	call DSP_WriteOscParam
 	ldfr_werp HL, 0xFA
 	lda xbc, (xsp+186:16)
-	lda xde, (FPConst_DSP_SOS_Algo0_FinalChain_4194304_2:24)
+	lda xde, (FPConst_DSP_SOS_Algo0_FinalChain_Q22One_2:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -55693,7 +55693,7 @@ DSP_SOS_Algo0_FinalChain:
 	call DSP_WriteParamWord
 	ldfr_werp HL, 0xFA
 	lda xbc, (xsp+194:16)
-	lda xde, (FPConst_DSP_SOS_Algo0_FinalChain_4194304_3:24)
+	lda xde, (FPConst_DSP_SOS_Algo0_FinalChain_Q22One_3:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -55938,7 +55938,7 @@ DSP_SOS_Algo1_FinalChain:
 	call DSP_WriteParamWord
 	ldfr_werp HL, 0xFA
 	lda xbc, (xsp+194:16)
-	lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_2097152_2:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_Q21One_2:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -56169,7 +56169,7 @@ DSP_SOS_Algo2_FinalChain:
 	call DSP_WriteOscParam
 	ldfr_werp HL, 0xFA
 	lda xbc, (xsp+194:16)
-	lda xde, (FPConst_DSP_SOS_Algo2_FinalChain_4194304_2:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_FinalChain_Q22One_2:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -56181,7 +56181,7 @@ DSP_SOS_Algo2_FinalChain:
 	call DSP_WriteCoeffData_5B_Direct
 	ldfr_werp HL, 0xFA
 	lda xbc, (xsp+190:16)
-	lda xde, (FPConst_DSP_SOS_Algo2_FinalChain_4194304_3:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_FinalChain_Q22One_3:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)

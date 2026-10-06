@@ -3165,8 +3165,8 @@ FPConst_DSP_BiquadWarp_ComputeCoeffs_Q23One:	.float 8388608	; 2^23; f32 8388608,
 ; FPConst_DSP_BiquadWarp_ComputeCoeffs_Q22One: f32 2^22 = 1.0 in Q22: DSP_BiquadWarp_ComputeCoeffs multiplies by it
 ;   and FP_ftoi's the product to get the Q22 DSP word. Basis: reader -- every use is fmul then ftoi.
 FPConst_DSP_BiquadWarp_ComputeCoeffs_Q22One:	.float 4194304	; f32 4194304, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CA8)
-FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152_2:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CCE)
-FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152_3:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CF4)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_Q21One_2:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CCE)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_Q21One_3:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CF4)
 FPConst_DSP_ParamEQ_Curve_FP_32768:	.float 32768	; f32 32768, read by DSP_ParamEQ_Curve_FP (operand at 0x039DC1)
 FPConst_DSP_ParamEQ_Curve_FP_65536:	.float 65536	; f32 65536, read by DSP_ParamEQ_Curve_FP (operand at 0x039DD0)
 FPConst_DSP_ParamEQ_Curve_FP_0p02:	.double 0.02	; f64 0.02, read by DSP_ParamEQ_Curve_FP (operand at 0x039DFF)
@@ -3234,9 +3234,9 @@ FPConst_DSP_BiquadCoeff_Algo0_Fixup_2_3:	.float 2	; f32 2, read by DSP_BiquadCoe
 ; FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q22One: f32 2^22 = 1.0 in Q22: DSP_BiquadCoeff_Algo0_Fixup multiplies by it and
 ;   FP_ftoi's the product to get the Q22 DSP word. Basis: reader -- every use is fmul then ftoi.
 FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q22One:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD89)
-FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03ADBC)
-FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03ADEA)
-FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AE18)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q22One_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03ADBC)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q22One_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03ADEA)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q22One_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AE18)
 ; FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q23One: f32 2^23 = 1.0 in Q23: DSP_BiquadCoeff_Algo0_Fixup multiplies by it and
 ;   FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.
 FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q23One:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AE46)
@@ -3248,9 +3248,9 @@ FPConst_DSP_BiquadCoeff_Algo1_1_3:	.float 1	; f32 1, read by DSP_BiquadCoeff_Alg
 ; FPConst_DSP_BiquadCoeff_Algo1_Q22One: f32 2^22 = 1.0 in Q22: DSP_BiquadCoeff_Algo1 multiplies by it and FP_ftoi's
 ;   the product to get the Q22 DSP word. Basis: reader -- every use is fmul then ftoi.
 FPConst_DSP_BiquadCoeff_Algo1_Q22One:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AFA1)
-FPConst_DSP_BiquadCoeff_Algo1_4194304_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AFD4)
-FPConst_DSP_BiquadCoeff_Algo1_4194304_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B002)
-FPConst_DSP_BiquadCoeff_Algo1_4194304_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B030)
+FPConst_DSP_BiquadCoeff_Algo1_Q22One_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AFD4)
+FPConst_DSP_BiquadCoeff_Algo1_Q22One_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B002)
+FPConst_DSP_BiquadCoeff_Algo1_Q22One_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B030)
 ; FPConst_DSP_BiquadCoeff_Algo1_Q23One: f32 2^23 = 1.0 in Q23: DSP_BiquadCoeff_Algo1 multiplies by it and FP_ftoi's
 ;   the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.
 FPConst_DSP_BiquadCoeff_Algo1_Q23One:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B05E)
@@ -3272,12 +3272,12 @@ FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_1:	.double 1.0	; f64 1.0, read by DSP_B
 ; FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q22One: f32 2^22 = 1.0 in Q22: DSP_BiquadCoeff_Algo2_WriteParams
 ;   multiplies by it and FP_ftoi's the product to get the Q22 DSP word. Basis: reader -- every use is fmul then ftoi.
 FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q22One:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B41E)
-FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B451)
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q22One_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B451)
 ; FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q23One: f32 2^23 = 1.0 in Q23: DSP_BiquadCoeff_Algo2_WriteParams
 ;   multiplies by it and FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.
 FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q23One:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B47A)
-FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B4A3)
-FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B4CC)
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q22One_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B4A3)
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q22One_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B4CC)
 FPConst_DSP_SOS_LUT_Fetch_0p5:	.double 0.5	; f64 0.5, read by DSP_SOS_LUT_Fetch (operand at 0x03B56F)
 FPConst_DSP_SOS_LUT_Fetch_Neg12:	.double -12.0	; f64 -12.0, read by DSP_SOS_LUT_Fetch (operand at 0x03B57E)
 FPConst_DSP_SOS_LUT_Mode0x10_0p5:	.double 0.5	; f64 0.5, read by DSP_SOS_LUT_Mode0x10 (operand at 0x03B5D4)
@@ -3304,8 +3304,8 @@ FPConst_DSP_SOS_Algo0_FinalChain_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo0_Fi
 ;   normalised second-order-section coefficient by it and truncates with FP_ftoi before writing it to the DSP. Basis:
 ;   reader + bytes (siblings _4194304_2 / _4194304_3 are the same scale for the other taps).
 FPConst_DSP_SOS_Algo0_FinalChain_Q22One:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B958)
-FPConst_DSP_SOS_Algo0_FinalChain_4194304_2:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B98D)
-FPConst_DSP_SOS_Algo0_FinalChain_4194304_3:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B9B8)
+FPConst_DSP_SOS_Algo0_FinalChain_Q22One_2:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B98D)
+FPConst_DSP_SOS_Algo0_FinalChain_Q22One_3:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B9B8)
 FPConst_DSP_SOS_Algo1_20:	.float 2e+01	; f32 2e+01, read by DSP_SOS_Algo1 (operand at 0x03B9E2)
 FPConst_DSP_SOS_Algo1_10:	.double 10.0	; f64 10.0, read by DSP_SOS_Algo1 (operand at 0x03BA02)
 FPConst_DSP_SOS_Algo1_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo1 (operand at 0x03BA46)
@@ -3332,7 +3332,7 @@ FPConst_DSP_SOS_Algo1_FinalChain_Q21One:	.float 2097152	; f32 2097152, read by D
 ;   normalised second-order-section coefficient by it and truncates with FP_ftoi before writing it to the DSP. Basis:
 ;   reader + bytes (the only 2^22 tap of Algo1; its other two taps use 2^21).
 FPConst_DSP_SOS_Algo1_FinalChain_Q22One:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BCCC)
-FPConst_DSP_SOS_Algo1_FinalChain_2097152_2:	.float 2097152	; f32 2097152, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BCF3)
+FPConst_DSP_SOS_Algo1_FinalChain_Q21One_2:	.float 2097152	; f32 2097152, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BCF3)
 FPConst_DSP_SOS_Algo2_20:	.float 2e+01	; f32 2e+01, read by DSP_SOS_Algo2 (operand at 0x03BD1D)
 FPConst_DSP_SOS_Algo2_10:	.double 10.0	; f64 10.0, read by DSP_SOS_Algo2 (operand at 0x03BD3D)
 FPConst_DSP_SOS_Algo2_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo2 (operand at 0x03BD7F)
@@ -3355,8 +3355,8 @@ FPConst_DSP_SOS_Algo2_FinalChain_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo2_Fi
 ;   normalised second-order-section coefficient by it and truncates with FP_ftoi before writing it to the DSP. Basis:
 ;   reader + bytes (siblings _4194304_2 / _4194304_3 are the same scale for the other taps).
 FPConst_DSP_SOS_Algo2_FinalChain_Q22One:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BFCB)
-FPConst_DSP_SOS_Algo2_FinalChain_4194304_2:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BFFC)
-FPConst_DSP_SOS_Algo2_FinalChain_4194304_3:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03C028)
+FPConst_DSP_SOS_Algo2_FinalChain_Q22One_2:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BFFC)
+FPConst_DSP_SOS_Algo2_FinalChain_Q22One_3:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03C028)
 
 ; --- 0x0131cf-0x0133ce  128 x u32 monotonic gain curve, read by DSP_MixerCoeff_Compute:
 ; g = curve[index] >> 15 enters the Q15/Q16 two-stage mixer-gain product that lands in
