@@ -179,5 +179,8 @@ Measured with `--debt`:
   and of B. 58 routines are named, `SmfWrite_` / `SmfSize_` / `SmfWriteCopy_` / `SmfSizeCopy_` +
   the role read from the body. The pending-note-off machinery (33 five-byte records at RAM 0x305A,
   a due list at 0x10D3, note-offs written as velocity-0 note-ons) is in that script's docstring.
+  ⚠ Corrected 2026-10-06: the records are SEVEN bytes, not five -- the loops over 0x305A step XIY by 7
+  (Smf_AddDeltaToHeldNotes, prom_b; found by naming wave 3, batch h). 0x305A..0x313A is 32 strides of 7; whether the
+  record at 0x313A is the 33rd depends on the loop's end test, which this note does not re-derive.
   Still `sub_`: the two big pass bodies' other helpers and the disk-side routines whose prom_a
   targets (T_DiskApi_ReadFileToWindow_Entry / AC / B0 / E4 / E8) are unnamed.
