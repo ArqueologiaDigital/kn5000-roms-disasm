@@ -33245,7 +33245,7 @@ AccPatch_CheckAndInitDemo_Helper3 00F5EBEA
 AccPatch_SlotScanByteData_Join2 00F5EBEC
 AccPatch_SlotScanByteData_Return3 00F5EBFD
 AccPatch_StoreMeasureCursor 00F5EBFE
-AccPatch_SlotScanByteData_Code 00F5EC4E
+AccPatch_ChannelBitToIndex 00F5EC4E
 AccPatch_RefreshSlotOffset_Wrap 00F5EC57
 AccPatch_RefreshSlotOffset 00F5EC5E
 Seq_RhythmProcessor 00F5EC75

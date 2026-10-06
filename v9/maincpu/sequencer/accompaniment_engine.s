@@ -14168,7 +14168,7 @@ AccPatch_StoreMeasureCursor:
 	ld	c, (0x379b:16)
 	and	c, 31
 	srl	c, 1
-	add	xbc, AccPatch_SlotScanByteData_Code
+	add	xbc, AccPatch_ChannelBitToIndex
 	ld	xde, 0:i3
 	ld	e, (xbc)
 	mul	de, 32
@@ -14184,16 +14184,9 @@ AccPatch_StoreMeasureCursor:
 	inc	2, c
 	ld	(xix+c), wa
 	ret
-AccPatch_SlotScanByteData_Code:
-	push	sr
-	pop	sr
-	max
-	nop
-	normal
-	nop
-	nop
-	nop
-	nop
+; AccPatch_ChannelBitToIndex: channel index by (one-hot channel 0x379B & 31) >> 1, read by
+;   AccPatch_StoreMeasureCursor: bits 0, 1, 2, 3, 4 (indices 0, 1, 2, 4, 8) -> 2, 3, 4, 1, 0.
+AccPatch_ChannelBitToIndex:	.byte 2, 3, 4, 0, 1, 0, 0, 0, 0
 
 AccPatch_RefreshSlotOffset_Wrap:
 	push xiz
