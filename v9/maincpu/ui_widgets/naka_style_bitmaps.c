@@ -143,7 +143,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_0[2];  /* zero padding */
     uint32_t ptrs_0[4];  /* 4 pointers */
     char w0_code[2];
-    char w0_name[6];
+    char False_name[6];
     char True_str[6];
     uint32_t ptr_0042;
     uint8_t pad_1[5];  /* zero padding */
@@ -3521,7 +3521,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
     .pad_0 = { 0 },
 
     .ptrs_0 = {
-        SELF(w0_name),
+        SELF(False_name),
         0x00000000,
         SELF(w0_code),
         0x00000000,
@@ -3529,7 +3529,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .w0_code = ALIGNED_STRING(""),
 
-    .w0_name = "False",
+    .False_name = "False",
 
     .True_str = ALIGNED_STRING("True"),
 

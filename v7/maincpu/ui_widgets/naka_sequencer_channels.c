@@ -2215,7 +2215,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1ae6;
     uint16_t field_1ae8;
     char w13_code[2];
-    char w13_name[4];
+    char Pe_name[4];
     uint16_t field_1af0;
     uint16_t field_1af2;
     char Sc_str[4];
@@ -2343,8 +2343,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1bfe;
     uint16_t field_1c00;
     uint16_t field_1c02;
-    char w14_code[4];
-    char w14_name[4];
+    char Fd3_code[4];
+    char Td3_name[4];
     char ed3_str[4];
     char WX3_str[4];
     uint16_t field_1c14;
@@ -2404,8 +2404,8 @@ typedef struct __attribute__((packed)) {
     char str_71[2];
     uint16_t field_1c90;
     uint16_t field_1c92;
-    char w15_code[4];
-    char w15_name[4];
+    char D3_code[4];
+    char SsD_name[4];
     char hsD_str[4];
     char faF_str[4];
     uint16_t field_1ca4;
@@ -2460,8 +2460,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1d0a;
     uint16_t field_1d0c;
     char str_88[2];
-    char w16_code[4];
-    char w16_name[4];
+    char Qs_code[4];
+    char Gav_name[4];
     uint16_t field_1d18;
     uint16_t field_1d1a;
     uint16_t field_1d1c;
@@ -2470,7 +2470,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1d22;
     char str_89[4];
     char w17_code[4];
-    char w17_name[4];
+    char Lxb_name[4];
     char lnk_str[4];
     uint16_t field_1d34;
     char str_91[2];
@@ -7164,7 +7164,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .w13_code = ",",
 
-    .w13_name = "Pe!",
+    .Pe_name = "Pe!",
 
     .field_1af0 = 0x7A11,
 
@@ -7420,9 +7420,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1c02 = 0x0013,
 
-    .w14_code = "Fd3",
+    .Fd3_code = "Fd3",
 
-    .w14_name = "Td3",
+    .Td3_name = "Td3",
 
     .ed3_str = "ed3",
 
@@ -7542,9 +7542,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1c92 = 0x000E,
 
-    .w15_code = "8d3",
+    .D3_code = "8d3",
 
-    .w15_name = "SsD",
+    .SsD_name = "SsD",
 
     .hsD_str = "hsD",
 
@@ -7654,9 +7654,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .str_88 = "9",
 
-    .w16_code = "5QS",
+    .Qs_code = "5QS",
 
-    .w16_name = "Gav",
+    .Gav_name = "Gav",
 
     .field_1d18 = 0x461B,
 
@@ -7674,7 +7674,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .w17_code = "1q;",
 
-    .w17_name = "Lxb",
+    .Lxb_name = "Lxb",
 
     .lnk_str = "lnk",
 

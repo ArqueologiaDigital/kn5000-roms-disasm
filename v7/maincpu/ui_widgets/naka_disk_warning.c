@@ -1010,21 +1010,21 @@ typedef struct __attribute__((packed)) {
     char PAGE_str[6];
     char MnSw_str[6];
     char EXIT_str[6];
-    char w0_code[6];
-    char w0_name[6];
+    char ExMD_code[6];
+    char ExSC_name[6];
     char ExWn_str[6];
-    char w1_code[6];
-    char w1_name[6];
-    char w2_code[6];
-    char w2_name[6];
+    char FWin_code[6];
+    char Name_name[6];
+    char TrSw_code[6];
+    char CcEv_name[6];
     char IntT_str[6];
     char iRem_str[6];
     char iCmp_str[6];
     char iErr_str[6];
     char iVar_str[6];
     char iEsy_str[6];
-    char w3_code[6];
-    char w3_name[6];
+    char IVar_code[6];
+    char Show_name[6];
     char Pmem_str[18];
     char Pmem_str_2[16];
     char Pmem_str_3[28];
@@ -1296,15 +1296,15 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1b76;
     char str_389[4];
     uint16_t field_1b7c;
-    char w4_code[10];
-    char w4_name[16];
+    char PsTextBox_code[10];
+    char AcLanguageText_name[16];
     uint32_t ptrs_19[6];  /* 6 pointers */
-    char w5_code[12];
-    char w5_name[8];
-    char w6_code[8];
-    char w6_name[8];
-    char w7_code[8];
-    char w7_name[8];
+    char Indonesian_code[12];
+    char Italian_name[8];
+    char Spanish_code[8];
+    char French_name[8];
+    char German_code[8];
+    char English_name[8];
     char YZ_str[4];
     char name_str[6];
     char romram_str[8];
@@ -1535,17 +1535,17 @@ typedef struct __attribute__((packed)) {
     char idNONE_str_7[8];
     char Idi_str_15[6];
     char Idi_str_16[8];
-    char w8_code[8];
-    char w8_name[8];
+    char IdNONE_code[8];
+    char Mode_name[8];
     char str_487[4];
     char Makemodeid_str[16];
-    char w9_code[8];
-    char w9_name[8];
+    char Mode_code[8];
+    char Mode_name_2[8];
     char Title_str[8];
     char str_490[4];
     char Maketitleid_str[16];
-    char w10_code[8];
-    char w10_name[8];
+    char Title_code[8];
+    char Title_name[8];
     char name_str_2[6];
     char str_493[2];
     char str_494[2];
@@ -2114,12 +2114,12 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2606;
     uint32_t ptrs_24[26];  /* 26 pointers */
     char w11_code[2];
-    char w11_name[14];
+    char ApTaskControl_name[14];
     char CaptureLcdCheck_str[16];
     char UserBitmapCheck_str[16];
     char LanguageCheck_str[14];
-    char w12_code[10];
-    char w12_name[18];
+    char GridCheck_code[10];
+    char DefaultClassProc_name[18];
     char NamingCheck_str[12];
     char BitEditCheck_str[14];
     char PasTableCheck_str[14];
@@ -2129,38 +2129,38 @@ typedef struct __attribute__((packed)) {
     char str_545[2];
     uint32_t ptrs_25[256];  /* 256 pointers */
     char w13_code[2];
-    char w13_name[6];
+    char LiMIC_name[6];
     char LiMetronome_str[12];
     char LiGMSpecial_str[12];
-    char w14_code[10];
-    char w14_name[8];
+    char LedSwOff_code[10];
+    char LedSwOn_name[8];
     char LiAccordion_str[12];
-    char w15_code[10];
-    char w15_name[8];
-    char w16_code[10];
-    char w16_name[6];
-    char w17_code[8];
-    char w17_name[10];
-    char w18_code[8];
-    char w18_name[8];
-    char w19_code[8];
-    char w19_name[10];
-    char w20_code[8];
-    char w20_name[10];
-    char w21_code[8];
-    char w21_name[8];
-    char w22_code[8];
-    char w22_name[8];
-    char w23_code[6];
-    char w23_name[8];
-    char w24_code[6];
-    char w24_name[6];
-    char w25_code[10];
-    char w25_name[8];
-    char w26_code[12];
-    char w26_name[14];
-    char w27_code[10];
-    char w27_name[10];
+    char LiDrawbar_code[10];
+    char LiSynth_name[8];
+    char LiStrings_code[10];
+    char LiSax_name[6];
+    char LiPiano_code[8];
+    char LiOrchPad_name[10];
+    char LiOrgan_code[8];
+    char LiMemB_name[8];
+    char LiMemA_code[8];
+    char LiMallet_name[10];
+    char LiWorld_code[8];
+    char LiGuitar_name[10];
+    char LiFlute_code[8];
+    char LiDrum_name[8];
+    char LiBrass_code[8];
+    char LiBass_name[8];
+    char Next_code[6];
+    char Before_name[8];
+    char Start_code[6];
+    char Pause_name[6];
+    char Backward_code[10];
+    char Forward_name[8];
+    char MixerPoint_code[12];
+    char MixerControl_name[14];
+    char SlideMove_code[10];
+    char SlideBase_name[10];
     char GoldTechnics_str[14];
     char TrashIcon_str[10];
     uint32_t ptrs_26[256];  /* 256 pointers */
@@ -4772,19 +4772,19 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .EXIT_str = ALIGNED_STRING("EXIT"),
 
-    .w0_code = ALIGNED_STRING("ExMD"),
+    .ExMD_code = ALIGNED_STRING("ExMD"),
 
-    .w0_name = ALIGNED_STRING("ExSC"),
+    .ExSC_name = ALIGNED_STRING("ExSC"),
 
     .ExWn_str = ALIGNED_STRING("ExWn"),
 
-    .w1_code = ALIGNED_STRING("FWin"),
+    .FWin_code = ALIGNED_STRING("FWin"),
 
-    .w1_name = ALIGNED_STRING("Name"),
+    .Name_name = ALIGNED_STRING("Name"),
 
-    .w2_code = ALIGNED_STRING("TrSw"),
+    .TrSw_code = ALIGNED_STRING("TrSw"),
 
-    .w2_name = ALIGNED_STRING("CcEv"),
+    .CcEv_name = ALIGNED_STRING("CcEv"),
 
     .IntT_str = ALIGNED_STRING("IntT"),
 
@@ -4798,9 +4798,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .iEsy_str = ALIGNED_STRING("iEsy"),
 
-    .w3_code = ALIGNED_STRING("iVar"),
+    .IVar_code = ALIGNED_STRING("iVar"),
 
-    .w3_name = ALIGNED_STRING("Show"),
+    .Show_name = ALIGNED_STRING("Show"),
 
     .Pmem_str = ALIGNED_STRING("PMEM:%2d-%d %16s"),
 
@@ -5405,30 +5405,30 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_1b7c = 0x000D,
 
-    .w4_code = "PsTextBox",
+    .PsTextBox_code = "PsTextBox",
 
-    .w4_name = ALIGNED_STRING("AcLanguageText"),
+    .AcLanguageText_name = ALIGNED_STRING("AcLanguageText"),
 
     .ptrs_19 = {
-        SELF(w7_name),
-        SELF(w7_code),
-        SELF(w6_name),
-        SELF(w6_code),
-        SELF(w5_name),
-        SELF(w5_code),
+        SELF(English_name),
+        SELF(German_code),
+        SELF(French_name),
+        SELF(Spanish_code),
+        SELF(Italian_name),
+        SELF(Indonesian_code),
     },
 
-    .w5_code = ALIGNED_STRING("Indonesian"),
+    .Indonesian_code = ALIGNED_STRING("Indonesian"),
 
-    .w5_name = "Italian",
+    .Italian_name = "Italian",
 
-    .w6_code = "Spanish",
+    .Spanish_code = "Spanish",
 
-    .w6_name = ALIGNED_STRING("French"),
+    .French_name = ALIGNED_STRING("French"),
 
-    .w7_code = ALIGNED_STRING("German"),
+    .German_code = ALIGNED_STRING("German"),
 
-    .w7_name = "English",
+    .English_name = "English",
 
     .YZ_str = ALIGNED_STRING("YZ"),
 
@@ -5894,17 +5894,17 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .Idi_str_16 = "idi%s%d",
 
-    .w8_code = ALIGNED_STRING("idNONE"),
+    .IdNONE_code = ALIGNED_STRING("idNONE"),
 
-    .w8_name = ALIGNED_STRING("Mode%d"),
+    .Mode_name = ALIGNED_STRING("Mode%d"),
 
     .str_487 = ALIGNED_STRING("%d"),
 
     .Makemodeid_str = ALIGNED_STRING("MAKEMODEID(%s)"),
 
-    .w9_code = ALIGNED_STRING("Mode%d"),
+    .Mode_code = ALIGNED_STRING("Mode%d"),
 
-    .w9_name = ALIGNED_STRING("Mode%d"),
+    .Mode_name_2 = ALIGNED_STRING("Mode%d"),
 
     .Title_str = "Title%d",
 
@@ -5912,9 +5912,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .Maketitleid_str = "MAKETITLEID(%s)",
 
-    .w10_code = "Title%d",
+    .Title_code = "Title%d",
 
-    .w10_name = "Title%d",
+    .Title_name = "Title%d",
 
     .name_str_2 = ALIGNED_STRING("name"),
 
@@ -7148,18 +7148,18 @@ const naka_disk_warning_t naka_disk_warning_data
         SELF(PasTableCheck_str),
         SELF(BitEditCheck_str),
         SELF(NamingCheck_str),
-        SELF(w12_name),
-        SELF(w12_code),
+        SELF(DefaultClassProc_name),
+        SELF(GridCheck_code),
         SELF(LanguageCheck_str),
         SELF(UserBitmapCheck_str),
         SELF(CaptureLcdCheck_str),
-        SELF(w11_name),
+        SELF(ApTaskControl_name),
         SELF(w11_code),
     },
 
     .w11_code = ALIGNED_STRING(""),
 
-    .w11_name = "ApTaskControl",
+    .ApTaskControl_name = "ApTaskControl",
 
     .CaptureLcdCheck_str = "CaptureLcdCheck",
 
@@ -7167,9 +7167,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .LanguageCheck_str = "LanguageCheck",
 
-    .w12_code = "GridCheck",
+    .GridCheck_code = "GridCheck",
 
-    .w12_name = ALIGNED_STRING("DefaultClassProc"),
+    .DefaultClassProc_name = ALIGNED_STRING("DefaultClassProc"),
 
     .NamingCheck_str = "NamingCheck",
 
@@ -7188,38 +7188,38 @@ const naka_disk_warning_t naka_disk_warning_data
     .ptrs_25 = {
         SELF(TrashIcon_str),
         SELF(GoldTechnics_str),
-        SELF(w27_name),
-        SELF(w27_code),
-        SELF(w26_name),
-        SELF(w26_code),
-        SELF(w25_name),
-        SELF(w25_code),
-        SELF(w24_name),
-        SELF(w24_code),
-        SELF(w23_name),
-        SELF(w23_code),
-        SELF(w22_name),
-        SELF(w22_code),
-        SELF(w21_name),
-        SELF(w21_code),
-        SELF(w20_name),
-        SELF(w20_code),
-        SELF(w19_name),
-        SELF(w19_code),
-        SELF(w18_name),
-        SELF(w18_code),
-        SELF(w17_name),
-        SELF(w17_code),
-        SELF(w16_name),
-        SELF(w16_code),
-        SELF(w15_name),
-        SELF(w15_code),
+        SELF(SlideBase_name),
+        SELF(SlideMove_code),
+        SELF(MixerControl_name),
+        SELF(MixerPoint_code),
+        SELF(Forward_name),
+        SELF(Backward_code),
+        SELF(Pause_name),
+        SELF(Start_code),
+        SELF(Before_name),
+        SELF(Next_code),
+        SELF(LiBass_name),
+        SELF(LiBrass_code),
+        SELF(LiDrum_name),
+        SELF(LiFlute_code),
+        SELF(LiGuitar_name),
+        SELF(LiWorld_code),
+        SELF(LiMallet_name),
+        SELF(LiMemA_code),
+        SELF(LiMemB_name),
+        SELF(LiOrgan_code),
+        SELF(LiOrchPad_name),
+        SELF(LiPiano_code),
+        SELF(LiSax_name),
+        SELF(LiStrings_code),
+        SELF(LiSynth_name),
+        SELF(LiDrawbar_code),
         SELF(LiAccordion_str),
-        SELF(w14_name),
-        SELF(w14_code),
+        SELF(LedSwOn_name),
+        SELF(LedSwOff_code),
         SELF(LiGMSpecial_str),
         SELF(LiMetronome_str),
-        SELF(w13_name),
+        SELF(LiMIC_name),
         SELF(w13_code),
         0x00000000,
         0x00000000,
@@ -7446,69 +7446,69 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .w13_code = ALIGNED_STRING(""),
 
-    .w13_name = "LiMIC",
+    .LiMIC_name = "LiMIC",
 
     .LiMetronome_str = "LiMetronome",
 
     .LiGMSpecial_str = "LiGMSpecial",
 
-    .w14_code = ALIGNED_STRING("LedSwOff"),
+    .LedSwOff_code = ALIGNED_STRING("LedSwOff"),
 
-    .w14_name = "LedSwOn",
+    .LedSwOn_name = "LedSwOn",
 
     .LiAccordion_str = "LiAccordion",
 
-    .w15_code = "LiDrawbar",
+    .LiDrawbar_code = "LiDrawbar",
 
-    .w15_name = "LiSynth",
+    .LiSynth_name = "LiSynth",
 
-    .w16_code = "LiStrings",
+    .LiStrings_code = "LiStrings",
 
-    .w16_name = "LiSax",
+    .LiSax_name = "LiSax",
 
-    .w17_code = "LiPiano",
+    .LiPiano_code = "LiPiano",
 
-    .w17_name = "LiOrchPad",
+    .LiOrchPad_name = "LiOrchPad",
 
-    .w18_code = "LiOrgan",
+    .LiOrgan_code = "LiOrgan",
 
-    .w18_name = ALIGNED_STRING("LiMemB"),
+    .LiMemB_name = ALIGNED_STRING("LiMemB"),
 
-    .w19_code = ALIGNED_STRING("LiMemA"),
+    .LiMemA_code = ALIGNED_STRING("LiMemA"),
 
-    .w19_name = ALIGNED_STRING("LiMallet"),
+    .LiMallet_name = ALIGNED_STRING("LiMallet"),
 
-    .w20_code = "LiWorld",
+    .LiWorld_code = "LiWorld",
 
-    .w20_name = ALIGNED_STRING("LiGuitar"),
+    .LiGuitar_name = ALIGNED_STRING("LiGuitar"),
 
-    .w21_code = "LiFlute",
+    .LiFlute_code = "LiFlute",
 
-    .w21_name = ALIGNED_STRING("LiDrum"),
+    .LiDrum_name = ALIGNED_STRING("LiDrum"),
 
-    .w22_code = "LiBrass",
+    .LiBrass_code = "LiBrass",
 
-    .w22_name = ALIGNED_STRING("LiBass"),
+    .LiBass_name = ALIGNED_STRING("LiBass"),
 
-    .w23_code = ALIGNED_STRING("Next"),
+    .Next_code = ALIGNED_STRING("Next"),
 
-    .w23_name = ALIGNED_STRING("Before"),
+    .Before_name = ALIGNED_STRING("Before"),
 
-    .w24_code = "Start",
+    .Start_code = "Start",
 
-    .w24_name = "Pause",
+    .Pause_name = "Pause",
 
-    .w25_code = ALIGNED_STRING("Backward"),
+    .Backward_code = ALIGNED_STRING("Backward"),
 
-    .w25_name = "Forward",
+    .Forward_name = "Forward",
 
-    .w26_code = ALIGNED_STRING("MixerPoint"),
+    .MixerPoint_code = ALIGNED_STRING("MixerPoint"),
 
-    .w26_name = ALIGNED_STRING("MixerControl"),
+    .MixerControl_name = ALIGNED_STRING("MixerControl"),
 
-    .w27_code = "SlideMove",
+    .SlideMove_code = "SlideMove",
 
-    .w27_name = "SlideBase",
+    .SlideBase_name = "SlideBase",
 
     .GoldTechnics_str = ALIGNED_STRING("GoldTechnics"),
 

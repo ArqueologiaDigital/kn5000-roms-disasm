@@ -109,23 +109,23 @@ typedef struct __attribute__((packed)) {
     naka_dispatch_t w[28];     /* 28 × 24 = 672 bytes */
     uint8_t padding[20];       /* zero padding */
     char w27_inst[4];
-    char w27_name[14];
+    char IvPageOverWr_name[14];
     char w26_inst[6];
-    char w26_name[16];
+    char SineWaveScreen_name[16];
     char w25_inst[12];
-    char w25_name[18];
+    char AcMstSong2GridBox_name[18];
     char w24_inst[8];
-    char w24_name[18];
+    char AcMstSong1GridBox_name[18];
     char w23_inst[12];
-    char w23_name[20];
+    char AcMstStyle2GridBox_name[20];
     char w22_inst[8];
-    char w22_name[22];
+    char AcMstStyle1SubGridBox_name[22];
     char w21_inst[8];
-    char w21_name[20];
+    char AcMstStyle1GridBox_name[20];
     char w20_inst[10];
-    char w20_name[22];
+    char AcMstStyleAlpGridBox_name[22];
     char w19_inst[12];
-    char w19_name[20];
+    char AcMstSugAlpGridBox_name[20];
     char w18_inst[2];
 } master_style_t;
 
@@ -308,7 +308,7 @@ const master_style_t master_style_data = {
             .header   = NAKA_HDR(0x54),
             .field_04 = 0x0066,
             .field_06 = 0x0028,
-            .name_ptr  = SELF(w19_name),
+            .name_ptr  = SELF(AcMstSugAlpGridBox_name),
             .inst_ptr  = SELF(w19_inst),
             .link_ptr  = NAKA_ADDR(NakaParam_AcMstStyleAlpGridBox),
             .proc_addr = NAKA_ADDR(AcMstStyleAlp_Boundary),
@@ -317,7 +317,7 @@ const master_style_t master_style_data = {
             .header   = NAKA_HDR(0x54),
             .field_04 = 0x005E,
             .field_06 = 0x0020,
-            .name_ptr  = SELF(w20_name),
+            .name_ptr  = SELF(AcMstStyleAlpGridBox_name),
             .inst_ptr  = SELF(w20_inst),
             .link_ptr  = NAKA_ADDR(ParamStr_Table_18),
             .proc_addr = NAKA_ADDR(MstStyle1Grid_Boundary),
@@ -326,7 +326,7 @@ const master_style_t master_style_data = {
             .header   = NAKA_HDR(0x54),
             .field_04 = 0x0056,
             .field_06 = 0x0018,
-            .name_ptr  = SELF(w21_name),
+            .name_ptr  = SELF(AcMstStyle1GridBox_name),
             .inst_ptr  = SELF(w21_inst),
             .link_ptr  = NAKA_ADDR(NakaParam_AcMstStyle1SubGridBox),
             .proc_addr = NAKA_ADDR(MstStyle1SubGrid_Boundary),
@@ -335,7 +335,7 @@ const master_style_t master_style_data = {
             .header   = NAKA_HDR(0x54),
             .field_04 = 0x0056,
             .field_06 = 0x0018,
-            .name_ptr  = SELF(w22_name),
+            .name_ptr  = SELF(AcMstStyle1SubGridBox_name),
             .inst_ptr  = SELF(w22_inst),
             .link_ptr  = NAKA_ADDR(ParamStr_Table_20),
             .proc_addr = NAKA_ADDR(MstStyle2Grid_Boundary),
@@ -344,7 +344,7 @@ const master_style_t master_style_data = {
             .header   = NAKA_HDR(0x54),
             .field_04 = 0x0066,
             .field_06 = 0x0028,
-            .name_ptr  = SELF(w23_name),
+            .name_ptr  = SELF(AcMstStyle2GridBox_name),
             .inst_ptr  = SELF(w23_inst),
             .link_ptr  = NAKA_ADDR(ParamStr_Table_21),
             .proc_addr = NAKA_ADDR(MstGrid2_Boundary),
@@ -353,7 +353,7 @@ const master_style_t master_style_data = {
             .header   = NAKA_HDR(0x54),
             .field_04 = 0x0056,
             .field_06 = 0x0018,
-            .name_ptr  = SELF(w24_name),
+            .name_ptr  = SELF(AcMstSong1GridBox_name),
             .inst_ptr  = SELF(w24_inst),
             .link_ptr  = NAKA_ADDR(NakaParam_AcMstSong2GridBox),
             .proc_addr = NAKA_ADDR(MstSong1Grid_Boundary),
@@ -362,7 +362,7 @@ const master_style_t master_style_data = {
             .header   = NAKA_HDR(0x54),
             .field_04 = 0x0066,
             .field_06 = 0x0028,
-            .name_ptr  = SELF(w25_name),
+            .name_ptr  = SELF(AcMstSong2GridBox_name),
             .inst_ptr  = SELF(w25_inst),
             .link_ptr  = NAKA_ADDR(ParamStr_Table_22),
             .proc_addr = NAKA_ADDR(PmBank_Boundary),
@@ -371,7 +371,7 @@ const master_style_t master_style_data = {
             .header   = NAKA_HDR(0x33),
             .field_04 = 0x0034,
             .field_06 = 0x0012,
-            .name_ptr  = SELF(w26_name),
+            .name_ptr  = SELF(SineWaveScreen_name),
             .inst_ptr  = SELF(w26_inst),
             .link_ptr  = NAKA_ADDR(ParamStr_Table_23),
             .proc_addr = NAKA_ADDR(IvWindowPgCtl_Boundary),
@@ -380,7 +380,7 @@ const master_style_t master_style_data = {
             .header   = NAKA_HDR(0x27),
             .field_04 = 0x001C,
             .field_06 = 0x0006,
-            .name_ptr  = SELF(w27_name),
+            .name_ptr  = SELF(IvPageOverWr_name),
             .inst_ptr  = SELF(w27_inst),
             .link_ptr  = NAKA_ADDR(ParamStr_Table_24),
             .proc_addr = 0,
@@ -388,22 +388,22 @@ const master_style_t master_style_data = {
     },
     .padding = {0},
     .w27_inst = ALIGNED_STRING("At"),
-    .w27_name = ALIGNED_STRING("IvPageOverWr"),
+    .IvPageOverWr_name = ALIGNED_STRING("IvPageOverWr"),
     .w26_inst = "kc^nn",
-    .w26_name = ALIGNED_STRING("SineWaveScreen"),
+    .SineWaveScreen_name = ALIGNED_STRING("SineWaveScreen"),
     .w25_inst = ALIGNED_STRING("XXjnnnnnnn"),
-    .w25_name = "AcMstSong2GridBox",
+    .AcMstSong2GridBox_name = "AcMstSong2GridBox",
     .w24_inst = ALIGNED_STRING("XXjnnn"),
-    .w24_name = "AcMstSong1GridBox",
+    .AcMstSong1GridBox_name = "AcMstSong1GridBox",
     .w23_inst = ALIGNED_STRING("XXjnnnnnnn"),
-    .w23_name = ALIGNED_STRING("AcMstStyle2GridBox"),
+    .AcMstStyle2GridBox_name = ALIGNED_STRING("AcMstStyle2GridBox"),
     .w22_inst = ALIGNED_STRING("XXjnnn"),
-    .w22_name = "AcMstStyle1SubGridBox",
+    .AcMstStyle1SubGridBox_name = "AcMstStyle1SubGridBox",
     .w21_inst = ALIGNED_STRING("XXjnnn"),
-    .w21_name = ALIGNED_STRING("AcMstStyle1GridBox"),
+    .AcMstStyle1GridBox_name = ALIGNED_STRING("AcMstStyle1GridBox"),
     .w20_inst = ALIGNED_STRING("XXjnnnnn"),
-    .w20_name = ALIGNED_STRING("AcMstStyleAlpGridBox"),
+    .AcMstStyleAlpGridBox_name = ALIGNED_STRING("AcMstStyleAlpGridBox"),
     .w19_inst = ALIGNED_STRING("XXjnnnnnnn"),
-    .w19_name = ALIGNED_STRING("AcMstSugAlpGridBox"),
+    .AcMstSugAlpGridBox_name = ALIGNED_STRING("AcMstSugAlpGridBox"),
     .w18_inst = "XX",
 };

@@ -279,10 +279,10 @@ typedef struct __attribute__((packed)) {
     char MainTimeFlashFunc_str[18];
     char MainMssSetUp_str[14];
     char FswAsIniFunc_str[14];
-    char w0_code[12];
-    char w0_name[16];
-    char w1_code[12];
-    char w1_name[10];
+    char CntIniFunc_code[12];
+    char MainSysControl_name[16];
+    char OneTchFUNC_code[12];
+    char MainPmGet_name[10];
     char MainChordPre_str[14];
     char MainGetRhyGrpName_str[18];
     char MainGetSndGrpName_str[18];
@@ -293,7 +293,7 @@ typedef struct __attribute__((packed)) {
     char MainVariSet_str[12];
     /* element 0 of Viewable slot 0x1 "Normal": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t Normal;
-    char w2_text[8];
+    char Normal_text[8];
     /* element 1 of Viewable slot 0x1 "normal": NormScreen (class id 0x01620000) */
     naka_cls_NormScreen_t normal;
     uint8_t field_0174;
@@ -309,18 +309,18 @@ typedef struct __attribute__((packed)) {
     /* element 6 of Viewable slot 0x1: AcSoundName (class id 0x0160002A) */
     naka_cls_AcSoundName_t v1_e6;
     /* element 7 of Viewable slot 0x1: StringBox (class id 0x01600037) */
-    naka_cls_StringBox_t v1_e7;
+    naka_cls_StringBox_t RIGHT2_StringBox;
     char RIGHT2_str[8];
     /* element 8 of Viewable slot 0x1: AcSoundName (class id 0x0160002A) */
     naka_cls_AcSoundName_t v1_e8;
     /* element 9 of Viewable slot 0x1: StringBox (class id 0x01600037) */
-    naka_cls_StringBox_t v1_e9;
+    naka_cls_StringBox_t RIGHT1_StringBox;
     char RIGHT1_str[8];
     /* element 10 of Viewable slot 0x1: StringBox (class id 0x01600037) */
-    naka_cls_StringBox_t v1_e10;
+    naka_cls_StringBox_t LEFT_StringBox;
     char LEFT_str[6];
     /* element 11 of Viewable slot 0x1: StringBox (class id 0x01600037) */
-    naka_cls_StringBox_t v1_e11;
+    naka_cls_StringBox_t RHYTHM_StringBox;
     char RHYTHM_str[8];
     /* element 12 of Viewable slot 0x1: TransposeBox (class id 0x01620003) */
     naka_cls_TransposeBox_t v1_e12;
@@ -381,13 +381,13 @@ const naka_normal_mode_t naka_normal_mode_data
 
     .FswAsIniFunc_str = ALIGNED_STRING("FswAsIniFunc"),
 
-    .w0_code = ALIGNED_STRING("CntIniFunc"),
+    .CntIniFunc_code = ALIGNED_STRING("CntIniFunc"),
 
-    .w0_name = ALIGNED_STRING("MainSysControl"),
+    .MainSysControl_name = ALIGNED_STRING("MainSysControl"),
 
-    .w1_code = ALIGNED_STRING("OneTchFUNC"),
+    .OneTchFUNC_code = ALIGNED_STRING("OneTchFUNC"),
 
-    .w1_name = "MainPmGet",
+    .MainPmGet_name = "MainPmGet",
 
     .MainChordPre_str = ALIGNED_STRING("MainChordPre"),
 
@@ -417,11 +417,11 @@ const naka_normal_mode_t naka_normal_mode_data
         .border = 0x0000,
         .exit = 0x01A00000,
         .window = 0x0003F3F8,
-        .title = SELF(w2_text),
+        .title = SELF(Normal_text),
         .icon = 0x00000001,
     },
 
-    .w2_text = ALIGNED_STRING("NORMAL"),
+    .Normal_text = ALIGNED_STRING("NORMAL"),
 
     .normal = {
         .class_ = 0x01620000,
@@ -525,7 +525,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .part = 0x0001,
     },
 
-    .v1_e7 = {
+    .RIGHT2_StringBox = {
         .class_ = 0x01600037,
         .super = 6,
         .sub = NAKA_NONE,
@@ -560,7 +560,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .part = 0x0002,
     },
 
-    .v1_e9 = {
+    .RIGHT1_StringBox = {
         .class_ = 0x01600037,
         .super = 1,
         .sub = NAKA_NONE,
@@ -578,7 +578,7 @@ const naka_normal_mode_t naka_normal_mode_data
 
     .RIGHT1_str = ALIGNED_STRING("RIGHT1"),
 
-    .v1_e10 = {
+    .LEFT_StringBox = {
         .class_ = 0x01600037,
         .super = 1,
         .sub = NAKA_NONE,
@@ -596,7 +596,7 @@ const naka_normal_mode_t naka_normal_mode_data
 
     .LEFT_str = ALIGNED_STRING("LEFT"),
 
-    .v1_e11 = {
+    .RHYTHM_StringBox = {
         .class_ = 0x01600037,
         .super = 1,
         .sub = NAKA_NONE,

@@ -551,15 +551,15 @@ typedef struct __attribute__((packed)) {
 typedef struct __attribute__((packed)) {
     /* element 0 of Viewable slot 0xC9 "MspRecScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t MspRecScreen;
-    char w0_text[22];
+    char MspPhraseRecording_text[22];
     /* element 1 of Viewable slot 0xC9 "MspRecBox1": VwBox (class id 0x01600011) */
     naka_cls_VwBox_t MspRecBox1;
     /* element 2 of Viewable slot 0xC9: Label (class id 0x0160002B) */
-    naka_cls_Label_t vC9_e2;
-    char w2_text[18];
+    naka_cls_Label_t RecordingPhrase_Label;
+    char RecordingPhrase_text[18];
     /* element 3 of Viewable slot 0xC9 "MspBnkLbl": Label (class id 0x0160002B) */
     naka_cls_Label_t MspBnkLbl;
-    char w3_text[8];
+    char Bank_text[8];
     /* element 4 of Viewable slot 0xC9 "RecPadNo": PsMspRecPadBox (class id 0x0164001B) */
     naka_cls_PsMspRecPadBox_t RecPadNo;
     /* element 5 of Viewable slot 0xC9 "RecBankName": PsMspRecBnkBox (class id 0x0164001C) */
@@ -567,8 +567,8 @@ typedef struct __attribute__((packed)) {
     /* element 6 of Viewable slot 0xC9 "MspRecBox2": VwBox (class id 0x01600011) */
     naka_cls_VwBox_t MspRecBox2;
     /* element 7 of Viewable slot 0xC9: Label (class id 0x0160002B) */
-    naka_cls_Label_t vC9_e7;
-    char w5_text[10];
+    naka_cls_Label_t Tempo_Label;
+    char Tempo_text[10];
     /* element 8 of Viewable slot 0xC9 "MspTempo": AcCmpTempoBox (class id 0x01640011) */
     naka_cls_AcCmpTempoBox_t MspTempo;
     /* element 9 of Viewable slot 0xC9 "MspMeas": PsMspMeasBox (class id 0x01640019) */
@@ -580,7 +580,7 @@ typedef struct __attribute__((packed)) {
     char w6_text[2];
     /* element 12 of Viewable slot 0xC9 "MspPadLbl": Label (class id 0x0160002B) */
     naka_cls_Label_t MspPadLbl;
-    char w7_text[8];
+    char Pad_text[8];
     /* element 13 of Viewable slot 0xC9: AcRamEditBox (class id 0x0160001B) */
     naka_cls_AcRamEditBox_t vC9_e13;
     char vC9_e13_caption[12];
@@ -590,13 +590,13 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvExitMode_t vC9_e15;
     /* element 0 of Viewable slot 0xCA "MspMenuScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t MspMenuScreen;
-    char w10_text[10];
+    char MspMenu_text[10];
     /* element 1 of Viewable slot 0xCA: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t vCA_e1;
-    char w11_text[12];
+    naka_cls_AcTitleMenu_t CompileSet_AcTitleMenu;
+    char CompileSet_text[12];
     /* element 2 of Viewable slot 0xCA: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t vCA_e2;
-    char w12_text[30];
+    naka_cls_AcTitleMenu_t NamingForUserCompile_AcTitleMenu;
+    char NamingForUserCompile_text[30];
     /* element 3 of Viewable slot 0xCA: IvExitMode (class id 0x01600048) */
     naka_cls_IvExitMode_t vCA_e3;
     /* element 4 of Viewable slot 0xCA: AcRamEditBox (class id 0x0160001B) */
@@ -606,7 +606,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcIndexWideES_t vCA_e5;
     /* element 0 of Viewable slot 0xCB "MspNamingScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t MspNamingScreen;
-    char w15_text[8];
+    char Naming_text[8];
     /* element 1 of Viewable slot 0xCB: AcFuncEditSw (class id 0x01600020) */
     naka_cls_AcFuncEditSw_t vCB_e1;
     /* element 2 of Viewable slot 0xCB: IvNaming (class id 0x0160004D) */
@@ -615,11 +615,11 @@ typedef struct __attribute__((packed)) {
     naka_cls_PsMspNameBnk_t vCB_e3;
     /* element 0 of Viewable slot 0xCC "MspReGrpScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t MspReGrpScreen;
-    char w17_text[20];
+    char MspCompileSetting_text[20];
     /* element 1 of Viewable slot 0xCC "RGrpBnkSw": AcFuncEditSw (class id 0x01600020) */
     naka_cls_AcFuncEditSw_t RGrpBnkSw;
     /* element 2 of Viewable slot 0xCC: StringBox (class id 0x01600037) */
-    naka_cls_StringBox_t vCC_e2;
+    naka_cls_StringBox_t BANK_StringBox;
     char BANK_str[6];
     /* element 3 of Viewable slot 0xCC "MspRGrpGrid": AcGridBox (class id 0x01600056) */
     naka_cls_AcGridBox_t MspRGrpGrid;
@@ -637,9 +637,9 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvShowHide_t vCC_e8;
     /* element 0 of Viewable slot 0xDC "SndArgrScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t SndArgrScreen;
-    char w21_text[16];
+    char SoundArranger_text[16];
     /* element 1 of Viewable slot 0xDC: StringBox (class id 0x01600037) */
-    naka_cls_StringBox_t vDC_e1;
+    naka_cls_StringBox_t Pattern_StringBox;
     char Pattern_str[12];
     /* element 2 of Viewable slot 0xDC "SndArgRhyName": PsCmpCpFVariBox (class id 0x01640013) */
     naka_cls_PsCmpCpFVariBox_t SndArgRhyName;
@@ -657,7 +657,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcLanguageText_t vDC_e7;
     /* element 0 of Viewable slot 0xED "ApcSelScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ApcSelScreen;
-    char w24_text[16];
+    char AutoPlayChord_text[16];
     /* element 1 of Viewable slot 0xED: AcApcMdBox (class id 0x0164000E) */
     naka_cls_AcApcMdBox_t vED_e1;
     char vED_e1_caption[12];
@@ -713,11 +713,11 @@ const naka_msp_recording_t naka_msp_recording_data
         .border = 0x0000,
         .exit = 0x01A00001,
         .window = 0x0003D762,
-        .title = SELF(w0_text),
+        .title = SELF(MspPhraseRecording_text),
         .icon = 0x000000A8,
     },
 
-    .w0_text = ALIGNED_STRING("MSP PHRASE RECORDING"),
+    .MspPhraseRecording_text = ALIGNED_STRING("MSP PHRASE RECORDING"),
 
     .MspRecBox1 = {
         .class_ = 0x01600011,
@@ -732,7 +732,7 @@ const naka_msp_recording_t naka_msp_recording_data
         .index = 0xFFFF,
     },
 
-    .vC9_e2 = {
+    .RecordingPhrase_Label = {
         .class_ = 0x0160002B,
         .super = 1,
         .sub = NAKA_NONE,
@@ -740,12 +740,12 @@ const naka_msp_recording_t naka_msp_recording_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 34, 42, 165, 60 },
-        .str = SELF(w2_text),
+        .str = SELF(RecordingPhrase_text),
         .font = 0x00000000,
         .fontcolor = 0x00F1,
     },
 
-    .w2_text = ALIGNED_STRING("Recording Phrase"),
+    .RecordingPhrase_text = ALIGNED_STRING("Recording Phrase"),
 
     .MspBnkLbl = {
         .class_ = 0x0160002B,
@@ -755,12 +755,12 @@ const naka_msp_recording_t naka_msp_recording_data
         .prev = 2,
         .flag = 0x0008,
         .rect = { 66, 62, 117, 80 },
-        .str = SELF(w3_text),
+        .str = SELF(Bank_text),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
     },
 
-    .w3_text = ALIGNED_STRING("BANK :"),
+    .Bank_text = ALIGNED_STRING("BANK :"),
 
     .RecPadNo = {
         .class_ = 0x0164001B,
@@ -807,7 +807,7 @@ const naka_msp_recording_t naka_msp_recording_data
         .index = 0xFFFF,
     },
 
-    .vC9_e7 = {
+    .Tempo_Label = {
         .class_ = 0x0160002B,
         .super = 6,
         .sub = NAKA_NONE,
@@ -815,12 +815,12 @@ const naka_msp_recording_t naka_msp_recording_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 34, 124, 109, 142 },
-        .str = SELF(w5_text),
+        .str = SELF(Tempo_text),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
     },
 
-    .w5_text = "TEMPO   =",
+    .Tempo_text = "TEMPO   =",
 
     .MspTempo = {
         .class_ = 0x01640011,
@@ -893,12 +893,12 @@ const naka_msp_recording_t naka_msp_recording_data
         .prev = 6,
         .flag = 0x0008,
         .rect = { 66, 83, 117, 101 },
-        .str = SELF(w7_text),
+        .str = SELF(Pad_text),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
     },
 
-    .w7_text = ALIGNED_STRING("PAD  :"),
+    .Pad_text = ALIGNED_STRING("PAD  :"),
 
     .vC9_e13 = {
         .class_ = 0x0160001B,
@@ -967,13 +967,13 @@ const naka_msp_recording_t naka_msp_recording_data
         .border = 0x0002,
         .exit = 0x01A00001,
         .window = 0x0003D76C,
-        .title = SELF(w10_text),
+        .title = SELF(MspMenu_text),
         .icon = 0x000000A6,
     },
 
-    .w10_text = ALIGNED_STRING("MSP MENU"),
+    .MspMenu_text = ALIGNED_STRING("MSP MENU"),
 
-    .vCA_e1 = {
+    .CompileSet_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -989,14 +989,14 @@ const naka_msp_recording_t naka_msp_recording_data
         .align = 0x0000,
         .editsw = 0x0089,
         .selected = 0x0003D770,
-        .str = SELF(w11_text),
+        .str = SELF(CompileSet_text),
         .title = 0x01A000CC,
         .icon = 0x000000A7,
     },
 
-    .w11_text = "COMPILE SET",
+    .CompileSet_text = "COMPILE SET",
 
-    .vCA_e2 = {
+    .NamingForUserCompile_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -1012,12 +1012,12 @@ const naka_msp_recording_t naka_msp_recording_data
         .align = 0x0000,
         .editsw = 0x008A,
         .selected = 0x0003D772,
-        .str = SELF(w12_text),
+        .str = SELF(NamingForUserCompile_text),
         .title = 0x01A000CB,
         .icon = 0x00000099,
     },
 
-    .w12_text = "Naming for User&COMPILE Banks",
+    .NamingForUserCompile_text = "Naming for User&COMPILE Banks",
 
     .vCA_e3 = {
         .class_ = 0x01600048,
@@ -1086,11 +1086,11 @@ const naka_msp_recording_t naka_msp_recording_data
         .border = 0x0000,
         .exit = 0x01A000CA,
         .window = 0x0003D77A,
-        .title = SELF(w15_text),
+        .title = SELF(Naming_text),
         .icon = 0x00000099,
     },
 
-    .w15_text = ALIGNED_STRING("NAMING"),
+    .Naming_text = ALIGNED_STRING("NAMING"),
 
     .vCB_e1 = {
         .class_ = 0x01600020,
@@ -1150,11 +1150,11 @@ const naka_msp_recording_t naka_msp_recording_data
         .border = 0x0000,
         .exit = 0x01A000CA,
         .window = 0x0003D77E,
-        .title = SELF(w17_text),
+        .title = SELF(MspCompileSetting_text),
         .icon = 0x000000A7,
     },
 
-    .w17_text = "MSP COMPILE SETTING",
+    .MspCompileSetting_text = "MSP COMPILE SETTING",
 
     .RGrpBnkSw = {
         .class_ = 0x01600020,
@@ -1175,7 +1175,7 @@ const naka_msp_recording_t naka_msp_recording_data
         .func = 0x0124000B,
     },
 
-    .vCC_e2 = {
+    .BANK_StringBox = {
         .class_ = 0x01600037,
         .super = 1,
         .sub = NAKA_NONE,
@@ -1319,13 +1319,13 @@ const naka_msp_recording_t naka_msp_recording_data
         .border = 0x0000,
         .exit = 0x01A00001,
         .window = 0x0003D792,
-        .title = SELF(w21_text),
+        .title = SELF(SoundArranger_text),
         .icon = 0x00000058,
     },
 
-    .w21_text = ALIGNED_STRING("SOUND ARRANGER"),
+    .SoundArranger_text = ALIGNED_STRING("SOUND ARRANGER"),
 
-    .vDC_e1 = {
+    .Pattern_StringBox = {
         .class_ = 0x01600037,
         .super = 0,
         .sub = 2,
@@ -1461,11 +1461,11 @@ const naka_msp_recording_t naka_msp_recording_data
         .border = 0x0000,
         .exit = 0x01A00000,
         .window = 0x0003D7A6,
-        .title = SELF(w24_text),
+        .title = SELF(AutoPlayChord_text),
         .icon = 0x00000071,
     },
 
-    .w24_text = "AUTO PLAY CHORD",
+    .AutoPlayChord_text = "AUTO PLAY CHORD",
 
     .vED_e1 = {
         .class_ = 0x0164000E,

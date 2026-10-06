@@ -20,7 +20,10 @@ QUESTION IT ANSWERS / WHAT IT DOES
        characters ("Bass Port Speaker" -> BassPortSpeaker_str).  Empty strings and single symbols keep
        their names;
     5. a ptr_XXXX member initialised with NAKA_ADDR(Name) or SELF(member) -> <Name>_ptr / <member's name>_ptr
-       (a derivative name: "the pointer to X"); one aimed at a placeholder member keeps its name.
+       (a derivative name: "the pointer to X"); one aimed at a placeholder member keeps its name;
+    6. the decoder's wN_text / wN_name / wN_code strings with words -> <first words>_text / _name / _code;
+    7. a widget element still named by position whose fields point (SELF) at a named string ->
+       <that string's stem>_<its class> (HardDiskMainMenu_TtlScreen).  (Steps 6 and 7 run before step 5.)
   Only member names change, never a type, size or order, so every compiled blob must stay byte-identical
   (`make all`).  Comments are kept; the position stays in the element comments.
 
@@ -113,6 +116,42 @@ def plan_file(text):
             nm, k = "%s_%d" % (base, k), k + 1
         ren[s] = nm
         used.add(nm)
+    # 6. a decoder-named wN_text / wN_name / wN_code string with words -> <first words>_text / _name / _code
+    def words_stem(body):
+        ws = re.findall(r'[A-Za-z][A-Za-z0-9]*', re.sub(r'\\[nrt0x][0-9a-fA-F]*', ' ', body))
+        ws = [w for w in ws if len(w) > 1 or w.isupper()][:4]
+        return "".join((w.capitalize() if w.isupper() else w[:1].upper() + w[1:]) for w in ws)[:32]
+    for m in re.finditer(r'\n\s+\.(w\d+_(text|name|code))\s*=\s*(?:ALIGNED_STRING\()?\s*"((?:[^"\\]|\\.)*)"', text):
+        w, role, body = m.group(1), m.group(2), m.group(3)
+        if w in ren:
+            continue
+        stem = words_stem(body)
+        if not stem:
+            continue
+        base = "%s_%s" % (stem, role)
+        nm, k = base, 2
+        while nm in used:
+            nm, k = "%s_%d" % (base, k), k + 1
+        ren[w] = nm
+        used.add(nm)
+    # 7. a widget element still named by position that points at a named string -> <string stem>_<Class>
+    types = {mm.group(2): mm.group(1) for mm in re.finditer(r'naka_cls_(\w+)_t\s+(v[0-9A-Fa-f]+_e\d+)\s*;', text)}
+    for m in re.finditer(r'\n    \.(v[0-9A-Fa-f]+_e\d+) = \{(.*?)\n    \},', text, re.S):
+        el, body = m.group(1), m.group(2)
+        if el in ren or el not in types:
+            continue
+        for f, x in re.findall(r'\.(\w+)\s*=\s*SELF\((\w+)\)', body):
+            tgt = ren.get(x, x)
+            if placeholder_field(tgt) or re.match(r'^w\d+_', tgt) or re.match(r'^v[0-9A-Fa-f]+_e\d+_', tgt):
+                continue
+            stem = re.sub(r'_(str|text|name|code|list)(_\d+)?$', '', tgt)
+            base = "%s_%s" % (stem, types[el])
+            nm, k = base, 2
+            while nm in used:
+                nm, k = "%s_%d" % (base, k), k + 1
+            ren[el] = nm
+            used.add(nm)
+            break
     # 5. a ptr_XXXX member that holds NAKA_ADDR(Name) or SELF(member) -> <Name or member's name>_ptr
     for m in re.finditer(r'\n\s+\.(ptr_[0-9a-f]+)\s*=\s*(?:NAKA_ADDR\((\w+)\)|SELF\((\w+)\))\s*,', text):
         p, ext, own = m.group(1), m.group(2), m.group(3)

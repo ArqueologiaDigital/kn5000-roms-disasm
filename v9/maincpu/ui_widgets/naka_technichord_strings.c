@@ -157,55 +157,55 @@ typedef struct __attribute__((packed)) {
     char str_1[2];
     char str_2[2];
     char w0_code[2];
-    char w0_name[8];
+    char Sdtecd2_name[8];
     char w1_code[2];
-    char w1_name[10];
-    char w2_code[12];
-    char w2_name[8];
-    char w3_code[10];
-    char w3_name[16];
+    char TcFanfare_name[10];
+    char TcHardRock_code[12];
+    char TcBlock_name[8];
+    char TcOctave_code[10];
+    char TcBigBandReeds_name[16];
     char TcBigBandBrass_str[16];
-    char w4_code[8];
-    char w4_name[10];
-    char w5_code[10];
-    char w5_name[8];
-    char w6_code[8];
-    char w6_name[8];
-    char w7_code[8];
-    char w7_name[8];
+    char TcHymn_code[8];
+    char TcTheatre_name[10];
+    char TcCountry_code[10];
+    char TcDuet2_name[8];
+    char TcDuet1_code[8];
+    char TcOpen2_name[8];
+    char TcOpen1_code[8];
+    char TcClose_name[8];
     char str_4[2];
     char str_5[2];
     char w8_code[2];
-    char w8_name[8];
+    char Sdtecd1_name[8];
     char str_6[2];
     char str_7[2];
     char str_8[2];
     char w9_code[2];
-    char w9_name[12];
+    char SdtecdPage_name[12];
     char Sdtecd_str[8];
     uint32_t ptrs_1[5];  /* 5 pointers */
     char str_10[2];
     char str_11[2];
     char str_12[2];
     char w10_code[2];
-    char w10_name[8];
+    char Sqmixer_name[8];
     uint32_t ptrs_2[16];  /* 16 pointers */
     char w11_code[2];
-    char w11_name[18];
+    char PresentationTitle_name[18];
     char w12_code[2];
-    char w12_name[20];
+    char LoadingPresentation_name[20];
     char w13_code[2];
-    char w13_name[20];
+    char PresentationControl_name[20];
     char PlainScreen_str[12];
     char FDemoTitleBox_str[14];
     char str_15[2];
     char w14_code[2];
-    char w14_name[14];
+    char Demofeature2_name[14];
     char str_16[2];
     char w15_code[2];
-    char w15_name[14];
+    char Demofeature1_name[14];
     char w16_code[2];
-    char w16_name[12];
+    char Demofeature_name[12];
     uint32_t ptrs_3[45];  /* 45 pointers */
     char str_17[2];
     char str_18[2];
@@ -213,13 +213,13 @@ typedef struct __attribute__((packed)) {
     char str_20[2];
     char str_21[2];
     char w17_code[2];
-    char w17_name[12];
+    char DrawbarSndE_name[12];
     char str_22[2];
     char str_23[2];
     char str_24[2];
     char str_25[2];
     char w18_code[2];
-    char w18_name[12];
+    char DrawTremolo_name[12];
     char DrawbarPart_str[12];
     char DrawbarNorm_str[12];
     char str_28[2];
@@ -229,7 +229,7 @@ typedef struct __attribute__((packed)) {
     char str_32[2];
     char str_33[2];
     char w19_code[2];
-    char w19_name[10];
+    char Drawbar2_name[10];
     char str_34[2];
     char str_35[2];
     char str_36[2];
@@ -238,7 +238,7 @@ typedef struct __attribute__((packed)) {
     char str_39[2];
     char str_40[2];
     char w20_code[2];
-    char w20_name[10];
+    char Drawbar1_name[10];
     char DrawSetting_str[12];
     char str_42[2];
     char str_43[2];
@@ -246,12 +246,12 @@ typedef struct __attribute__((packed)) {
     char str_45[2];
     char str_46[2];
     char w21_code[2];
-    char w21_name[8];
-    char w22_code[8];
-    char w22_name[12];
+    char Black23_name[8];
+    char White23_code[8];
+    char DrawPerc223_name[12];
     char DrawPerc4_str[10];
     char w23_code[2];
-    char w23_name[8];
+    char Drawbar_name[8];
     uint32_t ptrs_4[38];  /* 38 pointers */
     char str_48[2];
     char str_49[2];
@@ -267,7 +267,7 @@ typedef struct __attribute__((packed)) {
     char str_59[2];
     char str_60[2];
     char w24_code[2];
-    char w24_name[12];
+    char Accordion2_name[12];
     char str_61[2];
     char str_62[2];
     char str_63[2];
@@ -281,42 +281,42 @@ typedef struct __attribute__((packed)) {
     char str_71[2];
     char str_72[2];
     char w25_code[2];
-    char w25_name[12];
+    char Accordion1_name[12];
     char w26_code[2];
-    char w26_name[14];
+    char AccordionPart_name[14];
     char str_73[2];
     char str_74[2];
     char str_75[2];
     char str_76[2];
     char str_77[2];
     char w27_code[2];
-    char w27_name[10];
+    char Accordion_name[10];
     uint32_t ptrs_5[25];  /* 25 pointers */
     char str_78[2];
     char w28_code[2];
-    char w28_name[12];
+    char PleaseWait_name[12];
     char w29_code[2];
-    char w29_name[10];
+    char NoMessage_name[10];
     char str_79[2];
     char str_80[2];
     char str_81[2];
     char w30_code[2];
-    char w30_name[14];
+    char CheckMessage_name[14];
     char w31_code[2];
-    char w31_name[6];
+    char Other_name[6];
     char str_82[2];
     char str_83[2];
     char w32_code[2];
-    char w32_name[6];
+    char Error_name[6];
     char str_84[2];
     char str_85[2];
     char w33_code[2];
-    char w33_name[10];
+    char Reminder_name[10];
     char str_86[2];
     char w34_code[2];
-    char w34_name[10];
+    char Completed_name[10];
     char w35_code[2];
-    char w35_name[8];
+    char Mesage_name[8];
     uint32_t ptrs_6[12];  /* 12 pointers */
     char str_87[2];
     char MPver_str[6];
@@ -325,17 +325,17 @@ typedef struct __attribute__((packed)) {
     char MPVersion_str[10];
     char str_92[2];
     char w36_code[2];
-    char w36_name[12];
+    char AllInitial_name[12];
     char str_93[2];
     char str_94[2];
     char w37_code[2];
-    char w37_name[8];
+    char Welcom_name[8];
     uint32_t ptrs_7[7];  /* 7 pointers */
     char str_95[2];
     char w38_code[2];
-    char w38_name[12];
-    char w39_code[12];
-    char w39_name[10];
+    char SoundTable_name[12];
+    char SubProgram_code[12];
+    char MainTable_name[10];
     char MainProgram_str[12];
     char Softver_str[8];
     char MD_SOUND_str[10];
@@ -355,7 +355,7 @@ typedef struct __attribute__((packed)) {
     char TT_SOFTVER_str[12];
     uint32_t ptrs_8[6];  /* 6 pointers */
     char w40_code[2];
-    char w40_name[20];
+    char MainMemDrawControl_name[20];
     char MainPreControl_str[16];
     /* ---------------------------------------------------------------------
      * Bitmap_Accita16  --  120 x 95 bitmap, 8 bpp, row stride 120, 11400 bytes
@@ -1687,12 +1687,12 @@ typedef struct __attribute__((packed)) {
     char BitteWarten_str_2[14];
     char PleaseWait_str_4[14];
     uint32_t ptrs_246[6];  /* 6 pointers */
-    char w41_code[12];
-    char w41_name[8];
-    char w42_code[8];
-    char w42_name[8];
-    char w43_code[8];
-    char w43_name[8];
+    char Indonesian_code[12];
+    char Italian_name[8];
+    char Spanish_code[8];
+    char French_name[8];
+    char German_code[8];
+    char English_name[8];
     char MessageID_str[16];
     char str_677[10];
     char Metro_str[10];
@@ -1722,8 +1722,8 @@ typedef struct __attribute__((packed)) {
     char Left_str_2[10];
     char Right_str_3[10];
     char Right_str_4[10];
-    char w44_code[6];
-    char w44_name[6];
+    char Acdn_code[6];
+    char Acdn_name[6];
     char TeCd_str[6];
     uint16_t field_17a7e;
     uint16_t field_17a80;
@@ -1927,7 +1927,7 @@ typedef struct __attribute__((packed)) {
     char str_778[4];
     char str_779[4];
     char w45_code[4];
-    char w45_name[6];
+    char Soft_name[6];
     char VerX_str[8];
     char MPv_str[4];
     /* ---------------------------------------------------------------------
@@ -2652,12 +2652,12 @@ typedef struct __attribute__((packed)) {
     char str_1320[4];
     char str_1321[4];
     char w46_code[4];
-    char w46_name[6];
+    char Draw_name[6];
     char PAGE_str[6];
-    char w47_code[6];
-    char w47_name[6];
-    char w48_code[6];
-    char w48_name[6];
+    char Drw1_code[6];
+    char Drw2_name[6];
+    char DrwN_code[6];
+    char DrwE_name[6];
     uint16_t field_19a00;
     char str_1323[2];
     char V_str[2];
@@ -2693,8 +2693,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19a48;
     uint16_t field_19a4a;
     uint16_t field_19a4c;
-    char w49_code[10];
-    char w49_name[6];
+    char EditSw_code[10];
+    char Fdm1_name[6];
     char Fdm2_str[6];
     uint8_t pad_2052[2];  /* zero padding */
     uint16_t field_19a66;
@@ -3246,21 +3246,21 @@ typedef struct __attribute__((packed)) {
     char str_1597[2];
     uint32_t ptrs_274[60];  /* 60 pointers */
     char w50_code[2];
-    char w50_name[16];
+    char CheckPasswordNo_name[16];
     char CheckPasswordOk_str[16];
     char CheckPasswordText_str[18];
     char PasswordText_str[14];
-    char w51_code[12];
-    char w51_name[12];
+    char PasswordNo_code[12];
+    char PasswordOk_name[12];
     char WakeUpPassword_str[16];
-    char w52_code[8];
-    char w52_name[8];
-    char w53_code[10];
-    char w53_name[10];
-    char w54_code[10];
-    char w54_name[12];
-    char w55_code[12];
-    char w55_name[10];
+    char SaveNo_code[8];
+    char SaveYes_name[8];
+    char DeleteNo_code[10];
+    char DeleteYes_name[10];
+    char SaveText_code[10];
+    char DeleteText_name[12];
+    char FormatText_code[12];
+    char DiskSure_name[10];
     char DiskAttention_str[14];
     char DiskMedleyShowHideFunc_str[24];
     char WaitingFunc_str[12];
@@ -3385,8 +3385,8 @@ typedef struct __attribute__((packed)) {
     char classdef_165_0_propdata_2[6];
     char classdef_165_0_name_2[14];
     char classdef_165_0_propdata_3[6];
-    char w71_code[6];
-    char w71_name[4];
+    char Arrow_code[6];
+    char XbG_name[4];
     char classdef_165_0_name_3[14];
     char IvOneShotTimer_code[2];
     char IvOneShotTimer_name[16];
@@ -3444,31 +3444,31 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ptrs_0 = {
         SELF(Sdtecd_str),
-        SELF(w9_name),
+        SELF(SdtecdPage_name),
         SELF(w9_code),
         SELF(str_8),
         SELF(str_7),
         SELF(str_6),
-        SELF(w8_name),
+        SELF(Sdtecd1_name),
         SELF(w8_code),
         SELF(str_5),
         SELF(str_4),
-        SELF(w7_name),
-        SELF(w7_code),
-        SELF(w6_name),
-        SELF(w6_code),
-        SELF(w5_name),
-        SELF(w5_code),
-        SELF(w4_name),
-        SELF(w4_code),
+        SELF(TcClose_name),
+        SELF(TcOpen1_code),
+        SELF(TcOpen2_name),
+        SELF(TcDuet1_code),
+        SELF(TcDuet2_name),
+        SELF(TcCountry_code),
+        SELF(TcTheatre_name),
+        SELF(TcHymn_code),
         SELF(TcBigBandBrass_str),
-        SELF(w3_name),
-        SELF(w3_code),
-        SELF(w2_name),
-        SELF(w2_code),
-        SELF(w1_name),
+        SELF(TcBigBandReeds_name),
+        SELF(TcOctave_code),
+        SELF(TcBlock_name),
+        SELF(TcHardRock_code),
+        SELF(TcFanfare_name),
         SELF(w1_code),
-        SELF(w0_name),
+        SELF(Sdtecd2_name),
         SELF(w0_code),
         SELF(str_2),
         SELF(str_1),
@@ -3483,37 +3483,37 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w0_code = ALIGNED_STRING(""),
 
-    .w0_name = "Sdtecd2",
+    .Sdtecd2_name = "Sdtecd2",
 
     .w1_code = ALIGNED_STRING(""),
 
-    .w1_name = "TcFanfare",
+    .TcFanfare_name = "TcFanfare",
 
-    .w2_code = ALIGNED_STRING("TcHardRock"),
+    .TcHardRock_code = ALIGNED_STRING("TcHardRock"),
 
-    .w2_name = "TcBlock",
+    .TcBlock_name = "TcBlock",
 
-    .w3_code = ALIGNED_STRING("TcOctave"),
+    .TcOctave_code = ALIGNED_STRING("TcOctave"),
 
-    .w3_name = ALIGNED_STRING("TcBigBandReeds"),
+    .TcBigBandReeds_name = ALIGNED_STRING("TcBigBandReeds"),
 
     .TcBigBandBrass_str = ALIGNED_STRING("TcBigBandBrass"),
 
-    .w4_code = ALIGNED_STRING("TcHymn"),
+    .TcHymn_code = ALIGNED_STRING("TcHymn"),
 
-    .w4_name = "TcTheatre",
+    .TcTheatre_name = "TcTheatre",
 
-    .w5_code = "TcCountry",
+    .TcCountry_code = "TcCountry",
 
-    .w5_name = "TcDuet2",
+    .TcDuet2_name = "TcDuet2",
 
-    .w6_code = "TcDuet1",
+    .TcDuet1_code = "TcDuet1",
 
-    .w6_name = "TcOpen2",
+    .TcOpen2_name = "TcOpen2",
 
-    .w7_code = "TcOpen1",
+    .TcOpen1_code = "TcOpen1",
 
-    .w7_name = "TcClose",
+    .TcClose_name = "TcClose",
 
     .str_4 = ALIGNED_STRING(""),
 
@@ -3521,7 +3521,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w8_code = ALIGNED_STRING(""),
 
-    .w8_name = "Sdtecd1",
+    .Sdtecd1_name = "Sdtecd1",
 
     .str_6 = ALIGNED_STRING(""),
 
@@ -3531,12 +3531,12 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w9_code = ALIGNED_STRING(""),
 
-    .w9_name = ALIGNED_STRING("SdtecdPage"),
+    .SdtecdPage_name = ALIGNED_STRING("SdtecdPage"),
 
     .Sdtecd_str = ALIGNED_STRING("Sdtecd"),
 
     .ptrs_1 = {
-        SELF(w10_name),
+        SELF(Sqmixer_name),
         SELF(w10_code),
         SELF(str_12),
         SELF(str_11),
@@ -3551,38 +3551,38 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w10_code = ALIGNED_STRING(""),
 
-    .w10_name = "Sqmixer",
+    .Sqmixer_name = "Sqmixer",
 
     .ptrs_2 = {
-        SELF(w16_name),
+        SELF(Demofeature_name),
         SELF(w16_code),
-        SELF(w15_name),
+        SELF(Demofeature1_name),
         SELF(w15_code),
         SELF(str_16),
-        SELF(w14_name),
+        SELF(Demofeature2_name),
         SELF(w14_code),
         SELF(str_15),
         SELF(FDemoTitleBox_str),
         SELF(PlainScreen_str),
-        SELF(w13_name),
+        SELF(PresentationControl_name),
         SELF(w13_code),
-        SELF(w12_name),
+        SELF(LoadingPresentation_name),
         SELF(w12_code),
-        SELF(w11_name),
+        SELF(PresentationTitle_name),
         SELF(w11_code),
     },
 
     .w11_code = ALIGNED_STRING(""),
 
-    .w11_name = "PresentationTitle",
+    .PresentationTitle_name = "PresentationTitle",
 
     .w12_code = ALIGNED_STRING(""),
 
-    .w12_name = "LoadingPresentation",
+    .LoadingPresentation_name = "LoadingPresentation",
 
     .w13_code = ALIGNED_STRING(""),
 
-    .w13_name = "PresentationControl",
+    .PresentationControl_name = "PresentationControl",
 
     .PlainScreen_str = "PlainScreen",
 
@@ -3592,25 +3592,25 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w14_code = ALIGNED_STRING(""),
 
-    .w14_name = ALIGNED_STRING("Demofeature2"),
+    .Demofeature2_name = ALIGNED_STRING("Demofeature2"),
 
     .str_16 = ALIGNED_STRING(""),
 
     .w15_code = ALIGNED_STRING(""),
 
-    .w15_name = ALIGNED_STRING("Demofeature1"),
+    .Demofeature1_name = ALIGNED_STRING("Demofeature1"),
 
     .w16_code = ALIGNED_STRING(""),
 
-    .w16_name = "Demofeature",
+    .Demofeature_name = "Demofeature",
 
     .ptrs_3 = {
-        SELF(w23_name),
+        SELF(Drawbar_name),
         SELF(w23_code),
         SELF(DrawPerc4_str),
-        SELF(w22_name),
-        SELF(w22_code),
-        SELF(w21_name),
+        SELF(DrawPerc223_name),
+        SELF(White23_code),
+        SELF(Black23_name),
         SELF(w21_code),
         SELF(str_46),
         SELF(str_45),
@@ -3618,7 +3618,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(str_43),
         SELF(str_42),
         SELF(DrawSetting_str),
-        SELF(w20_name),
+        SELF(Drawbar1_name),
         SELF(w20_code),
         SELF(str_40),
         SELF(str_39),
@@ -3627,7 +3627,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(str_36),
         SELF(str_35),
         SELF(str_34),
-        SELF(w19_name),
+        SELF(Drawbar2_name),
         SELF(w19_code),
         SELF(str_33),
         SELF(str_32),
@@ -3637,13 +3637,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(str_28),
         SELF(DrawbarNorm_str),
         SELF(DrawbarPart_str),
-        SELF(w18_name),
+        SELF(DrawTremolo_name),
         SELF(w18_code),
         SELF(str_25),
         SELF(str_24),
         SELF(str_23),
         SELF(str_22),
-        SELF(w17_name),
+        SELF(DrawbarSndE_name),
         SELF(w17_code),
         SELF(str_21),
         SELF(str_20),
@@ -3664,7 +3664,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w17_code = ALIGNED_STRING(""),
 
-    .w17_name = "DrawbarSndE",
+    .DrawbarSndE_name = "DrawbarSndE",
 
     .str_22 = ALIGNED_STRING(""),
 
@@ -3676,7 +3676,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w18_code = ALIGNED_STRING(""),
 
-    .w18_name = "DrawTremolo",
+    .DrawTremolo_name = "DrawTremolo",
 
     .DrawbarPart_str = "DrawbarPart",
 
@@ -3696,7 +3696,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w19_code = ALIGNED_STRING(""),
 
-    .w19_name = ALIGNED_STRING("Drawbar2"),
+    .Drawbar2_name = ALIGNED_STRING("Drawbar2"),
 
     .str_34 = ALIGNED_STRING(""),
 
@@ -3714,7 +3714,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w20_code = ALIGNED_STRING(""),
 
-    .w20_name = ALIGNED_STRING("Drawbar1"),
+    .Drawbar1_name = ALIGNED_STRING("Drawbar1"),
 
     .DrawSetting_str = "DrawSetting",
 
@@ -3730,29 +3730,29 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w21_code = ALIGNED_STRING(""),
 
-    .w21_name = "Black23",
+    .Black23_name = "Black23",
 
-    .w22_code = "White23",
+    .White23_code = "White23",
 
-    .w22_name = "DrawPerc223",
+    .DrawPerc223_name = "DrawPerc223",
 
     .DrawPerc4_str = "DrawPerc4",
 
     .w23_code = ALIGNED_STRING(""),
 
-    .w23_name = "Drawbar",
+    .Drawbar_name = "Drawbar",
 
     .ptrs_4 = {
-        SELF(w27_name),
+        SELF(Accordion_name),
         SELF(w27_code),
         SELF(str_77),
         SELF(str_76),
         SELF(str_75),
         SELF(str_74),
         SELF(str_73),
-        SELF(w26_name),
+        SELF(AccordionPart_name),
         SELF(w26_code),
-        SELF(w25_name),
+        SELF(Accordion1_name),
         SELF(w25_code),
         SELF(str_72),
         SELF(str_71),
@@ -3766,7 +3766,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(str_63),
         SELF(str_62),
         SELF(str_61),
-        SELF(w24_name),
+        SELF(Accordion2_name),
         SELF(w24_code),
         SELF(str_60),
         SELF(str_59),
@@ -3811,7 +3811,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w24_code = ALIGNED_STRING(""),
 
-    .w24_name = ALIGNED_STRING("Accordion2"),
+    .Accordion2_name = ALIGNED_STRING("Accordion2"),
 
     .str_61 = ALIGNED_STRING(""),
 
@@ -3839,11 +3839,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w25_code = ALIGNED_STRING(""),
 
-    .w25_name = ALIGNED_STRING("Accordion1"),
+    .Accordion1_name = ALIGNED_STRING("Accordion1"),
 
     .w26_code = ALIGNED_STRING(""),
 
-    .w26_name = "AccordionPart",
+    .AccordionPart_name = "AccordionPart",
 
     .str_73 = ALIGNED_STRING(""),
 
@@ -3857,32 +3857,32 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w27_code = ALIGNED_STRING(""),
 
-    .w27_name = "Accordion",
+    .Accordion_name = "Accordion",
 
     .ptrs_5 = {
-        SELF(w35_name),
+        SELF(Mesage_name),
         SELF(w35_code),
-        SELF(w34_name),
+        SELF(Completed_name),
         SELF(w34_code),
         SELF(str_86),
-        SELF(w33_name),
+        SELF(Reminder_name),
         SELF(w33_code),
         SELF(str_85),
         SELF(str_84),
-        SELF(w32_name),
+        SELF(Error_name),
         SELF(w32_code),
         SELF(str_83),
         SELF(str_82),
-        SELF(w31_name),
+        SELF(Other_name),
         SELF(w31_code),
-        SELF(w30_name),
+        SELF(CheckMessage_name),
         SELF(w30_code),
         SELF(str_81),
         SELF(str_80),
         SELF(str_79),
-        SELF(w29_name),
+        SELF(NoMessage_name),
         SELF(w29_code),
-        SELF(w28_name),
+        SELF(PleaseWait_name),
         SELF(w28_code),
         SELF(str_78),
     },
@@ -3891,11 +3891,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w28_code = ALIGNED_STRING(""),
 
-    .w28_name = ALIGNED_STRING("PleaseWait"),
+    .PleaseWait_name = ALIGNED_STRING("PleaseWait"),
 
     .w29_code = ALIGNED_STRING(""),
 
-    .w29_name = "NoMessage",
+    .NoMessage_name = "NoMessage",
 
     .str_79 = ALIGNED_STRING(""),
 
@@ -3905,11 +3905,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w30_code = ALIGNED_STRING(""),
 
-    .w30_name = ALIGNED_STRING("CheckMessage"),
+    .CheckMessage_name = ALIGNED_STRING("CheckMessage"),
 
     .w31_code = ALIGNED_STRING(""),
 
-    .w31_name = "Other",
+    .Other_name = "Other",
 
     .str_82 = ALIGNED_STRING(""),
 
@@ -3917,7 +3917,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w32_code = ALIGNED_STRING(""),
 
-    .w32_name = "Error",
+    .Error_name = "Error",
 
     .str_84 = ALIGNED_STRING(""),
 
@@ -3925,24 +3925,24 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w33_code = ALIGNED_STRING(""),
 
-    .w33_name = ALIGNED_STRING("Reminder"),
+    .Reminder_name = ALIGNED_STRING("Reminder"),
 
     .str_86 = ALIGNED_STRING(""),
 
     .w34_code = ALIGNED_STRING(""),
 
-    .w34_name = "Completed",
+    .Completed_name = "Completed",
 
     .w35_code = ALIGNED_STRING(""),
 
-    .w35_name = ALIGNED_STRING("Mesage"),
+    .Mesage_name = ALIGNED_STRING("Mesage"),
 
     .ptrs_6 = {
-        SELF(w37_name),
+        SELF(Welcom_name),
         SELF(w37_code),
         SELF(str_94),
         SELF(str_93),
-        SELF(w36_name),
+        SELF(AllInitial_name),
         SELF(w36_code),
         SELF(str_92),
         SELF(MPVersion_str),
@@ -3966,7 +3966,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w36_code = ALIGNED_STRING(""),
 
-    .w36_name = ALIGNED_STRING("AllInitial"),
+    .AllInitial_name = ALIGNED_STRING("AllInitial"),
 
     .str_93 = ALIGNED_STRING(""),
 
@@ -3974,14 +3974,14 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w37_code = ALIGNED_STRING(""),
 
-    .w37_name = ALIGNED_STRING("Welcom"),
+    .Welcom_name = ALIGNED_STRING("Welcom"),
 
     .ptrs_7 = {
         SELF(Softver_str),
         SELF(MainProgram_str),
-        SELF(w39_name),
-        SELF(w39_code),
-        SELF(w38_name),
+        SELF(MainTable_name),
+        SELF(SubProgram_code),
+        SELF(SoundTable_name),
         SELF(w38_code),
         SELF(str_95),
     },
@@ -3990,11 +3990,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w38_code = ALIGNED_STRING(""),
 
-    .w38_name = ALIGNED_STRING("SoundTable"),
+    .SoundTable_name = ALIGNED_STRING("SoundTable"),
 
-    .w39_code = ALIGNED_STRING("SubProgram"),
+    .SubProgram_code = ALIGNED_STRING("SubProgram"),
 
-    .w39_name = "MainTable",
+    .MainTable_name = "MainTable",
 
     .MainProgram_str = "MainProgram",
 
@@ -4035,13 +4035,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
         NAKA_ADDR(MainMemDrawControl),
         0x00000000,
         SELF(MainPreControl_str),
-        SELF(w40_name),
+        SELF(MainMemDrawControl_name),
         SELF(w40_code),
     },
 
     .w40_code = ALIGNED_STRING(""),
 
-    .w40_name = ALIGNED_STRING("MainMemDrawControl"),
+    .MainMemDrawControl_name = ALIGNED_STRING("MainMemDrawControl"),
 
     .MainPreControl_str = ALIGNED_STRING("MainPreControl"),
 
@@ -9858,25 +9858,25 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .PleaseWait_str_4 = ALIGNED_STRING("PLEASE WAIT!"),
 
     .ptrs_246 = {
-        SELF(w43_name),
-        SELF(w43_code),
-        SELF(w42_name),
-        SELF(w42_code),
-        SELF(w41_name),
-        SELF(w41_code),
+        SELF(English_name),
+        SELF(German_code),
+        SELF(French_name),
+        SELF(Spanish_code),
+        SELF(Italian_name),
+        SELF(Indonesian_code),
     },
 
-    .w41_code = ALIGNED_STRING("Indonesian"),
+    .Indonesian_code = ALIGNED_STRING("Indonesian"),
 
-    .w41_name = "Italian",
+    .Italian_name = "Italian",
 
-    .w42_code = "Spanish",
+    .Spanish_code = "Spanish",
 
-    .w42_name = ALIGNED_STRING("French"),
+    .French_name = ALIGNED_STRING("French"),
 
-    .w43_code = ALIGNED_STRING("German"),
+    .German_code = ALIGNED_STRING("German"),
 
-    .w43_name = "English",
+    .English_name = "English",
 
     .MessageID_str = "MessageID : %3d",
 
@@ -9936,9 +9936,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Right_str_4 = ALIGNED_STRING("RIGHT 1:"),
 
-    .w44_code = ALIGNED_STRING("Acdn"),
+    .Acdn_code = ALIGNED_STRING("Acdn"),
 
-    .w44_name = ALIGNED_STRING("Acdn"),
+    .Acdn_name = ALIGNED_STRING("Acdn"),
 
     .TeCd_str = ALIGNED_STRING("TeCd"),
 
@@ -10408,7 +10408,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w45_code = "%4d",
 
-    .w45_name = ALIGNED_STRING("Soft"),
+    .Soft_name = ALIGNED_STRING("Soft"),
 
     .VerX_str = ALIGNED_STRING("Ver%2X"),
 
@@ -11994,17 +11994,17 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w46_code = ALIGNED_STRING(" 0"),
 
-    .w46_name = ALIGNED_STRING("Draw"),
+    .Draw_name = ALIGNED_STRING("Draw"),
 
     .PAGE_str = ALIGNED_STRING("PAGE"),
 
-    .w47_code = ALIGNED_STRING("Drw1"),
+    .Drw1_code = ALIGNED_STRING("Drw1"),
 
-    .w47_name = ALIGNED_STRING("Drw2"),
+    .Drw2_name = ALIGNED_STRING("Drw2"),
 
-    .w48_code = ALIGNED_STRING("DrwN"),
+    .DrwN_code = ALIGNED_STRING("DrwN"),
 
-    .w48_name = ALIGNED_STRING("DrwE"),
+    .DrwE_name = ALIGNED_STRING("DrwE"),
 
     .field_19a00 = 0x0016,
 
@@ -12076,9 +12076,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_19a4c = 0x001E,
 
-    .w49_code = ALIGNED_STRING("EditSw%d"),
+    .EditSw_code = ALIGNED_STRING("EditSw%d"),
 
-    .w49_name = ALIGNED_STRING("Fdm1"),
+    .Fdm1_name = ALIGNED_STRING("Fdm1"),
 
     .Fdm2_str = ALIGNED_STRING("Fdm2"),
 
@@ -13395,27 +13395,27 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(WaitingFunc_str),
         SELF(DiskMedleyShowHideFunc_str),
         SELF(DiskAttention_str),
-        SELF(w55_name),
-        SELF(w55_code),
-        SELF(w54_name),
-        SELF(w54_code),
-        SELF(w53_name),
-        SELF(w53_code),
-        SELF(w52_name),
-        SELF(w52_code),
+        SELF(DiskSure_name),
+        SELF(FormatText_code),
+        SELF(DeleteText_name),
+        SELF(SaveText_code),
+        SELF(DeleteYes_name),
+        SELF(DeleteNo_code),
+        SELF(SaveYes_name),
+        SELF(SaveNo_code),
         SELF(WakeUpPassword_str),
-        SELF(w51_name),
-        SELF(w51_code),
+        SELF(PasswordOk_name),
+        SELF(PasswordNo_code),
         SELF(PasswordText_str),
         SELF(CheckPasswordText_str),
         SELF(CheckPasswordOk_str),
-        SELF(w50_name),
+        SELF(CheckPasswordNo_name),
         SELF(w50_code),
     },
 
     .w50_code = ALIGNED_STRING(""),
 
-    .w50_name = "CheckPasswordNo",
+    .CheckPasswordNo_name = "CheckPasswordNo",
 
     .CheckPasswordOk_str = "CheckPasswordOk",
 
@@ -13423,27 +13423,27 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .PasswordText_str = ALIGNED_STRING("PasswordText"),
 
-    .w51_code = ALIGNED_STRING("PasswordNo"),
+    .PasswordNo_code = ALIGNED_STRING("PasswordNo"),
 
-    .w51_name = ALIGNED_STRING("PasswordOk"),
+    .PasswordOk_name = ALIGNED_STRING("PasswordOk"),
 
     .WakeUpPassword_str = ALIGNED_STRING("WakeUpPassword"),
 
-    .w52_code = ALIGNED_STRING("SaveNo"),
+    .SaveNo_code = ALIGNED_STRING("SaveNo"),
 
-    .w52_name = "SaveYes",
+    .SaveYes_name = "SaveYes",
 
-    .w53_code = ALIGNED_STRING("DeleteNo"),
+    .DeleteNo_code = ALIGNED_STRING("DeleteNo"),
 
-    .w53_name = "DeleteYes",
+    .DeleteYes_name = "DeleteYes",
 
-    .w54_code = ALIGNED_STRING("SaveText"),
+    .SaveText_code = ALIGNED_STRING("SaveText"),
 
-    .w54_name = ALIGNED_STRING("DeleteText"),
+    .DeleteText_name = ALIGNED_STRING("DeleteText"),
 
-    .w55_code = ALIGNED_STRING("FormatText"),
+    .FormatText_code = ALIGNED_STRING("FormatText"),
 
-    .w55_name = ALIGNED_STRING("DiskSure"),
+    .DiskSure_name = ALIGNED_STRING("DiskSure"),
 
     .DiskAttention_str = "DiskAttention",
 
@@ -13690,9 +13690,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .classdef_165_6 = { .proc = NAKA_ADDR(IvOneShotTimerProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = SELF(IvOneShotTimer_name), .propdata = SELF(IvOneShotTimer_code), .propname = SELF(main_func_str_6_ptr) },
 
-    .classdef_165_7 = { .proc = NAKA_ADDR(VwScreenTitleProc), .parent = 0x01600011, .allsize = 38, .selfsize = 10, .name = SELF(classdef_165_0_name_3), .propdata = SELF(w71_name), .propname = SELF(ptrs_279) },
+    .classdef_165_7 = { .proc = NAKA_ADDR(VwScreenTitleProc), .parent = 0x01600011, .allsize = 38, .selfsize = 10, .name = SELF(classdef_165_0_name_3), .propdata = SELF(XbG_name), .propname = SELF(ptrs_279) },
 
-    .classdef_165_8 = { .proc = NAKA_ADDR(ArrowProc), .parent = 0x01600010, .allsize = 32, .selfsize = 10, .name = SELF(w71_code), .propdata = SELF(classdef_165_0_propdata_3), .propname = SELF(ptrs_280) },
+    .classdef_165_8 = { .proc = NAKA_ADDR(ArrowProc), .parent = 0x01600010, .allsize = 32, .selfsize = 10, .name = SELF(Arrow_code), .propdata = SELF(classdef_165_0_propdata_3), .propname = SELF(ptrs_280) },
 
     .classdef_165_9 = { .proc = NAKA_ADDR(IvIndexSwCtrlProc), .parent = 0x01600027, .allsize = 32, .selfsize = 10, .name = SELF(classdef_165_0_name_2), .propdata = SELF(classdef_165_0_propdata_2), .propname = SELF(ptrs_281) },
 
@@ -13724,9 +13724,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .classdef_165_0_propdata_3 = "^GBBB",
 
-    .w71_code = "Arrow",
+    .Arrow_code = "Arrow",
 
-    .w71_name = "XbG",
+    .XbG_name = "XbG",
 
     .classdef_165_0_name_3 = "VwScreenTitle",
 

@@ -223,20 +223,20 @@ typedef struct __attribute__((packed)) {
     naka_cls_TextBox_t vF5_e1;
     char vF5_e1_text[106];
     /* element 2 of Viewable slot 0xF5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF5_e2;
-    char w2_text[20];
+    naka_cls_Label_t PanelCpuChecking_Label;
+    char PanelCpuChecking_text[20];
     /* element 3 of Viewable slot 0xF5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF5_e3;
-    char w3_text[22];
+    naka_cls_Label_t ResultCpuOfCpr_Label;
+    char ResultCpuOfCpr_text[22];
     /* element 4 of Viewable slot 0xF5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF5_e4;
-    char w4_text[14];
+    naka_cls_Label_t CpuOfCpl_Label;
+    char CpuOfCpl_text[14];
     /* element 5 of Viewable slot 0xF5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF5_e5;
-    char w5_text[20];
+    naka_cls_Label_t IfBothCpuAre_Label;
+    char IfBothCpuAre_text[20];
     /* element 6 of Viewable slot 0xF5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF5_e6;
-    char w6_text[36];
+    naka_cls_Label_t ItIsBetterTo_Label;
+    char ItIsBetterTo_text[36];
     /* element 7 of Viewable slot 0xF5: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t vF5_e7;
     /* element 8 of Viewable slot 0xF5: IvPageControl (class id 0x01600028) */
@@ -248,35 +248,35 @@ typedef struct __attribute__((packed)) {
     /* element 11 of Viewable slot 0xF5 "TEST2OKOK": Window (class id 0x01600035) */
     naka_cls_Window_t TEST2OKOK;
     /* element 12 of Viewable slot 0xF5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF5_e12;
-    char w7_text[4];
+    naka_cls_Label_t Ok_Label;
+    char Ok_text[4];
     /* element 13 of Viewable slot 0xF5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF5_e13;
-    char w8_text[4];
+    naka_cls_Label_t Ok_Label_2;
+    char Ok_text_2[4];
     /* element 14 of Viewable slot 0xF5 "TEST2NGNG": Window (class id 0x01600035) */
     naka_cls_Window_t TEST2NGNG;
     /* element 15 of Viewable slot 0xF5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF5_e15;
-    char w9_text[4];
+    naka_cls_Label_t No_Label;
+    char No_text[4];
     /* element 16 of Viewable slot 0xF5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF5_e16;
-    char w10_text[4];
+    naka_cls_Label_t No_Label_2;
+    char No_text_2[4];
     /* element 17 of Viewable slot 0xF5 "TEST2NGOK": Window (class id 0x01600035) */
     naka_cls_Window_t TEST2NGOK;
     /* element 18 of Viewable slot 0xF5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF5_e18;
-    char w11_text[4];
+    naka_cls_Label_t No_Label_3;
+    char No_text_3[4];
     /* element 19 of Viewable slot 0xF5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF5_e19;
-    char w12_text[4];
+    naka_cls_Label_t Ok_Label_3;
+    char Ok_text_3[4];
     /* element 20 of Viewable slot 0xF5 "TEST2OKNG": Window (class id 0x01600035) */
     naka_cls_Window_t TEST2OKNG;
     /* element 21 of Viewable slot 0xF5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF5_e21;
-    char w13_text[4];
+    naka_cls_Label_t Ok_Label_4;
+    char Ok_text_4[4];
     /* element 22 of Viewable slot 0xF5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF5_e22;
-    char w14_text[4];
+    naka_cls_Label_t No_Label_4;
+    char No_text_4[4];
     /* element 0 of Viewable slot 0xF6 "TEST3": SineWaveScreen (class id 0x0162001A) */
     naka_cls_SineWaveScreen_t TEST3;
     /* element 0 of Viewable slot 0xF7 "TEST4": TtlScreen (class id 0x01600034) */
@@ -286,8 +286,8 @@ typedef struct __attribute__((packed)) {
     naka_cls_TextBox_t vF7_e1;
     char vF7_e1_text[114];
     /* element 2 of Viewable slot 0xF7: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF7_e2;
-    char w16_text[20];
+    naka_cls_Label_t PanelSwLedCheck_Label;
+    char PanelSwLedCheck_text[20];
     /* element 0 of Viewable slot 0xF8 "TEST5": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t TEST5;
     char w17_text[2];
@@ -304,184 +304,184 @@ typedef struct __attribute__((packed)) {
     /* element 6 of Viewable slot 0xF8 "TEST51": Window (class id 0x01600035) */
     naka_cls_Window_t TEST51;
     /* element 7 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e7;
-    char w18_text[16];
+    naka_cls_Label_t LcdPanelTest_Label;
+    char LcdPanelTest_text[16];
     /* element 8 of Viewable slot 0xF8 "TEST52": Window (class id 0x01600035) */
     naka_cls_Window_t TEST52;
     /* element 9 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e9;
-    char w19_text[16];
+    naka_cls_Label_t LcdPanelTest_Label_2;
+    char LcdPanelTest_text_2[16];
     /* element 10 of Viewable slot 0xF8 "TEST53": Window (class id 0x01600035) */
     naka_cls_Window_t TEST53;
     /* element 11 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e11;
-    char w20_text[16];
+    naka_cls_Label_t LcdPanelTest_Label_3;
+    char LcdPanelTest_text_3[16];
     /* element 12 of Viewable slot 0xF8 "TEST54": Window (class id 0x01600035) */
     naka_cls_Window_t TEST54;
     /* element 13 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e13;
-    char w21_text[16];
+    naka_cls_Label_t LcdPanelTest_Label_4;
+    char LcdPanelTest_text_4[16];
     /* element 14 of Viewable slot 0xF8 "TEST55": Window (class id 0x01600035) */
     naka_cls_Window_t TEST55;
     /* element 15 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e15;
-    char w22_text[16];
+    naka_cls_Label_t LcdPanelTest_Label_5;
+    char LcdPanelTest_text_5[16];
     /* element 16 of Viewable slot 0xF8 "TEST56": Window (class id 0x01600035) */
     naka_cls_Window_t TEST56;
     /* element 17 of Viewable slot 0xF8: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vF8_e17;
     /* element 18 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e18;
-    char w23_text[2];
+    naka_cls_Label_t H_Label;
+    char H_text[2];
     /* element 19 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e19;
-    char w24_text[2];
+    naka_cls_Label_t H_Label_2;
+    char H_text_2[2];
     /* element 20 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e20;
-    char w25_text[8];
+    naka_cls_Label_t Hhhhhhh_Label;
+    char Hhhhhhh_text[8];
     /* element 21 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e21;
-    char w26_text[2];
+    naka_cls_Label_t H_Label_3;
+    char H_text_3[2];
     /* element 22 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e22;
-    char w27_text[2];
+    naka_cls_Label_t H_Label_4;
+    char H_text_4[2];
     /* element 23 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e23;
-    char w28_text[2];
+    naka_cls_Label_t H_Label_5;
+    char H_text_5[2];
     /* element 24 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e24;
-    char w29_text[2];
+    naka_cls_Label_t H_Label_6;
+    char H_text_6[2];
     /* element 25 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e25;
-    char w30_text[2];
+    naka_cls_Label_t H_Label_7;
+    char H_text_7[2];
     /* element 26 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e26;
-    char w31_text[2];
+    naka_cls_Label_t H_Label_8;
+    char H_text_8[2];
     /* element 27 of Viewable slot 0xF8: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vF8_e27;
     /* element 28 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e28;
-    char w32_text[2];
+    naka_cls_Label_t H_Label_9;
+    char H_text_9[2];
     /* element 29 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e29;
-    char w33_text[2];
+    naka_cls_Label_t H_Label_10;
+    char H_text_10[2];
     /* element 30 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e30;
-    char w34_text[8];
+    naka_cls_Label_t Hhhhhhh_Label_2;
+    char Hhhhhhh_text_2[8];
     /* element 31 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e31;
-    char w35_text[2];
+    naka_cls_Label_t H_Label_11;
+    char H_text_11[2];
     /* element 32 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e32;
-    char w36_text[2];
+    naka_cls_Label_t H_Label_12;
+    char H_text_12[2];
     /* element 33 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e33;
-    char w37_text[2];
+    naka_cls_Label_t H_Label_13;
+    char H_text_13[2];
     /* element 34 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e34;
-    char w38_text[2];
+    naka_cls_Label_t H_Label_14;
+    char H_text_14[2];
     /* element 35 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e35;
-    char w39_text[2];
+    naka_cls_Label_t H_Label_15;
+    char H_text_15[2];
     /* element 36 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e36;
-    char w40_text[2];
+    naka_cls_Label_t H_Label_16;
+    char H_text_16[2];
     /* element 37 of Viewable slot 0xF8: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vF8_e37;
     /* element 38 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e38;
-    char w41_text[2];
+    naka_cls_Label_t H_Label_17;
+    char H_text_17[2];
     /* element 39 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e39;
-    char w42_text[2];
+    naka_cls_Label_t H_Label_18;
+    char H_text_18[2];
     /* element 40 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e40;
-    char w43_text[8];
+    naka_cls_Label_t Hhhhhhh_Label_3;
+    char Hhhhhhh_text_3[8];
     /* element 41 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e41;
-    char w44_text[2];
+    naka_cls_Label_t H_Label_19;
+    char H_text_19[2];
     /* element 42 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e42;
-    char w45_text[2];
+    naka_cls_Label_t H_Label_20;
+    char H_text_20[2];
     /* element 43 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e43;
-    char w46_text[2];
+    naka_cls_Label_t H_Label_21;
+    char H_text_21[2];
     /* element 44 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e44;
-    char w47_text[2];
+    naka_cls_Label_t H_Label_22;
+    char H_text_22[2];
     /* element 45 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e45;
-    char w48_text[2];
+    naka_cls_Label_t H_Label_23;
+    char H_text_23[2];
     /* element 46 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e46;
-    char w49_text[2];
+    naka_cls_Label_t H_Label_24;
+    char H_text_24[2];
     /* element 47 of Viewable slot 0xF8: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vF8_e47;
     /* element 48 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e48;
-    char w50_text[2];
+    naka_cls_Label_t H_Label_25;
+    char H_text_25[2];
     /* element 49 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e49;
-    char w51_text[2];
+    naka_cls_Label_t H_Label_26;
+    char H_text_26[2];
     /* element 50 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e50;
-    char w52_text[8];
+    naka_cls_Label_t Hhhhhhh_Label_4;
+    char Hhhhhhh_text_4[8];
     /* element 51 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e51;
-    char w53_text[2];
+    naka_cls_Label_t H_Label_27;
+    char H_text_27[2];
     /* element 52 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e52;
-    char w54_text[2];
+    naka_cls_Label_t H_Label_28;
+    char H_text_28[2];
     /* element 53 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e53;
-    char w55_text[2];
+    naka_cls_Label_t H_Label_29;
+    char H_text_29[2];
     /* element 54 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e54;
-    char w56_text[2];
+    naka_cls_Label_t H_Label_30;
+    char H_text_30[2];
     /* element 55 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e55;
-    char w57_text[2];
+    naka_cls_Label_t H_Label_31;
+    char H_text_31[2];
     /* element 56 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e56;
-    char w58_text[2];
+    naka_cls_Label_t H_Label_32;
+    char H_text_32[2];
     /* element 57 of Viewable slot 0xF8: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vF8_e57;
     /* element 58 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e58;
-    char w59_text[2];
+    naka_cls_Label_t H_Label_33;
+    char H_text_33[2];
     /* element 59 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e59;
-    char w60_text[2];
+    naka_cls_Label_t H_Label_34;
+    char H_text_34[2];
     /* element 60 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e60;
-    char w61_text[8];
+    naka_cls_Label_t Hhhhhhh_Label_5;
+    char Hhhhhhh_text_5[8];
     /* element 61 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e61;
-    char w62_text[2];
+    naka_cls_Label_t H_Label_35;
+    char H_text_35[2];
     /* element 62 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e62;
-    char w63_text[2];
+    naka_cls_Label_t H_Label_36;
+    char H_text_36[2];
     /* element 63 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e63;
-    char w64_text[2];
+    naka_cls_Label_t H_Label_37;
+    char H_text_37[2];
     /* element 64 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e64;
-    char w65_text[2];
+    naka_cls_Label_t H_Label_38;
+    char H_text_38[2];
     /* element 65 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e65;
-    char w66_text[2];
+    naka_cls_Label_t H_Label_39;
+    char H_text_39[2];
     /* element 66 of Viewable slot 0xF8: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF8_e66;
-    char w67_text[2];
+    naka_cls_Label_t H_Label_40;
+    char H_text_40[2];
     /* element 0 of Viewable slot 0xF9 "TEST6": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t TEST6;
     char w68_text[2];
     /* element 1 of Viewable slot 0xF9: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF9_e1;
-    char w69_text[24];
+    naka_cls_Label_t PeripheralDeviceCheck_Label;
+    char PeripheralDeviceCheck_text[24];
     /* element 2 of Viewable slot 0xF9: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF9_e2;
-    char w70_text[30];
+    naka_cls_Label_t FloppyDiskControllerFdc_Label;
+    char FloppyDiskControllerFdc_text[30];
     /* element 3 of Viewable slot 0xF9: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t vF9_e3;
     /* element 4 of Viewable slot 0xF9: IvPageControl (class id 0x01600028) */
@@ -489,13 +489,13 @@ typedef struct __attribute__((packed)) {
     /* element 5 of Viewable slot 0xF9 "TEST6OK": Window (class id 0x01600035) */
     naka_cls_Window_t TEST6OK;
     /* element 6 of Viewable slot 0xF9: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF9_e6;
-    char w71_text[12];
+    naka_cls_Label_t MayBeOk_Label;
+    char MayBeOk_text[12];
     /* element 7 of Viewable slot 0xF9 "TEST6NG": Window (class id 0x01600035) */
     naka_cls_Window_t TEST6NG;
     /* element 8 of Viewable slot 0xF9: Label (class id 0x0160002B) */
-    naka_cls_Label_t vF9_e8;
-    char w72_text[6];
+    naka_cls_Label_t No_Label_5;
+    char No_text_5[6];
     /* element 0 of Viewable slot 0xFB "EXT": IvScreen (class id 0x0160006A) */
     naka_cls_IvScreen_t EXT;
     uint32_t ptrs_0[482];  /* 482 pointers */
@@ -561,8 +561,8 @@ typedef struct __attribute__((packed)) {
     char str_112[2];
     char str_113[2];
     char str_114[2];
-    char w73_code[8];
-    char w73_name[8];
+    char Normal_code[8];
+    char Normal_name[8];
     uint32_t ptrs_1[10];  /* 10 pointers */
     char str_115[2];
     char str_116[2];
@@ -573,7 +573,7 @@ typedef struct __attribute__((packed)) {
     char str_121[2];
     char str_122[2];
     char w74_code[2];
-    char w74_name[12];
+    char ControlMenu_name[12];
     uint32_t ptrs_2[18];  /* 18 pointers */
     char str_123[2];
     char str_124[2];
@@ -592,7 +592,7 @@ typedef struct __attribute__((packed)) {
     char str_137[2];
     char SYSINI_str[8];
     char w75_code[2];
-    char w75_name[12];
+    char ControlIni_name[12];
     uint32_t ptrs_3[7];  /* 7 pointers */
     char str_139[2];
     char str_140[2];
@@ -600,7 +600,7 @@ typedef struct __attribute__((packed)) {
     char str_142[2];
     char str_143[2];
     char w76_code[2];
-    char w76_name[12];
+    char ControlFsw_name[12];
     uint32_t ptrs_4[9];  /* 9 pointers */
     char str_144[2];
     char str_145[2];
@@ -610,7 +610,7 @@ typedef struct __attribute__((packed)) {
     char str_149[2];
     char str_150[2];
     char w77_code[2];
-    char w77_name[12];
+    char ControlSns_name[12];
     uint32_t ptrs_5[20];  /* 20 pointers */
     char str_151[2];
     char str_152[2];
@@ -663,7 +663,7 @@ typedef struct __attribute__((packed)) {
     char str_196[2];
     char str_197[2];
     char w78_code[2];
-    char w78_name[12];
+    char ControlSys_name[12];
     uint32_t ptrs_8[26];  /* 26 pointers */
     char str_198[2];
     char str_199[2];
@@ -688,7 +688,7 @@ typedef struct __attribute__((packed)) {
     char str_218[2];
     char str_219[2];
     char w79_code[2];
-    char w79_name[16];
+    char ControlWallSet_name[16];
     char str_220[2];
     char str_221[2];
     uint32_t ptrs_9[5];  /* 5 pointers */
@@ -3231,7 +3231,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .vF5_e1_text = ALIGNED_STRING("Please check by the LED of test port. (PANEL CPU:                            OK=Lit SHORT, NO=Lit LONG) "),
 
-    .vF5_e2 = {
+    .PanelCpuChecking_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3239,14 +3239,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 1,
         .flag = 0x0008,
         .rect = { 58, 26, 259, 44 },
-        .str = SELF(w2_text),
+        .str = SELF(PanelCpuChecking_text),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
     },
 
-    .w2_text = ALIGNED_STRING("PANEL CPU CHECKING"),
+    .PanelCpuChecking_text = ALIGNED_STRING("PANEL CPU CHECKING"),
 
-    .vF5_e3 = {
+    .ResultCpuOfCpr_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3254,14 +3254,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 2,
         .flag = 0x0008,
         .rect = { 42, 138, 205, 156 },
-        .str = SELF(w3_text),
+        .str = SELF(ResultCpuOfCpr_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w3_text = ALIGNED_STRING("RESULT: CPU of CPR ="),
+    .ResultCpuOfCpr_text = ALIGNED_STRING("RESULT: CPU of CPR ="),
 
-    .vF5_e4 = {
+    .CpuOfCpl_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3269,14 +3269,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 3,
         .flag = 0x0008,
         .rect = { 106, 158, 205, 176 },
-        .str = SELF(w4_text),
+        .str = SELF(CpuOfCpl_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w4_text = ALIGNED_STRING("CPU of CPL ="),
+    .CpuOfCpl_text = ALIGNED_STRING("CPU of CPL ="),
 
-    .vF5_e5 = {
+    .IfBothCpuAre_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3284,14 +3284,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 4,
         .flag = 0x0008,
         .rect = { 14, 190, 169, 208 },
-        .str = SELF(w5_text),
+        .str = SELF(IfBothCpuAre_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w5_text = "If both CPU are NO,",
+    .IfBothCpuAre_text = "If both CPU are NO,",
 
-    .vF5_e6 = {
+    .ItIsBetterTo_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3299,12 +3299,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 5,
         .flag = 0x0008,
         .rect = { 14, 206, 307, 224 },
-        .str = SELF(w6_text),
+        .str = SELF(ItIsBetterTo_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w6_text = "it is better to check the MAIN PCB.",
+    .ItIsBetterTo_text = "it is better to check the MAIN PCB.",
 
     .vF5_e7 = {
         .class_ = 0x01600028,
@@ -3369,7 +3369,7 @@ const naka_extension_device_t naka_extension_device_data
         .child = 0x0003F64E,
     },
 
-    .vF5_e12 = {
+    .Ok_Label = {
         .class_ = 0x0160002B,
         .super = 11,
         .sub = NAKA_NONE,
@@ -3377,14 +3377,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 214, 138, 233, 156 },
-        .str = SELF(w7_text),
+        .str = SELF(Ok_text),
         .font = 0x00000000,
         .fontcolor = 0x00FA,
     },
 
-    .w7_text = ALIGNED_STRING("OK"),
+    .Ok_text = ALIGNED_STRING("OK"),
 
-    .vF5_e13 = {
+    .Ok_Label_2 = {
         .class_ = 0x0160002B,
         .super = 11,
         .sub = NAKA_NONE,
@@ -3392,12 +3392,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 12,
         .flag = 0x0008,
         .rect = { 214, 158, 233, 176 },
-        .str = SELF(w8_text),
+        .str = SELF(Ok_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FA,
     },
 
-    .w8_text = ALIGNED_STRING("OK"),
+    .Ok_text_2 = ALIGNED_STRING("OK"),
 
     .TEST2NGNG = {
         .class_ = 0x01600035,
@@ -3414,7 +3414,7 @@ const naka_extension_device_t naka_extension_device_data
         .child = 0x0003F656,
     },
 
-    .vF5_e15 = {
+    .No_Label = {
         .class_ = 0x0160002B,
         .super = 14,
         .sub = NAKA_NONE,
@@ -3422,14 +3422,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 214, 138, 233, 156 },
-        .str = SELF(w9_text),
+        .str = SELF(No_text),
         .font = 0x00000000,
         .fontcolor = 0x00F9,
     },
 
-    .w9_text = ALIGNED_STRING("NO"),
+    .No_text = ALIGNED_STRING("NO"),
 
-    .vF5_e16 = {
+    .No_Label_2 = {
         .class_ = 0x0160002B,
         .super = 14,
         .sub = NAKA_NONE,
@@ -3437,12 +3437,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 15,
         .flag = 0x0008,
         .rect = { 214, 158, 233, 176 },
-        .str = SELF(w10_text),
+        .str = SELF(No_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00F9,
     },
 
-    .w10_text = ALIGNED_STRING("NO"),
+    .No_text_2 = ALIGNED_STRING("NO"),
 
     .TEST2NGOK = {
         .class_ = 0x01600035,
@@ -3459,7 +3459,7 @@ const naka_extension_device_t naka_extension_device_data
         .child = 0x0003F65E,
     },
 
-    .vF5_e18 = {
+    .No_Label_3 = {
         .class_ = 0x0160002B,
         .super = 17,
         .sub = NAKA_NONE,
@@ -3467,14 +3467,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 214, 138, 233, 156 },
-        .str = SELF(w11_text),
+        .str = SELF(No_text_3),
         .font = 0x00000000,
         .fontcolor = 0x00F9,
     },
 
-    .w11_text = ALIGNED_STRING("NO"),
+    .No_text_3 = ALIGNED_STRING("NO"),
 
-    .vF5_e19 = {
+    .Ok_Label_3 = {
         .class_ = 0x0160002B,
         .super = 17,
         .sub = NAKA_NONE,
@@ -3482,12 +3482,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 18,
         .flag = 0x0008,
         .rect = { 214, 158, 233, 176 },
-        .str = SELF(w12_text),
+        .str = SELF(Ok_text_3),
         .font = 0x00000000,
         .fontcolor = 0x00FA,
     },
 
-    .w12_text = ALIGNED_STRING("OK"),
+    .Ok_text_3 = ALIGNED_STRING("OK"),
 
     .TEST2OKNG = {
         .class_ = 0x01600035,
@@ -3504,7 +3504,7 @@ const naka_extension_device_t naka_extension_device_data
         .child = 0x0003F666,
     },
 
-    .vF5_e21 = {
+    .Ok_Label_4 = {
         .class_ = 0x0160002B,
         .super = 20,
         .sub = NAKA_NONE,
@@ -3512,14 +3512,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 214, 138, 233, 156 },
-        .str = SELF(w13_text),
+        .str = SELF(Ok_text_4),
         .font = 0x00000000,
         .fontcolor = 0x00FA,
     },
 
-    .w13_text = ALIGNED_STRING("OK"),
+    .Ok_text_4 = ALIGNED_STRING("OK"),
 
-    .vF5_e22 = {
+    .No_Label_4 = {
         .class_ = 0x0160002B,
         .super = 20,
         .sub = NAKA_NONE,
@@ -3527,12 +3527,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 21,
         .flag = 0x0008,
         .rect = { 214, 158, 233, 176 },
-        .str = SELF(w14_text),
+        .str = SELF(No_text_4),
         .font = 0x00000000,
         .fontcolor = 0x00F9,
     },
 
-    .w14_text = ALIGNED_STRING("NO"),
+    .No_text_4 = ALIGNED_STRING("NO"),
 
     .TEST3 = {
         .class_ = 0x0162001A,
@@ -3590,7 +3590,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .vF7_e1_text = ALIGNED_STRING("After all LEDs ON and OFF,  Please push any button.         If LED near the button turn ON/OFF,it is working OK."),
 
-    .vF7_e2 = {
+    .PanelSwLedCheck_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3598,12 +3598,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 1,
         .flag = 0x0008,
         .rect = { 54, 42, 255, 60 },
-        .str = SELF(w16_text),
+        .str = SELF(PanelSwLedCheck_text),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
     },
 
-    .w16_text = ALIGNED_STRING("PANEL SW&LED CHECK"),
+    .PanelSwLedCheck_text = ALIGNED_STRING("PANEL SW&LED CHECK"),
 
     .TEST5 = {
         .class_ = 0x01600034,
@@ -3698,7 +3698,7 @@ const naka_extension_device_t naka_extension_device_data
         .child = 0x0003F67E,
     },
 
-    .vF8_e7 = {
+    .LcdPanelTest_Label = {
         .class_ = 0x0160002B,
         .super = 6,
         .sub = NAKA_NONE,
@@ -3706,12 +3706,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 42, 110, 269, 128 },
-        .str = SELF(w18_text),
+        .str = SELF(LcdPanelTest_text),
         .font = 0x00000002,
         .fontcolor = 0x00FF,
     },
 
-    .w18_text = ALIGNED_STRING("LCD PANEL TEST"),
+    .LcdPanelTest_text = ALIGNED_STRING("LCD PANEL TEST"),
 
     .TEST52 = {
         .class_ = 0x01600035,
@@ -3728,7 +3728,7 @@ const naka_extension_device_t naka_extension_device_data
         .child = 0x0003F686,
     },
 
-    .vF8_e9 = {
+    .LcdPanelTest_Label_2 = {
         .class_ = 0x0160002B,
         .super = 8,
         .sub = NAKA_NONE,
@@ -3736,12 +3736,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 42, 110, 269, 128 },
-        .str = SELF(w19_text),
+        .str = SELF(LcdPanelTest_text_2),
         .font = 0x00000002,
         .fontcolor = 0x00FF,
     },
 
-    .w19_text = ALIGNED_STRING("LCD PANEL TEST"),
+    .LcdPanelTest_text_2 = ALIGNED_STRING("LCD PANEL TEST"),
 
     .TEST53 = {
         .class_ = 0x01600035,
@@ -3758,7 +3758,7 @@ const naka_extension_device_t naka_extension_device_data
         .child = 0x0003F68E,
     },
 
-    .vF8_e11 = {
+    .LcdPanelTest_Label_3 = {
         .class_ = 0x0160002B,
         .super = 10,
         .sub = NAKA_NONE,
@@ -3766,12 +3766,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 42, 110, 269, 128 },
-        .str = SELF(w20_text),
+        .str = SELF(LcdPanelTest_text_3),
         .font = 0x00000002,
         .fontcolor = 0x00FF,
     },
 
-    .w20_text = ALIGNED_STRING("LCD PANEL TEST"),
+    .LcdPanelTest_text_3 = ALIGNED_STRING("LCD PANEL TEST"),
 
     .TEST54 = {
         .class_ = 0x01600035,
@@ -3788,7 +3788,7 @@ const naka_extension_device_t naka_extension_device_data
         .child = 0x0003F696,
     },
 
-    .vF8_e13 = {
+    .LcdPanelTest_Label_4 = {
         .class_ = 0x0160002B,
         .super = 12,
         .sub = NAKA_NONE,
@@ -3796,12 +3796,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 42, 110, 269, 128 },
-        .str = SELF(w21_text),
+        .str = SELF(LcdPanelTest_text_4),
         .font = 0x00000002,
         .fontcolor = 0x0000,
     },
 
-    .w21_text = ALIGNED_STRING("LCD PANEL TEST"),
+    .LcdPanelTest_text_4 = ALIGNED_STRING("LCD PANEL TEST"),
 
     .TEST55 = {
         .class_ = 0x01600035,
@@ -3818,7 +3818,7 @@ const naka_extension_device_t naka_extension_device_data
         .child = 0x0003F69E,
     },
 
-    .vF8_e15 = {
+    .LcdPanelTest_Label_5 = {
         .class_ = 0x0160002B,
         .super = 14,
         .sub = NAKA_NONE,
@@ -3826,12 +3826,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 42, 110, 269, 128 },
-        .str = SELF(w22_text),
+        .str = SELF(LcdPanelTest_text_5),
         .font = 0x00000002,
         .fontcolor = 0x00FF,
     },
 
-    .w22_text = ALIGNED_STRING("LCD PANEL TEST"),
+    .LcdPanelTest_text_5 = ALIGNED_STRING("LCD PANEL TEST"),
 
     .TEST56 = {
         .class_ = 0x01600035,
@@ -3861,7 +3861,7 @@ const naka_extension_device_t naka_extension_device_data
         .color = 0x00FF,
     },
 
-    .vF8_e18 = {
+    .H_Label = {
         .class_ = 0x0160002B,
         .super = 17,
         .sub = NAKA_NONE,
@@ -3869,14 +3869,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 13, 11, 24, 29 },
-        .str = SELF(w23_text),
+        .str = SELF(H_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w23_text = "H",
+    .H_text = "H",
 
-    .vF8_e19 = {
+    .H_Label_2 = {
         .class_ = 0x0160002B,
         .super = 17,
         .sub = 20,
@@ -3884,14 +3884,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 18,
         .flag = 0x0008,
         .rect = { 13, 47, 24, 65 },
-        .str = SELF(w24_text),
+        .str = SELF(H_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w24_text = "H",
+    .H_text_2 = "H",
 
-    .vF8_e20 = {
+    .Hhhhhhh_Label = {
         .class_ = 0x0160002B,
         .super = 19,
         .sub = 21,
@@ -3899,14 +3899,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 13, 35, 72, 53 },
-        .str = SELF(w25_text),
+        .str = SELF(Hhhhhhh_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w25_text = "HHHHHHH",
+    .Hhhhhhh_text = "HHHHHHH",
 
-    .vF8_e21 = {
+    .H_Label_3 = {
         .class_ = 0x0160002B,
         .super = 20,
         .sub = 22,
@@ -3914,14 +3914,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 61, 47, 72, 65 },
-        .str = SELF(w26_text),
+        .str = SELF(H_text_3),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w26_text = "H",
+    .H_text_3 = "H",
 
-    .vF8_e22 = {
+    .H_Label_4 = {
         .class_ = 0x0160002B,
         .super = 21,
         .sub = NAKA_NONE,
@@ -3929,14 +3929,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 61, 59, 72, 77 },
-        .str = SELF(w27_text),
+        .str = SELF(H_text_4),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w27_text = "H",
+    .H_text_4 = "H",
 
-    .vF8_e23 = {
+    .H_Label_5 = {
         .class_ = 0x0160002B,
         .super = 19,
         .sub = NAKA_NONE,
@@ -3944,14 +3944,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 20,
         .flag = 0x0008,
         .rect = { 13, 59, 24, 77 },
-        .str = SELF(w28_text),
+        .str = SELF(H_text_5),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w28_text = "H",
+    .H_text_5 = "H",
 
-    .vF8_e24 = {
+    .H_Label_6 = {
         .class_ = 0x0160002B,
         .super = 17,
         .sub = NAKA_NONE,
@@ -3959,14 +3959,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 19,
         .flag = 0x0008,
         .rect = { 61, 11, 72, 29 },
-        .str = SELF(w29_text),
+        .str = SELF(H_text_6),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w29_text = "H",
+    .H_text_6 = "H",
 
-    .vF8_e25 = {
+    .H_Label_7 = {
         .class_ = 0x0160002B,
         .super = 17,
         .sub = NAKA_NONE,
@@ -3974,14 +3974,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 24,
         .flag = 0x0008,
         .rect = { 13, 23, 24, 41 },
-        .str = SELF(w30_text),
+        .str = SELF(H_text_7),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w30_text = "H",
+    .H_text_7 = "H",
 
-    .vF8_e26 = {
+    .H_Label_8 = {
         .class_ = 0x0160002B,
         .super = 17,
         .sub = NAKA_NONE,
@@ -3989,12 +3989,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 25,
         .flag = 0x0008,
         .rect = { 61, 23, 72, 41 },
-        .str = SELF(w31_text),
+        .str = SELF(H_text_8),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w31_text = "H",
+    .H_text_8 = "H",
 
     .vF8_e27 = {
         .class_ = 0x0160002F,
@@ -4009,7 +4009,7 @@ const naka_extension_device_t naka_extension_device_data
         .color = 0x00FF,
     },
 
-    .vF8_e28 = {
+    .H_Label_9 = {
         .class_ = 0x0160002B,
         .super = 27,
         .sub = NAKA_NONE,
@@ -4017,14 +4017,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 13, 167, 24, 185 },
-        .str = SELF(w32_text),
+        .str = SELF(H_text_9),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w32_text = "H",
+    .H_text_9 = "H",
 
-    .vF8_e29 = {
+    .H_Label_10 = {
         .class_ = 0x0160002B,
         .super = 27,
         .sub = 30,
@@ -4032,14 +4032,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 28,
         .flag = 0x0008,
         .rect = { 13, 203, 24, 221 },
-        .str = SELF(w33_text),
+        .str = SELF(H_text_10),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w33_text = "H",
+    .H_text_10 = "H",
 
-    .vF8_e30 = {
+    .Hhhhhhh_Label_2 = {
         .class_ = 0x0160002B,
         .super = 29,
         .sub = 31,
@@ -4047,14 +4047,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 13, 191, 72, 209 },
-        .str = SELF(w34_text),
+        .str = SELF(Hhhhhhh_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w34_text = "HHHHHHH",
+    .Hhhhhhh_text_2 = "HHHHHHH",
 
-    .vF8_e31 = {
+    .H_Label_11 = {
         .class_ = 0x0160002B,
         .super = 30,
         .sub = 32,
@@ -4062,14 +4062,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 61, 203, 72, 221 },
-        .str = SELF(w35_text),
+        .str = SELF(H_text_11),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w35_text = "H",
+    .H_text_11 = "H",
 
-    .vF8_e32 = {
+    .H_Label_12 = {
         .class_ = 0x0160002B,
         .super = 31,
         .sub = NAKA_NONE,
@@ -4077,14 +4077,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 61, 215, 72, 233 },
-        .str = SELF(w36_text),
+        .str = SELF(H_text_12),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w36_text = "H",
+    .H_text_12 = "H",
 
-    .vF8_e33 = {
+    .H_Label_13 = {
         .class_ = 0x0160002B,
         .super = 29,
         .sub = NAKA_NONE,
@@ -4092,14 +4092,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 30,
         .flag = 0x0008,
         .rect = { 13, 215, 24, 233 },
-        .str = SELF(w37_text),
+        .str = SELF(H_text_13),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w37_text = "H",
+    .H_text_13 = "H",
 
-    .vF8_e34 = {
+    .H_Label_14 = {
         .class_ = 0x0160002B,
         .super = 27,
         .sub = NAKA_NONE,
@@ -4107,14 +4107,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 29,
         .flag = 0x0008,
         .rect = { 61, 167, 72, 185 },
-        .str = SELF(w38_text),
+        .str = SELF(H_text_14),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w38_text = "H",
+    .H_text_14 = "H",
 
-    .vF8_e35 = {
+    .H_Label_15 = {
         .class_ = 0x0160002B,
         .super = 27,
         .sub = NAKA_NONE,
@@ -4122,14 +4122,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 34,
         .flag = 0x0008,
         .rect = { 13, 179, 24, 197 },
-        .str = SELF(w39_text),
+        .str = SELF(H_text_15),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w39_text = "H",
+    .H_text_15 = "H",
 
-    .vF8_e36 = {
+    .H_Label_16 = {
         .class_ = 0x0160002B,
         .super = 27,
         .sub = NAKA_NONE,
@@ -4137,12 +4137,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 35,
         .flag = 0x0008,
         .rect = { 61, 179, 72, 197 },
-        .str = SELF(w40_text),
+        .str = SELF(H_text_16),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w40_text = "H",
+    .H_text_16 = "H",
 
     .vF8_e37 = {
         .class_ = 0x0160002F,
@@ -4157,7 +4157,7 @@ const naka_extension_device_t naka_extension_device_data
         .color = 0x00FF,
     },
 
-    .vF8_e38 = {
+    .H_Label_17 = {
         .class_ = 0x0160002B,
         .super = 37,
         .sub = NAKA_NONE,
@@ -4165,14 +4165,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 247, 11, 258, 29 },
-        .str = SELF(w41_text),
+        .str = SELF(H_text_17),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w41_text = "H",
+    .H_text_17 = "H",
 
-    .vF8_e39 = {
+    .H_Label_18 = {
         .class_ = 0x0160002B,
         .super = 37,
         .sub = 40,
@@ -4180,14 +4180,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 38,
         .flag = 0x0008,
         .rect = { 247, 47, 258, 65 },
-        .str = SELF(w42_text),
+        .str = SELF(H_text_18),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w42_text = "H",
+    .H_text_18 = "H",
 
-    .vF8_e40 = {
+    .Hhhhhhh_Label_3 = {
         .class_ = 0x0160002B,
         .super = 39,
         .sub = 41,
@@ -4195,14 +4195,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 247, 35, 306, 53 },
-        .str = SELF(w43_text),
+        .str = SELF(Hhhhhhh_text_3),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w43_text = "HHHHHHH",
+    .Hhhhhhh_text_3 = "HHHHHHH",
 
-    .vF8_e41 = {
+    .H_Label_19 = {
         .class_ = 0x0160002B,
         .super = 40,
         .sub = 42,
@@ -4210,14 +4210,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 295, 47, 306, 65 },
-        .str = SELF(w44_text),
+        .str = SELF(H_text_19),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w44_text = "H",
+    .H_text_19 = "H",
 
-    .vF8_e42 = {
+    .H_Label_20 = {
         .class_ = 0x0160002B,
         .super = 41,
         .sub = NAKA_NONE,
@@ -4225,14 +4225,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 295, 59, 306, 77 },
-        .str = SELF(w45_text),
+        .str = SELF(H_text_20),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w45_text = "H",
+    .H_text_20 = "H",
 
-    .vF8_e43 = {
+    .H_Label_21 = {
         .class_ = 0x0160002B,
         .super = 39,
         .sub = NAKA_NONE,
@@ -4240,14 +4240,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 40,
         .flag = 0x0008,
         .rect = { 247, 59, 258, 77 },
-        .str = SELF(w46_text),
+        .str = SELF(H_text_21),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w46_text = "H",
+    .H_text_21 = "H",
 
-    .vF8_e44 = {
+    .H_Label_22 = {
         .class_ = 0x0160002B,
         .super = 37,
         .sub = NAKA_NONE,
@@ -4255,14 +4255,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 39,
         .flag = 0x0008,
         .rect = { 295, 11, 306, 29 },
-        .str = SELF(w47_text),
+        .str = SELF(H_text_22),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w47_text = "H",
+    .H_text_22 = "H",
 
-    .vF8_e45 = {
+    .H_Label_23 = {
         .class_ = 0x0160002B,
         .super = 37,
         .sub = NAKA_NONE,
@@ -4270,14 +4270,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 44,
         .flag = 0x0008,
         .rect = { 247, 23, 258, 41 },
-        .str = SELF(w48_text),
+        .str = SELF(H_text_23),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w48_text = "H",
+    .H_text_23 = "H",
 
-    .vF8_e46 = {
+    .H_Label_24 = {
         .class_ = 0x0160002B,
         .super = 37,
         .sub = NAKA_NONE,
@@ -4285,12 +4285,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 45,
         .flag = 0x0008,
         .rect = { 295, 23, 306, 41 },
-        .str = SELF(w49_text),
+        .str = SELF(H_text_24),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w49_text = "H",
+    .H_text_24 = "H",
 
     .vF8_e47 = {
         .class_ = 0x0160002F,
@@ -4305,7 +4305,7 @@ const naka_extension_device_t naka_extension_device_data
         .color = 0x00FF,
     },
 
-    .vF8_e48 = {
+    .H_Label_25 = {
         .class_ = 0x0160002B,
         .super = 47,
         .sub = NAKA_NONE,
@@ -4313,14 +4313,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 247, 167, 258, 185 },
-        .str = SELF(w50_text),
+        .str = SELF(H_text_25),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w50_text = "H",
+    .H_text_25 = "H",
 
-    .vF8_e49 = {
+    .H_Label_26 = {
         .class_ = 0x0160002B,
         .super = 47,
         .sub = 50,
@@ -4328,14 +4328,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 48,
         .flag = 0x0008,
         .rect = { 247, 203, 258, 221 },
-        .str = SELF(w51_text),
+        .str = SELF(H_text_26),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w51_text = "H",
+    .H_text_26 = "H",
 
-    .vF8_e50 = {
+    .Hhhhhhh_Label_4 = {
         .class_ = 0x0160002B,
         .super = 49,
         .sub = 51,
@@ -4343,14 +4343,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 247, 191, 306, 209 },
-        .str = SELF(w52_text),
+        .str = SELF(Hhhhhhh_text_4),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w52_text = "HHHHHHH",
+    .Hhhhhhh_text_4 = "HHHHHHH",
 
-    .vF8_e51 = {
+    .H_Label_27 = {
         .class_ = 0x0160002B,
         .super = 50,
         .sub = 52,
@@ -4358,14 +4358,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 295, 203, 306, 221 },
-        .str = SELF(w53_text),
+        .str = SELF(H_text_27),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w53_text = "H",
+    .H_text_27 = "H",
 
-    .vF8_e52 = {
+    .H_Label_28 = {
         .class_ = 0x0160002B,
         .super = 51,
         .sub = NAKA_NONE,
@@ -4373,14 +4373,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 295, 215, 306, 233 },
-        .str = SELF(w54_text),
+        .str = SELF(H_text_28),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w54_text = "H",
+    .H_text_28 = "H",
 
-    .vF8_e53 = {
+    .H_Label_29 = {
         .class_ = 0x0160002B,
         .super = 49,
         .sub = NAKA_NONE,
@@ -4388,14 +4388,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 50,
         .flag = 0x0008,
         .rect = { 247, 215, 258, 233 },
-        .str = SELF(w55_text),
+        .str = SELF(H_text_29),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w55_text = "H",
+    .H_text_29 = "H",
 
-    .vF8_e54 = {
+    .H_Label_30 = {
         .class_ = 0x0160002B,
         .super = 47,
         .sub = NAKA_NONE,
@@ -4403,14 +4403,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 49,
         .flag = 0x0008,
         .rect = { 295, 167, 306, 185 },
-        .str = SELF(w56_text),
+        .str = SELF(H_text_30),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w56_text = "H",
+    .H_text_30 = "H",
 
-    .vF8_e55 = {
+    .H_Label_31 = {
         .class_ = 0x0160002B,
         .super = 47,
         .sub = NAKA_NONE,
@@ -4418,14 +4418,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 54,
         .flag = 0x0008,
         .rect = { 247, 179, 258, 197 },
-        .str = SELF(w57_text),
+        .str = SELF(H_text_31),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w57_text = "H",
+    .H_text_31 = "H",
 
-    .vF8_e56 = {
+    .H_Label_32 = {
         .class_ = 0x0160002B,
         .super = 47,
         .sub = NAKA_NONE,
@@ -4433,12 +4433,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 55,
         .flag = 0x0008,
         .rect = { 295, 179, 306, 197 },
-        .str = SELF(w58_text),
+        .str = SELF(H_text_32),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w58_text = "H",
+    .H_text_32 = "H",
 
     .vF8_e57 = {
         .class_ = 0x0160002F,
@@ -4453,7 +4453,7 @@ const naka_extension_device_t naka_extension_device_data
         .color = 0x00FF,
     },
 
-    .vF8_e58 = {
+    .H_Label_33 = {
         .class_ = 0x0160002B,
         .super = 57,
         .sub = NAKA_NONE,
@@ -4461,14 +4461,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 130, 90, 141, 108 },
-        .str = SELF(w59_text),
+        .str = SELF(H_text_33),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w59_text = "H",
+    .H_text_33 = "H",
 
-    .vF8_e59 = {
+    .H_Label_34 = {
         .class_ = 0x0160002B,
         .super = 57,
         .sub = 60,
@@ -4476,14 +4476,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 58,
         .flag = 0x0008,
         .rect = { 130, 126, 141, 144 },
-        .str = SELF(w60_text),
+        .str = SELF(H_text_34),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w60_text = "H",
+    .H_text_34 = "H",
 
-    .vF8_e60 = {
+    .Hhhhhhh_Label_5 = {
         .class_ = 0x0160002B,
         .super = 59,
         .sub = 61,
@@ -4491,14 +4491,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 130, 114, 189, 132 },
-        .str = SELF(w61_text),
+        .str = SELF(Hhhhhhh_text_5),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w61_text = "HHHHHHH",
+    .Hhhhhhh_text_5 = "HHHHHHH",
 
-    .vF8_e61 = {
+    .H_Label_35 = {
         .class_ = 0x0160002B,
         .super = 60,
         .sub = 62,
@@ -4506,14 +4506,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 178, 126, 189, 144 },
-        .str = SELF(w62_text),
+        .str = SELF(H_text_35),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w62_text = "H",
+    .H_text_35 = "H",
 
-    .vF8_e62 = {
+    .H_Label_36 = {
         .class_ = 0x0160002B,
         .super = 61,
         .sub = NAKA_NONE,
@@ -4521,14 +4521,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 178, 138, 189, 156 },
-        .str = SELF(w63_text),
+        .str = SELF(H_text_36),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w63_text = "H",
+    .H_text_36 = "H",
 
-    .vF8_e63 = {
+    .H_Label_37 = {
         .class_ = 0x0160002B,
         .super = 59,
         .sub = NAKA_NONE,
@@ -4536,14 +4536,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 60,
         .flag = 0x0008,
         .rect = { 130, 138, 141, 156 },
-        .str = SELF(w64_text),
+        .str = SELF(H_text_37),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w64_text = "H",
+    .H_text_37 = "H",
 
-    .vF8_e64 = {
+    .H_Label_38 = {
         .class_ = 0x0160002B,
         .super = 57,
         .sub = NAKA_NONE,
@@ -4551,14 +4551,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 59,
         .flag = 0x0008,
         .rect = { 178, 90, 189, 108 },
-        .str = SELF(w65_text),
+        .str = SELF(H_text_38),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w65_text = "H",
+    .H_text_38 = "H",
 
-    .vF8_e65 = {
+    .H_Label_39 = {
         .class_ = 0x0160002B,
         .super = 57,
         .sub = NAKA_NONE,
@@ -4566,14 +4566,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 64,
         .flag = 0x0008,
         .rect = { 130, 102, 141, 120 },
-        .str = SELF(w66_text),
+        .str = SELF(H_text_39),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w66_text = "H",
+    .H_text_39 = "H",
 
-    .vF8_e66 = {
+    .H_Label_40 = {
         .class_ = 0x0160002B,
         .super = 57,
         .sub = NAKA_NONE,
@@ -4581,12 +4581,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 65,
         .flag = 0x0008,
         .rect = { 178, 102, 189, 120 },
-        .str = SELF(w67_text),
+        .str = SELF(H_text_40),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w67_text = "H",
+    .H_text_40 = "H",
 
     .TEST6 = {
         .class_ = 0x01600034,
@@ -4606,7 +4606,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w68_text = ALIGNED_STRING(""),
 
-    .vF9_e1 = {
+    .PeripheralDeviceCheck_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4614,14 +4614,14 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 22, 66, 278, 84 },
-        .str = SELF(w69_text),
+        .str = SELF(PeripheralDeviceCheck_text),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
     },
 
-    .w69_text = "PERIPHERAL DEVICE CHECK",
+    .PeripheralDeviceCheck_text = "PERIPHERAL DEVICE CHECK",
 
-    .vF9_e2 = {
+    .FloppyDiskControllerFdc_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4629,12 +4629,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = 1,
         .flag = 0x0008,
         .rect = { 14, 110, 241, 128 },
-        .str = SELF(w70_text),
+        .str = SELF(FloppyDiskControllerFdc_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w70_text = ALIGNED_STRING("FLOPPY DISK CONTROLLER(FDC) "),
+    .FloppyDiskControllerFdc_text = ALIGNED_STRING("FLOPPY DISK CONTROLLER(FDC) "),
 
     .vF9_e3 = {
         .class_ = 0x01600028,
@@ -4675,7 +4675,7 @@ const naka_extension_device_t naka_extension_device_data
         .child = 0x0003F6B2,
     },
 
-    .vF9_e6 = {
+    .MayBeOk_Label = {
         .class_ = 0x0160002B,
         .super = 5,
         .sub = NAKA_NONE,
@@ -4683,12 +4683,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 178, 134, 302, 152 },
-        .str = SELF(w71_text),
+        .str = SELF(MayBeOk_text),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
     },
 
-    .w71_text = "= may be OK",
+    .MayBeOk_text = "= may be OK",
 
     .TEST6NG = {
         .class_ = 0x01600035,
@@ -4705,7 +4705,7 @@ const naka_extension_device_t naka_extension_device_data
         .child = 0x0003F6BA,
     },
 
-    .vF9_e8 = {
+    .No_Label_5 = {
         .class_ = 0x0160002B,
         .super = 7,
         .sub = NAKA_NONE,
@@ -4713,12 +4713,12 @@ const naka_extension_device_t naka_extension_device_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 246, 110, 293, 128 },
-        .str = SELF(w72_text),
+        .str = SELF(No_text_5),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
     },
 
-    .w72_text = ALIGNED_STRING("= NO"),
+    .No_text_5 = ALIGNED_STRING("= NO"),
 
     .EXT = {
         .class_ = 0x0160006A,
@@ -5045,33 +5045,33 @@ const naka_extension_device_t naka_extension_device_data
         0x00000000,
         SELF(TEST2),
         SELF(vF5_e1),
-        SELF(vF5_e2),
-        SELF(vF5_e3),
-        SELF(vF5_e4),
-        SELF(vF5_e5),
-        SELF(vF5_e6),
+        SELF(PanelCpuChecking_Label),
+        SELF(ResultCpuOfCpr_Label),
+        SELF(CpuOfCpl_Label),
+        SELF(IfBothCpuAre_Label),
+        SELF(ItIsBetterTo_Label),
         SELF(vF5_e7),
         SELF(vF5_e8),
         SELF(vF5_e9),
         SELF(vF5_e10),
         SELF(TEST2OKOK),
-        SELF(vF5_e12),
-        SELF(vF5_e13),
+        SELF(Ok_Label),
+        SELF(Ok_Label_2),
         SELF(TEST2NGNG),
-        SELF(vF5_e15),
-        SELF(vF5_e16),
+        SELF(No_Label),
+        SELF(No_Label_2),
         SELF(TEST2NGOK),
-        SELF(vF5_e18),
-        SELF(vF5_e19),
+        SELF(No_Label_3),
+        SELF(Ok_Label_3),
         SELF(TEST2OKNG),
-        SELF(vF5_e21),
-        SELF(vF5_e22),
+        SELF(Ok_Label_4),
+        SELF(No_Label_4),
         0x00000000,
         SELF(TEST3),
         0x00000000,
         SELF(TEST4),
         SELF(vF7_e1),
-        SELF(vF7_e2),
+        SELF(PanelSwLedCheck_Label),
         0x00000000,
         SELF(TEST5),
         SELF(vF8_e1),
@@ -5080,81 +5080,81 @@ const naka_extension_device_t naka_extension_device_data
         SELF(vF8_e4),
         SELF(vF8_e5),
         SELF(TEST51),
-        SELF(vF8_e7),
+        SELF(LcdPanelTest_Label),
         SELF(TEST52),
-        SELF(vF8_e9),
+        SELF(LcdPanelTest_Label_2),
         SELF(TEST53),
-        SELF(vF8_e11),
+        SELF(LcdPanelTest_Label_3),
         SELF(TEST54),
-        SELF(vF8_e13),
+        SELF(LcdPanelTest_Label_4),
         SELF(TEST55),
-        SELF(vF8_e15),
+        SELF(LcdPanelTest_Label_5),
         SELF(TEST56),
         SELF(vF8_e17),
-        SELF(vF8_e18),
-        SELF(vF8_e19),
-        SELF(vF8_e20),
-        SELF(vF8_e21),
-        SELF(vF8_e22),
-        SELF(vF8_e23),
-        SELF(vF8_e24),
-        SELF(vF8_e25),
-        SELF(vF8_e26),
+        SELF(H_Label),
+        SELF(H_Label_2),
+        SELF(Hhhhhhh_Label),
+        SELF(H_Label_3),
+        SELF(H_Label_4),
+        SELF(H_Label_5),
+        SELF(H_Label_6),
+        SELF(H_Label_7),
+        SELF(H_Label_8),
         SELF(vF8_e27),
-        SELF(vF8_e28),
-        SELF(vF8_e29),
-        SELF(vF8_e30),
-        SELF(vF8_e31),
-        SELF(vF8_e32),
-        SELF(vF8_e33),
-        SELF(vF8_e34),
-        SELF(vF8_e35),
-        SELF(vF8_e36),
+        SELF(H_Label_9),
+        SELF(H_Label_10),
+        SELF(Hhhhhhh_Label_2),
+        SELF(H_Label_11),
+        SELF(H_Label_12),
+        SELF(H_Label_13),
+        SELF(H_Label_14),
+        SELF(H_Label_15),
+        SELF(H_Label_16),
         SELF(vF8_e37),
-        SELF(vF8_e38),
-        SELF(vF8_e39),
-        SELF(vF8_e40),
-        SELF(vF8_e41),
-        SELF(vF8_e42),
-        SELF(vF8_e43),
-        SELF(vF8_e44),
-        SELF(vF8_e45),
-        SELF(vF8_e46),
+        SELF(H_Label_17),
+        SELF(H_Label_18),
+        SELF(Hhhhhhh_Label_3),
+        SELF(H_Label_19),
+        SELF(H_Label_20),
+        SELF(H_Label_21),
+        SELF(H_Label_22),
+        SELF(H_Label_23),
+        SELF(H_Label_24),
         SELF(vF8_e47),
-        SELF(vF8_e48),
-        SELF(vF8_e49),
-        SELF(vF8_e50),
-        SELF(vF8_e51),
-        SELF(vF8_e52),
-        SELF(vF8_e53),
-        SELF(vF8_e54),
-        SELF(vF8_e55),
-        SELF(vF8_e56),
+        SELF(H_Label_25),
+        SELF(H_Label_26),
+        SELF(Hhhhhhh_Label_4),
+        SELF(H_Label_27),
+        SELF(H_Label_28),
+        SELF(H_Label_29),
+        SELF(H_Label_30),
+        SELF(H_Label_31),
+        SELF(H_Label_32),
         SELF(vF8_e57),
-        SELF(vF8_e58),
-        SELF(vF8_e59),
-        SELF(vF8_e60),
-        SELF(vF8_e61),
-        SELF(vF8_e62),
-        SELF(vF8_e63),
-        SELF(vF8_e64),
-        SELF(vF8_e65),
-        SELF(vF8_e66),
+        SELF(H_Label_33),
+        SELF(H_Label_34),
+        SELF(Hhhhhhh_Label_5),
+        SELF(H_Label_35),
+        SELF(H_Label_36),
+        SELF(H_Label_37),
+        SELF(H_Label_38),
+        SELF(H_Label_39),
+        SELF(H_Label_40),
         0x00000000,
         SELF(TEST6),
-        SELF(vF9_e1),
-        SELF(vF9_e2),
+        SELF(PeripheralDeviceCheck_Label),
+        SELF(FloppyDiskControllerFdc_Label),
         SELF(vF9_e3),
         SELF(vF9_e4),
         SELF(TEST6OK),
-        SELF(vF9_e6),
+        SELF(MayBeOk_Label),
         SELF(TEST6NG),
-        SELF(vF9_e8),
+        SELF(No_Label_5),
         0x00000000,
         SELF(EXT),
         0x00000000,
-        SELF(w73_name),
-        SELF(w73_code),
+        SELF(Normal_name),
+        SELF(Normal_code),
         SELF(str_114),
         SELF(str_113),
         SELF(str_112),
@@ -5343,12 +5343,12 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_114 = ALIGNED_STRING(""),
 
-    .w73_code = ALIGNED_STRING("normal"),
+    .Normal_code = ALIGNED_STRING("normal"),
 
-    .w73_name = ALIGNED_STRING("Normal"),
+    .Normal_name = ALIGNED_STRING("Normal"),
 
     .ptrs_1 = {
-        SELF(w74_name),
+        SELF(ControlMenu_name),
         SELF(w74_code),
         SELF(str_122),
         SELF(str_121),
@@ -5378,10 +5378,10 @@ const naka_extension_device_t naka_extension_device_data
 
     .w74_code = ALIGNED_STRING(""),
 
-    .w74_name = "ControlMenu",
+    .ControlMenu_name = "ControlMenu",
 
     .ptrs_2 = {
-        SELF(w75_name),
+        SELF(ControlIni_name),
         SELF(w75_code),
         SELF(SYSINI_str),
         SELF(str_137),
@@ -5435,10 +5435,10 @@ const naka_extension_device_t naka_extension_device_data
 
     .w75_code = ALIGNED_STRING(""),
 
-    .w75_name = ALIGNED_STRING("ControlIni"),
+    .ControlIni_name = ALIGNED_STRING("ControlIni"),
 
     .ptrs_3 = {
-        SELF(w76_name),
+        SELF(ControlFsw_name),
         SELF(w76_code),
         SELF(str_143),
         SELF(str_142),
@@ -5459,10 +5459,10 @@ const naka_extension_device_t naka_extension_device_data
 
     .w76_code = ALIGNED_STRING(""),
 
-    .w76_name = ALIGNED_STRING("ControlFsw"),
+    .ControlFsw_name = ALIGNED_STRING("ControlFsw"),
 
     .ptrs_4 = {
-        SELF(w77_name),
+        SELF(ControlSns_name),
         SELF(w77_code),
         SELF(str_150),
         SELF(str_149),
@@ -5489,7 +5489,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w77_code = ALIGNED_STRING(""),
 
-    .w77_name = ALIGNED_STRING("ControlSns"),
+    .ControlSns_name = ALIGNED_STRING("ControlSns"),
 
     .ptrs_5 = {
         SELF(str_170),
@@ -5622,7 +5622,7 @@ const naka_extension_device_t naka_extension_device_data
     .str_191 = ALIGNED_STRING(""),
 
     .ptrs_7 = {
-        SELF(w78_name),
+        SELF(ControlSys_name),
         SELF(w78_code),
         SELF(str_197),
         SELF(str_196),
@@ -5646,12 +5646,12 @@ const naka_extension_device_t naka_extension_device_data
 
     .w78_code = ALIGNED_STRING(""),
 
-    .w78_name = ALIGNED_STRING("ControlSys"),
+    .ControlSys_name = ALIGNED_STRING("ControlSys"),
 
     .ptrs_8 = {
         SELF(str_221),
         SELF(str_220),
-        SELF(w79_name),
+        SELF(ControlWallSet_name),
         SELF(w79_code),
         SELF(str_219),
         SELF(str_218),
@@ -5723,7 +5723,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w79_code = ALIGNED_STRING(""),
 
-    .w79_name = ALIGNED_STRING("ControlWallSet"),
+    .ControlWallSet_name = ALIGNED_STRING("ControlWallSet"),
 
     .str_220 = ALIGNED_STRING(""),
 

@@ -815,8 +815,8 @@ typedef struct __attribute__((packed)) {
     char IvIndexSwDelayProc_str[20];
     char AcRotStrBoxProc_str[16];
     char IvIndexSwCtrlProc_str[18];
-    char w0_code[10];
-    char w0_name[18];
+    char ArrowProc_code[10];
+    char VwScreenTitleProc_name[18];
     char IvOneShotTimerProc_str[20];
     char AcMonoIndexToggleProc_str[22];
     char AcFileSfxBoxProc_str[18];
@@ -826,34 +826,34 @@ typedef struct __attribute__((packed)) {
     char PsFileNameBoxProc_str[18];
     /* element 0 of Viewable slot 0x60 "DiskMenu": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskMenu;
-    char w1_text[10];
+    char DiskMenu_text[10];
     /* element 1 of Viewable slot 0x60: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v60_e1;
-    char w2_text[14];
+    naka_cls_AcTitleMenu_t StyleConvert_AcTitleMenu;
+    char StyleConvert_text[14];
     char HardDiskMainMenu_str[20];
     /* element 3 of Viewable slot 0x60: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v60_e3;
-    char w3_text[12];
+    naka_cls_AcTitleMenu_t Preferences_AcTitleMenu;
+    char Preferences_text[12];
     /* element 4 of Viewable slot 0x60: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v60_e4;
-    char w4_text[6];
+    naka_cls_AcTitleMenu_t Save_AcTitleMenu;
+    char Save_text[6];
     /* element 5 of Viewable slot 0x60: AcTtlJgBox (class id 0x01650002) */
-    naka_cls_AcTtlJgBox_t v60_e5;
+    naka_cls_AcTtlJgBox_t DiskTools_AcTtlJgBox;
     char DiskTools_str[12];
     /* element 6 of Viewable slot 0x60: AcTtlJgBox (class id 0x01650002) */
-    naka_cls_AcTtlJgBox_t v60_e6;
+    naka_cls_AcTtlJgBox_t LOAD_AcTtlJgBox;
     char LOAD_str[6];
     /* element 7 of Viewable slot 0x60: IvExitMode (class id 0x01600048) */
     naka_cls_IvExitMode_t v60_e7;
     /* element 8 of Viewable slot 0x60: AcTtlJgBox (class id 0x01650002) */
-    naka_cls_AcTtlJgBox_t v60_e8;
+    naka_cls_AcTtlJgBox_t DirectPlay_AcTtlJgBox;
     char DirectPlay_str[12];
     /* element 9 of Viewable slot 0x60: AcTtlJgBox (class id 0x01650002) */
-    naka_cls_AcTtlJgBox_t v60_e9;
+    naka_cls_AcTtlJgBox_t SongMedley_AcTtlJgBox;
     char SongMedley_str[12];
     /* element 10 of Viewable slot 0x60 "IntSongMedley": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t IntSongMedley;
-    char w6_text[22];
+    char InternalSongMedley_text[22];
     /* element 11 of Viewable slot 0x60: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v60_e11;
     /* element 12 of Viewable slot 0x60: AcIndexEditSw (class id 0x0160001F) */
@@ -873,29 +873,29 @@ typedef struct __attribute__((packed)) {
     /* element 18 of Viewable slot 0x60: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v60_e18;
     /* element 19 of Viewable slot 0x60: Label (class id 0x0160002B) */
-    naka_cls_Label_t v60_e19;
-    char w8_text[6];
+    naka_cls_Label_t Start_Label;
+    char Start_text[6];
     /* element 20 of Viewable slot 0x60: IvOneShotTimer (class id 0x01650006) */
     naka_cls_IvOneShotTimer_t v60_e20;
     /* element 21 of Viewable slot 0x60: Label (class id 0x0160002B) */
-    naka_cls_Label_t v60_e21;
-    char w9_text[4];
+    naka_cls_Label_t All_Label;
+    char All_text[4];
     /* element 22 of Viewable slot 0x60: Label (class id 0x0160002B) */
-    naka_cls_Label_t v60_e22;
-    char w10_text[4];
+    naka_cls_Label_t Add_Label;
+    char Add_text[4];
     /* element 23 of Viewable slot 0x60: Label (class id 0x0160002B) */
-    naka_cls_Label_t v60_e23;
-    char w11_text[6];
+    naka_cls_Label_t Loop_Label;
+    char Loop_text[6];
     /* element 24 of Viewable slot 0x60 "DiskSaveName": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskSaveName;
-    char w12_text[18];
+    char SaveFileNaming_text[18];
     /* element 25 of Viewable slot 0x60: AcFuncEditSw (class id 0x01600020) */
     naka_cls_AcFuncEditSw_t v60_e25;
     /* element 26 of Viewable slot 0x60: IvNaming (class id 0x0160004D) */
     naka_cls_IvNaming_t v60_e26;
     /* element 27 of Viewable slot 0x60 "ComposerLoad": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ComposerLoad;
-    char w14_text[14];
+    char ComposerLoad_text[14];
     /* element 28 of Viewable slot 0x60: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v60_e28;
     /* element 29 of Viewable slot 0x60: AcIndexWideES (class id 0x01600022) */
@@ -905,8 +905,8 @@ typedef struct __attribute__((packed)) {
     /* element 31 of Viewable slot 0x60: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v60_e31;
     /* element 32 of Viewable slot 0x60: Label (class id 0x0160002B) */
-    naka_cls_Label_t v60_e32;
-    char w16_text[12];
+    naka_cls_Label_t DiskName_Label;
+    char DiskName_text[12];
     /* element 33 of Viewable slot 0x60: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v60_e33;
     /* element 34 of Viewable slot 0x60: AcParaStrBox (class id 0x01650003) */
@@ -914,8 +914,8 @@ typedef struct __attribute__((packed)) {
     /* element 35 of Viewable slot 0x60: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v60_e35;
     /* element 36 of Viewable slot 0x60: Label (class id 0x0160002B) */
-    naka_cls_Label_t v60_e36;
-    char w17_text[6];
+    naka_cls_Label_t Load_Label;
+    char Load_text[6];
     /* element 37 of Viewable slot 0x60: IvExitMode (class id 0x01600048) */
     naka_cls_IvExitMode_t v60_e37;
     /* element 38 of Viewable slot 0x60 "DiskWaitWin": Window (class id 0x01600035) */
@@ -924,29 +924,29 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcRotStrBox_t v60_e39;
     /* element 40 of Viewable slot 0x60 "DiskSaveNameSMF": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskSaveNameSMF;
-    char w19_text[18];
+    char SaveFileNaming_text_2[18];
     /* element 41 of Viewable slot 0x60: AcFuncEditSw (class id 0x01600020) */
     naka_cls_AcFuncEditSw_t v60_e41;
     /* element 42 of Viewable slot 0x60: IvNaming (class id 0x0160004D) */
     naka_cls_IvNaming_t v60_e42;
     /* element 43 of Viewable slot 0x60 "WallpaperLoad": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t WallpaperLoad;
-    char w21_text[16];
+    char WallpaperLoad_text[16];
     /* element 44 of Viewable slot 0x60: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v60_e44;
     /* element 45 of Viewable slot 0x60: Label (class id 0x0160002B) */
-    naka_cls_Label_t v60_e45;
-    char w22_text[6];
+    naka_cls_Label_t Prev_Label;
+    char Prev_text[6];
     /* element 46 of Viewable slot 0x60: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v60_e46;
     /* element 47 of Viewable slot 0x60: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v60_e47;
     /* element 48 of Viewable slot 0x60: Label (class id 0x0160002B) */
-    naka_cls_Label_t v60_e48;
-    char w24_text[6];
+    naka_cls_Label_t Next_Label;
+    char Next_text[6];
     /* element 49 of Viewable slot 0x60: Label (class id 0x0160002B) */
-    naka_cls_Label_t v60_e49;
-    char w25_text[12];
+    naka_cls_Label_t DiskName_Label_2;
+    char DiskName_text_2[12];
     /* element 50 of Viewable slot 0x60: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v60_e50;
     /* element 51 of Viewable slot 0x60: AcParaStrBox (class id 0x01650003) */
@@ -954,8 +954,8 @@ typedef struct __attribute__((packed)) {
     /* element 52 of Viewable slot 0x60: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v60_e52;
     /* element 53 of Viewable slot 0x60: Label (class id 0x0160002B) */
-    naka_cls_Label_t v60_e53;
-    char w26_text[6];
+    naka_cls_Label_t Load_Label_2;
+    char Load_text_2[6];
     /* element 54 of Viewable slot 0x60: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v60_e54;
     /* element 55 of Viewable slot 0x60 "DiskSaveSureWin": Window (class id 0x01600035) */
@@ -1027,16 +1027,16 @@ typedef struct __attribute__((packed)) {
     /* element 9 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v61_e9;
     /* element 10 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e10;
-    char w38_text[6];
+    naka_cls_Label_t Load_Label_3;
+    char Load_text_3[6];
     /* element 11 of Viewable slot 0x61: AcFileSfxBox (class id 0x01650004) */
     naka_cls_AcFileSfxBox_t v61_e11;
     /* element 12 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e12;
-    char w39_text[12];
+    naka_cls_Label_t DiskName_Label_3;
+    char DiskName_text_3[12];
     /* element 13 of Viewable slot 0x61: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v61_e13;
-    char w40_text[4];
+    naka_cls_AcTitleMenu_t Smf_AcTitleMenu;
+    char Smf_text[4];
     /* element 14 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v61_e14;
     /* element 15 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
@@ -1069,57 +1069,57 @@ typedef struct __attribute__((packed)) {
     /* element 28 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v61_e28;
     /* element 29 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e29;
-    char w42_text[4];
+    naka_cls_Label_t Pnl_Label;
+    char Pnl_text[4];
     /* element 30 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e30;
-    char w43_text[6];
+    naka_cls_Label_t PMem_Label;
+    char PMem_text[6];
     /* element 31 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e31;
-    char w44_text[4];
+    naka_cls_Label_t Seq_Label;
+    char Seq_text[4];
     /* element 32 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e32;
-    char w45_text[6];
+    naka_cls_Label_t Comp_Label;
+    char Comp_text[6];
     /* element 33 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e33;
-    char w46_text[6];
+    naka_cls_Label_t Sound_Label;
+    char Sound_text[6];
     /* element 34 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e34;
-    char w47_text[4];
+    naka_cls_Label_t Msp_Label;
+    char Msp_text[4];
     /* element 35 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e35;
-    char w48_text[8];
+    naka_cls_Label_t Custom_Label;
+    char Custom_text[8];
     /* element 36 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e36;
-    char w49_text[6];
+    naka_cls_Label_t Midi_Label;
+    char Midi_text[6];
     /* element 37 of Viewable slot 0x61: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v61_e37;
     /* element 38 of Viewable slot 0x61: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v61_e38;
     /* element 39 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e39;
-    char w51_text[14];
+    naka_cls_Label_t CurrentPanel_Label;
+    char CurrentPanel_text[14];
     /* element 40 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e40;
-    char w52_text[20];
+    naka_cls_Label_t UserMidiSettings_Label;
+    char UserMidiSettings_text[20];
     /* element 41 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e41;
-    char w53_text[14];
+    naka_cls_Label_t RhythmCustom_Label;
+    char RhythmCustom_text[14];
     /* element 42 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e42;
-    char w54_text[4];
+    naka_cls_Label_t Msp_Label_2;
+    char Msp_text_2[4];
     /* element 43 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e43;
-    char w55_text[14];
+    naka_cls_Label_t SoundMemory_Label;
+    char SoundMemory_text[14];
     /* element 44 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e44;
-    char w56_text[10];
+    naka_cls_Label_t Composer_Label;
+    char Composer_text[10];
     /* element 45 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e45;
-    char w57_text[10];
+    naka_cls_Label_t Sequencer_Label;
+    char Sequencer_text[10];
     /* element 46 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e46;
-    char w58_text[14];
+    naka_cls_Label_t PanelMemory_Label;
+    char PanelMemory_text[14];
     /* element 47 of Viewable slot 0x61: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v61_e47;
     /* element 48 of Viewable slot 0x61: Line (class id 0x0160002E) */
@@ -1130,8 +1130,8 @@ typedef struct __attribute__((packed)) {
     naka_cls_VwScreenTitle_t v61_e50;
     char v61_e50_title[12];
     /* element 51 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e51;
-    char w59_text[6];
+    naka_cls_Label_t Load_Label_4;
+    char Load_text_4[6];
     /* element 52 of Viewable slot 0x61 "DiskLoadP3": Window (class id 0x01600035) */
     naka_cls_Window_t DiskLoadP3;
     /* element 53 of Viewable slot 0x61: VwScreenTitle (class id 0x01650007) */
@@ -1144,8 +1144,8 @@ typedef struct __attribute__((packed)) {
     /* element 56 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v61_e56;
     /* element 57 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e57;
-    char w60_text[6];
+    naka_cls_Label_t Load_Label_5;
+    char Load_text_5[6];
     /* element 58 of Viewable slot 0x61: Arrow (class id 0x01650008) */
     naka_cls_Arrow_t v61_e58;
     /* element 59 of Viewable slot 0x61: AcIndexWideES (class id 0x01600022) */
@@ -1163,13 +1163,13 @@ typedef struct __attribute__((packed)) {
     /* element 65 of Viewable slot 0x61: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v61_e65;
     /* element 66 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e66;
-    char w65_text[4];
+    naka_cls_Label_t To_Label;
+    char To_text[4];
     /* element 67 of Viewable slot 0x61: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v61_e67;
     /* element 68 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e68;
-    char w66_text[6];
+    naka_cls_Label_t Mode_Label;
+    char Mode_text[6];
     /* element 69 of Viewable slot 0x61: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v61_e69;
     /* element 70 of Viewable slot 0x61: PsFileNameBox (class id 0x01650000) */
@@ -1184,34 +1184,34 @@ typedef struct __attribute__((packed)) {
     char BANK_str[6];
     /* element 75 of Viewable slot 0x61 "DiskLoadSMF": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskLoadSMF;
-    char w67_text[10];
+    char SmfLoad_text[10];
     /* element 76 of Viewable slot 0x61: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v61_e76;
-    char w68_text[6];
+    naka_cls_AcTitleMenu_t Tech_AcTitleMenu;
+    char Tech_text[6];
     /* element 77 of Viewable slot 0x61: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v61_e77;
     /* element 78 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v61_e78;
     /* element 79 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e79;
-    char w70_text[6];
+    naka_cls_Label_t Prev_Label_2;
+    char Prev_text_2[6];
     /* element 80 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v61_e80;
     /* element 81 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e81;
-    char w71_text[6];
+    naka_cls_Label_t Next_Label_2;
+    char Next_text_2[6];
     /* element 82 of Viewable slot 0x61: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v61_e82;
     /* element 83 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e83;
-    char w72_text[6];
+    naka_cls_Label_t Info_Label;
+    char Info_text[6];
     /* element 84 of Viewable slot 0x61: PsWindowToggle (class id 0x01650001) */
     naka_cls_PsWindowToggle_t v61_e84;
     char v61_e84_stroff[6];
     char v61_e84_stron[6];
     /* element 85 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e85;
-    char w73_text[8];
+    naka_cls_Label_t LoadAs_Label;
+    char LoadAs_text[8];
     /* element 86 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v61_e86;
     /* element 87 of Viewable slot 0x61: PsFileNameBox (class id 0x01650000) */
@@ -1248,13 +1248,13 @@ typedef struct __attribute__((packed)) {
     /* element 97 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v61_e97;
     /* element 98 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e98;
-    char w76_text[6];
+    naka_cls_Label_t Load_Label_6;
+    char Load_text_6[6];
     /* element 99 of Viewable slot 0x61 "DiskInfoSmfLdWin": Window (class id 0x01600035) */
     naka_cls_Window_t DiskInfoSmfLdWin;
     /* element 100 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e100;
-    char w77_text[12];
+    naka_cls_Label_t DiskName_Label_4;
+    char DiskName_text_4[12];
     /* element 101 of Viewable slot 0x61: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v61_e101;
     /* element 102 of Viewable slot 0x61: AcParaStrBox (class id 0x01650003) */
@@ -1262,11 +1262,11 @@ typedef struct __attribute__((packed)) {
     /* element 103 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v61_e103;
     /* element 104 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e104;
-    char w78_text[6];
+    naka_cls_Label_t Load_Label_7;
+    char Load_text_7[6];
     /* element 105 of Viewable slot 0x61 "CmpSingleLoad": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CmpSingleLoad;
-    char w79_text[22];
+    char LoadSingleComposer_text[22];
     /* element 106 of Viewable slot 0x61: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v61_e106;
     /* element 107 of Viewable slot 0x61: AcIndexWideES (class id 0x01600022) */
@@ -1282,23 +1282,23 @@ typedef struct __attribute__((packed)) {
     /* element 112 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v61_e112;
     /* element 113 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e113;
-    char w84_text[6];
+    naka_cls_Label_t Load_Label_8;
+    char Load_text_8[6];
     /* element 114 of Viewable slot 0x61: Arrow (class id 0x01650008) */
     naka_cls_Arrow_t v61_e114;
     /* element 115 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e115;
-    char w85_text[4];
+    naka_cls_Label_t To_Label_2;
+    char To_text_2[4];
     /* element 116 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e116;
-    char w86_text[6];
+    naka_cls_Label_t From_Label;
+    char From_text[6];
     /* element 117 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v61_e117;
     /* element 118 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v61_e118;
     /* element 119 of Viewable slot 0x61: Label (class id 0x0160002B) */
-    naka_cls_Label_t v61_e119;
-    char w87_text[6];
+    naka_cls_Label_t File_Label;
+    char File_text[6];
     /* element 120 of Viewable slot 0x61: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v61_e120;
     /* element 121 of Viewable slot 0x61: AcMonoIndexToggle (class id 0x01650005) */
@@ -1319,12 +1319,12 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvIndexSwDelay_t v61_e127;
     /* element 0 of Viewable slot 0x65 "DiskSaveMenu": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskSaveMenu;
-    char w88_text[6];
+    char Save_text_2[6];
     /* element 1 of Viewable slot 0x65: AcTtlJgBox (class id 0x01650002) */
-    naka_cls_AcTtlJgBox_t v65_e1;
+    naka_cls_AcTtlJgBox_t TechnicsFormat_AcTtlJgBox;
     char TechnicsFormat_str[16];
     /* element 2 of Viewable slot 0x65: AcTtlJgBox (class id 0x01650002) */
-    naka_cls_AcTtlJgBox_t v65_e2;
+    naka_cls_AcTtlJgBox_t SmfFormat_AcTtlJgBox;
     char SmfFormat_str[14];
     /* element 0 of Viewable slot 0x67 "DiskSave": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskSave;
@@ -1361,20 +1361,20 @@ typedef struct __attribute__((packed)) {
     /* element 11 of Viewable slot 0x67: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v67_e11;
     /* element 12 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e12;
-    char w93_text[10];
+    naka_cls_Label_t SaveAs_Label;
+    char SaveAs_text[10];
     /* element 13 of Viewable slot 0x67: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v67_e13;
     /* element 14 of Viewable slot 0x67: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v67_e14;
-    char w94_text[6];
+    naka_cls_AcTitleMenu_t Name_AcTitleMenu;
+    char Name_text[6];
     /* element 15 of Viewable slot 0x67: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v67_e15;
     /* element 16 of Viewable slot 0x67: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v67_e16;
     /* element 17 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e17;
-    char w95_text[6];
+    naka_cls_Label_t Save_Label;
+    char Save_text_3[6];
     /* element 18 of Viewable slot 0x67: AcFileSfxBox (class id 0x01650004) */
     naka_cls_AcFileSfxBox_t v67_e18;
     /* element 19 of Viewable slot 0x67: IvCatchEvent (class id 0x01600052) */
@@ -1387,29 +1387,29 @@ typedef struct __attribute__((packed)) {
     /* element 22 of Viewable slot 0x67: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v67_e22;
     /* element 23 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e23;
-    char w97_text[14];
+    naka_cls_Label_t CurrentPanel_Label_2;
+    char CurrentPanel_text_2[14];
     /* element 24 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e24;
-    char w98_text[20];
+    naka_cls_Label_t UserMidiSettings_Label_2;
+    char UserMidiSettings_text_2[20];
     /* element 25 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e25;
-    char w99_text[14];
+    naka_cls_Label_t RhythmCustom_Label_2;
+    char RhythmCustom_text_2[14];
     /* element 26 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e26;
-    char w100_text[4];
+    naka_cls_Label_t Msp_Label_3;
+    char Msp_text_3[4];
     /* element 27 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e27;
-    char w101_text[14];
+    naka_cls_Label_t SoundMemory_Label_2;
+    char SoundMemory_text_2[14];
     /* element 28 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e28;
-    char w102_text[10];
+    naka_cls_Label_t Composer_Label_2;
+    char Composer_text_2[10];
     /* element 29 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e29;
-    char w103_text[10];
+    naka_cls_Label_t Sequencer_Label_2;
+    char Sequencer_text_2[10];
     /* element 30 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e30;
-    char w104_text[14];
+    naka_cls_Label_t PanelMemory_Label_2;
+    char PanelMemory_text_2[14];
     /* element 31 of Viewable slot 0x67: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v67_e31;
     /* element 32 of Viewable slot 0x67: Line (class id 0x0160002E) */
@@ -1417,35 +1417,35 @@ typedef struct __attribute__((packed)) {
     /* element 33 of Viewable slot 0x67: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v67_e33;
     /* element 34 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e34;
-    char w105_text[6];
+    naka_cls_Label_t Save_Label_2;
+    char Save_text_4[6];
     /* element 35 of Viewable slot 0x67: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v67_e35;
     /* element 36 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e36;
-    char w106_text[10];
+    naka_cls_Label_t SaveAs_Label_2;
+    char SaveAs_text_2[10];
     /* element 37 of Viewable slot 0x67: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v67_e37;
     /* element 38 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e38;
-    char w107_text[8];
+    naka_cls_Label_t Perform_Label;
+    char Perform_text[8];
     /* element 39 of Viewable slot 0x67: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v67_e39;
     /* element 40 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e40;
-    char w108_text[8];
+    naka_cls_Label_t Backup_Label;
+    char Backup_text[8];
     /* element 41 of Viewable slot 0x67: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v67_e41;
     /* element 42 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e42;
-    char w109_text[4];
+    naka_cls_Label_t Pnl_Label_2;
+    char Pnl_text_2[4];
     /* element 43 of Viewable slot 0x67: IvCatchEvent (class id 0x01600052) */
     naka_cls_IvCatchEvent_t v67_e43;
     /* element 44 of Viewable slot 0x67: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v67_e44;
     /* element 45 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e45;
-    char w110_text[6];
+    naka_cls_Label_t PMem_Label_2;
+    char PMem_text_2[6];
     /* element 46 of Viewable slot 0x67: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v67_e46;
     /* element 47 of Viewable slot 0x67: AcIndexEditSw (class id 0x0160001F) */
@@ -1459,31 +1459,31 @@ typedef struct __attribute__((packed)) {
     /* element 51 of Viewable slot 0x67: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v67_e51;
     /* element 52 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e52;
-    char w111_text[4];
+    naka_cls_Label_t Seq_Label_2;
+    char Seq_text_2[4];
     /* element 53 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e53;
-    char w112_text[6];
+    naka_cls_Label_t Comp_Label_2;
+    char Comp_text_2[6];
     /* element 54 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e54;
-    char w113_text[4];
+    naka_cls_Label_t Msp_Label_4;
+    char Msp_text_4[4];
     /* element 55 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e55;
-    char w114_text[6];
+    naka_cls_Label_t Sound_Label_2;
+    char Sound_text_2[6];
     /* element 56 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e56;
-    char w115_text[8];
+    naka_cls_Label_t Custom_Label_2;
+    char Custom_text_2[8];
     /* element 57 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e57;
-    char w116_text[6];
+    naka_cls_Label_t Midi_Label_2;
+    char Midi_text_2[6];
     /* element 58 of Viewable slot 0x67: VwScreenTitle (class id 0x01650007) */
     naka_cls_VwScreenTitle_t v67_e58;
     char v67_e58_title[12];
     /* element 59 of Viewable slot 0x67: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v67_e59;
     /* element 60 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e60;
-    char w117_text[8];
+    naka_cls_Label_t AllOff_Label;
+    char AllOff_text[8];
     /* element 61 of Viewable slot 0x67 "DiskSaveP3": Window (class id 0x01600035) */
     naka_cls_Window_t DiskSaveP3;
     /* element 62 of Viewable slot 0x67: PsFileNameBox (class id 0x01650000) */
@@ -1495,14 +1495,14 @@ typedef struct __attribute__((packed)) {
     /* element 65 of Viewable slot 0x67: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v67_e65;
     /* element 66 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e66;
-    char w119_text[6];
+    naka_cls_Label_t Save_Label_3;
+    char Save_text_5[6];
     /* element 67 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e67;
-    char w120_text[6];
+    naka_cls_Label_t As_Label;
+    char As_text[6];
     /* element 68 of Viewable slot 0x67: Label (class id 0x0160002B) */
-    naka_cls_Label_t v67_e68;
-    char w121_text[6];
+    naka_cls_Label_t Save_Label_4;
+    char Save_text_6[6];
     /* element 69 of Viewable slot 0x67: VwScreenTitle (class id 0x01650007) */
     naka_cls_VwScreenTitle_t v67_e69;
     char v67_e69_title[20];
@@ -1510,7 +1510,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvCatchEvent_t v67_e70;
     /* element 0 of Viewable slot 0x6B "DiskSmfSave": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskSmfSave;
-    char w122_text[10];
+    char SmfSave_text[10];
     /* element 1 of Viewable slot 0x6B: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v6B_e1;
     /* element 2 of Viewable slot 0x6B: AcIndexWideES (class id 0x01600022) */
@@ -1518,13 +1518,13 @@ typedef struct __attribute__((packed)) {
     /* element 3 of Viewable slot 0x6B: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6B_e3;
     /* element 4 of Viewable slot 0x6B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6B_e4;
-    char w124_text[6];
+    naka_cls_Label_t Prev_Label_3;
+    char Prev_text_3[6];
     /* element 5 of Viewable slot 0x6B: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6B_e5;
     /* element 6 of Viewable slot 0x6B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6B_e6;
-    char w125_text[6];
+    naka_cls_Label_t Next_Label_3;
+    char Next_text_3[6];
     /* element 7 of Viewable slot 0x6B: AcMonoIndexToggle (class id 0x01650005) */
     naka_cls_AcMonoIndexToggle_t v6B_e7;
     char v6B_e7_stroff[4];
@@ -1534,21 +1534,21 @@ typedef struct __attribute__((packed)) {
     char v6B_e8_stroff[4];
     char v6B_e8_stron[4];
     /* element 9 of Viewable slot 0x6B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6B_e9;
-    char w126_text[14];
+    naka_cls_Label_t PanelHeader_Label;
+    char PanelHeader_text[14];
     /* element 10 of Viewable slot 0x6B: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v6B_e10;
-    char w127_text[6];
+    naka_cls_AcTitleMenu_t Name_AcTitleMenu_2;
+    char Name_text_2[6];
     /* element 11 of Viewable slot 0x6B: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v6B_e11;
     /* element 12 of Viewable slot 0x6B: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6B_e12;
     /* element 13 of Viewable slot 0x6B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6B_e13;
-    char w128_text[6];
+    naka_cls_Label_t Save_Label_5;
+    char Save_text_7[6];
     /* element 14 of Viewable slot 0x6B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6B_e14;
-    char w129_text[16];
+    naka_cls_Label_t MeasureSpace_Label;
+    char MeasureSpace_text[16];
     /* element 15 of Viewable slot 0x6B: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v6B_e15;
     /* element 16 of Viewable slot 0x6B: AcIndexEditSw (class id 0x0160001F) */
@@ -1558,14 +1558,14 @@ typedef struct __attribute__((packed)) {
     /* element 18 of Viewable slot 0x6B: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v6B_e18;
     /* element 19 of Viewable slot 0x6B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6B_e19;
-    char w130_text[6];
+    naka_cls_Label_t Save_Label_6;
+    char Save_text_8[6];
     /* element 20 of Viewable slot 0x6B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6B_e20;
-    char w131_text[6];
+    naka_cls_Label_t As_Label_2;
+    char As_text_2[6];
     /* element 0 of Viewable slot 0x6C "DiskSmfDirectPlay": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskSmfDirectPlay;
-    char w132_text[16];
+    char SmfDirectPlay_text[16];
     /* element 1 of Viewable slot 0x6C: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v6C_e1;
     /* element 2 of Viewable slot 0x6C: PsFileNameBox (class id 0x01650000) */
@@ -1575,16 +1575,16 @@ typedef struct __attribute__((packed)) {
     /* element 4 of Viewable slot 0x6C: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6C_e4;
     /* element 5 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e5;
-    char w134_text[6];
+    naka_cls_Label_t Prev_Label_4;
+    char Prev_text_4[6];
     /* element 6 of Viewable slot 0x6C: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6C_e6;
     /* element 7 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e7;
-    char w135_text[6];
+    naka_cls_Label_t Next_Label_4;
+    char Next_text_4[6];
     /* element 8 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e8;
-    char w136_text[6];
+    naka_cls_Label_t Info_Label_2;
+    char Info_text_2[6];
     /* element 9 of Viewable slot 0x6C: PsWindowToggle (class id 0x01650001) */
     naka_cls_PsWindowToggle_t v6C_e9;
     char v6C_e9_stroff[6];
@@ -1602,8 +1602,8 @@ typedef struct __attribute__((packed)) {
     char v6C_e13_stroff[6];
     char v6C_e13_stron[4];
     /* element 14 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e14;
-    char w137_text[8];
+    naka_cls_Label_t PlayAs_Label;
+    char PlayAs_text[8];
     /* element 15 of Viewable slot 0x6C: Line (class id 0x0160002E) */
     naka_cls_Line_t v6C_e15;
     /* element 16 of Viewable slot 0x6C: Line (class id 0x0160002E) */
@@ -1613,26 +1613,26 @@ typedef struct __attribute__((packed)) {
     /* element 18 of Viewable slot 0x6C: Line (class id 0x0160002E) */
     naka_cls_Line_t v6C_e18;
     /* element 19 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e19;
-    char w138_text[6];
+    naka_cls_Label_t Loop_Label_2;
+    char Loop_text_2[6];
     /* element 20 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e20;
-    char w139_text[8];
+    naka_cls_Label_t Medley_Label;
+    char Medley_text[8];
     /* element 21 of Viewable slot 0x6C: IvOneShotTimer (class id 0x01650006) */
     naka_cls_IvOneShotTimer_t v6C_e21;
     /* element 22 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e22;
-    char w140_text[4];
+    naka_cls_Label_t All_Label_2;
+    char All_text_2[4];
     /* element 23 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e23;
-    char w141_text[4];
+    naka_cls_Label_t Add_Label_2;
+    char Add_text_2[4];
     /* element 24 of Viewable slot 0x6C "SmfMidiOut": AcMonoIndexToggle (class id 0x01650005) */
     naka_cls_AcMonoIndexToggle_t SmfMidiOut;
     char SmfMidiOut_stroff[4];
     char SmfMidiOut_stron[4];
     /* element 25 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e25;
-    char w142_text[10];
+    naka_cls_Label_t MidiOut_Label;
+    char MidiOut_text[10];
     /* element 26 of Viewable slot 0x6C: IvIndexSwDelay (class id 0x0165000B) */
     naka_cls_IvIndexSwDelay_t v6C_e26;
     /* element 27 of Viewable slot 0x6C: AcIndexEditSw (class id 0x0160001F) */
@@ -1644,13 +1644,13 @@ typedef struct __attribute__((packed)) {
     /* element 30 of Viewable slot 0x6C: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6C_e30;
     /* element 31 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e31;
-    char w143_text[6];
+    naka_cls_Label_t Start_Label_2;
+    char Start_text_2[6];
     /* element 32 of Viewable slot 0x6C "DiskInfoDPSmfWin": Window (class id 0x01600035) */
     naka_cls_Window_t DiskInfoDPSmfWin;
     /* element 33 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e33;
-    char w144_text[12];
+    naka_cls_Label_t DiskName_Label_5;
+    char DiskName_text_5[12];
     /* element 34 of Viewable slot 0x6C: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v6C_e34;
     /* element 35 of Viewable slot 0x6C: AcParaStrBox (class id 0x01650003) */
@@ -1658,11 +1658,11 @@ typedef struct __attribute__((packed)) {
     /* element 36 of Viewable slot 0x6C: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6C_e36;
     /* element 37 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e37;
-    char w145_text[6];
+    naka_cls_Label_t Start_Label_3;
+    char Start_text_3[6];
     /* element 38 of Viewable slot 0x6C "DiskDocDirectPlay": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskDocDirectPlay;
-    char w146_text[16];
+    char DocDirectPlay_text[16];
     /* element 39 of Viewable slot 0x6C: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v6C_e39;
     /* element 40 of Viewable slot 0x6C: PsFileNameBox (class id 0x01650000) */
@@ -1670,18 +1670,18 @@ typedef struct __attribute__((packed)) {
     /* element 41 of Viewable slot 0x6C: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6C_e41;
     /* element 42 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e42;
-    char w147_text[6];
+    naka_cls_Label_t Prev_Label_5;
+    char Prev_text_5[6];
     /* element 43 of Viewable slot 0x6C: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v6C_e43;
     /* element 44 of Viewable slot 0x6C: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6C_e44;
     /* element 45 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e45;
-    char w149_text[6];
+    naka_cls_Label_t Next_Label_5;
+    char Next_text_5[6];
     /* element 46 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e46;
-    char w150_text[8];
+    naka_cls_Label_t Medley_Label_2;
+    char Medley_text_2[8];
     /* element 47 of Viewable slot 0x6C: IvOneShotTimer (class id 0x01650006) */
     naka_cls_IvOneShotTimer_t v6C_e47;
     /* element 48 of Viewable slot 0x6C: Line (class id 0x0160002E) */
@@ -1697,8 +1697,8 @@ typedef struct __attribute__((packed)) {
     /* element 53 of Viewable slot 0x6C: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6C_e53;
     /* element 54 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e54;
-    char w151_text[6];
+    naka_cls_Label_t Loop_Label_3;
+    char Loop_text_3[6];
     /* element 55 of Viewable slot 0x6C: AcMonoIndexToggle (class id 0x01650005) */
     naka_cls_AcMonoIndexToggle_t v6C_e55;
     char v6C_e55_stroff[4];
@@ -1708,17 +1708,17 @@ typedef struct __attribute__((packed)) {
     /* element 57 of Viewable slot 0x6C: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6C_e57;
     /* element 58 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e58;
-    char w152_text[6];
+    naka_cls_Label_t Start_Label_4;
+    char Start_text_4[6];
     /* element 59 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e59;
-    char w153_text[4];
+    naka_cls_Label_t All_Label_3;
+    char All_text_3[4];
     /* element 60 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e60;
-    char w154_text[4];
+    naka_cls_Label_t Add_Label_3;
+    char Add_text_3[4];
     /* element 61 of Viewable slot 0x6C "DiskPdDirectPlay": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskPdDirectPlay;
-    char w155_text[24];
+    char PianoDiscDirectPlay_text[24];
     /* element 62 of Viewable slot 0x6C: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v6C_e62;
     /* element 63 of Viewable slot 0x6C: PsFileNameBox (class id 0x01650000) */
@@ -1728,13 +1728,13 @@ typedef struct __attribute__((packed)) {
     /* element 65 of Viewable slot 0x6C: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6C_e65;
     /* element 66 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e66;
-    char w157_text[6];
+    naka_cls_Label_t Prev_Label_6;
+    char Prev_text_6[6];
     /* element 67 of Viewable slot 0x6C: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6C_e67;
     /* element 68 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e68;
-    char w158_text[6];
+    naka_cls_Label_t Next_Label_6;
+    char Next_text_6[6];
     /* element 69 of Viewable slot 0x6C: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6C_e69;
     /* element 70 of Viewable slot 0x6C: IvOneShotTimer (class id 0x01650006) */
@@ -1746,16 +1746,16 @@ typedef struct __attribute__((packed)) {
     char v6C_e72_stroff[4];
     char v6C_e72_stron[4];
     /* element 73 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e73;
-    char w159_text[6];
+    naka_cls_Label_t Loop_Label_4;
+    char Loop_text_4[6];
     /* element 74 of Viewable slot 0x6C: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v6C_e74;
     /* element 75 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e75;
-    char w160_text[6];
+    naka_cls_Label_t Start_Label_5;
+    char Start_text_5[6];
     /* element 76 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e76;
-    char w161_text[8];
+    naka_cls_Label_t Medley_Label_3;
+    char Medley_text_3[8];
     /* element 77 of Viewable slot 0x6C: Line (class id 0x0160002E) */
     naka_cls_Line_t v6C_e77;
     /* element 78 of Viewable slot 0x6C: Line (class id 0x0160002E) */
@@ -1765,14 +1765,14 @@ typedef struct __attribute__((packed)) {
     /* element 80 of Viewable slot 0x6C: Line (class id 0x0160002E) */
     naka_cls_Line_t v6C_e80;
     /* element 81 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e81;
-    char w162_text[4];
+    naka_cls_Label_t All_Label_4;
+    char All_text_4[4];
     /* element 82 of Viewable slot 0x6C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v6C_e82;
-    char w163_text[4];
+    naka_cls_Label_t Add_Label_4;
+    char Add_text_4[4];
     /* element 0 of Viewable slot 0x77 "DiskSongMedley": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskSongMedley;
-    char w164_text[12];
+    char SongMedley_text[12];
     /* element 1 of Viewable slot 0x77: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v77_e1;
     /* element 2 of Viewable slot 0x77: AcIndexWideES (class id 0x01600022) */
@@ -1786,8 +1786,8 @@ typedef struct __attribute__((packed)) {
     /* element 6 of Viewable slot 0x77: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v77_e6;
     /* element 7 of Viewable slot 0x77: Label (class id 0x0160002B) */
-    naka_cls_Label_t v77_e7;
-    char w166_text[12];
+    naka_cls_Label_t DiskName_Label_6;
+    char DiskName_text_6[12];
     /* element 8 of Viewable slot 0x77 "SongMedleyDiskName": AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t SongMedleyDiskName;
     /* element 9 of Viewable slot 0x77 "SongMedleyDiskInfo": AcParaStrBox (class id 0x01650003) */
@@ -1795,18 +1795,18 @@ typedef struct __attribute__((packed)) {
     /* element 10 of Viewable slot 0x77: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v77_e10;
     /* element 11 of Viewable slot 0x77: Label (class id 0x0160002B) */
-    naka_cls_Label_t v77_e11;
-    char w167_text[6];
+    naka_cls_Label_t Start_Label_6;
+    char Start_text_6[6];
     /* element 12 of Viewable slot 0x77: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v77_e12;
     /* element 13 of Viewable slot 0x77: Label (class id 0x0160002B) */
-    naka_cls_Label_t v77_e13;
-    char w168_text[4];
+    naka_cls_Label_t All_Label_5;
+    char All_text_5[4];
     /* element 14 of Viewable slot 0x77: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v77_e14;
     /* element 15 of Viewable slot 0x77: Label (class id 0x0160002B) */
-    naka_cls_Label_t v77_e15;
-    char w169_text[4];
+    naka_cls_Label_t Add_Label_5;
+    char Add_text_5[4];
     /* element 16 of Viewable slot 0x77: AcMonoIndexToggle (class id 0x01650005) */
     naka_cls_AcMonoIndexToggle_t v77_e16;
     char v77_e16_stroff[4];
@@ -1816,16 +1816,16 @@ typedef struct __attribute__((packed)) {
     char v77_e17_stroff[6];
     char v77_e17_stron[8];
     /* element 18 of Viewable slot 0x77: Label (class id 0x0160002B) */
-    naka_cls_Label_t v77_e18;
-    char w170_text[6];
+    naka_cls_Label_t Mode_Label_2;
+    char Mode_text_2[6];
     /* element 19 of Viewable slot 0x77: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v77_e19;
     /* element 20 of Viewable slot 0x77: Label (class id 0x0160002B) */
-    naka_cls_Label_t v77_e20;
-    char w171_text[6];
+    naka_cls_Label_t Loop_Label_5;
+    char Loop_text_5[6];
     /* element 0 of Viewable slot 0x7B "DiskUtility": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskUtility;
-    char w172_text[12];
+    char DiskTools_text[12];
     /* element 1 of Viewable slot 0x7B: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v7B_e1;
     /* element 2 of Viewable slot 0x7B: AcIndexEditSw (class id 0x0160001F) */
@@ -1833,38 +1833,38 @@ typedef struct __attribute__((packed)) {
     /* element 3 of Viewable slot 0x7B: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v7B_e3;
     /* element 4 of Viewable slot 0x7B: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v7B_e4;
-    char w174_text[4];
+    naka_cls_AcTitleMenu_t Smf_AcTitleMenu_2;
+    char Smf_text_2[4];
     /* element 5 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e5;
-    char w175_text[12];
+    naka_cls_Label_t DiskName_Label_7;
+    char DiskName_text_7[12];
     /* element 6 of Viewable slot 0x7B: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v7B_e6;
     /* element 7 of Viewable slot 0x7B: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v7B_e7;
     /* element 8 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e8;
-    char w176_text[4];
+    naka_cls_Label_t Del_Label;
+    char Del_text[4];
     /* element 9 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e9;
-    char w177_text[6];
+    naka_cls_Label_t Move_Label;
+    char Move_text[6];
     /* element 10 of Viewable slot 0x7B: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t v7B_e10;
     char w178_text[2];
     /* element 11 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e11;
-    char w179_text[8];
+    naka_cls_Label_t Format_Label;
+    char Format_text[8];
     /* element 12 of Viewable slot 0x7B: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t v7B_e12;
     uint8_t field_44fe;
     uint8_t field_44ff;
     /* element 13 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e13;
+    naka_cls_Label_t RENAME_Label;
     char RENAME_str[8];
     /* element 14 of Viewable slot 0x7B: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v7B_e14;
     /* element 15 of Viewable slot 0x7B: AcScreenMenu (class id 0x01600041) */
-    naka_cls_AcScreenMenu_t v7B_e15;
+    naka_cls_AcScreenMenu_t COPY_AcScreenMenu;
     char COPY_str[6];
     /* element 16 of Viewable slot 0x7B: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v7B_e16;
@@ -1885,28 +1885,28 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcFuncEditSw_t v7B_e23;
     /* element 24 of Viewable slot 0x7B "DiskFormat": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskFormat;
-    char w182_text[20];
+    char FloppyDiskFormat_text[20];
     /* element 25 of Viewable slot 0x7B "DiskUtilitySMF": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskUtilitySMF;
-    char w183_text[16];
+    char SmfDiskTools_text[16];
     /* element 26 of Viewable slot 0x7B: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v7B_e26;
-    char w184_text[6];
+    naka_cls_AcTitleMenu_t Tech_AcTitleMenu_2;
+    char Tech_text_2[6];
     /* element 27 of Viewable slot 0x7B: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v7B_e27;
     /* element 28 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e28;
-    char w185_text[6];
+    naka_cls_Label_t Prev_Label_7;
+    char Prev_text_7[6];
     /* element 29 of Viewable slot 0x7B: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v7B_e29;
     /* element 30 of Viewable slot 0x7B: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v7B_e30;
     /* element 31 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e31;
-    char w187_text[6];
+    naka_cls_Label_t Next_Label_7;
+    char Next_text_7[6];
     /* element 32 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e32;
-    char w188_text[6];
+    naka_cls_Label_t Info_Label_3;
+    char Info_text_3[6];
     /* element 33 of Viewable slot 0x7B: PsFileNameBox (class id 0x01650000) */
     naka_cls_PsFileNameBox_t v7B_e33;
     /* element 34 of Viewable slot 0x7B: PsWindowToggle (class id 0x01650001) */
@@ -1917,19 +1917,19 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcTitleMenu_t v7B_e35;
     char w189_text[2];
     /* element 36 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e36;
-    char w190_text[8];
+    naka_cls_Label_t Format_Label_2;
+    char Format_text_2[8];
     /* element 37 of Viewable slot 0x7B: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v7B_e37;
     /* element 38 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e38;
-    char w191_text[4];
+    naka_cls_Label_t Del_Label_2;
+    char Del_text_2[4];
     /* element 39 of Viewable slot 0x7B: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t v7B_e39;
     uint8_t field_49ce;
     uint8_t field_49cf;
     /* element 40 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e40;
+    naka_cls_Label_t RENAME_Label_2;
     char RENAME_str_2[8];
     /* element 41 of Viewable slot 0x7B: IvIndexSwDelay (class id 0x0165000B) */
     naka_cls_IvIndexSwDelay_t v7B_e41;
@@ -1938,8 +1938,8 @@ typedef struct __attribute__((packed)) {
     /* element 43 of Viewable slot 0x7B "DiskInfoWin": Window (class id 0x01600035) */
     naka_cls_Window_t DiskInfoWin;
     /* element 44 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e44;
-    char w192_text[12];
+    naka_cls_Label_t DiskName_Label_8;
+    char DiskName_text_8[12];
     /* element 45 of Viewable slot 0x7B: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v7B_e45;
     /* element 46 of Viewable slot 0x7B: AcParaStrBox (class id 0x01650003) */
@@ -1957,8 +1957,8 @@ typedef struct __attribute__((packed)) {
     /* element 52 of Viewable slot 0x7B: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t v7B_e52;
     /* element 53 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e53;
-    char w195_text[12];
+    naka_cls_Label_t DiskNaming_Label;
+    char DiskNaming_text[12];
     /* element 54 of Viewable slot 0x7B "DiskFormatSureWin": Window (class id 0x01600035) */
     naka_cls_Window_t DiskFormatSureWin;
     /* element 55 of Viewable slot 0x7B: VwBox (class id 0x01600011) */
@@ -1984,13 +1984,13 @@ typedef struct __attribute__((packed)) {
     /* element 64 of Viewable slot 0x7B: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t v7B_e64;
     /* element 65 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e65;
-    char w201_text[38];
+    naka_cls_Label_t SelectTheFormatType_Label;
+    char SelectTheFormatType_text[38];
     /* element 66 of Viewable slot 0x7B: VwMenuBox (class id 0x0160003D) */
-    naka_cls_VwMenuBox_t v7B_e66;
+    naka_cls_VwMenuBox_t KByteFormatDd_VwMenuBox;
     char KByteFormatDd_str[28];
     /* element 67 of Viewable slot 0x7B: VwMenuBox (class id 0x0160003D) */
-    naka_cls_VwMenuBox_t v7B_e67;
+    naka_cls_VwMenuBox_t MByteFormatHd_VwMenuBox;
     char MByteFormatHd_str[28];
     /* element 68 of Viewable slot 0x7B "FileCopy": Screen (class id 0x01600033) */
     naka_cls_Screen_t FileCopy;
@@ -2000,13 +2000,13 @@ typedef struct __attribute__((packed)) {
     /* element 70 of Viewable slot 0x7B: Arrow (class id 0x01650008) */
     naka_cls_Arrow_t v7B_e70;
     /* element 71 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e71;
-    char w203_text[4];
+    naka_cls_Label_t To_Label_3;
+    char To_text_3[4];
     /* element 72 of Viewable slot 0x7B: AcParaStrBox (class id 0x01650003) */
     naka_cls_AcParaStrBox_t v7B_e72;
     /* element 73 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e73;
-    char w204_text[6];
+    naka_cls_Label_t From_Label_2;
+    char From_text_2[6];
     /* element 74 of Viewable slot 0x7B: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v7B_e74;
     /* element 75 of Viewable slot 0x7B: AcIndexEditSw (class id 0x0160001F) */
@@ -2043,16 +2043,16 @@ typedef struct __attribute__((packed)) {
     /* element 90 of Viewable slot 0x7B "DiskDeleteSureScr": Screen (class id 0x01600033) */
     naka_cls_Screen_t DiskDeleteSureScr;
     /* element 91 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e91;
-    char w213_text[12];
+    naka_cls_Label_t DeleteSure_Label;
+    char DeleteSure_text[12];
     /* element 92 of Viewable slot 0x7B "DiskSaveSureScr": Screen (class id 0x01600033) */
     naka_cls_Screen_t DiskSaveSureScr;
     /* element 93 of Viewable slot 0x7B: Label (class id 0x0160002B) */
-    naka_cls_Label_t v7B_e93;
-    char w215_text[16];
+    naka_cls_Label_t OverwriteSure_Label;
+    char OverwriteSure_text[16];
     /* element 0 of Viewable slot 0x7E "DiskSetup": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskSetup;
-    char w216_text[12];
+    char Preferences_text_2[12];
     /* element 1 of Viewable slot 0x7E: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v7E_e1;
     /* element 2 of Viewable slot 0x7E: AcRamEditBox (class id 0x0160001B) */
@@ -2070,7 +2070,7 @@ typedef struct __attribute__((packed)) {
     /* element 7 of Viewable slot 0x7E: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t v7E_e7;
     uint32_t DiskMenu_ptr;
-    uint32_t ptr_53ee;
+    uint32_t StyleConvert_AcTitleMenu_ptr;
     uint16_t field_53f2;
     uint16_t field_53f4;
     uint32_t ptrs_3[146];  /* 146 pointers */
@@ -2082,12 +2082,12 @@ typedef struct __attribute__((packed)) {
     char str_949[2];
     char str_950[2];
     char w219_code[2];
-    char w219_name[18];
+    char CheckPasswordWin_name[18];
     char str_951[2];
     char str_952[2];
     char str_953[2];
     char w220_code[2];
-    char w220_name[12];
+    char PasswordWin_name[12];
     char str_954[2];
     char str_955[2];
     char str_956[2];
@@ -2096,7 +2096,7 @@ typedef struct __attribute__((packed)) {
     char str_959[2];
     char str_960[2];
     char w221_code[2];
-    char w221_name[16];
+    char DiskSaveSureWin_name[16];
     char str_961[2];
     char str_962[2];
     char str_963[2];
@@ -2108,12 +2108,12 @@ typedef struct __attribute__((packed)) {
     char str_969[2];
     char str_970[2];
     char w222_code[2];
-    char w222_name[14];
+    char WallpaperLoad_name[14];
     char str_971[2];
     char w223_code[2];
-    char w223_name[16];
+    char DiskSaveNameSMF_name[16];
     char w224_code[2];
-    char w224_name[12];
+    char DiskWaitWin_name[12];
     char str_972[2];
     char str_973[2];
     char str_974[2];
@@ -2124,10 +2124,10 @@ typedef struct __attribute__((packed)) {
     char str_979[2];
     char str_980[2];
     char w225_code[2];
-    char w225_name[14];
+    char ComposerLoad_name[14];
     char str_981[2];
     char w226_code[2];
-    char w226_name[14];
+    char DiskSaveName_name[14];
     char str_982[2];
     char str_983[2];
     char str_984[2];
@@ -2141,7 +2141,7 @@ typedef struct __attribute__((packed)) {
     char str_992[2];
     char str_993[2];
     char w227_code[2];
-    char w227_name[14];
+    char IntSongMedley_name[14];
     char str_994[2];
     char str_995[2];
     char str_996[2];
@@ -2149,13 +2149,13 @@ typedef struct __attribute__((packed)) {
     char str_998[2];
     char str_999[2];
     char w228_code[2];
-    char w228_name[14];
+    char HardDiskMenu_name[14];
     char w229_code[2];
-    char w229_name[10];
+    char DiskMenu_name[10];
     uint32_t ptrs_5[129];  /* 129 pointers */
     char str_1000[2];
     char w230_code[2];
-    char w230_name[20];
+    char CmpSingleLoadSwCtl_name[20];
     char str_1001[2];
     char str_1002[2];
     char str_1003[2];
@@ -2176,17 +2176,17 @@ typedef struct __attribute__((packed)) {
     char str_1018[2];
     char str_1019[2];
     char w231_code[2];
-    char w231_name[14];
+    char CmpSingleLoad_name[14];
     char str_1020[2];
     char str_1021[2];
     char str_1022[2];
     char str_1023[2];
     char w232_code[2];
-    char w232_name[18];
+    char DiskInfoSmfLdWin_name[18];
     char str_1024[2];
     char str_1025[2];
     char w233_code[2];
-    char w233_name[18];
+    char SongNameSmfLdWin_name[18];
     char str_1026[2];
     char str_1027[2];
     char str_1028[2];
@@ -2206,7 +2206,7 @@ typedef struct __attribute__((packed)) {
     char str_1042[2];
     char str_1043[2];
     char w234_code[2];
-    char w234_name[12];
+    char DiskLoadSMF_name[12];
     char SingleBankToggle_str[18];
     char str_1045[2];
     char str_1046[2];
@@ -2227,9 +2227,9 @@ typedef struct __attribute__((packed)) {
     char str_1061[2];
     char str_1062[2];
     char w235_code[2];
-    char w235_name[16];
+    char SingleLoadSwCtl_name[16];
     char w236_code[2];
-    char w236_name[12];
+    char DiskLoadP3_name[12];
     char str_1063[2];
     char str_1064[2];
     char str_1065[2];
@@ -2261,7 +2261,7 @@ typedef struct __attribute__((packed)) {
     char str_1091[2];
     char str_1092[2];
     char w237_code[2];
-    char w237_name[12];
+    char DiskLoadP2_name[12];
     char str_1093[2];
     char str_1094[2];
     char str_1095[2];
@@ -2274,13 +2274,13 @@ typedef struct __attribute__((packed)) {
     char str_1102[2];
     char str_1103[2];
     char w238_code[2];
-    char w238_name[12];
+    char DiskLoadP1_name[12];
     char str_1104[2];
     char str_1105[2];
     char str_1106[2];
     char str_1107[2];
     char w239_code[2];
-    char w239_name[14];
+    char DiskLoadPage_name[14];
     char DiskLoad_str[10];
     uint32_t ptr_61fa;
     char str_1109[2];
@@ -2292,7 +2292,7 @@ typedef struct __attribute__((packed)) {
     char str_1112[2];
     char str_1113[2];
     char w240_code[2];
-    char w240_name[14];
+    char DiskSaveMenu_name[14];
     uint32_t ptr_6230;
     char str_1114[2];
     uint32_t ptrs_7[72];  /* 72 pointers */
@@ -2306,7 +2306,7 @@ typedef struct __attribute__((packed)) {
     char str_1122[2];
     char str_1123[2];
     char w241_code[2];
-    char w241_name[12];
+    char DiskSaveP3_name[12];
     char str_1124[2];
     char str_1125[2];
     char str_1126[2];
@@ -2346,7 +2346,7 @@ typedef struct __attribute__((packed)) {
     char str_1160[2];
     char str_1161[2];
     char w242_code[2];
-    char w242_name[12];
+    char DiskSaveP2_name[12];
     char str_1162[2];
     char str_1163[2];
     char str_1164[2];
@@ -2360,13 +2360,13 @@ typedef struct __attribute__((packed)) {
     char str_1172[2];
     char str_1173[2];
     char w243_code[2];
-    char w243_name[12];
+    char DiskSaveP1_name[12];
     char str_1174[2];
     char str_1175[2];
     char str_1176[2];
     char str_1177[2];
     char w244_code[2];
-    char w244_name[14];
+    char DiskSavePage_name[14];
     char DiskSave_str[10];
     uint32_t ptr_6418;
     char str_1179[2];
@@ -2392,7 +2392,7 @@ typedef struct __attribute__((packed)) {
     char str_1198[2];
     char str_1199[2];
     char w245_code[2];
-    char w245_name[12];
+    char DiskSmfSave_name[12];
     uint32_t ptrs_9[84];  /* 84 pointers */
     char str_1200[2];
     char str_1201[2];
@@ -2416,7 +2416,7 @@ typedef struct __attribute__((packed)) {
     char str_1219[2];
     char str_1220[2];
     char w246_code[2];
-    char w246_name[18];
+    char DiskPdDirectPlay_name[18];
     char str_1221[2];
     char str_1222[2];
     char str_1223[2];
@@ -2439,21 +2439,21 @@ typedef struct __attribute__((packed)) {
     char str_1240[2];
     char str_1241[2];
     char w247_code[2];
-    char w247_name[18];
+    char DiskDocDirectPlay_name[18];
     char str_1242[2];
     char str_1243[2];
     char str_1244[2];
     char str_1245[2];
     char w248_code[2];
-    char w248_name[18];
+    char DiskInfoDPSmfWin_name[18];
     char str_1246[2];
     char str_1247[2];
     char w249_code[2];
-    char w249_name[18];
+    char SongNameDPSmfWin_name[18];
     char str_1248[2];
     char str_1249[2];
     char w250_code[2];
-    char w250_name[12];
+    char SmfMidiOut_name[12];
     char str_1250[2];
     char str_1251[2];
     char str_1252[2];
@@ -2477,7 +2477,7 @@ typedef struct __attribute__((packed)) {
     char str_1270[2];
     char str_1271[2];
     char w251_code[2];
-    char w251_name[18];
+    char DiskSmfDirectPlay_name[18];
     uint32_t ptr_66fe;
     char str_1272[2];
     uint32_t ptr_6704;
@@ -2495,7 +2495,7 @@ typedef struct __attribute__((packed)) {
     char str_1283[2];
     char str_1284[2];
     char w252_code[2];
-    char w252_name[20];
+    char SongMedleyDiskInfo_name[20];
     char SongMedleyDiskName_str[20];
     char str_1286[2];
     char str_1287[2];
@@ -2504,15 +2504,15 @@ typedef struct __attribute__((packed)) {
     char str_1290[2];
     char str_1291[2];
     char w253_code[2];
-    char w253_name[16];
+    char DiskSongMedley_name[16];
     uint32_t ptr_67c0;
     char str_1292[2];
     uint32_t ptrs_11[95];  /* 95 pointers */
     char str_1293[2];
     char w254_code[2];
-    char w254_name[16];
+    char DiskSaveSureScr_name[16];
     char w255_code[2];
-    char w255_name[18];
+    char DiskDeleteSureScr_name[18];
     char str_1294[2];
     char str_1295[2];
     char str_1296[2];
@@ -2521,11 +2521,11 @@ typedef struct __attribute__((packed)) {
     char str_1299[2];
     char str_1300[2];
     char w256_code[2];
-    char w256_name[18];
+    char DiskDeleteSureWin_name[18];
     char str_1301[2];
     char str_1302[2];
     char w257_code[2];
-    char w257_name[14];
+    char FileRenameSMF_name[14];
     char str_1303[2];
     char str_1304[2];
     char str_1305[2];
@@ -2534,12 +2534,12 @@ typedef struct __attribute__((packed)) {
     char str_1308[2];
     char str_1309[2];
     char w258_code[2];
-    char w258_name[10];
+    char FileCopy_name[10];
     char str_1310[2];
     char str_1311[2];
     char str_1312[2];
     char w259_code[2];
-    char w259_name[20];
+    char DiskFormatSelectWin_name[20];
     char str_1313[2];
     char str_1314[2];
     char str_1315[2];
@@ -2548,18 +2548,18 @@ typedef struct __attribute__((packed)) {
     char str_1318[2];
     char str_1319[2];
     char w260_code[2];
-    char w260_name[18];
+    char DiskFormatSureWin_name[18];
     char str_1320[2];
     char str_1321[2];
     char str_1322[2];
     char w261_code[2];
-    char w261_name[20];
+    char DiskFormatNamingWin_name[20];
     char w262_code[2];
-    char w262_name[12];
+    char SongNameWin_name[12];
     char str_1323[2];
     char str_1324[2];
     char w263_code[2];
-    char w263_name[12];
+    char DiskInfoWin_name[12];
     char WaitWinCtlSmf_str[14];
     char str_1326[2];
     char str_1327[2];
@@ -2577,12 +2577,12 @@ typedef struct __attribute__((packed)) {
     char str_1339[2];
     char str_1340[2];
     char w264_code[2];
-    char w264_name[16];
+    char DiskUtilitySMF_name[16];
     char DiskFormat_str[12];
     char str_1342[2];
     char str_1343[2];
     char w265_code[2];
-    char w265_name[12];
+    char FileRename_name[12];
     char WaitWinCtl_str[12];
     char str_1345[2];
     char str_1346[2];
@@ -2602,7 +2602,7 @@ typedef struct __attribute__((packed)) {
     char str_1360[2];
     char str_1361[2];
     char w266_code[2];
-    char w266_name[12];
+    char DiskUtility_name[12];
     uint32_t ptr_6acc;
     char str_1362[2];
     uint32_t ptr_6ad2;
@@ -2616,7 +2616,7 @@ typedef struct __attribute__((packed)) {
     char str_1369[2];
     char str_1370[2];
     char w267_code[2];
-    char w267_name[10];
+    char DiskSetup_name[10];
     uint32_t ptr_6b16;
     char str_1371[2];
     char MD_DISK_str[8];
@@ -2642,7 +2642,7 @@ typedef struct __attribute__((packed)) {
     char TT_CMPLD_str[10];
     uint32_t ptrs_13[116];  /* 116 pointers */
     char w268_code[2];
-    char w268_name[16];
+    char FmmPasswordFunc_name[16];
     char FmmWallpaperLoadFunc_str[22];
     char FmmCmpSingleLoadFunc_str[22];
     char CmpSingleLoadDstFunc_str[22];
@@ -2767,9 +2767,9 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .IvIndexSwCtrlProc_str = "IvIndexSwCtrlProc",
 
-    .w0_code = "ArrowProc",
+    .ArrowProc_code = "ArrowProc",
 
-    .w0_name = "VwScreenTitleProc",
+    .VwScreenTitleProc_name = "VwScreenTitleProc",
 
     .IvOneShotTimerProc_str = ALIGNED_STRING("IvOneShotTimerProc"),
 
@@ -2797,13 +2797,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0002,
         .exit = 0x01A00000,
         .window = 0x0003EC50,
-        .title = SELF(w1_text),
+        .title = SELF(DiskMenu_text),
         .icon = 0x00000095,
     },
 
-    .w1_text = "DISK MENU",
+    .DiskMenu_text = "DISK MENU",
 
-    .v60_e1 = {
+    .StyleConvert_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2819,16 +2819,16 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0000,
         .editsw = 0x008A,
         .selected = 0x0003EC54,
-        .str = SELF(w2_text),
+        .str = SELF(StyleConvert_text),
         .title = 0x01A00010,
         .icon = 0x00000098,
     },
 
-    .w2_text = "STYLE CONVERT",
+    .StyleConvert_text = "STYLE CONVERT",
 
     .HardDiskMainMenu_str = "HARD DISK MAIN MENU",
 
-    .v60_e3 = {
+    .Preferences_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2844,14 +2844,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0000,
         .editsw = 0x0089,
         .selected = 0x0003EC58,
-        .str = SELF(w3_text),
+        .str = SELF(Preferences_text),
         .title = 0x01A0007E,
         .icon = 0x00000097,
     },
 
-    .w3_text = "PREFERENCES",
+    .Preferences_text = "PREFERENCES",
 
-    .v60_e4 = {
+    .Save_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2867,14 +2867,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0000,
         .editsw = 0x0009,
         .selected = 0x0003EC5A,
-        .str = SELF(w4_text),
+        .str = SELF(Save_text),
         .title = 0x01A00065,
         .icon = 0x0000002D,
     },
 
-    .w4_text = ALIGNED_STRING("SAVE"),
+    .Save_text = ALIGNED_STRING("SAVE"),
 
-    .v60_e5 = {
+    .DiskTools_AcTtlJgBox = {
         .class_ = 0x01650002,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2897,7 +2897,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .DiskTools_str = ALIGNED_STRING("DISK TOOLS"),
 
-    .v60_e6 = {
+    .LOAD_AcTtlJgBox = {
         .class_ = 0x01650002,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2931,7 +2931,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .mode = 0x01800001,
     },
 
-    .v60_e8 = {
+    .DirectPlay_AcTtlJgBox = {
         .class_ = 0x01650002,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2954,7 +2954,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .DirectPlay_str = "DIRECT PLAY",
 
-    .v60_e9 = {
+    .SongMedley_AcTtlJgBox = {
         .class_ = 0x01650002,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2989,11 +2989,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00081,
         .window = 0x0003EC64,
-        .title = SELF(w6_text),
+        .title = SELF(InternalSongMedley_text),
         .icon = 0x00000089,
     },
 
-    .w6_text = ALIGNED_STRING("INTERNAL SONG MEDLEY"),
+    .InternalSongMedley_text = ALIGNED_STRING("INTERNAL SONG MEDLEY"),
 
     .v60_e11 = {
         .class_ = 0x01600022,
@@ -3146,7 +3146,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v60_e19 = {
+    .Start_Label = {
         .class_ = 0x0160002B,
         .super = 18,
         .sub = NAKA_NONE,
@@ -3154,12 +3154,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 265, 35, 308, 53 },
-        .str = SELF(w8_text),
+        .str = SELF(Start_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w8_text = "START",
+    .Start_text = "START",
 
     .v60_e20 = {
         .class_ = 0x01650006,
@@ -3172,7 +3172,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .main_func = 0x01450011,
     },
 
-    .v60_e21 = {
+    .All_Label = {
         .class_ = 0x0160002B,
         .super = 10,
         .sub = NAKA_NONE,
@@ -3180,14 +3180,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 20,
         .flag = 0x0008,
         .rect = { 282, 77, 309, 95 },
-        .str = SELF(w9_text),
+        .str = SELF(All_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w9_text = "ALL",
+    .All_text = "ALL",
 
-    .v60_e22 = {
+    .Add_Label = {
         .class_ = 0x0160002B,
         .super = 10,
         .sub = NAKA_NONE,
@@ -3195,14 +3195,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 21,
         .flag = 0x0008,
         .rect = { 282, 119, 309, 137 },
-        .str = SELF(w10_text),
+        .str = SELF(Add_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w10_text = "ADD",
+    .Add_text = "ADD",
 
-    .v60_e23 = {
+    .Loop_Label = {
         .class_ = 0x0160002B,
         .super = 10,
         .sub = NAKA_NONE,
@@ -3210,12 +3210,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 22,
         .flag = 0x0008,
         .rect = { 278, 145, 313, 163 },
-        .str = SELF(w11_text),
+        .str = SELF(Loop_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w11_text = ALIGNED_STRING("LOOP"),
+    .Loop_text = ALIGNED_STRING("LOOP"),
 
     .DiskSaveName = {
         .class_ = 0x01600034,
@@ -3229,11 +3229,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00067,
         .window = 0x0003EC76,
-        .title = SELF(w12_text),
+        .title = SELF(SaveFileNaming_text),
         .icon = 0x00000099,
     },
 
-    .w12_text = ALIGNED_STRING("SAVE FILE NAMING"),
+    .SaveFileNaming_text = ALIGNED_STRING("SAVE FILE NAMING"),
 
     .v60_e25 = {
         .class_ = 0x01600020,
@@ -3277,11 +3277,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00060,
         .window = 0x0003EC7A,
-        .title = SELF(w14_text),
+        .title = SELF(ComposerLoad_text),
         .icon = 0x0000002C,
     },
 
-    .w14_text = "COMPOSER LOAD",
+    .ComposerLoad_text = "COMPOSER LOAD",
 
     .v60_e28 = {
         .class_ = 0x0160001F,
@@ -3361,7 +3361,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .aicok = 0x0003EC82,
     },
 
-    .v60_e32 = {
+    .DiskName_Label = {
         .class_ = 0x0160002B,
         .super = 27,
         .sub = NAKA_NONE,
@@ -3369,12 +3369,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 31,
         .flag = 0x0008,
         .rect = { 78, 38, 141, 48 },
-        .str = SELF(w16_text),
+        .str = SELF(DiskName_text),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w16_text = ALIGNED_STRING("DISK NAME:"),
+    .DiskName_text = ALIGNED_STRING("DISK NAME:"),
 
     .v60_e33 = {
         .class_ = 0x01650003,
@@ -3430,7 +3430,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v60_e36 = {
+    .Load_Label = {
         .class_ = 0x0160002B,
         .super = 35,
         .sub = NAKA_NONE,
@@ -3438,12 +3438,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 274, 35, 309, 53 },
-        .str = SELF(w17_text),
+        .str = SELF(Load_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w17_text = ALIGNED_STRING("LOAD"),
+    .Load_text = ALIGNED_STRING("LOAD"),
 
     .v60_e37 = {
         .class_ = 0x01600048,
@@ -3503,11 +3503,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A0006B,
         .window = 0x0003EC92,
-        .title = SELF(w19_text),
+        .title = SELF(SaveFileNaming_text_2),
         .icon = 0x00000099,
     },
 
-    .w19_text = ALIGNED_STRING("SAVE FILE NAMING"),
+    .SaveFileNaming_text_2 = ALIGNED_STRING("SAVE FILE NAMING"),
 
     .v60_e41 = {
         .class_ = 0x01600020,
@@ -3551,11 +3551,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00048,
         .window = 0x0003EC96,
-        .title = SELF(w21_text),
+        .title = SELF(WallpaperLoad_text),
         .icon = 0x0000002C,
     },
 
-    .w21_text = ALIGNED_STRING("WALLPAPER LOAD"),
+    .WallpaperLoad_text = ALIGNED_STRING("WALLPAPER LOAD"),
 
     .v60_e44 = {
         .class_ = 0x0160001F,
@@ -3575,7 +3575,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v60_e45 = {
+    .Prev_Label = {
         .class_ = 0x0160002B,
         .super = 44,
         .sub = NAKA_NONE,
@@ -3583,12 +3583,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 85, 222, 112, 232 },
-        .str = SELF(w22_text),
+        .str = SELF(Prev_text),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w22_text = ALIGNED_STRING("PREV"),
+    .Prev_text = ALIGNED_STRING("PREV"),
 
     .v60_e46 = {
         .class_ = 0x01600022,
@@ -3627,7 +3627,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v60_e48 = {
+    .Next_Label = {
         .class_ = 0x0160002B,
         .super = 47,
         .sub = NAKA_NONE,
@@ -3635,14 +3635,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 205, 222, 232, 232 },
-        .str = SELF(w24_text),
+        .str = SELF(Next_text),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w24_text = ALIGNED_STRING("NEXT"),
+    .Next_text = ALIGNED_STRING("NEXT"),
 
-    .v60_e49 = {
+    .DiskName_Label_2 = {
         .class_ = 0x0160002B,
         .super = 43,
         .sub = NAKA_NONE,
@@ -3650,12 +3650,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 47,
         .flag = 0x0008,
         .rect = { 78, 38, 141, 48 },
-        .str = SELF(w25_text),
+        .str = SELF(DiskName_text_2),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w25_text = ALIGNED_STRING("DISK NAME:"),
+    .DiskName_text_2 = ALIGNED_STRING("DISK NAME:"),
 
     .v60_e50 = {
         .class_ = 0x01650003,
@@ -3711,7 +3711,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v60_e53 = {
+    .Load_Label_2 = {
         .class_ = 0x0160002B,
         .super = 52,
         .sub = NAKA_NONE,
@@ -3719,12 +3719,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 274, 35, 309, 53 },
-        .str = SELF(w26_text),
+        .str = SELF(Load_text_2),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w26_text = ALIGNED_STRING("LOAD"),
+    .Load_text_2 = ALIGNED_STRING("LOAD"),
 
     .v60_e54 = {
         .class_ = 0x01650000,
@@ -4224,7 +4224,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v61_e10 = {
+    .Load_Label_3 = {
         .class_ = 0x0160002B,
         .super = 9,
         .sub = NAKA_NONE,
@@ -4232,12 +4232,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 274, 35, 309, 53 },
-        .str = SELF(w38_text),
+        .str = SELF(Load_text_3),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w38_text = ALIGNED_STRING("LOAD"),
+    .Load_text_3 = ALIGNED_STRING("LOAD"),
 
     .v61_e11 = {
         .class_ = 0x01650004,
@@ -4252,7 +4252,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .paintok = 0x0003ECD0,
     },
 
-    .v61_e12 = {
+    .DiskName_Label_3 = {
         .class_ = 0x0160002B,
         .super = 7,
         .sub = NAKA_NONE,
@@ -4260,14 +4260,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 11,
         .flag = 0x0008,
         .rect = { 78, 38, 141, 48 },
-        .str = SELF(w39_text),
+        .str = SELF(DiskName_text_3),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w39_text = ALIGNED_STRING("DISK NAME:"),
+    .DiskName_text_3 = ALIGNED_STRING("DISK NAME:"),
 
-    .v61_e13 = {
+    .Smf_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 7,
         .sub = NAKA_NONE,
@@ -4283,12 +4283,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0002,
         .editsw = 0x000C,
         .selected = 0x0003ECD2,
-        .str = SELF(w40_text),
+        .str = SELF(Smf_text),
         .title = 0x01A00064,
         .icon = 0x00000000,
     },
 
-    .w40_text = "SMF",
+    .Smf_text = "SMF",
 
     .v61_e14 = {
         .class_ = 0x0160001F,
@@ -4558,7 +4558,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0003,
     },
 
-    .v61_e29 = {
+    .Pnl_Label = {
         .class_ = 0x0160002B,
         .super = 20,
         .sub = NAKA_NONE,
@@ -4566,14 +4566,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 28,
         .flag = 0x0008,
         .rect = { 9, 206, 30, 216 },
-        .str = SELF(w42_text),
+        .str = SELF(Pnl_text),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w42_text = "PNL",
+    .Pnl_text = "PNL",
 
-    .v61_e30 = {
+    .PMem_Label = {
         .class_ = 0x0160002B,
         .super = 20,
         .sub = NAKA_NONE,
@@ -4581,14 +4581,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 29,
         .flag = 0x0008,
         .rect = { 44, 206, 77, 216 },
-        .str = SELF(w43_text),
+        .str = SELF(PMem_text),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w43_text = "P.MEM",
+    .PMem_text = "P.MEM",
 
-    .v61_e31 = {
+    .Seq_Label = {
         .class_ = 0x0160002B,
         .super = 20,
         .sub = NAKA_NONE,
@@ -4596,14 +4596,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 30,
         .flag = 0x0008,
         .rect = { 88, 206, 109, 216 },
-        .str = SELF(w44_text),
+        .str = SELF(Seq_text),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w44_text = "SEQ",
+    .Seq_text = "SEQ",
 
-    .v61_e32 = {
+    .Comp_Label = {
         .class_ = 0x0160002B,
         .super = 20,
         .sub = NAKA_NONE,
@@ -4611,14 +4611,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 31,
         .flag = 0x0008,
         .rect = { 126, 206, 153, 216 },
-        .str = SELF(w45_text),
+        .str = SELF(Comp_text),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w45_text = ALIGNED_STRING("COMP"),
+    .Comp_text = ALIGNED_STRING("COMP"),
 
-    .v61_e33 = {
+    .Sound_Label = {
         .class_ = 0x0160002B,
         .super = 20,
         .sub = NAKA_NONE,
@@ -4626,14 +4626,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 32,
         .flag = 0x0008,
         .rect = { 162, 206, 195, 216 },
-        .str = SELF(w46_text),
+        .str = SELF(Sound_text),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w46_text = "SOUND",
+    .Sound_text = "SOUND",
 
-    .v61_e34 = {
+    .Msp_Label = {
         .class_ = 0x0160002B,
         .super = 20,
         .sub = NAKA_NONE,
@@ -4641,14 +4641,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 33,
         .flag = 0x0008,
         .rect = { 208, 206, 229, 216 },
-        .str = SELF(w47_text),
+        .str = SELF(Msp_text),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w47_text = "MSP",
+    .Msp_text = "MSP",
 
-    .v61_e35 = {
+    .Custom_Label = {
         .class_ = 0x0160002B,
         .super = 20,
         .sub = NAKA_NONE,
@@ -4656,14 +4656,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 34,
         .flag = 0x0008,
         .rect = { 240, 206, 279, 216 },
-        .str = SELF(w48_text),
+        .str = SELF(Custom_text),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w48_text = ALIGNED_STRING("CUSTOM"),
+    .Custom_text = ALIGNED_STRING("CUSTOM"),
 
-    .v61_e36 = {
+    .Midi_Label = {
         .class_ = 0x0160002B,
         .super = 20,
         .sub = NAKA_NONE,
@@ -4671,12 +4671,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 35,
         .flag = 0x0008,
         .rect = { 285, 206, 312, 216 },
-        .str = SELF(w49_text),
+        .str = SELF(Midi_text),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w49_text = ALIGNED_STRING("MIDI"),
+    .Midi_text = ALIGNED_STRING("MIDI"),
 
     .v61_e37 = {
         .class_ = 0x01650003,
@@ -4709,7 +4709,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .index = 0xFFFF,
     },
 
-    .v61_e39 = {
+    .CurrentPanel_Label = {
         .class_ = 0x0160002B,
         .super = 38,
         .sub = NAKA_NONE,
@@ -4717,14 +4717,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 60, 69, 167, 87 },
-        .str = SELF(w51_text),
+        .str = SELF(CurrentPanel_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w51_text = "CURRENT PANEL",
+    .CurrentPanel_text = "CURRENT PANEL",
 
-    .v61_e40 = {
+    .UserMidiSettings_Label = {
         .class_ = 0x0160002B,
         .super = 38,
         .sub = NAKA_NONE,
@@ -4732,14 +4732,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 39,
         .flag = 0x0008,
         .rect = { 60, 181, 207, 199 },
-        .str = SELF(w52_text),
+        .str = SELF(UserMidiSettings_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w52_text = ALIGNED_STRING("USER MIDI SETTINGS"),
+    .UserMidiSettings_text = ALIGNED_STRING("USER MIDI SETTINGS"),
 
-    .v61_e41 = {
+    .RhythmCustom_Label = {
         .class_ = 0x0160002B,
         .super = 38,
         .sub = NAKA_NONE,
@@ -4747,14 +4747,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 40,
         .flag = 0x0008,
         .rect = { 60, 165, 167, 183 },
-        .str = SELF(w53_text),
+        .str = SELF(RhythmCustom_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w53_text = "RHYTHM CUSTOM",
+    .RhythmCustom_text = "RHYTHM CUSTOM",
 
-    .v61_e42 = {
+    .Msp_Label_2 = {
         .class_ = 0x0160002B,
         .super = 38,
         .sub = NAKA_NONE,
@@ -4762,14 +4762,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 41,
         .flag = 0x0008,
         .rect = { 60, 149, 87, 167 },
-        .str = SELF(w54_text),
+        .str = SELF(Msp_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w54_text = "MSP",
+    .Msp_text_2 = "MSP",
 
-    .v61_e43 = {
+    .SoundMemory_Label = {
         .class_ = 0x0160002B,
         .super = 38,
         .sub = NAKA_NONE,
@@ -4777,14 +4777,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 42,
         .flag = 0x0008,
         .rect = { 60, 133, 159, 151 },
-        .str = SELF(w55_text),
+        .str = SELF(SoundMemory_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w55_text = ALIGNED_STRING("SOUND MEMORY"),
+    .SoundMemory_text = ALIGNED_STRING("SOUND MEMORY"),
 
-    .v61_e44 = {
+    .Composer_Label = {
         .class_ = 0x0160002B,
         .super = 38,
         .sub = NAKA_NONE,
@@ -4792,14 +4792,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 43,
         .flag = 0x0008,
         .rect = { 60, 117, 127, 135 },
-        .str = SELF(w56_text),
+        .str = SELF(Composer_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w56_text = ALIGNED_STRING("COMPOSER"),
+    .Composer_text = ALIGNED_STRING("COMPOSER"),
 
-    .v61_e45 = {
+    .Sequencer_Label = {
         .class_ = 0x0160002B,
         .super = 38,
         .sub = NAKA_NONE,
@@ -4807,14 +4807,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 44,
         .flag = 0x0008,
         .rect = { 60, 101, 135, 119 },
-        .str = SELF(w57_text),
+        .str = SELF(Sequencer_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w57_text = "SEQUENCER",
+    .Sequencer_text = "SEQUENCER",
 
-    .v61_e46 = {
+    .PanelMemory_Label = {
         .class_ = 0x0160002B,
         .super = 38,
         .sub = NAKA_NONE,
@@ -4822,12 +4822,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 45,
         .flag = 0x0008,
         .rect = { 60, 85, 159, 103 },
-        .str = SELF(w58_text),
+        .str = SELF(PanelMemory_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w58_text = ALIGNED_STRING("PANEL MEMORY"),
+    .PanelMemory_text = ALIGNED_STRING("PANEL MEMORY"),
 
     .v61_e47 = {
         .class_ = 0x01650000,
@@ -4900,7 +4900,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .v61_e50_title = "LOAD OPTION",
 
-    .v61_e51 = {
+    .Load_Label_4 = {
         .class_ = 0x0160002B,
         .super = 20,
         .sub = NAKA_NONE,
@@ -4908,12 +4908,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 50,
         .flag = 0x0008,
         .rect = { 274, 35, 309, 53 },
-        .str = SELF(w59_text),
+        .str = SELF(Load_text_4),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w59_text = ALIGNED_STRING("LOAD"),
+    .Load_text_4 = ALIGNED_STRING("LOAD"),
 
     .DiskLoadP3 = {
         .class_ = 0x01600035,
@@ -4995,7 +4995,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v61_e57 = {
+    .Load_Label_5 = {
         .class_ = 0x0160002B,
         .super = 56,
         .sub = NAKA_NONE,
@@ -5003,12 +5003,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 274, 35, 309, 53 },
-        .str = SELF(w60_text),
+        .str = SELF(Load_text_5),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w60_text = ALIGNED_STRING("LOAD"),
+    .Load_text_5 = ALIGNED_STRING("LOAD"),
 
     .v61_e58 = {
         .class_ = 0x01650008,
@@ -5160,7 +5160,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .paintok = 0x0003ECF6,
     },
 
-    .v61_e66 = {
+    .To_Label = {
         .class_ = 0x0160002B,
         .super = 52,
         .sub = NAKA_NONE,
@@ -5168,12 +5168,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 65,
         .flag = 0x0008,
         .rect = { 174, 78, 199, 96 },
-        .str = SELF(w65_text),
+        .str = SELF(To_text),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
     },
 
-    .w65_text = ALIGNED_STRING("TO"),
+    .To_text = ALIGNED_STRING("TO"),
 
     .v61_e67 = {
         .class_ = 0x01650000,
@@ -5198,7 +5198,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .aicok = 0x0003ECFC,
     },
 
-    .v61_e68 = {
+    .Mode_Label = {
         .class_ = 0x0160002B,
         .super = 52,
         .sub = NAKA_NONE,
@@ -5206,12 +5206,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 67,
         .flag = 0x0008,
         .rect = { 9, 35, 44, 53 },
-        .str = SELF(w66_text),
+        .str = SELF(Mode_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w66_text = ALIGNED_STRING("MODE"),
+    .Mode_text = ALIGNED_STRING("MODE"),
 
     .v61_e69 = {
         .class_ = 0x01650000,
@@ -5344,13 +5344,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00060,
         .window = 0x0003ED1E,
-        .title = SELF(w67_text),
+        .title = SELF(SmfLoad_text),
         .icon = 0x0000002C,
     },
 
-    .w67_text = ALIGNED_STRING("SMF LOAD"),
+    .SmfLoad_text = ALIGNED_STRING("SMF LOAD"),
 
-    .v61_e76 = {
+    .Tech_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 75,
         .sub = NAKA_NONE,
@@ -5366,12 +5366,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0002,
         .editsw = 0x000C,
         .selected = 0x0003ED22,
-        .str = SELF(w68_text),
+        .str = SELF(Tech_text),
         .title = 0x01A00061,
         .icon = 0x00000000,
     },
 
-    .w68_text = ALIGNED_STRING("TECH"),
+    .Tech_text = ALIGNED_STRING("TECH"),
 
     .v61_e77 = {
         .class_ = 0x01600022,
@@ -5410,7 +5410,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v61_e79 = {
+    .Prev_Label_2 = {
         .class_ = 0x0160002B,
         .super = 78,
         .sub = NAKA_NONE,
@@ -5418,12 +5418,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 45, 222, 72, 232 },
-        .str = SELF(w70_text),
+        .str = SELF(Prev_text_2),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w70_text = ALIGNED_STRING("PREV"),
+    .Prev_text_2 = ALIGNED_STRING("PREV"),
 
     .v61_e80 = {
         .class_ = 0x0160001F,
@@ -5443,7 +5443,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v61_e81 = {
+    .Next_Label_2 = {
         .class_ = 0x0160002B,
         .super = 80,
         .sub = NAKA_NONE,
@@ -5451,12 +5451,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 165, 222, 192, 232 },
-        .str = SELF(w71_text),
+        .str = SELF(Next_text_2),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w71_text = ALIGNED_STRING("NEXT"),
+    .Next_text_2 = ALIGNED_STRING("NEXT"),
 
     .v61_e82 = {
         .class_ = 0x01650000,
@@ -5481,7 +5481,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .aicok = 0x0003ED28,
     },
 
-    .v61_e83 = {
+    .Info_Label = {
         .class_ = 0x0160002B,
         .super = 75,
         .sub = NAKA_NONE,
@@ -5489,12 +5489,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 82,
         .flag = 0x0008,
         .rect = { 8, 61, 43, 79 },
-        .str = SELF(w72_text),
+        .str = SELF(Info_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w72_text = ALIGNED_STRING("INFO"),
+    .Info_text = ALIGNED_STRING("INFO"),
 
     .v61_e84 = {
         .class_ = 0x01650001,
@@ -5518,7 +5518,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .v61_e84_stron = ALIGNED_STRING("SONG"),
 
-    .v61_e85 = {
+    .LoadAs_Label = {
         .class_ = 0x0160002B,
         .super = 75,
         .sub = NAKA_NONE,
@@ -5526,12 +5526,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 84,
         .flag = 0x0008,
         .rect = { 230, 145, 289, 163 },
-        .str = SELF(w73_text),
+        .str = SELF(LoadAs_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w73_text = "LOAD AS",
+    .LoadAs_text = "LOAD AS",
 
     .v61_e86 = {
         .class_ = 0x0160001F,
@@ -5756,7 +5756,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v61_e98 = {
+    .Load_Label_6 = {
         .class_ = 0x0160002B,
         .super = 97,
         .sub = NAKA_NONE,
@@ -5764,12 +5764,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 274, 35, 309, 53 },
-        .str = SELF(w76_text),
+        .str = SELF(Load_text_6),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w76_text = ALIGNED_STRING("LOAD"),
+    .Load_text_6 = ALIGNED_STRING("LOAD"),
 
     .DiskInfoSmfLdWin = {
         .class_ = 0x01600035,
@@ -5786,7 +5786,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .child = 0x0003ED4C,
     },
 
-    .v61_e100 = {
+    .DiskName_Label_4 = {
         .class_ = 0x0160002B,
         .super = 99,
         .sub = NAKA_NONE,
@@ -5794,12 +5794,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 78, 38, 141, 48 },
-        .str = SELF(w77_text),
+        .str = SELF(DiskName_text_4),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w77_text = ALIGNED_STRING("DISK NAME:"),
+    .DiskName_text_4 = ALIGNED_STRING("DISK NAME:"),
 
     .v61_e101 = {
         .class_ = 0x01650003,
@@ -5855,7 +5855,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v61_e104 = {
+    .Load_Label_7 = {
         .class_ = 0x0160002B,
         .super = 99,
         .sub = NAKA_NONE,
@@ -5863,12 +5863,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 103,
         .flag = 0x0008,
         .rect = { 274, 35, 309, 53 },
-        .str = SELF(w78_text),
+        .str = SELF(Load_text_7),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w78_text = ALIGNED_STRING("LOAD"),
+    .Load_text_7 = ALIGNED_STRING("LOAD"),
 
     .CmpSingleLoad = {
         .class_ = 0x01600034,
@@ -5882,11 +5882,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A000B0,
         .window = 0x0003ED54,
-        .title = SELF(w79_text),
+        .title = SELF(LoadSingleComposer_text),
         .icon = 0x00000054,
     },
 
-    .w79_text = ALIGNED_STRING("LOAD SINGLE COMPOSER"),
+    .LoadSingleComposer_text = ALIGNED_STRING("LOAD SINGLE COMPOSER"),
 
     .v61_e106 = {
         .class_ = 0x01600022,
@@ -6028,7 +6028,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v61_e113 = {
+    .Load_Label_8 = {
         .class_ = 0x0160002B,
         .super = 112,
         .sub = NAKA_NONE,
@@ -6036,12 +6036,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 274, 35, 309, 53 },
-        .str = SELF(w84_text),
+        .str = SELF(Load_text_8),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w84_text = ALIGNED_STRING("LOAD"),
+    .Load_text_8 = ALIGNED_STRING("LOAD"),
 
     .v61_e114 = {
         .class_ = 0x01650008,
@@ -6058,7 +6058,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .tail_y_rate = 0x0032,
     },
 
-    .v61_e115 = {
+    .To_Label_2 = {
         .class_ = 0x0160002B,
         .super = 105,
         .sub = NAKA_NONE,
@@ -6066,14 +6066,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 114,
         .flag = 0x0008,
         .rect = { 174, 78, 199, 96 },
-        .str = SELF(w85_text),
+        .str = SELF(To_text_2),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
     },
 
-    .w85_text = ALIGNED_STRING("TO"),
+    .To_text_2 = ALIGNED_STRING("TO"),
 
-    .v61_e116 = {
+    .From_Label = {
         .class_ = 0x0160002B,
         .super = 105,
         .sub = NAKA_NONE,
@@ -6081,12 +6081,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 115,
         .flag = 0x0008,
         .rect = { 96, 78, 143, 96 },
-        .str = SELF(w86_text),
+        .str = SELF(From_text),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
     },
 
-    .w86_text = ALIGNED_STRING("FROM"),
+    .From_text = ALIGNED_STRING("FROM"),
 
     .v61_e117 = {
         .class_ = 0x0160001F,
@@ -6124,7 +6124,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x000D,
     },
 
-    .v61_e119 = {
+    .File_Label = {
         .class_ = 0x0160002B,
         .super = 105,
         .sub = NAKA_NONE,
@@ -6132,12 +6132,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 118,
         .flag = 0x0008,
         .rect = { 5, 55, 40, 73 },
-        .str = SELF(w87_text),
+        .str = SELF(File_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w87_text = ALIGNED_STRING("FILE"),
+    .File_text = ALIGNED_STRING("FILE"),
 
     .v61_e120 = {
         .class_ = 0x01650000,
@@ -6315,13 +6315,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00060,
         .window = 0x0003ED84,
-        .title = SELF(w88_text),
+        .title = SELF(Save_text_2),
         .icon = 0x0000002D,
     },
 
-    .w88_text = ALIGNED_STRING("SAVE"),
+    .Save_text_2 = ALIGNED_STRING("SAVE"),
 
-    .v65_e1 = {
+    .TechnicsFormat_AcTtlJgBox = {
         .class_ = 0x01650002,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6344,7 +6344,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .TechnicsFormat_str = "TECHNICS FORMAT",
 
-    .v65_e2 = {
+    .SmfFormat_AcTtlJgBox = {
         .class_ = 0x01650002,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6559,7 +6559,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .paintok = 0x0003ED9A,
     },
 
-    .v67_e12 = {
+    .SaveAs_Label = {
         .class_ = 0x0160002B,
         .super = 11,
         .sub = NAKA_NONE,
@@ -6567,12 +6567,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 62, 35, 119, 45 },
-        .str = SELF(w93_text),
+        .str = SELF(SaveAs_text),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w93_text = "SAVE AS :",
+    .SaveAs_text = "SAVE AS :",
 
     .v67_e13 = {
         .class_ = 0x01650003,
@@ -6592,7 +6592,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .paintok = 0x0003ED9C,
     },
 
-    .v67_e14 = {
+    .Name_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 7,
         .sub = NAKA_NONE,
@@ -6608,12 +6608,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0000,
         .editsw = 0x0088,
         .selected = 0x0003ED9E,
-        .str = SELF(w94_text),
+        .str = SELF(Name_text),
         .title = 0x01A00066,
         .icon = 0x00000000,
     },
 
-    .w94_text = ALIGNED_STRING("NAME"),
+    .Name_text = ALIGNED_STRING("NAME"),
 
     .v67_e15 = {
         .class_ = 0x01650000,
@@ -6656,7 +6656,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v67_e17 = {
+    .Save_Label = {
         .class_ = 0x0160002B,
         .super = 16,
         .sub = NAKA_NONE,
@@ -6664,12 +6664,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 273, 35, 308, 53 },
-        .str = SELF(w95_text),
+        .str = SELF(Save_text_3),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w95_text = ALIGNED_STRING("SAVE"),
+    .Save_text_3 = ALIGNED_STRING("SAVE"),
 
     .v67_e18 = {
         .class_ = 0x01650004,
@@ -6741,7 +6741,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .index = 0xFFFF,
     },
 
-    .v67_e23 = {
+    .CurrentPanel_Label_2 = {
         .class_ = 0x0160002B,
         .super = 22,
         .sub = NAKA_NONE,
@@ -6749,14 +6749,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 46, 69, 153, 87 },
-        .str = SELF(w97_text),
+        .str = SELF(CurrentPanel_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w97_text = "CURRENT PANEL",
+    .CurrentPanel_text_2 = "CURRENT PANEL",
 
-    .v67_e24 = {
+    .UserMidiSettings_Label_2 = {
         .class_ = 0x0160002B,
         .super = 22,
         .sub = NAKA_NONE,
@@ -6764,14 +6764,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 23,
         .flag = 0x0008,
         .rect = { 46, 181, 193, 199 },
-        .str = SELF(w98_text),
+        .str = SELF(UserMidiSettings_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w98_text = ALIGNED_STRING("USER MIDI SETTINGS"),
+    .UserMidiSettings_text_2 = ALIGNED_STRING("USER MIDI SETTINGS"),
 
-    .v67_e25 = {
+    .RhythmCustom_Label_2 = {
         .class_ = 0x0160002B,
         .super = 22,
         .sub = NAKA_NONE,
@@ -6779,14 +6779,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 24,
         .flag = 0x0008,
         .rect = { 46, 165, 153, 183 },
-        .str = SELF(w99_text),
+        .str = SELF(RhythmCustom_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w99_text = "RHYTHM CUSTOM",
+    .RhythmCustom_text_2 = "RHYTHM CUSTOM",
 
-    .v67_e26 = {
+    .Msp_Label_3 = {
         .class_ = 0x0160002B,
         .super = 22,
         .sub = NAKA_NONE,
@@ -6794,14 +6794,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 25,
         .flag = 0x0008,
         .rect = { 46, 149, 73, 167 },
-        .str = SELF(w100_text),
+        .str = SELF(Msp_text_3),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w100_text = "MSP",
+    .Msp_text_3 = "MSP",
 
-    .v67_e27 = {
+    .SoundMemory_Label_2 = {
         .class_ = 0x0160002B,
         .super = 22,
         .sub = NAKA_NONE,
@@ -6809,14 +6809,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 26,
         .flag = 0x0008,
         .rect = { 46, 133, 145, 151 },
-        .str = SELF(w101_text),
+        .str = SELF(SoundMemory_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w101_text = ALIGNED_STRING("SOUND MEMORY"),
+    .SoundMemory_text_2 = ALIGNED_STRING("SOUND MEMORY"),
 
-    .v67_e28 = {
+    .Composer_Label_2 = {
         .class_ = 0x0160002B,
         .super = 22,
         .sub = NAKA_NONE,
@@ -6824,14 +6824,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 27,
         .flag = 0x0008,
         .rect = { 46, 117, 113, 135 },
-        .str = SELF(w102_text),
+        .str = SELF(Composer_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w102_text = ALIGNED_STRING("COMPOSER"),
+    .Composer_text_2 = ALIGNED_STRING("COMPOSER"),
 
-    .v67_e29 = {
+    .Sequencer_Label_2 = {
         .class_ = 0x0160002B,
         .super = 22,
         .sub = NAKA_NONE,
@@ -6839,14 +6839,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 28,
         .flag = 0x0008,
         .rect = { 46, 101, 121, 119 },
-        .str = SELF(w103_text),
+        .str = SELF(Sequencer_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w103_text = "SEQUENCER",
+    .Sequencer_text_2 = "SEQUENCER",
 
-    .v67_e30 = {
+    .PanelMemory_Label_2 = {
         .class_ = 0x0160002B,
         .super = 22,
         .sub = NAKA_NONE,
@@ -6854,12 +6854,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 29,
         .flag = 0x0008,
         .rect = { 46, 85, 145, 103 },
-        .str = SELF(w104_text),
+        .str = SELF(PanelMemory_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w104_text = ALIGNED_STRING("PANEL MEMORY"),
+    .PanelMemory_text_2 = ALIGNED_STRING("PANEL MEMORY"),
 
     .v67_e31 = {
         .class_ = 0x01650000,
@@ -6914,7 +6914,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v67_e34 = {
+    .Save_Label_2 = {
         .class_ = 0x0160002B,
         .super = 33,
         .sub = NAKA_NONE,
@@ -6922,12 +6922,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 273, 35, 308, 53 },
-        .str = SELF(w105_text),
+        .str = SELF(Save_text_4),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w105_text = ALIGNED_STRING("SAVE"),
+    .Save_text_4 = ALIGNED_STRING("SAVE"),
 
     .v67_e35 = {
         .class_ = 0x01650003,
@@ -6947,7 +6947,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .paintok = 0x0003EDB6,
     },
 
-    .v67_e36 = {
+    .SaveAs_Label_2 = {
         .class_ = 0x0160002B,
         .super = 35,
         .sub = NAKA_NONE,
@@ -6955,12 +6955,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 46, 40, 103, 50 },
-        .str = SELF(w106_text),
+        .str = SELF(SaveAs_text_2),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w106_text = "SAVE AS :",
+    .SaveAs_text_2 = "SAVE AS :",
 
     .v67_e37 = {
         .class_ = 0x0160001F,
@@ -6980,7 +6980,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v67_e38 = {
+    .Perform_Label = {
         .class_ = 0x0160002B,
         .super = 37,
         .sub = NAKA_NONE,
@@ -6988,12 +6988,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 251, 78, 310, 96 },
-        .str = SELF(w107_text),
+        .str = SELF(Perform_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w107_text = "PERFORM",
+    .Perform_text = "PERFORM",
 
     .v67_e39 = {
         .class_ = 0x0160001F,
@@ -7013,7 +7013,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v67_e40 = {
+    .Backup_Label = {
         .class_ = 0x0160002B,
         .super = 39,
         .sub = NAKA_NONE,
@@ -7021,12 +7021,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 256, 120, 307, 138 },
-        .str = SELF(w108_text),
+        .str = SELF(Backup_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w108_text = ALIGNED_STRING("BACKUP"),
+    .Backup_text = ALIGNED_STRING("BACKUP"),
 
     .v67_e41 = {
         .class_ = 0x0160001F,
@@ -7046,7 +7046,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0003,
     },
 
-    .v67_e42 = {
+    .Pnl_Label_2 = {
         .class_ = 0x0160002B,
         .super = 21,
         .sub = 43,
@@ -7054,12 +7054,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 41,
         .flag = 0x0008,
         .rect = { 9, 206, 30, 216 },
-        .str = SELF(w109_text),
+        .str = SELF(Pnl_text_2),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w109_text = "PNL",
+    .Pnl_text_2 = "PNL",
 
     .v67_e43 = {
         .class_ = 0x01600052,
@@ -7090,7 +7090,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0003,
     },
 
-    .v67_e45 = {
+    .PMem_Label_2 = {
         .class_ = 0x0160002B,
         .super = 21,
         .sub = NAKA_NONE,
@@ -7098,12 +7098,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 44,
         .flag = 0x0008,
         .rect = { 42, 206, 75, 216 },
-        .str = SELF(w110_text),
+        .str = SELF(PMem_text_2),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w110_text = "P.MEM",
+    .PMem_text_2 = "P.MEM",
 
     .v67_e46 = {
         .class_ = 0x0160001F,
@@ -7213,7 +7213,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0003,
     },
 
-    .v67_e52 = {
+    .Seq_Label_2 = {
         .class_ = 0x0160002B,
         .super = 21,
         .sub = NAKA_NONE,
@@ -7221,14 +7221,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 51,
         .flag = 0x0008,
         .rect = { 88, 206, 109, 216 },
-        .str = SELF(w111_text),
+        .str = SELF(Seq_text_2),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w111_text = "SEQ",
+    .Seq_text_2 = "SEQ",
 
-    .v67_e53 = {
+    .Comp_Label_2 = {
         .class_ = 0x0160002B,
         .super = 21,
         .sub = NAKA_NONE,
@@ -7236,14 +7236,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 52,
         .flag = 0x0008,
         .rect = { 126, 206, 153, 216 },
-        .str = SELF(w112_text),
+        .str = SELF(Comp_text_2),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w112_text = ALIGNED_STRING("COMP"),
+    .Comp_text_2 = ALIGNED_STRING("COMP"),
 
-    .v67_e54 = {
+    .Msp_Label_4 = {
         .class_ = 0x0160002B,
         .super = 21,
         .sub = NAKA_NONE,
@@ -7251,14 +7251,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 53,
         .flag = 0x0008,
         .rect = { 208, 206, 229, 216 },
-        .str = SELF(w113_text),
+        .str = SELF(Msp_text_4),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w113_text = "MSP",
+    .Msp_text_4 = "MSP",
 
-    .v67_e55 = {
+    .Sound_Label_2 = {
         .class_ = 0x0160002B,
         .super = 21,
         .sub = NAKA_NONE,
@@ -7266,14 +7266,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 54,
         .flag = 0x0008,
         .rect = { 162, 206, 195, 216 },
-        .str = SELF(w114_text),
+        .str = SELF(Sound_text_2),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w114_text = "SOUND",
+    .Sound_text_2 = "SOUND",
 
-    .v67_e56 = {
+    .Custom_Label_2 = {
         .class_ = 0x0160002B,
         .super = 21,
         .sub = NAKA_NONE,
@@ -7281,14 +7281,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 55,
         .flag = 0x0008,
         .rect = { 240, 206, 279, 216 },
-        .str = SELF(w115_text),
+        .str = SELF(Custom_text_2),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w115_text = ALIGNED_STRING("CUSTOM"),
+    .Custom_text_2 = ALIGNED_STRING("CUSTOM"),
 
-    .v67_e57 = {
+    .Midi_Label_2 = {
         .class_ = 0x0160002B,
         .super = 21,
         .sub = NAKA_NONE,
@@ -7296,12 +7296,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 56,
         .flag = 0x0008,
         .rect = { 285, 206, 312, 216 },
-        .str = SELF(w116_text),
+        .str = SELF(Midi_text_2),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w116_text = ALIGNED_STRING("MIDI"),
+    .Midi_text_2 = ALIGNED_STRING("MIDI"),
 
     .v67_e58 = {
         .class_ = 0x01650007,
@@ -7339,7 +7339,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v67_e60 = {
+    .AllOff_Label = {
         .class_ = 0x0160002B,
         .super = 59,
         .sub = NAKA_NONE,
@@ -7347,12 +7347,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 251, 161, 310, 179 },
-        .str = SELF(w117_text),
+        .str = SELF(AllOff_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w117_text = "ALL OFF",
+    .AllOff_text = "ALL OFF",
 
     .DiskSaveP3 = {
         .class_ = 0x01600035,
@@ -7447,7 +7447,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .paintok = 0x0003EDC6,
     },
 
-    .v67_e66 = {
+    .Save_Label_3 = {
         .class_ = 0x0160002B,
         .super = 65,
         .sub = NAKA_NONE,
@@ -7455,14 +7455,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 82, 35, 109, 45 },
-        .str = SELF(w119_text),
+        .str = SELF(Save_text_5),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w119_text = ALIGNED_STRING("SAVE"),
+    .Save_text_5 = ALIGNED_STRING("SAVE"),
 
-    .v67_e67 = {
+    .As_Label = {
         .class_ = 0x0160002B,
         .super = 65,
         .sub = NAKA_NONE,
@@ -7470,14 +7470,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 66,
         .flag = 0x0008,
         .rect = { 82, 44, 109, 54 },
-        .str = SELF(w120_text),
+        .str = SELF(As_text),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w120_text = ALIGNED_STRING(" AS:"),
+    .As_text = ALIGNED_STRING(" AS:"),
 
-    .v67_e68 = {
+    .Save_Label_4 = {
         .class_ = 0x0160002B,
         .super = 61,
         .sub = NAKA_NONE,
@@ -7485,12 +7485,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 65,
         .flag = 0x0008,
         .rect = { 273, 35, 308, 53 },
-        .str = SELF(w121_text),
+        .str = SELF(Save_text_6),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w121_text = ALIGNED_STRING("SAVE"),
+    .Save_text_6 = ALIGNED_STRING("SAVE"),
 
     .v67_e69 = {
         .class_ = 0x01650007,
@@ -7533,11 +7533,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00060,
         .window = 0x0003EDC8,
-        .title = SELF(w122_text),
+        .title = SELF(SmfSave_text),
         .icon = 0x0000002D,
     },
 
-    .w122_text = ALIGNED_STRING("SMF SAVE"),
+    .SmfSave_text = ALIGNED_STRING("SMF SAVE"),
 
     .v6B_e1 = {
         .class_ = 0x01650000,
@@ -7599,7 +7599,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6B_e4 = {
+    .Prev_Label_3 = {
         .class_ = 0x0160002B,
         .super = 3,
         .sub = NAKA_NONE,
@@ -7607,12 +7607,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 45, 222, 72, 232 },
-        .str = SELF(w124_text),
+        .str = SELF(Prev_text_3),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w124_text = ALIGNED_STRING("PREV"),
+    .Prev_text_3 = ALIGNED_STRING("PREV"),
 
     .v6B_e5 = {
         .class_ = 0x0160001F,
@@ -7632,7 +7632,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6B_e6 = {
+    .Next_Label_3 = {
         .class_ = 0x0160002B,
         .super = 5,
         .sub = NAKA_NONE,
@@ -7640,12 +7640,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 165, 222, 192, 232 },
-        .str = SELF(w125_text),
+        .str = SELF(Next_text_3),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w125_text = ALIGNED_STRING("NEXT"),
+    .Next_text_3 = ALIGNED_STRING("NEXT"),
 
     .v6B_e7 = {
         .class_ = 0x01650005,
@@ -7687,7 +7687,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .v6B_e8_stron = ALIGNED_STRING("ON"),
 
-    .v6B_e9 = {
+    .PanelHeader_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7695,14 +7695,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 8,
         .flag = 0x0008,
         .rect = { 220, 144, 319, 162 },
-        .str = SELF(w126_text),
+        .str = SELF(PanelHeader_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w126_text = ALIGNED_STRING("PANEL HEADER"),
+    .PanelHeader_text = ALIGNED_STRING("PANEL HEADER"),
 
-    .v6B_e10 = {
+    .Name_AcTitleMenu_2 = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7718,12 +7718,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0000,
         .editsw = 0x0088,
         .selected = 0x0003EDD6,
-        .str = SELF(w127_text),
+        .str = SELF(Name_text_2),
         .title = 0x01A0006A,
         .icon = 0x00000000,
     },
 
-    .w127_text = ALIGNED_STRING("NAME"),
+    .Name_text_2 = ALIGNED_STRING("NAME"),
 
     .v6B_e11 = {
         .class_ = 0x01650003,
@@ -7761,7 +7761,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6B_e13 = {
+    .Save_Label_5 = {
         .class_ = 0x0160002B,
         .super = 12,
         .sub = NAKA_NONE,
@@ -7769,14 +7769,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 273, 35, 308, 53 },
-        .str = SELF(w128_text),
+        .str = SELF(Save_text_7),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w128_text = ALIGNED_STRING("SAVE"),
+    .Save_text_7 = ALIGNED_STRING("SAVE"),
 
-    .v6B_e14 = {
+    .MeasureSpace_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7784,12 +7784,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 12,
         .flag = 0x0008,
         .rect = { 196, 186, 319, 204 },
-        .str = SELF(w129_text),
+        .str = SELF(MeasureSpace_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w129_text = "1 MEASURE SPACE",
+    .MeasureSpace_text = "1 MEASURE SPACE",
 
     .v6B_e15 = {
         .class_ = 0x01650000,
@@ -7878,7 +7878,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .aicok = 0x0003EDEA,
     },
 
-    .v6B_e19 = {
+    .Save_Label_6 = {
         .class_ = 0x0160002B,
         .super = 18,
         .sub = NAKA_NONE,
@@ -7886,14 +7886,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 62, 33, 89, 43 },
-        .str = SELF(w130_text),
+        .str = SELF(Save_text_8),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w130_text = ALIGNED_STRING("SAVE"),
+    .Save_text_8 = ALIGNED_STRING("SAVE"),
 
-    .v6B_e20 = {
+    .As_Label_2 = {
         .class_ = 0x0160002B,
         .super = 18,
         .sub = NAKA_NONE,
@@ -7901,12 +7901,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 19,
         .flag = 0x0008,
         .rect = { 62, 42, 89, 52 },
-        .str = SELF(w131_text),
+        .str = SELF(As_text_2),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w131_text = ALIGNED_STRING(" AS:"),
+    .As_text_2 = ALIGNED_STRING(" AS:"),
 
     .DiskSmfDirectPlay = {
         .class_ = 0x01600034,
@@ -7920,11 +7920,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00060,
         .window = 0x0003EDEC,
-        .title = SELF(w132_text),
+        .title = SELF(SmfDirectPlay_text),
         .icon = 0x0000002E,
     },
 
-    .w132_text = "SMF DIRECT PLAY",
+    .SmfDirectPlay_text = "SMF DIRECT PLAY",
 
     .v6C_e1 = {
         .class_ = 0x01650000,
@@ -8009,7 +8009,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6C_e5 = {
+    .Prev_Label_4 = {
         .class_ = 0x0160002B,
         .super = 4,
         .sub = NAKA_NONE,
@@ -8017,12 +8017,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 85, 222, 112, 232 },
-        .str = SELF(w134_text),
+        .str = SELF(Prev_text_4),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w134_text = ALIGNED_STRING("PREV"),
+    .Prev_text_4 = ALIGNED_STRING("PREV"),
 
     .v6C_e6 = {
         .class_ = 0x0160001F,
@@ -8042,7 +8042,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6C_e7 = {
+    .Next_Label_4 = {
         .class_ = 0x0160002B,
         .super = 6,
         .sub = NAKA_NONE,
@@ -8050,14 +8050,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 205, 222, 232, 232 },
-        .str = SELF(w135_text),
+        .str = SELF(Next_text_4),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w135_text = ALIGNED_STRING("NEXT"),
+    .Next_text_4 = ALIGNED_STRING("NEXT"),
 
-    .v6C_e8 = {
+    .Info_Label_2 = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8065,12 +8065,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 6,
         .flag = 0x0008,
         .rect = { 8, 61, 43, 79 },
-        .str = SELF(w136_text),
+        .str = SELF(Info_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w136_text = ALIGNED_STRING("INFO"),
+    .Info_text_2 = ALIGNED_STRING("INFO"),
 
     .v6C_e9 = {
         .class_ = 0x01650001,
@@ -8170,7 +8170,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .v6C_e13_stron = ALIGNED_STRING("GM"),
 
-    .v6C_e14 = {
+    .PlayAs_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8178,12 +8178,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 13,
         .flag = 0x0008,
         .rect = { 260, 187, 319, 205 },
-        .str = SELF(w137_text),
+        .str = SELF(PlayAs_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w137_text = "PLAY AS",
+    .PlayAs_text = "PLAY AS",
 
     .v6C_e15 = {
         .class_ = 0x0160002E,
@@ -8233,7 +8233,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .linemode = 0x0001,
     },
 
-    .v6C_e19 = {
+    .Loop_Label_2 = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8241,14 +8241,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 18,
         .flag = 0x0008,
         .rect = { 282, 150, 309, 160 },
-        .str = SELF(w138_text),
+        .str = SELF(Loop_text_2),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w138_text = ALIGNED_STRING("LOOP"),
+    .Loop_text_2 = ALIGNED_STRING("LOOP"),
 
-    .v6C_e20 = {
+    .Medley_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8256,12 +8256,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 19,
         .flag = 0x0008,
         .rect = { 241, 123, 280, 133 },
-        .str = SELF(w139_text),
+        .str = SELF(Medley_text),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w139_text = ALIGNED_STRING("MEDLEY"),
+    .Medley_text = ALIGNED_STRING("MEDLEY"),
 
     .v6C_e21 = {
         .class_ = 0x01650006,
@@ -8274,7 +8274,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .main_func = 0x0145001C,
     },
 
-    .v6C_e22 = {
+    .All_Label_2 = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8282,14 +8282,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 21,
         .flag = 0x0008,
         .rect = { 282, 77, 309, 95 },
-        .str = SELF(w140_text),
+        .str = SELF(All_text_2),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w140_text = "ALL",
+    .All_text_2 = "ALL",
 
-    .v6C_e23 = {
+    .Add_Label_2 = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8297,12 +8297,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 22,
         .flag = 0x0008,
         .rect = { 282, 119, 309, 137 },
-        .str = SELF(w141_text),
+        .str = SELF(Add_text_2),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w141_text = "ADD",
+    .Add_text_2 = "ADD",
 
     .SmfMidiOut = {
         .class_ = 0x01650005,
@@ -8324,7 +8324,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .SmfMidiOut_stron = ALIGNED_STRING("ON"),
 
-    .v6C_e25 = {
+    .MidiOut_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8332,12 +8332,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 24,
         .flag = 0x0008,
         .rect = { 0, 187, 67, 205 },
-        .str = SELF(w142_text),
+        .str = SELF(MidiOut_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w142_text = ALIGNED_STRING("MIDI OUT"),
+    .MidiOut_text = ALIGNED_STRING("MIDI OUT"),
 
     .v6C_e26 = {
         .class_ = 0x0165000B,
@@ -8422,7 +8422,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6C_e31 = {
+    .Start_Label_2 = {
         .class_ = 0x0160002B,
         .super = 30,
         .sub = NAKA_NONE,
@@ -8430,12 +8430,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 264, 36, 307, 54 },
-        .str = SELF(w143_text),
+        .str = SELF(Start_text_2),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w143_text = "START",
+    .Start_text_2 = "START",
 
     .DiskInfoDPSmfWin = {
         .class_ = 0x01600035,
@@ -8452,7 +8452,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .child = 0x0003EE12,
     },
 
-    .v6C_e33 = {
+    .DiskName_Label_5 = {
         .class_ = 0x0160002B,
         .super = 32,
         .sub = NAKA_NONE,
@@ -8460,12 +8460,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 78, 38, 141, 48 },
-        .str = SELF(w144_text),
+        .str = SELF(DiskName_text_5),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w144_text = ALIGNED_STRING("DISK NAME:"),
+    .DiskName_text_5 = ALIGNED_STRING("DISK NAME:"),
 
     .v6C_e34 = {
         .class_ = 0x01650003,
@@ -8521,7 +8521,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6C_e37 = {
+    .Start_Label_3 = {
         .class_ = 0x0160002B,
         .super = 36,
         .sub = NAKA_NONE,
@@ -8529,12 +8529,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 264, 36, 307, 54 },
-        .str = SELF(w145_text),
+        .str = SELF(Start_text_3),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w145_text = "START",
+    .Start_text_3 = "START",
 
     .DiskDocDirectPlay = {
         .class_ = 0x01600034,
@@ -8548,11 +8548,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00060,
         .window = 0x0003EE1A,
-        .title = SELF(w146_text),
+        .title = SELF(DocDirectPlay_text),
         .icon = 0x0000002E,
     },
 
-    .w146_text = "DOC DIRECT PLAY",
+    .DocDirectPlay_text = "DOC DIRECT PLAY",
 
     .v6C_e39 = {
         .class_ = 0x01650000,
@@ -8618,7 +8618,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6C_e42 = {
+    .Prev_Label_5 = {
         .class_ = 0x0160002B,
         .super = 41,
         .sub = NAKA_NONE,
@@ -8626,12 +8626,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 85, 222, 112, 232 },
-        .str = SELF(w147_text),
+        .str = SELF(Prev_text_5),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w147_text = ALIGNED_STRING("PREV"),
+    .Prev_text_5 = ALIGNED_STRING("PREV"),
 
     .v6C_e43 = {
         .class_ = 0x01600022,
@@ -8670,7 +8670,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6C_e45 = {
+    .Next_Label_5 = {
         .class_ = 0x0160002B,
         .super = 44,
         .sub = NAKA_NONE,
@@ -8678,14 +8678,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 205, 222, 232, 232 },
-        .str = SELF(w149_text),
+        .str = SELF(Next_text_5),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w149_text = ALIGNED_STRING("NEXT"),
+    .Next_text_5 = ALIGNED_STRING("NEXT"),
 
-    .v6C_e46 = {
+    .Medley_Label_2 = {
         .class_ = 0x0160002B,
         .super = 38,
         .sub = NAKA_NONE,
@@ -8693,12 +8693,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 44,
         .flag = 0x0008,
         .rect = { 241, 123, 280, 133 },
-        .str = SELF(w150_text),
+        .str = SELF(Medley_text_2),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w150_text = ALIGNED_STRING("MEDLEY"),
+    .Medley_text_2 = ALIGNED_STRING("MEDLEY"),
 
     .v6C_e47 = {
         .class_ = 0x01650006,
@@ -8795,7 +8795,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6C_e54 = {
+    .Loop_Label_3 = {
         .class_ = 0x0160002B,
         .super = 38,
         .sub = NAKA_NONE,
@@ -8803,12 +8803,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 53,
         .flag = 0x0008,
         .rect = { 282, 150, 309, 160 },
-        .str = SELF(w151_text),
+        .str = SELF(Loop_text_3),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w151_text = ALIGNED_STRING("LOOP"),
+    .Loop_text_3 = ALIGNED_STRING("LOOP"),
 
     .v6C_e55 = {
         .class_ = 0x01650005,
@@ -8866,7 +8866,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6C_e58 = {
+    .Start_Label_4 = {
         .class_ = 0x0160002B,
         .super = 57,
         .sub = NAKA_NONE,
@@ -8874,14 +8874,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 264, 36, 307, 54 },
-        .str = SELF(w152_text),
+        .str = SELF(Start_text_4),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w152_text = "START",
+    .Start_text_4 = "START",
 
-    .v6C_e59 = {
+    .All_Label_3 = {
         .class_ = 0x0160002B,
         .super = 38,
         .sub = NAKA_NONE,
@@ -8889,14 +8889,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 57,
         .flag = 0x0008,
         .rect = { 282, 77, 309, 95 },
-        .str = SELF(w153_text),
+        .str = SELF(All_text_3),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w153_text = "ALL",
+    .All_text_3 = "ALL",
 
-    .v6C_e60 = {
+    .Add_Label_3 = {
         .class_ = 0x0160002B,
         .super = 38,
         .sub = NAKA_NONE,
@@ -8904,12 +8904,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 59,
         .flag = 0x0008,
         .rect = { 282, 119, 309, 137 },
-        .str = SELF(w154_text),
+        .str = SELF(Add_text_3),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w154_text = "ADD",
+    .Add_text_3 = "ADD",
 
     .DiskPdDirectPlay = {
         .class_ = 0x01600034,
@@ -8923,11 +8923,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00060,
         .window = 0x0003EE2E,
-        .title = SELF(w155_text),
+        .title = SELF(PianoDiscDirectPlay_text),
         .icon = 0x0000002E,
     },
 
-    .w155_text = ALIGNED_STRING("PIANO DISC DIRECT PLAY"),
+    .PianoDiscDirectPlay_text = ALIGNED_STRING("PIANO DISC DIRECT PLAY"),
 
     .v6C_e62 = {
         .class_ = 0x01650000,
@@ -9012,7 +9012,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6C_e66 = {
+    .Prev_Label_6 = {
         .class_ = 0x0160002B,
         .super = 65,
         .sub = NAKA_NONE,
@@ -9020,12 +9020,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 5, 222, 32, 232 },
-        .str = SELF(w157_text),
+        .str = SELF(Prev_text_6),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w157_text = ALIGNED_STRING("PREV"),
+    .Prev_text_6 = ALIGNED_STRING("PREV"),
 
     .v6C_e67 = {
         .class_ = 0x0160001F,
@@ -9045,7 +9045,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6C_e68 = {
+    .Next_Label_6 = {
         .class_ = 0x0160002B,
         .super = 67,
         .sub = NAKA_NONE,
@@ -9053,12 +9053,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 205, 222, 232, 232 },
-        .str = SELF(w158_text),
+        .str = SELF(Next_text_6),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w158_text = ALIGNED_STRING("NEXT"),
+    .Next_text_6 = ALIGNED_STRING("NEXT"),
 
     .v6C_e69 = {
         .class_ = 0x0160001F,
@@ -9127,7 +9127,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .v6C_e72_stron = ALIGNED_STRING("ON"),
 
-    .v6C_e73 = {
+    .Loop_Label_4 = {
         .class_ = 0x0160002B,
         .super = 61,
         .sub = NAKA_NONE,
@@ -9135,12 +9135,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 72,
         .flag = 0x0008,
         .rect = { 282, 150, 309, 160 },
-        .str = SELF(w159_text),
+        .str = SELF(Loop_text_4),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w159_text = ALIGNED_STRING("LOOP"),
+    .Loop_text_4 = ALIGNED_STRING("LOOP"),
 
     .v6C_e74 = {
         .class_ = 0x0160001F,
@@ -9160,7 +9160,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v6C_e75 = {
+    .Start_Label_5 = {
         .class_ = 0x0160002B,
         .super = 74,
         .sub = NAKA_NONE,
@@ -9168,14 +9168,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 264, 36, 307, 54 },
-        .str = SELF(w160_text),
+        .str = SELF(Start_text_5),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w160_text = "START",
+    .Start_text_5 = "START",
 
-    .v6C_e76 = {
+    .Medley_Label_3 = {
         .class_ = 0x0160002B,
         .super = 61,
         .sub = NAKA_NONE,
@@ -9183,12 +9183,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 74,
         .flag = 0x0008,
         .rect = { 241, 123, 280, 133 },
-        .str = SELF(w161_text),
+        .str = SELF(Medley_text_3),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w161_text = ALIGNED_STRING("MEDLEY"),
+    .Medley_text_3 = ALIGNED_STRING("MEDLEY"),
 
     .v6C_e77 = {
         .class_ = 0x0160002E,
@@ -9238,7 +9238,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .linemode = 0x0001,
     },
 
-    .v6C_e81 = {
+    .All_Label_4 = {
         .class_ = 0x0160002B,
         .super = 61,
         .sub = NAKA_NONE,
@@ -9246,14 +9246,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 80,
         .flag = 0x0008,
         .rect = { 282, 77, 309, 95 },
-        .str = SELF(w162_text),
+        .str = SELF(All_text_4),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w162_text = "ALL",
+    .All_text_4 = "ALL",
 
-    .v6C_e82 = {
+    .Add_Label_4 = {
         .class_ = 0x0160002B,
         .super = 61,
         .sub = NAKA_NONE,
@@ -9261,12 +9261,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 81,
         .flag = 0x0008,
         .rect = { 282, 119, 309, 137 },
-        .str = SELF(w163_text),
+        .str = SELF(Add_text_4),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w163_text = "ADD",
+    .Add_text_4 = "ADD",
 
     .DiskSongMedley = {
         .class_ = 0x01600034,
@@ -9280,11 +9280,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00060,
         .window = 0x0003EE40,
-        .title = SELF(w164_text),
+        .title = SELF(SongMedley_text),
         .icon = 0x0000003A,
     },
 
-    .w164_text = "SONG MEDLEY",
+    .SongMedley_text = "SONG MEDLEY",
 
     .v77_e1 = {
         .class_ = 0x0160001F,
@@ -9410,7 +9410,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .aicok = 0x0003EE54,
     },
 
-    .v77_e7 = {
+    .DiskName_Label_6 = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9418,12 +9418,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 4,
         .flag = 0x0008,
         .rect = { 78, 38, 141, 48 },
-        .str = SELF(w166_text),
+        .str = SELF(DiskName_text_6),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w166_text = ALIGNED_STRING("DISK NAME:"),
+    .DiskName_text_6 = ALIGNED_STRING("DISK NAME:"),
 
     .SongMedleyDiskName = {
         .class_ = 0x01650003,
@@ -9479,7 +9479,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v77_e11 = {
+    .Start_Label_6 = {
         .class_ = 0x0160002B,
         .super = 10,
         .sub = NAKA_NONE,
@@ -9487,12 +9487,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 265, 35, 308, 53 },
-        .str = SELF(w167_text),
+        .str = SELF(Start_text_6),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w167_text = "START",
+    .Start_text_6 = "START",
 
     .v77_e12 = {
         .class_ = 0x0160001F,
@@ -9512,7 +9512,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v77_e13 = {
+    .All_Label_5 = {
         .class_ = 0x0160002B,
         .super = 12,
         .sub = NAKA_NONE,
@@ -9520,12 +9520,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 282, 77, 309, 95 },
-        .str = SELF(w168_text),
+        .str = SELF(All_text_5),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w168_text = "ALL",
+    .All_text_5 = "ALL",
 
     .v77_e14 = {
         .class_ = 0x0160001F,
@@ -9545,7 +9545,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v77_e15 = {
+    .Add_Label_5 = {
         .class_ = 0x0160002B,
         .super = 14,
         .sub = NAKA_NONE,
@@ -9553,12 +9553,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 282, 119, 309, 137 },
-        .str = SELF(w169_text),
+        .str = SELF(Add_text_5),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w169_text = "ADD",
+    .Add_text_5 = "ADD",
 
     .v77_e16 = {
         .class_ = 0x01650005,
@@ -9600,7 +9600,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .v77_e17_stron = ALIGNED_STRING("10SNGS"),
 
-    .v77_e18 = {
+    .Mode_Label_2 = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9608,12 +9608,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 17,
         .flag = 0x0008,
         .rect = { 267, 187, 302, 205 },
-        .str = SELF(w170_text),
+        .str = SELF(Mode_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w170_text = ALIGNED_STRING("MODE"),
+    .Mode_text_2 = ALIGNED_STRING("MODE"),
 
     .v77_e19 = {
         .class_ = 0x01600064,
@@ -9626,7 +9626,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .func = 0x0125000C,
     },
 
-    .v77_e20 = {
+    .Loop_Label_5 = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9634,12 +9634,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 19,
         .flag = 0x0008,
         .rect = { 278, 145, 313, 163 },
-        .str = SELF(w171_text),
+        .str = SELF(Loop_text_5),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w171_text = ALIGNED_STRING("LOOP"),
+    .Loop_text_5 = ALIGNED_STRING("LOOP"),
 
     .DiskUtility = {
         .class_ = 0x01600034,
@@ -9653,11 +9653,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00060,
         .window = 0x0003EE5E,
-        .title = SELF(w172_text),
+        .title = SELF(DiskTools_text),
         .icon = 0x00000096,
     },
 
-    .w172_text = ALIGNED_STRING("DISK TOOLS"),
+    .DiskTools_text = ALIGNED_STRING("DISK TOOLS"),
 
     .v7B_e1 = {
         .class_ = 0x01600022,
@@ -9714,7 +9714,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0010,
     },
 
-    .v7B_e4 = {
+    .Smf_AcTitleMenu_2 = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9730,14 +9730,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0002,
         .editsw = 0x000C,
         .selected = 0x0003EE62,
-        .str = SELF(w174_text),
+        .str = SELF(Smf_text_2),
         .title = 0x01A0007C,
         .icon = 0x00000000,
     },
 
-    .w174_text = "SMF",
+    .Smf_text_2 = "SMF",
 
-    .v7B_e5 = {
+    .DiskName_Label_7 = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9745,12 +9745,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 4,
         .flag = 0x0008,
         .rect = { 78, 38, 141, 48 },
-        .str = SELF(w175_text),
+        .str = SELF(DiskName_text_7),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w175_text = ALIGNED_STRING("DISK NAME:"),
+    .DiskName_text_7 = ALIGNED_STRING("DISK NAME:"),
 
     .v7B_e6 = {
         .class_ = 0x0160001F,
@@ -9788,7 +9788,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v7B_e8 = {
+    .Del_Label = {
         .class_ = 0x0160002B,
         .super = 7,
         .sub = NAKA_NONE,
@@ -9796,14 +9796,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 9, 119, 36, 137 },
-        .str = SELF(w176_text),
+        .str = SELF(Del_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w176_text = "DEL",
+    .Del_text = "DEL",
 
-    .v7B_e9 = {
+    .Move_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9811,12 +9811,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 7,
         .flag = 0x0008,
         .rect = { 4, 182, 39, 200 },
-        .str = SELF(w177_text),
+        .str = SELF(Move_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w177_text = ALIGNED_STRING("MOVE"),
+    .Move_text = ALIGNED_STRING("MOVE"),
 
     .v7B_e10 = {
         .class_ = 0x0160001D,
@@ -9841,7 +9841,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w178_text = ALIGNED_STRING(""),
 
-    .v7B_e11 = {
+    .Format_Label = {
         .class_ = 0x0160002B,
         .super = 10,
         .sub = NAKA_NONE,
@@ -9849,12 +9849,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 260, 119, 311, 137 },
-        .str = SELF(w179_text),
+        .str = SELF(Format_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w179_text = ALIGNED_STRING("FORMAT"),
+    .Format_text = ALIGNED_STRING("FORMAT"),
 
     .v7B_e12 = {
         .class_ = 0x01600041,
@@ -9881,7 +9881,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_44ff = 0xFF,
 
-    .v7B_e13 = {
+    .RENAME_Label = {
         .class_ = 0x0160002B,
         .super = 12,
         .sub = NAKA_NONE,
@@ -9914,7 +9914,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0001,
     },
 
-    .v7B_e15 = {
+    .COPY_AcScreenMenu = {
         .class_ = 0x01600041,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10081,11 +10081,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00060,
         .window = 0x0003EE78,
-        .title = SELF(w182_text),
+        .title = SELF(FloppyDiskFormat_text),
         .icon = 0x00000096,
     },
 
-    .w182_text = ALIGNED_STRING("FLOPPY DISK FORMAT"),
+    .FloppyDiskFormat_text = ALIGNED_STRING("FLOPPY DISK FORMAT"),
 
     .DiskUtilitySMF = {
         .class_ = 0x01600034,
@@ -10099,13 +10099,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00060,
         .window = 0x0003EE7C,
-        .title = SELF(w183_text),
+        .title = SELF(SmfDiskTools_text),
         .icon = 0x00000096,
     },
 
-    .w183_text = ALIGNED_STRING("SMF DISK TOOLS"),
+    .SmfDiskTools_text = ALIGNED_STRING("SMF DISK TOOLS"),
 
-    .v7B_e26 = {
+    .Tech_AcTitleMenu_2 = {
         .class_ = 0x0160001D,
         .super = 25,
         .sub = NAKA_NONE,
@@ -10121,12 +10121,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0002,
         .editsw = 0x000C,
         .selected = 0x0003EE80,
-        .str = SELF(w184_text),
+        .str = SELF(Tech_text_2),
         .title = 0x01A0007B,
         .icon = 0x00000000,
     },
 
-    .w184_text = ALIGNED_STRING("TECH"),
+    .Tech_text_2 = ALIGNED_STRING("TECH"),
 
     .v7B_e27 = {
         .class_ = 0x0160001F,
@@ -10146,7 +10146,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v7B_e28 = {
+    .Prev_Label_7 = {
         .class_ = 0x0160002B,
         .super = 27,
         .sub = NAKA_NONE,
@@ -10154,12 +10154,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 85, 222, 112, 232 },
-        .str = SELF(w185_text),
+        .str = SELF(Prev_text_7),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w185_text = ALIGNED_STRING("PREV"),
+    .Prev_text_7 = ALIGNED_STRING("PREV"),
 
     .v7B_e29 = {
         .class_ = 0x01600022,
@@ -10198,7 +10198,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v7B_e31 = {
+    .Next_Label_7 = {
         .class_ = 0x0160002B,
         .super = 30,
         .sub = NAKA_NONE,
@@ -10206,14 +10206,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 205, 222, 232, 232 },
-        .str = SELF(w187_text),
+        .str = SELF(Next_text_7),
         .font = 0x00000003,
         .fontcolor = 0x0000,
     },
 
-    .w187_text = ALIGNED_STRING("NEXT"),
+    .Next_text_7 = ALIGNED_STRING("NEXT"),
 
-    .v7B_e32 = {
+    .Info_Label_3 = {
         .class_ = 0x0160002B,
         .super = 25,
         .sub = NAKA_NONE,
@@ -10221,12 +10221,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 30,
         .flag = 0x0008,
         .rect = { 8, 61, 43, 79 },
-        .str = SELF(w188_text),
+        .str = SELF(Info_text_3),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w188_text = ALIGNED_STRING("INFO"),
+    .Info_text_3 = ALIGNED_STRING("INFO"),
 
     .v7B_e33 = {
         .class_ = 0x01650000,
@@ -10296,7 +10296,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w189_text = ALIGNED_STRING(""),
 
-    .v7B_e36 = {
+    .Format_Label_2 = {
         .class_ = 0x0160002B,
         .super = 35,
         .sub = NAKA_NONE,
@@ -10304,12 +10304,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 260, 119, 311, 137 },
-        .str = SELF(w190_text),
+        .str = SELF(Format_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w190_text = ALIGNED_STRING("FORMAT"),
+    .Format_text_2 = ALIGNED_STRING("FORMAT"),
 
     .v7B_e37 = {
         .class_ = 0x0160001F,
@@ -10329,7 +10329,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .style = 0x0000,
     },
 
-    .v7B_e38 = {
+    .Del_Label_2 = {
         .class_ = 0x0160002B,
         .super = 25,
         .sub = NAKA_NONE,
@@ -10337,12 +10337,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 37,
         .flag = 0x0008,
         .rect = { 9, 119, 36, 137 },
-        .str = SELF(w191_text),
+        .str = SELF(Del_text_2),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w191_text = "DEL",
+    .Del_text_2 = "DEL",
 
     .v7B_e39 = {
         .class_ = 0x01600041,
@@ -10369,7 +10369,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_49cf = 0xFF,
 
-    .v7B_e40 = {
+    .RENAME_Label_2 = {
         .class_ = 0x0160002B,
         .super = 39,
         .sub = NAKA_NONE,
@@ -10424,7 +10424,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .child = 0x0003EE92,
     },
 
-    .v7B_e44 = {
+    .DiskName_Label_8 = {
         .class_ = 0x0160002B,
         .super = 43,
         .sub = NAKA_NONE,
@@ -10432,12 +10432,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 78, 38, 141, 48 },
-        .str = SELF(w192_text),
+        .str = SELF(DiskName_text_8),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w192_text = ALIGNED_STRING("DISK NAME:"),
+    .DiskName_text_8 = ALIGNED_STRING("DISK NAME:"),
 
     .v7B_e45 = {
         .class_ = 0x01650003,
@@ -10564,7 +10564,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .func = 0x01450021,
     },
 
-    .v7B_e53 = {
+    .DiskNaming_Label = {
         .class_ = 0x0160002B,
         .super = 49,
         .sub = NAKA_NONE,
@@ -10572,12 +10572,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 52,
         .flag = 0x0008,
         .rect = { 97, 40, 221, 58 },
-        .str = SELF(w195_text),
+        .str = SELF(DiskNaming_text),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
     },
 
-    .w195_text = "DISK NAMING",
+    .DiskNaming_text = "DISK NAMING",
 
     .DiskFormatSureWin = {
         .class_ = 0x01600035,
@@ -10752,7 +10752,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .func = 0x01450021,
     },
 
-    .v7B_e65 = {
+    .SelectTheFormatType_Label = {
         .class_ = 0x0160002B,
         .super = 63,
         .sub = NAKA_NONE,
@@ -10760,14 +10760,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 64,
         .flag = 0x0008,
         .rect = { 10, 72, 309, 90 },
-        .str = SELF(w201_text),
+        .str = SELF(SelectTheFormatType_text),
         .font = 0x00000001,
         .fontcolor = 0x00F1,
     },
 
-    .w201_text = "Select the FORMAT type for your disk.",
+    .SelectTheFormatType_text = "Select the FORMAT type for your disk.",
 
-    .v7B_e66 = {
+    .KByteFormatDd_VwMenuBox = {
         .class_ = 0x0160003D,
         .super = 63,
         .sub = NAKA_NONE,
@@ -10789,7 +10789,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .KByteFormatDd_str = "     720K Byte format : 2DD",
 
-    .v7B_e67 = {
+    .MByteFormatHd_VwMenuBox = {
         .class_ = 0x0160003D,
         .super = 63,
         .sub = NAKA_NONE,
@@ -10858,7 +10858,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .tail_y_rate = 0x0032,
     },
 
-    .v7B_e71 = {
+    .To_Label_3 = {
         .class_ = 0x0160002B,
         .super = 68,
         .sub = NAKA_NONE,
@@ -10866,12 +10866,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 70,
         .flag = 0x0008,
         .rect = { 174, 78, 199, 96 },
-        .str = SELF(w203_text),
+        .str = SELF(To_text_3),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
     },
 
-    .w203_text = ALIGNED_STRING("TO"),
+    .To_text_3 = ALIGNED_STRING("TO"),
 
     .v7B_e72 = {
         .class_ = 0x01650003,
@@ -10891,7 +10891,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .paintok = 0x0003EEC4,
     },
 
-    .v7B_e73 = {
+    .From_Label_2 = {
         .class_ = 0x0160002B,
         .super = 68,
         .sub = NAKA_NONE,
@@ -10899,12 +10899,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = 72,
         .flag = 0x0008,
         .rect = { 8, 78, 55, 96 },
-        .str = SELF(w204_text),
+        .str = SELF(From_text_2),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
     },
 
-    .w204_text = ALIGNED_STRING("FROM"),
+    .From_text_2 = ALIGNED_STRING("FROM"),
 
     .v7B_e74 = {
         .class_ = 0x01600022,
@@ -11193,7 +11193,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .window = 0x0003EED8,
     },
 
-    .v7B_e91 = {
+    .DeleteSure_Label = {
         .class_ = 0x0160002B,
         .super = 90,
         .sub = NAKA_NONE,
@@ -11201,12 +11201,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 10, 10, 101, 28 },
-        .str = SELF(w213_text),
+        .str = SELF(DeleteSure_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w213_text = "DELETE SURE",
+    .DeleteSure_text = "DELETE SURE",
 
     .DiskSaveSureScr = {
         .class_ = 0x01600033,
@@ -11222,7 +11222,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .window = 0x0003EEDC,
     },
 
-    .v7B_e93 = {
+    .OverwriteSure_Label = {
         .class_ = 0x0160002B,
         .super = 92,
         .sub = NAKA_NONE,
@@ -11230,12 +11230,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 10, 10, 125, 28 },
-        .str = SELF(w215_text),
+        .str = SELF(OverwriteSure_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w215_text = ALIGNED_STRING("OVERWRITE SURE"),
+    .OverwriteSure_text = ALIGNED_STRING("OVERWRITE SURE"),
 
     .DiskSetup = {
         .class_ = 0x01600034,
@@ -11249,11 +11249,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .border = 0x0000,
         .exit = 0x01A00060,
         .window = 0x0003EEE0,
-        .title = SELF(w216_text),
+        .title = SELF(Preferences_text_2),
         .icon = 0x00000097,
     },
 
-    .w216_text = "PREFERENCES",
+    .Preferences_text_2 = "PREFERENCES",
 
     .v7E_e1 = {
         .class_ = 0x01600022,
@@ -11392,20 +11392,20 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .DiskMenu_ptr = SELF(DiskMenu),
 
-    .ptr_53ee = SELF(v60_e1),
+    .StyleConvert_AcTitleMenu_ptr = SELF(StyleConvert_AcTitleMenu),
 
     .field_53f2 = 0xEEEE,
 
     .field_53f4 = 0x0003,
 
     .ptrs_3 = {
-        SELF(v60_e3),
-        SELF(v60_e4),
-        SELF(v60_e5),
-        SELF(v60_e6),
+        SELF(Preferences_AcTitleMenu),
+        SELF(Save_AcTitleMenu),
+        SELF(DiskTools_AcTtlJgBox),
+        SELF(LOAD_AcTtlJgBox),
         SELF(v60_e7),
-        SELF(v60_e8),
-        SELF(v60_e9),
+        SELF(DirectPlay_AcTtlJgBox),
+        SELF(SongMedley_AcTtlJgBox),
         SELF(IntSongMedley),
         SELF(v60_e11),
         SELF(v60_e12),
@@ -11415,11 +11415,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v60_e16),
         SELF(v60_e17),
         SELF(v60_e18),
-        SELF(v60_e19),
+        SELF(Start_Label),
         SELF(v60_e20),
-        SELF(v60_e21),
-        SELF(v60_e22),
-        SELF(v60_e23),
+        SELF(All_Label),
+        SELF(Add_Label),
+        SELF(Loop_Label),
         SELF(DiskSaveName),
         SELF(v60_e25),
         SELF(v60_e26),
@@ -11428,11 +11428,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v60_e29),
         SELF(v60_e30),
         SELF(v60_e31),
-        SELF(v60_e32),
+        SELF(DiskName_Label),
         SELF(v60_e33),
         SELF(v60_e34),
         SELF(v60_e35),
-        SELF(v60_e36),
+        SELF(Load_Label),
         SELF(v60_e37),
         SELF(DiskWaitWin),
         SELF(v60_e39),
@@ -11441,15 +11441,15 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v60_e42),
         SELF(WallpaperLoad),
         SELF(v60_e44),
-        SELF(v60_e45),
+        SELF(Prev_Label),
         SELF(v60_e46),
         SELF(v60_e47),
-        SELF(v60_e48),
-        SELF(v60_e49),
+        SELF(Next_Label),
+        SELF(DiskName_Label_2),
         SELF(v60_e50),
         SELF(v60_e51),
         SELF(v60_e52),
-        SELF(v60_e53),
+        SELF(Load_Label_2),
         SELF(v60_e54),
         SELF(DiskSaveSureWin),
         SELF(v60_e56),
@@ -11481,10 +11481,10 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskLoadP1),
         SELF(v61_e8),
         SELF(v61_e9),
-        SELF(v61_e10),
+        SELF(Load_Label_3),
         SELF(v61_e11),
-        SELF(v61_e12),
-        SELF(v61_e13),
+        SELF(DiskName_Label_3),
+        SELF(Smf_AcTitleMenu),
         SELF(v61_e14),
         SELF(v61_e15),
         SELF(v61_e16),
@@ -11500,35 +11500,35 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v61_e26),
         SELF(v61_e27),
         SELF(v61_e28),
-        SELF(v61_e29),
-        SELF(v61_e30),
-        SELF(v61_e31),
-        SELF(v61_e32),
-        SELF(v61_e33),
-        SELF(v61_e34),
-        SELF(v61_e35),
-        SELF(v61_e36),
+        SELF(Pnl_Label),
+        SELF(PMem_Label),
+        SELF(Seq_Label),
+        SELF(Comp_Label),
+        SELF(Sound_Label),
+        SELF(Msp_Label),
+        SELF(Custom_Label),
+        SELF(Midi_Label),
         SELF(v61_e37),
         SELF(v61_e38),
-        SELF(v61_e39),
-        SELF(v61_e40),
-        SELF(v61_e41),
-        SELF(v61_e42),
-        SELF(v61_e43),
-        SELF(v61_e44),
-        SELF(v61_e45),
-        SELF(v61_e46),
+        SELF(CurrentPanel_Label),
+        SELF(UserMidiSettings_Label),
+        SELF(RhythmCustom_Label),
+        SELF(Msp_Label_2),
+        SELF(SoundMemory_Label),
+        SELF(Composer_Label),
+        SELF(Sequencer_Label),
+        SELF(PanelMemory_Label),
         SELF(v61_e47),
         SELF(v61_e48),
         SELF(v61_e49),
         SELF(v61_e50),
-        SELF(v61_e51),
+        SELF(Load_Label_4),
         SELF(DiskLoadP3),
         SELF(v61_e53),
         SELF(SingleLoadSwCtl),
         SELF(v61_e55),
         SELF(v61_e56),
-        SELF(v61_e57),
+        SELF(Load_Label_5),
         SELF(v61_e58),
         SELF(v61_e59),
         SELF(v61_e60),
@@ -11537,9 +11537,9 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v61_e63),
         SELF(v61_e64),
         SELF(v61_e65),
-        SELF(v61_e66),
+        SELF(To_Label),
         SELF(v61_e67),
-        SELF(v61_e68),
+        SELF(Mode_Label),
         SELF(v61_e69),
         0x00EA2C4E,
         SELF(v61_e71),
@@ -11553,16 +11553,16 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .ptrs_4 = {
         SELF(DiskLoadSMF),
-        SELF(v61_e76),
+        SELF(Tech_AcTitleMenu),
         SELF(v61_e77),
         SELF(v61_e78),
-        SELF(v61_e79),
+        SELF(Prev_Label_2),
         SELF(v61_e80),
-        SELF(v61_e81),
+        SELF(Next_Label_2),
         SELF(v61_e82),
-        SELF(v61_e83),
+        SELF(Info_Label),
         SELF(v61_e84),
-        SELF(v61_e85),
+        SELF(LoadAs_Label),
         SELF(v61_e86),
         0x00EA2F6A,
         SELF(v61_e88),
@@ -11575,13 +11575,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(SongNameSmfLdWin),
         SELF(v61_e96),
         SELF(v61_e97),
-        SELF(v61_e98),
+        SELF(Load_Label_6),
         SELF(DiskInfoSmfLdWin),
-        SELF(v61_e100),
+        SELF(DiskName_Label_4),
         SELF(v61_e101),
         SELF(v61_e102),
         SELF(v61_e103),
-        SELF(v61_e104),
+        SELF(Load_Label_7),
         SELF(CmpSingleLoad),
         SELF(v61_e106),
         SELF(v61_e107),
@@ -11590,13 +11590,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v61_e110),
         SELF(v61_e111),
         SELF(v61_e112),
-        SELF(v61_e113),
+        SELF(Load_Label_8),
         SELF(v61_e114),
-        SELF(v61_e115),
-        SELF(v61_e116),
+        SELF(To_Label_2),
+        SELF(From_Label),
         SELF(v61_e117),
         SELF(v61_e118),
-        SELF(v61_e119),
+        SELF(File_Label),
         SELF(v61_e120),
         SELF(v61_e121),
         SELF(v61_e122),
@@ -11610,8 +11610,8 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         0x00000000,
         0x00000000,
         SELF(DiskSaveMenu),
-        SELF(v65_e1),
-        SELF(v65_e2),
+        SELF(TechnicsFormat_AcTtlJgBox),
+        SELF(SmfFormat_AcTtlJgBox),
         0x00000000,
         0x00000000,
         SELF(DiskSave),
@@ -11626,63 +11626,63 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v67_e9),
         SELF(v67_e10),
         SELF(v67_e11),
-        SELF(v67_e12),
+        SELF(SaveAs_Label),
         SELF(v67_e13),
-        SELF(v67_e14),
+        SELF(Name_AcTitleMenu),
         SELF(v67_e15),
         SELF(v67_e16),
-        SELF(v67_e17),
+        SELF(Save_Label),
         SELF(v67_e18),
         SELF(v67_e19),
         SELF(v67_e20),
         SELF(DiskSaveP2),
         SELF(v67_e22),
-        SELF(v67_e23),
-        SELF(v67_e24),
-        SELF(v67_e25),
-        SELF(v67_e26),
-        SELF(v67_e27),
-        SELF(v67_e28),
-        SELF(v67_e29),
-        SELF(v67_e30),
+        SELF(CurrentPanel_Label_2),
+        SELF(UserMidiSettings_Label_2),
+        SELF(RhythmCustom_Label_2),
+        SELF(Msp_Label_3),
+        SELF(SoundMemory_Label_2),
+        SELF(Composer_Label_2),
+        SELF(Sequencer_Label_2),
+        SELF(PanelMemory_Label_2),
         SELF(v67_e31),
         SELF(v67_e32),
         SELF(v67_e33),
-        SELF(v67_e34),
+        SELF(Save_Label_2),
         SELF(v67_e35),
-        SELF(v67_e36),
+        SELF(SaveAs_Label_2),
         SELF(v67_e37),
-        SELF(v67_e38),
+        SELF(Perform_Label),
         SELF(v67_e39),
-        SELF(v67_e40),
+        SELF(Backup_Label),
         SELF(v67_e41),
-        SELF(v67_e42),
+        SELF(Pnl_Label_2),
         SELF(v67_e43),
         SELF(v67_e44),
-        SELF(v67_e45),
+        SELF(PMem_Label_2),
         SELF(v67_e46),
         SELF(v67_e47),
         SELF(v67_e48),
         SELF(v67_e49),
         SELF(v67_e50),
         SELF(v67_e51),
-        SELF(v67_e52),
-        SELF(v67_e53),
-        SELF(v67_e54),
-        SELF(v67_e55),
-        SELF(v67_e56),
-        SELF(v67_e57),
+        SELF(Seq_Label_2),
+        SELF(Comp_Label_2),
+        SELF(Msp_Label_4),
+        SELF(Sound_Label_2),
+        SELF(Custom_Label_2),
+        SELF(Midi_Label_2),
         SELF(v67_e58),
         SELF(v67_e59),
-        SELF(v67_e60),
+        SELF(AllOff_Label),
         SELF(DiskSaveP3),
         SELF(v67_e62),
         SELF(v67_e63),
         SELF(v67_e64),
         SELF(v67_e65),
-        SELF(v67_e66),
-        SELF(v67_e67),
-        SELF(v67_e68),
+        SELF(Save_Label_3),
+        SELF(As_Label),
+        SELF(Save_Label_4),
         SELF(v67_e69),
         SELF(v67_e70),
         0x00000000,
@@ -11691,71 +11691,71 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v6B_e1),
         SELF(v6B_e2),
         SELF(v6B_e3),
-        SELF(v6B_e4),
+        SELF(Prev_Label_3),
         SELF(v6B_e5),
-        SELF(v6B_e6),
+        SELF(Next_Label_3),
         SELF(v6B_e7),
         SELF(v6B_e8),
-        SELF(v6B_e9),
-        SELF(v6B_e10),
+        SELF(PanelHeader_Label),
+        SELF(Name_AcTitleMenu_2),
         SELF(v6B_e11),
         SELF(v6B_e12),
-        SELF(v6B_e13),
-        SELF(v6B_e14),
+        SELF(Save_Label_5),
+        SELF(MeasureSpace_Label),
         SELF(v6B_e15),
         SELF(v6B_e16),
         0x00EA453A,
         SELF(v6B_e18),
-        SELF(v6B_e19),
-        SELF(v6B_e20),
+        SELF(Save_Label_6),
+        SELF(As_Label_2),
         0x00000000,
         SELF(DiskSmfDirectPlay),
         SELF(v6C_e1),
         SELF(v6C_e2),
         SELF(v6C_e3),
         SELF(v6C_e4),
-        SELF(v6C_e5),
+        SELF(Prev_Label_4),
         SELF(v6C_e6),
-        SELF(v6C_e7),
-        SELF(v6C_e8),
+        SELF(Next_Label_4),
+        SELF(Info_Label_2),
         SELF(v6C_e9),
         SELF(v6C_e10),
         SELF(v6C_e11),
         SELF(v6C_e12),
         SELF(v6C_e13),
-        SELF(v6C_e14),
+        SELF(PlayAs_Label),
         SELF(v6C_e15),
         SELF(v6C_e16),
         SELF(v6C_e17),
         SELF(v6C_e18),
-        SELF(v6C_e19),
-        SELF(v6C_e20),
+        SELF(Loop_Label_2),
+        SELF(Medley_Label),
         SELF(v6C_e21),
-        SELF(v6C_e22),
-        SELF(v6C_e23),
+        SELF(All_Label_2),
+        SELF(Add_Label_2),
         SELF(SmfMidiOut),
-        SELF(v6C_e25),
+        SELF(MidiOut_Label),
         SELF(v6C_e26),
         SELF(v6C_e27),
         SELF(SongNameDPSmfWin),
         SELF(v6C_e29),
         SELF(v6C_e30),
-        SELF(v6C_e31),
+        SELF(Start_Label_2),
         SELF(DiskInfoDPSmfWin),
-        SELF(v6C_e33),
+        SELF(DiskName_Label_5),
         SELF(v6C_e34),
         SELF(v6C_e35),
         SELF(v6C_e36),
-        SELF(v6C_e37),
+        SELF(Start_Label_3),
         SELF(DiskDocDirectPlay),
         SELF(v6C_e39),
         SELF(v6C_e40),
         SELF(v6C_e41),
-        SELF(v6C_e42),
+        SELF(Prev_Label_5),
         SELF(v6C_e43),
         SELF(v6C_e44),
-        SELF(v6C_e45),
-        SELF(v6C_e46),
+        SELF(Next_Label_5),
+        SELF(Medley_Label_2),
         SELF(v6C_e47),
         SELF(v6C_e48),
         SELF(v6C_e49),
@@ -11763,35 +11763,35 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v6C_e51),
         SELF(v6C_e52),
         SELF(v6C_e53),
-        SELF(v6C_e54),
+        SELF(Loop_Label_3),
         SELF(v6C_e55),
         SELF(v6C_e56),
         SELF(v6C_e57),
-        SELF(v6C_e58),
-        SELF(v6C_e59),
-        SELF(v6C_e60),
+        SELF(Start_Label_4),
+        SELF(All_Label_3),
+        SELF(Add_Label_3),
         SELF(DiskPdDirectPlay),
         SELF(v6C_e62),
         SELF(v6C_e63),
         SELF(v6C_e64),
         SELF(v6C_e65),
-        SELF(v6C_e66),
+        SELF(Prev_Label_6),
         SELF(v6C_e67),
-        SELF(v6C_e68),
+        SELF(Next_Label_6),
         SELF(v6C_e69),
         SELF(v6C_e70),
         SELF(v6C_e71),
         SELF(v6C_e72),
-        SELF(v6C_e73),
+        SELF(Loop_Label_4),
         SELF(v6C_e74),
-        SELF(v6C_e75),
-        SELF(v6C_e76),
+        SELF(Start_Label_5),
+        SELF(Medley_Label_3),
         SELF(v6C_e77),
         SELF(v6C_e78),
         SELF(v6C_e79),
         SELF(v6C_e80),
-        SELF(v6C_e81),
-        SELF(v6C_e82),
+        SELF(All_Label_4),
+        SELF(Add_Label_4),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -11802,38 +11802,38 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v77_e4),
         SELF(v77_e5),
         SELF(v77_e6),
-        SELF(v77_e7),
+        SELF(DiskName_Label_6),
         SELF(SongMedleyDiskName),
         SELF(SongMedleyDiskInfo),
         SELF(v77_e10),
-        SELF(v77_e11),
+        SELF(Start_Label_6),
         SELF(v77_e12),
-        SELF(v77_e13),
+        SELF(All_Label_5),
         SELF(v77_e14),
-        SELF(v77_e15),
+        SELF(Add_Label_5),
         SELF(v77_e16),
         SELF(v77_e17),
-        SELF(v77_e18),
+        SELF(Mode_Label_2),
         SELF(v77_e19),
-        SELF(v77_e20),
+        SELF(Loop_Label_5),
         0x00000000,
         0x00000000,
         SELF(DiskUtility),
         SELF(v7B_e1),
         SELF(v7B_e2),
         SELF(v7B_e3),
-        SELF(v7B_e4),
-        SELF(v7B_e5),
+        SELF(Smf_AcTitleMenu_2),
+        SELF(DiskName_Label_7),
         SELF(v7B_e6),
         SELF(v7B_e7),
-        SELF(v7B_e8),
-        SELF(v7B_e9),
+        SELF(Del_Label),
+        SELF(Move_Label),
         SELF(v7B_e10),
-        SELF(v7B_e11),
+        SELF(Format_Label),
         SELF(v7B_e12),
         0x00EA58CC,
         SELF(v7B_e14),
-        SELF(v7B_e15),
+        SELF(COPY_AcScreenMenu),
         SELF(v7B_e16),
         SELF(v7B_e17),
         SELF(v7B_e18),
@@ -11844,25 +11844,25 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v7B_e23),
         SELF(DiskFormat),
         SELF(DiskUtilitySMF),
-        SELF(v7B_e26),
+        SELF(Tech_AcTitleMenu_2),
         SELF(v7B_e27),
-        SELF(v7B_e28),
+        SELF(Prev_Label_7),
         SELF(v7B_e29),
         SELF(v7B_e30),
-        SELF(v7B_e31),
-        SELF(v7B_e32),
+        SELF(Next_Label_7),
+        SELF(Info_Label_3),
         SELF(v7B_e33),
         SELF(v7B_e34),
         SELF(v7B_e35),
-        SELF(v7B_e36),
+        SELF(Format_Label_2),
         SELF(v7B_e37),
-        SELF(v7B_e38),
+        SELF(Del_Label_2),
         SELF(v7B_e39),
         0x00EA5D9C,
         SELF(v7B_e41),
         SELF(WaitWinCtlSmf),
         SELF(DiskInfoWin),
-        SELF(v7B_e44),
+        SELF(DiskName_Label_8),
         SELF(v7B_e45),
         SELF(v7B_e46),
         SELF(SongNameWin),
@@ -11871,7 +11871,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v7B_e50),
         SELF(v7B_e51),
         SELF(v7B_e52),
-        SELF(v7B_e53),
+        SELF(DiskNaming_Label),
         SELF(DiskFormatSureWin),
         SELF(v7B_e55),
         SELF(v7B_e56),
@@ -11883,15 +11883,15 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v7B_e62),
         SELF(DiskFormatSelectWin),
         SELF(v7B_e64),
-        SELF(v7B_e65),
-        SELF(v7B_e66),
-        SELF(v7B_e67),
+        SELF(SelectTheFormatType_Label),
+        SELF(KByteFormatDd_VwMenuBox),
+        SELF(MByteFormatHd_VwMenuBox),
         SELF(FileCopy),
         SELF(v7B_e69),
         SELF(v7B_e70),
-        SELF(v7B_e71),
+        SELF(To_Label_3),
         SELF(v7B_e72),
-        SELF(v7B_e73),
+        SELF(From_Label_2),
         SELF(v7B_e74),
         SELF(v7B_e75),
         SELF(v7B_e76),
@@ -11909,9 +11909,9 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v7B_e88),
         SELF(v7B_e89),
         SELF(DiskDeleteSureScr),
-        SELF(v7B_e91),
+        SELF(DeleteSure_Label),
         SELF(DiskSaveSureScr),
-        SELF(v7B_e93),
+        SELF(OverwriteSure_Label),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -11925,9 +11925,9 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(v7E_e7),
         0x00000000,
         0x00000000,
-        SELF(w229_name),
+        SELF(DiskMenu_name),
         SELF(w229_code),
-        SELF(w228_name),
+        SELF(HardDiskMenu_name),
         SELF(w228_code),
         SELF(str_999),
         SELF(str_998),
@@ -11935,7 +11935,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_996),
         SELF(str_995),
         SELF(str_994),
-        SELF(w227_name),
+        SELF(IntSongMedley_name),
         SELF(w227_code),
         SELF(str_993),
         SELF(str_992),
@@ -11949,10 +11949,10 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_984),
         SELF(str_983),
         SELF(str_982),
-        SELF(w226_name),
+        SELF(DiskSaveName_name),
         SELF(w226_code),
         SELF(str_981),
-        SELF(w225_name),
+        SELF(ComposerLoad_name),
         SELF(w225_code),
         SELF(str_980),
         SELF(str_979),
@@ -11963,12 +11963,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_974),
         SELF(str_973),
         SELF(str_972),
-        SELF(w224_name),
+        SELF(DiskWaitWin_name),
         SELF(w224_code),
-        SELF(w223_name),
+        SELF(DiskSaveNameSMF_name),
         SELF(w223_code),
         SELF(str_971),
-        SELF(w222_name),
+        SELF(WallpaperLoad_name),
         SELF(w222_code),
         SELF(str_970),
         SELF(str_969),
@@ -11980,7 +11980,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_963),
         SELF(str_962),
         SELF(str_961),
-        SELF(w221_name),
+        SELF(DiskSaveSureWin_name),
         SELF(w221_code),
         SELF(str_960),
         SELF(str_959),
@@ -11989,12 +11989,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_956),
         SELF(str_955),
         SELF(str_954),
-        SELF(w220_name),
+        SELF(PasswordWin_name),
         SELF(w220_code),
         SELF(str_953),
         SELF(str_952),
         SELF(str_951),
-        SELF(w219_name),
+        SELF(CheckPasswordWin_name),
         SELF(w219_code),
         SELF(str_950),
         SELF(str_949),
@@ -12012,7 +12012,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w219_code = ALIGNED_STRING(""),
 
-    .w219_name = ALIGNED_STRING("CheckPasswordWin"),
+    .CheckPasswordWin_name = ALIGNED_STRING("CheckPasswordWin"),
 
     .str_951 = ALIGNED_STRING(""),
 
@@ -12022,7 +12022,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w220_code = ALIGNED_STRING(""),
 
-    .w220_name = "PasswordWin",
+    .PasswordWin_name = "PasswordWin",
 
     .str_954 = ALIGNED_STRING(""),
 
@@ -12040,7 +12040,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w221_code = ALIGNED_STRING(""),
 
-    .w221_name = "DiskSaveSureWin",
+    .DiskSaveSureWin_name = "DiskSaveSureWin",
 
     .str_961 = ALIGNED_STRING(""),
 
@@ -12064,17 +12064,17 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w222_code = ALIGNED_STRING(""),
 
-    .w222_name = "WallpaperLoad",
+    .WallpaperLoad_name = "WallpaperLoad",
 
     .str_971 = ALIGNED_STRING(""),
 
     .w223_code = ALIGNED_STRING(""),
 
-    .w223_name = "DiskSaveNameSMF",
+    .DiskSaveNameSMF_name = "DiskSaveNameSMF",
 
     .w224_code = ALIGNED_STRING(""),
 
-    .w224_name = "DiskWaitWin",
+    .DiskWaitWin_name = "DiskWaitWin",
 
     .str_972 = ALIGNED_STRING(""),
 
@@ -12096,13 +12096,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w225_code = ALIGNED_STRING(""),
 
-    .w225_name = ALIGNED_STRING("ComposerLoad"),
+    .ComposerLoad_name = ALIGNED_STRING("ComposerLoad"),
 
     .str_981 = ALIGNED_STRING(""),
 
     .w226_code = ALIGNED_STRING(""),
 
-    .w226_name = ALIGNED_STRING("DiskSaveName"),
+    .DiskSaveName_name = ALIGNED_STRING("DiskSaveName"),
 
     .str_982 = ALIGNED_STRING(""),
 
@@ -12130,7 +12130,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w227_code = ALIGNED_STRING(""),
 
-    .w227_name = "IntSongMedley",
+    .IntSongMedley_name = "IntSongMedley",
 
     .str_994 = ALIGNED_STRING(""),
 
@@ -12146,21 +12146,21 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w228_code = ALIGNED_STRING(""),
 
-    .w228_name = ALIGNED_STRING("HardDiskMenu"),
+    .HardDiskMenu_name = ALIGNED_STRING("HardDiskMenu"),
 
     .w229_code = ALIGNED_STRING(""),
 
-    .w229_name = ALIGNED_STRING("DiskMenu"),
+    .DiskMenu_name = ALIGNED_STRING("DiskMenu"),
 
     .ptrs_5 = {
         SELF(DiskLoad_str),
-        SELF(w239_name),
+        SELF(DiskLoadPage_name),
         SELF(w239_code),
         SELF(str_1107),
         SELF(str_1106),
         SELF(str_1105),
         SELF(str_1104),
-        SELF(w238_name),
+        SELF(DiskLoadP1_name),
         SELF(w238_code),
         SELF(str_1103),
         SELF(str_1102),
@@ -12173,7 +12173,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1095),
         SELF(str_1094),
         SELF(str_1093),
-        SELF(w237_name),
+        SELF(DiskLoadP2_name),
         SELF(w237_code),
         SELF(str_1092),
         SELF(str_1091),
@@ -12205,9 +12205,9 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1065),
         SELF(str_1064),
         SELF(str_1063),
-        SELF(w236_name),
+        SELF(DiskLoadP3_name),
         SELF(w236_code),
-        SELF(w235_name),
+        SELF(SingleLoadSwCtl_name),
         SELF(w235_code),
         SELF(str_1062),
         SELF(str_1061),
@@ -12228,7 +12228,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1046),
         SELF(str_1045),
         SELF(SingleBankToggle_str),
-        SELF(w234_name),
+        SELF(DiskLoadSMF_name),
         SELF(w234_code),
         SELF(str_1043),
         SELF(str_1042),
@@ -12248,17 +12248,17 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1028),
         SELF(str_1027),
         SELF(str_1026),
-        SELF(w233_name),
+        SELF(SongNameSmfLdWin_name),
         SELF(w233_code),
         SELF(str_1025),
         SELF(str_1024),
-        SELF(w232_name),
+        SELF(DiskInfoSmfLdWin_name),
         SELF(w232_code),
         SELF(str_1023),
         SELF(str_1022),
         SELF(str_1021),
         SELF(str_1020),
-        SELF(w231_name),
+        SELF(CmpSingleLoad_name),
         SELF(w231_code),
         SELF(str_1019),
         SELF(str_1018),
@@ -12279,7 +12279,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1003),
         SELF(str_1002),
         SELF(str_1001),
-        SELF(w230_name),
+        SELF(CmpSingleLoadSwCtl_name),
         SELF(w230_code),
         SELF(str_1000),
     },
@@ -12288,7 +12288,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w230_code = ALIGNED_STRING(""),
 
-    .w230_name = ALIGNED_STRING("CmpSingleLoadSwCtl"),
+    .CmpSingleLoadSwCtl_name = ALIGNED_STRING("CmpSingleLoadSwCtl"),
 
     .str_1001 = ALIGNED_STRING(""),
 
@@ -12330,7 +12330,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w231_code = ALIGNED_STRING(""),
 
-    .w231_name = "CmpSingleLoad",
+    .CmpSingleLoad_name = "CmpSingleLoad",
 
     .str_1020 = ALIGNED_STRING(""),
 
@@ -12342,7 +12342,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w232_code = ALIGNED_STRING(""),
 
-    .w232_name = ALIGNED_STRING("DiskInfoSmfLdWin"),
+    .DiskInfoSmfLdWin_name = ALIGNED_STRING("DiskInfoSmfLdWin"),
 
     .str_1024 = ALIGNED_STRING(""),
 
@@ -12350,7 +12350,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w233_code = ALIGNED_STRING(""),
 
-    .w233_name = ALIGNED_STRING("SongNameSmfLdWin"),
+    .SongNameSmfLdWin_name = ALIGNED_STRING("SongNameSmfLdWin"),
 
     .str_1026 = ALIGNED_STRING(""),
 
@@ -12390,7 +12390,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w234_code = ALIGNED_STRING(""),
 
-    .w234_name = "DiskLoadSMF",
+    .DiskLoadSMF_name = "DiskLoadSMF",
 
     .SingleBankToggle_str = ALIGNED_STRING("SingleBankToggle"),
 
@@ -12432,11 +12432,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w235_code = ALIGNED_STRING(""),
 
-    .w235_name = "SingleLoadSwCtl",
+    .SingleLoadSwCtl_name = "SingleLoadSwCtl",
 
     .w236_code = ALIGNED_STRING(""),
 
-    .w236_name = ALIGNED_STRING("DiskLoadP3"),
+    .DiskLoadP3_name = ALIGNED_STRING("DiskLoadP3"),
 
     .str_1063 = ALIGNED_STRING(""),
 
@@ -12500,7 +12500,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w237_code = ALIGNED_STRING(""),
 
-    .w237_name = ALIGNED_STRING("DiskLoadP2"),
+    .DiskLoadP2_name = ALIGNED_STRING("DiskLoadP2"),
 
     .str_1093 = ALIGNED_STRING(""),
 
@@ -12526,7 +12526,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w238_code = ALIGNED_STRING(""),
 
-    .w238_name = ALIGNED_STRING("DiskLoadP1"),
+    .DiskLoadP1_name = ALIGNED_STRING("DiskLoadP1"),
 
     .str_1104 = ALIGNED_STRING(""),
 
@@ -12538,7 +12538,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w239_code = ALIGNED_STRING(""),
 
-    .w239_name = ALIGNED_STRING("DiskLoadPage"),
+    .DiskLoadPage_name = ALIGNED_STRING("DiskLoadPage"),
 
     .DiskLoad_str = ALIGNED_STRING("DiskLoad"),
 
@@ -12555,7 +12555,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
     .str_1111 = ALIGNED_STRING(""),
 
     .ptrs_6 = {
-        SELF(w240_name),
+        SELF(DiskSaveMenu_name),
         SELF(w240_code),
         SELF(str_1113),
         SELF(str_1112),
@@ -12567,7 +12567,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w240_code = ALIGNED_STRING(""),
 
-    .w240_name = ALIGNED_STRING("DiskSaveMenu"),
+    .DiskSaveMenu_name = ALIGNED_STRING("DiskSaveMenu"),
 
     .ptr_6230 = SELF(str_1114),
 
@@ -12575,13 +12575,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .ptrs_7 = {
         SELF(DiskSave_str),
-        SELF(w244_name),
+        SELF(DiskSavePage_name),
         SELF(w244_code),
         SELF(str_1177),
         SELF(str_1176),
         SELF(str_1175),
         SELF(str_1174),
-        SELF(w243_name),
+        SELF(DiskSaveP1_name),
         SELF(w243_code),
         SELF(str_1173),
         SELF(str_1172),
@@ -12595,7 +12595,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1164),
         SELF(str_1163),
         SELF(str_1162),
-        SELF(w242_name),
+        SELF(DiskSaveP2_name),
         SELF(w242_code),
         SELF(str_1161),
         SELF(str_1160),
@@ -12635,7 +12635,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1126),
         SELF(str_1125),
         SELF(str_1124),
-        SELF(w241_name),
+        SELF(DiskSaveP3_name),
         SELF(w241_code),
         SELF(str_1123),
         SELF(str_1122),
@@ -12668,7 +12668,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w241_code = ALIGNED_STRING(""),
 
-    .w241_name = ALIGNED_STRING("DiskSaveP3"),
+    .DiskSaveP3_name = ALIGNED_STRING("DiskSaveP3"),
 
     .str_1124 = ALIGNED_STRING(""),
 
@@ -12748,7 +12748,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w242_code = ALIGNED_STRING(""),
 
-    .w242_name = ALIGNED_STRING("DiskSaveP2"),
+    .DiskSaveP2_name = ALIGNED_STRING("DiskSaveP2"),
 
     .str_1162 = ALIGNED_STRING(""),
 
@@ -12776,7 +12776,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w243_code = ALIGNED_STRING(""),
 
-    .w243_name = ALIGNED_STRING("DiskSaveP1"),
+    .DiskSaveP1_name = ALIGNED_STRING("DiskSaveP1"),
 
     .str_1174 = ALIGNED_STRING(""),
 
@@ -12788,7 +12788,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w244_code = ALIGNED_STRING(""),
 
-    .w244_name = ALIGNED_STRING("DiskSavePage"),
+    .DiskSavePage_name = ALIGNED_STRING("DiskSavePage"),
 
     .DiskSave_str = ALIGNED_STRING("DiskSave"),
 
@@ -12797,7 +12797,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
     .str_1179 = ALIGNED_STRING(""),
 
     .ptrs_8 = {
-        SELF(w245_name),
+        SELF(DiskSmfSave_name),
         SELF(w245_code),
         SELF(str_1199),
         SELF(str_1198),
@@ -12863,10 +12863,10 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w245_code = ALIGNED_STRING(""),
 
-    .w245_name = "DiskSmfSave",
+    .DiskSmfSave_name = "DiskSmfSave",
 
     .ptrs_9 = {
-        SELF(w251_name),
+        SELF(DiskSmfDirectPlay_name),
         SELF(w251_code),
         SELF(str_1271),
         SELF(str_1270),
@@ -12890,21 +12890,21 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1252),
         SELF(str_1251),
         SELF(str_1250),
-        SELF(w250_name),
+        SELF(SmfMidiOut_name),
         SELF(w250_code),
         SELF(str_1249),
         SELF(str_1248),
-        SELF(w249_name),
+        SELF(SongNameDPSmfWin_name),
         SELF(w249_code),
         SELF(str_1247),
         SELF(str_1246),
-        SELF(w248_name),
+        SELF(DiskInfoDPSmfWin_name),
         SELF(w248_code),
         SELF(str_1245),
         SELF(str_1244),
         SELF(str_1243),
         SELF(str_1242),
-        SELF(w247_name),
+        SELF(DiskDocDirectPlay_name),
         SELF(w247_code),
         SELF(str_1241),
         SELF(str_1240),
@@ -12927,7 +12927,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1223),
         SELF(str_1222),
         SELF(str_1221),
-        SELF(w246_name),
+        SELF(DiskPdDirectPlay_name),
         SELF(w246_code),
         SELF(str_1220),
         SELF(str_1219),
@@ -12996,7 +12996,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w246_code = ALIGNED_STRING(""),
 
-    .w246_name = ALIGNED_STRING("DiskPdDirectPlay"),
+    .DiskPdDirectPlay_name = ALIGNED_STRING("DiskPdDirectPlay"),
 
     .str_1221 = ALIGNED_STRING(""),
 
@@ -13042,7 +13042,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w247_code = ALIGNED_STRING(""),
 
-    .w247_name = "DiskDocDirectPlay",
+    .DiskDocDirectPlay_name = "DiskDocDirectPlay",
 
     .str_1242 = ALIGNED_STRING(""),
 
@@ -13054,7 +13054,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w248_code = ALIGNED_STRING(""),
 
-    .w248_name = ALIGNED_STRING("DiskInfoDPSmfWin"),
+    .DiskInfoDPSmfWin_name = ALIGNED_STRING("DiskInfoDPSmfWin"),
 
     .str_1246 = ALIGNED_STRING(""),
 
@@ -13062,7 +13062,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w249_code = ALIGNED_STRING(""),
 
-    .w249_name = ALIGNED_STRING("SongNameDPSmfWin"),
+    .SongNameDPSmfWin_name = ALIGNED_STRING("SongNameDPSmfWin"),
 
     .str_1248 = ALIGNED_STRING(""),
 
@@ -13070,7 +13070,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w250_code = ALIGNED_STRING(""),
 
-    .w250_name = ALIGNED_STRING("SmfMidiOut"),
+    .SmfMidiOut_name = ALIGNED_STRING("SmfMidiOut"),
 
     .str_1250 = ALIGNED_STRING(""),
 
@@ -13118,7 +13118,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w251_code = ALIGNED_STRING(""),
 
-    .w251_name = "DiskSmfDirectPlay",
+    .DiskSmfDirectPlay_name = "DiskSmfDirectPlay",
 
     .ptr_66fe = SELF(str_1272),
 
@@ -13129,7 +13129,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
     .str_1273 = ALIGNED_STRING(""),
 
     .ptrs_10 = {
-        SELF(w253_name),
+        SELF(DiskSongMedley_name),
         SELF(w253_code),
         SELF(str_1291),
         SELF(str_1290),
@@ -13138,7 +13138,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1287),
         SELF(str_1286),
         SELF(SongMedleyDiskName_str),
-        SELF(w252_name),
+        SELF(SongMedleyDiskInfo_name),
         SELF(w252_code),
         SELF(str_1284),
         SELF(str_1283),
@@ -13177,7 +13177,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w252_code = ALIGNED_STRING(""),
 
-    .w252_name = ALIGNED_STRING("SongMedleyDiskInfo"),
+    .SongMedleyDiskInfo_name = ALIGNED_STRING("SongMedleyDiskInfo"),
 
     .SongMedleyDiskName_str = ALIGNED_STRING("SongMedleyDiskName"),
 
@@ -13195,14 +13195,14 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w253_code = ALIGNED_STRING(""),
 
-    .w253_name = ALIGNED_STRING("DiskSongMedley"),
+    .DiskSongMedley_name = ALIGNED_STRING("DiskSongMedley"),
 
     .ptr_67c0 = SELF(str_1292),
 
     .str_1292 = ALIGNED_STRING(""),
 
     .ptrs_11 = {
-        SELF(w266_name),
+        SELF(DiskUtility_name),
         SELF(w266_code),
         SELF(str_1361),
         SELF(str_1360),
@@ -13222,12 +13222,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1346),
         SELF(str_1345),
         SELF(WaitWinCtl_str),
-        SELF(w265_name),
+        SELF(FileRename_name),
         SELF(w265_code),
         SELF(str_1343),
         SELF(str_1342),
         SELF(DiskFormat_str),
-        SELF(w264_name),
+        SELF(DiskUtilitySMF_name),
         SELF(w264_code),
         SELF(str_1340),
         SELF(str_1339),
@@ -13245,18 +13245,18 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1327),
         SELF(str_1326),
         SELF(WaitWinCtlSmf_str),
-        SELF(w263_name),
+        SELF(DiskInfoWin_name),
         SELF(w263_code),
         SELF(str_1324),
         SELF(str_1323),
-        SELF(w262_name),
+        SELF(SongNameWin_name),
         SELF(w262_code),
-        SELF(w261_name),
+        SELF(DiskFormatNamingWin_name),
         SELF(w261_code),
         SELF(str_1322),
         SELF(str_1321),
         SELF(str_1320),
-        SELF(w260_name),
+        SELF(DiskFormatSureWin_name),
         SELF(w260_code),
         SELF(str_1319),
         SELF(str_1318),
@@ -13265,12 +13265,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1315),
         SELF(str_1314),
         SELF(str_1313),
-        SELF(w259_name),
+        SELF(DiskFormatSelectWin_name),
         SELF(w259_code),
         SELF(str_1312),
         SELF(str_1311),
         SELF(str_1310),
-        SELF(w258_name),
+        SELF(FileCopy_name),
         SELF(w258_code),
         SELF(str_1309),
         SELF(str_1308),
@@ -13279,11 +13279,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1305),
         SELF(str_1304),
         SELF(str_1303),
-        SELF(w257_name),
+        SELF(FileRenameSMF_name),
         SELF(w257_code),
         SELF(str_1302),
         SELF(str_1301),
-        SELF(w256_name),
+        SELF(DiskDeleteSureWin_name),
         SELF(w256_code),
         SELF(str_1300),
         SELF(str_1299),
@@ -13292,9 +13292,9 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(str_1296),
         SELF(str_1295),
         SELF(str_1294),
-        SELF(w255_name),
+        SELF(DiskDeleteSureScr_name),
         SELF(w255_code),
-        SELF(w254_name),
+        SELF(DiskSaveSureScr_name),
         SELF(w254_code),
         SELF(str_1293),
     },
@@ -13303,11 +13303,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w254_code = ALIGNED_STRING(""),
 
-    .w254_name = "DiskSaveSureScr",
+    .DiskSaveSureScr_name = "DiskSaveSureScr",
 
     .w255_code = ALIGNED_STRING(""),
 
-    .w255_name = "DiskDeleteSureScr",
+    .DiskDeleteSureScr_name = "DiskDeleteSureScr",
 
     .str_1294 = ALIGNED_STRING(""),
 
@@ -13325,7 +13325,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w256_code = ALIGNED_STRING(""),
 
-    .w256_name = "DiskDeleteSureWin",
+    .DiskDeleteSureWin_name = "DiskDeleteSureWin",
 
     .str_1301 = ALIGNED_STRING(""),
 
@@ -13333,7 +13333,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w257_code = ALIGNED_STRING(""),
 
-    .w257_name = "FileRenameSMF",
+    .FileRenameSMF_name = "FileRenameSMF",
 
     .str_1303 = ALIGNED_STRING(""),
 
@@ -13351,7 +13351,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w258_code = ALIGNED_STRING(""),
 
-    .w258_name = ALIGNED_STRING("FileCopy"),
+    .FileCopy_name = ALIGNED_STRING("FileCopy"),
 
     .str_1310 = ALIGNED_STRING(""),
 
@@ -13361,7 +13361,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w259_code = ALIGNED_STRING(""),
 
-    .w259_name = "DiskFormatSelectWin",
+    .DiskFormatSelectWin_name = "DiskFormatSelectWin",
 
     .str_1313 = ALIGNED_STRING(""),
 
@@ -13379,7 +13379,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w260_code = ALIGNED_STRING(""),
 
-    .w260_name = "DiskFormatSureWin",
+    .DiskFormatSureWin_name = "DiskFormatSureWin",
 
     .str_1320 = ALIGNED_STRING(""),
 
@@ -13389,11 +13389,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w261_code = ALIGNED_STRING(""),
 
-    .w261_name = "DiskFormatNamingWin",
+    .DiskFormatNamingWin_name = "DiskFormatNamingWin",
 
     .w262_code = ALIGNED_STRING(""),
 
-    .w262_name = "SongNameWin",
+    .SongNameWin_name = "SongNameWin",
 
     .str_1323 = ALIGNED_STRING(""),
 
@@ -13401,7 +13401,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w263_code = ALIGNED_STRING(""),
 
-    .w263_name = "DiskInfoWin",
+    .DiskInfoWin_name = "DiskInfoWin",
 
     .WaitWinCtlSmf_str = "WaitWinCtlSmf",
 
@@ -13437,7 +13437,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w264_code = ALIGNED_STRING(""),
 
-    .w264_name = ALIGNED_STRING("DiskUtilitySMF"),
+    .DiskUtilitySMF_name = ALIGNED_STRING("DiskUtilitySMF"),
 
     .DiskFormat_str = ALIGNED_STRING("DiskFormat"),
 
@@ -13447,7 +13447,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w265_code = ALIGNED_STRING(""),
 
-    .w265_name = ALIGNED_STRING("FileRename"),
+    .FileRename_name = ALIGNED_STRING("FileRename"),
 
     .WaitWinCtl_str = ALIGNED_STRING("WaitWinCtl"),
 
@@ -13487,7 +13487,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w266_code = ALIGNED_STRING(""),
 
-    .w266_name = "DiskUtility",
+    .DiskUtility_name = "DiskUtility",
 
     .ptr_6acc = SELF(str_1362),
 
@@ -13498,7 +13498,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
     .str_1363 = ALIGNED_STRING(""),
 
     .ptrs_12 = {
-        SELF(w267_name),
+        SELF(DiskSetup_name),
         SELF(w267_code),
         SELF(str_1370),
         SELF(str_1369),
@@ -13525,7 +13525,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w267_code = ALIGNED_STRING(""),
 
-    .w267_name = "DiskSetup",
+    .DiskSetup_name = "DiskSetup",
 
     .ptr_6b16 = SELF(str_1371),
 
@@ -13688,13 +13688,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(CmpSingleLoadDstFunc_str),
         SELF(FmmCmpSingleLoadFunc_str),
         SELF(FmmWallpaperLoadFunc_str),
-        SELF(w268_name),
+        SELF(FmmPasswordFunc_name),
         SELF(w268_code),
     },
 
     .w268_code = ALIGNED_STRING(""),
 
-    .w268_name = "FmmPasswordFunc",
+    .FmmPasswordFunc_name = "FmmPasswordFunc",
 
     .FmmWallpaperLoadFunc_str = ALIGNED_STRING("FmmWallpaperLoadFunc"),
 

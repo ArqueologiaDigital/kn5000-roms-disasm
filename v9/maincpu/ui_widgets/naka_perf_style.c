@@ -218,24 +218,24 @@ typedef struct __attribute__((packed)) {
     /* element 4 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e4;
     /* element 5 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e5;
-    char w4_text[12];
+    naka_cls_Label_t Preset_Label;
+    char Preset_text[12];
     /* element 6 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e6;
-    char w5_text[12];
+    naka_cls_Label_t Performance_Label;
+    char Performance_text[12];
     /* element 7 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e7;
     /* element 8 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e8;
-    char w7_text[10];
+    naka_cls_Label_t Custom_Label;
+    char Custom_text[10];
     /* element 9 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e9;
     /* element 10 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e10;
-    char w9_text[12];
+    naka_cls_Label_t Composer_Label;
+    char Composer_text[12];
     /* element 11 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e11;
-    char w10_text[8];
+    naka_cls_Label_t BackUp_Label;
+    char BackUp_text[8];
     /* element 12 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e12;
     /* element 13 of Viewable slot 0xFD: Line (class id 0x0160002E) */
@@ -274,8 +274,8 @@ typedef struct __attribute__((packed)) {
     /* element 28 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e28;
     /* element 29 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e29;
-    char w16_text[4];
+    naka_cls_Label_t Fd_Label;
+    char Fd_text[4];
     /* element 30 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e30;
     char w17_text[4];
@@ -287,14 +287,14 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vFD_e33;
     char w20_text[4];
     /* element 34 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e34;
-    char w21_text[10];
+    naka_cls_Label_t Volatile_Label;
+    char Volatile_text[10];
     /* element 35 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e35;
-    char w22_text[14];
+    naka_cls_Label_t NonVolatile_Label;
+    char NonVolatile_text[14];
     /* element 36 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e36;
-    char w23_text[10];
+    naka_cls_Label_t PlayOnly_Label;
+    char PlayOnly_text[10];
     /* element 37 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e37;
     char w24_text[4];
@@ -358,18 +358,18 @@ typedef struct __attribute__((packed)) {
     /* element 66 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e66;
     /* element 67 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e67;
-    char w27_text[12];
+    naka_cls_Label_t StyleData_Label;
+    char StyleData_text[12];
     /* element 68 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e68;
     /* element 69 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e69;
-    char w29_text[10];
+    naka_cls_Label_t Custom_Label_2;
+    char Custom_text_2[10];
     /* element 70 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e70;
     /* element 71 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e71;
-    char w31_text[12];
+    naka_cls_Label_t Composer_Label_2;
+    char Composer_text_2[12];
     /* element 72 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e72;
     char w32_text[4];
@@ -392,8 +392,8 @@ typedef struct __attribute__((packed)) {
     /* element 81 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e81;
     /* element 82 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e82;
-    char w33_text[14];
+    naka_cls_Label_t StyleConvert_Label;
+    char StyleConvert_text[14];
     /* element 83 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e83;
     /* element 84 of Viewable slot 0xFD: Line (class id 0x0160002E) */
@@ -436,8 +436,8 @@ typedef struct __attribute__((packed)) {
     /* element 101 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e101;
     /* element 102 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e102;
-    char w51_text[4];
+    naka_cls_Label_t Fd_Label_2;
+    char Fd_text_2[4];
     /* element 103 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e103;
     /* element 104 of Viewable slot 0xFD: Box (class id 0x01600031) */
@@ -449,11 +449,11 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vFD_e106;
     char w55_text[4];
     /* element 107 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e107;
-    char w56_text[14];
+    naka_cls_Label_t ConvertFrom_Label;
+    char ConvertFrom_text[14];
     /* element 108 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e108;
-    char w57_text[22];
+    naka_cls_Label_t VariousInstruments_Label;
+    char VariousInstruments_text[22];
     /* element 109 of Viewable slot 0xFD "ftdemo04": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo04;
     char w58_text[2];
@@ -527,12 +527,12 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcLanguageText_t vFD_e137;
     /* element 138 of Viewable slot 0xFD "ftdemo22": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo22;
-    char w68_text[10];
+    char BankView_text[10];
     /* element 139 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e139;
     /* element 140 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e140;
-    char w70_text[24];
+    naka_cls_Label_t BankForDinnerShow_Label;
+    char BankForDinnerShow_text[24];
     /* element 141 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e141;
     /* element 142 of Viewable slot 0xFD: Label (class id 0x0160002B) */
@@ -544,89 +544,89 @@ typedef struct __attribute__((packed)) {
     naka_slider_t w73;  /* NAKA_TYPE_SLIDER */
     naka_slider_t w74;  /* NAKA_TYPE_SLIDER */
     /* element 146 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e146;
-    char w75_text[6];
+    naka_cls_Label_t Bank_Label;
+    char Bank_text[6];
     /* element 147 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e147;
-    char w76_text[8];
+    naka_cls_Label_t Naming_Label;
+    char Naming_text[8];
     /* element 148 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e148;
-    char w77_text[8];
+    naka_cls_Label_t Memory_Label;
+    char Memory_text[8];
     /* element 149 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e149;
-    char w78_text[8];
+    naka_cls_Label_t Naming_Label_2;
+    char Naming_text_2[8];
     /* element 150 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e150;
     /* element 151 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e151;
-    char w79_text[18];
+    naka_cls_Label_t CurtainCall_Label;
+    char CurtainCall_text[18];
     /* element 152 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e152;
-    char w80_text[14];
+    naka_cls_Label_t HotelCombo_Label;
+    char HotelCombo_text[14];
     /* element 153 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e153;
-    char w81_text[18];
+    naka_cls_Label_t PubSingAlong_Label;
+    char PubSingAlong_text[18];
     /* element 154 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e154;
-    char w82_text[16];
+    naka_cls_Label_t SoloRomance_Label;
+    char SoloRomance_text[16];
     /* element 155 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e155;
-    char w83_text[16];
+    naka_cls_Label_t CasinoLights_Label;
+    char CasinoLights_text[16];
     /* element 156 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e156;
-    char w84_text[20];
+    naka_cls_Label_t LaidBackOctave_Label;
+    char LaidBackOctave_text[20];
     /* element 157 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e157;
-    char w85_text[12];
+    naka_cls_Label_t Overture_Label;
+    char Overture_text[12];
     /* element 158 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e158;
-    char w86_text[16];
+    naka_cls_Label_t LateAtNight_Label;
+    char LateAtNight_text[16];
     /* element 159 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e159;
-    char w87_text[6];
+    naka_cls_Label_t Bank_Label_2;
+    char Bank_text_2[6];
     /* element 160 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e160;
     /* element 161 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e161;
-    char w89_text[10];
+    naka_cls_Label_t Page_Label;
+    char Page_text[10];
     /* element 162 of Viewable slot 0xFD "ftdemo23": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo23;
-    char w90_text[18];
+    char SmfDirectPlay_text[18];
     /* element 163 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e163;
-    char w91_text[8];
+    naka_cls_Label_t Aa_Label;
+    char Aa_text[8];
     /* element 164 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e164;
     char w92_text[4];
     /* element 165 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e165;
-    char w93_text[4];
+    naka_cls_Label_t Mic_Label;
+    char Mic_text[4];
     /* element 166 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e166;
     /* element 167 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e167;
-    char w95_text[28];
+    naka_cls_Label_t OhIWantTo_Label;
+    char OhIWantTo_text[28];
     /* element 168 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e168;
-    char w96_text[6];
+    naka_cls_Label_t Ber_Label;
+    char Ber_text[6];
     /* element 169 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e169;
-    char w97_text[20];
+    naka_cls_Label_t OhWhenTheSaints_Label;
+    char OhWhenTheSaints_text[20];
     /* element 170 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e170;
-    char w98_text[32];
+    naka_cls_Label_t WhenTheSaintsGo_Label;
+    char WhenTheSaintsGo_text[32];
     /* element 171 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e171;
-    char w99_text[16];
+    naka_cls_Label_t GoMarchinIn_Label;
+    char GoMarchinIn_text[16];
     /* element 172 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e172;
-    char w100_text[16];
+    naka_cls_Label_t WhenTheSaints_Label;
+    char WhenTheSaints_text[16];
     /* element 173 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e173;
     char w101_text[2];
     /* element 174 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e174;
-    char w102_text[6];
+    naka_cls_Label_t Play_Label;
+    char Play_text[6];
     /* element 175 of Viewable slot 0xFD: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t vFD_e175;
     char str_276[2];
@@ -652,40 +652,40 @@ typedef struct __attribute__((packed)) {
     naka_cls_Bitmap_t vFD_e184;
     /* element 185 of Viewable slot 0xFD "ftdemo24": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo24;
-    char w106_text[12];
+    char Entertainer_text[12];
     /* element 186 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e186;
     /* element 187 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e187;
     /* element 188 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e188;
-    char w108_text[24];
+    naka_cls_Label_t MicBalance_Label;
+    char MicBalance_text[24];
     /* element 189 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e189;
-    char w109_text[14];
+    naka_cls_Label_t VocalReverb_Label;
+    char VocalReverb_text[14];
     /* element 190 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e190;
-    char w110_text[24];
+    naka_cls_Label_t ReverbTime_Label;
+    char ReverbTime_text[24];
     /* element 191 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e191;
-    char w111_text[14];
+    naka_cls_Label_t Type_Label;
+    char Type_text[14];
     /* element 192 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e192;
-    char w112_text[24];
+    naka_cls_Label_t OnOffOn_Label;
+    char OnOffOn_text[24];
     /* element 193 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e193;
-    char w113_text[24];
+    naka_cls_Label_t ExciterFcKHz_Label;
+    char ExciterFcKHz_text[24];
     /* element 194 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e194;
-    char w114_text[24];
+    naka_cls_Label_t ExciterG_Label;
+    char ExciterG_text[24];
     /* element 195 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e195;
-    char w115_text[24];
+    naka_cls_Label_t Volume_Label;
+    char Volume_text[24];
     /* element 196 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e196;
     /* element 197 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e197;
-    char w117_text[6];
+    naka_cls_Label_t Stage_Label;
+    char Stage_text[6];
     /* element 198 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e198;
     char w118_text[4];
@@ -702,33 +702,33 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vFD_e202;
     char w122_text[4];
     /* element 203 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e203;
-    char w123_text[10];
+    naka_cls_Label_t Vocalist_Label;
+    char Vocalist_text[10];
     /* element 204 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e204;
-    char w124_text[12];
+    naka_cls_Label_t Workstation_Label;
+    char Workstation_text[12];
     /* element 205 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e205;
-    char w125_text[12];
+    naka_cls_Label_t FadeInOut_Label;
+    char FadeInOut_text[12];
     /* element 206 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e206;
-    char w126_text[8];
+    naka_cls_Label_t Setting_Label;
+    char Setting_text[8];
     /* element 207 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e207;
-    char w127_text[6];
+    naka_cls_Label_t Mixer_Label;
+    char Mixer_text[6];
     /* element 208 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e208;
-    char w128_text[10];
+    naka_cls_Label_t DiskLoad_Label;
+    char DiskLoad_text[10];
     /* element 209 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e209;
     /* element 210 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e210;
-    char w130_text[14];
+    naka_cls_Label_t MuteKeysOff_Label;
+    char MuteKeysOff_text[14];
     /* element 211 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e211;
     /* element 212 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e212;
-    char w132_text[6];
+    naka_cls_Label_t Panic_Label;
+    char Panic_text[6];
     /* element 213 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e213;
     /* element 214 of Viewable slot 0xFD: Label (class id 0x0160002B) */
@@ -750,11 +750,11 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vFD_e220;
     char w138_text[4];
     /* element 221 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e221;
-    char w139_text[6];
+    naka_cls_Label_t Item_Label;
+    char Item_text[6];
     /* element 222 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e222;
-    char w140_text[6];
+    naka_cls_Label_t Value_Label;
+    char Value_text[6];
     /* element 223 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e223;
     /* element 224 of Viewable slot 0xFD "ftdemo25": TtlScreen (class id 0x01600034) */
@@ -765,37 +765,37 @@ typedef struct __attribute__((packed)) {
     char ftdemobmpend_file[8];
     /* element 226 of Viewable slot 0xFD "ftdemo26": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo26;
-    char w142_text[20];
+    char FadeInOutSetting_text[20];
     /* element 227 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e227;
     /* element 228 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e228;
-    char w144_text[8];
+    naka_cls_Label_t FadeIn_Label;
+    char FadeIn_text[8];
     /* element 229 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e229;
-    char w145_text[22];
+    naka_cls_Label_t Time_Label;
+    char Time_text[22];
     /* element 230 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e230;
-    char w146_text[10];
+    naka_cls_Label_t FadeOut_Label;
+    char FadeOut_text[10];
     /* element 231 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e231;
-    char w147_text[32];
+    naka_cls_Label_t TimeMeasure_Label;
+    char TimeMeasure_text[32];
     /* element 232 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e232;
-    char w148_text[28];
+    naka_cls_Label_t AutoResetOn_Label;
+    char AutoResetOn_text[28];
     /* element 233 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e233;
-    char w149_text[28];
+    naka_cls_Label_t AutoStopRhythmOn_Label;
+    char AutoStopRhythmOn_text[28];
     /* element 234 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e234;
-    char w150_text[28];
+    naka_cls_Label_t AutoStopSeqOn_Label;
+    char AutoStopSeqOn_text[28];
     /* element 235 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e235;
     /* element 236 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e236;
     /* element 237 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e237;
-    char w152_text[10];
+    naka_cls_Label_t Measure_Label;
+    char Measure_text[10];
     /* element 238 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e238;
     /* element 239 of Viewable slot 0xFD: Label (class id 0x0160002B) */
@@ -824,59 +824,59 @@ typedef struct __attribute__((packed)) {
     /* element 248 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e248;
     /* element 249 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e249;
-    char w160_text[14];
+    naka_cls_Label_t MusicStylist_Label;
+    char MusicStylist_text[14];
     /* element 250 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e250;
-    char w161_text[36];
+    naka_cls_Label_t StylesOfWorldWide_Label;
+    char StylesOfWorldWide_text[36];
     /* element 251 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e251;
-    char w162_text[26];
+    naka_cls_Label_t StyleExplorerByGenre_Label;
+    char StyleExplorerByGenre_text[26];
     /* element 252 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e252;
-    char w163_text[28];
+    naka_cls_Label_t AlphabeticalStyleSelect_Label;
+    char AlphabeticalStyleSelect_text[28];
     /* element 253 of Viewable slot 0xFD "ftdemo41": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo41;
-    char w164_text[16];
+    char StyleExplorer_text[16];
     /* element 254 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e254;
     /* element 255 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e255;
-    char w166_text[16];
+    naka_cls_Label_t EasyListening_Label;
+    char EasyListening_text[16];
     /* element 256 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e256;
-    char w167_text[12];
+    naka_cls_Label_t RockPop_Label;
+    char RockPop_text[12];
     /* element 257 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e257;
-    char w168_text[12];
+    naka_cls_Label_t PartyMusic_Label;
+    char PartyMusic_text[12];
     /* element 258 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e258;
-    char w169_text[10];
+    naka_cls_Label_t DancePop_Label;
+    char DancePop_text[10];
     /* element 259 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e259;
-    char w170_text[18];
+    naka_cls_Label_t GospelBluesRB_Label;
+    char GospelBluesRB_text[18];
     /* element 260 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e260;
-    char w171_text[14];
+    naka_cls_Label_t JazzSwing_Label;
+    char JazzSwing_text[14];
     /* element 261 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e261;
-    char w172_text[16];
+    naka_cls_Label_t ShowTradDance_Label;
+    char ShowTradDance_text[16];
     /* element 262 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e262;
-    char w173_text[12];
+    naka_cls_Label_t TradFolk_Label;
+    char TradFolk_text[12];
     /* element 263 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e263;
-    char w174_text[8];
+    naka_cls_Label_t Country_Label;
+    char Country_text[8];
     /* element 264 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e264;
-    char w175_text[14];
+    naka_cls_Label_t LatinWorld_Label;
+    char LatinWorld_text[14];
     /* element 265 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e265;
     /* element 266 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e266;
     /* element 267 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e267;
-    char w176_text[4];
+    naka_cls_Label_t Ok_Label;
+    char Ok_text[4];
     /* element 268 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e268;
     /* element 269 of Viewable slot 0xFD: Label (class id 0x0160002B) */
@@ -898,90 +898,90 @@ typedef struct __attribute__((packed)) {
     /* element 275 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e275;
     /* element 276 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e276;
-    char w181_text[14];
+    naka_cls_Label_t MainCategory_Label;
+    char MainCategory_text[14];
     /* element 277 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e277;
     /* element 278 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e278;
-    char w183_text[16];
+    naka_cls_Label_t GlamrockPiano_Label;
+    char GlamrockPiano_text[16];
     /* element 279 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e279;
-    char w184_text[10];
+    naka_cls_Label_t Hits_Label;
+    char Hits_text[10];
     /* element 280 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e280;
-    char w185_text[18];
+    naka_cls_Label_t EuroPopShuffle_Label;
+    char EuroPopShuffle_text[18];
     /* element 281 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e281;
-    char w186_text[16];
+    naka_cls_Label_t PowerRock_Label;
+    char PowerRock_text[16];
     /* element 282 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e282;
-    char w187_text[16];
+    naka_cls_Label_t LoveSongs_Label;
+    char LoveSongs_text[16];
     /* element 283 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e283;
-    char w188_text[16];
+    naka_cls_Label_t InTheEighties_Label;
+    char InTheEighties_text[16];
     /* element 284 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e284;
-    char w189_text[10];
+    naka_cls_Label_t PopBeat_Label;
+    char PopBeat_text[10];
     /* element 285 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e285;
-    char w190_text[14];
+    naka_cls_Label_t BeatGroove_Label;
+    char BeatGroove_text[14];
     /* element 286 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e286;
-    char w191_text[18];
+    naka_cls_Label_t PopBallads_Label;
+    char PopBallads_text[18];
     /* element 287 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e287;
-    char w192_text[10];
+    naka_cls_Label_t RockGig_Label;
+    char RockGig_text[10];
     /* element 288 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e288;
     /* element 289 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e289;
-    char w193_text[14];
+    naka_cls_Label_t SubCategory_Label;
+    char SubCategory_text[14];
     /* element 290 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e290;
     char w194_text[4];
     /* element 291 of Viewable slot 0xFD "ftdemo42": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo42;
-    char w195_text[16];
+    char StyleExplorer_text_2[16];
     /* element 292 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e292;
     /* element 293 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e293;
-    char w197_text[16];
+    naka_cls_Label_t EasyListening_Label_2;
+    char EasyListening_text_2[16];
     /* element 294 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e294;
-    char w198_text[12];
+    naka_cls_Label_t RockPop_Label_2;
+    char RockPop_text_2[12];
     /* element 295 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e295;
-    char w199_text[12];
+    naka_cls_Label_t PartyMusic_Label_2;
+    char PartyMusic_text_2[12];
     /* element 296 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e296;
-    char w200_text[10];
+    naka_cls_Label_t DancePop_Label_2;
+    char DancePop_text_2[10];
     /* element 297 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e297;
-    char w201_text[18];
+    naka_cls_Label_t GospelBluesRB_Label_2;
+    char GospelBluesRB_text_2[18];
     /* element 298 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e298;
-    char w202_text[14];
+    naka_cls_Label_t JazzSwing_Label_2;
+    char JazzSwing_text_2[14];
     /* element 299 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e299;
-    char w203_text[16];
+    naka_cls_Label_t ShowTradDance_Label_2;
+    char ShowTradDance_text_2[16];
     /* element 300 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e300;
-    char w204_text[12];
+    naka_cls_Label_t TradFolk_Label_2;
+    char TradFolk_text_2[12];
     /* element 301 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e301;
-    char w205_text[8];
+    naka_cls_Label_t Country_Label_2;
+    char Country_text_2[8];
     /* element 302 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e302;
-    char w206_text[14];
+    naka_cls_Label_t LatinWorld_Label_2;
+    char LatinWorld_text_2[14];
     /* element 303 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e303;
     /* element 304 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e304;
     /* element 305 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e305;
-    char w207_text[4];
+    naka_cls_Label_t Ok_Label_2;
+    char Ok_text_2[4];
     /* element 306 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e306;
     /* element 307 of Viewable slot 0xFD: Label (class id 0x0160002B) */
@@ -1003,90 +1003,90 @@ typedef struct __attribute__((packed)) {
     /* element 313 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e313;
     /* element 314 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e314;
-    char w212_text[14];
+    naka_cls_Label_t MainCategory_Label_2;
+    char MainCategory_text_2[14];
     /* element 315 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e315;
     /* element 316 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e316;
-    char w214_text[16];
+    naka_cls_Label_t GlamrockPiano_Label_2;
+    char GlamrockPiano_text_2[16];
     /* element 317 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e317;
-    char w215_text[10];
+    naka_cls_Label_t Hits_Label_2;
+    char Hits_text_2[10];
     /* element 318 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e318;
-    char w216_text[18];
+    naka_cls_Label_t EuroPopShuffle_Label_2;
+    char EuroPopShuffle_text_2[18];
     /* element 319 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e319;
-    char w217_text[16];
+    naka_cls_Label_t PowerRock_Label_2;
+    char PowerRock_text_2[16];
     /* element 320 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e320;
-    char w218_text[16];
+    naka_cls_Label_t LoveSongs_Label_2;
+    char LoveSongs_text_2[16];
     /* element 321 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e321;
-    char w219_text[16];
+    naka_cls_Label_t InTheEighties_Label_2;
+    char InTheEighties_text_2[16];
     /* element 322 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e322;
-    char w220_text[10];
+    naka_cls_Label_t PopBeat_Label_2;
+    char PopBeat_text_2[10];
     /* element 323 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e323;
-    char w221_text[14];
+    naka_cls_Label_t BeatGroove_Label_2;
+    char BeatGroove_text_2[14];
     /* element 324 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e324;
-    char w222_text[18];
+    naka_cls_Label_t PopBallads_Label_2;
+    char PopBallads_text_2[18];
     /* element 325 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e325;
-    char w223_text[10];
+    naka_cls_Label_t RockGig_Label_2;
+    char RockGig_text_2[10];
     /* element 326 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e326;
     /* element 327 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e327;
-    char w224_text[14];
+    naka_cls_Label_t SubCategory_Label_2;
+    char SubCategory_text_2[14];
     /* element 328 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e328;
     char w225_text[4];
     /* element 329 of Viewable slot 0xFD "ftdemo44": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo44;
-    char w226_text[16];
+    char StyleExplorer_text_3[16];
     /* element 330 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e330;
     /* element 331 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e331;
-    char w228_text[38];
+    naka_cls_Label_t EuroPopShuffleTempo_Label;
+    char EuroPopShuffleTempo_text[38];
     /* element 332 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e332;
-    char w229_text[32];
+    naka_cls_Label_t ShuffleSynth_Label;
+    char ShuffleSynth_text[32];
     /* element 333 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e333;
-    char w230_text[32];
+    naka_cls_Label_t JumpBrass_Label;
+    char JumpBrass_text[32];
     /* element 334 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e334;
-    char w231_text[32];
+    naka_cls_Label_t PopLeader_Label;
+    char PopLeader_text[32];
     /* element 335 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e335;
-    char w232_text[32];
+    naka_cls_Label_t ShuffleOrgan_Label;
+    char ShuffleOrgan_text[32];
     /* element 336 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e336;
-    char w233_text[38];
+    naka_cls_Label_t LoveSongsTempo_Label;
+    char LoveSongsTempo_text[38];
     /* element 337 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e337;
-    char w234_text[32];
+    naka_cls_Label_t AnalogueBallad_Label;
+    char AnalogueBallad_text[32];
     /* element 338 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e338;
-    char w235_text[32];
+    naka_cls_Label_t DonFret_Label;
+    char DonFret_text[32];
     /* element 339 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e339;
-    char w236_text[32];
+    naka_cls_Label_t EpOfThe_Label;
+    char EpOfThe_text[32];
     /* element 340 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e340;
-    char w237_text[32];
+    naka_cls_Label_t SaxProduction_Label;
+    char SaxProduction_text[32];
     /* element 341 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e341;
     /* element 342 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e342;
     /* element 343 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e343;
-    char w238_text[6];
+    naka_cls_Label_t Skip_Label;
+    char Skip_text[6];
     /* element 344 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e344;
     char w239_text[4];
@@ -1106,50 +1106,50 @@ typedef struct __attribute__((packed)) {
     /* element 350 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e350;
     /* element 351 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e351;
-    char w243_text[22];
+    naka_cls_Label_t CategoryRockPop_Label;
+    char CategoryRockPop_text[22];
     /* element 352 of Viewable slot 0xFD "ftdemo45": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo45;
-    char w244_text[16];
+    char StyleExplorer_text_4[16];
     /* element 353 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e353;
     /* element 354 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e354;
-    char w246_text[38];
+    naka_cls_Label_t EuroPopShuffleTempo_Label_2;
+    char EuroPopShuffleTempo_text_2[38];
     /* element 355 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e355;
-    char w247_text[32];
+    naka_cls_Label_t ShuffleSynth_Label_2;
+    char ShuffleSynth_text_2[32];
     /* element 356 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e356;
-    char w248_text[32];
+    naka_cls_Label_t JumpBrass_Label_2;
+    char JumpBrass_text_2[32];
     /* element 357 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e357;
-    char w249_text[32];
+    naka_cls_Label_t PopLeader_Label_2;
+    char PopLeader_text_2[32];
     /* element 358 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e358;
-    char w250_text[32];
+    naka_cls_Label_t ShuffleOrgan_Label_2;
+    char ShuffleOrgan_text_2[32];
     /* element 359 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e359;
-    char w251_text[38];
+    naka_cls_Label_t LoveSongsTempo_Label_2;
+    char LoveSongsTempo_text_2[38];
     /* element 360 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e360;
-    char w252_text[32];
+    naka_cls_Label_t AnalogueBallad_Label_2;
+    char AnalogueBallad_text_2[32];
     /* element 361 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e361;
-    char w253_text[32];
+    naka_cls_Label_t DonFret_Label_2;
+    char DonFret_text_2[32];
     /* element 362 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e362;
-    char w254_text[32];
+    naka_cls_Label_t EpOfThe_Label_2;
+    char EpOfThe_text_2[32];
     /* element 363 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e363;
-    char w255_text[32];
+    naka_cls_Label_t SaxProduction_Label_2;
+    char SaxProduction_text_2[32];
     /* element 364 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e364;
     /* element 365 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e365;
     /* element 366 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e366;
-    char w256_text[6];
+    naka_cls_Label_t Skip_Label_2;
+    char Skip_text_2[6];
     /* element 367 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e367;
     char w257_text[4];
@@ -1169,45 +1169,45 @@ typedef struct __attribute__((packed)) {
     /* element 373 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e373;
     /* element 374 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e374;
-    char w261_text[22];
+    naka_cls_Label_t CategoryRockPop_Label_2;
+    char CategoryRockPop_text_2[22];
     /* element 375 of Viewable slot 0xFD "ftdemo46": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo46;
-    char w262_text[22];
+    char AlphabeticalExplorer_text[22];
     /* element 376 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e376;
     /* element 377 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e377;
-    char w264_text[36];
+    naka_cls_Label_t BTempo_Label;
+    char BTempo_text[36];
     /* element 378 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e378;
     /* element 379 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e379;
-    char w265_text[32];
+    naka_cls_Label_t BallroomFiddle_Label;
+    char BallroomFiddle_text[32];
     /* element 380 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e380;
-    char w266_text[32];
+    naka_cls_Label_t BebopSolo_Label;
+    char BebopSolo_text[32];
     /* element 381 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e381;
-    char w267_text[32];
+    naka_cls_Label_t BarbarShop_Label;
+    char BarbarShop_text[32];
     /* element 382 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e382;
-    char w268_text[32];
+    naka_cls_Label_t BensonFrets_Label;
+    char BensonFrets_text[32];
     /* element 383 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e383;
-    char w269_text[32];
+    naka_cls_Label_t BigStage_Label;
+    char BigStage_text[32];
     /* element 384 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e384;
-    char w270_text[32];
+    naka_cls_Label_t BillyEP_Label;
+    char BillyEP_text[32];
     /* element 385 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e385;
-    char w271_text[32];
+    naka_cls_Label_t BonjourParis_Label;
+    char BonjourParis_text[32];
     /* element 386 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e386;
-    char w272_text[32];
+    naka_cls_Label_t BreathyNight_Label;
+    char BreathyNight_text[32];
     /* element 387 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e387;
-    char w273_text[32];
+    naka_cls_Label_t BridgeTooFar_Label;
+    char BridgeTooFar_text[32];
     /* element 388 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e388;
     /* element 389 of Viewable slot 0xFD: Label (class id 0x0160002B) */
@@ -1224,8 +1224,8 @@ typedef struct __attribute__((packed)) {
     /* element 393 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e393;
     /* element 394 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e394;
-    char w277_text[6];
+    naka_cls_Label_t Skip_Label_3;
+    char Skip_text_3[6];
     /* element 395 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e395;
     char w278_text[4];
@@ -1236,33 +1236,33 @@ typedef struct __attribute__((packed)) {
     naka_cls_Line_t vFD_e397;
     /* element 398 of Viewable slot 0xFD "ftdemo47": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo47;
-    char w280_text[22];
+    char AlphabeticalExplorer_text_2[22];
     /* element 399 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e399;
     /* element 400 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e400;
-    char w282_text[36];
+    naka_cls_Label_t CTempo_Label;
+    char CTempo_text[36];
     /* element 401 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e401;
-    char w283_text[32];
+    naka_cls_Label_t CafeJazz_Label;
+    char CafeJazz_text[32];
     /* element 402 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e402;
-    char w284_text[32];
+    naka_cls_Label_t CharmingWaltz_Label;
+    char CharmingWaltz_text[32];
     /* element 403 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e403;
-    char w285_text[32];
+    naka_cls_Label_t CasinoShow_Label;
+    char CasinoShow_text[32];
     /* element 404 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e404;
-    char w286_text[32];
+    naka_cls_Label_t ChubbySolo_Label;
+    char ChubbySolo_text[32];
     /* element 405 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e405;
-    char w287_text[32];
+    naka_cls_Label_t ClickPiano_Label;
+    char ClickPiano_text[32];
     /* element 406 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e406;
-    char w288_text[32];
+    naka_cls_Label_t CrystalDance_Label;
+    char CrystalDance_text[32];
     /* element 407 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e407;
-    char w289_text[32];
+    naka_cls_Label_t CurtainUp_Label;
+    char CurtainUp_text[32];
     /* element 408 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e408;
     /* element 409 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
@@ -1281,8 +1281,8 @@ typedef struct __attribute__((packed)) {
     /* element 414 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e414;
     /* element 415 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e415;
-    char w293_text[6];
+    naka_cls_Label_t Skip_Label_4;
+    char Skip_text_4[6];
     /* element 416 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e416;
     char w294_text[4];
@@ -1293,33 +1293,33 @@ typedef struct __attribute__((packed)) {
     naka_cls_Line_t vFD_e418;
     /* element 419 of Viewable slot 0xFD "ftdemo48": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo48;
-    char w296_text[22];
+    char AlphabeticalExplorer_text_3[22];
     /* element 420 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e420;
     /* element 421 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e421;
-    char w298_text[36];
+    naka_cls_Label_t CTempo_Label_2;
+    char CTempo_text_2[36];
     /* element 422 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e422;
-    char w299_text[32];
+    naka_cls_Label_t CafeJazz_Label_2;
+    char CafeJazz_text_2[32];
     /* element 423 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e423;
-    char w300_text[32];
+    naka_cls_Label_t CharmingWaltz_Label_2;
+    char CharmingWaltz_text_2[32];
     /* element 424 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e424;
-    char w301_text[32];
+    naka_cls_Label_t CasinoShow_Label_2;
+    char CasinoShow_text_2[32];
     /* element 425 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e425;
-    char w302_text[32];
+    naka_cls_Label_t ChubbySolo_Label_2;
+    char ChubbySolo_text_2[32];
     /* element 426 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e426;
-    char w303_text[32];
+    naka_cls_Label_t ClickPiano_Label_2;
+    char ClickPiano_text_2[32];
     /* element 427 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e427;
-    char w304_text[32];
+    naka_cls_Label_t CrystalDance_Label_2;
+    char CrystalDance_text_2[32];
     /* element 428 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e428;
-    char w305_text[32];
+    naka_cls_Label_t CurtainUp_Label_2;
+    char CurtainUp_text_2[32];
     /* element 429 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e429;
     /* element 430 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
@@ -1338,8 +1338,8 @@ typedef struct __attribute__((packed)) {
     /* element 435 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e435;
     /* element 436 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e436;
-    char w309_text[6];
+    naka_cls_Label_t Skip_Label_5;
+    char Skip_text_5[6];
     /* element 437 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e437;
     char w310_text[4];
@@ -1350,46 +1350,46 @@ typedef struct __attribute__((packed)) {
     naka_cls_Line_t vFD_e439;
     /* element 440 of Viewable slot 0xFD "ftdemo43": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo43;
-    char w312_text[16];
+    char StyleExplorer_text_5[16];
     /* element 441 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e441;
     /* element 442 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e442;
-    char w314_text[16];
+    naka_cls_Label_t EasyListening_Label_3;
+    char EasyListening_text_3[16];
     /* element 443 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e443;
-    char w315_text[12];
+    naka_cls_Label_t RockPop_Label_3;
+    char RockPop_text_3[12];
     /* element 444 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e444;
-    char w316_text[12];
+    naka_cls_Label_t PartyMusic_Label_3;
+    char PartyMusic_text_3[12];
     /* element 445 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e445;
-    char w317_text[10];
+    naka_cls_Label_t DancePop_Label_3;
+    char DancePop_text_3[10];
     /* element 446 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e446;
-    char w318_text[18];
+    naka_cls_Label_t GospelBluesRB_Label_3;
+    char GospelBluesRB_text_3[18];
     /* element 447 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e447;
-    char w319_text[14];
+    naka_cls_Label_t JazzSwing_Label_3;
+    char JazzSwing_text_3[14];
     /* element 448 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e448;
-    char w320_text[16];
+    naka_cls_Label_t ShowTradDance_Label_3;
+    char ShowTradDance_text_3[16];
     /* element 449 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e449;
-    char w321_text[12];
+    naka_cls_Label_t TradFolk_Label_3;
+    char TradFolk_text_3[12];
     /* element 450 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e450;
-    char w322_text[8];
+    naka_cls_Label_t Country_Label_3;
+    char Country_text_3[8];
     /* element 451 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e451;
-    char w323_text[14];
+    naka_cls_Label_t LatinWorld_Label_3;
+    char LatinWorld_text_3[14];
     /* element 452 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e452;
     /* element 453 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e453;
     /* element 454 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e454;
-    char w324_text[4];
+    naka_cls_Label_t Ok_Label_3;
+    char Ok_text_3[4];
     /* element 455 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
     naka_cls_PsEditSwBox_t vFD_e455;
     /* element 456 of Viewable slot 0xFD: Label (class id 0x0160002B) */
@@ -1411,45 +1411,45 @@ typedef struct __attribute__((packed)) {
     /* element 462 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e462;
     /* element 463 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e463;
-    char w329_text[14];
+    naka_cls_Label_t MainCategory_Label_3;
+    char MainCategory_text_3[14];
     /* element 464 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e464;
     /* element 465 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e465;
-    char w331_text[16];
+    naka_cls_Label_t GlamrockPiano_Label_3;
+    char GlamrockPiano_text_3[16];
     /* element 466 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e466;
-    char w332_text[10];
+    naka_cls_Label_t Hits_Label_3;
+    char Hits_text_3[10];
     /* element 467 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e467;
-    char w333_text[18];
+    naka_cls_Label_t EuroPopShuffle_Label_3;
+    char EuroPopShuffle_text_3[18];
     /* element 468 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e468;
-    char w334_text[16];
+    naka_cls_Label_t PowerRock_Label_3;
+    char PowerRock_text_3[16];
     /* element 469 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e469;
-    char w335_text[16];
+    naka_cls_Label_t LoveSongs_Label_3;
+    char LoveSongs_text_3[16];
     /* element 470 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e470;
-    char w336_text[16];
+    naka_cls_Label_t InTheEighties_Label_3;
+    char InTheEighties_text_3[16];
     /* element 471 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e471;
-    char w337_text[10];
+    naka_cls_Label_t PopBeat_Label_3;
+    char PopBeat_text_3[10];
     /* element 472 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e472;
-    char w338_text[14];
+    naka_cls_Label_t BeatGroove_Label_3;
+    char BeatGroove_text_3[14];
     /* element 473 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e473;
-    char w339_text[18];
+    naka_cls_Label_t PopBallads_Label_3;
+    char PopBallads_text_3[18];
     /* element 474 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e474;
-    char w340_text[10];
+    naka_cls_Label_t RockGig_Label_3;
+    char RockGig_text_3[10];
     /* element 475 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e475;
     /* element 476 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e476;
-    char w341_text[14];
+    naka_cls_Label_t SubCategory_Label_3;
+    char SubCategory_text_3[14];
     /* element 477 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e477;
     char w342_text[4];
@@ -2224,7 +2224,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e5 = {
+    .Preset_Label = {
         .class_ = 0x0160002B,
         .super = 4,
         .sub = NAKA_NONE,
@@ -2232,14 +2232,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 42, 52, 125, 70 },
-        .str = SELF(w4_text),
+        .str = SELF(Preset_text),
         .font = 0x00000001,
         .fontcolor = 0x00FC,
     },
 
-    .w4_text = ALIGNED_STRING("200 Preset"),
+    .Preset_text = ALIGNED_STRING("200 Preset"),
 
-    .vFD_e6 = {
+    .Performance_Label = {
         .class_ = 0x0160002B,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2247,12 +2247,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 4,
         .flag = 0x0008,
         .rect = { 200, 212, 291, 230 },
-        .str = SELF(w5_text),
+        .str = SELF(Performance_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w5_text = "Performance",
+    .Performance_text = "Performance",
 
     .vFD_e7 = {
         .class_ = 0x01600031,
@@ -2266,7 +2266,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e8 = {
+    .Custom_Label = {
         .class_ = 0x0160002B,
         .super = 7,
         .sub = NAKA_NONE,
@@ -2274,12 +2274,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 42, 116, 117, 134 },
-        .str = SELF(w7_text),
+        .str = SELF(Custom_text),
         .font = 0x00000001,
         .fontcolor = 0x00FC,
     },
 
-    .w7_text = "20 Custom",
+    .Custom_text = "20 Custom",
 
     .vFD_e9 = {
         .class_ = 0x01600031,
@@ -2293,7 +2293,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e10 = {
+    .Composer_Label = {
         .class_ = 0x0160002B,
         .super = 9,
         .sub = NAKA_NONE,
@@ -2301,14 +2301,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 188, 84, 271, 102 },
-        .str = SELF(w9_text),
+        .str = SELF(Composer_text),
         .font = 0x00000001,
         .fontcolor = 0x00FC,
     },
 
-    .w9_text = ALIGNED_STRING("3 Composer"),
+    .Composer_text = ALIGNED_STRING("3 Composer"),
 
-    .vFD_e11 = {
+    .BackUp_Label = {
         .class_ = 0x0160002B,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2316,12 +2316,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 9,
         .flag = 0x0008,
         .rect = { 56, 212, 115, 230 },
-        .str = SELF(w10_text),
+        .str = SELF(BackUp_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w10_text = "Back-up",
+    .BackUp_text = "Back-up",
 
     .vFD_e12 = {
         .class_ = 0x0160002E,
@@ -2536,7 +2536,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e29 = {
+    .Fd_Label = {
         .class_ = 0x0160002B,
         .super = 28,
         .sub = NAKA_NONE,
@@ -2544,12 +2544,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 155, 210, 174, 228 },
-        .str = SELF(w16_text),
+        .str = SELF(Fd_text),
         .font = 0x00000001,
         .fontcolor = 0x0000,
     },
 
-    .w16_text = ALIGNED_STRING("FD"),
+    .Fd_text = ALIGNED_STRING("FD"),
 
     .vFD_e30 = {
         .class_ = 0x0160002B,
@@ -2605,7 +2605,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w20_text = "~80",
 
-    .vFD_e34 = {
+    .Volatile_Label = {
         .class_ = 0x0160002B,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2613,14 +2613,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 27,
         .flag = 0x0008,
         .rect = { 206, 54, 273, 72 },
-        .str = SELF(w21_text),
+        .str = SELF(Volatile_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w21_text = ALIGNED_STRING("Volatile"),
+    .Volatile_text = ALIGNED_STRING("Volatile"),
 
-    .vFD_e35 = {
+    .NonVolatile_Label = {
         .class_ = 0x0160002B,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2628,14 +2628,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 34,
         .flag = 0x0008,
         .rect = { 30, 86, 129, 104 },
-        .str = SELF(w22_text),
+        .str = SELF(NonVolatile_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w22_text = ALIGNED_STRING("Non Volatile"),
+    .NonVolatile_text = ALIGNED_STRING("Non Volatile"),
 
-    .vFD_e36 = {
+    .PlayOnly_Label = {
         .class_ = 0x0160002B,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2643,12 +2643,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 35,
         .flag = 0x0008,
         .rect = { 30, 22, 105, 40 },
-        .str = SELF(w23_text),
+        .str = SELF(PlayOnly_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w23_text = "Play Only",
+    .PlayOnly_text = "Play Only",
 
     .vFD_e37 = {
         .class_ = 0x0160002B,
@@ -3019,7 +3019,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e67 = {
+    .StyleData_Label = {
         .class_ = 0x0160002B,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3027,12 +3027,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 188, 64, 271, 82 },
-        .str = SELF(w27_text),
+        .str = SELF(StyleData_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w27_text = ALIGNED_STRING("Style Data"),
+    .StyleData_text = ALIGNED_STRING("Style Data"),
 
     .vFD_e68 = {
         .class_ = 0x01600031,
@@ -3046,7 +3046,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e69 = {
+    .Custom_Label_2 = {
         .class_ = 0x0160002B,
         .super = 68,
         .sub = NAKA_NONE,
@@ -3054,12 +3054,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 42, 112, 117, 130 },
-        .str = SELF(w29_text),
+        .str = SELF(Custom_text_2),
         .font = 0x00000001,
         .fontcolor = 0x00FC,
     },
 
-    .w29_text = "20 Custom",
+    .Custom_text_2 = "20 Custom",
 
     .vFD_e70 = {
         .class_ = 0x01600031,
@@ -3073,7 +3073,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e71 = {
+    .Composer_Label_2 = {
         .class_ = 0x0160002B,
         .super = 70,
         .sub = NAKA_NONE,
@@ -3081,12 +3081,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 40, 56, 123, 74 },
-        .str = SELF(w31_text),
+        .str = SELF(Composer_text_2),
         .font = 0x00000001,
         .fontcolor = 0x00FC,
     },
 
-    .w31_text = ALIGNED_STRING("3 Composer"),
+    .Composer_text_2 = ALIGNED_STRING("3 Composer"),
 
     .vFD_e72 = {
         .class_ = 0x0160002B,
@@ -3211,7 +3211,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e82 = {
+    .StyleConvert_Label = {
         .class_ = 0x0160002B,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3219,12 +3219,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 81,
         .flag = 0x0008,
         .rect = { 86, 10, 232, 28 },
-        .str = SELF(w33_text),
+        .str = SELF(StyleConvert_text),
         .font = 0x00000004,
         .fontcolor = 0x0000,
     },
 
-    .w33_text = "Style Convert",
+    .StyleConvert_text = "Style Convert",
 
     .vFD_e83 = {
         .class_ = 0x0160002E,
@@ -3463,7 +3463,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e102 = {
+    .Fd_Label_2 = {
         .class_ = 0x0160002B,
         .super = 101,
         .sub = NAKA_NONE,
@@ -3471,12 +3471,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 199, 210, 218, 228 },
-        .str = SELF(w51_text),
+        .str = SELF(Fd_text_2),
         .font = 0x00000001,
         .fontcolor = 0x0000,
     },
 
-    .w51_text = ALIGNED_STRING("FD"),
+    .Fd_text_2 = ALIGNED_STRING("FD"),
 
     .vFD_e103 = {
         .class_ = 0x01600031,
@@ -3532,7 +3532,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w55_text = "~7f",
 
-    .vFD_e107 = {
+    .ConvertFrom_Label = {
         .class_ = 0x0160002B,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3540,14 +3540,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 100,
         .flag = 0x0008,
         .rect = { 48, 184, 147, 202 },
-        .str = SELF(w56_text),
+        .str = SELF(ConvertFrom_text),
         .font = 0x00000000,
         .fontcolor = 0x00F9,
     },
 
-    .w56_text = ALIGNED_STRING("Convert from"),
+    .ConvertFrom_text = ALIGNED_STRING("Convert from"),
 
-    .vFD_e108 = {
+    .VariousInstruments_Label = {
         .class_ = 0x0160002B,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3555,12 +3555,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 107,
         .flag = 0x0008,
         .rect = { 12, 200, 183, 218 },
-        .str = SELF(w57_text),
+        .str = SELF(VariousInstruments_text),
         .font = 0x00000000,
         .fontcolor = 0x00F9,
     },
 
-    .w57_text = "various instruments !",
+    .VariousInstruments_text = "various instruments !",
 
     .ftdemo04 = {
         .class_ = 0x01600034,
@@ -4070,11 +4070,11 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0003,
         .exit = 0x01A00000,
         .window = 0x0003D5E0,
-        .title = SELF(w68_text),
+        .title = SELF(BankView_text),
         .icon = 0x0000009A,
     },
 
-    .w68_text = "BANK VIEW",
+    .BankView_text = "BANK VIEW",
 
     .vFD_e139 = {
         .class_ = 0x01600031,
@@ -4088,7 +4088,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e140 = {
+    .BankForDinnerShow_Label = {
         .class_ = 0x0160002B,
         .super = 139,
         .sub = NAKA_NONE,
@@ -4096,12 +4096,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 26, 56, 205, 74 },
-        .str = SELF(w70_text),
+        .str = SELF(BankForDinnerShow_text),
         .font = 0x00000001,
         .fontcolor = 0x00FB,
     },
 
-    .w70_text = ALIGNED_STRING("BANK 1:For Dinner Show"),
+    .BankForDinnerShow_text = ALIGNED_STRING("BANK 1:For Dinner Show"),
 
     .vFD_e141 = {
         .class_ = 0x0160001E,
@@ -4196,7 +4196,7 @@ const naka_perf_style_t naka_perf_style_data
         .field_2a       = 0x0030,
     },
 
-    .vFD_e146 = {
+    .Bank_Label = {
         .class_ = 0x0160002B,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4204,14 +4204,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 145,
         .flag = 0x0008,
         .rect = { 258, 66, 293, 84 },
-        .str = SELF(w75_text),
+        .str = SELF(Bank_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w75_text = ALIGNED_STRING("BANK"),
+    .Bank_text = ALIGNED_STRING("BANK"),
 
-    .vFD_e147 = {
+    .Naming_Label = {
         .class_ = 0x0160002B,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4219,14 +4219,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 146,
         .flag = 0x0008,
         .rect = { 258, 82, 309, 100 },
-        .str = SELF(w76_text),
+        .str = SELF(Naming_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w76_text = ALIGNED_STRING("NAMING"),
+    .Naming_text = ALIGNED_STRING("NAMING"),
 
-    .vFD_e148 = {
+    .Memory_Label = {
         .class_ = 0x0160002B,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4234,14 +4234,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 147,
         .flag = 0x0008,
         .rect = { 258, 110, 309, 128 },
-        .str = SELF(w77_text),
+        .str = SELF(Memory_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w77_text = ALIGNED_STRING("MEMORY"),
+    .Memory_text = ALIGNED_STRING("MEMORY"),
 
-    .vFD_e149 = {
+    .Naming_Label_2 = {
         .class_ = 0x0160002B,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4249,12 +4249,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 148,
         .flag = 0x0008,
         .rect = { 258, 126, 309, 144 },
-        .str = SELF(w78_text),
+        .str = SELF(Naming_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w78_text = ALIGNED_STRING("NAMING"),
+    .Naming_text_2 = ALIGNED_STRING("NAMING"),
 
     .vFD_e150 = {
         .class_ = 0x0160002E,
@@ -4268,7 +4268,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e151 = {
+    .CurtainCall_Label = {
         .class_ = 0x0160002B,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4276,14 +4276,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 150,
         .flag = 0x0008,
         .rect = { 42, 192, 181, 210 },
-        .str = SELF(w79_text),
+        .str = SELF(CurtainCall_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w79_text = "8:Curtain Call !!",
+    .CurtainCall_text = "8:Curtain Call !!",
 
-    .vFD_e152 = {
+    .HotelCombo_Label = {
         .class_ = 0x0160002B,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4291,14 +4291,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 151,
         .flag = 0x0008,
         .rect = { 42, 112, 149, 130 },
-        .str = SELF(w80_text),
+        .str = SELF(HotelCombo_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w80_text = "3:Hotel Combo",
+    .HotelCombo_text = "3:Hotel Combo",
 
-    .vFD_e153 = {
+    .PubSingAlong_Label = {
         .class_ = 0x0160002B,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4306,14 +4306,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 152,
         .flag = 0x0008,
         .rect = { 42, 176, 173, 194 },
-        .str = SELF(w81_text),
+        .str = SELF(PubSingAlong_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w81_text = ALIGNED_STRING("7:Pub Sing Along"),
+    .PubSingAlong_text = ALIGNED_STRING("7:Pub Sing Along"),
 
-    .vFD_e154 = {
+    .SoloRomance_Label = {
         .class_ = 0x0160002B,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4321,14 +4321,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 153,
         .flag = 0x0008,
         .rect = { 42, 160, 157, 178 },
-        .str = SELF(w82_text),
+        .str = SELF(SoloRomance_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w82_text = ALIGNED_STRING("6:Solo Romance"),
+    .SoloRomance_text = ALIGNED_STRING("6:Solo Romance"),
 
-    .vFD_e155 = {
+    .CasinoLights_Label = {
         .class_ = 0x0160002B,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4336,14 +4336,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 154,
         .flag = 0x0008,
         .rect = { 42, 144, 165, 162 },
-        .str = SELF(w83_text),
+        .str = SELF(CasinoLights_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w83_text = "5:Casino Lights",
+    .CasinoLights_text = "5:Casino Lights",
 
-    .vFD_e156 = {
+    .LaidBackOctave_Label = {
         .class_ = 0x0160002B,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4351,14 +4351,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 155,
         .flag = 0x0008,
         .rect = { 42, 128, 189, 146 },
-        .str = SELF(w84_text),
+        .str = SELF(LaidBackOctave_text),
         .font = 0x00000000,
         .fontcolor = 0x0009,
     },
 
-    .w84_text = ALIGNED_STRING("4:Laid Back Octave"),
+    .LaidBackOctave_text = ALIGNED_STRING("4:Laid Back Octave"),
 
-    .vFD_e157 = {
+    .Overture_Label = {
         .class_ = 0x0160002B,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4366,14 +4366,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 156,
         .flag = 0x0008,
         .rect = { 42, 80, 125, 98 },
-        .str = SELF(w85_text),
+        .str = SELF(Overture_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w85_text = ALIGNED_STRING("1:Overture"),
+    .Overture_text = ALIGNED_STRING("1:Overture"),
 
-    .vFD_e158 = {
+    .LateAtNight_Label = {
         .class_ = 0x0160002B,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4381,14 +4381,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 157,
         .flag = 0x0008,
         .rect = { 42, 96, 165, 114 },
-        .str = SELF(w86_text),
+        .str = SELF(LateAtNight_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w86_text = "2:Late At Night",
+    .LateAtNight_text = "2:Late At Night",
 
-    .vFD_e159 = {
+    .Bank_Label_2 = {
         .class_ = 0x0160002B,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4396,12 +4396,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 158,
         .flag = 0x0008,
         .rect = { 262, 198, 297, 216 },
-        .str = SELF(w87_text),
+        .str = SELF(Bank_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w87_text = ALIGNED_STRING("BANK"),
+    .Bank_text_2 = ALIGNED_STRING("BANK"),
 
     .vFD_e160 = {
         .class_ = 0x01600031,
@@ -4415,7 +4415,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e161 = {
+    .Page_Label = {
         .class_ = 0x0160002B,
         .super = 160,
         .sub = NAKA_NONE,
@@ -4423,12 +4423,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 245, 5, 312, 23 },
-        .str = SELF(w89_text),
+        .str = SELF(Page_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w89_text = ALIGNED_STRING("PAGE 2/2"),
+    .Page_text = ALIGNED_STRING("PAGE 2/2"),
 
     .ftdemo23 = {
         .class_ = 0x01600034,
@@ -4442,13 +4442,13 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0003,
         .exit = 0x01A00000,
         .window = 0x0003D5E4,
-        .title = SELF(w90_text),
+        .title = SELF(SmfDirectPlay_text),
         .icon = 0x0000002E,
     },
 
-    .w90_text = "SMF DIRECT PLAY  ",
+    .SmfDirectPlay_text = "SMF DIRECT PLAY  ",
 
-    .vFD_e163 = {
+    .Aa_Label = {
         .class_ = 0x0160002B,
         .super = 162,
         .sub = NAKA_NONE,
@@ -4456,12 +4456,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 256, 8, 314, 26 },
-        .str = SELF(w91_text),
+        .str = SELF(Aa_text),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
     },
 
-    .w91_text = "~aa=115",
+    .Aa_text = "~aa=115",
 
     .vFD_e164 = {
         .class_ = 0x0160002B,
@@ -4478,7 +4478,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w92_text = "~7f",
 
-    .vFD_e165 = {
+    .Mic_Label = {
         .class_ = 0x0160002B,
         .super = 162,
         .sub = NAKA_NONE,
@@ -4486,12 +4486,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 164,
         .flag = 0x0008,
         .rect = { 8, 34, 35, 52 },
-        .str = SELF(w93_text),
+        .str = SELF(Mic_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w93_text = "MIC",
+    .Mic_text = "MIC",
 
     .vFD_e166 = {
         .class_ = 0x01600031,
@@ -4505,7 +4505,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e167 = {
+    .OhIWantTo_Label = {
         .class_ = 0x0160002B,
         .super = 166,
         .sub = NAKA_NONE,
@@ -4513,14 +4513,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 30, 150, 249, 168 },
-        .str = SELF(w95_text),
+        .str = SELF(OhIWantTo_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w95_text = "Oh,I want to be in that num",
+    .OhIWantTo_text = "Oh,I want to be in that num",
 
-    .vFD_e168 = {
+    .Ber_Label = {
         .class_ = 0x0160002B,
         .super = 166,
         .sub = NAKA_NONE,
@@ -4528,14 +4528,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 167,
         .flag = 0x0008,
         .rect = { 246, 150, 281, 168 },
-        .str = SELF(w96_text),
+        .str = SELF(Ber_text),
         .font = 0x00000000,
         .fontcolor = 0x00FC,
     },
 
-    .w96_text = ALIGNED_STRING("ber."),
+    .Ber_text = ALIGNED_STRING("ber."),
 
-    .vFD_e169 = {
+    .OhWhenTheSaints_Label = {
         .class_ = 0x0160002B,
         .super = 166,
         .sub = NAKA_NONE,
@@ -4543,14 +4543,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 168,
         .flag = 0x0008,
         .rect = { 30, 102, 177, 120 },
-        .str = SELF(w97_text),
+        .str = SELF(OhWhenTheSaints_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w97_text = ALIGNED_STRING("Oh,When the Saints"),
+    .OhWhenTheSaints_text = ALIGNED_STRING("Oh,When the Saints"),
 
-    .vFD_e170 = {
+    .WhenTheSaintsGo_Label = {
         .class_ = 0x0160002B,
         .super = 166,
         .sub = NAKA_NONE,
@@ -4558,14 +4558,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 169,
         .flag = 0x0008,
         .rect = { 30, 166, 273, 184 },
-        .str = SELF(w98_text),
+        .str = SELF(WhenTheSaintsGo_text),
         .font = 0x00000000,
         .fontcolor = 0x00FC,
     },
 
-    .w98_text = ALIGNED_STRING("When the Saints go marchin'in."),
+    .WhenTheSaintsGo_text = ALIGNED_STRING("When the Saints go marchin'in."),
 
-    .vFD_e171 = {
+    .GoMarchinIn_Label = {
         .class_ = 0x0160002B,
         .super = 166,
         .sub = NAKA_NONE,
@@ -4573,14 +4573,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 170,
         .flag = 0x0008,
         .rect = { 30, 118, 145, 136 },
-        .str = SELF(w99_text),
+        .str = SELF(GoMarchinIn_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w99_text = ALIGNED_STRING("go marchin'in."),
+    .GoMarchinIn_text = ALIGNED_STRING("go marchin'in."),
 
-    .vFD_e172 = {
+    .WhenTheSaints_Label = {
         .class_ = 0x0160002B,
         .super = 162,
         .sub = NAKA_NONE,
@@ -4588,12 +4588,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 166,
         .flag = 0x0008,
         .rect = { 78, 43, 246, 61 },
-        .str = SELF(w100_text),
+        .str = SELF(WhenTheSaints_text),
         .font = 0x00000009,
         .fontcolor = 0x00FB,
     },
 
-    .w100_text = "When The Saints",
+    .WhenTheSaints_text = "When The Saints",
 
     .vFD_e173 = {
         .class_ = 0x0160002B,
@@ -4610,7 +4610,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w101_text = ALIGNED_STRING(""),
 
-    .vFD_e174 = {
+    .Play_Label = {
         .class_ = 0x0160002B,
         .super = 162,
         .sub = NAKA_NONE,
@@ -4618,12 +4618,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 173,
         .flag = 0x0008,
         .rect = { 122, 198, 157, 216 },
-        .str = SELF(w102_text),
+        .str = SELF(Play_text),
         .font = 0x00000000,
         .fontcolor = 0x000A,
     },
 
-    .w102_text = ALIGNED_STRING("PLAY"),
+    .Play_text = ALIGNED_STRING("PLAY"),
 
     .vFD_e175 = {
         .class_ = 0x0160003E,
@@ -4791,11 +4791,11 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0003,
         .exit = 0x01A00000,
         .window = 0x0003D5E8,
-        .title = SELF(w106_text),
+        .title = SELF(Entertainer_text),
         .icon = 0x0000009B,
     },
 
-    .w106_text = "ENTERTAINER",
+    .Entertainer_text = "ENTERTAINER",
 
     .vFD_e186 = {
         .class_ = 0x01600031,
@@ -4821,7 +4821,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e188 = {
+    .MicBalance_Label = {
         .class_ = 0x0160002B,
         .super = 186,
         .sub = NAKA_NONE,
@@ -4829,14 +4829,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 187,
         .flag = 0x0008,
         .rect = { 114, 36, 301, 54 },
-        .str = SELF(w108_text),
+        .str = SELF(MicBalance_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w108_text = "MIC BALANCE :       100",
+    .MicBalance_text = "MIC BALANCE :       100",
 
-    .vFD_e189 = {
+    .VocalReverb_Label = {
         .class_ = 0x0160002B,
         .super = 186,
         .sub = NAKA_NONE,
@@ -4844,14 +4844,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 188,
         .flag = 0x0008,
         .rect = { 114, 60, 213, 78 },
-        .str = SELF(w109_text),
+        .str = SELF(VocalReverb_text),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w109_text = ALIGNED_STRING("VOCAL REVERB"),
+    .VocalReverb_text = ALIGNED_STRING("VOCAL REVERB"),
 
-    .vFD_e190 = {
+    .ReverbTime_Label = {
         .class_ = 0x0160002B,
         .super = 186,
         .sub = NAKA_NONE,
@@ -4859,14 +4859,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 189,
         .flag = 0x0008,
         .rect = { 122, 116, 301, 134 },
-        .str = SELF(w110_text),
+        .str = SELF(ReverbTime_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w110_text = ALIGNED_STRING("REVERB TIME:     2.00s"),
+    .ReverbTime_text = ALIGNED_STRING("REVERB TIME:     2.00s"),
 
-    .vFD_e191 = {
+    .Type_Label = {
         .class_ = 0x0160002B,
         .super = 186,
         .sub = NAKA_NONE,
@@ -4874,14 +4874,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 190,
         .flag = 0x0008,
         .rect = { 122, 97, 221, 115 },
-        .str = SELF(w111_text),
+        .str = SELF(Type_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w111_text = ALIGNED_STRING("TYPE       :"),
+    .Type_text = ALIGNED_STRING("TYPE       :"),
 
-    .vFD_e192 = {
+    .OnOffOn_Label = {
         .class_ = 0x0160002B,
         .super = 186,
         .sub = NAKA_NONE,
@@ -4889,14 +4889,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 191,
         .flag = 0x0008,
         .rect = { 122, 78, 301, 96 },
-        .str = SELF(w112_text),
+        .str = SELF(OnOffOn_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w112_text = ALIGNED_STRING("ON/OFF     :        ON"),
+    .OnOffOn_text = ALIGNED_STRING("ON/OFF     :        ON"),
 
-    .vFD_e193 = {
+    .ExciterFcKHz_Label = {
         .class_ = 0x0160002B,
         .super = 186,
         .sub = NAKA_NONE,
@@ -4904,14 +4904,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 192,
         .flag = 0x0008,
         .rect = { 122, 135, 301, 153 },
-        .str = SELF(w113_text),
+        .str = SELF(ExciterFcKHz_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w113_text = ALIGNED_STRING("EXCITER FC :      1kHz"),
+    .ExciterFcKHz_text = ALIGNED_STRING("EXCITER FC :      1kHz"),
 
-    .vFD_e194 = {
+    .ExciterG_Label = {
         .class_ = 0x0160002B,
         .super = 186,
         .sub = NAKA_NONE,
@@ -4919,14 +4919,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 193,
         .flag = 0x0008,
         .rect = { 122, 154, 301, 172 },
-        .str = SELF(w114_text),
+        .str = SELF(ExciterG_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w114_text = ALIGNED_STRING("EXCITER G  :     + 2.0"),
+    .ExciterG_text = ALIGNED_STRING("EXCITER G  :     + 2.0"),
 
-    .vFD_e195 = {
+    .Volume_Label = {
         .class_ = 0x0160002B,
         .super = 186,
         .sub = NAKA_NONE,
@@ -4934,12 +4934,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 194,
         .flag = 0x0008,
         .rect = { 122, 174, 301, 192 },
-        .str = SELF(w115_text),
+        .str = SELF(Volume_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w115_text = ALIGNED_STRING("VOLUME     :        84"),
+    .Volume_text = ALIGNED_STRING("VOLUME     :        84"),
 
     .vFD_e196 = {
         .class_ = 0x01600031,
@@ -4953,7 +4953,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e197 = {
+    .Stage_Label = {
         .class_ = 0x0160002B,
         .super = 196,
         .sub = NAKA_NONE,
@@ -4961,12 +4961,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 250, 96, 293, 114 },
-        .str = SELF(w117_text),
+        .str = SELF(Stage_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w117_text = "STAGE",
+    .Stage_text = "STAGE",
 
     .vFD_e198 = {
         .class_ = 0x0160002B,
@@ -5043,7 +5043,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w122_text = "~7f",
 
-    .vFD_e203 = {
+    .Vocalist_Label = {
         .class_ = 0x0160002B,
         .super = 185,
         .sub = 204,
@@ -5051,14 +5051,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 202,
         .flag = 0x0008,
         .rect = { 10, 30, 77, 48 },
-        .str = SELF(w123_text),
+        .str = SELF(Vocalist_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w123_text = ALIGNED_STRING("VOCALIST"),
+    .Vocalist_text = ALIGNED_STRING("VOCALIST"),
 
-    .vFD_e204 = {
+    .Workstation_Label = {
         .class_ = 0x0160002B,
         .super = 203,
         .sub = NAKA_NONE,
@@ -5066,14 +5066,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 10, 42, 101, 60 },
-        .str = SELF(w124_text),
+        .str = SELF(Workstation_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w124_text = "WORKSTATION",
+    .Workstation_text = "WORKSTATION",
 
-    .vFD_e205 = {
+    .FadeInOut_Label = {
         .class_ = 0x0160002B,
         .super = 185,
         .sub = 206,
@@ -5081,14 +5081,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 203,
         .flag = 0x0008,
         .rect = { 10, 70, 101, 88 },
-        .str = SELF(w125_text),
+        .str = SELF(FadeInOut_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w125_text = "FADE IN/OUT",
+    .FadeInOut_text = "FADE IN/OUT",
 
-    .vFD_e206 = {
+    .Setting_Label = {
         .class_ = 0x0160002B,
         .super = 205,
         .sub = NAKA_NONE,
@@ -5096,14 +5096,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 10, 82, 69, 100 },
-        .str = SELF(w126_text),
+        .str = SELF(Setting_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w126_text = "SETTING",
+    .Setting_text = "SETTING",
 
-    .vFD_e207 = {
+    .Mixer_Label = {
         .class_ = 0x0160002B,
         .super = 185,
         .sub = NAKA_NONE,
@@ -5111,14 +5111,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 205,
         .flag = 0x0008,
         .rect = { 10, 118, 53, 136 },
-        .str = SELF(w127_text),
+        .str = SELF(Mixer_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w127_text = "MIXER",
+    .Mixer_text = "MIXER",
 
-    .vFD_e208 = {
+    .DiskLoad_Label = {
         .class_ = 0x0160002B,
         .super = 185,
         .sub = NAKA_NONE,
@@ -5126,12 +5126,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 207,
         .flag = 0x0008,
         .rect = { 10, 158, 85, 176 },
-        .str = SELF(w128_text),
+        .str = SELF(DiskLoad_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w128_text = "DISK LOAD",
+    .DiskLoad_text = "DISK LOAD",
 
     .vFD_e209 = {
         .class_ = 0x01600031,
@@ -5145,7 +5145,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e210 = {
+    .MuteKeysOff_Label = {
         .class_ = 0x0160002B,
         .super = 209,
         .sub = NAKA_NONE,
@@ -5153,12 +5153,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 10, 204, 117, 222 },
-        .str = SELF(w130_text),
+        .str = SELF(MuteKeysOff_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w130_text = "MUTE KEYS:OFF",
+    .MuteKeysOff_text = "MUTE KEYS:OFF",
 
     .vFD_e211 = {
         .class_ = 0x01600031,
@@ -5172,7 +5172,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C9,
     },
 
-    .vFD_e212 = {
+    .Panic_Label = {
         .class_ = 0x0160002B,
         .super = 211,
         .sub = NAKA_NONE,
@@ -5180,12 +5180,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 18, 223, 61, 241 },
-        .str = SELF(w132_text),
+        .str = SELF(Panic_text),
         .font = 0x00000000,
         .fontcolor = 0x000A,
     },
 
-    .w132_text = "PANIC",
+    .Panic_text = "PANIC",
 
     .vFD_e213 = {
         .class_ = 0x01600031,
@@ -5295,7 +5295,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w138_text = "~98",
 
-    .vFD_e221 = {
+    .Item_Label = {
         .class_ = 0x0160002B,
         .super = 185,
         .sub = NAKA_NONE,
@@ -5303,14 +5303,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 220,
         .flag = 0x0008,
         .rect = { 142, 202, 177, 220 },
-        .str = SELF(w139_text),
+        .str = SELF(Item_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w139_text = ALIGNED_STRING("ITEM"),
+    .Item_text = ALIGNED_STRING("ITEM"),
 
-    .vFD_e222 = {
+    .Value_Label = {
         .class_ = 0x0160002B,
         .super = 185,
         .sub = NAKA_NONE,
@@ -5318,12 +5318,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 221,
         .flag = 0x0008,
         .rect = { 256, 202, 299, 220 },
-        .str = SELF(w140_text),
+        .str = SELF(Value_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w140_text = "VALUE",
+    .Value_text = "VALUE",
 
     .vFD_e223 = {
         .class_ = 0x0160002F,
@@ -5381,11 +5381,11 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
         .exit = 0x01A00000,
         .window = 0x0003D5F0,
-        .title = SELF(w142_text),
+        .title = SELF(FadeInOutSetting_text),
         .icon = 0x00000001,
     },
 
-    .w142_text = "FADE IN/OUT SETTING",
+    .FadeInOutSetting_text = "FADE IN/OUT SETTING",
 
     .vFD_e227 = {
         .class_ = 0x01600031,
@@ -5399,7 +5399,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e228 = {
+    .FadeIn_Label = {
         .class_ = 0x0160002B,
         .super = 227,
         .sub = NAKA_NONE,
@@ -5407,14 +5407,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 14, 48, 73, 66 },
-        .str = SELF(w144_text),
+        .str = SELF(FadeIn_text),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w144_text = "FADE IN",
+    .FadeIn_text = "FADE IN",
 
-    .vFD_e229 = {
+    .Time_Label = {
         .class_ = 0x0160002B,
         .super = 227,
         .sub = NAKA_NONE,
@@ -5422,14 +5422,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 228,
         .flag = 0x0008,
         .rect = { 14, 68, 177, 86 },
-        .str = SELF(w145_text),
+        .str = SELF(Time_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w145_text = ALIGNED_STRING("Time               :"),
+    .Time_text = ALIGNED_STRING("Time               :"),
 
-    .vFD_e230 = {
+    .FadeOut_Label = {
         .class_ = 0x0160002B,
         .super = 227,
         .sub = NAKA_NONE,
@@ -5437,14 +5437,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 229,
         .flag = 0x0008,
         .rect = { 14, 88, 81, 106 },
-        .str = SELF(w146_text),
+        .str = SELF(FadeOut_text),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w146_text = ALIGNED_STRING("FADE OUT"),
+    .FadeOut_text = ALIGNED_STRING("FADE OUT"),
 
-    .vFD_e231 = {
+    .TimeMeasure_Label = {
         .class_ = 0x0160002B,
         .super = 227,
         .sub = NAKA_NONE,
@@ -5452,14 +5452,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 230,
         .flag = 0x0008,
         .rect = { 14, 108, 257, 126 },
-        .str = SELF(w147_text),
+        .str = SELF(TimeMeasure_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w147_text = ALIGNED_STRING("Time               : 4 measure"),
+    .TimeMeasure_text = ALIGNED_STRING("Time               : 4 measure"),
 
-    .vFD_e232 = {
+    .AutoResetOn_Label = {
         .class_ = 0x0160002B,
         .super = 227,
         .sub = NAKA_NONE,
@@ -5467,14 +5467,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 231,
         .flag = 0x0008,
         .rect = { 14, 128, 225, 146 },
-        .str = SELF(w148_text),
+        .str = SELF(AutoResetOn_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w148_text = ALIGNED_STRING("Auto reset         :    ON"),
+    .AutoResetOn_text = ALIGNED_STRING("Auto reset         :    ON"),
 
-    .vFD_e233 = {
+    .AutoStopRhythmOn_Label = {
         .class_ = 0x0160002B,
         .super = 227,
         .sub = NAKA_NONE,
@@ -5482,14 +5482,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 232,
         .flag = 0x0008,
         .rect = { 14, 148, 225, 166 },
-        .str = SELF(w149_text),
+        .str = SELF(AutoStopRhythmOn_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w149_text = ALIGNED_STRING("Auto stop Rhythm   :    ON"),
+    .AutoStopRhythmOn_text = ALIGNED_STRING("Auto stop Rhythm   :    ON"),
 
-    .vFD_e234 = {
+    .AutoStopSeqOn_Label = {
         .class_ = 0x0160002B,
         .super = 227,
         .sub = NAKA_NONE,
@@ -5497,12 +5497,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 233,
         .flag = 0x0008,
         .rect = { 14, 168, 225, 186 },
-        .str = SELF(w150_text),
+        .str = SELF(AutoStopSeqOn_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w150_text = ALIGNED_STRING("Auto stop Seq      :    ON"),
+    .AutoStopSeqOn_text = ALIGNED_STRING("Auto stop Seq      :    ON"),
 
     .vFD_e235 = {
         .class_ = 0x0160002F,
@@ -5529,7 +5529,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e237 = {
+    .Measure_Label = {
         .class_ = 0x0160002B,
         .super = 236,
         .sub = NAKA_NONE,
@@ -5537,12 +5537,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 182, 69, 257, 87 },
-        .str = SELF(w152_text),
+        .str = SELF(Measure_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w152_text = "2 measure",
+    .Measure_text = "2 measure",
 
     .vFD_e238 = {
         .class_ = 0x0160001E,
@@ -5704,7 +5704,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C9,
     },
 
-    .vFD_e249 = {
+    .MusicStylist_Label = {
         .class_ = 0x0160002B,
         .super = 248,
         .sub = NAKA_NONE,
@@ -5712,14 +5712,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 80, 28, 226, 46 },
-        .str = SELF(w160_text),
+        .str = SELF(MusicStylist_text),
         .font = 0x00000004,
         .fontcolor = 0x0000,
     },
 
-    .w160_text = "Music Stylist",
+    .MusicStylist_text = "Music Stylist",
 
-    .vFD_e250 = {
+    .StylesOfWorldWide_Label = {
         .class_ = 0x0160002B,
         .super = 247,
         .sub = NAKA_NONE,
@@ -5727,14 +5727,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 248,
         .flag = 0x0008,
         .rect = { 18, 100, 301, 118 },
-        .str = SELF(w161_text),
+        .str = SELF(StylesOfWorldWide_text),
         .font = 0x00000001,
         .fontcolor = 0x00FC,
     },
 
-    .w161_text = "> 1000 Styles of World wide Music !",
+    .StylesOfWorldWide_text = "> 1000 Styles of World wide Music !",
 
-    .vFD_e251 = {
+    .StyleExplorerByGenre_Label = {
         .class_ = 0x0160002B,
         .super = 247,
         .sub = NAKA_NONE,
@@ -5742,14 +5742,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 250,
         .flag = 0x0008,
         .rect = { 18, 140, 221, 158 },
-        .str = SELF(w162_text),
+        .str = SELF(StyleExplorerByGenre_text),
         .font = 0x00000001,
         .fontcolor = 0x00FC,
     },
 
-    .w162_text = "> Style explorer by Genre",
+    .StyleExplorerByGenre_text = "> Style explorer by Genre",
 
-    .vFD_e252 = {
+    .AlphabeticalStyleSelect_Label = {
         .class_ = 0x0160002B,
         .super = 247,
         .sub = NAKA_NONE,
@@ -5757,12 +5757,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 251,
         .flag = 0x0008,
         .rect = { 18, 180, 237, 198 },
-        .str = SELF(w163_text),
+        .str = SELF(AlphabeticalStyleSelect_text),
         .font = 0x00000001,
         .fontcolor = 0x00FC,
     },
 
-    .w163_text = "> Alphabetical style select",
+    .AlphabeticalStyleSelect_text = "> Alphabetical style select",
 
     .ftdemo41 = {
         .class_ = 0x01600034,
@@ -5776,11 +5776,11 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0003,
         .exit = 0x01A00000,
         .window = 0x0003D5F8,
-        .title = SELF(w164_text),
+        .title = SELF(StyleExplorer_text),
         .icon = 0x000000A3,
     },
 
-    .w164_text = ALIGNED_STRING("STYLE EXPLORER"),
+    .StyleExplorer_text = ALIGNED_STRING("STYLE EXPLORER"),
 
     .vFD_e254 = {
         .class_ = 0x01600031,
@@ -5794,7 +5794,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e255 = {
+    .EasyListening_Label = {
         .class_ = 0x0160002B,
         .super = 254,
         .sub = NAKA_NONE,
@@ -5802,14 +5802,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 6, 52, 121, 64 },
-        .str = SELF(w166_text),
+        .str = SELF(EasyListening_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w166_text = ALIGNED_STRING("Easy Listening"),
+    .EasyListening_text = ALIGNED_STRING("Easy Listening"),
 
-    .vFD_e256 = {
+    .RockPop_Label = {
         .class_ = 0x0160002B,
         .super = 254,
         .sub = NAKA_NONE,
@@ -5817,14 +5817,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 255,
         .flag = 0x0008,
         .rect = { 6, 68, 89, 80 },
-        .str = SELF(w167_text),
+        .str = SELF(RockPop_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w167_text = ALIGNED_STRING("Rock & Pop"),
+    .RockPop_text = ALIGNED_STRING("Rock & Pop"),
 
-    .vFD_e257 = {
+    .PartyMusic_Label = {
         .class_ = 0x0160002B,
         .super = 254,
         .sub = NAKA_NONE,
@@ -5832,14 +5832,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 256,
         .flag = 0x0008,
         .rect = { 6, 100, 97, 112 },
-        .str = SELF(w168_text),
+        .str = SELF(PartyMusic_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w168_text = "Party Music",
+    .PartyMusic_text = "Party Music",
 
-    .vFD_e258 = {
+    .DancePop_Label = {
         .class_ = 0x0160002B,
         .super = 254,
         .sub = NAKA_NONE,
@@ -5847,14 +5847,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 257,
         .flag = 0x0008,
         .rect = { 6, 84, 81, 96 },
-        .str = SELF(w169_text),
+        .str = SELF(DancePop_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w169_text = "Dance Pop",
+    .DancePop_text = "Dance Pop",
 
-    .vFD_e259 = {
+    .GospelBluesRB_Label = {
         .class_ = 0x0160002B,
         .super = 254,
         .sub = NAKA_NONE,
@@ -5862,14 +5862,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 258,
         .flag = 0x0008,
         .rect = { 6, 116, 137, 128 },
-        .str = SELF(w170_text),
+        .str = SELF(GospelBluesRB_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w170_text = ALIGNED_STRING("Gospel/Blues/R&B"),
+    .GospelBluesRB_text = ALIGNED_STRING("Gospel/Blues/R&B"),
 
-    .vFD_e260 = {
+    .JazzSwing_Label = {
         .class_ = 0x0160002B,
         .super = 254,
         .sub = NAKA_NONE,
@@ -5877,14 +5877,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 259,
         .flag = 0x0008,
         .rect = { 6, 132, 105, 144 },
-        .str = SELF(w171_text),
+        .str = SELF(JazzSwing_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w171_text = ALIGNED_STRING("Jazz & Swing"),
+    .JazzSwing_text = ALIGNED_STRING("Jazz & Swing"),
 
-    .vFD_e261 = {
+    .ShowTradDance_Label = {
         .class_ = 0x0160002B,
         .super = 254,
         .sub = NAKA_NONE,
@@ -5892,14 +5892,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 260,
         .flag = 0x0008,
         .rect = { 6, 148, 129, 160 },
-        .str = SELF(w172_text),
+        .str = SELF(ShowTradDance_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w172_text = "Show/Trad Dance",
+    .ShowTradDance_text = "Show/Trad Dance",
 
-    .vFD_e262 = {
+    .TradFolk_Label = {
         .class_ = 0x0160002B,
         .super = 254,
         .sub = NAKA_NONE,
@@ -5907,14 +5907,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 261,
         .flag = 0x0008,
         .rect = { 6, 164, 97, 176 },
-        .str = SELF(w173_text),
+        .str = SELF(TradFolk_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w173_text = "Trad / Folk",
+    .TradFolk_text = "Trad / Folk",
 
-    .vFD_e263 = {
+    .Country_Label = {
         .class_ = 0x0160002B,
         .super = 254,
         .sub = NAKA_NONE,
@@ -5922,14 +5922,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 262,
         .flag = 0x0008,
         .rect = { 6, 180, 65, 192 },
-        .str = SELF(w174_text),
+        .str = SELF(Country_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w174_text = "Country",
+    .Country_text = "Country",
 
-    .vFD_e264 = {
+    .LatinWorld_Label = {
         .class_ = 0x0160002B,
         .super = 254,
         .sub = NAKA_NONE,
@@ -5937,12 +5937,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 263,
         .flag = 0x0008,
         .rect = { 6, 196, 113, 208 },
-        .str = SELF(w175_text),
+        .str = SELF(LatinWorld_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w175_text = "Latin / World",
+    .LatinWorld_text = "Latin / World",
 
     .vFD_e265 = {
         .class_ = 0x0160002F,
@@ -5974,7 +5974,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x000B,
     },
 
-    .vFD_e267 = {
+    .Ok_Label = {
         .class_ = 0x0160002B,
         .super = 266,
         .sub = NAKA_NONE,
@@ -5982,12 +5982,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 290, 161, 309, 179 },
-        .str = SELF(w176_text),
+        .str = SELF(Ok_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w176_text = ALIGNED_STRING("OK"),
+    .Ok_text = ALIGNED_STRING("OK"),
 
     .vFD_e268 = {
         .class_ = 0x0160001E,
@@ -6107,7 +6107,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e276 = {
+    .MainCategory_Label = {
         .class_ = 0x0160002B,
         .super = 253,
         .sub = NAKA_NONE,
@@ -6115,12 +6115,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 272,
         .flag = 0x0008,
         .rect = { 18, 30, 125, 48 },
-        .str = SELF(w181_text),
+        .str = SELF(MainCategory_text),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w181_text = "MAIN CATEGORY",
+    .MainCategory_text = "MAIN CATEGORY",
 
     .vFD_e277 = {
         .class_ = 0x01600031,
@@ -6134,7 +6134,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e278 = {
+    .GlamrockPiano_Label = {
         .class_ = 0x0160002B,
         .super = 277,
         .sub = NAKA_NONE,
@@ -6142,14 +6142,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 150, 52, 265, 64 },
-        .str = SELF(w183_text),
+        .str = SELF(GlamrockPiano_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w183_text = ALIGNED_STRING("Glamrock Piano"),
+    .GlamrockPiano_text = ALIGNED_STRING("Glamrock Piano"),
 
-    .vFD_e279 = {
+    .Hits_Label = {
         .class_ = 0x0160002B,
         .super = 277,
         .sub = NAKA_NONE,
@@ -6157,14 +6157,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 278,
         .flag = 0x0008,
         .rect = { 150, 68, 225, 80 },
-        .str = SELF(w184_text),
+        .str = SELF(Hits_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w184_text = "70's Hits",
+    .Hits_text = "70's Hits",
 
-    .vFD_e280 = {
+    .EuroPopShuffle_Label = {
         .class_ = 0x0160002B,
         .super = 277,
         .sub = NAKA_NONE,
@@ -6172,14 +6172,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 279,
         .flag = 0x0008,
         .rect = { 150, 100, 281, 112 },
-        .str = SELF(w185_text),
+        .str = SELF(EuroPopShuffle_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w185_text = ALIGNED_STRING("Euro Pop Shuffle"),
+    .EuroPopShuffle_text = ALIGNED_STRING("Euro Pop Shuffle"),
 
-    .vFD_e281 = {
+    .PowerRock_Label = {
         .class_ = 0x0160002B,
         .super = 277,
         .sub = NAKA_NONE,
@@ -6187,14 +6187,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 280,
         .flag = 0x0008,
         .rect = { 150, 84, 273, 96 },
-        .str = SELF(w186_text),
+        .str = SELF(PowerRock_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w186_text = "70's Power Rock",
+    .PowerRock_text = "70's Power Rock",
 
-    .vFD_e282 = {
+    .LoveSongs_Label = {
         .class_ = 0x0160002B,
         .super = 277,
         .sub = NAKA_NONE,
@@ -6202,14 +6202,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 281,
         .flag = 0x0008,
         .rect = { 150, 116, 273, 128 },
-        .str = SELF(w187_text),
+        .str = SELF(LoveSongs_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w187_text = "80's Love Songs",
+    .LoveSongs_text = "80's Love Songs",
 
-    .vFD_e283 = {
+    .InTheEighties_Label = {
         .class_ = 0x0160002B,
         .super = 277,
         .sub = NAKA_NONE,
@@ -6217,14 +6217,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 282,
         .flag = 0x0008,
         .rect = { 150, 132, 273, 144 },
-        .str = SELF(w188_text),
+        .str = SELF(InTheEighties_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w188_text = "In The Eighties",
+    .InTheEighties_text = "In The Eighties",
 
-    .vFD_e284 = {
+    .PopBeat_Label = {
         .class_ = 0x0160002B,
         .super = 277,
         .sub = NAKA_NONE,
@@ -6232,14 +6232,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 283,
         .flag = 0x0008,
         .rect = { 150, 148, 217, 160 },
-        .str = SELF(w189_text),
+        .str = SELF(PopBeat_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w189_text = ALIGNED_STRING("Pop Beat"),
+    .PopBeat_text = ALIGNED_STRING("Pop Beat"),
 
-    .vFD_e285 = {
+    .BeatGroove_Label = {
         .class_ = 0x0160002B,
         .super = 277,
         .sub = NAKA_NONE,
@@ -6247,14 +6247,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 284,
         .flag = 0x0008,
         .rect = { 150, 164, 257, 176 },
-        .str = SELF(w190_text),
+        .str = SELF(BeatGroove_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w190_text = "8 Beat Groove",
+    .BeatGroove_text = "8 Beat Groove",
 
-    .vFD_e286 = {
+    .PopBallads_Label = {
         .class_ = 0x0160002B,
         .super = 277,
         .sub = NAKA_NONE,
@@ -6262,14 +6262,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 285,
         .flag = 0x0008,
         .rect = { 150, 180, 281, 192 },
-        .str = SELF(w191_text),
+        .str = SELF(PopBallads_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w191_text = ALIGNED_STRING("80's Pop Ballads"),
+    .PopBallads_text = ALIGNED_STRING("80's Pop Ballads"),
 
-    .vFD_e287 = {
+    .RockGig_Label = {
         .class_ = 0x0160002B,
         .super = 277,
         .sub = NAKA_NONE,
@@ -6277,12 +6277,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 286,
         .flag = 0x0008,
         .rect = { 150, 196, 217, 208 },
-        .str = SELF(w192_text),
+        .str = SELF(RockGig_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w192_text = ALIGNED_STRING("Rock Gig"),
+    .RockGig_text = ALIGNED_STRING("Rock Gig"),
 
     .vFD_e288 = {
         .class_ = 0x0160002F,
@@ -6297,7 +6297,7 @@ const naka_perf_style_t naka_perf_style_data
         .color = 0x00F2,
     },
 
-    .vFD_e289 = {
+    .SubCategory_Label = {
         .class_ = 0x0160002B,
         .super = 253,
         .sub = NAKA_NONE,
@@ -6305,12 +6305,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 277,
         .flag = 0x0008,
         .rect = { 150, 30, 249, 48 },
-        .str = SELF(w193_text),
+        .str = SELF(SubCategory_text),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w193_text = ALIGNED_STRING("SUB CATEGORY"),
+    .SubCategory_text = ALIGNED_STRING("SUB CATEGORY"),
 
     .vFD_e290 = {
         .class_ = 0x0160002B,
@@ -6339,11 +6339,11 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0003,
         .exit = 0x01A00000,
         .window = 0x0003D5FC,
-        .title = SELF(w195_text),
+        .title = SELF(StyleExplorer_text_2),
         .icon = 0x000000A3,
     },
 
-    .w195_text = ALIGNED_STRING("STYLE EXPLORER"),
+    .StyleExplorer_text_2 = ALIGNED_STRING("STYLE EXPLORER"),
 
     .vFD_e292 = {
         .class_ = 0x01600031,
@@ -6357,7 +6357,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e293 = {
+    .EasyListening_Label_2 = {
         .class_ = 0x0160002B,
         .super = 292,
         .sub = NAKA_NONE,
@@ -6365,14 +6365,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 6, 52, 121, 64 },
-        .str = SELF(w197_text),
+        .str = SELF(EasyListening_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w197_text = ALIGNED_STRING("Easy Listening"),
+    .EasyListening_text_2 = ALIGNED_STRING("Easy Listening"),
 
-    .vFD_e294 = {
+    .RockPop_Label_2 = {
         .class_ = 0x0160002B,
         .super = 292,
         .sub = NAKA_NONE,
@@ -6380,14 +6380,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 293,
         .flag = 0x0008,
         .rect = { 6, 68, 89, 80 },
-        .str = SELF(w198_text),
+        .str = SELF(RockPop_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w198_text = ALIGNED_STRING("Rock & Pop"),
+    .RockPop_text_2 = ALIGNED_STRING("Rock & Pop"),
 
-    .vFD_e295 = {
+    .PartyMusic_Label_2 = {
         .class_ = 0x0160002B,
         .super = 292,
         .sub = NAKA_NONE,
@@ -6395,14 +6395,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 294,
         .flag = 0x0008,
         .rect = { 6, 100, 97, 112 },
-        .str = SELF(w199_text),
+        .str = SELF(PartyMusic_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w199_text = "Party Music",
+    .PartyMusic_text_2 = "Party Music",
 
-    .vFD_e296 = {
+    .DancePop_Label_2 = {
         .class_ = 0x0160002B,
         .super = 292,
         .sub = NAKA_NONE,
@@ -6410,14 +6410,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 295,
         .flag = 0x0008,
         .rect = { 6, 84, 81, 96 },
-        .str = SELF(w200_text),
+        .str = SELF(DancePop_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w200_text = "Dance Pop",
+    .DancePop_text_2 = "Dance Pop",
 
-    .vFD_e297 = {
+    .GospelBluesRB_Label_2 = {
         .class_ = 0x0160002B,
         .super = 292,
         .sub = NAKA_NONE,
@@ -6425,14 +6425,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 296,
         .flag = 0x0008,
         .rect = { 6, 116, 137, 128 },
-        .str = SELF(w201_text),
+        .str = SELF(GospelBluesRB_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w201_text = ALIGNED_STRING("Gospel/Blues/R&B"),
+    .GospelBluesRB_text_2 = ALIGNED_STRING("Gospel/Blues/R&B"),
 
-    .vFD_e298 = {
+    .JazzSwing_Label_2 = {
         .class_ = 0x0160002B,
         .super = 292,
         .sub = NAKA_NONE,
@@ -6440,14 +6440,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 297,
         .flag = 0x0008,
         .rect = { 6, 132, 105, 144 },
-        .str = SELF(w202_text),
+        .str = SELF(JazzSwing_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w202_text = ALIGNED_STRING("Jazz & Swing"),
+    .JazzSwing_text_2 = ALIGNED_STRING("Jazz & Swing"),
 
-    .vFD_e299 = {
+    .ShowTradDance_Label_2 = {
         .class_ = 0x0160002B,
         .super = 292,
         .sub = NAKA_NONE,
@@ -6455,14 +6455,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 298,
         .flag = 0x0008,
         .rect = { 6, 148, 129, 160 },
-        .str = SELF(w203_text),
+        .str = SELF(ShowTradDance_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w203_text = "Show/Trad Dance",
+    .ShowTradDance_text_2 = "Show/Trad Dance",
 
-    .vFD_e300 = {
+    .TradFolk_Label_2 = {
         .class_ = 0x0160002B,
         .super = 292,
         .sub = NAKA_NONE,
@@ -6470,14 +6470,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 299,
         .flag = 0x0008,
         .rect = { 6, 164, 97, 176 },
-        .str = SELF(w204_text),
+        .str = SELF(TradFolk_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w204_text = "Trad / Folk",
+    .TradFolk_text_2 = "Trad / Folk",
 
-    .vFD_e301 = {
+    .Country_Label_2 = {
         .class_ = 0x0160002B,
         .super = 292,
         .sub = NAKA_NONE,
@@ -6485,14 +6485,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 300,
         .flag = 0x0008,
         .rect = { 6, 180, 65, 192 },
-        .str = SELF(w205_text),
+        .str = SELF(Country_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w205_text = "Country",
+    .Country_text_2 = "Country",
 
-    .vFD_e302 = {
+    .LatinWorld_Label_2 = {
         .class_ = 0x0160002B,
         .super = 292,
         .sub = NAKA_NONE,
@@ -6500,12 +6500,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 301,
         .flag = 0x0008,
         .rect = { 6, 196, 113, 208 },
-        .str = SELF(w206_text),
+        .str = SELF(LatinWorld_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w206_text = "Latin / World",
+    .LatinWorld_text_2 = "Latin / World",
 
     .vFD_e303 = {
         .class_ = 0x0160002F,
@@ -6537,7 +6537,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x000B,
     },
 
-    .vFD_e305 = {
+    .Ok_Label_2 = {
         .class_ = 0x0160002B,
         .super = 304,
         .sub = NAKA_NONE,
@@ -6545,12 +6545,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 290, 161, 309, 179 },
-        .str = SELF(w207_text),
+        .str = SELF(Ok_text_2),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w207_text = ALIGNED_STRING("OK"),
+    .Ok_text_2 = ALIGNED_STRING("OK"),
 
     .vFD_e306 = {
         .class_ = 0x0160001E,
@@ -6670,7 +6670,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e314 = {
+    .MainCategory_Label_2 = {
         .class_ = 0x0160002B,
         .super = 291,
         .sub = NAKA_NONE,
@@ -6678,12 +6678,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 310,
         .flag = 0x0008,
         .rect = { 18, 30, 125, 48 },
-        .str = SELF(w212_text),
+        .str = SELF(MainCategory_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w212_text = "MAIN CATEGORY",
+    .MainCategory_text_2 = "MAIN CATEGORY",
 
     .vFD_e315 = {
         .class_ = 0x01600031,
@@ -6697,7 +6697,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e316 = {
+    .GlamrockPiano_Label_2 = {
         .class_ = 0x0160002B,
         .super = 315,
         .sub = NAKA_NONE,
@@ -6705,14 +6705,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 150, 52, 265, 64 },
-        .str = SELF(w214_text),
+        .str = SELF(GlamrockPiano_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w214_text = ALIGNED_STRING("Glamrock Piano"),
+    .GlamrockPiano_text_2 = ALIGNED_STRING("Glamrock Piano"),
 
-    .vFD_e317 = {
+    .Hits_Label_2 = {
         .class_ = 0x0160002B,
         .super = 315,
         .sub = NAKA_NONE,
@@ -6720,14 +6720,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 316,
         .flag = 0x0008,
         .rect = { 150, 68, 225, 80 },
-        .str = SELF(w215_text),
+        .str = SELF(Hits_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w215_text = "70's Hits",
+    .Hits_text_2 = "70's Hits",
 
-    .vFD_e318 = {
+    .EuroPopShuffle_Label_2 = {
         .class_ = 0x0160002B,
         .super = 315,
         .sub = NAKA_NONE,
@@ -6735,14 +6735,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 317,
         .flag = 0x0008,
         .rect = { 150, 100, 281, 112 },
-        .str = SELF(w216_text),
+        .str = SELF(EuroPopShuffle_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w216_text = ALIGNED_STRING("Euro Pop Shuffle"),
+    .EuroPopShuffle_text_2 = ALIGNED_STRING("Euro Pop Shuffle"),
 
-    .vFD_e319 = {
+    .PowerRock_Label_2 = {
         .class_ = 0x0160002B,
         .super = 315,
         .sub = NAKA_NONE,
@@ -6750,14 +6750,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 318,
         .flag = 0x0008,
         .rect = { 150, 84, 273, 96 },
-        .str = SELF(w217_text),
+        .str = SELF(PowerRock_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w217_text = "70's Power Rock",
+    .PowerRock_text_2 = "70's Power Rock",
 
-    .vFD_e320 = {
+    .LoveSongs_Label_2 = {
         .class_ = 0x0160002B,
         .super = 315,
         .sub = NAKA_NONE,
@@ -6765,14 +6765,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 319,
         .flag = 0x0008,
         .rect = { 150, 116, 273, 128 },
-        .str = SELF(w218_text),
+        .str = SELF(LoveSongs_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w218_text = "80's Love Songs",
+    .LoveSongs_text_2 = "80's Love Songs",
 
-    .vFD_e321 = {
+    .InTheEighties_Label_2 = {
         .class_ = 0x0160002B,
         .super = 315,
         .sub = NAKA_NONE,
@@ -6780,14 +6780,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 320,
         .flag = 0x0008,
         .rect = { 150, 132, 273, 144 },
-        .str = SELF(w219_text),
+        .str = SELF(InTheEighties_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w219_text = "In The Eighties",
+    .InTheEighties_text_2 = "In The Eighties",
 
-    .vFD_e322 = {
+    .PopBeat_Label_2 = {
         .class_ = 0x0160002B,
         .super = 315,
         .sub = NAKA_NONE,
@@ -6795,14 +6795,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 321,
         .flag = 0x0008,
         .rect = { 150, 148, 217, 160 },
-        .str = SELF(w220_text),
+        .str = SELF(PopBeat_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w220_text = ALIGNED_STRING("Pop Beat"),
+    .PopBeat_text_2 = ALIGNED_STRING("Pop Beat"),
 
-    .vFD_e323 = {
+    .BeatGroove_Label_2 = {
         .class_ = 0x0160002B,
         .super = 315,
         .sub = NAKA_NONE,
@@ -6810,14 +6810,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 322,
         .flag = 0x0008,
         .rect = { 150, 164, 257, 176 },
-        .str = SELF(w221_text),
+        .str = SELF(BeatGroove_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w221_text = "8 Beat Groove",
+    .BeatGroove_text_2 = "8 Beat Groove",
 
-    .vFD_e324 = {
+    .PopBallads_Label_2 = {
         .class_ = 0x0160002B,
         .super = 315,
         .sub = NAKA_NONE,
@@ -6825,14 +6825,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 323,
         .flag = 0x0008,
         .rect = { 150, 180, 281, 192 },
-        .str = SELF(w222_text),
+        .str = SELF(PopBallads_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w222_text = ALIGNED_STRING("80's Pop Ballads"),
+    .PopBallads_text_2 = ALIGNED_STRING("80's Pop Ballads"),
 
-    .vFD_e325 = {
+    .RockGig_Label_2 = {
         .class_ = 0x0160002B,
         .super = 315,
         .sub = NAKA_NONE,
@@ -6840,12 +6840,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 324,
         .flag = 0x0008,
         .rect = { 150, 196, 217, 208 },
-        .str = SELF(w223_text),
+        .str = SELF(RockGig_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w223_text = ALIGNED_STRING("Rock Gig"),
+    .RockGig_text_2 = ALIGNED_STRING("Rock Gig"),
 
     .vFD_e326 = {
         .class_ = 0x0160002F,
@@ -6860,7 +6860,7 @@ const naka_perf_style_t naka_perf_style_data
         .color = 0x00F2,
     },
 
-    .vFD_e327 = {
+    .SubCategory_Label_2 = {
         .class_ = 0x0160002B,
         .super = 291,
         .sub = NAKA_NONE,
@@ -6868,12 +6868,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 315,
         .flag = 0x0008,
         .rect = { 150, 30, 249, 48 },
-        .str = SELF(w224_text),
+        .str = SELF(SubCategory_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w224_text = ALIGNED_STRING("SUB CATEGORY"),
+    .SubCategory_text_2 = ALIGNED_STRING("SUB CATEGORY"),
 
     .vFD_e328 = {
         .class_ = 0x0160002B,
@@ -6902,11 +6902,11 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0003,
         .exit = 0x01A00000,
         .window = 0x0003D600,
-        .title = SELF(w226_text),
+        .title = SELF(StyleExplorer_text_3),
         .icon = 0x000000A3,
     },
 
-    .w226_text = ALIGNED_STRING("STYLE EXPLORER"),
+    .StyleExplorer_text_3 = ALIGNED_STRING("STYLE EXPLORER"),
 
     .vFD_e330 = {
         .class_ = 0x01600031,
@@ -6920,7 +6920,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e331 = {
+    .EuroPopShuffleTempo_Label = {
         .class_ = 0x0160002B,
         .super = 330,
         .sub = NAKA_NONE,
@@ -6928,14 +6928,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 14, 52, 305, 64 },
-        .str = SELF(w228_text),
+        .str = SELF(EuroPopShuffleTempo_text),
         .font = 0x00000006,
         .fontcolor = 0x00FB,
     },
 
-    .w228_text = ALIGNED_STRING("Euro Pop Shuffle:              TEMPO"),
+    .EuroPopShuffleTempo_text = ALIGNED_STRING("Euro Pop Shuffle:              TEMPO"),
 
-    .vFD_e332 = {
+    .ShuffleSynth_Label = {
         .class_ = 0x0160002B,
         .super = 330,
         .sub = NAKA_NONE,
@@ -6943,14 +6943,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 331,
         .flag = 0x0008,
         .rect = { 50, 68, 301, 80 },
-        .str = SELF(w229_text),
+        .str = SELF(ShuffleSynth_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w229_text = "Shuffle Synth               144",
+    .ShuffleSynth_text = "Shuffle Synth               144",
 
-    .vFD_e333 = {
+    .JumpBrass_Label = {
         .class_ = 0x0160002B,
         .super = 330,
         .sub = NAKA_NONE,
@@ -6958,14 +6958,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 332,
         .flag = 0x0008,
         .rect = { 50, 100, 301, 112 },
-        .str = SELF(w230_text),
+        .str = SELF(JumpBrass_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w230_text = "Jump Brass                  144",
+    .JumpBrass_text = "Jump Brass                  144",
 
-    .vFD_e334 = {
+    .PopLeader_Label = {
         .class_ = 0x0160002B,
         .super = 330,
         .sub = NAKA_NONE,
@@ -6973,14 +6973,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 333,
         .flag = 0x0008,
         .rect = { 50, 84, 301, 96 },
-        .str = SELF(w231_text),
+        .str = SELF(PopLeader_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w231_text = "Pop Leader                  144",
+    .PopLeader_text = "Pop Leader                  144",
 
-    .vFD_e335 = {
+    .ShuffleOrgan_Label = {
         .class_ = 0x0160002B,
         .super = 330,
         .sub = NAKA_NONE,
@@ -6988,14 +6988,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 334,
         .flag = 0x0008,
         .rect = { 50, 116, 301, 128 },
-        .str = SELF(w232_text),
+        .str = SELF(ShuffleOrgan_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w232_text = "Shuffle Organ               144",
+    .ShuffleOrgan_text = "Shuffle Organ               144",
 
-    .vFD_e336 = {
+    .LoveSongsTempo_Label = {
         .class_ = 0x0160002B,
         .super = 330,
         .sub = NAKA_NONE,
@@ -7003,14 +7003,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 335,
         .flag = 0x0008,
         .rect = { 14, 132, 305, 144 },
-        .str = SELF(w233_text),
+        .str = SELF(LoveSongsTempo_text),
         .font = 0x00000006,
         .fontcolor = 0x00FB,
     },
 
-    .w233_text = ALIGNED_STRING("80's Love Songs :              TEMPO"),
+    .LoveSongsTempo_text = ALIGNED_STRING("80's Love Songs :              TEMPO"),
 
-    .vFD_e337 = {
+    .AnalogueBallad_Label = {
         .class_ = 0x0160002B,
         .super = 330,
         .sub = NAKA_NONE,
@@ -7018,14 +7018,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 336,
         .flag = 0x0008,
         .rect = { 50, 148, 301, 160 },
-        .str = SELF(w234_text),
+        .str = SELF(AnalogueBallad_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w234_text = "Analogue Ballad             106",
+    .AnalogueBallad_text = "Analogue Ballad             106",
 
-    .vFD_e338 = {
+    .DonFret_Label = {
         .class_ = 0x0160002B,
         .super = 330,
         .sub = NAKA_NONE,
@@ -7033,14 +7033,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 337,
         .flag = 0x0008,
         .rect = { 50, 164, 301, 176 },
-        .str = SELF(w235_text),
+        .str = SELF(DonFret_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w235_text = "Don't Fret!                 106",
+    .DonFret_text = "Don't Fret!                 106",
 
-    .vFD_e339 = {
+    .EpOfThe_Label = {
         .class_ = 0x0160002B,
         .super = 330,
         .sub = NAKA_NONE,
@@ -7048,14 +7048,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 338,
         .flag = 0x0008,
         .rect = { 50, 180, 301, 192 },
-        .str = SELF(w236_text),
+        .str = SELF(EpOfThe_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w236_text = "EP Of The 80's              106",
+    .EpOfThe_text = "EP Of The 80's              106",
 
-    .vFD_e340 = {
+    .SaxProduction_Label = {
         .class_ = 0x0160002B,
         .super = 330,
         .sub = NAKA_NONE,
@@ -7063,12 +7063,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 339,
         .flag = 0x0008,
         .rect = { 50, 196, 301, 208 },
-        .str = SELF(w237_text),
+        .str = SELF(SaxProduction_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w237_text = "Sax Production              106",
+    .SaxProduction_text = "Sax Production              106",
 
     .vFD_e341 = {
         .class_ = 0x0160002F,
@@ -7100,7 +7100,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0000,
     },
 
-    .vFD_e343 = {
+    .Skip_Label = {
         .class_ = 0x0160002B,
         .super = 329,
         .sub = NAKA_NONE,
@@ -7108,12 +7108,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 342,
         .flag = 0x0008,
         .rect = { 38, 220, 73, 238 },
-        .str = SELF(w238_text),
+        .str = SELF(Skip_text),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w238_text = ALIGNED_STRING("SKIP"),
+    .Skip_text = ALIGNED_STRING("SKIP"),
 
     .vFD_e344 = {
         .class_ = 0x0160002B,
@@ -7216,7 +7216,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e351 = {
+    .CategoryRockPop_Label = {
         .class_ = 0x0160002B,
         .super = 329,
         .sub = NAKA_NONE,
@@ -7224,12 +7224,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 347,
         .flag = 0x0008,
         .rect = { 54, 30, 225, 48 },
-        .str = SELF(w243_text),
+        .str = SELF(CategoryRockPop_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w243_text = "CATEGORY : Rock & Pop",
+    .CategoryRockPop_text = "CATEGORY : Rock & Pop",
 
     .ftdemo45 = {
         .class_ = 0x01600034,
@@ -7243,11 +7243,11 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0003,
         .exit = 0x01A00000,
         .window = 0x0003D604,
-        .title = SELF(w244_text),
+        .title = SELF(StyleExplorer_text_4),
         .icon = 0x000000A3,
     },
 
-    .w244_text = ALIGNED_STRING("STYLE EXPLORER"),
+    .StyleExplorer_text_4 = ALIGNED_STRING("STYLE EXPLORER"),
 
     .vFD_e353 = {
         .class_ = 0x01600031,
@@ -7261,7 +7261,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e354 = {
+    .EuroPopShuffleTempo_Label_2 = {
         .class_ = 0x0160002B,
         .super = 353,
         .sub = NAKA_NONE,
@@ -7269,14 +7269,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 14, 52, 305, 64 },
-        .str = SELF(w246_text),
+        .str = SELF(EuroPopShuffleTempo_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FB,
     },
 
-    .w246_text = ALIGNED_STRING("Euro Pop Shuffle:              TEMPO"),
+    .EuroPopShuffleTempo_text_2 = ALIGNED_STRING("Euro Pop Shuffle:              TEMPO"),
 
-    .vFD_e355 = {
+    .ShuffleSynth_Label_2 = {
         .class_ = 0x0160002B,
         .super = 353,
         .sub = NAKA_NONE,
@@ -7284,14 +7284,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 354,
         .flag = 0x0008,
         .rect = { 50, 68, 301, 80 },
-        .str = SELF(w247_text),
+        .str = SELF(ShuffleSynth_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w247_text = "Shuffle Synth               144",
+    .ShuffleSynth_text_2 = "Shuffle Synth               144",
 
-    .vFD_e356 = {
+    .JumpBrass_Label_2 = {
         .class_ = 0x0160002B,
         .super = 353,
         .sub = NAKA_NONE,
@@ -7299,14 +7299,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 355,
         .flag = 0x0008,
         .rect = { 50, 100, 301, 112 },
-        .str = SELF(w248_text),
+        .str = SELF(JumpBrass_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w248_text = "Jump Brass                  144",
+    .JumpBrass_text_2 = "Jump Brass                  144",
 
-    .vFD_e357 = {
+    .PopLeader_Label_2 = {
         .class_ = 0x0160002B,
         .super = 353,
         .sub = NAKA_NONE,
@@ -7314,14 +7314,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 356,
         .flag = 0x0008,
         .rect = { 50, 84, 301, 96 },
-        .str = SELF(w249_text),
+        .str = SELF(PopLeader_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w249_text = "Pop Leader                  144",
+    .PopLeader_text_2 = "Pop Leader                  144",
 
-    .vFD_e358 = {
+    .ShuffleOrgan_Label_2 = {
         .class_ = 0x0160002B,
         .super = 353,
         .sub = NAKA_NONE,
@@ -7329,14 +7329,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 357,
         .flag = 0x0008,
         .rect = { 50, 116, 301, 128 },
-        .str = SELF(w250_text),
+        .str = SELF(ShuffleOrgan_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w250_text = "Shuffle Organ               144",
+    .ShuffleOrgan_text_2 = "Shuffle Organ               144",
 
-    .vFD_e359 = {
+    .LoveSongsTempo_Label_2 = {
         .class_ = 0x0160002B,
         .super = 353,
         .sub = NAKA_NONE,
@@ -7344,14 +7344,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 358,
         .flag = 0x0008,
         .rect = { 14, 132, 305, 144 },
-        .str = SELF(w251_text),
+        .str = SELF(LoveSongsTempo_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FB,
     },
 
-    .w251_text = ALIGNED_STRING("80's Love Songs :              TEMPO"),
+    .LoveSongsTempo_text_2 = ALIGNED_STRING("80's Love Songs :              TEMPO"),
 
-    .vFD_e360 = {
+    .AnalogueBallad_Label_2 = {
         .class_ = 0x0160002B,
         .super = 353,
         .sub = NAKA_NONE,
@@ -7359,14 +7359,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 359,
         .flag = 0x0008,
         .rect = { 50, 148, 301, 160 },
-        .str = SELF(w252_text),
+        .str = SELF(AnalogueBallad_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w252_text = "Analogue Ballad             106",
+    .AnalogueBallad_text_2 = "Analogue Ballad             106",
 
-    .vFD_e361 = {
+    .DonFret_Label_2 = {
         .class_ = 0x0160002B,
         .super = 353,
         .sub = NAKA_NONE,
@@ -7374,14 +7374,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 360,
         .flag = 0x0008,
         .rect = { 50, 164, 301, 176 },
-        .str = SELF(w253_text),
+        .str = SELF(DonFret_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w253_text = "Don't Fret!                 106",
+    .DonFret_text_2 = "Don't Fret!                 106",
 
-    .vFD_e362 = {
+    .EpOfThe_Label_2 = {
         .class_ = 0x0160002B,
         .super = 353,
         .sub = NAKA_NONE,
@@ -7389,14 +7389,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 361,
         .flag = 0x0008,
         .rect = { 50, 180, 301, 192 },
-        .str = SELF(w254_text),
+        .str = SELF(EpOfThe_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w254_text = "EP Of The 80's              106",
+    .EpOfThe_text_2 = "EP Of The 80's              106",
 
-    .vFD_e363 = {
+    .SaxProduction_Label_2 = {
         .class_ = 0x0160002B,
         .super = 353,
         .sub = NAKA_NONE,
@@ -7404,12 +7404,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 362,
         .flag = 0x0008,
         .rect = { 50, 196, 301, 208 },
-        .str = SELF(w255_text),
+        .str = SELF(SaxProduction_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w255_text = "Sax Production              106",
+    .SaxProduction_text_2 = "Sax Production              106",
 
     .vFD_e364 = {
         .class_ = 0x0160002F,
@@ -7441,7 +7441,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0000,
     },
 
-    .vFD_e366 = {
+    .Skip_Label_2 = {
         .class_ = 0x0160002B,
         .super = 352,
         .sub = NAKA_NONE,
@@ -7449,12 +7449,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 365,
         .flag = 0x0008,
         .rect = { 38, 220, 73, 238 },
-        .str = SELF(w256_text),
+        .str = SELF(Skip_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w256_text = ALIGNED_STRING("SKIP"),
+    .Skip_text_2 = ALIGNED_STRING("SKIP"),
 
     .vFD_e367 = {
         .class_ = 0x0160002B,
@@ -7557,7 +7557,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e374 = {
+    .CategoryRockPop_Label_2 = {
         .class_ = 0x0160002B,
         .super = 352,
         .sub = NAKA_NONE,
@@ -7565,12 +7565,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 370,
         .flag = 0x0008,
         .rect = { 54, 30, 225, 48 },
-        .str = SELF(w261_text),
+        .str = SELF(CategoryRockPop_text_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w261_text = "CATEGORY : Rock & Pop",
+    .CategoryRockPop_text_2 = "CATEGORY : Rock & Pop",
 
     .ftdemo46 = {
         .class_ = 0x01600034,
@@ -7584,11 +7584,11 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
         .exit = 0x01A00000,
         .window = 0x0003D608,
-        .title = SELF(w262_text),
+        .title = SELF(AlphabeticalExplorer_text),
         .icon = 0x00000001,
     },
 
-    .w262_text = "ALPHABETICAL EXPLORER",
+    .AlphabeticalExplorer_text = "ALPHABETICAL EXPLORER",
 
     .vFD_e376 = {
         .class_ = 0x01600031,
@@ -7602,7 +7602,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e377 = {
+    .BTempo_Label = {
         .class_ = 0x0160002B,
         .super = 376,
         .sub = 378,
@@ -7610,12 +7610,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 18, 44, 293, 56 },
-        .str = SELF(w264_text),
+        .str = SELF(BTempo_text),
         .font = 0x00000006,
         .fontcolor = 0x00FB,
     },
 
-    .w264_text = ALIGNED_STRING("B:                           TEMPO"),
+    .BTempo_text = ALIGNED_STRING("B:                           TEMPO"),
 
     .vFD_e378 = {
         .class_ = 0x0160002F,
@@ -7630,7 +7630,7 @@ const naka_perf_style_t naka_perf_style_data
         .color = 0x00F2,
     },
 
-    .vFD_e379 = {
+    .BallroomFiddle_Label = {
         .class_ = 0x0160002B,
         .super = 376,
         .sub = NAKA_NONE,
@@ -7638,14 +7638,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 377,
         .flag = 0x0008,
         .rect = { 42, 60, 285, 72 },
-        .str = SELF(w265_text),
+        .str = SELF(BallroomFiddle_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w265_text = ALIGNED_STRING("Ballroom Fiddle            101"),
+    .BallroomFiddle_text = ALIGNED_STRING("Ballroom Fiddle            101"),
 
-    .vFD_e380 = {
+    .BebopSolo_Label = {
         .class_ = 0x0160002B,
         .super = 376,
         .sub = NAKA_NONE,
@@ -7653,14 +7653,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 379,
         .flag = 0x0008,
         .rect = { 42, 92, 285, 104 },
-        .str = SELF(w266_text),
+        .str = SELF(BebopSolo_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w266_text = ALIGNED_STRING("Bebop Solo                 121"),
+    .BebopSolo_text = ALIGNED_STRING("Bebop Solo                 121"),
 
-    .vFD_e381 = {
+    .BarbarShop_Label = {
         .class_ = 0x0160002B,
         .super = 376,
         .sub = NAKA_NONE,
@@ -7668,14 +7668,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 380,
         .flag = 0x0008,
         .rect = { 42, 76, 285, 88 },
-        .str = SELF(w267_text),
+        .str = SELF(BarbarShop_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w267_text = ALIGNED_STRING("Barbar Shop                 86"),
+    .BarbarShop_text = ALIGNED_STRING("Barbar Shop                 86"),
 
-    .vFD_e382 = {
+    .BensonFrets_Label = {
         .class_ = 0x0160002B,
         .super = 376,
         .sub = NAKA_NONE,
@@ -7683,14 +7683,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 381,
         .flag = 0x0008,
         .rect = { 42, 110, 285, 122 },
-        .str = SELF(w268_text),
+        .str = SELF(BensonFrets_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w268_text = ALIGNED_STRING("Benson Frets               147"),
+    .BensonFrets_text = ALIGNED_STRING("Benson Frets               147"),
 
-    .vFD_e383 = {
+    .BigStage_Label = {
         .class_ = 0x0160002B,
         .super = 376,
         .sub = NAKA_NONE,
@@ -7698,14 +7698,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 382,
         .flag = 0x0008,
         .rect = { 42, 126, 285, 138 },
-        .str = SELF(w269_text),
+        .str = SELF(BigStage_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w269_text = ALIGNED_STRING("Big Stage                   98"),
+    .BigStage_text = ALIGNED_STRING("Big Stage                   98"),
 
-    .vFD_e384 = {
+    .BillyEP_Label = {
         .class_ = 0x0160002B,
         .super = 376,
         .sub = NAKA_NONE,
@@ -7713,14 +7713,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 383,
         .flag = 0x0008,
         .rect = { 42, 142, 285, 154 },
-        .str = SELF(w270_text),
+        .str = SELF(BillyEP_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w270_text = ALIGNED_STRING("Billy's E.P                132"),
+    .BillyEP_text = ALIGNED_STRING("Billy's E.P                132"),
 
-    .vFD_e385 = {
+    .BonjourParis_Label = {
         .class_ = 0x0160002B,
         .super = 376,
         .sub = NAKA_NONE,
@@ -7728,14 +7728,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 384,
         .flag = 0x0008,
         .rect = { 42, 158, 285, 170 },
-        .str = SELF(w271_text),
+        .str = SELF(BonjourParis_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w271_text = ALIGNED_STRING("Bonjour Paris !            106"),
+    .BonjourParis_text = ALIGNED_STRING("Bonjour Paris !            106"),
 
-    .vFD_e386 = {
+    .BreathyNight_Label = {
         .class_ = 0x0160002B,
         .super = 376,
         .sub = NAKA_NONE,
@@ -7743,14 +7743,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 385,
         .flag = 0x0008,
         .rect = { 42, 174, 285, 186 },
-        .str = SELF(w272_text),
+        .str = SELF(BreathyNight_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w272_text = ALIGNED_STRING("Breathy Night              112"),
+    .BreathyNight_text = ALIGNED_STRING("Breathy Night              112"),
 
-    .vFD_e387 = {
+    .BridgeTooFar_Label = {
         .class_ = 0x0160002B,
         .super = 376,
         .sub = NAKA_NONE,
@@ -7758,12 +7758,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 386,
         .flag = 0x0008,
         .rect = { 42, 190, 285, 202 },
-        .str = SELF(w273_text),
+        .str = SELF(BridgeTooFar_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w273_text = ALIGNED_STRING("Bridge Too Far             128"),
+    .BridgeTooFar_text = ALIGNED_STRING("Bridge Too Far             128"),
 
     .vFD_e388 = {
         .class_ = 0x0160001E,
@@ -7856,7 +7856,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0000,
     },
 
-    .vFD_e394 = {
+    .Skip_Label_3 = {
         .class_ = 0x0160002B,
         .super = 375,
         .sub = NAKA_NONE,
@@ -7864,12 +7864,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 393,
         .flag = 0x0008,
         .rect = { 38, 220, 73, 238 },
-        .str = SELF(w277_text),
+        .str = SELF(Skip_text_3),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w277_text = ALIGNED_STRING("SKIP"),
+    .Skip_text_3 = ALIGNED_STRING("SKIP"),
 
     .vFD_e395 = {
         .class_ = 0x0160002B,
@@ -7925,11 +7925,11 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
         .exit = 0x01A00000,
         .window = 0x0003D60C,
-        .title = SELF(w280_text),
+        .title = SELF(AlphabeticalExplorer_text_2),
         .icon = 0x00000001,
     },
 
-    .w280_text = "ALPHABETICAL EXPLORER",
+    .AlphabeticalExplorer_text_2 = "ALPHABETICAL EXPLORER",
 
     .vFD_e399 = {
         .class_ = 0x01600031,
@@ -7943,7 +7943,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e400 = {
+    .CTempo_Label = {
         .class_ = 0x0160002B,
         .super = 399,
         .sub = NAKA_NONE,
@@ -7951,14 +7951,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 18, 44, 293, 56 },
-        .str = SELF(w282_text),
+        .str = SELF(CTempo_text),
         .font = 0x00000006,
         .fontcolor = 0x00FB,
     },
 
-    .w282_text = ALIGNED_STRING("C:                           TEMPO"),
+    .CTempo_text = ALIGNED_STRING("C:                           TEMPO"),
 
-    .vFD_e401 = {
+    .CafeJazz_Label = {
         .class_ = 0x0160002B,
         .super = 399,
         .sub = NAKA_NONE,
@@ -7966,14 +7966,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 400,
         .flag = 0x0008,
         .rect = { 42, 60, 285, 72 },
-        .str = SELF(w283_text),
+        .str = SELF(CafeJazz_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w283_text = ALIGNED_STRING("Cafe Jazz                   76"),
+    .CafeJazz_text = ALIGNED_STRING("Cafe Jazz                   76"),
 
-    .vFD_e402 = {
+    .CharmingWaltz_Label = {
         .class_ = 0x0160002B,
         .super = 399,
         .sub = NAKA_NONE,
@@ -7981,14 +7981,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 401,
         .flag = 0x0008,
         .rect = { 42, 92, 285, 104 },
-        .str = SELF(w284_text),
+        .str = SELF(CharmingWaltz_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w284_text = ALIGNED_STRING("Charming Waltz              88"),
+    .CharmingWaltz_text = ALIGNED_STRING("Charming Waltz              88"),
 
-    .vFD_e403 = {
+    .CasinoShow_Label = {
         .class_ = 0x0160002B,
         .super = 399,
         .sub = NAKA_NONE,
@@ -7996,14 +7996,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 402,
         .flag = 0x0008,
         .rect = { 42, 76, 285, 88 },
-        .str = SELF(w285_text),
+        .str = SELF(CasinoShow_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w285_text = ALIGNED_STRING("Casino Show                130"),
+    .CasinoShow_text = ALIGNED_STRING("Casino Show                130"),
 
-    .vFD_e404 = {
+    .ChubbySolo_Label = {
         .class_ = 0x0160002B,
         .super = 399,
         .sub = NAKA_NONE,
@@ -8011,14 +8011,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 403,
         .flag = 0x0008,
         .rect = { 42, 110, 285, 122 },
-        .str = SELF(w286_text),
+        .str = SELF(ChubbySolo_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w286_text = ALIGNED_STRING("Chubby's Solo              147"),
+    .ChubbySolo_text = ALIGNED_STRING("Chubby's Solo              147"),
 
-    .vFD_e405 = {
+    .ClickPiano_Label = {
         .class_ = 0x0160002B,
         .super = 399,
         .sub = NAKA_NONE,
@@ -8026,14 +8026,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 404,
         .flag = 0x0008,
         .rect = { 42, 126, 285, 138 },
-        .str = SELF(w287_text),
+        .str = SELF(ClickPiano_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w287_text = ALIGNED_STRING("Click Piano                104"),
+    .ClickPiano_text = ALIGNED_STRING("Click Piano                104"),
 
-    .vFD_e406 = {
+    .CrystalDance_Label = {
         .class_ = 0x0160002B,
         .super = 399,
         .sub = NAKA_NONE,
@@ -8041,14 +8041,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 405,
         .flag = 0x0008,
         .rect = { 42, 142, 285, 154 },
-        .str = SELF(w288_text),
+        .str = SELF(CrystalDance_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w288_text = ALIGNED_STRING("Crystal Dance              130"),
+    .CrystalDance_text = ALIGNED_STRING("Crystal Dance              130"),
 
-    .vFD_e407 = {
+    .CurtainUp_Label = {
         .class_ = 0x0160002B,
         .super = 399,
         .sub = NAKA_NONE,
@@ -8056,12 +8056,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 406,
         .flag = 0x0008,
         .rect = { 42, 158, 285, 170 },
-        .str = SELF(w289_text),
+        .str = SELF(CurtainUp_text),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w289_text = ALIGNED_STRING("Curtain Up!                116"),
+    .CurtainUp_text = ALIGNED_STRING("Curtain Up!                116"),
 
     .vFD_e408 = {
         .class_ = 0x0160002F,
@@ -8167,7 +8167,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0000,
     },
 
-    .vFD_e415 = {
+    .Skip_Label_4 = {
         .class_ = 0x0160002B,
         .super = 398,
         .sub = NAKA_NONE,
@@ -8175,12 +8175,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 414,
         .flag = 0x0008,
         .rect = { 38, 220, 73, 238 },
-        .str = SELF(w293_text),
+        .str = SELF(Skip_text_4),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w293_text = ALIGNED_STRING("SKIP"),
+    .Skip_text_4 = ALIGNED_STRING("SKIP"),
 
     .vFD_e416 = {
         .class_ = 0x0160002B,
@@ -8236,11 +8236,11 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
         .exit = 0x01A00000,
         .window = 0x0003D610,
-        .title = SELF(w296_text),
+        .title = SELF(AlphabeticalExplorer_text_3),
         .icon = 0x00000001,
     },
 
-    .w296_text = "ALPHABETICAL EXPLORER",
+    .AlphabeticalExplorer_text_3 = "ALPHABETICAL EXPLORER",
 
     .vFD_e420 = {
         .class_ = 0x01600031,
@@ -8254,7 +8254,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e421 = {
+    .CTempo_Label_2 = {
         .class_ = 0x0160002B,
         .super = 420,
         .sub = NAKA_NONE,
@@ -8262,14 +8262,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 18, 44, 293, 56 },
-        .str = SELF(w298_text),
+        .str = SELF(CTempo_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FB,
     },
 
-    .w298_text = ALIGNED_STRING("C:                           TEMPO"),
+    .CTempo_text_2 = ALIGNED_STRING("C:                           TEMPO"),
 
-    .vFD_e422 = {
+    .CafeJazz_Label_2 = {
         .class_ = 0x0160002B,
         .super = 420,
         .sub = NAKA_NONE,
@@ -8277,14 +8277,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 421,
         .flag = 0x0008,
         .rect = { 42, 60, 285, 72 },
-        .str = SELF(w299_text),
+        .str = SELF(CafeJazz_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w299_text = ALIGNED_STRING("Cafe Jazz                   76"),
+    .CafeJazz_text_2 = ALIGNED_STRING("Cafe Jazz                   76"),
 
-    .vFD_e423 = {
+    .CharmingWaltz_Label_2 = {
         .class_ = 0x0160002B,
         .super = 420,
         .sub = NAKA_NONE,
@@ -8292,14 +8292,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 422,
         .flag = 0x0008,
         .rect = { 42, 92, 285, 104 },
-        .str = SELF(w300_text),
+        .str = SELF(CharmingWaltz_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w300_text = ALIGNED_STRING("Charming Waltz              88"),
+    .CharmingWaltz_text_2 = ALIGNED_STRING("Charming Waltz              88"),
 
-    .vFD_e424 = {
+    .CasinoShow_Label_2 = {
         .class_ = 0x0160002B,
         .super = 420,
         .sub = NAKA_NONE,
@@ -8307,14 +8307,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 423,
         .flag = 0x0008,
         .rect = { 42, 76, 285, 88 },
-        .str = SELF(w301_text),
+        .str = SELF(CasinoShow_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w301_text = ALIGNED_STRING("Casino Show                130"),
+    .CasinoShow_text_2 = ALIGNED_STRING("Casino Show                130"),
 
-    .vFD_e425 = {
+    .ChubbySolo_Label_2 = {
         .class_ = 0x0160002B,
         .super = 420,
         .sub = NAKA_NONE,
@@ -8322,14 +8322,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 424,
         .flag = 0x0008,
         .rect = { 42, 110, 285, 122 },
-        .str = SELF(w302_text),
+        .str = SELF(ChubbySolo_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w302_text = ALIGNED_STRING("Chubby's Solo              147"),
+    .ChubbySolo_text_2 = ALIGNED_STRING("Chubby's Solo              147"),
 
-    .vFD_e426 = {
+    .ClickPiano_Label_2 = {
         .class_ = 0x0160002B,
         .super = 420,
         .sub = NAKA_NONE,
@@ -8337,14 +8337,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 425,
         .flag = 0x0008,
         .rect = { 42, 126, 285, 138 },
-        .str = SELF(w303_text),
+        .str = SELF(ClickPiano_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w303_text = ALIGNED_STRING("Click Piano                104"),
+    .ClickPiano_text_2 = ALIGNED_STRING("Click Piano                104"),
 
-    .vFD_e427 = {
+    .CrystalDance_Label_2 = {
         .class_ = 0x0160002B,
         .super = 420,
         .sub = NAKA_NONE,
@@ -8352,14 +8352,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 426,
         .flag = 0x0008,
         .rect = { 42, 142, 285, 154 },
-        .str = SELF(w304_text),
+        .str = SELF(CrystalDance_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w304_text = ALIGNED_STRING("Crystal Dance              130"),
+    .CrystalDance_text_2 = ALIGNED_STRING("Crystal Dance              130"),
 
-    .vFD_e428 = {
+    .CurtainUp_Label_2 = {
         .class_ = 0x0160002B,
         .super = 420,
         .sub = NAKA_NONE,
@@ -8367,12 +8367,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 427,
         .flag = 0x0008,
         .rect = { 42, 158, 285, 170 },
-        .str = SELF(w305_text),
+        .str = SELF(CurtainUp_text_2),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w305_text = ALIGNED_STRING("Curtain Up!                116"),
+    .CurtainUp_text_2 = ALIGNED_STRING("Curtain Up!                116"),
 
     .vFD_e429 = {
         .class_ = 0x0160002F,
@@ -8478,7 +8478,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0000,
     },
 
-    .vFD_e436 = {
+    .Skip_Label_5 = {
         .class_ = 0x0160002B,
         .super = 419,
         .sub = NAKA_NONE,
@@ -8486,12 +8486,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 435,
         .flag = 0x0008,
         .rect = { 38, 220, 73, 238 },
-        .str = SELF(w309_text),
+        .str = SELF(Skip_text_5),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w309_text = ALIGNED_STRING("SKIP"),
+    .Skip_text_5 = ALIGNED_STRING("SKIP"),
 
     .vFD_e437 = {
         .class_ = 0x0160002B,
@@ -8547,11 +8547,11 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0003,
         .exit = 0x01A00000,
         .window = 0x0003D614,
-        .title = SELF(w312_text),
+        .title = SELF(StyleExplorer_text_5),
         .icon = 0x000000A3,
     },
 
-    .w312_text = ALIGNED_STRING("STYLE EXPLORER"),
+    .StyleExplorer_text_5 = ALIGNED_STRING("STYLE EXPLORER"),
 
     .vFD_e441 = {
         .class_ = 0x01600031,
@@ -8565,7 +8565,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e442 = {
+    .EasyListening_Label_3 = {
         .class_ = 0x0160002B,
         .super = 441,
         .sub = NAKA_NONE,
@@ -8573,14 +8573,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 6, 52, 121, 64 },
-        .str = SELF(w314_text),
+        .str = SELF(EasyListening_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w314_text = ALIGNED_STRING("Easy Listening"),
+    .EasyListening_text_3 = ALIGNED_STRING("Easy Listening"),
 
-    .vFD_e443 = {
+    .RockPop_Label_3 = {
         .class_ = 0x0160002B,
         .super = 441,
         .sub = NAKA_NONE,
@@ -8588,14 +8588,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 442,
         .flag = 0x0008,
         .rect = { 6, 68, 89, 80 },
-        .str = SELF(w315_text),
+        .str = SELF(RockPop_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w315_text = ALIGNED_STRING("Rock & Pop"),
+    .RockPop_text_3 = ALIGNED_STRING("Rock & Pop"),
 
-    .vFD_e444 = {
+    .PartyMusic_Label_3 = {
         .class_ = 0x0160002B,
         .super = 441,
         .sub = NAKA_NONE,
@@ -8603,14 +8603,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 443,
         .flag = 0x0008,
         .rect = { 6, 100, 97, 112 },
-        .str = SELF(w316_text),
+        .str = SELF(PartyMusic_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w316_text = "Party Music",
+    .PartyMusic_text_3 = "Party Music",
 
-    .vFD_e445 = {
+    .DancePop_Label_3 = {
         .class_ = 0x0160002B,
         .super = 441,
         .sub = NAKA_NONE,
@@ -8618,14 +8618,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 444,
         .flag = 0x0008,
         .rect = { 6, 84, 81, 96 },
-        .str = SELF(w317_text),
+        .str = SELF(DancePop_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w317_text = "Dance Pop",
+    .DancePop_text_3 = "Dance Pop",
 
-    .vFD_e446 = {
+    .GospelBluesRB_Label_3 = {
         .class_ = 0x0160002B,
         .super = 441,
         .sub = NAKA_NONE,
@@ -8633,14 +8633,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 445,
         .flag = 0x0008,
         .rect = { 6, 116, 137, 128 },
-        .str = SELF(w318_text),
+        .str = SELF(GospelBluesRB_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w318_text = ALIGNED_STRING("Gospel/Blues/R&B"),
+    .GospelBluesRB_text_3 = ALIGNED_STRING("Gospel/Blues/R&B"),
 
-    .vFD_e447 = {
+    .JazzSwing_Label_3 = {
         .class_ = 0x0160002B,
         .super = 441,
         .sub = NAKA_NONE,
@@ -8648,14 +8648,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 446,
         .flag = 0x0008,
         .rect = { 6, 132, 105, 144 },
-        .str = SELF(w319_text),
+        .str = SELF(JazzSwing_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w319_text = ALIGNED_STRING("Jazz & Swing"),
+    .JazzSwing_text_3 = ALIGNED_STRING("Jazz & Swing"),
 
-    .vFD_e448 = {
+    .ShowTradDance_Label_3 = {
         .class_ = 0x0160002B,
         .super = 441,
         .sub = NAKA_NONE,
@@ -8663,14 +8663,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 447,
         .flag = 0x0008,
         .rect = { 6, 148, 129, 160 },
-        .str = SELF(w320_text),
+        .str = SELF(ShowTradDance_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w320_text = "Show/Trad Dance",
+    .ShowTradDance_text_3 = "Show/Trad Dance",
 
-    .vFD_e449 = {
+    .TradFolk_Label_3 = {
         .class_ = 0x0160002B,
         .super = 441,
         .sub = NAKA_NONE,
@@ -8678,14 +8678,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 448,
         .flag = 0x0008,
         .rect = { 6, 164, 97, 176 },
-        .str = SELF(w321_text),
+        .str = SELF(TradFolk_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w321_text = "Trad / Folk",
+    .TradFolk_text_3 = "Trad / Folk",
 
-    .vFD_e450 = {
+    .Country_Label_3 = {
         .class_ = 0x0160002B,
         .super = 441,
         .sub = NAKA_NONE,
@@ -8693,14 +8693,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 449,
         .flag = 0x0008,
         .rect = { 6, 180, 65, 192 },
-        .str = SELF(w322_text),
+        .str = SELF(Country_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w322_text = "Country",
+    .Country_text_3 = "Country",
 
-    .vFD_e451 = {
+    .LatinWorld_Label_3 = {
         .class_ = 0x0160002B,
         .super = 441,
         .sub = NAKA_NONE,
@@ -8708,12 +8708,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 450,
         .flag = 0x0008,
         .rect = { 6, 196, 113, 208 },
-        .str = SELF(w323_text),
+        .str = SELF(LatinWorld_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w323_text = "Latin / World",
+    .LatinWorld_text_3 = "Latin / World",
 
     .vFD_e452 = {
         .class_ = 0x0160002F,
@@ -8745,7 +8745,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x000B,
     },
 
-    .vFD_e454 = {
+    .Ok_Label_3 = {
         .class_ = 0x0160002B,
         .super = 453,
         .sub = NAKA_NONE,
@@ -8753,12 +8753,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 290, 161, 309, 179 },
-        .str = SELF(w324_text),
+        .str = SELF(Ok_text_3),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w324_text = ALIGNED_STRING("OK"),
+    .Ok_text_3 = ALIGNED_STRING("OK"),
 
     .vFD_e455 = {
         .class_ = 0x0160001E,
@@ -8878,7 +8878,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e463 = {
+    .MainCategory_Label_3 = {
         .class_ = 0x0160002B,
         .super = 440,
         .sub = NAKA_NONE,
@@ -8886,12 +8886,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 459,
         .flag = 0x0008,
         .rect = { 18, 30, 125, 48 },
-        .str = SELF(w329_text),
+        .str = SELF(MainCategory_text_3),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w329_text = "MAIN CATEGORY",
+    .MainCategory_text_3 = "MAIN CATEGORY",
 
     .vFD_e464 = {
         .class_ = 0x01600031,
@@ -8905,7 +8905,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e465 = {
+    .GlamrockPiano_Label_3 = {
         .class_ = 0x0160002B,
         .super = 464,
         .sub = NAKA_NONE,
@@ -8913,14 +8913,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 150, 52, 265, 64 },
-        .str = SELF(w331_text),
+        .str = SELF(GlamrockPiano_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w331_text = ALIGNED_STRING("Glamrock Piano"),
+    .GlamrockPiano_text_3 = ALIGNED_STRING("Glamrock Piano"),
 
-    .vFD_e466 = {
+    .Hits_Label_3 = {
         .class_ = 0x0160002B,
         .super = 464,
         .sub = NAKA_NONE,
@@ -8928,14 +8928,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 465,
         .flag = 0x0008,
         .rect = { 150, 68, 225, 80 },
-        .str = SELF(w332_text),
+        .str = SELF(Hits_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w332_text = "70's Hits",
+    .Hits_text_3 = "70's Hits",
 
-    .vFD_e467 = {
+    .EuroPopShuffle_Label_3 = {
         .class_ = 0x0160002B,
         .super = 464,
         .sub = NAKA_NONE,
@@ -8943,14 +8943,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 466,
         .flag = 0x0008,
         .rect = { 150, 100, 281, 112 },
-        .str = SELF(w333_text),
+        .str = SELF(EuroPopShuffle_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w333_text = ALIGNED_STRING("Euro Pop Shuffle"),
+    .EuroPopShuffle_text_3 = ALIGNED_STRING("Euro Pop Shuffle"),
 
-    .vFD_e468 = {
+    .PowerRock_Label_3 = {
         .class_ = 0x0160002B,
         .super = 464,
         .sub = NAKA_NONE,
@@ -8958,14 +8958,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 467,
         .flag = 0x0008,
         .rect = { 150, 84, 273, 96 },
-        .str = SELF(w334_text),
+        .str = SELF(PowerRock_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w334_text = "70's Power Rock",
+    .PowerRock_text_3 = "70's Power Rock",
 
-    .vFD_e469 = {
+    .LoveSongs_Label_3 = {
         .class_ = 0x0160002B,
         .super = 464,
         .sub = NAKA_NONE,
@@ -8973,14 +8973,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 468,
         .flag = 0x0008,
         .rect = { 150, 116, 273, 128 },
-        .str = SELF(w335_text),
+        .str = SELF(LoveSongs_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w335_text = "80's Love Songs",
+    .LoveSongs_text_3 = "80's Love Songs",
 
-    .vFD_e470 = {
+    .InTheEighties_Label_3 = {
         .class_ = 0x0160002B,
         .super = 464,
         .sub = NAKA_NONE,
@@ -8988,14 +8988,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 469,
         .flag = 0x0008,
         .rect = { 150, 132, 273, 144 },
-        .str = SELF(w336_text),
+        .str = SELF(InTheEighties_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w336_text = "In The Eighties",
+    .InTheEighties_text_3 = "In The Eighties",
 
-    .vFD_e471 = {
+    .PopBeat_Label_3 = {
         .class_ = 0x0160002B,
         .super = 464,
         .sub = NAKA_NONE,
@@ -9003,14 +9003,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 470,
         .flag = 0x0008,
         .rect = { 150, 148, 217, 160 },
-        .str = SELF(w337_text),
+        .str = SELF(PopBeat_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w337_text = ALIGNED_STRING("Pop Beat"),
+    .PopBeat_text_3 = ALIGNED_STRING("Pop Beat"),
 
-    .vFD_e472 = {
+    .BeatGroove_Label_3 = {
         .class_ = 0x0160002B,
         .super = 464,
         .sub = NAKA_NONE,
@@ -9018,14 +9018,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 471,
         .flag = 0x0008,
         .rect = { 150, 164, 257, 176 },
-        .str = SELF(w338_text),
+        .str = SELF(BeatGroove_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w338_text = "8 Beat Groove",
+    .BeatGroove_text_3 = "8 Beat Groove",
 
-    .vFD_e473 = {
+    .PopBallads_Label_3 = {
         .class_ = 0x0160002B,
         .super = 464,
         .sub = NAKA_NONE,
@@ -9033,14 +9033,14 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 472,
         .flag = 0x0008,
         .rect = { 150, 180, 281, 192 },
-        .str = SELF(w339_text),
+        .str = SELF(PopBallads_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w339_text = ALIGNED_STRING("80's Pop Ballads"),
+    .PopBallads_text_3 = ALIGNED_STRING("80's Pop Ballads"),
 
-    .vFD_e474 = {
+    .RockGig_Label_3 = {
         .class_ = 0x0160002B,
         .super = 464,
         .sub = NAKA_NONE,
@@ -9048,12 +9048,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 473,
         .flag = 0x0008,
         .rect = { 150, 196, 217, 208 },
-        .str = SELF(w340_text),
+        .str = SELF(RockGig_text_3),
         .font = 0x00000006,
         .fontcolor = 0x00FF,
     },
 
-    .w340_text = ALIGNED_STRING("Rock Gig"),
+    .RockGig_text_3 = ALIGNED_STRING("Rock Gig"),
 
     .vFD_e475 = {
         .class_ = 0x0160002F,
@@ -9068,7 +9068,7 @@ const naka_perf_style_t naka_perf_style_data
         .color = 0x00F2,
     },
 
-    .vFD_e476 = {
+    .SubCategory_Label_3 = {
         .class_ = 0x0160002B,
         .super = 440,
         .sub = NAKA_NONE,
@@ -9076,12 +9076,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 464,
         .flag = 0x0008,
         .rect = { 150, 30, 249, 48 },
-        .str = SELF(w341_text),
+        .str = SELF(SubCategory_text_3),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
     },
 
-    .w341_text = ALIGNED_STRING("SUB CATEGORY"),
+    .SubCategory_text_3 = ALIGNED_STRING("SUB CATEGORY"),
 
     .vFD_e477 = {
         .class_ = 0x0160002B,
@@ -9104,13 +9104,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(ftdemo02),
         SELF(vFD_e3),
         SELF(vFD_e4),
-        SELF(vFD_e5),
-        SELF(vFD_e6),
+        SELF(Preset_Label),
+        SELF(Performance_Label),
         SELF(vFD_e7),
-        SELF(vFD_e8),
+        SELF(Custom_Label),
         SELF(vFD_e9),
-        SELF(vFD_e10),
-        SELF(vFD_e11),
+        SELF(Composer_Label),
+        SELF(BackUp_Label),
         SELF(vFD_e12),
         SELF(vFD_e13),
         SELF(vFD_e14),
@@ -9128,14 +9128,14 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e26),
         SELF(vFD_e27),
         SELF(vFD_e28),
-        SELF(vFD_e29),
+        SELF(Fd_Label),
         SELF(vFD_e30),
         SELF(vFD_e31),
         SELF(vFD_e32),
         SELF(vFD_e33),
-        SELF(vFD_e34),
-        SELF(vFD_e35),
-        SELF(vFD_e36),
+        SELF(Volatile_Label),
+        SELF(NonVolatile_Label),
+        SELF(PlayOnly_Label),
         SELF(vFD_e37),
         SELF(vFD_e38),
         SELF(vFD_e39),
@@ -9166,11 +9166,11 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e64),
         SELF(ftdemo03),
         SELF(vFD_e66),
-        SELF(vFD_e67),
+        SELF(StyleData_Label),
         SELF(vFD_e68),
-        SELF(vFD_e69),
+        SELF(Custom_Label_2),
         SELF(vFD_e70),
-        SELF(vFD_e71),
+        SELF(Composer_Label_2),
         SELF(vFD_e72),
         SELF(vFD_e73),
         SELF(vFD_e74),
@@ -9181,7 +9181,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e79),
         SELF(vFD_e80),
         SELF(vFD_e81),
-        SELF(vFD_e82),
+        SELF(StyleConvert_Label),
         SELF(vFD_e83),
         SELF(vFD_e84),
         SELF(vFD_e85),
@@ -9201,13 +9201,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e99),
         SELF(vFD_e100),
         SELF(vFD_e101),
-        SELF(vFD_e102),
+        SELF(Fd_Label_2),
         SELF(vFD_e103),
         SELF(vFD_e104),
         SELF(vFD_e105),
         SELF(vFD_e106),
-        SELF(vFD_e107),
-        SELF(vFD_e108),
+        SELF(ConvertFrom_Label),
+        SELF(VariousInstruments_Label),
         SELF(ftdemo04),
         SELF(ftdemobmp3D),
         SELF(vFD_e111),
@@ -9239,41 +9239,41 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e137),
         SELF(ftdemo22),
         SELF(vFD_e139),
-        SELF(vFD_e140),
+        SELF(BankForDinnerShow_Label),
         SELF(vFD_e141),
         SELF(vFD_e142),
         SELF(vFD_e143),
         SELF(w73),
         SELF(w74),
-        SELF(vFD_e146),
-        SELF(vFD_e147),
-        SELF(vFD_e148),
-        SELF(vFD_e149),
+        SELF(Bank_Label),
+        SELF(Naming_Label),
+        SELF(Memory_Label),
+        SELF(Naming_Label_2),
         SELF(vFD_e150),
-        SELF(vFD_e151),
-        SELF(vFD_e152),
-        SELF(vFD_e153),
-        SELF(vFD_e154),
-        SELF(vFD_e155),
-        SELF(vFD_e156),
-        SELF(vFD_e157),
-        SELF(vFD_e158),
-        SELF(vFD_e159),
+        SELF(CurtainCall_Label),
+        SELF(HotelCombo_Label),
+        SELF(PubSingAlong_Label),
+        SELF(SoloRomance_Label),
+        SELF(CasinoLights_Label),
+        SELF(LaidBackOctave_Label),
+        SELF(Overture_Label),
+        SELF(LateAtNight_Label),
+        SELF(Bank_Label_2),
         SELF(vFD_e160),
-        SELF(vFD_e161),
+        SELF(Page_Label),
         SELF(ftdemo23),
-        SELF(vFD_e163),
+        SELF(Aa_Label),
         SELF(vFD_e164),
-        SELF(vFD_e165),
+        SELF(Mic_Label),
         SELF(vFD_e166),
-        SELF(vFD_e167),
-        SELF(vFD_e168),
-        SELF(vFD_e169),
-        SELF(vFD_e170),
-        SELF(vFD_e171),
-        SELF(vFD_e172),
+        SELF(OhIWantTo_Label),
+        SELF(Ber_Label),
+        SELF(OhWhenTheSaints_Label),
+        SELF(WhenTheSaintsGo_Label),
+        SELF(GoMarchinIn_Label),
+        SELF(WhenTheSaints_Label),
         SELF(vFD_e173),
-        SELF(vFD_e174),
+        SELF(Play_Label),
         SELF(vFD_e175),
         SELF(vFD_e176),
         SELF(vFD_e177),
@@ -9287,31 +9287,31 @@ const naka_perf_style_t naka_perf_style_data
         SELF(ftdemo24),
         SELF(vFD_e186),
         SELF(vFD_e187),
-        SELF(vFD_e188),
-        SELF(vFD_e189),
-        SELF(vFD_e190),
-        SELF(vFD_e191),
-        SELF(vFD_e192),
-        SELF(vFD_e193),
-        SELF(vFD_e194),
-        SELF(vFD_e195),
+        SELF(MicBalance_Label),
+        SELF(VocalReverb_Label),
+        SELF(ReverbTime_Label),
+        SELF(Type_Label),
+        SELF(OnOffOn_Label),
+        SELF(ExciterFcKHz_Label),
+        SELF(ExciterG_Label),
+        SELF(Volume_Label),
         SELF(vFD_e196),
-        SELF(vFD_e197),
+        SELF(Stage_Label),
         SELF(vFD_e198),
         SELF(vFD_e199),
         SELF(vFD_e200),
         SELF(vFD_e201),
         SELF(vFD_e202),
-        SELF(vFD_e203),
-        SELF(vFD_e204),
-        SELF(vFD_e205),
-        SELF(vFD_e206),
-        SELF(vFD_e207),
-        SELF(vFD_e208),
+        SELF(Vocalist_Label),
+        SELF(Workstation_Label),
+        SELF(FadeInOut_Label),
+        SELF(Setting_Label),
+        SELF(Mixer_Label),
+        SELF(DiskLoad_Label),
         SELF(vFD_e209),
-        SELF(vFD_e210),
+        SELF(MuteKeysOff_Label),
         SELF(vFD_e211),
-        SELF(vFD_e212),
+        SELF(Panic_Label),
         SELF(vFD_e213),
         SELF(vFD_e214),
         SELF(vFD_e215),
@@ -9320,23 +9320,23 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e218),
         SELF(vFD_e219),
         SELF(vFD_e220),
-        SELF(vFD_e221),
-        SELF(vFD_e222),
+        SELF(Item_Label),
+        SELF(Value_Label),
         SELF(vFD_e223),
         SELF(ftdemo25),
         SELF(ftdemobmpend),
         SELF(ftdemo26),
         SELF(vFD_e227),
-        SELF(vFD_e228),
-        SELF(vFD_e229),
-        SELF(vFD_e230),
-        SELF(vFD_e231),
-        SELF(vFD_e232),
-        SELF(vFD_e233),
-        SELF(vFD_e234),
+        SELF(FadeIn_Label),
+        SELF(Time_Label),
+        SELF(FadeOut_Label),
+        SELF(TimeMeasure_Label),
+        SELF(AutoResetOn_Label),
+        SELF(AutoStopRhythmOn_Label),
+        SELF(AutoStopSeqOn_Label),
         SELF(vFD_e235),
         SELF(vFD_e236),
-        SELF(vFD_e237),
+        SELF(Measure_Label),
         SELF(vFD_e238),
         SELF(vFD_e239),
         SELF(vFD_e240),
@@ -9348,25 +9348,25 @@ const naka_perf_style_t naka_perf_style_data
         SELF(ftdemo40),
         SELF(vFD_e247),
         SELF(vFD_e248),
-        SELF(vFD_e249),
-        SELF(vFD_e250),
-        SELF(vFD_e251),
-        SELF(vFD_e252),
+        SELF(MusicStylist_Label),
+        SELF(StylesOfWorldWide_Label),
+        SELF(StyleExplorerByGenre_Label),
+        SELF(AlphabeticalStyleSelect_Label),
         SELF(ftdemo41),
         SELF(vFD_e254),
-        SELF(vFD_e255),
-        SELF(vFD_e256),
-        SELF(vFD_e257),
-        SELF(vFD_e258),
-        SELF(vFD_e259),
-        SELF(vFD_e260),
-        SELF(vFD_e261),
-        SELF(vFD_e262),
-        SELF(vFD_e263),
-        SELF(vFD_e264),
+        SELF(EasyListening_Label),
+        SELF(RockPop_Label),
+        SELF(PartyMusic_Label),
+        SELF(DancePop_Label),
+        SELF(GospelBluesRB_Label),
+        SELF(JazzSwing_Label),
+        SELF(ShowTradDance_Label),
+        SELF(TradFolk_Label),
+        SELF(Country_Label),
+        SELF(LatinWorld_Label),
         SELF(vFD_e265),
         SELF(vFD_e266),
-        SELF(vFD_e267),
+        SELF(Ok_Label),
         SELF(vFD_e268),
         SELF(vFD_e269),
         SELF(vFD_e270),
@@ -9375,36 +9375,36 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e273),
         SELF(vFD_e274),
         SELF(vFD_e275),
-        SELF(vFD_e276),
+        SELF(MainCategory_Label),
         SELF(vFD_e277),
-        SELF(vFD_e278),
-        SELF(vFD_e279),
-        SELF(vFD_e280),
-        SELF(vFD_e281),
-        SELF(vFD_e282),
-        SELF(vFD_e283),
-        SELF(vFD_e284),
-        SELF(vFD_e285),
-        SELF(vFD_e286),
-        SELF(vFD_e287),
+        SELF(GlamrockPiano_Label),
+        SELF(Hits_Label),
+        SELF(EuroPopShuffle_Label),
+        SELF(PowerRock_Label),
+        SELF(LoveSongs_Label),
+        SELF(InTheEighties_Label),
+        SELF(PopBeat_Label),
+        SELF(BeatGroove_Label),
+        SELF(PopBallads_Label),
+        SELF(RockGig_Label),
         SELF(vFD_e288),
-        SELF(vFD_e289),
+        SELF(SubCategory_Label),
         SELF(vFD_e290),
         SELF(ftdemo42),
         SELF(vFD_e292),
-        SELF(vFD_e293),
-        SELF(vFD_e294),
-        SELF(vFD_e295),
-        SELF(vFD_e296),
-        SELF(vFD_e297),
-        SELF(vFD_e298),
-        SELF(vFD_e299),
-        SELF(vFD_e300),
-        SELF(vFD_e301),
-        SELF(vFD_e302),
+        SELF(EasyListening_Label_2),
+        SELF(RockPop_Label_2),
+        SELF(PartyMusic_Label_2),
+        SELF(DancePop_Label_2),
+        SELF(GospelBluesRB_Label_2),
+        SELF(JazzSwing_Label_2),
+        SELF(ShowTradDance_Label_2),
+        SELF(TradFolk_Label_2),
+        SELF(Country_Label_2),
+        SELF(LatinWorld_Label_2),
         SELF(vFD_e303),
         SELF(vFD_e304),
-        SELF(vFD_e305),
+        SELF(Ok_Label_2),
         SELF(vFD_e306),
         SELF(vFD_e307),
         SELF(vFD_e308),
@@ -9413,36 +9413,36 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e311),
         SELF(vFD_e312),
         SELF(vFD_e313),
-        SELF(vFD_e314),
+        SELF(MainCategory_Label_2),
         SELF(vFD_e315),
-        SELF(vFD_e316),
-        SELF(vFD_e317),
-        SELF(vFD_e318),
-        SELF(vFD_e319),
-        SELF(vFD_e320),
-        SELF(vFD_e321),
-        SELF(vFD_e322),
-        SELF(vFD_e323),
-        SELF(vFD_e324),
-        SELF(vFD_e325),
+        SELF(GlamrockPiano_Label_2),
+        SELF(Hits_Label_2),
+        SELF(EuroPopShuffle_Label_2),
+        SELF(PowerRock_Label_2),
+        SELF(LoveSongs_Label_2),
+        SELF(InTheEighties_Label_2),
+        SELF(PopBeat_Label_2),
+        SELF(BeatGroove_Label_2),
+        SELF(PopBallads_Label_2),
+        SELF(RockGig_Label_2),
         SELF(vFD_e326),
-        SELF(vFD_e327),
+        SELF(SubCategory_Label_2),
         SELF(vFD_e328),
         SELF(ftdemo44),
         SELF(vFD_e330),
-        SELF(vFD_e331),
-        SELF(vFD_e332),
-        SELF(vFD_e333),
-        SELF(vFD_e334),
-        SELF(vFD_e335),
-        SELF(vFD_e336),
-        SELF(vFD_e337),
-        SELF(vFD_e338),
-        SELF(vFD_e339),
-        SELF(vFD_e340),
+        SELF(EuroPopShuffleTempo_Label),
+        SELF(ShuffleSynth_Label),
+        SELF(JumpBrass_Label),
+        SELF(PopLeader_Label),
+        SELF(ShuffleOrgan_Label),
+        SELF(LoveSongsTempo_Label),
+        SELF(AnalogueBallad_Label),
+        SELF(DonFret_Label),
+        SELF(EpOfThe_Label),
+        SELF(SaxProduction_Label),
         SELF(vFD_e341),
         SELF(vFD_e342),
-        SELF(vFD_e343),
+        SELF(Skip_Label),
         SELF(vFD_e344),
         SELF(vFD_e345),
         SELF(vFD_e346),
@@ -9450,22 +9450,22 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e348),
         SELF(vFD_e349),
         SELF(vFD_e350),
-        SELF(vFD_e351),
+        SELF(CategoryRockPop_Label),
         SELF(ftdemo45),
         SELF(vFD_e353),
-        SELF(vFD_e354),
-        SELF(vFD_e355),
-        SELF(vFD_e356),
-        SELF(vFD_e357),
-        SELF(vFD_e358),
-        SELF(vFD_e359),
-        SELF(vFD_e360),
-        SELF(vFD_e361),
-        SELF(vFD_e362),
-        SELF(vFD_e363),
+        SELF(EuroPopShuffleTempo_Label_2),
+        SELF(ShuffleSynth_Label_2),
+        SELF(JumpBrass_Label_2),
+        SELF(PopLeader_Label_2),
+        SELF(ShuffleOrgan_Label_2),
+        SELF(LoveSongsTempo_Label_2),
+        SELF(AnalogueBallad_Label_2),
+        SELF(DonFret_Label_2),
+        SELF(EpOfThe_Label_2),
+        SELF(SaxProduction_Label_2),
         SELF(vFD_e364),
         SELF(vFD_e365),
-        SELF(vFD_e366),
+        SELF(Skip_Label_2),
         SELF(vFD_e367),
         SELF(vFD_e368),
         SELF(vFD_e369),
@@ -9473,40 +9473,40 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e371),
         SELF(vFD_e372),
         SELF(vFD_e373),
-        SELF(vFD_e374),
+        SELF(CategoryRockPop_Label_2),
         SELF(ftdemo46),
         SELF(vFD_e376),
-        SELF(vFD_e377),
+        SELF(BTempo_Label),
         SELF(vFD_e378),
-        SELF(vFD_e379),
-        SELF(vFD_e380),
-        SELF(vFD_e381),
-        SELF(vFD_e382),
-        SELF(vFD_e383),
-        SELF(vFD_e384),
-        SELF(vFD_e385),
-        SELF(vFD_e386),
-        SELF(vFD_e387),
+        SELF(BallroomFiddle_Label),
+        SELF(BebopSolo_Label),
+        SELF(BarbarShop_Label),
+        SELF(BensonFrets_Label),
+        SELF(BigStage_Label),
+        SELF(BillyEP_Label),
+        SELF(BonjourParis_Label),
+        SELF(BreathyNight_Label),
+        SELF(BridgeTooFar_Label),
         SELF(vFD_e388),
         SELF(vFD_e389),
         SELF(vFD_e390),
         SELF(vFD_e391),
         SELF(vFD_e392),
         SELF(vFD_e393),
-        SELF(vFD_e394),
+        SELF(Skip_Label_3),
         SELF(vFD_e395),
         SELF(vFD_e396),
         SELF(vFD_e397),
         SELF(ftdemo47),
         SELF(vFD_e399),
-        SELF(vFD_e400),
-        SELF(vFD_e401),
-        SELF(vFD_e402),
-        SELF(vFD_e403),
-        SELF(vFD_e404),
-        SELF(vFD_e405),
-        SELF(vFD_e406),
-        SELF(vFD_e407),
+        SELF(CTempo_Label),
+        SELF(CafeJazz_Label),
+        SELF(CharmingWaltz_Label),
+        SELF(CasinoShow_Label),
+        SELF(ChubbySolo_Label),
+        SELF(ClickPiano_Label),
+        SELF(CrystalDance_Label),
+        SELF(CurtainUp_Label),
         SELF(vFD_e408),
         SELF(vFD_e409),
         SELF(vFD_e410),
@@ -9514,20 +9514,20 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e412),
         SELF(vFD_e413),
         SELF(vFD_e414),
-        SELF(vFD_e415),
+        SELF(Skip_Label_4),
         SELF(vFD_e416),
         SELF(vFD_e417),
         SELF(vFD_e418),
         SELF(ftdemo48),
         SELF(vFD_e420),
-        SELF(vFD_e421),
-        SELF(vFD_e422),
-        SELF(vFD_e423),
-        SELF(vFD_e424),
-        SELF(vFD_e425),
-        SELF(vFD_e426),
-        SELF(vFD_e427),
-        SELF(vFD_e428),
+        SELF(CTempo_Label_2),
+        SELF(CafeJazz_Label_2),
+        SELF(CharmingWaltz_Label_2),
+        SELF(CasinoShow_Label_2),
+        SELF(ChubbySolo_Label_2),
+        SELF(ClickPiano_Label_2),
+        SELF(CrystalDance_Label_2),
+        SELF(CurtainUp_Label_2),
         SELF(vFD_e429),
         SELF(vFD_e430),
         SELF(vFD_e431),
@@ -9535,25 +9535,25 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e433),
         SELF(vFD_e434),
         SELF(vFD_e435),
-        SELF(vFD_e436),
+        SELF(Skip_Label_5),
         SELF(vFD_e437),
         SELF(vFD_e438),
         SELF(vFD_e439),
         SELF(ftdemo43),
         SELF(vFD_e441),
-        SELF(vFD_e442),
-        SELF(vFD_e443),
-        SELF(vFD_e444),
-        SELF(vFD_e445),
-        SELF(vFD_e446),
-        SELF(vFD_e447),
-        SELF(vFD_e448),
-        SELF(vFD_e449),
-        SELF(vFD_e450),
-        SELF(vFD_e451),
+        SELF(EasyListening_Label_3),
+        SELF(RockPop_Label_3),
+        SELF(PartyMusic_Label_3),
+        SELF(DancePop_Label_3),
+        SELF(GospelBluesRB_Label_3),
+        SELF(JazzSwing_Label_3),
+        SELF(ShowTradDance_Label_3),
+        SELF(TradFolk_Label_3),
+        SELF(Country_Label_3),
+        SELF(LatinWorld_Label_3),
         SELF(vFD_e452),
         SELF(vFD_e453),
-        SELF(vFD_e454),
+        SELF(Ok_Label_3),
         SELF(vFD_e455),
         SELF(vFD_e456),
         SELF(vFD_e457),
@@ -9562,20 +9562,20 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e460),
         SELF(vFD_e461),
         SELF(vFD_e462),
-        SELF(vFD_e463),
+        SELF(MainCategory_Label_3),
         SELF(vFD_e464),
-        SELF(vFD_e465),
-        SELF(vFD_e466),
-        SELF(vFD_e467),
-        SELF(vFD_e468),
-        SELF(vFD_e469),
-        SELF(vFD_e470),
-        SELF(vFD_e471),
-        SELF(vFD_e472),
-        SELF(vFD_e473),
-        SELF(vFD_e474),
+        SELF(GlamrockPiano_Label_3),
+        SELF(Hits_Label_3),
+        SELF(EuroPopShuffle_Label_3),
+        SELF(PowerRock_Label_3),
+        SELF(LoveSongs_Label_3),
+        SELF(InTheEighties_Label_3),
+        SELF(PopBeat_Label_3),
+        SELF(BeatGroove_Label_3),
+        SELF(PopBallads_Label_3),
+        SELF(RockGig_Label_3),
         SELF(vFD_e475),
-        SELF(vFD_e476),
+        SELF(SubCategory_Label_3),
         SELF(vFD_e477),
         0x00000000,
         SELF(ftdemo01_str),

@@ -99,13 +99,13 @@ typedef struct __attribute__((packed)) {
 
     /* w2: MENU_ITEM "INITIAL" */
     /* element 1 of Viewable slot 0x40: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v40_e1;
-    char w2_text[8];        /* "INITIAL" + NUL */
+    naka_cls_AcTitleMenu_t Initial_AcTitleMenu;
+    char Initial_text[8];        /* "INITIAL" + NUL */
 
     /* w3: MENU_ITEM "OVERALL TOUCH SENSITIVITY" */
     /* element 2 of Viewable slot 0x40: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v40_e2;
-    char w3_text[26];       /* "OVERALL TOUCH SENSITIVITY" + NUL */
+    naka_cls_AcTitleMenu_t OverallTouchSensitivity_AcTitleMenu;
+    char OverallTouchSensitivity_text[26];       /* "OVERALL TOUCH SENSITIVITY" + NUL */
 
     /* w4: MENU_ITEM "FOOT CONTROLLERS" */
     /* element 3 of Viewable slot 0x40: AcTitleMenu (class id 0x0160001D) */
@@ -119,8 +119,8 @@ typedef struct __attribute__((packed)) {
 
     /* w6: MENU_ITEM "PANEL MEMORY MODE" */
     /* element 5 of Viewable slot 0x40: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v40_e5;
-    char w6_text[18];       /* "PANEL MEMORY MODE" + NUL */
+    naka_cls_AcTitleMenu_t PanelMemoryMode_AcTitleMenu;
+    char PanelMemoryMode_text[18];       /* "PANEL MEMORY MODE" + NUL */
 
     /* w7: TYPE_0x48 (separator/spacer) */
     /* element 6 of Viewable slot 0x40: IvExitMode (class id 0x01600048) */
@@ -128,13 +128,13 @@ typedef struct __attribute__((packed)) {
 
     /* w8: MENU_ITEM "MUSIC STYLE ARRANGER MODE" */
     /* element 7 of Viewable slot 0x40: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v40_e7;
-    char w8_text[26];       /* "MUSIC STYLE ARRANGER MODE" + NUL */
+    naka_cls_AcTitleMenu_t MusicStyleArrangerMode_AcTitleMenu;
+    char MusicStyleArrangerMode_text[26];       /* "MUSIC STYLE ARRANGER MODE" + NUL */
 
     /* w9: MENU_ITEM "WALLPAPER SETTING" */
     /* element 8 of Viewable slot 0x40: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v40_e8;
-    char w9_text[18];       /* "WALLPAPER SETTING" + NUL */
+    naka_cls_AcTitleMenu_t WallpaperSetting_AcTitleMenu;
+    char WallpaperSetting_text[18];       /* "WALLPAPER SETTING" + NUL */
 } ctrl_menu_header_t;
 
 /* Self-referential pointer: computes ROM address of a field */
@@ -167,7 +167,7 @@ const ctrl_menu_header_t ctrl_menu_header_data
     .w1_text = { 'C','O','N','T','R','O','L',' ','M','E','N','U', 0, 0xFF },
 
     /* ─── w2: MENU_ITEM "INITIAL" ──────────────────────── */
-    .v40_e1 = {
+    .Initial_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -183,14 +183,14 @@ const ctrl_menu_header_t ctrl_menu_header_data
         .align = 0x0000,
         .editsw = 0x0088,
         .selected = 0x0003F438,
-        .str = SELF(w2_text),
+        .str = SELF(Initial_text),
         .title = 0x01A00041,
         .icon = 0x0000000E,
     },
-    .w2_text = "INITIAL",
+    .Initial_text = "INITIAL",
 
     /* ─── w3: MENU_ITEM "OVERALL TOUCH SENSITIVITY" ───── */
-    .v40_e2 = {
+    .OverallTouchSensitivity_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -206,11 +206,11 @@ const ctrl_menu_header_t ctrl_menu_header_data
         .align = 0x0000,
         .editsw = 0x0089,
         .selected = 0x0003F43A,
-        .str = SELF(w3_text),
+        .str = SELF(OverallTouchSensitivity_text),
         .title = 0x01A00043,
         .icon = 0x0000000A,
     },
-    .w3_text = "OVERALL TOUCH SENSITIVITY",
+    .OverallTouchSensitivity_text = "OVERALL TOUCH SENSITIVITY",
 
     /* ─── w4: MENU_ITEM "FOOT CONTROLLERS" ─────────────── */
     .v40_e3 = {
@@ -259,7 +259,7 @@ const ctrl_menu_header_t ctrl_menu_header_data
     .w5_text = { 'D','I','S','P','L','A','Y',' ','T','I','M','E',' ','O','U','T', 0, 0xFF },
 
     /* ─── w6: MENU_ITEM "PANEL MEMORY MODE" ────────────── */
-    .v40_e5 = {
+    .PanelMemoryMode_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -275,11 +275,11 @@ const ctrl_menu_header_t ctrl_menu_header_data
         .align = 0x0000,
         .editsw = 0x0009,
         .selected = 0x0003F440,
-        .str = SELF(w6_text),
+        .str = SELF(PanelMemoryMode_text),
         .title = 0x01A00045,
         .icon = 0x00000031,
     },
-    .w6_text = "PANEL MEMORY MODE",
+    .PanelMemoryMode_text = "PANEL MEMORY MODE",
 
     /* ─── w7: TYPE_0x48 (separator/spacer) ─────────────── */
     .v40_e6 = {
@@ -294,7 +294,7 @@ const ctrl_menu_header_t ctrl_menu_header_data
     },
 
     /* ─── w8: MENU_ITEM "MUSIC STYLE ARRANGER MODE" ───── */
-    .v40_e7 = {
+    .MusicStyleArrangerMode_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -310,14 +310,14 @@ const ctrl_menu_header_t ctrl_menu_header_data
         .align = 0x0000,
         .editsw = 0x000A,
         .selected = 0x0003F442,
-        .str = SELF(w8_text),
+        .str = SELF(MusicStyleArrangerMode_text),
         .title = 0x01A00044,
         .icon = 0x00000032,
     },
-    .w8_text = "MUSIC STYLE ARRANGER MODE",
+    .MusicStyleArrangerMode_text = "MUSIC STYLE ARRANGER MODE",
 
     /* ─── w9: MENU_ITEM "WALLPAPER SETTING" ────────────── */
-    .v40_e8 = {
+    .WallpaperSetting_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -333,9 +333,9 @@ const ctrl_menu_header_t ctrl_menu_header_data
         .align = 0x0000,
         .editsw = 0x008B,
         .selected = 0x0003F444,
-        .str = SELF(w9_text),
+        .str = SELF(WallpaperSetting_text),
         .title = 0x01A00048,
         .icon = 0x00000085,
     },
-    .w9_text = "WALLPAPER SETTING",
+    .WallpaperSetting_text = "WALLPAPER SETTING",
 };

@@ -388,23 +388,23 @@ typedef struct __attribute__((packed)) {
 
 typedef struct __attribute__((packed)) {
     /* element 2 of Viewable slot 0x0: Label (class id 0x0160002B) */
-    naka_cls_Label_t v0_e2;
-    char w0_text[24];
+    naka_cls_Label_t PanelSimulatorForHk_Label;
+    char PanelSimulatorForHk_text[24];
     /* element 3 of Viewable slot 0x0: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v0_e3;
-    char w1_text[12];
+    naka_cls_AcTitleMenu_t CheckTitle_AcTitleMenu;
+    char CheckTitle_text[12];
     /* element 4 of Viewable slot 0x0: IvExitMode (class id 0x01600048) */
     naka_cls_IvExitMode_t v0_e4;
     /* element 5 of Viewable slot 0x0: AcWindowMenu (class id 0x01600042) */
-    naka_cls_AcWindowMenu_t v0_e5;
+    naka_cls_AcWindowMenu_t DebugWindow_AcWindowMenu;
     char DebugWindow_str[14];
     /* element 6 of Viewable slot 0x0 "ClipBoard": Screen (class id 0x01600033) */
     naka_cls_Screen_t ClipBoard;
     /* element 7 of Viewable slot 0x0 "DebugWindow": Window (class id 0x01600035) */
     naka_cls_Window_t DebugWindow;
     /* element 8 of Viewable slot 0x0: Label (class id 0x0160002B) */
-    naka_cls_Label_t v0_e8;
-    char w4_text[14];
+    naka_cls_Label_t DebugTime_Label;
+    char DebugTime_text[14];
     /* element 9 of Viewable slot 0x0: DbDebugMenu (class id 0x01600057) */
     naka_cls_DbDebugMenu_t v0_e9;
     /* element 10 of Viewable slot 0x0 "NamingWindow": AcNamingWindow (class id 0x0160004B) */
@@ -412,18 +412,18 @@ typedef struct __attribute__((packed)) {
     /* element 11 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v0_e11;
     /* element 12 of Viewable slot 0x0: Label (class id 0x0160002B) */
-    naka_cls_Label_t v0_e12;
-    char w5_text[4];
+    naka_cls_Label_t Del_Label;
+    char Del_text[4];
     /* element 13 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v0_e13;
     /* element 14 of Viewable slot 0x0: Label (class id 0x0160002B) */
-    naka_cls_Label_t v0_e14;
-    char w6_text[4];
+    naka_cls_Label_t Ins_Label;
+    char Ins_text[4];
     /* element 15 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v0_e15;
     /* element 16 of Viewable slot 0x0: Label (class id 0x0160002B) */
-    naka_cls_Label_t v0_e16;
-    char w7_text[4];
+    naka_cls_Label_t Clr_Label;
+    char Clr_text[4];
     /* element 17 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v0_e17;
     /* element 18 of Viewable slot 0x0: Label (class id 0x0160002B) */
@@ -434,8 +434,8 @@ typedef struct __attribute__((packed)) {
     /* element 20 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v0_e20;
     /* element 21 of Viewable slot 0x0: Label (class id 0x0160002B) */
-    naka_cls_Label_t v0_e21;
-    char w9_text[10];
+    naka_cls_Label_t Position_Label;
+    char Position_text[10];
     /* element 22 of Viewable slot 0x0 "NamingCursorBox": PsCursorBox (class id 0x0160004C) */
     naka_cls_PsCursorBox_t NamingCursorBox;
     char ABC_str[4];
@@ -496,18 +496,18 @@ typedef struct __attribute__((packed)) {
     naka_cls_DbMemoryDump_t v0_e50;
     /* element 0 of Viewable slot 0xFF "CheckTitle": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CheckTitle;
-    char w11_text[12];
+    char CheckTitle_text_2[12];
     /* element 1 of Viewable slot 0xFF: IvExitScreen (class id 0x01600049) */
     naka_cls_IvExitScreen_t vFF_e1;
     /* element 2 of Viewable slot 0xFF: AcScreenMenu (class id 0x01600041) */
-    naka_cls_AcScreenMenu_t vFF_e2;
+    naka_cls_AcScreenMenu_t Naming_AcScreenMenu;
     char Naming_str[8];
     /* element 3 of Viewable slot 0xFF: AcScreenMenu (class id 0x01600041) */
-    naka_cls_AcScreenMenu_t vFF_e3;
+    naka_cls_AcScreenMenu_t Wall_AcScreenMenu;
     char Wall_str[6];
     /* element 4 of Viewable slot 0xFF "CheckNaming": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CheckNaming;
-    char w12_text[14];
+    char CheckNaming_text[14];
     /* element 5 of Viewable slot 0xFF: IvNaming (class id 0x0160004D) */
     naka_cls_IvNaming_t vFF_e5;
     /* element 6 of Viewable slot 0xFF: IvExitScreen (class id 0x01600049) */
@@ -534,7 +534,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_3[88];  /* 88 pointers */
     char str_135[2];
     char w14_code[2];
-    char w14_name[14];
+    char MemDumpWindow_name[14];
     char str_136[2];
     char str_137[2];
     char str_138[2];
@@ -551,16 +551,16 @@ typedef struct __attribute__((packed)) {
     char str_149[2];
     char str_150[2];
     char w15_code[2];
-    char w15_name[18];
+    char TrackSwitchWindow_name[18];
     char w16_code[2];
-    char w16_name[12];
+    char MemoWindow_name[12];
     char NamingLabel_str[12];
     char str_152[2];
     char str_153[2];
     char w17_code[2];
-    char w17_name[14];
-    char w18_code[10];
-    char w18_name[10];
+    char NamingSymbol_name[14];
+    char Namingabc_code[10];
+    char NamingABC_name[10];
     char NamingCursorBox_str[16];
     char str_155[2];
     char str_156[2];
@@ -573,34 +573,34 @@ typedef struct __attribute__((packed)) {
     char str_163[2];
     char str_164[2];
     char w19_code[2];
-    char w19_name[14];
+    char NamingWindow_name[14];
     char str_165[2];
     char w20_code[2];
-    char w20_name[12];
+    char DebugWindow_name[12];
     char ClipBoard_str[10];
     char str_167[2];
     char str_168[2];
     char str_169[2];
     char str_170[2];
     char w21_code[2];
-    char w21_name[16];
+    char PanelSimulator_name[16];
     uint32_t ptrs_4[10];  /* 10 pointers */
     char str_171[2];
     char w22_code[2];
-    char w22_name[10];
+    char CheckWall_name[10];
     char str_172[2];
     char w23_code[2];
-    char w23_name[12];
+    char CheckNaming_name[12];
     char str_173[2];
     char str_174[2];
     char w24_code[2];
-    char w24_name[12];
+    char CheckTitle_name[12];
     char MD_PS_str[6];
     char TT_PS_str[6];
     char TT_CHECK_str[10];
     uint32_t ptrs_5[28];  /* 28 pointers */
     char w25_code[2];
-    char w25_name[16];
+    char MainTaskControl_name[16];
     char DirmdTitleFunc_str[16];
     char MainTrSwControl_str[16];
     char CheckTitleFunc_str[16];
@@ -660,7 +660,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_81[3];  /* zero padding */
     uint32_t ptrs_6[4];  /* 4 pointers */
     char w26_code[2];
-    char w26_name[6];
+    char False_name[6];
     char True_str[6];
     uint32_t ptr_3d42;
     uint8_t pad_82[5];  /* zero padding */
@@ -1219,7 +1219,7 @@ _Static_assert(sizeof(naka_debug_naming_t) == 18112,
 const naka_debug_naming_t naka_debug_naming_data
     __attribute__((section(".text"), used)) = {
 
-    .v0_e2 = {
+    .PanelSimulatorForHk_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -1227,14 +1227,14 @@ const naka_debug_naming_t naka_debug_naming_data
         .prev = 1,
         .flag = 0x0008,
         .rect = { 38, 114, 283, 132 },
-        .str = SELF(w0_text),
+        .str = SELF(PanelSimulatorForHk_text),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
     },
 
-    .w0_text = ALIGNED_STRING("Panel Simulator for HK"),
+    .PanelSimulatorForHk_text = ALIGNED_STRING("Panel Simulator for HK"),
 
-    .v0_e3 = {
+    .CheckTitle_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -1250,12 +1250,12 @@ const naka_debug_naming_t naka_debug_naming_data
         .align = 0x0000,
         .editsw = 0x000C,
         .selected = 0x0003F0B0,
-        .str = SELF(w1_text),
+        .str = SELF(CheckTitle_text),
         .title = 0x01A000FF,
         .icon = 0x00000001,
     },
 
-    .w1_text = "CHECK TITLE",
+    .CheckTitle_text = "CHECK TITLE",
 
     .v0_e4 = {
         .class_ = 0x01600048,
@@ -1268,7 +1268,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .mode = 0x01800001,
     },
 
-    .v0_e5 = {
+    .DebugWindow_AcWindowMenu = {
         .class_ = 0x01600042,
         .super = 0,
         .sub = NAKA_NONE,
@@ -1320,7 +1320,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .child = 0x0003F0BC,
     },
 
-    .v0_e8 = {
+    .DebugTime_Label = {
         .class_ = 0x0160002B,
         .super = 7,
         .sub = NAKA_NONE,
@@ -1328,12 +1328,12 @@ const naka_debug_naming_t naka_debug_naming_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 14, 32, 89, 42 },
-        .str = SELF(w4_text),
+        .str = SELF(DebugTime_text),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
     },
 
-    .w4_text = ALIGNED_STRING("DEBUG TIME !"),
+    .DebugTime_text = ALIGNED_STRING("DEBUG TIME !"),
 
     .v0_e9 = {
         .class_ = 0x01600057,
@@ -1387,7 +1387,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .style = 0x0000,
     },
 
-    .v0_e12 = {
+    .Del_Label = {
         .class_ = 0x0160002B,
         .super = 11,
         .sub = NAKA_NONE,
@@ -1395,12 +1395,12 @@ const naka_debug_naming_t naka_debug_naming_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 9, 77, 36, 95 },
-        .str = SELF(w5_text),
+        .str = SELF(Del_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w5_text = "DEL",
+    .Del_text = "DEL",
 
     .v0_e13 = {
         .class_ = 0x0160001F,
@@ -1420,7 +1420,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .style = 0x0000,
     },
 
-    .v0_e14 = {
+    .Ins_Label = {
         .class_ = 0x0160002B,
         .super = 13,
         .sub = NAKA_NONE,
@@ -1428,12 +1428,12 @@ const naka_debug_naming_t naka_debug_naming_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 9, 35, 36, 53 },
-        .str = SELF(w6_text),
+        .str = SELF(Ins_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w6_text = "INS",
+    .Ins_text = "INS",
 
     .v0_e15 = {
         .class_ = 0x0160001F,
@@ -1453,7 +1453,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .style = 0x0000,
     },
 
-    .v0_e16 = {
+    .Clr_Label = {
         .class_ = 0x0160002B,
         .super = 15,
         .sub = NAKA_NONE,
@@ -1461,12 +1461,12 @@ const naka_debug_naming_t naka_debug_naming_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 282, 35, 309, 53 },
-        .str = SELF(w7_text),
+        .str = SELF(Clr_text),
         .font = 0x00000000,
         .fontcolor = 0x0000,
     },
 
-    .w7_text = "CLR",
+    .Clr_text = "CLR",
 
     .v0_e17 = {
         .class_ = 0x0160001F,
@@ -1537,7 +1537,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .style = 0x0010,
     },
 
-    .v0_e21 = {
+    .Position_Label = {
         .class_ = 0x0160002B,
         .super = 10,
         .sub = NAKA_NONE,
@@ -1545,12 +1545,12 @@ const naka_debug_naming_t naka_debug_naming_data
         .prev = 20,
         .flag = 0x0008,
         .rect = { 6, 201, 73, 219 },
-        .str = SELF(w9_text),
+        .str = SELF(Position_text),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
     },
 
-    .w9_text = ALIGNED_STRING("POSITION"),
+    .Position_text = ALIGNED_STRING("POSITION"),
 
     .NamingCursorBox = {
         .class_ = 0x0160004C,
@@ -1953,11 +1953,11 @@ const naka_debug_naming_t naka_debug_naming_data
         .border = 0x0002,
         .exit = 0x01A00000,
         .window = 0x0003F150,
-        .title = SELF(w11_text),
+        .title = SELF(CheckTitle_text_2),
         .icon = 0x00000001,
     },
 
-    .w11_text = "CHECK TITLE",
+    .CheckTitle_text_2 = "CHECK TITLE",
 
     .vFF_e1 = {
         .class_ = 0x01600049,
@@ -1970,7 +1970,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .screen = 0x00000000,
     },
 
-    .vFF_e2 = {
+    .Naming_AcScreenMenu = {
         .class_ = 0x01600041,
         .super = 0,
         .sub = NAKA_NONE,
@@ -1993,7 +1993,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .Naming_str = ALIGNED_STRING("Naming"),
 
-    .vFF_e3 = {
+    .Wall_AcScreenMenu = {
         .class_ = 0x01600041,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2028,11 +2028,11 @@ const naka_debug_naming_t naka_debug_naming_data
         .border = 0x0000,
         .exit = 0x01A000FF,
         .window = 0x0003F158,
-        .title = SELF(w12_text),
+        .title = SELF(CheckNaming_text),
         .icon = 0x00000001,
     },
 
-    .w12_text = ALIGNED_STRING("Check Naming"),
+    .CheckNaming_text = ALIGNED_STRING("Check Naming"),
 
     .vFF_e5 = {
         .class_ = 0x0160004D,
@@ -2094,26 +2094,26 @@ const naka_debug_naming_t naka_debug_naming_data
         0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
         0x00EB2AC2,
         NAKA_ADDR(Naka_FileManagerEntry),
-        SELF(v0_e2),
-        SELF(v0_e3),
+        SELF(PanelSimulatorForHk_Label),
+        SELF(CheckTitle_AcTitleMenu),
         SELF(v0_e4),
-        SELF(v0_e5),
+        SELF(DebugWindow_AcWindowMenu),
         SELF(ClipBoard),
         SELF(DebugWindow),
-        SELF(v0_e8),
+        SELF(DebugTime_Label),
         SELF(v0_e9),
         SELF(NamingWindow),
         SELF(v0_e11),
-        SELF(v0_e12),
+        SELF(Del_Label),
         SELF(v0_e13),
-        SELF(v0_e14),
+        SELF(Ins_Label),
         SELF(v0_e15),
-        SELF(v0_e16),
+        SELF(Clr_Label),
         SELF(v0_e17),
         SELF(v0_e18),
         SELF(v0_e19),
         SELF(v0_e20),
-        SELF(v0_e21),
+        SELF(Position_Label),
         SELF(NamingCursorBox),
     },
 
@@ -2158,25 +2158,25 @@ const naka_debug_naming_t naka_debug_naming_data
         0x00000000,
         SELF(CheckTitle),
         SELF(vFF_e1),
-        SELF(vFF_e2),
-        SELF(vFF_e3),
+        SELF(Naming_AcScreenMenu),
+        SELF(Wall_AcScreenMenu),
         SELF(CheckNaming),
         SELF(vFF_e5),
         SELF(vFF_e6),
         SELF(CheckWall),
         SELF(I_str),
         0x00000000,
-        SELF(w21_name),
+        SELF(PanelSimulator_name),
         SELF(w21_code),
         SELF(str_170),
         SELF(str_169),
         SELF(str_168),
         SELF(str_167),
         SELF(ClipBoard_str),
-        SELF(w20_name),
+        SELF(DebugWindow_name),
         SELF(w20_code),
         SELF(str_165),
-        SELF(w19_name),
+        SELF(NamingWindow_name),
         SELF(w19_code),
         SELF(str_164),
         SELF(str_163),
@@ -2189,16 +2189,16 @@ const naka_debug_naming_t naka_debug_naming_data
         SELF(str_156),
         SELF(str_155),
         SELF(NamingCursorBox_str),
-        SELF(w18_name),
-        SELF(w18_code),
-        SELF(w17_name),
+        SELF(NamingABC_name),
+        SELF(Namingabc_code),
+        SELF(NamingSymbol_name),
         SELF(w17_code),
         SELF(str_153),
         SELF(str_152),
         SELF(NamingLabel_str),
-        SELF(w16_name),
+        SELF(MemoWindow_name),
         SELF(w16_code),
-        SELF(w15_name),
+        SELF(TrackSwitchWindow_name),
         SELF(w15_code),
         SELF(str_150),
         SELF(str_149),
@@ -2215,7 +2215,7 @@ const naka_debug_naming_t naka_debug_naming_data
         SELF(str_138),
         SELF(str_137),
         SELF(str_136),
-        SELF(w14_name),
+        SELF(MemDumpWindow_name),
         SELF(w14_code),
         SELF(str_135),
     },
@@ -2224,7 +2224,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w14_code = ALIGNED_STRING(""),
 
-    .w14_name = "MemDumpWindow",
+    .MemDumpWindow_name = "MemDumpWindow",
 
     .str_136 = ALIGNED_STRING(""),
 
@@ -2258,11 +2258,11 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w15_code = ALIGNED_STRING(""),
 
-    .w15_name = "TrackSwitchWindow",
+    .TrackSwitchWindow_name = "TrackSwitchWindow",
 
     .w16_code = ALIGNED_STRING(""),
 
-    .w16_name = ALIGNED_STRING("MemoWindow"),
+    .MemoWindow_name = ALIGNED_STRING("MemoWindow"),
 
     .NamingLabel_str = "NamingLabel",
 
@@ -2272,11 +2272,11 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w17_code = ALIGNED_STRING(""),
 
-    .w17_name = ALIGNED_STRING("NamingSymbol"),
+    .NamingSymbol_name = ALIGNED_STRING("NamingSymbol"),
 
-    .w18_code = "Namingabc",
+    .Namingabc_code = "Namingabc",
 
-    .w18_name = "NamingABC",
+    .NamingABC_name = "NamingABC",
 
     .NamingCursorBox_str = "NamingCursorBox",
 
@@ -2302,13 +2302,13 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w19_code = ALIGNED_STRING(""),
 
-    .w19_name = ALIGNED_STRING("NamingWindow"),
+    .NamingWindow_name = ALIGNED_STRING("NamingWindow"),
 
     .str_165 = ALIGNED_STRING(""),
 
     .w20_code = ALIGNED_STRING(""),
 
-    .w20_name = "DebugWindow",
+    .DebugWindow_name = "DebugWindow",
 
     .ClipBoard_str = "ClipBoard",
 
@@ -2322,17 +2322,17 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w21_code = ALIGNED_STRING(""),
 
-    .w21_name = ALIGNED_STRING("PanelSimulator"),
+    .PanelSimulator_name = ALIGNED_STRING("PanelSimulator"),
 
     .ptrs_4 = {
-        SELF(w24_name),
+        SELF(CheckTitle_name),
         SELF(w24_code),
         SELF(str_174),
         SELF(str_173),
-        SELF(w23_name),
+        SELF(CheckNaming_name),
         SELF(w23_code),
         SELF(str_172),
-        SELF(w22_name),
+        SELF(CheckWall_name),
         SELF(w22_code),
         SELF(str_171),
     },
@@ -2341,13 +2341,13 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w22_code = ALIGNED_STRING(""),
 
-    .w22_name = "CheckWall",
+    .CheckWall_name = "CheckWall",
 
     .str_172 = ALIGNED_STRING(""),
 
     .w23_code = ALIGNED_STRING(""),
 
-    .w23_name = "CheckNaming",
+    .CheckNaming_name = "CheckNaming",
 
     .str_173 = ALIGNED_STRING(""),
 
@@ -2355,7 +2355,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w24_code = ALIGNED_STRING(""),
 
-    .w24_name = ALIGNED_STRING("CheckTitle"),
+    .CheckTitle_name = ALIGNED_STRING("CheckTitle"),
 
     .MD_PS_str = "MD_PS",
 
@@ -2390,13 +2390,13 @@ const naka_debug_naming_t naka_debug_naming_data
         SELF(CheckTitleFunc_str),
         SELF(MainTrSwControl_str),
         SELF(DirmdTitleFunc_str),
-        SELF(w25_name),
+        SELF(MainTaskControl_name),
         SELF(w25_code),
     },
 
     .w25_code = ALIGNED_STRING(""),
 
-    .w25_name = "MainTaskControl",
+    .MainTaskControl_name = "MainTaskControl",
 
     .DirmdTitleFunc_str = ALIGNED_STRING("DirmdTitleFunc"),
 
@@ -5573,7 +5573,7 @@ const naka_debug_naming_t naka_debug_naming_data
     .pad_81 = { 0 },
 
     .ptrs_6 = {
-        SELF(w26_name),
+        SELF(False_name),
         0x00000000,
         SELF(w26_code),
         0x00000000,
@@ -5581,7 +5581,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w26_code = ALIGNED_STRING(""),
 
-    .w26_name = "False",
+    .False_name = "False",
 
     .True_str = ALIGNED_STRING("True"),
 

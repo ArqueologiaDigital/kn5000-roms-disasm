@@ -123,67 +123,67 @@ typedef struct __attribute__((packed)) {
     char AcFdemoScreen_code[2];
     char AcFdemoScreen_name[14];
     char w11_code[2];
-    char w11_name[16];
-    char w12_code[6];
-    char w12_name[18];
-    char w13_code[4];
-    char w13_name[14];
+    char VwUserBitmapSp_name[16];
+    char XemA_code[6];
+    char AcPresentationBox_name[18];
+    char Jn_code[4];
+    char AcLswPartPan_name[14];
     char w14_code[2];
-    char w14_name[14];
+    char AcDrawEditBox_name[14];
     char w15_code[2];
-    char w15_name[16];
+    char IvDemofeature2_name[16];
     char w16_code[2];
-    char w16_name[16];
+    char IvDemofeature1_name[16];
     char w17_code[2];
-    char w17_name[22];
-    char w18_code[6];
-    char w18_name[10];
+    char AcPresentationControl_name[22];
+    char Dem_code[6];
+    char PsVariBox_name[10];
     char w19_code[2];
-    char w19_name[12];
+    char AcResetPage_name[12];
     char w20_code[2];
-    char w20_name[14];
+    char IvDrawbarSndE_name[14];
     char w21_code[2];
-    char w21_name[14];
+    char IvDrawbarNorm_name[14];
     char w22_code[2];
-    char w22_name[12];
+    char IvDrawbar2_name[12];
     char w23_code[2];
-    char w23_name[12];
+    char IvDrawbar1_name[12];
     char w24_code[2];
-    char w24_name[10];
-    char w25_code[4];
-    char w25_name[16];
+    char IvDrawbar_name[10];
+    char At_code[4];
+    char IvPageOverWrite_name[16];
     char w26_code[2];
-    char w26_name[10];
+    char IvSoftver_name[10];
     char w27_code[2];
-    char w27_name[14];
+    char AcTrackMixer_name[14];
     char w28_code[2];
-    char w28_name[12];
+    char AcPartMixer_name[12];
     char w29_code[2];
-    char w29_name[16];
+    char PsMixerControl_name[16];
     char w30_code[2];
-    char w30_name[16];
+    char AcWelcomScreen_name[16];
     char w31_code[2];
-    char w31_name[12];
+    char IvSdscltyp2_name[12];
     char w32_code[2];
-    char w32_name[10];
+    char IvSdtecd1_name[10];
     char w33_code[2];
-    char w33_name[10];
-    char w34_code[8];
-    char w34_name[12];
-    char w35_code[4];
-    char w35_name[16];
+    char IvSdtecd_name[10];
+    char XcDmm_code[8];
+    char PsLabelBox_name[12];
+    char Xx_code[4];
+    char AcAccordionTab_name[16];
     char w36_code[2];
-    char w36_name[14];
+    char IvAccordionX_name[14];
     char w37_code[2];
-    char w37_name[12];
+    char IvAccordion_name[12];
     char w38_code[2];
-    char w38_name[10];
-    char w39_code[4];
-    char w39_name[18];
-    char w40_code[4];
-    char w40_name[18];
+    char IvMesage_name[10];
+    char Jjn_code[4];
+    char AcVolPartEditBox_name[18];
+    char Jn_code_2[4];
+    char AcLswPartEditBox_name[18];
     char w41_code[2];
-    char w41_name[10];
+    char IvSdpart_name[10];
     char str_1[2];
     uint32_t ptrs_0[11];  /* 11 pointers */
     char EV_MPVERSION_str[14];
@@ -216,7 +216,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0510;
     uint32_t ptrs_2[76];  /* 76 pointers */
     char w42_code[2];
-    char w42_name[12];
+    char IvMPverProc_name[12];
     char AcDrawbarNameProc_str[18];
     char AcDrawSettingProc_str[18];
     char AcPleaseWaitProc_str[18];
@@ -255,7 +255,7 @@ typedef struct __attribute__((packed)) {
     char IvSdpartProc_str[14];
     /* element 0 of Viewable slot 0x2 "Sdmenu": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t Sdmenu;
-    char w43_text[12];
+    char SoundMenu_text[12];
     char str_63[2];
     uint16_t field_0906;
     uint8_t pad_1[2];  /* zero padding */
@@ -322,127 +322,127 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
 
     .w11_code = ALIGNED_STRING(""),
 
-    .w11_name = ALIGNED_STRING("VwUserBitmapSp"),
+    .VwUserBitmapSp_name = ALIGNED_STRING("VwUserBitmapSp"),
 
-    .w12_code = ALIGNED_STRING("XemA"),
+    .XemA_code = ALIGNED_STRING("XemA"),
 
-    .w12_name = "AcPresentationBox",
+    .AcPresentationBox_name = "AcPresentationBox",
 
-    .w13_code = ALIGNED_STRING("jn"),
+    .Jn_code = ALIGNED_STRING("jn"),
 
-    .w13_name = ALIGNED_STRING("AcLswPartPan"),
+    .AcLswPartPan_name = ALIGNED_STRING("AcLswPartPan"),
 
     .w14_code = ALIGNED_STRING(""),
 
-    .w14_name = "AcDrawEditBox",
+    .AcDrawEditBox_name = "AcDrawEditBox",
 
     .w15_code = ALIGNED_STRING(""),
 
-    .w15_name = ALIGNED_STRING("IvDemofeature2"),
+    .IvDemofeature2_name = ALIGNED_STRING("IvDemofeature2"),
 
     .w16_code = ALIGNED_STRING(""),
 
-    .w16_name = ALIGNED_STRING("IvDemofeature1"),
+    .IvDemofeature1_name = ALIGNED_STRING("IvDemofeature1"),
 
     .w17_code = ALIGNED_STRING(""),
 
-    .w17_name = "AcPresentationControl",
+    .AcPresentationControl_name = "AcPresentationControl",
 
-    .w18_code = "c^dem",
+    .Dem_code = "c^dem",
 
-    .w18_name = "PsVariBox",
+    .PsVariBox_name = "PsVariBox",
 
     .w19_code = ALIGNED_STRING(""),
 
-    .w19_name = "AcResetPage",
+    .AcResetPage_name = "AcResetPage",
 
     .w20_code = ALIGNED_STRING(""),
 
-    .w20_name = "IvDrawbarSndE",
+    .IvDrawbarSndE_name = "IvDrawbarSndE",
 
     .w21_code = ALIGNED_STRING(""),
 
-    .w21_name = "IvDrawbarNorm",
+    .IvDrawbarNorm_name = "IvDrawbarNorm",
 
     .w22_code = ALIGNED_STRING(""),
 
-    .w22_name = ALIGNED_STRING("IvDrawbar2"),
+    .IvDrawbar2_name = ALIGNED_STRING("IvDrawbar2"),
 
     .w23_code = ALIGNED_STRING(""),
 
-    .w23_name = ALIGNED_STRING("IvDrawbar1"),
+    .IvDrawbar1_name = ALIGNED_STRING("IvDrawbar1"),
 
     .w24_code = ALIGNED_STRING(""),
 
-    .w24_name = "IvDrawbar",
+    .IvDrawbar_name = "IvDrawbar",
 
-    .w25_code = ALIGNED_STRING("At"),
+    .At_code = ALIGNED_STRING("At"),
 
-    .w25_name = "IvPageOverWrite",
+    .IvPageOverWrite_name = "IvPageOverWrite",
 
     .w26_code = ALIGNED_STRING(""),
 
-    .w26_name = "IvSoftver",
+    .IvSoftver_name = "IvSoftver",
 
     .w27_code = ALIGNED_STRING(""),
 
-    .w27_name = ALIGNED_STRING("AcTrackMixer"),
+    .AcTrackMixer_name = ALIGNED_STRING("AcTrackMixer"),
 
     .w28_code = ALIGNED_STRING(""),
 
-    .w28_name = "AcPartMixer",
+    .AcPartMixer_name = "AcPartMixer",
 
     .w29_code = ALIGNED_STRING(""),
 
-    .w29_name = ALIGNED_STRING("PsMixerControl"),
+    .PsMixerControl_name = ALIGNED_STRING("PsMixerControl"),
 
     .w30_code = ALIGNED_STRING(""),
 
-    .w30_name = ALIGNED_STRING("AcWelcomScreen"),
+    .AcWelcomScreen_name = ALIGNED_STRING("AcWelcomScreen"),
 
     .w31_code = ALIGNED_STRING(""),
 
-    .w31_name = "IvSdscltyp2",
+    .IvSdscltyp2_name = "IvSdscltyp2",
 
     .w32_code = ALIGNED_STRING(""),
 
-    .w32_name = "IvSdtecd1",
+    .IvSdtecd1_name = "IvSdtecd1",
 
     .w33_code = ALIGNED_STRING(""),
 
-    .w33_name = ALIGNED_STRING("IvSdtecd"),
+    .IvSdtecd_name = ALIGNED_STRING("IvSdtecd"),
 
-    .w34_code = ALIGNED_STRING("Xc^dmm"),
+    .XcDmm_code = ALIGNED_STRING("Xc^dmm"),
 
-    .w34_name = ALIGNED_STRING("PsLabelBox"),
+    .PsLabelBox_name = ALIGNED_STRING("PsLabelBox"),
 
-    .w35_code = ALIGNED_STRING("XX"),
+    .Xx_code = ALIGNED_STRING("XX"),
 
-    .w35_name = ALIGNED_STRING("AcAccordionTab"),
+    .AcAccordionTab_name = ALIGNED_STRING("AcAccordionTab"),
 
     .w36_code = ALIGNED_STRING(""),
 
-    .w36_name = ALIGNED_STRING("IvAccordionX"),
+    .IvAccordionX_name = ALIGNED_STRING("IvAccordionX"),
 
     .w37_code = ALIGNED_STRING(""),
 
-    .w37_name = "IvAccordion",
+    .IvAccordion_name = "IvAccordion",
 
     .w38_code = ALIGNED_STRING(""),
 
-    .w38_name = ALIGNED_STRING("IvMesage"),
+    .IvMesage_name = ALIGNED_STRING("IvMesage"),
 
-    .w39_code = "jjn",
+    .Jjn_code = "jjn",
 
-    .w39_name = ALIGNED_STRING("AcVolPartEditBox"),
+    .AcVolPartEditBox_name = ALIGNED_STRING("AcVolPartEditBox"),
 
-    .w40_code = ALIGNED_STRING("jn"),
+    .Jn_code_2 = ALIGNED_STRING("jn"),
 
-    .w40_name = ALIGNED_STRING("AcLswPartEditBox"),
+    .AcLswPartEditBox_name = ALIGNED_STRING("AcLswPartEditBox"),
 
     .w41_code = ALIGNED_STRING(""),
 
-    .w41_name = ALIGNED_STRING("IvSdpart"),
+    .IvSdpart_name = ALIGNED_STRING("IvSdpart"),
 
     .str_1 = "%",
 
@@ -608,13 +608,13 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
         SELF(AcPleaseWaitProc_str),
         SELF(AcDrawSettingProc_str),
         SELF(AcDrawbarNameProc_str),
-        SELF(w42_name),
+        SELF(IvMPverProc_name),
         SELF(w42_code),
     },
 
     .w42_code = ALIGNED_STRING(""),
 
-    .w42_name = "IvMPverProc",
+    .IvMPverProc_name = "IvMPverProc",
 
     .AcDrawbarNameProc_str = "AcDrawbarNameProc",
 
@@ -700,11 +700,11 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
         .border = 0x0002,
         .exit = 0x01A00000,
         .window = 0x0003E660,
-        .title = SELF(w43_text),
+        .title = SELF(SoundMenu_text),
         .icon = 0x00000015,
     },
 
-    .w43_text = ALIGNED_STRING("SOUND MENU"),
+    .SoundMenu_text = ALIGNED_STRING("SOUND MENU"),
 
     .str_63 = "%",
 

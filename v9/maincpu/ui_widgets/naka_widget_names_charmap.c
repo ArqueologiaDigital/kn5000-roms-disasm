@@ -368,217 +368,217 @@ extern const char uwordProc;
 
 typedef struct __attribute__((packed)) {
     char w0_code[2];
-    char w0_name[14];
+    char VwUserBitmap_name[14];
     char w1_code[2];
-    char w1_name[12];
+    char TrChordBox_name[12];
     char w2_code[2];
-    char w2_name[16];
+    char TrTransposeBox_name[16];
     char w3_code[2];
-    char w3_name[16];
-    char w4_code[6];
-    char w4_name[10];
+    char AcLanguageText_name[16];
+    char DB_code[6];
+    char PsTextBox_name[10];
     char w5_code[2];
-    char w5_name[12];
+    char IvShowHide_name[12];
     char w6_code[2];
-    char w6_name[14];
+    char IvIntEasySet_name[14];
     char w7_code[2];
-    char w7_name[10];
+    char IvIntVari_name[10];
     char w8_code[2];
-    char w8_name[14];
+    char IvIntComplete_name[14];
     char w9_code[2];
-    char w9_name[12];
+    char IvIntError_name[12];
     char w10_code[2];
-    char w10_name[14];
+    char IvIntReminder_name[14];
     char w11_code[2];
-    char w11_name[12];
+    char IvInterrupt_name[12];
     char w12_code[2];
-    char w12_name[14];
+    char DbMemoryDump_name[14];
     char w13_code[2];
-    char w13_name[14];
+    char IvExitWindow_name[14];
     char w14_code[2];
-    char w14_name[14];
+    char IvTrackSwitch_name[14];
     char w15_code[2];
-    char w15_name[14];
+    char IvDirmdScreen_name[14];
     char w16_code[2];
-    char w16_name[14];
-    char w17_code[6];
-    char w17_name[14];
+    char AcTrackSwitch_name[14];
+    char Vmnn_code[6];
+    char PsTrackSwitch_name[14];
     char w18_code[2];
-    char w18_name[12];
-    char w19_code[4];
-    char w19_name[10];
-    char w20_code[4];
-    char w20_name[10];
+    char DbDebugMenu_name[12];
+    char XXj_code[4];
+    char AcGridBox_name[10];
+    char Xg_code[4];
+    char AcListBox_name[10];
     char DBBGnnsss_str[12];
     char PsGridBox_str[10];
-    char w21_code[6];
-    char w21_name[10];
+    char DBn_code[6];
+    char PsListBox_name[10];
     char w22_code[2];
-    char w22_name[14];
-    char w23_code[2];
-    char w23_name[14];
-    char w24_code[8];
-    char w24_name[12];
-    char w25_code[4];
-    char w25_name[10];
-    char w26_code[4];
-    char w26_name[14];
+    char IvCatchEvent_name[14];
+    char X_code[2];
+    char AcStrRadioBox_name[14];
+    char DemA_code[8];
+    char PsRadioBox_name[12];
+    char Jr_code[4];
+    char AcRamBox_name[10];
+    char Aa_code[4];
+    char AcIndexToggle_name[14];
     char w27_code[2];
-    char w27_name[10];
+    char IvNaming_name[10];
     char w28_code[2];
-    char w28_name[12];
+    char PsCursorBox_name[12];
     char w29_code[2];
-    char w29_name[16];
+    char AcNamingWindow_name[16];
     char w30_code[2];
-    char w30_name[10];
-    char w31_code[2];
-    char w31_name[14];
+    char IvFixWin_name[10];
+    char N_code[2];
+    char IvExitScreen_name[14];
     char w32_code[2];
-    char w32_name[12];
+    char IvExitMode_name[12];
     char w33_code[2];
-    char w33_name[8];
+    char IvExit_name[8];
     char w34_code[2];
-    char w34_name[8];
+    char DbMemo_name[8];
     char w35_code[2];
-    char w35_name[14];
+    char PsWideToggle_name[14];
     char w36_code[2];
-    char w36_name[14];
-    char w37_code[4];
-    char w37_name[14];
-    char w38_code[4];
-    char w38_name[14];
-    char w39_code[4];
-    char w39_name[14];
-    char w40_code[4];
-    char w40_name[12];
-    char w41_code[4];
-    char w41_name[12];
-    char w42_code[4];
-    char w42_name[12];
-    char w43_code[4];
-    char w43_name[10];
-    char w44_code[4];
-    char w44_name[12];
+    char AcFuncToggle_name[14];
+    char Jm_code[4];
+    char AcBitEditBox_name[14];
+    char Xtb_code[4];
+    char AcWindowMenu_name[14];
+    char XNb_code[4];
+    char AcScreenMenu_name[14];
+    char X_code_2[4];
+    char AcModeMenu_name[12];
+    char FX_code[4];
+    char VwWideESBox_name[12];
+    char FX_code_2[4];
+    char VwEditSwBox_name[12];
+    char Xb_code[4];
+    char VwMenuBox_name[10];
+    char Ue_code[4];
+    char AcMixerVol_name[12];
     char w45_code[2];
-    char w45_name[12];
+    char AcPmemName_name[12];
     char w46_code[2];
-    char w46_name[14];
-    char w47_code[6];
-    char w47_name[10];
-    char w48_code[6];
-    char w48_name[10];
-    char w49_code[6];
-    char w49_name[10];
-    char w50_code[6];
-    char w50_name[8];
-    char w51_code[4];
-    char w51_name[8];
-    char w52_code[4];
-    char w52_name[10];
-    char w53_code[4];
-    char w53_name[8];
+    char AcRhythmName_name[14];
+    char AkNlX_code[6];
+    char TitleEdit_name[10];
+    char KalX_code[6];
+    char ModeEdit_name[10];
+    char Xc_code[6];
+    char StringBox_name[10];
+    char XcDB_code[6];
+    char TextBox_name[8];
+    char Grr_code[4];
+    char Window_name[8];
+    char Xb_code_2[4];
+    char TtlScreen_name[10];
+    char Ar_code[4];
+    char Screen_name[8];
     char w54_code[2];
-    char w54_name[10];
+    char GroupBox_name[10];
     char str_2[4];
     char Box_str[4];
-    char w55_code[4];
-    char w55_name[8];
-    char w56_code[4];
-    char w56_name[6];
+    char EjA_code[4];
+    char EditSw_name[8];
+    char HA_code[4];
+    char Frame_name[6];
     char w57_code[4];
-    char w57_name[6];
+    char Line_name[6];
     char w58_code[2];
-    char w58_name[6];
+    char Icon_name[6];
     char w59_code[2];
-    char w59_name[8];
-    char w60_code[4];
-    char w60_name[6];
+    char Bitmap_name[8];
+    char Xc_code_2[4];
+    char Label_name[6];
     char w61_code[2];
-    char w61_name[12];
+    char AcSoundName_name[12];
     char w62_code[2];
-    char w62_name[14];
-    char w63_code[4];
-    char w63_name[14];
+    char IvMainEditSw_name[14];
+    char At_code[4];
+    char IvPageControl_name[14];
     char w64_code[2];
-    char w64_name[16];
-    char w65_code[6];
-    char w65_name[12];
-    char w66_code[4];
-    char w66_name[14];
+    char PsInvisibleBox_name[16];
+    char CXXme_code[6];
+    char PsToggleBox_name[12];
+    char Aa_code_2[4];
+    char AcWindowPage_name[14];
     char w67_code[2];
-    char w67_name[10];
-    char w68_code[4];
-    char w68_name[14];
+    char PsPageBox_name[10];
+    char Fj_code[4];
+    char AcFuncWideES_name[14];
     char w69_code[2];
-    char w69_name[14];
+    char AcIndexWideES_name[14];
     char w70_code[2];
-    char w70_name[12];
-    char w71_code[4];
-    char w71_name[14];
+    char PsWideESBox_name[12];
+    char Fj_code_2[4];
+    char AcFuncEditSw_name[14];
     char w72_code[2];
-    char w72_name[14];
-    char w73_code[6];
-    char w73_name[12];
-    char w74_code[4];
-    char w74_name[12];
-    char w75_code[6];
-    char w75_name[10];
-    char w76_code[4];
-    char w76_name[14];
-    char w77_code[4];
-    char w77_name[14];
-    char w78_code[8];
-    char w78_name[14];
+    char AcIndexEditSw_name[14];
+    char De_code[6];
+    char PsEditSwBox_name[12];
+    char Xab_code[4];
+    char AcTitleMenu_name[12];
+    char Dem_code[6];
+    char PsMenuBox_name[10];
+    char Jr_code_2[4];
+    char AcRamEditBox_name[14];
+    char Jn_code[4];
+    char AcLswEditBox_name[14];
+    char NAAAAA_code[8];
+    char AcNumEditBox_name[14];
     char w79_code[2];
-    char w79_name[12];
+    char AcOnOffBox_name[12];
     char w80_code[2];
-    char w80_name[14];
-    char w81_code[2];
-    char w81_name[14];
-    char w82_code[10];
-    char w82_name[10];
+    char PsTblEditBox_name[14];
+    char A_code[2];
+    char PsNumEditBox_name[14];
+    char XcDBeGm_code[10];
+    char PsEditBox_name[10];
     char w83_code[2];
-    char w83_name[12];
-    char w84_code[4];
-    char w84_name[10];
+    char AcTempoBox_name[12];
+    char Jn_code_2[4];
+    char AcLswBox_name[10];
     char w85_code[4];
-    char w85_name[10];
+    char PsParaBox_name[10];
     char A_str[4];
     char VwBox_str[6];
     char MP_str[8];
     char Viewable_str[10];
-    char w86_code[2];
-    char w86_name[8];
-    char w87_code[2];
-    char w87_name[10];
-    char w88_code[2];
-    char w88_name[10];
-    char w89_code[2];
-    char w89_name[10];
-    char w90_code[2];
-    char w90_name[8];
-    char w91_code[2];
-    char w91_name[8];
-    char w92_code[2];
-    char w92_name[10];
-    char w93_code[2];
-    char w93_name[10];
-    char w94_code[8];
-    char w94_name[6];
-    char w95_code[6];
-    char w95_name[6];
+    char X_code_3[2];
+    char ResName_name[8];
+    char B_code[2];
+    char ResString_name[10];
+    char X_code_4[2];
+    char ResMethod_name[10];
+    char X_code_5[2];
+    char ResEvent_name[10];
+    char B_code_2[2];
+    char ResFont_name[8];
+    char B_code_3[2];
+    char ResIcon_name[8];
+    char B_code_4[2];
+    char ResFrame_name[10];
+    char B_code_5[2];
+    char ResBitmap_name[10];
+    char KNlXNAA_code[8];
+    char Title_name[6];
+    char KalX_code_2[6];
+    char Mode_name[6];
     char JBBK_str[6];
     char SupportClass_str[14];
     char JMBBXXL_str[8];
     char Class_str[6];
     char w96_code[2];
-    char w96_name[14];
+    char MainFunction_name[14];
     char w97_code[2];
-    char w97_name[12];
-    char w98_code[2];
-    char w98_name[10];
+    char ApFunction_name[12];
+    char I_code[2];
+    char Function_name[10];
     char w99_code[2];
-    char w99_name[8];
+    char Object_name[8];
     char m_str[2];
     uint16_t field_0624;
     char str_13[2];
@@ -605,19 +605,19 @@ typedef struct __attribute__((packed)) {
     char Chara1Fnt_str[12];
     uint32_t ptrs_0[256];  /* 256 pointers */
     char w100_code[2];
-    char w100_name[10];
-    char w101_code[8];
-    char w101_name[8];
-    char w102_code[8];
-    char w102_name[8];
-    char w103_code[8];
-    char w103_name[8];
-    char w104_code[8];
-    char w104_name[8];
-    char w105_code[6];
-    char w105_name[6];
-    char w106_code[6];
-    char w106_name[6];
+    char MixerTab_name[10];
+    char EditDD_code[8];
+    char EditDC_name[8];
+    char EditDB_code[8];
+    char EditDA_name[8];
+    char Edit95D_code[8];
+    char Edit95C_name[8];
+    char Edit95B_code[8];
+    char Edit95A_name[8];
+    char EditD_code[6];
+    char EditC_name[6];
+    char EditB_code[6];
+    char EditA_name[6];
     char RightSwitch_str[12];
     char LeftSwitch_str[12];
     char ROnOff48_str[10];
@@ -627,52 +627,52 @@ typedef struct __attribute__((packed)) {
     char LOnOff48_str[10];
     char LOnOff32_str[10];
     char LOnOff24_str[10];
-    char w107_code[10];
-    char w107_name[8];
-    char w108_code[8];
-    char w108_name[8];
-    char w109_code[8];
-    char w109_name[8];
-    char w110_code[8];
-    char w110_name[8];
-    char w111_code[8];
-    char w111_name[8];
-    char w112_code[8];
-    char w112_name[10];
-    char w113_code[10];
-    char w113_name[10];
-    char w114_code[10];
-    char w114_name[8];
-    char w115_code[8];
-    char w115_name[8];
-    char w116_code[8];
-    char w116_name[8];
-    char w117_code[8];
-    char w117_name[8];
-    char w118_code[8];
-    char w118_name[8];
-    char w119_code[8];
-    char w119_name[8];
-    char w120_code[8];
-    char w120_name[8];
-    char w121_code[8];
-    char w121_name[8];
+    char LOnOff16_code[10];
+    char Left48_name[8];
+    char Left32_code[8];
+    char Left24_name[8];
+    char Left16_code[8];
+    char Left12_name[8];
+    char Right48_code[8];
+    char Right32_name[8];
+    char Right24_code[8];
+    char Right16_name[8];
+    char Right12_code[8];
+    char Round14d_name[10];
+    char Round14c_code[10];
+    char Round14b_name[10];
+    char Round14a_code[10];
+    char Round9d_name[8];
+    char Round9c_code[8];
+    char Round9b_name[8];
+    char Round9a_code[8];
+    char Round5d_name[8];
+    char Round5c_code[8];
+    char Round5b_name[8];
+    char Round5a_code[8];
+    char Round2d_name[8];
+    char Round2c_code[8];
+    char Round2b_name[8];
+    char Round2a_code[8];
+    char Round1d_name[8];
+    char Round1c_code[8];
+    char Round1b_name[8];
     char Round1a_str[8];
     uint32_t ptrs_1[256];  /* 256 pointers */
     char w122_code[2];
-    char w122_name[14];
-    char w123_code[12];
-    char w123_name[12];
-    char w124_code[12];
-    char w124_name[12];
+    char MixertabBmp_name[14];
+    char EditDDBmp_code[12];
+    char EditDCBmp_name[12];
+    char EditDBBmp_code[12];
+    char EditDABmp_name[12];
     char Edit95DBmp_str[12];
     char Edit95CBmp_str[12];
     char Edit95BBmp_str[12];
     char Edit95ABmp_str[12];
-    char w125_code[10];
-    char w125_name[10];
-    char w126_code[10];
-    char w126_name[10];
+    char EditDBmp_code[10];
+    char EditCBmp_name[10];
+    char EditBBmp_code[10];
+    char EditABmp_name[10];
     char RightSwBmp_str[12];
     char LeftSwBmp_str[12];
     char ROnOff48Bmp_str[14];
@@ -683,12 +683,12 @@ typedef struct __attribute__((packed)) {
     char LOnOff32Bmp_str[14];
     char LOnOff24Bmp_str[14];
     char LOnOff16Bmp_str[14];
-    char w127_code[12];
-    char w127_name[12];
-    char w128_code[12];
-    char w128_name[12];
-    char w129_code[12];
-    char w129_name[12];
+    char Left48Bmp_code[12];
+    char Left32Bmp_name[12];
+    char Left24Bmp_code[12];
+    char Left16Bmp_name[12];
+    char Left12Bmp_code[12];
+    char Right48Bmp_name[12];
     char Right32Bmp_str[12];
     char Right24Bmp_str[12];
     char Right16Bmp_str[12];
@@ -709,10 +709,10 @@ typedef struct __attribute__((packed)) {
     char Round2cBmp_str[12];
     char Round2bBmp_str[12];
     char Round2aBmp_str[12];
-    char w130_code[12];
-    char w130_name[12];
-    char w131_code[12];
-    char w131_name[12];
+    char Round1Bmp_code[12];
+    char Round1Bmp_name[12];
+    char Round1Bmp_code_2[12];
+    char Round1Bmp_name_2[12];
     uint32_t ptrs_2[61];  /* 61 pointers */
     char EV_SWIN_MODE_str[14];
     char EV_OLD_TITLE_str[14];
@@ -967,16 +967,16 @@ typedef struct __attribute__((packed)) {
     uint16_t field_25fc;
     uint32_t ptrs_4[706];  /* 706 pointers */
     char w132_code[2];
-    char w132_name[14];
+    char DrawBitmapSP2_name[14];
     char MainDeleteEvent_str[16];
     char MainDeleteSpecificEvent_str[24];
-    char w133_code[10];
-    char w133_name[14];
+    char DrawFunc_code[10];
+    char SetRootParam_name[14];
     char SetRootEvent_str[14];
     char InitDrawTask_str[14];
     char RefreshSwEvent_str[16];
-    char w134_code[6];
-    char w134_name[8];
+    char LcdOn_code[6];
+    char LcdOff_name[8];
     char DrawBitmapFile_str[16];
     char VwUserBitmapByNameProc_str[24];
     char ApDeliveryEvent_str[16];
@@ -987,8 +987,8 @@ typedef struct __attribute__((packed)) {
     char SleepMainTask_str[14];
     char DeleteEvent_str[12];
     char DeleteSpecificEvent_str[20];
-    char w135_code[10];
-    char w135_name[18];
+    char FuncCall_code[10];
+    char IvIntWelcomeProc_name[18];
     char SetWallColor_str[14];
     char SetWallPaper_str[14];
     char InitPaletteRGB_str[16];
@@ -997,8 +997,8 @@ typedef struct __attribute__((packed)) {
     char DrawBitmapSPFast_str[18];
     char GetNamingWindowID_str[18];
     char IvScreenProc_str[14];
-    char w136_code[12];
-    char w136_name[18];
+    char CaptureLcd_code[12];
+    char VwUserBitmapProc_name[18];
     char DrawBitmapSP_str[14];
     char GetPartSelect_str[14];
     char TrChordBoxProc_str[16];
@@ -1046,26 +1046,26 @@ typedef struct __attribute__((packed)) {
     char DrawStringReverse_str[18];
     char IvExitScreenProc_str[18];
     char IvExitModeProc_str[16];
-    char w137_code[12];
-    char w137_name[14];
+    char IvExitProc_code[12];
+    char GetFocusParam_name[14];
     char GetFocusEvent_str[14];
     char GetFocusObject_str[16];
     char SetRootObject_str[14];
-    char w138_code[12];
-    char w138_name[18];
+    char SetAutoInc_code[12];
+    char SetAutoIncDefault_name[18];
     char GetRootParam_str[14];
     char GetRootEvent_str[14];
     char GetRootObject_str[14];
     char KillApTimer_str[12];
     char ResetApTimer_str[14];
-    char w139_code[12];
-    char w139_name[8];
+    char SetApTimer_code[12];
+    char ApTimer_name[8];
     char InitializeTimer_str[16];
-    char w140_code[12];
-    char w140_name[18];
+    char DbMemoProc_code[12];
+    char PsWideToggleProc_name[18];
     char AcFuncToggleProc_str[18];
-    char w141_code[12];
-    char w141_name[12];
+    char MainBitGet_code[12];
+    char MainBitPut_name[12];
     char AcBitEditBoxProc_str[18];
     char VwEditSwBoxProc_str[16];
     char VwMenuBoxProc_str[14];
@@ -1076,8 +1076,8 @@ typedef struct __attribute__((packed)) {
     char GetWallPaletteRGB_str[18];
     char ChangeWallPalette_str[18];
     char SetDialDown_str[12];
-    char w142_code[10];
-    char w142_name[14];
+    char SetDialUp_code[10];
+    char SetDialEnable_name[14];
     char IvMainEditSwProc_str[18];
     char IvPageControlProc_str[18];
     char PsInvisibleBoxProc_str[20];
@@ -1100,83 +1100,83 @@ typedef struct __attribute__((packed)) {
     char AcTempoBoxProc_str[16];
     char AcLswBoxProc_str[14];
     char PsParaBoxProc_str[14];
-    char w143_code[10];
-    char w143_name[12];
-    char w144_code[10];
-    char w144_name[10];
-    char w145_code[12];
-    char w145_name[10];
+    char VwBoxProc_code[10];
+    char TextBoxProc_name[12];
+    char LineProc_code[10];
+    char IconProc_name[10];
+    char BitmapProc_code[12];
+    char LabelProc_name[10];
     char StringBoxProc_str[14];
-    char w146_code[12];
-    char w146_name[14];
+    char WindowProc_code[12];
+    char GroupBoxProc_name[14];
     char TitleEditProc_str[14];
     char ModeEditProc_str[14];
-    char w147_code[12];
-    char w147_name[12];
-    char w148_code[12];
-    char w148_name[16];
+    char MainRamGet_code[12];
+    char MainRamAdd_name[12];
+    char MainRamPut_code[12];
+    char ResetLswFilter_name[16];
     char SetLswFilter_str[14];
     char MainLswPartGet_str[16];
-    char w149_code[12];
-    char w149_name[16];
-    char w150_code[12];
-    char w150_name[16];
-    char w151_code[12];
-    char w151_name[12];
-    char w152_code[12];
-    char w152_name[14];
+    char MainLswGet_code[12];
+    char MainLswPartAdd_name[16];
+    char MainLswAdd_code[12];
+    char MainLswPartPut_name[16];
+    char MainLswPut_code[12];
+    char DrawEditSw_name[12];
+    char EditSwProc_code[12];
+    char DrawTitleBar_name[14];
     char TtlScreenProc_str[14];
     char DrawDesignFrame_str[16];
     char GetClientFrame2_str[16];
     char GetClientFrame_str[16];
-    char w153_code[10];
-    char w153_name[16];
-    char w154_code[12];
-    char w154_name[14];
+    char FrameProc_code[10];
+    char GetEditSwPoint_name[16];
+    char ScreenProc_code[12];
+    char BoxRightCheck_name[14];
     char BoxLeftCheck_str[14];
     char GetFrameColor_str[14];
     char DrawDesignBox_str[14];
     char GetClientBox2_str[14];
     char GetClientBox_str[14];
-    char w155_code[8];
-    char w155_name[8];
-    char w156_code[8];
-    char w156_name[16];
+    char BoxProc_code[8];
+    char SetBox_name[8];
+    char GetBox_code[8];
+    char GetViewInstance_name[16];
     char GetLinkView_str[12];
     char SetSuperView_str[14];
-    char w157_code[8];
-    char w157_name[6];
-    char w158_code[8];
-    char w158_name[10];
-    char w159_code[10];
-    char w159_name[10];
-    char w160_code[12];
-    char w160_name[12];
-    char w161_code[12];
-    char w161_name[12];
-    char w162_code[10];
-    char w162_name[10];
-    char w163_code[10];
-    char w163_name[10];
+    char Unlink_code[8];
+    char Link_name[6];
+    char SubView_code[8];
+    char SuperView_name[10];
+    char PrevView_code[10];
+    char NextView_name[10];
+    char GetMovable_code[12];
+    char SetMovable_name[12];
+    char GetVisible_code[12];
+    char SetVisible_name[12];
+    char GetChange_code[10];
+    char SetChange_name[10];
+    char GetConst_code[10];
+    char SetConst_name[10];
     char ViewableProc_str[14];
     char GetTitleOld_str[12];
     char GetTitleNow_str[12];
     char UnregisteredTitle_str[18];
     char RegisterTitle_str[14];
-    char w164_code[10];
-    char w164_name[12];
-    char w165_code[12];
-    char w165_name[18];
+    char TitleProc_code[10];
+    char GetModeOld_name[12];
+    char GetModeNow_code[12];
+    char UnregisteredMode_name[18];
     char RegisterMode_str[14];
-    char w166_code[10];
-    char w166_name[14];
-    char w167_code[12];
-    char w167_name[18];
+    char ModeProc_code[10];
+    char MainFuncCall_name[14];
+    char ApFuncCall_code[12];
+    char MainFunctionProc_name[18];
     char ApFunctionProc_str[16];
     char FunctionProc_str[14];
     char TrackIDProc_str[12];
-    char w168_code[12];
-    char w168_name[12];
+    char PartIDProc_code[12];
+    char UserIDProc_name[12];
     char MainFuncIDProc_str[16];
     char ApFuncIDProc_str[14];
     char BitmapIDProc_str[14];
@@ -1185,34 +1185,34 @@ typedef struct __attribute__((packed)) {
     char EditSwStyleIDProc_str[18];
     char EditSwIDProc_str[14];
     char AlignmentIDProc_str[16];
-    char w169_code[12];
-    char w169_name[12];
+    char FontIDProc_code[12];
+    char IconIDProc_name[12];
     char TitleIDProc_str[12];
-    char w170_code[12];
-    char w170_name[14];
+    char ModeIDProc_code[12];
+    char BorderIDProc_name[14];
     char ColorIDProc_str[12];
     char ViewFlagProc_str[14];
-    char w171_code[12];
-    char w171_name[14];
-    char w172_code[10];
-    char w172_name[12];
-    char w173_code[12];
-    char w173_name[12];
-    char w174_code[12];
-    char w174_name[12];
-    char w175_code[12];
-    char w175_name[12];
+    char ViewIDProc_code[12];
+    char ConstFlagProc_name[14];
+    char NameProc_code[10];
+    char StringProc_name[12];
+    char PointYProc_code[12];
+    char PointXProc_name[12];
+    char POINTWProc_code[12];
+    char RectY2Proc_name[12];
+    char RectX2Proc_code[12];
+    char RectY1Proc_name[12];
     char RectX1Proc_str[12];
-    char w176_code[10];
-    char w176_name[12];
+    char RECTWProc_code[10];
+    char EventIDProc_name[12];
     char WindowIDProc_str[14];
     char ScreenIDProc_str[14];
     char ClassIDProc_str[12];
     char pStringProc_str[12];
     char pPropProc_str[10];
     char pProcProc_str[10];
-    char w177_code[10];
-    char w177_name[14];
+    char PFuncProc_code[10];
+    char ObjectIDProc_name[14];
     char pUlongProc_str[12];
     char pSlongProc_str[12];
     char pUcharProc_str[12];
@@ -1226,10 +1226,10 @@ typedef struct __attribute__((packed)) {
     char scharProc_str[10];
     char ucharProc_str[10];
     char uwordProc_str[10];
-    char w178_code[10];
-    char w178_name[18];
-    char w179_code[10];
-    char w179_name[16];
+    char SwordProc_code[10];
+    char SupportClassProc_name[18];
+    char ClassProc_code[10];
+    char WordwrapStrings_name[16];
     char CalcTotalWidth_str[16];
     char ConvertStrings_str[16];
     char GetCenteredDelta_str[18];
@@ -1252,10 +1252,10 @@ typedef struct __attribute__((packed)) {
     char MainDispatchEvent_str[18];
     char SetCurrentTarget_str[18];
     char GetCurrentTarget_str[18];
-    char w180_code[10];
-    char w180_name[10];
-    char w181_code[10];
-    char w181_name[14];
+    char GetEvent_code[10];
+    char PostEvent_name[10];
+    char SendEvent_code[10];
+    char DispatchEvent_name[14];
     char InitializeEventQueue_str[22];
     char CheckViewObject_str[16];
     char CountObject_str[12];
@@ -1264,26 +1264,26 @@ typedef struct __attribute__((packed)) {
     char RegisterObjectTable_str[20];
     char InitializeObjectTable_str[22];
     char InheritedProc_str[14];
-    char w182_code[12];
-    char w182_name[20];
+    char ObjectProc_code[12];
+    char DrawStringAlignment_name[20];
     char DrawStringRightJustify_str[24];
     char DrawStringLeftJustify_str[22];
     char DrawStringCentered_str[20];
-    char w183_code[12];
-    char w183_name[12];
-    char w184_code[10];
-    char w184_name[12];
-    char w185_code[10];
-    char w185_name[12];
+    char DrawString_code[12];
+    char DrawFrameSP_name[12];
+    char DrawIcons_code[10];
+    char DrawBitmap_name[12];
+    char DrawWall_code[10];
+    char MovePixels_name[12];
     char DrawFrameEx_str[12];
-    char w186_code[10];
-    char w186_name[8];
-    char w187_code[12];
-    char w187_name[10];
+    char DrawFrame_code[10];
+    char DrawBox_name[8];
+    char DrawLineEx_code[12];
+    char DrawLine_name[10];
     char ModifyPixelEx_str[14];
     char ModifyPixel_str[12];
-    char w188_code[10];
-    char w188_name[14];
+    char ReadPixel_code[10];
+    char SetChangeRect_name[14];
     char SetNeedUpdate_str[14];
     char UpdateScreen_str[14];
     char InitializeGraphics_str[20];
@@ -1495,8 +1495,8 @@ typedef struct __attribute__((packed)) {
     char i3_str[4];
     char i2_str[4];
     char i1_str[4];
-    char w189_code[4];
-    char w189_name[8];
+    char I0_code[4];
+    char Default_name[8];
     char None_str[6];
     uint32_t ptrs_6[256];  /* 256 pointers */
     char str_742[2];
@@ -1708,355 +1708,355 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w0_code = "j",
 
-    .w0_name = ALIGNED_STRING("VwUserBitmap"),
+    .VwUserBitmap_name = ALIGNED_STRING("VwUserBitmap"),
 
     .w1_code = ALIGNED_STRING(""),
 
-    .w1_name = ALIGNED_STRING("TrChordBox"),
+    .TrChordBox_name = ALIGNED_STRING("TrChordBox"),
 
     .w2_code = ALIGNED_STRING(""),
 
-    .w2_name = ALIGNED_STRING("TrTransposeBox"),
+    .TrTransposeBox_name = ALIGNED_STRING("TrTransposeBox"),
 
     .w3_code = "j",
 
-    .w3_name = ALIGNED_STRING("AcLanguageText"),
+    .AcLanguageText_name = ALIGNED_STRING("AcLanguageText"),
 
-    .w4_code = ALIGNED_STRING("c^dB"),
+    .DB_code = ALIGNED_STRING("c^dB"),
 
-    .w4_name = "PsTextBox",
+    .PsTextBox_name = "PsTextBox",
 
     .w5_code = "j",
 
-    .w5_name = ALIGNED_STRING("IvShowHide"),
+    .IvShowHide_name = ALIGNED_STRING("IvShowHide"),
 
     .w6_code = ALIGNED_STRING(""),
 
-    .w6_name = ALIGNED_STRING("IvIntEasySet"),
+    .IvIntEasySet_name = ALIGNED_STRING("IvIntEasySet"),
 
     .w7_code = ALIGNED_STRING(""),
 
-    .w7_name = "IvIntVari",
+    .IvIntVari_name = "IvIntVari",
 
     .w8_code = ALIGNED_STRING(""),
 
-    .w8_name = "IvIntComplete",
+    .IvIntComplete_name = "IvIntComplete",
 
     .w9_code = ALIGNED_STRING(""),
 
-    .w9_name = ALIGNED_STRING("IvIntError"),
+    .IvIntError_name = ALIGNED_STRING("IvIntError"),
 
     .w10_code = ALIGNED_STRING(""),
 
-    .w10_name = "IvIntReminder",
+    .IvIntReminder_name = "IvIntReminder",
 
     .w11_code = "w",
 
-    .w11_name = "IvInterrupt",
+    .IvInterrupt_name = "IvInterrupt",
 
     .w12_code = "s",
 
-    .w12_name = ALIGNED_STRING("DbMemoryDump"),
+    .DbMemoryDump_name = ALIGNED_STRING("DbMemoryDump"),
 
     .w13_code = ALIGNED_STRING(""),
 
-    .w13_name = ALIGNED_STRING("IvExitWindow"),
+    .IvExitWindow_name = ALIGNED_STRING("IvExitWindow"),
 
     .w14_code = ALIGNED_STRING(""),
 
-    .w14_name = "IvTrackSwitch",
+    .IvTrackSwitch_name = "IvTrackSwitch",
 
     .w15_code = ALIGNED_STRING(""),
 
-    .w15_name = "IvDirmdScreen",
+    .IvDirmdScreen_name = "IvDirmdScreen",
 
     .w16_code = ALIGNED_STRING(""),
 
-    .w16_name = "AcTrackSwitch",
+    .AcTrackSwitch_name = "AcTrackSwitch",
 
-    .w17_code = ALIGNED_STRING("vmnn"),
+    .Vmnn_code = ALIGNED_STRING("vmnn"),
 
-    .w17_name = "PsTrackSwitch",
+    .PsTrackSwitch_name = "PsTrackSwitch",
 
     .w18_code = "n",
 
-    .w18_name = "DbDebugMenu",
+    .DbDebugMenu_name = "DbDebugMenu",
 
-    .w19_code = "XXj",
+    .XXj_code = "XXj",
 
-    .w19_name = "AcGridBox",
+    .AcGridBox_name = "AcGridBox",
 
-    .w20_code = ALIGNED_STRING("XG"),
+    .Xg_code = ALIGNED_STRING("XG"),
 
-    .w20_name = "AcListBox",
+    .AcListBox_name = "AcListBox",
 
     .DBBGnnsss_str = "c^dBBGnnsss",
 
     .PsGridBox_str = "PsGridBox",
 
-    .w21_code = "c^dBn",
+    .DBn_code = "c^dBn",
 
-    .w21_name = "PsListBox",
+    .PsListBox_name = "PsListBox",
 
     .w22_code = "j",
 
-    .w22_name = ALIGNED_STRING("IvCatchEvent"),
+    .IvCatchEvent_name = ALIGNED_STRING("IvCatchEvent"),
 
-    .w23_code = "X",
+    .X_code = "X",
 
-    .w23_name = "AcStrRadioBox",
+    .AcStrRadioBox_name = "AcStrRadioBox",
 
-    .w24_code = ALIGNED_STRING("c^demA"),
+    .DemA_code = ALIGNED_STRING("c^demA"),
 
-    .w24_name = ALIGNED_STRING("PsRadioBox"),
+    .PsRadioBox_name = ALIGNED_STRING("PsRadioBox"),
 
-    .w25_code = ALIGNED_STRING("jr"),
+    .Jr_code = ALIGNED_STRING("jr"),
 
-    .w25_name = ALIGNED_STRING("AcRamBox"),
+    .AcRamBox_name = ALIGNED_STRING("AcRamBox"),
 
-    .w26_code = ALIGNED_STRING("AA"),
+    .Aa_code = ALIGNED_STRING("AA"),
 
-    .w26_name = "AcIndexToggle",
+    .AcIndexToggle_name = "AcIndexToggle",
 
     .w27_code = "j",
 
-    .w27_name = ALIGNED_STRING("IvNaming"),
+    .IvNaming_name = ALIGNED_STRING("IvNaming"),
 
     .w28_code = "n",
 
-    .w28_name = "PsCursorBox",
+    .PsCursorBox_name = "PsCursorBox",
 
     .w29_code = ALIGNED_STRING(""),
 
-    .w29_name = ALIGNED_STRING("AcNamingWindow"),
+    .AcNamingWindow_name = ALIGNED_STRING("AcNamingWindow"),
 
     .w30_code = "t",
 
-    .w30_name = ALIGNED_STRING("IvFixWin"),
+    .IvFixWin_name = ALIGNED_STRING("IvFixWin"),
 
-    .w31_code = "N",
+    .N_code = "N",
 
-    .w31_name = ALIGNED_STRING("IvExitScreen"),
+    .IvExitScreen_name = ALIGNED_STRING("IvExitScreen"),
 
     .w32_code = "`",
 
-    .w32_name = ALIGNED_STRING("IvExitMode"),
+    .IvExitMode_name = ALIGNED_STRING("IvExitMode"),
 
     .w33_code = ALIGNED_STRING(""),
 
-    .w33_name = ALIGNED_STRING("IvExit"),
+    .IvExit_name = ALIGNED_STRING("IvExit"),
 
     .w34_code = ALIGNED_STRING(""),
 
-    .w34_name = ALIGNED_STRING("DbMemo"),
+    .DbMemo_name = ALIGNED_STRING("DbMemo"),
 
     .w35_code = "e",
 
-    .w35_name = ALIGNED_STRING("PsWideToggle"),
+    .PsWideToggle_name = ALIGNED_STRING("PsWideToggle"),
 
     .w36_code = "j",
 
-    .w36_name = ALIGNED_STRING("AcFuncToggle"),
+    .AcFuncToggle_name = ALIGNED_STRING("AcFuncToggle"),
 
-    .w37_code = ALIGNED_STRING("jm"),
+    .Jm_code = ALIGNED_STRING("jm"),
 
-    .w37_name = ALIGNED_STRING("AcBitEditBox"),
+    .AcBitEditBox_name = ALIGNED_STRING("AcBitEditBox"),
 
-    .w38_code = "Xtb",
+    .Xtb_code = "Xtb",
 
-    .w38_name = ALIGNED_STRING("AcWindowMenu"),
+    .AcWindowMenu_name = ALIGNED_STRING("AcWindowMenu"),
 
-    .w39_code = "XNb",
+    .XNb_code = "XNb",
 
-    .w39_name = ALIGNED_STRING("AcScreenMenu"),
+    .AcScreenMenu_name = ALIGNED_STRING("AcScreenMenu"),
 
-    .w40_code = "X`b",
+    .X_code_2 = "X`b",
 
-    .w40_name = ALIGNED_STRING("AcModeMenu"),
+    .AcModeMenu_name = ALIGNED_STRING("AcModeMenu"),
 
-    .w41_code = ALIGNED_STRING("fX"),
+    .FX_code = ALIGNED_STRING("fX"),
 
-    .w41_name = "VwWideESBox",
+    .VwWideESBox_name = "VwWideESBox",
 
-    .w42_code = ALIGNED_STRING("fX"),
+    .FX_code_2 = ALIGNED_STRING("fX"),
 
-    .w42_name = "VwEditSwBox",
+    .VwEditSwBox_name = "VwEditSwBox",
 
-    .w43_code = ALIGNED_STRING("Xb"),
+    .Xb_code = ALIGNED_STRING("Xb"),
 
-    .w43_name = "VwMenuBox",
+    .VwMenuBox_name = "VwMenuBox",
 
-    .w44_code = ALIGNED_STRING("ue"),
+    .Ue_code = ALIGNED_STRING("ue"),
 
-    .w44_name = ALIGNED_STRING("AcMixerVol"),
+    .AcMixerVol_name = ALIGNED_STRING("AcMixerVol"),
 
     .w45_code = ALIGNED_STRING(""),
 
-    .w45_name = ALIGNED_STRING("AcPmemName"),
+    .AcPmemName_name = ALIGNED_STRING("AcPmemName"),
 
     .w46_code = ALIGNED_STRING(""),
 
-    .w46_name = ALIGNED_STRING("AcRhythmName"),
+    .AcRhythmName_name = ALIGNED_STRING("AcRhythmName"),
 
-    .w47_code = "akNlX",
+    .AkNlX_code = "akNlX",
 
-    .w47_name = "TitleEdit",
+    .TitleEdit_name = "TitleEdit",
 
-    .w48_code = "`kalX",
+    .KalX_code = "`kalX",
 
-    .w48_name = ALIGNED_STRING("ModeEdit"),
+    .ModeEdit_name = ALIGNED_STRING("ModeEdit"),
 
-    .w49_code = ALIGNED_STRING("Xc^d"),
+    .Xc_code = ALIGNED_STRING("Xc^d"),
 
-    .w49_name = "StringBox",
+    .StringBox_name = "StringBox",
 
-    .w50_code = "Xc^dB",
+    .XcDB_code = "Xc^dB",
 
-    .w50_name = "TextBox",
+    .TextBox_name = "TextBox",
 
-    .w51_code = "Grr",
+    .Grr_code = "Grr",
 
-    .w51_name = ALIGNED_STRING("Window"),
+    .Window_name = ALIGNED_STRING("Window"),
 
-    .w52_code = ALIGNED_STRING("Xb"),
+    .Xb_code_2 = ALIGNED_STRING("Xb"),
 
-    .w52_name = "TtlScreen",
+    .TtlScreen_name = "TtlScreen",
 
-    .w53_code = ALIGNED_STRING("ar"),
+    .Ar_code = ALIGNED_STRING("ar"),
 
-    .w53_name = ALIGNED_STRING("Screen"),
+    .Screen_name = ALIGNED_STRING("Screen"),
 
     .w54_code = ALIGNED_STRING(""),
 
-    .w54_name = ALIGNED_STRING("GroupBox"),
+    .GroupBox_name = ALIGNED_STRING("GroupBox"),
 
     .str_2 = ALIGNED_STRING("^_"),
 
     .Box_str = "Box",
 
-    .w55_code = "ejA",
+    .EjA_code = "ejA",
 
-    .w55_name = ALIGNED_STRING("EditSw"),
+    .EditSw_name = ALIGNED_STRING("EditSw"),
 
-    .w56_code = "hA^",
+    .HA_code = "hA^",
 
-    .w56_name = "Frame",
+    .Frame_name = "Frame",
 
     .w57_code = ALIGNED_STRING("^g"),
 
-    .w57_name = ALIGNED_STRING("Line"),
+    .Line_name = ALIGNED_STRING("Line"),
 
     .w58_code = "b",
 
-    .w58_name = ALIGNED_STRING("Icon"),
+    .Icon_name = ALIGNED_STRING("Icon"),
 
     .w59_code = "i",
 
-    .w59_name = ALIGNED_STRING("Bitmap"),
+    .Bitmap_name = ALIGNED_STRING("Bitmap"),
 
-    .w60_code = "Xc^",
+    .Xc_code_2 = "Xc^",
 
-    .w60_name = "Label",
+    .Label_name = "Label",
 
     .w61_code = "u",
 
-    .w61_name = "AcSoundName",
+    .AcSoundName_name = "AcSoundName",
 
     .w62_code = "k",
 
-    .w62_name = ALIGNED_STRING("IvMainEditSw"),
+    .IvMainEditSw_name = ALIGNED_STRING("IvMainEditSw"),
 
-    .w63_code = ALIGNED_STRING("At"),
+    .At_code = ALIGNED_STRING("At"),
 
-    .w63_name = "IvPageControl",
+    .IvPageControl_name = "IvPageControl",
 
     .w64_code = ALIGNED_STRING(""),
 
-    .w64_name = ALIGNED_STRING("PsInvisibleBox"),
+    .PsInvisibleBox_name = ALIGNED_STRING("PsInvisibleBox"),
 
-    .w65_code = "cXXme",
+    .CXXme_code = "cXXme",
 
-    .w65_name = "PsToggleBox",
+    .PsToggleBox_name = "PsToggleBox",
 
-    .w66_code = ALIGNED_STRING("AA"),
+    .Aa_code_2 = ALIGNED_STRING("AA"),
 
-    .w66_name = ALIGNED_STRING("AcWindowPage"),
+    .AcWindowPage_name = ALIGNED_STRING("AcWindowPage"),
 
     .w67_code = "n",
 
-    .w67_name = "PsPageBox",
+    .PsPageBox_name = "PsPageBox",
 
-    .w68_code = ALIGNED_STRING("fj"),
+    .Fj_code = ALIGNED_STRING("fj"),
 
-    .w68_name = ALIGNED_STRING("AcFuncWideES"),
+    .AcFuncWideES_name = ALIGNED_STRING("AcFuncWideES"),
 
     .w69_code = "f",
 
-    .w69_name = "AcIndexWideES",
+    .AcIndexWideES_name = "AcIndexWideES",
 
     .w70_code = "e",
 
-    .w70_name = "PsWideESBox",
+    .PsWideESBox_name = "PsWideESBox",
 
-    .w71_code = ALIGNED_STRING("fj"),
+    .Fj_code_2 = ALIGNED_STRING("fj"),
 
-    .w71_name = ALIGNED_STRING("AcFuncEditSw"),
+    .AcFuncEditSw_name = ALIGNED_STRING("AcFuncEditSw"),
 
     .w72_code = "f",
 
-    .w72_name = "AcIndexEditSw",
+    .AcIndexEditSw_name = "AcIndexEditSw",
 
-    .w73_code = ALIGNED_STRING("c^de"),
+    .De_code = ALIGNED_STRING("c^de"),
 
-    .w73_name = "PsEditSwBox",
+    .PsEditSwBox_name = "PsEditSwBox",
 
-    .w74_code = "Xab",
+    .Xab_code = "Xab",
 
-    .w74_name = "AcTitleMenu",
+    .AcTitleMenu_name = "AcTitleMenu",
 
-    .w75_code = "c^dem",
+    .Dem_code = "c^dem",
 
-    .w75_name = "PsMenuBox",
+    .PsMenuBox_name = "PsMenuBox",
 
-    .w76_code = ALIGNED_STRING("jr"),
+    .Jr_code_2 = ALIGNED_STRING("jr"),
 
-    .w76_name = ALIGNED_STRING("AcRamEditBox"),
+    .AcRamEditBox_name = ALIGNED_STRING("AcRamEditBox"),
 
-    .w77_code = ALIGNED_STRING("jn"),
+    .Jn_code = ALIGNED_STRING("jn"),
 
-    .w77_name = ALIGNED_STRING("AcLswEditBox"),
+    .AcLswEditBox_name = ALIGNED_STRING("AcLswEditBox"),
 
-    .w78_code = ALIGNED_STRING("nAAAAA"),
+    .NAAAAA_code = ALIGNED_STRING("nAAAAA"),
 
-    .w78_name = ALIGNED_STRING("AcNumEditBox"),
+    .AcNumEditBox_name = ALIGNED_STRING("AcNumEditBox"),
 
     .w79_code = "m",
 
-    .w79_name = ALIGNED_STRING("AcOnOffBox"),
+    .AcOnOffBox_name = ALIGNED_STRING("AcOnOffBox"),
 
     .w80_code = "j",
 
-    .w80_name = ALIGNED_STRING("PsTblEditBox"),
+    .PsTblEditBox_name = ALIGNED_STRING("PsTblEditBox"),
 
-    .w81_code = "A",
+    .A_code = "A",
 
-    .w81_name = ALIGNED_STRING("PsNumEditBox"),
+    .PsNumEditBox_name = ALIGNED_STRING("PsNumEditBox"),
 
-    .w82_code = ALIGNED_STRING("Xc^dBeGm"),
+    .XcDBeGm_code = ALIGNED_STRING("Xc^dBeGm"),
 
-    .w82_name = "PsEditBox",
+    .PsEditBox_name = "PsEditBox",
 
     .w83_code = ALIGNED_STRING(""),
 
-    .w83_name = ALIGNED_STRING("AcTempoBox"),
+    .AcTempoBox_name = ALIGNED_STRING("AcTempoBox"),
 
-    .w84_code = ALIGNED_STRING("jn"),
+    .Jn_code_2 = ALIGNED_STRING("jn"),
 
-    .w84_name = ALIGNED_STRING("AcLswBox"),
+    .AcLswBox_name = ALIGNED_STRING("AcLswBox"),
 
     .w85_code = "c^d",
 
-    .w85_name = "PsParaBox",
+    .PsParaBox_name = "PsParaBox",
 
     .A_str = "^_A",
 
@@ -2066,45 +2066,45 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .Viewable_str = ALIGNED_STRING("Viewable"),
 
-    .w86_code = "X",
+    .X_code_3 = "X",
 
-    .w86_name = "ResName",
+    .ResName_name = "ResName",
 
-    .w87_code = "B",
+    .B_code = "B",
 
-    .w87_name = "ResString",
+    .ResString_name = "ResString",
 
-    .w88_code = "X",
+    .X_code_4 = "X",
 
-    .w88_name = "ResMethod",
+    .ResMethod_name = "ResMethod",
 
-    .w89_code = "X",
+    .X_code_5 = "X",
 
-    .w89_name = ALIGNED_STRING("ResEvent"),
+    .ResEvent_name = ALIGNED_STRING("ResEvent"),
 
-    .w90_code = "B",
+    .B_code_2 = "B",
 
-    .w90_name = "ResFont",
+    .ResFont_name = "ResFont",
 
-    .w91_code = "B",
+    .B_code_3 = "B",
 
-    .w91_name = "ResIcon",
+    .ResIcon_name = "ResIcon",
 
-    .w92_code = "B",
+    .B_code_4 = "B",
 
-    .w92_name = ALIGNED_STRING("ResFrame"),
+    .ResFrame_name = ALIGNED_STRING("ResFrame"),
 
-    .w93_code = "B",
+    .B_code_5 = "B",
 
-    .w93_name = "ResBitmap",
+    .ResBitmap_name = "ResBitmap",
 
-    .w94_code = "kNlXNAA",
+    .KNlXNAA_code = "kNlXNAA",
 
-    .w94_name = "Title",
+    .Title_name = "Title",
 
-    .w95_code = ALIGNED_STRING("kalX"),
+    .KalX_code_2 = ALIGNED_STRING("kalX"),
 
-    .w95_name = ALIGNED_STRING("Mode"),
+    .Mode_name = ALIGNED_STRING("Mode"),
 
     .JBBK_str = ALIGNED_STRING("JBBK"),
 
@@ -2116,19 +2116,19 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w96_code = ALIGNED_STRING(""),
 
-    .w96_name = ALIGNED_STRING("MainFunction"),
+    .MainFunction_name = ALIGNED_STRING("MainFunction"),
 
     .w97_code = ALIGNED_STRING(""),
 
-    .w97_name = ALIGNED_STRING("ApFunction"),
+    .ApFunction_name = ALIGNED_STRING("ApFunction"),
 
-    .w98_code = "I",
+    .I_code = "I",
 
-    .w98_name = ALIGNED_STRING("Function"),
+    .Function_name = ALIGNED_STRING("Function"),
 
     .w99_code = ALIGNED_STRING(""),
 
-    .w99_name = ALIGNED_STRING("Object"),
+    .Object_name = ALIGNED_STRING("Object"),
 
     .m_str = "m",
 
@@ -2180,36 +2180,36 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .ptrs_0 = {
         SELF(Round1a_str),
-        SELF(w121_name),
-        SELF(w121_code),
-        SELF(w120_name),
-        SELF(w120_code),
-        SELF(w119_name),
-        SELF(w119_code),
-        SELF(w118_name),
-        SELF(w118_code),
-        SELF(w117_name),
-        SELF(w117_code),
-        SELF(w116_name),
-        SELF(w116_code),
-        SELF(w115_name),
-        SELF(w115_code),
-        SELF(w114_name),
-        SELF(w114_code),
-        SELF(w113_name),
-        SELF(w113_code),
-        SELF(w112_name),
-        SELF(w112_code),
-        SELF(w111_name),
-        SELF(w111_code),
-        SELF(w110_name),
-        SELF(w110_code),
-        SELF(w109_name),
-        SELF(w109_code),
-        SELF(w108_name),
-        SELF(w108_code),
-        SELF(w107_name),
-        SELF(w107_code),
+        SELF(Round1b_name),
+        SELF(Round1c_code),
+        SELF(Round1d_name),
+        SELF(Round2a_code),
+        SELF(Round2b_name),
+        SELF(Round2c_code),
+        SELF(Round2d_name),
+        SELF(Round5a_code),
+        SELF(Round5b_name),
+        SELF(Round5c_code),
+        SELF(Round5d_name),
+        SELF(Round9a_code),
+        SELF(Round9b_name),
+        SELF(Round9c_code),
+        SELF(Round9d_name),
+        SELF(Round14a_code),
+        SELF(Round14b_name),
+        SELF(Round14c_code),
+        SELF(Round14d_name),
+        SELF(Right12_code),
+        SELF(Right16_name),
+        SELF(Right24_code),
+        SELF(Right32_name),
+        SELF(Right48_code),
+        SELF(Left12_name),
+        SELF(Left16_code),
+        SELF(Left24_name),
+        SELF(Left32_code),
+        SELF(Left48_name),
+        SELF(LOnOff16_code),
         SELF(LOnOff24_str),
         SELF(LOnOff32_str),
         SELF(LOnOff48_str),
@@ -2219,19 +2219,19 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(ROnOff48_str),
         SELF(LeftSwitch_str),
         SELF(RightSwitch_str),
-        SELF(w106_name),
-        SELF(w106_code),
-        SELF(w105_name),
-        SELF(w105_code),
-        SELF(w104_name),
-        SELF(w104_code),
-        SELF(w103_name),
-        SELF(w103_code),
-        SELF(w102_name),
-        SELF(w102_code),
-        SELF(w101_name),
-        SELF(w101_code),
-        SELF(w100_name),
+        SELF(EditA_name),
+        SELF(EditB_code),
+        SELF(EditC_name),
+        SELF(EditD_code),
+        SELF(Edit95A_name),
+        SELF(Edit95B_code),
+        SELF(Edit95C_name),
+        SELF(Edit95D_code),
+        SELF(EditDA_name),
+        SELF(EditDB_code),
+        SELF(EditDC_name),
+        SELF(EditDD_code),
+        SELF(MixerTab_name),
         SELF(w100_code),
         0x00000000,
         0x00000000,
@@ -2439,31 +2439,31 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w100_code = ALIGNED_STRING(""),
 
-    .w100_name = ALIGNED_STRING("MixerTab"),
+    .MixerTab_name = ALIGNED_STRING("MixerTab"),
 
-    .w101_code = ALIGNED_STRING("EditDD"),
+    .EditDD_code = ALIGNED_STRING("EditDD"),
 
-    .w101_name = ALIGNED_STRING("EditDC"),
+    .EditDC_name = ALIGNED_STRING("EditDC"),
 
-    .w102_code = ALIGNED_STRING("EditDB"),
+    .EditDB_code = ALIGNED_STRING("EditDB"),
 
-    .w102_name = ALIGNED_STRING("EditDA"),
+    .EditDA_name = ALIGNED_STRING("EditDA"),
 
-    .w103_code = "Edit95D",
+    .Edit95D_code = "Edit95D",
 
-    .w103_name = "Edit95C",
+    .Edit95C_name = "Edit95C",
 
-    .w104_code = "Edit95B",
+    .Edit95B_code = "Edit95B",
 
-    .w104_name = "Edit95A",
+    .Edit95A_name = "Edit95A",
 
-    .w105_code = "EditD",
+    .EditD_code = "EditD",
 
-    .w105_name = "EditC",
+    .EditC_name = "EditC",
 
-    .w106_code = "EditB",
+    .EditB_code = "EditB",
 
-    .w106_name = "EditA",
+    .EditA_name = "EditA",
 
     .RightSwitch_str = "RightSwitch",
 
@@ -2483,73 +2483,73 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .LOnOff24_str = ALIGNED_STRING("LOnOff24"),
 
-    .w107_code = ALIGNED_STRING("LOnOff16"),
+    .LOnOff16_code = ALIGNED_STRING("LOnOff16"),
 
-    .w107_name = ALIGNED_STRING("Left48"),
+    .Left48_name = ALIGNED_STRING("Left48"),
 
-    .w108_code = ALIGNED_STRING("Left32"),
+    .Left32_code = ALIGNED_STRING("Left32"),
 
-    .w108_name = ALIGNED_STRING("Left24"),
+    .Left24_name = ALIGNED_STRING("Left24"),
 
-    .w109_code = ALIGNED_STRING("Left16"),
+    .Left16_code = ALIGNED_STRING("Left16"),
 
-    .w109_name = ALIGNED_STRING("Left12"),
+    .Left12_name = ALIGNED_STRING("Left12"),
 
-    .w110_code = "Right48",
+    .Right48_code = "Right48",
 
-    .w110_name = "Right32",
+    .Right32_name = "Right32",
 
-    .w111_code = "Right24",
+    .Right24_code = "Right24",
 
-    .w111_name = "Right16",
+    .Right16_name = "Right16",
 
-    .w112_code = "Right12",
+    .Right12_code = "Right12",
 
-    .w112_name = ALIGNED_STRING("Round14d"),
+    .Round14d_name = ALIGNED_STRING("Round14d"),
 
-    .w113_code = ALIGNED_STRING("Round14c"),
+    .Round14c_code = ALIGNED_STRING("Round14c"),
 
-    .w113_name = ALIGNED_STRING("Round14b"),
+    .Round14b_name = ALIGNED_STRING("Round14b"),
 
-    .w114_code = ALIGNED_STRING("Round14a"),
+    .Round14a_code = ALIGNED_STRING("Round14a"),
 
-    .w114_name = "Round9d",
+    .Round9d_name = "Round9d",
 
-    .w115_code = "Round9c",
+    .Round9c_code = "Round9c",
 
-    .w115_name = "Round9b",
+    .Round9b_name = "Round9b",
 
-    .w116_code = "Round9a",
+    .Round9a_code = "Round9a",
 
-    .w116_name = "Round5d",
+    .Round5d_name = "Round5d",
 
-    .w117_code = "Round5c",
+    .Round5c_code = "Round5c",
 
-    .w117_name = "Round5b",
+    .Round5b_name = "Round5b",
 
-    .w118_code = "Round5a",
+    .Round5a_code = "Round5a",
 
-    .w118_name = "Round2d",
+    .Round2d_name = "Round2d",
 
-    .w119_code = "Round2c",
+    .Round2c_code = "Round2c",
 
-    .w119_name = "Round2b",
+    .Round2b_name = "Round2b",
 
-    .w120_code = "Round2a",
+    .Round2a_code = "Round2a",
 
-    .w120_name = "Round1d",
+    .Round1d_name = "Round1d",
 
-    .w121_code = "Round1c",
+    .Round1c_code = "Round1c",
 
-    .w121_name = "Round1b",
+    .Round1b_name = "Round1b",
 
     .Round1a_str = "Round1a",
 
     .ptrs_1 = {
-        SELF(w131_name),
-        SELF(w131_code),
-        SELF(w130_name),
-        SELF(w130_code),
+        SELF(Round1Bmp_name_2),
+        SELF(Round1Bmp_code_2),
+        SELF(Round1Bmp_name),
+        SELF(Round1Bmp_code),
         SELF(Round2aBmp_str),
         SELF(Round2bBmp_str),
         SELF(Round2cBmp_str),
@@ -2570,12 +2570,12 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(Right16Bmp_str),
         SELF(Right24Bmp_str),
         SELF(Right32Bmp_str),
-        SELF(w129_name),
-        SELF(w129_code),
-        SELF(w128_name),
-        SELF(w128_code),
-        SELF(w127_name),
-        SELF(w127_code),
+        SELF(Right48Bmp_name),
+        SELF(Left12Bmp_code),
+        SELF(Left16Bmp_name),
+        SELF(Left24Bmp_code),
+        SELF(Left32Bmp_name),
+        SELF(Left48Bmp_code),
         SELF(LOnOff16Bmp_str),
         SELF(LOnOff24Bmp_str),
         SELF(LOnOff32Bmp_str),
@@ -2586,19 +2586,19 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(ROnOff48Bmp_str),
         SELF(LeftSwBmp_str),
         SELF(RightSwBmp_str),
-        SELF(w126_name),
-        SELF(w126_code),
-        SELF(w125_name),
-        SELF(w125_code),
+        SELF(EditABmp_name),
+        SELF(EditBBmp_code),
+        SELF(EditCBmp_name),
+        SELF(EditDBmp_code),
         SELF(Edit95ABmp_str),
         SELF(Edit95BBmp_str),
         SELF(Edit95CBmp_str),
         SELF(Edit95DBmp_str),
-        SELF(w124_name),
-        SELF(w124_code),
-        SELF(w123_name),
-        SELF(w123_code),
-        SELF(w122_name),
+        SELF(EditDABmp_name),
+        SELF(EditDBBmp_code),
+        SELF(EditDCBmp_name),
+        SELF(EditDDBmp_code),
+        SELF(MixertabBmp_name),
         SELF(w122_code),
         0x00000000,
         0x00000000,
@@ -2806,15 +2806,15 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w122_code = ALIGNED_STRING(""),
 
-    .w122_name = ALIGNED_STRING("Mixertab.bmp"),
+    .MixertabBmp_name = ALIGNED_STRING("Mixertab.bmp"),
 
-    .w123_code = ALIGNED_STRING("EditDD.bmp"),
+    .EditDDBmp_code = ALIGNED_STRING("EditDD.bmp"),
 
-    .w123_name = ALIGNED_STRING("EditDC.bmp"),
+    .EditDCBmp_name = ALIGNED_STRING("EditDC.bmp"),
 
-    .w124_code = ALIGNED_STRING("EditDB.bmp"),
+    .EditDBBmp_code = ALIGNED_STRING("EditDB.bmp"),
 
-    .w124_name = ALIGNED_STRING("EditDA.bmp"),
+    .EditDABmp_name = ALIGNED_STRING("EditDA.bmp"),
 
     .Edit95DBmp_str = "Edit95D.bmp",
 
@@ -2824,13 +2824,13 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .Edit95ABmp_str = "Edit95A.bmp",
 
-    .w125_code = "EditD.bmp",
+    .EditDBmp_code = "EditD.bmp",
 
-    .w125_name = "EditC.bmp",
+    .EditCBmp_name = "EditC.bmp",
 
-    .w126_code = "EditB.bmp",
+    .EditBBmp_code = "EditB.bmp",
 
-    .w126_name = "EditA.bmp",
+    .EditABmp_name = "EditA.bmp",
 
     .RightSwBmp_str = "RightSw.bmp",
 
@@ -2852,17 +2852,17 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .LOnOff16Bmp_str = ALIGNED_STRING("LOnOff16.bmp"),
 
-    .w127_code = ALIGNED_STRING("Left48.bmp"),
+    .Left48Bmp_code = ALIGNED_STRING("Left48.bmp"),
 
-    .w127_name = ALIGNED_STRING("Left32.bmp"),
+    .Left32Bmp_name = ALIGNED_STRING("Left32.bmp"),
 
-    .w128_code = ALIGNED_STRING("Left24.bmp"),
+    .Left24Bmp_code = ALIGNED_STRING("Left24.bmp"),
 
-    .w128_name = ALIGNED_STRING("Left16.bmp"),
+    .Left16Bmp_name = ALIGNED_STRING("Left16.bmp"),
 
-    .w129_code = ALIGNED_STRING("Left12.bmp"),
+    .Left12Bmp_code = ALIGNED_STRING("Left12.bmp"),
 
-    .w129_name = "Right48.bmp",
+    .Right48Bmp_name = "Right48.bmp",
 
     .Right32Bmp_str = "Right32.bmp",
 
@@ -2904,13 +2904,13 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .Round2aBmp_str = "Round2a.bmp",
 
-    .w130_code = ALIGNED_STRING("Round1.bmp"),
+    .Round1Bmp_code = ALIGNED_STRING("Round1.bmp"),
 
-    .w130_name = ALIGNED_STRING("Round1.bmp"),
+    .Round1Bmp_name = ALIGNED_STRING("Round1.bmp"),
 
-    .w131_code = ALIGNED_STRING("Round1.bmp"),
+    .Round1Bmp_code_2 = ALIGNED_STRING("Round1.bmp"),
 
-    .w131_name = ALIGNED_STRING("Round1.bmp"),
+    .Round1Bmp_name_2 = ALIGNED_STRING("Round1.bmp"),
 
     .ptrs_2 = {
         SELF(EV_NONE_str),
@@ -4057,26 +4057,26 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(InitializeGraphics_str),
         SELF(UpdateScreen_str),
         SELF(SetNeedUpdate_str),
-        SELF(w188_name),
-        SELF(w188_code),
+        SELF(SetChangeRect_name),
+        SELF(ReadPixel_code),
         SELF(ModifyPixel_str),
         SELF(ModifyPixelEx_str),
-        SELF(w187_name),
-        SELF(w187_code),
-        SELF(w186_name),
-        SELF(w186_code),
+        SELF(DrawLine_name),
+        SELF(DrawLineEx_code),
+        SELF(DrawBox_name),
+        SELF(DrawFrame_code),
         SELF(DrawFrameEx_str),
-        SELF(w185_name),
-        SELF(w185_code),
-        SELF(w184_name),
-        SELF(w184_code),
-        SELF(w183_name),
-        SELF(w183_code),
+        SELF(MovePixels_name),
+        SELF(DrawWall_code),
+        SELF(DrawBitmap_name),
+        SELF(DrawIcons_code),
+        SELF(DrawFrameSP_name),
+        SELF(DrawString_code),
         SELF(DrawStringCentered_str),
         SELF(DrawStringLeftJustify_str),
         SELF(DrawStringRightJustify_str),
-        SELF(w182_name),
-        SELF(w182_code),
+        SELF(DrawStringAlignment_name),
+        SELF(ObjectProc_code),
         SELF(InheritedProc_str),
         SELF(InitializeObjectTable_str),
         SELF(RegisterObjectTable_str),
@@ -4085,10 +4085,10 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(CountObject_str),
         SELF(CheckViewObject_str),
         SELF(InitializeEventQueue_str),
-        SELF(w181_name),
-        SELF(w181_code),
-        SELF(w180_name),
-        SELF(w180_code),
+        SELF(DispatchEvent_name),
+        SELF(SendEvent_code),
+        SELF(PostEvent_name),
+        SELF(GetEvent_code),
         SELF(GetCurrentTarget_str),
         SELF(SetCurrentTarget_str),
         SELF(MainDispatchEvent_str),
@@ -4111,10 +4111,10 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(GetCenteredDelta_str),
         SELF(ConvertStrings_str),
         SELF(CalcTotalWidth_str),
-        SELF(w179_name),
-        SELF(w179_code),
-        SELF(w178_name),
-        SELF(w178_code),
+        SELF(WordwrapStrings_name),
+        SELF(ClassProc_code),
+        SELF(SupportClassProc_name),
+        SELF(SwordProc_code),
         SELF(uwordProc_str),
         SELF(ucharProc_str),
         SELF(scharProc_str),
@@ -4128,34 +4128,34 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(pUcharProc_str),
         SELF(pSlongProc_str),
         SELF(pUlongProc_str),
-        SELF(w177_name),
-        SELF(w177_code),
+        SELF(ObjectIDProc_name),
+        SELF(PFuncProc_code),
         SELF(pProcProc_str),
         SELF(pPropProc_str),
         SELF(pStringProc_str),
         SELF(ClassIDProc_str),
         SELF(ScreenIDProc_str),
         SELF(WindowIDProc_str),
-        SELF(w176_name),
-        SELF(w176_code),
+        SELF(EventIDProc_name),
+        SELF(RECTWProc_code),
         SELF(RectX1Proc_str),
-        SELF(w175_name),
-        SELF(w175_code),
-        SELF(w174_name),
-        SELF(w174_code),
-        SELF(w173_name),
-        SELF(w173_code),
-        SELF(w172_name),
-        SELF(w172_code),
-        SELF(w171_name),
-        SELF(w171_code),
+        SELF(RectY1Proc_name),
+        SELF(RectX2Proc_code),
+        SELF(RectY2Proc_name),
+        SELF(POINTWProc_code),
+        SELF(PointXProc_name),
+        SELF(PointYProc_code),
+        SELF(StringProc_name),
+        SELF(NameProc_code),
+        SELF(ConstFlagProc_name),
+        SELF(ViewIDProc_code),
         SELF(ViewFlagProc_str),
         SELF(ColorIDProc_str),
-        SELF(w170_name),
-        SELF(w170_code),
+        SELF(BorderIDProc_name),
+        SELF(ModeIDProc_code),
         SELF(TitleIDProc_str),
-        SELF(w169_name),
-        SELF(w169_code),
+        SELF(IconIDProc_name),
+        SELF(FontIDProc_code),
         SELF(AlignmentIDProc_str),
         SELF(EditSwIDProc_str),
         SELF(EditSwStyleIDProc_str),
@@ -4164,83 +4164,83 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(BitmapIDProc_str),
         SELF(ApFuncIDProc_str),
         SELF(MainFuncIDProc_str),
-        SELF(w168_name),
-        SELF(w168_code),
+        SELF(UserIDProc_name),
+        SELF(PartIDProc_code),
         SELF(TrackIDProc_str),
         SELF(FunctionProc_str),
         SELF(ApFunctionProc_str),
-        SELF(w167_name),
-        SELF(w167_code),
-        SELF(w166_name),
-        SELF(w166_code),
+        SELF(MainFunctionProc_name),
+        SELF(ApFuncCall_code),
+        SELF(MainFuncCall_name),
+        SELF(ModeProc_code),
         SELF(RegisterMode_str),
-        SELF(w165_name),
-        SELF(w165_code),
-        SELF(w164_name),
-        SELF(w164_code),
+        SELF(UnregisteredMode_name),
+        SELF(GetModeNow_code),
+        SELF(GetModeOld_name),
+        SELF(TitleProc_code),
         SELF(RegisterTitle_str),
         SELF(UnregisteredTitle_str),
         SELF(GetTitleNow_str),
         SELF(GetTitleOld_str),
         SELF(ViewableProc_str),
-        SELF(w163_name),
-        SELF(w163_code),
-        SELF(w162_name),
-        SELF(w162_code),
-        SELF(w161_name),
-        SELF(w161_code),
-        SELF(w160_name),
-        SELF(w160_code),
-        SELF(w159_name),
-        SELF(w159_code),
-        SELF(w158_name),
-        SELF(w158_code),
-        SELF(w157_name),
-        SELF(w157_code),
+        SELF(SetConst_name),
+        SELF(GetConst_code),
+        SELF(SetChange_name),
+        SELF(GetChange_code),
+        SELF(SetVisible_name),
+        SELF(GetVisible_code),
+        SELF(SetMovable_name),
+        SELF(GetMovable_code),
+        SELF(NextView_name),
+        SELF(PrevView_code),
+        SELF(SuperView_name),
+        SELF(SubView_code),
+        SELF(Link_name),
+        SELF(Unlink_code),
         SELF(SetSuperView_str),
         SELF(GetLinkView_str),
-        SELF(w156_name),
-        SELF(w156_code),
-        SELF(w155_name),
-        SELF(w155_code),
+        SELF(GetViewInstance_name),
+        SELF(GetBox_code),
+        SELF(SetBox_name),
+        SELF(BoxProc_code),
         SELF(GetClientBox_str),
         SELF(GetClientBox2_str),
         SELF(DrawDesignBox_str),
         SELF(GetFrameColor_str),
         SELF(BoxLeftCheck_str),
-        SELF(w154_name),
-        SELF(w154_code),
-        SELF(w153_name),
-        SELF(w153_code),
+        SELF(BoxRightCheck_name),
+        SELF(ScreenProc_code),
+        SELF(GetEditSwPoint_name),
+        SELF(FrameProc_code),
         SELF(GetClientFrame_str),
         SELF(GetClientFrame2_str),
         SELF(DrawDesignFrame_str),
         SELF(TtlScreenProc_str),
-        SELF(w152_name),
-        SELF(w152_code),
-        SELF(w151_name),
-        SELF(w151_code),
-        SELF(w150_name),
-        SELF(w150_code),
-        SELF(w149_name),
-        SELF(w149_code),
+        SELF(DrawTitleBar_name),
+        SELF(EditSwProc_code),
+        SELF(DrawEditSw_name),
+        SELF(MainLswPut_code),
+        SELF(MainLswPartPut_name),
+        SELF(MainLswAdd_code),
+        SELF(MainLswPartAdd_name),
+        SELF(MainLswGet_code),
         SELF(MainLswPartGet_str),
         SELF(SetLswFilter_str),
-        SELF(w148_name),
-        SELF(w148_code),
-        SELF(w147_name),
-        SELF(w147_code),
+        SELF(ResetLswFilter_name),
+        SELF(MainRamPut_code),
+        SELF(MainRamAdd_name),
+        SELF(MainRamGet_code),
         SELF(ModeEditProc_str),
         SELF(TitleEditProc_str),
-        SELF(w146_name),
-        SELF(w146_code),
+        SELF(GroupBoxProc_name),
+        SELF(WindowProc_code),
         SELF(StringBoxProc_str),
-        SELF(w145_name),
-        SELF(w145_code),
-        SELF(w144_name),
-        SELF(w144_code),
-        SELF(w143_name),
-        SELF(w143_code),
+        SELF(LabelProc_name),
+        SELF(BitmapProc_code),
+        SELF(IconProc_name),
+        SELF(LineProc_code),
+        SELF(TextBoxProc_name),
+        SELF(VwBoxProc_code),
         SELF(PsParaBoxProc_str),
         SELF(AcLswBoxProc_str),
         SELF(AcTempoBoxProc_str),
@@ -4263,8 +4263,8 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(PsInvisibleBoxProc_str),
         SELF(IvPageControlProc_str),
         SELF(IvMainEditSwProc_str),
-        SELF(w142_name),
-        SELF(w142_code),
+        SELF(SetDialEnable_name),
+        SELF(SetDialUp_code),
         SELF(SetDialDown_str),
         SELF(ChangeWallPalette_str),
         SELF(GetWallPaletteRGB_str),
@@ -4275,26 +4275,26 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(VwMenuBoxProc_str),
         SELF(VwEditSwBoxProc_str),
         SELF(AcBitEditBoxProc_str),
-        SELF(w141_name),
-        SELF(w141_code),
+        SELF(MainBitPut_name),
+        SELF(MainBitGet_code),
         SELF(AcFuncToggleProc_str),
-        SELF(w140_name),
-        SELF(w140_code),
+        SELF(PsWideToggleProc_name),
+        SELF(DbMemoProc_code),
         SELF(InitializeTimer_str),
-        SELF(w139_name),
-        SELF(w139_code),
+        SELF(ApTimer_name),
+        SELF(SetApTimer_code),
         SELF(ResetApTimer_str),
         SELF(KillApTimer_str),
         SELF(GetRootObject_str),
         SELF(GetRootEvent_str),
         SELF(GetRootParam_str),
-        SELF(w138_name),
-        SELF(w138_code),
+        SELF(SetAutoIncDefault_name),
+        SELF(SetAutoInc_code),
         SELF(SetRootObject_str),
         SELF(GetFocusObject_str),
         SELF(GetFocusEvent_str),
-        SELF(w137_name),
-        SELF(w137_code),
+        SELF(GetFocusParam_name),
+        SELF(IvExitProc_code),
         SELF(IvExitModeProc_str),
         SELF(IvExitScreenProc_str),
         SELF(DrawStringReverse_str),
@@ -4342,8 +4342,8 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(TrChordBoxProc_str),
         SELF(GetPartSelect_str),
         SELF(DrawBitmapSP_str),
-        SELF(w136_name),
-        SELF(w136_code),
+        SELF(VwUserBitmapProc_name),
+        SELF(CaptureLcd_code),
         SELF(IvScreenProc_str),
         SELF(GetNamingWindowID_str),
         SELF(DrawBitmapSPFast_str),
@@ -4352,8 +4352,8 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(InitPaletteRGB_str),
         SELF(SetWallPaper_str),
         SELF(SetWallColor_str),
-        SELF(w135_name),
-        SELF(w135_code),
+        SELF(IvIntWelcomeProc_name),
+        SELF(FuncCall_code),
         SELF(DeleteSpecificEvent_str),
         SELF(DeleteEvent_str),
         SELF(SleepMainTask_str),
@@ -4364,30 +4364,30 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(ApDeliveryEvent_str),
         SELF(VwUserBitmapByNameProc_str),
         SELF(DrawBitmapFile_str),
-        SELF(w134_name),
-        SELF(w134_code),
+        SELF(LcdOff_name),
+        SELF(LcdOn_code),
         SELF(RefreshSwEvent_str),
         SELF(InitDrawTask_str),
         SELF(SetRootEvent_str),
-        SELF(w133_name),
-        SELF(w133_code),
+        SELF(SetRootParam_name),
+        SELF(DrawFunc_code),
         SELF(MainDeleteSpecificEvent_str),
         SELF(MainDeleteEvent_str),
-        SELF(w132_name),
+        SELF(DrawBitmapSP2_name),
         SELF(w132_code),
     },
 
     .w132_code = ALIGNED_STRING(""),
 
-    .w132_name = "DrawBitmapSP2",
+    .DrawBitmapSP2_name = "DrawBitmapSP2",
 
     .MainDeleteEvent_str = "MainDeleteEvent",
 
     .MainDeleteSpecificEvent_str = "MainDeleteSpecificEvent",
 
-    .w133_code = ALIGNED_STRING("DrawFunc"),
+    .DrawFunc_code = ALIGNED_STRING("DrawFunc"),
 
-    .w133_name = ALIGNED_STRING("SetRootParam"),
+    .SetRootParam_name = ALIGNED_STRING("SetRootParam"),
 
     .SetRootEvent_str = ALIGNED_STRING("SetRootEvent"),
 
@@ -4395,9 +4395,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .RefreshSwEvent_str = ALIGNED_STRING("RefreshSwEvent"),
 
-    .w134_code = "LcdOn",
+    .LcdOn_code = "LcdOn",
 
-    .w134_name = ALIGNED_STRING("LcdOff"),
+    .LcdOff_name = ALIGNED_STRING("LcdOff"),
 
     .DrawBitmapFile_str = ALIGNED_STRING("DrawBitmapFile"),
 
@@ -4419,9 +4419,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .DeleteSpecificEvent_str = "DeleteSpecificEvent",
 
-    .w135_code = ALIGNED_STRING("FuncCall"),
+    .FuncCall_code = ALIGNED_STRING("FuncCall"),
 
-    .w135_name = ALIGNED_STRING("IvIntWelcomeProc"),
+    .IvIntWelcomeProc_name = ALIGNED_STRING("IvIntWelcomeProc"),
 
     .SetWallColor_str = ALIGNED_STRING("SetWallColor"),
 
@@ -4439,9 +4439,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .IvScreenProc_str = ALIGNED_STRING("IvScreenProc"),
 
-    .w136_code = ALIGNED_STRING("CaptureLcd"),
+    .CaptureLcd_code = ALIGNED_STRING("CaptureLcd"),
 
-    .w136_name = ALIGNED_STRING("VwUserBitmapProc"),
+    .VwUserBitmapProc_name = ALIGNED_STRING("VwUserBitmapProc"),
 
     .DrawBitmapSP_str = ALIGNED_STRING("DrawBitmapSP"),
 
@@ -4537,9 +4537,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .IvExitModeProc_str = ALIGNED_STRING("IvExitModeProc"),
 
-    .w137_code = ALIGNED_STRING("IvExitProc"),
+    .IvExitProc_code = ALIGNED_STRING("IvExitProc"),
 
-    .w137_name = "GetFocusParam",
+    .GetFocusParam_name = "GetFocusParam",
 
     .GetFocusEvent_str = "GetFocusEvent",
 
@@ -4547,9 +4547,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .SetRootObject_str = "SetRootObject",
 
-    .w138_code = ALIGNED_STRING("SetAutoInc"),
+    .SetAutoInc_code = ALIGNED_STRING("SetAutoInc"),
 
-    .w138_name = "SetAutoIncDefault",
+    .SetAutoIncDefault_name = "SetAutoIncDefault",
 
     .GetRootParam_str = ALIGNED_STRING("GetRootParam"),
 
@@ -4561,21 +4561,21 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .ResetApTimer_str = ALIGNED_STRING("ResetApTimer"),
 
-    .w139_code = ALIGNED_STRING("SetApTimer"),
+    .SetApTimer_code = ALIGNED_STRING("SetApTimer"),
 
-    .w139_name = "ApTimer",
+    .ApTimer_name = "ApTimer",
 
     .InitializeTimer_str = "InitializeTimer",
 
-    .w140_code = ALIGNED_STRING("DbMemoProc"),
+    .DbMemoProc_code = ALIGNED_STRING("DbMemoProc"),
 
-    .w140_name = ALIGNED_STRING("PsWideToggleProc"),
+    .PsWideToggleProc_name = ALIGNED_STRING("PsWideToggleProc"),
 
     .AcFuncToggleProc_str = ALIGNED_STRING("AcFuncToggleProc"),
 
-    .w141_code = ALIGNED_STRING("MainBitGet"),
+    .MainBitGet_code = ALIGNED_STRING("MainBitGet"),
 
-    .w141_name = ALIGNED_STRING("MainBitPut"),
+    .MainBitPut_name = ALIGNED_STRING("MainBitPut"),
 
     .AcBitEditBoxProc_str = ALIGNED_STRING("AcBitEditBoxProc"),
 
@@ -4597,9 +4597,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .SetDialDown_str = "SetDialDown",
 
-    .w142_code = "SetDialUp",
+    .SetDialUp_code = "SetDialUp",
 
-    .w142_name = "SetDialEnable",
+    .SetDialEnable_name = "SetDialEnable",
 
     .IvMainEditSwProc_str = ALIGNED_STRING("IvMainEditSwProc"),
 
@@ -4645,55 +4645,55 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .PsParaBoxProc_str = "PsParaBoxProc",
 
-    .w143_code = "VwBoxProc",
+    .VwBoxProc_code = "VwBoxProc",
 
-    .w143_name = "TextBoxProc",
+    .TextBoxProc_name = "TextBoxProc",
 
-    .w144_code = ALIGNED_STRING("LineProc"),
+    .LineProc_code = ALIGNED_STRING("LineProc"),
 
-    .w144_name = ALIGNED_STRING("IconProc"),
+    .IconProc_name = ALIGNED_STRING("IconProc"),
 
-    .w145_code = ALIGNED_STRING("BitmapProc"),
+    .BitmapProc_code = ALIGNED_STRING("BitmapProc"),
 
-    .w145_name = "LabelProc",
+    .LabelProc_name = "LabelProc",
 
     .StringBoxProc_str = "StringBoxProc",
 
-    .w146_code = ALIGNED_STRING("WindowProc"),
+    .WindowProc_code = ALIGNED_STRING("WindowProc"),
 
-    .w146_name = ALIGNED_STRING("GroupBoxProc"),
+    .GroupBoxProc_name = ALIGNED_STRING("GroupBoxProc"),
 
     .TitleEditProc_str = "TitleEditProc",
 
     .ModeEditProc_str = ALIGNED_STRING("ModeEditProc"),
 
-    .w147_code = ALIGNED_STRING("MainRamGet"),
+    .MainRamGet_code = ALIGNED_STRING("MainRamGet"),
 
-    .w147_name = ALIGNED_STRING("MainRamAdd"),
+    .MainRamAdd_name = ALIGNED_STRING("MainRamAdd"),
 
-    .w148_code = ALIGNED_STRING("MainRamPut"),
+    .MainRamPut_code = ALIGNED_STRING("MainRamPut"),
 
-    .w148_name = ALIGNED_STRING("ResetLswFilter"),
+    .ResetLswFilter_name = ALIGNED_STRING("ResetLswFilter"),
 
     .SetLswFilter_str = ALIGNED_STRING("SetLswFilter"),
 
     .MainLswPartGet_str = ALIGNED_STRING("MainLswPartGet"),
 
-    .w149_code = ALIGNED_STRING("MainLswGet"),
+    .MainLswGet_code = ALIGNED_STRING("MainLswGet"),
 
-    .w149_name = ALIGNED_STRING("MainLswPartAdd"),
+    .MainLswPartAdd_name = ALIGNED_STRING("MainLswPartAdd"),
 
-    .w150_code = ALIGNED_STRING("MainLswAdd"),
+    .MainLswAdd_code = ALIGNED_STRING("MainLswAdd"),
 
-    .w150_name = ALIGNED_STRING("MainLswPartPut"),
+    .MainLswPartPut_name = ALIGNED_STRING("MainLswPartPut"),
 
-    .w151_code = ALIGNED_STRING("MainLswPut"),
+    .MainLswPut_code = ALIGNED_STRING("MainLswPut"),
 
-    .w151_name = ALIGNED_STRING("DrawEditSw"),
+    .DrawEditSw_name = ALIGNED_STRING("DrawEditSw"),
 
-    .w152_code = ALIGNED_STRING("EditSwProc"),
+    .EditSwProc_code = ALIGNED_STRING("EditSwProc"),
 
-    .w152_name = ALIGNED_STRING("DrawTitleBar"),
+    .DrawTitleBar_name = ALIGNED_STRING("DrawTitleBar"),
 
     .TtlScreenProc_str = "TtlScreenProc",
 
@@ -4703,13 +4703,13 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .GetClientFrame_str = ALIGNED_STRING("GetClientFrame"),
 
-    .w153_code = "FrameProc",
+    .FrameProc_code = "FrameProc",
 
-    .w153_name = ALIGNED_STRING("GetEditSwPoint"),
+    .GetEditSwPoint_name = ALIGNED_STRING("GetEditSwPoint"),
 
-    .w154_code = ALIGNED_STRING("ScreenProc"),
+    .ScreenProc_code = ALIGNED_STRING("ScreenProc"),
 
-    .w154_name = "BoxRightCheck",
+    .BoxRightCheck_name = "BoxRightCheck",
 
     .BoxLeftCheck_str = ALIGNED_STRING("BoxLeftCheck"),
 
@@ -4721,45 +4721,45 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .GetClientBox_str = ALIGNED_STRING("GetClientBox"),
 
-    .w155_code = "BoxProc",
+    .BoxProc_code = "BoxProc",
 
-    .w155_name = ALIGNED_STRING("SetBox"),
+    .SetBox_name = ALIGNED_STRING("SetBox"),
 
-    .w156_code = ALIGNED_STRING("GetBox"),
+    .GetBox_code = ALIGNED_STRING("GetBox"),
 
-    .w156_name = "GetViewInstance",
+    .GetViewInstance_name = "GetViewInstance",
 
     .GetLinkView_str = "GetLinkView",
 
     .SetSuperView_str = ALIGNED_STRING("SetSuperView"),
 
-    .w157_code = ALIGNED_STRING("Unlink"),
+    .Unlink_code = ALIGNED_STRING("Unlink"),
 
-    .w157_name = ALIGNED_STRING("Link"),
+    .Link_name = ALIGNED_STRING("Link"),
 
-    .w158_code = "SubView",
+    .SubView_code = "SubView",
 
-    .w158_name = "SuperView",
+    .SuperView_name = "SuperView",
 
-    .w159_code = ALIGNED_STRING("PrevView"),
+    .PrevView_code = ALIGNED_STRING("PrevView"),
 
-    .w159_name = ALIGNED_STRING("NextView"),
+    .NextView_name = ALIGNED_STRING("NextView"),
 
-    .w160_code = ALIGNED_STRING("GetMovable"),
+    .GetMovable_code = ALIGNED_STRING("GetMovable"),
 
-    .w160_name = ALIGNED_STRING("SetMovable"),
+    .SetMovable_name = ALIGNED_STRING("SetMovable"),
 
-    .w161_code = ALIGNED_STRING("GetVisible"),
+    .GetVisible_code = ALIGNED_STRING("GetVisible"),
 
-    .w161_name = ALIGNED_STRING("SetVisible"),
+    .SetVisible_name = ALIGNED_STRING("SetVisible"),
 
-    .w162_code = "GetChange",
+    .GetChange_code = "GetChange",
 
-    .w162_name = "SetChange",
+    .SetChange_name = "SetChange",
 
-    .w163_code = ALIGNED_STRING("GetConst"),
+    .GetConst_code = ALIGNED_STRING("GetConst"),
 
-    .w163_name = ALIGNED_STRING("SetConst"),
+    .SetConst_name = ALIGNED_STRING("SetConst"),
 
     .ViewableProc_str = ALIGNED_STRING("ViewableProc"),
 
@@ -4771,23 +4771,23 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .RegisterTitle_str = "RegisterTitle",
 
-    .w164_code = "TitleProc",
+    .TitleProc_code = "TitleProc",
 
-    .w164_name = ALIGNED_STRING("GetModeOld"),
+    .GetModeOld_name = ALIGNED_STRING("GetModeOld"),
 
-    .w165_code = ALIGNED_STRING("GetModeNow"),
+    .GetModeNow_code = ALIGNED_STRING("GetModeNow"),
 
-    .w165_name = ALIGNED_STRING("UnregisteredMode"),
+    .UnregisteredMode_name = ALIGNED_STRING("UnregisteredMode"),
 
     .RegisterMode_str = ALIGNED_STRING("RegisterMode"),
 
-    .w166_code = ALIGNED_STRING("ModeProc"),
+    .ModeProc_code = ALIGNED_STRING("ModeProc"),
 
-    .w166_name = ALIGNED_STRING("MainFuncCall"),
+    .MainFuncCall_name = ALIGNED_STRING("MainFuncCall"),
 
-    .w167_code = ALIGNED_STRING("ApFuncCall"),
+    .ApFuncCall_code = ALIGNED_STRING("ApFuncCall"),
 
-    .w167_name = ALIGNED_STRING("MainFunctionProc"),
+    .MainFunctionProc_name = ALIGNED_STRING("MainFunctionProc"),
 
     .ApFunctionProc_str = ALIGNED_STRING("ApFunctionProc"),
 
@@ -4795,9 +4795,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .TrackIDProc_str = "TrackIDProc",
 
-    .w168_code = ALIGNED_STRING("PartIDProc"),
+    .PartIDProc_code = ALIGNED_STRING("PartIDProc"),
 
-    .w168_name = ALIGNED_STRING("UserIDProc"),
+    .UserIDProc_name = ALIGNED_STRING("UserIDProc"),
 
     .MainFuncIDProc_str = ALIGNED_STRING("MainFuncIDProc"),
 
@@ -4815,45 +4815,45 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .AlignmentIDProc_str = "AlignmentIDProc",
 
-    .w169_code = ALIGNED_STRING("FontIDProc"),
+    .FontIDProc_code = ALIGNED_STRING("FontIDProc"),
 
-    .w169_name = ALIGNED_STRING("IconIDProc"),
+    .IconIDProc_name = ALIGNED_STRING("IconIDProc"),
 
     .TitleIDProc_str = "TitleIDProc",
 
-    .w170_code = ALIGNED_STRING("ModeIDProc"),
+    .ModeIDProc_code = ALIGNED_STRING("ModeIDProc"),
 
-    .w170_name = ALIGNED_STRING("BorderIDProc"),
+    .BorderIDProc_name = ALIGNED_STRING("BorderIDProc"),
 
     .ColorIDProc_str = "ColorIDProc",
 
     .ViewFlagProc_str = ALIGNED_STRING("ViewFlagProc"),
 
-    .w171_code = ALIGNED_STRING("ViewIDProc"),
+    .ViewIDProc_code = ALIGNED_STRING("ViewIDProc"),
 
-    .w171_name = "ConstFlagProc",
+    .ConstFlagProc_name = "ConstFlagProc",
 
-    .w172_code = ALIGNED_STRING("NameProc"),
+    .NameProc_code = ALIGNED_STRING("NameProc"),
 
-    .w172_name = ALIGNED_STRING("StringProc"),
+    .StringProc_name = ALIGNED_STRING("StringProc"),
 
-    .w173_code = ALIGNED_STRING("PointYProc"),
+    .PointYProc_code = ALIGNED_STRING("PointYProc"),
 
-    .w173_name = ALIGNED_STRING("PointXProc"),
+    .PointXProc_name = ALIGNED_STRING("PointXProc"),
 
-    .w174_code = ALIGNED_STRING("POINTWProc"),
+    .POINTWProc_code = ALIGNED_STRING("POINTWProc"),
 
-    .w174_name = ALIGNED_STRING("RectY2Proc"),
+    .RectY2Proc_name = ALIGNED_STRING("RectY2Proc"),
 
-    .w175_code = ALIGNED_STRING("RectX2Proc"),
+    .RectX2Proc_code = ALIGNED_STRING("RectX2Proc"),
 
-    .w175_name = ALIGNED_STRING("RectY1Proc"),
+    .RectY1Proc_name = ALIGNED_STRING("RectY1Proc"),
 
     .RectX1Proc_str = ALIGNED_STRING("RectX1Proc"),
 
-    .w176_code = "RECTWProc",
+    .RECTWProc_code = "RECTWProc",
 
-    .w176_name = "EventIDProc",
+    .EventIDProc_name = "EventIDProc",
 
     .WindowIDProc_str = ALIGNED_STRING("WindowIDProc"),
 
@@ -4867,9 +4867,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .pProcProc_str = "pProcProc",
 
-    .w177_code = "pFuncProc",
+    .PFuncProc_code = "pFuncProc",
 
-    .w177_name = ALIGNED_STRING("ObjectIDProc"),
+    .ObjectIDProc_name = ALIGNED_STRING("ObjectIDProc"),
 
     .pUlongProc_str = ALIGNED_STRING("pUlongProc"),
 
@@ -4897,13 +4897,13 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .uwordProc_str = "uwordProc",
 
-    .w178_code = "swordProc",
+    .SwordProc_code = "swordProc",
 
-    .w178_name = ALIGNED_STRING("SupportClassProc"),
+    .SupportClassProc_name = ALIGNED_STRING("SupportClassProc"),
 
-    .w179_code = "ClassProc",
+    .ClassProc_code = "ClassProc",
 
-    .w179_name = "WordwrapStrings",
+    .WordwrapStrings_name = "WordwrapStrings",
 
     .CalcTotalWidth_str = ALIGNED_STRING("CalcTotalWidth"),
 
@@ -4949,13 +4949,13 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .GetCurrentTarget_str = ALIGNED_STRING("GetCurrentTarget"),
 
-    .w180_code = ALIGNED_STRING("GetEvent"),
+    .GetEvent_code = ALIGNED_STRING("GetEvent"),
 
-    .w180_name = "PostEvent",
+    .PostEvent_name = "PostEvent",
 
-    .w181_code = "SendEvent",
+    .SendEvent_code = "SendEvent",
 
-    .w181_name = "DispatchEvent",
+    .DispatchEvent_name = "DispatchEvent",
 
     .InitializeEventQueue_str = ALIGNED_STRING("InitializeEventQueue"),
 
@@ -4973,9 +4973,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .InheritedProc_str = "InheritedProc",
 
-    .w182_code = ALIGNED_STRING("ObjectProc"),
+    .ObjectProc_code = ALIGNED_STRING("ObjectProc"),
 
-    .w182_name = "DrawStringAlignment",
+    .DrawStringAlignment_name = "DrawStringAlignment",
 
     .DrawStringRightJustify_str = ALIGNED_STRING("DrawStringRightJustify"),
 
@@ -4983,35 +4983,35 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .DrawStringCentered_str = ALIGNED_STRING("DrawStringCentered"),
 
-    .w183_code = ALIGNED_STRING("DrawString"),
+    .DrawString_code = ALIGNED_STRING("DrawString"),
 
-    .w183_name = "DrawFrameSP",
+    .DrawFrameSP_name = "DrawFrameSP",
 
-    .w184_code = "DrawIcons",
+    .DrawIcons_code = "DrawIcons",
 
-    .w184_name = ALIGNED_STRING("DrawBitmap"),
+    .DrawBitmap_name = ALIGNED_STRING("DrawBitmap"),
 
-    .w185_code = ALIGNED_STRING("DrawWall"),
+    .DrawWall_code = ALIGNED_STRING("DrawWall"),
 
-    .w185_name = ALIGNED_STRING("MovePixels"),
+    .MovePixels_name = ALIGNED_STRING("MovePixels"),
 
     .DrawFrameEx_str = "DrawFrameEx",
 
-    .w186_code = "DrawFrame",
+    .DrawFrame_code = "DrawFrame",
 
-    .w186_name = "DrawBox",
+    .DrawBox_name = "DrawBox",
 
-    .w187_code = ALIGNED_STRING("DrawLineEx"),
+    .DrawLineEx_code = ALIGNED_STRING("DrawLineEx"),
 
-    .w187_name = ALIGNED_STRING("DrawLine"),
+    .DrawLine_name = ALIGNED_STRING("DrawLine"),
 
     .ModifyPixelEx_str = "ModifyPixelEx",
 
     .ModifyPixel_str = "ModifyPixel",
 
-    .w188_code = "ReadPixel",
+    .ReadPixel_code = "ReadPixel",
 
-    .w188_name = "SetChangeRect",
+    .SetChangeRect_name = "SetChangeRect",
 
     .SetNeedUpdate_str = "SetNeedUpdate",
 
@@ -5087,8 +5087,8 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .ptrs_5 = {
         SELF(None_str),
-        SELF(w189_name),
-        SELF(w189_code),
+        SELF(Default_name),
+        SELF(I0_code),
         SELF(i1_str),
         SELF(i2_str),
         SELF(i3_str),
@@ -5692,9 +5692,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .i1_str = ALIGNED_STRING("i1"),
 
-    .w189_code = ALIGNED_STRING("i0"),
+    .I0_code = ALIGNED_STRING("i0"),
 
-    .w189_name = "Default",
+    .Default_name = "Default",
 
     .None_str = ALIGNED_STRING("None"),
 
