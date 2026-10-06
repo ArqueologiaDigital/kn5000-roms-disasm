@@ -200,13 +200,13 @@ def _print_block(lo, hi, header):
 
 HEAD_HEADER = """\
 ; ---------------------------------------------------------------------
-; sub_FDE74C -- 17 bytes, the head of the block that used to be all
-;               `.incbin`.  Falls straight through into sub_FDE74C_Skip
+; ScreenButton_SoundEditFilterLfo_AfterOp -- 17 bytes, the head of the block that used to be all
+;               `.incbin`.  Falls straight through into ScreenButton_SoundEditFilterLfo_AfterOp_Skip
 ;               (already converted).  See
 ;               notes/FINDINGS-prom_a-fde74c-boundary.md for the argument
 ;               that licenses treating this as code.
 ; ---------------------------------------------------------------------
-sub_FDE74C:"""
+ScreenButton_SoundEditFilterLfo_AfterOp:"""
 
 BODY_HEADER = """\
 ; =======================================================================

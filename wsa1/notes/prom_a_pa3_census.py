@@ -217,7 +217,7 @@ def main():
             print("  0x%06X  %2d instruction(s) after the first instruction "
                   "following the previous `ret`" % (site, d))
     # 2 of the 3 are within 4 instructions of the routine head.  The third,
-    # 0xFE09F1, is 20 in -- because sub_FE09BE does its setup first and then
+    # 0xFE09F1, is 20 in -- because DiskFormat_Execute does its setup first and then
     # CYCLES the line, release (0xFE09EE) immediately followed by assert.
     check("2 of the 3 CLEAR sites are within 4 instructions of the routine head",
           sorted(d for _, d in heads)[:2] == sorted(d for _, d in heads if d <= 4)
@@ -260,7 +260,7 @@ def main():
     # first draft of this script asserted "all twelve" and failed here, which is
     # why the number below is 11: 0xFE09EE is immediately followed by the CLEAR
     # call at 0xFE09F1, i.e. it RELEASES the line and asserts it again -- a
-    # deliberate cycle at the head of sub_FE09BE, not an exit.
+    # deliberate cycle at the head of DiskFormat_Execute, not an exit.
     onexit = [(a, s2) for a, s2, _ in exits if s2 <= 12]
     check("11 of the 12 SET sites are within 12 instructions of a `ret`",
           len(onexit) == 11)
@@ -360,7 +360,7 @@ def main():
           rows[0xFE08E9][1] == "ld C,(XIX)"
           and rows[0xFE08EB][1] == "cp C,0x0b"
           and rows[0xFE08C0][1] == "lda_24 xix, (0x1735)")
-    # ⚠ NOT the only writers.  sub_FE09BE loads XIX with the ADDRESS 0x21E7 and
+    # ⚠ NOT the only writers.  DiskFormat_Execute loads XIX with the ADDRESS 0x21E7 and
     # then reaches bit 6 through the pointer, which no scan for
     # `f1 e7 21 b6/be` can see.  This check exists so the "only two writers"
     # reading cannot be written down: it asserts the pointer path is there.

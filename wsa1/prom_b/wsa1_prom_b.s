@@ -1007,7 +1007,7 @@
 	.set	T_F41F3C_Nop, 0xFAE829
 	.set	T_F41F38_Nop, 0xFAE84C
 	.set	SeqBuf_RecordQueuedEvents, 0xFAE84D
-	.set	sub_FAE872, 0xFAE872
+	.set	SeqBuf_PickRecordPartMask, 0xFAE872
 	.set	SeqBuf_EncodeQueue2C00, 0xFAE921
 	.set	T_F41F24_Nop, 0xFAEBAA
 	.set	T_F41F1C_Nop, 0xFAEC78
@@ -1368,8 +1368,8 @@
 	.set	SoundRemap_ResetToDefault, 0xFC01B1
 	.set	CombiRemap_ResetToDefault, 0xFC01C7
 	.set	DrumMap_ResetToDefault, 0xFC01DD
-	.set	sub_FC01F3, 0xFC01F3
-	.set	sub_FC0206, 0xFC0206
+	.set	Msg0716_PostOp17AndRestageAllParts, 0xFC01F3
+	.set	Msg0716_PostRestageAllParts, 0xFC0206
 	.set	Msg0716_PostSysEx50_92_SaveRegs, 0xFC020F
 	.set	T_F40FF8_Nop, 0xFC024F
 	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13, 0xFC0250
@@ -1402,12 +1402,12 @@
 	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13, 0xFC0400
 	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13, 0xFC0410
 	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13, 0xFC0420
-	.set	sub_FC0430, 0xFC0430
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_13, 0xFC0430
 	.set	Msg0716_DispatchIndex_Entry, 0xFC043C
 	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13, 0xFC0440
-	.set	sub_FC0450, 0xFC0450
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_56_26, 0xFC0450
 	.set	Msg0716_DispatchIndex_Msg0716_HandlerTables_56_26, 0xFC0455
-	.set	sub_FC0460, 0xFC0460
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_56_26, 0xFC0460
 	.set	Msg0716_DispatchIndex_26, 0xFC046A
 	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26, 0xFC0470
 	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26, 0xFC0480
@@ -1469,7 +1469,7 @@
 	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_248_7, 0xFC06B5
 	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4, 0xFC06C0
 	.set	T_F41164_Nop, 0xFC06CB
-	.set	sub_FC06CC, 0xFC06CC
+	.set	UiListB_Class9A_Nop, 0xFC06CC
 	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19, 0xFC06D0
 	.set	T_F41170_Nop, 0xFC06DB
 	.set	T_F41174_Nop, 0xFC06DC
@@ -1499,16 +1499,16 @@
 	.set	Msg0716_AllPartsResetBendAndModulation, 0xFC10DD
 	.set	Msg0716_AllPartsSustainOff, 0xFC10FA
 	.set	sub_FC1116, 0xFC1116
-	.set	sub_FC11FB, 0xFC11FB
+	.set	Cpu2Query_RefreshPartSoundRecord, 0xFC11FB
 	.set	Msg0716_PostGmSystemOnOff, 0xFC182F
 	.set	Msg0716_PostSysEx50_A3, 0xFC188F
-	.set	sub_FC18AA, 0xFC18AA
+	.set	Msg0716_PostSysEx50_87_StackArg, 0xFC18AA
 	.set	Msg0716_PostSysEx50_87, 0xFC18B2
 	.set	T_F40FD8_Nop, 0xFC19DC
 	.set	SoundName_Lookup, 0xFC1B81
 	.set	CombiName_Lookup, 0xFC1C59
 	.set	T_F40FC8_Nop, 0xFC1CD1
-	.set	sub_FC1D92, 0xFC1D92
+	.set	Cpu2Query_DrainRecordReplies, 0xFC1D92
 	.set	CreatorSelect_ReadSlotLabelIds, 0xFC1E68
 	.set	SoundGroupName_Lookup, 0xFC2035
 	.set	CombiGroupName_Lookup, 0xFC2155
@@ -1521,8 +1521,8 @@
 	.set	CombiSel_FromNumberAndBank, 0xFC24E3
 	.set	PartSound_FromProgramChange, 0xFC24EB
 	.set	PartSound_ToProgramChange, 0xFC2526
-	.set	sub_FC25A2, 0xFC25A2
-	.set	sub_FC25A8, 0xFC25A8
+	.set	DrumMap_MapNoteForPart_StackArgs, 0xFC25A2
+	.set	DrumMap_MapNoteForPart, 0xFC25A8
 	.set	DigitalEffect_Frame, 0xFC4000
 	.set	DigitalEffect_Frame_End, 0xFC40B4
 	.set	SoundEditDigitalEffect_Paint_DL2, 0xFC40D2
@@ -1599,7 +1599,7 @@
 	.set	PartNotes_ReleaseAllTrackNotes, 0xFC8CE0
 	.set	sub_FC8D45, 0xFC8D45
 	.set	NoteRouting_ApplyQueuedChanges, 0xFC8D49
-	.set	sub_FC8E7B, 0xFC8E7B
+	.set	PartNoteList_NextHeldNote, 0xFC8E7B
 	.set	ToneGen_SendSoundSelNote, 0xFC8FD7
 	.set	MidiOut_SendNote, 0xFC9016
 	.set	NoteRouting_DefaultRecordPtrs, 0xFCAD7C
@@ -1720,11 +1720,11 @@
 	.set	Var27FE_Set, 0xFDA341
 	.set	UiRequestBits_SetBit3, 0xFDA467
 	.set	sub_FDA6FC, 0xFDA6FC
-	.set	sub_FDA777, 0xFDA777
+	.set	SoundEditPitchTune_KeyScalingPosToParam, 0xFDA777
 	.set	MemoryProtect_IsSoundOn, 0xFDA901
 	.set	DspEffect_SendAllToCpu2, 0xFDA911
 	.set	LCD_SetPanelDarkFlag, 0xFDAC5B
-	.set	sub_FDAC6B, 0xFDAC6B
+	.set	ModeEnter_SoundEdit, 0xFDAC6B
 	.set	sub_FDACBD, 0xFDACBD
 	.set	ScreenEnter_SoundEditMenu, 0xFDAD44
 	.set	ScreenEnter_SoundEditPitchTune, 0xFDB22F
@@ -1914,7 +1914,7 @@
 	.set	DiskLoadScreen_MountAndScanDirectory, 0xFE1C5D
 	.set	DiskSaveScreen_MountAndScanDirectory, 0xFE1C67
 	.set	Notes_ReleaseAllSources_Call_Call, 0xFE1C71
-	.set	sub_FE1C75, 0xFE1C75
+	.set	Disk_TickCountdowns, 0xFE1C75
 	.set	DiskLoadFile_Execute, 0xFE1C79
 	.set	DiskSaveFile_Execute_Entry, 0xFE1C80
 	.set	MidiFileSave_Page5_LcdKeyRow3, 0xFE1C98
@@ -1949,7 +1949,7 @@
 	.set	Medley_Tick, 0xFE7950
 	.set	Medley_ScheduleNextMidiFile, 0xFE7A49
 	.set	EditScreen_Tick_Call, 0xFE8000
-	.set	sub_FE8005, 0xFE8005
+	.set	PowerFail_PrepareSongWorkspace, 0xFE8005
 	.set	Transport_ResetAndStartBC, 0xFE8026
 	.set	ScreenLeave_DrumEditPartSelect, 0xFE8045
 	.set	EditScreen_PhaseVector, 0xFE8046
@@ -18935,7 +18935,7 @@ SoftKeyCol6_SoundEditPitchTune:
 	ld	c, (xwa)	; F0A31A  ld C,(XWA)
 	extz	bc	; F0A31C  extz BC
 	pushw	bc	; F0A31E  push BC
-	call	sub_FDA777	; F0A31F  call 0xfda777
+	call	SoundEditPitchTune_KeyScalingPosToParam	; F0A31F  call 0xfda777
 	ld	bc, (xiz-4)	; F0A323  ld BC,(XIZ+0xfc)
 	extz	bc	; F0A326  extz BC
 	pushw	bc	; F0A328  push BC
@@ -31303,7 +31303,7 @@ LcdKeyRow5_DspEffect_ParamSections_Nop4:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2076) (0x2807)
-; Calls:   T_DspEffect_SendAllToCpu2 DspEffect_ToneMsg88_Id00 T_F41054 DspEffect_SendToneMsg80
+; Calls:   T_DspEffect_SendAllToCpu2 DspEffect_ToneMsg88_Id00 T_Cpu2Query_RefreshPartSoundRecord DspEffect_SendToneMsg80
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -31329,7 +31329,7 @@ CompareKey_DspEffect_Skip:
 CompareKey_DspEffect_Join:
 	calr	DspEffect_ToneMsg88_Id00	; F0F775  calr 0xf112ed
 	pushw	0	; F0F778  push 0x0000
-	call	T_F41054	; F0F77B  call 0xf41054
+	call	T_Cpu2Query_RefreshPartSoundRecord	; F0F77B  call 0xf41054
 	pushw	16	; F0F77F  push 0x0010
 	calr	DspEffect_SendToneMsg80	; F0F782  calr 0xf11329
 	inc	6, xsp	; F0F785  inc 6,XSP
@@ -46300,13 +46300,14 @@ DL_Mixer:
 	.byte 0x3a, 0x01, 0xe2, 0x00, 0x3a, 0x01, 0xec, 0x00	; +2  ':...:...'
 
 ; --------------------------------------------------------------------------
-; DL_F17E2E -- display list, 0xF17E2E-0xF17E41 (20 bytes)
+; CombiEditMixer_ShowOtherParts_DL1 -- display list, 0xF17E2E-0xF17E41 (20 bytes)
 ; Interpreter: A.  2 records, framed by their own length bytes; the walk
 ;              consumes 0xF17E2E-0xF17E41 exactly.
 ; Evidence: 2 records, interpreter A, inside the call-site run
 ;           0xF17E2E-0xF17E9D
 ; --------------------------------------------------------------------------
-DL_F17E2E:
+CombiEditMixer_ShowOtherParts_DL1:
+; ; drawn (start operand) by CombiEditMixer_ShowOtherParts -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x09, 0x0a	; F17E2E  op 09, 10 bytes -> handler 0xF31A75
 	.byte 0x06, 0x00, 0x29, 0x00, 0x3a, 0x01, 0x6a, 0x00	; +2  '..).:.j.'
 	.byte 0x02, 0x0a	; F17E38  op 02, 10 bytes -> handler 0xF31A75
@@ -46350,14 +46351,15 @@ DL_Sound:
 	.byte 0x06, 0x00, 0x99, 0x00, 0x26, 0x00, 0xa3, 0x00	; +2  '....&...'
 
 ; --------------------------------------------------------------------------
-; DL_F17E9D -- display list, 0xF17E9D-0xF17F06 (106 bytes)
+; CombiEditMixer_ShowOtherParts_DL2 -- display list, 0xF17E9D-0xF17F06 (106 bytes)
 ; Interpreter: A.  11 records, framed by their own length bytes; the walk
 ;              consumes 0xF17E9D-0xF17F06 exactly.
 ; Text it draws: 'INT'
 ; Evidence: 11 records, interpreter A, inside the call-site run
 ;           0xF17E42-0xF17F07
 ; --------------------------------------------------------------------------
-DL_F17E9D:
+CombiEditMixer_ShowOtherParts_DL2:
+; ; drawn (start operand) by CombiEditMixer_ShowOtherParts -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x17, 0x09	; F17E9D  op 17, 9 bytes -> handler 0xF31A52
 	.short 0x000D, 0x0049	; +2  the two words
 	.ascii "INT"	; +6
@@ -46488,14 +46490,15 @@ DL_Midiout:
 	.byte 0x06, 0x00, 0xbe, 0x00, 0x26, 0x00, 0xc8, 0x00	; +2  '....&...'
 
 ; --------------------------------------------------------------------------
-; DL_F1802A -- display list, 0xF1802A-0xF18043 (26 bytes)
+; CombiEditMixer_ShowOtherParts_DL3 -- display list, 0xF1802A-0xF18043 (26 bytes)
 ; Interpreter: A.  3 records, framed by their own length bytes; the walk
 ;              consumes 0xF1802A-0xF18043 exactly.
 ; Text it draws: 'INT'
 ; Evidence: 3 records, interpreter A, inside the call-site run
 ;           0xF17FA4-0xF18044
 ; --------------------------------------------------------------------------
-DL_F1802A:
+CombiEditMixer_ShowOtherParts_DL3:
+; ; drawn (start operand) by CombiEditMixer_ShowOtherParts -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x17, 0x09	; F1802A  op 17, 9 bytes -> handler 0xF31A52
 	.short 0x000D, 0x001F	; +2  the two words
 	.ascii "INT"	; +6
@@ -75229,16 +75232,16 @@ SysExThirdRegion_LocateDrumModellingChunk:
 	ld	bc, hl	; F36B73  ld BC,HL
 	sub	bc, de	; F36B75  sub BC,DE
 	m_cp_rm MWD+r6, 0x0c, 1	; F36B77  cp BC,(XIZ+0x0c)
-	jr	ule, sub_F36B2F_Skip	; F36B7A  jr ULE,0xf36b84
+	jr	ule, SysExThirdRegion_LocateDrumModellingChunk_Skip	; F36B7A  jr ULE,0xf36b84
 	ld	bc, (xiz+12)	; F36B7C  ld BC,(XIZ+0x0c)
 	ld	(xix+3), bc	; F36B7F  ld (XIX+0x03),BC
-	jr	sub_F36B2F_Join	; F36B82  jr T,0xf36b8e
-sub_F36B2F_Skip:
+	jr	SysExThirdRegion_LocateDrumModellingChunk_Join	; F36B82  jr T,0xf36b8e
+SysExThirdRegion_LocateDrumModellingChunk_Skip:
 	ld	bc, (xix+1)	; F36B84  ld BC,(XIX+0x01)
 	ld	wa, hl	; F36B87  ld WA,HL
 	sub	wa, bc	; F36B89  sub WA,BC
 	ld	(xix+3), wa	; F36B8B  ld (XIX+0x03),WA
-sub_F36B2F_Join:
+SysExThirdRegion_LocateDrumModellingChunk_Join:
 	pop	xix	; F36B8E  pop XIX
 	popw	de	; F36B8F  pop DE
 	popw	hl	; F36B90  pop HL
@@ -89595,7 +89598,9 @@ T_Transport_ResetAndStartBC:	jp Transport_ResetAndStartBC  ; F40304 (was T_F4030
 ; Evidence: slot 0xF40308 is `jp 0xFE8000`; prom_a 0xFE8000 carries the label
 ;           EditScreen_Tick_Call (graded CONTENT).  DERIVATIVE name.
 T_EditScreen_Tick_Call:	jp EditScreen_Tick_Call  ; F40308 (was T_F40308) -> prom_a 0x68000   x1
-T_F4030C:	jp sub_FE8005  ; -> prom_a 0x68005   x1
+; Evidence: slot 0xF4030C is `jp 0xFE8005`; prom_a 0xFE8005 carries the label
+;           PowerFail_PrepareSongWorkspace (graded CONTENT).  DERIVATIVE name.
+T_PowerFail_PrepareSongWorkspace:	jp PowerFail_PrepareSongWorkspace  ; F4030C (was T_F4030C) -> prom_a 0x68005   x1
 	.fill 0x2E0, 1, 0x0E  ; 0xF40310: 736 x ret
 ; Evidence: slot 0xF405F0 is `jp 0xF89800`; prom_a 0xF89800 carries the label
 ;           Ctrl_Normalise, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
@@ -90436,12 +90441,18 @@ T_Msg0716_AllPartsResetBendAndModulation:	jp Msg0716_AllPartsResetBendAndModulat
 ;           Msg0716_AllPartsSustainOff (graded CONTENT).  DERIVATIVE name.
 T_Msg0716_AllPartsSustainOff:	jp Msg0716_AllPartsSustainOff  ; F40FD4 (was T_F40FD4) -> prom_a 0x410FA
 T_F40FD8:	jp T_F40FD8_Nop  ; -> prom_a 0x419DC
-T_F40FDC:	jp sub_FC18AA  ; -> prom_a 0x418AA   x1
+; Evidence: slot 0xF40FDC is `jp 0xFC18AA`; prom_a 0xFC18AA carries the label
+;           Msg0716_PostSysEx50_87_StackArg (graded CONTENT).  DERIVATIVE name.
+T_Msg0716_PostSysEx50_87_StackArg:	jp Msg0716_PostSysEx50_87_StackArg  ; F40FDC (was T_F40FDC) -> prom_a 0x418AA   x1
 T_F40FE0:	jp T_F40FE0_Nop  ; -> prom_a 0x410DB
 T_F40FE4:	jp T_F40FE4_Nop  ; -> prom_a 0x410DA
 T_F40FE8:	jp sub_FC2213  ; -> prom_a 0x42213
-T_F40FEC:	jp sub_FC0206  ; -> prom_a 0x40206   x3
-T_F40FF0:	jp sub_FC01F3  ; -> prom_a 0x401F3   x2
+; Evidence: slot 0xF40FEC is `jp 0xFC0206`; prom_a 0xFC0206 carries the label
+;           Msg0716_PostRestageAllParts (graded CONTENT).  DERIVATIVE name.
+T_Msg0716_PostRestageAllParts:	jp Msg0716_PostRestageAllParts  ; F40FEC (was T_F40FEC) -> prom_a 0x40206   x3
+; Evidence: slot 0xF40FF0 is `jp 0xFC01F3`; prom_a 0xFC01F3 carries the label
+;           Msg0716_PostOp17AndRestageAllParts (graded CONTENT).  DERIVATIVE name.
+T_Msg0716_PostOp17AndRestageAllParts:	jp Msg0716_PostOp17AndRestageAllParts  ; F40FF0 (was T_F40FF0) -> prom_a 0x401F3   x2
 T_F40FF4:	jp T_F40FF4_Nop  ; -> prom_a 0x4018D   x1
 T_F40FF8:	jp T_F40FF8_Nop  ; -> prom_a 0x4024F
 ; Evidence: slot 0xF40FFC is `jp 0xFC22BA`; prom_a 0xFC22BA carries the label
@@ -90488,13 +90499,21 @@ T_SoundGroup_MaxMemberIndex_GetToneCopy:	jp SoundGroup_MaxMemberIndex_GetToneCop
 ; Evidence: slot 0xF41038 is `jp 0xFC1E68`; prom_a 0xFC1E68 carries the label
 ;           CreatorSelect_ReadSlotLabelIds (graded CONTENT).  DERIVATIVE name.
 T_CreatorSelect_ReadSlotLabelIds:	jp CreatorSelect_ReadSlotLabelIds  ; F41038 (was T_F41038) -> prom_a 0x41E68   x4
-T_F4103C:	jp sub_FC1D92  ; -> prom_a 0x41D92   x1
-T_F41040:	jp sub_FC25A8  ; -> prom_a 0x425A8   x1
-T_F41044:	jp sub_FC25A2  ; -> prom_a 0x425A2   x1
+; Evidence: slot 0xF4103C is `jp 0xFC1D92`; prom_a 0xFC1D92 carries the label
+;           Cpu2Query_DrainRecordReplies (graded CONTENT).  DERIVATIVE name.
+T_Cpu2Query_DrainRecordReplies:	jp Cpu2Query_DrainRecordReplies  ; F4103C (was T_F4103C) -> prom_a 0x41D92   x1
+; Evidence: slot 0xF41040 is `jp 0xFC25A8`; prom_a 0xFC25A8 carries the label
+;           DrumMap_MapNoteForPart (graded CONTENT).  DERIVATIVE name.
+T_DrumMap_MapNoteForPart:	jp DrumMap_MapNoteForPart  ; F41040 (was T_F41040) -> prom_a 0x425A8   x1
+; Evidence: slot 0xF41044 is `jp 0xFC25A2`; prom_a 0xFC25A2 carries the label
+;           DrumMap_MapNoteForPart_StackArgs (graded CONTENT).  DERIVATIVE name.
+T_DrumMap_MapNoteForPart_StackArgs:	jp DrumMap_MapNoteForPart_StackArgs  ; F41044 (was T_F41044) -> prom_a 0x425A2   x1
 T_SoundRemap_ResetToDefault:	jp SoundRemap_ResetToDefault  ; -> prom_a 0x401B1   x2
 T_CombiRemap_ResetToDefault:	jp CombiRemap_ResetToDefault  ; -> prom_a 0x401C7   x2
 T_DrumMap_ResetToDefault:	jp DrumMap_ResetToDefault  ; -> prom_a 0x401DD   x2
-T_F41054:	jp sub_FC11FB  ; -> prom_a 0x411FB   x4
+; Evidence: slot 0xF41054 is `jp 0xFC11FB`; prom_a 0xFC11FB carries the label
+;           Cpu2Query_RefreshPartSoundRecord (graded CONTENT).  DERIVATIVE name.
+T_Cpu2Query_RefreshPartSoundRecord:	jp Cpu2Query_RefreshPartSoundRecord  ; F41054 (was T_F41054) -> prom_a 0x411FB   x4
 T_F41058:	jp sub_FC1116  ; -> prom_a 0x41116
 ; Evidence: slot 0xF4105C is `jp 0xFC182F`; prom_a 0xFC182F carries the label
 ;           Msg0716_PostGmSystemOnOff (graded CONTENT).  DERIVATIVE name.
@@ -90533,7 +90552,7 @@ T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_13:	jp M
 T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13  ; -> prom_a 0x40400
 T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13  ; -> prom_a 0x40410
 T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13  ; -> prom_a 0x40420
-T_F410E8:	jp sub_FC0430  ; -> prom_a 0x40430
+T_F410E8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_13  ; -> prom_a 0x40430
 T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13  ; -> prom_a 0x40440
 T_F410F0:	jp T_F410F0_Nop  ; -> prom_a 0x40651
 T_F410F4:	jp T_F410F4_Nop  ; -> prom_a 0x40653
@@ -90565,7 +90584,9 @@ T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_192_13:	jp Msg0716_DispatchIn
 T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_248_7:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_248_7  ; -> prom_a 0x406B5
 T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4  ; -> prom_a 0x406C0
 T_F41164:	jp T_F41164_Nop  ; -> prom_a 0x406CB
-T_F41168:	jp sub_FC06CC  ; -> prom_a 0x406CC
+; Evidence: slot 0xF41168 is `jp 0xFC06CC`; prom_a 0xFC06CC carries the label
+;           UiListB_Class9A_Nop (graded CONTENT).  DERIVATIVE name.
+T_UiListB_Class9A_Nop:	jp UiListB_Class9A_Nop  ; F41168 (was T_F41168) -> prom_a 0x406CC
 T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19  ; -> prom_a 0x406D0
 T_F41170:	jp T_F41170_Nop  ; -> prom_a 0x406DB
 T_F41174:	jp T_F41174_Nop  ; -> prom_a 0x406DC
@@ -90686,7 +90707,9 @@ T_PartNotes_ResoundOnToneGen:	jp PartNotes_ResoundOnToneGen  ; F413D8 (was T_F41
 ; Evidence: slot 0xF413DC is `jp 0xFCAD7C`; prom_a 0xFCAD7C carries the label
 ;           NoteRouting_DefaultRecordPtrs (graded CONTENT).  DERIVATIVE name.
 T_NoteRouting_DefaultRecordPtrs:	jp NoteRouting_DefaultRecordPtrs  ; F413DC (was T_F413DC) -> prom_a 0x4AD7C   x2
-T_F413E0:	jp sub_FC8E7B  ; -> prom_a 0x48E7B   x2
+; Evidence: slot 0xF413E0 is `jp 0xFC8E7B`; prom_a 0xFC8E7B carries the label
+;           PartNoteList_NextHeldNote (graded CONTENT).  DERIVATIVE name.
+T_PartNoteList_NextHeldNote:	jp PartNoteList_NextHeldNote  ; F413E0 (was T_F413E0) -> prom_a 0x48E7B   x2
 T_F413E4:	jp T_F413E4_Nop  ; -> prom_a 0x480DC   x3
 T_F413E8:	jp T_F413E8_Nop  ; -> prom_a 0x480DD   x1
 T_F413EC:	jp T_F413EC_Nop  ; -> prom_a 0x480DE
@@ -90708,7 +90731,9 @@ T_BStore_CompactBlocks_Veneer:	jp BStore_CompactBlocks_Veneer  ; F414B0 (was T_F
 ; Evidence: slot 0xF414B4 is `jp 0xF4C802`; prom_b 0xF4C802 carries the label
 ;           BStore_RebuildFreeListAfterLoad_Veneer (graded CONTENT).  DERIVATIVE name.
 T_BStore_RebuildFreeListAfterLoad_Veneer:	jp BStore_RebuildFreeListAfterLoad_Veneer  ; F414B4 (was T_F414B4) -> prom_b 0x4C802   x1
-T_F414B8:	jp sub_F4CA64  ; -> prom_b 0x4CA64   x1
+; Evidence: slot 0xF414B8 is `jp 0xF4CA64`; prom_b 0xF4CA64 carries the label
+;           SysExDump_RestoreSavedCurrentBank (graded CONTENT).  DERIVATIVE name.
+T_SysExDump_RestoreSavedCurrentBank:	jp SysExDump_RestoreSavedCurrentBank  ; F414B8 (was T_F414B8) -> prom_b 0x4CA64   x1
 ; Evidence: slot 0xF414BC is `jp 0xF4CA2A`; prom_b 0xF4CA2A carries the label
 ;           SysExDump_PrepareSequencerData (graded CONTENT).  DERIVATIVE name.
 T_SysExDump_PrepareSequencerData:	jp SysExDump_PrepareSequencerData  ; F414BC (was T_F414BC) -> prom_b 0x4CA2A   x1
@@ -91567,13 +91592,15 @@ T_F41F20:	jp T_F41F20_Nop  ; -> prom_a 0x2F48F
 T_F41F24:	jp T_F41F24_Nop  ; -> prom_a 0x2EBAA
 T_F41F28:	jp T_F41F28_Nop  ; -> prom_a 0x2F490
 T_F41F2C:	jp T_F41F2C_Nop  ; -> prom_a 0x2E800
-T_F41F30:	jp sub_FAE872  ; -> prom_a 0x2E872   x1
+T_F41F30:	jp SeqBuf_PickRecordPartMask  ; -> prom_a 0x2E872   x1
 T_F41F34:	jp SeqBuf_EncodeQueue2C00  ; -> prom_a 0x2E921   x1
 T_F41F38:	jp T_F41F38_Nop  ; -> prom_a 0x2E84C
 T_F41F3C:	jp T_F41F3C_Nop  ; -> prom_a 0x2E829
 	.fill 0x10, 1, 0x0E  ; 0xF41F40: 16 x ret
 	.fill 0x4, 1, 0x00  ; 0xF41F50: 4 x nop
-T_F41F54:	jp sub_FDAC6B  ; -> prom_a 0x5AC6B
+; Evidence: slot 0xF41F54 is `jp 0xFDAC6B`; prom_a 0xFDAC6B carries the label
+;           ModeEnter_SoundEdit (graded CONTENT).  DERIVATIVE name.
+T_ModeEnter_SoundEdit:	jp ModeEnter_SoundEdit  ; F41F54 (was T_F41F54) -> prom_a 0x5AC6B
 T_F41F58:	jp sub_FDACBD  ; -> prom_a 0x5ACBD
 T_ScreenEnter_SoundEditMenu:	jp ScreenEnter_SoundEditMenu  ; -> prom_a 0x5AD44
 T_ScreenLeave_SoundEditMenu:	jp ScreenLeave_SoundEditMenu  ; -> prom_a 0x5E152
@@ -91832,8 +91859,8 @@ T_ScreenLeave_L0adSingleC0mbination:	jp ScreenLeave_L0adSingleC0mbination  ; -> 
 T_PanelButtonDispatch_L0adSingleC0mbination:	jp PanelButtonDispatch_L0adSingleC0mbination  ; -> prom_a 0x76F21
 T_F42428:	jp T_F42428_Nop  ; -> prom_a 0x77083
 	.fill 0x44, 1, 0x0E  ; 0xF4242C: 68 x ret
-T_F42470:	jp sub_FC0450  ; -> prom_a 0x40450
-T_F42474:	jp sub_FC0460  ; -> prom_a 0x40460
+T_F42470:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40450
+T_F42474:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40460
 T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40470
 T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40480
 T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40490
@@ -91942,7 +91969,9 @@ T_SysPartMidi_ResetBlock1Default_Call:	jp SysPartMidi_ResetBlock1Default_Call  ;
 ; Evidence: slot 0xF425C0 is `jp 0xFE1C71`; prom_a 0xFE1C71 carries the label
 ;           Notes_ReleaseAllSources_Call_Call (graded CONTENT).  DERIVATIVE name.
 T_Notes_ReleaseAllSources_Call_Call:	jp Notes_ReleaseAllSources_Call_Call  ; F425C0 (was T_F425C0) -> prom_a 0x61C71
-T_F425C4:	jp sub_FE1C75  ; -> prom_a 0x61C75   x1
+; Evidence: slot 0xF425C4 is `jp 0xFE1C75`; prom_a 0xFE1C75 carries the label
+;           Disk_TickCountdowns (graded CONTENT).  DERIVATIVE name.
+T_Disk_TickCountdowns:	jp Disk_TickCountdowns  ; F425C4 (was T_F425C4) -> prom_a 0x61C75   x1
 ; Evidence: slot 0xF425C8 is `jp 0xFE1C79`; prom_a 0xFE1C79 carries the label
 ;           DiskLoadFile_Execute (graded CONTENT).  DERIVATIVE name.
 T_DiskLoadFile_Execute:	jp DiskLoadFile_Execute  ; F425C8 (was T_F425C8) -> prom_a 0x61C79   x3
@@ -92417,8 +92446,12 @@ T_SequencerMedley_StepFieldDown:	jp SequencerMedley_StepFieldDown  ; -> prom_b 0
 T_TrackAssign_StageZero_LcdKeyRow2:	jp TrackAssign_StageZero_LcdKeyRow2  ; -> prom_b 0x65C5E   x1
 T_TrackAssign_StageZero_LcdKeyRow1:	jp TrackAssign_StageZero_LcdKeyRow1  ; -> prom_b 0x65C9A   x1
 T_TrackAssign_SelectTrackGroup:	jp TrackAssign_SelectTrackGroup  ; -> prom_b 0x65CD6   x2
-T_F42B98:	jp sub_F65DAE  ; -> prom_b 0x65DAE   x1
-T_F42B9C:	jp sub_F65DD3  ; -> prom_b 0x65DD3   x2
+; Evidence: slot 0xF42B98 is `jp 0xF65DAE`; prom_b 0xF65DAE carries the label
+;           TrackAssign_IsLocalControlDashed_Copy (graded CONTENT).  DERIVATIVE name.
+T_TrackAssign_IsLocalControlDashed_Copy:	jp TrackAssign_IsLocalControlDashed_Copy  ; F42B98 (was T_F42B98) -> prom_b 0x65DAE   x1
+; Evidence: slot 0xF42B9C is `jp 0xF65DD3`; prom_b 0xF65DD3 carries the label
+;           TrackAssign_IsLocalControlDashed (graded CONTENT).  DERIVATIVE name.
+T_TrackAssign_IsLocalControlDashed:	jp TrackAssign_IsLocalControlDashed  ; F42B9C (was T_F42B9C) -> prom_b 0x65DD3   x2
 T_TrackAssign_StageZero_SoftKeyCol4:	jp TrackAssign_StageZero_SoftKeyCol4  ; -> prom_b 0x65DF8   x1
 T_TrackAssign_StageZero_LcdKeyRow3:	jp TrackAssign_StageZero_LcdKeyRow3  ; -> prom_b 0x65E94   x1
 T_TrackAssign_StageZero_SoftKeyCol5:	jp TrackAssign_StageZero_SoftKeyCol5  ; -> prom_b 0x65F7C   x1
@@ -95124,13 +95157,13 @@ sub_F44C15:
 ;   (veneer header) + body. (notes/naming-pilot-2026-10-06/proposals_wave6_s.json)
 Seq_LocateNowIfPending:
 	m_bit 7, MD16, 0x0c05	; F44C37  bit 7,(0x0c05)
-	jr	z, sub_F44C37_Return	; F44C3B  jr Z,0xf44c50
+	jr	z, Seq_LocateNowIfPending_Return	; F44C3B  jr Z,0xf44c50
 	ld	(3077:16), 0	; F44C3D  ld (0x0c05),0x00
 	calr	Seq_LocateToCurrentMeasure	; F44C42  calr 0xf45bd3
 	call	T_PartNotes_ReleaseAllTrackNotes	; F44C45  call 0xf413c8
 	call	T_F41F18	; F44C49  call 0xf41f18
 	calr	Seq_ResetPositionOnRequest	; F44C4D  calr 0xf44b2d
-sub_F44C37_Return:
+Seq_LocateNowIfPending_Return:
 	ret	; F44C50  ret
 
 ; --------------------------------------------------------------------------
@@ -95921,33 +95954,33 @@ SeqRecord_ResetSlotLists:
 	ld	(xhl), 1	; F4526B  ld (XHL),0x01
 	xor	iy, iy	; F4526E  xor IY,IY
 	ld	xhl, 12310	; F45270  ld XHL,0x00003016
-sub_F45263_Loop:
+SeqRecord_ResetSlotLists_Loop:
 	mx_ld_mi16 MXD, ra_HL, ra_IY, 0x0000	; F45275  ld (XHL+IY),0x0000
 	add	iy, 2	; F4527C  add IY,0x0002
 	cp	iy, 34	; F45280  cp IY,0x0022
-	jr	c, sub_F45263_Loop	; F45284  jr C,0xf45275
+	jr	c, SeqRecord_ResetSlotLists_Loop	; F45284  jr C,0xf45275
 	xor	iy, iy	; F45286  xor IY,IY
 	xor	c, c	; F45288  xor C,C
 	ld	xhl, 12378	; F4528A  ld XHL,0x0000305a
-sub_F45263_Loop2:
+SeqRecord_ResetSlotLists_Loop2:
 	ld	xiz, xhl	; F4528F  ld XIZ,XHL
 	mx_lda32 MXD, ra_IZ, ra_IY, 6	; F45291  lda XIZ,XIZ+IY
 	ld	(xiz+6), c	; F45296  ld (XIZ+0x06),C
 	inc	1, c	; F45299  inc 1,C
 	add	iy, 8	; F4529B  add IY,0x0008
 	cp	iy, 512	; F4529F  cp IY,0x0200
-	jr	c, sub_F45263_Loop2	; F452A3  jr C,0xf4528f
+	jr	c, SeqRecord_ResetSlotLists_Loop2	; F452A3  jr C,0xf4528f
 	xor	iy, iy	; F452A5  xor IY,IY
 	ld	c, 2:opc	; F452A7  ld C,0x02
 	ld	xhl, 12378	; F452A9  ld XHL,0x0000305a
-sub_F45263_Loop3:
+SeqRecord_ResetSlotLists_Loop3:
 	ld	xiz, xhl	; F452AE  ld XIZ,XHL
 	mx_lda32 MXD, ra_IZ, ra_IY, 6	; F452B0  lda XIZ,XIZ+IY
 	ld	(xiz+7), c	; F452B5  ld (XIZ+0x07),C
 	inc	1, c	; F452B8  inc 1,C
 	add	iy, 8	; F452BA  add IY,0x0008
 	cp	iy, 504	; F452BE  cp IY,0x01f8
-	jr	c, sub_F45263_Loop3	; F452C2  jr C,0xf452ae
+	jr	c, SeqRecord_ResetSlotLists_Loop3	; F452C2  jr C,0xf452ae
 	ld	xiz, xhl	; F452C4  ld XIZ,XHL
 	mx_lda32 MXD, ra_IZ, ra_IY, 6	; F452C6  lda XIZ,XIZ+IY
 	ld	(xiz+7), 255	; F452CB  ld (XIZ+0x07),0xff
@@ -95975,36 +96008,36 @@ sub_F45263_Loop3:
 ;   callers + body. (notes/naming-pilot-2026-10-06/proposals_wave5_o.json)
 SeqTrack_CompletePlayOff:		; <- T_SeqTrack_CompletePlayOff
 	bit	2, (TransportB_State:8)	; F452D3  bit 2,(0x96)
-	jr	nz, sub_F45263_Skip2	; F452D6  jr NZ,0xf4530a
+	jr	nz, SeqTrack_CompletePlayOff_Skip2	; F452D6  jr NZ,0xf4530a
 	cpl	wa	; F452D8  cpl WA
 	cpl	qwa	; F452DA  cpl QWA
 	m_and_mr ML16, 0x3008, 0	; F452DD  and (0x3008),XWA
 	m_and_mr ML16, 0x300c, 0	; F452E1  and (0x300c),XWA
 	ld	xwa, (6304798:24)	; F452E5  ld XWA,(0x60341e)
 	cp	xwa, 0	; F452EA  cp XWA,0x00000000
-	jr	nz, sub_F45263_Skip	; F452F0  jr NZ,0xf45304
+	jr	nz, SeqTrack_CompletePlayOff_Skip	; F452F0  jr NZ,0xf45304
 	xor	xwa, xwa	; F452F2  xor XWA,XWA
 	ld	(12296:16), xwa	; F452F4  ld (0x3008),XWA
 	ld	(12300:16), xwa	; F452F8  ld (0x300c),XWA
 	m_and_mi8 MB16, 0x34d1, 0x7f	; F452FC  and (0x34d1),0x7f
 	calr	TimedEventRing_Discard	; F45301  calr 0xf45b0a
-sub_F45263_Skip:
+SeqTrack_CompletePlayOff_Skip:
 	call	T_NoteRouting_RebuildForSong	; F45304  call 0xf411b8
-	jr	sub_F45263_Return	; F45308  jr T,0xf45347
-sub_F45263_Skip2:
+	jr	SeqTrack_CompletePlayOff_Return	; F45308  jr T,0xf45347
+SeqTrack_CompletePlayOff_Skip2:
 	ld	(13471:16), 0	; F4530A  ld (0x349f),0x00
-sub_F45263_Loop4:
+SeqTrack_CompletePlayOff_Loop4:
 	ld	c, (13471:16)	; F4530F  ld C,(0x349f)
 	cp	c, 16	; F45313  cp C,0x10
-	jr	nc, sub_F45263_Skip3	; F45316  jr NC,0xf45325
+	jr	nc, SeqTrack_CompletePlayOff_Skip3	; F45316  jr NC,0xf45325
 	ld	iz, wa	; F45318  ld IZ,WA
 	ld	a, c	; F4531A  ld A,C
 	scf	; F4531C  scf
 	m_rd_xorcf_a RW+r6	; F4531D  xorcf A,IZ
 	ld	wa, iz	; F4531F  ld WA,IZ
-	jr	c, sub_F45263_Skip4	; F45321  jr C,0xf4533c
-	jr	sub_F45263_Join	; F45323  jr T,0xf45337
-sub_F45263_Skip3:
+	jr	c, SeqTrack_CompletePlayOff_Skip4	; F45321  jr C,0xf4533c
+	jr	SeqTrack_CompletePlayOff_Join	; F45323  jr T,0xf45337
+SeqTrack_CompletePlayOff_Skip3:
 	pushw	wa	; F45325  push WA
 	ld	iz, qwa	; F45326  ld IZ,QWA
 	ld	a, c	; F45329  ld A,C
@@ -96013,16 +96046,16 @@ sub_F45263_Skip3:
 	m_rd_xorcf_a RW+r6	; F4532F  xorcf A,IZ
 	ld	qwa, iz	; F45331  ld QWA,IZ
 	popw	wa	; F45334  pop WA
-	jr	c, sub_F45263_Skip4	; F45335  jr C,0xf4533c
-sub_F45263_Join:
+	jr	c, SeqTrack_CompletePlayOff_Skip4	; F45335  jr C,0xf4533c
+SeqTrack_CompletePlayOff_Join:
 	push	xwa	; F45337  push XWA
 	calr	SeqTrack_QueueSwitchOffEvents	; F45338  calr 0xf44e8e
 	pop	xwa	; F4533B  pop XWA
-sub_F45263_Skip4:
+SeqTrack_CompletePlayOff_Skip4:
 	inc	1, (13471:16)	; F4533C  inc 1,(0x349f)
 	m_cp_mi8 MB16, 0x349f, 0x11	; F45340  cp (0x349f),0x11
-	jr	c, sub_F45263_Loop4	; F45345  jr C,0xf4530f
-sub_F45263_Return:
+	jr	c, SeqTrack_CompletePlayOff_Loop4	; F45345  jr C,0xf4530f
+SeqTrack_CompletePlayOff_Return:
 	ret	; F45347  ret
 
 ; --------------------------------------------------------------------------
@@ -96865,33 +96898,33 @@ SeqRecord_AllocTakeChains:
 	ld	(13471:16), 0	; F45812  ld (0x349f),0x00
 	xor	iy, iy	; F45817  xor IY,IY
 	xor	ix, ix	; F45819  xor IX,IX
-sub_F45812_Loop:
+SeqRecord_AllocTakeChains_Loop:
 	push	xiy	; F4581B  push XIY
 	push	xix	; F4581C  push XIX
 	call	T_CycleRecord_CheckIsRecordTrack	; F4581D  call 0xf40be4
 	pop	xix	; F45821  pop XIX
 	pop	xiy	; F45822  pop XIY
 	cp	a, 0:i3	; F45823  cp A,0
-	jrl	z, sub_F45812_Skip2	; F45825  jrl Z,0xf458b4
+	jrl	z, SeqRecord_AllocTakeChains_Skip2	; F45825  jrl Z,0xf458b4
 	ld	c, (13471:16)	; F45828  ld C,(0x349f)
 	cp	c, 16	; F4582C  cp C,0x10
-	jr	nc, sub_F45812_Skip	; F4582F  jr NC,0xf4583e
+	jr	nc, SeqRecord_AllocTakeChains_Skip	; F4582F  jr NC,0xf4583e
 	ld	iz, (12292:16)	; F45831  ld IZ,(0x3004)
 	ld	a, c	; F45835  ld A,C
 	scf	; F45837  scf
 	m_rd_xorcf_a RW+r6	; F45838  xorcf A,IZ
-	jr	c, sub_F45812_Skip2	; F4583A  jr C,0xf458b4
-	jr	sub_F45812_Join	; F4583C  jr T,0xf4584c
-sub_F45812_Skip:
+	jr	c, SeqRecord_AllocTakeChains_Skip2	; F4583A  jr C,0xf458b4
+	jr	SeqRecord_AllocTakeChains_Join	; F4583C  jr T,0xf4584c
+SeqRecord_AllocTakeChains_Skip:
 	ld	iz, (12294:16)	; F4583E  ld IZ,(0x3006)
 	ld	a, c	; F45842  ld A,C
 	sub	a, 16	; F45844  sub A,0x10
 	scf	; F45847  scf
 	m_rd_xorcf_a RW+r6	; F45848  xorcf A,IZ
-	jr	c, sub_F45812_Skip2	; F4584A  jr C,0xf458b4
-sub_F45812_Join:
+	jr	c, SeqRecord_AllocTakeChains_Skip2	; F4584A  jr C,0xf458b4
+SeqRecord_AllocTakeChains_Join:
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F4584C  cp (0x6034ba),0x0000
-	jr	z, sub_F45812_Skip3	; F45853  jr Z,0xf458ca
+	jr	z, SeqRecord_AllocTakeChains_Skip3	; F45853  jr Z,0xf458ca
 	push	xiy	; F45855  push XIY
 	push	xix	; F45856  push XIX
 	call	T_BStore_AllocBlock_B_Veneer	; F45857  call 0xf40c88
@@ -96900,9 +96933,9 @@ sub_F45812_Join:
 	pop	xiy	; F4585E  pop XIY
 	ld	bc, (BStore_BlockCount:16)	; F4585F  ld BC,(0x3608)
 	cp	wa, bc	; F45863  cp WA,BC
-	jr	ugt, sub_F45812_Skip3	; F45865  jr UGT,0xf458ca
+	jr	ugt, SeqRecord_AllocTakeChains_Skip3	; F45865  jr UGT,0xf458ca
 	cp	wa, 0:i3	; F45867  cp WA,0
-	jr	z, sub_F45812_Skip3	; F45869  jr Z,0xf458ca
+	jr	z, SeqRecord_AllocTakeChains_Skip3	; F45869  jr Z,0xf458ca
 	pushw	wa	; F4586B  push WA
 	ld	hl, wa	; F4586C  ld HL,WA
 	call	T_BStore_BlockAddrFromHL	; F4586E  call 0xf40c84
@@ -96924,14 +96957,14 @@ sub_F45812_Join:
 	ld	iy, bc	; F458AB  ld IY,BC
 	mx_ld_mi8 MXD, ra_HL, ra_IY, 0x05	; F458AD  ld (XHL+IY),0x05
 	pop	xiy	; F458B3  pop XIY
-sub_F45812_Skip2:
+SeqRecord_AllocTakeChains_Skip2:
 	add	iy, 3	; F458B4  add IY,0x0003
 	add	ix, 2	; F458B8  add IX,0x0002
 	inc	1, (13471:16)	; F458BC  inc 1,(0x349f)
 	m_cp_mi8 MB16, 0x349f, 0x11	; F458C0  cp (0x349f),0x11
-	jrl	c, sub_F45812_Loop	; F458C5  jrl C,0xf4581b
-	jr	sub_F45812_Return	; F458C8  jr T,0xf458e9
-sub_F45812_Skip3:
+	jrl	c, SeqRecord_AllocTakeChains_Loop	; F458C5  jrl C,0xf4581b
+	jr	SeqRecord_AllocTakeChains_Return	; F458C8  jr T,0xf458e9
+SeqRecord_AllocTakeChains_Skip3:
 	xor	xwa, xwa	; F458CA  xor XWA,XWA
 	ld	(12288:16), xwa	; F458CC  ld (0x3000),XWA
 	ld	(12292:16), xwa	; F458D0  ld (0x3004),XWA
@@ -96940,7 +96973,7 @@ sub_F45812_Skip3:
 	calr	Var34D1_SetBits20	; F458DC  calr 0xf45fc4
 	m_and_mi8 MB16, 0x20a9, 0xfe	; F458DF  and (0x20a9),0xfe
 	m_or_mi8 MB16, 0x34d1, 0x10	; F458E4  or (0x34d1),0x10
-sub_F45812_Return:
+SeqRecord_AllocTakeChains_Return:
 	ret	; F458E9  ret
 
 ; --------------------------------------------------------------------------
@@ -99171,7 +99204,7 @@ sub_F47C25_Return:
 ; Touches: (0x3008) (0x300A) (0x33E2) (0x345C) (0x345E) (0x3494) (0x3496)
 ;          (0x3498) (0x349E) (0x349F) +12 more  |  0x0034A4 0x00365E
 ;          0x003680 0x0036E9 0xFFFFF8
-; Calls:   sub_F4802B sub_F4840E sub_F4842F sub_F48056 CycleRecord_CheckIsRecordTrack_Copy T_F40BE8
+; Calls:   sub_F4802B BStore_ReadCursorByte_Call BStore_StepCursorOneByte_Call sub_F48056 CycleRecord_CheckIsRecordTrack_Copy T_F40BE8
 ;          T_SeqCycle_CheckOn T_F40ABC sub_F47F3E BStore_StepCursorToNextLeadByte sub_F4812F T_Seq_StopAll_Veneer +12
 ;          more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -99185,7 +99218,7 @@ sub_F47C7C:
 	calr	sub_F4802B	; F47C80  calr 0xf4802b
 	ld	(13652:16), 0	; F47C83  ld (0x3554),0x00
 sub_F47C7C_Join:
-	calr	sub_F4840E	; F47C88  calr 0xf4840e
+	calr	BStore_ReadCursorByte_Call	; F47C88  calr 0xf4840e
 	ld	(13470:16), a	; F47C8B  ld (0x349e),A
 	cp	a, 130	; F47C8F  cp A,0x82
 	jr	nz, sub_F47C7C_Skip	; F47C92  jr NZ,0xf47c97
@@ -99195,8 +99228,8 @@ sub_F47C7C_Skip:
 	jr	z, sub_F47C7C_Skip2	; F47C9A  jr Z,0xf47cb6
 	ld	de, (BStore_CursorBlock:16)	; F47C9C  ld DE,(0x345c)
 	ld	bc, (BStore_CursorOffset:16)	; F47CA0  ld BC,(0x345e)
-	calr	sub_F4842F	; F47CA4  calr 0xf4842f
-	calr	sub_F4840E	; F47CA7  calr 0xf4840e
+	calr	BStore_StepCursorOneByte_Call	; F47CA4  calr 0xf4842f
+	calr	BStore_ReadCursorByte_Call	; F47CA7  calr 0xf4840e
 	ld	(13464:16), a	; F47CAA  ld (0x3498),A
 	ld	(BStore_CursorBlock:16), de	; F47CAE  ld (0x345c),DE
 	ld	(BStore_CursorOffset:16), bc	; F47CB2  ld (0x345e),BC
@@ -99699,7 +99732,7 @@ sub_F48056_Return:
 ; BStore_StepCursorToNextLeadByte
 ; Called from: T_BStore_StepCursorToNextLeadByte (x1); in-module: 0xF47D53
 ; Touches:   |  0x0034A4
-; Calls:   sub_F4842F sub_F4840E
+; Calls:   BStore_StepCursorOneByte_Call BStore_ReadCursorByte_Call
 ; Evidence: thunk slot T_BStore_StepCursorToNextLeadByte holds `jp 0x00F48107`, and 0xF48107 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -99714,24 +99747,24 @@ sub_F48056_Return:
 ;   caller header + body. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
 BStore_StepCursorToNextLeadByte:		; <- T_BStore_StepCursorToNextLeadByte
 	xor	de, de	; F48107  xor DE,DE
-sub_F48107_Loop:
-	calr	sub_F4842F	; F48109  calr 0xf4842f
-	calr	sub_F4840E	; F4810C  calr 0xf4840e
+BStore_StepCursorToNextLeadByte_Loop:
+	calr	BStore_StepCursorOneByte_Call	; F48109  calr 0xf4842f
+	calr	BStore_ReadCursorByte_Call	; F4810C  calr 0xf4840e
 	bit	7, a	; F4810F  bit 0x07,A
-	jr	z, sub_F48107_Skip	; F48112  jr Z,0xf48115
-sub_F48107_Return:
+	jr	z, BStore_StepCursorToNextLeadByte_Skip	; F48112  jr Z,0xf48115
+BStore_StepCursorToNextLeadByte_Return:
 	ret	; F48114  ret
-sub_F48107_Skip:
+BStore_StepCursorToNextLeadByte_Skip:
 	cp	de, 5:i3	; F48115  cp DE,5
-	jr	nc, sub_F48107_Skip2	; F48117  jr NC,0xf48125
+	jr	nc, BStore_StepCursorToNextLeadByte_Skip2	; F48117  jr NC,0xf48125
 	ld	xhl, 13476	; F48119  ld XHL,0x000034a4
 	ld	iy, de	; F4811E  ld IY,DE
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F48120  ld (XHL+IY),A
-sub_F48107_Skip2:
+BStore_StepCursorToNextLeadByte_Skip2:
 	inc	1, de	; F48125  inc 1,DE
 	cp	de, 18	; F48127  cp DE,0x0012
-	jr	c, sub_F48107_Loop	; F4812B  jr C,0xf48109
-	jr	sub_F48107_Return	; F4812D  jr T,0xf48114
+	jr	c, BStore_StepCursorToNextLeadByte_Loop	; F4812B  jr C,0xf48109
+	jr	BStore_StepCursorToNextLeadByte_Return	; F4812D  jr T,0xf48114
 
 ; --------------------------------------------------------------------------
 ; sub_F4812F
@@ -100157,22 +100190,26 @@ SeqTrackCursors_SaveTrack_Return:
 	ret	; F4840D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4840E
+; BStore_ReadCursorByte_Call
 ; Called from: in-module: 0xF47C88 0xF47CA7 0xF4810C
 ; Touches: (0x345C) (0x345E)
-; Calls:   T_BStore_ReadCursorByte sub_F4840E_Nop
+; Calls:   T_BStore_ReadCursorByte BStore_StepCursorOneByte_Call_Nop
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4840E is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4840E:
+; BStore_ReadCursorByte_Call: `call T_BStore_ReadCursorByte` / `jr` / `ret`: A = the byte at the block-store cursor.
+;   The bytes after its ret (0xF48415-0xF4842E) are an unreached inline version of the same read.
+;   BStore_StepCursorToNextLeadByte reads each byte with it. Basis: caller header + body (wrapper). (notes/naming-
+;   pilot-2026-10-06/proposals_wave9_d9.json)
+BStore_ReadCursorByte_Call:
 	call	T_BStore_ReadCursorByte	; F4840E  call 0xf40c54
-	jr	sub_F4840E_Return	; F48412  jr T,0xf48414
-sub_F4840E_Return:
+	jr	BStore_ReadCursorByte_Call_Return	; F48412  jr T,0xf48414
+BStore_ReadCursorByte_Call_Return:
 	ret	; F48414  ret
-	calr	sub_F4840E_Nop	; F48415  calr 0xf48463
+	calr	BStore_StepCursorOneByte_Call_Nop	; F48415  calr 0xf48463
 	xor	xhl, xhl	; F48418  xor XHL,XHL
 	ld	hl, (BStore_CursorBlock:16)	; F4841A  ld HL,(0x345c)
 	dec	1, xhl	; F4841E  dec 1,XHL
@@ -100183,25 +100220,29 @@ sub_F4840E_Return:
 	ret	; F4842E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4842F
+; BStore_StepCursorOneByte_Call
 ; Called from: in-module: 0xF47CA4 0xF48109
 ; Touches: (0x345C) (0x345E)
-; Calls:   T_BStore_StepCursorOneByte sub_F4840E_Nop
+; Calls:   T_BStore_StepCursorOneByte BStore_StepCursorOneByte_Call_Nop
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4842F is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4842F:
+; BStore_StepCursorOneByte_Call: `call T_BStore_StepCursorOneByte` / `jr` / `ret`: steps the block-store cursor one
+;   byte (offset + 1, or the +3 next block at offset 5). The bytes after its ret (0xF48436-0xF48462) are an unreached
+;   inline version of the same step. BStore_StepCursorToNextLeadByte steps with it. Basis: caller header + body
+;   (wrapper). (notes/naming-pilot-2026-10-06/proposals_wave9_d9.json)
+BStore_StepCursorOneByte_Call:
 	call	T_BStore_StepCursorOneByte	; F4842F  call 0xf40c50
-	jr	sub_F4842F_Return	; F48433  jr T,0xf48435
-sub_F4842F_Return:
+	jr	BStore_StepCursorOneByte_Call_Return	; F48433  jr T,0xf48435
+BStore_StepCursorOneByte_Call_Return:
 	ret	; F48435  ret
 	ld	wa, (BStore_CursorOffset:16)	; F48436  ld WA,(0x345e)
 	cp	wa, 255	; F4843A  cp WA,0x00ff
-	jr	nz, sub_F4842F_Skip	; F4843E  jr NZ,0xf4845c
-	calr	sub_F4840E_Nop	; F48440  calr 0xf48463
+	jr	nz, BStore_StepCursorOneByte_Call_Skip	; F4843E  jr NZ,0xf4845c
+	calr	BStore_StepCursorOneByte_Call_Nop	; F48440  calr 0xf48463
 	xor	xhl, xhl	; F48443  xor XHL,XHL
 	ld	hl, (BStore_CursorBlock:16)	; F48445  ld HL,(0x345c)
 	dec	1, xhl	; F48449  dec 1,XHL
@@ -100210,24 +100251,24 @@ sub_F4842F_Return:
 	ld	wa, (xhl+3)	; F48450  ld WA,(XHL+0x03)
 	ld	(BStore_CursorBlock:16), wa	; F48453  ld (0x345c),WA
 	ldw	wa, 5	; F48457  ld WA,0x0005
-	jr	sub_F4842F_Join	; F4845A  jr T,0xf4845e
-sub_F4842F_Skip:
+	jr	BStore_StepCursorOneByte_Call_Join	; F4845A  jr T,0xf4845e
+BStore_StepCursorOneByte_Call_Skip:
 	inc	1, wa	; F4845C  inc 1,WA
-sub_F4842F_Join:
+BStore_StepCursorOneByte_Call_Join:
 	ld	(BStore_CursorOffset:16), wa	; F4845E  ld (0x345e),WA
 	ret	; F48462  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4840E_Nop
+; BStore_StepCursorOneByte_Call_Nop
 ; Called from: in-module: 0xF48415 0xF48440
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF48463 is an instruction boundary.
 ;
-; Purpose: none -- the entry is a lone `ret`.  Named sub_F4840E_Nop after what reaches it
+; Purpose: none -- the entry is a lone `ret`.  Named BStore_StepCursorOneByte_Call_Nop after what reaches it
 ;          (was sub_F48463; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F4840E_Nop:
+BStore_StepCursorOneByte_Call_Nop:
 	ret	; F48463  ret
 
 ; --------------------------------------------------------------------------
@@ -100625,16 +100666,16 @@ CycleRecord_CaptureStartCursors:		; <- T_CycleRecord_CaptureStartCursors
 	pop	xwa	; F48728  pop XWA
 	ld	(6304798:24), xwa	; F48729  ld (0x60341e),XWA
 	m_cp_mi16 MW16, 0x3552, 0x0001	; F4872E  cp (0x3552),0x0001
-	jr	nz, sub_F486D9_Skip2	; F48734  jr NZ,0xf48783
+	jr	nz, CycleRecord_CaptureStartCursors_Skip2	; F48734  jr NZ,0xf48783
 	ld	(13471:16), 0	; F48736  ld (0x349f),0x00
 	xor	iy, iy	; F4873B  xor IY,IY
 	xor	ix, ix	; F4873D  xor IX,IX
-sub_F486D9_Loop3:
+CycleRecord_CaptureStartCursors_Loop3:
 	xor	bc, bc	; F4873F  xor BC,BC
 	ld	c, (13471:16)	; F48741  ld C,(0x349f)
 	ld	a, (14038:16)	; F48745  ld A,(0x36d6)
 	cp	(13471:16), a	; F48749  cp (0x349f),A
-	jr	nz, sub_F486D9_Skip	; F4874D  jr NZ,0xf48770
+	jr	nz, CycleRecord_CaptureStartCursors_Skip	; F4874D  jr NZ,0xf48770
 	push	xix	; F4874F  push XIX
 	push	xiy	; F48750  push XIY
 	call	BStore_DirEntryHeadAtIY	; F48751  call 0xf47804
@@ -100646,13 +100687,13 @@ sub_F486D9_Loop3:
 	ex16	iy, bc	; F48766  ex IY,BC
 	mx_ld_mi8 MXD, ra_HL, ra_IY, 0x05	; F48768  ld (XHL+IY),0x05
 	ex16	iy, bc	; F4876E  ex IY,BC
-sub_F486D9_Skip:
+CycleRecord_CaptureStartCursors_Skip:
 	add	iy, 3	; F48770  add IY,0x0003
 	add	ix, 2	; F48774  add IX,0x0002
 	inc	1, (13471:16)	; F48778  inc 1,(0x349f)
 	m_cp_mi8 MB16, 0x349f, 0x11	; F4877C  cp (0x349f),0x11
-	jr	c, sub_F486D9_Loop3	; F48781  jr C,0xf4873f
-sub_F486D9_Skip2:
+	jr	c, CycleRecord_CaptureStartCursors_Loop3	; F48781  jr C,0xf4873f
+CycleRecord_CaptureStartCursors_Skip2:
 	ldw	bc, 17	; F48783  ld BC,0x0011
 	ld	xde, 13866	; F48786  ld XDE,0x0000362a
 	ld	xhl, 13408	; F4878B  ld XHL,0x00003460
@@ -101824,13 +101865,13 @@ SeqRecord_SoundAlert_Veneer:		; <- T_SeqRecord_SoundAlert_Veneer
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SeqRecord_DrainEventRingAtTakeEnd: Veneer (slot T_SeqRecord_DrainEventRingAtTakeEnd): `jr` to 0xF49868 (sub_F49861_Join): (0x34DD) b1 set
-;   around sub_F498A0 -- the drain that writes SeqBuf_Ring's events into the take tracks -- then (0x34DD) b1 and
+; SeqRecord_DrainEventRingAtTakeEnd: Veneer (slot T_SeqRecord_DrainEventRingAtTakeEnd): `jr` to 0xF49868 (SeqRecord_SoundAlert_Join): (0x34DD) b1 set
+;   around SeqRecord_WriteRingEventsToTracks -- the drain that writes SeqBuf_Ring's events into the take tracks -- then (0x34DD) b1 and
 ;   (0x34D4) b1 cleared; unlike SeqRecord_DrainEventRing no (0x3004) test. SeqRecord_EndTake runs it before
 ;   SeqRecord_TerminateTakeTracks. Basis: caller + body + sibling. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave5_p.json)
 SeqRecord_DrainEventRingAtTakeEnd:		; <- T_SeqRecord_DrainEventRingAtTakeEnd
-	jr	sub_F49861_Join	; F49806  jr T,0xf49868
+	jr	SeqRecord_SoundAlert_Join	; F49806  jr T,0xf49868
 
 ; --------------------------------------------------------------------------
 ; SeqRecord_DrainEventRing
@@ -101844,12 +101885,12 @@ SeqRecord_DrainEventRingAtTakeEnd:		; <- T_SeqRecord_DrainEventRingAtTakeEnd
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SeqRecord_DrainEventRing: `jr` into 0xF4987B: while a take runs ((0x3004) non-zero) clears (0x34D0) bit 3 and runs
-;   sub_F498A0, which takes every event out of SeqBuf_Ring (0x81 beat marks, 0x9n, 0xBn, 0xCn, 0xD0-0xD3) and writes
+;   SeqRecord_WriteRingEventsToTracks, which takes every event out of SeqBuf_Ring (0x81 beat marks, 0x9n, 0xBn, 0xCn, 0xD0-0xD3) and writes
 ;   it into its track through the block-store cursor; then clears (0x34DD) bit 1 and (0x34D4) bit 1.
 ;   Seq_MainLoopService calls it every pass through T_SeqRecord_DrainEventRing. Basis: caller + body. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave4_l.json)
 SeqRecord_DrainEventRing:		; <- T_SeqRecord_DrainEventRing
-	jr	sub_F49861_Join2	; F49808  jr T,0xf4987b
+	jr	SeqRecord_SoundAlert_Join2	; F49808  jr T,0xf4987b
 
 ; --------------------------------------------------------------------------
 ; sub_F4980A
@@ -101926,7 +101967,7 @@ SeqRecord_SaveTakeCursor:
 ; SeqRecord_SoundAlert
 ; Called from: in-module: 0xF49B3F 0xF4A501
 ; Touches: (0x3004) (0x34D0) (0x34D4) (0x34DD)  |  0x000000
-; Calls:   T_F41020 sub_F498A0
+; Calls:   T_F41020 SeqRecord_WriteRingEventsToTracks
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49861 is an instruction boundary.
 ;           The name IS the address.
@@ -101942,28 +101983,28 @@ SeqRecord_SoundAlert:
 	ld	a, 8:opc	; F49861  ld A,0x08
 	call	T_F41020	; F49863  call 0xf41020
 	ret	; F49867  ret
-sub_F49861_Join:
+SeqRecord_SoundAlert_Join:
 	m_or_mi8 MB16, 0x34dd, 0x02	; F49868  or (0x34dd),0x02
-	calr	sub_F498A0	; F4986D  calr 0xf498a0
+	calr	SeqRecord_WriteRingEventsToTracks	; F4986D  calr 0xf498a0
 	m_and_mi8 MB16, 0x34dd, 0xfd	; F49870  and (0x34dd),0xfd
 	m_and_mi8 MB16, 0x34d4, 0xfd	; F49875  and (0x34d4),0xfd
 	ret	; F4987A  ret
-sub_F49861_Join2:
+SeqRecord_SoundAlert_Join2:
 	ld	xwa, (12292:16)	; F4987B  ld XWA,(0x3004)
 	cp	xwa, 0	; F4987F  cp XWA,0x00000000
-	jr	z, sub_F49861_Skip2	; F49885  jr Z,0xf49895
+	jr	z, SeqRecord_SoundAlert_Skip2	; F49885  jr Z,0xf49895
 	m_bit 3, MD16, 0x34d0	; F49887  bit 3,(0x34d0)
-	jr	z, sub_F49861_Skip	; F4988B  jr Z,0xf49892
+	jr	z, SeqRecord_SoundAlert_Skip	; F4988B  jr Z,0xf49892
 	m_and_mi8 MB16, 0x34d0, 0xf7	; F4988D  and (0x34d0),0xf7
-sub_F49861_Skip:
-	calr	sub_F498A0	; F49892  calr 0xf498a0
-sub_F49861_Skip2:
+SeqRecord_SoundAlert_Skip:
+	calr	SeqRecord_WriteRingEventsToTracks	; F49892  calr 0xf498a0
+SeqRecord_SoundAlert_Skip2:
 	m_and_mi8 MB16, 0x34dd, 0xfd	; F49895  and (0x34dd),0xfd
 	m_and_mi8 MB16, 0x34d4, 0xfd	; F4989A  and (0x34d4),0xfd
 	ret	; F4989F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F498A0
+; SeqRecord_WriteRingEventsToTracks
 ; Called from: in-module: 0xF4986D 0xF49892
 ; Touches: (0x349F) (0x34AA) (0x34AB) (0x34AD) (0x34AE) (0x34B0) (0x34D4)
 ;          (0x34DD) (0x36F0)  |  0x0034AA 0x600A0A 0x600A14
@@ -101976,154 +102017,159 @@ sub_F49861_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F498A0:
+; SeqRecord_WriteRingEventsToTracks: Takes events out of SeqBuf_Ring until it is empty (T_SeqBufRing_IsEmpty) and
+;   writes each into its track by type: 0x81 beat mark, 0x9n, 0xBn, 0xCn, 0xD0-0xD3 (record tracks via
+;   CycleRecord_CheckIsRecordTrack, others another path). The drain body that SeqRecord_DrainEventRing and
+;   SeqRecord_DrainEventRingAtTakeEnd reach. Basis: callers' headers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave9_d9.json)
+SeqRecord_WriteRingEventsToTracks:
 	call	T_SeqBufRing_IsEmpty	; F498A0  call 0xf41d90
 	cp	wa, 0:i3	; F498A4  cp WA,0
-	jr	nz, sub_F498A0_Skip12	; F498A6  jr NZ,0xf498b1
+	jr	nz, SeqRecord_WriteRingEventsToTracks_Skip12	; F498A6  jr NZ,0xf498b1
 	calr	sub_F49ADE	; F498A8  calr 0xf49ade
 	calr	sub_F49AFD	; F498AB  calr 0xf49afd
-	jrl	sub_F498A0_Return	; F498AE  jrl T,0xf49a3c
-sub_F498A0_Skip12:
+	jrl	SeqRecord_WriteRingEventsToTracks_Return	; F498AE  jrl T,0xf49a3c
+SeqRecord_WriteRingEventsToTracks_Skip12:
 	m_bit 1, MD16, 0x34dd	; F498B1  bit 1,(0x34dd)
-	jr	nz, sub_F498A0_Skip13	; F498B5  jr NZ,0xf498bd
+	jr	nz, SeqRecord_WriteRingEventsToTracks_Skip13	; F498B5  jr NZ,0xf498bd
 	m_bit 1, MD16, 0x34d4	; F498B7  bit 1,(0x34d4)
-	jr	nz, sub_F498A0_Skip13	; F498BB  jr NZ,0xf498bd
-sub_F498A0_Skip13:
+	jr	nz, SeqRecord_WriteRingEventsToTracks_Skip13	; F498BB  jr NZ,0xf498bd
+SeqRecord_WriteRingEventsToTracks_Skip13:
 	ld	xhl, 6294026	; F498BD  ld XHL,0x00600a0a
 	ld	iy, (xhl+2)	; F498C2  ld IY,(XHL+0x02)
 	ld	xhl, SeqBuf_Ring	; F498C5  ld XHL,0x00600a14
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F498CA  ld A,(XHL+IY)
 	cp	a, 129	; F498CF  cp A,0x81
-	jrl	z, sub_F498A0_Skip15	; F498D2  jrl Z,0xf499bc
+	jrl	z, SeqRecord_WriteRingEventsToTracks_Skip15	; F498D2  jrl Z,0xf499bc
 	ld	w, 240:opc	; F498D5  ld W,0xf0
 	and	w, a	; F498D7  and W,A
 	cp	w, 144	; F498D9  cp W,0x90
-	jr	z, sub_F498A0_Skip14	; F498DC  jr Z,0xf49937
+	jr	z, SeqRecord_WriteRingEventsToTracks_Skip14	; F498DC  jr Z,0xf49937
 	cp	a, 210	; F498DE  cp A,0xd2
-	jrl	z, sub_F498A0_Skip16	; F498E1  jrl Z,0xf499da
+	jrl	z, SeqRecord_WriteRingEventsToTracks_Skip16	; F498E1  jrl Z,0xf499da
 	cp	a, 209	; F498E4  cp A,0xd1
-	jrl	z, sub_F498A0_Join	; F498E7  jrl Z,0xf49a0b
+	jrl	z, SeqRecord_WriteRingEventsToTracks_Join	; F498E7  jrl Z,0xf49a0b
 	cp	a, 211	; F498EA  cp A,0xd3
-	jr	nz, sub_F498A0_Skip2	; F498ED  jr NZ,0xf4991e
+	jr	nz, SeqRecord_WriteRingEventsToTracks_Skip2	; F498ED  jr NZ,0xf4991e
 	ldw	bc, 4	; F498EF  ld BC,0x0004
 	calr	sub_F49CA9	; F498F2  calr 0xf49ca9
 	ld	a, (13485:16)	; F498F5  ld A,(0x34ad)
 	ld	(13471:16), a	; F498F9  ld (0x349f),A
 	calr	CycleRecord_CheckIsRecordTrack	; F498FD  calr 0xf49a3d
 	cp	a, 0:i3	; F49900  cp A,0
-	jr	z, sub_F498A0_Skip	; F49902  jr Z,0xf4990c
+	jr	z, SeqRecord_WriteRingEventsToTracks_Skip	; F49902  jr Z,0xf4990c
 	ldw	de, 3	; F49904  ld DE,0x0003
 	calr	sub_F4A2B6	; F49907  calr 0xf4a2b6
-	jr	sub_F498A0	; F4990A  jr T,0xf498a0
-sub_F498A0_Skip:
+	jr	SeqRecord_WriteRingEventsToTracks	; F4990A  jr T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Skip:
 	ld	(14064:16), 3	; F4990C  ld (0x36f0),0x03
 	ld	a, (13485:16)	; F49911  ld A,(0x34ad)
 	ld	(13471:16), a	; F49915  ld (0x349f),A
 	calr	sub_F49CE6	; F49919  calr 0xf49ce6
-	jr	sub_F498A0	; F4991C  jr T,0xf498a0
-sub_F498A0_Skip2:
+	jr	SeqRecord_WriteRingEventsToTracks	; F4991C  jr T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Skip2:
 	cp	a, 208	; F4991E  cp A,0xd0
-	jr	nz, sub_F498A0_Skip3	; F49921  jr NZ,0xf49926
-	jrl	sub_F498A0_Join	; F49923  jrl T,0xf49a0b
-sub_F498A0_Skip3:
+	jr	nz, SeqRecord_WriteRingEventsToTracks_Skip3	; F49921  jr NZ,0xf49926
+	jrl	SeqRecord_WriteRingEventsToTracks_Join	; F49923  jrl T,0xf49a0b
+SeqRecord_WriteRingEventsToTracks_Skip3:
 	cp	w, 192	; F49926  cp W,0xc0
-	jr	z, sub_F498A0_Skip7	; F49929  jr Z,0xf4997d
+	jr	z, SeqRecord_WriteRingEventsToTracks_Skip7	; F49929  jr Z,0xf4997d
 	cp	w, 176	; F4992B  cp W,0xb0
-	jrl	z, sub_F498A0_Skip9	; F4992E  jrl Z,0xf499cb
+	jrl	z, SeqRecord_WriteRingEventsToTracks_Skip9	; F4992E  jrl Z,0xf499cb
 	calr	sub_F49C7D	; F49931  calr 0xf49c7d
-	jrl	sub_F498A0	; F49934  jrl T,0xf498a0
-sub_F498A0_Skip14:
+	jrl	SeqRecord_WriteRingEventsToTracks	; F49934  jrl T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Skip14:
 	ldw	bc, 5	; F49937  ld BC,0x0005
 	calr	sub_F49CA9	; F4993A  calr 0xf49ca9
 	m_bit 1, MD16, 0x34d4	; F4993D  bit 1,(0x34d4)
-	jr	z, sub_F498A0_Skip4	; F49941  jr Z,0xf49948
+	jr	z, SeqRecord_WriteRingEventsToTracks_Skip4	; F49941  jr Z,0xf49948
 	ld	(13483:16), 0	; F49943  ld (0x34ab),0x00
-sub_F498A0_Skip4:
+SeqRecord_WriteRingEventsToTracks_Skip4:
 	m_cp_mi8 MB16, 0x34ad, 0x00	; F49948  cp (0x34ad),0x00
-	jr	nz, sub_F498A0_Skip5	; F4994D  jr NZ,0xf49955
+	jr	nz, SeqRecord_WriteRingEventsToTracks_Skip5	; F4994D  jr NZ,0xf49955
 	calr	sub_F4A0FF	; F4994F  calr 0xf4a0ff
-	jrl	sub_F498A0	; F49952  jrl T,0xf498a0
-sub_F498A0_Skip5:
+	jrl	SeqRecord_WriteRingEventsToTracks	; F49952  jrl T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Skip5:
 	ld	a, (13486:16)	; F49955  ld A,(0x34ae)
 	ld	(13471:16), a	; F49959  ld (0x349f),A
 	calr	CycleRecord_CheckIsRecordTrack	; F4995D  calr 0xf49a3d
 	cp	a, 0:i3	; F49960  cp A,0
-	jr	z, sub_F498A0_Skip6	; F49962  jr Z,0xf4996a
+	jr	z, SeqRecord_WriteRingEventsToTracks_Skip6	; F49962  jr Z,0xf4996a
 	calr	sub_F49F6D	; F49964  calr 0xf49f6d
-	jrl	sub_F498A0	; F49967  jrl T,0xf498a0
-sub_F498A0_Skip6:
+	jrl	SeqRecord_WriteRingEventsToTracks	; F49967  jrl T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Skip6:
 	ld	a, (13486:16)	; F4996A  ld A,(0x34ae)
 	ld	(13471:16), a	; F4996E  ld (0x349f),A
 	ld	(14064:16), 6	; F49972  ld (0x36f0),0x06
 	calr	sub_F49CC2	; F49977  calr 0xf49cc2
-	jrl	sub_F498A0	; F4997A  jrl T,0xf498a0
-sub_F498A0_Skip7:
+	jrl	SeqRecord_WriteRingEventsToTracks	; F4997A  jrl T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Skip7:
 	ldw	bc, 7	; F4997D  ld BC,0x0007
 	calr	sub_F49CA9	; F49980  calr 0xf49ca9
 	ld	a, (13488:16)	; F49983  ld A,(0x34b0)
 	ld	(13471:16), a	; F49987  ld (0x349f),A
 	calr	CycleRecord_CheckIsRecordTrack	; F4998B  calr 0xf49a3d
 	cp	a, 0:i3	; F4998E  cp A,0
-	jr	z, sub_F498A0_Skip8	; F49990  jr Z,0xf499a9
+	jr	z, SeqRecord_WriteRingEventsToTracks_Skip8	; F49990  jr Z,0xf499a9
 	ldw	de, 6	; F49992  ld DE,0x0006
 	ld	hl, de	; F49995  ld HL,DE
 	xor	bc, bc	; F49997  xor BC,BC
 	ld	xix, 13482	; F49999  ld XIX,0x000034aa
 	mx_ld_rm MXB, ra_IX, ra_HL, 3	; F4999E  ld C,(XIX+HL)
 	calr	sub_F4A2C8	; F499A3  calr 0xf4a2c8
-	jrl	sub_F498A0	; F499A6  jrl T,0xf498a0
-sub_F498A0_Skip8:
+	jrl	SeqRecord_WriteRingEventsToTracks	; F499A6  jrl T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Skip8:
 	ld	(14064:16), 6	; F499A9  ld (0x36f0),0x06
 	ld	a, (13488:16)	; F499AE  ld A,(0x34b0)
 	ld	(13471:16), a	; F499B2  ld (0x349f),A
 	calr	sub_F49CE6	; F499B6  calr 0xf49ce6
-	jrl	sub_F498A0	; F499B9  jrl T,0xf498a0
-sub_F498A0_Skip15:
+	jrl	SeqRecord_WriteRingEventsToTracks	; F499B9  jrl T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Skip15:
 	ld	(13482:16), 129	; F499BC  ld (0x34aa),0x81
 	call	T_SeqBufRing_Get	; F499C1  call 0xf41d84
 	calr	sub_F49D00	; F499C5  calr 0xf49d00
-	jrl	sub_F498A0	; F499C8  jrl T,0xf498a0
-sub_F498A0_Skip9:
+	jrl	SeqRecord_WriteRingEventsToTracks	; F499C8  jrl T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Skip9:
 	ldw	bc, 7	; F499CB  ld BC,0x0007
 	calr	sub_F49CA9	; F499CE  calr 0xf49ca9
 	ldw	de, 6	; F499D1  ld DE,0x0006
 	calr	sub_F4A26D	; F499D4  calr 0xf4a26d
-	jrl	sub_F498A0	; F499D7  jrl T,0xf498a0
-sub_F498A0_Skip16:
+	jrl	SeqRecord_WriteRingEventsToTracks	; F499D7  jrl T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Skip16:
 	ldw	bc, 5	; F499DA  ld BC,0x0005
 	calr	sub_F49CA9	; F499DD  calr 0xf49ca9
 	ld	a, (13486:16)	; F499E0  ld A,(0x34ae)
 	ld	(13471:16), a	; F499E4  ld (0x349f),A
 	calr	CycleRecord_CheckIsRecordTrack	; F499E8  calr 0xf49a3d
 	cp	a, 0:i3	; F499EB  cp A,0
-	jr	z, sub_F498A0_Skip10	; F499ED  jr Z,0xf499f8
+	jr	z, SeqRecord_WriteRingEventsToTracks_Skip10	; F499ED  jr Z,0xf499f8
 	ldw	de, 4	; F499EF  ld DE,0x0004
 	calr	sub_F4A2A4	; F499F2  calr 0xf4a2a4
-	jrl	sub_F498A0	; F499F5  jrl T,0xf498a0
-sub_F498A0_Skip10:
+	jrl	SeqRecord_WriteRingEventsToTracks	; F499F5  jrl T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Skip10:
 	ld	(14064:16), 4	; F499F8  ld (0x36f0),0x04
 	ld	a, (13486:16)	; F499FD  ld A,(0x34ae)
 	ld	(13471:16), a	; F49A01  ld (0x349f),A
 	calr	sub_F49CE6	; F49A05  calr 0xf49ce6
-	jrl	sub_F498A0	; F49A08  jrl T,0xf498a0
-sub_F498A0_Join:
+	jrl	SeqRecord_WriteRingEventsToTracks	; F49A08  jrl T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Join:
 	ldw	bc, 4	; F49A0B  ld BC,0x0004
 	calr	sub_F49CA9	; F49A0E  calr 0xf49ca9
 	ld	a, (13485:16)	; F49A11  ld A,(0x34ad)
 	ld	(13471:16), a	; F49A15  ld (0x349f),A
 	calr	CycleRecord_CheckIsRecordTrack	; F49A19  calr 0xf49a3d
 	cp	a, 0:i3	; F49A1C  cp A,0
-	jr	z, sub_F498A0_Skip11	; F49A1E  jr Z,0xf49a29
+	jr	z, SeqRecord_WriteRingEventsToTracks_Skip11	; F49A1E  jr Z,0xf49a29
 	ldw	de, 3	; F49A20  ld DE,0x0003
 	calr	sub_F4A2B6	; F49A23  calr 0xf4a2b6
-	jrl	sub_F498A0	; F49A26  jrl T,0xf498a0
-sub_F498A0_Skip11:
+	jrl	SeqRecord_WriteRingEventsToTracks	; F49A26  jrl T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Skip11:
 	ld	(14064:16), 3	; F49A29  ld (0x36f0),0x03
 	ld	a, (13485:16)	; F49A2E  ld A,(0x34ad)
 	ld	(13471:16), a	; F49A32  ld (0x349f),A
 	calr	sub_F49CE6	; F49A36  calr 0xf49ce6
-	jrl	sub_F498A0	; F49A39  jrl T,0xf498a0
-sub_F498A0_Return:
+	jrl	SeqRecord_WriteRingEventsToTracks	; F49A39  jrl T,0xf498a0
+SeqRecord_WriteRingEventsToTracks_Return:
 	ret	; F49A3C  ret
 
 ; --------------------------------------------------------------------------
@@ -104023,17 +104069,17 @@ CycleRecord_AbortMemoryFull:
 ; CycleRecord_FillTakeChain2WithBeatMarks: Starts take chain 2 (0x36FC) as one block holding the 0x82 end tag and
 ;   makes it record track (0x36D6)'s end cursor (CycleRecord_AllocTakeChain2; no free block -> CycleRecord_AbortMemoryFull), then
 ;   appends one 0x81 beat mark per beat of the cycle range (count from CycleRecord_CountCycleRangeBeats: (0x3624)-(0x3622)+1 bars x
-;   TransportA_BeatsPerBar, or via sub_F4B771). Track cursors saved/restored around it.
+;   TransportA_BeatsPerBar, or via CycleRecord_BeatsBeforeMeasureFromTimeSigs). Track cursors saved/restored around it.
 ;   CycleRecord_CopyCycleRangeToTakeChain2's empty-track arm. Basis: caller + body. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave6_s.json)
 CycleRecord_FillTakeChain2WithBeatMarks:
 	call	T_SeqTrackCursors_Save	; F4A813  call 0xf40b68
 	calr	CycleRecord_AllocTakeChain2	; F4A817  calr 0xf4a82c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4A81A  cp (0x0d4a),0x00
-	jr	nz, sub_F4A813_Skip	; F4A81F  jr NZ,0xf4a827
+	jr	nz, CycleRecord_FillTakeChain2WithBeatMarks_Skip	; F4A81F  jr NZ,0xf4a827
 	calr	CycleRecord_CountCycleRangeBeats	; F4A821  calr 0xf4a88a
 	calr	CycleRecord_AppendBeatMarks	; F4A824  calr 0xf4a90a
-sub_F4A813_Skip:
+CycleRecord_FillTakeChain2WithBeatMarks_Skip:
 	call	T_SeqTrackCursors_RestoreSaved	; F4A827  call 0xf40b64
 	ret	; F4A82B  ret
 
@@ -104055,7 +104101,7 @@ sub_F4A813_Skip:
 CycleRecord_AllocTakeChain2:
 	ld	(BStore_ErrorCode:16), 0	; F4A82C  ld (0x0d4a),0x00
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F4A831  cp (0x6034ba),0x0000
-	jr	z, sub_F4A82C_Skip	; F4A838  jr Z,0xf4a886
+	jr	z, CycleRecord_AllocTakeChain2_Skip	; F4A838  jr Z,0xf4a886
 	call	T_BStore_AllocBlock_B_Veneer	; F4A83A  call 0xf40c88
 	ld	(14076:16), ix	; F4A83E  ld (0x36fc),IX
 	ld	hl, ix	; F4A842  ld HL,IX
@@ -104077,10 +104123,10 @@ CycleRecord_AllocTakeChain2:
 	ld	a, (14038:16)	; F4A87B  ld A,(0x36d6)
 	add	xix, xwa	; F4A87F  add XIX,XWA
 	ld	(xix), 5	; F4A881  ld (XIX),0x05
-	jr	sub_F4A82C_Return	; F4A884  jr T,0xf4a889
-sub_F4A82C_Skip:
+	jr	CycleRecord_AllocTakeChain2_Return	; F4A884  jr T,0xf4a889
+CycleRecord_AllocTakeChain2_Skip:
 	calr	CycleRecord_AbortMemoryFull	; F4A886  calr 0xf4a7fe
-sub_F4A82C_Return:
+CycleRecord_AllocTakeChain2_Return:
 	ret	; F4A889  ret
 
 ; --------------------------------------------------------------------------
@@ -104097,25 +104143,25 @@ sub_F4A82C_Return:
 ; CycleRecord_CountCycleRangeBeats: (0x36F2) := the beats in measures (0x3622)..(0x3624): after
 ;   SeqMasterTrack_UpdateActive, with MASTER off ((0x0C8A) bit 2 clear) ((0x3624) + 1 - (0x3622)) x
 ;   TransportA_BeatsPerBar (CycleRecord_CountCycleRangeBeatsFromBeatsPerBar); with MASTER on, (0x0D1D) := W and CycleRecord_CountCycleRangeBeatsFromTimeSigs takes the time-signature beat
-;   count before measure (0x3624)+1 minus that before (0x3622) (sub_F4B771). Basis: callers + caller header + body.
+;   count before measure (0x3624)+1 minus that before (0x3622) (CycleRecord_BeatsBeforeMeasureFromTimeSigs). Basis: callers + caller header + body.
 ;   (notes/naming-pilot-2026-10-06/proposals_wave7_w.json)
 CycleRecord_CountCycleRangeBeats:
 	call	T_SeqMasterTrack_UpdateActive	; F4A88A  call 0xf40aa8
 	m_bit 2, MD16, 0x0c8a	; F4A88E  bit 2,(0x0c8a)
-	jr	nz, sub_F4A88A_Skip	; F4A892  jr NZ,0xf4a899
+	jr	nz, CycleRecord_CountCycleRangeBeats_Skip	; F4A892  jr NZ,0xf4a899
 	calr	CycleRecord_CountCycleRangeBeatsFromBeatsPerBar	; F4A894  calr 0xf4a8f0
-	jr	sub_F4A88A_Return	; F4A897  jr T,0xf4a8a0
-sub_F4A88A_Skip:
+	jr	CycleRecord_CountCycleRangeBeats_Return	; F4A897  jr T,0xf4a8a0
+CycleRecord_CountCycleRangeBeats_Skip:
 	ld	(3357:16), w	; F4A899  ld (0x0d1d),W
 	calr	CycleRecord_CountCycleRangeBeatsFromTimeSigs	; F4A89D  calr 0xf4a8a1
-sub_F4A88A_Return:
+CycleRecord_CountCycleRangeBeats_Return:
 	ret	; F4A8A0  ret
 
 ; --------------------------------------------------------------------------
 ; CycleRecord_CountCycleRangeBeatsFromTimeSigs
 ; Called from: in-module: 0xF4A89D
 ; Touches: (0x0C90) (0x345C) (0x345E) (0x3622) (0x3624) (0x36F2)
-; Calls:   sub_F4B771
+; Calls:   CycleRecord_BeatsBeforeMeasureFromTimeSigs
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A8A1 is an instruction boundary.
 ;           The name IS the address.
@@ -104123,7 +104169,7 @@ sub_F4A88A_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; CycleRecord_CountCycleRangeBeatsFromTimeSigs: (0x36F2) := beats before measure (0x3624)+1 minus beats before measure
-;   (0x3622), each summed from the master track's time-signature records by sub_F4B771 (chain (0x0D1D)); BStore cursor
+;   (0x3622), each summed from the master track's time-signature records by CycleRecord_BeatsBeforeMeasureFromTimeSigs (chain (0x0D1D)); BStore cursor
 ;   kept. The MASTER-on arm of CycleRecord_CountCycleRangeBeats. Basis: caller + caller header + body. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave8_a8.json)
 CycleRecord_CountCycleRangeBeatsFromTimeSigs:
@@ -104134,7 +104180,7 @@ CycleRecord_CountCycleRangeBeatsFromTimeSigs:
 	ld	(3216:16), bc	; F4A8AF  ld (0x0c90),BC
 	ld	a, w	; F4A8B3  ld A,W
 	pushw	wa	; F4A8B5  push WA
-	calr	sub_F4B771	; F4A8B6  calr 0xf4b771
+	calr	CycleRecord_BeatsBeforeMeasureFromTimeSigs	; F4A8B6  calr 0xf4b771
 	popw	wa	; F4A8B9  pop WA
 	m_popw MD16, BStore_CursorOffset	; F4A8BA  popw (0x345e)
 	m_popw MD16, BStore_CursorBlock	; F4A8BE  popw (0x345c)
@@ -104145,7 +104191,7 @@ CycleRecord_CountCycleRangeBeatsFromTimeSigs:
 	ld	(3216:16), bc	; F4A8D2  ld (0x0c90),BC
 	ld	a, w	; F4A8D6  ld A,W
 	pushw	wa	; F4A8D8  push WA
-	calr	sub_F4B771	; F4A8D9  calr 0xf4b771
+	calr	CycleRecord_BeatsBeforeMeasureFromTimeSigs	; F4A8D9  calr 0xf4b771
 	popw	wa	; F4A8DC  pop WA
 	m_popw MD16, BStore_CursorOffset	; F4A8DD  popw (0x345e)
 	m_popw MD16, BStore_CursorBlock	; F4A8E1  popw (0x345c)
@@ -104195,13 +104241,13 @@ CycleRecord_CountCycleRangeBeatsFromBeatsPerBar:
 ;   missing. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave7_w.json)
 CycleRecord_AppendBeatMarks:
 	m_cp_mi16 MW16, 0x36f2, 0x0000	; F4A90A  cp (0x36f2),0x0000
-	jr	nz, sub_F4A90A_Skip	; F4A910  jr NZ,0xf4a914
-	jr	sub_F4A90A_Return	; F4A912  jr T,0xf4a91d
-sub_F4A90A_Skip:
+	jr	nz, CycleRecord_AppendBeatMarks_Skip	; F4A910  jr NZ,0xf4a914
+	jr	CycleRecord_AppendBeatMarks_Return	; F4A912  jr T,0xf4a91d
+CycleRecord_AppendBeatMarks_Skip:
 	calr	CycleRecord_AppendBeatMark	; F4A914  calr 0xf4a91e
 	decw	1, (14066:16)	; F4A917  decw 1,(0x36f2)
 	jr	CycleRecord_AppendBeatMarks	; F4A91B  jr T,0xf4a90a
-sub_F4A90A_Return:
+CycleRecord_AppendBeatMarks_Return:
 	ret	; F4A91D  ret
 
 ; --------------------------------------------------------------------------
@@ -104293,11 +104339,11 @@ CycleRecord_CopyPaddedRangeToTakeChain2:
 	ld	(14132:16), a	; F4A99F  ld (0x3734),A
 	calr	CycleRecord_AllocTakeChain2	; F4A9A3  calr 0xf4a82c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4A9A6  cp (0x0d4a),0x00
-	jr	nz, sub_F4A976_Skip	; F4A9AB  jr NZ,0xf4a9ce
+	jr	nz, CycleRecord_CopyPaddedRangeToTakeChain2_Skip	; F4A9AB  jr NZ,0xf4a9ce
 	calr	CycleRecord_CountCycleRangeBeats	; F4A9AD  calr 0xf4a88a
 	calr	CycleRecord_CopyFromCycleStartToTakeChain2	; F4A9B0  calr 0xf4a9d3
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4A9B3  cp (0x0d4a),0x00
-	jr	nz, sub_F4A976_Skip	; F4A9B8  jr NZ,0xf4a9ce
+	jr	nz, CycleRecord_CopyPaddedRangeToTakeChain2_Skip	; F4A9B8  jr NZ,0xf4a9ce
 	ld	wa, (14066:16)	; F4A9BA  ld WA,(0x36f2)
 	pushw	wa	; F4A9BE  push WA
 	calr	CycleRecord_CountTakeChain2BeatMarks	; F4A9BF  calr 0xf4aa59
@@ -104305,7 +104351,7 @@ CycleRecord_CopyPaddedRangeToTakeChain2:
 	m_sub_rm MW16, 0x36f2, 0	; F4A9C3  sub WA,(0x36f2)
 	ld	(14066:16), wa	; F4A9C7  ld (0x36f2),WA
 	calr	CycleRecord_AppendBeatMarks	; F4A9CB  calr 0xf4a90a
-sub_F4A976_Skip:
+CycleRecord_CopyPaddedRangeToTakeChain2_Skip:
 	call	T_SeqTrackCursors_RestoreSaved	; F4A9CE  call 0xf40b64
 	ret	; F4A9D2  ret
 
@@ -104346,9 +104392,9 @@ CycleRecord_CopyFromCycleStartToTakeChain2:
 	ld	de, (14130:16)	; F4AA12  ld DE,(0x3732)
 	call	CycleRecord_CopyRangeIntoGrowingChain	; F4AA16  call 0xf4b462
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4AA1A  cp (0x0d4a),0x00
-	jr	z, sub_F4A9D3_Skip	; F4AA1F  jr Z,0xf4aa26
+	jr	z, CycleRecord_CopyFromCycleStartToTakeChain2_Skip	; F4AA1F  jr Z,0xf4aa26
 	ld	(BStore_ErrorCode:16), 255	; F4AA21  ld (0x0d4a),0xff
-sub_F4A9D3_Skip:
+CycleRecord_CopyFromCycleStartToTakeChain2_Skip:
 	calr	CycleRecord_SetEndCursorAtTakeChain2EndTag	; F4AA26  calr 0xf4adcc
 	ret	; F4AA29  ret
 	ld	xix, 6304894	; F4AA2A  ld XIX,0x0060347e
@@ -104388,19 +104434,19 @@ CycleRecord_CountTakeChain2BeatMarks:
 	ld	(BStore_CursorBlock:16), wa	; F4AA5D  ld (0x345c),WA
 	ldw	(BStore_CursorOffset:16), 5	; F4AA61  ld (0x345e),0x0005
 	ldw	(14066:16), 0	; F4AA67  ld (0x36f2),0x0000
-sub_F4AA59_Join:
+CycleRecord_CountTakeChain2BeatMarks_Join:
 	call	T_BStore_ReadCursorByte	; F4AA6D  call 0xf40c54
 	cp	a, 129	; F4AA71  cp A,0x81
-	jr	z, sub_F4AA59_Skip	; F4AA74  jr Z,0xf4aa81
+	jr	z, CycleRecord_CountTakeChain2BeatMarks_Skip	; F4AA74  jr Z,0xf4aa81
 	cp	a, 130	; F4AA76  cp A,0x82
-	jr	z, sub_F4AA59_Return	; F4AA79  jr Z,0xf4aa87
-sub_F4AA59_Join2:
+	jr	z, CycleRecord_CountTakeChain2BeatMarks_Return	; F4AA79  jr Z,0xf4aa87
+CycleRecord_CountTakeChain2BeatMarks_Join2:
 	call	CycleRecord_StepCursorOneEvent	; F4AA7B  call 0xf4aedd
-	jr	sub_F4AA59_Join	; F4AA7F  jr T,0xf4aa6d
-sub_F4AA59_Skip:
+	jr	CycleRecord_CountTakeChain2BeatMarks_Join	; F4AA7F  jr T,0xf4aa6d
+CycleRecord_CountTakeChain2BeatMarks_Skip:
 	incw	1, (14066:16)	; F4AA81  incw 1,(0x36f2)
-	jr	sub_F4AA59_Join2	; F4AA85  jr T,0xf4aa7b
-sub_F4AA59_Return:
+	jr	CycleRecord_CountTakeChain2BeatMarks_Join2	; F4AA85  jr T,0xf4aa7b
+CycleRecord_CountTakeChain2BeatMarks_Return:
 	ret	; F4AA87  ret
 
 ; --------------------------------------------------------------------------
@@ -104424,7 +104470,7 @@ CycleRecord_CopyRangeToTakeChain2:
 	call	T_SeqTrackCursors_Save	; F4AA88  call 0xf40b68
 	calr	CycleRecord_AllocTakeChain2	; F4AA8C  calr 0xf4a82c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4AA8F  cp (0x0d4a),0x00
-	jr	nz, sub_F4AA88_Skip	; F4AA94  jr NZ,0xf4aad0
+	jr	nz, CycleRecord_CopyRangeToTakeChain2_Skip	; F4AA94  jr NZ,0xf4aad0
 	ld	wa, (14076:16)	; F4AA96  ld WA,(0x36fc)
 	ld	(3159:16), wa	; F4AA9A  ld (0x0c57),WA
 	ldw	(3165:16), 5	; F4AA9E  ld (0x0c5d),0x0005
@@ -104437,12 +104483,12 @@ CycleRecord_CopyRangeToTakeChain2:
 	ld	(3179:16), wa	; F4AABC  ld (0x0c6b),WA
 	call	CycleRecord_CopyRangeIntoGrowingChain	; F4AAC0  call 0xf4b462
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4AAC4  cp (0x0d4a),0x00
-	jr	nz, sub_F4AA88_Skip	; F4AAC9  jr NZ,0xf4aad0
+	jr	nz, CycleRecord_CopyRangeToTakeChain2_Skip	; F4AAC9  jr NZ,0xf4aad0
 	calr	CycleRecord_TerminateTakeChain2AtCopyEnd	; F4AACB  calr 0xf4aada
-	jr	sub_F4AA88_Join	; F4AACE  jr T,0xf4aad5
-sub_F4AA88_Skip:
+	jr	CycleRecord_CopyRangeToTakeChain2_Join	; F4AACE  jr T,0xf4aad5
+CycleRecord_CopyRangeToTakeChain2_Skip:
 	ld	(BStore_ErrorCode:16), 255	; F4AAD0  ld (0x0d4a),0xff
-sub_F4AA88_Join:
+CycleRecord_CopyRangeToTakeChain2_Join:
 	call	T_SeqTrackCursors_RestoreSaved	; F4AAD5  call 0xf40b64
 	ret	; F4AAD9  ret
 
@@ -104808,7 +104854,7 @@ sub_F4ACB1_Return:
 	ret	; F4ADC1  ret
 	ld	wa, (14074:16)	; F4ADC2  ld WA,(0x36fa)
 	ld	(BStore_CursorBlock:16), wa	; F4ADC6  ld (0x345c),WA
-	jr	sub_F4ADCC_Join	; F4ADCA  jr T,0xf4add4
+	jr	CycleRecord_SetEndCursorAtTakeChain2EndTag_Join	; F4ADCA  jr T,0xf4add4
 
 ; --------------------------------------------------------------------------
 ; CycleRecord_SetEndCursorAtTakeChain2EndTag
@@ -104829,15 +104875,15 @@ sub_F4ACB1_Return:
 CycleRecord_SetEndCursorAtTakeChain2EndTag:
 	ld	wa, (14076:16)	; F4ADCC  ld WA,(0x36fc)
 	ld	(BStore_CursorBlock:16), wa	; F4ADD0  ld (0x345c),WA
-sub_F4ADCC_Join:
+CycleRecord_SetEndCursorAtTakeChain2EndTag_Join:
 	ldw	(BStore_CursorOffset:16), 5	; F4ADD4  ld (0x345e),0x0005
-sub_F4ADCC_Join2:
+CycleRecord_SetEndCursorAtTakeChain2EndTag_Join2:
 	call	T_BStore_ReadCursorByte	; F4ADDA  call 0xf40c54
 	cp	a, 130	; F4ADDE  cp A,0x82
-	jr	z, sub_F4ADCC_Skip	; F4ADE1  jr Z,0xf4ade9
+	jr	z, CycleRecord_SetEndCursorAtTakeChain2EndTag_Skip	; F4ADE1  jr Z,0xf4ade9
 	call	CycleRecord_StepCursorOneEvent	; F4ADE3  call 0xf4aedd
-	jr	sub_F4ADCC_Join2	; F4ADE7  jr T,0xf4adda
-sub_F4ADCC_Skip:
+	jr	CycleRecord_SetEndCursorAtTakeChain2EndTag_Join2	; F4ADE7  jr T,0xf4adda
+CycleRecord_SetEndCursorAtTakeChain2EndTag_Skip:
 	ld	xix, 6304894	; F4ADE9  ld XIX,0x0060347e
 	xor	xwa, xwa	; F4ADEE  xor XWA,XWA
 	ld	a, (14038:16)	; F4ADF0  ld A,(0x36d6)
@@ -105308,9 +105354,9 @@ CycleRecord_PadTrackPastCycleEnd:
 	ld	xix, 6305024	; F4B16E  ld XIX,0x00603500
 	add	xix, xwa	; F4B173  add XIX,XWA
 	m_bit 7, MDI+r4, 0	; F4B175  bit 7,(XIX)
-	jr	nz, sub_F4B160_Skip	; F4B177  jr NZ,0xf4b1e3
+	jr	nz, CycleRecord_PadTrackPastCycleEnd_Skip	; F4B177  jr NZ,0xf4b1e3
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F4B179  cp (0x6034ba),0x0000
-	jrl	z, sub_F4B160_Skip2	; F4B180  jrl Z,0xf4b207
+	jrl	z, CycleRecord_PadTrackPastCycleEnd_Skip2	; F4B180  jrl Z,0xf4b207
 	push	xix	; F4B183  push XIX
 	call	T_BStore_AllocBlock_B_Veneer	; F4B184  call 0xf40c88
 	ld	hl, ix	; F4B188  ld HL,IX
@@ -105341,20 +105387,20 @@ CycleRecord_PadTrackPastCycleEnd:
 	add	xix, xwa	; F4B1DB  add XIX,XWA
 	ld	(xix), 5	; F4B1DD  ld (XIX),0x05
 	calr	CycleRecord_AppendBeatMark	; F4B1E0  calr 0xf4a91e
-sub_F4B160_Skip:
+CycleRecord_PadTrackPastCycleEnd_Skip:
 	calr	CycleRecord_CountTrackBeatMarks	; F4B1E3  calr 0xf4b20d
 	calr	CycleRecord_CountBeatsToCycleEnd	; F4B1E6  calr 0xf4b258
 	ld	wa, (14066:16)	; F4B1E9  ld WA,(0x36f2)
 	m_cp_rm MW16, 0x36f4, 0	; F4B1ED  cp WA,(0x36f4)
-	jr	ugt, sub_F4B160_Return	; F4B1F1  jr UGT,0xf4b206
+	jr	ugt, CycleRecord_PadTrackPastCycleEnd_Return	; F4B1F1  jr UGT,0xf4b206
 	ld	wa, (14068:16)	; F4B1F3  ld WA,(0x36f4)
 	m_sub_rm MW16, 0x36f2, 0	; F4B1F7  sub WA,(0x36f2)
 	add	wa, 2	; F4B1FB  add WA,0x0002
 	ld	(14066:16), wa	; F4B1FF  ld (0x36f2),WA
 	calr	CycleRecord_AppendBeatMarks	; F4B203  calr 0xf4a90a
-sub_F4B160_Return:
+CycleRecord_PadTrackPastCycleEnd_Return:
 	ret	; F4B206  ret
-sub_F4B160_Skip2:
+CycleRecord_PadTrackPastCycleEnd_Skip2:
 	ld	(BStore_ErrorCode:16), 255	; F4B207  ld (0x0d4a),0xff
 	ret	; F4B20C  ret
 
@@ -105382,25 +105428,25 @@ CycleRecord_CountTrackBeatMarks:
 	add	xix, 1	; F4B21D  add XIX,0x00000001
 	ld	wa, (xix)	; F4B223  ld WA,(XIX)
 	cp	wa, 65535	; F4B225  cp WA,0xffff
-	jr	nz, sub_F4B20D_Skip	; F4B229  jr NZ,0xf4b22d
-	jr	sub_F4B20D_Return	; F4B22B  jr T,0xf4b257
-sub_F4B20D_Skip:
+	jr	nz, CycleRecord_CountTrackBeatMarks_Skip	; F4B229  jr NZ,0xf4b22d
+	jr	CycleRecord_CountTrackBeatMarks_Return	; F4B22B  jr T,0xf4b257
+CycleRecord_CountTrackBeatMarks_Skip:
 	ld	(BStore_CursorBlock:16), wa	; F4B22D  ld (0x345c),WA
 	ldw	(BStore_CursorOffset:16), 5	; F4B231  ld (0x345e),0x0005
 	ldw	(14066:16), 0	; F4B237  ld (0x36f2),0x0000
-sub_F4B20D_Join:
+CycleRecord_CountTrackBeatMarks_Join:
 	call	T_BStore_ReadCursorByte	; F4B23D  call 0xf40c54
 	cp	a, 129	; F4B241  cp A,0x81
-	jr	z, sub_F4B20D_Skip2	; F4B244  jr Z,0xf4b251
+	jr	z, CycleRecord_CountTrackBeatMarks_Skip2	; F4B244  jr Z,0xf4b251
 	cp	a, 130	; F4B246  cp A,0x82
-	jr	z, sub_F4B20D_Return	; F4B249  jr Z,0xf4b257
-sub_F4B20D_Join2:
+	jr	z, CycleRecord_CountTrackBeatMarks_Return	; F4B249  jr Z,0xf4b257
+CycleRecord_CountTrackBeatMarks_Join2:
 	call	CycleRecord_StepCursorOneEvent	; F4B24B  call 0xf4aedd
-	jr	sub_F4B20D_Join	; F4B24F  jr T,0xf4b23d
-sub_F4B20D_Skip2:
+	jr	CycleRecord_CountTrackBeatMarks_Join	; F4B24F  jr T,0xf4b23d
+CycleRecord_CountTrackBeatMarks_Skip2:
 	incw	1, (14066:16)	; F4B251  incw 1,(0x36f2)
-	jr	sub_F4B20D_Join2	; F4B255  jr T,0xf4b24b
-sub_F4B20D_Return:
+	jr	CycleRecord_CountTrackBeatMarks_Join2	; F4B255  jr T,0xf4b24b
+CycleRecord_CountTrackBeatMarks_Return:
 	ret	; F4B257  ret
 
 ; --------------------------------------------------------------------------
@@ -105416,26 +105462,26 @@ sub_F4B20D_Return:
 ; --------------------------------------------------------------------------
 ; CycleRecord_CountBeatsToCycleEnd: (0x36F4) := the beats up to the cycle end: after SeqMasterTrack_UpdateActive, with
 ;   MASTER off ((0x0C8A) bit 2 clear) ((0x3624) + 1) x TransportA_BeatsPerBar (CycleRecord_CountBeatsToCycleEndFromBeatsPerBar); with MASTER on, (0x0D1D)
-;   := W and CycleRecord_CountBeatsToCycleEndFromTimeSigs takes the time-signature beat count before measure (0x3624) + 1 (sub_F4B771). Same shape as
+;   := W and CycleRecord_CountBeatsToCycleEndFromTimeSigs takes the time-signature beat count before measure (0x3624) + 1 (CycleRecord_BeatsBeforeMeasureFromTimeSigs). Same shape as
 ;   CycleRecord_CountCycleRangeBeats, measured from the song start. Basis: caller + caller header + body + twin. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave7_w.json)
 CycleRecord_CountBeatsToCycleEnd:
 	call	T_SeqMasterTrack_UpdateActive	; F4B258  call 0xf40aa8
 	m_bit 2, MD16, 0x0c8a	; F4B25C  bit 2,(0x0c8a)
-	jr	nz, sub_F4B258_Skip	; F4B260  jr NZ,0xf4b267
+	jr	nz, CycleRecord_CountBeatsToCycleEnd_Skip	; F4B260  jr NZ,0xf4b267
 	calr	CycleRecord_CountBeatsToCycleEndFromBeatsPerBar	; F4B262  calr 0xf4b295
-	jr	sub_F4B258_Return	; F4B265  jr T,0xf4b26e
-sub_F4B258_Skip:
+	jr	CycleRecord_CountBeatsToCycleEnd_Return	; F4B265  jr T,0xf4b26e
+CycleRecord_CountBeatsToCycleEnd_Skip:
 	ld	(3357:16), w	; F4B267  ld (0x0d1d),W
 	calr	CycleRecord_CountBeatsToCycleEndFromTimeSigs	; F4B26B  calr 0xf4b26f
-sub_F4B258_Return:
+CycleRecord_CountBeatsToCycleEnd_Return:
 	ret	; F4B26E  ret
 
 ; --------------------------------------------------------------------------
 ; CycleRecord_CountBeatsToCycleEndFromTimeSigs
 ; Called from: in-module: 0xF4B26B
 ; Touches: (0x0C90) (0x345C) (0x345E) (0x3624) (0x36F4)
-; Calls:   sub_F4B771
+; Calls:   CycleRecord_BeatsBeforeMeasureFromTimeSigs
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4B26F is an instruction boundary.
 ;           The name IS the address.
@@ -105443,7 +105489,7 @@ sub_F4B258_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; CycleRecord_CountBeatsToCycleEndFromTimeSigs: (0x36F4) := beats before measure (0x3624)+1, summed from the master
-;   track's time-signature records by sub_F4B771 (chain (0x0D1D)); BStore cursor kept. The MASTER-on arm of
+;   track's time-signature records by CycleRecord_BeatsBeforeMeasureFromTimeSigs (chain (0x0D1D)); BStore cursor kept. The MASTER-on arm of
 ;   CycleRecord_CountBeatsToCycleEnd. Basis: caller + caller header + body + twin. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave8_a8.json)
 CycleRecord_CountBeatsToCycleEndFromTimeSigs:
@@ -105454,7 +105500,7 @@ CycleRecord_CountBeatsToCycleEndFromTimeSigs:
 	ld	(3216:16), bc	; F4B27D  ld (0x0c90),BC
 	ld	a, w	; F4B281  ld A,W
 	pushw	wa	; F4B283  push WA
-	calr	sub_F4B771	; F4B284  calr 0xf4b771
+	calr	CycleRecord_BeatsBeforeMeasureFromTimeSigs	; F4B284  calr 0xf4b771
 	popw	wa	; F4B287  pop WA
 	m_popw MD16, BStore_CursorOffset	; F4B288  popw (0x345e)
 	m_popw MD16, BStore_CursorBlock	; F4B28C  popw (0x345c)
@@ -105564,9 +105610,9 @@ CycleRecord_AppendUnplayedRest:
 	calr	CycleRecord_SetCopySourceEndAtEndTag	; F4B32B  calr 0xf4b342
 	call	CycleRecord_CopyRangeIntoGrowingChain	; F4B32E  call 0xf4b462
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B332  cp (0x0d4a),0x00
-	jr	z, sub_F4B2D5_Skip	; F4B337  jr Z,0xf4b33e
+	jr	z, CycleRecord_AppendUnplayedRest_Skip	; F4B337  jr Z,0xf4b33e
 	ld	(BStore_ErrorCode:16), 255	; F4B339  ld (0x0d4a),0xff
-sub_F4B2D5_Skip:
+CycleRecord_AppendUnplayedRest_Skip:
 	calr	CycleRecord_SetEndCursorAtCopiedEndTag	; F4B33E  calr 0xf4ab0c
 	ret	; F4B341  ret
 
@@ -105590,13 +105636,13 @@ CycleRecord_SetCopySourceEndAtEndTag:
 	ld	(BStore_CursorBlock:16), wa	; F4B346  ld (0x345c),WA
 	ld	wa, (3175:16)	; F4B34A  ld WA,(0x0c67)
 	ld	(BStore_CursorOffset:16), wa	; F4B34E  ld (0x345e),WA
-sub_F4B342_Join:
+CycleRecord_SetCopySourceEndAtEndTag_Join:
 	call	T_BStore_ReadCursorByte	; F4B352  call 0xf40c54
 	cp	a, 130	; F4B356  cp A,0x82
-	jr	z, sub_F4B342_Skip	; F4B359  jr Z,0xf4b361
+	jr	z, CycleRecord_SetCopySourceEndAtEndTag_Skip	; F4B359  jr Z,0xf4b361
 	call	CycleRecord_StepCursorOneEvent	; F4B35B  call 0xf4aedd
-	jr	sub_F4B342_Join	; F4B35F  jr T,0xf4b352
-sub_F4B342_Skip:
+	jr	CycleRecord_SetCopySourceEndAtEndTag_Join	; F4B35F  jr T,0xf4b352
+CycleRecord_SetCopySourceEndAtEndTag_Skip:
 	ld	de, (BStore_CursorBlock:16)	; F4B361  ld DE,(0x345c)
 	ld	wa, (BStore_CursorOffset:16)	; F4B365  ld WA,(0x345e)
 	ld	(3179:16), wa	; F4B369  ld (0x0c6b),WA
@@ -105762,7 +105808,7 @@ CycleRecord_CopyRangeIntoGrowingChain:
 	ld	(BStore_CopyDestAddr:16), xwa	; F4B482  ld (0x0c59),XWA
 	pop	xwa	; F4B486  pop XWA
 	m_cp_rm MW16, 0x0c61, 2	; F4B487  cp DE,(0x0c61)
-	jr	nz, sub_F4B462_Skip	; F4B48B  jr NZ,0xf4b4ae
+	jr	nz, CycleRecord_CopyRangeIntoGrowingChain_Skip	; F4B48B  jr NZ,0xf4b4ae
 	ldw	iy, 256	; F4B48D  ld IY,0x0100
 	m_sub_rm MW16, 0x0c67, 5	; F4B490  sub IY,(0x0c67)
 	ld	(3226:16), iy	; F4B494  ld (0x0c9a),IY
@@ -105771,20 +105817,20 @@ CycleRecord_CopyRangeIntoGrowingChain:
 	m_sub_rm MW16, 0x0c5d, 4	; F4B49F  sub IX,(0x0c5d)
 	ld	(3228:16), ix	; F4B4A3  ld (0x0c9c),IX
 	ld	ix, (3165:16)	; F4B4A7  ld IX,(0x0c5d)
-	jrl	sub_F4B462_Join7	; F4B4AB  jrl T,0xf4b65e
-sub_F4B462_Skip:
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Join7	; F4B4AB  jrl T,0xf4b65e
+CycleRecord_CopyRangeIntoGrowingChain_Skip:
 	ld	wa, (3165:16)	; F4B4AE  ld WA,(0x0c5d)
 	m_cp_rm MW16, 0x0c67, 0	; F4B4B2  cp WA,(0x0c67)
-	jr	c, sub_F4B462_Skip2	; F4B4B6  jr C,0xf4b4bc
-	jr	z, sub_F4B462_Skip3	; F4B4B8  jr Z,0xf4b4be
-	jr	ugt, sub_F4B462_Skip4	; F4B4BA  jr UGT,0xf4b4c1
-sub_F4B462_Skip2:
-	jr	sub_F4B462_Join	; F4B4BC  jr T,0xf4b4c4
-sub_F4B462_Skip3:
-	jrl	sub_F4B462_Join3	; F4B4BE  jrl T,0xf4b550
-sub_F4B462_Skip4:
-	jrl	sub_F4B462_Join5	; F4B4C1  jrl T,0xf4b5c0
-sub_F4B462_Join:
+	jr	c, CycleRecord_CopyRangeIntoGrowingChain_Skip2	; F4B4B6  jr C,0xf4b4bc
+	jr	z, CycleRecord_CopyRangeIntoGrowingChain_Skip3	; F4B4B8  jr Z,0xf4b4be
+	jr	ugt, CycleRecord_CopyRangeIntoGrowingChain_Skip4	; F4B4BA  jr UGT,0xf4b4c1
+CycleRecord_CopyRangeIntoGrowingChain_Skip2:
+	jr	CycleRecord_CopyRangeIntoGrowingChain_Join	; F4B4BC  jr T,0xf4b4c4
+CycleRecord_CopyRangeIntoGrowingChain_Skip3:
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Join3	; F4B4BE  jrl T,0xf4b550
+CycleRecord_CopyRangeIntoGrowingChain_Skip4:
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Join5	; F4B4C1  jrl T,0xf4b5c0
+CycleRecord_CopyRangeIntoGrowingChain_Join:
 	ldw	wa, 256	; F4B4C4  ld WA,0x0100
 	m_sub_rm MW16, 0x0c5d, 0	; F4B4C7  sub WA,(0x0c5d)
 	ldw	bc, 256	; F4B4CB  ld BC,0x0100
@@ -105802,34 +105848,34 @@ sub_F4B462_Join:
 	call	T_BStore_CopyAcrossBlocks	; F4B4F4  call 0xf427c0
 	call	CycleRecord_StepCopySrcToNextBlock	; F4B4F8  call 0xf4b726
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B4FC  cp (0x0d4a),0x00
-	jr	z, sub_F4B462_Loop	; F4B501  jr Z,0xf4b506
-	jrl	sub_F4B462_Return	; F4B503  jrl T,0xf4b69e
-sub_F4B462_Loop:
+	jr	z, CycleRecord_CopyRangeIntoGrowingChain_Loop	; F4B501  jr Z,0xf4b506
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Return	; F4B503  jrl T,0xf4b69e
+CycleRecord_CopyRangeIntoGrowingChain_Loop:
 	m_cp_rm MW16, 0x0c61, 2	; F4B506  cp DE,(0x0c61)
-	jr	nz, sub_F4B462_Skip5	; F4B50A  jr NZ,0xf4b50e
-	jr	sub_F4B462_Join2	; F4B50C  jr T,0xf4b53a
-sub_F4B462_Skip5:
+	jr	nz, CycleRecord_CopyRangeIntoGrowingChain_Skip5	; F4B50A  jr NZ,0xf4b50e
+	jr	CycleRecord_CopyRangeIntoGrowingChain_Join2	; F4B50C  jr T,0xf4b53a
+CycleRecord_CopyRangeIntoGrowingChain_Skip5:
 	ld	bc, (3222:16)	; F4B50E  ld BC,(0x0c96)
 	call	T_BStore_CopyAcrossBlocks	; F4B512  call 0xf427c0
 	call	CycleRecord_StepCopyDestToNextBlockOrAlloc	; F4B516  call 0xf4b69f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B51A  cp (0x0d4a),0x00
-	jr	z, sub_F4B462_Skip6	; F4B51F  jr Z,0xf4b524
-	jrl	sub_F4B462_Return	; F4B521  jrl T,0xf4b69e
-sub_F4B462_Skip6:
+	jr	z, CycleRecord_CopyRangeIntoGrowingChain_Skip6	; F4B51F  jr Z,0xf4b524
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Return	; F4B521  jrl T,0xf4b69e
+CycleRecord_CopyRangeIntoGrowingChain_Skip6:
 	ld	bc, (3224:16)	; F4B524  ld BC,(0x0c98)
 	call	T_BStore_CopyAcrossBlocks	; F4B528  call 0xf427c0
 	call	CycleRecord_StepCopySrcToNextBlock	; F4B52C  call 0xf4b726
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B530  cp (0x0d4a),0x00
-	jr	z, sub_F4B462_Loop	; F4B535  jr Z,0xf4b506
-	jrl	sub_F4B462_Return	; F4B537  jrl T,0xf4b69e
-sub_F4B462_Join2:
+	jr	z, CycleRecord_CopyRangeIntoGrowingChain_Loop	; F4B535  jr Z,0xf4b506
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Return	; F4B537  jrl T,0xf4b69e
+CycleRecord_CopyRangeIntoGrowingChain_Join2:
 	ld	wa, (3222:16)	; F4B53A  ld WA,(0x0c96)
 	ld	(3228:16), wa	; F4B53E  ld (0x0c9c),WA
 	ldw	bc, 256	; F4B542  ld BC,0x0100
 	sub	bc, 5	; F4B545  sub BC,0x0005
 	ld	(3226:16), bc	; F4B549  ld (0x0c9a),BC
-	jrl	sub_F4B462_Join7	; F4B54D  jrl T,0xf4b65e
-sub_F4B462_Join3:
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Join7	; F4B54D  jrl T,0xf4b65e
+CycleRecord_CopyRangeIntoGrowingChain_Join3:
 	ldw	bc, 256	; F4B550  ld BC,0x0100
 	m_sub_rm MW16, 0x0c67, 1	; F4B553  sub BC,(0x0c67)
 	ld	iy, (3175:16)	; F4B557  ld IY,(0x0c67)
@@ -105837,37 +105883,37 @@ sub_F4B462_Join3:
 	call	T_BStore_CopyAcrossBlocks	; F4B55F  call 0xf427c0
 	call	CycleRecord_StepCopySrcToNextBlock	; F4B563  call 0xf4b726
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B567  cp (0x0d4a),0x00
-	jr	z, sub_F4B462_Skip7	; F4B56C  jr Z,0xf4b571
-	jrl	sub_F4B462_Return	; F4B56E  jrl T,0xf4b69e
-sub_F4B462_Skip7:
+	jr	z, CycleRecord_CopyRangeIntoGrowingChain_Skip7	; F4B56C  jr Z,0xf4b571
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Return	; F4B56E  jrl T,0xf4b69e
+CycleRecord_CopyRangeIntoGrowingChain_Skip7:
 	call	CycleRecord_StepCopyDestToNextBlockOrAlloc	; F4B571  call 0xf4b69f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B575  cp (0x0d4a),0x00
-	jr	z, sub_F4B462_Loop2	; F4B57A  jr Z,0xf4b57f
-	jrl	sub_F4B462_Return	; F4B57C  jrl T,0xf4b69e
-sub_F4B462_Loop2:
+	jr	z, CycleRecord_CopyRangeIntoGrowingChain_Loop2	; F4B57A  jr Z,0xf4b57f
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Return	; F4B57C  jrl T,0xf4b69e
+CycleRecord_CopyRangeIntoGrowingChain_Loop2:
 	m_cp_rm MW16, 0x0c61, 2	; F4B57F  cp DE,(0x0c61)
-	jr	nz, sub_F4B462_Skip8	; F4B583  jr NZ,0xf4b587
-	jr	sub_F4B462_Join4	; F4B585  jr T,0xf4b5ae
-sub_F4B462_Skip8:
+	jr	nz, CycleRecord_CopyRangeIntoGrowingChain_Skip8	; F4B583  jr NZ,0xf4b587
+	jr	CycleRecord_CopyRangeIntoGrowingChain_Join4	; F4B585  jr T,0xf4b5ae
+CycleRecord_CopyRangeIntoGrowingChain_Skip8:
 	ldw	bc, 256	; F4B587  ld BC,0x0100
 	sub	bc, 5	; F4B58A  sub BC,0x0005
 	call	T_BStore_CopyAcrossBlocks	; F4B58E  call 0xf427c0
 	call	CycleRecord_StepCopySrcToNextBlock	; F4B592  call 0xf4b726
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B596  cp (0x0d4a),0x00
-	jr	z, sub_F4B462_Skip9	; F4B59B  jr Z,0xf4b5a0
-	jrl	sub_F4B462_Return	; F4B59D  jrl T,0xf4b69e
-sub_F4B462_Skip9:
+	jr	z, CycleRecord_CopyRangeIntoGrowingChain_Skip9	; F4B59B  jr Z,0xf4b5a0
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Return	; F4B59D  jrl T,0xf4b69e
+CycleRecord_CopyRangeIntoGrowingChain_Skip9:
 	call	CycleRecord_StepCopyDestToNextBlockOrAlloc	; F4B5A0  call 0xf4b69f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B5A4  cp (0x0d4a),0x00
-	jr	z, sub_F4B462_Loop2	; F4B5A9  jr Z,0xf4b57f
-	jrl	sub_F4B462_Return	; F4B5AB  jrl T,0xf4b69e
-sub_F4B462_Join4:
+	jr	z, CycleRecord_CopyRangeIntoGrowingChain_Loop2	; F4B5A9  jr Z,0xf4b57f
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Return	; F4B5AB  jrl T,0xf4b69e
+CycleRecord_CopyRangeIntoGrowingChain_Join4:
 	ldw	bc, 256	; F4B5AE  ld BC,0x0100
 	sub	bc, 5	; F4B5B1  sub BC,0x0005
 	ld	(3228:16), bc	; F4B5B5  ld (0x0c9c),BC
 	ld	(3226:16), bc	; F4B5B9  ld (0x0c9a),BC
-	jrl	sub_F4B462_Join7	; F4B5BD  jrl T,0xf4b65e
-sub_F4B462_Join5:
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Join7	; F4B5BD  jrl T,0xf4b65e
+CycleRecord_CopyRangeIntoGrowingChain_Join5:
 	ldw	wa, 256	; F4B5C0  ld WA,0x0100
 	m_sub_rm MW16, 0x0c67, 0	; F4B5C3  sub WA,(0x0c67)
 	ldw	bc, 256	; F4B5C7  ld BC,0x0100
@@ -105885,63 +105931,63 @@ sub_F4B462_Join5:
 	call	T_BStore_CopyAcrossBlocks	; F4B5F0  call 0xf427c0
 	call	CycleRecord_StepCopyDestToNextBlockOrAlloc	; F4B5F4  call 0xf4b69f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B5F8  cp (0x0d4a),0x00
-	jr	z, sub_F4B462_Skip10	; F4B5FD  jr Z,0xf4b602
-	jrl	sub_F4B462_Return	; F4B5FF  jrl T,0xf4b69e
-sub_F4B462_Skip10:
+	jr	z, CycleRecord_CopyRangeIntoGrowingChain_Skip10	; F4B5FD  jr Z,0xf4b602
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Return	; F4B5FF  jrl T,0xf4b69e
+CycleRecord_CopyRangeIntoGrowingChain_Skip10:
 	ld	bc, (3222:16)	; F4B602  ld BC,(0x0c96)
 	call	T_BStore_CopyAcrossBlocks	; F4B606  call 0xf427c0
 	call	CycleRecord_StepCopySrcToNextBlock	; F4B60A  call 0xf4b726
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B60E  cp (0x0d4a),0x00
-	jr	z, sub_F4B462_Loop3	; F4B613  jr Z,0xf4b618
-	jrl	sub_F4B462_Return	; F4B615  jrl T,0xf4b69e
-sub_F4B462_Loop3:
+	jr	z, CycleRecord_CopyRangeIntoGrowingChain_Loop3	; F4B613  jr Z,0xf4b618
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Return	; F4B615  jrl T,0xf4b69e
+CycleRecord_CopyRangeIntoGrowingChain_Loop3:
 	m_cp_rm MW16, 0x0c61, 2	; F4B618  cp DE,(0x0c61)
-	jr	nz, sub_F4B462_Skip11	; F4B61C  jr NZ,0xf4b620
-	jr	sub_F4B462_Join6	; F4B61E  jr T,0xf4b64b
-sub_F4B462_Skip11:
+	jr	nz, CycleRecord_CopyRangeIntoGrowingChain_Skip11	; F4B61C  jr NZ,0xf4b620
+	jr	CycleRecord_CopyRangeIntoGrowingChain_Join6	; F4B61E  jr T,0xf4b64b
+CycleRecord_CopyRangeIntoGrowingChain_Skip11:
 	ld	bc, (3224:16)	; F4B620  ld BC,(0x0c98)
 	call	T_BStore_CopyAcrossBlocks	; F4B624  call 0xf427c0
 	call	CycleRecord_StepCopyDestToNextBlockOrAlloc	; F4B628  call 0xf4b69f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B62C  cp (0x0d4a),0x00
-	jr	z, sub_F4B462_Skip12	; F4B631  jr Z,0xf4b636
-	jrl	sub_F4B462_Return	; F4B633  jrl T,0xf4b69e
-sub_F4B462_Skip12:
+	jr	z, CycleRecord_CopyRangeIntoGrowingChain_Skip12	; F4B631  jr Z,0xf4b636
+	jrl	CycleRecord_CopyRangeIntoGrowingChain_Return	; F4B633  jrl T,0xf4b69e
+CycleRecord_CopyRangeIntoGrowingChain_Skip12:
 	ld	bc, (3222:16)	; F4B636  ld BC,(0x0c96)
 	call	T_BStore_CopyAcrossBlocks	; F4B63A  call 0xf427c0
 	call	CycleRecord_StepCopySrcToNextBlock	; F4B63E  call 0xf4b726
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B642  cp (0x0d4a),0x00
-	jr	z, sub_F4B462_Loop3	; F4B647  jr Z,0xf4b618
-	jr	sub_F4B462_Return	; F4B649  jr T,0xf4b69e
-sub_F4B462_Join6:
+	jr	z, CycleRecord_CopyRangeIntoGrowingChain_Loop3	; F4B647  jr Z,0xf4b618
+	jr	CycleRecord_CopyRangeIntoGrowingChain_Return	; F4B649  jr T,0xf4b69e
+CycleRecord_CopyRangeIntoGrowingChain_Join6:
 	ld	wa, (3224:16)	; F4B64B  ld WA,(0x0c98)
 	ld	(3228:16), wa	; F4B64F  ld (0x0c9c),WA
 	ldw	wa, 256	; F4B653  ld WA,0x0100
 	sub	wa, 5	; F4B656  sub WA,0x0005
 	ld	(3226:16), wa	; F4B65A  ld (0x0c9a),WA
-sub_F4B462_Join7:
+CycleRecord_CopyRangeIntoGrowingChain_Join7:
 	ldw	wa, 255	; F4B65E  ld WA,0x00ff
 	m_sub_rm MW16, 0x0c6b, 0	; F4B661  sub WA,(0x0c6b)
 	ld	bc, (3226:16)	; F4B665  ld BC,(0x0c9a)
 	sub	bc, wa	; F4B669  sub BC,WA
 	ld	(3232:16), bc	; F4B66B  ld (0x0ca0),BC
 	m_cp_mr MW16, 0x0c9c, 1	; F4B66F  cp (0x0c9c),BC
-	jr	ugt, sub_F4B462_Skip13	; F4B673  jr UGT,0xf4b677
-	jr	sub_F4B462_Join8	; F4B675  jr T,0xf4b67d
-sub_F4B462_Skip13:
+	jr	ugt, CycleRecord_CopyRangeIntoGrowingChain_Skip13	; F4B673  jr UGT,0xf4b677
+	jr	CycleRecord_CopyRangeIntoGrowingChain_Join8	; F4B675  jr T,0xf4b67d
+CycleRecord_CopyRangeIntoGrowingChain_Skip13:
 	call	T_BStore_CopyAcrossBlocks	; F4B677  call 0xf427c0
-	jr	sub_F4B462_Return	; F4B67B  jr T,0xf4b69e
-sub_F4B462_Join8:
+	jr	CycleRecord_CopyRangeIntoGrowingChain_Return	; F4B67B  jr T,0xf4b69e
+CycleRecord_CopyRangeIntoGrowingChain_Join8:
 	ld	bc, (3228:16)	; F4B67D  ld BC,(0x0c9c)
 	call	T_BStore_CopyAcrossBlocks	; F4B681  call 0xf427c0
 	call	CycleRecord_StepCopyDestToNextBlockOrAlloc	; F4B685  call 0xf4b69f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B689  cp (0x0d4a),0x00
-	jr	z, sub_F4B462_Skip14	; F4B68E  jr Z,0xf4b692
-	jr	sub_F4B462_Return	; F4B690  jr T,0xf4b69e
-sub_F4B462_Skip14:
+	jr	z, CycleRecord_CopyRangeIntoGrowingChain_Skip14	; F4B68E  jr Z,0xf4b692
+	jr	CycleRecord_CopyRangeIntoGrowingChain_Return	; F4B690  jr T,0xf4b69e
+CycleRecord_CopyRangeIntoGrowingChain_Skip14:
 	ld	bc, (3232:16)	; F4B692  ld BC,(0x0ca0)
 	m_sub_rm MW16, 0x0c9c, 1	; F4B696  sub BC,(0x0c9c)
 	call	T_BStore_CopyAcrossBlocks	; F4B69A  call 0xf427c0
-sub_F4B462_Return:
+CycleRecord_CopyRangeIntoGrowingChain_Return:
 	ret	; F4B69E  ret
 
 ; --------------------------------------------------------------------------
@@ -105969,9 +106015,9 @@ CycleRecord_StepCopyDestToNextBlockOrAlloc:
 	ld	wa, (xix+3)	; F4B6B1  ld WA,(XIX+0x03)
 	ld	(3159:16), wa	; F4B6B4  ld (0x0c57),WA
 	cp	wa, 65535	; F4B6B8  cp WA,0xffff
-	jr	nz, sub_F4B69F_Skip	; F4B6BC  jr NZ,0xf4b6fe
+	jr	nz, CycleRecord_StepCopyDestToNextBlockOrAlloc_Skip	; F4B6BC  jr NZ,0xf4b6fe
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F4B6BE  cp (0x6034ba),0x0000
-	jr	z, sub_F4B69F_Skip2	; F4B6C5  jr Z,0xf4b713
+	jr	z, CycleRecord_StepCopyDestToNextBlockOrAlloc_Skip2	; F4B6C5  jr Z,0xf4b713
 	ld	wa, (BStore_FreeHead:24)	; F4B6C7  ld WA,(0x6034b8)
 	ld	(3159:16), wa	; F4B6CC  ld (0x0c57),WA
 	push	xiy	; F4B6D0  push XIY
@@ -105991,7 +106037,7 @@ CycleRecord_StepCopyDestToNextBlockOrAlloc:
 	pop	xwa	; F4B6FB  pop XWA
 	pop	xix	; F4B6FC  pop XIX
 	pop	xiy	; F4B6FD  pop XIY
-sub_F4B69F_Skip:
+CycleRecord_StepCopyDestToNextBlockOrAlloc_Skip:
 	extz	xwa	; F4B6FE  extz XWA
 	dec	1, xwa	; F4B700  dec 1,XWA
 	sla	xwa, 8	; F4B702  sla 0x08,XWA
@@ -105999,15 +106045,15 @@ sub_F4B69F_Skip:
 	ld	(BStore_CursorBlockAddr:16), xwa	; F4B709  ld (0x126e),XWA
 	m_bit 7, MDI+r4, 0	; F4B70D  bit 7,(XIX)
 	m_bit 7, MDI+r0, 0	; F4B70F  bit 7,(XWA)
-	jr	nz, sub_F4B69F_Skip3	; F4B711  jr NZ,0xf4b71a
-sub_F4B69F_Skip2:
+	jr	nz, CycleRecord_StepCopyDestToNextBlockOrAlloc_Skip3	; F4B711  jr NZ,0xf4b71a
+CycleRecord_StepCopyDestToNextBlockOrAlloc_Skip2:
 	ld	(BStore_ErrorCode:16), 11	; F4B713  ld (0x0d4a),0x0b
-	jr	sub_F4B69F_Return	; F4B718  jr T,0xf4b725
-sub_F4B69F_Skip3:
+	jr	CycleRecord_StepCopyDestToNextBlockOrAlloc_Return	; F4B718  jr T,0xf4b725
+CycleRecord_StepCopyDestToNextBlockOrAlloc_Skip3:
 	ld	xwa, (BStore_CursorBlockAddr:16)	; F4B71A  ld XWA,(0x126e)
 	ld	(BStore_CopyDestAddr:16), xwa	; F4B71E  ld (0x0c59),XWA
 	ldw	ix, 5	; F4B722  ld IX,0x0005
-sub_F4B69F_Return:
+CycleRecord_StepCopyDestToNextBlockOrAlloc_Return:
 	ret	; F4B725  ret
 
 ; --------------------------------------------------------------------------
@@ -106037,16 +106083,16 @@ CycleRecord_StepCopySrcToNextBlock:
 	add	xwa, (BStore_HeapBase:16)	; F4B73E  add XWA,(0x3604)
 	ld	(BStore_CursorBlockAddr:16), xwa	; F4B742  ld (0x126e),XWA
 	m_bit 7, MDI+r0, 0	; F4B746  bit 7,(XWA)
-	jr	nz, sub_F4B726_Skip	; F4B748  jr NZ,0xf4b751
+	jr	nz, CycleRecord_StepCopySrcToNextBlock_Skip	; F4B748  jr NZ,0xf4b751
 	ld	(BStore_ErrorCode:16), 11	; F4B74A  ld (0x0d4a),0x0b
-	jr	sub_F4B726_Return	; F4B74F  jr T,0xf4b75e
-sub_F4B726_Skip:
+	jr	CycleRecord_StepCopySrcToNextBlock_Return	; F4B74F  jr T,0xf4b75e
+CycleRecord_StepCopySrcToNextBlock_Skip:
 	push	xwa	; F4B751  push XWA
 	ld	xwa, (BStore_CursorBlockAddr:16)	; F4B752  ld XWA,(0x126e)
 	ld	(BStore_CopySrcAddr:16), xwa	; F4B756  ld (0x0c63),XWA
 	pop	xwa	; F4B75A  pop XWA
 	ldw	iy, 5	; F4B75B  ld IY,0x0005
-sub_F4B726_Return:
+CycleRecord_StepCopySrcToNextBlock_Return:
 	ret	; F4B75E  ret
 
 ; --------------------------------------------------------------------------
@@ -106070,7 +106116,7 @@ BStore_SetCursorBlockAddr:
 	ret	; F4B770  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4B771
+; CycleRecord_BeatsBeforeMeasureFromTimeSigs
 ; Called from: in-module: 0xF4A8B6 0xF4A8D9 0xF4B284
 ; Touches: (0x0C8A) (0x0D1C) (0x374A)
 ; Calls:   T_BStore_TimeSigFirstMeasure T_F427A8
@@ -106080,11 +106126,16 @@ BStore_SetCursorBlockAddr:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4B771:
+; CycleRecord_BeatsBeforeMeasureFromTimeSigs: IX := the beats in measures 1..BC-1 (BC capped at 1000), summed from the
+;   master track's time signatures: BStore_TimeSigFirstMeasure, then per measure IX += (0x0D1C) and T_F427A8
+;   (sub_F63749, next measure's meter) until the walk hits the end ((0x0C8A) bit 5). The helper of both
+;   CycleRecord_*FromTimeSigs routines. Basis: callers + callers' headers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave9_d9.json)
+CycleRecord_BeatsBeforeMeasureFromTimeSigs:
 	cp	bc, 1000	; F4B771  cp BC,0x03e8
-	jr	ule, sub_F4B771_Skip	; F4B775  jr ULE,0xf4b77a
+	jr	ule, CycleRecord_BeatsBeforeMeasureFromTimeSigs_Skip	; F4B775  jr ULE,0xf4b77a
 	ldw	bc, 1000	; F4B777  ld BC,0x03e8
-sub_F4B771_Skip:
+CycleRecord_BeatsBeforeMeasureFromTimeSigs_Skip:
 	xor	xix, xix	; F4B77A  xor XIX,XIX
 	ldw	(14154:16), 1	; F4B77C  ld (0x374a),0x0001
 	pushw	ix	; F4B782  push IX
@@ -106092,22 +106143,22 @@ sub_F4B771_Skip:
 	call	T_BStore_TimeSigFirstMeasure	; F4B784  call 0xf427a4
 	popw	bc	; F4B788  pop BC
 	popw	ix	; F4B789  pop IX
-sub_F4B771_Loop:
+CycleRecord_BeatsBeforeMeasureFromTimeSigs_Loop:
 	m_cp_mr MW16, 0x374a, 1	; F4B78A  cp (0x374a),BC
-	jr	nc, sub_F4B771_Return	; F4B78E  jr NC,0xf4b7ac
+	jr	nc, CycleRecord_BeatsBeforeMeasureFromTimeSigs_Return	; F4B78E  jr NC,0xf4b7ac
 	incw	1, (14154:16)	; F4B790  incw 1,(0x374a)
 	xor	wa, wa	; F4B794  xor WA,WA
 	ld	a, (3356:16)	; F4B796  ld A,(0x0d1c)
 	add	ix, wa	; F4B79A  add IX,WA
 	m_bit 5, MD16, 0x0c8a	; F4B79C  bit 5,(0x0c8a)
-	jr	nz, sub_F4B771_Loop	; F4B7A0  jr NZ,0xf4b78a
+	jr	nz, CycleRecord_BeatsBeforeMeasureFromTimeSigs_Loop	; F4B7A0  jr NZ,0xf4b78a
 	pushw	ix	; F4B7A2  push IX
 	pushw	bc	; F4B7A3  push BC
 	call	T_F427A8	; F4B7A4  call 0xf427a8
 	popw	bc	; F4B7A8  pop BC
 	popw	ix	; F4B7A9  pop IX
-	jr	sub_F4B771_Loop	; F4B7AA  jr T,0xf4b78a
-sub_F4B771_Return:
+	jr	CycleRecord_BeatsBeforeMeasureFromTimeSigs_Loop	; F4B7AA  jr T,0xf4b78a
+CycleRecord_BeatsBeforeMeasureFromTimeSigs_Return:
 	ret	; F4B7AC  ret
 
 ; --------------------------------------------------------------------------
@@ -107298,7 +107349,7 @@ BStore_RebuildFreeListAfterLoad_Veneer:		; <- T_BStore_RebuildFreeListAfterLoad_
 ; BStore_RebuildFreeListAfterLoad: (0x34CE) := BStore_BlockCount; from block 1 finds the first block whose header bit
 ;   7 is clear (BStore_FindFreeBlockUp) and threads it and every later block onto the free list (BStore_ThreadFreeListFrom:
 ;   BStore_FreeHead/FreeCount, none -> 0xFFFF / 0). The body behind BStore_RebuildFreeListAfterLoad_Veneer; also
-;   sub_F4CA64. Basis: caller (veneer header) + body. (notes/naming-pilot-2026-10-06/proposals_wave5_p.json)
+;   SysExDump_RestoreSavedCurrentBank. Basis: caller (veneer header) + body. (notes/naming-pilot-2026-10-06/proposals_wave5_p.json)
 BStore_RebuildFreeListAfterLoad:
 	calr	BStore_LatchBlockCount	; F4C804  calr 0xf4c85a
 	ldw	de, 1	; F4C807  ld DE,0x0001
@@ -107395,25 +107446,25 @@ BStore_FindUsedBlockDown:
 	ld	hl, bc	; F4C863  ld HL,BC
 	call	T_BStore_BlockAddrFromHL	; F4C865  call 0xf40c84
 	ldw	(3226:16), 0	; F4C869  ld (0x0c9a),0x0000
-sub_F4C863_Join:
+BStore_FindUsedBlockDown_Join:
 	m_cp_mi16 MW16, 0x0c9a, 0x0001	; F4C86F  cp (0x0c9a),0x0001
-	jr	z, sub_F4C863_Return	; F4C875  jr Z,0xf4c89d
+	jr	z, BStore_FindUsedBlockDown_Return	; F4C875  jr Z,0xf4c89d
 	m_ld_rm MBD+r3, 0x00, 1	; F4C877  ld A,(XHL+0x00)
 	bit	7, a	; F4C87A  bit 0x07,A
-	jr	z, sub_F4C863_Skip	; F4C87D  jr Z,0xf4c887
+	jr	z, BStore_FindUsedBlockDown_Skip	; F4C87D  jr Z,0xf4c887
 	ldw	(3226:16), 1	; F4C87F  ld (0x0c9a),0x0001
-	jr	sub_F4C863_Join	; F4C885  jr T,0xf4c86f
-sub_F4C863_Skip:
+	jr	BStore_FindUsedBlockDown_Join	; F4C885  jr T,0xf4c86f
+BStore_FindUsedBlockDown_Skip:
 	dec	1, bc	; F4C887  dec 1,BC
 	cp	bc, 0:i3	; F4C889  cp BC,0
-	jr	nz, sub_F4C863_Skip2	; F4C88B  jr NZ,0xf4c895
+	jr	nz, BStore_FindUsedBlockDown_Skip2	; F4C88B  jr NZ,0xf4c895
 	ldw	(3226:16), 1	; F4C88D  ld (0x0c9a),0x0001
-	jr	sub_F4C863_Join	; F4C893  jr T,0xf4c86f
-sub_F4C863_Skip2:
+	jr	BStore_FindUsedBlockDown_Join	; F4C893  jr T,0xf4c86f
+BStore_FindUsedBlockDown_Skip2:
 	ld	hl, bc	; F4C895  ld HL,BC
 	call	T_BStore_BlockAddrFromHL	; F4C897  call 0xf40c84
-	jr	sub_F4C863_Join	; F4C89B  jr T,0xf4c86f
-sub_F4C863_Return:
+	jr	BStore_FindUsedBlockDown_Join	; F4C89B  jr T,0xf4c86f
+BStore_FindUsedBlockDown_Return:
 	ret	; F4C89D  ret
 
 ; --------------------------------------------------------------------------
@@ -107435,26 +107486,26 @@ BStore_FindFreeBlockUp:
 	ld	hl, de	; F4C89E  ld HL,DE
 	call	T_BStore_BlockAddrFromHL	; F4C8A0  call 0xf40c84
 	ldw	(3226:16), 0	; F4C8A4  ld (0x0c9a),0x0000
-sub_F4C89E_Join:
+BStore_FindFreeBlockUp_Join:
 	m_cp_mi16 MW16, 0x0c9a, 0x0001	; F4C8AA  cp (0x0c9a),0x0001
-	jr	z, sub_F4C89E_Return	; F4C8B0  jr Z,0xf4c8dc
+	jr	z, BStore_FindFreeBlockUp_Return	; F4C8B0  jr Z,0xf4c8dc
 	m_ld_rm MBD+r3, 0x00, 1	; F4C8B2  ld A,(XHL+0x00)
 	bit	7, a	; F4C8B5  bit 0x07,A
-	jr	nz, sub_F4C89E_Skip	; F4C8B8  jr NZ,0xf4c8c2
+	jr	nz, BStore_FindFreeBlockUp_Skip	; F4C8B8  jr NZ,0xf4c8c2
 	ldw	(3226:16), 1	; F4C8BA  ld (0x0c9a),0x0001
-	jr	sub_F4C89E_Join	; F4C8C0  jr T,0xf4c8aa
-sub_F4C89E_Skip:
+	jr	BStore_FindFreeBlockUp_Join	; F4C8C0  jr T,0xf4c8aa
+BStore_FindFreeBlockUp_Skip:
 	inc	1, de	; F4C8C2  inc 1,DE
 	ld	wa, (13518:16)	; F4C8C4  ld WA,(0x34ce)
 	cp	de, wa	; F4C8C8  cp DE,WA
-	jr	ule, sub_F4C89E_Skip2	; F4C8CA  jr ULE,0xf4c8d4
+	jr	ule, BStore_FindFreeBlockUp_Skip2	; F4C8CA  jr ULE,0xf4c8d4
 	ldw	(3226:16), 1	; F4C8CC  ld (0x0c9a),0x0001
-	jr	sub_F4C89E_Join	; F4C8D2  jr T,0xf4c8aa
-sub_F4C89E_Skip2:
+	jr	BStore_FindFreeBlockUp_Join	; F4C8D2  jr T,0xf4c8aa
+BStore_FindFreeBlockUp_Skip2:
 	ld	hl, de	; F4C8D4  ld HL,DE
 	call	T_BStore_BlockAddrFromHL	; F4C8D6  call 0xf40c84
-	jr	sub_F4C89E_Join	; F4C8DA  jr T,0xf4c8aa
-sub_F4C89E_Return:
+	jr	BStore_FindFreeBlockUp_Join	; F4C8DA  jr T,0xf4c8aa
+BStore_FindFreeBlockUp_Return:
 	ret	; F4C8DC  ret
 
 ; --------------------------------------------------------------------------
@@ -107550,41 +107601,41 @@ BStore_RelocateRepointPrevLink:
 	pushw	iy	; F4C916  push IY
 	ld	wa, (xix+1)	; F4C917  ld WA,(XIX+0x01)
 	cp	wa, 0:i3	; F4C91A  cp WA,0
-	jr	nz, sub_F4C911_Skip4	; F4C91C  jr NZ,0xf4c960
+	jr	nz, BStore_RelocateRepointPrevLink_Skip4	; F4C91C  jr NZ,0xf4c960
 	xor	hl, hl	; F4C91E  xor HL,HL
-sub_F4C911_Join:
+BStore_RelocateRepointPrevLink_Join:
 	cp	l, 10	; F4C920  cp L,0x0a
-	jr	nc, sub_F4C911_Skip3	; F4C923  jr NC,0xf4c95e
+	jr	nc, BStore_RelocateRepointPrevLink_Skip3	; F4C923  jr NC,0xf4c95e
 	xor	xwa, xwa	; F4C925  xor XWA,XWA
 	ld	wa, hl	; F4C927  ld WA,HL
 	mul	wa, 3072	; F4C929  mul WA,0x0c00
 	add	xwa, 6356992	; F4C92D  add XWA,0x00610000
 	lda	xiz, (xwa+0x0100)	; F4C933  lda XIZ,XWA+0x0100
 	ld	xix, xiz	; F4C938  ld XIX,XIZ
-sub_F4C911_Join2:
+BStore_RelocateRepointPrevLink_Join2:
 	lda	xwa, (xiz+51)	; F4C93A  lda XWA,XIZ+0x33
 	cp	xix, xwa	; F4C93D  cp XIX,XWA
-	jr	z, sub_F4C911_Skip2	; F4C93F  jr Z,0xf4c95a
+	jr	z, BStore_RelocateRepointPrevLink_Skip2	; F4C93F  jr Z,0xf4c95a
 	ld	a, (xix)	; F4C941  ld A,(XIX)
 	bit	7, a	; F4C943  bit 0x07,A
-	jr	z, sub_F4C911_Skip	; F4C946  jr Z,0xf4c952
+	jr	z, BStore_RelocateRepointPrevLink_Skip	; F4C946  jr Z,0xf4c952
 	ld	wa, (xix+1)	; F4C948  ld WA,(XIX+0x01)
 	cp	wa, bc	; F4C94B  cp WA,BC
-	jr	nz, sub_F4C911_Skip	; F4C94D  jr NZ,0xf4c952
+	jr	nz, BStore_RelocateRepointPrevLink_Skip	; F4C94D  jr NZ,0xf4c952
 	ld	(xix+1), de	; F4C94F  ld (XIX+0x01),DE
-sub_F4C911_Skip:
+BStore_RelocateRepointPrevLink_Skip:
 	add	xix, 3	; F4C952  add XIX,0x00000003
-	jr	sub_F4C911_Join2	; F4C958  jr T,0xf4c93a
-sub_F4C911_Skip2:
+	jr	BStore_RelocateRepointPrevLink_Join2	; F4C958  jr T,0xf4c93a
+BStore_RelocateRepointPrevLink_Skip2:
 	inc	1, l	; F4C95A  inc 1,L
-	jr	sub_F4C911_Join	; F4C95C  jr T,0xf4c920
-sub_F4C911_Skip3:
-	jr	sub_F4C911_Epilogue	; F4C95E  jr T,0xf4c969
-sub_F4C911_Skip4:
+	jr	BStore_RelocateRepointPrevLink_Join	; F4C95C  jr T,0xf4c920
+BStore_RelocateRepointPrevLink_Skip3:
+	jr	BStore_RelocateRepointPrevLink_Epilogue	; F4C95E  jr T,0xf4c969
+BStore_RelocateRepointPrevLink_Skip4:
 	ld	hl, wa	; F4C960  ld HL,WA
 	call	T_BStore_BlockAddrFromHL	; F4C962  call 0xf40c84
 	ld	(xhl+3), de	; F4C966  ld (XHL+0x03),DE
-sub_F4C911_Epilogue:
+BStore_RelocateRepointPrevLink_Epilogue:
 	popw	iy	; F4C969  pop IY
 	ret	; F4C96A  ret
 
@@ -107606,38 +107657,38 @@ sub_F4C911_Epilogue:
 BStore_RelocateRepointNextLink:
 	ld	wa, iy	; F4C96B  ld WA,IY
 	cp	wa, 65535	; F4C96D  cp WA,0xffff
-	jr	nz, sub_F4C96B_Skip4	; F4C971  jr NZ,0xf4c9aa
+	jr	nz, BStore_RelocateRepointNextLink_Skip4	; F4C971  jr NZ,0xf4c9aa
 	xor	hl, hl	; F4C973  xor HL,HL
-sub_F4C96B_Join:
+BStore_RelocateRepointNextLink_Join:
 	cp	l, 10	; F4C975  cp L,0x0a
-	jr	nc, sub_F4C96B_Skip3	; F4C978  jr NC,0xf4c9a8
+	jr	nc, BStore_RelocateRepointNextLink_Skip3	; F4C978  jr NC,0xf4c9a8
 	xor	xwa, xwa	; F4C97A  xor XWA,XWA
 	ld	wa, hl	; F4C97C  ld WA,HL
 	mul	wa, 3072	; F4C97E  mul WA,0x0c00
 	add	xwa, 6356992	; F4C982  add XWA,0x00610000
 	lda	xiz, (xwa+126)	; F4C988  lda XIZ,XWA+0x7e
 	ld	xix, xiz	; F4C98B  ld XIX,XIZ
-sub_F4C96B_Join2:
+BStore_RelocateRepointNextLink_Join2:
 	lda	xwa, (xiz+34)	; F4C98D  lda XWA,XIZ+0x22
 	cp	xix, xwa	; F4C990  cp XIX,XWA
-	jr	z, sub_F4C96B_Skip2	; F4C992  jr Z,0xf4c9a4
+	jr	z, BStore_RelocateRepointNextLink_Skip2	; F4C992  jr Z,0xf4c9a4
 	ld	wa, (xix)	; F4C994  ld WA,(XIX)
 	cp	wa, bc	; F4C996  cp WA,BC
-	jr	nz, sub_F4C96B_Skip	; F4C998  jr NZ,0xf4c99c
+	jr	nz, BStore_RelocateRepointNextLink_Skip	; F4C998  jr NZ,0xf4c99c
 	ld	(xix), de	; F4C99A  ld (XIX),DE
-sub_F4C96B_Skip:
+BStore_RelocateRepointNextLink_Skip:
 	add	xix, 2	; F4C99C  add XIX,0x00000002
-	jr	sub_F4C96B_Join2	; F4C9A2  jr T,0xf4c98d
-sub_F4C96B_Skip2:
+	jr	BStore_RelocateRepointNextLink_Join2	; F4C9A2  jr T,0xf4c98d
+BStore_RelocateRepointNextLink_Skip2:
 	inc	1, l	; F4C9A4  inc 1,L
-	jr	sub_F4C96B_Join	; F4C9A6  jr T,0xf4c975
-sub_F4C96B_Skip3:
-	jr	sub_F4C96B_Return	; F4C9A8  jr T,0xf4c9b3
-sub_F4C96B_Skip4:
+	jr	BStore_RelocateRepointNextLink_Join	; F4C9A6  jr T,0xf4c975
+BStore_RelocateRepointNextLink_Skip3:
+	jr	BStore_RelocateRepointNextLink_Return	; F4C9A8  jr T,0xf4c9b3
+BStore_RelocateRepointNextLink_Skip4:
 	ld	hl, wa	; F4C9AA  ld HL,WA
 	call	T_BStore_BlockAddrFromHL	; F4C9AC  call 0xf40c84
 	ld	(xhl+1), de	; F4C9B0  ld (XHL+0x01),DE
-sub_F4C96B_Return:
+BStore_RelocateRepointNextLink_Return:
 	ret	; F4C9B3  ret
 
 ; --------------------------------------------------------------------------
@@ -107659,11 +107710,11 @@ sub_F4C96B_Return:
 BStore_ThreadFreeListFrom:
 	ld	wa, (13518:16)	; F4C9B4  ld WA,(0x34ce)
 	cp	de, wa	; F4C9B8  cp DE,WA
-	jr	ule, sub_F4C9B4_Skip	; F4C9BA  jr ULE,0xf4c9cc
+	jr	ule, BStore_ThreadFreeListFrom_Skip	; F4C9BA  jr ULE,0xf4c9cc
 	ldw	(BStore_FreeCount:24), 0	; F4C9BC  ld (0x6034ba),0x0000
 	ldw	(BStore_FreeHead:24), 65535	; F4C9C3  ld (0x6034b8),0xffff
-	jr	sub_F4C9B4_Return	; F4C9CA  jr T,0xf4ca09
-sub_F4C9B4_Skip:
+	jr	BStore_ThreadFreeListFrom_Return	; F4C9CA  jr T,0xf4ca09
+BStore_ThreadFreeListFrom_Skip:
 	ld	(BStore_FreeHead:24), de	; F4C9CC  ld (0x6034b8),DE
 	ld	wa, de	; F4C9D1  ld WA,DE
 	ldw	(BStore_FreeCount:24), 0	; F4C9D3  ld (0x6034ba),0x0000
@@ -107672,19 +107723,19 @@ sub_F4C9B4_Skip:
 	ldw	iy, 0	; F4C9DE  ld IY,0x0000
 	ld	hl, wa	; F4C9E1  ld HL,WA
 	call	T_BStore_BlockAddrFromHL	; F4C9E3  call 0xf40c84
-sub_F4C9B4_Join:
+BStore_ThreadFreeListFrom_Join:
 	ld	iz, (13518:16)	; F4C9E7  ld IZ,(0x34ce)
 	cp	wa, iz	; F4C9EB  cp WA,IZ
-	jr	nc, sub_F4C9B4_Skip2	; F4C9ED  jr NC,0xf4c9f4
+	jr	nc, BStore_ThreadFreeListFrom_Skip2	; F4C9ED  jr NC,0xf4c9f4
 	calr	BStore_ThreadFreeBlock	; F4C9EF  calr 0xf4ca0a
-	jr	sub_F4C9B4_Join	; F4C9F2  jr T,0xf4c9e7
-sub_F4C9B4_Skip2:
+	jr	BStore_ThreadFreeListFrom_Join	; F4C9F2  jr T,0xf4c9e7
+BStore_ThreadFreeListFrom_Skip2:
 	m_ld_mi8 MDD+r3, 0x00, 0x7f	; F4C9F4  ld (XHL+0x00),0x7f
 	incw	1, (BStore_FreeCount:24)	; F4C9F8  incw 1,(0x6034ba)
 	ld	(xhl+1), iy	; F4C9FD  ld (XHL+0x01),IY
 	m_ld_mi16 MDD+r3, 0x03, 0xffff	; F4CA00  ld (XHL+0x03),0xffff
 	ld	(xhl+5), 130	; F4CA05  ld (XHL+0x05),0x82
-sub_F4C9B4_Return:
+BStore_ThreadFreeListFrom_Return:
 	ret	; F4CA09  ret
 
 ; --------------------------------------------------------------------------
@@ -107749,18 +107800,22 @@ SysExDump_PrepareSequencerData:		; <- T_SysExDump_PrepareSequencerData
 	ret	; F4CA63  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4CA64
-; Called from: T_F414B8 (x1)
+; SysExDump_RestoreSavedCurrentBank
+; Called from: T_SysExDump_RestoreSavedCurrentBank (x1)
 ; Touches: (0x34BB) (0x3552) (0x360A) (0x360C)
 ; Calls:   BStore_RebuildFreeListAfterLoad
-; Evidence: thunk slot T_F414B8 holds `jp 0x00F4CA64`, and 0xF4CA64 is an
+; Evidence: thunk slot T_SysExDump_RestoreSavedCurrentBank holds `jp 0x00F4CA64`, and 0xF4CA64 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4CA64:		; <- T_F414B8
+; SysExDump_RestoreSavedCurrentBank: After a received SEQUENCER dump: BStore_CurrentBank := (0x6034D0) and (0x360C) :=
+;   (0x6034D1) -- where SysExDump_PrepareSequencerData stashed them before sending -- both cleared, (0x3552) := 1,
+;   (0x34BB) bit 3 cleared, then BStore_RebuildFreeListAfterLoad. SysEx twin of SeqFile_RestoreSavedCurrentBank.
+;   Basis: caller + body + twins. (notes/naming-pilot-2026-10-06/proposals_wave9_d9.json)
+SysExDump_RestoreSavedCurrentBank:		; <- T_SysExDump_RestoreSavedCurrentBank
 	ld	a, (6304976:24)	; F4CA64  ld A,(0x6034d0)
 	ld	(BStore_CurrentBank:16), a	; F4CA69  ld (0x360a),A
 	ld	(6304976:24), 0	; F4CA6D  ld (0x6034d0),0x00
@@ -110083,9 +110138,9 @@ StepRecordPartSelect_OnTrackKey:
 ;   pilot-2026-10-06/proposals_wave6_s.json)
 StepRecordPartSelect_ChooseTrack:
 	m_cp_mi8 MB16, PanelMode, 0x06	; F4E4C8  cp (0x2078),0x06
-	jr	nz, sub_F4E4C8_Return	; F4E4CD  jr NZ,0xf4e4f5
+	jr	nz, StepRecordPartSelect_ChooseTrack_Return	; F4E4CD  jr NZ,0xf4e4f5
 	m_cp_mi8 MB16, UI_ScreenId, 0x0f	; F4E4CF  cp (0x207c),0x0f
-	jr	nz, sub_F4E4C8_Return	; F4E4D4  jr NZ,0xf4e4f5
+	jr	nz, StepRecordPartSelect_ChooseTrack_Return	; F4E4D4  jr NZ,0xf4e4f5
 	ld	xhl, BStore_TrackToPart	; F4E4D6  ld XHL,0x00603422
 	xor	b, b	; F4E4DB  xor B,B
 	ld	iy, bc	; F4E4DD  ld IY,BC
@@ -110095,7 +110150,7 @@ StepRecordPartSelect_ChooseTrack:
 	inc	1, e	; F4E4EA  inc 1,E
 	ld	(3676:16), e	; F4E4EC  ld (0x0e5c),E
 	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F4E4F0  or (0x2095),0x10
-sub_F4E4C8_Return:
+StepRecordPartSelect_ChooseTrack_Return:
 	ret	; F4E4F5  ret
 
 ; --------------------------------------------------------------------------
@@ -110180,15 +110235,15 @@ T_F40CB4_Nop:		; <- T_F40CB4
 Seq_RequestRewindOnEvent:		; <- T_Seq_RequestRewindOnEvent
 	ld	a, (UiEvent_Byte1:16)	; F4E525  ld A,(0x20b8)
 	cp	a, 17	; F4E529  cp A,0x11
-	jr	nz, sub_F4E50B_Return	; F4E52C  jr NZ,0xf4e544
+	jr	nz, Seq_RequestRewindOnEvent_Return	; F4E52C  jr NZ,0xf4e544
 	ld	wa, (UiEvent_Byte2:16)	; F4E52E  ld WA,(0x20b9)
 	and	a, w	; F4E532  and A,W
 	bit	1, a	; F4E534  bit 0x01,A
-	jr	z, sub_F4E50B_Return	; F4E537  jr Z,0xf4e544
+	jr	z, Seq_RequestRewindOnEvent_Return	; F4E537  jr Z,0xf4e544
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x0e	; F4E539  cp (0x207a),0x0e
-	jr	z, sub_F4E50B_Return	; F4E53E  jr Z,0xf4e544
+	jr	z, Seq_RequestRewindOnEvent_Return	; F4E53E  jr Z,0xf4e544
 	call	Seq_RequestRewindIfIdle	; F4E540  call 0xf4e545
-sub_F4E50B_Return:
+Seq_RequestRewindOnEvent_Return:
 	ret	; F4E544  ret
 
 ; --------------------------------------------------------------------------
@@ -116989,7 +117044,7 @@ Drawbar9_1ft_Update_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Drawbar_OnCpu2Reply: T_Drawbar_OnCpu2Reply, called by prom_a's link-reply handler sub_FD2014 when the reply's tag (0x2335) is 0xA3: for a part-0
+; Drawbar_OnCpu2Reply: T_Drawbar_OnCpu2Reply, called by prom_a's link-reply handler Cpu2Reply_HandleNext when the reply's tag (0x2335) is 0xA3: for a part-0
 ;   reply tagged 0xA3, server 0x81 offset 0x10 sets Drawbar_ReloadMark from the byte's bits 6-7 (0 -> 0; 0x40 -> 1,
 ;   Drawbar_QueryElementBlocks(0) and (0x2890) / (0x2891) = 0; 0x80 -> 2); 0x82 / 0x83 replies go to their own arms;
 ;   on screen 0xA3 a repaint is requested.  Basis: body + caller.
@@ -135363,7 +135418,7 @@ Quantize_Execute_Skip:
 	jr	z, Quantize_Execute_Skip3	; F5DAF6  jr Z,0xf5db00
 Quantize_Execute_Skip2:
 	ld	(BStore_ErrorCode:16), 3	; F5DAF8  ld (0x0d4a),0x03
-	jrl	sub_F5DBD0_Join6	; F5DAFD  jrl T,0xf5dda9
+	jrl	Quantize_ApplyRoundMapToTrack_Join6	; F5DAFD  jrl T,0xf5dda9
 Quantize_Execute_Skip3:
 	ld	(BStore_ErrorCode:16), 0	; F5DB00  ld (0x0d4a),0x00
 	m_and_mi8 MB16, 0x0c8a, 0xbf	; F5DB05  and (0x0c8a),0xbf
@@ -135381,10 +135436,10 @@ Quantize_Execute_Skip3:
 	ld	a, (3184:16)	; F5DB2A  ld A,(0x0c70)
 	ld	(3214:16), a	; F5DB2E  ld (0x0c8e),A
 	calr	Quantize_Track	; F5DB32  calr 0xf5db97
-	jrl	sub_F5DBD0_Join6	; F5DB35  jrl T,0xf5dda9
+	jrl	Quantize_ApplyRoundMapToTrack_Join6	; F5DB35  jrl T,0xf5dda9
 Quantize_Execute_Skip4:
 	ld	(BStore_ErrorCode:16), 9	; F5DB38  ld (0x0d4a),0x09
-	jrl	sub_F5DBD0_Join6	; F5DB3D  jrl T,0xf5dda9
+	jrl	Quantize_ApplyRoundMapToTrack_Join6	; F5DB3D  jrl T,0xf5dda9
 Quantize_Execute_Skip5:
 	xor	xhl, xhl	; F5DB40  xor XHL,XHL
 Quantize_Execute_Join:
@@ -135420,7 +135475,7 @@ Quantize_Execute_Skip7:
 Quantize_Execute_Skip8:
 	ld	a, (3352:16)	; F5DB8C  ld A,(0x0d18)
 	ld	(BStore_ErrorCode:16), a	; F5DB90  ld (0x0d4a),A
-	jrl	sub_F5DBD0_Join6	; F5DB94  jrl T,0xf5dda9
+	jrl	Quantize_ApplyRoundMapToTrack_Join6	; F5DB94  jrl T,0xf5dda9
 
 ; --------------------------------------------------------------------------
 ; Quantize_Track
@@ -135504,22 +135559,22 @@ RoundMap_Table:
 ;   pilot-2026-10-06/proposals_wave6_t.json)
 Quantize_ApplyRoundMapToTrack:
 	m_cp_mi8 MB16, 0x0e04, 0x00	; F5DBD0  cp (0x0e04),0x00
-	jrl	z, sub_F5DBD0_Return	; F5DBD5  jrl Z,0xf5dda8
+	jrl	z, Quantize_ApplyRoundMapToTrack_Return	; F5DBD5  jrl Z,0xf5dda8
 	m_cp_mi8 MB16, 0x0e05, 0x00	; F5DBD8  cp (0x0e05),0x00
-	jrl	z, sub_F5DBD0_Return	; F5DBDD  jrl Z,0xf5dda8
+	jrl	z, Quantize_ApplyRoundMapToTrack_Return	; F5DBDD  jrl Z,0xf5dda8
 	call	T_Seq_FindMasterTrack	; F5DBE0  call 0xf427a0
 	ld	a, (3214:16)	; F5DBE4  ld A,(0x0c8e)
 	ld	de, (3187:16)	; F5DBE8  ld DE,(0x0c73)
 	ld	(3216:16), de	; F5DBEC  ld (0x0c90),DE
 	call	T_BStore_SeekMeasure	; F5DBF0  call 0xf42774
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5DBF4  cp (0x0d4a),0x00
-	jrl	nz, sub_F5DBD0_Return	; F5DBF9  jrl NZ,0xf5dda8
+	jrl	nz, Quantize_ApplyRoundMapToTrack_Return	; F5DBF9  jrl NZ,0xf5dda8
 	xor	de, de	; F5DBFC  xor DE,DE
-sub_F5DBD0_Loop:
+Quantize_ApplyRoundMapToTrack_Loop:
 	m_cp_rm MW16, 0x0c77, 2	; F5DBFE  cp DE,(0x0c77)
-	jrl	z, sub_F5DBD0_Return	; F5DC02  jrl Z,0xf5dda8
+	jrl	z, Quantize_ApplyRoundMapToTrack_Return	; F5DC02  jrl Z,0xf5dda8
 	xor	bc, bc	; F5DC05  xor BC,BC
-sub_F5DBD0_Join:
+Quantize_ApplyRoundMapToTrack_Join:
 	xor	wa, wa	; F5DC07  xor WA,WA
 	m_and_mi8 MB16, 0x0c8a, 0xfe	; F5DC09  and (0x0c8a),0xfe
 	ld	(3338:16), iy	; F5DC0E  ld (0x0d0a),IY
@@ -135528,22 +135583,22 @@ sub_F5DBD0_Join:
 	ld	(3348:16), xhl	; F5DC17  ld (0x0d14),XHL
 	pop	xhl	; F5DC1B  pop XHL
 	m_cp_rm MB16, 0x0d1c, 3	; F5DC1C  cp C,(0x0d1c)
-	jrl	z, sub_F5DBD0_Skip14	; F5DC20  jrl Z,0xf5dd7a
-sub_F5DBD0_Join2:
+	jrl	z, Quantize_ApplyRoundMapToTrack_Skip14	; F5DC20  jrl Z,0xf5dd7a
+Quantize_ApplyRoundMapToTrack_Join2:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5DC23  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F5DC27  ld A,(XHL+IY)
 	cp	a, 130	; F5DC2C  cp A,0x82
-	jrl	z, sub_F5DBD0_Return	; F5DC2F  jrl Z,0xf5dda8
+	jrl	z, Quantize_ApplyRoundMapToTrack_Return	; F5DC2F  jrl Z,0xf5dda8
 	cp	a, 129	; F5DC32  cp A,0x81
-	jrl	z, sub_F5DBD0_Skip13	; F5DC35  jrl Z,0xf5dd5f
+	jrl	z, Quantize_ApplyRoundMapToTrack_Skip13	; F5DC35  jrl Z,0xf5dd5f
 	bit	7, a	; F5DC38  bit 0x07,A
-	jrl	z, sub_F5DBD0_Skip12	; F5DC3B  jrl Z,0xf5dd51
+	jrl	z, Quantize_ApplyRoundMapToTrack_Skip12	; F5DC3B  jrl Z,0xf5dd51
 	and	a, 240	; F5DC3E  and A,0xf0
 	cp	a, 144	; F5DC41  cp A,0x90
-	jrl	nz, sub_F5DBD0_Skip12	; F5DC44  jrl NZ,0xf5dd51
+	jrl	nz, Quantize_ApplyRoundMapToTrack_Skip12	; F5DC44  jrl NZ,0xf5dd51
 	call	T_BStore_CursorAdvance	; F5DC47  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5DC4B  cp (0x0d4a),0x00
-	jrl	nz, sub_F5DBD0_Return	; F5DC50  jrl NZ,0xf5dda8
+	jrl	nz, Quantize_ApplyRoundMapToTrack_Return	; F5DC50  jrl NZ,0xf5dda8
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5DC53  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F5DC57  ld A,(XHL+IY)
 	xor	w, w	; F5DC5C  xor W,W
@@ -135555,64 +135610,64 @@ sub_F5DBD0_Join2:
 	ld	(3622:16), a	; F5DC6E  ld (0x0e26),A
 	pop	xhl	; F5DC72  pop XHL
 	m_cp_mi8 MB16, 0x0e05, 0x64	; F5DC73  cp (0x0e05),0x64
-	jr	z, sub_F5DBD0_Join3	; F5DC78  jr Z,0xf5dcea
+	jr	z, Quantize_ApplyRoundMapToTrack_Join3	; F5DC78  jr Z,0xf5dcea
 	m_cp_mi8 MB16, 0x0e05, 0x9c	; F5DC7A  cp (0x0e05),0x9c
-	jr	z, sub_F5DBD0_Join3	; F5DC7F  jr Z,0xf5dcea
+	jr	z, Quantize_ApplyRoundMapToTrack_Join3	; F5DC7F  jr Z,0xf5dcea
 	call	Quantize_ComputeWindowBounds	; F5DC81  call 0xf5ddb2
 	ld	a, (3621:16)	; F5DC85  ld A,(0x0e25)
 	m_bit 7, MD16, 0x0e05	; F5DC89  bit 7,(0x0e05)
-	jr	nz, sub_F5DBD0_Skip3	; F5DC8D  jr NZ,0xf5dcbf
+	jr	nz, Quantize_ApplyRoundMapToTrack_Skip3	; F5DC8D  jr NZ,0xf5dcbf
 	m_cp_mi8 MB16, 0x0e26, 0x00	; F5DC8F  cp (0x0e26),0x00
-	jr	z, sub_F5DBD0_Skip	; F5DC94  jr Z,0xf5dca6
+	jr	z, Quantize_ApplyRoundMapToTrack_Skip	; F5DC94  jr Z,0xf5dca6
 	m_cp_mi8 MB16, 0x0e26, 0x7f	; F5DC96  cp (0x0e26),0x7f
-	jr	nz, sub_F5DBD0_Skip2	; F5DC9B  jr NZ,0xf5dcaf
+	jr	nz, Quantize_ApplyRoundMapToTrack_Skip2	; F5DC9B  jr NZ,0xf5dcaf
 	m_cp_rm MB16, 0x0e27, 1	; F5DC9D  cp A,(0x0e27)
-	jrl	lt, sub_F5DBD0_Skip12	; F5DCA1  jrl LT,0xf5dd51
-	jr	sub_F5DBD0_Join3	; F5DCA4  jr T,0xf5dcea
-sub_F5DBD0_Skip:
+	jrl	lt, Quantize_ApplyRoundMapToTrack_Skip12	; F5DCA1  jrl LT,0xf5dd51
+	jr	Quantize_ApplyRoundMapToTrack_Join3	; F5DCA4  jr T,0xf5dcea
+Quantize_ApplyRoundMapToTrack_Skip:
 	m_cp_rm MB16, 0x0e28, 1	; F5DCA6  cp A,(0x0e28)
-	jrl	gt, sub_F5DBD0_Skip12	; F5DCAA  jrl GT,0xf5dd51
-	jr	sub_F5DBD0_Join3	; F5DCAD  jr T,0xf5dcea
-sub_F5DBD0_Skip2:
+	jrl	gt, Quantize_ApplyRoundMapToTrack_Skip12	; F5DCAA  jrl GT,0xf5dd51
+	jr	Quantize_ApplyRoundMapToTrack_Join3	; F5DCAD  jr T,0xf5dcea
+Quantize_ApplyRoundMapToTrack_Skip2:
 	m_cp_rm MB16, 0x0e27, 1	; F5DCAF  cp A,(0x0e27)
-	jrl	lt, sub_F5DBD0_Skip12	; F5DCB3  jrl LT,0xf5dd51
+	jrl	lt, Quantize_ApplyRoundMapToTrack_Skip12	; F5DCB3  jrl LT,0xf5dd51
 	m_cp_rm MB16, 0x0e28, 1	; F5DCB6  cp A,(0x0e28)
-	jrl	gt, sub_F5DBD0_Skip12	; F5DCBA  jrl GT,0xf5dd51
-	jr	sub_F5DBD0_Join3	; F5DCBD  jr T,0xf5dcea
-sub_F5DBD0_Skip3:
+	jrl	gt, Quantize_ApplyRoundMapToTrack_Skip12	; F5DCBA  jrl GT,0xf5dd51
+	jr	Quantize_ApplyRoundMapToTrack_Join3	; F5DCBD  jr T,0xf5dcea
+Quantize_ApplyRoundMapToTrack_Skip3:
 	m_cp_mi8 MB16, 0x0e26, 0x00	; F5DCBF  cp (0x0e26),0x00
-	jr	z, sub_F5DBD0_Skip4	; F5DCC4  jr Z,0xf5dcd6
+	jr	z, Quantize_ApplyRoundMapToTrack_Skip4	; F5DCC4  jr Z,0xf5dcd6
 	m_cp_mi8 MB16, 0x0e26, 0x7f	; F5DCC6  cp (0x0e26),0x7f
-	jr	nz, sub_F5DBD0_Skip5	; F5DCCB  jr NZ,0xf5dcde
+	jr	nz, Quantize_ApplyRoundMapToTrack_Skip5	; F5DCCB  jr NZ,0xf5dcde
 	m_cp_rm MB16, 0x0e27, 1	; F5DCCD  cp A,(0x0e27)
-	jrl	gt, sub_F5DBD0_Skip12	; F5DCD1  jrl GT,0xf5dd51
-	jr	sub_F5DBD0_Join3	; F5DCD4  jr T,0xf5dcea
-sub_F5DBD0_Skip4:
+	jrl	gt, Quantize_ApplyRoundMapToTrack_Skip12	; F5DCD1  jrl GT,0xf5dd51
+	jr	Quantize_ApplyRoundMapToTrack_Join3	; F5DCD4  jr T,0xf5dcea
+Quantize_ApplyRoundMapToTrack_Skip4:
 	m_cp_rm MB16, 0x0e28, 1	; F5DCD6  cp A,(0x0e28)
-	jr	lt, sub_F5DBD0_Skip12	; F5DCDA  jr LT,0xf5dd51
-	jr	sub_F5DBD0_Join3	; F5DCDC  jr T,0xf5dcea
-sub_F5DBD0_Skip5:
+	jr	lt, Quantize_ApplyRoundMapToTrack_Skip12	; F5DCDA  jr LT,0xf5dd51
+	jr	Quantize_ApplyRoundMapToTrack_Join3	; F5DCDC  jr T,0xf5dcea
+Quantize_ApplyRoundMapToTrack_Skip5:
 	m_cp_rm MB16, 0x0e27, 1	; F5DCDE  cp A,(0x0e27)
-	jr	le, sub_F5DBD0_Join3	; F5DCE2  jr LE,0xf5dcea
+	jr	le, Quantize_ApplyRoundMapToTrack_Join3	; F5DCE2  jr LE,0xf5dcea
 	m_cp_rm MB16, 0x0e28, 1	; F5DCE4  cp A,(0x0e28)
-	jr	lt, sub_F5DBD0_Skip12	; F5DCE8  jr LT,0xf5dd51
-sub_F5DBD0_Join3:
+	jr	lt, Quantize_ApplyRoundMapToTrack_Skip12	; F5DCE8  jr LT,0xf5dd51
+Quantize_ApplyRoundMapToTrack_Join3:
 	ld	l, (3622:16)	; F5DCEA  ld L,(0x0e26)
 	m_cp_mi8 MB16, 0x0e04, 0x64	; F5DCEE  cp (0x0e04),0x64
-	jr	z, sub_F5DBD0_Skip10	; F5DCF3  jr Z,0xf5dd3c
+	jr	z, Quantize_ApplyRoundMapToTrack_Skip10	; F5DCF3  jr Z,0xf5dd3c
 	cp	l, 127	; F5DCF5  cp L,0x7f
-	jr	nz, sub_F5DBD0_Skip6	; F5DCF8  jr NZ,0xf5dcfc
+	jr	nz, Quantize_ApplyRoundMapToTrack_Skip6	; F5DCF8  jr NZ,0xf5dcfc
 	ld	l, 96:opc	; F5DCFA  ld L,0x60
-sub_F5DBD0_Skip6:
+Quantize_ApplyRoundMapToTrack_Skip6:
 	ld	a, (3621:16)	; F5DCFC  ld A,(0x0e25)
 	cp	a, l	; F5DD00  cp A,L
-	jr	lt, sub_F5DBD0_Skip7	; F5DD02  jr LT,0xf5dd08
+	jr	lt, Quantize_ApplyRoundMapToTrack_Skip7	; F5DD02  jr LT,0xf5dd08
 	sub	a, l	; F5DD04  sub A,L
-	jr	sub_F5DBD0_Join4	; F5DD06  jr T,0xf5dd0c
-sub_F5DBD0_Skip7:
+	jr	Quantize_ApplyRoundMapToTrack_Join4	; F5DD06  jr T,0xf5dd0c
+Quantize_ApplyRoundMapToTrack_Skip7:
 	sub	l, a	; F5DD08  sub L,A
 	ld	a, l	; F5DD0A  ld A,L
-sub_F5DBD0_Join4:
+Quantize_ApplyRoundMapToTrack_Join4:
 	xor	w, w	; F5DD0C  xor W,W
 	ld	l, (3588:16)	; F5DD0E  ld L,(0x0e04)
 	mul	wa, l	; F5DD12  mul WA,L
@@ -135621,36 +135676,36 @@ sub_F5DBD0_Join4:
 	ld	l, (3621:16)	; F5DD18  ld L,(0x0e25)
 	ld	h, (3622:16)	; F5DD1C  ld H,(0x0e26)
 	cp	h, 127	; F5DD20  cp H,0x7f
-	jr	nz, sub_F5DBD0_Skip8	; F5DD23  jr NZ,0xf5dd27
+	jr	nz, Quantize_ApplyRoundMapToTrack_Skip8	; F5DD23  jr NZ,0xf5dd27
 	ld	h, 96:opc	; F5DD25  ld H,0x60
-sub_F5DBD0_Skip8:
+Quantize_ApplyRoundMapToTrack_Skip8:
 	cp	l, h	; F5DD27  cp L,H
-	jr	lt, sub_F5DBD0_Skip9	; F5DD29  jr LT,0xf5dd2f
+	jr	lt, Quantize_ApplyRoundMapToTrack_Skip9	; F5DD29  jr LT,0xf5dd2f
 	sub	l, a	; F5DD2B  sub L,A
-	jr	sub_F5DBD0_Join5	; F5DD2D  jr T,0xf5dd33
-sub_F5DBD0_Skip9:
+	jr	Quantize_ApplyRoundMapToTrack_Join5	; F5DD2D  jr T,0xf5dd33
+Quantize_ApplyRoundMapToTrack_Skip9:
 	add	l, a	; F5DD2F  add L,A
 	ld	a, l	; F5DD31  ld A,L
-sub_F5DBD0_Join5:
+Quantize_ApplyRoundMapToTrack_Join5:
 	cp	a, 96	; F5DD33  cp A,0x60
-	jr	c, sub_F5DBD0_Skip10	; F5DD36  jr C,0xf5dd3c
+	jr	c, Quantize_ApplyRoundMapToTrack_Skip10	; F5DD36  jr C,0xf5dd3c
 	ld	a, 127:opc	; F5DD38  ld A,0x7f
 	ld	l, a	; F5DD3A  ld L,A
-sub_F5DBD0_Skip10:
+Quantize_ApplyRoundMapToTrack_Skip10:
 	cp	l, 127	; F5DD3C  cp L,0x7f
-	jr	nz, sub_F5DBD0_Skip11	; F5DD3F  jr NZ,0xf5dd46
+	jr	nz, Quantize_ApplyRoundMapToTrack_Skip11	; F5DD3F  jr NZ,0xf5dd46
 	m_or_mi8 MB16, 0x0c8a, 0x01	; F5DD41  or (0x0c8a),0x01
-sub_F5DBD0_Skip11:
+Quantize_ApplyRoundMapToTrack_Skip11:
 	push	xix	; F5DD46  push XIX
 	ld	xix, (BStore_CursorBlockAddr:16)	; F5DD47  ld XIX,(0x126e)
 	mx_st_mr8 MXD, ra_IX, ra_IY, 7	; F5DD4B  ld (XIX+IY),L
 	pop	xix	; F5DD50  pop XIX
-sub_F5DBD0_Skip12:
+Quantize_ApplyRoundMapToTrack_Skip12:
 	call	T_BStore_CursorAdvance	; F5DD51  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5DD55  cp (0x0d4a),0x00
-	jr	nz, sub_F5DBD0_Return	; F5DD5A  jr NZ,0xf5dda8
-	jrl	sub_F5DBD0_Join2	; F5DD5C  jrl T,0xf5dc23
-sub_F5DBD0_Skip13:
+	jr	nz, Quantize_ApplyRoundMapToTrack_Return	; F5DD5A  jr NZ,0xf5dda8
+	jrl	Quantize_ApplyRoundMapToTrack_Join2	; F5DD5C  jrl T,0xf5dc23
+Quantize_ApplyRoundMapToTrack_Skip13:
 	pushw	bc	; F5DD5F  push BC
 	pushw	de	; F5DD60  push DE
 	calr	SongEdit_SortBeatEventsByTiming	; F5DD61  calr 0xf5e0bd
@@ -135658,11 +135713,11 @@ sub_F5DBD0_Skip13:
 	popw	de	; F5DD68  pop DE
 	popw	bc	; F5DD69  pop BC
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5DD6A  cp (0x0d4a),0x00
-	jr	nz, sub_F5DBD0_Return	; F5DD6F  jr NZ,0xf5dda8
+	jr	nz, Quantize_ApplyRoundMapToTrack_Return	; F5DD6F  jr NZ,0xf5dda8
 	inc	1, c	; F5DD71  inc 1,C
 	call	T_BStore_CursorAdvance	; F5DD73  call 0xf4279c
-	jrl	sub_F5DBD0_Join	; F5DD77  jrl T,0xf5dc07
-sub_F5DBD0_Skip14:
+	jrl	Quantize_ApplyRoundMapToTrack_Join	; F5DD77  jrl T,0xf5dc07
+Quantize_ApplyRoundMapToTrack_Skip14:
 	inc	1, de	; F5DD7A  inc 1,DE
 	push	xiz	; F5DD7C  push XIZ
 	ld	xiz, (BStore_CursorBlockAddr:16)	; F5DD7D  ld XIZ,(0x126e)
@@ -135684,10 +135739,10 @@ sub_F5DBD0_Skip14:
 	ld	(BStore_CursorBlockAddr:16), xiz	; F5DD9B  ld (0x126e),XIZ
 	pop	xiz	; F5DD9F  pop XIZ
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5DDA0  cp (0x0d4a),0x00
-	jrl	z, sub_F5DBD0_Loop	; F5DDA5  jrl Z,0xf5dbfe
-sub_F5DBD0_Return:
+	jrl	z, Quantize_ApplyRoundMapToTrack_Loop	; F5DDA5  jrl Z,0xf5dbfe
+Quantize_ApplyRoundMapToTrack_Return:
 	ret	; F5DDA8  ret
-sub_F5DBD0_Join6:
+Quantize_ApplyRoundMapToTrack_Join6:
 	call	T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_12	; F5DDA9  call 0xf42810
 	call	T_F40A1C	; F5DDAD  call 0xf40a1c
 	ret	; F5DDB1  ret
@@ -135716,205 +135771,205 @@ Quantize_ComputeWindowBounds:
 	push	xix	; F5DDB6  push XIX
 	ld	a, (3199:16)	; F5DDB7  ld A,(0x0c7f)
 	cp	a, 0:i3	; F5DDBB  cp A,0
-	jr	z, sub_F5DDB2_Skip	; F5DDBD  jr Z,0xf5dddb
+	jr	z, Quantize_ComputeWindowBounds_Skip	; F5DDBD  jr Z,0xf5dddb
 	cp	a, 2:i3	; F5DDBF  cp A,2
-	jr	z, sub_F5DDB2_Skip2	; F5DDC1  jr Z,0xf5dde8
+	jr	z, Quantize_ComputeWindowBounds_Skip2	; F5DDC1  jr Z,0xf5dde8
 	cp	a, 4:i3	; F5DDC3  cp A,4
-	jr	z, sub_F5DDB2_Skip4	; F5DDC5  jr Z,0xf5de1b
+	jr	z, Quantize_ComputeWindowBounds_Skip4	; F5DDC5  jr Z,0xf5de1b
 	cp	a, 6:i3	; F5DDC7  cp A,6
-	jrl	z, sub_F5DDB2_Skip6	; F5DDC9  jrl Z,0xf5de5c
+	jrl	z, Quantize_ComputeWindowBounds_Skip6	; F5DDC9  jrl Z,0xf5de5c
 	cp	a, 8	; F5DDCC  cp A,0x08
-	jrl	z, sub_F5DDB2_Skip8	; F5DDCF  jrl Z,0xf5deb8
+	jrl	z, Quantize_ComputeWindowBounds_Skip8	; F5DDCF  jrl Z,0xf5deb8
 	cp	a, 10	; F5DDD2  cp A,0x0a
-	jrl	z, sub_F5DDB2_Skip10	; F5DDD5  jrl Z,0xf5def2
-	jrl	sub_F5DDB2_Join	; F5DDD8  jrl T,0xf5df40
-sub_F5DDB2_Skip:
+	jrl	z, Quantize_ComputeWindowBounds_Skip10	; F5DDD5  jrl Z,0xf5def2
+	jrl	Quantize_ComputeWindowBounds_Join	; F5DDD8  jrl T,0xf5df40
+Quantize_ComputeWindowBounds_Skip:
 	ld	(3625:16), 48	; F5DDDB  ld (0x0e29),0x30
 	ld	(3626:16), 48	; F5DDE0  ld (0x0e2a),0x30
-	jrl	sub_F5DDB2_Join2	; F5DDE5  jrl T,0xf5dfb5
-sub_F5DDB2_Skip2:
+	jrl	Quantize_ComputeWindowBounds_Join2	; F5DDE5  jrl T,0xf5dfb5
+Quantize_ComputeWindowBounds_Skip2:
 	xor	de, de	; F5DDE8  xor DE,DE
 	ld	a, (3621:16)	; F5DDEA  ld A,(0x0e25)
 	cp	a, 24	; F5DDEE  cp A,0x18
-	jr	lt, sub_F5DDB2_Skip3	; F5DDF1  jr LT,0xf5ddfc
+	jr	lt, Quantize_ComputeWindowBounds_Skip3	; F5DDF1  jr LT,0xf5ddfc
 	ld	e, 1:opc	; F5DDF3  ld E,0x01
 	cp	a, 72	; F5DDF5  cp A,0x48
-	jr	lt, sub_F5DDB2_Skip3	; F5DDF8  jr LT,0xf5ddfc
+	jr	lt, Quantize_ComputeWindowBounds_Skip3	; F5DDF8  jr LT,0xf5ddfc
 	xor	de, de	; F5DDFA  xor DE,DE
-sub_F5DDB2_Skip3:
+Quantize_ComputeWindowBounds_Skip3:
 	ld	xix, RoundMap_Bounds_A + 0x1	; F5DDFC  ld XIX,0x00f621ba
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DE01  ld A,(XIX+DE)
 	ld	(3625:16), a	; F5DE06  ld (0x0e29),A
 	ld	xix, RoundMap_Bounds_B + 0x1	; F5DE0A  ld XIX,0x00f621de
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DE0F  ld A,(XIX+DE)
 	ld	(3626:16), a	; F5DE14  ld (0x0e2a),A
-	jrl	sub_F5DDB2_Join2	; F5DE18  jrl T,0xf5dfb5
-sub_F5DDB2_Skip4:
+	jrl	Quantize_ComputeWindowBounds_Join2	; F5DE18  jrl T,0xf5dfb5
+Quantize_ComputeWindowBounds_Skip4:
 	xor	de, de	; F5DE1B  xor DE,DE
 	ld	a, (3621:16)	; F5DE1D  ld A,(0x0e25)
 	cp	a, 12	; F5DE21  cp A,0x0c
-	jr	lt, sub_F5DDB2_Skip5	; F5DE24  jr LT,0xf5de3d
+	jr	lt, Quantize_ComputeWindowBounds_Skip5	; F5DE24  jr LT,0xf5de3d
 	ld	e, 1:opc	; F5DE26  ld E,0x01
 	cp	a, 36	; F5DE28  cp A,0x24
-	jr	lt, sub_F5DDB2_Skip5	; F5DE2B  jr LT,0xf5de3d
+	jr	lt, Quantize_ComputeWindowBounds_Skip5	; F5DE2B  jr LT,0xf5de3d
 	ld	e, 2:opc	; F5DE2D  ld E,0x02
 	cp	a, 60	; F5DE2F  cp A,0x3c
-	jr	lt, sub_F5DDB2_Skip5	; F5DE32  jr LT,0xf5de3d
+	jr	lt, Quantize_ComputeWindowBounds_Skip5	; F5DE32  jr LT,0xf5de3d
 	ld	e, 3:opc	; F5DE34  ld E,0x03
 	cp	a, 84	; F5DE36  cp A,0x54
-	jr	lt, sub_F5DDB2_Skip5	; F5DE39  jr LT,0xf5de3d
+	jr	lt, Quantize_ComputeWindowBounds_Skip5	; F5DE39  jr LT,0xf5de3d
 	xor	de, de	; F5DE3B  xor DE,DE
-sub_F5DDB2_Skip5:
+Quantize_ComputeWindowBounds_Skip5:
 	ld	xix, RoundMap_Bounds_A + 0x3	; F5DE3D  ld XIX,0x00f621bc
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DE42  ld A,(XIX+DE)
 	ld	(3625:16), a	; F5DE47  ld (0x0e29),A
 	ld	xix, RoundMap_Bounds_B + 0x3	; F5DE4B  ld XIX,0x00f621e0
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DE50  ld A,(XIX+DE)
 	ld	(3626:16), a	; F5DE55  ld (0x0e2a),A
-	jrl	sub_F5DDB2_Join2	; F5DE59  jrl T,0xf5dfb5
-sub_F5DDB2_Skip6:
+	jrl	Quantize_ComputeWindowBounds_Join2	; F5DE59  jrl T,0xf5dfb5
+Quantize_ComputeWindowBounds_Skip6:
 	xor	de, de	; F5DE5C  xor DE,DE
 	ld	a, (3621:16)	; F5DE5E  ld A,(0x0e25)
 	cp	a, 6:i3	; F5DE62  cp A,6
-	jr	lt, sub_F5DDB2_Skip7	; F5DE64  jr LT,0xf5de99
+	jr	lt, Quantize_ComputeWindowBounds_Skip7	; F5DE64  jr LT,0xf5de99
 	ld	e, 1:opc	; F5DE66  ld E,0x01
 	cp	a, 18	; F5DE68  cp A,0x12
-	jr	lt, sub_F5DDB2_Skip7	; F5DE6B  jr LT,0xf5de99
+	jr	lt, Quantize_ComputeWindowBounds_Skip7	; F5DE6B  jr LT,0xf5de99
 	ld	e, 2:opc	; F5DE6D  ld E,0x02
 	cp	a, 30	; F5DE6F  cp A,0x1e
-	jr	lt, sub_F5DDB2_Skip7	; F5DE72  jr LT,0xf5de99
+	jr	lt, Quantize_ComputeWindowBounds_Skip7	; F5DE72  jr LT,0xf5de99
 	ld	e, 3:opc	; F5DE74  ld E,0x03
 	cp	a, 42	; F5DE76  cp A,0x2a
-	jr	lt, sub_F5DDB2_Skip7	; F5DE79  jr LT,0xf5de99
+	jr	lt, Quantize_ComputeWindowBounds_Skip7	; F5DE79  jr LT,0xf5de99
 	ld	e, 4:opc	; F5DE7B  ld E,0x04
 	cp	a, 54	; F5DE7D  cp A,0x36
-	jr	lt, sub_F5DDB2_Skip7	; F5DE80  jr LT,0xf5de99
+	jr	lt, Quantize_ComputeWindowBounds_Skip7	; F5DE80  jr LT,0xf5de99
 	ld	e, 5:opc	; F5DE82  ld E,0x05
 	cp	a, 66	; F5DE84  cp A,0x42
-	jr	lt, sub_F5DDB2_Skip7	; F5DE87  jr LT,0xf5de99
+	jr	lt, Quantize_ComputeWindowBounds_Skip7	; F5DE87  jr LT,0xf5de99
 	ld	e, 6:opc	; F5DE89  ld E,0x06
 	cp	a, 78	; F5DE8B  cp A,0x4e
-	jr	lt, sub_F5DDB2_Skip7	; F5DE8E  jr LT,0xf5de99
+	jr	lt, Quantize_ComputeWindowBounds_Skip7	; F5DE8E  jr LT,0xf5de99
 	ld	e, 7:opc	; F5DE90  ld E,0x07
 	cp	a, 90	; F5DE92  cp A,0x5a
-	jr	lt, sub_F5DDB2_Skip7	; F5DE95  jr LT,0xf5de99
+	jr	lt, Quantize_ComputeWindowBounds_Skip7	; F5DE95  jr LT,0xf5de99
 	xor	de, de	; F5DE97  xor DE,DE
-sub_F5DDB2_Skip7:
+Quantize_ComputeWindowBounds_Skip7:
 	ld	xix, RoundMap_Bounds_A + 0x7	; F5DE99  ld XIX,0x00f621c0
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DE9E  ld A,(XIX+DE)
 	ld	(3625:16), a	; F5DEA3  ld (0x0e29),A
 	ld	xix, RoundMap_Bounds_B + 0x7	; F5DEA7  ld XIX,0x00f621e4
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DEAC  ld A,(XIX+DE)
 	ld	(3626:16), a	; F5DEB1  ld (0x0e2a),A
-	jrl	sub_F5DDB2_Join2	; F5DEB5  jrl T,0xf5dfb5
-sub_F5DDB2_Skip8:
+	jrl	Quantize_ComputeWindowBounds_Join2	; F5DEB5  jrl T,0xf5dfb5
+Quantize_ComputeWindowBounds_Skip8:
 	xor	de, de	; F5DEB8  xor DE,DE
 	ld	a, (3621:16)	; F5DEBA  ld A,(0x0e25)
 	cp	a, 16	; F5DEBE  cp A,0x10
-	jr	lt, sub_F5DDB2_Skip9	; F5DEC1  jr LT,0xf5ded3
+	jr	lt, Quantize_ComputeWindowBounds_Skip9	; F5DEC1  jr LT,0xf5ded3
 	ld	e, 1:opc	; F5DEC3  ld E,0x01
 	cp	a, 48	; F5DEC5  cp A,0x30
-	jr	lt, sub_F5DDB2_Skip9	; F5DEC8  jr LT,0xf5ded3
+	jr	lt, Quantize_ComputeWindowBounds_Skip9	; F5DEC8  jr LT,0xf5ded3
 	ld	e, 2:opc	; F5DECA  ld E,0x02
 	cp	a, 80	; F5DECC  cp A,0x50
-	jr	lt, sub_F5DDB2_Skip9	; F5DECF  jr LT,0xf5ded3
+	jr	lt, Quantize_ComputeWindowBounds_Skip9	; F5DECF  jr LT,0xf5ded3
 	xor	de, de	; F5DED1  xor DE,DE
-sub_F5DDB2_Skip9:
+Quantize_ComputeWindowBounds_Skip9:
 	ld	xix, RoundMap_Bounds_A + 0xF	; F5DED3  ld XIX,0x00f621c8
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DED8  ld A,(XIX+DE)
 	ld	(3625:16), a	; F5DEDD  ld (0x0e29),A
 	ld	xix, RoundMap_Bounds_B + 0xF	; F5DEE1  ld XIX,0x00f621ec
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DEE6  ld A,(XIX+DE)
 	ld	(3626:16), a	; F5DEEB  ld (0x0e2a),A
-	jrl	sub_F5DDB2_Join2	; F5DEEF  jrl T,0xf5dfb5
-sub_F5DDB2_Skip10:
+	jrl	Quantize_ComputeWindowBounds_Join2	; F5DEEF  jrl T,0xf5dfb5
+Quantize_ComputeWindowBounds_Skip10:
 	xor	de, de	; F5DEF2  xor DE,DE
 	ld	a, (3621:16)	; F5DEF4  ld A,(0x0e25)
 	cp	a, 8	; F5DEF8  cp A,0x08
-	jr	lt, sub_F5DDB2_Skip11	; F5DEFB  jr LT,0xf5df22
+	jr	lt, Quantize_ComputeWindowBounds_Skip11	; F5DEFB  jr LT,0xf5df22
 	ld	e, 1:opc	; F5DEFD  ld E,0x01
 	cp	a, 24	; F5DEFF  cp A,0x18
-	jr	lt, sub_F5DDB2_Skip11	; F5DF02  jr LT,0xf5df22
+	jr	lt, Quantize_ComputeWindowBounds_Skip11	; F5DF02  jr LT,0xf5df22
 	ld	e, 2:opc	; F5DF04  ld E,0x02
 	cp	a, 40	; F5DF06  cp A,0x28
-	jr	lt, sub_F5DDB2_Skip11	; F5DF09  jr LT,0xf5df22
+	jr	lt, Quantize_ComputeWindowBounds_Skip11	; F5DF09  jr LT,0xf5df22
 	ld	e, 3:opc	; F5DF0B  ld E,0x03
 	cp	a, 56	; F5DF0D  cp A,0x38
-	jr	lt, sub_F5DDB2_Skip11	; F5DF10  jr LT,0xf5df22
+	jr	lt, Quantize_ComputeWindowBounds_Skip11	; F5DF10  jr LT,0xf5df22
 	ld	e, 4:opc	; F5DF12  ld E,0x04
 	cp	a, 72	; F5DF14  cp A,0x48
-	jr	lt, sub_F5DDB2_Skip11	; F5DF17  jr LT,0xf5df22
+	jr	lt, Quantize_ComputeWindowBounds_Skip11	; F5DF17  jr LT,0xf5df22
 	ld	e, 5:opc	; F5DF19  ld E,0x05
 	cp	a, 88	; F5DF1B  cp A,0x58
-	jr	lt, sub_F5DDB2_Skip11	; F5DF1E  jr LT,0xf5df22
+	jr	lt, Quantize_ComputeWindowBounds_Skip11	; F5DF1E  jr LT,0xf5df22
 	xor	de, de	; F5DF20  xor DE,DE
-sub_F5DDB2_Skip11:
+Quantize_ComputeWindowBounds_Skip11:
 	ld	xix, RoundMap_Bounds_A + 0x12	; F5DF22  ld XIX,0x00f621cb
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DF27  ld A,(XIX+DE)
 	ld	(3625:16), a	; F5DF2C  ld (0x0e29),A
 	ld	xix, RoundMap_Bounds_B + 0x12	; F5DF30  ld XIX,0x00f621ef
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DF35  ld A,(XIX+DE)
 	ld	(3626:16), a	; F5DF3A  ld (0x0e2a),A
-	jr	sub_F5DDB2_Join2	; F5DF3E  jr T,0xf5dfb5
-sub_F5DDB2_Join:
+	jr	Quantize_ComputeWindowBounds_Join2	; F5DF3E  jr T,0xf5dfb5
+Quantize_ComputeWindowBounds_Join:
 	xor	de, de	; F5DF40  xor DE,DE
 	ld	a, (3621:16)	; F5DF42  ld A,(0x0e25)
 	cp	a, 4:i3	; F5DF46  cp A,4
-	jr	lt, sub_F5DDB2_Skip12	; F5DF48  jr LT,0xf5df99
+	jr	lt, Quantize_ComputeWindowBounds_Skip12	; F5DF48  jr LT,0xf5df99
 	ld	e, 1:opc	; F5DF4A  ld E,0x01
 	cp	a, 12	; F5DF4C  cp A,0x0c
-	jr	lt, sub_F5DDB2_Skip12	; F5DF4F  jr LT,0xf5df99
+	jr	lt, Quantize_ComputeWindowBounds_Skip12	; F5DF4F  jr LT,0xf5df99
 	ld	e, 2:opc	; F5DF51  ld E,0x02
 	cp	a, 20	; F5DF53  cp A,0x14
-	jr	lt, sub_F5DDB2_Skip12	; F5DF56  jr LT,0xf5df99
+	jr	lt, Quantize_ComputeWindowBounds_Skip12	; F5DF56  jr LT,0xf5df99
 	ld	e, 3:opc	; F5DF58  ld E,0x03
 	cp	a, 28	; F5DF5A  cp A,0x1c
-	jr	lt, sub_F5DDB2_Skip12	; F5DF5D  jr LT,0xf5df99
+	jr	lt, Quantize_ComputeWindowBounds_Skip12	; F5DF5D  jr LT,0xf5df99
 	ld	e, 4:opc	; F5DF5F  ld E,0x04
 	cp	a, 36	; F5DF61  cp A,0x24
-	jr	lt, sub_F5DDB2_Skip12	; F5DF64  jr LT,0xf5df99
+	jr	lt, Quantize_ComputeWindowBounds_Skip12	; F5DF64  jr LT,0xf5df99
 	ld	e, 5:opc	; F5DF66  ld E,0x05
 	cp	a, 44	; F5DF68  cp A,0x2c
-	jr	lt, sub_F5DDB2_Skip12	; F5DF6B  jr LT,0xf5df99
+	jr	lt, Quantize_ComputeWindowBounds_Skip12	; F5DF6B  jr LT,0xf5df99
 	ld	e, 6:opc	; F5DF6D  ld E,0x06
 	cp	a, 52	; F5DF6F  cp A,0x34
-	jr	lt, sub_F5DDB2_Skip12	; F5DF72  jr LT,0xf5df99
+	jr	lt, Quantize_ComputeWindowBounds_Skip12	; F5DF72  jr LT,0xf5df99
 	ld	e, 7:opc	; F5DF74  ld E,0x07
 	cp	a, 60	; F5DF76  cp A,0x3c
-	jr	lt, sub_F5DDB2_Skip12	; F5DF79  jr LT,0xf5df99
+	jr	lt, Quantize_ComputeWindowBounds_Skip12	; F5DF79  jr LT,0xf5df99
 	ld	e, 8:opc	; F5DF7B  ld E,0x08
 	cp	a, 68	; F5DF7D  cp A,0x44
-	jr	lt, sub_F5DDB2_Skip12	; F5DF80  jr LT,0xf5df99
+	jr	lt, Quantize_ComputeWindowBounds_Skip12	; F5DF80  jr LT,0xf5df99
 	ld	e, 9:opc	; F5DF82  ld E,0x09
 	cp	a, 76	; F5DF84  cp A,0x4c
-	jr	lt, sub_F5DDB2_Skip12	; F5DF87  jr LT,0xf5df99
+	jr	lt, Quantize_ComputeWindowBounds_Skip12	; F5DF87  jr LT,0xf5df99
 	ld	e, 10:opc	; F5DF89  ld E,0x0a
 	cp	a, 84	; F5DF8B  cp A,0x54
-	jr	lt, sub_F5DDB2_Skip12	; F5DF8E  jr LT,0xf5df99
+	jr	lt, Quantize_ComputeWindowBounds_Skip12	; F5DF8E  jr LT,0xf5df99
 	ld	e, 11:opc	; F5DF90  ld E,0x0b
 	cp	a, 92	; F5DF92  cp A,0x5c
-	jr	lt, sub_F5DDB2_Skip12	; F5DF95  jr LT,0xf5df99
+	jr	lt, Quantize_ComputeWindowBounds_Skip12	; F5DF95  jr LT,0xf5df99
 	xor	de, de	; F5DF97  xor DE,DE
-sub_F5DDB2_Skip12:
+Quantize_ComputeWindowBounds_Skip12:
 	ld	xix, RoundMap_Bounds_A + 0x18	; F5DF99  ld XIX,0x00f621d1
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DF9E  ld A,(XIX+DE)
 	ld	(3625:16), a	; F5DFA3  ld (0x0e29),A
 	ld	xix, RoundMap_Bounds_B + 0x18	; F5DFA7  ld XIX,0x00f621f5
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DFAC  ld A,(XIX+DE)
 	ld	(3626:16), a	; F5DFB1  ld (0x0e2a),A
-sub_F5DDB2_Join2:
+Quantize_ComputeWindowBounds_Join2:
 	xor	w, w	; F5DFB5  xor W,W
 	ld	a, (3625:16)	; F5DFB7  ld A,(0x0e29)
 	ld	w, (3622:16)	; F5DFBB  ld W,(0x0e26)
 	cp	w, 127	; F5DFBF  cp W,0x7f
-	jr	nz, sub_F5DDB2_Skip13	; F5DFC2  jr NZ,0xf5dfc6
+	jr	nz, Quantize_ComputeWindowBounds_Skip13	; F5DFC2  jr NZ,0xf5dfc6
 	xor	w, w	; F5DFC4  xor W,W
-sub_F5DDB2_Skip13:
+Quantize_ComputeWindowBounds_Skip13:
 	sub	a, w	; F5DFC6  sub A,W
 	xor	w, w	; F5DFC8  xor W,W
 	ld	l, (3589:16)	; F5DFCA  ld L,(0x0e05)
 	bit	7, l	; F5DFCE  bit 0x07,L
-	jr	z, sub_F5DDB2_Skip15	; F5DFD1  jr Z,0xf5dfed
+	jr	z, Quantize_ComputeWindowBounds_Skip15	; F5DFD1  jr Z,0xf5dfed
 	xor	h, h	; F5DFD3  xor H,H
 	ldw	de, 256	; F5DFD5  ld DE,0x0100
 	sub	de, hl	; F5DFD8  sub DE,HL
@@ -135922,30 +135977,30 @@ sub_F5DDB2_Skip13:
 	sub	l, e	; F5DFDC  sub L,E
 	ld	w, (3622:16)	; F5DFDE  ld W,(0x0e26)
 	cp	w, 127	; F5DFE2  cp W,0x7f
-	jr	nz, sub_F5DDB2_Skip14	; F5DFE5  jr NZ,0xf5dfe9
+	jr	nz, Quantize_ComputeWindowBounds_Skip14	; F5DFE5  jr NZ,0xf5dfe9
 	xor	w, w	; F5DFE7  xor W,W
-sub_F5DDB2_Skip14:
+Quantize_ComputeWindowBounds_Skip14:
 	sub	a, w	; F5DFE9  sub A,W
 	xor	w, w	; F5DFEB  xor W,W
-sub_F5DDB2_Skip15:
+Quantize_ComputeWindowBounds_Skip15:
 	mul	wa, l	; F5DFED  mul WA,L
 	ld	l, 100:opc	; F5DFEF  ld L,0x64
 	div	wa, l	; F5DFF1  div WA,L
 	ld	l, (3622:16)	; F5DFF3  ld L,(0x0e26)
 	ld	h, l	; F5DFF7  ld H,L
 	cp	l, 127	; F5DFF9  cp L,0x7f
-	jr	nz, sub_F5DDB2_Skip16	; F5DFFC  jr NZ,0xf5e000
+	jr	nz, Quantize_ComputeWindowBounds_Skip16	; F5DFFC  jr NZ,0xf5e000
 	ld	l, 0:opc	; F5DFFE  ld L,0x00
-sub_F5DDB2_Skip16:
+Quantize_ComputeWindowBounds_Skip16:
 	add	l, a	; F5E000  add L,A
 	ld	(3624:16), l	; F5E002  ld (0x0e28),L
 	cp	h, 0:i3	; F5E006  cp H,0
-	jr	z, sub_F5DDB2_Skip17	; F5E008  jr Z,0xf5e00f
+	jr	z, Quantize_ComputeWindowBounds_Skip17	; F5E008  jr Z,0xf5e00f
 	cp	h, 127	; F5E00A  cp H,0x7f
-	jr	nz, sub_F5DDB2_Skip18	; F5E00D  jr NZ,0xf5e011
-sub_F5DDB2_Skip17:
+	jr	nz, Quantize_ComputeWindowBounds_Skip18	; F5E00D  jr NZ,0xf5e011
+Quantize_ComputeWindowBounds_Skip17:
 	ld	h, 96:opc	; F5E00F  ld H,0x60
-sub_F5DDB2_Skip18:
+Quantize_ComputeWindowBounds_Skip18:
 	sub	h, a	; F5E011  sub H,A
 	ld	(3623:16), h	; F5E013  ld (0x0e27),H
 	pop	xix	; F5E017  pop XIX
@@ -135975,34 +136030,34 @@ Quantize_CarryRoundedUpEventsToNextBeat:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E01D  ld XHL,(0x126e)
 	push	xhl	; F5E021  push XHL
 	m_bit 0, MD16, 0x0c8a	; F5E022  bit 0,(0x0c8a)
-	jrl	z, sub_F5E01D_Skip4	; F5E026  jrl Z,0xf5e0b7
+	jrl	z, Quantize_CarryRoundedUpEventsToNextBeat_Skip4	; F5E026  jrl Z,0xf5e0b7
 	xor	hl, hl	; F5E029  xor HL,HL
 	ld	iy, (3338:16)	; F5E02B  ld IY,(0x0d0a)
 	push	xhl	; F5E02F  push XHL
 	ld	xhl, (3348:16)	; F5E030  ld XHL,(0x0d14)
 	ld	(BStore_CursorBlockAddr:16), xhl	; F5E034  ld (0x126e),XHL
 	pop	xhl	; F5E038  pop XHL
-sub_F5E01D_Join:
+Quantize_CarryRoundedUpEventsToNextBeat_Join:
 	call	T_BStore_CursorAdvance	; F5E039  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E03D  cp (0x0d4a),0x00
-	jrl	nz, sub_F5E01D_Skip4	; F5E042  jrl NZ,0xf5e0b7
+	jrl	nz, Quantize_CarryRoundedUpEventsToNextBeat_Skip4	; F5E042  jrl NZ,0xf5e0b7
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E045  ld XHL,(0x126e)
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x7f	; F5E049  cp (XHL+IY),0x7f
-	jr	z, sub_F5E01D_Skip	; F5E04F  jr Z,0xf5e077
-sub_F5E01D_Loop:
+	jr	z, Quantize_CarryRoundedUpEventsToNextBeat_Skip	; F5E04F  jr Z,0xf5e077
+Quantize_CarryRoundedUpEventsToNextBeat_Loop:
 	call	T_BStore_CursorAdvance	; F5E051  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E055  cp (0x0d4a),0x00
-	jr	nz, sub_F5E01D_Skip4	; F5E05A  jr NZ,0xf5e0b7
+	jr	nz, Quantize_CarryRoundedUpEventsToNextBeat_Skip4	; F5E05A  jr NZ,0xf5e0b7
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E05C  ld XHL,(0x126e)
 	mx_bit 7, MXD, ra_HL, ra_IY	; F5E060  bit 7,(XHL+IY)
-	jr	z, sub_F5E01D_Loop	; F5E065  jr Z,0xf5e051
+	jr	z, Quantize_CarryRoundedUpEventsToNextBeat_Loop	; F5E065  jr Z,0xf5e051
 	ld	(3338:16), iy	; F5E067  ld (0x0d0a),IY
 	push	xwa	; F5E06B  push XWA
 	ld	xwa, (BStore_CursorBlockAddr:16)	; F5E06C  ld XWA,(0x126e)
 	ld	(3348:16), xwa	; F5E070  ld (0x0d14),XWA
 	pop	xwa	; F5E074  pop XWA
-	jr	sub_F5E01D_Join	; F5E075  jr T,0xf5e039
-sub_F5E01D_Skip:
+	jr	Quantize_CarryRoundedUpEventsToNextBeat_Join	; F5E075  jr T,0xf5e039
+Quantize_CarryRoundedUpEventsToNextBeat_Skip:
 	pushw	de	; F5E077  push DE
 	pushw	bc	; F5E078  push BC
 	ld	iy, (3338:16)	; F5E079  ld IY,(0x0d0a)
@@ -136010,24 +136065,24 @@ sub_F5E01D_Skip:
 	ld	(BStore_CursorBlockAddr:16), xhl	; F5E081  ld (0x126e),XHL
 	mx_ld_rm MXB, ra_HL, ra_IY, 4	; F5E085  ld D,(XHL+IY)
 	mx_ld_mi8 MXD, ra_HL, ra_IY, 0x81	; F5E08A  ld (XHL+IY),0x81
-sub_F5E01D_Join2:
+Quantize_CarryRoundedUpEventsToNextBeat_Join2:
 	cp	d, 129	; F5E090  cp D,0x81
-	jr	z, sub_F5E01D_Skip3	; F5E093  jr Z,0xf5e0b5
+	jr	z, Quantize_CarryRoundedUpEventsToNextBeat_Skip3	; F5E093  jr Z,0xf5e0b5
 	call	T_BStore_CursorAdvance	; F5E095  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E099  cp (0x0d4a),0x00
-	jr	nz, sub_F5E01D_Skip3	; F5E09E  jr NZ,0xf5e0b5
+	jr	nz, Quantize_CarryRoundedUpEventsToNextBeat_Skip3	; F5E09E  jr NZ,0xf5e0b5
 	ld	e, d	; F5E0A0  ld E,D
 	mx_ld_rm MXB, ra_HL, ra_IY, 4	; F5E0A2  ld D,(XHL+IY)
 	mx_st_mr8 MXD, ra_HL, ra_IY, 5	; F5E0A7  ld (XHL+IY),E
 	bit	7, e	; F5E0AC  bit 0x07,E
-	jr	z, sub_F5E01D_Skip2	; F5E0AF  jr Z,0xf5e0b3
+	jr	z, Quantize_CarryRoundedUpEventsToNextBeat_Skip2	; F5E0AF  jr Z,0xf5e0b3
 	ld	d, 0:opc	; F5E0B1  ld D,0x00
-sub_F5E01D_Skip2:
-	jr	sub_F5E01D_Join2	; F5E0B3  jr T,0xf5e090
-sub_F5E01D_Skip3:
+Quantize_CarryRoundedUpEventsToNextBeat_Skip2:
+	jr	Quantize_CarryRoundedUpEventsToNextBeat_Join2	; F5E0B3  jr T,0xf5e090
+Quantize_CarryRoundedUpEventsToNextBeat_Skip3:
 	popw	bc	; F5E0B5  pop BC
 	popw	de	; F5E0B6  pop DE
-sub_F5E01D_Skip4:
+Quantize_CarryRoundedUpEventsToNextBeat_Skip4:
 	pop	xhl	; F5E0B7  pop XHL
 	ld	(BStore_CursorBlockAddr:16), xhl	; F5E0B8  ld (0x126e),XHL
 	ret	; F5E0BC  ret
@@ -136056,15 +136111,15 @@ SongEdit_SortBeatEventsByTiming:
 	ld	(BStore_CursorBlockAddr:16), xhl	; F5E0C9  ld (0x126e),XHL
 	ld	(3364:16), xhl	; F5E0CD  ld (0x0d24),XHL
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82	; F5E0D1  cp (XHL+IY),0x82
-	jr	z, sub_F5E0BD_Skip	; F5E0D7  jr Z,0xf5e0e1
+	jr	z, SongEdit_SortBeatEventsByTiming_Skip	; F5E0D7  jr Z,0xf5e0e1
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x81	; F5E0D9  cp (XHL+IY),0x81
-	jr	nz, sub_F5E0BD_Skip2	; F5E0DF  jr NZ,0xf5e0e4
-sub_F5E0BD_Skip:
-	jrl	sub_F5E0BD_Return	; F5E0E1  jrl T,0xf5e1a0
-sub_F5E0BD_Skip2:
+	jr	nz, SongEdit_SortBeatEventsByTiming_Skip2	; F5E0DF  jr NZ,0xf5e0e4
+SongEdit_SortBeatEventsByTiming_Skip:
+	jrl	SongEdit_SortBeatEventsByTiming_Return	; F5E0E1  jrl T,0xf5e1a0
+SongEdit_SortBeatEventsByTiming_Skip2:
 	call	T_BStore_CursorAdvance	; F5E0E4  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E0E8  cp (0x0d4a),0x00
-	jrl	nz, sub_F5E0BD_Return	; F5E0ED  jrl NZ,0xf5e1a0
+	jrl	nz, SongEdit_SortBeatEventsByTiming_Return	; F5E0ED  jrl NZ,0xf5e1a0
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F5E0F0  ld A,(XHL+IY)
 	ld	(3360:16), a	; F5E0F5  ld (0x0d20),A
 	ld	(3368:16), iy	; F5E0F9  ld (0x0d28),IY
@@ -136074,39 +136129,39 @@ sub_F5E0BD_Skip2:
 	pop	xwa	; F5E106  pop XWA
 	calr	SongEdit_SortBeatAdvanceScan	; F5E107  calr 0xf5e370
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E10A  cp (0x0d4a),0x00
-	jr	z, sub_F5E0BD_Skip3	; F5E10F  jr Z,0xf5e114
-	jrl	sub_F5E0BD_Return	; F5E111  jrl T,0xf5e1a0
-sub_F5E0BD_Skip3:
+	jr	z, SongEdit_SortBeatEventsByTiming_Skip3	; F5E10F  jr Z,0xf5e114
+	jrl	SongEdit_SortBeatEventsByTiming_Return	; F5E111  jrl T,0xf5e1a0
+SongEdit_SortBeatEventsByTiming_Skip3:
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82	; F5E114  cp (XHL+IY),0x82
-	jrl	z, sub_F5E0BD_Return	; F5E11A  jrl Z,0xf5e1a0
+	jrl	z, SongEdit_SortBeatEventsByTiming_Return	; F5E11A  jrl Z,0xf5e1a0
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x81	; F5E11D  cp (XHL+IY),0x81
-	jrl	z, sub_F5E0BD_Return	; F5E123  jrl Z,0xf5e1a0
-sub_F5E0BD_Loop:
+	jrl	z, SongEdit_SortBeatEventsByTiming_Return	; F5E123  jrl Z,0xf5e1a0
+SongEdit_SortBeatEventsByTiming_Loop:
 	ld	a, (3361:16)	; F5E126  ld A,(0x0d21)
 	cp	(3360:16), a	; F5E12A  cp (0x0d20),A
-	jr	ule, sub_F5E0BD_Skip4	; F5E12E  jr ULE,0xf5e142
+	jr	ule, SongEdit_SortBeatEventsByTiming_Skip4	; F5E12E  jr ULE,0xf5e142
 	calr	SongEdit_SortBeatMoveEventToAnchor	; F5E130  calr 0xf5e1a1
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E133  cp (0x0d4a),0x00
-	jr	nz, sub_F5E0BD_Return	; F5E138  jr NZ,0xf5e1a0
+	jr	nz, SongEdit_SortBeatEventsByTiming_Return	; F5E138  jr NZ,0xf5e1a0
 	ld	a, (3361:16)	; F5E13A  ld A,(0x0d21)
 	ld	(3360:16), a	; F5E13E  ld (0x0d20),A
-sub_F5E0BD_Skip4:
+SongEdit_SortBeatEventsByTiming_Skip4:
 	calr	SongEdit_SortBeatAdvanceScan	; F5E142  calr 0xf5e370
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E145  cp (0x0d4a),0x00
-	jr	nz, sub_F5E0BD_Return	; F5E14A  jr NZ,0xf5e1a0
+	jr	nz, SongEdit_SortBeatEventsByTiming_Return	; F5E14A  jr NZ,0xf5e1a0
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82	; F5E14C  cp (XHL+IY),0x82
-	jr	z, sub_F5E0BD_Skip5	; F5E152  jr Z,0xf5e15e
+	jr	z, SongEdit_SortBeatEventsByTiming_Skip5	; F5E152  jr Z,0xf5e15e
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x81	; F5E154  cp (XHL+IY),0x81
-	jr	z, sub_F5E0BD_Skip5	; F5E15A  jr Z,0xf5e15e
-	jr	sub_F5E0BD_Loop	; F5E15C  jr T,0xf5e126
-sub_F5E0BD_Skip5:
+	jr	z, SongEdit_SortBeatEventsByTiming_Skip5	; F5E15A  jr Z,0xf5e15e
+	jr	SongEdit_SortBeatEventsByTiming_Loop	; F5E15C  jr T,0xf5e126
+SongEdit_SortBeatEventsByTiming_Skip5:
 	calr	SongEdit_SortBeatAdvanceAnchor	; F5E15E  calr 0xf5e306
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E161  cp (0x0d4a),0x00
-	jr	nz, sub_F5E0BD_Return	; F5E166  jr NZ,0xf5e1a0
+	jr	nz, SongEdit_SortBeatEventsByTiming_Return	; F5E166  jr NZ,0xf5e1a0
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82	; F5E168  cp (XHL+IY),0x82
-	jr	z, sub_F5E0BD_Return	; F5E16E  jr Z,0xf5e1a0
+	jr	z, SongEdit_SortBeatEventsByTiming_Return	; F5E16E  jr Z,0xf5e1a0
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x81	; F5E170  cp (XHL+IY),0x81
-	jr	z, sub_F5E0BD_Return	; F5E176  jr Z,0xf5e1a0
+	jr	z, SongEdit_SortBeatEventsByTiming_Return	; F5E176  jr Z,0xf5e1a0
 	ld	(3368:16), iy	; F5E178  ld (0x0d28),IY
 	push	xhl	; F5E17C  push XHL
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E17D  ld XHL,(0x126e)
@@ -136114,12 +136169,12 @@ sub_F5E0BD_Skip5:
 	pop	xhl	; F5E185  pop XHL
 	calr	SongEdit_SortBeatAdvanceScan	; F5E186  calr 0xf5e370
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E189  cp (0x0d4a),0x00
-	jr	nz, sub_F5E0BD_Return	; F5E18E  jr NZ,0xf5e1a0
+	jr	nz, SongEdit_SortBeatEventsByTiming_Return	; F5E18E  jr NZ,0xf5e1a0
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82	; F5E190  cp (XHL+IY),0x82
-	jr	z, sub_F5E0BD_Return	; F5E196  jr Z,0xf5e1a0
+	jr	z, SongEdit_SortBeatEventsByTiming_Return	; F5E196  jr Z,0xf5e1a0
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x81	; F5E198  cp (XHL+IY),0x81
-	jr	nz, sub_F5E0BD_Loop	; F5E19E  jr NZ,0xf5e126
-sub_F5E0BD_Return:
+	jr	nz, SongEdit_SortBeatEventsByTiming_Loop	; F5E19E  jr NZ,0xf5e126
+SongEdit_SortBeatEventsByTiming_Return:
 	ret	; F5E1A0  ret
 
 ; --------------------------------------------------------------------------
@@ -136127,7 +136182,7 @@ sub_F5E0BD_Return:
 ; Called from: in-module: 0xF5E130
 ; Touches: (0x0C57) (0x0C59) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0D21)
 ;          (0x0D22) (0x0D24) (0x0D28) +6 more  |  0x000D36
-; Calls:   T_BStore_CursorAdvance sub_F5E2B9 BStore_CursorBlockAddrToNumber T_BStore_CopyRangeBackward T_BStore_SeekBlock
+; Calls:   T_BStore_CursorAdvance BStore_CursorStepBack BStore_CursorBlockAddrToNumber T_BStore_CopyRangeBackward T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5E1A1 is an instruction boundary.
 ;           The name IS the address.
@@ -136143,23 +136198,23 @@ SongEdit_SortBeatMoveEventToAnchor:
 	ld	xix, 3382	; F5E1A1  ld XIX,0x00000d36
 	call	T_BStore_CursorAdvance	; F5E1A6  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E1AA  cp (0x0d4a),0x00
-	jrl	nz, sub_F5E1A1_Return	; F5E1AF  jrl NZ,0xf5e2b8
-sub_F5E1A1_Loop:
+	jrl	nz, SongEdit_SortBeatMoveEventToAnchor_Return	; F5E1AF  jrl NZ,0xf5e2b8
+SongEdit_SortBeatMoveEventToAnchor_Loop:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E1B2  ld XHL,(0x126e)
 	mx_bit 7, MXD, ra_HL, ra_IY	; F5E1B6  bit 7,(XHL+IY)
-	jr	nz, sub_F5E1A1_Skip	; F5E1BB  jr NZ,0xf5e1d4
+	jr	nz, SongEdit_SortBeatMoveEventToAnchor_Skip	; F5E1BB  jr NZ,0xf5e1d4
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F5E1BD  ld A,(XHL+IY)
 	ld	(xix), a	; F5E1C2  ld (XIX),A
 	inc	1, xix	; F5E1C4  inc 1,XIX
 	call	T_BStore_CursorAdvance	; F5E1C6  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E1CA  cp (0x0d4a),0x00
-	jr	z, sub_F5E1A1_Loop	; F5E1CF  jr Z,0xf5e1b2
-	jrl	sub_F5E1A1_Return	; F5E1D1  jrl T,0xf5e2b8
-sub_F5E1A1_Skip:
+	jr	z, SongEdit_SortBeatMoveEventToAnchor_Loop	; F5E1CF  jr Z,0xf5e1b2
+	jrl	SongEdit_SortBeatMoveEventToAnchor_Return	; F5E1D1  jrl T,0xf5e2b8
+SongEdit_SortBeatMoveEventToAnchor_Skip:
 	ld	(3376:16), xix	; F5E1D4  ld (0x0d30),XIX
-	calr	sub_F5E2B9	; F5E1D8  calr 0xf5e2b9
+	calr	BStore_CursorStepBack	; F5E1D8  calr 0xf5e2b9
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E1DB  cp (0x0d4a),0x00
-	jrl	nz, sub_F5E1A1_Return	; F5E1E0  jrl NZ,0xf5e2b8
+	jrl	nz, SongEdit_SortBeatMoveEventToAnchor_Return	; F5E1E0  jrl NZ,0xf5e2b8
 	calr	BStore_CursorBlockAddrToNumber	; F5E1E3  calr 0xf5e2f0
 	ld	(3165:16), iy	; F5E1E6  ld (0x0c5d),IY
 	ld	wa, (3374:16)	; F5E1EA  ld WA,(0x0d2e)
@@ -136169,9 +136224,9 @@ sub_F5E1A1_Skip:
 	ld	(BStore_CursorBlockAddr:16), xhl	; F5E1FA  ld (0x126e),XHL
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F5E1FE  ld A,(XHL+IY)
 	ld	(3380:16), a	; F5E203  ld (0x0d34),A
-	calr	sub_F5E2B9	; F5E207  calr 0xf5e2b9
+	calr	BStore_CursorStepBack	; F5E207  calr 0xf5e2b9
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E20A  cp (0x0d4a),0x00
-	jrl	nz, sub_F5E1A1_Return	; F5E20F  jrl NZ,0xf5e2b8
+	jrl	nz, SongEdit_SortBeatMoveEventToAnchor_Return	; F5E20F  jrl NZ,0xf5e2b8
 	calr	BStore_CursorBlockAddrToNumber	; F5E212  calr 0xf5e2f0
 	ld	(3175:16), iy	; F5E215  ld (0x0c67),IY
 	ld	wa, (3374:16)	; F5E219  ld WA,(0x0d2e)
@@ -136186,50 +136241,50 @@ sub_F5E1A1_Skip:
 	ld	(3179:16), iy	; F5E236  ld (0x0c6b),IY
 	call	T_BStore_CopyRangeBackward	; F5E23A  call 0xf4277c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E23E  cp (0x0d4a),0x00
-	jrl	nz, sub_F5E1A1_Return	; F5E243  jrl NZ,0xf5e2b8
+	jrl	nz, SongEdit_SortBeatMoveEventToAnchor_Return	; F5E243  jrl NZ,0xf5e2b8
 	ld	xhl, (BStore_CopyDestAddr:16)	; F5E246  ld XHL,(0x0c59)
 	ld	(BStore_CursorBlockAddr:16), xhl	; F5E24A  ld (0x126e),XHL
 	ld	iy, ix	; F5E24E  ld IY,IX
 	cp	iy, 5:i3	; F5E250  cp IY,5
-	jr	nc, sub_F5E1A1_Skip3	; F5E252  jr NC,0xf5e26f
+	jr	nc, SongEdit_SortBeatMoveEventToAnchor_Skip3	; F5E252  jr NC,0xf5e26f
 	xor	iy, iy	; F5E254  xor IY,IY
 	ld	hl, (xhl+1)	; F5E256  ld HL,(XHL+0x01)
 	call	T_BStore_SeekBlock	; F5E259  call 0xf427bc
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E25D  ld XHL,(0x126e)
 	m_bit 7, MDI+r3, 0	; F5E261  bit 7,(XHL)
-	jr	nz, sub_F5E1A1_Skip2	; F5E263  jr NZ,0xf5e26c
+	jr	nz, SongEdit_SortBeatMoveEventToAnchor_Skip2	; F5E263  jr NZ,0xf5e26c
 	ld	(BStore_ErrorCode:16), 11	; F5E265  ld (0x0d4a),0x0b
-	jr	sub_F5E1A1_Return	; F5E26A  jr T,0xf5e2b8
-sub_F5E1A1_Skip2:
+	jr	SongEdit_SortBeatMoveEventToAnchor_Return	; F5E26A  jr T,0xf5e2b8
+SongEdit_SortBeatMoveEventToAnchor_Skip2:
 	ldw	iy, 255	; F5E26C  ld IY,0x00ff
-sub_F5E1A1_Skip3:
+SongEdit_SortBeatMoveEventToAnchor_Skip3:
 	ld	xix, (3376:16)	; F5E26F  ld XIX,(0x0d30)
-sub_F5E1A1_Loop2:
+SongEdit_SortBeatMoveEventToAnchor_Loop2:
 	cp	xix, 3382	; F5E273  cp XIX,0x00000d36
-	jr	z, sub_F5E1A1_Skip4	; F5E279  jr Z,0xf5e294
+	jr	z, SongEdit_SortBeatMoveEventToAnchor_Skip4	; F5E279  jr Z,0xf5e294
 	dec	1, xix	; F5E27B  dec 1,XIX
 	ld	a, (xix)	; F5E27D  ld A,(XIX)
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E27F  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F5E283  ld (XHL+IY),A
-	calr	sub_F5E2B9	; F5E288  calr 0xf5e2b9
+	calr	BStore_CursorStepBack	; F5E288  calr 0xf5e2b9
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E28B  cp (0x0d4a),0x00
-	jr	z, sub_F5E1A1_Loop2	; F5E290  jr Z,0xf5e273
-	jr	sub_F5E1A1_Return	; F5E292  jr T,0xf5e2b8
-sub_F5E1A1_Skip4:
+	jr	z, SongEdit_SortBeatMoveEventToAnchor_Loop2	; F5E290  jr Z,0xf5e273
+	jr	SongEdit_SortBeatMoveEventToAnchor_Return	; F5E292  jr T,0xf5e2b8
+SongEdit_SortBeatMoveEventToAnchor_Skip4:
 	ld	a, (3361:16)	; F5E294  ld A,(0x0d21)
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E298  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F5E29C  ld (XHL+IY),A
-	calr	sub_F5E2B9	; F5E2A1  calr 0xf5e2b9
+	calr	BStore_CursorStepBack	; F5E2A1  calr 0xf5e2b9
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E2A4  cp (0x0d4a),0x00
-	jr	nz, sub_F5E1A1_Return	; F5E2A9  jr NZ,0xf5e2b8
+	jr	nz, SongEdit_SortBeatMoveEventToAnchor_Return	; F5E2A9  jr NZ,0xf5e2b8
 	ld	a, (3380:16)	; F5E2AB  ld A,(0x0d34)
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E2AF  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F5E2B3  ld (XHL+IY),A
-sub_F5E1A1_Return:
+SongEdit_SortBeatMoveEventToAnchor_Return:
 	ret	; F5E2B8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5E2B9
+; BStore_CursorStepBack
 ; Called from: in-module: 0xF5E1D8 0xF5E207 0xF5E288 0xF5E2A1 0xF61D88
 ; Touches: (0x0CA4) (0x0D4A) (0x126E)
 ; Calls:   T_BStore_SeekBlock
@@ -136239,30 +136294,34 @@ sub_F5E1A1_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5E2B9:
+; BStore_CursorStepBack: Steps the cursor (block address (0x126E), offset IY) back one byte: IY - 1, or below offset 5
+;   the block's +1 previous link at offset 0xFF (BStore_ErrorCode 10 for link 0 or above BStore_BlockLimit, 11 for a
+;   free block). The backward twin of BStore_CursorAdvance; SongEdit_SortBeatMoveEventToAnchor writes an event back to
+;   front with it. Basis: caller + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave9_d9.json)
+BStore_CursorStepBack:
 	dec	1, iy	; F5E2B9  dec 1,IY
 	cp	iy, 5:i3	; F5E2BB  cp IY,5
-	jr	nc, sub_F5E2B9_Return	; F5E2BD  jr NC,0xf5e2ef
+	jr	nc, BStore_CursorStepBack_Return	; F5E2BD  jr NC,0xf5e2ef
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E2BF  ld XHL,(0x126e)
 	ld	wa, (xhl+1)	; F5E2C3  ld WA,(XHL+0x01)
 	cp	wa, 0:i3	; F5E2C6  cp WA,0
-	jr	z, sub_F5E2B9_Skip	; F5E2C8  jr Z,0xf5e2d0
+	jr	z, BStore_CursorStepBack_Skip	; F5E2C8  jr Z,0xf5e2d0
 	m_cp_rm MW16, BStore_BlockLimit, 0	; F5E2CA  cp WA,(0x0ca4)
-	jr	ule, sub_F5E2B9_Skip2	; F5E2CE  jr ULE,0xf5e2d7
-sub_F5E2B9_Skip:
+	jr	ule, BStore_CursorStepBack_Skip2	; F5E2CE  jr ULE,0xf5e2d7
+BStore_CursorStepBack_Skip:
 	ld	(BStore_ErrorCode:16), 10	; F5E2D0  ld (0x0d4a),0x0a
-	jr	sub_F5E2B9_Return	; F5E2D5  jr T,0xf5e2ef
-sub_F5E2B9_Skip2:
+	jr	BStore_CursorStepBack_Return	; F5E2D5  jr T,0xf5e2ef
+BStore_CursorStepBack_Skip2:
 	ld	hl, wa	; F5E2D7  ld HL,WA
 	call	T_BStore_SeekBlock	; F5E2D9  call 0xf427bc
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E2DD  ld XHL,(0x126e)
 	m_bit 7, MDI+r3, 0	; F5E2E1  bit 7,(XHL)
-	jr	nz, sub_F5E2B9_Skip3	; F5E2E3  jr NZ,0xf5e2ec
+	jr	nz, BStore_CursorStepBack_Skip3	; F5E2E3  jr NZ,0xf5e2ec
 	ld	(BStore_ErrorCode:16), 11	; F5E2E5  ld (0x0d4a),0x0b
-	jr	sub_F5E2B9_Return	; F5E2EA  jr T,0xf5e2ef
-sub_F5E2B9_Skip3:
+	jr	BStore_CursorStepBack_Return	; F5E2EA  jr T,0xf5e2ef
+BStore_CursorStepBack_Skip3:
 	ldw	iy, 255	; F5E2EC  ld IY,0x00ff
-sub_F5E2B9_Return:
+BStore_CursorStepBack_Return:
 	ret	; F5E2EF  ret
 
 ; --------------------------------------------------------------------------
@@ -136308,33 +136367,33 @@ SongEdit_SortBeatAdvanceAnchor:
 	pop	xhl	; F5E313  pop XHL
 	call	T_BStore_CursorAdvance	; F5E314  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E318  cp (0x0d4a),0x00
-	jr	z, sub_F5E306_Loop	; F5E31D  jr Z,0xf5e321
-	jr	sub_F5E306_Return	; F5E31F  jr T,0xf5e36f
-sub_F5E306_Loop:
+	jr	z, SongEdit_SortBeatAdvanceAnchor_Loop	; F5E31D  jr Z,0xf5e321
+	jr	SongEdit_SortBeatAdvanceAnchor_Return	; F5E31F  jr T,0xf5e36f
+SongEdit_SortBeatAdvanceAnchor_Loop:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E321  ld XHL,(0x126e)
 	mx_bit 7, MXD, ra_HL, ra_IY	; F5E325  bit 7,(XHL+IY)
-	jr	nz, sub_F5E306_Skip	; F5E32A  jr NZ,0xf5e339
+	jr	nz, SongEdit_SortBeatAdvanceAnchor_Skip	; F5E32A  jr NZ,0xf5e339
 	call	T_BStore_CursorAdvance	; F5E32C  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E330  cp (0x0d4a),0x00
-	jr	z, sub_F5E306_Loop	; F5E335  jr Z,0xf5e321
-	jr	sub_F5E306_Return	; F5E337  jr T,0xf5e36f
-sub_F5E306_Skip:
+	jr	z, SongEdit_SortBeatAdvanceAnchor_Loop	; F5E335  jr Z,0xf5e321
+	jr	SongEdit_SortBeatAdvanceAnchor_Return	; F5E337  jr T,0xf5e36f
+SongEdit_SortBeatAdvanceAnchor_Skip:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E339  ld XHL,(0x126e)
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82	; F5E33D  cp (XHL+IY),0x82
-	jr	z, sub_F5E306_Return	; F5E343  jr Z,0xf5e36f
+	jr	z, SongEdit_SortBeatAdvanceAnchor_Return	; F5E343  jr Z,0xf5e36f
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x81	; F5E345  cp (XHL+IY),0x81
-	jr	z, sub_F5E306_Return	; F5E34B  jr Z,0xf5e36f
+	jr	z, SongEdit_SortBeatAdvanceAnchor_Return	; F5E34B  jr Z,0xf5e36f
 	ld	(3362:16), iy	; F5E34D  ld (0x0d22),IY
 	ld	(3364:16), xhl	; F5E351  ld (0x0d24),XHL
 	call	T_BStore_CursorAdvance	; F5E355  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E359  cp (0x0d4a),0x00
-	jr	z, sub_F5E306_Skip2	; F5E35E  jr Z,0xf5e362
-	jr	sub_F5E306_Return	; F5E360  jr T,0xf5e36f
-sub_F5E306_Skip2:
+	jr	z, SongEdit_SortBeatAdvanceAnchor_Skip2	; F5E35E  jr Z,0xf5e362
+	jr	SongEdit_SortBeatAdvanceAnchor_Return	; F5E360  jr T,0xf5e36f
+SongEdit_SortBeatAdvanceAnchor_Skip2:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E362  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F5E366  ld A,(XHL+IY)
 	ld	(3360:16), a	; F5E36B  ld (0x0d20),A
-sub_F5E306_Return:
+SongEdit_SortBeatAdvanceAnchor_Return:
 	ret	; F5E36F  ret
 
 ; --------------------------------------------------------------------------
@@ -136360,33 +136419,33 @@ SongEdit_SortBeatAdvanceScan:
 	pop	xhl	; F5E37D  pop XHL
 	call	T_BStore_CursorAdvance	; F5E37E  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E382  cp (0x0d4a),0x00
-	jr	z, sub_F5E370_Loop	; F5E387  jr Z,0xf5e38b
-	jr	sub_F5E370_Return	; F5E389  jr T,0xf5e3d9
-sub_F5E370_Loop:
+	jr	z, SongEdit_SortBeatAdvanceScan_Loop	; F5E387  jr Z,0xf5e38b
+	jr	SongEdit_SortBeatAdvanceScan_Return	; F5E389  jr T,0xf5e3d9
+SongEdit_SortBeatAdvanceScan_Loop:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E38B  ld XHL,(0x126e)
 	mx_bit 7, MXD, ra_HL, ra_IY	; F5E38F  bit 7,(XHL+IY)
-	jr	nz, sub_F5E370_Skip	; F5E394  jr NZ,0xf5e3a3
+	jr	nz, SongEdit_SortBeatAdvanceScan_Skip	; F5E394  jr NZ,0xf5e3a3
 	call	T_BStore_CursorAdvance	; F5E396  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E39A  cp (0x0d4a),0x00
-	jr	z, sub_F5E370_Loop	; F5E39F  jr Z,0xf5e38b
-	jr	sub_F5E306_Return	; F5E3A1  jr T,0xf5e36f
-sub_F5E370_Skip:
+	jr	z, SongEdit_SortBeatAdvanceScan_Loop	; F5E39F  jr Z,0xf5e38b
+	jr	SongEdit_SortBeatAdvanceAnchor_Return	; F5E3A1  jr T,0xf5e36f
+SongEdit_SortBeatAdvanceScan_Skip:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E3A3  ld XHL,(0x126e)
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82	; F5E3A7  cp (XHL+IY),0x82
-	jr	z, sub_F5E370_Return	; F5E3AD  jr Z,0xf5e3d9
+	jr	z, SongEdit_SortBeatAdvanceScan_Return	; F5E3AD  jr Z,0xf5e3d9
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x81	; F5E3AF  cp (XHL+IY),0x81
-	jr	z, sub_F5E370_Return	; F5E3B5  jr Z,0xf5e3d9
+	jr	z, SongEdit_SortBeatAdvanceScan_Return	; F5E3B5  jr Z,0xf5e3d9
 	ld	(3368:16), iy	; F5E3B7  ld (0x0d28),IY
 	ld	(3370:16), xhl	; F5E3BB  ld (0x0d2a),XHL
 	call	T_BStore_CursorAdvance	; F5E3BF  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E3C3  cp (0x0d4a),0x00
-	jr	z, sub_F5E370_Skip2	; F5E3C8  jr Z,0xf5e3cc
-	jr	sub_F5E370_Return	; F5E3CA  jr T,0xf5e3d9
-sub_F5E370_Skip2:
+	jr	z, SongEdit_SortBeatAdvanceScan_Skip2	; F5E3C8  jr Z,0xf5e3cc
+	jr	SongEdit_SortBeatAdvanceScan_Return	; F5E3CA  jr T,0xf5e3d9
+SongEdit_SortBeatAdvanceScan_Skip2:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E3CC  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F5E3D0  ld A,(XHL+IY)
 	ld	(3361:16), a	; F5E3D5  ld (0x0d21),A
-sub_F5E370_Return:
+SongEdit_SortBeatAdvanceScan_Return:
 	ret	; F5E3D9  ret
 
 ; --------------------------------------------------------------------------
@@ -136412,32 +136471,32 @@ SongEdit_DeleteMeasures:		; <- T_SongEdit_DeleteMeasures
 	call	T_BStore_LoadGeometry	; F5E3DA  call 0xf427c4
 	ld	a, (3184:16)	; F5E3DE  ld A,(0x0c70)
 	cp	a, 1:i3	; F5E3E2  cp A,1
-	jr	c, sub_F5E370_Skip4	; F5E3E4  jr C,0xf5e40d
+	jr	c, SongEdit_DeleteMeasures_Skip4	; F5E3E4  jr C,0xf5e40d
 	cp	a, 127	; F5E3E6  cp A,0x7f
-	jr	z, sub_F5E370_Skip3	; F5E3E9  jr Z,0xf5e3f1
+	jr	z, SongEdit_DeleteMeasures_Skip3	; F5E3E9  jr Z,0xf5e3f1
 	m_cp_rm MB16, 0x0ca2, 1	; F5E3EB  cp A,(0x0ca2)
-	jr	ugt, sub_F5E370_Skip4	; F5E3EF  jr UGT,0xf5e40d
-sub_F5E370_Skip3:
+	jr	ugt, SongEdit_DeleteMeasures_Skip4	; F5E3EF  jr UGT,0xf5e40d
+SongEdit_DeleteMeasures_Skip3:
 	ld	wa, (3187:16)	; F5E3F1  ld WA,(0x0c73)
 	cp	wa, 1:i3	; F5E3F5  cp WA,1
-	jr	c, sub_F5E370_Skip4	; F5E3F7  jr C,0xf5e40d
+	jr	c, SongEdit_DeleteMeasures_Skip4	; F5E3F7  jr C,0xf5e40d
 	cp	wa, 999	; F5E3F9  cp WA,0x03e7
-	jr	ugt, sub_F5E370_Skip4	; F5E3FD  jr UGT,0xf5e40d
+	jr	ugt, SongEdit_DeleteMeasures_Skip4	; F5E3FD  jr UGT,0xf5e40d
 	ld	wa, (3191:16)	; F5E3FF  ld WA,(0x0c77)
 	cp	wa, 1:i3	; F5E403  cp WA,1
-	jr	c, sub_F5E370_Skip4	; F5E405  jr C,0xf5e40d
+	jr	c, SongEdit_DeleteMeasures_Skip4	; F5E405  jr C,0xf5e40d
 	cp	wa, 999	; F5E407  cp WA,0x03e7
-	jr	ule, sub_F5E370_Skip5	; F5E40B  jr ULE,0xf5e415
-sub_F5E370_Skip4:
+	jr	ule, SongEdit_DeleteMeasures_Skip5	; F5E40B  jr ULE,0xf5e415
+SongEdit_DeleteMeasures_Skip4:
 	ld	(BStore_ErrorCode:16), 3	; F5E40D  ld (0x0d4a),0x03
-	jrl	sub_F5E370_Join4	; F5E412  jrl T,0xf5e567
-sub_F5E370_Skip5:
+	jrl	SongEdit_DeleteMeasures_Join4	; F5E412  jrl T,0xf5e567
+SongEdit_DeleteMeasures_Skip5:
 	ld	(BStore_ErrorCode:16), 0	; F5E415  ld (0x0d4a),0x00
 	m_and_mi8 MB16, 0x0c8a, 0xbf	; F5E41A  and (0x0c8a),0xbf
 	m_cp_mi8 MB16, 0x0c70, 0x7f	; F5E41F  cp (0x0c70),0x7f
-	jr	nz, sub_F5E370_Skip6	; F5E424  jr NZ,0xf5e429
-	jrl	sub_F5E370_Join	; F5E426  jrl T,0xf5e49d
-sub_F5E370_Skip6:
+	jr	nz, SongEdit_DeleteMeasures_Skip6	; F5E424  jr NZ,0xf5e429
+	jrl	SongEdit_DeleteMeasures_Join	; F5E426  jrl T,0xf5e49d
+SongEdit_DeleteMeasures_Skip6:
 	xor	hl, hl	; F5E429  xor HL,HL
 	ld	l, (3184:16)	; F5E42B  ld L,(0x0c70)
 	dec	1, l	; F5E42F  dec 1,L
@@ -136446,18 +136505,18 @@ sub_F5E370_Skip6:
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5E437  ld A,(XIX+HL)
 	pop	xix	; F5E43C  pop XIX
 	cp	a, 32	; F5E43D  cp A,0x20
-	jr	nz, sub_F5E370_Skip7	; F5E440  jr NZ,0xf5e459
+	jr	nz, SongEdit_DeleteMeasures_Skip7	; F5E440  jr NZ,0xf5e459
 	m_or_mi8 MB16, 0x0c8a, 0x40	; F5E442  or (0x0c8a),0x40
 	ld	a, (3184:16)	; F5E447  ld A,(0x0c70)
 	call	T_BStore_OpenChainAtSavedCursor	; F5E44B  call 0xf42790
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E44F  cp (0x0d4a),0x00
-	jr	z, sub_F5E370_Skip7	; F5E454  jr Z,0xf5e459
-	jrl	sub_F5E370_Join4	; F5E456  jrl T,0xf5e567
-sub_F5E370_Skip7:
+	jr	z, SongEdit_DeleteMeasures_Skip7	; F5E454  jr Z,0xf5e459
+	jrl	SongEdit_DeleteMeasures_Join4	; F5E456  jrl T,0xf5e567
+SongEdit_DeleteMeasures_Skip7:
 	ld	a, (3184:16)	; F5E459  ld A,(0x0c70)
 	ld	(3214:16), a	; F5E45D  ld (0x0c8e),A
 	m_bit 6, MD16, 0x0c8a	; F5E461  bit 6,(0x0c8a)
-	jr	z, sub_F5E370_Skip8	; F5E465  jr Z,0xf5e480
+	jr	z, SongEdit_DeleteMeasures_Skip8	; F5E465  jr Z,0xf5e480
 	xor	hl, hl	; F5E467  xor HL,HL
 	ld	l, a	; F5E469  ld L,A
 	dec	1, hl	; F5E46B  dec 1,HL
@@ -136465,28 +136524,28 @@ sub_F5E370_Skip7:
 	ld	xix, BStore_TrackToPart	; F5E46E  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20	; F5E473  cp (XIX+HL),0x20
 	pop	xix	; F5E479  pop XIX
-	jr	nz, sub_F5E370_Skip8	; F5E47A  jr NZ,0xf5e480
+	jr	nz, SongEdit_DeleteMeasures_Skip8	; F5E47A  jr NZ,0xf5e480
 	call	T_SongEdit_SaveTimeSigOfDeletedMeasures	; F5E47C  call 0xf432c0
-sub_F5E370_Skip8:
+SongEdit_DeleteMeasures_Skip8:
 	calr	SongEdit_DeleteMeasuresFromTrack	; F5E480  calr 0xf5e570
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E483  cp (0x0d4a),0x00
-	jrl	nz, sub_F5E370_Join4	; F5E488  jrl NZ,0xf5e567
+	jrl	nz, SongEdit_DeleteMeasures_Join4	; F5E488  jrl NZ,0xf5e567
 	ld	a, (3214:16)	; F5E48B  ld A,(0x0c8e)
 	m_cp_rm MB16, 0x0d1d, 1	; F5E48F  cp A,(0x0d1d)
-	jrl	nz, sub_F5E370_Join4	; F5E493  jrl NZ,0xf5e567
+	jrl	nz, SongEdit_DeleteMeasures_Join4	; F5E493  jrl NZ,0xf5e567
 	call	T_SongEdit_ReinsertTimeSigAfterDelete	; F5E496  call 0xf432cc
-	jrl	sub_F5E370_Join4	; F5E49A  jrl T,0xf5e567
-sub_F5E370_Join:
+	jrl	SongEdit_DeleteMeasures_Join4	; F5E49A  jrl T,0xf5e567
+SongEdit_DeleteMeasures_Join:
 	xor	xhl, xhl	; F5E49D  xor XHL,XHL
-sub_F5E370_Join2:
+SongEdit_DeleteMeasures_Join2:
 	m_cp_rm MB16, 0x0ca3, 7	; F5E49F  cp L,(0x0ca3)
-	jr	ugt, sub_F5E370_Skip10	; F5E4A3  jr UGT,0xf5e4d3
+	jr	ugt, SongEdit_DeleteMeasures_Skip10	; F5E4A3  jr UGT,0xf5e4d3
 	push	xix	; F5E4A5  push XIX
 	ld	xix, BStore_TrackToPart	; F5E4A6  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5E4AB  ld A,(XIX+HL)
 	pop	xix	; F5E4B0  pop XIX
 	cp	a, 32	; F5E4B1  cp A,0x20
-	jr	nz, sub_F5E370_Skip9	; F5E4B4  jr NZ,0xf5e4cf
+	jr	nz, SongEdit_DeleteMeasures_Skip9	; F5E4B4  jr NZ,0xf5e4cf
 	m_or_mi8 MB16, 0x0c8a, 0x40	; F5E4B6  or (0x0c8a),0x40
 	push	xhl	; F5E4BB  push XHL
 	ld	wa, hl	; F5E4BC  ld WA,HL
@@ -136494,25 +136553,25 @@ sub_F5E370_Join2:
 	call	T_BStore_OpenChainAtSavedCursor	; F5E4C0  call 0xf42790
 	pop	xhl	; F5E4C4  pop XHL
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E4C5  cp (0x0d4a),0x00
-	jr	z, sub_F5E370_Skip9	; F5E4CA  jr Z,0xf5e4cf
-	jrl	sub_F5E370_Join4	; F5E4CC  jrl T,0xf5e567
-sub_F5E370_Skip9:
+	jr	z, SongEdit_DeleteMeasures_Skip9	; F5E4CA  jr Z,0xf5e4cf
+	jrl	SongEdit_DeleteMeasures_Join4	; F5E4CC  jrl T,0xf5e567
+SongEdit_DeleteMeasures_Skip9:
 	inc	1, hl	; F5E4CF  inc 1,HL
-	jr	sub_F5E370_Join2	; F5E4D1  jr T,0xf5e49f
-sub_F5E370_Skip10:
+	jr	SongEdit_DeleteMeasures_Join2	; F5E4D1  jr T,0xf5e49f
+SongEdit_DeleteMeasures_Skip10:
 	call	T_SongEdit_CheckAllTracksToStartMeasure	; F5E4D3  call 0xf427d0
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E4D7  cp (0x0d4a),0x00
-	jr	z, sub_F5E370_Skip11	; F5E4DC  jr Z,0xf5e4e1
-	jrl	sub_F5E370_Join4	; F5E4DE  jrl T,0xf5e567
-sub_F5E370_Skip11:
+	jr	z, SongEdit_DeleteMeasures_Skip11	; F5E4DC  jr Z,0xf5e4e1
+	jrl	SongEdit_DeleteMeasures_Join4	; F5E4DE  jrl T,0xf5e567
+SongEdit_DeleteMeasures_Skip11:
 	ld	a, 1:opc	; F5E4E1  ld A,0x01
 	ld	(3352:16), 0	; F5E4E3  ld (0x0d18),0x00
-sub_F5E370_Join3:
+SongEdit_DeleteMeasures_Join3:
 	m_cp_rm MB16, 0x0ca2, 1	; F5E4E8  cp A,(0x0ca2)
-	jrl	ugt, sub_F5E370_Skip15	; F5E4EC  jrl UGT,0xf5e55f
+	jrl	ugt, SongEdit_DeleteMeasures_Skip15	; F5E4EC  jrl UGT,0xf5e55f
 	ld	(3214:16), a	; F5E4EF  ld (0x0c8e),A
 	m_bit 6, MD16, 0x0c8a	; F5E4F3  bit 6,(0x0c8a)
-	jr	z, sub_F5E370_Skip12	; F5E4F7  jr Z,0xf5e519
+	jr	z, SongEdit_DeleteMeasures_Skip12	; F5E4F7  jr Z,0xf5e519
 	xor	hl, hl	; F5E4F9  xor HL,HL
 	ld	l, a	; F5E4FB  ld L,A
 	dec	1, hl	; F5E4FD  dec 1,HL
@@ -136520,42 +136579,42 @@ sub_F5E370_Join3:
 	ld	xix, BStore_TrackToPart	; F5E500  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20	; F5E505  cp (XIX+HL),0x20
 	pop	xix	; F5E50B  pop XIX
-	jr	nz, sub_F5E370_Skip12	; F5E50C  jr NZ,0xf5e519
+	jr	nz, SongEdit_DeleteMeasures_Skip12	; F5E50C  jr NZ,0xf5e519
 	pushw	wa	; F5E50E  push WA
 	ld	(BStore_ErrorCode:16), 0	; F5E50F  ld (0x0d4a),0x00
 	call	T_SongEdit_SaveTimeSigOfDeletedMeasures	; F5E514  call 0xf432c0
 	popw	wa	; F5E518  pop WA
-sub_F5E370_Skip12:
+SongEdit_DeleteMeasures_Skip12:
 	pushw	wa	; F5E519  push WA
 	calr	SongEdit_DeleteMeasuresFromTrack	; F5E51A  calr 0xf5e570
 	popw	wa	; F5E51D  pop WA
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E51E  cp (0x0d4a),0x00
-	jr	nz, sub_F5E370_Skip13	; F5E523  jr NZ,0xf5e53e
+	jr	nz, SongEdit_DeleteMeasures_Skip13	; F5E523  jr NZ,0xf5e53e
 	m_bit 6, MD16, 0x0c8a	; F5E525  bit 6,(0x0c8a)
-	jr	z, sub_F5E370_Skip14	; F5E529  jr Z,0xf5e55b
+	jr	z, SongEdit_DeleteMeasures_Skip14	; F5E529  jr Z,0xf5e55b
 	m_cp_rm MB16, 0x0d1d, 1	; F5E52B  cp A,(0x0d1d)
-	jr	nz, sub_F5E370_Skip14	; F5E52F  jr NZ,0xf5e55b
+	jr	nz, SongEdit_DeleteMeasures_Skip14	; F5E52F  jr NZ,0xf5e55b
 	pushw	wa	; F5E531  push WA
 	call	T_SongEdit_ReinsertTimeSigAfterDelete	; F5E532  call 0xf432cc
 	popw	wa	; F5E536  pop WA
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E537  cp (0x0d4a),0x00
-	jr	z, sub_F5E370_Skip14	; F5E53C  jr Z,0xf5e55b
-sub_F5E370_Skip13:
+	jr	z, SongEdit_DeleteMeasures_Skip14	; F5E53C  jr Z,0xf5e55b
+SongEdit_DeleteMeasures_Skip13:
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x01	; F5E53E  cp (0x0d4a),0x01
-	jr	z, sub_F5E370_Skip14	; F5E543  jr Z,0xf5e55b
+	jr	z, SongEdit_DeleteMeasures_Skip14	; F5E543  jr Z,0xf5e55b
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x08	; F5E545  cp (0x0d4a),0x08
-	jr	z, sub_F5E370_Skip14	; F5E54A  jr Z,0xf5e55b
+	jr	z, SongEdit_DeleteMeasures_Skip14	; F5E54A  jr Z,0xf5e55b
 	m_cp_mi8 MB16, 0x0d18, 0x00	; F5E54C  cp (0x0d18),0x00
-	jr	nz, sub_F5E370_Skip14	; F5E551  jr NZ,0xf5e55b
+	jr	nz, SongEdit_DeleteMeasures_Skip14	; F5E551  jr NZ,0xf5e55b
 	ld	l, (BStore_ErrorCode:16)	; F5E553  ld L,(0x0d4a)
 	ld	(3352:16), l	; F5E557  ld (0x0d18),L
-sub_F5E370_Skip14:
+SongEdit_DeleteMeasures_Skip14:
 	inc	1, a	; F5E55B  inc 1,A
-	jr	sub_F5E370_Join3	; F5E55D  jr T,0xf5e4e8
-sub_F5E370_Skip15:
+	jr	SongEdit_DeleteMeasures_Join3	; F5E55D  jr T,0xf5e4e8
+SongEdit_DeleteMeasures_Skip15:
 	ld	a, (3352:16)	; F5E55F  ld A,(0x0d18)
 	ld	(BStore_ErrorCode:16), a	; F5E563  ld (0x0d4a),A
-sub_F5E370_Join4:
+SongEdit_DeleteMeasures_Join4:
 	call	T_BStore_ErrorToStatusByte	; F5E567  call 0xf4278c
 	call	T_F40A1C	; F5E56B  call 0xf40a1c
 	ret	; F5E56F  ret
@@ -137289,7 +137348,7 @@ BStore_WriteCursorAdvance:
 	push	xwa	; F5EBD8  push XWA
 	inc	1, ix	; F5EBD9  inc 1,IX
 	cp	ix, 255	; F5EBDB  cp IX,0x00ff
-	jr	ule, sub_F5EBD4_Join	; F5EBDF  jr ULE,0xf5ec08
+	jr	ule, BStore_WriteCursorAdvance_Join	; F5EBDF  jr ULE,0xf5ec08
 	ld	xhl, (3254:16)	; F5EBE1  ld XHL,(0x0cb6)
 	ld	wa, (xhl+3)	; F5EBE5  ld WA,(XHL+0x03)
 	ld	(3252:16), wa	; F5EBE8  ld (0x0cb4),WA
@@ -137297,13 +137356,13 @@ BStore_WriteCursorAdvance:
 	call	T_BStore_SeekBlock	; F5EBEE  call 0xf427bc
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5EBF2  ld XHL,(0x126e)
 	m_bit 7, MDI+r3, 0	; F5EBF6  bit 7,(XHL)
-	jr	nz, sub_F5EBD4_Skip	; F5EBF8  jr NZ,0xf5ec01
+	jr	nz, BStore_WriteCursorAdvance_Skip	; F5EBF8  jr NZ,0xf5ec01
 	ld	(BStore_ErrorCode:16), 2	; F5EBFA  ld (0x0d4a),0x02
-	jr	sub_F5EBD4_Join	; F5EBFF  jr T,0xf5ec08
-sub_F5EBD4_Skip:
+	jr	BStore_WriteCursorAdvance_Join	; F5EBFF  jr T,0xf5ec08
+BStore_WriteCursorAdvance_Skip:
 	ld	(3254:16), xhl	; F5EC01  ld (0x0cb6),XHL
 	ldw	ix, 5	; F5EC05  ld IX,0x0005
-sub_F5EBD4_Join:
+BStore_WriteCursorAdvance_Join:
 	pop	xwa	; F5EC08  pop XWA
 	ld	(BStore_CursorBlockAddr:16), xwa	; F5EC09  ld (0x126e),XWA
 	ret	; F5EC0D  ret
@@ -137350,44 +137409,44 @@ MeasureInsert_Execute:		; <- T_MeasureInsert_Execute
 	call	T_BStore_LoadGeometry	; F5EC1C  call 0xf427c4
 	ld	a, (3184:16)	; F5EC20  ld A,(0x0c70)
 	cp	a, 1:i3	; F5EC24  cp A,1
-	jr	c, sub_F5EBD4_Skip3	; F5EC26  jr C,0xf5ec6b
+	jr	c, MeasureInsert_Execute_Skip3	; F5EC26  jr C,0xf5ec6b
 	cp	a, 127	; F5EC28  cp A,0x7f
-	jr	z, sub_F5EBD4_Skip2	; F5EC2B  jr Z,0xf5ec41
+	jr	z, MeasureInsert_Execute_Skip2	; F5EC2B  jr Z,0xf5ec41
 	m_cp_rm MB16, 0x0ca2, 1	; F5EC2D  cp A,(0x0ca2)
-	jr	ugt, sub_F5EBD4_Skip3	; F5EC31  jr UGT,0xf5ec6b
+	jr	ugt, MeasureInsert_Execute_Skip3	; F5EC31  jr UGT,0xf5ec6b
 	ld	a, (3185:16)	; F5EC33  ld A,(0x0c71)
 	cp	a, 1:i3	; F5EC37  cp A,1
-	jr	c, sub_F5EBD4_Skip3	; F5EC39  jr C,0xf5ec6b
+	jr	c, MeasureInsert_Execute_Skip3	; F5EC39  jr C,0xf5ec6b
 	m_cp_rm MB16, 0x0ca2, 1	; F5EC3B  cp A,(0x0ca2)
-	jr	ugt, sub_F5EBD4_Skip3	; F5EC3F  jr UGT,0xf5ec6b
-sub_F5EBD4_Skip2:
+	jr	ugt, MeasureInsert_Execute_Skip3	; F5EC3F  jr UGT,0xf5ec6b
+MeasureInsert_Execute_Skip2:
 	ld	wa, (3187:16)	; F5EC41  ld WA,(0x0c73)
 	cp	wa, 1:i3	; F5EC45  cp WA,1
-	jr	c, sub_F5EBD4_Skip3	; F5EC47  jr C,0xf5ec6b
+	jr	c, MeasureInsert_Execute_Skip3	; F5EC47  jr C,0xf5ec6b
 	cp	wa, 999	; F5EC49  cp WA,0x03e7
-	jr	ugt, sub_F5EBD4_Skip3	; F5EC4D  jr UGT,0xf5ec6b
+	jr	ugt, MeasureInsert_Execute_Skip3	; F5EC4D  jr UGT,0xf5ec6b
 	ld	wa, (3191:16)	; F5EC4F  ld WA,(0x0c77)
 	cp	wa, 1:i3	; F5EC53  cp WA,1
-	jr	c, sub_F5EBD4_Skip3	; F5EC55  jr C,0xf5ec6b
+	jr	c, MeasureInsert_Execute_Skip3	; F5EC55  jr C,0xf5ec6b
 	cp	wa, 999	; F5EC57  cp WA,0x03e7
-	jr	ugt, sub_F5EBD4_Skip3	; F5EC5B  jr UGT,0xf5ec6b
+	jr	ugt, MeasureInsert_Execute_Skip3	; F5EC5B  jr UGT,0xf5ec6b
 	ld	wa, (3189:16)	; F5EC5D  ld WA,(0x0c75)
 	cp	wa, 1:i3	; F5EC61  cp WA,1
-	jr	c, sub_F5EBD4_Skip3	; F5EC63  jr C,0xf5ec6b
+	jr	c, MeasureInsert_Execute_Skip3	; F5EC63  jr C,0xf5ec6b
 	cp	wa, 999	; F5EC65  cp WA,0x03e7
-	jr	ule, sub_F5EBD4_Skip4	; F5EC69  jr ULE,0xf5ec73
-sub_F5EBD4_Skip3:
+	jr	ule, MeasureInsert_Execute_Skip4	; F5EC69  jr ULE,0xf5ec73
+MeasureInsert_Execute_Skip3:
 	ld	(BStore_ErrorCode:16), 3	; F5EC6B  ld (0x0d4a),0x03
-	jrl	sub_F5EBD4_Join6	; F5EC70  jrl T,0xf5ee62
-sub_F5EBD4_Skip4:
+	jrl	MeasureInsert_Execute_Join6	; F5EC70  jrl T,0xf5ee62
+MeasureInsert_Execute_Skip4:
 	ld	(BStore_ErrorCode:16), 0	; F5EC73  ld (0x0d4a),0x00
 	m_and_mi8 MB16, 0x0c8a, 0xbf	; F5EC78  and (0x0c8a),0xbf
 	m_cp_mi8 MB16, 0x0c70, 0x7f	; F5EC7D  cp (0x0c70),0x7f
-	jrl	z, sub_F5EBD4_Skip10	; F5EC82  jrl Z,0xf5eda7
+	jrl	z, MeasureInsert_Execute_Skip10	; F5EC82  jrl Z,0xf5eda7
 	xor	hl, hl	; F5EC85  xor HL,HL
 	ld	l, (3184:16)	; F5EC87  ld L,(0x0c70)
 	m_cp_rm MB16, 0x0c71, 7	; F5EC8B  cp L,(0x0c71)
-	jr	z, sub_F5EBD4_Skip6	; F5EC8F  jr Z,0xf5eccb
+	jr	z, MeasureInsert_Execute_Skip6	; F5EC8F  jr Z,0xf5eccb
 	xor	hl, hl	; F5EC91  xor HL,HL
 	ld	l, (3184:16)	; F5EC93  ld L,(0x0c70)
 	dec	1, l	; F5EC97  dec 1,L
@@ -137396,7 +137455,7 @@ sub_F5EBD4_Skip4:
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5EC9F  ld A,(XIX+HL)
 	pop	xix	; F5ECA4  pop XIX
 	cp	a, 32	; F5ECA5  cp A,0x20
-	jr	z, sub_F5EBD4_Skip5	; F5ECA8  jr Z,0xf5ecc3
+	jr	z, MeasureInsert_Execute_Skip5	; F5ECA8  jr Z,0xf5ecc3
 	ld	l, (3185:16)	; F5ECAA  ld L,(0x0c71)
 	dec	1, l	; F5ECAE  dec 1,L
 	push	xix	; F5ECB0  push XIX
@@ -137404,36 +137463,36 @@ sub_F5EBD4_Skip4:
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5ECB6  ld A,(XIX+HL)
 	pop	xix	; F5ECBB  pop XIX
 	cp	a, 32	; F5ECBC  cp A,0x20
-	jr	z, sub_F5EBD4_Skip5	; F5ECBF  jr Z,0xf5ecc3
-	jr	sub_F5EBD4_Join2	; F5ECC1  jr T,0xf5ecf9
-sub_F5EBD4_Skip5:
+	jr	z, MeasureInsert_Execute_Skip5	; F5ECBF  jr Z,0xf5ecc3
+	jr	MeasureInsert_Execute_Join2	; F5ECC1  jr T,0xf5ecf9
+MeasureInsert_Execute_Skip5:
 	ld	(BStore_ErrorCode:16), 9	; F5ECC3  ld (0x0d4a),0x09
-	jrl	sub_F5EBD4_Join6	; F5ECC8  jrl T,0xf5ee62
-sub_F5EBD4_Skip6:
+	jrl	MeasureInsert_Execute_Join6	; F5ECC8  jrl T,0xf5ee62
+MeasureInsert_Execute_Skip6:
 	dec	1, l	; F5ECCB  dec 1,L
 	push	xix	; F5ECCD  push XIX
 	ld	xix, BStore_TrackToPart	; F5ECCE  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5ECD3  ld A,(XIX+HL)
 	pop	xix	; F5ECD8  pop XIX
 	cp	a, 32	; F5ECD9  cp A,0x20
-	jr	nz, sub_F5EBD4_Skip7	; F5ECDC  jr NZ,0xf5ecf7
+	jr	nz, MeasureInsert_Execute_Skip7	; F5ECDC  jr NZ,0xf5ecf7
 	m_or_mi8 MB16, 0x0c8a, 0x40	; F5ECDE  or (0x0c8a),0x40
 	xor	wa, wa	; F5ECE3  xor WA,WA
 	ld	a, (3184:16)	; F5ECE5  ld A,(0x0c70)
 	call	T_BStore_OpenChainAtSavedCursor	; F5ECE9  call 0xf42790
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5ECED  cp (0x0d4a),0x00
-	jr	z, sub_F5EBD4_Skip7	; F5ECF2  jr Z,0xf5ecf7
-	jrl	sub_F5EBD4_Join6	; F5ECF4  jrl T,0xf5ee62
-sub_F5EBD4_Skip7:
-	jr	sub_F5EBD4_Join3	; F5ECF7  jr T,0xf5ed69
-sub_F5EBD4_Join2:
+	jr	z, MeasureInsert_Execute_Skip7	; F5ECF2  jr Z,0xf5ecf7
+	jrl	MeasureInsert_Execute_Join6	; F5ECF4  jrl T,0xf5ee62
+MeasureInsert_Execute_Skip7:
+	jr	MeasureInsert_Execute_Join3	; F5ECF7  jr T,0xf5ed69
+MeasureInsert_Execute_Join2:
 	ld	a, (3184:16)	; F5ECF9  ld A,(0x0c70)
 	ld	(3214:16), a	; F5ECFD  ld (0x0c8e),A
 	ld	a, (3185:16)	; F5ED01  ld A,(0x0c71)
 	ld	(3215:16), a	; F5ED05  ld (0x0c8f),A
 	calr	MeasureInsert_InsertToTrack	; F5ED09  calr 0xf5ee9a
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5ED0C  cp (0x0d4a),0x00
-	jr	nz, sub_F5EBD4_Skip8	; F5ED11  jr NZ,0xf5ed66
+	jr	nz, MeasureInsert_Execute_Skip8	; F5ED11  jr NZ,0xf5ed66
 	xor	hl, hl	; F5ED13  xor HL,HL
 	ld	l, (3184:16)	; F5ED15  ld L,(0x0c70)
 	dec	1, hl	; F5ED19  dec 1,HL
@@ -137447,7 +137506,7 @@ sub_F5EBD4_Join2:
 	ld	xix, BStore_TrackToPart	; F5ED2E  ld XIX,0x00603422
 	mx_cp_rm MXB, ra_IX, ra_HL, 1	; F5ED33  cp A,(XIX+HL)
 	pop	xix	; F5ED38  pop XIX
-	jr	z, sub_F5EBD4_Skip8	; F5ED39  jr Z,0xf5ed66
+	jr	z, MeasureInsert_Execute_Skip8	; F5ED39  jr Z,0xf5ed66
 	ld	(3203:16), l	; F5ED3B  ld (0x0c83),L
 	push	xix	; F5ED3F  push XIX
 	ld	xix, BStore_TrackToPart	; F5ED40  ld XIX,0x00603422
@@ -137461,14 +137520,14 @@ sub_F5EBD4_Join2:
 	pop	xix	; F5ED5E  pop XIX
 	ld	(3508:16), a	; F5ED5F  ld (0x0db4),A
 	calr	sub_F5EE95	; F5ED63  calr 0xf5ee95
-sub_F5EBD4_Skip8:
-	jrl	sub_F5EBD4_Join6	; F5ED66  jrl T,0xf5ee62
-sub_F5EBD4_Join3:
+MeasureInsert_Execute_Skip8:
+	jrl	MeasureInsert_Execute_Join6	; F5ED66  jrl T,0xf5ee62
+MeasureInsert_Execute_Join3:
 	ld	a, (3184:16)	; F5ED69  ld A,(0x0c70)
 	ld	(3214:16), a	; F5ED6D  ld (0x0c8e),A
 	ld	(3215:16), a	; F5ED71  ld (0x0c8f),A
 	m_bit 6, MD16, 0x0c8a	; F5ED75  bit 6,(0x0c8a)
-	jr	z, sub_F5EBD4_Skip9	; F5ED79  jr Z,0xf5ed9c
+	jr	z, MeasureInsert_Execute_Skip9	; F5ED79  jr Z,0xf5ed9c
 	xor	hl, hl	; F5ED7B  xor HL,HL
 	ld	l, a	; F5ED7D  ld L,A
 	dec	1, hl	; F5ED7F  dec 1,HL
@@ -137476,25 +137535,25 @@ sub_F5EBD4_Join3:
 	ld	xix, BStore_TrackToPart	; F5ED82  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20	; F5ED87  cp (XIX+HL),0x20
 	pop	xix	; F5ED8D  pop XIX
-	jr	nz, sub_F5EBD4_Skip9	; F5ED8E  jr NZ,0xf5ed9c
+	jr	nz, MeasureInsert_Execute_Skip9	; F5ED8E  jr NZ,0xf5ed9c
 	call	T_SongEdit_InsertTimeSigsForMeasureInsert	; F5ED90  call 0xf432c4
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5ED94  cp (0x0d4a),0x00
-	jrl	nz, sub_F5EBD4_Join6	; F5ED99  jrl NZ,0xf5ee62
-sub_F5EBD4_Skip9:
+	jrl	nz, MeasureInsert_Execute_Join6	; F5ED99  jrl NZ,0xf5ee62
+MeasureInsert_Execute_Skip9:
 	calr	MeasureInsert_InsertWithinTrack	; F5ED9C  calr 0xf5f02c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5ED9F  cp (0x0d4a),0x00
-	jrl	sub_F5EBD4_Join6	; F5EDA4  jrl T,0xf5ee62
-sub_F5EBD4_Skip10:
+	jrl	MeasureInsert_Execute_Join6	; F5EDA4  jrl T,0xf5ee62
+MeasureInsert_Execute_Skip10:
 	xor	hl, hl	; F5EDA7  xor HL,HL
-sub_F5EBD4_Join4:
+MeasureInsert_Execute_Join4:
 	m_cp_rm MB16, 0x0ca3, 7	; F5EDA9  cp L,(0x0ca3)
-	jr	ugt, sub_F5EBD4_Skip12	; F5EDAD  jr UGT,0xf5eddd
+	jr	ugt, MeasureInsert_Execute_Skip12	; F5EDAD  jr UGT,0xf5eddd
 	push	xix	; F5EDAF  push XIX
 	ld	xix, BStore_TrackToPart	; F5EDB0  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5EDB5  ld A,(XIX+HL)
 	pop	xix	; F5EDBA  pop XIX
 	cp	a, 32	; F5EDBB  cp A,0x20
-	jr	nz, sub_F5EBD4_Skip11	; F5EDBE  jr NZ,0xf5edd9
+	jr	nz, MeasureInsert_Execute_Skip11	; F5EDBE  jr NZ,0xf5edd9
 	m_or_mi8 MB16, 0x0c8a, 0x40	; F5EDC0  or (0x0c8a),0x40
 	pushw	hl	; F5EDC5  push HL
 	ld	wa, hl	; F5EDC6  ld WA,HL
@@ -137502,26 +137561,26 @@ sub_F5EBD4_Join4:
 	call	T_BStore_OpenChainAtSavedCursor	; F5EDCA  call 0xf42790
 	popw	hl	; F5EDCE  pop HL
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5EDCF  cp (0x0d4a),0x00
-	jr	z, sub_F5EBD4_Skip11	; F5EDD4  jr Z,0xf5edd9
-	jrl	sub_F5EBD4_Join6	; F5EDD6  jrl T,0xf5ee62
-sub_F5EBD4_Skip11:
+	jr	z, MeasureInsert_Execute_Skip11	; F5EDD4  jr Z,0xf5edd9
+	jrl	MeasureInsert_Execute_Join6	; F5EDD6  jrl T,0xf5ee62
+MeasureInsert_Execute_Skip11:
 	inc	1, hl	; F5EDD9  inc 1,HL
-	jr	sub_F5EBD4_Join4	; F5EDDB  jr T,0xf5eda9
-sub_F5EBD4_Skip12:
+	jr	MeasureInsert_Execute_Join4	; F5EDDB  jr T,0xf5eda9
+MeasureInsert_Execute_Skip12:
 	call	T_SongEdit_CheckFreeBlocksForInsert	; F5EDDD  call 0xf427d4
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5EDE1  cp (0x0d4a),0x00
-	jr	z, sub_F5EBD4_Skip13	; F5EDE6  jr Z,0xf5edeb
-	jrl	sub_F5EBD4_Join6	; F5EDE8  jrl T,0xf5ee62
-sub_F5EBD4_Skip13:
+	jr	z, MeasureInsert_Execute_Skip13	; F5EDE6  jr Z,0xf5edeb
+	jrl	MeasureInsert_Execute_Join6	; F5EDE8  jrl T,0xf5ee62
+MeasureInsert_Execute_Skip13:
 	ld	(3352:16), 0	; F5EDEB  ld (0x0d18),0x00
 	ld	a, 1:opc	; F5EDF0  ld A,0x01
-sub_F5EBD4_Join5:
+MeasureInsert_Execute_Join5:
 	m_cp_rm MB16, 0x0ca2, 1	; F5EDF2  cp A,(0x0ca2)
-	jr	ugt, sub_F5EBD4_Skip17	; F5EDF6  jr UGT,0xf5ee5a
+	jr	ugt, MeasureInsert_Execute_Skip17	; F5EDF6  jr UGT,0xf5ee5a
 	ld	(3214:16), a	; F5EDF8  ld (0x0c8e),A
 	ld	(3215:16), a	; F5EDFC  ld (0x0c8f),A
 	m_bit 6, MD16, 0x0c8a	; F5EE00  bit 6,(0x0c8a)
-	jr	z, sub_F5EBD4_Skip14	; F5EE04  jr Z,0xf5ee2d
+	jr	z, MeasureInsert_Execute_Skip14	; F5EE04  jr Z,0xf5ee2d
 	xor	hl, hl	; F5EE06  xor HL,HL
 	ld	l, a	; F5EE08  ld L,A
 	dec	1, hl	; F5EE0A  dec 1,HL
@@ -137529,35 +137588,35 @@ sub_F5EBD4_Join5:
 	ld	xix, BStore_TrackToPart	; F5EE0D  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20	; F5EE12  cp (XIX+HL),0x20
 	pop	xix	; F5EE18  pop XIX
-	jr	nz, sub_F5EBD4_Skip14	; F5EE19  jr NZ,0xf5ee2d
+	jr	nz, MeasureInsert_Execute_Skip14	; F5EE19  jr NZ,0xf5ee2d
 	pushw	wa	; F5EE1B  push WA
 	ld	(BStore_ErrorCode:16), 0	; F5EE1C  ld (0x0d4a),0x00
 	call	T_SongEdit_InsertTimeSigsForMeasureInsert	; F5EE21  call 0xf432c4
 	popw	wa	; F5EE25  pop WA
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5EE26  cp (0x0d4a),0x00
-	jr	nz, sub_F5EBD4_Skip15	; F5EE2B  jr NZ,0xf5ee32
-sub_F5EBD4_Skip14:
+	jr	nz, MeasureInsert_Execute_Skip15	; F5EE2B  jr NZ,0xf5ee32
+MeasureInsert_Execute_Skip14:
 	pushw	wa	; F5EE2D  push WA
 	calr	MeasureInsert_InsertWithinTrack	; F5EE2E  calr 0xf5f02c
 	popw	wa	; F5EE31  pop WA
-sub_F5EBD4_Skip15:
+MeasureInsert_Execute_Skip15:
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5EE32  cp (0x0d4a),0x00
-	jr	z, sub_F5EBD4_Skip16	; F5EE37  jr Z,0xf5ee56
+	jr	z, MeasureInsert_Execute_Skip16	; F5EE37  jr Z,0xf5ee56
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x01	; F5EE39  cp (0x0d4a),0x01
-	jr	z, sub_F5EBD4_Skip16	; F5EE3E  jr Z,0xf5ee56
+	jr	z, MeasureInsert_Execute_Skip16	; F5EE3E  jr Z,0xf5ee56
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x08	; F5EE40  cp (0x0d4a),0x08
-	jr	z, sub_F5EBD4_Skip16	; F5EE45  jr Z,0xf5ee56
+	jr	z, MeasureInsert_Execute_Skip16	; F5EE45  jr Z,0xf5ee56
 	m_cp_mi8 MB16, 0x0d18, 0x00	; F5EE47  cp (0x0d18),0x00
-	jr	nz, sub_F5EBD4_Skip16	; F5EE4C  jr NZ,0xf5ee56
+	jr	nz, MeasureInsert_Execute_Skip16	; F5EE4C  jr NZ,0xf5ee56
 	ld	l, (BStore_ErrorCode:16)	; F5EE4E  ld L,(0x0d4a)
 	ld	(3352:16), l	; F5EE52  ld (0x0d18),L
-sub_F5EBD4_Skip16:
+MeasureInsert_Execute_Skip16:
 	inc	1, a	; F5EE56  inc 1,A
-	jr	sub_F5EBD4_Join5	; F5EE58  jr T,0xf5edf2
-sub_F5EBD4_Skip17:
+	jr	MeasureInsert_Execute_Join5	; F5EE58  jr T,0xf5edf2
+MeasureInsert_Execute_Skip17:
 	ld	a, (3352:16)	; F5EE5A  ld A,(0x0d18)
 	ld	(BStore_ErrorCode:16), a	; F5EE5E  ld (0x0d4a),A
-sub_F5EBD4_Join6:
+MeasureInsert_Execute_Join6:
 	call	T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_24	; F5EE62  call 0xf42814
 	call	T_F40A1C	; F5EE66  call 0xf40a1c
 	m_and_mi8 MB16, 0x0d45, 0xfc	; F5EE6A  and (0x0d45),0xfc
@@ -138621,7 +138680,7 @@ SongEdit_RestoreDestTrackEnd:
 	ld	xde, 6305024	; F5F9D2  ld XDE,0x00603500
 	mx_bit 7, MXD, ra_DE, ra_HL	; F5F9D7  bit 7,(XDE+HL)
 	pop	xde	; F5F9DC  pop XDE
-	jr	z, sub_F5F9C1_Loop	; F5F9DD  jr Z,0xf5fa59
+	jr	z, SongEdit_RestoreDestTrackEnd_Loop	; F5F9DD  jr Z,0xf5fa59
 	ld	hl, bc	; F5F9DF  ld HL,BC
 	sla	hl, 1	; F5F9E1  sla 0x01,HL
 	push	xix	; F5F9E4  push XIX
@@ -138661,25 +138720,25 @@ SongEdit_RestoreDestTrackEnd:
 	mx_ld_rm MXW, ra_IX, ra_HL, 0	; F5FA4F  ld WA,(XIX+HL)
 	pop	xix	; F5FA54  pop XIX
 	call	T_BStore_TruncateChainAfterBlock	; F5FA55  call 0xf42794
-sub_F5F9C1_Loop:
+SongEdit_RestoreDestTrackEnd_Loop:
 	pop	xiy	; F5FA59  pop XIY
 	popw	bc	; F5FA5A  pop BC
 	ret	; F5FA5B  ret
 	pushw	bc	; F5FA5C  push BC
 	push	xiy	; F5FA5D  push XIY
 	m_cp_mi8 MB16, 0x0c70, 0x7f	; F5FA5E  cp (0x0c70),0x7f
-	jr	nz, sub_F5F9C1_Loop	; F5FA63  jr NZ,0xf5fa59
+	jr	nz, SongEdit_RestoreDestTrackEnd_Loop	; F5FA63  jr NZ,0xf5fa59
 	xor	bc, bc	; F5FA65  xor BC,BC
-sub_F5F9C1_Join:
+SongEdit_RestoreDestTrackEnd_Join:
 	cp	c, 16	; F5FA67  cp C,0x10
-	jrl	ugt, sub_F5F9C1_Epilogue	; F5FA6A  jrl UGT,0xf5fb01
+	jrl	ugt, SongEdit_RestoreDestTrackEnd_Epilogue	; F5FA6A  jrl UGT,0xf5fb01
 	ld	hl, bc	; F5FA6D  ld HL,BC
 	muls	hl, 3	; F5FA6F  muls HL,0x0003
 	push	xix	; F5FA73  push XIX
 	ld	xix, 6305024	; F5FA74  ld XIX,0x00603500
 	mx_bit 7, MXD, ra_IX, ra_HL	; F5FA79  bit 7,(XIX+HL)
 	pop	xix	; F5FA7E  pop XIX
-	jr	z, sub_F5F9C1_Skip	; F5FA7F  jr Z,0xf5fafc
+	jr	z, SongEdit_RestoreDestTrackEnd_Skip	; F5FA7F  jr Z,0xf5fafc
 	ld	hl, bc	; F5FA81  ld HL,BC
 	sla	hl, 1	; F5FA83  sla 0x01,HL
 	push	xix	; F5FA86  push XIX
@@ -138687,7 +138746,7 @@ sub_F5F9C1_Join:
 	mx_ld_rm MXW, ra_IX, ra_HL, 3	; F5FA8C  ld HL,(XIX+HL)
 	pop	xix	; F5FA91  pop XIX
 	cp	hl, 0:i3	; F5FA92  cp HL,0
-	jr	z, sub_F5F9C1_Skip	; F5FA94  jr Z,0xf5fafc
+	jr	z, SongEdit_RestoreDestTrackEnd_Skip	; F5FA94  jr Z,0xf5fafc
 	pushw	bc	; F5FA96  push BC
 	call	T_BStore_SeekBlock	; F5FA97  call 0xf427bc
 	popw	bc	; F5FA9B  pop BC
@@ -138723,10 +138782,10 @@ sub_F5F9C1_Join:
 	pushw	bc	; F5FAF6  push BC
 	call	T_BStore_TruncateChainAfterBlock	; F5FAF7  call 0xf42794
 	popw	bc	; F5FAFB  pop BC
-sub_F5F9C1_Skip:
+SongEdit_RestoreDestTrackEnd_Skip:
 	inc	1, c	; F5FAFC  inc 1,C
-	jrl	sub_F5F9C1_Join	; F5FAFE  jrl T,0xf5fa67
-sub_F5F9C1_Epilogue:
+	jrl	SongEdit_RestoreDestTrackEnd_Join	; F5FAFE  jrl T,0xf5fa67
+SongEdit_RestoreDestTrackEnd_Epilogue:
 	pop	xiy	; F5FB01  pop XIY
 	popw	bc	; F5FB02  pop BC
 	ret	; F5FB03  ret
@@ -139437,7 +139496,7 @@ TrackMerge_CopySource2ToMark:
 ;   Basis: caller + body. (notes/naming-pilot-2026-10-06/proposals_wave6_t.json)
 TrackMerge_EmitCommonMark:
 	cp	c, 130	; F6027D  cp C,0x82
-	jr	nz, sub_F6027D_Skip	; F60280  jr NZ,0xf602a9
+	jr	nz, TrackMerge_EmitCommonMark_Skip	; F60280  jr NZ,0xf602a9
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60282  ld XHL,(0x126e)
 	mx_ld_mi8 MXD, ra_HL, ra_IX, 0x82	; F60286  ld (XHL+IX),0x82
 	ld	(3211:16), 255	; F6028C  ld (0x0c8b),0xff
@@ -139447,8 +139506,8 @@ TrackMerge_EmitCommonMark:
 	ld	a, (3186:16)	; F6029B  ld A,(0x0c72)
 	ld	(3354:16), wa	; F6029F  ld (0x0d1a),WA
 	call	T_BStore_SaveCursor	; F602A3  call 0xf427b0
-	jr	sub_F6027D_Return	; F602A7  jr T,0xf602ef
-sub_F6027D_Skip:
+	jr	TrackMerge_EmitCommonMark_Return	; F602A7  jr T,0xf602ef
+TrackMerge_EmitCommonMark_Skip:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F602A9  ld XHL,(0x126e)
 	mx_ld_mi8 MXD, ra_HL, ra_IX, 0x81	; F602AD  ld (XHL+IX),0x81
 	call	TrackMerge_AdvanceWriteCursor	; F602B3  call 0xf60457
@@ -139469,7 +139528,7 @@ sub_F6027D_Skip:
 	call	TrackMerge_FetchSource2Event	; F602E6  call 0xf602f0
 	ld	(3328:16), iy	; F602EA  ld (0x0d00),IY
 	pop	xix	; F602EE  pop XIX
-sub_F6027D_Return:
+TrackMerge_EmitCommonMark_Return:
 	ret	; F602EF  ret
 
 ; --------------------------------------------------------------------------
@@ -139496,13 +139555,13 @@ TrackMerge_FetchSource2Event:
 	mx_ld_rm MXB, ra_IX, ra_IY, 2	; F602FF  ld B,(XIX+IY)
 	pop	xix	; F60304  pop XIX
 	cp	b, 130	; F60305  cp B,0x82
-	jr	z, sub_F602F0_Skip	; F60308  jr Z,0xf6030f
+	jr	z, TrackMerge_FetchSource2Event_Skip	; F60308  jr Z,0xf6030f
 	cp	b, 129	; F6030A  cp B,0x81
-	jr	nz, sub_F602F0_Skip2	; F6030D  jr NZ,0xf60316
-sub_F602F0_Skip:
+	jr	nz, TrackMerge_FetchSource2Event_Skip2	; F6030D  jr NZ,0xf60316
+TrackMerge_FetchSource2Event_Skip:
 	m_or_mi8 MB16, 0x0c8b, 0x02	; F6030F  or (0x0c8b),0x02
-	jr	sub_F602F0_Return	; F60314  jr T,0xf60337
-sub_F602F0_Skip2:
+	jr	TrackMerge_FetchSource2Event_Return	; F60314  jr T,0xf60337
+TrackMerge_FetchSource2Event_Skip2:
 	pushw	bc	; F60316  push BC
 	push	xix	; F60317  push XIX
 	ld	xix, 6332672	; F60318  ld XIX,0x0060a100
@@ -139516,7 +139575,7 @@ sub_F602F0_Skip2:
 	ld	(3359:16), a	; F6032E  ld (0x0d1f),A
 	pop	xix	; F60332  pop XIX
 	ld	(3328:16), iy	; F60333  ld (0x0d00),IY
-sub_F602F0_Return:
+TrackMerge_FetchSource2Event_Return:
 	ret	; F60337  ret
 
 ; --------------------------------------------------------------------------
@@ -139542,13 +139601,13 @@ TrackMerge_FetchSource1Event:
 	mx_ld_rm MXB, ra_IX, ra_IY, 3	; F60347  ld C,(XIX+IY)
 	pop	xix	; F6034C  pop XIX
 	cp	c, 130	; F6034D  cp C,0x82
-	jr	z, sub_F60338_Skip	; F60350  jr Z,0xf60357
+	jr	z, TrackMerge_FetchSource1Event_Skip	; F60350  jr Z,0xf60357
 	cp	c, 129	; F60352  cp C,0x81
-	jr	nz, sub_F60338_Skip2	; F60355  jr NZ,0xf6035e
-sub_F60338_Skip:
+	jr	nz, TrackMerge_FetchSource1Event_Skip2	; F60355  jr NZ,0xf6035e
+TrackMerge_FetchSource1Event_Skip:
 	m_or_mi8 MB16, 0x0c8b, 0x01	; F60357  or (0x0c8b),0x01
-	jr	sub_F60338_Return	; F6035C  jr T,0xf6037f
-sub_F60338_Skip2:
+	jr	TrackMerge_FetchSource1Event_Return	; F6035C  jr T,0xf6037f
+TrackMerge_FetchSource1Event_Skip2:
 	pushw	bc	; F6035E  push BC
 	push	xix	; F6035F  push XIX
 	ld	xix, 6332416	; F60360  ld XIX,0x0060a000
@@ -139562,7 +139621,7 @@ sub_F60338_Skip2:
 	ld	(3358:16), a	; F60376  ld (0x0d1e),A
 	pop	xix	; F6037A  pop XIX
 	ld	(3322:16), iy	; F6037B  ld (0x0cfa),IY
-sub_F60338_Return:
+TrackMerge_FetchSource1Event_Return:
 	ret	; F6037F  ret
 
 ; --------------------------------------------------------------------------
@@ -139585,12 +139644,12 @@ TrackMerge_CopySource2Event:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60380  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IX, 2	; F60384  ld (XHL+IX),B
 	m_bit 1, MD16, 0x0c8b	; F60389  bit 1,(0x0c8b)
-	jr	nz, sub_F60380_Join	; F6038D  jr NZ,0xf603a0
+	jr	nz, TrackMerge_CopySource2Event_Join	; F6038D  jr NZ,0xf603a0
 	call	TrackMerge_AdvanceWriteCursor	; F6038F  call 0xf60457
 	ld	a, (3359:16)	; F60393  ld A,(0x0d1f)
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60397  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IX, 1	; F6039B  ld (XHL+IX),A
-sub_F60380_Join:
+TrackMerge_CopySource2Event_Join:
 	push	xix	; F603A0  push XIX
 	ld	xix, 6332672	; F603A1  ld XIX,0x0060a100
 	nop	; F603A6  nop
@@ -139604,15 +139663,15 @@ sub_F60380_Join:
 	ld	xix, 6332672	; F603BC  ld XIX,0x0060a100
 	mx_bit 7, MXD, ra_IX, ra_IY	; F603C1  bit 7,(XIX+IY)
 	pop	xix	; F603C6  pop XIX
-	jr	nz, sub_F60380_Skip	; F603C7  jr NZ,0xf603e0
+	jr	nz, TrackMerge_CopySource2Event_Skip	; F603C7  jr NZ,0xf603e0
 	push	xix	; F603C9  push XIX
 	ld	xix, 6332672	; F603CA  ld XIX,0x0060a100
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F603CF  ld A,(XIX+IY)
 	pop	xix	; F603D4  pop XIX
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F603D5  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IX, 1	; F603D9  ld (XHL+IX),A
-	jr	sub_F60380_Join	; F603DE  jr T,0xf603a0
-sub_F60380_Skip:
+	jr	TrackMerge_CopySource2Event_Join	; F603DE  jr T,0xf603a0
+TrackMerge_CopySource2Event_Skip:
 	ld	(3328:16), iy	; F603E0  ld (0x0d00),IY
 	call	TrackMerge_FetchSource2Event	; F603E4  call 0xf602f0
 	ret	; F603E8  ret
@@ -139636,13 +139695,13 @@ TrackMerge_CopySource1Event:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F603E9  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IX, 3	; F603ED  ld (XHL+IX),C
 	m_bit 0, MD16, 0x0c8b	; F603F2  bit 0,(0x0c8b)
-	jr	nz, sub_F603E9_Join	; F603F6  jr NZ,0xf6040d
+	jr	nz, TrackMerge_CopySource1Event_Join	; F603F6  jr NZ,0xf6040d
 	call	TrackMerge_AdvanceWriteCursor	; F603F8  call 0xf60457
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F603FC  ld XHL,(0x126e)
 	ld	a, (3358:16)	; F60400  ld A,(0x0d1e)
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60404  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IX, 1	; F60408  ld (XHL+IX),A
-sub_F603E9_Join:
+TrackMerge_CopySource1Event_Join:
 	push	xix	; F6040D  push XIX
 	ld	xix, 6332416	; F6040E  ld XIX,0x0060a000
 	nop	; F60413  nop
@@ -139656,15 +139715,15 @@ sub_F603E9_Join:
 	ld	xix, 6332416	; F6042A  ld XIX,0x0060a000
 	mx_bit 7, MXD, ra_IX, ra_IY	; F6042F  bit 7,(XIX+IY)
 	pop	xix	; F60434  pop XIX
-	jr	nz, sub_F603E9_Skip	; F60435  jr NZ,0xf6044e
+	jr	nz, TrackMerge_CopySource1Event_Skip	; F60435  jr NZ,0xf6044e
 	push	xix	; F60437  push XIX
 	ld	xix, 6332416	; F60438  ld XIX,0x0060a000
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F6043D  ld A,(XIX+IY)
 	pop	xix	; F60442  pop XIX
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60443  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IX, 1	; F60447  ld (XHL+IX),A
-	jr	sub_F603E9_Join	; F6044C  jr T,0xf6040d
-sub_F603E9_Skip:
+	jr	TrackMerge_CopySource1Event_Join	; F6044C  jr T,0xf6040d
+TrackMerge_CopySource1Event_Skip:
 	ld	(3322:16), iy	; F6044E  ld (0x0cfa),IY
 	call	TrackMerge_FetchSource1Event	; F60452  call 0xf60338
 	ret	; F60456  ret
@@ -139689,9 +139748,9 @@ TrackMerge_AdvanceWriteCursor:
 	and	ix, 255	; F60457  and IX,0x00ff
 	inc	1, ix	; F6045B  inc 1,IX
 	cp	ix, 255	; F6045D  cp IX,0x00ff
-	jr	ugt, sub_F60457_Skip	; F60461  jr UGT,0xf60465
-	jr	sub_F60457_Return	; F60463  jr T,0xf604b6
-sub_F60457_Skip:
+	jr	ugt, TrackMerge_AdvanceWriteCursor_Skip	; F60461  jr UGT,0xf60465
+	jr	TrackMerge_AdvanceWriteCursor_Return	; F60463  jr T,0xf604b6
+TrackMerge_AdvanceWriteCursor_Skip:
 	push	xiz	; F60465  push XIZ
 	ld	xiz, (BStore_CursorBlockAddr:16)	; F60466  ld XIZ,(0x126e)
 	m_rd_ld_rr2x RLX, 0x38, r6	; F6046A  ld XDE3,XIZ
@@ -139708,10 +139767,10 @@ sub_F60457_Skip:
 	ld	(BStore_CursorBlockAddr:16), xiz	; F60480  ld (0x126e),XIZ
 	pop	xiz	; F60484  pop XIZ
 	m_cp_rm MW16, BStore_BlockLimit, 4	; F60485  cp IX,(0x0ca4)
-	jr	ule, sub_F60457_Skip2	; F60489  jr ULE,0xf60492
+	jr	ule, TrackMerge_AdvanceWriteCursor_Skip2	; F60489  jr ULE,0xf60492
 	ld	(BStore_ErrorCode:16), 5	; F6048B  ld (0x0d4a),0x05
-	jr	sub_F60457_Return	; F60490  jr T,0xf604b6
-sub_F60457_Skip2:
+	jr	TrackMerge_AdvanceWriteCursor_Return	; F60490  jr T,0xf604b6
+TrackMerge_AdvanceWriteCursor_Skip2:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60492  ld XHL,(0x126e)
 	ld	(xhl+3), ix	; F60496  ld (XHL+0x03),IX
 	ld	hl, ix	; F60499  ld HL,IX
@@ -139722,7 +139781,7 @@ sub_F60457_Skip2:
 	m_ld_mi16 MDD+r3, 0x03, 0xffff	; F604AA  ld (XHL+0x03),0xffff
 	ld	(3332:16), ix	; F604AF  ld (0x0d04),IX
 	ldw	ix, 5	; F604B3  ld IX,0x0005
-sub_F60457_Return:
+TrackMerge_AdvanceWriteCursor_Return:
 	ret	; F604B6  ret
 
 ; --------------------------------------------------------------------------
@@ -139749,29 +139808,29 @@ TrackMerge_AdvanceReadCursor:
 	m_rd_pushx RLX, 0x38	; F604C0  push XDE3
 	inc	1, iy	; F604C3  inc 1,IY
 	cp	iy, 255	; F604C5  cp IY,0x00ff
-	jr	ugt, sub_F604B7_Skip	; F604C9  jr UGT,0xf604cd
+	jr	ugt, TrackMerge_AdvanceReadCursor_Skip	; F604C9  jr UGT,0xf604cd
 	jr	sub_F604B7_Entry	; F604CB  jr T,0xf60507
-sub_F604B7_Skip:
+TrackMerge_AdvanceReadCursor_Skip:
 	ld	wa, (xix+3)	; F604CD  ld WA,(XIX+0x03)
 	cp	wa, 65535	; F604D0  cp WA,0xffff
-	jr	nz, sub_F604B7_Skip2	; F604D4  jr NZ,0xf604dd
+	jr	nz, TrackMerge_AdvanceReadCursor_Skip2	; F604D4  jr NZ,0xf604dd
 	ld	(BStore_ErrorCode:16), 2	; F604D6  ld (0x0d4a),0x02
 	jr	sub_F604B7_Entry	; F604DB  jr T,0xf60507
-sub_F604B7_Skip2:
+TrackMerge_AdvanceReadCursor_Skip2:
 	m_cp_rm MW16, BStore_BlockLimit, 0	; F604DD  cp WA,(0x0ca4)
-	jr	ule, sub_F604B7_Skip3	; F604E1  jr ULE,0xf604ea
+	jr	ule, TrackMerge_AdvanceReadCursor_Skip3	; F604E1  jr ULE,0xf604ea
 	ld	(BStore_ErrorCode:16), 10	; F604E3  ld (0x0d4a),0x0a
 	jr	sub_F604B7_Entry	; F604E8  jr T,0xf60507
-sub_F604B7_Skip3:
+TrackMerge_AdvanceReadCursor_Skip3:
 	ld	(BStore_CursorBlock:16), wa	; F604EA  ld (0x345c),WA
 	ld	hl, wa	; F604EE  ld HL,WA
 	call	T_BStore_SeekBlock	; F604F0  call 0xf427bc
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F604F4  ld XHL,(0x126e)
 	m_bit 7, MDI+r3, 0	; F604F8  bit 7,(XHL)
-	jr	nz, sub_F604B7_Skip4	; F604FA  jr NZ,0xf60503
+	jr	nz, TrackMerge_AdvanceReadCursor_Skip4	; F604FA  jr NZ,0xf60503
 	ld	(BStore_ErrorCode:16), 11	; F604FC  ld (0x0d4a),0x0b
 	jr	sub_F604B7_Entry	; F60501  jr T,0xf60507
-sub_F604B7_Skip4:
+TrackMerge_AdvanceReadCursor_Skip4:
 	call	TrackMerge_LoadAndFreeBlock	; F60503  call 0xf60514
 sub_F604B7_Entry:
 	m_rd_popx RLX, 0x38	; F60507  pop XDE3
@@ -139878,46 +139937,46 @@ Vel0cityChange_Execute:		; <- T_Vel0cityChange_Execute
 	call	T_BStore_LoadGeometry	; F60598  call 0xf427c4
 	ld	a, (3184:16)	; F6059C  ld A,(0x0c70)
 	cp	a, 1:i3	; F605A0  cp A,1
-	jr	c, sub_F60548_Skip3	; F605A2  jr C,0xf605ed
+	jr	c, Vel0cityChange_Execute_Skip3	; F605A2  jr C,0xf605ed
 	cp	a, 127	; F605A4  cp A,0x7f
-	jr	z, sub_F60548_Skip	; F605A7  jr Z,0xf605af
+	jr	z, Vel0cityChange_Execute_Skip	; F605A7  jr Z,0xf605af
 	m_cp_rm MB16, 0x0ca2, 1	; F605A9  cp A,(0x0ca2)
-	jr	ugt, sub_F60548_Skip3	; F605AD  jr UGT,0xf605ed
-sub_F60548_Skip:
+	jr	ugt, Vel0cityChange_Execute_Skip3	; F605AD  jr UGT,0xf605ed
+Vel0cityChange_Execute_Skip:
 	ld	wa, (3187:16)	; F605AF  ld WA,(0x0c73)
 	cp	wa, 1:i3	; F605B3  cp WA,1
-	jr	c, sub_F60548_Skip3	; F605B5  jr C,0xf605ed
+	jr	c, Vel0cityChange_Execute_Skip3	; F605B5  jr C,0xf605ed
 	cp	wa, 999	; F605B7  cp WA,0x03e7
-	jr	ugt, sub_F60548_Skip3	; F605BB  jr UGT,0xf605ed
+	jr	ugt, Vel0cityChange_Execute_Skip3	; F605BB  jr UGT,0xf605ed
 	ld	wa, (3191:16)	; F605BD  ld WA,(0x0c77)
 	cp	wa, 1:i3	; F605C1  cp WA,1
-	jr	c, sub_F60548_Skip3	; F605C3  jr C,0xf605ed
+	jr	c, Vel0cityChange_Execute_Skip3	; F605C3  jr C,0xf605ed
 	cp	wa, 999	; F605C5  cp WA,0x03e7
-	jr	ugt, sub_F60548_Skip3	; F605C9  jr UGT,0xf605ed
+	jr	ugt, Vel0cityChange_Execute_Skip3	; F605C9  jr UGT,0xf605ed
 	ld	a, (3194:16)	; F605CB  ld A,(0x0c7a)
 	cp	a, 0:i3	; F605CF  cp A,0
-	jr	nz, sub_F60548_Skip2	; F605D1  jr NZ,0xf605de
+	jr	nz, Vel0cityChange_Execute_Skip2	; F605D1  jr NZ,0xf605de
 	ld	a, (3195:16)	; F605D3  ld A,(0x0c7b)
 	cp	a, 128	; F605D7  cp A,0x80
-	jr	z, sub_F60548_Skip3	; F605DA  jr Z,0xf605ed
-	jr	sub_F60548_Join	; F605DC  jr T,0xf605f5
-sub_F60548_Skip2:
+	jr	z, Vel0cityChange_Execute_Skip3	; F605DA  jr Z,0xf605ed
+	jr	Vel0cityChange_Execute_Join	; F605DC  jr T,0xf605f5
+Vel0cityChange_Execute_Skip2:
 	cp	a, 1:i3	; F605DE  cp A,1
-	jr	nz, sub_F60548_Skip3	; F605E0  jr NZ,0xf605ed
+	jr	nz, Vel0cityChange_Execute_Skip3	; F605E0  jr NZ,0xf605ed
 	ld	a, (3195:16)	; F605E2  ld A,(0x0c7b)
 	bit	7, a	; F605E6  bit 0x07,A
-	jr	nz, sub_F60548_Skip3	; F605E9  jr NZ,0xf605ed
-	jr	sub_F60548_Join	; F605EB  jr T,0xf605f5
-sub_F60548_Skip3:
+	jr	nz, Vel0cityChange_Execute_Skip3	; F605E9  jr NZ,0xf605ed
+	jr	Vel0cityChange_Execute_Join	; F605EB  jr T,0xf605f5
+Vel0cityChange_Execute_Skip3:
 	ld	(BStore_ErrorCode:16), 3	; F605ED  ld (0x0d4a),0x03
-	jrl	sub_F6068D_Join7	; F605F2  jrl T,0xf60791
-sub_F60548_Join:
+	jrl	Vel0cityChange_ApplyToTrack_Join7	; F605F2  jrl T,0xf60791
+Vel0cityChange_Execute_Join:
 	ld	(BStore_ErrorCode:16), 0	; F605F5  ld (0x0d4a),0x00
 	m_and_mi8 MB16, 0x0c8a, 0xbf	; F605FA  and (0x0c8a),0xbf
 	m_cp_mi8 MB16, 0x0c70, 0x7f	; F605FF  cp (0x0c70),0x7f
-	jr	nz, sub_F60548_Skip4	; F60604  jr NZ,0xf60608
-	jr	sub_F60548_Join2	; F60606  jr T,0xf60637
-sub_F60548_Skip4:
+	jr	nz, Vel0cityChange_Execute_Skip4	; F60604  jr NZ,0xf60608
+	jr	Vel0cityChange_Execute_Join2	; F60606  jr T,0xf60637
+Vel0cityChange_Execute_Skip4:
 	xor	hl, hl	; F60608  xor HL,HL
 	ld	l, (3184:16)	; F6060A  ld L,(0x0c70)
 	dec	1, l	; F6060E  dec 1,L
@@ -139926,19 +139985,19 @@ sub_F60548_Skip4:
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F60616  ld A,(XIX+HL)
 	pop	xix	; F6061B  pop XIX
 	cp	a, 32	; F6061C  cp A,0x20
-	jr	z, sub_F60548_Skip5	; F6061F  jr Z,0xf6062f
+	jr	z, Vel0cityChange_Execute_Skip5	; F6061F  jr Z,0xf6062f
 	ld	a, (3184:16)	; F60621  ld A,(0x0c70)
 	ld	(3214:16), a	; F60625  ld (0x0c8e),A
 	calr	Vel0cityChange_ApplyToTrack	; F60629  calr 0xf6068d
-	jrl	sub_F6068D_Join7	; F6062C  jrl T,0xf60791
-sub_F60548_Skip5:
+	jrl	Vel0cityChange_ApplyToTrack_Join7	; F6062C  jrl T,0xf60791
+Vel0cityChange_Execute_Skip5:
 	ld	(BStore_ErrorCode:16), 9	; F6062F  ld (0x0d4a),0x09
-	jrl	sub_F6068D_Join7	; F60634  jrl T,0xf60791
-sub_F60548_Join2:
+	jrl	Vel0cityChange_ApplyToTrack_Join7	; F60634  jrl T,0xf60791
+Vel0cityChange_Execute_Join2:
 	xor	hl, hl	; F60637  xor HL,HL
-sub_F60548_Join3:
+Vel0cityChange_Execute_Join3:
 	m_cp_rm MB16, 0x0ca3, 7	; F60639  cp L,(0x0ca3)
-	jr	ugt, sub_F60548_Skip8	; F6063D  jr UGT,0xf60682
+	jr	ugt, Vel0cityChange_Execute_Skip8	; F6063D  jr UGT,0xf60682
 	ld	h, l	; F6063F  ld H,L
 	inc	1, h	; F60641  inc 1,H
 	ld	(3214:16), h	; F60643  ld (0x0c8e),H
@@ -139950,26 +140009,26 @@ sub_F60548_Join3:
 	pop	xix	; F60655  pop XIX
 	popw	hl	; F60656  pop HL
 	cp	a, 32	; F60657  cp A,0x20
-	jr	z, sub_F60548_Skip6	; F6065A  jr Z,0xf60661
+	jr	z, Vel0cityChange_Execute_Skip6	; F6065A  jr Z,0xf60661
 	pushw	hl	; F6065C  push HL
 	calr	Vel0cityChange_ApplyToTrack	; F6065D  calr 0xf6068d
 	popw	hl	; F60660  pop HL
-sub_F60548_Skip6:
+Vel0cityChange_Execute_Skip6:
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60661  cp (0x0d4a),0x00
-	jr	z, sub_F60548_Skip7	; F60666  jr Z,0xf6067e
+	jr	z, Vel0cityChange_Execute_Skip7	; F60666  jr Z,0xf6067e
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x01	; F60668  cp (0x0d4a),0x01
-	jr	z, sub_F60548_Skip7	; F6066D  jr Z,0xf6067e
+	jr	z, Vel0cityChange_Execute_Skip7	; F6066D  jr Z,0xf6067e
 	m_cp_mi8 MB16, 0x0d18, 0x00	; F6066F  cp (0x0d18),0x00
-	jr	nz, sub_F60548_Skip7	; F60674  jr NZ,0xf6067e
+	jr	nz, Vel0cityChange_Execute_Skip7	; F60674  jr NZ,0xf6067e
 	ld	a, (BStore_ErrorCode:16)	; F60676  ld A,(0x0d4a)
 	ld	(3352:16), a	; F6067A  ld (0x0d18),A
-sub_F60548_Skip7:
+Vel0cityChange_Execute_Skip7:
 	inc	1, hl	; F6067E  inc 1,HL
-	jr	sub_F60548_Join3	; F60680  jr T,0xf60639
-sub_F60548_Skip8:
+	jr	Vel0cityChange_Execute_Join3	; F60680  jr T,0xf60639
+Vel0cityChange_Execute_Skip8:
 	ld	a, (3352:16)	; F60682  ld A,(0x0d18)
 	ld	(BStore_ErrorCode:16), a	; F60686  ld (0x0d4a),A
-	jrl	sub_F6068D_Join7	; F6068A  jrl T,0xf60791
+	jrl	Vel0cityChange_ApplyToTrack_Join7	; F6068A  jrl T,0xf60791
 
 ; --------------------------------------------------------------------------
 ; Vel0cityChange_ApplyToTrack
@@ -139994,81 +140053,81 @@ Vel0cityChange_ApplyToTrack:
 	ld	(3216:16), de	; F60699  ld (0x0c90),DE
 	call	T_BStore_SeekMeasure	; F6069D  call 0xf42774
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F606A1  cp (0x0d4a),0x00
-	jrl	nz, sub_F6068D_Return	; F606A6  jrl NZ,0xf60790
+	jrl	nz, Vel0cityChange_ApplyToTrack_Return	; F606A6  jrl NZ,0xf60790
 	xor	de, de	; F606A9  xor DE,DE
-sub_F6068D_Join:
+Vel0cityChange_ApplyToTrack_Join:
 	m_cp_rm MW16, 0x0c77, 2	; F606AB  cp DE,(0x0c77)
-	jr	nz, sub_F6068D_Skip	; F606AF  jr NZ,0xf606b4
-	jrl	sub_F6068D_Return	; F606B1  jrl T,0xf60790
-sub_F6068D_Skip:
+	jr	nz, Vel0cityChange_ApplyToTrack_Skip	; F606AF  jr NZ,0xf606b4
+	jrl	Vel0cityChange_ApplyToTrack_Return	; F606B1  jrl T,0xf60790
+Vel0cityChange_ApplyToTrack_Skip:
 	xor	bc, bc	; F606B4  xor BC,BC
-sub_F6068D_Join2:
+Vel0cityChange_ApplyToTrack_Join2:
 	m_cp_rm MB16, 0x0d1c, 3	; F606B6  cp C,(0x0d1c)
-	jr	nz, sub_F6068D_Join3	; F606BA  jr NZ,0xf606bf
-	jrl	sub_F6068D_Join6	; F606BC  jrl T,0xf60760
-sub_F6068D_Join3:
+	jr	nz, Vel0cityChange_ApplyToTrack_Join3	; F606BA  jr NZ,0xf606bf
+	jrl	Vel0cityChange_ApplyToTrack_Join6	; F606BC  jrl T,0xf60760
+Vel0cityChange_ApplyToTrack_Join3:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F606BF  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F606C3  ld A,(XHL+IY)
 	cp	a, 130	; F606C8  cp A,0x82
-	jr	nz, sub_F6068D_Skip2	; F606CB  jr NZ,0xf606d0
-	jrl	sub_F6068D_Return	; F606CD  jrl T,0xf60790
-sub_F6068D_Skip2:
+	jr	nz, Vel0cityChange_ApplyToTrack_Skip2	; F606CB  jr NZ,0xf606d0
+	jrl	Vel0cityChange_ApplyToTrack_Return	; F606CD  jrl T,0xf60790
+Vel0cityChange_ApplyToTrack_Skip2:
 	cp	a, 129	; F606D0  cp A,0x81
-	jrl	z, sub_F6068D_Skip9	; F606D3  jrl Z,0xf60757
+	jrl	z, Vel0cityChange_ApplyToTrack_Skip9	; F606D3  jrl Z,0xf60757
 	and	a, 240	; F606D6  and A,0xf0
 	cp	a, 144	; F606D9  cp A,0x90
-	jr	nz, sub_F6068D_Join5	; F606DC  jr NZ,0xf60747
+	jr	nz, Vel0cityChange_ApplyToTrack_Join5	; F606DC  jr NZ,0xf60747
 	call	T_BStore_CursorAdvance	; F606DE  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F606E2  cp (0x0d4a),0x00
-	jr	z, sub_F6068D_Skip3	; F606E7  jr Z,0xf606ec
-	jrl	sub_F6068D_Return	; F606E9  jrl T,0xf60790
-sub_F6068D_Skip3:
+	jr	z, Vel0cityChange_ApplyToTrack_Skip3	; F606E7  jr Z,0xf606ec
+	jrl	Vel0cityChange_ApplyToTrack_Return	; F606E9  jrl T,0xf60790
+Vel0cityChange_ApplyToTrack_Skip3:
 	call	T_BStore_CursorAdvance	; F606EC  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F606F0  cp (0x0d4a),0x00
-	jr	z, sub_F6068D_Skip4	; F606F5  jr Z,0xf606fa
-	jrl	sub_F6068D_Return	; F606F7  jrl T,0xf60790
-sub_F6068D_Skip4:
+	jr	z, Vel0cityChange_ApplyToTrack_Skip4	; F606F5  jr Z,0xf606fa
+	jrl	Vel0cityChange_ApplyToTrack_Return	; F606F7  jrl T,0xf60790
+Vel0cityChange_ApplyToTrack_Skip4:
 	call	T_BStore_CursorAdvance	; F606FA  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F606FE  cp (0x0d4a),0x00
-	jr	z, sub_F6068D_Skip5	; F60703  jr Z,0xf60708
-	jrl	sub_F6068D_Return	; F60705  jrl T,0xf60790
-sub_F6068D_Skip5:
+	jr	z, Vel0cityChange_ApplyToTrack_Skip5	; F60703  jr Z,0xf60708
+	jrl	Vel0cityChange_ApplyToTrack_Return	; F60705  jrl T,0xf60790
+Vel0cityChange_ApplyToTrack_Skip5:
 	xor	wa, wa	; F60708  xor WA,WA
 	ld	a, (3195:16)	; F6070A  ld A,(0x0c7b)
 	m_cp_mi8 MB16, 0x0c7a, 0x01	; F6070E  cp (0x0c7a),0x01
-	jr	nz, sub_F6068D_Skip6	; F60713  jr NZ,0xf60720
+	jr	nz, Vel0cityChange_ApplyToTrack_Skip6	; F60713  jr NZ,0xf60720
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60715  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F60719  ld (XHL+IY),A
-	jr	sub_F6068D_Join5	; F6071E  jr T,0xf60747
-sub_F6068D_Skip6:
+	jr	Vel0cityChange_ApplyToTrack_Join5	; F6071E  jr T,0xf60747
+Vel0cityChange_ApplyToTrack_Skip6:
 	exts	wa	; F60720  exts WA
 	ld	ix, wa	; F60722  ld IX,WA
 	xor	w, w	; F60724  xor W,W
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60726  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F6072A  ld A,(XHL+IY)
 	add	wa, ix	; F6072F  add WA,IX
-	jr	pl, sub_F6068D_Skip7	; F60731  jr P/PL,0xf60737
+	jr	pl, Vel0cityChange_ApplyToTrack_Skip7	; F60731  jr P/PL,0xf60737
 	xor	a, a	; F60733  xor A,A
-	jr	sub_F6068D_Join4	; F60735  jr T,0xf6073e
-sub_F6068D_Skip7:
+	jr	Vel0cityChange_ApplyToTrack_Join4	; F60735  jr T,0xf6073e
+Vel0cityChange_ApplyToTrack_Skip7:
 	cp	a, 127	; F60737  cp A,0x7f
-	jr	ule, sub_F6068D_Join4	; F6073A  jr ULE,0xf6073e
+	jr	ule, Vel0cityChange_ApplyToTrack_Join4	; F6073A  jr ULE,0xf6073e
 	ld	a, 127:opc	; F6073C  ld A,0x7f
-sub_F6068D_Join4:
+Vel0cityChange_ApplyToTrack_Join4:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6073E  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F60742  ld (XHL+IY),A
-sub_F6068D_Join5:
+Vel0cityChange_ApplyToTrack_Join5:
 	call	T_BStore_CursorAdvance	; F60747  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F6074B  cp (0x0d4a),0x00
-	jr	z, sub_F6068D_Skip8	; F60750  jr Z,0xf60754
-	jr	sub_F6068D_Return	; F60752  jr T,0xf60790
-sub_F6068D_Skip8:
-	jrl	sub_F6068D_Join3	; F60754  jrl T,0xf606bf
-sub_F6068D_Skip9:
+	jr	z, Vel0cityChange_ApplyToTrack_Skip8	; F60750  jr Z,0xf60754
+	jr	Vel0cityChange_ApplyToTrack_Return	; F60752  jr T,0xf60790
+Vel0cityChange_ApplyToTrack_Skip8:
+	jrl	Vel0cityChange_ApplyToTrack_Join3	; F60754  jrl T,0xf606bf
+Vel0cityChange_ApplyToTrack_Skip9:
 	inc	1, c	; F60757  inc 1,C
 	call	T_BStore_CursorAdvance	; F60759  call 0xf4279c
-	jrl	sub_F6068D_Join2	; F6075D  jrl T,0xf606b6
-sub_F6068D_Join6:
+	jrl	Vel0cityChange_ApplyToTrack_Join2	; F6075D  jrl T,0xf606b6
+Vel0cityChange_ApplyToTrack_Join6:
 	inc	1, de	; F60760  inc 1,DE
 	push	xiz	; F60762  push XIZ
 	ld	xiz, (BStore_CursorBlockAddr:16)	; F60763  ld XIZ,(0x126e)
@@ -140090,11 +140149,11 @@ sub_F6068D_Join6:
 	ld	(BStore_CursorBlockAddr:16), xiz	; F60781  ld (0x126e),XIZ
 	pop	xiz	; F60785  pop XIZ
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60786  cp (0x0d4a),0x00
-	jr	nz, sub_F6068D_Return	; F6078B  jr NZ,0xf60790
-	jrl	sub_F6068D_Join	; F6078D  jrl T,0xf606ab
-sub_F6068D_Return:
+	jr	nz, Vel0cityChange_ApplyToTrack_Return	; F6078B  jr NZ,0xf60790
+	jrl	Vel0cityChange_ApplyToTrack_Join	; F6078D  jrl T,0xf606ab
+Vel0cityChange_ApplyToTrack_Return:
 	ret	; F60790  ret
-sub_F6068D_Join7:
+Vel0cityChange_ApplyToTrack_Join7:
 	call	T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_60	; F60791  call 0xf42820
 	call	T_F40A1C	; F60795  call 0xf40a1c
 	ret	; F60799  ret
@@ -140590,12 +140649,12 @@ Transp0se_ApplyToTrack:
 	ld	(BStore_ErrorCode:16), 0	; F60C2C  ld (0x0d4a),0x00
 	xor	wa, wa	; F60C31  xor WA,WA
 	m_cp_mi8 MB16, 0x0dfc, 0x00	; F60C33  cp (0x0dfc),0x00
-	jrl	z, sub_F60C2C_Return	; F60C38  jrl Z,0xf60d3d
+	jrl	z, Transp0se_ApplyToTrack_Return	; F60C38  jrl Z,0xf60d3d
 	ld	a, (3214:16)	; F60C3B  ld A,(0x0c8e)
 	ld	(3354:16), a	; F60C3F  ld (0x0d1a),A
 	call	T_BStore_ValidateSavedCursor	; F60C43  call 0xf42770
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60C47  cp (0x0d4a),0x00
-	jrl	nz, sub_F60C2C_Return	; F60C4C  jrl NZ,0xf60d3d
+	jrl	nz, Transp0se_ApplyToTrack_Return	; F60C4C  jrl NZ,0xf60d3d
 	ld	(3278:16), iy	; F60C4F  ld (0x0cce),IY
 	ld	wa, (BStore_CursorBlock:16)	; F60C53  ld WA,(0x345c)
 	ld	(3276:16), wa	; F60C57  ld (0x0ccc),WA
@@ -140605,7 +140664,7 @@ Transp0se_ApplyToTrack:
 	ld	(3216:16), de	; F60C67  ld (0x0c90),DE
 	call	T_BStore_SeekMeasure	; F60C6B  call 0xf42774
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60C6F  cp (0x0d4a),0x00
-	jrl	nz, sub_F60C2C_Return	; F60C74  jrl NZ,0xf60d3d
+	jrl	nz, Transp0se_ApplyToTrack_Return	; F60C74  jrl NZ,0xf60d3d
 	ld	(3258:16), iy	; F60C77  ld (0x0cba),IY
 	ld	wa, (BStore_CursorBlock:16)	; F60C7B  ld WA,(0x345c)
 	ld	(3252:16), wa	; F60C7F  ld (0x0cb4),WA
@@ -140613,60 +140672,60 @@ Transp0se_ApplyToTrack:
 	ld	(3260:16), wa	; F60C87  ld (0x0cbc),WA
 	ld	ix, iy	; F60C8B  ld IX,IY
 	xor	de, de	; F60C8D  xor DE,DE
-sub_F60C2C_Join:
+Transp0se_ApplyToTrack_Join:
 	m_cp_rm MW16, 0x0c77, 2	; F60C8F  cp DE,(0x0c77)
-	jrl	z, sub_F60C2C_Return	; F60C93  jrl Z,0xf60d3d
+	jrl	z, Transp0se_ApplyToTrack_Return	; F60C93  jrl Z,0xf60d3d
 	xor	c, c	; F60C96  xor C,C
-sub_F60C2C_Join2:
+Transp0se_ApplyToTrack_Join2:
 	m_cp_rm MB16, 0x0d1c, 3	; F60C98  cp C,(0x0d1c)
-	jrl	z, sub_F60C2C_Skip4	; F60C9C  jrl Z,0xf60d1d
-sub_F60C2C_Join3:
+	jrl	z, Transp0se_ApplyToTrack_Skip4	; F60C9C  jrl Z,0xf60d1d
+Transp0se_ApplyToTrack_Join3:
 	push	xhl	; F60C9F  push XHL
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60CA0  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F60CA4  ld A,(XHL+IY)
 	pop	xhl	; F60CA9  pop XHL
 	cp	a, 130	; F60CAA  cp A,0x82
-	jrl	z, sub_F60C2C_Return	; F60CAD  jrl Z,0xf60d3d
+	jrl	z, Transp0se_ApplyToTrack_Return	; F60CAD  jrl Z,0xf60d3d
 	cp	a, 129	; F60CB0  cp A,0x81
-	jr	z, sub_F60C2C_Skip3	; F60CB3  jr Z,0xf60d0d
+	jr	z, Transp0se_ApplyToTrack_Skip3	; F60CB3  jr Z,0xf60d0d
 	ld	w, 240:opc	; F60CB5  ld W,0xf0
 	and	w, a	; F60CB7  and W,A
 	cp	w, 144	; F60CB9  cp W,0x90
-	jr	nz, sub_F60C2C_Skip2	; F60CBC  jr NZ,0xf60cff
+	jr	nz, Transp0se_ApplyToTrack_Skip2	; F60CBC  jr NZ,0xf60cff
 	call	T_BStore_CursorAdvance	; F60CBE  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60CC2  cp (0x0d4a),0x00
-	jrl	nz, sub_F60C2C_Return	; F60CC7  jrl NZ,0xf60d3d
+	jrl	nz, Transp0se_ApplyToTrack_Return	; F60CC7  jrl NZ,0xf60d3d
 	call	T_BStore_CursorAdvance	; F60CCA  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60CCE  cp (0x0d4a),0x00
-	jrl	nz, sub_F60C2C_Return	; F60CD3  jrl NZ,0xf60d3d
+	jrl	nz, Transp0se_ApplyToTrack_Return	; F60CD3  jrl NZ,0xf60d3d
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60CD6  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F60CDA  ld A,(XHL+IY)
 	xor	w, w	; F60CDF  xor W,W
 	ld	l, (3580:16)	; F60CE1  ld L,(0x0dfc)
 	exts	hl	; F60CE5  exts HL
 	add	wa, hl	; F60CE7  add WA,HL
-	jr	pl, sub_F60C2C_Skip	; F60CE9  jr P/PL,0xf60cef
+	jr	pl, Transp0se_ApplyToTrack_Skip	; F60CE9  jr P/PL,0xf60cef
 	xor	a, a	; F60CEB  xor A,A
-	jr	sub_F60C2C_Join4	; F60CED  jr T,0xf60cf6
-sub_F60C2C_Skip:
+	jr	Transp0se_ApplyToTrack_Join4	; F60CED  jr T,0xf60cf6
+Transp0se_ApplyToTrack_Skip:
 	cp	a, 127	; F60CEF  cp A,0x7f
-	jr	ule, sub_F60C2C_Join4	; F60CF2  jr ULE,0xf60cf6
+	jr	ule, Transp0se_ApplyToTrack_Join4	; F60CF2  jr ULE,0xf60cf6
 	ld	a, 127:opc	; F60CF4  ld A,0x7f
-sub_F60C2C_Join4:
+Transp0se_ApplyToTrack_Join4:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60CF6  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F60CFA  ld (XHL+IY),A
-sub_F60C2C_Skip2:
+Transp0se_ApplyToTrack_Skip2:
 	call	T_BStore_CursorAdvance	; F60CFF  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60D03  cp (0x0d4a),0x00
-	jrl	nz, sub_F60C2C_Return	; F60D08  jrl NZ,0xf60d3d
-	jr	sub_F60C2C_Join3	; F60D0B  jr T,0xf60c9f
-sub_F60C2C_Skip3:
+	jrl	nz, Transp0se_ApplyToTrack_Return	; F60D08  jrl NZ,0xf60d3d
+	jr	Transp0se_ApplyToTrack_Join3	; F60D0B  jr T,0xf60c9f
+Transp0se_ApplyToTrack_Skip3:
 	call	T_BStore_CursorAdvance	; F60D0D  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60D11  cp (0x0d4a),0x00
-	jr	nz, sub_F60C2C_Return	; F60D16  jr NZ,0xf60d3d
+	jr	nz, Transp0se_ApplyToTrack_Return	; F60D16  jr NZ,0xf60d3d
 	inc	1, c	; F60D18  inc 1,C
-	jrl	sub_F60C2C_Join2	; F60D1A  jrl T,0xf60c98
-sub_F60C2C_Skip4:
+	jrl	Transp0se_ApplyToTrack_Join2	; F60D1A  jrl T,0xf60c98
+Transp0se_ApplyToTrack_Skip4:
 	inc	1, de	; F60D1D  inc 1,DE
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60D1F  ld XHL,(0x126e)
 	push	xhl	; F60D23  push XHL
@@ -140680,9 +140739,9 @@ sub_F60C2C_Skip4:
 	pop	xhl	; F60D2E  pop XHL
 	ld	(BStore_CursorBlockAddr:16), xhl	; F60D2F  ld (0x126e),XHL
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60D33  cp (0x0d4a),0x00
-	jr	nz, sub_F60C2C_Return	; F60D38  jr NZ,0xf60d3d
-	jrl	sub_F60C2C_Join	; F60D3A  jrl T,0xf60c8f
-sub_F60C2C_Return:
+	jr	nz, Transp0se_ApplyToTrack_Return	; F60D38  jr NZ,0xf60d3d
+	jrl	Transp0se_ApplyToTrack_Join	; F60D3A  jrl T,0xf60c8f
+Transp0se_ApplyToTrack_Return:
 	ret	; F60D3D  ret
 
 ; --------------------------------------------------------------------------
@@ -140706,41 +140765,41 @@ N0teChange_Execute:		; <- T_N0teChange_Execute
 	call	T_BStore_LoadGeometry	; F60D3E  call 0xf427c4
 	ld	a, (3184:16)	; F60D42  ld A,(0x0c70)
 	cp	a, 1:i3	; F60D46  cp A,1
-	jr	c, sub_F60C2C_Skip6	; F60D48  jr C,0xf60d8b
+	jr	c, N0teChange_Execute_Skip6	; F60D48  jr C,0xf60d8b
 	cp	a, 17	; F60D4A  cp A,0x11
-	jr	z, sub_F60C2C_Skip5	; F60D4D  jr Z,0xf60d55
+	jr	z, N0teChange_Execute_Skip5	; F60D4D  jr Z,0xf60d55
 	m_cp_rm MB16, 0x0ca3, 1	; F60D4F  cp A,(0x0ca3)
-	jr	ugt, sub_F60C2C_Skip6	; F60D53  jr UGT,0xf60d8b
-sub_F60C2C_Skip5:
+	jr	ugt, N0teChange_Execute_Skip6	; F60D53  jr UGT,0xf60d8b
+N0teChange_Execute_Skip5:
 	ld	wa, (3187:16)	; F60D55  ld WA,(0x0c73)
 	cp	wa, 1:i3	; F60D59  cp WA,1
-	jr	c, sub_F60C2C_Skip6	; F60D5B  jr C,0xf60d8b
+	jr	c, N0teChange_Execute_Skip6	; F60D5B  jr C,0xf60d8b
 	cp	wa, 999	; F60D5D  cp WA,0x03e7
-	jr	ugt, sub_F60C2C_Skip6	; F60D61  jr UGT,0xf60d8b
+	jr	ugt, N0teChange_Execute_Skip6	; F60D61  jr UGT,0xf60d8b
 	ld	wa, (3191:16)	; F60D63  ld WA,(0x0c77)
 	cp	wa, 1:i3	; F60D67  cp WA,1
-	jr	c, sub_F60C2C_Skip6	; F60D69  jr C,0xf60d8b
+	jr	c, N0teChange_Execute_Skip6	; F60D69  jr C,0xf60d8b
 	cp	wa, 999	; F60D6B  cp WA,0x03e7
-	jr	ugt, sub_F60C2C_Skip6	; F60D6F  jr UGT,0xf60d8b
+	jr	ugt, N0teChange_Execute_Skip6	; F60D6F  jr UGT,0xf60d8b
 	ld	a, (N0teChange_FromNote:16)	; F60D71  ld A,(0x0df4)
 	cp	a, 0:i3	; F60D75  cp A,0
-	jr	c, sub_F60C2C_Skip6	; F60D77  jr C,0xf60d8b
+	jr	c, N0teChange_Execute_Skip6	; F60D77  jr C,0xf60d8b
 	cp	a, 127	; F60D79  cp A,0x7f
-	jr	ugt, sub_F60C2C_Skip6	; F60D7C  jr UGT,0xf60d8b
+	jr	ugt, N0teChange_Execute_Skip6	; F60D7C  jr UGT,0xf60d8b
 	ld	a, (N0teChange_ToNote:16)	; F60D7E  ld A,(0x0df5)
 	cp	a, 0:i3	; F60D82  cp A,0
-	jr	c, sub_F60C2C_Skip6	; F60D84  jr C,0xf60d8b
+	jr	c, N0teChange_Execute_Skip6	; F60D84  jr C,0xf60d8b
 	cp	a, 127	; F60D86  cp A,0x7f
-	jr	ule, sub_F60C2C_Skip7	; F60D89  jr ULE,0xf60d93
-sub_F60C2C_Skip6:
+	jr	ule, N0teChange_Execute_Skip7	; F60D89  jr ULE,0xf60d93
+N0teChange_Execute_Skip6:
 	ld	(BStore_ErrorCode:16), 3	; F60D8B  ld (0x0d4a),0x03
-	jrl	sub_F60C2C_Join7	; F60D90  jrl T,0xf60e37
-sub_F60C2C_Skip7:
+	jrl	N0teChange_Execute_Join7	; F60D90  jrl T,0xf60e37
+N0teChange_Execute_Skip7:
 	ld	a, (N0teChange_FromNote:16)	; F60D93  ld A,(0x0df4)
 	m_cp_rm MB16, N0teChange_ToNote, 1	; F60D97  cp A,(0x0df5)
-	jrl	z, sub_F60C2C_Join7	; F60D9B  jrl Z,0xf60e37
+	jrl	z, N0teChange_Execute_Join7	; F60D9B  jrl Z,0xf60e37
 	m_cp_mi8 MB16, 0x0c70, 0x11	; F60D9E  cp (0x0c70),0x11
-	jr	z, sub_F60C2C_Skip9	; F60DA3  jr Z,0xf60ddc
+	jr	z, N0teChange_Execute_Skip9	; F60DA3  jr Z,0xf60ddc
 	xor	xhl, xhl	; F60DA5  xor XHL,XHL
 	ld	l, (3184:16)	; F60DA7  ld L,(0x0c70)
 	dec	1, hl	; F60DAB  dec 1,HL
@@ -140749,22 +140808,22 @@ sub_F60C2C_Skip7:
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F60DB3  ld A,(XIX+HL)
 	pop	xix	; F60DB8  pop XIX
 	cp	a, 32	; F60DB9  cp A,0x20
-	jr	z, sub_F60C2C_Skip8	; F60DBC  jr Z,0xf60dc0
-	jr	sub_F60C2C_Join5	; F60DBE  jr T,0xf60dc8
-sub_F60C2C_Skip8:
+	jr	z, N0teChange_Execute_Skip8	; F60DBC  jr Z,0xf60dc0
+	jr	N0teChange_Execute_Join5	; F60DBE  jr T,0xf60dc8
+N0teChange_Execute_Skip8:
 	ld	(BStore_ErrorCode:16), 9	; F60DC0  ld (0x0d4a),0x09
-	jrl	sub_F60C2C_Join7	; F60DC5  jrl T,0xf60e37
-sub_F60C2C_Join5:
+	jrl	N0teChange_Execute_Join7	; F60DC5  jrl T,0xf60e37
+N0teChange_Execute_Join5:
 	ld	a, (3184:16)	; F60DC8  ld A,(0x0c70)
 	ld	(3214:16), a	; F60DCC  ld (0x0c8e),A
 	ld	(BStore_ErrorCode:16), 0	; F60DD0  ld (0x0d4a),0x00
 	call	N0teChange_ApplyToTrack	; F60DD5  call 0xf60e40
-	jrl	sub_F60C2C_Join7	; F60DD9  jrl T,0xf60e37
-sub_F60C2C_Skip9:
+	jrl	N0teChange_Execute_Join7	; F60DD9  jrl T,0xf60e37
+N0teChange_Execute_Skip9:
 	xor	xhl, xhl	; F60DDC  xor XHL,XHL
-sub_F60C2C_Join6:
+N0teChange_Execute_Join6:
 	cp	l, 16	; F60DDE  cp L,0x10
-	jrl	ugt, sub_F60C2C_Skip12	; F60DE1  jrl UGT,0xf60e2f
+	jrl	ugt, N0teChange_Execute_Skip12	; F60DE1  jrl UGT,0xf60e2f
 	ld	a, l	; F60DE4  ld A,L
 	inc	1, a	; F60DE6  inc 1,A
 	ld	(3214:16), a	; F60DE8  ld (0x0c8e),A
@@ -140776,28 +140835,28 @@ sub_F60C2C_Join6:
 	pop	xix	; F60DFA  pop XIX
 	pop	xhl	; F60DFB  pop XHL
 	cp	a, 32	; F60DFC  cp A,0x20
-	jr	z, sub_F60C2C_Skip10	; F60DFF  jr Z,0xf60e07
+	jr	z, N0teChange_Execute_Skip10	; F60DFF  jr Z,0xf60e07
 	push	xhl	; F60E01  push XHL
 	call	N0teChange_ApplyToTrack	; F60E02  call 0xf60e40
 	pop	xhl	; F60E06  pop XHL
-sub_F60C2C_Skip10:
+N0teChange_Execute_Skip10:
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60E07  cp (0x0d4a),0x00
-	jr	z, sub_F60C2C_Skip11	; F60E0C  jr Z,0xf60e2b
+	jr	z, N0teChange_Execute_Skip11	; F60E0C  jr Z,0xf60e2b
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x01	; F60E0E  cp (0x0d4a),0x01
-	jr	z, sub_F60C2C_Skip11	; F60E13  jr Z,0xf60e2b
+	jr	z, N0teChange_Execute_Skip11	; F60E13  jr Z,0xf60e2b
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x08	; F60E15  cp (0x0d4a),0x08
-	jr	z, sub_F60C2C_Skip11	; F60E1A  jr Z,0xf60e2b
+	jr	z, N0teChange_Execute_Skip11	; F60E1A  jr Z,0xf60e2b
 	m_cp_mi8 MB16, 0x0d18, 0x00	; F60E1C  cp (0x0d18),0x00
-	jr	nz, sub_F60C2C_Skip11	; F60E21  jr NZ,0xf60e2b
+	jr	nz, N0teChange_Execute_Skip11	; F60E21  jr NZ,0xf60e2b
 	ld	a, (BStore_ErrorCode:16)	; F60E23  ld A,(0x0d4a)
 	ld	(3352:16), a	; F60E27  ld (0x0d18),A
-sub_F60C2C_Skip11:
+N0teChange_Execute_Skip11:
 	inc	1, l	; F60E2B  inc 1,L
-	jr	sub_F60C2C_Join6	; F60E2D  jr T,0xf60dde
-sub_F60C2C_Skip12:
+	jr	N0teChange_Execute_Join6	; F60E2D  jr T,0xf60dde
+N0teChange_Execute_Skip12:
 	ld	a, (3352:16)	; F60E2F  ld A,(0x0d18)
 	ld	(BStore_ErrorCode:16), a	; F60E33  ld (0x0d4a),A
-sub_F60C2C_Join7:
+N0teChange_Execute_Join7:
 	call	T_BStore_ErrorToStatusByte	; F60E37  call 0xf4278c
 	call	T_F40A1C	; F60E3B  call 0xf40a1c
 	ret	; F60E3F  ret
@@ -140822,13 +140881,13 @@ N0teChange_ApplyToTrack:
 	ld	(BStore_ErrorCode:16), 0	; F60E40  ld (0x0d4a),0x00
 	ld	a, (N0teChange_FromNote:16)	; F60E45  ld A,(0x0df4)
 	m_cp_rm MB16, N0teChange_ToNote, 1	; F60E49  cp A,(0x0df5)
-	jrl	z, sub_F60E40_Return	; F60E4D  jrl Z,0xf60f37
+	jrl	z, N0teChange_ApplyToTrack_Return	; F60E4D  jrl Z,0xf60f37
 	xor	wa, wa	; F60E50  xor WA,WA
 	ld	a, (3214:16)	; F60E52  ld A,(0x0c8e)
 	ld	(3354:16), a	; F60E56  ld (0x0d1a),A
 	call	T_BStore_ValidateSavedCursor	; F60E5A  call 0xf42770
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60E5E  cp (0x0d4a),0x00
-	jrl	nz, sub_F60E40_Return	; F60E63  jrl NZ,0xf60f37
+	jrl	nz, N0teChange_ApplyToTrack_Return	; F60E63  jrl NZ,0xf60f37
 	ld	(3278:16), iy	; F60E66  ld (0x0cce),IY
 	ld	wa, (BStore_CursorBlock:16)	; F60E6A  ld WA,(0x345c)
 	ld	(3276:16), wa	; F60E6E  ld (0x0ccc),WA
@@ -140838,7 +140897,7 @@ N0teChange_ApplyToTrack:
 	ld	(3216:16), de	; F60E7E  ld (0x0c90),DE
 	call	T_BStore_SeekMeasure	; F60E82  call 0xf42774
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60E86  cp (0x0d4a),0x00
-	jrl	nz, sub_F60E40_Return	; F60E8B  jrl NZ,0xf60f37
+	jrl	nz, N0teChange_ApplyToTrack_Return	; F60E8B  jrl NZ,0xf60f37
 	ld	(3258:16), iy	; F60E8E  ld (0x0cba),IY
 	ld	wa, (BStore_CursorBlock:16)	; F60E92  ld WA,(0x345c)
 	ld	(3252:16), wa	; F60E96  ld (0x0cb4),WA
@@ -140846,50 +140905,50 @@ N0teChange_ApplyToTrack:
 	ld	(3260:16), wa	; F60E9E  ld (0x0cbc),WA
 	ld	ix, iy	; F60EA2  ld IX,IY
 	xor	de, de	; F60EA4  xor DE,DE
-sub_F60E40_Join:
+N0teChange_ApplyToTrack_Join:
 	m_cp_rm MW16, 0x0c77, 2	; F60EA6  cp DE,(0x0c77)
-	jrl	z, sub_F60E40_Return	; F60EAA  jrl Z,0xf60f37
+	jrl	z, N0teChange_ApplyToTrack_Return	; F60EAA  jrl Z,0xf60f37
 	xor	c, c	; F60EAD  xor C,C
-sub_F60E40_Join2:
+N0teChange_ApplyToTrack_Join2:
 	m_cp_rm MB16, 0x0d1c, 3	; F60EAF  cp C,(0x0d1c)
-	jr	z, sub_F60E40_Skip3	; F60EB3  jr Z,0xf60f1e
-sub_F60E40_Join3:
+	jr	z, N0teChange_ApplyToTrack_Skip3	; F60EB3  jr Z,0xf60f1e
+N0teChange_ApplyToTrack_Join3:
 	push	xhl	; F60EB5  push XHL
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60EB6  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F60EBA  ld A,(XHL+IY)
 	pop	xhl	; F60EBF  pop XHL
 	cp	a, 130	; F60EC0  cp A,0x82
-	jr	z, sub_F60E40_Return	; F60EC3  jr Z,0xf60f37
+	jr	z, N0teChange_ApplyToTrack_Return	; F60EC3  jr Z,0xf60f37
 	cp	a, 129	; F60EC5  cp A,0x81
-	jr	z, sub_F60E40_Skip2	; F60EC8  jr Z,0xf60f0e
+	jr	z, N0teChange_ApplyToTrack_Skip2	; F60EC8  jr Z,0xf60f0e
 	ld	w, 240:opc	; F60ECA  ld W,0xf0
 	and	w, a	; F60ECC  and W,A
 	cp	w, 144	; F60ECE  cp W,0x90
-	jr	nz, sub_F60E40_Skip	; F60ED1  jr NZ,0xf60f01
+	jr	nz, N0teChange_ApplyToTrack_Skip	; F60ED1  jr NZ,0xf60f01
 	call	T_BStore_CursorAdvance	; F60ED3  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60ED7  cp (0x0d4a),0x00
-	jr	nz, sub_F60E40_Return	; F60EDC  jr NZ,0xf60f37
+	jr	nz, N0teChange_ApplyToTrack_Return	; F60EDC  jr NZ,0xf60f37
 	call	T_BStore_CursorAdvance	; F60EDE  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60EE2  cp (0x0d4a),0x00
-	jr	nz, sub_F60E40_Return	; F60EE7  jr NZ,0xf60f37
+	jr	nz, N0teChange_ApplyToTrack_Return	; F60EE7  jr NZ,0xf60f37
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60EE9  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F60EED  ld A,(XHL+IY)
 	m_cp_rm MB16, N0teChange_FromNote, 1	; F60EF2  cp A,(0x0df4)
-	jr	nz, sub_F60E40_Skip	; F60EF6  jr NZ,0xf60f01
+	jr	nz, N0teChange_ApplyToTrack_Skip	; F60EF6  jr NZ,0xf60f01
 	ld	a, (N0teChange_ToNote:16)	; F60EF8  ld A,(0x0df5)
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F60EFC  ld (XHL+IY),A
-sub_F60E40_Skip:
+N0teChange_ApplyToTrack_Skip:
 	call	T_BStore_CursorAdvance	; F60F01  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60F05  cp (0x0d4a),0x00
-	jr	nz, sub_F60E40_Return	; F60F0A  jr NZ,0xf60f37
-	jr	sub_F60E40_Join3	; F60F0C  jr T,0xf60eb5
-sub_F60E40_Skip2:
+	jr	nz, N0teChange_ApplyToTrack_Return	; F60F0A  jr NZ,0xf60f37
+	jr	N0teChange_ApplyToTrack_Join3	; F60F0C  jr T,0xf60eb5
+N0teChange_ApplyToTrack_Skip2:
 	call	T_BStore_CursorAdvance	; F60F0E  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F60F12  cp (0x0d4a),0x00
-	jr	nz, sub_F60E40_Return	; F60F17  jr NZ,0xf60f37
+	jr	nz, N0teChange_ApplyToTrack_Return	; F60F17  jr NZ,0xf60f37
 	inc	1, c	; F60F19  inc 1,C
-	jrl	sub_F60E40_Join2	; F60F1B  jrl T,0xf60eaf
-sub_F60E40_Skip3:
+	jrl	N0teChange_ApplyToTrack_Join2	; F60F1B  jrl T,0xf60eaf
+N0teChange_ApplyToTrack_Skip3:
 	inc	1, de	; F60F1E  inc 1,DE
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F60F20  ld XHL,(0x126e)
 	push	xhl	; F60F24  push XHL
@@ -140902,8 +140961,8 @@ sub_F60E40_Skip3:
 	pop	xde	; F60F2E  pop XDE
 	pop	xhl	; F60F2F  pop XHL
 	ld	(BStore_CursorBlockAddr:16), xhl	; F60F30  ld (0x126e),XHL
-	jrl	sub_F60E40_Join	; F60F34  jrl T,0xf60ea6
-sub_F60E40_Return:
+	jrl	N0teChange_ApplyToTrack_Join	; F60F34  jrl T,0xf60ea6
+N0teChange_ApplyToTrack_Return:
 	ret	; F60F37  ret
 	ld	a, (3586:16)	; F60F38  ld A,(0x0e02)
 	pushw	wa	; F60F3C  push WA
@@ -141563,9 +141622,9 @@ sub_F610E3_Return:
 S0ngC0py_CopyAllTracks:
 	xor	a, a	; F615C2  xor A,A
 	ld	(3184:16), a	; F615C4  ld (0x0c70),A
-sub_F615C2_Loop:
+S0ngC0py_CopyAllTracks_Loop:
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F615C8  cp (0x6034ba),0x0000
-	jrl	z, sub_F615C2_Skip10	; F615CF  jrl Z,0xf61862
+	jrl	z, S0ngC0py_CopyAllTracks_Skip10	; F615CF  jrl Z,0xf61862
 	ld	xde, 6356992	; F615D2  ld XDE,0x00610000
 	push	xbc	; F615D7  push XBC
 	xor	xbc, xbc	; F615D8  xor XBC,XBC
@@ -141583,9 +141642,9 @@ sub_F615C2_Loop:
 	ld	a, (S0ngC0py_FromSong:16)	; F615F6  ld A,(0x0e0c)
 	dec	1, a	; F615FA  dec 1,A
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F615FC  cp A,(0x360a)
-	jr	nz, sub_F615C2_Skip	; F61600  jr NZ,0xf61607
+	jr	nz, S0ngC0py_CopyAllTracks_Skip	; F61600  jr NZ,0xf61607
 	ld	xde, 6305024	; F61602  ld XDE,0x00603500
-sub_F615C2_Skip:
+S0ngC0py_CopyAllTracks_Skip:
 	xor	xwa, xwa	; F61607  xor XWA,XWA
 	ld	a, (3184:16)	; F61609  ld A,(0x0c70)
 	ld	w, a	; F6160D  ld W,A
@@ -141593,13 +141652,13 @@ sub_F615C2_Skip:
 	add	a, w	; F61612  add A,W
 	xor	w, w	; F61614  xor W,W
 	mx_bit 7, MXD, ra_DE, ra_WA	; F61616  bit 7,(XDE+WA)
-	jrl	z, sub_F615C2_Skip5	; F6161B  jrl Z,0xf6175f
+	jrl	z, S0ngC0py_CopyAllTracks_Skip5	; F6161B  jrl Z,0xf6175f
 	inc	1, wa	; F6161E  inc 1,WA
 	mx_ld_rm MXW, ra_DE, ra_WA, 3	; F61620  ld HL,(XDE+WA)
 	cp	hl, 0:i3	; F61625  cp HL,0
-	jrl	z, sub_F615C2_Skip5	; F61627  jrl Z,0xf6175f
+	jrl	z, S0ngC0py_CopyAllTracks_Skip5	; F61627  jrl Z,0xf6175f
 	cp	hl, 65535	; F6162A  cp HL,0xffff
-	jrl	z, sub_F615C2_Skip5	; F6162E  jrl Z,0xf6175f
+	jrl	z, S0ngC0py_CopyAllTracks_Skip5	; F6162E  jrl Z,0xf6175f
 	pushw	hl	; F61631  push HL
 	call	S0ngC0py_AllocDestHeadBlock	; F61632  call 0xf61880
 	ld	xix, (BStore_CursorBlockAddr:16)	; F61636  ld XIX,(0x126e)
@@ -141610,15 +141669,15 @@ sub_F615C2_Skip:
 	inc	5, xix	; F61646  inc 5,XIX
 	inc	5, xiy	; F61648  inc 5,XIY
 	ldir85	; F6164A  ldir
-sub_F615C2_Join:
+S0ngC0py_CopyAllTracks_Join:
 	sub	xiy, 256	; F6164C  sub XIY,0x00000100
 	ld	hl, (xiy+3)	; F61652  ld HL,(XIY+0x03)
 	cp	hl, 65535	; F61655  cp HL,0xffff
-	jr	z, sub_F615C2_Skip2	; F61659  jr Z,0xf616b4
+	jr	z, S0ngC0py_CopyAllTracks_Skip2	; F61659  jr Z,0xf616b4
 	call	T_BStore_SeekBlock	; F6165B  call 0xf427bc
 	ld	xiy, (BStore_CursorBlockAddr:16)	; F6165F  ld XIY,(0x126e)
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F61663  cp (0x6034ba),0x0000
-	jrl	z, sub_F615C2_Skip10	; F6166A  jrl Z,0xf61862
+	jrl	z, S0ngC0py_CopyAllTracks_Skip10	; F6166A  jrl Z,0xf61862
 	push	xiy	; F6166D  push XIY
 	call	T_BStore_AllocBlock_Veneer	; F6166E  call 0xf42884
 	pop	xiy	; F61672  pop XIY
@@ -141639,8 +141698,8 @@ sub_F615C2_Join:
 	add	xiy, 5	; F616A7  add XIY,0x00000005
 	ldw	bc, 251	; F616AD  ld BC,0x00fb
 	ldir85	; F616B0  ldir
-	jr	sub_F615C2_Join	; F616B2  jr T,0xf6164c
-sub_F615C2_Skip2:
+	jr	S0ngC0py_CopyAllTracks_Join	; F616B2  jr T,0xf6164c
+S0ngC0py_CopyAllTracks_Skip2:
 	ld	xde, 6356992	; F616B4  ld XDE,0x00610000
 	push	xbc	; F616B9  push XBC
 	xor	xbc, xbc	; F616BA  xor XBC,XBC
@@ -141663,10 +141722,10 @@ sub_F615C2_Skip2:
 	ld	b, (S0ngC0py_ToSong:16)	; F616EA  ld B,(0x0e0d)
 	dec	1, b	; F616EE  dec 1,B
 	m_cp_rm MB16, BStore_CurrentBank, 2	; F616F0  cp B,(0x360a)
-	jr	nz, sub_F615C2_Skip3	; F616F4  jr NZ,0xf61700
+	jr	nz, S0ngC0py_CopyAllTracks_Skip3	; F616F4  jr NZ,0xf61700
 	ld	xhl, 6304894	; F616F6  ld XHL,0x0060347e
 	mx_st_mr16 MXD, ra_HL, ra_WA, 4	; F616FB  ld (XHL+WA),IX
-sub_F615C2_Skip3:
+S0ngC0py_CopyAllTracks_Skip3:
 	ld	xhl, 6356992	; F61700  ld XHL,0x00610000
 	push	xwa	; F61705  push XWA
 	xor	xwa, xwa	; F61706  xor XWA,XWA
@@ -141684,9 +141743,9 @@ sub_F615C2_Skip3:
 	ld	c, (S0ngC0py_FromSong:16)	; F61724  ld C,(0x0e0c)
 	dec	1, c	; F61728  dec 1,C
 	m_cp_rm MB16, BStore_CurrentBank, 3	; F6172A  cp C,(0x360a)
-	jr	nz, sub_F615C2_Skip4	; F6172E  jr NZ,0xf61735
+	jr	nz, S0ngC0py_CopyAllTracks_Skip4	; F6172E  jr NZ,0xf61735
 	ld	xhl, 6304928	; F61730  ld XHL,0x006034a0
-sub_F615C2_Skip4:
+S0ngC0py_CopyAllTracks_Skip4:
 	sra	a, 1	; F61735  sra 0x01,A
 	mx_ld_rm MXB, ra_HL, ra_WA, 3	; F61738  ld C,(XHL+WA)
 	ld	xhl, 160	; F6173D  ld XHL,0x000000a0
@@ -141695,13 +141754,13 @@ sub_F615C2_Skip4:
 	ld	b, (S0ngC0py_ToSong:16)	; F61749  ld B,(0x0e0d)
 	dec	1, b	; F6174D  dec 1,B
 	m_cp_rm MB16, BStore_CurrentBank, 2	; F6174F  cp B,(0x360a)
-	jr	nz, sub_F615C2_Skip5	; F61753  jr NZ,0xf6175f
+	jr	nz, S0ngC0py_CopyAllTracks_Skip5	; F61753  jr NZ,0xf6175f
 	ld	xhl, 6304928	; F61755  ld XHL,0x006034a0
 	mx_st_mr8 MXD, ra_HL, ra_WA, 3	; F6175A  ld (XHL+WA),C
-sub_F615C2_Skip5:
+S0ngC0py_CopyAllTracks_Skip5:
 	inc	1, (3184:16)	; F6175F  inc 1,(0x0c70)
 	m_cp_mi8 MB16, 0x0c70, 0x11	; F61763  cp (0x0c70),0x11
-	jrl	c, sub_F615C2_Loop	; F61768  jrl C,0xf615c8
+	jrl	c, S0ngC0py_CopyAllTracks_Loop	; F61768  jrl C,0xf615c8
 	ld	xde, 6356992	; F6176B  ld XDE,0x00610000
 	push	xbc	; F61770  push XBC
 	xor	xbc, xbc	; F61771  xor XBC,XBC
@@ -141719,9 +141778,9 @@ sub_F615C2_Skip5:
 	ld	a, (S0ngC0py_FromSong:16)	; F61790  ld A,(0x0e0c)
 	dec	1, a	; F61794  dec 1,A
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F61796  cp A,(0x360a)
-	jr	nz, sub_F615C2_Skip6	; F6179A  jr NZ,0xf617a1
+	jr	nz, S0ngC0py_CopyAllTracks_Skip6	; F6179A  jr NZ,0xf617a1
 	ld	xiy, BStore_TrackToPart	; F6179C  ld XIY,0x00603422
-sub_F615C2_Skip6:
+S0ngC0py_CopyAllTracks_Skip6:
 	push	xbc	; F617A1  push XBC
 	xor	xbc, xbc	; F617A2  xor XBC,XBC
 	xor	xwa, xwa	; F617A4  xor XWA,XWA
@@ -141740,12 +141799,12 @@ sub_F615C2_Skip6:
 	ld	a, (S0ngC0py_ToSong:16)	; F617C6  ld A,(0x0e0d)
 	dec	1, a	; F617CA  dec 1,A
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F617CC  cp A,(0x360a)
-	jr	nz, sub_F615C2_Skip7	; F617D0  jr NZ,0xf617e2
+	jr	nz, S0ngC0py_CopyAllTracks_Skip7	; F617D0  jr NZ,0xf617e2
 	sub	xiy, 17	; F617D2  sub XIY,0x00000011
 	ld	xix, BStore_TrackToPart	; F617D8  ld XIX,0x00603422
 	ldw	bc, 17	; F617DD  ld BC,0x0011
 	ldir85	; F617E0  ldir
-sub_F615C2_Skip7:
+S0ngC0py_CopyAllTracks_Skip7:
 	ld	xde, 6356992	; F617E2  ld XDE,0x00610000
 	push	xbc	; F617E7  push XBC
 	xor	xbc, xbc	; F617E8  xor XBC,XBC
@@ -141763,21 +141822,21 @@ sub_F615C2_Skip7:
 	ld	c, (S0ngC0py_FromSong:16)	; F61807  ld C,(0x0e0c)
 	dec	1, c	; F6180B  dec 1,C
 	m_cp_rm MB16, BStore_CurrentBank, 3	; F6180D  cp C,(0x360a)
-	jr	nz, sub_F615C2_Skip8	; F61811  jr NZ,0xf61818
+	jr	nz, S0ngC0py_CopyAllTracks_Skip8	; F61811  jr NZ,0xf61818
 	ld	xiy, 13836	; F61813  ld XIY,0x0000360c
-sub_F615C2_Skip8:
+S0ngC0py_CopyAllTracks_Skip8:
 	ld	c, (S0ngC0py_ToSong:16)	; F61818  ld C,(0x0e0d)
 	dec	1, c	; F6181C  dec 1,C
 	m_cp_rm MB16, BStore_CurrentBank, 3	; F6181E  cp C,(0x360a)
-	jr	nz, sub_F615C2_Skip9	; F61822  jr NZ,0xf6183c
+	jr	nz, S0ngC0py_CopyAllTracks_Skip9	; F61822  jr NZ,0xf6183c
 	ld	xwa, (xiy)	; F61824  ld XWA,(XIY)
 	ld	(13836:16), xwa	; F61826  ld (0x360c),XWA
 	ld	(14162:16), 0	; F6182A  ld (0x3752),0x00
 	m_bit 0, MD16, 0x360e	; F6182F  bit 0,(0x360e)
-	jr	z, sub_F615C2_Return	; F61833  jr Z,0xf6187f
+	jr	z, S0ngC0py_CopyAllTracks_Return	; F61833  jr Z,0xf6187f
 	ld	(14162:16), 1	; F61835  ld (0x3752),0x01
-	jr	sub_F615C2_Return	; F6183A  jr T,0xf6187f
-sub_F615C2_Skip9:
+	jr	S0ngC0py_CopyAllTracks_Return	; F6183A  jr T,0xf6187f
+S0ngC0py_CopyAllTracks_Skip9:
 	push	xbc	; F6183C  push XBC
 	xor	xbc, xbc	; F6183D  xor XBC,XBC
 	xor	xwa, xwa	; F6183F  xor XWA,XWA
@@ -141793,8 +141852,8 @@ sub_F615C2_Skip9:
 	add	xix, 30	; F61856  add XIX,0x0000001e
 	ld	xwa, (xiy)	; F6185C  ld XWA,(XIY)
 	ld	(xix), xwa	; F6185E  ld (XIX),XWA
-	jr	sub_F615C2_Return	; F61860  jr T,0xf6187f
-sub_F615C2_Skip10:
+	jr	S0ngC0py_CopyAllTracks_Return	; F61860  jr T,0xf6187f
+S0ngC0py_CopyAllTracks_Skip10:
 	ld	a, (3586:16)	; F61862  ld A,(0x0e02)
 	pushw	wa	; F61866  push WA
 	ld	a, (S0ngC0py_ToSong:16)	; F61867  ld A,(0x0e0d)
@@ -141804,7 +141863,7 @@ sub_F615C2_Skip10:
 	popw	wa	; F61875  pop WA
 	ld	(3586:16), a	; F61876  ld (0x0e02),A
 	ld	(UI_StatusCode:16), 15	; F6187A  ld (0x2880),0x0f
-sub_F615C2_Return:
+S0ngC0py_CopyAllTracks_Return:
 	ret	; F6187F  ret
 
 ; --------------------------------------------------------------------------
@@ -141826,7 +141885,7 @@ sub_F615C2_Return:
 ;   pilot-2026-10-06/proposals_wave6_t.json)
 S0ngC0py_AllocDestHeadBlock:
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F61880  cp (0x6034ba),0x0000
-	jr	z, sub_F61880_Return	; F61887  jr Z,0xf61906
+	jr	z, S0ngC0py_AllocDestHeadBlock_Return	; F61887  jr Z,0xf61906
 	call	T_BStore_AllocBlock_Veneer	; F61889  call 0xf42884
 	ld	(BStore_CursorBlock:16), ix	; F6188D  ld (0x345c),IX
 	ld	hl, ix	; F61891  ld HL,IX
@@ -141861,12 +141920,12 @@ S0ngC0py_AllocDestHeadBlock:
 	ld	c, (S0ngC0py_ToSong:16)	; F618E8  ld C,(0x0e0d)
 	dec	1, c	; F618EC  dec 1,C
 	m_cp_rm MB16, BStore_CurrentBank, 3	; F618EE  cp C,(0x360a)
-	jr	nz, sub_F61880_Return	; F618F2  jr NZ,0xf61906
+	jr	nz, S0ngC0py_AllocDestHeadBlock_Return	; F618F2  jr NZ,0xf61906
 	ld	xde, 6305024	; F618F4  ld XDE,0x00603500
 	mx_st_mr16 MXD, ra_DE, ra_WA, 4	; F618F9  ld (XDE+WA),IX
 	dec	1, wa	; F618FE  dec 1,WA
 	mx_or_mi8 MXB, ra_DE, ra_WA, 0x80	; F61900  or (XDE+WA),0x80
-sub_F61880_Return:
+S0ngC0py_AllocDestHeadBlock_Return:
 	ret	; F61906  ret
 
 ; --------------------------------------------------------------------------
@@ -142109,11 +142168,11 @@ AdvanceDelay_ApplyToTrack:
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F61B0F  cp (0x0d4a),0x00
 	jrl	nz, sub_F61AF7_Join3	; F61B14  jrl NZ,0xf61bf4
 	xor	de, de	; F61B17  xor DE,DE
-sub_F61AF7_Loop:
+AdvanceDelay_ApplyToTrack_Loop:
 	m_cp_rm MW16, 0x0c77, 2	; F61B19  cp DE,(0x0c77)
 	jrl	z, sub_F61AF7_Join3	; F61B1D  jrl Z,0xf61bf4
 	xor	bc, bc	; F61B20  xor BC,BC
-sub_F61AF7_Join:
+AdvanceDelay_ApplyToTrack_Join:
 	xor	wa, wa	; F61B22  xor WA,WA
 	ld	(3611:16), a	; F61B24  ld (0x0e1b),A
 	ld	(3613:16), a	; F61B28  ld (0x0e1d),A
@@ -142125,18 +142184,18 @@ sub_F61AF7_Join:
 	pop	xhl	; F61B3E  pop XHL
 	m_cp_rm MB16, 0x0d1c, 3	; F61B3F  cp C,(0x0d1c)
 	jrl	z, sub_F61AF7_Skip4	; F61B43  jrl Z,0xf61bc6
-sub_F61AF7_Join2:
+AdvanceDelay_ApplyToTrack_Join2:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F61B46  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F61B4A  ld A,(XHL+IY)
 	cp	a, 130	; F61B4F  cp A,0x82
-	jr	nz, sub_F61AF7_Skip	; F61B52  jr NZ,0xf61b5a
+	jr	nz, AdvanceDelay_ApplyToTrack_Skip	; F61B52  jr NZ,0xf61b5a
 	calr	AdvanceDelay_ClampTimingsAtTrackEnd	; F61B54  calr 0xf620af
 	jrl	sub_F61AF7_Join3	; F61B57  jrl T,0xf61bf4
-sub_F61AF7_Skip:
+AdvanceDelay_ApplyToTrack_Skip:
 	cp	a, 129	; F61B5A  cp A,0x81
 	jr	z, sub_F61AF7_Entry	; F61B5D  jr Z,0xf61ba6
 	bit	7, a	; F61B5F  bit 0x07,A
-	jr	z, sub_F61AF7_Skip3	; F61B62  jr Z,0xf61b99
+	jr	z, AdvanceDelay_ApplyToTrack_Skip3	; F61B62  jr Z,0xf61b99
 	call	T_BStore_CursorAdvance	; F61B64  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F61B68  cp (0x0d4a),0x00
 	jrl	nz, sub_F61AF7_Join3	; F61B6D  jrl NZ,0xf61bf4
@@ -142148,16 +142207,16 @@ sub_F61AF7_Skip:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F61B81  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F61B85  ld (XHL+IY),A
 	bit	7, a	; F61B8A  bit 0x07,A
-	jr	nz, sub_F61AF7_Skip2	; F61B8D  jr NZ,0xf61b94
+	jr	nz, AdvanceDelay_ApplyToTrack_Skip2	; F61B8D  jr NZ,0xf61b94
 	cp	a, 96	; F61B8F  cp A,0x60
-	jr	c, sub_F61AF7_Skip3	; F61B92  jr C,0xf61b99
-sub_F61AF7_Skip2:
+	jr	c, AdvanceDelay_ApplyToTrack_Skip3	; F61B92  jr C,0xf61b99
+AdvanceDelay_ApplyToTrack_Skip2:
 	m_or_mi8 MB16, 0x0c8a, 0x01	; F61B94  or (0x0c8a),0x01
-sub_F61AF7_Skip3:
+AdvanceDelay_ApplyToTrack_Skip3:
 	call	T_BStore_CursorAdvance	; F61B99  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F61B9D  cp (0x0d4a),0x00
 	jr	nz, sub_F61AF7_Join3	; F61BA2  jr NZ,0xf61bf4
-	jr	sub_F61AF7_Join2	; F61BA4  jr T,0xf61b46
+	jr	AdvanceDelay_ApplyToTrack_Join2	; F61BA4  jr T,0xf61b46
 sub_F61AF7_Entry:
 	m_rd_ld_rr2x RWX, 0x34, r1	; F61BA6  ld RBC3,BC
 	m_rd_ld_rr2x RWX, 0x38, r2	; F61BA9  ld RDE3,DE
@@ -142172,7 +142231,7 @@ sub_F61AF7_Entry:
 	jr	nz, sub_F61AF7_Join3	; F61BBB  jr NZ,0xf61bf4
 	inc	1, c	; F61BBD  inc 1,C
 	call	T_BStore_CursorAdvance	; F61BBF  call 0xf4279c
-	jrl	sub_F61AF7_Join	; F61BC3  jrl T,0xf61b22
+	jrl	AdvanceDelay_ApplyToTrack_Join	; F61BC3  jrl T,0xf61b22
 sub_F61AF7_Skip4:
 	inc	1, de	; F61BC6  inc 1,DE
 	push	xiz	; F61BC8  push XIZ
@@ -142195,7 +142254,7 @@ sub_F61AF7_Skip4:
 	ld	(BStore_CursorBlockAddr:16), xiz	; F61BE7  ld (0x126e),XIZ
 	pop	xiz	; F61BEB  pop XIZ
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F61BEC  cp (0x0d4a),0x00
-	jrl	z, sub_F61AF7_Loop	; F61BF1  jrl Z,0xf61b19
+	jrl	z, AdvanceDelay_ApplyToTrack_Loop	; F61BF1  jrl Z,0xf61b19
 sub_F61AF7_Join3:
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F61BF4  cp (0x0d4a),0x00
 	jr	nz, sub_F61AF7_Return	; F61BF9  jr NZ,0xf61c0b
@@ -142385,7 +142444,7 @@ sub_F61C24_Loop2:
 ; Called from: in-module: 0xF61C1F
 ; Touches: (0x0C57) (0x0C59) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C73)
 ;          (0x0C8A) (0x0D0A) (0x0D14) +10 more  |  0x617800
-; Calls:   sub_F5E2B9 T_BStore_CursorAdvance sub_F61F7B T_BStore_CopyRangeForward_Call
+; Calls:   BStore_CursorStepBack T_BStore_CursorAdvance sub_F61F7B T_BStore_CopyRangeForward_Call
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF61D65 is an instruction boundary.
 ;           The name IS the address.
@@ -142406,7 +142465,7 @@ sub_F61D65:
 	pushw	iy	; F61D7F  push IY
 	ld	xwa, (3348:16)	; F61D80  ld XWA,(0x0d14)
 	ld	(BStore_CursorBlockAddr:16), xwa	; F61D84  ld (0x126e),XWA
-	call	sub_F5E2B9	; F61D88  call 0xf5e2b9
+	call	BStore_CursorStepBack	; F61D88  call 0xf5e2b9
 	ld	(3165:16), iy	; F61D8C  ld (0x0c5d),IY
 	ld	xwa, (BStore_CursorBlockAddr:16)	; F61D90  ld XWA,(0x126e)
 	sub	xwa, 6387712	; F61D94  sub XWA,0x00617800
@@ -142825,10 +142884,10 @@ AdvanceDelay_ClampTimingsAtTrackEnd:
 	pushw	bc	; F620B4  push BC
 	pushw	de	; F620B5  push DE
 	m_bit 7, MD16, 0x0dec	; F620B6  bit 7,(0x0dec)
-	jrl	nz, sub_F620AF_Join3	; F620BA  jrl NZ,0xf621b1
+	jrl	nz, AdvanceDelay_ClampTimingsAtTrackEnd_Join3	; F620BA  jrl NZ,0xf621b1
 	m_bit 0, MD16, 0x0c8a	; F620BD  bit 0,(0x0c8a)
-	jrl	z, sub_F620AF_Skip7	; F620C1  jrl Z,0xf621ae
-sub_F620AF_Join:
+	jrl	z, AdvanceDelay_ClampTimingsAtTrackEnd_Skip7	; F620C1  jrl Z,0xf621ae
+AdvanceDelay_ClampTimingsAtTrackEnd_Join:
 	xor	hl, hl	; F620C4  xor HL,HL
 	ld	iy, (3338:16)	; F620C6  ld IY,(0x0d0a)
 	push	xhl	; F620CA  push XHL
@@ -142837,39 +142896,39 @@ sub_F620AF_Join:
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F620D3  ld A,(XHL+IY)
 	pop	xhl	; F620D8  pop XHL
 	cp	a, 129	; F620D9  cp A,0x81
-	jrl	z, sub_F620AF_Skip6	; F620DC  jrl Z,0xf621ac
+	jrl	z, AdvanceDelay_ClampTimingsAtTrackEnd_Skip6	; F620DC  jrl Z,0xf621ac
 	cp	a, 130	; F620DF  cp A,0x82
-	jrl	z, sub_F620AF_Skip7	; F620E2  jrl Z,0xf621ae
+	jrl	z, AdvanceDelay_ClampTimingsAtTrackEnd_Skip7	; F620E2  jrl Z,0xf621ae
 	cp	a, 208	; F620E5  cp A,0xd0
-	jr	z, sub_F620AF_Skip	; F620E8  jr Z,0xf62113
+	jr	z, AdvanceDelay_ClampTimingsAtTrackEnd_Skip	; F620E8  jr Z,0xf62113
 	cp	a, 209	; F620EA  cp A,0xd1
-	jr	z, sub_F620AF_Skip	; F620ED  jr Z,0xf62113
+	jr	z, AdvanceDelay_ClampTimingsAtTrackEnd_Skip	; F620ED  jr Z,0xf62113
 	cp	a, 210	; F620EF  cp A,0xd2
-	jr	z, sub_F620AF_Skip9	; F620F2  jr Z,0xf6211b
+	jr	z, AdvanceDelay_ClampTimingsAtTrackEnd_Skip9	; F620F2  jr Z,0xf6211b
 	cp	a, 211	; F620F4  cp A,0xd3
-	jr	z, sub_F620AF_Skip	; F620F7  jr Z,0xf62113
+	jr	z, AdvanceDelay_ClampTimingsAtTrackEnd_Skip	; F620F7  jr Z,0xf62113
 	cp	a, 128	; F620F9  cp A,0x80
-	jr	z, sub_F620AF_Skip9	; F620FC  jr Z,0xf6211b
+	jr	z, AdvanceDelay_ClampTimingsAtTrackEnd_Skip9	; F620FC  jr Z,0xf6211b
 	and	a, 240	; F620FE  and A,0xf0
 	cp	a, 144	; F62101  cp A,0x90
-	jr	z, sub_F620AF_Skip8	; F62104  jr Z,0xf6210b
+	jr	z, AdvanceDelay_ClampTimingsAtTrackEnd_Skip8	; F62104  jr Z,0xf6210b
 	cp	a, 176	; F62106  cp A,0xb0
-	jr	z, sub_F620AF_Skip8	; F62109  jr Z,0xf6210b
-sub_F620AF_Skip8:
+	jr	z, AdvanceDelay_ClampTimingsAtTrackEnd_Skip8	; F62109  jr Z,0xf6210b
+AdvanceDelay_ClampTimingsAtTrackEnd_Skip8:
 	ld	w, 5:opc	; F6210B  ld W,0x05
-	jr	sub_F620AF_Join4	; F6210D  jr T,0xf6211d
+	jr	AdvanceDelay_ClampTimingsAtTrackEnd_Join4	; F6210D  jr T,0xf6211d
 	ld	w, 0:opc	; F6210F  ld W,0x00
-	jr	sub_F620AF_Join4	; F62111  jr T,0xf6211d
-sub_F620AF_Skip:
+	jr	AdvanceDelay_ClampTimingsAtTrackEnd_Join4	; F62111  jr T,0xf6211d
+AdvanceDelay_ClampTimingsAtTrackEnd_Skip:
 	ld	w, 2:opc	; F62113  ld W,0x02
-	jr	sub_F620AF_Join4	; F62115  jr T,0xf6211d
+	jr	AdvanceDelay_ClampTimingsAtTrackEnd_Join4	; F62115  jr T,0xf6211d
 	ld	w, 1:opc	; F62117  ld W,0x01
-	jr	sub_F620AF_Join4	; F62119  jr T,0xf6211d
-sub_F620AF_Skip9:
+	jr	AdvanceDelay_ClampTimingsAtTrackEnd_Join4	; F62119  jr T,0xf6211d
+AdvanceDelay_ClampTimingsAtTrackEnd_Skip9:
 	ld	w, 3:opc	; F6211B  ld W,0x03
-sub_F620AF_Join4:
+AdvanceDelay_ClampTimingsAtTrackEnd_Join4:
 	xor	c, c	; F6211D  xor C,C
-sub_F620AF_Loop:
+AdvanceDelay_ClampTimingsAtTrackEnd_Loop:
 	pushw	wa	; F6211F  push WA
 	pushw	bc	; F62120  push BC
 	call	T_BStore_CursorAdvance	; F62121  call 0xf4279c
@@ -142879,16 +142938,16 @@ sub_F620AF_Loop:
 	jrl	nz, sub_F61C24_Loop2	; F6212C  jrl NZ,0xf61d5d
 	inc	1, c	; F6212F  inc 1,C
 	cp	w, c	; F62131  cp W,C
-	jr	z, sub_F620AF_Skip5	; F62133  jr Z,0xf62197
-sub_F620AF_Join2:
+	jr	z, AdvanceDelay_ClampTimingsAtTrackEnd_Skip5	; F62133  jr Z,0xf62197
+AdvanceDelay_ClampTimingsAtTrackEnd_Join2:
 	cp	c, 1:i3	; F62135  cp C,1
-	jr	nz, sub_F620AF_Skip2	; F62137  jr NZ,0xf62149
+	jr	nz, AdvanceDelay_ClampTimingsAtTrackEnd_Skip2	; F62137  jr NZ,0xf62149
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F62139  ld XHL,(0x126e)
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x5f	; F6213D  cp (XHL+IY),0x5f
-	jr	ugt, sub_F620AF_Skip3	; F62143  jr UGT,0xf62161
+	jr	ugt, AdvanceDelay_ClampTimingsAtTrackEnd_Skip3	; F62143  jr UGT,0xf62161
 	cp	c, w	; F62145  cp C,W
-	jr	z, sub_F620AF_Skip5	; F62147  jr Z,0xf62197
-sub_F620AF_Skip2:
+	jr	z, AdvanceDelay_ClampTimingsAtTrackEnd_Skip5	; F62147  jr Z,0xf62197
+AdvanceDelay_ClampTimingsAtTrackEnd_Skip2:
 	pushw	wa	; F62149  push WA
 	pushw	bc	; F6214A  push BC
 	call	T_BStore_CursorAdvance	; F6214B  call 0xf4279c
@@ -142898,11 +142957,11 @@ sub_F620AF_Skip2:
 	jrl	nz, sub_F61C24_Loop2	; F62156  jrl NZ,0xf61d5d
 	inc	1, c	; F62159  inc 1,C
 	cp	c, w	; F6215B  cp C,W
-	jr	z, sub_F620AF_Skip5	; F6215D  jr Z,0xf62197
-	jr	sub_F620AF_Join2	; F6215F  jr T,0xf62135
-sub_F620AF_Skip3:
+	jr	z, AdvanceDelay_ClampTimingsAtTrackEnd_Skip5	; F6215D  jr Z,0xf62197
+	jr	AdvanceDelay_ClampTimingsAtTrackEnd_Join2	; F6215F  jr T,0xf62135
+AdvanceDelay_ClampTimingsAtTrackEnd_Skip3:
 	m_bit 0, MD16, 0x0e1b	; F62161  bit 0,(0x0e1b)
-	jr	nz, sub_F620AF_Skip4	; F62165  jr NZ,0xf62182
+	jr	nz, AdvanceDelay_ClampTimingsAtTrackEnd_Skip4	; F62165  jr NZ,0xf62182
 	push	xwa	; F62167  push XWA
 	ld	wa, (3338:16)	; F62168  ld WA,(0x0d0a)
 	and	wa, 255	; F6216C  and WA,0x00ff
@@ -142911,26 +142970,26 @@ sub_F620AF_Skip3:
 	ld	(3615:16), xwa	; F62178  ld (0x0e1f),XWA
 	pop	xwa	; F6217C  pop XWA
 	m_or_mi8 MB16, 0x0e1b, 0x01	; F6217D  or (0x0e1b),0x01
-sub_F620AF_Skip4:
+AdvanceDelay_ClampTimingsAtTrackEnd_Skip4:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F62182  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F62186  ld A,(XHL+IY)
 	ld	a, 95:opc	; F6218B  ld A,0x5f
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F6218D  ld (XHL+IY),A
 	cp	c, w	; F62192  cp C,W
-	jrl	nz, sub_F620AF_Loop	; F62194  jrl NZ,0xf6211f
-sub_F620AF_Skip5:
+	jrl	nz, AdvanceDelay_ClampTimingsAtTrackEnd_Loop	; F62194  jrl NZ,0xf6211f
+AdvanceDelay_ClampTimingsAtTrackEnd_Skip5:
 	call	T_BStore_CursorAdvance	; F62197  call 0xf4279c
 	push	xwa	; F6219B  push XWA
 	ld	xwa, (BStore_CursorBlockAddr:16)	; F6219C  ld XWA,(0x126e)
 	ld	(3348:16), xwa	; F621A0  ld (0x0d14),XWA
 	pop	xwa	; F621A4  pop XWA
 	ld	(3338:16), iy	; F621A5  ld (0x0d0a),IY
-	jrl	sub_F620AF_Join	; F621A9  jrl T,0xf620c4
-sub_F620AF_Skip6:
-	jr	sub_F620AF_Join3	; F621AC  jr T,0xf621b1
-sub_F620AF_Skip7:
+	jrl	AdvanceDelay_ClampTimingsAtTrackEnd_Join	; F621A9  jrl T,0xf620c4
+AdvanceDelay_ClampTimingsAtTrackEnd_Skip6:
+	jr	AdvanceDelay_ClampTimingsAtTrackEnd_Join3	; F621AC  jr T,0xf621b1
+AdvanceDelay_ClampTimingsAtTrackEnd_Skip7:
 	calr	AdvanceDelay_EnsureBeatMarkBeforeEndTag	; F621AE  calr 0xf62201
-sub_F620AF_Join3:
+AdvanceDelay_ClampTimingsAtTrackEnd_Join3:
 	popw	de	; F621B1  pop DE
 	popw	bc	; F621B2  pop BC
 	pop	xhl	; F621B3  pop XHL
@@ -143019,7 +143078,7 @@ RoundMap_Bounds_B:
 ; AdvanceDelay_EnsureBeatMarkBeforeEndTag
 ; Called from: in-module: 0xF621AE
 ; Touches: nothing with an absolute address
-; Calls:   sub_F622AA sub_F6220D
+; Calls:   AdvanceDelay_ReadByteBeforeCursor AdvanceDelay_InsertBeatMarkBeforeEndTag
 ; Evidence: the label is here because it is the target of `calr 0xF62201` at
 ;           0xF621AE, the call that steps past the 72 bytes of
 ;           RoundMap_Bounds_A and _B; the address is an instruction boundary
@@ -143028,20 +143087,20 @@ RoundMap_Bounds_B:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; AdvanceDelay_EnsureBeatMarkBeforeEndTag: At the track's 0x82 end tag: unless the byte before it is already a 0x81
-;   (sub_F622AA reads it, following the +1 link at offset 5), sub_F6220D writes 0x81 over the 0x82 and a new 0x82
+;   (AdvanceDelay_ReadByteBeforeCursor reads it, following the +1 link at offset 5), AdvanceDelay_InsertBeatMarkBeforeEndTag writes 0x81 over the 0x82 and a new 0x82
 ;   after it (allocating and linking a block at offset 0xFF) and moves track (0x0C8E)'s end cursor onto it.
 ;   AdvanceDelay_ClampTimingsAtTrackEnd's last step. Basis: caller + caller header + body. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave8_a8.json)
 AdvanceDelay_EnsureBeatMarkBeforeEndTag:
-	calr	sub_F622AA	; F62201  calr 0xf622aa
+	calr	AdvanceDelay_ReadByteBeforeCursor	; F62201  calr 0xf622aa
 	cp	a, 129	; F62204  cp A,0x81
-	jr	z, sub_F62201_Return	; F62207  jr Z,0xf6220c
-	calr	sub_F6220D	; F62209  calr 0xf6220d
-sub_F62201_Return:
+	jr	z, AdvanceDelay_EnsureBeatMarkBeforeEndTag_Return	; F62207  jr Z,0xf6220c
+	calr	AdvanceDelay_InsertBeatMarkBeforeEndTag	; F62209  calr 0xf6220d
+AdvanceDelay_EnsureBeatMarkBeforeEndTag_Return:
 	ret	; F6220C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6220D
+; AdvanceDelay_InsertBeatMarkBeforeEndTag
 ; Called from: in-module: 0xF62209
 ; Touches: (0x0C8E) (0x126E)  |  0x60347E 0x6034A0 0x617800
 ; Calls:   T_BStore_AllocBlock_Veneer T_BStore_SeekBlock
@@ -143051,14 +143110,19 @@ sub_F62201_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6220D:
+; AdvanceDelay_InsertBeatMarkBeforeEndTag: At the cursor (block (0x126E), offset IY) on the track's 0x82 end tag:
+;   writes 0x81 over it and a new 0x82 after it, moving track (0x0C8E)'s saved end offset (0x6034A0) on; at offset
+;   0xFF it allocates and links a block (0x82 at +5, end cursor := it, 5), or does nothing when no block is free.
+;   AdvanceDelay_EnsureBeatMarkBeforeEndTag's write step. Basis: caller + caller header + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave9_d9.json)
+AdvanceDelay_InsertBeatMarkBeforeEndTag:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6220D  ld XHL,(0x126e)
 	push	xhl	; F62211  push XHL
 	push	xde	; F62212  push XDE
 	push	xix	; F62213  push XIX
 	push	xiy	; F62214  push XIY
 	cp	iy, 255	; F62215  cp IY,0x00ff
-	jr	z, sub_F6220D_Skip	; F62219  jr Z,0xf6223f
+	jr	z, AdvanceDelay_InsertBeatMarkBeforeEndTag_Skip	; F62219  jr Z,0xf6223f
 	mx_ld_mi8 MXD, ra_HL, ra_IY, 0x81	; F6221B  ld (XHL+IY),0x81
 	inc	1, iy	; F62221  inc 1,IY
 	mx_ld_mi8 MXD, ra_HL, ra_IY, 0x82	; F62223  ld (XHL+IY),0x82
@@ -143068,10 +143132,10 @@ sub_F6220D:
 	ld	c, (3214:16)	; F62232  ld C,(0x0c8e)
 	dec	1, c	; F62236  dec 1,C
 	mx_st_mr8 MXD, ra_IX, ra_BC, 5	; F62238  ld (XIX+BC),E
-	jr	sub_F6220D_Join	; F6223D  jr T,0xf622a1
-sub_F6220D_Skip:
+	jr	AdvanceDelay_InsertBeatMarkBeforeEndTag_Join	; F6223D  jr T,0xf622a1
+AdvanceDelay_InsertBeatMarkBeforeEndTag_Skip:
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F6223F  cp (0x6034ba),0x0000
-	jr	z, sub_F6220D_Join	; F62246  jr Z,0xf622a1
+	jr	z, AdvanceDelay_InsertBeatMarkBeforeEndTag_Join	; F62246  jr Z,0xf622a1
 	mx_ld_mi8 MXD, ra_HL, ra_IY, 0x81	; F62248  ld (XHL+IY),0x81
 	push	xhl	; F6224E  push XHL
 	call	T_BStore_AllocBlock_Veneer	; F6224F  call 0xf42884
@@ -143100,7 +143164,7 @@ sub_F6220D_Skip:
 	ld	xhl, 6304928	; F62293  ld XHL,0x006034a0
 	srl	bc, 1	; F62298  srl 0x01,BC
 	mx_ld_mi8 MXD, ra_HL, ra_BC, 0x05	; F6229B  ld (XHL+BC),0x05
-sub_F6220D_Join:
+AdvanceDelay_InsertBeatMarkBeforeEndTag_Join:
 	pop	xiy	; F622A1  pop XIY
 	pop	xix	; F622A2  pop XIX
 	pop	xde	; F622A3  pop XDE
@@ -143109,7 +143173,7 @@ sub_F6220D_Join:
 	ret	; F622A9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F622AA
+; AdvanceDelay_ReadByteBeforeCursor
 ; Called from: in-module: 0xF62201
 ; Touches: (0x0FD6) (0x126E)
 ; Calls:   T_BStore_SeekBlock
@@ -143119,21 +143183,25 @@ sub_F6220D_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F622AA:
+; AdvanceDelay_ReadByteBeforeCursor: A = the byte before the cursor (block (0x126E), offset IY): offset - 1, or at
+;   offset 5 the last byte (0xFF) of the +1 previous block; cursor block address and IY preserved, (0x0FD6) := IY.
+;   AdvanceDelay_EnsureBeatMarkBeforeEndTag tests it for 0x81. Basis: caller + caller header + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave9_d9.json)
+AdvanceDelay_ReadByteBeforeCursor:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F622AA  ld XHL,(0x126e)
 	push	xhl	; F622AE  push XHL
 	push	xiy	; F622AF  push XIY
 	ld	(4054:16), iy	; F622B0  ld (0x0fd6),IY
 	cp	iy, 5:i3	; F622B4  cp IY,5
-	jr	nz, sub_F622AA_Skip	; F622B6  jr NZ,0xf622c8
+	jr	nz, AdvanceDelay_ReadByteBeforeCursor_Skip	; F622B6  jr NZ,0xf622c8
 	ld	hl, (xhl+1)	; F622B8  ld HL,(XHL+0x01)
 	call	T_BStore_SeekBlock	; F622BB  call 0xf427bc
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F622BF  ld XHL,(0x126e)
 	ldw	iy, 255	; F622C3  ld IY,0x00ff
-	jr	sub_F622AA_Join	; F622C6  jr T,0xf622ca
-sub_F622AA_Skip:
+	jr	AdvanceDelay_ReadByteBeforeCursor_Join	; F622C6  jr T,0xf622ca
+AdvanceDelay_ReadByteBeforeCursor_Skip:
 	dec	1, iy	; F622C8  dec 1,IY
-sub_F622AA_Join:
+AdvanceDelay_ReadByteBeforeCursor_Join:
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F622CA  ld A,(XHL+IY)
 	pop	xiy	; F622CF  pop XIY
 	pop	xhl	; F622D0  pop XHL
@@ -143277,7 +143345,7 @@ sub_F622AA_Join:
 ;   name the three targets directly.
 ; --------------------------------------------------------------------------
 BStore_Veneers:		; <- T_BStore_Veneers
-	jr	sub_F622AA_Join2	; F62C00  jr T,0xf62c66
+	jr	BStore_LoadGeometry_Call_Join2	; F62C00  jr T,0xf62c66
 sub_F62C02:
 	jrl	sub_F64A7A	; F62C02  jrl T,0xf64a7a
 ; SongGmFlag_OnEventPassB_Veneer: Veneer (`jrl` to 0xF64A9F, still the local label sub_F64A34_Join) for
@@ -143382,7 +143450,7 @@ BStore_LoadGeometry_Call:		; <- T_BStore_LoadGeometry_Call
 	ret	; F62C61  ret
 	calr	sub_F63C02	; F62C62  calr 0xf63c02
 	ret	; F62C65  ret
-sub_F622AA_Join2:
+BStore_LoadGeometry_Call_Join2:
 	calr	BStore_ApplyTrackPartChange	; F62C66  calr 0xf63c41
 	ret	; F62C69  ret
 	calr	SongEdit_CheckAllTracksToStartMeasure	; F62C6A  calr 0xf6452b
@@ -143814,16 +143882,16 @@ CycleRecord_StepCopySrcToNextBlock_Copy:
 	add	xwa, (BStore_HeapBase:16)	; F63049  add XWA,(0x3604)
 	ld	(BStore_CursorBlockAddr:16), xwa	; F6304D  ld (0x126e),XWA
 	m_bit 7, MDI+r0, 0	; F63051  bit 7,(XWA)
-	jr	nz, sub_F63031_Skip	; F63053  jr NZ,0xf6305c
+	jr	nz, CycleRecord_StepCopySrcToNextBlock_Copy_Skip	; F63053  jr NZ,0xf6305c
 	ld	(BStore_ErrorCode:16), 11	; F63055  ld (0x0d4a),0x0b
-	jr	sub_F63031_Return	; F6305A  jr T,0xf63069
-sub_F63031_Skip:
+	jr	CycleRecord_StepCopySrcToNextBlock_Copy_Return	; F6305A  jr T,0xf63069
+CycleRecord_StepCopySrcToNextBlock_Copy_Skip:
 	push	xwa	; F6305C  push XWA
 	ld	xwa, (BStore_CursorBlockAddr:16)	; F6305D  ld XWA,(0x126e)
 	ld	(BStore_CopySrcAddr:16), xwa	; F63061  ld (0x0c63),XWA
 	pop	xwa	; F63065  pop XWA
 	ldw	iy, 5	; F63066  ld IY,0x0005
-sub_F63031_Return:
+CycleRecord_StepCopySrcToNextBlock_Copy_Return:
 	ret	; F63069  ret
 ; BStore_CopyRangeBackward: Copies the chain bytes from the cursor (block DE, offset (0x0C6B)) up to the source end
 ;   (block (0x0C61), offset (0x0C67)) so they end at the destination end ((0x0C57)/(0x0C5D)), back to front with LDDR,
@@ -144008,7 +144076,7 @@ BStore_CopyAcrossBlocksBackward:
 	push	xde	; F63281  push XDE
 	push	xhl	; F63282  push XHL
 	cp	bc, 0:i3	; F63283  cp BC,0
-	jr	z, sub_F63280_Epilogue	; F63285  jr Z,0xf632a5
+	jr	z, BStore_CopyAcrossBlocksBackward_Epilogue	; F63285  jr Z,0xf632a5
 	ld	xhl, (BStore_CopySrcAddr:16)	; F63287  ld XHL,(0x0c63)
 	ld	xde, (BStore_CopyDestAddr:16)	; F6328B  ld XDE,(0x0c59)
 	extz	xiy	; F6328F  extz XIY
@@ -144020,7 +144088,7 @@ BStore_CopyAcrossBlocksBackward:
 	sub	xde, (BStore_CopyDestAddr:16)	; F6329D  sub XDE,(0x0c59)
 	ld	iy, hl	; F632A1  ld IY,HL
 	ld	ix, de	; F632A3  ld IX,DE
-sub_F63280_Epilogue:
+BStore_CopyAcrossBlocksBackward_Epilogue:
 	pop	xhl	; F632A5  pop XHL
 	pop	xde	; F632A6  pop XDE
 	popw	wa	; F632A7  pop WA
@@ -144041,14 +144109,14 @@ BStore_CopySrcToPrevBlock:
 	add	xwa, (BStore_HeapBase:16)	; F632C1  add XWA,(0x3604)
 	ld	(BStore_CursorBlockAddr:16), xwa	; F632C5  ld (0x126e),XWA
 	m_bit 7, MDI+r0, 0	; F632C9  bit 7,(XWA)
-	jr	nz, sub_F632A9_Skip	; F632CB  jr NZ,0xf632d4
+	jr	nz, BStore_CopySrcToPrevBlock_Skip	; F632CB  jr NZ,0xf632d4
 	ld	(BStore_ErrorCode:16), 11	; F632CD  ld (0x0d4a),0x0b
-	jr	sub_F632A9_Return	; F632D2  jr T,0xf632df
-sub_F632A9_Skip:
+	jr	BStore_CopySrcToPrevBlock_Return	; F632D2  jr T,0xf632df
+BStore_CopySrcToPrevBlock_Skip:
 	ld	xwa, (BStore_CursorBlockAddr:16)	; F632D4  ld XWA,(0x126e)
 	ld	(BStore_CopySrcAddr:16), xwa	; F632D8  ld (0x0c63),XWA
 	ldw	iy, 255	; F632DC  ld IY,0x00ff
-sub_F632A9_Return:
+BStore_CopySrcToPrevBlock_Return:
 	ret	; F632DF  ret
 ; BStore_CopyDestToPrevBlock: Steps BStore_CopyRangeBackward's destination to the previous block: (0x0C57) := the +1
 ;   PREVIOUS link of block (0x0C59), (0x0C59) := its address, IX = 0xFF; error 11 when that block is not allocated.
@@ -144066,14 +144134,14 @@ BStore_CopyDestToPrevBlock:
 	add	xwa, (BStore_HeapBase:16)	; F632F8  add XWA,(0x3604)
 	ld	(BStore_CursorBlockAddr:16), xwa	; F632FC  ld (0x126e),XWA
 	m_bit 7, MDI+r0, 0	; F63300  bit 7,(XWA)
-	jr	nz, sub_F632E0_Skip	; F63302  jr NZ,0xf6330b
+	jr	nz, BStore_CopyDestToPrevBlock_Skip	; F63302  jr NZ,0xf6330b
 	ld	(BStore_ErrorCode:16), 11	; F63304  ld (0x0d4a),0x0b
-	jr	sub_F632E0_Return	; F63309  jr T,0xf63316
-sub_F632E0_Skip:
+	jr	BStore_CopyDestToPrevBlock_Return	; F63309  jr T,0xf63316
+BStore_CopyDestToPrevBlock_Skip:
 	ld	xwa, (BStore_CursorBlockAddr:16)	; F6330B  ld XWA,(0x126e)
 	ld	(BStore_CopyDestAddr:16), xwa	; F6330F  ld (0x0c59),XWA
 	ldw	ix, 255	; F63313  ld IX,0x00ff
-sub_F632E0_Return:
+BStore_CopyDestToPrevBlock_Return:
 	ret	; F63316  ret
 ; BStore_MovePosForward: Moves the chain position (block (0x0CE8), offset (0x0CEA)) forward by BStore_AllocBytesWanted
 ;   bytes, following +3 next links (251 payload bytes per block, resuming at offset 5); error 10 past
@@ -144478,7 +144546,7 @@ Seq_FindMasterTrack_Return:
 ;   tag-0x87 records and at the first 0x81 beat mark lets BStore_TimeSigAdvanceOneMeasure leave the time-sig cursor (0x0CF0)/(0x0CF4) at
 ;   measure 2; a 0x82 or 0x84 tag before any beat mark sets (0x0C8A) bit 5 and keeps the default. BStore_CursorBlock
 ;   is preserved. BStore_TimeSigNextMeasure_Call's target (sub_F63749) continues from that cursor. Behind the
-;   BStore_LoadStartBeatsPerBar stub; BStore_SeekMeasure and sub_F4B771 start with it. Basis: callers + body.
+;   BStore_LoadStartBeatsPerBar stub; BStore_SeekMeasure and CycleRecord_BeatsBeforeMeasureFromTimeSigs start with it. Basis: callers + body.
 ;   (notes/naming-pilot-2026-10-06/proposals_wave4_k.json)
 BStore_TimeSigFirstMeasure:		; <- T_BStore_TimeSigFirstMeasure
 	m_push MW16, BStore_CursorBlock	; F6364D  pushw (0x345c)
@@ -145229,9 +145297,9 @@ BStore_RewriteTrackForPart:
 	ldw	(3216:16), 1	; F63CF0  ld (0x0c90),0x0001
 	calr	BStore_SeekMeasure	; F63CF6  calr 0xf62cfe
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F63CF9  cp (0x0d4a),0x00
-	jr	z, sub_F63CE0_Skip	; F63CFE  jr Z,0xf63d03
+	jr	z, BStore_RewriteTrackForPart_Skip	; F63CFE  jr Z,0xf63d03
 	jrl	sub_F63CE0_Return	; F63D00  jrl T,0xf63f87
-sub_F63CE0_Skip:
+BStore_RewriteTrackForPart_Skip:
 	push	xhl	; F63D03  push XHL
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F63D04  ld XHL,(0x126e)
 	ld	(3254:16), xhl	; F63D08  ld (0x0cb6),XHL
@@ -145242,7 +145310,7 @@ sub_F63CE0_Skip:
 	ld	(3262:16), iy	; F63D19  ld (0x0cbe),IY
 	ld	(3260:16), wa	; F63D1D  ld (0x0cbc),WA
 	ld	ix, iy	; F63D21  ld IX,IY
-sub_F63CE0_Loop:
+BStore_RewriteTrackForPart_Loop:
 	push	xde	; F63D23  push XDE
 	ld	xde, (BStore_CursorBlockAddr:16)	; F63D24  ld XDE,(0x126e)
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F63D28  ld A,(XDE+IY)
@@ -145250,37 +145318,37 @@ sub_F63CE0_Loop:
 	cp	a, 130	; F63D2E  cp A,0x82
 	jrl	z, sub_F63CE0_Skip16	; F63D31  jrl Z,0xf63f6e
 	cp	a, 129	; F63D34  cp A,0x81
-	jr	z, sub_F63CE0_Loop3	; F63D37  jr Z,0xf63d83
+	jr	z, BStore_RewriteTrackForPart_Loop3	; F63D37  jr Z,0xf63d83
 	cp	a, 128	; F63D39  cp A,0x80
-	jr	z, sub_F63CE0_Loop3	; F63D3C  jr Z,0xf63d83
+	jr	z, BStore_RewriteTrackForPart_Loop3	; F63D3C  jr Z,0xf63d83
 	cp	a, 210	; F63D3E  cp A,0xd2
-	jr	z, sub_F63CE0_Skip2	; F63D41  jr Z,0xf63d7d
+	jr	z, BStore_RewriteTrackForPart_Skip2	; F63D41  jr Z,0xf63d7d
 	cp	a, 209	; F63D43  cp A,0xd1
-	jr	z, sub_F63CE0_Skip2	; F63D46  jr Z,0xf63d7d
+	jr	z, BStore_RewriteTrackForPart_Skip2	; F63D46  jr Z,0xf63d7d
 	cp	a, 133	; F63D48  cp A,0x85
-	jr	z, sub_F63CE0_Loop3	; F63D4B  jr Z,0xf63d83
+	jr	z, BStore_RewriteTrackForPart_Loop3	; F63D4B  jr Z,0xf63d83
 	cp	a, 134	; F63D4D  cp A,0x86
-	jr	z, sub_F63CE0_Loop3	; F63D50  jr Z,0xf63d83
+	jr	z, BStore_RewriteTrackForPart_Loop3	; F63D50  jr Z,0xf63d83
 	cp	a, 211	; F63D52  cp A,0xd3
-	jr	z, sub_F63CE0_Loop3	; F63D55  jr Z,0xf63d83
+	jr	z, BStore_RewriteTrackForPart_Loop3	; F63D55  jr Z,0xf63d83
 	ld	(4696:16), a	; F63D57  ld (0x1258),A
 	ld	w, 240:opc	; F63D5B  ld W,0xf0
 	and	w, a	; F63D5D  and W,A
 	cp	w, 144	; F63D5F  cp W,0x90
-	jr	z, sub_F63CE0_Loop3	; F63D62  jr Z,0xf63d83
+	jr	z, BStore_RewriteTrackForPart_Loop3	; F63D62  jr Z,0xf63d83
 	cp	w, 192	; F63D64  cp W,0xc0
 	jr	z, sub_F63CE0_Entry	; F63D67  jr Z,0xf63dc1
 	cp	w, 176	; F63D69  cp W,0xb0
 	jrl	z, sub_F63CE0_Skip4	; F63D6C  jrl Z,0xf63e4a
-sub_F63CE0_Loop2:
+BStore_RewriteTrackForPart_Loop2:
 	call	T_BStore_ReadCursorAdvance_Call	; F63D6F  call 0xf4270c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F63D73  cp (0x0d4a),0x00
-	jr	z, sub_F63CE0_Loop	; F63D78  jr Z,0xf63d23
+	jr	z, BStore_RewriteTrackForPart_Loop	; F63D78  jr Z,0xf63d23
 	jrl	sub_F63CE0_Return	; F63D7A  jrl T,0xf63f87
-sub_F63CE0_Skip2:
+BStore_RewriteTrackForPart_Skip2:
 	m_bit 0, MD16, 0x0d45	; F63D7D  bit 0,(0x0d45)
-	jr	nz, sub_F63CE0_Loop2	; F63D81  jr NZ,0xf63d6f
-sub_F63CE0_Loop3:
+	jr	nz, BStore_RewriteTrackForPart_Loop2	; F63D81  jr NZ,0xf63d6f
+BStore_RewriteTrackForPart_Loop3:
 	push	xhl	; F63D83  push XHL
 	ld	xhl, (3254:16)	; F63D84  ld XHL,(0x0cb6)
 	mx_st_mr8 MXD, ra_HL, ra_IX, 1	; F63D88  ld (XHL+IX),A
@@ -145295,18 +145363,18 @@ sub_F63CE0_Loop3:
 	ld	xde, (BStore_CursorBlockAddr:16)	; F63DA7  ld XDE,(0x126e)
 	mx_bit 7, MXD, ra_DE, ra_IY	; F63DAB  bit 7,(XDE+IY)
 	pop	xde	; F63DB0  pop XDE
-	jrl	nz, sub_F63CE0_Loop	; F63DB1  jrl NZ,0xf63d23
+	jrl	nz, BStore_RewriteTrackForPart_Loop	; F63DB1  jrl NZ,0xf63d23
 	push	xde	; F63DB4  push XDE
 	ld	xde, (BStore_CursorBlockAddr:16)	; F63DB5  ld XDE,(0x126e)
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F63DB9  ld A,(XDE+IY)
 	pop	xde	; F63DBE  pop XDE
-	jr	sub_F63CE0_Loop3	; F63DBF  jr T,0xf63d83
+	jr	BStore_RewriteTrackForPart_Loop3	; F63DBF  jr T,0xf63d83
 sub_F63CE0_Entry:
 	m_rd_ld_rr2x RBX, 0x3C, r1	; F63DC1  ld RL3,A
 	ld	a, (3397:16)	; F63DC4  ld A,(0x0d45)
 	and	a, 3	; F63DC8  and A,0x03
 	m_rd_ld_rrx RBX, 0x3C, r1	; F63DCB  ld A,RL3
-	jr	nz, sub_F63CE0_Loop2	; F63DCE  jr NZ,0xf63d6f
+	jr	nz, BStore_RewriteTrackForPart_Loop2	; F63DCE  jr NZ,0xf63d6f
 	push	xiz	; F63DD0  push XIZ
 	ld	xiz, (BStore_CursorBlockAddr:16)	; F63DD1  ld XIZ,(0x126e)
 	m_rd_ld_rr2x RLX, 0x38, r6	; F63DD5  ld XDE3,XIZ
@@ -145325,7 +145393,7 @@ sub_F63CE0_Entry:
 	ld	(BStore_CursorBlockAddr:16), xiz	; F63DF2  ld (0x126e),XIZ
 	pop	xiz	; F63DF6  pop XIZ
 	cp	l, 0:i3	; F63DF7  cp L,0
-	jrl	nz, sub_F63CE0_Loop2	; F63DF9  jrl NZ,0xf63d6f
+	jrl	nz, BStore_RewriteTrackForPart_Loop2	; F63DF9  jrl NZ,0xf63d6f
 	xor	c, c	; F63DFC  xor C,C
 sub_F63CE0_Join:
 	cp	c, 2:i3	; F63DFE  cp C,2
@@ -145351,7 +145419,7 @@ sub_F63CE0_Skip3:
 	ld	xde, (BStore_CursorBlockAddr:16)	; F63E30  ld XDE,(0x126e)
 	mx_bit 7, MXD, ra_DE, ra_IY	; F63E34  bit 7,(XDE+IY)
 	pop	xde	; F63E39  pop XDE
-	jrl	nz, sub_F63CE0_Loop	; F63E3A  jrl NZ,0xf63d23
+	jrl	nz, BStore_RewriteTrackForPart_Loop	; F63E3A  jrl NZ,0xf63d23
 	push	xde	; F63E3D  push XDE
 	ld	xde, (BStore_CursorBlockAddr:16)	; F63E3E  ld XDE,(0x126e)
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F63E42  ld A,(XDE+IY)
@@ -145385,8 +145453,8 @@ sub_F63CE0_Skip4:
 	m_bit 0, MD16, 0x0d46	; F63E8D  bit 0,(0x0d46)
 	jr	nz, sub_F63CE0_Skip5	; F63E91  jr NZ,0xf63e9d
 	m_bit 2, MD16, 0x0d46	; F63E93  bit 2,(0x0d46)
-	jrl	nz, sub_F63CE0_Loop3	; F63E97  jrl NZ,0xf63d83
-	jrl	sub_F63CE0_Loop2	; F63E9A  jrl T,0xf63d6f
+	jrl	nz, BStore_RewriteTrackForPart_Loop3	; F63E97  jrl NZ,0xf63d83
+	jrl	BStore_RewriteTrackForPart_Loop2	; F63E9A  jrl T,0xf63d6f
 sub_F63CE0_Skip5:
 	xor	c, c	; F63E9D  xor C,C
 sub_F63CE0_Join2:
@@ -145471,7 +145539,7 @@ sub_F63CE0_Join3:
 	ld	xde, (BStore_CursorBlockAddr:16)	; F63F53  ld XDE,(0x126e)
 	mx_bit 7, MXD, ra_DE, ra_IY	; F63F57  bit 7,(XDE+IY)
 	pop	xde	; F63F5C  pop XDE
-	jrl	nz, sub_F63CE0_Loop	; F63F5D  jrl NZ,0xf63d23
+	jrl	nz, BStore_RewriteTrackForPart_Loop	; F63F5D  jrl NZ,0xf63d23
 	push	xde	; F63F60  push XDE
 	ld	xde, (BStore_CursorBlockAddr:16)	; F63F61  ld XDE,(0x126e)
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F63F65  ld A,(XDE+IY)
@@ -146376,27 +146444,27 @@ SongEdit_PadDestTrackToMeasure:		; <- T_SongEdit_PadDestTrackToMeasure
 	ld	(BStore_ErrorCode:16), 0	; F6487D  ld (0x0d4a),0x00
 	calr	SongEdit_CountDestTrackMeasures	; F64882  calr 0xf648f2
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F64885  cp (0x0d4a),0x00
-	jr	nz, sub_F64838_Return	; F6488A  jr NZ,0xf648f1
+	jr	nz, SongEdit_PadDestTrackToMeasure_Return	; F6488A  jr NZ,0xf648f1
 	ld	wa, (3189:16)	; F6488C  ld WA,(0x0c75)
 	sub	wa, de	; F64890  sub WA,DE
 	dec	1, wa	; F64892  dec 1,WA
 	ld	(3404:16), wa	; F64894  ld (0x0d4c),WA
 	calr	SongEdit_SizeDestTrackPadding	; F64898  calr 0xf6498d
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F6489B  cp (0x0d4a),0x00
-	jr	nz, sub_F64838_Return	; F648A0  jr NZ,0xf648f1
+	jr	nz, SongEdit_PadDestTrackToMeasure_Return	; F648A0  jr NZ,0xf648f1
 	ld	wa, (3276:16)	; F648A2  ld WA,(0x0ccc)
 	ld	(BStore_LinkBlock:16), wa	; F648A6  ld (0x0cc0),WA
 	ld	wa, (3278:16)	; F648AA  ld WA,(0x0cce)
 	ld	(BStore_LastBlockUsed:16), wa	; F648AE  ld (0x0cc6),WA
 	calr	BStore_AllocChain	; F648B2  calr 0xf63988
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F648B5  cp (0x0d4a),0x00
-	jr	nz, sub_F64838_Return	; F648BA  jr NZ,0xf648f1
+	jr	nz, SongEdit_PadDestTrackToMeasure_Return	; F648BA  jr NZ,0xf648f1
 	ld	(3300:16), de	; F648BC  ld (0x0ce4),DE
 	ld	wa, (BStore_LastBlockFree:16)	; F648C0  ld WA,(0x0d08)
 	ld	(3302:16), wa	; F648C4  ld (0x0ce6),WA
 	calr	SongEdit_WriteDestTrackPadding	; F648C8  calr 0xf64a34
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F648CB  cp (0x0d4a),0x00
-	jr	nz, sub_F64838_Return	; F648D0  jr NZ,0xf648f1
+	jr	nz, SongEdit_PadDestTrackToMeasure_Return	; F648D0  jr NZ,0xf648f1
 	xor	wa, wa	; F648D2  xor WA,WA
 	ld	a, (3215:16)	; F648D4  ld A,(0x0c8f)
 	ld	(3354:16), wa	; F648D8  ld (0x0d1a),WA
@@ -146406,7 +146474,7 @@ SongEdit_PadDestTrackToMeasure:		; <- T_SongEdit_PadDestTrackToMeasure
 	ld	(3159:16), wa	; F648E6  ld (0x0c57),WA
 	ld	(3276:16), wa	; F648EA  ld (0x0ccc),WA
 	calr	BStore_SaveCursor	; F648EE  calr 0xf63924
-sub_F64838_Return:
+SongEdit_PadDestTrackToMeasure_Return:
 	ret	; F648F1  ret
 ; SongEdit_CountDestTrackMeasures: MEASURE COPY: counts the measures of destination track (0x0C8F) -- seeks it to
 ;   measure 1 (BStore_SeekMeasure, time signatures from the master track found by Seq_FindMasterTrack), then walks
@@ -146421,25 +146489,25 @@ SongEdit_CountDestTrackMeasures:
 	ldw	(3216:16), 1	; F648FE  ld (0x0c90),0x0001
 	calr	BStore_SeekMeasure	; F64904  calr 0xf62cfe
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F64907  cp (0x0d4a),0x00
-	jrl	nz, sub_F648F2_Return	; F6490C  jrl NZ,0xf6498c
+	jrl	nz, SongEdit_CountDestTrackMeasures_Return	; F6490C  jrl NZ,0xf6498c
 	ld	(3262:16), iy	; F6490F  ld (0x0cbe),IY
 	ld	wa, (BStore_CursorBlock:16)	; F64913  ld WA,(0x345c)
 	ld	(3260:16), wa	; F64917  ld (0x0cbc),WA
 	xor	de, de	; F6491B  xor DE,DE
-sub_F648F2_Join:
+SongEdit_CountDestTrackMeasures_Join:
 	xor	c, c	; F6491D  xor C,C
-sub_F648F2_Join2:
+SongEdit_CountDestTrackMeasures_Join2:
 	m_cp_rm MB16, 0x0d1c, 3	; F6491F  cp C,(0x0d1c)
-	jr	z, sub_F648F2_Skip2	; F64923  jr Z,0xf6495e
-sub_F648F2_Join3:
+	jr	z, SongEdit_CountDestTrackMeasures_Skip2	; F64923  jr Z,0xf6495e
+SongEdit_CountDestTrackMeasures_Join3:
 	push	xde	; F64925  push XDE
 	ld	xde, (BStore_CursorBlockAddr:16)	; F64926  ld XDE,(0x126e)
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F6492A  ld A,(XDE+IY)
 	pop	xde	; F6492F  pop XDE
 	cp	a, 130	; F64930  cp A,0x82
-	jr	z, sub_F648F2_Skip3	; F64933  jr Z,0xf6498a
+	jr	z, SongEdit_CountDestTrackMeasures_Skip3	; F64933  jr Z,0xf6498a
 	cp	a, 129	; F64935  cp A,0x81
-	jr	nz, sub_F648F2_Skip	; F64938  jr NZ,0xf6494d
+	jr	nz, SongEdit_CountDestTrackMeasures_Skip	; F64938  jr NZ,0xf6494d
 	inc	1, c	; F6493A  inc 1,C
 	pushw	de	; F6493C  push DE
 	pushw	bc	; F6493D  push BC
@@ -146447,18 +146515,18 @@ sub_F648F2_Join3:
 	popw	bc	; F64942  pop BC
 	popw	de	; F64943  pop DE
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F64944  cp (0x0d4a),0x00
-	jr	nz, sub_F648F2_Return	; F64949  jr NZ,0xf6498c
-	jr	sub_F648F2_Join2	; F6494B  jr T,0xf6491f
-sub_F648F2_Skip:
+	jr	nz, SongEdit_CountDestTrackMeasures_Return	; F64949  jr NZ,0xf6498c
+	jr	SongEdit_CountDestTrackMeasures_Join2	; F6494B  jr T,0xf6491f
+SongEdit_CountDestTrackMeasures_Skip:
 	pushw	de	; F6494D  push DE
 	pushw	bc	; F6494E  push BC
 	call	T_BStore_ReadCursorAdvance_Call	; F6494F  call 0xf4270c
 	popw	bc	; F64953  pop BC
 	popw	de	; F64954  pop DE
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F64955  cp (0x0d4a),0x00
-	jr	nz, sub_F648F2_Return	; F6495A  jr NZ,0xf6498c
-	jr	sub_F648F2_Join3	; F6495C  jr T,0xf64925
-sub_F648F2_Skip2:
+	jr	nz, SongEdit_CountDestTrackMeasures_Return	; F6495A  jr NZ,0xf6498c
+	jr	SongEdit_CountDestTrackMeasures_Join3	; F6495C  jr T,0xf64925
+SongEdit_CountDestTrackMeasures_Skip2:
 	push	xiz	; F6495E  push XIZ
 	ld	xiz, (BStore_CursorBlockAddr:16)	; F6495F  ld XIZ,(0x126e)
 	m_rd_ld_rr2x RLX, 0x38, r6	; F64963  ld XDE3,XIZ
@@ -146477,12 +146545,12 @@ sub_F648F2_Skip2:
 	ld	(BStore_CursorBlockAddr:16), xiz	; F6497A  ld (0x126e),XIZ
 	pop	xiz	; F6497E  pop XIZ
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F6497F  cp (0x0d4a),0x00
-	jr	nz, sub_F648F2_Return	; F64984  jr NZ,0xf6498c
+	jr	nz, SongEdit_CountDestTrackMeasures_Return	; F64984  jr NZ,0xf6498c
 	inc	1, de	; F64986  inc 1,DE
-	jr	sub_F648F2_Join	; F64988  jr T,0xf6491d
-sub_F648F2_Skip3:
+	jr	SongEdit_CountDestTrackMeasures_Join	; F64988  jr T,0xf6491d
+SongEdit_CountDestTrackMeasures_Skip3:
 	inc	1, de	; F6498A  inc 1,DE
-sub_F648F2_Return:
+SongEdit_CountDestTrackMeasures_Return:
 	ret	; F6498C  ret
 ; SongEdit_SizeDestTrackPadding: MEASURE COPY: BStore_AllocBytesWanted := the 0x81 beat marks that complete
 ;   destination track (0x0C8F)'s last measure ((0x0D1C) minus the marks already in it, after BStore_SeekMeasure to
@@ -146496,27 +146564,27 @@ SongEdit_SizeDestTrackPadding:
 	ld	(3216:16), de	; F6499A  ld (0x0c90),DE
 	calr	BStore_SeekMeasure	; F6499E  calr 0xf62cfe
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F649A1  cp (0x0d4a),0x00
-	jrl	nz, sub_F6498D_Return	; F649A6  jrl NZ,0xf64a33
+	jrl	nz, SongEdit_SizeDestTrackPadding_Return	; F649A6  jrl NZ,0xf64a33
 	xor	bc, bc	; F649A9  xor BC,BC
 	ldw	(BStore_AllocBytesWanted:16), 0	; F649AB  ld (0x0cae),0x0000
-sub_F6498D_Join2:
+SongEdit_SizeDestTrackPadding_Join2:
 	push	xde	; F649B1  push XDE
 	ld	xde, (BStore_CursorBlockAddr:16)	; F649B2  ld XDE,(0x126e)
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F649B6  ld A,(XDE+IY)
 	pop	xde	; F649BB  pop XDE
 	cp	a, 130	; F649BC  cp A,0x82
-	jr	z, sub_F6498D_Skip2	; F649BF  jr Z,0xf649d6
+	jr	z, SongEdit_SizeDestTrackPadding_Skip2	; F649BF  jr Z,0xf649d6
 	cp	a, 129	; F649C1  cp A,0x81
-	jr	nz, sub_F6498D_Skip	; F649C4  jr NZ,0xf649c8
+	jr	nz, SongEdit_SizeDestTrackPadding_Skip	; F649C4  jr NZ,0xf649c8
 	inc	1, c	; F649C6  inc 1,C
-sub_F6498D_Skip:
+SongEdit_SizeDestTrackPadding_Skip:
 	pushw	bc	; F649C8  push BC
 	calr	BStore_CursorAdvance	; F649C9  calr 0xf635c9
 	popw	bc	; F649CC  pop BC
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F649CD  cp (0x0d4a),0x00
-	jr	nz, sub_F6498D_Return	; F649D2  jr NZ,0xf64a33
-	jr	sub_F6498D_Join2	; F649D4  jr T,0xf649b1
-sub_F6498D_Skip2:
+	jr	nz, SongEdit_SizeDestTrackPadding_Return	; F649D2  jr NZ,0xf64a33
+	jr	SongEdit_SizeDestTrackPadding_Join2	; F649D4  jr T,0xf649b1
+SongEdit_SizeDestTrackPadding_Skip2:
 	ld	a, (3356:16)	; F649D6  ld A,(0x0d1c)
 	sub	a, c	; F649DA  sub A,C
 	xor	w, w	; F649DC  xor W,W
@@ -146535,9 +146603,9 @@ sub_F6498D_Skip2:
 	nop	; F649ED  nop
 	nop	; F649EE  nop
 	xor	de, de	; F649EF  xor DE,DE
-sub_F6498D_Join:
+SongEdit_SizeDestTrackPadding_Join:
 	m_cp_rm MW16, 0x0d4c, 2	; F649F1  cp DE,(0x0d4c)
-	jr	z, sub_F6498D_Skip3	; F649F5  jr Z,0xf64a2f
+	jr	z, SongEdit_SizeDestTrackPadding_Skip3	; F649F5  jr Z,0xf64a2f
 	push	xiz	; F649F7  push XIZ
 	ld	xiz, (BStore_CursorBlockAddr:16)	; F649F8  ld XIZ,(0x126e)
 	m_rd_ld_rr2x RLX, 0x38, r6	; F649FC  ld XDE3,XIZ
@@ -146558,15 +146626,15 @@ sub_F6498D_Join:
 	ld	(BStore_CursorBlockAddr:16), xiz	; F64A15  ld (0x126e),XIZ
 	pop	xiz	; F64A19  pop XIZ
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F64A1A  cp (0x0d4a),0x00
-	jr	nz, sub_F6498D_Return	; F64A1F  jr NZ,0xf64a33
+	jr	nz, SongEdit_SizeDestTrackPadding_Return	; F64A1F  jr NZ,0xf64a33
 	inc	1, de	; F64A21  inc 1,DE
 	xor	wa, wa	; F64A23  xor WA,WA
 	ld	a, (3356:16)	; F64A25  ld A,(0x0d1c)
 	m_add_mr MW16, BStore_AllocBytesWanted, 0	; F64A29  add (0x0cae),WA
-	jr	sub_F6498D_Join	; F64A2D  jr T,0xf649f1
-sub_F6498D_Skip3:
+	jr	SongEdit_SizeDestTrackPadding_Join	; F64A2D  jr T,0xf649f1
+SongEdit_SizeDestTrackPadding_Skip3:
 	incw	1, (BStore_AllocBytesWanted:16)	; F64A2F  incw 1,(0x0cae)
-sub_F6498D_Return:
+SongEdit_SizeDestTrackPadding_Return:
 	ret	; F64A33  ret
 ; SongEdit_WriteDestTrackPadding: MEASURE COPY: from destination track's saved end cursor (block (0x0CCC) via
 ;   BStore_SeekBlock, offset (0x0CCE)) writes BStore_AllocBytesWanted-1 0x81 beat marks into the chain
@@ -146581,9 +146649,9 @@ SongEdit_WriteDestTrackPadding:
 	ld	iy, (3278:16)	; F64A44  ld IY,(0x0cce)
 	decw	1, (BStore_AllocBytesWanted:16)	; F64A48  decw 1,(0x0cae)
 	xor	de, de	; F64A4C  xor DE,DE
-sub_F64A34_Loop:
+SongEdit_WriteDestTrackPadding_Loop:
 	m_cp_mr MW16, BStore_AllocBytesWanted, 2	; F64A4E  cp (0x0cae),DE
-	jr	z, sub_F64A34_Skip	; F64A52  jr Z,0xf64a6f
+	jr	z, SongEdit_WriteDestTrackPadding_Skip	; F64A52  jr Z,0xf64a6f
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F64A54  ld XHL,(0x126e)
 	mx_ld_mi8 MXD, ra_HL, ra_IY, 0x81	; F64A58  ld (XHL+IY),0x81
 	inc	1, de	; F64A5E  inc 1,DE
@@ -146591,12 +146659,12 @@ sub_F64A34_Loop:
 	call	T_BStore_ReadCursorAdvance_Call	; F64A61  call 0xf4270c
 	popw	de	; F64A65  pop DE
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F64A66  cp (0x0d4a),0x00
-	jr	z, sub_F64A34_Loop	; F64A6B  jr Z,0xf64a4e
-	jr	sub_F64A34_Return	; F64A6D  jr T,0xf64a79
-sub_F64A34_Skip:
+	jr	z, SongEdit_WriteDestTrackPadding_Loop	; F64A6B  jr Z,0xf64a4e
+	jr	SongEdit_WriteDestTrackPadding_Return	; F64A6D  jr T,0xf64a79
+SongEdit_WriteDestTrackPadding_Skip:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F64A6F  ld XHL,(0x126e)
 	mx_ld_mi8 MXD, ra_HL, ra_IY, 0x82	; F64A73  ld (XHL+IY),0x82
-sub_F64A34_Return:
+SongEdit_WriteDestTrackPadding_Return:
 	ret	; F64A79  ret
 sub_F64A7A:		; <- T_F42824
 	ldw	(3106:16), 1	; F64A7A  ld (0x0c22),0x0001
@@ -146720,25 +146788,25 @@ BStore_Workspace_LoadFromBank:
 ;   body + twin. (notes/naming-pilot-2026-10-06/proposals_wave6_t.json)
 SongGmFlag_ApplyAndRebuildRouting:
 	m_cp_mi8 MB24, 0x6034c6, 0xff	; F64B7A  cp (0x6034c6),0xff
-	jr	z, sub_F64B7A_Skip	; F64B80  jr Z,0xf64b91
+	jr	z, SongGmFlag_ApplyAndRebuildRouting_Skip	; F64B80  jr Z,0xf64b91
 	m_bit 2, MD16, 0x7f4d	; F64B82  bit 2,(0x7f4d)
-	jr	z, sub_F64B7A_Skip2	; F64B86  jr Z,0xf64bb1
+	jr	z, SongGmFlag_ApplyAndRebuildRouting_Skip2	; F64B86  jr Z,0xf64bb1
 	m_and_mi8 MB16, 0x7f4d, 0xfb	; F64B88  and (0x7f4d),0xfb
 	xor	a, a	; F64B8D  xor A,A
-	jr	sub_F64B7A_Join	; F64B8F  jr T,0xf64b9e
-sub_F64B7A_Skip:
+	jr	SongGmFlag_ApplyAndRebuildRouting_Join	; F64B8F  jr T,0xf64b9e
+SongGmFlag_ApplyAndRebuildRouting_Skip:
 	m_bit 2, MD16, 0x7f4d	; F64B91  bit 2,(0x7f4d)
-	jr	nz, sub_F64B7A_Skip2	; F64B95  jr NZ,0xf64bb1
+	jr	nz, SongGmFlag_ApplyAndRebuildRouting_Skip2	; F64B95  jr NZ,0xf64bb1
 	m_or_mi8 MB16, 0x7f4d, 0x04	; F64B97  or (0x7f4d),0x04
 	ld	a, 4:opc	; F64B9C  ld A,0x04
-sub_F64B7A_Join:
+SongGmFlag_ApplyAndRebuildRouting_Join:
 	ld	(4684:16), 1	; F64B9E  ld (0x124c),0x01
 	ld	e, 145:opc	; F64BA3  ld E,0x91
 	ld	d, 3:opc	; F64BA5  ld D,0x03
 	ld	w, 4:opc	; F64BA7  ld W,0x04
 	call	T_Queue2C00_AppendRegs	; F64BA9  call 0xf40f38
 	call	T_Queue2C00_DrainPassAB	; F64BAD  call 0xf40018
-sub_F64B7A_Skip2:
+SongGmFlag_ApplyAndRebuildRouting_Skip2:
 	call	T_NoteRouting_RebuildForSong	; F64BB1  call 0xf411b8
 	ret	; F64BB5  ret
 ; BStore_MoveWorkspaceToNextBank: (0x0E2B) / (0x0E2D) = BStore_FreeHead / FreeCount; unless BStore_CurrentBank is 0 the workspace goes back
@@ -146752,11 +146820,11 @@ BStore_MoveWorkspaceToNextBank:		; <- T_BStore_MoveWorkspaceToNextBank
 	ld	a, (BStore_CurrentBank:16)	; F64BC8  ld A,(0x360a)
 	pushw	wa	; F64BCC  push WA
 	cp	a, 0:i3	; F64BCD  cp A,0
-	jr	z, sub_F64B7A_Skip3	; F64BCF  jr Z,0xf64bda
+	jr	z, BStore_MoveWorkspaceToNextBank_Skip3	; F64BCF  jr Z,0xf64bda
 	dec	1, a	; F64BD1  dec 1,A
 	ld	(BStore_CurrentBank:16), a	; F64BD3  ld (0x360a),A
 	calr	BStore_Workspace_SaveToBank	; F64BD7  calr 0xf64be3
-sub_F64B7A_Skip3:
+BStore_MoveWorkspaceToNextBank_Skip3:
 	popw	wa	; F64BDA  pop WA
 	ld	(BStore_CurrentBank:16), a	; F64BDB  ld (0x360a),A
 	calr	BStore_Workspace_LoadFromBank	; F64BDF  calr 0xf64b3d
@@ -147957,32 +148025,34 @@ TrackAssign_CommitEditedPart_Join:
 	ret	; F65DAD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F65DAE
-; Called from: T_F42B98 (x1)
+; TrackAssign_IsLocalControlDashed_Copy
+; Called from: T_TrackAssign_IsLocalControlDashed_Copy (x1)
 ; Touches: (0x0C03) (0x0C06)  |  0x603422
-; Evidence: thunk slot T_F42B98 holds `jp 0x00F65DAE`, and 0xF65DAE is an
+; Evidence: thunk slot T_TrackAssign_IsLocalControlDashed_Copy holds `jp 0x00F65DAE`, and 0xF65DAE is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F65DAE:		; <- T_F42B98
+; TrackAssign_IsLocalControlDashed_Copy: an exact copy of TrackAssign_IsLocalControlDashed (prom_b 0xF65DD3) -- all 13 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+TrackAssign_IsLocalControlDashed_Copy:		; <- T_TrackAssign_IsLocalControlDashed_Copy
 	m_cp_rm MB16, 0x0c03, 1	; F65DAE  cp A,(0x0c03)
-	jr	z, sub_F65D26_Skip2	; F65DB2  jr Z,0xf65dc4
+	jr	z, TrackAssign_IsLocalControlDashed_Copy_Skip2	; F65DB2  jr Z,0xf65dc4
 	ld	xhl, BStore_TrackToPart	; F65DB4  ld XHL,0x00603422
 	xor	w, w	; F65DB9  xor W,W
 	ld	iy, wa	; F65DBB  ld IY,WA
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F65DBD  ld A,(XHL+IY)
-	jr	sub_F65D26_Join2	; F65DC2  jr T,0xf65dc8
-sub_F65D26_Skip2:
+	jr	TrackAssign_IsLocalControlDashed_Copy_Join2	; F65DC2  jr T,0xf65dc8
+TrackAssign_IsLocalControlDashed_Copy_Skip2:
 	ld	a, (3078:16)	; F65DC4  ld A,(0x0c06)
-sub_F65D26_Join2:
+TrackAssign_IsLocalControlDashed_Copy_Join2:
 	ld	a, 170:opc	; F65DC8  ld A,0xaa
-	jr	sub_F65DAE_Return	; F65DCA  jr T,0xf65dd2
+	jr	TrackAssign_IsLocalControlDashed_Copy_Return	; F65DCA  jr T,0xf65dd2
 
 ; --------------------------------------------------------------------------
-; UNREACHED CODE, not data (was `Data_F65DCC`), part of sub_F65DAE:
+; UNREACHED CODE, not data (was `Data_F65DCC`), part of TrackAssign_IsLocalControlDashed_Copy:
 ;   `ld A,0x55 / ld W,(0x0C03)` beside the arm that sets A = 0xAA; (0x0C03) is the cell the
 ;   routine compares A with at its entry (0xF65DAE); the decode ends on the `ret` the jr above
 ;   targets.
@@ -147993,36 +148063,40 @@ sub_F65D26_Join2:
 	ld	a, 85:opc	; F65DCC  ld A,0x55
 	ld	w, (3075:16)	; F65DCE  ld W,(0x0c03)
 
-sub_F65DAE_Return:
+TrackAssign_IsLocalControlDashed_Copy_Return:
 	ret	; F65DD2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F65DD3
-; Called from: T_F42B9C (x2)
+; TrackAssign_IsLocalControlDashed
+; Called from: T_TrackAssign_IsLocalControlDashed (x2)
 ; Touches: (0x0C03) (0x0C06)  |  0x603422
-; Evidence: thunk slot T_F42B9C holds `jp 0x00F65DD3`, and 0xF65DD3 is an
+; Evidence: thunk slot T_TrackAssign_IsLocalControlDashed holds `jp 0x00F65DD3`, and 0xF65DD3 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F65DD3:		; <- T_F42B9C
+; TrackAssign_IsLocalControlDashed: Returns A = 0x55 when track A's LOCAL CONTROL cell should read '-- ', else 0xAA;
+;   in this build always 0xAA -- the part lookup ((0x0C06) for the selected track (0x0C03), else
+;   BStore_TrackToPart[A]) is overwritten and the 0x55 arm is unreached. TrackAssign_DrawLocalControlColumn and prom_a
+;   sub_F819A2 test it. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave9_d9.json)
+TrackAssign_IsLocalControlDashed:		; <- T_TrackAssign_IsLocalControlDashed
 	m_cp_rm MB16, 0x0c03, 1	; F65DD3  cp A,(0x0c03)
-	jr	z, sub_F65DD3_Skip	; F65DD7  jr Z,0xf65de9
+	jr	z, TrackAssign_IsLocalControlDashed_Skip	; F65DD7  jr Z,0xf65de9
 	ld	xhl, BStore_TrackToPart	; F65DD9  ld XHL,0x00603422
 	xor	w, w	; F65DDE  xor W,W
 	ld	iy, wa	; F65DE0  ld IY,WA
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F65DE2  ld A,(XHL+IY)
-	jr	sub_F65DD3_Join	; F65DE7  jr T,0xf65ded
-sub_F65DD3_Skip:
+	jr	TrackAssign_IsLocalControlDashed_Join	; F65DE7  jr T,0xf65ded
+TrackAssign_IsLocalControlDashed_Skip:
 	ld	a, (3078:16)	; F65DE9  ld A,(0x0c06)
-sub_F65DD3_Join:
+TrackAssign_IsLocalControlDashed_Join:
 	ld	a, 170:opc	; F65DED  ld A,0xaa
-	jr	sub_F65DD3_Return	; F65DEF  jr T,0xf65df7
+	jr	TrackAssign_IsLocalControlDashed_Return	; F65DEF  jr T,0xf65df7
 
 ; --------------------------------------------------------------------------
-; UNREACHED CODE, not data (was `Data_F65DF1`), part of sub_F65DD3:
+; UNREACHED CODE, not data (was `Data_F65DF1`), part of TrackAssign_IsLocalControlDashed:
 ;   the same six bytes as 0xF65DCC, in the next routine.
 ;   Nothing in prom_b branches to, calls or spells 0xF65DF1 (code_islands.py searches every
 ;   jr/jrl/calr displacement and jp/call/24-bit operand); it is recorded as code because it
@@ -148031,7 +148105,7 @@ sub_F65DD3_Join:
 	ld	a, 85:opc	; F65DF1  ld A,0x55
 	ld	w, (3075:16)	; F65DF3  ld W,(0x0c03)
 
-sub_F65DD3_Return:
+TrackAssign_IsLocalControlDashed_Return:
 	ret	; F65DF7  ret
 
 ; --------------------------------------------------------------------------
@@ -149725,12 +149799,12 @@ TrackAssignPresets_ApplyToAllSongs:
 	ld	(xix), 32	; F66853  ld (XIX),0x20
 	ld	a, 0:opc	; F66856  ld A,0x00
 	m_cp_mi8 MB16, 0x0dfd, 0x03	; F66858  cp (0x0dfd),0x03
-	jr	nz, sub_F6682C_Skip	; F6685D  jr NZ,0xf66861
+	jr	nz, TrackAssignPresets_ApplyToAllSongs_Skip	; F6685D  jr NZ,0xf66861
 	ld	a, 255:opc	; F6685F  ld A,0xff
-sub_F6682C_Skip:
+TrackAssignPresets_ApplyToAllSongs_Skip:
 	ld	(6304966:24), a	; F66861  ld (0x6034c6),A
 	ldib_erp	52, 0	; F66866  ld RC3,0
-sub_F6682C_Loop:
+TrackAssignPresets_ApplyToAllSongs_Loop:
 	ld	xix, 6356992	; F66869  ld XIX,0x00610000
 	push	xbc	; F6686E  push XBC
 	xor	xbc, xbc	; F6686F  xor XBC,XBC
@@ -149763,20 +149837,20 @@ sub_F6682C_Loop:
 	add	xix, xwa	; F668B6  add XIX,XWA
 	ld	a, 0:opc	; F668B8  ld A,0x00
 	m_cp_mi8 MB16, 0x0dfd, 0x03	; F668BA  cp (0x0dfd),0x03
-	jr	nz, sub_F6682C_Skip2	; F668BF  jr NZ,0xf668c3
+	jr	nz, TrackAssignPresets_ApplyToAllSongs_Skip2	; F668BF  jr NZ,0xf668c3
 	ld	a, 255:opc	; F668C1  ld A,0xff
-sub_F6682C_Skip2:
+TrackAssignPresets_ApplyToAllSongs_Skip2:
 	ld	(xix), a	; F668C3  ld (XIX),A
 	inc1b_erp	52	; F668C5  inc 1,RC3
 	cp_erpb	52, 10	; F668C8  cp RC3,0x0a
-	jr	c, sub_F6682C_Loop	; F668CC  jr C,0xf66869
+	jr	c, TrackAssignPresets_ApplyToAllSongs_Loop	; F668CC  jr C,0xf66869
 	ld	xde, IndexMap_F667CC + 0x30	; F668CE  ld XDE,0x00f667fc
 	mx_lda32 MXD, ra_DE, ra_HL, 5	; F668D3  lda XIY,XDE+HL
 	ld	xix, 6304819	; F668D8  ld XIX,0x00603433
 	ldw	bc, 16	; F668DD  ld BC,0x0010
 	ldir85	; F668E0  ldir
 	ldib_erp	52, 0	; F668E2  ld RC3,0
-sub_F6682C_Loop2:
+TrackAssignPresets_ApplyToAllSongs_Loop2:
 	ld	xix, 6356992	; F668E5  ld XIX,0x00610000
 	push	xbc	; F668EA  push XBC
 	xor	xbc, xbc	; F668EB  xor XBC,XBC
@@ -149795,27 +149869,27 @@ sub_F6682C_Loop2:
 	ldir85	; F6690E  ldir
 	inc1b_erp	52	; F66910  inc 1,RC3
 	cp_erpb	52, 10	; F66913  cp RC3,0x0a
-	jr	c, sub_F6682C_Loop2	; F66917  jr C,0xf668e5
+	jr	c, TrackAssignPresets_ApplyToAllSongs_Loop2	; F66917  jr C,0xf668e5
 	m_cp_mi8 MB16, 0x0dfd, 0x03	; F66919  cp (0x0dfd),0x03
-	jr	z, sub_F6682C_Skip3	; F6691E  jr Z,0xf6692f
+	jr	z, TrackAssignPresets_ApplyToAllSongs_Skip3	; F6691E  jr Z,0xf6692f
 	m_bit 2, MD16, 0x7f4d	; F66920  bit 2,(0x7f4d)
-	jr	z, sub_F6682C_Return	; F66924  jr Z,0xf6694f
+	jr	z, TrackAssignPresets_ApplyToAllSongs_Return	; F66924  jr Z,0xf6694f
 	m_and_mi8 MB16, 0x7f4d, 0xfb	; F66926  and (0x7f4d),0xfb
 	xor	a, a	; F6692B  xor A,A
-	jr	sub_F6682C_Join	; F6692D  jr T,0xf6693c
-sub_F6682C_Skip3:
+	jr	TrackAssignPresets_ApplyToAllSongs_Join	; F6692D  jr T,0xf6693c
+TrackAssignPresets_ApplyToAllSongs_Skip3:
 	m_bit 2, MD16, 0x7f4d	; F6692F  bit 2,(0x7f4d)
-	jr	nz, sub_F6682C_Return	; F66933  jr NZ,0xf6694f
+	jr	nz, TrackAssignPresets_ApplyToAllSongs_Return	; F66933  jr NZ,0xf6694f
 	m_or_mi8 MB16, 0x7f4d, 0x04	; F66935  or (0x7f4d),0x04
 	ld	a, 4:opc	; F6693A  ld A,0x04
-sub_F6682C_Join:
+TrackAssignPresets_ApplyToAllSongs_Join:
 	ld	e, 145:opc	; F6693C  ld E,0x91
 	ld	d, 3:opc	; F6693E  ld D,0x03
 	ld	w, 4:opc	; F66940  ld W,0x04
 	ld	(4684:16), 1	; F66942  ld (0x124c),0x01
 	call	T_Queue2C00_AppendRegs	; F66947  call 0xf40f38
 	call	T_Queue2C00_DrainPassAB	; F6694B  call 0xf40018
-sub_F6682C_Return:
+TrackAssignPresets_ApplyToAllSongs_Return:
 	ret	; F6694F  ret
 
 ; --------------------------------------------------------------------------
@@ -149837,13 +149911,13 @@ sub_F6682C_Return:
 BStore_ResetAllDirectoriesAndCursors:
 	ld	xix, 6305024	; F66950  ld XIX,0x00603500
 	xor	bc, bc	; F66955  xor BC,BC
-sub_F6682C_Loop3:
+BStore_ResetAllDirectoriesAndCursors_Loop3:
 	mx_ld_mi8 MXD, ra_IX, ra_BC, 0x00	; F66957  ld (XIX+BC),0x00
 	inc	1, bc	; F6695D  inc 1,BC
 	mx_ld_mi16 MXD, ra_IX, ra_BC, 0xffff	; F6695F  ld (XIX+BC),0xffff
 	inc	2, bc	; F66966  inc 2,BC
 	cp	bc, 51	; F66968  cp BC,0x0033
-	jr	c, sub_F6682C_Loop3	; F6696C  jr C,0xf66957
+	jr	c, BStore_ResetAllDirectoriesAndCursors_Loop3	; F6696C  jr C,0xf66957
 	ld	xix, 13408	; F6696E  ld XIX,0x00003460
 	ldw	wa, 65535	; F66973  ld WA,0xffff
 	ld	c, 17:opc	; F66976  ld C,0x11
@@ -149866,7 +149940,7 @@ sub_F6682C_Loop3:
 	djnz8	c, -6	; F669A9  djnz C,0xf669a6
 	ldib_erp	52, 0	; F669AC  ld RC3,0
 	ld	xde, 6356992	; F669AF  ld XDE,0x00610000
-sub_F6682C_Loop4:
+BStore_ResetAllDirectoriesAndCursors_Loop4:
 	push	xbc	; F669B4  push XBC
 	xor	xbc, xbc	; F669B5  xor XBC,XBC
 	xor	xhl, xhl	; F669B7  xor XHL,XHL
@@ -149880,13 +149954,13 @@ sub_F6682C_Loop4:
 	ld	xix, 256	; F669C9  ld XIX,0x00000100
 	add	xix, xhl	; F669CE  add XIX,XHL
 	xor	bc, bc	; F669D0  xor BC,BC
-sub_F6682C_Loop5:
+BStore_ResetAllDirectoriesAndCursors_Loop5:
 	mx_ld_mi8 MXD, ra_IX, ra_BC, 0x00	; F669D2  ld (XIX+BC),0x00
 	inc	1, bc	; F669D8  inc 1,BC
 	mx_ld_mi16 MXD, ra_IX, ra_BC, 0xffff	; F669DA  ld (XIX+BC),0xffff
 	inc	2, bc	; F669E1  inc 2,BC
 	cp	bc, 51	; F669E3  cp BC,0x0033
-	jr	c, sub_F6682C_Loop5	; F669E7  jr C,0xf669d2
+	jr	c, BStore_ResetAllDirectoriesAndCursors_Loop5	; F669E7  jr C,0xf669d2
 	ld	xix, 126	; F669E9  ld XIX,0x0000007e
 	add	xix, xhl	; F669EE  add XIX,XHL
 	ldw	wa, 65535	; F669F0  ld WA,0xffff
@@ -149901,7 +149975,7 @@ sub_F6682C_Loop5:
 	djnz8	c, -6	; F66A09  djnz C,0xf66a06
 	inc1b_erp	52	; F66A0C  inc 1,RC3
 	cp_erpb	52, 10	; F66A0F  cp RC3,0x0a
-	jrl	c, sub_F6682C_Loop4	; F66A13  jrl C,0xf669b4
+	jrl	c, BStore_ResetAllDirectoriesAndCursors_Loop4	; F66A13  jrl C,0xf669b4
 	ld	xix, 3408	; F66A16  ld XIX,0x00000d50
 	xor	wa, wa	; F66A1B  xor WA,WA
 	ld	c, 16:opc	; F66A1D  ld C,0x10
@@ -149976,7 +150050,7 @@ StepRecord_CursorForward_Veneer:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; StepRecord_ShortenMeasures_Veneer: `jp StepRecord_ShortenMeasures`, the re-bar used when a meter change SHORTENS measures (new beats
-;   (0x0F52) < old (0x0F53)): from the cursor, per old measure deletes (0x0F53)-(0x0F52) 0x81 beat marks (sub_F68E48:
+;   (0x0F52) < old (0x0F53)): from the cursor, per old measure deletes (0x0F53)-(0x0F52) 0x81 beat marks (BStore_DeleteByteAtSongPosition:
 ;   delete 1 byte) then skips (0x0F52), until a 0x87 record, 0x84 or the end (cursor restored, slot 1). StepRecord_LengthenMeasures is
 ;   the lengthening twin; StepRecord_ShortenMeasures can take the name without the suffix. Basis: callers + body (target read).
 ;   (notes/naming-pilot-2026-10-06/proposals_wave7_x.json)
@@ -152282,14 +152356,14 @@ StepRecord_WriteEventByteSplitBit7_Return:
 StepRecordKind3Sub12_ButtonDispatch:
 	ld	hl, bc	; F68271  ld HL,BC
 	cp	hl, 31	; F68273  cp HL,0x001f
-	jr	ugt, sub_F68234_Return2	; F68277  jr UGT,0xf6828a
+	jr	ugt, StepRecordKind3Sub12_ButtonDispatch_Return2	; F68277  jr UGT,0xf6828a
 	sla	hl, 2	; F68279  sla 0x02,HL
 	push	xix	; F6827C  push XIX
 	ld	xix, DispatchTable_F6828B	; F6827D  ld XIX,0x00f6828b
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F68282  ld XHL,(XIX+HL)
 	pop	xix	; F68287  pop XIX
 	call	(xhl)	; F68288  call T,XHL
-sub_F68234_Return2:
+StepRecordKind3Sub12_ButtonDispatch_Return2:
 	ret	; F6828A  ret
 
 ; --------------------------------------------------------------------------
@@ -152815,9 +152889,9 @@ Text_FillSpaces30:
 ;   (notes/naming-pilot-2026-10-06/proposals_wave6_u.json)
 StepRecordKind3Sub13_ButtonDispatch:
 	cp	bc, 0:i3	; F6859F  cp BC,0
-	jr	nz, sub_F68590_Return	; F685A1  jr NZ,0xf685a6
+	jr	nz, StepRecordKind3Sub13_ButtonDispatch_Return	; F685A1  jr NZ,0xf685a6
 	calr	SoftKeyCol1_StepRecordSub16	; F685A3  calr 0xf6830b
-sub_F68590_Return:
+StepRecordKind3Sub13_ButtonDispatch_Return:
 	ret	; F685A6  ret
 ; StepRecordSub16_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 16 -- StepRecord_SubScreenButtonTable/F67789
 ;   entry 16 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub16_ButtonTable[code & 0x1F].
@@ -153371,7 +153445,7 @@ StepRecordSub18_LcdKeyRow3:
 ;   sub_F695B7) and refresh. Basis: caller + body. (notes/naming-pilot-2026-10-06/proposals_wave6_u.json)
 StepRecord_MainLoopService:		; <- T_StepRecord_MainLoopService
 	m_bit 3, MD16, 0x0e4e	; F68951  bit 3,(0x0e4e)
-	jr	z, sub_F68945_Return	; F68955  jr Z,0xf68971
+	jr	z, StepRecord_MainLoopService_Return	; F68955  jr Z,0xf68971
 	ld	l, (3683:16)	; F68957  ld L,(0x0e63)
 	and	l, 3	; F6895B  and L,0x03
 	xor	h, h	; F6895E  xor H,H
@@ -153381,7 +153455,7 @@ StepRecord_MainLoopService:		; <- T_StepRecord_MainLoopService
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F68969  ld XHL,(XIX+HL)
 	pop	xix	; F6896E  pop XIX
 	call	(xhl)	; F6896F  call T,XHL
-sub_F68945_Return:
+StepRecord_MainLoopService_Return:
 	ret	; F68971  ret
 
 ; --------------------------------------------------------------------------
@@ -153465,8 +153539,8 @@ sub_F689E0_Return:
 ; sub_F689F5
 ; Called from: in-module: 0xF689A8
 ; Touches: (0x0EC2) (0x1008) (0x1071) (0x12A7) (0x34D4)  |  0x60080A
-; Calls:   T_F431C0 BStore_ReadByteAtSongPosition StepRecord_SaveCursorToSlot T_TimedEventRing_Get sub_F6A304 sub_F6B96F
-;          sub_F6B9B9 T_TimedEventRing_Put TrackCursor_AdvanceBytes sub_F6B97B StepRecord_RestoreCursorFromSlot
+; Calls:   T_F431C0 BStore_ReadByteAtSongPosition StepRecord_SaveCursorToSlot T_TimedEventRing_Get sub_F6A304 BStore_ReadByteAtSongPositionPlus1_SaveRegs
+;          BStore_ReadByteAtSongPositionAndAdvance_SaveRegs T_TimedEventRing_Put TrackCursor_AdvanceBytes BStore_ReadByteAtSongPositionForEntryE StepRecord_RestoreCursorFromSlot
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF689F5 is an instruction
 ;           boundary.  The name IS the address.
@@ -153512,25 +153586,25 @@ sub_F689F5_Loop:
 	jr	nz, sub_F689F5_Loop	; F68A55  jr NZ,0xf68a4d
 	calr	sub_F6A304	; F68A57  calr 0xf6a304
 	ld	e, (BStore_DirEntry:16)	; F68A5A  ld E,(0x1008)
-	calr	sub_F6B96F	; F68A5E  calr 0xf6b96f
+	calr	BStore_ReadByteAtSongPositionPlus1_SaveRegs	; F68A5E  calr 0xf6b96f
 	ld	(3778:16), a	; F68A61  ld (0x0ec2),A
 sub_F689F5_Join:
-	calr	sub_F6B96F	; F68A65  calr 0xf6b96f
+	calr	BStore_ReadByteAtSongPositionPlus1_SaveRegs	; F68A65  calr 0xf6b96f
 	m_cp_rm MB16, 0x0ec2, 1	; F68A68  cp A,(0x0ec2)
 	jr	z, sub_F689F5_Skip	; F68A6C  jr Z,0xf68a70
 	jr	sub_F689F5_Join2	; F68A6E  jr T,0xf68aca
 sub_F689F5_Skip:
-	calr	sub_F6B9B9	; F68A70  calr 0xf6b9b9
+	calr	BStore_ReadByteAtSongPositionAndAdvance_SaveRegs	; F68A70  calr 0xf6b9b9
 	pushw	wa	; F68A73  push WA
 	call	T_TimedEventRing_Put	; F68A74  call 0xf41d64
 	inc	2, xsp	; F68A78  inc 2,XSP
-	calr	sub_F6B9B9	; F68A7A  calr 0xf6b9b9
+	calr	BStore_ReadByteAtSongPositionAndAdvance_SaveRegs	; F68A7A  calr 0xf6b9b9
 	ld	(3778:16), a	; F68A7D  ld (0x0ec2),A
 	ld	a, 0:opc	; F68A81  ld A,0x00
 	pushw	wa	; F68A83  push WA
 	call	T_TimedEventRing_Put	; F68A84  call 0xf41d64
 	inc	2, xsp	; F68A88  inc 2,XSP
-	calr	sub_F6B9B9	; F68A8A  calr 0xf6b9b9
+	calr	BStore_ReadByteAtSongPositionAndAdvance_SaveRegs	; F68A8A  calr 0xf6b9b9
 	pushw	wa	; F68A8D  push WA
 	call	T_TimedEventRing_Put	; F68A8E  call 0xf41d64
 	inc	2, xsp	; F68A92  inc 2,XSP
@@ -153560,7 +153634,7 @@ sub_F689F5_Skip:
 	pop	xbc	; F68ABD  pop XBC
 	pop	xhl	; F68ABE  pop XHL
 	pop	xwa	; F68ABF  pop XWA
-	calr	sub_F6B97B	; F68AC0  calr 0xf6b97b
+	calr	BStore_ReadByteAtSongPositionForEntryE	; F68AC0  calr 0xf6b97b
 	cp	a, 144	; F68AC3  cp A,0x90
 	jr	nz, sub_F689F5_Join2	; F68AC6  jr NZ,0xf68aca
 	jr	sub_F689F5_Join	; F68AC8  jr T,0xf68a65
@@ -153696,15 +153770,15 @@ StepRecord_CursorBack:
 	ld	w, 1:opc	; F68B75  ld W,0x01
 	calr	StepRecord_CursorStep	; F68B77  calr 0xf68b91
 	m_bit 5, MD16, 0x0e4f	; F68B7A  bit 5,(0x0e4f)
-	jr	nz, sub_F68B70_Skip	; F68B7E  jr NZ,0xf68b86
-sub_F68B70_Join:
+	jr	nz, StepRecord_CursorBack_Skip	; F68B7E  jr NZ,0xf68b86
+StepRecord_CursorBack_Join:
 	ld	(3664:16), 255	; F68B80  ld (0x0e50),0xff
 	ret	; F68B85  ret
-sub_F68B70_Skip:
+StepRecord_CursorBack_Skip:
 	ld	w, 1:opc	; F68B86  ld W,0x01
 	calr	StepRecord_CursorStep	; F68B88  calr 0xf68b91
 	m_res 5, MD16, 0x0e4f	; F68B8B  res 5,(0x0e4f)
-	jr	sub_F68B70_Join	; F68B8F  jr T,0xf68b80
+	jr	StepRecord_CursorBack_Join	; F68B8F  jr T,0xf68b80
 
 ; --------------------------------------------------------------------------
 ; StepRecord_CursorStep
@@ -153738,47 +153812,47 @@ StepRecord_CursorStep:
 	ld	a, (3667:16)	; F68BAD  ld A,(0x0e53)
 	ld	(3776:16), a	; F68BB1  ld (0x0ec0),A
 	cp	w, 0:i3	; F68BB5  cp W,0
-	jr	nz, sub_F68B91_Skip	; F68BB7  jr NZ,0xf68bbc
-	jrl	sub_F68B91_Join2	; F68BB9  jrl T,0xf68c7c
-sub_F68B91_Skip:
+	jr	nz, StepRecord_CursorStep_Skip	; F68BB7  jr NZ,0xf68bbc
+	jrl	StepRecord_CursorStep_Join2	; F68BB9  jrl T,0xf68c7c
+StepRecord_CursorStep_Skip:
 	m_cp_mi8 MB16, 0x0ec2, 0x00	; F68BBC  cp (0x0ec2),0x00
-	jr	nz, sub_F68B91_Join	; F68BC1  jr NZ,0xf68bf0
+	jr	nz, StepRecord_CursorStep_Join	; F68BC1  jr NZ,0xf68bf0
 	calr	TrackCursor_StepBackKeepBeatPosition	; F68BC3  calr 0xf6b770
 	cp	w, 255	; F68BC6  cp W,0xff
-	jr	nz, sub_F68B91_Skip3	; F68BC9  jr NZ,0xf68be4
+	jr	nz, StepRecord_CursorStep_Skip3	; F68BC9  jr NZ,0xf68be4
 	m_cp_mi8 MB16, 0x0e53, 0x00	; F68BCB  cp (0x0e53),0x00
-	jr	z, sub_F68B91_Skip2	; F68BD0  jr Z,0xf68bd8
+	jr	z, StepRecord_CursorStep_Skip2	; F68BD0  jr Z,0xf68bd8
 	inc	1, (3778:16)	; F68BD2  inc 1,(0x0ec2)
-	jr	sub_F68B91_Join	; F68BD6  jr T,0xf68bf0
-sub_F68B91_Skip2:
+	jr	StepRecord_CursorStep_Join	; F68BD6  jr T,0xf68bf0
+StepRecord_CursorStep_Skip2:
 	add	xsp, 4	; F68BD8  add XSP,0x00000004
 	ld	w, 104:opc	; F68BDE  ld W,0x68
 	calr	StepRecord_PostSysEx50_87FromW	; F68BE0  calr 0xf67481
 	ret	; F68BE3  ret
-sub_F68B91_Skip3:
+StepRecord_CursorStep_Skip3:
 	calr	BStore_ReadByteAtSongPosition	; F68BE4  calr 0xf6b8bd
 	cp	a, 129	; F68BE7  cp A,0x81
-	jr	nz, sub_F68B91_Join	; F68BEA  jr NZ,0xf68bf0
+	jr	nz, StepRecord_CursorStep_Join	; F68BEA  jr NZ,0xf68bf0
 	inc	1, (3778:16)	; F68BEC  inc 1,(0x0ec2)
-sub_F68B91_Join:
+StepRecord_CursorStep_Join:
 	calr	StepRecord_PrevGridTick	; F68BF0  calr 0xf68d9d
 	m_cp_mi8 MB16, 0x0ec2, 0x00	; F68BF3  cp (0x0ec2),0x00
-	jr	z, sub_F68B91_Skip4	; F68BF8  jr Z,0xf68c04
+	jr	z, StepRecord_CursorStep_Skip4	; F68BF8  jr Z,0xf68c04
 	m_cp_mi8 MB16, 0x0ec0, 0x00	; F68BFA  cp (0x0ec0),0x00
-	jr	z, sub_F68B91_Skip7	; F68BFF  jr Z,0xf68c1b
-	jrl	sub_F68B91_Join4	; F68C01  jrl T,0xf68d4a
-sub_F68B91_Skip4:
+	jr	z, StepRecord_CursorStep_Skip7	; F68BFF  jr Z,0xf68c1b
+	jrl	StepRecord_CursorStep_Join4	; F68C01  jrl T,0xf68d4a
+StepRecord_CursorStep_Skip4:
 	m_cp_mi8 MB16, 0x0ec0, 0x00	; F68C04  cp (0x0ec0),0x00
-	jr	nz, sub_F68B91_Skip5	; F68C09  jr NZ,0xf68c0e
-	jrl	sub_F68B91_Join6	; F68C0B  jrl T,0xf68d6d
-sub_F68B91_Skip5:
+	jr	nz, StepRecord_CursorStep_Skip5	; F68C09  jr NZ,0xf68c0e
+	jrl	StepRecord_CursorStep_Join6	; F68C0B  jrl T,0xf68d6d
+StepRecord_CursorStep_Skip5:
 	calr	StepRecord_ReadEventTickAtCursor	; F68C0E  calr 0xf68dbe
 	cp	e, a	; F68C11  cp E,A
-	jr	le, sub_F68B91_Skip6	; F68C13  jr LE,0xf68c18
-	jrl	sub_F68B91_Join4	; F68C15  jrl T,0xf68d4a
-sub_F68B91_Skip6:
-	jrl	sub_F68B91_Join5	; F68C18  jrl T,0xf68d5f
-sub_F68B91_Skip7:
+	jr	le, StepRecord_CursorStep_Skip6	; F68C13  jr LE,0xf68c18
+	jrl	StepRecord_CursorStep_Join4	; F68C15  jrl T,0xf68d4a
+StepRecord_CursorStep_Skip6:
+	jrl	StepRecord_CursorStep_Join5	; F68C18  jrl T,0xf68d5f
+StepRecord_CursorStep_Skip7:
 	decw	1, (3670:16)	; F68C1B  decw 1,(0x0e56)
 	add	xsp, 4	; F68C1F  add XSP,0x00000004
 	pushw	de	; F68C25  push DE
@@ -153791,15 +153865,15 @@ sub_F68B91_Skip7:
 	calr	TrackCursor_StepBackKeepBeatPosition	; F68C37  calr 0xf6b770
 	calr	BStore_ReadByteAtSongPosition	; F68C3A  calr 0xf6b8bd
 	cp	a, 129	; F68C3D  cp A,0x81
-	jr	z, sub_F68B91_Skip8	; F68C40  jr Z,0xf68c56
+	jr	z, StepRecord_CursorStep_Skip8	; F68C40  jr Z,0xf68c56
 	calr	BStore_ReadByteAtSongPositionPlus1	; F68C42  calr 0xf6b8f1
 	cp	a, 83	; F68C45  cp A,0x53
-	jr	le, sub_F68B91_Skip8	; F68C48  jr LE,0xf68c56
+	jr	le, StepRecord_CursorStep_Skip8	; F68C48  jr LE,0xf68c56
 	cp	a, 95	; F68C4A  cp A,0x5f
-	jr	le, sub_F68B91_Skip9	; F68C4D  jr LE,0xf68c6c
+	jr	le, StepRecord_CursorStep_Skip9	; F68C4D  jr LE,0xf68c6c
 	add	xsp, 4	; F68C4F  add XSP,0x00000004
 	ret	; F68C55  ret
-sub_F68B91_Skip8:
+StepRecord_CursorStep_Skip8:
 	ld	(3667:16), 84	; F68C56  ld (0x0e53),0x54
 	m_popw MD16, 0x0e58	; F68C5B  popw (0x0e58)
 	m_popw MD16, 0x12b2	; F68C5F  popw (0x12b2)
@@ -153807,8 +153881,8 @@ sub_F68B91_Skip8:
 	calr	StepRecord_RestoreCursorFromSlot	; F68C65  calr 0xf6c2e5
 	calr	StepRecord_ReturnToTrackKindPage	; F68C68  calr 0xf69c03
 	ret	; F68C6B  ret
-sub_F68B91_Skip9:
-	jrl	sub_F68B91_Join5	; F68C6C  jrl T,0xf68d5f
+StepRecord_CursorStep_Skip9:
+	jrl	StepRecord_CursorStep_Join5	; F68C6C  jrl T,0xf68d5f
 	pop	xiz	; F68C6F  pop XIZ
 	pop	xiy	; F68C70  pop XIY
 	pop	xix	; F68C71  pop XIX
@@ -153819,14 +153893,14 @@ sub_F68B91_Skip9:
 	ld	w, 104:opc	; F68C76  ld W,0x68
 	calr	StepRecord_PostSysEx50_87FromW	; F68C78  calr 0xf67481
 	ret	; F68C7B  ret
-sub_F68B91_Join2:
+StepRecord_CursorStep_Join2:
 	m_and_mi8 MB16, 0x0e4e, 0xfb	; F68C7C  and (0x0e4e),0xfb
 	calr	StepRecord_NextGridTick	; F68C81  calr 0xf68d8a
 	m_cp_mi8 MB16, 0x0ecd, 0xff	; F68C84  cp (0x0ecd),0xff
-	jr	nz, sub_F68B91_Skip13	; F68C89  jr NZ,0xf68d01
-sub_F68B91_Join3:
+	jr	nz, StepRecord_CursorStep_Skip13	; F68C89  jr NZ,0xf68d01
+StepRecord_CursorStep_Join3:
 	cp	e, 96	; F68C8B  cp E,0x60
-	jr	nz, sub_F68B91_Skip12	; F68C8E  jr NZ,0xf68cf3
+	jr	nz, StepRecord_CursorStep_Skip12	; F68C8E  jr NZ,0xf68cf3
 	add	xsp, 4	; F68C90  add XSP,0x00000004
 	push	xwa	; F68C96  push XWA
 	push	xhl	; F68C97  push XHL
@@ -153845,12 +153919,12 @@ sub_F68B91_Join3:
 	pop	xhl	; F68CA9  pop XHL
 	pop	xwa	; F68CAA  pop XWA
 	m_cp_mi8 MB16, 0x0ec0, 0x53	; F68CAB  cp (0x0ec0),0x53
-	jr	ule, sub_F68B91_Skip10	; F68CB0  jr ULE,0xf68cc1
+	jr	ule, StepRecord_CursorStep_Skip10	; F68CB0  jr ULE,0xf68cc1
 	m_or_mi8 MB16, 0x0e4e, 0x04	; F68CB2  or (0x0e4e),0x04
 	m_cp_mi8 MB16, 0x0e44, 0xff	; F68CB7  cp (0x0e44),0xff
-	jr	nz, sub_F68B91_Skip10	; F68CBC  jr NZ,0xf68cc1
+	jr	nz, StepRecord_CursorStep_Skip10	; F68CBC  jr NZ,0xf68cc1
 	calr	StepRecord_AppendBeatMarkAtTrackEnd	; F68CBE  calr 0xf6b243
-sub_F68B91_Skip10:
+StepRecord_CursorStep_Skip10:
 	ld	(3667:16), 0	; F68CC1  ld (0x0e53),0x00
 	incw	1, (3670:16)	; F68CC6  incw 1,(0x0e56)
 	push	xwa	; F68CCA  push XWA
@@ -153870,23 +153944,23 @@ sub_F68B91_Skip10:
 	pop	xwa	; F68CDA  pop XWA
 	calr	StepRecord_ReadEventTickAtCursor	; F68CDB  calr 0xf68dbe
 	cp	a, 0:i3	; F68CDE  cp A,0
-	jr	nz, sub_F68B91_Skip11	; F68CE0  jr NZ,0xf68cea
+	jr	nz, StepRecord_CursorStep_Skip11	; F68CE0  jr NZ,0xf68cea
 	ld	(3667:16), a	; F68CE2  ld (0x0e53),A
 	calr	sub_F6741C	; F68CE6  calr 0xf6741c
 	ret	; F68CE9  ret
-sub_F68B91_Skip11:
+StepRecord_CursorStep_Skip11:
 	ld	(3667:16), 0	; F68CEA  ld (0x0e53),0x00
 	calr	StepRecord_ReturnToTrackKindPage	; F68CEF  calr 0xf69c03
 	ret	; F68CF2  ret
-sub_F68B91_Skip12:
+StepRecord_CursorStep_Skip12:
 	ld	(3667:16), e	; F68CF3  ld (0x0e53),E
 	add	xsp, 4	; F68CF7  add XSP,0x00000004
 	calr	StepRecord_ReturnToTrackKindPage	; F68CFD  calr 0xf69c03
 	ret	; F68D00  ret
-sub_F68B91_Skip13:
+StepRecord_CursorStep_Skip13:
 	ld	a, (3789:16)	; F68D01  ld A,(0x0ecd)
 	m_cp_rm MB16, 0x0ec0, 1	; F68D05  cp A,(0x0ec0)
-	jr	nz, sub_F68B91_Skip14	; F68D09  jr NZ,0xf68d27
+	jr	nz, StepRecord_CursorStep_Skip14	; F68D09  jr NZ,0xf68d27
 	push	xwa	; F68D0B  push XWA
 	push	xhl	; F68D0C  push XHL
 	push	xbc	; F68D0D  push XBC
@@ -153904,23 +153978,23 @@ sub_F68B91_Skip13:
 	pop	xwa	; F68D1B  pop XWA
 	calr	BStore_ReadByteAtSongPosition	; F68D1C  calr 0xf6b8bd
 	cp	a, 129	; F68D1F  cp A,0x81
-	jr	z, sub_F68B91_Skip16	; F68D22  jr Z,0xf68d47
+	jr	z, StepRecord_CursorStep_Skip16	; F68D22  jr Z,0xf68d47
 	calr	StepRecord_ReadEventTickAtCursor	; F68D24  calr 0xf68dbe
-sub_F68B91_Skip14:
+StepRecord_CursorStep_Skip14:
 	cp	e, a	; F68D27  cp E,A
-	jr	ge, sub_F68B91_Skip15	; F68D29  jr GE,0xf68d39
+	jr	ge, StepRecord_CursorStep_Skip15	; F68D29  jr GE,0xf68d39
 	ld	(3667:16), e	; F68D2B  ld (0x0e53),E
 	add	xsp, 4	; F68D2F  add XSP,0x00000004
 	calr	StepRecord_ReturnToTrackKindPage	; F68D35  calr 0xf69c03
 	ret	; F68D38  ret
-sub_F68B91_Skip15:
+StepRecord_CursorStep_Skip15:
 	ld	(3667:16), a	; F68D39  ld (0x0e53),A
 	add	xsp, 4	; F68D3D  add XSP,0x00000004
 	calr	sub_F6741C	; F68D43  calr 0xf6741c
 	ret	; F68D46  ret
-sub_F68B91_Skip16:
-	jrl	sub_F68B91_Join3	; F68D47  jrl T,0xf68c8b
-sub_F68B91_Join4:
+StepRecord_CursorStep_Skip16:
+	jrl	StepRecord_CursorStep_Join3	; F68D47  jrl T,0xf68c8b
+StepRecord_CursorStep_Join4:
 	ld	(3667:16), e	; F68D4A  ld (0x0e53),E
 	m_popw MD16, 0x0e58	; F68D4E  popw (0x0e58)
 	m_popw MD16, 0x12b2	; F68D52  popw (0x12b2)
@@ -153928,12 +154002,12 @@ sub_F68B91_Join4:
 	calr	StepRecord_RestoreCursorFromSlot	; F68D58  calr 0xf6c2e5
 	calr	StepRecord_ReturnToTrackKindPage	; F68D5B  calr 0xf69c03
 	ret	; F68D5E  ret
-sub_F68B91_Join5:
+StepRecord_CursorStep_Join5:
 	add	xsp, 4	; F68D5F  add XSP,0x00000004
 	ld	(3667:16), a	; F68D65  ld (0x0e53),A
 	calr	sub_F6741C	; F68D69  calr 0xf6741c
 	ret	; F68D6C  ret
-sub_F68B91_Join6:
+StepRecord_CursorStep_Join6:
 	ld	(3667:16), 0	; F68D6D  ld (0x0e53),0x00
 	add	xsp, 4	; F68D72  add XSP,0x00000004
 	calr	sub_F6741C	; F68D78  calr 0xf6741c
@@ -153988,14 +154062,14 @@ StepRecord_PrevGridTick:
 	ld	l, 12:opc	; F68DA4  ld L,0x0c
 	div	wa, l	; F68DA6  div WA,L
 	cp	w, 0:i3	; F68DA8  cp W,0
-	jr	nz, sub_F68D9D_Join	; F68DAA  jr NZ,0xf68db6
+	jr	nz, StepRecord_PrevGridTick_Join	; F68DAA  jr NZ,0xf68db6
 	cp	a, 0:i3	; F68DAC  cp A,0
-	jr	nz, sub_F68D9D_Skip	; F68DAE  jr NZ,0xf68db4
+	jr	nz, StepRecord_PrevGridTick_Skip	; F68DAE  jr NZ,0xf68db4
 	ld	a, 7:opc	; F68DB0  ld A,0x07
-	jr	sub_F68D9D_Join	; F68DB2  jr T,0xf68db6
-sub_F68D9D_Skip:
+	jr	StepRecord_PrevGridTick_Join	; F68DB2  jr T,0xf68db6
+StepRecord_PrevGridTick_Skip:
 	dec	1, a	; F68DB4  dec 1,A
-sub_F68D9D_Join:
+StepRecord_PrevGridTick_Join:
 	xor	w, w	; F68DB6  xor W,W
 	mul	wa, l	; F68DB8  mul WA,L
 	ld	e, a	; F68DBA  ld E,A
@@ -154036,55 +154110,55 @@ StepRecord_ReadEventTickAtCursor:
 	pop	xbc	; F68DCF  pop XBC
 	pop	xhl	; F68DD0  pop XHL
 	pop	xwa	; F68DD1  pop XWA
-	jr	z, sub_F68DBE_Skip	; F68DD2  jr Z,0xf68dde
+	jr	z, StepRecord_ReadEventTickAtCursor_Skip	; F68DD2  jr Z,0xf68dde
 	pushw	wa	; F68DD4  push WA
 	calr	BStore_ReadByteAtSongPositionPlus1	; F68DD5  calr 0xf6b8f1
 	ld	l, a	; F68DD8  ld L,A
 	popw	wa	; F68DDA  pop WA
 	ld	a, l	; F68DDB  ld A,L
 	ret	; F68DDD  ret
-sub_F68DBE_Skip:
+StepRecord_ReadEventTickAtCursor_Skip:
 	ld	a, 255:opc	; F68DDE  ld A,0xff
 	ret	; F68DE0  ret
 ; LcdKeyRow4_StepRecordSub00: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub00_ButtonTable slot 0x0B.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow4_StepRecordSub00:
 	bit	7, w	; F68DE1  bit 0x07,W
-	jr	nz, sub_F68DBE_Return	; F68DE4  jr NZ,0xf68e40
+	jr	nz, LcdKeyRow4_StepRecordSub00_Return	; F68DE4  jr NZ,0xf68e40
 	m_cp_mi8 MB16, 0x0e63, 0x01	; F68DE6  cp (0x0e63),0x01
-	jr	nz, sub_F68DBE_Return	; F68DEB  jr NZ,0xf68e40
+	jr	nz, LcdKeyRow4_StepRecordSub00_Return	; F68DEB  jr NZ,0xf68e40
 	calr	StepRecord_CalcStepAndNoteLength	; F68DED  calr 0xf6a7eb
 	calr	sub_F6C43C	; F68DF0  calr 0xf6c43c
 	cp	w, 0:i3	; F68DF3  cp W,0
-	jr	nz, sub_F68DBE_Skip2	; F68DF5  jr NZ,0xf68e03
+	jr	nz, LcdKeyRow4_StepRecordSub00_Skip2	; F68DF5  jr NZ,0xf68e03
 	cp	c, 6:i3	; F68DF7  cp C,6
-	jr	ugt, sub_F68DBE_Skip2	; F68DF9  jr UGT,0xf68e03
+	jr	ugt, LcdKeyRow4_StepRecordSub00_Skip2	; F68DF9  jr UGT,0xf68e03
 	calr	StepLength_AddTo0E53	; F68DFB  calr 0xf6a895
 	calr	StepRecord_AppendBeatMarks	; F68DFE  calr 0xf6a7c5
-	jr	sub_F68DBE_Join	; F68E01  jr T,0xf68e0f
-sub_F68DBE_Skip2:
+	jr	LcdKeyRow4_StepRecordSub00_Join	; F68E01  jr T,0xf68e0f
+LcdKeyRow4_StepRecordSub00_Skip2:
 	ld	(4205:16), 0	; F68E03  ld (0x106d),0x00
 	calr	StepRecord_CursorForwardByStepLength	; F68E08  calr 0xf69811
 	m_res 2, MD16, 0x0e4f	; F68E0B  res 2,(0x0e4f)
-sub_F68DBE_Join:
+LcdKeyRow4_StepRecordSub00_Join:
 	m_or_mi8 MB16, 0x0ed5, 0x01	; F68E0F  or (0x0ed5),0x01
 	calr	sub_F69CB4	; F68E14  calr 0xf69cb4
 	call	MsgLine_MeasureNumber	; F68E17  call 0xf6d6dc
 	calr	BStore_ReadByteAtSongPosition	; F68E1B  calr 0xf6b8bd
 	cp	a, 129	; F68E1E  cp A,0x81
-	jr	z, sub_F68DBE_Skip3	; F68E21  jr Z,0xf68e35
+	jr	z, LcdKeyRow4_StepRecordSub00_Skip3	; F68E21  jr Z,0xf68e35
 	cp	a, 130	; F68E23  cp A,0x82
-	jr	z, sub_F68DBE_Skip3	; F68E26  jr Z,0xf68e35
+	jr	z, LcdKeyRow4_StepRecordSub00_Skip3	; F68E26  jr Z,0xf68e35
 	calr	BStore_ReadByteAtSongPositionPlus1	; F68E28  calr 0xf6b8f1
 	cp	a, 83	; F68E2B  cp A,0x53
-	jr	ugt, sub_F68DBE_Skip3	; F68E2E  jr UGT,0xf68e35
+	jr	ugt, LcdKeyRow4_StepRecordSub00_Skip3	; F68E2E  jr UGT,0xf68e35
 	calr	sub_F6741C	; F68E30  calr 0xf6741c
-	jr	sub_F68DBE_Join2	; F68E33  jr T,0xf68e38
-sub_F68DBE_Skip3:
+	jr	LcdKeyRow4_StepRecordSub00_Join2	; F68E33  jr T,0xf68e38
+LcdKeyRow4_StepRecordSub00_Skip3:
 	calr	StepRecord_ReturnToTrackKindPage	; F68E35  calr 0xf69c03
-sub_F68DBE_Join2:
+LcdKeyRow4_StepRecordSub00_Join2:
 	m_res 2, MD16, 0x0e4f	; F68E38  res 2,(0x0e4f)
 	call	T_F431B4	; F68E3C  call 0xf431b4
-sub_F68DBE_Return:
+LcdKeyRow4_StepRecordSub00_Return:
 	ret	; F68E40  ret
 	ret	; F68E41  ret
 	ret	; F68E42  ret
@@ -154093,7 +154167,7 @@ sub_F68DBE_Return:
 	ret	; F68E47  ret
 
 ; --------------------------------------------------------------------------
-; sub_F68E48
+; BStore_DeleteByteAtSongPosition
 ; Called from: in-module: 0xF68F05 0xF692D6
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F6B657
@@ -154103,7 +154177,11 @@ sub_F68DBE_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F68E48:
+; BStore_DeleteByteAtSongPosition: W := 1 and sub_F6B657: deletes one byte at the current entry's song position
+;   (BStore_CopyRangeForward pulls the rest of the chain down, the saved end cursor shrinks).
+;   StepRecord_ShortenMeasures removes 0x81 beat marks with it; sub_F6B657 with W = 6 deletes a note event. Basis:
+;   caller + caller header + body. (notes/naming-pilot-2026-10-06/proposals_wave9_d9.json)
+BStore_DeleteByteAtSongPosition:
 	ld	w, 1:opc	; F68E48  ld W,0x01
 	calr	sub_F6B657	; F68E4A  calr 0xf6b657
 	ret	; F68E4D  ret
@@ -154171,7 +154249,7 @@ sub_F68E48_Skip2:
 ; Called from: in-module: 0xF68EAB
 ; Touches: (0x0F02)
 ; Calls:   BStore_ReadByteAtSongPositionPlus1 sub_F6B740 sub_F68F52 StepRecord_SaveCursorToSlot StepRecord_RestoreCursorFromSlot TrackCursor_StepBack
-;          sub_F68E48
+;          BStore_DeleteByteAtSongPosition
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68EB5 is an instruction
 ;           boundary.  The name IS the address.
@@ -154216,7 +154294,7 @@ sub_F68EB5_Skip4:
 	ld	a, 1:opc	; F68EFD  ld A,0x01
 	calr	StepRecord_RestoreCursorFromSlot	; F68EFF  calr 0xf6c2e5
 	calr	TrackCursor_StepBack	; F68F02  calr 0xf6b76a
-	calr	sub_F68E48	; F68F05  calr 0xf68e48
+	calr	BStore_DeleteByteAtSongPosition	; F68F05  calr 0xf68e48
 	jr	sub_F68EB5_Join	; F68F08  jr T,0xf68ed5
 
 ; --------------------------------------------------------------------------
@@ -154434,51 +154512,51 @@ DispatchTable_F68FB4_Code_Skip2:
 ;   pilot-2026-10-06/proposals_wave6_u.json)
 StepRecord_EraseTimeSig:
 	m_cp_mi8 MB16, 0x0e63, 0x02	; F69019  cp (0x0e63),0x02
-	jr	z, sub_F69019_Skip	; F6901E  jr Z,0xf69023
-sub_F69019_Loop:
+	jr	z, StepRecord_EraseTimeSig_Skip	; F6901E  jr Z,0xf69023
+StepRecord_EraseTimeSig_Loop:
 	ld	w, 0:opc	; F69020  ld W,0x00
-sub_F69019_Return:
+StepRecord_EraseTimeSig_Return:
 	ret	; F69022  ret
-sub_F69019_Skip:
+StepRecord_EraseTimeSig_Skip:
 	calr	StepRecord_ReadTimeSigBeatsAtCursor	; F69023  calr 0xf69203
 	cp	w, 255	; F69026  cp W,0xff
-	jr	z, sub_F69019_Loop	; F69029  jr Z,0xf69020
+	jr	z, StepRecord_EraseTimeSig_Loop	; F69029  jr Z,0xf69020
 	calr	StepRecord_CheckCursorAtSongStart	; F6902B  calr 0xf6922b
 	cp	w, 0:i3	; F6902E  cp W,0
-	jr	nz, sub_F69019_Skip2	; F69030  jr NZ,0xf6903b
+	jr	nz, StepRecord_EraseTimeSig_Skip2	; F69030  jr NZ,0xf6903b
 	ld	w, 104:opc	; F69032  ld W,0x68
 	calr	StepRecord_PostSysEx50_87FromW	; F69034  calr 0xf67481
 	ld	w, 1:opc	; F69037  ld W,0x01
-	jr	sub_F69019_Return	; F69039  jr T,0xf69022
-sub_F69019_Skip2:
+	jr	StepRecord_EraseTimeSig_Return	; F69039  jr T,0xf69022
+StepRecord_EraseTimeSig_Skip2:
 	ld	a, (3921:16)	; F6903B  ld A,(0x0f51)
 	ld	(3923:16), a	; F6903F  ld (0x0f53),A
 	calr	StepRecord_FindPrevTimeSigBeats	; F69043  calr 0xf69162
 	ld	a, (3921:16)	; F69046  ld A,(0x0f51)
 	ld	(3922:16), a	; F6904A  ld (0x0f52),A
 	m_cp_rm MB16, 0x0f53, 1	; F6904E  cp A,(0x0f53)
-	jr	nz, sub_F69019_Skip3	; F69052  jr NZ,0xf69056
-	jr	sub_F69019_Loop	; F69054  jr T,0xf69020
-sub_F69019_Skip3:
+	jr	nz, StepRecord_EraseTimeSig_Skip3	; F69052  jr NZ,0xf69056
+	jr	StepRecord_EraseTimeSig_Loop	; F69054  jr T,0xf69020
+StepRecord_EraseTimeSig_Skip3:
 	ld	wa, (3670:16)	; F69056  ld WA,(0x0e56)
 	m_cp_rm MW16, 0x0e6a, 0	; F6905A  cp WA,(0x0e6a)
-	jr	c, sub_F69019_Skip5	; F6905E  jr C,0xf69079
+	jr	c, StepRecord_EraseTimeSig_Skip5	; F6905E  jr C,0xf69079
 	calr	sub_F693F6	; F69060  calr 0xf693f6
 	ld	a, (3922:16)	; F69063  ld A,(0x0f52)
 	m_cp_rm MB16, 0x0f53, 1	; F69067  cp A,(0x0f53)
-	jr	c, sub_F69019_Skip4	; F6906B  jr C,0xf69072
+	jr	c, StepRecord_EraseTimeSig_Skip4	; F6906B  jr C,0xf69072
 	calr	StepRecord_LengthenMeasures	; F6906D  calr 0xf69240
-	jr	sub_F69019_Join	; F69070  jr T,0xf69075
-sub_F69019_Skip4:
+	jr	StepRecord_EraseTimeSig_Join	; F69070  jr T,0xf69075
+StepRecord_EraseTimeSig_Skip4:
 	calr	StepRecord_ShortenMeasures_Veneer	; F69072  calr 0xf67414
-sub_F69019_Join:
+StepRecord_EraseTimeSig_Join:
 	ld	w, 1:opc	; F69075  ld W,0x01
-	jr	sub_F69019_Return	; F69077  jr T,0xf69022
-sub_F69019_Skip5:
+	jr	StepRecord_EraseTimeSig_Return	; F69077  jr T,0xf69022
+StepRecord_EraseTimeSig_Skip5:
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F69079  and (0x2075),0x6f
 	ld	(UI_StatusCode:16), 25	; F6907E  ld (0x2880),0x19
 	ldw	(UI_Request:16), 16555	; F69083  ld (0x2070),0x40ab
-	jr	sub_F69019_Join	; F69089  jr T,0xf69075
+	jr	StepRecord_EraseTimeSig_Join	; F69089  jr T,0xf69075
 
 ; --------------------------------------------------------------------------
 ; StepRecord_ApplyTimeSigChange
@@ -154500,23 +154578,23 @@ sub_F69019_Skip5:
 StepRecord_ApplyTimeSigChange:
 	ld	a, (3683:16)	; F6908B  ld A,(0x0e63)
 	cp	a, 2:i3	; F6908F  cp A,2
-	jr	z, sub_F6908B_Skip	; F69091  jr Z,0xf69096
+	jr	z, StepRecord_ApplyTimeSigChange_Skip	; F69091  jr Z,0xf69096
 	ld	w, 0:opc	; F69093  ld W,0x00
-sub_F6908B_Return:
+StepRecord_ApplyTimeSigChange_Return:
 	ret	; F69095  ret
-sub_F6908B_Skip:
+StepRecord_ApplyTimeSigChange_Skip:
 	ld	a, (4794:16)	; F69096  ld A,(0x12ba)
 	ld	d, (3929:16)	; F6909A  ld D,(0x0f59)
 	inc	1, a	; F6909E  inc 1,A
 	ld	(3922:16), a	; F690A0  ld (0x0f52),A
 	calr	StepRecord_FindTimeSigInCursorBeat	; F690A4  calr 0xf69183
 	cp	w, 0:i3	; F690A7  cp W,0
-	jr	nz, sub_F6908B_Skip2	; F690A9  jr NZ,0xf690b0
+	jr	nz, StepRecord_ApplyTimeSigChange_Skip2	; F690A9  jr NZ,0xf690b0
 	calr	StepRecord_ReplaceTimeSigAtCursor	; F690AB  calr 0xf690b5
-	jr	sub_F6908B_Return	; F690AE  jr T,0xf69095
-sub_F6908B_Skip2:
+	jr	StepRecord_ApplyTimeSigChange_Return	; F690AE  jr T,0xf69095
+StepRecord_ApplyTimeSigChange_Skip2:
 	calr	StepRecord_RebarForInsertedTimeSig	; F690B0  calr 0xf69116
-	jr	sub_F6908B_Return	; F690B3  jr T,0xf69095
+	jr	StepRecord_ApplyTimeSigChange_Return	; F690B3  jr T,0xf69095
 
 ; --------------------------------------------------------------------------
 ; StepRecord_ReplaceTimeSigAtCursor
@@ -154540,35 +154618,35 @@ StepRecord_ReplaceTimeSigAtCursor:
 	ld	(3923:16), a	; F690B9  ld (0x0f53),A
 	ld	a, (3922:16)	; F690BD  ld A,(0x0f52)
 	m_cp_rm MB16, 0x0f53, 1	; F690C1  cp A,(0x0f53)
-	jr	nz, sub_F690B5_Skip	; F690C5  jr NZ,0xf690d6
+	jr	nz, StepRecord_ReplaceTimeSigAtCursor_Skip	; F690C5  jr NZ,0xf690d6
 	calr	sub_F693F6	; F690C7  calr 0xf693f6
 	ld	w, 3:opc	; F690CA  ld W,0x03
 	ld	xiy, 4846	; F690CC  ld XIY,0x000012ee
 	calr	StepRecord_AppendBytesToCurrentEntry	; F690D1  calr 0xf6b387
-	jr	sub_F690B5_Join2	; F690D4  jr T,0xf69113
-sub_F690B5_Skip:
+	jr	StepRecord_ReplaceTimeSigAtCursor_Join2	; F690D4  jr T,0xf69113
+StepRecord_ReplaceTimeSigAtCursor_Skip:
 	ld	wa, (3670:16)	; F690D6  ld WA,(0x0e56)
 	m_cp_rm MW16, 0x0e6a, 0	; F690DA  cp WA,(0x0e6a)
-	jr	c, sub_F690B5_Skip3	; F690DE  jr C,0xf69101
+	jr	c, StepRecord_ReplaceTimeSigAtCursor_Skip3	; F690DE  jr C,0xf69101
 	calr	sub_F693F6	; F690E0  calr 0xf693f6
 	ld	a, (3922:16)	; F690E3  ld A,(0x0f52)
 	m_cp_rm MB16, 0x0f53, 1	; F690E7  cp A,(0x0f53)
-	jr	c, sub_F690B5_Skip2	; F690EB  jr C,0xf690f2
+	jr	c, StepRecord_ReplaceTimeSigAtCursor_Skip2	; F690EB  jr C,0xf690f2
 	calr	StepRecord_LengthenMeasures	; F690ED  calr 0xf69240
-	jr	sub_F690B5_Join	; F690F0  jr T,0xf690f5
-sub_F690B5_Skip2:
+	jr	StepRecord_ReplaceTimeSigAtCursor_Join	; F690F0  jr T,0xf690f5
+StepRecord_ReplaceTimeSigAtCursor_Skip2:
 	calr	StepRecord_ShortenMeasures_Veneer	; F690F2  calr 0xf67414
-sub_F690B5_Join:
+StepRecord_ReplaceTimeSigAtCursor_Join:
 	ld	w, 3:opc	; F690F5  ld W,0x03
 	ld	xiy, 4846	; F690F7  ld XIY,0x000012ee
 	calr	StepRecord_AppendBytesToCurrentEntry	; F690FC  calr 0xf6b387
-	jr	sub_F690B5_Join2	; F690FF  jr T,0xf69113
-sub_F690B5_Skip3:
+	jr	StepRecord_ReplaceTimeSigAtCursor_Join2	; F690FF  jr T,0xf69113
+StepRecord_ReplaceTimeSigAtCursor_Skip3:
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F69101  and (0x2075),0x6f
 	ld	(UI_StatusCode:16), 25	; F69106  ld (0x2880),0x19
 	ldw	(UI_Request:16), 16555	; F6910B  ld (0x2070),0x40ab
-	jr	sub_F690B5_Join2	; F69111  jr T,0xf69113
-sub_F690B5_Join2:
+	jr	StepRecord_ReplaceTimeSigAtCursor_Join2	; F69111  jr T,0xf69113
+StepRecord_ReplaceTimeSigAtCursor_Join2:
 	ld	w, 1:opc	; F69113  ld W,0x01
 	ret	; F69115  ret
 
@@ -154595,29 +154673,29 @@ StepRecord_RebarForInsertedTimeSig:
 	ld	(3923:16), a	; F6911D  ld (0x0f53),A
 	ld	a, (3922:16)	; F69121  ld A,(0x0f52)
 	m_cp_rm MB16, 0x0f53, 1	; F69125  cp A,(0x0f53)
-	jr	nz, sub_F69116_Skip	; F69129  jr NZ,0xf6912f
+	jr	nz, StepRecord_RebarForInsertedTimeSig_Skip	; F69129  jr NZ,0xf6912f
 	ld	w, 0:opc	; F6912B  ld W,0x00
-	jr	sub_F69116_Return	; F6912D  jr T,0xf69161
-sub_F69116_Skip:
+	jr	StepRecord_RebarForInsertedTimeSig_Return	; F6912D  jr T,0xf69161
+StepRecord_RebarForInsertedTimeSig_Skip:
 	ld	wa, (3670:16)	; F6912F  ld WA,(0x0e56)
 	m_cp_rm MW16, 0x0e6a, 0	; F69133  cp WA,(0x0e6a)
-	jr	c, sub_F69116_Skip3	; F69137  jr C,0xf6914f
+	jr	c, StepRecord_RebarForInsertedTimeSig_Skip3	; F69137  jr C,0xf6914f
 	ld	a, (3922:16)	; F69139  ld A,(0x0f52)
 	m_cp_rm MB16, 0x0f53, 1	; F6913D  cp A,(0x0f53)
-	jr	c, sub_F69116_Skip2	; F69141  jr C,0xf69148
+	jr	c, StepRecord_RebarForInsertedTimeSig_Skip2	; F69141  jr C,0xf69148
 	calr	StepRecord_LengthenMeasures	; F69143  calr 0xf69240
-	jr	sub_F69116_Join	; F69146  jr T,0xf6914b
-sub_F69116_Skip2:
+	jr	StepRecord_RebarForInsertedTimeSig_Join	; F69146  jr T,0xf6914b
+StepRecord_RebarForInsertedTimeSig_Skip2:
 	calr	StepRecord_ShortenMeasures_Veneer	; F69148  calr 0xf67414
-sub_F69116_Join:
+StepRecord_RebarForInsertedTimeSig_Join:
 	ld	w, 0:opc	; F6914B  ld W,0x00
-	jr	sub_F69116_Return	; F6914D  jr T,0xf69161
-sub_F69116_Skip3:
+	jr	StepRecord_RebarForInsertedTimeSig_Return	; F6914D  jr T,0xf69161
+StepRecord_RebarForInsertedTimeSig_Skip3:
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F6914F  and (0x2075),0x6f
 	ld	(UI_StatusCode:16), 25	; F69154  ld (0x2880),0x19
 	ldw	(UI_Request:16), 16555	; F69159  ld (0x2070),0x40ab
 	ld	w, 1:opc	; F6915F  ld W,0x01
-sub_F69116_Return:
+StepRecord_RebarForInsertedTimeSig_Return:
 	ret	; F69161  ret
 
 ; --------------------------------------------------------------------------
@@ -154638,17 +154716,17 @@ sub_F69116_Return:
 StepRecord_FindPrevTimeSigBeats:
 	ld	a, 3:opc	; F69162  ld A,0x03
 	calr	StepRecord_SaveCursorToSlot	; F69164  calr 0xf6c292
-sub_F69162_Loop:
+StepRecord_FindPrevTimeSigBeats_Loop:
 	calr	TrackCursor_StepBackKeepBeatPosition	; F69167  calr 0xf6b770
 	cp	w, 255	; F6916A  cp W,0xff
-	jr	z, sub_F69162_Skip	; F6916D  jr Z,0xf69178
+	jr	z, StepRecord_FindPrevTimeSigBeats_Skip	; F6916D  jr Z,0xf69178
 	calr	StepRecord_ReadTimeSigBeatsAtCursor	; F6916F  calr 0xf69203
 	cp	w, 0:i3	; F69172  cp W,0
-	jr	nz, sub_F69162_Loop	; F69174  jr NZ,0xf69167
-	jr	sub_F69162_Join	; F69176  jr T,0xf6917d
-sub_F69162_Skip:
+	jr	nz, StepRecord_FindPrevTimeSigBeats_Loop	; F69174  jr NZ,0xf69167
+	jr	StepRecord_FindPrevTimeSigBeats_Join	; F69176  jr T,0xf6917d
+StepRecord_FindPrevTimeSigBeats_Skip:
 	ld	(3921:16), 4	; F69178  ld (0x0f51),0x04
-sub_F69162_Join:
+StepRecord_FindPrevTimeSigBeats_Join:
 	ld	a, 3:opc	; F6917D  ld A,0x03
 	calr	StepRecord_RestoreCursorFromSlot	; F6917F  calr 0xf6c2e5
 	ret	; F69182  ret
@@ -154673,60 +154751,60 @@ sub_F69162_Join:
 StepRecord_FindTimeSigInCursorBeat:
 	ld	a, 3:opc	; F69183  ld A,0x03
 	calr	StepRecord_SaveCursorToSlot	; F69185  calr 0xf6c292
-sub_F69183_Loop:
+StepRecord_FindTimeSigInCursorBeat_Loop:
 	calr	BStore_ReadByteAtSongPosition	; F69188  calr 0xf6b8bd
 	cp	a, 129	; F6918B  cp A,0x81
-	jr	z, sub_F69183_Loop2	; F6918E  jr Z,0xf69198
+	jr	z, StepRecord_FindTimeSigInCursorBeat_Loop2	; F6918E  jr Z,0xf69198
 	calr	TrackCursor_StepForwardKeepBeatPosition	; F69190  calr 0xf6b75e
 	cp	w, 255	; F69193  cp W,0xff
-	jr	nz, sub_F69183_Loop	; F69196  jr NZ,0xf69188
-sub_F69183_Loop2:
+	jr	nz, StepRecord_FindTimeSigInCursorBeat_Loop	; F69196  jr NZ,0xf69188
+StepRecord_FindTimeSigInCursorBeat_Loop2:
 	calr	TrackCursor_StepBackKeepBeatPosition	; F69198  calr 0xf6b770
 	cp	w, 255	; F6919B  cp W,0xff
-	jr	z, sub_F69183_Skip3	; F6919E  jr Z,0xf691fb
+	jr	z, StepRecord_FindTimeSigInCursorBeat_Skip3	; F6919E  jr Z,0xf691fb
 	calr	BStore_ReadByteAtSongPosition	; F691A0  calr 0xf6b8bd
 	cp	a, 129	; F691A3  cp A,0x81
-	jr	z, sub_F69183_Skip3	; F691A6  jr Z,0xf691fb
+	jr	z, StepRecord_FindTimeSigInCursorBeat_Skip3	; F691A6  jr Z,0xf691fb
 	calr	StepRecord_ReadTimeSigBeatsAtCursor	; F691A8  calr 0xf69203
 	cp	w, 0:i3	; F691AB  cp W,0
-	jr	nz, sub_F69183_Loop2	; F691AD  jr NZ,0xf69198
+	jr	nz, StepRecord_FindTimeSigInCursorBeat_Loop2	; F691AD  jr NZ,0xf69198
 	ld	a, 4:opc	; F691AF  ld A,0x04
 	calr	StepRecord_SaveCursorToSlot	; F691B1  calr 0xf6c292
 	ld	a, (3921:16)	; F691B4  ld A,(0x0f51)
 	ld	(3924:16), a	; F691B8  ld (0x0f54),A
-sub_F69183_Loop3:
+StepRecord_FindTimeSigInCursorBeat_Loop3:
 	calr	TrackCursor_StepBackKeepBeatPosition	; F691BC  calr 0xf6b770
 	cp	w, 255	; F691BF  cp W,0xff
-	jr	z, sub_F69183_Skip	; F691C2  jr Z,0xf691e8
+	jr	z, StepRecord_FindTimeSigInCursorBeat_Skip	; F691C2  jr Z,0xf691e8
 	calr	BStore_ReadByteAtSongPosition	; F691C4  calr 0xf6b8bd
 	cp	a, 129	; F691C7  cp A,0x81
-	jr	z, sub_F69183_Loop4	; F691CA  jr Z,0xf691d8
+	jr	z, StepRecord_FindTimeSigInCursorBeat_Loop4	; F691CA  jr Z,0xf691d8
 	calr	StepRecord_ReadTimeSigBeatsAtCursor	; F691CC  calr 0xf69203
 	cp	w, 0:i3	; F691CF  cp W,0
-	jr	nz, sub_F69183_Loop3	; F691D1  jr NZ,0xf691bc
+	jr	nz, StepRecord_FindTimeSigInCursorBeat_Loop3	; F691D1  jr NZ,0xf691bc
 	calr	sub_F693F6	; F691D3  calr 0xf693f6
-	jr	sub_F69183_Loop3	; F691D6  jr T,0xf691bc
-sub_F69183_Loop4:
+	jr	StepRecord_FindTimeSigInCursorBeat_Loop3	; F691D6  jr T,0xf691bc
+StepRecord_FindTimeSigInCursorBeat_Loop4:
 	calr	TrackCursor_StepForwardKeepBeatPosition	; F691D8  calr 0xf6b75e
 	cp	w, 255	; F691DB  cp W,0xff
-	jr	z, sub_F69183_Skip2	; F691DE  jr Z,0xf691ef
+	jr	z, StepRecord_FindTimeSigInCursorBeat_Skip2	; F691DE  jr Z,0xf691ef
 	calr	BStore_ReadByteAtSongPosition	; F691E0  calr 0xf6b8bd
 	cp	a, 129	; F691E3  cp A,0x81
-	jr	z, sub_F69183_Skip2	; F691E6  jr Z,0xf691ef
-sub_F69183_Skip:
+	jr	z, StepRecord_FindTimeSigInCursorBeat_Skip2	; F691E6  jr Z,0xf691ef
+StepRecord_FindTimeSigInCursorBeat_Skip:
 	calr	StepRecord_ReadTimeSigBeatsAtCursor	; F691E8  calr 0xf69203
 	cp	w, 0:i3	; F691EB  cp W,0
-	jr	nz, sub_F69183_Loop4	; F691ED  jr NZ,0xf691d8
-sub_F69183_Skip2:
+	jr	nz, StepRecord_FindTimeSigInCursorBeat_Loop4	; F691ED  jr NZ,0xf691d8
+StepRecord_FindTimeSigInCursorBeat_Skip2:
 	ld	a, (3924:16)	; F691EF  ld A,(0x0f54)
 	ld	(3921:16), a	; F691F3  ld (0x0f51),A
 	ld	w, 0:opc	; F691F7  ld W,0x00
-	jr	sub_F69183_Return	; F691F9  jr T,0xf69202
-sub_F69183_Skip3:
+	jr	StepRecord_FindTimeSigInCursorBeat_Return	; F691F9  jr T,0xf69202
+StepRecord_FindTimeSigInCursorBeat_Skip3:
 	ld	a, 3:opc	; F691FB  ld A,0x03
 	calr	StepRecord_RestoreCursorFromSlot	; F691FD  calr 0xf6c2e5
 	ld	w, 255:opc	; F69200  ld W,0xff
-sub_F69183_Return:
+StepRecord_FindTimeSigInCursorBeat_Return:
 	ret	; F69202  ret
 
 ; --------------------------------------------------------------------------
@@ -154750,15 +154828,15 @@ StepRecord_ReadTimeSigBeatsAtCursor:
 	calr	BStore_ReadByteAtSongPositionAndAdvance	; F69209  calr 0xf6b95f
 	ld	(3786:16), a	; F6920C  ld (0x0eca),A
 	cp	a, 135	; F69210  cp A,0x87
-	jr	nz, sub_F69203_Skip	; F69213  jr NZ,0xf69222
+	jr	nz, StepRecord_ReadTimeSigBeatsAtCursor_Skip	; F69213  jr NZ,0xf69222
 	calr	BStore_SkipTickReadFirstDataByte	; F69215  calr 0xf6c230
 	inc	1, a	; F69218  inc 1,A
 	ld	(3921:16), a	; F6921A  ld (0x0f51),A
 	ld	w, 0:opc	; F6921E  ld W,0x00
-	jr	sub_F69203_Join	; F69220  jr T,0xf69224
-sub_F69203_Skip:
+	jr	StepRecord_ReadTimeSigBeatsAtCursor_Join	; F69220  jr T,0xf69224
+StepRecord_ReadTimeSigBeatsAtCursor_Skip:
 	ld	w, 255:opc	; F69222  ld W,0xff
-sub_F69203_Join:
+StepRecord_ReadTimeSigBeatsAtCursor_Join:
 	ld	a, 2:opc	; F69224  ld A,0x02
 	calr	StepRecord_RestoreCursorFromSlot	; F69226  calr 0xf6c2e5
 	pop	xiy	; F69229  pop XIY
@@ -154782,11 +154860,11 @@ StepRecord_CheckCursorAtSongStart:
 	pushw	de	; F6922D  push DE
 	xor	de, de	; F6922E  xor DE,DE
 	m_cp_mr MW16, 0x0e56, 2	; F69230  cp (0x0e56),DE
-	jr	nz, sub_F6922B_Epilogue	; F69234  jr NZ,0xf6923e
+	jr	nz, StepRecord_CheckCursorAtSongStart_Epilogue	; F69234  jr NZ,0xf6923e
 	m_cp_rm MB16, 0x0e53, 5	; F69236  cp E,(0x0e53)
-	jr	nz, sub_F6922B_Epilogue	; F6923A  jr NZ,0xf6923e
+	jr	nz, StepRecord_CheckCursorAtSongStart_Epilogue	; F6923A  jr NZ,0xf6923e
 	ld	w, 0:opc	; F6923C  ld W,0x00
-sub_F6922B_Epilogue:
+StepRecord_CheckCursorAtSongStart_Epilogue:
 	popw	de	; F6923E  pop DE
 	ret	; F6923F  ret
 
@@ -154815,33 +154893,33 @@ StepRecord_LengthenMeasures:
 	push	xiz	; F69246  push XIZ
 	ld	a, 1:opc	; F69247  ld A,0x01
 	calr	StepRecord_SaveCursorToSlot	; F69249  calr 0xf6c292
-sub_F69240_Join:
+StepRecord_LengthenMeasures_Join:
 	xor	a, a	; F6924C  xor A,A
 	ld	(3925:16), a	; F6924E  ld (0x0f55),A
-sub_F69240_Loop:
+StepRecord_LengthenMeasures_Loop:
 	calr	BStore_ReadByteAtSongPosition	; F69252  calr 0xf6b8bd
 	cp	a, 129	; F69255  cp A,0x81
-	jr	nz, sub_F69240_Skip	; F69258  jr NZ,0xf69282
+	jr	nz, StepRecord_LengthenMeasures_Skip	; F69258  jr NZ,0xf69282
 	inc	1, (3925:16)	; F6925A  inc 1,(0x0f55)
 	calr	TrackCursor_StepForwardKeepBeatPosition	; F6925E  calr 0xf6b75e
 	cp	w, 255	; F69261  cp W,0xff
-	jr	z, sub_F69240_Skip2	; F69264  jr Z,0xf6928f
+	jr	z, StepRecord_LengthenMeasures_Skip2	; F69264  jr Z,0xf6928f
 	ld	a, (3925:16)	; F69266  ld A,(0x0f55)
 	m_cp_rm MB16, 0x0f53, 1	; F6926A  cp A,(0x0f53)
-	jr	c, sub_F69240_Loop	; F6926E  jr C,0xf69252
+	jr	c, StepRecord_LengthenMeasures_Loop	; F6926E  jr C,0xf69252
 	xor	b, b	; F69270  xor B,B
 	ld	c, (3922:16)	; F69272  ld C,(0x0f52)
 	sub	c, (3923:16)	; F69276  sub C,(0x0f53)
 	calr	StepRecord_AppendBeatMark	; F6927A  calr 0xf6b257
 	djnz16	bc, -6	; F6927D  djnz BC,0xf6927a
-	jr	sub_F69240_Join	; F69280  jr T,0xf6924c
-sub_F69240_Skip:
+	jr	StepRecord_LengthenMeasures_Join	; F69280  jr T,0xf6924c
+StepRecord_LengthenMeasures_Skip:
 	cp	a, 135	; F69282  cp A,0x87
-	jr	z, sub_F69240_Skip2	; F69285  jr Z,0xf6928f
+	jr	z, StepRecord_LengthenMeasures_Skip2	; F69285  jr Z,0xf6928f
 	calr	TrackCursor_StepForwardKeepBeatPosition	; F69287  calr 0xf6b75e
 	cp	w, 255	; F6928A  cp W,0xff
-	jr	nz, sub_F69240_Loop	; F6928D  jr NZ,0xf69252
-sub_F69240_Skip2:
+	jr	nz, StepRecord_LengthenMeasures_Loop	; F6928D  jr NZ,0xf69252
+StepRecord_LengthenMeasures_Skip2:
 	ld	a, 1:opc	; F6928F  ld A,0x01
 	calr	StepRecord_RestoreCursorFromSlot	; F69291  calr 0xf6c2e5
 	pop	xiz	; F69294  pop XIZ
@@ -154857,7 +154935,7 @@ sub_F69240_Skip2:
 ; StepRecord_ShortenMeasures
 ; Called from: in-module: 0xF67414
 ; Touches: (0x0F52) (0x0F53) (0x0F55)
-; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPositionPlus1 BStore_ReadByteAtSongPosition TrackCursor_StepForwardKeepBeatPosition sub_F68E48 StepRecord_RestoreCursorFromSlot
+; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPositionPlus1 BStore_ReadByteAtSongPosition TrackCursor_StepForwardKeepBeatPosition BStore_DeleteByteAtSongPosition StepRecord_RestoreCursorFromSlot
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6929C is an instruction
 ;           boundary.  The name IS the address.
@@ -154865,7 +154943,7 @@ sub_F69240_Skip2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; StepRecord_ShortenMeasures: Re-bar when a meter change SHORTENS measures (new beats (0x0F52) < old (0x0F53)): from
-;   the cursor, deletes (0x0F53)-(0x0F52) 0x81 beat marks (sub_F68E48) then skips (0x0F52), repeating until a 0x87
+;   the cursor, deletes (0x0F53)-(0x0F52) 0x81 beat marks (BStore_DeleteByteAtSongPosition) then skips (0x0F52), repeating until a 0x87
 ;   record, a 0x84, the 0x82 end or no next event; cursor (slot 1) and registers restored. The body behind
 ;   StepRecord_ShortenMeasures_Veneer; twin of StepRecord_LengthenMeasures. Basis: callers + veneer header + body +
 ;   twin. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
@@ -154879,56 +154957,56 @@ StepRecord_ShortenMeasures:
 	push	xiz	; F692A2  push XIZ
 	ld	a, 1:opc	; F692A3  ld A,0x01
 	calr	StepRecord_SaveCursorToSlot	; F692A5  calr 0xf6c292
-sub_F69240_Join2:
+StepRecord_ShortenMeasures_Join2:
 	xor	a, a	; F692A8  xor A,A
 	ld	(3925:16), a	; F692AA  ld (0x0f55),A
-sub_F69240_Loop2:
+StepRecord_ShortenMeasures_Loop2:
 	calr	BStore_ReadByteAtSongPositionPlus1	; F692AE  calr 0xf6b8f1
 	cp	a, 130	; F692B1  cp A,0x82
-	jr	z, sub_F69240_Skip5	; F692B4  jr Z,0xf6931a
+	jr	z, StepRecord_ShortenMeasures_Skip5	; F692B4  jr Z,0xf6931a
 	calr	BStore_ReadByteAtSongPosition	; F692B6  calr 0xf6b8bd
 	cp	a, 132	; F692B9  cp A,0x84
-	jr	z, sub_F69240_Skip5	; F692BC  jr Z,0xf6931a
+	jr	z, StepRecord_ShortenMeasures_Skip5	; F692BC  jr Z,0xf6931a
 	cp	a, 129	; F692BE  cp A,0x81
-	jr	z, sub_F69240_Skip3	; F692C1  jr Z,0xf692d2
+	jr	z, StepRecord_ShortenMeasures_Skip3	; F692C1  jr Z,0xf692d2
 	cp	a, 135	; F692C3  cp A,0x87
-	jr	z, sub_F69240_Skip5	; F692C6  jr Z,0xf6931a
+	jr	z, StepRecord_ShortenMeasures_Skip5	; F692C6  jr Z,0xf6931a
 	calr	TrackCursor_StepForwardKeepBeatPosition	; F692C8  calr 0xf6b75e
 	cp	w, 255	; F692CB  cp W,0xff
-	jr	z, sub_F69240_Skip5	; F692CE  jr Z,0xf6931a
-	jr	sub_F69240_Loop2	; F692D0  jr T,0xf692ae
-sub_F69240_Skip3:
+	jr	z, StepRecord_ShortenMeasures_Skip5	; F692CE  jr Z,0xf6931a
+	jr	StepRecord_ShortenMeasures_Loop2	; F692D0  jr T,0xf692ae
+StepRecord_ShortenMeasures_Skip3:
 	inc	1, (3925:16)	; F692D2  inc 1,(0x0f55)
-	calr	sub_F68E48	; F692D6  calr 0xf68e48
+	calr	BStore_DeleteByteAtSongPosition	; F692D6  calr 0xf68e48
 	ld	a, (3923:16)	; F692D9  ld A,(0x0f53)
 	sub	a, (3922:16)	; F692DD  sub A,(0x0f52)
 	m_cp_rm MB16, 0x0f55, 1	; F692E1  cp A,(0x0f55)
-	jr	ugt, sub_F69240_Loop2	; F692E5  jr UGT,0xf692ae
+	jr	ugt, StepRecord_ShortenMeasures_Loop2	; F692E5  jr UGT,0xf692ae
 	xor	b, b	; F692E7  xor B,B
 	ld	c, (3922:16)	; F692E9  ld C,(0x0f52)
-sub_F69240_Join3:
+StepRecord_ShortenMeasures_Join3:
 	calr	BStore_ReadByteAtSongPosition	; F692ED  calr 0xf6b8bd
 	cp	a, 130	; F692F0  cp A,0x82
-	jr	z, sub_F69240_Skip5	; F692F3  jr Z,0xf6931a
+	jr	z, StepRecord_ShortenMeasures_Skip5	; F692F3  jr Z,0xf6931a
 	cp	a, 132	; F692F5  cp A,0x84
-	jr	z, sub_F69240_Skip5	; F692F8  jr Z,0xf6931a
+	jr	z, StepRecord_ShortenMeasures_Skip5	; F692F8  jr Z,0xf6931a
 	cp	a, 129	; F692FA  cp A,0x81
-	jr	nz, sub_F69240_Skip4	; F692FD  jr NZ,0xf6930e
+	jr	nz, StepRecord_ShortenMeasures_Skip4	; F692FD  jr NZ,0xf6930e
 	pushw	bc	; F692FF  push BC
 	calr	TrackCursor_StepForwardKeepBeatPosition	; F69300  calr 0xf6b75e
 	popw	bc	; F69303  pop BC
 	cp	w, 255	; F69304  cp W,0xff
-	jr	z, sub_F69240_Skip5	; F69307  jr Z,0xf6931a
+	jr	z, StepRecord_ShortenMeasures_Skip5	; F69307  jr Z,0xf6931a
 	djnz16	bc, -31	; F69309  djnz BC,0xf692ed
-	jr	sub_F69240_Join2	; F6930C  jr T,0xf692a8
-sub_F69240_Skip4:
+	jr	StepRecord_ShortenMeasures_Join2	; F6930C  jr T,0xf692a8
+StepRecord_ShortenMeasures_Skip4:
 	cp	a, 135	; F6930E  cp A,0x87
-	jr	z, sub_F69240_Skip5	; F69311  jr Z,0xf6931a
+	jr	z, StepRecord_ShortenMeasures_Skip5	; F69311  jr Z,0xf6931a
 	pushw	bc	; F69313  push BC
 	calr	TrackCursor_StepForwardKeepBeatPosition	; F69314  calr 0xf6b75e
 	popw	bc	; F69317  pop BC
-	jr	sub_F69240_Join3	; F69318  jr T,0xf692ed
-sub_F69240_Skip5:
+	jr	StepRecord_ShortenMeasures_Join3	; F69318  jr T,0xf692ed
+StepRecord_ShortenMeasures_Skip5:
 	ld	a, 1:opc	; F6931A  ld A,0x01
 	calr	StepRecord_RestoreCursorFromSlot	; F6931C  calr 0xf6c2e5
 	pop	xiz	; F6931F  pop XIZ
@@ -154941,7 +155019,7 @@ sub_F69240_Skip5:
 	ret	; F69326  ret
 
 ; --------------------------------------------------------------------------
-; sub_F69327
+; StepRecord_FindSongTracksEndBeat
 ; Called from: in-module: 0xF6AB74
 ; Touches: (0x0E63) (0x0E6A) (0x0F56) (0x0F58) (0x1008)  |  0x603422
 ;          0x603500
@@ -154952,19 +155030,24 @@ sub_F69240_Skip5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F69327:
+; StepRecord_FindSongTracksEndBeat: Master track only (kind 2): walks every in-use non-master entry from its chain
+;   head, counting 0x81 marks, and keeps (0x0E6A) := count - 1 (the longest track in effect), or 0xFFFF and stops when
+;   the byte after a walk's end is 0x84; BStore_DirEntry restored. StepRecord_BeginSession's last step; the time-
+;   signature edits refuse (status 0x19) when the step position (0x0E56) < (0x0E6A). Basis: caller + body + readers.
+;   (notes/naming-pilot-2026-10-06/proposals_wave9_d9.json)
+StepRecord_FindSongTracksEndBeat:
 	ld	a, (BStore_DirEntry:16)	; F69327  ld A,(0x1008)
 	ld	(3928:16), a	; F6932B  ld (0x0f58),A
 	xor	wa, wa	; F6932F  xor WA,WA
 	ld	(BStore_DirEntry:16), a	; F69331  ld (0x1008),A
 	ld	(3690:16), wa	; F69335  ld (0x0e6a),WA
 	m_cp_mi8 MB16, 0x0e63, 0x02	; F69339  cp (0x0e63),0x02
-	jrl	nz, sub_F69240_Skip8	; F6933E  jrl NZ,0xf693ed
-sub_F69240_Loop3:
+	jrl	nz, StepRecord_FindSongTracksEndBeat_Skip8	; F6933E  jrl NZ,0xf693ed
+StepRecord_FindSongTracksEndBeat_Loop3:
 	ld	a, (BStore_DirEntry:16)	; F69341  ld A,(0x1008)
 	inc	1, a	; F69345  inc 1,A
 	cp	a, 17	; F69347  cp A,0x11
-	jrl	ugt, sub_F69240_Skip8	; F6934A  jrl UGT,0xf693ed
+	jrl	ugt, StepRecord_FindSongTracksEndBeat_Skip8	; F6934A  jrl UGT,0xf693ed
 	ld	(BStore_DirEntry:16), a	; F6934D  ld (0x1008),A
 	calr	BStore_DirEntryOffsetX2	; F69351  calr 0xf6bbd4
 	srl	xiz, 1	; F69354  srl 0x01,XIZ
@@ -154972,12 +155055,12 @@ sub_F69240_Loop3:
 	ld	xix, BStore_TrackToPart	; F69358  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_IZ, 0x20	; F6935D  cp (XIX+IZ),0x20
 	pop	xix	; F69363  pop XIX
-	jr	z, sub_F69240_Loop3	; F69364  jr Z,0xf69341
+	jr	z, StepRecord_FindSongTracksEndBeat_Loop3	; F69364  jr Z,0xf69341
 	xor	wa, wa	; F69366  xor WA,WA
 	ld	(3926:16), wa	; F69368  ld (0x0f56),WA
 	calr	BStore_IsDirEntryUnused	; F6936C  calr 0xf6c4a5
 	cp	w, 0:i3	; F6936F  cp W,0
-	jr	nz, sub_F69240_Loop3	; F69371  jr NZ,0xf69341
+	jr	nz, StepRecord_FindSongTracksEndBeat_Loop3	; F69371  jr NZ,0xf69341
 	xor	wa, wa	; F69373  xor WA,WA
 	ld	a, (BStore_DirEntry:16)	; F69375  ld A,(0x1008)
 	dec	1, a	; F69379  dec 1,A
@@ -155001,27 +155084,27 @@ sub_F69240_Loop3:
 	mx_ld_mi8 MXD, ra_DE, ra_HL, 0x05	; F693AF  ld (XDE+HL),0x05
 	pop	xhl	; F693B5  pop XHL
 	pop	xde	; F693B6  pop XDE
-sub_F69240_Loop4:
+StepRecord_FindSongTracksEndBeat_Loop4:
 	calr	BStore_ReadByteAtSongPosition	; F693B7  calr 0xf6b8bd
 	cp	a, 129	; F693BA  cp A,0x81
-	jr	nz, sub_F69240_Skip6	; F693BD  jr NZ,0xf693c3
+	jr	nz, StepRecord_FindSongTracksEndBeat_Skip6	; F693BD  jr NZ,0xf693c3
 	incw	1, (3926:16)	; F693BF  incw 1,(0x0f56)
-sub_F69240_Skip6:
+StepRecord_FindSongTracksEndBeat_Skip6:
 	calr	TrackCursor_StepForwardKeepBeatPosition	; F693C3  calr 0xf6b75e
 	cp	w, 255	; F693C6  cp W,0xff
-	jr	nz, sub_F69240_Loop4	; F693C9  jr NZ,0xf693b7
+	jr	nz, StepRecord_FindSongTracksEndBeat_Loop4	; F693C9  jr NZ,0xf693b7
 	calr	BStore_ReadByteAtSongPositionPlus1	; F693CB  calr 0xf6b8f1
 	cp	a, 132	; F693CE  cp A,0x84
-	jr	z, sub_F69240_Skip7	; F693D1  jr Z,0xf693e7
+	jr	z, StepRecord_FindSongTracksEndBeat_Skip7	; F693D1  jr Z,0xf693e7
 	ld	wa, (3926:16)	; F693D3  ld WA,(0x0f56)
 	m_cp_rm MW16, 0x0e6a, 0	; F693D7  cp WA,(0x0e6a)
-	jrl	c, sub_F69240_Loop3	; F693DB  jrl C,0xf69341
+	jrl	c, StepRecord_FindSongTracksEndBeat_Loop3	; F693DB  jrl C,0xf69341
 	dec	1, wa	; F693DE  dec 1,WA
 	ld	(3690:16), wa	; F693E0  ld (0x0e6a),WA
-	jrl	sub_F69240_Loop3	; F693E4  jrl T,0xf69341
-sub_F69240_Skip7:
+	jrl	StepRecord_FindSongTracksEndBeat_Loop3	; F693E4  jrl T,0xf69341
+StepRecord_FindSongTracksEndBeat_Skip7:
 	ldw	(3690:16), 65535	; F693E7  ld (0x0e6a),0xffff
-sub_F69240_Skip8:
+StepRecord_FindSongTracksEndBeat_Skip8:
 	ld	a, (3928:16)	; F693ED  ld A,(0x0f58)
 	ld	(BStore_DirEntry:16), a	; F693F1  ld (0x1008),A
 	ret	; F693F5  ret
@@ -155067,22 +155150,22 @@ sub_F693F6:		; <- T_F42F04
 StepRecord_CursorToPrevMeasure:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F6940B  or (0x2075),0x08
 	ld	hl, (3670:16)	; F69410  ld HL,(0x0e56)
-sub_F6940B_Loop:
+StepRecord_CursorToPrevMeasure_Loop:
 	push	xhl	; F69414  push XHL
 	calr	StepRecord_LoadMeasureBeat	; F69415  calr 0xf6a20f
-sub_F6940B_Loop2:
+StepRecord_CursorToPrevMeasure_Loop2:
 	calr	StepRecord_CursorBack	; F69418  calr 0xf68b70
 	xor	a, a	; F6941B  xor A,A
 	cp	(3667:16), a	; F6941D  cp (0x0e53),A
-	jr	nz, sub_F6940B_Loop2	; F69421  jr NZ,0xf69418
+	jr	nz, StepRecord_CursorToPrevMeasure_Loop2	; F69421  jr NZ,0xf69418
 	cp	(3672:16), a	; F69423  cp (0x0e58),A
-	jr	nz, sub_F6940B_Loop2	; F69427  jr NZ,0xf69418
+	jr	nz, StepRecord_CursorToPrevMeasure_Loop2	; F69427  jr NZ,0xf69418
 	pop	xhl	; F69429  pop XHL
 	m_cp_mi16 MW16, 0x0e56, 0x0000	; F6942A  cp (0x0e56),0x0000
-	jr	z, sub_F6940B_Skip	; F69430  jr Z,0xf69438
+	jr	z, StepRecord_CursorToPrevMeasure_Skip	; F69430  jr Z,0xf69438
 	m_cp_rm MW16, 0x0e56, 3	; F69432  cp HL,(0x0e56)
-	jr	z, sub_F6940B_Loop	; F69436  jr Z,0xf69414
-sub_F6940B_Skip:
+	jr	z, StepRecord_CursorToPrevMeasure_Loop	; F69436  jr Z,0xf69414
+StepRecord_CursorToPrevMeasure_Skip:
 	m_res 2, MD16, 0x0e4f	; F69438  res 2,(0x0e4f)
 	ld	(3664:16), 255	; F6943C  ld (0x0e50),0xff
 	ret	; F69441  ret
@@ -155106,7 +155189,7 @@ StepRecord_CursorToNextMeasure:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F69442  or (0x2075),0x08
 	calr	StepRecord_LoadMeasureBeat	; F69447  calr 0xf6a20f
 	cp	w, 255	; F6944A  cp W,0xff
-	jr	z, sub_F69442_Return	; F6944D  jr Z,0xf6946e
+	jr	z, StepRecord_CursorToNextMeasure_Return	; F6944D  jr Z,0xf6946e
 	ld	l, (3673:16)	; F6944F  ld L,(0x0e59)
 	sub	l, (3672:16)	; F69453  sub L,(0x0e58)
 	xor	h, h	; F69457  xor H,H
@@ -155115,11 +155198,11 @@ StepRecord_CursorToNextMeasure:
 	calr	StepRecord_CursorForwardBeatsToTick	; F69462  calr 0xf69814
 	m_res 2, MD16, 0x0e4f	; F69465  res 2,(0x0e4f)
 	ld	(3664:16), 255	; F69469  ld (0x0e50),0xff
-sub_F69442_Return:
+StepRecord_CursorToNextMeasure_Return:
 	ret	; F6946E  ret
 	ld	w, 104:opc	; F6946F  ld W,0x68
 	calr	StepRecord_PostSysEx50_87FromW	; F69471  calr 0xf67481
-	jr	sub_F69442_Return	; F69474  jr T,0xf6946e
+	jr	StepRecord_CursorToNextMeasure_Return	; F69474  jr T,0xf6946e
 
 ; --------------------------------------------------------------------------
 ; sub_F69476
@@ -155679,52 +155762,52 @@ StepRecord_CursorForwardBeatsToTick:
 	ld	l, (3791:16)	; F69814  ld L,(0x0ecf)
 	xor	h, h	; F69818  xor H,H
 	m_add_rm MW16, 0x0e56, 3	; F6981A  add HL,(0x0e56)
-sub_F69814_Join:
+StepRecord_CursorForwardBeatsToTick_Join:
 	m_cp_rm MW16, 0x0e56, 3	; F6981E  cp HL,(0x0e56)
-	jr	z, sub_F69814_Skip	; F69822  jr Z,0xf6982b
+	jr	z, StepRecord_CursorForwardBeatsToTick_Skip	; F69822  jr Z,0xf6982b
 	push	xhl	; F69824  push XHL
 	calr	StepRecord_CursorForward_Veneer	; F69825  calr 0xf6740c
 	pop	xhl	; F69828  pop XHL
-	jr	sub_F69814_Join	; F69829  jr T,0xf6981e
-sub_F69814_Skip:
+	jr	StepRecord_CursorForwardBeatsToTick_Join	; F69829  jr T,0xf6981e
+StepRecord_CursorForwardBeatsToTick_Skip:
 	ld	l, (3792:16)	; F6982B  ld L,(0x0ed0)
 	m_and_mi8 MB16, 0x0e4e, 0xfb	; F6982F  and (0x0e4e),0xfb
-sub_F69814_Join2:
+StepRecord_CursorForwardBeatsToTick_Join2:
 	ld	h, (3667:16)	; F69834  ld H,(0x0e53)
 	cp	h, 0:i3	; F69838  cp H,0
-	jr	nz, sub_F69814_Skip2	; F6983A  jr NZ,0xf69844
+	jr	nz, StepRecord_CursorForwardBeatsToTick_Skip2	; F6983A  jr NZ,0xf69844
 	m_bit 2, MD16, 0x0e4e	; F6983C  bit 2,(0x0e4e)
-	jr	z, sub_F69814_Skip2	; F69840  jr Z,0xf69844
+	jr	z, StepRecord_CursorForwardBeatsToTick_Skip2	; F69840  jr Z,0xf69844
 	ld	h, 96:opc	; F69842  ld H,0x60
-sub_F69814_Skip2:
+StepRecord_CursorForwardBeatsToTick_Skip2:
 	cp	l, h	; F69844  cp L,H
-	jr	le, sub_F69814_Skip3	; F69846  jr LE,0xf6984f
+	jr	le, StepRecord_CursorForwardBeatsToTick_Skip3	; F69846  jr LE,0xf6984f
 	push	xhl	; F69848  push XHL
 	calr	StepRecord_CursorForward_Veneer	; F69849  calr 0xf6740c
 	pop	xhl	; F6984C  pop XHL
-	jr	sub_F69814_Join2	; F6984D  jr T,0xf69834
-sub_F69814_Skip3:
-	jr	z, sub_F69814_Return	; F6984F  jr Z,0xf69866
+	jr	StepRecord_CursorForwardBeatsToTick_Join2	; F6984D  jr T,0xf69834
+StepRecord_CursorForwardBeatsToTick_Skip3:
+	jr	z, StepRecord_CursorForwardBeatsToTick_Return	; F6984F  jr Z,0xf69866
 	cp	h, 96	; F69851  cp H,0x60
-	jr	nz, sub_F69814_Skip4	; F69854  jr NZ,0xf69862
+	jr	nz, StepRecord_CursorForwardBeatsToTick_Skip4	; F69854  jr NZ,0xf69862
 	decw	1, (3670:16)	; F69856  decw 1,(0x0e56)
 	push	xhl	; F6985A  push XHL
 	calr	TrackCursor_StepBackKeepBeatPosition	; F6985B  calr 0xf6b770
 	calr	StepRecord_LoadMeasureBeat	; F6985E  calr 0xf6a20f
 	pop	xhl	; F69861  pop XHL
-sub_F69814_Skip4:
+StepRecord_CursorForwardBeatsToTick_Skip4:
 	ld	(3667:16), l	; F69862  ld (0x0e53),L
-sub_F69814_Return:
+StepRecord_CursorForwardBeatsToTick_Return:
 	ret	; F69866  ret
 ; SoftKeyCol2_StepRecordSub00: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub00_ButtonTable slot 0x01; StepRecordSub00_ButtonTable slot 0x12.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol2_StepRecordSub00:
 	bit	7, w	; F69867  bit 0x07,W
-	jr	nz, sub_F69814_Skip5	; F6986A  jr NZ,0xf69871
+	jr	nz, SoftKeyCol2_StepRecordSub00_Skip5	; F6986A  jr NZ,0xf69871
 	calr	StepRecordSub00_SoftKeyCol2	; F6986C  calr 0xf69875
-	jr	sub_F69814_Return2	; F6986F  jr T,0xf69874
-sub_F69814_Skip5:
+	jr	SoftKeyCol2_StepRecordSub00_Return2	; F6986F  jr T,0xf69874
+SoftKeyCol2_StepRecordSub00_Skip5:
 	calr	StepRecord_NoteNumberDown	; F69871  calr 0xf6987e
-sub_F69814_Return2:
+SoftKeyCol2_StepRecordSub00_Return2:
 	ret	; F69874  ret
 
 ; --------------------------------------------------------------------------
@@ -155784,16 +155867,16 @@ StepRecord_NoteNumberDown:
 StepRecord_StepNoteNumber:
 	calr	sub_F6C43C	; F69887  calr 0xf6c43c
 	cp	w, 0:i3	; F6988A  cp W,0
-	jrl	z, sub_F69887_Return	; F6988C  jrl Z,0xf6990f
+	jrl	z, StepRecord_StepNoteNumber_Return	; F6988C  jrl Z,0xf6990f
 	m_cp_mi8 MB16, 0x0e63, 0x01	; F6988F  cp (0x0e63),0x01
-	jr	nz, sub_F69887_Return	; F69894  jr NZ,0xf6990f
+	jr	nz, StepRecord_StepNoteNumber_Return	; F69894  jr NZ,0xf6990f
 	calr	BStore_ReadByteAtSongPosition	; F69896  calr 0xf6b8bd
 	and	a, 240	; F69899  and A,0xf0
 	cp	a, 144	; F6989C  cp A,0x90
-	jr	nz, sub_F69887_Return	; F6989F  jr NZ,0xf6990f
+	jr	nz, StepRecord_StepNoteNumber_Return	; F6989F  jr NZ,0xf6990f
 	calr	BStore_ReadByteAtSongPositionPlus1	; F698A1  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F698A4  cp A,(0x0e53)
-	jr	nz, sub_F69887_Return	; F698A8  jr NZ,0xf6990f
+	jr	nz, StepRecord_StepNoteNumber_Return	; F698A8  jr NZ,0xf6990f
 	xor	a, a	; F698AA  xor A,A
 	calr	StepRecord_SaveCursorToSlot	; F698AC  calr 0xf6c292
 	ldw	de, 2	; F698AF  ld DE,0x0002
@@ -155804,9 +155887,9 @@ StepRecord_StepNoteNumber:
 	ld	l, w	; F698BD  ld L,W
 	add	a, (3834:16)	; F698BF  add A,(0x0efa)
 	bit	7, a	; F698C3  bit 0x07,A
-	jr	z, sub_F69887_Skip	; F698C6  jr Z,0xf698ca
+	jr	z, StepRecord_StepNoteNumber_Skip	; F698C6  jr Z,0xf698ca
 	ld	a, w	; F698C8  ld A,W
-sub_F69887_Skip:
+StepRecord_StepNoteNumber_Skip:
 	ld	(4784:16), a	; F698CA  ld (0x12b0),A
 	pushw	hl	; F698CE  push HL
 	calr	sub_F69938	; F698CF  calr 0xf69938
@@ -155817,23 +155900,23 @@ sub_F69887_Skip:
 	ld	xde, BStore_TrackToPart	; F698DA  ld XDE,0x00603422
 	mx_cp_mi8 MXB, ra_DE, ra_IZ, 0x0f	; F698DF  cp (XDE+IZ),0x0f
 	pop	xde	; F698E5  pop XDE
-	jr	nz, sub_F69887_Skip2	; F698E6  jr NZ,0xf698f8
+	jr	nz, StepRecord_StepNoteNumber_Skip2	; F698E6  jr NZ,0xf698f8
 	m_bit 2, MD16, 0x7f4d	; F698E8  bit 2,(0x7f4d)
-	jr	z, sub_F69887_Skip2	; F698EC  jr Z,0xf698f8
+	jr	z, StepRecord_StepNoteNumber_Skip2	; F698EC  jr Z,0xf698f8
 	cp	a, 0:i3	; F698EE  cp A,0
-	jr	nz, sub_F69887_Skip2	; F698F0  jr NZ,0xf698f8
+	jr	nz, StepRecord_StepNoteNumber_Skip2	; F698F0  jr NZ,0xf698f8
 	ld	(4784:16), l	; F698F2  ld (0x12b0),L
-	jr	sub_F69887_Join	; F698F6  jr T,0xf698fd
-sub_F69887_Skip2:
+	jr	StepRecord_StepNoteNumber_Join	; F698F6  jr T,0xf698fd
+StepRecord_StepNoteNumber_Skip2:
 	ld	w, a	; F698F8  ld W,A
 	calr	BStore_WriteByteAtSongPosition	; F698FA  calr 0xf6b9df
-sub_F69887_Join:
+StepRecord_StepNoteNumber_Join:
 	xor	a, a	; F698FD  xor A,A
 	calr	StepRecord_RestoreCursorFromSlot	; F698FF  calr 0xf6c2e5
 	call	MsgLine_FormatNoteAndVelocity	; F69902  call 0xf6dd17
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F69906  or (0x2075),0x08
 	call	T_F431B4	; F6990B  call 0xf431b4
-sub_F69887_Return:
+StepRecord_StepNoteNumber_Return:
 	ret	; F6990F  ret
 
 ; --------------------------------------------------------------------------
@@ -155960,11 +156043,11 @@ StepRecord_TempoDown:
 StepRecord_StepTempo:
 	calr	sub_F6C43C	; F69998  calr 0xf6c43c
 	cp	w, 0:i3	; F6999B  cp W,0
-	jrl	z, sub_F69998_Return	; F6999D  jrl Z,0xf69a1d
+	jrl	z, StepRecord_StepTempo_Return	; F6999D  jrl Z,0xf69a1d
 	calr	BStore_ReadByteAtSongPosition	; F699A0  calr 0xf6b8bd
 	and	a, 240	; F699A3  and A,0xf0
 	cp	a, 128	; F699A6  cp A,0x80
-	jr	nz, sub_F69998_Return	; F699A9  jr NZ,0xf69a1d
+	jr	nz, StepRecord_StepTempo_Return	; F699A9  jr NZ,0xf69a1d
 	xor	a, a	; F699AB  xor A,A
 	calr	StepRecord_SaveCursorToSlot	; F699AD  calr 0xf6c292
 	ld	e, (3835:16)	; F699B0  ld E,(0x0efb)
@@ -155986,14 +156069,14 @@ StepRecord_StepTempo:
 	ld	bc, wa	; F699D8  ld BC,WA
 	m_add_rm MW16, 0x100a, 0	; F699DA  add WA,(0x100a)
 	cp	wa, 40	; F699DE  cp WA,0x0028
-	jr	nc, sub_F69998_Skip	; F699E2  jr NC,0xf699e8
+	jr	nc, StepRecord_StepTempo_Skip	; F699E2  jr NC,0xf699e8
 	ld	wa, bc	; F699E4  ld WA,BC
-	jr	sub_F69998_Join	; F699E6  jr T,0xf699f0
-sub_F69998_Skip:
+	jr	StepRecord_StepTempo_Join	; F699E6  jr T,0xf699f0
+StepRecord_StepTempo_Skip:
 	cp	wa, 300	; F699E8  cp WA,0x012c
-	jr	ule, sub_F69998_Join	; F699EC  jr ULE,0xf699f0
+	jr	ule, StepRecord_StepTempo_Join	; F699EC  jr ULE,0xf699f0
 	ld	wa, bc	; F699EE  ld WA,BC
-sub_F69998_Join:
+StepRecord_StepTempo_Join:
 	ld	(4108:16), wa	; F699F0  ld (0x100c),WA
 	ld	bc, wa	; F699F4  ld BC,WA
 	and	a, 127	; F699F6  and A,0x7f
@@ -156012,7 +156095,7 @@ sub_F69998_Join:
 	calr	BStore_WriteByteAtSongPosition	; F69A15  calr 0xf6b9df
 	xor	a, a	; F69A18  xor A,A
 	calr	StepRecord_RestoreCursorFromSlot	; F69A1A  calr 0xf6c2e5
-sub_F69998_Return:
+StepRecord_StepTempo_Return:
 	ret	; F69A1D  ret
 
 ; --------------------------------------------------------------------------
@@ -156080,37 +156163,37 @@ StepRecord_ControlValueDown:
 	ld	l, a	; F69A74  ld L,A
 	and	a, 240	; F69A76  and A,0xf0
 	cp	a, 208	; F69A79  cp A,0xd0
-	jr	nz, sub_F69A67_Return	; F69A7C  jr NZ,0xf69aaf
+	jr	nz, StepRecord_ControlValueDown_Return	; F69A7C  jr NZ,0xf69aaf
 	pushw	hl	; F69A7E  push HL
 	calr	BStore_ReadByteAtSongPositionPlus1	; F69A7F  calr 0xf6b8f1
 	popw	hl	; F69A82  pop HL
 	m_cp_rm MB16, 0x0e53, 1	; F69A83  cp A,(0x0e53)
-	jr	nz, sub_F69A67_Return	; F69A87  jr NZ,0xf69aaf
+	jr	nz, StepRecord_ControlValueDown_Return	; F69A87  jr NZ,0xf69aaf
 	push	xhl	; F69A89  push XHL
 	ld	xhl, 4793	; F69A8A  ld XHL,0x000012b9
 	ld	(3824:16), xhl	; F69A8F  ld (0x0ef0),XHL
 	pop	xhl	; F69A93  pop XHL
 	cp	l, 210	; F69A94  cp L,0xd2
-	jr	nz, sub_F69A67_Skip	; F69A97  jr NZ,0xf69a9f
+	jr	nz, StepRecord_ControlValueDown_Skip	; F69A97  jr NZ,0xf69a9f
 	call	StepRecord_AdjustEvent14BitValue	; F69A99  call 0xf69b76
-	jr	sub_F69A67_Join	; F69A9D  jr T,0xf69aa2
-sub_F69A67_Skip:
+	jr	StepRecord_ControlValueDown_Join	; F69A9D  jr T,0xf69aa2
+StepRecord_ControlValueDown_Skip:
 	calr	StepRecord_AdjustEventByte	; F69A9F  calr 0xf69b40
-sub_F69A67_Join:
+StepRecord_ControlValueDown_Join:
 	call	MsgLine_ControlTypeAndValue	; F69AA2  call 0xf6d890
 	call	T_F431B4	; F69AA6  call 0xf431b4
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F69AAA  or (0x2075),0x08
-sub_F69A67_Return:
+StepRecord_ControlValueDown_Return:
 	ret	; F69AAF  ret
 ; SoftKeyCol3_StepRecordSub00: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub00_ButtonTable slot 0x02; StepRecordSub00_ButtonTable slot 0x13.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol3_StepRecordSub00:
 	bit	7, w	; F69AB0  bit 0x07,W
-	jr	nz, sub_F69A67_Skip2	; F69AB3  jr NZ,0xf69aba
+	jr	nz, SoftKeyCol3_StepRecordSub00_Skip2	; F69AB3  jr NZ,0xf69aba
 	calr	StepRecordSub00_SoftKeyCol3	; F69AB5  calr 0xf69abe
-	jr	sub_F69A67_Return2	; F69AB8  jr T,0xf69abd
-sub_F69A67_Skip2:
+	jr	SoftKeyCol3_StepRecordSub00_Return2	; F69AB8  jr T,0xf69abd
+SoftKeyCol3_StepRecordSub00_Skip2:
 	calr	StepRecord_VelocityDown	; F69ABA  calr 0xf69aff
-sub_F69A67_Return2:
+SoftKeyCol3_StepRecordSub00_Return2:
 	ret	; F69ABD  ret
 
 ; --------------------------------------------------------------------------
@@ -156167,14 +156250,14 @@ StepRecord_VelocityDown:
 	ld	(3834:16), 255	; F69AFF  ld (0x0efa),0xff
 	ld	(3835:16), 3	; F69B04  ld (0x0efb),0x03
 	m_cp_mi8 MB16, 0x0e63, 0x01	; F69B09  cp (0x0e63),0x01
-	jr	nz, sub_F69AFF_Return	; F69B0E  jr NZ,0xf69b3f
+	jr	nz, StepRecord_VelocityDown_Return	; F69B0E  jr NZ,0xf69b3f
 	calr	BStore_ReadByteAtSongPosition	; F69B10  calr 0xf6b8bd
 	and	a, 240	; F69B13  and A,0xf0
 	cp	a, 144	; F69B16  cp A,0x90
-	jr	nz, sub_F69AFF_Return	; F69B19  jr NZ,0xf69b3f
+	jr	nz, StepRecord_VelocityDown_Return	; F69B19  jr NZ,0xf69b3f
 	calr	BStore_ReadByteAtSongPositionPlus1	; F69B1B  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F69B1E  cp A,(0x0e53)
-	jr	nz, sub_F69AFF_Return	; F69B22  jr NZ,0xf69b3f
+	jr	nz, StepRecord_VelocityDown_Return	; F69B22  jr NZ,0xf69b3f
 	push	xhl	; F69B24  push XHL
 	ld	xhl, 4783	; F69B25  ld XHL,0x000012af
 	ld	(3824:16), xhl	; F69B2A  ld (0x0ef0),XHL
@@ -156183,7 +156266,7 @@ StepRecord_VelocityDown:
 	call	MsgLine_FormatNoteAndVelocity	; F69B32  call 0xf6dd17
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F69B36  or (0x2075),0x08
 	call	T_F431B4	; F69B3B  call 0xf431b4
-sub_F69AFF_Return:
+StepRecord_VelocityDown_Return:
 	ret	; F69B3F  ret
 
 ; --------------------------------------------------------------------------
@@ -156245,7 +156328,7 @@ StepRecord_AdjustEventByte_Return:
 StepRecord_AdjustEvent14BitValue:
 	calr	sub_F6C43C	; F69B76  calr 0xf6c43c
 	cp	w, 0:i3	; F69B79  cp W,0
-	jrl	z, sub_F69B76_Return	; F69B7B  jrl Z,0xf69c02
+	jrl	z, StepRecord_AdjustEvent14BitValue_Return	; F69B7B  jrl Z,0xf69c02
 	xor	a, a	; F69B7E  xor A,A
 	calr	StepRecord_SaveCursorToSlot	; F69B80  calr 0xf6c292
 	ld	e, (3835:16)	; F69B83  ld E,(0x0efb)
@@ -156270,13 +156353,13 @@ StepRecord_AdjustEvent14BitValue:
 	exts	de	; F69BBC  exts DE
 	add	wa, de	; F69BBE  add WA,DE
 	cp	wa, 16383	; F69BC0  cp WA,0x3fff
-	jr	gt, sub_F69B76_Skip2	; F69BC4  jr GT,0xf69bfd
+	jr	gt, StepRecord_AdjustEvent14BitValue_Skip2	; F69BC4  jr GT,0xf69bfd
 	cp	wa, 0:i3	; F69BC6  cp WA,0
-	jr	lt, sub_F69B76_Skip2	; F69BC8  jr LT,0xf69bfd
+	jr	lt, StepRecord_AdjustEvent14BitValue_Skip2	; F69BC8  jr LT,0xf69bfd
 	bit	7, w	; F69BCA  bit 0x07,W
-	jr	z, sub_F69B76_Skip	; F69BCD  jr Z,0xf69bd1
+	jr	z, StepRecord_AdjustEvent14BitValue_Skip	; F69BCD  jr Z,0xf69bd1
 	ld	wa, bc	; F69BCF  ld WA,BC
-sub_F69B76_Skip:
+StepRecord_AdjustEvent14BitValue_Skip:
 	ld	bc, wa	; F69BD1  ld BC,WA
 	and	a, 127	; F69BD3  and A,0x7f
 	ld	(4793:16), a	; F69BD6  ld (0x12b9),A
@@ -156293,10 +156376,10 @@ sub_F69B76_Skip:
 	popw	bc	; F69BF6  pop BC
 	ld	w, c	; F69BF7  ld W,C
 	call	BStore_WriteByteAtSongPosition	; F69BF9  call 0xf6b9df
-sub_F69B76_Skip2:
+StepRecord_AdjustEvent14BitValue_Skip2:
 	xor	a, a	; F69BFD  xor A,A
 	calr	StepRecord_RestoreCursorFromSlot	; F69BFF  calr 0xf6c2e5
-sub_F69B76_Return:
+StepRecord_AdjustEvent14BitValue_Return:
 	ret	; F69C02  ret
 
 ; --------------------------------------------------------------------------
@@ -157007,13 +157090,13 @@ StepRecordSub16_SoftKeyCol1_Return:
 StepRecord_CursorBackToMeasureStart:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F6A1F1  or (0x2075),0x08
 	calr	StepRecord_LoadMeasureBeat	; F6A1F6  calr 0xf6a20f
-sub_F6A1F1_Loop:
+StepRecord_CursorBackToMeasureStart_Loop:
 	calr	StepRecord_CursorBack	; F6A1F9  calr 0xf68b70
 	xor	a, a	; F6A1FC  xor A,A
 	cp	(3667:16), a	; F6A1FE  cp (0x0e53),A
-	jr	nz, sub_F6A1F1_Loop	; F6A202  jr NZ,0xf6a1f9
+	jr	nz, StepRecord_CursorBackToMeasureStart_Loop	; F6A202  jr NZ,0xf6a1f9
 	cp	(3672:16), a	; F6A204  cp (0x0e58),A
-	jr	nz, sub_F6A1F1_Loop	; F6A208  jr NZ,0xf6a1f9
+	jr	nz, StepRecord_CursorBackToMeasureStart_Loop	; F6A208  jr NZ,0xf6a1f9
 	call	MsgLine_PutMeasureDigits	; F6A20A  call 0xf6d5ba
 	ret	; F6A20E  ret
 
@@ -157882,7 +157965,7 @@ StepRecord_AppendBeatMarks:
 	xor	b, b	; F6A7C9  xor B,B
 	m_add_mr MW16, 0x0e56, 1	; F6A7CB  add (0x0e56),BC
 	cp	c, 0:i3	; F6A7CF  cp C,0
-	jr	z, sub_F6A7C5_Return	; F6A7D1  jr Z,0xf6a7ea
+	jr	z, StepRecord_AppendBeatMarks_Return	; F6A7D1  jr Z,0xf6a7ea
 	push	xwa	; F6A7D3  push XWA
 	push	xhl	; F6A7D4  push XHL
 	push	xbc	; F6A7D5  push XBC
@@ -157900,7 +157983,7 @@ StepRecord_AppendBeatMarks:
 	pop	xbc	; F6A7E7  pop XBC
 	pop	xhl	; F6A7E8  pop XHL
 	pop	xwa	; F6A7E9  pop XWA
-sub_F6A7C5_Return:
+StepRecord_AppendBeatMarks_Return:
 	ret	; F6A7EA  ret
 
 ; --------------------------------------------------------------------------
@@ -157921,9 +158004,9 @@ sub_F6A7C5_Return:
 StepRecord_CalcStepAndNoteLength:
 	ld	l, (4780:16)	; F6A7EB  ld L,(0x12ac)
 	cp	l, 0:i3	; F6A7EF  cp L,0
-	jr	nz, sub_F6A7EB_Skip	; F6A7F1  jr NZ,0xf6a7f5
+	jr	nz, StepRecord_CalcStepAndNoteLength_Skip	; F6A7F1  jr NZ,0xf6a7f5
 	ld	l, 6:opc	; F6A7F3  ld L,0x06
-sub_F6A7EB_Skip:
+StepRecord_CalcStepAndNoteLength_Skip:
 	sla	l, 1	; F6A7F5  sla 0x01,L
 	xor	h, h	; F6A7F8  xor H,H
 	push	xix	; F6A7FA  push XIX
@@ -157941,7 +158024,7 @@ sub_F6A7EB_Skip:
 	ld	(4842:16), a	; F6A81E  ld (0x12ea),A
 	ld	a, (4782:16)	; F6A822  ld A,(0x12ae)
 	cp	a, 1:i3	; F6A826  cp A,1
-	jr	nz, sub_F6A7EB_Skip2	; F6A828  jr NZ,0xf6a83e
+	jr	nz, StepRecord_CalcStepAndNoteLength_Skip2	; F6A828  jr NZ,0xf6a83e
 	sla	de, 2	; F6A82A  sla 0x02,DE
 	ld	wa, de	; F6A82D  ld WA,DE
 	xor	de, de	; F6A82F  xor DE,DE
@@ -157949,10 +158032,10 @@ sub_F6A7EB_Skip:
 	ld	qwa, de	; F6A834  ld QWA,DE
 	div	xwa, hl	; F6A837  div XWA,HL
 	ld	de, qwa	; F6A839  ld DE,QWA
-	jr	sub_F6A7EB_Join	; F6A83C  jr T,0xf6a86c
-sub_F6A7EB_Skip2:
+	jr	StepRecord_CalcStepAndNoteLength_Join	; F6A83C  jr T,0xf6a86c
+StepRecord_CalcStepAndNoteLength_Skip2:
 	cp	a, 0:i3	; F6A83E  cp A,0
-	jr	nz, sub_F6A7EB_Skip3	; F6A840  jr NZ,0xf6a85c
+	jr	nz, StepRecord_CalcStepAndNoteLength_Skip3	; F6A840  jr NZ,0xf6a85c
 	ld	wa, de	; F6A842  ld WA,DE
 	sla	wa, 4	; F6A844  sla 0x04,WA
 	add	wa, de	; F6A847  add WA,DE
@@ -157963,17 +158046,17 @@ sub_F6A7EB_Skip2:
 	ld	qwa, de	; F6A852  ld QWA,DE
 	div	xwa, hl	; F6A855  div XWA,HL
 	ld	de, qwa	; F6A857  ld DE,QWA
-	jr	sub_F6A7EB_Join	; F6A85A  jr T,0xf6a86c
-sub_F6A7EB_Skip3:
+	jr	StepRecord_CalcStepAndNoteLength_Join	; F6A85A  jr T,0xf6a86c
+StepRecord_CalcStepAndNoteLength_Skip3:
 	cp	a, 2:i3	; F6A85C  cp A,2
-	jr	nz, sub_F6A7EB_Skip4	; F6A85E  jr NZ,0xf6a867
+	jr	nz, StepRecord_CalcStepAndNoteLength_Skip4	; F6A85E  jr NZ,0xf6a867
 	srl	de, 1	; F6A860  srl 0x01,DE
 	ld	wa, de	; F6A863  ld WA,DE
-	jr	sub_F6A7EB_Join	; F6A865  jr T,0xf6a86c
-sub_F6A7EB_Skip4:
+	jr	StepRecord_CalcStepAndNoteLength_Join	; F6A865  jr T,0xf6a86c
+StepRecord_CalcStepAndNoteLength_Skip4:
 	srl	de, 2	; F6A867  srl 0x02,DE
 	ld	wa, de	; F6A86A  ld WA,DE
-sub_F6A7EB_Join:
+StepRecord_CalcStepAndNoteLength_Join:
 	ld	l, 96:opc	; F6A86C  ld L,0x60
 	div	wa, l	; F6A86E  div WA,L
 	ld	(4839:16), w	; F6A870  ld (0x12e7),W
@@ -158064,10 +158147,10 @@ StepLength_AddToTick:
 	ld	a, (4842:16)	; F6A8B1  ld A,(0x12ea)
 	add	w, (3667:16)	; F6A8B5  add W,(0x0e53)
 	cp	w, 96	; F6A8B9  cp W,0x60
-	jr	c, sub_F6A8A1_Return	; F6A8BC  jr C,0xf6a8c3
+	jr	c, StepLength_AddToTick_Return	; F6A8BC  jr C,0xf6a8c3
 	sub	w, 96	; F6A8BE  sub W,0x60
 	inc	1, a	; F6A8C1  inc 1,A
-sub_F6A8A1_Return:
+StepLength_AddToTick_Return:
 	ret	; F6A8C3  ret
 	push	xwa	; F6A8C4  push XWA
 	push	xhl	; F6A8C5  push XHL
@@ -158078,7 +158161,7 @@ sub_F6A8A1_Return:
 	push	xiz	; F6A8CA  push XIZ
 	ld	xiy, 13498	; F6A8CB  ld XIY,0x000034ba
 	m_cp_mi8 MBI+r5, 0, 0xff	; F6A8D0  cp (XIY),0xff
-	jr	z, sub_F6A8A1_Epilogue	; F6A8D3  jr Z,0xf6a8f0
+	jr	z, StepLength_AddToTick_Epilogue	; F6A8D3  jr Z,0xf6a8f0
 	ld	(xiy), 255	; F6A8D5  ld (XIY),0xff
 	ld	a, (BStore_DirEntry:16)	; F6A8D8  ld A,(0x1008)
 	ld	(3184:16), a	; F6A8DC  ld (0x0c70),A
@@ -158086,7 +158169,7 @@ sub_F6A8A1_Return:
 	m_res 7, MD16, 0x0e4f	; F6A8E4  res 7,(0x0e4f)
 	calr	StepRecord_BeginSession	; F6A8E8  calr 0xf6a9e3
 	m_or_mi8 MB16, 0x20a9, 0x01	; F6A8EB  or (0x20a9),0x01
-sub_F6A8A1_Epilogue:
+StepLength_AddToTick_Epilogue:
 	pop	xiz	; F6A8F0  pop XIZ
 	pop	xiy	; F6A8F1  pop XIY
 	pop	xix	; F6A8F2  pop XIX
@@ -158138,7 +158221,7 @@ StepRecord_AppendLatchedParamEvents:
 	push	xiy	; F6A90D  push XIY
 	push	xiz	; F6A90E  push XIZ
 	xor	bc, bc	; F6A90F  xor BC,BC
-sub_F6A908_Loop:
+StepRecord_AppendLatchedParamEvents_Loop:
 	ld	wa, bc	; F6A911  ld WA,BC
 	ld	xhl, 3694	; F6A913  ld XHL,0x00000e6e
 	mx8_ld_rm MXB, ra_HL, rb_A, 1	; F6A918  ld A,(XHL+A)
@@ -158146,11 +158229,11 @@ sub_F6A908_Loop:
 	ld	(xhl), 255	; F6A922  ld (XHL),0xff
 	ld	e, a	; F6A925  ld E,A
 	cp	a, 255	; F6A927  cp A,0xff
-	jr	nz, sub_F6A908_Skip	; F6A92A  jr NZ,0xf6a957
-sub_F6A908_Loop2:
+	jr	nz, StepRecord_AppendLatchedParamEvents_Skip	; F6A92A  jr NZ,0xf6a957
+StepRecord_AppendLatchedParamEvents_Loop2:
 	inc	1, bc	; F6A92C  inc 1,BC
 	cp	bc, 31	; F6A92E  cp BC,0x001f
-	jr	ule, sub_F6A908_Loop	; F6A932  jr ULE,0xf6a911
+	jr	ule, StepRecord_AppendLatchedParamEvents_Loop	; F6A932  jr ULE,0xf6a911
 	calr	StepRecord_AppendLatchedModulation2Event	; F6A934  calr 0xf6ce77
 	calr	StepRecord_AppendLatchedCtrlPedalEvent	; F6A937  calr 0xf6cf21
 	calr	StepRecord_AppendLatchedHoldEvent	; F6A93A  calr 0xf6cfcb
@@ -158168,7 +158251,7 @@ sub_F6A908_Loop2:
 	pop	xhl	; F6A954  pop XHL
 	pop	xwa	; F6A955  pop XWA
 	ret	; F6A956  ret
-sub_F6A908_Skip:
+StepRecord_AppendLatchedParamEvents_Skip:
 	ld	xiy, 3726	; F6A957  ld XIY,0x00000e8e
 	ld	(xiy), 176	; F6A95C  ld (XIY),0xb0
 	ld	a, (3667:16)	; F6A95F  ld A,(0x0e53)
@@ -158176,23 +158259,23 @@ sub_F6A908_Skip:
 	ld	(xiy+5), 127	; F6A966  ld (XIY+0x05),0x7f
 	ld	a, c	; F6A96A  ld A,C
 	cp	a, 31	; F6A96C  cp A,0x1f
-	jr	ugt, sub_F6A908_Loop2	; F6A96F  jr UGT,0xf6a92c
+	jr	ugt, StepRecord_AppendLatchedParamEvents_Loop2	; F6A96F  jr UGT,0xf6a92c
 	ld	xhl, IndexMap_F6A9AA	; F6A971  ld XHL,0x00f6a9aa
 	mx8_ld_rm MXB, ra_HL, rb_A, 1	; F6A976  ld A,(XHL+A)
 	ld	w, 3:opc	; F6A97B  ld W,0x03
-	jr	sub_F6A908_Join	; F6A97D  jr T,0xf6a995
+	jr	StepRecord_AppendLatchedParamEvents_Join	; F6A97D  jr T,0xf6a995
 	cp	a, 27	; F6A97F  cp A,0x1b
-	jr	nz, sub_F6A908_Skip2	; F6A982  jr NZ,0xf6a98a
+	jr	nz, StepRecord_AppendLatchedParamEvents_Skip2	; F6A982  jr NZ,0xf6a98a
 	ld	a, 72:opc	; F6A984  ld A,0x48
 	ld	w, 8:opc	; F6A986  ld W,0x08
-	jr	sub_F6A908_Join	; F6A988  jr T,0xf6a995
-sub_F6A908_Skip2:
+	jr	StepRecord_AppendLatchedParamEvents_Join	; F6A988  jr T,0xf6a995
+StepRecord_AppendLatchedParamEvents_Skip2:
 	cp	a, 28	; F6A98A  cp A,0x1c
-	jr	z, sub_F6A908_Skip3	; F6A98D  jr Z,0xf6a992
-	jrl	sub_F6A908_Loop2	; F6A98F  jrl T,0xf6a92c
-sub_F6A908_Skip3:
-	jrl	sub_F6A908_Loop2	; F6A992  jrl T,0xf6a92c
-sub_F6A908_Join:
+	jr	z, StepRecord_AppendLatchedParamEvents_Skip3	; F6A98D  jr Z,0xf6a992
+	jrl	StepRecord_AppendLatchedParamEvents_Loop2	; F6A98F  jrl T,0xf6a92c
+StepRecord_AppendLatchedParamEvents_Skip3:
+	jrl	StepRecord_AppendLatchedParamEvents_Loop2	; F6A992  jrl T,0xf6a92c
+StepRecord_AppendLatchedParamEvents_Join:
 	ld	(xiy+2), a	; F6A995  ld (XIY+0x02),A
 	ld	a, w	; F6A998  ld A,W
 	ld	(xiy+3), a	; F6A99A  ld (XIY+0x03),A
@@ -158201,7 +158284,7 @@ sub_F6A908_Join:
 	pushw	bc	; F6A9A2  push BC
 	calr	StepRecord_AppendBytesToCurrentEntry	; F6A9A3  calr 0xf6b387
 	popw	bc	; F6A9A6  pop BC
-	jrl	sub_F6A908_Loop2	; F6A9A7  jrl T,0xf6a92c
+	jrl	StepRecord_AppendLatchedParamEvents_Loop2	; F6A9A7  jrl T,0xf6a92c
 
 ; --------------------------------------------------------------------------
 ; IndexMap_F6A9AA -- 32 bytes at 0xF6A9AA counting 0x00..0x1F.  The name
@@ -158278,13 +158361,13 @@ StepRecord_BeginSession:
 	calr	StepRecord_SetSubScreenForTrackKind	; F6AA03  calr 0xf6ad40
 	calr	Nop_Ret_F6AD5A	; F6AA06  calr 0xf6ad5a
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F6AA09  cp (0x6034ba),0x0000
-	jr	nz, sub_F6A9E3_Skip	; F6AA10  jr NZ,0xf6aa21
+	jr	nz, StepRecord_BeginSession_Skip	; F6AA10  jr NZ,0xf6aa21
 	calr	BStore_IsDirEntryUnused	; F6AA12  calr 0xf6c4a5
 	cp	w, 0:i3	; F6AA15  cp W,0
-	jr	z, sub_F6A9E3_Skip	; F6AA17  jr Z,0xf6aa21
+	jr	z, StepRecord_BeginSession_Skip	; F6AA17  jr Z,0xf6aa21
 	ld	(3688:16), 24	; F6AA19  ld (0x0e68),0x18
 	jrl	sub_F6A9E3_Return	; F6AA1E  jrl T,0xf6ab77
-sub_F6A9E3_Skip:
+StepRecord_BeginSession_Skip:
 	m_res 7, MD16, 0x0e4f	; F6AA21  res 7,(0x0e4f)
 	calr	StepRecord_FlushSeqBufRing	; F6AA25  calr 0xf6ad30
 	call	T_TimedEventRing_Discard	; F6AA28  call 0xf40a14
@@ -158302,18 +158385,18 @@ sub_F6A9E3_Skip:
 	ld	de, (4918:16)	; F6AA4F  ld DE,(0x1336)
 	ld	a, c	; F6AA53  ld A,C
 	cp	a, 16	; F6AA55  cp A,0x10
-	jr	lt, sub_F6A9E3_Skip2	; F6AA58  jr LT,0xf6aa61
+	jr	lt, StepRecord_BeginSession_Skip2	; F6AA58  jr LT,0xf6aa61
 	ld	de, (4920:16)	; F6AA5A  ld DE,(0x1338)
 	sub	a, 16	; F6AA5E  sub A,0x10
-sub_F6A9E3_Skip2:
+StepRecord_BeginSession_Skip2:
 	scf	; F6AA61  scf
 	m_rd_stcf_a RW+r2	; F6AA62  stcf A,DE
 	m_rd_ld_rrx RBX, 0x3C, r1	; F6AA64  ld A,RL3
 	cp	c, 16	; F6AA67  cp C,0x10
-	jr	lt, sub_F6A9E3_Skip3	; F6AA6A  jr LT,0xf6aa72
+	jr	lt, StepRecord_BeginSession_Skip3	; F6AA6A  jr LT,0xf6aa72
 	ld	(4920:16), de	; F6AA6C  ld (0x1338),DE
 	jr	sub_F6A9E3_Entry	; F6AA70  jr T,0xf6aa76
-sub_F6A9E3_Skip3:
+StepRecord_BeginSession_Skip3:
 	ld	(4918:16), de	; F6AA72  ld (0x1336),DE
 sub_F6A9E3_Entry:
 	m_rd_ld_rrx RWX, 0x3E, r2	; F6AA76  ld DE,QHL3
@@ -158386,17 +158469,17 @@ sub_F6A9E3_Entry4:
 	jr	z, sub_F6A9E3_Skip10	; F6AB24  jr Z,0xf6ab31
 	calr	StepRecord_AppendCountedBeatMark	; F6AB26  calr 0xf6b253
 	calr	TrackCursor_StepBack	; F6AB29  calr 0xf6b76a
-	calr	sub_F6AD5F	; F6AB2C  calr 0xf6ad5f
+	calr	StepRecord_AppendMasterTimeSigAndTempo	; F6AB2C  calr 0xf6ad5f
 	jr	sub_F6A9E3_Join	; F6AB2F  jr T,0xf6ab34
 sub_F6A9E3_Skip10:
-	calr	sub_F6B01E	; F6AB31  calr 0xf6b01e
+	calr	StepRecord_OpenExistingEntry	; F6AB31  calr 0xf6b01e
 sub_F6A9E3_Join:
-	calr	sub_F6ADC2	; F6AB34  calr 0xf6adc2
+	calr	StepRecord_ResetSessionState	; F6AB34  calr 0xf6adc2
 	bit	2, (TransportB_State:8)	; F6AB37  bit 2,(0x96)
 	jr	z, sub_F6A9E3_Skip11	; F6AB3A  jr Z,0xf6ab40
 	call	T_F40A20	; F6AB3C  call 0xf40a20
 sub_F6A9E3_Skip11:
-	calr	sub_F6C786	; F6AB40  calr 0xf6c786
+	calr	StepRecord_FindMasterTrack	; F6AB40  calr 0xf6c786
 	m_or_mi8 MB16, 0x34bb, 0x04	; F6AB43  or (0x34bb),0x04
 	ld	xiy, 3662	; F6AB48  ld XIY,0x00000e4e
 	m_or_mi8 MBI+r5, 0, 0x08	; F6AB4D  or (XIY),0x08
@@ -158413,7 +158496,7 @@ sub_F6A9E3_Skip12:
 	jr	nz, sub_F6A9E3_Entry4_Skip	; F6AB6F  jr NZ,0xf6ab74
 	calr	sub_F6ABAE_Nop	; F6AB71  calr 0xf6abae
 sub_F6A9E3_Entry4_Skip:
-	calr	sub_F69327	; F6AB74  calr 0xf69327
+	calr	StepRecord_FindSongTracksEndBeat	; F6AB74  calr 0xf69327
 sub_F6A9E3_Return:
 	ret	; F6AB77  ret
 sub_F6A9E3_Skip13:
@@ -158619,7 +158702,7 @@ StepRecord_ResetCursorIfEntryUnused:
 	ld	xde, 6305024	; F6AC51  ld XDE,0x00603500
 	mx_bit 7, MXD, ra_DE, ra_IZ	; F6AC56  bit 7,(XDE+IZ)
 	pop	xde	; F6AC5B  pop XDE
-	jr	nz, sub_F6AC4D_Return	; F6AC5C  jr NZ,0xf6ac7d
+	jr	nz, StepRecord_ResetCursorIfEntryUnused_Return	; F6AC5C  jr NZ,0xf6ac7d
 	calr	BStore_DirEntryOffsetX2	; F6AC5E  calr 0xf6bbd4
 	push	xix	; F6AC61  push XIX
 	ld	xix, 13408	; F6AC62  ld XIX,0x00003460
@@ -158628,7 +158711,7 @@ StepRecord_ResetCursorIfEntryUnused:
 	ld	xix, 13442	; F6AC71  ld XIX,0x00003482
 	mx_ld_mi8 MXD, ra_IX, ra_IZ, 0x05	; F6AC76  ld (XIX+IZ),0x05
 	pop	xix	; F6AC7C  pop XIX
-sub_F6AC4D_Return:
+StepRecord_ResetCursorIfEntryUnused_Return:
 	ret	; F6AC7D  ret
 
 ; --------------------------------------------------------------------------
@@ -158700,14 +158783,14 @@ StepRecord_SelectTrackPart:
 	mx_ld_rm MXB, ra_IX, ra_IZ, 1	; F6ACD4  ld A,(XIX+IZ)
 	pop	xix	; F6ACD9  pop XIX
 	cp	a, 32	; F6ACDA  cp A,0x20
-	jr	z, sub_F6ACF5_Return	; F6ACDD  jr Z,0xf6ad03
+	jr	z, StepRecord_SelectUiPart_Return	; F6ACDD  jr Z,0xf6ad03
 	ld	l, a	; F6ACDF  ld L,A
 	xor	h, h	; F6ACE1  xor H,H
 	sla	hl, 2	; F6ACE3  sla 0x02,HL
 	ld	xhl, IndexMap_F6AD04	; F6ACE6  ld XHL,0x00f6ad04
 	mx8_ld_rm MXB, ra_HL, rb_A, 1	; F6ACEB  ld A,(XHL+A)
 	cp	a, 255	; F6ACF0  cp A,0xff
-	jr	z, sub_F6ACF5_Return	; F6ACF3  jr Z,0xf6ad03
+	jr	z, StepRecord_SelectUiPart_Return	; F6ACF3  jr Z,0xf6ad03
 
 ; --------------------------------------------------------------------------
 ; StepRecord_SelectUiPart
@@ -158731,7 +158814,7 @@ StepRecord_SelectUiPart:
 	ld	d, 255:opc	; F6ACFB  ld D,0xff
 	ldw	wa, 4240	; F6ACFD  ld WA,0x1090
 	calr	StepRecord_Queue2E00AppendRegs	; F6AD00  calr 0xf6b2ee
-sub_F6ACF5_Return:
+StepRecord_SelectUiPart_Return:
 	ret	; F6AD03  ret
 
 ; --------------------------------------------------------------------------
@@ -158789,10 +158872,10 @@ BStore_ResetAllocHeapBase:
 ;   0x12 to discard queued input. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave7_x.json)
 StepRecord_FlushSeqBufRing:
 	ld	xhl, SeqBuf_Ring	; F6AD30  ld XHL,0x00600a14
-sub_F6AD30_Loop:
+StepRecord_FlushSeqBufRing_Loop:
 	call	T_SeqBufRing_Get	; F6AD35  call 0xf41d84
 	cp	wa, 65535	; F6AD39  cp WA,0xffff
-	jr	nz, sub_F6AD30_Loop	; F6AD3D  jr NZ,0xf6ad35
+	jr	nz, StepRecord_FlushSeqBufRing_Loop	; F6AD3D  jr NZ,0xf6ad35
 	ret	; F6AD3F  ret
 
 ; --------------------------------------------------------------------------
@@ -158839,7 +158922,7 @@ Data_F6AD5B:
 	.byte	0x04, 0x02, 0x02, 0x04	; F6AD5B  [0..3]
 
 ; --------------------------------------------------------------------------
-; sub_F6AD5F
+; StepRecord_AppendMasterTimeSigAndTempo
 ; Called from: in-module: 0xF6AB2C
 ; Touches: (0x0E63) (0x7EE2) (0x7EE3)
 ; Calls:   StepRecord_AppendBytesToCurrentEntry
@@ -158849,20 +158932,25 @@ Data_F6AD5B:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6AD5F:
+; StepRecord_AppendMasterTimeSigAndTempo: Master track (kind 2) only: appends a 0x87 time-signature record {0x87, 0,
+;   song beats per bar (0x6034D7) - 1} and a 0x80 record {0x80, 0, Tempo (0x7EE2) & 0x7F, its bits 7/8 as bits 0/1} to
+;   the current entry. StepRecord_BeginSession runs it for an unused entry, after StepRecord_AppendCountedBeatMark and
+;   TrackCursor_StepBack. Basis: caller + body + record readers. (notes/naming-
+;   pilot-2026-10-06/proposals_wave9_d9.json)
+StepRecord_AppendMasterTimeSigAndTempo:
 	m_cp_mi8 MB16, 0x0e63, 0x02	; F6AD5F  cp (0x0e63),0x02
-	jr	nz, sub_F6AD5F_Return	; F6AD64  jr NZ,0xf6adbe
+	jr	nz, StepRecord_AppendMasterTimeSigAndTempo_Return	; F6AD64  jr NZ,0xf6adbe
 	ldw	bc, 3	; F6AD66  ld BC,0x0003
-	ld	xiy, sub_F6AD5F + 0x60	; F6AD69  ld XIY,0x00f6adbf
+	ld	xiy, StepRecord_AppendMasterTimeSigAndTempo + 0x60	; F6AD69  ld XIY,0x00f6adbf
 	ld	xix, 3726	; F6AD6E  ld XIX,0x00000e8e
 	push	xix	; F6AD73  push XIX
 	ldir85	; F6AD74  ldir
 	pop	xix	; F6AD76  pop XIX
 	ld	a, (6304983:24)	; F6AD77  ld A,(0x6034d7)
 	cp	a, 0:i3	; F6AD7C  cp A,0
-	jr	z, sub_F6AD5F_Skip	; F6AD7E  jr Z,0xf6ad82
+	jr	z, StepRecord_AppendMasterTimeSigAndTempo_Skip	; F6AD7E  jr Z,0xf6ad82
 	dec	1, a	; F6AD80  dec 1,A
-sub_F6AD5F_Skip:
+StepRecord_AppendMasterTimeSigAndTempo_Skip:
 	ld	(xix+2), a	; F6AD82  ld (XIX+0x02),A
 	ld	xiy, xix	; F6AD85  ld XIY,XIX
 	ld	w, 3:opc	; F6AD87  ld W,0x03
@@ -158883,13 +158971,13 @@ sub_F6AD5F_Skip:
 	ld	(xiy+3), l	; F6ADB6  ld (XIY+0x03),L
 	ld	w, 4:opc	; F6ADB9  ld W,0x04
 	calr	StepRecord_AppendBytesToCurrentEntry	; F6ADBB  calr 0xf6b387
-sub_F6AD5F_Return:
+StepRecord_AppendMasterTimeSigAndTempo_Return:
 	ret	; F6ADBE  ret
 	.byte 0x87, 0x00	; F6ADBF  db   [llvm-mc cannot encode this]
 	nop	; F6ADC1  nop
 
 ; --------------------------------------------------------------------------
-; sub_F6ADC2
+; StepRecord_ResetSessionState
 ; Called from: in-module: 0xF6AB34 0xF6B02C
 ; Touches: (0x0E50) (0x0E53) (0x0E54) (0x0E56) (0x0E5A) (0x0E65) (0x0E66)
 ;          (0x0ED2) (0x0ED6) (0x0F5E) +18 more
@@ -158899,7 +158987,12 @@ sub_F6AD5F_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6ADC2:
+; StepRecord_ResetSessionState: Clears the step-record working state: (0x0F5E..0x0F66), the beat positions
+;   (0x0E54)/(0x0E56), (0x0E53), (0x12B1)/(0x12B2), (0x12C0), (0x0E65)/(0x0E66), the countdown (0x0E5A), (0x0ED6) :=
+;   0; (0x0E50), (0x0ED2), (0x1340-0x1346), (0x134E)/(0x134F) := 0xFF; 16 words at 0x0E6E := 0xFFFF; (0x12B4) := 0x20.
+;   StepRecord_BeginSession runs it on every start. Basis: callers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave9_d9.json)
+StepRecord_ResetSessionState:
 	xor	wa, wa	; F6ADC2  xor WA,WA
 	ld	(3934:16), wa	; F6ADC4  ld (0x0f5e),WA
 	ld	(3936:16), wa	; F6ADC8  ld (0x0f60),WA
@@ -158963,46 +159056,46 @@ StepRecord_OnLeave:		; <- T_StepRecord_OnLeave
 	ld	(3527:16), 0	; F6AE5E  ld (0x0dc7),0x00
 	ld	a, (UI_ScreenLatch_Previous:16)	; F6AE63  ld A,(0x207b)
 	cp	(UI_ScreenLatch:16), a	; F6AE67  cp (0x207a),A
-	jrl	z, sub_F6ADC2_Return	; F6AE6B  jrl Z,0xf6af56
+	jrl	z, StepRecord_OnLeave_Return	; F6AE6B  jrl Z,0xf6af56
 	m_bit 0, MD16, 0x106e	; F6AE6E  bit 0,(0x106e)
-	jr	z, sub_F6ADC2_Skip	; F6AE72  jr Z,0xf6ae77
+	jr	z, StepRecord_OnLeave_Skip	; F6AE72  jr Z,0xf6ae77
 	calr	sub_F6A304	; F6AE74  calr 0xf6a304
-sub_F6ADC2_Skip:
+StepRecord_OnLeave_Skip:
 	m_and_mi8 MB16, 0x106e, 0xfe	; F6AE77  and (0x106e),0xfe
 	calr	StepRecord_AppendLatchedParamEvents	; F6AE7C  calr 0xf6a908
 	ld	de, (12304:16)	; F6AE7F  ld DE,(0x3010)
 	ld	de, (13836:16)	; F6AE83  ld DE,(0x360c)
 	m_cp_mi8 MB16, BStore_DirEntry, 0x11	; F6AE87  cp (0x1008),0x11
-	jr	lt, sub_F6ADC2_Skip2	; F6AE8C  jr LT,0xf6ae92
+	jr	lt, StepRecord_OnLeave_Skip2	; F6AE8C  jr LT,0xf6ae92
 	ld	de, (13838:16)	; F6AE8E  ld DE,(0x360e)
-sub_F6ADC2_Skip2:
+StepRecord_OnLeave_Skip2:
 	pushw	de	; F6AE92  push DE
 	calr	BStore_IsDirEntryUnused	; F6AE93  calr 0xf6c4a5
 	popw	de	; F6AE96  pop DE
 	cp	w, 0:i3	; F6AE97  cp W,0
-	jr	nz, sub_F6ADC2_Skip4	; F6AE99  jr NZ,0xf6aebb
+	jr	nz, StepRecord_OnLeave_Skip4	; F6AE99  jr NZ,0xf6aebb
 	ld	c, (BStore_DirEntry:16)	; F6AE9B  ld C,(0x1008)
 	dec	1, c	; F6AE9F  dec 1,C
 	m_rd_ld_rr2x RBX, 0x3C, r1	; F6AEA1  ld RL3,A
 	m_rd_ld_rr2x RWX, 0x3E, r2	; F6AEA4  ld QHL3,DE
 	ld	a, c	; F6AEA7  ld A,C
 	cp	a, 16	; F6AEA9  cp A,0x10
-	jr	lt, sub_F6ADC2_Skip3	; F6AEAC  jr LT,0xf6aeb1
+	jr	lt, StepRecord_OnLeave_Skip3	; F6AEAC  jr LT,0xf6aeb1
 	sub	a, 16	; F6AEAE  sub A,0x10
-sub_F6ADC2_Skip3:
+StepRecord_OnLeave_Skip3:
 	scf	; F6AEB1  scf
 	m_rd_stcf_ax RWX, 0x3E	; F6AEB2  stcf A,QHL3
 	m_rd_ld_rrx RBX, 0x3C, r1	; F6AEB5  ld A,RL3
 	m_rd_ld_rrx RWX, 0x3E, r2	; F6AEB8  ld DE,QHL3
-sub_F6ADC2_Skip4:
+StepRecord_OnLeave_Skip4:
 	cp	c, 16	; F6AEBB  cp C,0x10
-	jr	lt, sub_F6ADC2_Skip5	; F6AEBE  jr LT,0xf6aecb
+	jr	lt, StepRecord_OnLeave_Skip5	; F6AEBE  jr LT,0xf6aecb
 	ld	(13838:16), de	; F6AEC0  ld (0x360e),DE
 	ld	(14162:16), 1	; F6AEC4  ld (0x3752),0x01
-	jr	sub_F6ADC2_Join	; F6AEC9  jr T,0xf6aecf
-sub_F6ADC2_Skip5:
+	jr	StepRecord_OnLeave_Join	; F6AEC9  jr T,0xf6aecf
+StepRecord_OnLeave_Skip5:
 	ld	(13836:16), de	; F6AECB  ld (0x360c),DE
-sub_F6ADC2_Join:
+StepRecord_OnLeave_Join:
 	ld	xwa, (13836:16)	; F6AECF  ld XWA,(0x360c)
 	ld	(6304798:24), xwa	; F6AED3  ld (0x60341e),XWA
 	call	T_F40CB4	; F6AED8  call 0xf40cb4
@@ -159033,14 +159126,14 @@ sub_F6ADC2_Join:
 	m_and_mi8 MB16, 0x0e4e, 0xf7	; F6AF3D  and (0x0e4e),0xf7
 	ld	a, (3683:16)	; F6AF42  ld A,(0x0e63)
 	cp	a, 3:i3	; F6AF46  cp A,3
-	jr	nz, sub_F6ADC2_Skip6	; F6AF48  jr NZ,0xf6af4f
+	jr	nz, StepRecord_OnLeave_Skip6	; F6AF48  jr NZ,0xf6af4f
 	calr	sub_F6B276	; F6AF4A  calr 0xf6b276
-	jr	sub_F6ADC2_Return	; F6AF4D  jr T,0xf6af56
-sub_F6ADC2_Skip6:
+	jr	StepRecord_OnLeave_Return	; F6AF4D  jr T,0xf6af56
+StepRecord_OnLeave_Skip6:
 	cp	a, 0:i3	; F6AF4F  cp A,0
-	jr	nz, sub_F6ADC2_Return	; F6AF51  jr NZ,0xf6af56
+	jr	nz, StepRecord_OnLeave_Return	; F6AF51  jr NZ,0xf6af56
 	calr	sub_F67434_Nop	; F6AF53  calr 0xf6b2ed
-sub_F6ADC2_Return:
+StepRecord_OnLeave_Return:
 	ret	; F6AF56  ret
 
 ; --------------------------------------------------------------------------
@@ -159077,7 +159170,7 @@ StepRecord_OnLeave_Nop:
 StepRecord_Tick:		; <- T_StepRecord_Tick
 	ld	xiy, 3688	; F6AF58  ld XIY,0x00000e68
 	m_cp_mi8 MBI+r5, 0, 0x18	; F6AF5D  cp (XIY),0x18
-	jr	nz, sub_F6AF57_Skip	; F6AF60  jr NZ,0xf6af7d
+	jr	nz, StepRecord_Tick_Skip	; F6AF60  jr NZ,0xf6af7d
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F6AF62  and (0x2075),0x6f
 	pushw	wa	; F6AF67  push WA
 	push	xiy	; F6AF68  push XIY
@@ -159087,20 +159180,20 @@ StepRecord_Tick:		; <- T_StepRecord_Tick
 	popw	wa	; F6AF6F  pop WA
 	ld	(UI_StatusCode:16), 15	; F6AF70  ld (0x2880),0x0f
 	ldw	(UI_Request:16), 16555	; F6AF75  ld (0x2070),0x40ab
-	jr	sub_F6AF57_Join	; F6AF7B  jr T,0xf6af82
-sub_F6AF57_Skip:
+	jr	StepRecord_Tick_Join	; F6AF7B  jr T,0xf6af82
+StepRecord_Tick_Skip:
 	m_cp_mi8 MBI+r5, 0, 0x00	; F6AF7D  cp (XIY),0x00
-	jr	z, sub_F6AF57_Skip2	; F6AF80  jr Z,0xf6af8c
-sub_F6AF57_Join:
+	jr	z, StepRecord_Tick_Skip2	; F6AF80  jr Z,0xf6af8c
+StepRecord_Tick_Join:
 	decm8	1, (xiy)	; F6AF82  dec 1,(XIY)
 	m_cp_mi8 MBI+r5, 0, 0x00	; F6AF84  cp (XIY),0x00
-	jr	nz, sub_F6AF57_Skip2	; F6AF87  jr NZ,0xf6af8c
+	jr	nz, StepRecord_Tick_Skip2	; F6AF87  jr NZ,0xf6af8c
 	calr	StepRecord_ClearMsgLineField	; F6AF89  calr 0xf6b1ea
-sub_F6AF57_Skip2:
+StepRecord_Tick_Skip2:
 	m_bit 3, MD16, 0x0e4e	; F6AF8C  bit 3,(0x0e4e)
-	jr	z, sub_F6AF57_Skip4	; F6AF90  jr Z,0xf6afd8
+	jr	z, StepRecord_Tick_Skip4	; F6AF90  jr Z,0xf6afd8
 	m_bit 0, MD16, 0x106e	; F6AF92  bit 0,(0x106e)
-	jr	z, sub_F6AF57_Skip3	; F6AF96  jr Z,0xf6afbe
+	jr	z, StepRecord_Tick_Skip3	; F6AF96  jr Z,0xf6afbe
 	ld	c, (4207:16)	; F6AF98  ld C,(0x106f)
 	add	c, 5	; F6AF9C  add C,0x05
 	m_rd_ld_rr2x RBX, 0x3C, r1	; F6AF9F  ld RL3,A
@@ -159111,34 +159204,34 @@ sub_F6AF57_Skip2:
 	m_rd_xorcf_a RW+r2	; F6AFAC  xorcf A,DE
 	m_rd_ld_rrx RWX, 0x3E, r2	; F6AFAE  ld DE,QHL3
 	m_rd_ld_rrx RBX, 0x3C, r1	; F6AFB1  ld A,RL3
-	jr	nc, sub_F6AF57_Skip3	; F6AFB4  jr NC,0xf6afbe
+	jr	nc, StepRecord_Tick_Skip3	; F6AFB4  jr NC,0xf6afbe
 	m_and_mi8 MB16, 0x106e, 0xfe	; F6AFB6  and (0x106e),0xfe
 	calr	sub_F6A304	; F6AFBB  calr 0xf6a304
-sub_F6AF57_Skip3:
+StepRecord_Tick_Skip3:
 	ld	xiy, 3674	; F6AFBE  ld XIY,0x00000e5a
 	m_cp_mi8 MBI+r5, 0, 0x00	; F6AFC3  cp (XIY),0x00
-	jr	z, sub_F6AF57_Skip4	; F6AFC6  jr Z,0xf6afd8
+	jr	z, StepRecord_Tick_Skip4	; F6AFC6  jr Z,0xf6afd8
 	m_bit 0, MD16, UI_ScreenHoldState	; F6AFC8  bit 0,(0x2092)
-	jr	nz, sub_F6AF57_Skip4	; F6AFCC  jr NZ,0xf6afd8
+	jr	nz, StepRecord_Tick_Skip4	; F6AFCC  jr NZ,0xf6afd8
 	decm8	1, (xiy)	; F6AFCE  dec 1,(XIY)
 	m_cp_mi8 MBI+r5, 0, 0x00	; F6AFD0  cp (XIY),0x00
-	jr	nz, sub_F6AF57_Skip4	; F6AFD3  jr NZ,0xf6afd8
+	jr	nz, StepRecord_Tick_Skip4	; F6AFD3  jr NZ,0xf6afd8
 	calr	StepRecord_ReturnToTrackKindPage	; F6AFD5  calr 0xf69c03
-sub_F6AF57_Skip4:
+StepRecord_Tick_Skip4:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x0e	; F6AFD8  cp (0x207a),0x0e
-	jr	nz, sub_F6AF57_Skip5	; F6AFDD  jr NZ,0xf6afed
+	jr	nz, StepRecord_Tick_Skip5	; F6AFDD  jr NZ,0xf6afed
 	m_cp_mi8 MB16, 0x0e63, 0x03	; F6AFDF  cp (0x0e63),0x03
-	jr	nz, sub_F6AF57_Skip5	; F6AFE4  jr NZ,0xf6afed
+	jr	nz, StepRecord_Tick_Skip5	; F6AFE4  jr NZ,0xf6afed
 	m_or_mi8 MB16, 0x1070, 0x02	; F6AFE6  or (0x1070),0x02
-	jr	sub_F6AF57_Return	; F6AFEB  jr T,0xf6b004
-sub_F6AF57_Skip5:
+	jr	StepRecord_Tick_Return	; F6AFEB  jr T,0xf6b004
+StepRecord_Tick_Skip5:
 	m_and_mi8 MB16, 0x1070, 0xfd	; F6AFED  and (0x1070),0xfd
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x0d	; F6AFF2  cp (0x207a),0x0d
-	jr	nz, sub_F6AF57_Return	; F6AFF7  jr NZ,0xf6b004
+	jr	nz, StepRecord_Tick_Return	; F6AFF7  jr NZ,0xf6b004
 	m_cp_mi8 MB16, 0x0e45, 0x00	; F6AFF9  cp (0x0e45),0x00
-	jr	z, sub_F6AF57_Return	; F6AFFE  jr Z,0xf6b004
+	jr	z, StepRecord_Tick_Return	; F6AFFE  jr Z,0xf6b004
 	dec	1, (3653:16)	; F6B000  dec 1,(0x0e45)
-sub_F6AF57_Return:
+StepRecord_Tick_Return:
 	ret	; F6B004  ret
 
 ; --------------------------------------------------------------------------
@@ -159172,25 +159265,29 @@ Data_F6B006:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6B01E
+; StepRecord_OpenExistingEntry
 ; Called from: in-module: 0xF6AB31
 ; Touches: (0x0E63)
-; Calls:   sub_F68982_Nop sub_F6B039 sub_F6ADC2
+; Calls:   sub_F68982_Nop sub_F6B039 StepRecord_ResetSessionState
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B01E is an instruction
 ;           boundary.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6B01E:
+; StepRecord_OpenExistingEntry: StepRecord_BeginSession's arm for an entry already in use: (0x0E4E) bit 6 cleared,
+;   sub_F6B039 puts the entry's song position at its chain head (offset 5), StepRecord_ResetSessionState (StepRecord_ResetSessionState,
+;   this batch), W := 0. The other arm appends a beat mark and the master's records instead. Basis: caller + caller
+;   header + body. (notes/naming-pilot-2026-10-06/proposals_wave9_d9.json)
+StepRecord_OpenExistingEntry:
 	calr	sub_F68982_Nop	; F6B01E  calr 0xf6b1e8
 	ld	xiz, 3662	; F6B021  ld XIZ,0x00000e4e
 	m_and_mi8 MBI+r6, 0, 0xbf	; F6B026  and (XIZ),0xbf
 	calr	sub_F6B039	; F6B029  calr 0xf6b039
-	calr	sub_F6ADC2	; F6B02C  calr 0xf6adc2
+	calr	StepRecord_ResetSessionState	; F6B02C  calr 0xf6adc2
 	m_cp_mi8 MB16, 0x0e63, 0x00	; F6B02F  cp (0x0e63),0x00
-	jr	nz, sub_F6B01E_Skip	; F6B034  jr NZ,0xf6b036
-sub_F6B01E_Skip:
+	jr	nz, StepRecord_OpenExistingEntry_Skip	; F6B034  jr NZ,0xf6b036
+StepRecord_OpenExistingEntry_Skip:
 	ld	w, 0:opc	; F6B036  ld W,0x00
 	ret	; F6B038  ret
 
@@ -159557,9 +159654,9 @@ StepRecord_AppendBeatMarkKeepCursor:
 	calr	StepRecord_SaveCursorToSlot	; F6B22B  calr 0xf6c292
 	calr	BStore_ReadByteAtSongPositionPlus1	; F6B22E  calr 0xf6b8f1
 	cp	a, 132	; F6B231  cp A,0x84
-	jr	nz, sub_F6B229_Skip	; F6B234  jr NZ,0xf6b23a
+	jr	nz, StepRecord_AppendBeatMarkKeepCursor_Skip	; F6B234  jr NZ,0xf6b23a
 	m_set 7, MD16, 0x0e4f	; F6B236  set 7,(0x0e4f)
-sub_F6B229_Skip:
+StepRecord_AppendBeatMarkKeepCursor_Skip:
 	calr	StepRecord_AppendBeatMark	; F6B23A  calr 0xf6b257
 	xor	a, a	; F6B23D  xor A,A
 	calr	StepRecord_RestoreCursorFromSlot	; F6B23F  calr 0xf6c2e5
@@ -159584,9 +159681,9 @@ sub_F6B229_Skip:
 StepRecord_AppendBeatMarkAtTrackEnd:
 	calr	BStore_ReadByteAtSongPositionPlus1	; F6B243  calr 0xf6b8f1
 	cp	a, 132	; F6B246  cp A,0x84
-	jr	nz, sub_F6B243_Skip	; F6B249  jr NZ,0xf6b24f
+	jr	nz, StepRecord_AppendBeatMarkAtTrackEnd_Skip	; F6B249  jr NZ,0xf6b24f
 	m_set 7, MD16, 0x0e4f	; F6B24B  set 7,(0x0e4f)
-sub_F6B243_Skip:
+StepRecord_AppendBeatMarkAtTrackEnd_Skip:
 	calr	StepRecord_AppendBeatMark	; F6B24F  calr 0xf6b257
 	ret	; F6B252  ret
 
@@ -159857,7 +159954,7 @@ StepRecord_BStoreAppendBytes:
 StepRecord_BStoreAppendBytes_Join:
 	mx_ld_rm MXW, ra_IX, ra_IZ, 5	; F6B3AE  ld IY,(XIX+IZ)
 	cp	iy, 65535	; F6B3B3  cp IY,0xffff
-	jrl	z, sub_F6B50C_Skip3	; F6B3B7  jrl Z,0xf6b5e9
+	jrl	z, BStore_WriteBytesAtSongPosition_Skip3	; F6B3B7  jrl Z,0xf6b5e9
 	ld	(3169:16), iy	; F6B3BA  ld (0x0c61),IY
 	srl	xiz, 1	; F6B3BE  srl 0x01,XIZ
 	m_rd_ld_rr2x RLX, 0x38, r4	; F6B3C1  ld XDE3,XIX
@@ -159996,13 +160093,13 @@ StepRecord_BStoreAppendBytes_Loop:
 ; BStore_WriteBytesAtSongPosition: Writes BC bytes from (0x1272) at directory entry IZ/2's song position (0x3460[n]
 ;   block, 0x3482[n] offset) and advances it; past offset 0xFF it continues at offset 5 of the block's +3 successor
 ;   (already linked by the caller). The body behind BStore_WriteBytesAtSongPosition_Call; StepRecord_BStoreAppendBytes
-;   calls it after opening the gap. (Its local label sub_F6B50C_Skip3 is StepRecord_BStoreAppendBytes's empty-chain
+;   calls it after opening the gap. (Its local label BStore_WriteBytesAtSongPosition_Skip3 is StepRecord_BStoreAppendBytes's empty-chain
 ;   tail.) Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave6_s.json)
 BStore_WriteBytesAtSongPosition:
 	cp	bc, 0:i3	; F6B50C  cp BC,0
-	jr	nz, sub_F6B50C_Skip	; F6B50E  jr NZ,0xf6b511
+	jr	nz, BStore_WriteBytesAtSongPosition_Skip	; F6B50E  jr NZ,0xf6b511
 	ret	; F6B510  ret
-sub_F6B50C_Skip:
+BStore_WriteBytesAtSongPosition_Skip:
 	ld	xix, 13408	; F6B511  ld XIX,0x00003460
 	srl	iz, 1	; F6B516  srl 0x01,IZ
 	m_rd_ld_rr2x RLX, 0x38, r4	; F6B519  ld XDE3,XIX
@@ -160014,7 +160111,7 @@ sub_F6B50C_Skip:
 	pushw	bc	; F6B52E  push BC
 	add	bc, iy	; F6B52F  add BC,IY
 	cp	bc, 255	; F6B531  cp BC,0x00ff
-	jr	ugt, sub_F6B50C_Skip2	; F6B535  jr UGT,0xf6b567
+	jr	ugt, BStore_WriteBytesAtSongPosition_Skip2	; F6B535  jr UGT,0xf6b567
 	srl	iz, 1	; F6B537  srl 0x01,IZ
 	m_rd_ld_rr2x RLX, 0x38, r4	; F6B53A  ld XDE3,XIX
 	mx_lda32 MXD, ra_IX, ra_IZ, 4	; F6B53D  lda XIX,XIX+IZ
@@ -160033,7 +160130,7 @@ sub_F6B50C_Skip:
 	ld	xiy, (4722:16)	; F6B560  ld XIY,(0x1272)
 	ldir85	; F6B564  ldir
 	ret	; F6B566  ret
-sub_F6B50C_Skip2:
+BStore_WriteBytesAtSongPosition_Skip2:
 	ld	de, bc	; F6B567  ld DE,BC
 	ldw	wa, 256	; F6B569  ld WA,0x0100
 	mx_ld_rm MXW, ra_IX, ra_IZ, 5	; F6B56C  ld IY,(XIX+IZ)
@@ -160071,12 +160168,12 @@ sub_F6B50C_Skip2:
 	add	xix, 5	; F6B5D7  add XIX,0x00000005
 	ld	xiy, (4722:16)	; F6B5DD  ld XIY,(0x1272)
 	cp	bc, 0:i3	; F6B5E1  cp BC,0
-	jr	z, sub_F6B50C_Epilogue	; F6B5E3  jr Z,0xf6b5e7
+	jr	z, BStore_WriteBytesAtSongPosition_Epilogue	; F6B5E3  jr Z,0xf6b5e7
 	ldir85	; F6B5E5  ldir
-sub_F6B50C_Epilogue:
+BStore_WriteBytesAtSongPosition_Epilogue:
 	popw	bc	; F6B5E7  pop BC
 	ret	; F6B5E8  ret
-sub_F6B50C_Skip3:
+BStore_WriteBytesAtSongPosition_Skip3:
 	push	xix	; F6B5E9  push XIX
 	call	T_BStore_AllocBlock_Veneer	; F6B5EA  call 0xf42884
 	ld	iy, ix	; F6B5EE  ld IY,IX
@@ -160349,19 +160446,19 @@ TrackCursor_StepOneEvent:
 	and	ix, 255	; F6B7A8  and IX,0x00ff
 	sla	iz, 1	; F6B7AC  sla 0x01,IZ
 	cp	b, 0:i3	; F6B7AF  cp B,0
-	jrl	nz, sub_F6B770_Loop2	; F6B7B1  jrl NZ,0xf6b83e
-sub_F6B770_Loop:
+	jrl	nz, TrackCursor_StepOneEvent_Loop2	; F6B7B1  jrl NZ,0xf6b83e
+TrackCursor_StepOneEvent_Loop:
 	inc	1, ix	; F6B7B4  inc 1,IX
 	cp	ix, 255	; F6B7B6  cp IX,0x00ff
-	jr	ugt, sub_F6B770_Skip3	; F6B7BA  jr UGT,0xf6b815
+	jr	ugt, TrackCursor_StepOneEvent_Skip3	; F6B7BA  jr UGT,0xf6b815
 	mx_ld_rm MXB, ra_HL, ra_IX, 1	; F6B7BC  ld A,(XHL+IX)
 	inc	1, c	; F6B7C1  inc 1,C
 	cp	a, 129	; F6B7C3  cp A,0x81
-	jr	z, sub_F6B770_Skip	; F6B7C6  jr Z,0xf6b7f6
+	jr	z, TrackCursor_StepOneEvent_Skip	; F6B7C6  jr Z,0xf6b7f6
 	calr	TrackCursor_IsEventLeadByte	; F6B7C8  calr 0xf6bc89
 	cp	w, 255	; F6B7CB  cp W,0xff
-	jr	z, sub_F6B770_Loop	; F6B7CE  jr Z,0xf6b7b4
-sub_F6B770_Join:
+	jr	z, TrackCursor_StepOneEvent_Loop	; F6B7CE  jr Z,0xf6b7b4
+TrackCursor_StepOneEvent_Join:
 	ld	wa, ix	; F6B7D0  ld WA,IX
 	push	xde	; F6B7D2  push XDE
 	ld	xde, 13408	; F6B7D3  ld XDE,0x00003460
@@ -160375,7 +160472,7 @@ sub_F6B770_Join:
 	ld	(3790:16), c	; F6B7F0  ld (0x0ece),C
 	popw	bc	; F6B7F4  pop BC
 	ret	; F6B7F5  ret
-sub_F6B770_Skip:
+TrackCursor_StepOneEvent_Skip:
 	pushw	wa	; F6B7F6  push WA
 	pushw	bc	; F6B7F7  push BC
 	push	xhl	; F6B7F8  push XHL
@@ -160384,19 +160481,19 @@ sub_F6B770_Skip:
 	push	xiz	; F6B7FB  push XIZ
 	calr	BStore_ReadByteAtSongPositionPlus2	; F6B7FC  calr 0xf6b8fb
 	cp	w, 255	; F6B7FF  cp W,0xff
-	jr	z, sub_F6B770_Skip2	; F6B802  jr Z,0xf6b80d
+	jr	z, TrackCursor_StepOneEvent_Skip2	; F6B802  jr Z,0xf6b80d
 	cp	a, 130	; F6B804  cp A,0x82
-	jr	z, sub_F6B770_Skip2	; F6B807  jr Z,0xf6b80d
+	jr	z, TrackCursor_StepOneEvent_Skip2	; F6B807  jr Z,0xf6b80d
 	incw	1, (3668:16)	; F6B809  incw 1,(0x0e54)
-sub_F6B770_Skip2:
+TrackCursor_StepOneEvent_Skip2:
 	pop	xiz	; F6B80D  pop XIZ
 	pop	xiy	; F6B80E  pop XIY
 	pop	xix	; F6B80F  pop XIX
 	pop	xhl	; F6B810  pop XHL
 	popw	bc	; F6B811  pop BC
 	popw	wa	; F6B812  pop WA
-	jr	sub_F6B770_Join	; F6B813  jr T,0xf6b7d0
-sub_F6B770_Skip3:
+	jr	TrackCursor_StepOneEvent_Join	; F6B813  jr T,0xf6b7d0
+TrackCursor_StepOneEvent_Skip3:
 	push	xde	; F6B815  push XDE
 	ld	xde, 13408	; F6B816  ld XDE,0x00003460
 	mx_ld_rm MXW, ra_DE, ra_IZ, 5	; F6B81B  ld IY,(XDE+IZ)
@@ -160405,23 +160502,23 @@ sub_F6B770_Skip3:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B824  ld XHL,(0x126e)
 	ld	iy, (xhl+3)	; F6B828  ld IY,(XHL+0x03)
 	cp	iy, 65535	; F6B82B  cp IY,0xffff
-	jr	z, sub_F6B770_Skip6	; F6B82F  jr Z,0xf6b8a9
+	jr	z, TrackCursor_StepOneEvent_Skip6	; F6B82F  jr Z,0xf6b8a9
 	calr	BStore_SetCursorBlockAddrFromIY	; F6B831  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B834  ld XHL,(0x126e)
 	ldw	ix, 4	; F6B838  ld IX,0x0004
-	jrl	sub_F6B770_Loop	; F6B83B  jrl T,0xf6b7b4
-sub_F6B770_Loop2:
+	jrl	TrackCursor_StepOneEvent_Loop	; F6B83B  jrl T,0xf6b7b4
+TrackCursor_StepOneEvent_Loop2:
 	dec	1, ix	; F6B83E  dec 1,IX
 	cp	ix, 4:i3	; F6B840  cp IX,4
-	jr	le, sub_F6B770_Skip5	; F6B842  jr LE,0xf6b883
+	jr	le, TrackCursor_StepOneEvent_Skip5	; F6B842  jr LE,0xf6b883
 	mx_ld_rm MXB, ra_HL, ra_IX, 1	; F6B844  ld A,(XHL+IX)
 	inc	1, c	; F6B849  inc 1,C
 	cp	a, 129	; F6B84B  cp A,0x81
-	jr	z, sub_F6B770_Skip4	; F6B84E  jr Z,0xf6b87e
+	jr	z, TrackCursor_StepOneEvent_Skip4	; F6B84E  jr Z,0xf6b87e
 	calr	TrackCursor_IsEventLeadByte	; F6B850  calr 0xf6bc89
 	cp	w, 255	; F6B853  cp W,0xff
-	jr	z, sub_F6B770_Loop2	; F6B856  jr Z,0xf6b83e
-sub_F6B770_Join2:
+	jr	z, TrackCursor_StepOneEvent_Loop2	; F6B856  jr Z,0xf6b83e
+TrackCursor_StepOneEvent_Join2:
 	ld	wa, ix	; F6B858  ld WA,IX
 	push	xde	; F6B85A  push XDE
 	ld	xde, 13408	; F6B85B  ld XDE,0x00003460
@@ -160435,10 +160532,10 @@ sub_F6B770_Join2:
 	ld	(3790:16), c	; F6B878  ld (0x0ece),C
 	popw	bc	; F6B87C  pop BC
 	ret	; F6B87D  ret
-sub_F6B770_Skip4:
+TrackCursor_StepOneEvent_Skip4:
 	calr	TrackCursor_DecBeatPosition	; F6B87E  calr 0xf6b8ad
-	jr	sub_F6B770_Join2	; F6B881  jr T,0xf6b858
-sub_F6B770_Skip5:
+	jr	TrackCursor_StepOneEvent_Join2	; F6B881  jr T,0xf6b858
+TrackCursor_StepOneEvent_Skip5:
 	push	xde	; F6B883  push XDE
 	ld	xde, 13408	; F6B884  ld XDE,0x00003460
 	mx_ld_rm MXW, ra_DE, ra_IZ, 5	; F6B889  ld IY,(XDE+IZ)
@@ -160447,12 +160544,12 @@ sub_F6B770_Skip5:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B892  ld XHL,(0x126e)
 	ld	iy, (xhl+1)	; F6B896  ld IY,(XHL+0x01)
 	cp	iy, 0:i3	; F6B899  cp IY,0
-	jr	z, sub_F6B770_Skip6	; F6B89B  jr Z,0xf6b8a9
+	jr	z, TrackCursor_StepOneEvent_Skip6	; F6B89B  jr Z,0xf6b8a9
 	calr	BStore_SetCursorBlockAddrFromIY	; F6B89D  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B8A0  ld XHL,(0x126e)
 	ldw	ix, 256	; F6B8A4  ld IX,0x0100
-	jr	sub_F6B770_Loop2	; F6B8A7  jr T,0xf6b83e
-sub_F6B770_Skip6:
+	jr	TrackCursor_StepOneEvent_Loop2	; F6B8A7  jr T,0xf6b83e
+TrackCursor_StepOneEvent_Skip6:
 	ld	w, 255:opc	; F6B8A9  ld W,0xff
 	popw	bc	; F6B8AB  pop BC
 	ret	; F6B8AC  ret
@@ -160474,9 +160571,9 @@ TrackCursor_DecBeatPosition:
 	push	xiy	; F6B8AD  push XIY
 	ld	xiy, 3668	; F6B8AE  ld XIY,0x00000e54
 	m_cp_mi16 MWI+r5, 0, 0x0000	; F6B8B3  cp (XIY),0x0000
-	jr	z, sub_F6B8AD_Epilogue	; F6B8B7  jr Z,0xf6b8bb
+	jr	z, TrackCursor_DecBeatPosition_Epilogue	; F6B8B7  jr Z,0xf6b8bb
 	decm	1, (xiy)	; F6B8B9  decw 1,(XIY)
-sub_F6B8AD_Epilogue:
+TrackCursor_DecBeatPosition_Epilogue:
 	pop	xiy	; F6B8BB  pop XIY
 	ret	; F6B8BC  ret
 
@@ -160589,19 +160686,19 @@ BStore_ReadByteAtSongPositionPlusN:
 	and	iy, 255	; F6B92F  and IY,0x00ff
 	m_add_rm MW16, 0x0efe, 5	; F6B933  add IY,(0x0efe)
 	cp	iy, 255	; F6B937  cp IY,0x00ff
-	jr	ugt, sub_F6B905_Skip	; F6B93B  jr UGT,0xf6b943
+	jr	ugt, BStore_ReadByteAtSongPositionPlusN_Skip	; F6B93B  jr UGT,0xf6b943
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F6B93D  ld A,(XHL+IY)
 	ret	; F6B942  ret
-sub_F6B905_Skip:
+BStore_ReadByteAtSongPositionPlusN_Skip:
 	ld	iy, (xhl+3)	; F6B943  ld IY,(XHL+0x03)
 	cp	iy, 65535	; F6B946  cp IY,0xffff
-	jr	z, sub_F6B905_Skip2	; F6B94A  jr Z,0xf6b95c
+	jr	z, BStore_ReadByteAtSongPositionPlusN_Skip2	; F6B94A  jr Z,0xf6b95c
 	calr	BStore_SetCursorBlockAddrFromIY	; F6B94C  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B94F  ld XHL,(0x126e)
 	ldw	iy, 5	; F6B953  ld IY,0x0005
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F6B956  ld A,(XHL+IY)
 	ret	; F6B95B  ret
-sub_F6B905_Skip2:
+BStore_ReadByteAtSongPositionPlusN_Skip2:
 	ld	w, 255:opc	; F6B95C  ld W,0xff
 	ret	; F6B95E  ret
 
@@ -160632,7 +160729,7 @@ BStore_ReadByteAtSongPositionAndAdvance:
 	ret	; F6B96E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B96F
+; BStore_ReadByteAtSongPositionPlus1_SaveRegs
 ; Called from: in-module: 0xF68A5E 0xF68A65
 ; Touches: nothing with an absolute address
 ; Calls:   BStore_ReadByteAtSongPositionPlus1
@@ -160642,7 +160739,11 @@ BStore_ReadByteAtSongPositionAndAdvance:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6B96F:
+; BStore_ReadByteAtSongPositionPlus1_SaveRegs: BStore_ReadByteAtSongPositionPlus1 with XIY, XIZ and XHL saved: A = the
+;   byte one past the current entry's song position, W = 0xFF at the chain end (the `ld A,E` in front is overwritten).
+;   Its two calls sit in the unlabelled chord-audition code at 0xF68A35, which no known reference reaches. Basis: body
+;   (wrapper of a named routine). (notes/naming-pilot-2026-10-06/proposals_wave9_d9.json)
+BStore_ReadByteAtSongPositionPlus1_SaveRegs:
 	ld	a, e	; F6B96F  ld A,E
 	push	xiy	; F6B971  push XIY
 	push	xiz	; F6B972  push XIZ
@@ -160654,7 +160755,7 @@ sub_F6B96F:
 	ret	; F6B97A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B97B
+; BStore_ReadByteAtSongPositionForEntryE
 ; Called from: in-module: 0xF68AC0
 ; Touches: (0x126E)
 ; Calls:   BStore_SetCursorBlockAddrFromIY
@@ -160664,7 +160765,11 @@ sub_F6B96F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6B97B:
+; BStore_ReadByteAtSongPositionForEntryE: A = the byte at directory entry E's song position (block word 0x3460[E-1],
+;   offset byte 0x3482[E-1]); BStore_ReadByteAtSongPosition with the 1-based entry taken from E instead of
+;   BStore_DirEntry (XHL and DE kept, IZ left = 2*(E-1)). Its one call sits in the unlabelled code at 0xF68A35. Basis:
+;   body + named twin. (notes/naming-pilot-2026-10-06/proposals_wave9_d9.json)
+BStore_ReadByteAtSongPositionForEntryE:
 	push	xhl	; F6B97B  push XHL
 	pushw	de	; F6B97C  push DE
 	dec	1, e	; F6B97D  dec 1,E
@@ -160691,7 +160796,7 @@ sub_F6B97B:
 	ret	; F6B9B8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B9B9
+; BStore_ReadByteAtSongPositionAndAdvance_SaveRegs
 ; Called from: in-module: 0xF68A70 0xF68A7A 0xF68A8A
 ; Touches: (0x0EC4)
 ; Calls:   BStore_ReadByteAtSongPosition TrackCursor_AdvanceBytes
@@ -160701,7 +160806,11 @@ sub_F6B97B:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6B9B9:
+; BStore_ReadByteAtSongPositionAndAdvance_SaveRegs: A = the byte at the current entry's song position, then the
+;   position steps one byte (TrackCursor_AdvanceBytes, DE = 1); every register but A is preserved (no step status,
+;   unlike BStore_ReadByteAtSongPositionAndAdvance). Its three calls sit in the unlabelled code at 0xF68A35. Basis:
+;   body + named twin. (notes/naming-pilot-2026-10-06/proposals_wave9_d9.json)
+BStore_ReadByteAtSongPositionAndAdvance_SaveRegs:
 	ld	d, w	; F6B9B9  ld D,W
 	push	xwa	; F6B9BB  push XWA
 	push	xhl	; F6B9BC  push XHL
@@ -160896,41 +161005,41 @@ BStore_FreeChain_C:
 	ld	ix, (xhl+1)	; F6BB1E  ld IX,(XHL+0x01)
 	ld	de, ix	; F6BB21  ld DE,IX
 	cp	ix, 0:i3	; F6BB23  cp IX,0
-	jrl	z, sub_F6BAFA_Skip3	; F6BB25  jrl Z,0xf6bba1
+	jrl	z, BStore_FreeChain_C_Skip3	; F6BB25  jrl Z,0xf6bba1
 	ld	iy, ix	; F6BB28  ld IY,IX
 	m_ld_mi16 MDD+r3, 0x01, 0x0000	; F6BB2A  ld (XHL+0x01),0x0000
 	calr	BStore_SetCursorBlockAddrFromIY	; F6BB2F  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BB32  ld XHL,(0x126e)
 	ld	ix, iy	; F6BB36  ld IX,IY
 	ld	iy, (xhl+3)	; F6BB38  ld IY,(XHL+0x03)
-sub_F6BAFA_Loop:
+BStore_FreeChain_C_Loop:
 	calr	BStore_SetCursorBlockAddrFromIY	; F6BB3B  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BB3E  ld XHL,(0x126e)
 	ld	ix, iy	; F6BB42  ld IX,IY
 	ld	iy, (xhl+3)	; F6BB44  ld IY,(XHL+0x03)
 	cp	iy, 65535	; F6BB47  cp IY,0xffff
-	jr	z, sub_F6BAFA_Skip	; F6BB4B  jr Z,0xf6bb68
-sub_F6BAFA_Loop2:
+	jr	z, BStore_FreeChain_C_Skip	; F6BB4B  jr Z,0xf6bb68
+BStore_FreeChain_C_Loop2:
 	m_and_mi8 MBI+r3, 0, 0x7f	; F6BB4D  and (XHL),0x7f
 	ld	(xhl+5), 130	; F6BB50  ld (XHL+0x05),0x82
 	inc	1, wa	; F6BB54  inc 1,WA
 	m_cp_rm MW16, 0x0c88, 0	; F6BB56  cp WA,(0x0c88)
-	jr	nz, sub_F6BAFA_Loop	; F6BB5A  jr NZ,0xf6bb3b
+	jr	nz, BStore_FreeChain_C_Loop	; F6BB5A  jr NZ,0xf6bb3b
 	dec	1, wa	; F6BB5C  dec 1,WA
-sub_F6BAFA_Join:
+BStore_FreeChain_C_Join:
 	calr	BStore_SetCursorBlockAddrFromIY	; F6BB5E  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BB61  ld XHL,(0x126e)
 	ld	(xhl+1), de	; F6BB65  ld (XHL+0x01),DE
-sub_F6BAFA_Skip:
+BStore_FreeChain_C_Skip:
 	cp	de, 0:i3	; F6BB68  cp DE,0
-	jr	z, sub_F6BAFA_Skip2	; F6BB6A  jr Z,0xf6bb7a
+	jr	z, BStore_FreeChain_C_Skip2	; F6BB6A  jr Z,0xf6bb7a
 	push	xiy	; F6BB6C  push XIY
 	ld	iy, de	; F6BB6D  ld IY,DE
 	calr	BStore_SetCursorBlockAddrFromIY	; F6BB6F  calr 0xf6bbc0
 	pop	xiy	; F6BB72  pop XIY
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BB73  ld XHL,(0x126e)
 	ld	(xhl+3), iy	; F6BB77  ld (XHL+0x03),IY
-sub_F6BAFA_Skip2:
+BStore_FreeChain_C_Skip2:
 	ld	iy, ix	; F6BB7A  ld IY,IX
 	calr	BStore_SetCursorBlockAddrFromIY	; F6BB7C  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BB7F  ld XHL,(0x126e)
@@ -160944,17 +161053,17 @@ sub_F6BAFA_Skip2:
 	inc	1, wa	; F6BB99  inc 1,WA
 	add	(BStore_FreeCount:24), wa	; F6BB9B  add (0x6034ba),WA
 	ret	; F6BBA0  ret
-sub_F6BAFA_Skip3:
+BStore_FreeChain_C_Skip3:
 	calr	BStore_SetCursorBlockAddrFromIY	; F6BBA1  calr 0xf6bbc0
 	ld	ix, iy	; F6BBA4  ld IX,IY
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BBA6  ld XHL,(0x126e)
 	ld	iy, (xhl+3)	; F6BBAA  ld IY,(XHL+0x03)
 	cp	iy, 65535	; F6BBAD  cp IY,0xffff
-	jr	nz, sub_F6BAFA_Loop2	; F6BBB1  jr NZ,0xf6bb4d
+	jr	nz, BStore_FreeChain_C_Loop2	; F6BBB1  jr NZ,0xf6bb4d
 	ldw	(3208:16), 0	; F6BBB3  ld (0x0c88),0x0000
 	ld	iy, ix	; F6BBB9  ld IY,IX
 	m_and_mi8 MBI+r3, 0, 0x7f	; F6BBBB  and (XHL),0x7f
-	jr	sub_F6BAFA_Join	; F6BBBE  jr T,0xf6bb5e
+	jr	BStore_FreeChain_C_Join	; F6BBBE  jr T,0xf6bb5e
 
 ; --------------------------------------------------------------------------
 ; BStore_SetCursorBlockAddrFromIY
@@ -161113,23 +161222,23 @@ sub_F6BBFC_Join2:
 ;   pilot-2026-10-06/proposals_wave7_x.json)
 TrackCursor_IsEventLeadByte:
 	bit	7, a	; F6BC89  bit 0x07,A
-	jr	z, sub_F6BC89_Skip2	; F6BC8C  jr Z,0xf6bcaf
+	jr	z, TrackCursor_IsEventLeadByte_Skip2	; F6BC8C  jr Z,0xf6bcaf
 	cp	a, 131	; F6BC8E  cp A,0x83
-	jr	z, sub_F6BC89_Skip2	; F6BC91  jr Z,0xf6bcaf
+	jr	z, TrackCursor_IsEventLeadByte_Skip2	; F6BC91  jr Z,0xf6bcaf
 	cp	a, 144	; F6BC93  cp A,0x90
-	jr	nc, sub_F6BC89_Skip	; F6BC96  jr NC,0xf6bc9d
+	jr	nc, TrackCursor_IsEventLeadByte_Skip	; F6BC96  jr NC,0xf6bc9d
 	cp	a, 135	; F6BC98  cp A,0x87
-	jr	ugt, sub_F6BC89_Skip2	; F6BC9B  jr UGT,0xf6bcaf
-sub_F6BC89_Skip:
+	jr	ugt, TrackCursor_IsEventLeadByte_Skip2	; F6BC9B  jr UGT,0xf6bcaf
+TrackCursor_IsEventLeadByte_Skip:
 	cp	a, 211	; F6BC9D  cp A,0xd3
-	jr	ugt, sub_F6BC89_Skip2	; F6BCA0  jr UGT,0xf6bcaf
+	jr	ugt, TrackCursor_IsEventLeadByte_Skip2	; F6BCA0  jr UGT,0xf6bcaf
 	ld	w, a	; F6BCA2  ld W,A
 	and	w, 240	; F6BCA4  and W,0xf0
 	cp	w, 160	; F6BCA7  cp W,0xa0
-	jr	z, sub_F6BC89_Skip2	; F6BCAA  jr Z,0xf6bcaf
+	jr	z, TrackCursor_IsEventLeadByte_Skip2	; F6BCAA  jr Z,0xf6bcaf
 	ld	w, 0:opc	; F6BCAC  ld W,0x00
 	ret	; F6BCAE  ret
-sub_F6BC89_Skip2:
+TrackCursor_IsEventLeadByte_Skip2:
 	ld	w, 255:opc	; F6BCAF  ld W,0xff
 	ret	; F6BCB1  ret
 
@@ -161973,44 +162082,44 @@ StepRecord_RestoreBeatPositionsFromSlot:
 	ld	xiy, 13408	; F6C368  ld XIY,0x00003460
 	mx_ld_rm MXW, ra_IY, ra_IZ, 0	; F6C36D  ld WA,(XIY+IZ)
 	cp	(xix), wa	; F6C372  cp (XIX),WA
-	jr	nz, sub_F6C340_Join	; F6C374  jr NZ,0xf6c39d
+	jr	nz, StepRecord_RestoreBeatPositionsFromSlot_Join	; F6C374  jr NZ,0xf6c39d
 	srl	iz, 1	; F6C376  srl 0x01,IZ
 	m_rd_ld_rr2x RLX, 0x38, r5	; F6C379  ld XDE3,XIY
 	mx_lda32 MXD, ra_IY, ra_IZ, 5	; F6C37C  lda XIY,XIY+IZ
 	ld	a, (xiy+34)	; F6C381  ld A,(XIY+0x22)
 	m_rd_ld_rrx RLX, 0x38, r5	; F6C384  ld XIY,XDE3
 	cp	(xix+2), a	; F6C387  cp (XIX+0x02),A
-	jr	ule, sub_F6C340_Skip	; F6C38A  jr ULE,0xf6c390
+	jr	ule, StepRecord_RestoreBeatPositionsFromSlot_Skip	; F6C38A  jr ULE,0xf6c390
 	ld	w, 3:opc	; F6C38C  ld W,0x03
-	jr	sub_F6C340_Epilogue	; F6C38E  jr T,0xf6c398
-sub_F6C340_Skip:
-	jr	z, sub_F6C340_Skip2	; F6C390  jr Z,0xf6c396
+	jr	StepRecord_RestoreBeatPositionsFromSlot_Epilogue	; F6C38E  jr T,0xf6c398
+StepRecord_RestoreBeatPositionsFromSlot_Skip:
+	jr	z, StepRecord_RestoreBeatPositionsFromSlot_Skip2	; F6C390  jr Z,0xf6c396
 	ld	w, 2:opc	; F6C392  ld W,0x02
-	jr	sub_F6C340_Epilogue	; F6C394  jr T,0xf6c398
-sub_F6C340_Skip2:
+	jr	StepRecord_RestoreBeatPositionsFromSlot_Epilogue	; F6C394  jr T,0xf6c398
+StepRecord_RestoreBeatPositionsFromSlot_Skip2:
 	ld	w, 1:opc	; F6C396  ld W,0x01
-sub_F6C340_Epilogue:
+StepRecord_RestoreBeatPositionsFromSlot_Epilogue:
 	pop	xix	; F6C398  pop XIX
 	pop	xiy	; F6C399  pop XIY
 	pop	xiz	; F6C39A  pop XIZ
 	pop	xhl	; F6C39B  pop XHL
 	ret	; F6C39C  ret
-sub_F6C340_Join:
+StepRecord_RestoreBeatPositionsFromSlot_Join:
 	ld	iy, wa	; F6C39D  ld IY,WA
 	calr	BStore_SetCursorBlockAddrFromIY	; F6C39F  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6C3A2  ld XHL,(0x126e)
 	ld	wa, (xhl+1)	; F6C3A6  ld WA,(XHL+0x01)
 	cp	wa, 0:i3	; F6C3A9  cp WA,0
-	jr	z, sub_F6C340_Skip3	; F6C3AB  jr Z,0xf6c3b3
+	jr	z, StepRecord_RestoreBeatPositionsFromSlot_Skip3	; F6C3AB  jr Z,0xf6c3b3
 	m_cp_rm MWI+r4, 0, 0	; F6C3AD  cp WA,(XIX)
-	jr	z, sub_F6C340_Skip4	; F6C3AF  jr Z,0xf6c3b7
-	jr	sub_F6C340_Join	; F6C3B1  jr T,0xf6c39d
-sub_F6C340_Skip3:
+	jr	z, StepRecord_RestoreBeatPositionsFromSlot_Skip4	; F6C3AF  jr Z,0xf6c3b7
+	jr	StepRecord_RestoreBeatPositionsFromSlot_Join	; F6C3B1  jr T,0xf6c39d
+StepRecord_RestoreBeatPositionsFromSlot_Skip3:
 	ld	w, 3:opc	; F6C3B3  ld W,0x03
-	jr	sub_F6C340_Epilogue	; F6C3B5  jr T,0xf6c398
-sub_F6C340_Skip4:
+	jr	StepRecord_RestoreBeatPositionsFromSlot_Epilogue	; F6C3B5  jr T,0xf6c398
+StepRecord_RestoreBeatPositionsFromSlot_Skip4:
 	ld	w, 2:opc	; F6C3B7  ld W,0x02
-	jr	sub_F6C340_Epilogue	; F6C3B9  jr T,0xf6c398
+	jr	StepRecord_RestoreBeatPositionsFromSlot_Epilogue	; F6C3B9  jr T,0xf6c398
 	push	xhl	; F6C3BB  push XHL
 	xor	w, w	; F6C3BC  xor W,W
 	and	a, 7	; F6C3BE  and A,0x07
@@ -162020,16 +162129,16 @@ sub_F6C340_Skip4:
 	ld	xhl, xwa	; F6C3CC  ld XHL,XWA
 	ld	hl, (xhl+4)	; F6C3CE  ld HL,(XHL+0x04)
 	m_cp_rm MW16, 0x0e54, 3	; F6C3D1  cp HL,(0x0e54)
-	jr	ule, sub_F6C340_Skip5	; F6C3D5  jr ULE,0xf6c3db
+	jr	ule, StepRecord_RestoreBeatPositionsFromSlot_Skip5	; F6C3D5  jr ULE,0xf6c3db
 	ld	w, 3:opc	; F6C3D7  ld W,0x03
-	jr	sub_F6C340_Epilogue2	; F6C3D9  jr T,0xf6c3e3
-sub_F6C340_Skip5:
-	jr	z, sub_F6C340_Skip6	; F6C3DB  jr Z,0xf6c3e1
+	jr	StepRecord_RestoreBeatPositionsFromSlot_Epilogue2	; F6C3D9  jr T,0xf6c3e3
+StepRecord_RestoreBeatPositionsFromSlot_Skip5:
+	jr	z, StepRecord_RestoreBeatPositionsFromSlot_Skip6	; F6C3DB  jr Z,0xf6c3e1
 	ld	w, 2:opc	; F6C3DD  ld W,0x02
-	jr	sub_F6C340_Epilogue2	; F6C3DF  jr T,0xf6c3e3
-sub_F6C340_Skip6:
+	jr	StepRecord_RestoreBeatPositionsFromSlot_Epilogue2	; F6C3DF  jr T,0xf6c3e3
+StepRecord_RestoreBeatPositionsFromSlot_Skip6:
 	ld	w, 1:opc	; F6C3E1  ld W,0x01
-sub_F6C340_Epilogue2:
+StepRecord_RestoreBeatPositionsFromSlot_Epilogue2:
 	pop	xhl	; F6C3E3  pop XHL
 	ret	; F6C3E4  ret
 
@@ -162626,7 +162735,7 @@ sub_F6C736_Skip2:
 	ret	; F6C785  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6C786
+; StepRecord_FindMasterTrack
 ; Called from: in-module: 0xF6AB40
 ; Touches: (0x0C8A) (0x0E4F) (0x0E51) (0x360C)  |  0x603422 0x603500
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -162635,16 +162744,21 @@ sub_F6C736_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6C786:
+; StepRecord_FindMasterTrack: Finds the first track whose BStore_TrackToPart byte is 0x20 (the master); when its bit
+;   is set in (0x360C) and its directory entry is in use: (0x0E51) := W := track + 1, (0x0E4F) bit 0 and (0x0C8A) bit
+;   2 set; else both bits cleared, W := 0. StepRecord_BeginSession runs it; twin of EditScreen_FindMasterTrack /
+;   Seq_FindMasterTrack (without the (0x3752) test). Basis: caller + body + twins. (notes/naming-
+;   pilot-2026-10-06/proposals_wave9_d9.json)
+StepRecord_FindMasterTrack:
 	ld	xix, BStore_TrackToPart	; F6C786  ld XIX,0x00603422
 	xor	bc, bc	; F6C78B  xor BC,BC
 	ld	c, 17:opc	; F6C78D  ld C,0x11
 	ld	a, 32:opc	; F6C78F  ld A,0x20
 	cp	a, (xix+)	; F6C791  cp A,(XIX+)
-	jr	z, sub_F6C786_Skip	; F6C794  jr Z,0xf6c79b
+	jr	z, StepRecord_FindMasterTrack_Skip	; F6C794  jr Z,0xf6c79b
 	djnz16	bc, -8	; F6C796  djnz BC,0xf6c791
-	jr	sub_F6C786_Join2	; F6C799  jr T,0xf6c7ea
-sub_F6C786_Skip:
+	jr	StepRecord_FindMasterTrack_Join2	; F6C799  jr T,0xf6c7ea
+StepRecord_FindMasterTrack_Skip:
 	xor	wa, wa	; F6C79B  xor WA,WA
 	ld	a, 17:opc	; F6C79D  ld A,0x11
 	sub	wa, bc	; F6C79F  sub WA,BC
@@ -162656,27 +162770,27 @@ sub_F6C786_Skip:
 	pop	xix	; F6C7B1  pop XIX
 	m_and_rm ML16, 0x360c, 1	; F6C7B2  and XBC,(0x360c)
 	cp	xbc, 0	; F6C7B6  cp XBC,0x00000000
-	jr	z, sub_F6C786_Join2	; F6C7BC  jr Z,0xf6c7ea
+	jr	z, StepRecord_FindMasterTrack_Join2	; F6C7BC  jr Z,0xf6c7ea
 	pushw	wa	; F6C7BE  push WA
 	ld	xhl, 6305024	; F6C7BF  ld XHL,0x00603500
 	ld	c, 3:opc	; F6C7C4  ld C,0x03
 	mul	wa, c	; F6C7C6  mul WA,C
 	ld	iy, wa	; F6C7C8  ld IY,WA
 	mx_bit 7, MXD, ra_HL, ra_IY	; F6C7CA  bit 7,(XHL+IY)
-	jr	z, sub_F6C786_Skip2	; F6C7CF  jr Z,0xf6c7d4
+	jr	z, StepRecord_FindMasterTrack_Skip2	; F6C7CF  jr Z,0xf6c7d4
 	popw	wa	; F6C7D1  pop WA
-	jr	sub_F6C786_Join	; F6C7D2  jr T,0xf6c7d7
-sub_F6C786_Skip2:
+	jr	StepRecord_FindMasterTrack_Join	; F6C7D2  jr T,0xf6c7d7
+StepRecord_FindMasterTrack_Skip2:
 	popw	wa	; F6C7D4  pop WA
-	jr	sub_F6C786_Join2	; F6C7D5  jr T,0xf6c7ea
-sub_F6C786_Join:
+	jr	StepRecord_FindMasterTrack_Join2	; F6C7D5  jr T,0xf6c7ea
+StepRecord_FindMasterTrack_Join:
 	inc	1, a	; F6C7D7  inc 1,A
 	ld	w, a	; F6C7D9  ld W,A
 	ld	(3665:16), w	; F6C7DB  ld (0x0e51),W
 	m_or_mi8 MB16, 0x0e4f, 0x01	; F6C7DF  or (0x0e4f),0x01
 	m_or_mi8 MB16, 0x0c8a, 0x04	; F6C7E4  or (0x0c8a),0x04
 	ret	; F6C7E9  ret
-sub_F6C786_Join2:
+StepRecord_FindMasterTrack_Join2:
 	m_and_mi8 MB16, 0x0e4f, 0xfe	; F6C7EA  and (0x0e4f),0xfe
 	m_and_mi8 MB16, 0x0c8a, 0xfb	; F6C7EF  and (0x0c8a),0xfb
 	xor	w, w	; F6C7F4  xor W,W
@@ -163550,7 +163664,7 @@ sub_F6CE26_Return:
 ;   pilot-2026-10-06/proposals_wave7_x.json)
 StepRecord_AppendLatchedModulation2Event:
 	m_cp_mi8 MB16, 0x1340, 0xff	; F6CE77  cp (0x1340),0xff
-	jr	z, sub_F6CE77_Return	; F6CE7C  jr Z,0xf6cecf
+	jr	z, StepRecord_AppendLatchedModulation2Event_Return	; F6CE7C  jr Z,0xf6cecf
 	ld	xiy, 3726	; F6CE7E  ld XIY,0x00000e8e
 	ld	a, 188:opc	; F6CE83  ld A,0xbc
 	and	a, 128	; F6CE85  and A,0x80
@@ -163578,7 +163692,7 @@ StepRecord_AppendLatchedModulation2Event:
 	ld	(xiy+5), 127	; F6CEC6  ld (XIY+0x05),0x7f
 	ld	w, 6:opc	; F6CECA  ld W,0x06
 	calr	StepRecord_AppendBytesToCurrentEntry	; F6CECC  calr 0xf6b387
-sub_F6CE77_Return:
+StepRecord_AppendLatchedModulation2Event_Return:
 	ret	; F6CECF  ret
 
 ; --------------------------------------------------------------------------
@@ -163642,7 +163756,7 @@ sub_F6CED0_Return:
 ;   Basis: caller + body + paired input arm. (notes/naming-pilot-2026-10-06/proposals_wave7_x.json)
 StepRecord_AppendLatchedCtrlPedalEvent:
 	m_cp_mi8 MB16, 0x1341, 0xff	; F6CF21  cp (0x1341),0xff
-	jr	z, sub_F6CF21_Return	; F6CF26  jr Z,0xf6cf79
+	jr	z, StepRecord_AppendLatchedCtrlPedalEvent_Return	; F6CF26  jr Z,0xf6cf79
 	ld	xiy, 3726	; F6CF28  ld XIY,0x00000e8e
 	ld	a, 189:opc	; F6CF2D  ld A,0xbd
 	and	a, 128	; F6CF2F  and A,0x80
@@ -163670,7 +163784,7 @@ StepRecord_AppendLatchedCtrlPedalEvent:
 	ld	(xiy+5), 127	; F6CF70  ld (XIY+0x05),0x7f
 	ld	w, 6:opc	; F6CF74  ld W,0x06
 	calr	StepRecord_AppendBytesToCurrentEntry	; F6CF76  calr 0xf6b387
-sub_F6CF21_Return:
+StepRecord_AppendLatchedCtrlPedalEvent_Return:
 	ret	; F6CF79  ret
 
 ; --------------------------------------------------------------------------
@@ -163730,11 +163844,11 @@ sub_F6CF7A_Return:
 ; StepRecord_AppendLatchedHoldEvent: If the HOLD latch (0x1342) holds a value (not 0xFF; reset to 0xFF) appends the
 ;   6-byte parameter event 0xB4, tick (0x0E53), 0x35, the track's part, value, 0x7F (parameter 0xB5) to the current
 ;   entry. The input arm sub_F6CF7A fills (0x1342) from parameter 0xB5 and shows MsgLine_PartHold. Its last 33 bytes
-;   are the `.byte` block StepRecord_AppendLatchedHoldEvent_Cont and its `ret` is sub_F6CFCB_Nop. Basis: caller + body + paired input arm.
+;   are the `.byte` block StepRecord_AppendLatchedHoldEvent_Cont and its `ret` is StepRecord_AppendLatchedHoldEvent_Nop. Basis: caller + body + paired input arm.
 ;   (notes/naming-pilot-2026-10-06/proposals_wave7_x.json)
 StepRecord_AppendLatchedHoldEvent:
 	m_cp_mi8 MB16, 0x1342, 0xff	; F6CFCB  cp (0x1342),0xff
-	jr	z, sub_F6CFCB_Nop	; F6CFD0  jr Z,0xf6d023
+	jr	z, StepRecord_AppendLatchedHoldEvent_Nop	; F6CFD0  jr Z,0xf6d023
 	ld	xiy, 3726	; F6CFD2  ld XIY,0x00000e8e
 	ld	a, 181:opc	; F6CFD7  ld A,0xb5
 	and	a, 128	; F6CFD9  and A,0x80
@@ -163915,7 +164029,7 @@ StepRecord_AppendLatchedHoldEvent:
 ; (2026-10-06) CORRECTED: these 33 bytes are CODE, the tail of StepRecord_AppendLatchedHoldEvent, which runs across
 ;   this module boundary: its `push xix` / `ld xix, BStore_TrackToPart` are the last two instructions above 0xF6D002.
 ;   It stores the track's part and the latched value as event bytes 3-4, resets the latch to 0xFF, stores 0x7F, and
-;   appends 6 bytes with StepRecord_AppendBytesToCurrentEntry; the `ret` it reaches is sub_F6CFCB_Nop's.  Every
+;   appends 6 bytes with StepRecord_AppendBytesToCurrentEntry; the `ret` it reaches is StepRecord_AppendLatchedHoldEvent_Nop's.  Every
 ;   instruction was checked against the ROM bytes with llvm-mc -show-encoding.
 StepRecord_AppendLatchedHoldEvent_Cont:
 	ld	a, (xix+wa)	; F6D002  ld A,(XIX+WA)
@@ -163931,7 +164045,7 @@ StepRecord_AppendLatchedHoldEvent_Cont:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6CFCB_Nop
+; StepRecord_AppendLatchedHoldEvent_Nop
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
@@ -163944,10 +164058,10 @@ StepRecord_AppendLatchedHoldEvent_Cont:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D023
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.
-; Purpose: none -- the entry is a lone `ret`.  Named sub_F6CFCB_Nop after what reaches it
+; Purpose: none -- the entry is a lone `ret`.  Named StepRecord_AppendLatchedHoldEvent_Nop after what reaches it
 ;          (was sub_F6D023; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6CFCB_Nop:
+StepRecord_AppendLatchedHoldEvent_Nop:
 	ret	; F6D023  ret
 
 ; --------------------------------------------------------------------------
@@ -164026,7 +164140,7 @@ sub_F6D024_Return:
 ;   + body + the arm that fills the latch. (notes/naming-pilot-2026-10-06/proposals_wave7_y.json)
 StepRecord_AppendLatchedRtCreateX:
 	m_cp_mi8 MB16, 0x1343, 0xff	; F6D075  cp (0x1343),0xff
-	jr	z, sub_F6D075_Return	; F6D07A  jr Z,0xf6d0cd
+	jr	z, StepRecord_AppendLatchedRtCreateX_Return	; F6D07A  jr Z,0xf6d0cd
 	ld	xiy, 3726	; F6D07C  ld XIY,0x00000e8e
 	ld	a, 184:opc	; F6D081  ld A,0xb8
 	and	a, 128	; F6D083  and A,0x80
@@ -164054,7 +164168,7 @@ StepRecord_AppendLatchedRtCreateX:
 	ld	(xiy+5), 127	; F6D0C4  ld (XIY+0x05),0x7f
 	ld	w, 6:opc	; F6D0C8  ld W,0x06
 	calr	StepRecord_AppendBytesToCurrentEntry	; F6D0CA  calr 0xf6b387
-sub_F6D075_Return:
+StepRecord_AppendLatchedRtCreateX_Return:
 	ret	; F6D0CD  ret
 
 ; --------------------------------------------------------------------------
@@ -164133,7 +164247,7 @@ sub_F6D0CE_Return:
 ;   + body + the arm that fills the latch. (notes/naming-pilot-2026-10-06/proposals_wave7_y.json)
 StepRecord_AppendLatchedRtCreateY:
 	m_cp_mi8 MB16, 0x1344, 0xff	; F6D11F  cp (0x1344),0xff
-	jr	z, sub_F6D11F_Return	; F6D124  jr Z,0xf6d177
+	jr	z, StepRecord_AppendLatchedRtCreateY_Return	; F6D124  jr Z,0xf6d177
 	ld	xiy, 3726	; F6D126  ld XIY,0x00000e8e
 	ld	a, 185:opc	; F6D12B  ld A,0xb9
 	and	a, 128	; F6D12D  and A,0x80
@@ -164161,7 +164275,7 @@ StepRecord_AppendLatchedRtCreateY:
 	ld	(xiy+5), 127	; F6D16E  ld (XIY+0x05),0x7f
 	ld	w, 6:opc	; F6D172  ld W,0x06
 	calr	StepRecord_AppendBytesToCurrentEntry	; F6D174  calr 0xf6b387
-sub_F6D11F_Return:
+StepRecord_AppendLatchedRtCreateY_Return:
 	ret	; F6D177  ret
 
 ; --------------------------------------------------------------------------
@@ -164240,7 +164354,7 @@ sub_F6D178_Return:
 ;   body + the arm that fills the latch. (notes/naming-pilot-2026-10-06/proposals_wave7_y.json)
 StepRecord_AppendLatchedRtCtrlX:
 	m_cp_mi8 MB16, 0x1345, 0xff	; F6D1C9  cp (0x1345),0xff
-	jr	z, sub_F6D1C9_Return	; F6D1CE  jr Z,0xf6d221
+	jr	z, StepRecord_AppendLatchedRtCtrlX_Return	; F6D1CE  jr Z,0xf6d221
 	ld	xiy, 3726	; F6D1D0  ld XIY,0x00000e8e
 	ld	a, 186:opc	; F6D1D5  ld A,0xba
 	and	a, 128	; F6D1D7  and A,0x80
@@ -164268,7 +164382,7 @@ StepRecord_AppendLatchedRtCtrlX:
 	ld	(xiy+5), 127	; F6D218  ld (XIY+0x05),0x7f
 	ld	w, 6:opc	; F6D21C  ld W,0x06
 	calr	StepRecord_AppendBytesToCurrentEntry	; F6D21E  calr 0xf6b387
-sub_F6D1C9_Return:
+StepRecord_AppendLatchedRtCtrlX_Return:
 	ret	; F6D221  ret
 
 ; --------------------------------------------------------------------------
@@ -164347,7 +164461,7 @@ sub_F6D222_Return:
 ;   body + the arm that fills the latch. (notes/naming-pilot-2026-10-06/proposals_wave7_y.json)
 StepRecord_AppendLatchedRtCtrlY:
 	m_cp_mi8 MB16, 0x1346, 0xff	; F6D273  cp (0x1346),0xff
-	jr	z, sub_F6D273_Return	; F6D278  jr Z,0xf6d2cb
+	jr	z, StepRecord_AppendLatchedRtCtrlY_Return	; F6D278  jr Z,0xf6d2cb
 	ld	xiy, 3726	; F6D27A  ld XIY,0x00000e8e
 	ld	a, 187:opc	; F6D27F  ld A,0xbb
 	and	a, 128	; F6D281  and A,0x80
@@ -164375,7 +164489,7 @@ StepRecord_AppendLatchedRtCtrlY:
 	ld	(xiy+5), 127	; F6D2C2  ld (XIY+0x05),0x7f
 	ld	w, 6:opc	; F6D2C6  ld W,0x06
 	calr	StepRecord_AppendBytesToCurrentEntry	; F6D2C8  calr 0xf6b387
-sub_F6D273_Return:
+StepRecord_AppendLatchedRtCtrlY_Return:
 	ret	; F6D2CB  ret
 
 ; --------------------------------------------------------------------------
@@ -164455,7 +164569,7 @@ sub_F6D2CC_Return:
 ;   body + the arm that fills the latch. (notes/naming-pilot-2026-10-06/proposals_wave7_y.json)
 StepRecord_AppendLatchedReverb:
 	m_cp_mi8 MB16, 0x134e, 0xff	; F6D320  cp (0x134e),0xff
-	jr	z, sub_F6D320_Return	; F6D325  jr Z,0xf6d36b
+	jr	z, StepRecord_AppendLatchedReverb_Return	; F6D325  jr Z,0xf6d36b
 	ld	xiy, 3726	; F6D327  ld XIY,0x00000e8e
 	ld	a, 176:opc	; F6D32C  ld A,0xb0
 	ld	(xiy), a	; F6D32E  ld (XIY),A
@@ -164478,7 +164592,7 @@ StepRecord_AppendLatchedReverb:
 	ld	(xiy+5), 127	; F6D362  ld (XIY+0x05),0x7f
 	ld	w, 6:opc	; F6D366  ld W,0x06
 	calr	StepRecord_AppendBytesToCurrentEntry	; F6D368  calr 0xf6b387
-sub_F6D320_Return:
+StepRecord_AppendLatchedReverb_Return:
 	ret	; F6D36B  ret
 
 ; --------------------------------------------------------------------------
@@ -164558,7 +164672,7 @@ sub_F6D36C_Return:
 ;   body + the arm that fills the latch. (notes/naming-pilot-2026-10-06/proposals_wave7_y.json)
 StepRecord_AppendLatchedEffect1:
 	m_cp_mi8 MB16, 0x134f, 0xff	; F6D3C0  cp (0x134f),0xff
-	jr	z, sub_F6D3C0_Return	; F6D3C5  jr Z,0xf6d40b
+	jr	z, StepRecord_AppendLatchedEffect1_Return	; F6D3C5  jr Z,0xf6d40b
 	ld	xiy, 3726	; F6D3C7  ld XIY,0x00000e8e
 	ld	a, 176:opc	; F6D3CC  ld A,0xb0
 	ld	(xiy), a	; F6D3CE  ld (XIY),A
@@ -164581,7 +164695,7 @@ StepRecord_AppendLatchedEffect1:
 	ld	(xiy+5), 127	; F6D402  ld (XIY+0x05),0x7f
 	ld	w, 6:opc	; F6D406  ld W,0x06
 	calr	StepRecord_AppendBytesToCurrentEntry	; F6D408  calr 0xf6b387
-sub_F6D3C0_Return:
+StepRecord_AppendLatchedEffect1_Return:
 	ret	; F6D40B  ret
 
 ; --------------------------------------------------------------------------
@@ -165232,10 +165346,10 @@ sub_F6D5B5:
 MsgLine_PutMeasureDigits:
 	ld	wa, (4786:16)	; F6D5BA  ld WA,(0x12b2)
 	cp	wa, 1000	; F6D5BE  cp WA,0x03e8
-	jr	c, sub_F6D5BA_Skip	; F6D5C2  jr C,0xf6d5c9
+	jr	c, MsgLine_PutMeasureDigits_Skip	; F6D5C2  jr C,0xf6d5c9
 	calr	MsgLine_SetTextDashes	; F6D5C4  calr 0xf6d5e2
-	jr	sub_F6D5BA_Return	; F6D5C7  jr T,0xf6d5e1
-sub_F6D5BA_Skip:
+	jr	MsgLine_PutMeasureDigits_Return	; F6D5C7  jr T,0xf6d5e1
+MsgLine_PutMeasureDigits_Skip:
 	call	T_Value_ToAsciiDigits3_RightJustified	; F6D5C9  call 0xf41af0
 	ld	xiy, Value_AsciiDigits	; F6D5CD  ld XIY,0x00002661
 	ld	xix, MsgLine_Text	; F6D5D2  ld XIX,0x00000fe4
@@ -165243,7 +165357,7 @@ sub_F6D5BA_Skip:
 	ld	(xix), wa	; F6D5D9  ld (XIX),WA
 	ld	a, (xiy+2)	; F6D5DB  ld A,(XIY+0x02)
 	ld	(xix+2), a	; F6D5DE  ld (XIX+0x02),A
-sub_F6D5BA_Return:
+MsgLine_PutMeasureDigits_Return:
 	ret	; F6D5E1  ret
 
 ; --------------------------------------------------------------------------
@@ -169011,20 +169125,20 @@ StepRecord_ReadScanEvent:
 	calr	StepRecord_ReadScanByte	; F6E9C0  calr 0xf6e9e6
 	ld	(xix+), a	; F6E9C3  ld (XIX+),A
 	cp	a, 129	; F6E9C6  cp A,0x81
-	jr	z, sub_F6E9BB_Skip	; F6E9C9  jr Z,0xf6e9d0
+	jr	z, StepRecord_ReadScanEvent_Skip	; F6E9C9  jr Z,0xf6e9d0
 	cp	a, 130	; F6E9CB  cp A,0x82
-	jr	nz, sub_F6E9BB_Join	; F6E9CE  jr NZ,0xf6e9d5
-sub_F6E9BB_Skip:
+	jr	nz, StepRecord_ReadScanEvent_Join	; F6E9CE  jr NZ,0xf6e9d5
+StepRecord_ReadScanEvent_Skip:
 	calr	StepRecord_AdvanceScanPosition	; F6E9D0  calr 0xf6ea15
-	jr	sub_F6E9BB_Return	; F6E9D3  jr T,0xf6e9e5
-sub_F6E9BB_Join:
+	jr	StepRecord_ReadScanEvent_Return	; F6E9D3  jr T,0xf6e9e5
+StepRecord_ReadScanEvent_Join:
 	calr	StepRecord_AdvanceScanPosition	; F6E9D5  calr 0xf6ea15
 	calr	StepRecord_ReadScanByte	; F6E9D8  calr 0xf6e9e6
 	bit	7, a	; F6E9DB  bit 0x07,A
-	jr	nz, sub_F6E9BB_Return	; F6E9DE  jr NZ,0xf6e9e5
+	jr	nz, StepRecord_ReadScanEvent_Return	; F6E9DE  jr NZ,0xf6e9e5
 	ld	(xix+), a	; F6E9E0  ld (XIX+),A
-	jr	sub_F6E9BB_Join	; F6E9E3  jr T,0xf6e9d5
-sub_F6E9BB_Return:
+	jr	StepRecord_ReadScanEvent_Join	; F6E9E3  jr T,0xf6e9d5
+StepRecord_ReadScanEvent_Return:
 	ret	; F6E9E5  ret
 
 ; --------------------------------------------------------------------------
@@ -169090,17 +169204,17 @@ StepRecord_AdvanceScanPosition:
 	push	xix	; F6EA21  push XIX
 	ld	wa, (4054:16)	; F6EA22  ld WA,(0x0fd6)
 	cp	wa, 255	; F6EA26  cp WA,0x00ff
-	jr	nz, sub_F6EA15_Skip	; F6EA2A  jr NZ,0xf6ea43
+	jr	nz, StepRecord_AdvanceScanPosition_Skip	; F6EA2A  jr NZ,0xf6ea43
 	ld	hl, (4052:16)	; F6EA2C  ld HL,(0x0fd4)
 	calr	BStore_SetCursorBlockAddr_B	; F6EA30  calr 0xf6ec31
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6EA33  ld XHL,(0x126e)
 	ld	hl, (xhl+3)	; F6EA37  ld HL,(XHL+0x03)
 	ld	(4052:16), hl	; F6EA3A  ld (0x0fd4),HL
 	ldw	wa, 5	; F6EA3E  ld WA,0x0005
-	jr	sub_F6EA15_Join	; F6EA41  jr T,0xf6ea45
-sub_F6EA15_Skip:
+	jr	StepRecord_AdvanceScanPosition_Join	; F6EA41  jr T,0xf6ea45
+StepRecord_AdvanceScanPosition_Skip:
 	inc	1, wa	; F6EA43  inc 1,WA
-sub_F6EA15_Join:
+StepRecord_AdvanceScanPosition_Join:
 	ld	(4054:16), wa	; F6EA45  ld (0x0fd6),WA
 	pop	xix	; F6EA49  pop XIX
 	m_rd_popx RLX, 0x38	; F6EA4A  pop XDE3
@@ -169927,7 +170041,7 @@ OldCopy_TrackMerge_StepDestTrack:
 	ret	; F6F3F4  ret
 OldCopy_TrackMerge_ReturnToStageZero:
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F3F5  cp (0x207e),0x01
-	jr	nz, sub_F7ADDC_Return - 0xBA00	; F6F3FA  jr NZ,0xf6f40b
+	jr	nz, TrackMerge_ReturnToStageZero_Return - 0xBA00	; F6F3FA  jr NZ,0xf6f40b
 	.byte	0xC1, 0x75, 0x20, 0x3C	; F6F3FC  the first 4 of the 5 bytes of `and (0x2075),0xf6` (live 0xF7ADFC); this build's MidiFileL0ad_LcdKeyRow1 begins at 0xF6F400
 
 
@@ -170000,12 +170114,12 @@ MidiFileL0ad_SelectSeqBankAndReadSmf:
 	call	OldCopy_BStore_Workspace_SaveToBank	; F6F40C  call 0xf6f476
 	ld	a, (Disk_SeqBank:16)	; F6F410  ld A,(0x272b)
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F6F414  cp A,(0x360a)
-	jr	z, sub_F6F408_Skip	; F6F418  jr Z,0xf6f42a
+	jr	z, MidiFileL0ad_SelectSeqBankAndReadSmf_Skip	; F6F418  jr Z,0xf6f42a
 	ld	a, (Disk_SeqBank:16)	; F6F41A  ld A,(0x272b)
 	ld	(BStore_CurrentBank:16), a	; F6F41E  ld (0x360a),A
 	call	MidiFile_LoadWorkspaceFromBank	; F6F422  call 0xf6f4a3
 	call	T_Seq_ApplySongBeatsPerBar	; F6F426  call 0xf40ac8
-sub_F6F408_Skip:
+MidiFileL0ad_SelectSeqBankAndReadSmf_Skip:
 	call	Smf_ReadFile_Entry	; F6F42A  call 0xf6f526
 	call	T_Ring601850_Init	; F6F42E  call 0xf41e6c
 	call	T_SeqBufRing_Init	; F6F432  call 0xf41d94
@@ -170043,14 +170157,14 @@ MidiFileSave_SelectSeqBankAndWriteSmf:
 	push	xde	; F6F443  push XDE
 	ld	a, (Disk_SeqBank:16)	; F6F444  ld A,(0x272b)
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F6F448  cp A,(0x360a)
-	jr	z, sub_F6F440_Skip	; F6F44C  jr Z,0xf6f465
+	jr	z, MidiFileSave_SelectSeqBankAndWriteSmf_Skip	; F6F44C  jr Z,0xf6f465
 	call	OldCopy_BStore_Workspace_SaveToBank	; F6F44E  call 0xf6f476
 	ld	a, (Disk_SeqBank:16)	; F6F452  ld A,(0x272b)
 	ld	(BStore_CurrentBank:16), a	; F6F456  ld (0x360a),A
 	call	MidiFile_LoadWorkspaceFromBank	; F6F45A  call 0xf6f4a3
 	calr	Seq_RewindAndApplySongGmAndParams	; F6F45E  calr 0xf6f4f2
 	call	T_Seq_ApplySongBeatsPerBar	; F6F461  call 0xf40ac8
-sub_F6F440_Skip:
+MidiFileSave_SelectSeqBankAndWriteSmf_Skip:
 	call	Smf_WriteFile_Veneer	; F6F465  call 0xf73840
 	call	T_Ring601850_Init	; F6F469  call 0xf41e6c
 	call	T_SeqBufRing_Init	; F6F46D  call 0xf41d94
@@ -170155,14 +170269,14 @@ MidiFile_LoadWorkspaceFromBank:
 Seq_RewindAndApplySongGmAndParams:
 	call	T_Seq_RequestRewind	; F6F4F2  call 0xf409e0
 	m_cp_mi8 MB24, 0x6034c6, 0xff	; F6F4F6  cp (0x6034c6),0xff
-	jr	z, sub_F6F4F2_Skip	; F6F4FC  jr Z,0xf6f507
+	jr	z, Seq_RewindAndApplySongGmAndParams_Skip	; F6F4FC  jr Z,0xf6f507
 	m_and_mi8 MB16, 0x7f4d, 0xfb	; F6F4FE  and (0x7f4d),0xfb
 	xor	a, a	; F6F503  xor A,A
-	jr	sub_F6F4F2_Join	; F6F505  jr T,0xf6f50e
-sub_F6F4F2_Skip:
+	jr	Seq_RewindAndApplySongGmAndParams_Join	; F6F505  jr T,0xf6f50e
+Seq_RewindAndApplySongGmAndParams_Skip:
 	m_or_mi8 MB16, 0x7f4d, 0x04	; F6F507  or (0x7f4d),0x04
 	ld	a, 4:opc	; F6F50C  ld A,0x04
-sub_F6F4F2_Join:
+Seq_RewindAndApplySongGmAndParams_Join:
 	ld	(4684:16), 1	; F6F50E  ld (0x124c),0x01
 	ld	e, 145:opc	; F6F513  ld E,0x91
 	ld	d, 3:opc	; F6F515  ld D,0x03
@@ -170603,9 +170717,9 @@ SmfPart_ResetFineTuneAndBendRange:
 	ld	(xix+13), a	; F6F8D1  ld (XIX+0x0d),A
 	add	xix, 64	; F6F8D4  add XIX,0x00000040
 	cp	bc, 9	; F6F8DA  cp BC,0x0009
-	jr	nz, sub_F6F8C7_Skip	; F6F8DE  jr NZ,0xf6f8e6
+	jr	nz, SmfPart_ResetFineTuneAndBendRange_Skip	; F6F8DE  jr NZ,0xf6f8e6
 	add	xix, 64	; F6F8E0  add XIX,0x00000040
-sub_F6F8C7_Skip:
+SmfPart_ResetFineTuneAndBendRange_Skip:
 	djnz16	bc, -24	; F6F8E6  djnz BC,0xf6f8d1
 	ld	xix, 6305440	; F6F8E9  ld XIX,0x006036a0
 	ld	a, 128:opc	; F6F8EE  ld A,0x80
@@ -170613,9 +170727,9 @@ sub_F6F8C7_Skip:
 	ld	(xix+12), a	; F6F8F3  ld (XIX+0x0c),A
 	add	xix, 64	; F6F8F6  add XIX,0x00000040
 	cp	bc, 9	; F6F8FC  cp BC,0x0009
-	jr	nz, sub_F6F8C7_Skip2	; F6F900  jr NZ,0xf6f908
+	jr	nz, SmfPart_ResetFineTuneAndBendRange_Skip2	; F6F900  jr NZ,0xf6f908
 	add	xix, 64	; F6F902  add XIX,0x00000040
-sub_F6F8C7_Skip2:
+SmfPart_ResetFineTuneAndBendRange_Skip2:
 	djnz16	bc, -24	; F6F908  djnz BC,0xf6f8f3
 	ret	; F6F90B  ret
 
@@ -170812,9 +170926,9 @@ Smf_AllocFirstBlockForAllTracks:
 	xor	iy, iy	; F6F9DE  xor IY,IY
 	xor	ix, ix	; F6F9E0  xor IX,IX
 	ld	(13471:16), 0	; F6F9E2  ld (0x349f),0x00
-sub_F6F9DE_Loop:
+Smf_AllocFirstBlockForAllTracks_Loop:
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0011	; F6F9E7  cp (0x6034ba),0x0011
-	jrl	c, sub_F6F9DE_Return	; F6F9EE  jrl C,0xf6fa6f
+	jrl	c, Smf_AllocFirstBlockForAllTracks_Return	; F6F9EE  jrl C,0xf6fa6f
 	push	xiy	; F6F9F1  push XIY
 	push	xix	; F6F9F2  push XIX
 	call	T_BStore_AllocBlock_Veneer	; F6F9F3  call 0xf42884
@@ -170823,9 +170937,9 @@ sub_F6F9DE_Loop:
 	pop	xiy	; F6F9FA  pop XIY
 	ld	bc, (BStore_BlockCount:16)	; F6F9FB  ld BC,(0x3608)
 	cp	wa, bc	; F6F9FF  cp WA,BC
-	jr	ugt, sub_F6F9DE_Return	; F6FA01  jr UGT,0xf6fa6f
+	jr	ugt, Smf_AllocFirstBlockForAllTracks_Return	; F6FA01  jr UGT,0xf6fa6f
 	cp	wa, 0:i3	; F6FA03  cp WA,0
-	jr	z, sub_F6F9DE_Return	; F6FA05  jr Z,0xf6fa6f
+	jr	z, Smf_AllocFirstBlockForAllTracks_Return	; F6FA05  jr Z,0xf6fa6f
 	pushw	wa	; F6FA07  push WA
 	ld	hl, wa	; F6FA08  ld HL,WA
 	calr	SongStore_SeekBlock_Copy	; F6FA0A  calr 0xf72f0a
@@ -170854,9 +170968,9 @@ sub_F6F9DE_Loop:
 	add	ix, 2	; F6FA5D  add IX,0x0002
 	inc	1, (13471:16)	; F6FA61  inc 1,(0x349f)
 	m_cp_mi8 MB16, 0x349f, 0x11	; F6FA65  cp (0x349f),0x11
-	jrl	c, sub_F6F9DE_Loop	; F6FA6A  jrl C,0xf6f9e7
-	jr	sub_F6F9DE_Return	; F6FA6D  jr T,0xf6fa6f
-sub_F6F9DE_Return:
+	jrl	c, Smf_AllocFirstBlockForAllTracks_Loop	; F6FA6A  jrl C,0xf6f9e7
+	jr	Smf_AllocFirstBlockForAllTracks_Return	; F6FA6D  jr T,0xf6fa6f
+Smf_AllocFirstBlockForAllTracks_Return:
 	ret	; F6FA6F  ret
 
 ; --------------------------------------------------------------------------
@@ -170902,12 +171016,12 @@ Smf_PutDefaultTimeSigOnMasterTrack:
 	pop	xix	; F6FA93  pop XIX
 	popw	bc	; F6FA94  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6FA95  cp (0x1238),0x00
-	jr	nz, sub_F6FA70_Epilogue	; F6FA9A  jr NZ,0xf6faac
+	jr	nz, Smf_PutDefaultTimeSigOnMasterTrack_Epilogue	; F6FA9A  jr NZ,0xf6faac
 	djnz16	bc, -22	; F6FA9C  djnz BC,0xf6fa89
 	m_or_mi8 MB16, 0x360e, 0x01	; F6FA9F  or (0x360e),0x01
 	calr	TrackCursor_Save	; F6FAA4  calr 0xf71275
 	ld	(4664:16), 0	; F6FAA7  ld (0x1238),0x00
-sub_F6FA70_Epilogue:
+Smf_PutDefaultTimeSigOnMasterTrack_Epilogue:
 	pop	xiz	; F6FAAC  pop XIZ
 	pop	xiy	; F6FAAD  pop XIY
 	pop	xix	; F6FAAE  pop XIX
@@ -170954,7 +171068,7 @@ Data_F6FAB4:
 ;   Basis: caller + body. (notes/naming-pilot-2026-10-06/proposals_wave6_v.json)
 Smf_TerminateUsedTracks:
 	xor	hl, hl	; F6FAB7  xor HL,HL
-sub_F6FAB7_Loop:
+Smf_TerminateUsedTracks_Loop:
 	ld	iy, hl	; F6FAB9  ld IY,HL
 	extz	xiy	; F6FABB  extz XIY
 	sla	iy, 1	; F6FABD  sla 0x01,IY
@@ -170963,7 +171077,7 @@ sub_F6FAB7_Loop:
 	ld	xde, 6305024	; F6FAC3  ld XDE,0x00603500
 	mx_bit 7, MXD, ra_DE, ra_IY	; F6FAC8  bit 7,(XDE+IY)
 	pop	xde	; F6FACD  pop XDE
-	jr	z, sub_F6FAB7_Skip	; F6FACE  jr Z,0xf6fadf
+	jr	z, Smf_TerminateUsedTracks_Skip	; F6FACE  jr Z,0xf6fadf
 	ld	iy, hl	; F6FAD0  ld IY,HL
 	pushw	hl	; F6FAD2  push HL
 	calr	TrackCursor_Load	; F6FAD3  calr 0xf7124e
@@ -170971,10 +171085,10 @@ sub_F6FAB7_Loop:
 	calr	BStore_PutByteAtCursor	; F6FAD8  calr 0xf70fe1
 	calr	Smf_SaveTrackEndCursor	; F6FADB  calr 0xf6fb16
 	popw	hl	; F6FADE  pop HL
-sub_F6FAB7_Skip:
+Smf_TerminateUsedTracks_Skip:
 	inc	1, hl	; F6FADF  inc 1,HL
 	cp	hl, 16	; F6FAE1  cp HL,0x0010
-	jr	ule, sub_F6FAB7_Loop	; F6FAE5  jr ULE,0xf6fab9
+	jr	ule, Smf_TerminateUsedTracks_Loop	; F6FAE5  jr ULE,0xf6fab9
 	ret	; F6FAE7  ret
 
 ; --------------------------------------------------------------------------
@@ -170997,26 +171111,26 @@ sub_F6FAB7_Skip:
 ;   pilot-2026-10-06/proposals_wave6_v.json)
 Smf_ClearUnusedTracks:
 	xor	c, c	; F6FAE8  xor C,C
-sub_F6FAE8_Loop:
+Smf_ClearUnusedTracks_Loop:
 	ld	de, (13836:16)	; F6FAEA  ld DE,(0x360c)
 	ld	a, c	; F6FAEE  ld A,C
 	cp	a, 16	; F6FAF0  cp A,0x10
-	jr	lt, sub_F6FAE8_Skip	; F6FAF3  jr LT,0xf6fafb
+	jr	lt, Smf_ClearUnusedTracks_Skip	; F6FAF3  jr LT,0xf6fafb
 	ld	de, (13838:16)	; F6FAF5  ld DE,(0x360e)
 	ld	a, 16:opc	; F6FAF9  ld A,0x10
-sub_F6FAE8_Skip:
+Smf_ClearUnusedTracks_Skip:
 	scf	; F6FAFB  scf
 	m_rd_xorcf_a RW+r2	; F6FAFC  xorcf A,DE
-	jr	nc, sub_F6FAE8_Skip2	; F6FAFE  jr NC,0xf6fb0e
+	jr	nc, Smf_ClearUnusedTracks_Skip2	; F6FAFE  jr NC,0xf6fb0e
 	ld	(3184:16), c	; F6FB00  ld (0x0c70),C
 	inc	1, (3184:16)	; F6FB04  inc 1,(0x0c70)
 	pushw	bc	; F6FB08  push BC
 	call	T_F40A04	; F6FB09  call 0xf40a04
 	popw	bc	; F6FB0D  pop BC
-sub_F6FAE8_Skip2:
+Smf_ClearUnusedTracks_Skip2:
 	inc	1, c	; F6FB0E  inc 1,C
 	cp	c, 16	; F6FB10  cp C,0x10
-	jr	ule, sub_F6FAE8_Loop	; F6FB13  jr ULE,0xf6faea
+	jr	ule, Smf_ClearUnusedTracks_Loop	; F6FB13  jr ULE,0xf6faea
 	ret	; F6FB15  ret
 
 ; --------------------------------------------------------------------------
@@ -172204,7 +172318,7 @@ SmfEvent_PitchBend_Return:
 ; Called from: in-module: 0xF6FFA0
 ; Touches: (0x10D1) (0x1239) (0x124B) (0x2732)
 ; Calls:   SmfPart_ResetAllRecords SmfCC_GeneralPurpose1 SmfCC_GeneralPurpose2 SmfCC_GeneralPurpose3 SmfCC_GeneralPurpose4 SmfCC_BankSelectLsb
-;          SmfCC_DataEntryLsb SmfCC_Sustain sub_F7039A_Nop2 sub_F7039A_Nop SmfCC_Effect1Depth SmfCC_Effect3Depth
+;          SmfCC_DataEntryLsb SmfCC_Sustain sub_F7039A_Nop2 SmfCC_PutSustainParamEvent_Nop SmfCC_Effect1Depth SmfCC_Effect3Depth
 ;          +6 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -172302,7 +172416,7 @@ SmfEvent_ControlChange_Skip11:
 	call	sub_F7039A_Nop2	; F7045A  call 0xf7095e
 	jr	SmfEvent_ControlChange_Return	; F7045E  jr T,0xf7048c
 SmfEvent_ControlChange_Skip12:
-	call	sub_F7039A_Nop	; F70460  call 0xf7091d
+	call	SmfCC_PutSustainParamEvent_Nop	; F70460  call 0xf7091d
 	jr	SmfEvent_ControlChange_Return	; F70464  jr T,0xf7048c
 SmfEvent_ControlChange_Skip13:
 	calr	SmfCC_Effect1Depth	; F70466  calr 0xf709ed
@@ -172951,16 +173065,16 @@ SmfCC_Sustain_Nop:
 SmfCC_PutSustainParamEvent:
 	push	xiy	; F7083B  push XIY
 	m_cp_mi8 MB16, 0x11ae, 0xff	; F7083C  cp (0x11ae),0xff
-	jrl	z, sub_F7083B_Epilogue	; F70841  jrl Z,0xf7091b
+	jrl	z, SmfCC_PutSustainParamEvent_Epilogue	; F70841  jrl Z,0xf7091b
 	ld	iy, (Smf_EventStatus:16)	; F70844  ld IY,(0x10d0)
 	and	iy, 15	; F70848  and IY,0x000f
 	m_cp_mi8 MB16, Smf_Format, 0x00	; F7084C  cp (0x1078),0x00
-	jr	z, sub_F7083B_Skip	; F70851  jr Z,0xf70862
+	jr	z, SmfCC_PutSustainParamEvent_Skip	; F70851  jr Z,0xf70862
 	m_cp_mi8 MB16, Smf_TrackCount, 0x02	; F70853  cp (0x107a),0x02
-	jr	lt, sub_F7083B_Skip	; F70858  jr LT,0xf70862
+	jr	lt, SmfCC_PutSustainParamEvent_Skip	; F70858  jr LT,0xf70862
 	ld	iy, (4530:16)	; F7085A  ld IY,(0x11b2)
 	call	Smf_ClampTrackToSlot	; F7085E  call 0xf70c3f
-sub_F7083B_Skip:
+SmfCC_PutSustainParamEvent_Skip:
 	push	xiy	; F70862  push XIY
 	pushw	bc	; F70863  push BC
 	call	TrackCursor_Load	; F70864  call 0xf7124e
@@ -172974,7 +173088,7 @@ sub_F7083B_Skip:
 	popw	bc	; F70875  pop BC
 	pop	xiy	; F70876  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70877  cp (0x1238),0x00
-	jrl	nz, sub_F7083B_Epilogue	; F7087C  jrl NZ,0xf7091b
+	jrl	nz, SmfCC_PutSustainParamEvent_Epilogue	; F7087C  jrl NZ,0xf7091b
 	sla	iy, 1	; F7087F  sla 0x01,IY
 	push	xde	; F70882  push XDE
 	ld	xde, 4307	; F70883  ld XDE,0x000010d3
@@ -172988,14 +173102,14 @@ sub_F7083B_Skip:
 	pop	xiy	; F7089B  pop XIY
 	popw	bc	; F7089C  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7089D  cp (0x1238),0x00
-	jrl	nz, sub_F7083B_Epilogue	; F708A2  jrl NZ,0xf7091b
+	jrl	nz, SmfCC_PutSustainParamEvent_Epilogue	; F708A2  jrl NZ,0xf7091b
 	ld	a, 181:opc	; F708A5  ld A,0xb5
 	and	a, 127	; F708A7  and A,0x7f
 	push	xiy	; F708AA  push XIY
 	call	BStore_PutByteAndAdvance	; F708AB  call 0xf70fda
 	pop	xiy	; F708AF  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F708B0  cp (0x1238),0x00
-	jrl	nz, sub_F7083B_Epilogue	; F708B5  jrl NZ,0xf7091b
+	jrl	nz, SmfCC_PutSustainParamEvent_Epilogue	; F708B5  jrl NZ,0xf7091b
 	pop	xiy	; F708B8  pop XIY
 	push	xiy	; F708B9  push XIY
 	ld	a, (4526:16)	; F708BA  ld A,(0x11ae)
@@ -173003,38 +173117,38 @@ sub_F7083B_Skip:
 	call	BStore_PutByteAndAdvance	; F708BF  call 0xf70fda
 	pop	xiy	; F708C3  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F708C4  cp (0x1238),0x00
-	jr	nz, sub_F7083B_Epilogue	; F708C9  jr NZ,0xf7091b
+	jr	nz, SmfCC_PutSustainParamEvent_Epilogue	; F708C9  jr NZ,0xf7091b
 	ld	a, (4527:16)	; F708CB  ld A,(0x11af)
 	and	a, 127	; F708CF  and A,0x7f
 	push	xiy	; F708D2  push XIY
 	call	BStore_PutByteAndAdvance	; F708D3  call 0xf70fda
 	pop	xiy	; F708D7  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F708D8  cp (0x1238),0x00
-	jr	nz, sub_F7083B_Epilogue	; F708DD  jr NZ,0xf7091b
+	jr	nz, SmfCC_PutSustainParamEvent_Epilogue	; F708DD  jr NZ,0xf7091b
 	ld	a, (4528:16)	; F708DF  ld A,(0x11b0)
 	push	xiy	; F708E3  push XIY
 	call	BStore_PutByteAndAdvance	; F708E4  call 0xf70fda
 	pop	xiy	; F708E8  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F708E9  cp (0x1238),0x00
-	jr	nz, sub_F7083B_Epilogue	; F708EE  jr NZ,0xf7091b
+	jr	nz, SmfCC_PutSustainParamEvent_Epilogue	; F708EE  jr NZ,0xf7091b
 	call	SmfEvent_MarkChannelUsed	; F708F0  call 0xf7129a
 	ld	iy, (Smf_EventStatus:16)	; F708F4  ld IY,(0x10d0)
 	and	iy, 15	; F708F8  and IY,0x000f
 	m_cp_mi8 MB16, Smf_Format, 0x00	; F708FC  cp (0x1078),0x00
-	jr	z, sub_F7083B_Skip2	; F70901  jr Z,0xf70912
+	jr	z, SmfCC_PutSustainParamEvent_Skip2	; F70901  jr Z,0xf70912
 	m_cp_mi8 MB16, Smf_TrackCount, 0x02	; F70903  cp (0x107a),0x02
-	jr	lt, sub_F7083B_Skip2	; F70908  jr LT,0xf70912
+	jr	lt, SmfCC_PutSustainParamEvent_Skip2	; F70908  jr LT,0xf70912
 	ld	iy, (4530:16)	; F7090A  ld IY,(0x11b2)
 	call	Smf_ClampTrackToSlot	; F7090E  call 0xf70c3f
-sub_F7083B_Skip2:
+SmfCC_PutSustainParamEvent_Skip2:
 	call	TrackCursor_Save	; F70912  call 0xf71275
 	ld	(4664:16), 0	; F70916  ld (0x1238),0x00
-sub_F7083B_Epilogue:
+SmfCC_PutSustainParamEvent_Epilogue:
 	pop	xiy	; F7091B  pop XIY
 	ret	; F7091C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7039A_Nop
+; SmfCC_PutSustainParamEvent_Nop
 ; Called from: in-module: 0xF70460 0xF722F5
 ; Touches: nothing with an absolute address
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
@@ -173043,10 +173157,10 @@ sub_F7083B_Epilogue:
 ;                  decodes is still a real instruction.  0xF7091D is an
 ;                  instruction boundary of this transcription, re-asserted
 ;                  on every emit.
-; Purpose: none -- the entry is a lone `ret`.  Named sub_F7039A_Nop after what reaches it
+; Purpose: none -- the entry is a lone `ret`.  Named SmfCC_PutSustainParamEvent_Nop after what reaches it
 ;          (was sub_F7091D; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F7039A_Nop:
+SmfCC_PutSustainParamEvent_Nop:
 	ret	; F7091D  ret
 
 ; --------------------------------------------------------------------------
@@ -173442,13 +173556,13 @@ SmfCC_PutSelectedRpnValueEvent_Return:
 SmfCC_PutRpnParamEvent:
 	push	xiy	; F70B22  push XIY
 	m_cp_mi16 MW16, Smf_Format, 0x0000	; F70B23  cp (0x1078),0x0000
-	jr	z, sub_F70B22_Skip	; F70B29  jr Z,0xf70b3c
+	jr	z, SmfCC_PutRpnParamEvent_Skip	; F70B29  jr Z,0xf70b3c
 	m_cp_mi16 MW16, Smf_TrackCount, 0x0002	; F70B2B  cp (0x107a),0x0002
-	jr	c, sub_F70B22_Skip	; F70B31  jr C,0xf70b3c
+	jr	c, SmfCC_PutRpnParamEvent_Skip	; F70B31  jr C,0xf70b3c
 	ld	iy, (4530:16)	; F70B33  ld IY,(0x11b2)
 	extz	xiy	; F70B37  extz XIY
 	calr	Smf_ClampTrackToSlot	; F70B39  calr 0xf70c3f
-sub_F70B22_Skip:
+SmfCC_PutRpnParamEvent_Skip:
 	push	xiy	; F70B3C  push XIY
 	pushw	bc	; F70B3D  push BC
 	calr	TrackCursor_Load	; F70B3E  calr 0xf7124e
@@ -173456,19 +173570,19 @@ sub_F70B22_Skip:
 	pop	xiy	; F70B42  pop XIY
 	ld	a, 176:opc	; F70B43  ld A,0xb0
 	cp	c, 1:i3	; F70B45  cp C,1
-	jr	nz, sub_F70B22_Skip2	; F70B47  jr NZ,0xf70b55
+	jr	nz, SmfCC_PutRpnParamEvent_Skip2	; F70B47  jr NZ,0xf70b55
 	or	a, 2	; F70B49  or A,0x02
 	m_bit 7, MD16, 0x11af	; F70B4C  bit 7,(0x11af)
-	jr	z, sub_F70B22_Skip2	; F70B50  jr Z,0xf70b55
+	jr	z, SmfCC_PutRpnParamEvent_Skip2	; F70B50  jr Z,0xf70b55
 	or	a, 1	; F70B52  or A,0x01
-sub_F70B22_Skip2:
+SmfCC_PutRpnParamEvent_Skip2:
 	push	xiy	; F70B55  push XIY
 	pushw	bc	; F70B56  push BC
 	calr	BStore_PutByteAndAdvance	; F70B57  calr 0xf70fda
 	popw	bc	; F70B5A  pop BC
 	pop	xiy	; F70B5B  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70B5C  cp (0x1238),0x00
-	jrl	nz, sub_F70B22_Epilogue	; F70B61  jrl NZ,0xf70c3a
+	jrl	nz, SmfCC_PutRpnParamEvent_Epilogue	; F70B61  jrl NZ,0xf70c3a
 	sla	xiy, 1	; F70B64  sla 0x01,XIY
 	push	xix	; F70B67  push XIX
 	ld	xix, 4307	; F70B68  ld XIX,0x000010d3
@@ -173482,33 +173596,33 @@ sub_F70B22_Skip2:
 	pop	xiy	; F70B7E  pop XIY
 	popw	bc	; F70B7F  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70B80  cp (0x1238),0x00
-	jrl	nz, sub_F70B22_Epilogue	; F70B85  jrl NZ,0xf70c3a
+	jrl	nz, SmfCC_PutRpnParamEvent_Epilogue	; F70B85  jrl NZ,0xf70c3a
 	ld	l, c	; F70B88  ld L,C
 	xor	h, h	; F70B8A  xor H,H
 	ld	l, (Smf_EventStatus:16)	; F70B8C  ld L,(0x10d0)
 	and	l, 15	; F70B90  and L,0x0f
 	xor	h, h	; F70B93  xor H,H
 	m_cp_mi16 MW16, Smf_Format, 0x0000	; F70B95  cp (0x1078),0x0000
-	jr	z, sub_F70B22_Skip3	; F70B9B  jr Z,0xf70ba9
+	jr	z, SmfCC_PutRpnParamEvent_Skip3	; F70B9B  jr Z,0xf70ba9
 	m_cp_mi16 MW16, Smf_TrackCount, 0x0002	; F70B9D  cp (0x107a),0x0002
-	jr	c, sub_F70B22_Skip3	; F70BA3  jr C,0xf70ba9
+	jr	c, SmfCC_PutRpnParamEvent_Skip3	; F70BA3  jr C,0xf70ba9
 	ld	a, l	; F70BA5  ld A,L
-	jr	sub_F70B22_Join	; F70BA7  jr T,0xf70bbf
-sub_F70B22_Skip3:
+	jr	SmfCC_PutRpnParamEvent_Join	; F70BA7  jr T,0xf70bbf
+SmfCC_PutRpnParamEvent_Skip3:
 	ld	xix, ByteMap_F70298 + 0x10	; F70BA9  ld XIX,0x00f702a8
 	m_cp_mi8 MB16, 0x1239, 0xff	; F70BAE  cp (0x1239),0xff
-	jr	z, sub_F70B22_Skip4	; F70BB3  jr Z,0xf70bba
+	jr	z, SmfCC_PutRpnParamEvent_Skip4	; F70BB3  jr Z,0xf70bba
 	ld	xix, ByteMap_F70298	; F70BB5  ld XIX,0x00f70298
-sub_F70B22_Skip4:
+SmfCC_PutRpnParamEvent_Skip4:
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F70BBA  ld A,(XIX+HL)
-sub_F70B22_Join:
+SmfCC_PutRpnParamEvent_Join:
 	pushw	bc	; F70BBF  push BC
 	push	xiy	; F70BC0  push XIY
 	calr	BStore_PutByteAndAdvance	; F70BC1  calr 0xf70fda
 	pop	xiy	; F70BC4  pop XIY
 	popw	bc	; F70BC5  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70BC6  cp (0x1238),0x00
-	jrl	nz, sub_F70B22_Epilogue	; F70BCB  jrl NZ,0xf70c3a
+	jrl	nz, SmfCC_PutRpnParamEvent_Epilogue	; F70BCB  jrl NZ,0xf70c3a
 	pop	xiy	; F70BCE  pop XIY
 	push	xiy	; F70BCF  push XIY
 	push	xde	; F70BD0  push XDE
@@ -173519,35 +173633,35 @@ sub_F70B22_Join:
 	calr	BStore_PutByteAndAdvance	; F70BDD  calr 0xf70fda
 	pop	xiy	; F70BE0  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70BE1  cp (0x1238),0x00
-	jrl	nz, sub_F70B22_Epilogue	; F70BE6  jrl NZ,0xf70c3a
+	jrl	nz, SmfCC_PutRpnParamEvent_Epilogue	; F70BE6  jrl NZ,0xf70c3a
 	ld	a, (4527:16)	; F70BE9  ld A,(0x11af)
 	and	a, 127	; F70BED  and A,0x7f
 	push	xiy	; F70BF0  push XIY
 	calr	BStore_PutByteAndAdvance	; F70BF1  calr 0xf70fda
 	pop	xiy	; F70BF4  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70BF5  cp (0x1238),0x00
-	jrl	nz, sub_F70B22_Epilogue	; F70BFA  jrl NZ,0xf70c3a
+	jrl	nz, SmfCC_PutRpnParamEvent_Epilogue	; F70BFA  jrl NZ,0xf70c3a
 	ld	a, 127:opc	; F70BFD  ld A,0x7f
 	push	xiy	; F70BFF  push XIY
 	calr	BStore_PutByteAndAdvance	; F70C00  calr 0xf70fda
 	pop	xiy	; F70C03  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70C04  cp (0x1238),0x00
-	jrl	nz, sub_F70B22_Epilogue	; F70C09  jrl NZ,0xf70c3a
+	jrl	nz, SmfCC_PutRpnParamEvent_Epilogue	; F70C09  jrl NZ,0xf70c3a
 	calr	SmfEvent_MarkChannelUsed	; F70C0C  calr 0xf7129a
 	ld	iy, (Smf_EventStatus:16)	; F70C0F  ld IY,(0x10d0)
 	and	iy, 15	; F70C13  and IY,0x000f
 	extz	xiy	; F70C17  extz XIY
 	m_cp_mi16 MW16, Smf_Format, 0x0000	; F70C19  cp (0x1078),0x0000
-	jr	z, sub_F70B22_Skip5	; F70C1F  jr Z,0xf70c32
+	jr	z, SmfCC_PutRpnParamEvent_Skip5	; F70C1F  jr Z,0xf70c32
 	m_cp_mi16 MW16, Smf_TrackCount, 0x0002	; F70C21  cp (0x107a),0x0002
-	jr	c, sub_F70B22_Skip5	; F70C27  jr C,0xf70c32
+	jr	c, SmfCC_PutRpnParamEvent_Skip5	; F70C27  jr C,0xf70c32
 	ld	iy, (4530:16)	; F70C29  ld IY,(0x11b2)
 	extz	xiy	; F70C2D  extz XIY
 	calr	Smf_ClampTrackToSlot	; F70C2F  calr 0xf70c3f
-sub_F70B22_Skip5:
+SmfCC_PutRpnParamEvent_Skip5:
 	calr	TrackCursor_Save	; F70C32  calr 0xf71275
 	ld	(4664:16), 0	; F70C35  ld (0x1238),0x00
-sub_F70B22_Epilogue:
+SmfCC_PutRpnParamEvent_Epilogue:
 	pop	xiy	; F70C3A  pop XIY
 	ret	; F70C3B  ret
 
@@ -174449,12 +174563,12 @@ Smf_PutBeatMarks:
 	pop	xiy	; F71215  pop XIY
 	popw	bc	; F71216  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71217  cp (0x1238),0x00
-	jr	nz, sub_F71203_Return	; F7121C  jr NZ,0xf7122e
+	jr	nz, Smf_PutBeatMarks_Return	; F7121C  jr NZ,0xf7122e
 	djnz16	bc, -19	; F7121E  djnz BC,0xf7120e
 	calr	TrackCursor_Save	; F71221  calr 0xf71275
 	m_or_mi8 MB16, 0x11b1, 0x01	; F71224  or (0x11b1),0x01
 	ld	(4664:16), 0	; F71229  ld (0x1238),0x00
-sub_F71203_Return:
+Smf_PutBeatMarks_Return:
 	ret	; F7122E  ret
 
 ; --------------------------------------------------------------------------
@@ -176621,7 +176735,7 @@ SmfEvent_NoteOff_MultiTrack_Return:
 ; Called from: in-module: 0xF71E13
 ; Touches: (0x10D1) (0x1239) (0x124B) (0x2732)
 ; Calls:   SmfPart_ResetAllRecords SmfCC_GeneralPurpose1 SmfCC_GeneralPurpose2 SmfCC_GeneralPurpose3 SmfCC_GeneralPurpose4 SmfCC_BankSelectLsb_MultiTrack
-;          SmfCC_DataEntryLsb_MultiTrack SmfCC_Sustain sub_F7039A_Nop2 sub_F7039A_Nop SmfCC_Effect1Depth_MultiTrack SmfCC_Effect3Depth_MultiTrack
+;          SmfCC_DataEntryLsb_MultiTrack SmfCC_Sustain sub_F7039A_Nop2 SmfCC_PutSustainParamEvent_Nop SmfCC_Effect1Depth_MultiTrack SmfCC_Effect3Depth_MultiTrack
 ;          +6 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -176719,7 +176833,7 @@ SmfEvent_ControlChange_MultiTrack_Skip11:
 	call	sub_F7039A_Nop2	; F722EF  call 0xf7095e
 	jr	SmfEvent_ControlChange_MultiTrack_Return	; F722F3  jr T,0xf72322
 SmfEvent_ControlChange_MultiTrack_Skip12:
-	call	sub_F7039A_Nop	; F722F5  call 0xf7091d
+	call	SmfCC_PutSustainParamEvent_Nop	; F722F5  call 0xf7091d
 	jr	SmfEvent_ControlChange_MultiTrack_Return	; F722F9  jr T,0xf72322
 SmfEvent_ControlChange_MultiTrack_Skip13:
 	call	SmfCC_Effect1Depth_MultiTrack	; F722FB  call 0xf7263a
@@ -177577,7 +177691,7 @@ Smf_AllocFirstBlockForTrackSlot:
 	calr	Smf_TrackToSlot	; F72826  calr 0xf728fe
 	ld	ix, iy	; F72829  ld IX,IY
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0011	; F7282B  cp (0x6034ba),0x0011
-	jr	c, sub_F72822_Return	; F72832  jr C,0xf728a2
+	jr	c, Smf_AllocFirstBlockForTrackSlot_Return	; F72832  jr C,0xf728a2
 	push	xiy	; F72834  push XIY
 	push	xix	; F72835  push XIX
 	call	T_BStore_AllocBlock_Veneer	; F72836  call 0xf42884
@@ -177586,9 +177700,9 @@ Smf_AllocFirstBlockForTrackSlot:
 	pop	xiy	; F7283D  pop XIY
 	ld	bc, (BStore_BlockCount:16)	; F7283E  ld BC,(0x3608)
 	cp	wa, bc	; F72842  cp WA,BC
-	jr	ugt, sub_F72822_Return	; F72844  jr UGT,0xf728a2
+	jr	ugt, Smf_AllocFirstBlockForTrackSlot_Return	; F72844  jr UGT,0xf728a2
 	cp	wa, 0:i3	; F72846  cp WA,0
-	jr	z, sub_F72822_Return	; F72848  jr Z,0xf728a2
+	jr	z, Smf_AllocFirstBlockForTrackSlot_Return	; F72848  jr Z,0xf728a2
 	pushw	wa	; F7284A  push WA
 	ld	hl, wa	; F7284B  ld HL,WA
 	calr	SongStore_SeekBlock_Copy	; F7284D  calr 0xf72f0a
@@ -177613,7 +177727,7 @@ Smf_AllocFirstBlockForTrackSlot:
 	ld	iy, (4530:16)	; F72894  ld IY,(0x11b2)
 	calr	Smf_TrackToSlot	; F72898  calr 0xf728fe
 	mx_ld_mi16 MXD, ra_HL, ra_IY, 0x0005	; F7289B  ld (XHL+IY),0x0005
-sub_F72822_Return:
+Smf_AllocFirstBlockForTrackSlot_Return:
 	ret	; F728A2  ret
 
 ; --------------------------------------------------------------------------
@@ -177645,7 +177759,7 @@ Smf_TerminateTrackSlot:
 	ld	xde, 6305024	; F728B4  ld XDE,0x00603500
 	mx_bit 7, MXD, ra_DE, ra_IY	; F728B9  bit 7,(XDE+IY)
 	pop	xde	; F728BE  pop XDE
-	jr	z, sub_F728A3_Return	; F728BF  jr Z,0xf728d4
+	jr	z, Smf_TerminateTrackSlot_Return	; F728BF  jr Z,0xf728d4
 	ld	iy, (4530:16)	; F728C1  ld IY,(0x11b2)
 	ld	hl, iy	; F728C5  ld HL,IY
 	push	xhl	; F728C7  push XHL
@@ -177654,7 +177768,7 @@ Smf_TerminateTrackSlot:
 	calr	BStore_PutByteAtCursor	; F728CD  calr 0xf70fe1
 	calr	Smf_SaveSlotEndCursor	; F728D0  calr 0xf728d5
 	pop	xhl	; F728D3  pop XHL
-sub_F728A3_Return:
+Smf_TerminateTrackSlot_Return:
 	ret	; F728D4  ret
 
 ; --------------------------------------------------------------------------
@@ -177676,9 +177790,9 @@ sub_F728A3_Return:
 Smf_SaveSlotEndCursor:
 	push	xix	; F728D5  push XIX
 	cp	hl, 1:i3	; F728D6  cp HL,1
-	jr	ule, sub_F728D5_Skip	; F728D8  jr ULE,0xf728dd
+	jr	ule, Smf_SaveSlotEndCursor_Skip	; F728D8  jr ULE,0xf728dd
 	ldw	hl, 1	; F728DA  ld HL,0x0001
-sub_F728D5_Skip:
+Smf_SaveSlotEndCursor_Skip:
 	ld	wa, (BStore_CursorOffset:16)	; F728DD  ld WA,(0x345e)
 	ld	xix, 6304928	; F728E1  ld XIX,0x006034a0
 	mx_st_mr8 MXD, ra_IX, ra_HL, 1	; F728E6  ld (XIX+HL),A
@@ -177742,17 +177856,17 @@ Smf_TrackToSlot_Skip:
 SmfExport_MergeUsedTracksIntoFirst:
 	xor	xhl, xhl	; F72918  xor XHL,XHL
 	xor	bc, bc	; F7291A  xor BC,BC
-sub_F72918_Loop:
+SmfExport_MergeUsedTracksIntoFirst_Loop:
 	ld	de, (13836:16)	; F7291C  ld DE,(0x360c)
 	ld	a, c	; F72920  ld A,C
 	cp	a, 16	; F72922  cp A,0x10
-	jr	lt, sub_F72918_Skip	; F72925  jr LT,0xf7292e
+	jr	lt, SmfExport_MergeUsedTracksIntoFirst_Skip	; F72925  jr LT,0xf7292e
 	ld	de, (13838:16)	; F72927  ld DE,(0x360e)
 	sub	a, 16	; F7292B  sub A,0x10
-sub_F72918_Skip:
+SmfExport_MergeUsedTracksIntoFirst_Skip:
 	scf	; F7292E  scf
 	m_rd_xorcf_a RW+r2	; F7292F  xorcf A,DE
-	jr	c, sub_F72918_Skip2	; F72931  jr C,0xf7294e
+	jr	c, SmfExport_MergeUsedTracksIntoFirst_Skip2	; F72931  jr C,0xf7294e
 	xor	wa, wa	; F72933  xor WA,WA
 	ld	a, c	; F72935  ld A,C
 	sla	a, 1	; F72937  sla 0x01,A
@@ -177762,31 +177876,31 @@ sub_F72918_Skip:
 	ld	xde, 6305024	; F7293F  ld XDE,0x00603500
 	mx_bit 7, MXD, ra_DE, ra_IY	; F72944  bit 7,(XDE+IY)
 	pop	xde	; F72949  pop XDE
-	jr	z, sub_F72918_Skip2	; F7294A  jr Z,0xf7294e
+	jr	z, SmfExport_MergeUsedTracksIntoFirst_Skip2	; F7294A  jr Z,0xf7294e
 	inc	1, l	; F7294C  inc 1,L
-sub_F72918_Skip2:
+SmfExport_MergeUsedTracksIntoFirst_Skip2:
 	inc	1, c	; F7294E  inc 1,C
 	cp	c, 16	; F72950  cp C,0x10
-	jr	ule, sub_F72918_Loop	; F72953  jr ULE,0xf7291c
+	jr	ule, SmfExport_MergeUsedTracksIntoFirst_Loop	; F72953  jr ULE,0xf7291c
 	cp	l, 2:i3	; F72955  cp L,2
-	jrl	c, sub_F72918_Return	; F72957  jrl C,0xf729d8
+	jrl	c, SmfExport_MergeUsedTracksIntoFirst_Return	; F72957  jrl C,0xf729d8
 	xor	bc, bc	; F7295A  xor BC,BC
-sub_F72918_Loop2:
+SmfExport_MergeUsedTracksIntoFirst_Loop2:
 	ld	de, (13836:16)	; F7295C  ld DE,(0x360c)
 	ld	a, c	; F72960  ld A,C
 	cp	a, 16	; F72962  cp A,0x10
-	jr	lt, sub_F72918_Skip3	; F72965  jr LT,0xf7296e
+	jr	lt, SmfExport_MergeUsedTracksIntoFirst_Skip3	; F72965  jr LT,0xf7296e
 	ld	de, (13838:16)	; F72967  ld DE,(0x360e)
 	sub	a, 16	; F7296B  sub A,0x10
-sub_F72918_Skip3:
+SmfExport_MergeUsedTracksIntoFirst_Skip3:
 	scf	; F7296E  scf
 	m_rd_xorcf_a RW+r2	; F7296F  xorcf A,DE
-	jr	nc, sub_F72918_Skip4	; F72971  jr NC,0xf7297a
-sub_F72918_Loop3:
+	jr	nc, SmfExport_MergeUsedTracksIntoFirst_Skip4	; F72971  jr NC,0xf7297a
+SmfExport_MergeUsedTracksIntoFirst_Loop3:
 	inc	1, c	; F72973  inc 1,C
 	cp	c, 16	; F72975  cp C,0x10
-	jr	ule, sub_F72918_Loop2	; F72978  jr ULE,0xf7295c
-sub_F72918_Skip4:
+	jr	ule, SmfExport_MergeUsedTracksIntoFirst_Loop2	; F72978  jr ULE,0xf7295c
+SmfExport_MergeUsedTracksIntoFirst_Skip4:
 	ld	l, c	; F7297A  ld L,C
 	sla	l, 1	; F7297C  sla 0x01,L
 	add	l, c	; F7297F  add L,C
@@ -177795,23 +177909,23 @@ sub_F72918_Skip4:
 	ld	xix, 6305024	; F72984  ld XIX,0x00603500
 	mx_bit 7, MXD, ra_IX, ra_HL	; F72989  bit 7,(XIX+HL)
 	pop	xix	; F7298E  pop XIX
-	jr	z, sub_F72918_Loop3	; F7298F  jr Z,0xf72973
+	jr	z, SmfExport_MergeUsedTracksIntoFirst_Loop3	; F7298F  jr Z,0xf72973
 	xor	xhl, xhl	; F72991  xor XHL,XHL
 	ld	l, c	; F72993  ld L,C
 	inc	1, c	; F72995  inc 1,C
 	ld	(3184:16), l	; F72997  ld (0x0c70),L
 	inc	1, (3184:16)	; F7299B  inc 1,(0x0c70)
-sub_F72918_Loop4:
+SmfExport_MergeUsedTracksIntoFirst_Loop4:
 	ld	de, (13836:16)	; F7299F  ld DE,(0x360c)
 	ld	a, c	; F729A3  ld A,C
 	cp	a, 16	; F729A5  cp A,0x10
-	jr	lt, sub_F72918_Skip5	; F729A8  jr LT,0xf729b1
+	jr	lt, SmfExport_MergeUsedTracksIntoFirst_Skip5	; F729A8  jr LT,0xf729b1
 	ld	de, (13838:16)	; F729AA  ld DE,(0x360e)
 	sub	a, 16	; F729AE  sub A,0x10
-sub_F72918_Skip5:
+SmfExport_MergeUsedTracksIntoFirst_Skip5:
 	scf	; F729B1  scf
 	m_rd_xorcf_a RW+r2	; F729B2  xorcf A,DE
-	jr	c, sub_F72918_Skip6	; F729B4  jr C,0xf729d1
+	jr	c, SmfExport_MergeUsedTracksIntoFirst_Skip6	; F729B4  jr C,0xf729d1
 	xor	b, b	; F729B6  xor B,B
 	ld	iz, bc	; F729B8  ld IZ,BC
 	ld	(3185:16), c	; F729BA  ld (0x0c71),C
@@ -177823,11 +177937,11 @@ sub_F72918_Skip5:
 	calr	Smf_MergeTracks	; F729CC  calr 0xf72a2b
 	popw	bc	; F729CF  pop BC
 	pop	xhl	; F729D0  pop XHL
-sub_F72918_Skip6:
+SmfExport_MergeUsedTracksIntoFirst_Skip6:
 	inc	1, c	; F729D1  inc 1,C
 	cp	c, 16	; F729D3  cp C,0x10
-	jr	ule, sub_F72918_Loop4	; F729D6  jr ULE,0xf7299f
-sub_F72918_Return:
+	jr	ule, SmfExport_MergeUsedTracksIntoFirst_Loop4	; F729D6  jr ULE,0xf7299f
+SmfExport_MergeUsedTracksIntoFirst_Return:
 	ret	; F729D8  ret
 
 ; --------------------------------------------------------------------------
@@ -177909,47 +178023,47 @@ Smf_MergeTracks:
 	call	T_BStore_LoadGeometry_Call	; F72A30  call 0xf427fc
 	ld	a, (3184:16)	; F72A34  ld A,(0x0c70)
 	cp	a, 1:i3	; F72A38  cp A,1
-	jr	c, sub_F72A2B_Skip	; F72A3A  jr C,0xf72a64
+	jr	c, Smf_MergeTracks_Skip	; F72A3A  jr C,0xf72a64
 	m_cp_rm MB16, 0x0ca2, 1	; F72A3C  cp A,(0x0ca2)
-	jr	ugt, sub_F72A2B_Skip	; F72A40  jr UGT,0xf72a64
+	jr	ugt, Smf_MergeTracks_Skip	; F72A40  jr UGT,0xf72a64
 	m_cp_rm MB16, 0x0c71, 1	; F72A42  cp A,(0x0c71)
-	jr	z, sub_F72A2B_Skip	; F72A46  jr Z,0xf72a64
+	jr	z, Smf_MergeTracks_Skip	; F72A46  jr Z,0xf72a64
 	ld	a, (3185:16)	; F72A48  ld A,(0x0c71)
 	cp	a, 1:i3	; F72A4C  cp A,1
-	jr	c, sub_F72A2B_Skip	; F72A4E  jr C,0xf72a64
+	jr	c, Smf_MergeTracks_Skip	; F72A4E  jr C,0xf72a64
 	m_cp_rm MB16, 0x0ca2, 1	; F72A50  cp A,(0x0ca2)
-	jr	ugt, sub_F72A2B_Skip	; F72A54  jr UGT,0xf72a64
+	jr	ugt, Smf_MergeTracks_Skip	; F72A54  jr UGT,0xf72a64
 	ld	a, (3186:16)	; F72A56  ld A,(0x0c72)
 	cp	a, 1:i3	; F72A5A  cp A,1
-	jr	c, sub_F72A2B_Skip	; F72A5C  jr C,0xf72a64
+	jr	c, Smf_MergeTracks_Skip	; F72A5C  jr C,0xf72a64
 	m_cp_rm MB16, 0x0ca2, 1	; F72A5E  cp A,(0x0ca2)
-	jr	ule, sub_F72A2B_Skip2	; F72A62  jr ULE,0xf72a6c
-sub_F72A2B_Skip:
+	jr	ule, Smf_MergeTracks_Skip2	; F72A62  jr ULE,0xf72a6c
+Smf_MergeTracks_Skip:
 	ld	(BStore_ErrorCode:16), 3	; F72A64  ld (0x0d4a),0x03
-	jrl	sub_F72A2B_Return	; F72A69  jrl T,0xf72bb2
-sub_F72A2B_Skip2:
+	jrl	Smf_MergeTracks_Return	; F72A69  jrl T,0xf72bb2
+Smf_MergeTracks_Skip2:
 	xor	hl, hl	; F72A6C  xor HL,HL
 	ld	(BStore_ErrorCode:16), 0	; F72A6E  ld (0x0d4a),0x00
 	m_and_mi8 MB16, 0x0c8a, 0xbf	; F72A73  and (0x0c8a),0xbf
 	ld	a, (3184:16)	; F72A78  ld A,(0x0c70)
 	call	T_BStore_OpenChain_Call	; F72A7C  call 0xf427f8
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F72A80  cp (0x0d4a),0x00
-	jr	z, sub_F72A2B_Skip3	; F72A85  jr Z,0xf72a8a
-	jrl	sub_F72A2B_Return	; F72A87  jrl T,0xf72bb2
-sub_F72A2B_Skip3:
+	jr	z, Smf_MergeTracks_Skip3	; F72A85  jr Z,0xf72a8a
+	jrl	Smf_MergeTracks_Return	; F72A87  jrl T,0xf72bb2
+Smf_MergeTracks_Skip3:
 	ld	wa, (BStore_CursorBlock:16)	; F72A8A  ld WA,(0x345c)
 	ld	(3320:16), wa	; F72A8E  ld (0x0cf8),WA
 	ld	a, (3185:16)	; F72A92  ld A,(0x0c71)
 	call	T_BStore_OpenChain_Call	; F72A96  call 0xf427f8
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F72A9A  cp (0x0d4a),0x00
-	jrl	nz, sub_F72A2B_Return	; F72A9F  jrl NZ,0xf72bb2
+	jrl	nz, Smf_MergeTracks_Return	; F72A9F  jrl NZ,0xf72bb2
 	ld	wa, (BStore_CursorBlock:16)	; F72AA2  ld WA,(0x345c)
 	ld	(3326:16), wa	; F72AA6  ld (0x0cfe),WA
 	ld	a, (3186:16)	; F72AAA  ld A,(0x0c72)
 	m_cp_rm MB16, 0x0c70, 1	; F72AAE  cp A,(0x0c70)
-	jr	z, sub_F72A2B_Skip4	; F72AB2  jr Z,0xf72ad0
+	jr	z, Smf_MergeTracks_Skip4	; F72AB2  jr Z,0xf72ad0
 	m_cp_rm MB16, 0x0c71, 1	; F72AB4  cp A,(0x0c71)
-	jr	z, sub_F72A2B_Skip4	; F72AB8  jr Z,0xf72ad0
+	jr	z, Smf_MergeTracks_Skip4	; F72AB8  jr Z,0xf72ad0
 	ld	a, (3184:16)	; F72ABA  ld A,(0x0c70)
 	pushw	wa	; F72ABE  push WA
 	ld	a, (3186:16)	; F72ABF  ld A,(0x0c72)
@@ -177957,7 +178071,7 @@ sub_F72A2B_Skip3:
 	call	T_F40A04	; F72AC7  call 0xf40a04
 	popw	wa	; F72ACB  pop WA
 	ld	(3184:16), a	; F72ACC  ld (0x0c70),A
-sub_F72A2B_Skip4:
+Smf_MergeTracks_Skip4:
 	xor	xhl, xhl	; F72AD0  xor XHL,XHL
 	ld	l, (3184:16)	; F72AD2  ld L,(0x0c70)
 	calr	SmfMerge_DetachSourceTrack	; F72AD6  calr 0xf72eba
@@ -178001,49 +178115,49 @@ sub_F72A2B_Skip4:
 	m_ld_mi16 MDD+r3, 0x03, 0xffff	; F72B52  ld (XHL+0x03),0xffff
 	calr	SmfMerge_FetchSource1Event	; F72B57  calr 0xf72cbc
 	calr	SmfMerge_FetchSource2Event	; F72B5A  calr 0xf72c74
-sub_F72A2B_Join:
+Smf_MergeTracks_Join:
 	m_cp_mi8 MB16, 0x0c8b, 0xff	; F72B5D  cp (0x0c8b),0xff
-	jr	nz, sub_F72A2B_Skip5	; F72B62  jr NZ,0xf72b66
-	jr	sub_F72A2B_Return	; F72B64  jr T,0xf72bb2
-sub_F72A2B_Skip5:
+	jr	nz, Smf_MergeTracks_Skip5	; F72B62  jr NZ,0xf72b66
+	jr	Smf_MergeTracks_Return	; F72B64  jr T,0xf72bb2
+Smf_MergeTracks_Skip5:
 	m_cp_mi8 MB16, 0x0c8b, 0x03	; F72B66  cp (0x0c8b),0x03
-	jr	z, sub_F72A2B_Skip6	; F72B6B  jr Z,0xf72b6f
-	jr	sub_F72A2B_Join2	; F72B6D  jr T,0xf72b86
-sub_F72A2B_Skip6:
+	jr	z, Smf_MergeTracks_Skip6	; F72B6B  jr Z,0xf72b6f
+	jr	Smf_MergeTracks_Join2	; F72B6D  jr T,0xf72b86
+Smf_MergeTracks_Skip6:
 	cp	c, b	; F72B6F  cp C,B
-	jr	c, sub_F72A2B_Skip7	; F72B71  jr C,0xf72b77
-	jr	z, sub_F72A2B_Skip8	; F72B73  jr Z,0xf72b7c
-	jr	ugt, sub_F72A2B_Skip9	; F72B75  jr UGT,0xf72b81
-sub_F72A2B_Skip7:
+	jr	c, Smf_MergeTracks_Skip7	; F72B71  jr C,0xf72b77
+	jr	z, Smf_MergeTracks_Skip8	; F72B73  jr Z,0xf72b7c
+	jr	ugt, Smf_MergeTracks_Skip9	; F72B75  jr UGT,0xf72b81
+Smf_MergeTracks_Skip7:
 	calr	SmfMerge_CopySource1ToMark	; F72B77  calr 0xf72bb3
-	jr	sub_F72A2B_Join	; F72B7A  jr T,0xf72b5d
-sub_F72A2B_Skip8:
+	jr	Smf_MergeTracks_Join	; F72B7A  jr T,0xf72b5d
+Smf_MergeTracks_Skip8:
 	calr	SmfMerge_EmitCommonMark	; F72B7C  calr 0xf72bc7
-	jr	sub_F72A2B_Join	; F72B7F  jr T,0xf72b5d
-sub_F72A2B_Skip9:
+	jr	Smf_MergeTracks_Join	; F72B7F  jr T,0xf72b5d
+Smf_MergeTracks_Skip9:
 	calr	SmfMerge_CopySource2ToMark	; F72B81  calr 0xf72bbd
-	jr	sub_F72A2B_Join	; F72B84  jr T,0xf72b5d
-sub_F72A2B_Join2:
+	jr	Smf_MergeTracks_Join	; F72B84  jr T,0xf72b5d
+Smf_MergeTracks_Join2:
 	m_bit 0, MD16, 0x0c8b	; F72B86  bit 0,(0x0c8b)
-	jr	z, sub_F72A2B_Skip10	; F72B8A  jr Z,0xf72b91
+	jr	z, Smf_MergeTracks_Skip10	; F72B8A  jr Z,0xf72b91
 	calr	SmfMerge_CopySource2ToMark	; F72B8C  calr 0xf72bbd
-	jr	sub_F72A2B_Join	; F72B8F  jr T,0xf72b5d
-sub_F72A2B_Skip10:
+	jr	Smf_MergeTracks_Join	; F72B8F  jr T,0xf72b5d
+Smf_MergeTracks_Skip10:
 	m_bit 1, MD16, 0x0c8b	; F72B91  bit 1,(0x0c8b)
-	jr	z, sub_F72A2B_Skip11	; F72B95  jr Z,0xf72b9c
+	jr	z, Smf_MergeTracks_Skip11	; F72B95  jr Z,0xf72b9c
 	calr	SmfMerge_CopySource1ToMark	; F72B97  calr 0xf72bb3
-	jr	sub_F72A2B_Join	; F72B9A  jr T,0xf72b5d
-sub_F72A2B_Skip11:
+	jr	Smf_MergeTracks_Join	; F72B9A  jr T,0xf72b5d
+Smf_MergeTracks_Skip11:
 	ld	a, (3358:16)	; F72B9C  ld A,(0x0d1e)
 	ld	w, (3359:16)	; F72BA0  ld W,(0x0d1f)
 	cp	a, w	; F72BA4  cp A,W
-	jr	le, sub_F72A2B_Skip12	; F72BA6  jr LE,0xf72bad
+	jr	le, Smf_MergeTracks_Skip12	; F72BA6  jr LE,0xf72bad
 	calr	SmfMerge_CopySource2Event	; F72BA8  calr 0xf72d04
-	jr	sub_F72A2B_Join	; F72BAB  jr T,0xf72b5d
-sub_F72A2B_Skip12:
+	jr	Smf_MergeTracks_Join	; F72BAB  jr T,0xf72b5d
+Smf_MergeTracks_Skip12:
 	calr	SmfMerge_CopySource1Event	; F72BAD  calr 0xf72d66
-	jr	sub_F72A2B_Join	; F72BB0  jr T,0xf72b5d
-sub_F72A2B_Return:
+	jr	Smf_MergeTracks_Join	; F72BB0  jr T,0xf72b5d
+Smf_MergeTracks_Return:
 	ret	; F72BB2  ret
 
 ; --------------------------------------------------------------------------
@@ -178113,7 +178227,7 @@ SmfMerge_CopySource2ToMark:
 ;   caller + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave7_y.json)
 SmfMerge_EmitCommonMark:
 	cp	c, 130	; F72BC7  cp C,0x82
-	jr	nz, sub_F72BC7_Skip	; F72BCA  jr NZ,0xf72bf2
+	jr	nz, SmfMerge_EmitCommonMark_Skip	; F72BCA  jr NZ,0xf72bf2
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72BCC  ld XHL,(0x126e)
 	mx_ld_mi8 MXD, ra_HL, ra_IX, 0x82	; F72BD0  ld (XHL+IX),0x82
 	ld	(3211:16), 255	; F72BD6  ld (0x0c8b),0xff
@@ -178123,8 +178237,8 @@ SmfMerge_EmitCommonMark:
 	ld	a, (3186:16)	; F72BE5  ld A,(0x0c72)
 	ld	(3354:16), wa	; F72BE9  ld (0x0d1a),WA
 	calr	SmfMerge_SaveDestEndCursor	; F72BED  calr 0xf72c36
-	jr	sub_F72BC7_Return	; F72BF0  jr T,0xf72c35
-sub_F72BC7_Skip:
+	jr	SmfMerge_EmitCommonMark_Return	; F72BF0  jr T,0xf72c35
+SmfMerge_EmitCommonMark_Skip:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72BF2  ld XHL,(0x126e)
 	mx_ld_mi8 MXD, ra_HL, ra_IX, 0x81	; F72BF6  ld (XHL+IX),0x81
 	calr	SmfMerge_AdvanceWriteCursor	; F72BFC  calr 0xf72dc8
@@ -178145,7 +178259,7 @@ sub_F72BC7_Skip:
 	calr	SmfMerge_FetchSource2Event	; F72C2D  calr 0xf72c74
 	ld	(3328:16), iy	; F72C30  ld (0x0d00),IY
 	pop	xix	; F72C34  pop XIX
-sub_F72BC7_Return:
+SmfMerge_EmitCommonMark_Return:
 	ret	; F72C35  ret
 
 ; --------------------------------------------------------------------------
@@ -178214,13 +178328,13 @@ SmfMerge_FetchSource2Event:
 	mx_ld_rm MXB, ra_IX, ra_IY, 2	; F72C83  ld B,(XIX+IY)
 	pop	xix	; F72C88  pop XIX
 	cp	b, 130	; F72C89  cp B,0x82
-	jr	z, sub_F72C74_Skip	; F72C8C  jr Z,0xf72c93
+	jr	z, SmfMerge_FetchSource2Event_Skip	; F72C8C  jr Z,0xf72c93
 	cp	b, 129	; F72C8E  cp B,0x81
-	jr	nz, sub_F72C74_Skip2	; F72C91  jr NZ,0xf72c9a
-sub_F72C74_Skip:
+	jr	nz, SmfMerge_FetchSource2Event_Skip2	; F72C91  jr NZ,0xf72c9a
+SmfMerge_FetchSource2Event_Skip:
 	m_or_mi8 MB16, 0x0c8b, 0x02	; F72C93  or (0x0c8b),0x02
-	jr	sub_F72C74_Return	; F72C98  jr T,0xf72cbb
-sub_F72C74_Skip2:
+	jr	SmfMerge_FetchSource2Event_Return	; F72C98  jr T,0xf72cbb
+SmfMerge_FetchSource2Event_Skip2:
 	pushw	bc	; F72C9A  push BC
 	push	xix	; F72C9B  push XIX
 	ld	xix, 6332672	; F72C9C  ld XIX,0x0060a100
@@ -178234,7 +178348,7 @@ sub_F72C74_Skip2:
 	pop	xix	; F72CB2  pop XIX
 	ld	(3359:16), a	; F72CB3  ld (0x0d1f),A
 	ld	(3328:16), iy	; F72CB7  ld (0x0d00),IY
-sub_F72C74_Return:
+SmfMerge_FetchSource2Event_Return:
 	ret	; F72CBB  ret
 
 ; --------------------------------------------------------------------------
@@ -178262,13 +178376,13 @@ SmfMerge_FetchSource1Event:
 	mx_ld_rm MXB, ra_IX, ra_IY, 3	; F72CCB  ld C,(XIX+IY)
 	pop	xix	; F72CD0  pop XIX
 	cp	c, 130	; F72CD1  cp C,0x82
-	jr	z, sub_F72CBC_Skip	; F72CD4  jr Z,0xf72cdb
+	jr	z, SmfMerge_FetchSource1Event_Skip	; F72CD4  jr Z,0xf72cdb
 	cp	c, 129	; F72CD6  cp C,0x81
-	jr	nz, sub_F72CBC_Skip2	; F72CD9  jr NZ,0xf72ce2
-sub_F72CBC_Skip:
+	jr	nz, SmfMerge_FetchSource1Event_Skip2	; F72CD9  jr NZ,0xf72ce2
+SmfMerge_FetchSource1Event_Skip:
 	m_or_mi8 MB16, 0x0c8b, 0x01	; F72CDB  or (0x0c8b),0x01
-	jr	sub_F72CBC_Return	; F72CE0  jr T,0xf72d03
-sub_F72CBC_Skip2:
+	jr	SmfMerge_FetchSource1Event_Return	; F72CE0  jr T,0xf72d03
+SmfMerge_FetchSource1Event_Skip2:
 	pushw	bc	; F72CE2  push BC
 	push	xix	; F72CE3  push XIX
 	ld	xix, 6332416	; F72CE4  ld XIX,0x0060a000
@@ -178282,7 +178396,7 @@ sub_F72CBC_Skip2:
 	pop	xix	; F72CFA  pop XIX
 	ld	(3358:16), a	; F72CFB  ld (0x0d1e),A
 	ld	(3322:16), iy	; F72CFF  ld (0x0cfa),IY
-sub_F72CBC_Return:
+SmfMerge_FetchSource1Event_Return:
 	ret	; F72D03  ret
 
 ; --------------------------------------------------------------------------
@@ -178307,12 +178421,12 @@ SmfMerge_CopySource2Event:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72D04  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IX, 2	; F72D08  ld (XHL+IX),B
 	m_bit 1, MD16, 0x0c8b	; F72D0D  bit 1,(0x0c8b)
-	jr	nz, sub_F72D04_Join	; F72D11  jr NZ,0xf72d23
+	jr	nz, SmfMerge_CopySource2Event_Join	; F72D11  jr NZ,0xf72d23
 	calr	SmfMerge_AdvanceWriteCursor	; F72D13  calr 0xf72dc8
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72D16  ld XHL,(0x126e)
 	ld	a, (3359:16)	; F72D1A  ld A,(0x0d1f)
 	mx_st_mr8 MXD, ra_HL, ra_IX, 1	; F72D1E  ld (XHL+IX),A
-sub_F72D04_Join:
+SmfMerge_CopySource2Event_Join:
 	push	xix	; F72D23  push XIX
 	ld	xix, 6332672	; F72D24  ld XIX,0x0060a100
 	nop	; F72D29  nop
@@ -178326,14 +178440,14 @@ sub_F72D04_Join:
 	ld	xix, 6332672	; F72D3E  ld XIX,0x0060a100
 	mx_bit 7, MXD, ra_IX, ra_IY	; F72D43  bit 7,(XIX+IY)
 	pop	xix	; F72D48  pop XIX
-	jr	nz, sub_F72D04_Skip	; F72D49  jr NZ,0xf72d5e
+	jr	nz, SmfMerge_CopySource2Event_Skip	; F72D49  jr NZ,0xf72d5e
 	push	xix	; F72D4B  push XIX
 	ld	xix, 6332672	; F72D4C  ld XIX,0x0060a100
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F72D51  ld A,(XIX+IY)
 	pop	xix	; F72D56  pop XIX
 	mx_st_mr8 MXD, ra_HL, ra_IX, 1	; F72D57  ld (XHL+IX),A
-	jr	sub_F72D04_Join	; F72D5C  jr T,0xf72d23
-sub_F72D04_Skip:
+	jr	SmfMerge_CopySource2Event_Join	; F72D5C  jr T,0xf72d23
+SmfMerge_CopySource2Event_Skip:
 	ld	(3328:16), iy	; F72D5E  ld (0x0d00),IY
 	calr	SmfMerge_FetchSource2Event	; F72D62  calr 0xf72c74
 	ret	; F72D65  ret
@@ -178360,12 +178474,12 @@ SmfMerge_CopySource1Event:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72D66  ld XHL,(0x126e)
 	mx_st_mr8 MXD, ra_HL, ra_IX, 3	; F72D6A  ld (XHL+IX),C
 	m_bit 0, MD16, 0x0c8b	; F72D6F  bit 0,(0x0c8b)
-	jr	nz, sub_F72D66_Join	; F72D73  jr NZ,0xf72d85
+	jr	nz, SmfMerge_CopySource1Event_Join	; F72D73  jr NZ,0xf72d85
 	calr	SmfMerge_AdvanceWriteCursor	; F72D75  calr 0xf72dc8
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72D78  ld XHL,(0x126e)
 	ld	a, (3358:16)	; F72D7C  ld A,(0x0d1e)
 	mx_st_mr8 MXD, ra_HL, ra_IX, 1	; F72D80  ld (XHL+IX),A
-sub_F72D66_Join:
+SmfMerge_CopySource1Event_Join:
 	push	xix	; F72D85  push XIX
 	ld	xix, 6332416	; F72D86  ld XIX,0x0060a000
 	nop	; F72D8B  nop
@@ -178379,14 +178493,14 @@ sub_F72D66_Join:
 	ld	xde, 6332416	; F72DA0  ld XDE,0x0060a000
 	mx_bit 7, MXD, ra_DE, ra_IY	; F72DA5  bit 7,(XDE+IY)
 	pop	xde	; F72DAA  pop XDE
-	jr	nz, sub_F72D66_Skip	; F72DAB  jr NZ,0xf72dc0
+	jr	nz, SmfMerge_CopySource1Event_Skip	; F72DAB  jr NZ,0xf72dc0
 	push	xde	; F72DAD  push XDE
 	ld	xde, 6332416	; F72DAE  ld XDE,0x0060a000
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F72DB3  ld A,(XDE+IY)
 	pop	xde	; F72DB8  pop XDE
 	mx_st_mr8 MXD, ra_HL, ra_IX, 1	; F72DB9  ld (XHL+IX),A
-	jr	sub_F72D66_Join	; F72DBE  jr T,0xf72d85
-sub_F72D66_Skip:
+	jr	SmfMerge_CopySource1Event_Join	; F72DBE  jr T,0xf72d85
+SmfMerge_CopySource1Event_Skip:
 	ld	(3322:16), iy	; F72DC0  ld (0x0cfa),IY
 	calr	SmfMerge_FetchSource1Event	; F72DC4  calr 0xf72cbc
 	ret	; F72DC7  ret
@@ -178413,9 +178527,9 @@ SmfMerge_AdvanceWriteCursor:
 	and	ix, 255	; F72DC8  and IX,0x00ff
 	inc	1, ix	; F72DCC  inc 1,IX
 	cp	ix, 255	; F72DCE  cp IX,0x00ff
-	jr	ugt, sub_F72DC8_Skip	; F72DD2  jr UGT,0xf72dd6
-	jr	sub_F72DC8_Return	; F72DD4  jr T,0xf72e26
-sub_F72DC8_Skip:
+	jr	ugt, SmfMerge_AdvanceWriteCursor_Skip	; F72DD2  jr UGT,0xf72dd6
+	jr	SmfMerge_AdvanceWriteCursor_Return	; F72DD4  jr T,0xf72e26
+SmfMerge_AdvanceWriteCursor_Skip:
 	push	xiz	; F72DD6  push XIZ
 	ld	xiz, (BStore_CursorBlockAddr:16)	; F72DD7  ld XIZ,(0x126e)
 	m_rd_ld_rr2x RLX, 0x38, r6	; F72DDB  ld XDE3,XIZ
@@ -178432,10 +178546,10 @@ sub_F72DC8_Skip:
 	ld	(BStore_CursorBlockAddr:16), xiz	; F72DF1  ld (0x126e),XIZ
 	pop	xiz	; F72DF5  pop XIZ
 	m_cp_rm MW16, BStore_BlockCount, 4	; F72DF6  cp IX,(0x3608)
-	jr	ule, sub_F72DC8_Skip2	; F72DFA  jr ULE,0xf72e03
+	jr	ule, SmfMerge_AdvanceWriteCursor_Skip2	; F72DFA  jr ULE,0xf72e03
 	ld	(BStore_ErrorCode:16), 5	; F72DFC  ld (0x0d4a),0x05
-	jr	sub_F72DC8_Return	; F72E01  jr T,0xf72e26
-sub_F72DC8_Skip2:
+	jr	SmfMerge_AdvanceWriteCursor_Return	; F72E01  jr T,0xf72e26
+SmfMerge_AdvanceWriteCursor_Skip2:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72E03  ld XHL,(0x126e)
 	ld	(xhl+3), ix	; F72E07  ld (XHL+0x03),IX
 	ld	hl, ix	; F72E0A  ld HL,IX
@@ -178446,7 +178560,7 @@ sub_F72DC8_Skip2:
 	m_ld_mi16 MDD+r3, 0x03, 0xffff	; F72E1A  ld (XHL+0x03),0xffff
 	ld	(3332:16), ix	; F72E1F  ld (0x0d04),IX
 	ldw	ix, 5	; F72E23  ld IX,0x0005
-sub_F72DC8_Return:
+SmfMerge_AdvanceWriteCursor_Return:
 	ret	; F72E26  ret
 
 ; --------------------------------------------------------------------------
@@ -178477,29 +178591,29 @@ SmfMerge_AdvanceReadCursor:
 	and	iy, 255	; F72E33  and IY,0x00ff
 	inc	1, iy	; F72E37  inc 1,IY
 	cp	iy, 255	; F72E39  cp IY,0x00ff
-	jr	ugt, sub_F72E27_Skip	; F72E3D  jr UGT,0xf72e41
+	jr	ugt, SmfMerge_AdvanceReadCursor_Skip	; F72E3D  jr UGT,0xf72e41
 	jr	sub_F72E27_Entry	; F72E3F  jr T,0xf72e79
-sub_F72E27_Skip:
+SmfMerge_AdvanceReadCursor_Skip:
 	ld	wa, (xix+3)	; F72E41  ld WA,(XIX+0x03)
 	cp	wa, 65535	; F72E44  cp WA,0xffff
-	jr	nz, sub_F72E27_Skip2	; F72E48  jr NZ,0xf72e51
+	jr	nz, SmfMerge_AdvanceReadCursor_Skip2	; F72E48  jr NZ,0xf72e51
 	ld	(BStore_ErrorCode:16), 2	; F72E4A  ld (0x0d4a),0x02
 	jr	sub_F72E27_Entry	; F72E4F  jr T,0xf72e79
-sub_F72E27_Skip2:
+SmfMerge_AdvanceReadCursor_Skip2:
 	m_cp_rm MW16, BStore_BlockCount, 0	; F72E51  cp WA,(0x3608)
-	jr	ule, sub_F72E27_Skip3	; F72E55  jr ULE,0xf72e5e
+	jr	ule, SmfMerge_AdvanceReadCursor_Skip3	; F72E55  jr ULE,0xf72e5e
 	ld	(BStore_ErrorCode:16), 10	; F72E57  ld (0x0d4a),0x0a
 	jr	sub_F72E27_Entry	; F72E5C  jr T,0xf72e79
-sub_F72E27_Skip3:
+SmfMerge_AdvanceReadCursor_Skip3:
 	ld	(BStore_CursorBlock:16), wa	; F72E5E  ld (0x345c),WA
 	ld	hl, wa	; F72E62  ld HL,WA
 	calr	SongStore_SeekBlock_Copy	; F72E64  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72E67  ld XHL,(0x126e)
 	m_bit 7, MDI+r3, 0	; F72E6B  bit 7,(XHL)
-	jr	nz, sub_F72E27_Skip4	; F72E6D  jr NZ,0xf72e76
+	jr	nz, SmfMerge_AdvanceReadCursor_Skip4	; F72E6D  jr NZ,0xf72e76
 	ld	(BStore_ErrorCode:16), 11	; F72E6F  ld (0x0d4a),0x0b
 	jr	sub_F72E27_Entry	; F72E74  jr T,0xf72e79
-sub_F72E27_Skip4:
+SmfMerge_AdvanceReadCursor_Skip4:
 	calr	TrackMerge_LoadAndFreeBlock_Copy	; F72E76  calr 0xf72e86
 sub_F72E27_Entry:
 	m_rd_popx RLX, 0x38	; F72E79  pop XDE3
@@ -178699,62 +178813,62 @@ ByteMap_F72F3C:
 ;   pilot-2026-10-06/proposals_wave6_v.json)
 Smf_SplitTrack1ByChannel:
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0011	; F72F5C  cp (0x6034ba),0x0011
-	jr	nc, sub_F72F5C_Skip15	; F72F63  jr NC,0xf72f6d
+	jr	nc, Smf_SplitTrack1ByChannel_Skip15	; F72F63  jr NC,0xf72f6d
 	ld	(4664:16), 255	; F72F65  ld (0x1238),0xff
-	jrl	sub_F72F5C_Join3	; F72F6A  jrl T,0xf731a2
-sub_F72F5C_Skip15:
+	jrl	Smf_SplitTrack1ByChannel_Join3	; F72F6A  jrl T,0xf731a2
+Smf_SplitTrack1ByChannel_Skip15:
 	ld	de, (6305025:24)	; F72F6D  ld DE,(0x603501)
 	ld	hl, de	; F72F72  ld HL,DE
 	calr	SmfSplit_LoadAndFreeSourceBlock	; F72F74  calr 0xf7335a
 	ld	(3322:16), iy	; F72F77  ld (0x0cfa),IY
 	pushw	de	; F72F7B  push DE
 	ldw	hl, 1	; F72F7C  ld HL,0x0001
-sub_F72F5C_Loop:
+Smf_SplitTrack1ByChannel_Loop:
 	pushw	hl	; F72F7F  push HL
 	calr	SmfSplit_DetachTrack	; F72F80  calr 0xf7330a
 	popw	hl	; F72F83  pop HL
 	inc	1, hl	; F72F84  inc 1,HL
 	cp	hl, 17	; F72F86  cp HL,0x0011
-	jr	ule, sub_F72F5C_Loop	; F72F8A  jr ULE,0xf72f7f
+	jr	ule, Smf_SplitTrack1ByChannel_Loop	; F72F8A  jr ULE,0xf72f7f
 	popw	de	; F72F8C  pop DE
 	calr	Smf_AllocFirstBlockForAllTracks_B	; F72F8D  calr 0xf73566
 	m_cp_mi8 MB16, 0x1010, 0x00	; F72F90  cp (0x1010),0x00
-	jrl	nz, sub_F72F5C_Return	; F72F95  jrl NZ,0xf731aa
+	jrl	nz, Smf_SplitTrack1ByChannel_Return	; F72F95  jrl NZ,0xf731aa
 	ld	(6332690:24), 0	; F72F98  ld (0x60a112),0x00
 	call	Smf_PutDefaultTimeSigOnMasterTrack	; F72F9E  call 0xf6fa70
-sub_F72F5C_Loop2:
+Smf_SplitTrack1ByChannel_Loop2:
 	calr	SmfSplit_FetchSourceEvent	; F72FA2  calr 0xf7339c
 	ld	a, (Smf_VlqValue:16)	; F72FA5  ld A,(0x1198)
 	cp	a, 129	; F72FA9  cp A,0x81
-	jr	z, sub_F72F5C_Skip	; F72FAC  jr Z,0xf72fe0
+	jr	z, Smf_SplitTrack1ByChannel_Skip	; F72FAC  jr Z,0xf72fe0
 	cp	a, 130	; F72FAE  cp A,0x82
-	jr	z, sub_F72F5C_Skip2	; F72FB1  jr Z,0xf72fe7
+	jr	z, Smf_SplitTrack1ByChannel_Skip2	; F72FB1  jr Z,0xf72fe7
 	and	a, 240	; F72FB3  and A,0xf0
 	cp	a, 144	; F72FB6  cp A,0x90
-	jr	z, sub_F72F5C_Skip3	; F72FB9  jr Z,0xf7300a
+	jr	z, Smf_SplitTrack1ByChannel_Skip3	; F72FB9  jr Z,0xf7300a
 	cp	a, 160	; F72FBB  cp A,0xa0
-	jr	z, sub_F72F5C_Skip4	; F72FBE  jr Z,0xf7302b
+	jr	z, Smf_SplitTrack1ByChannel_Skip4	; F72FBE  jr Z,0xf7302b
 	cp	a, 176	; F72FC0  cp A,0xb0
-	jrl	z, sub_F72F5C_Skip6	; F72FC3  jrl Z,0xf73074
+	jrl	z, Smf_SplitTrack1ByChannel_Skip6	; F72FC3  jrl Z,0xf73074
 	cp	a, 192	; F72FC6  cp A,0xc0
-	jrl	z, sub_F72F5C_Skip10	; F72FC9  jrl Z,0xf73107
+	jrl	z, Smf_SplitTrack1ByChannel_Skip10	; F72FC9  jrl Z,0xf73107
 	cp	a, 208	; F72FCC  cp A,0xd0
-	jrl	z, sub_F72F5C_Skip12	; F72FCF  jrl Z,0xf7313f
+	jrl	z, Smf_SplitTrack1ByChannel_Skip12	; F72FCF  jrl Z,0xf7313f
 	cp	a, 224	; F72FD2  cp A,0xe0
-	jrl	z, sub_F72F5C_Skip13	; F72FD5  jrl Z,0xf73160
+	jrl	z, Smf_SplitTrack1ByChannel_Skip13	; F72FD5  jrl Z,0xf73160
 	cp	a, 240	; F72FD8  cp A,0xf0
-	jrl	z, sub_F72F5C_Skip14	; F72FDB  jrl Z,0xf73181
-	jr	sub_F72F5C_Loop2	; F72FDE  jr T,0xf72fa2
-sub_F72F5C_Skip:
+	jrl	z, Smf_SplitTrack1ByChannel_Skip14	; F72FDB  jrl Z,0xf73181
+	jr	Smf_SplitTrack1ByChannel_Loop2	; F72FDE  jr T,0xf72fa2
+Smf_SplitTrack1ByChannel_Skip:
 	ld	a, 129:opc	; F72FE0  ld A,0x81
 	calr	SmfSplit_PutMarkOnAllTracks	; F72FE2  calr 0xf7328f
-	jr	sub_F72F5C_Loop2	; F72FE5  jr T,0xf72fa2
-sub_F72F5C_Skip2:
+	jr	Smf_SplitTrack1ByChannel_Loop2	; F72FE5  jr T,0xf72fa2
+Smf_SplitTrack1ByChannel_Skip2:
 	ld	a, 130:opc	; F72FE7  ld A,0x82
 	calr	SmfSplit_PutMarkOnAllTracks	; F72FE9  calr 0xf7328f
 	xor	hl, hl	; F72FEC  xor HL,HL
 	xor	iy, iy	; F72FEE  xor IY,IY
-sub_F72F5C_Loop3:
+Smf_SplitTrack1ByChannel_Loop3:
 	pushw	hl	; F72FF0  push HL
 	pushw	iy	; F72FF1  push IY
 	calr	SmfSplit_LoadTrackCursor	; F72FF2  calr 0xf73440
@@ -178764,10 +178878,10 @@ sub_F72F5C_Loop3:
 	inc	1, iy	; F72FFA  inc 1,IY
 	inc	1, hl	; F72FFC  inc 1,HL
 	cp	iy, 16	; F72FFE  cp IY,0x0010
-	jr	ule, sub_F72F5C_Loop3	; F73002  jr ULE,0xf72ff0
+	jr	ule, Smf_SplitTrack1ByChannel_Loop3	; F73002  jr ULE,0xf72ff0
 	calr	SmfSplit_ClearUnusedTracks	; F73004  calr 0xf731fb
-	jrl	sub_F72F5C_Join3	; F73007  jrl T,0xf731a2
-sub_F72F5C_Skip3:
+	jrl	Smf_SplitTrack1ByChannel_Join3	; F73007  jrl T,0xf731a2
+Smf_SplitTrack1ByChannel_Skip3:
 	ld	iy, (Smf_VlqValue:16)	; F7300A  ld IY,(0x1198)
 	and	iy, 15	; F7300E  and IY,0x000f
 	m_and_mi8 MB16, Smf_VlqValue, 0xf0	; F73012  and (0x1198),0xf0
@@ -178778,10 +178892,10 @@ sub_F72F5C_Skip3:
 	popw	iy	; F73021  pop IY
 	calr	SmfSplit_MarkTrackUsed	; F73022  calr 0xf73236
 	calr	SmfSplit_SaveTrackCursor	; F73025  calr 0xf73469
-	jrl	sub_F72F5C_Loop2	; F73028  jrl T,0xf72fa2
-sub_F72F5C_Skip4:
+	jrl	Smf_SplitTrack1ByChannel_Loop2	; F73028  jrl T,0xf72fa2
+Smf_SplitTrack1ByChannel_Skip4:
 	cp	hl, 3:i3	; F7302B  cp HL,3
-	jr	z, sub_F72F5C_Skip5	; F7302D  jr Z,0xf73053
+	jr	z, Smf_SplitTrack1ByChannel_Skip5	; F7302D  jr Z,0xf73053
 	ld	iy, (Smf_VlqValue:16)	; F7302F  ld IY,(0x1198)
 	and	iy, 15	; F73033  and IY,0x000f
 	ldw	iy, 16	; F73037  ld IY,0x0010
@@ -178793,8 +178907,8 @@ sub_F72F5C_Skip4:
 	popw	iy	; F73049  pop IY
 	calr	SmfSplit_MarkTrackUsed	; F7304A  calr 0xf73236
 	calr	SmfSplit_SaveTrackCursor	; F7304D  calr 0xf73469
-	jrl	sub_F72F5C_Loop2	; F73050  jrl T,0xf72fa2
-sub_F72F5C_Skip5:
+	jrl	Smf_SplitTrack1ByChannel_Loop2	; F73050  jrl T,0xf72fa2
+Smf_SplitTrack1ByChannel_Skip5:
 	ld	iy, (Smf_VlqValue:16)	; F73053  ld IY,(0x1198)
 	and	iy, 15	; F73057  and IY,0x000f
 	ld	(Smf_VlqValue:16), 208	; F7305B  ld (0x1198),0xd0
@@ -178805,56 +178919,56 @@ sub_F72F5C_Skip5:
 	popw	iy	; F7306A  pop IY
 	calr	SmfSplit_MarkTrackUsed	; F7306B  calr 0xf73236
 	calr	SmfSplit_SaveTrackCursor	; F7306E  calr 0xf73469
-	jrl	sub_F72F5C_Loop2	; F73071  jrl T,0xf72fa2
-sub_F72F5C_Skip6:
+	jrl	Smf_SplitTrack1ByChannel_Loop2	; F73071  jrl T,0xf72fa2
+Smf_SplitTrack1ByChannel_Skip6:
 	xor	hl, hl	; F73074  xor HL,HL
 	ld	l, (4506:16)	; F73076  ld L,(0x119a)
 	cp	l, 127	; F7307A  cp L,0x7f
-	jrl	z, sub_F72F5C_Loop2	; F7307D  jrl Z,0xf72fa2
+	jrl	z, Smf_SplitTrack1ByChannel_Loop2	; F7307D  jrl Z,0xf72fa2
 	ld	h, (Smf_VlqValue:16)	; F73080  ld H,(0x1198)
 	and	h, 4	; F73084  and H,0x04
 	sla	h, 5	; F73087  sla 0x05,H
 	or	l, h	; F7308A  or L,H
 	cp	l, 181	; F7308C  cp L,0xb5
-	jr	z, sub_F72F5C_Skip7	; F7308F  jr Z,0xf730b1
+	jr	z, Smf_SplitTrack1ByChannel_Skip7	; F7308F  jr Z,0xf730b1
 	cp	l, 188	; F73091  cp L,0xbc
-	jr	z, sub_F72F5C_Skip7	; F73094  jr Z,0xf730b1
+	jr	z, Smf_SplitTrack1ByChannel_Skip7	; F73094  jr Z,0xf730b1
 	cp	l, 189	; F73096  cp L,0xbd
-	jr	z, sub_F72F5C_Skip7	; F73099  jr Z,0xf730b1
+	jr	z, Smf_SplitTrack1ByChannel_Skip7	; F73099  jr Z,0xf730b1
 	cp	l, 184	; F7309B  cp L,0xb8
-	jr	z, sub_F72F5C_Skip7	; F7309E  jr Z,0xf730b1
+	jr	z, Smf_SplitTrack1ByChannel_Skip7	; F7309E  jr Z,0xf730b1
 	cp	l, 185	; F730A0  cp L,0xb9
-	jr	z, sub_F72F5C_Skip7	; F730A3  jr Z,0xf730b1
+	jr	z, Smf_SplitTrack1ByChannel_Skip7	; F730A3  jr Z,0xf730b1
 	cp	l, 186	; F730A5  cp L,0xba
-	jr	z, sub_F72F5C_Skip7	; F730A8  jr Z,0xf730b1
+	jr	z, Smf_SplitTrack1ByChannel_Skip7	; F730A8  jr Z,0xf730b1
 	cp	l, 187	; F730AA  cp L,0xbb
-	jr	z, sub_F72F5C_Skip7	; F730AD  jr Z,0xf730b1
-	jr	sub_F72F5C_Join	; F730AF  jr T,0xf730d5
-sub_F72F5C_Skip7:
+	jr	z, Smf_SplitTrack1ByChannel_Skip7	; F730AD  jr Z,0xf730b1
+	jr	Smf_SplitTrack1ByChannel_Join	; F730AF  jr T,0xf730d5
+Smf_SplitTrack1ByChannel_Skip7:
 	ld	l, (4507:16)	; F730B1  ld L,(0x119b)
 	xor	h, h	; F730B5  xor H,H
 	extz	xhl	; F730B7  extz XHL
 	push	xix	; F730B9  push XIX
 	ld	xix, ByteMap_F731AB	; F730BA  ld XIX,0x00f731ab
 	m_cp_mi8 MB16, 0x1239, 0x00	; F730BF  cp (0x1239),0x00
-	jr	z, sub_F72F5C_Skip8	; F730C4  jr Z,0xf730cb
+	jr	z, Smf_SplitTrack1ByChannel_Skip8	; F730C4  jr Z,0xf730cb
 	ld	xix, ByteMap_F731AB + 0x10	; F730C6  ld XIX,0x00f731bb
-sub_F72F5C_Skip8:
+Smf_SplitTrack1ByChannel_Skip8:
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F730CB  ld A,(XIX+HL)
 	pop	xix	; F730D0  pop XIX
 	ld	l, a	; F730D1  ld L,A
-	jr	sub_F72F5C_Join2	; F730D3  jr T,0xf730f1
-sub_F72F5C_Join:
+	jr	Smf_SplitTrack1ByChannel_Join2	; F730D3  jr T,0xf730f1
+Smf_SplitTrack1ByChannel_Join:
 	push	xix	; F730D5  push XIX
 	ld	xix, ByteMap_F731DB	; F730D6  ld XIX,0x00f731db
 	m_cp_mi8 MB16, 0x1239, 0x00	; F730DB  cp (0x1239),0x00
-	jr	z, sub_F72F5C_Skip9	; F730E0  jr Z,0xf730e7
+	jr	z, Smf_SplitTrack1ByChannel_Skip9	; F730E0  jr Z,0xf730e7
 	ld	xix, ByteMap_F731DB + 0x10	; F730E2  ld XIX,0x00f731eb
-sub_F72F5C_Skip9:
+Smf_SplitTrack1ByChannel_Skip9:
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F730E7  ld A,(XIX+HL)
 	pop	xix	; F730EC  pop XIX
 	ld	(4506:16), a	; F730ED  ld (0x119a),A
-sub_F72F5C_Join2:
+Smf_SplitTrack1ByChannel_Join2:
 	ld	iy, hl	; F730F1  ld IY,HL
 	pushw	iy	; F730F3  push IY
 	calr	SmfSplit_LoadTrackCursor	; F730F4  calr 0xf73440
@@ -178863,16 +178977,16 @@ sub_F72F5C_Join2:
 	popw	iy	; F730FD  pop IY
 	calr	SmfSplit_MarkTrackUsed	; F730FE  calr 0xf73236
 	calr	SmfSplit_SaveTrackCursor	; F73101  calr 0xf73469
-	jrl	sub_F72F5C_Loop2	; F73104  jrl T,0xf72fa2
-sub_F72F5C_Skip10:
+	jrl	Smf_SplitTrack1ByChannel_Loop2	; F73104  jrl T,0xf72fa2
+Smf_SplitTrack1ByChannel_Skip10:
 	xor	hl, hl	; F73107  xor HL,HL
 	ld	l, (4506:16)	; F73109  ld L,(0x119a)
 	push	xix	; F7310D  push XIX
 	ld	xix, ByteMap_F731DB	; F7310E  ld XIX,0x00f731db
 	m_cp_mi8 MB16, 0x1239, 0x00	; F73113  cp (0x1239),0x00
-	jr	z, sub_F72F5C_Skip11	; F73118  jr Z,0xf7311f
+	jr	z, Smf_SplitTrack1ByChannel_Skip11	; F73118  jr Z,0xf7311f
 	ld	xix, ByteMap_F731DB + 0x10	; F7311A  ld XIX,0x00f731eb
-sub_F72F5C_Skip11:
+Smf_SplitTrack1ByChannel_Skip11:
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F7311F  ld A,(XIX+HL)
 	pop	xix	; F73124  pop XIX
 	ld	(4506:16), a	; F73125  ld (0x119a),A
@@ -178884,8 +178998,8 @@ sub_F72F5C_Skip11:
 	popw	iy	; F73135  pop IY
 	calr	SmfSplit_MarkTrackUsed	; F73136  calr 0xf73236
 	calr	SmfSplit_SaveTrackCursor	; F73139  calr 0xf73469
-	jrl	sub_F72F5C_Loop2	; F7313C  jrl T,0xf72fa2
-sub_F72F5C_Skip12:
+	jrl	Smf_SplitTrack1ByChannel_Loop2	; F7313C  jrl T,0xf72fa2
+Smf_SplitTrack1ByChannel_Skip12:
 	ld	iy, (Smf_VlqValue:16)	; F7313F  ld IY,(0x1198)
 	and	iy, 15	; F73143  and IY,0x000f
 	ld	(Smf_VlqValue:16), 209	; F73147  ld (0x1198),0xd1
@@ -178896,8 +179010,8 @@ sub_F72F5C_Skip12:
 	popw	iy	; F73156  pop IY
 	calr	SmfSplit_MarkTrackUsed	; F73157  calr 0xf73236
 	calr	SmfSplit_SaveTrackCursor	; F7315A  calr 0xf73469
-	jrl	sub_F72F5C_Loop2	; F7315D  jrl T,0xf72fa2
-sub_F72F5C_Skip13:
+	jrl	Smf_SplitTrack1ByChannel_Loop2	; F7315D  jrl T,0xf72fa2
+Smf_SplitTrack1ByChannel_Skip13:
 	ld	iy, (Smf_VlqValue:16)	; F73160  ld IY,(0x1198)
 	and	iy, 15	; F73164  and IY,0x000f
 	ld	(Smf_VlqValue:16), 210	; F73168  ld (0x1198),0xd2
@@ -178908,8 +179022,8 @@ sub_F72F5C_Skip13:
 	popw	iy	; F73177  pop IY
 	calr	SmfSplit_MarkTrackUsed	; F73178  calr 0xf73236
 	calr	SmfSplit_SaveTrackCursor	; F7317B  calr 0xf73469
-	jrl	sub_F72F5C_Loop2	; F7317E  jrl T,0xf72fa2
-sub_F72F5C_Skip14:
+	jrl	Smf_SplitTrack1ByChannel_Loop2	; F7317E  jrl T,0xf72fa2
+Smf_SplitTrack1ByChannel_Skip14:
 	ld	iy, (Smf_VlqValue:16)	; F73181  ld IY,(0x1198)
 	and	iy, 15	; F73185  and IY,0x000f
 	ld	(Smf_VlqValue:16), 211	; F73189  ld (0x1198),0xd3
@@ -178920,11 +179034,11 @@ sub_F72F5C_Skip14:
 	popw	iy	; F73198  pop IY
 	calr	SmfSplit_MarkTrackUsed	; F73199  calr 0xf73236
 	calr	SmfSplit_SaveTrackCursor	; F7319C  calr 0xf73469
-	jrl	sub_F72F5C_Loop2	; F7319F  jrl T,0xf72fa2
-sub_F72F5C_Join3:
+	jrl	Smf_SplitTrack1ByChannel_Loop2	; F7319F  jrl T,0xf72fa2
+Smf_SplitTrack1ByChannel_Join3:
 	calr	SmfSplit_RewindUsedTracks	; F731A2  calr 0xf734fb
 	m_or_mi8 MB16, 0x34d4, 0x10	; F731A5  or (0x34d4),0x10
-sub_F72F5C_Return:
+Smf_SplitTrack1ByChannel_Return:
 	ret	; F731AA  ret
 
 ; --------------------------------------------------------------------------
@@ -179074,19 +179188,19 @@ SmfSplit_MarkTrackUsed:
 	ld	de, (13836:16)	; F7323C  ld DE,(0x360c)
 	ld	a, c	; F73240  ld A,C
 	cp	a, 16	; F73242  cp A,0x10
-	jr	lt, sub_F73236_Skip	; F73245  jr LT,0xf7324e
+	jr	lt, SmfSplit_MarkTrackUsed_Skip	; F73245  jr LT,0xf7324e
 	ld	de, (13838:16)	; F73247  ld DE,(0x360e)
 	sub	a, 16	; F7324B  sub A,0x10
-sub_F73236_Skip:
+SmfSplit_MarkTrackUsed_Skip:
 	scf	; F7324E  scf
 	m_rd_stcf_a RW+r2	; F7324F  stcf A,DE
 	cp	c, 16	; F73251  cp C,0x10
-	jr	lt, sub_F73236_Skip2	; F73254  jr LT,0xf7325c
+	jr	lt, SmfSplit_MarkTrackUsed_Skip2	; F73254  jr LT,0xf7325c
 	ld	(13838:16), de	; F73256  ld (0x360e),DE
-	jr	sub_F73236_Return	; F7325A  jr T,0xf73260
-sub_F73236_Skip2:
+	jr	SmfSplit_MarkTrackUsed_Return	; F7325A  jr T,0xf73260
+SmfSplit_MarkTrackUsed_Skip2:
 	ld	(13836:16), de	; F7325C  ld (0x360c),DE
-sub_F73236_Return:
+SmfSplit_MarkTrackUsed_Return:
 	ret	; F73260  ret
 
 ; --------------------------------------------------------------------------
@@ -179125,10 +179239,10 @@ SmfSplit_PutEventBytes:
 	pop	xix	; F73280  pop XIX
 	popw	bc	; F73281  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F73282  cp (0x1238),0x00
-	jr	nz, sub_F73261_Return	; F73287  jr NZ,0xf7328e
+	jr	nz, SmfSplit_PutEventBytes_Return	; F73287  jr NZ,0xf7328e
 	inc	1, ix	; F73289  inc 1,IX
 	djnz16	bc, -34	; F7328B  djnz BC,0xf7326c
-sub_F73261_Return:
+SmfSplit_PutEventBytes_Return:
 	ret	; F7328E  ret
 
 ; --------------------------------------------------------------------------
@@ -179150,7 +179264,7 @@ sub_F73261_Return:
 ;   body. (notes/naming-pilot-2026-10-06/proposals_wave7_y.json)
 SmfSplit_PutMarkOnAllTracks:
 	xor	iy, iy	; F7328F  xor IY,IY
-sub_F7328F_Loop:
+SmfSplit_PutMarkOnAllTracks_Loop:
 	pushw	wa	; F73291  push WA
 	pushw	iy	; F73292  push IY
 	calr	SmfSplit_LoadTrackCursor	; F73293  calr 0xf73440
@@ -179163,17 +179277,17 @@ sub_F7328F_Loop:
 	popw	iy	; F7329E  pop IY
 	popw	wa	; F7329F  pop WA
 	cp	a, 129	; F732A0  cp A,0x81
-	jr	nz, sub_F7328F_Skip	; F732A3  jr NZ,0xf732b6
+	jr	nz, SmfSplit_PutMarkOnAllTracks_Skip	; F732A3  jr NZ,0xf732b6
 	pushw	wa	; F732A5  push WA
 	pushw	iy	; F732A6  push IY
 	calr	SmfSplit_AdvanceWriteCursor	; F732A7  calr 0xf732df
 	popw	iy	; F732AA  pop IY
 	popw	wa	; F732AB  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x00	; F732AC  cp (0x1238),0x00
-	jr	z, sub_F7328F_Skip	; F732B1  jr Z,0xf732b6
+	jr	z, SmfSplit_PutMarkOnAllTracks_Skip	; F732B1  jr Z,0xf732b6
 	popw	iy	; F732B3  pop IY
-	jr	sub_F7328F_Return	; F732B4  jr T,0xf732c6
-sub_F7328F_Skip:
+	jr	SmfSplit_PutMarkOnAllTracks_Return	; F732B4  jr T,0xf732c6
+SmfSplit_PutMarkOnAllTracks_Skip:
 	popw	iy	; F732B6  pop IY
 	pushw	wa	; F732B7  push WA
 	pushw	iy	; F732B8  push IY
@@ -179182,8 +179296,8 @@ sub_F7328F_Skip:
 	popw	wa	; F732BD  pop WA
 	inc	1, iy	; F732BE  inc 1,IY
 	cp	iy, 16	; F732C0  cp IY,0x0010
-	jr	ule, sub_F7328F_Loop	; F732C4  jr ULE,0xf73291
-sub_F7328F_Return:
+	jr	ule, SmfSplit_PutMarkOnAllTracks_Loop	; F732C4  jr ULE,0xf73291
+SmfSplit_PutMarkOnAllTracks_Return:
 	ret	; F732C6  ret
 
 ; --------------------------------------------------------------------------
@@ -179216,7 +179330,7 @@ BStore_PutByteAtCursorNoSave:
 ; SmfSplit_AdvanceWriteCursor
 ; Called from: in-module: 0xF7327D 0xF732A7
 ; Touches: (0x1238) (0x345E)
-; Calls:   sub_F7348E
+; Calls:   SmfSplit_ExtendChainAtCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF732DF is an instruction boundary of this
@@ -179226,27 +179340,27 @@ BStore_PutByteAtCursorNoSave:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SmfSplit_AdvanceWriteCursor: Steps the BStore cursor one byte: BStore_CursorOffset + 1, or at offset 0xFF with
-;   blocks free allocates and links a new block (sub_F7348E: +3 of the old, +1 back link, +3 = 0xFFFF; cursor = new
+;   blocks free allocates and links a new block (SmfSplit_ExtendChainAtCursor: +3 of the old, +1 back link, +3 = 0xFFFF; cursor = new
 ;   block, offset 5); (0x1238) := 0 on success, 0xFF when BStore_FreeCount is 0. SmfSplit_PutEventBytes and
 ;   SmfSplit_PutMarkOnAllTracks step after each byte they write. Basis: callers + body. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave8_a8.json)
 SmfSplit_AdvanceWriteCursor:
 	ld	wa, (BStore_CursorOffset:16)	; F732DF  ld WA,(0x345e)
 	cp	wa, 255	; F732E3  cp WA,0x00ff
-	jr	nz, sub_F732DF_Skip2	; F732E7  jr NZ,0xf732fe
+	jr	nz, SmfSplit_AdvanceWriteCursor_Skip2	; F732E7  jr NZ,0xf732fe
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F732E9  cp (0x6034ba),0x0000
-	jr	nz, sub_F732DF_Skip	; F732F0  jr NZ,0xf732f9
+	jr	nz, SmfSplit_AdvanceWriteCursor_Skip	; F732F0  jr NZ,0xf732f9
 	ld	(4664:16), 255	; F732F2  ld (0x1238),0xff
-	jr	sub_F732DF_Return	; F732F7  jr T,0xf73309
-sub_F732DF_Skip:
-	calr	sub_F7348E	; F732F9  calr 0xf7348e
-	jr	sub_F732DF_Join	; F732FC  jr T,0xf73304
-sub_F732DF_Skip2:
+	jr	SmfSplit_AdvanceWriteCursor_Return	; F732F7  jr T,0xf73309
+SmfSplit_AdvanceWriteCursor_Skip:
+	calr	SmfSplit_ExtendChainAtCursor	; F732F9  calr 0xf7348e
+	jr	SmfSplit_AdvanceWriteCursor_Join	; F732FC  jr T,0xf73304
+SmfSplit_AdvanceWriteCursor_Skip2:
 	inc	1, wa	; F732FE  inc 1,WA
 	ld	(BStore_CursorOffset:16), wa	; F73300  ld (0x345e),WA
-sub_F732DF_Join:
+SmfSplit_AdvanceWriteCursor_Join:
 	ld	(4664:16), 0	; F73304  ld (0x1238),0x00
-sub_F732DF_Return:
+SmfSplit_AdvanceWriteCursor_Return:
 	ret	; F73309  ret
 
 ; --------------------------------------------------------------------------
@@ -179366,8 +179480,8 @@ SmfSplit_FetchSourceEvent:
 	mx_st_mr8 MXD, ra_IX, ra_HL, 1	; F733B5  ld (XIX+HL),A
 	pop	xix	; F733BA  pop XIX
 	cp	a, 130	; F733BB  cp A,0x82
-	jr	z, sub_F7339C_Return	; F733BE  jr Z,0xf733ea
-sub_F7339C_Join:
+	jr	z, SmfSplit_FetchSourceEvent_Return	; F733BE  jr Z,0xf733ea
+SmfSplit_FetchSourceEvent_Join:
 	inc	1, hl	; F733C0  inc 1,HL
 	pushw	hl	; F733C2  push HL
 	calr	SmfSplit_AdvanceReadCursor	; F733C3  calr 0xf733eb
@@ -179378,13 +179492,13 @@ sub_F7339C_Join:
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F733D1  ld A,(XIX+IY)
 	pop	xix	; F733D6  pop XIX
 	bit	7, a	; F733D7  bit 0x07,A
-	jr	nz, sub_F7339C_Return	; F733DA  jr NZ,0xf733ea
+	jr	nz, SmfSplit_FetchSourceEvent_Return	; F733DA  jr NZ,0xf733ea
 	push	xix	; F733DC  push XIX
 	ld	xix, Smf_VlqValue	; F733DD  ld XIX,0x00001198
 	mx_st_mr8 MXD, ra_IX, ra_HL, 1	; F733E2  ld (XIX+HL),A
 	pop	xix	; F733E7  pop XIX
-	jr	sub_F7339C_Join	; F733E8  jr T,0xf733c0
-sub_F7339C_Return:
+	jr	SmfSplit_FetchSourceEvent_Join	; F733E8  jr T,0xf733c0
+SmfSplit_FetchSourceEvent_Return:
 	ret	; F733EA  ret
 
 ; --------------------------------------------------------------------------
@@ -179410,31 +179524,31 @@ SmfSplit_AdvanceReadCursor:
 	ld	xix, 6332416	; F733EF  ld XIX,0x0060a000
 	inc	1, iy	; F733F4  inc 1,IY
 	cp	iy, 255	; F733F6  cp IY,0x00ff
-	jr	ule, sub_F733EB_Join	; F733FA  jr ULE,0xf7343b
+	jr	ule, SmfSplit_AdvanceReadCursor_Join	; F733FA  jr ULE,0xf7343b
 	ld	wa, (xix+3)	; F733FC  ld WA,(XIX+0x03)
 	cp	wa, 65535	; F733FF  cp WA,0xffff
-	jr	nz, sub_F733EB_Skip	; F73403  jr NZ,0xf7340c
+	jr	nz, SmfSplit_AdvanceReadCursor_Skip	; F73403  jr NZ,0xf7340c
 	ld	(BStore_ErrorCode:16), 2	; F73405  ld (0x0d4a),0x02
-	jr	sub_F733EB_Join	; F7340A  jr T,0xf7343b
-sub_F733EB_Skip:
+	jr	SmfSplit_AdvanceReadCursor_Join	; F7340A  jr T,0xf7343b
+SmfSplit_AdvanceReadCursor_Skip:
 	m_cp_rm MW16, BStore_BlockCount, 0	; F7340C  cp WA,(0x3608)
-	jr	ule, sub_F733EB_Skip2	; F73410  jr ULE,0xf73419
+	jr	ule, SmfSplit_AdvanceReadCursor_Skip2	; F73410  jr ULE,0xf73419
 	ld	(BStore_ErrorCode:16), 10	; F73412  ld (0x0d4a),0x0a
-	jr	sub_F733EB_Join	; F73417  jr T,0xf7343b
-sub_F733EB_Skip2:
+	jr	SmfSplit_AdvanceReadCursor_Join	; F73417  jr T,0xf7343b
+SmfSplit_AdvanceReadCursor_Skip2:
 	ld	(BStore_CursorBlock:16), wa	; F73419  ld (0x345c),WA
 	ld	hl, wa	; F7341D  ld HL,WA
 	calr	SongStore_SeekBlock_Copy	; F7341F  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F73422  ld XHL,(0x126e)
 	m_bit 7, MDI+r3, 0	; F73426  bit 7,(XHL)
-	jr	nz, sub_F733EB_Skip3	; F73428  jr NZ,0xf73431
+	jr	nz, SmfSplit_AdvanceReadCursor_Skip3	; F73428  jr NZ,0xf73431
 	ld	(BStore_ErrorCode:16), 11	; F7342A  ld (0x0d4a),0x0b
-	jr	sub_F733EB_Join	; F7342F  jr T,0xf7343b
-sub_F733EB_Skip3:
+	jr	SmfSplit_AdvanceReadCursor_Join	; F7342F  jr T,0xf7343b
+SmfSplit_AdvanceReadCursor_Skip3:
 	ld	hl, (BStore_CursorBlock:16)	; F73431  ld HL,(0x345c)
 	calr	SmfSplit_LoadAndFreeSourceBlock	; F73435  calr 0xf7335a
 	ldw	iy, 5	; F73438  ld IY,0x0005
-sub_F733EB_Join:
+SmfSplit_AdvanceReadCursor_Join:
 	ld	(3322:16), iy	; F7343B  ld (0x0cfa),IY
 	ret	; F7343F  ret
 
@@ -179502,7 +179616,7 @@ SmfSplit_SaveTrackCursor:
 	ret	; F7348D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7348E
+; SmfSplit_ExtendChainAtCursor
 ; Called from: in-module: 0xF732F9
 ; Touches: (0x126E) (0x345C) (0x345E)
 ; Calls:   T_BStore_AllocBlock_Veneer SongStore_SeekBlock_Copy
@@ -179514,7 +179628,12 @@ SmfSplit_SaveTrackCursor:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7348E:
+; SmfSplit_ExtendChainAtCursor: Allocates a block (T_BStore_AllocBlock_Veneer), links it after the cursor block (old
+;   +3 := new, new +1 := old, new +3 := 0xFFFF) and moves the cursor to it at offset 5. SmfSplit_AdvanceWriteCursor's
+;   step at offset 0xFF; the SMF-split module's copy of BStore_ExtendChainAtCursor (through its own
+;   SongStore_SeekBlock_Copy). Basis: caller + caller header + body + twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave9_d9.json)
+SmfSplit_ExtendChainAtCursor:
 	push	xix	; F7348E  push XIX
 	push	xiy	; F7348F  push XIY
 	call	T_BStore_AllocBlock_Veneer	; F73490  call 0xf42884
@@ -179665,9 +179784,9 @@ Smf_AllocFirstBlockForAllTracks_B:
 	xor	iy, iy	; F73566  xor IY,IY
 	xor	ix, ix	; F73568  xor IX,IX
 	ld	(13471:16), 0	; F7356A  ld (0x349f),0x00
-sub_F73566_Loop:
+Smf_AllocFirstBlockForAllTracks_B_Loop:
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0011	; F7356F  cp (0x6034ba),0x0011
-	jrl	c, sub_F73566_Return	; F73576  jrl C,0xf735f6
+	jrl	c, Smf_AllocFirstBlockForAllTracks_B_Return	; F73576  jrl C,0xf735f6
 	pushw	iy	; F73579  push IY
 	pushw	ix	; F7357A  push IX
 	call	T_BStore_AllocBlock_Veneer	; F7357B  call 0xf42884
@@ -179676,9 +179795,9 @@ sub_F73566_Loop:
 	popw	iy	; F73582  pop IY
 	ld	bc, (BStore_BlockCount:16)	; F73583  ld BC,(0x3608)
 	cp	wa, bc	; F73587  cp WA,BC
-	jr	ugt, sub_F73566_Return	; F73589  jr UGT,0xf735f6
+	jr	ugt, Smf_AllocFirstBlockForAllTracks_B_Return	; F73589  jr UGT,0xf735f6
 	cp	wa, 0:i3	; F7358B  cp WA,0
-	jr	z, sub_F73566_Return	; F7358D  jr Z,0xf735f6
+	jr	z, Smf_AllocFirstBlockForAllTracks_B_Return	; F7358D  jr Z,0xf735f6
 	pushw	wa	; F7358F  push WA
 	ld	hl, wa	; F73590  ld HL,WA
 	calr	SongStore_SeekBlock_Copy	; F73592  calr 0xf72f0a
@@ -179706,9 +179825,9 @@ sub_F73566_Loop:
 	add	ix, 2	; F735E4  add IX,0x0002
 	inc	1, (13471:16)	; F735E8  inc 1,(0x349f)
 	m_cp_mi8 MB16, 0x349f, 0x11	; F735EC  cp (0x349f),0x11
-	jrl	c, sub_F73566_Loop	; F735F1  jrl C,0xf7356f
-	jr	sub_F73566_Return	; F735F4  jr T,0xf735f6
-sub_F73566_Return:
+	jrl	c, Smf_AllocFirstBlockForAllTracks_B_Loop	; F735F1  jrl C,0xf7356f
+	jr	Smf_AllocFirstBlockForAllTracks_B_Return	; F735F4  jr T,0xf735f6
+Smf_AllocFirstBlockForAllTracks_B_Return:
 	ret	; F735F6  ret
 
 ; --------------------------------------------------------------------------
@@ -181668,13 +181787,13 @@ MidiFileList_CheckSelectedEntryBlank:
 	ld	c, 8:opc	; F74897  ld C,0x08
 	ld	a, 0:opc	; F74899  ld A,0x00
 	cp	(xix+), 32	; F7489B  cp (XIX+),0x20
-	jr	nz, sub_F74885_Skip	; F7489F  jr NZ,0xf748a6
+	jr	nz, MidiFileList_CheckSelectedEntryBlank_Skip	; F7489F  jr NZ,0xf748a6
 	djnz8	c, -9	; F748A1  djnz C,0xf7489b
-	jr	sub_F74885_Epilogue	; F748A4  jr T,0xf748aa
-sub_F74885_Skip:
+	jr	MidiFileList_CheckSelectedEntryBlank_Epilogue	; F748A4  jr T,0xf748aa
+MidiFileList_CheckSelectedEntryBlank_Skip:
 	ld	a, 254:opc	; F748A6  ld A,0xfe
-	jr	sub_F74885_Epilogue	; F748A8  jr T,0xf748aa
-sub_F74885_Epilogue:
+	jr	MidiFileList_CheckSelectedEntryBlank_Epilogue	; F748A8  jr T,0xf748aa
+MidiFileList_CheckSelectedEntryBlank_Epilogue:
 	pop	xix	; F748AA  pop XIX
 	pop	xbc	; F748AB  pop XBC
 	ret	; F748AC  ret
@@ -181702,30 +181821,30 @@ MidiFileList_FindFileName:
 	push	xix	; F748B0  push XIX
 	xor	bc, bc	; F748B1  xor BC,BC
 	xor	w, w	; F748B3  xor W,W
-sub_F748AD_Loop:
+MidiFileList_FindFileName_Loop:
 	ld	xix, 6333568	; F748B5  ld XIX,0x0060a480
 	ld	hl, bc	; F748BA  ld HL,BC
 	sla	hl, 3	; F748BC  sla 0x03,HL
 	mx_lda32 MXD, ra_IX, ra_HL, 4	; F748BF  lda XIX,XIX+HL
 	ld	xiy, Disk_FileName	; F748C4  ld XIY,0x000021c8
 	xor	hl, hl	; F748C9  xor HL,HL
-sub_F748AD_Loop2:
+MidiFileList_FindFileName_Loop2:
 	ld	a, (xiy+)	; F748CB  ld A,(XIY+)
 	m_cp_rm MBI+r4, 0, 1	; F748CE  cp A,(XIX)
-	jr	nz, sub_F748AD_Skip	; F748D0  jr NZ,0xf748e2
+	jr	nz, MidiFileList_FindFileName_Skip	; F748D0  jr NZ,0xf748e2
 	inc	1, xix	; F748D2  inc 1,XIX
 	inc	1, l	; F748D4  inc 1,L
 	cp	l, 7:i3	; F748D6  cp L,7
-	jr	ule, sub_F748AD_Loop2	; F748D8  jr ULE,0xf748cb
+	jr	ule, MidiFileList_FindFileName_Loop2	; F748D8  jr ULE,0xf748cb
 	ld	(Disk_SelectedEntry:16), c	; F748DA  ld (0x2724),C
 	ld	w, 255:opc	; F748DE  ld W,0xff
-	jr	sub_F748AD_Epilogue	; F748E0  jr T,0xf748eb
-sub_F748AD_Skip:
+	jr	MidiFileList_FindFileName_Epilogue	; F748E0  jr T,0xf748eb
+MidiFileList_FindFileName_Skip:
 	inc	1, c	; F748E2  inc 1,C
 	cp	c, 99	; F748E4  cp C,0x63
-	jr	ule, sub_F748AD_Loop	; F748E7  jr ULE,0xf748b5
+	jr	ule, MidiFileList_FindFileName_Loop	; F748E7  jr ULE,0xf748b5
 	xor	w, w	; F748E9  xor W,W
-sub_F748AD_Epilogue:
+MidiFileList_FindFileName_Epilogue:
 	pop	xix	; F748EB  pop XIX
 	pop	xiy	; F748EC  pop XIY
 	popw	bc	; F748ED  pop BC
@@ -181746,7 +181865,7 @@ sub_F748AD_Epilogue:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SmfWrite_RestoreSongFromTempFile: Disk_FileName := "_ZZZZZZZ" + "SEQ" (Data_F73844+0x10), Disk_ContentType := 1
-;   (sequencer), T_DiskLoadFile_Execute (prom_a DiskLoadFile_Execute -> sub_FE0599 -> DiskLoad_ByContentType) reloads the song Smf_WriteFile
+;   (sequencer), T_DiskLoadFile_Execute (prom_a DiskLoadFile_Execute -> DiskLoadFile_SendSongSelectAndLoad -> DiskLoad_ByContentType) reloads the song Smf_WriteFile
 ;   saved there before its destructive track merge; then extension '???', T_DiskApi_DeleteFile_Call deletes the temp
 ;   file and SmfWrite_RestoreFileName restores the user's name. Smf_WriteFile runs it on success and on both error
 ;   exits. Basis: caller + body. (notes/naming-pilot-2026-10-06/proposals_wave7_z.json)
@@ -181909,7 +182028,7 @@ SmfWrite_StageTempoFromBpm:
 SmfWrite_WriteTempoEvent:
 	ld	xiy, Smf_VlqBytes	; F749C5  ld XIY,0x00001193
 	ld	xix, (InputStream_Cursor:16)	; F749CA  ld XIX,(0x1088)
-sub_F749C5_Loop:
+SmfWrite_WriteTempoEvent_Loop:
 	ld	a, (xiy+)	; F749CE  ld A,(XIY+)
 	ld	(xix+), a	; F749D1  ld (XIX+),A
 	pushw	wa	; F749D4  push WA
@@ -181918,47 +182037,47 @@ sub_F749C5_Loop:
 	pop	xiy	; F749D9  pop XIY
 	popw	wa	; F749DA  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F749DB  cp (0x1238),0x03
-	jrl	nz, sub_F749C5_Return	; F749E0  jrl NZ,0xf74a65
+	jrl	nz, SmfWrite_WriteTempoEvent_Return	; F749E0  jrl NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F749E3  ld XIX,(0x1088)
 	bit	7, a	; F749E7  bit 0x07,A
-	jr	nz, sub_F749C5_Loop	; F749EA  jr NZ,0xf749ce
+	jr	nz, SmfWrite_WriteTempoEvent_Loop	; F749EA  jr NZ,0xf749ce
 	ld	a, 255:opc	; F749EC  ld A,0xff
 	ld	(xix+), a	; F749EE  ld (XIX+),A
 	calr	SmfWrite_CommitOutputByte	; F749F1  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F749F4  cp (0x1238),0x03
-	jrl	nz, sub_F749C5_Return	; F749F9  jrl NZ,0xf74a65
+	jrl	nz, SmfWrite_WriteTempoEvent_Return	; F749F9  jrl NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F749FC  ld XIX,(0x1088)
 	ld	a, 81:opc	; F74A00  ld A,0x51
 	ld	(xix+), a	; F74A02  ld (XIX+),A
 	calr	SmfWrite_CommitOutputByte	; F74A05  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A08  cp (0x1238),0x03
-	jr	nz, sub_F749C5_Return	; F74A0D  jr NZ,0xf74a65
+	jr	nz, SmfWrite_WriteTempoEvent_Return	; F74A0D  jr NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F74A0F  ld XIX,(0x1088)
 	ld	a, 3:opc	; F74A13  ld A,0x03
 	ld	(xix+), a	; F74A15  ld (XIX+),A
 	calr	SmfWrite_CommitOutputByte	; F74A18  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A1B  cp (0x1238),0x03
-	jr	nz, sub_F749C5_Return	; F74A20  jr NZ,0xf74a65
+	jr	nz, SmfWrite_WriteTempoEvent_Return	; F74A20  jr NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F74A22  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo+2:16)	; F74A26  ld A,(0x108e)
 	ld	(xix+), a	; F74A2A  ld (XIX+),A
 	calr	SmfWrite_CommitOutputByte	; F74A2D  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A30  cp (0x1238),0x03
-	jr	nz, sub_F749C5_Return	; F74A35  jr NZ,0xf74a65
+	jr	nz, SmfWrite_WriteTempoEvent_Return	; F74A35  jr NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F74A37  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo+1:16)	; F74A3B  ld A,(0x108d)
 	ld	(xix+), a	; F74A3F  ld (XIX+),A
 	calr	SmfWrite_CommitOutputByte	; F74A42  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A45  cp (0x1238),0x03
-	jr	nz, sub_F749C5_Return	; F74A4A  jr NZ,0xf74a65
+	jr	nz, SmfWrite_WriteTempoEvent_Return	; F74A4A  jr NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F74A4C  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo:16)	; F74A50  ld A,(0x108c)
 	ld	(xix+), a	; F74A54  ld (XIX+),A
 	calr	SmfWrite_CommitOutputByte	; F74A57  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A5A  cp (0x1238),0x03
-	jr	nz, sub_F749C5_Return	; F74A5F  jr NZ,0xf74a65
+	jr	nz, SmfWrite_WriteTempoEvent_Return	; F74A5F  jr NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F74A61  ld XIX,(0x1088)
-sub_F749C5_Return:
+SmfWrite_WriteTempoEvent_Return:
 	ret	; F74A65  ret
 
 ; --------------------------------------------------------------------------
@@ -185024,10 +185143,10 @@ SmfWrite_WriteNextWindow:
 ;   + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave7_z.json)
 SmfWrite_WriteLastWindowAndClose:
 	m_cp_mi16 MW16, SmfOut_WindowsFlushed, 0x0000	; F7666F  cp (0x126c),0x0000
-	jr	z, sub_F7666F_Skip	; F76675  jr Z,0xf76680
+	jr	z, SmfWrite_WriteLastWindowAndClose_Skip	; F76675  jr Z,0xf76680
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F76677  or (0x21e7),0x02
 	call	T_DiskApi_WriteFileFromWindow_Entry	; F7667C  call 0xf425ac
-sub_F7666F_Skip:
+SmfWrite_WriteLastWindowAndClose_Skip:
 	m_and_mi8 MB16, Disk_Flags, 0xfd	; F76680  and (0x21e7),0xfd
 	call	T_DiskApi_CloseFile_Call	; F76685  call 0xf425e4
 	ret	; F76689  ret
@@ -185107,14 +185226,14 @@ sub_F7669D_Code_Join:
 	jrl	nz, sub_F7669D_Code_Entry	; F76709  jrl NZ,0xf7678d
 	cpw	(SmfOut_WindowsFlushed:16), 0	; F7670C  cp (0x126c),0x0000
 	jr	nz, sub_F7669D_Code_Skip3	; F76712  jr NZ,0xf76723
-	call	sub_F77D4B	; F76714  call 0xf77d4b
+	call	SmfOut_CreateFileWithFirstWindow	; F76714  call 0xf77d4b
 	ld	w, a	; F76718  ld W,A
 	ld	(4664:16), w	; F7671A  ld (0x1238),W
 	cp	w, 3:i3	; F7671E  cp W,3
 	jrl	nz, sub_F7669D_Code_Entry	; F76720  jrl NZ,0xf7678d
 sub_F7669D_Code_Skip3:
 	calr	SmfOut_WriteLastWindowAndClose	; F76723  calr 0xf77dd4
-	calr	sub_F768A1	; F76726  calr 0xf768a1
+	calr	SmfSize_RestoreSongFromTempFile	; F76726  calr 0xf768a1
 	ld	(UI_StatusCode:16), 35	; F76729  ld (0x2880),0x23
 	call	T_MessageScreen_Paint	; F7672E  call 0xf41600
 	calr	SmfExport_ParamSysExTemplates + 0xDC	; F76732  calr 0xf750ab  (lands inside record 11 at +11; see SmfExport_ParamSysExTemplates)
@@ -185140,7 +185259,7 @@ sub_F7669D_Code_Skip4:
 	ld	(UI_ScreenPage:16), 0	; F76777  ld (0x2229),0x00
 	jr	sub_F7669D_Code_Entry2	; F7677C  jr T,0xf767ab
 sub_F7669D_Code_Loop:
-	calr	sub_F768A1	; F7677E  calr 0xf768a1
+	calr	SmfSize_RestoreSongFromTempFile	; F7677E  calr 0xf768a1
 	ld	(UI_StatusCode:16), 30	; F76781  ld (0x2880),0x1e
 	ld	(UI_ScreenPage:16), 0	; F76786  ld (0x2229),0x00
 	jr	sub_F7669D_Code_Entry2	; F7678B  jr T,0xf767ab
@@ -185150,7 +185269,7 @@ sub_F7669D_Code_Entry:
 	ld	l, (4664:16)	; F76794  ld L,(0x1238)
 	calr	SmfExport_ParamSysExTemplates + 0xE9	; F76798  calr 0xf750b8  (lands inside record 12 at +5; see SmfExport_ParamSysExTemplates)
 	pushw	hl	; F7679B  push HL
-	calr	sub_F768A1	; F7679C  calr 0xf768a1
+	calr	SmfSize_RestoreSongFromTempFile	; F7679C  calr 0xf768a1
 	popw	hl	; F7679F  pop HL
 	ld	(UI_StatusCode:16), l	; F767A0  ld (0x2880),L
 	jr	sub_F7669D_Code_Entry2	; F767A4  jr T,0xf767ab
@@ -185278,13 +185397,13 @@ MidiFileList_CheckSelectedEntryBlank_Copy:
 	ld	c, 8:opc	; F76848  ld C,0x08
 	ld	a, 0:opc	; F7684A  ld A,0x00
 	cp	(xix+), 32	; F7684C  cp (XIX+),0x20
-	jr	nz, sub_F76836_Skip	; F76850  jr NZ,0xf76857
+	jr	nz, MidiFileList_CheckSelectedEntryBlank_Copy_Skip	; F76850  jr NZ,0xf76857
 	djnz8	c, -9	; F76852  djnz C,0xf7684c
-	jr	sub_F76836_Epilogue	; F76855  jr T,0xf7685b
-sub_F76836_Skip:
+	jr	MidiFileList_CheckSelectedEntryBlank_Copy_Epilogue	; F76855  jr T,0xf7685b
+MidiFileList_CheckSelectedEntryBlank_Copy_Skip:
 	ld	a, 254:opc	; F76857  ld A,0xfe
-	jr	sub_F76836_Epilogue	; F76859  jr T,0xf7685b
-sub_F76836_Epilogue:
+	jr	MidiFileList_CheckSelectedEntryBlank_Copy_Epilogue	; F76859  jr T,0xf7685b
+MidiFileList_CheckSelectedEntryBlank_Copy_Epilogue:
 	pop	xix	; F7685B  pop XIX
 	pop	xbc	; F7685C  pop XBC
 	ret	; F7685D  ret
@@ -185294,30 +185413,30 @@ sub_F76836_Epilogue:
 	push	xix	; F76861  push XIX
 	xor	bc, bc	; F76862  xor BC,BC
 	xor	w, w	; F76864  xor W,W
-sub_F76836_Loop:
+MidiFileList_CheckSelectedEntryBlank_Copy_Loop:
 	ld	xix, 6333568	; F76866  ld XIX,0x0060a480
 	ld	hl, bc	; F7686B  ld HL,BC
 	sla	hl, 3	; F7686D  sla 0x03,HL
 	lda	xix, (xix+hl)	; F76870  lda XIX,XIX+HL
 	ld	xiy, Disk_FileName	; F76875  ld XIY,0x000021c8
 	xor	hl, hl	; F7687A  xor HL,HL
-sub_F76836_Loop2:
+MidiFileList_CheckSelectedEntryBlank_Copy_Loop2:
 	ld	a, (xiy+)	; F7687C  ld A,(XIY+)
 	cp	a, (xix)	; F7687F  cp A,(XIX)
-	jr	nz, sub_F76836_Skip2	; F76881  jr NZ,0xf76893
+	jr	nz, MidiFileList_CheckSelectedEntryBlank_Copy_Skip2	; F76881  jr NZ,0xf76893
 	inc	1, xix	; F76883  inc 1,XIX
 	inc	1, l	; F76885  inc 1,L
 	cp	l, 7:i3	; F76887  cp L,7
-	jr	ule, sub_F76836_Loop2	; F76889  jr ULE,0xf7687c
+	jr	ule, MidiFileList_CheckSelectedEntryBlank_Copy_Loop2	; F76889  jr ULE,0xf7687c
 	ld	(Disk_SelectedEntry:16), c	; F7688B  ld (0x2724),C
 	ld	w, 255:opc	; F7688F  ld W,0xff
-	jr	sub_F76836_Epilogue2	; F76891  jr T,0xf7689c
-sub_F76836_Skip2:
+	jr	MidiFileList_CheckSelectedEntryBlank_Copy_Epilogue2	; F76891  jr T,0xf7689c
+MidiFileList_CheckSelectedEntryBlank_Copy_Skip2:
 	inc	1, c	; F76893  inc 1,C
 	cp	c, 99	; F76895  cp C,0x63
-	jr	ule, sub_F76836_Loop	; F76898  jr ULE,0xf76866
+	jr	ule, MidiFileList_CheckSelectedEntryBlank_Copy_Loop	; F76898  jr ULE,0xf76866
 	xor	w, w	; F7689A  xor W,W
-sub_F76836_Epilogue2:
+MidiFileList_CheckSelectedEntryBlank_Copy_Epilogue2:
 	pop	xix	; F7689C  pop XIX
 	pop	xiy	; F7689D  pop XIY
 	popw	bc	; F7689E  pop BC
@@ -185325,7 +185444,7 @@ sub_F76836_Epilogue2:
 	ret	; F768A0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F768A1
+; SmfSize_RestoreSongFromTempFile
 ; Called from: 0xF76726, 0xF7677E, 0xF7679C -- all three inside sub_F7669D, which nothing
 ;              references, so this is dead too; its 0x00F759A2 is inside an instruction (0xF759A1)
 ; Evidence: 0xF768A1 is an instruction boundary of this transcription,
@@ -185333,7 +185452,12 @@ sub_F76836_Epilogue2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F768A1:
+; SmfSize_RestoreSongFromTempFile: Copy B's SmfWrite_RestoreSongFromTempFile: 11 bytes into Disk_FileName,
+;   Disk_ContentType := 1, T_DiskLoadFile_Execute, extension '???', T_DiskApi_DeleteFile_Call,
+;   SmfSize_RestoreFileName. Dead here: its callers are inside unreferenced sub_F7669D, and its name source 0xF759A2
+;   is mid-instruction in this build. Basis: body + named twin + callee. (notes/naming-
+;   pilot-2026-10-06/proposals_wave9_d9.json)
+SmfSize_RestoreSongFromTempFile:
 	ld	xiy, 16210338	; F768A1  ld XIY,0x00f759a2
 	ld	xix, Disk_FileName	; F768A6  ld XIX,0x000021c8
 	ldw	bc, 11	; F768AB  ld BC,0x000b
@@ -185638,7 +185762,7 @@ sub_F76ADF_Entry:
 	jr	nz, sub_F76ADF_Skip	; F76AFA  jr NZ,0xf76b10
 	ld	c, a	; F76AFC  ld C,A
 	pushw	bc	; F76AFE  push BC
-	call	sub_F77D4B	; F76AFF  call 0xf77d4b
+	call	SmfOut_CreateFileWithFirstWindow	; F76AFF  call 0xf77d4b
 	popw	bc	; F76B03  pop BC
 	ld	w, a	; F76B04  ld W,A
 	ld	(4664:16), w	; F76B06  ld (0x1238),W
@@ -185669,7 +185793,7 @@ sub_F76ADF_Skip2:
 	pop	xhl	; F76B37  pop XHL
 	popw	wa	; F76B38  pop WA
 	pushw	bc	; F76B39  push BC
-	calr	sub_F77DC6	; F76B3A  calr 0xf77dc6
+	calr	SmfOut_WriteNextWindow	; F76B3A  calr 0xf77dc6
 	popw	bc	; F76B3D  pop BC
 	ld	w, a	; F76B3E  ld W,A
 	ld	(4664:16), w	; F76B40  ld (0x1238),W
@@ -187759,21 +187883,26 @@ InputStream_RefillDone_Copy:
 	m_and_mi8 MB16, Disk_Flags, 0xfd	; F77D43  and (0x21e7),0xfd
 	ld	w, 1:opc	; F77D48  ld W,0x01
 	ret	; F77D4A  ret
-sub_F77D4B:
+; SmfOut_CreateFileWithFirstWindow: Copy of SmfWrite_CreateFileWithFirstWindow: checks free space for
+;   SmfOut_TrackLength + 22 (>> 4, T_DiskSave_CheckFreeSpace); if OK sets extension 'MID', deletes the old file, sets
+;   Disk_Flags bit 7, then sub_F77DEF (window set-up) and sub_F77DB3 (first-window write); A = the disk result.
+;   SmfWriteCopy_CommitOutputByte calls it for the first window. Basis: caller + body + twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave9_d9.json)
+SmfOut_CreateFileWithFirstWindow:
 	xor	de, de	; F77D4B  xor DE,DE
 	ld	d, (SmfOut_TrackLength+1:16)	; F77D4D  ld D,(0x10c5)
 	ld	w, (SmfOut_TrackLength+2:16)	; F77D51  ld W,(0x10c6)
 	ld	a, (SmfOut_TrackLength+3:16)	; F77D55  ld A,(0x10c7)
 	add	wa, 22	; F77D59  add WA,0x0016
-	jr	nov, sub_F77D4B_Skip	; F77D5D  jr PO/NOV,0xf77d61
+	jr	nov, SmfOut_CreateFileWithFirstWindow_Skip	; F77D5D  jr PO/NOV,0xf77d61
 
 ; --------------------------------------------------------------------------
-; REACHED CODE, not data (was `Data_F77D5F`), part of sub_F77D4B:
+; REACHED CODE, not data (was `Data_F77D5F`), part of SmfOut_CreateFileWithFirstWindow:
 ;   the overflow arm of `jr nov` at 0xF77D5D; the same two bytes as 0xF765FA.
 ; --------------------------------------------------------------------------
 	inc	1, d	; F77D5F  inc 1,D
 
-sub_F77D4B_Skip:
+SmfOut_CreateFileWithFirstWindow_Skip:
 	srl	wa, 4	; F77D61  srl 0x04,WA
 	sla	de, 4	; F77D64  sla 0x04,DE
 	and	de, 61440	; F77D67  and DE,0xf000
@@ -187784,7 +187913,7 @@ sub_F77D4B_Skip:
 	call	T_DiskSave_CheckFreeSpace	; F77D77  call 0xf425e8
 	ld	w, (Disk_LastError:16)	; F77D7B  ld W,(0x2243)
 	cp	w, 0:i3	; F77D7F  cp W,0
-	jr	nz, sub_F77D4B_Return	; F77D81  jr NZ,0xf77db2
+	jr	nz, SmfOut_CreateFileWithFirstWindow_Return	; F77D81  jr NZ,0xf77db2
 	ld	(Disk_FileName+8:16), 77	; F77D83  ld (0x21d0),0x4d
 	ld	(Disk_FileName+9:16), 73	; F77D88  ld (0x21d1),0x49
 	ld	(Disk_FileName+10:16), 68	; F77D8D  ld (0x21d2),0x44
@@ -187795,7 +187924,7 @@ sub_F77D4B_Skip:
 	ld	(Disk_FileName+10:16), 68	; F77DA5  ld (0x21d2),0x44
 	call	sub_F77DEF	; F77DAA  call 0xf77def
 	call	sub_F77DB3	; F77DAE  call 0xf77db3
-sub_F77D4B_Return:
+SmfOut_CreateFileWithFirstWindow_Return:
 	ret	; F77DB2  ret
 
 ; --------------------------------------------------------------------------
@@ -187818,7 +187947,11 @@ sub_F77DB3:
 	ld	a, (Disk_LastError:16)	; F77DBC  ld A,(0x2243)
 	m_and_mi8 MB16, Disk_Flags, 0xdf	; F77DC0  and (0x21e7),0xdf
 	ret	; F77DC5  ret
-sub_F77DC6:
+; SmfOut_WriteNextWindow: Copy of SmfWrite_WriteNextWindow: Disk_Flags |= 0x02, T_DiskApi_WriteFileFromWindow_Entry, A
+;   := Disk_LastError -- writes a further 1,024-byte window of the .MID file. SmfWriteCopy_CommitOutputByte calls it
+;   once a window was already flushed. Basis: caller + body + twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave9_d9.json)
+SmfOut_WriteNextWindow:
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F77DC6  or (0x21e7),0x02
 	call	T_DiskApi_WriteFileFromWindow_Entry	; F77DCB  call 0xf425ac
 	ld	a, (Disk_LastError:16)	; F77DCF  ld A,(0x2243)
@@ -189656,7 +189789,7 @@ DLGlyph_118_F7A158:
 ;   TrackAssignPresets_ApplyToAllSongs call it to free every block; sibling of BStore_AllocBlock_Veneer /
 ;   BStore_FreeChain_Veneer. Basis: body (veneer) + callers. (notes/naming-pilot-2026-10-06/proposals_wave7_w.json)
 BStore_FreeList_Init_Veneer:		; <- T_BStore_FreeList_Init_Veneer
-	jr	sub_F7A400_Skip	; F7A400  jr T,0xf7a40a
+	jr	BStore_LatchHeapBase_Veneer_Skip	; F7A400  jr T,0xf7a40a
 
 ; --------------------------------------------------------------------------
 ; BStore_AllocBlock_Veneer -- veneer.  `jr T,0xF7A40E`, and 0xF7A40E is `calr 0xF7A4DB /
@@ -189724,7 +189857,7 @@ BStore_LatchHeapBase_Veneer_Join3_Veneer:		; <- T_BStore_LatchHeapBase_Veneer_Jo
 ; --------------------------------------------------------------------------
 BStore_LatchHeapBase_Veneer:		; <- T_BStore_LatchHeapBase_Veneer
 	jr	BStore_LatchHeapBase	; F7A408  jr T,0xf7a41a
-sub_F7A400_Skip:
+BStore_LatchHeapBase_Veneer_Skip:
 	calr	BStore_FreeList_Init	; F7A40A  calr 0xf7a428
 	ret	; F7A40D  ret
 BStore_LatchHeapBase_Veneer_Join:
@@ -190515,11 +190648,11 @@ SongStore_LoadSongHeaderToDisplay_Return4:
 ;   caller + body. (notes/naming-pilot-2026-10-06/proposals_wave7_z.json)
 SongClear_ClearBankTrackMask:
 	m_cp_mi8 MB16, 0x0e02, 0x0a	; F7AB3F  cp (0x0e02),0x0a
-	jr	nz, sub_F7AB3F_Skip	; F7AB44  jr NZ,0xf7ab76
+	jr	nz, SongClear_ClearBankTrackMask_Skip	; F7AB44  jr NZ,0xf7ab76
 	xor	xwa, xwa	; F7AB46  xor XWA,XWA
 	ld	(13836:16), xwa	; F7AB48  ld (0x360c),XWA
 	ld	xde, 6356992	; F7AB4C  ld XDE,0x00610000
-sub_F7AB3F_Loop:
+SongClear_ClearBankTrackMask_Loop:
 	ld	xhl, xwa	; F7AB51  ld XHL,XWA
 	push	xbc	; F7AB53  push XBC
 	ld	xbc, xhl	; F7AB54  ld XBC,XHL
@@ -190535,9 +190668,9 @@ sub_F7AB3F_Loop:
 	pop	xbc	; F7AB6C  pop XBC
 	inc	1, a	; F7AB6D  inc 1,A
 	cp	a, 10	; F7AB6F  cp A,0x0a
-	jr	c, sub_F7AB3F_Loop	; F7AB72  jr C,0xf7ab51
-	jr	sub_F7AB3F_Return	; F7AB74  jr T,0xf7ab9b
-sub_F7AB3F_Skip:
+	jr	c, SongClear_ClearBankTrackMask_Loop	; F7AB72  jr C,0xf7ab51
+	jr	SongClear_ClearBankTrackMask_Return	; F7AB74  jr T,0xf7ab9b
+SongClear_ClearBankTrackMask_Skip:
 	ld	xde, 6356992	; F7AB76  ld XDE,0x00610000
 	push	xbc	; F7AB7B  push XBC
 	xor	xwa, xwa	; F7AB7C  xor XWA,XWA
@@ -190553,7 +190686,7 @@ sub_F7AB3F_Skip:
 	xor	xbc, xbc	; F7AB96  xor XBC,XBC
 	ld	(xde), xbc	; F7AB98  ld (XDE),XBC
 	pop	xbc	; F7AB9A  pop XBC
-sub_F7AB3F_Return:
+SongClear_ClearBankTrackMask_Return:
 	ret	; F7AB9B  ret
 
 ; --------------------------------------------------------------------------
@@ -190574,11 +190707,11 @@ sub_F7AB3F_Return:
 TrackClear_ResetSelectionOnEntry:		; <- T_TrackClear_ResetSelectionOnEntry
 	ld	a, (UI_ScreenLatch:16)	; F7AB9C  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F7ABA0  cp A,(0x207b)
-	jr	z, sub_F7AB3F_Return2	; F7ABA4  jr Z,0xf7abb8
+	jr	z, TrackClear_ResetSelectionOnEntry_Return2	; F7ABA4  jr Z,0xf7abb8
 	ldw	(3518:16), 0	; F7ABA6  ld (0x0dbe),0x0000
 	ldw	(8542:16), 0	; F7ABAC  ld (0x215e),0x0000
 	m_or_mi16 MW16, 0x212e, 0x0100	; F7ABB2  or (0x212e),0x0100
-sub_F7AB3F_Return2:
+TrackClear_ResetSelectionOnEntry_Return2:
 	ret	; F7ABB8  ret
 
 ; --------------------------------------------------------------------------
@@ -190597,7 +190730,7 @@ sub_F7AB3F_Return2:
 ;   (notes/prom_ab_screen_enter_leave_work.py).
 TrackClear_OnLeave:		; <- T_TrackClear_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1c	; F7ABB9  cp (0x207a),0x1c
-	jr	z, sub_F7AB3F_Return3	; F7ABBE  jr Z,0xf7abdb
+	jr	z, TrackClear_OnLeave_Return3	; F7ABBE  jr Z,0xf7abdb
 	ld	wa, (3654:16)	; F7ABC0  ld WA,(0x0e46)
 	xor	wa, 65535	; F7ABC4  xor WA,0xffff
 	m_and_mr MW16, 0x360c, 0	; F7ABC8  and (0x360c),WA
@@ -190605,7 +190738,7 @@ TrackClear_OnLeave:		; <- T_TrackClear_OnLeave
 	xor	xwa, xwa	; F7ABD1  xor XWA,XWA
 	ld	(12304:16), xwa	; F7ABD3  ld (0x3010),XWA
 	call	T_Seq_RequestRewind	; F7ABD7  call 0xf409e0
-sub_F7AB3F_Return3:
+TrackClear_OnLeave_Return3:
 	ret	; F7ABDB  ret
 
 ; --------------------------------------------------------------------------
@@ -190624,15 +190757,15 @@ sub_F7AB3F_Return3:
 TrackClear_ReturnToStageZero:		; <- T_TrackClear_ReturnToStageZero
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7ABDC  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7ABE1  cp (0x207e),0x01
-	jr	z, sub_F7AB3F_Skip2	; F7ABE6  jr Z,0xf7abea
-	jr	sub_F7AB3F_Return4	; F7ABE8  jr T,0xf7ac06
-sub_F7AB3F_Skip2:
+	jr	z, TrackClear_ReturnToStageZero_Skip2	; F7ABE6  jr Z,0xf7abea
+	jr	TrackClear_ReturnToStageZero_Return4	; F7ABE8  jr T,0xf7ac06
+TrackClear_ReturnToStageZero_Skip2:
 	ld	(UI_ScreenStage:16), 0	; F7ABEA  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7ABEF  or (0x2071),0x10
 	ldw	(3518:16), 0	; F7ABF4  ld (0x0dbe),0x0000
 	ldw	(8542:16), 0	; F7ABFA  ld (0x215e),0x0000
 	m_or_mi16 MW16, 0x212e, 0x0100	; F7AC00  or (0x212e),0x0100
-sub_F7AB3F_Return4:
+TrackClear_ReturnToStageZero_Return4:
 	ret	; F7AC06  ret
 
 ; --------------------------------------------------------------------------
@@ -190652,17 +190785,17 @@ sub_F7AB3F_Return4:
 TrackClear_LcdKeyRow2:		; <- T_TrackClear_LcdKeyRow2
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7AC07  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AC0C  cp (0x207e),0x01
-	jr	z, sub_F7AB3F_Skip3	; F7AC11  jr Z,0xf7ac1e
+	jr	z, TrackClear_LcdKeyRow2_Skip3	; F7AC11  jr Z,0xf7ac1e
 	ld	(UI_ScreenStage:16), 1	; F7AC13  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7AC18  or (0x2071),0x10
 	ret	; F7AC1D  ret
-sub_F7AB3F_Skip3:
+TrackClear_LcdKeyRow2_Skip3:
 	m_cp_mi16 MW16, 0x0dbe, 0x0000	; F7AC1E  cp (0x0dbe),0x0000
-	jr	nz, sub_F7AB3F_Skip4	; F7AC24  jr NZ,0xf7ac32
+	jr	nz, TrackClear_LcdKeyRow2_Skip4	; F7AC24  jr NZ,0xf7ac32
 	ld	(UI_ScreenStage:16), 0	; F7AC26  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7AC2B  or (0x2071),0x10
 	jr	sub_F7AB3F_Return5	; F7AC30  jr T,0xf7ac9c
-sub_F7AB3F_Skip4:
+TrackClear_LcdKeyRow2_Skip4:
 	xor	c, c	; F7AC32  xor C,C
 	ld	hl, (3518:16)	; F7AC34  ld HL,(0x0dbe)
 sub_F7AB3F_Entry:
@@ -190737,14 +190870,14 @@ TrackMerge_InitFields:		; <- T_TrackMerge_InitFields
 ;   (notes/prom_ab_screen_enter_leave_work.py).
 TrackMerge_OnLeave:		; <- T_TrackMerge_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1f	; F7ACA6  cp (0x207a),0x1f
-	jr	z, sub_F7AB3F_Return6	; F7ACAB  jr Z,0xf7acc4
+	jr	z, TrackMerge_OnLeave_Return6	; F7ACAB  jr Z,0xf7acc4
 	ld	xwa, (12304:16)	; F7ACAD  ld XWA,(0x3010)
 	m_or_mr ML16, 0x360c, 0	; F7ACB1  or (0x360c),XWA
 	ld	(6304798:24), xwa	; F7ACB5  ld (0x60341e),XWA
 	xor	xwa, xwa	; F7ACBA  xor XWA,XWA
 	ld	(12304:16), xwa	; F7ACBC  ld (0x3010),XWA
 	call	T_Seq_RequestRewind	; F7ACC0  call 0xf409e0
-sub_F7AB3F_Return6:
+TrackMerge_OnLeave_Return6:
 	ret	; F7ACC4  ret
 
 ; --------------------------------------------------------------------------
@@ -190829,19 +190962,19 @@ TrackMerge_StepSelectedFieldUp:		; <- T_TrackMerge_StepSelectedFieldUp
 	and	w, 128	; F7ACEA  and W,0x80
 	ld	(3151:16), w	; F7ACED  ld (0x0c4f),W
 	m_cp_mi8 MB16, 0x0dba, 0x01	; F7ACF1  cp (0x0dba),0x01
-	jr	nz, sub_F7AB3F_Skip6	; F7ACF6  jr NZ,0xf7acfd
+	jr	nz, TrackMerge_StepSelectedFieldUp_Skip6	; F7ACF6  jr NZ,0xf7acfd
 	calr	TrackMerge_StepSourceTrack1	; F7ACF8  calr 0xf7ad42
-	jr	sub_F7AB3F_Return7	; F7ACFB  jr T,0xf7ad13
-sub_F7AB3F_Skip6:
+	jr	TrackMerge_StepSelectedFieldUp_Return7	; F7ACFB  jr T,0xf7ad13
+TrackMerge_StepSelectedFieldUp_Skip6:
 	m_cp_mi8 MB16, 0x0dba, 0x02	; F7ACFD  cp (0x0dba),0x02
-	jr	nz, sub_F7AB3F_Skip7	; F7AD02  jr NZ,0xf7ad09
+	jr	nz, TrackMerge_StepSelectedFieldUp_Skip7	; F7AD02  jr NZ,0xf7ad09
 	calr	TrackMerge_StepSourceTrack2	; F7AD04  calr 0xf7ad8f
-	jr	sub_F7AB3F_Return7	; F7AD07  jr T,0xf7ad13
-sub_F7AB3F_Skip7:
+	jr	TrackMerge_StepSelectedFieldUp_Return7	; F7AD07  jr T,0xf7ad13
+TrackMerge_StepSelectedFieldUp_Skip7:
 	m_cp_mi8 MB16, 0x0dba, 0x03	; F7AD09  cp (0x0dba),0x03
-	jr	nz, sub_F7AB3F_Return7	; F7AD0E  jr NZ,0xf7ad13
+	jr	nz, TrackMerge_StepSelectedFieldUp_Return7	; F7AD0E  jr NZ,0xf7ad13
 	calr	TrackMerge_StepDestTrack	; F7AD10  calr 0xf7addc
-sub_F7AB3F_Return7:
+TrackMerge_StepSelectedFieldUp_Return7:
 	ret	; F7AD13  ret
 
 ; --------------------------------------------------------------------------
@@ -190862,19 +190995,19 @@ TrackMerge_StageZero_SoftKeyCol5:		; <- T_TrackMerge_StageZero_SoftKeyCol5
 	and	w, 128	; F7AD18  and W,0x80
 	ld	(3151:16), w	; F7AD1B  ld (0x0c4f),W
 	m_cp_mi8 MB16, 0x0dba, 0x01	; F7AD1F  cp (0x0dba),0x01
-	jr	nz, sub_F7AB3F_Skip8	; F7AD24  jr NZ,0xf7ad2b
+	jr	nz, TrackMerge_StageZero_SoftKeyCol5_Skip8	; F7AD24  jr NZ,0xf7ad2b
 	calr	TrackMerge_StepSourceTrack1	; F7AD26  calr 0xf7ad42
-	jr	sub_F7AB3F_Return8	; F7AD29  jr T,0xf7ad41
-sub_F7AB3F_Skip8:
+	jr	TrackMerge_StageZero_SoftKeyCol5_Return8	; F7AD29  jr T,0xf7ad41
+TrackMerge_StageZero_SoftKeyCol5_Skip8:
 	m_cp_mi8 MB16, 0x0dba, 0x02	; F7AD2B  cp (0x0dba),0x02
-	jr	nz, sub_F7AB3F_Skip9	; F7AD30  jr NZ,0xf7ad37
+	jr	nz, TrackMerge_StageZero_SoftKeyCol5_Skip9	; F7AD30  jr NZ,0xf7ad37
 	calr	TrackMerge_StepSourceTrack2	; F7AD32  calr 0xf7ad8f
-	jr	sub_F7AB3F_Return8	; F7AD35  jr T,0xf7ad41
-sub_F7AB3F_Skip9:
+	jr	TrackMerge_StageZero_SoftKeyCol5_Return8	; F7AD35  jr T,0xf7ad41
+TrackMerge_StageZero_SoftKeyCol5_Skip9:
 	m_cp_mi8 MB16, 0x0dba, 0x03	; F7AD37  cp (0x0dba),0x03
-	jr	nz, sub_F7AB3F_Return8	; F7AD3C  jr NZ,0xf7ad41
+	jr	nz, TrackMerge_StageZero_SoftKeyCol5_Return8	; F7AD3C  jr NZ,0xf7ad41
 	calr	TrackMerge_StepDestTrack	; F7AD3E  calr 0xf7addc
-sub_F7AB3F_Return8:
+TrackMerge_StageZero_SoftKeyCol5_Return8:
 	ret	; F7AD41  ret
 
 ; --------------------------------------------------------------------------
@@ -190896,31 +191029,31 @@ TrackMerge_StepSourceTrack1:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7AD42  or (0x2075),0x09
 	ld	a, (3091:16)	; F7AD47  ld A,(0x0c13)
 	m_cp_mi8 MB16, 0x0c4f, 0x80	; F7AD4B  cp (0x0c4f),0x80
-	jr	z, sub_F7AD42_Loop2	; F7AD50  jr Z,0xf7ad6b
-sub_F7AD42_Loop:
+	jr	z, TrackMerge_StepSourceTrack1_Loop2	; F7AD50  jr Z,0xf7ad6b
+TrackMerge_StepSourceTrack1_Loop:
 	inc	1, a	; F7AD52  inc 1,A
 	cp	a, 16	; F7AD54  cp A,0x10
-	jr	ule, sub_F7AD42_Skip	; F7AD57  jr ULE,0xf7ad63
+	jr	ule, TrackMerge_StepSourceTrack1_Skip	; F7AD57  jr ULE,0xf7ad63
 	ld	a, 1:opc	; F7AD59  ld A,0x01
 	m_cp_rm MB16, 0x0c14, 1	; F7AD5B  cp A,(0x0c14)
-	jr	nz, sub_F7AD42_Join	; F7AD5F  jr NZ,0xf7ad81
-	jr	sub_F7AD42_Loop	; F7AD61  jr T,0xf7ad52
-sub_F7AD42_Skip:
+	jr	nz, TrackMerge_StepSourceTrack1_Join	; F7AD5F  jr NZ,0xf7ad81
+	jr	TrackMerge_StepSourceTrack1_Loop	; F7AD61  jr T,0xf7ad52
+TrackMerge_StepSourceTrack1_Skip:
 	m_cp_rm MB16, 0x0c14, 1	; F7AD63  cp A,(0x0c14)
-	jr	z, sub_F7AD42_Loop	; F7AD67  jr Z,0xf7ad52
-	jr	sub_F7AD42_Join	; F7AD69  jr T,0xf7ad81
-sub_F7AD42_Loop2:
+	jr	z, TrackMerge_StepSourceTrack1_Loop	; F7AD67  jr Z,0xf7ad52
+	jr	TrackMerge_StepSourceTrack1_Join	; F7AD69  jr T,0xf7ad81
+TrackMerge_StepSourceTrack1_Loop2:
 	dec	1, a	; F7AD6B  dec 1,A
 	cp	a, 0:i3	; F7AD6D  cp A,0
-	jr	ugt, sub_F7AD42_Skip2	; F7AD6F  jr UGT,0xf7ad7b
+	jr	ugt, TrackMerge_StepSourceTrack1_Skip2	; F7AD6F  jr UGT,0xf7ad7b
 	ld	a, 16:opc	; F7AD71  ld A,0x10
 	m_cp_rm MB16, 0x0c14, 1	; F7AD73  cp A,(0x0c14)
-	jr	nz, sub_F7AD42_Join	; F7AD77  jr NZ,0xf7ad81
-	jr	sub_F7AD42_Loop2	; F7AD79  jr T,0xf7ad6b
-sub_F7AD42_Skip2:
+	jr	nz, TrackMerge_StepSourceTrack1_Join	; F7AD77  jr NZ,0xf7ad81
+	jr	TrackMerge_StepSourceTrack1_Loop2	; F7AD79  jr T,0xf7ad6b
+TrackMerge_StepSourceTrack1_Skip2:
 	m_cp_rm MB16, 0x0c14, 1	; F7AD7B  cp A,(0x0c14)
-	jr	z, sub_F7AD42_Loop2	; F7AD7F  jr Z,0xf7ad6b
-sub_F7AD42_Join:
+	jr	z, TrackMerge_StepSourceTrack1_Loop2	; F7AD7F  jr Z,0xf7ad6b
+TrackMerge_StepSourceTrack1_Join:
 	ld	(3091:16), a	; F7AD81  ld (0x0c13),A
 	ld	(6304857:24), a	; F7AD85  ld (0x603459),A
 	ld	(DisplayListB_Stage:16), a	; F7AD8A  ld (0x12f6),A
@@ -190945,31 +191078,31 @@ TrackMerge_StepSourceTrack2:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7AD8F  or (0x2075),0x09
 	ld	a, (3092:16)	; F7AD94  ld A,(0x0c14)
 	m_cp_mi8 MB16, 0x0c4f, 0x80	; F7AD98  cp (0x0c4f),0x80
-	jr	z, sub_F7AD8F_Loop2	; F7AD9D  jr Z,0xf7adb8
-sub_F7AD8F_Loop:
+	jr	z, TrackMerge_StepSourceTrack2_Loop2	; F7AD9D  jr Z,0xf7adb8
+TrackMerge_StepSourceTrack2_Loop:
 	inc	1, a	; F7AD9F  inc 1,A
 	cp	a, 16	; F7ADA1  cp A,0x10
-	jr	ule, sub_F7AD8F_Skip	; F7ADA4  jr ULE,0xf7adb0
+	jr	ule, TrackMerge_StepSourceTrack2_Skip	; F7ADA4  jr ULE,0xf7adb0
 	ld	a, 1:opc	; F7ADA6  ld A,0x01
 	m_cp_rm MB16, 0x0c13, 1	; F7ADA8  cp A,(0x0c13)
-	jr	nz, sub_F7AD8F_Join	; F7ADAC  jr NZ,0xf7adce
-	jr	sub_F7AD8F_Loop	; F7ADAE  jr T,0xf7ad9f
-sub_F7AD8F_Skip:
+	jr	nz, TrackMerge_StepSourceTrack2_Join	; F7ADAC  jr NZ,0xf7adce
+	jr	TrackMerge_StepSourceTrack2_Loop	; F7ADAE  jr T,0xf7ad9f
+TrackMerge_StepSourceTrack2_Skip:
 	m_cp_rm MB16, 0x0c13, 1	; F7ADB0  cp A,(0x0c13)
-	jr	z, sub_F7AD8F_Loop	; F7ADB4  jr Z,0xf7ad9f
-	jr	sub_F7AD8F_Join	; F7ADB6  jr T,0xf7adce
-sub_F7AD8F_Loop2:
+	jr	z, TrackMerge_StepSourceTrack2_Loop	; F7ADB4  jr Z,0xf7ad9f
+	jr	TrackMerge_StepSourceTrack2_Join	; F7ADB6  jr T,0xf7adce
+TrackMerge_StepSourceTrack2_Loop2:
 	dec	1, a	; F7ADB8  dec 1,A
 	cp	a, 0:i3	; F7ADBA  cp A,0
-	jr	ugt, sub_F7AD8F_Skip2	; F7ADBC  jr UGT,0xf7adc8
+	jr	ugt, TrackMerge_StepSourceTrack2_Skip2	; F7ADBC  jr UGT,0xf7adc8
 	ld	a, 16:opc	; F7ADBE  ld A,0x10
 	m_cp_rm MB16, 0x0c13, 1	; F7ADC0  cp A,(0x0c13)
-	jr	nz, sub_F7AD8F_Join	; F7ADC4  jr NZ,0xf7adce
-	jr	sub_F7AD8F_Loop2	; F7ADC6  jr T,0xf7adb8
-sub_F7AD8F_Skip2:
+	jr	nz, TrackMerge_StepSourceTrack2_Join	; F7ADC4  jr NZ,0xf7adce
+	jr	TrackMerge_StepSourceTrack2_Loop2	; F7ADC6  jr T,0xf7adb8
+TrackMerge_StepSourceTrack2_Skip2:
 	m_cp_rm MB16, 0x0c13, 1	; F7ADC8  cp A,(0x0c13)
-	jr	z, sub_F7AD8F_Loop2	; F7ADCC  jr Z,0xf7adb8
-sub_F7AD8F_Join:
+	jr	z, TrackMerge_StepSourceTrack2_Loop2	; F7ADCC  jr Z,0xf7adb8
+TrackMerge_StepSourceTrack2_Join:
 	ld	(3092:16), a	; F7ADCE  ld (0x0c14),A
 	ld	(6304858:24), a	; F7ADD2  ld (0x60345a),A
 	ld	(DisplayListB_Stage+1:16), a	; F7ADD7  ld (0x12f7),A
@@ -191015,11 +191148,11 @@ TrackMerge_StepDestTrack:
 ;   called by ExitKey_TrackMerge_StageNonZero, LcdKeyRow4_TrackMerge_StageNonZero (notes/prom_ab_stage_zero_names.py).
 TrackMerge_ReturnToStageZero:		; <- T_TrackMerge_ReturnToStageZero
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7ADF5  cp (0x207e),0x01
-	jr	nz, sub_F7ADDC_Return	; F7ADFA  jr NZ,0xf7ae0b
+	jr	nz, TrackMerge_ReturnToStageZero_Return	; F7ADFA  jr NZ,0xf7ae0b
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7ADFC  and (0x2075),0xf6
 	ld	(UI_ScreenStage:16), 0	; F7AE01  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7AE06  or (0x2071),0x10
-sub_F7ADDC_Return:
+TrackMerge_ReturnToStageZero_Return:
 	ret	; F7AE0B  ret
 
 ; --------------------------------------------------------------------------
@@ -191039,11 +191172,11 @@ sub_F7ADDC_Return:
 TrackMerge_LcdKeyRow2:		; <- T_TrackMerge_LcdKeyRow2
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7AE0C  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AE11  cp (0x207e),0x01
-	jr	z, sub_F7ADDC_Skip	; F7AE16  jr Z,0xf7ae25
+	jr	z, TrackMerge_LcdKeyRow2_Skip	; F7AE16  jr Z,0xf7ae25
 	ld	(UI_ScreenStage:16), 1	; F7AE18  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7AE1D  or (0x2071),0x10
 	jrl	sub_F7ADDC_Return2	; F7AE22  jrl T,0xf7af59
-sub_F7ADDC_Skip:
+TrackMerge_LcdKeyRow2_Skip:
 	ld	a, (3091:16)	; F7AE25  ld A,(0x0c13)
 	ld	(3184:16), a	; F7AE29  ld (0x0c70),A
 	ld	a, (3092:16)	; F7AE2D  ld A,(0x0c14)
@@ -191066,18 +191199,18 @@ sub_F7ADDC_Skip:
 	ld	de, (12304:16)	; F7AE72  ld DE,(0x3010)
 	ld	a, c	; F7AE76  ld A,C
 	cp	a, 16	; F7AE78  cp A,0x10
-	jr	lt, sub_F7ADDC_Skip2	; F7AE7B  jr LT,0xf7ae84
+	jr	lt, TrackMerge_LcdKeyRow2_Skip2	; F7AE7B  jr LT,0xf7ae84
 	ld	de, (12306:16)	; F7AE7D  ld DE,(0x3012)
 	sub	a, 16	; F7AE81  sub A,0x10
-sub_F7ADDC_Skip2:
+TrackMerge_LcdKeyRow2_Skip2:
 	rcf	; F7AE84  rcf
 	m_rd_stcf_a RW+r2	; F7AE85  stcf A,DE
 	m_rd_ld_rrx RBX, 0x3C, r1	; F7AE87  ld A,RL3
 	cp	c, 16	; F7AE8A  cp C,0x10
-	jr	lt, sub_F7ADDC_Skip3	; F7AE8D  jr LT,0xf7ae95
+	jr	lt, TrackMerge_LcdKeyRow2_Skip3	; F7AE8D  jr LT,0xf7ae95
 	ld	(12306:16), de	; F7AE8F  ld (0x3012),DE
 	jr	sub_F7ADDC_Entry	; F7AE93  jr T,0xf7ae99
-sub_F7ADDC_Skip3:
+TrackMerge_LcdKeyRow2_Skip3:
 	ld	(12304:16), de	; F7AE95  ld (0x3010),DE
 sub_F7ADDC_Entry:
 	m_rd_ld_rrx RWX, 0x3E, r2	; F7AE99  ld DE,QHL3
@@ -191260,9 +191393,9 @@ MeasureDelete_InitFields:		; <- T_MeasureDelete_InitFields
 ;   (notes/prom_ab_screen_enter_leave_work.py).
 MeasureDelete_OnLeave:		; <- T_MeasureDelete_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x23	; F7B00E  cp (0x207a),0x23
-	jr	z, sub_F7AFD8_Return	; F7B013  jr Z,0xf7b019
+	jr	z, MeasureDelete_OnLeave_Return	; F7B013  jr Z,0xf7b019
 	call	T_Seq_RequestRewind	; F7B015  call 0xf409e0
-sub_F7AFD8_Return:
+MeasureDelete_OnLeave_Return:
 	ret	; F7B019  ret
 
 ; --------------------------------------------------------------------------
@@ -191343,25 +191476,25 @@ MeasureDelete_SelectField3:		; <- T_MeasureDelete_SelectField3
 ;   steps field (0x0DD4) (notes/prom_b_seqjob_field_names.py)
 MeasureDelete_StepFieldUp:		; <- T_MeasureDelete_StepFieldUp
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B045  cp (0x207e),0x01
-	jr	nz, sub_F7AFD8_Skip	; F7B04A  jr NZ,0xf7b04e
+	jr	nz, MeasureDelete_StepFieldUp_Skip	; F7B04A  jr NZ,0xf7b04e
 	jr	MeasureDelete_ReturnToStageZero	; F7B04C  jr T,0xf7b07a
-sub_F7AFD8_Skip:
+MeasureDelete_StepFieldUp_Skip:
 	ld	(3150:16), w	; F7B04E  ld (0x0c4e),W
 	ld	(3151:16), 0	; F7B052  ld (0x0c4f),0x00
 	m_cp_mi8 MB16, 0x0dd4, 0x01	; F7B057  cp (0x0dd4),0x01
-	jr	nz, sub_F7AFD8_Skip2	; F7B05C  jr NZ,0xf7b063
+	jr	nz, MeasureDelete_StepFieldUp_Skip2	; F7B05C  jr NZ,0xf7b063
 	calr	MeasureDelete_StepTrack	; F7B05E  calr 0xf7b0b7
-	jr	sub_F7AFD8_Return2	; F7B061  jr T,0xf7b079
-sub_F7AFD8_Skip2:
+	jr	MeasureDelete_StepFieldUp_Return2	; F7B061  jr T,0xf7b079
+MeasureDelete_StepFieldUp_Skip2:
 	m_cp_mi8 MB16, 0x0dd4, 0x02	; F7B063  cp (0x0dd4),0x02
-	jr	nz, sub_F7AFD8_Skip3	; F7B068  jr NZ,0xf7b06f
+	jr	nz, MeasureDelete_StepFieldUp_Skip3	; F7B068  jr NZ,0xf7b06f
 	calr	MeasureDelete_StepFirstMeasure	; F7B06A  calr 0xf7b0f2
-	jr	sub_F7AFD8_Return2	; F7B06D  jr T,0xf7b079
-sub_F7AFD8_Skip3:
+	jr	MeasureDelete_StepFieldUp_Return2	; F7B06D  jr T,0xf7b079
+MeasureDelete_StepFieldUp_Skip3:
 	m_cp_mi8 MB16, 0x0dd4, 0x03	; F7B06F  cp (0x0dd4),0x03
-	jr	nz, sub_F7AFD8_Return2	; F7B074  jr NZ,0xf7b079
+	jr	nz, MeasureDelete_StepFieldUp_Return2	; F7B074  jr NZ,0xf7b079
 	calr	MeasureDelete_StepLastMeasure	; F7B076  calr 0xf7b128
-sub_F7AFD8_Return2:
+MeasureDelete_StepFieldUp_Return2:
 	ret	; F7B079  ret
 
 ; --------------------------------------------------------------------------
@@ -191380,7 +191513,7 @@ MeasureDelete_ReturnToStageZero:		; <- T_MeasureDelete_ReturnToStageZero
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B07A  and (0x2075),0xf6
 	ld	(UI_ScreenStage:16), 0	; F7B07F  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B084  or (0x2071),0x10
-	jr	sub_F7AFD8_Return2	; F7B089  jr T,0xf7b079
+	jr	MeasureDelete_StepFieldUp_Return2	; F7B089  jr T,0xf7b079
 
 ; --------------------------------------------------------------------------
 ; MeasureDelete_StepFieldDown
@@ -191399,19 +191532,19 @@ MeasureDelete_StepFieldDown:		; <- T_MeasureDelete_StepFieldDown
 	ld	(3150:16), w	; F7B08B  ld (0x0c4e),W
 	ld	(3151:16), 128	; F7B08F  ld (0x0c4f),0x80
 	m_cp_mi8 MB16, 0x0dd4, 0x01	; F7B094  cp (0x0dd4),0x01
-	jr	nz, sub_F7AFD8_Skip4	; F7B099  jr NZ,0xf7b0a0
+	jr	nz, MeasureDelete_StepFieldDown_Skip4	; F7B099  jr NZ,0xf7b0a0
 	calr	MeasureDelete_StepTrack	; F7B09B  calr 0xf7b0b7
-	jr	sub_F7AFD8_Return3	; F7B09E  jr T,0xf7b0b6
-sub_F7AFD8_Skip4:
+	jr	MeasureDelete_StepFieldDown_Return3	; F7B09E  jr T,0xf7b0b6
+MeasureDelete_StepFieldDown_Skip4:
 	m_cp_mi8 MB16, 0x0dd4, 0x02	; F7B0A0  cp (0x0dd4),0x02
-	jr	nz, sub_F7AFD8_Skip5	; F7B0A5  jr NZ,0xf7b0ac
+	jr	nz, MeasureDelete_StepFieldDown_Skip5	; F7B0A5  jr NZ,0xf7b0ac
 	calr	MeasureDelete_StepFirstMeasure	; F7B0A7  calr 0xf7b0f2
-	jr	sub_F7AFD8_Return3	; F7B0AA  jr T,0xf7b0b6
-sub_F7AFD8_Skip5:
+	jr	MeasureDelete_StepFieldDown_Return3	; F7B0AA  jr T,0xf7b0b6
+MeasureDelete_StepFieldDown_Skip5:
 	m_cp_mi8 MB16, 0x0dd4, 0x03	; F7B0AC  cp (0x0dd4),0x03
-	jr	nz, sub_F7AFD8_Return3	; F7B0B1  jr NZ,0xf7b0b6
+	jr	nz, MeasureDelete_StepFieldDown_Return3	; F7B0B1  jr NZ,0xf7b0b6
 	calr	MeasureDelete_StepLastMeasure	; F7B0B3  calr 0xf7b128
-sub_F7AFD8_Return3:
+MeasureDelete_StepFieldDown_Return3:
 	ret	; F7B0B6  ret
 
 ; --------------------------------------------------------------------------
@@ -194360,7 +194493,7 @@ Quantize_LcdKeyRow3_Return:
 ;   body + siblings (AdvanceDelay_InitFields). (notes/naming-pilot-2026-10-06/proposals_wave7_z.json)
 S0ngC0py_InitFields:		; <- T_S0ngC0py_InitFields
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x2a	; F7C3B2  cp (0x207b),0x2a
-	jr	z, sub_F7C3B2_Return	; F7C3B7  jr Z,0xf7c3ed
+	jr	z, S0ngC0py_InitFields_Return	; F7C3B7  jr Z,0xf7c3ed
 	ld	a, 1:opc	; F7C3B9  ld A,0x01
 	ld	(S0ngC0py_FromSong:16), a	; F7C3BB  ld (0x0e0c),A
 	ld	(DisplayListB_Stage:16), a	; F7C3BF  ld (0x12f6),A
@@ -194374,7 +194507,7 @@ S0ngC0py_InitFields:		; <- T_S0ngC0py_InitFields
 	ld	(DisplayListB_Stage+14:16), a	; F7C3E1  ld (0x1304),A
 	ld	(S0ngC0py_ToTrack:16), a	; F7C3E5  ld (0x0e0f),A
 	ld	(DisplayListB_Stage+15:16), a	; F7C3E9  ld (0x1305),A
-sub_F7C3B2_Return:
+S0ngC0py_InitFields_Return:
 	ret	; F7C3ED  ret
 
 ; --------------------------------------------------------------------------
@@ -194736,14 +194869,14 @@ S0ngC0py_ReturnToStageZero:		; <- T_S0ngC0py_ReturnToStageZero
 PanelWrite_OnEnter:		; <- T_PanelWrite_OnEnter
 	ld	a, (UI_ScreenLatch:16)	; F7C5CB  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F7C5CF  cp A,(0x207b)
-	jr	z, sub_F7C440_Skip3	; F7C5D3  jr Z,0xf7c5dc
+	jr	z, PanelWrite_OnEnter_Skip3	; F7C5D3  jr Z,0xf7c5dc
 	ld	(UI_StatusCode:16), 255	; F7C5D5  ld (0x2880),0xff
-	jr	sub_F7C440_Return8	; F7C5DA  jr T,0xf7c5e9
-sub_F7C440_Skip3:
+	jr	PanelWrite_OnEnter_Return8	; F7C5DA  jr T,0xf7c5e9
+PanelWrite_OnEnter_Skip3:
 	m_cp_mi8 MB16, UI_StatusCode, 0x23	; F7C5DC  cp (0x2880),0x23
-	jr	nz, sub_F7C440_Return8	; F7C5E1  jr NZ,0xf7c5e9
+	jr	nz, PanelWrite_OnEnter_Return8	; F7C5E1  jr NZ,0xf7c5e9
 	ldw	(UI_Request:16), 32794	; F7C5E3  ld (0x2070),0x801a
-sub_F7C440_Return8:
+PanelWrite_OnEnter_Return8:
 	ret	; F7C5E9  ret
 
 ; --------------------------------------------------------------------------
@@ -194805,17 +194938,17 @@ PanelWrite_Execute:		; <- T_PanelWrite_Execute
 ;   Basis: caller + body + siblings (AdvanceDelay_InitFields). (notes/naming-pilot-2026-10-06/proposals_wave7_z.json)
 Transp0se_InitFields:		; <- T_Transp0se_InitFields
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x2b	; F7C606  cp (0x207b),0x2b
-	jr	z, sub_F7C440_Skip4	; F7C60B  jr Z,0xf7c61f
+	jr	z, Transp0se_InitFields_Skip4	; F7C60B  jr Z,0xf7c61f
 	calr	Transp0se_StageDisplayFields	; F7C60D  calr 0xf7c62d
 	ld	a, 1:opc	; F7C610  ld A,0x01
 	ld	(3574:16), a	; F7C612  ld (0x0df6),A
 	ld	(DisplayListB_Stage+6:16), a	; F7C616  ld (0x12fc),A
 	ld	(UI_StatusCode:16), 255	; F7C61A  ld (0x2880),0xff
-sub_F7C440_Skip4:
+Transp0se_InitFields_Skip4:
 	m_cp_mi8 MB16, UI_StatusCode, 0x23	; F7C61F  cp (0x2880),0x23
-	jr	nz, sub_F7C440_Return10	; F7C624  jr NZ,0xf7c62c
+	jr	nz, Transp0se_InitFields_Return10	; F7C624  jr NZ,0xf7c62c
 	ldw	(UI_Request:16), 32794	; F7C626  ld (0x2070),0x801a
-sub_F7C440_Return10:
+Transp0se_InitFields_Return10:
 	ret	; F7C62C  ret
 
 ; --------------------------------------------------------------------------
@@ -194868,9 +195001,9 @@ Transp0se_StageDisplayFields:
 ;   (notes/prom_ab_screen_enter_leave_work.py).
 Transp0se_OnLeave:		; <- T_Transp0se_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x2b	; F7C666  cp (0x207a),0x2b
-	jr	z, sub_F7C62D_Return	; F7C66B  jr Z,0xf7c671
+	jr	z, Transp0se_OnLeave_Return	; F7C66B  jr Z,0xf7c671
 	call	T_Seq_RequestRewind	; F7C66D  call 0xf409e0
-sub_F7C62D_Return:
+Transp0se_OnLeave_Return:
 	ret	; F7C671  ret
 
 ; --------------------------------------------------------------------------
@@ -195308,12 +195441,12 @@ Transp0se_ReturnToStageZero:		; <- T_Transp0se_ReturnToStageZero
 ;   caller + body + siblings (AdvanceDelay_InitFields). (notes/naming-pilot-2026-10-06/proposals_wave7_z.json)
 N0teChange_InitFields:		; <- T_N0teChange_InitFields
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x2d	; F7C853  cp (0x207b),0x2d
-	jr	z, sub_F7C853_Return	; F7C858  jr Z,0xf7c868
+	jr	z, N0teChange_InitFields_Return	; F7C858  jr Z,0xf7c868
 	call	N0teChange_StageDisplayFields	; F7C85A  call 0xf7c869
 	ld	a, 1:opc	; F7C85E  ld A,0x01
 	ld	(N0teChange_Field:16), a	; F7C860  ld (0x0ded),A
 	ld	(DisplayListB_Stage+11:16), a	; F7C864  ld (0x1301),A
-sub_F7C853_Return:
+N0teChange_InitFields_Return:
 	ret	; F7C868  ret
 
 ; --------------------------------------------------------------------------
@@ -196447,15 +196580,15 @@ SongStore_StepSizeTable:
 ;   Basis: caller + body. (notes/naming-pilot-2026-10-06/proposals_wave7_z.json)
 MeasureInsert_RepeatInsert:
 	m_cp_mi8 MB16, 0x0e17, 0x00	; F7CDA0  cp (0x0e17),0x00
-	jr	z, sub_F7CDA0_Return	; F7CDA5  jr Z,0xf7ce03
+	jr	z, MeasureInsert_RepeatInsert_Return	; F7CDA5  jr Z,0xf7ce03
 	m_bit 3, MD16, 0x0c8a	; F7CDA7  bit 3,(0x0c8a)
-	jr	nz, sub_F7CDA0_Return	; F7CDAB  jr NZ,0xf7ce03
+	jr	nz, MeasureInsert_RepeatInsert_Return	; F7CDAB  jr NZ,0xf7ce03
 	ld	c, (3607:16)	; F7CDAD  ld C,(0x0e17)
 	ld	a, (3092:16)	; F7CDB1  ld A,(0x0c14)
 	m_bit 2, MD16, 0x0c35	; F7CDB5  bit 2,(0x0c35)
-	jr	z, sub_F7CDA0_Skip	; F7CDB9  jr Z,0xf7cdbd
+	jr	z, MeasureInsert_RepeatInsert_Skip	; F7CDB9  jr Z,0xf7cdbd
 	ld	a, 127:opc	; F7CDBB  ld A,0x7f
-sub_F7CDA0_Skip:
+MeasureInsert_RepeatInsert_Skip:
 	ld	(3184:16), a	; F7CDBD  ld (0x0c70),A
 	ld	wa, (6304877:24)	; F7CDC1  ld WA,(0x60346d)
 	ld	(3187:16), wa	; F7CDC6  ld (0x0c73),WA
@@ -196468,14 +196601,14 @@ sub_F7CDA0_Skip:
 	call	T_MeasureInsert_Execute	; F7CDE2  call 0xf426f4
 	popw	bc	; F7CDE6  pop BC
 	m_cp_mi8 MB16, UI_StatusCode, 0x23	; F7CDE7  cp (0x2880),0x23
-	jr	nz, sub_F7CDA0_Return	; F7CDEC  jr NZ,0xf7ce03
+	jr	nz, MeasureInsert_RepeatInsert_Return	; F7CDEC  jr NZ,0xf7ce03
 	m_bit 3, MD16, 0x0c8a	; F7CDEE  bit 3,(0x0c8a)
-	jr	nz, sub_F7CDA0_Return	; F7CDF2  jr NZ,0xf7ce03
+	jr	nz, MeasureInsert_RepeatInsert_Return	; F7CDF2  jr NZ,0xf7ce03
 	ld	wa, (3189:16)	; F7CDF4  ld WA,(0x0c75)
 	m_add_rm MW16, 0x0c77, 0	; F7CDF8  add WA,(0x0c77)
 	ld	(3189:16), wa	; F7CDFC  ld (0x0c75),WA
 	djnz8	c, -44	; F7CE00  djnz C,0xf7cdd7
-sub_F7CDA0_Return:
+MeasureInsert_RepeatInsert_Return:
 	ret	; F7CE03  ret
 
 ; --------------------------------------------------------------------------
@@ -196497,15 +196630,15 @@ sub_F7CDA0_Return:
 ;   + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave7_z.json)
 MeasureC0py_RepeatCopy:
 	m_cp_mi8 MB16, 0x0e16, 0x00	; F7CE04  cp (0x0e16),0x00
-	jr	z, sub_F7CE04_Return	; F7CE09  jr Z,0xf7ce67
+	jr	z, MeasureC0py_RepeatCopy_Return	; F7CE09  jr Z,0xf7ce67
 	m_bit 3, MD16, 0x0c8a	; F7CE0B  bit 3,(0x0c8a)
-	jr	nz, sub_F7CE04_Return	; F7CE0F  jr NZ,0xf7ce67
+	jr	nz, MeasureC0py_RepeatCopy_Return	; F7CE0F  jr NZ,0xf7ce67
 	ld	c, (3606:16)	; F7CE11  ld C,(0x0e16)
 	ld	a, (3092:16)	; F7CE15  ld A,(0x0c14)
 	m_bit 3, MD16, 0x0c35	; F7CE19  bit 3,(0x0c35)
-	jr	z, sub_F7CE04_Skip	; F7CE1D  jr Z,0xf7ce21
+	jr	z, MeasureC0py_RepeatCopy_Skip	; F7CE1D  jr Z,0xf7ce21
 	ld	a, 127:opc	; F7CE1F  ld A,0x7f
-sub_F7CE04_Skip:
+MeasureC0py_RepeatCopy_Skip:
 	ld	(3184:16), a	; F7CE21  ld (0x0c70),A
 	ld	wa, (6304885:24)	; F7CE25  ld WA,(0x603475)
 	ld	(3187:16), wa	; F7CE2A  ld (0x0c73),WA
@@ -196518,14 +196651,14 @@ sub_F7CE04_Skip:
 	call	T_SongEdit_CopyMeasures	; F7CE46  call 0xf426f8
 	popw	bc	; F7CE4A  pop BC
 	m_cp_mi8 MB16, UI_StatusCode, 0x23	; F7CE4B  cp (0x2880),0x23
-	jr	nz, sub_F7CE04_Return	; F7CE50  jr NZ,0xf7ce67
+	jr	nz, MeasureC0py_RepeatCopy_Return	; F7CE50  jr NZ,0xf7ce67
 	m_bit 3, MD16, 0x0c8a	; F7CE52  bit 3,(0x0c8a)
-	jr	nz, sub_F7CE04_Return	; F7CE56  jr NZ,0xf7ce67
+	jr	nz, MeasureC0py_RepeatCopy_Return	; F7CE56  jr NZ,0xf7ce67
 	ld	wa, (3189:16)	; F7CE58  ld WA,(0x0c75)
 	m_add_rm MW16, 0x0c77, 0	; F7CE5C  add WA,(0x0c77)
 	ld	(3189:16), wa	; F7CE60  ld (0x0c75),WA
 	djnz8	c, -44	; F7CE64  djnz C,0xf7ce3b
-sub_F7CE04_Return:
+MeasureC0py_RepeatCopy_Return:
 	ret	; F7CE67  ret
 	.fill	408, 1, 0x0E	; F7CE68-F7CFFF  `ret` padding (asserted pure 0x0E)
 
@@ -196703,9 +196836,9 @@ ScreenLeave_Edit:
 ScreenButton_Edit:
 	ld	xix, ButtonTable_Edit_0C10Zero	; F7D032  ld XIX,0x00f7d2d8
 	m_cp_mi8 MB16, 0x0c10, 0x00	; F7D037  cp (0x0c10),0x00
-	jr	z, sub_F7CE04_Skip2	; F7D03C  jr Z,0xf7d043
+	jr	z, ScreenButton_Edit_Skip2	; F7D03C  jr Z,0xf7d043
 	ld	xix, ButtonTable_Edit_0C10NonZero	; F7D03E  ld XIX,0x00f7d358
-sub_F7CE04_Skip2:
+ScreenButton_Edit_Skip2:
 	call	T_PanelButton_CallTableEntry	; F7D043  call 0xf41b08
 	ret	; F7D047  ret
 ; Evidence: the +0x0C word of screen object F43050 (prom_a's PanelScreen_VtableTable);
@@ -196798,9 +196931,9 @@ ScreenLeave_TrackClear:
 ScreenButton_TrackClear:
 	ld	xix, ButtonTable_TrackClear_StageZero	; F7D06A  ld XIX,0x00f7d458
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D06F  cp (0x207e),0x00
-	jr	z, sub_F7CE04_Skip3	; F7D074  jr Z,0xf7d07b
+	jr	z, ScreenButton_TrackClear_Skip3	; F7D074  jr Z,0xf7d07b
 	ld	xix, ButtonTable_TrackClear_StageNonZero	; F7D076  ld XIX,0x00f7d4d8
-sub_F7CE04_Skip3:
+ScreenButton_TrackClear_Skip3:
 	call	T_PanelButton_CallTableEntry	; F7D07B  call 0xf41b08
 	ret	; F7D07F  ret
 ; Evidence: the +0x0C word of screen object F43070 (prom_a's PanelScreen_VtableTable);
@@ -196848,9 +196981,9 @@ ScreenLeave_TrackAssign:
 ScreenButton_TrackAssign:
 	ld	xix, ButtonTable_TrackAssign_StageZero	; F7D08C  ld XIX,0x00f7d558
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D091  cp (0x207e),0x00
-	jr	z, sub_F7CE04_Skip4	; F7D096  jr Z,0xf7d09d
+	jr	z, ScreenButton_TrackAssign_Skip4	; F7D096  jr Z,0xf7d09d
 	ld	xix, ButtonTable_TrackAssign_StageNonZero	; F7D098  ld XIX,0x00f7d5d8
-sub_F7CE04_Skip4:
+ScreenButton_TrackAssign_Skip4:
 	call	T_PanelButton_CallTableEntry	; F7D09D  call 0xf41b08
 	ret	; F7D0A1  ret
 ; Evidence: the +0x0C word of screen object F43140 (prom_a's PanelScreen_VtableTable);
@@ -196943,9 +197076,9 @@ ScreenLeave_TrackMerge:
 ScreenButton_TrackMerge:
 	ld	xix, ButtonTable_TrackMerge_StageZero	; F7D0C6  ld XIX,0x00f7d6d8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D0CB  cp (0x207e),0x00
-	jr	z, sub_F7CE04_Skip5	; F7D0D0  jr Z,0xf7d0d7
+	jr	z, ScreenButton_TrackMerge_Skip5	; F7D0D0  jr Z,0xf7d0d7
 	ld	xix, ButtonTable_TrackMerge_StageNonZero	; F7D0D2  ld XIX,0x00f7d758
-sub_F7CE04_Skip5:
+ScreenButton_TrackMerge_Skip5:
 	call	T_PanelButton_CallTableEntry	; F7D0D7  call 0xf41b08
 	ret	; F7D0DB  ret
 ; Evidence: the +0x0C word of screen object F430A0 (prom_a's PanelScreen_VtableTable);
@@ -196992,9 +197125,9 @@ ScreenLeave_MeasureDelete:
 ScreenButton_MeasureDelete:
 	ld	xix, ButtonTable_MeasureDelete_StageZero	; F7D0E7  ld XIX,0x00f7d7d8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D0EC  cp (0x207e),0x00
-	jr	z, sub_F7CE04_Skip6	; F7D0F1  jr Z,0xf7d0f8
+	jr	z, ScreenButton_MeasureDelete_Skip6	; F7D0F1  jr Z,0xf7d0f8
 	ld	xix, ButtonTable_MeasureDelete_StageNonZero	; F7D0F3  ld XIX,0x00f7d858
-sub_F7CE04_Skip6:
+ScreenButton_MeasureDelete_Skip6:
 	call	T_PanelButton_CallTableEntry	; F7D0F8  call 0xf41b08
 	ret	; F7D0FC  ret
 ; Evidence: the +0x0C word of screen object F430E0 (prom_a's PanelScreen_VtableTable);
@@ -197041,9 +197174,9 @@ ScreenLeave_MeasureErase:
 ScreenButton_MeasureErase:
 	ld	xix, ButtonTable_MeasureErase_StageZero	; F7D108  ld XIX,0x00f7d8d8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D10D  cp (0x207e),0x00
-	jr	z, sub_F7CE04_Skip7	; F7D112  jr Z,0xf7d119
+	jr	z, ScreenButton_MeasureErase_Skip7	; F7D112  jr Z,0xf7d119
 	ld	xix, ButtonTable_MeasureErase_StageNonZero	; F7D114  ld XIX,0x00f7d958
-sub_F7CE04_Skip7:
+ScreenButton_MeasureErase_Skip7:
 	call	T_PanelButton_CallTableEntry	; F7D119  call 0xf41b08
 	ret	; F7D11D  ret
 ; Evidence: the +0x0C word of screen object F430B0 (prom_a's PanelScreen_VtableTable);
@@ -197129,9 +197262,9 @@ ScreenLeave_Quantize:
 ScreenButton_Quantize:
 	ld	xix, ButtonTable_Quantize_StageZero	; F7D139  ld XIX,0x00f7d9d8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D13E  cp (0x207e),0x00
-	jr	z, sub_F7CE04_Skip8	; F7D143  jr Z,0xf7d14a
+	jr	z, ScreenButton_Quantize_Skip8	; F7D143  jr Z,0xf7d14a
 	ld	xix, ButtonTable_Quantize_StageNonZero	; F7D145  ld XIX,0x00f7da58
-sub_F7CE04_Skip8:
+ScreenButton_Quantize_Skip8:
 	call	T_PanelButton_CallTableEntry	; F7D14A  call 0xf41b08
 	ret	; F7D14E  ret
 ; Evidence: the +0x0C word of screen object F43090 (prom_a's PanelScreen_VtableTable);
@@ -197178,9 +197311,9 @@ ScreenLeave_Vel0cityChange:
 ScreenButton_Vel0cityChange:
 	ld	xix, ButtonTable_Vel0cityChange_StageZero	; F7D15A  ld XIX,0x00f7dad8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D15F  cp (0x207e),0x00
-	jr	z, sub_F7CE04_Skip9	; F7D164  jr Z,0xf7d16b
+	jr	z, ScreenButton_Vel0cityChange_Skip9	; F7D164  jr Z,0xf7d16b
 	ld	xix, ButtonTable_Vel0cityChange_StageNonZero	; F7D166  ld XIX,0x00f7db58
-sub_F7CE04_Skip9:
+ScreenButton_Vel0cityChange_Skip9:
 	call	T_PanelButton_CallTableEntry	; F7D16B  call 0xf41b08
 	ret	; F7D16F  ret
 ; Evidence: the +0x0C word of screen object F43080 (prom_a's PanelScreen_VtableTable);
@@ -197227,9 +197360,9 @@ ScreenLeave_Transp0se:
 ScreenButton_Transp0se:
 	ld	xix, ButtonTable_Transp0se_StageZero	; F7D17B  ld XIX,0x00f7dbd8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D180  cp (0x207e),0x00
-	jr	z, sub_F7CE04_Skip10	; F7D185  jr Z,0xf7d18c
+	jr	z, ScreenButton_Transp0se_Skip10	; F7D185  jr Z,0xf7d18c
 	ld	xix, ButtonTable_Transp0se_StageNonZero	; F7D187  ld XIX,0x00f7dc58
-sub_F7CE04_Skip10:
+ScreenButton_Transp0se_Skip10:
 	call	T_PanelButton_CallTableEntry	; F7D18C  call 0xf41b08
 	ret	; F7D190  ret
 ; Evidence: the +0x0C word of screen object F43100 (prom_a's PanelScreen_VtableTable);
@@ -197270,25 +197403,25 @@ ScreenLeave_AfterT0uchSetting:
 ;           its body is transcribed below.  [round7-entrypoints]
 ScreenButton_AfterT0uchSetting:
 	cp	hl, 15	; F7D19C  cp HL,0x000f
-	jr	z, sub_F7CE04_Skip12	; F7D1A0  jr Z,0xf7d1c6
+	jr	z, ScreenButton_AfterT0uchSetting_Skip12	; F7D1A0  jr Z,0xf7d1c6
 	cp	hl, 10	; F7D1A2  cp HL,0x000a
-	jr	z, sub_F7CE04_Skip11	; F7D1A6  jr Z,0xf7d1ae
+	jr	z, ScreenButton_AfterT0uchSetting_Skip11	; F7D1A6  jr Z,0xf7d1ae
 	cp	hl, 11	; F7D1A8  cp HL,0x000b
-	jr	nz, sub_F7CE04_Return2	; F7D1AC  jr NZ,0xf7d1d3
-sub_F7CE04_Skip11:
+	jr	nz, ScreenButton_AfterT0uchSetting_Return2	; F7D1AC  jr NZ,0xf7d1d3
+ScreenButton_AfterT0uchSetting_Skip11:
 	ld	bc, hl	; F7D1AE  ld BC,HL
 	call	T_AfterT0uchSetting_SetRecordEnable	; F7D1B0  call 0xf42bec
 	call	AfterT0uchSetting_EraseRecordValue	; F7D1B4  call 0xf7e430
 	ld	a, (32706:16)	; F7D1B8  ld A,(0x7fc2)
 	ld	(DisplayListB_Stage:16), a	; F7D1BC  ld (0x12f6),A
 	call	Draw_AfterTouchRecord	; F7D1C0  call 0xf7e421
-	jr	sub_F7CE04_Return2	; F7D1C4  jr T,0xf7d1d3
-sub_F7CE04_Skip12:
+	jr	ScreenButton_AfterT0uchSetting_Return2	; F7D1C4  jr T,0xf7d1d3
+ScreenButton_AfterT0uchSetting_Skip12:
 	bit	7, w	; F7D1C6  bit 0x07,W
-	jr	nz, sub_F7CE04_Return2	; F7D1C9  jr NZ,0xf7d1d3
+	jr	nz, ScreenButton_AfterT0uchSetting_Return2	; F7D1C9  jr NZ,0xf7d1d3
 	ldw	(UI_Request:16), 32772	; F7D1CB  ld (0x2070),0x8004
-	jr	sub_F7CE04_Return2	; F7D1D1  jr T,0xf7d1d3
-sub_F7CE04_Return2:
+	jr	ScreenButton_AfterT0uchSetting_Return2	; F7D1D1  jr T,0xf7d1d3
+ScreenButton_AfterT0uchSetting_Return2:
 	ret	; F7D1D3  ret
 ; Evidence: the +0x0C word of screen object F43180 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  NO READER of +0x0C exists in either image.  [round7-entrypoints]
@@ -197334,9 +197467,9 @@ ScreenLeave_AdvanceDelay:
 ScreenButton_AdvanceDelay:
 	ld	xix, ButtonTable_AdvanceDelay_StageZero	; F7D1DF  ld XIX,0x00f7dcd8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D1E4  cp (0x207e),0x00
-	jr	z, sub_F7CE04_Skip13	; F7D1E9  jr Z,0xf7d1f0
+	jr	z, ScreenButton_AdvanceDelay_Skip13	; F7D1E9  jr Z,0xf7d1f0
 	ld	xix, ButtonTable_AdvanceDelay_StageNonZero	; F7D1EB  ld XIX,0x00f7dd58
-sub_F7CE04_Skip13:
+ScreenButton_AdvanceDelay_Skip13:
 	call	T_PanelButton_CallTableEntry	; F7D1F0  call 0xf41b08
 	ret	; F7D1F4  ret
 ; Evidence: the +0x0C word of screen object F43110 (prom_a's PanelScreen_VtableTable);
@@ -197383,9 +197516,9 @@ ScreenLeave_S0ngC0py:
 ScreenButton_S0ngC0py:
 	ld	xix, ButtonTable_S0ngC0py_StageZero	; F7D200  ld XIX,0x00f7ddd8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D205  cp (0x207e),0x00
-	jr	z, sub_F7CE04_Skip14	; F7D20A  jr Z,0xf7d211
+	jr	z, ScreenButton_S0ngC0py_Skip14	; F7D20A  jr Z,0xf7d211
 	ld	xix, ButtonTable_S0ngC0py_StageNonZero	; F7D20C  ld XIX,0x00f7de58
-sub_F7CE04_Skip14:
+ScreenButton_S0ngC0py_Skip14:
 	call	T_PanelButton_CallTableEntry	; F7D211  call 0xf41b08
 	ret	; F7D215  ret
 ; Evidence: the +0x0C word of screen object F430F0 (prom_a's PanelScreen_VtableTable);
@@ -197432,9 +197565,9 @@ ScreenLeave_N0teChange:
 ScreenButton_N0teChange:
 	ld	xix, ButtonTable_N0teChange_StageZero	; F7D221  ld XIX,0x00f7ded8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D226  cp (0x207e),0x00
-	jr	z, sub_F7CE04_Skip15	; F7D22B  jr Z,0xf7d232
+	jr	z, ScreenButton_N0teChange_Skip15	; F7D22B  jr Z,0xf7d232
 	ld	xix, ButtonTable_N0teChange_StageNonZero	; F7D22D  ld XIX,0x00f7df58
-sub_F7CE04_Skip15:
+ScreenButton_N0teChange_Skip15:
 	call	T_PanelButton_CallTableEntry	; F7D232  call 0xf41b08
 	ret	; F7D236  ret
 ; Evidence: the +0x0C word of screen object F43120 (prom_a's PanelScreen_VtableTable);
@@ -197481,9 +197614,9 @@ ScreenLeave_MeasureC0py:
 ScreenButton_MeasureC0py:
 	ld	xix, ButtonTable_MeasureC0py_StageZero	; F7D242  ld XIX,0x00f7dfd8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D247  cp (0x207e),0x00
-	jr	z, sub_F7CE04_Skip16	; F7D24C  jr Z,0xf7d253
+	jr	z, ScreenButton_MeasureC0py_Skip16	; F7D24C  jr Z,0xf7d253
 	ld	xix, ButtonTable_MeasureC0py_StageNonZero	; F7D24E  ld XIX,0x00f7e058
-sub_F7CE04_Skip16:
+ScreenButton_MeasureC0py_Skip16:
 	call	T_PanelButton_CallTableEntry	; F7D253  call 0xf41b08
 	ret	; F7D257  ret
 ; Evidence: the +0x0C word of screen object F430C0 (prom_a's PanelScreen_VtableTable);
@@ -197530,9 +197663,9 @@ ScreenLeave_MeasureInsert:
 ScreenButton_MeasureInsert:
 	ld	xix, ButtonTable_MeasureInsert_StageZero	; F7D263  ld XIX,0x00f7e0d8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D268  cp (0x207e),0x00
-	jr	z, sub_F7CE04_Skip17	; F7D26D  jr Z,0xf7d274
+	jr	z, ScreenButton_MeasureInsert_Skip17	; F7D26D  jr Z,0xf7d274
 	ld	xix, ButtonTable_MeasureInsert_StageNonZero	; F7D26F  ld XIX,0x00f7e158
-sub_F7CE04_Skip17:
+ScreenButton_MeasureInsert_Skip17:
 	call	T_PanelButton_CallTableEntry	; F7D274  call 0xf41b08
 	ret	; F7D278  ret
 ; Evidence: the +0x0C word of screen object F430D0 (prom_a's PanelScreen_VtableTable);
@@ -199351,7 +199484,7 @@ ButtonTable_SequencerMedley:
 ;     python3 notes/gen_prom_b_f7e2d8_module.py --selftest --cost
 ; ==============================================================================
 
-sub_F7E39F_Nop:
+ButtonTable_SequencerMedley_Nop:
 	ret	; F7E2D8  ret
 
 ; ------------------------------------------------------------------------------
@@ -199467,14 +199600,14 @@ TrackClear_DrawTrackSelection:
 	call	T_DisplayList_Run	; F7E3AF  call 0xf417f0
 	popw	hl	; F7E3B3  pop HL
 	cp	hl, 0:i3	; F7E3B4  cp HL,0
-	jr	nz, sub_F7E39F_Skip	; F7E3B6  jr NZ,0xf7e3ba
-	jr	sub_F7E39F_Return	; F7E3B8  jr T,0xf7e3f3
-sub_F7E39F_Skip:
+	jr	nz, TrackClear_DrawTrackSelection_Skip	; F7E3B6  jr NZ,0xf7e3ba
+	jr	TrackClear_DrawTrackSelection_Return	; F7E3B8  jr T,0xf7e3f3
+TrackClear_DrawTrackSelection_Skip:
 	ldw	wa, 1	; F7E3BA  ld WA,0x0001
 	xor	c, c	; F7E3BD  xor C,C
-sub_F7E39F_Loop:
+TrackClear_DrawTrackSelection_Loop:
 	pushw	wa	; F7E3BF  push WA
-	calr	sub_F7E39F_Nop	; F7E3C0  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7E3C0  calr 0xf7e2d8
 	popw	wa	; F7E3C3  pop WA
 	ld	(DisplayListB_Stage:16), c	; F7E3C4  ld (0x12f6),C
 	pushw	wa	; F7E3C8  push WA
@@ -199483,21 +199616,21 @@ sub_F7E39F_Loop:
 	m_rd_ld_rr2x RWX, 0x3C, r3	; F7E3CB  ld RHL3,HL
 	and	hl, wa	; F7E3CE  and HL,WA
 	m_rd_ld_rrx RWX, 0x3C, r3	; F7E3D0  ld HL,RHL3
-	jr	z, sub_F7E39F_Skip2	; F7E3D3  jr Z,0xf7e3e0
+	jr	z, TrackClear_DrawTrackSelection_Skip2	; F7E3D3  jr Z,0xf7e3e0
 	ld	xiy, Data_F3A0D9	; F7E3D5  ld XIY,0x00f3a0d9
 	call	T_DLB_Handler_Array8	; F7E3DA  call 0xf4181c
-	jr	sub_F7E39F_Join	; F7E3DE  jr T,0xf7e3e9
-sub_F7E39F_Skip2:
+	jr	TrackClear_DrawTrackSelection_Join	; F7E3DE  jr T,0xf7e3e9
+TrackClear_DrawTrackSelection_Skip2:
 	ld	xiy, Data_F3A0E4	; F7E3E0  ld XIY,0x00f3a0e4
 	call	T_DLB_Handler_Array6	; F7E3E5  call 0xf41824
-sub_F7E39F_Join:
+TrackClear_DrawTrackSelection_Join:
 	popw	bc	; F7E3E9  pop BC
 	popw	hl	; F7E3EA  pop HL
 	popw	wa	; F7E3EB  pop WA
 	inc	1, c	; F7E3EC  inc 1,C
 	sla	wa, 1	; F7E3EE  sla 0x01,WA
-	jr	nc, sub_F7E39F_Loop	; F7E3F1  jr NC,0xf7e3bf
-sub_F7E39F_Return:
+	jr	nc, TrackClear_DrawTrackSelection_Loop	; F7E3F1  jr NC,0xf7e3bf
+TrackClear_DrawTrackSelection_Return:
 	ret	; F7E3F3  ret
 	ret	; F7E3F4  ret
 
@@ -201009,7 +201142,7 @@ TrackAssignPresets_MoveFieldHighlight:
 ;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
 TrackAssign_PaintTrackGroup:
 	m_or_mi8 MB8, 0xc6, 0x01	; F7E788  or (0xc6),0x01
-	calr	sub_F7E39F_Nop	; F7E78C  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7E78C  calr 0xf7e2d8
 	ld	a, (BStore_CurrentBank:16)	; F7E78F  ld A,(0x360a)
 	inc	1, a	; F7E793  inc 1,A
 	ld	(UI_DrawScratch:16), a	; F7E795  ld (0x2640),A
@@ -201066,11 +201199,11 @@ TrackAssign_PaintTrackGroup_Join2:
 TrackAssign_DrawOutChannelColumn:
 	ld	xiy, TrackAssign_DrawOutChannelColumn_DL	; F7E81F  ld XIY,0x00f3b74b
 	xor	bc, bc	; F7E824  xor BC,BC
-sub_F7E81F_Loop:
+TrackAssign_DrawOutChannelColumn_Loop:
 	pushw	wa	; F7E826  push WA
 	push	xhl	; F7E827  push XHL
 	push	xiy	; F7E828  push XIY
-	call	T_F42B98	; F7E829  call 0xf42b98
+	call	T_TrackAssign_IsLocalControlDashed_Copy	; F7E829  call 0xf42b98
 	pop	xiy	; F7E82D  pop XIY
 	pop	xhl	; F7E82E  pop XHL
 	ld	b, (xhl)	; F7E82F  ld B,(XHL)
@@ -201088,24 +201221,24 @@ sub_F7E81F_Loop:
 	inc	1, xhl	; F7E848  inc 1,XHL
 	inc	1, c	; F7E84A  inc 1,C
 	cp	c, 8	; F7E84C  cp C,0x08
-	jr	c, sub_F7E81F_Loop	; F7E84F  jr C,0xf7e826
+	jr	c, TrackAssign_DrawOutChannelColumn_Loop	; F7E84F  jr C,0xf7e826
 	ret	; F7E851  ret
 
 ; Evidence: reached from calr from prom_b 0xF7E7C5; calr from prom_b
 ;           0xF7E7E1, and from nothing else the scans see.
 ; TrackAssign_DrawLocalControlColumn: TRACK ASSIGN, LOCAL CONTROL column: for bits 0..7 of L (the per-track bits of
 ;   the word 0x603454 -- low byte for tracks 1-8, high byte for 9-16) draws TrackAssign_DrawLocalControlColumn_DL's eight records with
-;   DisplayListB_Stage = 0 ('OFF') or 1 ('ON '); 2 ('-- ') only if T_F42B9C returned 0x55, which it never does (it
+;   DisplayListB_Stage = 0 ('OFF') or 1 ('ON '); 2 ('-- ') only if T_TrackAssign_IsLocalControlDashed returned 0x55, which it never does (it
 ;   always returns 0xAA). TrackAssign_StageZero_SoftKeyCol5 toggles the same bits. Basis: caller + body + display
 ;   list. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
 TrackAssign_DrawLocalControlColumn:
 	ld	xiy, TrackAssign_DrawLocalControlColumn_DL	; F7E852  ld XIY,0x00f3b6d3
 	ld	c, 1:opc	; F7E857  ld C,0x01
-sub_F7E852_Loop:
+TrackAssign_DrawLocalControlColumn_Loop:
 	pushw	wa	; F7E859  push WA
 	push	xhl	; F7E85A  push XHL
 	push	xiy	; F7E85B  push XIY
-	call	T_F42B9C	; F7E85C  call 0xf42b9c
+	call	T_TrackAssign_IsLocalControlDashed	; F7E85C  call 0xf42b9c
 	cp	a, 85	; F7E860  cp A,0x55
 	pop	xiy	; F7E863  pop XIY
 	pop	xhl	; F7E864  pop XHL
@@ -201135,7 +201268,7 @@ sub_F7E852_Join:
 	add	xiy, 15	; F7E891  add XIY,0x0000000f
 	inc	1, a	; F7E897  inc 1,A
 	sla	c, 1	; F7E899  sla 0x01,C
-	jr	nc, sub_F7E852_Loop	; F7E89C  jr NC,0xf7e859
+	jr	nc, TrackAssign_DrawLocalControlColumn_Loop	; F7E89C  jr NC,0xf7e859
 	ret	; F7E89E  ret
 
 ; ---------------------------------------------------------------------
@@ -201151,7 +201284,7 @@ sub_F7E852_Join:
 ; ---------------------------------------------------------------------
 Paint_TrackLabels1To8:
 	ld	(LCD_CurrentLayer:16), 0	; F7E89F  ld (0x2540),0x00
-	calr	sub_F7E39F_Nop	; F7E8A4  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7E8A4  calr 0xf7e2d8
 	ld	xiy, Paint_TrackLabels1To8_DL	; F7E8A7  ld XIY,0x00f3b5d1
 	ld	xix, Paint_TrackLabels9To16_DL	; F7E8AC  ld XIX,0x00f3b611
 	call	T_DisplayList_Run	; F7E8B1  call 0xf417f0
@@ -201170,7 +201303,7 @@ Paint_TrackLabels1To8:
 ; ---------------------------------------------------------------------
 Paint_TrackLabels9To16:
 	ld	(LCD_CurrentLayer:16), 0	; F7E8B6  ld (0x2540),0x00
-	calr	sub_F7E39F_Nop	; F7E8BB  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7E8BB  calr 0xf7e2d8
 	ld	xiy, Paint_TrackLabels9To16_DL	; F7E8BE  ld XIY,0x00f3b611
 	ld	xix, TrackAssign_PaintTrackGroup_DL	; F7E8C3  ld XIX,0x00f3b651
 	call	T_DisplayList_Run	; F7E8C8  call 0xf417f0
@@ -201184,7 +201317,7 @@ Paint_TrackLabels9To16:
 ;   display list. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
 TrackAssign_DrawParts1To8:
 	ld	(LCD_CurrentLayer:16), 0	; F7E8CD  ld (0x2540),0x00
-	calr	sub_F7E39F_Nop	; F7E8D2  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7E8D2  calr 0xf7e2d8
 	ld	xiy, BStore_TrackToPart	; F7E8D5  ld XIY,0x00603422
 	ld	xix, UI_DrawScratch+1	; F7E8DA  ld XIX,0x00002641
 	ldw	bc, 8	; F7E8DF  ld BC,0x0008
@@ -201202,7 +201335,7 @@ TrackAssign_DrawParts1To8:
 ;   pilot-2026-10-06/proposals_wave8_b8.json)
 TrackAssign_DrawParts9To16:
 	ld	(LCD_CurrentLayer:16), 0	; F7E8F3  ld (0x2540),0x00
-	calr	sub_F7E39F_Nop	; F7E8F8  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7E8F8  calr 0xf7e2d8
 	ld	xiy, 6304810	; F7E8FB  ld XIY,0x0060342a
 	ld	xix, UI_DrawScratch+1	; F7E900  ld XIX,0x00002641
 	ldw	bc, 8	; F7E905  ld BC,0x0008
@@ -201220,7 +201353,7 @@ TrackAssign_DrawParts9To16:
 ;   (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
 TrackAssign_DrawTrackGroupHighlight:
 	ld	(LCD_CurrentLayer:16), 1	; F7E919  ld (0x2540),0x01
-	calr	sub_F7E39F_Nop	; F7E91E  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7E91E  calr 0xf7e2d8
 	ld	xiy, TrackAssign_DrawTrackGroupHighlight_DL	; F7E921  ld XIY,0x00f3b7c3
 	ld	xix, Data_F3B7CD	; F7E926  ld XIX,0x00f3b7cd
 	call	T_DisplayList_Run	; F7E92B  call 0xf417f0
@@ -201237,15 +201370,15 @@ TrackAssign_DrawTrackGroupHighlight:
 ;   (0x0C03), 0..15. Basis: caller + body + display list. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
 TrackAssign_DrawTrackRowHighlight:
 	ld	(LCD_CurrentLayer:16), 1	; F7E941  ld (0x2540),0x01
-	calr	sub_F7E39F_Nop	; F7E946  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7E946  calr 0xf7e2d8
 	ld	xiy, TrackAssign_DrawTrackRowHighlight_DL	; F7E949  ld XIY,0x00f3972d
 	ld	xix, TrackAssign_DrawSelectedPart_DL	; F7E94E  ld XIX,0x00f39737
 	call	T_DisplayList_Run	; F7E953  call 0xf417f0
 	ld	a, (3075:16)	; F7E957  ld A,(0x0c03)
 	cp	a, 8	; F7E95B  cp A,0x08
-	jr	c, sub_F7E941_Skip	; F7E95E  jr C,0xf7e963
+	jr	c, TrackAssign_DrawTrackRowHighlight_Skip	; F7E95E  jr C,0xf7e963
 	sub	a, 8	; F7E960  sub A,0x08
-sub_F7E941_Skip:
+TrackAssign_DrawTrackRowHighlight_Skip:
 	ld	(UI_DrawScratch:16), a	; F7E963  ld (0x2640),A
 	ld	xiy, Data_F396E2	; F7E967  ld XIY,0x00f396e2
 	call	T_DLB_Handler_Array8	; F7E96C  call 0xf4181c
@@ -203128,7 +203261,7 @@ ScreenLeaveBody_TrackMerge_Skip:
 	call	T_TrackMerge_StepSelectedFieldUp	; F7EEAF  call 0xf4294c
 ScreenLeaveBody_TrackMerge_Join:
 	ld	(LCD_CurrentLayer:16), 0	; F7EEB3  ld (0x2540),0x00
-	calr	sub_F7E39F_Nop	; F7EEB8  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7EEB8  calr 0xf7e2d8
 	ld	xiy, DL_F3A561	; F7EEBB  ld XIY,0x00f3a561
 	ld	xix, DL_F3A561 + 0x1E	; F7EEC0  ld XIX,0x00f3a57f
 	call	T_DisplayListB_Run	; F7EEC5  call 0xf417f4
@@ -203531,7 +203664,7 @@ Paint_MeasureDelete_Join:
 ; MeasureDelete_RedrawFields: clears the value area (DL_F39551) and redraws the page's fields with
 ;   T_DLB_Handler_Array8 -- ld xiy, DL_LastMeasure + 0x23 (notes/prom_ab_stage_zero_names.py).
 MeasureDelete_RedrawFields:
-	calr	sub_F7E39F_Nop	; F7EFFA  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7EFFA  calr 0xf7e2d8
 	ld	(LCD_CurrentLayer:16), 1	; F7EFFD  ld (0x2540),0x01
 	ld	xiy, DL_F39551	; F7F002  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7F007  ld XIX,0x00f39559
@@ -203543,7 +203676,7 @@ MeasureDelete_RedrawFields:
 ; Evidence: reached from calr from prom_b 0xF7F05D; calr from prom_b
 ;           0xF7F07F, and from nothing else the scans see.
 Draw_LastMeasure:
-	calr	sub_F7E39F_Nop	; F7F01A  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7F01A  calr 0xf7e2d8
 	ld	(LCD_CurrentLayer:16), 0	; F7F01D  ld (0x2540),0x00
 	ld	xiy, DL_LastMeasure	; F7F022  ld XIY,0x00f3a6ab
 	ld	xix, DL_LastMeasure + 0x23	; F7F027  ld XIX,0x00f3a6ce
@@ -203937,44 +204070,44 @@ MeasureDelete_KeypadCommit:
 	ld	(10278:16), 3	; F7F144  ld (0x2826),0x03
 	call	T_AsciiDigits3_ToValue	; F7F149  call 0xf432f0
 	cp	wa, 1:i3	; F7F14D  cp WA,1
-	jr	c, sub_F7F144_Return	; F7F14F  jr C,0xf7f1c1
+	jr	c, MeasureDelete_KeypadCommit_Return	; F7F14F  jr C,0xf7f1c1
 	cp	wa, 999	; F7F151  cp WA,0x03e7
-	jr	ugt, sub_F7F144_Return	; F7F155  jr UGT,0xf7f1c1
+	jr	ugt, MeasureDelete_KeypadCommit_Return	; F7F155  jr UGT,0xf7f1c1
 	m_cp_mi8 MB16, 0x0dd4, 0x02	; F7F157  cp (0x0dd4),0x02
-	jr	z, sub_F7F144_Skip	; F7F15C  jr Z,0xf7f167
+	jr	z, MeasureDelete_KeypadCommit_Skip	; F7F15C  jr Z,0xf7f167
 	m_cp_mi8 MB16, 0x0dd4, 0x03	; F7F15E  cp (0x0dd4),0x03
-	jr	z, sub_F7F144_Skip3	; F7F163  jr Z,0xf7f188
-	jr	sub_F7F144_Return	; F7F165  jr T,0xf7f1c1
-sub_F7F144_Skip:
+	jr	z, MeasureDelete_KeypadCommit_Skip3	; F7F163  jr Z,0xf7f188
+	jr	MeasureDelete_KeypadCommit_Return	; F7F165  jr T,0xf7f1c1
+MeasureDelete_KeypadCommit_Skip:
 	ld	(3096:16), wa	; F7F167  ld (0x0c18),WA
 	ld	(6304861:24), wa	; F7F16B  ld (0x60345d),WA
 	m_cp_rm MW16, 0x0dd8, 0	; F7F170  cp WA,(0x0dd8)
-	jr	ule, sub_F7F144_Skip2	; F7F174  jr ULE,0xf7f17e
+	jr	ule, MeasureDelete_KeypadCommit_Skip2	; F7F174  jr ULE,0xf7f17e
 	ld	(3544:16), wa	; F7F176  ld (0x0dd8),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7F17A  ld (0x12f9),WA
-sub_F7F144_Skip2:
+MeasureDelete_KeypadCommit_Skip2:
 	ld	(3542:16), wa	; F7F17E  ld (0x0dd6),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7F182  ld (0x12f7),WA
-	jr	sub_F7F144_Join	; F7F186  jr T,0xf7f1ab
-sub_F7F144_Skip3:
+	jr	MeasureDelete_KeypadCommit_Join	; F7F186  jr T,0xf7f1ab
+MeasureDelete_KeypadCommit_Skip3:
 	ld	(3544:16), wa	; F7F188  ld (0x0dd8),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7F18C  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0dd6, 0	; F7F190  cp WA,(0x0dd6)
-	jr	nc, sub_F7F144_Skip4	; F7F194  jr NC,0xf7f1a7
+	jr	nc, MeasureDelete_KeypadCommit_Skip4	; F7F194  jr NC,0xf7f1a7
 	ld	(3542:16), wa	; F7F196  ld (0x0dd6),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7F19A  ld (0x12f7),WA
 	ld	(3096:16), wa	; F7F19E  ld (0x0c18),WA
 	ld	(6304861:24), wa	; F7F1A2  ld (0x60345d),WA
-sub_F7F144_Skip4:
+MeasureDelete_KeypadCommit_Skip4:
 	ld	(3544:16), wa	; F7F1A7  ld (0x0dd8),WA
-sub_F7F144_Join:
+MeasureDelete_KeypadCommit_Join:
 	ld	wa, (3544:16)	; F7F1AB  ld WA,(0x0dd8)
 	m_sub_rm MW16, 0x0dd6, 0	; F7F1AF  sub WA,(0x0dd6)
 	inc	1, wa	; F7F1B3  inc 1,WA
 	ld	(6304863:24), wa	; F7F1B5  ld (0x60345f),WA
 	call	T_Blink_Stop	; F7F1BA  call 0xf42e24
 	calr	Draw_LastMeasure	; F7F1BE  calr 0xf7f01a
-sub_F7F144_Return:
+MeasureDelete_KeypadCommit_Return:
 	ret	; F7F1C1  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F133, and from nothing else
@@ -203993,9 +204126,9 @@ Var2820_Set2B:
 ;   pilot-2026-10-06/proposals_wave8_b8.json)
 MeasureDelete_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits	; F7F1C8  bit 1,(0x2075)
-	jr	z, sub_F7F1C8_Return	; F7F1CC  jr Z,0xf7f1f4
+	jr	z, MeasureDelete_BlinkSelectedField_Return	; F7F1CC  jr Z,0xf7f1f4
 	m_cp_mi8 MB16, 0x2267, 0x0f	; F7F1CE  cp (0x2267),0x0f
-	jr	z, sub_F7F1C8_Return	; F7F1D3  jr Z,0xf7f1f4
+	jr	z, MeasureDelete_BlinkSelectedField_Return	; F7F1D3  jr Z,0xf7f1f4
 	xor	xwa, xwa	; F7F1D5  xor XWA,XWA
 	ld	a, (3540:16)	; F7F1D7  ld A,(0x0dd4)
 	sla	xwa, 2	; F7F1DB  sla 0x02,XWA
@@ -204005,7 +204138,7 @@ MeasureDelete_BlinkSelectedField:
 	push	xiy	; F7F1ED  push XIY
 	call	T_Blink_Command	; F7F1EE  call 0xf42e20
 	inc	4, xsp	; F7F1F2  inc 4,XSP
-sub_F7F1C8_Return:
+MeasureDelete_BlinkSelectedField_Return:
 	ret	; F7F1F4  ret
 ; ---------------------------------------------------------------------
 ; BlinkArgPtrs_F7F1F5 -- pointers to blink templates, read through
@@ -204382,7 +204515,7 @@ ScreenLeaveBody_MeasureErase_Return:
 ;   T_DLB_Handler_Array8 -- ld xiy, DL_F3A9DA + 0x32 (notes/prom_ab_stage_zero_names.py).
 MeasureErase_RedrawFields:
 	ld	(LCD_CurrentLayer:16), 1	; F7F32A  ld (0x2540),0x01
-	calr	sub_F7E39F_Nop	; F7F32F  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7F32F  calr 0xf7e2d8
 	ld	xiy, DL_F39551	; F7F332  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7F337  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F33C  call 0xf417f0
@@ -204502,7 +204635,7 @@ LcdKeyRow3_MeasureErase_StageZero_Return2:
 ;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
 MeasureErase_DrawValues:
 	ld	(LCD_CurrentLayer:16), 0	; F7F397  ld (0x2540),0x00
-	calr	sub_F7E39F_Nop	; F7F39C  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7F39C  calr 0xf7e2d8
 	ld	xiy, DL_F3A9DA	; F7F39F  ld XIY,0x00f3a9da
 	ld	xix, DL_F3A9DA + 0x32	; F7F3A4  ld XIX,0x00f3aa0c
 	call	T_DisplayListB_Run	; F7F3A9  call 0xf417f4
@@ -204844,44 +204977,44 @@ MeasureErase_KeypadCommit:
 	ld	(10278:16), 3	; F7F470  ld (0x2826),0x03
 	call	T_AsciiDigits3_ToValue	; F7F475  call 0xf432f0
 	cp	wa, 1:i3	; F7F479  cp WA,1
-	jr	lt, sub_F7F470_Return	; F7F47B  jr LT,0xf7f4ed
+	jr	lt, MeasureErase_KeypadCommit_Return	; F7F47B  jr LT,0xf7f4ed
 	cp	wa, 999	; F7F47D  cp WA,0x03e7
-	jr	gt, sub_F7F470_Return	; F7F481  jr GT,0xf7f4ed
+	jr	gt, MeasureErase_KeypadCommit_Return	; F7F481  jr GT,0xf7f4ed
 	m_cp_mi8 MB16, 0x0dbb, 0x02	; F7F483  cp (0x0dbb),0x02
-	jr	z, sub_F7F470_Skip	; F7F488  jr Z,0xf7f493
+	jr	z, MeasureErase_KeypadCommit_Skip	; F7F488  jr Z,0xf7f493
 	m_cp_mi8 MB16, 0x0dbb, 0x03	; F7F48A  cp (0x0dbb),0x03
-	jr	z, sub_F7F470_Skip3	; F7F48F  jr Z,0xf7f4b4
-	jr	sub_F7F470_Return	; F7F491  jr T,0xf7f4ed
-sub_F7F470_Skip:
+	jr	z, MeasureErase_KeypadCommit_Skip3	; F7F48F  jr Z,0xf7f4b4
+	jr	MeasureErase_KeypadCommit_Return	; F7F491  jr T,0xf7f4ed
+MeasureErase_KeypadCommit_Skip:
 	ld	(3096:16), wa	; F7F493  ld (0x0c18),WA
 	ld	(6304866:24), wa	; F7F497  ld (0x603462),WA
 	m_cp_rm MW16, 0x0c2c, 0	; F7F49C  cp WA,(0x0c2c)
-	jr	ule, sub_F7F470_Skip2	; F7F4A0  jr ULE,0xf7f4aa
+	jr	ule, MeasureErase_KeypadCommit_Skip2	; F7F4A0  jr ULE,0xf7f4aa
 	ld	(3116:16), wa	; F7F4A2  ld (0x0c2c),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7F4A6  ld (0x12f9),WA
-sub_F7F470_Skip2:
+MeasureErase_KeypadCommit_Skip2:
 	ld	(3114:16), wa	; F7F4AA  ld (0x0c2a),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7F4AE  ld (0x12f7),WA
-	jr	sub_F7F470_Join	; F7F4B2  jr T,0xf7f4d7
-sub_F7F470_Skip3:
+	jr	MeasureErase_KeypadCommit_Join	; F7F4B2  jr T,0xf7f4d7
+MeasureErase_KeypadCommit_Skip3:
 	ld	(3116:16), wa	; F7F4B4  ld (0x0c2c),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7F4B8  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0c2a, 0	; F7F4BC  cp WA,(0x0c2a)
-	jr	nc, sub_F7F470_Skip4	; F7F4C0  jr NC,0xf7f4d3
+	jr	nc, MeasureErase_KeypadCommit_Skip4	; F7F4C0  jr NC,0xf7f4d3
 	ld	(3114:16), wa	; F7F4C2  ld (0x0c2a),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7F4C6  ld (0x12f7),WA
 	ld	(3096:16), wa	; F7F4CA  ld (0x0c18),WA
 	ld	(6304866:24), wa	; F7F4CE  ld (0x603462),WA
-sub_F7F470_Skip4:
+MeasureErase_KeypadCommit_Skip4:
 	ld	(3116:16), wa	; F7F4D3  ld (0x0c2c),WA
-sub_F7F470_Join:
+MeasureErase_KeypadCommit_Join:
 	ld	wa, (3116:16)	; F7F4D7  ld WA,(0x0c2c)
 	m_sub_rm MW16, 0x0c2a, 0	; F7F4DB  sub WA,(0x0c2a)
 	inc	1, wa	; F7F4DF  inc 1,WA
 	ld	(6304868:24), wa	; F7F4E1  ld (0x603464),WA
 	call	T_Blink_Stop	; F7F4E6  call 0xf42e24
 	calr	MeasureErase_DrawValues	; F7F4EA  calr 0xf7f397
-sub_F7F470_Return:
+MeasureErase_KeypadCommit_Return:
 	ret	; F7F4ED  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F45F, and from nothing else
@@ -204899,9 +205032,9 @@ Var2820_Set2B_2:
 ;   pilot-2026-10-06/proposals_wave8_b8.json)
 MeasureErase_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits	; F7F4F4  bit 1,(0x2075)
-	jr	z, sub_F7F4F4_Return	; F7F4F8  jr Z,0xf7f520
+	jr	z, MeasureErase_BlinkSelectedField_Return	; F7F4F8  jr Z,0xf7f520
 	m_cp_mi8 MB16, 0x2267, 0x0f	; F7F4FA  cp (0x2267),0x0f
-	jr	z, sub_F7F4F4_Return	; F7F4FF  jr Z,0xf7f520
+	jr	z, MeasureErase_BlinkSelectedField_Return	; F7F4FF  jr Z,0xf7f520
 	xor	xwa, xwa	; F7F501  xor XWA,XWA
 	ld	a, (3515:16)	; F7F503  ld A,(0x0dbb)
 	sla	xwa, 2	; F7F507  sla 0x02,XWA
@@ -204911,7 +205044,7 @@ MeasureErase_BlinkSelectedField:
 	push	xiy	; F7F519  push XIY
 	call	T_Blink_Command	; F7F51A  call 0xf42e20
 	inc	4, xsp	; F7F51E  inc 4,XSP
-sub_F7F4F4_Return:
+MeasureErase_BlinkSelectedField_Return:
 	ret	; F7F520  ret
 ; ---------------------------------------------------------------------
 ; BlinkArgPtrs_F7F521 -- pointers to blink templates, read through
@@ -204999,11 +205132,11 @@ ScreenButtonBody_PanelWrite_Return:
 ;   pilot-2026-10-06/proposals_wave8_b8.json)
 ExitKey_PanelWrite:
 	bit	7, w	; F7F574  bit 0x07,W
-	jr	z, sub_F7F574_Skip	; F7F577  jr Z,0xf7f57b
-	jr	sub_F7F574_Return	; F7F579  jr T,0xf7f581
-sub_F7F574_Skip:
+	jr	z, ExitKey_PanelWrite_Skip	; F7F577  jr Z,0xf7f57b
+	jr	ExitKey_PanelWrite_Return	; F7F579  jr T,0xf7f581
+ExitKey_PanelWrite_Skip:
 	ldw	(UI_Request:16), 32794	; F7F57B  ld (0x2070),0x801a
-sub_F7F574_Return:
+ExitKey_PanelWrite_Return:
 	ret	; F7F581  ret
 
 ; ---------------------------------------------------------------------
@@ -205206,7 +205339,7 @@ ScreenLeaveBody_Quantize_Return:
 ;   T_DLB_Handler_Array8 -- ld xiy, DL_TrackValueFirstMeasureLastMeasureStrengthWindow + 0x47 (notes/prom_ab_stage_zero_names.py).
 Quantize_RedrawFields:
 	ld	(LCD_CurrentLayer:16), 1	; F7F668  ld (0x2540),0x01
-	calr	sub_F7E39F_Nop	; F7F66D  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7F66D  calr 0xf7e2d8
 	ld	xiy, DL_F39551	; F7F670  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7F675  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F67A  call 0xf417f0
@@ -205329,7 +205462,7 @@ LcdKeyRow3_Quantize_StageZero_Return2:
 ;           0xF7F661, and from nothing else the scans see.
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow:
 	ld	(LCD_CurrentLayer:16), 0	; F7F6E5  ld (0x2540),0x00
-	calr	sub_F7E39F_Nop	; F7F6EA  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7F6EA  calr 0xf7e2d8
 	ld	xiy, DL_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F6ED  ld XIY,0x00f3acf0
 	ld	xix, DL_TrackValueFirstMeasureLastMeasureStrengthWindow + 0x47	; F7F6F2  ld XIX,0x00f3ad37
 	call	T_DisplayListB_Run	; F7F6F7  call 0xf417f4
@@ -205679,44 +205812,44 @@ Quantize_KeypadCommit:
 	ld	(10278:16), 3	; F7F7DC  ld (0x2826),0x03
 	call	T_AsciiDigits3_ToValue	; F7F7E1  call 0xf432f0
 	cp	wa, 1:i3	; F7F7E5  cp WA,1
-	jr	lt, sub_F7F7DC_Return	; F7F7E7  jr LT,0xf7f859
+	jr	lt, Quantize_KeypadCommit_Return	; F7F7E7  jr LT,0xf7f859
 	cp	wa, 999	; F7F7E9  cp WA,0x03e7
-	jr	gt, sub_F7F7DC_Return	; F7F7ED  jr GT,0xf7f859
+	jr	gt, Quantize_KeypadCommit_Return	; F7F7ED  jr GT,0xf7f859
 	m_cp_mi8 MB16, 0x0db9, 0x02	; F7F7EF  cp (0x0db9),0x02
-	jr	z, sub_F7F7DC_Skip	; F7F7F4  jr Z,0xf7f7ff
+	jr	z, Quantize_KeypadCommit_Skip	; F7F7F4  jr Z,0xf7f7ff
 	m_cp_mi8 MB16, 0x0db9, 0x03	; F7F7F6  cp (0x0db9),0x03
-	jr	z, sub_F7F7DC_Skip3	; F7F7FB  jr Z,0xf7f820
-	jr	sub_F7F7DC_Return	; F7F7FD  jr T,0xf7f859
-sub_F7F7DC_Skip:
+	jr	z, Quantize_KeypadCommit_Skip3	; F7F7FB  jr Z,0xf7f820
+	jr	Quantize_KeypadCommit_Return	; F7F7FD  jr T,0xf7f859
+Quantize_KeypadCommit_Skip:
 	ld	(6304888:24), wa	; F7F7FF  ld (0x603478),WA
 	ld	(3146:16), wa	; F7F804  ld (0x0c4a),WA
 	m_cp_rm MW16, 0x0c28, 0	; F7F808  cp WA,(0x0c28)
-	jr	ule, sub_F7F7DC_Skip2	; F7F80C  jr ULE,0xf7f816
+	jr	ule, Quantize_KeypadCommit_Skip2	; F7F80C  jr ULE,0xf7f816
 	ld	(3112:16), wa	; F7F80E  ld (0x0c28),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7F812  ld (0x12f9),WA
-sub_F7F7DC_Skip2:
+Quantize_KeypadCommit_Skip2:
 	ld	(3110:16), wa	; F7F816  ld (0x0c26),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7F81A  ld (0x12f7),WA
-	jr	sub_F7F7DC_Join	; F7F81E  jr T,0xf7f843
-sub_F7F7DC_Skip3:
+	jr	Quantize_KeypadCommit_Join	; F7F81E  jr T,0xf7f843
+Quantize_KeypadCommit_Skip3:
 	ld	(3112:16), wa	; F7F820  ld (0x0c28),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7F824  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0c26, 0	; F7F828  cp WA,(0x0c26)
-	jr	nc, sub_F7F7DC_Skip4	; F7F82C  jr NC,0xf7f83f
+	jr	nc, Quantize_KeypadCommit_Skip4	; F7F82C  jr NC,0xf7f83f
 	ld	(3110:16), wa	; F7F82E  ld (0x0c26),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7F832  ld (0x12f7),WA
 	ld	(6304888:24), wa	; F7F836  ld (0x603478),WA
 	ld	(3146:16), wa	; F7F83B  ld (0x0c4a),WA
-sub_F7F7DC_Skip4:
+Quantize_KeypadCommit_Skip4:
 	ld	(3112:16), wa	; F7F83F  ld (0x0c28),WA
-sub_F7F7DC_Join:
+Quantize_KeypadCommit_Join:
 	ld	wa, (3112:16)	; F7F843  ld WA,(0x0c28)
 	m_sub_rm MW16, 0x0c26, 0	; F7F847  sub WA,(0x0c26)
 	inc	1, wa	; F7F84B  inc 1,WA
 	ld	(6304890:24), wa	; F7F84D  ld (0x60347a),WA
 	call	T_Blink_Stop	; F7F852  call 0xf42e24
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F856  calr 0xf7f6e5
-sub_F7F7DC_Return:
+Quantize_KeypadCommit_Return:
 	ret	; F7F859  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F7CB, and from nothing else
@@ -205734,9 +205867,9 @@ Var2820_Set2B_3:
 ;   pilot-2026-10-06/proposals_wave8_b8.json)
 Quantize_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits	; F7F860  bit 1,(0x2075)
-	jr	z, sub_F7F860_Return	; F7F864  jr Z,0xf7f88c
+	jr	z, Quantize_BlinkSelectedField_Return	; F7F864  jr Z,0xf7f88c
 	m_cp_mi8 MB16, 0x2267, 0x0f	; F7F866  cp (0x2267),0x0f
-	jr	z, sub_F7F860_Return	; F7F86B  jr Z,0xf7f88c
+	jr	z, Quantize_BlinkSelectedField_Return	; F7F86B  jr Z,0xf7f88c
 	xor	xwa, xwa	; F7F86D  xor XWA,XWA
 	ld	a, (3513:16)	; F7F86F  ld A,(0x0db9)
 	sla	xwa, 2	; F7F873  sla 0x02,XWA
@@ -205746,7 +205879,7 @@ Quantize_BlinkSelectedField:
 	push	xiy	; F7F885  push XIY
 	call	T_Blink_Command	; F7F886  call 0xf42e20
 	inc	4, xsp	; F7F88A  inc 4,XSP
-sub_F7F860_Return:
+Quantize_BlinkSelectedField_Return:
 	ret	; F7F88C  ret
 ; ---------------------------------------------------------------------
 ; BlinkArgPtrs_F7F88D -- pointers to blink templates, read through
@@ -205815,7 +205948,7 @@ Paint_Vel0cityChange_Skip2:
 	call	T_DisplayList_Run	; F7F914  call 0xf417f0
 Paint_Vel0cityChange_Join:
 	ld	(LCD_CurrentLayer:16), 0	; F7F918  ld (0x2540),0x00
-	calr	sub_F7E39F_Nop	; F7F91D  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7F91D  calr 0xf7e2d8
 	calr	Vel0cityChange_FormatSignedValue	; F7F920  calr 0xf7f935
 	ld	xiy, DL_F3AB3B	; F7F923  ld XIY,0x00f3ab3b
 	ld	xix, DLBoxes_F3AB74	; F7F928  ld XIX,0x00f3ab74
@@ -205982,7 +206115,7 @@ ScreenLeaveBody_Vel0cityChange_Return:
 ;   T_DLB_Handler_Array8 -- ld xiy, DL_F3AB3B + 0x2E (notes/prom_ab_stage_zero_names.py).
 Vel0cityChange_RedrawFields:
 	ld	(LCD_CurrentLayer:16), 1	; F7F99C  ld (0x2540),0x01
-	calr	sub_F7E39F_Nop	; F7F9A1  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7F9A1  calr 0xf7e2d8
 	ld	xiy, DL_F39551	; F7F9A4  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7F9A9  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F9AE  call 0xf417f0
@@ -206099,7 +206232,7 @@ LcdKeyRow3_Vel0cityChange_StageZero_Return2:
 ;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
 Vel0cityChange_DrawValues:
 	ld	(LCD_CurrentLayer:16), 0	; F7F9FB  ld (0x2540),0x00
-	calr	sub_F7E39F_Nop	; F7FA00  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7FA00  calr 0xf7e2d8
 	calr	Vel0cityChange_FormatSignedValue	; F7FA03  calr 0xf7f935
 	ld	xiy, DL_F3AB3B	; F7FA06  ld XIY,0x00f3ab3b
 	ld	xix, DL_F3AB3B + 0x2E	; F7FA0B  ld XIX,0x00f3ab69
@@ -206440,76 +206573,76 @@ Blink_SetEnable_1_9:
 ;   + body + siblings. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
 Vel0cityChange_KeypadCommit:
 	m_cp_mi8 MB16, 0x0db8, 0x04	; F7FAD2  cp (0x0db8),0x04
-	jr	nz, sub_F7FAD2_Skip	; F7FAD7  jr NZ,0xf7fae9
+	jr	nz, Vel0cityChange_KeypadCommit_Skip	; F7FAD7  jr NZ,0xf7fae9
 	ld	(10278:16), 3	; F7FAD9  ld (0x2826),0x03
 	ld	(10276:16), 0	; F7FADE  ld (0x2824),0x00
 	call	T_AsciiField_ToSignedValue	; F7FAE3  call 0xf432f4
-	jr	sub_F7FAD2_Join	; F7FAE7  jr T,0xf7faf2
-sub_F7FAD2_Skip:
+	jr	Vel0cityChange_KeypadCommit_Join	; F7FAE7  jr T,0xf7faf2
+Vel0cityChange_KeypadCommit_Skip:
 	ld	(10278:16), 3	; F7FAE9  ld (0x2826),0x03
 	call	T_AsciiDigits3_ToValue	; F7FAEE  call 0xf432f0
-sub_F7FAD2_Join:
+Vel0cityChange_KeypadCommit_Join:
 	m_cp_mi8 MB16, 0x0db8, 0x02	; F7FAF2  cp (0x0db8),0x02
-	jr	z, sub_F7FAD2_Skip2	; F7FAF7  jr Z,0xf7fb0b
+	jr	z, Vel0cityChange_KeypadCommit_Skip2	; F7FAF7  jr Z,0xf7fb0b
 	m_cp_mi8 MB16, 0x0db8, 0x03	; F7FAF9  cp (0x0db8),0x03
-	jr	z, sub_F7FAD2_Skip4	; F7FAFE  jr Z,0xf7fb38
+	jr	z, Vel0cityChange_KeypadCommit_Skip4	; F7FAFE  jr Z,0xf7fb38
 	m_cp_mi8 MB16, 0x0db8, 0x04	; F7FB00  cp (0x0db8),0x04
-	jrl	z, sub_F7FAD2_Skip6	; F7FB05  jrl Z,0xf7fb76
-	jrl	sub_F7FAD2_Return	; F7FB08  jrl T,0xf7fba3
-sub_F7FAD2_Skip2:
+	jrl	z, Vel0cityChange_KeypadCommit_Skip6	; F7FB05  jrl Z,0xf7fb76
+	jrl	Vel0cityChange_KeypadCommit_Return	; F7FB08  jrl T,0xf7fba3
+Vel0cityChange_KeypadCommit_Skip2:
 	cp	wa, 1:i3	; F7FB0B  cp WA,1
-	jrl	lt, sub_F7FAD2_Return	; F7FB0D  jrl LT,0xf7fba3
+	jrl	lt, Vel0cityChange_KeypadCommit_Return	; F7FB0D  jrl LT,0xf7fba3
 	cp	wa, 999	; F7FB10  cp WA,0x03e7
-	jrl	gt, sub_F7FAD2_Return	; F7FB14  jrl GT,0xf7fba3
+	jrl	gt, Vel0cityChange_KeypadCommit_Return	; F7FB14  jrl GT,0xf7fba3
 	ld	(3096:16), wa	; F7FB17  ld (0x0c18),WA
 	ld	(6304946:24), wa	; F7FB1B  ld (0x6034b2),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7FB20  ld (0x12f7),WA
 	m_cp_rm MW16, 0x0c22, 0	; F7FB24  cp WA,(0x0c22)
-	jr	ule, sub_F7FAD2_Skip3	; F7FB28  jr ULE,0xf7fb32
+	jr	ule, Vel0cityChange_KeypadCommit_Skip3	; F7FB28  jr ULE,0xf7fb32
 	ld	(3106:16), wa	; F7FB2A  ld (0x0c22),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7FB2E  ld (0x12f9),WA
-sub_F7FAD2_Skip3:
+Vel0cityChange_KeypadCommit_Skip3:
 	ld	(3104:16), wa	; F7FB32  ld (0x0c20),WA
-	jr	sub_F7FAD2_Join2	; F7FB36  jr T,0xf7fb65
-sub_F7FAD2_Skip4:
+	jr	Vel0cityChange_KeypadCommit_Join2	; F7FB36  jr T,0xf7fb65
+Vel0cityChange_KeypadCommit_Skip4:
 	cp	wa, 1:i3	; F7FB38  cp WA,1
-	jr	lt, sub_F7FAD2_Return	; F7FB3A  jr LT,0xf7fba3
+	jr	lt, Vel0cityChange_KeypadCommit_Return	; F7FB3A  jr LT,0xf7fba3
 	cp	wa, 999	; F7FB3C  cp WA,0x03e7
-	jr	gt, sub_F7FAD2_Return	; F7FB40  jr GT,0xf7fba3
+	jr	gt, Vel0cityChange_KeypadCommit_Return	; F7FB40  jr GT,0xf7fba3
 	ld	(3106:16), wa	; F7FB42  ld (0x0c22),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7FB46  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0c20, 0	; F7FB4A  cp WA,(0x0c20)
-	jr	nc, sub_F7FAD2_Skip5	; F7FB4E  jr NC,0xf7fb61
+	jr	nc, Vel0cityChange_KeypadCommit_Skip5	; F7FB4E  jr NC,0xf7fb61
 	ld	(3104:16), wa	; F7FB50  ld (0x0c20),WA
 	ld	(3096:16), wa	; F7FB54  ld (0x0c18),WA
 	ld	(6304946:24), wa	; F7FB58  ld (0x6034b2),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7FB5D  ld (0x12f7),WA
-sub_F7FAD2_Skip5:
+Vel0cityChange_KeypadCommit_Skip5:
 	ld	(3106:16), wa	; F7FB61  ld (0x0c22),WA
-sub_F7FAD2_Join2:
+Vel0cityChange_KeypadCommit_Join2:
 	ld	wa, (3106:16)	; F7FB65  ld WA,(0x0c22)
 	m_sub_rm MW16, 0x0c20, 0	; F7FB69  sub WA,(0x0c20)
 	inc	1, wa	; F7FB6D  inc 1,WA
 	ld	(6304948:24), wa	; F7FB6F  ld (0x6034b4),WA
-	jr	sub_F7FAD2_Join4	; F7FB74  jr T,0xf7fb9c
-sub_F7FAD2_Skip6:
+	jr	Vel0cityChange_KeypadCommit_Join4	; F7FB74  jr T,0xf7fb9c
+Vel0cityChange_KeypadCommit_Skip6:
 	m_cp_mi8 MB16, 0x2820, 0x2b	; F7FB76  cp (0x2820),0x2b
-	jr	z, sub_F7FAD2_Skip7	; F7FB7B  jr Z,0xf7fb85
+	jr	z, Vel0cityChange_KeypadCommit_Skip7	; F7FB7B  jr Z,0xf7fb85
 	cp	wa, 65409	; F7FB7D  cp WA,0xff81
-	jr	lt, sub_F7FAD2_Return	; F7FB81  jr LT,0xf7fba3
-	jr	sub_F7FAD2_Join3	; F7FB83  jr T,0xf7fb8b
-sub_F7FAD2_Skip7:
+	jr	lt, Vel0cityChange_KeypadCommit_Return	; F7FB81  jr LT,0xf7fba3
+	jr	Vel0cityChange_KeypadCommit_Join3	; F7FB83  jr T,0xf7fb8b
+Vel0cityChange_KeypadCommit_Skip7:
 	cp	wa, 127	; F7FB85  cp WA,0x007f
-	jr	gt, sub_F7FAD2_Return	; F7FB89  jr GT,0xf7fba3
-sub_F7FAD2_Join3:
+	jr	gt, Vel0cityChange_KeypadCommit_Return	; F7FB89  jr GT,0xf7fba3
+Vel0cityChange_KeypadCommit_Join3:
 	ld	(3102:16), a	; F7FB8B  ld (0x0c1e),A
 	ld	(6304956:24), a	; F7FB8F  ld (0x6034bc),A
 	ld	(3108:16), a	; F7FB94  ld (0x0c24),A
 	ld	(DisplayListB_Stage+5:16), a	; F7FB98  ld (0x12fb),A
-sub_F7FAD2_Join4:
+Vel0cityChange_KeypadCommit_Join4:
 	call	T_Blink_Stop	; F7FB9C  call 0xf42e24
 	calr	Vel0cityChange_DrawValues	; F7FBA0  calr 0xf7f9fb
-sub_F7FAD2_Return:
+Vel0cityChange_KeypadCommit_Return:
 	ret	; F7FBA3  ret
 
 ; Evidence: reached from calr from prom_b 0xF7FAC1, and from nothing else
@@ -206519,11 +206652,11 @@ sub_F7FAD2_Return:
 ;   Basis: caller + body + siblings. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
 Vel0cityChange_KeypadSign:
 	m_bit 1, MD16, UI_RequestBits	; F7FBA4  bit 1,(0x2075)
-	jr	z, sub_F7FBA4_Return	; F7FBA8  jr Z,0xf7fbb6
+	jr	z, Vel0cityChange_KeypadSign_Return	; F7FBA8  jr Z,0xf7fbb6
 	m_cp_mi8 MB16, 0x0db8, 0x04	; F7FBAA  cp (0x0db8),0x04
-	jr	z, sub_F7FBA4_Return	; F7FBAF  jr Z,0xf7fbb6
+	jr	z, Vel0cityChange_KeypadSign_Return	; F7FBAF  jr Z,0xf7fbb6
 	ld	(10272:16), 43	; F7FBB1  ld (0x2820),0x2b
-sub_F7FBA4_Return:
+Vel0cityChange_KeypadSign_Return:
 	ret	; F7FBB6  ret
 
 ; Evidence: reached from calr from prom_b 0xF7FAC4, and from nothing else
@@ -206534,9 +206667,9 @@ sub_F7FBA4_Return:
 ;   pilot-2026-10-06/proposals_wave8_b8.json)
 Vel0cityChange_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits	; F7FBB7  bit 1,(0x2075)
-	jr	z, sub_F7FBB7_Return	; F7FBBB  jr Z,0xf7fbe3
+	jr	z, Vel0cityChange_BlinkSelectedField_Return	; F7FBBB  jr Z,0xf7fbe3
 	m_cp_mi8 MB16, 0x2267, 0x0f	; F7FBBD  cp (0x2267),0x0f
-	jr	z, sub_F7FBB7_Return	; F7FBC2  jr Z,0xf7fbe3
+	jr	z, Vel0cityChange_BlinkSelectedField_Return	; F7FBC2  jr Z,0xf7fbe3
 	xor	xwa, xwa	; F7FBC4  xor XWA,XWA
 	ld	a, (3512:16)	; F7FBC6  ld A,(0x0db8)
 	sla	xwa, 2	; F7FBCA  sla 0x02,XWA
@@ -206546,7 +206679,7 @@ Vel0cityChange_BlinkSelectedField:
 	push	xiy	; F7FBDC  push XIY
 	call	T_Blink_Command	; F7FBDD  call 0xf42e20
 	inc	4, xsp	; F7FBE1  inc 4,XSP
-sub_F7FBB7_Return:
+Vel0cityChange_BlinkSelectedField_Return:
 	ret	; F7FBE3  ret
 ; ---------------------------------------------------------------------
 ; BlinkArgPtrs_F7FBE4 -- pointers to blink templates, read through
@@ -206624,7 +206757,7 @@ Paint_Transp0se_Skip2:
 	call	T_DisplayList_Run	; F7FC7B  call 0xf417f0
 Paint_Transp0se_Join2:
 	ld	(LCD_CurrentLayer:16), 0	; F7FC7F  ld (0x2540),0x00
-	calr	sub_F7E39F_Nop	; F7FC84  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7FC84  calr 0xf7e2d8
 	ld	xiy, DL_F3B1E3	; F7FC87  ld XIY,0x00f3b1e3
 	ld	xix, DLBoxes_F3B21C	; F7FC8C  ld XIX,0x00f3b21c
 	call	T_DisplayListB_Run	; F7FC91  call 0xf417f4
@@ -206773,7 +206906,7 @@ ScreenLeaveBody_Transp0se_Return:
 ;   T_DLB_Handler_Array8 -- ld xiy, DL_F3B1E3 + 0x2E (notes/prom_ab_stage_zero_names.py).
 Transp0se_RedrawFields:
 	ld	(LCD_CurrentLayer:16), 1	; F7FCE6  ld (0x2540),0x01
-	calr	sub_F7E39F_Nop	; F7FCEB  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7FCEB  calr 0xf7e2d8
 	ld	xiy, DL_F39551	; F7FCEE  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7FCF3  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7FCF8  call 0xf417f0
@@ -206890,7 +207023,7 @@ LcdKeyRow3_Transp0se_StageZero_Return2:
 ;   pilot-2026-10-06/proposals_prom_b.json)
 Transp0se_DrawValues:
 	ld	(LCD_CurrentLayer:16), 0	; F7FD45  ld (0x2540),0x00
-	calr	sub_F7E39F_Nop	; F7FD4A  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7FD4A  calr 0xf7e2d8
 	ld	xiy, DL_F3B1E3	; F7FD4D  ld XIY,0x00f3b1e3
 	ld	xix, DL_F3B1E3 + 0x2E	; F7FD52  ld XIX,0x00f3b211
 	call	T_DisplayListB_Run	; F7FD57  call 0xf417f4
@@ -207229,71 +207362,71 @@ Blink_SetEnable_1_10:
 ;   pilot-2026-10-06/proposals_wave8_b8.json)
 Transp0se_KeypadCommit:
 	m_cp_mi8 MB16, 0x0df6, 0x04	; F7FE19  cp (0x0df6),0x04
-	jr	nz, sub_F7FE19_Skip	; F7FE1E  jr NZ,0xf7fe30
+	jr	nz, Transp0se_KeypadCommit_Skip	; F7FE1E  jr NZ,0xf7fe30
 	ld	(10278:16), 3	; F7FE20  ld (0x2826),0x03
 	ld	(10276:16), 0	; F7FE25  ld (0x2824),0x00
 	call	T_AsciiField_ToSignedValue	; F7FE2A  call 0xf432f4
-	jr	sub_F7FE19_Join	; F7FE2E  jr T,0xf7fe39
-sub_F7FE19_Skip:
+	jr	Transp0se_KeypadCommit_Join	; F7FE2E  jr T,0xf7fe39
+Transp0se_KeypadCommit_Skip:
 	ld	(10278:16), 3	; F7FE30  ld (0x2826),0x03
 	call	T_AsciiDigits3_ToValue	; F7FE35  call 0xf432f0
-sub_F7FE19_Join:
+Transp0se_KeypadCommit_Join:
 	m_cp_mi8 MB16, 0x0df6, 0x02	; F7FE39  cp (0x0df6),0x02
-	jr	z, sub_F7FE19_Skip2	; F7FE3E  jr Z,0xf7fe51
+	jr	z, Transp0se_KeypadCommit_Skip2	; F7FE3E  jr Z,0xf7fe51
 	m_cp_mi8 MB16, 0x0df6, 0x03	; F7FE40  cp (0x0df6),0x03
-	jr	z, sub_F7FE19_Skip4	; F7FE45  jr Z,0xf7fe73
+	jr	z, Transp0se_KeypadCommit_Skip4	; F7FE45  jr Z,0xf7fe73
 	m_cp_mi8 MB16, 0x0df6, 0x04	; F7FE47  cp (0x0df6),0x04
-	jr	z, sub_F7FE19_Skip5	; F7FE4C  jr Z,0xf7fea7
-	jrl	sub_F7FE19_Return	; F7FE4E  jrl T,0xf7fed2
-sub_F7FE19_Skip2:
+	jr	z, Transp0se_KeypadCommit_Skip5	; F7FE4C  jr Z,0xf7fea7
+	jrl	Transp0se_KeypadCommit_Return	; F7FE4E  jrl T,0xf7fed2
+Transp0se_KeypadCommit_Skip2:
 	cp	wa, 1:i3	; F7FE51  cp WA,1
-	jr	lt, sub_F7FE19_Return	; F7FE53  jr LT,0xf7fed2
+	jr	lt, Transp0se_KeypadCommit_Return	; F7FE53  jr LT,0xf7fed2
 	cp	wa, 999	; F7FE55  cp WA,0x03e7
-	jr	gt, sub_F7FE19_Return	; F7FE59  jr GT,0xf7fed2
+	jr	gt, Transp0se_KeypadCommit_Return	; F7FE59  jr GT,0xf7fed2
 	ld	(3576:16), wa	; F7FE5B  ld (0x0df8),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7FE5F  ld (0x12f7),WA
 	m_cp_rm MW16, 0x0dfa, 0	; F7FE63  cp WA,(0x0dfa)
-	jr	ule, sub_F7FE19_Skip3	; F7FE67  jr ULE,0xf7fe71
+	jr	ule, Transp0se_KeypadCommit_Skip3	; F7FE67  jr ULE,0xf7fe71
 	ld	(3578:16), wa	; F7FE69  ld (0x0dfa),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7FE6D  ld (0x12f9),WA
-sub_F7FE19_Skip3:
-	jr	sub_F7FE19_Join2	; F7FE71  jr T,0xf7fe93
-sub_F7FE19_Skip4:
+Transp0se_KeypadCommit_Skip3:
+	jr	Transp0se_KeypadCommit_Join2	; F7FE71  jr T,0xf7fe93
+Transp0se_KeypadCommit_Skip4:
 	cp	wa, 1:i3	; F7FE73  cp WA,1
-	jr	lt, sub_F7FE19_Return	; F7FE75  jr LT,0xf7fed2
+	jr	lt, Transp0se_KeypadCommit_Return	; F7FE75  jr LT,0xf7fed2
 	cp	wa, 999	; F7FE77  cp WA,0x03e7
-	jr	gt, sub_F7FE19_Return	; F7FE7B  jr GT,0xf7fed2
+	jr	gt, Transp0se_KeypadCommit_Return	; F7FE7B  jr GT,0xf7fed2
 	ld	(3578:16), wa	; F7FE7D  ld (0x0dfa),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7FE81  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0df8, 0	; F7FE85  cp WA,(0x0df8)
-	jr	nc, sub_F7FE19_Join2	; F7FE89  jr NC,0xf7fe93
+	jr	nc, Transp0se_KeypadCommit_Join2	; F7FE89  jr NC,0xf7fe93
 	ld	(3576:16), wa	; F7FE8B  ld (0x0df8),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7FE8F  ld (0x12f7),WA
-sub_F7FE19_Join2:
+Transp0se_KeypadCommit_Join2:
 	ld	wa, (3578:16)	; F7FE93  ld WA,(0x0dfa)
 	m_sub_rm MW16, 0x0df8, 0	; F7FE97  sub WA,(0x0df8)
 	inc	1, wa	; F7FE9B  inc 1,WA
 	ld	(3592:16), wa	; F7FE9D  ld (0x0e08),WA
 	ld	(3584:16), wa	; F7FEA1  ld (0x0e00),WA
-	jr	sub_F7FE19_Join4	; F7FEA5  jr T,0xf7fecb
-sub_F7FE19_Skip5:
+	jr	Transp0se_KeypadCommit_Join4	; F7FEA5  jr T,0xf7fecb
+Transp0se_KeypadCommit_Skip5:
 	m_cp_mi8 MB16, 0x2820, 0x2b	; F7FEA7  cp (0x2820),0x2b
-	jr	z, sub_F7FE19_Skip6	; F7FEAC  jr Z,0xf7feb6
+	jr	z, Transp0se_KeypadCommit_Skip6	; F7FEAC  jr Z,0xf7feb6
 	cp	wa, 65409	; F7FEAE  cp WA,0xff81
-	jr	lt, sub_F7FE19_Return	; F7FEB2  jr LT,0xf7fed2
-	jr	sub_F7FE19_Join3	; F7FEB4  jr T,0xf7febc
-sub_F7FE19_Skip6:
+	jr	lt, Transp0se_KeypadCommit_Return	; F7FEB2  jr LT,0xf7fed2
+	jr	Transp0se_KeypadCommit_Join3	; F7FEB4  jr T,0xf7febc
+Transp0se_KeypadCommit_Skip6:
 	cp	wa, 127	; F7FEB6  cp WA,0x007f
-	jr	gt, sub_F7FE19_Return	; F7FEBA  jr GT,0xf7fed2
-sub_F7FE19_Join3:
+	jr	gt, Transp0se_KeypadCommit_Return	; F7FEBA  jr GT,0xf7fed2
+Transp0se_KeypadCommit_Join3:
 	ld	(3580:16), a	; F7FEBC  ld (0x0dfc),A
 	ld	(DisplayListB_Stage+5:16), a	; F7FEC0  ld (0x12fb),A
 	ld	(4764:16), a	; F7FEC4  ld (0x129c),A
 	ldw	de, 127	; F7FEC8  ld DE,0x007f
-sub_F7FE19_Join4:
+Transp0se_KeypadCommit_Join4:
 	call	T_Blink_Stop	; F7FECB  call 0xf42e24
 	calr	Transp0se_DrawValues	; F7FECF  calr 0xf7fd45
-sub_F7FE19_Return:
+Transp0se_KeypadCommit_Return:
 	ret	; F7FED2  ret
 
 ; Evidence: reached from calr from prom_b 0xF7FE08, and from nothing else
@@ -207303,11 +207436,11 @@ sub_F7FE19_Return:
 ;   + siblings. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
 Transp0se_KeypadSign:
 	m_bit 1, MD16, UI_RequestBits	; F7FED3  bit 1,(0x2075)
-	jr	z, sub_F7FED3_Return	; F7FED7  jr Z,0xf7fee5
+	jr	z, Transp0se_KeypadSign_Return	; F7FED7  jr Z,0xf7fee5
 	m_cp_mi8 MB16, 0x0df6, 0x04	; F7FED9  cp (0x0df6),0x04
-	jr	z, sub_F7FED3_Return	; F7FEDE  jr Z,0xf7fee5
+	jr	z, Transp0se_KeypadSign_Return	; F7FEDE  jr Z,0xf7fee5
 	ld	(10272:16), 43	; F7FEE0  ld (0x2820),0x2b
-sub_F7FED3_Return:
+Transp0se_KeypadSign_Return:
 	ret	; F7FEE5  ret
 
 ; Evidence: reached from calr from prom_b 0xF7FE0B, and from nothing else
@@ -207318,9 +207451,9 @@ sub_F7FED3_Return:
 ;   pilot-2026-10-06/proposals_wave8_b8.json)
 Transp0se_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits	; F7FEE6  bit 1,(0x2075)
-	jr	z, sub_F7FEE6_Return	; F7FEEA  jr Z,0xf7ff12
+	jr	z, Transp0se_BlinkSelectedField_Return	; F7FEEA  jr Z,0xf7ff12
 	m_cp_mi8 MB16, 0x2267, 0x0f	; F7FEEC  cp (0x2267),0x0f
-	jr	z, sub_F7FEE6_Return	; F7FEF1  jr Z,0xf7ff12
+	jr	z, Transp0se_BlinkSelectedField_Return	; F7FEF1  jr Z,0xf7ff12
 	xor	xwa, xwa	; F7FEF3  xor XWA,XWA
 	ld	a, (3574:16)	; F7FEF5  ld A,(0x0df6)
 	sla	xwa, 2	; F7FEF9  sla 0x02,XWA
@@ -207330,7 +207463,7 @@ Transp0se_BlinkSelectedField:
 	push	xiy	; F7FF0B  push XIY
 	call	T_Blink_Command	; F7FF0C  call 0xf42e20
 	inc	4, xsp	; F7FF10  inc 4,XSP
-sub_F7FEE6_Return:
+Transp0se_BlinkSelectedField_Return:
 	ret	; F7FF12  ret
 ; ---------------------------------------------------------------------
 ; BlinkArgPtrs_F7FF13 -- pointers to blink templates, read through
@@ -207408,7 +207541,7 @@ Paint_AdvanceDelay_Skip2:
 	call	T_DisplayList_Run	; F7FFAA  call 0xf417f0
 Paint_AdvanceDelay_Join2:
 	ld	(LCD_CurrentLayer:16), 0	; F7FFAE  ld (0x2540),0x00
-	calr	sub_F7E39F_Nop	; F7FFB3  calr 0xf7e2d8
+	calr	ButtonTable_SequencerMedley_Nop	; F7FFB3  calr 0xf7e2d8
 	ld	xiy, DL_F3B379	; F7FFB6  ld XIY,0x00f3b379
 	ld	xix, DLBoxes_F3B3B2	; F7FFBB  ld XIX,0x00f3b3b2
 	call	T_DisplayListB_Run	; F7FFC0  call 0xf417f4

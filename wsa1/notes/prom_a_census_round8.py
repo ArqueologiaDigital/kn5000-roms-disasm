@@ -1815,20 +1815,20 @@ RING_NAMES = [
      "exhaustion. Ring_Get_0400 (0xF8405D), the class routine every 0x400-"
      "capacity Get reaches, loads WA=0xFFFF exactly when the read cursor "
      "equals the write cursor, so 0xFFFF is its empty marker. All seven call "
-     "sites are inside sub_FC1D92, the first at 0xFC1D9B",
+     "sites are inside Cpu2Query_DrainRecordReplies, the first at 0xFC1D9B",
      "why exhaustion is reported in XIY when the byte itself comes back in "
      "WA, and whether any caller reads XIY"),
     ("sub_FD2504", "Ring608A0A_DrainAll",
-     "calls sub_FD2014 once per item until ring 0x608A0A is empty",
+     "calls Cpu2Reply_HandleNext once per item until ring 0x608A0A is empty",
      "0xFD2504 `call 0xF41CDC` = prom_b slot T_Ring608A0A_IsEmpty; 0xFD2508 "
      "`cps WA,0x00` and 0xFD250A `jr z` return when it reads zero; 0xFD250C "
-     "`calr sub_FD2014` otherwise, and 0xFD250F `jr` re-tests. "
+     "`calr Cpu2Reply_HandleNext` otherwise, and 0xFD250F `jr` re-tests. "
      "Ring608A0A_IsEmpty (0xF84327) returns 0 only when the read cursor "
-     "(0x608A02) equals the write cursor (0x608A06). sub_FD2014's own body "
+     "(0x608A02) equals the write cursor (0x608A06). Cpu2Reply_HandleNext's own body "
      "reaches T_Ring608A0A_Get, so the loop consumes what it tests. Published "
      "by prom_b slot T_F42380 and reached from `call 0xF42380` at 0xF8213E, "
      "inside sub_F82028",
-     "what sub_FD2014 does with each item"),
+     "what Cpu2Reply_HandleNext does with each item"),
     ("sub_FB7EFD", "Ring600C1E_InitIfPanelMode79",
      "re-initialises ring 0x600C1E, with interrupts masked, only while the "
      "panel mode byte reads 0x79",
@@ -1928,7 +1928,7 @@ VENEER_NAMES = [
      "carries the label Disk_FormatSelectedMedia; 0xFE0041-0xFE0044 pop the "
      "same four in reverse and 0xFE0045 returns. No other call or jump is in "
      "the extent. Called by `calr` at 0xFE0A29 and 0xFE0A59, both inside "
-     "sub_FE09BE. DERIVATIVE: the name is the callee's, and the routine's own "
+     "DiskFormat_Execute. DERIVATIVE: the name is the callee's, and the routine's own "
      "contribution is the register save",
      "why the four registers need saving here when the callee is reached "
      "directly elsewhere"),
@@ -2075,7 +2075,7 @@ def _rewrite_round8_header(lines, old, new, bucket="T1"):
 # ★★ THE OTHER HALF OF THE GOAL METRIC, MEASURED AND THEN DECLINED
 # ---------------------------------------------------------------------------
 # prom_a carries 253 FRAMED labels -- a structural kind with an address glued
-# on, `DisplayList_FE829B`, `JumpTable_...`, `BlinkArgPtrs_F8024D`.  Promoting
+# on, `Sequencer_DrawTitleIcon_DL`, `JumpTable_...`, `BlinkArgPtrs_F8024D`.  Promoting
 # one of those to a CONTENT name is worth more per label than naming a
 # `sub_XXXXXX`, because it moves LOWER without moving UPPER, and prom_b's lanes
 # have been doing exactly that.  So this round measured whether prom_a has the

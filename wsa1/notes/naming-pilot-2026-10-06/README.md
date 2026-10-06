@@ -58,3 +58,16 @@ other, unlabelled routines.
 - `sub_F82CE8` (now `Variant_SendPortBToCpu2`) is the missing writer of CPU 2's 0xFFF8. This answers the open
   question in FINDINGS-prom_c-scheduler.md:82.
 - `sub_F49861`'s tail labels `_Join`/`_Join2` are the entry points of SeqRecord_DrainEventRing*.
+
+**Wave 9** (`proposals_wave9_{a9,b9,c9,d9}.json`): 126 named, 16 refused. Routines whose only named callers were
+OldCopy_* (an older build's code, whose calls into prom_a say nothing about this build) were left out of the batches.
+Derivative passes then named 15 thunk slots, 2 wrappers (`sub_FE00EB` / `sub_FE00F8`, which batch c9 had refused
+because their targets were still unnamed), 15 display lists, 1 exact copy (`TrackAssign_IsLocalControlDashed_Copy`)
+and 904 local labels after their enclosing routine (rename_orphan_locals.py). Leads reported for later:
+- `MidiFileSave_Page4_*` / `MidiFileSave_Page5_*` are the button tables of the floppy-format screens 0x50 / 0x51
+  (rows 4-5 of `Dispatch_FF3D39`), not of MIDI FILE SAVE; `sub_FE09BE` is now `DiskFormat_Execute`.
+- icon cell 49's header says no record uses it, but `Sequencer_DrawTitleIcon_DL` (was DisplayList_FE829B) does,
+  through an operand spelled `.ascii "14"`.
+- `TrackAssign_IsLocalControlDashed` always returns 0xAA, so its "-- " cell is never drawn.
+- (0x215E) receives a 16-bit track mask at 0xF66054 and 0xF6AEDC.
+- `ScreenButton_SoundEditFilterLfo_AfterOp` is a return point inside another routine (its siblings are `.L` labels).

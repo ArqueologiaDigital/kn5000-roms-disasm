@@ -491,8 +491,8 @@ ROWS = [
      "otherwise Disk_PortA3_Release, Disk_ShowMountError, a 1500-tick delay and UI_StatusCode = 2."),
     ("FE0E89", "Disk_ScanDirectory_RecordEntry",
      "for the entry DiskFile_FindFirst/_FindNext left at 0x60A080: if a record among the twenty 16-byte records at\n"
-     "0x60A480 starts with the same two name characters, sub_FE0F6B merges it; otherwise, unless the entry is deleted\n"
-     "(0xE5) or a .MID file or the table is full (0x840), sub_FE10AA and its 11-byte name go to a new record at (0x222B)."),
+     "0x60A480 starts with the same two name characters, Disk_ScanDirectory_MarkFileType merges it; otherwise, unless the entry is deleted\n"
+     "(0xE5) or a .MID file or the table is full (0x840), Disk_ScanDirectory_StoreEntryName and its 11-byte name go to a new record at (0x222B)."),
     ("FAA742", "Tempo_ApplyBpm",
      "unless MidiCfg_ModeBits bit 2: the BPM in the low 9 bits of (0x7EE2), reset to 120 when outside 40..300,\n"
      "to (0x60F800); TREG5 = 140,000,000 / (64 * BPM), rounded (FINDINGS-system-clock.md, lever B -- which quotes the\n"
@@ -1502,7 +1502,7 @@ ROWS = [
      "through NoteEdit_InsertNoteEvent then EditCursor_SyncBeatAndTick, stopping on a BStore error (EditScreen_FlagMemoryFull)."),
     ("FE97DF", "EditScreen_AppendMissingBeatMarkers",
      "appends 0x81 beat markers (EditScreen_AppendBeatMarker) while the target (0x601F6C) exceeds the count\n"
-     "sub_FE9830 returns; BStore_ErrorCode = 0xFF when an append fails; the cursor is restored."),
+     "EditScreen_ReadNoteLengthBeats returns; BStore_ErrorCode = 0xFF when an append fails; the cursor is restored."),
     # NOTE / DRUM EDIT: note insertion, the periodic tick and its deferred actions
     ("FE91D2", "NoteEdit_InsertNoteEvent",
      "NoteEdit_SeekInsertPoint, then the 6-byte event at 0x601F16 -- 0x90, EditCursor_TickInMeasure mod 0x60,\n"
@@ -1535,7 +1535,7 @@ ROWS = [
     ("FE932D", "EditScreen_RunDueAction2", "when (0x601F5A) has reached 0x80: cleared, EditScreen_EndAudition_Call (EditScreen_EndAudition)."),
     ("FE933F", "EditScreen_ReloadMeasureView",
      "EditScreen_DeferredActions[0] and [6]: EditScreen_EndAudition, the measure reopened (EditScreen_OpenCursorMeasure, moving on through\n"
-     "EditScreen_ExtendChainToCursorMeasure), its beat table rebuilt (EditScreen_BuildBeatTable), sub_FE938E, the event at the cursor selected\n"
+     "EditScreen_ExtendChainToCursorMeasure), its beat table rebuilt (EditScreen_BuildBeatTable), EditScreen_AppendTwoBeatsIfNoneAfterMark, the event at the cursor selected\n"
      "(EditScreen_SelectEventAtCursor), and every part of the screen redrawn."),
     # NOTE / DRUM EDIT: audition, note-grid drawing, the deferred redraws
     ("FEA566", "EditScreen_AuditionEventNote",
@@ -1815,7 +1815,7 @@ ROWS = [
      "EditPartSelect_OpenEditor."),
     ("FEB280", "DrumEdit_DrawRowNames", "DrumEdit_DrawRowName for rows 0..11."),
     ("FEB290", "DrumEdit_DrawRowName",
-     "(row DE) layer 0: note = DrumEdit_TopRowNote + row; T_F41040 with the part's kit (0x603422[EditScreen_Part])\n"
+     "(row DE) layer 0: note = DrumEdit_TopRowNote + row; T_DrumMap_MapNoteForPart with the part's kit (0x603422[EditScreen_Part])\n"
      "and the note; RecordNameSource_Select; 10 characters (SWI 7 0x17) at x 0x1A, y = row x 10 + 0x2B."),
     ("FE8CB4", "EditPos_SeekShownNoteAtTickZero",
      "within the beat (to the next 0x81 / 0x82), stops on the first note-on DrumEdit_IsOtherNote passes whose tick\n"
@@ -1964,7 +1964,7 @@ ROWS = [
      "freed, budget + 1.  A = the bits."),
     ("FCA194", "PartNoteList_MoveNode", "NoteList_MoveNode for the 15-byte nodes (previous +0x0B, next +0x0D)."),
     ("FCADD5", "PartNote_MapForToneGen",
-     "on screen 0x28 the note is EditCursor_Note; then T_F41044 with the part block's +0x0E -- the note the tone\n"
+     "on screen 0x28 the note is EditCursor_Note; then T_DrumMap_MapNoteForPart_StackArgs with the part block's +0x0E -- the note the tone\n"
      "generator gets."),
     ("FCADFA", "PartNote_ApplyVelocityOffset",
      "velocity + the part block's signed offset (+1), clamped to 0 / 0x7F; unchanged when the offset is 0."),
@@ -2240,7 +2240,7 @@ ROWS = [
      "GmMode_HandleChange and GmMode_OnEventPassB."),
     ("FC182F", "Msg0716_PostGmSystemOnOff",
      "T_Msg0716_PostGmSystemOnOff (on): the 4-byte message F0 7F 09 01 (on) or F0 7F 09 02 (off) at 0x716 through Msg0716_Post_Trampoline\n"
-     "-- the GM System On / Off pair (sub-IDs 09 01 / 09 02) -- then sub_FC1859."),
+     "-- the GM System On / Off pair (sub-IDs 09 01 / 09 02) -- then Msg0716_AllPartsPostVolume."),
     ("F914AF", "GmMode_RepaintModeScreen",
      "T_GmMode_RepaintModeScreen, UiListB_Class91: byte 3 with the GM bit (0x04) changed, while (0x97) bit 1 is set and the screen is SOUND\n"
      "MODE (1) or COMBINATION MODE (2): UI_Request_Hi |= 0x10."),
@@ -2445,7 +2445,7 @@ ROWS = [
      "T_MidiFilePlay_OnSongSelect: when MidiIn_SongSelectValue bit 7 is set (MidiIn_SongSelect stored a received 0xF3) and transport C is stopped:\n"
      "the disk is mounted if needed (Disk_MountAndScanDirectory), Disk_SelectedEntry = the song number (at most 0x13),\n"
      "that directory entry's 8-character name is copied to Disk_FileName and the file is loaded (DiskLoad_SetContentTypeFromSelectedEntry_SaveRegs,\n"
-     "sub_FE05AE ...); the pending bit is then cleared and the screen repainted or set to 1 on a disk error.\n"
+     "DiskLoad_LoadAndReportResult ...); the pending bit is then cleared and the screen repainted or set to 1 on a disk error.\n"
      "Basis: body + the writer's header (MidiIn_SongSelect)."),
     # CPU 1 -> CPU 2 link requests, paired with prom_c's ToneMsg_Dispatch arms (notes/prom_ab_link_requests.py)
     ("FC1F4B", "Cpu2Query_SendPartRecordRead",
@@ -2473,7 +2473,7 @@ ROWS = [
      "(part): four requests tagged 0xA3 on reply channel 1 -- [0x82, part, 2, 2] and [0x82, part, 0x82, 2], then the same\n"
      "with 0x83 -- to LinkQuery_ReplyElementBlockBytes_Elements01 / _Elements23.  Basis: protocol pairing."),
     ("F53E04", "Drawbar_OnCpu2Reply",
-     "T_Drawbar_OnCpu2Reply, called by prom_a's link-reply handler sub_FD2014 when the reply's tag (0x2335) is 0xA3: for a part-0\n"
+     "T_Drawbar_OnCpu2Reply, called by prom_a's link-reply handler Cpu2Reply_HandleNext when the reply's tag (0x2335) is 0xA3: for a part-0\n"
      "reply tagged 0xA3, server 0x81 offset 0x10 sets Drawbar_ReloadMark from the byte's bits 6-7 (0 -> 0; 0x40 -> 1,\n"
      "Drawbar_QueryElementBlocks(0) and (0x2890) / (0x2891) = 0; 0x80 -> 2); 0x82 / 0x83 replies go to their own arms;\n"
      "on screen 0xA3 a repaint is requested.  Basis: body + caller."),
@@ -2565,7 +2565,7 @@ ROWS = [
     ("FE2699", "Disk_DeleteFilesWithSamePrefix",
      "Disk_SaveFileName, Disk_FileName bytes 2..10 = '?' (the 8.3 name keeps its first two characters, every other\n"
      "character and the extension become wildcards), DiskApi_DeleteFile, Disk_RestoreFileName; called from\n"
-     "DiskSave_ByContentType and sub_FE2667.  Basis: body (named RAM)."),
+     "DiskSave_ByContentType and DiskSaveFile_DeleteEntryFiles.  Basis: body (named RAM)."),
     ("FB5154", "SysExDump_StopTransportsAndSend",
      "sets bit 7 of (0x60F802), T_Transport_StopAllRunning with XDE/XHL/XIX/XIZ preserved, then SysExDump_RunSendJob;\n"
      "called from SysExCmd_DumpRequestGate.  Basis: body."),

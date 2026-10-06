@@ -1,0 +1,423 @@
+[
+ {
+  "old": "sub_FD7095",
+  "verdict": "name",
+  "new": "SoundEditControllerPage2_GetRecordParam",
+  "header": "(n, &p): p := the first tone parameter of CONTROLLER page 2 controller n's 3-byte record {switches, destination, depth}: 0x14 0x17 0x1A 0x1D 0x20 0x25 0x28 0x2B 0x2E for n = 1..9, each 3 lower on a drum kit ((0x27F5) != 0).\nScreenEnter_SoundEditControllerPage2 keeps p in ModelingPage_Fields[13] and reads back p+2 (DEPTH -> Fields[11]) and p (switches -> Fields[12]); its nine destination requests are exactly p(n)+1. Basis: caller + body + the page's request list.",
+  "basis": "caller + body + request list",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:153392 `call SoundEditController_LoadField0` -- ScreenEnter_SoundEditControllerPage2 takes the page-2 pick n (1..9) ...",
+   "prom_a/wsa1_prom_a.s:153398 `call sub_FD7095` -- ... and maps it to p",
+   "prom_a/wsa1_prom_a.s:153405 `ldw hl, 0x15` -- melodic destination requests 0x15+3k (5 of them) and, at 153420 `ldw hl, 0x26`, 0x26+3k (4): exactly p(1..9)+1",
+   "prom_a/wsa1_prom_a.s:153441 `inc 2,BC` -- then requests p+2 and (153449) p, the last two replies",
+   "prom_a/wsa1_prom_a.s:153506 `call Arr27A6_Set` -- Fields[13] := p (pushw 0x0d at 153505)",
+   "prom_a/wsa1_prom_a.s:153551 `call Arr27A6_Set` -- after the replies Fields[12] := reply(p), Fields[11] := reply(p+2): the switches and DEPTH that SoundEditController_PaintDepthAndSwitches draws",
+   "prom_a/wsa1_prom_a.s:143741 `jr ugt, JumpTable_FD710A_Code_Skip` -- melodic n outside 2..9 (n = 1) -> 0x14 (143807 `ld (XIX),0x14`)",
+   "prom_a/wsa1_prom_a.s:143761 `.long sub_FD712F` -- JumpTable_FD70C5[n-2] stores 0x17, 0x1A, 0x1D, 0x20, 0x25, 0x28, 0x2B, 0x2E",
+   "prom_a/wsa1_prom_a.s:143735 `jr nz, JumpTable_FD70C5_Code_Skip` -- (0x27F5) != 0 takes JumpTable_FD710A: n = 1 -> 0x11 (143831), 2..9 -> 0x14..0x2B",
+   "prom_a/wsa1_prom_a.s:153454 `ldw hl, 0x12` -- drum destination requests 0x12+3k and (153469) 0x23+3k: exactly the drum p(n)+1",
+   "/home/fsanches/compartilhado/tmp/wsa1-triage/agent_b9/verify_b9.py part 3 -- recomputes both tables and the p(n)+1 == request identity (True, True)"
+  ]
+ },
+ {
+  "old": "sub_FD71B9",
+  "verdict": "name",
+  "new": "SoundEditController_StepDepth",
+  "header": "(p, step): steps the picked controller's DEPTH, ModelingPage_Fields[11], by the key/dial step within 0..127 (edit descriptor mask 0x7F, max 0x7F, min 0); if it moved, sends it as tone parameter p+2 (ToneMsg8D_SendParam on a drum kit), stores it and repaints field 11 (T_Dispatch_Code80(0x9B, 11)).\nSoundEditController_SoftKeyCol4 of both CONTROLLER pages passes Fields[13], the controller record's first parameter. Basis: caller + body + display record.",
+  "basis": "caller + body + display record",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:146849 `pushw 0x0d` -- SoundEditController_SoftKeyCol4 reads Fields[13] (the record parameter p) ...",
+   "prom_a/wsa1_prom_a.s:146856 `calr ToneEdit_StepFromEvent` -- ... and the +/-1 / +/-3 step ...",
+   "prom_a/wsa1_prom_a.s:146863 `calr sub_FD71B9` -- ... and passes (p, step)",
+   "prom_a/wsa1_prom_a.s:143904 `pushw 0x0b` -- descriptor D[0] := Fields[11]",
+   "prom_a/wsa1_prom_a.s:143908 `ld (XIX+0x06),0x7f` -- MASK 0x7F; 143910 `ld (XIX+0x08),0x7f` MAX, 143911 `ld (XIX+0x09),0x00` MIN (layout: notes/FINDINGS-l7a1429-field-editors.md section 1)",
+   "prom_a/wsa1_prom_a.s:143921 `inc 2,H` -- the parameter sent is p+2",
+   "prom_a/wsa1_prom_a.s:143937 `calr ToneMsg_SendParam` -- melodic; 143941 `calr ToneMsg8D_SendParam` on a drum kit",
+   "prom_a/wsa1_prom_a.s:143949 `calr Arr27A6_Set` -- Fields[11] := the new value",
+   "prom_a/wsa1_prom_a.s:143952 `call T_Dispatch_Code80` -- repaint (0x9B, 11)",
+   "prom_b/wsa1_prom_b.s:69862 `.short ModelingPage_Fields+11` -- DL_F32FA0: the 3-digit readout of Fields+11 & 0x7F at 0x2298, the DEPTH value",
+   "prom_a/wsa1_prom_a.s:153551 `call Arr27A6_Set` -- page 2 enter: Fields[11] is the reply to p+2"
+  ]
+ },
+ {
+  "old": "sub_FD724B",
+  "verdict": "name",
+  "new": "SoundEditControllerPage1_UnpackReply",
+  "header": "(block e, reply): unpacks one 18-byte read-back of CONTROLLER page 1 (e = 0: parameters 0x31.., sources 1-3; e = 1: 0x43.., sources 4-6; drum 0x2E / 0x40), 6 bytes per source = two {switches, destination, depth} records: for the sources picked by the lowest set bit of Fields[5] / Fields[6] it stores the destinations Fields[1..4],\nand for the picked controller (SoundEditController_LoadField0(1), 1..4) DEPTH -> Fields[11], switches -> Fields[12], record parameter -> Fields[13]. ScreenEnter_SoundEditControllerPage1 calls it on replies 3 and 4. Basis: caller + body + display records.",
+  "basis": "caller + body + display records",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:153117 `pushw 0x24` -- page 1 enter requests 0x24 and (153122) 0x23, count 1 (reply screen 0xCD, 153113) ...",
+   "prom_a/wsa1_prom_a.s:153127 `pushw 0x31` -- ... then 0x31 and (153132) 0x43 with count 0x12 (153126); drum: 0x2E / 0x40 (153147, 153152)",
+   "prom_a/wsa1_prom_a.s:153240 `call sub_FD724B` -- reply 3 -> (0, reply), reply 4 -> (1, reply) (stage tests 153229 / 153235); done after reply 4 (153244)",
+   "prom_a/wsa1_prom_a.s:143977 `pushw 0x05` -- L := 1-based lowest set bit of Fields[5]; 143995 `pushw 0x06` -- D := the same of Fields[6]",
+   "prom_a/wsa1_prom_a.s:144026 `mul bc, l` -- with 144030 `mul bc, e`: offset H = 6L - 6 - 18e of source L inside block e",
+   "prom_a/wsa1_prom_a.s:144044 `calr Arr27A6_Set` -- Fields[1] := reply[H+4], 144052 Fields[2] := reply[H+1] (likewise Fields[3]/[4] for D)",
+   "prom_b/wsa1_prom_b.s:69811 `.short ModelingPage_Fields+1` -- DL_F32F43 draws Fields+1..+4 (69835) through ControllerDestinationNames: they are destinations",
+   "prom_a/wsa1_prom_a.s:144111 `calr SoundEditController_LoadField0` -- the picked controller n (1..4) chooses record offset k",
+   "prom_a/wsa1_prom_a.s:144129 `calr Arr27A6_Set` -- Fields[11] := reply[k+2] (DEPTH); 144143 Fields[12] := reply[k] (switches)",
+   "prom_a/wsa1_prom_a.s:144160 `add WA,0x0031` -- Fields[13] := k + 0x31 / 0x43 (144165), drum 0x2E / 0x40 (144178, 144183): the record parameter SoundEditController_StepDepth / _StepSwitch write"
+  ]
+ },
+ {
+  "old": "sub_FD759A",
+  "verdict": "name",
+  "new": "SoundEditController_StepSwitch",
+  "header": "(k, down): steps switch k (1..4) of the picked controller -- bits 2k-2..2k-1 of ModelingPage_Fields[12] -- OFF -> ON -> INV going up and back going down ('---' is left as it is), sends the byte as tone parameter Fields[13] with mask 3 << (2k-2), stores it and repaints field 12 (T_Dispatch_Code80(0x9B, 12)).\nSoundEditController_SoftKeyCols5to8 (soft keys 5-8, the '1st'..'4th' switches) calls it unless the destination is an effect send/dynamic. Basis: caller + body + ControllerSwitchStateText.",
+  "basis": "caller + body + string table",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:146915 `calr sub_FD759A` -- SoundEditController_SoftKeyCols5to8 passes k = 1..4 ...",
+   "prom_a/wsa1_prom_a.s:146884 `ld l, 0x01:opc` -- ... and down = 1 when the event flag byte (bit 7 cleared) is non-zero, else 0 (146881)",
+   "prom_a/wsa1_prom_a.s:144398 `pushw 0x0d` -- reads Fields[13] (record parameter) and (144402) Fields[12]",
+   "prom_a/wsa1_prom_a.s:144406 `dec 2,L` -- shift 2k-2; 144415 `and A,0x03` -- the switch value",
+   "prom_a/wsa1_prom_a.s:144436 `ld h, 0x01:opc` -- up: OFF(0) -> ON(1); 144424 `ld h, 0x03:opc` ON -> INV; INV stays (jrl to the end)",
+   "prom_a/wsa1_prom_a.s:144441 `ld h, 0x00:opc` -- down: ON -> OFF; INV -> ON (144436); OFF stays",
+   "prom_a/wsa1_prom_a.s:144472 `calr ToneMsg_SendParam` -- (0, Fields[13], &byte, 3 << (2k-2)); ToneMsg8D_SendParam on a drum kit",
+   "prom_a/wsa1_prom_a.s:144484 `calr Arr27A6_Set` -- Fields[12] := byte; 144487 `call T_Dispatch_Code80` (0x9B, 12)",
+   "prom_b/wsa1_prom_b.s:69941 `ControllerSwitchStateText:` -- OFF / ON / --- / INV, read by the four 2-bit Fields+12 records (69886)"
+  ]
+ },
+ {
+  "old": "sub_FD7A24",
+  "verdict": "name",
+  "new": "SoundEditMemoryWrite_GetTargetSlot",
+  "header": "(&slot): the SOUND EDIT MEMORY WRITE destination. The first time in a SOUND EDIT session (Var27F6 = 0) a sound already in user memory proposes its own place -- from the part record at 0x76A2 / 0x76E2 / 0x7722 (UI_PartIndex 0/1/2): bank 8/9 -> program + 128 x (bank - 8), drum bank 0x28 -> program 0..3 -- kept in (0x27E9) with Var27F6 := 1; otherwise the kept (0x27E9) (drum kit: reset to 0 when > 3).\nScreenEnter_SoundEditMemoryWrite makes it Fields[0] = slot / 128 + 1 (bank 1/2) and Fields[1] = slot % 128 + 1 (drum kit: Fields[1] = slot + 1). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:155124 `call sub_FD7A24` -- ScreenEnter_SoundEditMemoryWrite ...",
+   "prom_a/wsa1_prom_a.s:155131 `inc 1,BC` -- ... drum kit: Fields[1] := slot + 1; else 155139 `div BC,0x0080` -- Fields[0] := slot / 128 + 1 and Fields[1] := slot % 128 + 1 (155146-155147)",
+   "prom_b/wsa1_prom_b.s:134432 `;   bank/number -- W = (0x27A6) + 7, A = (0x27A7) - 1; drum kits ((0x27F5) = 1) W = 0x28/0x29` -- SoundEditMemoryWrite_DrawSlotSoundName reads those fields as bank 8/9 (0x28/0x29) and number",
+   "prom_a/wsa1_prom_a.s:145061 `calr Var2250_Get` -- the part: 1 -> (0x76E2/3) 145065, 2 -> (0x7722/3) 145071, else (0x76A2/3) 145075: program L, bank H",
+   "prom_a/wsa1_prom_a.s:145084 `cp H,0x28` -- drum kit: user drum bank 0x28 ...",
+   "prom_a/wsa1_prom_a.s:145097 `cp l, 0x03:i3` -- ... program > 3 -> 0 (145099)",
+   "prom_a/wsa1_prom_a.s:145108 `cp H,0x08` -- tone: bank 8 or 9 (145110) ...",
+   "prom_a/wsa1_prom_a.s:145121 `mul bc, h` -- ... slot = (0x80 x bank + program) & 0xFF",
+   "prom_a/wsa1_prom_a.s:145126 `ld (0x27e9:16), c` -- kept, and 145128 `calr Var27F6_Set` (1)",
+   "prom_a/wsa1_prom_a.s:145132 `ld c, (0x27e9:16)` -- otherwise the kept slot",
+   "prom_a/wsa1_prom_a.s:151436 `call Var27F6_Set` -- cleared to 0 by the SOUND EDIT mode Enter (sub_FDAC6B) and Leave (151450)"
+  ]
+ },
+ {
+  "old": "sub_FD8D21",
+  "verdict": "name",
+  "new": "SoundEditEnvelope_DrawGraphSegment",
+  "header": "(x0, y0, x1, y1): draws one envelope-graph segment through sub_FD92B7, first cutting it where it crosses x = 0xD5 (end of the attack/decay part; the release part starts at x = 0xD6) or, for a release segment (x0 >= 0xD5), x = 0x102; returns the y of the cut (0 = drawn whole).\nSoundEditAmpEnvelope_DrawGraph and SoundEditEnvelope1_DrawGraph chain their segments from (0x33, 0x92) with it and stop at the first cut. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:147197 `calr sub_FD8D21` -- SoundEditAmpEnvelope_DrawGraph: first segment from (0x33, 0x92) (147196, 147195)",
+   "prom_a/wsa1_prom_a.s:147202 `jr nz, .LFD8CCA` -- a non-zero return (147201) ends the chain ...",
+   "prom_a/wsa1_prom_a.s:147263 `calr sub_FD8D21` -- ... and the release segment is drawn from x 0xD6 (147262)",
+   "prom_a/wsa1_prom_a.s:147716 `calr sub_FD8D21` -- the same chain in SoundEditEnvelope1_DrawGraph (also 147810, 147821; the sub_FD9145 / sub_FD922B labels there are unreferenced fall-through points)",
+   "prom_a/wsa1_prom_a.s:147279 `cp HL,0x00d5` -- x0 < 0xD5 and (147281) x1 > 0xD5 -> cut",
+   "prom_a/wsa1_prom_a.s:147292 `muls xwa, iy` -- y = y0 + (y1 - y0)(0xD5 - x0)/(x1 - x0) (147294 divs, 147296 add y0); x1 := 0xD5 (147298)",
+   "prom_a/wsa1_prom_a.s:147302 `cp DE,0x0102` -- release segment: cut at x = 0x102 (147311)",
+   "prom_a/wsa1_prom_a.s:147327 `calr sub_FD92B7` -- draws the (cut) segment",
+   "prom_a/wsa1_prom_a.s:147329 `ld wa, (xiz-2)` -- returns the cut y, 0 when not cut"
+  ]
+ },
+ {
+  "old": "sub_FD9242",
+  "verdict": "name",
+  "new": "SoundEditEnvelope1_ScaleLevel",
+  "header": "(&level): clamps a signed envelope level to -50..+50 and, on any screen but FILTER ENVELOPE 1 (UI_ScreenId 0x97) -- i.e. on PITCH ENVELOPE 1 -- scales it by ModelingPage_Fields[1] / 50 (signed).\nSoundEditEnvelope1_DrawGraph runs its five levels (Fields 2/4/6/8/10) through it before plotting (level + 50) x 87/100; on FILTER ENVELOPE 1 sub_FD92B7 offsets the curve by Fields[1] x 43/50 instead. Basis: caller + body + screen table.",
+  "basis": "caller + body + screen table",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:147395 `calr sub_FD9242` -- SoundEditEnvelope1_DrawGraph on the level Fields[2] (and 4, 6, 8, 10) ...",
+   "prom_a/wsa1_prom_a.s:147398 `add BC,0x0032` -- ... then plots (level + 50) x 0x57 / 0x64 (147399)",
+   "prom_a/wsa1_prom_a.s:147837 `calr Var207C_Get` -- UI_ScreenId",
+   "prom_a/wsa1_prom_a.s:147840 `cp C,0x32` -- clamp to +50 and (147845) -50",
+   "prom_a/wsa1_prom_a.s:147857 `m_cp_mi8 MBD+r6, 0xfe, 0x97` -- screen 0x97 skips the scaling",
+   "prom_a/wsa1_prom_a.s:13994 `.long T_ScreenEnter_SoundEditFilterEnvelope1` -- ScreenEnter table [151] = 0x97 is FILTER ENVELOPE 1",
+   "prom_a/wsa1_prom_a.s:147852 `calr Arr27A6_Get` -- Fields[1]; 147863 `muls xbc, wa`, 147879 `divs BC,0x0032` -- level x Fields[1] / 50",
+   "prom_a/wsa1_prom_a.s:147904 `m_cp_mi8 MBD+r6, 0xfc, 0x97` -- sub_FD92B7 does the opposite: only on 0x97 it offsets by Fields[1] x 0x2B / 0x32 (147908, 147910)"
+  ]
+ },
+ {
+  "old": "sub_FD9F42",
+  "verdict": "name",
+  "new": "ModelingPage_StoreDrumSourceReply",
+  "header": "Stores CPU 2's reply to tone query 0x10 (ToneQuery_ReplyDrumSourceNameAndIndex, the drum key's source): 13-char name -> SoundEditText slot 1, row byte +0x0D -> ModelingPage_Fields[1] (not on SOUND EDIT MENU, screen 0x80), row index LE16 (+0x0E) -> the word at 0x27F7.\nSingle-slot twin of ModelingPage_StorePercSource2Reply; ScreenEnter_SoundEditDrumMenu and SoundEditMenu_ReadBackDrum call it on the stage after ToneMsg80_Id10(key). Basis: callers + body + CPU-2 responder.",
+  "basis": "callers + body + CPU-2 responder",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:155623 `call ToneMsg80_Id10` -- ScreenEnter_SoundEditDrumMenu asks query 0x10 for the key ...",
+   "prom_a/wsa1_prom_a.s:155630 `call sub_FD9F42` -- ... and stores the reply on the next stage",
+   "prom_a/wsa1_prom_a.s:151941 `call ToneMsg80_Id10` -- the same pair in SoundEditMenu_ReadBackDrum (sub_FDAF07), 151949 `call sub_FD9F42`",
+   "prom_c/tone_db/tone_db_module.s:18628 `.long ToneQuery_Dispatch__FC1DA3` -- query opcode 0x10 = entry 16 ...",
+   "prom_c/tone_db/tone_db_module.s:18457 `calr ToneQuery_ReplyDrumSourceNameAndIndex` -- ... answers 13 name chars, row byte +0x0D, row number LE16 (header at 17203)",
+   "prom_a/wsa1_prom_a.s:149325 `calr Rec2330_CopyData25` -- the reply",
+   "prom_a/wsa1_prom_a.s:149329 `calr SoundEditText_SetSlot` -- 13 chars into slot 1 (149328 `pushw 0x01`)",
+   "prom_a/wsa1_prom_a.s:149335 `m_cp_mi8 MBD+r6, 0xfe, 0x80` -- not on screen 0x80: 149341 Fields[1] := byte +0x0D",
+   "prom_a/wsa1_prom_a.s:149354 `ld (0x27f7:16), bc` -- (+0x0F << 8) + (+0x0E) (149347, 149350)",
+   "prom_a/wsa1_prom_a.s:149360 `; ModelingPage_StorePercSource2Reply: Stores CPU 2's reply to tone query 0x13` -- the slot-n twin, same layout"
+  ]
+ },
+ {
+  "old": "sub_FDA160",
+  "verdict": "name",
+  "new": "SoundEditDrum_GetSelectedKey",
+  "header": "(&key): key := (0x27FC), the drum-kit key SOUND EDIT works on; the first call after ModeEnter_SoundEdit cleared (0x27FB) sets it to 0x24 (note 36) and (0x27FB) := 1.\nScreenEnter_SoundEditDrumMenu (Fields[0]) and SoundEditMenu_ReadBackDrum (Fields[1]) take it and select that key on CPU 2 with ToneMsg88_Id13; LCD rows 1/2 of SOUND EDIT step it or store a held note there. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:155518 `call sub_FDA160` -- ScreenEnter_SoundEditDrumMenu: Fields[0] := key (155523) ...",
+   "prom_a/wsa1_prom_a.s:155527 `call ToneMsg88_Id13` -- ... selects it on CPU 2, then asks query 0x10 for it (155623)",
+   "prom_a/wsa1_prom_a.s:151707 `call sub_FDA160` -- SoundEditMenu_ReadBackDrum: Fields[1] := key (151712), ToneMsg88_Id13 (151716)",
+   "prom_a/wsa1_prom_a.s:149718 `calr Var27FB_Get` -- (0x27FB) = 0 ...",
+   "prom_a/wsa1_prom_a.s:149723 `ld (XBC),0x24` -- ... key := 0x24, 149727 `calr Var27FC_Set`, 149729 `calr Var27FB_Set` (1)",
+   "prom_a/wsa1_prom_a.s:149736 `calr Var27FC_Get` -- otherwise key := (0x27FC)",
+   "prom_a/wsa1_prom_a.s:151425 `call Var27FB_Set` -- the SOUND EDIT mode Enter (sub_FDAC6B) clears (0x27FB) (pushw 0x00 at 151424)",
+   "prom_a/wsa1_prom_a.s:149742 `;   head, ... 0xFF when no note is held. LCD rows 1/2 of` -- PartNotes_GetCurrentPartHeldNote header: those rows store a held note into (0x27FC) or step it up to 0x7F"
+  ]
+ },
+ {
+  "old": "sub_FDA1D5",
+  "verdict": "name",
+  "new": "DrumSoundNames_StoreName",
+  "header": "(n, name): stores drum key n's sound name from a CPU-2 reply -- 10 bytes at 0x604000 + 10(n-1) on DRUM EDIT (UI_ScreenId 0x28), else 13 bytes at 0x60A000 + 13n.\nDrumSoundNames_FetchNext calls it for each reply with n = the running key count (Var27DB). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:149892 `calr Rec2330_CopyData` -- DrumSoundNames_FetchNext copies the reply ...",
+   "prom_a/wsa1_prom_a.s:149898 `calr sub_FDA1D5` -- ... and stores it for key n = Var27DB",
+   "prom_a/wsa1_prom_a.s:149836 `; DrumSoundNames_FetchNext: One step of loading the 128 per-key drum-sound names` -- whose header already says where the names go",
+   "prom_a/wsa1_prom_a.s:149785 `m_cp_mi8 MBD+r6, 0xfe, 0x28` -- DRUM EDIT screen 0x28 ...",
+   "prom_a/wsa1_prom_a.s:149790 `mul BC,0x000a` -- ... (n-1) x 10, 149803 `add XBC,0x00604000`, 10 bytes (149806)",
+   "prom_a/wsa1_prom_a.s:149812 `mul BC,0x000d` -- else n x 13, 149825 `add XBC,0x0060a000`, 13 bytes (149828)"
+  ]
+ },
+ {
+  "old": "sub_FDA504",
+  "verdict": "name",
+  "new": "DspEffect_CopyRecordBytes",
+  "header": "(r, off, n, dest): copies n bytes from offset off of DSP effect record r -- 0 = record 0x60 EFFECT COMMON (RAM 0x7634), 1/2/3 = effect blocks 0x61/0x62/0x63 (0x7642/0x7662/0x7682) -- to dest; any other r copies nothing.\nDspEffect_SendAllToCpu2 fetches record 0x60's byte 0 and each block's 23 bytes with it before sending them as consecutive tone parameters. Basis: caller + body + record addresses named elsewhere.",
+  "basis": "caller + body + named record addresses",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:150976 `calr sub_FDA504` -- DspEffect_SendAllToCpu2: (0, 0, 1, buf), sent as parameter 0x53 / 0x8B (150983, 150988)",
+   "prom_a/wsa1_prom_a.s:150998 `calr sub_FDA504` -- (1, 0, 23, buf), sent from 0x54 / 0x8C (151004, 151025); then r = 2 (151049) and 3 (151102)",
+   "prom_a/wsa1_prom_a.s:150288 `ld D,(XWA+0x7634)` -- r = 0; 150312 0x7642 (r 1), 150336 0x7662 (r 2), 150360 0x7682 (r 3)",
+   "prom_b/wsa1_prom_b.s:32480 `; DspEffect_ToggleCommonAlgorithm: Toggles bit 0 of RAM 0x7634 -- record 0x60 EFFECT COMMON` -- 0x7634 is record 0x60",
+   "prom_a/wsa1_prom_a.s:87907 `; DspEffect_RepostRotarySpeakerAlgorithm: For each DSP effect block 0x61/0x62/0x63 whose algorithm byte` -- (0x7642)/(0x7662)/(0x7682) are blocks 0x61..0x63"
+  ]
+ },
+ {
+  "old": "sub_FDA5D4",
+  "verdict": "name",
+  "new": "ToneEditPage_A0_DeriveGroupBrackets",
+  "header": "ModelingPage_Fields[6] := the GROUP bracket state ToneEditPage_A0_PaintGroupBrackets draws, from bits 7:6 of the slot bytes Fields[2..5]: all four 0x80 -> 4 (both pairs, linked), slots 1/2 and 3/4 both non-zero -> 3, only 3/4 -> 2, only 1/2 -> 1, none -> 0; a drum kit (two slots) gives 1 or 0.\nToneEditPage_A0_ModelingTop runs it after its read-back before repainting screen 0xC0; sub_FD26D3 runs it after a slot reply and repaints field 6. Basis: callers + body + painter.",
+  "basis": "callers + body + painter",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:156039 `call sub_FDA5D4` -- ToneEditPage_A0_ModelingTop, then the page repaint (156041 `call T_Dispatch_Code80_Bracketed`, screen 0xC0)",
+   "prom_a/wsa1_prom_a.s:134416 `call sub_FDA5D4` -- sub_FD26D3 after storing a slot byte, then T_Dispatch_Code80(0xC0, 6) (134417-134419)",
+   "prom_a/wsa1_prom_a.s:150395 `calr Arr27A6_Get` -- Fields[2+k], k = 0..3 ...",
+   "prom_a/wsa1_prom_a.s:150398 `and (XBC),0xc0` -- ... keeping bits 7:6",
+   "prom_a/wsa1_prom_a.s:150407 `calr Var27F5_Get` -- drum kit: only slots 1/2 count (1 or 0)",
+   "prom_a/wsa1_prom_a.s:150423 `ld h, 0x04:opc` -- all four 0x80 -> 4; 150440 -> 3; 150456 -> 2; 150466 -> 1; 150469 -> 0",
+   "prom_a/wsa1_prom_a.s:150475 `calr Arr27A6_Set` -- Fields[6] := it (pushw 0x06)",
+   "prom_b/wsa1_prom_b.s:133859 `; ToneEditPage_A0_PaintGroupBrackets: ... then by` -- draws by Fields+6: 0 none, 1 slots 1-2, 2 slots 3-4, 3 both pairs, else both pairs plus the link"
+  ]
+ },
+ {
+  "old": "sub_FDA6A3",
+  "verdict": "name",
+  "new": "PartRecord0_CopyBytes",
+  "header": "(r, off, n, dest): copies n bytes from RAM 0x76A2 + off -- part 0's first record, the one PartRecord0_GetProgramAndBank reads -- to dest; the record argument (0 at every call) is not read.\nDspEffect_SendAllToCpu2 (tones only) takes bytes +5 and +7 with it as tone parameters 0x88 / 0x89 and +6 into parameter 0x87 -- the bytes the COMBINATION EDIT MIXER reads as a part's EFFECT1 SEND / REVERB SEND / EFFECT2 ON/OFF. Basis: caller + body + part-record layout.",
+  "basis": "caller + body + part-record layout",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:151171 `calr sub_FDA6A3` -- (0, 5, 1, buf) (151169) -> ToneMsg_SendParam parameter 0x88 (151174, 151176)",
+   "prom_a/wsa1_prom_a.s:151192 `calr sub_FDA6A3` -- (0, 6, 1, ..) into the value sent as parameter 0x87 (151237); (0, 7, 1) -> 0x89 at 151179 / 151184",
+   "prom_a/wsa1_prom_a.s:150496 `ld L,(XWA+0x76a2)` -- the only RAM it reads; (XIZ+0x08) is never read",
+   "prom_a/wsa1_prom_a.s:145036 `; PartRecord0_GetProgramAndBank: *arg1 := (0x76A2), *arg2 := (0x76A3)` -- the record name already in the tree",
+   "notes/FINDINGS-prom_ab-parameter-events.md:59 `CombiEditMixer_DrawReverbSend | first 7` -- first record +7 REVERB SEND, +5 EFFECT1 SEND (60), +6 EFFECT2 ON/OFF (61)"
+  ]
+ },
+ {
+  "old": "sub_FDA742",
+  "verdict": "name",
+  "new": "Part0SecondRecord_StoreBytes",
+  "header": "(r, off, n, src): copies n bytes from src to RAM 0x76C2 + off -- part 0's second record (IndexedTable entry 0x20, PartRecord0 + 0x20); the record argument (0x20) is not read.\nScreenEnter_SoundEditControllerPage1 (when (0x2811) = 1) stores the picked source bits Fields[5] / Fields[6] into bytes 25 / 26 with it and posts {0x20, 25/26, v, 0x3F} -- the bytes SoftKeyCols2to7_CreatorSelectController toggles. Basis: caller + body + CreatorSelectController.",
+  "basis": "caller + body + sibling record users",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:153268 `ld h, 0x19:opc` -- ScreenEnter_SoundEditControllerPage1: picks 1/2 -> v = Fields[5], byte 0x19; else Fields[6], byte 0x1A (153275)",
+   "prom_a/wsa1_prom_a.s:153286 `call sub_FDA742` -- (0x20, byte, 1, &v) (153285 `pushw 0x20`)",
+   "prom_a/wsa1_prom_a.s:153293 `call T_EventQueue_AppendStackArgs` -- then posts {0x20, byte, v, 0x3F} (153292)",
+   "prom_a/wsa1_prom_a.s:150587 `ld (XWA+0x76c2),L` -- the only RAM it writes; (XIZ+0x08) is never read",
+   "prom_b/wsa1_prom_b.s:106861 `;   0x20 + UI_PartIndex byte 26 / 25 & 0x3F ... T_List2030_Append4(entry, 26 / 25, v, 0x3F)` -- the same entry and bytes, one bit of six",
+   "prom_a/wsa1_prom_a.s:151198 `calr sub_FDA70D` -- its read twin at 0x76C2 + off, (0x20, 3/4, ..): second-record MAIN OUT / SUB OUT per notes/FINDINGS-prom_ab-parameter-events.md:62-63"
+  ]
+ },
+ {
+  "old": "sub_FDA777",
+  "verdict": "name",
+  "new": "SoundEditPitchTune_KeyScalingPosToParam",
+  "header": "(pos, &code): code := IndexMap_FCF144[pos] -- KEY SCALING list position (Data_F05286: OFF, RANDOM, PIANO, ORCHESTR, PHYTHAGO, WERCKMEI, KIRNBERG, ARABIC1-5, SLENDRO, PELOG, USER) -> the tone parameter 0x13 value (0x00, 0x40-0x42, 0x03-0x05, 0x10-0x16, 0x80).\nSoftKeyCol6_SoundEditPitchTune steps the position (0..13) and sends the code as parameter 0x13; ScreenEnter_SoundEditPitchTune searches it to turn the read-back code into the position Fields[16]. Basis: callers + body + display list.",
+  "basis": "callers + body + display list",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:18905 `pushw\t16` -- SoftKeyCol6_SoundEditPitchTune steps Fields[16] within 0..13 (18909) ...",
+   "prom_b/wsa1_prom_b.s:18938 `call\tsub_FDA777` -- ... maps it, Fields[14] := code (18942) ...",
+   "prom_b/wsa1_prom_b.s:18949 `call\tToneMsg_SendParam` -- ... sends it as parameter 0x13 (18947 `pushw 19`)",
+   "prom_a/wsa1_prom_a.s:152038 `pushw 0x13` -- ScreenEnter_SoundEditPitchTune reads parameter 0x13 back",
+   "prom_a/wsa1_prom_a.s:152108 `call sub_FDA777` -- searches pos 0..14 (152114) until the code equals it (152111) ...",
+   "prom_a/wsa1_prom_a.s:152121 `call Arr27A6_Set` -- ... Fields[16] := pos (152120)",
+   "prom_a/wsa1_prom_a.s:150601 `add XBC,IndexMap_FCF144` -- the body: one table read",
+   "prom_a/wsa1_prom_a.s:128501 `IndexMap_FCF144:` -- 15 bytes 00 40 41 42 03 04 05 10..16 80",
+   "prom_b/wsa1_prom_b.s:13655 `.short ModelingPage_Fields+16` -- PITCH page record: Fields+16 & 0x0F names from Data_F05286 (13659, 8 bytes each, 15 names at 13704) at IX 0x175F (13661) ...",
+   "prom_b/wsa1_prom_b.s:10293 `.ascii \"KEY SCALING\"` -- ... the caption at (0xB6, 0x89), just above that readout (x 184, y 149)"
+  ]
+ },
+ {
+  "old": "sub_FDA7C6",
+  "verdict": "name",
+  "new": "SoundEditController_FieldCodeToShortListPos",
+  "header": "A := IndexMap_FCF1E9[code]: a controller destination code -> its position in the 36-entry list (12 on a drum kit) that leaves out FITTING, MUTING, RESO.KEYSHIFT and DELAY .. FILTER RESO. (codes 28, 35, 36, 38-46); IndexMap_FCF1B7 is its exact inverse.\nSoundEditController_SoftKeyCol2 uses it in place of SoundEditController_FieldCodeToListPos for page 2's controllers 8 and 9. Basis: caller + body + table check.",
+  "basis": "caller + body + table check",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:146687 `cp (XIZ+0x0a),0x02` -- SoundEditController_SoftKeyCol2: page 2 and Fields[0] = 8 (146695) or 9 (146697) -> L = 1 (146700)",
+   "prom_a/wsa1_prom_a.s:146736 `calr sub_FDA7C6` -- L = 1 converts the destination code with it (L = 0: SoundEditController_FieldCodeToListPos, 146732)",
+   "prom_a/wsa1_prom_a.s:146750 `ld (XIX+0x08),0x23` -- the stepped position is bounded by 0x23 (36 entries), 0x0B on a drum kit (146758), against 0x2F / 0x17 for L = 0 (146747, 146755)",
+   "prom_a/wsa1_prom_a.s:146783 `calr sub_FDA7F2` -- converted back with IndexMap_FCF1B7",
+   "prom_a/wsa1_prom_a.s:150665 `add XBC,IndexMap_FCF1E9` -- the body: one table read",
+   "prom_b/wsa1_prom_b.s:69957 `ControllerDestinationNames:` -- codes 28 FITTING, 35 MUTING, 36 RESO.KEYSHIFT, 38 DELAY .. 46 FILTER RESO.",
+   "/home/fsanches/compartilhado/tmp/wsa1-triage/agent_b9/verify_b9.py part 2 -- FCF1B7 is the inverse of FCF1E9 on 0..35; codes missing from the short list [28, 35, 36, 38..46]"
+  ]
+ },
+ {
+  "old": "sub_FDA7DC",
+  "verdict": "name",
+  "new": "SoundEditController_FieldCodeFromListPos",
+  "header": "A := IndexMap_FCF153[pos]: a position in the 48-entry controller destination list (24 on a drum kit) -> the destination code; the exact inverse of SoundEditController_FieldCodeToListPos on 0..47.\nSoundEditController_SoftKeyCol2 converts the stepped position back with it before storing Fields[n] and sending parameter Fields[13]+1, the destination byte. Basis: caller + body + table check.",
+  "basis": "caller + body + table check",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:146732 `calr SoundEditController_FieldCodeToListPos` -- SoundEditController_SoftKeyCol2: code -> position ...",
+   "prom_a/wsa1_prom_a.s:146779 `calr sub_FDA7DC` -- ... position stepped (max 0x2F / 0x17) -> code",
+   "prom_a/wsa1_prom_a.s:146796 `calr Arr27A6_Set` -- Fields[n] := code | the old bits 7:6",
+   "prom_a/wsa1_prom_a.s:146816 `incm8 0x01, (xiz-8)` -- sent as parameter Fields[13]+1 with mask 0x3F (146827 `calr ToneMsg_SendParam`)",
+   "prom_a/wsa1_prom_a.s:150674 `add XBC,IndexMap_FCF153` -- the body: one table read",
+   "prom_a/wsa1_prom_a.s:150647 `;   position 0..0x2F ...; IndexMap_FCF153 (sub_FDA7DC) maps it back and is its` -- the FieldCodeToListPos header already records the inverse",
+   "/home/fsanches/compartilhado/tmp/wsa1-triage/agent_b9/verify_b9.py part 1 -- FCF153 is the inverse of FCF185 on 0..47 (True)"
+  ]
+ },
+ {
+  "old": "sub_FDA7F2",
+  "verdict": "name",
+  "new": "SoundEditController_FieldCodeFromShortListPos",
+  "header": "A := IndexMap_FCF1B7[pos]: a position in the 36-entry short destination list (12 on a drum kit) -> the controller destination code; the exact inverse of SoundEditController_FieldCodeToShortListPos on 0..35.\nSoundEditController_SoftKeyCol2 uses it for page 2's controllers 8 and 9. Basis: caller + body + table check.",
+  "basis": "caller + body + table check",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:146700 `ld l, 0x01:opc` -- SoundEditController_SoftKeyCol2: L = 1 on page 2 for controllers 8 / 9",
+   "prom_a/wsa1_prom_a.s:146783 `calr sub_FDA7F2` -- L = 1: stepped position (max 0x23 / 0x0B) -> code",
+   "prom_a/wsa1_prom_a.s:150683 `add XBC,IndexMap_FCF1B7` -- the body: one table read",
+   "/home/fsanches/compartilhado/tmp/wsa1-triage/agent_b9/verify_b9.py part 2 -- FCF1B7 is the inverse of FCF1E9 on 0..35 (True)"
+  ]
+ },
+ {
+  "old": "sub_FDAC6B",
+  "verdict": "name",
+  "new": "ModeEnter_SoundEdit",
+  "header": "Enter method of panel mode 0x17, SOUND EDIT (PanelScreen_VtableTable[23] -> T_F41F54; PanelMode_ToScreenIdMap[0x17] = 0x80, the SOUND EDIT MENU): clears (0x27FB) (no drum key chosen yet), stops the running transports, sub_FDA43D(1), sub_FDA459(1), ToneMsg88_Id0D, Var2806 := 0, T_Mode_SwitchToSound,\nthen resets Var27F6 (MEMORY WRITE slot kept), Var27DF, Var2807 := 0xFF, Var2811 and Var2805. Basis: table + body.",
+  "basis": "table + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:13819 `.long T_F41F54` -- PanelScreen_VtableTable entry [23], view A, indexed by PanelMode (13770)",
+   "prom_b/wsa1_prom_b.s:91576 `T_F41F54:\tjp sub_FDAC6B` -- vtable +0 = Enter; +4 T_F41F58 = sub_FDACBD (91577), the Leave",
+   "prom_a/wsa1_prom_a.s:13763 `.byte 0x60, 0x01, 0x70, 0x5b, 0x40, 0x40, 0x33, 0x80, ...` -- PanelMode_ToScreenIdMap[23] = 0x80",
+   "prom_a/wsa1_prom_a.s:13971 `.long T_ScreenEnter_SoundEditMenu` -- screen 0x80 (ScreenEnter table [128]) is SOUND EDIT MENU",
+   "prom_a/wsa1_prom_a.s:151425 `call Var27FB_Set` -- (0x27FB) := 0, the flag SoundEditDrum_GetSelectedKey tests",
+   "prom_a/wsa1_prom_a.s:151426 `call T_Transport_StopAllRunning`",
+   "prom_a/wsa1_prom_a.s:151434 `call T_Mode_SwitchToSound`",
+   "prom_a/wsa1_prom_a.s:151436 `call Var27F6_Set` -- 0: SoundEditMemoryWrite_GetTargetSlot proposes a slot afresh",
+   "prom_a/wsa1_prom_a.s:151440 `call Var2807_Set` -- 0xFF; then Var2811 / Var2805 := 0"
+  ]
+ },
+ {
+  "old": "sub_FDAE1F",
+  "verdict": "name",
+  "new": "SoundEditMenu_ReadBackTone",
+  "header": "SOUND EDIT MENU enter stages 2-5 for a tone ((0x27F5) != 1): requests parameter 0x11 and stores the reply as the slot-enable byte (Var27A4_Set), takes bit 0 of the ToneMsg80_Id00 reply into ModelingPage_Fields[1], reads parameter 0x17 of elements 1..4 into Arr2800[1..4],\nthen repaints screen 0x80 and ends with ToneMsg80_Id00(0x10). ScreenEnter_SoundEditMenu runs it once (0x27F5) is known; the drum-kit branch is SoundEditMenu_ReadBackDrum. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:151525 `cp C,0x80` -- ScreenEnter_SoundEditMenu stage 1: reply bits 7:6 = 0x80 -> (0x27F5) := 1 (151528), 0x40 -> 2 (151545), else 0",
+   "prom_a/wsa1_prom_a.s:151579 `calr sub_FDAE1F` -- stages >= 2 when (0x27F5) != 1 (151574); 151576 the drum branch",
+   "prom_a/wsa1_prom_a.s:151597 `pushw 0x11` -- stage 2: ToneMsg80_SendParam(0, 0x11, 1, 0x80) (151599)",
+   "prom_a/wsa1_prom_a.s:151611 `call Var27A4_Set` -- stage 3: the reply -> (0x27A4), the slot-enable byte SoundEdit_SetSlotEnabled sends as parameter 0x11",
+   "prom_a/wsa1_prom_a.s:151613 `call ToneMsg80_Id00` -- then query 0x00",
+   "prom_a/wsa1_prom_a.s:151626 `and (XIX),0x01` -- stage 4: its bit 0 -> Fields[1] (151631)",
+   "prom_a/wsa1_prom_a.s:151637 `pushw 0x17` -- parameter 0x17 of elements H = 1..4 (151641)",
+   "prom_a/wsa1_prom_a.s:151663 `call Arr2800_Set1` -- replies -> Arr2800[n]",
+   "prom_a/wsa1_prom_a.s:151670 `call T_Dispatch_Code80_Bracketed` -- after 4 replies: repaint screen 0x80"
+  ]
+ },
+ {
+  "old": "sub_FDAF07",
+  "verdict": "name",
+  "new": "SoundEditMenu_ReadBackDrum",
+  "header": "SOUND EDIT MENU enter stages 2-9 for a drum kit ((0x27F5) = 1): Fields[0] := Var27A3_GetValidSlot, Fields[1] := SoundEditDrum_GetSelectedKey (selected on CPU 2), kit parameters 0x00-0x0F (the name) -> SoundEditText slot 4, kit parameters 0x0D, 0x11, 0x13.., 0x16.., 0x17.., 0x18.. -> Fields[2..11],\nthen the perc-source (sub_FD9EB7) and drum-source (ModelingPage_StoreDrumSourceReply) replies and two catalogue footers, and repaints screen 0x80. ScreenEnter_SoundEditMenu runs it once (0x27F5) = 1 is known. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:151576 `calr sub_FDAF07` -- ScreenEnter_SoundEditMenu, stages >= 2 when (0x27F5) = 1 (151574)",
+   "prom_a/wsa1_prom_a.s:151699 `call Var27A3_GetValidSlot` -- stage 2: Fields[0] := slot; Fields[1] := SoundEditDrum_GetSelectedKey (151707), ToneMsg88_Id13 (151716)",
+   "prom_a/wsa1_prom_a.s:151723 `call ToneMsg85_SendParam` -- (3, 0x00, count 0x10, 0x80) (151719-151722): the 16-byte kit name ...",
+   "prom_a/wsa1_prom_a.s:151756 `call SoundEditText_SetSlot` -- ... printable-filtered into slot 4",
+   "prom_a/wsa1_prom_a.s:151759 `pushw 0x0d` -- stage 3 requests 0x0D, 0x18/0x2F, 0x16/0x2D, 0x17/0x2E, 0x13/0x2A, 0x11 (151854)",
+   "prom_a/wsa1_prom_a.s:151891 `call Var27A4_Set` -- after 11 replies: slot-enable byte, pans split (151893 ToneLayerPan_SplitSideAndAmount) ...",
+   "prom_a/wsa1_prom_a.s:151922 `call sub_FD9EB7` -- stages 5/6: perc-source replies; 151949 `call sub_FD9F42` stage 7 after ToneMsg80_Id10(key) (151941)",
+   "prom_a/wsa1_prom_a.s:151960 `call ToneCatalogue_StoreFooterReply` -- stages 8/9",
+   "prom_a/wsa1_prom_a.s:151977 `call T_Dispatch_Code80_Bracketed` -- repaint screen 0x80 (or field 0x32, 151983)"
+  ]
+ },
+ {
+  "old": "sub_FDB7F3",
+  "verdict": "name",
+  "new": "SoundEditAmpLevel1_RequestToneFields",
+  "header": "Sends the AMPLITUDE LEVEL page 1 read-back requests for a tone: parameters 0x17, 0x18, 0x19 of elements 1..4 (12 x ToneMsg80_SendParam, count 1, reply screen 0x8B), answered into ModelingPage_Fields[1..12].\nScreenEnter_SoundEditAmpLevel1 calls it on entry when (0x27F5) = 0 and repaints after reply 12. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:152495 `calr sub_FDB7F3` -- ScreenEnter_SoundEditAmpLevel1 stage 0, (0x27F5) = 0 (152493)",
+   "prom_a/wsa1_prom_a.s:152502 `call Var27DB_Increment` -- replies counted from 1 ...",
+   "prom_a/wsa1_prom_a.s:152532 `cp A,0x0c` -- ... done after reply 12; repaint screen 0x8B (152604, 152605)",
+   "prom_a/wsa1_prom_a.s:152621 `ldw ix, 0x17` -- parameters 0x17.. (3 of them, 152622 / 152637) ...",
+   "prom_a/wsa1_prom_a.s:152632 `call ToneMsg80_SendParam` -- ... for selectors D = 1..4 (152635), reply screen 0x8B (152626)"
+  ]
+ },
+ {
+  "old": "sub_FDB81F",
+  "verdict": "name",
+  "new": "SoundEditAmpLevel1_RequestDrumFields",
+  "header": "Drum-kit twin of SoundEditAmpLevel1_RequestToneFields: through ToneMsg85_SendParam requests kit parameter 0x0E, then 0x18/0x2F, 0x19/0x30, 0x1A/0x31, then 0x12 and 0x29 (9 requests, reply screen 0x8B), answered into ModelingPage_Fields[1..9].\nScreenEnter_SoundEditAmpLevel1 calls it on entry when (0x27F5) != 0 and repaints after reply 9. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:152498 `calr sub_FDB81F` -- ScreenEnter_SoundEditAmpLevel1 stage 0, (0x27F5) != 0",
+   "prom_a/wsa1_prom_a.s:152575 `cp A,0x09` -- done after reply 9 on a drum kit",
+   "prom_a/wsa1_prom_a.s:152649 `lda xix, (ToneMsg85_SendParam:24)` -- every request goes through ToneMsg85_SendParam (jp (xix), 152656)",
+   "prom_a/wsa1_prom_a.s:152652 `pushw 0x0e` -- kit parameter 0x0E",
+   "prom_a/wsa1_prom_a.s:152672 `add XWA,0x00000018` -- 0x18 + h + 0x17k for h = 0..2, k = 0/1 (152686 `add DE,0x0017`)",
+   "prom_a/wsa1_prom_a.s:152704 `add XWA,0x00000012` -- then 0x12 + 0x17k"
+  ]
+ },
+ {
+  "old": "sub_FDBA51",
+  "verdict": "name",
+  "new": "SoundEditAmpEnvelope1_RequestToneFields",
+  "header": "Sends the AMPLITUDE ENVELOPE page 1 read-back requests for a tone: parameters 0x27-0x2D of element Var27A3_GetValidSlot (7 x ToneMsg80_SendParam, reply screen 0x8D), answered into ModelingPage_Fields[0..6] -- the levels and times SoundEditAmpEnvelope_DrawGraph draws.\nScreenEnter_SoundEditAmpEnvelope1 calls it on entry when (0x27F5) = 0 and draws after reply 7. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:152827 `calr sub_FDBA51` -- ScreenEnter_SoundEditAmpEnvelope1 stage 0, (0x27F5) = 0",
+   "prom_a/wsa1_prom_a.s:152855 `cp a, 0x06:i3` -- replies counted from 0: done after 7 ...",
+   "prom_a/wsa1_prom_a.s:152865 `call SoundEditAmpEnvelope_DrawGraph` -- ... repaint screen 0x8D (152863) and the graph",
+   "prom_a/wsa1_prom_a.s:146926 `; SoundEditAmpEnvelope_DrawGraph: erase the graph box, read ModelingPage_Fields[0..6]` -- what the graph reads",
+   "prom_a/wsa1_prom_a.s:152884 `call Var27A3_GetValidSlot` -- the element",
+   "prom_a/wsa1_prom_a.s:152885 `ldw de, 0x27` -- parameters 0x27.. , 7 of them (152886)",
+   "prom_a/wsa1_prom_a.s:152896 `call ToneMsg80_SendParam` -- (slot, p, 1, 0x8D) (152889)"
+  ]
+ },
+ {
+  "old": "sub_FDBA8B",
+  "verdict": "name",
+  "new": "SoundEditAmpEnvelope1_RequestDrumFields",
+  "header": "Drum-kit twin of SoundEditAmpEnvelope1_RequestToneFields: through ToneMsg85_SendParam requests kit parameter 0x0D, then 0x17 x s + 4 .. 0x17 x s + 11 for s = Var27A3_GetValidSlot (9 requests, reply screen 0x8D), answered into ModelingPage_Fields[0..8].\nScreenEnter_SoundEditAmpEnvelope1 calls it on entry when (0x27F5) != 0 and repaints after reply 9. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:152830 `calr sub_FDBA8B` -- ScreenEnter_SoundEditAmpEnvelope1 stage 0, (0x27F5) != 0",
+   "prom_a/wsa1_prom_a.s:152860 `cp A,0x08` -- done after reply 9 on a drum kit",
+   "prom_a/wsa1_prom_a.s:152915 `call Var27A3_GetValidSlot` -- s",
+   "prom_a/wsa1_prom_a.s:152918 `pushw 0x0d` -- kit parameter 0x0D (152920 `call ToneMsg85_SendParam`)",
+   "prom_a/wsa1_prom_a.s:152929 `m_mul MBD+r6, 0xfe, 3` -- 0x17 x s (152928) + 4 (152931) + h ...",
+   "prom_a/wsa1_prom_a.s:152940 `call ToneMsg85_SendParam` -- ... for h = 0..7 (152943)"
+  ]
+ }
+]

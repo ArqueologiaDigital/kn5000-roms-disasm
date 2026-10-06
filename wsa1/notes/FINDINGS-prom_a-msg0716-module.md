@@ -346,7 +346,7 @@ On 2026-10-05 it lists 16 pairings. Named from them:
 - `Cpu2Query_SendPartRecordRead` / `_SendToneRecordRead` (`_ReplyCh4` variants, and offset-fixed `...Read87` /
   `...Read52`);
 - `Drawbar_QueryPart0Byte10`, `Drawbar_QueryElementBlocks` and the reply side `Drawbar_OnCpu2Reply`. The
-  DRAWBAR requests carry the tag 0xA3, which is the screen's own id, and prom_a's reply handler `sub_FD2014`
+  DRAWBAR requests carry the tag 0xA3, which is the screen's own id, and prom_a's reply handler `Cpu2Reply_HandleNext`
   routes replies tagged 0xA3 to it.
 
 This settles two things prom_c's headers record as unknown:

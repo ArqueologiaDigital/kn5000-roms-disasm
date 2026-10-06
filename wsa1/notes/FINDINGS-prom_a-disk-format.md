@@ -262,7 +262,7 @@ stated gap beats a plausible name.
    ⚠ Half of this is now answered: `Disk_MountFloppyWithRetry` **clears** bit 6 of `(0x21E7)`
    at 0xFE08D1 and **sets** it again at 0xFE08F3 when the disk-command result
    byte `(0x1735)` — the byte `Disk_MountFloppy` and its siblings store at 0xFE1957 —
-   comes back as **0x0B**. And `sub_FE09BE` writes the same bit through a
+   comes back as **0x0B**. And `DiskFormat_Execute` writes the same bit through a
    POINTER — 0xFE09C0 `lda XIX,0x21E7`, then 0xFE0A0E `and (XIX),0xBF` and
    0xFE0A1B `or (XIX),0x40` — which **copies bit 3 of `(0x21E8)` into bit 6 of
    `(0x21E7)`**. So bit 6 is a state flag the block-device layer raises itself,

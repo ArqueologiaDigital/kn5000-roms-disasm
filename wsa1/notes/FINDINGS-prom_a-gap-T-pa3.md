@@ -101,7 +101,7 @@ a per-operation line has:
   the way. 0xFE1CC4 is a bare `calr Disk_PortA3_Release / ret` veneer.
 * ⚠ **the twelfth release is not an exit, and the first draft of the census
   asserted it was and failed.** 0xFE09EE is immediately followed by 0xFE09F1,
-  which asserts: `sub_FE09BE` **cycles** the line, release then assert, 20
+  which asserts: `DiskFormat_Execute` **cycles** the line, release then assert, 20
   instructions into its own body. That is exactly what a driver does to a motor
   it is not sure of the state of.
 
@@ -150,7 +150,7 @@ around them.
 
 ## 5. What this pass did NOT do
 
-* It did not name `Disk_MountFloppyWithRetry`, `sub_FE09BE` or the routine at 0xFE1997. They
+* It did not name `Disk_MountFloppyWithRetry`, `DiskFormat_Execute` or the routine at 0xFE1997. They
   are the three sequences that own the line; what each one is FOR is unknown,
   and the module they live in is still the one whose banner says "converted but
   NOT NAMED".

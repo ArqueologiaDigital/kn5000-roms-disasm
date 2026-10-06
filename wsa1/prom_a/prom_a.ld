@@ -65,7 +65,7 @@ SECTIONS {
 T_ModuleInit_Phase2Veneer = 0xF40034;
 T_EditValue_SetBit = 0xF42C7C;
 T_CallbackQueue_ResetAndRestartTask2 = 0xF42E80;
-sub_F7E39F_Nop = 0xF7E2D8;
+ButtonTable_SequencerMedley_Nop = 0xF7E2D8;
 PromB_LCD_ScreenRedraw_Begin = 0xF7E2D9;
 PromB_LCD_ScreenRedraw_End = 0xF7E2E7;
 LCD_ClearCurrentLayer = 0xF7E2ED;

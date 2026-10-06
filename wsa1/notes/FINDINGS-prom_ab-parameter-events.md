@@ -42,7 +42,7 @@ Handlers named this way on 2026-10-04 (notes/prom_ab_read_names_2026_10_04.py):
 Not established:
 - records 0xA8 and 0xA9 and byte 9 of record 0x80 have no descriptor;
 - the handlers of 0xA8 byte 17 (`Seq_RequestRewindOnEvent` -> T_Seq_RequestRewind, 24 callers, unnamed) and of 0x9A;
-- the Msg0716 entry stubs `sub_FC0430` / `sub_FC0450` / `sub_FC0460`.
+- the Msg0716 entry stubs `Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_13` / `Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_56_26` / `Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_56_26`.
 
 ## COMBINATION EDIT MIXER cells (2026-10-05)
 
@@ -71,7 +71,7 @@ dirty mask and posts the matching `CombiEditMixer_RepaintMarked*` callback. That
 clears it with interrupts held (`ei 6`), then repaints the marked parts of the edited group.
 
 The switches go through `CombiEditMixer_DrawSwitchCell` and the levels through `CombiEditMixer_DrawValueCell`.
-The basis is the descriptor match, which is a table-index basis. Not established: `sub_FBE5CA` (the
+The basis is the descriptor match, which is a table-index basis. Not established: `CombiEditMixer_DrawCurrentPartSound` (the
 edited-part header) and the page painters, which are still `.L` labels in 0xFBE2E9..0xFBE4AF.
 
 ### COMBINATION EDIT state (2026-10-05)

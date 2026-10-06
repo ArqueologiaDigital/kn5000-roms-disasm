@@ -1,0 +1,506 @@
+[
+ {
+  "old": "sub_FDCD22",
+  "verdict": "name",
+  "new": "SoundEditModelingDriverWaveform_DeriveRangeStarts",
+  "header": "DRIVER WAVEFORM page: ModelingPage_Fields[4+c] := Fields[1+c] + 1 for c = 0..2 (0, and 0 for every later row, once Fields[1+c] is 0x7F), Fields[7] := 0x7F -- the starts of the ranges the page draws as 0-F1, F4-F2, F5-F3, F6-F7.\nScreenEnter_SoundEditModelingDriverWaveform runs it on its last reply stage, before the repaint; SoundEditModelingDriverWaveform_PaintRows erases a row whose start is 0. Basis: caller + body + the page's display lists.",
+  "basis": "caller + body + display lists",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:154877 `calr sub_FDCD22` -- ScreenEnter_SoundEditModelingDriverWaveform, last reply stage: after ToneCatalogue_StoreFooterReply, before T_Dispatch_Code80_Bracketed",
+   "prom_a/wsa1_prom_a.s:154898 `lda xix, (Arr27A6_Set:24)` -- every store goes through the ModelingPage_Fields setter (index, value)",
+   "prom_a/wsa1_prom_a.s:154904 `m_cp_mi8 MBD+r6, 0xfe, 0x7f` -- Fields[1] (Arr27A6_Get(1)) == 0x7F -> Fields[4] := 0 and the jump to the 0-stores of rows 5 and 6",
+   "prom_a/wsa1_prom_a.s:154917 `inc 1,BC` -- otherwise Fields[4] := Fields[1] + 1; the same pattern for 5 from 2 (0xFDCD8E) and 6 from 3 (0xFDCDBE)",
+   "prom_a/wsa1_prom_a.s:154974 `pushw 0x7f` -- with the next line `pushw 0x07`: Fields[7] := 0x7F",
+   "prom_b/wsa1_prom_b.s:70946 `.short ModelingPage_Fields+1` -- the head row reads Fields[1] after the \"  0-\" record (SoundEditModelingDriverWaveform_PaintRows_DL1)",
+   "prom_b/wsa1_prom_b.s:70973 `.short 0x27AA` -- row 0 reads Fields[4] then Fields[2] (0x27A8); rows 1/2 read 0x27AB/0x27A9 and 0x27AC/0x27AD -- start and end of each range",
+   "prom_b/wsa1_prom_b.s:133940 `ld xiz, ModelingPage_Fields+4` -- PaintRows: a row whose Fields[4+c] is 0 gets its erase list instead of its readouts"
+  ]
+ },
+ {
+  "old": "sub_FDE74C",
+  "verdict": "name",
+  "new": "ScreenButton_SoundEditFilterLfo_AfterOp",
+  "header": "The return point ScreenButton_SoundEditFilterLfo pushes before its computed `jp (xbc)` through PanelOpTable_FCF72B: after the op, unless a screen request is pending (PanelScreen_RequestPending), ToneMsg80_Id00(0x10); then the handler's own `unlk XIZ / ret` (sub_FDE74C_Skip).\nNot a routine: the eleven sibling ScreenButton handlers spell the same return point as a local `.L` label, so demoting it to one is the alternative to this name. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:158076 `add XBC,PanelOpTable_FCF72B` -- ScreenButton_SoundEditFilterLfo indexes the op table with the field index",
+   "prom_a/wsa1_prom_a.s:158078 `lda xiy, (sub_FDE74C:24)` -- the return address it pushes before `jp (xbc)` -- the only reference",
+   "prom_a/wsa1_prom_a.s:158089 `call PanelScreen_RequestPending` -- A = 1 when (0x2071) bits 7/6/4 request a screen change",
+   "prom_a/wsa1_prom_a.s:158094 `call ToneMsg80_Id00` -- with `pushw 0x10`: sent only when no request is pending",
+   "prom_a/wsa1_prom_a.s:158024 `lda xiy, (.LFDE6F3:24)` -- the previous ScreenButton handler: the same return point as a local label, followed by the same PanelScreen_RequestPending / ToneMsg80_Id00(0x10) tail"
+  ]
+ },
+ {
+  "old": "sub_FE0090",
+  "verdict": "refuse",
+  "why_refused": "A register-saving veneer for slot T_F401D4, whose target T_F401D4_Nop is a lone `ret` in this build, so DiskLoad_ApplyPanelImage's call does nothing and nothing says what the hook was for.",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:165525 `calr sub_FE0090` -- DiskLoad_ApplyPanelImage, between ParamImage_SanitizeAllAndHook and ParamImage_QueueDiffAll",
+   "prom_a/wsa1_prom_a.s:161617 `call T_F401D4` -- the whole body besides the four push/pop pairs",
+   "prom_b/wsa1_prom_b.s:89525 `T_F401D4:` -- `jp T_F401D4_Nop`; prom_a 0xF96018 is `ret`"
+  ]
+ },
+ {
+  "old": "sub_FE00AA",
+  "verdict": "refuse",
+  "why_refused": "A register-saving veneer for slot T_F407A4, whose target T_F407A4_Nop is a lone `ret` in this build; nothing identifies the hook.",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:165527 `calr sub_FE00AA` -- DiskLoad_ApplyPanelImage",
+   "prom_a/wsa1_prom_a.s:161639 `call T_F407A4` -- the whole body besides the push/pop pairs",
+   "prom_b/wsa1_prom_b.s:89719 `T_F407A4:` -- `jp T_F407A4_Nop` -> prom_a 0xFAA7AB `ret`"
+  ]
+ },
+ {
+  "old": "sub_FE00B7",
+  "verdict": "refuse",
+  "why_refused": "A register-saving veneer for slot T_F407A0, whose target T_F407A0_Nop is a lone `ret` in this build; nothing identifies the hook.",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:165528 `calr sub_FE00B7` -- DiskLoad_ApplyPanelImage",
+   "prom_a/wsa1_prom_a.s:161650 `call T_F407A0` -- the whole body besides the push/pop pairs",
+   "prom_b/wsa1_prom_b.s:89718 `T_F407A0:` -- `jp T_F407A0_Nop` -> prom_a 0xFAB5EA `ret`"
+  ]
+ },
+ {
+  "old": "sub_FE00EB",
+  "verdict": "refuse",
+  "why_refused": "A register-saving veneer for slot T_F40FF0 -> sub_FC01F3, still unnamed: CPU-2 link request 88 00 17 00 00 00 (an opcode ToneQuery_Dispatch answers with an empty reply) then sub_FC0206 (SysEx 50 92, meaning not established); the veneer can only inherit a name from it.",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:165573 `calr sub_FE00EB` -- DiskLoad_Sound, when DiskLoad_StreamFileToLinkRam did not return 1",
+   "prom_a/wsa1_prom_a.s:161719 `call T_F40FF0` -- the body; T_F40FF0 is `jp sub_FC01F3`",
+   "prom_a/wsa1_prom_a.s:115730 `ld (XIX),0x88` -- sub_FC19E0 (called by sub_FC01FA): the 6-byte request 88 00 17 00 00 00 through Msg0716_Post",
+   "prom_a/wsa1_prom_a.s:100523 `call T_F40FF0` -- SysExSession_OnAbort_Sound calls the same slot, then T_F40FEC"
+  ]
+ },
+ {
+  "old": "sub_FE00F8",
+  "verdict": "refuse",
+  "why_refused": "A register-saving veneer for slot T_F40FEC -> sub_FC0206, still unnamed: Msg0716_PostSysEx50_92 (command 0x92, meaning not established) plus sub_FC0215's re-post of RAM record 0x76A2; no name for the target, so none for the veneer.",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:165577 `calr sub_FE00F8` -- DiskLoad_Sound when Disk_ContentType is 3; other types post only Msg0716_PostSysEx50_92",
+   "prom_a/wsa1_prom_a.s:161730 `call T_F40FEC` -- the body; T_F40FEC is `jp sub_FC0206`",
+   "prom_a/wsa1_prom_a.s:112907 `calr Msg0716_PostSysEx50_92` -- sub_FC0206 = PostSysEx50_92 + sub_FC0215",
+   "prom_a/wsa1_prom_a.s:91518 `call T_F40FEC` -- sub_FB31BF, the same veneer shape, also left unnamed (SysExSession_OnEnd_Sound)"
+  ]
+ },
+ {
+  "old": "sub_FE011B",
+  "verdict": "name",
+  "new": "BStore_ClearSongStore_SaveRegs",
+  "header": "Calls slot T_F40A00 (`jp T_BStore_ClearSongStore` -> BStore_ClearSongStore) with XDE/XHL/XIX/XIZ saved: empties the song store.\nMedley_NormFileCommand's start and next arms run it, right after zeroing the track mask (0x60341E), to clear the song before loading the next disk song. Basis: caller + body (DERIVATIVE wrapper name, prom_ab_wrapper_names.py style).",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:164177 `calr sub_FE011B` -- Medley_NormFileCommand, cases 0 and 2-4 (\"both clear the song\" in its header)",
+   "prom_a/wsa1_prom_a.s:164176 `ld (0x60341e:24), xbc` -- the instruction before: track mask := 0",
+   "prom_a/wsa1_prom_a.s:161762 `call T_F40A00` -- the body besides the four push/pop pairs",
+   "prom_b/wsa1_prom_b.s:89896 `T_F40A00:` -- `jp T_BStore_ClearSongStore`, which is `jp BStore_ClearSongStore`",
+   "prom_b/wsa1_prom_b.s:108016 `; BStore_ClearSongStore: Empties the song store` -- the target's header"
+  ]
+ },
+ {
+  "old": "sub_FE01BD",
+  "verdict": "name",
+  "new": "SC1_Cmd_EF_SaveRegs",
+  "header": "Calls slot T_F40F1C (SC1_Entry_F40F1C -> SC1_Cmd_EF: empties SC1's receive ring, sends 0xEF then 0xE3 0x10) with XDE/XHL/XIX/XIZ saved.\nMidiFilePlay_OnSongSelect runs it after the song-select load, as the disk execute keys do through SC1_CmdEFAndClearHeldButtons. Basis: caller + body (DERIVATIVE wrapper name).",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:164091 `calr sub_FE01BD` -- MidiFilePlay_OnSongSelect, after the load and the drive release",
+   "prom_a/wsa1_prom_a.s:161905 `call T_F40F1C` -- the body besides the push/pop pairs",
+   "prom_b/wsa1_prom_b.s:129523 `calr SC1_Cmd_EF` -- SC1_Entry_F40F1C, the slot target, is itself a register-saving call of SC1_Cmd_EF",
+   "prom_a/wsa1_prom_a.s:198679 `call T_F40F1C` -- SC1_CmdEFAndClearHeldButtons calls the same slot after a disk transfer"
+  ]
+ },
+ {
+  "old": "sub_FE0599",
+  "verdict": "name",
+  "new": "DiskLoadFile_SendSongSelectAndLoad",
+  "header": "Unless UI_ScreenLatch is 0x49 or 0x4E, sends MIDI Song Select (F3, Disk_SelectedEntry) when MidiFilter_SongSelect bit 3 allows (sub_FE1522 -> sub_FE14E9); then DiskLoad_LoadAndReportResult.\nThe body of DiskLoadFile_Execute (which then runs Ring_InitTenOfFourteen). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:165010 `calr sub_FE0599` -- DiskLoadFile_Execute, the directory entry DiskL0adFile_LcdKeyRow1 and SmfWrite_RestoreSongFromTempFile use",
+   "prom_a/wsa1_prom_a.s:162401 `m_cp_mi8 MB16, UI_ScreenLatch, 0x49` -- screens 0x49 / 0x4E skip the Song Select",
+   "prom_a/wsa1_prom_a.s:162405 `calr sub_FE1522` -- push Disk_SelectedEntry, sub_FE14E9",
+   "prom_a/wsa1_prom_a.s:164116 `ld (0x9b:8), 0xf3:io` -- sub_FE14E9: status byte 0xF3 + the song number from MidiOut_SongSelectTemplate into Ring601432, T_MIDI_PostSendWork",
+   "prom_a/wsa1_prom_a.s:162407 `calr sub_FE05AE` -- then the load (DiskLoad_LoadAndReportResult)"
+  ]
+ },
+ {
+  "old": "sub_FE05AE",
+  "verdict": "name",
+  "new": "DiskLoad_LoadAndReportResult",
+  "header": "Playback_SilenceAll, status message 0x0A, DiskLoad_ByContentType -> Disk_LastError and its own status message; result 1 (done): Delay_500Ticks, UI_Request := 1, UI_Request_Hi := 2; else Delay_Ticks(2000), UI_Request_Hi |= 0x10.\nThe load step of DiskLoadFile_SendSongSelectAndLoad and of MidiFilePlay_OnSongSelect. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:162407 `calr sub_FE05AE` -- DiskLoadFile_SendSongSelectAndLoad (body of DiskLoadFile_Execute)",
+   "prom_a/wsa1_prom_a.s:164084 `calr sub_FE05AE` -- MidiFilePlay_OnSongSelect, after copying the entry name to Disk_FileName",
+   "prom_a/wsa1_prom_a.s:162416 `calr DiskLoad_ByContentType` -- with `pushw 0x0a / calr StatusMsg_ShowByIndex` before it",
+   "prom_a/wsa1_prom_a.s:162418 `ld (Disk_LastError:16), a` -- the result kept and shown (StatusMsg_ShowByIndex(H))",
+   "prom_a/wsa1_prom_a.s:162423 `cp h, 0x01:i3` -- result 1 -> short delay and UI_Request 1 / 2; else 2000 ticks and UI_Request_Hi bit 4"
+  ]
+ },
+ {
+  "old": "sub_FE09BE",
+  "verdict": "name",
+  "new": "DiskFormat_Execute",
+  "header": "FLOPPY DISK FORMAT: Playback_SilenceAll, drive released, status 9, Disk_MountFloppyWithRetry and Disk_RequestSenseDriveStatus (errors -> status 8 / 0x0C), status 0x0E, then Disk_FormatSelectedMedia as 2HD when (0x21E8) bit 3 (Disk_Flags bit 6 set) else 2DD;\na failed format flips (0x21E8) bit 3 and retries once at the other density. Status 0x0F on success, 0x14 + alert on failure. Row-3 key of the 'Are You Sure?' screen 0x51 (its button table is Dispatch_FF3D39 row 5). Basis: callers + body + screen.",
+  "basis": "callers + body + screen table",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:165029 `calr sub_FE09BE` -- MidiFileSave_Page5_LcdKeyRow3 -- but row 5 of Dispatch_FF3D39 is not a MidiFileSave page:",
+   "prom_a/wsa1_prom_a.s:195995 `add XBC,Dispatch_FF3D39+0x280` -- PanelButtonDispatch_FloppyDiskFormatAreYouSure (screen 0x51) reads row 5, so LcdKeyRow3_MidiFileSave_Page5 is that screen's row-3 key",
+   "prom_a/wsa1_prom_a.s:196037 `call T_MidiFileSave_Page5_LcdKeyRow3` -- LcdKeyRow3_MidiFileSave_Page5, left key only",
+   "prom_a/wsa1_prom_a.s:162980 `calr Disk_FormatSelectedMedia_Veneer` -- the format, after mounting at the density (0x21E8) bit 3 picks",
+   "prom_a/wsa1_prom_a.s:162984 `m_xor_mi8 MB16, 0x21e8, 0x08` -- on a non-zero Disk_LastError: other density, mount twice, format again",
+   "prom_a/wsa1_prom_a.s:195920 `lda xwa, (DL_2hd:24)` -- Paint_FloppyDiskFormatAreYouSure shows (2HD) when (0x21E8) bit 3, (2DD) otherwise",
+   "prom_a/wsa1_prom_a.s:164927 `calr sub_FE09BE` -- the second caller, directory entry sub_FE1C17 (T_F42588)"
+  ]
+ },
+ {
+  "old": "sub_FE0AF8",
+  "verdict": "name",
+  "new": "DiskFile_CopyFileBufferToWindow",
+  "header": "Copies Disk_WindowEnd - Disk_WindowStart bytes from the file buffer 0x60A080 to Disk_WindowStart.\nDiskApi_ReadFileToWindow runs it after a successful read when Disk_Flags bit 2 sent the transfer to 0x60A080 instead of the window (DiskFile_SetTransferToWindow). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:163163 `calr sub_FE0AF8` -- DiskApi_ReadFileToWindow, on the Disk_Flags bit 2 path after DiskFile_ReadBlock",
+   "prom_a/wsa1_prom_a.s:163203 `jr nz, .LFE0C1F` -- DiskFile_SetTransferToWindow: bit 2 -> the DTA is 0x60A080, not the window",
+   "prom_a/wsa1_prom_a.s:163081 `ld XBC,0x00000080` -- source offset 0x80 into 0x60A000, i.e. 0x60A080",
+   "prom_a/wsa1_prom_a.s:163085 `sub xbc, (Disk_WindowStart:16)` -- count = window end - start",
+   "prom_a/wsa1_prom_a.s:163095 `ld (XIX),A` -- stored at Disk_WindowStart onwards"
+  ]
+ },
+ {
+  "old": "sub_FE0F6B",
+  "verdict": "name",
+  "new": "Disk_ScanDirectory_MarkFileType",
+  "header": "For the entry DiskFile_FindFirst/_FindNext left at 0x60A080, sets the listing record's type flag for its extension -- +8 'S' (SE?), +9 'C' (C?B), +10 'T' (TM?), +11 'L' (LS?), +12 'M' (MD?), +13 'S' (SR?), +14 'C' (CR?), +15 'D' (DR?), content types 1..8 -- then Disk_ScanDirectory_StoreEntryName, A = 0; A = 0xFE for any other extension.\nDisk_ScanDirectory_RecordEntry calls it when a record already holds the entry's first two name characters. Basis: caller + body + loaders' extensions.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:163448 `calr sub_FE0F6B` -- Disk_ScanDirectory_RecordEntry, on a match of bytes 0/1 with 0x60A081/0x60A082",
+   "prom_a/wsa1_prom_a.s:163506 `lda xix, (0x60a000:24)` -- with HL = (0x1743), the record offset",
+   "prom_a/wsa1_prom_a.s:163508 `ld C,(XIX+0x0089)` -- the extension bytes 0x60A089..0x60A08B",
+   "prom_a/wsa1_prom_a.s:163518 `ld (XBC),0x53` -- first case: +8 := 'S'",
+   "prom_a/wsa1_prom_a.s:163611 `calr sub_FE10AA` -- every matched case ends in Disk_ScanDirectory_StoreEntryName",
+   "prom_a/wsa1_prom_a.s:163573 `ld C,(XIX+0x0089)` -- extensions 0x4C/0x53 (LS), 0x4D/0x44 (MD), 0x53/0x52 (SR), 0x43/0x52 (CR), 0x44/0x52 (DR) follow; DiskLoad_* use MDS, SRM, CRM, DRM, LSW, CMB, TM"
+  ]
+ },
+ {
+  "old": "sub_FE10AA",
+  "verdict": "name",
+  "new": "Disk_ScanDirectory_StoreEntryName",
+  "header": "Copies the 8 name characters of the directory entry at 0x60A081 into the listing record at 0x60A000 + (0x1743), then prints a progress dot (DiskProgress_PrintDot; (0x2218) is 0 around it and 0xFF after).\nDisk_ScanDirectory_RecordEntry calls it for a new record, Disk_ScanDirectory_MarkFileType for a merged one. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:163475 `calr sub_FE10AA` -- Disk_ScanDirectory_RecordEntry, new record (then +0x89.. goes to +8..)",
+   "prom_a/wsa1_prom_a.s:163611 `calr sub_FE10AA` -- Disk_ScanDirectory_MarkFileType",
+   "prom_a/wsa1_prom_a.s:163624 `ld XIX,0x00000081` -- source 0x60A000 + 0x81, H = 0..7",
+   "prom_a/wsa1_prom_a.s:163635 `ld wa, (0x1743:24)` -- destination 0x60A000 + (0x1743) + H",
+   "prom_a/wsa1_prom_a.s:163649 `calr DiskProgress_PrintDot` -- the per-file dot"
+  ]
+ },
+ {
+  "old": "sub_FE16F3",
+  "verdict": "name",
+  "new": "Playback_StopAllBlockingMidiStart",
+  "header": "Playback_SilenceAll, (0x34BB) bit 2 set so external MIDI 0xFA/0xFB are ignored, Transport_StopAllRunning -- Playback_StopAll with the MIDI-start block set between its two steps.\nThe body of Playback_StopAllAndIgnoreMidiStart (`calr` + `ret`), which the disk / MIDI-file / load screens call on entry. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:164940 `calr sub_FE16F3` -- Playback_StopAllAndIgnoreMidiStart is just this call",
+   "prom_a/wsa1_prom_a.s:164341 `calr sub_FE2E96` -- Playback_SilenceAll",
+   "prom_a/wsa1_prom_a.s:164342 `m_set 2, MD16, 0x34bb` -- the bit Playback_AcceptMidiStartAndRequestPositionReset clears again",
+   "prom_a/wsa1_prom_a.s:164343 `calr Transport_StopAllRunning_SaveRegs2` -- then the transports",
+   "prom_a/wsa1_prom_a.s:164350 `calr sub_FE2E96` -- Playback_StopAll: the same two calls without the bit"
+  ]
+ },
+ {
+  "old": "sub_FE1C75",
+  "verdict": "name",
+  "new": "Disk_TickCountdowns",
+  "header": "Directory entry T_F425C4 (`calr` to the body sub_FE2EF9): decrements (0x2244) (0xFF after Disk_PortA3_Release); counts down (0x222A), the DISK SAVE password-prompt timeout DiskSaveFile_AskForPassword arms with 0xFA, returning to page 1 at 0;\ncounts down (0x2247), armed to 15 by Medley_LoadNextSongFromDisk after a song loads, calling Transport_ResetAndStartBC at 0. MainTask_Loop runs it on every (0x88) bit-5 pass. Basis: caller + body + the counters' writers.",
+  "basis": "caller + body + writers",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:6277 `call T_F425C4` -- MainTask_Loop, beside T_Link_ServiceTask, T_EditScreen_Tick_Call and T_Medley_Tick under `tset 5,(0x88)`",
+   "prom_b/wsa1_prom_b.s:91945 `T_F425C4:` -- `jp sub_FE1C75`",
+   "prom_a/wsa1_prom_a.s:167202 `m_cp_mi8 MB16, 0x222a, 0x00` -- sub_FE2EF9: (0x222A) reaching 0 -> UI_ScreenPage 1, repaint",
+   "prom_a/wsa1_prom_a.s:162759 `ld (0x222a:16), 0xfa` -- DiskSaveFile_AskForPassword arms it with page 4",
+   "prom_a/wsa1_prom_a.s:167214 `calr Transport_ResetAndStartBC_SaveRegs` -- (0x2247) reaching 0",
+   "prom_a/wsa1_prom_a.s:164267 `ld (0x2247:16), 0x0f` -- Medley_LoadNextSongFromDisk arms it after loading a song",
+   "prom_a/wsa1_prom_a.s:164601 `ld (0x2244:16), 0xff` -- Disk_PortA3_Release"
+  ]
+ },
+ {
+  "old": "sub_FE1CE4",
+  "verdict": "refuse",
+  "why_refused": "A `calr` to a lone `ret` (sub_FE1CE4_Nop) behind slot T_F42610; ScreenEnter_DiskSaveFile_Page0 calls it on a real screen change, but an empty hook says nothing about what it was for.",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:193112 `call T_F42610` -- ScreenEnter_DiskSaveFile_Page0, after T_Playback_StopAllAndIgnoreMidiStart",
+   "prom_a/wsa1_prom_a.s:165115 `calr sub_FE1CE4_Nop` -- the body",
+   "prom_a/wsa1_prom_a.s:167218 `sub_FE1CE4_Nop:` -- `ret`"
+  ]
+ },
+ {
+  "old": "sub_FE2610",
+  "verdict": "name",
+  "new": "MidiFileSave_DeleteFile",
+  "header": "MIDI FILE SAVE : FILE DELETE: Disk_RequestSenseDriveStatus; ready -> DiskApi_DeleteFile on Disk_FileName (the selected entry + 'MID'), result shown (StatusMsg_ShowByIndex), then page 0 + repaint during an SMF write ((0x21E8) bit 7) or Delay_500Ticks;\nnot ready -> status 0x0C, alert, 1,500 ticks, repaint (sub_FE264C). Basis: caller + body + the page's text.",
+  "basis": "caller + body + screen text",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:164977 `calr sub_FE2610` -- MidiFileSave_Page3_LcdKeyRow3",
+   "prom_a/wsa1_prom_a.s:195541 `ld (XIX+0x08),0x4d` -- LcdKeyRow3_MidiFileSave_Page3: Disk_FileName := the entry name + \"MID\" before calling it",
+   "prom_a/wsa1_prom_a.s:194562 `lda xwa, (DL_MidiFileSaveFileDelete:24)` -- ScreenEnter_MidiFileSave_Page3 draws MIDI FILE SAVE : FILE DELETE and DL_AttentionUsingFileDeleteWillErase",
+   "prom_a/wsa1_prom_a.s:166224 `calr DiskApi_DeleteFile` -- the delete, one exact file",
+   "prom_a/wsa1_prom_a.s:166240 `calr sub_FE264C` -- the drive-not-ready path"
+  ]
+ },
+ {
+  "old": "sub_FE2667",
+  "verdict": "name",
+  "new": "DiskSaveFile_DeleteEntryFiles",
+  "header": "DISK SAVE : FILE DELETE: Disk_RequestSenseDriveStatus -> (0x1735); ready -> Disk_DeleteFilesWithSamePrefix (every file of the selected listing entry, name bytes 2..10 wildcarded), status 0x19, Delay_500Ticks, page 0, repaint;\nnot ready -> sub_FE264C (status 0x0C, alert, repaint). Basis: caller + body + the page's text.",
+  "basis": "caller + body + screen text",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:165086 `calr sub_FE2667` -- DiskSaveFile_Page5_LcdKeyRow3",
+   "prom_a/wsa1_prom_a.s:194256 `calr DiskEntry_CopySelectedToFileName` -- LcdKeyRow3_DiskSaveFile_Page5 puts the selected entry in Disk_FileName first",
+   "prom_a/wsa1_prom_a.s:193333 `lda xbc, (DL_AttentionUsingFileDeleteWillErase:24)` -- ScreenEnter_DiskSaveFile_Page5 draws DISK SAVE FILE DELETE / \"Using FILE DELETE will erase\"",
+   "prom_a/wsa1_prom_a.s:166265 `calr Disk_DeleteFilesWithSamePrefix` -- the delete",
+   "prom_a/wsa1_prom_a.s:166266 `ld (0x1736:24), 0x19` -- status 0x19 shown after it"
+  ]
+ },
+ {
+  "old": "sub_FE2D13",
+  "verdict": "name",
+  "new": "Disk_SetWindowStartForSeqFile",
+  "header": "Disk_WindowStart := 0x609000 -- the start of the SEQ file image Disk_SaveSeqFile writes (window 0x609000 .. BStore_HeapBase + (0x603452) x 16); sibling of Disk_SetWindowStartToStaging (0x609400) and Disk_SetWindowStartToFileBuffer (0x60A080).\nIts only caller is Disk_SaveSeqFile, after setting the extension SEQ. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:166910 `calr sub_FE2D13` -- Disk_SaveSeqFile, right after Disk_FileName+8..10 := \"SEQ\"",
+   "prom_a/wsa1_prom_a.s:166911 `calr Disk_SetWindowEndToHeapPlusSeqLength` -- then the window end",
+   "prom_a/wsa1_prom_a.s:166960 `ld XBC,0x00609000` -- the body",
+   "prom_a/wsa1_prom_a.s:166950 `ld XBC,0x00609400` -- Disk_SetWindowStartToStaging, the sibling"
+  ]
+ },
+ {
+  "old": "sub_FE2E96",
+  "verdict": "name",
+  "new": "Playback_SilenceAll",
+  "header": "With (0x21E8) bit 6 set for the duration: TimedEventRing_Discard, PartNotes_ReleaseAllTrackNotes, SeqEvt_ResetPlayingSlotControllers (veneer sub_FE019E -> T_F41F18), Notes_ReleaseAllSources.\nThe note half of Playback_StopAll (which then stops the transports); also first in Playback_StopAllBlockingMidiStart, DiskLoad_LoadAndReportResult and DiskFormat_Execute. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:164350 `calr sub_FE2E96` -- Playback_StopAll, whose header lists exactly these four steps",
+   "prom_a/wsa1_prom_a.s:167149 `m_or_mi8 MBI+r4, 0, 0x40` -- XIX = 0x21E8: bit 6 set, cleared again at the end",
+   "prom_a/wsa1_prom_a.s:167150 `calr TimedEventRing_Discard_SaveRegs_C` -- ",
+   "prom_a/wsa1_prom_a.s:167151 `calr PartNotes_ReleaseAllTrackNotes_SaveRegs` -- ",
+   "prom_a/wsa1_prom_a.s:161876 `call T_F41F18` -- sub_FE019E, the third call: T_F41F18 = SeqEvt_ResetPlayingSlotControllers",
+   "prom_a/wsa1_prom_a.s:167153 `calr Notes_ReleaseAllSources_Call` -- "
+  ]
+ },
+ {
+  "old": "sub_FE2F6A",
+  "verdict": "name",
+  "new": "DiskProgress_NextDotPosition",
+  "header": "WA := pos + 1 while pos < 0x146E, else pos -- the capped advance of the dot position (0x2216).\nDiskProgress_DrawDotAndAdvance stores it back after each dot. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:167287 `calr sub_FE2F6A` -- DiskProgress_DrawDotAndAdvance, with the current (0x2216) pushed",
+   "prom_a/wsa1_prom_a.s:167288 `ld (XIX),WA` -- the result becomes the new (0x2216)",
+   "prom_a/wsa1_prom_a.s:167248 `cp HL,0x146e` -- the cap",
+   "prom_a/wsa1_prom_a.s:167250 `ld BC,HL` -- below it: +1"
+  ]
+ },
+ {
+  "old": "sub_FE2FE7",
+  "verdict": "refuse",
+  "why_refused": "Its body is only `ld A,1 / ret`; MidiFilePlay_OnSongSelect tests it to decide whether to mount the drive before and release it after the song-select load, but nothing says what condition the constant stands in for (same case as the refused sub_F6A2FC).",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:164054 `calr sub_FE2FE7` -- A != 0 -> Disk_MountAndScanDirectory",
+   "prom_a/wsa1_prom_a.s:164086 `calr sub_FE2FE7` -- A != 0 -> Disk_PortA3_Release",
+   "prom_a/wsa1_prom_a.s:167323 `ld a, 0x01:opc` -- the whole body"
+  ]
+ },
+ {
+  "old": "sub_FE306B",
+  "verdict": "name",
+  "new": "Disk_CommandDispatch_RestoreRegs",
+  "header": "The return point Disk_CommandDispatch_SaveRegs pushes before `jp Disk_CommandDispatch`: WA := HL (the dispatcher's result), the caller's return address back from (0x605B0A), XHL/XBC/XDE/XIY/XIX back from 0x605D70..0x605D80, `ret`.\nBasis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:167493 `ld XDE,sub_FE306B` -- Disk_CommandDispatch_SaveRegs pushes it as the return address",
+   "prom_a/wsa1_prom_a.s:167486 `ld (0x605d70:24), xix` -- where the save half put the registers",
+   "prom_a/wsa1_prom_a.s:167497 `ld WA,HL` -- the result",
+   "prom_a/wsa1_prom_a.s:167498 `ld xhl, (0x605b0a:24)` -- the caller's return address, pushed back"
+  ]
+ },
+ {
+  "old": "sub_FE30B6",
+  "verdict": "name",
+  "new": "Fdc_Request_RestoreRegs",
+  "header": "The return point Fdc_Request_SaveRegs pushes before `jp Fdc_Request`: WA := HL (the result), the caller's return address back from (0x605B0E), XHL/XBC/XDE/XIY/XIX back from 0x605D84..0x605D94, `ret`.\nTwin of Disk_CommandDispatch_RestoreRegs. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:167527 `ld XDE,sub_FE30B6` -- Fdc_Request_SaveRegs pushes it as the return address",
+   "prom_a/wsa1_prom_a.s:167520 `ld (0x605d84:24), xix` -- where the save half put the registers",
+   "prom_a/wsa1_prom_a.s:167531 `ld WA,HL` -- the result",
+   "prom_a/wsa1_prom_a.s:167532 `ld xhl, (0x605b0e:24)` -- the caller's return address, pushed back"
+  ]
+ },
+ {
+  "old": "sub_FE8005",
+  "verdict": "name",
+  "new": "PowerFail_PrepareSongWorkspace",
+  "header": "Power-fail step: on screen 0x45 (MIDI FILE DIRECT PLAY) puts BStore_TrackToPart back from the copy at 0x34BC that the screen's entry saved (16 bytes, as ScreenLeave_MidiFileDirectPlay would); then workspace (0x6034D5) := BStore_CurrentBank,\nwhich BStore_BootPhase3 restores into BStore_CurrentBank at the next boot. NMI_PowerFail_SaveAndHalt calls it (slot T_F4030C) before the checksums. Basis: caller + body + the save/restore pair + the boot reader.",
+  "basis": "caller + body + writers/readers",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:8630 `call T_F4030C` -- NMI_PowerFail_SaveAndHalt, when (0x97) bit 1 allows the save",
+   "prom_b/wsa1_prom_b.s:89598 `T_F4030C:` -- `jp sub_FE8005`",
+   "prom_a/wsa1_prom_a.s:176865 `m_cp_mi8 MB16, UI_ScreenLatch, 0x45` -- screen 0x45 = MidiFileDirectPlay (MidiFilePlay_Tick header)",
+   "prom_a/wsa1_prom_a.s:176871 `ldir85` -- (XIX)+ <- (XIY)+: BStore_TrackToPart <- 0x34BC",
+   "prom_b/wsa1_prom_b.s:96239 `ld\txix, 13500` -- sub_F45463 (via T_F409EC from Paint_MidiFileDirectPlay): 0x34BC <- BStore_TrackToPart; sub_F45478 (ScreenLeave_MidiFileDirectPlay) copies it back",
+   "prom_a/wsa1_prom_a.s:176874 `ld (0x6034d5:24), a` -- the current bank into the workspace",
+   "prom_b/wsa1_prom_b.s:93617 `ld\ta, (6304981:24)` -- BStore_BootPhase3: BStore_CurrentBank := (0x6034D5)"
+  ]
+ },
+ {
+  "old": "sub_FE81E7",
+  "verdict": "name",
+  "new": "Sequencer_DrawTitleIcon",
+  "header": "Draws the SEQUENCER screen's title icon (the image reads \"SEQ.\"): one op-0x23 record, icon-sheet cell 49 (prom_b/images/DLGlyph_049_*.png) at LCD address 0x0034.\nPaint_Sequencer draws it right after DisplayList_SequencerRealtimeEdit, whose title 'SEQUENCER' starts at pixel x 0x7A, y 5 -- the icon sits just left of it (row 1, column 12). Basis: caller + body + icon image + position.",
+  "basis": "caller + body + icon image + position",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:177110 `calr sub_FE81E7` -- Paint_Sequencer, first of nine",
+   "prom_a/wsa1_prom_a.s:177455 `.ascii \"14\"` -- the record: glyph 49 (0x31), position 0x0034",
+   "prom_b/wsa1_prom_b.s:2793 `DLHandler_Glyph24x24 (0xF31ACE)` -- op 0x23 blits the 72-byte 24x24 cell index*0x48 from 0xF78028"
+  ]
+ },
+ {
+  "old": "sub_FE81F6",
+  "verdict": "name",
+  "new": "Sequencer_DrawRealtimeIcon",
+  "header": "Draws the REALTIME item's icon (a stopwatch), left edge of LCD key row 1: one op-0x23 record, icon-sheet cell 50 (prom_b/images/DLGlyph_050_*.png) at LCD address 0x0411.\nPaint_Sequencer draws it after DisplayList_SequencerRealtimeEdit, where the item text 'REALTIME' sits at 0x05A5 (row 36, column 5); the icon covers rows 26-49 at column 1. Basis: caller + body + icon image + position.",
+  "basis": "caller + body + icon image + position",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:177111 `calr sub_FE81F6` -- Paint_Sequencer",
+   "prom_a/wsa1_prom_a.s:177462 `.byte 0x32, 0x11, 0x04` -- the record: glyph 50 (0x32), position 0x0411",
+   "prom_b/wsa1_prom_b.s:2793 `DLHandler_Glyph24x24 (0xF31ACE)` -- op 0x23 blits the 72-byte 24x24 cell index*0x48 from 0xF78028"
+  ]
+ },
+ {
+  "old": "sub_FE8205",
+  "verdict": "name",
+  "new": "Sequencer_DrawMasterRecordIcon",
+  "header": "Draws the MASTER RECORD item's icon, left edge of LCD key row 2: one op-0x23 record, icon-sheet cell 58 (prom_b/images/DLGlyph_058_*.png) at LCD address 0x0AF1.\nPaint_Sequencer draws it after DisplayList_SequencerRealtimeEdit, where the item text 'MASTER REC0RD' sits at 0x0BE5 (row 76, column 5); the icon covers rows 70-93 at column 1. Basis: caller + body + icon image + position.",
+  "basis": "caller + body + icon image + position",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:177112 `calr sub_FE8205` -- Paint_Sequencer",
+   "prom_a/wsa1_prom_a.s:177468 `.byte 0x3A, 0xF1, 0x0A` -- the record: glyph 58 (0x3A), position 0x0AF1",
+   "prom_b/wsa1_prom_b.s:2793 `DLHandler_Glyph24x24 (0xF31ACE)` -- op 0x23 blits the 72-byte 24x24 cell index*0x48 from 0xF78028"
+  ]
+ },
+ {
+  "old": "sub_FE8214",
+  "verdict": "name",
+  "new": "Sequencer_DrawStepIcon",
+  "header": "Draws the STEP item's icon (footprints), left edge of LCD key row 3: one op-0x23 record, icon-sheet cell 52 (prom_b/images/DLGlyph_052_*.png) at LCD address 0x10B9.\nPaint_Sequencer draws it after DisplayList_SequencerRealtimeEdit, where the item text 'STEP' sits at 0x11D5 (row 114, column 5); the icon covers rows 107-130 at column 1. Basis: caller + body + icon image + position.",
+  "basis": "caller + body + icon image + position",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:177113 `calr sub_FE8214` -- Paint_Sequencer",
+   "prom_a/wsa1_prom_a.s:177474 `.byte 0x34, 0xB9, 0x10` -- the record: glyph 52 (0x34), position 0x10B9",
+   "prom_b/wsa1_prom_b.s:2793 `DLHandler_Glyph24x24 (0xF31ACE)` -- op 0x23 blits the 72-byte 24x24 cell index*0x48 from 0xF78028"
+  ]
+ },
+ {
+  "old": "sub_FE8223",
+  "verdict": "name",
+  "new": "Sequencer_DrawSongSelectIcon",
+  "header": "Draws the SONG SELECT /NAME item's icon (a clef and a \"1\"), left edge of LCD key row 4: one op-0x23 record, icon-sheet cell 53 (prom_b/images/DLGlyph_053_*.png) at LCD address 0x16D1.\nPaint_Sequencer draws it after DisplayList_SequencerRealtimeEdit, where the item text 'S0NG SELECT /NAME' sits at 0x16D5 (row 146, column 5); the icon covers rows 146-169 at column 1. The next stub (0xFE8232, cell 54, row 186) has no caller. Basis: caller + body + icon image + position.",
+  "basis": "caller + body + icon image + position",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:177114 `calr sub_FE8223` -- Paint_Sequencer",
+   "prom_a/wsa1_prom_a.s:177480 `.byte 0x35, 0xD1, 0x16` -- the record: glyph 53 (0x35), position 0x16D1",
+   "prom_b/wsa1_prom_b.s:2793 `DLHandler_Glyph24x24 (0xF31ACE)` -- op 0x23 blits the 72-byte 24x24 cell index*0x48 from 0xF78028"
+  ]
+ },
+ {
+  "old": "sub_FE8241",
+  "verdict": "name",
+  "new": "Sequencer_DrawEditIcon",
+  "header": "Draws the EDIT item's icon (the image reads \"EDIT\"), right edge of LCD key row 1: one op-0x23 record, icon-sheet cell 16 (prom_b/images/DLGlyph_016_*.png) at LCD address 0x0434.\nPaint_Sequencer draws it after DisplayList_SequencerRealtimeEdit, where the item text 'EDIT' sits at 0x05B7 (row 36, column 23); the icon covers rows 26-49 at column 36. Basis: caller + body + icon image + position.",
+  "basis": "caller + body + icon image + position",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:177115 `calr sub_FE8241` -- Paint_Sequencer",
+   "prom_a/wsa1_prom_a.s:177492 `.byte 0x10, 0x34, 0x04` -- the record: glyph 16 (0x10), position 0x0434",
+   "prom_b/wsa1_prom_b.s:2793 `DLHandler_Glyph24x24 (0xF31ACE)` -- op 0x23 blits the 72-byte 24x24 cell index*0x48 from 0xF78028"
+  ]
+ },
+ {
+  "old": "sub_FE8250",
+  "verdict": "name",
+  "new": "Sequencer_DrawTrackAssignIcon",
+  "header": "Draws the TRACK ASSIGN item's icon (a clef over tracks 1-4 and an arrow), right edge of LCD key row 2: one op-0x23 record, icon-sheet cell 55 (prom_b/images/DLGlyph_055_*.png) at LCD address 0x0B14.\nPaint_Sequencer draws it after DisplayList_SequencerRealtimeEdit, where the item text 'TRACK ASSIGN' sits at 0x0BF7 (row 76, column 23); the icon covers rows 70-93 at column 36. Basis: caller + body + icon image + position.",
+  "basis": "caller + body + icon image + position",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:177116 `calr sub_FE8250` -- Paint_Sequencer",
+   "prom_a/wsa1_prom_a.s:177498 `.byte 0x37, 0x14, 0x0B` -- the record: glyph 55 (0x37), position 0x0B14",
+   "prom_b/wsa1_prom_b.s:2793 `DLHandler_Glyph24x24 (0xF31ACE)` -- op 0x23 blits the 72-byte 24x24 cell index*0x48 from 0xF78028"
+  ]
+ },
+ {
+  "old": "sub_FE825F",
+  "verdict": "name",
+  "new": "Sequencer_DrawMedleyIcon",
+  "header": "Draws the MEDLEY item's icon (the image reads \"SONGS\" in a loop of arrows), right edge of LCD key row 3: one op-0x23 record, icon-sheet cell 56 (prom_b/images/DLGlyph_056_*.png) at LCD address 0x10DC.\nPaint_Sequencer draws it after DisplayList_SequencerRealtimeEdit, where the item text 'MEDLEY' sits at 0x11E7 (row 114, column 23); the icon covers rows 107-130 at column 36. Basis: caller + body + icon image + position.",
+  "basis": "caller + body + icon image + position",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:177117 `calr sub_FE825F` -- Paint_Sequencer",
+   "prom_a/wsa1_prom_a.s:177504 `.byte 0x38, 0xDC, 0x10` -- the record: glyph 56 (0x38), position 0x10DC",
+   "prom_b/wsa1_prom_b.s:2793 `DLHandler_Glyph24x24 (0xF31ACE)` -- op 0x23 blits the 72-byte 24x24 cell index*0x48 from 0xF78028"
+  ]
+ },
+ {
+  "old": "sub_FE826E",
+  "verdict": "name",
+  "new": "Sequencer_DrawAfterTouchSetIcon",
+  "header": "Draws the AFTER TOUCH SET item's icon (a hand pressing keys), right edge of LCD key row 4: one op-0x23 record, icon-sheet cell 57 (prom_b/images/DLGlyph_057_*.png) at LCD address 0x16F4.\nPaint_Sequencer draws it after DisplayList_SequencerRealtimeEdit, where the item text 'AFTER T0UCH SET' sits at 0x16E7 (row 146, column 23); the icon covers rows 146-169 at column 36. Basis: caller + body + icon image + position.",
+  "basis": "caller + body + icon image + position",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:177118 `calr sub_FE826E` -- Paint_Sequencer",
+   "prom_a/wsa1_prom_a.s:177510 `.byte 0x39, 0xF4, 0x16` -- the record: glyph 57 (0x39), position 0x16F4",
+   "prom_b/wsa1_prom_b.s:2793 `DLHandler_Glyph24x24 (0xF31ACE)` -- op 0x23 blits the 72-byte 24x24 cell index*0x48 from 0xF78028"
+  ]
+ },
+ {
+  "old": "sub_FE827D",
+  "verdict": "name",
+  "new": "NoteEditPartSelect_DrawTitleIcon",
+  "header": "Draws the NOTE EDIT part-select title icon (piano keys): one op-0x23 record, icon-sheet cell 2 (prom_b/images/DLGlyph_002_*.png) at LCD address 0x007E.\nThe icon covers x 48-71, y 3-26, just left of the title 'NOTE' (pixel x 0x50, y 6) DisplayList_NoteEditPartSelect draws. Basis: caller + body + icon image + position.",
+  "basis": "caller + body + icon image + position",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:177619 `calr sub_FE827D` -- ShowScreen_NoteEditPartSelect, after Paint_NoteEditPartSelect and EditPartSelect_DrawPartLabels",
+   "prom_a/wsa1_prom_a.s:177516 `.byte 0x02, 0x7E, 0x00` -- the record: glyph 2 (0x02), position 0x007E",
+   "prom_b/wsa1_prom_b.s:2793 `DLHandler_Glyph24x24 (0xF31ACE)` -- op 0x23 blits the 72-byte 24x24 cell index*0x48 from 0xF78028"
+  ]
+ },
+ {
+  "old": "sub_FE828C",
+  "verdict": "name",
+  "new": "DrumEditPartSelect_DrawTitleIcon",
+  "header": "Draws the DRUM EDIT part-select title icon (a drum kit): one op-0x23 record, icon-sheet cell 15 (prom_b/images/DLGlyph_015_*.png) at LCD address 0x007E.\nThe same cell position as NoteEditPartSelect_DrawTitleIcon, left of the title 'DRUM' (pixel x 0x50, y 6). Its list-end operand is spelled EditScreen_Tick only because that routine starts at 0xFE82D7. Basis: caller + body + icon image + position.",
+  "basis": "caller + body + icon image + position",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:177677 `calr sub_FE828C` -- ShowScreen_DrumEditPartSelect, after Paint_DrumEditPartSelect and EditPartSelect_DrawPartLabels",
+   "prom_a/wsa1_prom_a.s:177522 `.byte 0x0F, 0x7E, 0x00` -- the record: glyph 15 (0x0F), position 0x007E",
+   "prom_b/wsa1_prom_b.s:2793 `DLHandler_Glyph24x24 (0xF31ACE)` -- op 0x23 blits the 72-byte 24x24 cell index*0x48 from 0xF78028"
+  ]
+ },
+ {
+  "old": "sub_FE8CA7",
+  "verdict": "name",
+  "new": "NoteEdit_RestorePlayingTrackMask",
+  "header": "Playing-track mask (0x60341E) := (0x360C), its saved copy, XWA preserved -- Seq_RestorePlayingTrackMask without the T_NoteRouting_RebuildForSong.\nScreenLeave_NoteEdit runs it right after OR-ing (0x1336) into (0x360C), and calls NoteRouting_RebuildForSong_Call itself a few lines later. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:178557 `calr sub_FE8CA7` -- ScreenLeave_NoteEdit",
+   "prom_a/wsa1_prom_a.s:178555 `m_or_rm ML16, 0x1336, r0` -- the instruction pair before: (0x360C) |= (0x1336)",
+   "prom_a/wsa1_prom_a.s:178577 `ld (0x60341e:24), xwa` -- the body: from (0x360C)",
+   "prom_b/wsa1_prom_b.s:125418 `Seq_RestorePlayingTrackMask:` -- the same three instructions, followed by T_NoteRouting_RebuildForSong",
+   "prom_a/wsa1_prom_a.s:178564 `call NoteRouting_RebuildForSong_Call` -- ScreenLeave_NoteEdit rebuilds the routing itself"
+  ]
+ }
+]

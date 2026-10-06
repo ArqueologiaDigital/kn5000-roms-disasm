@@ -98,7 +98,7 @@ the `*_audit_callsites.py` pair, `scripts/analysis/transplant_kn5000_labels.py`
 ⚠ **This table is GENERATED. Regenerate it, never retype it** — the README's status section went
 stale within one commit precisely because it was maintained by hand, and the first draft of this
 very section, typed from a shell heredoc, already omitted two thunk runs (`T_F40214` into
-`0xF96018`, and `T_F41F54`'s one remaining slot in `0xFDE70F`).
+`0xF96018`, and `T_F41F54`'s (now `T_ModeEnter_SoundEdit`) one remaining slot in `0xFDE70F`).
 
     python3 notes/wave7_frontier_table.py             # what follows, in full
     python3 notes/wave7_frontier_table.py --selftest  # 16 checks, incl. the LAST span of each image

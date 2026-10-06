@@ -76,7 +76,7 @@ Each entry goes to up to three outputs, given by the part block:
 
 | bit | output | the note sent | sender |
 |---|---|---|---|
-| 0 | the tone generator | `PartNote_MapForToneGen` (T_F41044), velocity + offset (`PartNote_ApplyVelocityOffset`) | `PartFrame_SendToToneGen` |
+| 0 | the tone generator | `PartNote_MapForToneGen` (T_DrumMap_MapNoteForPart_StackArgs), velocity + offset (`PartNote_ApplyVelocityOffset`) | `PartFrame_SendToToneGen` |
 | 1 | MIDI OUT (skipped while 0x602493 bit 5 is set) | `PartNote_TransposeForMidiOut`, octave-folded | `PartFrame_SendToMidiOut` |
 | 2 | the sequencer's record buffer | the note as received | `PartFrame_RecordToSeqBuf` |
 
