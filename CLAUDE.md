@@ -878,6 +878,12 @@ that we can have strong evidence whenever we reach true full code-coverage"*.
    KN5000 work is again mostly LABELLING the case targets of compiled `switch` statements, about 1,075
    distinct ones in v10, and respelling their offset tables as `.short Case - Base`. Re-read this
    paragraph against each new snapshot and update it when it stops being true.
+   **Updated 2026-10-06 (`dispatch-census-2026-10-06-23`).** Every KN5000 image (v10, v9, v7, v142, subboot,
+   table data, custom data, HD-AE5000) now shows NOT = newT = newT(x) = spellT = 0, U-NOT = U-newT = 0 and
+   D-unres = 0. The last KN5000 tables were MidiSysEx_BlockHandlers and GraphicsRender_Start_PtrTable ops 08-0B.
+   That meets the census half of the full-coverage criterion for KN5000 only. The spec's other L1/L2
+   measurements still have to be shown before anyone claims it. The census work left is WSA1: prom_a
+   NOT 3 / newT 12, prom_b NOT 7 / newT 44 / newT(x) 179, prom_c NOT 1 / newT 5.
 
 ### Semantic Score Badges
 
