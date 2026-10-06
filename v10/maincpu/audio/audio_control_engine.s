@@ -1114,8 +1114,8 @@ PanelButton_Variation_Epilogue:
 	pop	qiz
 	lda	xsp, (xsp+10)
 	ret
-; event 28 bit 0: per panel parameter 0x2886 (tag 0x99 payload byte 4)
-PanelAction_Event28Bit0:
+; foot switch FS1 (PG.2; event 28 bit 0): acts per panel parameter 0x2886 (tag 0x99 payload byte 4)
+PanelAction_FootSwitch1:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
@@ -1129,8 +1129,8 @@ PanelAction_Event28Bit0:
 PanelAction_Event28Bit0_Epilogue:
 	pop	xiz
 	ret
-; event 28 bit 1: per panel parameter 0x2888 (tag 0x99 payload byte 5)
-PanelAction_Event28Bit1:
+; foot switch FS2 (PG.3; event 28 bit 1): acts per panel parameter 0x2888 (tag 0x99 payload byte 5)
+PanelAction_FootSwitch2:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
@@ -1144,8 +1144,8 @@ PanelAction_Event28Bit1:
 PanelAction_Event28Bit1_Epilogue:
 	pop	xiz
 	ret
-; event 29 bit 0: per panel parameter 0x288A (tag 0x99 payload byte 6)
-PanelAction_Event29Bit0:
+; foot controller FC1 (PG.4; event 29 bit 0): acts per panel parameter 0x288A (tag 0x99 payload byte 6)
+PanelAction_FootController1:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
@@ -1159,8 +1159,8 @@ PanelAction_Event29Bit0:
 PanelAction_Event29Bit0_Epilogue:
 	pop	xiz
 	ret
-; event 29 bit 1: per panel parameter 0x288C (tag 0x99 payload byte 7)
-PanelAction_Event29Bit1:
+; foot controller FC2 (PG.5; event 29 bit 1): acts per panel parameter 0x288C (tag 0x99 payload byte 7)
+PanelAction_FootController2:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
@@ -1174,8 +1174,8 @@ PanelAction_Event29Bit1:
 PanelAction_Event29Bit1_Epilogue:
 	pop	xiz
 	ret
-; event 29 bit 2: per panel parameter 0x288E (tag 0x99 payload byte 8)
-PanelAction_Event29Bit2:
+; foot controller FC3 (PG.6; event 29 bit 2): acts per panel parameter 0x288E (tag 0x99 payload byte 8)
+PanelAction_FootController3:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
@@ -1189,8 +1189,8 @@ PanelAction_Event29Bit2:
 PanelAction_Event29Bit2_Epilogue:
 	pop	xiz
 	ret
-; event 29 bit 3: per panel parameter 0x2890 (tag 0x99 payload byte 9)
-PanelAction_Event29Bit3:
+; foot controller FC4 (PG.7; event 29 bit 3): acts per panel parameter 0x2890 (tag 0x99 payload byte 9)
+PanelAction_FootController4:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
@@ -1225,8 +1225,8 @@ PanelAction_Event22_Skip:
 	ld	(xix), e
 PanelAction_Event22_Join:
 	jrl	PanelEvent_Post
-; event 26: depends on panel parameter 0x2880 (tag 0x99 payload byte 2) being 182 or 183
-PanelAction_Event26:
+; modulation wheel (ENCODER_0_OUTPUT, event 26, queued by PanelInput_QueueWheelChanges): depends on panel parameter 0x2880 (tag 0x99 payload byte 2) being 182 or 183
+PanelAction_ModWheel:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, 10368
@@ -1253,8 +1253,8 @@ PanelAction_Event23:
 	cp	(CURRENT_MODE:16), 19
 	ret	z
 	jrl	PanelEvent_Post
-; event 27: post when panel parameter 0x104 (tag 0x93 payload byte 6 bit 7) is set
-PanelAction_Event27:
+; volume slider (ENCODER_1_OUTPUT, event 27, queued by PanelInput_QueueWheelChanges): post when panel parameter 0x104 (tag 0x93 payload byte 6 bit 7) is set
+PanelAction_Volume:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
@@ -1940,14 +1940,14 @@ VoiceEntry_CheckTerminator:
 	jr nz, VoiceEntry_CheckMatch
 	ret
 
-Audio_CopyStateFromROM:
-	calr MidiCC_ResetState
-	lda xbc, (Audio_CopyStateFromROM_Data:24)
+PanelInput_InitPedalRecords:
+	calr PanelInput_ClearChangeQueue
+	lda xbc, (PanelInput_PedalRecordDefaults:24)
 	ld xwa, xbc
 	lda xde, (0x8eb6:16)
 	lda xhl, (xbc + 12)
 
-AudioCopy_TransferLoop:
+PanelInput_InitPedalRecords_Loop:
 	ld xiy, xwa
 	ld xix, xde
 	ldiw
@@ -1955,7 +1955,7 @@ AudioCopy_TransferLoop:
 	inc 4, xwa
 	inc 4, xde
 	cp xwa, xhl
-	jr c, AudioCopy_TransferLoop
+	jr c, PanelInput_InitPedalRecords_Loop
 	ret
 
 Audio_NullHandler_A:
@@ -1988,7 +1988,7 @@ Encoder_CheckBitAndProcess:
 	jr nz, Encoder_IncrementAndDispatch
 
 Encoder_ProcessUpdate:
-	calr Audio_PeriodicUpdate
+	calr PanelInput_Poll
 
 Encoder_IncrementAndDispatch:
 	call Audio_IncrementUpdateCounter
@@ -1998,122 +1998,135 @@ Encoder_IncrementAndDispatch:
 	pop	sr
 	jp CompIface_ProcessInput
 
-Audio_PeriodicUpdate:
+; Each periodic tick (unless CURRENT_TITLE 247): drain the control-panel RX queue into change records, scan the
+; pedal ports, queue the wheel encoders' changes.  The records go to PanelInput_ChangeQueue (RAM 0x8E94, 3 bytes
+; each, count at 0x8EC4); PanelButton_ProcessChanges dispatches them later.
+PanelInput_Poll:
 	ldmm16 0x8ec2, SYSTEM_TIMESTAMP
 	cp (CURRENT_TITLE:16), 247
 	ret z
-	calr Audio_ProcessVoiceQueue
-	calr MIDI_ProcessVoiceAssignment
-	calr MIDI_ProcessControlChange
+	calr PanelInput_DrainRxQueue
+	calr PanelInput_ScanPedalPorts
+	calr PanelInput_QueueWheelChanges
 	ret
 
-Audio_ProcessVoiceQueue:
+; While fewer than 7 records are queued, read one {header, state, changed} from CPANEL_RX_EVENT_QUEUE
+; (PanelInput_ReadRxRecord) and queue it (PanelInput_QueueChange).
+PanelInput_DrainRxQueue:
 	push xiz
 	lda xiz, (0x8eb2:16)
 	cp (0x8ec4:16), 7
-	jr nc, VoiceQueue_Done
+	jr nc, PanelInput_DrainRxQueue_Return
 
-VoiceQueue_ParseNextEntry:
+PanelInput_DrainRxQueue_Loop:
 	ld xwa, xiz
-	calr MIDI_ParseThreeByteParams
+	calr PanelInput_ReadRxRecord
 	cp l, 0xff
-	jr z, VoiceQueue_Done
+	jr z, PanelInput_DrainRxQueue_Return
 	ld xwa, xiz
-	calr Voice_SetupFromData
+	calr PanelInput_QueueChange
 	cp (0x8ec4:16), 7
-	jr c, VoiceQueue_ParseNextEntry
+	jr c, PanelInput_DrainRxQueue_Loop
 
-VoiceQueue_Done:
+PanelInput_DrainRxQueue_Return:
 	pop xiz
 	ret
 
-MIDI_ParseThreeByteParams:
+; xwa -> a 3-byte record: pop a header (-> event index, PanelInput_EventIndexOfHeader) and two data bytes from
+; CPANEL_RX_EVENT_QUEUE; l = 0 when all three were there, 0xFF otherwise.
+PanelInput_ReadRxRecord:
 	dec 2, xsp
 	push xiz
 	ld xiz, xwa
 	ld (xsp + 4), 0xff
-	call Seq_DataHandler
+	call CPanel_RxEventQueue_Pop
 	cp hl, 0xffff
-	jr z, MidiParseThreeByte_Done
+	jr z, PanelInput_ReadRxRecord_Return
 	extz hl
 	ld wa, hl
-	calr MidiCC_LookupHandler
+	calr PanelInput_EventIndexOfHeader
 	ld (xiz), l
-	call Seq_DataHandler
+	call CPanel_RxEventQueue_Pop
 	cp hl, 0xffff
-	jr z, MidiParseThreeByte_Done
+	jr z, PanelInput_ReadRxRecord_Return
 	ld (xiz + 1), l
-	call Seq_DataHandler
+	call CPanel_RxEventQueue_Pop
 	cp hl, 0xffff
-	jr z, MidiParseThreeByte_Done
+	jr z, PanelInput_ReadRxRecord_Return
 	ld (xiz + 2), l
 	ld (xsp + 4), 0x0
 
-MidiParseThreeByte_Done:
+PanelInput_ReadRxRecord_Return:
 	ld l, (xsp + 4)
 	pop xiz
 	inc 2, xsp
 	ret
 
-MIDI_ProcessVoiceAssignment:
+; Port G is the pedal port, active low (technics-docs cpu-subsystem.md): PG.3-2 -> the foot-switch record (event
+; 28), PG.7-4 -> the foot-controller record (event 29; all four high = nothing engaged, which arms a 500-tick
+; debounce at 0x8EC8), PD.6 -> the third record (event 30).  Records at 0x8EB6 / 0x8EBA / 0x8EBE.
+PanelInput_ScanPedalPorts:
 	ld	a, (PG:8)
 	and a, 0xc
 	srl a, 2
 	ld c, a
 	ld xwa, 0x8eb6
-	calr MIDI_WriteParamByte
+	calr PanelInput_UpdatePedalRecord
 	ld	a, (PG:8)
 	and a, 0xf0
 	srl a, 4
 	cp a, 0xf
-	jr nz, MIDI_ValidateParam
+	jr nz, PanelInput_ScanPedalPorts_Debounce
 	ldw (0x8ec8:16), 500
-	jr MIDI_WriteSecondByte
+	jr PanelInput_ScanPedalPorts_PD6
 
-MIDI_ValidateParam:
+PanelInput_ScanPedalPorts_Debounce:
 	cpw (0x8ec8:16), 0
-	jr nz, MIDI_WriteSecondByte
+	jr nz, PanelInput_ScanPedalPorts_PD6
 	lda xwa, (0x8eba:16)
 	ld	c, (PG:8)
 	and c, 0xf0
 	srl c, 4
-	calr MIDI_WriteParamByte
+	calr PanelInput_UpdatePedalRecord
 
-MIDI_WriteSecondByte:
+PanelInput_ScanPedalPorts_PD6:
 	lda xwa, (0x8ebe:16)
 	ldcf	6, (PD:8)
 	scc8 c, c
-	jr MIDI_WriteParamByte
+	jr PanelInput_UpdatePedalRecord
 
-MIDI_WriteParamByte:
+; xwa -> a pedal record {event index, raw, previous raw, state}, c = the new raw bits: a bit of the state follows
+; the raw bit once two samples agree; when the state changes, queue {index, new state, new ^ old state} with
+; PanelInput_QueueChange (unless 7 records are already queued).
+PanelInput_UpdatePedalRecord:
 	lda xsp, (xsp - 10)
 	push xiz
 	lda xhl, (xwa + 1)
 	cp (xwa), 0x1d
-	jr nz, MIDI_ChannelSetup_Skip
+	jr nz, PanelInput_UpdatePedalRecord_Store
 	ld e, c
 	and e, 0xf
 	cp e, 0xf
-	jr nz, MIDI_ChannelSetup_Skip
+	jr nz, PanelInput_UpdatePedalRecord_Store
 	xor c, 0xf
 	ld (xhl), c
-	jr MIDI_ChannelSetup_Store
+	jr PanelInput_UpdatePedalRecord_Compare
 
-MIDI_ChannelSetup_Skip:
+PanelInput_UpdatePedalRecord_Store:
 	ld (xhl), c
 
-MIDI_ChannelSetup_Store:
+PanelInput_UpdatePedalRecord_Compare:
 	cp (0x8ec4:16), 7
-	jr nc, VoiceData_Setup_Ret
+	jr nc, PanelInput_UpdatePedalRecord_Return
 	lda xbc, (xwa + 1)
 	ld (xsp + 8), xbc
 	ld b, (xbc)
 	cp b, 0:i3
-	jr nz, MIDI_ChannelSetup_Init
+	jr nz, PanelInput_UpdatePedalRecord_Queue
 	cp (xwa + 3), 0x0
-	jr z, VoiceData_Setup_Ret
+	jr z, PanelInput_UpdatePedalRecord_Return
 
-MIDI_ChannelSetup_Init:
+PanelInput_UpdatePedalRecord_Queue:
 	lda xiz, (0x8eb2:16)
 	ld (xsp + 4), xiz
 	lda xiy, (xwa + 3)
@@ -2131,7 +2144,7 @@ MIDI_ChannelSetup_Init:
 	ld c, (xbc)
 	ld (xix), c
 	cp l, e
-	jr z, VoiceData_Setup_Ret
+	jr z, PanelInput_UpdatePedalRecord_Return
 	ld a, (xwa)
 	ld (xiz), a
 	ld (xiz + 1), l
@@ -2139,61 +2152,71 @@ MIDI_ChannelSetup_Init:
 	xor a, l
 	ld (xiz + 2), a
 	ld xwa, (xsp + 4)
-	calr Voice_SetupFromData
+	calr PanelInput_QueueChange
 
-VoiceData_Setup_Ret:
+PanelInput_UpdatePedalRecord_Return:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
 
-MIDI_ProcessControlChange:
+; ENCODER_0_OUTPUT (modulation wheel) and ENCODER_1_OUTPUT (volume slider): when bit 7 of the output's flag byte
+; is set, clear it and queue {26 / 27, value, 0x7F}.
+PanelInput_QueueWheelChanges:
 	push xiz
 	lda xiz, (0x8eb2:16)
 	cp (0x8ec4:16), 7
-	jr nc, MidiCC_ProcessParam
+	jr nc, PanelInput_QueueWheelChanges_Volume
 	lda xbc, (ENCODER_0_OUTPUT:16)
 	lda xwa, (xbc + 1)
 	bitm 7, (xwa)
-	jr z, MidiCC_ProcessParam
+	jr z, PanelInput_QueueWheelChanges_Volume
 	resm 7, (xwa)
 	ld (xiz), 0x1a
 	ld a, (xbc)
 	ld (xiz + 1), a
 	ld (xiz + 2), 0x7f
 	ld xwa, xiz
-	calr Voice_SetupFromData
+	calr PanelInput_QueueChange
 
-MidiCC_ProcessParam:
+PanelInput_QueueWheelChanges_Volume:
 	cp (0x8ec4:16), 7
-	jr nc, MidiCC_SkipEntry
+	jr nc, PanelInput_QueueWheelChanges_Return
 	lda xbc, (ENCODER_1_OUTPUT:16)
 	lda xwa, (xbc + 1)
 	bitm 7, (xwa)
-	jr z, MidiCC_SkipEntry
+	jr z, PanelInput_QueueWheelChanges_Return
 	resm 7, (xwa)
 	ld (xiz), 0x1b
 	ld a, (xbc)
 	ld (xiz + 1), a
 	ld (xiz + 2), 0x7f
 	ld xwa, xiz
-	calr Voice_SetupFromData
+	calr PanelInput_QueueChange
 
-MidiCC_SkipEntry:
+PanelInput_QueueWheelChanges_Return:
 	pop xiz
 	ret
 
-MidiCC_LookupHandler:
+; wa = a control-panel packet header -> l = its event index: PanelInput_EventIndexByHeader[(h & 0xC0) >> 1 |
+; (h & 0x1F)] (0..10 left-panel segments, 11..21 right, 22..24 left headers 0xD1-0xD3, 25 = header 0xD7, the
+; TEMPO/PROGRAM data wheel -- records {0x19, delta, 0xFF}, as the kn7000_mame data-wheel patch feeds them -- and
+; 0x1F = none).
+PanelInput_EventIndexOfHeader:
 	ld c, a
 	and c, 0x1f
 	and a, 0xc0
 	srl a, 1
 	or a, c
 	extz wa
-	lda xbc, (MidiCC_LookupHandler_Data:24)
+	lda xbc, (PanelInput_EventIndexByHeader:24)
 	ld	l, (xbc+wa)
 	ret
 
-Voice_SetupFromData:
+; xwa -> {event index, state, changed}: append it to PanelInput_ChangeQueue and call SeqStep_TimerDispatchC.
+; In CURRENT_TITLE 251 only indexes above 0x15 (but 0x19) are queued: index 3 sets RAM 0x8D80 bit 0 from the
+; state; 0x19 and the panel segments (<= 0x15) send MIDI_SendSysExCmd 0x10 on a press, and the segments go to
+; EffectMode_MidiSetLEDs.
+PanelInput_QueueChange:
 	push xiz
 	ld xiz, xwa
 	ld c, (0x8ec4:16)
@@ -2204,11 +2227,11 @@ Voice_SetupFromData:
 	exts xwa
 	add xwa, xde
 	cp (CURRENT_TITLE:16), 251
-	jrl nz, MidiCC_ReturnClean
+	jrl nz, PanelInput_QueueChange_AppendAndNotify
 	cp (xiz), 0x3
-	jr nz, MidiCC_ValidateRange
+	jr nz, PanelInput_QueueChange_Index19
 	cp (xiz + 2), 0x1
-	jr nz, MidiCC_ValidateRange
+	jr nz, PanelInput_QueueChange_Index19
 	ld c, (0x8d80:16)
 	res 0, c
 	ld (0x8d80:16), c
@@ -2216,38 +2239,38 @@ Voice_SetupFromData:
 	and a, 0x1
 	and a, (xiz + 1)
 	bit 0, a
-	jr z, MidiCC_Return
+	jr z, PanelInput_QueueChange_Return
 	set 0, c
 	ld (0x8d80:16), c
-	jr MIDI_PopIzRet
+	jr PanelInput_QueueChange_Done
 
-MidiCC_ValidateRange:
+PanelInput_QueueChange_Index19:
 	cp (xiz), 0x19
-	jr nz, MidiCC_StoreAndDispatch
+	jr nz, PanelInput_QueueChange_Segment
 	ld a, (xiz + 2)
 	and a, 0x1
 	and a, (xiz + 1)
 	bit 0, a
-	jr z, MidiCC_Return
+	jr z, PanelInput_QueueChange_Return
 	ldw wa, 0x10
 	call MIDI_SendSysExCmd
-	jr MIDI_PopIzRet
+	jr PanelInput_QueueChange_Done
 
-MidiCC_StoreAndDispatch:
+PanelInput_QueueChange_Segment:
 	cp (xiz), 0x15
-	jr ugt, MidiCC_Finalize
+	jr ugt, PanelInput_QueueChange_Append
 	ld a, (xiz + 2)
 	and a, (xiz + 1)
-	jr z, MidiCC_CheckOverflow
+	jr z, PanelInput_QueueChange_Leds
 	ldw wa, 0x10
 	call MIDI_SendSysExCmd
 
-MidiCC_CheckOverflow:
+PanelInput_QueueChange_Leds:
 	ld xwa, xiz
 	call EffectMode_MidiSetLEDs
-	jr MIDI_PopIzRet
+	jr PanelInput_QueueChange_Done
 
-MidiCC_Finalize:
+PanelInput_QueueChange_Append:
 	inc 1, c
 	ld (0x8ec4:16), c
 	ld xiy, xiz
@@ -2259,10 +2282,10 @@ MidiCC_Finalize:
 	muls wa, 0x3
 	ld	(xde+wa), 0xff
 
-MidiCC_Return:
-	jr MIDI_PopIzRet
+PanelInput_QueueChange_Return:
+	jr PanelInput_QueueChange_Done
 
-MidiCC_ReturnClean:
+PanelInput_QueueChange_AppendAndNotify:
 	inc 1, c
 	ld (0x8ec4:16), c
 	ld xiy, xiz
@@ -2275,15 +2298,15 @@ MidiCC_ReturnClean:
 	ld	(xde+wa), 0xff
 	call SeqStep_TimerDispatchC
 
-MIDI_PopIzRet:
+PanelInput_QueueChange_Done:
 	pop xiz
 	ret
 
-MidiCC_SyncForceResync:
+PanelInput_ChangeQueue:
 	lda xhl, (0x8e94:16)
 	ret
 
-MidiCC_ResetState:
+PanelInput_ClearChangeQueue:
 	ld (0x8e94:16), 255
 	ld (0x8ec4:16), 0
 	ret

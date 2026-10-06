@@ -2184,14 +2184,14 @@ EffectMode_MidiParseLoop:
 	push	xiz
 	lda	xiz, (36048:16)
 	ld	xwa, xiz
-	call	MIDI_ParseThreeByteParams
+	call	PanelInput_ReadRxRecord
 	cp	hl, 65535
 	jr	z, EffectMode_MidiParse_Done
 EffectMode_MidiParse_Continue:
 	ld xwa, xiz
 	calr EffectMode_MidiSetLEDs
 	ld xwa, xiz
-	call MIDI_ParseThreeByteParams
+	call PanelInput_ReadRxRecord
 	cp hl, 0xffff
 	jr nz, EffectMode_MidiParse_Continue
 

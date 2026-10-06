@@ -1,14 +1,14 @@
 {
  "date": "2026-10-06",
- "head": "9e5ec270",
+ "head": "34fa5973",
  "dirty": true,
  "rules": 2,
- "entry_snapshot": "docs/coverage/dispatch-census-2026-10-06-10.json",
- "entry_snapshot_head": "6b76ce6f",
+ "entry_snapshot": "docs/coverage/dispatch-census-2026-10-06-11.json",
+ "entry_snapshot_head": "9e5ec270",
  "score": {
-  "kn5000": 84.24,
+  "kn5000": 84.22,
   "wsa1": 89.54,
-  "all": 84.3
+  "all": 84.27
  },
  "components": {
   "kn5000": {
@@ -18,14 +18,14 @@
     "pct": 89.91
    },
    "names": {
-    "num": 129830,
-    "den": 145764,
+    "num": 129818,
+    "den": 145746,
     "pct": 89.07
    },
    "entry": {
-    "num": 2107,
-    "den": 2224,
-    "pct": 94.74
+    "num": 2111,
+    "den": 2231,
+    "pct": 94.62
    },
    "fields": {
     "num": 57102,
@@ -62,14 +62,14 @@
     "pct": 90.72
    },
    "names": {
-    "num": 144141,
-    "den": 164755,
+    "num": 144129,
+    "den": 164737,
     "pct": 87.49
    },
    "entry": {
-    "num": 2858,
-    "den": 2986,
-    "pct": 95.71
+    "num": 2862,
+    "den": 2993,
+    "pct": 95.62
    },
    "fields": {
     "num": 57102,
@@ -81,9 +81,9 @@
  "images": {
   "v10": {
    "names": {
-    "semantic": 39291,
-    "continuation": 8743,
-    "generic": 4436,
+    "semantic": 39287,
+    "continuation": 8749,
+    "generic": 4434,
     "positional": 751
    },
    "bytes": [
@@ -91,15 +91,15 @@
     2097152
    ],
    "entry": [
-    677,
-    700
+    678,
+    702
    ]
   },
   "v9": {
    "names": {
-    "semantic": 39291,
-    "continuation": 8739,
-    "generic": 4429,
+    "semantic": 39287,
+    "continuation": 8745,
+    "generic": 4427,
     "positional": 752
    },
    "bytes": [
@@ -107,15 +107,15 @@
     2097152
    ],
    "entry": [
-    677,
-    700
+    678,
+    702
    ]
   },
   "v7": {
    "names": {
-    "semantic": 39144,
-    "continuation": 8499,
-    "generic": 4506,
+    "semantic": 39140,
+    "continuation": 8505,
+    "generic": 4504,
     "positional": 835
    },
    "bytes": [
@@ -123,8 +123,8 @@
     2097152
    ],
    "entry": [
-    627,
-    698
+    629,
+    701
    ]
   },
   "v142": {

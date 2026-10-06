@@ -12,14 +12,14 @@
 
 extern const char PanelAction_Event22;
 extern const char PanelAction_Event23;
-extern const char PanelAction_Event26;
-extern const char PanelAction_Event27;
-extern const char PanelAction_Event28Bit0;
-extern const char PanelAction_Event28Bit1;
-extern const char PanelAction_Event29Bit0;
-extern const char PanelAction_Event29Bit1;
-extern const char PanelAction_Event29Bit2;
-extern const char PanelAction_Event29Bit3;
+extern const char PanelAction_ModWheel;
+extern const char PanelAction_Volume;
+extern const char PanelAction_FootSwitch1;
+extern const char PanelAction_FootSwitch2;
+extern const char PanelAction_FootController1;
+extern const char PanelAction_FootController2;
+extern const char PanelAction_FootController3;
+extern const char PanelAction_FootController4;
 extern const char PanelAction_PostUnlessDemo;
 extern const char PanelAction_PostUnlessDemoOrParamC0;
 extern const char PanelButton_AcousticIllusion;
@@ -47,7 +47,7 @@ extern const char PanelButton_StartStop;
 extern const char PanelButton_Sustain;
 extern const char PanelButton_SynchroBreak;
 extern const char PanelButton_Variation;
-extern const char Audio_CopyStateFromROM;
+extern const char PanelInput_InitPedalRecords;
 extern const char Audio_NullHandler_A;
 extern const char Audio_NullHandler_B;
 extern const char Audio_NullHandler_C;
@@ -262,10 +262,10 @@ typedef struct __attribute__((packed)) {
 } snd_param_mask_entry_t;
 
 /* One control-panel button action (8 bytes; scripts/converters/panel_button_actions_retype.py).  For a change of
- * panel segment byte old -> new, PanelButton_DispatchChange takes (old & mask) and (new & mask), shifts both by
- * shift & 0x0F (left when bit 4 of shift is set, else right) and, when the new value is not 0, calls handler with
- * the frame {event_id, event_arg, old, new} + {0xAA, segment index, old byte, new byte}.  A list ends with
- * event_id 0xFF. */
+ * panel segment byte (record {event index, new state, changed bits}), PanelButton_DispatchChange takes
+ * (state & mask) and (changed & mask), shifts both by shift & 0x0F (left when bit 4 of shift is set, else right)
+ * and, when the masked changed bits are not 0, calls handler with the frame {event_id, event_arg, state, changed}
+ * + {0xAA, segment index, state byte, changed byte}.  A list ends with event_id 0xFF. */
 typedef struct __attribute__((packed)) {
     uint8_t  event_id;
     uint8_t  event_arg;
@@ -6228,26 +6228,26 @@ const naka_extension_device_t naka_extension_device_data
     },
 
     .PanelActions_Event26 = {
-        { 0xB0, 0x01, 0x00, 0x7F, NAKA_ADDR(PanelAction_Event26) },  /* event 26 */
+        { 0xB0, 0x01, 0x00, 0x7F, NAKA_ADDR(PanelAction_ModWheel) },  /* event 26 */
         { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
     },
 
     .PanelActions_Event27 = {
-        { 0xB4, 0x00, 0x00, 0x7F, NAKA_ADDR(PanelAction_Event27) },  /* event 27 */
+        { 0xB4, 0x00, 0x00, 0x7F, NAKA_ADDR(PanelAction_Volume) },  /* event 27 */
         { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
     },
 
     .PanelActions_Event28 = {
-        { 0xA9, 0x32, 0x00, 0x01, NAKA_ADDR(PanelAction_Event28Bit0) },  /* event 28 */
-        { 0xA9, 0x33, 0x01, 0x02, NAKA_ADDR(PanelAction_Event28Bit1) },  /* event 28 */
+        { 0xA9, 0x32, 0x00, 0x01, NAKA_ADDR(PanelAction_FootSwitch1) },  /* event 28 */
+        { 0xA9, 0x33, 0x01, 0x02, NAKA_ADDR(PanelAction_FootSwitch2) },  /* event 28 */
         { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
     },
 
     .PanelActions_Event29 = {
-        { 0xA9, 0x34, 0x00, 0x01, NAKA_ADDR(PanelAction_Event29Bit0) },  /* event 29 */
-        { 0xA9, 0x35, 0x01, 0x02, NAKA_ADDR(PanelAction_Event29Bit1) },  /* event 29 */
-        { 0xA9, 0x36, 0x02, 0x04, NAKA_ADDR(PanelAction_Event29Bit2) },  /* event 29 */
-        { 0xA9, 0x37, 0x03, 0x08, NAKA_ADDR(PanelAction_Event29Bit3) },  /* event 29 */
+        { 0xA9, 0x34, 0x00, 0x01, NAKA_ADDR(PanelAction_FootController1) },  /* event 29 */
+        { 0xA9, 0x35, 0x01, 0x02, NAKA_ADDR(PanelAction_FootController2) },  /* event 29 */
+        { 0xA9, 0x36, 0x02, 0x04, NAKA_ADDR(PanelAction_FootController3) },  /* event 29 */
+        { 0xA9, 0x37, 0x03, 0x08, NAKA_ADDR(PanelAction_FootController4) },  /* event 29 */
         { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
     },
 
@@ -6921,7 +6921,7 @@ const naka_extension_device_t naka_extension_device_data
     .pad_235 = { 0 },
 
     .ptrs_31 = {
-        NAKA_ADDR(Audio_CopyStateFromROM),
+        NAKA_ADDR(PanelInput_InitPedalRecords),
         NAKA_ADDR(Audio_NullHandler_A),
         NAKA_ADDR(Audio_NullHandler_B),
         NAKA_ADDR(Audio_NullHandler_C),

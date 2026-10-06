@@ -1181,7 +1181,7 @@ MainLoop_AfterAccWrap:
 
 MainLoop_AfterPedalReset:
 	calr Seq_EventProcessingTick
-	call Encoder_ValueScanAndSync
+	call PanelButton_ProcessChanges
 	cp (0xbf39:16), 255
 	jr z, MainLoop_AfterSwbtWr
 	call SwbtWr_ProcessAll
@@ -4361,7 +4361,8 @@ SeqBuf_DspSysEx_CopyPointers:
 	ret
 
 
-Seq_DataHandler:
+; Pop one byte from CPANEL_RX_EVENT_QUEUE (RingBuf128_CheckEmpty); hl = 0xFFFF when empty.
+CPanel_RxEventQueue_Pop:
 	pushw ix
 	push xde
 	lda xde, (CPANEL_RX_EVENT_QUEUE:24)
@@ -4371,7 +4372,7 @@ Seq_DataHandler:
 	ret
 
 
-SeqBuf_TimerEvent_BytecodeBlock:
+CPanel_RxEventQueue_Push:
 	link	xiz, 0
 	pushw	ix
 	push	xde

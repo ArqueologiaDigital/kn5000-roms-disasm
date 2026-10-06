@@ -195,31 +195,31 @@ control register on this part (the SFR table jumps `PG 0x40` → `PH 0x44`), so
 
 The firmware reads it three times per periodic tick.
 `v10/maincpu/audio/audio_control_engine.s:1848-1871`, reached from
-`Audio_PeriodicUpdate` via `calr MIDI_ProcessVoiceAssignment` (`:1796`):
+`PanelInput_Poll` via `calr PanelInput_ScanPedalPorts` (`:1796`):
 
 ```
-MIDI_ProcessVoiceAssignment:
+PanelInput_ScanPedalPorts:
 	ld_sd8b A, 0x40      ; A = (PG)
 	and a, 0xc           ; bits 3:2 = FS1/FS2
 	srl a, 2
 	ld c, a
 	ld xwa, 0x8eb6
-	calr MIDI_WriteParamByte
+	calr PanelInput_UpdatePedalRecord
 	ld_sd8b A, 0x40      ; A = (PG)
 	and a, 0xf0          ; bits 7:4 = FC1..FC4
 	srl a, 4
 	cp a, 0xf            ; ALL FOUR HIGH -> nothing engaged
-	jr nz, MIDI_ValidateParam
+	jr nz, PanelInput_ScanPedalPorts_Debounce
 	stdi16 (0x8ec8), 500 ; ...so arm a 500-count debounce and skip the write
-	jr MIDI_WriteSecondByte
-MIDI_ValidateParam:
+	jr PanelInput_ScanPedalPorts_PD6
+PanelInput_ScanPedalPorts_Debounce:
 	cpdi16 0x8ec8, 0
-	jr nz, MIDI_WriteSecondByte
+	jr nz, PanelInput_ScanPedalPorts_PD6
 	lda_d16 xwa, (0x8eba)
 	ld_sd8b C, 0x40      ; A = (PG)
 	and c, 0xf0
 	srl c, 4
-	calr MIDI_WriteParamByte
+	calr PanelInput_UpdatePedalRecord
 ```
 
 The firmware's **own idle test is `upper nibble == 0xF`**, which is what makes
@@ -228,7 +228,7 @@ the polarity a fact rather than an inference: these pins are **active LOW**, and
 is never taken, the debounce at `0x8EC8` is never armed, and the firmware writes
 the fully-engaged pedal values into its parameter block on every tick.
 
-Note the label `MIDI_ProcessVoiceAssignment` is auto-generated and misleading;
+Note the label `PanelInput_ScanPedalPorts` is auto-generated and misleading;
 judge the block by the instructions, which are a foot-switch / foot-controller
 scan.
 
@@ -782,7 +782,7 @@ Both are stated so they can be killed cheaply.  Neither is a finding.
 * **Auto-generated labels in this tree are guesses and several are wrong.**
   Confirmed wrong in this pass: `HDAE5000_Detect` (identifies the *table-data*
   flash), `HDAE5000_Status_Check` (is `Flash_CheckReady`), `Show_ScreenGroup`
-  (is `sta_tsk`), `MIDI_ProcessVoiceAssignment` (is a foot-switch scan),
+  (is `sta_tsk`), `PanelInput_ScanPedalPorts` (is a foot-switch scan),
   `smf_event_processor.s` (is the FAT/file-system + FDC command layer),
   `Audio_Lock_*` (is the generic `sem` family).  Every claim above is stated
   from the instructions, with the label named only for navigation.

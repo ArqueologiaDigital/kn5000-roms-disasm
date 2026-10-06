@@ -11,7 +11,7 @@ SECTIONS {
     /DISCARD/ : { *(.comment) *(.note*) *(.eh_frame*) }
 }
 
-Audio_CopyStateFromROM = 0x00FC61A7;
+PanelInput_InitPedalRecords = 0x00FC61A7;
 Audio_NullHandler_A = 0x00FC61C9;
 Audio_NullHandler_B = 0x00FC61CA;
 Audio_NullHandler_C = 0x00FC61CB;
@@ -58,14 +58,14 @@ FileIO_BytecodeData_Code_Join18 = 0x00FC5D1F;
 Naka_PresentationRootState = 0x00EF013F;
 PanelAction_Event22 = 0x00FC5AFE;
 PanelAction_Event23 = 0x00FC5B5D;
-PanelAction_Event26 = 0x00FC5B2C;
-PanelAction_Event27 = 0x00FC5B67;
-PanelAction_Event28Bit0 = 0x00FC5A4A;
-PanelAction_Event28Bit1 = 0x00FC5A68;
-PanelAction_Event29Bit0 = 0x00FC5A86;
-PanelAction_Event29Bit1 = 0x00FC5AA4;
-PanelAction_Event29Bit2 = 0x00FC5AC2;
-PanelAction_Event29Bit3 = 0x00FC5AE0;
+PanelAction_ModWheel = 0x00FC5B2C;
+PanelAction_Volume = 0x00FC5B67;
+PanelAction_FootSwitch1 = 0x00FC5A4A;
+PanelAction_FootSwitch2 = 0x00FC5A68;
+PanelAction_FootController1 = 0x00FC5A86;
+PanelAction_FootController2 = 0x00FC5AA4;
+PanelAction_FootController3 = 0x00FC5AC2;
+PanelAction_FootController4 = 0x00FC5AE0;
 PanelAction_PostUnlessDemo = 0x00FC50DA;
 PanelAction_PostUnlessDemoOrParamC0 = 0x00FC50F7;
 PanelButton_AcousticIllusion = 0x00FC5154;

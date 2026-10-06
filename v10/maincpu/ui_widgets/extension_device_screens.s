@@ -1061,9 +1061,9 @@ ExtDevScreen_UserInitWallpaper_Data:		.incbin "includes/generated/naka_extension
 ExtDev_SndParam_DispatchComplex_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x37D8, 0x7C	; 8 x 32-bit pointer
 ; [nakarest] naka_extension_device+0x3854  +0x3854..+0x3860 (0xeda020, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeda020 not derived; readers below
-; [nakarest] Readers: source references Audio_CopyStateFromROM (audio/audio_control_engine.s:
-; [nakarest] `lda xbc, (Audio_CopyStateFromROM_Data:24)`).
-Audio_CopyStateFromROM_Data:
+; [nakarest] Readers: source references PanelInput_InitPedalRecords (audio/audio_control_engine.s:
+; [nakarest] `lda xbc, (PanelInput_PedalRecordDefaults:24)`).
+PanelInput_PedalRecordDefaults:
 	.incbin "includes/generated/naka_extension_device.bin", 0x3854, 0xC
 ; [nakarest] EffectMode_DispatchTable  +0x3860..+0x3870 (0xeda02c, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeda02c not derived; readers below
@@ -1076,9 +1076,9 @@ EffectMode_DispatchTable:
 	.incbin "includes/generated/naka_extension_device.bin", 0x3860, 0x10
 ; [nakarest] naka_extension_device+0x3870  +0x3870..+0x38f0 (0xeda03c, 128 B)
 ; [nakarest] purpose not established: layout of 128 B at 0xeda03c not derived; readers below
-; [nakarest] Readers: source references MidiCC_LookupHandler (audio/audio_control_engine.s: `lda
-; [nakarest] xbc, (MidiCC_LookupHandler_Data:24)`).
-MidiCC_LookupHandler_Data:
+; [nakarest] Readers: source references PanelInput_EventIndexOfHeader (audio/audio_control_engine.s: `lda
+; [nakarest] xbc, (PanelInput_EventIndexByHeader:24)`).
+PanelInput_EventIndexByHeader:
 	.incbin "includes/generated/naka_extension_device.bin", 0x3870, 0x80
 ; [nakarest] ENCODER_HANDLER_TABLE  +0x38f0..+0x3970 (0xeda0bc, 128 B)
 ; [nakarest] purpose not established: layout of 128 B at 0xeda0bc not derived; readers below

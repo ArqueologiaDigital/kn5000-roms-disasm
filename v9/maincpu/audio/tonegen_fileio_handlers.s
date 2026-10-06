@@ -1312,24 +1312,26 @@ Encoder_Stub3:
 Encoder_AlignByte:
 	ret
 
-Encoder_ValueScanAndSync:
+; Dispatch every queued panel change (PanelButton_FetchChange, then PanelButton_DispatchChange), end the
+; event queue at (0xC039) with 0xFF, clear the change queue, then VoiceEntry_FindMasterVolume.
+PanelButton_ProcessChanges:
 	ld (0x8e8c:16), 0
 	ld (0x8e8e:16), 0
-	jr Encoder_SyncLoop
+	jr PanelButton_ProcessChanges_Loop
 
-Encoder_ScanAndSync:
-	calr Encoder_ReadNextEntry
+PanelButton_ProcessChanges_Next:
+	calr PanelButton_FetchChange
 	calr PanelButton_DispatchChange
 
-Encoder_SyncLoop:
-	call MidiCC_SyncForceResync
+PanelButton_ProcessChanges_Loop:
+	call PanelInput_ChangeQueue
 	ld a, (0x8e8c:16)
 	extz wa
 	muls wa, 0x3
 	ld	a, (xhl+wa)
 	ld (0x8e90:16), a
 	cp a, 0xff
-	jr nz, Encoder_ScanAndSync
+	jr nz, PanelButton_ProcessChanges_Next
 	ld a, (0x8e8e:16)
 	extz wa
 	sll wa, 2
@@ -1337,11 +1339,11 @@ Encoder_SyncLoop:
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0xff
-	call MidiCC_ResetState
+	call PanelInput_ClearChangeQueue
 	jrl VoiceEntry_FindMasterVolume
 
-Encoder_ReadNextEntry:
-	call MidiCC_SyncForceResync
+PanelButton_FetchChange:
+	call PanelInput_ChangeQueue
 	ld a, (0x8e8c:16)
 	extz wa
 	muls wa, 0x3
@@ -1352,10 +1354,10 @@ Encoder_ReadNextEntry:
 	inc 1, (0x8e8c:16)
 	ret
 
-; One queued panel change {event index, old byte, new byte} (RAM 0x8E78, the index also at 0x8E90): walk
+; One queued panel change {event index, new state, changed bits} (RAM 0x8E78, the index also at 0x8E90): walk
 ; PanelButton_ActionLists[index] (PanelButton_HelpModeActionLists in mode 20, MD_HELP).  The frame at
-; (0x8E7C) gets {0xAA, index, old, new} at +4; per action, +0..+3 = {event_id, event_arg, old & mask,
-; new & mask} shifted by the action's shift, and the handler is called when the new value is not 0.
+; (0x8E7C) gets {0xAA, index, state, changed} at +4; per action, +0..+3 = {event_id, event_arg, state & mask,
+; changed & mask} shifted by the action's shift; the handler is called when the masked changed bits are not 0.
 PanelButton_DispatchChange:
 	push xiz
 	ld c, (0x8e90:16)
