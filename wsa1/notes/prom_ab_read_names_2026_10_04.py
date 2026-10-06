@@ -2526,6 +2526,49 @@ ROWS = [
     ("F73827", "BStore_WriteCursorByteNoSave",
      "BStore_WriteCursorByte's work without saving XIX/WA: A to BStore_HeapBase + (BStore_CursorBlock - 1) * 0x100 +\n"
      "BStore_CursorOffset; called from sub_F73664.  Basis: body, compared with BStore_WriteCursorByte."),
+    # prom_b leaves: SWI7 panel services, value-bar wrapper, transport stop, bounded step, cycle-play exit (2026-10-06)
+    ("F5BF18", "LCD_BlankThenSetPanel3Layer_Copy2",
+     "C = 0, `swi 7` service 0x0C (LCD_Svc_0C_SetLayersOn: all layers off), then service 0x10 (LCD_Svc_10_SetPanel3Layer):\n"
+     "prom_a's LCD_BlankThenSetPanel3Layer sequence (prom_b also holds LCD_BlankThenSetPanel3Layer_Copy at 0xF31852); called from Dispatch_Code80_Bracketed.  Basis: body + SWI7 service\n"
+     "table (FINDINGS-display-controller.md)."),
+    ("F55C2F", "LCD_BlankThenSetPanel3Layer_Layer0",
+     "the same two services as LCD_BlankThenSetPanel3Layer_Copy2, then LCD_CurrentLayer = 0; called from\n"
+     "Draw_CyclePlayCurrentMeasureCycle / _CurrentMeasureEdit and Draw_CycleRecordCurrentMeasure.  Basis: body + SWI7 table."),
+    ("F55C3D", "LCD_ShowAllLayers_Copy",
+     "C = 7, `swi 7` service 0x0C: display layers 1, 2 and 3 steady on (prom_a's LCD_ShowAllLayers_StackFrame does the\n"
+     "same from a stack frame); called from Draw_CycleMasterS0ngMeasureTimeSig.  Basis: body + SWI7 table."),
+    ("F5BF21", "LCD_ShowAllLayers_Copy2",
+     "the same as LCD_ShowAllLayers_Copy; called from Dispatch_Code80_Bracketed.  Basis: body + SWI7 table."),
+    ("F4F000", "LCD_BlitValueBar_StackArgs",
+     "frame-pointer wrapper: IX = stack argument 1 (zero-extended), A = argument 2, T_LCD_BlitValueBar, every register\n"
+     "it touches restored; called from CombiEditMixer_DrawVolume.  Basis: body."),
+    ("F56579", "Transport_StopAllAndWaitC",
+     "T_Transport_StopAllRunning, then up to 65,535 passes of a 3-NOP loop while TransportC_State bit 2 (running) stays\n"
+     "set; called from ScreenLeave_CyclePlayEditScreen.  Basis: body (named RAM)."),
+    ("F67F68", "StepByteWithinLH",
+     "W bit 7 set: A - 1 unless A == L; clear: A + 1 unless A == H -- one step of a byte bounded by L and H, direction in\n"
+     "W bit 7; called from SoftKeyCol3_StepRecordSub05, SoftKeyCol4_StepRecordSub11, SoftKeyCol5_StepRecordSub09.\n"
+     "Basis: body."),
+    ("F57382", "CyclePlayEdit_StopAndLeave",
+     "T_Transport_StopAllRunning, then UI_Request = 0x8025 when UI_ScreenId is 0x26, else 0x8028 (high byte 0x80 = go to\n"
+     "screen); called from ExitKey_CyclePlayEditScreen and LcdKeyRow1_CyclePlayEditScreen.  Basis: callers + body."),
+    # prom_a leaves: sound-conversion argument/result helpers, name characters, wildcard delete, SysEx dump (2026-10-06)
+    ("FD7ADD", "SoundConv_SetArgs4",
+     "SoundConv_Arg0[0] = stack argument 2, [1] = argument 3, [2] = 0, [3] = argument 1 -- SoundConv_SetArgs with a fourth\n"
+     "byte; called from SoftKeyCol1_SoundEditCopy.  Basis: body (named RAM)."),
+    ("FD7B00", "SoundConv_GetResults",
+     "*argument 1 = SoundConv_Result0, *argument 2 = SoundConv_Result1 -- the converters' two result bytes out through\n"
+     "pointers; called from SoftKeyCol1_SoundEditCopy.  Basis: body (named RAM)."),
+    ("FD7C5A", "NameChar_IndexToAsciiOrSpace",
+     "*argument 2 = NameChar_IndexToAscii[argument 1] for a character-set index below 0x61 (the table holds 97), else\n"
+     "' '; called from SoundEditNaming_SoftKeyCol6 / 7 / 8.  Basis: body."),
+    ("FE2699", "Disk_DeleteFilesWithSamePrefix",
+     "Disk_SaveFileName, Disk_FileName bytes 2..10 = '?' (the 8.3 name keeps its first two characters, every other\n"
+     "character and the extension become wildcards), DiskApi_DeleteFile, Disk_RestoreFileName; called from\n"
+     "DiskSave_ByContentType and sub_FE2667.  Basis: body (named RAM)."),
+    ("FB5154", "SysExDump_StopTransportsAndSend",
+     "sets bit 7 of (0x60F802), T_Transport_StopAllRunning with XDE/XHL/XIX/XIZ preserved, then SysExDump_RunSendJob;\n"
+     "called from SysExCmd_DumpRequestGate.  Basis: body."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

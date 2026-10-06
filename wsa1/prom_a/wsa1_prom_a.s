@@ -2028,7 +2028,7 @@
 	.set T_ScreenEnter_CreatorSelectController,                                                                      0x00F434E0
 	.set T_CreatorSelectController_OpenOnEvent,                                                                      0x00F434F0
 	.set T_CreatorSelectController_OnPartEvent,                                                                      0x00F434F4
-	.set sub_F4F000,                              0x00F4F000
+	.set LCD_BlitValueBar_StackArgs,                              0x00F4F000
 	.set DrawValueGlyph_Veneer,                   0x00F4F017
 	.set PartSound_StepBankGroupMember,                              0x00F4F02E
 	.set PtrTable_F4F800,                         0x00F4F800
@@ -89240,7 +89240,7 @@ SoundGroup_ReloadSelection_SaveRegs:
 	ret                                                  ; FB2048  0e
 ; SysExDump_RunSendJob -- run the pending SysEx bulk-dump transmit job: when bit 7 of (0x60F802) is set, prepare, send the category selected by (0x60F802) & 7, close the dump and report the status
 ; Evidence: `and C,0x80` on (0x60F802) at 0xFB204E; `set 6,(0x60fd40)`, MidiInARing_InitIfPanelMode79, sub_FB7B0B, SysExDump_Handshake (the enquiry / start-transfer templates); `cp bc,5 / jr ugt` and SysExDump_JobTable at 0xFB2070-0xFB207F; then SysExDump_SendJobDone (end-of-dump template) and SysExDump_ShowResult (status -> COMPLETED!/ERROR message); always `ld (0x60fd40),0` and SysEx_ResetSession.
-; Run by: prom_b T_SysExDump_RunSendJob after the SEND row->job table 0xF99AE3 writes (0x60F802)|0x80, and by sub_FB5154 (`call 0xFB2049` at 0xFB5165) for a received dump request -- notes/sysex-probes/README.md, sysex_bulkdump_tx.py, sysex_command_map.py.
+; Run by: prom_b T_SysExDump_RunSendJob after the SEND row->job table 0xF99AE3 writes (0x60F802)|0x80, and by SysExDump_StopTransportsAndSend (`call 0xFB2049` at 0xFB5165) for a received dump request -- notes/sysex-probes/README.md, sysex_bulkdump_tx.py, sysex_command_map.py.
 SysExDump_RunSendJob:
 	ld c, (0x60f802:24)                                 ; FB2049  c2 02 f8 60 23
 	and C,0x80                                           ; FB204E  cb cc 80
@@ -94873,7 +94873,9 @@ SysExCmd_DumpRequest_Combination:
 	ld (0x60f802:24), 0x05                             ; FB514A  f2 02 f8 60 00 05
 	calr SysExCmd_DumpRequestGate                                      ; FB5150  1e 17 00
 	ret                                                  ; FB5153  0e
-sub_FB5154:
+; SysExDump_StopTransportsAndSend: sets bit 7 of (0x60F802), T_Transport_StopAllRunning with XDE/XHL/XIX/XIZ preserved, then SysExDump_RunSendJob;
+;   called from SysExCmd_DumpRequestGate.  Basis: body.
+SysExDump_StopTransportsAndSend:
 	m_set 7, MD24, 0x60f802                              ; FB5154  f2 02 f8 60 bf
 	push XDE                                             ; FB5159  3a
 	push XHL                                             ; FB515A  3b
@@ -94886,7 +94888,7 @@ sub_FB5154:
 	pop XDE                                              ; FB5164  5a
 	call SysExDump_RunSendJob                                      ; FB5165  1d 49 20 fb
 	ret                                                  ; FB5169  0e
-; SysExCmd_DumpRequestGate: commands 0x1B-0x1F run sub_FB5154 only on the SYSEX BULK DUMP screen (UI_ScreenLatch 0x79) or
+; SysExCmd_DumpRequestGate: commands 0x1B-0x1F run SysExDump_StopTransportsAndSend only on the SYSEX BULK DUMP screen (UI_ScreenLatch 0x79) or
 ;   when PanelModeGroup == 1 and UI_ScreenLatch == 1; otherwise status 0x11 (sysex-probes/sysex_handshake_gate.py).
 SysExCmd_DumpRequestGate:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x79                          ; FB516A  c1 7a 20 3f 79
@@ -94896,7 +94898,7 @@ SysExCmd_DumpRequestGate:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x01                          ; FB5178  c1 7a 20 3f 01
 	jr nz, .LFB5184                                      ; FB517D  6e 05
 .LFB517F:
-	calr sub_FB5154                                      ; FB517F  1e d2 ff
+	calr SysExDump_StopTransportsAndSend                                      ; FB517F  1e d2 ff
 	jr .LFB5196                                          ; FB5182  68 12
 .LFB5184:
 	pushw 0x11                                           ; FB5184  0b 11 00
@@ -109169,7 +109171,7 @@ CombiEditMixer_DrawVolume:
 	add XBC,IndexMap_F1B0DB                              ; FBE853  e9 c8 db b0 f1 00
 	ld BC,(XBC)                                          ; FBE859  91 21
 	pushw bc                                             ; FBE85B  29
-	call sub_F4F000                                      ; FBE85C  1d 00 f0 f4
+	call LCD_BlitValueBar_StackArgs                                      ; FBE85C  1d 00 f0 f4
 	inc 8,XSP                                            ; FBE860  ef 60
 	inc 6,XSP                                            ; FBE862  ef 66
 	popw hl                                              ; FBE864  4b
@@ -127954,7 +127956,7 @@ FieldColumnX_ByIndex:
 ; NameChar_IndexToAscii -- 97 bytes: character-set INDEX -> ASCII.  0 is
 ; a space, 1-26 'A'-'Z', 27-52 'a'-'z', 53-62 '0'-'9', then punctuation,
 ; 0x7F and '<>[]{}'; index 96 is 0x00.
-; Read by: sub_FD7C5A at 0xFD7C73: sub_FD7C5A(index, &out): out = index < 0x61 ?
+; Read by: NameChar_IndexToAsciiOrSpace at 0xFD7C73: NameChar_IndexToAsciiOrSpace(index, &out): out = index < 0x61 ?
 ;          this[index] : ' '.  COUNT 97 = that bound, `cp (XIZ+8),0x61`.
 ; ★ It is the exact inverse of NameChar_AsciiToIndex below, checked for
 ;   all 96 characters by gen_fcf044_tables.py -- so the pair is the
@@ -144560,7 +144562,9 @@ sub_FD7A24:
 	popw hl                                              ; FD7AD9  4b
 	unlk XIZ                                             ; FD7ADA  ee 0d
 	ret                                                  ; FD7ADC  0e
-sub_FD7ADD:
+; SoundConv_SetArgs4: SoundConv_Arg0[0] = stack argument 2, [1] = argument 3, [2] = 0, [3] = argument 1 -- SoundConv_SetArgs with a fourth
+;   byte; called from SoftKeyCol1_SoundEditCopy.  Basis: body (named RAM).
+SoundConv_SetArgs4:
 	link XIZ,0x0000                                      ; FD7ADD  ee 0c 00 00
 	push XIX                                             ; FD7AE1  3c
 	lda xix, (SoundConv_Arg0:24)                               ; FD7AE2  f2 10 f0 60 34
@@ -144574,7 +144578,9 @@ sub_FD7ADD:
 	pop XIX                                              ; FD7AFC  5c
 	unlk XIZ                                             ; FD7AFD  ee 0d
 	ret                                                  ; FD7AFF  0e
-sub_FD7B00:
+; SoundConv_GetResults: *argument 1 = SoundConv_Result0, *argument 2 = SoundConv_Result1 -- the converters' two result bytes out through
+;   pointers; called from SoftKeyCol1_SoundEditCopy.  Basis: body (named RAM).
+SoundConv_GetResults:
 	link XIZ,0x0000                                      ; FD7B00  ee 0c 00 00
 	pushw hl                                             ; FD7B04  2b
 	ld c, (SoundConv_Result0:24)                                 ; FD7B05  c2 14 f0 60 23
@@ -144770,7 +144776,7 @@ ToneEdit_StepFromEvent:
 	unlk XIZ                                             ; FD7C57  ee 0d
 	ret                                                  ; FD7C59  0e
 ; ---------------------------------------------------------------------
-; sub_FD7C5A -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; NameChar_IndexToAsciiOrSpace -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
 ; Called from: nothing in either image names this address.
 ;
@@ -144785,7 +144791,9 @@ ToneEdit_StepFromEvent:
 ;          from evidence instead of a search.
 ; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
 ; ---------------------------------------------------------------------
-sub_FD7C5A:
+; NameChar_IndexToAsciiOrSpace: *argument 2 = NameChar_IndexToAscii[argument 1] for a character-set index below 0x61 (the table holds 97), else
+;   ' '; called from SoundEditNaming_SoftKeyCol6 / 7 / 8.  Basis: body.
+NameChar_IndexToAsciiOrSpace:
 	link XIZ,0x0000                                      ; FD7C5A  ee 0c 00 00
 	cp (XIZ+0x08),0x61                                   ; FD7C5E  8e 08 3f 61
 	jr c, .LFD7C6C                                       ; FD7C62  67 08
@@ -165396,7 +165404,7 @@ DiskSave_ByContentType:
 	lda xix, (Disk_ContentType:16)                                ; FE2533  f1 25 27 34
 	calr SysPartMidi_ResetBlock1Default                                          ; FE2537  1e 75 09
 	calr ParamImage_WriteRecordHeaders_Entry_SaveRegs                                          ; FE253A  1e 23 db
-	calr sub_FE2699                                          ; FE253D  1e 59 01
+	calr Disk_DeleteFilesWithSamePrefix                                          ; FE253D  1e 59 01
 	calr Var2216_SetW145C                                          ; FE2540  1e 76 0a
 	ld C,(XIX)                                           ; FE2543  84 23
 	cp c, 0x00:i3                                          ; FE2545  cb d8
@@ -165492,7 +165500,7 @@ DiskSave_ByContentType:
 .LFE25FA:
 	cp h, 0x03:i3                                          ; FE25FA  ce db
 	jr z, .LFE260B                                           ; FE25FC  66 0d
-	calr sub_FE2699                                            ; FE25FE  1e 98 00
+	calr Disk_DeleteFilesWithSamePrefix                                            ; FE25FE  1e 98 00
 	ld (0x605a03:24), 0x00                             ; FE2601  f2 03 5a 60 00 00
 	ld A,H                                               ; FE2607  ce 89
 	jr .LFE260D                                              ; FE2609  68 02
@@ -165548,7 +165556,7 @@ sub_FE2667:
 	ld (0x1735:24), a                                   ; FE266D  f2 35 17 00 41
 	cp h, 0x00:i3                                          ; FE2672  ce d8
 	jr nz, .LFE2694                                          ; FE2674  6e 1e
-	calr sub_FE2699                                            ; FE2676  1e 20 00
+	calr Disk_DeleteFilesWithSamePrefix                                            ; FE2676  1e 20 00
 	ld (0x1736:24), 0x19                               ; FE2679  f2 36 17 00 00 19
 	pushw 0x19                                           ; FE267F  0b 19 00
 	calr StatusMsg_ShowByIndex                                          ; FE2682  1e b3 f1
@@ -165562,7 +165570,10 @@ sub_FE2667:
 .LFE2697:
 	popw hl                                              ; FE2697  4b
 	ret                                                  ; FE2698  0e
-sub_FE2699:
+; Disk_DeleteFilesWithSamePrefix: Disk_SaveFileName, Disk_FileName bytes 2..10 = '?' (the 8.3 name keeps its first two characters, every other
+;   character and the extension become wildcards), DiskApi_DeleteFile, Disk_RestoreFileName; called from
+;   DiskSave_ByContentType and sub_FE2667.  Basis: body (named RAM).
+Disk_DeleteFilesWithSamePrefix:
 	push XHL                                             ; FE2699  3b
 	calr Disk_SaveFileName                                          ; FE269A  1e 88 e2
 	ldw hl, 0x02                                         ; FE269D  33 02 00

@@ -1671,8 +1671,8 @@
 	.set	sub_FD785C, 0xFD785C
 	.set	PanelEvent_ToFieldIndex, 0xFD7905
 	.set	sub_FD79DC, 0xFD79DC
-	.set	sub_FD7ADD, 0xFD7ADD
-	.set	sub_FD7B00, 0xFD7B00
+	.set	SoundConv_SetArgs4, 0xFD7ADD
+	.set	SoundConv_GetResults, 0xFD7B00
 	.set	Var27E9_Get, 0xFD7B6B
 	.set	Var27E9_Set, 0xFD7B7B
 	.set	Arr22F0_Set, 0xFD7B89
@@ -1681,7 +1681,7 @@
 	.set	PanelDial_SetDirectionButton, 0xFD7BDE
 	.set	PanelDial_ActAsButton, 0xFD7C01
 	.set	ToneEdit_StepFromEvent, 0xFD7C2D
-	.set	sub_FD7C5A, 0xFD7C5A
+	.set	NameChar_IndexToAsciiOrSpace, 0xFD7C5A
 	.set	sub_FD7C83, 0xFD7C83
 	.set	SoundEditLfo_SoftKeyCol2, 0xFD7E1A
 	.set	SoundEditLfo_SoftKeyCol3, 0xFD7E66
@@ -23462,7 +23462,7 @@ SoundEditNaming_SoftKeyCol6:		; <- T_SoundEditNaming_SoftKeyCol6
 	ld	wa, (xiz-2)	; F0BD5C  ld WA,(XIZ+0xfe)
 	extz	wa	; F0BD5F  extz WA
 	pushw	wa	; F0BD61  push WA
-	call	sub_FD7C5A	; F0BD62  call 0xfd7c5a
+	call	NameChar_IndexToAsciiOrSpace	; F0BD62  call 0xfd7c5a
 	lda	xbc, (xiz-6)	; F0BD66  lda XBC,XIZ+0xfa
 	push	xbc	; F0BD69  push XBC
 	pushw	0	; F0BD6A  push 0x0000
@@ -23502,7 +23502,7 @@ sub_F0BD31_Skip:
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol7: the routine directory slot between T_SoundEditNaming_SoftKeyCol6 and _SoftKeyCol8
 ;   (T_SoundEditNaming_SoftKeyCol7), and slot 6 of ScreenButtons_CombinationNamingWrite -- SOFT KEY 7.  Steps the character Arr27A6[1] by 16, one row of
-;   the 16-wide table: down to >= 0, or up (argument bit 15) to <= 95; then sub_FD7C5A, Arr22F0_Set and two
+;   the 16-wide table: down to >= 0, or up (argument bit 15) to <= 95; then NameChar_IndexToAsciiOrSpace, Arr22F0_Set and two
 ;   T_Dispatch_Code80(159) posts, as SoundEditNaming_SoftKeyCol6 does after its step of 1.  Also called by SoftKeyCol7_SoundEditNaming.
 SoundEditNaming_SoftKeyCol7:		; <- T_SoundEditNaming_SoftKeyCol7
 	link XIZ,0xfffa	; F0BDAC  link XIZ,0xfffa
@@ -23543,7 +23543,7 @@ sub_F0BDAC_Join:
 	ld	wa, (xiz-2)	; F0BE01  ld WA,(XIZ+0xfe)
 	extz	wa	; F0BE04  extz WA
 	pushw	wa	; F0BE06  push WA
-	call	sub_FD7C5A	; F0BE07  call 0xfd7c5a
+	call	NameChar_IndexToAsciiOrSpace	; F0BE07  call 0xfd7c5a
 	lda	xbc, (xiz-6)	; F0BE0B  lda XBC,XIZ+0xfa
 	push	xbc	; F0BE0E  push XBC
 	pushw	0	; F0BE0F  push 0x0000
@@ -23599,7 +23599,7 @@ SoundEditNaming_SoftKeyCol8:		; <- T_SoundEditNaming_SoftKeyCol8
 	ld	wa, (xiz-2)	; F0BE6F  ld WA,(XIZ+0xfe)
 	extz	wa	; F0BE72  extz WA
 	pushw	wa	; F0BE74  push WA
-	call	sub_FD7C5A	; F0BE75  call 0xfd7c5a
+	call	NameChar_IndexToAsciiOrSpace	; F0BE75  call 0xfd7c5a
 	lda	xbc, (xiz-6)	; F0BE79  lda XBC,XIZ+0xfa
 	push	xbc	; F0BE7C  push XBC
 	pushw	0	; F0BE7D  push 0x0000
@@ -24044,13 +24044,13 @@ sub_F0C1B9_Resume:
 	ld	c, d	; F0C21B  ld C,D
 	extz	bc	; F0C21D  extz BC
 	pushw	bc	; F0C21F  push BC
-	call	sub_FD7ADD	; F0C220  call 0xfd7add
+	call	SoundConv_SetArgs4	; F0C220  call 0xfd7add
 	call	T_SoundSel_ToProgramAndBank	; F0C224  call 0xf40ffc
 	lda	xbc, (xiz-12)	; F0C228  lda XBC,XIZ+0xf4
 	push	xbc	; F0C22B  push XBC
 	lda	xwa, (xiz-14)	; F0C22C  lda XWA,XIZ+0xf2
 	push	xwa	; F0C22F  push XWA
-	call	sub_FD7B00	; F0C230  call 0xfd7b00
+	call	SoundConv_GetResults	; F0C230  call 0xfd7b00
 	ld	bc, (xiz-12)	; F0C234  ld BC,(XIZ+0xf4)
 	extz	bc	; F0C237  extz BC
 	pushw	bc	; F0C239  push BC
@@ -24158,13 +24158,13 @@ sub_F0C2F4_Resume:
 	ld	bc, (xiz-2)	; F0C30B  ld BC,(XIZ+0xfe)
 	extz	bc	; F0C30E  extz BC
 	pushw	bc	; F0C310  push BC
-	call	sub_FD7ADD	; F0C311  call 0xfd7add
+	call	SoundConv_SetArgs4	; F0C311  call 0xfd7add
 	call	T_SoundSel_ToProgramAndBank	; F0C315  call 0xf40ffc
 	lda	xbc, (xiz-6)	; F0C319  lda XBC,XIZ+0xfa
 	push	xbc	; F0C31C  push XBC
 	lda	xwa, (xiz-8)	; F0C31D  lda XWA,XIZ+0xf8
 	push	xwa	; F0C320  push XWA
-	call	sub_FD7B00	; F0C321  call 0xfd7b00
+	call	SoundConv_GetResults	; F0C321  call 0xfd7b00
 	ld	bc, (xiz-6)	; F0C325  ld BC,(XIZ+0xfa)
 	extz	bc	; F0C328  extz BC
 	pushw	bc	; F0C32A  push BC
@@ -109110,7 +109110,7 @@ Table_F4EF40:
 ; ==============================================================================
 
 ; --------------------------------------------------------------------------
-; sub_F4F000 -- the same veneer shape as DrawValueGlyph_Veneer, for a
+; LCD_BlitValueBar_StackArgs -- the same veneer shape as DrawValueGlyph_Veneer, for a
 ; routine that has no name yet
 ; Called from: prom_a 0xFBE85C `call 0xf4f000`
 ; Evidence: `ld IX,(XIZ+0x08) / ld A,(XIZ+0x0a) / call 0xf415b4`; slot
@@ -109119,7 +109119,9 @@ Table_F4EF40:
 ; Unknown: what the callee does.  Its target is unnamed, so naming the
 ;          veneer would be inventing a meaning the tree does not have.
 ; --------------------------------------------------------------------------
-sub_F4F000:
+; LCD_BlitValueBar_StackArgs: frame-pointer wrapper: IX = stack argument 1 (zero-extended), A = argument 2, T_LCD_BlitValueBar, every register
+;   it touches restored; called from CombiEditMixer_DrawVolume.  Basis: body.
+LCD_BlitValueBar_StackArgs:
 	push	xiz	; F4F000  push XIZ
 	ld	xiz, xsp	; F4F001  ld XIZ,XSP
 	push	xix	; F4F003  push XIX
@@ -118783,7 +118785,7 @@ Nop_Ret_F55C2E:
 	ret	; F55C2E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F55C2F
+; LCD_BlankThenSetPanel3Layer_Layer0
 ; Called from: in-module: 0xF55C61 0xF55CB6 0xF55CE7 0xF55D12 0xF55E7D
 ;              0xF55ED8 0xF55F33
 ; Touches: (0x2540)
@@ -118792,7 +118794,9 @@ Nop_Ret_F55C2E:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F55C2F:
+; LCD_BlankThenSetPanel3Layer_Layer0: the same two services as LCD_BlankThenSetPanel3Layer_Copy2, then LCD_CurrentLayer = 0; called from
+;   Draw_CyclePlayCurrentMeasureCycle / _CurrentMeasureEdit and Draw_CycleRecordCurrentMeasure.  Basis: body + SWI7 table.
+LCD_BlankThenSetPanel3Layer_Layer0:
 	ld	c, 0:opc	; F55C2F  ld C,0x00
 	ld	a, 12:opc	; F55C31  ld A,0x0c
 	swi	7	; F55C33  swi 7
@@ -118802,7 +118806,7 @@ sub_F55C2F:
 	ret	; F55C3C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F55C3D
+; LCD_ShowAllLayers_Copy
 ; Called from: in-module: 0xF55CB2 0xF55CE3 0xF55D63 0xF55ED4 0xF55F2F
 ;              0xF55F9B
 ; Touches: nothing with an absolute address
@@ -118811,7 +118815,9 @@ sub_F55C2F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F55C3D:
+; LCD_ShowAllLayers_Copy: C = 7, `swi 7` service 0x0C: display layers 1, 2 and 3 steady on (prom_a's LCD_ShowAllLayers_StackFrame does the
+;   same from a stack frame); called from Draw_CycleMasterS0ngMeasureTimeSig.  Basis: body + SWI7 table.
+LCD_ShowAllLayers_Copy:
 	ld	c, 7:opc	; F55C3D  ld C,0x07
 	ld	a, 12:opc	; F55C3F  ld A,0x0c
 	swi	7	; F55C41  swi 7
@@ -118823,9 +118829,9 @@ sub_F55C3D:
 ; Called from: in-module: 0xF55CAB 0xF55D5C 0xF55F6D
 ; Touches: (0x12F6) (0x2540) (0x2652) (0x3552) (0x3753)  |  0xF341B6 0xF34256
 ;          0xF3434C 0xF34361 0xF343B6 0xF343BC +9 more
-; Calls:   T_DLB_Handler_StringTable sub_F55C2F T_DisplayList_Run sub_F55D67
+; Calls:   T_DLB_Handler_StringTable LCD_BlankThenSetPanel3Layer_Layer0 T_DisplayList_Run sub_F55D67
 ;          sub_F55D90 SeqPlayScreen_StageValues T_DisplayListB_Run sub_F55C44 T_PanelDial_QueueValueRedraw_Entry
-;          sub_F55C3D RealtimeRecordScreen_StageValues
+;          LCD_ShowAllLayers_Copy RealtimeRecordScreen_StageValues
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF55C44 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -118845,7 +118851,7 @@ sub_F55C44_Join:
 sub_F55C44_Return:
 	ret	; F55C60  ret
 Draw_SequencerPlayS0ngCycleMeasure:
-	calr	sub_F55C2F	; F55C61  calr 0xf55c2f
+	calr	LCD_BlankThenSetPanel3Layer_Layer0	; F55C61  calr 0xf55c2f
 	ld	xiy, DL_SequencerPlayS0ngCycleMeasure	; F55C64  ld XIY,0x00f349c7
 	ld	xix, Data_F34C6E	; F55C69  ld XIX,0x00f34c6e
 	call	T_DisplayList_Run	; F55C6E  call 0xf417f0
@@ -118866,10 +118872,10 @@ Draw_CycleMasterS0ngMeasureTimeSig:
 	ld	xiy, DL_F3434C	; F55CA6  ld XIY,0x00f3434c
 	calr	sub_F55C44	; F55CAB  calr 0xf55c44
 	call	T_PanelDial_QueueValueRedraw_Entry	; F55CAE  call 0xf415bc
-	calr	sub_F55C3D	; F55CB2  calr 0xf55c3d
+	calr	LCD_ShowAllLayers_Copy	; F55CB2  calr 0xf55c3d
 	ret	; F55CB5  ret
 Draw_MetronomeBalance:
-	calr	sub_F55C2F	; F55CB6  calr 0xf55c2f
+	calr	LCD_BlankThenSetPanel3Layer_Layer0	; F55CB6  calr 0xf55c2f
 	ld	xiy, DL_MetronomeBalance	; F55CB9  ld XIY,0x00f35342
 	ld	xix, DL_F3539F	; F55CBE  ld XIX,0x00f3539f
 	call	T_DisplayList_Run	; F55CC3  call 0xf417f0
@@ -118881,10 +118887,10 @@ sub_F55CC8:
 	ld	xiy, DL_F3539F	; F55CD5  ld XIY,0x00f3539f
 	ld	xix, DL_F3539F + 0xC	; F55CDA  ld XIX,0x00f353ab
 	call	T_DisplayListB_Run	; F55CDF  call 0xf417f4
-	calr	sub_F55C3D	; F55CE3  calr 0xf55c3d
+	calr	LCD_ShowAllLayers_Copy	; F55CE3  calr 0xf55c3d
 	ret	; F55CE6  ret
 Draw_RealtimeRecordSongMeasureQuantiTimeSigMasterClear:
-	calr	sub_F55C2F	; F55CE7  calr 0xf55c2f
+	calr	LCD_BlankThenSetPanel3Layer_Layer0	; F55CE7  calr 0xf55c2f
 	ld	xiy, DL_RealtimeRecordSongMeasureQuantiTimeSigMasterClear	; F55CEA  ld XIY,0x00f34681
 	ld	xix, DL_RealtimeRecordSongMeasureQuantiTimeSigMasterClear + 0x2E7	; F55CEF  ld XIX,0x00f34968
 	call	T_DisplayList_Run	; F55CF4  call 0xf417f0
@@ -118896,7 +118902,7 @@ Draw_RealtimeRecordSongMeasureQuantiTimeSigMasterClear:
 	calr	sub_F55D90	; F55D0E  calr 0xf55d90
 	ret	; F55D11  ret
 Draw_RealtimeRecordSongMeasureQuantiTimeSigMasterCycle:
-	calr	sub_F55C2F	; F55D12  calr 0xf55c2f
+	calr	LCD_BlankThenSetPanel3Layer_Layer0	; F55D12  calr 0xf55c2f
 	ld	xiy, DL_RealtimeRecordSongMeasureQuantiTimeSigMasterCycle	; F55D15  ld XIY,0x00f343bc
 	ld	xix, DL_RealtimeRecordSongMeasureQuantiTimeSigMasterClear	; F55D1A  ld XIX,0x00f34681
 	call	T_DisplayList_Run	; F55D1F  call 0xf417f0
@@ -118917,7 +118923,7 @@ sub_F55D3D:
 	ld	xiy, DL_F3434C	; F55D57  ld XIY,0x00f3434c
 	calr	sub_F55C44	; F55D5C  calr 0xf55c44
 	call	T_PanelDial_QueueValueRedraw_Entry	; F55D5F  call 0xf415bc
-	calr	sub_F55C3D	; F55D63  calr 0xf55c3d
+	calr	LCD_ShowAllLayers_Copy	; F55D63  calr 0xf55c3d
 	ret	; F55D66  ret
 
 ; --------------------------------------------------------------------------
@@ -119028,7 +119034,7 @@ sub_F55D90_Join:
 ; Touches: (0x12F6) (0x2540) (0x3552) (0x3627) (0x36CE) (0x3755) (0x3756)  |
 ;          0xF3437F 0xF3438E 0xF343A2 0xF343AC 0xF34C9A 0xF34CA2 +18 more
 ; Calls:   T_DisplayList_Run Nop_Ret_F55C2E T_DLB_Handler_Array8 T_DLB_Handler_Array6
-;          sub_F55C2F CyclePlayEditScreen_StageValues T_DisplayListB_Run T_DLB_Handler_Array8_2 sub_F55C3D CyclePlayScreen_StageValues
+;          LCD_BlankThenSetPanel3Layer_Layer0 CyclePlayEditScreen_StageValues T_DisplayListB_Run T_DLB_Handler_Array8_2 LCD_ShowAllLayers_Copy CyclePlayScreen_StageValues
 ;          CycleRecordScreen_StageValues sub_F55C44 +1 more
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF55E20 is an instruction boundary.
@@ -119078,7 +119084,7 @@ sub_F55E20_Join2:
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55E78  and (0xc6),0xfe
 	ret	; F55E7C  ret
 Draw_CyclePlayCurrentMeasureEdit:
-	calr	sub_F55C2F	; F55E7D  calr 0xf55c2f
+	calr	LCD_BlankThenSetPanel3Layer_Layer0	; F55E7D  calr 0xf55c2f
 	ld	xiy, DL_CyclePlayCurrentMeasureEdit	; F55E80  ld XIY,0x00f35208
 	ld	xix, DL_F352F9	; F55E85  ld XIX,0x00f352f9
 	call	T_DisplayList_Run	; F55E8A  call 0xf417f0
@@ -119100,10 +119106,10 @@ sub_F55E8F:
 	ld	xiy, DL_F34FF2 + 0x2D	; F55EC7  ld XIY,0x00f3501f
 	call	T_DLB_Handler_Array8	; F55ECC  call 0xf4181c
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55ED0  and (0xc6),0xfe
-	calr	sub_F55C3D	; F55ED4  calr 0xf55c3d
+	calr	LCD_ShowAllLayers_Copy	; F55ED4  calr 0xf55c3d
 	ret	; F55ED7  ret
 Draw_CyclePlayCurrentMeasureCycle:
-	calr	sub_F55C2F	; F55ED8  calr 0xf55c2f
+	calr	LCD_BlankThenSetPanel3Layer_Layer0	; F55ED8  calr 0xf55c2f
 	ld	xiy, DL_CyclePlayCurrentMeasureCycle	; F55EDB  ld XIY,0x00f34ee8
 	ld	xix, DL_F34FF2	; F55EE0  ld XIX,0x00f34ff2
 	call	T_DisplayList_Run	; F55EE5  call 0xf417f0
@@ -119125,10 +119131,10 @@ sub_F55EEA:
 	ld	xiy, DL_F34FF2 + 0x2D	; F55F22  ld XIY,0x00f3501f
 	call	T_DLB_Handler_Array8	; F55F27  call 0xf4181c
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55F2B  and (0xc6),0xfe
-	calr	sub_F55C3D	; F55F2F  calr 0xf55c3d
+	calr	LCD_ShowAllLayers_Copy	; F55F2F  calr 0xf55c3d
 	ret	; F55F32  ret
 Draw_CycleRecordCurrentMeasure:
-	calr	sub_F55C2F	; F55F33  calr 0xf55c2f
+	calr	LCD_BlankThenSetPanel3Layer_Layer0	; F55F33  calr 0xf55c2f
 	ld	xiy, DL_CycleRecordCurrentMeasure	; F55F36  ld XIY,0x00f3505b
 	ld	xix, DL_F351A7	; F55F3B  ld XIX,0x00f351a7
 	call	T_DisplayList_Run	; F55F40  call 0xf417f0
@@ -119154,7 +119160,7 @@ sub_F55F45:
 	ld	xiy, DL_F34FF2 + 0x2D	; F55F8E  ld XIY,0x00f3501f
 	call	T_DLB_Handler_Array8	; F55F93  call 0xf4181c
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55F97  and (0xc6),0xfe
-	calr	sub_F55C3D	; F55F9B  calr 0xf55c3d
+	calr	LCD_ShowAllLayers_Copy	; F55F9B  calr 0xf55c3d
 	ret	; F55F9E  ret
 sub_F55F9F:
 	ld	(LCD_CurrentLayer:16), 0	; F55F9F  ld (0x2540),0x00
@@ -120176,7 +120182,7 @@ Nop_Ret_F56524:
 ; sub_F56525
 ; Called from: T_F40E18 (0xF40E18, x2)
 ; Touches: (0x34D3) (0x34D4) (0x3614)
-; Calls:   T_F40CEC sub_F56579 T_F42578 T_F409C8 T_F40CCC T_F40BD8 T_NoteRouting_RebuildForSong
+; Calls:   T_F40CEC Transport_StopAllAndWaitC T_F42578 T_F409C8 T_F40CCC T_F40BD8 T_NoteRouting_RebuildForSong
 ;          T_F40B60 T_F40B5C T_F40AC4 sub_F55D90
 ; Evidence: thunk slot T_F40E18 holds `jp 0x00F56525`, and 0xF56525 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -120188,7 +120194,7 @@ sub_F56525:		; <- T_F40E18
 	m_set 1, MD16, 0x3614	; F56525  set 1,(0x3614)
 	call	T_F40CEC	; F56529  call 0xf40cec
 	m_res 1, MD16, 0x3614	; F5652D  res 1,(0x3614)
-	calr	sub_F56579	; F56531  calr 0xf56579
+	calr	Transport_StopAllAndWaitC	; F56531  calr 0xf56579
 	call	T_F42578	; F56534  call 0xf42578
 	call	T_F409C8	; F56538  call 0xf409c8
 	call	T_F40CCC	; F5653C  call 0xf40ccc
@@ -120212,7 +120218,7 @@ Nop_Ret_F56524_Join:
 	ret	; F56578  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56579
+; Transport_StopAllAndWaitC
 ; Called from: in-module: 0xF56531 0xF57327
 ; Touches: nothing with an absolute address
 ; Calls:   T_Transport_StopAllRunning
@@ -120221,7 +120227,9 @@ Nop_Ret_F56524_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56579:
+; Transport_StopAllAndWaitC: T_Transport_StopAllRunning, then up to 65,535 passes of a 3-NOP loop while TransportC_State bit 2 (running) stays
+;   set; called from ScreenLeave_CyclePlayEditScreen.  Basis: body (named RAM).
+Transport_StopAllAndWaitC:
 	call	T_Transport_StopAllRunning	; F56579  call 0xf409ac
 	ldw	wa, 65535	; F5657D  ld WA,0xffff
 	bit	2, (TransportC_State:8)	; F56580  bit 2,(0x95)
@@ -122678,7 +122686,7 @@ sub_F57286_Skip6:
 ; ScreenLeave_CyclePlayEditScreen
 ; Called from: in-module: 0xF55886 0xF57414
 ; Touches: (0x207A) (0x207B) (0x3628)
-; Calls:   sub_F56579 T_PartNotes_ReleaseAllTrackNotes T_F41F18 T_NoteRouting_RebuildForSong
+; Calls:   Transport_StopAllAndWaitC T_PartNotes_ReleaseAllTrackNotes T_F41F18 T_NoteRouting_RebuildForSong
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF57311 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -122694,7 +122702,7 @@ sub_F57311_Skip:
 	ld	(13864:16), 0	; F5731D  ld (0x3628),0x00
 	bit	2, (TransportB_State:8)	; F57322  bit 2,(0x96)
 	jr	z, sub_F57311_Skip2	; F57325  jr Z,0xf57332
-	calr	sub_F56579	; F57327  calr 0xf56579
+	calr	Transport_StopAllAndWaitC	; F57327  calr 0xf56579
 	call	T_PartNotes_ReleaseAllTrackNotes	; F5732A  call 0xf413c8
 	call	T_F41F18	; F5732E  call 0xf41f18
 sub_F57311_Skip2:
@@ -122725,7 +122733,7 @@ Nop_Ret_F57337:
 ; LcdKeyRow1_CyclePlayEditScreen
 ; Called from: table 0xF55B2E[8]; in-module: 0xF57419
 ; Touches: (0x3628)
-; Calls:   sub_F57382
+; Calls:   CyclePlayEdit_StopAndLeave
 ; Evidence: entry [8] of the table at 0xF55B2E reads 0x00F57338, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF57338
 ;           is an instruction boundary of this transcription.
@@ -122738,7 +122746,7 @@ LcdKeyRow1_CyclePlayEditScreen:
 	jr	nz, sub_F57338_Return	; F5733B  jr NZ,0xf57349
 	m_cp_mi8 MB16, 0x3628, 0x00	; F5733D  cp (0x3628),0x00
 	jr	nz, sub_F57338_Return	; F57342  jr NZ,0xf57349
-	calr	sub_F57382	; F57344  calr 0xf57382
+	calr	CyclePlayEdit_StopAndLeave	; F57344  calr 0xf57382
 	jr	sub_F57338_Return	; F57347  jr T,0xf57349
 sub_F57338_Return:
 	ret	; F57349  ret
@@ -122829,7 +122837,7 @@ Nop_Ret_F5736A:
 ; ExitKey_CyclePlayEditScreen
 ; Called from: table 0xF55B2E[15]; in-module: 0xF5742A
 ; Touches: (0x3628)
-; Calls:   sub_F57382
+; Calls:   CyclePlayEdit_StopAndLeave
 ; Evidence: entry [15] of the table at 0xF55B2E reads 0x00F5736B, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF5736B is an instruction boundary of this transcription.
@@ -122842,7 +122850,7 @@ ExitKey_CyclePlayEditScreen:
 	jr	nz, sub_F5736B_Return	; F5736E  jr NZ,0xf5737c
 	m_cp_mi8 MB16, 0x3628, 0x00	; F57370  cp (0x3628),0x00
 	jr	nz, sub_F5736B_Return	; F57375  jr NZ,0xf5737c
-	calr	sub_F57382	; F57377  calr 0xf57382
+	calr	CyclePlayEdit_StopAndLeave	; F57377  calr 0xf57382
 	jr	sub_F5736B_Return	; F5737A  jr T,0xf5737c
 sub_F5736B_Return:
 	ret	; F5737C  ret
@@ -122886,7 +122894,7 @@ Nop_Ret_F57381:
 	ret	; F57381  ret
 
 ; --------------------------------------------------------------------------
-; sub_F57382
+; CyclePlayEdit_StopAndLeave
 ; Called from: in-module: 0xF57344 0xF57377
 ; Touches: (0x2070) (0x207C)
 ; Calls:   T_Transport_StopAllRunning
@@ -122895,7 +122903,9 @@ Nop_Ret_F57381:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F57382:
+; CyclePlayEdit_StopAndLeave: T_Transport_StopAllRunning, then UI_Request = 0x8025 when UI_ScreenId is 0x26, else 0x8028 (high byte 0x80 = go to
+;   screen); called from ExitKey_CyclePlayEditScreen and LcdKeyRow1_CyclePlayEditScreen.  Basis: callers + body.
+CyclePlayEdit_StopAndLeave:
 	call	T_Transport_StopAllRunning	; F57382  call 0xf409ac
 	m_cp_mi8 MB16, UI_ScreenId, 0x26	; F57386  cp (0x207c),0x26
 	jr	z, sub_F57382_Skip	; F5738B  jr Z,0xf57395
@@ -129392,10 +129402,10 @@ SC1_Entry_F40F24_Body_Ret_Join:
 	sla	hl, 2	; F5B8DC  sla 0x02,HL
 	mx_ld_rm MXL, ra_IY, ra_HL, 5	; F5B8DF  ld XIY,(XIY+HL)
 	push	xiy	; F5B8E4  push XIY
-	call	sub_F5BF18	; F5B8E5  call 0xf5bf18
+	call	LCD_BlankThenSetPanel3Layer_Copy2	; F5B8E5  call 0xf5bf18
 	pop	xiy	; F5B8E9  pop XIY
 	call	(xiy)	; F5B8EA  call T,XIY
-	call	sub_F5BF21	; F5B8EC  call 0xf5bf21
+	call	LCD_ShowAllLayers_Copy2	; F5B8EC  call 0xf5bf21
 	pop	xiy	; F5B8F0  pop XIY
 	pop	xix	; F5B8F1  pop XIX
 	pop	xhl	; F5B8F2  pop XHL
@@ -130238,7 +130248,7 @@ sub_F5BE5A_Return:
 ;   `ld XIY,(XIZ+WA)`, destination y*40 + x/8 from (0x2350)/(0x2352), BC = 5,
 ;   HL = 40, SWI7 service 0x03 (a 5-column x 40-row blit).
 ; Entry count: 7 -- 28 bytes, and every word is one of the six bitmaps; the
-;   byte after the table is 0x0E and sub_F5BF18 begins after that.
+;   byte after the table is 0x0E and LCD_BlankThenSetPanel3Layer_Copy2 begins after that.
 ; --------------------------------------------------------------------------
 CurveBitmapSelector:
 	.long	Bitmap_F01DAA	; F5BEFB  [0]
@@ -130249,14 +130259,18 @@ CurveBitmapSelector:
 	.long	Bitmap_F01A8A	; F5BF0F  [5]
 	.long	Bitmap_F019C2	; F5BF13  [6]
 	.byte	0x0E	; F5BF17  a lone 0x0E (`ret`) that nothing reaches
-sub_F5BF18:
+; LCD_BlankThenSetPanel3Layer_Copy2: C = 0, `swi 7` service 0x0C (LCD_Svc_0C_SetLayersOn: all layers off), then service 0x10 (LCD_Svc_10_SetPanel3Layer):
+;   prom_a's LCD_BlankThenSetPanel3Layer sequence (prom_b also holds LCD_BlankThenSetPanel3Layer_Copy at 0xF31852); called from Dispatch_Code80_Bracketed.  Basis: body + SWI7 service
+;   table (FINDINGS-display-controller.md).
+LCD_BlankThenSetPanel3Layer_Copy2:
 	ld	c, 0:opc	; F5BF18  ld C,0x00
 	ld	a, 12:opc	; F5BF1A  ld A,0x0c
 	swi	7	; F5BF1C  swi 7
 	ld	a, 16:opc	; F5BF1D  ld A,0x10
 	swi	7	; F5BF1F  swi 7
 	ret	; F5BF20  ret
-sub_F5BF21:
+; LCD_ShowAllLayers_Copy2: the same as LCD_ShowAllLayers_Copy; called from Dispatch_Code80_Bracketed.  Basis: body + SWI7 table.
+LCD_ShowAllLayers_Copy2:
 	ld	c, 7:opc	; F5BF21  ld C,0x07
 	ld	a, 12:opc	; F5BF23  ld A,0x0c
 	swi	7	; F5BF25  swi 7
@@ -148975,7 +148989,7 @@ SoftKeyCol5_StepRecordSub09:
 	ld	a, (4113:16)	; F67E6E  ld A,(0x1011)
 	ld	l, 0:opc	; F67E72  ld L,0x00
 	ld	h, 127:opc	; F67E74  ld H,0x7f
-	calr	sub_F67F68	; F67E76  calr 0xf67f68
+	calr	StepByteWithinLH	; F67E76  calr 0xf67f68
 	ld	(4113:16), a	; F67E79  ld (0x1011),A
 	ld	l, (3676:16)	; F67E7D  ld L,(0x0e5c)
 	dec	1, l	; F67E81  dec 1,L
@@ -149077,7 +149091,7 @@ RamPtrTable_F67EE8:
 
 
 ; --------------------------------------------------------------------------
-; sub_F67F68
+; StepByteWithinLH
 ; Called from: in-module: 0xF67E76 0xF6806F 0xF6808D 0xF680AA 0xF680C8
 ;              0xF680E6 0xF68104 0xF68122 +9 more
 ; Touches: nothing with an absolute address
@@ -149087,7 +149101,10 @@ RamPtrTable_F67EE8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F67F68:
+; StepByteWithinLH: W bit 7 set: A - 1 unless A == L; clear: A + 1 unless A == H -- one step of a byte bounded by L and H, direction in
+;   W bit 7; called from SoftKeyCol3_StepRecordSub05, SoftKeyCol4_StepRecordSub11, SoftKeyCol5_StepRecordSub09.
+;   Basis: body.
+StepByteWithinLH:
 	bit	7, w	; F67F68  bit 0x07,W
 	jr	nz, sub_F67F68_Skip	; F67F6B  jr NZ,0xf67f75
 	cp	a, h	; F67F6D  cp A,H
@@ -149214,7 +149231,7 @@ SoftKeyCol5_StepRecordSub10:
 	ld	a, (4698:16)	; F68067  ld A,(0x125a)
 	ld	l, 28:opc	; F6806B  ld L,0x1c
 	ld	h, 100:opc	; F6806D  ld H,0x64
-	calr	sub_F67F68	; F6806F  calr 0xf67f68
+	calr	StepByteWithinLH	; F6806F  calr 0xf67f68
 	ld	(4698:16), a	; F68072  ld (0x125a),A
 	ld	(3835:16), 4	; F68076  ld (0x0efb),0x04
 	calr	sub_F6820F	; F6807B  calr 0xf6820f
@@ -149224,7 +149241,7 @@ sub_F68016_Skip:
 	ld	a, (4698:16)	; F68085  ld A,(0x125a)
 	ld	l, 0:opc	; F68089  ld L,0x00
 	ld	h, 127:opc	; F6808B  ld H,0x7f
-	calr	sub_F67F68	; F6808D  calr 0xf67f68
+	calr	StepByteWithinLH	; F6808D  calr 0xf67f68
 	ld	(4698:16), a	; F68090  ld (0x125a),A
 	ld	(3835:16), 4	; F68094  ld (0x0efb),0x04
 	calr	sub_F6820F	; F68099  calr 0xf6820f
@@ -149234,7 +149251,7 @@ sub_F68016_Skip2:
 	ld	a, (4698:16)	; F680A2  ld A,(0x125a)
 	ld	l, 0:opc	; F680A6  ld L,0x00
 	ld	h, 127:opc	; F680A8  ld H,0x7f
-	calr	sub_F67F68	; F680AA  calr 0xf67f68
+	calr	StepByteWithinLH	; F680AA  calr 0xf67f68
 	ld	(4698:16), a	; F680AD  ld (0x125a),A
 	ld	(3835:16), 4	; F680B1  ld (0x0efb),0x04
 	calr	sub_F6820F	; F680B6  calr 0xf6820f
@@ -149244,7 +149261,7 @@ sub_F68016_Skip3:
 	ld	a, (4698:16)	; F680C0  ld A,(0x125a)
 	ld	l, 0:opc	; F680C4  ld L,0x00
 	ld	h, 255:opc	; F680C6  ld H,0xff
-	calr	sub_F67F68	; F680C8  calr 0xf67f68
+	calr	StepByteWithinLH	; F680C8  calr 0xf67f68
 	ld	(4698:16), a	; F680CB  ld (0x125a),A
 	ld	(3835:16), 4	; F680CF  ld (0x0efb),0x04
 	calr	sub_F68234	; F680D4  calr 0xf68234
@@ -149254,7 +149271,7 @@ sub_F68016_Skip4:
 	ld	a, (4698:16)	; F680DE  ld A,(0x125a)
 	ld	l, 0:opc	; F680E2  ld L,0x00
 	ld	h, 12:opc	; F680E4  ld H,0x0c
-	calr	sub_F67F68	; F680E6  calr 0xf67f68
+	calr	StepByteWithinLH	; F680E6  calr 0xf67f68
 	ld	(4698:16), a	; F680E9  ld (0x125a),A
 	ld	(3835:16), 4	; F680ED  ld (0x0efb),0x04
 	calr	sub_F6820F	; F680F2  calr 0xf6820f
@@ -149264,7 +149281,7 @@ sub_F68016_Skip5:
 	ld	a, (4698:16)	; F680FC  ld A,(0x125a)
 	ld	l, 0:opc	; F68100  ld L,0x00
 	ld	h, 127:opc	; F68102  ld H,0x7f
-	calr	sub_F67F68	; F68104  calr 0xf67f68
+	calr	StepByteWithinLH	; F68104  calr 0xf67f68
 	ld	(4698:16), a	; F68107  ld (0x125a),A
 	ld	(3835:16), 4	; F6810B  ld (0x0efb),0x04
 	calr	sub_F6820F	; F68110  calr 0xf6820f
@@ -149274,7 +149291,7 @@ sub_F68016_Skip6:
 	ld	a, (4698:16)	; F6811A  ld A,(0x125a)
 	ld	l, 0:opc	; F6811E  ld L,0x00
 	ld	h, 127:opc	; F68120  ld H,0x7f
-	calr	sub_F67F68	; F68122  calr 0xf67f68
+	calr	StepByteWithinLH	; F68122  calr 0xf67f68
 	ld	(4698:16), a	; F68125  ld (0x125a),A
 	ld	(3835:16), 4	; F68129  ld (0x0efb),0x04
 	calr	sub_F6820F	; F6812E  calr 0xf6820f
@@ -149284,7 +149301,7 @@ sub_F68016_Skip7:
 	ld	a, (4698:16)	; F68138  ld A,(0x125a)
 	ld	l, 0:opc	; F6813C  ld L,0x00
 	ld	h, 127:opc	; F6813E  ld H,0x7f
-	calr	sub_F67F68	; F68140  calr 0xf67f68
+	calr	StepByteWithinLH	; F68140  calr 0xf67f68
 	ld	(4698:16), a	; F68143  ld (0x125a),A
 	ld	(3835:16), 4	; F68147  ld (0x0efb),0x04
 	calr	sub_F6820F	; F6814C  calr 0xf6820f
@@ -149294,7 +149311,7 @@ sub_F68016_Skip8:
 	ld	a, (4698:16)	; F68156  ld A,(0x125a)
 	ld	l, 0:opc	; F6815A  ld L,0x00
 	ld	h, 127:opc	; F6815C  ld H,0x7f
-	calr	sub_F67F68	; F6815E  calr 0xf67f68
+	calr	StepByteWithinLH	; F6815E  calr 0xf67f68
 	ld	(4698:16), a	; F68161  ld (0x125a),A
 	ld	(3835:16), 4	; F68165  ld (0x0efb),0x04
 	calr	sub_F6820F	; F6816A  calr 0xf6820f
@@ -149304,7 +149321,7 @@ sub_F68016_Skip9:
 	ld	a, (4698:16)	; F68174  ld A,(0x125a)
 	ld	l, 0:opc	; F68178  ld L,0x00
 	ld	h, 127:opc	; F6817A  ld H,0x7f
-	calr	sub_F67F68	; F6817C  calr 0xf67f68
+	calr	StepByteWithinLH	; F6817C  calr 0xf67f68
 	ld	(4698:16), a	; F6817F  ld (0x125a),A
 	ld	(3835:16), 4	; F68183  ld (0x0efb),0x04
 	calr	sub_F6820F	; F68188  calr 0xf6820f
@@ -149314,7 +149331,7 @@ sub_F68016_Skip10:
 	ld	a, (4698:16)	; F68191  ld A,(0x125a)
 	ld	l, 0:opc	; F68195  ld L,0x00
 	ld	h, 127:opc	; F68197  ld H,0x7f
-	calr	sub_F67F68	; F68199  calr 0xf67f68
+	calr	StepByteWithinLH	; F68199  calr 0xf67f68
 	ld	(4698:16), a	; F6819C  ld (0x125a),A
 	ld	(3835:16), 4	; F681A0  ld (0x0efb),0x04
 	calr	sub_F6820F	; F681A5  calr 0xf6820f
@@ -149324,7 +149341,7 @@ sub_F68016_Skip11:
 	ld	a, (4698:16)	; F681AE  ld A,(0x125a)
 	ld	l, 0:opc	; F681B2  ld L,0x00
 	ld	h, 127:opc	; F681B4  ld H,0x7f
-	calr	sub_F67F68	; F681B6  calr 0xf67f68
+	calr	StepByteWithinLH	; F681B6  calr 0xf67f68
 	ld	(4698:16), a	; F681B9  ld (0x125a),A
 	ld	(3835:16), 4	; F681BD  ld (0x0efb),0x04
 	calr	sub_F6820F	; F681C2  calr 0xf6820f
@@ -149334,7 +149351,7 @@ sub_F68016_Skip12:
 	ld	a, (4698:16)	; F681CB  ld A,(0x125a)
 	ld	l, 0:opc	; F681CF  ld L,0x00
 	ld	h, 127:opc	; F681D1  ld H,0x7f
-	calr	sub_F67F68	; F681D3  calr 0xf67f68
+	calr	StepByteWithinLH	; F681D3  calr 0xf67f68
 	ld	(4698:16), a	; F681D6  ld (0x125a),A
 	ld	(3835:16), 4	; F681DA  ld (0x0efb),0x04
 	calr	sub_F6820F	; F681DF  calr 0xf6820f
@@ -149344,7 +149361,7 @@ sub_F68016_Skip13:
 	ld	a, (4698:16)	; F681E8  ld A,(0x125a)
 	ld	l, 0:opc	; F681EC  ld L,0x00
 	ld	h, 127:opc	; F681EE  ld H,0x7f
-	calr	sub_F67F68	; F681F0  calr 0xf67f68
+	calr	StepByteWithinLH	; F681F0  calr 0xf67f68
 	ld	(4698:16), a	; F681F3  ld (0x125a),A
 	ld	(3835:16), 4	; F681F7  ld (0x0efb),0x04
 	calr	sub_F6820F	; F681FC  calr 0xf6820f
@@ -159894,7 +159911,7 @@ sub_F6CB13_Skip2:
 	jr	nz, sub_F6CB13_Join	; F6CB3D  jr NZ,0xf6cb41
 	ld	h, 255:opc	; F6CB3F  ld H,0xff
 sub_F6CB13_Join:
-	call	sub_F67F68	; F6CB41  call 0xf67f68
+	call	StepByteWithinLH	; F6CB41  call 0xf67f68
 	ld	(4845:16), a	; F6CB45  ld (0x12ed),A
 	call	MsgLine_PanKeyShiftTuningBendSens	; F6CB49  call 0xf6c9c7
 	call	sub_F6C935	; F6CB4D  call 0xf6c935
@@ -160168,7 +160185,7 @@ sub_F6CC6E_Epilogue:
 ; Called from: in-module: 0xF6CD69 0xF6CDA9
 ; Touches: (0x0E4F) (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x0ED5) (0x12BA)
 ;          (0x2075)
-; Calls:   sub_F67F68 0xF6E706 StepRecord_SoftKeyCol3 sub_F6908B sub_F6B387 sub_F6C43C
+; Calls:   StepByteWithinLH 0xF6E706 StepRecord_SoftKeyCol3 sub_F6908B sub_F6B387 sub_F6C43C
 ;          BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6741C sub_F69C03
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6CD74 is an instruction
@@ -160196,7 +160213,7 @@ SoftKeyCol3_StepRecordSub05:
 	pop	xix	; F6CD9A  pop XIX
 	xor	l, l	; F6CD9B  xor L,L
 	ld	h, 7:opc	; F6CD9D  ld H,0x07
-	call	sub_F67F68	; F6CD9F  call 0xf67f68
+	call	StepByteWithinLH	; F6CD9F  call 0xf67f68
 	pushw	wa	; F6CDA3  push WA
 	call	MsgLine_TimeSignature	; F6CDA4  call 0xf6e706
 	popw	wa	; F6CDA8  pop WA

@@ -729,7 +729,7 @@ def structure():
     for a, tgt, arg in ((0xF4F000, 0xF415B4, "A"), (0xF4F02E, None, None)):
         LABELS[a] = "sub_%06X" % a
     H(0xF4F000,
-      "sub_F4F000 -- the same veneer shape as DrawValueGlyph_Veneer, for a",
+      "LCD_BlitValueBar_StackArgs -- the same veneer shape as DrawValueGlyph_Veneer, for a",
       "routine that has no name yet",
       "Called from: " + namer_text(0xF4F000),
       "Evidence: `ld IX,(XIZ+0x08) / ld A,(XIZ+0x0a) / call 0xf415b4`; slot",
