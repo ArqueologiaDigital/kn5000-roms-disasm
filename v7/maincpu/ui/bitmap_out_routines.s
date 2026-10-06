@@ -3480,7 +3480,7 @@ OneTchFUNC:
 	cp xde, 0x5
 	jr ugt, BitMapOut_ApplyWidgetPatch
 	add xde, xde
-	add xde, OneTchFUNC_Data
+	add xde, OneTchFUNC_CaseTable
 	ld de, (xde)
 	lda xix, (BitMapOut_ByteData_WidgetTable:24)
 	jp	t, (xix+de)

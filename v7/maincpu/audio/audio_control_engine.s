@@ -3031,7 +3031,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	cp	wa, 16
 	jr	gt, SndParamF9A541_ResBit7_Code_Epilogue
 	add	wa, wa
-	lda	xix, (ExtData_VoiceParam_DispatchBytecode_Data:24)
+	lda	xix, (ExtData_VoiceParam_DispatchBytecode_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda	xix, (ExtData_VoiceParam_DispatchBytecode_Code:24)
 	jp	t, (xix+wa)
@@ -3767,11 +3767,11 @@ UIState_ProcessExtendedMode:
 	cp	wa, 7:i3
 	ret	gt
 	add	wa, wa
-	lda	xix, (UIState_ProcessExtendedMode_Data:24)
+	lda	xix, (UIState_ProcessExtendedMode_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda	xix, (UIState_ProcessExtendedMode_Cases:24)
 	jp	t, (xix+wa)
-UIState_ProcessExtendedMode_Cases:	; the switch's base: case k is at +UIState_ProcessExtendedMode_Data[k]
+UIState_ProcessExtendedMode_Cases:	; the switch's base: case k is at +UIState_ProcessExtendedMode_CaseTable[k]
 	orw	(36514:16), 515
 	ret
 UIState_ProcessExtendedMode_Case5:	; cases 5, 6
@@ -4754,7 +4754,7 @@ ExtData_ToneParam_DispatchHandler:
 	cp	wa, 11
 	ret	gt
 	add	wa, wa
-	lda	xix, (ExtData_ToneParam_DispatchHandler_Data:24)
+	lda	xix, (ExtData_ToneParam_DispatchHandler_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda	xix, (ExtData_ToneParam_DispatchHandler_Code:24)
 	jp	t, (xix+wa)
@@ -4978,7 +4978,7 @@ ExtData_ToneParam_AltDispatch:
 	cp	wa, 8
 	ret	gt
 	add	wa, wa
-	lda	xix, (ExtData_ToneParam_AltDispatch_Data:24)
+	lda	xix, (ExtData_ToneParam_AltDispatch_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda	xix, (ExtData_ToneParam_AltDispatch_Code:24)
 	jp	t, (xix+wa)
@@ -5024,7 +5024,7 @@ ExtData_ToneParam_AltBody:
 	cp	wa, 8
 	ret	gt
 	add	wa, wa
-	lda	xix, (ExtData_ToneParam_AltBody_Data:24)
+	lda	xix, (ExtData_ToneParam_AltBody_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda	xix, (ExtData_ToneParam_AltBody_Code:24)
 	jp	t, (xix+wa)

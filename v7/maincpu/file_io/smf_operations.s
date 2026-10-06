@@ -532,7 +532,7 @@ FmmSmfFileNameFunc:
 	cp	xde, 5
 	jr	gt, SmfFN_ReturnZero
 	add	xde, xde
-	add	xde, FmmSmfFileNameFunc_Data
+	add	xde, FmmSmfFileNameFunc_CaseTable
 	ld	de, (xde)
 	lda	xix, (FmmSmfFileNameFunc_Code:24)
 SmfFN_JumpTable:

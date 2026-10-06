@@ -1237,7 +1237,7 @@ MidiSysEx_SendControlChange1_Data:	.incbin "includes/generated/sound_config_look
 MidiSysEx_SendProgramChange_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1776, 0x2
 MidiSysEx_SendPartChanLoop_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1778, 0xE
 MidiSysEx_CopyParamToBuffer_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1786, 0x30
-MIDI_ReadChannelParam_Data:
+MIDI_ReadChannelParam_CaseTable:
 	.short	MidiChan_ParamDispatch - MidiChan_ParamDispatch
 	.short	MIDI_ReadChannelParam_Case1 - MidiChan_ParamDispatch
 	.short	MIDI_ReadChannelParam_Case2 - MidiChan_ParamDispatch
@@ -1254,7 +1254,7 @@ MIDI_ReadChannelParam_Data:
 	.short	MIDI_ReadChannelParam_Case13 - MidiChan_ParamDispatch
 	.short	MIDI_ReadChannelParam_Case14 - MidiChan_ParamDispatch
 	.short	MIDI_ReadChannelParam_Case15 - MidiChan_ParamDispatch
-SeqData_ReadFieldByIndex_Data:
+SeqData_ReadFieldByIndex_CaseTable:
 	.short	SeqData_FieldDispatch - SeqData_FieldDispatch
 	.short	SeqData_ReadFieldByIndex_Case1 - SeqData_FieldDispatch
 	.short	SeqData_ReadFieldByIndex_Case2 - SeqData_FieldDispatch

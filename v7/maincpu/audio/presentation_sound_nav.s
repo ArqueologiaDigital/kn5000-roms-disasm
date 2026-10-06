@@ -730,7 +730,7 @@ GetEditSwPoint:
 	cp hl, 0xc
 	jrl ugt, EditSwParam_Default
 	add hl, hl
-	lda xix, (GetEditSwPoint_Data:24)
+	lda xix, (GetEditSwPoint_CaseTable:24)
 	ld	hl, (xix+hl)
 	lda xix, (EditSwParam_Mode0:24)
 	jp	t, (xix+hl)
@@ -835,7 +835,7 @@ SetWallPaper:
 	cp wa, 5:i3
 	jr gt, SetWallPaper_Default
 	add wa, wa
-	lda xix, (SetWallPaper_Data:24)
+	lda xix, (SetWallPaper_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (SetWallPaper_DispatchData:24)
 	jp	t, (xix+wa)
@@ -1330,7 +1330,7 @@ DirmdEmulator:
 	cp xbc, 0xf
 	jrl gt, DirmdEmu_DefaultCase
 	add xbc, xbc
-	add xbc, DirmdEmulator_Data
+	add xbc, DirmdEmulator_CaseTable
 	ld bc, (xbc)
 	lda xix, (DirmdEmulator_Dispatch:24)
 	jp	t, (xix+bc)
@@ -1480,7 +1480,7 @@ WindowProc:
 	cp xbc, 0x9
 	jrl gt, WindowProc_DefaultHandler
 	add xbc, xbc
-	add xbc, WindowProc_Data
+	add xbc, WindowProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (WindowProc_EventDispatch:24)
 	jp	t, (xix+bc)

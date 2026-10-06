@@ -920,7 +920,7 @@ MssName_EventDispatch_Str_Memory_data:	aligned_string "Memory data "
 MssName_EventDispatch_Str_Blank2:
 	.byte	0x20, 0x20, 0x00, 0xff
 MssName_EventDispatch_Str_Blank2_2:	.byte	0x20, 0x20, 0x00, 0xff
-MssNameFunc_Data:
+MssNameFunc_CaseTable:
 	.short	MssNameFunc_OnGetLargeStep - MssName_EventDispatch
 	.short	MssNameFunc_OnGetLargeStep - MssName_EventDispatch
 	.short	MssName_ReturnZero - MssName_EventDispatch
@@ -937,7 +937,7 @@ AcBkNoBox_Match_Str_Fmtd:		.byte 0x25, 0x64, 0x3a, 0x00
 PmemMode_Paint_Str_PAGE_1_3:		aligned_string "PAGE 1/3"
 AcPmBkEdit_BankChanged_Str_BANK_Fmt2d:	aligned_string "BANK%2d:"
 AcPmBkEdit_BankEdit_Str_Fmtd:		.byte	0x25, 0x64, 0x3a, 0x00
-PmBkNameFunc_Data:
+PmBkNameFunc_CaseTable:
 	.short	PmBkNameFunc_OnGetLargeStep - PmBkName_EventDispatch
 	.short	PmBkNameFunc_OnGetLargeStep - PmBkName_EventDispatch
 	.short	PmBkName_ReturnZero - PmBkName_EventDispatch
@@ -1070,7 +1070,7 @@ ToneGen_ParamWriteDispatch_Str_N5_NORMAL_SOUND_check_with_TOUCH:
 	aligned_string "(5)NORMAL SOUND check with TOUCH"
 ToneGen_ParamWriteDispatch_Str_N6_SINE_WAVE_ROM_check_16dB_DOWN:
 	aligned_string "(6)SINE WAVE & ROM check 16dB DOWN"
-ToneGen_WriteParamByIndex_Data:
+ToneGen_WriteParamByIndex_CaseTable:
 	.short	ToneGen_ParamWriteDispatch - ToneGen_ParamWriteDispatch
 	.short	ToneGen_WriteParamByIndex_Case1 - ToneGen_ParamWriteDispatch
 	.short	ToneGen_WriteParamByIndex_Case2 - ToneGen_ParamWriteDispatch
@@ -1082,7 +1082,7 @@ WallHomeEdit_Text:
 WallHomeEdit_PushSndAddr_Str_USER:	aligned_string " USER  "
 WallHomeEdit_LoadSndAddr3_Str_ERROR:
 	aligned_string " ERROR "
-WallHomeEditCheck_Data:
+WallHomeEditCheck_CaseTable:
 	.short	WallHomeEditCheck_OnGetLargeStep - WallHomeEdit_EventDispatch
 	.short	WallHomeEditCheck_OnGetLargeStep - WallHomeEdit_EventDispatch
 	.short	WallHomeEditCheck_ReturnFalse - WallHomeEdit_EventDispatch
@@ -1099,7 +1099,7 @@ WallMenuEdit_EventDispatch_Str_USER:
 	aligned_string " USER  "
 WallMenuEdit_EventDispatch_Str_ERROR:
 	aligned_string " ERROR "
-WallMenuEditCheck_Data:
+WallMenuEditCheck_CaseTable:
 	.short	WallMenuEditCheck_OnGetLargeStep - WallMenuEdit_EventDispatch
 	.short	WallMenuEditCheck_OnGetLargeStep - WallMenuEdit_EventDispatch
 	.short	WallOthEditCheck_RetZero - WallMenuEdit_EventDispatch
@@ -1116,7 +1116,7 @@ WallOthEdit_EventDispatch_Str_USER:
 	aligned_string " USER  "
 WallOthEdit_EventDispatch_Str_ERROR:
 	aligned_string " ERROR "
-WallOthEditCheck_Data:
+WallOthEditCheck_CaseTable:
 	.short	WallOthEditCheck_OnGetLargeStep - WallOthEdit_EventDispatch
 	.short	WallOthEditCheck_OnGetLargeStep - WallOthEdit_EventDispatch
 	.short	WallOthCheckLoop_RetZero - WallOthEdit_EventDispatch
@@ -1140,7 +1140,7 @@ Str_UserInitialWallpaper_ES:	aligned_string "°El USER INITIAL cambiar· el patr”n
 Str_UserInitialWallpaper_FR:	aligned_string "USER INITIAL va remplacer votre fond de l'Ècran par un fond noir !"
 Str_UserInitialWallpaper_DE:	aligned_string "USER INITIAL ersetzt das aktuelle Hintergrundbild durch eine schwarze Fl‰che !"
 Str_UserInitialWallpaper_EN:	aligned_string "USER INITIAL will replace the current user wallpaper with the \"Plain Black\" wallpaper!"
-MainSysControl_Data:
+MainSysControl_CaseTable:
 	.short	MainSysCtrl_DispatchTable - MainSysCtrl_DispatchTable
 	.short	MainSysCtrl_Entry6 - MainSysCtrl_DispatchTable
 	.short	MainSysCtrl_Entry7 - MainSysCtrl_DispatchTable
@@ -1150,7 +1150,7 @@ MainSysControl_Data:
 	.short	MainSysCtrl_Entry2_PartInit - MainSysCtrl_DispatchTable
 	.short	MainSysCtrl_Entry5_VoiceInit - MainSysCtrl_DispatchTable
 	.short	MainSysCtrl_Entry3_Misc - MainSysCtrl_DispatchTable
-CntIniFunc_Data:
+CntIniFunc_CaseTable:
 	.short	CntIniFunc_EventDispatch - CntIniFunc_EventDispatch
 	.short	CntIniFunc_ReturnZero - CntIniFunc_EventDispatch
 	.short	CntIniFunc_ReturnZero - CntIniFunc_EventDispatch
@@ -2768,7 +2768,7 @@ Protocol_values_for_LED_rows:
 ; ---------------------------------------------------------------------------
 AudioCtl_SmallTables:
 	.byte 4, 2, 6, 7, 5, 3
-ExtData_VoiceParam_DispatchBytecode_Data:
+ExtData_VoiceParam_DispatchBytecode_CaseTable:
 	.short	ExtData_VoiceParam_DispatchBytecode_Case2 - ExtData_VoiceParam_DispatchBytecode_Code
 	.short	ExtData_VoiceParam_DispatchBytecode_Case2 - ExtData_VoiceParam_DispatchBytecode_Code
 	.short	ExtData_VoiceParam_DispatchBytecode_Case4 - ExtData_VoiceParam_DispatchBytecode_Code
@@ -2790,7 +2790,7 @@ MidiChOut_Mode6or3_Mask7_Data:
 	.byte 1, 2, 4, 1, 2, 4
 MidiChOut_OtherMode_Mask3_Data:
 	.byte 1, 2, 4, 8, 1, 2, 4, 8
-UIState_ProcessExtendedMode_Data:
+UIState_ProcessExtendedMode_CaseTable:
 	.short	UIState_ProcessExtendedMode_Cases - UIState_ProcessExtendedMode_Cases
 	.short	UIState_ProcessExtendedMode_Case1 - UIState_ProcessExtendedMode_Cases
 	.short	UIState_ProcessExtendedMode_Case1 - UIState_ProcessExtendedMode_Cases
@@ -3320,7 +3320,7 @@ BitmapTable_ProcessEntry_Data_2:
 	; +0x896: 12 jump offsets.  ExtData_ToneParam_DispatchHandler (0xFC8542):
 	; `cp wa, 11` / `add wa, wa` / `ld wa, (xix+wa)` / `jp_rr` from 0xFC8570
 	; (no label there in audio_control_engine.s, so the offsets are numeric).
-ExtData_ToneParam_DispatchHandler_Data:
+ExtData_ToneParam_DispatchHandler_CaseTable:
 	.short	ExtData_ToneParam_DispatchHandler_Code - ExtData_ToneParam_DispatchHandler_Code
 	.short	ExtData_ToneParam_DispatchHandler_Case1 - ExtData_ToneParam_DispatchHandler_Code
 	.short	ExtData_ToneParam_DispatchHandler_Case1 - ExtData_ToneParam_DispatchHandler_Code
@@ -3334,7 +3334,7 @@ ExtData_ToneParam_DispatchHandler_Data:
 	.short	ExtData_ToneParam_DispatchHandler_Case10 - ExtData_ToneParam_DispatchHandler_Code
 	.short	ExtData_ToneParam_DispatchHandler_Case11 - ExtData_ToneParam_DispatchHandler_Code
 	; +0x8AE: 9 jump offsets, ExtData_ToneParam_AltDispatch (0xFC876A), from 0xFC8793.
-ExtData_ToneParam_AltDispatch_Data:
+ExtData_ToneParam_AltDispatch_CaseTable:
 	.short	ExtData_ToneParam_AltDispatch_Code - ExtData_ToneParam_AltDispatch_Code
 	.short	ExtData_ToneParam_AltDispatch_Case1 - ExtData_ToneParam_AltDispatch_Code
 	.short	ExtData_ToneParam_AltDispatch_Case1 - ExtData_ToneParam_AltDispatch_Code
@@ -3345,7 +3345,7 @@ ExtData_ToneParam_AltDispatch_Data:
 	.short	ExtData_ToneParam_AltDispatch_Case7 - ExtData_ToneParam_AltDispatch_Code
 	.short	ExtData_ToneParam_AltDispatch_Code - ExtData_ToneParam_AltDispatch_Code
 	; +0x8C0: 9 jump offsets, ExtData_ToneParam_AltBody (0xFC87D4), from 0xFC87FD.
-ExtData_ToneParam_AltBody_Data:
+ExtData_ToneParam_AltBody_CaseTable:
 	.short	ExtData_ToneParam_AltBody_Code - ExtData_ToneParam_AltBody_Code
 	.short	ExtData_ToneParam_AltBody_Case1 - ExtData_ToneParam_AltBody_Code
 	.short	ExtData_ToneParam_AltBody_Case1 - ExtData_ToneParam_AltBody_Code

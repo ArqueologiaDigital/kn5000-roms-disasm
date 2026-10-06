@@ -1106,7 +1106,7 @@ SqSngSelTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqSngName_ReturnZero
 	add xde, xde
-	add xde, SqSngSelTtlFunc_Data
+	add xde, SqSngSelTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (SqTrAs_CondCheck:24)
 	jp	t, (xix+de)
@@ -1147,7 +1147,7 @@ SqSngNameTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqTrAs_ReturnZero
 	add xde, xde
-	add xde, SqSngNameTtlFunc_Data
+	add xde, SqSngNameTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (SQTR_DISPATCH_TABLE_1:24)
 	jp	t, (xix+de)
@@ -1190,7 +1190,7 @@ SqTrAsTtlFunc:
 	cp xde, 0x5
 	jrl ugt, CDlikeSwTtl_ReturnZero2
 	add xde, xde
-	add xde, SqTrAsTtlFunc_Data
+	add xde, SqTrAsTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (SQTR_DISPATCH_TABLE_2:24)
 	jp	t, (xix+de)
@@ -1337,7 +1337,7 @@ SqTrAsPsTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqTrAsPsTtl_ReturnZero
 	add xde, xde
-	add xde, SqTrAsPsTtlFunc_Data
+	add xde, SqTrAsPsTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (SqTrAsPsTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1441,7 +1441,7 @@ SqTrAsPsTtl_CaseF:
 	ld	wa, (xix+wa)
 	extz wa
 	sll	wa, 1
-	ld	xix, SetWall_ReturnZero_Data_2
+	ld	xix, SqTrAsPsTtl_CaseF_CaseTable
 	ld	wa, (xix+wa)
 	lda xix, (SqTrAsPsTtl_CaseF_Skip:24)
 	jp	t, (xix+wa)
@@ -1469,7 +1469,7 @@ SqMdlyPlyTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqMdlyPly_ReturnZero
 	add xde, xde
-	add xde, SqMdlyPlyTtlFunc_Data
+	add xde, SqMdlyPlyTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (SqMdlyPlyTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1549,7 +1549,7 @@ DkMdlyPlyTtlFunc:
 	cp xde, 0x5
 	jr ugt, DkMdlyPly_ReturnZero
 	add xde, xde
-	add xde, DkMdlyPlyTtlFunc_Data
+	add xde, DkMdlyPlyTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (DkMdlyPlyTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1698,7 +1698,7 @@ DisplayMode_DispatchEvents:
 	cp wa, 6:i3
 	ret gt
 	add wa, wa
-	lda xix, (DisplayMode_DispatchEvents_Data:24)
+	lda xix, (DisplayMode_DispatchEvents_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (DisplayMode_BatchEventSend:24)
 	jp	t, (xix+wa)
@@ -1783,7 +1783,7 @@ DpMdlyDocTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpMdlyDoc_ReturnZero
 	add xde, xde
-	add xde, DpMdlyDocTtlFunc_Data
+	add xde, DpMdlyDocTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (DpMdlyDocTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1877,7 +1877,7 @@ DpMdlyPdTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpMdlyPd_ReturnZero
 	add xde, xde
-	add xde, DpMdlyPdTtlFunc_Data
+	add xde, DpMdlyPdTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (DpMdlyPdTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1971,7 +1971,7 @@ DpMdlySmfTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpMdlySmf_ReturnZero
 	add xde, xde
-	add xde, DpMdlySmfTtlFunc_Data
+	add xde, DpMdlySmfTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (DpMdlySmfTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -2069,7 +2069,7 @@ DpMdlySmfLyrTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpMdlySmfLyr_ReturnZero
 	add xde, xde
-	add xde, DpMdlySmfLyrTtlFunc_Data
+	add xde, DpMdlySmfLyrTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (DpMdlySmfLyrTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -2178,7 +2178,7 @@ NameGetFuncCall:
 	cp xbc, 0xd
 	jrl gt, NameGetFunc_Entry
 	add xbc, xbc
-	add xbc, NameGetFuncCall_Data
+	add xbc, NameGetFuncCall_CaseTable
 	ld bc, (xbc)
 	lda xix, (NameGetFuncCall_Dispatch:24)
 	jp	t, (xix+bc)
@@ -2889,7 +2889,7 @@ DpDocTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpDocTtl_ReturnZero
 	add xde, xde
-	add xde, DpDocTtlFunc_Data
+	add xde, DpDocTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (DpDocTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -2927,7 +2927,7 @@ DpDoc_CaseA:
 	cp xwa, 0x9
 	jr ugt, DpDocTtl_ReturnZero
 	add xwa, xwa
-	add xwa, DpDocTtl_Dispatch_Data
+	add xwa, DpDoc_CaseA_CaseTable
 	ld wa, (xwa)
 	lda xix, (DpDoc_CaseB:24)
 	jp	t, (xix+wa)
@@ -3019,7 +3019,7 @@ DpPdTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpPdTtl_ReturnZero
 	add xde, xde
-	add xde, DpPdTtlFunc_Data
+	add xde, DpPdTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (DpPdTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -3057,7 +3057,7 @@ DpPd_CaseA:
 	cp xwa, 0x9
 	jr ugt, DpPdTtl_ReturnZero
 	add xwa, xwa
-	add xwa, DpPdTtl_Dispatch_Data
+	add xwa, DpPd_CaseA_CaseTable
 	ld wa, (xwa)
 	lda xix, (DpPd_CaseB:24)
 	jp	t, (xix+wa)
@@ -3149,7 +3149,7 @@ DpSmfTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpSmfTtl_ReturnZero
 	add xde, xde
-	add xde, DpSmfTtlFunc_Data
+	add xde, DpSmfTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (DpSmfTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -3196,7 +3196,7 @@ DpSmf_CaseA:
 	cp xwa, 0x9
 	jr ugt, DpSmfTtl_ReturnZero
 	add xwa, xwa
-	add xwa, DpSmfTtl_Dispatch_Data
+	add xwa, DpSmf_CaseA_CaseTable
 	ld wa, (xwa)
 	lda xix, (DpSmf_CaseB:24)
 	jp	t, (xix+wa)
@@ -3288,7 +3288,7 @@ DpSmfLyrTtlFunc:
 	cp xde, 0x5
 	jrl ugt, SeqStep_ReturnZero
 	add xde, xde
-	add xde, DpSmfLyrTtlFunc_Data
+	add xde, DpSmfLyrTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (DpSmfLyrTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -3434,7 +3434,7 @@ SqTrSelTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqTrSelTtl_ReturnZero
 	add xde, xde
-	add xde, SqTrSelTtlFunc_Data
+	add xde, SqTrSelTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (SqTrSelTtl_Dispatch:24)
 	jp	t, (xix+de)

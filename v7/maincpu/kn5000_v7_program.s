@@ -257,7 +257,7 @@ GUI_DisplayStructData_0x7D8:
 	.incbin "includes/generated/gui_display_struct_data.bin", 0x7D8, 0x300
 ; ---------------------------------------------------------------------------------------------------------------
 ; Sound-editor title method tables: SeXxxTitleFunc copies its 16-byte table to the stack and calls DirmdEmulator
-; (audio/presentation_sound_nav.s) with the event, which calls one of the four methods through DirmdEmulator_Data:
+; (audio/presentation_sound_nav.s) with the event, which calls one of the four methods through DirmdEmulator_CaseTable:
 ;   +0  <Title>_OnDraw      EVT_ALL_PAINT (drawing state reset first) and EVT_PARA_DRAW (redraw mode 16)
 ;   +4  <Title>_OnHide      EVT_HIDE: SeMenu_SetCurrentStep(0), then SeMenu_ResetSubIndex
 ;   +8  <Title>_OnSwitchIn  EVT_SW_IN with a switch number <= 255: (switch & 31, bit 7) on the stack, then the

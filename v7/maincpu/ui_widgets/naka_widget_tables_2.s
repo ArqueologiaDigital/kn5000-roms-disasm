@@ -3112,7 +3112,7 @@ ComSetGridCheck_CaseTable:
 ;   at 0xE10276 (pointer-shaped); NakaWidget_SmfDpMuteCtrl5 (0xE2163E, 32-bit pointer)
 ; -----------------------------------------------------------------------------
 ComSetGridCheck_CaseTable_Tail:
-AcPmemOutLGridBoxProc_Data:
+AcPmemOutLGridBoxProc_CaseTable:
 	.short	AcPmemOutLGridBoxProc_OnIndexswUp - AcPmemOutL_Init
 	.short	AcPmemOutLGridBoxProc_OnIndexswUp - AcPmemOutL_Init
 	.short	AcPmemOutLGridBoxProc_OnIndexswUp - AcPmemOutL_Init

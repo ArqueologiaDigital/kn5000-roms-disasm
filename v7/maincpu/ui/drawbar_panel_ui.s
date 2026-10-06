@@ -520,10 +520,10 @@ AcPmemOutLGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, AcPmemOutL_ForwardToBase
 	add xbc, xbc
-	add xbc, AcPmemOutLGridBoxProc_Data
+	add xbc, AcPmemOutLGridBoxProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (AcPmemOutL_Init:24)
-; Computed jump: target = AcPmemOutL_Init + AcPmemOutLGridBoxProc_Data[i], AcPmemOutLGridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = AcPmemOutL_Init + AcPmemOutLGridBoxProc_CaseTable[i], AcPmemOutLGridBoxProc_CaseTable = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcPmemOutLGridBoxProc_OnIndexswUp
 ;   0x1c00018 -> AcPmemOutLGridBoxProc_OnIndexswUp
@@ -5340,10 +5340,10 @@ IvSdpartProc:
 	cp xwa, 0x9
 	jrl gt, IvSdpart_ForwardToBase
 	add xwa, xwa
-	add xwa, IvSdpartProc_Data
+	add xwa, IvSdpartProc_CaseTable
 	ld wa, (xwa)
 	lda xix, (IvSdpart_Init:24)
-; Computed jump: target = IvSdpart_Init + IvSdpartProc_Data[i], IvSdpartProc_Data = 16-bit offsets (10 words, read
+; Computed jump: target = IvSdpart_Init + IvSdpartProc_CaseTable[i], IvSdpartProc_CaseTable = 16-bit offsets (10 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> IvSdpartProc_OnIndexswUp
 ;   0x1c00018 -> IvSdpartProc_OnIndexswUp
@@ -11494,7 +11494,7 @@ AcWelcomScreen_Select:
 	cp hl, 0xc
 	jrl gt, AcWelcomScreen_Select_NextStep
 	add hl, hl
-	lda xix, (AcWelcomScreen_Select_Data:24)
+	lda xix, (AcWelcomScreen_Select_CaseTable:24)
 	ld	hl, (xix+hl)
 	lda xix, (AcWelcomScreen_RenderBytecode:24)
 	jp	t, (xix+hl)
@@ -11907,10 +11907,10 @@ PsMixerControlProc:
 	cp xbc, 0x9
 	jrl gt, PsMixer_ControlReturn
 	add xbc, xbc
-	add xbc, PsMixerControlProc_Data
+	add xbc, PsMixerControlProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (PsMixer_ControlHandler:24)
-; Computed jump: target = PsMixer_ControlHandler + PsMixerControlProc_Data[i], PsMixerControlProc_Data = 16-bit offsets (10 words, read
+; Computed jump: target = PsMixer_ControlHandler + PsMixerControlProc_CaseTable[i], PsMixerControlProc_CaseTable = 16-bit offsets (10 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> PsMixer_ControlCase8
 ;   0x1c00018 -> PsMixer_ControlCase8
@@ -18162,7 +18162,7 @@ DemoMenu_WorkspaceFunc:
 	cp wa, 5:i3
 	jr ugt, DemoMenu_BuildItemWorkspace_Post
 	add wa, wa
-	lda xix, (DemoMenu_WorkspaceFunc_Data:24)
+	lda xix, (DemoMenu_WorkspaceFunc_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (DemoMenu_WorkspaceDispatch:24)
 	jp	t, (xix+wa)
@@ -18225,7 +18225,7 @@ DemoMenu_DescriptorFunc:
 	cp wa, 5:i3
 	jr ugt, DemoMenu_DescriptorReturn
 	add wa, wa
-	lda xix, (DemoMenu_DescriptorFunc_Data:24)
+	lda xix, (DemoMenu_DescriptorFunc_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (DemoDesc_DispatchTable:24)
 	jp	t, (xix+wa)
@@ -18947,10 +18947,10 @@ AcPresentationControlProc:
 	cp xbc, 0xa
 	jrl gt, AcPresCtrl_DefaultCase
 	add xbc, xbc
-	add xbc, AcPresentationControlProc_Data
+	add xbc, AcPresentationControlProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (AcPresCtrl_EventDispatch:24)
-; Computed jump: target = AcPresCtrl_EventDispatch + AcPresentationControlProc_Data[i], AcPresentationControlProc_Data = 16-bit offsets (11 words, read
+; Computed jump: target = AcPresCtrl_EventDispatch + AcPresentationControlProc_CaseTable[i], AcPresentationControlProc_CaseTable = 16-bit offsets (11 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00002:
 ;   0x1c00002 -> AcPresCtrl_EventDispatch
 ;   0x1c00003 -> AcPresCtrl_DefaultCase

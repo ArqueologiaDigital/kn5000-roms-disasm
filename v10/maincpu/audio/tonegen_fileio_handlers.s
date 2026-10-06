@@ -1116,7 +1116,7 @@ CtrlPanel_IndicatorJumpTable:
 	cp wa, 0x8
 	ret gt
 	add wa, wa
-	lda xix, (CtrlPanel_IndicatorJumpTable_Data:24)
+	lda xix, (CtrlPanel_IndicatorJumpTable_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (DSPCfg_Param_CaseC:24)
 	jp	t, (xix+wa)
@@ -1169,7 +1169,7 @@ Audio_DispatchCommand:
 	cp wa, 0x8
 	ret gt
 	add wa, wa
-	lda xix, (Audio_DispatchCommand_Data:24)
+	lda xix, (Audio_DispatchCommand_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (DSPCfg_Param_CaseD:24)
 	jp	t, (xix+wa)
@@ -1222,7 +1222,7 @@ PanelDisplay_DispatchByMode:
 	cp wa, 0x8
 	jrl gt, DSPCfg_Param_Default
 	add wa, wa
-	lda xix, (PanelDisplay_DispatchByMode_Data:24)
+	lda xix, (PanelDisplay_DispatchByMode_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (PanelDisplay_DispatchData:24)
 	jp	t, (xix+wa)

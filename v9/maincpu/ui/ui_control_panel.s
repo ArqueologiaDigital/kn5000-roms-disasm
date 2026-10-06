@@ -2589,14 +2589,14 @@ MainPmanControl:
 	cp xwa, 0x5
 	jrl gt, MainTitle_SendEventDone
 	add xwa, xwa
-	add xwa, MainPmanControl_Data
+	add xwa, MainPmanControl_CaseTable
 	ld wa, (xwa)
 	lda xix, (MainPmanCtrl_DispatchTable:24)
 	jp	t, (xix+wa)
 
 ; MainPmanControl's six switch cases, not a table: it takes event - 0x1E00057 as
 ; the case, `ld wa,(<offset word>)` from the six s16 at 0xEA99F8 (0, 17, 34, 100,
-; 125, 150; spelled MainPmanControl_Data above), then `lda xix,(<this>);
+; 125, 150; spelled MainPmanControl_CaseTable above), then `lda xix,(<this>);
 ; jp t,xix+wa`.  Held as `.byte` (v10/v9) or a romslice `.incbin` (v7) before
 ; scripts/converters/convert_mainpman_switch.py; each case offset is an
 ; instruction boundary and every instruction re-encodes to the ROM bytes.
@@ -3094,7 +3094,7 @@ GetClientBox2:
 
 CtrlPanel_DispatchByIndex:
 	add wa, wa
-	lda xix, (CtrlPanel_DispatchByIndex_Data:24)
+	lda xix, (CtrlPanel_DispatchByIndex_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (CtrlPanel_FrameDispatchTable:24)
 	jp	t, (xix+wa)
@@ -3433,7 +3433,7 @@ CtrlPanel_FuncDispatch:
 	ld wa, (xwa)
 	extz wa
 	sll wa, 1
-	ld xix, CtrlPanel_FuncDispatch_Data_2
+	ld xix, CtrlPanel_FuncDispatch_CaseTable
 	ld	wa, (xix+wa)
 	lda xix, (GroupBox_HandlePartChange:24)
 	jp	t, (xix+wa)

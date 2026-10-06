@@ -18,7 +18,7 @@ MiddleFuncCall:
 	cp xwa, 0xc
 	jrl gt, SqTrSel_CaseC
 	add xwa, xwa
-	add xwa, MiddleFuncCall_Data
+	add xwa, MiddleFuncCall_CaseTable
 	ld wa, (xwa)
 	lda xix, (MiddleFuncCall_DispatchData:24)
 	jp	t, (xix+wa)
@@ -652,7 +652,7 @@ SqTrSel_CaseG:
 	cp wa, 7:i3
 	ret gt
 	add wa, wa
-	lda xix, (PlayMode_SendStopEvent_Data:24)
+	lda xix, (SqTrSel_CaseG_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (SqTrSel_CaseG_JumpTable:24)
 	jp	t, (xix+wa)

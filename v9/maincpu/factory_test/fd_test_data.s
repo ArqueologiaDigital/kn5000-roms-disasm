@@ -370,7 +370,7 @@ TitleFunc_LifecycleTable_Data_5:	.byte	0x0a
 TitleFunc_LifecycleTable_Data_6:
 	.byte 0x0a
 	.asciz "Debug Test"
-TitleFunc_LifecycleDispatch_Data:
+TitleFunc_LifecycleDispatch_CaseTable:
 	.short	TitleFunc_LifecycleTable - TitleFunc_LifecycleTable
 	.short	TitleFunc_LifecycleDispatch_Case1 - TitleFunc_LifecycleTable
 	.short	TitleFunc_LifecycleDispatch_Case2 - TitleFunc_LifecycleTable
@@ -379,7 +379,7 @@ TitleFunc_LifecycleDispatch_Data:
 	.short	TitleFunc_LifecycleDispatch_Case5 - TitleFunc_LifecycleTable
 	.short	TitleFunc_LifecycleDispatch_Case6 - TitleFunc_LifecycleTable
 	.short	TitleFunc_Return - TitleFunc_LifecycleTable
-TestTitleFunc_Data:
+TestTitleFunc_CaseTable:
 	.short	TitleFunc_ActionDispatch - TitleFunc_ActionDispatch
 	.short	TestTitleFunc_Case3 - TitleFunc_ActionDispatch
 	.short	TestTitleFunc_Case4 - TitleFunc_ActionDispatch
@@ -443,7 +443,7 @@ FDTest_Pass_Str_OK:
 FDListDirectory_Str_Star_Dot_Star:	.byte	0x2a, 0x2e, 0x2a, 0x00
 FDTestDlg_FormatDisplay_Str_File_Name_20_charact:
 	aligned_string "File Name 20 charact"
-FDTestDialogProc_Data:
+FDTestDialogProc_CaseTable:
 	.short	FDTestDlg_DefaultCase - FDTestDlg_DefaultCase
 	.short	FDTestDlg_DefaultCase - FDTestDlg_DefaultCase
 	.short	FDTestDlg_DefaultCase - FDTestDlg_DefaultCase

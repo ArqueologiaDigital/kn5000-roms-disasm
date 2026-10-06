@@ -205,7 +205,7 @@ FDC_WaitReady_Skip10:
 	cp	wa, 5:i3
 	jrl	gt, FDC_WaitReady_Skip11
 	add	wa, wa
-	lda	xix, (FDC_WaitReady_Data:24)
+	lda	xix, (FDC_WaitReady_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (FDC_CONFIG_VERIFY_Code:24)
 	jp	t, (xix+wa)
@@ -301,7 +301,7 @@ FDC_COMMAND_DISPATCHER:
 	cp wa, 0xb
 	jr ugt, FDC_CheckDriveCount
 	add wa, wa
-	lda xix, (FDC_COMMAND_DISPATCHER_Data:24)
+	lda xix, (FDC_COMMAND_DISPATCHER_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (FDC_CMD_HANDLER_BASE:24)
 	jp	t, (xix+wa)
@@ -2052,7 +2052,7 @@ FDC_CommandEntry_CopyParams:
 	cp wa, 0xb
 	jr	ugt, FDC_Handler_InvalidCommand
 	add wa, wa
-	lda xix, (FDC_CommandEntry_CopyParams_Data:24)
+	lda xix, (FDC_CommandEntry_CopyParams_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (FDC_HANDLER_DISPATCH_BASE:24)
 	jp	t, (xix+wa)

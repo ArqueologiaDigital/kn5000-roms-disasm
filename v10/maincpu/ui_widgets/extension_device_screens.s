@@ -960,8 +960,8 @@ SndParamBank_Default2:		.incbin "includes/generated/naka_extension_device.bin", 
 ; [nakarest] purpose not established: layout of 18 B at 0xed9608 not derived; readers below
 ; [nakarest] Readers: source references CtrlPanel_IndicatorJumpTable
 ; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
-; [nakarest] (CtrlPanel_IndicatorJumpTable_Data:24)`).
-CtrlPanel_IndicatorJumpTable_Data:
+; [nakarest] (CtrlPanel_IndicatorJumpTable_CaseTable:24)`).
+CtrlPanel_IndicatorJumpTable_CaseTable:
 	.short	DSPCfg_Param_CaseC - DSPCfg_Param_CaseC
 	.short	DSPCfg_Param_CaseC - DSPCfg_Param_CaseC
 	.short	DSPCfg_Param_CaseC - DSPCfg_Param_CaseC
@@ -974,8 +974,8 @@ CtrlPanel_IndicatorJumpTable_Data:
 ; [nakarest] naka_extension_device+0x2e4e  +0x2e4e..+0x2e60 (0xed961a, 18 B)
 ; [nakarest] purpose not established: layout of 18 B at 0xed961a not derived; readers below
 ; [nakarest] Readers: source references Audio_DispatchCommand (audio/tonegen_fileio_handlers.s:
-; [nakarest] `lda xix, (Audio_DispatchCommand_Data:24)`).
-Audio_DispatchCommand_Data:
+; [nakarest] `lda xix, (Audio_DispatchCommand_CaseTable:24)`).
+Audio_DispatchCommand_CaseTable:
 	.short	DSPCfg_Param_CaseD - DSPCfg_Param_CaseD
 	.short	DSPCfg_Param_CaseD - DSPCfg_Param_CaseD
 	.short	DSPCfg_Param_CaseD - DSPCfg_Param_CaseD
@@ -989,14 +989,14 @@ Audio_DispatchCommand_Data:
 ; [nakarest] purpose not established: layout of 1522 B at 0xed962c not derived; readers below
 ; [nakarest] Readers: source references PanelDisplay_DispatchByMode
 ; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
-; [nakarest] (PanelDisplay_DispatchByMode_Data:24)`); 32 data words in
+; [nakarest] (PanelDisplay_DispatchByMode_CaseTable:24)`); 32 data words in
 ; [nakarest] PanelButton_ActionLists (at 0xed9c1e, 0xed9c22, 0xed9c26), which is read
 ; [nakarest] by PanelButton_DispatchChange (audio/tonegen_fileio_handlers.s: `ld xwa,
 ; [nakarest] PanelButton_ActionLists`); 32 data words in
 ; [nakarest] PanelButton_HelpModeActionLists (at 0xed9c9e, 0xed9ca2, 0xed9ca6), which is read
 ; [nakarest] by PanelButton_DispatchChange (audio/tonegen_fileio_handlers.s: `ld xwa,
 ; [nakarest] PanelButton_HelpModeActionLists`).
-PanelDisplay_DispatchByMode_Data:
+PanelDisplay_DispatchByMode_CaseTable:
 	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData
 	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData
 	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData

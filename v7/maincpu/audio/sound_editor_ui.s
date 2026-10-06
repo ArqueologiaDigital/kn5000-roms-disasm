@@ -15606,7 +15606,7 @@ S2cGridCheck:
 	cp xwa, 0x6
 	jrl gt, S2c_GridCheck_EventEnc
 	add xwa, xwa
-	add xwa, S2cGridCheck_Data
+	add xwa, S2cGridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (S2c_GridCheck_DataBlock:24)
 	jp	t, (xix+wa)
@@ -16933,7 +16933,7 @@ AcEasyCmpGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, EasyCmp_GridCheck_Case4
 	add xbc, xbc
-	add xbc, AcEasyCmpGridBoxProc_Data
+	add xbc, AcEasyCmpGridBoxProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (EasyCmp_DialGrid:24)
 	jp	t, (xix+bc)
@@ -17148,7 +17148,7 @@ EasyCmpGridCheck:
 	cp xwa, 0x6
 	jrl gt, EasyCmp_GridCheck_EventCase4
 	add xwa, xwa
-	add xwa, EasyCmpGridCheck_Data
+	add xwa, EasyCmpGridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (EasyCmp_GridCheck_DataBlock:24)
 	jp	t, (xix+wa)
@@ -17290,7 +17290,7 @@ MspNameBnkFunc:
 	cp xwa, 0x9
 	jr gt, MspNaming_CleanupExit
 	add xwa, xwa
-	add xwa, MspNameBnkFunc_Data_2
+	add xwa, MspNameBnkFunc_CaseTable
 	ld wa, (xwa)
 	lda xix, (EasyCmp_GridEvtCase_Default:24)
 	jp	t, (xix+wa)
@@ -18160,7 +18160,7 @@ MspRGrpSetGridCheck:
 	cp xwa, 0x6
 	jrl gt, RgpSetBnk_GridCheck_Return
 	add xwa, xwa
-	add xwa, MspRGrpSetGridCheck_Data
+	add xwa, MspRGrpSetGridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (MspRGrpSetGridCheck_DataBlock:24)
 	jp	t, (xix+wa)
@@ -18696,7 +18696,7 @@ MspPlayModeFunc:
 	cp xwa, 0x9
 	jr gt, AcSndArgGrid_BoxCase1
 	add xwa, xwa
-	add xwa, MspPlayModeFunc_Data_2
+	add xwa, MspPlayModeFunc_CaseTable
 	ld wa, (xwa)
 	lda xix, (MspPlayModeFunc_DataBlock:24)
 	jp	t, (xix+wa)
@@ -18776,7 +18776,7 @@ AcSndArgGridBoxProc:
 	cp xwa, 0x6
 	jrl gt, AcSndArgGrid_ForwardToBase
 	add xwa, xwa
-	add xwa, AcSndArgGridBoxProc_Data_2
+	add xwa, AcSndArgGridBoxProc_CaseTable
 	ld wa, (xwa)
 	lda xix, (AcSndArgGrid_Init:24)
 	jp	t, (xix+wa)
@@ -19123,7 +19123,7 @@ SndArgGridCheck:
 	cp xwa, 0x6
 	jrl gt, SndArgGridCheck_Return
 	add xwa, xwa
-	add xwa, SndArgGridCheck_Data
+	add xwa, SndArgGridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (SndArgGridCheck_JumpTableFallthrough:24)
 	jp	t, (xix+wa)

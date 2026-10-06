@@ -73,7 +73,7 @@ FDemoText_ByteData_VoiceProbeC:
 	cp	wa, 6:i3
 	ret	gt
 	add	wa, wa
-	lda	xix, (FDemoText_ByteData_VoiceProbeC_Data_3:24)
+	lda	xix, (FDemoText_ByteData_VoiceProbeC_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda	xix, (FDemoText_ByteData_VoiceProbeC_Code:24)
 	jp	t, (xix+wa)

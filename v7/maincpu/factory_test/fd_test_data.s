@@ -370,7 +370,7 @@ TitleFunc_LifecycleTable_Data_5:	.byte	0x0a, 0x44, 0x65, 0x62, 0x75
 	.byte	0x67, 0x20, 0x54, 0x65, 0x73, 0x74, 0x00
 TitleFunc_LifecycleTable_Data_6:	.byte	0x0a
 	.asciz	"Debug Test"
-TitleFunc_LifecycleDispatch_Data:
+TitleFunc_LifecycleDispatch_CaseTable:
 	.short	TitleFunc_LifecycleTable - TitleFunc_LifecycleTable
 	.short	TitleFunc_LifecycleDispatch_Case1 - TitleFunc_LifecycleTable
 	.short	TitleFunc_LifecycleDispatch_Case2 - TitleFunc_LifecycleTable
@@ -379,7 +379,7 @@ TitleFunc_LifecycleDispatch_Data:
 	.short	TitleFunc_LifecycleDispatch_Case5 - TitleFunc_LifecycleTable
 	.short	TitleFunc_LifecycleDispatch_Case6 - TitleFunc_LifecycleTable
 	.short	TitleFunc_Return - TitleFunc_LifecycleTable
-TestTitleFunc_Data:
+TestTitleFunc_CaseTable:
 	.short	TitleFunc_ActionDispatch - TitleFunc_ActionDispatch
 	.short	TestTitleFunc_Case3 - TitleFunc_ActionDispatch
 	.short	TestTitleFunc_Case4 - TitleFunc_ActionDispatch
@@ -444,7 +444,7 @@ FDTestDlg_FormatDisplay_Str_File_Name_20_charact:	.byte	0x46, 0x69, 0x6c, 0x65
 	.byte	0x20, 0x4e, 0x61, 0x6d, 0x65, 0x20, 0x32, 0x30
 	.byte	0x20, 0x63, 0x68, 0x61, 0x72, 0x61, 0x63, 0x74
 	.byte	0x00, 0xff
-FDTestDialogProc_Data:
+FDTestDialogProc_CaseTable:
 	.short	FDTestDlg_DefaultCase - FDTestDlg_DefaultCase
 	.short	FDTestDlg_DefaultCase - FDTestDlg_DefaultCase
 	.short	FDTestDlg_DefaultCase - FDTestDlg_DefaultCase

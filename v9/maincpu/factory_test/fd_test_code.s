@@ -306,7 +306,7 @@ FDTestDialogProc:
 	cp xwa, 0x6
 	jr gt, FDTestDlg_Unhandled
 	add xwa, xwa
-	add xwa, FDTestDialogProc_Data
+	add xwa, FDTestDialogProc_CaseTable
 	ld wa, (xwa)
 	lda xix, (FDTestDlg_DefaultCase:24)
 	jp	t, (xix+wa)

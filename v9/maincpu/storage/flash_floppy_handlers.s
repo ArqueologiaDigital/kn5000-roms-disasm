@@ -5794,7 +5794,7 @@ AcCmpSetGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, CmpSetP1_GridCheck_Case4
 	add xbc, xbc
-	add xbc, AcCmpSetGridBoxProc_Data
+	add xbc, AcCmpSetGridBoxProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (CmpSetP1_DialGrid:24)
 	jp	t, (xix+bc)
@@ -6019,7 +6019,7 @@ CmpSetP1GridCheck:
 	cp xwa, 0x6
 	jrl gt, Widget_PostEvtReturnZero
 	add xwa, xwa
-	add xwa, CmpSetP1GridCheck_Data
+	add xwa, CmpSetP1GridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (CmpSetP1_GridCheck_EventEnc:24)
 	jp	t, (xix+wa)
@@ -6087,7 +6087,7 @@ CmpSetP1_GridCheck_Return:
 	cp wa, 7:i3
 	jrl gt, WidgetHandler_PostEventAndReturnZero
 	add wa, wa
-	lda xix, (CmpSetP1_GridCheck_EventEnc_Data:24)
+	lda xix, (CmpSetP1_GridCheck_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (UI_COMPONENT_DISPATCH:24)
 	jp	t, (xix+wa)
@@ -6187,7 +6187,7 @@ CmpSetGridCheck:
 	cp xwa, 0x6
 	jrl gt, GridCheck_ReturnZero
 	add xwa, xwa
-	add xwa, CmpSetGridCheck_Data
+	add xwa, CmpSetGridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (GridCheck_Handler0:24)
 	jp	t, (xix+wa)
@@ -6943,7 +6943,7 @@ S2cGridBoxProc:
 	cp xwa, 0x6
 	jrl gt, FdcFormat_GridCheck_Case4
 	add xwa, xwa
-	add xwa, S2cGridBoxProc_Data
+	add xwa, S2cGridBoxProc_CaseTable
 	ld wa, (xwa)
 	lda xix, (FdcFormat_DialGrid:24)
 	jp	t, (xix+wa)

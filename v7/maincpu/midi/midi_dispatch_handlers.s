@@ -7729,7 +7729,7 @@ MIDI_ReadChannelParam:
 	cp bc, 0xf
 	ret gt
 	add bc, bc
-	lda	xix, (MIDI_ReadChannelParam_Data:24)
+	lda	xix, (MIDI_ReadChannelParam_CaseTable:24)
 	ld	bc, (xix+bc)
 	lda	xix, (MidiChan_ParamDispatch:24)
 	jp	t, (xix+bc)
@@ -7800,7 +7800,7 @@ SeqData_ReadFieldByIndex:
 	cp bc, 0xf
 	jr	gt, SeqData_ReturnZeroField
 	add bc, bc
-	lda	xix, (SeqData_ReadFieldByIndex_Data:24)
+	lda	xix, (SeqData_ReadFieldByIndex_CaseTable:24)
 	ld	bc, (xix+bc)
 	lda	xix, (SeqData_FieldDispatch:24)
 	jp	t, (xix+bc)

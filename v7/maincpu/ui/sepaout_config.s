@@ -24,28 +24,28 @@ SetSepaOutMode_Data:				.incbin "includes/generated/sepaout_config.bin", 0x4, 0x
 SetSepaOutMode_Data_2:				.incbin "includes/generated/sepaout_config.bin", 0x8, 0x4
 SetSepaOutMode_Data_3:				.incbin "includes/generated/sepaout_config.bin", 0xC, 0x4
 SetSepaOutMode_Data_4:				.incbin "includes/generated/sepaout_config.bin", 0x10, 0x4
-SqSngSelTtlFunc_Data:
+SqSngSelTtlFunc_CaseTable:
 	.short	SqTrAs_CondCheck - SqTrAs_CondCheck
 	.short	SqSngSelTtlFunc_Case3 - SqTrAs_CondCheck
 	.short	SqSngName_ReturnZero - SqTrAs_CondCheck
 	.short	SqSngName_ReturnZero - SqTrAs_CondCheck
 	.short	SqSngName_ReturnZero - SqTrAs_CondCheck
 	.short	SqSngName_ReturnZero - SqTrAs_CondCheck
-SqSngNameTtlFunc_Data:
+SqSngNameTtlFunc_CaseTable:
 	.short	SQTR_DISPATCH_TABLE_1 - SQTR_DISPATCH_TABLE_1
 	.short	SqSngNameTtlFunc_Case3 - SQTR_DISPATCH_TABLE_1
 	.short	SqTrAs_ReturnZero - SQTR_DISPATCH_TABLE_1
 	.short	SqTrAs_ReturnZero - SQTR_DISPATCH_TABLE_1
 	.short	SqTrAs_ReturnZero - SQTR_DISPATCH_TABLE_1
 	.short	SqTrAs_ReturnZero - SQTR_DISPATCH_TABLE_1
-SqTrAsTtlFunc_Data:
+SqTrAsTtlFunc_CaseTable:
 	.short	SQTR_DISPATCH_TABLE_2 - SQTR_DISPATCH_TABLE_2
 	.short	SQTR_DISPATCH_TABLE_2_CASE1 - SQTR_DISPATCH_TABLE_2
 	.short	CDlikeSwTtl_ReturnZero2 - SQTR_DISPATCH_TABLE_2
 	.short	SQTR_DISPATCH_TABLE_2_CASE2 - SQTR_DISPATCH_TABLE_2
 	.short	CDlikeSwTtl_ReturnZero2 - SQTR_DISPATCH_TABLE_2
 	.short	CDlikeSwTtl_ReturnZero2 - SQTR_DISPATCH_TABLE_2
-SqTrAsPsTtlFunc_Data:
+SqTrAsPsTtlFunc_CaseTable:
 	.short	SqTrAsPsTtl_Dispatch - SqTrAsPsTtl_Dispatch
 	.short	SqTrAsPsTtlFunc_Case3 - SqTrAsPsTtl_Dispatch
 	.short	SqTrAsPsTtl_ReturnZero - SqTrAsPsTtl_Dispatch
@@ -53,17 +53,17 @@ SqTrAsPsTtlFunc_Data:
 	.short	SqTrAsPsTtl_ReturnZero - SqTrAsPsTtl_Dispatch
 	.short	SqTrAsPsTtl_ReturnZero - SqTrAsPsTtl_Dispatch
 SetWall_ReturnZero_Data:			.incbin "includes/generated/sepaout_config.bin", 0x44, 0xE
-SetWall_ReturnZero_Data_2:
+SqTrAsPsTtl_CaseF_CaseTable:
 	.short	SqTrAsPsTtl_CaseF_Case0 - SqTrAsPsTtl_CaseF_Skip
 	.short	SqTrAsPsTtl_CaseF_Skip - SqTrAsPsTtl_CaseF_Skip
-SqMdlyPlyTtlFunc_Data:
+SqMdlyPlyTtlFunc_CaseTable:
 	.short	SqMdlyPlyTtl_Dispatch - SqMdlyPlyTtl_Dispatch
 	.short	SqMdlyPlyTtlFunc_Case3 - SqMdlyPlyTtl_Dispatch
 	.short	SqMdlyPly_ReturnZero - SqMdlyPlyTtl_Dispatch
 	.short	SqMdlyPly_ReturnZero - SqMdlyPlyTtl_Dispatch
 	.short	SqMdlyPly_ReturnZero - SqMdlyPlyTtl_Dispatch
 	.short	SqMdlyPly_ReturnZero - SqMdlyPlyTtl_Dispatch
-DkMdlyPlyTtlFunc_Data:
+DkMdlyPlyTtlFunc_CaseTable:
 	.short	DkMdlyPlyTtl_Dispatch - DkMdlyPlyTtl_Dispatch
 	.short	DkMdlyPlyTtlFunc_Case3 - DkMdlyPlyTtl_Dispatch
 	.short	DkMdlyPly_ReturnZero - DkMdlyPlyTtl_Dispatch
@@ -72,7 +72,7 @@ DkMdlyPlyTtlFunc_Data:
 	.short	DkMdlyPly_ReturnZero - DkMdlyPlyTtl_Dispatch
 DkMdlyPly_SendAudioCmd_Data:			.incbin "includes/generated/sepaout_config.bin", 0x6E, 0x20
 DkMdlyPly_HandleResult_Data:			.incbin "includes/generated/sepaout_config.bin", 0x8E, 0x40
-DisplayMode_DispatchEvents_Data:
+DisplayMode_DispatchEvents_CaseTable:
 	.short	DisplayMode_BatchEventSend - DisplayMode_BatchEventSend
 	.short	DisplayMode_DispatchEvents_Case112 - DisplayMode_BatchEventSend
 	.short	DisplayMode_DispatchEvents_Case113 - DisplayMode_BatchEventSend
@@ -80,28 +80,28 @@ DisplayMode_DispatchEvents_Data:
 	.short	DisplayMode_DispatchEvents_Case115 - DisplayMode_BatchEventSend
 	.short	DisplayMode_DispatchEvents_Case116 - DisplayMode_BatchEventSend
 	.short	DisplayMode_DispatchEvents_Case117 - DisplayMode_BatchEventSend
-DpMdlyDocTtlFunc_Data:
+DpMdlyDocTtlFunc_CaseTable:
 	.short	DpMdlyDocTtl_Dispatch - DpMdlyDocTtl_Dispatch
 	.short	DpMdlyDocTtlFunc_Case3 - DpMdlyDocTtl_Dispatch
 	.short	DpMdlyDoc_ReturnZero - DpMdlyDocTtl_Dispatch
 	.short	DpMdlyDoc_ReturnZero - DpMdlyDocTtl_Dispatch
 	.short	DpMdlyDoc_ReturnZero - DpMdlyDocTtl_Dispatch
 	.short	DpMdlyDoc_ReturnZero - DpMdlyDocTtl_Dispatch
-DpMdlyPdTtlFunc_Data:
+DpMdlyPdTtlFunc_CaseTable:
 	.short	DpMdlyPdTtl_Dispatch - DpMdlyPdTtl_Dispatch
 	.short	DpMdlyPdTtlFunc_Case3 - DpMdlyPdTtl_Dispatch
 	.short	DpMdlyPd_ReturnZero - DpMdlyPdTtl_Dispatch
 	.short	DpMdlyPd_ReturnZero - DpMdlyPdTtl_Dispatch
 	.short	DpMdlyPd_ReturnZero - DpMdlyPdTtl_Dispatch
 	.short	DpMdlyPd_ReturnZero - DpMdlyPdTtl_Dispatch
-DpMdlySmfTtlFunc_Data:
+DpMdlySmfTtlFunc_CaseTable:
 	.short	DpMdlySmfTtl_Dispatch - DpMdlySmfTtl_Dispatch
 	.short	DpMdlySmfTtlFunc_Case3 - DpMdlySmfTtl_Dispatch
 	.short	DpMdlySmf_ReturnZero - DpMdlySmfTtl_Dispatch
 	.short	DpMdlySmf_ReturnZero - DpMdlySmfTtl_Dispatch
 	.short	DpMdlySmf_ReturnZero - DpMdlySmfTtl_Dispatch
 	.short	DpMdlySmf_ReturnZero - DpMdlySmfTtl_Dispatch
-DpMdlySmfLyrTtlFunc_Data:
+DpMdlySmfLyrTtlFunc_CaseTable:
 	.short	DpMdlySmfLyrTtl_Dispatch - DpMdlySmfLyrTtl_Dispatch
 	.short	DpMdlySmfLyrTtlFunc_Case3 - DpMdlySmfLyrTtl_Dispatch
 	.short	DpMdlySmfLyr_ReturnZero - DpMdlySmfLyrTtl_Dispatch
@@ -113,7 +113,7 @@ NameGetFuncCall_Dispatch_Str_FILE_Fmt2d_Fmts:	.incbin "includes/generated/sepaou
 NameGetFuncCall_Dispatch_Str_Fmt3d_Fmts:	.incbin "includes/generated/sepaout_config.bin", 0x122, 0x8
 NameGetFuncCall_Dispatch_Str_Fmt2d_Fmts_2:	.incbin "includes/generated/sepaout_config.bin", 0x12A, 0x8
 NameGetFuncCall_Dispatch_Str_Fmt2d_Fmts_3:	.incbin "includes/generated/sepaout_config.bin", 0x132, 0x8
-NameGetFuncCall_Data:
+NameGetFuncCall_CaseTable:
 	.short	NameGetFuncCall_Dispatch - NameGetFuncCall_Dispatch
 	.short	NameGetFuncCall_OnGetDiskFileName - NameGetFuncCall_Dispatch
 	.short	NameGetFuncCall_OnGetSmfFileName - NameGetFuncCall_Dispatch
@@ -128,7 +128,7 @@ NameGetFuncCall_Data:
 	.short	NameGetFunc_Entry - NameGetFuncCall_Dispatch
 	.short	NameGetFuncCall_OnGetLyricsSongName - NameGetFuncCall_Dispatch
 	.short	NameGetFuncCall_OnGetComposerName - NameGetFuncCall_Dispatch
-DpDocTtl_Dispatch_Data:
+DpDoc_CaseA_CaseTable:
 	.short	DpDoc_CaseB - DpDoc_CaseB
 	.short	DpDoc_CaseC - DpDoc_CaseB
 	.short	DpDoc_CaseD - DpDoc_CaseB
@@ -139,14 +139,14 @@ DpDocTtl_Dispatch_Data:
 	.short	DpDocTtl_ReturnZero - DpDoc_CaseB
 	.short	DpDocTtlFunc_Switch2_Case137 - DpDoc_CaseB
 	.short	DpDocTtlFunc_Switch2_Case138 - DpDoc_CaseB
-DpDocTtlFunc_Data:
+DpDocTtlFunc_CaseTable:
 	.short	DpDocTtl_Dispatch - DpDocTtl_Dispatch
 	.short	DpDocTtlFunc_Case3 - DpDocTtl_Dispatch
 	.short	DpDocTtl_ReturnZero - DpDocTtl_Dispatch
 	.short	DpDocTtl_ReturnZero - DpDocTtl_Dispatch
 	.short	DpDocTtl_ReturnZero - DpDocTtl_Dispatch
 	.short	DpDocTtl_ReturnZero - DpDocTtl_Dispatch
-DpPdTtl_Dispatch_Data:
+DpPd_CaseA_CaseTable:
 	.short	DpPd_CaseB - DpPd_CaseB
 	.short	DpPd_CaseC - DpPd_CaseB
 	.short	DpPd_CaseD - DpPd_CaseB
@@ -157,14 +157,14 @@ DpPdTtl_Dispatch_Data:
 	.short	DpPdTtl_ReturnZero - DpPd_CaseB
 	.short	DpPdTtlFunc_Switch2_Case137 - DpPd_CaseB
 	.short	DpPdTtlFunc_Switch2_Case138 - DpPd_CaseB
-DpPdTtlFunc_Data:
+DpPdTtlFunc_CaseTable:
 	.short	DpPdTtl_Dispatch - DpPdTtl_Dispatch
 	.short	DpPdTtlFunc_Case3 - DpPdTtl_Dispatch
 	.short	DpPdTtl_ReturnZero - DpPdTtl_Dispatch
 	.short	DpPdTtl_ReturnZero - DpPdTtl_Dispatch
 	.short	DpPdTtl_ReturnZero - DpPdTtl_Dispatch
 	.short	DpPdTtl_ReturnZero - DpPdTtl_Dispatch
-DpSmfTtl_Dispatch_Data:
+DpSmf_CaseA_CaseTable:
 	.short	DpSmf_CaseB - DpSmf_CaseB
 	.short	DpSmf_CaseC - DpSmf_CaseB
 	.short	DpSmf_CaseD - DpSmf_CaseB
@@ -175,21 +175,21 @@ DpSmfTtl_Dispatch_Data:
 	.short	DpSmfTtl_ReturnZero - DpSmf_CaseB
 	.short	DpSmfTtlFunc_Switch2_Case137 - DpSmf_CaseB
 	.short	DpSmfTtlFunc_Switch2_Case138 - DpSmf_CaseB
-DpSmfTtlFunc_Data:
+DpSmfTtlFunc_CaseTable:
 	.short	DpSmfTtl_Dispatch - DpSmfTtl_Dispatch
 	.short	DpSmfTtlFunc_Case3 - DpSmfTtl_Dispatch
 	.short	DpSmfTtl_ReturnZero - DpSmfTtl_Dispatch
 	.short	DpSmfTtl_ReturnZero - DpSmfTtl_Dispatch
 	.short	DpSmfTtl_ReturnZero - DpSmfTtl_Dispatch
 	.short	DpSmfTtl_ReturnZero - DpSmfTtl_Dispatch
-DpSmfLyrTtlFunc_Data:
+DpSmfLyrTtlFunc_CaseTable:
 	.short	DpSmfLyrTtl_Dispatch - DpSmfLyrTtl_Dispatch
 	.short	DpSmfLyrTtlFunc_Case3 - DpSmfLyrTtl_Dispatch
 	.short	SeqStep_ReturnZero - DpSmfLyrTtl_Dispatch
 	.short	DpSmfLyrTtlFunc_Case5 - DpSmfLyrTtl_Dispatch
 	.short	SeqStep_ReturnZero - DpSmfLyrTtl_Dispatch
 	.short	SeqStep_ReturnZero - DpSmfLyrTtl_Dispatch
-SqTrSelTtlFunc_Data:
+SqTrSelTtlFunc_CaseTable:
 	.short	SqTrSelTtl_Dispatch - SqTrSelTtl_Dispatch
 	.short	SqTrSelTtlFunc_Case3 - SqTrSelTtl_Dispatch
 	.short	SqTrSelTtl_ReturnZero - SqTrSelTtl_Dispatch
@@ -197,28 +197,28 @@ SqTrSelTtlFunc_Data:
 	.short	SqTrSelTtl_ReturnZero - SqTrSelTtl_Dispatch
 	.short	SqTrSelTtl_ReturnZero - SqTrSelTtl_Dispatch
 SqStepTtlFunc_Data:				.incbin "includes/generated/sepaout_config.bin", 0x1CE, 0x10
-DemoStyleTtlFunc_Data:
+DemoStyleTtlFunc_CaseTable:
 	.short	DemoStyle_DispatchTable - DemoStyle_DispatchTable
 	.short	DemoStyleTtlFunc_Exit - DemoStyle_DispatchTable
 	.short	DemoStyleTtlFunc_Exit - DemoStyle_DispatchTable
 	.short	DemoStyleTtlFunc_Exit - DemoStyle_DispatchTable
 	.short	DemoStyleTtlFunc_Exit - DemoStyle_DispatchTable
 	.short	DemoStyleTtlFunc_Exit - DemoStyle_DispatchTable
-DemoSoundTtlFunc_Data:
+DemoSoundTtlFunc_CaseTable:
 	.short	DemoSound_DispatchTable - DemoSound_DispatchTable
 	.short	DemoSoundTtlFunc_Exit - DemoSound_DispatchTable
 	.short	DemoSoundTtlFunc_Exit - DemoSound_DispatchTable
 	.short	DemoSoundTtlFunc_Exit - DemoSound_DispatchTable
 	.short	DemoSoundTtlFunc_Exit - DemoSound_DispatchTable
 	.short	DemoSoundTtlFunc_Exit - DemoSound_DispatchTable
-DemoRhyTtlFunc_Data:
+DemoRhyTtlFunc_CaseTable:
 	.short	DemoRhythm_DispatchTable - DemoRhythm_DispatchTable
 	.short	DemoRhyTtlFunc_Exit - DemoRhythm_DispatchTable
 	.short	DemoRhyTtlFunc_Exit - DemoRhythm_DispatchTable
 	.short	DemoRhyTtlFunc_Exit - DemoRhythm_DispatchTable
 	.short	DemoRhyTtlFunc_Exit - DemoRhythm_DispatchTable
 	.short	DemoRhyTtlFunc_Exit - DemoRhythm_DispatchTable
-MiddleFuncCall_Data:
+MiddleFuncCall_CaseTable:
 	.short	MiddleFuncCall_DispatchData - MiddleFuncCall_DispatchData
 	.short	MiddleFuncCall_OnSongNameSet - MiddleFuncCall_DispatchData
 	.short	SqTrSel_CaseC - MiddleFuncCall_DispatchData
@@ -234,7 +234,7 @@ MiddleFuncCall_Data:
 	.short	MiddleFuncCall_OnTrackMidiCall - MiddleFuncCall_DispatchData
 SongBankLookup_BuildAudioCmd_Str_Fmt3d_FmtPct:	.incbin "includes/generated/sepaout_config.bin", 0x21C, 0x6
 SeqInit_LookupDispatchEntry_Data:		.incbin "includes/generated/sepaout_config.bin", 0x222, 0x48
-PlayMode_SendStopEvent_Data:
+SqTrSel_CaseG_CaseTable:
 	.short	SqTrSel_CaseG_JumpTable - SqTrSel_CaseG_JumpTable
 	.short	SqTrSel_CaseG_OnTitleDpdoc - SqTrSel_CaseG_JumpTable
 	.short	SqTrSel_CaseG_OnTitleDppd - SqTrSel_CaseG_JumpTable

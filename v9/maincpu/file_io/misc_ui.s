@@ -22,7 +22,7 @@ JumpInsertFunc:
 	cp xbc, 0x9
 	jr gt, JumpInsert_Error
 	add xbc, xbc
-	add xbc, JumpInsertFunc_Data
+	add xbc, JumpInsertFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (JumpInsert_DispatchBody:24)
 	jp	t, (xix+bc)

@@ -558,7 +558,7 @@ FmmSmfFileNameFunc:
 	cp xde, 0x5
 	jr gt, SmfFN_ReturnZero
 	add xde, xde
-	add xde, FmmSmfFileNameFunc_Data
+	add xde, FmmSmfFileNameFunc_CaseTable
 	ld de, (xde)
 	lda xix, (SmfFN_JumpTable:24)
 	jp	t, (xix+de)

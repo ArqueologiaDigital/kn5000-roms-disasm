@@ -143,7 +143,7 @@ MainPreControl:
 	cp xbc, 0xa
 	jr gt, MainPreControl_ReturnNull
 	add xbc, xbc
-	add xbc, MainPreControl_Data
+	add xbc, MainPreControl_CaseTable
 	ld bc, (xbc)
 	lda xix, (MainPreControl_Dispatch:24)
 	jp	t, (xix+bc)
@@ -223,7 +223,7 @@ ApPreControl:
 	cp xwa, 0x6
 	jr gt, ApPreControl_ReturnNull
 	add xwa, xwa
-	add xwa, ApPreControl_Data
+	add xwa, ApPreControl_CaseTable
 	ld wa, (xwa)
 	lda xix, (Seq_PostMelodyEvent:24)
 	jp	t, (xix+wa)

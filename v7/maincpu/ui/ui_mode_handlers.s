@@ -2252,10 +2252,10 @@ TEST2FUNC:
 	cp xde, 0x5
 	jr ugt, TableDispatch_Return3
 	add xde, xde
-	add xde, TEST2FUNC_Data
+	add xde, TEST2FUNC_CaseTable
 	ld de, (xde)
 	lda xix, (TEST2FUNC_DispatchReturn:24)
-; Computed jump: target = TEST2FUNC_DispatchReturn + TEST2FUNC_Data[i], TEST2FUNC_Data = 16-bit offsets (6 words, read
+; Computed jump: target = TEST2FUNC_DispatchReturn + TEST2FUNC_CaseTable[i], TEST2FUNC_CaseTable = 16-bit offsets (6 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
 ;   0 -> TEST2FUNC_DispatchReturn
 ;   1 -> TableDispatch_Return3
@@ -2281,10 +2281,10 @@ TEST3FUNC:
 	cp xde, 0x5
 	jr ugt, TableDispatch_Return4
 	add xde, xde
-	add xde, TEST3FUNC_Data
+	add xde, TEST3FUNC_CaseTable
 	ld de, (xde)
 	lda xix, (TEST3FUNC_DispatchReturn:24)
-; Computed jump: target = TEST3FUNC_DispatchReturn + TEST3FUNC_Data[i], TEST3FUNC_Data = 16-bit offsets (6 words, read
+; Computed jump: target = TEST3FUNC_DispatchReturn + TEST3FUNC_CaseTable[i], TEST3FUNC_CaseTable = 16-bit offsets (6 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
 ;   0 -> TEST3FUNC_DispatchReturn
 ;   1 -> TableDispatch_Return4
@@ -2310,10 +2310,10 @@ TEST4FUNC:
 	cp xde, 0x5
 	jr ugt, TableDispatch_Return5
 	add xde, xde
-	add xde, TEST4FUNC_Data
+	add xde, TEST4FUNC_CaseTable
 	ld de, (xde)
 	lda xix, (TEST4FUNC_DispatchReturn:24)
-; Computed jump: target = TEST4FUNC_DispatchReturn + TEST4FUNC_Data[i], TEST4FUNC_Data = 16-bit offsets (6 words, read
+; Computed jump: target = TEST4FUNC_DispatchReturn + TEST4FUNC_CaseTable[i], TEST4FUNC_CaseTable = 16-bit offsets (6 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
 ;   0 -> TEST4FUNC_DispatchReturn
 ;   1 -> TableDispatch_Return5
@@ -2339,10 +2339,10 @@ TEST6FUNC:
 	cp xde, 0x5
 	jr ugt, TableDispatch_Return
 	add xde, xde
-	add xde, TEST6FUNC_Data
+	add xde, TEST6FUNC_CaseTable
 	ld de, (xde)
 	lda xix, (TEST6FUNC_DispatchReturn:24)
-; Computed jump: target = TEST6FUNC_DispatchReturn + TEST6FUNC_Data[i], TEST6FUNC_Data = 16-bit offsets (6 words, read
+; Computed jump: target = TEST6FUNC_DispatchReturn + TEST6FUNC_CaseTable[i], TEST6FUNC_CaseTable = 16-bit offsets (6 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
 ;   0 -> TEST6FUNC_DispatchReturn
 ;   1 -> TableDispatch_Return
@@ -10537,10 +10537,10 @@ MssNameFunc:
 	cp xbc, 0x9
 	jrl gt, MssName_ReturnZero
 	add xbc, xbc
-	add xbc, MssNameFunc_Data
+	add xbc, MssNameFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (MssName_EventDispatch:24)
-; Computed jump: target = MssName_EventDispatch + MssNameFunc_Data[i], MssNameFunc_Data = 16-bit offsets (10 words, read
+; Computed jump: target = MssName_EventDispatch + MssNameFunc_CaseTable[i], MssNameFunc_CaseTable = 16-bit offsets (10 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0003e:
 ;   0x1e0003e -> MssNameFunc_OnGetLargeStep
 ;   0x1e0003f -> MssNameFunc_OnGetLargeStep
@@ -11826,10 +11826,10 @@ PmBkNameFunc:
 	cp xbc, 0x9
 	jr gt, PmBkName_ReturnZero
 	add xbc, xbc
-	add xbc, PmBkNameFunc_Data
+	add xbc, PmBkNameFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (PmBkName_EventDispatch:24)
-; Computed jump: target = PmBkName_EventDispatch + PmBkNameFunc_Data[i], PmBkNameFunc_Data = 16-bit offsets (10 words, read
+; Computed jump: target = PmBkName_EventDispatch + PmBkNameFunc_CaseTable[i], PmBkNameFunc_CaseTable = 16-bit offsets (10 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0003e:
 ;   0x1e0003e -> PmBkNameFunc_OnGetLargeStep
 ;   0x1e0003f -> PmBkNameFunc_OnGetLargeStep

@@ -141,7 +141,7 @@ TestTitleFunc:
 	cp xwa, 0x5
 	jrl ugt, TitleFunc_Return
 	add xwa, xwa
-	add xwa, TestTitleFunc_Data
+	add xwa, TestTitleFunc_CaseTable
 	ld wa, (xwa)
 	lda xix, (TitleFunc_ActionDispatch:24)
 	jp	t, (xix+wa)
@@ -178,7 +178,7 @@ TitleFunc_LifecycleDispatch:
 	cp xwa, 0x7
 	jrl ugt, TitleFunc_Return
 	add xwa, xwa
-	add xwa, TitleFunc_LifecycleDispatch_Data
+	add xwa, TitleFunc_LifecycleDispatch_CaseTable
 	ld wa, (xwa)
 	lda xix, (TitleFunc_LifecycleTable:24)
 	jp	t, (xix+wa)

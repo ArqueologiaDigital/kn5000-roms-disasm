@@ -4257,7 +4257,7 @@ ToneGen_WriteParamByIndex:
 	cp bc, 5:i3
 	jrl ugt, ToneGen_WriteParam_Return
 	add bc, bc
-	lda xix, (ToneGen_WriteParamByIndex_Data:24)
+	lda xix, (ToneGen_WriteParamByIndex_CaseTable:24)
 	ld	bc, (xix+bc)
 	lda xix, (ToneGen_ParamWriteDispatch:24)
 	jp	t, (xix+bc)
@@ -4434,7 +4434,7 @@ WallHomeEditCheck:
 	cp xwa, 0x9
 	jr gt, WallHomeEditCheck_ReturnFalse
 	add xwa, xwa
-	add xwa, WallHomeEditCheck_Data
+	add xwa, WallHomeEditCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (WallHomeEdit_EventDispatch:24)
 	jp	t, (xix+wa)
@@ -4527,7 +4527,7 @@ WallMenuEditCheck:
 	cp xwa, 0x9
 	jr gt, WallOthEditCheck_RetZero
 	add xwa, xwa
-	add xwa, WallMenuEditCheck_Data
+	add xwa, WallMenuEditCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (WallMenuEdit_EventDispatch:24)
 	jp	t, (xix+wa)
@@ -4582,7 +4582,7 @@ WallOthEditCheck:
 	cp xwa, 0x9
 	jr gt, WallOthCheckLoop_RetZero
 	add xwa, xwa
-	add xwa, WallOthEditCheck_Data
+	add xwa, WallOthEditCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (WallOthEdit_EventDispatch:24)
 	jp	t, (xix+wa)
@@ -5165,7 +5165,7 @@ MainSysControl:
 	cp wa, 0x8
 	jr gt, MainSysControl_PostDispatchFinalize
 	add wa, wa
-	lda xix, (MainSysControl_Data:24)
+	lda xix, (MainSysControl_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (MainSysCtrl_DispatchTable:24)
 	jp	t, (xix+wa)
@@ -5245,7 +5245,7 @@ CntIniFunc:
 	cp xde, 0x5
 	jr ugt, CntIniFunc_ReturnZero
 	add xde, xde
-	add xde, CntIniFunc_Data
+	add xde, CntIniFunc_CaseTable
 	ld de, (xde)
 	lda xix, (CntIniFunc_EventDispatch:24)
 	jp	t, (xix+de)

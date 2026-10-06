@@ -28,10 +28,10 @@ AcGridBoxProc:
 	cp xwa, 0x6
 	jrl gt, AcGridBox_Default
 	add xwa, xwa
-	add xwa, AcGridBoxProc_Data
+	add xwa, AcGridBoxProc_CaseTable
 	ld wa, (xwa)
 	lda xix, (AcGridBox_Init:24)
-; Computed jump: target = AcGridBox_Init + AcGridBoxProc_Data[i], AcGridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = AcGridBox_Init + AcGridBoxProc_CaseTable[i], AcGridBoxProc_CaseTable = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcGridBoxProc_OnIndexswUp
 ;   0x1c00018 -> AcGridBoxProc_OnIndexswDown
@@ -248,10 +248,10 @@ GridCheck:
 	cp xwa, 0x6
 	jr gt, GridCheck_Return
 	add xwa, xwa
-	add xwa, GridCheck_Data
+	add xwa, GridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (GridCheck_JumpEnd:24)
-; Computed jump: target = GridCheck_JumpEnd + GridCheck_Data[i], GridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = GridCheck_JumpEnd + GridCheck_CaseTable[i], GridCheck_CaseTable = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> GridCheck_JumpEnd
 ;   0x1c00018 -> GridCheck_JumpEnd
@@ -1931,10 +1931,10 @@ RamEditCheck:
 	cp xwa, 0x9
 	jr gt, RamEditCheck_NotHandled
 	add xwa, xwa
-	add xwa, RamEditCheck_Data
+	add xwa, RamEditCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (RamEditCheck_JumpStart:24)
-; Computed jump: target = RamEditCheck_JumpStart + RamEditCheck_Data[i], RamEditCheck_Data = 16-bit offsets (10 words, read
+; Computed jump: target = RamEditCheck_JumpStart + RamEditCheck_CaseTable[i], RamEditCheck_CaseTable = 16-bit offsets (10 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0003e:
 ;   0x1e0003e -> RamEditCheck_OnGetLargeStep
 ;   0x1e0003f -> RamEditCheck_OnGetSmallStep
@@ -3476,7 +3476,7 @@ ButtonState_DispatchDSP:
 	cp wa, 0x10
 	jrl gt, ButtonState_Paint_DrawAligned
 	add wa, wa
-	lda xix, (ButtonState_DispatchDSP_Data:24)
+	lda xix, (ButtonState_DispatchDSP_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (ButtonState_DispatchDSP_InlineData:24)
 	jp	t, (xix+wa)
@@ -3734,7 +3734,7 @@ AcIndexEdit_DispatchDSP:
 	ld	wa, (xix+wa)
 	extz wa
 	sll wa, 1
-	ld xix, AcIndexEdit_DispatchDSP_Data_2
+	ld xix, AcIndexEdit_DispatchDSP_CaseTable
 	ld	wa, (xix+wa)
 	lda xix, (AcIndexEdit_DispatchDSP_InlineData:24)
 	jp	t, (xix+wa)
@@ -8400,10 +8400,10 @@ ObjectProc:
 	cp xwa, 0x13
 	jrl gt, ExitWindow_Init
 	add xwa, xwa
-	add xwa, ObjectProc_Data
+	add xwa, ObjectProc_CaseTable
 	ld wa, (xwa)
 	lda xix, (AcTrkSw_Return:24)
-; Computed jump: target = AcTrkSw_Return + ObjectProc_Data[i], ObjectProc_Data = 16-bit offsets (20 words, read
+; Computed jump: target = AcTrkSw_Return + ObjectProc_CaseTable[i], ObjectProc_CaseTable = 16-bit offsets (20 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00010:
 ;   0x1e00010 -> AcTrkSw_Return
 ;   0x1e00011 -> ObjectProc_OnGetParentClass
@@ -9145,10 +9145,10 @@ ClassProc:
 	cp xbc, 0x7
 	jrl gt, TitleWidget_OK_AdvanceDone
 	add xbc, xbc
-	add xbc, ClassProc_Data
+	add xbc, ClassProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ClassProc_Event_LoadFromWA:24)
-; Computed jump: target = ClassProc_Event_LoadFromWA + ClassProc_Data[i], ClassProc_Data = 16-bit offsets (8 words, read
+; Computed jump: target = ClassProc_Event_LoadFromWA + ClassProc_CaseTable[i], ClassProc_CaseTable = 16-bit offsets (8 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00000:
 ;   0x1e00000 -> ClassProc_Event_LoadFromWA
 ;   0x1e00001 -> ClassProc_Event_LoadFromHL
@@ -9738,10 +9738,10 @@ ModeProc:
 	cp xbc, 0x5
 	jrl gt, GetMode_DispatchDSP
 	add xbc, xbc
-	add xbc, ModeProc_Data
+	add xbc, ModeProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (NakaWidget_ReturnConst_0x1600006:24)
-; Computed jump: target = NakaWidget_ReturnConst_0x1600006 + ModeProc_Data[i], ModeProc_Data = 16-bit offsets (6 words, read
+; Computed jump: target = NakaWidget_ReturnConst_0x1600006 + ModeProc_CaseTable[i], ModeProc_CaseTable = 16-bit offsets (6 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0002b:
 ;   0x1e0002b -> ModeProc_OnGetModeProc
 ;   0x1e0002c -> ModeProc_OnGetModeProcId
@@ -11178,10 +11178,10 @@ ViewableProc:
 	cp xwa, 0x6
 	jrl gt, Viewable_DefaultDispatch
 	add xwa, xwa
-	add xwa, ViewableProc_Data
+	add xwa, ViewableProc_CaseTable
 	ld wa, (xwa)
 	lda xix, (Viewable_GetClassProc:24)
-; Computed jump: target = Viewable_GetClassProc + ViewableProc_Data[i], ViewableProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = Viewable_GetClassProc + ViewableProc_CaseTable[i], ViewableProc_CaseTable = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c0000b:
 ;   0x1c0000b -> ViewableProc_OnPaint
 ;   0x1c0000c -> ViewableProc_OnRepaint
@@ -17444,10 +17444,10 @@ CommonIDProc:
 	cp xde, 0x6
 	jrl gt, CommonIDProc_Default
 	add xde, xde
-	add xde, CommonIDProc_Data
+	add xde, CommonIDProc_CaseTable
 	ld de, (xde)
 	lda xix, (CommonIDProc_OnGetPropDataSp:24)
-; Computed jump: target = CommonIDProc_OnGetPropDataSp + CommonIDProc_Data[i], CommonIDProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = CommonIDProc_OnGetPropDataSp + CommonIDProc_CaseTable[i], CommonIDProc_CaseTable = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00008:
 ;   0x1e00008 -> CommonIDProc_ReturnZero
 ;   0x1e00009 -> CommonIDProc_OnDumpPropertyEx

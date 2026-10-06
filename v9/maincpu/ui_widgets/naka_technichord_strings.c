@@ -1975,7 +1975,7 @@ typedef struct __attribute__((packed)) {
      * WelcomeScript_OpJumpOffsets  --  13 x s16 code offsets, one per op 0..12
      *
      * AcWelcomScreen_Select (v10/v9 0xF7F605, v7 0xF7F201) doubles the op
-     * (add hl, hl), loads the word at AcWelcomScreen_Select_Data + 2*op (the name
+     * (add hl, hl), loads the word at AcWelcomScreen_Select_CaseTable + 2*op (the name
      * is .set in shared/positional_labels.s), loads xix with
      * AcWelcomScreen_RenderBytecode and jumps indirectly -- so each entry is
      * the offset of an op handler from AcWelcomScreen_RenderBytecode.

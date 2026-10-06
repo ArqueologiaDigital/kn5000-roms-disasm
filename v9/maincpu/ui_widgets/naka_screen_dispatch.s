@@ -1339,7 +1339,7 @@ CmpSetP1_DialGrid_Data:
 CmpSetP1_SendAndApplyFunc_Data:	.byte	0x01, 0x00, 0x01, 0x00, 0x03, 0x00
 	.byte 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
 	.byte	0x01, 0x00, 0x01, 0x00
-AcCmpSetGridBoxProc_Data:
+AcCmpSetGridBoxProc_CaseTable:
 	.short	AcCmpSetGridBoxProc_OnIndexswUp - CmpSetP1_DialGrid
 	.short	AcCmpSetGridBoxProc_OnIndexswDown - CmpSetP1_DialGrid
 	.short	AcCmpSetGridBoxProc_OnIndexswUp - CmpSetP1_DialGrid
@@ -1411,7 +1411,7 @@ StrTimeSig_1_2:
 	aligned_string "1/2"
 UI_COMPONENT_DISPATCH_Str_Fmtd:			.byte 0x25, 0x64, 0x00, 0xff
 UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts:	aligned_string "%s (%s)"
-CmpSetP1_GridCheck_EventEnc_Data:
+CmpSetP1_GridCheck_CaseTable:
 	.short	UI_COMPONENT_DISPATCH - UI_COMPONENT_DISPATCH
 	.short	UI_COMPONENT_DISPATCH_CASE1 - UI_COMPONENT_DISPATCH
 	.short	WidgetHandler_PostEventAndReturnZero - UI_COMPONENT_DISPATCH
@@ -1420,7 +1420,7 @@ CmpSetP1_GridCheck_EventEnc_Data:
 	.short	UI_COMPONENT_DISPATCH_CASE3 - UI_COMPONENT_DISPATCH
 	.short	UI_COMPONENT_DISPATCH_CASE4 - UI_COMPONENT_DISPATCH
 	.short	UI_COMPONENT_DISPATCH_CASE5 - UI_COMPONENT_DISPATCH
-CmpSetP1GridCheck_Data:
+CmpSetP1GridCheck_CaseTable:
 	.short	CmpSetP1_GridCheck_EventEnc - CmpSetP1_GridCheck_EventEnc
 	.short	CmpSetP1GridCheck_OnIndexswDown - CmpSetP1_GridCheck_EventEnc
 	.short	CmpSetP1_GridCheck_EventEnc - CmpSetP1_GridCheck_EventEnc
@@ -1556,7 +1556,7 @@ StrPanLeft61:	aligned_string " Left 61"
 StrPanLeft62:	aligned_string " Left 62"
 StrPanLeft63:	aligned_string " Left 63"
 StrPanLeft64:	aligned_string " Left 64"
-CmpSetGridCheck_Data:
+CmpSetGridCheck_CaseTable:
 	.short	GridCheck_Handler0 - GridCheck_Handler0
 	.short	GridCheck_Handler1 - GridCheck_Handler0
 	.short	GridCheck_Handler0 - GridCheck_Handler0
@@ -1779,7 +1779,7 @@ StrTranspose_Minus24:
 	.byte 0x2d, 0x32, 0x34, 0x00
 StrTranspose_Minus25:
 	.byte 0x2d, 0x32, 0x35, 0x00
-S2cGridBoxProc_Data:
+S2cGridBoxProc_CaseTable:
 	.short	S2cGridBoxProc_OnIndexswUp - FdcFormat_DialGrid
 	.short	S2cGridBoxProc_OnIndexswDown - FdcFormat_DialGrid
 	.short	S2cGridBoxProc_OnIndexswUp - FdcFormat_DialGrid
@@ -1817,7 +1817,7 @@ StrBeat02:
 StrBeat01:	.asciz " 1 "
 StrBeatOff:
 	.byte	0x4f, 0x46, 0x46, 0x00
-S2cGridCheck_Data:
+S2cGridCheck_CaseTable:
 	.short	S2c_GridCheck_DataBlock - S2c_GridCheck_DataBlock
 	.short	S2cGridCheck_OnIndexswDown - S2c_GridCheck_DataBlock
 	.short	S2c_GridCheck_DataBlock - S2c_GridCheck_DataBlock
@@ -2157,7 +2157,7 @@ StyleVarGrp_AEnd1:
 	.byte 0x41, 0x00
 StyleVarGrp_AEnd2b:
 	.byte	0x41, 0x00
-AcEasyCmpGridBoxProc_Data:
+AcEasyCmpGridBoxProc_CaseTable:
 	.short	AcEasyCmpGridBoxProc_OnIndexswUp - EasyCmp_DialGrid
 	.short	AcEasyCmpGridBoxProc_OnIndexswDown - EasyCmp_DialGrid
 	.short	AcEasyCmpGridBoxProc_OnIndexswUp - EasyCmp_DialGrid
@@ -2179,7 +2179,7 @@ EasyCmp_GridCheck_EventEnc_Str_OFF:
 	.byte 0x4f, 0x46
 	.byte	0x46, 0x00
 EasyCmp_GridCheck_EventCase2_Str_Fmt3d:	.byte	0x25, 0x33, 0x64, 0x00
-EasyCmpGridCheck_Data:
+EasyCmpGridCheck_CaseTable:
 	.short	EasyCmp_GridCheck_DataBlock - EasyCmp_GridCheck_DataBlock
 	.short	EasyCmpGridCheck_OnIndexswDown - EasyCmp_GridCheck_DataBlock
 	.short	EasyCmp_GridCheck_DataBlock - EasyCmp_GridCheck_DataBlock
@@ -2195,7 +2195,7 @@ StrBankShort_Compile2:	aligned_string "COMPILE2"
 StrBankShort_Compile1:	aligned_string "COMPILE1"
 StrBankShort_User2:	aligned_string "User2   "
 StrBankShort_User1:	aligned_string "User1   "
-MspNameBnkFunc_Data_2:
+MspNameBnkFunc_CaseTable:
 	.short	MspNameBnkFunc_OnGetLargeStep - EasyCmp_GridEvtCase_Default
 	.short	MspNameBnkFunc_OnGetLargeStep - EasyCmp_GridEvtCase_Default
 	.short	MspNaming_CleanupExit - EasyCmp_GridEvtCase_Default
@@ -2287,7 +2287,7 @@ StrMsBankLong2_Effect2:				aligned_string "    Effect 2    "
 StrMsBankLong2_Effect1:				aligned_string "    Effect 1    "
 RgpSetBnk_EvtEnc_SendAudioCmd_Str_PAD_Fmtd:	.byte 0x50, 0x41, 0x44, 0x25
 	.byte	0x64, 0x00
-MspRGrpSetGridCheck_Data:
+MspRGrpSetGridCheck_CaseTable:
 	.short	MspRGrpSetGridCheck_DataBlock - MspRGrpSetGridCheck_DataBlock
 	.short	MspRGrpSetGridCheck_OnIndexswDown - MspRGrpSetGridCheck_DataBlock
 	.short	MspRGrpSetGridCheck_DataBlock - MspRGrpSetGridCheck_DataBlock
@@ -2310,7 +2310,7 @@ MspPlayModeFunc_Data:
 	.long StrSyncToRhythm
 StrSyncToRhythm:	aligned_string "SYNC TO RHYTHM   "
 StrInstantStart:	aligned_string "INSTANT START    "
-MspPlayModeFunc_Data_2:
+MspPlayModeFunc_CaseTable:
 	.short	MspPlayModeFunc_OnGetLargeStep - MspPlayModeFunc_DataBlock
 	.short	MspPlayModeFunc_OnGetLargeStep - MspPlayModeFunc_DataBlock
 	.short	AcSndArgGrid_BoxCase1 - MspPlayModeFunc_DataBlock
@@ -2323,7 +2323,7 @@ MspPlayModeFunc_Data_2:
 	.short	MspPlayModeFunc_DataBlock - MspPlayModeFunc_DataBlock
 AcSndArgGridBoxProc_Data:
 	.byte	0x01, 0x02, 0x04, 0x08, 0x10, 0xff
-AcSndArgGridBoxProc_Data_2:
+AcSndArgGridBoxProc_CaseTable:
 	.short	AcSndArgGridBoxProc_OnIndexswUp - AcSndArgGrid_Init
 	.short	AcSndArgGridBoxProc_OnIndexswDown - AcSndArgGrid_Init
 	.short	AcSndArgGridBoxProc_OnIndexswUp - AcSndArgGrid_Init
@@ -2335,7 +2335,7 @@ AcSndArgGridBoxProc_Data_2:
 ; SndArgGridCheck_JumpTableFallthrough (`lda xix, (<base>:24); jp t, (xix+wa)`).  Only EVT_INDEX_SELECT
 ; has a case; the fallthrough also returns.  (The 0x00EA at entry 4 was once spelled `.long
 ; Presentation_RootEntry`, whose address is 0xEA0000.)
-SndArgGridCheck_Data:
+SndArgGridCheck_CaseTable:
 	.short	SndArgGridCheck_JumpTableFallthrough - SndArgGridCheck_JumpTableFallthrough	; EVT_INDEXSW_UP
 	.short	SndArgGridCheck_JumpTableFallthrough - SndArgGridCheck_JumpTableFallthrough	; EVT_INDEXSW_DOWN
 	.short	SndArgGridCheck_JumpTableFallthrough - SndArgGridCheck_JumpTableFallthrough	; EVT_INDEXSW_UP_AIC

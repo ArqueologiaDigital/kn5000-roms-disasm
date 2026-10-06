@@ -304,10 +304,10 @@ WndEvt_DispatchByEventCode:
 	cp xwa, 0x8
 	jrl ugt, UIDialog_ReturnZeroJmp
 	add xwa, xwa
-	add xwa, WndEvt_DispatchByEventCode_Data
+	add xwa, WndEvt_DispatchByEventCode_CaseTable
 	ld wa, (xwa)
 	lda xix, (WndEvt_EventCodeDispatch:24)
-; Computed jump: target = WndEvt_EventCodeDispatch + WndEvt_DispatchByEventCode_Data[i], WndEvt_DispatchByEventCode_Data = 16-bit offsets (9 words, read
+; Computed jump: target = WndEvt_EventCodeDispatch + WndEvt_DispatchByEventCode_CaseTable[i], WndEvt_DispatchByEventCode_CaseTable = 16-bit offsets (9 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
 ;   0 -> WndEvt_EventCodeDispatch
 ;   1 -> WndEvt_DispatchByEventCode_Case1
@@ -4005,10 +4005,10 @@ PsGridBoxProc:
 	cp xbc, 0x7
 	jrl gt, PsGridBox_Default
 	add xbc, xbc
-	add xbc, PsGridBoxProc_Data
+	add xbc, PsGridBoxProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (PsGridBox_Init:24)
-; Computed jump: target = PsGridBox_Init + PsGridBoxProc_Data[i], PsGridBoxProc_Data = 16-bit offsets (8 words, read
+; Computed jump: target = PsGridBox_Init + PsGridBoxProc_CaseTable[i], PsGridBoxProc_CaseTable = 16-bit offsets (8 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0008a:
 ;   0x1e0008a -> 0xf9e3e8
 ;   0x1e0008b -> 0xf9e3ef
@@ -4500,7 +4500,7 @@ DrawDesignBox_CheckStyle80:
 ; Draw dispatch by part type
 Draw_DispatchByPartType:
 	add wa, wa
-	lda xix, (Draw_DispatchByPartType_Data:24)
+	lda xix, (Draw_DispatchByPartType_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (Draw_StyledBoxWithFrame:24)
 	jp	t, (xix+wa)
@@ -5001,7 +5001,7 @@ DrawDesignBox_PartGroupStyle:
 ; DrawPartGroup dispatch by type
 DrawPartGroup_DispatchByType:
 	add wa, wa
-	lda xix, (DrawPartGroup_DispatchByType_Data:24)
+	lda xix, (DrawPartGroup_DispatchByType_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (DrawPartGroup_TableJump_DefaultCase:24)
 	jp	t, (xix+wa)
