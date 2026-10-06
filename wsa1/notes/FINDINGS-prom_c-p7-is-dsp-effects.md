@@ -136,3 +136,24 @@ Two reasons it was not done in the same pass:
 rows above, and run the byte gate. `notes/prom_c_split.py --verify` is pinned to
 the pre-split commit and will report the rename as a change, which is correct --
 retire it at that point.
+
+## 7. Applied 2026-10-06: the record-held streams by effect and field
+
+The per-stream half of §6's `P7Stream_*` row is now applied, in a commit of its own as §6 asked.
+`notes/prom_c_p7stream_effect_names.py` reads the three tables from ROM bytes, not from the source
+comments: `PoolDir_RecordForUnitProgram`, the 56 `PoolDir_Records` and prom_b's `EffectNames_F147AC`.
+- Each of the 224 streams a record holds becomes `DspEffNN_<EffectName>_<Field>`.
+  - NN is the effect number, i.e. the record's lowest program.
+  - `<Field>` is CoefA / CoefB / ParamsA / ParamsB for +0 / +4 / +8 / +12, from §4's split.
+  - Examples: `DspEff05_Phaser_CoefB`, one of the four streams byte-identical to the KN5000's
+    `DSP_Eff05_Coef_Bytecode`; `DspEff00_NoOperation_CoefA` for record 53.
+- Every stream is held by exactly one record field (asserted).
+- The 72 streams no record holds keep their address names, among them `P7Stream_FCD0F7`, the pool's
+  first.
+- `gen_prom_c_p7stream_pool.py` takes the names into NAMED_STREAMS, so `--emit` still spells every label
+  the source has (379 = 379).
+- `--check` asserts the names are the labels.
+
+Still not applied: the prefix renames `P7Unit_` -> `EffSlot_`, `P7Units_` -> `EffSlots_` and
+`PoolDir_RecordForUnitProgram` -> `EffectNumberToRecord`. Each is a separate argument about a
+whole family.

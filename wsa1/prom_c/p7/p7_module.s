@@ -15708,7 +15708,7 @@ P7Units_BootLoadAndStartTask:
 	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3272  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3277  push XBC
 	pushw	1                                    ; FA3278  push 0x0001
-	lda	xwa, (P7Stream_FD4B4C:24)                     ; FA327B  lda XWA,0xfd4b4c
+	lda	xwa, (DspEff00_NoOperation_ParamsB:24)                     ; FA327B  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA3280  push XWA
 	call	P7Stream_Run                              ; FA3281  call 0xf9a646
 	inc	8, xsp                                 ; FA3285  inc 0,XSP
@@ -15716,7 +15716,7 @@ P7Units_BootLoadAndStartTask:
 	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3289  lda XBC,0xfd4b85
 	push	xbc                                   ; FA328E  push XBC
 	pushw	1                                    ; FA328F  push 0x0001
-	lda	xwa, (P7Stream_FD4AFD:24)                     ; FA3292  lda XWA,0xfd4afd
+	lda	xwa, (DspEff00_NoOperation_CoefB:24)                     ; FA3292  lda XWA,0xfd4afd
 	push	xwa                                   ; FA3297  push XWA
 	call	P7Stream_Run                              ; FA3298  call 0xf9a646
 	inc	8, xsp                                 ; FA329C  inc 0,XSP
@@ -15732,7 +15732,7 @@ P7Units_BootLoadAndStartTask:
 	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA32B7  lda XBC,0xfd4b85
 	push	xbc                                   ; FA32BC  push XBC
 	pushw	2                                    ; FA32BD  push 0x0002
-	lda	xwa, (P7Stream_FD4B4C:24)                     ; FA32C0  lda XWA,0xfd4b4c
+	lda	xwa, (DspEff00_NoOperation_ParamsB:24)                     ; FA32C0  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA32C5  push XWA
 	call	P7Stream_Run                              ; FA32C6  call 0xf9a646
 	inc	8, xsp                                 ; FA32CA  inc 0,XSP
@@ -15740,7 +15740,7 @@ P7Units_BootLoadAndStartTask:
 	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA32CE  lda XBC,0xfd4b85
 	push	xbc                                   ; FA32D3  push XBC
 	pushw	2                                    ; FA32D4  push 0x0002
-	lda	xwa, (P7Stream_FD4AFD:24)                     ; FA32D7  lda XWA,0xfd4afd
+	lda	xwa, (DspEff00_NoOperation_CoefB:24)                     ; FA32D7  lda XWA,0xfd4afd
 	push	xwa                                   ; FA32DC  push XWA
 	call	P7Stream_Run                              ; FA32DD  call 0xf9a646
 	inc	8, xsp                                 ; FA32E1  inc 0,XSP
@@ -15764,7 +15764,7 @@ P7Units_BootLoadAndStartTask:
 	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3313  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3318  push XBC
 	pushw	3                                    ; FA3319  push 0x0003
-	lda	xwa, (P7Stream_FD4B4C:24)                     ; FA331C  lda XWA,0xfd4b4c
+	lda	xwa, (DspEff00_NoOperation_ParamsB:24)                     ; FA331C  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA3321  push XWA
 	call	P7Stream_Run                              ; FA3322  call 0xf9a646
 	inc	8, xsp                                 ; FA3326  inc 0,XSP
@@ -15772,7 +15772,7 @@ P7Units_BootLoadAndStartTask:
 	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA332A  lda XBC,0xfd4b85
 	push	xbc                                   ; FA332F  push XBC
 	pushw	3                                    ; FA3330  push 0x0003
-	lda	xwa, (P7Stream_FD4AFD:24)                     ; FA3333  lda XWA,0xfd4afd
+	lda	xwa, (DspEff00_NoOperation_CoefB:24)                     ; FA3333  lda XWA,0xfd4afd
 	push	xwa                                   ; FA3338  push XWA
 	call	P7Stream_Run                              ; FA3339  call 0xf9a646
 	inc	8, xsp                                 ; FA333D  inc 0,XSP
@@ -15959,7 +15959,7 @@ P7Units_ReloadFixedStreams__FA33FF:
 	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA34EE  lda XBC,0xfd4b85
 	push	xbc                                   ; FA34F3  push XBC
 	pushw	1                                    ; FA34F4  push 0x0001
-	lda	xwa, (P7Stream_FD4B4C:24)                     ; FA34F7  lda XWA,0xfd4b4c
+	lda	xwa, (DspEff00_NoOperation_ParamsB:24)                     ; FA34F7  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA34FC  push XWA
 	call	P7Stream_Run                              ; FA34FD  call 0xf9a646
 	inc	8, xsp                                 ; FA3501  inc 0,XSP
@@ -15967,7 +15967,7 @@ P7Units_ReloadFixedStreams__FA33FF:
 	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3505  lda XBC,0xfd4b85
 	push	xbc                                   ; FA350A  push XBC
 	pushw	1                                    ; FA350B  push 0x0001
-	lda	xwa, (P7Stream_FD4AFD:24)                     ; FA350E  lda XWA,0xfd4afd
+	lda	xwa, (DspEff00_NoOperation_CoefB:24)                     ; FA350E  lda XWA,0xfd4afd
 	push	xwa                                   ; FA3513  push XWA
 	call	P7Stream_Run                              ; FA3514  call 0xf9a646
 	inc	8, xsp                                 ; FA3518  inc 0,XSP
@@ -15983,7 +15983,7 @@ P7Units_ReloadFixedStreams__FA33FF:
 	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3533  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3538  push XBC
 	pushw	2                                    ; FA3539  push 0x0002
-	lda	xwa, (P7Stream_FD4B4C:24)                     ; FA353C  lda XWA,0xfd4b4c
+	lda	xwa, (DspEff00_NoOperation_ParamsB:24)                     ; FA353C  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA3541  push XWA
 	call	P7Stream_Run                              ; FA3542  call 0xf9a646
 	inc	8, xsp                                 ; FA3546  inc 0,XSP
@@ -15991,7 +15991,7 @@ P7Units_ReloadFixedStreams__FA33FF:
 	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA354A  lda XBC,0xfd4b85
 	push	xbc                                   ; FA354F  push XBC
 	pushw	2                                    ; FA3550  push 0x0002
-	lda	xwa, (P7Stream_FD4AFD:24)                     ; FA3553  lda XWA,0xfd4afd
+	lda	xwa, (DspEff00_NoOperation_CoefB:24)                     ; FA3553  lda XWA,0xfd4afd
 	push	xwa                                   ; FA3558  push XWA
 	call	P7Stream_Run                              ; FA3559  call 0xf9a646
 	inc	8, xsp                                 ; FA355D  inc 0,XSP
@@ -16015,7 +16015,7 @@ P7Units_ReloadFixedStreams__FA33FF:
 	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA358F  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3594  push XBC
 	pushw	3                                    ; FA3595  push 0x0003
-	lda	xwa, (P7Stream_FD4B4C:24)                     ; FA3598  lda XWA,0xfd4b4c
+	lda	xwa, (DspEff00_NoOperation_ParamsB:24)                     ; FA3598  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA359D  push XWA
 	call	P7Stream_Run                              ; FA359E  call 0xf9a646
 	inc	8, xsp                                 ; FA35A2  inc 0,XSP
@@ -16023,7 +16023,7 @@ P7Units_ReloadFixedStreams__FA33FF:
 	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA35A6  lda XBC,0xfd4b85
 	push	xbc                                   ; FA35AB  push XBC
 	pushw	3                                    ; FA35AC  push 0x0003
-	lda	xwa, (P7Stream_FD4AFD:24)                     ; FA35AF  lda XWA,0xfd4afd
+	lda	xwa, (DspEff00_NoOperation_CoefB:24)                     ; FA35AF  lda XWA,0xfd4afd
 	push	xwa                                   ; FA35B4  push XWA
 	call	P7Stream_Run                              ; FA35B5  call 0xf9a646
 	inc	8, xsp                                 ; FA35B9  inc 0,XSP

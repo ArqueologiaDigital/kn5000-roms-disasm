@@ -288,6 +288,11 @@ def census():
 # Everything else keeps its address, which is the honest answer while the byte-code is
 # undecoded.  Emitting the old spelling here would silently undo the rename in the .s.
 NAMED_STREAMS = {0xFD2C2B: "P7Stream_UnitPreamble"}
+# ★ 2026-10-06: the 224 streams PoolDir_Records holds are named for their DSP effect and record field, derived
+# from ROM bytes by notes/prom_c_p7stream_effect_names.py (FINDINGS-prom_c-p7-is-dsp-effects.md's chain).
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from prom_c_p7stream_effect_names import stream_names as _effect_stream_names  # noqa: E402
+NAMED_STREAMS.update({a: d["name"] for a, d in _effect_stream_names().items()})
 
 
 def label(kind, a):
