@@ -163,16 +163,8 @@ typedef struct __attribute__((packed)) {
     char Load_str[14];
     char DiskMenu_str[14];
     char Off_str[14];
-    uint16_t field_0a38;
-    uint16_t field_0a3a;
-    char str_38[2];
-    char str_39[2];
-    char str_40[2];
-    char str_41[2];
-    char str_42[2];
-    char str_43[2];
-    uint16_t field_0a48;
-    uint8_t pad_0[2];  /* zero padding */
+    /* JumpInsertFunc_CaseTable: 10 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t JumpInsertFunc_CaseTable[10];
     uint32_t Technics_str_ptr;
     uint32_t Smf_str_ptr;
     char Smf_str[12];
@@ -199,36 +191,12 @@ typedef struct __attribute__((packed)) {
     char ISC_str[4];
     char ISD_str[4];
     char WWC_str[4];
-    uint8_t pad_1[2];  /* zero padding */
-    uint16_t field_0bfc;
-    char str_65[2];
-    char A_str[2];
-    char W_str[2];
-    char l_str[2];
-    uint8_t pad_2[2];  /* zero padding */
-    uint16_t field_0c08;
-    uint16_t field_0c0a;
-    uint16_t field_0c0c;
-    uint16_t field_0c0e;
-    uint16_t field_0c10;
-    uint16_t field_0c12;
-    uint16_t field_0c14;
-    uint16_t field_0c16;
-    uint16_t field_0c18;
-    uint16_t field_0c1a;
-    uint16_t field_0c1c;
-    uint8_t pad_3[2];  /* zero padding */
-    uint16_t field_0c20;
-    uint16_t field_0c22;
-    uint16_t field_0c24;
-    uint16_t field_0c26;
-    char str_69[2];
-    char str_70[2];
-    char str_71[2];
-    char str_72[2];
-    char str_73[2];
-    char A_str_2[2];
-    char F_str[2];
+    /* FDC_WaitReady_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t FDC_WaitReady_CaseTable[6];
+    /* FDC_COMMAND_DISPATCHER_CaseTable: 12 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t FDC_COMMAND_DISPATCHER_CaseTable[12];
+    /* FDC_CommandEntry_CopyParams_CaseTable: 12 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t FDC_CommandEntry_CopyParams_CaseTable[12];
     uint16_t field_0c36;
     uint8_t pad_4[2];  /* zero padding */
     uint16_t field_0c3a;
@@ -357,13 +325,10 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_50[2];  /* zero padding */
     uint16_t field_0d39;
     char str_84[16];
-    uint16_t field_0d4b;
-    uint16_t field_0d4d;
-    uint16_t field_0d4f;
-    uint16_t field_0d51;
-    uint16_t field_0d53;
-    uint16_t field_0d55;
-    uint16_t field_0d57;
+    uint8_t field_0d4b;
+    /* MainPmanControl_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t MainPmanControl_CaseTable[6];
+    uint8_t field_0d58;
     uint16_t field_0d59;
     uint16_t field_0d5b;
     uint16_t field_0d5d;
@@ -468,84 +433,23 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0e50;
     uint16_t field_0e52;
     char str_92[2];
-    uint16_t field_0e56;
-    uint16_t field_0e58;
-    uint16_t field_0e5a;
-    uint16_t field_0e5c;
-    uint16_t field_0e5e;
-    uint16_t field_0e60;
-    uint16_t field_0e62;
-    uint16_t field_0e64;
-    uint16_t field_0e66;
-    uint16_t field_0e68;
-    uint16_t field_0e6a;
-    uint16_t field_0e6c;
-    uint16_t field_0e6e;
-    char F_str_2[2];
-    char K_str[2];
-    char P_str[2];
-    char U_str[2];
-    char Z_str[2];
-    char __str[2];
-    char d_str[2];
-    char i_str[2];
-    uint16_t field_0e80;
-    uint16_t field_0e82;
-    char str_101[2];
-    char str_102[2];
-    char str_103[2];
-    uint8_t pad_76[2];  /* zero padding */
-    uint16_t field_0e8c;
-    uint16_t field_0e8e;
-    uint16_t field_0e90;
-    uint16_t field_0e92;
-    uint16_t field_0e94;
-    char K_str_2[2];
-    char str_105[2];
-    uint16_t field_0e9a;
-    uint16_t field_0e9c;
-    uint16_t field_0e9e;
-    uint16_t field_0ea0;
-    uint16_t field_0ea2;
-    uint16_t field_0ea4;
-    uint16_t field_0ea6;
-    char q_str[2];
-    uint16_t field_0eaa;
-    uint16_t field_0eac;
-    uint16_t field_0eae;
-    uint16_t field_0eb0;
-    uint16_t field_0eb2;
+    /* CtrlPanel_FuncDispatch_CaseTable: 13 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t CtrlPanel_FuncDispatch_CaseTable[13];
+    /* GetEditSwPoint_CaseTable: 13 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t GetEditSwPoint_CaseTable[13];
+    /* SetWallPaper_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t SetWallPaper_CaseTable[6];
+    /* IvDirmdScreenProc_Str_K: 15 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t IvDirmdScreenProc_Str_K[15];
     uint32_t DirmdTitleFunc_PtrTable[4];  /* 4 pointers */
     char DirmdTitleNew_str[18];
     char DirmdTitleOld_str[18];
     char DirmdTitleESw_str[24];
     char DirmdTitleCur_str[18];
-    uint16_t field_0f12;
-    uint16_t field_0f14;
-    uint8_t pad_77[2];  /* zero padding */
-    uint16_t field_0f18;
-    uint16_t field_0f1a;
-    uint16_t field_0f1c;
-    uint16_t field_0f1e;
-    char S_str[2];
-    uint16_t field_0f22;
-    uint16_t field_0f24;
-    uint16_t field_0f26;
-    uint16_t field_0f28;
-    uint16_t field_0f2a;
-    uint16_t field_0f2c;
-    uint16_t field_0f2e;
-    char str_112[2];
-    uint8_t pad_78[2];  /* zero padding */
-    uint16_t field_0f34;
-    uint16_t field_0f36;
-    uint16_t field_0f38;
-    uint16_t field_0f3a;
-    uint16_t field_0f3c;
-    uint16_t field_0f3e;
-    uint16_t field_0f40;
-    uint16_t field_0f42;
-    uint16_t field_0f44;
+    /* DirmdEmulator_CaseTable: 16 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t DirmdEmulator_CaseTable[16];
+    /* WindowProc_CaseTable: 10 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t WindowProc_CaseTable[10];
     uint32_t ptrs_10[3];  /* 3 pointers */
     char str_113[14];
     char Abc_str[14];
@@ -675,15 +579,8 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_1242;
     char __str_4[2];
     char str_232[2];
-    uint8_t pad_79[2];  /* zero padding */
-    char str_233[2];
-    char a_str_2[2];
-    uint16_t field_1250;
-    uint16_t field_1252;
-    uint16_t field_1254;
-    uint16_t field_1256;
-    uint16_t field_1258;
-    uint16_t field_125a;
+    /* WndEvt_DispatchByEventCode_CaseTable: 9 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t WndEvt_DispatchByEventCode_CaseTable[9];
     char ModeEdit_HandlePaint_Data[12];
     char TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts[12];
     uint16_t field_1274;
@@ -939,25 +836,13 @@ typedef struct __attribute__((packed)) {
     char PsGridBox_Scroll_Render_Str_Fmtd_Fmtd[6];
     char PartChannelOctaveLocal_str[32];
     char Right1Right2LeftPart4_str[54];
-    uint16_t field_159c;
-    uint16_t field_159e;
-    uint16_t field_15a0;
-    uint16_t field_15a2;
-    uint16_t field_15a4;
-    uint16_t field_15a6;
-    uint16_t field_15a8;
-    uint16_t field_15aa;
-    char k_str_2[2];
-    uint16_t field_15ae;
-    char k_str_3[2];
-    uint16_t field_15b2;
-    uint16_t field_15b4;
-    uint16_t field_15b6;
-    uint16_t field_15b8;
+    /* PsGridBoxProc_CaseTable: 8 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t PsGridBoxProc_CaseTable[8];
+    /* AcGridBoxProc_CaseTable: 7 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t AcGridBoxProc_CaseTable[7];
     char str_255[6];
-    uint8_t pad_104[8];  /* zero padding */
-    char str_256[2];
-    uint8_t pad_105[4];  /* zero padding */
+    /* GridCheck_CaseTable: 7 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t GridCheck_CaseTable[7];
     char PsNumEditBox_Confirm_Str_Chr25[2];
     char PsNumEditBox_Confirm_Str_Fmtd[4];
     char PsNumEditBox_Confirm_Str_d[2];
@@ -974,16 +859,8 @@ typedef struct __attribute__((packed)) {
     char AcNumEdit_GetText_Str_d[2];
     char LswEditCheck_Str_Fmt3d[4];
     char RamEditCheck_JumpStart_Str_Fmt3d[4];
-    uint16_t field_160e;
-    uint16_t field_1610;
-    char str_269[2];
-    char str_270[2];
-    char str_271[2];
-    char str_272[2];
-    char str_273[2];
-    char str_274[2];
-    uint16_t field_161e;
-    uint8_t pad_106[2];  /* zero padding */
+    /* RamEditCheck_CaseTable: 10 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t RamEditCheck_CaseTable[10];
     uint32_t FALSE_str_ptr;
     uint32_t True_str_ptr;
     char True_str[6];
@@ -1003,23 +880,8 @@ typedef struct __attribute__((packed)) {
     char ButtonState_DispatchDSP_InlineData_Str_N80[4];
     char YES_str[4];
     char NO_str[4];
-    uint8_t pad_107[2];  /* zero padding */
-    uint16_t field_1670;
-    uint16_t field_1672;
-    char w_str_2[2];
-    char str_293[2];
-    char str_294[2];
-    char str_295[2];
-    char D_str_2[2];
-    char K_str_4[2];
-    char str_298[2];
-    char g_str_2[2];
-    char w_str_3[2];
-    char str_301[2];
-    char str_302[2];
-    char w_str_4[2];
-    char R_str_3[2];
-    char Y_str_2[2];
+    /* ButtonState_DispatchDSP_CaseTable: 17 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t ButtonState_DispatchDSP_CaseTable[17];
     uint16_t field_1690;
     uint16_t field_1692;
     uint16_t field_1694;
@@ -1029,9 +891,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_169c;
     uint16_t field_169e;
     uint16_t field_16a0;
-    uint8_t pad_108[2];  /* zero padding */
-    char str_306[2];
-    char str_307[2];
+    /* AcIndexEdit_DispatchDSP_CaseTable: 3 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t AcIndexEdit_DispatchDSP_CaseTable[3];
     char Page_str[12];
     char PAGE_str[6];
     char MnSw_str[6];
@@ -1198,26 +1059,8 @@ typedef struct __attribute__((packed)) {
     char name_str[6];
     char romram_str[8];
     char ObjectProc_Evt1E00018_Str_Empty[2];
-    uint8_t pad_186[2];  /* zero padding */
-    uint16_t field_1bfa;
-    char str_394[2];
-    uint16_t field_1bfe;
-    char A_str_5[2];
-    uint16_t field_1c02;
-    uint16_t field_1c04;
-    uint16_t field_1c06;
-    uint16_t field_1c08;
-    char P_str_3[2];
-    uint16_t field_1c0c;
-    uint16_t field_1c0e;
-    uint16_t field_1c10;
-    uint16_t field_1c12;
-    uint16_t field_1c14;
-    uint16_t field_1c16;
-    uint16_t field_1c18;
-    char str_397[2];
-    uint16_t field_1c1c;
-    uint16_t field_1c1e;
+    /* ObjectProc_CaseTable: 20 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t ObjectProc_CaseTable[20];
     uint8_t pad_187[2];  /* zero padding */
     uint16_t field_1c22;
     uint16_t field_1c24;
@@ -1234,20 +1077,10 @@ typedef struct __attribute__((packed)) {
     char str_399[2];
     char str_400[2];
     char str_401[2];
-    uint8_t pad_189[2];  /* zero padding */
-    uint16_t field_1c4e;
-    uint16_t field_1c50;
-    uint16_t field_1c52;
-    char str_402[2];
-    char z_str_2[2];
-    uint16_t field_1c58;
-    uint16_t field_1c5a;
-    uint16_t field_1c5c;
-    char str_404[2];
-    char S_str_3[2];
-    uint16_t field_1c62;
-    uint16_t field_1c64;
-    char j_str_2[2];
+    /* ClassProc_CaseTable: 8 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t ClassProc_CaseTable[8];
+    /* ModeProc_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t ModeProc_CaseTable[6];
     char str_407[2];
     char str_408[2];
     uint16_t field_1c6c;
@@ -1322,12 +1155,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1d0c;
     char str_423[2];
     uint8_t pad_201[4];  /* zero padding */
-    char j_str_3[2];
-    uint16_t field_1d16;
-    char str_425[2];
-    char S_str_4[2];
-    uint16_t field_1d1c;
-    uint16_t field_1d1e;
+    /* TitleProc_Str_j: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t TitleProc_Str_j[6];
     uint8_t pad_202[2];  /* zero padding */
     uint16_t field_1d22;
     uint16_t field_1d24;
@@ -1340,13 +1169,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1d34;
     uint16_t field_1d36;
     uint16_t field_1d38;
-    char K_str_5[2];
-    uint16_t field_1d3c;
-    uint16_t field_1d3e;
-    uint16_t field_1d40;
-    uint16_t field_1d42;
-    uint16_t field_1d44;
-    uint16_t field_1d46;
+    /* ViewableProc_CaseTable: 7 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t ViewableProc_CaseTable[7];
     /* BoxStyle7_Setup_Data: text (the asm slice of the same name) */
     char BoxStyle7_Setup_Data[10];
     char BoxStyle7_CalcWidth_Str_Fmts_Fmtd[6];
@@ -1428,59 +1252,16 @@ typedef struct __attribute__((packed)) {
     char str_496[2];
     char ConstFlagProc_SetValue_Check_Str_Empty[2];
     char str_498[2];
-    uint16_t field_1f38;
-    char str_499[2];
-    char str_500[2];
-    char str_501[2];
-    uint16_t field_1f40;
-    uint8_t pad_203[2];  /* zero padding */
-    uint16_t field_1f44;
+    /* CommonIDProc_CaseTable: 7 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t CommonIDProc_CaseTable[7];
     /* DrawIcons_PixelPairTable: [icon byte] -> {left, right} colour index of its two 4-bpp pixels, nibble n -> n (n < 8) or 0xF0 + n; read by DrawIcons_Impl (ui/drawing_primitives.s) */
     uint8_t DrawIcons_PixelPairTable[256][2];
     /* DrawBitmapFile_Impl_Data: text (the asm slice of the same name) */
     char DrawBitmapFile_Impl_Data[4];
-    uint8_t field_214a;
-    uint16_t field_214b;
-    uint16_t field_214d;
-    uint16_t field_214f;
-    uint16_t field_2151;
-    uint16_t field_2153;
-    uint16_t field_2155;
-    uint16_t field_2157;
-    uint16_t field_2159;
-    uint16_t field_215b;
-    uint16_t field_215d;
-    uint16_t field_215f;
-    uint16_t field_2161;
-    uint16_t field_2163;
-    uint16_t field_2165;
-    uint16_t field_2167;
-    uint16_t field_2169;
-    uint16_t field_216b;
-    uint16_t field_216d;
-    uint16_t field_216f;
-    uint16_t field_2171;
-    uint16_t field_2173;
-    uint16_t field_2175;
-    uint16_t field_2177;
-    uint16_t field_2179;
-    uint16_t field_217b;
-    uint16_t field_217d;
-    uint16_t field_217f;
-    uint16_t field_2181;
-    uint16_t field_2183;
-    uint16_t field_2185;
-    uint16_t field_2187;
-    uint16_t field_2189;
-    uint16_t field_218b;
-    uint16_t field_218d;
-    uint16_t field_218f;
-    uint16_t field_2191;
-    uint16_t field_2193;
-    uint16_t field_2195;
-    uint16_t field_2197;
-    uint16_t field_2199;
-    uint8_t field_219b;
+    /* DrawPartGroup_DispatchByType_CaseTable: 16 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t DrawPartGroup_DispatchByType_CaseTable[16];
+    /* Draw_DispatchByPartType_CaseTable: 25 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t Draw_DispatchByPartType_CaseTable[25];
     /* Gfx_LoadSplashBMP_Data: text (the asm slice of the same name) */
     char Gfx_LoadSplashBMP_Data[4];
     /* CaptureLcd_Str_BM: text (the asm slice of the same name) */
@@ -2382,25 +2163,10 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .Off_str = "     OFF     ",
 
-    .field_0a38 = 0x001E,
-
-    .field_0a3a = 0x001E,
-
-    .str_38 = "&",
-
-    .str_39 = "&",
-
-    .str_40 = "&",
-
-    .str_41 = "\"",
-
-    .str_42 = "&",
-
-    .str_43 = "*",
-
-    .field_0a48 = 0x001E,
-
-    .pad_0 = { 0 },
+    .JumpInsertFunc_CaseTable = {
+        0x001E, 0x001E, 0x0026, 0x0026, 0x0026, 0x0022, 0x0026, 0x002A,
+        0x001E, 0x0000,
+    },
 
     .Technics_str_ptr = SELF(Technics_str),
 
@@ -2471,65 +2237,19 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .WWC_str = "WWC",
 
-    .pad_1 = { 0 },
+    .FDC_WaitReady_CaseTable = {
+        0x0000, 0x0015, 0x002B, 0x0041, 0x0057, 0x006C,
+    },
 
-    .field_0bfc = 0x0015,
+    .FDC_COMMAND_DISPATCHER_CaseTable = {
+        0x0000, 0x000E, 0x000E, 0x000E, 0x000E, 0x000E, 0x0008, 0x0008,
+        0x0008, 0x000B, 0x0008, 0x000E,
+    },
 
-    .str_65 = "+",
-
-    .A_str = "A",
-
-    .W_str = "W",
-
-    .l_str = "l",
-
-    .pad_2 = { 0 },
-
-    .field_0c08 = 0x000E,
-
-    .field_0c0a = 0x000E,
-
-    .field_0c0c = 0x000E,
-
-    .field_0c0e = 0x000E,
-
-    .field_0c10 = 0x000E,
-
-    .field_0c12 = 0x0008,
-
-    .field_0c14 = 0x0008,
-
-    .field_0c16 = 0x0008,
-
-    .field_0c18 = 0x000B,
-
-    .field_0c1a = 0x0008,
-
-    .field_0c1c = 0x000E,
-
-    .pad_3 = { 0 },
-
-    .field_0c20 = 0x0005,
-
-    .field_0c22 = 0x000D,
-
-    .field_0c24 = 0x0015,
-
-    .field_0c26 = 0x001D,
-
-    .str_69 = "%",
-
-    .str_70 = "-",
-
-    .str_71 = "2",
-
-    .str_72 = "7",
-
-    .str_73 = "<",
-
-    .A_str_2 = "A",
-
-    .F_str = "F",
+    .FDC_CommandEntry_CopyParams_CaseTable = {
+        0x0000, 0x0005, 0x000D, 0x0015, 0x001D, 0x0025, 0x002D, 0x0032,
+        0x0037, 0x003C, 0x0041, 0x0046,
+    },
 
     .field_0c36 = 0x0007,
 
@@ -2787,19 +2507,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_84 = "    ------     ",
 
-    .field_0d4b = 0x00FF,
+    .field_0d4b = 0xFF,
 
-    .field_0d4d = 0x1100,
+    .MainPmanControl_CaseTable = {
+        0x0000, 0x0011, 0x0022, 0x0064, 0x007D, 0x0096,
+    },
 
-    .field_0d4f = 0x2200,
-
-    .field_0d51 = 0x6400,
-
-    .field_0d53 = 0x7D00,
-
-    .field_0d55 = 0x9600,
-
-    .field_0d57 = 0x3800,
+    .field_0d58 = 0x38,
 
     .field_0d59 = 0x3301,
 
@@ -3019,99 +2733,24 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_92 = ALIGNED_STRING(""),
 
-    .field_0e56 = 0x0B0F,
+    .CtrlPanel_FuncDispatch_CaseTable = {
+        0x0B0F, 0x0BC9, 0x0BC5, 0x0B2B, 0x0B4E, 0x0B1D, 0x0B24, 0x054C,
+        0x05AD, 0x07A0, 0x0657, 0x06FA, 0x05EC,
+    },
 
-    .field_0e58 = 0x0BC9,
+    .GetEditSwPoint_CaseTable = {
+        0x0046, 0x004B, 0x0050, 0x0055, 0x005A, 0x005F, 0x0064, 0x0069,
+        0x0004, 0x0012, 0x0020, 0x002E, 0x003C,
+    },
 
-    .field_0e5a = 0x0BC5,
+    .SetWallPaper_CaseTable = {
+        0x0000, 0x000F, 0x001C, 0x0009, 0x0018, 0x0018,
+    },
 
-    .field_0e5c = 0x0B2B,
-
-    .field_0e5e = 0x0B4E,
-
-    .field_0e60 = 0x0B1D,
-
-    .field_0e62 = 0x0B24,
-
-    .field_0e64 = 0x054C,
-
-    .field_0e66 = 0x05AD,
-
-    .field_0e68 = 0x07A0,
-
-    .field_0e6a = 0x0657,
-
-    .field_0e6c = 0x06FA,
-
-    .field_0e6e = 0x05EC,
-
-    .F_str_2 = "F",
-
-    .K_str = "K",
-
-    .P_str = "P",
-
-    .U_str = "U",
-
-    .Z_str = "Z",
-
-    .__str = "_",
-
-    .d_str = "d",
-
-    .i_str = "i",
-
-    .field_0e80 = 0x0004,
-
-    .field_0e82 = 0x0012,
-
-    .str_101 = " ",
-
-    .str_102 = ".",
-
-    .str_103 = "<",
-
-    .pad_76 = { 0 },
-
-    .field_0e8c = 0x000F,
-
-    .field_0e8e = 0x001C,
-
-    .field_0e90 = 0x0009,
-
-    .field_0e92 = 0x0018,
-
-    .field_0e94 = 0x0018,
-
-    .K_str_2 = "K",
-
-    .str_105 = "]",
-
-    .field_0e9a = 0x0125,
-
-    .field_0e9c = 0x0125,
-
-    .field_0e9e = 0x0125,
-
-    .field_0ea0 = 0x0125,
-
-    .field_0ea2 = 0x00D8,
-
-    .field_0ea4 = 0x0125,
-
-    .field_0ea6 = 0x0125,
-
-    .q_str = "q",
-
-    .field_0eaa = 0x0125,
-
-    .field_0eac = 0x0125,
-
-    .field_0eae = 0x00D4,
-
-    .field_0eb0 = 0x00D4,
-
-    .field_0eb2 = 0x00AD,
+    .IvDirmdScreenProc_Str_K = {
+        0x004B, 0x005D, 0x0125, 0x0125, 0x0125, 0x0125, 0x00D8, 0x0125,
+        0x0125, 0x0071, 0x0125, 0x0125, 0x00D4, 0x00D4, 0x00AD,
+    },
 
     .DirmdTitleFunc_PtrTable = {
         NAKA_ADDR(DirmdEmu_CaseF),
@@ -3128,57 +2767,15 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DirmdTitleCur_str = ALIGNED_STRING("DirmdTitleCur();"),
 
-    .field_0f12 = 0x0080,
+    .DirmdEmulator_CaseTable = {
+        0x0080, 0x0080, 0x0000, 0x0080, 0x0080, 0x0080, 0x0080, 0x0053,
+        0x0080, 0x0080, 0x000F, 0x0080, 0x0080, 0x0080, 0x0080, 0x003B,
+    },
 
-    .field_0f14 = 0x0080,
-
-    .pad_77 = { 0 },
-
-    .field_0f18 = 0x0080,
-
-    .field_0f1a = 0x0080,
-
-    .field_0f1c = 0x0080,
-
-    .field_0f1e = 0x0080,
-
-    .S_str = "S",
-
-    .field_0f22 = 0x0080,
-
-    .field_0f24 = 0x0080,
-
-    .field_0f26 = 0x000F,
-
-    .field_0f28 = 0x0080,
-
-    .field_0f2a = 0x0080,
-
-    .field_0f2c = 0x0080,
-
-    .field_0f2e = 0x0080,
-
-    .str_112 = ";",
-
-    .pad_78 = { 0 },
-
-    .field_0f34 = 0x00C7,
-
-    .field_0f36 = 0x02BF,
-
-    .field_0f38 = 0x02BF,
-
-    .field_0f3a = 0x02BF,
-
-    .field_0f3c = 0x02BF,
-
-    .field_0f3e = 0x024F,
-
-    .field_0f40 = 0x024F,
-
-    .field_0f42 = 0x024F,
-
-    .field_0f44 = 0x01E8,
+    .WindowProc_CaseTable = {
+        0x0000, 0x00C7, 0x02BF, 0x02BF, 0x02BF, 0x02BF, 0x024F, 0x024F,
+        0x024F, 0x01E8,
+    },
 
     .ptrs_10 = {
         SELF(Abc_str_2),
@@ -3560,23 +3157,10 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_232 = " ",
 
-    .pad_79 = { 0 },
-
-    .str_233 = "-",
-
-    .a_str_2 = "a",
-
-    .field_1250 = 0x00DD,
-
-    .field_1252 = 0x02AE,
-
-    .field_1254 = 0x0369,
-
-    .field_1256 = 0x03DF,
-
-    .field_1258 = 0x0455,
-
-    .field_125a = 0x059E,
+    .WndEvt_DispatchByEventCode_CaseTable = {
+        0x0000, 0x002D, 0x0061, 0x00DD, 0x02AE, 0x0369, 0x03DF, 0x0455,
+        0x059E,
+    },
 
     .ModeEdit_HandlePaint_Data = "0x%02X : %s",
 
@@ -4086,43 +3670,19 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .Right1Right2LeftPart4_str = ALIGNED_STRING("|-|RIGHT1|RIGHT2|LEFT|PART4|PART5|PART6|PART7|PART8|"),
 
-    .field_159c = 0x09C3,
+    .PsGridBoxProc_CaseTable = {
+        0x09C3, 0x09CA, 0x0887, 0x0981, 0x09DF, 0x0ABB, 0x0B0B, 0x0ADB,
+    },
 
-    .field_159e = 0x09CA,
-
-    .field_15a0 = 0x0887,
-
-    .field_15a2 = 0x0981,
-
-    .field_15a4 = 0x09DF,
-
-    .field_15a6 = 0x0ABB,
-
-    .field_15a8 = 0x0B0B,
-
-    .field_15aa = 0x0ADB,
-
-    .k_str_2 = "k",
-
-    .field_15ae = 0x0116,
-
-    .k_str_3 = "k",
-
-    .field_15b2 = 0x0116,
-
-    .field_15b4 = 0x0200,
-
-    .field_15b6 = 0x01E9,
-
-    .field_15b8 = 0x01E9,
+    .AcGridBoxProc_CaseTable = {
+        0x006B, 0x0116, 0x006B, 0x0116, 0x0200, 0x01E9, 0x01E9,
+    },
 
     .str_255 = "%d-%d",
 
-    .pad_104 = { 0 },
-
-    .str_256 = "?",
-
-    .pad_105 = { 0 },
+    .GridCheck_CaseTable = {
+        0x0000, 0x0000, 0x0000, 0x0000, 0x003F, 0x0000, 0x0000,
+    },
 
     .PsNumEditBox_Confirm_Str_Chr25 = "%",
 
@@ -4156,25 +3716,10 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .RamEditCheck_JumpStart_Str_Fmt3d = "%3d",
 
-    .field_160e = 0x0019,
-
-    .field_1610 = 0x001D,
-
-    .str_269 = "6",
-
-    .str_270 = "6",
-
-    .str_271 = "6",
-
-    .str_272 = "!",
-
-    .str_273 = "(",
-
-    .str_274 = "/",
-
-    .field_161e = 0x0019,
-
-    .pad_106 = { 0 },
+    .RamEditCheck_CaseTable = {
+        0x0019, 0x001D, 0x0036, 0x0036, 0x0036, 0x0021, 0x0028, 0x002F,
+        0x0019, 0x0000,
+    },
 
     .FALSE_str_ptr = SELF(FALSE_str),
 
@@ -4214,39 +3759,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .NO_str = ALIGNED_STRING("NO"),
 
-    .pad_107 = { 0 },
-
-    .field_1670 = 0x0013,
-
-    .field_1672 = 0x001A,
-
-    .w_str_2 = "w",
-
-    .str_293 = "/",
-
-    .str_294 = "6",
-
-    .str_295 = "=",
-
-    .D_str_2 = "D",
-
-    .K_str_4 = "K",
-
-    .str_298 = "`",
-
-    .g_str_2 = "g",
-
-    .w_str_3 = "w",
-
-    .str_301 = "!",
-
-    .str_302 = "(",
-
-    .w_str_4 = "w",
-
-    .R_str_3 = "R",
-
-    .Y_str_2 = "Y",
+    .ButtonState_DispatchDSP_CaseTable = {
+        0x0000, 0x0013, 0x001A, 0x0077, 0x002F, 0x0036, 0x003D, 0x0044,
+        0x004B, 0x0060, 0x0067, 0x0077, 0x0021, 0x0028, 0x0077, 0x0052,
+        0x0059,
+    },
 
     .field_1690 = 0x0100,
 
@@ -4266,11 +3783,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_16a0 = 0xFF01,
 
-    .pad_108 = { 0 },
-
-    .str_306 = "'",
-
-    .str_307 = "9",
+    .AcIndexEdit_DispatchDSP_CaseTable = {
+        0x0000, 0x0027, 0x0039,
+    },
 
     .Page_str = ALIGNED_STRING("PAGE %d/%d"),
 
@@ -4699,45 +4214,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .ObjectProc_Evt1E00018_Str_Empty = ALIGNED_STRING(""),
 
-    .pad_186 = { 0 },
-
-    .field_1bfa = 0x0005,
-
-    .str_394 = "2",
-
-    .field_1bfe = 0x0014,
-
-    .A_str_5 = "A",
-
-    .field_1c02 = 0x029D,
-
-    .field_1c04 = 0x029D,
-
-    .field_1c06 = 0x0099,
-
-    .field_1c08 = 0x00A8,
-
-    .P_str_3 = "P",
-
-    .field_1c0c = 0x0112,
-
-    .field_1c0e = 0x014E,
-
-    .field_1c10 = 0x018C,
-
-    .field_1c12 = 0x01CA,
-
-    .field_1c14 = 0x020D,
-
-    .field_1c16 = 0x024F,
-
-    .field_1c18 = 0x025D,
-
-    .str_397 = "#",
-
-    .field_1c1c = 0x026E,
-
-    .field_1c1e = 0x028D,
+    .ObjectProc_CaseTable = {
+        0x0000, 0x0005, 0x0032, 0x0014, 0x0041, 0x029D, 0x029D, 0x0099,
+        0x00A8, 0x0050, 0x0112, 0x014E, 0x018C, 0x01CA, 0x020D, 0x024F,
+        0x025D, 0x0023, 0x026E, 0x028D,
+    },
 
     .pad_187 = { 0 },
 
@@ -4775,33 +4256,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_401 = ALIGNED_STRING(""),
 
-    .pad_189 = { 0 },
+    .ClassProc_CaseTable = {
+        0x0000, 0x0005, 0x000A, 0x0018, 0x0020, 0x007A, 0x0104, 0x011E,
+    },
 
-    .field_1c4e = 0x0005,
-
-    .field_1c50 = 0x000A,
-
-    .field_1c52 = 0x0018,
-
-    .str_402 = " ",
-
-    .z_str_2 = "z",
-
-    .field_1c58 = 0x0104,
-
-    .field_1c5a = 0x011E,
-
-    .field_1c5c = 0x001C,
-
-    .str_404 = "=",
-
-    .S_str_3 = "S",
-
-    .field_1c62 = 0x009A,
-
-    .field_1c64 = 0x00A2,
-
-    .j_str_2 = "j",
+    .ModeProc_CaseTable = {
+        0x001C, 0x003D, 0x0053, 0x009A, 0x00A2, 0x006A,
+    },
 
     .str_407 = ALIGNED_STRING(""),
 
@@ -4951,17 +4412,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_201 = { 0 },
 
-    .j_str_3 = "j",
-
-    .field_1d16 = 0x001C,
-
-    .str_425 = "=",
-
-    .S_str_4 = "S",
-
-    .field_1d1c = 0x009A,
-
-    .field_1d1e = 0x00A2,
+    .TitleProc_Str_j = {
+        0x006A, 0x001C, 0x003D, 0x0053, 0x009A, 0x00A2,
+    },
 
     .pad_202 = { 0 },
 
@@ -4987,19 +4440,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_1d38 = 0x01A1,
 
-    .K_str_5 = "K",
-
-    .field_1d3c = 0x0091,
-
-    .field_1d3e = 0x00C2,
-
-    .field_1d40 = 0x00C2,
-
-    .field_1d42 = 0x00C2,
-
-    .field_1d44 = 0x0333,
-
-    .field_1d46 = 0x00C2,
+    .ViewableProc_CaseTable = {
+        0x004B, 0x0091, 0x00C2, 0x00C2, 0x00C2, 0x0333, 0x00C2,
+    },
 
     .BoxStyle7_Setup_Data = "bool\011%s%d",
 
@@ -5149,19 +4592,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_498 = ALIGNED_STRING(""),
 
-    .field_1f38 = 0x0096,
-
-    .str_499 = ">",
-
-    .str_500 = "#",
-
-    .str_501 = ">",
-
-    .field_1f40 = 0x009B,
-
-    .pad_203 = { 0 },
-
-    .field_1f44 = 0x0017,
+    .CommonIDProc_CaseTable = {
+        0x0096, 0x003E, 0x0023, 0x003E, 0x009B, 0x0000, 0x0017,
+    },
 
     .DrawIcons_PixelPairTable = {
         {0x00, 0x00}, {0x00, 0x01}, {0x00, 0x02}, {0x00, 0x03}, {0x00, 0x04}, {0x00, 0x05}, {0x00, 0x06}, {0x00, 0x07},  /* 0x00.. */
@@ -5200,89 +4633,17 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DrawBitmapFile_Impl_Data = "BM\000\377",
 
-    .field_214a = 0x63,
+    .DrawPartGroup_DispatchByType_CaseTable = {
+        0x0063, 0x0091, 0x00BF, 0x00F3, 0x0126, 0x013C, 0x0152, 0x016B,
+        0x007A, 0x00A8, 0x00D9, 0x010C, 0x0189, 0x019F, 0x01B5, 0x01CE,
+    },
 
-    .field_214b = 0x9100,
-
-    .field_214d = 0xBF00,
-
-    .field_214f = 0xF300,
-
-    .field_2151 = 0x2600,
-
-    .field_2153 = 0x3C01,
-
-    .field_2155 = 0x5201,
-
-    .field_2157 = 0x6B01,
-
-    .field_2159 = 0x7A01,
-
-    .field_215b = 0xA800,
-
-    .field_215d = 0xD900,
-
-    .field_215f = 0x0C00,
-
-    .field_2161 = 0x8901,
-
-    .field_2163 = 0x9F01,
-
-    .field_2165 = 0xB501,
-
-    .field_2167 = 0xCE01,
-
-    .field_2169 = 0x0001,
-
-    .field_216b = 0x1E00,
-
-    .field_216d = 0x1E00,
-
-    .field_216f = 0x1E00,
-
-    .field_2171 = 0x1500,
-
-    .field_2173 = 0x0C00,
-
-    .field_2175 = 0x0300,
-
-    .field_2177 = 0x8D03,
-
-    .field_2179 = 0x8D04,
-
-    .field_217b = 0x8D04,
-
-    .field_217d = 0x8D04,
-
-    .field_217f = 0x8D04,
-
-    .field_2181 = 0x1104,
-
-    .field_2183 = 0x0C01,
-
-    .field_2185 = 0x1101,
-
-    .field_2187 = 0x0C01,
-
-    .field_2189 = 0xEC01,
-
-    .field_218b = 0xE701,
-
-    .field_218d = 0xEC01,
-
-    .field_218f = 0xE701,
-
-    .field_2191 = 0x6501,
-
-    .field_2193 = 0x770F,
-
-    .field_2195 = 0x7709,
-
-    .field_2197 = 0xE109,
-
-    .field_2199 = 0x9C0B,
-
-    .field_219b = 0x0D,
+    .Draw_DispatchByPartType_CaseTable = {
+        0x0000, 0x001E, 0x001E, 0x001E, 0x0015, 0x000C, 0x0303, 0x048D,
+        0x048D, 0x048D, 0x048D, 0x048D, 0x0111, 0x010C, 0x0111, 0x010C,
+        0x01EC, 0x01E7, 0x01EC, 0x01E7, 0x0F65, 0x0977, 0x0977, 0x0BE1,
+        0x0D9C,
+    },
 
     .Gfx_LoadSplashBMP_Data = "BM\000\377",
 

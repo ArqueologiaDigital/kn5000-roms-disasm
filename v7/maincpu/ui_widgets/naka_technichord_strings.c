@@ -830,16 +830,8 @@ typedef struct __attribute__((packed)) {
     char Right_str[10];
     char Right_str_2[10];
     char SdPT_str[6];
-    uint16_t field_f602;
-    uint16_t field_f604;
-    uint16_t field_f606;
-    uint16_t field_f608;
-    uint16_t field_f60a;
-    uint16_t field_f60c;
-    uint16_t field_f60e;
-    uint16_t field_f610;
-    uint16_t field_f612;
-    uint16_t field_f614;
+    /* IvSdpartProc_CaseTable: 10 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t IvSdpartProc_CaseTable[10];
     char SdpartUpdatePartUI_Confirm_Str_Dash_Dash_Dash_Dash[18];
     char LswSound_Str_Dash_Dash_Dash_Dash[18];
     char LswVolume_Str_Fmt4d[4];
@@ -2227,16 +2219,8 @@ typedef struct __attribute__((packed)) {
     char Tr_str_18[6];
     char Sound_str[14];
     char RightSoundNameXxxxx_str[26];
-    uint16_t field_1965a;
-    uint16_t field_1965c;
-    uint16_t field_1965e;
-    uint16_t field_19660;
-    uint16_t field_19662;
-    uint16_t field_19664;
-    uint16_t field_19666;
-    uint16_t field_19668;
-    uint16_t field_1966a;
-    uint16_t field_1966c;
+    /* PsMixerControlProc_CaseTable: 10 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t PsMixerControlProc_CaseTable[10];
     char str_1262[2];
     uint8_t pad_2013[6];  /* zero padding */
     uint32_t ptr_19676;
@@ -2549,18 +2533,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19a2a;
     uint8_t pad_2049[2];  /* zero padding */
     uint16_t field_19a2e;
-    uint8_t pad_2050[8];  /* zero padding */
-    uint16_t field_19a38;
-    uint16_t field_19a3a;
-    uint16_t field_19a3c;
-    uint16_t field_19a3e;
-    char str_1326[2];
-    uint8_t pad_2051[2];  /* zero padding */
-    uint16_t field_19a44;
-    uint16_t field_19a46;
-    uint16_t field_19a48;
-    uint16_t field_19a4a;
-    uint16_t field_19a4c;
+    uint8_t bytes_19a30[6];
+    /* DemoMenu_WorkspaceFunc_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t DemoMenu_WorkspaceFunc_CaseTable[6];
+    /* DemoMenu_DescriptorFunc_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t DemoMenu_DescriptorFunc_CaseTable[6];
     char EditSw_code[10];
     char Fdm1_name[6];
     char Fdm2_str[6];
@@ -2589,12 +2566,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19d80;
     uint16_t field_19d82;
     uint16_t field_19d84;
-    uint8_t pad_2053[4];  /* zero padding */
-    uint16_t field_19d8a;
-    uint16_t field_19d8c;
-    uint16_t field_19d8e;
-    uint16_t field_19d90;
-    uint16_t field_19d92;
+    /* FDemoText_ByteData_VoiceProbeC_CaseTable: 7 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t FDemoText_ByteData_VoiceProbeC_CaseTable[7];
     uint32_t ptrs_256[34];  /* 34 pointers */
     char Action_str[8];
     char ACTION_str[8];
@@ -2688,24 +2661,10 @@ typedef struct __attribute__((packed)) {
     char rt_str_2[4];
     char Sqt_str[6];
     char rb_str[4];
-    uint16_t field_1a12c;
-    char str_1385[2];
-    uint16_t field_1a130;
-    char M_str_2[2];
-    uint16_t field_1a134;
-    uint16_t field_1a136;
-    uint16_t field_1a138;
-    uint16_t field_1a13a;
-    char g_str[2];
-    uint8_t pad_2071[2];  /* zero padding */
-    char X_str[2];
-    uint16_t field_1a142;
-    char t_str[2];
-    char str_1390[2];
-    uint16_t field_1a148;
-    uint16_t field_1a14a;
-    uint16_t field_1a14c;
-    uint16_t field_1a14e;
+    /* MainPreControl_CaseTable: 11 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t MainPreControl_CaseTable[11];
+    /* ApPreControl_CaseTable: 7 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t ApPreControl_CaseTable[7];
     char Feature_str[10];
     char rb_str_2[4];
     uint16_t field_1a15e;
@@ -3034,12 +2993,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a832;
     char GmGm_str[14];
     char Mid_str_5[14];
-    uint16_t field_1a850;
-    uint16_t field_1a852;
-    uint8_t pad_2094[2];  /* zero padding */
-    uint16_t field_1a856;
-    uint16_t field_1a858;
-    uint16_t field_1a85a;
+    /* FmmSmfFileNameFunc_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t FmmSmfFileNameFunc_CaseTable[6];
     uint16_t field_1a85c;
     uint16_t field_1a85e;
     uint32_t WP_GetPresetName1_PtrTable[3];  /* 3 pointers */
@@ -7495,25 +7450,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .SdPT_str = ALIGNED_STRING("SdPT"),
 
-    .field_f602 = 0x01D5,
-
-    .field_f604 = 0x01D5,
-
-    .field_f606 = 0x01D5,
-
-    .field_f608 = 0x01D5,
-
-    .field_f60a = 0x03B1,
-
-    .field_f60c = 0x02FF,
-
-    .field_f60e = 0x03B1,
-
-    .field_f610 = 0x03B1,
-
-    .field_f612 = 0x03B1,
-
-    .field_f614 = 0x034D,
+    .IvSdpartProc_CaseTable = {
+        0x01D5, 0x01D5, 0x01D5, 0x01D5, 0x03B1, 0x02FF, 0x03B1, 0x03B1,
+        0x03B1, 0x034D,
+    },
 
     .SdpartUpdatePartUI_Confirm_Str_Dash_Dash_Dash_Dash = ALIGNED_STRING("     ------     "),
 
@@ -8757,12 +8697,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Error_str_36 = ALIGNED_STRING("ERROR 43"),
 
-    .Str_DiskErr43_Spanish = 
-        "El fichero que trata de cargar fue almacenado en un teclado KN anterior. S\363lo es posible carg"
+    .Str_DiskErr43_Spanish = "El fichero que trata de cargar fue almacenado en un teclado KN anterior. S\363lo es posible carg"
         "ar utilizando la opci\363n \223ALL\224.",
 
-    .Str_DiskErr43_French = 
-        "Le fichier que vous essayez de charger a \351t\351 sauvegard\351 \340 partir d'un clavier KN ant"
+    .Str_DiskErr43_French = "Le fichier que vous essayez de charger a \351t\351 sauvegard\351 \340 partir d'un clavier KN ant"
         "\351rieur. Vous ne pouvez le charger qu'en utilisant l'option \223ALL\224.",
 
     .field_14546 = 0x6544,
@@ -10989,25 +10927,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .RightSoundNameXxxxx_str = "RIGHT 1: Sound Name xxxxx",
 
-    .field_1965a = 0x0770,
-
-    .field_1965c = 0x0770,
-
-    .field_1965e = 0x0770,
-
-    .field_19660 = 0x0770,
-
-    .field_19662 = 0x0C23,
-
-    .field_19664 = 0x07AF,
-
-    .field_19666 = 0x0C23,
-
-    .field_19668 = 0x029E,
-
-    .field_1966a = 0x0C23,
-
-    .field_1966c = 0x0B47,
+    .PsMixerControlProc_CaseTable = {
+        0x0770, 0x0770, 0x0770, 0x0770, 0x0C23, 0x07AF, 0x0C23, 0x029E,
+        0x0C23, 0x0B47,
+    },
 
     .str_1262 = " ",
 
@@ -11651,29 +11574,15 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_19a2e = 0x008F,
 
-    .pad_2050 = { 0 },
+    .bytes_19a30 = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
 
-    .field_19a38 = 0x0007,
+    .DemoMenu_WorkspaceFunc_CaseTable = {
+        0x0000, 0x0007, 0x000E, 0x0015, 0x001C, 0x0023,
+    },
 
-    .field_19a3a = 0x000E,
-
-    .field_19a3c = 0x0015,
-
-    .field_19a3e = 0x001C,
-
-    .str_1326 = "#",
-
-    .pad_2051 = { 0 },
-
-    .field_19a44 = 0x0006,
-
-    .field_19a46 = 0x000C,
-
-    .field_19a48 = 0x0012,
-
-    .field_19a4a = 0x0018,
-
-    .field_19a4c = 0x001E,
+    .DemoMenu_DescriptorFunc_CaseTable = {
+        0x0000, 0x0006, 0x000C, 0x0012, 0x0018, 0x001E,
+    },
 
     .EditSw_code = ALIGNED_STRING("EditSw%d"),
 
@@ -11738,17 +11647,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_19d84 = 0xFF20,
 
-    .pad_2053 = { 0 },
-
-    .field_19d8a = 0x0006,
-
-    .field_19d8c = 0x0006,
-
-    .field_19d8e = 0x0006,
-
-    .field_19d90 = 0x0006,
-
-    .field_19d92 = 0x000D,
+    .FDemoText_ByteData_VoiceProbeC_CaseTable = {
+        0x0000, 0x0000, 0x0006, 0x0006, 0x0006, 0x0006, 0x000D,
+    },
 
     .ptrs_256 = {
         NAKA_ADDR(FDemoText_StubReturn_A),
@@ -11993,41 +11894,14 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .rb_str = ALIGNED_STRING("rb"),
 
-    .field_1a12c = 0x000A,
+    .MainPreControl_CaseTable = {
+        0x000A, 0x0034, 0x001F, 0x004D, 0x0007, 0x0007, 0x0007, 0x0007,
+        0x0067, 0x0000, 0x0058,
+    },
 
-    .str_1385 = "4",
-
-    .field_1a130 = 0x001F,
-
-    .M_str_2 = "M",
-
-    .field_1a134 = 0x0007,
-
-    .field_1a136 = 0x0007,
-
-    .field_1a138 = 0x0007,
-
-    .field_1a13a = 0x0007,
-
-    .g_str = "g",
-
-    .pad_2071 = { 0 },
-
-    .X_str = "X",
-
-    .field_1a142 = 0x0017,
-
-    .t_str = "t",
-
-    .str_1390 = ",",
-
-    .field_1a148 = 0x000B,
-
-    .field_1a14a = 0x008C,
-
-    .field_1a14c = 0x000B,
-
-    .field_1a14e = 0x0010,
+    .ApPreControl_CaseTable = {
+        0x0017, 0x0074, 0x002C, 0x000B, 0x008C, 0x000B, 0x0010,
+    },
 
     .Feature_str = ALIGNED_STRING("FEATURE "),
 
@@ -12732,17 +12606,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Mid_str_5 = ALIGNED_STRING("________.MID"),
 
-    .field_1a850 = 0x07B5,
-
-    .field_1a852 = 0x07E6,
-
-    .pad_2094 = { 0 },
-
-    .field_1a856 = 0x07A0,
-
-    .field_1a858 = 0x07A7,
-
-    .field_1a85a = 0x07AE,
+    .FmmSmfFileNameFunc_CaseTable = {
+        0x07B5, 0x07E6, 0x0000, 0x07A0, 0x07A7, 0x07AE,
+    },
 
     .field_1a85c = 0x0201,
 

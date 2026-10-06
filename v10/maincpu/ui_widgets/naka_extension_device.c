@@ -1154,15 +1154,8 @@ typedef struct __attribute__((packed)) {
     uint8_t PanelTlv_ResetMasks_pad;
     /* PanelTlv_CompanionPartTags: the 23 records whose companion PanelTlv_ResolvePartCompanions refreshes from the record's sound (+0, +1) -- parts 0x00-0x14 and 0x17 (companion 0xC0 + part, through PanelTlv_CompanionByPart) and the style record 0x48 (companion tag 0x49) */
     uint8_t PanelTlv_CompanionPartTags[24];
-    uint8_t pad_143[2];  /* zero padding */
-    uint16_t field_2b40;
-    uint16_t field_2b42;
-    uint16_t field_2b44;
-    uint16_t field_2b46;
-    uint16_t field_2b48;
-    uint16_t field_2b4a;
-    char str_506[2];
-    char str_507[2];
+    /* PanelTlv_ApplyFieldRule_CaseOffsets: 9 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t PanelTlv_ApplyFieldRule_CaseOffsets[9];
     uint8_t pad_144[2];  /* zero padding */
     uint16_t field_2b52;
     uint8_t SndParamBank_OptionDefault_30[4];  /* zero padding */
@@ -1186,27 +1179,12 @@ typedef struct __attribute__((packed)) {
     /* SndParamBank_Default2: the factory default of user bank 2 (Custom Data Flash 0x3D3210, block 0x1D of SndParam_GetBlockPointer) */
     snd_param_base_entry_t SndParamBank_Default2_Base[23];
     snd_param_mask_entry_t SndParamBank_Default2_Masked[16];
-    uint8_t bytes_2e3c[8];
-    uint16_t field_2e44;
-    uint16_t field_2e46;
-    char str_524[2];
-    char str_525[2];
-    char F_str[2];
-    uint8_t pad_226[8];  /* zero padding */
-    uint16_t field_2e56;
-    uint16_t field_2e58;
-    char str_527[2];
-    char str_528[2];
-    char C_str[2];
-    uint16_t field_2e60;
-    uint16_t field_2e62;
-    uint16_t field_2e64;
-    uint16_t field_2e66;
-    uint8_t pad_227[2];  /* zero padding */
-    uint16_t field_2e6a;
-    char str_530[2];
-    char V_str[2];
-    char r_str[2];
+    /* CtrlPanel_IndicatorJumpTable_CaseTable: 9 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t CtrlPanel_IndicatorJumpTable_CaseTable[9];
+    /* Audio_DispatchCommand_CaseTable: 9 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t Audio_DispatchCommand_CaseTable[9];
+    /* PanelDisplay_DispatchByMode_CaseTable: 9 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t PanelDisplay_DispatchByMode_CaseTable[9];
     /* ---------------------------------------------------------------------
      * The 53 control-panel action lists (panel_button_action_t, defined above), in ROM order.
      * Each is named after its first user: PanelActions_LeftSegN / RightSegN = panel segment N (event
@@ -5628,23 +5606,10 @@ const naka_extension_device_t naka_extension_device_data
         0xFF  /* to an even address */
     },
 
-    .pad_143 = { 0 },
-
-    .field_2b40 = 0x0005,
-
-    .field_2b42 = 0x000A,
-
-    .field_2b44 = 0x000F,
-
-    .field_2b46 = 0x0014,
-
-    .field_2b48 = 0x0019,
-
-    .field_2b4a = 0x001E,
-
-    .str_506 = "#",
-
-    .str_507 = "(",
+    .PanelTlv_ApplyFieldRule_CaseOffsets = {
+        0x0000, 0x0005, 0x000A, 0x000F, 0x0014, 0x0019, 0x001E, 0x0023,
+        0x0028,
+    },
 
     .pad_144 = { 0 },
 
@@ -5809,47 +5774,20 @@ const naka_extension_device_t naka_extension_device_data
         { 0x0000, 0x00, 0x00 },  /* unused */
     },
 
-    .bytes_2e3c = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    .CtrlPanel_IndicatorJumpTable_CaseTable = {
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0001, 0x0012, 0x0024, 0x0035,
+        0x0046,
+    },
 
-    .field_2e44 = 0x0001,
+    .Audio_DispatchCommand_CaseTable = {
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0001, 0x0011, 0x0021, 0x0032,
+        0x0043,
+    },
 
-    .field_2e46 = 0x0012,
-
-    .str_524 = "$",
-
-    .str_525 = "5",
-
-    .F_str = "F",
-
-    .pad_226 = { 0 },
-
-    .field_2e56 = 0x0001,
-
-    .field_2e58 = 0x0011,
-
-    .str_527 = "!",
-
-    .str_528 = "2",
-
-    .C_str = "C",
-
-    .field_2e60 = 0x008F,
-
-    .field_2e62 = 0x008F,
-
-    .field_2e64 = 0x008F,
-
-    .field_2e66 = 0x008F,
-
-    .pad_227 = { 0 },
-
-    .field_2e6a = 0x001C,
-
-    .str_530 = ":",
-
-    .V_str = "V",
-
-    .r_str = "r",
+    .PanelDisplay_DispatchByMode_CaseTable = {
+        0x008F, 0x008F, 0x008F, 0x008F, 0x0000, 0x001C, 0x003A, 0x0056,
+        0x0072,
+    },
 
     .PanelActions_LeftSeg0 = {
         { 0x48, 0x00, 0x00, 0x7F, NAKA_ADDR(PanelButton_RhythmGroup) },  /* STANDARD ROCK, R & ROLL & BLUES, POP & BALLAD, FUNK & FUSION, SOUL & MODERN DANCE, BIG BAND & SWING, JAZZ COMBO */

@@ -887,12 +887,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0acf;
     uint8_t pad_202[3];  /* zero padding */
     uint16_t field_0ad4;
-    uint8_t pad_203[2];  /* zero padding */
-    uint16_t field_0ad8;
-    uint16_t field_0ada;
-    uint16_t field_0adc;
-    uint16_t field_0ade;
-    uint16_t field_0ae0;
+    /* OneTchFUNC_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t OneTchFUNC_CaseTable[6];
     uint16_t field_0ae2;
     uint16_t field_0ae4;
     uint16_t field_0ae6;
@@ -1182,30 +1178,14 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0e7e;
     uint8_t pad_223[2];  /* zero padding */
     uint16_t field_0e82;
-    uint8_t pad_224[2];  /* zero padding */
-    uint16_t field_0e86;
-    uint16_t field_0e88;
-    uint16_t field_0e8a;
-    uint16_t field_0e8c;
-    uint16_t field_0e8e;
-    uint8_t pad_225[2];  /* zero padding */
-    uint16_t field_0e92;
-    uint16_t field_0e94;
-    uint16_t field_0e96;
-    uint16_t field_0e98;
-    uint16_t field_0e9a;
-    uint8_t pad_226[2];  /* zero padding */
-    uint16_t field_0e9e;
-    uint16_t field_0ea0;
-    uint16_t field_0ea2;
-    uint16_t field_0ea4;
-    uint16_t field_0ea6;
-    uint8_t pad_227[2];  /* zero padding */
-    uint16_t field_0eaa;
-    uint16_t field_0eac;
-    uint16_t field_0eae;
-    uint16_t field_0eb0;
-    uint16_t field_0eb2;
+    /* TEST2FUNC_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t TEST2FUNC_CaseTable[6];
+    /* TEST3FUNC_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t TEST3FUNC_CaseTable[6];
+    /* TEST4FUNC_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t TEST4FUNC_CaseTable[6];
+    /* TEST6FUNC_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
+    uint16_t TEST6FUNC_CaseTable[6];
     /* ---------------------------------------------------------------------
      * Bitmap_FadeInPicture  --  112 x 25 bitmap, 8 bpp, row stride 112, 2800 bytes
      *
@@ -4809,17 +4789,9 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0ad4 = NAKA_NONE,
 
-    .pad_203 = { 0 },
-
-    .field_0ad8 = 0x0018,
-
-    .field_0ada = 0x0018,
-
-    .field_0adc = 0x0018,
-
-    .field_0ade = 0x0018,
-
-    .field_0ae0 = 0x0018,
+    .OneTchFUNC_CaseTable = {
+        0x0000, 0x0018, 0x0018, 0x0018, 0x0018, 0x0018,
+    },
 
     .field_0ae2 = 0x0249,
 
@@ -5420,53 +5392,21 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0e82 = 0x0004,
 
-    .pad_224 = { 0 },
+    .TEST2FUNC_CaseTable = {
+        0x0000, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003,
+    },
 
-    .field_0e86 = 0x0003,
+    .TEST3FUNC_CaseTable = {
+        0x0000, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003,
+    },
 
-    .field_0e88 = 0x0003,
+    .TEST4FUNC_CaseTable = {
+        0x0000, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003,
+    },
 
-    .field_0e8a = 0x0003,
-
-    .field_0e8c = 0x0003,
-
-    .field_0e8e = 0x0003,
-
-    .pad_225 = { 0 },
-
-    .field_0e92 = 0x0003,
-
-    .field_0e94 = 0x0003,
-
-    .field_0e96 = 0x0003,
-
-    .field_0e98 = 0x0003,
-
-    .field_0e9a = 0x0003,
-
-    .pad_226 = { 0 },
-
-    .field_0e9e = 0x0003,
-
-    .field_0ea0 = 0x0003,
-
-    .field_0ea2 = 0x0003,
-
-    .field_0ea4 = 0x0003,
-
-    .field_0ea6 = 0x0003,
-
-    .pad_227 = { 0 },
-
-    .field_0eaa = 0x0003,
-
-    .field_0eac = 0x0003,
-
-    .field_0eae = 0x0003,
-
-    .field_0eb0 = 0x0003,
-
-    .field_0eb2 = 0x0003,
+    .TEST6FUNC_CaseTable = {
+        0x0000, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003,
+    },
 
     .Bitmap_FadeInPicture = {
         /*   0 */ {
