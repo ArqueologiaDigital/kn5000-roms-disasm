@@ -2384,10 +2384,10 @@ SeMenu_SwitchToValueStep:
 	ret
 SeMenu_CopyWriteUpdate_Step3_Code_3_Helper7:
 	cp	a, 97
-	jr	c, SeMenu_ApplyPartEdit_Helper5_Skip
+	jr	c, SeMenu_CopyWriteUpdate_Step3_Code_3_Helper7_Skip
 	ld	(xbc), 32
 	ret
-SeMenu_ApplyPartEdit_Helper5_Skip:
+SeMenu_CopyWriteUpdate_Step3_Code_3_Helper7_Skip:
 	extz	wa
 	lda	xde, (GUI_DisplayStructData_0x1129:24)
 	ld	a, (xde+wa)
@@ -2395,15 +2395,15 @@ SeMenu_ApplyPartEdit_Helper5_Skip:
 	ret
 SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8:
 	cp	a, 130
-	jr	c, SeMenu_ApplyPartEdit_Helper5_Skip2
+	jr	c, SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8_Skip2
 	ld	(xbc), 0
-	jr	SeMenu_ApplyPartEdit_Helper5_Join
-SeMenu_ApplyPartEdit_Helper5_Skip2:
+	jr	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8_Join
+SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8_Skip2:
 	extz	wa
 	lda	xde, (GUI_DisplayStructData_0x118A:24)
 	ld	a, (xde+wa)
 	ld	(xbc), a
-SeMenu_ApplyPartEdit_Helper5_Join:
+SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8_Join:
 	cp	(xbc), 95
 	ret	ule
 	ld	(xbc), 0
@@ -2416,49 +2416,49 @@ SeMenu_CopyWriteUpdate_Entry7_Code_Helper:
 	calr	SeMenu_LoadObjEntries
 	ldib_erp	250, 2
 	cp	(xsp+2), 0
-	jr	nz, SeMenu_ApplyPartEdit_Helper5_Skip3
+	jr	nz, SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Skip3
 	ldib_erp	250, 4
-SeMenu_ApplyPartEdit_Helper5_Skip3:
+SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Skip3:
 	lda	xwa, (xsp+4)
 	calr	SeMenu_ValidatePartNumber
 	ld	a, (xsp+4)
 	extz	wa
 	calr	SeMenu_IsPartEnabled
 	cp	hl, 0:i3
-	jr	z, SeMenu_ApplyPartEdit_Helper5_Skip4
+	jr	z, SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Skip4
 	ld	a, (xsp+6)
 	extz	wa
 	ld	bc, 0:i3
-	jr	SeMenu_ApplyPartEdit_Helper5_Join2
-SeMenu_ApplyPartEdit_Helper5_Skip4:
+	jr	SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Join2
+SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Skip4:
 	ldib_erp	251, 1
 	cpib_erp	250, 1
-	jr	c, SeMenu_ApplyPartEdit_Helper5_Skip6
-SeMenu_ApplyPartEdit_Helper5_Loop:
+	jr	c, SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Skip6
+SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Loop:
 	ldto_berp	a, 251
 	extz	wa
 	calr	SeMenu_IsPartEnabled
 	cp	hl, 0:i3
-	jr	z, SeMenu_ApplyPartEdit_Helper5_Skip5
+	jr	z, SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Skip5
 	ldto_berp	a, 251
 	extz	wa
 	calr	SeMenu_SetupMenuDisplay_Finalize_Data
 	ld	a, (xsp+6)
 	extz	wa
 	ld	bc, 0:i3
-	jr	SeMenu_ApplyPartEdit_Helper5_Join2
-SeMenu_ApplyPartEdit_Helper5_Skip5:
+	jr	SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Join2
+SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Skip5:
 	inc1b_erp	251
 	ldto_berp	a, 251
 	cpb_erp	a, 250
-	jr	ule, SeMenu_ApplyPartEdit_Helper5_Loop
-SeMenu_ApplyPartEdit_Helper5_Skip6:
+	jr	ule, SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Loop
+SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Skip6:
 	ld	wa, 1:i3
 	calr	SeMenu_SetupMenuDisplay_Finalize_Data
 	ld	a, (xsp+6)
 	extz	wa
 	ld	bc, 0:i3
-SeMenu_ApplyPartEdit_Helper5_Join2:
+SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Join2:
 	calr	SeMenu_SendEvent
 	pop	qiz
 	inc	6, xsp

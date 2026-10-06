@@ -22558,18 +22558,18 @@ ToneBank_SwapCopy_Pad_Code:
 	nop
 	nop
 	ldw	de, 150
-AccFill_ProcessDone_Helper_Join:
+ToneBank_SwapCopy_Pad_Code_Join:
 	cp	de, 340
-	jr	nc, AccFill_ProcessDone_Helper_Skip
+	jr	nc, ToneBank_SwapCopy_Pad_Code_Skip
 	ld	hl, de
 	calr	AccPat_IndexToAddress_Sub2
 	bit	7, (xhl)
-	jr	z, AccFill_ProcessDone_Helper_Skip2
+	jr	z, ToneBank_SwapCopy_Pad_Code_Skip2
 	inc	1, de
-	jr	AccFill_ProcessDone_Helper_Join
-AccFill_ProcessDone_Helper_Skip:
+	jr	ToneBank_SwapCopy_Pad_Code_Join
+ToneBank_SwapCopy_Pad_Code_Skip:
 	or	(0x35b0:16), 1
-AccFill_ProcessDone_Helper_Skip2:
+ToneBank_SwapCopy_Pad_Code_Skip2:
 	or	de, 0x8000
 	ret
 
@@ -29730,18 +29730,18 @@ AccPatch_CopyEventToCursor:
 	jr	gt, AccPatch_ResolveEntryAddr_Skip8
 	add	(0x3614:16), bc
 	cp	bc, 0:i3
-	jr	z, AccPatch_ResolveEntryAddr_Helper8_Skip
+	jr	z, AccPatch_CopyEventToCursor_Skip
 	ldir85
-AccPatch_ResolveEntryAddr_Helper8_Skip:
+AccPatch_CopyEventToCursor_Skip:
 	jr	AccPatch_ResolveEntryAddr_Join3
 AccPatch_ResolveEntryAddr_Skip8:
 	pushw	bc
 	ld	bc, de
 	add	(0x3614:16), bc
 	cp	bc, 0:i3
-	jr	z, AccPatch_ResolveEntryAddr_Helper8_Skip2
+	jr	z, AccPatch_CopyEventToCursor_Skip2
 	ldir85
-AccPatch_ResolveEntryAddr_Helper8_Skip2:
+AccPatch_CopyEventToCursor_Skip2:
 	popw	bc
 	push	xiy
 	sub	bc, de

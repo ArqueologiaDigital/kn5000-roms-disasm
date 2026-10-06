@@ -4357,9 +4357,9 @@ CPanel_RxEventQueue_Push:
 	ld	hl, (0x200a9:24)
 	cp hl, (131237:24)
 	ld	hl, 0:i3
-	jr	z, Seq_DataHandler_Return
+	jr	z, CPanel_RxEventQueue_Push_Return
 	ldw	hl, 0xffff
-Seq_DataHandler_Return:
+CPanel_RxEventQueue_Push_Return:
 	ret
 	ld	hl, (0x200ab:24)
 	ret

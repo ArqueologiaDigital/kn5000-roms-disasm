@@ -3316,11 +3316,11 @@ FileData_ImportM4M6PanelMemories:
 	push	xiz
 	ld	wa, (0xb7ea:16)
 	cp	wa, 1:i3
-	jr	z, FileData_AllocLoadAndParse_Helper_Skip2
+	jr	z, FileData_ImportM4M6PanelMemories_Skip2
 	cp	wa, 2:i3
-	jr	nz, FileData_AllocLoadAndParse_Helper_Skip3
+	jr	nz, FileData_ImportM4M6PanelMemories_Skip3
 	ldw	(xsp+12), 10
-FileData_AllocLoadAndParse_Helper_Join:
+FileData_ImportM4M6PanelMemories_Join:
 	call	PrePmLoad
 	ld	wa, (xsp+12)
 	calr	DataBuf_CopyBulkBitfields_Large_Helper3
@@ -3328,46 +3328,46 @@ FileData_AllocLoadAndParse_Helper_Join:
 	ld	wa, (xsp+12)
 	srl	wa, 3
 	cp	wa, 0:i3
-	jr	ule, FileData_AllocLoadAndParse_Helper_Skip
-FileData_AllocLoadAndParse_Helper_Loop:
+	jr	ule, FileData_ImportM4M6PanelMemories_Skip
+FileData_ImportM4M6PanelMemories_Loop:
 	ld	wa, (xsp+8)
 	calr	SndParam_TableDispatch_Memset
 	incw	1, (xsp+8)
 	ld	wa, (xsp+12)
 	srl	wa, 3
 	cp	(xsp+8), wa
-	jr	c, FileData_AllocLoadAndParse_Helper_Loop
-FileData_AllocLoadAndParse_Helper_Skip:
+	jr	c, FileData_ImportM4M6PanelMemories_Loop
+FileData_ImportM4M6PanelMemories_Skip:
 	pushw	768
 	call	Malloc
 	inc	2, xsp
 	ld	(xsp+14), xhl
 	ld	xwa, (xsp+14)
 	or	xwa, xwa
-	jr	z, FileData_AllocLoadAndParse_Helper_Skip3
+	jr	z, FileData_ImportM4M6PanelMemories_Skip3
 	ldw (xsp+10), 0
 	cpw	(xsp+12), 0
-	jrl	ule, FileData_AllocLoadAndParse_Helper_Skip5
-FileData_AllocLoadAndParse_Helper_Loop2:
+	jrl	ule, FileData_ImportM4M6PanelMemories_Skip5
+FileData_ImportM4M6PanelMemories_Loop2:
 	ld	xwa, (xsp+14)
 	ld	xbc, 768
 	call	FileIO_ReadBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	ge, FileData_AllocLoadAndParse_Helper_Skip4
+	jr	ge, FileData_ImportM4M6PanelMemories_Skip4
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	Free
 	inc	4, xsp
 	ld	hl, iz
 	jrl	FileData_RawDataBlock_Epilogue2
-FileData_AllocLoadAndParse_Helper_Skip2:
+FileData_ImportM4M6PanelMemories_Skip2:
 	ldw (xsp+12), 24
-	jr	FileData_AllocLoadAndParse_Helper_Join
-FileData_AllocLoadAndParse_Helper_Skip3:
+	jr	FileData_ImportM4M6PanelMemories_Join
+FileData_ImportM4M6PanelMemories_Skip3:
 	ldw	hl, 0xff38
 	jrl	FileData_RawDataBlock_Epilogue2
-FileData_AllocLoadAndParse_Helper_Skip4:
+FileData_ImportM4M6PanelMemories_Skip4:
 	ld	wa, (xsp+10)
 	extz	xwa
 	ld	xbc, xwa
@@ -3378,7 +3378,7 @@ FileData_AllocLoadAndParse_Helper_Skip4:
 	add	xwa, xbc
 	ld	(xsp+4), xwa
 	ldw (xsp+8), 0
-FileData_AllocLoadAndParse_Helper_Loop3:
+FileData_ImportM4M6PanelMemories_Loop3:
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, xwa
@@ -3396,9 +3396,9 @@ FileData_AllocLoadAndParse_Helper_Loop3:
 	calr	DataBuf_CopyVoiceBlock24
 	incw	1, (xsp+8)
 	cpw	(xsp+8), 24
-	jr	c, FileData_AllocLoadAndParse_Helper_Loop3
+	jr	c, FileData_ImportM4M6PanelMemories_Loop3
 	ldw	(xsp+8), 0
-FileData_AllocLoadAndParse_Helper_Loop4:
+FileData_ImportM4M6PanelMemories_Loop4:
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, xwa
@@ -3413,7 +3413,7 @@ FileData_AllocLoadAndParse_Helper_Loop4:
 	calr	DataBuf_CopyEffectBlock12
 	incw	1, (xsp+8)
 	cpw	(xsp+8), 3
-	jr	c, FileData_AllocLoadAndParse_Helper_Loop4
+	jr	c, FileData_ImportM4M6PanelMemories_Loop4
 	ld	xwa, (xsp+14)
 	lda	xwa, (xwa+612)
 	ld	xbc, (xsp+4)
@@ -3482,8 +3482,8 @@ FileData_RawDataBlock_Loop:
 	incw	1, (xsp+10)
 	ld	wa, (xsp+10)
 	cp	wa, (xsp+12)
-	jrl	c, FileData_AllocLoadAndParse_Helper_Loop2
-FileData_AllocLoadAndParse_Helper_Skip5:
+	jrl	c, FileData_ImportM4M6PanelMemories_Loop2
+FileData_ImportM4M6PanelMemories_Skip5:
 	ld	wa, 0:i3
 	call	PostPmLoad
 	ld	xwa, (xsp+14)
@@ -10086,17 +10086,17 @@ MidiSeq_ClearSyncFlag_Helper:
 	ld	wa, 1:i3
 	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, SeqVoice_DispatchProcess_Data_Skip3
+	jr	z, MidiSeq_ClearSyncFlag_Helper_Skip3
 	ld	xwa, 0x72aa
 	add	(xiz+8), xwa
-SeqVoice_DispatchProcess_Data_Skip3:
+MidiSeq_ClearSyncFlag_Helper_Skip3:
 	ld	wa, 3:i3
 	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, SeqVoice_DispatchProcess_Data_Skip4
+	jr	z, MidiSeq_ClearSyncFlag_Helper_Skip4
 	calr	SeqVoice_DispatchProcess_Data_Helper
 	add	(xiz+8), xhl
-SeqVoice_DispatchProcess_Data_Skip4:
+MidiSeq_ClearSyncFlag_Helper_Skip4:
 	ld	xwa, (xiz+8)
 	add	xwa, (xiz)
 	ld	(xiz+4), xwa
@@ -10184,13 +10184,13 @@ MidiSeq_ClearSyncFlag_Helper4:
 	ld	xwa, 0x16800
 	ld	(xiz+8), xwa
 	bit	6, (0xbd18:16)
-	jr	z, SeqVoice_DispatchProcess_Data_Epilogue2
+	jr	z, MidiSeq_ClearSyncFlag_Helper4_Epilogue2
 	calr	SeqVoice_DispatchProcess_Data_Helper
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
 	ld	(xiz+8), xhl
-SeqVoice_DispatchProcess_Data_Epilogue2:
+MidiSeq_ClearSyncFlag_Helper4_Epilogue2:
 	pop	xiz
 	ret
 MidiPkt_ArpPopReturn_Helper5:
@@ -10228,7 +10228,7 @@ MidiPkt_SetXferBlock_StyleImagePool:
 	ld	xwa, 0x15440
 	ld	(xiz+8), xwa
 	bit	6, (0xbd18:16)
-	jr	z, SeqVoice_DispatchProcess_Data_Epilogue3
+	jr	z, MidiPkt_SetXferBlock_StyleImagePool_Epilogue3
 	calr	SeqVoice_DispatchProcess_Data_Helper
 	lda	xde, (0x94860:24)
 	lda	xbc, (0x95bc0:24)
@@ -10242,7 +10242,7 @@ MidiPkt_SetXferBlock_StyleImagePool:
 	ld	(xiz+4), xbc
 	sub	xhl, xde
 	ld	(xiz+8), xhl
-SeqVoice_DispatchProcess_Data_Epilogue3:
+MidiPkt_SetXferBlock_StyleImagePool_Epilogue3:
 	pop	xiz
 	ret
 ; MidiPkt_SetXferTotal_SeqData: Fills the transfer descriptor at XWA for the whole sequencer transfer: start 0xF180,
@@ -10261,7 +10261,7 @@ MidiPkt_SetXferTotal_SeqData:
 	ld	xwa, 0x53000
 	ld	(xiz+8), xwa
 	bit	6, (0xbd18:16)
-	jr	z, SeqVoice_DispatchProcess_Data_Epilogue4
+	jr	z, MidiPkt_SetXferTotal_SeqData_Epilogue4
 	calr	SeqVoice_DispatchProcess_Data_Helper2
 	lda	xwa, (xhl+22528)
 	add	xwa, (xiz)
@@ -10269,7 +10269,7 @@ MidiPkt_SetXferTotal_SeqData:
 	ld	xwa, 0x5800
 	add	xwa, xhl
 	ld	(xiz+8), xwa
-SeqVoice_DispatchProcess_Data_Epilogue4:
+MidiPkt_SetXferTotal_SeqData_Epilogue4:
 	pop	xiz
 	ret
 ; MidiPkt_SetXferBlock_CurrentSong: Fills the transfer descriptor at XWA for the current song record: {start 0xF180,
@@ -10307,13 +10307,13 @@ MidiPkt_ArpPopReturn_Helper10:
 	ld	xwa, 0x4d800
 	ld	(xiz+8), xwa
 	bit	6, (0xbd18:16)
-	jr	z, SeqVoice_DispatchProcess_Data_Epilogue5
+	jr	z, MidiPkt_ArpPopReturn_Helper10_Epilogue5
 	calr	SeqVoice_DispatchProcess_Data_Helper2
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
 	ld	(xiz+8), xhl
-SeqVoice_DispatchProcess_Data_Epilogue5:
+MidiPkt_ArpPopReturn_Helper10_Epilogue5:
 	pop	xiz
 	ret
 	ret
@@ -10329,13 +10329,13 @@ MidiSeq_ClearSyncFlag_Helper6:
 	ld	xwa, 0x3c00
 	ld	(xiz+8), xwa
 	bit	6, (0xbd18:16)
-	jr	z, SeqVoice_DispatchProcess_Data_Epilogue6
+	jr	z, MidiSeq_ClearSyncFlag_Helper6_Epilogue6
 	calr	SeqVoice_DispatchProcess_Data_Helper3
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
 	ld	(xiz+8), xhl
-SeqVoice_DispatchProcess_Data_Epilogue6:
+MidiSeq_ClearSyncFlag_Helper6_Epilogue6:
 	pop	xiz
 	ret
 MidiPkt_ArpPopReturn_Helper11:
@@ -10375,7 +10375,7 @@ MidiPkt_SetXferBlock_AccompBlockPool:
 	ld	xwa, 0x3900
 	ld	(xiz+8), xwa
 	bit	6, (0xbd18:16)
-	jr	z, SeqVoice_DispatchProcess_Data_Epilogue7
+	jr	z, MidiPkt_SetXferBlock_AccompBlockPool_Epilogue7
 	calr	SeqVoice_DispatchProcess_Data_Helper3
 	lda	xde, (0x1e8820:24)
 	lda	xbc, (0x1e8b00:24)
@@ -10389,7 +10389,7 @@ MidiPkt_SetXferBlock_AccompBlockPool:
 	ld	(xiz+4), xbc
 	sub	xhl, xde
 	ld	(xiz+8), xhl
-SeqVoice_DispatchProcess_Data_Epilogue7:
+MidiPkt_SetXferBlock_AccompBlockPool_Epilogue7:
 	pop	xiz
 	ret
 SeqVoice_DispatchProcess_Data_Helper:

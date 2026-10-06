@@ -8287,7 +8287,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	sla A, 0x01
 	dec 1,A
 	.byte	0xc8,	0xff
-	jr	c, SeMenu_PresetManager_Data_Helper2_Skip
+	jr	c, SeMenu_DrawPartSelector_Skip
 	push	c
 	xor	b, b
 	sla	bc, 2
@@ -8297,8 +8297,8 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
-	jr	SeMenu_PresetManager_Data_Helper2_Join
-SeMenu_PresetManager_Data_Helper2_Skip:
+	jr	SeMenu_DrawPartSelector_Join
+SeMenu_DrawPartSelector_Skip:
 	push	c
 	xor	b, b
 	sla	bc, 2
@@ -8308,7 +8308,7 @@ SeMenu_PresetManager_Data_Helper2_Skip:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
-SeMenu_PresetManager_Data_Helper2_Join:
+SeMenu_DrawPartSelector_Join:
 	djnz8	c, -84
 	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x086E
@@ -8903,16 +8903,16 @@ SeMenu_DrawPartRadioButtons:
 	ld C, 0x02:opc
 	jr t, .Lc_f0f818
 .Lc_f0f816:
-SeMenu_PresetManager_SaveApply_Helper2_Skip:
+SeMenu_DrawPartRadioButtons_Skip:
 	ld C, 0x04:opc
 .Lc_f0f818:
-SeMenu_PresetManager_SaveApply_Helper2_Join:
+SeMenu_DrawPartRadioButtons_Join:
 	ld w, (0x065e:16)
 	ld A,C
 	sla A, 0x01
 	dec 1,A
 	.byte 0xc8, 0xff
-	jr	c, SeMenu_PresetManager_SaveApply_Helper2_Skip2
+	jr	c, SeMenu_DrawPartRadioButtons_Skip2
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
@@ -8922,8 +8922,8 @@ SeMenu_PresetManager_SaveApply_Helper2_Join:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
-	jr	SeMenu_PresetManager_SaveApply_Helper2_Join2
-SeMenu_PresetManager_SaveApply_Helper2_Skip2:
+	jr	SeMenu_DrawPartRadioButtons_Join2
+SeMenu_DrawPartRadioButtons_Skip2:
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
@@ -8933,7 +8933,7 @@ SeMenu_PresetManager_SaveApply_Helper2_Skip2:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
-SeMenu_PresetManager_SaveApply_Helper2_Join2:
+SeMenu_DrawPartRadioButtons_Join2:
 	djnz8	c, -84
 	ret
 SeMenu_WaveformSelect_Apply_Helper4:

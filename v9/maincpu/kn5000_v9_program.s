@@ -537,14 +537,14 @@ SeFilLpq1TitleFunc_SwitchHandlers:
 	.long SeFilLpq1_OnColumn3
 	.long SeFilLpq1_OnColumn4
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Join23
-	.long Scoop_SoundEditorData_Join24
-	.long Scoop_SoundEditorData_Join25
-	.long Scoop_SoundEditorData_Join26
-	.long Scoop_SoundEditorData_Join27
-	.long Scoop_SoundEditorData_Join28
+	.long SeFilLpq1_OnColumn4_Join23
+	.long SeFilLpq1_OnColumn4_Join24
+	.long SeFilLpq1_OnColumn4_Join25
+	.long SeFilLpq1_OnColumn4_Join26
+	.long SeFilLpq1_OnColumn4_Join27
+	.long SeFilLpq1_OnColumn4_Join28
 	.long SeFilLpq1_OnSideRow4
-	.long Scoop_SoundEditorData_Join30
+	.long SeFilLpq1_OnSideRow4_Join30
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
 	.long SeFilLpq1_OnSwitch15
@@ -582,11 +582,11 @@ SeFilL241TitleFunc_SwitchHandlers:
 	.long SeFilL241_OnColumn6
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Join33
-	.long Scoop_SoundEditorData_Join34
-	.long Scoop_SoundEditorData_Join35
+	.long SeFilL241_OnColumn6_Join33
+	.long SeFilL241_OnColumn6_Join34
+	.long SeFilL241_OnColumn6_Join35
 	.long SeFilL241_OnSideRow4
-	.long Scoop_SoundEditorData_Helper2_Join11
+	.long SeFilL241_OnSideRow4_Join11
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
 	.long SeFilL241_OnSwitch15

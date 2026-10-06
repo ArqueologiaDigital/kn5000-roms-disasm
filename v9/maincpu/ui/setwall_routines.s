@@ -38,30 +38,30 @@ SetWall_InlineCodeBlock:
 SqTrAs_CursorNextTrack:
 	call	SetWall_InlineCodeBlock2
 	cp (3295:16), 7
-	jr	z, MiddleFuncCall_DispatchData_Code_Helper_Skip
+	jr	z, SqTrAs_CursorNextTrack_Skip
 	call	CDlikeSwTtl_SendEvt4
-MiddleFuncCall_DispatchData_Code_Helper_Skip:
+SqTrAs_CursorNextTrack_Skip:
 	call	CDlikeSwTtl_SendStartEvt
 	ld	a, (3295:16)
 	cp	a, 15
-	jr	z, MiddleFuncCall_DispatchData_Code_Helper_Skip2
+	jr	z, SqTrAs_CursorNextTrack_Skip2
 	inc	1, a
-MiddleFuncCall_DispatchData_Code_Helper_Skip2:
+SqTrAs_CursorNextTrack_Skip2:
 	ld	(3295:16), a
 	call	SetWall_UpdateSlotIndex
 	ret
 SqTrAs_CursorPrevTrack:
 	call	SetWall_InlineCodeBlock2
 	cp (3295:16), 8
-	jr	z, MiddleFuncCall_DispatchData_Code_Helper2_Skip
+	jr	z, SqTrAs_CursorPrevTrack_Skip
 	call	CDlikeSwTtl_SendEvt4
-MiddleFuncCall_DispatchData_Code_Helper2_Skip:
+SqTrAs_CursorPrevTrack_Skip:
 	call	CDlikeSwTtl_SendStartEvt
 	ld	a, (3295:16)
 	cp	a, 0:i3
-	jr	z, MiddleFuncCall_DispatchData_Code_Helper2_Skip2
+	jr	z, SqTrAs_CursorPrevTrack_Skip2
 	dec	1, a
-MiddleFuncCall_DispatchData_Code_Helper2_Skip2:
+SqTrAs_CursorPrevTrack_Skip2:
 	ld	(3295:16), a
 	call	SetWall_UpdateSlotIndex
 	ret

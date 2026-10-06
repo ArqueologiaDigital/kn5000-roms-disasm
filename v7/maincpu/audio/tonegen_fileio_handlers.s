@@ -581,7 +581,7 @@ DSPCfg_SyncBitmapData:
 	ld	(xsp+10), xwa
 	ld	bc, (0x9042:16)
 	jrl	DSPCfg_CopyEntryValues_Entry
-DSPCfg_CopyEntryValues_Loop:
+DSPCfg_SyncBitmapData_Loop:
 	ld	(xsp+6), 0
 	ld	a, (xiz+)
 	ld	(xsp+8), a
@@ -590,13 +590,13 @@ DSPCfg_CopyEntryValues_Loop:
 	.byte	0x8f
 	ld	(PFFC:8), 0:io
 	jr	z, DSPCfg_CopyEntryValues_Entry
-DSPCfg_CopyEntryValues_Loop2:
+DSPCfg_SyncBitmapData_Loop2:
 	ld	xwa, (xsp+18)
 	ld	a, (xwa)
 	cp	a, (xiz)
-	jr	z, DSPCfg_CopyEntryValues_Skip2
+	jr	z, DSPCfg_SyncBitmapData_Skip2
 	cp	bc, 500
-	jr	c, DSPCfg_CopyEntryValues_Skip
+	jr	c, DSPCfg_SyncBitmapData_Skip
 	extz	xbc
 	add	xbc, (xsp+10)
 	ld	(xbc), 255
@@ -610,7 +610,7 @@ DSPCfg_CopyEntryValues_Loop2:
 	pop	xhl
 	pop	xde
 	ld	bc, 0:i3
-DSPCfg_CopyEntryValues_Skip:
+DSPCfg_SyncBitmapData_Skip:
 	ld	de, bc
 	inc	1, bc
 	extz	xde
@@ -637,19 +637,19 @@ DSPCfg_CopyEntryValues_Skip:
 	extz	xwa
 	add	xwa, (xsp+10)
 	ld	(xwa), e
-DSPCfg_CopyEntryValues_Skip2:
+DSPCfg_SyncBitmapData_Skip2:
 	incm8	1, (xsp+6)
 	decm8	1, (xsp+8)
 	inc	1, xiz
 	ld	xwa, 1:i3
 	add	(xsp+18), xwa
 	cp	(xsp+8), 0
-	jr	nz, DSPCfg_CopyEntryValues_Loop2
+	jr	nz, DSPCfg_SyncBitmapData_Loop2
 DSPCfg_CopyEntryValues_Entry:
 	ld	a, (xiz+)
 	ld	(xsp+4), a
 	cp	(xsp+4), 255
-	jrl	nz, DSPCfg_CopyEntryValues_Loop
+	jrl	nz, DSPCfg_SyncBitmapData_Loop
 	ld	wa, bc
 	extz	xwa
 	add	xwa, (xsp+14)

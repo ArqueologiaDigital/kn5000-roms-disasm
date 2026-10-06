@@ -641,7 +641,7 @@ AudioInit_ChannelLoop_Body:
 	ld	a, (xwa)
 	ld	d, a
 	bit	1, (62014:16)
-	jr	z, DSPCfg_EventType50_Code_Helper5_Skip2
+	jr	z, AudioInit_ChannelLoop_Body_Skip2
 	ldi_erpb	230, 255
 	ld	a, e
 	extz	wa
@@ -649,7 +649,7 @@ AudioInit_ChannelLoop_Body:
 	extz	xwa
 	add	xwa, xix
 	cp	(xwa), 16
-	jr	z, DSPCfg_EventType50_Code_Helper5_Skip
+	jr	z, AudioInit_ChannelLoop_Body_Skip
 	ld	a, e
 	extz	wa
 	lda	xix, (61872:16)
@@ -657,11 +657,11 @@ AudioInit_ChannelLoop_Body:
 	add	xwa, xix
 	ld	a, (xwa)
 	ldfr_berp	a, 230
-DSPCfg_EventType50_Code_Helper5_Skip:
+AudioInit_ChannelLoop_Body_Skip:
 	ldto_berp	a, 230
 	ldfr_berp	a, 226
 	jr	AudioInit_CheckVoiceChanged
-DSPCfg_EventType50_Code_Helper5_Skip2:
+AudioInit_ChannelLoop_Body_Skip2:
 	ld	a, e
 	extz	wa
 	add	wa, wa

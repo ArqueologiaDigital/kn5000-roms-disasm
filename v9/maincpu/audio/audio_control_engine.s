@@ -1121,14 +1121,14 @@ PanelAction_FootSwitch1:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event28Bit0_Epilogue
+	jr	z, PanelAction_FootSwitch1_Epilogue
 	ld	xwa, 10374
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	PanelAction_DispatchPedalFunction
-PanelAction_Event28Bit0_Epilogue:
+PanelAction_FootSwitch1_Epilogue:
 	pop	xiz
 	ret
 ; foot switch FS2 (PG.3; event 28 bit 1): acts per panel parameter 0x2888 (tag 0x99 payload byte 5)
@@ -1136,14 +1136,14 @@ PanelAction_FootSwitch2:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event28Bit1_Epilogue
+	jr	z, PanelAction_FootSwitch2_Epilogue
 	ld	xwa, 10376
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	PanelAction_DispatchPedalFunction
-PanelAction_Event28Bit1_Epilogue:
+PanelAction_FootSwitch2_Epilogue:
 	pop	xiz
 	ret
 ; foot controller FC1 (PG.4; event 29 bit 0): acts per panel parameter 0x288A (tag 0x99 payload byte 6)
@@ -1151,14 +1151,14 @@ PanelAction_FootController1:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event29Bit0_Epilogue
+	jr	z, PanelAction_FootController1_Epilogue
 	ld	xwa, 10378
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	PanelAction_DispatchPedalFunction
-PanelAction_Event29Bit0_Epilogue:
+PanelAction_FootController1_Epilogue:
 	pop	xiz
 	ret
 ; foot controller FC2 (PG.5; event 29 bit 1): acts per panel parameter 0x288C (tag 0x99 payload byte 7)
@@ -1166,14 +1166,14 @@ PanelAction_FootController2:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event29Bit1_Epilogue
+	jr	z, PanelAction_FootController2_Epilogue
 	ld	xwa, 10380
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	PanelAction_DispatchPedalFunction
-PanelAction_Event29Bit1_Epilogue:
+PanelAction_FootController2_Epilogue:
 	pop	xiz
 	ret
 ; foot controller FC3 (PG.6; event 29 bit 2): acts per panel parameter 0x288E (tag 0x99 payload byte 8)
@@ -1181,14 +1181,14 @@ PanelAction_FootController3:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event29Bit2_Epilogue
+	jr	z, PanelAction_FootController3_Epilogue
 	ld	xwa, 10382
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	PanelAction_DispatchPedalFunction
-PanelAction_Event29Bit2_Epilogue:
+PanelAction_FootController3_Epilogue:
 	pop	xiz
 	ret
 ; foot controller FC4 (PG.7; event 29 bit 3): acts per panel parameter 0x2890 (tag 0x99 payload byte 9)
@@ -1196,14 +1196,14 @@ PanelAction_FootController4:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event29Bit3_Epilogue
+	jr	z, PanelAction_FootController4_Epilogue
 	ld	xwa, 10384
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	PanelAction_DispatchPedalFunction
-PanelAction_Event29Bit3_Epilogue:
+PanelAction_FootController4_Epilogue:
 	pop	xiz
 	ret
 ; event 22 (left-panel header 0xD1): the byte as two 7-bit values ((b & 1) << 6, b >> 1)
@@ -1234,20 +1234,20 @@ PanelAction_ModWheel:
 	ld	xwa, 10368
 	call	SndParam_LookupReadOnly
 	cp	hl, 183
-	jr	z, PanelAction_Event26_Skip
+	jr	z, PanelAction_ModWheel_Skip
 	cp	hl, 182
-	jr	nz, PanelAction_Event26_Epilogue
+	jr	nz, PanelAction_ModWheel_Epilogue
 	ld	xwa, xiz
-	jr	PanelAction_Event26_Join
-PanelAction_Event26_Skip:
+	jr	PanelAction_ModWheel_Join
+PanelAction_ModWheel_Skip:
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event26_Epilogue
+	jr	z, PanelAction_ModWheel_Epilogue
 	ld	(xiz), 179
 	ld	(xiz+1), 0
 	ld	xwa, xiz
-PanelAction_Event26_Join:
+PanelAction_ModWheel_Join:
 	calr	PanelEvent_Post
-PanelAction_Event26_Epilogue:
+PanelAction_ModWheel_Epilogue:
 	pop	xiz
 	ret
 ; event 23 (left-panel header 0xD2): post unless MD_DEMO
@@ -1260,14 +1260,14 @@ PanelAction_Volume:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event27_Epilogue
+	jr	z, PanelAction_Volume_Epilogue
 	ld	xwa, 260
 	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
-	jr	z, PanelAction_Event27_Epilogue
+	jr	z, PanelAction_Volume_Epilogue
 	ld	xwa, xiz
 	calr	PanelEvent_Post
-PanelAction_Event27_Epilogue:
+PanelAction_Volume_Epilogue:
 	pop	xiz
 	ret
 PanelEvent_FillSelectedPart:
@@ -11715,7 +11715,7 @@ MidiStream_CheckPartProgramAllowed:
 	pushw	de
 	and	(0x90fa:16), 253
 	bit	0, (0x90fa:16)
-	jr	z, MidiStream_ExtendedDispatch_Helper_Skip2
+	jr	z, MidiStream_CheckPartProgramAllowed_Skip2
 	and	(0x90fa:16), 254
 	stb_d8	(0x90f7), c
 	ld	l, e
@@ -11724,12 +11724,12 @@ MidiStream_CheckPartProgramAllowed:
 	ldb_d8	e, (0xfd50)
 	and	e, 3
 	cp	e, 1:i3
-	jr	z, MidiStream_ExtendedDispatch_Helper_Skip
+	jr	z, MidiStream_CheckPartProgramAllowed_Skip
 	ld	xix, PartCtrl_WriteProgramChange
-MidiStream_ExtendedDispatch_Helper_Skip:
+MidiStream_CheckPartProgramAllowed_Skip:
 	call	(xix)
 	ld	e, l
-MidiStream_ExtendedDispatch_Helper_Skip2:
+MidiStream_CheckPartProgramAllowed_Skip2:
 	cp	c, 15
 	jr	z, MidiStream_ExtendedDispatch_Skip7
 	cp	c, 20
@@ -11748,20 +11748,20 @@ MidiStream_ExtendedDispatch_Helper_Skip2:
 	jr	nz, MidiStream_ExtendedDispatch_Epilogue2
 MidiStream_ExtendedDispatch_Skip6:
 	call	MidiStream_ExtendedDispatch_Helper_Helper2
-	jr	c, MidiStream_ExtendedDispatch_Helper_Skip3
-	jr	MidiStream_ExtendedDispatch_Helper_Join
+	jr	c, MidiStream_CheckPartProgramAllowed_Skip3
+	jr	MidiStream_CheckPartProgramAllowed_Join
 MidiStream_ExtendedDispatch_Skip7:
 	call	MidiStream_ExtendedDispatch_Helper_Helper2
-	jr	nc, MidiStream_ExtendedDispatch_Helper_Skip3
+	jr	nc, MidiStream_CheckPartProgramAllowed_Skip3
 	cp	c, 15
 	jr	z, MidiStream_ExtendedDispatch_Epilogue2
-MidiStream_ExtendedDispatch_Helper_Join:
+MidiStream_CheckPartProgramAllowed_Join:
 	push_a
 	ldb_d8	a, (0x379b)
 	and	a, 31
 	pop_a
 	jr	nz, MidiStream_ExtendedDispatch_Epilogue2
-MidiStream_ExtendedDispatch_Helper_Skip3:
+MidiStream_CheckPartProgramAllowed_Skip3:
 	set	1, (0x90fa:16)
 MidiStream_ExtendedDispatch_Epilogue2:
 	popw	de
@@ -11771,19 +11771,19 @@ MidiStream_ExtendedDispatch_Epilogue2:
 	ret
 MidiStream_ExtendedDispatch_Helper_Helper2:
 	cp	e, 15
-	jr	nz, MidiStream_ExtendedDispatch_Helper_Skip4
+	jr	nz, MidiStream_ExtendedDispatch_Helper_Helper2_Skip4
 	scf
 	ret
-MidiStream_ExtendedDispatch_Helper_Skip4:
+MidiStream_ExtendedDispatch_Helper_Helper2_Skip4:
 	rcf
 	ret
 MidiCC_ApplyBankSelect:
 	cp	(0x9644:16), 72
-	jr	nz, MidiStream_ExtendedDispatch_Helper_Skip5
+	jr	nz, MidiCC_ApplyBankSelect_Skip5
 	ld	(0x9644:16), 20
 	cp	(CURRENT_MODE:16), 14
-	jrl	z, MidiStream_ExtendedDispatch_Helper_Return
-MidiStream_ExtendedDispatch_Helper_Skip5:
+	jrl	z, MidiStream_ExtDispatch_ModeJump3_Return
+MidiCC_ApplyBankSelect_Skip5:
 	ldw_d16	bc, (0x9644)
 	ldw_d16	de, (0x9646)
 	ld	xix, 0x93d2
@@ -11824,31 +11824,31 @@ MidiStream_ExtDispatch_Mode3_Data:
 	.long	MidiStream_ExtDispatch_ModeJump02
 	.long	MidiStream_ExtDispatch_ModeJump3
 MidiStream_ExtDispatch_ModeJump02:
-	jr	MidiStream_ExtendedDispatch_Helper_Join2
+	jr	MidiStream_ExtDispatch_ModeJump3_Join2
 MidiStream_ExtDispatch_ModeJump1:
 	bit	0, w
-	jr	z, MidiStream_ExtendedDispatch_Helper_Skip7
+	jr	z, MidiStream_ExtDispatch_ModeJump1_Skip7
 	srl	a, 4
 	and	a, 15
 	cp	c, 20
-	jr	z, MidiStream_ExtendedDispatch_Helper_Skip6
+	jr	z, MidiStream_ExtDispatch_ModeJump1_Skip6
 	cp	a, 2:i3
-	jr	c, MidiStream_ExtendedDispatch_Helper_Skip6
+	jr	c, MidiStream_ExtDispatch_ModeJump1_Skip6
 	cp	a, 6:i3
-	jr	nc, MidiStream_ExtendedDispatch_Helper_Skip6
+	jr	nc, MidiStream_ExtDispatch_ModeJump1_Skip6
 	xor	a, a
-MidiStream_ExtendedDispatch_Helper_Skip6:
+MidiStream_ExtDispatch_ModeJump1_Skip6:
 	set	7, a
-	jr	MidiStream_ExtendedDispatch_Helper_Join2
-MidiStream_ExtendedDispatch_Helper_Skip7:
+	jr	MidiStream_ExtDispatch_ModeJump3_Join2
+MidiStream_ExtDispatch_ModeJump1_Skip7:
 	srl	a, 4
 	and	a, 15
-	jr	MidiStream_ExtendedDispatch_Helper_Join2
+	jr	MidiStream_ExtDispatch_ModeJump3_Join2
 MidiStream_ExtDispatch_ModeJump3:
 	srl	wa, 8
-MidiStream_ExtendedDispatch_Helper_Join2:
+MidiStream_ExtDispatch_ModeJump3_Join2:
 	ld	(xiz+hl), a
-MidiStream_ExtendedDispatch_Helper_Return:
+MidiStream_ExtDispatch_ModeJump3_Return:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret

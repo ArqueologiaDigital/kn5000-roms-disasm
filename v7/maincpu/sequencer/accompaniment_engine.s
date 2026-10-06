@@ -21646,18 +21646,18 @@ ToneBank_SwapCopy_Pad_Code:
 	nop
 	nop
 	ldw	de, 150
-AccFill_ProcessDone_Helper_Join:
+ToneBank_SwapCopy_Pad_Code_Join:
 	cp	de, 340
-	jr	nc, AccFill_ProcessDone_Helper_Skip
+	jr	nc, ToneBank_SwapCopy_Pad_Code_Skip
 	ld	hl, de
 	calr	AccPat_IndexToAddress_Sub2
 	bit	7, (xhl)
-	jr	z, AccFill_ProcessDone_Helper_Skip2
+	jr	z, ToneBank_SwapCopy_Pad_Code_Skip2
 	inc	1, de
-	jr	AccFill_ProcessDone_Helper_Join
-AccFill_ProcessDone_Helper_Skip:
+	jr	ToneBank_SwapCopy_Pad_Code_Join
+ToneBank_SwapCopy_Pad_Code_Skip:
 	or	(0x3514:16), 1
-AccFill_ProcessDone_Helper_Skip2:
+ToneBank_SwapCopy_Pad_Code_Skip2:
 	or	de, 32768
 	ret
 RhythmROM_PatternDispatcher:
@@ -25570,7 +25570,7 @@ TimeSig_DisplayStrings_Code_Helper_Return:
 DrumVoice_NotifyEE_Helper8:
 	ld	l, (xix+h)
 	cp	l, 255
-	jr	z, TimeSig_DisplayStrings_Code_Helper2_Skip
+	jr	z, DrumVoice_NotifyEE_Helper8_Skip
 	pushdi_b	(13370)
 	ld	(13370:16), l
 	push	h
@@ -25580,10 +25580,10 @@ DrumVoice_NotifyEE_Helper8:
 	pop	h
 	pop	(0x343a:16)
 	ld	b, a
-	jr	TimeSig_DisplayStrings_Code_Helper2_Return
-TimeSig_DisplayStrings_Code_Helper2_Skip:
+	jr	DrumVoice_NotifyEE_Helper8_Return
+DrumVoice_NotifyEE_Helper8_Skip:
 	ldw	bc, 65535
-TimeSig_DisplayStrings_Code_Helper2_Return:
+DrumVoice_NotifyEE_Helper8_Return:
 	ret
 TimeSig_DisplayStrings_Code_Helper3:
 	push	xwa

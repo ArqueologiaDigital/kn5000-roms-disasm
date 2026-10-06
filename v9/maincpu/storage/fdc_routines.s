@@ -122,12 +122,12 @@ FDC_CONFIG_VERIFY:
 	calr	FDC_ClearStatus_InitTimer
 	calr	FDC_DRIVE_DETECT
 	cp	hl, 0xffff
-	jr	z, FDC_CMD_EXEC_Helper2_Skip
+	jr	z, FDC_CONFIG_VERIFY_Skip
 	calr	FDC_DRIVE_STATUS
 	cp	hl, 0xffff
-	jr	z, FDC_CMD_EXEC_Helper2_Skip
+	jr	z, FDC_CONFIG_VERIFY_Skip
 	ld	(0x8b04:16), 255
-FDC_CMD_EXEC_Helper2_Skip:
+FDC_CONFIG_VERIFY_Skip:
 	cp	(0x8a20:16), 255
 	jrl	z, FDC_WaitReady_Epilogue3
 	ld	(0x8a20:16), 255
@@ -137,10 +137,10 @@ FDC_CMD_EXEC_Helper2_Skip:
 	calr	SOME_DELAY
 	calr	FDC_DRIVE_DETECT
 	cp	hl, 0xffff
-	jr	z, FDC_CMD_EXEC_Helper2_Skip2
+	jr	z, FDC_CONFIG_VERIFY_Skip2
 	calr	FDC_DRIVE_STATUS
 	cp	hl, 0xffff
-	jr	z, FDC_CMD_EXEC_Helper2_Skip2
+	jr	z, FDC_CONFIG_VERIFY_Skip2
 	calr	FDC_ClearStatus_InitTimer
 	calr	FDC_CMD_DISPATCH_SUB
 	cp	(FDC_ERROR_CODE:16), 0
@@ -182,7 +182,7 @@ FDC_WaitReady_Loop6:
 	calr	FDC_Exception_Status_Decoder
 	cp	(0x8a61:16), 128
 	jr	nz, FDC_WaitReady_Loop3
-FDC_CMD_EXEC_Helper2_Skip2:
+FDC_CONFIG_VERIFY_Skip2:
 	ld	wa, 3:i3
 	calr	FDC_CMD_SEND
 	cp	(FDC_ERROR_CODE:16), 0
@@ -1171,79 +1171,79 @@ FDC_DETECT_CHECK:
 	ret
 FDC_HardwareSetup_Entry:
 	cpw	(0x8a44:16), 0
-	jr	z, FDC_CMD_EXEC_Helper3_Skip
+	jr	z, FDC_HardwareSetup_Entry_Skip
 	ld	hl, 0:i3
 	ret
-FDC_CMD_EXEC_Helper3_Skip:
+FDC_HardwareSetup_Entry_Skip:
 	cpw	(FDC_COMMAND_INDEX:16), 3
-	jr	z, FDC_CMD_EXEC_Helper3_Skip2
+	jr	z, FDC_HardwareSetup_Entry_Skip2
 	ld	hl, 0:i3
 	ret
-FDC_CMD_EXEC_Helper3_Skip2:
+FDC_HardwareSetup_Entry_Skip2:
 	cpw	(0x8a4a:16), 1
-	jr	z, FDC_CMD_EXEC_Helper3_Skip3
+	jr	z, FDC_HardwareSetup_Entry_Skip3
 	ld	hl, 0:i3
 	ret
-FDC_CMD_EXEC_Helper3_Skip3:
+FDC_HardwareSetup_Entry_Skip3:
 	cpw	(0x8a10:16), 0xffff
-	jr	z, FDC_CMD_EXEC_Helper3_Skip4
+	jr	z, FDC_HardwareSetup_Entry_Skip4
 	ld	hl, 0:i3
 	ret
-FDC_CMD_EXEC_Helper3_Skip4:
+FDC_HardwareSetup_Entry_Skip4:
 	cpw	(0x8a48:16), 1
-	jr	z, FDC_CMD_EXEC_Helper3_Skip5
+	jr	z, FDC_HardwareSetup_Entry_Skip5
 	ld	hl, 0:i3
 	ret
-FDC_CMD_EXEC_Helper3_Skip5:
+FDC_HardwareSetup_Entry_Skip5:
 	ldw	hl, 0xffff
 	ret
 FDC_DRIVE_DETECT:
 	cpw	(0x8a46:16), 0
-	jr	z, FDC_CMD_EXEC_Helper4_Skip
+	jr	z, FDC_DRIVE_DETECT_Skip
 	ld	hl, 0:i3
 	ret
-FDC_CMD_EXEC_Helper4_Skip:
+FDC_DRIVE_DETECT_Skip:
 	cpw	(0x8a44:16), 0
-	jr	z, FDC_CMD_EXEC_Helper4_Skip2
+	jr	z, FDC_DRIVE_DETECT_Skip2
 	ld	hl, 0:i3
 	ret
-FDC_CMD_EXEC_Helper4_Skip2:
+FDC_DRIVE_DETECT_Skip2:
 	cpw	(FDC_COMMAND_INDEX:16), 3
-	jr	z, FDC_CMD_EXEC_Helper4_Skip3
+	jr	z, FDC_DRIVE_DETECT_Skip3
 	ld	hl, 0:i3
 	ret
-FDC_CMD_EXEC_Helper4_Skip3:
+FDC_DRIVE_DETECT_Skip3:
 	cpw	(0x8a4a:16), 1
-	jr	z, FDC_CMD_EXEC_Helper4_Skip4
+	jr	z, FDC_DRIVE_DETECT_Skip4
 	ld	hl, 0:i3
 	ret
-FDC_CMD_EXEC_Helper4_Skip4:
+FDC_DRIVE_DETECT_Skip4:
 	cpw	(0x8a10:16), 0xffff
-	jr	z, FDC_CMD_EXEC_Helper4_Skip5
+	jr	z, FDC_DRIVE_DETECT_Skip5
 	ld	hl, 0:i3
 	ret
-FDC_CMD_EXEC_Helper4_Skip5:
+FDC_DRIVE_DETECT_Skip5:
 	cpw	(0x8a48:16), 2
-	jr	z, FDC_CMD_EXEC_Helper4_Skip6
+	jr	z, FDC_DRIVE_DETECT_Skip6
 	cpw	(0x8a48:16), 255
-	jr	nz, FDC_CMD_EXEC_Helper4_Skip7
-FDC_CMD_EXEC_Helper4_Skip6:
+	jr	nz, FDC_DRIVE_DETECT_Skip7
+FDC_DRIVE_DETECT_Skip6:
 	ldw	hl, 0xffff
 	ret
-FDC_CMD_EXEC_Helper4_Skip7:
+FDC_DRIVE_DETECT_Skip7:
 	ld	hl, 0:i3
 	ret
 FDC_DRIVE_STATUS:
 	cpw	(0x8a4a:16), 0xffff
-	jr	z, FDC_CMD_EXEC_Helper4_Skip8
+	jr	z, FDC_DRIVE_STATUS_Skip8
 	ld	hl, 0:i3
 	ret
-FDC_CMD_EXEC_Helper4_Skip8:
+FDC_DRIVE_STATUS_Skip8:
 	cpw	(FDC_COMMAND_INDEX:16), 0
-	jr	z, FDC_CMD_EXEC_Helper4_Skip9
+	jr	z, FDC_DRIVE_STATUS_Skip9
 	ld	hl, 0:i3
 	ret
-FDC_CMD_EXEC_Helper4_Skip9:
+FDC_DRIVE_STATUS_Skip9:
 	ldw	hl, 0xffff
 	ret
 FDC_PRE_OP_CHECK:
@@ -1294,21 +1294,21 @@ FDC_POST_OP:
 	ldw	qiz, 0x1f4
 	ldw_d16	iz, (SYSTEM_TIMESTAMP)
 	ld	bc, 0:i3
-FDC_ClearStatus_InitTimer_Join_Loop:
+FDC_POST_OP_Loop:
 	cp	(0x8a60:16), 255
-	jr	z, FDC_ClearStatus_InitTimer_Join_Skip
+	jr	z, FDC_POST_OP_Skip
 	ldw	bc, 0xffff
-FDC_ClearStatus_InitTimer_Join_Skip:
+FDC_POST_OP_Skip:
 	ld	wa, (SYSTEM_TIMESTAMP:16)
 	sub	wa, iz
 	cp wa, qiz
-	jr	ule, FDC_ClearStatus_InitTimer_Join_Skip2
+	jr	ule, FDC_POST_OP_Skip2
 	ldw	wa, 9
 	calr	FDC_Set_Status
 	ldw	bc, 0xffff
-FDC_ClearStatus_InitTimer_Join_Skip2:
+FDC_POST_OP_Skip2:
 	cp	bc, 0:i3
-	jr	z, FDC_ClearStatus_InitTimer_Join_Loop
+	jr	z, FDC_POST_OP_Loop
 	pop	xiz
 	ret
 
@@ -1395,9 +1395,9 @@ FDC_CmdSeek:
 	calr	FDC_CMD_SEND
 	calr	FDC_POST_OP
 	cp	(FDC_ERROR_CODE:16), 0
-	jr	z, FDC_CMD_EXEC_Helper5_Skip
+	jr	z, FDC_CmdSeek_Skip
 	ld	(0x8b04:16), 255
-FDC_CMD_EXEC_Helper5_Skip:
+FDC_CmdSeek_Skip:
 	ldw	wa, 16
 	jrl	SOME_DELAY
 FDC_SubmitReadDataCmd:

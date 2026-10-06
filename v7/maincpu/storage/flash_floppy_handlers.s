@@ -2956,7 +2956,7 @@ Flash_InitBytecodeBlock_Helper8:
 	calr	Flash_InitBytecodeBlock_Helper9_Helper_Helper3
 	ld	wa, iz
 	and	wa, 0xff00
-	jr	z, Flash_InitBytecodeBlock_Helper4_Skip
+	jr	z, Flash_InitBytecodeBlock_Helper8_Skip3
 	ld	d, 0:opc
 	ld	b, 0:opc
 	ld	c, 0:opc
@@ -2987,16 +2987,16 @@ Flash_StoreBaseAndInitAccPatch_Skip15:
 	ld	c, b
 	extz	bc
 	ld	(xde+2), bc
-Flash_InitBytecodeBlock_Helper4_Skip:
+Flash_InitBytecodeBlock_Helper8_Skip3:
 	ld	wa, iz
 	and	wa, 255
-	jrl	z, Flash_InitBytecodeBlock_Helper4_Epilogue
+	jrl	z, Flash_InitBytecodeBlock_Helper8_Epilogue3
 	ld	e, 0:opc
 	ld	c, 0:opc
 	ld	(xsp+6), 0
 	ld	(xsp+8), 0
 	ld	(xsp+4), 0
-Flash_InitBytecodeBlock_Helper4_Loop:
+Flash_InitBytecodeBlock_Helper8_Loop2:
 	ld	a, (xsp+4)
 	extz	wa
 	add	wa, wa
@@ -3004,9 +3004,9 @@ Flash_InitBytecodeBlock_Helper4_Loop:
 	lda	xhl, (1748:16)
 	lda	xhl, (xhl+wa)
 	cpw	(xhl), 0xffff
-	jrl	z, Flash_InitBytecodeBlock_Helper4_Epilogue
+	jrl	z, Flash_InitBytecodeBlock_Helper8_Epilogue3
 	cp	(xsp+0x8), 0
-	jr	nz, Flash_InitBytecodeBlock_Helper4_Skip3
+	jr	nz, Flash_InitBytecodeBlock_Helper8_Skip5
 	cp	c, 40
 	jr	nc, Flash_StoreBaseAndInitAccPatch_Join4
 Flash_StoreBaseAndInitAccPatch_Loop11:
@@ -3019,7 +3019,7 @@ Flash_StoreBaseAndInitAccPatch_Loop11:
 	cp	w, 0:i3
 	jr	z, Flash_StoreBaseAndInitAccPatch_Skip16
 	cp	w, (xsp+0xa)
-	jr	nz, Flash_InitBytecodeBlock_Helper4_Skip2
+	jr	nz, Flash_InitBytecodeBlock_Helper8_Skip4
 Flash_StoreBaseAndInitAccPatch_Skip16:
 	ldfr_berp	e, 240
 	extz	ix
@@ -3038,20 +3038,20 @@ Flash_StoreBaseAndInitAccPatch_Skip16:
 	inc	1, e
 	inc	1, c
 	jr	Flash_StoreBaseAndInitAccPatch_Join4
-Flash_InitBytecodeBlock_Helper4_Skip2:
+Flash_InitBytecodeBlock_Helper8_Skip4:
 	inc	1, c
 	cp	c, 40
 	jr	c, Flash_StoreBaseAndInitAccPatch_Loop11
 Flash_StoreBaseAndInitAccPatch_Join4:
 	cp	c, 40
-	jrl	nz, Flash_InitBytecodeBlock_Helper4_Join
+	jrl	nz, Flash_InitBytecodeBlock_Helper8_Join
 	ld	(xsp+8), 1
-	jrl	Flash_InitBytecodeBlock_Helper4_Join
-Flash_InitBytecodeBlock_Helper4_Skip3:
+	jrl	Flash_InitBytecodeBlock_Helper8_Join
+Flash_InitBytecodeBlock_Helper8_Skip5:
 	ld	d, 0:opc
 	ld	b, 0:opc
 	ld	c, 0:opc
-Flash_InitBytecodeBlock_Helper4_Loop2:
+Flash_InitBytecodeBlock_Helper8_Loop3:
 	ld	a, c
 	extz	wa
 	ld	iy, wa
@@ -3059,23 +3059,23 @@ Flash_InitBytecodeBlock_Helper4_Loop2:
 	inc	2, iy
 	lda	xix, (2972:16)
 	.byte	0xd3, 0x07, 0xf0, 0xf4, 0x3f, 0x01, 0x00
-	jr	z, Flash_InitBytecodeBlock_Helper4_Skip4
+	jr	z, Flash_InitBytecodeBlock_Helper8_Skip6
 	ld	iy, wa
 	add	iy, 16
 	ld	xwa, (FLASH_SECTION_PTR_7:16)
 	ld	w, (xwa+iy)
 	cp	w, b
-	jr	ule, Flash_InitBytecodeBlock_Helper4_Skip4
+	jr	ule, Flash_InitBytecodeBlock_Helper8_Skip6
 	cp	w, (xsp+0xa)
-	jr	z, Flash_InitBytecodeBlock_Helper4_Skip4
+	jr	z, Flash_InitBytecodeBlock_Helper8_Skip6
 	ld	b, w
 	ld	d, c
-Flash_InitBytecodeBlock_Helper4_Skip4:
+Flash_InitBytecodeBlock_Helper8_Skip6:
 	inc	1, c
 	ldfr_berp	e, 244
 	extz	iy
 	cp	c, 40
-	jr	c, Flash_InitBytecodeBlock_Helper4_Loop2
+	jr	c, Flash_InitBytecodeBlock_Helper8_Loop3
 	sla	iy, 2
 	ld	qwa, iy
 	inc	4, qwa
@@ -3107,11 +3107,11 @@ Flash_InitBytecodeBlock_Helper4_Skip4:
 	.byte	0xf3, 0x07, 0xf0, 0xe0, 0x02, 0x01, 0x00
 	incm8	1, (xsp+6)
 	inc	1, e
-Flash_InitBytecodeBlock_Helper4_Join:
+Flash_InitBytecodeBlock_Helper8_Join:
 	incm8	1, (xsp+4)
 	cp	(xsp+0x4), 50
-	jrl	c, Flash_InitBytecodeBlock_Helper4_Loop
-Flash_InitBytecodeBlock_Helper4_Epilogue:
+	jrl	c, Flash_InitBytecodeBlock_Helper8_Loop2
+Flash_InitBytecodeBlock_Helper8_Epilogue3:
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -3120,14 +3120,14 @@ Flash_InitBytecodeBlock_Helper10:
 	lda	xbc, (0x39b3:16)
 	ld	xwa, xbc
 	lda	xbc, (xbc+29)
-Flash_InitBytecodeBlock_Helper5_Loop:
+Flash_InitBytecodeBlock_Helper10_Loop:
 	ld	(xwa+), 32
 	cp	xwa, xbc
-	jr	c, Flash_InitBytecodeBlock_Helper5_Loop
+	jr	c, Flash_InitBytecodeBlock_Helper10_Loop
 	ldib_erp	251, 0
 	lda	xwa, (2156:16)
 	cpw	(xwa), 0xffff
-	jr	z, Flash_InitBytecodeBlock_Helper5_Skip
+	jr	z, Flash_InitBytecodeBlock_Helper10_Skip
 	ld	wa, (xwa)
 	ld	w, 0:opc
 	ldfr_berp	a, 249
@@ -3148,7 +3148,7 @@ Flash_InitBytecodeBlock_Helper5_Loop:
 	ld	(xbc+6), 109
 	ld	(xbc+7), 41
 	ldi_erpb	251, 9
-Flash_InitBytecodeBlock_Helper5_Skip:
+Flash_InitBytecodeBlock_Helper10_Skip:
 	ldib_erp	250, 0
 Flash_StoreBaseAndInitAccPatch_Loop12:
 	ldto_berp	a, 250
@@ -3164,12 +3164,12 @@ Flash_StoreBaseAndInitAccPatch_Loop12:
 	ldfr_berp	a, 249
 	ld	bc, 0:i3
 	cpib_erp	250, 0
-	jr	z, Flash_InitBytecodeBlock_Helper5_Skip2
+	jr	z, Flash_InitBytecodeBlock_Helper10_Skip2
 	ldto_berp	a, 249
 	cp	a, l
-	jr	z, Flash_InitBytecodeBlock_Helper5_Skip2
+	jr	z, Flash_InitBytecodeBlock_Helper10_Skip2
 	ld	bc, 1:i3
-Flash_InitBytecodeBlock_Helper5_Skip2:
+Flash_InitBytecodeBlock_Helper10_Skip2:
 	cpib_erp	250, 0
 	scc	z, wa
 	or	wa, bc
@@ -5274,7 +5274,7 @@ ToneParam_ExtendedOpsBlock_Helper_Helper:
 	ld L, 0x00:opc
 	ld de, 0:i3
 .Lc_f1919c:
-ToneParam_ExtendedOpsBlock_Helper3_Loop:
+ToneParam_ExtendedOpsBlock_Helper_Helper_Loop:
 	ld WA,DE
 	add WA,0x0060
 	ld xbc, (RHYTHM_PATTERN_BUF_PTR:16)

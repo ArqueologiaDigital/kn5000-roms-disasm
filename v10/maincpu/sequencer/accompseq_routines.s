@@ -1680,29 +1680,29 @@ AccompSeq_MidiFilterCodeBlock:
 	; No reference found.  Unless (0x7F0B) is set, steps (0xFD12) within 0..12 (bit 7 of W = down).
 AccompSeq_MidiFilterCodeBlock_Step:
 	cp	(0x7f0b:16), 0
-	jr	z, AccompSeq_MidiFilterCodeBlock_Code_Skip
-	jp	AccompSeq_MidiFilterCodeBlock_Code_Return
-AccompSeq_MidiFilterCodeBlock_Code_Skip:
+	jr	z, AccompSeq_MidiFilterCodeBlock_Step_Skip
+	jp	AccompSeq_MidiFilterCodeBlock_Step2_Store_Return
+AccompSeq_MidiFilterCodeBlock_Step_Skip:
 	ld	e, 12:opc
 	ld	a, (0xfd12:16)
 	bit	7, w
-	jr	z, AccompSeq_MidiFilterCodeBlock_Code_Skip3
+	jr	z, AccompSeq_MidiFilterCodeBlock_Step_Skip3
 	inc	1, a
 	cp	a, e
-	jr	ule, AccompSeq_MidiFilterCodeBlock_Code_Skip2
+	jr	ule, AccompSeq_MidiFilterCodeBlock_Step_Skip2
 	ld	a, e
-AccompSeq_MidiFilterCodeBlock_Code_Skip2:
-	jr	AccompSeq_MidiFilterCodeBlock_Code_Join
-AccompSeq_MidiFilterCodeBlock_Code_Skip3:
+AccompSeq_MidiFilterCodeBlock_Step_Skip2:
+	jr	AccompSeq_MidiFilterCodeBlock_Step_Join
+AccompSeq_MidiFilterCodeBlock_Step_Skip3:
 	dec	1, a
 	cp	a, 255
-	jr	nz, AccompSeq_MidiFilterCodeBlock_Code_Join
+	jr	nz, AccompSeq_MidiFilterCodeBlock_Step_Join
 	ld	a, 0:opc
-AccompSeq_MidiFilterCodeBlock_Code_Join:
+AccompSeq_MidiFilterCodeBlock_Step_Join:
 	ld	(0xfd12:16), a
 	ld	(0x7e78:16), 0
 	or	(0xe3e0:16), 16
-	jr	AccompSeq_MidiFilterCodeBlock_Code_Return
+	jr	AccompSeq_MidiFilterCodeBlock_Step2_Store_Return
 	; No reference found.  Was `.byte 0xc1 / jrl 16254 / nop`: `cp (0x7e78:16), 0`.
 AccompSeq_MidiFilterCodeBlock_Step2:
 	cp	(0x7e78:16), 0
@@ -1710,7 +1710,7 @@ AccompSeq_MidiFilterCodeBlock_Step2:
 	ld	(0x7e79:16), a
 	ld	(0x7e78:16), 1
 	or	(0xe3de:16), 16
-	jr	AccompSeq_MidiFilterCodeBlock_Code_Return
+	jr	AccompSeq_MidiFilterCodeBlock_Step2_Store_Return
 AccompSeq_MidiFilterCodeBlock_Code_Entry:
 	ld	a, (0x7e79:16)
 	ld	w, 10:opc
@@ -1726,7 +1726,7 @@ AccompSeq_MidiFilterCodeBlock_Step2_Store:
 	ld	(0xfd12:16), a
 	ld	(0x7e78:16), 0
 	or	(0xe3de:16), 16
-AccompSeq_MidiFilterCodeBlock_Code_Return:
+AccompSeq_MidiFilterCodeBlock_Step2_Store_Return:
 	ret
 AccompSeq_LowestBitIndex:
 	; Byte a (0..63) = the index of the lowest set bit of a, 0 for a = 0.  AccompSeq_ProcessAfterNote

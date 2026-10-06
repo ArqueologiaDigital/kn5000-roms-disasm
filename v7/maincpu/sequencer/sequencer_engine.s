@@ -12306,10 +12306,10 @@ SeqVoice_InitEntryForCurrentBank:
 	ld	bc, hl
 	calr	SeqVoice_SeekToBar
 	cp	(SEQ_ERROR_CODE:16), 0
-	jr	z, SeqPos_DataBlock_Skip
+	jr	z, SeqVoice_InitEntryForCurrentBank_Skip
 	ldmm8	9818, 1075
 	ret
-SeqPos_DataBlock_Skip:
+SeqVoice_InitEntryForCurrentBank_Skip:
 	ldmm8	9818, 10382
 	ret
 Seq_ValidatePartTempoAndRange:

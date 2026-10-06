@@ -7355,7 +7355,7 @@ PortConfig_Handler_0_Helper:
 	ld	xde, 0xf250
 	bit	7, (xde+iz)
 	pop	xde
-	jrl	nz, ScoopParam_ValueTable_Helper_Skip
+	jrl	nz, PortConfig_Handler_0_Helper_Skip
 	call	VoiceSlot_ComputeWordIndex
 	push	xix
 	ld	xix, 3230
@@ -7365,7 +7365,7 @@ PortConfig_Handler_0_Helper:
 	ld	(xix+iz), 0x05
 	pop	xix
 	jp	PortConfig_Handler_0_Return3
-ScoopParam_ValueTable_Helper_Skip:
+PortConfig_Handler_0_Helper_Skip:
 	push	xde
 	push	xix
 	ld	xix, 0xf250
@@ -7478,7 +7478,7 @@ Unref_EFA7C5_Tbl:
 	.byte	0x04, 0x02, 0x02, 0x04
 ScoopParam_ValueTable_Sub_Helper:
 	cp	(0x0d65:16), 3
-	jrl	nz, ScoopParam_ValueTable_Helper6_Return
+	jrl	nz, ScoopParam_ValueTable_Sub_Helper_Return
 	ld	bc, 6:i3
 	ld	xiy, ClockConfig_Handler_0_Tbl
 	ld	xix, 3471
@@ -7499,10 +7499,10 @@ ScoopParam_ValueTable_Sub_Helper:
 	ld	w, 6:opc
 	call	SystemInit_StepHandler_0_Helper2
 	bit	7, (0xfc5a:16)
-	jrl	z, ScoopParam_ValueTable_Helper6_Skip
+	jrl	z, ScoopParam_ValueTable_Sub_Helper_Skip
 	ld	a, (0xfc5a:16)
 	cp	a, 240
-	jrl	nc, ScoopParam_ValueTable_Helper6_Skip
+	jrl	nc, ScoopParam_ValueTable_Sub_Helper_Skip
 	and	a, 127
 	extz	wa
 	div	a, 4
@@ -7515,7 +7515,7 @@ ScoopParam_ValueTable_Sub_Helper:
 	ld	d, 7:opc
 	ld	w, 48:opc
 	call	SwbtWr_QueuePostEvent
-ScoopParam_ValueTable_Helper6_Skip:
+ScoopParam_ValueTable_Sub_Helper_Skip:
 	ld	bc, 6:i3
 	ld	xiy, ClockConfig_Handler_0_Tbl2
 	ld	xix, 3471
@@ -7528,7 +7528,7 @@ ScoopParam_ValueTable_Helper6_Skip:
 	ld	xiy, xix
 	ld	w, 6:opc
 	call	SystemInit_StepHandler_0_Helper2
-ScoopParam_ValueTable_Helper6_Return:
+ScoopParam_ValueTable_Sub_Helper_Return:
 	ret
 	; 6-byte template, copied (`ldir`, BC = 6) to RAM 0x0D8F by ScoopParam_ValueTable_Sub_Helper
 	; (display mode 3), which fills bytes +0/+4/+5 from 0xFC5A/0xFC5B and passes the six
@@ -7536,7 +7536,7 @@ ScoopParam_ValueTable_Helper6_Return:
 ClockConfig_Handler_0_Tbl:
 	.byte	0xc0, 0x00, 0x48, 0x00, 0x00, 0x00
 	; 6-byte template, copied the same way (`ldir`, BC = 6, to RAM 0x0D8F) by the
-	; ScoopParam_ValueTable_Helper6_Skip path, which fills it from 0xFC61.
+	; ScoopParam_ValueTable_Sub_Helper_Skip path, which fills it from 0xFC61.
 ClockConfig_Handler_0_Tbl2:
 	.byte	0xb0, 0x00, 0x48, 0x07, 0x00, 0x30
 ScoopParam_ValueTable_Sub_Helper2:
@@ -7578,25 +7578,25 @@ SqStep_RestoreOnLeave:
 	ld	(3382:16), 0
 	ld	a, (PREVIOUS_TITLE:16)
 	cp	(CURRENT_TITLE:16), a
-	jrl	z, ScoopParam_ValueTable_Helper6_Return2
+	jrl	z, SqStep_RestoreOnLeave_Return2
 	and	(0x0d53:16), 254
 	bit	0, (0x0f54:16)
-	jrl	z, ScoopParam_ValueTable_Helper6_Skip2
+	jrl	z, SqStep_RestoreOnLeave_Skip2
 	call	VoiceCtrl_SendNoteOffSequence
-ScoopParam_ValueTable_Helper6_Skip2:
+SqStep_RestoreOnLeave_Skip2:
 	and	(0x0f54:16), 254
 	bit	0, (0x1126:16)
-	jrl	nz, ScoopParam_ValueTable_Helper6_Skip3
+	jrl	nz, SqStep_RestoreOnLeave_Skip3
 	cp	(0x28be:16), 255
-	jrl	nz, ScoopParam_ValueTable_Helper6_Skip3
+	jrl	nz, SqStep_RestoreOnLeave_Skip3
 	call	Timer_ParamCompareAlt_Helper5
-ScoopParam_ValueTable_Helper6_Skip3:
+SqStep_RestoreOnLeave_Skip3:
 	and	(0x1126:16), 254
 	ld	de, (0x2875:16)
 	ld	de, (0xffec:24)
 	call	VoiceState_DataBlock2_Helper
 	cp	w, 0:i3
-	jrl	nz, ScoopParam_ValueTable_Helper6_Skip4
+	jrl	nz, SqStep_RestoreOnLeave_Skip4
 	ld	c, (3822:16)
 	dec	1, c
 	ldfr_berp	a, 60
@@ -7606,7 +7606,7 @@ ScoopParam_ValueTable_Helper6_Skip3:
 	stcfw_erp 0x3e	; stcf A,QHL3
 	ldto_berp	a, 60
 	ldto_werp DE, 0x3e	; ld DE,QHL3
-ScoopParam_ValueTable_Helper6_Skip4:
+SqStep_RestoreOnLeave_Skip4:
 	ld	(0xf19e:16), de
 	ld	(0xffec:24), de
 	or	(0x28a5:16), 1
@@ -7644,25 +7644,25 @@ ScoopParam_ValueTable_Helper6_Skip4:
 	and	(0x0d53:16), 247
 	ld	a, (3429:16)
 	cp	a, 3:i3
-	jrl	nz, ScoopParam_ValueTable_Helper6_Skip5
+	jrl	nz, SqStep_RestoreOnLeave_Skip5
 	call	ClockConfig_Handler_0_Tbl2_Helper2
-	jp	ScoopParam_ValueTable_Helper6_Return2
-ScoopParam_ValueTable_Helper6_Skip5:
+	jp	SqStep_RestoreOnLeave_Return2
+SqStep_RestoreOnLeave_Skip5:
 	cp	a, 0:i3
-	jrl	nz, ScoopParam_ValueTable_Helper6_Return2
+	jrl	nz, SqStep_RestoreOnLeave_Return2
 	call	SysEx_BytecodeDispatcher_Tbl2_Sub4
-ScoopParam_ValueTable_Helper6_Return2:
+SqStep_RestoreOnLeave_Return2:
 	ret
 ClockConfig_Handler_0_Tbl2_Helper:
 	cp	(0x28be:16), 255
-	jrl	z, ScoopParam_ValueTable_Helper6_Return3
+	jrl	z, ClockConfig_Handler_0_Tbl2_Helper_Return3
 	call	VoiceSlot_ComputeWordIndex
 	sra	iz, 1
 	push	xix
 	ld	xix, 0xf1a0
 	ld	(xix+iz), 0x0e
 	pop	xix
-ScoopParam_ValueTable_Helper6_Return3:
+ClockConfig_Handler_0_Tbl2_Helper_Return3:
 	ret
 
 SysEx_PeriodicDispatch:
@@ -7945,9 +7945,9 @@ MemoryConfig_Handler_Table_Target2_Join:
 	ld	(0x0d6a:16), 0
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 144
-	jr	nz, MemoryConfig_Handler_Table_Code_Sub_Skip
+	jr	nz, MemoryConfig_Handler_Table_Target2_Sub_Skip
 	call	MemConfig_Handler_5_Helper10
-MemoryConfig_Handler_Table_Code_Sub_Skip:
+MemoryConfig_Handler_Table_Target2_Sub_Skip:
 	call	MemConfig_Handler_5_Helper12
 	call	DMA_FlagCheckWithCalls
 	call	MemConfig_Handler_5_Helper11
@@ -8939,13 +8939,13 @@ MemConfig_Handler_4_Helper:
 	ret
 MemConfig_Handler_4_Helper2:
 	cp	(0x0d65:16), 0
-	jrl	nz, ScoopParam_ValueTable_Helper8_Return
+	jrl	nz, MemConfig_Handler_4_Helper2_Return
 	ld	a, (0xfc5d:16)
 	and	a, 7
 	cp	a, 1:i3
-	jrl	nz, ScoopParam_ValueTable_Helper8_Skip
-	jp	ScoopParam_ValueTable_Helper8_Return
-ScoopParam_ValueTable_Helper8_Skip:
+	jrl	nz, MemConfig_Handler_4_Helper2_Skip
+	jp	MemConfig_Handler_4_Helper2_Return
+MemConfig_Handler_4_Helper2_Skip:
 	and	(0xfc5d:16), 248
 	or	(0xfc5d:16), 2
 	ld	a, 72:opc
@@ -8953,7 +8953,7 @@ ScoopParam_ValueTable_Helper8_Skip:
 	ld	e, 2:opc
 	ld	d, 2:opc
 	call	PortConfig_DataTable_A_Helper
-ScoopParam_ValueTable_Helper8_Return:
+MemConfig_Handler_4_Helper2_Return:
 	ret
 
 SysInit_SendAllNotesAndReset:
@@ -9288,11 +9288,11 @@ SystemInit_StepHandler_0_Return6:
 ClockConfig_Handler_0_Tbl2_Helper2:
 	ld	xhl, 3412
 	bitm	7, (xhl)
-	jrl	z, ScoopParam_ValueTable_Helper9_Return
+	jrl	z, ClockConfig_Handler_0_Tbl2_Helper2_Return
 	resm	7, (xhl)
 	call	VoiceState_DataBlock2_Helper
 	cp	w, 0:i3
-	jrl	nz, ScoopParam_ValueTable_Helper9_Return
+	jrl	nz, ClockConfig_Handler_0_Tbl2_Helper2_Return
 	call	VoiceSlot_ComputeWordIndex
 	push	xix
 	ld	xix, 0xf1f8
@@ -9308,14 +9308,14 @@ ClockConfig_Handler_0_Tbl2_Helper2:
 SysEx_BytecodeDispatcher_Tbl2_Join2:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 132
-	jrl	nz, ScoopParam_ValueTable_Helper9_Skip
+	jrl	nz, ClockConfig_Handler_0_Tbl2_Helper2_Skip
 	call	Timer_ParamCompareAlt_Helper7
 	cp	w, 255
-	jrl	z, ScoopParam_ValueTable_Helper9_Return
+	jrl	z, ClockConfig_Handler_0_Tbl2_Helper2_Return
 	jp	SysEx_BytecodeDispatcher_Tbl2_Join2
-ScoopParam_ValueTable_Helper9_Skip:
+ClockConfig_Handler_0_Tbl2_Helper2_Skip:
 	cp	a, 129
-	jrl	nz, ScoopParam_ValueTable_Helper9_Return
+	jrl	nz, ClockConfig_Handler_0_Tbl2_Helper2_Return
 	xor	a, a
 	call	VoiceSlot_SaveState
 	ld	w, 132:opc
@@ -9327,11 +9327,11 @@ ScoopParam_ValueTable_Helper9_Skip:
 	xor	a, a
 	call	VoiceSlot_RestoreState
 	call	MemConfig_Handler_0_Helper
-ScoopParam_ValueTable_Helper9_Return:
+ClockConfig_Handler_0_Tbl2_Helper2_Return:
 	ret
 	xor	a, a
 	ld	(3822:16), a
-ScoopParam_ValueTable_Helper9_Loop:
+ClockConfig_Handler_0_Tbl2_Helper2_Loop:
 	ld	a, (3822:16)
 	inc	1, a
 	cp	a, 15
@@ -9343,7 +9343,7 @@ ScoopParam_ValueTable_Helper9_Loop:
 	ld	xix, 0xf1a0
 	cp	(xix+iz), 0x0d
 	pop	xix
-	jrl	nz, ScoopParam_ValueTable_Helper9_Loop
+	jrl	nz, ClockConfig_Handler_0_Tbl2_Helper2_Loop
 SysEx_BytecodeDispatcher_Tbl2_Sub4:
 	call	VoiceState_DataBlock2_Helper
 	cp	w, 0:i3
@@ -9369,7 +9369,7 @@ SysEx_BytecodeDispatcher_Tbl2_Join3:
 	ld	w, a
 	and	a, 240
 	cp	a, 176
-	jrl	z, ScoopParam_ValueTable_Helper9_Skip2
+	jrl	z, SysEx_BytecodeDispatcher_Tbl2_Sub4_Skip2
 SysEx_BytecodeDispatcher_Tbl2_Join4:
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
@@ -9382,7 +9382,7 @@ SysEx_BytecodeDispatcher_Tbl2_Join5:
 	jrl	z, SystemInit_StepHandler_0_Return7
 	jp	SysEx_BytecodeDispatcher_Tbl2_Join3
 	jp	SystemInit_StepHandler_0_Return7
-ScoopParam_ValueTable_Helper9_Skip2:
+SysEx_BytecodeDispatcher_Tbl2_Sub4_Skip2:
 	and	w, 1
 	rrc	w
 	ld	(3528:16), w
@@ -9579,7 +9579,7 @@ SysEx_BytecodeDispatcher_Tbl2_Helper:
 SysEx_BytecodeDispatcher_Tbl2_Join9:
 	ld	iy, (xix+iz)
 	cp iy, 65535
-	jrl	z, ScoopParam_ValueTable_Helper10_Skip3
+	jrl	z, SysEx_BytecodeDispatcher_Tbl2_Helper_Skip3
 	ld	(0x28ba:16), iy
 	srl	xiz, 1
 	ldfr_lerp xix, 56
@@ -9593,7 +9593,7 @@ SysEx_BytecodeDispatcher_Tbl2_Join9:
 SysEx_BytecodeDispatcher_Tbl2_Join10:
 	ld	de, (xix+iz)
 	cp de, 65535
-	jrl	nz, ScoopParam_ValueTable_Helper10_Skip
+	jrl	nz, SysEx_BytecodeDispatcher_Tbl2_Helper_Skip
 	ld	(xix+iz), iy
 	srl	iz, 1
 	ldfr_lerp xix, 56
@@ -9602,7 +9602,7 @@ SysEx_BytecodeDispatcher_Tbl2_Join10:
 	ldto_lerp	xix, 56
 	sla	iz, 1
 	jp	SysEx_BytecodeDispatcher_Tbl2_Join10
-ScoopParam_ValueTable_Helper10_Skip:
+SysEx_BytecodeDispatcher_Tbl2_Helper_Skip:
 	srl	iz, 1
 	ldfr_lerp	xix, 56
 	lda	xix, (xix+iz)
@@ -9621,7 +9621,7 @@ ScoopParam_ValueTable_Helper10_Skip:
 	sla	iz, 1
 	add	wa, bc
 	cp	wa, 255
-	jrl	ugt, ScoopParam_ValueTable_Helper10_Skip2
+	jrl	ugt, SysEx_BytecodeDispatcher_Tbl2_Helper_Skip2
 	ld	iy, (xix+iz)
 	ld (10399:16), iy
 	ld	(0x28b6:16), wa
@@ -9650,7 +9650,7 @@ ScoopParam_ValueTable_Helper10_Skip:
 	xor	w, w
 	popw	bc
 	jp	SysEx_BytecodeDispatcher_Tbl2_Return3
-ScoopParam_ValueTable_Helper10_Skip2:
+SysEx_BytecodeDispatcher_Tbl2_Helper_Skip2:
 	sub	wa, 251
 	ld	(0x28b6:16), wa
 	pushw	de
@@ -9705,7 +9705,7 @@ SystemInit_StepHandler_0_Loop7:
 	call	SoundCtrl_SendCommand
 	popw	bc
 	jp	SysEx_BytecodeDispatcher_Tbl2_Return3
-ScoopParam_ValueTable_Helper10_Skip3:
+SysEx_BytecodeDispatcher_Tbl2_Helper_Skip3:
 	push	xix
 	call	DispatchHandler_JumpToSubHandler
 	ld	iy, ix
@@ -11616,9 +11616,9 @@ VoiceState_DataBlock2_Helper:
 	ld	xde, 0xf250
 	bit	7, (xde+hl)
 	pop	xde
-	jrl	z, ScoopParam_ValueTable_Helper11_Epilogue
+	jrl	z, VoiceState_DataBlock2_Helper_Epilogue
 	ld	w, 0:opc
-ScoopParam_ValueTable_Helper11_Epilogue:
+VoiceState_DataBlock2_Helper_Epilogue:
 	pop	xhl
 	ret
 VoiceState_DataBlock2_Code_Loop:
@@ -11763,17 +11763,17 @@ VoiceState_DataBlock2_Helper3:
 	ld	a, (xix)
 	and	a, 240
 	cp	a, 176
-	jrl	nz, ScoopParam_ValueTable_Helper11_Skip
+	jrl	nz, VoiceState_DataBlock2_Helper3_Skip
 	cp	(xix+2), 72
-	jrl	nz, ScoopParam_ValueTable_Helper11_Skip
+	jrl	nz, VoiceState_DataBlock2_Helper3_Skip
 	cp	(xix+3), 7
-	jrl	nz, ScoopParam_ValueTable_Helper11_Skip
+	jrl	nz, VoiceState_DataBlock2_Helper3_Skip
 	ld	a, (xix+5)
 	bit	4, a
-	jrl	z, ScoopParam_ValueTable_Helper11_Skip
+	jrl	z, VoiceState_DataBlock2_Helper3_Skip
 	ld	w, 0:opc
 	jp	VoiceState_DataBlock2_Join2
-ScoopParam_ValueTable_Helper11_Skip:
+VoiceState_DataBlock2_Helper3_Skip:
 	ld	w, 255:opc
 VoiceState_DataBlock2_Join2:
 	ld	a, 2:opc
@@ -11813,12 +11813,12 @@ VoiceState_DataBlock2_Code_Skip14:
 	call	MemConfig_VoiceSlotLookup
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	nz, ScoopParam_ValueTable_Helper11_Skip3
+	jrl	nz, VoiceState_DataBlock2_Helper3_Skip3
 	jp	VoiceState_DataBlock2_Code_Entry3
-ScoopParam_ValueTable_Helper11_Loop:
+VoiceState_DataBlock2_Helper3_Loop:
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
-	jrl	z, ScoopParam_ValueTable_Helper11_Skip4
+	jrl	z, VoiceState_DataBlock2_Code_Entry3_Skip4
 	call	VoiceSlot_ComputeWordIndex
 	push	xde
 	ld	xde, 3230
@@ -11828,28 +11828,28 @@ ScoopParam_ValueTable_Helper11_Loop:
 	ld	a, (xde+iz)
 	pop xde
 	cp iy, (3583:16)
-	jrl	nz, ScoopParam_ValueTable_Helper11_Skip2
+	jrl	nz, VoiceState_DataBlock2_Helper3_Skip2
 	cp	a, (0x0e01:16)
-	jrl	nc, ScoopParam_ValueTable_Helper11_Skip4
-ScoopParam_ValueTable_Helper11_Skip2:
+	jrl	nc, VoiceState_DataBlock2_Code_Entry3_Skip4
+VoiceState_DataBlock2_Helper3_Skip2:
 	call	VoiceSlot_ReadCurrentParams
-ScoopParam_ValueTable_Helper11_Skip3:
+VoiceState_DataBlock2_Helper3_Skip3:
 	and	a, 240
 	cp	a, 176
-	jrl	nz, ScoopParam_ValueTable_Helper11_Loop
+	jrl	nz, VoiceState_DataBlock2_Helper3_Loop
 	call	VoiceState_DataBlock2_Helper4
 	cp	a, 1:i3
 	jrl	z, VoiceState_DataBlock2_Code_Entry2
 	cp	a, 2:i3
 	jrl	z, VoiceState_DataBlock2_Code_Entry3
-	jp	ScoopParam_ValueTable_Helper11_Loop
+	jp	VoiceState_DataBlock2_Helper3_Loop
 VoiceState_DataBlock2_Code_Entry2:
 	or	(0x0f56:16), 1
-	jp	ScoopParam_ValueTable_Helper11_Loop
+	jp	VoiceState_DataBlock2_Helper3_Loop
 VoiceState_DataBlock2_Code_Entry3:
 	and	(0x0f56:16), 254
-	jp	ScoopParam_ValueTable_Helper11_Loop
-ScoopParam_ValueTable_Helper11_Skip4:
+	jp	VoiceState_DataBlock2_Helper3_Loop
+VoiceState_DataBlock2_Code_Entry3_Skip4:
 	ld	a, 4:opc
 	call	VoiceSlot_RestoreState
 	pop	xiz
@@ -11881,17 +11881,17 @@ VoiceState_DataBlock2_Helper4:
 	ld	a, (3765:16)
 	and	a, 240
 	cp	a, 176
-	jrl	z, ScoopParam_ValueTable_Helper11_Skip5
-ScoopParam_ValueTable_Helper11_Loop2:
+	jrl	z, VoiceState_DataBlock2_Helper4_Skip5
+VoiceState_DataBlock2_Helper4_Loop2:
 	ld	a, 0:opc
 	jp	VoiceState_DataBlock2_Return5
-ScoopParam_ValueTable_Helper11_Skip5:
+VoiceState_DataBlock2_Helper4_Skip5:
 	cp	(0x0eb7:16), 72
-	jrl	nz, ScoopParam_ValueTable_Helper11_Loop2
+	jrl	nz, VoiceState_DataBlock2_Helper4_Loop2
 	cp	(0x0eb8:16), 10
-	jrl	nz, ScoopParam_ValueTable_Helper11_Loop2
+	jrl	nz, VoiceState_DataBlock2_Helper4_Loop2
 	bit	4, (0x0eba:16)
-	jrl	z, ScoopParam_ValueTable_Helper11_Loop2
+	jrl	z, VoiceState_DataBlock2_Helper4_Loop2
 	ld	a, 1:opc
 	bit	4, (0x0eb9:16)
 	jrl	nz, VoiceState_DataBlock2_Return5
@@ -11902,14 +11902,14 @@ SoundEvt_LongPacketHandler_DispatchTbl_Target1_Helper2:
 	ld	a, 32:opc
 	ld	w, (3421:16)
 	cp	(0x0d5c:16), 3
-	jrl	le, ScoopParam_ValueTable_Helper11_Skip6
+	jrl	le, SoundEvt_LongPacketHandler_DispatchTbl_Target1_Helper2_Skip6
 	sub	w, 4
-	jp	ScoopParam_ValueTable_Helper11_Skip7
-ScoopParam_ValueTable_Helper11_Skip6:
+	jp	SoundEvt_LongPacketHandler_DispatchTbl_Target1_Helper2_Skip7
+SoundEvt_LongPacketHandler_DispatchTbl_Target1_Helper2_Skip6:
 	cp	w, 4:i3
-	jrl	ule, ScoopParam_ValueTable_Helper11_Skip7
+	jrl	ule, SoundEvt_LongPacketHandler_DispatchTbl_Target1_Helper2_Skip7
 	ld	w, 4:opc
-ScoopParam_ValueTable_Helper11_Skip7:
+SoundEvt_LongPacketHandler_DispatchTbl_Target1_Helper2_Skip7:
 	ld	(0x371c:16), a
 	ld	(0x3711:16), w
 	ld	(3667:16), w
@@ -11938,7 +11938,7 @@ VoiceState_DataBlock2_Helper2:
 	cp a, (xix+)
 	jrl z, VoiceState_DataBlock2_Code_Skip16
 	djnz16 bc, -9
-	jp	ScoopParam_ValueTable_Helper12_Skip2
+	jp	VoiceState_DataBlock2_Helper2_Skip2
 VoiceState_DataBlock2_Code_Skip16:
 	xor	wa, wa
 	ld	a, 16:opc
@@ -11951,19 +11951,19 @@ VoiceState_DataBlock2_Code_Skip16:
 	pop xix
 	and	bc, (0xffec:24)
 	cp	bc, 0:i3
-	jrl	z, ScoopParam_ValueTable_Helper12_Skip2
+	jrl	z, VoiceState_DataBlock2_Helper2_Skip2
 	pushw	wa
 	ld	xhl, 0xf250
 	ld	c, 3:opc
 	mul	wa, c
 	ld	iy, wa
 	bit	7, (xhl+iy)
-	jrl	z, ScoopParam_ValueTable_Helper12_Skip
+	jrl	z, VoiceState_DataBlock2_Helper2_Skip
 	popw	wa
 	jp	VoiceState_DataBlock2_Join3
-ScoopParam_ValueTable_Helper12_Skip:
+VoiceState_DataBlock2_Helper2_Skip:
 	popw	wa
-	jp	ScoopParam_ValueTable_Helper12_Skip2
+	jp	VoiceState_DataBlock2_Helper2_Skip2
 VoiceState_DataBlock2_Join3:
 	inc	1, a
 	ld	w, a
@@ -11971,7 +11971,7 @@ VoiceState_DataBlock2_Join3:
 	or	(0x0d54:16), 1
 	or	(0x287b:16), 4
 	jp	VoiceState_DataBlock2_Return6
-ScoopParam_ValueTable_Helper12_Skip2:
+VoiceState_DataBlock2_Helper2_Skip2:
 	and	(0x0d54:16), 254
 	and	(0x287b:16), 251
 	xor	w, w

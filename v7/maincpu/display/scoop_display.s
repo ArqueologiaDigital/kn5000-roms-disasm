@@ -4942,11 +4942,11 @@ PerfMode_ParamHandler_Data_Helper2:
 PerfMode_EventTable_0_Target1_Helper:
 	call	ToneParam_ModeGuardEntry_Helper4
 	cp	w, 0:i3
-	jrl	z, DisplayMode_Handler_3_Helper9_Return
+	jrl	z, PerfMode_EventTable_0_Target1_Helper_Return
 	call	VoiceSlot_ReadCurrentParams
 	and	a, 240
 	cp	a, 128
-	jrl	nz, DisplayMode_Handler_3_Helper9_Return
+	jrl	nz, PerfMode_EventTable_0_Target1_Helper_Return
 	xor	a, a
 	call	VoiceSlot_SaveState
 	ldb_d8	e, (0x0df3)
@@ -4968,10 +4968,10 @@ PerfMode_EventTable_0_Target1_Helper:
 	ld	bc, wa
 	add	wa, (0x0ef0:16)
 	cp	wa, 40
-	jrl	nc, DisplayMode_Handler_3_Helper9_Skip
+	jrl	nc, PerfMode_EventTable_0_Target1_Helper_Skip
 	ld	wa, bc
 	jp	PerfMode_EventTable_0_Target1_Join
-DisplayMode_Handler_3_Helper9_Skip:
+PerfMode_EventTable_0_Target1_Helper_Skip:
 	cp	wa, 300
 	jrl	ule, PerfMode_EventTable_0_Target1_Join
 	ld	wa, bc
@@ -4994,7 +4994,7 @@ PerfMode_EventTable_0_Target1_Join:
 	call	MemConfig_Handler_5_Code_Helper13
 	xor	a, a
 	call	VoiceSlot_RestoreState
-DisplayMode_Handler_3_Helper9_Return:
+PerfMode_EventTable_0_Target1_Helper_Return:
 	ret
 PerfMode_ParamHandler_3_Helper:
 	ld	(0x0df2:16), 1
@@ -5003,12 +5003,12 @@ PerfMode_ParamHandler_3_Helper:
 	ld	l, a
 	and	a, 240
 	cp	a, 208
-	jrl	nz, DisplayMode_Handler_3_Helper9_Return2
+	jrl	nz, PerfMode_ParamHandler_3_Helper_Return2
 	pushw	hl
 	call	VoiceSlot_FlagCheck
 	popw	hl
 	cp	a, (0x0d57:16)
-	jrl	nz, DisplayMode_Handler_3_Helper9_Return2
+	jrl	nz, PerfMode_ParamHandler_3_Helper_Return2
 	push	xhl
 	ld	xhl, 0x3685
 	ld	(0x110e:16), xhl
@@ -5023,7 +5023,7 @@ PerfMode_EventTable_0_Target1_Join2:
 	call	PerfMode_EventTable_0_Target1_Helper4
 	call	Display_UpdateRegion3
 	or	(0xe31c:16), 8
-DisplayMode_Handler_3_Helper9_Return2:
+PerfMode_ParamHandler_3_Helper_Return2:
 	ret
 PerfMode_ParamHandler_3_Helper2:
 	ld	(0x0df2:16), 255
@@ -5032,35 +5032,35 @@ PerfMode_ParamHandler_3_Helper2:
 	ld	l, a
 	and	a, 240
 	cp	a, 208
-	jrl	nz, DisplayMode_Handler_3_Helper9_Return3
+	jrl	nz, PerfMode_ParamHandler_3_Helper2_Return3
 	pushw	hl
 	call	VoiceSlot_FlagCheck
 	popw	hl
 	cp	a, (0x0d57:16)
-	jrl	nz, DisplayMode_Handler_3_Helper9_Return3
+	jrl	nz, PerfMode_ParamHandler_3_Helper2_Return3
 	push	xhl
 	ld	xhl, 0x3685
 	ld	(0x110e:16), xhl
 	pop	xhl
 	cp	l, 210
-	jrl	nz, DisplayMode_Handler_3_Helper9_Skip2
+	jrl	nz, PerfMode_ParamHandler_3_Helper2_Skip2
 	call	PerfMode_EventTable_0_Target1_Helper3
 	jp	PerfMode_EventTable_0_Target1_Join3
-DisplayMode_Handler_3_Helper9_Skip2:
+PerfMode_ParamHandler_3_Helper2_Skip2:
 	call	PerfMode_EventTable_0_Target1_Helper2
 PerfMode_EventTable_0_Target1_Join3:
 	call	PerfMode_EventTable_0_Target1_Helper4
 	call	Display_UpdateRegion3
 	or	(0xe31c:16), 8
-DisplayMode_Handler_3_Helper9_Return3:
+PerfMode_ParamHandler_3_Helper2_Return3:
 	ret
 	; Entry 2 of PerfMode_EventTable_0 (a code pointer the table holds).
 PerfMode_EventTable_0_Target2:
 	bit	7, w
-	jrl	nz, DisplayMode_Handler_3_Helper9_Skip3
+	jrl	nz, PerfMode_EventTable_0_Target2_Skip3
 	call	PerfMode_IncNoteVelocity
 	jp	PerfMode_EventTable_0_Target2_Return
-DisplayMode_Handler_3_Helper9_Skip3:
+PerfMode_EventTable_0_Target2_Skip3:
 	call	PerfMode_EventTable_0_Target2_Helper
 PerfMode_EventTable_0_Target2_Return:
 	ret
@@ -5068,14 +5068,14 @@ PerfMode_IncNoteVelocity:
 	ld	(0x0df2:16), 1
 	ld	(0x0df3:16), 3
 	cp	(0x0d65:16), 1
-	jrl	nz, DisplayMode_Handler_3_Helper9_Return4
+	jrl	nz, PerfMode_IncNoteVelocity_Return4
 	call	VoiceSlot_ReadCurrentParams
 	and	a, 240
 	cp	a, 144
-	jrl	nz, DisplayMode_Handler_3_Helper9_Return4
+	jrl	nz, PerfMode_IncNoteVelocity_Return4
 	call	VoiceSlot_FlagCheck
 	cp	a, (0x0d57:16)
-	jrl	nz, DisplayMode_Handler_3_Helper9_Return4
+	jrl	nz, PerfMode_IncNoteVelocity_Return4
 	push	xhl
 	ld	xhl, 0x367b
 	ld	(0x110e:16), xhl
@@ -5084,20 +5084,20 @@ PerfMode_IncNoteVelocity:
 	call	Disp_ShowNoteNameAndVelocity
 	or	(0xe31c:16), 8
 	call	Display_UpdateRegion3
-DisplayMode_Handler_3_Helper9_Return4:
+PerfMode_IncNoteVelocity_Return4:
 	ret
 PerfMode_EventTable_0_Target2_Helper:
 	ld	(0x0df2:16), 255
 	ld	(0x0df3:16), 3
 	cp	(0x0d65:16), 1
-	jrl	nz, DisplayMode_Handler_3_Helper9_Return5
+	jrl	nz, PerfMode_EventTable_0_Target2_Helper_Return5
 	call	VoiceSlot_ReadCurrentParams
 	and	a, 240
 	cp	a, 144
-	jrl	nz, DisplayMode_Handler_3_Helper9_Return5
+	jrl	nz, PerfMode_EventTable_0_Target2_Helper_Return5
 	call	VoiceSlot_FlagCheck
 	cp	a, (0x0d57:16)
-	jrl	nz, DisplayMode_Handler_3_Helper9_Return5
+	jrl	nz, PerfMode_EventTable_0_Target2_Helper_Return5
 	push	xhl
 	ld	xhl, 0x367b
 	ld	(0x110e:16), xhl
@@ -5106,12 +5106,12 @@ PerfMode_EventTable_0_Target2_Helper:
 	call	Disp_ShowNoteNameAndVelocity
 	or	(0xe31c:16), 8
 	call	Display_UpdateRegion3
-DisplayMode_Handler_3_Helper9_Return5:
+PerfMode_EventTable_0_Target2_Helper_Return5:
 	ret
 PerfMode_EventTable_0_Target1_Helper2:
 	call	ToneParam_ModeGuardEntry_Helper4
 	cp	w, 0:i3
-	jrl	z, DisplayMode_Handler_3_Helper9_Return6
+	jrl	z, PerfMode_EventTable_0_Target1_Helper2_Return6
 	xor	a, a
 	call	VoiceSlot_SaveState
 	ldb_d8	e, (0x0df3)
@@ -5121,21 +5121,21 @@ PerfMode_EventTable_0_Target1_Helper2:
 	ld	w, a
 	add	a, (0x0df2:16)
 	bit	7, a
-	jrl	z, DisplayMode_Handler_3_Helper9_Skip4
+	jrl	z, PerfMode_EventTable_0_Target1_Helper2_Skip4
 	ld	a, w
-DisplayMode_Handler_3_Helper9_Skip4:
+PerfMode_EventTable_0_Target1_Helper2_Skip4:
 	ld	xhl, (0x110e:16)
 	ld	(xhl), a
 	ld	w, a
 	call	MemConfig_Handler_5_Code_Helper13
 	xor	a, a
 	call	VoiceSlot_RestoreState
-DisplayMode_Handler_3_Helper9_Return6:
+PerfMode_EventTable_0_Target1_Helper2_Return6:
 	ret
 PerfMode_EventTable_0_Target1_Helper3:
 	call	ToneParam_ModeGuardEntry_Helper4
 	cp	w, 0:i3
-	jrl	z, DisplayMode_Handler_3_Helper9_Return7
+	jrl	z, PerfMode_EventTable_0_Target1_Helper3_Return7
 	xor	a, a
 	call	VoiceSlot_SaveState
 	ldb_d8	e, (0x0df3)
@@ -5160,13 +5160,13 @@ PerfMode_EventTable_0_Target1_Helper3:
 	exts	de
 	add	wa, de
 	cp	wa, 16383
-	jrl	gt, DisplayMode_Handler_3_Helper9_Helper_Skip2
+	jrl	gt, PerfMode_EventTable_0_Target1_Helper3_Skip2
 	cp	wa, 0:i3
-	jrl	lt, DisplayMode_Handler_3_Helper9_Helper_Skip2
+	jrl	lt, PerfMode_EventTable_0_Target1_Helper3_Skip2
 	bit	7, w
-	jrl	z, DisplayMode_Handler_3_Helper9_Helper_Skip
+	jrl	z, PerfMode_EventTable_0_Target1_Helper3_Skip
 	ld	wa, bc
-DisplayMode_Handler_3_Helper9_Helper_Skip:
+PerfMode_EventTable_0_Target1_Helper3_Skip:
 	ld	bc, wa
 	and	a, 127
 	stb_d8	(0x3685), a
@@ -5183,14 +5183,14 @@ DisplayMode_Handler_3_Helper9_Helper_Skip:
 	popw	bc
 	ld	w, c
 	call	MemConfig_Handler_5_Code_Helper13
-DisplayMode_Handler_3_Helper9_Helper_Skip2:
+PerfMode_EventTable_0_Target1_Helper3_Skip2:
 	xor	a, a
 	call	VoiceSlot_RestoreState
-DisplayMode_Handler_3_Helper9_Return7:
+PerfMode_EventTable_0_Target1_Helper3_Return7:
 	ret
 Timer_ParamCompareAlt_Helper6:
 	bit	0, (0x0f57:16)
-	jrl	nz, DisplayMode_Handler_3_Helper9_Return8
+	jrl	nz, Timer_ParamCompareAlt_Helper6_Return8
 	ldb_d8	l, (0x0d65)
 	and	l, 3
 	xor	h, h
@@ -5200,7 +5200,7 @@ Timer_ParamCompareAlt_Helper6:
 	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
-DisplayMode_Handler_3_Helper9_Return8:
+Timer_ParamCompareAlt_Helper6_Return8:
 	ret
 	; Handler dispatch table, 16 B.  Read by PerfMode_EventTable_0_Target2 (0xEF8DD1): `ld xix, DMA_ChannelSelect_Table`
 	; indexed with stride 4 (`sla hl, 2`)
@@ -9024,9 +9024,9 @@ SystemInit_Handler_Table_0x18:
 	pop	xhl
 	sub	l, 2
 	cp	l, 6:i3
-	jrl	lt, SysEx_BytecodeDispatcher_Helper_Skip
+	jrl	lt, SystemInit_Handler_Table_0x18_Skip
 	sub	l, 2
-SysEx_BytecodeDispatcher_Helper_Skip:
+SystemInit_Handler_Table_0x18_Skip:
 	xor	h, h
 	sla	hl, 3
 SystemInit_Handler_Table_Join:
@@ -13758,10 +13758,10 @@ OscScope_FinalizeRender_Return:
 OscScope_FinalizeRender_0x79:
 	ld	(4479:16), 0
 	cp	e, 0:i3
-	jrl	z, OscScope_DrawWaveform_Code_Helper_Return
-OscScope_DrawWaveform_Code_Helper_Join:
+	jrl	z, OscScope_FinalizeRender_Entry3_Return
+OscScope_FinalizeRender_0x79_Join:
 	cp	c, e
-	jrl	z, OscScope_DrawWaveform_Code_Helper_Return
+	jrl	z, OscScope_FinalizeRender_Entry3_Return
 	ld	a, (xiy+1)
 	cp	a, 6:i3
 	jrl	z, OscScope_FinalizeRender_Skip3
@@ -13769,7 +13769,7 @@ OscScope_DrawWaveform_Code_Helper_Join:
 	jrl	nz, OscScope_FinalizeRender_Entry
 OscScope_FinalizeRender_Skip3:
 	ld	(4479:16), 255
-	jp	OscScope_DrawWaveform_Code_Helper_Return
+	jp	OscScope_FinalizeRender_Entry3_Return
 OscScope_FinalizeRender_Entry:
 	; v10 does not spell this byte either
 	cp	(xix+1), 0
@@ -13781,21 +13781,21 @@ OscScope_FinalizeRender_Entry:
 OscScope_DrawWaveform_Code_Entry2:
 	; v10 does not spell this byte either
 	cp	(xiy+2), 0
-	jrl	nz, OscScope_DrawWaveform_Code_Helper_Skip
+	jrl	nz, OscScope_FinalizeRender_Entry3_Skip
 OscScope_FinalizeRender_Entry3:
 	; v10 does not spell this byte either
 	andmi8	(xiy), 127
-	jp	OscScope_DrawWaveform_Code_Helper_Join2
-OscScope_DrawWaveform_Code_Helper_Skip:
+	jp	OscScope_FinalizeRender_Entry3_Join2
+OscScope_FinalizeRender_Entry3_Skip:
 	ormi8	(xiy), 128
-OscScope_DrawWaveform_Code_Helper_Join2:
+OscScope_FinalizeRender_Entry3_Join2:
 	add	iy, 4
 	add	ix, 4
 	inc	1, c
 	; v10 does not spell this byte either
-	jp	OscScope_DrawWaveform_Code_Helper_Join
+	jp	OscScope_FinalizeRender_0x79_Join
 	; differs from v10 here and llvm-objdump cannot read it
-OscScope_DrawWaveform_Code_Helper_Return:
+OscScope_FinalizeRender_Entry3_Return:
 	ret
 VoiceBank_ProcessCommand:
 	ld xix, 0xeb5
@@ -14237,11 +14237,11 @@ VoiceSlot_StatusRet_Helper3:
 	call	Display_BytecodeBlock_F_Sub2
 	ld	xiy, DisplayStr_TempoString
 	cp	(0xfc5a:16), 7
-	jrl	nz, VoiceCtrl_ParamSetupBytecode_Helper10_Skip
+	jrl	nz, VoiceSlot_StatusRet_Helper3_Skip
 	cp	(0xfc5b:16), 2
-	jrl	nz, VoiceCtrl_ParamSetupBytecode_Helper10_Skip
+	jrl	nz, VoiceSlot_StatusRet_Helper3_Skip
 	ld	xiy, DisplayStr_BytecodeBlock_C_Tbl2
-VoiceCtrl_ParamSetupBytecode_Helper10_Skip:
+VoiceSlot_StatusRet_Helper3_Skip:
 	ld	xix, 3791
 	ldw	bc, 25
 	ldir85

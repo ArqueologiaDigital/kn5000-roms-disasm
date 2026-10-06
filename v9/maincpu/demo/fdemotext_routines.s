@@ -1270,7 +1270,7 @@ FDemoText_ByteData_DisplayRefresh_Loop:
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
 	jr	ule, FDemoText_ByteData_DisplayRefresh_Skip4
-FDemoText_TextDispatch_Helper_Loop:
+FDemoText_GetInstanceID_Loop:
 	ld	xbc, xiz
 	ld	xwa, (xsp+4)
 	sll	xwa, 16
@@ -1300,7 +1300,7 @@ FDemoText_ByteData_DisplayRefresh_Skip3:
 	inc	1, xiz
 	ld	xwa, xiz
 	cp	xwa, (xsp+0x8)
-	jr	c, FDemoText_TextDispatch_Helper_Loop
+	jr	c, FDemoText_GetInstanceID_Loop
 FDemoText_ByteData_DisplayRefresh_Skip4:
 	ld	xwa, 1:i3
 	sub	(xsp+4), xwa
@@ -1323,24 +1323,24 @@ FDemoText_ReadTaggedBlock:
 	ld	(xsp+20), xwa
 	ldw	(xsp+2), 1
 	jr	FDemoText_ByteData_DisplayRefresh_Join2
-Seq_LoadDisplayResource_Helper_Loop:
+FDemoText_ReadTaggedBlock_Loop:
 	cp	hl, 60
 	jr	nz, FDemoText_ByteData_DisplayRefresh_Join2
 	ld	iz, 1:i3
-Seq_LoadDisplayResource_Helper_Loop2:
+FDemoText_ReadTaggedBlock_Loop2:
 	call	FileIO_ReadByte
 	cp	hl, 0:i3
 	jr	ge, FDemoText_ByteData_DisplayRefresh_Skip6
-Seq_LoadDisplayResource_Helper_Loop3:
+FDemoText_ReadTaggedBlock_Loop3:
 	cpw	(xsp+2), 0
 	jr	z, FDemoText_ByteData_DisplayRefresh_Skip5
 FDemoText_ByteData_DisplayRefresh_Join2:
 	call	FileIO_ReadByte
 	cp	hl, 0:i3
-	jr	ge, Seq_LoadDisplayResource_Helper_Loop
+	jr	ge, FDemoText_ReadTaggedBlock_Loop
 FDemoText_ByteData_DisplayRefresh_Skip5:
 	cpw	(xsp+2), 0
-	jr	z, Seq_LoadDisplayResource_Helper_Skip
+	jr	z, FDemoText_ReadTaggedBlock_Skip
 	ldw	hl, 0xfffd
 	jrl	FDemoText_ByteData_DisplayRefresh_Epilogue3
 FDemoText_ByteData_DisplayRefresh_Skip6:
@@ -1348,24 +1348,24 @@ FDemoText_ByteData_DisplayRefresh_Skip6:
 	ld	a, (xbc+iz)
 	extz wa
 	cp	wa, hl
-	jr	nz, Seq_LoadDisplayResource_Helper_Loop3
+	jr	nz, FDemoText_ReadTaggedBlock_Loop3
 	inc	1, iz
 	cp	(xbc+iz), 0x00
-	jr	nz, Seq_LoadDisplayResource_Helper_Loop2
+	jr	nz, FDemoText_ReadTaggedBlock_Loop2
 	ldw	(xsp+2), 0
-Seq_LoadDisplayResource_Helper_Skip:
+FDemoText_ReadTaggedBlock_Skip:
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
 FDemoText_ByteData_DisplayRefresh_Loop2:
 	call	FileIO_ReadByte
 	cp	hl, 0:i3
-	jr	ge, Seq_LoadDisplayResource_Helper_Skip2
+	jr	ge, FDemoText_ReadTaggedBlock_Skip2
 FDemoText_ByteData_DisplayRefresh_Loop3:
 	cpw	(xsp+2), 1
-	jrl	z, Seq_LoadDisplayResource_Helper_Skip4
+	jrl	z, FDemoText_ReadTaggedBlock_Skip4
 	ldw	hl, 0xfffc
 	jrl	FDemoText_ByteData_DisplayRefresh_Epilogue3
-Seq_LoadDisplayResource_Helper_Skip2:
+FDemoText_ReadTaggedBlock_Skip2:
 	cp	hl, 13
 	jr	z, FDemoText_ByteData_DisplayRefresh_Skip7
 	cp	hl, 10
@@ -1387,11 +1387,11 @@ FDemoText_ByteData_DisplayRefresh_Skip7:
 	cp	hl, 60
 	jr	nz, FDemoText_ByteData_DisplayRefresh_Loop2
 	ld	iz, 1:i3
-Seq_LoadDisplayResource_Helper_Loop4:
+FDemoText_ReadTaggedBlock_Loop4:
 	call	FileIO_ReadByte
 	cp	hl, 0:i3
 	jr	ge, FDemoText_ByteData_DisplayRefresh_Skip8
-Seq_LoadDisplayResource_Helper_Loop5:
+FDemoText_ReadTaggedBlock_Loop5:
 	cpw	(xsp+2), 1
 	jr	z, FDemoText_ByteData_DisplayRefresh_Loop3
 	jr	FDemoText_ByteData_DisplayRefresh_Loop2
@@ -1404,25 +1404,25 @@ FDemoText_ByteData_DisplayRefresh_Skip8:
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
 	cp	xwa, (xsp+16)
-	jr	c, Seq_LoadDisplayResource_Helper_Skip3
+	jr	c, FDemoText_ReadTaggedBlock_Skip3
 FDemoText_ByteData_DisplayRefresh_Skip9:
 	ldw	hl, 0xfffb
 	jr	FDemoText_ByteData_DisplayRefresh_Epilogue3
-Seq_LoadDisplayResource_Helper_Skip3:
+FDemoText_ReadTaggedBlock_Skip3:
 	ld	xbc, (xsp+28)
 	ld	a, (xbc+iz)
 	extz wa
 	cp	wa, hl
-	jr	nz, Seq_LoadDisplayResource_Helper_Loop5
+	jr	nz, FDemoText_ReadTaggedBlock_Loop5
 	inc	1, iz
 	cp	(xbc+iz), 0x00
-	jr	nz, Seq_LoadDisplayResource_Helper_Loop4
+	jr	nz, FDemoText_ReadTaggedBlock_Loop4
 	ldw	(xsp+2), 1
 	ld	xwa, (xsp+20)
 	add	xwa, (xsp+0x8)
 	ld	(xwa), 0
-	jr	Seq_LoadDisplayResource_Helper_Loop5
-Seq_LoadDisplayResource_Helper_Skip4:
+	jr	FDemoText_ReadTaggedBlock_Loop5
+FDemoText_ReadTaggedBlock_Skip4:
 	ld	hl, 0:i3
 FDemoText_ByteData_DisplayRefresh_Epilogue3:
 	popw	iz

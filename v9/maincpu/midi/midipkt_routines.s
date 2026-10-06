@@ -1103,9 +1103,9 @@ MidiPkt_SendCtlValueSysEx:
 	ld	c, a
 	ld	a, (xde+11)
 	and	a, 15
-	jr	z, MidiPkt_BuildControl_Helper_Skip
+	jr	z, MidiPkt_SendCtlValueSysEx_Skip
 	.byte 0xcb, 0xff	; srl a,c -- the backend cannot spell this form
-MidiPkt_BuildControl_Helper_Skip:
+MidiPkt_SendCtlValueSysEx_Skip:
 	lda	xwa, (xsp+4)
 	ld	(xwa), c
 	and	c, 15

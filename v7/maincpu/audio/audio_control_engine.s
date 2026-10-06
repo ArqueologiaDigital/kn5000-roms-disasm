@@ -1121,14 +1121,14 @@ PanelAction_FootSwitch1:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event28Bit0_Epilogue
+	jr	z, PanelAction_FootSwitch1_Epilogue
 	ld	xwa, 10374
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	PanelAction_DispatchPedalFunction
-PanelAction_Event28Bit0_Epilogue:
+PanelAction_FootSwitch1_Epilogue:
 	pop	xiz
 	ret
 ; foot switch FS2 (PG.3; event 28 bit 1): acts per panel parameter 0x2888 (tag 0x99 payload byte 5)
@@ -1136,14 +1136,14 @@ PanelAction_FootSwitch2:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event28Bit1_Epilogue
+	jr	z, PanelAction_FootSwitch2_Epilogue
 	ld	xwa, 10376
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	PanelAction_DispatchPedalFunction
-PanelAction_Event28Bit1_Epilogue:
+PanelAction_FootSwitch2_Epilogue:
 	pop	xiz
 	ret
 ; foot controller FC1 (PG.4; event 29 bit 0): acts per panel parameter 0x288A (tag 0x99 payload byte 6)
@@ -1151,14 +1151,14 @@ PanelAction_FootController1:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event29Bit0_Epilogue
+	jr	z, PanelAction_FootController1_Epilogue
 	ld	xwa, 10378
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	PanelAction_DispatchPedalFunction
-PanelAction_Event29Bit0_Epilogue:
+PanelAction_FootController1_Epilogue:
 	pop	xiz
 	ret
 ; foot controller FC2 (PG.5; event 29 bit 1): acts per panel parameter 0x288C (tag 0x99 payload byte 7)
@@ -1166,14 +1166,14 @@ PanelAction_FootController2:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event29Bit1_Epilogue
+	jr	z, PanelAction_FootController2_Epilogue
 	ld	xwa, 10380
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	PanelAction_DispatchPedalFunction
-PanelAction_Event29Bit1_Epilogue:
+PanelAction_FootController2_Epilogue:
 	pop	xiz
 	ret
 ; foot controller FC3 (PG.6; event 29 bit 2): acts per panel parameter 0x288E (tag 0x99 payload byte 8)
@@ -1181,14 +1181,14 @@ PanelAction_FootController3:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event29Bit2_Epilogue
+	jr	z, PanelAction_FootController3_Epilogue
 	ld	xwa, 10382
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	PanelAction_DispatchPedalFunction
-PanelAction_Event29Bit2_Epilogue:
+PanelAction_FootController3_Epilogue:
 	pop	xiz
 	ret
 ; foot controller FC4 (PG.7; event 29 bit 3): acts per panel parameter 0x2890 (tag 0x99 payload byte 9)
@@ -1196,14 +1196,14 @@ PanelAction_FootController4:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event29Bit3_Epilogue
+	jr	z, PanelAction_FootController4_Epilogue
 	ld	xwa, 10384
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	PanelAction_DispatchPedalFunction
-PanelAction_Event29Bit3_Epilogue:
+PanelAction_FootController4_Epilogue:
 	pop	xiz
 	ret
 ; event 22 (left-panel header 0xD1): the byte as two 7-bit values ((b & 1) << 6, b >> 1)
@@ -1234,20 +1234,20 @@ PanelAction_ModWheel:
 	ld	xwa, 10368
 	call	SndParam_LookupReadOnly
 	cp	hl, 183
-	jr	z, PanelAction_Event26_Skip
+	jr	z, PanelAction_ModWheel_Skip
 	cp	hl, 182
-	jr	nz, PanelAction_Event26_Epilogue
+	jr	nz, PanelAction_ModWheel_Epilogue
 	ld	xwa, xiz
-	jr	PanelAction_Event26_Join
-PanelAction_Event26_Skip:
+	jr	PanelAction_ModWheel_Join
+PanelAction_ModWheel_Skip:
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event26_Epilogue
+	jr	z, PanelAction_ModWheel_Epilogue
 	ld	(xiz), 179
 	ld	(xiz+1), 0
 	ld	xwa, xiz
-PanelAction_Event26_Join:
+PanelAction_ModWheel_Join:
 	calr	PanelEvent_Post
-PanelAction_Event26_Epilogue:
+PanelAction_ModWheel_Epilogue:
 	pop	xiz
 	ret
 ; event 23 (left-panel header 0xD2): post unless MD_DEMO
@@ -1260,14 +1260,14 @@ PanelAction_Volume:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, PanelAction_Event27_Epilogue
+	jr	z, PanelAction_Volume_Epilogue
 	ld	xwa, 260
 	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
-	jr	z, PanelAction_Event27_Epilogue
+	jr	z, PanelAction_Volume_Epilogue
 	ld	xwa, xiz
 	calr	PanelEvent_Post
-PanelAction_Event27_Epilogue:
+PanelAction_Volume_Epilogue:
 	pop	xiz
 	ret
 PanelEvent_FillSelectedPart:
@@ -1544,10 +1544,10 @@ ExtDev_SndParam_Block48_Var04_B:
 	and	c, (xde)
 	jr	z, FileIO_BytecodeData_Code_Skip78
 	ld	(xde), 4
-	jr	FileIO_BytecodeData_Code_Helper4_Join
+	jr	ExtDev_SndParam_Block48_Var04_B_Join
 FileIO_BytecodeData_Code_Skip78:
 	ld	(xde), 0
-FileIO_BytecodeData_Code_Helper4_Join:
+ExtDev_SndParam_Block48_Var04_B_Join:
 	ld	(xhl), 4
 	jrl	PanelEvent_Post
 ExtDev_SndParam_Write98_Block:
@@ -1558,7 +1558,7 @@ ExtDev_SndParam_Write98_Block:
 	ldw	bc, 1539
 	call	SndParam_LookupViaEncode
 	cp	hl, 1:i3
-	jr	nz, FileIO_BytecodeData_Code_Helper4_Epilogue
+	jr	nz, ExtDev_SndParam_Write98_Block_Epilogue
 	set	1, (36957:16)
 	ld	(xiz), 152
 	ld	(xiz+1), 2
@@ -1566,16 +1566,16 @@ ExtDev_SndParam_Write98_Block:
 	lda	xde, (xiz+3)
 	ld	a, (xde)
 	and	a, (xbc)
-	jr	z, FileIO_BytecodeData_Code_Helper4_Skip
+	jr	z, ExtDev_SndParam_Write98_Block_Skip
 	ld	(xbc), 128
-	jr	FileIO_BytecodeData_Code_Helper4_Join2
-FileIO_BytecodeData_Code_Helper4_Skip:
+	jr	ExtDev_SndParam_Write98_Block_Join2
+ExtDev_SndParam_Write98_Block_Skip:
 	ld	(xbc), 0
-FileIO_BytecodeData_Code_Helper4_Join2:
+ExtDev_SndParam_Write98_Block_Join2:
 	ld	(xde), 128
 	ld	xwa, xiz
 	calr	PanelEvent_Post
-FileIO_BytecodeData_Code_Helper4_Epilogue:
+ExtDev_SndParam_Write98_Block_Epilogue:
 	pop	xiz
 	ret
 ExtDev_SndParam_Block98_Var40:
@@ -1586,12 +1586,12 @@ ExtDev_SndParam_Block98_Var40:
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
 	and	c, (xde)
-	jr	z, FileIO_BytecodeData_Code_Helper4_Skip2
+	jr	z, ExtDev_SndParam_Block98_Var40_Skip2
 	ld	(xde), 64
-	jr	FileIO_BytecodeData_Code_Helper4_Join3
-FileIO_BytecodeData_Code_Helper4_Skip2:
+	jr	ExtDev_SndParam_Block98_Var40_Join3
+ExtDev_SndParam_Block98_Var40_Skip2:
 	ld	(xde), 0
-FileIO_BytecodeData_Code_Helper4_Join3:
+ExtDev_SndParam_Block98_Var40_Join3:
 	ld	(xhl), 64
 	jrl	PanelEvent_Post
 ExtDev_SndParam_BlockA9_Var02:
@@ -1604,12 +1604,12 @@ ExtDev_SndParam_BlockA9_Var02:
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
 	and	c, (xde)
-	jr	z, FileIO_BytecodeData_Code_Helper4_Skip3
+	jr	z, ExtDev_SndParam_BlockA9_Var02_Skip3
 	ld	(xde), 2
-	jr	FileIO_BytecodeData_Code_Helper4_Join4
-FileIO_BytecodeData_Code_Helper4_Skip3:
+	jr	ExtDev_SndParam_BlockA9_Var02_Join4
+ExtDev_SndParam_BlockA9_Var02_Skip3:
 	ld	(xde), 0
-FileIO_BytecodeData_Code_Helper4_Join4:
+ExtDev_SndParam_BlockA9_Var02_Join4:
 	ld	(xhl), 2
 	calr	PanelEvent_Post
 	ret
@@ -1637,12 +1637,12 @@ ExtDev_SndParam_Block98_Var40_B:
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
 	and	c, (xde)
-	jr	z, FileIO_BytecodeData_Code_Helper4_Skip4
+	jr	z, ExtDev_SndParam_Block98_Var40_B_Skip4
 	ld	(xde), 64
-	jr	FileIO_BytecodeData_Code_Helper4_Join5
-FileIO_BytecodeData_Code_Helper4_Skip4:
+	jr	ExtDev_SndParam_Block98_Var40_B_Join5
+ExtDev_SndParam_Block98_Var40_B_Skip4:
 	ld	(xde), 0
-FileIO_BytecodeData_Code_Helper4_Join5:
+ExtDev_SndParam_Block98_Var40_B_Join5:
 	ld	(xhl), 64
 	jrl	PanelEvent_Post
 ; (pre-port v7 note about the bytes at 0xFC5EF6:)
@@ -1662,7 +1662,7 @@ ExtDev_SndParam_ConfigAndWrite:
 	call	SndParam_LookupViaEncode
 	lda	xbc, (xiz+2)
 	cp	hl, 0:i3
-	jr	nz, FileIO_BytecodeData_Code_Helper4_Skip5
+	jr	nz, ExtDev_SndParam_ConfigAndWrite_Skip5
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	lda	xde, (0x90f1:16)
@@ -1671,7 +1671,7 @@ ExtDev_SndParam_ConfigAndWrite:
 	ld	a, (xwa)
 	ld	(xbc), a
 	jr	FileIO_BytecodeData_Code_Join24
-FileIO_BytecodeData_Code_Helper4_Skip5:
+ExtDev_SndParam_ConfigAndWrite_Skip5:
 	ld	(xbc), 0
 FileIO_BytecodeData_Code_Join24:
 	ld	(xiz+3), 127
@@ -1700,7 +1700,7 @@ ExtDev_SndParam_Write48_Block:
 	ld	xwa, 192
 	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
-	jr	nz, FileIO_BytecodeData_Code_Helper4_Epilogue2
+	jr	nz, ExtDev_SndParam_Write48_Block_Epilogue2
 	set	1, (36957:16)
 	ld	(xiz), 72
 	ld	(xiz+1), 4
@@ -1708,16 +1708,16 @@ ExtDev_SndParam_Write48_Block:
 	lda	xde, (xiz+3)
 	ld	a, (xde)
 	and	a, (xbc)
-	jr	z, FileIO_BytecodeData_Code_Helper4_Skip6
+	jr	z, ExtDev_SndParam_Write48_Block_Skip6
 	ld	(xbc), 64
-	jr	FileIO_BytecodeData_Code_Helper4_Join6
-FileIO_BytecodeData_Code_Helper4_Skip6:
+	jr	ExtDev_SndParam_Write48_Block_Join6
+ExtDev_SndParam_Write48_Block_Skip6:
 	ld	(xbc), 0
-FileIO_BytecodeData_Code_Helper4_Join6:
+ExtDev_SndParam_Write48_Block_Join6:
 	ld	(xde), 64
 	ld	xwa, xiz
 	calr	PanelEvent_Post
-FileIO_BytecodeData_Code_Helper4_Epilogue2:
+ExtDev_SndParam_Write48_Block_Epilogue2:
 	pop	xiz
 	ret
 ExtDev_SndParam_Block48_Var02:
@@ -1769,14 +1769,14 @@ ExtDev_SndParam_DispatchAndWriteA8:
 	cp	a, 3:i3
 	jr	z, FileIO_BytecodeData_Code_Skip82
 	cp	a, 19
-	jr	nz, FileIO_BytecodeData_Code_Helper4_Skip7
+	jr	nz, ExtDev_SndParam_DispatchAndWriteA8_Skip7
 FileIO_BytecodeData_Code_Skip82:
-	jr	FileIO_BytecodeData_Code_Helper4_Epilogue3
-FileIO_BytecodeData_Code_Helper4_Skip7:
+	jr	ExtDev_SndParam_DispatchAndWriteA8_Epilogue3
+ExtDev_SndParam_DispatchAndWriteA8_Skip7:
 	ld	xwa, 192
 	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
-	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue3
+	jr	z, ExtDev_SndParam_DispatchAndWriteA8_Epilogue3
 	set	1, (36957:16)
 	ld	(xiz), 168
 	ld	(xiz+1), 4
@@ -1785,12 +1785,12 @@ FileIO_BytecodeData_Code_Helper4_Skip7:
 	ld	c, (xde)
 	ld	a, (xhl)
 	and	a, c
-	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue3
+	jr	z, ExtDev_SndParam_DispatchAndWriteA8_Epilogue3
 	ld	(xde), 2
 	ld	(xhl), 2
 	ld	xwa, xiz
 	calr	PanelEvent_Post
-FileIO_BytecodeData_Code_Helper4_Epilogue3:
+ExtDev_SndParam_DispatchAndWriteA8_Epilogue3:
 	pop	xiz
 	ret
 ExtDev_SndParam_DispatchAndWriteA8_Alt:
@@ -1808,14 +1808,14 @@ ExtDev_SndParam_DispatchAndWriteA8_Alt:
 	cp	a, 3:i3
 	jr	z, FileIO_BytecodeData_Code_Skip83
 	cp	a, 19
-	jr	nz, FileIO_BytecodeData_Code_Helper4_Skip8
+	jr	nz, ExtDev_SndParam_DispatchAndWriteA8_Alt_Skip8
 FileIO_BytecodeData_Code_Skip83:
-	jr	FileIO_BytecodeData_Code_Helper4_Epilogue4
-FileIO_BytecodeData_Code_Helper4_Skip8:
+	jr	ExtDev_SndParam_DispatchAndWriteA8_Alt_Epilogue4
+ExtDev_SndParam_DispatchAndWriteA8_Alt_Skip8:
 	ld	xwa, 192
 	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
-	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue4
+	jr	z, ExtDev_SndParam_DispatchAndWriteA8_Alt_Epilogue4
 	set	1, (36957:16)
 	ld	(xiz), 168
 	ld	(xiz+1), 4
@@ -1824,12 +1824,12 @@ FileIO_BytecodeData_Code_Helper4_Skip8:
 	ld	c, (xde)
 	ld	a, (xhl)
 	and	a, c
-	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue4
+	jr	z, ExtDev_SndParam_DispatchAndWriteA8_Alt_Epilogue4
 	ld	(xde), 1
 	ld	(xhl), 1
 	ld	xwa, xiz
 	calr	PanelEvent_Post
-FileIO_BytecodeData_Code_Helper4_Epilogue4:
+ExtDev_SndParam_DispatchAndWriteA8_Alt_Epilogue4:
 	pop	xiz
 	ret
 ExtDev_SndParam_MultiReg_Iterate:
@@ -1862,17 +1862,17 @@ ExtDev_SndParam_DispatchComplex:
 	cp	a, 3:i3
 	jr	z, FileIO_BytecodeData_Code_Skip84
 	cp	a, 19
-	jr	nz, FileIO_BytecodeData_Code_Helper4_Skip9
+	jr	nz, ExtDev_SndParam_DispatchComplex_Skip9
 FileIO_BytecodeData_Code_Skip84:
-	jr	FileIO_BytecodeData_Code_Helper4_Epilogue5
-FileIO_BytecodeData_Code_Helper4_Skip9:
+	jr	ExtDev_SndParam_DispatchComplex_Epilogue5
+ExtDev_SndParam_DispatchComplex_Skip9:
 	ld	xwa, 192
 	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
-	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue5
+	jr	z, ExtDev_SndParam_DispatchComplex_Epilogue5
 	ld	a, (xiz+3)
 	and	a, (xiz+2)
-	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue5
+	jr	z, ExtDev_SndParam_DispatchComplex_Epilogue5
 	set	1, (36957:16)
 	ld	(xiz), 152
 	ld	(xiz+1), 1
@@ -1885,7 +1885,7 @@ FileIO_BytecodeData_Code_Helper4_Skip9:
 	ld	(xiz+3), 127
 	ld	xwa, xiz
 	calr	PanelEvent_Post
-FileIO_BytecodeData_Code_Helper4_Epilogue5:
+ExtDev_SndParam_DispatchComplex_Epilogue5:
 	pop	xiz
 	inc	2, xsp
 	ret

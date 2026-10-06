@@ -9283,17 +9283,17 @@ MidiSeq_ClearSyncFlag_Helper:
 	ld	wa, 1:i3
 	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, SeqVoice_DispatchProcess_Data_Skip3
+	jr	z, MidiSeq_ClearSyncFlag_Helper_Skip3
 	ld	xwa, 0x72aa
 	add	(xiz+8), xwa
-SeqVoice_DispatchProcess_Data_Skip3:
+MidiSeq_ClearSyncFlag_Helper_Skip3:
 	ld	wa, 3:i3
 	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, SeqVoice_DispatchProcess_Data_Skip4
+	jr	z, MidiSeq_ClearSyncFlag_Helper_Skip4
 	calr	SeqVoice_DispatchProcess_Data_Helper
 	add	(xiz+8), xhl
-SeqVoice_DispatchProcess_Data_Skip4:
+MidiSeq_ClearSyncFlag_Helper_Skip4:
 	ld	xwa, (xiz+8)
 	add	xwa, (xiz)
 	ld	(xiz+4), xwa
@@ -9370,13 +9370,13 @@ MidiSeq_ClearSyncFlag_Helper4:
 	ld	xwa, 0x16800
 	ld	(xiz+8), xwa
 	bit	6, (0xbc7c:16)
-	jr	z, SeqVoice_DispatchProcess_Data_Epilogue2
+	jr	z, MidiSeq_ClearSyncFlag_Helper4_Epilogue2
 	calr	SeqVoice_DispatchProcess_Data_Helper
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
 	ld	(xiz+8), xhl
-SeqVoice_DispatchProcess_Data_Epilogue2:
+MidiSeq_ClearSyncFlag_Helper4_Epilogue2:
 	pop	xiz
 	ret
 MidiPkt_ArpPopReturn_Helper5:
@@ -9407,7 +9407,7 @@ MidiPkt_SetXferBlock_StyleImagePool:
 	ld	xwa, 0x15440
 	ld	(xiz+8), xwa
 	bit	6, (0xbc7c:16)
-	jr	z, SeqVoice_DispatchProcess_Data_Epilogue3
+	jr	z, MidiPkt_SetXferBlock_StyleImagePool_Epilogue3
 	calr	SeqVoice_DispatchProcess_Data_Helper
 	lda	xde, (0x94860:24)
 	lda	xbc, (0x95bc0:24)
@@ -9421,7 +9421,7 @@ MidiPkt_SetXferBlock_StyleImagePool:
 	ld	(xiz+4), xbc
 	sub	xhl, xde
 	ld	(xiz+8), xhl
-SeqVoice_DispatchProcess_Data_Epilogue3:
+MidiPkt_SetXferBlock_StyleImagePool_Epilogue3:
 	pop	xiz
 	ret
 MidiPkt_SetXferTotal_SeqData:
@@ -9434,7 +9434,7 @@ MidiPkt_SetXferTotal_SeqData:
 	ld	xwa, 0x53000
 	ld	(xiz+8), xwa
 	bit	6, (0xbc7c:16)
-	jr	z, SeqVoice_DispatchProcess_Data_Epilogue4
+	jr	z, MidiPkt_SetXferTotal_SeqData_Epilogue4
 	calr	SeqVoice_DispatchProcess_Data_Helper2
 	lda	xwa, (xhl+22528)
 	add	xwa, (xiz)
@@ -9442,7 +9442,7 @@ MidiPkt_SetXferTotal_SeqData:
 	ld	xwa, 0x5800
 	add	xwa, xhl
 	ld	(xiz+8), xwa
-SeqVoice_DispatchProcess_Data_Epilogue4:
+MidiPkt_SetXferTotal_SeqData_Epilogue4:
 	pop	xiz
 	ret
 MidiPkt_SetXferBlock_CurrentSong:
@@ -9471,13 +9471,13 @@ MidiPkt_ArpPopReturn_Helper10:
 	ld	xwa, 0x4d800
 	ld	(xiz+8), xwa
 	bit	6, (0xbc7c:16)
-	jr	z, SeqVoice_DispatchProcess_Data_Epilogue5
+	jr	z, MidiPkt_ArpPopReturn_Helper10_Epilogue5
 	calr	SeqVoice_DispatchProcess_Data_Helper2
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
 	ld	(xiz+8), xhl
-SeqVoice_DispatchProcess_Data_Epilogue5:
+MidiPkt_ArpPopReturn_Helper10_Epilogue5:
 	pop	xiz
 	ret
 	ret
@@ -9493,13 +9493,13 @@ MidiSeq_ClearSyncFlag_Helper6:
 	ld	xwa, 0x3c00
 	ld	(xiz+8), xwa
 	bit	6, (0xbc7c:16)
-	jr	z, SeqVoice_DispatchProcess_Data_Epilogue6
+	jr	z, MidiSeq_ClearSyncFlag_Helper6_Epilogue6
 	calr	SeqVoice_DispatchProcess_Data_Helper3
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
 	ld	(xiz+8), xhl
-SeqVoice_DispatchProcess_Data_Epilogue6:
+MidiSeq_ClearSyncFlag_Helper6_Epilogue6:
 	pop	xiz
 	ret
 MidiPkt_ArpPopReturn_Helper11:
@@ -9532,7 +9532,7 @@ MidiPkt_SetXferBlock_AccompBlockPool:
 	ld	xwa, 0x3900
 	ld	(xiz+8), xwa
 	bit	6, (0xbc7c:16)
-	jr	z, SeqVoice_DispatchProcess_Data_Epilogue7
+	jr	z, MidiPkt_SetXferBlock_AccompBlockPool_Epilogue7
 	calr	SeqVoice_DispatchProcess_Data_Helper3
 	lda	xde, (0x1e8820:24)
 	lda	xbc, (0x1e8b00:24)
@@ -9546,7 +9546,7 @@ MidiPkt_SetXferBlock_AccompBlockPool:
 	ld	(xiz+4), xbc
 	sub	xhl, xde
 	ld	(xiz+8), xhl
-SeqVoice_DispatchProcess_Data_Epilogue7:
+MidiPkt_SetXferBlock_AccompBlockPool_Epilogue7:
 	pop	xiz
 	ret
 SeqVoice_DispatchProcess_Data_Helper:
