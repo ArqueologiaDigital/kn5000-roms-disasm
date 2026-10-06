@@ -2580,7 +2580,7 @@ Flash_CopyBlocksToSlots:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 2:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -2592,7 +2592,7 @@ Flash_CopyBlocksToSlots:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 3:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xix, (xsp+12)
 	sub	xix, 0x346800
 	cp	hl, 0:i3
@@ -2638,7 +2638,7 @@ Flash_CopyBlocksToSlots_Loop2:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 0:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -2650,7 +2650,7 @@ Flash_CopyBlocksToSlots_Loop2:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 1:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xix, (xsp+12)
 	sub	xix, 0x346800
 	cp	hl, 0:i3
@@ -2699,7 +2699,7 @@ Flash_InitBytecodeBlock_Helper9_Helper:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 3:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -2711,7 +2711,7 @@ Flash_InitBytecodeBlock_Helper9_Helper:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 2:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xix, (xsp+12)
 	cp	hl, 0:i3
 	jr	nz, Flash_StoreBaseAndInitAccPatch_Skip14
@@ -2756,7 +2756,7 @@ Flash_InitBytecodeBlock_Helper9_Helper_Loop5:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 1:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -2768,7 +2768,7 @@ Flash_InitBytecodeBlock_Helper9_Helper_Loop5:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 0:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xix, (xsp+12)
 	cp	hl, 0:i3
 	jr	nz, Flash_InitBytecodeBlock_Helper9_Helper_Skip2

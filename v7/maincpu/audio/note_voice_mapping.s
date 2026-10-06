@@ -25864,7 +25864,14 @@ TmFlash_CopyToExtMem:
 	ld	xde, 0xa0000
 	call	InterCPU_E1_Bulk_Transfer
 	jp	TmFlash_Return
-TmFlash_WriteRoutine:
+; Flash_GetSlotAddressAndSize: Locates slot BC of the custom-data section-7 slot store (custom_data/kn5000_custom_data.s):
+;   A bit 0 set = the flash slot (0x3B0410 + 470*BC small, 0x3B4D80 + 10535*BC large), clear = the RAM work-area
+;   block at 0x1E0000; A bit 1 = large.  Stores the address at (XDE) and the size (470 / 10,535) at the second
+;   out-pointer on the stack; L = 0, or 0xFF when BC is out of range (40 small / 4 large slots).  Writes nothing to
+;   flash.  Was TmFlash_WriteRoutine.  Basis: callers + body -- Flash_CopyBlocksToSlots (and the unnamed
+;   Flash_InitBytecodeBlock_Helper9_Helper) call it in pairs: the RAM source (A bit 0 clear) and the flash slot
+;   (helper-naming batch g).
+Flash_GetSlotAddressAndSize:
 	lda	xsp, (xsp-18)
 	push	xiz
 	ld	(xsp+14), xde
@@ -25878,14 +25885,14 @@ TmFlash_WriteRoutine:
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
 	bitm	0, (xsp+20)
-	jr	z, TmFlash_WriteRoutine_Skip2
+	jr	z, Flash_GetSlotAddressAndSize_RamBlock
 	lda	xiz, (0x300000:24)
 	add	xiz, 0xb0400
 	ld	xde, xiz
 	bitm	1, (xsp+20)
-	jr	z, TmFlash_WriteRoutine_Entry
+	jr	z, Flash_GetSlotAddressAndSize_FlashSmallSlot
 	cpw	(xsp+18), 4
-	jr	nc, TmFlash_WriteRoutine_Skip
+	jr	nc, Flash_GetSlotAddressAndSize_OutOfRange
 	ld	xwa, (xsp+14)
 	ld	(xsp+6), xwa
 	ld	xwa, (xsp+10)
@@ -25896,45 +25903,45 @@ TmFlash_WriteRoutine:
 	ld	xwa, (xsp+6)
 	ld	(xwa), xhl
 	ldw	wa, 10535
-	jr	TmFlash_WriteRoutine_Entry_Code_Join
-TmFlash_WriteRoutine_Skip:
+	jr	Flash_GetSlotAddressAndSize_StoreSize
+Flash_GetSlotAddressAndSize_OutOfRange:
 	ld	(xsp+4), 255
-TmFlash_WriteRoutine_Join:
+Flash_GetSlotAddressAndSize_Join:
 	ld	l, (xsp+4)
 	exts	hl
 	pop	xiz
 	lda	xsp, (xsp+18)
 	retd	4
-TmFlash_WriteRoutine_Entry:
+Flash_GetSlotAddressAndSize_FlashSmallSlot:
 	cpw	(xsp+18), 40
-	jr	nc, TmFlash_WriteRoutine_Skip
+	jr	nc, Flash_GetSlotAddressAndSize_OutOfRange
 	add	xhl, xde
 	ld	xwa, (xsp+14)
 	ld	(xwa), xhl
 	ldw	wa, 470
-	jr	TmFlash_WriteRoutine_Entry_Code_Join
-TmFlash_WriteRoutine_Skip2:
+	jr	Flash_GetSlotAddressAndSize_StoreSize
+Flash_GetSlotAddressAndSize_RamBlock:
 	lda	xbc, (0x1e0000:24)
 	bit	1, (xsp+20)
-	jr	z, TmFlash_WriteRoutine_Entry_Code_Entry
+	jr	z, Flash_GetSlotAddressAndSize_RamSmallBlock
 	cpw	(xsp+18), 1
-	jr	nc, TmFlash_WriteRoutine_Skip
+	jr	nc, Flash_GetSlotAddressAndSize_OutOfRange
 	lda	xbc, (xbc+18816)
 	ld	xwa, (xsp+14)
 	ld	(xwa), xbc
 	ldw	wa, 10535
-	jr	TmFlash_WriteRoutine_Entry_Code_Join
-TmFlash_WriteRoutine_Entry_Code_Entry:
+	jr	Flash_GetSlotAddressAndSize_StoreSize
+Flash_GetSlotAddressAndSize_RamSmallBlock:
 	cpw	(xsp+18), 40
-	jr	nc, TmFlash_WriteRoutine_Skip
+	jr	nc, Flash_GetSlotAddressAndSize_OutOfRange
 	add	xbc, xhl
 	ld	xwa, (xsp+14)
 	ld	(xwa), xbc
 	ldw	wa, 470
-TmFlash_WriteRoutine_Entry_Code_Join:
+Flash_GetSlotAddressAndSize_StoreSize:
 	ld	xbc, (xsp+26)
 	ld	(xbc), wa
-	jr	TmFlash_WriteRoutine_Join
+	jr	Flash_GetSlotAddressAndSize_Join
 TmFlash_BulkTransferToSubCPU:
 	ld	xwa, 0x1e0000
 	ldw	bc, 0x72aa

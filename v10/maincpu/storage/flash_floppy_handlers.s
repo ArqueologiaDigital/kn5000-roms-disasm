@@ -2573,7 +2573,7 @@ Flash_StoreBaseAndInitAccPatch_Skip11:
 ; Flash_CopyBlocksToSlots: Copies every block in the assignment list at RAM 0x7A0 from the RAM work area at 0x1E0000
 ;   into its slot in the RAM image of the section-7 sector (large block 10,535 bytes, small blocks 470), then erases
 ;   and rewrites the sector. Basis: callers + body -- Flash_InitBytecodeBlock calls it right after
-;   Flash_WriteSlotOwnerMap on its write path; TmFlash_WriteRoutine supplies the source and destination addresses.
+;   Flash_WriteSlotOwnerMap on its write path; Flash_GetSlotAddressAndSize supplies the source and destination addresses.
 Flash_CopyBlocksToSlots:
 	lda	xsp, (xsp-12)
 	push	xiz
@@ -2595,7 +2595,7 @@ Flash_CopyBlocksToSlots:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 2:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -2607,7 +2607,7 @@ Flash_CopyBlocksToSlots:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 3:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xix, (xsp+12)
 	sub	xix, 0x346800
 	cp	hl, 0:i3
@@ -2653,7 +2653,7 @@ Flash_CopyBlocksToSlots_Loop2:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 0:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -2665,7 +2665,7 @@ Flash_CopyBlocksToSlots_Loop2:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 1:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xix, (xsp+12)
 	sub	xix, 0x346800
 	cp	hl, 0:i3
@@ -2714,7 +2714,7 @@ Flash_InitBytecodeBlock_Helper9_Helper:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 3:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -2726,7 +2726,7 @@ Flash_InitBytecodeBlock_Helper9_Helper:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 2:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xix, (xsp+12)
 	cp	hl, 0:i3
 	jr	nz, Flash_StoreBaseAndInitAccPatch_Skip14
@@ -2771,7 +2771,7 @@ Flash_InitBytecodeBlock_Helper9_Helper_Loop5:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 1:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -2783,7 +2783,7 @@ Flash_InitBytecodeBlock_Helper9_Helper_Loop5:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 0:i3
-	call	TmFlash_WriteRoutine
+	call	Flash_GetSlotAddressAndSize
 	ld	xix, (xsp+12)
 	cp	hl, 0:i3
 	jr	nz, Flash_InitBytecodeBlock_Helper9_Helper_Skip2

@@ -8000,7 +8000,7 @@ PortWrite_BusyWait:
 
 ; LED_BlinkBit2Forever: Error halt: toggles bit 2 of the LED port 0x160004 every 0x249F0 busy-wait cycles and never
 ;   returns.  Basis: body + callers -- HDAE5000_TableData_Write and HDAE5000_Init_TransferData call it when
-;   HDAE5000_ROM_Transfer reports a failure.
+;   HDAE5000_VerifyFlashAgainstWindow reports a failure.
 LED_BlinkBit2Forever:
 	chg 2, (0x160004:24)
 	ld xwa, 0x249f0
@@ -8042,18 +8042,18 @@ TableData_ROM_Verify_CheckBlock:
 	ret
 
 ; ===========================================================================
-; HDAE5000_ROM_Transfer - Transfer HDAE5000 ROM data to working memory
+; HDAE5000_VerifyFlashAgainstWindow - compare flash with a banked window, block by block
 ; ===========================================================================
-; Entry: XWA = source address (Table Data ROM)
-;        XBC = destination address (HDAE5000 ROM space)
-;        DE = starting block index
-;        Stack+4 = block count
-; Exit:  XHL = 0 on success, non-zero on verify failure
-; Notes: Transfers data in blocks via HDAE5000 PPI at 0x160000
-;        Block index written to PORT_A for each 256KB block
-;        Verifies each word transferred matches source
+; Entry: XWA = flash address (0x800000 table data / 0x300000 custom data)
+;        XBC = window base (0x280000 / 0x200000); DE = first bank; word at (XSP+4) = last bank
+; Exit:  XHL = 0 when every word matches, else the flash address just after the first mismatch
+; For each bank written to port 0x160000 it compares 0x40000 words of the window with the flash.  Nothing is
+; written.  HDAE5000_TableData_Write runs it after HDAE5000_ProgramTableDataFlash / _ProgramCustomDataFlash and
+; halts in LED_BlinkBit2Forever / _BlinkBit3Forever on a mismatch.
+; Corrected 2026-10-06 (was: "HDAE5000_ROM_Transfer - Transfer HDAE5000 ROM data to working memory ... Transfers
+; data in blocks via HDAE5000 PPI at 0x160000 ... Verifies each word transferred matches source").
 ; ===========================================================================
-HDAE5000_ROM_Transfer:
+HDAE5000_VerifyFlashAgainstWindow:
 	ld xhl, xwa
 	ld w, e
 	ld a, (xsp + 4)
@@ -8115,7 +8115,11 @@ HDAE5000_FlashWrite_WordLoop:
 	lda xsp, (xsp + 10)
 	ret
 
-HDAE5000_FlashVerify_BytecodeBlock:
+; HDAE5000_ProgramTableDataFlash: Programs the 2 MB table-data flash at 0x800000 from the 512 KB window at 0x280000,
+;   banks 0-3 through port 0x160000, 32 bits at a time (Flash_ProgramByte); the twin of HDAE5000_ProgramCustomDataFlash.
+;   Called first by HDAE5000_TableData_Write; HDAE5000_VerifyFlashAgainstWindow checks it.  Was
+;   HDAE5000_FlashVerify_BytecodeBlock: it verifies nothing.
+HDAE5000_ProgramTableDataFlash:
 	lda	xsp, (xsp-10)
 	push	xiz
 	ld	xwa, 0x800000
@@ -8246,7 +8250,7 @@ HDAE5000_Init_BytecodeBlock_Code_Loop:
 HDAE5000_TableData_Write_Skip5:
 	ld	(0x160004:24), 0
 	set	0, (0x160004:24)
-	calr	HDAE5000_FlashVerify_BytecodeBlock
+	calr	HDAE5000_ProgramTableDataFlash
 	res	0, (0x160004:24)
 	ld	xwa, 0xdbba0
 	calr	BusyWait_XWA_Cycles
@@ -8258,14 +8262,14 @@ HDAE5000_TableData_Write_Skip5:
 	ld	xwa, 0x800000
 	ld	xbc, 0x280000
 	ld	de, 0:i3
-	calr	HDAE5000_ROM_Transfer
+	calr	HDAE5000_VerifyFlashAgainstWindow
 	or	xhl, xhl
 	call	nz, (LED_BlinkBit2Forever:24)
 	pushw	1
 	ld	xwa, 0x300000
 	ld	xbc, 0x200000
 	ld	de, 0:i3
-	calr	HDAE5000_ROM_Transfer
+	calr	HDAE5000_VerifyFlashAgainstWindow
 	or	xhl, xhl
 	call	nz, (LED_BlinkBit3Forever:24)
 	ld	(0x160000:24), 7
@@ -8324,7 +8328,7 @@ HDAE5000_Init_TransferData:
 	ld xwa, 0x800000
 	ld xbc, 0x280000
 	ld de, 4:i3
-	calr HDAE5000_ROM_Transfer
+	calr HDAE5000_VerifyFlashAgainstWindow
 	or xhl, xhl
 	call nz, (LED_BlinkBit2Forever:24)
 
