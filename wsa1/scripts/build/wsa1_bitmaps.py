@@ -235,9 +235,9 @@ def build_manifest():
 
     # Three small shapes with literal source addresses in converted code.
     m.append(entry('Glyph_F318EE', 'b', 0xF318EE, 1, 16,
-                   'sub_F31899 0xF318B2: ld XIY,0x00F318EE / ldw BC,0x0001 / ldw HL,0x0010'))
+                   'UiPaint_PageLabelBackdrop 0xF318B2: ld XIY,0x00F318EE / ldw BC,0x0001 / ldw HL,0x0010'))
     m.append(entry('Glyph_F318FE', 'b', 0xF318FE, 1, 16,
-                   'sub_F31899 0xF318DE: ld XIY,0x00F318FE / ldw BC,0x0001 / ldw HL,0x0010'))
+                   'UiPaint_PageLabelBackdrop 0xF318DE: ld XIY,0x00F318FE / ldw BC,0x0001 / ldw HL,0x0010'))
     m.append(entry('Bitmap_F31952', 'b', 0xF31952, 5, 15,
                    'sub_F3190E 0xF31942: ld XIY,0x00F31952 / ldw BC,0x0005 / ldw HL,0x000F'))
 

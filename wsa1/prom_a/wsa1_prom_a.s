@@ -480,7 +480,7 @@
 	.set LcdKeyRow1_SoundEditNaming,                              0x00F0B74B
 	.set LcdKeyRow2_SoundEditNaming,                              0x00F0B80D
 	.set ExitKey_SoundEditNaming,                              0x00F0B81D
-	.set sub_F0B91C,                              0x00F0B91C
+	.set NameEntry_Begin,                              0x00F0B91C
 	.set SoftKeyCol1_SoundEditCopy,                              0x00F0C0BB
 	.set SoftKeyCol2_SoundEditCopy,                              0x00F0C35D
 	.set SoftKeyCol3_SoundEditCopy,                              0x00F0C3F9
@@ -1289,7 +1289,7 @@
 	.set T_F409C4,                                                                      0x00F409C4
 	.set T_F409C8,                                                                      0x00F409C8
 	.set T_F409CC,                                                                      0x00F409CC
-	.set T_F409E0,                                                                      0x00F409E0
+	.set T_Seq_RequestRewind,                                                                      0x00F409E0
 	.set T_F409E4,                                                                      0x00F409E4
 	.set T_F409EC,                                                                      0x00F409EC
 	.set T_F409F0,                                                                      0x00F409F0
@@ -1897,7 +1897,7 @@
 	.set T_IndexedTable_GetByte,                                                        0x00F42C90
 	.set T_IndexedParam_AdjustField,                                                    0x00F42C94
 	.set T_IndexedParam_SetBit,                                                         0x00F42C98
-	.set T_F42C9C,                                                                      0x00F42C9C
+	.set T_PartIndex_PostChangeEvent,                                                                      0x00F42C9C
 	.set T_F42CA0,                                                                      0x00F42CA0
 	.set T_IndexedParam_SetFieldFromAsciiEntry,                                         0x00F42CA8
 	.set T_INT5_Dev7B_Receive_Alias,                                                    0x00F42D28
@@ -1926,7 +1926,7 @@
 	.set T_DisplayListB_RunOne_Stack,                                                   0x00F42E0C
 	.set T_LCD_BlankThenSetPanel3Layer_Copy,                                                                      0x00F42E10
 	.set T_LCD_ShowAllLayers_StackFrame_Copy,                                                                      0x00F42E14
-	.set T_F42E18,                                                                      0x00F42E18
+	.set T_UiPaint_PageLabelBackdrop,                                                                      0x00F42E18
 	.set T_Blink_Command,                                                               0x00F42E20
 	.set T_Blink_Stop,                                                                  0x00F42E24
 	.set T_Blink_SetEnable,                                                             0x00F42E28
@@ -1937,7 +1937,7 @@
 	.set T_Drawbar_ReloadIfMarked,                                                                      0x00F42E60
 	.set T_Drawbar_OnCpu2Reply,                                                                      0x00F42E64
 	.set T_F42E68,                                                                      0x00F42E68
-	.set T_F42E6C,                                                                      0x00F42E6C
+	.set T_Drawbar_WaitReloadMark,                                                                      0x00F42E6C
 	.set T_CallbackQueue_Post,                                                          0x00F42E84
 	.set T_Task2_CallbackDispatcher,                                                    0x00F42E88
 	.set T_F42E90,                                                                      0x00F42E90
@@ -1954,7 +1954,7 @@
 	.set T_DspEffect_SanitizeBlock,                                                                      0x00F42F5C
 	.set T_ScreenEnterBody_MainOutEqualizer,                                                                      0x00F42F68
 	.set T_ScreenButtonBody_MainOutEqualizer,                                                                      0x00F42F6C
-	.set T_F42F80,                                                                      0x00F42F80
+	.set T_NameEntry_Begin,                                                                      0x00F42F80
 	.set T_SoundEditNaming_SoftKeyCol1,                                                                      0x00F42F84
 	.set T_SoundEditNaming_SoftKeyCol2,                                                                      0x00F42F88
 	.set T_SoundEditNaming_SoftKeyCol3,                                                                      0x00F42F8C
@@ -2934,7 +2934,7 @@ Paint_N0teChange:
 	calr PromB_LCD_ScreenRedraw_End                                          ; F804E8  1e fc dd
 	ret                                                  ; F804EB  0e
 ; ScreenLeaveBody_N0teChange -- the whole body of the N0teChange screen's Leave method
-; Evidence: prom_b ScreenLeave_N0teChange (0xF7D21C) is `call 0xF804EC / ret` (+4 of screen object 0xF43120); body `call T_N0teChange_OnLeave / ret` -- prom_b 0xF7C8BC: unless (0x207A)=0x2D, call T_F409E0.  Same shape as prom_b ScreenLeaveBody_AdvanceDelay.
+; Evidence: prom_b ScreenLeave_N0teChange (0xF7D21C) is `call 0xF804EC / ret` (+4 of screen object 0xF43120); body `call T_N0teChange_OnLeave / ret` -- prom_b 0xF7C8BC: unless (0x207A)=0x2D, call T_Seq_RequestRewind.  Same shape as prom_b ScreenLeaveBody_AdvanceDelay.
 ScreenLeaveBody_N0teChange:
 	call T_N0teChange_OnLeave                                        ; F804EC  1d 8c 2a f4
 	ret                                                  ; F804F0  0e
@@ -5361,7 +5361,7 @@ S0ngSelectName_Leave:
 .LF8180C:
 	ret                                                  ; F8180C  0e
 ; S0ngSelectName_LoadSongFromBank -- load song (0x360A) from its bank into the workspace and refresh the name-edit state
-; Evidence: saves workspace words +0xB8/+0xBA in (0x0E2B)/(0x0E2D), ldir 0xC00 bytes 0x610000+(0x360A)*0xC00 -> 0x603400 and restores the two words (as prom_b BStore_Workspace_LoadFromBank does), (0x360C)=(0x60341E), (0x3752)=bit 0 of (0x603420), cursor 0, name -> 0x12F6, SongName_CharIndexAtCursor; then the (0x6034C6)/(0x7F4D) queue post, T_F42578, T_F409E0, T_F40AC8, (0x360B) bit 0 cleared.
+; Evidence: saves workspace words +0xB8/+0xBA in (0x0E2B)/(0x0E2D), ldir 0xC00 bytes 0x610000+(0x360A)*0xC00 -> 0x603400 and restores the two words (as prom_b BStore_Workspace_LoadFromBank does), (0x360C)=(0x60341E), (0x3752)=bit 0 of (0x603420), cursor 0, name -> 0x12F6, SongName_CharIndexAtCursor; then the (0x6034C6)/(0x7F4D) queue post, T_F42578, T_Seq_RequestRewind, T_F40AC8, (0x360B) bit 0 cleared.
 ; The label sub_F81812 one instruction in is unreferenced and part of this routine.
 S0ngSelectName_LoadSongFromBank:
 	ld wa, (BStore_FreeHead:24)                                ; F8180D  d2 b8 34 60 20
@@ -5395,7 +5395,7 @@ S0ngSelectName_LoadSongFromBank:
 	ld (0x3752:16), 0x00                                 ; F81869  f1 52 37 00 00
 .LF8186E:
 	m_and_mi8 MB16, 0x34bb, 0xf7                         ; F8186E  c1 bb 34 3c f7
-	call T_F409E0                                        ; F81873  1d e0 09 f4
+	call T_Seq_RequestRewind                                        ; F81873  1d e0 09 f4
 	xor A,A                                              ; F81877  c9 d1
 	ld (NameEdit_CursorPos:16), a                                   ; F81879  f1 2d 22 41
 	ld (DisplayListB_Stage+11:16), a                                   ; F8187D  f1 01 13 41
@@ -5428,7 +5428,7 @@ S0ngSelectName_LoadSongFromBank:
 .LF818D3:
 	call T_F42578                                        ; F818D3  1d 78 25 f4
 	m_and_mi8 MB16, 0x34bb, 0xf7                         ; F818D7  c1 bb 34 3c f7
-	call T_F409E0                                        ; F818DC  1d e0 09 f4
+	call T_Seq_RequestRewind                                        ; F818DC  1d e0 09 f4
 	call T_F40AC8                                        ; F818E0  1d c8 0a f4
 	m_and_mi8 MB16, 0x360b, 0xfe                         ; F818E4  c1 0b 36 3c fe
 	ret                                                  ; F818E9  0e
@@ -32961,7 +32961,7 @@ sub_F90F9F:
 ;          whether any other routine paints it.  Neither was searched.
 ; ---------------------------------------------------------------------
 Paint_Drawbar:
-	call T_F42E6C                                        ; F9113F  1d 6c 2e f4
+	call T_Drawbar_WaitReloadMark                                        ; F9113F  1d 6c 2e f4
 	cp a, 0x01:i3                                          ; F91143  c9 d9
 	jr nz, .LF9117F                                      ; F91145  6e 38
 	m_bit 1, MD16, 0x2688                                ; F91147  f1 88 26 c9
@@ -33676,7 +33676,7 @@ Draw_C0mbinati0nM0dePage22Sound:   ; entry: named by 1 `ld` operand, first at 0x
 	ld (CombinationMode_DirtyInt:16), 0xff                                 ; F916EA  f1 7a 26 00 ff
 	ld (CombinationMode_DirtyPan:16), 0xff                                 ; F916EF  f1 7b 26 00 ff
 	ld (CombinationMode_DirtyVol:16), 0xff                                 ; F916F4  f1 7c 26 00 ff
-	call T_F42E18                                        ; F916F9  1d 18 2e f4
+	call T_UiPaint_PageLabelBackdrop                                        ; F916F9  1d 18 2e f4
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F916FD  f1 40 25 00 01
 	ld XIY,DL_F29672                                     ; F91702  45 72 96 f2 00
 	ld XIX,DL_F2967C                                     ; F91707  44 7c 96 f2 00
@@ -34355,7 +34355,7 @@ C0mbinati0nM0de_DrawPart8Vol:   ; entry: named by 1 `.long` operand, first at 0x
 	ret                                                  ; F91C7D  0e
 ; Paint_C0mbinati0nM0dePage1 -- paints COMBINATION MODE page 1: the lists whose text reads "PAGE1/2", "C0MBINATI0N M0DE", "OCT" "VOL" "PAN" "EFF1" "EFF2" "REV" "INT", "PART"
 ; Evidence: posted by sub_F915FB (`ld XWA,0x00F91C7E` at 0xF91653) only when (0x2687) == 0; clears with swi 0x0C (C=0) and swi 0x10, then (0xC4) != 2 runs Paint_C0mbinati0nM0dePage1_DL1..Paint_C0mbinati0nM0dePage1_DL3, (0xC4) == 2 runs Paint_C0mbinati0nM0dePage1_DL3..DL_C0mbinati0nM0dePage22Sound (layers 0 then 2).
-; (0xC4) is the panel variant Variant_SetFromPB0 writes (2 = the SX-WSA1R). Afterwards marks every page-1 field dirty ((0x2676) |= 0xFF, (0x2677) |= 0x07), calls T_F42E18 and sub_F911B6.
+; (0xC4) is the panel variant Variant_SetFromPB0 writes (2 = the SX-WSA1R). Afterwards marks every page-1 field dirty ((0x2676) |= 0xFF, (0x2677) |= 0x07), calls T_UiPaint_PageLabelBackdrop and sub_F911B6.
 ; Page 2 ("PAGE2/2") is painted by sub_F916AA, the other arm of the same `cp (0x2687),0x00` in sub_F915FB.
 Paint_C0mbinati0nM0dePage1:   ; entry: named by 1 `ld` operand, first at 0xF91653
 	xor C,C                                              ; F91C7E  cb d3
@@ -34387,7 +34387,7 @@ Paint_C0mbinati0nM0dePage1:   ; entry: named by 1 `ld` operand, first at 0xF9165
 	m_or_mi8 MB16, ModeScreen_DirtyFields, 0xff                          ; F91CDA  c1 76 26 3e ff
 	m_or_mi8 MB16, ModeScreen_DirtyFields2, 0x07                          ; F91CDF  c1 77 26 3e 07
 	orw	(0x2116:16), 0x0044                  ; F91CE4  d1 16 21 3e 44 00
-	call T_F42E18                                        ; F91CEA  1d 18 2e f4
+	call T_UiPaint_PageLabelBackdrop                                        ; F91CEA  1d 18 2e f4
 	calr sub_F911B6                                          ; F91CEE  1e c5 f4
 	ret                                                  ; F91CF1  0e
 ; C0mbinati0nM0de_RepaintPage1Fields -- COMBINATION MODE page 1 field refresh: redraws the combination name and number, then every field of the selected part whose dirty bit is set
@@ -52585,7 +52585,7 @@ Screen_SoundGroupNaming_Enter:
 	jr .LF9CB51                                          ; F9CB44  68 0b
 .LF9CB46:
 	pushw 0x10                                           ; F9CB46  0b 10 00
-	call T_F42F80                                        ; F9CB49  1d 80 2f f4
+	call T_NameEntry_Begin                                        ; F9CB49  1d 80 2f f4
 	calr Paint_SoundGroupNamingWrite                                      ; F9CB4D  1e cb 02
 	popw bc                                              ; F9CB50  49
 .LF9CB51:
@@ -53286,7 +53286,7 @@ Screen_CombinationGroupNaming_Enter:
 	jr .LF9CFB9                                          ; F9CFAC  68 0b
 .LF9CFAE:
 	pushw 0x10                                           ; F9CFAE  0b 10 00
-	call T_F42F80                                        ; F9CFB1  1d 80 2f f4
+	call T_NameEntry_Begin                                        ; F9CFB1  1d 80 2f f4
 	calr Paint_CombinationGroupNamingWrite                                      ; F9CFB5  1e cb 02
 	popw bc                                              ; F9CFB8  49
 .LF9CFB9:
@@ -57115,7 +57115,7 @@ Screen_DrumsMapNaming_Enter:
 	jr .LF9EFF5                                          ; F9EFE3  68 10
 .LF9EFE5:
 	pushw 0x10                                           ; F9EFE5  0b 10 00
-	call T_F42F80                                        ; F9EFE8  1d 80 2f f4
+	call T_NameEntry_Begin                                        ; F9EFE8  1d 80 2f f4
 	calr Paint_DrumsMapWrite                                      ; F9EFEC  1e cd 03
 	popw bc                                              ; F9EFEF  49
 	jr .LF9EFF5                                          ; F9EFF0  68 03
@@ -59095,7 +59095,7 @@ LcdKeyRow4_System:
 	ld (UI_Request:16), 0xb7                                 ; F9FFAE  f1 70 20 00 b7
 	jr .LF9FFD4                                          ; F9FFB3  68 1f
 .LF9FFB5:
-	call T_F42E6C                                        ; F9FFB5  1d 6c 2e f4
+	call T_Drawbar_WaitReloadMark                                        ; F9FFB5  1d 6c 2e f4
 	cp a, 0x02:i3                                          ; F9FFB9  c9 da
 	jr nz, .LF9FFC7                                      ; F9FFBB  6e 0a
 	ld (0x2700:16), 0x00                                 ; F9FFBD  f1 00 27 00 00
@@ -61118,7 +61118,7 @@ sub_FA10CD:
 	push XWA                                             ; FA1197  38
 .LFA1198:
 	call T_DisplayList_Run_Stack                         ; FA1198  1d 00 2e f4
-	call T_F42E18                                        ; FA119C  1d 18 2e f4
+	call T_UiPaint_PageLabelBackdrop                                        ; FA119C  1d 18 2e f4
 	jr .LFA11B2                                          ; FA11A0  68 10
 .LFA11A2:
 	lda xbc, (DisplayList_FA2ACA:24)                     ; FA11A2  f2 ca 2a fa 31
@@ -105916,7 +105916,7 @@ ModeEnter_CombiEditPart:
 sub_FBCB31:
 	m_set 1, MD16, 0x2134                                ; FBCB31  f1 34 21 b9
 	ld	(UI_PartIndex:16), (CombiEdit_EntryPart:16)             ; FBCB35  c1 6d 27 19 50 22
-	call T_F42C9C                                        ; FBCB3B  1d 9c 2c f4
+	call T_PartIndex_PostChangeEvent                                        ; FBCB3B  1d 9c 2c f4
 	ret                                                  ; FBCB3F  0e
 ; ScreenEnter_CombiEditPartMenu: the +0 ENTER method of the screen object for screen id 0xB0 -- PanelScreen_VtableTable entry 0xD0
 ;   (ViewB entry 0xB0) points at the thunk triple starting at T_ScreenEnter_CombiEditPartMenu, and slot T_ScreenEnter_CombiEditPartMenu jumps here.
@@ -105969,7 +105969,7 @@ T_F41854_Nop:
 	ret                                                  ; FBCBA9  0e
 ; LcdKeyRow1_CombiEditPartSelect: slot 8 (LCD key row 1, prom_a_panel_control_map.py) of ScreenButtons_CombiEditPartMenu and
 ;   ScreenButtons_CombiEditInternalSound: on the press, UI_PartIndex stepped through Record_F1AE1B (Record_F1AE24 in
-;   panel-mode group 0x16) by T_EditValue_StepBitField; when it moved, T_F42C9C, CombiEdit_Part = UI_PartIndex and a
+;   panel-mode group 0x16) by T_EditValue_StepBitField; when it moved, T_PartIndex_PostChangeEvent, CombiEdit_Part = UI_PartIndex and a
 ;   repaint.  Basis: table (button code) + body.
 LcdKeyRow1_CombiEditPartSelect:
 	pushw hl                                             ; FBCBAA  2b
@@ -105995,7 +105995,7 @@ LcdKeyRow1_CombiEditPartSelect:
 	inc 8,XSP                                            ; FBCBDA  ef 60
 	cp a, 0x01:i3                                          ; FBCBDC  c9 d9
 	jr nz, .LFBCBEE                                      ; FBCBDE  6e 0e
-	call T_F42C9C                                        ; FBCBE0  1d 9c 2c f4
+	call T_PartIndex_PostChangeEvent                                        ; FBCBE0  1d 9c 2c f4
 	ld	(CombiEdit_Part:16), (UI_PartIndex:16)             ; FBCBE4  c1 50 22 19 65 27
 	m_set 4, MD16, UI_Request_Hi                                ; FBCBEA  f1 71 20 bc
 .LFBCBEE:
@@ -106025,7 +106025,7 @@ LcdKeyRow2_CombiEditPartSelect:
 	inc 8,XSP                                            ; FBCC1B  ef 60
 	cp a, 0x01:i3                                          ; FBCC1D  c9 d9
 	jr nz, .LFBCC3B                                      ; FBCC1F  6e 1a
-	call T_F42C9C                                        ; FBCC21  1d 9c 2c f4
+	call T_PartIndex_PostChangeEvent                                        ; FBCC21  1d 9c 2c f4
 	ld	(CombiEdit_Part:16), (UI_PartIndex:16)             ; FBCC25  c1 50 22 19 65 27
 	m_set 4, MD16, UI_Request_Hi                                ; FBCC2B  f1 71 20 bc
 	jr .LFBCC3B                                          ; FBCC2F  68 0a
@@ -106742,7 +106742,7 @@ CombiEditSound_PageIndex:
 	push XIY                                             ; FBD217  3d
 	jp (xix)                                             ; FBD218  b4 d8
 .LFBD21A:
-	call T_F42E18                                        ; FBD21A  1d 18 2e f4
+	call T_UiPaint_PageLabelBackdrop                                        ; FBD21A  1d 18 2e f4
 	inc 8,XSP                                            ; FBD21E  ef 60
 	pop XIX                                              ; FBD220  5c
 	ret                                                  ; FBD221  0e
@@ -107921,7 +107921,7 @@ ScreenLeaveBody_CombiEditMixer:
 	cp H,0xa1                                            ; FBDD47  ce cf a1
 	jr z, .LFBDD56                                       ; FBDD4A  66 0a
 	ld	(UI_PartIndex:16), (CombiEdit_EntryPart:16)             ; FBDD4C  c1 6d 27 19 50 22
-	call T_F42C9C                                        ; FBDD52  1d 9c 2c f4
+	call T_PartIndex_PostChangeEvent                                        ; FBDD52  1d 9c 2c f4
 .LFBDD56:
 	ld c, (UI_ScreenLatch:16)                                   ; FBDD56  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FBDD5A  c1 7b 20 f3
@@ -107930,7 +107930,7 @@ ScreenLeaveBody_CombiEditMixer:
 	cp A,0x0a                                            ; FBDD62  c9 cf 0a
 	jr nz, .LFBDD7D                                      ; FBDD65  6e 16
 	ld	(UI_PartIndex:16), (CombiEdit_EntryPart:16)             ; FBDD67  c1 6d 27 19 50 22
-	call T_F42C9C                                        ; FBDD6D  1d 9c 2c f4
+	call T_PartIndex_PostChangeEvent                                        ; FBDD6D  1d 9c 2c f4
 	push XDE                                             ; FBDD71  3a
 	push XHL                                             ; FBDD72  3b
 	push XIX                                             ; FBDD73  3c
@@ -108315,7 +108315,7 @@ PageKey_CombiEditMixer:
 ; CombiEditMixer_ColumnKey: (column 0..7), from SoftKeyCols1to8_CombiEditMixer: the part = the edited group ((CombiEdit_Part) & 0xF8) +
 ;   column.  When it is already CombiEdit_Part (or while UI_RequestBits bit 2 is set) its field
 ;   IndexMap_F1B031[CombiEdit_Row] is stepped (PartParam_StepFieldById); otherwise it becomes the edited part
-;   (UI_PartIndex and CombiEdit_Part, T_F42C9C, a repaint request).  Basis: body + caller.
+;   (UI_PartIndex and CombiEdit_Part, T_PartIndex_PostChangeEvent, a repaint request).  Basis: body + caller.
 CombiEditMixer_ColumnKey:
 	link XIZ,0x0000                                      ; FBE05D  ee 0c 00 00
 	pushw hl                                             ; FBE061  2b
@@ -108347,7 +108347,7 @@ CombiEditMixer_ColumnKey:
 .LFBE0A1:
 	ld (UI_PartIndex:16), h                                   ; FBE0A1  f1 50 22 46
 	ld (CombiEdit_Part:16), h                                   ; FBE0A5  f1 65 27 46
-	call T_F42C9C                                        ; FBE0A9  1d 9c 2c f4
+	call T_PartIndex_PostChangeEvent                                        ; FBE0A9  1d 9c 2c f4
 	m_or_mi8 MBI+r4, 0, 0x08                             ; FBE0AD  84 3e 08
 	m_set 4, MD16, UI_Request_Hi                                ; FBE0B0  f1 71 20 bc
 .LFBE0B4:
@@ -108410,7 +108410,7 @@ sub_FBE106:
 	and H,0x1f                                           ; FBE120  ce cc 1f
 	ld (XIX),H                                           ; FBE123  b4 46
 	ld (UI_PartIndex:16), h                                   ; FBE125  f1 50 22 46
-	call T_F42C9C                                        ; FBE129  1d 9c 2c f4
+	call T_PartIndex_PostChangeEvent                                        ; FBE129  1d 9c 2c f4
 	m_set 4, MD16, UI_Request_Hi                                ; FBE12D  f1 71 20 bc
 .LFBE131:
 	pop XIX                                              ; FBE131  5c
@@ -108422,7 +108422,7 @@ sub_FBE106:
 	lda xix, (T_DisplayList_Run_Stack:24)                ; FBE136  f2 00 2e f4 34
 	ld	(0x2768:16), (CombiEdit_Page:16)             ; FBE13B  c1 67 27 19 68 27
 	call T_LCD_BlankThenSetPanel3Layer_Copy                                        ; FBE141  1d 10 2e f4
-	call T_F42E18                                        ; FBE145  1d 18 2e f4
+	call T_UiPaint_PageLabelBackdrop                                        ; FBE145  1d 18 2e f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FBE149  f1 40 25 00 00
 	lda xbc, (DL_F17E2E:24)                              ; FBE14E  f2 2e 7e f1 31
 	push XBC                                             ; FBE153  39
@@ -109803,12 +109803,12 @@ CombiEdit_Begin:
 	popw bc                                              ; FBECFF  49
 	popw hl                                              ; FBED00  4b
 	ret                                                  ; FBED01  0e
-; CombiEdit_End: T_CombiEdit_End: (0x2134) bit 1, UI_PartIndex = CombiEdit_EntryPart, T_F42C9C, T_NoteRouting_SetSoloAndRebuild(0),
+; CombiEdit_End: T_CombiEdit_End: (0x2134) bit 1, UI_PartIndex = CombiEdit_EntryPart, T_PartIndex_PostChangeEvent, T_NoteRouting_SetSoloAndRebuild(0),
 ;   (0x276F) = 0, CombiEdit_CompareOff.  Basis: body.
 CombiEdit_End:
 	m_set 1, MD16, 0x2134                                ; FBED02  f1 34 21 b9
 	ld	(UI_PartIndex:16), (CombiEdit_EntryPart:16)             ; FBED06  c1 6d 27 19 50 22
-	call T_F42C9C                                        ; FBED0C  1d 9c 2c f4
+	call T_PartIndex_PostChangeEvent                                        ; FBED0C  1d 9c 2c f4
 	pushw 0x00                                           ; FBED10  0b 00 00
 	call T_NoteRouting_SetSoloAndRebuild                                        ; FBED13  1d ec 11 f4
 	ld (0x276f:16), 0x00                                 ; FBED17  f1 6f 27 00 00
@@ -110471,7 +110471,7 @@ ScreenEnterBody_CombinationNaming:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FBF1EB  1d 80 2e f4
 .LFBF1EF:
 	pushw 0x10                                           ; FBF1EF  0b 10 00
-	call T_F42F80                                        ; FBF1F2  1d 80 2f f4
+	call T_NameEntry_Begin                                        ; FBF1F2  1d 80 2f f4
 	calr Paint_CombinationNamingWrite                                      ; FBF1F6  1e c9 00
 	popw bc                                              ; FBF1F9  49
 	pop XIX                                              ; FBF1FA  5c
@@ -110630,7 +110630,7 @@ ScreenEnterBody_CombiEditConfigure:
 	ld C,H                                               ; FBF2F8  ce 8b
 	and C,0x07                                           ; FBF2FA  cb cc 07
 	ld (UI_PartIndex:16), c                                   ; FBF2FD  f1 50 22 43
-	call T_F42C9C                                        ; FBF301  1d 9c 2c f4
+	call T_PartIndex_PostChangeEvent                                        ; FBF301  1d 9c 2c f4
 .LFBF305:
 	calr sub_FBCCB1                                          ; FBF305  1e a9 d9
 	ld c, (UI_ScreenLatch:16)                                   ; FBF308  c1 7a 20 23
@@ -110733,7 +110733,7 @@ ScreenLeaveBody_CombiEditConfigure:
 	m_cp_mi8 MB16, PanelModeGroup_Previous, 0x12                          ; FBF430  c1 77 20 3f 12
 	jr nz, .LFBF441                                      ; FBF435  6e 0a
 	ld	(UI_PartIndex:16), (CombiEdit_EntryPart:16)             ; FBF437  c1 6d 27 19 50 22
-	call T_F42C9C                                        ; FBF43D  1d 9c 2c f4
+	call T_PartIndex_PostChangeEvent                                        ; FBF43D  1d 9c 2c f4
 .LFBF441:
 	ret                                                  ; FBF441  0e
 ScreenButtonBody_CombiEditConfigure_Call:
@@ -110815,7 +110815,7 @@ SoftKeyCol2_CombiEditConfigure:
 	jr z, .LFBF4FE                                       ; FBF4F7  66 05
 	ld (CombiEdit_DirtySound:16), 0xff                                 ; FBF4F9  f1 70 27 00 ff
 .LFBF4FE:
-	call T_F42C9C                                        ; FBF4FE  1d 9c 2c f4
+	call T_PartIndex_PostChangeEvent                                        ; FBF4FE  1d 9c 2c f4
 	ld	(CombiEdit_Part:16), (UI_PartIndex:16)             ; FBF502  c1 50 22 19 65 27
 	m_or_mi8 MBI+r4, 0, 0x10                             ; FBF508  84 3e 10
 .LFBF50B:
@@ -111520,7 +111520,7 @@ LcdKeyRow1_CombiEditMenu:
 	inc 8,XSP                                            ; FBFB52  ef 60
 	cp a, 0x01:i3                                          ; FBFB54  c9 d9
 	jr nz, .LFBFB66                                      ; FBFB56  6e 0e
-	call T_F42C9C                                        ; FBFB58  1d 9c 2c f4
+	call T_PartIndex_PostChangeEvent                                        ; FBFB58  1d 9c 2c f4
 	ld	(CombiEdit_Part:16), (UI_PartIndex:16)             ; FBFB5C  c1 50 22 19 65 27
 	m_set 4, MD16, UI_ScreenFlags                                ; FBFB62  f1 95 20 bc
 .LFBFB66:
@@ -111540,7 +111540,7 @@ LcdKeyRow2_CombiEditMenu:
 	inc 8,XSP                                            ; FBFB80  ef 60
 	cp a, 0x01:i3                                          ; FBFB82  c9 d9
 	jr nz, .LFBFB99                                      ; FBFB84  6e 13
-	call T_F42C9C                                        ; FBFB86  1d 9c 2c f4
+	call T_PartIndex_PostChangeEvent                                        ; FBFB86  1d 9c 2c f4
 ; (sub_FBFB8A removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenButton_CombiEditMenu;
 ;  notes/prom_a_stray_label_removal.py)
 	ld	(CombiEdit_Part:16), (UI_PartIndex:16)             ; FBFB8A  c1 50 22 19 65 27
@@ -154640,7 +154640,7 @@ ScreenEnter_SoundEditNaming:
 	ld C,H                                               ; FDD018  ce 8b
 	extz BC                                              ; FDD01A  d9 12
 	pushw bc                                             ; FDD01C  29
-	call sub_F0B91C                                      ; FDD01D  1d 1c b9 f0
+	call NameEntry_Begin                                      ; FDD01D  1d 1c b9 f0
 	pushw 0x10                                           ; FDD021  0b 10 00
 	call ToneMsg80_Id00                                      ; FDD024  1d 47 64 fd
 	pop XBC                                              ; FDD028  59
@@ -192587,7 +192587,7 @@ ScreenEnter_DiskSaveFile_Page3:   ; entry: named by 1 `.long` operand, first at 
 	push XWA                                             ; FF5632  38
 	call MemCpy_C                                      ; FF5633  1d b5 78 ff
 	pushw 0x02                                           ; FF5637  0b 02 00
-	call T_F42F80                                        ; FF563A  1d 80 2f f4
+	call T_NameEntry_Begin                                        ; FF563A  1d 80 2f f4
 	pushw 0x00                                           ; FF563E  0b 00 00
 	lda xbc, (DL_F5999A:24)                              ; FF5641  f2 9a 99 f5 31
 	push XBC                                             ; FF5646  39
@@ -192617,7 +192617,7 @@ ScreenEnter_DiskSaveFile_Page4:   ; entry: named by 1 `.long` operand, first at 
 	extz XIX                                             ; FF5685  ec 12
 	ld (XIX+0x01),0x5f                                   ; FF5687  bc 01 00 5f
 	pushw 0x02                                           ; FF568B  0b 02 00
-	call T_F42F80                                        ; FF568E  1d 80 2f f4
+	call T_NameEntry_Begin                                        ; FF568E  1d 80 2f f4
 	pushw 0x00                                           ; FF5692  0b 00 00
 	lda xbc, (DL_F5999A:24)                              ; FF5695  f2 9a 99 f5 31
 	push XBC                                             ; FF569A  39

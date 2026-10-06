@@ -10533,7 +10533,7 @@ DL_StartPitchStopPitchTotal:
 ;   ends used:  0xF03FF3, 0xF0402E
 ; Formerly Data_F03F77 + a 46-byte `.incbin` + Data_F03FAF -- the head,
 ; the middle and the tail of ONE list, cut in two places by the round-1
-; reachability walk.  THE READER NAMES BOTH EDGES: sub_F5C727 does
+; reachability walk.  THE READER NAMES BOTH EDGES: SoundEditAmp_PaintHeader does
 ;   F5C72C  ld XIY,0x00F03F77   /  F5C738 ld XIX,0x00F0402E
 ;   F5C73F  ld XIX,0x00F03FF3   /  F5C744 call 0xF417F0
 ; so the list starts at 0xF03F77 and ends at 0xF03FF3 or 0xF0402E; the
@@ -17589,7 +17589,7 @@ ProgramChangeOut_ByProgramAndBank:
 ; Called from: table 0xF5B8F8[45]
 ; Touches: (0x2540) (0x27F5)  |  0xF32D2C 0xF32E71 0xF32F43 0xF32FA0 0xF32FC8
 ;          0xF32FE6
-; Calls:   SoundEditController_PaintHeader T_F42E18 T_DisplayList_Run T_DisplayListB_Run
+; Calls:   SoundEditController_PaintHeader T_UiPaint_PageLabelBackdrop T_DisplayList_Run T_DisplayListB_Run
 ; Draws:   4 display-list call sites naming 4 distinct lists; their printable
 ;          runs: 0xF32D2C-0xF32E71 "PAGE1/2"; 0xF32F43-0xF32FA0;
 ;          0xF32FC8-0xF32FE6; 0xF32FA0-0xF32FC8
@@ -17600,7 +17600,7 @@ ProgramChangeOut_ByProgramAndBank:
 ; --------------------------------------------------------------------------
 SoundEditController_PaintPage1:
 	call	SoundEditController_PaintHeader	; F09800  call 0xf098b8
-	call	T_F42E18	; F09804  call 0xf42e18
+	call	T_UiPaint_PageLabelBackdrop	; F09804  call 0xf42e18
 	ld	(LCD_CurrentLayer:16), 0	; F09808  ld (0x2540),0x00
 	ld	xiy, SoundEditController_PaintPage1_DL	; F0980D  ld XIY,0x00f32d2c
 	ld	xix, DL_Page22AfterTouchCtrlPedal	; F09812  ld XIX,0x00f32e71
@@ -17627,7 +17627,7 @@ SoundEditController_PaintPage1_Skip:
 ; Called from: table 0xF5B8F8[27]
 ; Touches: (0x2540) (0x27F5)  |  0xF32E71 0xF32F43 0xF32FA0 0xF32FC8 0xF32FE6
 ;          0xF3341C +1 more
-; Calls:   SoundEditController_PaintHeader T_F42E18 T_DisplayList_Run T_DisplayListB_Run
+; Calls:   SoundEditController_PaintHeader T_UiPaint_PageLabelBackdrop T_DisplayList_Run T_DisplayListB_Run
 ; Draws:   4 display-list call sites naming 4 distinct lists; their printable
 ;          runs: 0xF32E71-0xF32F43 "PAGE2/2 / AFTER TOUCH / CTRL PEDAL";
 ;          0xF3341C-0xF334AE; 0xF32FC8-0xF32FE6; 0xF32FA0-0xF32FC8
@@ -17636,7 +17636,7 @@ SoundEditController_PaintPage1_Skip:
 ; --------------------------------------------------------------------------
 SoundEditController_PaintPage2:
 	call	SoundEditController_PaintHeader	; F0985C  call 0xf098b8
-	call	T_F42E18	; F09860  call 0xf42e18
+	call	T_UiPaint_PageLabelBackdrop	; F09860  call 0xf42e18
 	ld	(LCD_CurrentLayer:16), 0	; F09864  ld (0x2540),0x00
 	ld	xiy, DL_Page22AfterTouchCtrlPedal	; F09869  ld XIY,0x00f32e71
 	ld	xix, DL_F32F43	; F0986E  ld XIX,0x00f32f43
@@ -22968,17 +22968,22 @@ sub_F0B81D_Join2:
 	ret	; F0B91B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B91C
-; Called from: T_F42F80 (x6)
+; NameEntry_Begin
+; Called from: T_NameEntry_Begin (x6)
 ; Touches: nothing with an absolute address
 ; Calls:   T_CallbackQueue_ResetAndRestartTask2 0xFD7BA5 0xFD7C83 T_Dispatch_Code80_Bracketed 0xFD7BC3 0xFD7BDE
-; Evidence: thunk slot T_F42F80 holds `jp 0x00F0B91C`, and 0xF0B91C is an
+; Evidence: thunk slot T_NameEntry_Begin holds `jp 0x00F0B91C`, and 0xF0B91C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B91C:		; <- T_F42F80
+; NameEntry_Begin: Starts the shared name-entry editor: (0x27A6)[2] = field length (argument & 0x1F, at most 16), [1]
+;   = NameChar index of the entry buffer's (0x22F0) first character, [0] = cursor 0; then
+;   Dispatch_Code80_Bracketed(0x9F) and the dial as buttons 7/5. Called by the naming screens' ENTER (length 16, or
+;   13) and the DISK SAVE password pages (2). Basis: callers + body + sibling key handlers. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_b.json)
+NameEntry_Begin:		; <- T_NameEntry_Begin
 	link XIZ,0xfffc	; F0B91C  link XIZ,0xfffc
 	pushw	hl	; F0B920  push HL
 	push	xix	; F0B921  push XIX
@@ -29260,7 +29265,7 @@ ExitKey_DspEffect_BySection:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2070) (0x2076) (0x207C)
-; Calls:   T_F42E6C
+; Calls:   T_Drawbar_WaitReloadMark
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -29293,7 +29298,7 @@ sub_F0F200_Skip3:
 	jr	nz, sub_F0F200_Join	; F0F232  jr NZ,0xf0f25c
 	m_cp_mi8 MB16, UI_ScreenId, 0xca	; F0F234  cp (0x207c),0xca
 	jr	nz, sub_F0F200_Skip4	; F0F239  jr NZ,0xf0f254
-	call	T_F42E6C	; F0F23B  call 0xf42e6c
+	call	T_Drawbar_WaitReloadMark	; F0F23B  call 0xf42e6c
 	ld	h, a	; F0F23F  ld H,A
 	m_or_mi8 MBI+r4, 0, 0x80	; F0F241  or (XIX),0x80
 	ld	(UI_Request:16), 128	; F0F244  ld (0x2070),0x80
@@ -29447,7 +29452,7 @@ SoftKeyCol1_DspEffect_BySection:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2076) (0x209B) (0x209C) (0x2791) (0x2798)
-; Calls:   T_F42E6C sub_F10222
+; Calls:   T_Drawbar_WaitReloadMark sub_F10222
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -29465,7 +29470,7 @@ SoftKeyCol1_DspEffect_Section0:
 	jr	nz, DispatchTable_F0F29A_Nop4	; F0F2B7  jr NZ,0xf0f2de
 	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F2B9  cp (0x2076),0x17
 	jr	nz, DispatchTable_F0F29A_Nop4	; F0F2BE  jr NZ,0xf0f2de
-	call	T_F42E6C	; F0F2C0  call 0xf42e6c
+	call	T_Drawbar_WaitReloadMark	; F0F2C0  call 0xf42e6c
 	cp	a, 2:i3	; F0F2C4  cp A,2
 	jr	z, DispatchTable_F0F29A_Nop4	; F0F2C6  jr Z,0xf0f2de
 	calr	sub_F10222	; F0F2C8  calr 0xf10222
@@ -31164,7 +31169,7 @@ LcdKeyRow5_DspEffect_BySection:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2071) (0x2076) (0x2798) (0x28B0)
-; Calls:   T_F42E6C
+; Calls:   T_Drawbar_WaitReloadMark
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -31183,7 +31188,7 @@ LcdKeyRow5_DspEffect_Section0:
 	jr	z, DispatchTable_F0F708_Nop4	; F0F727  jr Z,0xf0f75a
 	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F729  cp (0x2076),0x17
 	jr	nz, DispatchTable_F0F708_Nop4	; F0F72E  jr NZ,0xf0f75a
-	call	T_F42E6C	; F0F730  call 0xf42e6c
+	call	T_Drawbar_WaitReloadMark	; F0F730  call 0xf42e6c
 	cp	a, 2:i3	; F0F734  cp A,2
 	jr	z, DispatchTable_F0F708_Nop4	; F0F736  jr Z,0xf0f75a
 	m_cp_mi8 MB16, 0x2798, 0x01	; F0F738  cp (0x2798),0x01
@@ -31278,7 +31283,7 @@ sub_F0F75B_Return:
 ; Called from: in-module: 0xF0F16A
 ; Touches: (0x2075) (0x2076) (0x2095) (0x209B) (0x209C) (0x2540) (0x2640)
 ;          (0x2791) (0x2797) (0x2798) +1 more
-; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg sub_F11329 T_LCD_BlankThenSetPanel3Layer_Copy T_F42E6C T_DisplayListB_RunOne_Stack
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg sub_F11329 T_LCD_BlankThenSetPanel3Layer_Copy T_Drawbar_WaitReloadMark T_DisplayListB_RunOne_Stack
 ;          T_DisplayList_Run_Stack T_DisplayListB_Run_Stack T_DisplayList_RunOne_Stack sub_F0FD2F T_IndexedTable_GetByte +1 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -31422,7 +31427,7 @@ sub_F0F8A3_Resume:
 	inc	8, xsp	; F0F8B9  inc 0,XSP
 	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F8BB  cp (0x2076),0x17
 	jr	nz, sub_F0F788_Skip10	; F0F8C0  jr NZ,0xf0f8d8
-	call	T_F42E6C	; F0F8C2  call 0xf42e6c
+	call	T_Drawbar_WaitReloadMark	; F0F8C2  call 0xf42e6c
 	cp	a, 2:i3	; F0F8C6  cp A,2
 	jr	z, sub_F0F788_Skip10	; F0F8C8  jr Z,0xf0f8d8
 	lda	xbc, (DL_F14329:24)	; F0F8CA  lda XBC,0xf14329
@@ -31505,7 +31510,7 @@ sub_F0F788_Skip11:
 	inc	4, xsp	; F0F978  inc 4,XSP
 	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F97A  cp (0x2076),0x17
 	jr	nz, sub_F0F788_Skip12	; F0F97F  jr NZ,0xf0f99e
-	call	T_F42E6C	; F0F981  call 0xf42e6c
+	call	T_Drawbar_WaitReloadMark	; F0F981  call 0xf42e6c
 	cp	a, 2:i3	; F0F985  cp A,2
 	jr	z, sub_F0F788_Skip12	; F0F987  jr Z,0xf0f99e
 	ld	(xix), 0	; F0F989  ld (XIX),0x00
@@ -31621,7 +31626,7 @@ sub_F0F788_Join6:
 sub_F0F788_Skip15:
 	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0FA9A  cp (0x2076),0x17
 	jr	nz, sub_F0F788_Skip16	; F0FA9F  jr NZ,0xf0fac1
-	call	T_F42E6C	; F0FAA1  call 0xf42e6c
+	call	T_Drawbar_WaitReloadMark	; F0FAA1  call 0xf42e6c
 	cp	a, 2:i3	; F0FAA5  cp A,2
 	jr	z, sub_F0F788_Skip16	; F0FAA7  jr Z,0xf0fac1
 	pushw	5	; F0FAA9  push 0x0005
@@ -31651,7 +31656,7 @@ sub_F0F788_Skip16:
 sub_F0F788_Skip17:
 	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0FAEB  cp (0x2076),0x17
 	jr	nz, sub_F0F788_Skip19	; F0FAF0  jr NZ,0xf0fb1c
-	call	T_F42E6C	; F0FAF2  call 0xf42e6c
+	call	T_Drawbar_WaitReloadMark	; F0FAF2  call 0xf42e6c
 	cp	a, 2:i3	; F0FAF6  cp A,2
 	jr	z, sub_F0F788_Skip19	; F0FAF8  jr Z,0xf0fb1c
 	pushw	6	; F0FAFA  push 0x0006
@@ -31695,7 +31700,7 @@ sub_F0F788_Skip19:
 sub_F0F788_Skip20:
 	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0FB57  cp (0x2076),0x17
 	jr	nz, sub_F0F788_Skip21	; F0FB5C  jr NZ,0xf0fb7e
-	call	T_F42E6C	; F0FB5E  call 0xf42e6c
+	call	T_Drawbar_WaitReloadMark	; F0FB5E  call 0xf42e6c
 	cp	a, 2:i3	; F0FB62  cp A,2
 	jr	z, sub_F0F788_Skip21	; F0FB64  jr Z,0xf0fb7e
 	pushw	7	; F0FB66  push 0x0007
@@ -31804,7 +31809,7 @@ sub_F0F788_Join10:
 	inc	8, xsp	; F0FC7F  inc 0,XSP
 	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0FC81  cp (0x2076),0x17
 	jrl	nz, sub_F0F788_Skip28	; F0FC86  jrl NZ,0xf0fd28
-	call	T_F42E6C	; F0FC89  call 0xf42e6c
+	call	T_Drawbar_WaitReloadMark	; F0FC89  call 0xf42e6c
 	cp	a, 2:i3	; F0FC8D  cp A,2
 	jrl	z, sub_F0F788_Skip28	; F0FC8F  jrl Z,0xf0fd28
 	pushw	6	; F0FC92  push 0x0006
@@ -37311,7 +37316,7 @@ sub_F123F4:
 ; sub_F1245A
 ; Called from: in-module: 0xF0F1B3
 ; Touches: nothing with an absolute address
-; Calls:   T_F42E6C T_IndexedTable_GetByte T_Link_SendBlockIn32ByteChunks
+; Calls:   T_Drawbar_WaitReloadMark T_IndexedTable_GetByte T_Link_SendBlockIn32ByteChunks
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -37325,7 +37330,7 @@ sub_F1245A:
 	link XIZ,0xfffa	; F1245A  link XIZ,0xfffa
 	push	xix	; F1245E  push XIX
 	lda	xix, (xiz-6)	; F1245F  lda XIX,XIZ+0xfa
-	call	T_F42E6C	; F12462  call 0xf42e6c
+	call	T_Drawbar_WaitReloadMark	; F12462  call 0xf42e6c
 	cp	a, 2:i3	; F12466  cp A,2
 	jr	nz, sub_F1245A_Skip	; F12468  jr NZ,0xf12473
 	ld	(xix), 141	; F1246A  ld (XIX),0x8d
@@ -67274,7 +67279,7 @@ DrawValueGlyph_24x24:
 	ret	; F31898  ret
 
 ; ---------------------------------------------------------------------
-; sub_F31899 -- draws a fixed 16x16 decoration, around a service-5 call
+; UiPaint_PageLabelBackdrop -- draws a fixed 16x16 decoration, around a service-5 call
 ;
 ; Called from: not yet traced
 ; Inputs:  none -- every operand is an immediate here
@@ -67287,7 +67292,12 @@ DrawValueGlyph_24x24:
 ;          adjacent 8-pixel halves would need if IX counted pixels -- suggestive
 ;          only, and not asserted.
 ; ---------------------------------------------------------------------
-sub_F31899:
+; UiPaint_PageLabelBackdrop: Draws, in LCD layer 1, the solid rounded box behind the top-right 'PAGEn/m' legend: left
+;   cap (blit at layer offset 151 = x 248-255), fill (256,2)-(311,19), right cap (offset 159 = x 312-319); saves and
+;   restores (0x2540). Basis: callers + body -- every caller's page draws 'PAGEn/m' at layer offset 0x0110/0x00E8 (x
+;   256-311), exactly the fill's X0..X1; called via T_UiPaint_PageLabelBackdrop by sound-edit, tone-edit, combination-mode, combi-edit
+;   and controller-assign painters. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+UiPaint_PageLabelBackdrop:
 	push	xiz	; F31899  push XIZ
 	push	xix	; F3189A  push XIX
 	push	xhl	; F3189B  push XHL
@@ -67321,7 +67331,7 @@ sub_F31899:
 	pop	xiz	; F318EC  pop XIZ
 	ret	; F318ED  ret
 
-; --- 0xF318EE: two 8-pixel-wide, 16-row bitmaps, blitted by sub_F31899 -------
+; --- 0xF318EE: two 8-pixel-wide, 16-row bitmaps, blitted by UiPaint_PageLabelBackdrop -------
 bitmap_F318EE:
 	.byte 0x03, 0x07, 0x0F, 0x1F, 0x1F, 0x3F, 0x3F, 0x3F, 0x3F, 0x3F, 0x3F, 0x1F, 0x1F, 0x0F, 0x07, 0x03
 bitmap_F318FE:
@@ -67330,7 +67340,7 @@ bitmap_F318FE:
 ; ---------------------------------------------------------------------
 ; sub_F3190E -- draws a fixed 5-byte x 15-row shape, around a service-5 call
 ;
-; Same shape as sub_F31899: save (0x2540), force it to 1, service 5 with
+; Same shape as UiPaint_PageLabelBackdrop: save (0x2540), force it to 1, service 5 with
 ; parameter words 0x0120/0x0004/0x0121/0x0004, then one service-3 blit of the
 ; 75-byte bitmap at 0xF31952, then restore (0x2540).
 ; ---------------------------------------------------------------------
@@ -89579,7 +89589,9 @@ T_F409D0:	jp sub_F451E6  ; -> prom_b 0x451E6   x4
 T_F409D4:	jp sub_F452D3  ; -> prom_b 0x452D3   x2
 T_F409D8:	jp sub_F45348  ; -> prom_b 0x45348   x1
 T_F409DC:	jp sub_F45BD3  ; -> prom_b 0x45BD3   x1
-T_F409E0:	jp sub_F4542D  ; -> prom_b 0x4542D   x24
+; Evidence: slot 0xF409E0 is `jp 0xF4542D`; prom_b 0xF4542D carries the label
+;           Seq_RequestRewind (graded CONTENT).  DERIVATIVE name.
+T_Seq_RequestRewind:	jp Seq_RequestRewind  ; F409E0 (was T_F409E0) -> prom_b 0x4542D   x24
 T_F409E4:	jp sub_F45445  ; -> prom_b 0x45445   x1
 T_F409E8:	jp sub_F4545B  ; -> prom_b 0x4545B
 T_F409EC:	jp sub_F4545F  ; -> prom_b 0x4545F   x1
@@ -89648,7 +89660,9 @@ T_F40AB4:	jp sub_F45FE5  ; -> prom_b 0x45FE5
 T_F40AB8:	jp sub_F440A0  ; -> prom_b 0x440A0
 T_F40ABC:	jp sub_F44F67  ; -> prom_b 0x44F67   x2
 T_F40AC0:	jp sub_F4603C  ; -> prom_b 0x4603C   x1
-T_F40AC4:	jp sub_F44AEE  ; -> prom_b 0x44AEE   x11
+; Evidence: slot 0xF40AC4 is `jp 0xF44AEE`; prom_b 0xF44AEE carries the label
+;           Seq_SetTrackBeatsFromTransportB (graded CONTENT).  DERIVATIVE name.
+T_Seq_SetTrackBeatsFromTransportB:	jp Seq_SetTrackBeatsFromTransportB  ; F40AC4 (was T_F40AC4) -> prom_b 0x44AEE   x11
 T_F40AC8:	jp sub_F44131  ; -> prom_b 0x44131   x6
 	.fill 0x74, 1, 0x0E  ; 0xF40ACC: 116 x ret
 T_F40B40:	jp sub_F48107  ; -> prom_b 0x48107   x1
@@ -89658,8 +89672,12 @@ T_F40B4C:	jp sub_F47804  ; -> prom_b 0x47804   x1
 T_F40B50:	jp sub_F47807  ; -> prom_b 0x47807
 T_F40B54:	jp sub_F483B2  ; -> prom_b 0x483B2   x3
 T_F40B58:	jp sub_F47A5D  ; -> prom_b 0x47A5D   x2
-T_F40B5C:	jp sub_F48464  ; -> prom_b 0x48464   x13
-T_F40B60:	jp sub_F48580  ; -> prom_b 0x48580   x13
+; Evidence: slot 0xF40B5C is `jp 0xF48464`; prom_b 0xF48464 carries the label
+;           SeqCycle_LocateToStart (graded CONTENT).  DERIVATIVE name.
+T_SeqCycle_LocateToStart:	jp SeqCycle_LocateToStart  ; F40B5C (was T_F40B5C) -> prom_b 0x48464   x13
+; Evidence: slot 0xF40B60 is `jp 0xF48580`; prom_b 0xF48580 carries the label
+;           SeqCycle_CaptureEndCursors (graded CONTENT).  DERIVATIVE name.
+T_SeqCycle_CaptureEndCursors:	jp SeqCycle_CaptureEndCursors  ; F40B60 (was T_F40B60) -> prom_b 0x48580   x13
 T_F40B64:	jp sub_F486BA  ; -> prom_b 0x486BA   x7
 T_F40B68:	jp sub_F4869B  ; -> prom_b 0x4869B   x7
 T_F40B6C:	jp sub_F48647  ; -> prom_b 0x48647   x3
@@ -89711,7 +89729,9 @@ T_F40CB4:	jp T_F40CB4_Nop  ; -> prom_b 0x4E524   x14
 T_F40CB8:	jp T_F40CB8_Nop  ; -> prom_b 0x4E591
 T_F40CBC:	jp sub_F4E525  ; -> prom_b 0x4E525
 T_F40CC0:	jp sub_F4E1B2  ; -> prom_b 0x4E1B2   x1
-T_F40CC4:	jp sub_F4E56F  ; -> prom_b 0x4E56F   x24
+; Evidence: slot 0xF40CC4 is `jp 0xF4E56F`; prom_b 0xF4E56F carries the label
+;           SeqTrackKey_Press (graded CONTENT).  DERIVATIVE name.
+T_SeqTrackKey_Press:	jp SeqTrackKey_Press  ; F40CC4 (was T_F40CC4) -> prom_b 0x4E56F   x24
 ; Evidence: slot 0xF40CC8 is `jp 0xF4E592`; prom_b 0xF4E592 carries the label
 ;           RealtimeRecordScreen_LcdKeyRow2 (graded CONTENT).  DERIVATIVE name.
 T_RealtimeRecordScreen_LcdKeyRow2:	jp RealtimeRecordScreen_LcdKeyRow2  ; F40CC8 (was T_F40CC8) -> prom_b 0x4E592   x1
@@ -91531,7 +91551,9 @@ T_F426F4:	jp sub_F5EC12  ; -> prom_b 0x5EC12   x2
 T_F426F8:	jp sub_F5F221  ; -> prom_b 0x5F221   x2
 T_F426FC:	jp sub_F60598  ; -> prom_b 0x60598   x1
 T_F42700:	jp sub_F5DAA2  ; -> prom_b 0x5DAA2   x1
-T_F42704:	jp sub_F60B22  ; -> prom_b 0x60B22   x6
+; Evidence: slot 0xF42704 is `jp 0xF60B22`; prom_b 0xF60B22 carries the label
+;           Seq_LoadTimeSigAtCurrentMeasure (graded CONTENT).  DERIVATIVE name.
+T_Seq_LoadTimeSigAtCurrentMeasure:	jp Seq_LoadTimeSigAtCurrentMeasure  ; F42704 (was T_F42704) -> prom_b 0x60B22   x6
 ; Evidence: slot 0xF42708 is `jp 0xF60B0C`; prom_b 0xF60B0C carries the label
 ;           SongClear_ClearCurrentBank (graded CONTENT).  DERIVATIVE name.
 T_SongClear_ClearCurrentBank:	jp SongClear_ClearCurrentBank  ; F42708 (was T_F42708) -> prom_b 0x60B0C   x6
@@ -91867,7 +91889,9 @@ T_IndexedParam_AdjustField:	jp IndexedParam_AdjustField  ; F42C94 (was T_F42C94)
 ; Evidence: slot 0xF42C98 is `jp 0xF5547B`; prom_b 0xF5547B carries the label
 ;           IndexedParam_SetBit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_IndexedParam_SetBit:	jp IndexedParam_SetBit  ; F42C98 (was T_F42C98) -> prom_b 0x5547B   x35
-T_F42C9C:	jp sub_F556D2  ; -> prom_b 0x556D2   x13
+; Evidence: slot 0xF42C9C is `jp 0xF556D2`; prom_b 0xF556D2 carries the label
+;           PartIndex_PostChangeEvent (graded CONTENT).  DERIVATIVE name.
+T_PartIndex_PostChangeEvent:	jp PartIndex_PostChangeEvent  ; F42C9C (was T_F42C9C) -> prom_b 0x556D2   x13
 T_F42CA0:	jp sub_F556EA  ; -> prom_b 0x556EA   x5
 T_F42CA4:	jp sub_F551E7  ; -> prom_b 0x551E7
 ; Evidence: slot 0xF42CA8 is `jp 0xF5553F`; prom_b 0xF5553F carries the label
@@ -91984,7 +92008,9 @@ T_DisplayListB_RunOne_Stack:	jp DisplayListB_RunOne_Stack  ; F42E0C (was T_F42E0
 ;           LCD_BlankThenSetPanel3Layer_Copy (graded CONTENT).  DERIVATIVE name.
 T_LCD_BlankThenSetPanel3Layer_Copy:	jp LCD_BlankThenSetPanel3Layer_Copy  ; F42E10 (was T_F42E10) -> prom_b 0x31852   x37  services 0x0C and 0x10, C = 0
 T_LCD_ShowAllLayers_StackFrame_Copy:	jp LCD_ShowAllLayers_StackFrame_Copy  ; -> prom_b 0x31863   x39  service 0x0C, C = 7
-T_F42E18:	jp sub_F31899  ; -> prom_b 0x31899   x9
+; Evidence: slot 0xF42E18 is `jp 0xF31899`; prom_b 0xF31899 carries the label
+;           UiPaint_PageLabelBackdrop (graded CONTENT).  DERIVATIVE name.
+T_UiPaint_PageLabelBackdrop:	jp UiPaint_PageLabelBackdrop  ; F42E18 (was T_F42E18) -> prom_b 0x31899   x9
 T_F42E1C:	jp sub_F3190E  ; -> prom_b 0x3190E   x1
 ; Evidence: slot 0xF42E20 is `jp 0xF0E9CF`; prom_b 0xF0E9CF carries the label
 ;           Blink_Command, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
@@ -92023,7 +92049,9 @@ T_Drawbar_ReloadIfMarked:	jp Drawbar_ReloadIfMarked  ; F42E60 (was T_F42E60) -> 
 ;           Drawbar_OnCpu2Reply (graded CONTENT).  DERIVATIVE name.
 T_Drawbar_OnCpu2Reply:	jp Drawbar_OnCpu2Reply  ; F42E64 (was T_F42E64) -> prom_b 0x53E04   x1
 T_F42E68:	jp sub_F541FF  ; -> prom_b 0x541FF   x3
-T_F42E6C:	jp sub_F54210  ; -> prom_b 0x54210   x12
+; Evidence: slot 0xF42E6C is `jp 0xF54210`; prom_b 0xF54210 carries the label
+;           Drawbar_WaitReloadMark (graded CONTENT).  DERIVATIVE name.
+T_Drawbar_WaitReloadMark:	jp Drawbar_WaitReloadMark  ; F42E6C (was T_F42E6C) -> prom_b 0x54210   x12
 	.fill 0x10, 1, 0x0E  ; 0xF42E70: 16 x ret
 ; Evidence: slot 0xF42E80 is `jp 0xF8DA83`; prom_a 0xF8DA83 carries the label
 ;           CallbackQueue_ResetAndRestartTask2, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
@@ -92088,7 +92116,9 @@ T_ScreenEnterBody_MainOutEqualizer:	jp ScreenEnterBody_MainOutEqualizer  ; F42F6
 ;           ScreenButtonBody_MainOutEqualizer (graded CONTENT).  DERIVATIVE name.
 T_ScreenButtonBody_MainOutEqualizer:	jp ScreenButtonBody_MainOutEqualizer  ; F42F6C (was T_F42F6C) -> prom_b 0x12334   x1
 	.fill 0x10, 1, 0x0E  ; 0xF42F70: 16 x ret
-T_F42F80:	jp sub_F0B91C  ; -> prom_b 0x0B91C   x6
+; Evidence: slot 0xF42F80 is `jp 0xF0B91C`; prom_b 0xF0B91C carries the label
+;           NameEntry_Begin (graded CONTENT).  DERIVATIVE name.
+T_NameEntry_Begin:	jp NameEntry_Begin  ; F42F80 (was T_F42F80) -> prom_b 0x0B91C   x6
 T_SoundEditNaming_SoftKeyCol1:	jp SoundEditNaming_SoftKeyCol1  ; -> prom_b 0x0B9B3   x3
 T_SoundEditNaming_SoftKeyCol2:	jp SoundEditNaming_SoftKeyCol2  ; -> prom_b 0x0BA20   x3
 T_SoundEditNaming_SoftKeyCol3:	jp SoundEditNaming_SoftKeyCol3  ; -> prom_b 0x0BAA8   x3
@@ -92556,7 +92586,7 @@ T_F44010:	jp BStore_BootPhase2And4  ; -> prom_b 0x44095
 ; WHY THIS BLOCK.  notes/prom_b_module_frontier.py ranks T_F409C0-T_F40A30,
 ; T_F40A3C-T_F40A64 and T_F40A6C-T_F40AC8 -- three ADJACENT runs, all pointing
 ; into this one range -- with a summed reference upper bound of 81 + 41 + 7 = 129,
-; the highest of any group in prom_b.  T_F409E0 -> 0xF4542D (x24) and
+; the highest of any group in prom_b.  T_Seq_RequestRewind -> 0xF4542D (x24) and
 ; T_F40A1C -> 0xF44367 (x15) are both in notes/prom_b_call_graph.py's top ten
 ; unconverted targets.  64 SLOTS point in here, resolving to 62 distinct TARGETS
 ; -- two slots share a target with another.  Both numbers are derived by --checks,
@@ -92892,7 +92922,7 @@ sub_F440A0_Loop:
 ; BStore_BootPhase3
 ; Called from: T_BStore_BootPhase3 (x0)
 ; Touches: (0x34D3) (0x3552) (0x360A) (0x360C)
-; Calls:   TimedEventRing_Discard SeqBufRing_Discard sub_F4542D T_BStore_LoadGeometry_Call T_F427B8 T_BStore_LatchHeapBase_Veneer
+; Calls:   TimedEventRing_Discard SeqBufRing_Discard Seq_RequestRewind T_BStore_LoadGeometry_Call T_F427B8 T_BStore_LatchHeapBase_Veneer
 ;          sub_F44505 T_NoteRouting_RebuildForSong sub_F44143 BStore_ClearPasswordProtectedBanks T_EditScreen_BootPhase2And4 sub_F44237 +1
 ;          more
 ; Evidence: thunk slot T_BStore_BootPhase3 holds `jp 0x00F440C4`, and 0xF440C4 is an
@@ -92915,7 +92945,7 @@ sub_F440A0_Skip:
 	ldw	(13650:16), 1	; F440D7  ld (0x3552),0x0001
 	ld	xwa, (6304798:24)	; F440DD  ld XWA,(0x60341e)
 	ld	(13836:16), xwa	; F440E2  ld (0x360c),XWA
-	calr	sub_F4542D	; F440E6  calr 0xf4542d
+	calr	Seq_RequestRewind	; F440E6  calr 0xf4542d
 	m_bit 0, MD16, 0x34d3	; F440E9  bit 0,(0x34d3)
 	jr	z, sub_F440A0_Skip2	; F440ED  jr Z,0xf440f4
 	m_or_mi8 MB16, 0x34d3, 0x04	; F440EF  or (0x34d3),0x04
@@ -94144,17 +94174,22 @@ sub_F44ADA_Return:
 	ret	; F44AED  ret
 
 ; --------------------------------------------------------------------------
-; sub_F44AEE
-; Called from: T_F40AC4 (x11); in-module: 0xF45EC8 0xF45F0F
+; Seq_SetTrackBeatsFromTransportB
+; Called from: T_Seq_SetTrackBeatsFromTransportB (x11); in-module: 0xF45EC8 0xF45F0F
 ; Touches: (0x345B) (0x34BB)  |  0x0033EA
-; Evidence: thunk slot T_F40AC4 holds `jp 0x00F44AEE`, and 0xF44AEE is an
+; Evidence: thunk slot T_Seq_SetTrackBeatsFromTransportB holds `jp 0x00F44AEE`, and 0xF44AEE is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F44AEE:		; <- T_F40AC4
+; Seq_SetTrackBeatsFromTransportB: If (0x34BB) bit 3 (set by the locate paths, cleared by Seq_RewindToStart): (0x345B)
+;   := Seq_BeatTick and all 17 per-track words at 0x33EA := TransportB_Beat; else TransportB_Beat, Seq_BeatTick,
+;   (0x345B) and the 17 words := 0. Always the third call of the cycle-arming triple (after
+;   SeqCycle_CaptureEndCursors, SeqCycle_LocateToStart). Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_b.json)
+Seq_SetTrackBeatsFromTransportB:		; <- T_Seq_SetTrackBeatsFromTransportB
 	m_bit 3, MD16, 0x34bb	; F44AEE  bit 3,(0x34bb)
 	jr	z, sub_F44AEE_Skip	; F44AF2  jr Z,0xf44b0f
 	ld	a, (Seq_BeatTick:8)	; F44AF4  ld A,(0x93)
@@ -95294,17 +95329,21 @@ sub_F453E9_Skip2:
 	ret	; F4542C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4542D
-; Called from: T_F409E0 (x24); in-module: 0xF440E6
+; Seq_RequestRewind
+; Called from: T_Seq_RequestRewind (x24); in-module: 0xF440E6
 ; Touches: (0x34D3)  |  0x000000
-; Evidence: thunk slot T_F409E0 holds `jp 0x00F4542D`, and 0xF4542D is an
+; Evidence: thunk slot T_Seq_RequestRewind holds `jp 0x00F4542D`, and 0xF4542D is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4542D:		; <- T_F409E0
+; Seq_RequestRewind: If any track plays ((0x60341E) non-zero) and transport B is stopped, sets (0x34D3) bit 0; the
+;   sequencer tick (sub_F44582 -> sub_F44809) consumes it and moves to the cycle start measure or calls
+;   Seq_RewindToStart. Called after the song changes: edit-job OnLeave handlers, song load, SMF read. Basis: callers +
+;   body + consumer. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+Seq_RequestRewind:		; <- T_Seq_RequestRewind
 	ld	xwa, (6304798:24)	; F4542D  ld XWA,(0x60341e)
 	cp	xwa, 0	; F45432  cp XWA,0x00000000
 	jr	z, sub_F4542D_Return	; F45438  jr Z,0xf45444
@@ -96991,7 +97030,7 @@ Dispatch_3629_Nop3:
 ; sub_F45EAF
 ; Called from: dispatch entry Dispatch_3629[0]
 ; Touches: (0x349F) (0x36D6)
-; Calls:   T_F40BE4 T_F40B5C sub_F44AEE T_F40C00
+; Calls:   T_F40BE4 T_SeqCycle_LocateToStart Seq_SetTrackBeatsFromTransportB T_F40C00
 ; Evidence: 0xF45EAF is stored in Dispatch_3629, whose reader ends `ld
 ;           XIX,(XIX) / call XIX`, and it is an instruction boundary of this
 ;           transcription.  The name IS the address.
@@ -97006,8 +97045,8 @@ sub_F45EAF:
 	call	T_F40BE4	; F45EBC  call 0xf40be4
 	cp	a, 0:i3	; F45EC0  cp A,0
 	jr	z, sub_F45EAF_Skip	; F45EC2  jr Z,0xf45ecd
-	call	T_F40B5C	; F45EC4  call 0xf40b5c
-	calr	sub_F44AEE	; F45EC8  calr 0xf44aee
+	call	T_SeqCycle_LocateToStart	; F45EC4  call 0xf40b5c
+	calr	Seq_SetTrackBeatsFromTransportB	; F45EC8  calr 0xf44aee
 	jr	sub_F45EAF_Return	; F45ECB  jr T,0xf45ed1
 sub_F45EAF_Skip:
 	call	T_F40C00	; F45ECD  call 0xf40c00
@@ -97018,7 +97057,7 @@ sub_F45EAF_Return:
 ; sub_F45ED2
 ; Called from: dispatch entry Dispatch_3629[1]
 ; Touches: (0x349F) (0x36D6)
-; Calls:   T_F40BE4 T_F40B60 T_F40C00
+; Calls:   T_F40BE4 T_SeqCycle_CaptureEndCursors T_F40C00
 ; Evidence: 0xF45ED2 is stored in Dispatch_3629, whose reader ends `ld
 ;           XIX,(XIX) / call XIX`, and it is an instruction boundary of this
 ;           transcription.  The name IS the address.
@@ -97033,7 +97072,7 @@ sub_F45ED2:
 	call	T_F40BE4	; F45EDF  call 0xf40be4
 	cp	a, 0:i3	; F45EE3  cp A,0
 	jr	z, sub_F45ED2_Skip	; F45EE5  jr Z,0xf45eed
-	call	T_F40B60	; F45EE7  call 0xf40b60
+	call	T_SeqCycle_CaptureEndCursors	; F45EE7  call 0xf40b60
 	jr	sub_F45ED2_Return	; F45EEB  jr T,0xf45ef1
 sub_F45ED2_Skip:
 	call	T_F40C00	; F45EED  call 0xf40c00
@@ -97044,7 +97083,7 @@ sub_F45ED2_Return:
 ; sub_F45EF2
 ; Called from: dispatch entry Dispatch_3629[2]
 ; Touches: (0x349F) (0x36D6)
-; Calls:   T_F40BE4 T_F40B5C T_F40B60 sub_F44AEE T_F40C00
+; Calls:   T_F40BE4 T_SeqCycle_LocateToStart T_SeqCycle_CaptureEndCursors Seq_SetTrackBeatsFromTransportB T_F40C00
 ; Evidence: 0xF45EF2 is stored in Dispatch_3629, whose reader ends `ld
 ;           XIX,(XIX) / call XIX`, and it is an instruction boundary of this
 ;           transcription.  The name IS the address.
@@ -97059,9 +97098,9 @@ sub_F45EF2:
 	call	T_F40BE4	; F45EFF  call 0xf40be4
 	cp	a, 0:i3	; F45F03  cp A,0
 	jr	z, sub_F45EF2_Skip	; F45F05  jr Z,0xf45f14
-	call	T_F40B5C	; F45F07  call 0xf40b5c
-	call	T_F40B60	; F45F0B  call 0xf40b60
-	calr	sub_F44AEE	; F45F0F  calr 0xf44aee
+	call	T_SeqCycle_LocateToStart	; F45F07  call 0xf40b5c
+	call	T_SeqCycle_CaptureEndCursors	; F45F0B  call 0xf40b60
+	calr	Seq_SetTrackBeatsFromTransportB	; F45F0F  calr 0xf44aee
 	jr	sub_F45EF2_Return	; F45F12  jr T,0xf45f18
 sub_F45EF2_Skip:
 	call	T_F40C00	; F45F14  call 0xf40c00
@@ -99199,21 +99238,26 @@ sub_F4840E_Nop:
 	ret	; F48463  ret
 
 ; --------------------------------------------------------------------------
-; sub_F48464
-; Called from: T_F40B5C (x13)
+; SeqCycle_LocateToStart
+; Called from: T_SeqCycle_LocateToStart (x13)
 ; Touches: (0x207A) (0x2095) (0x349A) (0x349C) (0x349F) (0x34D4) (0x3552)
 ;          (0x361E) (0x3622) (0x36C6) +2 more  |  0x003460 0x003482 0x00362A
 ;          0x00364C
 ; Calls:   sub_F486D9 T_F40AB0 T_F40BE4 sub_F47804 T_Nop_CallsEmptyDirectorySlot_Veneer T_PartNotes_ReleaseAllTrackNotes
 ;          T_F41F18
-; Evidence: thunk slot T_F40B5C holds `jp 0x00F48464`, and 0xF48464 is an
+; Evidence: thunk slot T_SeqCycle_LocateToStart holds `jp 0x00F48464`, and 0xF48464 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F48464:		; <- T_F40B5C
+; SeqCycle_LocateToStart: (0x3552), the CURRENT MEASURE, := the CYCLE START MEASURE (CyclePlay's 0x361E, or
+;   CycleRecord's 0x3622 when UI_ScreenLatch is 6/8); locates every track there (T_F40AB0 with the playing mask forced
+;   to all ones), saves the 17 track cursors 0x3460/0x3482 to 0x362A/0x364C (restored at the cycle wrap), releases
+;   notes and resets controllers. Basis: callers + DL captions + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_b.json)
+SeqCycle_LocateToStart:		; <- T_SeqCycle_LocateToStart
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F48464  cp (0x207a),0x06
 	jr	z, sub_F48463_Skip	; F48469  jr Z,0xf48478
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x08	; F4846B  cp (0x207a),0x08
@@ -99315,19 +99359,23 @@ sub_F48463_Skip5:
 	ret	; F4857F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F48580
-; Called from: T_F40B60 (x13)
+; SeqCycle_CaptureEndCursors
+; Called from: T_SeqCycle_CaptureEndCursors (x13)
 ; Touches: (0x207A) (0x3552) (0x3620) (0x3624)  |  0x003460 0x003482
 ;          0x00365E 0x003680
 ; Calls:   sub_F4869B sub_F486D9 T_F40A9C sub_F485D7 sub_F486BA
-; Evidence: thunk slot T_F40B60 holds `jp 0x00F48580`, and 0xF48580 is an
+; Evidence: thunk slot T_SeqCycle_CaptureEndCursors holds `jp 0x00F48580`, and 0xF48580 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F48580:		; <- T_F40B60
+; SeqCycle_CaptureEndCursors: Saves the live track cursors, locates to CYCLE END MEASURE + 1 (CyclePlay's 0x3620, or
+;   CycleRecord's 0x3624 when UI_ScreenLatch is 6/8), stores the 17 cursors there in 0x365E/0x3680 -- what the
+;   playback loop compares against -- then restores (0x3552) and the cursors. First call of the cycle-arming triple.
+;   Basis: callers + DL captions + body. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+SeqCycle_CaptureEndCursors:		; <- T_SeqCycle_CaptureEndCursors
 	calr	sub_F4869B	; F48580  calr 0xf4869b
 	ld	wa, (13650:16)	; F48583  ld WA,(0x3552)
 	pushw	wa	; F48587  push WA
@@ -102504,7 +102552,7 @@ sub_F4A5AD:		; <- T_F40BDC
 ; Called from: T_F40C00 (x3); in-module: 0xF4A5B1
 ; Touches: (0x0D4A) (0x3000) (0x3002) (0x34D4) (0x34D9) (0x3552) (0x36D4)
 ;          (0x36D6) (0x3751)  |  0x000000
-; Calls:   sub_F4B414 T_F40B60 T_F40B5C T_F40AC4 sub_F4A6CF sub_F4A6E7
+; Calls:   sub_F4B414 T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart T_Seq_SetTrackBeatsFromTransportB sub_F4A6CF sub_F4A6E7
 ;          sub_F4A756 sub_F4AB8A sub_F4A6FF T_F40AAC
 ; Evidence: thunk slot T_F40C00 holds `jp 0x00F4A5B5`, and 0xF4A5B5 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -102516,9 +102564,9 @@ sub_F4A5AD:		; <- T_F40BDC
 sub_F4A5B5:		; <- T_F40C00
 	calr	sub_F4B414	; F4A5B5  calr 0xf4b414
 	m_set 0, MD16, 0x3751	; F4A5B8  set 0,(0x3751)
-	call	T_F40B60	; F4A5BC  call 0xf40b60
-	call	T_F40B5C	; F4A5C0  call 0xf40b5c
-	call	T_F40AC4	; F4A5C4  call 0xf40ac4
+	call	T_SeqCycle_CaptureEndCursors	; F4A5BC  call 0xf40b60
+	call	T_SeqCycle_LocateToStart	; F4A5C0  call 0xf40b5c
+	call	T_Seq_SetTrackBeatsFromTransportB	; F4A5C4  call 0xf40ac4
 	m_res 0, MD16, 0x3751	; F4A5C8  res 0,(0x3751)
 	ld	xwa, (12288:16)	; F4A5CC  ld XWA,(0x3000)
 	cp	xwa, 0	; F4A5D0  cp XWA,0x00000000
@@ -103827,7 +103875,7 @@ sub_F4AEEE_Return2:
 ; Called from: in-module: 0xF4AFC6
 ; Touches: (0x0D4A) (0x3000) (0x3002) (0x34D4) (0x34D9) (0x3552) (0x36D4)
 ;          (0x36D6) (0x3731) (0x3751)  |  0x000000
-; Calls:   sub_F4B414 T_F40B60 T_F40B5C T_F40AC4 sub_F4A6CF sub_F4A6E7
+; Calls:   sub_F4B414 T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart T_Seq_SetTrackBeatsFromTransportB sub_F4A6CF sub_F4A6E7
 ;          sub_F4A756 sub_F4A813 sub_F4AB8A sub_F4A6FF T_F40AAC
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4AFD5 is an instruction boundary.
@@ -103839,9 +103887,9 @@ sub_F4AFD5:
 	m_res 0, MD16, 0x3731	; F4AFD5  res 0,(0x3731)
 	calr	sub_F4B414	; F4AFD9  calr 0xf4b414
 	m_set 0, MD16, 0x3751	; F4AFDC  set 0,(0x3751)
-	call	T_F40B60	; F4AFE0  call 0xf40b60
-	call	T_F40B5C	; F4AFE4  call 0xf40b5c
-	call	T_F40AC4	; F4AFE8  call 0xf40ac4
+	call	T_SeqCycle_CaptureEndCursors	; F4AFE0  call 0xf40b60
+	call	T_SeqCycle_LocateToStart	; F4AFE4  call 0xf40b5c
+	call	T_Seq_SetTrackBeatsFromTransportB	; F4AFE8  call 0xf40ac4
 	m_res 0, MD16, 0x3751	; F4AFEC  res 0,(0x3751)
 	ld	xwa, (12288:16)	; F4AFF0  ld XWA,(0x3000)
 	cp	xwa, 0	; F4AFF4  cp XWA,0x00000000
@@ -108604,7 +108652,7 @@ sub_F4E50B_Return:
 ; sub_F4E545
 ; Called from: in-module: 0xF4E540
 ; Touches: (0x3000)  |  0x000000
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4E545 is an instruction boundary.
 ;           The name IS the address.
@@ -108623,24 +108671,28 @@ sub_F4E545:
 	bit	2, (TransportA_State:8)	; F4E563  bit 2,(0x94)
 	jr	nz, sub_F4E545_Return	; F4E566  jr NZ,0xf4e56e
 	pushw	iy	; F4E568  push IY
-	call	T_F409E0	; F4E569  call 0xf409e0
+	call	T_Seq_RequestRewind	; F4E569  call 0xf409e0
 	popw	iy	; F4E56D  pop IY
 sub_F4E545_Return:
 	ret	; F4E56E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4E56F
-; Called from: T_F40CC4 (x24)
+; SeqTrackKey_Press
+; Called from: T_SeqTrackKey_Press (x24)
 ; Touches: (0x207A) (0x207C) (0x207E) (0x3602)
 ; Calls:   sub_F4E05B
-; Evidence: thunk slot T_F40CC4 holds `jp 0x00F4E56F`, and 0xF4E56F is an
+; Evidence: thunk slot T_SeqTrackKey_Press holds `jp 0x00F4E56F`, and 0xF4E56F is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4E56F:		; <- T_F40CC4
+; SeqTrackKey_Press: Track key gate: with the track index the soft key left in (0x3602) <= 15, UI_ScreenStage != 1 and
+;   UI_ScreenLatch == UI_ScreenId, calls sub_F4E05B with C = that track, which per panel mode / screen updates the
+;   track's bit in the track masks (0x3000)/(0x3002) and (0x60341E)/(0x603420). Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+SeqTrackKey_Press:		; <- T_SeqTrackKey_Press
 	m_cp_mi8 MB16, 0x3602, 0x0f	; F4E56F  cp (0x3602),0x0f
 	jr	ugt, sub_F4E545_Return2	; F4E574  jr UGT,0xf4e590
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F4E576  cp (0x207e),0x01
@@ -109232,7 +109284,7 @@ sub_F4EE73_Return2:
 ; sub_F4EEBC
 ; Called from: T_F40D08 (x0)
 ; Touches: (0x3552)  |  0x000000
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_F40D08 holds `jp 0x00F4EEBC`, and 0xF4EEBC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -109246,7 +109298,7 @@ sub_F4EEBC:		; <- T_F40D08
 	jr	z, sub_F4EE73_Return3	; F4EEC7  jr Z,0xf4eed8
 	bit	2, (TransportB_State:8)	; F4EEC9  bit 2,(0x96)
 	jr	nz, sub_F4EE73_Return3	; F4EECC  jr NZ,0xf4eed8
-	call	T_F409E0	; F4EECE  call 0xf409e0
+	call	T_Seq_RequestRewind	; F4EECE  call 0xf409e0
 	ldw	(13650:16), 1	; F4EED2  ld (0x3552),0x0001
 sub_F4EE73_Return3:
 	ret	; F4EED8  ret
@@ -113446,7 +113498,7 @@ sub_F5323E_Epilogue4:
 	ret	; F533DB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F533DC
+; Drawbar_StepLevel
 ; Called from: call from 0xF53419, 0xF5345B, 0xF534A0, 0xF534EB, 0xF53533,
 ;              0xF53578, +3 more
 ; Evidence: 0xF533DC is an instruction boundary of this transcription, re-
@@ -113455,7 +113507,11 @@ sub_F5323E_Epilogue4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F533DC:
+; Drawbar_StepLevel: Returns A = the drawbar level argument (0..8) stepped +1 when PanelEvent_Flags bit 0 is set, else
+;   -1, clamped to 0..8, and sets UI_RequestBits bit 3 when it moved; returns it unchanged while (0x289E) != 0. The
+;   nine DRAWBAR screen keys pass their drawbar's nibble and write the result back. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+Drawbar_StepLevel:
 	link XIZ,0x0000	; F533DC  link XIZ,0x0000
 	pushw	hl	; F533E0  push HL
 	ld	h, (xiz+8)	; F533E1  ld H,(XIZ+0x08)
@@ -113539,7 +113595,7 @@ SoftKeyCol1_DrawbarScreen:
 	ld	c, (xix)	; F53413  ld C,(XIX)
 	and	c, 15	; F53415  and C,0x0f
 	pushw	bc	; F53418  push BC
-	calr	sub_F533DC	; F53419  calr 0xf533dc
+	calr	Drawbar_StepLevel	; F53419  calr 0xf533dc
 	ld	h, a	; F5341C  ld H,A
 	ld	c, (xix)	; F5341E  ld C,(XIX)
 	and	c, 15	; F53420  and C,0x0f
@@ -113622,7 +113678,7 @@ SoftKeyCol2_DrawbarScreen:
 	ld	c, (xix)	; F53455  ld C,(XIX)
 	and	c, 15	; F53457  and C,0x0f
 	pushw	bc	; F5345A  push BC
-	calr	sub_F533DC	; F5345B  calr 0xf533dc
+	calr	Drawbar_StepLevel	; F5345B  calr 0xf533dc
 	ld	h, a	; F5345E  ld H,A
 	ld	c, (xix)	; F53460  ld C,(XIX)
 	and	c, 15	; F53462  and C,0x0f
@@ -113706,7 +113762,7 @@ SoftKeyCol3_DrawbarScreen:
 	and	c, 240	; F53499  and C,0xf0
 	srl	c, 4	; F5349C  srl 0x04,C
 	pushw	bc	; F5349F  push BC
-	calr	sub_F533DC	; F534A0  calr 0xf533dc
+	calr	Drawbar_StepLevel	; F534A0  calr 0xf533dc
 	ld	h, a	; F534A3  ld H,A
 	ld	c, (xix)	; F534A5  ld C,(XIX)
 	and	c, 240	; F534A7  and C,0xf0
@@ -113792,7 +113848,7 @@ SoftKeyCol4_DrawbarScreen:
 	and	c, 240	; F534E4  and C,0xf0
 	srl	c, 4	; F534E7  srl 0x04,C
 	pushw	bc	; F534EA  push BC
-	calr	sub_F533DC	; F534EB  calr 0xf533dc
+	calr	Drawbar_StepLevel	; F534EB  calr 0xf533dc
 	ld	h, a	; F534EE  ld H,A
 	ld	c, (xix)	; F534F0  ld C,(XIX)
 	and	c, 240	; F534F2  and C,0xf0
@@ -113875,7 +113931,7 @@ SoftKeyCol5_DrawbarScreen:
 	ld	c, (xix)	; F5352D  ld C,(XIX)
 	and	c, 15	; F5352F  and C,0x0f
 	pushw	bc	; F53532  push BC
-	calr	sub_F533DC	; F53533  calr 0xf533dc
+	calr	Drawbar_StepLevel	; F53533  calr 0xf533dc
 	ld	h, a	; F53536  ld H,A
 	ld	c, (xix)	; F53538  ld C,(XIX)
 	and	c, 15	; F5353A  and C,0x0f
@@ -113957,7 +114013,7 @@ SoftKeyCol6_DrawbarScreen:
 	and	c, 240	; F53571  and C,0xf0
 	srl	c, 4	; F53574  srl 0x04,C
 	pushw	bc	; F53577  push BC
-	calr	sub_F533DC	; F53578  calr 0xf533dc
+	calr	Drawbar_StepLevel	; F53578  calr 0xf533dc
 	ld	h, a	; F5357B  ld H,A
 	ld	c, (xix)	; F5357D  ld C,(XIX)
 	and	c, 240	; F5357F  and C,0xf0
@@ -114040,7 +114096,7 @@ SoftKeyCol7_DrawbarScreen:
 	ld	c, (xix)	; F535BA  ld C,(XIX)
 	and	c, 15	; F535BC  and C,0x0f
 	pushw	bc	; F535BF  push BC
-	calr	sub_F533DC	; F535C0  calr 0xf533dc
+	calr	Drawbar_StepLevel	; F535C0  calr 0xf533dc
 	ld	h, a	; F535C3  ld H,A
 	ld	c, (xix)	; F535C5  ld C,(XIX)
 	and	c, 15	; F535C7  and C,0x0f
@@ -114122,7 +114178,7 @@ SoftKeyCol8_DrawbarScreen:
 	and	c, 240	; F535FE  and C,0xf0
 	srl	c, 4	; F53601  srl 0x04,C
 	pushw	bc	; F53604  push BC
-	calr	sub_F533DC	; F53605  calr 0xf533dc
+	calr	Drawbar_StepLevel	; F53605  calr 0xf533dc
 	ld	h, a	; F53608  ld H,A
 	ld	c, (xix)	; F5360A  ld C,(XIX)
 	and	c, 240	; F5360C  and C,0xf0
@@ -114171,7 +114227,7 @@ PageKey_DrawbarScreen:
 	ld	c, (xix)	; F53647  ld C,(XIX)
 	and	c, 15	; F53649  and C,0x0f
 	pushw	bc	; F5364C  push BC
-	calr	sub_F533DC	; F5364D  calr 0xf533dc
+	calr	Drawbar_StepLevel	; F5364D  calr 0xf533dc
 	ld	h, a	; F53650  ld H,A
 	ld	c, (xix)	; F53652  ld C,(XIX)
 	and	c, 15	; F53654  and C,0x0f
@@ -115757,7 +115813,7 @@ RetStub_F53000_Nop:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F541FF:		; <- T_F42E68
-	calr	sub_F54210	; F541FF  calr 0xf54210
+	calr	Drawbar_WaitReloadMark	; F541FF  calr 0xf54210
 	cp	a, 1:i3	; F54202  cp A,1
 	jr	nz, sub_F5418E_Return	; F54204  jr NZ,0xf5420f
 	m_set 7, MD16, UI_Request_Hi	; F54206  set 7,(0x2071)
@@ -115766,15 +115822,19 @@ sub_F5418E_Return:
 	ret	; F5420F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F54210
-; Called from: thunk slot T_F42E6C; call from 0xF541FF
+; Drawbar_WaitReloadMark
+; Called from: thunk slot T_Drawbar_WaitReloadMark; call from 0xF541FF
 ; Evidence: 0xF54210 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F54210:		; <- T_F42E6C
+; Drawbar_WaitReloadMark: Polls Drawbar_ReloadMark while it is 0x0F (reload requested) or 0xF0 (query sent), draining
+;   Ring608A0A between polls, and returns A = the mark the CPU-2 reply left (0/1/2, Drawbar_OnCpu2Reply), or 0 after
+;   10,000 polls. Callers branch on 1 (DRAWBAR, screen 0xA3) and 2. Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_b.json)
+Drawbar_WaitReloadMark:		; <- T_Drawbar_WaitReloadMark
 	pushw	hl	; F54210  push HL
 	push	xix	; F54211  push XIX
 	lda	xix, (Drawbar_ReloadMark:16)	; F54212  lda XIX,0x28a0
@@ -117933,17 +117993,21 @@ IndexedTable_GetByte_Join16:
 	ret	; F556D1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F556D2
-; Called from: T_F42C9C (0xF42C9C, x13)
+; PartIndex_PostChangeEvent
+; Called from: T_PartIndex_PostChangeEvent (0xF42C9C, x13)
 ; Touches: (0x2250)
 ; Calls:   0xF55231 T_NoteRouting_Rebuild
-; Evidence: thunk slot T_F42C9C holds `jp 0x00F556D2`, and 0xF556D2 is an
+; Evidence: thunk slot T_PartIndex_PostChangeEvent holds `jp 0x00F556D2`, and 0xF556D2 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F556D2:		; <- T_F42C9C
+; PartIndex_PostChangeEvent: Posts the UI event {class 0x90, code 0x10, value UI_PartIndex, mask 0xFF} to the 0x2C00
+;   queue (Queue2C00_Append4), then T_NoteRouting_Rebuild; the COMBINATION EDIT part keys and screens call it right
+;   after changing UI_PartIndex. Class 0x90 code 0x10 is what PanelLed_OnClass90Event and UiEvent_SyncSoundSelection
+;   react to. Basis: callers + body + event-list handlers. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+PartIndex_PostChangeEvent:		; <- T_PartIndex_PostChangeEvent
 	pushw	255	; F556D2  push 0x00ff
 	ld	c, (UI_PartIndex:16)	; F556D5  ld C,(0x2250)
 	pushw	bc	; F556D9  push BC
@@ -119601,9 +119665,9 @@ ModeLeave_RealtimeRecord:
 ; Called from: in-module: 0xF55810
 ; Touches: (0x2070) (0x2071) (0x207A) (0x207B) (0x207C) (0x207D) (0x2095)
 ;          (0x2250) (0x34D1) (0x34D9) +5 more
-; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F40CF8 T_F40B60 T_F40B5C
-;          T_F40AC4 T_F40BDC T_F40D00 T_Queue2E00_AppendRegs T_NoteRouting_Rebuild
-;          T_CallbackQueue_Post T_Kernel_SemaSignal T_F42704
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F40CF8 T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart
+;          T_Seq_SetTrackBeatsFromTransportB T_F40BDC T_F40D00 T_Queue2E00_AppendRegs T_NoteRouting_Rebuild
+;          T_CallbackQueue_Post T_Kernel_SemaSignal T_Seq_LoadTimeSigAtCurrentMeasure
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF56058 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -119628,9 +119692,9 @@ sub_F56058_Skip:
 	call	T_F40CF8	; F56083  call 0xf40cf8
 	m_bit 1, MD16, 0x360b	; F56087  bit 1,(0x360b)
 	jr	z, sub_F56058_Skip2	; F5608B  jr Z,0xf5609d
-	call	T_F40B60	; F5608D  call 0xf40b60
-	call	T_F40B5C	; F56091  call 0xf40b5c
-	call	T_F40AC4	; F56095  call 0xf40ac4
+	call	T_SeqCycle_CaptureEndCursors	; F5608D  call 0xf40b60
+	call	T_SeqCycle_LocateToStart	; F56091  call 0xf40b5c
+	call	T_Seq_SetTrackBeatsFromTransportB	; F56095  call 0xf40ac4
 	call	T_F40BDC	; F56099  call 0xf40bdc
 sub_F56058_Skip2:
 	call	T_F40D00	; F5609D  call 0xf40d00
@@ -119673,7 +119737,7 @@ sub_F56058_Skip7:
 	ld	a, 1:opc	; F5610C  ld A,0x01
 	call	T_Kernel_SemaSignal	; F5610E  call 0xf42d88
 sub_F56058_Join:
-	call	T_F42704	; F56112  call 0xf42704
+	call	T_Seq_LoadTimeSigAtCurrentMeasure	; F56112  call 0xf42704
 	ld	xwa, sub_F55D3D	; F56116  ld XWA,0x00f55d3d
 	push	xwa	; F5611B  push XWA
 	call	T_CallbackQueue_Post	; F5611C  call 0xf42e84
@@ -119708,12 +119772,12 @@ sub_F56129_Return:
 ; SoftKeyCol1_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[0], 0xF55A2E[0]
 ; Touches: (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [0] of the table at 0xF558AE reads 0x00F56142, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF56142
 ;           is an instruction boundary of this transcription.
 ; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x00 on
-;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          one arm and that value plus 8 on the other -- and calls T_SeqTrackKey_Press.
 ;          The +8 is the only difference between the two arms, so bit 7 of W
 ;          selects between two halves of one 16-value space.  What the halves
 ;          are is not established.
@@ -119723,7 +119787,7 @@ sub_F56129_Return:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol1_SeqPlayAndRealtimeRecord: slot 0 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
-;   (0x3602) = 0 for the column's upper switch, 8 for the lower (bit 7 of W), then T_F40CC4.
+;   (0x3602) = 0 for the column's upper switch, 8 for the lower (bit 7 of W), then T_SeqTrackKey_Press.
 SoftKeyCol1_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F56142  bit 0x07,W
 	jr	nz, sub_F56129_Skip2	; F56145  jr NZ,0xf5614e
@@ -119732,19 +119796,19 @@ SoftKeyCol1_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip2:
 	ld	(13826:16), 8	; F5614E  ld (0x3602),0x08
 sub_F56129_Join:
-	call	T_F40CC4	; F56153  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F56153  call 0xf40cc4
 	ret	; F56157  ret
 
 ; --------------------------------------------------------------------------
 ; SoftKeyCol2_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[1], 0xF55A2E[1]
 ; Touches: (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [1] of the table at 0xF558AE reads 0x00F56158, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF56158
 ;           is an instruction boundary of this transcription.
 ; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x01 on
-;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          one arm and that value plus 8 on the other -- and calls T_SeqTrackKey_Press.
 ;          The +8 is the only difference between the two arms, so bit 7 of W
 ;          selects between two halves of one 16-value space.  What the halves
 ;          are is not established.
@@ -119754,7 +119818,7 @@ sub_F56129_Join:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol2_SeqPlayAndRealtimeRecord: slot 1 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
-;   (0x3602) = 1 for the column's upper switch, 9 for the lower (bit 7 of W), then T_F40CC4.
+;   (0x3602) = 1 for the column's upper switch, 9 for the lower (bit 7 of W), then T_SeqTrackKey_Press.
 SoftKeyCol2_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F56158  bit 0x07,W
 	jr	nz, sub_F56129_Skip3	; F5615B  jr NZ,0xf56164
@@ -119763,19 +119827,19 @@ SoftKeyCol2_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip3:
 	ld	(13826:16), 9	; F56164  ld (0x3602),0x09
 sub_F56129_Join2:
-	call	T_F40CC4	; F56169  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F56169  call 0xf40cc4
 	ret	; F5616D  ret
 
 ; --------------------------------------------------------------------------
 ; SoftKeyCol3_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[2], 0xF55A2E[2]
 ; Touches: (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [2] of the table at 0xF558AE reads 0x00F5616E, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF5616E
 ;           is an instruction boundary of this transcription.
 ; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x02 on
-;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          one arm and that value plus 8 on the other -- and calls T_SeqTrackKey_Press.
 ;          The +8 is the only difference between the two arms, so bit 7 of W
 ;          selects between two halves of one 16-value space.  What the halves
 ;          are is not established.
@@ -119785,7 +119849,7 @@ sub_F56129_Join2:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol3_SeqPlayAndRealtimeRecord: slot 2 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
-;   (0x3602) = 2 for the column's upper switch, 10 for the lower (bit 7 of W), then T_F40CC4.
+;   (0x3602) = 2 for the column's upper switch, 10 for the lower (bit 7 of W), then T_SeqTrackKey_Press.
 SoftKeyCol3_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F5616E  bit 0x07,W
 	jr	nz, sub_F56129_Skip4	; F56171  jr NZ,0xf5617a
@@ -119794,19 +119858,19 @@ SoftKeyCol3_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip4:
 	ld	(13826:16), 10	; F5617A  ld (0x3602),0x0a
 sub_F56129_Join3:
-	call	T_F40CC4	; F5617F  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F5617F  call 0xf40cc4
 	ret	; F56183  ret
 
 ; --------------------------------------------------------------------------
 ; SoftKeyCol4_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[3], 0xF55A2E[3]
 ; Touches: (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [3] of the table at 0xF558AE reads 0x00F56184, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF56184
 ;           is an instruction boundary of this transcription.
 ; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x03 on
-;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          one arm and that value plus 8 on the other -- and calls T_SeqTrackKey_Press.
 ;          The +8 is the only difference between the two arms, so bit 7 of W
 ;          selects between two halves of one 16-value space.  What the halves
 ;          are is not established.
@@ -119816,7 +119880,7 @@ sub_F56129_Join3:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol4_SeqPlayAndRealtimeRecord: slot 3 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
-;   (0x3602) = 3 for the column's upper switch, 11 for the lower (bit 7 of W), then T_F40CC4.
+;   (0x3602) = 3 for the column's upper switch, 11 for the lower (bit 7 of W), then T_SeqTrackKey_Press.
 SoftKeyCol4_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F56184  bit 0x07,W
 	jr	nz, sub_F56129_Skip5	; F56187  jr NZ,0xf56190
@@ -119825,19 +119889,19 @@ SoftKeyCol4_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip5:
 	ld	(13826:16), 11	; F56190  ld (0x3602),0x0b
 sub_F56129_Join4:
-	call	T_F40CC4	; F56195  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F56195  call 0xf40cc4
 	ret	; F56199  ret
 
 ; --------------------------------------------------------------------------
 ; SoftKeyCol5_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[4], 0xF55A2E[4]
 ; Touches: (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [4] of the table at 0xF558AE reads 0x00F5619A, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF5619A
 ;           is an instruction boundary of this transcription.
 ; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x04 on
-;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          one arm and that value plus 8 on the other -- and calls T_SeqTrackKey_Press.
 ;          The +8 is the only difference between the two arms, so bit 7 of W
 ;          selects between two halves of one 16-value space.  What the halves
 ;          are is not established.
@@ -119847,7 +119911,7 @@ sub_F56129_Join4:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol5_SeqPlayAndRealtimeRecord: slot 4 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
-;   (0x3602) = 4 for the column's upper switch, 12 for the lower (bit 7 of W), then T_F40CC4.
+;   (0x3602) = 4 for the column's upper switch, 12 for the lower (bit 7 of W), then T_SeqTrackKey_Press.
 SoftKeyCol5_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F5619A  bit 0x07,W
 	jr	nz, sub_F56129_Skip6	; F5619D  jr NZ,0xf561a6
@@ -119856,19 +119920,19 @@ SoftKeyCol5_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip6:
 	ld	(13826:16), 12	; F561A6  ld (0x3602),0x0c
 sub_F56129_Join5:
-	call	T_F40CC4	; F561AB  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F561AB  call 0xf40cc4
 	ret	; F561AF  ret
 
 ; --------------------------------------------------------------------------
 ; SoftKeyCol6_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[5], 0xF55A2E[5]
 ; Touches: (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [5] of the table at 0xF558AE reads 0x00F561B0, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF561B0
 ;           is an instruction boundary of this transcription.
 ; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x05 on
-;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          one arm and that value plus 8 on the other -- and calls T_SeqTrackKey_Press.
 ;          The +8 is the only difference between the two arms, so bit 7 of W
 ;          selects between two halves of one 16-value space.  What the halves
 ;          are is not established.
@@ -119878,7 +119942,7 @@ sub_F56129_Join5:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol6_SeqPlayAndRealtimeRecord: slot 5 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
-;   (0x3602) = 5 for the column's upper switch, 13 for the lower (bit 7 of W), then T_F40CC4.
+;   (0x3602) = 5 for the column's upper switch, 13 for the lower (bit 7 of W), then T_SeqTrackKey_Press.
 SoftKeyCol6_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F561B0  bit 0x07,W
 	jr	nz, sub_F56129_Skip7	; F561B3  jr NZ,0xf561bc
@@ -119887,19 +119951,19 @@ SoftKeyCol6_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip7:
 	ld	(13826:16), 13	; F561BC  ld (0x3602),0x0d
 sub_F56129_Join6:
-	call	T_F40CC4	; F561C1  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F561C1  call 0xf40cc4
 	ret	; F561C5  ret
 
 ; --------------------------------------------------------------------------
 ; SoftKeyCol7_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[6], 0xF55A2E[6]
 ; Touches: (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [6] of the table at 0xF558AE reads 0x00F561C6, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF561C6
 ;           is an instruction boundary of this transcription.
 ; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x06 on
-;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          one arm and that value plus 8 on the other -- and calls T_SeqTrackKey_Press.
 ;          The +8 is the only difference between the two arms, so bit 7 of W
 ;          selects between two halves of one 16-value space.  What the halves
 ;          are is not established.
@@ -119909,7 +119973,7 @@ sub_F56129_Join6:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol7_SeqPlayAndRealtimeRecord: slot 6 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
-;   (0x3602) = 6 for the column's upper switch, 14 for the lower (bit 7 of W), then T_F40CC4.
+;   (0x3602) = 6 for the column's upper switch, 14 for the lower (bit 7 of W), then T_SeqTrackKey_Press.
 SoftKeyCol7_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F561C6  bit 0x07,W
 	jr	nz, sub_F56129_Skip8	; F561C9  jr NZ,0xf561d2
@@ -119918,19 +119982,19 @@ SoftKeyCol7_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip8:
 	ld	(13826:16), 14	; F561D2  ld (0x3602),0x0e
 sub_F56129_Join7:
-	call	T_F40CC4	; F561D7  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F561D7  call 0xf40cc4
 	ret	; F561DB  ret
 
 ; --------------------------------------------------------------------------
 ; SoftKeyCol8_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[7], 0xF55A2E[7]
 ; Touches: (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [7] of the table at 0xF558AE reads 0x00F561DC, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF561DC
 ;           is an instruction boundary of this transcription.
 ; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x07 on
-;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          one arm and that value plus 8 on the other -- and calls T_SeqTrackKey_Press.
 ;          The +8 is the only difference between the two arms, so bit 7 of W
 ;          selects between two halves of one 16-value space.  What the halves
 ;          are is not established.
@@ -119940,7 +120004,7 @@ sub_F56129_Join7:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol8_SeqPlayAndRealtimeRecord: slot 7 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
-;   (0x3602) = 7 for the column's upper switch, 15 for the lower (bit 7 of W), then T_F40CC4.
+;   (0x3602) = 7 for the column's upper switch, 15 for the lower (bit 7 of W), then T_SeqTrackKey_Press.
 SoftKeyCol8_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F561DC  bit 0x07,W
 	jr	nz, sub_F56129_Skip9	; F561DF  jr NZ,0xf561e8
@@ -119949,18 +120013,18 @@ SoftKeyCol8_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip9:
 	ld	(13826:16), 15	; F561E8  ld (0x3602),0x0f
 sub_F56129_Join8:
-	call	T_F40CC4	; F561ED  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F561ED  call 0xf40cc4
 	ret	; F561F1  ret
 
 ; --------------------------------------------------------------------------
 ; SoftKeyCol1Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[17], 0xF55A2E[17]
 ; Touches: (0x2088) (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [17] of the table at 0xF558AE reads 0x00F561F2, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF561F2 is an instruction boundary of this transcription.
-; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+; Shape:   the same (0x3602) write and T_SeqTrackKey_Press call as its siblings, index
 ;          0x00, but reached only when one bit of the 32-bit word at (0x2088)
 ;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
 ;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
@@ -119970,7 +120034,7 @@ sub_F56129_Join8:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol1Held_SeqPlayAndRealtimeRecord: slot 0x11 of the same two tables, the column's held form: unless
-;   PanelButton_HeldMask bit 0, the same store of 0 / 8 to (0x3602) and T_F40CC4.
+;   PanelButton_HeldMask bit 0, the same store of 0 / 8 to (0x3602) and T_SeqTrackKey_Press.
 SoftKeyCol1Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F561F2  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F561F3  ld XBC,(0x2088)
@@ -119984,7 +120048,7 @@ SoftKeyCol1Held_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip10:
 	ld	(13826:16), 8	; F56211  ld (0x3602),0x08
 sub_F56129_Join9:
-	call	T_F40CC4	; F56216  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F56216  call 0xf40cc4
 sub_F56129_Epilogue:
 	pop	xbc	; F5621A  pop XBC
 	ret	; F5621B  ret
@@ -119993,11 +120057,11 @@ sub_F56129_Epilogue:
 ; SoftKeyCol2Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[18], 0xF55A2E[18]
 ; Touches: (0x2088) (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [18] of the table at 0xF558AE reads 0x00F5621C, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF5621C is an instruction boundary of this transcription.
-; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+; Shape:   the same (0x3602) write and T_SeqTrackKey_Press call as its siblings, index
 ;          0x01, but reached only when one bit of the 32-bit word at (0x2088)
 ;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
 ;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
@@ -120007,7 +120071,7 @@ sub_F56129_Epilogue:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol2Held_SeqPlayAndRealtimeRecord: slot 0x12 of the same two tables, the column's held form: unless
-;   PanelButton_HeldMask bit 0, the same store of 1 / 9 to (0x3602) and T_F40CC4.
+;   PanelButton_HeldMask bit 0, the same store of 1 / 9 to (0x3602) and T_SeqTrackKey_Press.
 SoftKeyCol2Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F5621C  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F5621D  ld XBC,(0x2088)
@@ -120021,7 +120085,7 @@ SoftKeyCol2Held_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip11:
 	ld	(13826:16), 9	; F5623B  ld (0x3602),0x09
 sub_F56129_Join10:
-	call	T_F40CC4	; F56240  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F56240  call 0xf40cc4
 sub_F56129_Epilogue2:
 	pop	xbc	; F56244  pop XBC
 	ret	; F56245  ret
@@ -120030,11 +120094,11 @@ sub_F56129_Epilogue2:
 ; SoftKeyCol3Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[19], 0xF55A2E[19]
 ; Touches: (0x2088) (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [19] of the table at 0xF558AE reads 0x00F56246, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF56246 is an instruction boundary of this transcription.
-; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+; Shape:   the same (0x3602) write and T_SeqTrackKey_Press call as its siblings, index
 ;          0x02, but reached only when one bit of the 32-bit word at (0x2088)
 ;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
 ;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
@@ -120044,7 +120108,7 @@ sub_F56129_Epilogue2:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol3Held_SeqPlayAndRealtimeRecord: slot 0x13 of the same two tables, the column's held form: unless
-;   PanelButton_HeldMask bit 0, the same store of 2 / 10 to (0x3602) and T_F40CC4.
+;   PanelButton_HeldMask bit 0, the same store of 2 / 10 to (0x3602) and T_SeqTrackKey_Press.
 SoftKeyCol3Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F56246  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F56247  ld XBC,(0x2088)
@@ -120058,7 +120122,7 @@ SoftKeyCol3Held_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip12:
 	ld	(13826:16), 10	; F56265  ld (0x3602),0x0a
 sub_F56129_Join11:
-	call	T_F40CC4	; F5626A  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F5626A  call 0xf40cc4
 sub_F56129_Epilogue3:
 	pop	xbc	; F5626E  pop XBC
 	ret	; F5626F  ret
@@ -120067,11 +120131,11 @@ sub_F56129_Epilogue3:
 ; SoftKeyCol4Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[20], 0xF55A2E[20]
 ; Touches: (0x2088) (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [20] of the table at 0xF558AE reads 0x00F56270, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF56270 is an instruction boundary of this transcription.
-; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+; Shape:   the same (0x3602) write and T_SeqTrackKey_Press call as its siblings, index
 ;          0x03, but reached only when one bit of the 32-bit word at (0x2088)
 ;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
 ;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
@@ -120081,7 +120145,7 @@ sub_F56129_Epilogue3:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol4Held_SeqPlayAndRealtimeRecord: slot 0x14 of the same two tables, the column's held form: unless
-;   PanelButton_HeldMask bit 0, the same store of 3 / 11 to (0x3602) and T_F40CC4.
+;   PanelButton_HeldMask bit 0, the same store of 3 / 11 to (0x3602) and T_SeqTrackKey_Press.
 SoftKeyCol4Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F56270  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F56271  ld XBC,(0x2088)
@@ -120095,7 +120159,7 @@ SoftKeyCol4Held_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip13:
 	ld	(13826:16), 11	; F5628F  ld (0x3602),0x0b
 sub_F56129_Join12:
-	call	T_F40CC4	; F56294  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F56294  call 0xf40cc4
 sub_F56129_Epilogue4:
 	pop	xbc	; F56298  pop XBC
 	ret	; F56299  ret
@@ -120104,11 +120168,11 @@ sub_F56129_Epilogue4:
 ; SoftKeyCol5Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[21], 0xF55A2E[21]
 ; Touches: (0x2088) (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [21] of the table at 0xF558AE reads 0x00F5629A, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF5629A is an instruction boundary of this transcription.
-; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+; Shape:   the same (0x3602) write and T_SeqTrackKey_Press call as its siblings, index
 ;          0x04, but reached only when one bit of the 32-bit word at (0x2088)
 ;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
 ;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
@@ -120118,7 +120182,7 @@ sub_F56129_Epilogue4:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol5Held_SeqPlayAndRealtimeRecord: slot 0x15 of the same two tables, the column's held form: unless
-;   PanelButton_HeldMask bit 0, the same store of 4 / 12 to (0x3602) and T_F40CC4.
+;   PanelButton_HeldMask bit 0, the same store of 4 / 12 to (0x3602) and T_SeqTrackKey_Press.
 SoftKeyCol5Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F5629A  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F5629B  ld XBC,(0x2088)
@@ -120132,7 +120196,7 @@ SoftKeyCol5Held_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip14:
 	ld	(13826:16), 12	; F562B9  ld (0x3602),0x0c
 sub_F56129_Join13:
-	call	T_F40CC4	; F562BE  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F562BE  call 0xf40cc4
 sub_F56129_Epilogue5:
 	pop	xbc	; F562C2  pop XBC
 	ret	; F562C3  ret
@@ -120141,11 +120205,11 @@ sub_F56129_Epilogue5:
 ; SoftKeyCol6Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[22], 0xF55A2E[22]
 ; Touches: (0x2088) (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [22] of the table at 0xF558AE reads 0x00F562C4, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF562C4 is an instruction boundary of this transcription.
-; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+; Shape:   the same (0x3602) write and T_SeqTrackKey_Press call as its siblings, index
 ;          0x05, but reached only when one bit of the 32-bit word at (0x2088)
 ;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
 ;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
@@ -120155,7 +120219,7 @@ sub_F56129_Epilogue5:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol6Held_SeqPlayAndRealtimeRecord: slot 0x16 of the same two tables, the column's held form: unless
-;   PanelButton_HeldMask bit 0, the same store of 5 / 13 to (0x3602) and T_F40CC4.
+;   PanelButton_HeldMask bit 0, the same store of 5 / 13 to (0x3602) and T_SeqTrackKey_Press.
 SoftKeyCol6Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F562C4  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F562C5  ld XBC,(0x2088)
@@ -120169,7 +120233,7 @@ SoftKeyCol6Held_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip15:
 	ld	(13826:16), 13	; F562E3  ld (0x3602),0x0d
 sub_F56129_Join14:
-	call	T_F40CC4	; F562E8  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F562E8  call 0xf40cc4
 sub_F56129_Epilogue6:
 	pop	xbc	; F562EC  pop XBC
 	ret	; F562ED  ret
@@ -120178,11 +120242,11 @@ sub_F56129_Epilogue6:
 ; SoftKeyCol7Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[23], 0xF55A2E[23]
 ; Touches: (0x2088) (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [23] of the table at 0xF558AE reads 0x00F562EE, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF562EE is an instruction boundary of this transcription.
-; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+; Shape:   the same (0x3602) write and T_SeqTrackKey_Press call as its siblings, index
 ;          0x06, but reached only when one bit of the 32-bit word at (0x2088)
 ;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
 ;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
@@ -120192,7 +120256,7 @@ sub_F56129_Epilogue6:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol7Held_SeqPlayAndRealtimeRecord: slot 0x17 of the same two tables, the column's held form: unless
-;   PanelButton_HeldMask bit 0, the same store of 6 / 14 to (0x3602) and T_F40CC4.
+;   PanelButton_HeldMask bit 0, the same store of 6 / 14 to (0x3602) and T_SeqTrackKey_Press.
 SoftKeyCol7Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F562EE  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F562EF  ld XBC,(0x2088)
@@ -120206,7 +120270,7 @@ SoftKeyCol7Held_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip16:
 	ld	(13826:16), 14	; F5630D  ld (0x3602),0x0e
 sub_F56129_Join15:
-	call	T_F40CC4	; F56312  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F56312  call 0xf40cc4
 sub_F56129_Epilogue7:
 	pop	xbc	; F56316  pop XBC
 	ret	; F56317  ret
@@ -120215,11 +120279,11 @@ sub_F56129_Epilogue7:
 ; SoftKeyCol8Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[24], 0xF55A2E[24]
 ; Touches: (0x2088) (0x3602)
-; Calls:   T_F40CC4
+; Calls:   T_SeqTrackKey_Press
 ; Evidence: entry [24] of the table at 0xF558AE reads 0x00F56318, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF56318 is an instruction boundary of this transcription.
-; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+; Shape:   the same (0x3602) write and T_SeqTrackKey_Press call as its siblings, index
 ;          0x07, but reached only when one bit of the 32-bit word at (0x2088)
 ;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
 ;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
@@ -120229,7 +120293,7 @@ sub_F56129_Epilogue7:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 ; SoftKeyCol8Held_SeqPlayAndRealtimeRecord: slot 0x18 of the same two tables, the column's held form: unless
-;   PanelButton_HeldMask bit 0, the same store of 7 / 15 to (0x3602) and T_F40CC4.
+;   PanelButton_HeldMask bit 0, the same store of 7 / 15 to (0x3602) and T_SeqTrackKey_Press.
 SoftKeyCol8Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F56318  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F56319  ld XBC,(0x2088)
@@ -120243,7 +120307,7 @@ SoftKeyCol8Held_SeqPlayAndRealtimeRecord:
 sub_F56129_Skip17:
 	ld	(13826:16), 15	; F56337  ld (0x3602),0x0f
 sub_F56129_Join16:
-	call	T_F40CC4	; F5633C  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F5633C  call 0xf40cc4
 sub_F56129_Epilogue8:
 	pop	xbc	; F56340  pop XBC
 	ret	; F56341  ret
@@ -120253,7 +120317,7 @@ sub_F56129_Epilogue8:
 ; Called from: table 0xF558AE[8]
 ; Touches: (0x2070) (0x3000) (0x34D9) (0x360B) (0x3622) (0x3624) (0x36D6)
 ;          (0x7F32)
-; Calls:   T_RecordScreen_LcdKeyRow1 T_F42704 T_CallbackQueue_Post T_Kernel_SemaSignal
+; Calls:   T_RecordScreen_LcdKeyRow1 T_Seq_LoadTimeSigAtCurrentMeasure T_CallbackQueue_Post T_Kernel_SemaSignal
 ; Evidence: entry [8] of the table at 0xF558AE reads 0x00F56342, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF56342
 ;           is an instruction boundary of this transcription.
@@ -120276,7 +120340,7 @@ sub_F56129_Skip18:
 	ldw	(UI_Request:16), 16396	; F56360  ld (0x2070),0x400c
 	jr	sub_F56129_Return2	; F56366  jr T,0xf563dc
 sub_F56129_Skip19:
-	call	T_F42704	; F56368  call 0xf42704
+	call	T_Seq_LoadTimeSigAtCurrentMeasure	; F56368  call 0xf42704
 	ld	xwa, sub_F55D3D	; F5636C  ld XWA,0x00f55d3d
 	push	xwa	; F56371  push XWA
 	call	T_CallbackQueue_Post	; F56372  call 0xf42e84
@@ -120529,7 +120593,7 @@ Nop_Ret_F56524:
 ; Called from: T_F40E18 (0xF40E18, x2)
 ; Touches: (0x34D3) (0x34D4) (0x3614)
 ; Calls:   T_F40CEC Transport_StopAllAndWaitC T_F42578 T_F409C8 T_F40CCC T_F40BD8 T_NoteRouting_RebuildForSong
-;          T_F40B60 T_F40B5C T_F40AC4 sub_F55D90
+;          T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart T_Seq_SetTrackBeatsFromTransportB sub_F55D90
 ; Evidence: thunk slot T_F40E18 holds `jp 0x00F56525`, and 0xF56525 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -120555,9 +120619,9 @@ Nop_Ret_F56524_Skip:
 	m_set 1, MD16, 0x34d3	; F56557  set 1,(0x34d3)
 	call	T_F40BD8	; F5655B  call 0xf40bd8
 	m_or_mi8 MB16, 0x34d4, 0x10	; F5655F  or (0x34d4),0x10
-	call	T_F40B60	; F56564  call 0xf40b60
-	call	T_F40B5C	; F56568  call 0xf40b5c
-	call	T_F40AC4	; F5656C  call 0xf40ac4
+	call	T_SeqCycle_CaptureEndCursors	; F56564  call 0xf40b60
+	call	T_SeqCycle_LocateToStart	; F56568  call 0xf40b5c
+	call	T_Seq_SetTrackBeatsFromTransportB	; F5656C  call 0xf40ac4
 	call	T_NoteRouting_RebuildForSong	; F56570  call 0xf411b8
 Nop_Ret_F56524_Join:
 	call	sub_F55D90	; F56574  call 0xf55d90
@@ -120764,7 +120828,7 @@ Nop_Ret_F56649:
 ; Called from: in-module: 0xF5583C
 ; Touches: (0x2070) (0x2071) (0x207A) (0x207B) (0x207C) (0x207D) (0x2095)
 ;          (0x34D1) (0x34D9) (0x3614) +3 more
-; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F40B60 T_F40B5C T_F40AC4
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart T_Seq_SetTrackBeatsFromTransportB
 ;          T_F40BDC T_CallbackQueue_Post T_Kernel_SemaSignal T_Blink_Stop
 ;          sub_F566E0
 ; Evidence: reached by a branch decoded in this transcription (the sites are
@@ -120792,9 +120856,9 @@ sub_F5664A_Skip:
 	ld	wa, (13858:16)	; F56677  ld WA,(0x3622)
 	ld	(13860:16), wa	; F5667B  ld (0x3624),WA
 sub_F5664A_Skip2:
-	call	T_F40B60	; F5667F  call 0xf40b60
-	call	T_F40B5C	; F56683  call 0xf40b5c
-	call	T_F40AC4	; F56687  call 0xf40ac4
+	call	T_SeqCycle_CaptureEndCursors	; F5667F  call 0xf40b60
+	call	T_SeqCycle_LocateToStart	; F56683  call 0xf40b5c
+	call	T_Seq_SetTrackBeatsFromTransportB	; F56687  call 0xf40ac4
 	call	T_F40BDC	; F5668B  call 0xf40bdc
 sub_F5664A_Skip3:
 	m_bit 4, MD16, 0x34d1	; F5668F  bit 4,(0x34d1)
@@ -120901,7 +120965,7 @@ Nop_Ret_F5672A:
 ; LcdKeyRow1_CycleRecordScreen
 ; Called from: table 0xF559AE[8]
 ; Touches: (0x2095) (0x34D9) (0x7F32)
-; Calls:   T_Blink_Stop T_RecordScreen_LcdKeyRow1 T_F42704
+; Calls:   T_Blink_Stop T_RecordScreen_LcdKeyRow1 T_Seq_LoadTimeSigAtCurrentMeasure
 ; Evidence: entry [8] of the table at 0xF559AE reads 0x00F5672B, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF5672B
 ;           is an instruction boundary of this transcription.
@@ -120920,7 +120984,7 @@ LcdKeyRow1_CycleRecordScreen:
 sub_F5670C_Skip2:
 	call	T_Blink_Stop	; F5673E  call 0xf42e24
 	call	T_RecordScreen_LcdKeyRow1	; F56742  call 0xf40cfc
-	call	T_F42704	; F56746  call 0xf42704
+	call	T_Seq_LoadTimeSigAtCurrentMeasure	; F56746  call 0xf42704
 	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F5674A  or (0x2095),0x10
 	jr	sub_F5670C_Return2	; F5674F  jr T,0xf56751
 sub_F5670C_Return2:
@@ -121354,7 +121418,7 @@ StateDispatchTable_F5693F:
 ; sub_F56953
 ; Called from: table 0xF5693F[0], 0xF5693F[3], 0xF5693F[4]
 ; Touches: (0x360B)
-; Calls:   sub_F5696D T_F40B60 T_F40B5C T_F40AC4
+; Calls:   sub_F5696D T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart T_Seq_SetTrackBeatsFromTransportB
 ; Evidence: entry [0] of the table at 0xF5693F reads 0x00F56953, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF56953
 ;           is an instruction boundary of this transcription.
@@ -121366,9 +121430,9 @@ sub_F56953:
 	jr	nz, sub_F56953_Return	; F56957  jr NZ,0xf5696c
 	m_set 1, MD16, 0x360b	; F56959  set 1,(0x360b)
 	calr	sub_F5696D	; F5695D  calr 0xf5696d
-	call	T_F40B60	; F56960  call 0xf40b60
-	call	T_F40B5C	; F56964  call 0xf40b5c
-	call	T_F40AC4	; F56968  call 0xf40ac4
+	call	T_SeqCycle_CaptureEndCursors	; F56960  call 0xf40b60
+	call	T_SeqCycle_LocateToStart	; F56964  call 0xf40b5c
+	call	T_Seq_SetTrackBeatsFromTransportB	; F56968  call 0xf40ac4
 sub_F56953_Return:
 	ret	; F5696C  ret
 
@@ -121741,9 +121805,9 @@ sub_F56B67_Return:
 ; Called from: in-module: 0xF55856
 ; Touches: (0x207A) (0x207B) (0x207C) (0x207D) (0x2095) (0x2250) (0x2666)
 ;          (0x266A) (0x360B) (0x3757) +1 more
-; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F40D04 T_F40B60 T_F40B5C
-;          T_F40AC4 T_F40D00 T_Queue2E00_AppendRegs T_NoteRouting_Rebuild
-;          T_CallbackQueue_Post T_Kernel_SemaSignal T_F42704
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F40D04 T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart
+;          T_Seq_SetTrackBeatsFromTransportB T_F40D00 T_Queue2E00_AppendRegs T_NoteRouting_Rebuild
+;          T_CallbackQueue_Post T_Kernel_SemaSignal T_Seq_LoadTimeSigAtCurrentMeasure
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF56B95 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -121771,9 +121835,9 @@ sub_F56B95_Skip:
 	m_and_mi8 MB16, 0x360b, 0xfe	; F56BC9  and (0x360b),0xfe
 	jr	sub_F56B95_Join	; F56BCE  jr T,0xf56bdc
 sub_F56B95_Skip2:
-	call	T_F40B60	; F56BD0  call 0xf40b60
-	call	T_F40B5C	; F56BD4  call 0xf40b5c
-	call	T_F40AC4	; F56BD8  call 0xf40ac4
+	call	T_SeqCycle_CaptureEndCursors	; F56BD0  call 0xf40b60
+	call	T_SeqCycle_LocateToStart	; F56BD4  call 0xf40b5c
+	call	T_Seq_SetTrackBeatsFromTransportB	; F56BD8  call 0xf40ac4
 sub_F56B95_Join:
 	call	T_F40D00	; F56BDC  call 0xf40d00
 	ldw	(9830:16), 65535	; F56BE0  ld (0x2666),0xffff
@@ -121796,7 +121860,7 @@ sub_F56B95_Skip4:
 	ld	a, 1:opc	; F56C18  ld A,0x01
 	call	T_Kernel_SemaSignal	; F56C1A  call 0xf42d88
 sub_F56B95_Skip5:
-	call	T_F42704	; F56C1E  call 0xf42704
+	call	T_Seq_LoadTimeSigAtCurrentMeasure	; F56C1E  call 0xf42704
 	ld	xwa, Draw_CycleMasterS0ngMeasureTimeSig	; F56C22  ld XWA,0x00f55c8c
 	push	xwa	; F56C27  push XWA
 	call	T_CallbackQueue_Post	; F56C28  call 0xf42e84
@@ -121837,7 +121901,7 @@ sub_F56C35_Return:
 ; Called from: table 0xF55A2E[8]
 ; Touches: (0x2070) (0x2075) (0x209B) (0x2647) (0x360B) (0x3627) (0x36C6)
 ;          (0x36CA) (0x3731)
-; Calls:   T_CallbackQueue_Post T_Kernel_SemaSignal T_SeqPlayScreen_LcdKeyRow1 T_F42704
+; Calls:   T_CallbackQueue_Post T_Kernel_SemaSignal T_SeqPlayScreen_LcdKeyRow1 T_Seq_LoadTimeSigAtCurrentMeasure
 ; Evidence: entry [8] of the table at 0xF55A2E reads 0x00F56C57, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF56C57
 ;           is an instruction boundary of this transcription.
@@ -121878,7 +121942,7 @@ sub_F56C35_Skip4:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F56CB0  or (0x2075),0x09
 	ldw	(PanelDial_DownButton:16), 34953	; F56CB5  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	call	T_SeqPlayScreen_LcdKeyRow1	; F56CBB  call 0xf40d0c
-	call	T_F42704	; F56CBF  call 0xf42704
+	call	T_Seq_LoadTimeSigAtCurrentMeasure	; F56CBF  call 0xf42704
 	ld	xwa, Draw_CycleMasterS0ngMeasureTimeSig	; F56CC3  ld XWA,0x00f55c8c
 	push	xwa	; F56CC8  push XWA
 	call	T_CallbackQueue_Post	; F56CC9  call 0xf42e84
@@ -121892,7 +121956,7 @@ sub_F56C35_Return2:
 ; LcdKeyRow2_SeqPlayScreen
 ; Called from: table 0xF55A2E[9]
 ; Touches: (0x2070) (0x2075) (0x209B) (0x3008) (0x300C)
-; Calls:   T_SeqPlayScreen_LcdKeyRow2 T_F42704 T_CallbackQueue_Post T_Kernel_SemaSignal
+; Calls:   T_SeqPlayScreen_LcdKeyRow2 T_Seq_LoadTimeSigAtCurrentMeasure T_CallbackQueue_Post T_Kernel_SemaSignal
 ; Evidence: entry [9] of the table at 0xF55A2E reads 0x00F56CD6, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF56CD6
 ;           is an instruction boundary of this transcription.
@@ -121915,7 +121979,7 @@ sub_F56C35_Skip5:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F56CF7  or (0x2075),0x09
 	ldw	(PanelDial_DownButton:16), 34953	; F56CFC  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	call	T_SeqPlayScreen_LcdKeyRow2	; F56D02  call 0xf40d10
-	call	T_F42704	; F56D06  call 0xf42704
+	call	T_Seq_LoadTimeSigAtCurrentMeasure	; F56D06  call 0xf42704
 	ld	xwa, Draw_CycleMasterS0ngMeasureTimeSig	; F56D0A  ld XWA,0x00f55c8c
 	push	xwa	; F56D0F  push XWA
 	call	T_CallbackQueue_Post	; F56D10  call 0xf42e84
@@ -121960,7 +122024,7 @@ sub_F56C35_Return4:
 ; Called from: in-module: 0xF56D2D
 ; Touches: (0x360B) (0x3752)
 ; Calls:   sub_F56D7E sub_F56DA8 T_CallbackQueue_Post T_Kernel_SemaSignal
-;          T_NoteRouting_RebuildForSong T_F40B60 T_F40B5C T_F40AC4
+;          T_NoteRouting_RebuildForSong T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart T_Seq_SetTrackBeatsFromTransportB
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF56D46 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -121984,9 +122048,9 @@ sub_F56D46_Join:
 	call	T_NoteRouting_RebuildForSong	; F56D67  call 0xf411b8
 	m_bit 0, MD16, 0x360b	; F56D6B  bit 0,(0x360b)
 	jr	z, sub_F56D46_Return	; F56D6F  jr Z,0xf56d7d
-	call	T_F40B60	; F56D71  call 0xf40b60
-	call	T_F40B5C	; F56D75  call 0xf40b5c
-	call	T_F40AC4	; F56D79  call 0xf40ac4
+	call	T_SeqCycle_CaptureEndCursors	; F56D71  call 0xf40b60
+	call	T_SeqCycle_LocateToStart	; F56D75  call 0xf40b5c
+	call	T_Seq_SetTrackBeatsFromTransportB	; F56D79  call 0xf40ac4
 sub_F56D46_Return:
 	ret	; F56D7D  ret
 
@@ -122110,7 +122174,7 @@ Nop_Ret_F56DF0:
 ; Called from: in-module: 0xF5586C
 ; Touches: (0x207A) (0x207B) (0x207C) (0x207D) (0x2095) (0x361E) (0x3620)
 ;          (0x3627)
-; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F40B60 T_F40B5C T_F40AC4
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart T_Seq_SetTrackBeatsFromTransportB
 ;          T_CallbackQueue_Post T_Kernel_SemaSignal sub_F56E66
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF56DF1 is an instruction boundary.
@@ -122141,9 +122205,9 @@ sub_F56DF1_Skip2:
 	ld	wa, (13854:16)	; F56E2A  ld WA,(0x361e)
 	ld	(13856:16), wa	; F56E2E  ld (0x3620),WA
 sub_F56DF1_Skip3:
-	call	T_F40B60	; F56E32  call 0xf40b60
-	call	T_F40B5C	; F56E36  call 0xf40b5c
-	call	T_F40AC4	; F56E3A  call 0xf40ac4
+	call	T_SeqCycle_CaptureEndCursors	; F56E32  call 0xf40b60
+	call	T_SeqCycle_LocateToStart	; F56E36  call 0xf40b5c
+	call	T_Seq_SetTrackBeatsFromTransportB	; F56E3A  call 0xf40ac4
 sub_F56DF1_Skip4:
 	ld	xwa, Draw_CyclePlayCurrentMeasureCycle	; F56E3E  ld XWA,0x00f55ed8
 	push	xwa	; F56E43  push XWA
@@ -122628,7 +122692,7 @@ StateDispatchTable_F5706A:
 ; sub_F5707E
 ; Called from: table 0xF5706A[0], 0xF5706A[4]
 ; Touches: (0x360B)
-; Calls:   sub_F5709D T_F40B60 T_F40B5C T_F40AC4
+; Calls:   sub_F5709D T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart T_Seq_SetTrackBeatsFromTransportB
 ; Evidence: entry [0] of the table at 0xF5706A reads 0x00F5707E, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF5707E
 ;           is an instruction boundary of this transcription.
@@ -122642,9 +122706,9 @@ sub_F5707E:
 	jr	nz, sub_F5707E_Return	; F57087  jr NZ,0xf5709c
 	m_set 0, MD16, 0x360b	; F57089  set 0,(0x360b)
 	calr	sub_F5709D	; F5708D  calr 0xf5709d
-	call	T_F40B60	; F57090  call 0xf40b60
-	call	T_F40B5C	; F57094  call 0xf40b5c
-	call	T_F40AC4	; F57098  call 0xf40ac4
+	call	T_SeqCycle_CaptureEndCursors	; F57090  call 0xf40b60
+	call	T_SeqCycle_LocateToStart	; F57094  call 0xf40b5c
+	call	T_Seq_SetTrackBeatsFromTransportB	; F57098  call 0xf40ac4
 sub_F5707E_Return:
 	ret	; F5709C  ret
 
@@ -122970,8 +123034,8 @@ sub_F5723B_Return:
 ; Called from: in-module: 0xF55882 0xF57410
 ; Touches: (0x207A) (0x207B) (0x207C) (0x207D) (0x2095) (0x360C) (0x361E)
 ;          (0x3620) (0x3626) (0x3627)
-; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_NoteRouting_RebuildForSong T_F40B60 T_F40B5C
-;          T_F40AC4 T_CallbackQueue_Post T_Kernel_SemaSignal sub_F56E66
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_NoteRouting_RebuildForSong T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart
+;          T_Seq_SetTrackBeatsFromTransportB T_CallbackQueue_Post T_Kernel_SemaSignal sub_F56E66
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF57286 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -123008,9 +123072,9 @@ sub_F57286_Skip3:
 	ld	wa, (13854:16)	; F572D5  ld WA,(0x361e)
 	ld	(13856:16), wa	; F572D9  ld (0x3620),WA
 sub_F57286_Skip4:
-	call	T_F40B60	; F572DD  call 0xf40b60
-	call	T_F40B5C	; F572E1  call 0xf40b5c
-	call	T_F40AC4	; F572E5  call 0xf40ac4
+	call	T_SeqCycle_CaptureEndCursors	; F572DD  call 0xf40b60
+	call	T_SeqCycle_LocateToStart	; F572E1  call 0xf40b5c
+	call	T_Seq_SetTrackBeatsFromTransportB	; F572E5  call 0xf40ac4
 sub_F57286_Skip5:
 	ld	xwa, Draw_CyclePlayCurrentMeasureEdit	; F572E9  ld XWA,0x00f55e7d
 	push	xwa	; F572EE  push XWA
@@ -130707,12 +130771,12 @@ sub_F5BF9F_Return:
 	ret	; F5BFBC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5BFBD
+; SoundEdit_PaintPageLabelBackdrop
 ; Called from: in-module: 0xF5C0B4 0xF5C0EA 0xF5C120 0xF5C188 0xF5C1FF
 ;              0xF5C6C9 0xF5C74D 0xF5C89B +5 more
 ; Touches: (0x2540) (0x27F5)  |  0xF02064 0xF020AA 0xF021E4 0xF02469
 ;          0xF02671 0xF027AF +17 more
-; Calls:   T_F42E18 Draw_M0delingSoundEditToneDriver Draw_ToneDriverResonator T_DisplayList_Run T_DisplayListB_Run 0xF09AF1
+; Calls:   T_UiPaint_PageLabelBackdrop Draw_M0delingSoundEditToneDriver Draw_ToneDriverResonator T_DisplayList_Run T_DisplayListB_Run 0xF09AF1
 ;          0xF5BAB8 sub_F5C424 sub_F5CBD9 0xF5BB00 sub_F5CC64 DisplayList_Run_ResoDriverNatorPositionMovement_Page22P0siti0nM0vementWidth +4
 ;          more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -130721,9 +130785,13 @@ sub_F5BF9F_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5BFBD:
+; SoundEdit_PaintPageLabelBackdrop: LCD_CurrentLayer := 0, then T_UiPaint_PageLabelBackdrop (sub_F31899, the rounded backdrop behind the
+;   'PAGEn/m' legend), which restores the layer it saved -- so the caller carries on drawing in layer 0. Basis:
+;   callers + body -- called only by the sound-edit / modeling tone-edit page painters of DispatchTable_F5B8F8 next to
+;   the list that prints their 'PAGEn/m'. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+SoundEdit_PaintPageLabelBackdrop:
 	ld	(LCD_CurrentLayer:16), 0	; F5BFBD  ld (0x2540),0x00
-	call	T_F42E18	; F5BFC2  call 0xf42e18
+	call	T_UiPaint_PageLabelBackdrop	; F5BFC2  call 0xf42e18
 	ret	; F5BFC6  ret
 ; ToneEditPage_A0_Paint: DispatchTable_F5B8F8[code 0xA0] -- Dispatch_Code80_Bracketed, the full paint.
 ToneEditPage_A0_Paint:
@@ -130795,7 +130863,7 @@ ToneEditPage_A3_Paint:
 	ld	xiy, DL_Page12P0siti0nParameterP0siti0n	; F5C0A6  ld XIY,0x00f02671
 	ld	xix, DL_ResoDriverNatorPositionMovement	; F5C0AB  ld XIX,0x00f027af
 	call	T_DisplayList_Run	; F5C0B0  call 0xf417f0
-	call	sub_F5BFBD	; F5C0B4  call 0xf5bfbd
+	call	SoundEdit_PaintPageLabelBackdrop	; F5C0B4  call 0xf5bfbd
 	call	UiPaint_Solo	; F5C0B8  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C0BC  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5C0C0  ld (0x2540),0x00
@@ -130810,7 +130878,7 @@ ToneEditPage_A4_Paint:
 	ld	xiy, DL_Page22P0siti0nM0vementWidth	; F5C0DC  ld XIY,0x00f02942
 	ld	xix, DL_Page13FitMutKeyDeResoTing	; F5C0E1  ld XIX,0x00f02a46
 	call	T_DisplayList_Run	; F5C0E6  call 0xf417f0
-	call	sub_F5BFBD	; F5C0EA  call 0xf5bfbd
+	call	SoundEdit_PaintPageLabelBackdrop	; F5C0EA  call 0xf5bfbd
 	call	UiPaint_Solo	; F5C0EE  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C0F2  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5C0F6  ld (0x2540),0x00
@@ -130825,31 +130893,36 @@ ToneEditPage_A5_Paint:
 	ld	xiy, DL_Page13FitMutKeyDeResoTing	; F5C112  ld XIY,0x00f02a46
 	ld	xix, DL_MainDriverResonatorSubResonator	; F5C117  ld XIX,0x00f02b47
 	call	T_DisplayList_Run	; F5C11C  call 0xf417f0
-	call	sub_F5BFBD	; F5C120  call 0xf5bfbd
+	call	SoundEdit_PaintPageLabelBackdrop	; F5C120  call 0xf5bfbd
 	call	UiPaint_Solo	; F5C124  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C128  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5C12C  ld (0x2540),0x00
 	ld	xiy, ToneEditPage_A5_Paint_DL	; F5C131  ld XIY,0x00f034de
 	ld	xix, DLRecordPtrs_F0355D	; F5C136  ld XIX,0x00f0355d
 	call	T_DisplayListB_Run	; F5C13B  call 0xf417f4
-	call	sub_F5C144	; F5C13F  call 0xf5c144
+	call	ToneEditPage_PaintMainAndSubFocus	; F5C13F  call 0xf5c144
 	ret	; F5C143  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C144
+; ToneEditPage_PaintMainAndSubFocus
 ; Called from: in-module: 0xF5C13F 0xF5C1A7 0xF5C20B 0xF5CD67 0xF5CDBF
 ;              0xF5CDEB
 ; Touches: (0x2540) (0x27B5) (0x27F5)  |  0xF02D08 0xF02DFB 0xF02EF9
 ;          0xF02F22 0xF03595 0xF0359F +15 more
-; Calls:   T_DisplayList_Run T_DisplayListB_Run DisplayList_Run_M0delingSoundEditToneDriver DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain sub_F5BFBD 0xF5BAB8
-;          0xF5BB00 sub_F5C144 sub_F5C27D sub_F5BF8A
+; Calls:   T_DisplayList_Run T_DisplayListB_Run DisplayList_Run_M0delingSoundEditToneDriver DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain SoundEdit_PaintPageLabelBackdrop 0xF5BAB8
+;          0xF5BB00 ToneEditPage_PaintMainAndSubFocus sub_F5C27D sub_F5BF8A
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C144 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C144:
+; ToneEditPage_PaintMainAndSubFocus: Unless ModelingPage_Fields[15] == 1 (a single row has focus), fills in layer 1
+;   the 'MAIN&SUB' legend box (253,218)-(305,228) and the OTHER resonator row's box, DLTable_F035BA[Fields[0]&1] --
+;   the mirror of DLTable_F035AA, which the page lists use for the focused row -- so both rows show as selected.
+;   Basis: callers + body -- called by the A5/A6/A7 (PAGE1/3..3/3) paint and field-0 repaint routines;
+;   ToneEditPage_ToggleRowFocus flips Fields[15]. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+ToneEditPage_PaintMainAndSubFocus:
 	m_cp_mi8 MB16, ModelingPage_Fields+15, 0x01	; F5C144  cp (0x27b5),0x01
 	jr	z, sub_F5C144_Return	; F5C149  jr Z,0xf5c171
 	ld	(LCD_CurrentLayer:16), 1	; F5C14B  ld (0x2540),0x01
@@ -130869,14 +130942,14 @@ ToneEditPage_A6_Paint:
 	ld	xiy, DL_Page23TouchDepthSubFittingMutingSubGain	; F5C17A  ld XIY,0x00f02d08
 	ld	xix, DL_MutingKeyFollowSlopeRange	; F5C17F  ld XIX,0x00f02dfb
 	call	T_DisplayList_Run	; F5C184  call 0xf417f0
-	call	sub_F5BFBD	; F5C188  call 0xf5bfbd
+	call	SoundEdit_PaintPageLabelBackdrop	; F5C188  call 0xf5bfbd
 	call	UiPaint_Solo	; F5C18C  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C190  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5C194  ld (0x2540),0x00
 	ld	xiy, ToneEditPage_A6_Paint_DL	; F5C199  ld XIY,0x00f035ca
 	ld	xix, Data_F03617	; F5C19E  ld XIX,0x00f03617
 	call	T_DisplayListB_Run	; F5C1A3  call 0xf417f4
-	call	sub_F5C144	; F5C1A7  call 0xf5c144
+	call	ToneEditPage_PaintMainAndSubFocus	; F5C1A7  call 0xf5c144
 	ret	; F5C1AB  ret
 ; ToneEditPage_A7_Paint: DispatchTable_F5B8F8[code 0xA7] -- Dispatch_Code80_Bracketed, the full paint.
 ToneEditPage_A7_Paint:
@@ -130901,10 +130974,10 @@ sub_F5C144_Skip:
 	ld	xix, DLRecordPtrs_F036C2	; F5C1F6  ld XIX,0x00f036c2
 	call	T_DisplayListB_Run	; F5C1FB  call 0xf417f4
 sub_F5C144_Join:
-	call	sub_F5BFBD	; F5C1FF  call 0xf5bfbd
+	call	SoundEdit_PaintPageLabelBackdrop	; F5C1FF  call 0xf5bfbd
 	call	UiPaint_Solo	; F5C203  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C207  call 0xf5bb00
-	call	sub_F5C144	; F5C20B  call 0xf5c144
+	call	ToneEditPage_PaintMainAndSubFocus	; F5C20B  call 0xf5c144
 	ret	; F5C20F  ret
 Draw_Serial:
 	ldw	bc, ModelingPage_Fields+4	; F5C210  ld BC,0x27aa
@@ -131354,7 +131427,7 @@ sub_F5C549_Join:
 ; Called from: in-module: 0xF5C52D 0xF5CF52 0xF5CF78
 ; Touches: (0x2540) (0x27F5)  |  0x000001 0x000007 0x00000A 0x000014
 ;          0x0027AB 0xF0417E +17 more
-; Calls:   T_DisplayList_Run T_DisplayListB_RunOne sub_F5C727 sub_F5BFBD 0xF5BAB8 sub_F5C39C
+; Calls:   T_DisplayList_Run T_DisplayListB_RunOne SoundEditAmp_PaintHeader SoundEdit_PaintPageLabelBackdrop 0xF5BAB8 sub_F5C39C
 ;          TouchCurve_DrawCurrentSlot T_DisplayListB_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C5A5 is an instruction boundary.
@@ -131457,10 +131530,10 @@ sub_F5C5A5_Skip:
 	jrl	nz, sub_F5C5A5_Loop	; F5C6BA  jrl NZ,0xf5c5f3
 	ret	; F5C6BD  ret
 Draw_Page12LevelTouchCurveLevel:
-	call	sub_F5C727	; F5C6BE  call 0xf5c727
+	call	SoundEditAmp_PaintHeader	; F5C6BE  call 0xf5c727
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C6C2  cp (0x27f5),0x01
 	jr	z, sub_F5C5A5_Skip2	; F5C6C7  jr Z,0xf5c6dd
-	call	sub_F5BFBD	; F5C6C9  call 0xf5bfbd
+	call	SoundEdit_PaintPageLabelBackdrop	; F5C6C9  call 0xf5bfbd
 	ld	xiy, DL_Page12LevelTouchCurveLevel	; F5C6CD  ld XIY,0x00f0417e
 	ld	xix, DL_Page22KeyFollowSlopeRange	; F5C6D2  ld XIX,0x00f0426b
 	call	T_DisplayList_Run	; F5C6D7  call 0xf417f0
@@ -131489,18 +131562,22 @@ sub_F5C5A5_Return:
 	ret	; F5C726  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C727
+; SoundEditAmp_PaintHeader
 ; Called from: in-module: 0xF5C6BE 0xF5C749 0xF5C79E 0xF5C876 0xF5D622
 ; Touches: (0x2540) (0x27F5)  |  0xF03F77 0xF03FF3 0xF0402E 0xF0426B
 ;          0xF04344 0xF04358
-; Calls:   T_DisplayList_Run sub_F5C727 sub_F5BFBD
+; Calls:   T_DisplayList_Run SoundEditAmp_PaintHeader SoundEdit_PaintPageLabelBackdrop
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C727 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C727:
+; SoundEditAmp_PaintHeader: Layer 0: runs DL_F03F77 ('AMPLITUDE' title, 'SOUND EDIT' box, 'ENV' and 'AMP' side tabs)
+;   and, unless (0x27F5) == 1, on through DL_F03FF3 (the 'LFO' tab, its box and arrow). Basis: callers + body --
+;   called first by all five AMP page painters (DispatchTable_F5B8F8 codes 0x8B-0x8F); same shape as
+;   SoundEditController_PaintHeader. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+SoundEditAmp_PaintHeader:
 	ld	(LCD_CurrentLayer:16), 0	; F5C727  ld (0x2540),0x00
 	ld	xiy, DL_F03F77	; F5C72C  ld XIY,0x00f03f77
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C731  cp (0x27f5),0x01
@@ -131513,8 +131590,8 @@ sub_F5C727_Join:
 	call	T_DisplayList_Run	; F5C744  call 0xf417f0
 	ret	; F5C748  ret
 Draw_Page22KeyFollowSlopeRange:
-	call	sub_F5C727	; F5C749  call 0xf5c727
-	call	sub_F5BFBD	; F5C74D  call 0xf5bfbd
+	call	SoundEditAmp_PaintHeader	; F5C749  call 0xf5c727
+	call	SoundEdit_PaintPageLabelBackdrop	; F5C74D  call 0xf5bfbd
 	ld	xiy, DL_Page22KeyFollowSlopeRange	; F5C751  ld XIY,0x00f0426b
 	ld	xix, DL_F04344	; F5C756  ld XIX,0x00f04344
 	call	T_DisplayList_Run	; F5C75B  call 0xf417f0
@@ -131528,8 +131605,8 @@ Draw_Page22KeyFollowSlopeRange:
 ; Called from: in-module: 0xF5D5BF
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27F5)  |  0xF04358 0xF04370
 ;          0xF04415 0xF049DD 0xF049E7 0xF05063 +7 more
-; Calls:   KeyboardIcon_Draw 0xF5BAB8 0xF5BB00 T_DisplayListB_Run sub_F5C727 T_DisplayList_Run
-;          sub_F5C916 Draw_Keyoff
+; Calls:   KeyboardIcon_Draw 0xF5BAB8 0xF5BB00 T_DisplayListB_Run SoundEditAmp_PaintHeader T_DisplayList_Run
+;          SoundEdit_PaintPage12Label Draw_Keyoff
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C772 is an instruction boundary.
 ;           The name IS the address.
@@ -131549,13 +131626,13 @@ sub_F5C772:
 	ret	; F5C79D  ret
 ; SoundEditAmpEnvelope1_Paint: DispatchTable_F5B8F8[code 0x8D] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditAmpEnvelope1_Paint:
-	call	sub_F5C727	; F5C79E  call 0xf5c727
+	call	SoundEditAmp_PaintHeader	; F5C79E  call 0xf5c727
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C7A2  cp (0x27f5),0x01
 	jr	z, sub_F5C772_Skip	; F5C7A7  jr Z,0xf5c7d0
 	ld	xiy, DL_EnvelopeKeyoffAtkPeakDecay1	; F5C7A9  ld XIY,0x00f04358
 	ld	xix, DL_Page22KeyFollowEnvelopeKeyFollowTouchAtk	; F5C7AE  ld XIX,0x00f04415
 	call	T_DisplayList_Run	; F5C7B3  call 0xf417f0
-	call	sub_F5C916	; F5C7B7  call 0xf5c916
+	call	SoundEdit_PaintPage12Label	; F5C7B7  call 0xf5c916
 	ld	(LCD_CurrentLayer:16), 2	; F5C7BB  ld (0x2540),0x02
 	ld	xiy, DL_Keyoff	; F5C7C0  ld XIY,0x00f049dd
 	ld	xix, DL_Keyoff + 0xA	; F5C7C5  ld XIX,0x00f049e7
@@ -131591,8 +131668,8 @@ sub_F5C772_Return:
 ; Called from: in-module: 0xF5C81E 0xF5D08A
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27A6) (0x27F5)  |  0xF04415
 ;          0xF04560 0xF04574 0xF0467D 0xF047CA 0xF047DF +11 more
-; Calls:   T_DisplayListB_Run T_DisplayList_Run sub_F5C727 sub_F5BFBD KeyboardIcon_Draw 0xF5BAB8
-;          0xF5BB00 sub_F5C929 sub_F5C916 sub_F5C94B
+; Calls:   T_DisplayListB_Run T_DisplayList_Run SoundEditAmp_PaintHeader SoundEdit_PaintPageLabelBackdrop KeyboardIcon_Draw 0xF5BAB8
+;          0xF5BB00 SoundEditFilter_PaintHeader SoundEdit_PaintPage12Label SoundEditFilter_PaintModeField
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C823 is an instruction boundary.
 ; Name:    from the one text-named display list it STARTS, DL_Keyoff (the
@@ -131624,7 +131701,7 @@ Draw_Keyoff_Skip:
 Draw_Keyoff_Return:
 	ret	; F5C875  ret
 Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk:
-	call	sub_F5C727	; F5C876  call 0xf5c727
+	call	SoundEditAmp_PaintHeader	; F5C876  call 0xf5c727
 	ld	xiy, DL_Page22KeyFollowEnvelopeKeyFollowTouchAtk	; F5C87A  ld XIY,0x00f04415
 	ld	xix, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL1	; F5C87F  ld XIX,0x00f04560
 	call	T_DisplayList_Run	; F5C884  call 0xf417f0
@@ -131632,7 +131709,7 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk:
 	ld	xiy, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL1	; F5C88D  ld XIY,0x00f04560
 	ld	xix, DL_F04574	; F5C892  ld XIX,0x00f04574
 	call	T_DisplayList_Run	; F5C897  call 0xf417f0
-	call	sub_F5BFBD	; F5C89B  call 0xf5bfbd
+	call	SoundEdit_PaintPageLabelBackdrop	; F5C89B  call 0xf5bfbd
 	ldw	(IconOrigin_X:16), 56	; F5C89F  ld (0x2350),0x0038
 	ldw	(IconOrigin_Y:16), 139	; F5C8A5  ld (0x2352),0x008b
 	call	KeyboardIcon_Draw	; F5C8AB  call 0xf5bbe7
@@ -131645,7 +131722,7 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk:
 	ret	; F5C8CA  ret
 ; SoundEditFilterLpf12_Paint: DispatchTable_F5B8F8[code 0x90] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterLpf12_Paint:
-	call	sub_F5C929	; F5C8CB  call 0xf5c929
+	call	SoundEditFilter_PaintHeader	; F5C8CB  call 0xf5c929
 	ld	xiy, DL_FilterCutoffEqualizerFreq	; F5C8CF  ld XIY,0x00f0467d
 	ld	xix, DL_HighPass12db	; F5C8D4  ld XIX,0x00f047ca
 	call	T_DisplayList_Run	; F5C8D9  call 0xf417f0
@@ -131654,11 +131731,11 @@ SoundEditFilterLpf12_Paint:
 	call	T_DisplayList_Run	; F5C8E7  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C8EB  cp (0x27f5),0x01
 	jr	z, Draw_Keyoff_Skip2	; F5C8F0  jr Z,0xf5c8f6
-	call	sub_F5C916	; F5C8F2  call 0xf5c916
+	call	SoundEdit_PaintPage12Label	; F5C8F2  call 0xf5c916
 Draw_Keyoff_Skip2:
 	call	UiPaint_Solo	; F5C8F6  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C8FA  call 0xf5bb00
-	call	sub_F5C94B	; F5C8FE  call 0xf5c94b
+	call	SoundEditFilter_PaintModeField	; F5C8FE  call 0xf5c94b
 	ld	(LCD_CurrentLayer:16), 0	; F5C902  ld (0x2540),0x00
 	ld	xiy, DL_F04D43	; F5C907  ld XIY,0x00f04d43
 	ld	xix, DLBRecordPtrs_F04DA3	; F5C90C  ld XIX,0x00f04da3
@@ -131666,26 +131743,29 @@ Draw_Keyoff_Skip2:
 	ret	; F5C915  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C916
+; SoundEdit_PaintPage12Label
 ; Called from: in-module: 0xF5C7B7 0xF5C8F2 0xF5C9AA 0xF5C9F5 0xF5CA40
 ;              0xF5CA7D 0xF5CABA
 ; Touches:   |  0xF04672 0xF0467D
-; Calls:   T_DisplayList_Run sub_F5BFBD
+; Calls:   T_DisplayList_Run SoundEdit_PaintPageLabelBackdrop
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C916 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C916:
+; SoundEdit_PaintPage12Label: Prints the 'PAGE1/2' legend (DL_F04672, one text record at layer offset 0x0110) and its
+;   rounded backdrop (sub_F5BFBD). Basis: callers + body -- called by the AMP ENVELOPE1 and six filter-type page
+;   painters, each only when (0x27F5) != 1. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+SoundEdit_PaintPage12Label:
 	ld	xiy, DL_F04672	; F5C916  ld XIY,0x00f04672
 	ld	xix, DL_FilterCutoffEqualizerFreq	; F5C91B  ld XIX,0x00f0467d
 	call	T_DisplayList_Run	; F5C920  call 0xf417f0
-	call	sub_F5BFBD	; F5C924  call 0xf5bfbd
+	call	SoundEdit_PaintPageLabelBackdrop	; F5C924  call 0xf5bfbd
 	ret	; F5C928  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C929
+; SoundEditFilter_PaintHeader
 ; Called from: in-module: 0xF5C8CB 0xF5C983 0xF5C9CE 0xF5CA19 0xF5CA64
 ;              0xF5CAA1 0xF5CACB 0xF5D583 +2 more
 ; Touches: (0x2540) (0x27F5)  |  0xF04574 0xF0459F 0xF04632
@@ -131696,7 +131776,11 @@ sub_F5C916:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C929:
+; SoundEditFilter_PaintHeader: Layer 0: runs DL_F04574 ('FILTER' title, 'SOUND EDIT' box) and, unless (0x27F5) == 1,
+;   on through DL_F0459F (the 'ENV', 'FILTER', 'LFO' side tabs with their boxes and arrows). Basis: callers + body --
+;   called first by all ten FILTER page painters (DispatchTable_F5B8F8 codes 0x90-0x99); same shape as
+;   SoundEditController_PaintHeader. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+SoundEditFilter_PaintHeader:
 	ld	(LCD_CurrentLayer:16), 0	; F5C929  ld (0x2540),0x00
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C92E  cp (0x27f5),0x01
 	jr	z, sub_F5C929_Skip	; F5C933  jr Z,0xf5c93c
@@ -131710,20 +131794,25 @@ sub_F5C929_Join:
 	ret	; F5C94A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C94B
+; SoundEditFilter_PaintModeField
 ; Called from: in-module: 0xF5C8FE 0xF5C9B6 0xF5CA01 0xF5CA4C 0xF5CA89
 ;              0xF5CAC6
 ; Touches: (0x207A) (0x2540) (0x27BE) (0x27F5)  |  0xF04650 0xF04668
 ;          0xF04672 0xF0467D 0xF047CA 0xF047DF +15 more
-; Calls:   T_DisplayList_Run T_DisplayListB_RunOne sub_F5C929 sub_F5C916 0xF5BAB8 0xF5BB00
-;          sub_F5C94B T_DisplayListB_Run
+; Calls:   T_DisplayList_Run T_DisplayListB_RunOne SoundEditFilter_PaintHeader SoundEdit_PaintPage12Label 0xF5BAB8 0xF5BB00
+;          SoundEditFilter_PaintModeField T_DisplayListB_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C94B is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C94B:
+; SoundEditFilter_PaintModeField: (0x27BE) := UI_ScreenLatch; layer 2: the 'M0DE' label, arrow and box
+;   (252,149)-(308,166) (+ the fill at (270,67)-(306,92) over the FILTER side tab when (0x27F5) != 1); layer 0: prints
+;   DLTable_F04D1F[(0x27BE) & 7] into the box. Basis: callers + table + body -- called only by the six filter-type
+;   painters, codes 0x90-0x95, and the table's six names LPF+EQ/HPF+EQ/LPF24/HPF24/BPF/THRU are those pages in the
+;   same order. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+SoundEditFilter_PaintModeField:
 	ld	a, (UI_ScreenLatch:16)	; F5C94B  ld A,(0x207a)
 	ld	(10174:16), a	; F5C94F  ld (0x27be),A
 	ld	(LCD_CurrentLayer:16), 2	; F5C953  ld (0x2540),0x02
@@ -131742,7 +131831,7 @@ sub_F5C94B_Join:
 	ret	; F5C982  ret
 ; SoundEditFilterHpf12_Paint: DispatchTable_F5B8F8[code 0x91] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterHpf12_Paint:
-	call	sub_F5C929	; F5C983  call 0xf5c929
+	call	SoundEditFilter_PaintHeader	; F5C983  call 0xf5c929
 	ld	xiy, DL_FilterCutoffEqualizerFreq	; F5C987  ld XIY,0x00f0467d
 	ld	xix, DL_HighPass12db	; F5C98C  ld XIX,0x00f047ca
 	call	T_DisplayList_Run	; F5C991  call 0xf417f0
@@ -131751,11 +131840,11 @@ SoundEditFilterHpf12_Paint:
 	call	T_DisplayList_Run	; F5C99F  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C9A3  cp (0x27f5),0x01
 	jr	z, sub_F5C94B_Skip2	; F5C9A8  jr Z,0xf5c9ae
-	call	sub_F5C916	; F5C9AA  call 0xf5c916
+	call	SoundEdit_PaintPage12Label	; F5C9AA  call 0xf5c916
 sub_F5C94B_Skip2:
 	call	UiPaint_Solo	; F5C9AE  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C9B2  call 0xf5bb00
-	call	sub_F5C94B	; F5C9B6  call 0xf5c94b
+	call	SoundEditFilter_PaintModeField	; F5C9B6  call 0xf5c94b
 	ld	(LCD_CurrentLayer:16), 0	; F5C9BA  ld (0x2540),0x00
 	ld	xiy, DL_F04D43	; F5C9BF  ld XIY,0x00f04d43
 	ld	xix, DLBRecordPtrs_F04DA3	; F5C9C4  ld XIX,0x00f04da3
@@ -131763,7 +131852,7 @@ sub_F5C94B_Skip2:
 	ret	; F5C9CD  ret
 ; SoundEditFilterLpf24_Paint: DispatchTable_F5B8F8[code 0x92] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterLpf24_Paint:
-	call	sub_F5C929	; F5C9CE  call 0xf5c929
+	call	SoundEditFilter_PaintHeader	; F5C9CE  call 0xf5c929
 	ld	xiy, DL_FilterCutoffFilterCutoff	; F5C9D2  ld XIY,0x00f047f3
 	ld	xix, DL_LowPass24db	; F5C9D7  ld XIX,0x00f04889
 	call	T_DisplayList_Run	; F5C9DC  call 0xf417f0
@@ -131772,11 +131861,11 @@ SoundEditFilterLpf24_Paint:
 	call	T_DisplayList_Run	; F5C9EA  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C9EE  cp (0x27f5),0x01
 	jr	z, sub_F5C94B_Skip3	; F5C9F3  jr Z,0xf5c9f9
-	call	sub_F5C916	; F5C9F5  call 0xf5c916
+	call	SoundEdit_PaintPage12Label	; F5C9F5  call 0xf5c916
 sub_F5C94B_Skip3:
 	call	UiPaint_Solo	; F5C9F9  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C9FD  call 0xf5bb00
-	call	sub_F5C94B	; F5CA01  call 0xf5c94b
+	call	SoundEditFilter_PaintModeField	; F5CA01  call 0xf5c94b
 	ld	(LCD_CurrentLayer:16), 0	; F5CA05  ld (0x2540),0x00
 	ld	xiy, DL_F04DFF	; F5CA0A  ld XIY,0x00f04dff
 	ld	xix, Data_F04E32	; F5CA0F  ld XIX,0x00f04e32
@@ -131784,7 +131873,7 @@ sub_F5C94B_Skip3:
 	ret	; F5CA18  ret
 ; SoundEditFilterHpf24_Paint: DispatchTable_F5B8F8[code 0x93] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterHpf24_Paint:
-	call	sub_F5C929	; F5CA19  call 0xf5c929
+	call	SoundEditFilter_PaintHeader	; F5CA19  call 0xf5c929
 	ld	xiy, DL_FilterCutoffFilterCutoff	; F5CA1D  ld XIY,0x00f047f3
 	ld	xix, DL_LowPass24db	; F5CA22  ld XIX,0x00f04889
 	call	T_DisplayList_Run	; F5CA27  call 0xf417f0
@@ -131793,48 +131882,48 @@ SoundEditFilterHpf24_Paint:
 	call	T_DisplayList_Run	; F5CA35  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5CA39  cp (0x27f5),0x01
 	jr	z, sub_F5C94B_Skip4	; F5CA3E  jr Z,0xf5ca44
-	call	sub_F5C916	; F5CA40  call 0xf5c916
+	call	SoundEdit_PaintPage12Label	; F5CA40  call 0xf5c916
 sub_F5C94B_Skip4:
 	call	UiPaint_Solo	; F5CA44  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5CA48  call 0xf5bb00
-	call	sub_F5C94B	; F5CA4C  call 0xf5c94b
+	call	SoundEditFilter_PaintModeField	; F5CA4C  call 0xf5c94b
 	ld	(LCD_CurrentLayer:16), 0	; F5CA50  ld (0x2540),0x00
 	ld	xiy, DL_F04DFF	; F5CA55  ld XIY,0x00f04dff
 	ld	xix, Data_F04E32	; F5CA5A  ld XIX,0x00f04e32
 	call	T_DisplayListB_Run	; F5CA5F  call 0xf417f4
 	ret	; F5CA63  ret
 Draw_FilterBandPassLowHighCutoff:
-	call	sub_F5C929	; F5CA64  call 0xf5c929
+	call	SoundEditFilter_PaintHeader	; F5CA64  call 0xf5c929
 	ld	xiy, DL_FilterBandPassLowHighCutoff	; F5CA68  ld XIY,0x00f048b2
 	ld	xix, DL_Through	; F5CA6D  ld XIX,0x00f049bc
 	call	T_DisplayList_Run	; F5CA72  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5CA76  cp (0x27f5),0x01
 	jr	z, sub_F5C94B_Skip5	; F5CA7B  jr Z,0xf5ca81
-	call	sub_F5C916	; F5CA7D  call 0xf5c916
+	call	SoundEdit_PaintPage12Label	; F5CA7D  call 0xf5c916
 sub_F5C94B_Skip5:
 	call	UiPaint_Solo	; F5CA81  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5CA85  call 0xf5bb00
-	call	sub_F5C94B	; F5CA89  call 0xf5c94b
+	call	SoundEditFilter_PaintModeField	; F5CA89  call 0xf5c94b
 	ld	(LCD_CurrentLayer:16), 0	; F5CA8D  ld (0x2540),0x00
 	ld	xiy, Draw_FilterBandPassLowHighCutoff_DL	; F5CA92  ld XIY,0x00f04e42
 	ld	xix, DLRecordPtrs_F04E93	; F5CA97  ld XIX,0x00f04e93
 	call	T_DisplayListB_Run	; F5CA9C  call 0xf417f4
 	ret	; F5CAA0  ret
 Draw_Through:
-	call	sub_F5C929	; F5CAA1  call 0xf5c929
+	call	SoundEditFilter_PaintHeader	; F5CAA1  call 0xf5c929
 	ld	xiy, DL_Through	; F5CAA5  ld XIY,0x00f049bc
 	ld	xix, Draw_Page12EnvelopeKeyoffCurSor_DL1	; F5CAAA  ld XIX,0x00f049d3
 	call	T_DisplayList_Run	; F5CAAF  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5CAB3  cp (0x27f5),0x01
 	jr	z, sub_F5C94B_Skip6	; F5CAB8  jr Z,0xf5cabe
-	call	sub_F5C916	; F5CABA  call 0xf5c916
+	call	SoundEdit_PaintPage12Label	; F5CABA  call 0xf5c916
 sub_F5C94B_Skip6:
 	call	UiPaint_Solo	; F5CABE  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5CAC2  call 0xf5bb00
-	call	sub_F5C94B	; F5CAC6  call 0xf5c94b
+	call	SoundEditFilter_PaintModeField	; F5CAC6  call 0xf5c94b
 	ret	; F5CACA  ret
 Draw_StartPointStopPointCutoff:
-	call	sub_F5C929	; F5CACB  call 0xf5c929
+	call	SoundEditFilter_PaintHeader	; F5CACB  call 0xf5c929
 	ld	xiy, DL_StartPointStopPointCutoff	; F5CACF  ld XIY,0x00f04b1f
 	ld	xix, DL_Page22KeyFollowEnvelopeKeyFollowTouchAttack	; F5CAD4  ld XIX,0x00f04b6c
 	call	T_DisplayList_Run	; F5CAD9  call 0xf417f0
@@ -131844,7 +131933,7 @@ Draw_StartPointStopPointCutoff:
 ; Called from: in-module: 0xF5D575
 ; Touches: (0x2540)  |  0x0027D6 0xF030E6 0xF03107 0xF03173 0xF031BF
 ;          0xF031C9 +7 more
-; Calls:   T_DisplayList_Run sub_F5BFBD 0xF5BAB8 0xF5BB00 T_DisplayListB_Run 0xF09AF1
+; Calls:   T_DisplayList_Run SoundEdit_PaintPageLabelBackdrop 0xF5BAB8 0xF5BB00 T_DisplayListB_Run 0xF09AF1
 ;          sub_F5C424 sub_F5CBD9 0xF09AE1
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5CADD is an instruction boundary.
@@ -131857,7 +131946,7 @@ Draw_Page12EnvelopeKeyoffCurSor:
 	ld	xiy, DL_Page12EnvelopeKeyoffCurSor	; F5CADD  ld XIY,0x00f049fd
 	ld	xix, DL_StartPointStopPointCutoff	; F5CAE2  ld XIX,0x00f04b1f
 	call	T_DisplayList_Run	; F5CAE7  call 0xf417f0
-	call	sub_F5BFBD	; F5CAEB  call 0xf5bfbd
+	call	SoundEdit_PaintPageLabelBackdrop	; F5CAEB  call 0xf5bfbd
 	ld	(LCD_CurrentLayer:16), 2	; F5CAEF  ld (0x2540),0x02
 	ld	xiy, Draw_Page12EnvelopeKeyoffCurSor_DL1	; F5CAF4  ld XIY,0x00f049d3
 	ld	xix, DL_Keyoff + 0xA	; F5CAF9  ld XIX,0x00f049e7
@@ -132004,7 +132093,7 @@ sub_F5CBD9_Return2:
 ; Called from: in-module: 0xF5C099 0xF5CC41
 ; Touches: (0x2540)  |  0x000001 0x000005 0x000014 0x000032 0x0027AA
 ;          0xF03455 +40 more
-; Calls:   T_DisplayList_Run T_DisplayListB_Run 0xF09AE1 sub_F5C144 sub_F5BF8A sub_F5C27D
+; Calls:   T_DisplayList_Run T_DisplayListB_Run 0xF09AE1 ToneEditPage_PaintMainAndSubFocus sub_F5BF8A sub_F5C27D
 ;          sub_F5CFA4 sub_F5C5A5 sub_F5C549 0xF5BAB8
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5CC64 is an instruction boundary.
@@ -132107,7 +132196,7 @@ sub_F5CC64_Skip4:
 	ld	xiy, DL_F03581	; F5CD59  ld XIY,0x00f03581
 	ld	xix, DL_F03595	; F5CD5E  ld XIX,0x00f03595
 	call	T_DisplayList_Run	; F5CD63  call 0xf417f0
-	call	sub_F5C144	; F5CD67  call 0xf5c144
+	call	ToneEditPage_PaintMainAndSubFocus	; F5CD67  call 0xf5c144
 	ld	a, 0:opc	; F5CD6B  ld A,0x00
 	jr	sub_F5CC64_Join2	; F5CD6D  jr T,0xf5cd99
 sub_F5CC64_Skip5:
@@ -132136,7 +132225,7 @@ ToneEditPage_A6_RepaintField:
 	ld	xiy, DL_F03581	; F5CDB1  ld XIY,0x00f03581
 	ld	xix, DL_F03595	; F5CDB6  ld XIX,0x00f03595
 	call	T_DisplayList_Run	; F5CDBB  call 0xf417f0
-	call	sub_F5C144	; F5CDBF  call 0xf5c144
+	call	ToneEditPage_PaintMainAndSubFocus	; F5CDBF  call 0xf5c144
 	ld	a, 0:opc	; F5CDC3  ld A,0x00
 sub_F5CC64_Skip7:
 	ld	(LCD_CurrentLayer:16), 0	; F5CDC5  ld (0x2540),0x00
@@ -132151,7 +132240,7 @@ ToneEditPage_A7_RepaintField:
 	ld	xiy, DL_F03581	; F5CDDD  ld XIY,0x00f03581
 	ld	xix, DL_F03595	; F5CDE2  ld XIX,0x00f03595
 	call	T_DisplayList_Run	; F5CDE7  call 0xf417f0
-	call	sub_F5C144	; F5CDEB  call 0xf5c144
+	call	ToneEditPage_PaintMainAndSubFocus	; F5CDEB  call 0xf5c144
 	ld	a, 0:opc	; F5CDEF  ld A,0x00
 sub_F5CC64_Skip8:
 	ld	(LCD_CurrentLayer:16), 0	; F5CDF1  ld (0x2540),0x00
@@ -132832,7 +132921,7 @@ sub_F5D497_Loop:
 ; Touches: (0x2350) (0x2352) (0x2540)  |  0xF03F31 0xF03F77 0xF0426B
 ;          0xF04323 0xF04344 0xF04358 +11 more
 ; Calls:   0xF09AE1 DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit T_DisplayList_Run KeyboardIcon_Draw 0xF5BAB8 0xF5BB00
-;          T_DisplayListB_Run Draw_PitchSoundEditEnvPitchLf0 sub_F5BFBD Draw_Page12EnvelopeKeyoffCurSor Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack sub_F5C929
+;          T_DisplayListB_Run Draw_PitchSoundEditEnvPitchLf0 SoundEdit_PaintPageLabelBackdrop Draw_Page12EnvelopeKeyoffCurSor Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack SoundEditFilter_PaintHeader
 ;          +1 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5D4A7 is an instruction boundary.
@@ -132896,7 +132985,7 @@ Draw_StartPitchStopPitchTotal:
 	ld	xiy, DL_StartPitchStopPitchTotal	; F5D563  ld XIY,0x00f03f31
 	ld	xix, DL_F03F77	; F5D568  ld XIX,0x00f03f77
 	call	T_DisplayList_Run	; F5D56D  call 0xf417f0
-	call	sub_F5BFBD	; F5D571  call 0xf5bfbd
+	call	SoundEdit_PaintPageLabelBackdrop	; F5D571  call 0xf5bfbd
 	call	Draw_Page12EnvelopeKeyoffCurSor	; F5D575  call 0xf5cadd
 	ret	; F5D579  ret
 ; SoundEditPitchEnvelope2_Paint: DispatchTable_F5B8F8[code 0x89] -- Dispatch_Code80_Bracketed, the full paint.
@@ -132906,7 +132995,7 @@ SoundEditPitchEnvelope2_Paint:
 	ret	; F5D582  ret
 ; SoundEditFilterKeyFollow_Paint: DispatchTable_F5B8F8[code 0x96] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterKeyFollow_Paint:
-	call	sub_F5C929	; F5D583  call 0xf5c929
+	call	SoundEditFilter_PaintHeader	; F5D583  call 0xf5c929
 	ld	xiy, DL_Page22KeyFollowSlopeRange	; F5D587  ld XIY,0x00f0426b
 	ld	xix, DL_Page22KeyFollowSlopeRange + 0xB8	; F5D58C  ld XIX,0x00f04323
 	call	T_DisplayList_Run	; F5D591  call 0xf417f0
@@ -132918,20 +133007,20 @@ SoundEditFilterKeyFollow_Paint:
 	ld	xiy, DL_FilterKeyFollow	; F5D5AD  ld XIY,0x00f065e0
 	ld	xix, DL_Lf01Lf02Lf03Lf04Lf0WaveDelay	; F5D5B2  ld XIX,0x00f06601
 	call	T_DisplayList_Run	; F5D5B7  call 0xf417f0
-	call	sub_F5BFBD	; F5D5BB  call 0xf5bfbd
+	call	SoundEdit_PaintPageLabelBackdrop	; F5D5BB  call 0xf5bfbd
 	call	sub_F5C772	; F5D5BF  call 0xf5c772
 	ret	; F5D5C3  ret
 ; SoundEditFilterEnvelope2_Paint: DispatchTable_F5B8F8[code 0x98] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterEnvelope2_Paint:
-	call	sub_F5C929	; F5D5C4  call 0xf5c929
+	call	SoundEditFilter_PaintHeader	; F5D5C4  call 0xf5c929
 
 ; --------------------------------------------------------------------------
 ; Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack
 ; Called from: in-module: 0xF5D57E
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27F5)  |  0xF04B6C 0xF04CA9
 ;          0xF04CBD 0xF328DC 0xF32918 0xF3294B +18 more
-; Calls:   T_DisplayList_Run sub_F5BFBD KeyboardIcon_Draw 0xF5BAB8 0xF5BB00 T_DisplayListB_Run
-;          sub_F5C929 Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay sub_F5C727 sub_F5D497 sub_F5D46B 0xF09AE1
+; Calls:   T_DisplayList_Run SoundEdit_PaintPageLabelBackdrop KeyboardIcon_Draw 0xF5BAB8 0xF5BB00 T_DisplayListB_Run
+;          SoundEditFilter_PaintHeader Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay SoundEditAmp_PaintHeader sub_F5D497 sub_F5D46B 0xF09AE1
 ;          +2 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5D5C8 is an instruction boundary.
@@ -132948,7 +133037,7 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack:
 	ld	xiy, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_DL1	; F5D5DB  ld XIY,0x00f04ca9
 	ld	xix, DLTable_ABCDEFGHIJKLMNOPQRSU	; F5D5E0  ld XIX,0x00f04cbd
 	call	T_DisplayList_Run	; F5D5E5  call 0xf417f0
-	call	sub_F5BFBD	; F5D5E9  call 0xf5bfbd
+	call	SoundEdit_PaintPageLabelBackdrop	; F5D5E9  call 0xf5bfbd
 	ldw	(IconOrigin_X:16), 56	; F5D5ED  ld (0x2350),0x0038
 	ldw	(IconOrigin_Y:16), 139	; F5D5F3  ld (0x2352),0x008b
 	call	KeyboardIcon_Draw	; F5D5F9  call 0xf5bbe7
@@ -132961,12 +133050,12 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack:
 	ret	; F5D618  ret
 ; SoundEditFilterLfo_Paint: DispatchTable_F5B8F8[code 0x99] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterLfo_Paint:
-	call	sub_F5C929	; F5D619  call 0xf5c929
+	call	SoundEditFilter_PaintHeader	; F5D619  call 0xf5c929
 	call	Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay	; F5D61D  call 0xf5c517
 	ret	; F5D621  ret
 ; SoundEditAmpLfo_Paint: DispatchTable_F5B8F8[code 0x8F] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditAmpLfo_Paint:
-	call	sub_F5C727	; F5D622  call 0xf5c727
+	call	SoundEditAmp_PaintHeader	; F5D622  call 0xf5c727
 	call	Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay	; F5D626  call 0xf5c517
 	ret	; F5D62A  ret
 ; SoundEditToneLayerPanning_RepaintField: DispatchTable_F5B9F8[code 0x83] -- Dispatch_Code80, the partial repaint.
@@ -133052,7 +133141,7 @@ SoundEditEnvelope2_RepaintField:
 	call	T_DisplayListB_Run	; F5D71E  call 0xf417f4
 	ret	; F5D722  ret
 	call	SoundEditController_PaintHeader_Copy	; F5D723  call 0xf5d77f
-	call	T_F42E18	; F5D727  call 0xf42e18
+	call	T_UiPaint_PageLabelBackdrop	; F5D727  call 0xf42e18
 	ld	(LCD_CurrentLayer:16), 0	; F5D72B  ld (0x2540),0x00
 	ld	xiy, DL_Page22AfterTouchCtrlPedal	; F5D730  ld XIY,0x00f32e71
 	ld	xix, DL_F32F43	; F5D735  ld XIX,0x00f32f43
@@ -138310,18 +138399,22 @@ SongClear_ClearCurrentBank:		; <- T_SongClear_ClearCurrentBank
 	ret	; F60B21  ret
 
 ; --------------------------------------------------------------------------
-; sub_F60B22
-; Called from: T_F42704 (x6)
+; Seq_LoadTimeSigAtCurrentMeasure
+; Called from: T_Seq_LoadTimeSigAtCurrentMeasure (x6)
 ; Touches: (0x0C90) (0x0D1C) (0x0D4A) (0x0DE3) (0x3552)
 ; Calls:   T_F427A0 T_F42774
-; Evidence: thunk slot T_F42704 holds `jp 0x00F60B22`, and 0xF60B22 is an
+; Evidence: thunk slot T_Seq_LoadTimeSigAtCurrentMeasure holds `jp 0x00F60B22`, and 0xF60B22 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F60B22:		; <- T_F42704
+; Seq_LoadTimeSigAtCurrentMeasure: (0x0DE3), the value of the sequencer screens' "TIME SIG.=" field, := the beats per
+;   bar in force at the current measure (0x3552), looked up in the song through T_F427A0 / T_F42774; the song's own
+;   beats per bar (0x6034D7) when there is no lookup or it fails. Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_b.json)
+Seq_LoadTimeSigAtCurrentMeasure:		; <- T_Seq_LoadTimeSigAtCurrentMeasure
 	call	T_F427A0	; F60B22  call 0xf427a0
 	ld	a, w	; F60B26  ld A,W
 	cp	w, 0:i3	; F60B28  cp W,0
@@ -142907,7 +143000,7 @@ sub_F63C41:		; <- T_F427CC
 	ld	a, (3203:16)	; F63CA6  ld A,(0x0c83)
 	inc	1, a	; F63CAA  inc 1,A
 	pushw	wa	; F63CAC  push WA
-	call	T_F409E0	; F63CAD  call 0xf409e0
+	call	T_Seq_RequestRewind	; F63CAD  call 0xf409e0
 	popw	wa	; F63CB1  pop WA
 	call	sub_F63CE0	; F63CB2  call 0xf63ce0
 sub_F63C41_Skip:
@@ -148475,7 +148568,7 @@ StepRecordSub00_ButtonTable:
 	.long	SoftKeyCol7_StepRecord	; F67807  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F6780B  [7] -> 0xF6749D
 	.long	LcdKeyRow1_StepRecord	; F6780F  [8] -> 0xF67D6F
-	.long	sub_F68F62	; F67813  [9] -> sub_F68F62
+	.long	LcdKeyErs_StepRecord	; F67813  [9] -> LcdKeyErs_StepRecord
 	.long	LcdKeyRow3_StepRecord	; F67817  [10] -> 0xF6C8F8
 	.long	LcdKeyRow4_StepRecordSub00	; F6781B  [11] -> 0xF68DE1
 	.long	DispatchTable_F674CE_Nop0	; F6781F  [12] -> ret stub
@@ -148594,7 +148687,7 @@ SoftKeyCol1_StepRecordSub00:
 	pop	xhl	; F67910  pop XHL
 	pop	xwa	; F67911  pop XWA
 	djnz16	bc, -20	; F67912  djnz BC,0xf67901
-	call	sub_F6D6DC	; F67915  call 0xf6d6dc
+	call	MsgLine_MeasureNumber	; F67915  call 0xf6d6dc
 	call	T_F431B4	; F67919  call 0xf431b4
 	ret	; F6791D  ret
 
@@ -148664,7 +148757,7 @@ StepRecordSub01_ButtonTable:
 	.long	SoftKeyCol7_StepRecord	; F67951  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67955  [7] -> 0xF6749D
 	.long	LcdKeyRow1_StepRecord	; F67959  [8] -> 0xF67D6F
-	.long	sub_F68F62	; F6795D  [9] -> sub_F68F62
+	.long	LcdKeyErs_StepRecord	; F6795D  [9] -> LcdKeyErs_StepRecord
 	.long	LcdKeyRow3_StepRecord	; F67961  [10] -> 0xF6C8F8
 	.long	DispatchTable_F674CE_Nop0	; F67965  [11] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67969  [12] -> ret stub
@@ -148835,7 +148928,7 @@ StepRecordSub03_ButtonTable:
 	.long	SoftKeyCol7_StepRecord	; F67A92  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67A96  [7] -> 0xF6749D
 	.long	LcdKeyRow1_StepRecord	; F67A9A  [8] -> 0xF67D6F
-	.long	sub_F68F62	; F67A9E  [9] -> sub_F68F62
+	.long	LcdKeyErs_StepRecord	; F67A9E  [9] -> LcdKeyErs_StepRecord
 	.long	DispatchTable_F674CE_Nop0	; F67AA2  [10] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67AA6  [11] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67AAA  [12] -> ret stub
@@ -148916,7 +149009,7 @@ StepRecordSub04_ButtonTable:
 	.long	SoftKeyCol7_StepRecord	; F67B2C  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67B30  [7] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67B34  [8] -> ret stub
-	.long	sub_F68F62	; F67B38  [9] -> sub_F68F62
+	.long	LcdKeyErs_StepRecord	; F67B38  [9] -> LcdKeyErs_StepRecord
 	.long	DispatchTable_F674CE_Nop0	; F67B3C  [10] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B40  [11] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B44  [12] -> ret stub
@@ -149088,7 +149181,7 @@ StepRecordSub07_ButtonTable:
 	.long	SoftKeyCol8_StepRecord	; F67C71  [7] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67C75  [8] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67C79  [9] -> ret stub
-	.long	sub_F68F62	; F67C7D  [10] -> sub_F68F62
+	.long	LcdKeyErs_StepRecord	; F67C7D  [10] -> LcdKeyErs_StepRecord
 	.long	LcdKeyRow4_StepRecord	; F67C81  [11] -> 0xF688F0
 	.long	DispatchTable_F674CE_Nop0	; F67C85  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67C89  [13] -> ret stub
@@ -149169,7 +149262,7 @@ StepRecordSub08_ButtonTable:
 	.long	SoftKeyCol8_StepRecord	; F67D0B  [7] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67D0F  [8] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67D13  [9] -> ret stub
-	.long	sub_F68F62	; F67D17  [10] -> sub_F68F62
+	.long	LcdKeyErs_StepRecord	; F67D17  [10] -> LcdKeyErs_StepRecord
 	.long	LcdKeyRow4_StepRecord	; F67D1B  [11] -> 0xF688F0
 	.long	DispatchTable_F674CE_Nop0	; F67D1F  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67D23  [13] -> ret stub
@@ -149529,7 +149622,7 @@ StepRecordSub10_ButtonTable:
 	.long	SoftKeyCol7_StepRecord	; F67FAE  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67FB2  [7] -> 0xF6749D
 	.long	LcdKeyRow1_StepRecord	; F67FB6  [8] -> 0xF67D6F
-	.long	sub_F68F62	; F67FBA  [9] -> sub_F68F62
+	.long	LcdKeyErs_StepRecord	; F67FBA  [9] -> LcdKeyErs_StepRecord
 	.long	DispatchTable_F674CE_Nop0	; F67FBE  [10] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67FC2  [11] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67FC6  [12] -> ret stub
@@ -151173,7 +151266,7 @@ sub_F68B70_Skip:
 ; Touches: (0x0E44) (0x0E4E) (0x0E53) (0x0E56) (0x0E58) (0x0EC0) (0x0EC2)
 ;          (0x0ECD) (0x12B2)
 ; Calls:   sub_F6A908 sub_F6C292 sub_F68DBE sub_F6B770 sub_F67481 BStore_ReadByteAtSongPosition
-;          sub_F68D9D sub_F6A20F sub_F6B8F1 sub_F6C2E5 sub_F69C03 sub_F68D8A
+;          sub_F68D9D sub_F6A20F BStore_ReadByteAtSongPositionPlus1 sub_F6C2E5 sub_F69C03 sub_F68D8A
 ;          +3 more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68B91 is an instruction
@@ -151247,7 +151340,7 @@ sub_F68B91_Skip7:
 	calr	BStore_ReadByteAtSongPosition	; F68C3A  calr 0xf6b8bd
 	cp	a, 129	; F68C3D  cp A,0x81
 	jr	z, sub_F68B91_Skip8	; F68C40  jr Z,0xf68c56
-	calr	sub_F6B8F1	; F68C42  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F68C42  calr 0xf6b8f1
 	cp	a, 83	; F68C45  cp A,0x53
 	jr	le, sub_F68B91_Skip8	; F68C48  jr LE,0xf68c56
 	cp	a, 95	; F68C4A  cp A,0x5f
@@ -151455,7 +151548,7 @@ sub_F68D9D_Join:
 ; sub_F68DBE
 ; Called from: in-module: 0xF68BA6 0xF68C0E 0xF68CDB 0xF68D24
 ; Touches: (0x0E4F) (0x0E63) (0x0ED5) (0x106D)
-; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6A7EB sub_F6C43C StepLength_AddTo0E53 sub_F6A7C5
+; Calls:   BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 sub_F6A7EB sub_F6C43C StepLength_AddTo0E53 sub_F6A7C5
 ;          sub_F69811 sub_F69CB4 0xF6D6DC sub_F6741C sub_F69C03 T_F431B4 +1
 ;          more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -151483,7 +151576,7 @@ sub_F68DBE:
 	pop	xwa	; F68DD1  pop XWA
 	jr	z, sub_F68DBE_Skip	; F68DD2  jr Z,0xf68dde
 	pushw	wa	; F68DD4  push WA
-	calr	sub_F6B8F1	; F68DD5  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F68DD5  calr 0xf6b8f1
 	ld	l, a	; F68DD8  ld L,A
 	popw	wa	; F68DDA  pop WA
 	ld	a, l	; F68DDB  ld A,L
@@ -151513,13 +151606,13 @@ sub_F68DBE_Skip2:
 sub_F68DBE_Join:
 	m_or_mi8 MB16, 0x0ed5, 0x01	; F68E0F  or (0x0ed5),0x01
 	calr	sub_F69CB4	; F68E14  calr 0xf69cb4
-	call	sub_F6D6DC	; F68E17  call 0xf6d6dc
+	call	MsgLine_MeasureNumber	; F68E17  call 0xf6d6dc
 	calr	BStore_ReadByteAtSongPosition	; F68E1B  calr 0xf6b8bd
 	cp	a, 129	; F68E1E  cp A,0x81
 	jr	z, sub_F68DBE_Skip3	; F68E21  jr Z,0xf68e35
 	cp	a, 130	; F68E23  cp A,0x82
 	jr	z, sub_F68DBE_Skip3	; F68E26  jr Z,0xf68e35
-	calr	sub_F6B8F1	; F68E28  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F68E28  calr 0xf6b8f1
 	cp	a, 83	; F68E2B  cp A,0x53
 	jr	ugt, sub_F68DBE_Skip3	; F68E2E  jr UGT,0xf68e35
 	calr	sub_F6741C	; F68E30  calr 0xf6741c
@@ -151558,7 +151651,7 @@ sub_F68E48:
 ; sub_F68E4F
 ; Called from: in-module: 0xF67410
 ; Touches: (0x0E53) (0x0EC3) (0x0F02)
-; Calls:   sub_F6B8F1 sub_F6B657 BStore_ReadByteAtSongPosition sub_F6C292 sub_F68F0A sub_F6C2E5
+; Calls:   BStore_ReadByteAtSongPositionPlus1 sub_F6B657 BStore_ReadByteAtSongPosition sub_F6C292 sub_F68F0A sub_F6C2E5
 ;          sub_F68EB5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68E4F is an instruction
@@ -151567,10 +151660,10 @@ sub_F68E48:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F68E4F:
-	calr	sub_F6B8F1	; F68E4F  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F68E4F  calr 0xf6b8f1
 	ld	(3779:16), a	; F68E52  ld (0x0ec3),A
 sub_F68E48_Loop:
-	calr	sub_F6B8F1	; F68E56  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F68E56  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0ec3, 1	; F68E59  cp A,(0x0ec3)
 	jr	nz, sub_F68E48_Return	; F68E5D  jr NZ,0xf68e6f
 	ld	w, 6:opc	; F68E5F  ld W,0x06
@@ -151615,7 +151708,7 @@ sub_F68E48_Skip2:
 ; sub_F68EB5
 ; Called from: in-module: 0xF68EAB
 ; Touches: (0x0F02)
-; Calls:   sub_F6B8F1 sub_F6B740 sub_F68F52 sub_F6C292 sub_F6C2E5 sub_F6B76A
+; Calls:   BStore_ReadByteAtSongPositionPlus1 sub_F6B740 sub_F68F52 sub_F6C292 sub_F6C2E5 sub_F6B76A
 ;          sub_F68E48
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68EB5 is an instruction
@@ -151628,7 +151721,7 @@ sub_F68EB5:
 	jr	z, sub_F68EB5_Join	; F68EB8  jr Z,0xf68ed5
 	bit	7, a	; F68EBA  bit 0x07,A
 	jr	z, sub_F68EB5_Join	; F68EBD  jr Z,0xf68ed5
-	calr	sub_F6B8F1	; F68EBF  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F68EBF  calr 0xf6b8f1
 	cp	a, 48	; F68EC2  cp A,0x30
 	jr	z, sub_F68EB5_Skip	; F68EC5  jr Z,0xf68ed9
 	cp	a, 47	; F68EC7  cp A,0x2f
@@ -151668,7 +151761,7 @@ sub_F68EB5_Skip4:
 ; sub_F68F0A
 ; Called from: in-module: 0xF68E9D
 ; Touches: (0x0F02)
-; Calls:   sub_F6B8F1 sub_F6B740 sub_F68F52 sub_F6B257
+; Calls:   BStore_ReadByteAtSongPositionPlus1 sub_F6B740 sub_F68F52 sub_F6B257
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68F0A is an instruction
 ;           boundary.  The name IS the address.
@@ -151680,7 +151773,7 @@ sub_F68F0A:
 	jr	z, sub_F68F0A_Join	; F68F0D  jr Z,0xf68f2a
 	bit	7, a	; F68F0F  bit 0x07,A
 	jr	z, sub_F68F0A_Join	; F68F12  jr Z,0xf68f2a
-	calr	sub_F6B8F1	; F68F14  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F68F14  calr 0xf6b8f1
 	cp	a, 0:i3	; F68F17  cp A,0
 	jr	z, sub_F68F0A_Skip	; F68F19  jr Z,0xf68f2e
 	cp	a, 47	; F68F1B  cp A,0x2f
@@ -151716,7 +151809,7 @@ sub_F68F0A_Skip4:
 ; Called from: in-module: 0xF68EDB 0xF68EE2 0xF68EE9 0xF68EFA 0xF68F30
 ;              0xF68F37 0xF68F3E 0xF68F4D
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6B95F sub_F6B9DF sub_F68F62 sub_F6833E
+; Calls:   sub_F6B95F sub_F6B9DF LcdKeyErs_StepRecord sub_F6833E
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68F52 is an instruction
 ;           boundary.  The name IS the address.
@@ -151731,12 +151824,12 @@ sub_F68F52:
 	ret	; F68F5A  ret
 ; LcdKeyRow2_StepRecordSub17: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub17_ButtonTable slot 0x09.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow2_StepRecordSub17:
-	calr	sub_F68F62	; F68F5B  calr 0xf68f62
+	calr	LcdKeyErs_StepRecord	; F68F5B  calr 0xf68f62
 	calr	sub_F6833E	; F68F5E  calr 0xf6833e
 	ret	; F68F61  ret
 
 ; --------------------------------------------------------------------------
-; sub_F68F62
+; LcdKeyErs_StepRecord
 ; Called from: in-module: 0xF68F5B
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -151745,7 +151838,11 @@ LcdKeyRow2_StepRecordSub17:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F68F62:
+; LcdKeyErs_StepRecord: The right-hand (CP1) LCD key that the STEP RECORD pages label "ERS": slot 9 (row 2) of sub-
+;   screens 0,1,3,4,10 and slot 10 (row 3) of 7,8. Ignores the CP2 switch (bit 7 of W) and falls through into
+;   StepRecordSub00_LcdKeyRow4's body. Basis: button tables + page labels + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_b.json)
+LcdKeyErs_StepRecord:
 	bit	7, w	; F68F62  bit 0x07,W
 	jr	nz, sub_F68F67_Return	; F68F65  jr NZ,0xf68fb3
 
@@ -151753,7 +151850,7 @@ sub_F68F62:
 ; StepRecordSub00_LcdKeyRow4
 ; Called from: in-module: 0xF68E44
 ; Touches: (0x0E4F) (0x0E53) (0x0E63) (0x0ED5) (0x20A9)
-; Calls:   sub_F69019 sub_F6C52A sub_F6A2FC sub_F6B8F1 sub_F693F6 sub_F6742C
+; Calls:   sub_F69019 sub_F6C52A sub_F6A2FC BStore_ReadByteAtSongPositionPlus1 sub_F693F6 sub_F6742C
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68F67 is an instruction
 ;           boundary.  The name IS the address.
@@ -151772,7 +151869,7 @@ StepRecordSub00_LcdKeyRow4:
 	cp	b, 255	; F68F78  cp B,0xff
 	jr	nz, DispatchTable_F68FB4_Code_Skip	; F68F7B  jr NZ,0xf68fc4
 sub_F68F67_Loop:
-	calr	sub_F6B8F1	; F68F7D  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F68F7D  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F68F80  cp A,(0x0e53)
 	jr	nz, sub_F68F67_Return	; F68F84  jr NZ,0xf68fb3
 	calr	sub_F693F6	; F68F86  calr 0xf693f6
@@ -151819,7 +151916,7 @@ DispatchTable_F68FB4:
 	.long	DispatchTable_F674CE_Nop0	; F68FC0  [3] -> ret stub
 
 DispatchTable_F68FB4_Code_Skip:
-	calr	sub_F6B8F1	; F68FC4  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F68FC4  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F68FC7  cp A,(0x0e53)
 	jr	nz, sub_F68F67_Return	; F68FCB  jr NZ,0xf68fb3
 	ld	a, b	; F68FCD  ld A,B
@@ -152257,7 +152354,7 @@ sub_F69240_Skip2:
 ; sub_F6929C
 ; Called from: in-module: 0xF67414
 ; Touches: (0x0F52) (0x0F53) (0x0F55)
-; Calls:   sub_F6C292 sub_F6B8F1 BStore_ReadByteAtSongPosition sub_F6B75E sub_F68E48 sub_F6C2E5
+; Calls:   sub_F6C292 BStore_ReadByteAtSongPositionPlus1 BStore_ReadByteAtSongPosition sub_F6B75E sub_F68E48 sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6929C is an instruction
 ;           boundary.  The name IS the address.
@@ -152278,7 +152375,7 @@ sub_F69240_Join2:
 	xor	a, a	; F692A8  xor A,A
 	ld	(3925:16), a	; F692AA  ld (0x0f55),A
 sub_F69240_Loop2:
-	calr	sub_F6B8F1	; F692AE  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F692AE  calr 0xf6b8f1
 	cp	a, 130	; F692B1  cp A,0x82
 	jr	z, sub_F69240_Skip5	; F692B4  jr Z,0xf6931a
 	calr	BStore_ReadByteAtSongPosition	; F692B6  calr 0xf6b8bd
@@ -152340,7 +152437,7 @@ sub_F69240_Skip5:
 ; Called from: in-module: 0xF6AB74
 ; Touches: (0x0E63) (0x0E6A) (0x0F56) (0x0F58) (0x1008)  |  0x603422
 ;          0x603500
-; Calls:   BStore_DirEntryOffsetX2 sub_F6C4A5 BStore_ReadByteAtSongPosition sub_F6B75E sub_F6B8F1
+; Calls:   BStore_DirEntryOffsetX2 sub_F6C4A5 BStore_ReadByteAtSongPosition sub_F6B75E BStore_ReadByteAtSongPositionPlus1
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69327 is an instruction
 ;           boundary.  The name IS the address.
@@ -152405,7 +152502,7 @@ sub_F69240_Skip6:
 	calr	sub_F6B75E	; F693C3  calr 0xf6b75e
 	cp	w, 255	; F693C6  cp W,0xff
 	jr	nz, sub_F69240_Loop4	; F693C9  jr NZ,0xf693b7
-	calr	sub_F6B8F1	; F693CB  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F693CB  calr 0xf6b8f1
 	cp	a, 132	; F693CE  cp A,0x84
 	jr	z, sub_F69240_Skip7	; F693D1  jr Z,0xf693e7
 	ld	wa, (3926:16)	; F693D3  ld WA,(0x0f56)
@@ -152700,7 +152797,7 @@ sub_F69560_Skip:
 	jr	z, sub_F69560_Skip2	; F69579  jr Z,0xf6958f
 	cp	a, 130	; F6957B  cp A,0x82
 	jr	z, sub_F69560_Skip2	; F6957E  jr Z,0xf6958f
-	calr	sub_F6B8F1	; F69580  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F69580  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F69583  cp A,(0x0e53)
 	jr	ugt, sub_F69560_Skip2	; F69587  jr UGT,0xf6958f
 	call	sub_F6741C	; F69589  call 0xf6741c
@@ -153142,7 +153239,7 @@ sub_F6987E:
 ; Called from: in-module: 0xF6987A 0xF69883
 ; Touches: (0x0E53) (0x0E63) (0x0EFA) (0x12B0) (0x2075) (0x7F4D)  |
 ;          0x603422
-; Calls:   sub_F6C43C BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6C292 sub_F6BA11 sub_F69910
+; Calls:   sub_F6C43C BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 sub_F6C292 sub_F6BA11 sub_F69910
 ;          sub_F69938 BStore_DirEntryOffsetX2 sub_F6B9DF sub_F6C2E5 MsgLine_FormatNoteAndVelocity T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69887 is an instruction
@@ -153160,7 +153257,7 @@ sub_F69887:
 	and	a, 240	; F69899  and A,0xf0
 	cp	a, 144	; F6989C  cp A,0x90
 	jr	nz, sub_F69887_Return	; F6989F  jr NZ,0xf6990f
-	calr	sub_F6B8F1	; F698A1  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F698A1  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F698A4  cp A,(0x0e53)
 	jr	nz, sub_F69887_Return	; F698A8  jr NZ,0xf6990f
 	xor	a, a	; F698AA  xor A,A
@@ -153310,7 +153407,7 @@ sub_F6997C:
 ; sub_F69998
 ; Called from: in-module: 0xF6996B 0xF69987
 ; Touches: (0x0EFB) (0x100A) (0x100C)
-; Calls:   sub_F6C43C BStore_ReadByteAtSongPosition sub_F6C292 sub_F6BA11 sub_F6B8F1 sub_F6B9DF
+; Calls:   sub_F6C43C BStore_ReadByteAtSongPosition sub_F6C292 sub_F6BA11 BStore_ReadByteAtSongPositionPlus1 sub_F6B9DF
 ;          sub_F6B95F sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69998 is an instruction
@@ -153334,7 +153431,7 @@ sub_F69998:
 	calr	BStore_ReadByteAtSongPosition	; F699B9  calr 0xf6b8bd
 	ld	c, a	; F699BC  ld C,A
 	pushw	bc	; F699BE  push BC
-	calr	sub_F6B8F1	; F699BF  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F699BF  calr 0xf6b8f1
 	ld	l, a	; F699C2  ld L,A
 	rrc	a	; F699C4  rrc 0x01,A
 	and	a, 129	; F699C7  and A,0x81
@@ -153380,7 +153477,7 @@ sub_F69998_Return:
 ; StepRecordSub03_SoftKeyCol5
 ; Called from: in-module: 0xF67A72
 ; Touches: (0x0E53) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
-; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F69B76 sub_F69B40 0xF6D890 T_F431B4
+; Calls:   BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 sub_F69B76 sub_F69B40 0xF6D890 T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69A1E is an instruction
 ;           boundary.  The name IS the address.
@@ -153397,7 +153494,7 @@ StepRecordSub03_SoftKeyCol5:
 	cp	a, 208	; F69A30  cp A,0xd0
 	jr	nz, sub_F69A1E_Return	; F69A33  jr NZ,0xf69a66
 	pushw	hl	; F69A35  push HL
-	calr	sub_F6B8F1	; F69A36  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F69A36  calr 0xf6b8f1
 	popw	hl	; F69A39  pop HL
 	m_cp_rm MB16, 0x0e53, 1	; F69A3A  cp A,(0x0e53)
 	jr	nz, sub_F69A1E_Return	; F69A3E  jr NZ,0xf69a66
@@ -153422,7 +153519,7 @@ sub_F69A1E_Return:
 ; sub_F69A67
 ; Called from: in-module: 0xF67A76
 ; Touches: (0x0E53) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
-; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F69B76 sub_F69B40 0xF6D890 T_F431B4
+; Calls:   BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 sub_F69B76 sub_F69B40 0xF6D890 T_F431B4
 ;          StepRecordSub00_SoftKeyCol3 sub_F69AFF
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69A67 is an instruction
@@ -153439,7 +153536,7 @@ sub_F69A67:
 	cp	a, 208	; F69A79  cp A,0xd0
 	jr	nz, sub_F69A67_Return	; F69A7C  jr NZ,0xf69aaf
 	pushw	hl	; F69A7E  push HL
-	calr	sub_F6B8F1	; F69A7F  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F69A7F  calr 0xf6b8f1
 	popw	hl	; F69A82  pop HL
 	m_cp_rm MB16, 0x0e53, 1	; F69A83  cp A,(0x0e53)
 	jr	nz, sub_F69A67_Return	; F69A87  jr NZ,0xf69aaf
@@ -153474,7 +153571,7 @@ sub_F69A67_Return2:
 ; StepRecordSub00_SoftKeyCol3
 ; Called from: in-module: 0xF69AB5
 ; Touches: (0x0E53) (0x0E63) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
-; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F69B40 MsgLine_FormatNoteAndVelocity T_F431B4
+; Calls:   BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 sub_F69B40 MsgLine_FormatNoteAndVelocity T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69ABE is an instruction
 ;           boundary.  The name IS the address.
@@ -153491,7 +153588,7 @@ StepRecordSub00_SoftKeyCol3:
 	and	a, 240	; F69AD2  and A,0xf0
 	cp	a, 144	; F69AD5  cp A,0x90
 	jr	nz, sub_F69ABE_Return	; F69AD8  jr NZ,0xf69afe
-	calr	sub_F6B8F1	; F69ADA  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F69ADA  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F69ADD  cp A,(0x0e53)
 	jr	nz, sub_F69ABE_Return	; F69AE1  jr NZ,0xf69afe
 	push	xhl	; F69AE3  push XHL
@@ -153509,7 +153606,7 @@ sub_F69ABE_Return:
 ; sub_F69AFF
 ; Called from: in-module: 0xF69ABA
 ; Touches: (0x0E53) (0x0E63) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
-; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F69B40 MsgLine_FormatNoteAndVelocity T_F431B4
+; Calls:   BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 sub_F69B40 MsgLine_FormatNoteAndVelocity T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69AFF is an instruction
 ;           boundary.  The name IS the address.
@@ -153525,7 +153622,7 @@ sub_F69AFF:
 	and	a, 240	; F69B13  and A,0xf0
 	cp	a, 144	; F69B16  cp A,0x90
 	jr	nz, sub_F69AFF_Return	; F69B19  jr NZ,0xf69b3f
-	calr	sub_F6B8F1	; F69B1B  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F69B1B  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F69B1E  cp A,(0x0e53)
 	jr	nz, sub_F69AFF_Return	; F69B22  jr NZ,0xf69b3f
 	push	xhl	; F69B24  push XHL
@@ -153579,7 +153676,7 @@ sub_F69B40_Return:
 ; sub_F69B76
 ; Called from: in-module: 0xF69A50 0xF69A99
 ; Touches: (0x0EFA) (0x0EFB) (0x12B9) (0x12EB)
-; Calls:   sub_F6C43C sub_F6C292 sub_F6BA11 BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6B9DF
+; Calls:   sub_F6C43C sub_F6C292 sub_F6BA11 BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 sub_F6B9DF
 ;          sub_F6B95F sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69B76 is an instruction
@@ -153598,7 +153695,7 @@ sub_F69B76:
 	calr	sub_F6BA11	; F69B89  calr 0xf6ba11
 	calr	BStore_ReadByteAtSongPosition	; F69B8C  calr 0xf6b8bd
 	ld	(4793:16), a	; F69B8F  ld (0x12b9),A
-	call	sub_F6B8F1	; F69B93  call 0xf6b8f1
+	call	BStore_ReadByteAtSongPositionPlus1	; F69B93  call 0xf6b8f1
 	ld	(4843:16), a	; F69B97  ld (0x12eb),A
 	ld	w, a	; F69B9B  ld W,A
 	ld	a, (4793:16)	; F69B9D  ld A,(0x12b9)
@@ -153839,7 +153936,7 @@ sub_F69CB4_Join2:
 	pop	xix	; F69D67  pop XIX
 	calr	sub_F69DBD	; F69D68  calr 0xf69dbd
 	call	sub_F6D6D6	; F69D6B  call 0xf6d6d6
-	call	sub_F6D6DC	; F69D6F  call 0xf6d6dc
+	call	MsgLine_MeasureNumber	; F69D6F  call 0xf6d6dc
 	ld	wa, (4786:16)	; F69D73  ld WA,(0x12b2)
 	cp	wa, 1000	; F69D77  cp WA,0x03e8
 	jr	c, sub_F69CB4_Skip2	; F69D7B  jr C,0xf69d80
@@ -153889,7 +153986,7 @@ sub_F69D9E_Skip2:
 ; sub_F69DBD
 ; Called from: in-module: 0xF69D68
 ; Touches: (0x0EEA) (0x0EEC) (0x0EEE) (0x0EEF) (0x1008) (0x1075) (0x1076)
-; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 BStore_DirEntryOffsetX2 sub_F6B75E sub_F6C43C sub_F6BC89
+; Calls:   BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 BStore_DirEntryOffsetX2 sub_F6B75E sub_F6C43C sub_F6BC89
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69DBD is an instruction
 ;           boundary.  The name IS the address.
@@ -153943,7 +154040,7 @@ sub_F69DBD:
 	pop	xde	; F69E4A  pop XDE
 	m_cp_rm MB16, 0x0eef, 1	; F69E4B  cp A,(0x0eef)
 	jrl	nz, sub_F69DBD_Skip4	; F69E4F  jrl NZ,0xf69f05
-	calr	sub_F6B8F1	; F69E52  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F69E52  calr 0xf6b8f1
 	cp	a, 130	; F69E55  cp A,0x82
 	jrl	nz, sub_F69DBD_Epilogue	; F69E58  jrl NZ,0xf69f59
 	ld	xwa, xix	; F69E5B  ld XWA,XIX
@@ -153989,7 +154086,7 @@ sub_F69DBD_Loop:
 	pop	xde	; F69EC7  pop XDE
 	m_cp_rm MB16, 0x0eef, 1	; F69EC8  cp A,(0x0eef)
 	jr	nz, sub_F69DBD_Skip4	; F69ECC  jr NZ,0xf69f05
-	calr	sub_F6B8F1	; F69ECE  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F69ECE  calr 0xf6b8f1
 	cp	a, 130	; F69ED1  cp A,0x82
 	jrl	nz, sub_F69DBD_Epilogue	; F69ED4  jrl NZ,0xf69f59
 	ld	xwa, xix	; F69ED7  ld XWA,XIX
@@ -154031,7 +154128,7 @@ sub_F69DBD_Skip5:
 	jr	z, sub_F69DBD_Epilogue	; F69F30  jr Z,0xf69f59
 	cp	a, 129	; F69F32  cp A,0x81
 	jr	z, sub_F69DBD_Skip6	; F69F35  jr Z,0xf69f52
-	calr	sub_F6B8F1	; F69F37  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F69F37  calr 0xf6b8f1
 	xor	w, w	; F69F3A  xor W,W
 	ld	l, 12:opc	; F69F3C  ld L,0x0c
 	div	wa, l	; F69F3E  div WA,L
@@ -154303,7 +154400,7 @@ SoftKeyCol6_StepRecordSub17:
 ; StepRecordSub16_SoftKeyCol1
 ; Called from: in-module: 0xF6831F
 ; Touches: (0x0E53) (0x0E58) (0x12C0) (0x2075)
-; Calls:   sub_F6A20F sub_F6740C 0xF6D5BA sub_F6B8F1 0xF6D608
+; Calls:   sub_F6A20F sub_F6740C 0xF6D5BA BStore_ReadByteAtSongPositionPlus1 0xF6D608
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A1C2 is an instruction
 ;           boundary.  The name IS the address.
@@ -154322,7 +154419,7 @@ sub_F6A1C2_Loop:
 	cp	(3672:16), a	; F6A1D5  cp (0x0e58),A
 	jr	nz, sub_F6A1C2_Loop	; F6A1D9  jr NZ,0xf6a1ca
 	call	sub_F6D5BA	; F6A1DB  call 0xf6d5ba
-	calr	sub_F6B8F1	; F6A1DF  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F6A1DF  calr 0xf6b8f1
 	cp	a, 132	; F6A1E2  cp A,0x84
 	jr	nz, sub_F6A1C2_Return	; F6A1E5  jr NZ,0xf6a1f0
 	ld	(4800:16), 9	; F6A1E7  ld (0x12c0),0x09
@@ -155877,7 +155974,7 @@ DispatchTable_F6ABD2_Nop0:
 ; sub_F6AC24
 ; Called from: in-module: 0xF6742C
 ; Touches: (0x0E53)
-; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6B1DF sub_F69C03
+; Calls:   BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 sub_F6B1DF sub_F69C03
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6AC24 is an instruction
 ;           boundary.  The name IS the address.
@@ -155890,7 +155987,7 @@ sub_F6AC24:
 	jr	z, sub_F6AC24_Skip	; F6AC2A  jr Z,0xf6ac48
 	cp	a, 130	; F6AC2C  cp A,0x82
 	jr	z, sub_F6AC24_Skip	; F6AC2F  jr Z,0xf6ac48
-	calr	sub_F6B8F1	; F6AC31  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F6AC31  calr 0xf6b8f1
 	cp	a, 132	; F6AC34  cp A,0x84
 	jr	z, sub_F6AC24_Skip	; F6AC37  jr Z,0xf6ac48
 	cp	a, 130	; F6AC39  cp A,0x82
@@ -156512,7 +156609,7 @@ sub_F6B039_Skip:
 ; StepRecordSub17_SoftKeyCol7
 ; Called from: in-module: 0xF6A1B4
 ; Touches: (0x20A9)
-; Calls:   sub_F6ABB6 sub_F6A2FC sub_F6B8F1 sub_F6C292 sub_F6B9DF sub_F6BA11
+; Calls:   sub_F6ABB6 sub_F6A2FC BStore_ReadByteAtSongPositionPlus1 sub_F6C292 sub_F6B9DF sub_F6BA11
 ;          sub_F6C2E5 sub_F6B134 sub_F6B740
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B075 is an instruction
@@ -156535,7 +156632,7 @@ sub_F6B075_Skip:
 	cp	b, 23	; F6B08D  cp B,0x17
 	jr	z, sub_F6B075_Skip3	; F6B090  jr Z,0xf6b0bf
 sub_F6B075_Join:
-	calr	sub_F6B8F1	; F6B092  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F6B092  calr 0xf6b8f1
 	cp	w, 255	; F6B095  cp W,0xff
 	jr	z, sub_F6B075_Skip2	; F6B098  jr Z,0xf6b0b7
 	xor	a, a	; F6B09A  xor A,A
@@ -156808,7 +156905,7 @@ Data_F6B1FE:
 ; sub_F6B229
 ; Called from: in-module: 0xF68B51
 ; Touches: (0x0E4F)
-; Calls:   sub_F6C292 sub_F6B8F1 sub_F6B257 sub_F6C2E5
+; Calls:   sub_F6C292 BStore_ReadByteAtSongPositionPlus1 sub_F6B257 sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B229 is an instruction
 ;           boundary.  The name IS the address.
@@ -156818,7 +156915,7 @@ Data_F6B1FE:
 sub_F6B229:
 	xor	a, a	; F6B229  xor A,A
 	calr	sub_F6C292	; F6B22B  calr 0xf6c292
-	calr	sub_F6B8F1	; F6B22E  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F6B22E  calr 0xf6b8f1
 	cp	a, 132	; F6B231  cp A,0x84
 	jr	nz, sub_F6B229_Skip	; F6B234  jr NZ,0xf6b23a
 	m_set 7, MD16, 0x0e4f	; F6B236  set 7,(0x0e4f)
@@ -156832,7 +156929,7 @@ sub_F6B229_Skip:
 ; sub_F6B243
 ; Called from: in-module: 0xF68CBE
 ; Touches: (0x0E4F)
-; Calls:   sub_F6B8F1 sub_F6B257
+; Calls:   BStore_ReadByteAtSongPositionPlus1 sub_F6B257
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B243 is an instruction
 ;           boundary.  The name IS the address.
@@ -156840,7 +156937,7 @@ sub_F6B229_Skip:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6B243:
-	calr	sub_F6B8F1	; F6B243  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F6B243  calr 0xf6b8f1
 	cp	a, 132	; F6B246  cp A,0x84
 	jr	nz, sub_F6B243_Skip	; F6B249  jr NZ,0xf6b24f
 	m_set 7, MD16, 0x0e4f	; F6B24B  set 7,(0x0e4f)
@@ -157456,7 +157553,7 @@ sub_F6B657_Join3:
 ; sub_F6B740
 ; Called from: in-module: 0xF68ED5 0xF68F2A 0xF6B0BF 0xF6B12F 0xF6B762
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6B8F1 BStore_ReadByteAtSongPosition sub_F67438
+; Calls:   BStore_ReadByteAtSongPositionPlus1 BStore_ReadByteAtSongPosition sub_F67438
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B740 is an instruction
 ;           boundary.  The name IS the address.
@@ -157464,7 +157561,7 @@ sub_F6B657_Join3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6B740:
-	calr	sub_F6B8F1	; F6B740  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F6B740  calr 0xf6b8f1
 	cp	w, 255	; F6B743  cp W,0xff
 	jr	z, sub_F6B740_Skip	; F6B746  jr Z,0xf6b75b
 	cp	a, 130	; F6B748  cp A,0x82
@@ -157724,7 +157821,7 @@ BStore_ReadByteAtSongPosition:
 	ret	; F6B8F0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B8F1
+; BStore_ReadByteAtSongPositionPlus1
 ; Called from: in-module: 0xF68C42 0xF68DD5 0xF68E28 0xF68E4F 0xF68E56
 ;              0xF68EBF 0xF68F14 0xF68F7D +27 more
 ; Touches: (0x0EFE)
@@ -157735,7 +157832,12 @@ BStore_ReadByteAtSongPosition:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6B8F1:
+; BStore_ReadByteAtSongPositionPlus1: A = the byte ONE past directory entry IZ's song position (block word 0x3460[IZ],
+;   offset byte 0x3482[IZ]), following the chain into the next block (offset 5) when it crosses 0xFF; W = 0xFF at the
+;   chain end. The step editor reads an event's tag with BStore_ReadByteAtSongPosition and its next byte with this.
+;   Basis: callers + body (sibling of BStore_ReadByteAtSongPosition). (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_b.json)
+BStore_ReadByteAtSongPositionPlus1:
 	ldw	(3838:16), 1	; F6B8F1  ld (0x0efe),0x0001
 	calr	sub_F6B905	; F6B8F7  calr 0xf6b905
 	ret	; F6B8FA  ret
@@ -157827,7 +157929,7 @@ sub_F6B95F:
 ; sub_F6B96F
 ; Called from: in-module: 0xF68A5E 0xF68A65
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6B8F1
+; Calls:   BStore_ReadByteAtSongPositionPlus1
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B96F is an instruction
 ;           boundary.  The name IS the address.
@@ -157839,7 +157941,7 @@ sub_F6B96F:
 	push	xiy	; F6B971  push XIY
 	push	xiz	; F6B972  push XIZ
 	push	xhl	; F6B973  push XHL
-	calr	sub_F6B8F1	; F6B974  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F6B974  calr 0xf6b8f1
 	pop	xhl	; F6B977  pop XHL
 	pop	xiz	; F6B978  pop XIZ
 	pop	xiy	; F6B979  pop XIY
@@ -158206,7 +158308,7 @@ BStore_DirEntryOffsetX3:
 ; sub_F6BBFC
 ; Called from: in-module: 0xF6BCCA 0xF6C182
 ; Touches: (0x0E53) (0x0E60) (0x0E62)
-; Calls:   BStore_ReadByteAtSongPosition sub_F6BA11 sub_F6B8F1 0xF6DA12 0xF6D642
+; Calls:   BStore_ReadByteAtSongPosition sub_F6BA11 BStore_ReadByteAtSongPositionPlus1 0xF6DA12 0xF6D642
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6BBFC is an instruction
 ;           boundary.  The name IS the address.
@@ -158232,7 +158334,7 @@ sub_F6BBFC_Skip:
 	jr	z, sub_F6BBFC_Skip5	; F6BC27  jr Z,0xf6bc66
 	cp	a, 132	; F6BC29  cp A,0x84
 	jr	z, sub_F6BBFC_Skip7	; F6BC2C  jr Z,0xf6bc7b
-	calr	sub_F6B8F1	; F6BC2E  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F6BC2E  calr 0xf6b8f1
 	ld	xiy, 3682	; F6BC31  ld XIY,0x00000e62
 	cp	a, 0:i3	; F6BC36  cp A,0
 	jr	z, sub_F6BBFC_Skip2	; F6BC38  jr Z,0xf6bc3d
@@ -158310,7 +158412,7 @@ sub_F6BC89_Skip2:
 ; Called from: in-module: 0xF6743C
 ; Touches: (0x0E53) (0x0E63) (0x0ECA) (0x0EF5) (0x100E) (0x100F) (0x1258)
 ;          (0x1259) (0x125A) (0x1264) +11 more  |  0x603422
-; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6BBFC 0xF6D410 sub_F67448 sub_F6B95F
+; Calls:   BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 sub_F6BBFC 0xF6D410 sub_F67448 sub_F6B95F
 ;          sub_F6C230 BStore_DirEntryOffsetX2 T_F413E4 0xF6D710 0xF6D70C T_F40790 +15
 ;          more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -158325,7 +158427,7 @@ sub_F6BCB2:
 	calr	BStore_ReadByteAtSongPosition	; F6BCB9  calr 0xf6b8bd
 	cp	a, 129	; F6BCBC  cp A,0x81
 	jr	z, sub_F6BC89_Skip3	; F6BCBF  jr Z,0xf6bcca
-	calr	sub_F6B8F1	; F6BCC1  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F6BCC1  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F6BCC4  cp A,(0x0e53)
 	jr	z, sub_F6BC89_Skip4	; F6BCC8  jr Z,0xf6bcce
 sub_F6BC89_Skip3:
@@ -160276,7 +160378,7 @@ sub_F6CB13_Join:
 ; StepRecordSub11_SoftKeyCol2
 ; Called from: in-module: 0xF6CAFE
 ; Touches: (0x0E4F) (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x0ED5)
-; Calls:   sub_F6B387 sub_F6C43C BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6741C sub_F69C03
+; Calls:   sub_F6B387 sub_F6C43C BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 sub_F6741C sub_F69C03
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6CB52 is an instruction
 ;           boundary.  The name IS the address.
@@ -160334,7 +160436,7 @@ sub_F6CB52_Skip3:
 	jr	z, sub_F6CB52_Skip4	; F6CBB6  jr Z,0xf6cbcc
 	cp	a, 130	; F6CBB8  cp A,0x82
 	jr	z, sub_F6CB52_Skip4	; F6CBBB  jr Z,0xf6cbcc
-	calr	sub_F6B8F1	; F6CBBD  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F6CBBD  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F6CBC0  cp A,(0x0e53)
 	jr	ugt, sub_F6CB52_Skip4	; F6CBC4  jr UGT,0xf6cbcc
 	call	sub_F6741C	; F6CBC6  call 0xf6741c
@@ -160431,7 +160533,7 @@ StepRecordSub11_ButtonTable:
 ; Called from: in-module: 0xF67488
 ; Touches: (0x0D10) (0x0DC7) (0x0DCE) (0x0E4F) (0x0E53) (0x0E58) (0x0E63)
 ;          (0x0ED5) (0x0EF5) (0x1071) +5 more
-; Calls:   T_F431B0 BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6741C sub_F69C03 sub_F69CB4
+; Calls:   T_F431B0 BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 sub_F6741C sub_F69C03 sub_F69CB4
 ;          sub_F6A20F StepRecord_SoftKeyCol3 0xF6E706
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6CC6E is an instruction
@@ -160473,7 +160575,7 @@ sub_F6CC6E_Skip2:
 	jr	z, sub_F6CC6E_Skip3	; F6CCC3  jr Z,0xf6ccde
 	cp	a, 130	; F6CCC5  cp A,0x82
 	jr	z, sub_F6CC6E_Skip3	; F6CCC8  jr Z,0xf6ccde
-	call	sub_F6B8F1	; F6CCCA  call 0xf6b8f1
+	call	BStore_ReadByteAtSongPositionPlus1	; F6CCCA  call 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F6CCCE  cp A,(0x0e53)
 	jr	nc, sub_F6CC6E_Skip3	; F6CCD2  jr NC,0xf6ccde
 	call	sub_F6741C	; F6CCD4  call 0xf6741c
@@ -160495,7 +160597,7 @@ sub_F6CC6E_Skip4:
 	jr	z, sub_F6CC6E_Skip5	; F6CD09  jr Z,0xf6cd24
 	cp	a, 130	; F6CD0B  cp A,0x82
 	jr	z, sub_F6CC6E_Skip5	; F6CD0E  jr Z,0xf6cd24
-	call	sub_F6B8F1	; F6CD10  call 0xf6b8f1
+	call	BStore_ReadByteAtSongPositionPlus1	; F6CD10  call 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F6CD14  cp A,(0x0e53)
 	jr	nc, sub_F6CC6E_Skip5	; F6CD18  jr NC,0xf6cd24
 	call	sub_F6741C	; F6CD1A  call 0xf6741c
@@ -160541,7 +160643,7 @@ sub_F6CC6E_Epilogue:
 ; Touches: (0x0E4F) (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x0ED5) (0x12BA)
 ;          (0x2075)
 ; Calls:   StepByteWithinLH 0xF6E706 StepRecord_SoftKeyCol3 sub_F6908B sub_F6B387 sub_F6C43C
-;          BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6741C sub_F69C03
+;          BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 sub_F6741C sub_F69C03
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6CD74 is an instruction
 ;           boundary.  The name IS the address.
@@ -160613,7 +160715,7 @@ sub_F6CD74_Skip3:
 	jr	z, sub_F6CD74_Skip4	; F6CE08  jr Z,0xf6ce1e
 	cp	a, 130	; F6CE0A  cp A,0x82
 	jr	z, sub_F6CD74_Skip4	; F6CE0D  jr Z,0xf6ce1e
-	calr	sub_F6B8F1	; F6CE0F  calr 0xf6b8f1
+	calr	BStore_ReadByteAtSongPositionPlus1	; F6CE0F  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F6CE12  cp A,(0x0e53)
 	jr	ugt, sub_F6CD74_Skip4	; F6CE16  jr UGT,0xf6ce1e
 	call	sub_F6741C	; F6CE18  call 0xf6741c
@@ -161689,7 +161791,7 @@ sub_F6D40C:
 ; MsgLine_Control_Cleared -- 0xF6D410
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   MsgLine_Clear sub_F6D6DC sub_F6D890 T_F431B4
+; Calls:   MsgLine_Clear MsgLine_MeasureNumber sub_F6D890 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -161731,7 +161833,7 @@ MsgLine_Control_Cleared:
 	ldir85	; F6D431  ldir
 	ld	a, 32:opc	; F6D433  ld A,0x20
 	ld	(xix+), a	; F6D435  ld (XIX+),A
-	calr	sub_F6D6DC	; F6D438  calr 0xf6d6dc
+	calr	MsgLine_MeasureNumber	; F6D438  calr 0xf6d6dc
 	calr	sub_F6D890	; F6D43B  calr 0xf6d890
 	call	T_F431B4	; F6D43E  call 0xf431b4
 	ret	; F6D442  ret
@@ -161761,7 +161863,7 @@ sub_F6D443:
 ; MsgLine_Control -- 0xF6D447
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   MsgLine_Clear sub_F6D6DC sub_F6D890 T_F431B4
+; Calls:   MsgLine_Clear MsgLine_MeasureNumber sub_F6D890 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -161796,7 +161898,7 @@ MsgLine_Control:
 	ld	xix, MsgLine_Text+5	; F6D44F  ld XIX,0x00000fe9
 	ldw	bc, 7	; F6D454  ld BC,0x0007
 	ldir85	; F6D457  ldir
-	calr	sub_F6D6DC	; F6D459  calr 0xf6d6dc
+	calr	MsgLine_MeasureNumber	; F6D459  calr 0xf6d6dc
 	calr	sub_F6D890	; F6D45C  calr 0xf6d890
 	call	T_F431B4	; F6D45F  call 0xf431b4
 	ret	; F6D463  ret
@@ -162004,7 +162106,7 @@ MsgLine_TransportState_Plus14:
 ; MsgLine_Rhythm -- 0xF6D4E4
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   T_F431B0 MsgLine_Clear sub_F6D6DC MsgLine_TransportState_Plus14 T_F431B4
+; Calls:   T_F431B0 MsgLine_Clear MsgLine_MeasureNumber MsgLine_TransportState_Plus14 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -162040,7 +162142,7 @@ MsgLine_Rhythm:
 	ld	xix, MsgLine_Text+5	; F6D4F0  ld XIX,0x00000fe9
 	ldw	bc, 9	; F6D4F5  ld BC,0x0009
 	ldir85	; F6D4F8  ldir
-	calr	sub_F6D6DC	; F6D4FA  calr 0xf6d6dc
+	calr	MsgLine_MeasureNumber	; F6D4FA  calr 0xf6d6dc
 	calr	MsgLine_TransportState_Plus14	; F6D4FD  calr 0xf6d4c6
 	call	T_F431B4	; F6D500  call 0xf431b4
 	ret	; F6D504  ret
@@ -162049,7 +162151,7 @@ MsgLine_Rhythm:
 ; MsgLine_Tempo -- 0xF6D505
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   MsgLine_Clear sub_F6D6DC sub_F6D9AE T_F431B4
+; Calls:   MsgLine_Clear MsgLine_MeasureNumber sub_F6D9AE T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -162085,7 +162187,7 @@ MsgLine_Tempo:
 	ld	xix, MsgLine_Text+5	; F6D512  ld XIX,0x00000fe9
 	ldw	bc, 25	; F6D517  ld BC,0x0019
 	ldir85	; F6D51A  ldir
-	calr	sub_F6D6DC	; F6D51C  calr 0xf6d6dc
+	calr	MsgLine_MeasureNumber	; F6D51C  calr 0xf6d6dc
 	calr	sub_F6D9AE	; F6D51F  calr 0xf6d9ae
 	call	T_F431B4	; F6D522  call 0xf431b4
 	ret	; F6D526  ret
@@ -162114,7 +162216,7 @@ Data_F6D527:
 ; MsgLine_Tempo_Repaint -- 0xF6D540
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   T_F431B0 MsgLine_Clear sub_F6D6DC sub_F6D9AE T_F431B4
+; Calls:   T_F431B0 MsgLine_Clear MsgLine_MeasureNumber sub_F6D9AE T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -162150,7 +162252,7 @@ MsgLine_Tempo_Repaint:
 	ld	xix, MsgLine_Text+5	; F6D54C  ld XIX,0x00000fe9
 	ldw	bc, 25	; F6D551  ld BC,0x0019
 	ldir85	; F6D554  ldir
-	calr	sub_F6D6DC	; F6D556  calr 0xf6d6dc
+	calr	MsgLine_MeasureNumber	; F6D556  calr 0xf6d6dc
 	calr	sub_F6D9AE	; F6D559  calr 0xf6d9ae
 	call	T_F431B4	; F6D55C  call 0xf431b4
 	ret	; F6D560  ret
@@ -162200,7 +162302,7 @@ sub_F6D57A:
 ; MsgLine_Blank -- 0xF6D57E
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   MsgLine_Clear sub_F6D6DC T_F431B4 T_F431C0
+; Calls:   MsgLine_Clear MsgLine_MeasureNumber T_F431B4 T_F431C0
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -162235,7 +162337,7 @@ MsgLine_Blank:
 	ld	xix, MsgLine_Text	; F6D586  ld XIX,0x00000fe4
 	ldw	bc, 25	; F6D58B  ld BC,0x0019
 	ldir85	; F6D58E  ldir
-	calr	sub_F6D6DC	; F6D590  calr 0xf6d6dc
+	calr	MsgLine_MeasureNumber	; F6D590  calr 0xf6d6dc
 	call	T_F431B4	; F6D593  call 0xf431b4
 	call	T_F431C0	; F6D597  call 0xf431c0
 	ret	; F6D59B  ret
@@ -162560,7 +162662,7 @@ sub_F6D6D6:
 	ret	; F6D6DB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6D6DC
+; MsgLine_MeasureNumber
 ; Called from: in-module: 0xF6D438 0xF6D459 0xF6D4FA 0xF6D51C 0xF6D556
 ;              0xF6D590 0xF6D71D 0xF6D885; an already-converted call site
 ;              elsewhere in the image
@@ -162579,7 +162681,11 @@ sub_F6D6D6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6D6DC:
+; MsgLine_MeasureNumber: Writes the step cursor's measure (0x12B2) as three right-justified digits at MsgLine_Text+0
+;   ("---" when >= 1000) and (0x12B4) at +3, then repaints the line -- the MEAS column under every STEP RECORD
+;   message-line composer. Basis: callers + body + the 0x12B2 writer. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_b.json)
+MsgLine_MeasureNumber:
 	ld	wa, (4786:16)	; F6D6DC  ld WA,(0x12b2)
 	cp	wa, 1000	; F6D6E0  cp WA,0x03e8
 	jr	c, sub_F6D6DC_Skip	; F6D6E4  jr C,0xf6d6eb
@@ -162623,7 +162729,7 @@ sub_F6D70C:
 ; sub_F6D710
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   MsgLine_Clear sub_F6D6DC MsgLine_FormatNoteAndVelocity sub_F6DBF9 T_F431B4 T_F431C0
+; Calls:   MsgLine_Clear MsgLine_MeasureNumber MsgLine_FormatNoteAndVelocity sub_F6DBF9 T_F431B4 T_F431C0
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -162641,7 +162747,7 @@ sub_F6D710:
 	calr	MsgLine_Clear	; F6D710  calr 0xf6d9fb
 	ld	xix, MsgLine_Text	; F6D713  ld XIX,0x00000fe4
 	m_ld_mi16 MDD+r4, 0x09, 0x5620	; F6D718  ld (XIX+0x09),0x5620
-	calr	sub_F6D6DC	; F6D71D  calr 0xf6d6dc
+	calr	MsgLine_MeasureNumber	; F6D71D  calr 0xf6d6dc
 	calr	MsgLine_FormatNoteAndVelocity	; F6D720  calr 0xf6dd17
 	calr	sub_F6DBF9	; F6D723  calr 0xf6dbf9
 	call	T_F431B4	; F6D726  call 0xf431b4
@@ -162799,7 +162905,7 @@ Data_F6D867:
 ; sub_F6D86B
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   T_F431B0 MsgLine_Clear sub_F6D6DC sub_F6D72F T_F431B4
+; Calls:   T_F431B0 MsgLine_Clear MsgLine_MeasureNumber sub_F6D72F T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -162820,7 +162926,7 @@ sub_F6D86B:
 	ld	(xix+4), 83	; F6D877  ld (XIX+0x04),0x53
 	m_ld_mi16 MDD+r4, 0x05, 0x554f	; F6D87B  ld (XIX+0x05),0x554f
 	m_ld_mi16 MDD+r4, 0x07, 0x444e	; F6D880  ld (XIX+0x07),0x444e
-	calr	sub_F6D6DC	; F6D885  calr 0xf6d6dc
+	calr	MsgLine_MeasureNumber	; F6D885  calr 0xf6d6dc
 	calr	sub_F6D72F	; F6D888  calr 0xf6d72f
 	call	T_F431B4	; F6D88B  call 0xf431b4
 	ret	; F6D88F  ret
@@ -166751,7 +166857,7 @@ OldCopy_TrackClear_OnLeave:
 	ld	(6304798:24), wa	; F6F1CC  ld (0x60341e),WA
 	xor	xwa, xwa	; F6F1D1  xor XWA,XWA
 	ld	(12304:16), xwa	; F6F1D3  ld (0x3010),XWA
-	call	T_F409E0	; F6F1D7  call 0xf409e0
+	call	T_Seq_RequestRewind	; F6F1D7  call 0xf409e0
 OldCopy_F7ABDB:
 	ret	; F6F1DB  ret
 OldCopy_TrackClear_ReturnToStageZero:
@@ -166829,7 +166935,7 @@ OldCopy_TrackMerge_OnLeave:
 	ld	(6304798:24), xwa	; F6F2B5  ld (0x60341e),XWA
 	xor	xwa, xwa	; F6F2BA  xor XWA,XWA
 	ld	(12304:16), xwa	; F6F2BC  ld (0x3010),XWA
-	call	T_F409E0	; F6F2C0  call 0xf409e0
+	call	T_Seq_RequestRewind	; F6F2C0  call 0xf409e0
 OldCopy_F7ACC4:
 	ret	; F6F2C4  ret
 OldCopy_TrackMerge_SelectField1:
@@ -167150,7 +167256,7 @@ sub_F6F4A3:
 ; sub_F6F4F2
 ; Called from: in-module: 0xF6F45E
 ; Touches: (0x124C) (0x7F4D)
-; Calls:   T_F409E0 T_Queue2C00_AppendRegs T_Queue2C00_DrainPassAB T_F42578
+; Calls:   T_Seq_RequestRewind T_Queue2C00_AppendRegs T_Queue2C00_DrainPassAB T_F42578
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6F4F2 is an instruction boundary of this
@@ -167160,7 +167266,7 @@ sub_F6F4A3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6F4F2:
-	call	T_F409E0	; F6F4F2  call 0xf409e0
+	call	T_Seq_RequestRewind	; F6F4F2  call 0xf409e0
 	m_cp_mi8 MB24, 0x6034c6, 0xff	; F6F4F6  cp (0x6034c6),0xff
 	jr	z, sub_F6F4F2_Skip	; F6F4FC  jr Z,0xf6f507
 	m_and_mi8 MB16, 0x7f4d, 0xfb	; F6F4FE  and (0x7f4d),0xfb
@@ -167372,7 +167478,7 @@ Smf_ReadFile_Skip5:
 Smf_ReadFile_Skip6:
 	ld	(xix+), a	; F6F691  ld (XIX+),A
 	djnz16	bc, -27	; F6F694  djnz BC,0xf6f67c
-	call	T_F409E0	; F6F697  call 0xf409e0
+	call	T_Seq_RequestRewind	; F6F697  call 0xf409e0
 	call	T_SongClear_ClearCurrentBank	; F6F69B  call 0xf42708
 	xor	xwa, xwa	; F6F69F  xor XWA,XWA
 	ld	(6304798:24), xwa	; F6F6A1  ld (0x60341e),XWA
@@ -167547,7 +167653,7 @@ Smf_ReadFile_Skip22:
 	ld	(14162:16), 0	; F6F87D  ld (0x3752),0x00
 Smf_ReadFile_Join7:
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F6F882  and (0x34bb),0xf7
-	call	T_F409E0	; F6F887  call 0xf409e0
+	call	T_Seq_RequestRewind	; F6F887  call 0xf409e0
 	calr	sub_F6F8C7	; F6F88B  calr 0xf6f8c7
 	ldw	(BStore_Password:24), 0	; F6F88E  ld (0x60341c),0x0000
 	call	T_NoteRouting_RebuildForSong	; F6F895  call 0xf411b8
@@ -168689,7 +168795,7 @@ sub_F6FF44_Return:
 ; SmfEvent_ChannelPressure
 ; Called from: in-module: 0xF6FF8A
 ; Touches: (0x10D0) (0x10D1) (0x1238)
-; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
+; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FFAE is an instruction boundary of this
@@ -168731,7 +168837,7 @@ SmfEvent_ChannelPressure:
 	pop	xiy	; F6FFF4  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6FFF5  cp (0x1238),0x00
 	jr	nz, sub_F6FFAE_Return	; F6FFFA  jr NZ,0xf70007
-	calr	sub_F7129A	; F6FFFC  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F6FFFC  calr 0xf7129a
 	calr	TrackCursor_Save	; F6FFFF  calr 0xf71275
 	ld	(4664:16), 0	; F70002  ld (0x1238),0x00
 sub_F6FFAE_Return:
@@ -168741,8 +168847,8 @@ sub_F6FFAE_Return:
 ; SmfEvent_ProgramChange
 ; Called from: in-module: 0xF6FFAA
 ; Touches: (0x10D0) (0x10D1) (0x11B1) (0x1238) (0x1239) (0x124B) (0x2732)
-; Calls:   sub_F71417 sub_F701F1 T_PartSound_FromProgramChange TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96
-;          sub_F7129A TrackCursor_Save
+; Calls:   SmfPart_ResetAllRecords sub_F701F1 T_PartSound_FromProgramChange TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96
+;          SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70008 is an instruction boundary of this
@@ -168761,7 +168867,7 @@ SmfEvent_ProgramChange:
 	ld	(4665:16), 0	; F7001A  ld (0x1239),0x00
 sub_F70008_Skip:
 	ld	(4683:16), 1	; F7001F  ld (0x124b),0x01
-	calr	sub_F71417	; F70024  calr 0xf71417
+	calr	SmfPart_ResetAllRecords	; F70024  calr 0xf71417
 sub_F70008_Skip2:
 	ld	iy, (Smf_EventStatus:16)	; F70027  ld IY,(0x10d0)
 	and	iy, 15	; F7002B  and IY,0x000f
@@ -168858,7 +168964,7 @@ sub_F70008_Skip3:
 	pop	xiy	; F70128  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70129  cp (0x1238),0x00
 	jrl	nz, sub_F70008_Return	; F7012E  jrl NZ,0xf701f0
-	calr	sub_F7129A	; F70131  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F70131  calr 0xf7129a
 	calr	TrackCursor_Save	; F70134  calr 0xf71275
 	ld	(4664:16), 0	; F70137  ld (0x1238),0x00
 	jrl	sub_F70008_Return	; F7013C  jrl T,0xf701f0
@@ -168921,7 +169027,7 @@ sub_F70008_Skip4:
 	call	BStore_PutByteAndAdvance	; F701D0  call 0xf70fda
 	m_cp_mi8 MB16, 0x1238, 0x00	; F701D4  cp (0x1238),0x00
 	jr	nz, sub_F70008_Return	; F701D9  jr NZ,0xf701f0
-	calr	sub_F7129A	; F701DB  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F701DB  calr 0xf7129a
 	calr	TrackCursor_Save	; F701DE  calr 0xf71275
 	ld	(4664:16), 0	; F701E1  ld (0x1238),0x00
 	jr	sub_F70008_Return	; F701E6  jr T,0xf701f0
@@ -169100,7 +169206,7 @@ SmfPart_RecordOffsets_Alt:
 ; SmfEvent_PitchBend
 ; Called from: in-module: 0xF6FFA5
 ; Touches: (0x10D0) (0x10D1) (0x10D2) (0x1238)
-; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
+; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70330 is an instruction boundary of this
@@ -169147,7 +169253,7 @@ SmfEvent_PitchBend:
 	pop	xiy	; F70386  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70387  cp (0x1238),0x00
 	jr	nz, sub_F70330_Return	; F7038C  jr NZ,0xf70399
-	calr	sub_F7129A	; F7038E  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F7038E  calr 0xf7129a
 	calr	TrackCursor_Save	; F70391  calr 0xf71275
 	ld	(4664:16), 0	; F70394  ld (0x1238),0x00
 sub_F70330_Return:
@@ -169157,7 +169263,7 @@ sub_F70330_Return:
 ; SmfEvent_ControlChange
 ; Called from: in-module: 0xF6FFA0
 ; Touches: (0x10D1) (0x1239) (0x124B) (0x2732)
-; Calls:   sub_F71417 SmfCC_GeneralPurpose1 SmfCC_GeneralPurpose2 SmfCC_GeneralPurpose3 SmfCC_GeneralPurpose4 SmfCC_BankSelectLsb
+; Calls:   SmfPart_ResetAllRecords SmfCC_GeneralPurpose1 SmfCC_GeneralPurpose2 SmfCC_GeneralPurpose3 SmfCC_GeneralPurpose4 SmfCC_BankSelectLsb
 ;          SmfCC_DataEntryLsb SmfCC_Sustain sub_F7039A_Nop2 sub_F7039A_Nop SmfCC_Effect1Depth SmfCC_Effect3Depth
 ;          +6 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -169178,7 +169284,7 @@ SmfEvent_ControlChange:
 	ld	(4665:16), 0	; F703AC  ld (0x1239),0x00
 sub_F7039A_Skip:
 	ld	(4683:16), 1	; F703B1  ld (0x124b),0x01
-	calr	sub_F71417	; F703B6  calr 0xf71417
+	calr	SmfPart_ResetAllRecords	; F703B6  calr 0xf71417
 sub_F7039A_Skip2:
 	ld	a, (4305:16)	; F703B9  ld A,(0x10d1)
 	cp	a, 16	; F703BD  cp A,0x10
@@ -169376,7 +169482,7 @@ SmfCC_BankSelectMsb:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x1238)
-; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
+; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -169418,7 +169524,7 @@ SmfCC_Modulation:
 	pop	xiy	; F7052B  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7052C  cp (0x1238),0x00
 	jr	nz, sub_F704E7_Return	; F70531  jr NZ,0xf7053e
-	calr	sub_F7129A	; F70533  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F70533  calr 0xf7129a
 	calr	TrackCursor_Save	; F70536  calr 0xf71275
 	ld	(4664:16), 0	; F70539  ld (0x1238),0x00
 sub_F704E7_Return:
@@ -169429,7 +169535,7 @@ sub_F704E7_Return:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2)
-; Calls:   sub_F705F7 sub_F70AE9
+; Calls:   sub_F705F7 SmfCC_PutSelectedRpnValueEvent
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -169477,7 +169583,7 @@ sub_F7053F_Skip:
 	pop	xhl	; F7058F  pop XHL
 sub_F7053F_Skip2:
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F70590  ld (XHL+IY),A
-	calr	sub_F70AE9	; F70595  calr 0xf70ae9
+	calr	SmfCC_PutSelectedRpnValueEvent	; F70595  calr 0xf70ae9
 sub_F7053F_Return:
 	ret	; F70598  ret
 
@@ -169485,7 +169591,7 @@ sub_F7053F_Return:
 ; SmfCC_DataEntryLsb
 ; Called from: in-module: 0xF70450
 ; Touches: (0x10D0) (0x10D2)
-; Calls:   sub_F705F7 sub_F70AE9
+; Calls:   sub_F705F7 SmfCC_PutSelectedRpnValueEvent
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70599 is an instruction boundary of this
@@ -169532,7 +169638,7 @@ sub_F70599_Skip:
 	pop	xiy	; F705EC  pop XIY
 	pop	xhl	; F705ED  pop XHL
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F705EE  ld (XHL+IY),A
-	calr	sub_F70AE9	; F705F3  calr 0xf70ae9
+	calr	SmfCC_PutSelectedRpnValueEvent	; F705F3  calr 0xf70ae9
 sub_F70599_Return:
 	ret	; F705F6  ret
 
@@ -169581,7 +169687,7 @@ sub_F705F7_Entry:
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238) (0x1239)
 ;          (0x124B) (0x2732)
-; Calls:   sub_F71417 SmfPart_SetVolume sub_F70E1D
+; Calls:   SmfPart_ResetAllRecords SmfPart_SetVolume sub_F70E1D
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -169602,7 +169708,7 @@ SmfCC_Volume:
 	ld	(4665:16), 0	; F7064E  ld (0x1239),0x00
 sub_F705F7_Skip2:
 	ld	(4683:16), 1	; F70653  ld (0x124b),0x01
-	calr	sub_F71417	; F70658  calr 0xf71417
+	calr	SmfPart_ResetAllRecords	; F70658  calr 0xf71417
 sub_F705F7_Skip3:
 	m_bit 0, MD16, 0x11b1	; F7065B  bit 0,(0x11b1)
 	jr	nz, sub_F705F7_Skip4	; F7065F  jr NZ,0xf70669
@@ -169641,7 +169747,7 @@ SmfPart_SetVolume:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x1238) (0x1239) (0x124B) (0x2732)
-; Calls:   sub_F71417 TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
+; Calls:   SmfPart_ResetAllRecords TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -169662,7 +169768,7 @@ SmfCC_Pan:
 	ld	(4665:16), 0	; F7069C  ld (0x1239),0x00
 sub_F7067F_Skip:
 	ld	(4683:16), 1	; F706A1  ld (0x124b),0x01
-	calr	sub_F71417	; F706A6  calr 0xf71417
+	calr	SmfPart_ResetAllRecords	; F706A6  calr 0xf71417
 sub_F7067F_Skip2:
 	ld	iy, (Smf_EventStatus:16)	; F706A9  ld IY,(0x10d0)
 	and	iy, 15	; F706AD  and IY,0x000f
@@ -169724,7 +169830,7 @@ sub_F7067F_Skip3:
 	pop	xiy	; F70740  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70741  cp (0x1238),0x00
 	jr	nz, sub_F7067F_Return	; F70746  jr NZ,0xf70753
-	calr	sub_F7129A	; F70748  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F70748  calr 0xf7129a
 	calr	TrackCursor_Save	; F7074B  calr 0xf71275
 	ld	(4664:16), 0	; F7074E  ld (0x1238),0x00
 sub_F7067F_Return:
@@ -169735,7 +169841,7 @@ sub_F7067F_Return:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x1238)
-; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
+; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -169778,7 +169884,7 @@ SmfCC_Expression:
 	pop	xiy	; F7079A  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7079B  cp (0x1238),0x00
 	jr	nz, sub_F7067F_Return2	; F707A0  jr NZ,0xf707ad
-	calr	sub_F7129A	; F707A2  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F707A2  calr 0xf7129a
 	calr	TrackCursor_Save	; F707A5  calr 0xf71275
 	ld	(4664:16), 0	; F707A8  ld (0x1238),0x00
 sub_F7067F_Return2:
@@ -169824,7 +169930,7 @@ SmfCC_BankSelectLsb:
 ; Called from: in-module: 0xF70455 0xF722E9
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x124B)
 ;          (0x2732)
-; Calls:   sub_F71417 sub_F7083B
+; Calls:   SmfPart_ResetAllRecords sub_F7083B
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -169844,7 +169950,7 @@ SmfCC_Sustain:
 	ld	(4665:16), 0	; F707F8  ld (0x1239),0x00
 sub_F707E6_Skip:
 	ld	(4683:16), 1	; F707FD  ld (0x124b),0x01
-	calr	sub_F71417	; F70802  calr 0xf71417
+	calr	SmfPart_ResetAllRecords	; F70802  calr 0xf71417
 sub_F707E6_Skip2:
 	xor	h, h	; F70805  xor H,H
 	ld	l, (Smf_EventStatus:16)	; F70807  ld L,(0x10d0)
@@ -169883,7 +169989,7 @@ sub_F725D9_Nop:
 ; Called from: in-module: 0xF70835
 ; Touches: (0x1078) (0x107A) (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x11B2)
 ;          (0x1238)
-; Calls:   sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
+; Calls:   sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7083B is an instruction boundary of this
@@ -169961,7 +170067,7 @@ sub_F7083B_Skip:
 	pop	xiy	; F708E8  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F708E9  cp (0x1238),0x00
 	jr	nz, sub_F7083B_Epilogue	; F708EE  jr NZ,0xf7091b
-	call	sub_F7129A	; F708F0  call 0xf7129a
+	call	SmfEvent_MarkChannelUsed	; F708F0  call 0xf7129a
 	ld	iy, (Smf_EventStatus:16)	; F708F4  ld IY,(0x10d0)
 	and	iy, 15	; F708F8  and IY,0x000f
 	m_cp_mi8 MB16, Smf_Format, 0x00	; F708FC  cp (0x1078),0x00
@@ -170047,7 +170153,7 @@ sub_F7039A_Nop2:
 ; Called from: in-module: 0xF7046B
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238) (0x1239)
 ;          (0x124B) (0x2732)
-; Calls:   sub_F71417 SmfPart_SetEffect3Depth sub_F70E1D
+; Calls:   SmfPart_ResetAllRecords SmfPart_SetEffect3Depth sub_F70E1D
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70960 is an instruction boundary of this
@@ -170066,7 +170172,7 @@ SmfCC_Effect3Depth:
 	ld	(4665:16), 0	; F70972  ld (0x1239),0x00
 sub_F70960_Skip:
 	ld	(4683:16), 1	; F70977  ld (0x124b),0x01
-	calr	sub_F71417	; F7097C  calr 0xf71417
+	calr	SmfPart_ResetAllRecords	; F7097C  calr 0xf71417
 sub_F70960_Skip2:
 	m_bit 0, MD16, 0x11b1	; F7097F  bit 0,(0x11b1)
 	jr	nz, sub_F70960_Skip3	; F70983  jr NZ,0xf7098d
@@ -170158,7 +170264,7 @@ SmfPart_SetEffect4Depth:
 ; Called from: in-module: 0xF70466
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238) (0x1239)
 ;          (0x124B) (0x2732)
-; Calls:   sub_F71417 SmfPart_SetEffect1Depth sub_F70E1D
+; Calls:   SmfPart_ResetAllRecords SmfPart_SetEffect1Depth sub_F70E1D
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF709ED is an instruction boundary of this
@@ -170177,7 +170283,7 @@ SmfCC_Effect1Depth:
 	ld	(4665:16), 0	; F709FF  ld (0x1239),0x00
 sub_F709ED_Skip:
 	ld	(4683:16), 1	; F70A04  ld (0x124b),0x01
-	calr	sub_F71417	; F70A09  calr 0xf71417
+	calr	SmfPart_ResetAllRecords	; F70A09  calr 0xf71417
 sub_F709ED_Skip2:
 	m_bit 0, MD16, 0x11b1	; F70A0C  bit 0,(0x11b1)
 	jr	nz, sub_F709ED_Skip3	; F70A10  jr NZ,0xf70a1a
@@ -170218,7 +170324,7 @@ SmfPart_SetEffect1Depth:
 ; SmfCC_DataIncrement
 ; Called from: in-module: 0xF70475 0xF7230B
 ; Touches: (0x10D0)
-; Calls:   sub_F70AE9
+; Calls:   SmfCC_PutSelectedRpnValueEvent
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70A43 is an instruction boundary of this
@@ -170258,7 +170364,7 @@ SmfCC_DataIncrement:
 	ld	a, e	; F70A8C  ld A,E
 sub_F70A43_Skip:
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F70A8E  ld (XHL+IY),A
-	calr	sub_F70AE9	; F70A93  calr 0xf70ae9
+	calr	SmfCC_PutSelectedRpnValueEvent	; F70A93  calr 0xf70ae9
 sub_F70A43_Return:
 	ret	; F70A96  ret
 
@@ -170266,7 +170372,7 @@ sub_F70A43_Return:
 ; SmfCC_DataDecrement
 ; Called from: in-module: 0xF7047A 0xF72310
 ; Touches: (0x10D0)
-; Calls:   sub_F70AE9
+; Calls:   SmfCC_PutSelectedRpnValueEvent
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70A97 is an instruction boundary of this
@@ -170298,7 +170404,7 @@ SmfCC_DataDecrement:
 	dec	1, a	; F70ACC  dec 1,A
 sub_F70A97_Skip:
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F70ACE  ld (XHL+IY),A
-	calr	sub_F70AE9	; F70AD3  calr 0xf70ae9
+	calr	SmfCC_PutSelectedRpnValueEvent	; F70AD3  calr 0xf70ae9
 sub_F70A97_Return:
 	ret	; F70AD6  ret
 
@@ -170325,7 +170431,7 @@ Data_F70AD7:
 
 
 ; --------------------------------------------------------------------------
-; sub_F70AE9
+; SmfCC_PutSelectedRpnValueEvent
 ; Called from: in-module: 0xF70595 0xF705F3 0xF70A93 0xF70AD3 0xF72437
 ;              0xF72491
 ; Touches: (0x10D0) (0x11AF)
@@ -170338,7 +170444,12 @@ Data_F70AD7:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70AE9:
+; SmfCC_PutSelectedRpnValueEvent: If the event's channel has RPN 0, 1 or 2 selected ((0x11D8)[ch] != 0xFF, set by
+;   SmfCC_RpnMsb/Lsb), copies that RPN's stored value for the channel (arrays 0x1208 / 0x11E8 / 0x11F8 via
+;   Data_F70AD7) to (0x11AF) and calls sub_F70B22, which stores it in the track as a 0xB0 parameter event of class
+;   0x0B / 0x0A / 0x09. Shared tail of the data-entry, increment and decrement CC handlers. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+SmfCC_PutSelectedRpnValueEvent:
 	ld	iy, (Smf_EventStatus:16)	; F70AE9  ld IY,(0x10d0)
 	and	iy, 15	; F70AED  and IY,0x000f
 	push	xix	; F70AF1  push XIX
@@ -170364,7 +170475,7 @@ sub_F70AE9_Return:
 ; sub_F70B22
 ; Called from: in-module: 0xF70B1E
 ; Touches: (0x1078) (0x107A) (0x10D0) (0x11AF) (0x11B2) (0x1238) (0x1239)
-; Calls:   sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
+; Calls:   sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70B22 is an instruction boundary of this
@@ -170467,7 +170578,7 @@ sub_F70B22_Join:
 	pop	xiy	; F70C03  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70C04  cp (0x1238),0x00
 	jrl	nz, sub_F70B22_Epilogue	; F70C09  jrl NZ,0xf70c3a
-	calr	sub_F7129A	; F70C0C  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F70C0C  calr 0xf7129a
 	ld	iy, (Smf_EventStatus:16)	; F70C0F  ld IY,(0x10d0)
 	and	iy, 15	; F70C13  and IY,0x000f
 	extz	xiy	; F70C17  extz XIY
@@ -170800,7 +170911,7 @@ sub_F70DD6_Return:
 ; sub_F70E1D
 ; Called from: in-module: 0xF7067B 0xF7099F 0xF709D6 0xF70A2C
 ; Touches: (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x1238) (0x1239)
-; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
+; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70E1D is an instruction boundary of this
@@ -170874,7 +170985,7 @@ sub_F70E1D_Skip2:
 	pop	xiy	; F70EC1  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70EC2  cp (0x1238),0x00
 	jr	nz, sub_F70E1D_Return	; F70EC7  jr NZ,0xf70ed4
-	calr	sub_F7129A	; F70EC9  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F70EC9  calr 0xf7129a
 	calr	TrackCursor_Save	; F70ECC  calr 0xf71275
 	ld	(4664:16), 0	; F70ECF  ld (0x1238),0x00
 sub_F70E1D_Return:
@@ -170885,7 +170996,7 @@ sub_F70E1D_Return:
 ; Called from: in-module: 0xF6FF96
 ; Touches: (0x10D0) (0x10D1) (0x10D2) (0x11B1) (0x1238) (0x1239) (0x124B)
 ;          (0x2732) (0x345C) (0x345E)
-; Calls:   sub_F71417 TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
+; Calls:   SmfPart_ResetAllRecords TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70ED5 is an instruction boundary of this
@@ -170918,7 +171029,7 @@ sub_F70ED5_Join:
 	ld	(4665:16), 0	; F70F0F  ld (0x1239),0x00
 sub_F70ED5_Skip2:
 	ld	(4683:16), 1	; F70F14  ld (0x124b),0x01
-	calr	sub_F71417	; F70F19  calr 0xf71417
+	calr	SmfPart_ResetAllRecords	; F70F19  calr 0xf71417
 sub_F70ED5_Skip3:
 	ld	iy, (Smf_EventStatus:16)	; F70F1C  ld IY,(0x10d0)
 	and	iy, 15	; F70F20  and IY,0x000f
@@ -170986,7 +171097,7 @@ sub_F70ED5_Skip3:
 	pop	xiy	; F70FAC  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70FAD  cp (0x1238),0x00
 	jr	nz, sub_F70ED5_Return	; F70FB2  jr NZ,0xf70fd9
-	calr	sub_F7129A	; F70FB4  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F70FB4  calr 0xf7129a
 	push	xix	; F70FB7  push XIX
 	calr	TrackCursor_Save	; F70FB8  calr 0xf71275
 	pop	xix	; F70FBB  pop XIX
@@ -171455,7 +171566,7 @@ TrackCursor_Save:
 	ret	; F71299  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7129A
+; SmfEvent_MarkChannelUsed
 ; Called from: in-module: 0xF6FFFC 0xF70131 0xF701DB 0xF7038E 0xF70533
 ;              0xF70748 0xF707A2 0xF708F0 +12 more
 ; Touches: (0x10D0) (0x360C)
@@ -171468,7 +171579,11 @@ TrackCursor_Save:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7129A:
+; SmfEvent_MarkChannelUsed: Sets bit (Smf_EventStatus & 0x0F) -- the event's MIDI channel -- in the 16-bit word
+;   (0x360C); every SMF channel-event handler (single- and multi-track) calls it right after the event's bytes were
+;   stored with (0x1238) still 0, and Smf_ReadMultiTrack zeroes (0x360C) before an import. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+SmfEvent_MarkChannelUsed:
 	pushw	bc	; F7129A  push BC
 	ld	iy, (Smf_EventStatus:16)	; F7129B  ld IY,(0x10d0)
 	and	iy, 15	; F7129F  and IY,0x000f
@@ -171724,7 +171839,7 @@ BStore_ExtendChainAtCursor:
 	ret	; F71416  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71417
+; SmfPart_ResetAllRecords
 ; Called from: in-module: 0xF70024 0xF703B6 0xF70658 0xF706A6 0xF70802
 ;              0xF7097C 0xF70A09 0xF70F19 +6 more
 ; Touches: (0x1239)  |  0x6036A0
@@ -171738,7 +171853,12 @@ BStore_ExtendChainAtCursor:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71417:
+; SmfPart_ResetAllRecords: Calls T_F40908 with 1 when (0x1239)=0xFF (GM mode; prom_a then runs GmMode_ResetToDefaults)
+;   else 0, then writes defaults into the 16 channels' 64-byte part records at 0x6036A0: +2/+3 sound = 0 (the drum
+;   channel, ch 10 in GM / ch 16 otherwise, gets +3 = 0x20), +6 = 0x15, +7 = 0, +9 = 0x40, +10 = Data_F71512[ch], +11
+;   = 0x40. Run by GM System On/Off SysEx and before an import's first channel event. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+SmfPart_ResetAllRecords:
 	push	xwa	; F71417  push XWA
 	push	xhl	; F71418  push XHL
 	push	xbc	; F71419  push XBC
@@ -171871,7 +171991,7 @@ Data_F71512:
 ; Called from: in-module: 0xF6F733 0xF71CF1
 ; Touches: (0x1198) (0x11B1) (0x1239) (0x124A) (0x124B) (0x137B) (0x137C)
 ;          (0x137D) (0x137E)
-; Calls:   Smf_ReadVlq InputStream_GetByte sub_F71417 SmfSysEx_ApplyParamChange Smf_SkipBytes
+; Calls:   Smf_ReadVlq InputStream_GetByte SmfPart_ResetAllRecords SmfSysEx_ApplyParamChange Smf_SkipBytes
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71525 is an instruction boundary of this
@@ -171880,7 +172000,7 @@ Data_F71512:
 ; ⚠ ANSWERED 2026-09-25 (SmfEvent_SysEx, was a name that was the address): the
 ;   SMF reader's SysEx-event handler.  With (0x1198), the bytes left in the
 ;   event, = 5 it matches 7E 7F 09 01 / 02 -- GM System On / Off -- and
-;   records it (bit 0 of (0x124B); (0x1239) = 0xFF / 0x00; sub_F71417).  With
+;   records it (bit 0 of (0x124B); (0x1239) = 0xFF / 0x00; SmfPart_ResetAllRecords).  With
 ;   (0x1198) = 16 it matches 50 2C 04 00 11 00, an address pair into
 ;   (0x137B)/(0x137C) (0x00:0x30-0x31, 0x01:0x04, or 0x11:<=0x75 -- `cp
 ;   A,0x75` at 0xF71637), 00 00 01, two data nibbles into (0x137E)/(0x137D),
@@ -171928,14 +172048,14 @@ SmfEvent_SysEx_Skip:
 	jrl	nz, SmfEvent_SysEx_Skip2	; F71581  jrl NZ,0xf71594
 	m_or_mi8 MB16, 0x124b, 0x01	; F71584  or (0x124b),0x01
 	ld	(4665:16), 255	; F71589  ld (0x1239),0xff
-	calr	sub_F71417	; F7158E  calr 0xf71417
+	calr	SmfPart_ResetAllRecords	; F7158E  calr 0xf71417
 	jrl	SmfEvent_SysEx_Loop	; F71591  jrl T,0xf715a6
 SmfEvent_SysEx_Skip2:
 	cp	a, 2:i3	; F71594  cp A,2
 	jrl	nz, SmfEvent_SysEx_Loop	; F71596  jrl NZ,0xf715a6
 	m_or_mi8 MB16, 0x124b, 0x01	; F71599  or (0x124b),0x01
 	ld	(4665:16), 0	; F7159E  ld (0x1239),0x00
-	calr	sub_F71417	; F715A3  calr 0xf71417
+	calr	SmfPart_ResetAllRecords	; F715A3  calr 0xf71417
 SmfEvent_SysEx_Loop:
 	ld	(Smf_VlqValue:16), hl	; F715A6  ld (0x1198),HL
 	jrl	SmfEvent_SysEx_Join2	; F715AA  jrl T,0xf71693
@@ -172365,7 +172485,7 @@ SmfSysEx_Addr11_Targets:
 ; SmfCC_GeneralPurpose1
 ; Called from: in-module: 0xF70437 0xF722CB
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x1381)
-; Calls:   sub_F71A95
+; Calls:   SmfCC_PutParamEventWithNumber
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7193F is an instruction boundary of this
@@ -172390,14 +172510,14 @@ sub_F7193F_Skip:
 	ld	(4527:16), a	; F71966  ld (0x11af),A
 	ld	(4528:16), 127	; F7196A  ld (0x11b0),0x7f
 	ld	(4993:16), 184	; F7196F  ld (0x1381),0xb8
-	calr	sub_F71A95	; F71974  calr 0xf71a95
+	calr	SmfCC_PutParamEventWithNumber	; F71974  calr 0xf71a95
 	ret	; F71977  ret
 
 ; --------------------------------------------------------------------------
 ; SmfCC_GeneralPurpose2
 ; Called from: in-module: 0xF7043C 0xF722D0
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x1381)
-; Calls:   sub_F71A95
+; Calls:   SmfCC_PutParamEventWithNumber
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71978 is an instruction boundary of this
@@ -172422,14 +172542,14 @@ sub_F71978_Skip:
 	ld	(4527:16), a	; F7199F  ld (0x11af),A
 	ld	(4528:16), 127	; F719A3  ld (0x11b0),0x7f
 	ld	(4993:16), 185	; F719A8  ld (0x1381),0xb9
-	calr	sub_F71A95	; F719AD  calr 0xf71a95
+	calr	SmfCC_PutParamEventWithNumber	; F719AD  calr 0xf71a95
 	ret	; F719B0  ret
 
 ; --------------------------------------------------------------------------
 ; SmfCC_GeneralPurpose3
 ; Called from: in-module: 0xF70441 0xF722D5
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x1381)
-; Calls:   sub_F71A95
+; Calls:   SmfCC_PutParamEventWithNumber
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF719B1 is an instruction boundary of this
@@ -172454,14 +172574,14 @@ sub_F719B1_Skip:
 	ld	(4527:16), a	; F719D8  ld (0x11af),A
 	ld	(4528:16), 127	; F719DC  ld (0x11b0),0x7f
 	ld	(4993:16), 186	; F719E1  ld (0x1381),0xba
-	calr	sub_F71A95	; F719E6  calr 0xf71a95
+	calr	SmfCC_PutParamEventWithNumber	; F719E6  calr 0xf71a95
 	ret	; F719E9  ret
 
 ; --------------------------------------------------------------------------
 ; SmfCC_GeneralPurpose4
 ; Called from: in-module: 0xF70446 0xF722DA
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x1381)
-; Calls:   sub_F71A95
+; Calls:   SmfCC_PutParamEventWithNumber
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF719EA is an instruction boundary of this
@@ -172486,7 +172606,7 @@ sub_F719EA_Skip:
 	ld	(4527:16), a	; F71A11  ld (0x11af),A
 	ld	(4528:16), 127	; F71A15  ld (0x11b0),0x7f
 	ld	(4993:16), 187	; F71A1A  ld (0x1381),0xbb
-	calr	sub_F71A95	; F71A1F  calr 0xf71a95
+	calr	SmfCC_PutParamEventWithNumber	; F71A1F  calr 0xf71a95
 	ret	; F71A22  ret
 
 ; --------------------------------------------------------------------------
@@ -172494,7 +172614,7 @@ sub_F719EA_Skip:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x1381)
-; Calls:   sub_F71A95
+; Calls:   SmfCC_PutParamEventWithNumber
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -172521,7 +172641,7 @@ sub_F719EA_Skip2:
 	ld	(4527:16), a	; F71A4A  ld (0x11af),A
 	ld	(4528:16), 127	; F71A4E  ld (0x11b0),0x7f
 	ld	(4993:16), 188	; F71A53  ld (0x1381),0xbc
-	calr	sub_F71A95	; F71A58  calr 0xf71a95
+	calr	SmfCC_PutParamEventWithNumber	; F71A58  calr 0xf71a95
 	ret	; F71A5B  ret
 
 ; --------------------------------------------------------------------------
@@ -172529,7 +172649,7 @@ sub_F719EA_Skip2:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x1381)
-; Calls:   sub_F71A95
+; Calls:   SmfCC_PutParamEventWithNumber
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -172556,16 +172676,16 @@ sub_F719EA_Skip3:
 	ld	(4527:16), a	; F71A83  ld (0x11af),A
 	ld	(4528:16), 127	; F71A87  ld (0x11b0),0x7f
 	ld	(4993:16), 189	; F71A8C  ld (0x1381),0xbd
-	calr	sub_F71A95	; F71A91  calr 0xf71a95
+	calr	SmfCC_PutParamEventWithNumber	; F71A91  calr 0xf71a95
 	ret	; F71A94  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71A95
+; SmfCC_PutParamEventWithNumber
 ; Called from: in-module: 0xF71974 0xF719AD 0xF719E6 0xF71A1F 0xF71A58
 ;              0xF71A91
 ; Touches: (0x1078) (0x107A) (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x11B2)
 ;          (0x1238) (0x1381)
-; Calls:   sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
+; Calls:   sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71A95 is an instruction boundary of this
@@ -172574,7 +172694,12 @@ sub_F719EA_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71A95:
+; SmfCC_PutParamEventWithNumber: Unless (0x11AE)=0xFF, stores in the channel's track (multi-track: the slot of
+;   (0x11B2)) the 0xB0 parameter event {0xB0 | (bit 7 of (0x1381))>>5, tick, (0x1381)&0x7F, (0x11AE), (0x11AF)&0x7F,
+;   (0x11B0)} and marks the channel. The parameter number comes from (0x1381); its six callers (GP1-4, Breath, Foot)
+;   set 0xB8..0xBD with class = the channel's part. Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_b.json)
+SmfCC_PutParamEventWithNumber:
 	push	xiy	; F71A95  push XIY
 	m_cp_mi8 MB16, 0x11ae, 0xff	; F71A96  cp (0x11ae),0xff
 	jrl	z, sub_F71A95_Epilogue	; F71A9B  jrl Z,0xf71b80
@@ -172646,7 +172771,7 @@ sub_F71A95_Skip:
 	pop	xiy	; F71B4D  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71B4E  cp (0x1238),0x00
 	jr	nz, sub_F71A95_Epilogue	; F71B53  jr NZ,0xf71b80
-	call	sub_F7129A	; F71B55  call 0xf7129a
+	call	SmfEvent_MarkChannelUsed	; F71B55  call 0xf7129a
 	ld	iy, (Smf_EventStatus:16)	; F71B59  ld IY,(0x10d0)
 	and	iy, 15	; F71B5D  and IY,0x000f
 	m_cp_mi8 MB16, Smf_Format, 0x00	; F71B61  cp (0x1078),0x00
@@ -172666,7 +172791,7 @@ sub_F71A95_Epilogue:
 ; Smf_ReadMultiTrack
 ; Called from: in-module: 0xF6F637
 ; Touches: (0x1010) (0x107A) (0x10CB) (0x11B2) (0x1239) (0x124B) (0x360C)
-; Calls:   T_F409E0 T_SongClear_ClearCurrentBank sub_F72822 sub_F6FB38 ClearRam10D3_34Bytes_Copy sub_F6F929
+; Calls:   T_Seq_RequestRewind T_SongClear_ClearCurrentBank sub_F72822 sub_F6FB38 ClearRam10D3_34Bytes_Copy sub_F6F929
 ;          Smf_ReadTrackChunk InputStream_RefillDone sub_F729D9 sub_F72F5C sub_F6F94E
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -172682,7 +172807,7 @@ Smf_ReadMultiTrack:
 	xor	a, a	; F71B82  xor A,A
 	ld	(4665:16), a	; F71B84  ld (0x1239),A
 	ld	(4683:16), a	; F71B88  ld (0x124b),A
-	call	T_F409E0	; F71B8C  call 0xf409e0
+	call	T_Seq_RequestRewind	; F71B8C  call 0xf409e0
 	call	T_SongClear_ClearCurrentBank	; F71B90  call 0xf42708
 	xor	xwa, xwa	; F71B94  xor XWA,XWA
 	ld	(6304798:24), xwa	; F71B96  ld (0x60341e),XWA
@@ -173044,7 +173169,7 @@ sub_F71DB7_Return:
 ; SmfEvent_ChannelPressure_MultiTrack
 ; Called from: in-module: 0xF71DFD
 ; Touches: (0x10D0) (0x10D1) (0x11B2) (0x1238)
-; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A BStore_SaveTrackCursor
+; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed BStore_SaveTrackCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71E21 is an instruction boundary of this
@@ -173089,7 +173214,7 @@ SmfEvent_ChannelPressure_MultiTrack:
 	pop	xiy	; F71E75  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71E76  cp (0x1238),0x00
 	jr	nz, sub_F71E21_Return	; F71E7B  jr NZ,0xf71e88
-	calr	sub_F7129A	; F71E7D  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F71E7D  calr 0xf7129a
 	calr	BStore_SaveTrackCursor	; F71E80  calr 0xf727f6
 	ld	(4664:16), 0	; F71E83  ld (0x1238),0x00
 sub_F71E21_Return:
@@ -173100,8 +173225,8 @@ sub_F71E21_Return:
 ; Called from: in-module: 0xF71E1D
 ; Touches: (0x10D0) (0x10D1) (0x11B1) (0x11B2) (0x1238) (0x1239) (0x124B)
 ;          (0x2732)
-; Calls:   sub_F71417 Smf_TrackToSlot sub_F701F1 T_PartSound_FromProgramChange BStore_LoadTrackCursor BStore_PutByteAndAdvance
-;          Smf_TicksToPpq96 sub_F7129A BStore_SaveTrackCursor
+; Calls:   SmfPart_ResetAllRecords Smf_TrackToSlot sub_F701F1 T_PartSound_FromProgramChange BStore_LoadTrackCursor BStore_PutByteAndAdvance
+;          Smf_TicksToPpq96 SmfEvent_MarkChannelUsed BStore_SaveTrackCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71E89 is an instruction boundary of this
@@ -173120,7 +173245,7 @@ SmfEvent_ProgramChange_MultiTrack:
 	ld	(4665:16), 0	; F71E9B  ld (0x1239),0x00
 sub_F71E89_Skip:
 	ld	(4683:16), 1	; F71EA0  ld (0x124b),0x01
-	call	sub_F71417	; F71EA5  call 0xf71417
+	call	SmfPart_ResetAllRecords	; F71EA5  call 0xf71417
 sub_F71E89_Skip2:
 	ld	iy, (Smf_EventStatus:16)	; F71EA9  ld IY,(0x10d0)
 	and	iy, 15	; F71EAD  and IY,0x000f
@@ -173221,7 +173346,7 @@ sub_F71E89_Skip3:
 	pop	xiy	; F71FB9  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71FBA  cp (0x1238),0x00
 	jrl	nz, sub_F71E89_Return	; F71FBF  jrl NZ,0xf7207c
-	calr	sub_F7129A	; F71FC2  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F71FC2  calr 0xf7129a
 	calr	BStore_SaveTrackCursor	; F71FC5  calr 0xf727f6
 	ld	(4664:16), 0	; F71FC8  ld (0x1238),0x00
 	jrl	sub_F71E89_Return	; F71FCD  jrl T,0xf7207c
@@ -173282,7 +173407,7 @@ sub_F71E89_Skip4:
 	call	BStore_PutByteAndAdvance	; F7205C  call 0xf70fda
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72060  cp (0x1238),0x00
 	jr	nz, sub_F71E89_Return	; F72065  jr NZ,0xf7207c
-	calr	sub_F7129A	; F72067  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F72067  calr 0xf7129a
 	calr	BStore_SaveTrackCursor	; F7206A  calr 0xf727f6
 	ld	(4664:16), 0	; F7206D  ld (0x1238),0x00
 	jr	sub_F71E89_Return	; F72072  jr T,0xf7207c
@@ -173347,7 +173472,7 @@ sub_F7208D_Join:
 	ld	(4665:16), 0	; F720BD  ld (0x1239),0x00
 sub_F7208D_Skip2:
 	ld	(4683:16), 1	; F720C2  ld (0x124b),0x01
-	call	sub_F71417	; F720C7  call 0xf71417
+	call	SmfPart_ResetAllRecords	; F720C7  call 0xf71417
 sub_F7208D_Skip3:
 	m_or_mi8 MB16, 0x11b1, 0x01	; F720CB  or (0x11b1),0x01
 	ld	iy, (4530:16)	; F720D0  ld IY,(0x11b2)
@@ -173427,7 +173552,7 @@ sub_F7208D_Skip4:
 	pop	xiy	; F72175  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72176  cp (0x1238),0x00
 	jr	nz, sub_F7208D_Return	; F7217B  jr NZ,0xf721a2
-	calr	sub_F7129A	; F7217D  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F7217D  calr 0xf7129a
 	push	xix	; F72180  push XIX
 	calr	BStore_SaveTrackCursor	; F72181  calr 0xf727f6
 	pop	xix	; F72184  pop XIX
@@ -173515,7 +173640,7 @@ sub_F721A3_Return:
 ; SmfEvent_ControlChange_MultiTrack
 ; Called from: in-module: 0xF71E13
 ; Touches: (0x10D1) (0x1239) (0x124B) (0x2732)
-; Calls:   sub_F71417 SmfCC_GeneralPurpose1 SmfCC_GeneralPurpose2 SmfCC_GeneralPurpose3 SmfCC_GeneralPurpose4 SmfCC_BankSelectLsb_MultiTrack
+; Calls:   SmfPart_ResetAllRecords SmfCC_GeneralPurpose1 SmfCC_GeneralPurpose2 SmfCC_GeneralPurpose3 SmfCC_GeneralPurpose4 SmfCC_BankSelectLsb_MultiTrack
 ;          SmfCC_DataEntryLsb_MultiTrack SmfCC_Sustain sub_F7039A_Nop2 sub_F7039A_Nop SmfCC_Effect1Depth_MultiTrack SmfCC_Effect3Depth_MultiTrack
 ;          +6 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -173536,7 +173661,7 @@ SmfEvent_ControlChange_MultiTrack:
 	ld	(4665:16), 0	; F7223F  ld (0x1239),0x00
 sub_F7222D_Skip:
 	ld	(4683:16), 1	; F72244  ld (0x124b),0x01
-	call	sub_F71417	; F72249  call 0xf71417
+	call	SmfPart_ResetAllRecords	; F72249  call 0xf71417
 sub_F7222D_Skip2:
 	ld	a, (4305:16)	; F7224D  ld A,(0x10d1)
 	cp	a, 16	; F72251  cp A,0x10
@@ -173733,7 +173858,7 @@ SmfCC_BankSelectMsb_MultiTrack:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11B2) (0x1238)
-; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A BStore_SaveTrackCursor
+; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed BStore_SaveTrackCursor
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -173779,7 +173904,7 @@ SmfCC_Modulation_MultiTrack:
 	pop	xiy	; F723CD  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F723CE  cp (0x1238),0x00
 	jr	nz, sub_F7237D_Return	; F723D3  jr NZ,0xf723e0
-	calr	sub_F7129A	; F723D5  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F723D5  calr 0xf7129a
 	calr	BStore_SaveTrackCursor	; F723D8  calr 0xf727f6
 	ld	(4664:16), 0	; F723DB  ld (0x1238),0x00
 sub_F7237D_Return:
@@ -173790,7 +173915,7 @@ sub_F7237D_Return:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2)
-; Calls:   sub_F705F7 sub_F70AE9
+; Calls:   sub_F705F7 SmfCC_PutSelectedRpnValueEvent
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -173838,7 +173963,7 @@ sub_F723E1_Skip:
 	pop	xhl	; F72431  pop XHL
 sub_F723E1_Skip2:
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F72432  ld (XHL+IY),A
-	calr	sub_F70AE9	; F72437  calr 0xf70ae9
+	calr	SmfCC_PutSelectedRpnValueEvent	; F72437  calr 0xf70ae9
 sub_F723E1_Return:
 	ret	; F7243A  ret
 
@@ -173846,7 +173971,7 @@ sub_F723E1_Return:
 ; SmfCC_DataEntryLsb_MultiTrack
 ; Called from: in-module: 0xF722E4
 ; Touches: (0x10D0) (0x10D2)
-; Calls:   sub_F705F7 sub_F70AE9
+; Calls:   sub_F705F7 SmfCC_PutSelectedRpnValueEvent
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7243B is an instruction boundary of this
@@ -173891,7 +174016,7 @@ sub_F7243B_Skip:
 	pop	xiy	; F7248A  pop XIY
 	pop	xhl	; F7248B  pop XHL
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F7248C  ld (XHL+IY),A
-	calr	sub_F70AE9	; F72491  calr 0xf70ae9
+	calr	SmfCC_PutSelectedRpnValueEvent	; F72491  calr 0xf70ae9
 sub_F7243B_Return:
 	ret	; F72494  ret
 
@@ -173920,7 +174045,7 @@ Data_F72495:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
-; Calls:   SmfPart_SetVolume sub_F726C6
+; Calls:   SmfPart_SetVolume SmfCC_PutPartParamEvent_MultiTrack
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -173942,7 +174067,7 @@ sub_F724A7_Skip:
 	ld	a, (4306:16)	; F724BA  ld A,(0x10d2)
 	ld	(4527:16), a	; F724BE  ld (0x11af),A
 	ld	(4528:16), 127	; F724C2  ld (0x11b0),0x7f
-	calr	sub_F726C6	; F724C7  calr 0xf726c6
+	calr	SmfCC_PutPartParamEvent_MultiTrack	; F724C7  calr 0xf726c6
 	ret	; F724CA  ret
 
 ; --------------------------------------------------------------------------
@@ -173950,7 +174075,7 @@ sub_F724A7_Skip:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11B2) (0x1238)
-; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A BStore_SaveTrackCursor
+; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed BStore_SaveTrackCursor
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -174012,7 +174137,7 @@ SmfCC_Pan_MultiTrack:
 	pop	xiy	; F72541  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72542  cp (0x1238),0x00
 	jr	nz, sub_F724CB_Return	; F72547  jr NZ,0xf72554
-	calr	sub_F7129A	; F72549  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F72549  calr 0xf7129a
 	calr	BStore_SaveTrackCursor	; F7254C  calr 0xf727f6
 	ld	(4664:16), 0	; F7254F  ld (0x1238),0x00
 sub_F724CB_Return:
@@ -174104,7 +174229,7 @@ SmfCC_Expression_MultiTrack:
 	pop	xiy	; F725C5  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F725C6  cp (0x1238),0x00
 	jr	nz, SmfCC_Expression_MultiTrack_Return	; F725CB  jr NZ,0xf725d8
-	calr	sub_F7129A	; F725CD  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F725CD  calr 0xf7129a
 	calr	BStore_SaveTrackCursor	; F725D0  calr 0xf727f6
 	ld	(4664:16), 0	; F725D3  ld (0x1238),0x00
 SmfCC_Expression_MultiTrack_Return:
@@ -174115,7 +174240,7 @@ SmfCC_Expression_MultiTrack_Return:
 ; SmfCC_BankSelectLsb_MultiTrack
 ; Called from: in-module: 0xF722DF
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
-; Calls:   sub_F725D9_Nop sub_F726C6
+; Calls:   sub_F725D9_Nop SmfCC_PutPartParamEvent_MultiTrack
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF725D9 is an instruction boundary of this
@@ -174158,7 +174283,7 @@ sub_F725D9_Skip:
 sub_F725D9_Skip2:
 	ld	(4527:16), a	; F7262D  ld (0x11af),A
 	ld	(4528:16), 8	; F72631  ld (0x11b0),0x08
-	calr	sub_F726C6	; F72636  calr 0xf726c6
+	calr	SmfCC_PutPartParamEvent_MultiTrack	; F72636  calr 0xf726c6
 	ret	; F72639  ret
 
 ; --------------------------------------------------------------------------
@@ -174166,7 +174291,7 @@ sub_F725D9_Skip2:
 ; Called from: in-module: 0xF722FB
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238) (0x1239)
 ;          (0x124B) (0x2732)
-; Calls:   sub_F71417 SmfPart_SetEffect1Depth sub_F726C6
+; Calls:   SmfPart_ResetAllRecords SmfPart_SetEffect1Depth SmfCC_PutPartParamEvent_MultiTrack
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -174186,7 +174311,7 @@ SmfCC_Effect1Depth_MultiTrack:
 	ld	(4665:16), 0	; F7264C  ld (0x1239),0x00
 sub_F7263A_Skip:
 	ld	(4683:16), 1	; F72651  ld (0x124b),0x01
-	call	sub_F71417	; F72656  call 0xf71417
+	call	SmfPart_ResetAllRecords	; F72656  call 0xf71417
 sub_F7263A_Skip2:
 	m_bit 0, MD16, 0x11b1	; F7265A  bit 0,(0x11b1)
 	jr	nz, sub_F7263A_Skip3	; F7265E  jr NZ,0xf72668
@@ -174197,14 +174322,14 @@ sub_F7263A_Skip3:
 	ld	a, (4306:16)	; F7266D  ld A,(0x10d2)
 	ld	(4527:16), a	; F72671  ld (0x11af),A
 	ld	(4528:16), 127	; F72675  ld (0x11b0),0x7f
-	calr	sub_F726C6	; F7267A  calr 0xf726c6
+	calr	SmfCC_PutPartParamEvent_MultiTrack	; F7267A  calr 0xf726c6
 	ret	; F7267D  ret
 
 ; --------------------------------------------------------------------------
 ; SmfCC_Effect3Depth_MultiTrack
 ; Called from: in-module: 0xF72301
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
-; Calls:   SmfPart_SetEffect3Depth sub_F726C6
+; Calls:   SmfPart_SetEffect3Depth SmfCC_PutPartParamEvent_MultiTrack
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7267E is an instruction boundary of this
@@ -174224,14 +174349,14 @@ sub_F7267E_Skip:
 	ld	a, (4306:16)	; F72691  ld A,(0x10d2)
 	ld	(4527:16), a	; F72695  ld (0x11af),A
 	ld	(4528:16), 127	; F72699  ld (0x11b0),0x7f
-	calr	sub_F726C6	; F7269E  calr 0xf726c6
+	calr	SmfCC_PutPartParamEvent_MultiTrack	; F7269E  calr 0xf726c6
 	ret	; F726A1  ret
 
 ; --------------------------------------------------------------------------
 ; SmfCC_Effect4Depth_MultiTrack
 ; Called from: in-module: 0xF72306
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
-; Calls:   SmfPart_SetEffect4Depth sub_F726C6
+; Calls:   SmfPart_SetEffect4Depth SmfCC_PutPartParamEvent_MultiTrack
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF726A2 is an instruction boundary of this
@@ -174251,14 +174376,14 @@ sub_F726A2_Skip:
 	ld	a, (4306:16)	; F726B5  ld A,(0x10d2)
 	ld	(4527:16), a	; F726B9  ld (0x11af),A
 	ld	(4528:16), 127	; F726BD  ld (0x11b0),0x7f
-	calr	sub_F726C6	; F726C2  calr 0xf726c6
+	calr	SmfCC_PutPartParamEvent_MultiTrack	; F726C2  calr 0xf726c6
 	ret	; F726C5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F726C6
+; SmfCC_PutPartParamEvent_MultiTrack
 ; Called from: in-module: 0xF724C7 0xF72636 0xF7267A 0xF7269E 0xF726C2
 ; Touches: (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x11B2) (0x1238)
-; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A BStore_SaveTrackCursor
+; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed BStore_SaveTrackCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF726C6 is an instruction boundary of this
@@ -174267,7 +174392,11 @@ sub_F726A2_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F726C6:
+; SmfCC_PutPartParamEvent_MultiTrack: Multi-track path: stores in slot Smf_TrackToSlot((0x11B2)) the 0xB0 parameter
+;   event {0xB0, tick, channel, (0x11AE) class, (0x11AF) value, (0x11B0) mask}, then marks the channel and saves the
+;   slot cursor; its callers set class 3 (SmfCC_Volume_MultiTrack), 7, 5, 6 (Effect1/3/4 depth) and 4 (value 0/8 by
+;   data >= 0x40, mask 8). Basis: callers + body. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+SmfCC_PutPartParamEvent_MultiTrack:
 	ld	iy, (4530:16)	; F726C6  ld IY,(0x11b2)
 	calr	Smf_TrackToSlot	; F726CA  calr 0xf728fe
 	and	iy, 15	; F726CD  and IY,0x000f
@@ -174317,7 +174446,7 @@ sub_F726C6:
 	pop	xiy	; F72740  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72741  cp (0x1238),0x00
 	jr	nz, sub_F726C6_Return	; F72746  jr NZ,0xf72753
-	calr	sub_F7129A	; F72748  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F72748  calr 0xf7129a
 	calr	BStore_SaveTrackCursor	; F7274B  calr 0xf727f6
 	ld	(4664:16), 0	; F7274E  ld (0x1238),0x00
 sub_F726C6_Return:
@@ -174327,7 +174456,7 @@ sub_F726C6_Return:
 ; SmfEvent_PitchBend_MultiTrack
 ; Called from: in-module: 0xF71E18
 ; Touches: (0x10D0) (0x10D1) (0x10D2) (0x11B2) (0x1238)
-; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A BStore_SaveTrackCursor
+; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed BStore_SaveTrackCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72754 is an instruction boundary of this
@@ -174377,7 +174506,7 @@ SmfEvent_PitchBend_MultiTrack:
 	pop	xiy	; F727B4  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F727B5  cp (0x1238),0x00
 	jr	nz, sub_F72754_Return	; F727BA  jr NZ,0xf727c7
-	calr	sub_F7129A	; F727BC  calr 0xf7129a
+	calr	SmfEvent_MarkChannelUsed	; F727BC  calr 0xf7129a
 	calr	BStore_SaveTrackCursor	; F727BF  calr 0xf727f6
 	ld	(4664:16), 0	; F727C2  ld (0x1238),0x00
 sub_F72754_Return:
@@ -187229,7 +187358,7 @@ sub_F7AB3F_Return2:
 ; TrackClear_OnLeave
 ; Called from: T_TrackClear_OnLeave (x1)
 ; Touches: (0x0E46) (0x207A) (0x3010) (0x360C)
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_TrackClear_OnLeave holds `jp 0x00F7ABB9`, and 0xF7ABB9 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -187248,7 +187377,7 @@ TrackClear_OnLeave:		; <- T_TrackClear_OnLeave
 	ld	(6304798:24), wa	; F7ABCC  ld (0x60341e),WA
 	xor	xwa, xwa	; F7ABD1  xor XWA,XWA
 	ld	(12304:16), xwa	; F7ABD3  ld (0x3010),XWA
-	call	T_F409E0	; F7ABD7  call 0xf409e0
+	call	T_Seq_RequestRewind	; F7ABD7  call 0xf409e0
 sub_F7AB3F_Return3:
 	ret	; F7ABDB  ret
 
@@ -187365,7 +187494,7 @@ sub_F7AC9D:		; <- T_F42938
 ; TrackMerge_OnLeave
 ; Called from: T_TrackMerge_OnLeave (x1)
 ; Touches: (0x207A) (0x3010) (0x360C)
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_TrackMerge_OnLeave holds `jp 0x00F7ACA6`, and 0xF7ACA6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -187383,7 +187512,7 @@ TrackMerge_OnLeave:		; <- T_TrackMerge_OnLeave
 	ld	(6304798:24), xwa	; F7ACB5  ld (0x60341e),XWA
 	xor	xwa, xwa	; F7ACBA  xor XWA,XWA
 	ld	(12304:16), xwa	; F7ACBC  ld (0x3010),XWA
-	call	T_F409E0	; F7ACC0  call 0xf409e0
+	call	T_Seq_RequestRewind	; F7ACC0  call 0xf409e0
 sub_F7AB3F_Return6:
 	ret	; F7ACC4  ret
 
@@ -187865,7 +187994,7 @@ MeasureDelete_InitFields:		; <- T_MeasureDelete_InitFields
 ; MeasureDelete_OnLeave
 ; Called from: T_MeasureDelete_OnLeave (x1)
 ; Touches: (0x207A)
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_MeasureDelete_OnLeave holds `jp 0x00F7B00E`, and 0xF7B00E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -187878,7 +188007,7 @@ MeasureDelete_InitFields:		; <- T_MeasureDelete_InitFields
 MeasureDelete_OnLeave:		; <- T_MeasureDelete_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x23	; F7B00E  cp (0x207a),0x23
 	jr	z, sub_F7AFD8_Return	; F7B013  jr Z,0xf7b019
-	call	T_F409E0	; F7B015  call 0xf409e0
+	call	T_Seq_RequestRewind	; F7B015  call 0xf409e0
 sub_F7AFD8_Return:
 	ret	; F7B019  ret
 
@@ -188235,7 +188364,7 @@ MeasureErase_InitFields:		; <- T_MeasureErase_InitFields
 ; MeasureErase_OnLeave
 ; Called from: T_MeasureErase_OnLeave (x1)
 ; Touches: (0x207A)
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_MeasureErase_OnLeave holds `jp 0x00F7B23A`, and 0xF7B23A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -188248,7 +188377,7 @@ MeasureErase_InitFields:		; <- T_MeasureErase_InitFields
 MeasureErase_OnLeave:		; <- T_MeasureErase_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x20	; F7B23A  cp (0x207a),0x20
 	jr	z, sub_F7B1D1_Return2	; F7B23F  jr Z,0xf7b245
-	call	T_F409E0	; F7B241  call 0xf409e0
+	call	T_Seq_RequestRewind	; F7B241  call 0xf409e0
 sub_F7B1D1_Return2:
 	ret	; F7B245  ret
 
@@ -188675,7 +188804,7 @@ MeasureInsert_InitFields:		; <- T_MeasureInsert_InitFields
 ; MeasureInsert_OnLeave
 ; Called from: T_MeasureInsert_OnLeave (x1)
 ; Touches: (0x207A) (0x3010) (0x360C)
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_MeasureInsert_OnLeave holds `jp 0x00F7B4CD`, and 0xF7B4CD is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -188693,7 +188822,7 @@ MeasureInsert_OnLeave:		; <- T_MeasureInsert_OnLeave
 	ld	(6304798:24), xwa	; F7B4DC  ld (0x60341e),XWA
 	xor	xwa, xwa	; F7B4E1  xor XWA,XWA
 	ld	(12304:16), xwa	; F7B4E3  ld (0x3010),XWA
-	call	T_F409E0	; F7B4E7  call 0xf409e0
+	call	T_Seq_RequestRewind	; F7B4E7  call 0xf409e0
 sub_F7B457_Return2:
 	ret	; F7B4EB  ret
 
@@ -189285,7 +189414,7 @@ MeasureC0py_InitFields:		; <- T_MeasureC0py_InitFields
 ; MeasureC0py_OnLeave
 ; Called from: T_MeasureC0py_OnLeave (x1)
 ; Touches: (0x207A) (0x3010) (0x360C)
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_MeasureC0py_OnLeave holds `jp 0x00F7B8EA`, and 0xF7B8EA is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -189303,7 +189432,7 @@ MeasureC0py_OnLeave:		; <- T_MeasureC0py_OnLeave
 	ld	(6304798:24), xwa	; F7B8F9  ld (0x60341e),XWA
 	xor	xwa, xwa	; F7B8FE  xor XWA,XWA
 	ld	(12304:16), xwa	; F7B900  ld (0x3010),XWA
-	call	T_F409E0	; F7B904  call 0xf409e0
+	call	T_Seq_RequestRewind	; F7B904  call 0xf409e0
 sub_F7B852_Return2:
 	ret	; F7B908  ret
 
@@ -189902,7 +190031,7 @@ Vel0cityChange_InitFields:		; <- T_Vel0cityChange_InitFields
 ; Vel0cityChange_OnLeave
 ; Called from: T_Vel0cityChange_OnLeave (x1)
 ; Touches: (0x207A)
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_Vel0cityChange_OnLeave holds `jp 0x00F7BD24`, and 0xF7BD24 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -189915,7 +190044,7 @@ Vel0cityChange_InitFields:		; <- T_Vel0cityChange_InitFields
 Vel0cityChange_OnLeave:		; <- T_Vel0cityChange_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1d	; F7BD24  cp (0x207a),0x1d
 	jr	z, sub_F7BC73_Return2	; F7BD29  jr Z,0xf7bd2f
-	call	T_F409E0	; F7BD2B  call 0xf409e0
+	call	T_Seq_RequestRewind	; F7BD2B  call 0xf409e0
 sub_F7BC73_Return2:
 	ret	; F7BD2F  ret
 
@@ -190397,7 +190526,7 @@ sub_F7BF74_Return2:
 ; Quantize_OnLeave
 ; Called from: T_Quantize_OnLeave (x1)
 ; Touches: (0x207A)
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_Quantize_OnLeave holds `jp 0x00F7C0AF`, and 0xF7C0AF is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -190410,7 +190539,7 @@ sub_F7BF74_Return2:
 Quantize_OnLeave:		; <- T_Quantize_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1e	; F7C0AF  cp (0x207a),0x1e
 	jr	z, sub_F7BF74_Return3	; F7C0B4  jr Z,0xf7c0ba
-	call	T_F409E0	; F7C0B6  call 0xf409e0
+	call	T_Seq_RequestRewind	; F7C0B6  call 0xf409e0
 sub_F7BF74_Return3:
 	ret	; F7C0BA  ret
 
@@ -190990,7 +191119,7 @@ sub_F7C3B2_Return:
 ; sub_F7C3EE
 ; Called from: T_F42A0C (x0)
 ; Touches: (0x207A)
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_F42A0C holds `jp 0x00F7C3EE`, and 0xF7C3EE is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -191001,7 +191130,7 @@ sub_F7C3B2_Return:
 sub_F7C3EE:		; <- T_F42A0C
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x2a	; F7C3EE  cp (0x207a),0x2a
 	jr	z, sub_F7C3EE_Return	; F7C3F3  jr Z,0xf7c3f9
-	call	T_F409E0	; F7C3F5  call 0xf409e0
+	call	T_Seq_RequestRewind	; F7C3F5  call 0xf409e0
 sub_F7C3EE_Return:
 	ret	; F7C3F9  ret
 
@@ -191352,7 +191481,7 @@ sub_F7C440_Return8:
 ; sub_F7C5EA
 ; Called from: T_F42AB8 (x0)
 ; Touches: (0x207A)
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_F42AB8 holds `jp 0x00F7C5EA`, and 0xF7C5EA is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -191363,7 +191492,7 @@ sub_F7C440_Return8:
 sub_F7C5EA:		; <- T_F42AB8
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x2e	; F7C5EA  cp (0x207a),0x2e
 	jr	z, sub_F7C440_Return9	; F7C5EF  jr Z,0xf7c5f5
-	call	T_F409E0	; F7C5F1  call 0xf409e0
+	call	T_Seq_RequestRewind	; F7C5F1  call 0xf409e0
 sub_F7C440_Return9:
 	ret	; F7C5F5  ret
 
@@ -191445,7 +191574,7 @@ sub_F7C62D:
 ; Transp0se_OnLeave
 ; Called from: T_Transp0se_OnLeave (x1)
 ; Touches: (0x207A)
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_Transp0se_OnLeave holds `jp 0x00F7C666`, and 0xF7C666 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -191458,7 +191587,7 @@ sub_F7C62D:
 Transp0se_OnLeave:		; <- T_Transp0se_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x2b	; F7C666  cp (0x207a),0x2b
 	jr	z, sub_F7C62D_Return	; F7C66B  jr Z,0xf7c671
-	call	T_F409E0	; F7C66D  call 0xf409e0
+	call	T_Seq_RequestRewind	; F7C66D  call 0xf409e0
 sub_F7C62D_Return:
 	ret	; F7C671  ret
 
@@ -191938,7 +192067,7 @@ N0teChange_StageDisplayFields:
 ; N0teChange_OnLeave
 ; Called from: T_N0teChange_OnLeave (x1)
 ; Touches: (0x207A)
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_N0teChange_OnLeave holds `jp 0x00F7C8BC`, and 0xF7C8BC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -191951,7 +192080,7 @@ N0teChange_StageDisplayFields:
 N0teChange_OnLeave:		; <- T_N0teChange_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x2d	; F7C8BC  cp (0x207a),0x2d
 	jr	z, sub_F7C869_Return	; F7C8C1  jr Z,0xf7c8c7
-	call	T_F409E0	; F7C8C3  call 0xf409e0
+	call	T_Seq_RequestRewind	; F7C8C3  call 0xf409e0
 sub_F7C869_Return:
 	ret	; F7C8C7  ret
 
@@ -192419,7 +192548,7 @@ sub_F7CAD2_Return:
 ; AdvanceDelay_OnLeave
 ; Called from: T_AdvanceDelay_OnLeave (x1)
 ; Touches: (0x207A)
-; Calls:   T_F409E0
+; Calls:   T_Seq_RequestRewind
 ; Evidence: thunk slot T_AdvanceDelay_OnLeave holds `jp 0x00F7CB12`, and 0xF7CB12 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -192432,7 +192561,7 @@ sub_F7CAD2_Return:
 AdvanceDelay_OnLeave:		; <- T_AdvanceDelay_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x2c	; F7CB12  cp (0x207a),0x2c
 	jr	z, sub_F7CB12_Return	; F7CB17  jr Z,0xf7cb1d
-	call	T_F409E0	; F7CB19  call 0xf409e0
+	call	T_Seq_RequestRewind	; F7CB19  call 0xf409e0
 sub_F7CB12_Return:
 	ret	; F7CB1D  ret
 
@@ -195931,7 +196060,11 @@ sub_F7E2ED:
 
 ; Evidence: reached from call from prom_b 0xF7E57C; calr from prom_b
 ;           0xF7E4A4, and from nothing else the scans see.
-sub_F7E2FC:
+; TrackAssign_DrawSelectedPart: TRACK ASSIGN: draws, on layer 0, the part being chosen (0x0C06) as 'PART n' in the
+;   selected track's cell -- record (0x0C03) of DL_F39737 -- then one of two lists by (0x0DC0) bit 0.
+;   Paint_TrackAssign and the track/part keys call it after they change (0x0C03)/(0x0C06). Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+TrackAssign_DrawSelectedPart:
 	m_or_mi8 MB8, 0xc6, 0x01	; F7E2FC  or (0xc6),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7E300  or (0x2075),0x08
 	ld	(LCD_CurrentLayer:16), 0	; F7E305  ld (0x2540),0x00
@@ -196125,8 +196258,8 @@ Paint_TrackAssign_Skip2:
 	ld	xix, Paint_TrackLabels1To8_DL	; F7E498  ld XIX,0x00f3b5d1
 	call	T_DisplayList_Run	; F7E49D  call 0xf417f0
 Paint_TrackAssign_Skip3:
-	calr	sub_F7E788	; F7E4A1  calr 0xf7e788
-	calr	sub_F7E2FC	; F7E4A4  calr 0xf7e2fc
+	calr	TrackAssign_PaintTrackGroup	; F7E4A1  calr 0xf7e788
+	calr	TrackAssign_DrawSelectedPart	; F7E4A4  calr 0xf7e2fc
 	calr	LCD_ScreenRedraw_End	; F7E4A7  calr 0xf7e2e7
 	jr	Paint_TrackAssign_Return	; F7E4AA  jr T,0xf7e4f8
 Paint_TrackAssign_Skip4:
@@ -196234,8 +196367,8 @@ ScreenLeaveBody_TrackAssign_Skip:
 	jr	z, ScreenLeaveBody_TrackAssign_Return	; F7E51D  jr Z,0xf7e529
 ScreenLeaveBody_TrackAssign_Join:
 	call	T_TrackAssign_StageZero_SoftKeyCol4	; F7E51F  call 0xf42ba0
-	calr	sub_F7E788	; F7E523  calr 0xf7e788
-	calr	sub_F7E2FC	; F7E526  calr 0xf7e2fc
+	calr	TrackAssign_PaintTrackGroup	; F7E523  calr 0xf7e788
+	calr	TrackAssign_DrawSelectedPart	; F7E526  calr 0xf7e2fc
 ScreenLeaveBody_TrackAssign_Return:
 	ret	; F7E529  ret
 
@@ -196285,8 +196418,8 @@ ScreenLeaveBody_TrackAssign_Return:
 ; ---------------------------------------------------------------------
 SoftKeyCol5_TrackAssign_StageZero:
 	call	T_TrackAssign_StageZero_SoftKeyCol5	; F7E52A  call 0xf42ba8
-	calr	sub_F7E788	; F7E52E  calr 0xf7e788
-	calr	sub_F7E2FC	; F7E531  calr 0xf7e2fc
+	calr	TrackAssign_PaintTrackGroup	; F7E52E  calr 0xf7e788
+	calr	TrackAssign_DrawSelectedPart	; F7E531  calr 0xf7e2fc
 	ret	; F7E534  ret
 ButtonTable_TrackAssign_StageZero_Nop5:
 	ret	; F7E535  ret   <- button table 0xF7D558 entry 5 (TRACK ASSIGN) and 1 more slot(s)
@@ -196338,8 +196471,8 @@ ButtonTable_TrackAssign_StageZero_Nop5:
 SoftKeyCol7_TrackAssign_StageZero:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7E536  or (0x2075),0x08
 	call	T_TrackAssign_StageZero_SoftKeyCol7	; F7E53B  call 0xf42bac
-	calr	sub_F7E788	; F7E53F  calr 0xf7e788
-	calr	sub_F7E2FC	; F7E542  calr 0xf7e2fc
+	calr	TrackAssign_PaintTrackGroup	; F7E53F  calr 0xf7e788
+	calr	TrackAssign_DrawSelectedPart	; F7E542  calr 0xf7e2fc
 	ret	; F7E545  ret
 ButtonTable_TrackAssign_StageZero_Nop7:
 	ret	; F7E546  ret   <- button table 0xF7D558 entry 7 (TRACK ASSIGN)
@@ -196387,9 +196520,9 @@ LcdKeyRow1_TrackAssign_StageZero:
 	jr	z, ScreenLeaveBody_TrackAssign_Skip2	; F7E551  jr Z,0xf7e55f
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7E553  or (0x2075),0x09
 	call	T_TrackAssign_StageZero_LcdKeyRow1	; F7E558  call 0xf42b90
-	calr	sub_F7E788	; F7E55C  calr 0xf7e788
+	calr	TrackAssign_PaintTrackGroup	; F7E55C  calr 0xf7e788
 ScreenLeaveBody_TrackAssign_Skip2:
-	calr	sub_F7E2FC	; F7E55F  calr 0xf7e2fc
+	calr	TrackAssign_DrawSelectedPart	; F7E55F  calr 0xf7e2fc
 ScreenLeaveBody_TrackAssign_Return2:
 	ret	; F7E562  ret
 
@@ -196436,8 +196569,8 @@ LcdKeyRow2_TrackAssign_StageZero:
 	jr	z, ScreenLeaveBody_TrackAssign_Return3	; F7E56D  jr Z,0xf7e580
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7E56F  or (0x2075),0x09
 	call	T_TrackAssign_StageZero_LcdKeyRow2	; F7E574  call 0xf42b8c
-	call	sub_F7E788	; F7E578  call 0xf7e788
-	call	sub_F7E2FC	; F7E57C  call 0xf7e2fc
+	call	TrackAssign_PaintTrackGroup	; F7E578  call 0xf7e788
+	call	TrackAssign_DrawSelectedPart	; F7E57C  call 0xf7e2fc
 ScreenLeaveBody_TrackAssign_Return3:
 	ret	; F7E580  ret
 
@@ -196489,7 +196622,7 @@ ScreenLeaveBody_TrackAssign_Skip3:
 	m_cp_mi8 MB16, 0x0c03, 0x07	; F7E595  cp (0x0c03),0x07
 	jr	ule, ScreenLeaveBody_TrackAssign_Return4	; F7E59A  jr ULE,0xf7e5a4
 	call	T_TrackAssign_SelectTrackGroup	; F7E59C  call 0xf42b94
-	call	sub_F7E788	; F7E5A0  call 0xf7e788
+	call	TrackAssign_PaintTrackGroup	; F7E5A0  call 0xf7e788
 ScreenLeaveBody_TrackAssign_Return4:
 	ret	; F7E5A4  ret
 
@@ -196535,7 +196668,7 @@ LcdKeyRow4_TrackAssign_StageZero:
 	m_cp_mi8 MB16, 0x0c03, 0x07	; F7E5AA  cp (0x0c03),0x07
 	jr	ugt, ScreenLeaveBody_TrackAssign_Return5	; F7E5AF  jr UGT,0xf7e5b9
 	call	T_TrackAssign_SelectTrackGroup	; F7E5B1  call 0xf42b94
-	call	sub_F7E788	; F7E5B5  call 0xf7e788
+	call	TrackAssign_PaintTrackGroup	; F7E5B5  call 0xf7e788
 ScreenLeaveBody_TrackAssign_Return5:
 	ret	; F7E5B9  ret
 
@@ -197531,7 +197664,11 @@ sub_F7E770:
 
 ; Evidence: reached from call from prom_b 0xF7E578; call from prom_b
 ;           0xF7E5A0, and from nothing else the scans see.
-sub_F7E788:
+; TrackAssign_PaintTrackGroup: TRACK ASSIGN: repaints the table for the shown group of eight tracks -- bank number,
+;   cursor row, group indicator, then for (0x0C07) bit 0 = 0 the TR 1-8 labels, parts (BStore_TrackToPart), per-track
+;   bits of (0x603454) and MIDI channels (0x603433), or the TR 9-16 equivalents. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+TrackAssign_PaintTrackGroup:
 	m_or_mi8 MB8, 0xc6, 0x01	; F7E788  or (0xc6),0x01
 	calr	sub_F7E39F_Nop	; F7E78C  calr 0xf7e2d8
 	ld	a, (BStore_CurrentBank:16)	; F7E78F  ld A,(0x360a)
@@ -198898,7 +199035,7 @@ ScreenLeaveBody_TrackClear_Skip:
 	add	c, 8	; F7ED0B  add C,0x08
 	ld	(13826:16), 8	; F7ED0E  ld (0x3602),0x08
 ScreenLeaveBody_TrackClear_Join:
-	call	T_F40CC4	; F7ED13  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F7ED13  call 0xf40cc4
 	ret	; F7ED17  ret
 
 ; ---------------------------------------------------------------------
@@ -198956,7 +199093,7 @@ ScreenLeaveBody_TrackClear_Skip2:
 	add	c, 8	; F7ED24  add C,0x08
 	ld	(13826:16), 9	; F7ED27  ld (0x3602),0x09
 ScreenLeaveBody_TrackClear_Join2:
-	call	T_F40CC4	; F7ED2C  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F7ED2C  call 0xf40cc4
 	ret	; F7ED30  ret
 
 ; ---------------------------------------------------------------------
@@ -199014,7 +199151,7 @@ ScreenLeaveBody_TrackClear_Skip3:
 	add	c, 8	; F7ED3D  add C,0x08
 	ld	(13826:16), 10	; F7ED40  ld (0x3602),0x0a
 ScreenLeaveBody_TrackClear_Join3:
-	call	T_F40CC4	; F7ED45  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F7ED45  call 0xf40cc4
 	ret	; F7ED49  ret
 
 ; ---------------------------------------------------------------------
@@ -199072,7 +199209,7 @@ ScreenLeaveBody_TrackClear_Skip4:
 	add	c, 8	; F7ED56  add C,0x08
 	ld	(13826:16), 11	; F7ED59  ld (0x3602),0x0b
 ScreenLeaveBody_TrackClear_Join4:
-	call	T_F40CC4	; F7ED5E  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F7ED5E  call 0xf40cc4
 	ret	; F7ED62  ret
 
 ; ---------------------------------------------------------------------
@@ -199128,7 +199265,7 @@ ScreenLeaveBody_TrackClear_Skip5:
 	add	c, 8	; F7ED6F  add C,0x08
 	ld	(13826:16), 12	; F7ED72  ld (0x3602),0x0c
 ScreenLeaveBody_TrackClear_Join5:
-	call	T_F40CC4	; F7ED77  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F7ED77  call 0xf40cc4
 	ret	; F7ED7B  ret
 
 ; ---------------------------------------------------------------------
@@ -199184,7 +199321,7 @@ ScreenLeaveBody_TrackClear_Skip6:
 	add	c, 8	; F7ED88  add C,0x08
 	ld	(13826:16), 13	; F7ED8B  ld (0x3602),0x0d
 ScreenLeaveBody_TrackClear_Join6:
-	call	T_F40CC4	; F7ED90  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F7ED90  call 0xf40cc4
 	ret	; F7ED94  ret
 
 ; ---------------------------------------------------------------------
@@ -199240,7 +199377,7 @@ ScreenLeaveBody_TrackClear_Skip7:
 	add	c, 8	; F7EDA1  add C,0x08
 	ld	(13826:16), 14	; F7EDA4  ld (0x3602),0x0e
 ScreenLeaveBody_TrackClear_Join7:
-	call	T_F40CC4	; F7EDA9  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F7EDA9  call 0xf40cc4
 	ret	; F7EDAD  ret
 
 ; ---------------------------------------------------------------------
@@ -199296,7 +199433,7 @@ ScreenLeaveBody_TrackClear_Skip8:
 	add	c, 8	; F7EDBA  add C,0x08
 	ld	(13826:16), 15	; F7EDBD  ld (0x3602),0x0f
 ScreenLeaveBody_TrackClear_Join8:
-	call	T_F40CC4	; F7EDC2  call 0xf40cc4
+	call	T_SeqTrackKey_Press	; F7EDC2  call 0xf40cc4
 	ret	; F7EDC6  ret
 ButtonTable_TrackClear_StageZero_Nop8:
 	ret	; F7EDC7  ret   <- button table 0xF7D458 entry 8 (TRACK CLEAR)
@@ -200798,7 +200935,7 @@ ScreenLeaveBody_MeasureErase_Skip:
 ScreenLeaveBody_MeasureErase_Skip2:
 	call	T_MeasureErase_StepFieldDown	; F7F2FD  call 0xf4299c
 ScreenLeaveBody_MeasureErase_Join:
-	calr	sub_F7F397	; F7F301  calr 0xf7f397
+	calr	MeasureErase_DrawValues	; F7F301  calr 0xf7f397
 	ret	; F7F304  ret
 ButtonTable_MeasureErase_StageZero_Nop5:
 	ret	; F7F305  ret   <- button table 0xF7D8D8 entry 5 (MEASURE ERASE)
@@ -200852,7 +200989,7 @@ LcdKeyRow1_MeasureErase_StageZero:
 	call	T_MeasureErase_SelectField1	; F7F317  call 0xf42988
 	ld	a, (3515:16)	; F7F31B  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F31F  ld (0x12fc),A
-	calr	sub_F7F397	; F7F323  calr 0xf7f397
+	calr	MeasureErase_DrawValues	; F7F323  calr 0xf7f397
 	calr	MeasureErase_RedrawFields	; F7F326  calr 0xf7f32a
 ScreenLeaveBody_MeasureErase_Return:
 	ret	; F7F329  ret
@@ -200916,7 +201053,7 @@ LcdKeyRow2_MeasureErase_StageZero:
 	call	T_MeasureErase_SelectField2	; F7F359  call 0xf4298c
 	ld	a, (3515:16)	; F7F35D  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F361  ld (0x12fc),A
-	calr	sub_F7F397	; F7F365  calr 0xf7f397
+	calr	MeasureErase_DrawValues	; F7F365  calr 0xf7f397
 	calr	MeasureErase_RedrawFields	; F7F368  calr 0xf7f32a
 	jr	sub_F7F32A_Return	; F7F36B  jr T,0xf7f374
 sub_F7F32A_Skip:
@@ -200970,14 +201107,18 @@ LcdKeyRow3_MeasureErase_StageZero:
 	call	T_MeasureErase_SelectField3	; F7F384  call 0xf42990
 	ld	a, (3515:16)	; F7F388  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F38C  ld (0x12fc),A
-	calr	sub_F7F397	; F7F390  calr 0xf7f397
+	calr	MeasureErase_DrawValues	; F7F390  calr 0xf7f397
 	calr	MeasureErase_RedrawFields	; F7F393  calr 0xf7f32a
 sub_F7F32A_Return2:
 	ret	; F7F396  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F301; calr from prom_b
 ;           0xF7F323, and from nothing else the scans see.
-sub_F7F397:
+; MeasureErase_DrawValues: MEASURE ERASE: on layer 0, runs DL_F3A9DA up to its cursor-box record: the track
+;   (0-16/MASTER/ALL, DisplayListB_Stage+0), the ALL/NOTE/CONTROL choice (+5) and two 3-digit values (+1, +3). Every
+;   MEASURE ERASE field key calls it after changing a field, then MeasureErase_RedrawFields. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+MeasureErase_DrawValues:
 	ld	(LCD_CurrentLayer:16), 0	; F7F397  ld (0x2540),0x00
 	calr	sub_F7E39F_Nop	; F7F39C  calr 0xf7e2d8
 	ld	xiy, DL_F3A9DA	; F7F39F  ld XIY,0x00f3a9da
@@ -201030,7 +201171,7 @@ LcdKeyRow4_MeasureErase_StageZero:
 	call	T_MeasureErase_SelectField4	; F7F3BD  call 0xf42994
 	ld	a, (3515:16)	; F7F3C1  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F3C5  ld (0x12fc),A
-	calr	sub_F7F397	; F7F3C9  calr 0xf7f397
+	calr	MeasureErase_DrawValues	; F7F3C9  calr 0xf7f397
 	calr	MeasureErase_RedrawFields	; F7F3CC  calr 0xf7f32a
 sub_F7F397_Return:
 	ret	; F7F3CF  ret
@@ -201104,7 +201245,7 @@ sub_F7F397_Skip2:
 sub_F7F397_Skip3:
 	call	T_MeasureErase_StepFieldDown	; F7F401  call 0xf4299c
 sub_F7F397_Join:
-	calr	sub_F7F397	; F7F405  calr 0xf7f397
+	calr	MeasureErase_DrawValues	; F7F405  calr 0xf7f397
 	ret	; F7F408  ret
 ButtonTable_MeasureErase_StageZero_Nop22:
 	ret	; F7F409  ret   <- button table 0xF7D8D8 entry 22 (MEASURE ERASE) and 4 more slot(s)
@@ -201352,7 +201493,7 @@ sub_F7F470_Join:
 	inc	1, wa	; F7F4DF  inc 1,WA
 	ld	(6304868:24), wa	; F7F4E1  ld (0x603464),WA
 	call	T_Blink_Stop	; F7F4E6  call 0xf42e24
-	calr	sub_F7F397	; F7F4EA  calr 0xf7f397
+	calr	MeasureErase_DrawValues	; F7F4EA  calr 0xf7f397
 sub_F7F470_Return:
 	ret	; F7F4ED  ret
 
@@ -202370,7 +202511,7 @@ ScreenLeaveBody_Vel0cityChange_Skip:
 ScreenLeaveBody_Vel0cityChange_Skip2:
 	call	T_Vel0cityChange_StepFieldUp	; F7F977  call 0xf428f8
 ScreenLeaveBody_Vel0cityChange_Join:
-	calr	sub_F7F9FB	; F7F97B  calr 0xf7f9fb
+	calr	Vel0cityChange_DrawValues	; F7F97B  calr 0xf7f9fb
 	ret	; F7F97E  ret
 ButtonTable_Vel0cityChange_StageZero_Nop5:
 	ret	; F7F97F  ret   <- button table 0xF7DAD8 entry 5 (VEL0CITY CHANGE)
@@ -202422,7 +202563,7 @@ LcdKeyRow1_Vel0cityChange_StageZero:
 	jr	z, ScreenLeaveBody_Vel0cityChange_Return	; F7F98C  jr Z,0xf7f99b
 	calr	Blink_DisableThenStop	; F7F98E  calr 0xf7f245
 	call	T_Vel0cityChange_StageZero_LcdKeyRow1	; F7F991  call 0xf428e8
-	calr	sub_F7F9FB	; F7F995  calr 0xf7f9fb
+	calr	Vel0cityChange_DrawValues	; F7F995  calr 0xf7f9fb
 	calr	Vel0cityChange_RedrawFields	; F7F998  calr 0xf7f99c
 ScreenLeaveBody_Vel0cityChange_Return:
 	ret	; F7F99B  ret
@@ -202484,7 +202625,7 @@ LcdKeyRow2_Vel0cityChange_StageZero:
 	jr	z, sub_F7F99C_Return	; F7F9C6  jr Z,0xf7f9de
 	calr	Blink_EnableThenStop_Copy	; F7F9C8  calr 0xf7f237
 	call	T_Vel0cityChange_StageZero_LcdKeyRow2	; F7F9CB  call 0xf428ec
-	calr	sub_F7F9FB	; F7F9CF  calr 0xf7f9fb
+	calr	Vel0cityChange_DrawValues	; F7F9CF  calr 0xf7f9fb
 	calr	Vel0cityChange_RedrawFields	; F7F9D2  calr 0xf7f99c
 	jr	sub_F7F99C_Return	; F7F9D5  jr T,0xf7f9de
 sub_F7F99C_Skip:
@@ -202536,7 +202677,7 @@ LcdKeyRow3_Vel0cityChange_StageZero:
 	jr	z, sub_F7F99C_Return2	; F7F9E9  jr Z,0xf7f9fa
 	calr	Blink_EnableThenStop_Copy	; F7F9EB  calr 0xf7f237
 	call	T_Vel0cityChange_StageZero_LcdKeyRow3	; F7F9EE  call 0xf428f0
-	calr	sub_F7F9FB	; F7F9F2  calr 0xf7f9fb
+	calr	Vel0cityChange_DrawValues	; F7F9F2  calr 0xf7f9fb
 	calr	Vel0cityChange_RedrawFields	; F7F9F5  calr 0xf7f99c
 	jr	sub_F7F99C_Return2	; F7F9F8  jr T,0xf7f9fa
 sub_F7F99C_Return2:
@@ -202544,7 +202685,11 @@ sub_F7F99C_Return2:
 
 ; Evidence: reached from calr from prom_b 0xF7F97B; calr from prom_b
 ;           0xF7F995, and from nothing else the scans see.
-sub_F7F9FB:
+; Vel0cityChange_DrawValues: VEL0CITY CHANGE: on layer 0, formats (0x0C24) as signed digits (sub_F7F935) and runs
+;   DL_F3AB3B up to its cursor-box record: the track (0-16/ALL, DisplayListB_Stage+0), two 3-digit values (+1, +3) and
+;   a signed value (+5). Every VEL0CITY CHANGE field key calls it after changing a field. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
+Vel0cityChange_DrawValues:
 	ld	(LCD_CurrentLayer:16), 0	; F7F9FB  ld (0x2540),0x00
 	calr	sub_F7E39F_Nop	; F7FA00  calr 0xf7e2d8
 	calr	sub_F7F935	; F7FA03  calr 0xf7f935
@@ -202596,7 +202741,7 @@ LcdKeyRow4_Vel0cityChange_StageZero:
 	jr	z, sub_F7F9FB_Return	; F7FA1F  jr Z,0xf7fa30
 	calr	Blink_EnableThenStop_Copy	; F7FA21  calr 0xf7f237
 	call	T_Vel0cityChange_StageZero_LcdKeyRow4	; F7FA24  call 0xf428f4
-	calr	sub_F7F9FB	; F7FA28  calr 0xf7f9fb
+	calr	Vel0cityChange_DrawValues	; F7FA28  calr 0xf7f9fb
 	calr	Vel0cityChange_RedrawFields	; F7FA2B  calr 0xf7f99c
 	jr	sub_F7F9FB_Return	; F7FA2E  jr T,0xf7fa30
 sub_F7F9FB_Return:
@@ -202671,7 +202816,7 @@ sub_F7F9FB_Skip2:
 sub_F7F9FB_Skip3:
 	call	T_Vel0cityChange_StepFieldUp	; F7FA62  call 0xf428f8
 sub_F7F9FB_Join:
-	calr	sub_F7F9FB	; F7FA66  calr 0xf7f9fb
+	calr	Vel0cityChange_DrawValues	; F7FA66  calr 0xf7f9fb
 	ret	; F7FA69  ret
 ButtonTable_Vel0cityChange_StageZero_Nop22:
 	ret	; F7FA6A  ret   <- button table 0xF7DAD8 entry 22 (VEL0CITY CHANGE) and 4 more slot(s)
@@ -202950,7 +203095,7 @@ sub_F7FAD2_Join3:
 	ld	(DisplayListB_Stage+5:16), a	; F7FB98  ld (0x12fb),A
 sub_F7FAD2_Join4:
 	call	T_Blink_Stop	; F7FB9C  call 0xf42e24
-	calr	sub_F7F9FB	; F7FBA0  calr 0xf7f9fb
+	calr	Vel0cityChange_DrawValues	; F7FBA0  calr 0xf7f9fb
 sub_F7FAD2_Return:
 	ret	; F7FBA3  ret
 
@@ -203145,7 +203290,7 @@ ScreenLeaveBody_Transp0se_Skip:
 ScreenLeaveBody_Transp0se_Skip2:
 	call	T_F42A50	; F7FCC1  call 0xf42a50
 ScreenLeaveBody_Transp0se_Join:
-	calr	sub_F7FD45	; F7FCC5  calr 0xf7fd45
+	calr	Transp0se_DrawValues	; F7FCC5  calr 0xf7fd45
 	ret	; F7FCC8  ret
 ButtonTable_Transp0se_StageZero_Nop5:
 	ret	; F7FCC9  ret   <- button table 0xF7DBD8 entry 5 (TRANSP0SE)
@@ -203197,7 +203342,7 @@ LcdKeyRow1_Transp0se_StageZero:
 	jr	z, ScreenLeaveBody_Transp0se_Return	; F7FCD6  jr Z,0xf7fce5
 	calr	Blink_DisableThenStop	; F7FCD8  calr 0xf7f245
 	call	T_Transp0se_SelectField1	; F7FCDB  call 0xf42a40
-	calr	sub_F7FD45	; F7FCDF  calr 0xf7fd45
+	calr	Transp0se_DrawValues	; F7FCDF  calr 0xf7fd45
 	calr	Transp0se_RedrawFields	; F7FCE2  calr 0xf7fce6
 ScreenLeaveBody_Transp0se_Return:
 	ret	; F7FCE5  ret
@@ -203259,7 +203404,7 @@ LcdKeyRow2_Transp0se_StageZero:
 	jr	z, sub_F7FCE6_Return	; F7FD10  jr Z,0xf7fd28
 	calr	Blink_EnableThenStop_Copy	; F7FD12  calr 0xf7f237
 	call	T_Transp0se_SelectField2	; F7FD15  call 0xf42a44
-	calr	sub_F7FD45	; F7FD19  calr 0xf7fd45
+	calr	Transp0se_DrawValues	; F7FD19  calr 0xf7fd45
 	calr	Transp0se_RedrawFields	; F7FD1C  calr 0xf7fce6
 	jr	sub_F7FCE6_Return	; F7FD1F  jr T,0xf7fd28
 sub_F7FCE6_Skip:
@@ -203311,7 +203456,7 @@ LcdKeyRow3_Transp0se_StageZero:
 	jr	z, sub_F7FCE6_Return2	; F7FD33  jr Z,0xf7fd44
 	calr	Blink_EnableThenStop_Copy	; F7FD35  calr 0xf7f237
 	call	T_Transp0se_SelectField3	; F7FD38  call 0xf42a48
-	calr	sub_F7FD45	; F7FD3C  calr 0xf7fd45
+	calr	Transp0se_DrawValues	; F7FD3C  calr 0xf7fd45
 	calr	Transp0se_RedrawFields	; F7FD3F  calr 0xf7fce6
 	jr	sub_F7FCE6_Return2	; F7FD42  jr T,0xf7fd44
 sub_F7FCE6_Return2:
@@ -203319,7 +203464,11 @@ sub_F7FCE6_Return2:
 
 ; Evidence: reached from calr from prom_b 0xF7FCC5; calr from prom_b
 ;           0xF7FCDF, and from nothing else the scans see.
-sub_F7FD45:
+; Transp0se_DrawValues: TRANSP0SE: on layer 0, runs DL_F3B1E3 up to its cursor-box record: the track (0-16/ALL,
+;   DisplayListB_Stage+0), two 3-digit values (+1, +3) and a signed value (+5). Every TRANSP0SE field key calls it
+;   after changing a field, then Transp0se_RedrawFields. Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_b.json)
+Transp0se_DrawValues:
 	ld	(LCD_CurrentLayer:16), 0	; F7FD45  ld (0x2540),0x00
 	calr	sub_F7E39F_Nop	; F7FD4A  calr 0xf7e2d8
 	ld	xiy, DL_F3B1E3	; F7FD4D  ld XIY,0x00f3b1e3
@@ -203370,7 +203519,7 @@ LcdKeyRow4_Transp0se_StageZero:
 	jr	z, sub_F7FD45_Return	; F7FD66  jr Z,0xf7fd77
 	calr	Blink_EnableThenStop_Copy	; F7FD68  calr 0xf7f237
 	call	T_Transp0se_SelectField4	; F7FD6B  call 0xf42a4c
-	calr	sub_F7FD45	; F7FD6F  calr 0xf7fd45
+	calr	Transp0se_DrawValues	; F7FD6F  calr 0xf7fd45
 	calr	Transp0se_RedrawFields	; F7FD72  calr 0xf7fce6
 	jr	sub_F7FD45_Return	; F7FD75  jr T,0xf7fd77
 sub_F7FD45_Return:
@@ -203444,7 +203593,7 @@ sub_F7FD45_Skip2:
 sub_F7FD45_Skip3:
 	call	T_F42A50	; F7FDA9  call 0xf42a50
 sub_F7FD45_Join:
-	calr	sub_F7FD45	; F7FDAD  calr 0xf7fd45
+	calr	Transp0se_DrawValues	; F7FDAD  calr 0xf7fd45
 	ret	; F7FDB0  ret
 ButtonTable_Transp0se_StageZero_Nop22:
 	ret	; F7FDB1  ret   <- button table 0xF7DBD8 entry 22 (TRANSP0SE) and 4 more slot(s)
@@ -203718,7 +203867,7 @@ sub_F7FE19_Join3:
 	ldw	de, 127	; F7FEC8  ld DE,0x007f
 sub_F7FE19_Join4:
 	call	T_Blink_Stop	; F7FECB  call 0xf42e24
-	calr	sub_F7FD45	; F7FECF  calr 0xf7fd45
+	calr	Transp0se_DrawValues	; F7FECF  calr 0xf7fd45
 sub_F7FE19_Return:
 	ret	; F7FED2  ret
 

@@ -736,7 +736,7 @@ def selftest():
     check("T_F42E40-T_F42E6C slots", len(slots), 12)
     check("  ... distinct targets", len(set(v for _a, _k, v in slots)), 11)
     check("  FIRST slot", "T_%06X %s 0x%06X" % slots[0], "T_F42E40 ptr 0xF53000")
-    check("  LAST  slot", "T_%06X %s 0x%06X" % slots[-1], "T_F42E6C jp 0xF54210")
+    check("  LAST  slot", "T_%06X %s 0x%06X" % slots[-1], "T_Drawbar_WaitReloadMark jp 0xF54210")
     check("  extent (frontier table says 4624)",
           max(v for _a, _k, v in slots) - min(v for _a, _k, v in slots), 4624)
     kindof = {}

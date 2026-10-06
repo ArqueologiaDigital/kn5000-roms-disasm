@@ -151,7 +151,7 @@ def le32_sites(d, target):
 def region_F03F81(d, say):
     """0xF03F77-0xF0402D -- ONE interpreter-A display list, 18 records, 183 B.
 
-    Anchor: THE READER, sub_F5C727:
+    Anchor: THE READER, SoundEditAmp_PaintHeader:
         F5C72C  ld XIY,0x00F03F77      <- list start
         F5C731  cp (0x27F5),0x01
         F5C736  jr Z,0xF5C73F
@@ -434,7 +434,7 @@ def blocks(d):
         ";   ends used:  0xF03FF3, 0xF0402E",
         "; Formerly Data_F03F77 + a 46-byte `.incbin` + Data_F03FAF -- the head,",
         "; the middle and the tail of ONE list, cut in two places by the round-1",
-        "; reachability walk.  THE READER NAMES BOTH EDGES: sub_F5C727 does",
+        "; reachability walk.  THE READER NAMES BOTH EDGES: SoundEditAmp_PaintHeader does",
         ";   F5C72C  ld XIY,0x00F03F77   /  F5C738 ld XIX,0x00F0402E",
         ";   F5C73F  ld XIX,0x00F03FF3   /  F5C744 call 0xF417F0",
         "; so the list starts at 0xF03F77 and ends at 0xF03FF3 or 0xF0402E; the",

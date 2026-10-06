@@ -12,7 +12,7 @@ WHY THIS BLOCK
     notes/prom_b_module_frontier.py ranks three adjacent runs into this range
     1st, 5th and 6th by contiguous unconverted extent, and their summed reference
     upper bound -- 81 + 41 + 7 = 129 -- is the highest of any group in the image.
-    T_F409E0 -> 0xF4542D (x24) and T_F40A1C -> 0xF44367 (x15) are both in
+    T_Seq_RequestRewind -> 0xF4542D (x24) and T_F40A1C -> 0xF44367 (x15) are both in
     notes/prom_b_call_graph.py's top ten unconverted targets.
 
 WHERE THE EXTENT COMES FROM
@@ -533,7 +533,7 @@ BANNER = """
 ; WHY THIS BLOCK.  notes/prom_b_module_frontier.py ranks T_F409C0-T_F40A30,
 ; T_F40A3C-T_F40A64 and T_F40A6C-T_F40AC8 -- three ADJACENT runs, all pointing
 ; into this one range -- with a summed reference upper bound of 81 + 41 + 7 = 129,
-; the highest of any group in prom_b.  T_F409E0 -> 0xF4542D (x24) and
+; the highest of any group in prom_b.  T_Seq_RequestRewind -> 0xF4542D (x24) and
 ; T_F40A1C -> 0xF44367 (x15) are both in notes/prom_b_call_graph.py's top ten
 ; unconverted targets.  64 SLOTS point in here, resolving to 62 distinct TARGETS
 ; -- two slots share a target with another.  Both numbers are derived by --checks,

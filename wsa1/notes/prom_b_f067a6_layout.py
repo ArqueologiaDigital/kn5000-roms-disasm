@@ -1567,7 +1567,7 @@ def selftest():
        [0xF42000, 0xF42300, 0xF42F00, 0xF43300])
     ck("T_ScreenButton_SoundEditPitchTune run: 5 slots", len(runs[0xF42000]), 5)
     ck("T_ScreenButton_SoundEditDspEffect run: 6 slots", len(runs[0xF42300]), 6)
-    ck("T_F42F80 run: 11 slots", len(runs[0xF42F00]), 11)
+    ck("T_NameEntry_Begin run: 11 slots", len(runs[0xF42F00]), 11)
     ck("T_ScreenButton_SoundEditDigitalEffect run: 2 slots (the LAST run)", len(runs[0xF43300]), 2)
     ck("...and its LAST slot names 0xF0AAB2", max(runs[0xF43300]), 0xF0AAB2)
 

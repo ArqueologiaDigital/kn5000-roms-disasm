@@ -2380,7 +2380,7 @@ ROWS = [
      "(column 0..7), from SoftKeyCols1to8_CombiEditMixer: the part = the edited group ((CombiEdit_Part) & 0xF8) +\n"
      "column.  When it is already CombiEdit_Part (or while UI_RequestBits bit 2 is set) its field\n"
      "IndexMap_F1B031[CombiEdit_Row] is stepped (PartParam_StepFieldById); otherwise it becomes the edited part\n"
-     "(UI_PartIndex and CombiEdit_Part, T_F42C9C, a repaint request).  Basis: body + caller."),
+     "(UI_PartIndex and CombiEdit_Part, T_PartIndex_PostChangeEvent, a repaint request).  Basis: body + caller."),
     ("FBE0B9", "CombiEditMixer_ResetRowForPage",
      "PageKey_CombiEditMixer: CombiEdit_Row (and (0x276A)) = the page's first row -- 3 on page 0, 4 on page 1,\n"
      "0x0A on page 2 (9 outside panel-mode group 0x16).  Basis: body + caller."),
@@ -2393,7 +2393,7 @@ ROWS = [
      "becomes CombiEdit_Part and is kept in CombiEdit_EntryPart (0x276D); T_NoteRouting_SetSoloAndRebuild(0),\n"
      "(0x276F) = 0, then CombiEdit_SaveOriginalForCompare.  Basis: body."),
     ("FBED02", "CombiEdit_End",
-     "T_CombiEdit_End: (0x2134) bit 1, UI_PartIndex = CombiEdit_EntryPart, T_F42C9C, T_NoteRouting_SetSoloAndRebuild(0),\n"
+     "T_CombiEdit_End: (0x2134) bit 1, UI_PartIndex = CombiEdit_EntryPart, T_PartIndex_PostChangeEvent, T_NoteRouting_SetSoloAndRebuild(0),\n"
      "(0x276F) = 0, CombiEdit_CompareOff.  Basis: body."),
     ("FBED21", "CombiEdit_SaveOriginalForCompare",
      "CombiEdit_Comparing = 0, (0x216E) = 0, (0x213B) bit 2, and the 0x2C0-byte current combination\n"
@@ -2649,7 +2649,7 @@ PLACED = [
     ("FBCBAA", "LcdKeyRow1_CombiEditPartSelect",
      "slot 8 (LCD key row 1, prom_a_panel_control_map.py) of ScreenButtons_CombiEditPartMenu and\n"
      "ScreenButtons_CombiEditInternalSound: on the press, UI_PartIndex stepped through Record_F1AE1B (Record_F1AE24 in\n"
-     "panel-mode group 0x16) by T_EditValue_StepBitField; when it moved, T_F42C9C, CombiEdit_Part = UI_PartIndex and a\n"
+     "panel-mode group 0x16) by T_EditValue_StepBitField; when it moved, T_PartIndex_PostChangeEvent, CombiEdit_Part = UI_PartIndex and a\n"
      "repaint.  Basis: table (button code) + body."),
     ("FBCBF1", "LcdKeyRow2_CombiEditPartSelect",
      "slot 9 (LCD key row 2) of the same two tables: the same part step on the press; on the release in panel-mode group\n"

@@ -148,7 +148,7 @@ CLOSED = {
     0x003BE6: "res03a: tail of block 6 list 3's op-03 record at 0xF03BDF",
     # lane res05x, notes/prom_b_res05x_spans.py -- four of the five bounded by
     # a `ld XIY,<start>` / `ld XIX,<end>` pair in prom_b's own converted code
-    0x003F81: "res05x: middle of one 18-record list, both ends named by sub_F5C727",
+    0x003F81: "res05x: middle of one 18-record list, both ends named by SoundEditAmp_PaintHeader",
     0x004D14: "res05x: tail of the record at 0xF04D10 + head of the table it names",
     0x00540B: "res05x: four op-02 records listed by the pointer array at 0xF0545A",
     0x005792: "res05x: 5x8 rect array; interior splits rest on tiling, not a pointer",

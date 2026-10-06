@@ -1468,7 +1468,7 @@ tree already decodes.
     python3 notes/prom_b_res05x_spans.py --verify    # re-assemble it vs the ROM
     python3 notes/prom_b_res05x_spans.py --splice
 
-* **`0xF03F81`** — `sub_F5C727` names the whole object: `ld XIY,0x00F03F77` and,
+* **`0xF03F81`** — `SoundEditAmp_PaintHeader` names the whole object: `ld XIY,0x00F03F77` and,
   on a branch, `ld XIX,0x00F0402E` *or* `ld XIX,0x00F03FF3`. The op/len chain
   from `0xF03F77` lands on **both** ends, 18 interpreter-A records, 183 B.
 * **`0xF04D14`** — `0xF5CE93` runs `0xF04CDE..0xF04CE8`, so the rectangle array

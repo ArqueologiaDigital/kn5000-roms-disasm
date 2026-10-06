@@ -763,10 +763,10 @@ SHAPE_WHY = {
                  "0xF8BDC5.",
     "write3602": "guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- "
                  "0x%02X on one arm and that value plus 8 on the other -- and "
-                 "calls T_F40CC4.  The +8 is the only difference between the two "
+                 "calls T_SeqTrackKey_Press.  The +8 is the only difference between the two "
                  "arms, so bit 7 of W selects between two halves of one 16-value "
                  "space.  What the halves are is not established.",
-    "write3602gated": "the same (0x3602) write and T_F40CC4 call as its "
+    "write3602gated": "the same (0x3602) write and T_SeqTrackKey_Press call as its "
                       "siblings, index 0x%02X, but reached only when one bit of "
                       "the 32-bit word at (0x2088) is CLEAR -- `ld XBC,(0x2088) / "
                       "and XBC,<one bit> / cp XBC,0 / jr NZ,<skip>`.  So (0x2088) "
@@ -1295,7 +1295,7 @@ def checks(verbose=True, layout=True):
       (len(th), sorted("T_%06X" % s for v in th.values() for s in v)[:3],
        sorted("T_%06X" % s for v in th.values() for s in v)[-3:]),
       (len(th), ["T_ModeEnter_SeqPlay_Fwd", "T_ModeLeave_SeqPlay_Fwd", "T_ModeEnter_RealtimeRecord_Fwd"],
-       ["T_F42C9C", "T_F42CA0", "T_F42CA8"]), verbose)
+       ["T_PartIndex_PostChangeEvent", "T_F42CA0", "T_F42CA8"]), verbose)
     c("ENTRY every thunk target is an instruction boundary of this transcription",
       [hex(t) for t in th if t not in boundaries()], [], verbose)
     lab = labels()

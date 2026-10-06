@@ -202,7 +202,7 @@ one byte after its `ret`.
   `touches_buf` flag still listed it, which is why it got a second look.
   `sub_F6DBF9` is still refused: it writes three table-selected fields into the
   line and only the last, `TENU`/`NORM`/`STAC`/`CUTT`, is identifiable.
-* **`sub_F6D482`, `sub_F6D5BA`, `MsgLine_SetTextDashes`, `sub_F6D6DC`,
+* **`sub_F6D482`, `sub_F6D5BA`, `MsgLine_SetTextDashes`, `MsgLine_MeasureNumber`,
   `sub_F6D710`, `sub_F6D86B`, `sub_F6D890`, `sub_F6D963`, `sub_F6D9AE`,
   `sub_F6DA12`, `sub_F6DA9A`, `sub_F6DAED`, `sub_F6DBF9`** all touch the line
   but copy no caption of their own. Three of them are close to nameable and were
@@ -217,7 +217,7 @@ one byte after its `ret`.
     table at `0xF6D915` (`        `, `P.BEND= `, `MOD.1 = `, `EXP.  = `,
     `P.MEM = `, `AFT.  = `) into the line at +14. The table is nameable; what
     `(0x12B8)` is, is not, and the routine's behaviour splits on it.
-  * `sub_F6D6DC` renders `(0x12B2)` at the head of the line and takes a
+  * `MsgLine_MeasureNumber` renders `(0x12B2)` at the head of the line and takes a
     different path when it is >= 1000. Same reason.
 * **The three sibling lines** at `0x1012`, `0x1030`, `0x104E`. Real records, no
   writers found, nothing named.
