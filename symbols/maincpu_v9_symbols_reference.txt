@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,683
-#   semantic names ........... 53,024 (98.8%)
-#   positional names ......... 659
+#   symbols .................. 53,705
+#   semantic names ........... 53,048 (98.8%)
+#   positional names ......... 657
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -872,8 +872,8 @@ SeTonRan2TitleFunc_SwitchHandlers 00E0E4FD
 SeTonHyb1TitleFunc_SwitchHandlers 00E0E545
 SeEasyTitleFunc_SwitchHandlers 00E0E58D
 SeWrtMemTitleFunc_SwitchHandlers 00E0E5D5
-ToneGen_ParamTable_0x216 00E0E61D
-ToneGen_ParamTable_0x25E 00E0E665
+SeWrtSndTitleFunc_SwitchHandlers 00E0E61D
+SeDigEffTitleFunc_SwitchHandlers 00E0E665
 SeCopyTitleFunc_SwitchHandlers 00E0E6AD
 ToneGen_ParamTable_0x2EE 00E0E6F5
 ToneGen_ParamTable_0x306 00E0E70D
@@ -20621,15 +20621,18 @@ SeMenu_CopyWriteUpdate_Skip79 00F0DAEF
 SeMenu_CopyWriteUpdate_Join35 00F0DAF8
 SeMenu_CopyWriteUpdate_Epilogue61 00F0DB08
 SeEasy_OnSwitch15 00F0DB0B
+SeDigEff_OnColumn1 00F0DB19
 SeMenu_CopyWriteUpdate_Join36 00F0DB70
 SeMenu_CopyWriteUpdate_Skip34 00F0DB92
 SeMenu_CopyWriteUpdate_Skip35 00F0DB97
 SeMenu_CopyWriteUpdate_Epilogue33 00F0DB9C
+SeDigEff_OnColumn2 00F0DBA0
 SeMenu_CopyWriteUpdate_Skip36 00F0DBF8
 SeMenu_CopyWriteUpdate_Join37 00F0DC02
 SeMenu_CopyWriteUpdate_Skip37 00F0DC21
 SeMenu_CopyWriteUpdate_Skip38 00F0DC29
 SeMenu_CopyWriteUpdate_Epilogue34 00F0DC31
+SeDigEff_OnColumn3 00F0DC35
 SeMenu_CopyWriteUpdate_Step3_Code 00F0DC8B
 SeMenu_CopyWriteUpdate_Join38 00F0DC95
 SeMenu_CopyWriteUpdate_Entry5_Case4 00F0DCB4
@@ -20638,28 +20641,36 @@ SeMenu_CopyWriteUpdate_Entry5_Case8 00F0DCC4
 SeMenu_CopyWriteUpdate_Entry5_Case9 00F0DCD0
 SeMenu_CopyWriteUpdate_Join21 00F0DCD6
 SeMenu_CopyWriteUpdate_Epilogue35 00F0DCDC
+SeDigEff_OnColumn4 00F0DCE0
 SeMenu_CopyWriteUpdate_Step3_Code_2 00F0DD36
 SeMenu_CopyWriteUpdate_Join39 00F0DD3C
 SeMenu_CopyWriteUpdate_Entry5_Switch2_Case6 00F0DD5F
 SeMenu_CopyWriteUpdate_Entry5_Switch2_Case9 00F0DD67
 SeMenu_CopyWriteUpdate_Epilogue36 00F0DD6F
+SeDigEff_OnColumn5 00F0DD73
 SeMenu_CopyWriteUpdate_Step3_Code_3 00F0DDC7
 SeMenu_CopyWriteUpdate_Join40 00F0DDD1
 SeMenu_CopyWriteUpdate_Entry5_Switch3_Case4 00F0DDF0
 SeMenu_CopyWriteUpdate_Epilogue37 00F0DDFC
+SeDigEff_OnColumn6 00F0DE00
 SeMenu_CopyWriteUpdate_Skip39 00F0DE3C
 SeMenu_CopyWriteUpdate_Epilogue38 00F0DE60
+SeDigEff_OnColumn7 00F0DE64
 SeMenu_CopyWriteUpdate_Skip40 00F0DEAB
 SeMenu_CopyWriteUpdate_Epilogue39 00F0DECF
+SeDigEff_OnColumn8 00F0DED3
 SeMenu_CopyWriteUpdate_Epilogue40 00F0DF37
+SeDigEff_OnSideRow2 00F0DF3B
 SeMenu_CopyWriteUpdate_Skip41 00F0DF8E
 SeMenu_CopyWriteUpdate_Skip80 00F0DFBA
 SeMenu_CopyWriteUpdate_Join22 00F0DFD4
 SeMenu_CopyWriteUpdate_Epilogue41 00F0DFFE
+SeDigEff_OnSideRow3 00F0E001
 SeMenu_CopyWriteUpdate_Data_Skip 00F0E049
 SeMenu_CopyWriteUpdate_Entry6 00F0E057
 SeMenu_CopyWriteUpdate_Data_Join 00F0E059
 SeMenu_CopyWriteUpdate_Data_Epilogue 00F0E07D
+SeDigEff_OnSwitch15 00F0E080
 SeWrtMem_OnSideRow1 00F0E08E
 SeMenu_CopyWriteUpdate_Data_Epilogue2 00F0E0C0
 SeWrtMem_OnSideRow3 00F0E0C3
@@ -20668,10 +20679,21 @@ SeWrtMem_OnSideRow4 00F0E136
 SeMenu_CopyWriteUpdate_Data_Epilogue4 00F0E1A6
 SeWrtMem_OnSideRow5 00F0E1A9
 SeWrtMem_OnSwitch15 00F0E1B7
+SeWrtSnd_OnColumn1 00F0E1CB
+SeWrtSnd_OnColumn2 00F0E1CE
+SeWrtSnd_OnColumn3 00F0E1D1
+SeWrtSnd_OnColumn4 00F0E1D4
+SeWrtSnd_OnColumn5 00F0E1D7
+SeWrtSnd_OnColumn6 00F0E1DA
+SeWrtSnd_OnColumn7 00F0E1DD
 SeMenu_CopyWriteUpdate_Skip81 00F0E1EB
+SeWrtSnd_OnColumn8 00F0E1EE
+SeWrtSnd_OnSideRow1 00F0E1F1
 SeMenu_CopyWriteUpdate_Skip82 00F0E1FF
 SeMenu_CopyWriteUpdate_Data_Loop 00F0E20F
 SeMenu_CopyWriteUpdate_Data_Epilogue4_Epilogue 00F0E251
+SeWrtSnd_OnSideRow2 00F0E257
+SeWrtSnd_OnSwitch15 00F0E25E
 SeMenu_CopyWriteUpdate_Data_Loop2 00F0E285
 SeMenu_CopyWriteUpdate_Data_Loop_Skip 00F0E2AF
 SeMenu_CopyWriteUpdate_Data_Loop3 00F0E2B2

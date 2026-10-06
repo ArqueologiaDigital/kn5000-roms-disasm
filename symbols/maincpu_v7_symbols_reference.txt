@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,392
-#   semantic names ........... 52,649 (98.6%)
-#   positional names ......... 743
+#   symbols .................. 53,414
+#   semantic names ........... 52,673 (98.6%)
+#   positional names ......... 741
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -871,8 +871,8 @@ SeTonRan2TitleFunc_SwitchHandlers 00E0E4FD
 SeTonHyb1TitleFunc_SwitchHandlers 00E0E545
 SeEasyTitleFunc_SwitchHandlers 00E0E58D
 SeWrtMemTitleFunc_SwitchHandlers 00E0E5D5
-ToneGen_ParamTable_0x216 00E0E61D
-ToneGen_ParamTable_0x25E 00E0E665
+SeWrtSndTitleFunc_SwitchHandlers 00E0E61D
+SeDigEffTitleFunc_SwitchHandlers 00E0E665
 SeCopyTitleFunc_SwitchHandlers 00E0E6AD
 ToneGen_ParamTable_0x2EE 00E0E6F5
 ToneGen_ParamTable_0x306 00E0E70D
@@ -20441,15 +20441,18 @@ Scoop_SoundEditorData_Helper_Skip13 00F0DAC5
 Scoop_SoundEditorData_Helper_Join8 00F0DACE
 Scoop_SoundEditorData_Helper_Epilogue6 00F0DADE
 SeEasy_OnSwitch15 00F0DAE1
+SeDigEff_OnColumn1 00F0DAEF
 Scoop_SoundEditorData_Helper_Join9 00F0DB46
 Scoop_SoundEditorData_Helper_Skip14 00F0DB68
 Scoop_SoundEditorData_Helper_Skip15 00F0DB6D
 Scoop_SoundEditorData_Helper_Epilogue7 00F0DB72
+SeDigEff_OnColumn2 00F0DB76
 Scoop_SoundEditorData_Helper_Skip16 00F0DBCE
 Scoop_SoundEditorData_Helper_Join10 00F0DBD8
 Scoop_SoundEditorData_Helper_Skip17 00F0DBF7
 Scoop_SoundEditorData_Helper_Skip18 00F0DBFF
 Scoop_SoundEditorData_Helper_Epilogue8 00F0DC07
+SeDigEff_OnColumn3 00F0DC0B
 SeMenu_CopyWriteUpdate_Step3_Code 00F0DC61
 Scoop_SoundEditorData_Helper_Join11 00F0DC6B
 SeDigEffTitleFunc_DispatchSwitch_Case4 00F0DC8A
@@ -20458,28 +20461,36 @@ SeDigEffTitleFunc_DispatchSwitch_Case8 00F0DC9A
 SeDigEffTitleFunc_DispatchSwitch_Case9 00F0DCA6
 Scoop_SoundEditorData_Helper_Join12 00F0DCAC
 Scoop_SoundEditorData_Helper_Epilogue9 00F0DCB2
+SeDigEff_OnColumn4 00F0DCB6
 SeMenu_CopyWriteUpdate_Step3_Code_2 00F0DD0C
 Scoop_SoundEditorData_Helper_Join13 00F0DD12
 SeDigEffTitleFunc_DispatchSwitch_Switch2_Case6 00F0DD35
 SeDigEffTitleFunc_DispatchSwitch_Switch2_Case9 00F0DD3D
 Scoop_SoundEditorData_Helper_Epilogue10 00F0DD45
+SeDigEff_OnColumn5 00F0DD49
 SeMenu_CopyWriteUpdate_Step3_Code_3 00F0DD9D
 Scoop_SoundEditorData_Helper_Join14 00F0DDA7
 SeDigEffTitleFunc_DispatchSwitch_Switch3_Case4 00F0DDC6
 Scoop_SoundEditorData_Helper_Epilogue11 00F0DDD2
+SeDigEff_OnColumn6 00F0DDD6
 Scoop_SoundEditorData_Helper_Skip19 00F0DE12
 Scoop_SoundEditorData_Helper_Epilogue12 00F0DE36
+SeDigEff_OnColumn7 00F0DE3A
 Scoop_SoundEditorData_Helper_Skip20 00F0DE81
 Scoop_SoundEditorData_Helper_Epilogue13 00F0DEA5
+SeDigEff_OnColumn8 00F0DEA9
 Scoop_SoundEditorData_Helper_Epilogue14 00F0DF0D
+SeDigEff_OnSideRow2 00F0DF11
 Scoop_SoundEditorData_Helper_Skip21 00F0DF64
 Scoop_SoundEditorData_Helper_Skip22 00F0DF90
 Scoop_SoundEditorData_Helper_Join15 00F0DFAA
 Scoop_SoundEditorData_Helper_Epilogue15 00F0DFD4
+SeDigEff_OnSideRow3 00F0DFD7
 Scoop_SoundEditorData_Helper_Skip23 00F0E01F
 Scoop_SoundEditorData_Helper_Skip24 00F0E02D
 Scoop_SoundEditorData_Helper_Join16 00F0E02F
 Scoop_SoundEditorData_Helper_Epilogue16 00F0E053
+SeDigEff_OnSwitch15 00F0E056
 SeWrtMem_OnSideRow1 00F0E064
 Scoop_SoundEditorData_Helper_Epilogue17 00F0E096
 SeWrtMem_OnSideRow3 00F0E099
@@ -20488,10 +20499,21 @@ SeWrtMem_OnSideRow4 00F0E10C
 Scoop_SoundEditorData_Helper_Epilogue19 00F0E17C
 SeWrtMem_OnSideRow5 00F0E17F
 SeWrtMem_OnSwitch15 00F0E18D
+SeWrtSnd_OnColumn1 00F0E1A1
+SeWrtSnd_OnColumn2 00F0E1A4
+SeWrtSnd_OnColumn3 00F0E1A7
+SeWrtSnd_OnColumn4 00F0E1AA
+SeWrtSnd_OnColumn5 00F0E1AD
+SeWrtSnd_OnColumn6 00F0E1B0
+SeWrtSnd_OnColumn7 00F0E1B3
 Scoop_SoundEditorData_Helper_Skip25 00F0E1C1
+SeWrtSnd_OnColumn8 00F0E1C4
+SeWrtSnd_OnSideRow1 00F0E1C7
 Scoop_SoundEditorData_Helper_Skip26 00F0E1D5
 Scoop_SoundEditorData_Helper_Loop2 00F0E1E5
 Scoop_SoundEditorData_Helper_Epilogue20 00F0E227
+SeWrtSnd_OnSideRow2 00F0E22D
+SeWrtSnd_OnSwitch15 00F0E234
 Scoop_SoundEditorData_Helper_Loop3 00F0E25B
 Scoop_SoundEditorData_Helper_Skip27 00F0E285
 Scoop_SoundEditorData_Helper_Loop4 00F0E288

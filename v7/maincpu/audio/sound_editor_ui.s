@@ -5588,7 +5588,7 @@ Scoop_SoundEditorData_Helper:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (ToneGen_ParamTable_0x216:24)
+	lda	xde, (SeWrtSndTitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -5618,7 +5618,7 @@ SeDigEffTitleFunc_DispatchSwitch:
 	ld C,(XSP+0x06)
 	extz BC
 	sla BC, 0x02
-	lda xde, (ToneGen_ParamTable_0x25E:24)
+	lda xde, (SeDigEffTitleFunc_SwitchHandlers:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)
@@ -5944,6 +5944,7 @@ SeEasy_OnSwitch15:
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SeDigEff_OnColumn1:
 	lda	xsp, (xsp-16)
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
@@ -5998,6 +5999,7 @@ Scoop_SoundEditorData_Helper_Skip15:
 Scoop_SoundEditorData_Helper_Epilogue7:
 	lda	xsp, (xsp+16)
 	ret
+SeDigEff_OnColumn2:
 	lda	xsp, (xsp-16)
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
@@ -6059,6 +6061,7 @@ Scoop_SoundEditorData_Helper_Skip18:
 Scoop_SoundEditorData_Helper_Epilogue8:
 	lda	xsp, (xsp+16)
 	ret
+SeDigEff_OnColumn3:
 	lda	xsp, (xsp-16)
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
@@ -6126,6 +6129,7 @@ Scoop_SoundEditorData_Helper_Join12:
 Scoop_SoundEditorData_Helper_Epilogue9:
 	lda	xsp, (xsp+16)
 	ret
+SeDigEff_OnColumn4:
 	lda	xsp, (xsp-16)
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
@@ -6182,6 +6186,7 @@ SeDigEffTitleFunc_DispatchSwitch_Switch2_Case9:
 Scoop_SoundEditorData_Helper_Epilogue10:
 	lda	xsp, (xsp+16)
 	ret
+SeDigEff_OnColumn5:
 	lda	xsp, (xsp-16)
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
@@ -6235,6 +6240,7 @@ SeDigEffTitleFunc_DispatchSwitch_Switch3_Case4:	; cases 4, 5
 Scoop_SoundEditorData_Helper_Epilogue11:
 	lda	xsp, (xsp+16)
 	ret
+SeDigEff_OnColumn6:
 	lda	xsp, (xsp-16)
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
@@ -6274,6 +6280,7 @@ Scoop_SoundEditorData_Helper_Skip19:
 Scoop_SoundEditorData_Helper_Epilogue12:
 	lda	xsp, (xsp+16)
 	ret
+SeDigEff_OnColumn7:
 	lda	xsp, (xsp-16)
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
@@ -6317,6 +6324,7 @@ Scoop_SoundEditorData_Helper_Skip20:
 Scoop_SoundEditorData_Helper_Epilogue13:
 	lda	xsp, (xsp+16)
 	ret
+SeDigEff_OnColumn8:
 	lda	xsp, (xsp-16)
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
@@ -6355,6 +6363,7 @@ Scoop_SoundEditorData_Helper_Epilogue13:
 Scoop_SoundEditorData_Helper_Epilogue14:
 	lda	xsp, (xsp+16)
 	ret
+SeDigEff_OnSideRow2:
 	dec	4, xsp
 	lda	xbc, (xsp+2)
 	cp	a, 0:i3
@@ -6431,6 +6440,7 @@ Scoop_SoundEditorData_Helper_Join15:
 Scoop_SoundEditorData_Helper_Epilogue15:
 	inc	4, xsp
 	ret
+SeDigEff_OnSideRow3:
 	dec	2, xsp
 	lda	xbc, (xsp)
 	cp	a, 0:i3
@@ -6485,6 +6495,7 @@ Scoop_SoundEditorData_Helper_Join16:
 Scoop_SoundEditorData_Helper_Epilogue16:
 	inc	2, xsp
 	ret
+SeDigEff_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ldw	wa, 32
@@ -6619,12 +6630,19 @@ SeWrtMem_OnSwitch15:
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SeWrtSnd_OnColumn1:
 	jrl	Scoop_SoundEditorData_Helper_Join18
+SeWrtSnd_OnColumn2:
 	jrl	Scoop_SoundEditorData_Helper_Join19
+SeWrtSnd_OnColumn3:
 	jrl	Scoop_SoundEditorData_Helper_Join20
+SeWrtSnd_OnColumn4:
 	jrl	Scoop_SoundEditorData_Helper_Join21
+SeWrtSnd_OnColumn5:
 	jrl	Scoop_SoundEditorData_Helper_Join22
+SeWrtSnd_OnColumn6:
 	jrl	Scoop_SoundEditorData_Helper_Join24
+SeWrtSnd_OnColumn7:
 	ld	c, a
 	res	7, c
 	ldw	wa, 32768
@@ -6633,7 +6651,9 @@ SeWrtMem_OnSwitch15:
 	ld	wa, 0:i3
 Scoop_SoundEditorData_Helper_Skip25:
 	jrl	Scoop_SoundEditorData_Helper_Join25
+SeWrtSnd_OnColumn8:
 	jrl	Scoop_SoundEditorData_Helper_Join27
+SeWrtSnd_OnSideRow1:
 	dec	4, xsp
 	push	qiz
 	cp	a, 0:i3
@@ -6674,9 +6694,11 @@ Scoop_SoundEditorData_Helper_Epilogue20:
 	pop	qiz
 	inc	4, xsp
 	ret
+SeWrtSnd_OnSideRow2:
 	cp	a, 0:i3
 	ret	nz
 	jrl	Scoop_SoundEditorData_Helper_Join28
+SeWrtSnd_OnSwitch15:
 	lda	xsp, (xsp-20)
 	push	qiz
 	cp	a, 0:i3

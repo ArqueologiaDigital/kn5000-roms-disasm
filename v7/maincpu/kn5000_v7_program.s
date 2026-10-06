@@ -1043,10 +1043,46 @@ SeWrtMemTitleFunc_SwitchHandlers:
 	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Helper+0x1E (0xF0D78E) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
-ToneGen_ParamTable_0x216:	.incbin "includes/generated/tonegen_param_table.bin", 0x216, 0x48
+SeWrtSndTitleFunc_SwitchHandlers:
+	.long SeWrtSnd_OnColumn1
+	.long SeWrtSnd_OnColumn2
+	.long SeWrtSnd_OnColumn3
+	.long SeWrtSnd_OnColumn4
+	.long SeWrtSnd_OnColumn5
+	.long SeWrtSnd_OnColumn6
+	.long SeWrtSnd_OnColumn7
+	.long SeWrtSnd_OnColumn8
+	.long SeWrtSnd_OnSideRow1
+	.long SeWrtSnd_OnSideRow2
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeWrtSnd_OnSwitch15
+	.long SeMenu_BitShift_Stub
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeDigEffTitleFunc_DispatchSwitch+0x38 (0xF0D7D6) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
-ToneGen_ParamTable_0x25E:	.incbin "includes/generated/tonegen_param_table.bin", 0x25E, 0x48
+SeDigEffTitleFunc_SwitchHandlers:
+	.long SeDigEff_OnColumn1
+	.long SeDigEff_OnColumn2
+	.long SeDigEff_OnColumn3
+	.long SeDigEff_OnColumn4
+	.long SeDigEff_OnColumn5
+	.long SeDigEff_OnColumn6
+	.long SeDigEff_OnColumn7
+	.long SeDigEff_OnColumn8
+	.long SeMenu_BitShift_Stub
+	.long SeDigEff_OnSideRow2
+	.long SeDigEff_OnSideRow3
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeDigEff_OnSwitch15
+	.long SeMenu_BitShift_Stub
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeCopyTitleFunc_DispatchSwitch+0x1E (0xF0D732) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeCopyTitleFunc_SwitchHandlers:
