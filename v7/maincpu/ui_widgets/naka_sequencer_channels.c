@@ -261,7 +261,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0031;
     uint32_t NakaData_RomEnd_ptr;
     uint16_t field_0037;
-    uint8_t pad_1[11];  /* zero padding */
+    uint8_t pad_1[1];
+    uint8_t DpSmf_AcRamEditBox_Value[10];
     uint16_t field_0044;
     uint16_t field_0046;
     uint8_t pad_2[6];  /* zero padding */
@@ -269,9 +270,9 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0050;
     uint16_t field_0052;
     uint16_t field_0054;
-    uint16_t field_0056;
+    uint16_t PauseDisp_Value;
     uint8_t pad_3[2];  /* zero padding */
-    uint16_t field_005a;
+    uint16_t PlayDisp_Value;
     uint8_t pad_4[2];  /* zero padding */
     uint16_t field_005e;
     uint16_t field_0060;
@@ -292,7 +293,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0088;
     uint8_t pad_8[2];  /* zero padding */
     uint16_t field_008c;
-    uint8_t pad_9[10];  /* zero padding */
+    uint8_t DpMdlySmf_AcRamEditBox_Value[10];
     uint16_t field_0098;
     uint16_t field_009a;
     uint16_t field_009c;
@@ -375,7 +376,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0152;
     uint16_t field_0154;
     uint16_t field_0156;
-    uint8_t pad_32[4];  /* zero padding */
+    uint8_t SqTrAsPs_Song_Value[4];
     uint16_t field_015c;
     uint8_t pad_33[4];  /* zero padding */
     uint16_t field_0162;
@@ -392,7 +393,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0178;
     uint16_t field_017a;
     uint16_t field_017c;
-    uint8_t pad_35[2];  /* zero padding */
+    uint8_t AfterTouchSet_AfterTouchRecord_Value[2];
     uint16_t field_0180;
     uint16_t field_0182;
     uint16_t field_0184;
@@ -774,7 +775,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0728;
     uint16_t field_072a;
     uint16_t field_072c;
-    uint8_t pad_104[2];  /* zero padding */
+    uint8_t R12OctaveSetting_Octave_Value[2];
     uint16_t field_0730;
     uint16_t field_0732;
     uint8_t pad_105[4];  /* zero padding */
@@ -829,7 +830,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_07d4;
     uint16_t field_07d6;
     uint16_t field_07d8;
-    uint8_t pad_115[6];  /* zero padding */
+    uint8_t RealtimeCommandBox_Value[4];
+    uint8_t ClockBox_Value[2];
     uint16_t field_07e0;
     uint16_t field_07e2;
     uint8_t pad_116[2];  /* zero padding */
@@ -890,12 +892,24 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0854;
     uint16_t field_0856;
     uint16_t field_0858;
-    uint8_t pad_125[34];  /* zero padding */
+    uint8_t pad_125[2];
+    uint8_t ExcSendPmemBox_Value[6];
+    uint8_t ExcSendSmemBox_Value[6];
+    uint8_t ExcSendCmpBox_Value[6];
+    uint8_t ExcSendSeqBox_Value[6];
+    uint8_t ExcSendMspBox_Value[4];
+    uint8_t ExcSendDotBox_Value[4];
     uint16_t field_087c;
     uint16_t field_087e;
     uint16_t field_0880;
     uint16_t field_0882;
-    uint8_t pad_126[34];  /* zero padding */
+    uint8_t pad_126[2];
+    uint8_t ExcRcvPmemBox_Value[6];
+    uint8_t ExcRcvSmemBox_Value[6];
+    uint8_t ExcRcvCmpBox_Value[6];
+    uint8_t ExcRcvSeqBox_Value[6];
+    uint8_t ExcRcvMspBox_Value[4];
+    uint8_t ExcRcvDotBox_Value[4];
     uint16_t field_08a6;
     uint16_t field_08a8;
     uint16_t field_08aa;
@@ -922,7 +936,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_08d4;
     uint16_t field_08d6;
     uint16_t field_08d8;
-    uint8_t pad_129[2];  /* zero padding */
+    uint8_t MidiComputerConnection_Mode_Value[2];
     uint16_t field_08dc;
     uint16_t field_08de;
     uint8_t pad_130[2];  /* zero padding */
@@ -983,7 +997,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0950;
     uint16_t field_0952;
     uint16_t field_0954;
-    uint8_t pad_132[2];  /* zero padding */
+    uint8_t SplitSetting_AcLswBox_Value[2];
     uint16_t field_0958;
     uint16_t field_095a;
     uint8_t pad_133[2];  /* zero padding */
@@ -1028,59 +1042,79 @@ typedef struct __attribute__((packed)) {
     uint16_t field_09d0;
     uint16_t field_09d2;
     uint16_t field_09d4;
-    uint8_t pad_141[48];  /* zero padding */
+    uint8_t pad_141[2];
+    uint8_t SdpartMain_Pan_Value[4];
+    uint8_t SdpartMain_RevDepth_Value[4];
+    uint8_t SdpartMain_DspEffect_Value[4];
+    uint8_t SdpartMain_DigEffect_Value[4];
+    uint8_t SdpartMain_Sustain_Value[4];
+    uint8_t SdpartMain_SusLength_Value[4];
+    uint8_t SdpartMain_KeyShift_Value[4];
+    uint8_t SdpartMain_Tuning_Value[4];
+    uint8_t SdpartMain_BendRange_Value[4];
+    uint8_t SdpartMain_GlidePedal_Value[4];
+    uint8_t SdpartMain_SustPedal_Value[4];
+    uint8_t SdpartMain_Volume_Value[2];
     uint16_t field_0a06;
     uint16_t field_0a08;
     uint16_t field_0a0a;
     uint16_t field_0a0c;
     uint16_t field_0a0e;
-    uint8_t pad_142[2];  /* zero padding */
+    uint8_t SdpartVol_Volume_Value[2];
     uint16_t field_0a12;
     uint16_t field_0a14;
     uint16_t field_0a16;
     uint16_t field_0a18;
     uint16_t field_0a1a;
-    uint8_t pad_143[4];  /* zero padding */
+    uint8_t SdpartPan_Pan_Value[2];
+    uint8_t SdpartPan_AcLswPartPan_Value[2];
     uint16_t field_0a20;
     uint16_t field_0a22;
     uint16_t field_0a24;
     uint16_t field_0a26;
     uint16_t field_0a28;
-    uint8_t pad_144[10];  /* zero padding */
+    uint8_t SdpartEff_ReverbDepth_Value[4];
+    uint8_t SdpartEff_DspEffect_Value[4];
+    uint8_t SdpartEff_DigitalEff_Value[2];
     uint16_t field_0a34;
     uint16_t field_0a36;
     uint16_t field_0a38;
     uint16_t field_0a3a;
     uint16_t field_0a3c;
-    uint8_t pad_145[6];  /* zero padding */
+    uint8_t SdpartSus_SustainOnOff_Value[4];
+    uint8_t SdpartSus_SustainLength_Value[2];
     uint16_t field_0a44;
     uint16_t field_0a46;
     uint16_t field_0a48;
     uint16_t field_0a4a;
     uint16_t field_0a4c;
-    uint8_t pad_146[2];  /* zero padding */
+    uint8_t SdpartKey_KeyShift_Value[2];
     uint16_t field_0a50;
     uint16_t field_0a52;
     uint16_t field_0a54;
     uint16_t field_0a56;
     uint16_t field_0a58;
-    uint8_t pad_147[2];  /* zero padding */
+    uint8_t SdpartTun_Tuning_Value[2];
     uint16_t field_0a5c;
     uint16_t field_0a5e;
     uint16_t field_0a60;
     uint16_t field_0a62;
     uint16_t field_0a64;
-    uint8_t pad_148[2];  /* zero padding */
+    uint8_t SdpartBnd_PitchBendRange_Value[2];
     uint16_t field_0a68;
     uint16_t field_0a6a;
     uint16_t field_0a6c;
     uint16_t field_0a6e;
     uint16_t field_0a70;
-    uint8_t pad_149[18];  /* zero padding */
+    uint8_t SdpartOth_GlidePedal_Value[4];
+    uint8_t SdpartOth_SustainPdl_Value[4];
+    uint8_t SdpartOth_AfterTouch_Value[4];
+    uint8_t SdpartOth_KeyScaling_Value[4];
+    uint8_t SdpartOth_PartExpPdl_Value[2];
     uint16_t field_0a84;
     uint16_t field_0a86;
     uint16_t field_0a88;
-    uint8_t pad_150[2];  /* zero padding */
+    uint8_t Sdmtune_MasterTuning_Value[2];
     uint16_t field_0a8c;
     uint16_t field_0a8e;
     uint16_t field_0a90;
@@ -1089,17 +1123,31 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0a96;
     uint16_t field_0a98;
     uint16_t field_0a9a;
-    uint8_t pad_151[12];  /* zero padding */
+    uint8_t ScalingType_Value[4];
+    uint8_t Sdscltyp1_ScalingShift_Value[2];
+    uint8_t Sdscltyp1_AcLswBox_Value[4];
+    uint8_t Sdscltyp1_ScalingMode_Value[2];
     uint16_t field_0aa8;
     uint16_t field_0aaa;
     uint16_t field_0aac;
     uint16_t field_0aae;
     uint16_t field_0ab0;
-    uint8_t pad_152[46];  /* zero padding */
+    uint8_t ScalingKey1_Value[4];
+    uint8_t ScalingKey2_Value[4];
+    uint8_t ScalingKey3_Value[4];
+    uint8_t ScalingKey4_Value[4];
+    uint8_t ScalingKey5_Value[4];
+    uint8_t ScalingKey6_Value[4];
+    uint8_t ScalingKey7_Value[4];
+    uint8_t ScalingKey8_Value[4];
+    uint8_t ScalingKey9_Value[4];
+    uint8_t ScalingKey10_Value[4];
+    uint8_t ScalingKey11_Value[4];
+    uint8_t ScalingKey12_Value[2];
     uint16_t field_0ae0;
     uint16_t field_0ae2;
     uint16_t field_0ae4;
-    uint8_t pad_153[2];  /* zero padding */
+    uint8_t Sdlfthld_LeftHold_Value[2];
     uint16_t field_0ae8;
     uint16_t field_0aea;
     uint16_t field_0aec;
@@ -1118,7 +1166,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0b38;
     uint16_t field_0b3a;
     uint16_t field_0b3c;
-    uint8_t pad_156[2];  /* zero padding */
+    uint8_t Sdtecd2_Orchestrator_Value[2];
     uint16_t field_0b40;
     uint16_t field_0b42;
     uint16_t field_0b44;
@@ -1154,7 +1202,10 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0b84;
     uint16_t field_0b86;
     uint16_t field_0b88;
-    uint8_t pad_160[14];  /* zero padding */
+    uint8_t Drawbar2_Decay_Value[4];
+    uint8_t Drawbar2_Level_Value[4];
+    uint8_t Drawbar2_AttackTime_Value[4];
+    uint8_t Drawbar2_ReleaseTime_Value[2];
     uint16_t field_0b98;
     uint16_t field_0b9a;
     uint16_t field_0b9c;
@@ -1199,12 +1250,13 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0c0e;
     uint16_t field_0c10;
     uint16_t field_0c12;
-    uint8_t pad_165[8];  /* zero padding */
+    uint8_t CheckMessage_AcRamBox_Value[4];
+    uint8_t CheckMessage_AcRamBox_2_Value[4];
     uint16_t field_0c1c;
     uint16_t field_0c1e;
     uint16_t field_0c20;
     uint16_t field_0c22;
-    char C_str[2];
+    char NoMessage_AcRamBox_Value[2];
     uint8_t pad_166[2];  /* zero padding */
     uint16_t field_0c28;
     uint16_t field_0c2a;
@@ -1527,7 +1579,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_120c;
     uint16_t field_120e;
     uint16_t field_1210;
-    uint8_t pad_236[8];  /* zero padding */
+    uint8_t DiskSetup_DiskInsertOption_Value[6];
+    uint8_t DiskSetup_FileTypePriority_Value[2];
     naka_menu_item_t w9;  /* NAKA_TYPE_MENU_ITEM */
     uint16_t field_1250;
     uint16_t field_1252;
@@ -1816,7 +1869,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1726;
     uint16_t field_1728;
     uint16_t field_172a;
-    uint8_t pad_276[2];  /* zero padding */
+    uint8_t normal_AcLswBox_Value[2];
     uint16_t field_172e;
     uint16_t field_1730;
     uint16_t field_1732;
@@ -1920,12 +1973,14 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1806;
     uint8_t pad_282[2];  /* zero padding */
     uint16_t field_180a;
-    uint8_t pad_283[16];  /* zero padding */
+    uint8_t ControlWallSet_AcRamEditBox_Value[6];
+    uint8_t ControlWallSet_MenuPages_Value[6];
+    uint8_t ControlWallSet_Others_Value[4];
     uint16_t field_181c;
     uint16_t field_181e;
     uint16_t field_1820;
     uint16_t field_1822;
-    uint8_t pad_284[4];  /* zero padding */
+    uint8_t ONETCH_AcRamBox_Value[4];
     uint16_t field_1828;
     uint16_t field_182a;
     uint8_t pad_285[4];  /* zero padding */
@@ -2050,7 +2105,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1926;
     uint16_t field_1928;
     uint16_t field_192a;
-    uint8_t pad_296[4];  /* zero padding */
+    uint8_t PMVIEW_AcPmBkEditBox_Value[4];
     uint16_t field_1930;
     uint16_t field_1932;
     uint16_t field_1934;
@@ -2736,6 +2791,8 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_1 = { 0 },
 
+    .DpSmf_AcRamEditBox_Value = { 0 },
+
     .field_0044 = NAKA_NONE,
 
     .field_0046 = NAKA_NONE,
@@ -2750,11 +2807,11 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0054 = NAKA_NONE,
 
-    .field_0056 = 0x0001,
+    .PauseDisp_Value = 0x0001,
 
     .pad_3 = { 0 },
 
-    .field_005a = 0x0001,
+    .PlayDisp_Value = 0x0001,
 
     .pad_4 = { 0 },
 
@@ -2796,7 +2853,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_008c = 0x0001,
 
-    .pad_9 = { 0 },
+    .DpMdlySmf_AcRamEditBox_Value = { 0 },
 
     .field_0098 = NAKA_NONE,
 
@@ -2962,7 +3019,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0156 = 0x0001,
 
-    .pad_32 = { 0 },
+    .SqTrAsPs_Song_Value = { 0 },
 
     .field_015c = 0x0001,
 
@@ -2996,7 +3053,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_017c = 0x0001,
 
-    .pad_35 = { 0 },
+    .AfterTouchSet_AfterTouchRecord_Value = { 0 },
 
     .field_0180 = NAKA_NONE,
 
@@ -3916,7 +3973,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_072c = 0x0001,
 
-    .pad_104 = { 0 },
+    .R12OctaveSetting_Octave_Value = { 0 },
 
     .field_0730 = NAKA_NONE,
 
@@ -4026,7 +4083,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_07d8 = 0x0001,
 
-    .pad_115 = { 0 },
+    .RealtimeCommandBox_Value = { 0 },
+
+    .ClockBox_Value = { 0 },
 
     .field_07e0 = NAKA_NONE,
 
@@ -4150,6 +4209,18 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_125 = { 0 },
 
+    .ExcSendPmemBox_Value = { 0 },
+
+    .ExcSendSmemBox_Value = { 0 },
+
+    .ExcSendCmpBox_Value = { 0 },
+
+    .ExcSendSeqBox_Value = { 0 },
+
+    .ExcSendMspBox_Value = { 0 },
+
+    .ExcSendDotBox_Value = { 0 },
+
     .field_087c = NAKA_NONE,
 
     .field_087e = NAKA_NONE,
@@ -4159,6 +4230,18 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
     .field_0882 = NAKA_NONE,
 
     .pad_126 = { 0 },
+
+    .ExcRcvPmemBox_Value = { 0 },
+
+    .ExcRcvSmemBox_Value = { 0 },
+
+    .ExcRcvCmpBox_Value = { 0 },
+
+    .ExcRcvSeqBox_Value = { 0 },
+
+    .ExcRcvMspBox_Value = { 0 },
+
+    .ExcRcvDotBox_Value = { 0 },
 
     .field_08a6 = NAKA_NONE,
 
@@ -4212,7 +4295,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_08d8 = 0x0001,
 
-    .pad_129 = { 0 },
+    .MidiComputerConnection_Mode_Value = { 0 },
 
     .field_08dc = NAKA_NONE,
 
@@ -4334,7 +4417,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0954 = NAKA_NONE,
 
-    .pad_132 = { 0 },
+    .SplitSetting_AcLswBox_Value = { 0 },
 
     .field_0958 = 0x0003,
 
@@ -4426,6 +4509,30 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_141 = { 0 },
 
+    .SdpartMain_Pan_Value = { 0 },
+
+    .SdpartMain_RevDepth_Value = { 0 },
+
+    .SdpartMain_DspEffect_Value = { 0 },
+
+    .SdpartMain_DigEffect_Value = { 0 },
+
+    .SdpartMain_Sustain_Value = { 0 },
+
+    .SdpartMain_SusLength_Value = { 0 },
+
+    .SdpartMain_KeyShift_Value = { 0 },
+
+    .SdpartMain_Tuning_Value = { 0 },
+
+    .SdpartMain_BendRange_Value = { 0 },
+
+    .SdpartMain_GlidePedal_Value = { 0 },
+
+    .SdpartMain_SustPedal_Value = { 0 },
+
+    .SdpartMain_Volume_Value = { 0 },
+
     .field_0a06 = NAKA_NONE,
 
     .field_0a08 = NAKA_NONE,
@@ -4436,7 +4543,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0a0e = 0x0001,
 
-    .pad_142 = { 0 },
+    .SdpartVol_Volume_Value = { 0 },
 
     .field_0a12 = NAKA_NONE,
 
@@ -4448,7 +4555,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0a1a = 0x0001,
 
-    .pad_143 = { 0 },
+    .SdpartPan_Pan_Value = { 0 },
+
+    .SdpartPan_AcLswPartPan_Value = { 0 },
 
     .field_0a20 = NAKA_NONE,
 
@@ -4460,7 +4569,11 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0a28 = 0x0001,
 
-    .pad_144 = { 0 },
+    .SdpartEff_ReverbDepth_Value = { 0 },
+
+    .SdpartEff_DspEffect_Value = { 0 },
+
+    .SdpartEff_DigitalEff_Value = { 0 },
 
     .field_0a34 = NAKA_NONE,
 
@@ -4472,7 +4585,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0a3c = 0x0001,
 
-    .pad_145 = { 0 },
+    .SdpartSus_SustainOnOff_Value = { 0 },
+
+    .SdpartSus_SustainLength_Value = { 0 },
 
     .field_0a44 = NAKA_NONE,
 
@@ -4484,7 +4599,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0a4c = 0x0001,
 
-    .pad_146 = { 0 },
+    .SdpartKey_KeyShift_Value = { 0 },
 
     .field_0a50 = NAKA_NONE,
 
@@ -4496,7 +4611,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0a58 = 0x0001,
 
-    .pad_147 = { 0 },
+    .SdpartTun_Tuning_Value = { 0 },
 
     .field_0a5c = NAKA_NONE,
 
@@ -4508,7 +4623,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0a64 = 0x0001,
 
-    .pad_148 = { 0 },
+    .SdpartBnd_PitchBendRange_Value = { 0 },
 
     .field_0a68 = NAKA_NONE,
 
@@ -4520,7 +4635,15 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0a70 = 0x0001,
 
-    .pad_149 = { 0 },
+    .SdpartOth_GlidePedal_Value = { 0 },
+
+    .SdpartOth_SustainPdl_Value = { 0 },
+
+    .SdpartOth_AfterTouch_Value = { 0 },
+
+    .SdpartOth_KeyScaling_Value = { 0 },
+
+    .SdpartOth_PartExpPdl_Value = { 0 },
 
     .field_0a84 = NAKA_NONE,
 
@@ -4528,7 +4651,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0a88 = 0x0001,
 
-    .pad_150 = { 0 },
+    .Sdmtune_MasterTuning_Value = { 0 },
 
     .field_0a8c = NAKA_NONE,
 
@@ -4546,7 +4669,13 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0a9a = 0x0001,
 
-    .pad_151 = { 0 },
+    .ScalingType_Value = { 0 },
+
+    .Sdscltyp1_ScalingShift_Value = { 0 },
+
+    .Sdscltyp1_AcLswBox_Value = { 0 },
+
+    .Sdscltyp1_ScalingMode_Value = { 0 },
 
     .field_0aa8 = NAKA_NONE,
 
@@ -4558,7 +4687,29 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0ab0 = 0x0001,
 
-    .pad_152 = { 0 },
+    .ScalingKey1_Value = { 0 },
+
+    .ScalingKey2_Value = { 0 },
+
+    .ScalingKey3_Value = { 0 },
+
+    .ScalingKey4_Value = { 0 },
+
+    .ScalingKey5_Value = { 0 },
+
+    .ScalingKey6_Value = { 0 },
+
+    .ScalingKey7_Value = { 0 },
+
+    .ScalingKey8_Value = { 0 },
+
+    .ScalingKey9_Value = { 0 },
+
+    .ScalingKey10_Value = { 0 },
+
+    .ScalingKey11_Value = { 0 },
+
+    .ScalingKey12_Value = { 0 },
 
     .field_0ae0 = NAKA_NONE,
 
@@ -4566,7 +4717,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0ae4 = 0x0001,
 
-    .pad_153 = { 0 },
+    .Sdlfthld_LeftHold_Value = { 0 },
 
     .field_0ae8 = NAKA_NONE,
 
@@ -4604,7 +4755,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0b3c = 0x0001,
 
-    .pad_156 = { 0 },
+    .Sdtecd2_Orchestrator_Value = { 0 },
 
     .field_0b40 = NAKA_NONE,
 
@@ -4676,7 +4827,13 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0b88 = 0x0001,
 
-    .pad_160 = { 0 },
+    .Drawbar2_Decay_Value = { 0 },
+
+    .Drawbar2_Level_Value = { 0 },
+
+    .Drawbar2_AttackTime_Value = { 0 },
+
+    .Drawbar2_ReleaseTime_Value = { 0 },
 
     .field_0b98 = NAKA_NONE,
 
@@ -4766,7 +4923,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0c12 = NAKA_NONE,
 
-    .pad_165 = { 0 },
+    .CheckMessage_AcRamBox_Value = { 0 },
+
+    .CheckMessage_AcRamBox_2_Value = { 0 },
 
     .field_0c1c = NAKA_NONE,
 
@@ -4776,7 +4935,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0c22 = NAKA_NONE,
 
-    .C_str = "C",
+    .NoMessage_AcRamBox_Value = "C",
 
     .pad_166 = { 0 },
 
@@ -5604,7 +5763,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1210 = 0x0001,
 
-    .pad_236 = { 0 },
+    .DiskSetup_DiskInsertOption_Value = { 0 },
+
+    .DiskSetup_FileTypePriority_Value = { 0 },
 
     .w9 = {
         .header       = NAKA_HDR(NAKA_TYPE_MENU_ITEM),
@@ -6361,7 +6522,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_172a = NAKA_NONE,
 
-    .pad_276 = { 0 },
+    .normal_AcLswBox_Value = { 0 },
 
     .field_172e = 0x0001,
 
@@ -6569,7 +6730,11 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_180a = 0x0001,
 
-    .pad_283 = { 0 },
+    .ControlWallSet_AcRamEditBox_Value = { 0 },
+
+    .ControlWallSet_MenuPages_Value = { 0 },
+
+    .ControlWallSet_Others_Value = { 0 },
 
     .field_181c = NAKA_NONE,
 
@@ -6579,7 +6744,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1822 = NAKA_NONE,
 
-    .pad_284 = { 0 },
+    .ONETCH_AcRamBox_Value = { 0 },
 
     .field_1828 = NAKA_NONE,
 
@@ -6829,7 +6994,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_192a = 0x0001,
 
-    .pad_296 = { 0 },
+    .PMVIEW_AcPmBkEditBox_Value = { 0 },
 
     .field_1930 = 0x0001,
 
