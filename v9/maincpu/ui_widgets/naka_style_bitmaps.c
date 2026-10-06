@@ -102,6 +102,59 @@ extern const char swordProc;
 extern const char ucharProc;
 extern const char ulongProc;
 extern const char uwordProc;
+extern const char ChordTypeStr_7sus4;
+extern const char ChordTypeStr_M7_9;
+extern const char ChordTypeStr_Type00;
+extern const char ChordTypeStr_Type01;
+extern const char ChordTypeStr_Type02;
+extern const char ChordTypeStr_Type03;
+extern const char ChordTypeStr_Type04;
+extern const char ChordTypeStr_Type05;
+extern const char ChordTypeStr_Type06;
+extern const char ChordTypeStr_Type07;
+extern const char ChordTypeStr_Type08;
+extern const char ChordTypeStr_Type09;
+extern const char ChordTypeStr_Type11;
+extern const char ChordTypeStr_Type12;
+extern const char ChordTypeStr_Type13;
+extern const char ChordTypeStr_Type14;
+extern const char ChordTypeStr_Type15;
+extern const char ChordTypeStr_Type16;
+extern const char ChordTypeStr_Type18;
+extern const char ChordTypeStr_Type19;
+extern const char ChordTypeStr_Type20;
+extern const char ChordTypeStr_Type21;
+extern const char ChordTypeStr_Type34;
+extern const char ChordTypeStr_Type35;
+extern const char ChordTypeStr_Type36;
+extern const char ChordTypeStr_Type37;
+extern const char ChordTypeStr_Type38;
+extern const char NakaInst_AlignmentID_EnumTable;
+extern const char NakaInst_ColorID_EnumTable;
+extern const char NakaInst_EditSwStyleID_EnumTable;
+extern const char NakaInst_FrameID_EnumTable;
+extern const char NakaInst_IconID_EnumTable;
+extern const char NakaInst_ModeID_EnumTable;
+extern const char NakaInst_ObjectID_EnumTable;
+extern const char NakaInst_RECTW_EnumTable;
+extern const char NakaInst_RectY1_EnumTable;
+extern const char NakaInst_String_EnumTable;
+extern const char NakaInst_UserID_EnumTable;
+extern const char NakaInst_pProc_EnumTable;
+extern const char NakaInst_pSchar_EnumTable;
+extern const char NakaInst_pUlong_EnumTable;
+extern const char NakaInst_pUword_EnumTable;
+extern const char NakaInst_ulong_EnumTable;
+extern const char SupportClass_ApFuncIDValueNames;
+extern const char SupportClass_ConstFlagValueNames;
+extern const char SupportClass_PSlongValueNames;
+extern const char SupportClass_PStringValueNames;
+extern const char SupportClass_PUcharValueNames;
+extern const char SupportClass_PointXValueNames;
+extern const char SupportClass_RectY2ValueNames;
+extern const char SupportClass_ScharValueNames;
+extern const char SupportClass_ScreenIDValueNames;
+extern const char SupportClass_UwordValueNames;
 
 #define BASE  0x00EB71BEu
 
@@ -3128,7 +3181,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_04e4 = 0x0002,
 
-    .ptr_04e6 = 0x00eb67e8,
+    .ptr_04e6 = NAKA_ADDR(SupportClass_UwordValueNames),
 
     .ucharProc_ptr = NAKA_ADDR(ucharProc),
 
@@ -3144,7 +3197,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_04fc = 0x0001,
 
-    .ptr_04fe = 0x00eb67fc,
+    .ptr_04fe = NAKA_ADDR(SupportClass_ScharValueNames),
 
     .slongProc_ptr = NAKA_ADDR(slongProc),
 
@@ -3160,7 +3213,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0514 = 0x0004,
 
-    .ptr_0516 = 0x00eb6810,
+    .ptr_0516 = NAKA_ADDR(NakaInst_ulong_EnumTable),
 
     .boolProc_ptr = NAKA_ADDR(boolProc),
 
@@ -3176,7 +3229,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_052c = 0x0004,
 
-    .ptr_052e = 0x00eb6840,
+    .ptr_052e = NAKA_ADDR(NakaInst_ObjectID_EnumTable),
 
     .pFuncProc_ptr = NAKA_ADDR(pFuncProc),
 
@@ -3192,7 +3245,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0544 = 0x0004,
 
-    .ptr_0546 = 0x00eb6854,
+    .ptr_0546 = NAKA_ADDR(NakaInst_pProc_EnumTable),
 
     .pPropProc_ptr = NAKA_ADDR(pPropProc),
 
@@ -3208,7 +3261,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_055c = 0x0004,
 
-    .ptr_055e = 0x00eb6868,
+    .ptr_055e = NAKA_ADDR(SupportClass_PStringValueNames),
 
     .ClassIDProc_ptr = NAKA_ADDR(ClassIDProc),
 
@@ -3224,7 +3277,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0574 = 0x0004,
 
-    .ptr_0576 = 0x00eb687c,
+    .ptr_0576 = NAKA_ADDR(SupportClass_ScreenIDValueNames),
 
     .EventIDProc_ptr = NAKA_ADDR(EventIDProc),
 
@@ -3240,7 +3293,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_058c = 0x0008,
 
-    .ptr_058e = 0x00eb6890,
+    .ptr_058e = NAKA_ADDR(NakaInst_RECTW_EnumTable),
 
     .RectX1Proc_ptr = NAKA_ADDR(RectX1Proc),
 
@@ -3256,7 +3309,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_05a4 = 0x0002,
 
-    .ptr_05a6 = 0x00eb68a4,
+    .ptr_05a6 = NAKA_ADDR(NakaInst_RectY1_EnumTable),
 
     .RectX2Proc_ptr = NAKA_ADDR(RectX2Proc),
 
@@ -3272,7 +3325,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_05bc = 0x0002,
 
-    .ptr_05be = 0x00eb68b8,
+    .ptr_05be = NAKA_ADDR(SupportClass_RectY2ValueNames),
 
     .POINTWProc_ptr = NAKA_ADDR(POINTWProc),
 
@@ -3288,7 +3341,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_05d4 = 0x0002,
 
-    .ptr_05d6 = 0x00eb68cc,
+    .ptr_05d6 = NAKA_ADDR(SupportClass_PointXValueNames),
 
     .PointYProc_ptr = NAKA_ADDR(PointYProc),
 
@@ -3304,7 +3357,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_05ec = 0x0004,
 
-    .ptr_05ee = 0x00eb68e0,
+    .ptr_05ee = NAKA_ADDR(NakaInst_String_EnumTable),
 
     .NameProc_ptr = NAKA_ADDR(NameProc),
 
@@ -3320,7 +3373,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0604 = 0x0004,
 
-    .ptr_0606 = 0x00eb68f4,
+    .ptr_0606 = NAKA_ADDR(SupportClass_ConstFlagValueNames),
 
     .ViewIDProc_ptr = NAKA_ADDR(ViewIDProc),
 
@@ -3336,7 +3389,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_061c = 0x0002,
 
-    .ptr_061e = 0x00eb67e8,
+    .ptr_061e = NAKA_ADDR(SupportClass_UwordValueNames),
 
     .ViewFlagProc_ptr = NAKA_ADDR(ViewFlagProc),
 
@@ -3352,7 +3405,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0634 = 0x0002,
 
-    .ptr_0636 = 0x00eb69aa,
+    .ptr_0636 = NAKA_ADDR(NakaInst_ColorID_EnumTable),
 
     .BorderIDProc_ptr = NAKA_ADDR(BorderIDProc),
 
@@ -3368,7 +3421,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_064c = 0x0004,
 
-    .ptr_064e = 0x00eb6d62,
+    .ptr_064e = NAKA_ADDR(NakaInst_ModeID_EnumTable),
 
     .TitleIDProc_ptr = NAKA_ADDR(TitleIDProc),
 
@@ -3384,7 +3437,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0664 = 0x0004,
 
-    .ptr_0666 = 0x00eb6d76,
+    .ptr_0666 = NAKA_ADDR(NakaInst_IconID_EnumTable),
 
     .FontIDProc_ptr = NAKA_ADDR(FontIDProc),
 
@@ -3400,7 +3453,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_067c = 0x0001,
 
-    .ptr_067e = 0x00eb6d8a,
+    .ptr_067e = NAKA_ADDR(NakaInst_AlignmentID_EnumTable),
 
     .EditSwIDProc_ptr = NAKA_ADDR(EditSwIDProc),
 
@@ -3416,7 +3469,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0694 = 0x0001,
 
-    .ptr_0696 = 0x00eb6f54,
+    .ptr_0696 = NAKA_ADDR(NakaInst_EditSwStyleID_EnumTable),
 
     .LineModeIDProc_ptr = NAKA_ADDR(LineModeIDProc),
 
@@ -3432,7 +3485,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_06ac = 0x0002,
 
-    .ptr_06ae = 0x00eb70ae,
+    .ptr_06ae = NAKA_ADDR(NakaInst_FrameID_EnumTable),
 
     .BitmapIDProc_ptr = NAKA_ADDR(BitmapIDProc),
 
@@ -3448,7 +3501,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_06c4 = 0x0004,
 
-    .ptr_06c6 = 0x00eb70e4,
+    .ptr_06c6 = NAKA_ADDR(SupportClass_ApFuncIDValueNames),
 
     .MainFuncIDProc_ptr = NAKA_ADDR(MainFuncIDProc),
 
@@ -3464,7 +3517,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_06dc = 0x0002,
 
-    .ptr_06de = 0x00eb70f8,
+    .ptr_06de = NAKA_ADDR(NakaInst_UserID_EnumTable),
 
     .pBoolProc_ptr = NAKA_ADDR(pBoolProc),
 
@@ -3488,7 +3541,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0700 = 0x0004,
 
-    .ptr_0702 = 0x00eb720a,
+    .ptr_0702 = NAKA_ADDR(NakaInst_pUword_EnumTable),
 
     .pScharProc_ptr = NAKA_ADDR(pScharProc),
 
@@ -3496,7 +3549,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_070c = 0x0004,
 
-    .ptr_070e = 0x00eb7214,
+    .ptr_070e = NAKA_ADDR(NakaInst_pSchar_EnumTable),
 
     .pUcharProc_ptr = NAKA_ADDR(pUcharProc),
 
@@ -3504,7 +3557,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0718 = 0x0004,
 
-    .ptr_071a = 0x00eb721e,
+    .ptr_071a = NAKA_ADDR(SupportClass_PUcharValueNames),
 
     .pSlongProc_ptr = NAKA_ADDR(pSlongProc),
 
@@ -3512,7 +3565,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0724 = 0x0004,
 
-    .ptr_0726 = 0x00eb7228,
+    .ptr_0726 = NAKA_ADDR(SupportClass_PSlongValueNames),
 
     .pUlongProc_ptr = NAKA_ADDR(pUlongProc),
 
@@ -3520,7 +3573,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0730 = 0x0004,
 
-    .ptr_0732 = 0x00eb7232,
+    .ptr_0732 = NAKA_ADDR(NakaInst_pUlong_EnumTable),
 
     .WindowIDProc_ptr = NAKA_ADDR(WindowIDProc),
 
@@ -11341,28 +11394,28 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
     .str_2542 = ALIGNED_STRING("  "),
 
     .MainChordPre_ChordTypeNames = {
-        0x00ed020c,
-        0x00ed0206,
-        0x00ed0200,
-        0x00ed01fa,
-        0x00ed01f4,
-        0x00ed01ee,
-        0x00ed01e8,
-        0x00ed01e2,
-        0x00ed01da,
-        0x00ed01d4,
-        0x00ed01ce,
-        0x00ed01c8,
-        0x00ed01c2,
-        0x00ed01ba,
-        0x00ed01b2,
-        0x00ed01ac,
-        0x00ed01a4,
-        0x00ed019e,
-        0x00ed0198,
-        0x00ed0192,
-        0x00ed018a,
-        0x00ed0184,
+        NAKA_ADDR(ChordTypeStr_Type00),
+        NAKA_ADDR(ChordTypeStr_Type01),
+        NAKA_ADDR(ChordTypeStr_Type02),
+        NAKA_ADDR(ChordTypeStr_Type03),
+        NAKA_ADDR(ChordTypeStr_Type04),
+        NAKA_ADDR(ChordTypeStr_Type05),
+        NAKA_ADDR(ChordTypeStr_Type06),
+        NAKA_ADDR(ChordTypeStr_Type07),
+        NAKA_ADDR(ChordTypeStr_Type08),
+        NAKA_ADDR(ChordTypeStr_Type09),
+        NAKA_ADDR(ChordTypeStr_7sus4),
+        NAKA_ADDR(ChordTypeStr_Type11),
+        NAKA_ADDR(ChordTypeStr_Type12),
+        NAKA_ADDR(ChordTypeStr_Type13),
+        NAKA_ADDR(ChordTypeStr_Type14),
+        NAKA_ADDR(ChordTypeStr_Type15),
+        NAKA_ADDR(ChordTypeStr_Type16),
+        NAKA_ADDR(ChordTypeStr_M7_9),
+        NAKA_ADDR(ChordTypeStr_Type18),
+        NAKA_ADDR(ChordTypeStr_Type19),
+        NAKA_ADDR(ChordTypeStr_Type20),
+        NAKA_ADDR(ChordTypeStr_Type21),
         NAKA_ADDR(ChordTypeStr_69),
         NAKA_ADDR(ChordTypeStr_sus4),
         NAKA_ADDR(ChordTypeStr_7_Flat9),
@@ -11375,11 +11428,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         NAKA_ADDR(ChordTypeStr_Flat13_Only),
         NAKA_ADDR(ChordTypeStr_Sharp9_Flat13),
         NAKA_ADDR(ChordTypeStr_Flat9_Flat13),
-        0x00ed011e,
-        0x00ed0118,
-        0x00ed0110,
-        0x00ed0108,
-        0x00ed0102,
+        NAKA_ADDR(ChordTypeStr_Type34),
+        NAKA_ADDR(ChordTypeStr_Type35),
+        NAKA_ADDR(ChordTypeStr_Type36),
+        NAKA_ADDR(ChordTypeStr_Type37),
+        NAKA_ADDR(ChordTypeStr_Type38),
     },
 
     .field_18e48 = 0x00fa,

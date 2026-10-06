@@ -86,3 +86,7 @@ TitleProc = 0x00FA4E03;
 UserBitmapCheck = 0x00F9C5D5;
 ViewableProc = 0x00FA5995;
 VwBoxProc = 0x00F9CCE6;
+SeGfx_BoundOp08_ColorBlit = 0x00FB25A3;
+SeGfx_BoundOp09_FormatNumber = 0x00FB22A3;
+SeGfx_BoundOp0A_FormatNumber = 0x00FB2438;
+SeGfx_BoundOp0B_FormatNumber = 0x00FB2346;

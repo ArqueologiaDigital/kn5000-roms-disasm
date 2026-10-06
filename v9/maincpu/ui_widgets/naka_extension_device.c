@@ -93,6 +93,285 @@ extern const char FileIO_BytecodeData_Code_Loop3;
 extern const char FileIO_BytecodeData_Code_Join18;
 extern const char Naka_PresentationRootState;
 extern const char PanelAction_PedalFn_Code40;
+extern const char NakaWidget_ControlFsw;
+extern const char NakaWidget_ControlFsw_1_AcFSWAssGridBox;
+extern const char NakaWidget_ControlFsw_2_Label;
+extern const char NakaWidget_ControlFsw_3_Label;
+extern const char NakaWidget_ControlFsw_4_AcIndexWideES;
+extern const char NakaWidget_ControlFsw_5_AcIndexWideES;
+extern const char NakaWidget_ControlIni;
+extern const char NakaWidget_ControlIni_10_Box;
+extern const char NakaWidget_ControlIni_11_AcLanguageText;
+extern const char NakaWidget_ControlIni_12_AcLanguageText;
+extern const char NakaWidget_ControlIni_13_AcLanguageText;
+extern const char NakaWidget_ControlIni_14_AcFuncEditSw;
+extern const char NakaWidget_ControlIni_15_AcFuncEditSw;
+extern const char NakaWidget_ControlIni_16_IvShowHide;
+extern const char NakaWidget_ControlIni_1_AcIndexWideES;
+extern const char NakaWidget_ControlIni_3_AcFuncEditSw;
+extern const char NakaWidget_ControlIni_4_IvShowHide;
+extern const char NakaWidget_ControlIni_5_AcLanguageText;
+extern const char NakaWidget_ControlIni_6_TtlScreen;
+extern const char NakaWidget_ControlIni_8_Label;
+extern const char NakaWidget_ControlIni_9_Icon;
+extern const char NakaWidget_ControlMenu;
+extern const char NakaWidget_ControlMenu_1_AcTitleMenu;
+extern const char NakaWidget_ControlMenu_2_AcTitleMenu;
+extern const char NakaWidget_ControlMenu_3_AcTitleMenu;
+extern const char NakaWidget_ControlMenu_4_AcTitleMenu;
+extern const char NakaWidget_ControlMenu_5_AcTitleMenu;
+extern const char NakaWidget_ControlMenu_6_IvExitMode;
+extern const char NakaWidget_ControlMenu_7_AcTitleMenu;
+extern const char NakaWidget_ControlMenu_8_AcTitleMenu;
+extern const char NakaWidget_ControlSns;
+extern const char NakaWidget_ControlSns_1_AcTchSensGridBox;
+extern const char NakaWidget_ControlSns_2_Label;
+extern const char NakaWidget_ControlSns_3_Label;
+extern const char NakaWidget_ControlSns_4_AcIndexWideES;
+extern const char NakaWidget_ControlSns_5_AcIndexWideES;
+extern const char NakaWidget_ControlSns_6_Label;
+extern const char NakaWidget_ControlSns_7_Label;
+extern const char NakaWidget_ControlSys;
+extern const char NakaWidget_ControlSys_1_AcDispTimeSetGridBox;
+extern const char NakaWidget_ControlSys_2_Label;
+extern const char NakaWidget_ControlSys_3_Label;
+extern const char NakaWidget_ControlSys_4_AcIndexWideES;
+extern const char NakaWidget_ControlSys_5_AcIndexWideES;
+extern const char NakaWidget_ControlSys_6_AcFuncEditSw;
+extern const char NakaWidget_ControlWallSet;
+extern const char NakaWidget_MSCTSEL;
+extern const char NakaWidget_MSCTSEL_10_AcIndexWideES;
+extern const char NakaWidget_MSCTSEL_11_Label;
+extern const char NakaWidget_MSCTSEL_13_AcMstStyle2GridBox;
+extern const char NakaWidget_MSCTSEL_14_Box;
+extern const char NakaWidget_MSCTSEL_15_Label;
+extern const char NakaWidget_MSCTSEL_16_AcIndexWideES;
+extern const char NakaWidget_MSCTSEL_17_Label;
+extern const char NakaWidget_MSCTSEL_18_VwEditSwBox;
+extern const char NakaWidget_MSCTSEL_19_Label;
+extern const char NakaWidget_MSCTSEL_1_IvMstStyleWindowPgCtl;
+extern const char NakaWidget_MSCTSEL_2_IvPageControl;
+extern const char NakaWidget_MSCTSEL_3_IvPageControl;
+extern const char NakaWidget_MSCTSEL_5_AcMstStyle1GridBox;
+extern const char NakaWidget_MSCTSEL_6_AcIndexWideES;
+extern const char NakaWidget_MSCTSEL_7_VwEditSwBox;
+extern const char NakaWidget_MSCTSEL_8_Label;
+extern const char NakaWidget_MSCTSEL_9_AcMstStyle1SubGridBox;
+extern const char NakaWidget_MSSCTSEL;
+extern const char NakaWidget_MSSCTSEL_10_AcMstSong2GridBox;
+extern const char NakaWidget_MSSCTSEL_11_AcIndexWideES;
+extern const char NakaWidget_MSSCTSEL_12_Box;
+extern const char NakaWidget_MSSCTSEL_13_Label;
+extern const char NakaWidget_MSSCTSEL_14_Label;
+extern const char NakaWidget_MSSCTSEL_15_VwEditSwBox;
+extern const char NakaWidget_MSSCTSEL_16_Label;
+extern const char NakaWidget_MSSCTSEL_1_IvMstStyleWindowPgCtl;
+extern const char NakaWidget_MSSCTSEL_2_IvPageControl;
+extern const char NakaWidget_MSSCTSEL_3_IvPageControl;
+extern const char NakaWidget_MSSCTSEL_5_AcMstSong1GridBox;
+extern const char NakaWidget_MSSCTSEL_6_AcIndexWideES;
+extern const char NakaWidget_MSSCTSEL_7_VwEditSwBox;
+extern const char NakaWidget_MSSCTSEL_8_Label;
+extern const char NakaWidget_MSSONGLIST;
+extern const char NakaWidget_MSSONGLIST_1_AcMstSugAlpGridBox;
+extern const char NakaWidget_MSSONGLIST_2_Label;
+extern const char NakaWidget_MSSONGLIST_3_AcIndexWideES;
+extern const char NakaWidget_MSSONGLIST_4_Box;
+extern const char NakaWidget_MSSONGLIST_5_Label;
+extern const char NakaWidget_MSSONGLIST_6_VwEditSwBox;
+extern const char NakaWidget_MSSONGLIST_7_Label;
+extern const char NakaWidget_MSSTLSEL;
+extern const char NakaWidget_MSSTLSEL_1_AcMstStyleAlpGridBox;
+extern const char NakaWidget_MSSTLSEL_2_Box;
+extern const char NakaWidget_MSSTLSEL_3_Label;
+extern const char NakaWidget_MSSTLSEL_4_AcIndexWideES;
+extern const char NakaWidget_MSSTLSEL_5_VwEditSwBox;
+extern const char NakaWidget_MSSTLSEL_6_Label;
+extern const char NakaWidget_MUSICSTYL;
+extern const char NakaWidget_MUSICSTYL_1_AcTitleMenu;
+extern const char NakaWidget_MUSICSTYL_2_IvExitMode;
+extern const char NakaWidget_MUSICSTYL_3_AcTitleMenu;
+extern const char NakaWidget_N1;
+extern const char NakaWidget_Normal;
+extern const char NakaWidget_Normal_10_StringBox;
+extern const char NakaWidget_Normal_11_StringBox;
+extern const char NakaWidget_Normal_12_TransposeBox;
+extern const char NakaWidget_Normal_13_ChordBox;
+extern const char NakaWidget_Normal_14_AcLswBox;
+extern const char NakaWidget_Normal_15_IvWindowPageControl;
+extern const char NakaWidget_Normal_16_FreeSplitBox;
+extern const char NakaWidget_Normal_17_IvPageOverWr;
+extern const char NakaWidget_Normal_18_IvPageOverWr;
+extern const char NakaWidget_Normal_19_IvPageOverWr;
+extern const char NakaWidget_Normal_20_IvPageOverWr;
+extern const char NakaWidget_Normal_21_IvPageOverWr;
+extern const char NakaWidget_Normal_22_IvPageOverWr;
+extern const char NakaWidget_Normal_23_IvExit;
+extern const char NakaWidget_Normal_2_AcTempoBox;
+extern const char NakaWidget_Normal_3_AcPmemName;
+extern const char NakaWidget_Normal_4_AcRhythmName;
+extern const char NakaWidget_Normal_5_AcSoundName;
+extern const char NakaWidget_Normal_6_AcSoundName;
+extern const char NakaWidget_Normal_7_StringBox;
+extern const char NakaWidget_Normal_8_AcSoundName;
+extern const char NakaWidget_Normal_9_StringBox;
+extern const char NakaWidget_ONETCH;
+extern const char NakaWidget_ONETCH_1_Label;
+extern const char NakaWidget_ONETCH_2_AcRamBox;
+extern const char NakaWidget_ONETCH_3_IvExitMode;
+extern const char NakaWidget_PMBANK;
+extern const char NakaWidget_PMBANK_1_Icon;
+extern const char NakaWidget_PMBANK_2_StringBox;
+extern const char NakaWidget_PMBANK_3_PsPageBox;
+extern const char NakaWidget_PMBANK_4_Label;
+extern const char NakaWidget_PMBANK_5_IvIntEasySet;
+extern const char NakaWidget_PMBKNAME;
+extern const char NakaWidget_PMBKNAME_1_IvNaming;
+extern const char NakaWidget_PMBKNAME_2_AcFuncEditSw;
+extern const char NakaWidget_PMBKNAME_3_Label;
+extern const char NakaWidget_PMBKNAME_4_BkNoBox;
+extern const char NakaWidget_PMBKNAME_5_EditSw;
+extern const char NakaWidget_PMBKNAME_6_IvExit;
+extern const char NakaWidget_PMEM1;
+extern const char NakaWidget_PMEM2;
+extern const char NakaWidget_PMNAME;
+extern const char NakaWidget_PMNAME_1_IvNaming;
+extern const char NakaWidget_PMNAME_2_AcFuncEditSw;
+extern const char NakaWidget_PMNAME_3_Label;
+extern const char NakaWidget_PMNAME_4_PmBkNoBox;
+extern const char NakaWidget_PMNAME_5_EditSw;
+extern const char NakaWidget_PMNAME_6_IvExit;
+extern const char NakaWidget_PMVIEW;
+extern const char NakaWidget_PMVIEW_10_EditSw;
+extern const char NakaWidget_PMVIEW_11_EditSw;
+extern const char NakaWidget_PMVIEW_12_IvIntEasySet;
+extern const char NakaWidget_PMVIEW_1_AcPmBkEditBox;
+extern const char NakaWidget_PMVIEW_2_AcIndexWideES;
+extern const char NakaWidget_PMVIEW_3_PsPageBox;
+extern const char NakaWidget_PMVIEW_4_Label;
+extern const char NakaWidget_PMVIEW_5_Label;
+extern const char NakaWidget_PMVIEW_6_Label;
+extern const char NakaWidget_PMVIEW_7_Label;
+extern const char NakaWidget_PMVIEW_8_Label;
+extern const char NakaWidget_PMVIEW_9_Label;
+extern const char NakaWidget_RVARI;
+extern const char NakaWidget_RVARI_1_AcTempoBox;
+extern const char NakaWidget_RVARI_2_IvIntVari;
+extern const char NakaWidget_SONG1;
+extern const char NakaWidget_SONG2;
+extern const char NakaWidget_STYLE1;
+extern const char NakaWidget_STYLE2;
+extern const char NakaWidget_SVARI;
+extern const char NakaWidget_SVARI_1_IvIntVari;
+extern const char NakaWidget_SYSINI;
+extern const char NakaWidget_SYSINISURE;
+extern const char NakaWidget_TEST1CP;
+extern const char NakaWidget_TEST1RAM;
+extern const char NakaWidget_ToshiView044_0_MsaModeScreen;
+extern const char NakaWidget_ToshiView044_10_MsaModeScreen;
+extern const char NakaWidget_ToshiView044_11_Label;
+extern const char NakaWidget_ToshiView044_12_Icon;
+extern const char NakaWidget_ToshiView044_13_EditSw;
+extern const char NakaWidget_ToshiView044_14_EditSw;
+extern const char NakaWidget_ToshiView044_15_EditSw;
+extern const char NakaWidget_ToshiView044_16_Label;
+extern const char NakaWidget_ToshiView044_17_Label;
+extern const char NakaWidget_ToshiView044_18_Label;
+extern const char NakaWidget_ToshiView044_1_Label;
+extern const char NakaWidget_ToshiView044_2_Icon;
+extern const char NakaWidget_ToshiView044_3_EditSw;
+extern const char NakaWidget_ToshiView044_4_EditSw;
+extern const char NakaWidget_ToshiView044_5_EditSw;
+extern const char NakaWidget_ToshiView044_6_Label;
+extern const char NakaWidget_ToshiView044_7_Label;
+extern const char NakaWidget_ToshiView044_8_Label;
+extern const char NakaWidget_ToshiView044_9_IvIntEasySet;
+extern const char NakaWidget_ToshiView045_0_TtlScreen;
+extern const char NakaWidget_ToshiView045_10_Label;
+extern const char NakaWidget_ToshiView045_11_AcLanguageText;
+extern const char NakaWidget_ToshiView045_12_AcLanguageText;
+extern const char NakaWidget_ToshiView045_14_AcPmExpFilterGridBox;
+extern const char NakaWidget_ToshiView045_15_AcIndexWideES;
+extern const char NakaWidget_ToshiView045_16_AcIndexWideES;
+extern const char NakaWidget_ToshiView045_17_StringBox;
+extern const char NakaWidget_ToshiView045_18_Window;
+extern const char NakaWidget_ToshiView045_1_IvPmemWindowPageCtl;
+extern const char NakaWidget_ToshiView045_2_IvPageControl;
+extern const char NakaWidget_ToshiView045_3_IvPageControl;
+extern const char NakaWidget_ToshiView045_4_IvIntEasySet;
+extern const char NakaWidget_ToshiView045_6_PmemModeBox;
+extern const char NakaWidget_ToshiView045_7_EditSw;
+extern const char NakaWidget_ToshiView045_8_EditSw;
+extern const char NakaWidget_ToshiView045_9_Label;
+extern const char NakaWidget_ToshiView048_0_TtlScreen;
+extern const char NakaWidget_ToshiView048_10_Label;
+extern const char NakaWidget_ToshiView048_11_AcIndexWideES;
+extern const char NakaWidget_ToshiView048_12_Label;
+extern const char NakaWidget_ToshiView048_13_AcFuncEditSw;
+extern const char NakaWidget_ToshiView048_14_IvShowHide;
+extern const char NakaWidget_ToshiView048_16_Box;
+extern const char NakaWidget_ToshiView048_17_AcLanguageText;
+extern const char NakaWidget_ToshiView048_18_AcLanguageText;
+extern const char NakaWidget_ToshiView048_19_AcLanguageText;
+extern const char NakaWidget_ToshiView048_1_AcTitleMenu;
+extern const char NakaWidget_ToshiView048_20_AcFuncEditSw;
+extern const char NakaWidget_ToshiView048_21_AcFuncEditSw;
+extern const char NakaWidget_ToshiView048_22_IvShowHide;
+extern const char NakaWidget_ToshiView048_23_Icon;
+extern const char NakaWidget_ToshiView048_24_Label;
+extern const char NakaWidget_ToshiView048_3_AcTitleMenu;
+extern const char NakaWidget_ToshiView048_4_AcRamEditBox;
+extern const char NakaWidget_ToshiView048_5_Label;
+extern const char NakaWidget_ToshiView048_6_Label;
+extern const char NakaWidget_ToshiView048_7_AcRamEditBox;
+extern const char NakaWidget_ToshiView048_8_AcRamEditBox;
+extern const char NakaWidget_ToshiView048_9_AcFuncEditSw;
+extern const char NakaWidget_ToshiView0F4_0_TtlScreen;
+extern const char NakaWidget_ToshiView0F4_2_Label;
+extern const char NakaWidget_ToshiView0F4_3_Label;
+extern const char NakaWidget_ToshiView0F4_4_Label;
+extern const char NakaWidget_ToshiView0F4_5_Label;
+extern const char NakaWidget_ToshiView0F4_6_Label;
+extern const char NakaWidget_WALLSETSURE;
+extern const char NakaWidget_normal;
+extern const char Toshi_NORMAL_Elem25;
+extern const char Toshi_NORMAL_Elem26;
+extern const char Toshi_NORMAL_Elem27;
+extern const char Toshi_NORMAL_Elem28;
+extern const char Toshi_NORMAL_Elem29;
+extern const char Toshi_NORMAL_Elem30;
+extern const char Toshi_NORMAL_Elem31;
+extern const char Toshi_NORMAL_Elem32;
+extern const char Toshi_NORMAL_Elem33;
+extern const char Toshi_NORMAL_Elem34;
+extern const char Toshi_NORMAL_Elem35;
+extern const char Toshi_NORMAL_Elem36;
+extern const char Toshi_NORMAL_Elem37;
+extern const char Toshi_NORMAL_Elem38;
+extern const char Toshi_NORMAL_Elem39;
+extern const char Toshi_NORMAL_Elem40;
+extern const char Toshi_NORMAL_Elem41;
+extern const char Toshi_NORMAL_Elem42;
+extern const char Toshi_NORMAL_Elem43;
+extern const char Toshi_NORMAL_Elem44;
+extern const char Toshi_NORMAL_Elem45;
+extern const char Toshi_NORMAL_Elem46;
+extern const char Toshi_NORMAL_Elem47;
+extern const char Toshi_NORMAL_Elem48;
+extern const char Toshi_NORMAL_Elem49;
+extern const char Toshi_NORMAL_Elem50;
+extern const char Toshi_NORMAL_Elem51;
+extern const char Toshi_NORMAL_Elem52;
+extern const char Toshi_NORMAL_Elem53;
+extern const char Toshi_NORMAL_Elem54;
+extern const char Toshi_NORMAL_Elem55;
+extern const char Toshi_NORMAL_Elem56;
+extern const char Toshi_NORMAL_Elem57;
+extern const char Toshi_NORMAL_Elem58;
+extern const char Toshi_NORMAL_Elem59;
+extern const char Toshi_NORMAL_Elem60;
+extern const char Toshi_NORMAL_Elem61;
+extern const char Toshi_NORMAL_Elem62;
 
 #define BASE  0x00ED67CCu
 
@@ -2945,307 +3224,307 @@ const naka_extension_device_t naka_extension_device_data
     },
 
     .ptrs_0 = {
-        0x00ED3454,
-        0x00ED3486,
-        0x00ED34B2,
-        0x00ED34D6,
-        0x00ED34FA,
-        0x00ED351E,
-        0x00ED3544,
-        0x00ED356A,
-        0x00ED3598,
-        0x00ED35BE,
-        0x00ED35EC,
-        0x00ED3618,
-        0x00ED3646,
-        0x00ED366A,
-        0x00ED368E,
-        0x00ED36BA,
-        0x00ED36D4,
-        0x00ED36F8,
-        0x00ED3714,
-        0x00ED3730,
-        0x00ED374C,
-        0x00ED3768,
-        0x00ED3784,
-        0x00ED37A0,
-        0x00ED37B6,
-        0x00ED37DA,
-        0x00ED37FA,
-        0x00ED381A,
-        0x00ED383A,
-        0x00ED385A,
-        0x00ED387A,
-        0x00ED389A,
-        0x00ED38BA,
-        0x00ED38DA,
-        0x00ED38FE,
-        0x00ED391E,
-        0x00ED393E,
-        0x00ED395E,
-        0x00ED397E,
-        0x00ED399E,
-        0x00ED39C2,
-        0x00ED39E2,
-        0x00ED3A02,
-        0x00ED3A22,
-        0x00ED3A42,
-        0x00ED3A62,
-        0x00ED3A82,
-        0x00ED3AA2,
-        0x00ED3AC2,
-        0x00ED3AE6,
-        0x00ED3B06,
-        0x00ED3B26,
-        0x00ED3B46,
-        0x00ED3B66,
-        0x00ED3B86,
-        0x00ED3BA6,
-        0x00ED3BC6,
-        0x00ED3BE6,
-        0x00ED3C0A,
-        0x00ED3C24,
-        0x00ED3C3E,
-        0x00ED3C62,
-        0x00ED3C7C,
+        NAKA_ADDR(NakaWidget_Normal),
+        NAKA_ADDR(NakaWidget_normal),
+        NAKA_ADDR(NakaWidget_Normal_2_AcTempoBox),
+        NAKA_ADDR(NakaWidget_Normal_3_AcPmemName),
+        NAKA_ADDR(NakaWidget_Normal_4_AcRhythmName),
+        NAKA_ADDR(NakaWidget_Normal_5_AcSoundName),
+        NAKA_ADDR(NakaWidget_Normal_6_AcSoundName),
+        NAKA_ADDR(NakaWidget_Normal_7_StringBox),
+        NAKA_ADDR(NakaWidget_Normal_8_AcSoundName),
+        NAKA_ADDR(NakaWidget_Normal_9_StringBox),
+        NAKA_ADDR(NakaWidget_Normal_10_StringBox),
+        NAKA_ADDR(NakaWidget_Normal_11_StringBox),
+        NAKA_ADDR(NakaWidget_Normal_12_TransposeBox),
+        NAKA_ADDR(NakaWidget_Normal_13_ChordBox),
+        NAKA_ADDR(NakaWidget_Normal_14_AcLswBox),
+        NAKA_ADDR(NakaWidget_Normal_15_IvWindowPageControl),
+        NAKA_ADDR(NakaWidget_Normal_16_FreeSplitBox),
+        NAKA_ADDR(NakaWidget_Normal_17_IvPageOverWr),
+        NAKA_ADDR(NakaWidget_Normal_18_IvPageOverWr),
+        NAKA_ADDR(NakaWidget_Normal_19_IvPageOverWr),
+        NAKA_ADDR(NakaWidget_Normal_20_IvPageOverWr),
+        NAKA_ADDR(NakaWidget_Normal_21_IvPageOverWr),
+        NAKA_ADDR(NakaWidget_Normal_22_IvPageOverWr),
+        NAKA_ADDR(NakaWidget_Normal_23_IvExit),
+        NAKA_ADDR(NakaWidget_N1),
+        NAKA_ADDR(Toshi_NORMAL_Elem25),
+        NAKA_ADDR(Toshi_NORMAL_Elem26),
+        NAKA_ADDR(Toshi_NORMAL_Elem27),
+        NAKA_ADDR(Toshi_NORMAL_Elem28),
+        NAKA_ADDR(Toshi_NORMAL_Elem29),
+        NAKA_ADDR(Toshi_NORMAL_Elem30),
+        NAKA_ADDR(Toshi_NORMAL_Elem31),
+        NAKA_ADDR(Toshi_NORMAL_Elem32),
+        NAKA_ADDR(Toshi_NORMAL_Elem33),
+        NAKA_ADDR(Toshi_NORMAL_Elem34),
+        NAKA_ADDR(Toshi_NORMAL_Elem35),
+        NAKA_ADDR(Toshi_NORMAL_Elem36),
+        NAKA_ADDR(Toshi_NORMAL_Elem37),
+        NAKA_ADDR(Toshi_NORMAL_Elem38),
+        NAKA_ADDR(Toshi_NORMAL_Elem39),
+        NAKA_ADDR(Toshi_NORMAL_Elem40),
+        NAKA_ADDR(Toshi_NORMAL_Elem41),
+        NAKA_ADDR(Toshi_NORMAL_Elem42),
+        NAKA_ADDR(Toshi_NORMAL_Elem43),
+        NAKA_ADDR(Toshi_NORMAL_Elem44),
+        NAKA_ADDR(Toshi_NORMAL_Elem45),
+        NAKA_ADDR(Toshi_NORMAL_Elem46),
+        NAKA_ADDR(Toshi_NORMAL_Elem47),
+        NAKA_ADDR(Toshi_NORMAL_Elem48),
+        NAKA_ADDR(Toshi_NORMAL_Elem49),
+        NAKA_ADDR(Toshi_NORMAL_Elem50),
+        NAKA_ADDR(Toshi_NORMAL_Elem51),
+        NAKA_ADDR(Toshi_NORMAL_Elem52),
+        NAKA_ADDR(Toshi_NORMAL_Elem53),
+        NAKA_ADDR(Toshi_NORMAL_Elem54),
+        NAKA_ADDR(Toshi_NORMAL_Elem55),
+        NAKA_ADDR(Toshi_NORMAL_Elem56),
+        NAKA_ADDR(Toshi_NORMAL_Elem57),
+        NAKA_ADDR(Toshi_NORMAL_Elem58),
+        NAKA_ADDR(Toshi_NORMAL_Elem59),
+        NAKA_ADDR(Toshi_NORMAL_Elem60),
+        NAKA_ADDR(Toshi_NORMAL_Elem61),
+        NAKA_ADDR(Toshi_NORMAL_Elem62),
         0x00000000,
-        0x00ED3C96,
-        0x00ED3CCE,
-        0x00ED3D0C,
-        0x00ED3D5C,
-        0x00ED3DA4,
-        0x00ED3DEC,
-        0x00ED3E34,
-        0x00ED3E4E,
-        0x00ED3E9E,
+        NAKA_ADDR(NakaWidget_ControlMenu),
+        NAKA_ADDR(NakaWidget_ControlMenu_1_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_ControlMenu_2_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_ControlMenu_3_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_ControlMenu_4_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_ControlMenu_5_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_ControlMenu_6_IvExitMode),
+        NAKA_ADDR(NakaWidget_ControlMenu_7_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_ControlMenu_8_AcTitleMenu),
         0x00000000,
-        0x00ED3EE6,
-        0x00ED3F18,
-        0x00ED3F42,
-        0x00ED401E,
-        0x00ED404A,
-        0x00ED4064,
-        0x00ED408E,
-        0x00ED40C0,
-        0x00ED40E2,
-        0x00ED410A,
-        0x00ED4124,
-        0x00ED413E,
-        0x00ED4168,
-        0x00ED4192,
-        0x00ED41BC,
-        0x00ED41E8,
-        0x00ED4214,
+        NAKA_ADDR(NakaWidget_ControlIni),
+        NAKA_ADDR(NakaWidget_ControlIni_1_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_SYSINI),
+        NAKA_ADDR(NakaWidget_ControlIni_3_AcFuncEditSw),
+        NAKA_ADDR(NakaWidget_ControlIni_4_IvShowHide),
+        NAKA_ADDR(NakaWidget_ControlIni_5_AcLanguageText),
+        NAKA_ADDR(NakaWidget_ControlIni_6_TtlScreen),
+        NAKA_ADDR(NakaWidget_SYSINISURE),
+        NAKA_ADDR(NakaWidget_ControlIni_8_Label),
+        NAKA_ADDR(NakaWidget_ControlIni_9_Icon),
+        NAKA_ADDR(NakaWidget_ControlIni_10_Box),
+        NAKA_ADDR(NakaWidget_ControlIni_11_AcLanguageText),
+        NAKA_ADDR(NakaWidget_ControlIni_12_AcLanguageText),
+        NAKA_ADDR(NakaWidget_ControlIni_13_AcLanguageText),
+        NAKA_ADDR(NakaWidget_ControlIni_14_AcFuncEditSw),
+        NAKA_ADDR(NakaWidget_ControlIni_15_AcFuncEditSw),
+        NAKA_ADDR(NakaWidget_ControlIni_16_IvShowHide),
         0x00000000,
-        0x00ED422E,
-        0x00ED426A,
-        0x00ED4340,
-        0x00ED436C,
-        0x00ED4396,
-        0x00ED43C0,
+        NAKA_ADDR(NakaWidget_ControlFsw),
+        NAKA_ADDR(NakaWidget_ControlFsw_1_AcFSWAssGridBox),
+        NAKA_ADDR(NakaWidget_ControlFsw_2_Label),
+        NAKA_ADDR(NakaWidget_ControlFsw_3_Label),
+        NAKA_ADDR(NakaWidget_ControlFsw_4_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_ControlFsw_5_AcIndexWideES),
         0x00000000,
-        0x00ED43EA,
-        0x00ED442E,
-        0x00ED44FC,
-        0x00ED452A,
-        0x00ED4556,
-        0x00ED4580,
-        0x00ED45AA,
-        0x00ED45D0,
+        NAKA_ADDR(NakaWidget_ControlSns),
+        NAKA_ADDR(NakaWidget_ControlSns_1_AcTchSensGridBox),
+        NAKA_ADDR(NakaWidget_ControlSns_2_Label),
+        NAKA_ADDR(NakaWidget_ControlSns_3_Label),
+        NAKA_ADDR(NakaWidget_ControlSns_4_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_ControlSns_5_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_ControlSns_6_Label),
+        NAKA_ADDR(NakaWidget_ControlSns_7_Label),
         0x00000000,
-        0x00ED45F6,
-        0x00ED462A,
-        0x00ED4664,
-        0x00ED467E,
-        0x00ED46AA,
-        0x00ED46D6,
-        0x00ED4702,
-        0x00ED472A,
-        0x00ED475A,
-        0x00ED4788,
-        0x00ED47A0,
-        0x00ED47D4,
-        0x00ED480E,
-        0x00ED4828,
-        0x00ED4854,
-        0x00ED4880,
-        0x00ED48AC,
-        0x00ED48D4,
-        0x00ED4902,
+        NAKA_ADDR(NakaWidget_ToshiView044_0_MsaModeScreen),
+        NAKA_ADDR(NakaWidget_ToshiView044_1_Label),
+        NAKA_ADDR(NakaWidget_ToshiView044_2_Icon),
+        NAKA_ADDR(NakaWidget_ToshiView044_3_EditSw),
+        NAKA_ADDR(NakaWidget_ToshiView044_4_EditSw),
+        NAKA_ADDR(NakaWidget_ToshiView044_5_EditSw),
+        NAKA_ADDR(NakaWidget_ToshiView044_6_Label),
+        NAKA_ADDR(NakaWidget_ToshiView044_7_Label),
+        NAKA_ADDR(NakaWidget_ToshiView044_8_Label),
+        NAKA_ADDR(NakaWidget_ToshiView044_9_IvIntEasySet),
+        NAKA_ADDR(NakaWidget_ToshiView044_10_MsaModeScreen),
+        NAKA_ADDR(NakaWidget_ToshiView044_11_Label),
+        NAKA_ADDR(NakaWidget_ToshiView044_12_Icon),
+        NAKA_ADDR(NakaWidget_ToshiView044_13_EditSw),
+        NAKA_ADDR(NakaWidget_ToshiView044_14_EditSw),
+        NAKA_ADDR(NakaWidget_ToshiView044_15_EditSw),
+        NAKA_ADDR(NakaWidget_ToshiView044_16_Label),
+        NAKA_ADDR(NakaWidget_ToshiView044_17_Label),
+        NAKA_ADDR(NakaWidget_ToshiView044_18_Label),
         0x00000000,
-        0x00ED4930,
-        0x00ED4974,
-        0x00ED498E,
-        0x00ED49AA,
-        0x00ED49C6,
-        0x00ED49DE,
-        0x00ED4A02,
-        0x00ED4A2E,
-        0x00ED4A5A,
-        0x00ED4A86,
-        0x00ED4AAE,
-        0x00ED4AD6,
-        0x00ED4B00,
-        0x00ED4B2A,
-        0x00ED4B4E,
-        0x00ED4C22,
-        0x00ED4C4C,
-        0x00ED4C76,
-        0x00ED4CB0,
+        NAKA_ADDR(NakaWidget_ToshiView045_0_TtlScreen),
+        NAKA_ADDR(NakaWidget_ToshiView045_1_IvPmemWindowPageCtl),
+        NAKA_ADDR(NakaWidget_ToshiView045_2_IvPageControl),
+        NAKA_ADDR(NakaWidget_ToshiView045_3_IvPageControl),
+        NAKA_ADDR(NakaWidget_ToshiView045_4_IvIntEasySet),
+        NAKA_ADDR(NakaWidget_PMEM1),
+        NAKA_ADDR(NakaWidget_ToshiView045_6_PmemModeBox),
+        NAKA_ADDR(NakaWidget_ToshiView045_7_EditSw),
+        NAKA_ADDR(NakaWidget_ToshiView045_8_EditSw),
+        NAKA_ADDR(NakaWidget_ToshiView045_9_Label),
+        NAKA_ADDR(NakaWidget_ToshiView045_10_Label),
+        NAKA_ADDR(NakaWidget_ToshiView045_11_AcLanguageText),
+        NAKA_ADDR(NakaWidget_ToshiView045_12_AcLanguageText),
+        NAKA_ADDR(NakaWidget_PMEM2),
+        NAKA_ADDR(NakaWidget_ToshiView045_14_AcPmExpFilterGridBox),
+        NAKA_ADDR(NakaWidget_ToshiView045_15_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_ToshiView045_16_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_ToshiView045_17_StringBox),
+        NAKA_ADDR(NakaWidget_ToshiView045_18_Window),
         0x00000000,
         0x00000000,
-        0x00ED4CD4,
-        0x00ED4D10,
-        0x00ED4DC2,
-        0x00ED4DF0,
-        0x00ED4E16,
-        0x00ED4E40,
-        0x00ED4E6A,
+        NAKA_ADDR(NakaWidget_ControlSys),
+        NAKA_ADDR(NakaWidget_ControlSys_1_AcDispTimeSetGridBox),
+        NAKA_ADDR(NakaWidget_ControlSys_2_Label),
+        NAKA_ADDR(NakaWidget_ControlSys_3_Label),
+        NAKA_ADDR(NakaWidget_ControlSys_4_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_ControlSys_5_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_ControlSys_6_AcFuncEditSw),
         0x00000000,
-        0x00ED4E96,
-        0x00ED4ED2,
-        0x00ED4F0E,
-        0x00ED4F4A,
-        0x00ED4F86,
-        0x00ED4FD6,
-        0x00ED5002,
-        0x00ED5036,
-        0x00ED5086,
-        0x00ED50D6,
-        0x00ED5102,
-        0x00ED5130,
-        0x00ED515A,
-        0x00ED5180,
-        0x00ED51AC,
-        0x00ED51C6,
-        0x00ED51E8,
-        0x00ED5202,
-        0x00ED522C,
-        0x00ED5256,
-        0x00ED5280,
-        0x00ED52AC,
-        0x00ED52D8,
-        0x00ED52F2,
-        0x00ED530C,
+        NAKA_ADDR(NakaWidget_ToshiView048_0_TtlScreen),
+        NAKA_ADDR(NakaWidget_ToshiView048_1_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_ControlWallSet),
+        NAKA_ADDR(NakaWidget_ToshiView048_3_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_ToshiView048_4_AcRamEditBox),
+        NAKA_ADDR(NakaWidget_ToshiView048_5_Label),
+        NAKA_ADDR(NakaWidget_ToshiView048_6_Label),
+        NAKA_ADDR(NakaWidget_ToshiView048_7_AcRamEditBox),
+        NAKA_ADDR(NakaWidget_ToshiView048_8_AcRamEditBox),
+        NAKA_ADDR(NakaWidget_ToshiView048_9_AcFuncEditSw),
+        NAKA_ADDR(NakaWidget_ToshiView048_10_Label),
+        NAKA_ADDR(NakaWidget_ToshiView048_11_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_ToshiView048_12_Label),
+        NAKA_ADDR(NakaWidget_ToshiView048_13_AcFuncEditSw),
+        NAKA_ADDR(NakaWidget_ToshiView048_14_IvShowHide),
+        NAKA_ADDR(NakaWidget_WALLSETSURE),
+        NAKA_ADDR(NakaWidget_ToshiView048_16_Box),
+        NAKA_ADDR(NakaWidget_ToshiView048_17_AcLanguageText),
+        NAKA_ADDR(NakaWidget_ToshiView048_18_AcLanguageText),
+        NAKA_ADDR(NakaWidget_ToshiView048_19_AcLanguageText),
+        NAKA_ADDR(NakaWidget_ToshiView048_20_AcFuncEditSw),
+        NAKA_ADDR(NakaWidget_ToshiView048_21_AcFuncEditSw),
+        NAKA_ADDR(NakaWidget_ToshiView048_22_IvShowHide),
+        NAKA_ADDR(NakaWidget_ToshiView048_23_Icon),
+        NAKA_ADDR(NakaWidget_ToshiView048_24_Label),
         0x00000000,
-        0x00ED533E,
-        0x00ED536A,
-        0x00ED539A,
-        0x00ED53C6,
+        NAKA_ADDR(NakaWidget_ONETCH),
+        NAKA_ADDR(NakaWidget_ONETCH_1_Label),
+        NAKA_ADDR(NakaWidget_ONETCH_2_AcRamBox),
+        NAKA_ADDR(NakaWidget_ONETCH_3_IvExitMode),
         0x00000000,
-        0x00ED53E0,
-        0x00ED5418,
-        0x00ED545E,
-        0x00ED5478,
+        NAKA_ADDR(NakaWidget_MUSICSTYL),
+        NAKA_ADDR(NakaWidget_MUSICSTYL_1_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_MUSICSTYL_2_IvExitMode),
+        NAKA_ADDR(NakaWidget_MUSICSTYL_3_AcTitleMenu),
         0x00000000,
-        0x00ED54C2,
-        0x00ED54FC,
-        0x00ED5516,
-        0x00ED5532,
-        0x00ED554E,
-        0x00ED5572,
-        0x00ED55E0,
-        0x00ED560A,
-        0x00ED5638,
-        0x00ED5666,
-        0x00ED56D4,
-        0x00ED56FE,
-        0x00ED572C,
-        0x00ED5750,
-        0x00ED57CC,
-        0x00ED57E6,
-        0x00ED580C,
-        0x00ED5836,
-        0x00ED5862,
-        0x00ED5890,
+        NAKA_ADDR(NakaWidget_MSCTSEL),
+        NAKA_ADDR(NakaWidget_MSCTSEL_1_IvMstStyleWindowPgCtl),
+        NAKA_ADDR(NakaWidget_MSCTSEL_2_IvPageControl),
+        NAKA_ADDR(NakaWidget_MSCTSEL_3_IvPageControl),
+        NAKA_ADDR(NakaWidget_STYLE1),
+        NAKA_ADDR(NakaWidget_MSCTSEL_5_AcMstStyle1GridBox),
+        NAKA_ADDR(NakaWidget_MSCTSEL_6_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_MSCTSEL_7_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_MSCTSEL_8_Label),
+        NAKA_ADDR(NakaWidget_MSCTSEL_9_AcMstStyle1SubGridBox),
+        NAKA_ADDR(NakaWidget_MSCTSEL_10_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_MSCTSEL_11_Label),
+        NAKA_ADDR(NakaWidget_STYLE2),
+        NAKA_ADDR(NakaWidget_MSCTSEL_13_AcMstStyle2GridBox),
+        NAKA_ADDR(NakaWidget_MSCTSEL_14_Box),
+        NAKA_ADDR(NakaWidget_MSCTSEL_15_Label),
+        NAKA_ADDR(NakaWidget_MSCTSEL_16_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_MSCTSEL_17_Label),
+        NAKA_ADDR(NakaWidget_MSCTSEL_18_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_MSCTSEL_19_Label),
         0x00000000,
-        0x00ED58B6,
-        0x00ED58F4,
-        0x00ED590E,
-        0x00ED592A,
-        0x00ED5946,
-        0x00ED596A,
-        0x00ED59DA,
-        0x00ED5A04,
-        0x00ED5A32,
-        0x00ED5A60,
-        0x00ED5A84,
-        0x00ED5B00,
-        0x00ED5B2A,
-        0x00ED5B44,
-        0x00ED5B6A,
-        0x00ED5B96,
-        0x00ED5BC4,
+        NAKA_ADDR(NakaWidget_MSSCTSEL),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_1_IvMstStyleWindowPgCtl),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_2_IvPageControl),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_3_IvPageControl),
+        NAKA_ADDR(NakaWidget_SONG1),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_5_AcMstSong1GridBox),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_6_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_7_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_8_Label),
+        NAKA_ADDR(NakaWidget_SONG2),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_10_AcMstSong2GridBox),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_11_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_12_Box),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_13_Label),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_14_Label),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_15_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_MSSCTSEL_16_Label),
         0x00000000,
-        0x00ED5BEA,
-        0x00ED5C28,
-        0x00ED5CA8,
-        0x00ED5CD6,
-        0x00ED5D00,
-        0x00ED5D1A,
-        0x00ED5D40,
-        0x00ED5D6E,
+        NAKA_ADDR(NakaWidget_MSSONGLIST),
+        NAKA_ADDR(NakaWidget_MSSONGLIST_1_AcMstSugAlpGridBox),
+        NAKA_ADDR(NakaWidget_MSSONGLIST_2_Label),
+        NAKA_ADDR(NakaWidget_MSSONGLIST_3_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_MSSONGLIST_4_Box),
+        NAKA_ADDR(NakaWidget_MSSONGLIST_5_Label),
+        NAKA_ADDR(NakaWidget_MSSONGLIST_6_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_MSSONGLIST_7_Label),
         0x00000000,
-        0x00ED5D94,
-        0x00ED5DD2,
-        0x00ED5E4A,
-        0x00ED5E64,
-        0x00ED5E8A,
-        0x00ED5EB4,
-        0x00ED5EE2,
+        NAKA_ADDR(NakaWidget_MSSTLSEL),
+        NAKA_ADDR(NakaWidget_MSSTLSEL_1_AcMstStyleAlpGridBox),
+        NAKA_ADDR(NakaWidget_MSSTLSEL_2_Box),
+        NAKA_ADDR(NakaWidget_MSSTLSEL_3_Label),
+        NAKA_ADDR(NakaWidget_MSSTLSEL_4_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_MSSTLSEL_5_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_MSSTLSEL_6_Label),
         0x00000000,
-        0x00ED5F08,
-        0x00ED5F40,
-        0x00ED5F5A,
-        0x00ED5F92,
-        0x00ED5FB2,
-        0x00ED5FDC,
+        NAKA_ADDR(NakaWidget_PMBANK),
+        NAKA_ADDR(NakaWidget_PMBANK_1_Icon),
+        NAKA_ADDR(NakaWidget_PMBANK_2_StringBox),
+        NAKA_ADDR(NakaWidget_PMBANK_3_PsPageBox),
+        NAKA_ADDR(NakaWidget_PMBANK_4_Label),
+        NAKA_ADDR(NakaWidget_PMBANK_5_IvIntEasySet),
         0x00000000,
-        0x00ED5FF4,
-        0x00ED6028,
-        0x00ED6064,
-        0x00ED608E,
-        0x00ED60AE,
-        0x00ED60D8,
-        0x00ED60FE,
-        0x00ED6124,
-        0x00ED614C,
-        0x00ED6174,
-        0x00ED619C,
-        0x00ED61C8,
-        0x00ED61F4,
+        NAKA_ADDR(NakaWidget_PMVIEW),
+        NAKA_ADDR(NakaWidget_PMVIEW_1_AcPmBkEditBox),
+        NAKA_ADDR(NakaWidget_PMVIEW_2_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_PMVIEW_3_PsPageBox),
+        NAKA_ADDR(NakaWidget_PMVIEW_4_Label),
+        NAKA_ADDR(NakaWidget_PMVIEW_5_Label),
+        NAKA_ADDR(NakaWidget_PMVIEW_6_Label),
+        NAKA_ADDR(NakaWidget_PMVIEW_7_Label),
+        NAKA_ADDR(NakaWidget_PMVIEW_8_Label),
+        NAKA_ADDR(NakaWidget_PMVIEW_9_Label),
+        NAKA_ADDR(NakaWidget_PMVIEW_10_EditSw),
+        NAKA_ADDR(NakaWidget_PMVIEW_11_EditSw),
+        NAKA_ADDR(NakaWidget_PMVIEW_12_IvIntEasySet),
         0x00000000,
-        0x00ED620C,
-        0x00ED623E,
-        0x00ED6258,
-        0x00ED6284,
-        0x00ED62B2,
-        0x00ED62D6,
-        0x00ED6302,
+        NAKA_ADDR(NakaWidget_PMNAME),
+        NAKA_ADDR(NakaWidget_PMNAME_1_IvNaming),
+        NAKA_ADDR(NakaWidget_PMNAME_2_AcFuncEditSw),
+        NAKA_ADDR(NakaWidget_PMNAME_3_Label),
+        NAKA_ADDR(NakaWidget_PMNAME_4_PmBkNoBox),
+        NAKA_ADDR(NakaWidget_PMNAME_5_EditSw),
+        NAKA_ADDR(NakaWidget_PMNAME_6_IvExit),
         0x00000000,
-        0x00ED6318,
-        0x00ED634A,
-        0x00ED6364,
-        0x00ED6390,
-        0x00ED63BC,
-        0x00ED63E0,
-        0x00ED640C,
+        NAKA_ADDR(NakaWidget_PMBKNAME),
+        NAKA_ADDR(NakaWidget_PMBKNAME_1_IvNaming),
+        NAKA_ADDR(NakaWidget_PMBKNAME_2_AcFuncEditSw),
+        NAKA_ADDR(NakaWidget_PMBKNAME_3_Label),
+        NAKA_ADDR(NakaWidget_PMBKNAME_4_BkNoBox),
+        NAKA_ADDR(NakaWidget_PMBKNAME_5_EditSw),
+        NAKA_ADDR(NakaWidget_PMBKNAME_6_IvExit),
         0x00000000,
-        0x00ED6422,
-        0x00ED6466,
+        NAKA_ADDR(NakaWidget_SVARI),
+        NAKA_ADDR(NakaWidget_SVARI_1_IvIntVari),
         0x00000000,
-        0x00ED647E,
-        0x00ED64C2,
-        0x00ED64E6,
+        NAKA_ADDR(NakaWidget_RVARI),
+        NAKA_ADDR(NakaWidget_RVARI_1_AcTempoBox),
+        NAKA_ADDR(NakaWidget_RVARI_2_IvIntVari),
         0x00000000,
-        0x00ED64FE,
-        0x00ED652A,
-        0x00ED654E,
-        0x00ED6578,
-        0x00ED65B4,
-        0x00ED65FA,
-        0x00ED663A,
-        0x00ED6676,
+        NAKA_ADDR(NakaWidget_ToshiView0F4_0_TtlScreen),
+        NAKA_ADDR(NakaWidget_TEST1RAM),
+        NAKA_ADDR(NakaWidget_ToshiView0F4_2_Label),
+        NAKA_ADDR(NakaWidget_ToshiView0F4_3_Label),
+        NAKA_ADDR(NakaWidget_ToshiView0F4_4_Label),
+        NAKA_ADDR(NakaWidget_ToshiView0F4_5_Label),
+        NAKA_ADDR(NakaWidget_ToshiView0F4_6_Label),
+        NAKA_ADDR(NakaWidget_TEST1CP),
         NAKA_ADDR(ErrorDialog_CautionHeader),
         NAKA_ADDR(ErrorDialog_CPUTransmissionError),
         NAKA_ADDR(ErrorDialog_RecoveryLine1),

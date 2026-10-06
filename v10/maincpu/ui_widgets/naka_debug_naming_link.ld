@@ -37,3 +37,5 @@ WidgetCharMap_DataEntry1 = 0x00EB00D8;
 WidgetName_PtrBlock_G = 0x00EB00A4;
 WidgetName_PtrBlock_I1 = 0x00EB00C4;
 NakaInst_iduRoot = 0x00EB71D2;
+NakaWidget_PanelSimulator = 0x00EB2AC2;
+SendPartDataBlock_Data2 = 0x00FF0000;

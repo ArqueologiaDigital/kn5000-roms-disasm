@@ -40,6 +40,154 @@ extern const char NakaWidget_CmpRealScreen_6_Label;
 extern const char NakaWidget_CmpRealScreen_7_Label;
 extern const char NakaWidget_CmpRealScreen_8_Label;
 extern const char NakaWidget_CmpRealScreen_9_IvMainEditSw;
+extern const char NakaWidget_CmSetP1Ctl;
+extern const char NakaWidget_CmSetP1Grid;
+extern const char NakaWidget_CmSetP2Ctl;
+extern const char NakaWidget_CmSetPage;
+extern const char NakaWidget_CmSetPage1;
+extern const char NakaWidget_CmSetPage2;
+extern const char NakaWidget_CmSetPanSw;
+extern const char NakaWidget_CmSetPartSw;
+extern const char NakaWidget_CmSetRLmtSw;
+extern const char NakaWidget_CmpAc1Vol;
+extern const char NakaWidget_CmpAc2Vol;
+extern const char NakaWidget_CmpAc3Vol;
+extern const char NakaWidget_CmpBalScreen;
+extern const char NakaWidget_CmpBasVol;
+extern const char NakaWidget_CmpBkslSScreen;
+extern const char NakaWidget_CmpBkslSScreen_10_AcMemNoBox;
+extern const char NakaWidget_CmpBkslSScreen_11_Label;
+extern const char NakaWidget_CmpBkslSScreen_12_Line;
+extern const char NakaWidget_CmpBkslSScreen_13_Line;
+extern const char NakaWidget_CmpBkslSScreen_14_Line;
+extern const char NakaWidget_CmpBkslSScreen_15_Line;
+extern const char NakaWidget_CmpBkslSScreen_17_VwMenuBox;
+extern const char NakaWidget_CmpBkslSScreen_1_Box;
+extern const char NakaWidget_CmpBkslSScreen_21_AcLanguageText;
+extern const char NakaWidget_CmpBkslSScreen_2_Label;
+extern const char NakaWidget_CmpBkslSScreen_3_IvMainEditSw;
+extern const char NakaWidget_CmpBkslSScreen_4_VwMenuBox;
+extern const char NakaWidget_CmpBkslSScreen_5_VwEditSwBox;
+extern const char NakaWidget_CmpBkslSScreen_6_VwEditSwBox;
+extern const char NakaWidget_CmpBkslSScreen_7_VwEditSwBox;
+extern const char NakaWidget_CmpBkslSScreen_8_VwEditSwBox;
+extern const char NakaWidget_CmpBkslSScreen_9_VwEditSwBox;
+extern const char NakaWidget_CmpBkslScreen;
+extern const char NakaWidget_CmpBkslScreen_10_VwMenuBox;
+extern const char NakaWidget_CmpBkslScreen_11_VwMenuBox;
+extern const char NakaWidget_CmpBkslScreen_1_IvMainEditSw;
+extern const char NakaWidget_CmpBkslScreen_2_VwMenuBox;
+extern const char NakaWidget_CmpBkslScreen_3_VwMenuBox;
+extern const char NakaWidget_CmpBkslScreen_4_VwMenuBox;
+extern const char NakaWidget_CmpBkslScreen_5_VwMenuBox;
+extern const char NakaWidget_CmpBkslScreen_6_VwMenuBox;
+extern const char NakaWidget_CmpBkslScreen_7_VwMenuBox;
+extern const char NakaWidget_CmpBkslScreen_8_VwMenuBox;
+extern const char NakaWidget_CmpBkslScreen_9_VwMenuBox;
+extern const char NakaWidget_CmpClrNoSw;
+extern const char NakaWidget_CmpClrSure;
+extern const char NakaWidget_CmpClrYesSw;
+extern const char NakaWidget_CmpDrmVol;
+extern const char NakaWidget_CmpMenuScreen;
+extern const char NakaWidget_CmpMenuScreen_10_Line;
+extern const char NakaWidget_CmpMenuScreen_11_Label;
+extern const char NakaWidget_CmpMenuScreen_12_Label;
+extern const char NakaWidget_CmpMenuScreen_13_IvMainEditSw;
+extern const char NakaWidget_CmpMenuScreen_14_VwMenuBox;
+extern const char NakaWidget_CmpMenuScreen_15_VwMenuBox;
+extern const char NakaWidget_CmpMenuScreen_16_VwMenuBox;
+extern const char NakaWidget_CmpMenuScreen_17_IvExitMode;
+extern const char NakaWidget_CmpMenuScreen_1_AcTitleMenu;
+extern const char NakaWidget_CmpMenuScreen_2_AcTitleMenu;
+extern const char NakaWidget_CmpMenuScreen_3_AcTitleMenu;
+extern const char NakaWidget_CmpMenuScreen_4_AcTitleMenu;
+extern const char NakaWidget_CmpMenuScreen_5_AcTitleMenu;
+extern const char NakaWidget_CmpMenuScreen_6_AcTitleMenu;
+extern const char NakaWidget_CmpMenuScreen_7_Line;
+extern const char NakaWidget_CmpMenuScreen_8_Line;
+extern const char NakaWidget_CmpMenuScreen_9_Line;
+extern const char NakaWidget_CmpNameMenu;
+extern const char NakaWidget_CmpNamingScreen;
+extern const char NakaWidget_CmpNamingScreen_1_IvNaming;
+extern const char NakaWidget_CmpNamingScreen_2_AcFuncEditSw;
+extern const char NakaWidget_CmpNcpFitmSw;
+extern const char NakaWidget_CmpNcpScreen;
+extern const char NakaWidget_CmpNcpScreen_10_Line;
+extern const char NakaWidget_CmpNcpScreen_11_Line;
+extern const char NakaWidget_CmpNcpScreen_12_Label;
+extern const char NakaWidget_CmpNcpScreen_13_Line;
+extern const char NakaWidget_CmpNcpScreen_14_Line;
+extern const char NakaWidget_CmpNcpScreen_15_Line;
+extern const char NakaWidget_CmpNcpScreen_16_Line;
+extern const char NakaWidget_CmpNcpScreen_17_Box;
+extern const char NakaWidget_CmpNcpScreen_19_Label;
+extern const char NakaWidget_CmpNcpScreen_1_IvMainEditSw;
+extern const char NakaWidget_CmpNcpScreen_20_Label;
+extern const char NakaWidget_CmpNcpScreen_21_Label;
+extern const char NakaWidget_CmpNcpScreen_22_Label;
+extern const char NakaWidget_CmpNcpScreen_23_Label;
+extern const char NakaWidget_CmpNcpScreen_24_VwEditSwBox;
+extern const char NakaWidget_CmpNcpScreen_25_Box;
+extern const char NakaWidget_CmpNcpScreen_3_VwWideESBox;
+extern const char NakaWidget_CmpNcpScreen_5_VwWideESBox;
+extern const char NakaWidget_CmpNcpScreen_6_Label;
+extern const char NakaWidget_CmpNcpScreen_7_Label;
+extern const char NakaWidget_CmpNcpScreen_8_Line;
+extern const char NakaWidget_CmpNcpScreen_9_Line;
+extern const char NakaWidget_CmpNcpTitmSw;
+extern const char NakaWidget_CmpSetGrid;
+extern const char NakaWidget_CmpSetScreen;
+extern const char NakaWidget_CmpSetScreen_10_AcIndexWideES;
+extern const char NakaWidget_CmpSetScreen_11_Label;
+extern const char NakaWidget_CmpSetScreen_12_Label;
+extern const char NakaWidget_CmpSetScreen_1_IvMainEditSw;
+extern const char NakaWidget_CmpSetScreen_5_IvShowHide;
+extern const char NakaWidget_CmpSetScreen_8_Label;
+extern const char NakaWidget_CmpSetScreen_9_AcIndexWideES;
+extern const char NakaWidget_NameMemLabel;
+extern const char NakaWidget_NamingMem;
+extern const char NakaWidget_StylCnvCnvtBox;
+extern const char NakaWidget_StylCnvCnvtScreen;
+extern const char NakaWidget_StylCnvCnvtScreen_1_IvMainEditSw;
+extern const char NakaWidget_StylCnvCnvtScreen_3_VwEditSwBox;
+extern const char NakaWidget_StylCnvCnvtScreen_4_VwWideESBox;
+extern const char NakaWidget_StylCnvCnvtScreen_5_VwEditSwBox;
+extern const char NakaWidget_StylCnvCnvtScreen_6_VwEditSwBox;
+extern const char NakaWidget_StylCnvContScreen;
+extern const char NakaWidget_StylCnvContScreen_1_IvMainEditSw;
+extern const char NakaWidget_StylCnvContScreen_2_VwBox;
+extern const char NakaWidget_StylCnvContScreen_3_Label;
+extern const char NakaWidget_StylCnvContScreen_4_Label;
+extern const char NakaWidget_StylCnvContScreen_5_VwEditSwBox;
+extern const char NakaWidget_StylCnvContScreen_6_VwEditSwBox;
+extern const char NakaWidget_StylCnvModlBox;
+extern const char NakaWidget_StylCnvModlScreen;
+extern const char NakaWidget_StylCnvModlScreen_1_IvMainEditSw;
+extern const char NakaWidget_StylCnvModlScreen_3_VwEditSwBox;
+extern const char NakaWidget_StylCnvModlScreen_4_VwWideESBox;
+extern const char NakaWidget_StylCnvModlScreen_5_VwEditSwBox;
+extern const char NakaWidget_StylCnvModlScreen_6_VwEditSwBox;
+extern const char NakaWidget_StylCnvSelBox;
+extern const char NakaWidget_StylCnvSelScreen;
+extern const char NakaWidget_StylCnvSelScreen_1_IvMainEditSw;
+extern const char NakaWidget_StylCnvSelScreen_3_VwEditSwBox;
+extern const char NakaWidget_StylCnvSelScreen_4_VwWideESBox;
+extern const char NakaWidget_StylCnvSelScreen_5_VwEditSwBox;
+extern const char NakaWidget_StylCnvSelScreen_6_VwEditSwBox;
+extern const char NakaWidget_StylCnvSelScreen_7_PsSCTxtBox;
+extern const char NakaWidget_StylCnvStorScreen;
+extern const char NakaWidget_StylCnvStorScreen_1_AcRamEditBox;
+extern const char NakaWidget_StylCnvStorScreen_2_AcIndexWideES;
+extern const char NakaWidget_StylCnvStorScreen_3_AcFuncEditSw;
+extern const char NakaWidget_StylCnvTxtScreen;
+extern const char NakaWidget_StylCnvTxtScreen_1_VwBox;
+extern const char NakaWidget_StylCnvTxtScreen_2_PSSCTxtBox2;
+extern const char NakaWidget_StylCnvTxtScreen_3_IvMainEditSw;
+extern const char NakaWidget_StylCnvVer;
+extern const char NakaWidget_StylCnvWaitScreen;
+extern const char NakaWidget_StylCnvWaitScreen_1_VwBox;
+extern const char NakaWidget_StylCnvWaitScreen_2_AcLanguageText;
+extern const char NakaWidget_SunaView0B6_0_IvDirmdScreen;
 
 #define BASE  0x00E1AB58u
 
@@ -1632,166 +1780,166 @@ const naka_msp_recording_t naka_msp_recording_data
     .ApcOnBass_stron = ALIGNED_STRING("ON BASS : ON"),
 
     .Suna_ViewableTable_010 = {
-        0x00E176F6,
-        0x00E1772E,
-        0x00E1774A,
+        NAKA_ADDR(NakaWidget_StylCnvWaitScreen),
+        NAKA_ADDR(NakaWidget_StylCnvWaitScreen_1_VwBox),
+        NAKA_ADDR(NakaWidget_StylCnvWaitScreen_2_AcLanguageText),
         0x00000000,
     },
 
     .Suna_ViewableTable_011 = {
-        0x00E17774,
-        0x00E177B0,
-        0x00E177CA,
-        0x00E177F4,
-        0x00E17826,
-        0x00E17856,
-        0x00E17888,
-        0x00E178B6,
+        NAKA_ADDR(NakaWidget_StylCnvModlScreen),
+        NAKA_ADDR(NakaWidget_StylCnvModlScreen_1_IvMainEditSw),
+        NAKA_ADDR(NakaWidget_StylCnvModlBox),
+        NAKA_ADDR(NakaWidget_StylCnvModlScreen_3_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_StylCnvModlScreen_4_VwWideESBox),
+        NAKA_ADDR(NakaWidget_StylCnvModlScreen_5_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_StylCnvModlScreen_6_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_StylCnvVer),
         0x00000000,
     },
 
     .Suna_ViewableTable_012 = {
-        0x00E178DA,
-        0x00E17912,
-        0x00E1792C,
-        0x00E17956,
-        0x00E17988,
-        0x00E179B8,
-        0x00E179EA,
+        NAKA_ADDR(NakaWidget_StylCnvCnvtScreen),
+        NAKA_ADDR(NakaWidget_StylCnvCnvtScreen_1_IvMainEditSw),
+        NAKA_ADDR(NakaWidget_StylCnvCnvtBox),
+        NAKA_ADDR(NakaWidget_StylCnvCnvtScreen_3_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_StylCnvCnvtScreen_4_VwWideESBox),
+        NAKA_ADDR(NakaWidget_StylCnvCnvtScreen_5_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_StylCnvCnvtScreen_6_VwEditSwBox),
         0x00000000,
     },
 
     .Suna_ViewableTable_013 = {
-        0x00E17A18,
-        0x00E17A50,
-        0x00E17A9E,
-        0x00E17AC8,
+        NAKA_ADDR(NakaWidget_StylCnvStorScreen),
+        NAKA_ADDR(NakaWidget_StylCnvStorScreen_1_AcRamEditBox),
+        NAKA_ADDR(NakaWidget_StylCnvStorScreen_2_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_StylCnvStorScreen_3_AcFuncEditSw),
         0x00000000,
     },
 
     .Suna_ViewableTable_014 = {
-        0x00E17AF4,
-        0x00E17B2C,
-        0x00E17B48,
-        0x00E17B6E,
+        NAKA_ADDR(NakaWidget_StylCnvTxtScreen),
+        NAKA_ADDR(NakaWidget_StylCnvTxtScreen_1_VwBox),
+        NAKA_ADDR(NakaWidget_StylCnvTxtScreen_2_PSSCTxtBox2),
+        NAKA_ADDR(NakaWidget_StylCnvTxtScreen_3_IvMainEditSw),
         0x00000000,
     },
 
     .Suna_ViewableTable_015 = {
-        0x00E17B88,
-        0x00E17BC0,
-        0x00E17BDA,
-        0x00E17C04,
-        0x00E17C36,
-        0x00E17C66,
-        0x00E17C98,
-        0x00E17CC6,
+        NAKA_ADDR(NakaWidget_StylCnvSelScreen),
+        NAKA_ADDR(NakaWidget_StylCnvSelScreen_1_IvMainEditSw),
+        NAKA_ADDR(NakaWidget_StylCnvSelBox),
+        NAKA_ADDR(NakaWidget_StylCnvSelScreen_3_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_StylCnvSelScreen_4_VwWideESBox),
+        NAKA_ADDR(NakaWidget_StylCnvSelScreen_5_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_StylCnvSelScreen_6_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_StylCnvSelScreen_7_PsSCTxtBox),
         0x00000000,
     },
 
     .Suna_ViewableTable_016 = {
-        0x00E17CEA,
-        0x00E17D22,
-        0x00E17D3C,
-        0x00E17D58,
-        0x00E17D82,
-        0x00E17DAA,
-        0x00E17DD8,
+        NAKA_ADDR(NakaWidget_StylCnvContScreen),
+        NAKA_ADDR(NakaWidget_StylCnvContScreen_1_IvMainEditSw),
+        NAKA_ADDR(NakaWidget_StylCnvContScreen_2_VwBox),
+        NAKA_ADDR(NakaWidget_StylCnvContScreen_3_Label),
+        NAKA_ADDR(NakaWidget_StylCnvContScreen_4_Label),
+        NAKA_ADDR(NakaWidget_StylCnvContScreen_5_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_StylCnvContScreen_6_VwEditSwBox),
         0x00000000,
     },
 
     .Suna_ViewableTable_0B0 = {
-        0x00E17E06,
-        0x00E17E3E,
-        0x00E17E84,
-        0x00E17EC8,
-        0x00E17F0C,
-        0x00E17F4E,
-        0x00E17F9A,
-        0x00E17FE6,
-        0x00E18000,
-        0x00E1801A,
-        0x00E18034,
-        0x00E1804E,
-        0x00E18078,
-        0x00E180A0,
-        0x00E180BA,
-        0x00E180EE,
-        0x00E18122,
-        0x00E18156,
+        NAKA_ADDR(NakaWidget_CmpMenuScreen),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_1_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_2_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_3_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_4_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_5_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_6_AcTitleMenu),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_7_Line),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_8_Line),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_9_Line),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_10_Line),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_11_Label),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_12_Label),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_13_IvMainEditSw),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_14_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_15_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_16_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpMenuScreen_17_IvExitMode),
         0x00000000,
     },
 
     .Suna_ViewableTable_0B1 = {
-        0x00E18170,
-        0x00E181A8,
-        0x00E181C2,
-        0x00E18200,
-        0x00E1823E,
-        0x00E18278,
-        0x00E182B4,
-        0x00E182F0,
-        0x00E18334,
-        0x00E18378,
-        0x00E183B2,
-        0x00E183EE,
+        NAKA_ADDR(NakaWidget_CmpBkslScreen),
+        NAKA_ADDR(NakaWidget_CmpBkslScreen_1_IvMainEditSw),
+        NAKA_ADDR(NakaWidget_CmpBkslScreen_2_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpBkslScreen_3_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpBkslScreen_4_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpBkslScreen_5_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpBkslScreen_6_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpBkslScreen_7_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpBkslScreen_8_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpBkslScreen_9_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpBkslScreen_10_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpBkslScreen_11_VwMenuBox),
         0x00000000,
     },
 
     .Suna_ViewableTable_0B2 = {
-        0x00E1842A,
-        0x00E1845E,
-        0x00E18478,
-        0x00E184A0,
-        0x00E184BA,
-        0x00E184FC,
-        0x00E1852C,
-        0x00E1855C,
-        0x00E1858C,
-        0x00E185BC,
-        0x00E185EC,
-        0x00E18610,
-        0x00E18640,
-        0x00E1865A,
-        0x00E18674,
-        0x00E1868E,
-        0x00E186A8,
-        0x00E186EC,
-        0x00E18738,
-        0x00E1875C,
-        0x00E18788,
-        0x00E187B4,
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_1_Box),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_2_Label),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_3_IvMainEditSw),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_4_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_5_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_6_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_7_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_8_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_9_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_10_AcMemNoBox),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_11_Label),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_12_Line),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_13_Line),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_14_Line),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_15_Line),
+        NAKA_ADDR(NakaWidget_CmpNameMenu),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_17_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpClrSure),
+        NAKA_ADDR(NakaWidget_CmpClrYesSw),
+        NAKA_ADDR(NakaWidget_CmpClrNoSw),
+        NAKA_ADDR(NakaWidget_CmpBkslSScreen_21_AcLanguageText),
         0x00000000,
     },
 
     .Suna_ViewableTable_0B3 = {
-        0x00E187DE,
-        0x00E1881A,
-        0x00E18834,
-        0x00E18860,
-        0x00E1888A,
+        NAKA_ADDR(NakaWidget_CmpNamingScreen),
+        NAKA_ADDR(NakaWidget_CmpNamingScreen_1_IvNaming),
+        NAKA_ADDR(NakaWidget_CmpNamingScreen_2_AcFuncEditSw),
+        NAKA_ADDR(NakaWidget_NameMemLabel),
+        NAKA_ADDR(NakaWidget_NamingMem),
         0x00000000,
     },
 
     .Suna_ViewableTable_0B4 = {
-        0x00E188AE,
-        0x00E188E8,
-        0x00E18902,
-        0x00E18926,
-        0x00E18942,
-        0x00E1895E,
-        0x00E18978,
-        0x00E1899C,
-        0x00E18A6A,
-        0x00E18A9A,
-        0x00E18AC4,
-        0x00E18AEE,
-        0x00E18B14,
-        0x00E18B3A,
-        0x00E18B5E,
-        0x00E18BE6,
-        0x00E18C10,
-        0x00E18C3A,
+        NAKA_ADDR(NakaWidget_CmpSetScreen),
+        NAKA_ADDR(NakaWidget_CmpSetScreen_1_IvMainEditSw),
+        NAKA_ADDR(NakaWidget_CmSetPage),
+        NAKA_ADDR(NakaWidget_CmSetP1Ctl),
+        NAKA_ADDR(NakaWidget_CmSetP2Ctl),
+        NAKA_ADDR(NakaWidget_CmpSetScreen_5_IvShowHide),
+        NAKA_ADDR(NakaWidget_CmSetPage1),
+        NAKA_ADDR(NakaWidget_CmSetP1Grid),
+        NAKA_ADDR(NakaWidget_CmpSetScreen_8_Label),
+        NAKA_ADDR(NakaWidget_CmpSetScreen_9_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_CmpSetScreen_10_AcIndexWideES),
+        NAKA_ADDR(NakaWidget_CmpSetScreen_11_Label),
+        NAKA_ADDR(NakaWidget_CmpSetScreen_12_Label),
+        NAKA_ADDR(NakaWidget_CmSetPage2),
+        NAKA_ADDR(NakaWidget_CmpSetGrid),
+        NAKA_ADDR(NakaWidget_CmSetPartSw),
+        NAKA_ADDR(NakaWidget_CmSetPanSw),
+        NAKA_ADDR(NakaWidget_CmSetRLmtSw),
         0x00000000,
     },
 
@@ -1807,39 +1955,39 @@ const naka_msp_recording_t naka_msp_recording_data
     },
 
     .Suna_ViewableTable_0B6 = {
-        0x00E1910E,
+        NAKA_ADDR(NakaWidget_SunaView0B6_0_IvDirmdScreen),
         0x00000000,
     },
 
     .Suna_ViewableTable_0B7 = {
-        0x00E19130,
-        0x00E19168,
-        0x00E19188,
-        0x00E191A8,
-        0x00E191C8,
-        0x00E191E8,
+        NAKA_ADDR(NakaWidget_CmpBalScreen),
+        NAKA_ADDR(NakaWidget_CmpDrmVol),
+        NAKA_ADDR(NakaWidget_CmpAc3Vol),
+        NAKA_ADDR(NakaWidget_CmpAc2Vol),
+        NAKA_ADDR(NakaWidget_CmpAc1Vol),
+        NAKA_ADDR(NakaWidget_CmpBasVol),
         0x00000000,
     },
 
     .Suna_ViewableTable_0B8 = {
-        0x00E19208,
-        0x00E19240,
-        0x00E1925A,
-        0x00E1928A,
-        0x00E192BA,
-        0x00E192EA,
-        0x00E1931A,
-        0x00E1935E,
-        0x00E19384,
-        0x00E1939E,
-        0x00E193B8,
-        0x00E193D2,
-        0x00E193EC,
-        0x00E19410,
-        0x00E1942A,
-        0x00E19444,
-        0x00E1945E,
-        0x00E19478,
+        NAKA_ADDR(NakaWidget_CmpNcpScreen),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_1_IvMainEditSw),
+        NAKA_ADDR(NakaWidget_CmpNcpFitmSw),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_3_VwWideESBox),
+        NAKA_ADDR(NakaWidget_CmpNcpTitmSw),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_5_VwWideESBox),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_6_Label),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_7_Label),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_8_Line),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_9_Line),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_10_Line),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_11_Line),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_12_Label),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_13_Line),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_14_Line),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_15_Line),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_16_Line),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_17_Box),
     },
 
     .field_0c76 = 0xD872,
@@ -1847,13 +1995,13 @@ const naka_msp_recording_t naka_msp_recording_data
     .field_0c78 = 0x0003,
 
     .ptrs_3 = {
-        0x00E19492,
-        0x00E194BA,
-        0x00E194E2,
-        0x00E1950C,
-        0x00E19532,
-        0x00E19556,
-        0x00E19584,
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_19_Label),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_20_Label),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_21_Label),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_22_Label),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_23_Label),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_24_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_CmpNcpScreen_25_Box),
     },
 
 };

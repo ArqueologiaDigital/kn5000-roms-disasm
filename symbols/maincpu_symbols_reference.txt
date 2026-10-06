@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 53,689
-#   semantic names ........... 52,945 (98.6%)
+#   symbols .................. 53,693
+#   semantic names ........... 52,949 (98.6%)
 #   positional names ......... 744
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -34406,7 +34406,7 @@ DrumKit_UpdateStatusFlags_Helper_Skip 00F64CED
 DrumKit_UpdateStatusFlags_Helper_Skip2 00F64CF6
 DrumKit_UpdateStatusFlags_Helper_Join 00F64CF8
 DrumKit_UpdateStatusFlags_Return 00F64CFF
-DrumKit_InlineCode1_Code 00F64D00
+DrumKit_SlotClassBits 00F64D00
 DrumKit_InlineCode1_Sub 00F64D1E
 DrumKit_UpdateStatusFlags_Helper2 00F64D25
 DrumKit_UpdateStatusFlags_Return2 00F64D50
@@ -35436,7 +35436,11 @@ SndArgNm_DeliverAndReturn 00F6A2B1
 SndArgNm_CheckChannelDone_OnSetPtSel 00F6A2B7
 SndArgNm_ReturnZero 00F6A2D9
 CmpStepTitleFunc 00F6A2E2
-CmpStep_DataBlock 00F6A2FF
+CmpStepTitle_OnPaint 00F6A2FF
+CmpStepTitle_OnPaint_Draw 00F6A31F
+CmpStepTitle_OnHide 00F6A32C
+CmpStepTitle_OnSwitchIn 00F6A339
+CmpStepTitle_Method3Nop 00F6A346
 AccAudio_LockAcquire 00F6A347
 AccAudio_LockRelease 00F6A34E
 AccAudio_DataBlock1 00F6A355

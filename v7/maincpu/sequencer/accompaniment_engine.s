@@ -23541,7 +23541,7 @@ DrumKit_UpdateStatusFlags_Helper2:
 	and	e, 48
 	ld	xhl, 0:i3
 	ld	l, (13370:16)
-	ld	xwa, DrumKit_InlineCode1_Code
+	ld	xwa, DrumKit_SlotClassBits
 	add	xwa, xhl
 	ld	a, (xwa)
 	cp	a, e
@@ -23562,32 +23562,13 @@ DrumKit_UpdateStatusFlags_Helper2_Join:
 	calr	DrumKit_SendProgramChange
 DrumKit_UpdateStatusFlags_Return:
 	ret
-DrumKit_InlineCode1_Code:
-	nop
-	nop
-	nop
-	nop
-	ld	w, 32:opc
-	ld	w, 32:opc
-	rcf
-	rcf
-	rcf
-	rcf
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	ld	w, 32:opc
-	ld	w, 32:opc
-	ld	w, 32:opc
-	rcf
-	rcf
-	rcf
-	rcf
-	rcf
-	rcf
+; DrumKit_SlotClassBits: for each slot (0x34D6) 0..29, the (0x34CD) bits 4-5 its class has: slots 0-3 and
+;   12-17 -> 0, 4-7 and 18-23 -> 0x20, 8-11 and 24-29 -> 0x10.  DrumKit_UpdateStatusFlags_Helper compares it
+;   with (0x34CD) & 0x30 and, when they differ, moves the slot to 0, 4 or 8 and sends the program change.
+;   Spelled as nop / ld w / rcf / .ascii until 2026-10-06.
+DrumKit_SlotClassBits:	.byte 0x00, 0x00, 0x00, 0x00, 0x20, 0x20, 0x20, 0x20, 0x10, 0x10, 0x10, 0x10
+			.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
+			.byte 0x10, 0x10, 0x10, 0x10, 0x10, 0x10
 DrumKit_UpdateStatusFlags_Sub:
 	push	xiz
 	call	DrumKit_UpdateStatusFlags_Helper3

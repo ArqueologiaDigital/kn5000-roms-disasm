@@ -85,6 +85,17 @@ extern const char SongMedleyTtlJgFunc;
 extern const char SongNameFunc;
 extern const char UtilityTtlJgFunc;
 extern const char WidgetCharMap_DataEntry1;
+extern const char NakaWidget_DiskLoad_62_PsFileNameBox;
+extern const char NakaWidget_DiskLoad_6_IvMainEditSw;
+extern const char NakaWidget_DiskLoad_70_PsFileNameBox;
+extern const char NakaWidget_DiskLoad_87_PsFileNameBox;
+extern const char NakaWidget_DiskLoad_90_PsFileNameBox;
+extern const char NakaWidget_DiskLoad_93_IvIndexSwDelay;
+extern const char NakaWidget_DiskMenu_14_PsFileNameBox;
+extern const char NakaWidget_DiskSave_6_IvMainEditSw;
+extern const char NakaWidget_DiskSmfSave_17_PsFileNameBox;
+extern const char NakaWidget_DiskUtility_13_Label;
+extern const char NakaWidget_DiskUtility_40_Label;
 
 #define BASE  0x00EA13CCu
 
@@ -11472,7 +11483,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(IntSongMedley_AcIndexWideES),
         SELF(IntSongMedley_AcIndexEditSw),
         SELF(IntSongMedley_AcIndexEditSw_2),
-        0x00EA1794,
+        NAKA_ADDR(NakaWidget_DiskMenu_14_PsFileNameBox),
         SELF(IntSongMedley_PsFileNameBox_2),
         SELF(IntSongMedley_Line),
         SELF(IntSongMedley_AcMonoIndexToggle),
@@ -11542,7 +11553,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskLoad_IvPageControl_2),
         SELF(DiskLoad_IvPageControl_3),
         SELF(w37),
-        0x00EA21FC,
+        NAKA_ADDR(NakaWidget_DiskLoad_6_IvMainEditSw),
         SELF(DiskLoadP1),
         SELF(DiskLoadP1_PsFileNameBox),
         SELF(DiskLoadP1_AcIndexEditSw),
@@ -11598,7 +11609,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskLoadP3_AcIndexWideES),
         SELF(DiskLoadP3_AcIndexWideES_2),
         SELF(DiskLoadP3_AcIndexEditSw_2),
-        0x00EA2AD6,
+        NAKA_ADDR(NakaWidget_DiskLoad_62_PsFileNameBox),
         SELF(DiskLoadP3_AcIndexWideES_3),
         SELF(DiskLoadP3_AcIndexWideES_4),
         SELF(DiskLoadP3_AcParaStrBox),
@@ -11606,7 +11617,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskLoadP3_PsFileNameBox_2),
         SELF(Mode_Label),
         SELF(DiskLoadP3_PsFileNameBox_3),
-        0x00EA2C4E,
+        NAKA_ADDR(NakaWidget_DiskLoad_70_PsFileNameBox),
         SELF(DiskLoadP3_PsFileNameBox_5),
         SELF(DiskLoadP3_PsFileNameBox_6),
         SELF(DiskLoadP3_PsFileNameBox_7),
@@ -11629,13 +11640,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskLoadSMF_PsWindowToggle),
         SELF(LoadAs_Label),
         SELF(DiskLoadSMF_AcIndexEditSw_3),
-        0x00EA2F6A,
+        NAKA_ADDR(NakaWidget_DiskLoad_87_PsFileNameBox),
         SELF(DiskLoadSMF_PsFileNameBox_3),
         SELF(DiskLoadSMF_AcIndexEditSw_4),
-        0x00EA3006,
+        NAKA_ADDR(NakaWidget_DiskLoad_90_PsFileNameBox),
         SELF(DiskLoadSMF_IvMainEditSw),
         SELF(w75),
-        0x00EA3070,
+        NAKA_ADDR(NakaWidget_DiskLoad_93_IvIndexSwDelay),
         SELF(NakaWidget_DiskLoad_94_AcIndexEditSw),
         SELF(SongNameSmfLdWin),
         SELF(SongNameSmfLdWin_AcParaStrBox),
@@ -11703,7 +11714,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskSave_IvPageControl_2),
         SELF(DiskSave_IvPageControl_3),
         SELF(w91),
-        0x00EA37E0,
+        NAKA_ADDR(NakaWidget_DiskSave_6_IvMainEditSw),
         SELF(DiskSaveP1),
         SELF(DiskSaveP1_AcIndexWideES),
         SELF(DiskSaveP1_AcIndexEditSw),
@@ -11793,7 +11804,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(MeasureSpace_Label),
         SELF(DiskSmfSave_PsFileNameBox_2),
         SELF(DiskSmfSave_AcIndexEditSw_4),
-        0x00EA453A,
+        NAKA_ADDR(NakaWidget_DiskSmfSave_17_PsFileNameBox),
         SELF(DiskSmfSave_PsFileNameBox_4),
         SELF(Save_Label_6),
         SELF(As_Label_2),
@@ -11938,7 +11949,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskUtility_AcTitleMenu),
         SELF(Format_Label),
         SELF(DiskUtility_AcScreenMenu),
-        0x00EA58CC,
+        NAKA_ADDR(NakaWidget_DiskUtility_13_Label),
         SELF(DiskUtility_AcIndexEditSw_5),
         SELF(COPY_AcScreenMenu),
         SELF(DiskUtility_AcParaStrBox),
@@ -11965,7 +11976,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskUtilitySMF_AcIndexEditSw_3),
         SELF(Del_Label_2),
         SELF(DiskUtilitySMF_AcScreenMenu),
-        0x00EA5D9C,
+        NAKA_ADDR(NakaWidget_DiskUtility_40_Label),
         SELF(DiskUtilitySMF_IvIndexSwDelay),
         SELF(WaitWinCtlSmf),
         SELF(DiskInfoWin),

@@ -58,6 +58,9 @@ extern const char SeqByteBlock_TechnichordCfgA;
 extern const char SeqByteBlock_TechnichordCfgB;
 extern const char WidgetCharMap_DataEntry1;
 extern const char WidgetName_PtrBlock_H;
+extern const char NakaWidget_Demofeature;
+extern const char NakaWidget_Drawbar_8_Label;
+extern const char NakaWidget_Sdtecd;
 
 #define BASE  0x00E81CCEu
 
@@ -8201,7 +8204,7 @@ const naka_technichord_part_t naka_technichord_part_data
     },
 
     .Murai_ViewableTable_00D = {
-        0x00E837A4,
+        NAKA_ADDR(NakaWidget_Sdtecd),
         SELF(SdtecdPage),
         SELF(NakaWidget_Sdtecd_2_IvPageControl),
         SELF(NakaWidget_Sdtecd_3_IvPageControl),
@@ -8242,7 +8245,7 @@ const naka_technichord_part_t naka_technichord_part_data
     },
 
     .Murai_ViewableTable_0E4 = {
-        0x00E83D88,
+        NAKA_ADDR(NakaWidget_Demofeature),
         SELF(StartTheInternalDemo_AcPresentationBox),
         SELF(Demofeature1),
         SELF(Demofeature1_IvDemofeature1),
@@ -8269,7 +8272,7 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(Black23),
         SELF(Percussive_Label),
         SELF(w66),
-        0x00E84140,
+        NAKA_ADDR(NakaWidget_Drawbar_8_Label),
         SELF(NakaWidget_Drawbar_9_IvPageOverWrite),
         SELF(Drawbar_IvPageOverWrite),
         SELF(Drawbar_IvDrawbar),

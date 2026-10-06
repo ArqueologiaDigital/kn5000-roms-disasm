@@ -22,6 +22,7 @@ extern const char SeqByteBlock_EffectsSeqData;
 extern const char SeqByteBlock_EffectsSeqDotExt;
 extern const char WidgetCharMap_DataEntry1;
 extern const char WidgetCharMap_DataEntry2;
+extern const char NakaWidget_MdPresetUserWriteList;
 
 #define BASE  0x00E55E38u
 
@@ -7243,7 +7244,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(MidiPresetPage3_AcFuncEditSw),
         SELF(Value_Label_4),
         SELF(MidiPresetPage4),
-        0x00E57D62,
+        NAKA_ADDR(NakaWidget_MdPresetUserWriteList),
         SELF(MidiPresetPage4_AcIndexWideES),
         SELF(MidiPresetPage4_AcFuncEditSw),
         SELF(Write_Label),

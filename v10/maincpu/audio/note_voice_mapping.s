@@ -27819,11 +27819,7 @@ TmFlash_WriteRoutine_Join:
 	lda	xsp, (xsp+18)
 	retd	4
 TmFlash_WriteRoutine_Entry:
-	.byte 0x9f
-	ccf
-	push	xsp
-	pushw	wa
-	nop
+	cpw	(xsp+18), 40
 	jr	nc, TmFlash_WriteRoutine_Skip
 	add	xhl, xde
 	ld	xwa, (xsp+14)
@@ -27842,11 +27838,7 @@ TmFlash_WriteRoutine_Skip2:
 	ldw	wa, 10535
 	jr	TmFlash_WriteRoutine_Entry_Code_Join
 TmFlash_WriteRoutine_Entry_Code_Entry:
-	.byte 0x9f
-	ccf
-	push	xsp
-	pushw	wa
-	nop
+	cpw	(xsp+18), 40
 	jr	nc, TmFlash_WriteRoutine_Skip
 	add	xbc, xhl
 	ld	xwa, (xsp+14)

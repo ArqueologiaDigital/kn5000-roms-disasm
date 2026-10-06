@@ -395,6 +395,17 @@ extern const char StsTrkClr1Check;
 extern const char StsTrkClr2Check;
 extern const char SureJudgeFunc;
 extern const char TrkMixerIntTtlFunc;
+extern const char NakaWidget_AfterTouchSet;
+extern const char NakaWidget_DemoRhy;
+extern const char NakaWidget_DemoStyle;
+extern const char NakaWidget_DpDoc;
+extern const char NakaWidget_DpMdlyPd;
+extern const char NakaWidget_DpMdlySmfLyr;
+extern const char NakaWidget_DpSmf;
+extern const char NakaWidget_SqMdlyPly;
+extern const char NakaWidget_SqTrAsPs;
+extern const char NakaWidget_StepPartBal;
+extern const char NakaWidget_YokoView074_0_TtlScreen;
 
 #define BASE  0x00E24056u
 
@@ -1641,7 +1652,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_06F = {
-        0x00E21090,
+        NAKA_ADDR(NakaWidget_DpSmf),
         NAKA_ADDR(NakaWidget_SmfDpContainer),
         NAKA_ADDR(NakaWidget_SmfDpVolume),
         NAKA_ADDR(NakaWidget_SmfDpGroup),
@@ -1688,7 +1699,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_070 = {
-        0x00E2176E,
+        NAKA_ADDR(NakaWidget_DpDoc),
         NAKA_ADDR(NakaWidget_DocDpContainer),
         NAKA_ADDR(NakaWidget_DocDpVolume),
         NAKA_ADDR(NakaWidget_DocDpGroup),
@@ -1750,7 +1761,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_074 = {
-        0x00E21EF4,
+        NAKA_ADDR(NakaWidget_YokoView074_0_TtlScreen),
         NAKA_ADDR(NakaWidget_DpMdlyDoc),
         NAKA_ADDR(NakaWidget_DocMdlyContainer),
         NAKA_ADDR(NakaWidget_DocMdlyGroup),
@@ -1769,7 +1780,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_075 = {
-        0x00E22178,
+        NAKA_ADDR(NakaWidget_DpMdlyPd),
         NAKA_ADDR(NakaWidget_PdMdlyContainer),
         NAKA_ADDR(NakaWidget_PdMdlyGroup),
         NAKA_ADDR(NakaWidget_PdMdlyMuteRow0),
@@ -1786,7 +1797,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_076 = {
-        0x00E2239C,
+        NAKA_ADDR(NakaWidget_DpMdlySmfLyr),
         NAKA_ADDR(NakaWidget_SmfMdly2Container),
         NAKA_ADDR(NakaWidget_SmfMdly2MuteToggle),
         NAKA_ADDR(NakaWidget_SmfMdly2SkipLabel),
@@ -1832,7 +1843,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_07A = {
-        0x00E22906,
+        NAKA_ADDR(NakaWidget_SqMdlyPly),
         NAKA_ADDR(NakaWidget_SongMdly2Group),
         NAKA_ADDR(NakaWidget_SongMdly2Volume),
         NAKA_ADDR(NakaWidget_SongMdly2SongList),
@@ -1888,7 +1899,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_08C = {
-        0x00E22F50,
+        NAKA_ADDR(NakaWidget_SqTrAsPs),
         NAKA_ADDR(NakaWidget_TrAsPresetSong),
         NAKA_ADDR(NakaWidget_TrAsPresetMatrix),
         NAKA_ADDR(NakaWidget_TrAsPresetPanel),
@@ -1939,7 +1950,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_092 = {
-        0x00E23620,
+        NAKA_ADDR(NakaWidget_AfterTouchSet),
         NAKA_ADDR(NakaWidget_AftTouchDuration),
         NAKA_ADDR(NakaWidget_AftTouchChSel),
         NAKA_ADDR(NakaWidget_AftTouchList),
@@ -1949,7 +1960,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     .Yoko_ViewTable_0A7 = { 0x00000000 },
 
     .Yoko_ViewTable_0A9 = {
-        0x00E23704,
+        NAKA_ADDR(NakaWidget_StepPartBal),
         NAKA_ADDR(NakaWidget_PartBal0),
         NAKA_ADDR(NakaWidget_PartBal1),
         NAKA_ADDR(NakaWidget_PartBal2),
@@ -1967,7 +1978,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_0E1 = {
-        0x00E238BE,
+        NAKA_ADDR(NakaWidget_DemoStyle),
         NAKA_ADDR(NakaWidget_PerfMainMedley),
         NAKA_ADDR(NakaWidget_PerfAccordionMedley),
         NAKA_ADDR(NakaWidget_PerfFolkMedley),
@@ -1999,7 +2010,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_0E3 = {
-        0x00E23DF4,
+        NAKA_ADDR(NakaWidget_DemoRhy),
         NAKA_ADDR(NakaWidget_Perf3HokieDance),
         NAKA_ADDR(NakaWidget_DemoSong13),
         NAKA_ADDR(NakaWidget_DemoSong14),

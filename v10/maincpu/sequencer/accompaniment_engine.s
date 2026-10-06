@@ -13622,8 +13622,14 @@ AccPart_GetParamAddr_Wrap:
 	pop	xiy
 	pop	xix
 	ret
-	.ascii "<=>89:;è"
-	.byte 0xd0
+	push	xix	; was .ascii "<=>89:;\xe8" / .byte 0xd0
+	push	xiy
+	push	xiz
+	push	xwa
+	push	xbc
+	push	xde
+	push	xhl
+	xor	xwa, xwa
 	ld	a, (0x33d4:16)
 	call	AccPedal_DirectionA_Wrap_Helper2
 	pop	xhl	; was .ascii "[ZYX^]\\"
@@ -24645,7 +24651,7 @@ DrumKit_UpdateStatusFlags_Helper:
 	and	e, 48
 	ld	xhl, 0:i3
 	ld	l, (0x34d6:16)
-	ld	xwa, DrumKit_InlineCode1_Code
+	ld	xwa, DrumKit_SlotClassBits
 	add	xwa, xhl
 	ld	a, (xwa)
 	cp	a, e
@@ -24666,30 +24672,13 @@ DrumKit_UpdateStatusFlags_Helper_Join:
 	calr	DrumKit_SendProgramChange
 DrumKit_UpdateStatusFlags_Return:
 	ret
-DrumKit_InlineCode1_Code:
-	nop
-	nop
-	nop
-	nop
-	ld	w, 32:opc
-	ld	w, 32:opc
-	rcf
-	rcf
-	rcf
-	rcf
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.ascii "      "
-	rcf
-	rcf
-	rcf
-	rcf
-	rcf
-	rcf
+; DrumKit_SlotClassBits: for each slot (0x34D6) 0..29, the (0x34CD) bits 4-5 its class has: slots 0-3 and
+;   12-17 -> 0, 4-7 and 18-23 -> 0x20, 8-11 and 24-29 -> 0x10.  DrumKit_UpdateStatusFlags_Helper compares it
+;   with (0x34CD) & 0x30 and, when they differ, moves the slot to 0, 4 or 8 and sends the program change.
+;   Spelled as nop / ld w / rcf / .ascii until 2026-10-06.
+DrumKit_SlotClassBits:	.byte 0x00, 0x00, 0x00, 0x00, 0x20, 0x20, 0x20, 0x20, 0x10, 0x10, 0x10, 0x10
+			.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
+			.byte 0x10, 0x10, 0x10, 0x10, 0x10, 0x10
 DrumKit_InlineCode1_Sub:
 	push	xiz
 	call	DrumKit_UpdateStatusFlags_Helper2
@@ -33975,11 +33964,14 @@ CmpStepTitleFunc:
 	lda xsp, (xsp + 16)
 	ret
 
-CmpStep_DataBlock:
-	.byte 0xc1, 0x37, 0x8d
-	push	xsp
-	ld	(xiz), xiz
-	pop_f
+; CmpStepTitle_OnPaint: CmpStepTitleFunc_ProcTable[0], TT_CMSTEP's paint method (DirmdEmulator: EVT_ALL_PAINT,
+;   EVT_PARA_DRAW).  Unless the previous title was TT_CMSTEP (0xB6) it repeats DirmdEmulator's palette set-up
+;   (GraphicsRender_ByteData, background 245, the palette bands), then calls CmpStep_DrawScreen.  Its first
+;   instructions were spelled `.byte 0xc1, 0x37, 0x8d / push xsp / ld (xiz), xiz / pop_f` (respelled
+;   2026-10-06, scripts/tools/respell_misframed_runs_2026_10_06.py).
+CmpStepTitle_OnPaint:
+	cp	(PREVIOUS_TITLE:16), 182
+	jr	z, CmpStepTitle_OnPaint_Draw
 	ldw	wa, 255
 	call	GraphicsRender_ByteData
 	ldw	wa, 245
@@ -33987,6 +33979,7 @@ CmpStep_DataBlock:
 	call	Display_LoadFixedPaletteBands
 	ldw	wa, 255
 	call	Display_FillPaletteBandFromEntry
+CmpStepTitle_OnPaint_Draw:
 	push	xde
 	push	xhl
 	push	xix
@@ -33997,6 +33990,9 @@ CmpStep_DataBlock:
 	pop	xhl
 	pop	xde
 	ret
+; CmpStepTitle_OnHide: CmpStepTitleFunc_ProcTable[1], which DirmdEmulator calls on EVT_HIDE: CmpStep_OnHide with
+;   XDE/XHL/XIX/XIZ preserved.
+CmpStepTitle_OnHide:
 	push	xde
 	push	xhl
 	push	xix
@@ -34007,6 +34003,9 @@ CmpStep_DataBlock:
 	pop	xhl
 	pop	xde
 	ret
+; CmpStepTitle_OnSwitchIn: CmpStepTitleFunc_ProcTable[2], which DirmdEmulator calls on EVT_SW_IN: CmpStep_DispatchSwitch
+;   with XDE/XHL/XIX/XIZ preserved.
+CmpStepTitle_OnSwitchIn:
 	push	xde
 	push	xhl
 	push	xix
@@ -34017,6 +34016,8 @@ CmpStep_DataBlock:
 	pop	xhl
 	pop	xde
 	ret
+; CmpStepTitle_Method3Nop: CmpStepTitleFunc_ProcTable[3], a lone `ret`; DirmdEmulator calls only methods 0-2.
+CmpStepTitle_Method3Nop:
 	ret
 
 AccAudio_LockAcquire:
@@ -34084,7 +34085,7 @@ AccDraw_Secondary_Helper:
 ;   0x3525 = 0xB6 when entered from another title (PREVIOUS_TITLE != 0xB6), runs AccScreen_DataBlock_Helper ((0x3712)
 ;   = 4 on entry, 0x34CD bit 3 set), and queues the draw functions AccScreen_DataBlock_Code (static frame; skipped on
 ;   a partial redraw, 0xE3E0 bit 4) and AccScreen_DataBlock_Code2 (values). Basis: callers + body -- its only caller
-;   is the method-0 stub CmpStep_DataBlock (0xF6A2FF = CmpStepTitleFunc_ProcTable[0]); DirmdEmulator calls method 0 on
+;   is the method-0 stub CmpStepTitle_OnPaint (0xF6A2FF = CmpStepTitleFunc_ProcTable[0]); DirmdEmulator calls method 0 on
 ;   EVT_ALL_PAINT and on EVT_PARA_DRAW with (0xE3E0) = 16.
 CmpStep_DrawScreen:
 	push	xiz

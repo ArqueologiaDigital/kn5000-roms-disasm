@@ -38,6 +38,7 @@ extern const char WidgetCharMap_DataEntry1;
 extern const char WidgetName_PtrBlock_G;
 extern const char WidgetName_PtrBlock_I1;
 extern const char NakaInst_iduRoot;
+extern const char NakaWidget_PanelSimulator;
 
 #define BASE  0x00EB2AFEu
 
@@ -2228,7 +2229,7 @@ const naka_debug_naming_t naka_debug_naming_data
     .NakaWidget_CheckTitle_8_IvExitScreen = { 0x01600049, 0x0007, 0xFFFF, 0xFFFF, 0xFFFF, 0x0018, { 0, 0, 31, 31 }, 0x0000, 0x00FF },
 
     .Root_ViewableTable_000 = {
-        0x00EB2AC2,
+        NAKA_ADDR(NakaWidget_PanelSimulator),
         NAKA_ADDR(NakaDbg_PanelSimBitmap),
         SELF(PanelSimulatorForHk_Label),
         SELF(CheckTitle_AcTitleMenu),
