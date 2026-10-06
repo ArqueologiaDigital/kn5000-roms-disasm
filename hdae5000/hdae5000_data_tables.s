@@ -16168,83 +16168,50 @@ HDAE5000_FlsItem_SongRecord_Str_Blank26:	.asciz "                          "
 ;   file; u16 compare length} indexed by part (LSW, PMT, SQT, CMP, TM, MSP, RCM, MD, TLX); this label is record 0 =
 ;   the string-pointer column. Basis: HDAE5000_CheckFileSignature reads (base + part*8) and passes it to
 ;   HDAE5000_StrNCmp.
-HDAE5000_PartSignatureTable:
-	.byte 0x98, 0x8e
-	.asciz "/"
+HDAE5000_PartSignatureTable:		.long	HDAE5000_PartSig_LSW
 ; HDAE5000_PartSignatureTable_FileOffset: HDAE5000_PartSignatureTable + 4: the u16 column giving where in the part
 ;   file's first 512 bytes the signature sits. Basis: HDAE5000_CheckFileSignature adds (this + part*8) to the buffer
 ;   pointer before HDAE5000_StrNCmp.
-HDAE5000_PartSignatureTable_FileOffset:
-	.byte 0x04
-	.byte 0x00
+HDAE5000_PartSignatureTable_FileOffset:	.short	4
 ; HDAE5000_PartSignatureTable_Length: HDAE5000_PartSignatureTable + 6: the u16 column giving how many signature bytes
 ;   to compare. Basis: HDAE5000_CheckFileSignature pushes (this + part*8) as the HDAE5000_StrNCmp count.
-HDAE5000_PartSignatureTable_Length:
-	.byte 0x02
-	.byte 0x00
-	.byte 0x94, 0x8e
-	.asciz "/"
-	.zero 2
-	.byte 0x02
-	.byte 0x00
-	.byte 0x90, 0x8e
-	.asciz "/"
-	.byte 0x05
-	.byte 0x00
-	.byte 0x02
-	.byte 0x00
-	.byte 0x8c, 0x8e
-	.asciz "/"
-	.zero 2
-	.byte 0x03
+HDAE5000_PartSignatureTable_Length:	.short	2
+	.long	HDAE5000_PartSig_PMT
+	.short	0, 2
+	.long	HDAE5000_PartSig_SQT
+	.short	5, 2
+	.long	HDAE5000_PartSig_CMP
+	.short	0, 3
+	.long	HDAE5000_PartSig_TM
+	.short	0, 16
+	.long	HDAE5000_PartSig_MSP
+	.short	0, 3
+	.long	HDAE5000_PartSig_RCM
+	.short	0, 3
+	.long	HDAE5000_PartSig_MD
+	.short	0, 2
+	.long	HDAE5000_PartSig_TLX
+	.short	0, 4
+; The signature strings the table points at (offset and compare length in the table): CMP, MSP and RCM files start
+;   with 'H', 0, 'K' (3 bytes); PMT and MD files with "HK", LSW files have "HK" at offset 4; SQT files the bytes 01 08
+;   at offset 5; TM files start with "KN5000 SOUND RAM" (16 bytes), TLX files with "TLhd".
+HDAE5000_PartSig_TLX:	.asciz "TLhd"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "z"
-	.byte 0x8e
-	.asciz "/"
-	.zero 2
-	.byte 0x10
+HDAE5000_PartSig_MD:	.asciz "HK"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "v"
-	.byte 0x8e
-	.asciz "/"
-	.zero 2
-	.byte 0x03
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "r"
-	.byte 0x8e
-	.asciz "/"
-	.zero 2
-	.byte 0x03
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "n"
-	.byte 0x8e
-	.asciz "/"
-	.zero 2
-	.byte 0x02
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "h"
-	.byte 0x8e
-	.asciz "/"
-	.zero 2
-	.byte 0x04
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "TLhd"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "HK"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "H"
+HDAE5000_PartSig_RCM:	.asciz "H"
 	.asciz "K"
-	.asciz "H"
+HDAE5000_PartSig_MSP:	.asciz "H"
 	.asciz "K"
-	.asciz "KN5000 SOUND RAM"
+HDAE5000_PartSig_TM:	.asciz "KN5000 SOUND RAM"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "H"
+HDAE5000_PartSig_CMP:	.asciz "H"
 	.asciz "K"
-	.byte 0x01, 0x08
+HDAE5000_PartSig_SQT:	.byte 0x01, 0x08
 	.zero 2
-	.asciz "HK"
+HDAE5000_PartSig_PMT:	.asciz "HK"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "HK"
+HDAE5000_PartSig_LSW:	.asciz "HK"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_FdSong_CheckFiles_Str_SEQ:	.asciz ".SEQ"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)

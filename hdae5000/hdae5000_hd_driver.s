@@ -3386,7 +3386,7 @@ HDAE5000_TypeSel_Init:	; 0x2852E4 (92 bytes)
 	ld xiy, xix			; XIY = source
 	ld xix, xwa			; XIX = dest (for ldirw)
 	ld bc, 6:i3			; count = 6 words (12 bytes)
-	mriw2 0x95, 0x11		; ldirw — copy 6 words
+	ldirw				; 95 11: copy 6 words from (XIY+) to (XIX+)
 	ld (xwa), hl			; store flags at dest[0..1]
 	bit 0, hl			; bit 0 set?
 	jr z, .LHD_Data_Copy__bit1

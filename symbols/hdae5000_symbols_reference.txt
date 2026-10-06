@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 4,090
-#   semantic names ........... 4,090 (100.0%)
+#   symbols .................. 4,099
+#   semantic names ........... 4,099 (100.0%)
 #   positional names ......... 0
 #
 HDAE5000_ROM_HEADER 00280000
@@ -3956,6 +3956,15 @@ HDAE5000_FlsItem_SongRecord_Str_Blank26 002F8E04
 HDAE5000_PartSignatureTable 002F8E20
 HDAE5000_PartSignatureTable_FileOffset 002F8E24
 HDAE5000_PartSignatureTable_Length 002F8E26
+HDAE5000_PartSig_TLX 002F8E68
+HDAE5000_PartSig_MD 002F8E6E
+HDAE5000_PartSig_RCM 002F8E72
+HDAE5000_PartSig_MSP 002F8E76
+HDAE5000_PartSig_TM 002F8E7A
+HDAE5000_PartSig_CMP 002F8E8C
+HDAE5000_PartSig_SQT 002F8E90
+HDAE5000_PartSig_PMT 002F8E94
+HDAE5000_PartSig_LSW 002F8E98
 HDAE5000_FdSong_CheckFiles_Str_SEQ 002F8E9C
 HDAE5000_FdSong_CheckFiles_Str_SQF 002F8EA2
 HDAE5000_FdSong_CheckFiles_Str_LSW 002F8EA8

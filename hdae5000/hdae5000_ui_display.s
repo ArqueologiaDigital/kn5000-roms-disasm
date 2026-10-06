@@ -10020,10 +10020,10 @@ HDAE5000_LoadSong_Rcm:	; 0x290EC0 (133 bytes)
 	ld xwa, (xwa)		; XWA = table entry value
 	cp xwa, 0xFFFFFFFF	; empty entry?
 	jr z, .Lts290_exit	; skip if -1
-	ld xiy, HDAE5000_RcmStream_InitialState	; destination for ldirw
-	ld xix, HDAE5000_RAM_HdStreamBufferEnd	; source for ldirw
+	ld xiy, HDAE5000_RcmStream_InitialState	; source: 8 zero bytes in ROM
+	ld xix, HDAE5000_RAM_HdStreamBufferEnd	; destination: the RCM stream state {state, dir, song, last result}
 	ld bc, 4:i3		; count = 4 words (8 bytes)
-	mriw2 0x95, 0x11	; ldirw — copy from XIX to XIY
+	ldirw			; 95 11: copy BC words from (XIY+) to (XIX+)
 	ld wa, (xsp + 6)	; reload partition
 	ld (0x238f1e:24), wa; ld (0x238F1E), WA
 	ld wa, (xsp + 4)	; reload file number
@@ -11040,10 +11040,10 @@ HDAE5000_SaveSong_Rcm:	; 0x2919DC (134 bytes)
 	push xiz		; save XIZ
 	ld de, bc		; DE = BC (file number param)
 	ld hl, 0:i3		; HL = 0
-	ld xiy, HDAE5000_RcmStream_InitialState	; destination for ldirw
-	ld xix, HDAE5000_RAM_HdStreamBufferEnd	; source for ldirw
+	ld xiy, HDAE5000_RcmStream_InitialState	; source: 8 zero bytes in ROM
+	ld xix, HDAE5000_RAM_HdStreamBufferEnd	; destination: the RCM stream state {state, dir, song, last result}
 	ld bc, 4:i3		; count = 4 words
-	mriw2 0x95, 0x11	; ldirw — copy from XIX to XIY
+	ldirw			; 95 11: copy BC words from (XIY+) to (XIX+)
 	ld (0x238f1e:24), wa; ld (0x238F1E), WA — partition
 	ld (0x238f20:24), de; ld (0x238F20), DE — file number
 	ld wa, (0x238f20:24); WA = (0x238F20) file number
@@ -11245,9 +11245,9 @@ HDAE5000_TlxPart_Describe:	; 0x291BDE (47 bytes)
 HDAE5000_CheckFileSignature:	; 0x291C0D (2171 bytes)
 	; Complex table initialization (large stack frame)
 	; ^ corrected: HL = 0 if the file data at XBC carries part WA's
-	;   signature, else 0xFFFF.  The signature table at 0x2F8E20 has 8-byte
+	;   signature, else 0xFFFF.  The signature table HDAE5000_PartSignatureTable has 8-byte
 	;   records {long string; u16 offset; u16 length} indexed by part: "HK"
-	;   at +4 (LSW), "HK" (PMT), 01 08 at +5 (SQT), "HK\0" (CMP),
+	;   at +4 (LSW), "HK" (PMT), 01 08 at +5 (SQT), "H\0K" (CMP),
 	;   "KN5000 SOUND RAM" (TM), "H\0K" (MSP, RCM), "HK" (MD), "TLhd" (TLX);
 	;   compared with HDAE5000_StrNCmp.  Caller: HDAE5000_FdSong_CheckFiles.
 ; LTCI: 0x291C0D (2171 bytes)
@@ -25808,7 +25808,7 @@ HDAE5000_MemCopy:	; 29AE9Fh
 HDAE5000_MemCopy__copy_words:
 	srl bc, 1	; srl 1, BC - divide count by 2
 	jr z, HDAE5000_MemCopy__check_odd
-	mriw2 0x95, 0x11	; ldirw - copy words
+	ldirw			; 95 11: copy BC words from (XIY+) to (XIX+)
 HDAE5000_MemCopy__check_odd:
 	ret nc	; return if no odd byte
 	ldi85	; ldi - copy final odd byte
