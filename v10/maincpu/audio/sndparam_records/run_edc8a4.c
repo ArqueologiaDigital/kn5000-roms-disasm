@@ -16,7 +16,7 @@ const sndparam_descriptor_t run_edc8a4[10]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  1] 0xEDC8B6  SndParam_Part00_ChorusSend */
+    /* [  1] 0xEDC8B6  SndParam_Part00_DspEffect */
     { .key = 0x0000805D, .bank_index = 0x00, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -46,7 +46,7 @@ const sndparam_descriptor_t run_edc8a4[10]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  4] 0xEDC8EC  MidiChParam_Entry_098 */
+    /* [  4] 0xEDC8EC  SndParam_Part00_BendRange */
     { .key = 0x00008080, .bank_index = 0x00, .bank_offset = 0x0B,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x0C, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -56,7 +56,7 @@ const sndparam_descriptor_t run_edc8a4[10]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  5] 0xEDC8FE  MidiChParam_Entry_099 */
+    /* [  5] 0xEDC8FE  SndParam_Part00_Tuning */
     { .key = 0x00008081, .bank_index = 0x00, .bank_offset = 0x0A,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -66,7 +66,7 @@ const sndparam_descriptor_t run_edc8a4[10]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  6] 0xEDC910  MidiChParam_Entry_100 */
+    /* [  6] 0xEDC910  SndParam_Part00_KeyShift */
     { .key = 0x00008082, .bank_index = 0x00, .bank_offset = 0x09,
       .mask = 0x7F, .clamp_min = 0x34, .clamp_max = 0x4C, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,

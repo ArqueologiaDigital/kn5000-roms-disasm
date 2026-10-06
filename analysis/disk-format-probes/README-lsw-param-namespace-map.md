@@ -155,7 +155,7 @@ all 25 parts carry the same `(byte, mask)` per `k`, asserted by `scripts/renamin
 | `0x07` | CC 7 Volume | `+3`, `7F` | |
 | `0x0A` | CC 10 Pan | `+8`, `7F` | |
 | `0x5B` | CC 91 Reverb send | `+7`, `7F` | |
-| `0x5D` | CC 93 Chorus send | `+5`, `7F` | |
+| `0x5D` | CC 93 (General MIDI's chorus send) | `+5`, `7F` | the firmware calls it DSP EFFECT: `LswDSPEffect` answers `0x5D` (section 7) |
 | `0x40` | CC 64 Sustain | `+4`, `08` | the panel SUSTAIN button's action addresses tag 0 (the current part) byte 4 bit 3 (`PanelActions_RightSeg3`, technics-docs control-panel-protocol.md) |
 | `0x5E` | CC 94 (Celeste) | `+4`, `40` | DIGITAL EFFECT's action addresses byte 4 bit 6 (same list) |
 | `0x01` | CC 1 Modulation | record `0xB2`, byte = part | a per-part live-controller array, not the part record |
@@ -164,7 +164,8 @@ all 25 parts carry the same `(byte, mask)` per `k`, asserted by `scripts/renamin
 **[INFERENCE, with the evidence above]** The controller reading is not stated by the firmware; it is the one
 reading under which the constants are not arbitrary: eight of them land on the very byte or bit the controller of
 that number governs, and two of those are confirmed by the panel buttons that set them. `k = 0x08` (`+3`, `80`)
-is the part's MUTE flag (section 6, 2026-10-06). `0x78`, `0x80`-`0x82` and `0x1B0`/`0x1B2` are not named. The drawbar keys `0x280`-`0x288` of parts 0-2 are the nine
+is the part's MUTE flag (section 6, 2026-10-06), and `0x80` / `0x81` / `0x82` are BEND RANGE / TUNING / KEY SHIFT
+(section 7). `0x78` and `0x1B0`/`0x1B2` are not named. The drawbar keys `0x280`-`0x288` of parts 0-2 are the nine
 footages of section 2. `gen_sndparam_desc_names.py` names those descriptors `SndParam_Part<TT>_<Field>`.
 
 ## 6. `k = 0x08` is the part MUTE flag, and the part tags in mixer order (2026-10-06)
@@ -195,6 +196,34 @@ of the same law, outside the part id block), METR (`0xE807` / `0xE808`) and MIC 
 `+6` of the 12-byte EVT_LSW_PUT packet for `MainPmanControl`; what it selects is not read here.
 
 `gen_sndparam_desc_names.py` now names the 25 `k = 0x08` descriptors `SndParam_Part<TT>_Mute`.
+
+
+## 7. The firmware's own names for `k`: the Lsw* part-parameter functions (2026-10-06)
+
+The part-settings screens edit each parameter through an ApFunction of the Murai ApFunction table (registry slot
+`0x121`): "LswVolume", "LswPan", "LswReverb", "LswDSPEffect", "LswDigitalEffect", "LswSustain", "LswSustainLength",
+"LswKeyShift", "LswTuning", "LswBendRange", "LswGlidePedal", "LswSustainPedal", "LswKeyScaling", "LswAfterTouch",
+"LswPartExp" and "LswMute" are the firmware's own name strings (shared/event_codes.s, `NAKA_APFUNC_Lsw*`). Each one
+answers `EVT_GET_LSW_DATA_NO` with the parameter number it edits (`<Lsw>_GetSubParam` in ui/drawbar_panel_ui.s):
+
+| function | answers | = part field `k` |
+|---|---|---|
+| LswVolume | `0x07` (part 0x17: `0x28801`) | volume |
+| LswMute | `0x08` (part 0x17: `0x2880B`) | mute (section 6) |
+| LswPan | `0x0A` | pan |
+| LswReverb | `0x5B` (part 0x17: `0x28802`) | reverb |
+| LswDSPEffect | `0x5D` | **DSP effect** |
+| LswDigitalEffect | `0x5E` | digital effect |
+| LswSustain | `0x40` | sustain |
+| LswBendRange | `0x80` | **bend range** -- byte `+11`, `0..12` |
+| LswTuning | `0x81` | **tuning** -- byte `+10`, `0..255` |
+| LswKeyShift | `0x82` | **key shift** -- byte `+9`, `64 +/- 12` |
+| LswSustainLength / LswSustainPedal / LswKeyScaling / LswGlidePedal / LswPartExp / LswAfterTouch | `0x600` / `0x601` / `0x602` / `0x603` / `0x604` / `0x606` | not part-block keys; another number space |
+
+So `k = 0x5D` is the part's DSP EFFECT depth. The descriptors called it `ChorusSend`, after General MIDI's CC 93;
+they are now `SndParam_Part<TT>_DspEffect`. `0x80`-`0x82` become `_BendRange`, `_Tuning` and `_KeyShift`, whose
+ranges fit the byte ranges section 5 measured. Part `0x17` (the MSP) uses keys of its own in namespace `0x288xx`.
+`gen_sndparam_desc_names.py` applies this, asserting each field's (record, byte, mask) on all 25 parts.
 
 
 ## PROVEN vs INFERRED

@@ -333,11 +333,11 @@ SndParam_Registry:
 	.long SndParam_Part00_Bank
 	.long SndParam_Part00_Sustain
 	.long SndParam_Part00_ReverbSend
-	.long SndParam_Part00_ChorusSend
+	.long SndParam_Part00_DspEffect
 	.long SndParam_Part00_DigitalEffect
-	.long MidiChParam_Entry_098
-	.long MidiChParam_Entry_099
-	.long MidiChParam_Entry_100
+	.long SndParam_Part00_BendRange
+	.long SndParam_Part00_Tuning
+	.long SndParam_Part00_KeyShift
 	.long MidiChParam_Entry_101
 	.long MidiChParam_Entry_102
 	.long MidiChParam_Entry_097
@@ -366,11 +366,11 @@ SndParam_Registry:
 	.long SndParam_Part01_Bank
 	.long SndParam_Part01_Sustain
 	.long SndParam_Part01_ReverbSend
-	.long SndParam_Part01_ChorusSend
+	.long SndParam_Part01_DspEffect
 	.long SndParam_Part01_DigitalEffect
-	.long VoiceParamEx_Entry_019
-	.long VoiceParamEx_Entry_020
-	.long VoiceParamEx_Entry_021
+	.long SndParam_Part01_BendRange
+	.long SndParam_Part01_Tuning
+	.long SndParam_Part01_KeyShift
 	.long VoiceParamEx_Entry_022
 	.long VoiceParamEx_Entry_023
 	.long VoiceParamEx_Entry_018
@@ -399,11 +399,11 @@ SndParam_Registry:
 	.long SndParam_Part02_Bank
 	.long SndParam_Part02_Sustain
 	.long SndParam_Part02_ReverbSend
-	.long SndParam_Part02_ChorusSend
+	.long SndParam_Part02_DspEffect
 	.long SndParam_Part02_DigitalEffect
-	.long VoiceParamEx_Entry_052
-	.long VoiceParamEx_Entry_053
-	.long VoiceParamEx_Entry_054
+	.long SndParam_Part02_BendRange
+	.long SndParam_Part02_Tuning
+	.long SndParam_Part02_KeyShift
 	.long VoiceParamEx_Entry_055
 	.long VoiceParamEx_Entry_056
 	.long VoiceParamEx_Entry_051
@@ -432,11 +432,11 @@ SndParam_Registry:
 	.long SndParam_Part03_Bank
 	.long SndParam_Part03_Sustain
 	.long SndParam_Part03_ReverbSend
-	.long SndParam_Part03_ChorusSend
+	.long SndParam_Part03_DspEffect
 	.long SndParam_Part03_DigitalEffect
-	.long VoiceParamEx_Entry_085
-	.long PartParam_Entry_001
-	.long PartParam_Entry_002
+	.long SndParam_Part03_BendRange
+	.long SndParam_Part03_Tuning
+	.long SndParam_Part03_KeyShift
 	.long PartParam_Entry_003
 	.long PartParam_Entry_004
 	.long VoiceParamEx_Entry_084
@@ -449,11 +449,11 @@ SndParam_Registry:
 	.long SndParam_Part04_Bank
 	.long SndParam_Part04_Sustain
 	.long SndParam_Part04_ReverbSend
-	.long SndParam_Part04_ChorusSend
+	.long SndParam_Part04_DspEffect
 	.long SndParam_Part04_DigitalEffect
-	.long PartParam_Entry_017
-	.long PartParam_Entry_018
-	.long PartParam_Entry_019
+	.long SndParam_Part04_BendRange
+	.long SndParam_Part04_Tuning
+	.long SndParam_Part04_KeyShift
 	.long PartParam_Entry_020
 	.long PartParam_Entry_021
 	.long PartParam_Entry_016
@@ -466,11 +466,11 @@ SndParam_Registry:
 	.long SndParam_Part05_Bank
 	.long SndParam_Part05_Sustain
 	.long SndParam_Part05_ReverbSend
-	.long SndParam_Part05_ChorusSend
+	.long SndParam_Part05_DspEffect
 	.long SndParam_Part05_DigitalEffect
-	.long PartParam_Entry_034
-	.long PartParam_Entry_035
-	.long PartParam_Entry_036
+	.long SndParam_Part05_BendRange
+	.long SndParam_Part05_Tuning
+	.long SndParam_Part05_KeyShift
 	.long PartParam_Entry_037
 	.long PartParam_Entry_038
 	.long PartParam_Entry_033
@@ -483,11 +483,11 @@ SndParam_Registry:
 	.long SndParam_Part06_Bank
 	.long SndParam_Part06_Sustain
 	.long SndParam_Part06_ReverbSend
-	.long SndParam_Part06_ChorusSend
+	.long SndParam_Part06_DspEffect
 	.long SndParam_Part06_DigitalEffect
-	.long PartParam_Entry_051
-	.long PartParam_Entry_052
-	.long PartParam_Entry_053
+	.long SndParam_Part06_BendRange
+	.long SndParam_Part06_Tuning
+	.long SndParam_Part06_KeyShift
 	.long PartParam_Entry_054
 	.long PartParam_Entry_055
 	.long PartParam_Entry_050
@@ -500,11 +500,11 @@ SndParam_Registry:
 	.long SndParam_Part07_Bank
 	.long SndParam_Part07_Sustain
 	.long SndParam_Part07_ReverbSend
-	.long SndParam_Part07_ChorusSend
+	.long SndParam_Part07_DspEffect
 	.long SndParam_Part07_DigitalEffect
-	.long PartParam_Entry_068
-	.long PartParam_Entry_069
-	.long PartParam_Entry_070
+	.long SndParam_Part07_BendRange
+	.long SndParam_Part07_Tuning
+	.long SndParam_Part07_KeyShift
 	.long PartParam_Entry_071
 	.long PartParam_Entry_072
 	.long PartParam_Entry_067
@@ -517,11 +517,11 @@ SndParam_Registry:
 	.long SndParam_Part08_Bank
 	.long SndParam_Part08_Sustain
 	.long SndParam_Part08_ReverbSend
-	.long SndParam_Part08_ChorusSend
+	.long SndParam_Part08_DspEffect
 	.long SndParam_Part08_DigitalEffect
-	.long PartParam_Entry_085
-	.long PartParam_Entry_086
-	.long PartParam_Entry_087
+	.long SndParam_Part08_BendRange
+	.long SndParam_Part08_Tuning
+	.long SndParam_Part08_KeyShift
 	.long PartParam_Entry_088
 	.long PartParam_Entry_089
 	.long PartParam_Entry_084
@@ -534,11 +534,11 @@ SndParam_Registry:
 	.long SndParam_Part09_Bank
 	.long SndParam_Part09_Sustain
 	.long SndParam_Part09_ReverbSend
-	.long SndParam_Part09_ChorusSend
+	.long SndParam_Part09_DspEffect
 	.long SndParam_Part09_DigitalEffect
-	.long PartParam_Entry_102
-	.long PartParam_Entry_103
-	.long PartParam_Entry_104
+	.long SndParam_Part09_BendRange
+	.long SndParam_Part09_Tuning
+	.long SndParam_Part09_KeyShift
 	.long PartParam_Entry_105
 	.long PartParam_Entry_106
 	.long PartParam_Entry_101
@@ -551,11 +551,11 @@ SndParam_Registry:
 	.long SndParam_Part0A_Bank
 	.long SndParam_Part0A_Sustain
 	.long SndParam_Part0A_ReverbSend
-	.long SndParam_Part0A_ChorusSend
+	.long SndParam_Part0A_DspEffect
 	.long SndParam_Part0A_DigitalEffect
-	.long PartParam_Entry_119
-	.long PartParam_Entry_120
-	.long PartParam_Entry_121
+	.long SndParam_Part0A_BendRange
+	.long SndParam_Part0A_Tuning
+	.long SndParam_Part0A_KeyShift
 	.long PartParam_Entry_122
 	.long PartParam_Entry_123
 	.long PartParam_Entry_118
@@ -568,11 +568,11 @@ SndParam_Registry:
 	.long SndParam_Part0B_Bank
 	.long SndParam_Part0B_Sustain
 	.long SndParam_Part0B_ReverbSend
-	.long SndParam_Part0B_ChorusSend
+	.long SndParam_Part0B_DspEffect
 	.long SndParam_Part0B_DigitalEffect
-	.long PartParam_Entry_136
-	.long PartParam_Entry_137
-	.long PartParam_Entry_138
+	.long SndParam_Part0B_BendRange
+	.long SndParam_Part0B_Tuning
+	.long SndParam_Part0B_KeyShift
 	.long PartParam_Entry_139
 	.long PartParam_Entry_140
 	.long PartParam_Entry_135
@@ -585,11 +585,11 @@ SndParam_Registry:
 	.long SndParam_Part0C_Bank
 	.long SndParam_Part0C_Sustain
 	.long SndParam_Part0C_ReverbSend
-	.long SndParam_Part0C_ChorusSend
+	.long SndParam_Part0C_DspEffect
 	.long SndParam_Part0C_DigitalEffect
-	.long PartParam_Entry_153
-	.long PartParam_Entry_154
-	.long PartParam_Entry_155
+	.long SndParam_Part0C_BendRange
+	.long SndParam_Part0C_Tuning
+	.long SndParam_Part0C_KeyShift
 	.long PartParam_Entry_156
 	.long PartParam_Entry_157
 	.long PartParam_Entry_152
@@ -602,11 +602,11 @@ SndParam_Registry:
 	.long SndParam_Part0D_Bank
 	.long SndParam_Part0D_Sustain
 	.long SndParam_Part0D_ReverbSend
-	.long SndParam_Part0D_ChorusSend
+	.long SndParam_Part0D_DspEffect
 	.long SndParam_Part0D_DigitalEffect
-	.long PartParam_Entry_170
-	.long PartParam_Entry_171
-	.long PartParam_Entry_172
+	.long SndParam_Part0D_BendRange
+	.long SndParam_Part0D_Tuning
+	.long SndParam_Part0D_KeyShift
 	.long PartParam_Entry_173
 	.long PartParam_Entry_174
 	.long PartParam_Entry_169
@@ -619,11 +619,11 @@ SndParam_Registry:
 	.long SndParam_Part0E_Bank
 	.long SndParam_Part0E_Sustain
 	.long SndParam_Part0E_ReverbSend
-	.long SndParam_Part0E_ChorusSend
+	.long SndParam_Part0E_DspEffect
 	.long SndParam_Part0E_DigitalEffect
-	.long PartParam_Entry_187
-	.long PartParam_Entry_188
-	.long PartParam_Entry_189
+	.long SndParam_Part0E_BendRange
+	.long SndParam_Part0E_Tuning
+	.long SndParam_Part0E_KeyShift
 	.long PartParam_Entry_190
 	.long PartParam_Entry_191
 	.long PartParam_Entry_186
@@ -636,11 +636,11 @@ SndParam_Registry:
 	.long SndParam_Part0F_Bank
 	.long SndParam_Part0F_Sustain
 	.long SndParam_Part0F_ReverbSend
-	.long SndParam_Part0F_ChorusSend
+	.long SndParam_Part0F_DspEffect
 	.long SndParam_Part0F_DigitalEffect
-	.long PartParam_Entry_204
-	.long PartParam_Entry_205
-	.long PartParam_Entry_206
+	.long SndParam_Part0F_BendRange
+	.long SndParam_Part0F_Tuning
+	.long SndParam_Part0F_KeyShift
 	.long PartParam_Entry_207
 	.long PartParam_Entry_208
 	.long PartParam_Entry_203
@@ -653,11 +653,11 @@ SndParam_Registry:
 	.long SndParam_Part10_Bank
 	.long SndParam_Part10_Sustain
 	.long SndParam_Part10_ReverbSend
-	.long SndParam_Part10_ChorusSend
+	.long SndParam_Part10_DspEffect
 	.long SndParam_Part10_DigitalEffect
-	.long PartParam_Entry_221
-	.long PartParam_Entry_222
-	.long PartParam_Entry_223
+	.long SndParam_Part10_BendRange
+	.long SndParam_Part10_Tuning
+	.long SndParam_Part10_KeyShift
 	.long PartParam_Entry_224
 	.long PartParam_Entry_225
 	.long PartParam_Entry_220
@@ -670,11 +670,11 @@ SndParam_Registry:
 	.long SndParam_Part11_Bank
 	.long SndParam_Part11_Sustain
 	.long SndParam_Part11_ReverbSend
-	.long SndParam_Part11_ChorusSend
+	.long SndParam_Part11_DspEffect
 	.long SndParam_Part11_DigitalEffect
-	.long ExtPartParam_Entry_238
-	.long ExtPartParam_Entry_239
-	.long ExtPartParam_Entry_240
+	.long SndParam_Part11_BendRange
+	.long SndParam_Part11_Tuning
+	.long SndParam_Part11_KeyShift
 	.long ExtPartParam_Entry_241
 	.long ExtPartParam_Entry_242
 	.long ExtPartParam_Entry_237
@@ -687,11 +687,11 @@ SndParam_Registry:
 	.long SndParam_Part12_Bank
 	.long SndParam_Part12_Sustain
 	.long SndParam_Part12_ReverbSend
-	.long SndParam_Part12_ChorusSend
+	.long SndParam_Part12_DspEffect
 	.long SndParam_Part12_DigitalEffect
-	.long ExtPartParam_Entry_255
-	.long ExtPartParam_Entry_256
-	.long ExtPartParam_Entry_257
+	.long SndParam_Part12_BendRange
+	.long SndParam_Part12_Tuning
+	.long SndParam_Part12_KeyShift
 	.long ExtPartParam_Entry_258
 	.long ExtPartParam_Entry_259
 	.long ExtPartParam_Entry_254
@@ -704,11 +704,11 @@ SndParam_Registry:
 	.long SndParam_Part13_Bank
 	.long SndParam_Part13_Sustain
 	.long SndParam_Part13_ReverbSend
-	.long SndParam_Part13_ChorusSend
+	.long SndParam_Part13_DspEffect
 	.long SndParam_Part13_DigitalEffect
-	.long ExtPartParam_Entry_272
-	.long ExtPartParam_Entry_273
-	.long ExtPartParam_Entry_274
+	.long SndParam_Part13_BendRange
+	.long SndParam_Part13_Tuning
+	.long SndParam_Part13_KeyShift
 	.long ExtPartParam_Entry_275
 	.long ExtPartParam_Entry_276
 	.long ExtPartParam_Entry_271
@@ -721,11 +721,11 @@ SndParam_Registry:
 	.long SndParam_Part14_Bank
 	.long SndParam_Part14_Sustain
 	.long SndParam_Part14_ReverbSend
-	.long SndParam_Part14_ChorusSend
+	.long SndParam_Part14_DspEffect
 	.long SndParam_Part14_DigitalEffect
-	.long ExtPartParam_Entry_289
-	.long ExtPartParam_Entry_290
-	.long ExtPartParam_Entry_291
+	.long SndParam_Part14_BendRange
+	.long SndParam_Part14_Tuning
+	.long SndParam_Part14_KeyShift
 	.long ExtPartParam_Entry_292
 	.long ExtPartParam_Entry_293
 	.long ExtPartParam_Entry_288
@@ -738,11 +738,11 @@ SndParam_Registry:
 	.long SndParam_Part15_Bank
 	.long SndParam_Part15_Sustain
 	.long SndParam_Part15_ReverbSend
-	.long SndParam_Part15_ChorusSend
+	.long SndParam_Part15_DspEffect
 	.long SndParam_Part15_DigitalEffect
-	.long ExtPartParam_Entry_306
-	.long ExtPartParam_Entry_307
-	.long ExtPartParam_Entry_308
+	.long SndParam_Part15_BendRange
+	.long SndParam_Part15_Tuning
+	.long SndParam_Part15_KeyShift
 	.long ExtPartParam_Entry_309
 	.long ExtPartParam_Entry_310
 	.long ExtPartParam_Entry_305
@@ -755,11 +755,11 @@ SndParam_Registry:
 	.long SndParam_Part16_Bank
 	.long SndParam_Part16_Sustain
 	.long SndParam_Part16_ReverbSend
-	.long SndParam_Part16_ChorusSend
+	.long SndParam_Part16_DspEffect
 	.long SndParam_Part16_DigitalEffect
-	.long ExtPartParam_Entry_323
-	.long ExtPartParam_Entry_324
-	.long ExtPartParam_Entry_325
+	.long SndParam_Part16_BendRange
+	.long SndParam_Part16_Tuning
+	.long SndParam_Part16_KeyShift
 	.long ExtPartParam_Entry_326
 	.long ExtPartParam_Entry_327
 	.long ExtPartParam_Entry_322
@@ -772,11 +772,11 @@ SndParam_Registry:
 	.long SndParam_Part17_Bank
 	.long SndParam_Part17_Sustain
 	.long SndParam_Part17_ReverbSend
-	.long SndParam_Part17_ChorusSend
+	.long SndParam_Part17_DspEffect
 	.long SndParam_Part17_DigitalEffect
-	.long ExtPartParam_Entry_340
-	.long ExtPartParam_Entry_341
-	.long ExtPartParam_Entry_342
+	.long SndParam_Part17_BendRange
+	.long SndParam_Part17_Tuning
+	.long SndParam_Part17_KeyShift
 	.long ExtPartParam_Entry_343
 	.long ExtPartParam_Entry_344
 	.long ExtPartParam_Entry_339
@@ -789,11 +789,11 @@ SndParam_Registry:
 	.long SndParam_Part18_Bank
 	.long SndParam_Part18_Sustain
 	.long SndParam_Part18_ReverbSend
-	.long SndParam_Part18_ChorusSend
+	.long SndParam_Part18_DspEffect
 	.long SndParam_Part18_DigitalEffect
-	.long ExtPartParam_Entry_357
-	.long ExtPartParam_Entry_358
-	.long ExtPartParam_Entry_359
+	.long SndParam_Part18_BendRange
+	.long SndParam_Part18_Tuning
+	.long SndParam_Part18_KeyShift
 	.long ExtPartParam_Entry_360
 	.long ExtPartParam_Entry_361
 	.long ExtPartParam_Entry_356
