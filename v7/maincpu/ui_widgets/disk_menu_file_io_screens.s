@@ -1464,10 +1464,18 @@ DiskAttention_Text_German:	.incbin "includes/generated/naka_disk_menu_file_io.bi
 ; DiskAttention_Text_English -- 12 x char: "ATTENTION!" + 0xFF fill, English entry of DiskAttention_TextByLanguage
 ; DiskAttention_TextByLanguage[0] points here.
 DiskAttention_Text_English:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7884, 0xC
-; [nakarest] naka_disk_menu_file_io+0x7890  +0x7890..+0x78e0 (0xea8c5c, 80 B)
-; [nakarest] purpose not established: layout of 80 B at 0xea8c5c not derived; readers below
-; [nakarest] Readers: source references DiskSure (file_io/medley.s: `lda xhl,
-; [nakarest] (DiskSure_PtrTable:24)`).
-DiskSure_PtrTable:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7890, 0x50	; 6 x 32-bit pointer
+; DiskSure_LanguageTable -- 6 x u32: the "Are you sure?" text per language number (RAM 0x340E4): 0 English, 1 German,
+; 2 French (those three in naka_disk_warning), 3 Spanish, 4 English again, 5 Indonesian (the strings below).
+; DiskSure (file_io/medley.s) returns it for EVT_GET_LANGUAGE_PTR; AcLanguageTextProc (ui/ui_widget_defs.s)
+; indexes it with the language byte * 4 and draws the entry with EVT_PARA_DRAW.
+DiskSure_LanguageTable:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x7890, 0x18
+; Str_DiskSure_Indonesian -- 28 x char: "Apakah yakin akan dihapus ?", DiskSure_LanguageTable[5] (language 5, Indonesian)
+Str_DiskSure_Indonesian:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x78A8, 0x1C
+; Str_DiskSure_EnglishSlot4 -- 14 x char: "Are You Sure?", DiskSure_LanguageTable[4]; language 4 repeats English
+; (CheckLanguage skips it), so this is a second copy of the language-0 text.
+Str_DiskSure_EnglishSlot4:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x78C4, 0xE
+; Str_DiskSure_Spanish -- 14 x char: "\xbfEst\xe1 seguro?" (Latin-1 inverted question mark, a-acute),
+; DiskSure_LanguageTable[3] (language 3, Spanish).
+Str_DiskSure_Spanish:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x78D2, 0xE
 
 ; External label offsets within the binary blob above.

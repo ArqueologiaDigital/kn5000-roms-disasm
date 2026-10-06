@@ -9870,7 +9870,7 @@ RamInit_GenreStrPtrs:
 	.long StrGenre_RockBallad
 	.long StrGenre_Waltz
 ; Initial values of RAM 0x3DCBA..0x3DCD3: per-widget state cells named by
-; 32-bit pointers in NAKA widget descriptors (NakaData_SeqChannels+0x1E,
+; 32-bit pointers in NAKA widget descriptors (FDTest_ScreenView+0x1E,
 ; FDTest_DiagList_Total/NG/OK+0x2E, FDTest_Container_DebugHDAE1/2+0x1E,
 ; FDTest_ConsoleArea1/2+0x26, FDTest_StatusBar1+0x16).  The image continues
 ; in ui_widgets/sequencer_channel_containers.s.

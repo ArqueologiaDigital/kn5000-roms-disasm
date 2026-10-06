@@ -98,11 +98,11 @@ NakaWidget_PanelSimulator_21_Label:		.incbin "includes/generated/naka_debug_nami
 NakaWidget_NamingCursorBox:			.incbin "includes/generated/naka_debug_naming.bin", 0x34C, 0x30
 ; [nakarest] NakaDbg_LowerCaseChars  +0x37c..+0x380 (0xeb2e7a, 4 B)
 ; [nakarest] Text (4 B at 0xeb2e7a), first string "abc"; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in Naka_DrawbarDisplay_Table2 (at 0xeef54e).
+; [nakarest] it; reached through 1 data word in Font_FileNamePtrTable (at 0xeef54e).
 NakaDbg_LowerCaseChars:	.incbin "includes/generated/naka_debug_naming.bin", 0x37C, 0x4
 ; [nakarest] NakaDbg_LowerCaseChars2  +0x380..+0x704 (0xeb2e7e, 900 B)
 ; [nakarest] Text (12 B at 0xeb2e7e), first string "abc"; no registered NAKA table points into
-; [nakarest] it; reached through 3 data words in Naka_DrawbarDisplay_Table2 (at 0xeef54a,
+; [nakarest] it; reached through 3 data words in Font_FileNamePtrTable (at 0xeef54a,
 ; [nakarest] 0xeef57a, 0xeef576). widget records, elements 26-50 of Viewable slot 0x0 (table
 ; [nakarest] 0xeb3374, 51 entries, InitializeRoot) ("PanelSimulator"): AcIndexEditSw (40 B) x3,
 ; [nakarest] PsParaBox (36 B), Window (36 B) x3, DbMemo (22 B), AcTrackSwitch (36 B) x16,

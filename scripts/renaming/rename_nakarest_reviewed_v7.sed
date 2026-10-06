@@ -238,3 +238,12 @@ s/\bSLSrcBankList_FuncBody_Data\b/SingleLoadSrc_PanelMemBankSize/g
 s/\bSLSrcBankList_FuncBody_Entry_Data_2\b/SingleLoadSrc_SoundMemPageSize/g
 s/\bSLDstBankList_FuncBody_Data\b/SingleLoadDst_PanelMemBankSize/g
 s/\bSLDstBankList_FuncBody_Data_2\b/SingleLoadDst_ComposerBankSize/g
+s/\bDiskSure_PtrTable\b/DiskSure_LanguageTable/g
+s/\bNakaData_SeqChannels\b/FDTest_ScreenView/g
+s/\bNaka_DrawbarOrgan_Screens\b/FileIO_DriveAFileOps/g
+s/\bPad_AfterNaka_DrawbarOrgan_Screens\b/East_MidiMenuPage2WorkCells/g
+s/\bSeqCh_FeatureDemoCallbackData\b/East_MidiSettingWorkCells/g
+s/\bSeqCh_SystemHandlerData\b/East_MidiSetupWorkCells/g
+s/\bMixerPart_NamePtrTable\b/LswLeftHold_OnOffStrPtrs/g
+s/\bNaka_DrawbarDisplay_Table1\b/FontIDProc_FontNameTable/g
+s/\bNaka_DrawbarDisplay_Table2\b/Font_FileNamePtrTable/g

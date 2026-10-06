@@ -2802,13 +2802,14 @@ typedef struct __attribute__((packed)) {
     /* "ATTENTION!" + 0xFF fill: English entry of DiskAttention_TextByLanguage */
     char DiskAttention_Text_English[12];
     /* DiskSure_PtrTable: 6 pointers (cut from ptrs_19 by split_naka_pointer_arrays.py) */
-    uint32_t DiskSure_PtrTable[6];
-    char ApakahYakinAkanDihapus_str[28];
-    char AreYouSure_str[14];
-    uint16_t field_78d2;
-    uint16_t field_78d4;
-    uint16_t field_78d6;
-    char Seguro_str[8];
+    /* "Are you sure?" per language number (RAM 0x340E4): 0 English, 1 German, 2 French, 3 Spanish, 4 English again, 5 Indonesian */
+    uint32_t DiskSure_LanguageTable[6];
+    /* language 5 (Indonesian) entry of DiskSure_LanguageTable */
+    char Str_DiskSure_Indonesian[28];
+    /* language 4 entry of DiskSure_LanguageTable: English, a second copy */
+    char Str_DiskSure_EnglishSlot4[14];
+    /* language 3 (Spanish) entry of DiskSure_LanguageTable, Latin-1 */
+    char Str_DiskSure_Spanish[14];
 } naka_disk_menu_file_io_t;
 
 #define SELF(field) \
@@ -14039,26 +14040,16 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .DiskAttention_Text_English = "ATTENTION!\x00\xFF",
 
-    .DiskSure_PtrTable = {
-        0x00EA8CCE,
-        NAKA_ADDR(DiskWarning_GermanConfirm),
-        NAKA_ADDR(DiskWarning_ConfirmStrings),
-        SELF(field_78d2),
-        SELF(AreYouSure_str),
-        SELF(ApakahYakinAkanDihapus_str),
+    .DiskSure_LanguageTable = {
+        (NAKA_ADDR(DiskWarning_GermanConfirm) + 18), NAKA_ADDR(DiskWarning_GermanConfirm), NAKA_ADDR(DiskWarning_ConfirmStrings), SELF(Str_DiskSure_Spanish),
+        SELF(Str_DiskSure_EnglishSlot4), SELF(Str_DiskSure_Indonesian),
     },
 
-    .ApakahYakinAkanDihapus_str = "Apakah yakin akan dihapus ?",
+    .Str_DiskSure_Indonesian = "Apakah yakin akan dihapus ?",
 
-    .AreYouSure_str = "Are You Sure?",
+    .Str_DiskSure_EnglishSlot4 = "Are You Sure?",
 
-    .field_78d2 = 0x45BF,
-
-    .field_78d4 = 0x7473,
-
-    .field_78d6 = 0x20E1,
-
-    .Seguro_str = "seguro?",
+    .Str_DiskSure_Spanish = "\xBF" "Est\xE1 seguro?",
 
 };
 

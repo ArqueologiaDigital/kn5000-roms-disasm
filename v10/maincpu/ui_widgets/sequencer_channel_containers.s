@@ -1,64 +1,158 @@
 
 ; Sequencer Channel Containers + Drawbar/Mixer Data (13 widgets, 7936 bytes)
 ; Source: maincpu/ui_widgets/naka_sequencer_channels.c (C struct with named fields)
-; [nakarest] NakaData_SeqChannels  +0x0..+0x6a0 (0xeee078, 1696 B)
-; [nakarest] purpose not established: layout of 1696 B at 0xeee078 not derived; readers below
-; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
-; [nakarest] 0x3dcd4..0x3e374 (its ld xde/xhl/xbc + ldir blocks), where they are read by
-; [nakarest] InitializeKubo (sequencer/sequencer_ui.s: `RegObjTabl 0x1600001, FunctionProc, 0x0,
-; [nakarest] 0x3df10, 0x108`).
-NakaData_SeqChannels:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x0, 0x6A0
-; [nakarest] Naka_DrawbarOrgan_Screens  +0x6a0..+0x79a (0xeee718, 250 B)
-; [nakarest] purpose not established: layout of 250 B at 0xeee718 not derived; readers below
-; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
-; [nakarest] 0x3e374..0x3e46e (its ld xde/xhl/xbc + ldir blocks), where they are read by
-; [nakarest] FDC_ClearDiskChangeStatus (sequencer/smf_event_processor.s: `ld (0x3e3e2:24), a`),
-; [nakarest] FileOpen_DeviceFound (sequencer/smf_event_processor.s: `cp wa, (0x3e3de:24)`),
-; [nakarest] FileOpen_DeviceSearchLoop (sequencer/smf_event_processor.s: `cp wa, (0x3e3de:24)`),
-; [nakarest] FileOpen_MatchDevice (sequencer/smf_event_processor.s: `cp wa, (0x3e3de:24)`), 1
-; [nakarest] more.
-Naka_DrawbarOrgan_Screens:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x6A0, 0xFA
-; [nakarest] naka_sequencer_channels+0x79a  +0x79a..+0x7a8 (0xeee812, 14 B)
-; [nakarest] purpose not established: layout of 14 B at 0xeee812 not derived; readers below
-; [nakarest] Readers: source references PsMixer_CtlTypeProc3_Join (ui/drawbar_panel_ui.s: `.long
-; [nakarest] Pad_AfterNaka_DrawbarOrgan_Screens`); work-RAM image: Boot_InitWorkRAM copies these
-; [nakarest] bytes to RAM 0x3e46e..0x3e47c (its ld xde/xhl/xbc + ldir blocks); no literal RAM
-; [nakarest] reference into that copy was found.
-Pad_AfterNaka_DrawbarOrgan_Screens:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x79A, 0xE
-; [nakarest] SeqCh_FeatureDemoCallbackData  +0x7a8..+0x888 (0xeee820, 224 B)
-; [nakarest] purpose not established: layout of 224 B at 0xeee820 not derived; readers below
-; [nakarest] Readers: source references FDemoText_ByteData_DisplayRefresh_Loop
-; [nakarest] (demo/fdemotext_routines.s: `.long SeqCh_FeatureDemoCallbackData`); work-RAM image:
-; [nakarest] Boot_InitWorkRAM copies these bytes to RAM 0x3e47c..0x3e55c (its ld xde/xhl/xbc +
-; [nakarest] ldir blocks); no literal RAM reference into that copy was found.
-SeqCh_FeatureDemoCallbackData:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x7A8, 0xE0
-; [nakarest] SeqCh_SystemHandlerData  +0x888..+0xc48 (0xeee900, 960 B)
-; [nakarest] purpose not established: layout of 960 B at 0xeee900 not derived; readers below
-; [nakarest] Readers: source references HDAE5000_Init_BytecodeBlock_Code_Loop
-; [nakarest] (boot/system_handlers.s: `.long SeqCh_SystemHandlerData`); 2 data words in
-; [nakarest] HDAE5000_Init_BytecodeBlock_Code_Loop (at 0xef4b47, 0xef4b44), which is read by
-; [nakarest] HDAE5000_Init_BytecodeBlock_Code_Loop (boot/system_handlers.s: `jr z,
-; [nakarest] HDAE5000_Init_BytecodeBlock_Code_Loop`); 1 data word in
-; [nakarest] SLIDE_Decompress_4K_FillRing (at 0xef3ff1), which is read by
-; [nakarest] SLIDE_Decompress_4K_FillRing (boot/system_handlers.s: `jr c,
-; [nakarest] SLIDE_Decompress_4K_FillRing`); 1 data word in SLIDE_Decompress_8K_FillRing (at
-; [nakarest] 0xef410f), which is read by SLIDE_Decompress_8K_FillRing (boot/system_handlers.s:
-; [nakarest] `jr c, SLIDE_Decompress_8K_FillRing`); work-RAM image: Boot_InitWorkRAM copies
-; [nakarest] these bytes to RAM 0x3e55c..0x3e91c (its ld xde/xhl/xbc + ldir blocks), where they
-; [nakarest] are read by NakaMenuItem_AcousticIllusion
-; [nakarest] (ui_widgets/naka_sound_technichord_dispatch.s: `.long 0x3e67e`),
-; [nakarest] NakaMenuItem_KeyScaling (ui_widgets/naka_sound_technichord_dispatch.s: `.long
-; [nakarest] 0x3e674`), NakaMenuItem_Mixer (ui_widgets/naka_sound_technichord_dispatch.s: `.long
-; [nakarest] 0x3e670`), NakaMenuItem_PartSetting (ui_widgets/naka_sound_technichord_dispatch.s:
-; [nakarest] `.long 0x3e66e`), 4 more.
-SeqCh_SystemHandlerData:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x888, 0x3C0
-; [nakarest] MixerPart_NamePtrTable  +0xc48..+0xccc (0xeeecc0, 132 B)
-; [nakarest] purpose not established: layout of 132 B at 0xeeecc0 not derived; readers below
-; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
-; [nakarest] 0x3e91c..0x3e9a0 (its ld xde/xhl/xbc + ldir blocks), where they are read by
-; [nakarest] IvSdpart_Refresh (ui/drawbar_panel_ui.s: `cpw (0x3e99e:24), 18`), IvSdpart_ShowHide
-; [nakarest] (ui/drawbar_panel_ui.s: `cpw (0x3e99e:24), 18`).
-MixerPart_NamePtrTable:	.incbin "includes/generated/naka_sequencer_channels.bin", 0xC48, 0x84
+; FDTest_ScreenView -- 1 x struct (TtlScreen view record, 42 B): the "FDD_TEST" screen (title "FD SAVE/LOAD TEST"), entry 0 of InitializeHama's Viewable table (slot 0xFC)
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3dcd4),
+; so ViewableProc and the TtlScreen class proc use the RAM copy; first word = class id 0x1600034.
+FDTest_ScreenView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x0, 0x2A
+; FDTest_ResultCounters -- 1 x struct (3 x uint16_t): TOTAL / OK / NG counts of the FD save/load factory test
+; RunTestCounters_Entry increments TOTAL before FDLoadSaveTest, then OK or NG on its result,
+; and posts each count to its NAKA view (NAKA_VIEW_TOTAL / _OK / _NG) with EVT_PARA_DRAW.
+FDTest_ResultCounters:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x2A, 0x6
+; Xapr_PresentFlag -- 1 x struct (1 x uint8_t (+ pad byte)): 1 once an XAPR extension ROM has been found
+; (RAM 0x3DD04, XAPR_PRESENT_FLAG); set and tested by the XAPR loader in factory_test/test_init.s.
+Xapr_PresentFlag:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x30, 0x2
+; Yoko_ViewWorkCells -- 1 x struct (165 cells): power-on values of the InitializeYoko view work cells
+; SMF direct play, medley, track assign, song select, demo. Boot_InitWorkRAM copies them to RAM 0x3dd06..0x3dea2; each cell is the RAM
+; target of a pointer-typed property of a view record registered by InitializeYoko and is read through it by the record's class proc
+; (ScreenProc, WindowProc, PsTrackSwitchProc ...). Cells: window/parent/child = 32-bit view id (0xFFFFFFFF = none);
+; data/onoff/part/recplay/... (types m/n) = words; pcol/prow/crow = 32-bit heap pointers; AcRamEditBox/AcRamBox data = 32-bit values.
+Yoko_ViewWorkCells:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x32, 0x19C
+; TrAs_OkSwitchView -- 1 x struct (VwEditSwBox view record, 44 B): the "TrAsOkSw" edit switch, entry 3 of InitializeYoko's Viewable table slot 0x8B
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3dea2),
+; so ViewableProc and the VwEditSwBox class proc use the RAM copy; first word = class id 0x160003e.
+TrAs_OkSwitchView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1CE, 0x2C
+; TrAs_PartSelectSwitchView -- 1 x struct (AcIndexWideES view record, 42 B): the "TrAsPartSelSw" wide edit switch, entry 9 of slot 0x8B
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3dece),
+; so ViewableProc and the AcIndexWideES class proc use the RAM copy; first word = class id 0x1600022.
+TrAs_PartSelectSwitchView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1FA, 0x2A
+; TrAsSureLang_MessagePtrTable -- 6 x uint32_t: the per-language string table TrAsSureLangCheck
+; returns for EVT_GET_LANGUAGE_PTR (`lda xhl, (0x03def8:24)`), like the ROM *LangCheck_PtrTable[6]
+; siblings; every entry is RAM 0x20CB4, the buffer the routine has just Sprintf_Locked the message into.
+TrAsSureLang_MessagePtrTable:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x224, 0x18
+; Kubo_FunctionTable -- 1 x uint32_t: the Function table InitializeKubo registers at slot 0x108 with
+; count 0 (`RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x0, 0x3df10, 0x108`), so it has no entry to index.
+Kubo_FunctionTable:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x23C, 0x4
+; Kubo_FunctionNameTable -- 1 x uint32_t: the name table paired with Kubo_FunctionTable (slot 0x408,
+; count 0); its one word points at the empty string Kubo_FunctionNameTable_408_EndName.
+Kubo_FunctionNameTable:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x240, 0x4
+; Kubo_ViewWorkCells -- 1 x struct (233 cells): power-on values of the InitializeKubo view work cells
+; Reverb/DSP/EQ screens, sequencer menus, help windows. Boot_InitWorkRAM copies them to RAM 0x3df18..0x3e1b8; each
+; cell is the RAM target of a pointer-typed property of a view record registered by InitializeKubo and is read through
+; it by the record's class proc (ScreenProc, WindowProc, PsTrackSwitchProc ...). Cells: window/parent/child = 32-bit
+; view id (0xFFFFFFFF = none); onoff/page/part/recplay/... (types m/n) = words; pcol/prow/crow = 32-bit heap pointers.
+Kubo_ViewWorkCells:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x244, 0x2A0
+; CycRec_ClearSwitchView -- 1 x struct (AcFuncEditSw view record, 44 B): the "CycRecClrSw" function edit switch, entry 19 of Kubo Viewable table slot 0x85
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3e1b8),
+; so ViewableProc and the AcFuncEditSw class proc use the RAM copy; first word = class id 0x1600020.
+CycRec_ClearSwitchView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x4E4, 0x2C
+; CycRec_ClearLabelView -- 1 x struct (Label view record, 32 B): the "CycRecClrStr" label ("CLEAR"), entry 20 of slot 0x85
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3e1e4),
+; so ViewableProc and the Label class proc use the RAM copy; first word = class id 0x160002b.
+CycRec_ClearLabelView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x510, 0x20
+; Kubo_VocWorkMenuView -- 1 x struct (AcTitleMenu view record, 54 B): the "VocWorkSw" title-menu item ("VOCALIST WORKSTATION"), entry 3 of slot 0xD6
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3e204),
+; so ViewableProc and the AcTitleMenu class proc use the RAM copy; first word = class id 0x160001d.
+Kubo_VocWorkMenuView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x530, 0x36
+; Kubo_FadeInOutMenuView -- 1 x struct (AcTitleMenu view record, 54 B): the "FadeInOutSw" title-menu item ("FADE IN/OUT SETTING"), entry 4 of slot 0xD6
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3e23a),
+; so ViewableProc and the AcTitleMenu class proc use the RAM copy; first word = class id 0x160001d.
+Kubo_FadeInOutMenuView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x566, 0x36
+; Kubo_MixerMenuView -- 1 x struct (AcTitleMenu view record, 54 B): the "MixerSw" title-menu item ("MIXER"), entry 5 of slot 0xD6
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3e270),
+; so ViewableProc and the AcTitleMenu class proc use the RAM copy; first word = class id 0x160001d.
+Kubo_MixerMenuView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x59C, 0x36
+; Kubo_DiskLoadMenuView -- 1 x struct (AcTitleMenu view record, 54 B): the "DiskLoadSw" title-menu item ("DISK LOAD"), entry 6 of slot 0xD6
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3e2a6),
+; so ViewableProc and the AcTitleMenu class proc use the RAM copy; first word = class id 0x160001d.
+Kubo_DiskLoadMenuView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x5D2, 0x36
+; SqedtFunc_CursorState -- 1 x struct (3 x uint8_t (each + pad)): the from-cursor and to-cursor of the sequencer edit
+; value list (EVT_GET/SET_FROM_CUR, EVT_GET/SET_TO_CUR) and a 0/1 byte saying which of them SqedtVal2
+; is editing (1 = to-cursor); SeqFormat_DispatchA compares the list index against the active one.
+SqedtFunc_CursorState:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x608, 0x6
+; FileOpen_SlotByte1Init -- 1 x struct (1 x uint8_t (+ pad), power-on 1): FileOpen_PopulateStruct copies it to byte +1
+; of each new open-file slot (beside +0 = device index, +2 = 0x0D); SeqChan_ValidateAndDispatch
+; returns 0 at once when it is 0.  No store to it was found.
+FileOpen_SlotByte1Init:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x60E, 0x2
+; FileIO_DriveAParamBlock -- 144 x uint8_t: the block the drive-A device descriptor points at (+26 =
+; 0x0003E2E4); the file I/O code reaches it as handle->device->+26 and reads a word at +48 (sector
+; offset added to the position), a byte at +58 (retry limit) and a long at +12.
+FileIO_DriveAParamBlock:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x610, 0x90
+; FileIO_DriveAFileOps -- 10 x uint32_t: code pointers, the file-level operation table of drive "A"
+; (FileIO_DeviceTable +18); FileOpen calls entry 0 to open, the other file calls go through the copy
+; at handle +14 with `ld xwa, (xwa + 4*k)` / `call (xwa)` (k = 1..9; SeqStep_FileCloseProcess uses k = 5).
+FileIO_DriveAFileOps:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x6A0, 0x28
+; FileIO_DriveABlockOps -- 8 x uint32_t: code pointers, the second operation table of drive "A"
+; (FileIO_DeviceTable +14), copied to handle +10; the sector I/O paths call entries 4..7 through it
+; (`ld xwa, (xwa + 10)` / `ld xwa, (xwa + 16..28)` / `call (xwa)`).
+FileIO_DriveABlockOps:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x6C8, 0x20
+; FileIO_DeviceTable -- 1 x struct (34 B, one device): the file-system device table FileOpen_MatchDevice walks
+; (`lda xwa, (0x03e3bc:24)`, stride 0x22, FileIO_DeviceCount entries) comparing the path prefix with +22
+; Name ("A"); +1 = mode bits the device allows, +2 = state byte FDC_StoreDiskType clears, +14/+18 =
+; operation tables and +12 = word, all copied into each new handle, +26 = parameter block, +30 = the
+; handle FileOpen_InitSlot allocated last.
+FileIO_DeviceTable:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x6E8, 0x22
+; FileIO_DeviceCount -- 1 x uint16_t: entries in FileIO_DeviceTable (1); bounds FileOpen_MatchDevice's
+; search loop, and an index equal to it means "no such device" (error 7).
+FileIO_DeviceCount:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x70A, 0x2
+; SectorCache_AgeOverflowFlag -- 1 x struct (1 x uint8_t (+ pad)): SeqStep_FileIo sets it when the age word (+18) of
+; a 538-byte sector-cache entry reaches bit 15; while it is set the next scan decrements every age.
+SectorCache_AgeOverflowFlag:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x70C, 0x2
+; FDC_DiskTypeState -- 1 x struct: DiskType (byte, set by FDC_StoreDiskType, read by FDC_ReadDiskType),
+; DiskChanged (word, 1 after FDC_StoreDiskType) and AckedDiskType, the copy FDC_ClearDiskChangeStatus
+; takes when it clears DiskChanged.
+FDC_DiskTypeState:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x70E, 0x6
+; DiskStream_State -- 1 x struct: the streaming reader SndTable_LookupA/D set up: SourceMode 0 = FileRead
+; from a file opened "rb", 1 = raw sector commands; ByteLength = file size (handle +71) or sectors << 9;
+; BufferPtr = RAM 0x22D72, the message block ScreenGroup2_Entry hands to TaskMsg_Send.
+DiskStream_State:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x714, 0xA
+; East_ReverbMidiMenuWorkCells -- 1 x struct (54 cells): power-on values of the InitializeEast view work cells
+; Reverb/EQ presets, MIDI menu. Boot_InitWorkRAM copies them to RAM 0x3e3f2..0x3e46e; each cell is the RAM
+; target of a pointer-typed property of a view record registered by InitializeEast and is read through it by
+; the record's class proc (ScreenProc, WindowProc, PsTrackSwitchProc ...). Cells: window/parent/child = 32-bit
+; view id (0xFFFFFFFF = none); data/onoff/page/selected (types m/n) = words.
+East_ReverbMidiMenuWorkCells:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x71E, 0x7C
+; East_MidiMenuPage2WorkCells -- 1 x struct (5 cells): power-on values of the InitializeEast view work cells
+; MIDI menu page 2; ends with the low half of MidiPartSetting_Window. Boot_InitWorkRAM copies them to RAM 0x3e46e..0x3e47c; each cell
+; is the RAM target of a pointer-typed property of a view record registered by InitializeEast and is read through it by the record's
+; class proc (ScreenProc, WindowProc, PsTrackSwitchProc ...). Cells: window/parent/child = 32-bit view id (0xFFFFFFFF = none);
+; selected (types m/n) = words. A slice boundary cuts a 32-bit cell: the ...Lo / ...Hi word is its low / high half.
+East_MidiMenuPage2WorkCells:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x79A, 0xE
+; East_MidiSettingWorkCells -- 1 x struct (72 cells): power-on values of the InitializeEast view work cells
+; MIDI part/control/realtime/common/in-out/exclusive settings; starts and ends inside a 32-bit cell. Boot_InitWorkRAM copies them to RAM 0x3e47c..0x3e55c; each cell
+; is the RAM target of a pointer-typed property of a view record registered by InitializeEast and is read through it by the record's class proc (ScreenProc,
+; WindowProc, PsTrackSwitchProc ...). Cells: window/parent/child = 32-bit view id (0xFFFFFFFF = none); data/onoff/page/selcol/... (types m/n) = words; pcol/prow/crow
+; = 32-bit heap pointers; AcRamEditBox/AcRamBox data = 32-bit values. A slice boundary cuts a 32-bit cell: the ...Lo / ...Hi word is its low / high half.
+East_MidiSettingWorkCells:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x7A8, 0xE0
+; East_MidiSetupWorkCells -- 1 x struct (65 cells): power-on values of the InitializeEast view work cells
+; Exclusive receive, GM mode, PCG/panel-memory output, entertainer, split; starts inside a 32-bit cell. Boot_InitWorkRAM copies them to RAM 0x3e55c..0x3e62c; each
+; cell is the RAM target of a pointer-typed property of a view record registered by InitializeEast and is read through it by the record's class proc (ScreenProc,
+; WindowProc, PsTrackSwitchProc ...). Cells: window/parent/child = 32-bit view id (0xFFFFFFFF = none); data/onoff/page/selcol/... (types m/n) = words; pcol/prow/crow
+; = 32-bit heap pointers; AcRamEditBox/AcRamBox data = 32-bit values. A slice boundary cuts a 32-bit cell: the ...Lo / ...Hi word is its low / high half.
+East_MidiSetupWorkCells:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x888, 0xD0
+; East_SendSwitchView -- 1 x struct (AcSendEditSw view record, 52 B): the "SEND" edit switch (AcSendEditSw), entry 4 of InitializeEast's Viewable table slot 0x59
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3e62c),
+; so ViewableProc and the AcSendEditSw class proc use the RAM copy; first word = class id 0x1630003.
+East_SendSwitchView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x958, 0x34
+; Murai_SoundMenuWorkCells -- 1 x struct (267 cells): power-on values of the InitializeMurai view work cells
+; Sound menu, part settings, mixer, techni-chord, drawbar, accordion, messages. Boot_InitWorkRAM copies them to RAM 0x3e660..0x3e91c;
+; each cell is the RAM target of a pointer-typed property of a view record registered by InitializeMurai and is read through it by the
+; record's class proc (ScreenProc, WindowProc, PsTrackSwitchProc ...). Cells: window/parent/child = 32-bit view id (0xFFFFFFFF =
+; none); data/dialfocus/onoff/page/... (types m/n) = words; AcRamEditBox/AcRamBox data = 32-bit values.
+Murai_SoundMenuWorkCells:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x98C, 0x2BC
+; LswLeftHold_OnOffStrPtrs -- 2 x uint32_t: string pointers "OFF" / "ON " that LswLeftHold copies out for
+; EVT_GET_LSW_STRING (index (xde+4) checked 0..1, `sla bc, 2`, `ld xbc, (xde+bc)`, Strcpy).
+LswLeftHold_OnOffStrPtrs:	.incbin "includes/generated/naka_sequencer_channels.bin", 0xC48, 0x8
+; IvSdpart_PartNameStrPtrs -- 30 x uint32_t: part-name strings (" RIGHT 1 " ... "  RHYTHM  ", blank) indexed
+; by IvSdpart_PartRow; IvSdpart_ShowHide / _Refresh / scrolling send the selected one with EVT_PARA_DRAW
+; to view 0x3000B.  Scrolling keeps the row in 0..23.
+IvSdpart_PartNameStrPtrs:	.incbin "includes/generated/naka_sequencer_channels.bin", 0xC50, 0x78
+; IvSdpart_CurrentPage -- 1 x uint16_t: index into IvSdpart_PageViews of the page IvSdpart shows;
+; 8 (power-on value) is the top page: IvSdpart_OK exits to the sound menu from it.
+IvSdpart_CurrentPage:	.incbin "includes/generated/naka_sequencer_channels.bin", 0xCC8, 0x2
+; IvSdpart_PartRow -- 1 x uint16_t: the part row IvSdpart has selected; indexes IvSdpart_PartNameStrPtrs
+; and IvSdpart_PartNumberByRow; rows >= 18 are not resynchronised from GetPartSelect.
+IvSdpart_PartRow:	.incbin "includes/generated/naka_sequencer_channels.bin", 0xCCA, 0x2
 ; [nakarest] Naka_DrawbarControl_Table  +0xccc..+0xd00 (0xeeed44, 52 B)
 ; [nakarest] purpose not established: layout of 52 B at 0xeeed44 not derived; readers below
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
@@ -216,20 +310,32 @@ MidiPart_ConfigNameTable:
 ; [nakarest] c`), DrawRect_Deferred (kn5000_v10_program.s: `ld c,
 ; [nakarest] (257960:24)`), 1 more.
 Naka_DrawbarSlider_Resources:	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF48, 0x390
-; [nakarest] Naka_DrawbarDisplay_Table1  +0x12d8..+0x1358 (0xeef350, 128 B)
-; [nakarest] purpose not established: layout of 128 B at 0xeef350 not derived; readers below
-; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
-; [nakarest] 0x3efac..0x3f02c (its ld xde/xhl/xbc + ldir blocks), where they are read by
-; [nakarest] FontIDProc (ui/ui_widget_defs.s: `ld xbc, 0x3efac`), FontIDProc_OnGetOrDumpPropertyEx
-; [nakarest] (ui/ui_widget_defs.s: `ld xbc, 0x3efac`), FontIDProc_SetProp_LoopHead (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, 0x3efac`).
-Naka_DrawbarDisplay_Table1:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x12D8, 0x80
-; [nakarest] Naka_DrawbarDisplay_Table2  +0x1358..+0x1510 (0xeef3d0, 440 B)
-; [nakarest] purpose not established: layout of 440 B at 0xeef3d0 not derived; readers below
-; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
-; [nakarest] 0x3f02c..0x3f1e4 (its ld xde/xhl/xbc + ldir blocks); no literal RAM reference into
-; [nakarest] that copy was found.
-Naka_DrawbarDisplay_Table2:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1358, 0x1B8
+; FontIDProc_FontNameTable -- 32 x uint32_t: name pointers of the font ids (CHARA1, CHARA2, ... CHARA5W, then
+; "" and 21 NULLs); FontIDProc maps id -> name for EVT_GET_PROP_DATA_SP / EVT_GET_PROPERTY_EX (`sll xwa, 2`)
+; and name -> id for EVT_SET_PROPERTY_EX by Strcmp until the first NULL; FontIDProc_EntryCount = 10.
+FontIDProc_FontNameTable:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x12D8, 0x80
+; Font_FileNamePtrTable -- 32 x uint32_t: file-name pointers "chara1.fnt" ... "chara5w.fnt", "" and 21 NULLs,
+; entry for entry parallel to FontIDProc_FontNameTable (CHARA1 <-> chara1.fnt).  No reader of its RAM
+; copy (0x3F02C) was found in v10 maincpu, so its use is not established.
+Font_FileNamePtrTable:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1358, 0x80
+; Root_DebugNamingWorkCells -- 1 x struct (74 cells): power-on values of the InitializeRoot view work cells
+; Panel simulator, debug window, naming, memo, track switch, check windows. Boot_InitWorkRAM copies them to RAM
+; 0x3f0ac..0x3f160; each cell is the RAM target of a pointer-typed property of a view record registered by InitializeRoot and
+; is read through it by the record's class proc (ScreenProc, WindowProc, PsTrackSwitchProc ...). Cells: window/parent/child =
+; 32-bit view id (0xFFFFFFFF = none); cursor/onoff/page/part/... (types m/n) = words; pcol/prow/crow = 32-bit heap pointers.
+Root_DebugNamingWorkCells:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x13D8, 0xB4
+; Root_NamingUpperCaseToggleView -- 1 x struct (AcIndexToggle view record, 44 B): the "NamingABC" index toggle ("ABC"), entry 23 of InitializeRoot's slot 0x0
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3f160),
+; so ViewableProc and the AcIndexToggle class proc use the RAM copy; first word = class id 0x160004e.
+Root_NamingUpperCaseToggleView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x148C, 0x2C
+; Root_NamingLowerCaseToggleView -- 1 x struct (AcIndexToggle view record, 44 B): the "Namingabc" index toggle ("abc"), entry 24 of slot 0x0
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3f18c),
+; so ViewableProc and the AcIndexToggle class proc use the RAM copy; first word = class id 0x160004e.
+Root_NamingLowerCaseToggleView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x14B8, 0x2C
+; Root_NamingSymbolToggleView -- 1 x struct (AcIndexToggle view record, 44 B): the "NamingSymbol" index toggle ("!#$"), entry 25 of slot 0x0
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3f1b8),
+; so ViewableProc and the AcIndexToggle class proc use the RAM copy; first word = class id 0x160004e.
+Root_NamingSymbolToggleView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x14E4, 0x2C
 ; [nakarest] Naka_DrawbarReg_Table: despite the name, entries 0-11 are the WALLPAPER PALETTE
 ; [nakarest] table: pointers to NakaColor_Palette2, 1, 6, 5, 4, 3, 10, 9, 8, 7, Blank, Blank
 ; [nakarest] (debug_naming_panel_sim.s).  This blob lies wholly inside the work-RAM initial

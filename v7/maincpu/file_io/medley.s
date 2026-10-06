@@ -4792,7 +4792,7 @@ CheckNo_Type1:
 DiskSure:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CheckNo_Type2
-	lda xhl, (DiskSure_PtrTable:24)
+	lda xhl, (DiskSure_LanguageTable:24)
 	ret
 
 CheckNo_Type2:

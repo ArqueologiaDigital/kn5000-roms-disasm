@@ -916,11 +916,11 @@ Bitmap_TechnichordBackground_2:	.incbin "includes/generated/naka_technichord_str
 Bitmap_KN5000_Logo:	.incbin "includes/generated/naka_technichord_strings.bin", 0xD730, 0x1C20
 ; [nakarest] Str_Mixer_ON  +0xf350..+0xf354 (0xe9529e, 4 B)
 ; [nakarest] Text (4 B at 0xe9529e), first string "ON "; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecc4).
+; [nakarest] it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeecc4).
 Str_Mixer_ON:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF350, 0x4
 ; [nakarest] MixerPartTable_Start  +0xf354..+0xf35c (0xe952a2, 8 B)
 ; [nakarest] Text (8 B at 0xe952a2), first string "OFF"; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecc0).
+; [nakarest] it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeecc0).
 MixerPartTable_Start:		.incbin "includes/generated/naka_technichord_strings.bin", 0xF354, 0x4
 LswLeftHold_DefaultStr_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF358, 0x4
 ; PartParam_EnableMask -- 30 x u32, one mask per part index: which part parameters may be edited.  Every Lsw*
@@ -957,123 +957,123 @@ IvSdpart_TopPageViewId:	.incbin "includes/generated/naka_technichord_strings.bin
 IvSdpart_PartNumberByRow:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF480, 0x3C
 ; [nakarest] Str_PartName_Empty  +0xf4bc..+0xf4c6 (0xe9540a, 10 B)
 ; [nakarest] Text (10 B at 0xe9540a), first string " "; no registered NAKA table points into it;
-; [nakarest] reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed3c).
+; [nakarest] reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed3c).
 Str_PartName_Empty:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4BC, 0xA
 ; [nakarest] Str_PartName_Rhythm  +0xf4c6..+0xf4d2 (0xe95414, 12 B)
 ; [nakarest] Text (12 B at 0xe95414), first string " RHYTHM "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed38).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed38).
 Str_PartName_Rhythm:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4C6, 0xC
 ; [nakarest] Str_PartName_Control  +0xf4d2..+0xf4dc (0xe95420, 10 B)
 ; [nakarest] Text (10 B at 0xe95420), first string " CONTROL "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed34).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed34).
 Str_PartName_Control:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4D2, 0xA
 ; [nakarest] Str_PartName_APC  +0xf4dc..+0xf4e6 (0xe9542a, 10 B)
 ; [nakarest] Text (10 B at 0xe9542a), first string " APC "; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed30).
+; [nakarest] it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed30).
 Str_PartName_APC:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4DC, 0xA
 ; [nakarest] Str_PartName_MIC  +0xf4e6..+0xf4f0 (0xe95434, 10 B)
 ; [nakarest] Text (10 B at 0xe95434), first string " MIC "; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed2c).
+; [nakarest] it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed2c).
 Str_PartName_MIC:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4E6, 0xA
 ; [nakarest] Str_PartName_Metronome  +0xf4f0..+0xf4fa (0xe9543e, 10 B)
 ; [nakarest] Text (10 B at 0xe9543e), first string "METRONOME"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed28).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed28).
 Str_PartName_Metronome:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4F0, 0xA
 ; [nakarest] Str_PartName_MSP  +0xf4fa..+0xf504 (0xe95448, 10 B)
 ; [nakarest] Text (10 B at 0xe95448), first string " MSP "; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed24).
+; [nakarest] it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed24).
 Str_PartName_MSP:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF4FA, 0xA
 ; [nakarest] Str_PartName_Drums  +0xf504..+0xf50e (0xe95452, 10 B)
 ; [nakarest] Text (10 B at 0xe95452), first string " DRUMS "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed20).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed20).
 Str_PartName_Drums:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF504, 0xA
 ; [nakarest] Str_PartName_Bass  +0xf50e..+0xf51a (0xe9545c, 12 B)
 ; [nakarest] Text (12 B at 0xe9545c), first string " BASS "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed1c).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed1c).
 Str_PartName_Bass:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF50E, 0xC
 ; [nakarest] Str_PartName_Accomp3  +0xf51a..+0xf524 (0xe95468, 10 B)
 ; [nakarest] Text (10 B at 0xe95468), first string " ACCOMP3 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed18).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed18).
 Str_PartName_Accomp3:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF51A, 0xA
 ; [nakarest] Str_PartName_Accomp2  +0xf524..+0xf52e (0xe95472, 10 B)
 ; [nakarest] Text (10 B at 0xe95472), first string " ACCOMP2 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed14).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed14).
 Str_PartName_Accomp2:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF524, 0xA
 ; [nakarest] Str_PartName_Accomp1  +0xf52e..+0xf538 (0xe9547c, 10 B)
 ; [nakarest] Text (10 B at 0xe9547c), first string " ACCOMP1 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed10).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed10).
 Str_PartName_Accomp1:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF52E, 0xA
 ; [nakarest] Str_PartName_RBass  +0xf538..+0xf544 (0xe95486, 12 B)
 ; [nakarest] Text (12 B at 0xe95486), first string " R.BASS "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed0c).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed0c).
 Str_PartName_RBass:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF538, 0xC
 ; [nakarest] Str_PartName_Chord  +0xf544..+0xf54e (0xe95492, 10 B)
 ; [nakarest] Text (10 B at 0xe95492), first string " CHORD "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed08).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed08).
 Str_PartName_Chord:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF544, 0xA
 ; [nakarest] Str_PartName_Part16  +0xf54e..+0xf558 (0xe9549c, 10 B)
 ; [nakarest] Text (10 B at 0xe9549c), first string " PART 16 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed04).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed04).
 Str_PartName_Part16:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF54E, 0xA
 ; [nakarest] Str_PartName_Part15  +0xf558..+0xf562 (0xe954a6, 10 B)
 ; [nakarest] Text (10 B at 0xe954a6), first string " PART 15 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeed00).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeed00).
 Str_PartName_Part15:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF558, 0xA
 ; [nakarest] Str_PartName_Part14  +0xf562..+0xf56c (0xe954b0, 10 B)
 ; [nakarest] Text (10 B at 0xe954b0), first string " PART 14 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecfc).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeecfc).
 Str_PartName_Part14:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF562, 0xA
 ; [nakarest] Str_PartName_Part13  +0xf56c..+0xf576 (0xe954ba, 10 B)
 ; [nakarest] Text (10 B at 0xe954ba), first string " PART 13 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecf8).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeecf8).
 Str_PartName_Part13:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF56C, 0xA
 ; [nakarest] Str_PartName_Part12  +0xf576..+0xf580 (0xe954c4, 10 B)
 ; [nakarest] Text (10 B at 0xe954c4), first string " PART 12 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecf4).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeecf4).
 Str_PartName_Part12:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF576, 0xA
 ; [nakarest] Str_PartName_Part11  +0xf580..+0xf58a (0xe954ce, 10 B)
 ; [nakarest] Text (10 B at 0xe954ce), first string " PART 11 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecf0).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeecf0).
 Str_PartName_Part11:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF580, 0xA
 ; [nakarest] Str_PartName_Part10  +0xf58a..+0xf594 (0xe954d8, 10 B)
 ; [nakarest] Text (10 B at 0xe954d8), first string " PART 10 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecec).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeecec).
 Str_PartName_Part10:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF58A, 0xA
 ; [nakarest] Str_PartName_Part9  +0xf594..+0xf5a0 (0xe954e2, 12 B)
 ; [nakarest] Text (12 B at 0xe954e2), first string " PART 9 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeece8).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeece8).
 Str_PartName_Part9:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF594, 0xC
 ; [nakarest] Str_PartName_Part8  +0xf5a0..+0xf5ac (0xe954ee, 12 B)
 ; [nakarest] Text (12 B at 0xe954ee), first string " PART 8 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeece4).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeece4).
 Str_PartName_Part8:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5A0, 0xC
 ; [nakarest] Str_PartName_Part7  +0xf5ac..+0xf5b8 (0xe954fa, 12 B)
 ; [nakarest] Text (12 B at 0xe954fa), first string " PART 7 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeece0).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeece0).
 Str_PartName_Part7:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5AC, 0xC
 ; [nakarest] Str_PartName_Part6  +0xf5b8..+0xf5c4 (0xe95506, 12 B)
 ; [nakarest] Text (12 B at 0xe95506), first string " PART 6 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecdc).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeecdc).
 Str_PartName_Part6:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5B8, 0xC
 ; [nakarest] Str_PartName_Part5  +0xf5c4..+0xf5d0 (0xe95512, 12 B)
 ; [nakarest] Text (12 B at 0xe95512), first string " PART 5 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecd8).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeecd8).
 Str_PartName_Part5:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5C4, 0xC
 ; [nakarest] Str_PartName_Part4  +0xf5d0..+0xf5dc (0xe9551e, 12 B)
 ; [nakarest] Text (12 B at 0xe9551e), first string " PART 4 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecd4).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeecd4).
 Str_PartName_Part4:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5D0, 0xC
 ; [nakarest] Str_PartName_Left  +0xf5dc..+0xf5e8 (0xe9552a, 12 B)
 ; [nakarest] Text (12 B at 0xe9552a), first string " LEFT "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecd0).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeecd0).
 Str_PartName_Left:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5DC, 0xC
 ; [nakarest] Str_PartName_Right2  +0xf5e8..+0xf5f2 (0xe95536, 10 B)
 ; [nakarest] Text (10 B at 0xe95536), first string " RIGHT 2 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeeccc).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeeccc).
 Str_PartName_Right2:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5E8, 0xA
 ; [nakarest] Str_PartName_Right1  +0xf5f2..+0xf602 (0xe95540, 16 B)
 ; [nakarest] Text (16 B at 0xe95540), first string " RIGHT 1 "; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecc8).
+; [nakarest] into it; reached through 1 data word in LswLeftHold_OnOffStrPtrs (at 0xeeecc8).
 Str_PartName_Right1:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5F2, 0xA
 IvSdpart_GetText_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5FC, 0x6
 ; IvSdpartProc_CaseTable -- 10 x int16: the case offsets of IvSdpartProc's compiled switch, relative to IvSdpart_Init

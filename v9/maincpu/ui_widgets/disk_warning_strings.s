@@ -50,9 +50,9 @@
 
 ; [nakarest] DiskWarning_ConfirmStrings  +0x0..+0x30 (0xea8cac, 48 B)
 ; [nakarest] Text (48 B at 0xea8cac), first string "Etes vous s\xFBr?"; no registered NAKA table
-; [nakarest] points into it; reached through 3 data words in DiskSure_PtrTable (at
+; [nakarest] points into it; reached through 3 data words in DiskSure_LanguageTable (at
 ; [nakarest] 0xea8c64, 0xea8c60, 0xea8c5c), which is read by DiskSure (file_io/medley.s: `lda
-; [nakarest] xhl, (DiskSure_PtrTable:24)`).
+; [nakarest] xhl, (DiskSure_LanguageTable:24)`).
 DiskWarning_ConfirmStrings:	.incbin "includes/generated/naka_disk_warning.bin", 0x0, 0x10
 DiskWarning_GermanConfirm:	.incbin "includes/generated/naka_disk_warning.bin", 0x10, 0x20
 ; [nakarest] naka_disk_warning+0x30  +0x30..+0x1c4 (0xea8cdc, 404 B)

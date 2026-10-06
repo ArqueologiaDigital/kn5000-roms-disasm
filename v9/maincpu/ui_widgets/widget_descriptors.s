@@ -4904,7 +4904,7 @@ SeqStep_TimerDispatchC_PtrTable:	.incbin "includes/generated/naka_widget_descrip
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
 ; SeqStep_TimerDispatch_ProcTables_Tail[66].
-; Readers (claims_lint.py unread-claims, 2026-10-02): Naka_DrawbarOrgan_Screens (0xEEE776, 32-bit
+; Readers (claims_lint.py unread-claims, 2026-10-02): FileIO_DriveAFileOps (0xEEE776, 32-bit
 ;   pointer); FileOpenDefault (0xF4F21F, pushw far pointer); SeqStep_ByteBlockF245 (0xF4F257, pushw
 ;   far pointer); SeqStep_ByteBlockF245 (0xF4F298, pushw far pointer); and 8 more
 ; -----------------------------------------------------------------------------

@@ -252,1255 +252,1413 @@ extern const char TrackName6_Unassigned_05;
 extern const char TrackName6_Unassigned_06;
 extern const char TrackName6_Unassigned_07;
 extern const char TrackName6_Unassigned_08;
+extern const char HamaStr_HamaListProc;
+extern const char NakaWidget_EnterTainerScr_2_Label;
+extern const char NakaWidget_KuboView085_18_Label;
+extern const char NakaWidget_TrAsFileList;
+extern const char SeqStep_TimerDispatch_ProcTables_Tail;
+extern const char NakaWidget_MidiPcgOutput_3_AcIndexWideES;
+extern const char NakaWidget_NamingCursorBox;
 
 #define BASE  0x00EEE078u
 
+/* FDTest_ScreenView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* FDTest_ResultCounters's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Xapr_PresentFlag's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Yoko_ViewWorkCells's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* TrAs_OkSwitchView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* TrAs_PartSelectSwitchView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Kubo_ViewWorkCells's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* CycRec_ClearSwitchView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* CycRec_ClearLabelView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Kubo_VocWorkMenuView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Kubo_FadeInOutMenuView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Kubo_MixerMenuView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Kubo_DiskLoadMenuView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SqedtFunc_CursorState's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* FileOpen_SlotByte1Init's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* FileIO_DeviceTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SectorCache_AgeOverflowFlag's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* FDC_DiskTypeState's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* DiskStream_State's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* East_ReverbMidiMenuWorkCells's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* East_MidiMenuPage2WorkCells's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* East_MidiSettingWorkCells's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* East_MidiSetupWorkCells's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* East_SendSwitchView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Murai_SoundMenuWorkCells's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Root_DebugNamingWorkCells's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Root_NamingUpperCaseToggleView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Root_NamingLowerCaseToggleView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Root_NamingSymbolToggleView's element (scripts/converters/nakarest_reviewed_slices.py). */
 typedef struct __attribute__((packed)) {
-    naka_container_t w0;  /* NAKA_TYPE_CONTAINER */
-    uint8_t pad_0[7];  /* zero padding */
-    uint16_t field_0031;
-    uint32_t NakaData_RomEnd_ptr;
-    uint16_t field_0037;
-    uint8_t pad_1[1];
-    uint8_t DpSmf_AcRamEditBox_Value[4];
-    uint8_t SMFMuteSw_Onoff[2];
-    uint8_t MIXER_VwMenuBox_Selected[2];
-    uint8_t MIC_VwMenuBox_Selected[2];
-    uint16_t SmfMedley_TtlScreen_Window;
-    uint16_t field_0046;
-    uint8_t Mixer_AcTitleMenu_Selected[2];
-    uint8_t Mic_AcTitleMenu_Selected[2];
-    uint8_t Lyrics_AcTitleMenu_2_Selected[2];
-    uint16_t CDswWindow_Parent;
-    uint16_t field_0050;
-    uint16_t CDswWindow_Child;
-    uint16_t field_0054;
-    uint16_t PauseDisp_Value;
-    uint8_t pad_3[2];  /* zero padding */
-    uint16_t PlayDisp_Value;
-    uint8_t pad_4[2];  /* zero padding */
-    uint16_t Lyrics_Parent;
-    uint16_t field_0060;
-    uint16_t Lyrics_Child;
-    uint16_t field_0064;
-    uint16_t DpDoc_Window;
-    uint16_t field_0068;
-    uint16_t DOCR1Sw_Onoff;
-    uint8_t DOCR2Sw_Onoff[2];
-    uint8_t DOCOrchSw_Onoff[2];
-    uint8_t MIXER_VwMenuBox_2_Selected[2];
-    uint8_t MIC_VwMenuBox_2_Selected[2];
-    uint16_t DpPd_Window;
-    uint16_t field_0076;
-    uint16_t PDR1Sw_Onoff;
-    uint8_t PDOrchSw_Onoff[2];
-    uint8_t MIXER_VwMenuBox_3_Selected[2];
-    uint8_t MIC_VwMenuBox_3_Selected[2];
-    uint16_t DpSmfLyr_Window;
-    uint16_t field_0082;
-    uint8_t MIC_VwMenuBox_4_Selected[2];
-    uint16_t DpMdlySmf_Window;
-    uint16_t field_0088;
-    uint8_t Lyrics_AcTitleMenu_3_Selected[2];
-    uint16_t DpMdlySmf_AcRamEditBox_Selected;
-    uint8_t DpMdlySmf_AcRamEditBox_Value[6];
-    uint8_t MIXER_VwMenuBox_4_Selected[2];
-    uint8_t MIC_VwMenuBox_5_Selected[2];
-    uint16_t SmfMedley_TtlScreen_2_Window;
-    uint16_t field_009a;
-    uint16_t DpMdlyDoc_Window;
-    uint16_t field_009e;
-    uint16_t field_00a0;
-    uint8_t DOCMedR2Sw_Onoff[2];
-    uint8_t DOCMedOrchSw_Onoff[2];
-    uint8_t MIXER_VwMenuBox_5_Selected[2];
-    uint8_t MIC_VwMenuBox_6_Selected[2];
-    uint16_t DpMdlyPd_Window;
-    uint16_t field_00ac;
-    uint16_t field_00ae;
-    uint8_t PDMedOrchSw_Onoff[2];
-    uint8_t MIXER_VwMenuBox_6_Selected[2];
-    uint8_t MIC_VwMenuBox_7_Selected[2];
-    uint16_t DpMdlySmfLyr_Window;
-    uint16_t field_00b8;
-    uint8_t pad_12[2];  /* zero padding */
-    uint16_t DkMdlyPly_Window;
-    uint16_t field_00be;
-    uint8_t pad_13[2];  /* zero padding */
-    uint16_t NakaWidget_SongMdlyOrchSel_Parent;
-    uint16_t field_00c4;
-    uint16_t NakaWidget_SongMdlyOrchSel_Child;
-    uint16_t field_00c8;
-    uint16_t NakaWidget_SongMdlySongSel1_Onoff;
-    uint8_t NakaWidget_SongMdlySongSel1_Part[2];
-    uint8_t NakaWidget_SongMdlySongSel1_Recplay[2];
-    uint8_t NakaWidget_SongMdlySongSel2_Onoff[2];
-    uint16_t NakaWidget_SongMdlySongSel2_Part;
-    uint8_t NakaWidget_SongMdlySongSel2_Recplay[2];
-    uint16_t NakaWidget_SongMdlySongSel3_Onoff;
-    uint16_t NakaWidget_SongMdlySongSel3_Part;
-    uint8_t NakaWidget_SongMdlySongSel3_Recplay[2];
-    uint8_t NakaWidget_SongMdlySongSel4_Onoff[2];
-    uint16_t NakaWidget_SongMdlySongSel4_Part;
-    uint8_t NakaWidget_SongMdlySongSel4_Recplay[2];
-    uint16_t NakaWidget_SongMdlySongSel5_Onoff;
-    uint16_t NakaWidget_SongMdlySongSel5_Part;
-    uint8_t NakaWidget_SongMdlySongSel5_Recplay[2];
-    uint8_t NakaWidget_SongMdlySongSel6_Onoff[2];
-    uint16_t NakaWidget_SongMdlySongSel6_Part;
-    uint8_t NakaWidget_SongMdlySongSel6_Recplay[2];
-    uint16_t NakaWidget_SongMdlySongSel7_Onoff;
-    uint16_t NakaWidget_SongMdlySongSel7_Part;
-    uint8_t NakaWidget_SongMdlySongSel7_Recplay[2];
-    uint8_t NakaWidget_SongMdlySongSel8_Onoff[2];
-    uint16_t NakaWidget_SongMdlySongSel8_Part;
-    uint8_t NakaWidget_SongMdlySongSel8_Recplay[2];
-    uint8_t NakaWidget_SongMdlySongSel9_Onoff[2];
-    uint16_t NakaWidget_SongMdlySongSel9_Part;
-    uint8_t NakaWidget_SongMdlySongSel9_Recplay[2];
-    uint16_t NakaWidget_SongMdlySongSel10_Onoff;
-    uint16_t NakaWidget_SongMdlySongSel10_Part;
-    uint8_t NakaWidget_SongMdlySongSel10_Recplay[2];
-    uint8_t NakaWidget_SongMdlySongSel11_Onoff[2];
-    uint16_t NakaWidget_SongMdlySongSel11_Part;
-    uint8_t NakaWidget_SongMdlySongSel11_Recplay[2];
-    uint16_t NakaWidget_SongMdlySongSel12_Onoff;
-    uint16_t NakaWidget_SongMdlySongSel12_Part;
-    uint8_t NakaWidget_SongMdlySongSel12_Recplay[2];
-    uint8_t NakaWidget_SongMdlySongSel13_Onoff[2];
-    uint16_t NakaWidget_SongMdlySongSel13_Part;
-    uint8_t NakaWidget_SongMdlySongSel13_Recplay[2];
-    uint16_t NakaWidget_SongMdlySongSel14_Onoff;
-    uint16_t NakaWidget_SongMdlySongSel14_Part;
-    uint8_t NakaWidget_SongMdlySongSel14_Recplay[2];
-    uint8_t NakaWidget_SongMdlySongSel15_Onoff[2];
-    uint16_t NakaWidget_SongMdlySongSel15_Part;
-    uint8_t NakaWidget_SongMdlySongSel15_Recplay[2];
-    uint16_t NakaWidget_SongMdlySongSel16_Onoff;
-    uint16_t NakaWidget_SongMdlySongSel16_Part;
-    uint8_t NakaWidget_SongMdlySongSel16_Recplay[2];
-    uint16_t SqMdlyPly_Window;
-    uint16_t field_012c;
-    uint8_t pad_30[2];  /* zero padding */
-    uint16_t SqTrSel_Window;
-    uint16_t field_0132;
-    uint16_t NakaWidget_StepRecSubPanel_Window;
-    uint16_t field_0136;
-    uint16_t SqTrAs_Window;
-    uint16_t field_013a;
-    uint8_t Preset_AcTitleMenu_Selected[2];
-    uint16_t TrAsGrid_Selrow;
-    uint16_t TrAsGrid_Selcol;
-    uint16_t TrAsGrid_Pcol;
-    uint16_t field_0144;
-    uint16_t TrAsGrid_Prow;
-    uint16_t field_0148;
-    uint16_t TrAsGrid_Crow;
-    uint16_t field_014c;
-    uint16_t SqTrAsSure_Window;
-    uint16_t field_0150;
-    uint16_t SqTrAsPs_Window;
-    uint16_t field_0154;
-    uint16_t SqTrAsPs_AcRamEditBox_Selected;
-    uint8_t SqTrAsPs_Song_Value[4];
-    uint16_t TrAsPsIniSel_Selected;
-    uint8_t TrAsPsTechSel_Selected[2];
-    uint8_t TrAsPsGmSel_Selected[2];
-    uint16_t SqTrAsPsSure1_Window;
-    uint16_t field_0164;
-    uint16_t SqTrAsPsSure2_Window;
-    uint16_t field_0168;
-    uint16_t SqSngSel_Window;
-    uint16_t field_016c;
-    uint8_t Naming_AcTitleMenu_Se_016E_Value[2];
-    uint16_t SqSngSel_PsSongSelBox_Sel_num;
-    uint16_t SqSngSel_PsSongSelBox_2_Sel_num;
-    uint16_t SqNameing_Window;
-    uint16_t field_0176;
-    uint16_t AfterTouchSet_Window;
-    uint16_t field_017a;
-    uint16_t AfterTouchSet_AcBitEditBox_Selected;
-    uint8_t AfterTouchSet_AfterTouchRecord_Value[2];
-    uint16_t StepPartBal_Window;
-    uint16_t field_0182;
-    uint16_t DemoMenu_Window;
-    uint16_t field_0186;
-    uint8_t Performances_AcTitleMenu_Selected[2];
-    uint8_t FeaturePresentation_AcTitleMenu_Selected[2];
-    uint16_t DemoStyle_Window;
-    uint16_t field_018e;
-    uint8_t DemoSong0_Selected[2];
-    uint8_t DemoSong1_Selected[2];
-    uint8_t DemoSong2_Selected[2];
-    uint8_t DemoSong3_Selected[2];
-    uint8_t DemoSong4_Selected[2];
-    uint8_t DemoSong5_Selected[2];
-    uint16_t DemoStyle_PsWideToggle_Onoff;
-    uint8_t DemoStyle_PsWideToggle_2_Onoff[2];
-    uint8_t DemoStyle_PsWideToggle_3_Onoff[2];
-    uint16_t DemoSound_Window;
-    uint16_t field_01a4;
-    uint8_t DemoSong6_Selected[2];
-    uint8_t DemoSong7_Selected[2];
-    uint8_t DemoSong8_Selected[2];
-    uint8_t DemoSong9_Selected[2];
-    uint8_t DemoSong10_Selected[2];
-    uint8_t DemoSong11_Selected[2];
-    uint8_t DemoSound_PsWideToggle_Onoff[2];
-    uint16_t DemoSound_PsWideToggle_2_Onoff;
-    uint8_t DemoSound_PsWideToggle_3_Onoff[2];
-    uint16_t DemoRhy_Window;
-    uint16_t field_01ba;
-    uint8_t DemoSong12_Selected[2];
-    uint8_t DemoSong13_Selected[2];
-    uint8_t DemoSong14_Selected[2];
-    uint8_t DemoSong15_Selected[2];
-    uint8_t DemoSong16_Selected[2];
-    uint8_t DemoSong17_Selected[2];
-    uint8_t DemoRhy_PsWideToggle_Onoff[2];
-    uint8_t DemoRhy_PsWideToggle_2_Onoff[2];
-    uint16_t field_01cc;
-    naka_dispatch_t w1;  /* 0x3E */
-    uint16_t field_01e6;
-    uint16_t field_01e8;
-    uint8_t pad_42[8];  /* zero padding */
-    uint16_t field_01f2;
-    uint16_t field_01f4;
-    uint32_t ptr_01f6;
-    naka_dispatch_t w2;  /* 0x22 */
-    uint16_t field_0212;
-    uint16_t field_0214;
-    uint8_t pad_43[8];  /* zero padding */
-    uint16_t field_021e;
-    uint16_t field_0220;
-    uint16_t field_0222;
-    uint16_t field_0224;
-    uint16_t field_0226;
-    uint16_t field_0228;
-    uint16_t field_022a;
-    uint16_t field_022c;
-    uint16_t field_022e;
-    uint16_t field_0230;
-    uint16_t field_0232;
-    uint16_t field_0234;
-    uint16_t field_0236;
-    uint16_t field_0238;
-    uint16_t field_023a;
-    uint8_t pad_44[4];  /* zero padding */
-    uint32_t Naka_ReverbScreen_EmptyStr_ptr;
-    uint16_t Reverb_TtlScreen_Window;
-    uint16_t field_0246;
-    uint16_t DspEffect_TtlScreen_Window;
-    uint16_t field_024a;
-    uint16_t Equalizer_TtlScreen_Window;
-    uint16_t field_024e;
-    uint8_t EqOnOff_Onoff[2];
-    uint16_t AcousticIllusion_TtlScreen_Window;
-    uint16_t field_0254;
-    uint16_t SequencerMenu_TtlScreen_Window;
-    uint16_t field_0258;
-    uint8_t Create_AcTitleMenu_Selected[2];
-    uint8_t EDIT_AcModeMenu_Selected[2];
-    uint8_t PanelWrite_AcTitleMenu_Selected[2];
-    uint16_t SequencerPlay_TtlScreen_Window;
-    uint16_t field_0262;
-    uint8_t CycPlySw_Onoff[2];
-    uint16_t SngSelWin1_Parent;
-    uint16_t field_0268;
-    uint16_t SngSelWin1_Child;
-    uint16_t field_026c;
-    uint8_t Medley_AcTitleMenu_Selected[2];
-    uint16_t SngSelWin2_Parent;
-    uint16_t field_0272;
-    uint16_t SngSelWin2_Child;
-    uint16_t field_0276;
-    uint16_t CyclePlay_TtlScreen_Window;
-    uint16_t field_027a;
-    uint8_t CyclePlay_PsEditBox_Selected[2];
-    uint16_t CyclePlay_PsEditBox_2_Selected;
-    uint8_t CyclePlay_PsEditBox_3_Selected[2];
-    uint16_t EasyRecord_TtlScreen_Window;
-    uint16_t field_0284;
-    uint8_t Naming_AcTitleMenu_Se_0286_Value[2];
-    uint8_t EasyRecord_PsTrackSwitch_Onoff[2];
-    uint8_t EasyRecord_PsTrackSwitch_Part[2];
-    uint16_t EasyRecord_PsTrackSwitch_Recplay;
-    uint8_t EasyRecord_PsTrackSwitch_2_Onoff[2];
-    uint16_t EasyRecord_PsTrackSwitch_2_Part;
-    uint16_t EasyRecord_PsTrackSwitch_2_Recplay;
-    uint8_t EasyRecord_PsTrackSwitch_3_Onoff[2];
-    uint16_t EasyRecord_PsTrackSwitch_3_Part;
-    uint16_t EasyRecord_PsTrackSwitch_3_Recplay;
-    uint8_t EasyRecord_PsTrackSwitch_4_Onoff[2];
-    uint16_t EasyRecord_PsTrackSwitch_4_Part;
-    uint16_t EasyRecord_PsTrackSwitch_4_Recplay;
-    uint8_t EasyRecord_PsTrackSwitch_5_Onoff[2];
-    uint16_t EasyRecord_PsTrackSwitch_5_Part;
-    uint16_t EasyRecord_PsTrackSwitch_5_Recplay;
-    uint16_t Create_TtlScreen_Window;
-    uint16_t field_02a8;
-    uint8_t TrackAssign_AcTitleMenu_Selected[2];
-    uint8_t PanelWrite_AcTitleMenu_2_Selected[2];
-    uint8_t SongSelectNaming_AcTitleMenu_Selected[2];
-    uint8_t SongClear_AcTitleMenu_Selected[2];
-    uint8_t SongTrackCopy_AcTitleMenu_Selected[2];
-    uint8_t AfterTouchSet_AcTitleMenu_Selected[2];
-    uint8_t RealtimeRecord_AcModeMenu_Selected[2];
-    uint8_t StepRecord_AcModeMenu_Selected[2];
-    uint8_t PunchRecord_AcTitleMenu_Selected[2];
-    uint16_t RealtimeRecord_TtlScreen_Window;
-    uint16_t field_02be;
-    uint8_t CycRecSw_Onoff[2];
-    uint8_t MetRecSw_Onoff[2];
-    uint16_t CycClrSw_Parent;
-    uint16_t field_02c6;
-    uint16_t CycClrSw_Child;
-    uint16_t field_02ca;
-    uint16_t RealtimeRecord_TtlScreen_2_Window;
-    uint16_t field_02ce;
-    uint8_t RealtimeRecord_PsEditBox_Selected[2];
-    uint8_t RealtimeRecord_PsEditBox_2_Selected[2];
-    uint8_t MetCycRecSw_Onoff[2];
-    uint16_t RealtimeRecord_PsEditBox_3_Selected;
-    uint16_t PunchRecord_TtlScreen_Window;
-    uint16_t field_02da;
-    uint8_t MetPunchSw_Onoff[2];
-    uint8_t PunchInOutSw_Onoff[2];
-    uint16_t AutoPunchRecord_TtlScreen_Window;
-    uint16_t field_02e2;
-    uint8_t MetPunchmSw_Onoff[2];
-    uint16_t AutoPunchRecord_PsEditBox_Selected;
-    uint8_t AutoPunchRecord_PsEditBox_2_Selected[2];
-    uint8_t AutoPunchRecord_PsEditBox_3_Selected[2];
-    uint16_t AutoPunchRecord_TtlScreen_2_Window;
-    uint16_t field_02ee;
-    uint16_t PanelWrite_TtlScreen_Window;
-    uint16_t field_02f2;
-    uint16_t SongClear_TtlScreen_Window;
-    uint16_t field_02f6;
-    uint16_t SoclSureDisp_Parent;
-    uint16_t field_02fa;
-    uint16_t SoclSureDisp_Child;
-    uint16_t field_02fe;
-    uint8_t NO_AcScreenMenu_Selected[2];
-    uint16_t SongTrackCopy_TtlScreen_Window;
-    uint16_t field_0304;
-    uint16_t SngCpSureDisp_Parent;
-    uint16_t field_0308;
-    uint16_t SngCpSureDisp_Child;
-    uint16_t field_030c;
-    uint8_t NO_AcScreenMenu_2_Selected[2];
-    uint16_t Edit_TtlScreen_Window;
-    uint16_t field_0312;
-    uint16_t EdMenuPage_Page;
-    uint16_t SQEMENU_1_Parent;
-    uint16_t field_0318;
-    uint16_t SQEMENU_1_Child;
-    uint16_t field_031c;
-    uint8_t NoteEdit_AcTitleMenu_Selected[2];
-    uint8_t DrumEdit_AcTitleMenu_Selected[2];
-    uint8_t SongTrackCopy_AcTitleMenu_2_Selected[2];
-    uint8_t TrackClear_AcTitleMenu_Selected[2];
-    uint8_t TrackMerge_AcTitleMenu_Selected[2];
-    uint8_t Quantize_AcTitleMenu_Selected[2];
-    uint8_t Transpose_AcTitleMenu_Selected[2];
-    uint8_t VelocityChange_AcTitleMenu_Selected[2];
-    uint8_t NoteChange_AcTitleMenu_Selected[2];
-    uint8_t AdvanceDelay_AcTitleMenu_Selected[2];
-    uint16_t SQEMENU_2_Parent;
-    uint16_t field_0334;
-    uint16_t SQEMENU_2_Child;
-    uint16_t field_0338;
-    uint8_t Copy_AcTitleMenu_Selected[2];
-    uint8_t Erase_AcTitleMenu_Selected[2];
-    uint8_t Delete_AcTitleMenu_Selected[2];
-    uint8_t Insert_AcTitleMenu_Selected[2];
-    uint16_t NoteEdit_TtlScreen_Window;
-    uint16_t field_0344;
-    uint16_t NoteEdit_TtlScreen_2_Window;
-    uint16_t field_0348;
-    uint16_t CyclePlay_TtlScreen_2_Window;
-    uint16_t field_034c;
-    uint16_t CyclePlay_PsEditBox_4_Selected;
-    uint8_t CyclePlay_PsEditBox_5_Selected[2];
-    uint8_t CyclePlay_PsEditBox_6_Selected[2];
-    uint16_t DrumEdit_TtlScreen_Window;
-    uint16_t field_0356;
-    uint16_t DrumEdit_TtlScreen_2_Window;
-    uint16_t field_035a;
-    uint16_t CyclePlay_TtlScreen_3_Window;
-    uint16_t field_035e;
-    uint16_t CyclePlay_PsEditBox_7_Selected;
-    uint8_t CyclePlay_PsEditBox_8_Selected[2];
-    uint8_t CyclePlay_PsEditBox_9_Selected[2];
-    uint16_t TrackClear_TtlScreen_Window;
-    uint16_t field_0368;
-    uint16_t TrkClrSureDisp_Parent;
-    uint16_t field_036c;
-    uint16_t TrkClrSureDisp_Child;
-    uint16_t field_0370;
-    uint8_t NO_AcScreenMenu_3_Selected[2];
-    uint16_t TrackMerge_TtlScreen_Window;
-    uint16_t field_0376;
-    uint8_t TrackMerge_PsEditBox_Selected[2];
-    uint16_t TrackMerge_PsEditBox_2_Selected;
-    uint8_t TrackMerge_PsEditBox_3_Selected[2];
-    uint16_t TrkMrgSureDisp_Parent;
-    uint16_t field_0380;
-    uint16_t TrkMrgSureDisp_Child;
-    uint16_t field_0384;
-    uint8_t NO_AcScreenMenu_4_Selected[2];
-    uint16_t Quantize_TtlScreen_Window;
-    uint16_t field_038a;
-    uint8_t Quantize_PsEditBox_Selected[2];
-    uint8_t Quantize_PsEditBox_2_Selected[2];
-    uint16_t Quantize_PsEditBox_3_Selected;
-    uint8_t Quantize_PsEditBox_4_Selected[2];
-    uint8_t Quantize_PsEditBox_5_Selected[2];
-    uint8_t Quantize_PsEditBox_6_Selected[2];
-    uint16_t QtzSureDisp_Parent;
-    uint16_t field_039a;
-    uint16_t QtzSureDisp_Child;
-    uint16_t field_039e;
-    uint8_t NO_AcScreenMenu_5_Selected[2];
-    uint16_t Transpose_TtlScreen_Window;
-    uint16_t field_03a4;
-    uint8_t Transpose_PsEditBox_Selected[2];
-    uint16_t Transpose_PsEditBox_2_Selected;
-    uint8_t Transpose_PsEditBox_3_Selected[2];
-    uint8_t Transpose_PsEditBox_4_Selected[2];
-    uint16_t TrnsSureDisp_Parent;
-    uint16_t field_03b0;
-    uint16_t TrnsSureDisp_Child;
-    uint16_t field_03b4;
-    uint8_t NO_AcScreenMenu_6_Selected[2];
-    uint16_t VelocityChange_TtlScreen_Window;
-    uint16_t field_03ba;
-    uint8_t VelocityChange_PsEditBox_Selected[2];
-    uint16_t VelocityChange_PsEditBox_2_Selected;
-    uint8_t VelocityChange_PsEditBox_3_Selected[2];
-    uint8_t VelocityChange_PsEditBox_4_Selected[2];
-    uint16_t VeloSureDisp_Parent;
-    uint16_t field_03c6;
-    uint16_t VeloSureDisp_Child;
-    uint16_t field_03ca;
-    uint8_t NO_AcScreenMenu_7_Selected[2];
-    uint16_t NoteChange_TtlScreen_Window;
-    uint16_t field_03d0;
-    uint8_t NoteChange_PsEditBox_Selected[2];
-    uint16_t NoteChange_PsEditBox_2_Selected;
-    uint8_t NoteChange_PsEditBox_3_Selected[2];
-    uint8_t NoteChange_PsEditBox_4_Selected[2];
-    uint8_t NoteChange_PsEditBox_5_Selected[2];
-    uint16_t NoteSureDisp_Parent;
-    uint16_t field_03de;
-    uint16_t NoteSureDisp_Child;
-    uint16_t field_03e2;
-    uint8_t NO_AcScreenMenu_8_Selected[2];
-    uint16_t AdvanceDelay_TtlScreen_Window;
-    uint16_t field_03e8;
-    uint8_t AdvanceDelay_PsEditBox_Selected[2];
-    uint8_t AdvanceDelay_PsEditBox_2_Selected[2];
-    uint16_t AdvanceDelay_PsEditBox_3_Selected;
-    uint8_t AdvanceDelay_PsEditBox_4_Selected[2];
-    uint16_t AdvSureDisp_Parent;
-    uint16_t field_03f4;
-    uint16_t AdvSureDisp_Child;
-    uint16_t field_03f8;
-    uint8_t NO_AcScreenMenu_9_Selected[2];
-    uint16_t MeasureErase_TtlScreen_Window;
-    uint16_t field_03fe;
-    uint16_t MeasureErase_PsEditBox_Selected;
-    uint8_t MeasureErase_PsEditBox_2_Selected[2];
-    uint8_t MeasureErase_PsEditBox_3_Selected[2];
-    uint8_t MeasureErase_PsEditBox_4_Selected[2];
-    uint16_t MersSureDisp_Parent;
-    uint16_t field_040a;
-    uint16_t MersSureDisp_Child;
-    uint16_t field_040e;
-    uint8_t NO_AcScreenMenu_10_Selected[2];
-    uint16_t MeasureCopy_TtlScreen_Window;
-    uint16_t field_0414;
-    uint16_t McpSureDisp_Parent;
-    uint16_t field_0418;
-    uint16_t McpSureDisp_Child;
-    uint16_t field_041c;
-    uint8_t NO_AcScreenMenu_11_Selected[2];
-    uint16_t MeasureDelete_TtlScreen_Window;
-    uint16_t field_0422;
-    uint8_t MeasureDelete_PsEditBox_Selected[2];
-    uint8_t MeasureDelete_PsEditBox_2_Selected[2];
-    uint16_t MeasureDelete_PsEditBox_3_Selected;
-    uint16_t MdelSureDisp_Parent;
-    uint16_t field_042c;
-    uint16_t MdelSureDisp_Child;
-    uint16_t field_0430;
-    uint8_t NO_AcScreenMenu_12_Selected[2];
-    uint16_t MeasureInsert_TtlScreen_Window;
-    uint16_t field_0436;
-    uint16_t MinsSureDisp_Parent;
-    uint16_t field_043a;
-    uint16_t MinsSureDisp_Child;
-    uint16_t field_043e;
-    uint8_t NO_AcScreenMenu_13_Selected[2];
-    uint16_t MetronomeBalance_TtlScreen_Window;
-    uint16_t field_0444;
-    uint16_t EnterTainerScr_Window;
-    uint16_t field_0448;
-    uint16_t EnterTainerScr_AcEntertainerGridBox_Selrow;
-    uint16_t EnterTainerScr_AcEntertainerGridBox_Selcol;
-    uint16_t EnterTainerScr_AcEntertainerGridBox_Pcol;
-    uint16_t field_0450;
-    uint16_t EnterTainerScr_AcEntertainerGridBox_Prow;
-    uint16_t field_0454;
-    uint16_t EnterTainerScr_AcEntertainerGridBox_Crow;
-    uint16_t field_0458;
-    uint8_t pad_93[8];
-    uint8_t EnterTainerScr_AcFuncToggle_Onoff[2];
-    uint16_t HelpFunction_TtlScreen_Window;
-    uint16_t field_0466;
-    uint16_t HelpNotXWin_Parent;
-    uint16_t field_046a;
-    uint16_t HelpNotXWin_Child;
-    uint16_t field_046e;
-    uint16_t HelpNotXWin_AcIndexWideToggle_Onoff;
-    uint8_t HelpNotXWin_AcIndexWideToggle_2_Onoff[2];
-    uint8_t HelpNotXWin_AcIndexWideToggle_3_Onoff[2];
-    uint8_t HelpNotXWin_AcIndexWideToggle_4_Onoff[2];
-    uint16_t HelpXWin_Parent;
-    uint16_t field_047a;
-    uint16_t HelpXWin_Child;
-    uint16_t field_047e;
-    uint16_t HelpXWin_AcIndexWideToggle_Onoff;
-    uint8_t HelpXWin_AcIndexWideToggle_2_Onoff[2];
-    uint8_t HelpXWin_AcIndexWideToggle_3_Onoff[2];
-    uint16_t HelpSwTtl1Scr_Window;
-    uint16_t field_0488;
-    uint16_t HelpLang2P1_Parent;
-    uint16_t field_048c;
-    uint16_t HelpLang2P1_Child;
-    uint16_t field_0490;
-    uint16_t HelpLang2P2_Parent;
-    uint16_t field_0494;
-    uint16_t HelpLang2P2_Child;
-    uint16_t field_0498;
-    uint16_t HelpSwTtl2Scr_Window;
-    uint16_t field_049c;
-    uint16_t Help_P2_Page;
-    uint16_t HelpLang3P1_Parent;
-    uint16_t field_04a2;
-    uint16_t HelpLang3P1_Child;
-    uint16_t field_04a6;
-    uint16_t HelpLang3P2_Parent;
-    uint16_t field_04aa;
-    uint16_t HelpLang3P2_Child;
-    uint16_t field_04ae;
-    uint16_t HelpLang3P3_Parent;
-    uint16_t field_04b2;
-    uint16_t HelpLang3P3_Child;
-    uint16_t field_04b6;
-    uint16_t HelpSwTtl3Scr_Window;
-    uint16_t field_04ba;
-    uint16_t Help_P3_Page;
-    uint16_t HelpSwTtl4Scr_Window;
-    uint16_t field_04c0;
-    uint16_t Help_P4_Page;
-    uint16_t HelpLang4P1_Parent;
-    uint16_t field_04c6;
-    uint16_t HelpLang4P1_Child;
-    uint16_t field_04ca;
-    uint16_t HelpLang4P2_Parent;
-    uint16_t field_04ce;
-    uint16_t HelpLang4P2_Child;
-    uint16_t field_04d2;
-    uint16_t HelpLang4P3_Parent;
-    uint16_t field_04d6;
-    uint16_t HelpLang4P3_Child;
-    uint16_t field_04da;
-    uint16_t HelpLang4P4_Parent;
-    uint16_t field_04de;
-    uint16_t HelpLang4P4_Child;
-    uint16_t field_04e2;
-    naka_dispatch_t w3;  /* 0x20 */
-    uint16_t field_04fc;
-    uint16_t field_04fe;
-    uint8_t pad_96[8];  /* zero padding */
-    uint16_t field_0508;
-    uint8_t pad_97[2];  /* zero padding */
-    uint16_t field_050c;
-    uint16_t field_050e;
-    naka_label_t w4;  /* NAKA_TYPE_LABEL */
-    naka_menu_item_t w5;  /* NAKA_TYPE_MENU_ITEM */
-    naka_menu_item_t w6;  /* NAKA_TYPE_MENU_ITEM */
-    naka_menu_item_t w7;  /* NAKA_TYPE_MENU_ITEM */
-    naka_menu_item_t w8;  /* NAKA_TYPE_MENU_ITEM */
-    char w8_text[2];
-    char str_0[2];
-    char str_1[2];
-    uint16_t field_060e;
-    uint16_t field_0610;
-    uint8_t pad_98[70];  /* zero padding */
-    uint16_t field_0658;
-    uint8_t pad_99[70];  /* zero padding */
-    /* Naka_DrawbarOrgan_Screens: 18 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
-    uint32_t Naka_DrawbarOrgan_Screens[18];
-    uint16_t field_06e8;
-    uint8_t pad_100[12];  /* zero padding */
-    uint16_t field_06f6;
-    uint16_t field_06f8;
-    uint16_t field_06fa;
-    uint16_t field_06fc;
-    uint32_t ptr_06fe;
-    uint16_t field_0702;
-    uint16_t field_0704;
-    uint8_t pad_101[4];  /* zero padding */
-    uint16_t field_070a;
-    char str_2[2];
-    uint16_t field_070e;
-    uint16_t field_0710;
-    uint16_t field_0712;
-    uint8_t pad_102[5];  /* zero padding */
-    uint16_t field_0719;
-    uint16_t field_071b;
-    char str_3[2];
-    uint32_t NakaData_RomEnd_ptr_2;
-    uint8_t pad_103[1];
-    uint8_t EqualizerPresets_AcTitleMenu_Selected[2];
-    uint8_t ReverbEqualizerPresets_AcTitleMenu_Selected[2];
-    uint16_t R12OctaveSetting_Window;
-    uint16_t field_072a;
-    uint16_t R12OctaveSetting_AcLswEditBox_Selected;
-    uint8_t R12OctaveSetting_Octave_Value[2];
-    uint16_t ReverbPreset_Window;
-    uint16_t field_0732;
-    uint8_t HugeRoom_AcStrRadioBox_Selected[2];
-    uint8_t BoxRoom_AcStrRadioBox_Selected[2];
-    uint16_t SmallPlate_AcStrRadioBox_Selected;
-    uint8_t SportsHall_AcStrRadioBox_Selected[2];
-    uint8_t BrightHall_AcStrRadioBox_Selected[2];
-    uint8_t DarkConfines_AcStrRadioBox_Selected[2];
-    uint8_t Reflection_AcStrRadioBox_Selected[2];
-    uint8_t HighOpen_AcStrRadioBox_Selected[2];
-    uint8_t LeftToRight_AcStrRadioBox_Selected[2];
-    uint8_t Cavernous_AcStrRadioBox_Selected[2];
-    uint16_t EqualizerPreset_Window;
-    uint16_t field_074a;
-    uint8_t MakeUp_AcStrRadioBox_Selected[2];
-    uint8_t MiddleCut_AcStrRadioBox_Selected[2];
-    uint8_t TransistorRadio_AcStrRadioBox_Selected[2];
-    uint8_t TrebleBoost_AcStrRadioBox_Selected[2];
-    uint8_t TrebleCut_AcStrRadioBox_Selected[2];
-    uint16_t NoHiHat_AcStrRadioBox_Selected;
-    uint8_t TubbyBass_AcStrRadioBox_Selected[2];
-    uint8_t BassCut_AcStrRadioBox_Selected[2];
-    uint8_t TooBright_AcStrRadioBox_Selected[2];
-    uint8_t EqOnOffBox_Onoff[2];
-    uint16_t ReverbEqualizerPreset_Window;
-    uint16_t field_0762;
-    uint8_t WarmWide_AcStrRadioBox_Selected[2];
-    uint8_t InYourFace_AcStrRadioBox_Selected[2];
-    uint8_t OilTank_AcStrRadioBox_Selected[2];
-    uint8_t WarmPlate_AcStrRadioBox_Selected[2];
-    uint8_t LightShade_AcStrRadioBox_Selected[2];
-    uint8_t WarmFuzzy_AcStrRadioBox_Selected[2];
-    uint8_t IceBox_AcStrRadioBox_Selected[2];
-    uint16_t Stadium_AcStrRadioBox_Selected;
-    uint8_t LiveRoom_AcStrRadioBox_Selected[2];
-    uint8_t RevEqOnOffBox_Onoff[2];
-    uint16_t MidiMenu_Window;
-    uint16_t field_077a;
-    uint16_t MdmenuPage_Page;
-    uint16_t MidiMenuPage1_Parent;
-    uint16_t field_0780;
-    uint16_t MidiMenuPage1_Child;
-    uint16_t field_0784;
-    uint8_t PartSetting_AcTitleMenu_Selected[2];
-    uint8_t ControlMessages_AcTitleMenu_Selected[2];
-    uint8_t RealtimeMessages_AcTitleMenu_Selected[2];
-    uint8_t CommonSetting_AcTitleMenu_Selected[2];
-    uint8_t InputOutputSetting_AcTitleMenu_Selected[2];
-    uint8_t MidiPresets_AcTitleMenu_Selected[2];
-    uint8_t SysexBulkDump_AcTitleMenu_Selected[2];
-    uint8_t GeneralMidi_AcTitleMenu_Selected[2];
-    uint8_t ProgChangeMidiOut_AcTitleMenu_Selected[2];
-    uint8_t PMemOutput_AcTitleMenu_Selected[2];
-    uint16_t MidiMenuPage2_Parent;
-    uint16_t field_079c;
-    uint16_t MidiMenuPage2_Child;
-    uint16_t field_07a0;
-    uint8_t ComputerConnection_AcTitleMenu_Selected[2];
-    uint8_t MidiSettingsLoadOption_AcTitleMenu_Selected[2];
-    uint16_t MidiPartSetting_Window;
-    uint16_t field_07a8;
-    uint16_t MdPartSetGridBox_Selrow;
-    uint16_t MdPartSetGridBox_Selcol;
-    uint16_t MdPartSetGridBox_Pcol;
-    uint16_t field_07b0;
-    uint16_t MdPartSetGridBox_Prow;
-    uint16_t field_07b4;
-    uint16_t MdPartSetGridBox_Crow;
-    uint16_t field_07b8;
-    uint8_t MdPartSetGridBox_Page[2];
-    uint16_t MidiControlMessage_Window;
-    uint16_t field_07be;
-    uint16_t MidiControlMessage_PsPageBox_Page;
-    uint16_t CtlMsgGridBox_Selrow;
-    uint16_t CtlMsgGridBox_Selcol;
-    uint16_t CtlMsgGridBox_Pcol;
-    uint16_t field_07c8;
-    uint16_t CtlMsgGridBox_Prow;
-    uint16_t field_07cc;
-    uint16_t CtlMsgGridBox_Crow;
-    uint16_t field_07d0;
-    uint8_t CtlMsgGridBox_Page[2];
-    uint16_t MidiRealtimeMessage_Window;
-    uint16_t field_07d6;
-    uint16_t RealtimeCommandBox_Selected;
-    uint8_t RealtimeCommandBox_Value[2];
-    uint8_t ClockBox_Selected[2];
-    uint8_t ClockBox_Value[2];
-    uint16_t MidiCommonSetting_Window;
-    uint16_t field_07e2;
-    uint8_t ComSetGridBox_Selrow[2];
-    uint16_t ComSetGridBox_Selcol;
-    uint16_t ComSetGridBox_Pcol;
-    uint16_t field_07ea;
-    uint16_t ComSetGridBox_Prow;
-    uint16_t field_07ee;
-    uint16_t ComSetGridBox_Crow;
-    uint16_t field_07f2;
-    uint16_t MidiInOutSetting_Window;
-    uint16_t field_07f6;
-    uint8_t InOutGridBox_Selrow[2];
-    uint16_t InOutGridBox_Selcol;
-    uint16_t InOutGridBox_Pcol;
-    uint16_t field_07fe;
-    uint16_t InOutGridBox_Prow;
-    uint16_t field_0802;
-    uint16_t InOutGridBox_Crow;
-    uint16_t field_0806;
-    uint16_t MidiPresets_Window;
-    uint16_t field_080a;
-    uint16_t MdPresetPageBox_Page;
-    uint16_t MidiPresetSlaveWithout_Parent;
-    uint16_t field_0810;
-    uint16_t MidiPresetSlaveWithout_Child;
-    uint16_t field_0814;
-    uint8_t MpstSlaveWithoutList_Selected[2];
-    uint16_t MidiPresetSlaveWith_Parent;
-    uint16_t field_081a;
-    uint16_t MidiPresetSlaveWith_Child;
-    uint16_t field_081e;
-    uint8_t MpstSlaveWithList_Selected[2];
-    uint16_t MidiPresetPage3_Parent;
-    uint16_t field_0824;
-    uint16_t MidiPresetPage3_Child;
-    uint16_t field_0828;
-    uint8_t MdPresetUserLoadList_Selected[2];
-    uint16_t MidiPresetPage4_Parent;
-    uint16_t field_082e;
-    uint16_t MidiPresetPage4_Child;
-    uint16_t field_0832;
-    uint8_t MdPresetUserWriteList_Selected[2];
-    uint8_t MdpstSplitBox_Onoff[2];
-    uint16_t MidiPresetMasterWithout_Parent;
-    uint16_t field_083a;
-    uint16_t MidiPresetMasterWithout_Child;
-    uint16_t field_083e;
-    uint8_t MpstMasterWithoutList_Selected[2];
-    uint16_t MidiPresetMasterWith_Parent;
-    uint16_t field_0844;
-    uint16_t MidiPresetMasterWith_Child;
-    uint16_t field_0848;
-    uint8_t MpstMasterWithList_Selected[2];
-    uint16_t MidiExclusive_Window;
-    uint16_t field_084e;
-    uint8_t ExcListBox_Selected[2];
-    uint16_t ExcSendWindow_Parent;
-    uint16_t field_0854;
-    uint16_t ExcSendWindow_Child;
-    uint16_t field_0858;
-    uint8_t ExcSendPmemBox_Selected[2];
-    uint8_t ExcSendPmemBox_Value[4];
-    uint8_t ExcSendSmemBox_Selected[2];
-    uint8_t ExcSendSmemBox_Value[4];
-    uint8_t ExcSendCmpBox_Selected[2];
-    uint8_t ExcSendCmpBox_Value[4];
-    uint8_t ExcSendSeqBox_Selected[2];
-    uint8_t ExcSendSeqBox_Value[4];
-    uint8_t ExcSendMspBox_Selected[2];
-    uint8_t ExcSendMspBox_Value[4];
-    uint8_t ExcSendDotBox_Value[4];
-    uint16_t ExcRcvWindow_Parent;
-    uint16_t field_087e;
-    uint16_t ExcRcvWindow_Child;
-    uint16_t field_0882;
-    uint8_t ExcRcvPmemBox_Selected[2];
-    uint8_t ExcRcvPmemBox_Value[4];
-    uint8_t ExcRcvSmemBox_Selected[2];
-    uint8_t ExcRcvSmemBox_Value[4];
-    uint8_t ExcRcvCmpBox_Selected[2];
-    uint8_t ExcRcvCmpBox_Value[4];
-    uint8_t ExcRcvSeqBox_Selected[2];
-    uint8_t ExcRcvSeqBox_Value[4];
-    uint8_t ExcRcvMspBox_Selected[2];
-    uint8_t ExcRcvMspBox_Value[4];
-    uint8_t ExcRcvDotBox_Value[4];
-    uint16_t MidiGmMode_Window;
-    uint16_t field_08a8;
-    uint16_t GMOnOffBox_Selected;
-    uint8_t GMOnOffBox_Onoff[2];
-    uint16_t GMONSure_Parent;
-    uint16_t field_08b0;
-    uint16_t GMONSure_Child;
-    uint16_t field_08b4;
-    uint16_t GMOFFSure_Parent;
-    uint16_t field_08b8;
-    uint16_t GMOFFSure_Child;
-    uint16_t field_08bc;
-    uint16_t MidiPcgOutput_Window;
-    uint16_t field_08c0;
-    uint8_t PcgOutGridBox_Selrow[2];
-    uint16_t PcgOutGridBox_Selcol;
-    uint16_t PcgOutGridBox_Pcol;
-    uint16_t field_08c8;
-    uint16_t PcgOutGridBox_Prow;
-    uint16_t field_08cc;
-    uint16_t PcgOutGridBox_Crow;
-    uint16_t field_08d0;
-    uint16_t field_08d2;
-    uint16_t MidiComputerConnection_Window;
-    uint16_t field_08d6;
-    uint16_t MidiComputerConnection_AcLswEditBox_Selected;
-    uint8_t MidiComputerConnection_Mode_Value[2];
-    uint16_t MidiPanelMemoryOutput_Window;
-    uint16_t field_08de;
-    uint8_t PmemOutLeft_Selrow[2];
-    uint16_t PmemOutLeft_Selcol;
-    uint16_t PmemOutLeft_Pcol;
-    uint16_t field_08e6;
-    uint16_t PmemOutLeft_Prow;
-    uint16_t field_08ea;
-    uint16_t PmemOutLeft_Crow;
-    uint16_t field_08ee;
-    uint16_t PmemOutRight_Selrow;
-    uint16_t PmemOutRight_Selcol;
-    uint16_t PmemOutRight_Pcol;
-    uint16_t field_08f6;
-    uint16_t PmemOutRight_Prow;
-    uint16_t field_08fa;
-    uint16_t PmemOutRight_Crow;
-    uint16_t field_08fe;
-    uint16_t MidiSetup_Window;
-    uint16_t field_0902;
-    uint16_t MdSetOptGridBox_Selrow;
-    uint16_t MdSetOptGridBox_Selcol;
-    uint16_t MdSetOptGridBox_Pcol;
-    uint16_t field_090a;
-    uint16_t MdSetOptGridBox_Prow;
-    uint16_t field_090e;
-    uint16_t MdSetOptGridBox_Crow;
-    uint16_t field_0912;
-    uint16_t EntertainerVocal_Window;
-    uint16_t field_0916;
-    uint16_t VocalistPage_Page;
-    uint16_t VocalistPage1_Parent;
-    uint16_t field_091c;
-    uint16_t VocalistPage1_Child;
-    uint16_t field_0920;
-    uint8_t VocalistListBox_Selected[2];
-    uint8_t HarmOnOffBox_Onoff[2];
-    uint16_t VocalistPage2_Parent;
-    uint16_t field_0928;
-    uint16_t VocalistPage2_Child;
-    uint16_t field_092c;
-    uint16_t VocalistPage2Box_Selrow;
-    uint16_t VocalistPage2Box_Selcol;
-    uint16_t VocalistPage2Box_Pcol;
-    uint16_t field_0934;
-    uint16_t VocalistPage2Box_Prow;
-    uint16_t field_0938;
-    uint16_t VocalistPage2Box_Crow;
-    uint16_t field_093c;
-    uint16_t EntertainerFade_Window;
-    uint16_t field_0940;
-    uint16_t FadeInOutGridBox_Selrow;
-    uint16_t FadeInOutGridBox_Selcol;
-    uint16_t FadeInOutGridBox_Pcol;
-    uint16_t field_0948;
-    uint16_t FadeInOutGridBox_Prow;
-    uint16_t field_094c;
-    uint16_t FadeInOutGridBox_Crow;
-    uint16_t field_0950;
-    uint16_t SplitSetting_Window;
-    uint16_t field_0954;
-    uint8_t SplitSetting_AcLswBox_Value[2];
-    uint16_t field_0958;
-    uint16_t field_095a;
-    uint8_t pad_133[2];  /* zero padding */
-    uint16_t field_095e;
-    uint16_t field_0960;
-    uint16_t field_0962;
-    uint8_t pad_134[2];  /* zero padding */
-    uint16_t field_0966;
-    uint16_t field_0968;
-    uint16_t field_096a;
-    uint16_t field_096c;
-    uint16_t field_096e;
-    uint16_t field_0970;
-    uint16_t field_0972;
-    uint8_t pad_135[4];  /* zero padding */
-    uint16_t field_0978;
-    uint8_t pad_136[2];  /* zero padding */
-    uint16_t field_097c;
-    uint8_t pad_137[2];  /* zero padding */
-    uint16_t field_0980;
-    uint16_t field_0982;
-    uint32_t ptr_0984;
-    uint16_t field_0988;
-    uint16_t field_098a;
-    uint16_t Sdmenu_Window;
-    uint16_t field_098e;
-    uint16_t field_0990;
-    uint16_t field_0992;
-    uint16_t field_0994;
-    uint16_t field_0996;
-    uint16_t field_0998;
-    uint8_t pad_138[20];  /* zero padding */
-    uint16_t field_09ae;
-    uint16_t field_09b0;
-    uint16_t field_09b2;
-    uint16_t field_09b4;
-    uint8_t pad_139[4];  /* zero padding */
-    uint16_t Sdpart_Window;
-    uint16_t field_09bc;
-    uint8_t VOL_AcStrRadioBox_Selected[2];
-    uint8_t PAN_AcStrRadioBox_Selected[2];
-    uint8_t Sdpart_AcStrRadioBox_Selected[2];
-    uint8_t SUS_AcStrRadioBox_Selected[2];
-    uint8_t KEY_AcStrRadioBox_Selected[2];
-    uint8_t TUN_AcStrRadioBox_Selected[2];
-    uint8_t BND_AcStrRadioBox_Selected[2];
-    uint8_t OTH_AcStrRadioBox_Selected[2];
-    uint16_t SdpartMain_Parent;
-    uint16_t field_09d0;
-    uint16_t SdpartMain_Child;
-    uint16_t field_09d4;
-    uint8_t SdpartMain_AcLswPartEditBox_Selected[2];
-    uint8_t SdpartMain_Pan_Value[2];
-    uint8_t SdpartMain_AcLswPartEditBox_2_Selected[2];
-    uint8_t SdpartMain_RevDepth_Value[2];
-    uint8_t SdpartMain_AcLswPartEditBox_3_Selected[2];
-    uint8_t SdpartMain_DspEffect_Value[2];
-    uint8_t SdpartMain_AcLswPartEditBox_4_Selected[2];
-    uint8_t SdpartMain_DigEffect_Value[2];
-    uint8_t SdpartMain_AcLswPartEditBox_5_Selected[2];
-    uint8_t SdpartMain_Sustain_Value[2];
-    uint8_t SdpartMain_AcLswPartEditBox_6_Selected[2];
-    uint8_t SdpartMain_SusLength_Value[2];
-    uint8_t SdpartMain_AcLswPartEditBox_7_Selected[2];
-    uint8_t SdpartMain_KeyShift_Value[2];
-    uint8_t SdpartMain_AcLswPartEditBox_8_Selected[2];
-    uint8_t SdpartMain_Tuning_Value[2];
-    uint8_t SdpartMain_AcLswPartEditBox_9_Selected[2];
-    uint8_t SdpartMain_BendRange_Value[2];
-    uint8_t SdpartMain_AcLswPartEditBox_10_Selected[2];
-    uint8_t SdpartMain_GlidePedal_Value[2];
-    uint8_t SdpartMain_AcLswPartEditBox_11_Selected[2];
-    uint8_t SdpartMain_SustPedal_Value[2];
-    uint8_t SdpartMain_AcVolPartEditBox_Selected[2];
-    uint8_t SdpartMain_Volume_Value[2];
-    uint16_t SdpartVol_Parent;
-    uint16_t field_0a08;
-    uint16_t SdpartVol_Child;
-    uint16_t field_0a0c;
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint32_t font;
+    uint32_t stron;
+    uint32_t stroff;
+    uint32_t onoff;
+    uint16_t editsw;
+    uint16_t index;
+    uint16_t tag;
+} Root_NamingSymbolToggleView_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint32_t font;
+    uint32_t stron;
+    uint32_t stroff;
+    uint32_t onoff;
+    uint16_t editsw;
+    uint16_t index;
+    uint16_t tag;
+} Root_NamingLowerCaseToggleView_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint32_t font;
+    uint32_t stron;
+    uint32_t stroff;
+    uint32_t onoff;
+    uint16_t editsw;
+    uint16_t index;
+    uint16_t tag;
+} Root_NamingUpperCaseToggleView_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t PanelSimulator_Window;
+    uint16_t CheckTitle_AcTitleMenu_Selected;
+    uint16_t DebugWindow_AcWindowMenu_Selected;
+    uint32_t ClipBoard_Window;
+    uint32_t DebugWindow_Parent;
+    uint32_t DebugWindow_Child;
+    uint16_t DebugWindow_DbDebugMenu_Selected;
+    uint16_t DebugWindow_DbDebugMenu_Page;
+    uint32_t NamingWindow_Parent;
+    uint32_t NamingWindow_Child;
+    uint16_t NamingCursorBox_Cursor;
+    uint16_t NamingABC_OnOff;
+    uint16_t Namingabc_OnOff;
+    uint16_t NamingSymbol_OnOff;
+    uint32_t MemoWindow_Parent;
+    uint32_t MemoWindow_Child;
+    uint32_t TrackSwitchWindow_Parent;
+    uint32_t TrackSwitchWindow_Child;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_2_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_2_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_2_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_3_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_3_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_3_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_4_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_4_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_4_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_5_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_5_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_5_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_6_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_6_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_6_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_7_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_7_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_7_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_8_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_8_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_8_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_9_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_9_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_9_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_10_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_10_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_10_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_11_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_11_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_11_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_12_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_12_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_12_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_13_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_13_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_13_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_14_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_14_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_14_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_15_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_15_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_15_RecPlay;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_16_OnOff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_16_Part;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_16_RecPlay;
+    uint32_t MemDumpWindow_Parent;
+    uint32_t MemDumpWindow_Child;
+    uint32_t MemDumpWindow_DbMemoryDump_Adr;
+    uint32_t CheckTitle_Window;
+    uint16_t Naming_AcScreenMenu_Selected;
+    uint16_t Wall_AcScreenMenu_Selected;
+    uint32_t CheckNaming_Window;
+    uint32_t CheckWall_Window;
+} Root_DebugNamingWorkCells_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t Sdmenu_Window;
+    uint16_t SdmenuPage_Page;
+    uint32_t Sdmenu1_Parent;
+    uint32_t Sdmenu1_Child;
+    uint16_t PartSetting_AcTitleMenu_Selected;
+    uint16_t Mixer_AcTitleMenu_Selected;
+    uint16_t MasterTuning_AcTitleMenu_Selected;
+    uint16_t KeyScaling_AcTitleMenu_Selected;
+    uint16_t ReverbEqPresets_AcTitleMenu_Selected;
+    uint16_t Reverb_AcTitleMenu_Selected;
+    uint16_t Equalizer_AcTitleMenu_Selected;
+    uint16_t DspEffect_AcTitleMenu_Selected;
+    uint16_t AcousticIllusion_AcTitleMenu_Selected;
+    uint16_t SoundEdit_AcSndEMenu_Selected;
+    uint32_t Sdmenu2_Parent;
+    uint32_t Sdmenu2_Child;
+    uint16_t LeftHold_AcTitleMenu_Selected;
+    uint16_t TechniChord_AcTitleMenu_Selected;
+    uint32_t Sdpart_Window;
+    uint16_t VOL_AcStrRadioBox_Selected;
+    uint16_t PAN_AcStrRadioBox_Selected;
+    uint16_t Sdpart_AcStrRadioBox_Selected;
+    uint16_t SUS_AcStrRadioBox_Selected;
+    uint16_t KEY_AcStrRadioBox_Selected;
+    uint16_t TUN_AcStrRadioBox_Selected;
+    uint16_t BND_AcStrRadioBox_Selected;
+    uint16_t OTH_AcStrRadioBox_Selected;
+    uint32_t SdpartMain_Parent;
+    uint32_t SdpartMain_Child;
+    uint16_t SdpartMain_AcLswPartEditBox_Selected;
+    uint16_t SdpartMain_AcLswPartEditBox_Value;
+    uint16_t SdpartMain_AcLswPartEditBox_2_Selected;
+    uint16_t SdpartMain_AcLswPartEditBox_2_Value;
+    uint16_t SdpartMain_AcLswPartEditBox_3_Selected;
+    uint16_t SdpartMain_AcLswPartEditBox_3_Value;
+    uint16_t SdpartMain_AcLswPartEditBox_4_Selected;
+    uint16_t SdpartMain_AcLswPartEditBox_4_Value;
+    uint16_t SdpartMain_AcLswPartEditBox_5_Selected;
+    uint16_t SdpartMain_AcLswPartEditBox_5_Value;
+    uint16_t SdpartMain_AcLswPartEditBox_6_Selected;
+    uint16_t SdpartMain_AcLswPartEditBox_6_Value;
+    uint16_t SdpartMain_AcLswPartEditBox_7_Selected;
+    uint16_t SdpartMain_AcLswPartEditBox_7_Value;
+    uint16_t SdpartMain_AcLswPartEditBox_8_Selected;
+    uint16_t SdpartMain_AcLswPartEditBox_8_Value;
+    uint16_t SdpartMain_AcLswPartEditBox_9_Selected;
+    uint16_t SdpartMain_AcLswPartEditBox_9_Value;
+    uint16_t SdpartMain_AcLswPartEditBox_10_Selected;
+    uint16_t SdpartMain_AcLswPartEditBox_10_Value;
+    uint16_t SdpartMain_AcLswPartEditBox_11_Selected;
+    uint16_t SdpartMain_AcLswPartEditBox_11_Value;
+    uint16_t SdpartMain_AcVolPartEditBox_Selected;
+    uint16_t SdpartMain_AcVolPartEditBox_Value;
+    uint32_t SdpartVol_Parent;
+    uint32_t SdpartVol_Child;
     uint16_t SdpartVol_AcVolPartEditBox_Selected;
-    uint8_t SdpartVol_Volume_Value[2];
-    uint16_t SdpartPan_Parent;
-    uint16_t field_0a14;
-    uint16_t SdpartPan_Child;
-    uint16_t field_0a18;
+    uint16_t SdpartVol_AcVolPartEditBox_Value;
+    uint32_t SdpartPan_Parent;
+    uint32_t SdpartPan_Child;
     uint16_t SdpartPan_AcLswPartEditBox_Selected;
-    uint8_t SdpartPan_Pan_Value[2];
-    uint8_t SdpartPan_AcLswPartPan_Value[2];
-    uint16_t SdpartEff_Parent;
-    uint16_t field_0a22;
-    uint16_t SdpartEff_Child;
-    uint16_t field_0a26;
+    uint16_t SdpartPan_AcLswPartEditBox_Value;
+    uint16_t SdpartPan_AcLswPartPan_Value;
+    uint32_t SdpartEff_Parent;
+    uint32_t SdpartEff_Child;
     uint16_t SdpartEff_AcLswPartEditBox_Selected;
-    uint8_t SdpartEff_ReverbDepth_Value[2];
-    uint8_t SdpartEff_AcLswPartEditBox_2_Selected[2];
-    uint8_t SdpartEff_DspEffect_Value[2];
-    uint8_t SdpartEff_AcLswPartEditBox_3_Selected[2];
-    uint8_t SdpartEff_DigitalEff_Value[2];
-    uint16_t SdpartSus_Parent;
-    uint16_t field_0a36;
-    uint16_t SdpartSus_Child;
-    uint16_t field_0a3a;
+    uint16_t SdpartEff_AcLswPartEditBox_Value;
+    uint16_t SdpartEff_AcLswPartEditBox_2_Selected;
+    uint16_t SdpartEff_AcLswPartEditBox_2_Value;
+    uint16_t SdpartEff_AcLswPartEditBox_3_Selected;
+    uint16_t SdpartEff_AcLswPartEditBox_3_Value;
+    uint32_t SdpartSus_Parent;
+    uint32_t SdpartSus_Child;
     uint16_t SdpartSus_AcLswPartEditBox_Selected;
-    uint8_t SdpartSus_SustainOnOff_Value[2];
-    uint8_t SdpartSus_AcLswPartEditBox_2_Selected[2];
-    uint8_t SdpartSus_SustainLength_Value[2];
-    uint16_t SdpartKey_Parent;
-    uint16_t field_0a46;
-    uint16_t SdpartKey_Child;
-    uint16_t field_0a4a;
+    uint16_t SdpartSus_AcLswPartEditBox_Value;
+    uint16_t SdpartSus_AcLswPartEditBox_2_Selected;
+    uint16_t SdpartSus_AcLswPartEditBox_2_Value;
+    uint32_t SdpartKey_Parent;
+    uint32_t SdpartKey_Child;
     uint16_t SdpartKey_AcLswPartEditBox_Selected;
-    uint8_t SdpartKey_KeyShift_Value[2];
-    uint16_t SdpartTun_Parent;
-    uint16_t field_0a52;
-    uint16_t SdpartTun_Child;
-    uint16_t field_0a56;
+    uint16_t SdpartKey_AcLswPartEditBox_Value;
+    uint32_t SdpartTun_Parent;
+    uint32_t SdpartTun_Child;
     uint16_t SdpartTun_AcLswPartEditBox_Selected;
-    uint8_t SdpartTun_Tuning_Value[2];
-    uint16_t SdpartBnd_Parent;
-    uint16_t field_0a5e;
-    uint16_t SdpartBnd_Child;
-    uint16_t field_0a62;
+    uint16_t SdpartTun_AcLswPartEditBox_Value;
+    uint32_t SdpartBnd_Parent;
+    uint32_t SdpartBnd_Child;
     uint16_t SdpartBnd_AcLswPartEditBox_Selected;
-    uint8_t SdpartBnd_PitchBendRange_Value[2];
-    uint16_t SdpartOth_Parent;
-    uint16_t field_0a6a;
-    uint16_t SdpartOth_Child;
-    uint16_t field_0a6e;
+    uint16_t SdpartBnd_AcLswPartEditBox_Value;
+    uint32_t SdpartOth_Parent;
+    uint32_t SdpartOth_Child;
     uint16_t SdpartOth_AcLswPartEditBox_Selected;
-    uint8_t SdpartOth_GlidePedal_Value[2];
-    uint8_t SdpartOth_AcLswPartEditBox_2_Selected[2];
-    uint8_t SdpartOth_SustainPdl_Value[2];
-    uint8_t SdpartOth_AcLswPartEditBox_3_Selected[2];
-    uint8_t SdpartOth_AfterTouch_Value[2];
-    uint8_t SdpartOth_AcLswPartEditBox_4_Selected[2];
-    uint8_t SdpartOth_KeyScaling_Value[2];
-    uint8_t SdpartOth_AcLswPartEditBox_5_Selected[2];
-    uint8_t SdpartOth_PartExpPdl_Value[2];
-    uint16_t Sdmtune_Window;
-    uint16_t field_0a86;
+    uint16_t SdpartOth_AcLswPartEditBox_Value;
+    uint16_t SdpartOth_AcLswPartEditBox_2_Selected;
+    uint16_t SdpartOth_AcLswPartEditBox_2_Value;
+    uint16_t SdpartOth_AcLswPartEditBox_3_Selected;
+    uint16_t SdpartOth_AcLswPartEditBox_3_Value;
+    uint16_t SdpartOth_AcLswPartEditBox_4_Selected;
+    uint16_t SdpartOth_AcLswPartEditBox_4_Value;
+    uint16_t SdpartOth_AcLswPartEditBox_5_Selected;
+    uint16_t SdpartOth_AcLswPartEditBox_5_Value;
+    uint32_t Sdmtune_Window;
     uint16_t Sdmtune_AcLswEditBox_Selected;
-    uint8_t Sdmtune_MasterTuning_Value[2];
-    uint16_t Sdscltyp_Window;
-    uint16_t field_0a8e;
+    uint16_t Sdmtune_AcLswEditBox_Value;
+    uint32_t Sdscltyp_Window;
     uint16_t SdscltypPage_Page;
-    uint16_t Sdscltyp1_Parent;
-    uint16_t field_0a94;
-    uint16_t Sdscltyp1_Child;
-    uint16_t field_0a98;
+    uint32_t Sdscltyp1_Parent;
+    uint32_t Sdscltyp1_Child;
     uint16_t ScalingType_Selected;
-    uint8_t ScalingType_Value[2];
-    uint8_t Sdscltyp1_AcLswEditBox_Selected[2];
-    uint8_t Sdscltyp1_ScalingShift_Value[2];
-    uint8_t Sdscltyp1_AcLswBox_Value[2];
-    uint8_t Sdscltyp1_AcLswEditBox_2_Selected[2];
-    uint8_t Sdscltyp1_ScalingMode_Value[2];
-    uint16_t Sdscltyp2_Parent;
-    uint16_t field_0aaa;
-    uint16_t Sdscltyp2_Child;
-    uint16_t field_0aae;
+    uint16_t ScalingType_Value;
+    uint16_t Sdscltyp1_AcLswEditBox_Selected;
+    uint16_t Sdscltyp1_AcLswEditBox_Value;
+    uint16_t Sdscltyp1_AcLswBox_Value;
+    uint16_t Sdscltyp1_AcLswEditBox_2_Selected;
+    uint16_t Sdscltyp1_AcLswEditBox_2_Value;
+    uint32_t Sdscltyp2_Parent;
+    uint32_t Sdscltyp2_Child;
     uint16_t ScalingKey1_Selected;
-    uint8_t ScalingKey1_Value[2];
-    uint8_t ScalingKey2_Selected[2];
-    uint8_t ScalingKey2_Value[2];
-    uint8_t ScalingKey3_Selected[2];
-    uint8_t ScalingKey3_Value[2];
-    uint8_t ScalingKey4_Selected[2];
-    uint8_t ScalingKey4_Value[2];
-    uint8_t ScalingKey5_Selected[2];
-    uint8_t ScalingKey5_Value[2];
-    uint8_t ScalingKey6_Selected[2];
-    uint8_t ScalingKey6_Value[2];
-    uint8_t ScalingKey7_Selected[2];
-    uint8_t ScalingKey7_Value[2];
-    uint8_t ScalingKey8_Selected[2];
-    uint8_t ScalingKey8_Value[2];
-    uint8_t ScalingKey9_Selected[2];
-    uint8_t ScalingKey9_Value[2];
-    uint8_t ScalingKey10_Selected[2];
-    uint8_t ScalingKey10_Value[2];
-    uint8_t ScalingKey11_Selected[2];
-    uint8_t ScalingKey11_Value[2];
-    uint8_t ScalingKey12_Selected[2];
-    uint8_t ScalingKey12_Value[2];
-    uint16_t Sdlfthld_Window;
-    uint16_t field_0ae2;
+    uint16_t ScalingKey1_Value;
+    uint16_t ScalingKey2_Selected;
+    uint16_t ScalingKey2_Value;
+    uint16_t ScalingKey3_Selected;
+    uint16_t ScalingKey3_Value;
+    uint16_t ScalingKey4_Selected;
+    uint16_t ScalingKey4_Value;
+    uint16_t ScalingKey5_Selected;
+    uint16_t ScalingKey5_Value;
+    uint16_t ScalingKey6_Selected;
+    uint16_t ScalingKey6_Value;
+    uint16_t ScalingKey7_Selected;
+    uint16_t ScalingKey7_Value;
+    uint16_t ScalingKey8_Selected;
+    uint16_t ScalingKey8_Value;
+    uint16_t ScalingKey9_Selected;
+    uint16_t ScalingKey9_Value;
+    uint16_t ScalingKey10_Selected;
+    uint16_t ScalingKey10_Value;
+    uint16_t ScalingKey11_Selected;
+    uint16_t ScalingKey11_Value;
+    uint16_t ScalingKey12_Selected;
+    uint16_t ScalingKey12_Value;
+    uint32_t Sdlfthld_Window;
     uint16_t Sdlfthld_AcLswEditBox_Selected;
-    uint8_t Sdlfthld_LeftHold_Value[2];
-    uint16_t Sdmixer_Window;
-    uint16_t field_0aea;
+    uint16_t Sdlfthld_AcLswEditBox_Value;
+    uint32_t Sdmixer_Window;
     uint16_t Sdmixer_AcResetPage_Page;
-    uint16_t field_0aee;
-    uint16_t field_0af0;
+    uint32_t Sdtecd_Window;
     uint16_t SdtecdPage_Page;
-    uint16_t Sdtecd1_Parent;
-    uint16_t field_0af6;
-    uint16_t Sdtecd1_Child;
-    uint16_t field_0afa;
-    uint8_t TcClose_Selected[2];
-    uint16_t TcClose_Dialfocus;
-    uint8_t TcOpen1_Selected[2];
-    uint8_t TcOpen1_Dialfocus[2];
-    uint8_t TcOpen2_Selected[2];
-    uint8_t TcOpen2_Dialfocus[2];
-    uint8_t TcDuet1_Selected[2];
-    uint8_t TcDuet1_Dialfocus[2];
-    uint8_t TcDuet2_Selected[2];
-    uint8_t TcDuet2_Dialfocus[2];
-    uint8_t TcCountry_Selected[2];
-    uint8_t TcCountry_Dialfocus[2];
-    uint8_t TcTheatre_Selected[2];
-    uint8_t TcTheatre_Dialfocus[2];
-    uint8_t TcHymn_Selected[2];
-    uint8_t TcHymn_Dialfocus[2];
-    uint8_t TcBigBandBrass_Selected[2];
-    uint8_t TcBigBandBrass_Dialfocus[2];
-    uint8_t TcBigBandReeds_Selected[2];
-    uint8_t TcBigBandReeds_Dialfocus[2];
-    uint8_t TcOctave_Selected[2];
-    uint8_t TcOctave_Dialfocus[2];
-    uint8_t TcBlock_Selected[2];
-    uint8_t TcBlock_Dialfocus[2];
-    uint8_t TcHardRock_Selected[2];
-    uint8_t TcHardRock_Dialfocus[2];
-    uint8_t TcFanfare_Selected[2];
-    uint8_t TcFanfare_Dialfocus[2];
-    uint16_t Sdtecd2_Parent;
-    uint16_t field_0b36;
-    uint16_t Sdtecd2_Child;
-    uint16_t field_0b3a;
+    uint32_t Sdtecd1_Parent;
+    uint32_t Sdtecd1_Child;
+    uint16_t TcClose_Selected;
+    uint16_t TcClose_DialFocus;
+    uint16_t TcOpen1_Selected;
+    uint16_t TcOpen1_DialFocus;
+    uint16_t TcOpen2_Selected;
+    uint16_t TcOpen2_DialFocus;
+    uint16_t TcDuet1_Selected;
+    uint16_t TcDuet1_DialFocus;
+    uint16_t TcDuet2_Selected;
+    uint16_t TcDuet2_DialFocus;
+    uint16_t TcCountry_Selected;
+    uint16_t TcCountry_DialFocus;
+    uint16_t TcTheatre_Selected;
+    uint16_t TcTheatre_DialFocus;
+    uint16_t TcHymn_Selected;
+    uint16_t TcHymn_DialFocus;
+    uint16_t TcBigBandBrass_Selected;
+    uint16_t TcBigBandBrass_DialFocus;
+    uint16_t TcBigBandReeds_Selected;
+    uint16_t TcBigBandReeds_DialFocus;
+    uint16_t TcOctave_Selected;
+    uint16_t TcOctave_DialFocus;
+    uint16_t TcBlock_Selected;
+    uint16_t TcBlock_DialFocus;
+    uint16_t TcHardRock_Selected;
+    uint16_t TcHardRock_DialFocus;
+    uint16_t TcFanfare_Selected;
+    uint16_t TcFanfare_DialFocus;
+    uint32_t Sdtecd2_Parent;
+    uint32_t Sdtecd2_Child;
     uint16_t Sdtecd2_AcLswEditBox_Selected;
-    uint8_t Sdtecd2_Orchestrator_Value[2];
-    uint16_t Sqmixer_Window;
-    uint16_t field_0b42;
+    uint16_t Sdtecd2_AcLswEditBox_Value;
+    uint32_t Sqmixer_Window;
     uint16_t Sqmixer_AcResetPage_Page;
-    uint16_t field_0b46;
-    uint16_t field_0b48;
-    uint8_t StartTheInternalDemo_AcPresentationBox_Selected[2];
-    uint16_t Demofeature1_Parent;
-    uint16_t field_0b4e;
-    uint16_t Demofeature1_Child;
-    uint16_t field_0b52;
-    uint16_t Demofeature2_Parent;
-    uint16_t field_0b56;
-    uint16_t Demofeature2_Child;
-    uint16_t field_0b5a;
-    uint8_t StartTheLoadedDemo_AcPresentationBox_Selected[2];
-    uint16_t PlainScreen_Window;
-    uint16_t field_0b60;
-    uint16_t PresentationControl_Parent;
-    uint16_t field_0b64;
-    uint16_t PresentationControl_Child;
-    uint16_t field_0b68;
-    uint16_t LoadingPresentation_Window;
-    uint16_t field_0b6c;
-    uint16_t Drawbar_Window;
-    uint16_t field_0b70;
-    uint8_t DrawPerc4_Onoff[2];
-    uint8_t DrawPerc223_Onoff[2];
-    uint8_t DrawSetting_Onoff[2];
-    uint16_t Drawbar1_Parent;
-    uint16_t field_0b7a;
-    uint16_t Drawbar1_Child;
-    uint16_t field_0b7e;
-    uint16_t Drawbar2_Parent;
-    uint16_t field_0b82;
-    uint16_t Drawbar2_Child;
-    uint16_t field_0b86;
+    uint32_t Demofeature_Window;
+    uint16_t StartTheInternalDemo_AcPresentationBox_Selected;
+    uint32_t Demofeature1_Parent;
+    uint32_t Demofeature1_Child;
+    uint32_t Demofeature2_Parent;
+    uint32_t Demofeature2_Child;
+    uint16_t StartTheLoadedDemo_AcPresentationBox_Selected;
+    uint32_t PlainScreen_Window;
+    uint32_t PresentationControl_Parent;
+    uint32_t PresentationControl_Child;
+    uint32_t LoadingPresentation_Window;
+    uint32_t Drawbar_Window;
+    uint16_t DrawPerc4_OnOff;
+    uint16_t DrawPerc223_OnOff;
+    uint16_t DrawSetting_OnOff;
+    uint32_t Drawbar1_Parent;
+    uint32_t Drawbar1_Child;
+    uint32_t Drawbar2_Parent;
+    uint32_t Drawbar2_Child;
     uint16_t Drawbar2_AcDrawEditBox_Selected;
-    uint8_t Drawbar2_Decay_Value[2];
-    uint8_t Drawbar2_AcDrawEditBox_2_Selected[2];
-    uint8_t Drawbar2_Level_Value[2];
-    uint8_t Drawbar2_AcDrawEditBox_3_Selected[2];
-    uint8_t Drawbar2_AttackTime_Value[2];
-    uint8_t Drawbar2_AcDrawEditBox_4_Selected[2];
-    uint8_t Drawbar2_ReleaseTime_Value[2];
-    uint16_t DrawbarNorm_Parent;
-    uint16_t field_0b9a;
-    uint16_t DrawbarNorm_Child;
-    uint16_t field_0b9e;
-    uint8_t DrawTremolo_Onoff[2];
-    uint16_t DrawbarSndE_Parent;
-    uint16_t field_0ba4;
-    uint16_t DrawbarSndE_Child;
-    uint16_t field_0ba8;
-    uint8_t Write_AcTitleMenu_Selected[2];
-    uint16_t Accordion_Window;
-    uint16_t field_0bae;
-    uint16_t Accordion1_Parent;
-    uint16_t field_0bb2;
-    uint16_t Accordion1_Child;
-    uint16_t field_0bb6;
-    uint8_t Accordion1_AcIndexToggle_Onoff[2];
-    uint8_t Accordion1_AcIndexToggle_2_Onoff[2];
-    uint8_t Accordion1_AcAccordionTab_Onoff[2];
-    uint8_t Accordion1_AcAccordionTab_2_Onoff[2];
-    uint8_t Accordion1_AcAccordionTab_3_Onoff[2];
-    uint8_t Accordion1_AcAccordionTab_4_Onoff[2];
-    uint8_t Accordion1_AcAccordionTab_5_Onoff[2];
-    uint8_t Accordion1_AcAccordionTab_6_Onoff[2];
-    uint8_t Accordion1_AcAccordionTab_7_Onoff[2];
-    uint8_t Accordion1_AcAccordionTab_8_Onoff[2];
-    uint16_t Accordion2_Parent;
-    uint16_t field_0bce;
-    uint16_t Accordion2_Child;
-    uint16_t field_0bd2;
-    uint8_t Accordion2_AcIndexToggle_Onoff[2];
-    uint8_t Accordion2_AcIndexToggle_2_Onoff[2];
-    uint8_t Accordion2_AcAccordionTab_Onoff[2];
-    uint8_t Accordion2_AcAccordionTab_2_Onoff[2];
-    uint8_t Accordion2_AcAccordionTab_3_Onoff[2];
-    uint8_t Accordion2_AcAccordionTab_4_Onoff[2];
-    uint8_t Accordion2_AcAccordionTab_5_Onoff[2];
-    uint8_t Accordion2_AcAccordionTab_6_Onoff[2];
-    uint8_t Accordion2_AcAccordionTab_7_Onoff[2];
-    uint8_t Accordion2_AcAccordionTab_8_Onoff[2];
-    uint16_t Mesage_Window;
-    uint16_t field_0bea;
-    uint16_t Completed_Parent;
-    uint16_t field_0bee;
-    uint16_t Completed_Child;
-    uint16_t field_0bf2;
-    uint16_t Reminder_Parent;
-    uint16_t field_0bf6;
-    uint16_t Reminder_Child;
-    uint16_t field_0bfa;
-    uint16_t Error_Parent;
-    uint16_t field_0bfe;
-    uint16_t Error_Child;
-    uint16_t field_0c02;
-    uint16_t Other_Parent;
-    uint16_t field_0c06;
-    uint16_t Other_Child;
-    uint16_t field_0c0a;
-    uint16_t CheckMessage_Parent;
-    uint16_t field_0c0e;
-    uint16_t CheckMessage_Child;
-    uint16_t field_0c12;
-    uint8_t CheckMessage_AcRamBox_Value[4];
-    uint8_t CheckMessage_AcRamBox_2_Value[4];
-    uint16_t NoMessage_Parent;
-    uint16_t field_0c1e;
-    uint16_t NoMessage_Child;
-    uint16_t field_0c22;
-    char NoMessage_AcRamBox_Value[2];
-    uint8_t pad_166[2];  /* zero padding */
-    uint16_t PleaseWait_Parent;
-    uint16_t field_0c2a;
-    uint16_t PleaseWait_Child;
-    uint16_t field_0c2e;
-    uint16_t Welcom_Window;
-    uint16_t field_0c32;
-    uint16_t AllInitial_Window;
-    uint16_t field_0c36;
-    uint16_t MPVersion_Window;
-    uint16_t field_0c3a;
-    uint16_t Softver_Window;
-    uint16_t field_0c3e;
-    uint8_t MainProgram_Selected[2];
-    uint8_t MainTable_Selected[2];
-    uint8_t SubProgram_Selected[2];
-    uint8_t SoundTable_Selected[2];
+    uint16_t Drawbar2_AcDrawEditBox_Value;
+    uint16_t Drawbar2_AcDrawEditBox_2_Selected;
+    uint16_t Drawbar2_AcDrawEditBox_2_Value;
+    uint16_t Drawbar2_AcDrawEditBox_3_Selected;
+    uint16_t Drawbar2_AcDrawEditBox_3_Value;
+    uint16_t Drawbar2_AcDrawEditBox_4_Selected;
+    uint16_t Drawbar2_AcDrawEditBox_4_Value;
+    uint32_t DrawbarNorm_Parent;
+    uint32_t DrawbarNorm_Child;
+    uint16_t DrawTremolo_OnOff;
+    uint32_t DrawbarSndE_Parent;
+    uint32_t DrawbarSndE_Child;
+    uint16_t Write_AcTitleMenu_Selected;
+    uint32_t Accordion_Window;
+    uint32_t Accordion1_Parent;
+    uint32_t Accordion1_Child;
+    uint16_t Accordion1_AcIndexToggle_OnOff;
+    uint16_t Accordion1_AcIndexToggle_2_OnOff;
+    uint16_t Accordion1_AcAccordionTab_OnOff;
+    uint16_t Accordion1_AcAccordionTab_2_OnOff;
+    uint16_t Accordion1_AcAccordionTab_3_OnOff;
+    uint16_t Accordion1_AcAccordionTab_4_OnOff;
+    uint16_t Accordion1_AcAccordionTab_5_OnOff;
+    uint16_t Accordion1_AcAccordionTab_6_OnOff;
+    uint16_t Accordion1_AcAccordionTab_7_OnOff;
+    uint16_t Accordion1_AcAccordionTab_8_OnOff;
+    uint32_t Accordion2_Parent;
+    uint32_t Accordion2_Child;
+    uint16_t Accordion2_AcIndexToggle_OnOff;
+    uint16_t Accordion2_AcIndexToggle_2_OnOff;
+    uint16_t Accordion2_AcAccordionTab_OnOff;
+    uint16_t Accordion2_AcAccordionTab_2_OnOff;
+    uint16_t Accordion2_AcAccordionTab_3_OnOff;
+    uint16_t Accordion2_AcAccordionTab_4_OnOff;
+    uint16_t Accordion2_AcAccordionTab_5_OnOff;
+    uint16_t Accordion2_AcAccordionTab_6_OnOff;
+    uint16_t Accordion2_AcAccordionTab_7_OnOff;
+    uint16_t Accordion2_AcAccordionTab_8_OnOff;
+    uint32_t Mesage_Window;
+    uint32_t Completed_Parent;
+    uint32_t Completed_Child;
+    uint32_t Reminder_Parent;
+    uint32_t Reminder_Child;
+    uint32_t Error_Parent;
+    uint32_t Error_Child;
+    uint32_t Other_Parent;
+    uint32_t Other_Child;
+    uint32_t CheckMessage_Parent;
+    uint32_t CheckMessage_Child;
+    uint32_t CheckMessage_AcRamBox_Value;
+    uint32_t CheckMessage_AcRamBox_2_Value;
+    uint32_t NoMessage_Parent;
+    uint32_t NoMessage_Child;
+    uint32_t NoMessage_AcRamBox_Value;
+    uint32_t PleaseWait_Parent;
+    uint32_t PleaseWait_Child;
+    uint32_t Welcom_Window;
+    uint32_t AllInitial_Window;
+    uint32_t MPVersion_Window;
+    uint32_t Softver_Window;
+    uint16_t MainProgram_Selected;
+    uint16_t MainTable_Selected;
+    uint16_t SubProgram_Selected;
+    uint16_t SoundTable_Selected;
+} Murai_SoundMenuWorkCells_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint16_t index;
+    uint32_t font;
+    uint16_t fontcolor;
+    uint16_t align;
+    uint16_t editsw;
+    uint16_t style;
+    uint32_t func;
+    uint32_t str;
+    uint32_t onoff;
+} East_SendSwitchView_t;
+
+typedef struct __attribute__((packed)) {
+    uint16_t ExcRcvPmemBox_ValueHi;
+    uint16_t ExcRcvSmemBox_Selected;
+    uint32_t ExcRcvSmemBox_Value;
+    uint16_t ExcRcvCmpBox_Selected;
+    uint32_t ExcRcvCmpBox_Value;
+    uint16_t ExcRcvSeqBox_Selected;
+    uint32_t ExcRcvSeqBox_Value;
+    uint16_t ExcRcvMspBox_Selected;
+    uint32_t ExcRcvMspBox_Value;
+    uint32_t ExcRcvDotBox_Value;
+    uint32_t MidiGmMode_Window;
+    uint16_t GMOnOffBox_Selected;
+    uint16_t GMOnOffBox_OnOff;
+    uint32_t GMONSure_Parent;
+    uint32_t GMONSure_Child;
+    uint32_t GMOFFSure_Parent;
+    uint32_t GMOFFSure_Child;
+    uint32_t MidiPcgOutput_Window;
+    uint16_t PcgOutGridBox_SelRow;
+    uint16_t PcgOutGridBox_SelCol;
+    uint32_t PcgOutGridBox_PcolBuf;
+    uint32_t PcgOutGridBox_ProwBuf;
+    uint32_t PcgOutGridBox_CrowBuf;
+    uint16_t Send_AcSendEditSw_OnOff;
+    uint32_t MidiComputerConnection_Window;
+    uint16_t MidiComputerConnection_AcLswEditBox_Selected;
+    uint16_t MidiComputerConnection_AcLswEditBox_Value;
+    uint32_t MidiPanelMemoryOutput_Window;
+    uint16_t PmemOutLeft_SelRow;
+    uint16_t PmemOutLeft_SelCol;
+    uint32_t PmemOutLeft_PcolBuf;
+    uint32_t PmemOutLeft_ProwBuf;
+    uint32_t PmemOutLeft_CrowBuf;
+    uint16_t PmemOutRight_SelRow;
+    uint16_t PmemOutRight_SelCol;
+    uint32_t PmemOutRight_PcolBuf;
+    uint32_t PmemOutRight_ProwBuf;
+    uint32_t PmemOutRight_CrowBuf;
+    uint32_t MidiSetup_Window;
+    uint16_t MdSetOptGridBox_SelRow;
+    uint16_t MdSetOptGridBox_SelCol;
+    uint32_t MdSetOptGridBox_PcolBuf;
+    uint32_t MdSetOptGridBox_ProwBuf;
+    uint32_t MdSetOptGridBox_CrowBuf;
+    uint32_t EntertainerVocal_Window;
+    uint16_t VocalistPage_Page;
+    uint32_t VocalistPage1_Parent;
+    uint32_t VocalistPage1_Child;
+    uint16_t VocalistListBox_Selected;
+    uint16_t HarmOnOffBox_OnOff;
+    uint32_t VocalistPage2_Parent;
+    uint32_t VocalistPage2_Child;
+    uint16_t VocalistPage2Box_SelRow;
+    uint16_t VocalistPage2Box_SelCol;
+    uint32_t VocalistPage2Box_PcolBuf;
+    uint32_t VocalistPage2Box_ProwBuf;
+    uint32_t VocalistPage2Box_CrowBuf;
+    uint32_t EntertainerFade_Window;
+    uint16_t FadeInOutGridBox_SelRow;
+    uint16_t FadeInOutGridBox_SelCol;
+    uint32_t FadeInOutGridBox_PcolBuf;
+    uint32_t FadeInOutGridBox_ProwBuf;
+    uint32_t FadeInOutGridBox_CrowBuf;
+    uint32_t SplitSetting_Window;
+    uint16_t SplitSetting_AcLswBox_Value;
+} East_MidiSetupWorkCells_t;
+
+typedef struct __attribute__((packed)) {
+    uint16_t MidiPartSetting_WindowHi;
+    uint16_t MdPartSetGridBox_SelRow;
+    uint16_t MdPartSetGridBox_SelCol;
+    uint32_t MdPartSetGridBox_PcolBuf;
+    uint32_t MdPartSetGridBox_ProwBuf;
+    uint32_t MdPartSetGridBox_CrowBuf;
+    uint16_t MdPartSetGridBox_Page;
+    uint32_t MidiControlMessage_Window;
+    uint16_t MidiControlMessage_PsPageBox_Page;
+    uint16_t CtlMsgGridBox_SelRow;
+    uint16_t CtlMsgGridBox_SelCol;
+    uint32_t CtlMsgGridBox_PcolBuf;
+    uint32_t CtlMsgGridBox_ProwBuf;
+    uint32_t CtlMsgGridBox_CrowBuf;
+    uint16_t CtlMsgGridBox_Page;
+    uint32_t MidiRealtimeMessage_Window;
+    uint16_t RealtimeCommandBox_Selected;
+    uint16_t RealtimeCommandBox_Value;
+    uint16_t ClockBox_Selected;
+    uint16_t ClockBox_Value;
+    uint32_t MidiCommonSetting_Window;
+    uint16_t ComSetGridBox_SelRow;
+    uint16_t ComSetGridBox_SelCol;
+    uint32_t ComSetGridBox_PcolBuf;
+    uint32_t ComSetGridBox_ProwBuf;
+    uint32_t ComSetGridBox_CrowBuf;
+    uint32_t MidiInOutSetting_Window;
+    uint16_t InOutGridBox_SelRow;
+    uint16_t InOutGridBox_SelCol;
+    uint32_t InOutGridBox_PcolBuf;
+    uint32_t InOutGridBox_ProwBuf;
+    uint32_t InOutGridBox_CrowBuf;
+    uint32_t MidiPresets_Window;
+    uint16_t MdPresetPageBox_Page;
+    uint32_t MidiPresetSlaveWithout_Parent;
+    uint32_t MidiPresetSlaveWithout_Child;
+    uint16_t MpstSlaveWithoutList_Selected;
+    uint32_t MidiPresetSlaveWith_Parent;
+    uint32_t MidiPresetSlaveWith_Child;
+    uint16_t MpstSlaveWithList_Selected;
+    uint32_t MidiPresetPage3_Parent;
+    uint32_t MidiPresetPage3_Child;
+    uint16_t MdPresetUserLoadList_Selected;
+    uint32_t MidiPresetPage4_Parent;
+    uint32_t MidiPresetPage4_Child;
+    uint16_t MdPresetUserWriteList_Selected;
+    uint16_t MdpstSplitBox_OnOff;
+    uint32_t MidiPresetMasterWithout_Parent;
+    uint32_t MidiPresetMasterWithout_Child;
+    uint16_t MpstMasterWithoutList_Selected;
+    uint32_t MidiPresetMasterWith_Parent;
+    uint32_t MidiPresetMasterWith_Child;
+    uint16_t MpstMasterWithList_Selected;
+    uint32_t MidiExclusive_Window;
+    uint16_t ExcListBox_Selected;
+    uint32_t ExcSendWindow_Parent;
+    uint32_t ExcSendWindow_Child;
+    uint16_t ExcSendPmemBox_Selected;
+    uint32_t ExcSendPmemBox_Value;
+    uint16_t ExcSendSmemBox_Selected;
+    uint32_t ExcSendSmemBox_Value;
+    uint16_t ExcSendCmpBox_Selected;
+    uint32_t ExcSendCmpBox_Value;
+    uint16_t ExcSendSeqBox_Selected;
+    uint32_t ExcSendSeqBox_Value;
+    uint16_t ExcSendMspBox_Selected;
+    uint32_t ExcSendMspBox_Value;
+    uint32_t ExcSendDotBox_Value;
+    uint32_t ExcRcvWindow_Parent;
+    uint32_t ExcRcvWindow_Child;
+    uint16_t ExcRcvPmemBox_Selected;
+    uint16_t ExcRcvPmemBox_ValueLo;
+} East_MidiSettingWorkCells_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t MidiMenuPage2_Parent;
+    uint32_t MidiMenuPage2_Child;
+    uint16_t ComputerConnection_AcTitleMenu_Selected;
+    uint16_t MidiSettingsLoadOption_AcTitleMenu_Selected;
+    uint16_t MidiPartSetting_WindowLo;
+} East_MidiMenuPage2WorkCells_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t ReverbEqualizerMenu_Window;
+    uint16_t ReverbPresets_AcTitleMenu_Selected;
+    uint16_t EqualizerPresets_AcTitleMenu_Selected;
+    uint16_t ReverbEqualizerPresets_AcTitleMenu_Selected;
+    uint32_t R12OctaveSetting_Window;
+    uint16_t R12OctaveSetting_AcLswEditBox_Selected;
+    uint16_t R12OctaveSetting_AcLswEditBox_Value;
+    uint32_t ReverbPreset_Window;
+    uint16_t HugeRoom_AcStrRadioBox_Selected;
+    uint16_t BoxRoom_AcStrRadioBox_Selected;
+    uint16_t SmallPlate_AcStrRadioBox_Selected;
+    uint16_t SportsHall_AcStrRadioBox_Selected;
+    uint16_t BrightHall_AcStrRadioBox_Selected;
+    uint16_t DarkConfines_AcStrRadioBox_Selected;
+    uint16_t Reflection_AcStrRadioBox_Selected;
+    uint16_t HighOpen_AcStrRadioBox_Selected;
+    uint16_t LeftToRight_AcStrRadioBox_Selected;
+    uint16_t Cavernous_AcStrRadioBox_Selected;
+    uint32_t EqualizerPreset_Window;
+    uint16_t MakeUp_AcStrRadioBox_Selected;
+    uint16_t MiddleCut_AcStrRadioBox_Selected;
+    uint16_t TransistorRadio_AcStrRadioBox_Selected;
+    uint16_t TrebleBoost_AcStrRadioBox_Selected;
+    uint16_t TrebleCut_AcStrRadioBox_Selected;
+    uint16_t NoHiHat_AcStrRadioBox_Selected;
+    uint16_t TubbyBass_AcStrRadioBox_Selected;
+    uint16_t BassCut_AcStrRadioBox_Selected;
+    uint16_t TooBright_AcStrRadioBox_Selected;
+    uint16_t EqOnOffBox_OnOff;
+    uint32_t ReverbEqualizerPreset_Window;
+    uint16_t WarmWide_AcStrRadioBox_Selected;
+    uint16_t InYourFace_AcStrRadioBox_Selected;
+    uint16_t OilTank_AcStrRadioBox_Selected;
+    uint16_t WarmPlate_AcStrRadioBox_Selected;
+    uint16_t LightShade_AcStrRadioBox_Selected;
+    uint16_t WarmFuzzy_AcStrRadioBox_Selected;
+    uint16_t IceBox_AcStrRadioBox_Selected;
+    uint16_t Stadium_AcStrRadioBox_Selected;
+    uint16_t LiveRoom_AcStrRadioBox_Selected;
+    uint16_t RevEqOnOffBox_OnOff;
+    uint32_t MidiMenu_Window;
+    uint16_t MdmenuPage_Page;
+    uint32_t MidiMenuPage1_Parent;
+    uint32_t MidiMenuPage1_Child;
+    uint16_t PartSetting_AcTitleMenu_Selected;
+    uint16_t ControlMessages_AcTitleMenu_Selected;
+    uint16_t RealtimeMessages_AcTitleMenu_Selected;
+    uint16_t CommonSetting_AcTitleMenu_Selected;
+    uint16_t InputOutputSetting_AcTitleMenu_Selected;
+    uint16_t MidiPresets_AcTitleMenu_Selected;
+    uint16_t SysexBulkDump_AcTitleMenu_Selected;
+    uint16_t GeneralMidi_AcTitleMenu_Selected;
+    uint16_t ProgChangeMidiOut_AcTitleMenu_Selected;
+    uint16_t PMemOutput_AcTitleMenu_Selected;
+} East_ReverbMidiMenuWorkCells_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t ByteLength;
+    uint8_t SourceMode;
+    uint8_t SourceModePad;
+    uint32_t BufferPtr;
+} DiskStream_State_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t AckedDiskType;
+    uint8_t AckedDiskTypePad;
+    uint8_t DiskType;
+    uint8_t DiskTypePad;
+    uint16_t DiskChanged;
+} FDC_DiskTypeState_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Flag;
+    uint8_t Pad;
+} SectorCache_AgeOverflowFlag_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Unknown0;
+    uint8_t AccessMask;
+    uint8_t StateFlags;
+    uint8_t Unknown3[9];
+    uint16_t HandleWord8Init;
+    uint32_t BlockOps;
+    uint32_t FileOps;
+    uint32_t Name;
+    uint32_t ParamBlock;
+    uint32_t LastOpenHandle;
+} FileIO_DeviceTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Value;
+    uint8_t Pad;
+} FileOpen_SlotByte1Init_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t FromCursor;
+    uint8_t FromCursorPad;
+    uint8_t ToCursor;
+    uint8_t ToCursorPad;
+    uint8_t EditingTo;
+    uint8_t EditingToPad;
+} SqedtFunc_CursorState_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint16_t index;
+    uint32_t font;
+    uint16_t fontcolor;
+    uint16_t align;
+    uint16_t editsw;
+    uint32_t selected;
+    uint32_t str;
+    uint32_t title;
+    uint32_t icon;
+} Kubo_DiskLoadMenuView_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint16_t index;
+    uint32_t font;
+    uint16_t fontcolor;
+    uint16_t align;
+    uint16_t editsw;
+    uint32_t selected;
+    uint32_t str;
+    uint32_t title;
+    uint32_t icon;
+} Kubo_MixerMenuView_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint16_t index;
+    uint32_t font;
+    uint16_t fontcolor;
+    uint16_t align;
+    uint16_t editsw;
+    uint32_t selected;
+    uint32_t str;
+    uint32_t title;
+    uint32_t icon;
+} Kubo_FadeInOutMenuView_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint16_t index;
+    uint32_t font;
+    uint16_t fontcolor;
+    uint16_t align;
+    uint16_t editsw;
+    uint32_t selected;
+    uint32_t str;
+    uint32_t title;
+    uint32_t icon;
+} Kubo_VocWorkMenuView_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint32_t str;
+    uint32_t font;
+    uint16_t fontcolor;
+} CycRec_ClearLabelView_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint16_t index;
+    uint32_t font;
+    uint16_t fontcolor;
+    uint16_t align;
+    uint16_t editsw;
+    uint16_t style;
+    uint32_t func;
+} CycRec_ClearSwitchView_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t Reverb_TtlScreen_Window;
+    uint32_t DspEffect_TtlScreen_Window;
+    uint32_t Equalizer_TtlScreen_Window;
+    uint16_t EqOnOff_OnOff;
+    uint32_t AcousticIllusion_TtlScreen_Window;
+    uint32_t SequencerMenu_TtlScreen_Window;
+    uint16_t Create_AcTitleMenu_Selected;
+    uint16_t EDIT_AcModeMenu_Selected;
+    uint16_t PanelWrite_AcTitleMenu_Selected;
+    uint32_t SequencerPlay_TtlScreen_Window;
+    uint16_t CycPlySw_OnOff;
+    uint32_t SngSelWin1_Parent;
+    uint32_t SngSelWin1_Child;
+    uint16_t Medley_AcTitleMenu_Selected;
+    uint32_t SngSelWin2_Parent;
+    uint32_t SngSelWin2_Child;
+    uint32_t CyclePlay_TtlScreen_Window;
+    uint16_t CyclePlay_PsEditBox_Selected;
+    uint16_t CyclePlay_PsEditBox_2_Selected;
+    uint16_t CyclePlay_PsEditBox_3_Selected;
+    uint32_t EasyRecord_TtlScreen_Window;
+    uint16_t Naming_AcTitleMenu_Selected;
+    uint16_t EasyRecord_PsTrackSwitch_OnOff;
+    uint16_t EasyRecord_PsTrackSwitch_Part;
+    uint16_t EasyRecord_PsTrackSwitch_RecPlay;
+    uint16_t EasyRecord_PsTrackSwitch_2_OnOff;
+    uint16_t EasyRecord_PsTrackSwitch_2_Part;
+    uint16_t EasyRecord_PsTrackSwitch_2_RecPlay;
+    uint16_t EasyRecord_PsTrackSwitch_3_OnOff;
+    uint16_t EasyRecord_PsTrackSwitch_3_Part;
+    uint16_t EasyRecord_PsTrackSwitch_3_RecPlay;
+    uint16_t EasyRecord_PsTrackSwitch_4_OnOff;
+    uint16_t EasyRecord_PsTrackSwitch_4_Part;
+    uint16_t EasyRecord_PsTrackSwitch_4_RecPlay;
+    uint16_t EasyRecord_PsTrackSwitch_5_OnOff;
+    uint16_t EasyRecord_PsTrackSwitch_5_Part;
+    uint16_t EasyRecord_PsTrackSwitch_5_RecPlay;
+    uint32_t Create_TtlScreen_Window;
+    uint16_t TrackAssign_AcTitleMenu_Selected;
+    uint16_t PanelWrite_AcTitleMenu_2_Selected;
+    uint16_t SongSelectNaming_AcTitleMenu_Selected;
+    uint16_t SongClear_AcTitleMenu_Selected;
+    uint16_t SongTrackCopy_AcTitleMenu_Selected;
+    uint16_t AfterTouchSet_AcTitleMenu_Selected;
+    uint16_t RealtimeRecord_AcModeMenu_Selected;
+    uint16_t StepRecord_AcModeMenu_Selected;
+    uint16_t PunchRecord_AcTitleMenu_Selected;
+    uint32_t RealtimeRecord_TtlScreen_Window;
+    uint16_t CycRecSw_OnOff;
+    uint16_t MetRecSw_OnOff;
+    uint32_t CycClrSw_Parent;
+    uint32_t CycClrSw_Child;
+    uint32_t RealtimeRecord_TtlScreen_2_Window;
+    uint16_t RealtimeRecord_PsEditBox_Selected;
+    uint16_t RealtimeRecord_PsEditBox_2_Selected;
+    uint16_t MetCycRecSw_OnOff;
+    uint16_t RealtimeRecord_PsEditBox_3_Selected;
+    uint32_t PunchRecord_TtlScreen_Window;
+    uint16_t MetPunchSw_OnOff;
+    uint16_t PunchInOutSw_OnOff;
+    uint32_t AutoPunchRecord_TtlScreen_Window;
+    uint16_t MetPunchmSw_OnOff;
+    uint16_t AutoPunchRecord_PsEditBox_Selected;
+    uint16_t AutoPunchRecord_PsEditBox_2_Selected;
+    uint16_t AutoPunchRecord_PsEditBox_3_Selected;
+    uint32_t AutoPunchRecord_TtlScreen_2_Window;
+    uint32_t PanelWrite_TtlScreen_Window;
+    uint32_t SongClear_TtlScreen_Window;
+    uint32_t SoclSureDisp_Parent;
+    uint32_t SoclSureDisp_Child;
+    uint16_t NO_AcScreenMenu_Selected;
+    uint32_t SongTrackCopy_TtlScreen_Window;
+    uint32_t SngCpSureDisp_Parent;
+    uint32_t SngCpSureDisp_Child;
+    uint16_t NO_AcScreenMenu_2_Selected;
+    uint32_t Edit_TtlScreen_Window;
+    uint16_t EdMenuPage_Page;
+    uint32_t SQEMENU_1_Parent;
+    uint32_t SQEMENU_1_Child;
+    uint16_t NoteEdit_AcTitleMenu_Selected;
+    uint16_t DrumEdit_AcTitleMenu_Selected;
+    uint16_t SongTrackCopy_AcTitleMenu_2_Selected;
+    uint16_t TrackClear_AcTitleMenu_Selected;
+    uint16_t TrackMerge_AcTitleMenu_Selected;
+    uint16_t Quantize_AcTitleMenu_Selected;
+    uint16_t Transpose_AcTitleMenu_Selected;
+    uint16_t VelocityChange_AcTitleMenu_Selected;
+    uint16_t NoteChange_AcTitleMenu_Selected;
+    uint16_t AdvanceDelay_AcTitleMenu_Selected;
+    uint32_t SQEMENU_2_Parent;
+    uint32_t SQEMENU_2_Child;
+    uint16_t Copy_AcTitleMenu_Selected;
+    uint16_t Erase_AcTitleMenu_Selected;
+    uint16_t Delete_AcTitleMenu_Selected;
+    uint16_t Insert_AcTitleMenu_Selected;
+    uint32_t NoteEdit_TtlScreen_Window;
+    uint32_t NoteEdit_TtlScreen_2_Window;
+    uint32_t CyclePlay_TtlScreen_2_Window;
+    uint16_t CyclePlay_PsEditBox_4_Selected;
+    uint16_t CyclePlay_PsEditBox_5_Selected;
+    uint16_t CyclePlay_PsEditBox_6_Selected;
+    uint32_t DrumEdit_TtlScreen_Window;
+    uint32_t DrumEdit_TtlScreen_2_Window;
+    uint32_t CyclePlay_TtlScreen_3_Window;
+    uint16_t CyclePlay_PsEditBox_7_Selected;
+    uint16_t CyclePlay_PsEditBox_8_Selected;
+    uint16_t CyclePlay_PsEditBox_9_Selected;
+    uint32_t TrackClear_TtlScreen_Window;
+    uint32_t TrkClrSureDisp_Parent;
+    uint32_t TrkClrSureDisp_Child;
+    uint16_t NO_AcScreenMenu_3_Selected;
+    uint32_t TrackMerge_TtlScreen_Window;
+    uint16_t TrackMerge_PsEditBox_Selected;
+    uint16_t TrackMerge_PsEditBox_2_Selected;
+    uint16_t TrackMerge_PsEditBox_3_Selected;
+    uint32_t TrkMrgSureDisp_Parent;
+    uint32_t TrkMrgSureDisp_Child;
+    uint16_t NO_AcScreenMenu_4_Selected;
+    uint32_t Quantize_TtlScreen_Window;
+    uint16_t Quantize_PsEditBox_Selected;
+    uint16_t Quantize_PsEditBox_2_Selected;
+    uint16_t Quantize_PsEditBox_3_Selected;
+    uint16_t Quantize_PsEditBox_4_Selected;
+    uint16_t Quantize_PsEditBox_5_Selected;
+    uint16_t Quantize_PsEditBox_6_Selected;
+    uint32_t QtzSureDisp_Parent;
+    uint32_t QtzSureDisp_Child;
+    uint16_t NO_AcScreenMenu_5_Selected;
+    uint32_t Transpose_TtlScreen_Window;
+    uint16_t Transpose_PsEditBox_Selected;
+    uint16_t Transpose_PsEditBox_2_Selected;
+    uint16_t Transpose_PsEditBox_3_Selected;
+    uint16_t Transpose_PsEditBox_4_Selected;
+    uint32_t TrnsSureDisp_Parent;
+    uint32_t TrnsSureDisp_Child;
+    uint16_t NO_AcScreenMenu_6_Selected;
+    uint32_t VelocityChange_TtlScreen_Window;
+    uint16_t VelocityChange_PsEditBox_Selected;
+    uint16_t VelocityChange_PsEditBox_2_Selected;
+    uint16_t VelocityChange_PsEditBox_3_Selected;
+    uint16_t VelocityChange_PsEditBox_4_Selected;
+    uint32_t VeloSureDisp_Parent;
+    uint32_t VeloSureDisp_Child;
+    uint16_t NO_AcScreenMenu_7_Selected;
+    uint32_t NoteChange_TtlScreen_Window;
+    uint16_t NoteChange_PsEditBox_Selected;
+    uint16_t NoteChange_PsEditBox_2_Selected;
+    uint16_t NoteChange_PsEditBox_3_Selected;
+    uint16_t NoteChange_PsEditBox_4_Selected;
+    uint16_t NoteChange_PsEditBox_5_Selected;
+    uint32_t NoteSureDisp_Parent;
+    uint32_t NoteSureDisp_Child;
+    uint16_t NO_AcScreenMenu_8_Selected;
+    uint32_t AdvanceDelay_TtlScreen_Window;
+    uint16_t AdvanceDelay_PsEditBox_Selected;
+    uint16_t AdvanceDelay_PsEditBox_2_Selected;
+    uint16_t AdvanceDelay_PsEditBox_3_Selected;
+    uint16_t AdvanceDelay_PsEditBox_4_Selected;
+    uint32_t AdvSureDisp_Parent;
+    uint32_t AdvSureDisp_Child;
+    uint16_t NO_AcScreenMenu_9_Selected;
+    uint32_t MeasureErase_TtlScreen_Window;
+    uint16_t MeasureErase_PsEditBox_Selected;
+    uint16_t MeasureErase_PsEditBox_2_Selected;
+    uint16_t MeasureErase_PsEditBox_3_Selected;
+    uint16_t MeasureErase_PsEditBox_4_Selected;
+    uint32_t MersSureDisp_Parent;
+    uint32_t MersSureDisp_Child;
+    uint16_t NO_AcScreenMenu_10_Selected;
+    uint32_t MeasureCopy_TtlScreen_Window;
+    uint32_t McpSureDisp_Parent;
+    uint32_t McpSureDisp_Child;
+    uint16_t NO_AcScreenMenu_11_Selected;
+    uint32_t MeasureDelete_TtlScreen_Window;
+    uint16_t MeasureDelete_PsEditBox_Selected;
+    uint16_t MeasureDelete_PsEditBox_2_Selected;
+    uint16_t MeasureDelete_PsEditBox_3_Selected;
+    uint32_t MdelSureDisp_Parent;
+    uint32_t MdelSureDisp_Child;
+    uint16_t NO_AcScreenMenu_12_Selected;
+    uint32_t MeasureInsert_TtlScreen_Window;
+    uint32_t MinsSureDisp_Parent;
+    uint32_t MinsSureDisp_Child;
+    uint16_t NO_AcScreenMenu_13_Selected;
+    uint32_t MetronomeBalance_TtlScreen_Window;
+    uint32_t EnterTainerScr_Window;
+    uint16_t EnterTainerScr_AcEntertainerGridBox_SelRow;
+    uint16_t EnterTainerScr_AcEntertainerGridBox_SelCol;
+    uint32_t EnterTainerScr_AcEntertainerGridBox_PcolBuf;
+    uint32_t EnterTainerScr_AcEntertainerGridBox_ProwBuf;
+    uint32_t EnterTainerScr_AcEntertainerGridBox_CrowBuf;
+    uint16_t VocWorkSw_Selected;
+    uint16_t FadeInOutSw_Selected;
+    uint16_t MixerSw_Selected;
+    uint16_t DiskLoadSw_Selected;
+    uint16_t EnterTainerScr_AcFuncToggle_OnOff;
+    uint32_t HelpFunction_TtlScreen_Window;
+    uint32_t HelpNotXWin_Parent;
+    uint32_t HelpNotXWin_Child;
+    uint16_t HelpNotXWin_AcIndexWideToggle_OnOff;
+    uint16_t HelpNotXWin_AcIndexWideToggle_2_OnOff;
+    uint16_t HelpNotXWin_AcIndexWideToggle_3_OnOff;
+    uint16_t HelpNotXWin_AcIndexWideToggle_4_OnOff;
+    uint32_t HelpXWin_Parent;
+    uint32_t HelpXWin_Child;
+    uint16_t HelpXWin_AcIndexWideToggle_OnOff;
+    uint16_t HelpXWin_AcIndexWideToggle_2_OnOff;
+    uint16_t HelpXWin_AcIndexWideToggle_3_OnOff;
+    uint32_t HelpSwTtl1Scr_Window;
+    uint32_t HelpLang2P1_Parent;
+    uint32_t HelpLang2P1_Child;
+    uint32_t HelpLang2P2_Parent;
+    uint32_t HelpLang2P2_Child;
+    uint32_t HelpSwTtl2Scr_Window;
+    uint16_t Help_P2_Page;
+    uint32_t HelpLang3P1_Parent;
+    uint32_t HelpLang3P1_Child;
+    uint32_t HelpLang3P2_Parent;
+    uint32_t HelpLang3P2_Child;
+    uint32_t HelpLang3P3_Parent;
+    uint32_t HelpLang3P3_Child;
+    uint32_t HelpSwTtl3Scr_Window;
+    uint16_t Help_P3_Page;
+    uint32_t HelpSwTtl4Scr_Window;
+    uint16_t Help_P4_Page;
+    uint32_t HelpLang4P1_Parent;
+    uint32_t HelpLang4P1_Child;
+    uint32_t HelpLang4P2_Parent;
+    uint32_t HelpLang4P2_Child;
+    uint32_t HelpLang4P3_Parent;
+    uint32_t HelpLang4P3_Child;
+    uint32_t HelpLang4P4_Parent;
+    uint32_t HelpLang4P4_Child;
+} Kubo_ViewWorkCells_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint16_t index;
+    uint32_t font;
+    uint16_t fontcolor;
+    uint16_t align;
+    uint16_t editsw;
+    uint16_t editsw2;
+    uint16_t style;
+} TrAs_PartSelectSwitchView_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint16_t index;
+    uint32_t font;
+    uint16_t fontcolor;
+    uint16_t align;
+    uint16_t editsw;
+    uint16_t style;
+    uint32_t str;
+} TrAs_OkSwitchView_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t DpSmf_Window;
+    uint16_t Lyrics_AcTitleMenu_Selected;
+    uint16_t DpSmf_AcRamEditBox_Selected;
+    uint32_t DpSmf_AcRamEditBox_Value;
+    uint16_t SMFMuteSw_OnOff;
+    uint16_t MIXER_VwMenuBox_Selected;
+    uint16_t MIC_VwMenuBox_Selected;
+    uint32_t SmfMedley_TtlScreen_Window;
+    uint16_t Mixer_AcTitleMenu_Selected;
+    uint16_t Mic_AcTitleMenu_Selected;
+    uint16_t Lyrics_AcTitleMenu_2_Selected;
+    uint32_t CDswWindow_Parent;
+    uint32_t CDswWindow_Child;
+    uint32_t PauseDisp_Value;
+    uint32_t PlayDisp_Value;
+    uint32_t Lyrics_Parent;
+    uint32_t Lyrics_Child;
+    uint32_t DpDoc_Window;
+    uint16_t DOCR1Sw_OnOff;
+    uint16_t DOCR2Sw_OnOff;
+    uint16_t DOCOrchSw_OnOff;
+    uint16_t MIXER_VwMenuBox_2_Selected;
+    uint16_t MIC_VwMenuBox_2_Selected;
+    uint32_t DpPd_Window;
+    uint16_t PDR1Sw_OnOff;
+    uint16_t PDOrchSw_OnOff;
+    uint16_t MIXER_VwMenuBox_3_Selected;
+    uint16_t MIC_VwMenuBox_3_Selected;
+    uint32_t DpSmfLyr_Window;
+    uint16_t MIC_VwMenuBox_4_Selected;
+    uint32_t DpMdlySmf_Window;
+    uint16_t Lyrics_AcTitleMenu_3_Selected;
+    uint16_t DpMdlySmf_AcRamEditBox_Selected;
+    uint32_t DpMdlySmf_AcRamEditBox_Value;
+    uint16_t SMFMedMuteSw_OnOff;
+    uint16_t MIXER_VwMenuBox_4_Selected;
+    uint16_t MIC_VwMenuBox_5_Selected;
+    uint32_t SmfMedley_TtlScreen_2_Window;
+    uint32_t DpMdlyDoc_Window;
+    uint16_t DOCMedR1Sw_OnOff;
+    uint16_t DOCMedR2Sw_OnOff;
+    uint16_t DOCMedOrchSw_OnOff;
+    uint16_t MIXER_VwMenuBox_5_Selected;
+    uint16_t MIC_VwMenuBox_6_Selected;
+    uint32_t DpMdlyPd_Window;
+    uint16_t PDMedR1Sw_OnOff;
+    uint16_t PDMedOrchSw_OnOff;
+    uint16_t MIXER_VwMenuBox_6_Selected;
+    uint16_t MIC_VwMenuBox_7_Selected;
+    uint32_t DpMdlySmfLyr_Window;
+    uint16_t Mic_VwMenuBox_Selected;
+    uint32_t DkMdlyPly_Window;
+    uint16_t Mixer_VwMenuBox_Selected;
+    uint32_t SongMdlyOrchSel_Parent;
+    uint32_t SongMdlyOrchSel_Child;
+    uint16_t SongMdlySongSel1_OnOff;
+    uint16_t SongMdlySongSel1_Part;
+    uint16_t SongMdlySongSel1_RecPlay;
+    uint16_t SongMdlySongSel2_OnOff;
+    uint16_t SongMdlySongSel2_Part;
+    uint16_t SongMdlySongSel2_RecPlay;
+    uint16_t SongMdlySongSel3_OnOff;
+    uint16_t SongMdlySongSel3_Part;
+    uint16_t SongMdlySongSel3_RecPlay;
+    uint16_t SongMdlySongSel4_OnOff;
+    uint16_t SongMdlySongSel4_Part;
+    uint16_t SongMdlySongSel4_RecPlay;
+    uint16_t SongMdlySongSel5_OnOff;
+    uint16_t SongMdlySongSel5_Part;
+    uint16_t SongMdlySongSel5_RecPlay;
+    uint16_t SongMdlySongSel6_OnOff;
+    uint16_t SongMdlySongSel6_Part;
+    uint16_t SongMdlySongSel6_RecPlay;
+    uint16_t SongMdlySongSel7_OnOff;
+    uint16_t SongMdlySongSel7_Part;
+    uint16_t SongMdlySongSel7_RecPlay;
+    uint16_t SongMdlySongSel8_OnOff;
+    uint16_t SongMdlySongSel8_Part;
+    uint16_t SongMdlySongSel8_RecPlay;
+    uint16_t SongMdlySongSel9_OnOff;
+    uint16_t SongMdlySongSel9_Part;
+    uint16_t SongMdlySongSel9_RecPlay;
+    uint16_t SongMdlySongSel10_OnOff;
+    uint16_t SongMdlySongSel10_Part;
+    uint16_t SongMdlySongSel10_RecPlay;
+    uint16_t SongMdlySongSel11_OnOff;
+    uint16_t SongMdlySongSel11_Part;
+    uint16_t SongMdlySongSel11_RecPlay;
+    uint16_t SongMdlySongSel12_OnOff;
+    uint16_t SongMdlySongSel12_Part;
+    uint16_t SongMdlySongSel12_RecPlay;
+    uint16_t SongMdlySongSel13_OnOff;
+    uint16_t SongMdlySongSel13_Part;
+    uint16_t SongMdlySongSel13_RecPlay;
+    uint16_t SongMdlySongSel14_OnOff;
+    uint16_t SongMdlySongSel14_Part;
+    uint16_t SongMdlySongSel14_RecPlay;
+    uint16_t SongMdlySongSel15_OnOff;
+    uint16_t SongMdlySongSel15_Part;
+    uint16_t SongMdlySongSel15_RecPlay;
+    uint16_t SongMdlySongSel16_OnOff;
+    uint16_t SongMdlySongSel16_Part;
+    uint16_t SongMdlySongSel16_RecPlay;
+    uint32_t SqMdlyPly_Window;
+    uint16_t Mixer_VwMenuBox_Selected_2;
+    uint32_t SqTrSel_Window;
+    uint32_t StepRecSubPanel_Window;
+    uint32_t SqTrAs_Window;
+    uint16_t Preset_AcTitleMenu_Selected;
+    uint16_t TrAsGrid_SelRow;
+    uint16_t TrAsGrid_SelCol;
+    uint32_t TrAsGrid_PcolBuf;
+    uint32_t TrAsGrid_ProwBuf;
+    uint32_t TrAsGrid_CrowBuf;
+    uint32_t SqTrAsSure_Window;
+    uint32_t SqTrAsPs_Window;
+    uint16_t SqTrAsPs_AcRamEditBox_Selected;
+    uint32_t SqTrAsPs_AcRamEditBox_Value;
+    uint16_t TrAsPsIniSel_Selected;
+    uint16_t TrAsPsTechSel_Selected;
+    uint16_t TrAsPsGmSel_Selected;
+    uint32_t SqTrAsPsSure1_Window;
+    uint32_t SqTrAsPsSure2_Window;
+    uint32_t SqSngSel_Window;
+    uint16_t Naming_AcTitleMenu_Selected;
+    uint16_t SqSngSel_PsSongSelBox_SelNum;
+    uint16_t SqSngSel_PsSongSelBox_2_SelNum;
+    uint32_t SqNameing_Window;
+    uint32_t AfterTouchSet_Window;
+    uint16_t AfterTouchSet_AcBitEditBox_Selected;
+    uint16_t AfterTouchSet_AcBitEditBox_Value;
+    uint32_t StepPartBal_Window;
+    uint32_t DemoMenu_Window;
+    uint16_t Performances_AcTitleMenu_Selected;
+    uint16_t FeaturePresentation_AcTitleMenu_Selected;
+    uint32_t DemoStyle_Window;
+    uint16_t DemoSong0_Selected;
+    uint16_t DemoSong1_Selected;
+    uint16_t DemoSong2_Selected;
+    uint16_t DemoSong3_Selected;
+    uint16_t DemoSong4_Selected;
+    uint16_t DemoSong5_Selected;
+    uint16_t DemoStyle_PsWideToggle_OnOff;
+    uint16_t DemoStyle_PsWideToggle_2_OnOff;
+    uint16_t DemoStyle_PsWideToggle_3_OnOff;
+    uint32_t DemoSound_Window;
+    uint16_t DemoSong6_Selected;
+    uint16_t DemoSong7_Selected;
+    uint16_t DemoSong8_Selected;
+    uint16_t DemoSong9_Selected;
+    uint16_t DemoSong10_Selected;
+    uint16_t DemoSong11_Selected;
+    uint16_t DemoSound_PsWideToggle_OnOff;
+    uint16_t DemoSound_PsWideToggle_2_OnOff;
+    uint16_t DemoSound_PsWideToggle_3_OnOff;
+    uint32_t DemoRhy_Window;
+    uint16_t DemoSong12_Selected;
+    uint16_t DemoSong13_Selected;
+    uint16_t DemoSong14_Selected;
+    uint16_t DemoSong15_Selected;
+    uint16_t DemoSong16_Selected;
+    uint16_t DemoSong17_Selected;
+    uint16_t DemoRhy_PsWideToggle_OnOff;
+    uint16_t DemoRhy_PsWideToggle_2_OnOff;
+    uint16_t Rhythm_PsWideToggle_OnOff;
+} Yoko_ViewWorkCells_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Present;
+    uint8_t Pad;
+} Xapr_PresentFlag_t;
+
+typedef struct __attribute__((packed)) {
+    uint16_t Total;
+    uint16_t Ok;
+    uint16_t Ng;
+} FDTest_ResultCounters_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint32_t exit;
+    uint32_t window;
+    uint32_t title;
+    uint32_t icon;
+} FDTest_ScreenView_t;
+
+typedef struct __attribute__((packed)) {
+    /* NAKA_TYPE_CONTAINER */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* 0x3E */
+    /* zero padding */
+    /* 0x22 */
+    /* zero padding */
+    /* zero padding */
+    /* 0x20 */
+    /* zero padding */
+    /* zero padding */
+    /* NAKA_TYPE_LABEL */
+    /* NAKA_TYPE_MENU_ITEM */
+    /* NAKA_TYPE_MENU_ITEM */
+    /* NAKA_TYPE_MENU_ITEM */
+    /* NAKA_TYPE_MENU_ITEM */
+    /* zero padding */
+    /* zero padding */
+    /* TtlScreen view record "FDD_TEST" kept in work RAM */
+    FDTest_ScreenView_t FDTest_ScreenView;
+    /* FD save/load factory test: runs, passes, failures */
+    FDTest_ResultCounters_t FDTest_ResultCounters;
+    /* 1 = an XAPR extension ROM was detected */
+    Xapr_PresentFlag_t Xapr_PresentFlag;
+    /* InitializeYoko view work cells (SMF direct play, medley, track assign, song select, demo), power-on image */
+    Yoko_ViewWorkCells_t Yoko_ViewWorkCells;
+    /* VwEditSwBox view record "TrAsOkSw" kept in work RAM */
+    TrAs_OkSwitchView_t TrAs_OkSwitchView;
+    /* AcIndexWideES view record "TrAsPartSelSw" kept in work RAM */
+    TrAs_PartSelectSwitchView_t TrAs_PartSelectSwitchView;
+    /* per-language message pointers; all six point at the Sprintf buffer 0x20CB4 */
+    uint32_t TrAsSureLang_MessagePtrTable[6];
+    /* Kubo Function table, registered with 0 entries (one null word) */
+    uint32_t Kubo_FunctionTable[1];
+    /* Kubo Function-name table (slot 0x408), 0 entries; holds a pointer to an empty name */
+    uint32_t Kubo_FunctionNameTable[1];
+    /* InitializeKubo view work cells (reverb/DSP/EQ screens, sequencer menus, help windows), power-on image */
+    Kubo_ViewWorkCells_t Kubo_ViewWorkCells;
+    /* AcFuncEditSw view record "CycRecClrSw" kept in work RAM */
+    CycRec_ClearSwitchView_t CycRec_ClearSwitchView;
+    /* Label view record "CycRecClrStr" kept in work RAM */
+    CycRec_ClearLabelView_t CycRec_ClearLabelView;
+    /* AcTitleMenu view record "VocWorkSw" kept in work RAM */
+    Kubo_VocWorkMenuView_t Kubo_VocWorkMenuView;
+    /* AcTitleMenu view record "FadeInOutSw" kept in work RAM */
+    Kubo_FadeInOutMenuView_t Kubo_FadeInOutMenuView;
+    /* AcTitleMenu view record "MixerSw" kept in work RAM */
+    Kubo_MixerMenuView_t Kubo_MixerMenuView;
+    /* AcTitleMenu view record "DiskLoadSw" kept in work RAM */
+    Kubo_DiskLoadMenuView_t Kubo_DiskLoadMenuView;
+    /* sequencer edit value list: from-cursor, to-cursor, which one SqedtVal2 edits */
+    SqedtFunc_CursorState_t SqedtFunc_CursorState;
+    /* byte copied to +1 of every new open-file slot; 0 makes SeqChan_ValidateAndDispatch return 0 */
+    FileOpen_SlotByte1Init_t FileOpen_SlotByte1Init;
+    /* parameter block of drive "A", reached through FileIO_DeviceTable +26 */
+    uint8_t FileIO_DriveAParamBlock[144];
+    /* Naka_DrawbarOrgan_Screens: 18 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* drive A file-level operation table (open = entry 0) */
+    uint32_t FileIO_DriveAFileOps[10];
+    /* drive A block-level operation table (FileIO_DeviceTable +14) */
+    uint32_t FileIO_DriveABlockOps[8];
+    /* file-system device descriptors, 34 bytes each (FileIO_DeviceCount = 1: drive "A") */
+    FileIO_DeviceTable_t FileIO_DeviceTable;
+    /* number of FileIO_DeviceTable entries */
+    uint16_t FileIO_DeviceCount;
+    /* set when a sector-cache age counter wraps (bit 15); the next pass renormalises the ages */
+    SectorCache_AgeOverflowFlag_t SectorCache_AgeOverflowFlag;
+    /* floppy disk type, the type last acknowledged, and the disk-changed word */
+    FDC_DiskTypeState_t FDC_DiskTypeState;
+    /* disk stream reader: total length, source (0 = file, 1 = raw sectors), buffer pointer */
+    DiskStream_State_t DiskStream_State;
+    /* InitializeEast view work cells (reverb/EQ presets, MIDI menu), power-on image */
+    East_ReverbMidiMenuWorkCells_t East_ReverbMidiMenuWorkCells;
+    /* InitializeEast view work cells (MIDI menu page 2; ends with the low half of MidiPartSetting_Window), power-on image */
+    East_MidiMenuPage2WorkCells_t East_MidiMenuPage2WorkCells;
+    /* InitializeEast view work cells (MIDI part/control/realtime/common/in-out/exclusive settings; starts and ends inside a 32-bit cell), power-on image */
+    East_MidiSettingWorkCells_t East_MidiSettingWorkCells;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* InitializeEast view work cells (exclusive receive, GM mode, PCG/panel-memory output, entertainer, split; starts inside a 32-bit cell), power-on image */
+    East_MidiSetupWorkCells_t East_MidiSetupWorkCells;
+    /* AcSendEditSw view record kept in work RAM */
+    East_SendSwitchView_t East_SendSwitchView;
+    /* InitializeMurai view work cells (sound menu, part settings, mixer, techni-chord, drawbar, accordion, messages), power-on image */
+    Murai_SoundMenuWorkCells_t Murai_SoundMenuWorkCells;
     /* MixerPart_NamePtrTable: 32 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
-    uint32_t MixerPart_NamePtrTable[32];
-    uint16_t field_0cc8;
-    uint8_t pad_168[2];  /* zero padding */
+    /* zero padding */
+    /* LswLeftHold EVT_GET_LSW_STRING texts: [0] "OFF", [1] "ON " */
+    uint32_t LswLeftHold_OnOffStrPtrs[2];
+    /* IvSdpart part-name strings by part row (RIGHT 1 .. RHYTHM, blank) */
+    uint32_t IvSdpart_PartNameStrPtrs[30];
+    /* IvSdpart page index into IvSdpart_PageViews (8 = top page) */
+    uint16_t IvSdpart_CurrentPage;
+    /* IvSdpart selected part row (index into IvSdpart_PartNameStrPtrs / IvSdpart_PartNumberByRow) */
+    uint16_t IvSdpart_PartRow;
     /* Naka_DrawbarControl_Table: 28 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
     uint32_t Naka_DrawbarControl_Table[28];
     uint16_t field_0d3c;
@@ -1928,124 +2086,30 @@ typedef struct __attribute__((packed)) {
     char str_10[2];
     char str_11[2];
     /* Naka_DrawbarDisplay_Table1: 32 pointers (cut from ptrs_6 by split_naka_pointer_arrays.py) */
-    uint32_t Naka_DrawbarDisplay_Table1[32];
+    /* font names for the font-id property: CHARA1..CHARA5W, "", then NULLs */
+    uint32_t FontIDProc_FontNameTable[32];
     /* Naka_DrawbarDisplay_Table2: 32 pointers (cut from ptrs_6 by split_naka_pointer_arrays.py) */
-    uint32_t Naka_DrawbarDisplay_Table2[32];
-    uint16_t field_13d8;
-    uint16_t field_13da;
-    uint8_t CheckTitle_AcTitleMenu_Selected[2];
-    uint8_t DebugWindow_AcWindowMenu_Selected[2];
-    uint16_t ClipBoard_Window;
-    uint16_t field_13e2;
-    uint16_t DebugWindow_Parent;
-    uint16_t field_13e6;
-    uint16_t DebugWindow_Child;
-    uint16_t field_13ea;
-    uint8_t DebugWindow_DbDebugMenu_Selected[2];
-    uint16_t DebugWindow_DbDebugMenu_Page;
-    uint16_t NamingWindow_Parent;
-    uint16_t field_13f2;
-    uint16_t NamingWindow_Child;
-    uint16_t field_13f6;
-    uint8_t NamingCursorBox_Cursor[2];
-    uint16_t field_13fa;
-    uint8_t pad_251[4];  /* zero padding */
-    uint16_t MemoWindow_Parent;
-    uint16_t field_1402;
-    uint16_t MemoWindow_Child;
-    uint16_t field_1406;
-    uint16_t TrackSwitchWindow_Parent;
-    uint16_t field_140a;
-    uint16_t TrackSwitchWindow_Child;
-    uint16_t field_140e;
-    uint16_t TrackSwitchWindow_AcTrackSwitch_Onoff;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_Part[2];
-    uint8_t TrackSwitchWindow_AcTrackSwitch_Recplay[2];
-    uint8_t TrackSwitchWindow_AcTrackSwitch_2_Onoff[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_2_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_2_Recplay[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_3_Onoff;
-    uint16_t TrackSwitchWindow_AcTrackSwitch_3_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_3_Recplay[2];
-    uint8_t TrackSwitchWindow_AcTrackSwitch_4_Onoff[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_4_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_4_Recplay[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_5_Onoff;
-    uint16_t TrackSwitchWindow_AcTrackSwitch_5_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_5_Recplay[2];
-    uint8_t TrackSwitchWindow_AcTrackSwitch_6_Onoff[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_6_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_6_Recplay[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_7_Onoff;
-    uint16_t TrackSwitchWindow_AcTrackSwitch_7_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_7_Recplay[2];
-    uint8_t TrackSwitchWindow_AcTrackSwitch_8_Onoff[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_8_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_8_Recplay[2];
-    uint8_t TrackSwitchWindow_AcTrackSwitch_9_Onoff[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_9_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_9_Recplay[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_10_Onoff;
-    uint16_t TrackSwitchWindow_AcTrackSwitch_10_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_10_Recplay[2];
-    uint8_t TrackSwitchWindow_AcTrackSwitch_11_Onoff[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_11_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_11_Recplay[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_12_Onoff;
-    uint16_t TrackSwitchWindow_AcTrackSwitch_12_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_12_Recplay[2];
-    uint8_t TrackSwitchWindow_AcTrackSwitch_13_Onoff[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_13_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_13_Recplay[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_14_Onoff;
-    uint16_t TrackSwitchWindow_AcTrackSwitch_14_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_14_Recplay[2];
-    uint8_t TrackSwitchWindow_AcTrackSwitch_15_Onoff[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_15_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_15_Recplay[2];
-    uint16_t TrackSwitchWindow_AcTrackSwitch_16_Onoff;
-    uint16_t TrackSwitchWindow_AcTrackSwitch_16_Part;
-    uint8_t TrackSwitchWindow_AcTrackSwitch_16_Recplay[2];
-    uint16_t MemDumpWindow_Parent;
-    uint16_t field_1472;
-    uint16_t MemDumpWindow_Child;
-    uint16_t field_1476;
-    uint16_t MemDumpWindow_DbMemoryDump_Adr;
-    uint8_t pad_268[2];  /* zero padding */
-    uint16_t CheckTitle_Window;
-    uint16_t field_147e;
-    uint8_t Naming_AcScreenMenu_Selected[2];
-    uint8_t Wall_AcScreenMenu_Selected[2];
-    uint16_t CheckNaming_Window;
-    uint16_t field_1486;
-    uint16_t CheckWall_Window;
-    uint16_t field_148a;
-    naka_dispatch_t w10;  /* 0x4E */
-    uint8_t pad_270[2];  /* zero padding */
-    uint32_t ptr_14a6;
-    uint32_t ptr_14aa;
-    uint16_t field_14ae;
-    uint16_t field_14b0;
-    uint16_t field_14b2;
-    uint8_t pad_271[4];  /* zero padding */
-    naka_dispatch_t w11;  /* 0x4E */
-    uint8_t pad_272[2];  /* zero padding */
-    uint32_t NakaDbg_LowerCaseChars2_ptr;
-    uint32_t NakaDbg_LowerCaseChars_ptr;
-    uint16_t field_14da;
-    uint16_t field_14dc;
-    uint16_t field_14de;
-    uint8_t pad_273[2];  /* zero padding */
-    uint16_t field_14e2;
-    naka_dispatch_t w12;  /* 0x4E */
-    uint8_t pad_274[2];  /* zero padding */
-    uint32_t ptr_14fe;
-    uint32_t ptr_1502;
-    uint16_t field_1506;
-    uint16_t field_1508;
-    uint16_t field_150a;
-    uint8_t pad_275[2];  /* zero padding */
-    uint16_t field_150e;
+    /* zero padding */
+    /* zero padding */
+    /* 0x4E */
+    /* zero padding */
+    /* zero padding */
+    /* 0x4E */
+    /* zero padding */
+    /* zero padding */
+    /* 0x4E */
+    /* zero padding */
+    /* zero padding */
+    /* font file names chara1.fnt..chara5w.fnt, "", NULLs; parallel to FontIDProc_FontNameTable; no reader found */
+    uint32_t Font_FileNamePtrTable[32];
+    /* InitializeRoot view work cells (panel simulator, debug window, naming, memo, track switch, check windows), power-on image */
+    Root_DebugNamingWorkCells_t Root_DebugNamingWorkCells;
+    /* AcIndexToggle view record "NamingABC" kept in work RAM */
+    Root_NamingUpperCaseToggleView_t Root_NamingUpperCaseToggleView;
+    /* AcIndexToggle view record "Namingabc" kept in work RAM */
+    Root_NamingLowerCaseToggleView_t Root_NamingLowerCaseToggleView;
+    /* AcIndexToggle view record "NamingSymbol" kept in work RAM */
+    Root_NamingSymbolToggleView_t Root_NamingSymbolToggleView;
     /* Naka_DrawbarReg_Table: 69 pointers (cut from ptrs_7 by split_naka_pointer_arrays.py) */
     uint32_t Naka_DrawbarReg_Table[69];
     uint16_t field_1624;
@@ -3085,2700 +3149,112 @@ _Static_assert(sizeof(naka_sequencer_channels_t) == 7936,
 const naka_sequencer_channels_t naka_sequencer_channels_data
     __attribute__((section(".text"), used)) = {
 
-    .w0 = {
-        .header       = NAKA_HDR(NAKA_TYPE_CONTAINER),
-        .parent_idx     = NAKA_NONE,
-        .self_idx       = 0x0001,
-        .next_sibling   = NAKA_NONE,
-        .prev_sibling   = NAKA_NONE,
-        .child_count    = 0x0002,
-        .field_0e       = 0x0000,
-        .field_10       = 0x0000,
-        .handler        = NAKA_ADDR(Naka_PresentationRootState),
-        .style          = 0x00FF,
-        .field_18       = 0x0000,
-        .field_1a       = 0x0060,
-        .screen_id      = 0x01A0,
-        .handler_table  = 0x0003DCBA,
-        .string_ptr     = 0x00E1F782,
-        .string_id      = 0x0073,
-        .reserved       = 0x0000,
+    .FDTest_ScreenView = { 0x01600034, 0xFFFF, 0x0001, 0xFFFF, 0xFFFF, 0x0002, { 0, 0, 319, 239 }, 0x00FF, 0x0000, 0x01A00060, 0x0003DCBA, (NAKA_ADDR(HamaStr_HamaListProc) + 14), 0x00000073 },
+
+    .FDTest_ResultCounters = { 0x0000, 0x0000, 0x0000 },
+
+    .Xapr_PresentFlag = { 0x00, 0xFF },
+
+    .Yoko_ViewWorkCells = { 0xFFFFFFFF, 0x0000, 0x0001, 0x00000000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000001, 0x00000001, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0x0000, 0x0001, 0x00000000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0x0001, 0x0000, 0x0001, 0x0002, 0x0000, 0x0000, 0x0003, 0x0000, 0x0001, 0x0004, 0x0000, 0x0000, 0x0005, 0x0000, 0x0001, 0x0006, 0x0000, 0x0000, 0x0007, 0x0000, 0x0000, 0x0008, 0x0000, 0x0001, 0x0009, 0x0000, 0x0000, 0x000A, 0x0000, 0x0001, 0x000B, 0x0000, 0x0000, 0x000C, 0x0000, 0x0001, 0x000D, 0x0000, 0x0000, 0x000E, 0x0000, 0x0001, 0x000F, 0x0000, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0009, 0x0001, 0x00CD3768, 0x00CD3778, 0x00CD3794, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x00000000, 0x0001, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0009, 0x0009, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0001, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0001, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0001 },
+
+    .TrAs_OkSwitchView = { 0x0160003E, 0x0000, 0xFFFF, 0x0004, 0x0002, 0x0000, { 281, 160, 311, 177 }, 0x0007, 0x00C1, 0xFFFF, 0x00000000, 0x0000, 0x0000, 0x000B, 0x0006, (NAKA_ADDR(NakaWidget_TrAsFileList) + 36) },
+
+    .TrAs_PartSelectSwitchView = { 0x01600022, 0x0004, 0xFFFF, 0x000A, 0x0008, 0x0001, { 86, 216, 157, 238 }, 0x0007, 0x00C9, 0x0001, 0x00000000, 0x0000, 0x0000, 0x0002, 0x0003, 0x0003 },
+
+    .TrAsSureLang_MessagePtrTable = {
+        0x00020CB4, 0x00020CB4, 0x00020CB4, 0x00020CB4,
+        0x00020CB4, 0x00020CB4,
     },
 
-    .pad_0 = { 0 },
-
-    .field_0031 = NAKA_NONE,
-
-    .NakaData_RomEnd_ptr = NAKA_ADDR(NakaData_RomEnd),
-
-    .field_0037 = 0x0100,
-
-    .pad_1 = { 0 },
-
-    .DpSmf_AcRamEditBox_Value = { 0 },
-
-    .SMFMuteSw_Onoff = { 0 },
-
-    .MIXER_VwMenuBox_Selected = { 0 },
-
-    .MIC_VwMenuBox_Selected = { 0 },
-
-    .SmfMedley_TtlScreen_Window = NAKA_NONE,
-
-    .field_0046 = NAKA_NONE,
-
-    .Mixer_AcTitleMenu_Selected = { 0 },
-
-    .Mic_AcTitleMenu_Selected = { 0 },
-
-    .Lyrics_AcTitleMenu_2_Selected = { 0 },
-
-    .CDswWindow_Parent = NAKA_NONE,
-
-    .field_0050 = NAKA_NONE,
-
-    .CDswWindow_Child = NAKA_NONE,
-
-    .field_0054 = NAKA_NONE,
-
-    .PauseDisp_Value = 0x0001,
-
-    .pad_3 = { 0 },
-
-    .PlayDisp_Value = 0x0001,
-
-    .pad_4 = { 0 },
-
-    .Lyrics_Parent = NAKA_NONE,
-
-    .field_0060 = NAKA_NONE,
-
-    .Lyrics_Child = NAKA_NONE,
-
-    .field_0064 = NAKA_NONE,
-
-    .DpDoc_Window = NAKA_NONE,
-
-    .field_0068 = NAKA_NONE,
-
-    .DOCR1Sw_Onoff = 0x0001,
-
-    .DOCR2Sw_Onoff = { 0 },
-
-    .DOCOrchSw_Onoff = { 0 },
-
-    .MIXER_VwMenuBox_2_Selected = { 0 },
-
-    .MIC_VwMenuBox_2_Selected = { 0 },
-
-    .DpPd_Window = NAKA_NONE,
-
-    .field_0076 = NAKA_NONE,
-
-    .PDR1Sw_Onoff = 0x0001,
-
-    .PDOrchSw_Onoff = { 0 },
-
-    .MIXER_VwMenuBox_3_Selected = { 0 },
-
-    .MIC_VwMenuBox_3_Selected = { 0 },
-
-    .DpSmfLyr_Window = NAKA_NONE,
-
-    .field_0082 = NAKA_NONE,
-
-    .MIC_VwMenuBox_4_Selected = { 0 },
-
-    .DpMdlySmf_Window = NAKA_NONE,
-
-    .field_0088 = NAKA_NONE,
-
-    .Lyrics_AcTitleMenu_3_Selected = { 0 },
-
-    .DpMdlySmf_AcRamEditBox_Selected = 0x0001,
-
-    .DpMdlySmf_AcRamEditBox_Value = { 0 },
-
-    .MIXER_VwMenuBox_4_Selected = { 0 },
-
-    .MIC_VwMenuBox_5_Selected = { 0 },
-
-    .SmfMedley_TtlScreen_2_Window = NAKA_NONE,
-
-    .field_009a = NAKA_NONE,
-
-    .DpMdlyDoc_Window = NAKA_NONE,
-
-    .field_009e = NAKA_NONE,
-
-    .field_00a0 = 0x0001,
-
-    .DOCMedR2Sw_Onoff = { 0 },
-
-    .DOCMedOrchSw_Onoff = { 0 },
-
-    .MIXER_VwMenuBox_5_Selected = { 0 },
-
-    .MIC_VwMenuBox_6_Selected = { 0 },
-
-    .DpMdlyPd_Window = NAKA_NONE,
-
-    .field_00ac = NAKA_NONE,
-
-    .field_00ae = 0x0001,
-
-    .PDMedOrchSw_Onoff = { 0 },
-
-    .MIXER_VwMenuBox_6_Selected = { 0 },
-
-    .MIC_VwMenuBox_7_Selected = { 0 },
-
-    .DpMdlySmfLyr_Window = NAKA_NONE,
-
-    .field_00b8 = NAKA_NONE,
-
-    .pad_12 = { 0 },
-
-    .DkMdlyPly_Window = NAKA_NONE,
-
-    .field_00be = NAKA_NONE,
-
-    .pad_13 = { 0 },
-
-    .NakaWidget_SongMdlyOrchSel_Parent = NAKA_NONE,
-
-    .field_00c4 = NAKA_NONE,
-
-    .NakaWidget_SongMdlyOrchSel_Child = NAKA_NONE,
-
-    .field_00c8 = NAKA_NONE,
-
-    .NakaWidget_SongMdlySongSel1_Onoff = 0x0001,
-
-    .NakaWidget_SongMdlySongSel1_Part = { 0 },
-
-    .NakaWidget_SongMdlySongSel1_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel2_Onoff = { 0 },
-
-    .NakaWidget_SongMdlySongSel2_Part = 0x0001,
-
-    .NakaWidget_SongMdlySongSel2_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel3_Onoff = 0x0001,
-
-    .NakaWidget_SongMdlySongSel3_Part = 0x0002,
-
-    .NakaWidget_SongMdlySongSel3_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel4_Onoff = { 0 },
-
-    .NakaWidget_SongMdlySongSel4_Part = 0x0003,
-
-    .NakaWidget_SongMdlySongSel4_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel5_Onoff = 0x0001,
-
-    .NakaWidget_SongMdlySongSel5_Part = 0x0004,
-
-    .NakaWidget_SongMdlySongSel5_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel6_Onoff = { 0 },
-
-    .NakaWidget_SongMdlySongSel6_Part = 0x0005,
-
-    .NakaWidget_SongMdlySongSel6_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel7_Onoff = 0x0001,
-
-    .NakaWidget_SongMdlySongSel7_Part = 0x0006,
-
-    .NakaWidget_SongMdlySongSel7_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel8_Onoff = { 0 },
-
-    .NakaWidget_SongMdlySongSel8_Part = 0x0007,
-
-    .NakaWidget_SongMdlySongSel8_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel9_Onoff = { 0 },
-
-    .NakaWidget_SongMdlySongSel9_Part = 0x0008,
-
-    .NakaWidget_SongMdlySongSel9_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel10_Onoff = 0x0001,
-
-    .NakaWidget_SongMdlySongSel10_Part = 0x0009,
-
-    .NakaWidget_SongMdlySongSel10_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel11_Onoff = { 0 },
-
-    .NakaWidget_SongMdlySongSel11_Part = 0x000A,
-
-    .NakaWidget_SongMdlySongSel11_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel12_Onoff = 0x0001,
-
-    .NakaWidget_SongMdlySongSel12_Part = 0x000B,
-
-    .NakaWidget_SongMdlySongSel12_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel13_Onoff = { 0 },
-
-    .NakaWidget_SongMdlySongSel13_Part = 0x000C,
-
-    .NakaWidget_SongMdlySongSel13_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel14_Onoff = 0x0001,
-
-    .NakaWidget_SongMdlySongSel14_Part = 0x000D,
-
-    .NakaWidget_SongMdlySongSel14_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel15_Onoff = { 0 },
-
-    .NakaWidget_SongMdlySongSel15_Part = 0x000E,
-
-    .NakaWidget_SongMdlySongSel15_Recplay = { 0 },
-
-    .NakaWidget_SongMdlySongSel16_Onoff = 0x0001,
-
-    .NakaWidget_SongMdlySongSel16_Part = 0x000F,
-
-    .NakaWidget_SongMdlySongSel16_Recplay = { 0 },
-
-    .SqMdlyPly_Window = NAKA_NONE,
-
-    .field_012c = NAKA_NONE,
-
-    .pad_30 = { 0 },
-
-    .SqTrSel_Window = NAKA_NONE,
-
-    .field_0132 = NAKA_NONE,
-
-    .NakaWidget_StepRecSubPanel_Window = NAKA_NONE,
-
-    .field_0136 = NAKA_NONE,
-
-    .SqTrAs_Window = NAKA_NONE,
-
-    .field_013a = NAKA_NONE,
-
-    .Preset_AcTitleMenu_Selected = { 0 },
-
-    .TrAsGrid_Selrow = 0x0009,
-
-    .TrAsGrid_Selcol = 0x0001,
-
-    .TrAsGrid_Pcol = 0x3768,
-
-    .field_0144 = 0x00CD,
-
-    .TrAsGrid_Prow = 0x3778,
-
-    .field_0148 = 0x00CD,
-
-    .TrAsGrid_Crow = 0x3794,
-
-    .field_014c = 0x00CD,
-
-    .SqTrAsSure_Window = NAKA_NONE,
-
-    .field_0150 = NAKA_NONE,
-
-    .SqTrAsPs_Window = NAKA_NONE,
-
-    .field_0154 = NAKA_NONE,
-
-    .SqTrAsPs_AcRamEditBox_Selected = 0x0001,
-
-    .SqTrAsPs_Song_Value = { 0 },
-
-    .TrAsPsIniSel_Selected = 0x0001,
-
-    .TrAsPsTechSel_Selected = { 0 },
-
-    .TrAsPsGmSel_Selected = { 0 },
-
-    .SqTrAsPsSure1_Window = NAKA_NONE,
-
-    .field_0164 = NAKA_NONE,
-
-    .SqTrAsPsSure2_Window = NAKA_NONE,
-
-    .field_0168 = NAKA_NONE,
-
-    .SqSngSel_Window = NAKA_NONE,
-
-    .field_016c = NAKA_NONE,
-
-    .Naming_AcTitleMenu_Se_016E_Value = { 0 },
-
-    .SqSngSel_PsSongSelBox_Sel_num = 0x0009,
-
-    .SqSngSel_PsSongSelBox_2_Sel_num = 0x0009,
-
-    .SqNameing_Window = NAKA_NONE,
-
-    .field_0176 = NAKA_NONE,
-
-    .AfterTouchSet_Window = NAKA_NONE,
-
-    .field_017a = NAKA_NONE,
-
-    .AfterTouchSet_AcBitEditBox_Selected = 0x0001,
-
-    .AfterTouchSet_AfterTouchRecord_Value = { 0 },
-
-    .StepPartBal_Window = NAKA_NONE,
-
-    .field_0182 = NAKA_NONE,
-
-    .DemoMenu_Window = NAKA_NONE,
-
-    .field_0186 = NAKA_NONE,
-
-    .Performances_AcTitleMenu_Selected = { 0 },
-
-    .FeaturePresentation_AcTitleMenu_Selected = { 0 },
-
-    .DemoStyle_Window = NAKA_NONE,
-
-    .field_018e = NAKA_NONE,
-
-    .DemoSong0_Selected = { 0 },
-
-    .DemoSong1_Selected = { 0 },
-
-    .DemoSong2_Selected = { 0 },
-
-    .DemoSong3_Selected = { 0 },
-
-    .DemoSong4_Selected = { 0 },
-
-    .DemoSong5_Selected = { 0 },
-
-    .DemoStyle_PsWideToggle_Onoff = 0x0001,
-
-    .DemoStyle_PsWideToggle_2_Onoff = { 0 },
-
-    .DemoStyle_PsWideToggle_3_Onoff = { 0 },
-
-    .DemoSound_Window = NAKA_NONE,
-
-    .field_01a4 = NAKA_NONE,
-
-    .DemoSong6_Selected = { 0 },
-
-    .DemoSong7_Selected = { 0 },
-
-    .DemoSong8_Selected = { 0 },
-
-    .DemoSong9_Selected = { 0 },
-
-    .DemoSong10_Selected = { 0 },
-
-    .DemoSong11_Selected = { 0 },
-
-    .DemoSound_PsWideToggle_Onoff = { 0 },
-
-    .DemoSound_PsWideToggle_2_Onoff = 0x0001,
-
-    .DemoSound_PsWideToggle_3_Onoff = { 0 },
-
-    .DemoRhy_Window = NAKA_NONE,
-
-    .field_01ba = NAKA_NONE,
-
-    .DemoSong12_Selected = { 0 },
-
-    .DemoSong13_Selected = { 0 },
-
-    .DemoSong14_Selected = { 0 },
-
-    .DemoSong15_Selected = { 0 },
-
-    .DemoSong16_Selected = { 0 },
-
-    .DemoSong17_Selected = { 0 },
-
-    .DemoRhy_PsWideToggle_Onoff = { 0 },
-
-    .DemoRhy_PsWideToggle_2_Onoff = { 0 },
-
-    .field_01cc = 0x0001,
-
-    .w1 = {
-        .header    = NAKA_HDR(0x3E),
-        .field_04   = 0x0000,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x00020004,
-        .inst_ptr   = 0x01190000,
-        .link_ptr   = 0x013700A0,
-        .proc_addr  = 0x000700B1,
+    .Kubo_FunctionTable = {
+        0x00000000,
     },
 
-    .field_01e6 = 0x00C1,
-
-    .field_01e8 = NAKA_NONE,
-
-    .pad_42 = { 0 },
-
-    .field_01f2 = 0x000B,
-
-    .field_01f4 = 0x0006,
-
-    .ptr_01f6 = 0x00E22C32,
-
-    .w2 = {
-        .header    = NAKA_HDR(0x22),
-        .field_04   = 0x0004,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x0008000A,
-        .inst_ptr   = 0x00560001,
-        .link_ptr   = 0x009D00D8,
-        .proc_addr  = 0x000700EE,
+    .Kubo_FunctionNameTable = {
+        NAKA_ADDR(Kubo_FunctionNameTable_408_EndName),
     },
 
-    .field_0212 = 0x00C9,
+    .Kubo_ViewWorkCells = { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0001, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0001, 0x0000, 0x0002, 0x0001, 0x0000, 0x0001, 0x0001, 0x0000, 0x000E, 0x0001, 0x0000, 0x000F, 0x0001, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0001, 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0001, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0x0000, 0x0001, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0001, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0x0000, 0x0001, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0x0000, 0x0001, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0x0000, 0x0001, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0001, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0008, 0x0001, 0x00D237B4, 0x00D237C4, 0x00D237DC, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF },
 
-    .field_0214 = 0x0001,
+    .CycRec_ClearSwitchView = { 0x01600020, 0x0000, 0x0014, 0x0015, 0x0012, 0x0000, { 8, 76, 57, 93 }, 0x0007, 0x00C1, 0xFFFF, 0x00000000, 0x0000, 0x0000, 0x0089, 0x0000, 0x0128001D },
 
-    .pad_43 = { 0 },
+    .CycRec_ClearLabelView = { 0x0160002B, 0x0013, 0xFFFF, 0xFFFF, 0xFFFF, 0x0000, { 10, 77, 53, 95 }, (NAKA_ADDR(NakaWidget_KuboView085_18_Label) + 38), 0x00000000, 0x0000 },
 
-    .field_021e = 0x0002,
+    .Kubo_VocWorkMenuView = { 0x0160001D, 0x0000, 0xFFFF, 0x0004, 0x0001, 0x0000, { 8, 30, 156, 55 }, 0x00F7, 0x0000, 0xFFFF, 0x00000000, 0x00FF, 0x0000, 0x0088, 0x0003E12E, (NAKA_ADDR(NakaWidget_EnterTainerScr_2_Label) + 46), 0x01A000D7, 0x00000000 },
 
-    .field_0220 = 0x0003,
+    .Kubo_FadeInOutMenuView = { 0x0160001D, 0x0000, 0xFFFF, 0x0005, 0x0003, 0x0000, { 8, 72, 156, 97 }, 0x00F7, 0x0000, 0xFFFF, 0x00000000, 0x00FF, 0x0000, 0x0089, 0x0003E130, NAKA_ADDR(NakaInst_FADE_IN_OUT_SETTING), 0x01A000D8, 0x00000000 },
 
-    .field_0222 = 0x0003,
+    .Kubo_MixerMenuView = { 0x0160001D, 0x0000, 0xFFFF, 0x0006, 0x0004, 0x0000, { 8, 114, 156, 139 }, 0x00F7, 0x0000, 0xFFFF, 0x00000000, 0x00FF, 0x0000, 0x008A, 0x0003E132, (NAKA_ADDR(NakaInst_FADE_IN_OUT_SETTING) + 20), 0x01A00008, 0x00000000 },
 
-    .field_0224 = 0x0CB4,
+    .Kubo_DiskLoadMenuView = { 0x0160001D, 0x0000, 0xFFFF, 0x0007, 0x0005, 0x0000, { 8, 156, 156, 181 }, 0x00F7, 0x0000, 0xFFFF, 0x00000000, 0x00FF, 0x0000, 0x008B, 0x0003E134, (NAKA_ADDR(NakaInst_FADE_IN_OUT_SETTING) + 26), 0x01A00061, 0x00000000 },
 
-    .field_0226 = 0x0002,
+    .SqedtFunc_CursorState = { 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF },
 
-    .field_0228 = 0x0CB4,
+    .FileOpen_SlotByte1Init = { 0x01, 0xFF },
 
-    .field_022a = 0x0002,
-
-    .field_022c = 0x0CB4,
-
-    .field_022e = 0x0002,
-
-    .field_0230 = 0x0CB4,
-
-    .field_0232 = 0x0002,
-
-    .field_0234 = 0x0CB4,
-
-    .field_0236 = 0x0002,
-
-    .field_0238 = 0x0CB4,
-
-    .field_023a = 0x0002,
-
-    .pad_44 = { 0 },
-
-    .Naka_ReverbScreen_EmptyStr_ptr = NAKA_ADDR(Kubo_FunctionNameTable_408_EndName),
-
-    .Reverb_TtlScreen_Window = NAKA_NONE,
-
-    .field_0246 = NAKA_NONE,
-
-    .DspEffect_TtlScreen_Window = NAKA_NONE,
-
-    .field_024a = NAKA_NONE,
-
-    .Equalizer_TtlScreen_Window = NAKA_NONE,
-
-    .field_024e = NAKA_NONE,
-
-    .EqOnOff_Onoff = { 0 },
-
-    .AcousticIllusion_TtlScreen_Window = NAKA_NONE,
-
-    .field_0254 = NAKA_NONE,
-
-    .SequencerMenu_TtlScreen_Window = NAKA_NONE,
-
-    .field_0258 = NAKA_NONE,
-
-    .Create_AcTitleMenu_Selected = { 0 },
-
-    .EDIT_AcModeMenu_Selected = { 0 },
-
-    .PanelWrite_AcTitleMenu_Selected = { 0 },
-
-    .SequencerPlay_TtlScreen_Window = NAKA_NONE,
-
-    .field_0262 = NAKA_NONE,
-
-    .CycPlySw_Onoff = { 0 },
-
-    .SngSelWin1_Parent = NAKA_NONE,
-
-    .field_0268 = NAKA_NONE,
-
-    .SngSelWin1_Child = NAKA_NONE,
-
-    .field_026c = NAKA_NONE,
-
-    .Medley_AcTitleMenu_Selected = { 0 },
-
-    .SngSelWin2_Parent = NAKA_NONE,
-
-    .field_0272 = NAKA_NONE,
-
-    .SngSelWin2_Child = NAKA_NONE,
-
-    .field_0276 = NAKA_NONE,
-
-    .CyclePlay_TtlScreen_Window = NAKA_NONE,
-
-    .field_027a = NAKA_NONE,
-
-    .CyclePlay_PsEditBox_Selected = { 0 },
-
-    .CyclePlay_PsEditBox_2_Selected = 0x0001,
-
-    .CyclePlay_PsEditBox_3_Selected = { 0 },
-
-    .EasyRecord_TtlScreen_Window = NAKA_NONE,
-
-    .field_0284 = NAKA_NONE,
-
-    .Naming_AcTitleMenu_Se_0286_Value = { 0 },
-
-    .EasyRecord_PsTrackSwitch_Onoff = { 0 },
-
-    .EasyRecord_PsTrackSwitch_Part = { 0 },
-
-    .EasyRecord_PsTrackSwitch_Recplay = 0x0001,
-
-    .EasyRecord_PsTrackSwitch_2_Onoff = { 0 },
-
-    .EasyRecord_PsTrackSwitch_2_Part = 0x0002,
-
-    .EasyRecord_PsTrackSwitch_2_Recplay = 0x0001,
-
-    .EasyRecord_PsTrackSwitch_3_Onoff = { 0 },
-
-    .EasyRecord_PsTrackSwitch_3_Part = 0x0001,
-
-    .EasyRecord_PsTrackSwitch_3_Recplay = 0x0001,
-
-    .EasyRecord_PsTrackSwitch_4_Onoff = { 0 },
-
-    .EasyRecord_PsTrackSwitch_4_Part = 0x000E,
-
-    .EasyRecord_PsTrackSwitch_4_Recplay = 0x0001,
-
-    .EasyRecord_PsTrackSwitch_5_Onoff = { 0 },
-
-    .EasyRecord_PsTrackSwitch_5_Part = 0x000F,
-
-    .EasyRecord_PsTrackSwitch_5_Recplay = 0x0001,
-
-    .Create_TtlScreen_Window = NAKA_NONE,
-
-    .field_02a8 = NAKA_NONE,
-
-    .TrackAssign_AcTitleMenu_Selected = { 0 },
-
-    .PanelWrite_AcTitleMenu_2_Selected = { 0 },
-
-    .SongSelectNaming_AcTitleMenu_Selected = { 0 },
-
-    .SongClear_AcTitleMenu_Selected = { 0 },
-
-    .SongTrackCopy_AcTitleMenu_Selected = { 0 },
-
-    .AfterTouchSet_AcTitleMenu_Selected = { 0 },
-
-    .RealtimeRecord_AcModeMenu_Selected = { 0 },
-
-    .StepRecord_AcModeMenu_Selected = { 0 },
-
-    .PunchRecord_AcTitleMenu_Selected = { 0 },
-
-    .RealtimeRecord_TtlScreen_Window = NAKA_NONE,
-
-    .field_02be = NAKA_NONE,
-
-    .CycRecSw_Onoff = { 0 },
-
-    .MetRecSw_Onoff = { 0 },
-
-    .CycClrSw_Parent = NAKA_NONE,
-
-    .field_02c6 = NAKA_NONE,
-
-    .CycClrSw_Child = NAKA_NONE,
-
-    .field_02ca = NAKA_NONE,
-
-    .RealtimeRecord_TtlScreen_2_Window = NAKA_NONE,
-
-    .field_02ce = NAKA_NONE,
-
-    .RealtimeRecord_PsEditBox_Selected = { 0 },
-
-    .RealtimeRecord_PsEditBox_2_Selected = { 0 },
-
-    .MetCycRecSw_Onoff = { 0 },
-
-    .RealtimeRecord_PsEditBox_3_Selected = 0x0001,
-
-    .PunchRecord_TtlScreen_Window = NAKA_NONE,
-
-    .field_02da = NAKA_NONE,
-
-    .MetPunchSw_Onoff = { 0 },
-
-    .PunchInOutSw_Onoff = { 0 },
-
-    .AutoPunchRecord_TtlScreen_Window = NAKA_NONE,
-
-    .field_02e2 = NAKA_NONE,
-
-    .MetPunchmSw_Onoff = { 0 },
-
-    .AutoPunchRecord_PsEditBox_Selected = 0x0001,
-
-    .AutoPunchRecord_PsEditBox_2_Selected = { 0 },
-
-    .AutoPunchRecord_PsEditBox_3_Selected = { 0 },
-
-    .AutoPunchRecord_TtlScreen_2_Window = NAKA_NONE,
-
-    .field_02ee = NAKA_NONE,
-
-    .PanelWrite_TtlScreen_Window = NAKA_NONE,
-
-    .field_02f2 = NAKA_NONE,
-
-    .SongClear_TtlScreen_Window = NAKA_NONE,
-
-    .field_02f6 = NAKA_NONE,
-
-    .SoclSureDisp_Parent = NAKA_NONE,
-
-    .field_02fa = NAKA_NONE,
-
-    .SoclSureDisp_Child = NAKA_NONE,
-
-    .field_02fe = NAKA_NONE,
-
-    .NO_AcScreenMenu_Selected = { 0 },
-
-    .SongTrackCopy_TtlScreen_Window = NAKA_NONE,
-
-    .field_0304 = NAKA_NONE,
-
-    .SngCpSureDisp_Parent = NAKA_NONE,
-
-    .field_0308 = NAKA_NONE,
-
-    .SngCpSureDisp_Child = NAKA_NONE,
-
-    .field_030c = NAKA_NONE,
-
-    .NO_AcScreenMenu_2_Selected = { 0 },
-
-    .Edit_TtlScreen_Window = NAKA_NONE,
-
-    .field_0312 = NAKA_NONE,
-
-    .EdMenuPage_Page = 0x0001,
-
-    .SQEMENU_1_Parent = NAKA_NONE,
-
-    .field_0318 = NAKA_NONE,
-
-    .SQEMENU_1_Child = NAKA_NONE,
-
-    .field_031c = NAKA_NONE,
-
-    .NoteEdit_AcTitleMenu_Selected = { 0 },
-
-    .DrumEdit_AcTitleMenu_Selected = { 0 },
-
-    .SongTrackCopy_AcTitleMenu_2_Selected = { 0 },
-
-    .TrackClear_AcTitleMenu_Selected = { 0 },
-
-    .TrackMerge_AcTitleMenu_Selected = { 0 },
-
-    .Quantize_AcTitleMenu_Selected = { 0 },
-
-    .Transpose_AcTitleMenu_Selected = { 0 },
-
-    .VelocityChange_AcTitleMenu_Selected = { 0 },
-
-    .NoteChange_AcTitleMenu_Selected = { 0 },
-
-    .AdvanceDelay_AcTitleMenu_Selected = { 0 },
-
-    .SQEMENU_2_Parent = NAKA_NONE,
-
-    .field_0334 = NAKA_NONE,
-
-    .SQEMENU_2_Child = NAKA_NONE,
-
-    .field_0338 = NAKA_NONE,
-
-    .Copy_AcTitleMenu_Selected = { 0 },
-
-    .Erase_AcTitleMenu_Selected = { 0 },
-
-    .Delete_AcTitleMenu_Selected = { 0 },
-
-    .Insert_AcTitleMenu_Selected = { 0 },
-
-    .NoteEdit_TtlScreen_Window = NAKA_NONE,
-
-    .field_0344 = NAKA_NONE,
-
-    .NoteEdit_TtlScreen_2_Window = NAKA_NONE,
-
-    .field_0348 = NAKA_NONE,
-
-    .CyclePlay_TtlScreen_2_Window = NAKA_NONE,
-
-    .field_034c = NAKA_NONE,
-
-    .CyclePlay_PsEditBox_4_Selected = 0x0001,
-
-    .CyclePlay_PsEditBox_5_Selected = { 0 },
-
-    .CyclePlay_PsEditBox_6_Selected = { 0 },
-
-    .DrumEdit_TtlScreen_Window = NAKA_NONE,
-
-    .field_0356 = NAKA_NONE,
-
-    .DrumEdit_TtlScreen_2_Window = NAKA_NONE,
-
-    .field_035a = NAKA_NONE,
-
-    .CyclePlay_TtlScreen_3_Window = NAKA_NONE,
-
-    .field_035e = NAKA_NONE,
-
-    .CyclePlay_PsEditBox_7_Selected = 0x0001,
-
-    .CyclePlay_PsEditBox_8_Selected = { 0 },
-
-    .CyclePlay_PsEditBox_9_Selected = { 0 },
-
-    .TrackClear_TtlScreen_Window = NAKA_NONE,
-
-    .field_0368 = NAKA_NONE,
-
-    .TrkClrSureDisp_Parent = NAKA_NONE,
-
-    .field_036c = NAKA_NONE,
-
-    .TrkClrSureDisp_Child = NAKA_NONE,
-
-    .field_0370 = NAKA_NONE,
-
-    .NO_AcScreenMenu_3_Selected = { 0 },
-
-    .TrackMerge_TtlScreen_Window = NAKA_NONE,
-
-    .field_0376 = NAKA_NONE,
-
-    .TrackMerge_PsEditBox_Selected = { 0 },
-
-    .TrackMerge_PsEditBox_2_Selected = 0x0001,
-
-    .TrackMerge_PsEditBox_3_Selected = { 0 },
-
-    .TrkMrgSureDisp_Parent = NAKA_NONE,
-
-    .field_0380 = NAKA_NONE,
-
-    .TrkMrgSureDisp_Child = NAKA_NONE,
-
-    .field_0384 = NAKA_NONE,
-
-    .NO_AcScreenMenu_4_Selected = { 0 },
-
-    .Quantize_TtlScreen_Window = NAKA_NONE,
-
-    .field_038a = NAKA_NONE,
-
-    .Quantize_PsEditBox_Selected = { 0 },
-
-    .Quantize_PsEditBox_2_Selected = { 0 },
-
-    .Quantize_PsEditBox_3_Selected = 0x0001,
-
-    .Quantize_PsEditBox_4_Selected = { 0 },
-
-    .Quantize_PsEditBox_5_Selected = { 0 },
-
-    .Quantize_PsEditBox_6_Selected = { 0 },
-
-    .QtzSureDisp_Parent = NAKA_NONE,
-
-    .field_039a = NAKA_NONE,
-
-    .QtzSureDisp_Child = NAKA_NONE,
-
-    .field_039e = NAKA_NONE,
-
-    .NO_AcScreenMenu_5_Selected = { 0 },
-
-    .Transpose_TtlScreen_Window = NAKA_NONE,
-
-    .field_03a4 = NAKA_NONE,
-
-    .Transpose_PsEditBox_Selected = { 0 },
-
-    .Transpose_PsEditBox_2_Selected = 0x0001,
-
-    .Transpose_PsEditBox_3_Selected = { 0 },
-
-    .Transpose_PsEditBox_4_Selected = { 0 },
-
-    .TrnsSureDisp_Parent = NAKA_NONE,
-
-    .field_03b0 = NAKA_NONE,
-
-    .TrnsSureDisp_Child = NAKA_NONE,
-
-    .field_03b4 = NAKA_NONE,
-
-    .NO_AcScreenMenu_6_Selected = { 0 },
-
-    .VelocityChange_TtlScreen_Window = NAKA_NONE,
-
-    .field_03ba = NAKA_NONE,
-
-    .VelocityChange_PsEditBox_Selected = { 0 },
-
-    .VelocityChange_PsEditBox_2_Selected = 0x0001,
-
-    .VelocityChange_PsEditBox_3_Selected = { 0 },
-
-    .VelocityChange_PsEditBox_4_Selected = { 0 },
-
-    .VeloSureDisp_Parent = NAKA_NONE,
-
-    .field_03c6 = NAKA_NONE,
-
-    .VeloSureDisp_Child = NAKA_NONE,
-
-    .field_03ca = NAKA_NONE,
-
-    .NO_AcScreenMenu_7_Selected = { 0 },
-
-    .NoteChange_TtlScreen_Window = NAKA_NONE,
-
-    .field_03d0 = NAKA_NONE,
-
-    .NoteChange_PsEditBox_Selected = { 0 },
-
-    .NoteChange_PsEditBox_2_Selected = 0x0001,
-
-    .NoteChange_PsEditBox_3_Selected = { 0 },
-
-    .NoteChange_PsEditBox_4_Selected = { 0 },
-
-    .NoteChange_PsEditBox_5_Selected = { 0 },
-
-    .NoteSureDisp_Parent = NAKA_NONE,
-
-    .field_03de = NAKA_NONE,
-
-    .NoteSureDisp_Child = NAKA_NONE,
-
-    .field_03e2 = NAKA_NONE,
-
-    .NO_AcScreenMenu_8_Selected = { 0 },
-
-    .AdvanceDelay_TtlScreen_Window = NAKA_NONE,
-
-    .field_03e8 = NAKA_NONE,
-
-    .AdvanceDelay_PsEditBox_Selected = { 0 },
-
-    .AdvanceDelay_PsEditBox_2_Selected = { 0 },
-
-    .AdvanceDelay_PsEditBox_3_Selected = 0x0001,
-
-    .AdvanceDelay_PsEditBox_4_Selected = { 0 },
-
-    .AdvSureDisp_Parent = NAKA_NONE,
-
-    .field_03f4 = NAKA_NONE,
-
-    .AdvSureDisp_Child = NAKA_NONE,
-
-    .field_03f8 = NAKA_NONE,
-
-    .NO_AcScreenMenu_9_Selected = { 0 },
-
-    .MeasureErase_TtlScreen_Window = NAKA_NONE,
-
-    .field_03fe = NAKA_NONE,
-
-    .MeasureErase_PsEditBox_Selected = 0x0001,
-
-    .MeasureErase_PsEditBox_2_Selected = { 0 },
-
-    .MeasureErase_PsEditBox_3_Selected = { 0 },
-
-    .MeasureErase_PsEditBox_4_Selected = { 0 },
-
-    .MersSureDisp_Parent = NAKA_NONE,
-
-    .field_040a = NAKA_NONE,
-
-    .MersSureDisp_Child = NAKA_NONE,
-
-    .field_040e = NAKA_NONE,
-
-    .NO_AcScreenMenu_10_Selected = { 0 },
-
-    .MeasureCopy_TtlScreen_Window = NAKA_NONE,
-
-    .field_0414 = NAKA_NONE,
-
-    .McpSureDisp_Parent = NAKA_NONE,
-
-    .field_0418 = NAKA_NONE,
-
-    .McpSureDisp_Child = NAKA_NONE,
-
-    .field_041c = NAKA_NONE,
-
-    .NO_AcScreenMenu_11_Selected = { 0 },
-
-    .MeasureDelete_TtlScreen_Window = NAKA_NONE,
-
-    .field_0422 = NAKA_NONE,
-
-    .MeasureDelete_PsEditBox_Selected = { 0 },
-
-    .MeasureDelete_PsEditBox_2_Selected = { 0 },
-
-    .MeasureDelete_PsEditBox_3_Selected = 0x0001,
-
-    .MdelSureDisp_Parent = NAKA_NONE,
-
-    .field_042c = NAKA_NONE,
-
-    .MdelSureDisp_Child = NAKA_NONE,
-
-    .field_0430 = NAKA_NONE,
-
-    .NO_AcScreenMenu_12_Selected = { 0 },
-
-    .MeasureInsert_TtlScreen_Window = NAKA_NONE,
-
-    .field_0436 = NAKA_NONE,
-
-    .MinsSureDisp_Parent = NAKA_NONE,
-
-    .field_043a = NAKA_NONE,
-
-    .MinsSureDisp_Child = NAKA_NONE,
-
-    .field_043e = NAKA_NONE,
-
-    .NO_AcScreenMenu_13_Selected = { 0 },
-
-    .MetronomeBalance_TtlScreen_Window = NAKA_NONE,
-
-    .field_0444 = NAKA_NONE,
-
-    .EnterTainerScr_Window = NAKA_NONE,
-
-    .field_0448 = NAKA_NONE,
-
-    .EnterTainerScr_AcEntertainerGridBox_Selrow = 0x0008,
-
-    .EnterTainerScr_AcEntertainerGridBox_Selcol = 0x0001,
-
-    .EnterTainerScr_AcEntertainerGridBox_Pcol = 0x37B4,
-
-    .field_0450 = 0x00D2,
-
-    .EnterTainerScr_AcEntertainerGridBox_Prow = 0x37C4,
-
-    .field_0454 = 0x00D2,
-
-    .EnterTainerScr_AcEntertainerGridBox_Crow = 0x37DC,
-
-    .field_0458 = 0x00D2,
-
-    .pad_93 = { 0 },
-
-    .EnterTainerScr_AcFuncToggle_Onoff = { 0 },
-
-    .HelpFunction_TtlScreen_Window = NAKA_NONE,
-
-    .field_0466 = NAKA_NONE,
-
-    .HelpNotXWin_Parent = NAKA_NONE,
-
-    .field_046a = NAKA_NONE,
-
-    .HelpNotXWin_Child = NAKA_NONE,
-
-    .field_046e = NAKA_NONE,
-
-    .HelpNotXWin_AcIndexWideToggle_Onoff = 0x0001,
-
-    .HelpNotXWin_AcIndexWideToggle_2_Onoff = { 0 },
-
-    .HelpNotXWin_AcIndexWideToggle_3_Onoff = { 0 },
-
-    .HelpNotXWin_AcIndexWideToggle_4_Onoff = { 0 },
-
-    .HelpXWin_Parent = NAKA_NONE,
-
-    .field_047a = NAKA_NONE,
-
-    .HelpXWin_Child = NAKA_NONE,
-
-    .field_047e = NAKA_NONE,
-
-    .HelpXWin_AcIndexWideToggle_Onoff = 0x0001,
-
-    .HelpXWin_AcIndexWideToggle_2_Onoff = { 0 },
-
-    .HelpXWin_AcIndexWideToggle_3_Onoff = { 0 },
-
-    .HelpSwTtl1Scr_Window = NAKA_NONE,
-
-    .field_0488 = NAKA_NONE,
-
-    .HelpLang2P1_Parent = NAKA_NONE,
-
-    .field_048c = NAKA_NONE,
-
-    .HelpLang2P1_Child = NAKA_NONE,
-
-    .field_0490 = NAKA_NONE,
-
-    .HelpLang2P2_Parent = NAKA_NONE,
-
-    .field_0494 = NAKA_NONE,
-
-    .HelpLang2P2_Child = NAKA_NONE,
-
-    .field_0498 = NAKA_NONE,
-
-    .HelpSwTtl2Scr_Window = NAKA_NONE,
-
-    .field_049c = NAKA_NONE,
-
-    .Help_P2_Page = 0x0001,
-
-    .HelpLang3P1_Parent = NAKA_NONE,
-
-    .field_04a2 = NAKA_NONE,
-
-    .HelpLang3P1_Child = NAKA_NONE,
-
-    .field_04a6 = NAKA_NONE,
-
-    .HelpLang3P2_Parent = NAKA_NONE,
-
-    .field_04aa = NAKA_NONE,
-
-    .HelpLang3P2_Child = NAKA_NONE,
-
-    .field_04ae = NAKA_NONE,
-
-    .HelpLang3P3_Parent = NAKA_NONE,
-
-    .field_04b2 = NAKA_NONE,
-
-    .HelpLang3P3_Child = NAKA_NONE,
-
-    .field_04b6 = NAKA_NONE,
-
-    .HelpSwTtl3Scr_Window = NAKA_NONE,
-
-    .field_04ba = NAKA_NONE,
-
-    .Help_P3_Page = 0x0001,
-
-    .HelpSwTtl4Scr_Window = NAKA_NONE,
-
-    .field_04c0 = NAKA_NONE,
-
-    .Help_P4_Page = 0x0001,
-
-    .HelpLang4P1_Parent = NAKA_NONE,
-
-    .field_04c6 = NAKA_NONE,
-
-    .HelpLang4P1_Child = NAKA_NONE,
-
-    .field_04ca = NAKA_NONE,
-
-    .HelpLang4P2_Parent = NAKA_NONE,
-
-    .field_04ce = NAKA_NONE,
-
-    .HelpLang4P2_Child = NAKA_NONE,
-
-    .field_04d2 = NAKA_NONE,
-
-    .HelpLang4P3_Parent = NAKA_NONE,
-
-    .field_04d6 = NAKA_NONE,
-
-    .HelpLang4P3_Child = NAKA_NONE,
-
-    .field_04da = NAKA_NONE,
-
-    .HelpLang4P4_Parent = NAKA_NONE,
-
-    .field_04de = NAKA_NONE,
-
-    .HelpLang4P4_Child = NAKA_NONE,
-
-    .field_04e2 = NAKA_NONE,
-
-    .w3 = {
-        .header    = NAKA_HDR(0x20),
-        .field_04   = 0x0000,
-        .field_06   = 0x0014,
-        .name_ptr   = 0x00120015,
-        .inst_ptr   = 0x00080000,
-        .link_ptr   = 0x0039004C,
-        .proc_addr  = 0x0007005D,
+    .FileIO_DriveAParamBlock = {
+        0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     },
 
-    .field_04fc = 0x00C1,
-
-    .field_04fe = NAKA_NONE,
-
-    .pad_96 = { 0 },
-
-    .field_0508 = 0x0089,
-
-    .pad_97 = { 0 },
-
-    .field_050c = 0x001D,
-
-    .field_050e = 0x0128,
-
-    .w4 = {
-        .header       = NAKA_HDR(NAKA_TYPE_LABEL),
-        .parent_idx     = 0x0013,
-        .prev_sibling   = NAKA_NONE,
-        .self_idx       = NAKA_NONE,
-        .next_sibling   = NAKA_NONE,
-        .x_offset       = 0x0000,
-        .field_0e       = 0x000A,
-        .field_10       = 0x004D,
-        .field_12       = 0x0035,
-        .field_14       = 0x005F,
-        .string_ptr     = 0x00E29A30,
-        .flags          = 0x0000,
-        .field_1a       = 0x0000,
-        .bg_color       = 0x0000,
+    .FileIO_DriveAFileOps = {
+        NAKA_ADDR(SeqByteBlock_ChannelContainer), NAKA_ADDR(SeqChan_SetupAndCallHelper), NAKA_ADDR(SeqChan_InitChannelState), NAKA_ADDR(SeqChan_ProcessEventArg0),
+        NAKA_ADDR(SeqChan_ProcessEventArg1), NAKA_ADDR(SeqChan_ValidateAndDispatch), NAKA_ADDR(SeqChan_TraverseAndProcess), NAKA_ADDR(SeqChan_ReadNextFromLoop),
+        NAKA_ADDR(SeqChan_WritePatchData), NAKA_ADDR(SeqChan_WriteExtendedPatch),
     },
 
-    .w5 = {
-        .header       = NAKA_HDR(NAKA_TYPE_MENU_ITEM),
-        .parent_idx     = 0x0000,
-        .prev_sibling   = NAKA_NONE,
-        .self_idx       = 0x0004,
-        .next_sibling   = 0x0001,
-        .x_margin       = 0x0000,
-        .y_pos          = 0x0008,
-        .sel_x1         = 0x001E,
-        .sel_y1         = 0x009C,
-        .sel_x2         = 0x0037,
-        .sel_y2         = 0x00F7,
-        .flags          = 0x0000,
-        .link_idx       = NAKA_NONE,
-        .field_1c       = 0x0000,
-        .field_1e       = 0x0000,
-        .bg_color       = 0x00FF,
-        .field_22       = 0x0000,
-        .handler_id     = 0x0088,
-        .handler_table  = 0x0003E12E,
-        .string_ptr     = 0x00E2DB80,
-        .ui_class       = 0x00D7,
-        .screen_id      = 0x01A0,
-        .string_len     = 0x0000,
-        .reserved       = 0x0000,
+    .FileIO_DriveABlockOps = {
+        NAKA_ADDR(SeqChan_ByteBlockA), NAKA_ADDR(SeqChan_ByteBlockC), NAKA_ADDR(SeqChan_ByteBlockD), NAKA_ADDR(SeqChan_ByteBlockB),
+        NAKA_ADDR(SeqChan_ByteBlockE), NAKA_ADDR(SeqChan_ByteBlockF), NAKA_ADDR(FDC_ReturnZeroLong), NAKA_ADDR(FDC_ReturnAndPop),
     },
 
-    .w6 = {
-        .header       = NAKA_HDR(NAKA_TYPE_MENU_ITEM),
-        .parent_idx     = 0x0000,
-        .prev_sibling   = NAKA_NONE,
-        .self_idx       = 0x0005,
-        .next_sibling   = 0x0003,
-        .x_margin       = 0x0000,
-        .y_pos          = 0x0008,
-        .sel_x1         = 0x0048,
-        .sel_y1         = 0x009C,
-        .sel_x2         = 0x0061,
-        .sel_y2         = 0x00F7,
-        .flags          = 0x0000,
-        .link_idx       = NAKA_NONE,
-        .field_1c       = 0x0000,
-        .field_1e       = 0x0000,
-        .bg_color       = 0x00FF,
-        .field_22       = 0x0000,
-        .handler_id     = 0x0089,
-        .handler_table  = 0x0003E130,
-        .string_ptr     = NAKA_ADDR(NakaInst_FADE_IN_OUT_SETTING),
-        .ui_class       = 0x00D8,
-        .screen_id      = 0x01A0,
-        .string_len     = 0x0000,
-        .reserved       = 0x0000,
+    .FileIO_DeviceTable = { 0x01, 0x0F, 0x00, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x0000, 0x0003E39C, 0x0003E374, NAKA_ADDR(SeqStep_TimerDispatch_ProcTables_Tail), 0x0003E2E4, 0x00000000 },
+
+    .FileIO_DeviceCount = 0x0001,
+
+    .SectorCache_AgeOverflowFlag = { 0x00, 0xFF },
+
+    .FDC_DiskTypeState = { 0x01, 0xFF, 0x01, 0xFF, 0x0001 },
+
+    .DiskStream_State = { 0x00000000, 0x00, 0xFF, 0x00022D72 },
+
+    .East_ReverbMidiMenuWorkCells = { 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0001, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0001, 0x0000, 0x0000, 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
+
+    .East_MidiMenuPage2WorkCells = { 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFF },
+
+    .East_MidiSettingWorkCells = { 0xFFFF, 0x0002, 0x0001, 0x00D137E4, 0x00D137F4, 0x00D13810, 0x0000, 0xFFFFFFFF, 0x0001, 0x0002, 0x0001, 0x00D137E4, 0x00D137F4, 0x00D13810, 0x0000, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0001, 0x00D137E4, 0x00D137F4, 0x00D13810, 0xFFFFFFFF, 0x0000, 0x0001, 0x00D137E4, 0x00D137F4, 0x00D13810, 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x00000000, 0x0000, 0x00000000, 0x0000, 0x00000000, 0x0000, 0x00000000, 0x0000, 0x00000000, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000 },
+
+    .East_MidiSetupWorkCells = { 0x0000, 0x0000, 0x00000000, 0x0000, 0x00000000, 0x0000, 0x00000000, 0x0000, 0x00000000, 0x00000000, 0xFFFFFFFF, 0x0001, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0001, 0x00D137E4, 0x00D137F4, 0x00D13804, 0x00C1, 0xFFFFFFFF, 0x0001, 0x0000, 0xFFFFFFFF, 0x0000, 0x0001, 0x00D137E4, 0x00D137F4, 0x00D13804, 0xFFFF, 0xFFFD, 0x00D13814, 0x00D13824, 0x00D13834, 0xFFFFFFFF, 0x0002, 0x0001, 0x00D137F8, 0x00D13808, 0x00D13820, 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0002, 0x0001, 0x00D1383C, 0x00D1384C, 0x00D1386C, 0xFFFFFFFF, 0x0001, 0x0001, 0x00D14264, 0x00D14274, 0x00D14288, 0xFFFFFFFF, 0x0000 },
+
+    .East_SendSwitchView = { 0x01630003, 0x0000, 0xFFFF, 0x0005, 0x0003, 0x0000, { 270, 160, 308, 177 }, 0x0007, 0x00C1, 0xFFFF, 0x00000000, 0x00F9, 0x0000, 0x000B, 0x0000, 0x0123000D, (NAKA_ADDR(NakaWidget_MidiPcgOutput_3_AcIndexWideES) + 42), 0x0003E5A6 },
+
+    .Murai_SoundMenuWorkCells = { 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0001, 0x0000, 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0001, 0x0000, 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000043, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000 },
+
+    .LswLeftHold_OnOffStrPtrs = {
+        NAKA_ADDR(MixerPartTable_Start), NAKA_ADDR(Str_Mixer_ON),
     },
 
-    .w7 = {
-        .header       = NAKA_HDR(NAKA_TYPE_MENU_ITEM),
-        .parent_idx     = 0x0000,
-        .prev_sibling   = NAKA_NONE,
-        .self_idx       = 0x0006,
-        .next_sibling   = 0x0004,
-        .x_margin       = 0x0000,
-        .y_pos          = 0x0008,
-        .sel_x1         = 0x0072,
-        .sel_y1         = 0x009C,
-        .sel_x2         = 0x008B,
-        .sel_y2         = 0x00F7,
-        .flags          = 0x0000,
-        .link_idx       = NAKA_NONE,
-        .field_1c       = 0x0000,
-        .field_1e       = 0x0000,
-        .bg_color       = 0x00FF,
-        .field_22       = 0x0000,
-        .handler_id     = 0x008A,
-        .handler_table  = 0x0003E132,
-        .string_ptr     = 0x00E2DBAA,
-        .ui_class       = 0x0008,
-        .screen_id      = 0x01A0,
-        .string_len     = 0x0000,
-        .reserved       = 0x0000,
+    .IvSdpart_PartNameStrPtrs = {
+        NAKA_ADDR(Str_PartName_Right1), NAKA_ADDR(Str_PartName_Right2), NAKA_ADDR(Str_PartName_Left), NAKA_ADDR(Str_PartName_Part4),
+        NAKA_ADDR(Str_PartName_Part5), NAKA_ADDR(Str_PartName_Part6), NAKA_ADDR(Str_PartName_Part7), NAKA_ADDR(Str_PartName_Part8),
+        NAKA_ADDR(Str_PartName_Part9), NAKA_ADDR(Str_PartName_Part10), NAKA_ADDR(Str_PartName_Part11), NAKA_ADDR(Str_PartName_Part12),
+        NAKA_ADDR(Str_PartName_Part13), NAKA_ADDR(Str_PartName_Part14), NAKA_ADDR(Str_PartName_Part15), NAKA_ADDR(Str_PartName_Part16),
+        NAKA_ADDR(Str_PartName_Chord), NAKA_ADDR(Str_PartName_RBass), NAKA_ADDR(Str_PartName_Accomp1), NAKA_ADDR(Str_PartName_Accomp2),
+        NAKA_ADDR(Str_PartName_Accomp3), NAKA_ADDR(Str_PartName_Bass), NAKA_ADDR(Str_PartName_Drums), NAKA_ADDR(Str_PartName_MSP),
+        NAKA_ADDR(Str_PartName_Metronome), NAKA_ADDR(Str_PartName_MIC), NAKA_ADDR(Str_PartName_APC), NAKA_ADDR(Str_PartName_Control),
+        NAKA_ADDR(Str_PartName_Rhythm), NAKA_ADDR(Str_PartName_Empty),
     },
 
-    .w8 = {
-        .header       = NAKA_HDR(NAKA_TYPE_MENU_ITEM),
-        .parent_idx     = 0x0000,
-        .prev_sibling   = NAKA_NONE,
-        .self_idx       = 0x0007,
-        .next_sibling   = 0x0005,
-        .x_margin       = 0x0000,
-        .y_pos          = 0x0008,
-        .sel_x1         = 0x009C,
-        .sel_y1         = 0x009C,
-        .sel_x2         = 0x00B5,
-        .sel_y2         = 0x00F7,
-        .flags          = 0x0000,
-        .link_idx       = NAKA_NONE,
-        .field_1c       = 0x0000,
-        .field_1e       = 0x0000,
-        .bg_color       = 0x00FF,
-        .field_22       = 0x0000,
-        .handler_id     = 0x008B,
-        .handler_table  = 0x0003E134,
-        .string_ptr     = 0x00E2DBB0,
-        .ui_class       = 0x0061,
-        .screen_id      = 0x01A0,
-        .string_len     = 0x0000,
-        .reserved       = 0x0000,
-    },
+    .IvSdpart_CurrentPage = 0x0008,
 
-    .w8_text = ALIGNED_STRING(""),
-
-    .str_0 = ALIGNED_STRING(""),
-
-    .str_1 = ALIGNED_STRING(""),
-
-    .field_060e = 0xFF01,
-
-    .field_0610 = 0x0001,
-
-    .pad_98 = { 0 },
-
-    .field_0658 = 0x0002,
-
-    .pad_99 = { 0 },
-
-    .Naka_DrawbarOrgan_Screens = {
-        NAKA_ADDR(SeqByteBlock_ChannelContainer),
-        NAKA_ADDR(SeqChan_SetupAndCallHelper),
-        NAKA_ADDR(SeqChan_InitChannelState),
-        NAKA_ADDR(SeqChan_ProcessEventArg0),
-        NAKA_ADDR(SeqChan_ProcessEventArg1),
-        NAKA_ADDR(SeqChan_ValidateAndDispatch),
-        NAKA_ADDR(SeqChan_TraverseAndProcess),
-        NAKA_ADDR(SeqChan_ReadNextFromLoop),
-        NAKA_ADDR(SeqChan_WritePatchData),
-        NAKA_ADDR(SeqChan_WriteExtendedPatch),
-        NAKA_ADDR(SeqChan_ByteBlockA),
-        NAKA_ADDR(SeqChan_ByteBlockC),
-        NAKA_ADDR(SeqChan_ByteBlockD),
-        NAKA_ADDR(SeqChan_ByteBlockB),
-        NAKA_ADDR(SeqChan_ByteBlockE),
-        NAKA_ADDR(SeqChan_ByteBlockF),
-        NAKA_ADDR(FDC_ReturnZeroLong),
-        NAKA_ADDR(FDC_ReturnAndPop),
-    },
-
-    .field_06e8 = 0x0F01,
-
-    .pad_100 = { 0 },
-
-    .field_06f6 = 0xE39C,
-
-    .field_06f8 = 0x0003,
-
-    .field_06fa = 0xE374,
-
-    .field_06fc = 0x0003,
-
-    .ptr_06fe = 0x00E45014,
-
-    .field_0702 = 0xE2E4,
-
-    .field_0704 = 0x0003,
-
-    .pad_101 = { 0 },
-
-    .field_070a = 0x0001,
-
-    .str_2 = ALIGNED_STRING(""),
-
-    .field_070e = 0xFF01,
-
-    .field_0710 = 0xFF01,
-
-    .field_0712 = 0x0001,
-
-    .pad_102 = { 0 },
-
-    .field_0719 = 0x72FF,
-
-    .field_071b = 0x022D,
-
-    .str_3 = ALIGNED_STRING(""),
-
-    .NakaData_RomEnd_ptr_2 = NAKA_ADDR(NakaData_RomEnd),
-
-    .pad_103 = { 0 },
-
-    .EqualizerPresets_AcTitleMenu_Selected = { 0 },
-
-    .ReverbEqualizerPresets_AcTitleMenu_Selected = { 0 },
-
-    .R12OctaveSetting_Window = NAKA_NONE,
-
-    .field_072a = NAKA_NONE,
-
-    .R12OctaveSetting_AcLswEditBox_Selected = 0x0001,
-
-    .R12OctaveSetting_Octave_Value = { 0 },
-
-    .ReverbPreset_Window = NAKA_NONE,
-
-    .field_0732 = NAKA_NONE,
-
-    .HugeRoom_AcStrRadioBox_Selected = { 0 },
-
-    .BoxRoom_AcStrRadioBox_Selected = { 0 },
-
-    .SmallPlate_AcStrRadioBox_Selected = 0x0001,
-
-    .SportsHall_AcStrRadioBox_Selected = { 0 },
-
-    .BrightHall_AcStrRadioBox_Selected = { 0 },
-
-    .DarkConfines_AcStrRadioBox_Selected = { 0 },
-
-    .Reflection_AcStrRadioBox_Selected = { 0 },
-
-    .HighOpen_AcStrRadioBox_Selected = { 0 },
-
-    .LeftToRight_AcStrRadioBox_Selected = { 0 },
-
-    .Cavernous_AcStrRadioBox_Selected = { 0 },
-
-    .EqualizerPreset_Window = NAKA_NONE,
-
-    .field_074a = NAKA_NONE,
-
-    .MakeUp_AcStrRadioBox_Selected = { 0 },
-
-    .MiddleCut_AcStrRadioBox_Selected = { 0 },
-
-    .TransistorRadio_AcStrRadioBox_Selected = { 0 },
-
-    .TrebleBoost_AcStrRadioBox_Selected = { 0 },
-
-    .TrebleCut_AcStrRadioBox_Selected = { 0 },
-
-    .NoHiHat_AcStrRadioBox_Selected = 0x0001,
-
-    .TubbyBass_AcStrRadioBox_Selected = { 0 },
-
-    .BassCut_AcStrRadioBox_Selected = { 0 },
-
-    .TooBright_AcStrRadioBox_Selected = { 0 },
-
-    .EqOnOffBox_Onoff = { 0 },
-
-    .ReverbEqualizerPreset_Window = NAKA_NONE,
-
-    .field_0762 = NAKA_NONE,
-
-    .WarmWide_AcStrRadioBox_Selected = { 0 },
-
-    .InYourFace_AcStrRadioBox_Selected = { 0 },
-
-    .OilTank_AcStrRadioBox_Selected = { 0 },
-
-    .WarmPlate_AcStrRadioBox_Selected = { 0 },
-
-    .LightShade_AcStrRadioBox_Selected = { 0 },
-
-    .WarmFuzzy_AcStrRadioBox_Selected = { 0 },
-
-    .IceBox_AcStrRadioBox_Selected = { 0 },
-
-    .Stadium_AcStrRadioBox_Selected = 0x0001,
-
-    .LiveRoom_AcStrRadioBox_Selected = { 0 },
-
-    .RevEqOnOffBox_Onoff = { 0 },
-
-    .MidiMenu_Window = NAKA_NONE,
-
-    .field_077a = NAKA_NONE,
-
-    .MdmenuPage_Page = 0x0001,
-
-    .MidiMenuPage1_Parent = NAKA_NONE,
-
-    .field_0780 = NAKA_NONE,
-
-    .MidiMenuPage1_Child = NAKA_NONE,
-
-    .field_0784 = NAKA_NONE,
-
-    .PartSetting_AcTitleMenu_Selected = { 0 },
-
-    .ControlMessages_AcTitleMenu_Selected = { 0 },
-
-    .RealtimeMessages_AcTitleMenu_Selected = { 0 },
-
-    .CommonSetting_AcTitleMenu_Selected = { 0 },
-
-    .InputOutputSetting_AcTitleMenu_Selected = { 0 },
-
-    .MidiPresets_AcTitleMenu_Selected = { 0 },
-
-    .SysexBulkDump_AcTitleMenu_Selected = { 0 },
-
-    .GeneralMidi_AcTitleMenu_Selected = { 0 },
-
-    .ProgChangeMidiOut_AcTitleMenu_Selected = { 0 },
-
-    .PMemOutput_AcTitleMenu_Selected = { 0 },
-
-    .MidiMenuPage2_Parent = NAKA_NONE,
-
-    .field_079c = NAKA_NONE,
-
-    .MidiMenuPage2_Child = NAKA_NONE,
-
-    .field_07a0 = NAKA_NONE,
-
-    .ComputerConnection_AcTitleMenu_Selected = { 0 },
-
-    .MidiSettingsLoadOption_AcTitleMenu_Selected = { 0 },
-
-    .MidiPartSetting_Window = NAKA_NONE,
-
-    .field_07a8 = NAKA_NONE,
-
-    .MdPartSetGridBox_Selrow = 0x0002,
-
-    .MdPartSetGridBox_Selcol = 0x0001,
-
-    .MdPartSetGridBox_Pcol = 0x37E4,
-
-    .field_07b0 = 0x00D1,
-
-    .MdPartSetGridBox_Prow = 0x37F4,
-
-    .field_07b4 = 0x00D1,
-
-    .MdPartSetGridBox_Crow = 0x3810,
-
-    .field_07b8 = 0x00D1,
-
-    .MdPartSetGridBox_Page = { 0 },
-
-    .MidiControlMessage_Window = NAKA_NONE,
-
-    .field_07be = NAKA_NONE,
-
-    .MidiControlMessage_PsPageBox_Page = 0x0001,
-
-    .CtlMsgGridBox_Selrow = 0x0002,
-
-    .CtlMsgGridBox_Selcol = 0x0001,
-
-    .CtlMsgGridBox_Pcol = 0x37E4,
-
-    .field_07c8 = 0x00D1,
-
-    .CtlMsgGridBox_Prow = 0x37F4,
-
-    .field_07cc = 0x00D1,
-
-    .CtlMsgGridBox_Crow = 0x3810,
-
-    .field_07d0 = 0x00D1,
-
-    .CtlMsgGridBox_Page = { 0 },
-
-    .MidiRealtimeMessage_Window = NAKA_NONE,
-
-    .field_07d6 = NAKA_NONE,
-
-    .RealtimeCommandBox_Selected = 0x0001,
-
-    .RealtimeCommandBox_Value = { 0 },
-
-    .ClockBox_Selected = { 0 },
-
-    .ClockBox_Value = { 0 },
-
-    .MidiCommonSetting_Window = NAKA_NONE,
-
-    .field_07e2 = NAKA_NONE,
-
-    .ComSetGridBox_Selrow = { 0 },
-
-    .ComSetGridBox_Selcol = 0x0001,
-
-    .ComSetGridBox_Pcol = 0x37E4,
-
-    .field_07ea = 0x00D1,
-
-    .ComSetGridBox_Prow = 0x37F4,
-
-    .field_07ee = 0x00D1,
-
-    .ComSetGridBox_Crow = 0x3810,
-
-    .field_07f2 = 0x00D1,
-
-    .MidiInOutSetting_Window = NAKA_NONE,
-
-    .field_07f6 = NAKA_NONE,
-
-    .InOutGridBox_Selrow = { 0 },
-
-    .InOutGridBox_Selcol = 0x0001,
-
-    .InOutGridBox_Pcol = 0x37E4,
-
-    .field_07fe = 0x00D1,
-
-    .InOutGridBox_Prow = 0x37F4,
-
-    .field_0802 = 0x00D1,
-
-    .InOutGridBox_Crow = 0x3810,
-
-    .field_0806 = 0x00D1,
-
-    .MidiPresets_Window = NAKA_NONE,
-
-    .field_080a = NAKA_NONE,
-
-    .MdPresetPageBox_Page = 0x0001,
-
-    .MidiPresetSlaveWithout_Parent = NAKA_NONE,
-
-    .field_0810 = NAKA_NONE,
-
-    .MidiPresetSlaveWithout_Child = NAKA_NONE,
-
-    .field_0814 = NAKA_NONE,
-
-    .MpstSlaveWithoutList_Selected = { 0 },
-
-    .MidiPresetSlaveWith_Parent = NAKA_NONE,
-
-    .field_081a = NAKA_NONE,
-
-    .MidiPresetSlaveWith_Child = NAKA_NONE,
-
-    .field_081e = NAKA_NONE,
-
-    .MpstSlaveWithList_Selected = { 0 },
-
-    .MidiPresetPage3_Parent = NAKA_NONE,
-
-    .field_0824 = NAKA_NONE,
-
-    .MidiPresetPage3_Child = NAKA_NONE,
-
-    .field_0828 = NAKA_NONE,
-
-    .MdPresetUserLoadList_Selected = { 0 },
-
-    .MidiPresetPage4_Parent = NAKA_NONE,
-
-    .field_082e = NAKA_NONE,
-
-    .MidiPresetPage4_Child = NAKA_NONE,
-
-    .field_0832 = NAKA_NONE,
-
-    .MdPresetUserWriteList_Selected = { 0 },
-
-    .MdpstSplitBox_Onoff = { 0 },
-
-    .MidiPresetMasterWithout_Parent = NAKA_NONE,
-
-    .field_083a = NAKA_NONE,
-
-    .MidiPresetMasterWithout_Child = NAKA_NONE,
-
-    .field_083e = NAKA_NONE,
-
-    .MpstMasterWithoutList_Selected = { 0 },
-
-    .MidiPresetMasterWith_Parent = NAKA_NONE,
-
-    .field_0844 = NAKA_NONE,
-
-    .MidiPresetMasterWith_Child = NAKA_NONE,
-
-    .field_0848 = NAKA_NONE,
-
-    .MpstMasterWithList_Selected = { 0 },
-
-    .MidiExclusive_Window = NAKA_NONE,
-
-    .field_084e = NAKA_NONE,
-
-    .ExcListBox_Selected = { 0 },
-
-    .ExcSendWindow_Parent = NAKA_NONE,
-
-    .field_0854 = NAKA_NONE,
-
-    .ExcSendWindow_Child = NAKA_NONE,
-
-    .field_0858 = NAKA_NONE,
-
-    .ExcSendPmemBox_Selected = { 0 },
-
-    .ExcSendPmemBox_Value = { 0 },
-
-    .ExcSendSmemBox_Selected = { 0 },
-
-    .ExcSendSmemBox_Value = { 0 },
-
-    .ExcSendCmpBox_Selected = { 0 },
-
-    .ExcSendCmpBox_Value = { 0 },
-
-    .ExcSendSeqBox_Selected = { 0 },
-
-    .ExcSendSeqBox_Value = { 0 },
-
-    .ExcSendMspBox_Selected = { 0 },
-
-    .ExcSendMspBox_Value = { 0 },
-
-    .ExcSendDotBox_Value = { 0 },
-
-    .ExcRcvWindow_Parent = NAKA_NONE,
-
-    .field_087e = NAKA_NONE,
-
-    .ExcRcvWindow_Child = NAKA_NONE,
-
-    .field_0882 = NAKA_NONE,
-
-    .ExcRcvPmemBox_Selected = { 0 },
-
-    .ExcRcvPmemBox_Value = { 0 },
-
-    .ExcRcvSmemBox_Selected = { 0 },
-
-    .ExcRcvSmemBox_Value = { 0 },
-
-    .ExcRcvCmpBox_Selected = { 0 },
-
-    .ExcRcvCmpBox_Value = { 0 },
-
-    .ExcRcvSeqBox_Selected = { 0 },
-
-    .ExcRcvSeqBox_Value = { 0 },
-
-    .ExcRcvMspBox_Selected = { 0 },
-
-    .ExcRcvMspBox_Value = { 0 },
-
-    .ExcRcvDotBox_Value = { 0 },
-
-    .MidiGmMode_Window = NAKA_NONE,
-
-    .field_08a8 = NAKA_NONE,
-
-    .GMOnOffBox_Selected = 0x0001,
-
-    .GMOnOffBox_Onoff = { 0 },
-
-    .GMONSure_Parent = NAKA_NONE,
-
-    .field_08b0 = NAKA_NONE,
-
-    .GMONSure_Child = NAKA_NONE,
-
-    .field_08b4 = NAKA_NONE,
-
-    .GMOFFSure_Parent = NAKA_NONE,
-
-    .field_08b8 = NAKA_NONE,
-
-    .GMOFFSure_Child = NAKA_NONE,
-
-    .field_08bc = NAKA_NONE,
-
-    .MidiPcgOutput_Window = NAKA_NONE,
-
-    .field_08c0 = NAKA_NONE,
-
-    .PcgOutGridBox_Selrow = { 0 },
-
-    .PcgOutGridBox_Selcol = 0x0001,
-
-    .PcgOutGridBox_Pcol = 0x37E4,
-
-    .field_08c8 = 0x00D1,
-
-    .PcgOutGridBox_Prow = 0x37F4,
-
-    .field_08cc = 0x00D1,
-
-    .PcgOutGridBox_Crow = 0x3804,
-
-    .field_08d0 = 0x00D1,
-
-    .field_08d2 = 0x00C1,
-
-    .MidiComputerConnection_Window = NAKA_NONE,
-
-    .field_08d6 = NAKA_NONE,
-
-    .MidiComputerConnection_AcLswEditBox_Selected = 0x0001,
-
-    .MidiComputerConnection_Mode_Value = { 0 },
-
-    .MidiPanelMemoryOutput_Window = NAKA_NONE,
-
-    .field_08de = NAKA_NONE,
-
-    .PmemOutLeft_Selrow = { 0 },
-
-    .PmemOutLeft_Selcol = 0x0001,
-
-    .PmemOutLeft_Pcol = 0x37E4,
-
-    .field_08e6 = 0x00D1,
-
-    .PmemOutLeft_Prow = 0x37F4,
-
-    .field_08ea = 0x00D1,
-
-    .PmemOutLeft_Crow = 0x3804,
-
-    .field_08ee = 0x00D1,
-
-    .PmemOutRight_Selrow = NAKA_NONE,
-
-    .PmemOutRight_Selcol = 0xFFFD,
-
-    .PmemOutRight_Pcol = 0x3814,
-
-    .field_08f6 = 0x00D1,
-
-    .PmemOutRight_Prow = 0x3824,
-
-    .field_08fa = 0x00D1,
-
-    .PmemOutRight_Crow = 0x3834,
-
-    .field_08fe = 0x00D1,
-
-    .MidiSetup_Window = NAKA_NONE,
-
-    .field_0902 = NAKA_NONE,
-
-    .MdSetOptGridBox_Selrow = 0x0002,
-
-    .MdSetOptGridBox_Selcol = 0x0001,
-
-    .MdSetOptGridBox_Pcol = 0x37F8,
-
-    .field_090a = 0x00D1,
-
-    .MdSetOptGridBox_Prow = 0x3808,
-
-    .field_090e = 0x00D1,
-
-    .MdSetOptGridBox_Crow = 0x3820,
-
-    .field_0912 = 0x00D1,
-
-    .EntertainerVocal_Window = NAKA_NONE,
-
-    .field_0916 = NAKA_NONE,
-
-    .VocalistPage_Page = 0x0001,
-
-    .VocalistPage1_Parent = NAKA_NONE,
-
-    .field_091c = NAKA_NONE,
-
-    .VocalistPage1_Child = NAKA_NONE,
-
-    .field_0920 = NAKA_NONE,
-
-    .VocalistListBox_Selected = { 0 },
-
-    .HarmOnOffBox_Onoff = { 0 },
-
-    .VocalistPage2_Parent = NAKA_NONE,
-
-    .field_0928 = NAKA_NONE,
-
-    .VocalistPage2_Child = NAKA_NONE,
-
-    .field_092c = NAKA_NONE,
-
-    .VocalistPage2Box_Selrow = 0x0002,
-
-    .VocalistPage2Box_Selcol = 0x0001,
-
-    .VocalistPage2Box_Pcol = 0x383C,
-
-    .field_0934 = 0x00D1,
-
-    .VocalistPage2Box_Prow = 0x384C,
-
-    .field_0938 = 0x00D1,
-
-    .VocalistPage2Box_Crow = 0x386C,
-
-    .field_093c = 0x00D1,
-
-    .EntertainerFade_Window = NAKA_NONE,
-
-    .field_0940 = NAKA_NONE,
-
-    .FadeInOutGridBox_Selrow = 0x0001,
-
-    .FadeInOutGridBox_Selcol = 0x0001,
-
-    .FadeInOutGridBox_Pcol = 0x4264,
-
-    .field_0948 = 0x00D1,
-
-    .FadeInOutGridBox_Prow = 0x4274,
-
-    .field_094c = 0x00D1,
-
-    .FadeInOutGridBox_Crow = 0x4288,
-
-    .field_0950 = 0x00D1,
-
-    .SplitSetting_Window = NAKA_NONE,
-
-    .field_0954 = NAKA_NONE,
-
-    .SplitSetting_AcLswBox_Value = { 0 },
-
-    .field_0958 = 0x0003,
-
-    .field_095a = 0x0163,
-
-    .pad_133 = { 0 },
-
-    .field_095e = NAKA_NONE,
-
-    .field_0960 = 0x0005,
-
-    .field_0962 = 0x0003,
-
-    .pad_134 = { 0 },
-
-    .field_0966 = 0x010E,
-
-    .field_0968 = 0x00A0,
-
-    .field_096a = 0x0134,
-
-    .field_096c = 0x00B1,
-
-    .field_096e = 0x0007,
-
-    .field_0970 = 0x00C1,
-
-    .field_0972 = NAKA_NONE,
-
-    .pad_135 = { 0 },
-
-    .field_0978 = 0x00F9,
-
-    .pad_136 = { 0 },
-
-    .field_097c = 0x000B,
-
-    .pad_137 = { 0 },
-
-    .field_0980 = 0x000D,
-
-    .field_0982 = 0x0123,
-
-    .ptr_0984 = 0x00E58DE2,
-
-    .field_0988 = 0xE5A6,
-
-    .field_098a = 0x0003,
-
-    .Sdmenu_Window = NAKA_NONE,
-
-    .field_098e = NAKA_NONE,
-
-    .field_0990 = 0x0001,
-
-    .field_0992 = NAKA_NONE,
-
-    .field_0994 = NAKA_NONE,
-
-    .field_0996 = NAKA_NONE,
-
-    .field_0998 = NAKA_NONE,
-
-    .pad_138 = { 0 },
-
-    .field_09ae = NAKA_NONE,
-
-    .field_09b0 = NAKA_NONE,
-
-    .field_09b2 = NAKA_NONE,
-
-    .field_09b4 = NAKA_NONE,
-
-    .pad_139 = { 0 },
-
-    .Sdpart_Window = NAKA_NONE,
-
-    .field_09bc = NAKA_NONE,
-
-    .VOL_AcStrRadioBox_Selected = { 0 },
-
-    .PAN_AcStrRadioBox_Selected = { 0 },
-
-    .Sdpart_AcStrRadioBox_Selected = { 0 },
-
-    .SUS_AcStrRadioBox_Selected = { 0 },
-
-    .KEY_AcStrRadioBox_Selected = { 0 },
-
-    .TUN_AcStrRadioBox_Selected = { 0 },
-
-    .BND_AcStrRadioBox_Selected = { 0 },
-
-    .OTH_AcStrRadioBox_Selected = { 0 },
-
-    .SdpartMain_Parent = NAKA_NONE,
-
-    .field_09d0 = NAKA_NONE,
-
-    .SdpartMain_Child = NAKA_NONE,
-
-    .field_09d4 = NAKA_NONE,
-
-    .SdpartMain_AcLswPartEditBox_Selected = { 0 },
-
-    .SdpartMain_Pan_Value = { 0 },
-
-    .SdpartMain_AcLswPartEditBox_2_Selected = { 0 },
-
-    .SdpartMain_RevDepth_Value = { 0 },
-
-    .SdpartMain_AcLswPartEditBox_3_Selected = { 0 },
-
-    .SdpartMain_DspEffect_Value = { 0 },
-
-    .SdpartMain_AcLswPartEditBox_4_Selected = { 0 },
-
-    .SdpartMain_DigEffect_Value = { 0 },
-
-    .SdpartMain_AcLswPartEditBox_5_Selected = { 0 },
-
-    .SdpartMain_Sustain_Value = { 0 },
-
-    .SdpartMain_AcLswPartEditBox_6_Selected = { 0 },
-
-    .SdpartMain_SusLength_Value = { 0 },
-
-    .SdpartMain_AcLswPartEditBox_7_Selected = { 0 },
-
-    .SdpartMain_KeyShift_Value = { 0 },
-
-    .SdpartMain_AcLswPartEditBox_8_Selected = { 0 },
-
-    .SdpartMain_Tuning_Value = { 0 },
-
-    .SdpartMain_AcLswPartEditBox_9_Selected = { 0 },
-
-    .SdpartMain_BendRange_Value = { 0 },
-
-    .SdpartMain_AcLswPartEditBox_10_Selected = { 0 },
-
-    .SdpartMain_GlidePedal_Value = { 0 },
-
-    .SdpartMain_AcLswPartEditBox_11_Selected = { 0 },
-
-    .SdpartMain_SustPedal_Value = { 0 },
-
-    .SdpartMain_AcVolPartEditBox_Selected = { 0 },
-
-    .SdpartMain_Volume_Value = { 0 },
-
-    .SdpartVol_Parent = NAKA_NONE,
-
-    .field_0a08 = NAKA_NONE,
-
-    .SdpartVol_Child = NAKA_NONE,
-
-    .field_0a0c = NAKA_NONE,
-
-    .SdpartVol_AcVolPartEditBox_Selected = 0x0001,
-
-    .SdpartVol_Volume_Value = { 0 },
-
-    .SdpartPan_Parent = NAKA_NONE,
-
-    .field_0a14 = NAKA_NONE,
-
-    .SdpartPan_Child = NAKA_NONE,
-
-    .field_0a18 = NAKA_NONE,
-
-    .SdpartPan_AcLswPartEditBox_Selected = 0x0001,
-
-    .SdpartPan_Pan_Value = { 0 },
-
-    .SdpartPan_AcLswPartPan_Value = { 0 },
-
-    .SdpartEff_Parent = NAKA_NONE,
-
-    .field_0a22 = NAKA_NONE,
-
-    .SdpartEff_Child = NAKA_NONE,
-
-    .field_0a26 = NAKA_NONE,
-
-    .SdpartEff_AcLswPartEditBox_Selected = 0x0001,
-
-    .SdpartEff_ReverbDepth_Value = { 0 },
-
-    .SdpartEff_AcLswPartEditBox_2_Selected = { 0 },
-
-    .SdpartEff_DspEffect_Value = { 0 },
-
-    .SdpartEff_AcLswPartEditBox_3_Selected = { 0 },
-
-    .SdpartEff_DigitalEff_Value = { 0 },
-
-    .SdpartSus_Parent = NAKA_NONE,
-
-    .field_0a36 = NAKA_NONE,
-
-    .SdpartSus_Child = NAKA_NONE,
-
-    .field_0a3a = NAKA_NONE,
-
-    .SdpartSus_AcLswPartEditBox_Selected = 0x0001,
-
-    .SdpartSus_SustainOnOff_Value = { 0 },
-
-    .SdpartSus_AcLswPartEditBox_2_Selected = { 0 },
-
-    .SdpartSus_SustainLength_Value = { 0 },
-
-    .SdpartKey_Parent = NAKA_NONE,
-
-    .field_0a46 = NAKA_NONE,
-
-    .SdpartKey_Child = NAKA_NONE,
-
-    .field_0a4a = NAKA_NONE,
-
-    .SdpartKey_AcLswPartEditBox_Selected = 0x0001,
-
-    .SdpartKey_KeyShift_Value = { 0 },
-
-    .SdpartTun_Parent = NAKA_NONE,
-
-    .field_0a52 = NAKA_NONE,
-
-    .SdpartTun_Child = NAKA_NONE,
-
-    .field_0a56 = NAKA_NONE,
-
-    .SdpartTun_AcLswPartEditBox_Selected = 0x0001,
-
-    .SdpartTun_Tuning_Value = { 0 },
-
-    .SdpartBnd_Parent = NAKA_NONE,
-
-    .field_0a5e = NAKA_NONE,
-
-    .SdpartBnd_Child = NAKA_NONE,
-
-    .field_0a62 = NAKA_NONE,
-
-    .SdpartBnd_AcLswPartEditBox_Selected = 0x0001,
-
-    .SdpartBnd_PitchBendRange_Value = { 0 },
-
-    .SdpartOth_Parent = NAKA_NONE,
-
-    .field_0a6a = NAKA_NONE,
-
-    .SdpartOth_Child = NAKA_NONE,
-
-    .field_0a6e = NAKA_NONE,
-
-    .SdpartOth_AcLswPartEditBox_Selected = 0x0001,
-
-    .SdpartOth_GlidePedal_Value = { 0 },
-
-    .SdpartOth_AcLswPartEditBox_2_Selected = { 0 },
-
-    .SdpartOth_SustainPdl_Value = { 0 },
-
-    .SdpartOth_AcLswPartEditBox_3_Selected = { 0 },
-
-    .SdpartOth_AfterTouch_Value = { 0 },
-
-    .SdpartOth_AcLswPartEditBox_4_Selected = { 0 },
-
-    .SdpartOth_KeyScaling_Value = { 0 },
-
-    .SdpartOth_AcLswPartEditBox_5_Selected = { 0 },
-
-    .SdpartOth_PartExpPdl_Value = { 0 },
-
-    .Sdmtune_Window = NAKA_NONE,
-
-    .field_0a86 = NAKA_NONE,
-
-    .Sdmtune_AcLswEditBox_Selected = 0x0001,
-
-    .Sdmtune_MasterTuning_Value = { 0 },
-
-    .Sdscltyp_Window = NAKA_NONE,
-
-    .field_0a8e = NAKA_NONE,
-
-    .SdscltypPage_Page = 0x0001,
-
-    .Sdscltyp1_Parent = NAKA_NONE,
-
-    .field_0a94 = NAKA_NONE,
-
-    .Sdscltyp1_Child = NAKA_NONE,
-
-    .field_0a98 = NAKA_NONE,
-
-    .ScalingType_Selected = 0x0001,
-
-    .ScalingType_Value = { 0 },
-
-    .Sdscltyp1_AcLswEditBox_Selected = { 0 },
-
-    .Sdscltyp1_ScalingShift_Value = { 0 },
-
-    .Sdscltyp1_AcLswBox_Value = { 0 },
-
-    .Sdscltyp1_AcLswEditBox_2_Selected = { 0 },
-
-    .Sdscltyp1_ScalingMode_Value = { 0 },
-
-    .Sdscltyp2_Parent = NAKA_NONE,
-
-    .field_0aaa = NAKA_NONE,
-
-    .Sdscltyp2_Child = NAKA_NONE,
-
-    .field_0aae = NAKA_NONE,
-
-    .ScalingKey1_Selected = 0x0001,
-
-    .ScalingKey1_Value = { 0 },
-
-    .ScalingKey2_Selected = { 0 },
-
-    .ScalingKey2_Value = { 0 },
-
-    .ScalingKey3_Selected = { 0 },
-
-    .ScalingKey3_Value = { 0 },
-
-    .ScalingKey4_Selected = { 0 },
-
-    .ScalingKey4_Value = { 0 },
-
-    .ScalingKey5_Selected = { 0 },
-
-    .ScalingKey5_Value = { 0 },
-
-    .ScalingKey6_Selected = { 0 },
-
-    .ScalingKey6_Value = { 0 },
-
-    .ScalingKey7_Selected = { 0 },
-
-    .ScalingKey7_Value = { 0 },
-
-    .ScalingKey8_Selected = { 0 },
-
-    .ScalingKey8_Value = { 0 },
-
-    .ScalingKey9_Selected = { 0 },
-
-    .ScalingKey9_Value = { 0 },
-
-    .ScalingKey10_Selected = { 0 },
-
-    .ScalingKey10_Value = { 0 },
-
-    .ScalingKey11_Selected = { 0 },
-
-    .ScalingKey11_Value = { 0 },
-
-    .ScalingKey12_Selected = { 0 },
-
-    .ScalingKey12_Value = { 0 },
-
-    .Sdlfthld_Window = NAKA_NONE,
-
-    .field_0ae2 = NAKA_NONE,
-
-    .Sdlfthld_AcLswEditBox_Selected = 0x0001,
-
-    .Sdlfthld_LeftHold_Value = { 0 },
-
-    .Sdmixer_Window = NAKA_NONE,
-
-    .field_0aea = NAKA_NONE,
-
-    .Sdmixer_AcResetPage_Page = 0x0001,
-
-    .field_0aee = NAKA_NONE,
-
-    .field_0af0 = NAKA_NONE,
-
-    .SdtecdPage_Page = 0x0001,
-
-    .Sdtecd1_Parent = NAKA_NONE,
-
-    .field_0af6 = NAKA_NONE,
-
-    .Sdtecd1_Child = NAKA_NONE,
-
-    .field_0afa = NAKA_NONE,
-
-    .TcClose_Selected = { 0 },
-
-    .TcClose_Dialfocus = 0x0001,
-
-    .TcOpen1_Selected = { 0 },
-
-    .TcOpen1_Dialfocus = { 0 },
-
-    .TcOpen2_Selected = { 0 },
-
-    .TcOpen2_Dialfocus = { 0 },
-
-    .TcDuet1_Selected = { 0 },
-
-    .TcDuet1_Dialfocus = { 0 },
-
-    .TcDuet2_Selected = { 0 },
-
-    .TcDuet2_Dialfocus = { 0 },
-
-    .TcCountry_Selected = { 0 },
-
-    .TcCountry_Dialfocus = { 0 },
-
-    .TcTheatre_Selected = { 0 },
-
-    .TcTheatre_Dialfocus = { 0 },
-
-    .TcHymn_Selected = { 0 },
-
-    .TcHymn_Dialfocus = { 0 },
-
-    .TcBigBandBrass_Selected = { 0 },
-
-    .TcBigBandBrass_Dialfocus = { 0 },
-
-    .TcBigBandReeds_Selected = { 0 },
-
-    .TcBigBandReeds_Dialfocus = { 0 },
-
-    .TcOctave_Selected = { 0 },
-
-    .TcOctave_Dialfocus = { 0 },
-
-    .TcBlock_Selected = { 0 },
-
-    .TcBlock_Dialfocus = { 0 },
-
-    .TcHardRock_Selected = { 0 },
-
-    .TcHardRock_Dialfocus = { 0 },
-
-    .TcFanfare_Selected = { 0 },
-
-    .TcFanfare_Dialfocus = { 0 },
-
-    .Sdtecd2_Parent = NAKA_NONE,
-
-    .field_0b36 = NAKA_NONE,
-
-    .Sdtecd2_Child = NAKA_NONE,
-
-    .field_0b3a = NAKA_NONE,
-
-    .Sdtecd2_AcLswEditBox_Selected = 0x0001,
-
-    .Sdtecd2_Orchestrator_Value = { 0 },
-
-    .Sqmixer_Window = NAKA_NONE,
-
-    .field_0b42 = NAKA_NONE,
-
-    .Sqmixer_AcResetPage_Page = 0x0001,
-
-    .field_0b46 = NAKA_NONE,
-
-    .field_0b48 = NAKA_NONE,
-
-    .StartTheInternalDemo_AcPresentationBox_Selected = { 0 },
-
-    .Demofeature1_Parent = NAKA_NONE,
-
-    .field_0b4e = NAKA_NONE,
-
-    .Demofeature1_Child = NAKA_NONE,
-
-    .field_0b52 = NAKA_NONE,
-
-    .Demofeature2_Parent = NAKA_NONE,
-
-    .field_0b56 = NAKA_NONE,
-
-    .Demofeature2_Child = NAKA_NONE,
-
-    .field_0b5a = NAKA_NONE,
-
-    .StartTheLoadedDemo_AcPresentationBox_Selected = { 0 },
-
-    .PlainScreen_Window = NAKA_NONE,
-
-    .field_0b60 = NAKA_NONE,
-
-    .PresentationControl_Parent = NAKA_NONE,
-
-    .field_0b64 = NAKA_NONE,
-
-    .PresentationControl_Child = NAKA_NONE,
-
-    .field_0b68 = NAKA_NONE,
-
-    .LoadingPresentation_Window = NAKA_NONE,
-
-    .field_0b6c = NAKA_NONE,
-
-    .Drawbar_Window = NAKA_NONE,
-
-    .field_0b70 = NAKA_NONE,
-
-    .DrawPerc4_Onoff = { 0 },
-
-    .DrawPerc223_Onoff = { 0 },
-
-    .DrawSetting_Onoff = { 0 },
-
-    .Drawbar1_Parent = NAKA_NONE,
-
-    .field_0b7a = NAKA_NONE,
-
-    .Drawbar1_Child = NAKA_NONE,
-
-    .field_0b7e = NAKA_NONE,
-
-    .Drawbar2_Parent = NAKA_NONE,
-
-    .field_0b82 = NAKA_NONE,
-
-    .Drawbar2_Child = NAKA_NONE,
-
-    .field_0b86 = NAKA_NONE,
-
-    .Drawbar2_AcDrawEditBox_Selected = 0x0001,
-
-    .Drawbar2_Decay_Value = { 0 },
-
-    .Drawbar2_AcDrawEditBox_2_Selected = { 0 },
-
-    .Drawbar2_Level_Value = { 0 },
-
-    .Drawbar2_AcDrawEditBox_3_Selected = { 0 },
-
-    .Drawbar2_AttackTime_Value = { 0 },
-
-    .Drawbar2_AcDrawEditBox_4_Selected = { 0 },
-
-    .Drawbar2_ReleaseTime_Value = { 0 },
-
-    .DrawbarNorm_Parent = NAKA_NONE,
-
-    .field_0b9a = NAKA_NONE,
-
-    .DrawbarNorm_Child = NAKA_NONE,
-
-    .field_0b9e = NAKA_NONE,
-
-    .DrawTremolo_Onoff = { 0 },
-
-    .DrawbarSndE_Parent = NAKA_NONE,
-
-    .field_0ba4 = NAKA_NONE,
-
-    .DrawbarSndE_Child = NAKA_NONE,
-
-    .field_0ba8 = NAKA_NONE,
-
-    .Write_AcTitleMenu_Selected = { 0 },
-
-    .Accordion_Window = NAKA_NONE,
-
-    .field_0bae = NAKA_NONE,
-
-    .Accordion1_Parent = NAKA_NONE,
-
-    .field_0bb2 = NAKA_NONE,
-
-    .Accordion1_Child = NAKA_NONE,
-
-    .field_0bb6 = NAKA_NONE,
-
-    .Accordion1_AcIndexToggle_Onoff = { 0 },
-
-    .Accordion1_AcIndexToggle_2_Onoff = { 0 },
-
-    .Accordion1_AcAccordionTab_Onoff = { 0 },
-
-    .Accordion1_AcAccordionTab_2_Onoff = { 0 },
-
-    .Accordion1_AcAccordionTab_3_Onoff = { 0 },
-
-    .Accordion1_AcAccordionTab_4_Onoff = { 0 },
-
-    .Accordion1_AcAccordionTab_5_Onoff = { 0 },
-
-    .Accordion1_AcAccordionTab_6_Onoff = { 0 },
-
-    .Accordion1_AcAccordionTab_7_Onoff = { 0 },
-
-    .Accordion1_AcAccordionTab_8_Onoff = { 0 },
-
-    .Accordion2_Parent = NAKA_NONE,
-
-    .field_0bce = NAKA_NONE,
-
-    .Accordion2_Child = NAKA_NONE,
-
-    .field_0bd2 = NAKA_NONE,
-
-    .Accordion2_AcIndexToggle_Onoff = { 0 },
-
-    .Accordion2_AcIndexToggle_2_Onoff = { 0 },
-
-    .Accordion2_AcAccordionTab_Onoff = { 0 },
-
-    .Accordion2_AcAccordionTab_2_Onoff = { 0 },
-
-    .Accordion2_AcAccordionTab_3_Onoff = { 0 },
-
-    .Accordion2_AcAccordionTab_4_Onoff = { 0 },
-
-    .Accordion2_AcAccordionTab_5_Onoff = { 0 },
-
-    .Accordion2_AcAccordionTab_6_Onoff = { 0 },
-
-    .Accordion2_AcAccordionTab_7_Onoff = { 0 },
-
-    .Accordion2_AcAccordionTab_8_Onoff = { 0 },
-
-    .Mesage_Window = NAKA_NONE,
-
-    .field_0bea = NAKA_NONE,
-
-    .Completed_Parent = NAKA_NONE,
-
-    .field_0bee = NAKA_NONE,
-
-    .Completed_Child = NAKA_NONE,
-
-    .field_0bf2 = NAKA_NONE,
-
-    .Reminder_Parent = NAKA_NONE,
-
-    .field_0bf6 = NAKA_NONE,
-
-    .Reminder_Child = NAKA_NONE,
-
-    .field_0bfa = NAKA_NONE,
-
-    .Error_Parent = NAKA_NONE,
-
-    .field_0bfe = NAKA_NONE,
-
-    .Error_Child = NAKA_NONE,
-
-    .field_0c02 = NAKA_NONE,
-
-    .Other_Parent = NAKA_NONE,
-
-    .field_0c06 = NAKA_NONE,
-
-    .Other_Child = NAKA_NONE,
-
-    .field_0c0a = NAKA_NONE,
-
-    .CheckMessage_Parent = NAKA_NONE,
-
-    .field_0c0e = NAKA_NONE,
-
-    .CheckMessage_Child = NAKA_NONE,
-
-    .field_0c12 = NAKA_NONE,
-
-    .CheckMessage_AcRamBox_Value = { 0 },
-
-    .CheckMessage_AcRamBox_2_Value = { 0 },
-
-    .NoMessage_Parent = NAKA_NONE,
-
-    .field_0c1e = NAKA_NONE,
-
-    .NoMessage_Child = NAKA_NONE,
-
-    .field_0c22 = NAKA_NONE,
-
-    .NoMessage_AcRamBox_Value = "C",
-
-    .pad_166 = { 0 },
-
-    .PleaseWait_Parent = NAKA_NONE,
-
-    .field_0c2a = NAKA_NONE,
-
-    .PleaseWait_Child = NAKA_NONE,
-
-    .field_0c2e = NAKA_NONE,
-
-    .Welcom_Window = NAKA_NONE,
-
-    .field_0c32 = NAKA_NONE,
-
-    .AllInitial_Window = NAKA_NONE,
-
-    .field_0c36 = NAKA_NONE,
-
-    .MPVersion_Window = NAKA_NONE,
-
-    .field_0c3a = NAKA_NONE,
-
-    .Softver_Window = NAKA_NONE,
-
-    .field_0c3e = NAKA_NONE,
-
-    .MainProgram_Selected = { 0 },
-
-    .MainTable_Selected = { 0 },
-
-    .SubProgram_Selected = { 0 },
-
-    .SoundTable_Selected = { 0 },
-
-    .MixerPart_NamePtrTable = {
-        NAKA_ADDR(MixerPartTable_Start),
-        NAKA_ADDR(Str_Mixer_ON),
-        NAKA_ADDR(Str_PartName_Right1),
-        NAKA_ADDR(Str_PartName_Right2),
-        NAKA_ADDR(Str_PartName_Left),
-        NAKA_ADDR(Str_PartName_Part4),
-        NAKA_ADDR(Str_PartName_Part5),
-        NAKA_ADDR(Str_PartName_Part6),
-        NAKA_ADDR(Str_PartName_Part7),
-        NAKA_ADDR(Str_PartName_Part8),
-        NAKA_ADDR(Str_PartName_Part9),
-        NAKA_ADDR(Str_PartName_Part10),
-        NAKA_ADDR(Str_PartName_Part11),
-        NAKA_ADDR(Str_PartName_Part12),
-        NAKA_ADDR(Str_PartName_Part13),
-        NAKA_ADDR(Str_PartName_Part14),
-        NAKA_ADDR(Str_PartName_Part15),
-        NAKA_ADDR(Str_PartName_Part16),
-        NAKA_ADDR(Str_PartName_Chord),
-        NAKA_ADDR(Str_PartName_RBass),
-        NAKA_ADDR(Str_PartName_Accomp1),
-        NAKA_ADDR(Str_PartName_Accomp2),
-        NAKA_ADDR(Str_PartName_Accomp3),
-        NAKA_ADDR(Str_PartName_Bass),
-        NAKA_ADDR(Str_PartName_Drums),
-        NAKA_ADDR(Str_PartName_MSP),
-        NAKA_ADDR(Str_PartName_Metronome),
-        NAKA_ADDR(Str_PartName_MIC),
-        NAKA_ADDR(Str_PartName_APC),
-        NAKA_ADDR(Str_PartName_Control),
-        NAKA_ADDR(Str_PartName_Rhythm),
-        NAKA_ADDR(Str_PartName_Empty),
-    },
-
-    .field_0cc8 = 0x0008,
-
-    .pad_168 = { 0 },
+    .IvSdpart_PartRow = 0x0000,
 
     .Naka_DrawbarControl_Table = {
         NAKA_ADDR(NakaInst_RIGHT_1_E9D9B0),
@@ -6808,329 +4284,35 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .str_11 = ALIGNED_STRING(""),
 
-    .Naka_DrawbarDisplay_Table1 = {
-        NAKA_ADDR(NakaInst_CHARA1),
-        NAKA_ADDR(NakaInst_CHARA2),
-        NAKA_ADDR(NakaInst_CHARA3),
-        NAKA_ADDR(NakaInst_CHARA4),
-        NAKA_ADDR(NakaInst_CHARA5),
-        NAKA_ADDR(NakaInst_CHARA1P),
-        NAKA_ADDR(NakaInst_CHARA6),
-        NAKA_ADDR(NakaInst_CHARA1W),
-        NAKA_ADDR(NakaInst_CHARA2W),
-        NAKA_ADDR(NakaInst_CHARA5W),
-        NAKA_ADDR(NakaData_CharaFontTable),
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
+    .FontIDProc_FontNameTable = {
+        NAKA_ADDR(NakaInst_CHARA1), NAKA_ADDR(NakaInst_CHARA2), NAKA_ADDR(NakaInst_CHARA3), NAKA_ADDR(NakaInst_CHARA4),
+        NAKA_ADDR(NakaInst_CHARA5), NAKA_ADDR(NakaInst_CHARA1P), NAKA_ADDR(NakaInst_CHARA6), NAKA_ADDR(NakaInst_CHARA1W),
+        NAKA_ADDR(NakaInst_CHARA2W), NAKA_ADDR(NakaInst_CHARA5W), NAKA_ADDR(NakaData_CharaFontTable), 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
     },
 
-    .Naka_DrawbarDisplay_Table2 = {
-        NAKA_ADDR(NakaStr_Chara1Fnt),
-        NAKA_ADDR(NakaStr_Chara2Fnt),
-        NAKA_ADDR(NakaStr_Chara3Fnt),
-        NAKA_ADDR(NakaStr_Chara4Fnt),
-        NAKA_ADDR(NakaStr_Chara5Fnt),
-        NAKA_ADDR(NakaStr_Chara1pFnt),
-        NAKA_ADDR(NakaStr_Chara6Fnt),
-        NAKA_ADDR(NakaInst_chara1w_fnt),
-        NAKA_ADDR(NakaInst_chara2w_fnt),
-        NAKA_ADDR(NakaInst_chara5w_fnt),
-        NAKA_ADDR(NakaStr_FontFileBlank),
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
+    .Font_FileNamePtrTable = {
+        NAKA_ADDR(NakaStr_Chara1Fnt), NAKA_ADDR(NakaStr_Chara2Fnt), NAKA_ADDR(NakaStr_Chara3Fnt), NAKA_ADDR(NakaStr_Chara4Fnt),
+        NAKA_ADDR(NakaStr_Chara5Fnt), NAKA_ADDR(NakaStr_Chara1pFnt), NAKA_ADDR(NakaStr_Chara6Fnt), NAKA_ADDR(NakaInst_chara1w_fnt),
+        NAKA_ADDR(NakaInst_chara2w_fnt), NAKA_ADDR(NakaInst_chara5w_fnt), NAKA_ADDR(NakaStr_FontFileBlank), 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
     },
 
-    .field_13d8 = NAKA_NONE,
+    .Root_DebugNamingWorkCells = { 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0002, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0001, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x0000, 0x0000, 0x0000, 0x0001, 0x0000, 0x0001, 0x0002, 0x0000, 0x0000, 0x0003, 0x0000, 0x0001, 0x0004, 0x0000, 0x0000, 0x0005, 0x0000, 0x0001, 0x0006, 0x0000, 0x0000, 0x0007, 0x0000, 0x0000, 0x0008, 0x0000, 0x0001, 0x0009, 0x0000, 0x0000, 0x000A, 0x0000, 0x0001, 0x000B, 0x0000, 0x0000, 0x000C, 0x0000, 0x0001, 0x000D, 0x0000, 0x0000, 0x000E, 0x0000, 0x0001, 0x000F, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000F980, 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF },
 
-    .field_13da = NAKA_NONE,
+    .Root_NamingUpperCaseToggleView = { 0x0160004E, 0x000A, 0xFFFF, 0x0018, 0x0016, 0x0000, { 84, 216, 115, 238 }, 0x00000000, (NAKA_ADDR(NakaWidget_NamingCursorBox) + 44), (NAKA_ADDR(NakaWidget_NamingCursorBox) + 40), 0x0003F0CE, 0x0002, 0x0000, 0x0000 },
 
-    .CheckTitle_AcTitleMenu_Selected = { 0 },
+    .Root_NamingLowerCaseToggleView = { 0x0160004E, 0x000A, 0xFFFF, 0x0019, 0x0017, 0x0000, { 124, 216, 155, 238 }, 0x00000000, NAKA_ADDR(NakaDbg_LowerCaseChars2), NAKA_ADDR(NakaDbg_LowerCaseChars), 0x0003F0D0, 0x0003, 0x0000, 0x0001 },
 
-    .DebugWindow_AcWindowMenu_Selected = { 0 },
-
-    .ClipBoard_Window = NAKA_NONE,
-
-    .field_13e2 = NAKA_NONE,
-
-    .DebugWindow_Parent = NAKA_NONE,
-
-    .field_13e6 = NAKA_NONE,
-
-    .DebugWindow_Child = NAKA_NONE,
-
-    .field_13ea = NAKA_NONE,
-
-    .DebugWindow_DbDebugMenu_Selected = { 0 },
-
-    .DebugWindow_DbDebugMenu_Page = 0x0002,
-
-    .NamingWindow_Parent = NAKA_NONE,
-
-    .field_13f2 = NAKA_NONE,
-
-    .NamingWindow_Child = NAKA_NONE,
-
-    .field_13f6 = NAKA_NONE,
-
-    .NamingCursorBox_Cursor = { 0 },
-
-    .field_13fa = 0x0001,
-
-    .pad_251 = { 0 },
-
-    .MemoWindow_Parent = NAKA_NONE,
-
-    .field_1402 = NAKA_NONE,
-
-    .MemoWindow_Child = NAKA_NONE,
-
-    .field_1406 = NAKA_NONE,
-
-    .TrackSwitchWindow_Parent = NAKA_NONE,
-
-    .field_140a = NAKA_NONE,
-
-    .TrackSwitchWindow_Child = NAKA_NONE,
-
-    .field_140e = NAKA_NONE,
-
-    .TrackSwitchWindow_AcTrackSwitch_Onoff = 0x0001,
-
-    .TrackSwitchWindow_AcTrackSwitch_Part = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_2_Onoff = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_2_Part = 0x0001,
-
-    .TrackSwitchWindow_AcTrackSwitch_2_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_3_Onoff = 0x0001,
-
-    .TrackSwitchWindow_AcTrackSwitch_3_Part = 0x0002,
-
-    .TrackSwitchWindow_AcTrackSwitch_3_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_4_Onoff = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_4_Part = 0x0003,
-
-    .TrackSwitchWindow_AcTrackSwitch_4_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_5_Onoff = 0x0001,
-
-    .TrackSwitchWindow_AcTrackSwitch_5_Part = 0x0004,
-
-    .TrackSwitchWindow_AcTrackSwitch_5_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_6_Onoff = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_6_Part = 0x0005,
-
-    .TrackSwitchWindow_AcTrackSwitch_6_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_7_Onoff = 0x0001,
-
-    .TrackSwitchWindow_AcTrackSwitch_7_Part = 0x0006,
-
-    .TrackSwitchWindow_AcTrackSwitch_7_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_8_Onoff = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_8_Part = 0x0007,
-
-    .TrackSwitchWindow_AcTrackSwitch_8_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_9_Onoff = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_9_Part = 0x0008,
-
-    .TrackSwitchWindow_AcTrackSwitch_9_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_10_Onoff = 0x0001,
-
-    .TrackSwitchWindow_AcTrackSwitch_10_Part = 0x0009,
-
-    .TrackSwitchWindow_AcTrackSwitch_10_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_11_Onoff = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_11_Part = 0x000A,
-
-    .TrackSwitchWindow_AcTrackSwitch_11_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_12_Onoff = 0x0001,
-
-    .TrackSwitchWindow_AcTrackSwitch_12_Part = 0x000B,
-
-    .TrackSwitchWindow_AcTrackSwitch_12_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_13_Onoff = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_13_Part = 0x000C,
-
-    .TrackSwitchWindow_AcTrackSwitch_13_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_14_Onoff = 0x0001,
-
-    .TrackSwitchWindow_AcTrackSwitch_14_Part = 0x000D,
-
-    .TrackSwitchWindow_AcTrackSwitch_14_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_15_Onoff = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_15_Part = 0x000E,
-
-    .TrackSwitchWindow_AcTrackSwitch_15_Recplay = { 0 },
-
-    .TrackSwitchWindow_AcTrackSwitch_16_Onoff = 0x0001,
-
-    .TrackSwitchWindow_AcTrackSwitch_16_Part = 0x000F,
-
-    .TrackSwitchWindow_AcTrackSwitch_16_Recplay = { 0 },
-
-    .MemDumpWindow_Parent = NAKA_NONE,
-
-    .field_1472 = NAKA_NONE,
-
-    .MemDumpWindow_Child = NAKA_NONE,
-
-    .field_1476 = NAKA_NONE,
-
-    .MemDumpWindow_DbMemoryDump_Adr = 0xF980,
-
-    .pad_268 = { 0 },
-
-    .CheckTitle_Window = NAKA_NONE,
-
-    .field_147e = NAKA_NONE,
-
-    .Naming_AcScreenMenu_Selected = { 0 },
-
-    .Wall_AcScreenMenu_Selected = { 0 },
-
-    .CheckNaming_Window = NAKA_NONE,
-
-    .field_1486 = NAKA_NONE,
-
-    .CheckWall_Window = NAKA_NONE,
-
-    .field_148a = NAKA_NONE,
-
-    .w10 = {
-        .header    = NAKA_HDR(0x4E),
-        .field_04   = 0x000A,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x00160018,
-        .inst_ptr   = 0x00540000,
-        .link_ptr   = 0x007300D8,
-        .proc_addr  = NAKA_ADDR(INTETC45),
-    },
-
-    .pad_270 = { 0 },
-
-    .ptr_14a6 = 0x00EB2E76,
-
-    .ptr_14aa = 0x00EB2E72,
-
-    .field_14ae = 0xF0CE,
-
-    .field_14b0 = 0x0003,
-
-    .field_14b2 = 0x0002,
-
-    .pad_271 = { 0 },
-
-    .w11 = {
-        .header    = NAKA_HDR(0x4E),
-        .field_04   = 0x000A,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x00170019,
-        .inst_ptr   = 0x007C0000,
-        .link_ptr   = 0x009B00D8,
-        .proc_addr  = NAKA_ADDR(INTETC45),
-    },
-
-    .pad_272 = { 0 },
-
-    .NakaDbg_LowerCaseChars2_ptr = NAKA_ADDR(NakaDbg_LowerCaseChars2),
-
-    .NakaDbg_LowerCaseChars_ptr = NAKA_ADDR(NakaDbg_LowerCaseChars),
-
-    .field_14da = 0xF0D0,
-
-    .field_14dc = 0x0003,
-
-    .field_14de = 0x0003,
-
-    .pad_273 = { 0 },
-
-    .field_14e2 = 0x0001,
-
-    .w12 = {
-        .header    = NAKA_HDR(0x4E),
-        .field_04   = 0x000A,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x0018001A,
-        .inst_ptr   = 0x00A40000,
-        .link_ptr   = 0x00C300D8,
-        .proc_addr  = NAKA_ADDR(INTETC45),
-    },
-
-    .pad_274 = { 0 },
-
-    .ptr_14fe = 0x00EB2E86,
-
-    .ptr_1502 = 0x00EB2E82,
-
-    .field_1506 = 0xF0D2,
-
-    .field_1508 = 0x0003,
-
-    .field_150a = 0x0004,
-
-    .pad_275 = { 0 },
-
-    .field_150e = 0x0002,
+    .Root_NamingSymbolToggleView = { 0x0160004E, 0x000A, 0xFFFF, 0x001A, 0x0018, 0x0000, { 164, 216, 195, 238 }, 0x00000000, (NAKA_ADDR(NakaDbg_LowerCaseChars2) + 8), (NAKA_ADDR(NakaDbg_LowerCaseChars2) + 4), 0x0003F0D2, 0x0004, 0x0000, 0x0002 },
 
     .Naka_DrawbarReg_Table = {
         NAKA_ADDR(NakaColor_Palette2),

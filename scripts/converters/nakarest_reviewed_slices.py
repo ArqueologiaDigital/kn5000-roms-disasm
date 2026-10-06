@@ -35,6 +35,7 @@ RUN (repository root, built tree)
               per-value false-pointer note: each describes the old member, not the typed one);
           python3 scripts/analysis/l2_symbol_reference.py --regen && --check
 """
+import bisect
 import glob
 import json
 import os
@@ -73,6 +74,8 @@ def nelem(d):
     return n
 
 
+_SORTED = {}
+MAX_INTO = 64           # a ROM address this far past a label is spelled NAKA_ADDR(label) + offset
 PTR = re.compile(r'@PTR\((0x[0-9A-F]{8})\)')
 SYMFILE = {"v10": "symbols/maincpu_symbols_reference.txt", "v9": "symbols/maincpu_v9_symbols_reference.txt",
            "v7": "symbols/maincpu_v7_symbols_reference.txt"}
@@ -240,6 +243,15 @@ def resolve_pointers(cb, syms, externs, numeric, prefer=None):
             n = (prefer or {}).get(v) or syms[v]
             externs[n] = v
             return "NAKA_ADDR(%s)" % n
+        else:                   # inside a labelled object: the nearest label at most MAX_INTO bytes below it
+            if id(syms) not in _SORTED:
+                _SORTED[id(syms)] = sorted(syms)
+            ks = _SORTED[id(syms)]
+            i = bisect.bisect_right(ks, v) - 1
+            if i >= 0 and v - ks[i] <= MAX_INTO:
+                n = syms[ks[i]]
+                externs[n] = ks[i]
+                return "(NAKA_ADDR(%s) + %d)" % (n, v - ks[i])
         numeric.append(v)
         return m.group(1)
     for e in cb.entries:

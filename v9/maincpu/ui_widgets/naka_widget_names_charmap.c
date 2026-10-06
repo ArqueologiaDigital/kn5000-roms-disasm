@@ -1333,6 +1333,7 @@ typedef struct __attribute__((packed)) {
     /* IconIDProc_PtrTable: 256 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
     uint32_t IconIDProc_NameTable[256];
     /* "" (+ 0xFF alignment byte): name of icon-table entry 176, one past IconIDProc_EntryCount (176); a NULL pointer follows it */
+    /* "" (+ 0xFF alignment byte): name of icon-table entry 176, one past IconIDProc_EntryCount (176); a NULL pointer follows it */
     char IconName_Empty[2];
     char i173_str[6];
     char i172_str[6];

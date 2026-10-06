@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,308
-#   semantic names ........... 52,563 (98.6%)
+#   symbols .................. 53,345
+#   semantic names ........... 52,600 (98.6%)
 #   positional names ......... 745
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -9323,7 +9323,10 @@ DiskAttention_Text_Spanish 00EA8C2E
 DiskAttention_Text_French 00EA8C3A
 DiskAttention_Text_German 00EA8C46
 DiskAttention_Text_English 00EA8C50
-DiskSure_PtrTable 00EA8C5C
+DiskSure_LanguageTable 00EA8C5C
+Str_DiskSure_Indonesian 00EA8C74
+Str_DiskSure_EnglishSlot4 00EA8C90
+Str_DiskSure_Spanish 00EA8C9E
 DiskWarning_ConfirmStrings 00EA8CAC
 DiskWarning_GermanConfirm 00EA8CBC
 FormatText_PtrTable 00EA8CDC
@@ -15377,17 +15380,51 @@ RamInit_PanStrPtrs 00EEDDF2
 RamInit_BeatStrPtrs 00EEDFF2
 RamInit_GenreStrPtrs 00EEE036
 RamInit_WidgetState_3DCBA 00EEE05E
-NakaData_SeqChannels 00EEE078
-Naka_DrawbarOrgan_Screens 00EEE718
-Pad_AfterNaka_DrawbarOrgan_Screens 00EEE812
-SeqCh_FeatureDemoCallbackData 00EEE820
-SeqCh_SystemHandlerData 00EEE900
-MixerPart_NamePtrTable 00EEECC0
+FDTest_ScreenView 00EEE078
+FDTest_ResultCounters 00EEE0A2
+Xapr_PresentFlag 00EEE0A8
+Yoko_ViewWorkCells 00EEE0AA
+TrAs_OkSwitchView 00EEE246
+TrAs_PartSelectSwitchView 00EEE272
+TrAsSureLang_MessagePtrTable 00EEE29C
+Kubo_FunctionTable 00EEE2B4
+Kubo_FunctionNameTable 00EEE2B8
+Kubo_ViewWorkCells 00EEE2BC
+CycRec_ClearSwitchView 00EEE55C
+CycRec_ClearLabelView 00EEE588
+Kubo_VocWorkMenuView 00EEE5A8
+Kubo_FadeInOutMenuView 00EEE5DE
+Kubo_MixerMenuView 00EEE614
+Kubo_DiskLoadMenuView 00EEE64A
+SqedtFunc_CursorState 00EEE680
+FileOpen_SlotByte1Init 00EEE686
+FileIO_DriveAParamBlock 00EEE688
+FileIO_DriveAFileOps 00EEE718
+FileIO_DriveABlockOps 00EEE740
+FileIO_DeviceTable 00EEE760
+FileIO_DeviceCount 00EEE782
+SectorCache_AgeOverflowFlag 00EEE784
+FDC_DiskTypeState 00EEE786
+DiskStream_State 00EEE78C
+East_ReverbMidiMenuWorkCells 00EEE796
+East_MidiMenuPage2WorkCells 00EEE812
+East_MidiSettingWorkCells 00EEE820
+East_MidiSetupWorkCells 00EEE900
+East_SendSwitchView 00EEE9D0
+Murai_SoundMenuWorkCells 00EEEA04
+LswLeftHold_OnOffStrPtrs 00EEECC0
+IvSdpart_PartNameStrPtrs 00EEECC8
+IvSdpart_CurrentPage 00EEED40
+IvSdpart_PartRow 00EEED42
 Naka_DrawbarControl_Table 00EEED44
 MidiPart_ConfigNameTable 00EEEDD4
 Naka_DrawbarSlider_Resources 00EEEFC0
-Naka_DrawbarDisplay_Table1 00EEF350
-Naka_DrawbarDisplay_Table2 00EEF3D0
+FontIDProc_FontNameTable 00EEF350
+Font_FileNamePtrTable 00EEF3D0
+Root_DebugNamingWorkCells 00EEF450
+Root_NamingUpperCaseToggleView 00EEF504
+Root_NamingLowerCaseToggleView 00EEF530
+Root_NamingSymbolToggleView 00EEF55C
 Naka_DrawbarReg_Table 00EEF588
 Boot_InitWorkRAM_ROMCopy2_Start_Data 00EEFA66
 Palette_8bit_RGBA_2_Data 00EEFAF0

@@ -920,71 +920,71 @@ NakaData_WidgetNames:	.incbin "includes/generated/naka_widget_names_charmap.bin"
 Root_ClassCount_160:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x622, 0x2
 ; FontIDProc_EntryCount -- 1 x int16_t = 10: number of font IDs the FontID property offers
 ; FontIDProc (ui/ui_widget_defs.s) answers EVT_GET_PROP_DATA_COUNT_SP with it (sign-extended); the names are the
-; 10 pointers CHARA1 .. CHARA5W of the font-name list Boot_InitWorkRAM copies from Naka_DrawbarDisplay_Table1 to
+; 10 pointers CHARA1 .. CHARA5W of the font-name list Boot_InitWorkRAM copies from FontIDProc_FontNameTable to
 ; RAM 0x3efac, whose 11th pointer is the "" after this word (NakaData_CharaFontTable), not this word.
 FontIDProc_EntryCount:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x624, 0x2
 NakaData_CharaFontTable:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x626, 0x2
 ; [nakarest] NakaInst_CHARA5W  +0x628..+0x630 (0xeada98, 8 B)
 ; [nakarest] Text (8 B at 0xeada98), first string "CHARA5W"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in Naka_DrawbarDisplay_Table1 (at 0xeef374).
+; [nakarest] into it; reached through 1 data word in FontIDProc_FontNameTable (at 0xeef374).
 NakaInst_CHARA5W:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x628, 0x8
 ; [nakarest] NakaInst_CHARA2W  +0x630..+0x638 (0xeadaa0, 8 B)
 ; [nakarest] Text (8 B at 0xeadaa0), first string "CHARA2W"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in Naka_DrawbarDisplay_Table1 (at 0xeef370).
+; [nakarest] into it; reached through 1 data word in FontIDProc_FontNameTable (at 0xeef370).
 NakaInst_CHARA2W:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x630, 0x8
 ; [nakarest] NakaInst_CHARA1W  +0x638..+0x640 (0xeadaa8, 8 B)
 ; [nakarest] Text (8 B at 0xeadaa8), first string "CHARA1W"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in Naka_DrawbarDisplay_Table1 (at 0xeef36c).
+; [nakarest] into it; reached through 1 data word in FontIDProc_FontNameTable (at 0xeef36c).
 NakaInst_CHARA1W:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x638, 0x8
 ; [nakarest] NakaInst_CHARA6  +0x640..+0x648 (0xeadab0, 8 B)
 ; [nakarest] Text (8 B at 0xeadab0), first string "CHARA6"; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in Naka_DrawbarDisplay_Table1 (at 0xeef368).
+; [nakarest] it; reached through 1 data word in FontIDProc_FontNameTable (at 0xeef368).
 NakaInst_CHARA6:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x640, 0x8
 ; [nakarest] NakaInst_CHARA1P  +0x648..+0x650 (0xeadab8, 8 B)
 ; [nakarest] Text (8 B at 0xeadab8), first string "CHARA1P"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in Naka_DrawbarDisplay_Table1 (at 0xeef364).
+; [nakarest] into it; reached through 1 data word in FontIDProc_FontNameTable (at 0xeef364).
 NakaInst_CHARA1P:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x648, 0x8
 ; [nakarest] NakaInst_CHARA5  +0x650..+0x658 (0xeadac0, 8 B)
 ; [nakarest] Text (8 B at 0xeadac0), first string "CHARA5"; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in Naka_DrawbarDisplay_Table1 (at 0xeef360).
+; [nakarest] it; reached through 1 data word in FontIDProc_FontNameTable (at 0xeef360).
 NakaInst_CHARA5:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x650, 0x8
 ; [nakarest] NakaInst_CHARA4  +0x658..+0x660 (0xeadac8, 8 B)
 ; [nakarest] Text (8 B at 0xeadac8), first string "CHARA4"; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in Naka_DrawbarDisplay_Table1 (at 0xeef35c).
+; [nakarest] it; reached through 1 data word in FontIDProc_FontNameTable (at 0xeef35c).
 NakaInst_CHARA4:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x658, 0x8
 ; [nakarest] NakaInst_CHARA3  +0x660..+0x668 (0xeadad0, 8 B)
 ; [nakarest] Text (8 B at 0xeadad0), first string "CHARA3"; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in Naka_DrawbarDisplay_Table1 (at 0xeef358).
+; [nakarest] it; reached through 1 data word in FontIDProc_FontNameTable (at 0xeef358).
 NakaInst_CHARA3:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x660, 0x8
 ; [nakarest] NakaInst_CHARA2  +0x668..+0x670 (0xeadad8, 8 B)
 ; [nakarest] Text (8 B at 0xeadad8), first string "CHARA2"; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in Naka_DrawbarDisplay_Table1 (at 0xeef354).
+; [nakarest] it; reached through 1 data word in FontIDProc_FontNameTable (at 0xeef354).
 NakaInst_CHARA2:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x668, 0x8
 ; [nakarest] NakaInst_CHARA1  +0x670..+0x678 (0xeadae0, 8 B)
 ; [nakarest] Text (8 B at 0xeadae0), first string "CHARA1"; no registered NAKA table points into
-; [nakarest] it; reached through 1 data word in Naka_DrawbarDisplay_Table1 (at 0xeef350).
+; [nakarest] it; reached through 1 data word in FontIDProc_FontNameTable (at 0xeef350).
 NakaInst_CHARA1:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x670, 0x8
 ; NakaStr_FontFileBlank -- 1 x char[2]: "" + 0xFF pad, entry 10 of the font file-name pointer table
-; (Naka_DrawbarDisplay_Table2, copied to RAM 0x3F02C by Boot_InitWorkRAM; entries 0-9 are chara*.fnt);
+; (Font_FileNamePtrTable, copied to RAM 0x3F02C by Boot_InitWorkRAM; entries 0-9 are chara*.fnt);
 ; parallel to entry 10 of the font-name table at RAM 0x3EFAC that FontIDProc reads (also "")
 NakaStr_FontFileBlank:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x678, 0x2
 ; [nakarest] NakaInst_chara5w_fnt  +0x67a..+0x686 (0xeadaea, 12 B)
 ; [nakarest] Text (12 B at 0xeadaea), first string "chara5w.fnt"; no registered NAKA table
-; [nakarest] points into it; reached through 1 data word in Naka_DrawbarDisplay_Table2 (at
+; [nakarest] points into it; reached through 1 data word in Font_FileNamePtrTable (at
 ; [nakarest] 0xeef3f4).
 NakaInst_chara5w_fnt:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x67A, 0xC
 ; [nakarest] NakaInst_chara2w_fnt  +0x686..+0x692 (0xeadaf6, 12 B)
 ; [nakarest] Text (12 B at 0xeadaf6), first string "chara2w.fnt"; no registered NAKA table
-; [nakarest] points into it; reached through 1 data word in Naka_DrawbarDisplay_Table2 (at
+; [nakarest] points into it; reached through 1 data word in Font_FileNamePtrTable (at
 ; [nakarest] 0xeef3f0).
 NakaInst_chara2w_fnt:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x686, 0xC
 ; [nakarest] NakaInst_chara1w_fnt  +0x692..+0x69e (0xeadb02, 12 B)
 ; [nakarest] Text (12 B at 0xeadb02), first string "chara1w.fnt"; no registered NAKA table
-; [nakarest] points into it; reached through 1 data word in Naka_DrawbarDisplay_Table2 (at
+; [nakarest] points into it; reached through 1 data word in Font_FileNamePtrTable (at
 ; [nakarest] 0xeef3ec).
 NakaInst_chara1w_fnt:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x692, 0xC
 ; NakaStr_Chara6Fnt -- 12 x char: "chara6.fnt" + NUL + 0xFF pad, the file name of font 6
-; Entry 6 of the font file-name table (Naka_DrawbarDisplay_Table2, copied to RAM 0x3F02C by Boot_InitWorkRAM), parallel to entry 6
+; Entry 6 of the font file-name table (Font_FileNamePtrTable, copied to RAM 0x3F02C by Boot_InitWorkRAM), parallel to entry 6
 ; "CHARA6" of the font-name table at RAM 0x3EFAC that FontIDProc reads; no code reference to RAM 0x3F02C was found.
 NakaStr_Chara6Fnt:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x69E, 0xC
 NakaStr_Chara1pFnt:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x6AA, 0xC
@@ -2694,6 +2694,9 @@ IconIDProc_NameTable:	.incbin "includes/generated/naka_widget_names_charmap.bin"
 ; [nakarest] 460 B at 0xeb1b70: entries 141-176 of IconIDProc_NameTable (pointers), then 79 zero words (slots 177-255).  IconIDProc_NameTable holds 177 pointers from 0xeb193c, then zero words; its readers index it from there.
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4700, 0x1CC
 ; IconName_Empty -- 2 x char: "" + 0xFF fill, the name pointed to by IconIDProc_NameTable entry 176
+; IconIDProc reports 176 entries (IconIDProc_EntryCount) but its name search walks the pointer table to the NULL
+; after this entry, so "" is compared too.
+; IconName_Empty -- 2 x char: "" + 0xFF fill, the name pointed to by IconIDProc_PtrTable entry 176
 ; IconIDProc reports 176 entries (IconIDProc_EntryCount) but its name search walks the pointer table to the NULL
 ; after this entry, so "" is compared too.
 IconName_Empty:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x48CC, 0x2

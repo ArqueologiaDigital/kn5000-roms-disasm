@@ -1311,7 +1311,7 @@ NakaWidget_EnterTainerScr_1_AcEntertainerGridBox:	.incbin "includes/generated/na
 NakaWidget_EnterTainerScr_2_Label:			.incbin "includes/generated/naka_effects_seq.bin", 0x5BAE, 0x44
 ; [nakarest] NakaInst_FADE_IN_OUT_SETTING  +0x5bf2..+0x5d6c (0xe2db96, 378 B)
 ; [nakarest] Text (36 B at 0xe2db96), first string "FADE IN/OUT SETTING"; no registered NAKA
-; [nakarest] table points into it; reached through 3 data words in NakaData_SeqChannels (at
+; [nakarest] table points into it; reached through 3 data words in FDTest_ScreenView (at
 ; [nakarest] 0xeee608, 0xeee63e, 0xeee674). widget records, elements 7-14 of Viewable slot 0xd6
 ; [nakarest] (table 0xe2ef74, 15 entries, InitializeKubo) ("EnterTainerScr"): AcIndexWideES (42
 ; [nakarest] B) x2, Label (32 B) x3, IvExitMode (26 B), AcFuncToggle (44 B), AcPanicEditSw (46
