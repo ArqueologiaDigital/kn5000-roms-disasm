@@ -15,7 +15,7 @@ QUESTION IT ANSWERS
        LAYER LOW).  Both are entries of PartParamStep_Ids00to1F, whose field ids follow the COMBINATION EDIT INTERNAL SOUND
        page (DL_InternalSound_F18CDD: VOLUME / PAN / KEY SHIFT / FINE TUNE / BEND RANGE, then EFFECT1 SEND /
        EFFECT2 / REVERB SEND): id 2 sits between VOLUME and KEY SHIFT, so it is PAN; and the DSP EFFECT screen asks
-       for ids 6 / 7 / 8 for its EFFECT 1 / EFFECT 2 / REVERB blocks (sub_F10222), so id 8 is REVERB SEND.
+       for ids 6 / 7 / 8 for its EFFECT 1 / EFFECT 2 / REVERB blocks (DspEffect_StepSelectedBlockSend), so id 8 is REVERB SEND.
   Names: the record PartParamField_<Name>; an adjust handler PartParam_Step<Name>; a number-entry handler
   PartParam_Enter<Name>; the shared refusal at 0xFBBA83 (`Blink_SetEnable(0)`, return 0) PartParam_RefuseNumberEntry;
   the EFFECT2 handler at id 7 (toggles byte 6 between 0 and 0x7F) PartParam_StepEffect2.

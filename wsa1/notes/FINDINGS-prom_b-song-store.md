@@ -38,7 +38,7 @@ Directly below it in the same span is `T_F42880-T_F42894` (6 slots,
 `0xF7A400-0xF7A613`), which `FINDINGS-prom_b-block-store.md` had already
 singled out:
 
-> **`T_F42884 -> 0xF7A402` is the block allocator itself** — it is what
+> **`T_BStore_AllocBlock_Veneer -> 0xF7A402` is the block allocator itself** — it is what
 > `BStore_AllocChain` calls at `0xF63A18` for each block of a new chain. It is
 > the natural next conversion.
 

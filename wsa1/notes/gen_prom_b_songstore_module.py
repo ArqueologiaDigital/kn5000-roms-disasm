@@ -16,7 +16,7 @@ WHY THIS BLOCK
     extent, summed reference upper bound 172.  T_F42880-T_F42894 is the run
     immediately below it in the same span, and notes/FINDINGS-prom_b-block-store.md
     already named its target as "the natural next conversion":
-        "T_F42884 -> 0xF7A402 is the block allocator itself -- it is what
+        "T_BStore_AllocBlock_Veneer -> 0xF7A402 is the block allocator itself -- it is what
          BStore_AllocChain calls at 0xF63A18 for each block of a new chain."
 
 HOW THE CODE/DATA SPLIT WAS MADE
@@ -679,7 +679,7 @@ BANNER = """
 ; span, 8,906 bytes of extent, summed reference upper bound 172.  Immediately
 ; below it in the same span sits T_F42880-T_F42894 (6 slots), whose target
 ; notes/FINDINGS-prom_b-block-store.md had already singled out:
-;     "T_F42884 -> 0xF7A402 is the block allocator itself -- it is what
+;     "T_BStore_AllocBlock_Veneer -> 0xF7A402 is the block allocator itself -- it is what
 ;      BStore_AllocChain calls at 0xF63A18 for each block of a new chain.
 ;      It is the natural next conversion."
 ; Both runs are converted here, in one contiguous span.

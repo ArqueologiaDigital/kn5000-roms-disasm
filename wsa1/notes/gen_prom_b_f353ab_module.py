@@ -182,7 +182,7 @@ NAMED_WHY = {
     0xF3702F: ("five 16-bit words are read off the caller's stack -- (XIZ+0x08) "
                "value, (XIZ+0x0A) mask, (XIZ+0x0C) shift, (XIZ+0x0E) maximum, "
                "(XIZ+0x10) minimum.  The body is `ld DE,(XIZ+0x0a) / and "
-               "DE,(XIZ+0x08)` then a shift by (XIZ+0x0C) through sub_F37F70, "
+               "DE,(XIZ+0x08)` then a shift by (XIZ+0x0C) through Asr16ByCount, "
                "then `cp WA,(XIZ+0x0e) / jr LE` and `cp HL,(XIZ+0x10) / jr GE` "
                "-- a SIGNED clamp, which is what one arm's 0xFFC4/0x003C pair "
                "(-60..+60) requires -- then `cpl BC / and BC,(XIZ+0x08) / or "
@@ -784,7 +784,7 @@ def banner():
 ; @@ WHAT THE MODULE DOES.  ClampFieldToRange (0xF3702F) reads five 16-bit words
 ; off the caller's stack -- value, mask, shift, maximum, minimum -- and returns
 ; the value with ONE FIELD replaced by that field clamped, SIGNED, to [min,max]:
-;   `and DE,(XIZ+0x08)` masks, sub_F37F70 shifts, `jr LE`/`jr GE` clamp, and
+;   `and DE,(XIZ+0x08)` masks, Asr16ByCount shifts, `jr LE`/`jr GE` clamp, and
 ;   `cpl BC / and BC,(XIZ+0x08) / or BC,HL` merges the field back under the same
 ;   mask so every other bit survives.
 ; Everything else feeds it.  ClampParamValueById_From541 (0xF37069) and
@@ -1055,8 +1055,8 @@ def checks(verbose=True, layout=True):
       verbose)
     c("ENTRY six thunk slots and two more land in the span",
       sorted("T_%06X" % s for v in th.values() for s in v),
-      ["T_F41250", "T_F41254", "T_F41258", "T_F4125C", "T_F41260", "T_F41264",
-       "T_F42660", "T_F42664"], verbose)
+      ["T_SysExThirdRegion_FetchNextChunk", "T_SysExThirdRegion_AcceptRequest", "T_SysExToneImage_WriteByte", "T_SysExParam_ExecSoundWriteRequest", "T_F41260", "T_F41264",
+       "T_ParamImage_CopyToSongWorkspace", "T_F42664"], verbose)
     lab = labels()
     b_ = boundaries()
     objs = {a for a, _n, _k in OBJECTS}

@@ -80,7 +80,7 @@ are the UI's way in:
 | `T_F425C8` | 0xFE1C79 | 2 |
 | `T_DiskSaveFile_Execute_Entry` | 0xFE1C80 | 1 |
 | `T_DiskApi_CloseFile_Call` | 0xFE1CAF | 4 |
-| `T_F425E8` | 0xFE1CB3 | 3 |
+| `T_DiskSave_CheckFreeSpace` | 0xFE1CB3 | 3 |
 | `T_Disk_PortA3_Release_Entry` | 0xFE1CC4 | 1: 0xF66159 |
 | `T_Var2216_SetW145C_Call` | 0xFE1CD4 | 2 |
 | `T_DiskProgress_PrintDotForSmf` | 0xFE1CD8 | 8 |

@@ -20,3 +20,7 @@ re-read a sample of bodies against those claims. Each new label carries its head
 named routines call (`OldCopy_*` callers excluded): 102 named, 18 refused. Refusals are kept with their reasons, e.g.
 routines acting on song-data marker bytes whose meaning is not established, or veneers whose only callers are
 unnamed.
+
+**Wave 3** (`proposals_wave3_{g,h,i,j}.json`) took the next 120. Many of these have only one named caller. A single
+caller was accepted only when its name or header made the role clear and the body confirmed it. Result: 108 named,
+12 refused.

@@ -203,10 +203,10 @@ nothing else. The new top of the list is
 ```
 T_Transport_StopAllRunning x29 0xF000B9   T_BStore_ReadCursorAdvance_Call x25 0xF5EBD0   T_SeqTrackKey_Press x24 0xF4E56F
 T_Seq_RequestRewind x24 0xF4542D   T_F41EE4 x23 0xF5B84C   T_F40C84 x21 0xF4D01D
-T_BStore_ReadCursorByte x18 0xF4D0DB   T_F42884 x17 0xF7A402   T_F42CA8 x15 0xF5553F
+T_BStore_ReadCursorByte x18 0xF4D0DB   T_BStore_AllocBlock_Veneer x17 0xF7A402   T_F42CA8 x15 0xF5553F
 ```
 
-**`T_F42884 -> 0xF7A402` is the block allocator itself** — it is what
+**`T_BStore_AllocBlock_Veneer -> 0xF7A402` is the block allocator itself** — it is what
 `BStore_AllocChain` calls at `0xF63A18` for each block of a new chain, and it
 returns failure in `W`. It is the natural next conversion: it closes the one
 routine this module depends on and does not contain.

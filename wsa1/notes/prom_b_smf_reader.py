@@ -39,7 +39,7 @@ WHAT IS ESTABLISHED (each is a check; `--list` prints them all)
 
 WHAT IS **NOT** ESTABLISHED, AND IS NOT CLAIMED
   * WHERE the bytes come from.  The refill path leaves prom_b through
-    T_F425A8/T_F425B0/T_F425E8 -> prom_a 0xFE1C3A/0xFE1C55/0xFE1CB3, all of which
+    T_F425A8/T_F425B0/T_DiskSave_CheckFreeSpace -> prom_a 0xFE1C3A/0xFE1C55/0xFE1CB3, all of which
     are `sub_` in prom_a.  The floppy is the obvious candidate and this script
     does not assert it.
   * WHOSE buffer 0x60A700 is.  It lies inside the 0x60A000 region prom_a's

@@ -253,7 +253,7 @@ the same refusal.
   not have: at 20 bytes the rule misses most of those runs, at 10 it has three
   false positives. That is the next round's problem and it is a real one.
 * Above that, exactly **two** thunk slots point anywhere into 0xF6D002-0xF77FFF
-  (`T_MidiFileL0ad_LcdKeyRow1 -> 0xF6F400`, `T_F43384 -> 0xF6F404`), so a split there would rest
+  (`T_MidiFileL0ad_LcdKeyRow1 -> 0xF6F400`, `T_MidiFileSave_WriteSeqBankSmf -> 0xF6F404`), so a split there would rest
   on a linear decode — which §2 shows is not a test.
 
 ---

@@ -572,7 +572,7 @@ All three load bases are asserted by content first (prom_a `00 03 05 04 02` at
   default handler `0xFB2820` tests it at its second instruction — the script
   asserts the contrast, which is what establishes that these messages need no
   session and no screen.
-* **The request** is prom_b `sub_F36F8C` (`0xF36F8C`, thunk `T_F41254`):
+* **The request** is prom_b `SysExThirdRegion_AcceptRequest` (`0xF36F8C`, thunk `T_SysExThirdRegion_AcceptRequest`):
   `Pack3x7BitFields_Bytes6To8` → address, `..._Bytes9To11` → count,
   `cp XBC,0x00060000` splits the two regions, and
   `sub XWA,0x00040000 / cp XWA,0x000002c9` and
@@ -580,7 +580,7 @@ All three load bases are asserted by content first (prom_a `00 03 05 04 02` at
   `(0x000A00) |= 5` and return 0; refused → return 1, and prom_a `0xFB34AD`
   transmits the five bytes at prom_b `0xF4FEC8`, which are the **abort**
   message the reference already names.
-* **The write** is prom_b `sub_F379AB` (`0xF379AB`, thunk `T_F41258`): the same
+* **The write** is prom_b `SysExToneImage_WriteByte` (`0xF379AB`, thunk `T_SysExToneImage_WriteByte`): the same
   split, `cp (0x000A07),0x0001` (the count must be exactly 1), the value is
   `(msg[12]<<4) | (msg[13]&0x0F)`, and a ladder of `cp XIX,<n>` turns the
   offset into (block, index) for prom_a `0xFD616A` (melodic) or `0xFD6704`

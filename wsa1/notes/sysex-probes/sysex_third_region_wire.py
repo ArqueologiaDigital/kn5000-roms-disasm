@@ -36,11 +36,11 @@ WHERE THE SIGNAL IS  (prom_b at 0xF00000, prom_a at 0xF80000, prom_c at 0xF80000
     count one rejoins with `ld IY,(XIZ+0xfc)` / `or DE,WA` / `or BC,DE` and
     returns WA, so the count is TRUNCATED TO 16 BITS.  Both callers store it
     with a 16-bit `ld (0x000a07),WA`.
-  * THE REQUEST is sub_F36F8C (0xF36F8C), thunk T_F41254, command slot 0x19 of
+  * THE REQUEST is SysExThirdRegion_AcceptRequest (0xF36F8C), thunk T_SysExThirdRegion_AcceptRequest, command slot 0x19 of
     both receive tables (prom_a 0xFB3495).  Bounds `cp XBC,0x00060000`,
     `sub XWA,0x00040000 / cp XWA,0x000002c9`, `sub XWA,0x00060000 /
     cp XWA,0x00004c98`.
-  * THE WRITE is sub_F379AB (0xF379AB), thunk T_F41258, command slot 0x17
+  * THE WRITE is SysExToneImage_WriteByte (0xF379AB), thunk T_SysExToneImage_WriteByte, command slot 0x17
     (prom_a 0xFB3483).  `cp (0x000a07),0x0001` -- the count must be 1.
   * ⚠ THE TWO HANDLERS ARE NOT SYMMETRIC.  0xFB3495 does `pop XIY / cp WA,0 /
     jr Z` and sends the five bytes at prom_b 0xF4FEC8 when the routine refused;
@@ -226,7 +226,7 @@ print()
 
 
 # ------------------------------------------------- 3. the bounds, read twice
-# Request path, sub_F36F8C.
+# Request path, SysExThirdRegion_AcceptRequest.
 assert b(0xF36FD0, 6) == bytes([0xE9, 0xCF, 0x00, 0x00, 0x06, 0x00])   # cp XBC,0x60000
 assert b(0xF36FE4, 6) == bytes([0xE8, 0xCA, 0x00, 0x00, 0x04, 0x00])   # sub XWA,0x40000
 assert b(0xF36FEC, 6) == bytes([0xE8, 0xCF, 0xC9, 0x02, 0x00, 0x00])   # cp XWA,0x2c9
@@ -235,7 +235,7 @@ assert b(0xF3700A, 6) == bytes([0xE8, 0xCF, 0x98, 0x4C, 0x00, 0x00])   # cp XWA,
 SPLIT = le(b(0xF36FD2, 4))
 MEL_ADDR, MEL_LEN = le(b(0xF36FE6, 4)), le(b(0xF36FEE, 4))
 DRM_ADDR, DRM_LEN = le(b(0xF37004, 4)), le(b(0xF3700C, 4))
-# Write path, sub_F379AB -- the same five numbers, read from different bytes.
+# Write path, SysExToneImage_WriteByte -- the same five numbers, read from different bytes.
 assert le(b(0xF379DC, 4)) == SPLIT and le(b(0xF379E5, 4)) == MEL_ADDR
 assert le(b(0xF379F0, 4)) == MEL_LEN
 assert le(b(0xF37BAB, 4)) == DRM_ADDR and le(b(0xF37BB6, 4)) == DRM_LEN
@@ -289,8 +289,8 @@ for table in (0xF4F800, 0xF4F888):
 assert a(0xFB3483, 12) == PREFIX and a(0xFB3495, 12) == PREFIX, "handler shape"
 assert a(0xFB348F, 4) == bytes([0x1D, 0x58, 0x12, 0xF4]), "2C thunk"
 assert a(0xFB34A1, 4) == bytes([0x1D, 0x54, 0x12, 0xF4]), "2B thunk"
-assert b(0xF41254, 4) == bytes([0x1B, 0x8C, 0x6F, 0xF3]), "T_F41254"
-assert b(0xF41258, 4) == bytes([0x1B, 0xAB, 0x79, 0xF3]), "T_F41258"
+assert b(0xF41254, 4) == bytes([0x1B, 0x8C, 0x6F, 0xF3]), "T_SysExThirdRegion_AcceptRequest"
+assert b(0xF41258, 4) == bytes([0x1B, 0xAB, 0x79, 0xF3]), "T_SysExToneImage_WriteByte"
 # 2C: `pop XBC / ret` -- the return value is DISCARDED.
 assert a(0xFB3493, 2) == bytes([0x59, 0x0E]), "2C epilogue changed"
 # 2B: `pop XIY / cp WA,0 / jr Z` then the five-byte literal at 0xF4FEC8.
@@ -491,7 +491,7 @@ def imm16_at(addr):
     return le(b(addr, 2))
 
 
-# Melodic ladder, sub_F379AB: `cp XIX,<n>` (EC CF imm32) then `push <sel>` (0B imm16)
+# Melodic ladder, SysExToneImage_WriteByte: `cp XIX,<n>` (EC CF imm32) then `push <sel>` (0B imm16)
 MEL_LADDER = []
 for cp_site, push_site in ((0xF37A19, 0xF37A34), (0xF37A3D, 0xF37A57),
                            (0xF37A5D, 0xF37A77), (0xF37A7D, 0xF37A97),
@@ -515,7 +515,7 @@ assert b(0xF37B72, 6) == bytes([0xEC, 0xCF, 0xCF, 0x00, 0x00, 0x00])  # cp XIX,2
 MEL_LOCAL = (imm32_at(0xF37B1F), imm32_at(0xF37B74))
 assert MEL_LOCAL == (135, 207)
 
-# Drum ladder, sub_F379AB from 0xF37BA4.
+# Drum ladder, SysExToneImage_WriteByte from 0xF37BA4.
 assert b(0xF37BED, 6) == bytes([0xE9, 0xCA, 0x98, 0x01, 0x00, 0x00])  # sub XBC,408
 assert b(0xF37BF6, 3) == bytes([0x0B, 0x96, 0x00])                    # push 150
 DRM_COMMON = imm32_at(0xF37BEF)

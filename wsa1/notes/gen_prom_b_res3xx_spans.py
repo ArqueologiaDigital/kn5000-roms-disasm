@@ -306,7 +306,7 @@ def block3(d):
            ";",
            "; THE START IS NAMED BY CODE: prom_b 0xF55CA6 and 0xF55D57 both do",
            "; `ld XIY,0x00f3434c`, then reach T_F417F8 -> 0xF31B21 -- the opcode-02",
-           "; handler itself -- with that XIY (via sub_F55C44).  So this address is",
+           "; handler itself -- with that XIY (via SeqScreen_DrawCountInMeasure).  So this address is",
            "; a record start on the firmware's own say-so, and the handler fixes the",
            "; extent at 15 bytes.  Its +7 lands on 0xF3435B, the byte right after it.",
            "; THE END IS NAMED BY CODE TOO: DL_F34361 is `ld XIY,0x00f34361` at",

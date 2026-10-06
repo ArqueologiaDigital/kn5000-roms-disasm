@@ -75,7 +75,7 @@
 ;     CombiBank_RemoteGroupNameAddr (0xF9F910)  mode 0: 0xF80200 + 0x10*bank -- PresetBank_CategoryNames,
 ;                            indexed by the bank alone: 16 names for 16 banks of 8
 ;     Combination_ReadFromCpu2 (0xF98927)  0xF80300 + 0x2C0*index, 0x2C0 bytes -> CPU 1 RAM 0x7620
-;     sub_FAABB3 (0xFAABB3)  0xF80300 itself (combination 0), 0x2C0 bytes -> CPU 1 RAM 0x7300
+;     Mode_InitSavedPartBlocks (0xFAABB3)  0xF80300 itself (combination 0), 0x2C0 bytes -> CPU 1 RAM 0x7300
 ;     CombiName_RequestRead (0xFC1C77)  0xF80300 + 0x2C0*index + 2, 16 bytes -> 0x810: the NAME alone
 ;     CombiGroupName_RequestRead (0xFC21D0)  base 0xF80000 (loaded by CombiGroupName_Lookup) + 0x200 + 0x10*bank,
 ;                            16 bytes -> 0x810: one bank name

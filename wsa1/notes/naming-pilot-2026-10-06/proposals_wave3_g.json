@@ -1,0 +1,586 @@
+[
+ {
+  "old": "sub_F7E2ED",
+  "verdict": "name",
+  "new": "LCD_ClearCurrentLayer",
+  "header": "Runs DL_F39551, a single op-0E record (IY 0, BC 0x28, HL 0xF0) = SWI7 service 0x0E LCD_Svc_0E_ClearColumns over 40 byte-columns x 240 rows: zeroes the WHOLE layer (0x2540) selects.\nEvery caller stores LCD_CurrentLayer first: Paint_StepRecord (layers 0, 1, 2), Paint_StepRecordTrackClrMeas, sub_F81C90, TrackMerge_DrawFieldHighlight (layer 1). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:196460 `ld xiy, DL_F39551` -- body: XIY = DL_F39551 ...",
+   "prom_b/wsa1_prom_b.s:196462 `call T_DisplayList_Run` -- ... run to Data_F39559, i.e. one 8-byte record",
+   "prom_b/wsa1_prom_b.s:78603 `.byte 0x0E, 0x08` -- DL_F39551 = op 0E (handler DLHandler_IY_BC_HL: IY=+2, BC=+4, HL=+6, swi 7)",
+   "prom_b/wsa1_prom_b.s:78605 `.short 0x0028` -- BC = 40 byte-columns = 320 px, the full width",
+   "prom_b/wsa1_prom_b.s:78606 `.short 0x00F0` -- HL = 240 rows, the full height (IY = 0: from the top-left)",
+   "prom_a/wsa1_prom_a.s:26334 `.long LCD_Svc_0E_ClearColumns` -- SWI7 service 0x0E",
+   "prom_a/wsa1_prom_a.s:28980 `; Outputs: BC*HL display bytes set to 0x00. WA, BC, E clobbered. Returns` -- service 0x0E zeroes BC x HL bytes of the current layer",
+   "prom_a/wsa1_prom_a.s:5662 `ld (LCD_CurrentLayer:16), 0x01` -- Paint_StepRecord: layer 1 ...",
+   "prom_a/wsa1_prom_a.s:5663 `calr sub_F7E2ED` -- ... cleared; then layer 2 the same (5664-5665)",
+   "prom_b/wsa1_prom_b.s:200242 `ld (LCD_CurrentLayer:16), 1` -- TrackMerge_DrawFieldHighlight: layer 1 ...",
+   "prom_b/wsa1_prom_b.s:200243 `call sub_F7E2ED` -- ... cleared before its box is filled (so its header's \"clears the field area\" is the whole layer)"
+  ]
+ },
+ {
+  "old": "sub_F44B95",
+  "verdict": "name",
+  "new": "Seq_ResetPositionToSongStart",
+  "header": "Song position := the start: (0x345B), TransportB_Beat, Seq_BeatTick and the 17 per-track beat words at 0x33EA := 0, (0x3458) := TransportA_BeatsPerBar, (0x3456) := 0, current measure (0x3552) := 1 unless (0x34D9) b1;\nthen TimedEventRing_Discard and the per-track re-arm calls. The shared tail of Seq_RewindToStart and Seq_RewindAfterSongLoad. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:96549 `calr sub_F44B95` -- Seq_RewindToStart: its last step",
+   "prom_b/wsa1_prom_b.s:95081 `calr sub_F44B95` -- Seq_RewindAfterSongLoad: after clearing (0x34BB) b3 / (0x34D4) b2",
+   "prom_b/wsa1_prom_b.s:94404 `ldw (TransportB_Beat:8), 0:io` -- beat := 0",
+   "prom_b/wsa1_prom_b.s:94405 `ld (Seq_BeatTick:8), 0:io` -- tick := 0",
+   "prom_b/wsa1_prom_b.s:94407 `ld xix, 13290` -- 17 words at 0x33EA := 0 (the per-track beats Seq_SetTrackBeatsFromTransportB fills)",
+   "prom_b/wsa1_prom_b.s:94311 `; := Seq_BeatTick and all 17 per-track words at 0x33EA := TransportB_Beat; else TransportB_Beat, Seq_BeatTick,` -- what 0x33EA is",
+   "prom_b/wsa1_prom_b.s:94412 `ld a, (TransportA_BeatsPerBar:24)` -- (0x3458) := beats per bar",
+   "prom_b/wsa1_prom_b.s:94417 `ldw (13650:16), 1` -- (0x3552) := 1 when (0x34D9) b1 is clear",
+   "prom_b/wsa1_prom_b.s:97464 `; CountIn_SetMeasureToFirstBar: Current measure (0x3552) := 0x8002 (bit 15 = count-in) and UI_ScreenFlags bit 4` -- (0x3552) is the current measure (CountIn_SetMeasureToFirstBar header)",
+   "prom_b/wsa1_prom_b.s:94420 `calr TimedEventRing_Discard` -- pending timed events dropped"
+  ]
+ },
+ {
+  "old": "sub_F55C44",
+  "verdict": "name",
+  "new": "SeqScreen_DrawCountInMeasure",
+  "header": "WA = the current measure (0x3552): 0x8002 -> entry 1, 0x8001 -> entry 0 of DLTable_F3435B (' -2' / ' -1') drawn through the caller's string-table record XIY; any other value draws nothing.\n0x8002/0x8001 are the count-in bars (bit 15 = count-in). Called by the SEQ PLAY, REALTIME RECORD and CYCLE RECORD value painters. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:119429 `cp wa, 32770` -- 0x8002 ...",
+   "prom_b/wsa1_prom_b.s:119431 `ld (DisplayListB_Stage:16), 1` -- ... selects entry 1",
+   "prom_b/wsa1_prom_b.s:119434 `cp wa, 32769` -- 0x8001 ...",
+   "prom_b/wsa1_prom_b.s:119436 `ld (DisplayListB_Stage:16), 0` -- ... selects entry 0; anything else returns",
+   "prom_b/wsa1_prom_b.s:119438 `call T_DLB_Handler_StringTable` -- draws the record XIY",
+   "prom_b/wsa1_prom_b.s:72186 `.ascii \" -1\"` -- DLTable_F3435B[0]",
+   "prom_b/wsa1_prom_b.s:72187 `.ascii \" -2\"` -- DLTable_F3435B[1]",
+   "prom_b/wsa1_prom_b.s:97464 `; CountIn_SetMeasureToFirstBar: Current measure (0x3552) := 0x8002 (bit 15 = count-in) and UI_ScreenFlags bit 4` -- CountIn_SetMeasureToFirstBar; sub_F44CEA sets 0x8001 one bar later",
+   "prom_b/wsa1_prom_b.s:119459 `ld wa, (13650:16)` -- Draw_CycleMasterS0ngMeasureTimeSig passes (0x3552) ...",
+   "prom_b/wsa1_prom_b.s:119461 `calr sub_F55C44` -- ... with XIY = DL_F3434C",
+   "prom_b/wsa1_prom_b.s:119521 `calr sub_F55C44` -- RealtimeRecordScreen_DrawValues, same arguments",
+   "prom_b/wsa1_prom_b.s:119757 `calr sub_F55C44` -- the CYCLE RECORD painter, XIY = Data_F351F9 (same table 0xF3435B)"
+  ]
+ },
+ {
+  "old": "sub_F6B399",
+  "verdict": "name",
+  "new": "StepRecord_BStoreAppendBytes",
+  "header": "The step-record module's own variant of BStore_AppendBytes(A = directory entry, W = count, XIY = source): same opening stores and chain/heap logic, with local copies of the helpers (calr BStore_DirEntryOffsetX2, sub_F6B50C) and 16-bit saves.\nIts named caller StepRecord_AppendBytesToCurrentEntry already reads it that way. Basis: caller + body + twin.",
+  "basis": "caller + body + twin BStore_AppendBytes",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:157505 `calr sub_F6B399` -- StepRecord_AppendBytesToCurrentEntry, A = BStore_DirEntry",
+   "prom_b/wsa1_prom_b.s:157500 `; record copy of BStore_AppendBytes -- then (0x20A9) |= 1 and (0x3614) |= 1. Step-record handlers call it with W` -- that caller's header (\"prom_b's step-record copy of BStore_AppendBytes\")",
+   "prom_b/wsa1_prom_b.s:157524 `ld (4722:16), xiy` -- opening 1: (0x1272) = XIY",
+   "prom_b/wsa1_prom_b.s:157525 `ld (BStore_DirEntry:16), a` -- opening 2",
+   "prom_b/wsa1_prom_b.s:157526 `ld c, w` -- opening 3",
+   "prom_b/wsa1_prom_b.s:187256 `ld (4722:16), xiy` -- BStore_AppendBytes: the same three stores (187256-187258)",
+   "prom_b/wsa1_prom_b.s:157527 `calr BStore_DirEntryOffsetX2` -- local helper, where BStore_AppendBytes calls T_BStore_DirEntryOffsetX2_Call (187259)",
+   "prom_b/wsa1_prom_b.s:157528 `ld xix, 6304894` -- the same cursor table 0x60347E"
+  ]
+ },
+ {
+  "old": "sub_F6F94E",
+  "verdict": "name",
+  "new": "Smf_ResetTrackAssignToIdentity",
+  "header": "BStore_TrackToPart[0..16] := 0..15, 0x20 and the 16 track MIDI channels at 0x603433 := 0..15 (from ByteMap_F6F985/_F6F9A7; (0x1239) only picks a byte-identical copy).\nRun by both SMF readers after a file is read, so an SMF lands with track n on part n / channel n. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:168183 `ld xix, BStore_TrackToPart` -- 17 bytes ...",
+   "prom_b/wsa1_prom_b.s:168184 `ldw bc, 17` -- ...",
+   "prom_b/wsa1_prom_b.s:168191 `ld xix, 6304819` -- 16 bytes to 0x603433",
+   "prom_b/wsa1_prom_b.s:168192 `ldw bc, 16` -- ",
+   "prom_b/wsa1_prom_b.s:168233 `.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x20` -- ByteMap_F6F985: 0..15, then 0x20 for track 17",
+   "include/wsa1_ram.inc:574 `.equ BStore_TrackToPart, 0x603422 ; workspace +0x22: 16 bytes, the part each sequencer channel plays, 0xFF = none -- TimedEvents_ProcessRing maps a...` -- the part each sequencer channel plays",
+   "prom_b/wsa1_prom_b.s:198078 `; bits of (0x603454) and MIDI channels (0x603433), or the TR 9-16 equivalents. Basis: callers + body.` -- TrackAssign_PaintTrackGroup shows 0x603433 as the per-track MIDI channels",
+   "prom_b/wsa1_prom_b.s:167988 `calr sub_F6F94E` -- Smf_ReadFile, before status 0x23",
+   "prom_b/wsa1_prom_b.s:173230 `calr sub_F6F94E` -- Smf_ReadMultiTrack, at its end"
+  ]
+ },
+ {
+  "old": "sub_F70DD6",
+  "verdict": "name",
+  "new": "SmfCC_UpdateSelectedRpn",
+  "header": "For the event's channel (Smf_EventStatus & 15): selected RPN (0x11D8)[ch] := the RPN LSB (0x11C8)[ch] when the RPN MSB (0x11B8)[ch] is 0 and the LSB is 0..2, else 0xFF (none); returns it in A.\nThe common tail of SmfCC_RpnMsb (CC 101) and SmfCC_RpnLsb (CC 100); SmfCC_PutSelectedRpnValueEvent consumes (0x11D8). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:171271 `ld iy, (Smf_EventStatus:16)` -- channel = status & 15",
+   "prom_b/wsa1_prom_b.s:171274 `ld xix, 4536` -- A = (0x11B8)[ch], the MSB SmfCC_RpnMsb stores (171141)",
+   "prom_b/wsa1_prom_b.s:171276 `ld xix, 4552` -- W = (0x11C8)[ch], the LSB SmfCC_RpnLsb stores (171207)",
+   "prom_b/wsa1_prom_b.s:171279 `cp a, 0:i3` -- MSB must be 0 ...",
+   "prom_b/wsa1_prom_b.s:171283 `cp w, 2:i3` -- ... and LSB <= 2",
+   "prom_b/wsa1_prom_b.s:171286 `ld xix, 4568` -- (0x11D8)[ch] := LSB",
+   "prom_b/wsa1_prom_b.s:171291 `ld a, 255:opc` -- else 0xFF",
+   "prom_b/wsa1_prom_b.s:171167 `calr sub_F70DD6` -- SmfCC_RpnMsb",
+   "prom_b/wsa1_prom_b.s:171237 `calr sub_F70DD6` -- SmfCC_RpnLsb",
+   "prom_b/wsa1_prom_b.s:170836 `; SmfCC_PutSelectedRpnValueEvent: If the event's channel has RPN 0, 1 or 2 selected ((0x11D8)[ch] != 0xFF, set by` -- the reader of (0x11D8)"
+  ]
+ },
+ {
+  "old": "sub_F7659B",
+  "verdict": "name",
+  "new": "InputStream_OpenAndReadFirstBlock",
+  "header": "Disk_Flags |= 0x80; unless L = 1 the file extension := 'MID'; window := 0x60A700-0x60AB00 (the input-stream window) and DiskApi_ReadFileToWindow with Disk_Flags bit 5 (one block) set around it; A = its status.\nSmf_ReadFile's first read (L = 0), whose status it then tests. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:167759 `xor l, l` -- Smf_ReadFile: L = 0 ...",
+   "prom_b/wsa1_prom_b.s:167760 `calr sub_F7659B` -- ... then this",
+   "prom_b/wsa1_prom_b.s:167762 `ld (InputStream_Status:16), w` -- the returned A is the stream status (4/8/5 = error paths)",
+   "prom_b/wsa1_prom_b.s:167775 `ld (InputStream_Cursor:16), xwa` -- and the cursor starts at 0x60A700",
+   "prom_b/wsa1_prom_b.s:182065 `m_or_mi8 MB16, Disk_Flags, 0x80` -- body",
+   "prom_b/wsa1_prom_b.s:182066 `cp l, 1:i3` -- L != 1 ...",
+   "prom_b/wsa1_prom_b.s:182068 `ld (Disk_FileName+8:16), 77` -- ... extension 'M','I','D' (182068-182070)",
+   "prom_b/wsa1_prom_b.s:182072 `ld xwa, 6334208` -- window start 0x60A700",
+   "prom_b/wsa1_prom_b.s:182074 `ld xwa, 6335232` -- window end 0x60AB00 (1 KB)",
+   "prom_b/wsa1_prom_b.s:182076 `m_or_mi8 MB16, Disk_Flags, 0x20` -- bit 5 ...",
+   "prom_a/wsa1_prom_a.s:162648 `; address set; then DiskFile_ReadBlock per 1 KB until the window is full (DiskFile_AdvanceWindow 0xFF), bit 5 asks` -- ... = read one block",
+   "prom_b/wsa1_prom_b.s:182043 `calr sub_F7659B` -- the other site is an unreferenced `calr / ret` stub after SmfSize_AdvanceSongCursor's ret, not part of it"
+  ]
+ },
+ {
+  "old": "sub_F7C6FB",
+  "verdict": "name",
+  "new": "Transp0se_StepSelectedFieldDown",
+  "header": "(0x0C4E) := W, (0x0C4F) := W & 0x80 (0x80 = down), UI_RequestBits |= 9, then SongStore_DispatchA_2[(0x0DF6)] for TRANSP0SE field 1..4 (track via SeqJob_StepTrack17, start/end measure via SeqJob_StepMeasure, ...).\nBoth TRANSP0SE step keys call it when W bit 7 is set; its twin sub_F7C6B2 (UI_RequestBits |= 8) when clear. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:203699 `bit 7, w` -- SoftKeyCol5_Transp0se_StageZero: W bit 7 set ...",
+   "prom_b/wsa1_prom_b.s:203701 `call T_F42A54` -- ... -> this",
+   "prom_b/wsa1_prom_b.s:203704 `call T_F42A50` -- ... clear -> the twin sub_F7C6B2",
+   "prom_b/wsa1_prom_b.s:204004 `call T_F42A54` -- Transp0se_StageZero_Button21, same test",
+   "prom_b/wsa1_prom_b.s:91867 `T_F42A54: jp sub_F7C6FB` -- the directory slot",
+   "prom_b/wsa1_prom_b.s:192175 `m_or_mi8 MB16, UI_RequestBits, 0x09` -- body",
+   "prom_b/wsa1_prom_b.s:192176 `ld (3150:16), w` -- ",
+   "prom_b/wsa1_prom_b.s:192177 `and w, 128` -- (0x0C4F) = direction bit",
+   "prom_b/wsa1_prom_b.s:192179 `ld l, (3574:16)` -- field (0x0DF6), 1..4",
+   "prom_b/wsa1_prom_b.s:192072 `; (0x0DF6) is read by Paint_Transp0se, so it is the Transp0se screen's field cell.` -- Transp0se_SelectField4: (0x0DF6) is the TRANSP0SE field",
+   "prom_b/wsa1_prom_b.s:192186 `ld xde, SongStore_DispatchA_2` -- dispatch",
+   "prom_b/wsa1_prom_b.s:193483 `; SeqJob_StepMeasure: WA +- SongStore_StepSizeTable[(0x0E18)] by (0x0C4F), clamped 1..999 -- the MEASURE fields (notes/prom_b_seqjob_field_names.py)` -- SeqJob_StepMeasure: (0x0C4F) == 0x80 steps down",
+   "prom_b/wsa1_prom_b.s:192094 `m_or_mi8 MB16, UI_RequestBits, 0x08` -- the twin sub_F7C6B2, otherwise identical"
+  ]
+ },
+ {
+  "old": "sub_F7F935",
+  "verdict": "name",
+  "new": "Vel0cityChange_FormatSignedValue",
+  "header": "Formats the VEL0CITY CHANGE value (0x0C24) as a sign cell + 3 right-justified digits at 0x2660 (T_Value_ToSignedAsciiDigits3_RightJustified with DE = 127); the BC/HL/XIY/A it then loads are not used by either caller.\nPaint_Vel0cityChange and Vel0cityChange_DrawValues call it before the value list runs. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:202838 `ld a, (3108:16)` -- A = (0x0C24)",
+   "prom_b/wsa1_prom_b.s:202840 `ldw de, 127` -- offset 127",
+   "prom_b/wsa1_prom_b.s:202841 `call T_Value_ToSignedAsciiDigits3_RightJustified` -- ",
+   "prom_a/wsa1_prom_a.s:22593 `; Value_ToSignedAsciiDigits3_RightJustified -- (WA - DE) -> sign cell 0x2660 + right-justified digits 0x2661-0x2663` -- what that formatter does",
+   "prom_b/wsa1_prom_b.s:202828 `calr sub_F7F935` -- Paint_Vel0cityChange",
+   "prom_b/wsa1_prom_b.s:203108 `calr sub_F7F935` -- Vel0cityChange_DrawValues",
+   "prom_b/wsa1_prom_b.s:190420 `ld (3108:16), a` -- Vel0cityChange_InitFields writes (0x0C24) with DisplayListB_Stage+5, the signed value",
+   "prom_b/wsa1_prom_b.s:203507 `ld (3108:16), a` -- the VEL0CITY CHANGE value-entry path stores it the same way"
+  ]
+ },
+ {
+  "old": "sub_FAABB3",
+  "verdict": "name",
+  "new": "Mode_InitSavedPartBlocks",
+  "header": "Combination_Current -> 0x7000 (the sound-mode save of Mode_SwitchToCombination) and CPU 2's first preset combination record (PromC_PresetBank_Records, 0x2C0 bytes, link 0xE2) -> 0x7300 (the combination-mode block); (0x60F2D8) := 0.\nRun by INITIAL TOTAL, after ParamImage_LoadFactoryDefaults, and in boot phase 3 when phase 2 lost memory and set (0x60F2D8). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:79540 `lda xbc, (0x7000:16)` -- destination 0x7000 ...",
+   "prom_a/wsa1_prom_a.s:79542 `lda xix, (Combination_Current:16)` -- ... source 0x7620",
+   "prom_a/wsa1_prom_a.s:79543 `ldw wa, 0x78de` -- up to 0x78E0",
+   "prom_a/wsa1_prom_a.s:79565 `lda xbc, (0x7300:16)` -- local buffer 0x7300 (pushed first = LOCAL)",
+   "prom_a/wsa1_prom_a.s:79567 `pushw 0x02c0` -- length 0x2C0, one combination record",
+   "prom_a/wsa1_prom_a.s:79568 `ld XWA,PromC_PresetBank_Records` -- remote address: preset record 0",
+   "prom_a/wsa1_prom_a.s:79570 `call T_Link_SendCommandE2` -- ",
+   "prom_a/wsa1_prom_a.s:24636 `; immediately before this call, so (XIZ+0x08) is the REMOTE` -- Link_SendCommandE2 argument order",
+   "prom_a/wsa1_prom_a.s:79572 `ld (0x60f2d8:24), 0x00` -- flag cleared",
+   "prom_a/wsa1_prom_a.s:32442 `; {0x98,0x00,0x10,0xF0}, `ldirw` 0x160 words 0x7620 -> 0x7000 (save), T_ParamImage_SnapshotCombination_Entry, 0x7300 -> 0x7620 (load), T_ParamImage...` -- Mode_SwitchToCombination: 0x7000 = saved sound mode, 0x7300 = combination mode",
+   "prom_a/wsa1_prom_a.s:61501 `call T_F43450` -- Initial_Total (T_F43450 = jp sub_FAABB3, prom_b 92632)",
+   "prom_a/wsa1_prom_a.s:79391 `calr ParamImage_LoadFactoryDefaults` -- sub_FAAA8F: factory defaults ...",
+   "prom_a/wsa1_prom_a.s:79392 `calr sub_FAABB3` -- ... then this",
+   "prom_a/wsa1_prom_a.s:79147 `ld (0x60f2d8:24), 0x01` -- ParamModule_BootPhase2_MemoryLost sets the flag before loading defaults",
+   "prom_a/wsa1_prom_a.s:79253 `calr sub_FAABB3` -- ParamModule_BootPhase3 runs this when the flag is set"
+  ]
+ },
+ {
+  "old": "sub_FB4F8F",
+  "verdict": "name",
+  "new": "SysExTx_SendPartParamValue",
+  "header": "The PART variant of SysExTx_SendParamValue (family-2C reply, 1 data byte): same header F0 50 2C 04 00 11, conditions and nibbles, but the descriptor's 6 address bytes are copied and byte 7 patched to 0x20 | part (`set 5,A`).\nCalled by the 2B readers SysExParam_GetPartField and SysExParam_GetEffect2OnOff. Basis: callers + body + twin.",
+  "basis": "callers + body + twin SysExTx_SendParamValue",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:93829 `calr sub_FB4F8F` -- SysExParam_GetPartField",
+   "prom_a/wsa1_prom_a.s:93803 `sub H,0x20` -- which first builds record[0] from the part field",
+   "prom_a/wsa1_prom_a.s:94154 `calr sub_FB4F8F` -- SysExParam_GetEffect2OnOff",
+   "prom_a/wsa1_prom_a.s:94810 `lda xbc, (0xf4fef2:24)` -- the F0 50 2C 04 00 11 header",
+   "prom_a/wsa1_prom_a.s:94818 `call MemCopyWords_Copy` -- the 6 descriptor bytes copied to a local ...",
+   "prom_a/wsa1_prom_a.s:94821 `set 0x05,A` -- ... and record[0] | 0x20 ...",
+   "prom_a/wsa1_prom_a.s:94822 `ld (xiz-13), a` -- ... written over address byte 7",
+   "prom_a/wsa1_prom_a.s:94851 `call SysExTx_AppendChecksumF7` -- checksum + F7, then both ports",
+   "notes/sysex-probes/README.md:533 `part builders patch address byte 7 to `0x20 + part` (`set 5,A` / `add C,0x20`)` -- the SysEx probe README",
+   "notes/sysex-probes/sysex_param_wire_format.py:67 `1 byte 0xFB4F8F emits 3 (part blocks; `set 5,A` 0xFB4FF9 patches` -- sysex_param_wire_format.py lists it as the part builder"
+  ]
+ },
+ {
+  "old": "sub_FB7B0B",
+  "verdict": "name",
+  "new": "SysExSession_StartProgressScreen",
+  "header": "At a SysEx bulk session's start: UI_ScreenId/UI_ScreenLatch -> their _Previous cells, the progress cells 0x60F804..0x60F811 := 0, (0x60F810) := 1 sending / 2 otherwise ((0x60FD40) bit 6), the first progress field := 0x80,\nthen the Sending or SYSTEM EXCLUSIVE PLEASE WAIT screen is painted. Called by SysExDump_RunSendJob and SysExSession_Run. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:89343 `m_set 6, MD24, 0x60fd40` -- SysExDump_RunSendJob: sending ...",
+   "prom_a/wsa1_prom_a.s:89345 `call sub_FB7B0B` -- ... then this",
+   "prom_a/wsa1_prom_a.s:90255 `call sub_FB7B0B` -- SysExSession_Run, on the bulk-dump screen",
+   "prom_a/wsa1_prom_a.s:99789 `ld (UI_ScreenId_Previous:16), c` -- screen remembered",
+   "prom_a/wsa1_prom_a.s:99792 `ld (0x60f804:24), 0x00` -- progress cells cleared (to 0x60F811)",
+   "prom_a/wsa1_prom_a.s:99838 `; SysExSession_RefreshProgressScreen: While the session status (field 4 of (0x60FCD8)) is 0, recomputes the progress` -- SysExSession_RefreshProgressScreen: 0x60F804.. are the progress pairs",
+   "prom_a/wsa1_prom_a.s:99815 `ld (XIX),0x02` -- sub_FB7B79: (0x60F810) = 2 ...",
+   "prom_a/wsa1_prom_a.s:99818 `ld (XIX),0x01` -- ... or 1 when (0x60FD40) bit 6",
+   "prom_a/wsa1_prom_a.s:99832 `ld (0x60f804:24), 0x80` -- sub_FB7BA3: first field of the active direction",
+   "prom_a/wsa1_prom_a.s:100114 `call T_Paint_Sending_Entry` -- sub_FB7E6C: Sending ...",
+   "prom_a/wsa1_prom_a.s:100125 `call T_Paint_SystemExclusivePleaseWait_Entry` -- ... or Please Wait"
+  ]
+ },
+ {
+  "old": "sub_FBF020",
+  "verdict": "name",
+  "new": "CombinationNaming_StepWriteNumber",
+  "header": "EditValue_StepBitField((0x276E), Record_F1B1A7: mask 0x7F, 0..127): steps the USER combination number the screen writes to, up or down by PanelEvent_Flags bit 0; if it moved, UI_ScreenFlags bit 4 (repaint).\nLcdKeyRow3 (bit 0 cleared) and LcdKeyRow4 (bit 0 set) of COMBINATION NAMING; sub_FBF03A writes Combination_Current to 0xEC0300 + n*0x2C0. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:110289 `and (XIX),0xfe` -- LcdKeyRow3_CombinationNaming: bit 0 cleared ...",
+   "prom_a/wsa1_prom_a.s:110290 `calr sub_FBF020` -- ... then this",
+   "prom_a/wsa1_prom_a.s:110302 `m_or_mi8 MBI+r4, 0, 0x01` -- LcdKeyRow4_CombinationNaming: bit 0 set ...",
+   "prom_a/wsa1_prom_a.s:110303 `calr sub_FBF020` -- ... then this",
+   "prom_a/wsa1_prom_a.s:110330 `lda xwa, (0x276e:16)` -- the field",
+   "prom_a/wsa1_prom_a.s:110332 `call T_EditValue_StepBitField` -- ",
+   "prom_a/wsa1_prom_a.s:110336 `m_set 4, MD16, UI_ScreenFlags` -- only when A = 1 (moved)",
+   "prom_b/wsa1_prom_b.s:51998 `.byte 0x00, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x00` -- Record_F1B1A7: mask 0x7F, shift 0, max 0x7F, min 0",
+   "prom_b/wsa1_prom_b.s:117129 `; CORRECTED 2026-10-04: the other way round. After the +7 XOR, bit 0 SET steps DOWN (`sub H,A`, bounded` -- EditValue_StepBitField direction",
+   "prom_a/wsa1_prom_a.s:110356 `ld XBC,0x00ec0300` -- sub_FBF03A (the WRITE key): USER records base ...",
+   "prom_a/wsa1_prom_a.s:110360 `mul WA,0x02c0` -- ... + (0x276E) * 0x2C0 ...",
+   "prom_a/wsa1_prom_a.s:110370 `call T_Link_SendCommandE4` -- ... receives Combination_Current",
+   "prom_a/wsa1_prom_a.s:110177 `ld (0x276e:16), a` -- initialised on entry from the current combination number"
+  ]
+ },
+ {
+  "old": "sub_FD6BC6",
+  "verdict": "name",
+  "new": "SoundEdit_SetSlotEnabled",
+  "header": "(n, on): for slot n = 1..4 sets (on != 0) or clears bit 2n-2 of (0x27A4) -- the bit Var27A4_SlotEnabled tests -- and sends the new byte to CPU 2 as tone parameter 0x11 (ToneMsg_SendParam), or 0x0D (ToneMsg8D_SendParam) in drum-kit mode ((0x27F5) != 0).\nSOUND EDIT MENU soft key 1 and ToneEditPage_A0 op 0 toggle a slot with it after testing Var27A4_SlotEnabled. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:129230 `call Var27A4_SlotEnabled` -- SoftKeyCol1_SoundEditMenu tests the slot ...",
+   "prom_a/wsa1_prom_a.s:129246 `call sub_FD6BC6` -- ... and passes the opposite state",
+   "prom_a/wsa1_prom_a.s:136954 `call Var27A4_SlotEnabled` -- ToneEditPage_A0_Op0, the same toggle ...",
+   "prom_a/wsa1_prom_a.s:136972 `call sub_FD6BC6` -- ",
+   "prom_a/wsa1_prom_a.s:142651 `lda xix, (0x27a4:16)` -- body",
+   "prom_a/wsa1_prom_a.s:142655 `cp l, 0x04:i3` -- n in 1..4",
+   "prom_a/wsa1_prom_a.s:142662 `dec 2,C` -- bit 2n-2",
+   "prom_a/wsa1_prom_a.s:142672 `and (XIX),A` -- clear ...",
+   "prom_a/wsa1_prom_a.s:142675 `or (XIX),H` -- ... or set",
+   "prom_a/wsa1_prom_a.s:142686 `pushw 0x11` -- param 0x11 ...",
+   "prom_a/wsa1_prom_a.s:142693 `calr ToneMsg8D_SendParam` -- ... or 0x0D through the 8D message",
+   "prom_a/wsa1_prom_a.s:142702 `; Var27A4_SlotEnabled(n): 1 when 1 <= n <= 4 and bit 2n-2 of (0x27A4) is set, else 0.` -- the getter it mirrors",
+   "prom_a/wsa1_prom_a.s:150490 `; ToneMsg8D_SendParam in drum-kit mode ((0x27F5) == 1) or ToneMsg_SendParam: (0x78B7) as 0x52/0x8A, record 0x60's` -- (0x27F5) = drum-kit mode",
+   "prom_b/wsa1_prom_b.s:131407 `SoundEdit_PaintSlotOrdinals:` -- the slot vocabulary of the painters reading the same bit"
+  ]
+ },
+ {
+  "old": "sub_FD7A05",
+  "verdict": "name",
+  "new": "PartRecord0_GetProgramAndBank",
+  "header": "*arg1 := (0x76A2), *arg2 := (0x76A3): program and bank of the first 64-byte part record (RecordPtrs_RAM76A2[0]).\nSOUND EDIT COPY passes them to SoundConv_SetArgs (Arg0 program, Arg1 bank) / SoundSel_FromProgramAndBank; SOUND EDIT MEMORY WRITE stores them in its fields. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:144610 `ld c, (0x76a2:16)` -- body: *arg1",
+   "prom_a/wsa1_prom_a.s:144614 `ld c, (0x76a3:16)` -- *arg2",
+   "prom_a/wsa1_prom_a.s:154903 `call sub_FD7A05` -- ScreenEnter_SoundEditCopy, (xiz-8) / (xiz-6) ...",
+   "prom_a/wsa1_prom_a.s:154928 `call SoundConv_SetArgs` -- ... handed on as (arg1, arg2) ...",
+   "prom_a/wsa1_prom_a.s:154929 `call T_SoundSel_FromProgramAndBank` -- ... to the program+bank converter",
+   "prom_a/wsa1_prom_a.s:116777 `; SoundSel_FromProgramAndBank: T_SoundSel_FromProgramAndBank (SoundConv_Arg0 program, _Arg1 bank, _Arg2 part) -> SoundConv_Result0 group, _Result1 ...` -- SoundSel_FromProgramAndBank header",
+   "prom_a/wsa1_prom_a.s:144738 `; SoundConv_SetArgs: SoundConv_Arg0[0] = stack argument 1, [1] = argument 2, [2] = 0 -- the sound-selection converters' argument block;` -- SoundConv_SetArgs: arg 1 -> Arg0, arg 2 -> Arg1",
+   "prom_a/wsa1_prom_a.s:154725 `call sub_FD7A05` -- ScreenEnter_SoundEditMemoryWrite"
+  ]
+ },
+ {
+  "old": "sub_FDA7B0",
+  "verdict": "name",
+  "new": "SoundEditController_FieldCodeToListPos",
+  "header": "A := IndexMap_FCF185[code]: the CONTROLLER row's 6-bit field code -> its position 0..0x2F in the 48-entry list the soft keys step; IndexMap_FCF153 (sub_FDA7DC) maps it back and is its exact inverse on positions 0..47.\nSoundEditController_SoftKeyCol2 converts, steps (max 0x2F) and converts back; SoftKeyCols5to8 tests positions 0x13..0x17. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:150208 `add XBC,IndexMap_FCF185` -- body",
+   "prom_a/wsa1_prom_a.s:146299 `calr sub_FDA7B0` -- SoundEditController_SoftKeyCol2: code (Fields & 0x3F) -> position",
+   "prom_a/wsa1_prom_a.s:146314 `ld (XIX+0x08),0x2f` -- record max 0x2F: positions 0..47",
+   "prom_a/wsa1_prom_a.s:146336 `calr ToneEdit_ApplyStep` -- the position is stepped ...",
+   "prom_a/wsa1_prom_a.s:146346 `calr sub_FDA7DC` -- ... and mapped back through IndexMap_FCF153 before Arr27A6_Set",
+   "prom_a/wsa1_prom_a.s:146437 `; IndexMap_FCF185[Fields[Fields[0]] & 0x3F] is 0x13..0x17, sub_FD759A steps 2-bit value k of Fields[12]. Then` -- SoftKeyCols5to8 reads positions too",
+   "prom_a/wsa1_prom_a.s:128117 `.byte 0x00, 0x1c, 0x1d, 0x1e, 0x20, 0x21, 0x23, 0x24, 0x25, 0x2a, 0x2b, 0x2c, 0x02, 0x2d, 0x01, 0x03` -- IndexMap_FCF153 (position -> code): [1] = 0x1C ...",
+   "prom_a/wsa1_prom_a.s:128128 `.byte 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x01, 0x02, 0x03, 0x00` -- ... IndexMap_FCF185 (code -> position): [0x1C] = 1"
+  ]
+ },
+ {
+  "old": "sub_FE0514",
+  "verdict": "name",
+  "new": "Disk_PrepareForMount",
+  "header": "Shows message 9 (PLEASE WAIT), releases the disk port and clears the FCB (Disk_PortA3_Release_Call), and stops notes and transports (sub_FE16FE: sub_FE2E96 + Transport_StopAllRunning).\nRun right before Disk_MountFloppyWithRetry / Disk_MountAndScanDirectory by the MIDI-file and DISK LOAD mount paths. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:163273 `calr sub_FE0514` -- Disk_MountAndScanMidiFiles ...",
+   "prom_a/wsa1_prom_a.s:163274 `calr Disk_MountFloppyWithRetry` -- ... then mounts",
+   "prom_a/wsa1_prom_a.s:164514 `calr sub_FE0514` -- DiskLoadScreen_MountAndScanDirectory ...",
+   "prom_a/wsa1_prom_a.s:164515 `calr Disk_MountAndScanDirectory` -- ... then mounts and scans",
+   "prom_a/wsa1_prom_a.s:164519 `calr sub_FE0514` -- sub_FE1C67, the LeaveOnError twin",
+   "prom_a/wsa1_prom_a.s:161880 `pushw 0x09` -- message index 9 ...",
+   "prom_a/wsa1_prom_a.s:161881 `calr StatusMsg_ShowByIndex` -- ... PLEASE WAIT (DiskLoadScreen_MountAndScanDirectory header)",
+   "prom_a/wsa1_prom_a.s:161882 `calr Disk_PortA3_Release_Call` -- ",
+   "prom_a/wsa1_prom_a.s:162427 `ld (Disk_Fcb:24), 0x00` -- which also clears the FCB",
+   "prom_a/wsa1_prom_a.s:161883 `calr sub_FE16FE` -- ",
+   "prom_a/wsa1_prom_a.s:163886 `calr Transport_StopAllRunning_SaveRegs2` -- sub_FE16FE = sub_FE2E96 (notes released) + transports stopped"
+  ]
+ },
+ {
+  "old": "sub_FE2F93",
+  "verdict": "name",
+  "new": "DiskProgress_DrawDotAndAdvance",
+  "header": "Prints '.' (byte 0x2E at 0xFE706E) with LCD text service 8 at position (0x2216) and advances (0x2216) by 1, capped at 0x146E (sub_FE2F6A).\nThe ungated core of DiskProgress_PrintDot (which skips it during an SMF transfer) and all of DiskProgress_PrintDotForSmf. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:166781 `calr sub_FE2F93` -- DiskProgress_PrintDot, after the (0x21E8) bit 7 gate",
+   "prom_a/wsa1_prom_a.s:164617 `calr sub_FE2F93` -- DiskProgress_PrintDotForSmf, the whole body",
+   "prom_a/wsa1_prom_a.s:166786 `lda xix, (0x2216:16)` -- position cell",
+   "prom_a/wsa1_prom_a.s:166787 `pushw 0x08` -- service 8, count 1",
+   "prom_a/wsa1_prom_a.s:166791 `lda xbc, (sub_FE6F89__FE706E:24)` -- the '.' byte",
+   "prom_a/wsa1_prom_a.s:166793 `call LCD_SwiTextCall_SaveRegs_Copy` -- ",
+   "prom_a/wsa1_prom_a.s:166761 `cp HL,0x146e` -- sub_FE2F6A: +1, not past 0x146E",
+   "prom_a/wsa1_prom_a.s:166797 `ld (XIX),WA` -- stored back"
+  ]
+ },
+ {
+  "old": "sub_FF5F1B",
+  "verdict": "name",
+  "new": "MidiFileSave_MoveNameCursor",
+  "header": "(dir): NameEdit_CursorPos -1 (not below 1) when dir != 0, else +1 (not above 8), mirrored in (0x2721), NameEdit_SyncCharIndex, (0x2729) := NameEdit_CharIndex; the cursor cell is redrawn on layer 1 before and after (DL_F5879C / DL_F58786).\nSoftKeyCol1 (dir 1) and SoftKeyCol2 (dir 0) of MIDI FILE SAVE page 0 -- that screen's counterpart of NameEdit_MoveCursor. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:194167 `pushw 0x01` -- SoftKeyCol1_MidiFileSave_Page0: dir 1 ...",
+   "prom_a/wsa1_prom_a.s:194168 `calr sub_FF5F1B` -- ",
+   "prom_a/wsa1_prom_a.s:194174 `pushw 0x00` -- SoftKeyCol2_MidiFileSave_Page0: dir 0 ...",
+   "prom_a/wsa1_prom_a.s:194175 `calr sub_FF5F1B` -- ",
+   "prom_a/wsa1_prom_a.s:194181 `lda xix, (NameEdit_CursorPos:16)` -- body",
+   "prom_a/wsa1_prom_a.s:194202 `decm8 0x01, (xix)` -- left, bounded at 1 (194200)",
+   "prom_a/wsa1_prom_a.s:194208 `incm8 0x01, (xix)` -- right, bounded at 8 (194206)",
+   "prom_a/wsa1_prom_a.s:194212 `call T_NameEdit_SyncCharIndex_Call` -- ",
+   "prom_a/wsa1_prom_a.s:163407 `; NameEdit_MoveCursor: SoftKeyCol1/2 on DISK SAVE FILE page 0 (through NameEdit_MoveCursor_Call): NameEdit_CursorPos -1 when (0x272C) bit 7 is set` -- the DISK SAVE twin (3..8)"
+  ]
+ },
+ {
+  "old": "sub_FF70D8",
+  "verdict": "name",
+  "new": "PartRecords_RestoreShadowedField",
+  "header": "For the 16 part-record bytes PtrTable_FF4251 names (+0x0D of the 64-byte records at 0x76A2..): where one differs from the shadow 0x26B2[i] taken on entry (sub_FF70B6), writes it back and posts {id, 0x0D, value, 0x0F}.\nRun on leaving MIDI FILE DIRECT PLAY and the SEQUENCER MEDLEY, both of which snapshot on entry. Basis: callers + body + sibling.",
+  "basis": "callers + body + sibling sub_FF70B6",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:190325 `calr sub_FF70D8` -- ScreenLeave_MidiFileDirectPlay",
+   "prom_b/wsa1_prom_b.s:146568 `call T_F42414` -- SequencerMedley_OnLeave (T_F42414 = jp sub_FF70D8, 91424)",
+   "prom_a/wsa1_prom_a.s:190170 `calr sub_FF70B6` -- Paint_MidiFileDirectPlay takes the snapshot on entry",
+   "prom_b/wsa1_prom_b.s:146490 `; BStore_LoadBankDirectory, T_F42410; then Blink_EnableThenStop unless the medley plays. Called by Paint_SequencerMedley.` -- the SEQUENCER MEDLEY painter does too (T_F42410 = jp sub_FF70B6)",
+   "prom_a/wsa1_prom_a.s:196897 `ld (XHL+0x26b2),A` -- sub_FF70B6: byte -> shadow",
+   "prom_a/wsa1_prom_a.s:196911 `lda xix, (PtrTable_FF4251:24)` -- body",
+   "prom_a/wsa1_prom_a.s:196917 `ld H,(XDE+0x26b2)` -- shadow value",
+   "prom_a/wsa1_prom_a.s:196920 `ld (XBC),H` -- written back when different",
+   "prom_a/wsa1_prom_a.s:196927 `pushw 0x0d` -- field 0x0D ...",
+   "prom_a/wsa1_prom_a.s:196933 `call T_PendingEventQueue_AppendStackArgs` -- ... queued (E,D,A,W = id, field, value, mask)",
+   "prom_a/wsa1_prom_a.s:189706 `.long 0x000076af` -- PtrTable_FF4251[0] = 0x76A2 + 0x0D"
+  ]
+ },
+ {
+  "old": "sub_F0EA9F",
+  "verdict": "name",
+  "new": "Blink_SetupNumberFieldAndDraw",
+  "header": "Reads the record after the blink command byte (variable address, mask/shift or whole word, swi function, positions, digit count) into the Blink_* block and puts the value's digits in Blink_TextPtr (signed for 5/11; the typed 0x2820 text in state 2);\nthen Blink_Phase = 0 and one draw (Blink_DrawField_Op07 / _Op02). Shared tail of Blink_Command's SetState arms (commands 0, 5, 6, 9, 10, 11). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:28076 `calr sub_F0EA9F` -- Blink_CmdArm_SetState / _DashTest shared tail",
+   "prom_b/wsa1_prom_b.s:28242 `ld l, (xbc)` -- L = the command byte",
+   "prom_b/wsa1_prom_b.s:28245 `ld wa, (xbc)` -- XIX = the variable address",
+   "prom_b/wsa1_prom_b.s:28250 `cp l, 6:i3` -- commands 6 / 10 take the whole word ...",
+   "prom_b/wsa1_prom_b.s:28264 `and a, d` -- ... others a masked byte, then shifted (28275)",
+   "prom_b/wsa1_prom_b.s:28285 `ld (Blink_SwiFunction:16), h` -- the record fields -> the control block",
+   "prom_b/wsa1_prom_b.s:28307 `m_ld_m16m MBI+r0, 0, Blink_BytesPerEntry` -- ",
+   "prom_b/wsa1_prom_b.s:28309 `lda xix, (Blink_TextPtr:16)` -- text buffer",
+   "prom_b/wsa1_prom_b.s:28310 `cp l, 5:i3` -- commands 5 / 11 ...",
+   "prom_b/wsa1_prom_b.s:28322 `call T_Value_ToSignedAsciiDigits3_RightJustified` -- ... signed",
+   "prom_b/wsa1_prom_b.s:28327 `m_cp_mi8 MB16, Blink_State, 0x02` -- state 2: the typed text at 0x2820 instead",
+   "prom_b/wsa1_prom_b.s:28376 `call T_Value_ToAsciiDigits3_RightJustified` -- other commands: unsigned",
+   "prom_b/wsa1_prom_b.s:28413 `ld (Blink_Phase:16), 0` -- ",
+   "prom_b/wsa1_prom_b.s:28420 `calr Blink_DrawField_Op07` -- draw once (or _Op02, 28424)",
+   "prom_b/wsa1_prom_b.s:27986 `.long Blink_CmdArm_SetState_DashTest` -- Blink_Command_Table: the arms that reach the tail"
+  ]
+ },
+ {
+  "old": "sub_F10175",
+  "verdict": "name",
+  "new": "DspEffect_ToggleCommonAlgorithm",
+  "header": "Toggles bit 0 of RAM 0x7634 -- record 0x60 EFFECT COMMON, +0 bit 0 = EFFECT COMMON ALGORITHM -- and queues it (Queue2C00 {0x60, 0, value, mask 1}).\nLCD row 1 of the DSP EFFECT screen with no block opened (section 0); in the block sections the same key toggles the block's BYPASS byte instead (sub_F1018F). Basis: caller + body + record layout.",
+  "basis": "caller + body + record layout",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:30547 `calr sub_F10175` -- LcdKeyRow1_DspEffect_Section0",
+   "include/wsa1_ram.inc:511 `.equ DspEffect_Section, 0x2790 ; the DSP EFFECT screen's section, 0..5: 0 no block opened, 1..3 block 0..2's parameters, 4 / 5 block 0 / 2's EQ -- ...` -- DspEffect_Section 0",
+   "prom_b/wsa1_prom_b.s:32440 `m_xor_mi8 MB16, 0x7634, 0x01` -- body: toggle",
+   "prom_b/wsa1_prom_b.s:32444 `pushw 96` -- record 0x60, field 0, mask 1 (32439-32443)",
+   "prom_b/wsa1_prom_b.s:32445 `call T_Queue2C00_Append4` -- ",
+   "prom_b/wsa1_prom_b.s:88489 `; Default_Record60 -- id 0x60, 12 bytes, the factory default of RAM 0x7634` -- record 0x60 = RAM 0x7634",
+   "notes/sysex-probes/sysex_combination_layout.py:331 `0x60: (\"EFFECT COMMON\", \"+0 bit0 EFFECT COMMON ALGORITHM; +1..+11 always 0\"),` -- record 0x60: +0 bit 0 EFFECT COMMON ALGORITHM",
+   "prom_b/wsa1_prom_b.s:32472 `m_xor_mi8 MBI+r4, 0, 0x01` -- sub_F1018F, the param-section row-1 arm: block byte 23 (BYPASS)"
+  ]
+ },
+ {
+  "old": "sub_F10222",
+  "verdict": "name",
+  "new": "DspEffect_StepSelectedBlockSend",
+  "header": "PartParam_StepFieldById(field 6 / 7 / 8, part 0) for Effect_BlockIndex 0 / 1 / 2: steps the part's EFFECT1 SEND, EFFECT2 or REVERB SEND, the send into the block EFF1 / EFF2 / REV.\nSOFT KEY 1 of the DSP EFFECT screen with no block opened (section 0), only when (0x2798) = 0 and PanelModeGroup = 0x17. Basis: caller + body + step table.",
+  "basis": "caller + body + PartParamStep_Ids00to1F",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:29507 `calr sub_F10222` -- SoftKeyCol1_DspEffect_Section0, after its gates (29499-29504)",
+   "prom_b/wsa1_prom_b.s:32570 `ld bc, (Effect_BlockIndex:16)` -- body",
+   "prom_b/wsa1_prom_b.s:32581 `pushw 6` -- block 0 -> field 6",
+   "prom_b/wsa1_prom_b.s:32585 `pushw 7` -- block 1 -> field 7",
+   "prom_b/wsa1_prom_b.s:32589 `pushw 8` -- block 2 -> field 8",
+   "prom_b/wsa1_prom_b.s:32591 `call T_PartParam_StepFieldById` -- part 0",
+   "prom_a/wsa1_prom_a.s:104067 `; PartParam_StepEffect1Send: the adjust handler of PartParamField_Effect1Send (EFFECT1 SEND), slot PartParamStep_Ids00to1F[6] (notes/prom_ab_part_p...` -- id 6 = EFFECT1 SEND",
+   "prom_a/wsa1_prom_a.s:104089 `; PartParam_StepEffect2: PartParamStep_Ids00to1F[7], EFFECT2 on the INTERNAL SOUND page: byte 6 of the part record toggles 0 <-> 0x7F (notes/prom_a...` -- id 7 = EFFECT2",
+   "prom_a/wsa1_prom_a.s:104149 `; PartParam_StepReverbSend: the adjust handler of PartParamField_ReverbSend (REVERB SEND), slot PartParamStep_Ids00to1F[8] (notes/prom_ab_part_para...` -- id 8 = REVERB SEND",
+   "notes/FINDINGS-prom_b-dsp-effect-parameters.md:239 `| 1..3 | the parameters of effect block 0, 1, 2. `EffectPage_BlockIndex[k]` is 0, 1, 2 (`DspEffect_SelectSectionBlock` stores it into `Effect_Block...` -- Effect_BlockIndex 0/1/2 = EFF1/EFF2/REV"
+  ]
+ },
+ {
+  "old": "sub_F11329",
+  "verdict": "name",
+  "new": "DspEffect_SendToneMsg80",
+  "header": "When PanelModeGroup = 0x17: sends the 6-byte tone message {0x80, UI_PartIndex, 0, 0, 1, arg} over T_Link_SendBlockIn32ByteChunks(0, 6, msg) -- prom_a ToneMsg80_Id00's frame (CPU 2 ToneEdit_Dispatch, write table) without its copy to 0x27E0.\nAll four callers, in the DSP EFFECT module (CompareKey_DspEffect and three unnamed ones), pass 0x10. Basis: callers + body + twin.",
+  "basis": "callers + body + twin ToneMsg80_Id00",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:31306 `pushw 16` -- CompareKey_DspEffect: arg 0x10 ...",
+   "prom_b/wsa1_prom_b.s:31307 `calr sub_F11329` -- ",
+   "prom_b/wsa1_prom_b.s:31380 `calr sub_F11329` -- sub_F0F788; sub_F0FD5F and sub_F1008E (31998, 32419) likewise, each after pushw 16",
+   "prom_b/wsa1_prom_b.s:35032 `m_cp_mi8 MB16, PanelModeGroup, 0x17` -- gate",
+   "prom_b/wsa1_prom_b.s:35034 `ld (xix), 128` -- byte 0 = 0x80",
+   "prom_b/wsa1_prom_b.s:35035 `ld c, (UI_PartIndex:16)` -- byte 1 = part",
+   "prom_b/wsa1_prom_b.s:35039 `ld (xix+4), 1` -- bytes 2/3 = 0, 4 = 1, 5 = arg",
+   "prom_b/wsa1_prom_b.s:35045 `call T_Link_SendBlockIn32ByteChunks` -- ",
+   "prom_a/wsa1_prom_a.s:141716 `; ToneMsg80_Id00: builds a tone message for ToneMsg_Send. Stores read from its code: [0]=0x80 [1]=UI_PartIndex [3]=0x00 [4]=0x01 [5]=arg1.` -- ToneMsg80_Id00, the prom_a twin",
+   "prom_a/wsa1_prom_a.s:141336 `; ToneMsg_Send(u8 *msg): copies the 9-byte tone message to RAM 0x27E0..0x27E8 (the last one sent) and` -- which also sends with (0, 6, msg)",
+   "prom_c/tone_db/tone_db_module.s:19595 `; bit 3 of request[0] chooses the WRITE table or the QUERY table` -- CPU 2: 0x80 = write table"
+  ]
+ },
+ {
+  "old": "sub_F36E21",
+  "verdict": "name",
+  "new": "SysExThirdRegion_FetchNextChunk",
+  "header": "Main-loop step of a SysEx third-region request: while (0x0A00) bit 2 is set (sub_F36F8C's |= 5; re-armed by the reply sender sub_F37E1C while bytes remain), fetches the chunk at (0x0A03) -- region 0x040000 or 0x060000 --\nthrough ToneMsg80/85 requests to CPU 2 or DspParam_ReadByNumber + sub_F37E1C -- then clears bit 2 and sets bit 1. Basis: caller + body + module siblings.",
+  "basis": "caller + body + sibling request/reply routines",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:6195 `tset 3, (0x88:8)` -- MainTask_PhaseVector: one rota bit ...",
+   "prom_a/wsa1_prom_a.s:6197 `call T_F41250` -- ... runs this (T_F41250 = jp sub_F36E21, prom_b 90264)",
+   "prom_b/wsa1_prom_b.s:75428 `and bc, 4` -- only with (0x0A00) bit 2",
+   "prom_b/wsa1_prom_b.s:75430 `ld xbc, (2563:24)` -- address (0x0A03)",
+   "prom_b/wsa1_prom_b.s:75431 `cp xbc, 393216` -- region split at 0x060000",
+   "prom_b/wsa1_prom_b.s:75433 `sub xbc, 262144` -- offset in the 0x040000 region",
+   "prom_b/wsa1_prom_b.s:75462 `call T_ToneMsg80_SendParam` -- a CPU-2 request",
+   "prom_b/wsa1_prom_b.s:75491 `call T_DspParam_ReadByNumber` -- or a DSP read ...",
+   "prom_b/wsa1_prom_b.s:75492 `calr sub_F37E1C` -- ... answered at once",
+   "prom_b/wsa1_prom_b.s:75537 `m_res 2, MD24, 0x000a00` -- bit 2 cleared ...",
+   "prom_b/wsa1_prom_b.s:75538 `m_set 1, MD24, 0x000a00` -- ... bit 1 set",
+   "prom_b/wsa1_prom_b.s:75604 `m_or_mi16 MW24, 0x000a00, 0x0005` -- sub_F36F8C (the 2B request) arms it",
+   "prom_b/wsa1_prom_b.s:77503 `m_set 2, MD24, 0x000a00` -- sub_F37E1C re-arms while (0x0A07) > 0",
+   "notes/sysex-probes/README.md:575 `* **The request** is prom_b `sub_F36F8C` (`0xF36F8C`, thunk `T_F41254`):` -- the third-region request, SysExCmd_ThirdRegionRequest"
+  ]
+ },
+ {
+  "old": "sub_F37F70",
+  "verdict": "name",
+  "new": "Asr16ByCount",
+  "header": "Asr16ByCount(value, count): value >> count, ARITHMETIC (`sra A,IY`), count up to 31 (a high nibble shifts 16 first), callee pops 4 -- the signed twin of prom_a Lsr16ByCount.\nClampFieldToRange shifts its masked field with it before the SIGNED clamp. Basis: caller + body + twin.",
+  "basis": "caller + body + twin Lsr16ByCount",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:75644 `call sub_F37F70` -- ClampFieldToRange",
+   "prom_b/wsa1_prom_b.s:75625 `; DE,(XIZ+0x08)` then a shift by (XIZ+0x0C) through sub_F37F70, then` -- its header",
+   "prom_b/wsa1_prom_b.s:77566 `ld iy, (xsp+4)` -- value",
+   "prom_b/wsa1_prom_b.s:77567 `ld b, (xsp+6)` -- count",
+   "prom_b/wsa1_prom_b.s:77573 `.byte 0xDD, 0xFD` -- shift 16 when count >= 16 (A = 0 means 16)",
+   "prom_b/wsa1_prom_b.s:77576 `and a, 15` -- then count & 15",
+   "prom_b/wsa1_prom_b.s:77581 `retd 4` -- WA = result",
+   "prom_a/wsa1_prom_a.s:100575 `; Lsr16ByCount(value, count): the 16-bit (IY) twin of Lsr8ByCount.` -- prom_a twin, identical with `srl A,IY`"
+  ]
+ },
+ {
+  "old": "sub_F44505",
+  "verdict": "refuse",
+  "why_refused": "It clears (0x34BB) bits 3 and 0 around sub_F459D9 (track-mask builder) and then runs sub_F44516 (a per-track loop through the unconverted T_F40BE4 / T_F40B4C), and neither the boot-phase caller nor the callees establish what this step prepares.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:93065 `calr sub_F44505` -- BStore_BootPhase3, one of a dozen init steps",
+   "prom_b/wsa1_prom_b.s:93539 `m_and_mi8 MB16, 0x34bb, 0xf7` -- body 1",
+   "prom_b/wsa1_prom_b.s:93540 `calr sub_F459D9` -- body 2: unnamed",
+   "prom_b/wsa1_prom_b.s:93542 `calr sub_F44516` -- body 4: unnamed",
+   "prom_b/wsa1_prom_b.s:93563 `call T_F40BE4` -- sub_F44516 calls unnamed directory slots"
+  ]
+ },
+ {
+  "old": "sub_F45489",
+  "verdict": "name",
+  "new": "Seq_RestoreTrackMaskAndRewind",
+  "header": "Song track mask (0x60341E) := the copy in (0x3010) that sub_F454A6 saved; when non-zero, Seq_RewindToStart and NoteRouting_RebuildForSong.\nThe Leave half of screen 0xF43040 (via BStore_AppendBytes_Join4_Veneer, which then clears (0x34BB) b2); its Enter half saves the mask and stops transports. Basis: callers + body + twin.",
+  "basis": "callers + body + twin sub_F454A6",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:187473 `call T_F409F4` -- BStore_AppendBytes_Join4 (T_F409F4 = jp sub_F45489, 89657) ...",
+   "prom_b/wsa1_prom_b.s:187474 `m_and_mi8 MB16, 0x34bb, 0xfb` -- ... then (0x34BB) b2 cleared",
+   "prom_b/wsa1_prom_b.s:198310 `call T_BStore_AppendBytes_Join4_Veneer` -- screen 0xF43040's Leave method body",
+   "prom_b/wsa1_prom_b.s:198303 `call T_BStore_AppendBytes_Join3_Veneer` -- its Enter: Join3 -> T_F409F8 = sub_F454A6, (0x34BB) |= 4",
+   "prom_b/wsa1_prom_b.s:95626 `ld (12304:16), xwa` -- sub_F454A6: (0x3010) := (0x60341E), then sub_F455CC stops transports",
+   "prom_b/wsa1_prom_b.s:95602 `ld xwa, (12304:16)` -- body: restore",
+   "prom_b/wsa1_prom_b.s:95603 `ld (6304798:24), xwa` -- ",
+   "prom_b/wsa1_prom_b.s:89796 `T_F40CB4: jp T_F40CB4_Nop` -- the call between is a no-op, XWA unchanged",
+   "prom_b/wsa1_prom_b.s:95607 `calr Seq_RewindToStart` -- non-zero -> rewind ...",
+   "prom_b/wsa1_prom_b.s:95608 `call T_NoteRouting_RebuildForSong` -- ... and rebuild routes",
+   "prom_b/wsa1_prom_b.s:93732 `; received 0xF2 -- while (0x60341E) has tracks and transport B is stopped: TransportB_Beat = the 14-bit position` -- (0x60341E) is the song's track mask"
+  ]
+ },
+ {
+  "old": "sub_F455E6",
+  "verdict": "name",
+  "new": "SeqMasterTrack_UpdateActive",
+  "header": "Finds the track whose BStore_TrackToPart entry is 0x20 (the master track's part; the identity map gives it to track 17); if it is in the song's track mask, MASTER is ON ((0x3752) = 1) and its directory entry is in use:\n(0x0E51) := track + 1, (0x0E4F) |= 1, (0x0C8A) |= 4; otherwise those bits cleared and W = 0. Called by Seq_LocateToSongPosition, the measure locate sub_F45BD3 and the edit seeks (T_F40AA8). Basis: caller + body + flag owners.",
+  "basis": "caller + body + SeqMasterTrack_SwitchOff",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:93772 `calr sub_F455E6` -- Seq_LocateToSongPosition, before locating each track",
+   "prom_b/wsa1_prom_b.s:96692 `calr sub_F455E6` -- the measure-locate routine sub_F45BD3",
+   "prom_b/wsa1_prom_b.s:95839 `ld a, 32:opc` -- search 0x20 ...",
+   "prom_b/wsa1_prom_b.s:95840 `cp a, (xix+)` -- ... through BStore_TrackToPart (17 entries)",
+   "prom_b/wsa1_prom_b.s:95852 `ld iz, (6304798:24)` -- track in the song mask",
+   "prom_b/wsa1_prom_b.s:95869 `m_cp_mi8 MB16, 0x3752, 0x01` -- MASTER ON",
+   "prom_b/wsa1_prom_b.s:95872 `ld xhl, 6305024` -- directory entry 0x603500 + 3n, bit 7 = in use",
+   "prom_b/wsa1_prom_b.s:95886 `ld (3665:16), w` -- (0x0E51) := n + 1",
+   "prom_b/wsa1_prom_b.s:95891 `m_and_mi8 MB16, 0x0e4f, 0xfe` -- else cleared",
+   "prom_b/wsa1_prom_b.s:122293 `; SeqMasterTrack_SwitchOff: MASTER := OFF: (0x3752) = 0, bit 16 of (0x360C) cleared, (0x3736) = 16 (the 17th track),` -- SeqMasterTrack_SwitchOff: (0x3752) = MASTER OFF/ON, track 17",
+   "prom_b/wsa1_prom_b.s:168233 `.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x20` -- ByteMap_F6F985: track 17 -> part 0x20"
+  ]
+ },
+ {
+  "old": "sub_F45BCD",
+  "verdict": "name",
+  "new": "SeqCycle_LocateTracksToCurrentMeasure",
+  "header": "(0x3735) bit 0 := 1, then sub_F45BD3's body: every track sought to the current measure (0x3552) by BStore_SeekChainToMeasure, beats per bar / beat latched, located tracks in (0x349A)/(0x349C), (0x34BB) b3 set;\nmeasure 1 or a count-in rewinds instead. Bit 0 picks the cycle variants (sub_F45B48, (0x3759)). SeqCycle_LocateToStart's 'locates every track there'. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:99409 `call T_F40AB0` -- SeqCycle_LocateToStart, with the track mask forced to all ones (99407)",
+   "prom_b/wsa1_prom_b.s:99388 `; CycleRecord's 0x3622 when UI_ScreenLatch is 6/8); locates every track there (T_F40AB0 with the playing mask forced` -- its header",
+   "prom_b/wsa1_prom_b.s:89718 `T_F40AB0: jp sub_F45BCD` -- the directory slot",
+   "prom_b/wsa1_prom_b.s:96646 `m_set 0, MD16, 0x3735` -- body: the cycle bit ...",
+   "prom_b/wsa1_prom_b.s:96647 `jr sub_F45BD3_Join` -- ... joins the non-cycle entry sub_F45BD3 (which clears it)",
+   "prom_b/wsa1_prom_b.s:96674 `ld wa, (13650:16)` -- measure (0x3552) ...",
+   "prom_b/wsa1_prom_b.s:96676 `bit 7, w` -- count-in or measure 1 ...",
+   "prom_b/wsa1_prom_b.s:96686 `calr sub_F45B48` -- ... rewind (cycle variant; Seq_RewindToStart otherwise)",
+   "prom_b/wsa1_prom_b.s:96697 `call T_BStore_SeekChainToMeasure` -- per track",
+   "prom_b/wsa1_prom_b.s:96706 `ld (14169:16), a` -- cycle only: beats per bar -> (0x3759)",
+   "prom_b/wsa1_prom_b.s:96735 `m_or_mi8 MB16, 0x34bb, 0x08` -- (0x34BB) b3 = located",
+   "prom_b/wsa1_prom_b.s:107608 `; BStore_SeekChainToMeasure: Opens chain A (track + 1) and walks it from measure 1 to measure (0x0C90), skipping` -- what the seek does"
+  ]
+ }
+]

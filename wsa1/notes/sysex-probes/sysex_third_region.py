@@ -24,13 +24,13 @@ WHERE THE SIGNAL IS
     received message's own `F0`, so the routines below index the WIRE bytes.
     ⚠ Neither handler tests the panel-mode byte (0x207A), unlike the bulk-dump
     default handler 0xFB2820 -- these messages need no screen and no session.
-  * THE REQUEST, prom_b `sub_F36F8C` (0xF36F8C), reached through thunk
-    `T_F41254`.  `Pack3x7BitFields_Bytes6To8` -> address, `..._Bytes9To11` ->
+  * THE REQUEST, prom_b `SysExThirdRegion_AcceptRequest` (0xF36F8C), reached through thunk
+    `T_SysExThirdRegion_AcceptRequest`.  `Pack3x7BitFields_Bytes6To8` -> address, `..._Bytes9To11` ->
     count; `cp XBC,0x00060000` splits the two regions; `sub XWA,0x00040000 /
     cp XWA,0x000002c9` and `sub XWA,0x00060000 / cp XWA,0x00004c98` bound them.
     Accepted -> state word (0x000A00) |= 5 and return 0; refused -> return 1,
     and prom_a 0xFB34AD then transmits the 5-byte literal at prom_b 0xF4FEC8.
-  * THE WRITE, prom_b `sub_F379AB` (0xF379AB), thunk `T_F41258`.  Same address
+  * THE WRITE, prom_b `SysExToneImage_WriteByte` (0xF379AB), thunk `T_SysExToneImage_WriteByte`.  Same address
     split; `cp (0x000A07),0x0001` refuses any count but 1; the value is
     `(msg[12]<<4) | (msg[13]&0x0F)`; a ladder of `cp XIX,<n>` turns the offset
     into (block, index) and hands it to prom_a 0xFD616A (melodic) or 0xFD6704
@@ -106,8 +106,8 @@ assert a(0xFB3483, 12) == PREFIX and a(0xFB3495, 12) == PREFIX, "handler shape"
 assert a(0xFB348F, 4) == bytes([0x1D, 0x58, 0x12, 0xF4]), "2C thunk"
 assert a(0xFB34A1, 4) == bytes([0x1D, 0x54, 0x12, 0xF4]), "2B thunk"
 # The thunks: `jp imm24` (opcode 0x1B) into prom_b.
-assert b(0xF41254, 4) == bytes([0x1B, 0x8C, 0x6F, 0xF3]), "T_F41254"
-assert b(0xF41258, 4) == bytes([0x1B, 0xAB, 0x79, 0xF3]), "T_F41258"
+assert b(0xF41254, 4) == bytes([0x1B, 0x8C, 0x6F, 0xF3]), "T_SysExThirdRegion_AcceptRequest"
+assert b(0xF41258, 4) == bytes([0x1B, 0xAB, 0x79, 0xF3]), "T_SysExToneImage_WriteByte"
 WRITE_SUB, READ_SUB = 0xF379AB, 0xF36F8C
 assert le(b(0xF41258 + 1, 3)) == WRITE_SUB and le(b(0xF41254 + 1, 3)) == READ_SUB
 
@@ -119,7 +119,7 @@ assert SCREEN == 0x79, "SYSEX BULK DUMP screen id"
 assert bytes([0x7A, 0x20]) not in a(0xFB3483, 0x12) + a(0xFB3495, 0x36)
 
 # -------------------------------------------------------------- region bounds
-# sub_F36F8C, the 2B request.  Every literal below is an instruction operand.
+# SysExThirdRegion_AcceptRequest, the 2B request.  Every literal below is an instruction operand.
 assert b(0xF36FD0, 6) == bytes([0xE9, 0xCF, 0x00, 0x00, 0x06, 0x00])   # cp XBC,0x60000
 assert b(0xF36FE4, 6) == bytes([0xE8, 0xCA, 0x00, 0x00, 0x04, 0x00])   # sub XWA,0x40000
 assert b(0xF36FEC, 6) == bytes([0xE8, 0xCF, 0xC9, 0x02, 0x00, 0x00])   # cp XWA,0x2c9
@@ -158,7 +158,7 @@ NIB_MASK, NIB_SHIFT = b(0xF37A01, 1)[0], b(0xF37A07, 1)[0]
 assert (HI_BYTE, LO_BYTE, NIB_MASK, NIB_SHIFT) == (0x0C, 0x0D, 0x0F, 4)
 
 # -------------------------------------------------------- MELODIC region layout
-# sub_F379AB's ladder: `cp XIX,<threshold>` (EC CF imm32) then `push <selector>`
+# SysExToneImage_WriteByte's ladder: `cp XIX,<threshold>` (EC CF imm32) then `push <selector>`
 # (0B imm16).  Read both out of the instruction bytes rather than restating them.
 MEL_LADDER = [(0xF37A19, 0xF37A34), (0xF37A3D, 0xF37A57),
               (0xF37A5D, 0xF37A77), (0xF37A7D, 0xF37A97),

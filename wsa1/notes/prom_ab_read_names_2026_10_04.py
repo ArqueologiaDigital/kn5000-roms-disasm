@@ -39,7 +39,7 @@ ROWS = [
      "LcdKeyRow3_TrackAssign_StageNonZero."),
     ("F660ED", "SequencerMedley_InitOnEntry",
      "on a newly entered screen: (0x0E48) = (0x7F4D), Medley_Playing = 0, (0x22D0) = 0, (0x605068) |= 0x8000,\n"
-     "BStore_LoadBankDirectory, T_F42410; then Blink_EnableThenStop unless the medley plays.  Called by Paint_SequencerMedley."),
+     "BStore_LoadBankDirectory, T_MidiFilePlay_SnapshotRecordBytes; then Blink_EnableThenStop unless the medley plays.  Called by Paint_SequencerMedley."),
     ("F66123", "BStore_LoadBankDirectory",
      "(0x60341E) = (0x360C); copies 3,072 bytes from 0x610000 + BStore_CurrentBank * 0xC00 to 0x603500, the song directory\n"
      "SmfSize_Pass and the block store walk."),
@@ -227,7 +227,7 @@ ROWS = [
     ("F70FDA", "BStore_PutByteAndAdvance",
      "BStore_PutByteAtCursor then BStore_AdvanceCursorForWrite (107 call sites)."),
     ("F713E1", "BStore_ExtendChainAtCursor",
-     "IX = a new block from T_F42884; the cursor block's next link (+3) = it, its previous link (+1) = the cursor block,\n"
+     "IX = a new block from T_BStore_AllocBlock_Veneer; the cursor block's next link (+3) = it, its previous link (+1) = the cursor block,\n"
      "its next = 0xFFFF; the cursor moves to it at offset 5 (the block header's length)."),
     ("F6B8BD", "BStore_ReadByteAtSongPosition",
      "for directory entry IZ: the block word 0x3460[2 * entry] and the offset byte 0x3482[entry] (the per-song position\n"
@@ -487,7 +487,7 @@ ROWS = [
      "sets Disk_FileName to eight '?' + 'MID', the transfer address, DiskFile_FindFirst / _FindNext, and per entry\n"
      "(not deleted -- first byte 0xE5 -- and extension M I D) records it."),
     ("FE11D9", "Disk_MountAndScanMidiFiles",
-     "sub_FE0514, Disk_MountFloppyWithRetry; on 0: Disk_SaveFileName, Disk_ScanMidiFiles, Disk_RestoreFileName;\n"
+     "Disk_PrepareForMount, Disk_MountFloppyWithRetry; on 0: Disk_SaveFileName, Disk_ScanMidiFiles, Disk_RestoreFileName;\n"
      "otherwise Disk_PortA3_Release, Disk_ShowMountError, a 1500-tick delay and UI_StatusCode = 2."),
     ("FE0E89", "Disk_ScanDirectory_RecordEntry",
      "for the entry DiskFile_FindFirst/_FindNext left at 0x60A080: if a record among the twenty 16-byte records at\n"
@@ -763,7 +763,7 @@ ROWS = [
      "for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 11, 2, mask 0x7F} -- every part's BendRange set to the\n"
      "GM default.  One step of GmMode_ResetToDefaults."),
     ("FB58CC", "GmMode_ResetToDefaults",
-     "the GM reset sequence: sub_FB556D (SOUND mode when (0x7F02) & 0xF0 is 0x10), sub_FB5A17, sub_FB56D3, the\n"
+     "the GM reset sequence: sub_FB556D (SOUND mode when (0x7F02) & 0xF0 is 0x10), sub_FB5A17, ParamApply_ResetPairTablesForGm, the\n"
      "GmReset_Part* steps (volume 100, effect depths 0 / 0 / 90, pan and tuning centred, bend range 2) and further\n"
      "resets.  Called by GmMode_ApplyChange (GmMode_HandleChange's) and sub_FB585E."),
     # prom_a 0xFB5D64-0xFB5E2C: per-controller resets.  Each stores a parameter number to (0x60F080), loops (0x60F081) over the
@@ -1066,7 +1066,7 @@ ROWS = [
     # with the SmfEvent_* handlers at 0xF6FExx; for format 1 with Smf_TrackCount != 1 it calls Smf_ReadMultiTrack (0xF6F637).
     ("F71B82", "Smf_ReadMultiTrack",
      "Smf_ReadFile's branch for format 1 with more than one track (cp (Smf_Format),1 / cp (Smf_TrackCount),1 at 0xF6F626):\n"
-     "  for track (0x11B2) = 0 .. Smf_TrackCount-1, Smf_ReadTrackChunk and sub_F729D9; then sub_F72F5C."),
+     "  for track (0x11B2) = 0 .. Smf_TrackCount-1, Smf_ReadTrackChunk and Smf_MergeTrack2IntoTrack1; then sub_F72F5C."),
     ("F71BEA", "Smf_ReadTrackChunk",
      "one MTrk chunk of the multi-track path: compares the 4 tag bytes at SmfTrackTag (UI_StatusCode 49 on a mismatch), reads the\n"
      "  length into SmfOut_TrackLength, then loops delta (Smf_ReadVlqBytes_Copy / Smf_DecodeVlq) and event: 0xFF SmfEvent_Meta,\n"
@@ -1423,7 +1423,7 @@ ROWS = [
     ("FA14E3", "Initial_SelectPreviousItem",
      "LcdKeyRow4_Initial: with Descriptor9_FA1B82 (+7 = 1: PanelEvent_Flags bit 0 set, the down step;\n"
      "maximum 6, one less on Variant_Flag 2), EditValue_StepBitField on Initial_SelectedItem; when it moved, posts\n"
-     "the repaint sub_FA15CC and signals semaphore 1.  Only when PanelEvent_Flags bit 0 is clear on entry."),
+     "the repaint Initial_RedrawSelectionHighlight and signals semaphore 1.  Only when PanelEvent_Flags bit 0 is clear on entry."),
     ("FA1546", "Initial_SelectNextItem",
      "LcdKeyRow5_Initial: the same with Descriptor9_FA1B8B (+7 = 0: the up step)."),
     ("FF0850", "EditMeasure_DrawBeatLines",
@@ -1476,7 +1476,7 @@ ROWS = [
      "when the event at the cursor is a note-on, byte +3 = (0x601F45) (cursor restored); then EditScreen_AuditionEvent.  Called by\n"
      "the four steppers of 0x601F45 -- which is therefore the selected event's VELOCITY."),
     ("FF0B46", "EditScreen_DrawEventVelocity",
-     "(0x601F19) = (0x601F45), then the shared tail .LFF0B50: layer 0, the cell erased (sub_FEF81D), the value drawn\n"
+     "(0x601F19) = (0x601F45), then the shared tail .LFF0B50: layer 0, the cell erased (EditScreen_EraseVelocityCell), the value drawn\n"
      "(below 100 with a leading blank, otherwise with Str_v)."),
     ("FF0B3A", "EditScreen_DrawNewNoteVelocity", "(0x601F19) = (0x601F46), then the same tail -- the same cell."),
     ("FE8F11", "EditScreen_SelectEventAtCursor",
@@ -1598,7 +1598,7 @@ ROWS = [
      "measure's start -- the callers subtract them to get the tick within the measure."),
     # NOTE / DRUM EDIT: opening the cursor's measure
     ("FE8EF3", "EditScreen_SeekCursorMeasure",
-     "(0x0C90) = EditCursor_Measure, sub_FE8F0C (T_F40A70), then T_BStore_SeekChainToMeasure on chain EditScreen_Part + 1: prom_b's\n"
+     "(0x0C90) = EditCursor_Measure, EditScreen_FindMasterTrack (T_F40A70), then T_BStore_SeekChainToMeasure on chain EditScreen_Part + 1: prom_b's\n"
      "seek to that measure, which returns IX = its first beat and IY = the offset."),
     ("FE8EA9", "EditScreen_OpenCursorMeasure",
      "EditScreen_SeekCursorMeasure; when it found the measure: EditMeasure_StartBeat = IX, EditMeasure_StartTick = 0,\n"
@@ -1911,10 +1911,10 @@ ROWS = [
      "transports from zero), FD + MIDI FILE -> the next song (wrapping) and Medley_StartMidiFile."),
     ("FE79B7", "Medley_StartMidiFile",
      "(0x34D0) |= 4, T_Disk_MountAndScanMidiFilesResetRings (mount and list the MIDI files); from Medley_PlayingSong, the first listing entry\n"
-     "(0x60A480 + 8 n) that is not blank: its name to Disk_FileName and to 0x0E38, T_F42E90.  None: Medley_StopMidiFile,\n"
+     "(0x60A480 + 8 n) that is not blank: its name to Disk_FileName and to 0x0E38, T_Medley_ToggleMidiFileStream.  None: Medley_StopMidiFile,\n"
      "status 3."),
     ("FE7A30", "Medley_StopMidiFile",
-     "(0x34D0) bit 2 cleared, Disk_BlankFileNameBase, T_F42E90, Name11At0E38_Blank."),
+     "(0x34D0) bit 2 cleared, Disk_BlankFileNameBase, T_Medley_ToggleMidiFileStream, Name11At0E38_Blank."),
     ("FE7A40", "Medley_SkipToNextMidiFile", "Medley_StopMidiFile, then (0x22D0) = 10 so Medley_Tick starts the next file."),
     ("FE7A49", "Medley_ScheduleNextMidiFile",
      "T_Medley_ScheduleNextMidiFile: with an FD MIDI-file medley playing, (0x22D0) = 10."),
@@ -2350,7 +2350,7 @@ ROWS = [
      "code).  Basis: body."),
     ("FC24E3", "CombiSel_FromNumberAndBank",
      "T_CombiSel_FromNumberAndBank: PanelSel_FromNumberDirect with XWA saved -- for a combination every bank is numbered group x 8 +\n"
-     "member.  Callers: ParamApply_Param98Tech and sub_FAB728 (event class 0x98, COMBINATION NUMBER and BANK).\n"
+     "member.  Callers: ParamApply_Param98Tech and CombiSel_GroupMemberFromNumberAndBank (event class 0x98, COMBINATION NUMBER and BANK).\n"
      "Basis: body + caller."),
     ("FC24EB", "PartSound_FromProgramChange",
      "T_PartSound_FromProgramChange (SoundConv_Arg2 program number, _Arg3 part) -> SoundConv_Result0 / _Result1 = the part's PROGRAM\n"
@@ -2423,18 +2423,18 @@ ROWS = [
      "UI_DrawScratch, drawn by CombiEditConfigure_DrawVelocityLayers_DL.  Basis: table (descriptor match)."),
     # the sequencer's MIDI system-message side: Song Position Pointer, Song Select, stop and the slot controller reset
     ("F4466D", "Seq_LocateToSongPosition",
-     "from the sequencer tick (sub_F44582): when MidiIn_SongPositionHi bit 7 is set -- MidiIn_SongPosition stored a\n"
+     "from the sequencer tick (Seq_MainLoopService): when MidiIn_SongPositionHi bit 7 is set -- MidiIn_SongPosition stored a\n"
      "received 0xF2 -- while (0x60341E) has tracks and transport B is stopped: TransportB_Beat = the 14-bit position\n"
      ">> 2 (sixteenths to beats) and Seq_BeatTick = WorkspaceDefaults+0x77[position & 3] -- the bytes 0 / 24 / 48 / 72,\n"
      "a sixteenth at 96 ticks a beat.  Position 0 goes to Seq_RewindToStart_Veneer; any other locates each of the 17 tracks\n"
-     "(T_F40C90 per track, sub_F4477F) and collects the located ones in (0x349A) / (0x349C).  The pending bit is cleared\n"
+     "(T_F40C90 per track, Seq_SeekTrackToBeatTick) and collects the located ones in (0x349A) / (0x349C).  The pending bit is cleared\n"
      "at the end.  Basis: body + the writer's header (MidiIn_SongPosition)."),
     ("F44E6B", "Seq_StopPlaybackOnRequest",
      "(0x34D2) bit 1 taken and cleared: T_PartNotes_ReleaseAllTrackNotes, T_F41F18 (SeqEvt_ResetPlayingSlotControllers),\n"
      "the playing-track mask (0x60341E) = 0, T_F40CB4 (a bare ret), T_NoteRouting_RebuildForSong.  Basis: body."),
     ("F45B1F", "Seq_RewindToStart",
      "under ei 6 TransportB_Beat = 0 and Seq_BeatTick = 0; unless (0x34D0) bit 5, the 32-bit (0x3008) and (0x300C) = 0;\n"
-     "(0x34BB) bit 3 cleared, sub_F459AA, sub_F44B95.  Seq_LocateToSongPosition calls it (through the veneer\n"
+     "(0x34BB) bit 3 cleared, sub_F459AA, Seq_ResetPositionToSongStart.  Seq_LocateToSongPosition calls it (through the veneer\n"
      "Seq_RewindToStart_Veneer) for a received position of 0.  Basis: body + caller."),
     ("FAEC8A", "SeqEvt_ResetPlayingSlotControllers",
      "T_F41F18: for each of the 17 sequencer slots whose bit is set in the playing mask (0x60341E), with its part from\n"
@@ -2444,7 +2444,7 @@ ROWS = [
     ("FE144E", "MidiFilePlay_OnSongSelect",
      "T_MidiFilePlay_OnSongSelect: when MidiIn_SongSelectValue bit 7 is set (MidiIn_SongSelect stored a received 0xF3) and transport C is stopped:\n"
      "the disk is mounted if needed (Disk_MountAndScanDirectory), Disk_SelectedEntry = the song number (at most 0x13),\n"
-     "that directory entry's 8-character name is copied to Disk_FileName and the file is loaded (sub_FE0250,\n"
+     "that directory entry's 8-character name is copied to Disk_FileName and the file is loaded (DiskLoad_SetContentTypeFromSelectedEntry_SaveRegs,\n"
      "sub_FE05AE ...); the pending bit is then cleared and the screen repainted or set to 1 on a disk error.\n"
      "Basis: body + the writer's header (MidiIn_SongSelect)."),
     # CPU 1 -> CPU 2 link requests, paired with prom_c's ToneMsg_Dispatch arms (notes/prom_ab_link_requests.py)
@@ -2499,7 +2499,7 @@ ROWS = [
     ("FB9D88", "MidiCfg_ClearInputMode",
      "MidiCfg_InOutMode bits 0-3 (INPUT MODE) = 0, then the parameter event (record 0x80, byte 3, value 0, changed bits\n"
      "0x0F) through T_EventQueue_AppendStackArgs -- the same byte and nibble MidiTotalMode_EditInputMode edits.  Called\n"
-     "from MidiFileDirectPlay_LcdKeyRow1 and after a successful T_MidiFileStream_Open in sub_FB9DA0.  Basis: body."),
+     "from MidiFileDirectPlay_LcdKeyRow1 and after a successful T_MidiFileStream_Open in Medley_ToggleMidiFileStream.  Basis: body."),
     ("FA1533", "Initial_CancelConfirm_LcdKeyRow4",
      "LcdKeyRow4_Initial at UI_ScreenStage 1 (\"Are You Sure ?\"): when PanelEvent_Flags bit 0 is clear, UI_ScreenStage = 0\n"
      "(back to the parameters) and UI_Request_Hi bit 4.  Basis: caller (stage dispatch) + body."),

@@ -333,8 +333,8 @@ for area in sorted(AREA_REQ):
 
 print()
 print("THIRD REGION  (both families)   byte 6 = 10 / 18 / 19, rest wild")
-print("  2B -> CMD 0x19 (prom_a 0xFB3495 -> prom_b sub_F36F8C)")
-print("  2C -> CMD 0x17 (prom_a 0xFB3483 -> prom_b sub_F379AB)")
+print("  2B -> CMD 0x19 (prom_a 0xFB3495 -> prom_b SysExThirdRegion_AcceptRequest)")
+print("  2C -> CMD 0x17 (prom_a 0xFB3483 -> prom_b SysExToneImage_WriteByte)")
 print("  both unpack the address and count septets and are otherwise undecoded")
 
 print()

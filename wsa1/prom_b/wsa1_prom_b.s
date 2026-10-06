@@ -938,7 +938,7 @@
 	.set	MidiIn_ReqListRebuild_Msg13_16, 0xFA835E
 	.set	MidiIn_ReqRebuild_Msg03_0A, 0xFA8378
 	.set	ParamModule_PhaseVector, 0xFAA400
-	.set	sub_FAA418, 0xFAA418
+	.set	SoundSel_ClampToProgramAndBankRegs, 0xFAA418
 	.set	SoundSel_FromProgramAndBankRegs, 0xFAA43A
 	.set	sub_FAA45C, 0xFAA45C
 	.set	sub_FAA47E, 0xFAA47E
@@ -963,7 +963,7 @@
 	.set	ParamImage_PostAllAsChangeEvents_Call, 0xFAAAB1
 	.set	ParamImage_PostAllAsChangeEvents, 0xFAAAB5
 	.set	ParamImage_LoadFactoryDefaults, 0xFAAB28
-	.set	sub_FAABB3, 0xFAABB3
+	.set	Mode_InitSavedPartBlocks, 0xFAABB3
 	.set	PartSettings_ResetToDefault, 0xFAAE2A
 	.set	SystemSettings_ResetToDefault, 0xFAAF91
 	.set	T_F407A8_Nop, 0xFAB5E9
@@ -972,7 +972,7 @@
 	.set	T_F407C4_Nop, 0xFAB657
 	.set	SoundSel_ClampToProgramAndBank, 0xFAB658
 	.set	sub_FAB6D7, 0xFAB6D7
-	.set	sub_FAB728, 0xFAB728
+	.set	CombiSel_GroupMemberFromNumberAndBank, 0xFAB728
 	.set	CombiSel_ClampToNumberAndBank, 0xFAB779
 	.set	sub_FAB7E6, 0xFAB7E6
 	.set	T_F407F0_Nop, 0xFABBD6
@@ -1137,7 +1137,7 @@
 	.set	sub_FB9C52, 0xFB9C52
 	.set	sub_FB9D2C, 0xFB9D2C
 	.set	sub_FB9D43, 0xFB9D43
-	.set	sub_FB9DA0, 0xFB9DA0
+	.set	Medley_ToggleMidiFileStream, 0xFB9DA0
 	.set	MidiFileDirectPlay_LcdKeyRow1, 0xFB9DFE
 	.set	MidiFilePlay_Tick, 0xFB9E79
 	.set	SeqFile_Load, 0xFBAC00
@@ -1668,7 +1668,7 @@
 	.set	Var27A3_ChangeSlot, 0xFD74AE
 	.set	SoundEditLfo_CycleLfoState, 0xFD74E0
 	.set	SoundEditText_SetSlot, 0xFD77B3
-	.set	sub_FD785C, 0xFD785C
+	.set	SoundEditText_GetSlot, 0xFD785C
 	.set	PanelEvent_ToFieldIndex, 0xFD7905
 	.set	Mem_CopyBytes, 0xFD79DC
 	.set	SoundConv_SetArgs4, 0xFD7ADD
@@ -1716,12 +1716,12 @@
 	.set	Var27FC_Get, 0xFDA142
 	.set	Var27FC_Set, 0xFDA152
 	.set	PartNotes_GetCurrentPartHeldNote, 0xFDA194
-	.set	sub_FDA252, 0xFDA252
+	.set	DrumSoundNames_FetchNext, 0xFDA252
 	.set	Var27FE_Set, 0xFDA341
 	.set	UiRequestBits_SetBit3, 0xFDA467
 	.set	sub_FDA6FC, 0xFDA6FC
 	.set	sub_FDA777, 0xFDA777
-	.set	sub_FDA901, 0xFDA901
+	.set	MemoryProtect_IsSoundOn, 0xFDA901
 	.set	DspEffect_SendAllToCpu2, 0xFDA911
 	.set	LCD_SetPanelDarkFlag, 0xFDAC5B
 	.set	sub_FDAC6B, 0xFDAC6B
@@ -1912,7 +1912,7 @@
 	.set	DiskApi_DeleteFile_Call, 0xFE1C55
 	.set	MidiFileSave_Page3_LcdKeyRow3, 0xFE1C59
 	.set	DiskLoadScreen_MountAndScanDirectory, 0xFE1C5D
-	.set	sub_FE1C67, 0xFE1C67
+	.set	DiskSaveScreen_MountAndScanDirectory, 0xFE1C67
 	.set	Notes_ReleaseAllSources_Call_Call, 0xFE1C71
 	.set	sub_FE1C75, 0xFE1C75
 	.set	sub_FE1C79, 0xFE1C79
@@ -1920,10 +1920,10 @@
 	.set	MidiFileSave_Page5_LcdKeyRow3, 0xFE1C98
 	.set	NameEdit_MoveCursor_Call, 0xFE1C9F
 	.set	NameEdit_StepChar_Call, 0xFE1CA3
-	.set	sub_FE1CA7, 0xFE1CA7
+	.set	Playback_AcceptMidiStartAgain, 0xFE1CA7
 	.set	Disk_SaveFileName_Call, 0xFE1CAB
 	.set	DiskApi_CloseFile_Call, 0xFE1CAF
-	.set	sub_FE1CB3, 0xFE1CB3
+	.set	DiskSave_CheckFreeSpace, 0xFE1CB3
 	.set	Disk_ResetAndMountFloppy_Call, 0xFE1CC0
 	.set	Disk_PortA3_Release_Entry, 0xFE1CC4
 	.set	DiskSaveFile_Page5_LcdKeyRow3, 0xFE1CC8
@@ -2017,8 +2017,8 @@
 	.set	ScreenLeave_L0adSingleC0mbination, 0xFF6F13
 	.set	PanelButtonDispatch_L0adSingleC0mbination, 0xFF6F21
 	.set	T_F42428_Nop, 0xFF7083
-	.set	sub_FF70B6, 0xFF70B6
-	.set	sub_FF70D8, 0xFF70D8
+	.set	MidiFilePlay_SnapshotRecordBytes, 0xFF70B6
+	.set	PartRecords_RestoreShadowedField, 0xFF70D8
 	.set	DiskScreens_PhaseVector, 0xFF75B6
 	.set	MIDI_UART_Configure_Data, 0xFFFFF8
 ; <<< END prom_a ADDRESS EQUATES
@@ -18310,13 +18310,13 @@ sub_F09D91_Join:
 ; SoundEditMenu_PaintPanAmounts
 ; Called from: in-module: 0xF09CDF 0xF09D7C
 ; Touches: (0x2540)
-; Calls:   sub_F09E02
+; Calls:   SoundEditMenu_PaintPanAmountField
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription (the
 ;           sites are listed above), so 0xF09DED is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoundEditMenu_PaintPanAmounts: For fields 13 and 14 (sub_F09E02): when ModelingPage_Fields[n] != 0, draws record [n]
+; SoundEditMenu_PaintPanAmounts: For fields 13 and 14 (SoundEditMenu_PaintPanAmountField): when ModelingPage_Fields[n] != 0, draws record [n]
 ;   of DisplayRecordPtrs_FC52B4, a 2-digit readout of Fields+13 / +14 at x 0x109, y 0x7A / 0x98 -- the PAN column of
 ;   the User Kit SOUND EDIT menu, beside the CTR/L/R/RDM mode of Fields+12. Basis: callers + body + display-list
 ;   records. (notes/naming-pilot-2026-10-06/proposals_wave2_f.json)
@@ -18325,7 +18325,7 @@ SoundEditMenu_PaintPanAmounts:
 	ld	a, 13:opc	; F09DF2  ld A,0x0d
 sub_F09DED_Loop:
 	push_a	; F09DF4  push A
-	call	sub_F09E02	; F09DF5  call 0xf09e02
+	call	SoundEditMenu_PaintPanAmountField	; F09DF5  call 0xf09e02
 	pop_a	; F09DF9  pop A
 	inc	1, a	; F09DFA  inc 1,A
 	cp	a, 15	; F09DFC  cp A,0x0f
@@ -18333,7 +18333,7 @@ sub_F09DED_Loop:
 	ret	; F09E01  ret
 
 ; --------------------------------------------------------------------------
-; sub_F09E02
+; SoundEditMenu_PaintPanAmountField
 ; Called from: in-module: 0xF09DF5
 ; Touches: (0x2540)  |  0xF03B6F 0xFC52B4
 ; Calls:   RunDisplayListBFromPointerArray T_DisplayList_Run sub_F09E67
@@ -18342,7 +18342,11 @@ sub_F09DED_Loop:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F09E02:
+; SoundEditMenu_PaintPanAmountField: For field A (13 or 14): when ModelingPage_Fields[A] is non-zero, draws record [A]
+;   of DisplayRecordPtrs_FC52B4 on layer 0 (RunDisplayListBFromPointerArray) -- one 2-digit PAN amount of the User Kit
+;   SOUND EDIT menu. SoundEditMenu_PaintPanAmounts calls it for A = 13 and 14. Basis: caller + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_j.json)
+SoundEditMenu_PaintPanAmountField:
 	xor	xbc, xbc	; F09E02  xor XBC,XBC
 	xor	w, w	; F09E04  xor W,W
 	ldw	bc, ModelingPage_Fields	; F09E06  ld BC,0x27a6
@@ -18413,7 +18417,7 @@ sub_F09E67:
 	ld	xiy, DisplayList_FC52AA_End	; F09E76  ld XIY,0x00fc52b4
 	ld	(LCD_CurrentLayer:16), 0	; F09E7B  ld (0x2540),0x00
 ; stale: sub_F09E67 is reached only from the unlabelled loop at 0xF09E52, an older copy of SoundEditMenu_PaintPanAmounts.  Its live
-; twin sub_F09E02 has the same bytes except this operand, and calls RunDisplayListBFromPointerArray 0x31 higher.
+; twin SoundEditMenu_PaintPanAmountField has the same bytes except this operand, and calls RunDisplayListBFromPointerArray 0x31 higher.
 	call	RunDisplayListBFromPointerArray - 0x31	; F09E80  call 0xf09ab0
 sub_F09E67_Return:
 	ret	; F09E84  ret
@@ -22322,7 +22326,7 @@ LcdKeyRow1_SoundEditMemoryWrite:
 	link XIZ,0x0000	; F0B533  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B537  cp (XIZ+0x08),0x00
 	jr	z, sub_F0B36C_Join	; F0B53B  jr Z,0xf0b575
-	call	sub_FDA901	; F0B53D  call 0xfda901
+	call	MemoryProtect_IsSoundOn	; F0B53D  call 0xfda901
 	cp	a, 0:i3	; F0B541  cp A,0
 	jr	z, sub_F0B36C_Skip3	; F0B543  jr Z,0xf0b552
 	pushw	0	; F0B545  push 0x0000
@@ -22777,7 +22781,7 @@ sub_F0B74B_Skip:
 	lda	xbc, (xiz-24)	; F0B77F  lda XBC,XIZ+0xe8
 	push	xbc	; F0B782  push XBC
 	pushw	1	; F0B783  push 0x0001
-	call	sub_FD785C	; F0B786  call 0xfd785c
+	call	SoundEditText_GetSlot	; F0B786  call 0xfd785c
 	ld	h, 0:opc	; F0B78A  ld H,0x00
 	inc	8, xsp	; F0B78C  inc 0,XSP
 sub_F0B74B_Loop:
@@ -22898,7 +22902,7 @@ ExitKey_SoundEditNaming:
 	pushw	16	; F0B845  push 0x0010
 	push	xix	; F0B848  push XIX
 	pushw	1	; F0B849  push 0x0001
-	call	sub_FD785C	; F0B84C  call 0xfd785c
+	call	SoundEditText_GetSlot	; F0B84C  call 0xfd785c
 	ld	h, 0:opc	; F0B850  ld H,0x00
 	inc	8, xsp	; F0B852  inc 0,XSP
 	inc	4, xsp	; F0B854  inc 4,XSP
@@ -28031,7 +28035,7 @@ Blink_CmdArm_SetState_Then_F0EC4A_Join:
 ; Evidence: same two literal writes through the same XIX; the only difference is
 ;          the shared tail at 0xF0EA93.
 ; Unknown:  what the shared tail's callee DOES.  ⚠ CORRECTED 2026-08-25 (round
-;          5): 0xF0EA9F IS converted now -- it is sub_F0EA9F, the head of the
+;          5): 0xF0EA9F IS converted now -- it is Blink_SetupNumberFieldAndDraw, the head of the
 ;          0xF0EA9F-0xF13D33 block, and this `calr` is the PROVEN call site that
 ;          seeds that block's code walk.
 ; ---------------------------------------------------------------------
@@ -28073,7 +28077,7 @@ Blink_CmdArm_SetState_DashTest_Join:
 Blink_CmdArm_SetState_DashTest_Join2:
 	ld	xbc, (xiz+8)	; F0EA93  ld XBC,(XIZ+0x08)
 	push	xbc	; F0EA96  push XBC
-	calr	sub_F0EA9F	; F0EA97  calr 0xf0ea9f
+	calr	Blink_SetupNumberFieldAndDraw	; F0EA97  calr 0xf0ea9f
 Blink_CmdArm_SetState_DashTest_Join3:
 	pop	xiy	; F0EA9A  pop XIY
 
@@ -28218,7 +28222,7 @@ Blink_CmdArm_Ret:
 
 
 ; --------------------------------------------------------------------------
-; sub_F0EA9F
+; Blink_SetupNumberFieldAndDraw
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x2660) (0x2820) (0x28C9) (0x28CA) (0x28CC) (0x28CE) (0x28D0)
 ;          (0x28D1) (0x28D2) (0x28D4) +1 more
@@ -28233,7 +28237,12 @@ Blink_CmdArm_Ret:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0EA9F:
+; Blink_SetupNumberFieldAndDraw: Reads the record after the blink command byte (variable address, mask/shift or whole
+;   word, swi function, positions, digit count) into the Blink_* block and puts the value's digits in Blink_TextPtr
+;   (signed for 5/11; the typed 0x2820 text in state 2); then Blink_Phase = 0 and one draw (Blink_DrawField_Op07 /
+;   _Op02). Shared tail of Blink_Command's SetState arms (commands 0, 5, 6, 9, 10, 11). Basis: caller + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave3_g.json)
+Blink_SetupNumberFieldAndDraw:
 	link XIZ,0xfff8	; F0EA9F  link XIZ,0xfff8
 	pushw	hl	; F0EAA3  push HL
 	pushw	de	; F0EAA4  push DE
@@ -28613,7 +28622,7 @@ sub_F0EC4A_Join5:
 OldBuild_DLHandlerTables_Tail:
 	.long	DLHandler_Ignore - 0x23000	; F0ED50  [0] -> 0xF0EAEB
 	.long	DLHandler_Ignore - 0x23000	; F0ED54  [1] -> 0xF0EAEB
-	.long	DLHandler_IY_BC_HL - 0x23000	; F0ED58  [2] -> sub_F0EA9F
+	.long	DLHandler_IY_BC_HL - 0x23000	; F0ED58  [2] -> Blink_SetupNumberFieldAndDraw
 	.long	DLHandler_Ignore - 0x23000	; F0ED5C  [3] -> 0xF0EAEB
 	.long	DLHandler_Ignore - 0x23000	; F0ED60  [4] -> 0xF0EAEB
 	.long	DLHandler_4Words - 0x23000	; F0ED64  [5] -> 0xF0EA75
@@ -29117,7 +29126,7 @@ ScreenEnterBody_DspEffect_BySection:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0F788
+; Calls:   DspEffectSection0_QueuePaintJobs
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -29131,7 +29140,7 @@ ScreenEnterBody_DspEffect_BySection:
 ; ScreenEnterBody_DspEffect_Section0: an arm of ScreenEnterBody_DspEffect_BySection -- what it does when DspEffect_Section is 0
 ;   (notes/prom_b_dsp_effect_section_arms.py).
 ScreenEnterBody_DspEffect_Section0:
-	calr	sub_F0F788	; F0F16A  calr 0xf0f788
+	calr	DspEffectSection0_QueuePaintJobs	; F0F16A  calr 0xf0f788
 	jr	sub_F0F174_Join	; F0F16D  jr T,0xf0f177
 
 ; --------------------------------------------------------------------------
@@ -29139,7 +29148,7 @@ ScreenEnterBody_DspEffect_Section0:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F1008E
+; Calls:   DspEffect_EnterParamSection
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -29153,7 +29162,7 @@ ScreenEnterBody_DspEffect_Section0:
 ; ScreenEnterBody_DspEffect_ParamSections: an arm of ScreenEnterBody_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2 or 3
 ;   (notes/prom_b_dsp_effect_section_arms.py).
 ScreenEnterBody_DspEffect_ParamSections:
-	calr	sub_F1008E	; F0F16F  calr 0xf1008e
+	calr	DspEffect_EnterParamSection	; F0F16F  calr 0xf1008e
 	jr	sub_F0F174_Join	; F0F172  jr T,0xf0f177
 
 ; --------------------------------------------------------------------------
@@ -29161,7 +29170,7 @@ ScreenEnterBody_DspEffect_ParamSections:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0FD5F
+; Calls:   DspEffect_EnterEqSection
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -29175,7 +29184,7 @@ ScreenEnterBody_DspEffect_ParamSections:
 ; ScreenEnterBody_DspEffect_EqSections: an arm of ScreenEnterBody_DspEffect_BySection -- what it does when DspEffect_Section is 4 or 5
 ;   (notes/prom_b_dsp_effect_section_arms.py).
 ScreenEnterBody_DspEffect_EqSections:
-	calr	sub_F0FD5F	; F0F174  calr 0xf0fd5f
+	calr	DspEffect_EnterEqSection	; F0F174  calr 0xf0fd5f
 sub_F0F174_Join:
 	ld	(xix), 0	; F0F177  ld (XIX),0x00
 	pop	xix	; F0F17A  pop XIX
@@ -29483,7 +29492,7 @@ SoftKeyCol1_DspEffect_BySection:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2076) (0x209B) (0x209C) (0x2791) (0x2798)
-; Calls:   T_Drawbar_WaitReloadMark sub_F10222
+; Calls:   T_Drawbar_WaitReloadMark DspEffect_StepSelectedBlockSend
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -29504,7 +29513,7 @@ SoftKeyCol1_DspEffect_Section0:
 	call	T_Drawbar_WaitReloadMark	; F0F2C0  call 0xf42e6c
 	cp	a, 2:i3	; F0F2C4  cp A,2
 	jr	z, DispatchTable_F0F29A_Nop4	; F0F2C6  jr Z,0xf0f2de
-	calr	sub_F10222	; F0F2C8  calr 0xf10222
+	calr	DspEffect_StepSelectedBlockSend	; F0F2C8  calr 0xf10222
 	m_set 0, MD16, 0x2791	; F0F2CB  set 0,(0x2791)
 	ld	(PanelDial_DownButton:16), 128	; F0F2CF  ld (0x209b),0x80  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ld	(PanelDial_UpButton:16), 0	; F0F2D4  ld (0x209c),0x00  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
@@ -30152,7 +30161,7 @@ SoftKeyCol6_DspEffect_BySection:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2798)
-; Calls:   sub_F101C8
+; Calls:   DspEffect_AdjustBlockByte21
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -30168,7 +30177,7 @@ SoftKeyCol6_DspEffect_BySection:
 SoftKeyCol6_DspEffect_Section0:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F479  cp (0x2798),0x00
 	jr	nz, sub_F0F48D_Epilogue	; F0F47E  jr NZ,0xf0f4a4
-	calr	sub_F101C8	; F0F480  calr 0xf101c8
+	calr	DspEffect_AdjustBlockByte21	; F0F480  calr 0xf101c8
 	jr	sub_F0F48D_Join	; F0F483  jr T,0xf0f497
 
 ; --------------------------------------------------------------------------
@@ -30530,7 +30539,7 @@ LcdKeyRow1_DspEffect_BySection:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2791)
-; Calls:   sub_F10175
+; Calls:   DspEffect_ToggleCommonAlgorithm
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -30544,7 +30553,7 @@ LcdKeyRow1_DspEffect_BySection:
 ; LcdKeyRow1_DspEffect_Section0: an arm of LcdKeyRow1_DspEffect_BySection -- what it does when DspEffect_Section is 0
 ;   (notes/prom_b_dsp_effect_section_arms.py).
 LcdKeyRow1_DspEffect_Section0:
-	calr	sub_F10175	; F0F570  calr 0xf10175
+	calr	DspEffect_ToggleCommonAlgorithm	; F0F570  calr 0xf10175
 	m_set 0, MD16, 0x2791	; F0F573  set 0,(0x2791)
 	jr	DispatchTable_F0F558_Nop4	; F0F577  jr T,0xf0f59e
 
@@ -30553,7 +30562,7 @@ LcdKeyRow1_DspEffect_Section0:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2797)
-; Calls:   T_IndexedTable_GetPtr DspEffect_SanitizeBlock sub_F1018F
+; Calls:   T_IndexedTable_GetPtr DspEffect_SanitizeBlock DspEffect_ToggleBypass
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -30581,7 +30590,7 @@ LcdKeyRow1_DspEffect_ParamSections:
 	inc	8, xsp	; F0F597  inc 0,XSP
 	jr	DispatchTable_F0F558_Nop4	; F0F599  jr T,0xf0f59e
 sub_F0F579_Skip:
-	calr	sub_F1018F	; F0F59B  calr 0xf1018f
+	calr	DspEffect_ToggleBypass	; F0F59B  calr 0xf1018f
 
 ; --------------------------------------------------------------------------
 ; DispatchTable_F0F558_Nop4
@@ -31233,7 +31242,7 @@ LcdKeyRow5_DspEffect_Section0:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2791) (0x28B0)
-; Calls:   sub_F10CC4
+; Calls:   DspEffect_ToggleParamMarkAtCursor
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -31250,7 +31259,7 @@ LcdKeyRow5_DspEffect_ParamSections:
 	ld	c, (PanelEvent_Flags:16)	; F0F74A  ld C,(0x28b0)
 	and	c, 1	; F0F74E  and C,0x01
 	jr	z, DispatchTable_F0F708_Nop4	; F0F751  jr Z,0xf0f75a
-	calr	sub_F10CC4	; F0F753  calr 0xf10cc4
+	calr	DspEffect_ToggleParamMarkAtCursor	; F0F753  calr 0xf10cc4
 	m_set 0, MD16, 0x2791	; F0F756  set 0,(0x2791)
 
 ; --------------------------------------------------------------------------
@@ -31276,7 +31285,7 @@ DispatchTable_F0F708_Nop4:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2076) (0x2807)
-; Calls:   T_DspEffect_SendAllToCpu2 sub_F112ED T_F41054 sub_F11329
+; Calls:   T_DspEffect_SendAllToCpu2 DspEffect_ToneMsg88_Id00 T_F41054 DspEffect_SendToneMsg80
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -31300,21 +31309,21 @@ CompareKey_DspEffect:
 sub_F0F75B_Skip:
 	pushw	1	; F0F772  push 0x0001
 sub_F0F75B_Join:
-	calr	sub_F112ED	; F0F775  calr 0xf112ed
+	calr	DspEffect_ToneMsg88_Id00	; F0F775  calr 0xf112ed
 	pushw	0	; F0F778  push 0x0000
 	call	T_F41054	; F0F77B  call 0xf41054
 	pushw	16	; F0F77F  push 0x0010
-	calr	sub_F11329	; F0F782  calr 0xf11329
+	calr	DspEffect_SendToneMsg80	; F0F782  calr 0xf11329
 	inc	6, xsp	; F0F785  inc 6,XSP
 sub_F0F75B_Return:
 	ret	; F0F787  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F788
+; DspEffectSection0_QueuePaintJobs
 ; Called from: in-module: 0xF0F16A
 ; Touches: (0x2075) (0x2076) (0x2095) (0x209B) (0x209C) (0x2540) (0x2640)
 ;          (0x2791) (0x2797) (0x2798) +1 more
-; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg sub_F11329 T_LCD_BlankThenSetPanel3Layer_Copy T_Drawbar_WaitReloadMark T_DisplayListB_RunOne_Stack
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg DspEffect_SendToneMsg80 T_LCD_BlankThenSetPanel3Layer_Copy T_Drawbar_WaitReloadMark T_DisplayListB_RunOne_Stack
 ;          T_DisplayList_Run_Stack T_DisplayListB_Run_Stack T_DisplayList_RunOne_Stack EffectEditor_PaintBypassIndicator T_IndexedTable_GetByte +1 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -31324,7 +31333,11 @@ sub_F0F75B_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F788:
+; DspEffectSection0_QueuePaintJobs: DSP EFFECT section 0 (no block opened) enter work: when (0x2791) bit 7 resets the
+;   callback queue, (0x2799) and arms the dial (0x82/0x02) and queues EffectEditor_PaintJob0; queues PaintJob1 and
+;   PaintJob2 unless already pending in (0x2799); then DspEffect_SendToneMsg80(0x10), a 0x80 tone message to CPU 2. Basis: caller +
+;   body + paint-job headers. (notes/naming-pilot-2026-10-06/proposals_wave3_h.json)
+DspEffectSection0_QueuePaintJobs:
 	push	xix	; F0F788  push XIX
 	lda	xix, (10137:16)	; F0F789  lda XIX,0x2799
 	ld	c, (10129:16)	; F0F78D  ld C,(0x2791)
@@ -31377,7 +31390,7 @@ sub_F0F788_Skip3:
 	inc	6, xsp	; F0F815  inc 6,XSP
 sub_F0F788_Skip4:
 	pushw	16	; F0F817  push 0x0010
-	calr	sub_F11329	; F0F81A  calr 0xf11329
+	calr	DspEffect_SendToneMsg80	; F0F81A  calr 0xf11329
 	popw	bc	; F0F81D  pop BC
 	pop	xix	; F0F81E  pop XIX
 	ret	; F0F81F  ret
@@ -31943,11 +31956,11 @@ sub_F0FD2F_Join:
 	ret	; F0FD5E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0FD5F
+; DspEffect_EnterEqSection
 ; Called from: in-module: 0xF0F174
 ; Touches: (0x2075) (0x2076) (0x209B) (0x209C) (0x2540) (0x2640) (0x2790)
 ;          (0x2791) (0x2797) (0x2799)
-; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg sub_F11329 T_LCD_BlankThenSetPanel3Layer_Copy T_DisplayListB_RunOne_Stack T_DisplayListB_Run_Stack
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg DspEffect_SendToneMsg80 T_LCD_BlankThenSetPanel3Layer_Copy T_DisplayListB_RunOne_Stack T_DisplayListB_Run_Stack
 ;          DspEffect_LoadEqGain DspEffect_LoadEqFc EffectEditor_PaintBypassIndicator EqGraph_Draw T_LCD_ShowAllLayers_StackFrame_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -31957,7 +31970,12 @@ sub_F0FD2F_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0FD5F:
+; DspEffect_EnterEqSection: DSP EFFECT screen entering section 4/5 (an EQ): when the section was just set ((0x2791)
+;   bit 7) resets the callback queue, clears the pending paint jobs (0x2799) and arms the dial buttons; queues
+;   EffectEditor_PaintJob3 (the page) once per section change and PaintJob4 (EQ values) unless pending; then
+;   DspEffect_SendToneMsg80(0x10), a link message to CPU 2 in PanelModeGroup 0x17. The whole body of
+;   ScreenEnterBody_DspEffect_EqSections. Basis: caller + body. (notes/naming-pilot-2026-10-06/proposals_wave3_i.json)
+DspEffect_EnterEqSection:
 	push	xix	; F0FD5F  push XIX
 	lda	xix, (10137:16)	; F0FD60  lda XIX,0x2799
 	ld	c, (10129:16)	; F0FD64  ld C,(0x2791)
@@ -31995,7 +32013,7 @@ sub_F0FD5F_Skip2:
 	inc	6, xsp	; F0FDC3  inc 6,XSP
 sub_F0FD5F_Skip3:
 	pushw	16	; F0FDC5  push 0x0010
-	calr	sub_F11329	; F0FDC8  calr 0xf11329
+	calr	DspEffect_SendToneMsg80	; F0FDC8  calr 0xf11329
 	popw	bc	; F0FDCB  pop BC
 	pop	xix	; F0FDCC  pop XIX
 	ret	; F0FDCD  ret
@@ -32183,7 +32201,7 @@ EffectEditor_PaintJob4:
 ;          which is y = 135-24 and entry 24 of the gain strings is "  0.0" --
 ;          and then the patched frame through T_DisplayList_Run_Stack;
 ;          otherwise it runs DL_F13F32, whose first record prints "BYPASS".
-;          Both callers (EffectEditor_PaintJob4 via 0xF0FF30, sub_F123F4 via 0xF1244B)
+;          Both callers (EffectEditor_PaintJob4 via 0xF0FF30, MainOutEqualizer_PaintEqValues via 0xF1244B)
 ;          fill (0x2640)-(0x2643) first and run DL_F1465F, which prints
 ;          (0x2640)/(0x2641) through DLBTable_1k125k16k2k25k315k4k (frequency
 ;          strings) and (0x2642)/(0x2643) through DLBTable_F15C93 (-12.0 ..
@@ -32327,11 +32345,11 @@ EqGraph_Draw_Join3:
 	ret	; F1008D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F1008E
+; DspEffect_EnterParamSection
 ; Called from: in-module: 0xF0F16F
 ; Touches: (0x2075) (0x2095) (0x209B) (0x209C) (0x2791) (0x2792) (0x2793)
 ;          (0x2794) (0x2795) (0x2796) +1 more
-; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_IndexedTable_GetByte T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg sub_F11329
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_IndexedTable_GetByte T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg DspEffect_SendToneMsg80
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF1008E is an instruction boundary of this
@@ -32340,7 +32358,13 @@ EqGraph_Draw_Join3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F1008E:
+; DspEffect_EnterParamSection: The ScreenEnter work of DSP EFFECT sections 1..3 (a block's parameters): on a fresh
+;   entry ((0x2791) bit 7) resets (0x2792..0x2795) / (0x2799) and arms the dial buttons; loads the block's algorithm
+;   (IndexedTable entry 97 + Effect_BlockIndex) into Effect_Algorithm, resetting the cursor when it changed; then
+;   posts EffectEditor_PaintJob5 / 6 / 7 by the (0x2799) bits and calls DspEffect_SendToneMsg80(16). Sole body of
+;   ScreenEnterBody_DspEffect_ParamSections. Basis: table index + caller + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_j.json)
+DspEffect_EnterParamSection:
 	pushw	hl	; F1008E  push HL
 	push	xix	; F1008F  push XIX
 	lda	xix, (10137:16)	; F10090  lda XIX,0x2799
@@ -32416,14 +32440,14 @@ sub_F1008E_Skip4:
 	inc	6, xsp	; F10169  inc 6,XSP
 sub_F1008E_Skip5:
 	pushw	16	; F1016B  push 0x0010
-	calr	sub_F11329	; F1016E  calr 0xf11329
+	calr	DspEffect_SendToneMsg80	; F1016E  calr 0xf11329
 	popw	bc	; F10171  pop BC
 	pop	xix	; F10172  pop XIX
 	popw	hl	; F10173  pop HL
 	ret	; F10174  ret
 
 ; --------------------------------------------------------------------------
-; sub_F10175
+; DspEffect_ToggleCommonAlgorithm
 ; Called from: in-module: 0xF0F570
 ; Touches: (0x7634)
 ; Calls:   T_Queue2C00_Append4
@@ -32435,7 +32459,11 @@ sub_F1008E_Skip5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F10175:
+; DspEffect_ToggleCommonAlgorithm: Toggles bit 0 of RAM 0x7634 -- record 0x60 EFFECT COMMON, +0 bit 0 = EFFECT COMMON
+;   ALGORITHM -- and queues it (Queue2C00 {0x60, 0, value, mask 1}). LCD row 1 of the DSP EFFECT screen with no block
+;   opened (section 0); in the block sections the same key toggles the block's BYPASS byte instead (DspEffect_ToggleBypass).
+;   Basis: caller + body + record layout. (notes/naming-pilot-2026-10-06/proposals_wave3_g.json)
+DspEffect_ToggleCommonAlgorithm:
 	pushw	1	; F10175  push 0x0001
 	m_xor_mi8 MB16, 0x7634, 0x01	; F10178  xor (0x7634),0x01
 	ld	c, (30260:16)	; F1017D  ld C,(0x7634)
@@ -32447,7 +32475,7 @@ sub_F10175:
 	ret	; F1018E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F1018F
+; DspEffect_ToggleBypass
 ; Called from: in-module: 0xF0F59B
 ; Touches: (0x2797)
 ; Calls:   T_IndexedTable_GetPtr T_Queue2C00_Append4
@@ -32459,7 +32487,11 @@ sub_F10175:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F1018F:
+; DspEffect_ToggleBypass: Flips bit 0 of byte 23, the BYPASS flag, of the current effect block (IndexedTable record
+;   0x61 + Effect_BlockIndex) and posts the change {record, 23, value, 0xFF} through T_Queue2C00_Append4. Run by DSP
+;   EFFECT's LCD key row 1 when PanelEvent_Flags bit 0 is clear. Basis: caller + body + bypass readers. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_h.json)
+DspEffect_ToggleBypass:
 	push	xix	; F1018F  push XIX
 	ld	bc, (Effect_BlockIndex:16)	; F10190  ld BC,(0x2797)
 	extz	bc	; F10194  extz BC
@@ -32484,7 +32516,7 @@ sub_F1018F:
 	ret	; F101C7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F101C8
+; DspEffect_AdjustBlockByte21
 ; Called from: in-module: 0xF0F480
 ; Touches: (0x2797)
 ; Calls:   T_IndexedParam_AdjustField
@@ -32496,7 +32528,11 @@ sub_F1018F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F101C8:
+; DspEffect_AdjustBlockByte21: DSP EFFECT section 0, soft key 6: unless the selected block (Effect_BlockIndex) is 2
+;   (REV), IndexedParam_AdjustField(entry 97 + block, AdjustDesc_EffectBlockByte21): byte 21 of the EFF1 / EFF2 block,
+;   0..99, step 1 / 5. What byte 21 means is not decoded (descriptor header), so the name says where the byte is.
+;   Basis: caller + body + descriptor. (notes/naming-pilot-2026-10-06/proposals_wave3_i.json)
+DspEffect_AdjustBlockByte21:
 	m_cp_mi8 MB16, Effect_BlockIndex, 0x02	; F101C8  cp (0x2797),0x02
 	jr	z, sub_F1018F_Return	; F101CD  jr Z,0xf101e6
 	lda	xbc, (AdjustDesc_EffectBlockByte21:24)	; F101CF  lda XBC,0xf13659
@@ -32554,7 +32590,7 @@ sub_F101E7_Return:
 	ret	; F10221  ret
 
 ; --------------------------------------------------------------------------
-; sub_F10222
+; DspEffect_StepSelectedBlockSend
 ; Called from: in-module: 0xF0F2C8
 ; Touches: (0x2797)
 ; Calls:   T_PartParam_StepFieldById
@@ -32566,7 +32602,11 @@ sub_F101E7_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F10222:
+; DspEffect_StepSelectedBlockSend: PartParam_StepFieldById(field 6 / 7 / 8, part 0) for Effect_BlockIndex 0 / 1 / 2:
+;   steps the part's EFFECT1 SEND, EFFECT2 or REVERB SEND, the send into the block EFF1 / EFF2 / REV. SOFT KEY 1 of
+;   the DSP EFFECT screen with no block opened (section 0), only when (0x2798) = 0 and PanelModeGroup = 0x17. Basis:
+;   caller + body + step table. (notes/naming-pilot-2026-10-06/proposals_wave3_g.json)
+DspEffect_StepSelectedBlockSend:
 	ld	bc, (Effect_BlockIndex:16)	; F10222  ld BC,(0x2797)
 	extz	bc	; F10226  extz BC
 	cp	bc, 0:i3	; F10228  cp BC,0
@@ -34090,7 +34130,7 @@ DspEffect_StepSlowFast:
 	ret	; F10CC3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F10CC4
+; DspEffect_ToggleParamMarkAtCursor
 ; Called from: in-module: 0xF0F753
 ; Touches: (0x2792) (0x2794) (0x2796) (0x2797)
 ; Calls:   T_IndexedTable_GetByte T_IndexedTable_GetPtr T_Queue2C00_Append4
@@ -34102,7 +34142,12 @@ DspEffect_StepSlowFast:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F10CC4:
+; DspEffect_ToggleParamMarkAtCursor: Unless the block is bypassed (byte 23) or the cursor is on the algorithm row 8:
+;   byte 22 of the effect block := descriptor byte +3 of parameter (0x2792) + (0x2794) of algorithm (0x2796), or 0xFF
+;   when it already held that id; the change is posted {record, 22, ...}. Byte 22 is the parameter
+;   DspEffect_PaintParamEditor marks. LCD key row 5 in sections 1-3. Basis: caller + body + FINDINGS. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_h.json)
+DspEffect_ToggleParamMarkAtCursor:
 	link XIZ,0xfffc	; F10CC4  link XIZ,0xfffc
 	pushw	hl	; F10CC8  push HL
 	push	xix	; F10CC9  push XIX
@@ -34355,29 +34400,34 @@ EffectEditor_PaintJob6:
 ;          one bit each for EffectEditor_PaintJob0..7, and each job clears its
 ;          own bit and redraws with display lists.  All eight are checked by
 ;          python3 notes/promb-2026-09-25/effect_paint_jobs.py.
-; Body:    `calr EffectEditor_PaintBypassIndicator`, `calr sub_F10EE9`, `call T_LCD_ShowAllLayers_StackFrame_Copy`.
+; Body:    `calr EffectEditor_PaintBypassIndicator`, `calr DspEffect_RepaintParamPage`, `call T_LCD_ShowAllLayers_StackFrame_Copy`.
 ; ⚠ WAS the middle of `Data_F10E0F`.
 ; --------------------------------------------------------------------------
 EffectEditor_PaintJob7:
 	m_res 7, MD16, 0x2799	; F10EDA  res 7,(0x2799)
 	calr	EffectEditor_PaintBypassIndicator	; F10EDE  calr 0xf0fd2f
-	calr	sub_F10EE9	; F10EE1  calr 0xf10ee9
+	calr	DspEffect_RepaintParamPage	; F10EE1  calr 0xf10ee9
 	call	T_LCD_ShowAllLayers_StackFrame_Copy	; F10EE4  call 0xf42e14
 	ret	; F10EE8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F10EE9
+; DspEffect_RepaintParamPage
 ; Called from: EffectEditor_PaintJob7 (`calr` at 0xF10EE1)
 ; Evidence: reached by that `calr`; the name IS the address.  It
 ;          saves (0x2793) in L and copies (0x2792) into it, tests
 ;          IndexedTable_GetByte(23, (0x2797)+97) -- block byte 23, the flag
-;          EqGraph_Draw prints "BYPASS" for and sub_F1018F toggles -- and
+;          EqGraph_Draw prints "BYPASS" for and DspEffect_ToggleBypass toggles -- and
 ;          runs on into the code below (it calls DspEffect_LoadParamNames at
 ;          0xF10F55).  What it is FOR as a whole is not decoded here.
 ; ⚠ WAS the tail of `Data_F10E0F` plus four lines framed from
 ;   0xF10EFF, inside `ld (0x2793),H` at 0xF10EFC.
 ; --------------------------------------------------------------------------
-sub_F10EE9:
+; DspEffect_RepaintParamPage: Parameter page of the open effect block: (0x2793) := page (0x2792). Block byte 23 set:
+;   erase + 'BYPASS' (DL_F13F1E). Else: cursor (0x2794) moved -> DL_F14712 erases the old box and fills the new one
+;   (layer 1); page changed -> DspEffect_LoadParamNames and the two scroll marks of DL_F146F0 ((0x2642) bit 0 page >
+;   0, bit 1 a parameter 8 lines on); then DspEffect_PaintParamEditor. Run by EffectEditor_PaintJob7. Basis: caller +
+;   body + display lists. (notes/naming-pilot-2026-10-06/proposals_wave3_i.json)
+DspEffect_RepaintParamPage:
 	link XIZ,0xfffc	; F10EE9  link XIZ,0xfffc
 	pushw	hl	; F10EED  push HL
 	pushw	de	; F10EEE  push DE
@@ -34976,7 +35026,7 @@ DspEffect_LoadSlowFast:
 	ret	; F112EC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F112ED
+; DspEffect_ToneMsg88_Id00
 ; Called from: in-module: 0xF0F775
 ; Touches: (0x2076) (0x2250)
 ; Calls:   T_Link_SendBlockIn32ByteChunks
@@ -34988,7 +35038,12 @@ DspEffect_LoadSlowFast:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F112ED:
+; DspEffect_ToneMsg88_Id00: When PanelModeGroup = 0x17: sends link message [0x88, UI_PartIndex, 0x00, 0x00, arg, 0x00]
+;   (6 bytes, T_Link_SendBlockIn32ByteChunks) -- the prom_b copy of prom_a's ToneMsg88_Id00. On CPU 2, 0x88 (bit 3
+;   set) goes to ToneEdit_Dispatch arm 0, sub_FB8CEC: operand 0 sets part flag bit 1, else bit 0. CompareKey_DspEffect
+;   sends 0 after DspEffect_SendAllToCpu2 when (0x2807) = 1, else 1. Basis: caller + body + prom_a twin + CPU-2
+;   handler. (notes/naming-pilot-2026-10-06/proposals_wave3_j.json)
+DspEffect_ToneMsg88_Id00:
 	link XIZ,0xfffa	; F112ED  link XIZ,0xfffa
 	push	xix	; F112F1  push XIX
 	lda	xix, (xiz-6)	; F112F2  lda XIX,XIZ+0xfa
@@ -35013,7 +35068,7 @@ sub_F112ED_Skip:
 	ret	; F11328  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11329
+; DspEffect_SendToneMsg80
 ; Called from: in-module: 0xF0F782 0xF0F81A 0xF0FDC8 0xF1016E
 ; Touches: (0x2076) (0x2250)
 ; Calls:   T_Link_SendBlockIn32ByteChunks
@@ -35025,7 +35080,12 @@ sub_F112ED_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F11329:
+; DspEffect_SendToneMsg80: When PanelModeGroup = 0x17: sends the 6-byte tone message {0x80, UI_PartIndex, 0, 0, 1,
+;   arg} over T_Link_SendBlockIn32ByteChunks(0, 6, msg) -- prom_a ToneMsg80_Id00's frame (CPU 2 ToneEdit_Dispatch,
+;   write table) without its copy to 0x27E0. All four callers, in the DSP EFFECT module (CompareKey_DspEffect and
+;   three unnamed ones), pass 0x10. Basis: callers + body + twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_g.json)
+DspEffect_SendToneMsg80:
 	link XIZ,0xfffa	; F11329  link XIZ,0xfffa
 	push	xix	; F1132D  push XIX
 	lda	xix, (xiz-6)	; F1132E  lda XIX,XIZ+0xfa
@@ -37121,7 +37181,7 @@ sub_F1195A_Skip41:
 	and	c, 16	; F12317  and C,0x10
 	jr	nz, sub_F1195A_Epilogue	; F1231A  jr NZ,0xf12332
 	m_or_mi8 MBI+r4, 0, 0x10	; F1231C  or (XIX),0x10
-	lda	xbc, (sub_F123F4:24)	; F1231F  lda XBC,0xf123f4
+	lda	xbc, (MainOutEqualizer_PaintEqValues:24)	; F1231F  lda XBC,0xf123f4
 	push	xbc	; F12324  push XBC
 	call	T_CallbackQueue_Post	; F12325  call 0xf42e84
 	pushw	1	; F12329  push 0x0001
@@ -37314,7 +37374,11 @@ Draw_MainOutEqualizer:
 	inc	8, xsp	; F123EF  inc 0,XSP
 	inc	8, xsp	; F123F1  inc 0,XSP
 	ret	; F123F3  ret
-sub_F123F4:
+; MainOutEqualizer_PaintEqValues: Paint job 4 of MAIN OUT EQUALIZER (clears (0x2799) bit 4): with Effect_BlockIndex 24
+;   loads both bands' gain (offsets 3, 1) and Fc into UI_DrawScratch+3..+0, draws them (DL_F1465F..DL_F1469B),
+;   EqGraph_Draw, shows the layers. EffectEditor_PaintJob4's twin at offsets 19/17 without the bypass box. Basis:
+;   poster + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave3_h.json)
+MainOutEqualizer_PaintEqValues:
 	link XIZ,0xfffc	; F123F4  link XIZ,0xfffc
 	push	xix	; F123F8  push XIX
 	lda	xix, (UI_DrawScratch:16)	; F123F9  lda XIX,0x2640
@@ -39124,7 +39188,7 @@ DispatchTable_F135FD:
 ;   (+0 byte offset, +1 mask, +2 right shift, +3 upper bound, +4 lower bound,
 ;   +5/+6 the two coarse steps, +7 XORed into (0x28B0)); +8 is 0x00 in all
 ;   three and IndexedParam_AdjustField does not read it.
-; Read by: sub_F101C8 (0xF101C8) passes the first with entry 97 + (0x2797)
+; Read by: DspEffect_AdjustBlockByte21 (0xF101C8) passes the first with entry 97 + (0x2797)
 ;   unless (0x2797) is 2 -- byte 21 of effect blocks 97/98, 0..99, which is
 ;   also why the SysEx parameter map (EffectParamNumberMap) has a byte-21
 ;   parameter for blocks 97 and 98 and none for 99.  sub_F101E7 (0xF101E7)
@@ -39135,8 +39199,8 @@ DispatchTable_F135FD:
 ;   say where the bytes are, which the readers establish.
 ; ⚠ REPLACES `Data_F13659`, whose header admitted knowing nothing but the bytes.
 ;--------------------------------------------------------------------------
-; AdjustDesc_EffectBlockByte21 -- the descriptor sub_F101C8 for blocks 97/98 passes to
-;   IndexedParam_AdjustField; read by sub_F101C8 (0xF101CF)
+; AdjustDesc_EffectBlockByte21 -- the descriptor DspEffect_AdjustBlockByte21 for blocks 97/98 passes to
+;   IndexedParam_AdjustField; read by DspEffect_AdjustBlockByte21 (0xF101CF)
 AdjustDesc_EffectBlockByte21:
 	.byte	21, 0xff, 0, 99, 0, 1, 5, 0x00	; F13659  offset, mask, shift, upper, lower, step, step, xor
 	.byte	0x00	; F13661  not read
@@ -72158,7 +72222,7 @@ DL_F34256:
 ;
 ; THE START IS NAMED BY CODE: prom_b 0xF55CA6 and 0xF55D57 both do
 ; `ld XIY,0x00f3434c`, then reach T_F417F8 -> 0xF31B21 -- the opcode-02
-; handler itself -- with that XIY (via sub_F55C44).  So this address is
+; handler itself -- with that XIY (via SeqScreen_DrawCountInMeasure).  So this address is
 ; a record start on the firmware's own say-so, and the handler fixes the
 ; extent at 15 bytes.  Its +7 lands on 0xF3435B, the byte right after it.
 ; THE END IS NAMED BY CODE TOO: DL_F34361 is `ld XIY,0x00f34361` at
@@ -74579,7 +74643,7 @@ DL_F3539F:
 ; ⚠ WHAT THE MODULE DOES.  ClampFieldToRange (0xF3702F) reads five 16-bit words
 ; off the caller's stack -- value, mask, shift, maximum, minimum -- and returns
 ; the value with ONE FIELD replaced by that field clamped, SIGNED, to [min,max]:
-;   `and DE,(XIZ+0x08)` masks, sub_F37F70 shifts, `jr LE`/`jr GE` clamp, and
+;   `and DE,(XIZ+0x08)` masks, Asr16ByCount shifts, `jr LE`/`jr GE` clamp, and
 ;   `cpl BC / and BC,(XIZ+0x08) / or BC,HL` merges the field back under the same
 ;   mask so every other bit survives.
 ; Everything else feeds it.  ClampParamValueById_From541 (0xF37069) and
@@ -75408,18 +75472,23 @@ sub_F36CED_Join2:
 	ret	; F36E20  ret
 
 ; --------------------------------------------------------------------------
-; sub_F36E21
-; Called from: T_F41250 (x1); far site 0xF41250
+; SysExThirdRegion_FetchNextChunk
+; Called from: T_SysExThirdRegion_FetchNextChunk (x1); far site 0xF41250
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F36938 sub_F36A06 T_ToneMsg80_SendParam sub_F36C5D T_DspParam_ReadByNumber sub_F37E1C
 ;          sub_F36CED T_ToneMsg80_Id16 T_F43488 T_ToneMsg85_SendParam
-; Evidence: thunk slot T_F41250 holds `jp 0x00F36E21`, and 0xF36E21 is an
+; Evidence: thunk slot T_SysExThirdRegion_FetchNextChunk holds `jp 0x00F36E21`, and 0xF36E21 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F36E21:		; <- T_F41250
+; SysExThirdRegion_FetchNextChunk: Main-loop step of a SysEx third-region request: while (0x0A00) bit 2 is set
+;   (SysExThirdRegion_AcceptRequest's |= 5; re-armed by the reply sender sub_F37E1C while bytes remain), fetches the chunk at (0x0A03) --
+;   region 0x040000 or 0x060000 -- through ToneMsg80/85 requests to CPU 2 or DspParam_ReadByNumber + sub_F37E1C --
+;   then clears bit 2 and sets bit 1. Basis: caller + body + module siblings. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_g.json)
+SysExThirdRegion_FetchNextChunk:		; <- T_SysExThirdRegion_FetchNextChunk
 	link XIZ,0xfffc	; F36E21  link XIZ,0xfffc
 	pushw	hl	; F36E25  push HL
 	push	xix	; F36E26  push XIX
@@ -75543,17 +75612,21 @@ sub_F36CED_Join5:
 	ret	; F36F8B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F36F8C
-; Called from: T_F41254 (x1); far site 0xF41254
+; SysExThirdRegion_AcceptRequest
+; Called from: T_SysExThirdRegion_AcceptRequest (x1); far site 0xF41254
 ; Touches: nothing with an absolute address
 ; Calls:   Pack3x7BitFields_Bytes9To11 Pack3x7BitFields_Bytes6To8
-; Evidence: thunk slot T_F41254 holds `jp 0x00F36F8C`, and 0xF36F8C is an
+; Evidence: thunk slot T_SysExThirdRegion_AcceptRequest holds `jp 0x00F36F8C`, and 0xF36F8C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F36F8C:		; <- T_F41254
+; SysExThirdRegion_AcceptRequest: 2B request into the tone-edit image: busy ((0x0A00) bit 0) -> 1; else unpacks
+;   address (msg bytes 6-8 -> (0x0A03)) and count (9-11 -> (0x0A07)) and accepts a non-empty run inside 0x040000+713
+;   (melodic) or 0x060000+19608 (drum): (0x0A00) |= 5, returns 0; otherwise (0x0A00) := 0, returns 1 and the caller
+;   sends the refusal. Basis: caller + body + sysex probe. (notes/naming-pilot-2026-10-06/proposals_wave3_h.json)
+SysExThirdRegion_AcceptRequest:		; <- T_SysExThirdRegion_AcceptRequest
 	link XIZ,0xfffc	; F36F8C  link XIZ,0xfffc
 	pushw	hl	; F36F90  push HL
 	push	xix	; F36F91  push XIX
@@ -75618,11 +75691,11 @@ sub_F36CED_Join8:
 ; ClampFieldToRange
 ; Called from: in-module: 0xF37584 0xF3799A
 ; Touches: nothing with an absolute address
-; Calls:   sub_F37F70
+; Calls:   Asr16ByCount
 ; Evidence: five 16-bit words are read off the caller's stack -- (XIZ+0x08)
 ;           value, (XIZ+0x0A) mask, (XIZ+0x0C) shift, (XIZ+0x0E) maximum,
 ;           (XIZ+0x10) minimum.  The body is `ld DE,(XIZ+0x0a) / and
-;           DE,(XIZ+0x08)` then a shift by (XIZ+0x0C) through sub_F37F70, then
+;           DE,(XIZ+0x08)` then a shift by (XIZ+0x0C) through Asr16ByCount, then
 ;           `cp WA,(XIZ+0x0e) / jr LE` and `cp HL,(XIZ+0x10) / jr GE` -- a
 ;           SIGNED clamp, which is what one arm's 0xFFC4/0x003C pair
 ;           (-60..+60) requires -- then `cpl BC / and BC,(XIZ+0x08) / or
@@ -75641,7 +75714,7 @@ ClampFieldToRange:
 	ld	c, (xiz+12)	; F3703B  ld C,(XIZ+0x0c)
 	pushw	bc	; F3703E  push BC
 	pushw	de	; F3703F  push DE
-	call	sub_F37F70	; F37040  call 0xf37f70
+	call	Asr16ByCount	; F37040  call 0xf37f70
 	ld	hl, wa	; F37044  ld HL,WA
 	m_cp_rm MWD+r6, 0x0e, 0	; F37046  cp WA,(XIZ+0x0e)
 	jr	le, ClampFieldToRange_Skip	; F37049  jr LE,0xf37050
@@ -76926,19 +76999,24 @@ ClampParamValueById_Unchanged2:
 	ret	; F379AA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F379AB
-; Called from: T_F41258 (x1); far site 0xF41258
+; SysExToneImage_WriteByte
+; Called from: T_SysExToneImage_WriteByte (x1); far site 0xF41258
 ; Touches: nothing with an absolute address
 ; Calls:   Pack3x7BitFields_Bytes9To11 Pack3x7BitFields_Bytes6To8
 ;          ClampParamValueById_From541 T_ToneMsg_SendParam ClampParamValueById_From408
 ;          Divide32_Unsigned_Quotient T_F43488 T_DspParam_WriteByNumber T_ToneMsg8D_SendParam
-; Evidence: thunk slot T_F41258 holds `jp 0x00F379AB`, and 0xF379AB is an
+; Evidence: thunk slot T_SysExToneImage_WriteByte holds `jp 0x00F379AB`, and 0xF379AB is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F379AB:		; <- T_F41258
+; SysExToneImage_WriteByte: SysEx command 0x17 (2C write) into the live tone-edit image: address 0x040000 + n (melodic
+;   sound, n < 713) or 0x060000 + n (drum kit, n <= 19608), count must be 1, value (msg[12] << 4) | (msg[13] & 0x0F)
+;   clamped per parameter; a ladder of offsets turns n into (block, index) and commits through ToneMsg_SendParam /
+;   ToneMsg8D_SendParam / DspParam_WriteByNumber, as the panel's tone editor does. Basis: caller + body + notes/sysex-
+;   probes/sysex_third_region.py. (notes/naming-pilot-2026-10-06/proposals_wave3_i.json)
+SysExToneImage_WriteByte:		; <- T_SysExToneImage_WriteByte
 	link XIZ,0xffe8	; F379AB  link XIZ,0xffe8
 	pushw	hl	; F379AF  push HL
 	push	xix	; F379B0  push XIX
@@ -77255,17 +77333,22 @@ sub_F379AB_Join6:
 	ret	; F37D16  ret
 
 ; --------------------------------------------------------------------------
-; sub_F37D17
-; Called from: T_F4125C (x1); far site 0xF4125C
+; SysExParam_ExecSoundWriteRequest
+; Called from: T_SysExParam_ExecSoundWriteRequest (x1); far site 0xF4125C
 ; Touches: nothing with an absolute address
 ; Calls:   T_ToneMsg80_Id01
-; Evidence: thunk slot T_F4125C holds `jp 0x00F37D17`, and 0xF37D17 is an
+; Evidence: thunk slot T_SysExParam_ExecSoundWriteRequest holds `jp 0x00F37D17`, and 0xF37D17 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F37D17:		; <- T_F4125C
+; SysExParam_ExecSoundWriteRequest: Carries out a received SOUND WRITE REQUEST: number = nibbles +12/+13, bank =
+;   nibbles +15/+16 of the payload; bank 8/9 -> slot (bank-8)*128 + number, bank 0x28/0x29 with number < 2 ->
+;   (bank-0x28)*2 + number; T_ToneMsg80_Id01(slot, 0x30), WA = 0. Any other bank or number returns WA = 1, and the
+;   setter then sends an error frame. ToneMsg80_Id01 is the call SOUND EDIT MEMORY WRITE makes. Basis: caller + body +
+;   the memory-write twin. (notes/naming-pilot-2026-10-06/proposals_wave3_j.json)
+SysExParam_ExecSoundWriteRequest:		; <- T_SysExParam_ExecSoundWriteRequest
 	link XIZ,0xfffc	; F37D17  link XIZ,0xfffc
 	pushw	hl	; F37D1B  push HL
 	pushw	de	; F37D1C  push DE
@@ -77554,7 +77637,7 @@ Divide32_Unsigned_Quotient_Skip:
 	retd	8	; F37F6D  retd 0x0008
 
 ; --------------------------------------------------------------------------
-; sub_F37F70
+; Asr16ByCount
 ; Called from: in-module: 0xF37040
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a branch decoded in this transcription (the sites are
@@ -77562,7 +77645,11 @@ Divide32_Unsigned_Quotient_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F37F70:
+; Asr16ByCount: Asr16ByCount(value, count): value >> count, ARITHMETIC (`sra A,IY`), count up to 31 (a high nibble
+;   shifts 16 first), callee pops 4 -- the signed twin of prom_a Lsr16ByCount. ClampFieldToRange shifts its masked
+;   field with it before the SIGNED clamp. Basis: caller + body + twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_g.json)
+Asr16ByCount:
 	ld	iy, (xsp+4)	; F37F70  ld IY,(XSP+0x04)
 	ld	b, (xsp+6)	; F37F73  ld B,(XSP+0x06)
 	ld	w, b	; F37F76  ld W,B
@@ -77621,16 +77708,19 @@ Divide32_Unsigned_Remainder_Skip:
 
 
 ; --------------------------------------------------------------------------
-; sub_F38800
-; Called from: T_F42660 (x1); far site 0xF42660
+; ParamImage_CopyToSongWorkspace
+; Called from: T_ParamImage_CopyToSongWorkspace (x1); far site 0xF42660
 ; Touches:   |  0x603600
-; Evidence: thunk slot T_F42660 holds `jp 0x00F38800`, and 0xF38800 is an
+; Evidence: thunk slot T_ParamImage_CopyToSongWorkspace holds `jp 0x00F38800`, and 0xF38800 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F38800:		; <- T_F42660
+; ParamImage_CopyToSongWorkspace: Copies the parameter image 0x7600-0x7FFF (0x500 words, count in (0x609102)) into the
+;   song workspace at 0x603600-0x603FFF. The copy step of BStore_Workspace_StoreParamImage (after
+;   SysPartMidi_ResetBlock1Default). Basis: caller + body. (notes/naming-pilot-2026-10-06/proposals_wave3_h.json)
+ParamImage_CopyToSongWorkspace:		; <- T_ParamImage_CopyToSongWorkspace
 	link XIZ,0xfffc	; F38800  link XIZ,0xfffc
 	push	xix	; F38804  push XIX
 	ldw	bc, 30208	; F38805  ld BC,0x7600
@@ -89500,7 +89590,9 @@ T_F40780:	jp sub_FAB7E6  ; -> prom_a 0x2B7E6   x1
 T_F40784:	jp sub_FABD33  ; -> prom_a 0x2BD33   x2
 	ret  ; 0xF40788: 1 x ret
 	.fill 0x3, 1, 0x00  ; 0xF40789: 3 x nop
-T_F4078C:	jp sub_FAA418  ; -> prom_a 0x2A418   x2
+; Evidence: slot 0xF4078C is `jp 0xFAA418`; prom_a 0xFAA418 carries the label
+;           SoundSel_ClampToProgramAndBankRegs (graded CONTENT).  DERIVATIVE name.
+T_SoundSel_ClampToProgramAndBankRegs:	jp SoundSel_ClampToProgramAndBankRegs  ; F4078C (was T_F4078C) -> prom_a 0x2A418   x2
 ; Evidence: slot 0xF40790 is `jp 0xFAA43A`; prom_a 0xFAA43A carries the label
 ;           SoundSel_FromProgramAndBankRegs (graded CONTENT).  DERIVATIVE name.
 T_SoundSel_FromProgramAndBankRegs:	jp SoundSel_FromProgramAndBankRegs  ; F40790 (was T_F40790) -> prom_a 0x2A43A   x6
@@ -89559,7 +89651,9 @@ T_F40800:	jp sub_FAA47E  ; -> prom_a 0x2A47E
 ; Evidence: slot 0xF40804 is `jp 0xFAB779`; prom_a 0xFAB779 carries the label
 ;           CombiSel_ClampToNumberAndBank (graded CONTENT).  DERIVATIVE name.
 T_CombiSel_ClampToNumberAndBank:	jp CombiSel_ClampToNumberAndBank  ; F40804 (was T_F40804) -> prom_a 0x2B779   x3
-T_F40808:	jp sub_FAB728  ; -> prom_a 0x2B728   x3
+; Evidence: slot 0xF40808 is `jp 0xFAB728`; prom_a 0xFAB728 carries the label
+;           CombiSel_GroupMemberFromNumberAndBank (graded CONTENT).  DERIVATIVE name.
+T_CombiSel_GroupMemberFromNumberAndBank:	jp CombiSel_GroupMemberFromNumberAndBank  ; F40808 (was T_F40808) -> prom_a 0x2B728   x3
 T_MidiIn_ControlRecord_Dispatch:	jp MidiIn_ControlRecord_Dispatch  ; -> prom_a 0x2BEFB   x21
 T_ParamMsg_RefreshMasksOnCtrlFieldChange:	jp ParamMsg_RefreshMasksOnCtrlFieldChange  ; -> prom_a 0x2C786
 	.fill 0x2C, 1, 0x0E  ; 0xF40814: 44 x ret
@@ -89639,28 +89733,40 @@ T_Transport_StartAllFromZero:	jp Transport_StartAllFromZero  ; F409B4 (was T_F40
 	.fill 0x8, 1, 0x0E  ; 0xF409B8: 8 x ret
 T_F409C0:	.long T_BStore_BootPhase0	; ptr -> 0xF44000 (prom_b 0x44000)
 T_F409C4:	jp T_F40B44  ; -> prom_b 0x40B44   x1
-T_F409C8:	jp sub_F44582  ; -> prom_b 0x44582   x2
+; Evidence: slot 0xF409C8 is `jp 0xF44582`; prom_b 0xF44582 carries the label
+;           Seq_MainLoopService (graded CONTENT).  DERIVATIVE name.
+T_Seq_MainLoopService:	jp Seq_MainLoopService  ; F409C8 (was T_F409C8) -> prom_b 0x44582   x2
 ; Evidence: slot 0xF409CC is `jp 0xF450F7`; prom_b 0xF450F7 carries the label
 ;           Seq_RewindAfterSongLoad (graded CONTENT).  DERIVATIVE name.
 T_Seq_RewindAfterSongLoad:	jp Seq_RewindAfterSongLoad  ; F409CC (was T_F409CC) -> prom_b 0x450F7   x4
 T_F409D0:	jp sub_F451E6  ; -> prom_b 0x451E6   x4
 T_F409D4:	jp sub_F452D3  ; -> prom_b 0x452D3   x2
 T_F409D8:	jp sub_F45348  ; -> prom_b 0x45348   x1
-T_F409DC:	jp sub_F45BD3  ; -> prom_b 0x45BD3   x1
+; Evidence: slot 0xF409DC is `jp 0xF45BD3`; prom_b 0xF45BD3 carries the label
+;           Seq_LocateToCurrentMeasure (graded CONTENT).  DERIVATIVE name.
+T_Seq_LocateToCurrentMeasure:	jp Seq_LocateToCurrentMeasure  ; F409DC (was T_F409DC) -> prom_b 0x45BD3   x1
 ; Evidence: slot 0xF409E0 is `jp 0xF4542D`; prom_b 0xF4542D carries the label
 ;           Seq_RequestRewind (graded CONTENT).  DERIVATIVE name.
 T_Seq_RequestRewind:	jp Seq_RequestRewind  ; F409E0 (was T_F409E0) -> prom_b 0x4542D   x24
-T_F409E4:	jp sub_F45445  ; -> prom_b 0x45445   x1
+; Evidence: slot 0xF409E4 is `jp 0xF45445`; prom_b 0xF45445 carries the label
+;           Seq_RewindOnMidiStart (graded CONTENT).  DERIVATIVE name.
+T_Seq_RewindOnMidiStart:	jp Seq_RewindOnMidiStart  ; F409E4 (was T_F409E4) -> prom_b 0x45445   x1
 T_F409E8:	jp sub_F4545B  ; -> prom_b 0x4545B
 T_F409EC:	jp sub_F4545F  ; -> prom_b 0x4545F   x1
 T_F409F0:	jp sub_F45474  ; -> prom_b 0x45474   x1
-T_F409F4:	jp sub_F45489  ; -> prom_b 0x45489   x2
-T_F409F8:	jp sub_F454A6  ; -> prom_b 0x454A6   x2
+; Evidence: slot 0xF409F4 is `jp 0xF45489`; prom_b 0xF45489 carries the label
+;           Seq_RestoreTrackMaskAndRewind (graded CONTENT).  DERIVATIVE name.
+T_Seq_RestoreTrackMaskAndRewind:	jp Seq_RestoreTrackMaskAndRewind  ; F409F4 (was T_F409F4) -> prom_b 0x45489   x2
+; Evidence: slot 0xF409F8 is `jp 0xF454A6`; prom_b 0xF454A6 carries the label
+;           Seq_SaveTrackMaskAndStopAll (graded CONTENT).  DERIVATIVE name.
+T_Seq_SaveTrackMaskAndStopAll:	jp Seq_SaveTrackMaskAndStopAll  ; F409F8 (was T_F409F8) -> prom_b 0x454A6   x2
 T_F409FC:	jp T_F414B0  ; -> prom_b 0x414B0   x1
 T_F40A00:	jp T_F40C70  ; -> prom_b 0x40C70   x3
 T_F40A04:	jp T_F40C74  ; -> prom_b 0x40C74   x8
 T_Var34D1_SetBits20:	jp Var34D1_SetBits20  ; -> prom_b 0x45FC4   x2
-T_F40A0C:	jp sub_F45524  ; -> prom_b 0x45524   x1
+; Evidence: slot 0xF40A0C is `jp 0xF45524`; prom_b 0xF45524 carries the label
+;           TimedEvents_ClearEndedTrackBits (graded CONTENT).  DERIVATIVE name.
+T_TimedEvents_ClearEndedTrackBits:	jp TimedEvents_ClearEndedTrackBits  ; F40A0C (was T_F40A0C) -> prom_b 0x45524   x1
 ; Evidence: slot 0xF40A10 is `jp 0xF45975`; prom_b 0xF45975 carries the label
 ;           SeqBufRing_Discard (graded CONTENT).  DERIVATIVE name.
 T_SeqBufRing_Discard:	jp SeqBufRing_Discard  ; F40A10 (was T_F40A10) -> prom_b 0x45975   x2
@@ -89670,8 +89776,12 @@ T_TimedEventRing_Discard:	jp TimedEventRing_Discard  ; F40A14 (was T_F40A14) -> 
 T_Sequencer_ResetToDefault:	jp Sequencer_ResetToDefault  ; -> prom_b 0x455A0   x2
 T_F40A1C:	jp BStore_ResetWorkspaceFields  ; -> prom_b 0x44367   x15
 T_F40A20:	jp sub_F455C5  ; -> prom_b 0x455C5   x3
-T_F40A24:	jp sub_F456EC  ; -> prom_b 0x456EC   x2
-T_F40A28:	jp sub_F45D09  ; -> prom_b 0x45D09   x1
+; Evidence: slot 0xF40A24 is `jp 0xF456EC`; prom_b 0xF456EC carries the label
+;           SeqRecord_StartOnFirstEvent (graded CONTENT).  DERIVATIVE name.
+T_SeqRecord_StartOnFirstEvent:	jp SeqRecord_StartOnFirstEvent  ; F40A24 (was T_F40A24) -> prom_b 0x456EC   x2
+; Evidence: slot 0xF40A28 is `jp 0xF45D09`; prom_b 0xF45D09 carries the label
+;           SeqRecord_TerminateTracksIfRecording (graded CONTENT).  DERIVATIVE name.
+T_SeqRecord_TerminateTracksIfRecording:	jp SeqRecord_TerminateTracksIfRecording  ; F40A28 (was T_F40A28) -> prom_b 0x45D09   x1
 T_F40A2C:	jp sub_F45D19  ; -> prom_b 0x45D19
 T_F40A30:	jp sub_F45D80  ; -> prom_b 0x45D80
 ; T_F40A34_Zeroed -- two slots of 0x00 (nop), not a thunk.  prom_a calls 0xF40A34 three times (0xFBACAC,
@@ -89710,12 +89820,18 @@ T_F40A8C:	jp BStore_ResetWorkspaceFields  ; -> prom_b 0x44367   x1
 T_Nop_CallsEmptyDirectorySlot_Veneer:	jp Nop_CallsEmptyDirectorySlot_Veneer  ; -> prom_b 0x44039   x1
 T_F40A94:	jp sub_F4403C  ; -> prom_b 0x4403C
 T_F40A98:	jp sub_F44018  ; -> prom_b 0x44018   x1
-T_F40A9C:	jp sub_F45CC4  ; -> prom_b 0x45CC4   x3
+; Evidence: slot 0xF40A9C is `jp 0xF45CC4`; prom_b 0xF45CC4 carries the label
+;           SeqTrackCursors_LocateAllToCurrentMeasure (graded CONTENT).  DERIVATIVE name.
+T_SeqTrackCursors_LocateAllToCurrentMeasure:	jp SeqTrackCursors_LocateAllToCurrentMeasure  ; F40A9C (was T_F40A9C) -> prom_b 0x45CC4   x3
 T_F40AA0:	jp sub_F44E8E  ; -> prom_b 0x44E8E
 T_F40AA4:	jp sub_F448C6  ; -> prom_b 0x448C6   x3
-T_F40AA8:	jp sub_F455E6  ; -> prom_b 0x455E6   x5
+; Evidence: slot 0xF40AA8 is `jp 0xF455E6`; prom_b 0xF455E6 carries the label
+;           SeqMasterTrack_UpdateActive (graded CONTENT).  DERIVATIVE name.
+T_SeqMasterTrack_UpdateActive:	jp SeqMasterTrack_UpdateActive  ; F40AA8 (was T_F40AA8) -> prom_b 0x455E6   x5
 T_F40AAC:	jp sub_F44B2D  ; -> prom_b 0x44B2D   x2
-T_F40AB0:	jp sub_F45BCD  ; -> prom_b 0x45BCD   x1
+; Evidence: slot 0xF40AB0 is `jp 0xF45BCD`; prom_b 0xF45BCD carries the label
+;           SeqCycle_LocateTracksToCurrentMeasure (graded CONTENT).  DERIVATIVE name.
+T_SeqCycle_LocateTracksToCurrentMeasure:	jp SeqCycle_LocateTracksToCurrentMeasure  ; F40AB0 (was T_F40AB0) -> prom_b 0x45BCD   x1
 T_F40AB4:	jp sub_F45FE5  ; -> prom_b 0x45FE5
 ; Evidence: slot 0xF40AB8 is `jp 0xF440A0`; prom_b 0xF440A0 carries the label
 ;           BStore_CopyWorkspaceToAllBanks (graded CONTENT).  DERIVATIVE name.
@@ -89755,7 +89871,9 @@ T_F40BC8:	jp sub_F49804  ; -> prom_b 0x49804   x4
 T_F40BCC:	jp sub_F49806  ; -> prom_b 0x49806   x1
 T_F40BD0:	jp sub_F49808  ; -> prom_b 0x49808   x1
 T_F40BD4:	jp sub_F4980A  ; -> prom_b 0x4980A   x1
-T_F40BD8:	jp sub_F4A57E  ; -> prom_b 0x4A57E   x3
+; Evidence: slot 0xF40BD8 is `jp 0xF4A57E`; prom_b 0xF4A57E carries the label
+;           SeqRecord_SaveCursorBaseline (graded CONTENT).  DERIVATIVE name.
+T_SeqRecord_SaveCursorBaseline:	jp SeqRecord_SaveCursorBaseline  ; F40BD8 (was T_F40BD8) -> prom_b 0x4A57E   x3
 ; Evidence: slot 0xF40BDC is `jp 0xF4A5AD`; prom_b 0xF4A5AD carries the label
 ;           CycleRecord_SetUpRecordTrack (graded CONTENT).  DERIVATIVE name.
 T_CycleRecord_SetUpRecordTrack:	jp CycleRecord_SetUpRecordTrack  ; F40BDC (was T_F40BDC) -> prom_b 0x4A5AD   x6
@@ -89803,12 +89921,16 @@ T_SeqTrackKey_Press:	jp SeqTrackKey_Press  ; F40CC4 (was T_F40CC4) -> prom_b 0x4
 ; Evidence: slot 0xF40CC8 is `jp 0xF4E592`; prom_b 0xF4E592 carries the label
 ;           RealtimeRecordScreen_LcdKeyRow2 (graded CONTENT).  DERIVATIVE name.
 T_RealtimeRecordScreen_LcdKeyRow2:	jp RealtimeRecordScreen_LcdKeyRow2  ; F40CC8 (was T_F40CC8) -> prom_b 0x4E592   x1
-T_F40CCC:	jp sub_F4E30F  ; -> prom_b 0x4E30F   x2
+; Evidence: slot 0xF40CCC is `jp 0xF4E30F`; prom_b 0xF4E30F carries the label
+;           CycleRecord_CheckOn (graded CONTENT).  DERIVATIVE name.
+T_CycleRecord_CheckOn:	jp CycleRecord_CheckOn  ; F40CCC (was T_F40CCC) -> prom_b 0x4E30F   x2
 	.fill 0x10, 1, 0x0E  ; 0xF40CD0: 16 x ret
 T_F40CE0:	jp sub_F4EC00  ; -> prom_b 0x4EC00
 T_Var34BB_ClearBits04:	jp Var34BB_ClearBits04  ; -> prom_b 0x4EC25
 T_F40CE8:	jp sub_F4EC2B  ; -> prom_b 0x4EC2B   x1
-T_F40CEC:	jp sub_F4EC56  ; -> prom_b 0x4EC56   x2
+; Evidence: slot 0xF40CEC is `jp 0xF4EC56`; prom_b 0xF4EC56 carries the label
+;           RealtimeRecord_Disarm (graded CONTENT).  DERIVATIVE name.
+T_RealtimeRecord_Disarm:	jp RealtimeRecord_Disarm  ; F40CEC (was T_F40CEC) -> prom_b 0x4EC56   x2
 T_F40CF0:	jp sub_F4EC8A  ; -> prom_b 0x4EC8A   x1
 T_F40CF4:	jp sub_F4EC9A  ; -> prom_b 0x4EC9A
 T_F40CF8:	jp sub_F4ECA9  ; -> prom_b 0x4ECA9   x1
@@ -90261,10 +90383,18 @@ T_Link_WaitBlockDone:	jp Link_WaitBlockDone  ; F4123C (was T_F4123C) -> prom_a 0
 ;           Link_SendCommandE7 (graded CONTENT).  DERIVATIVE name.
 T_Link_SendCommandE7:	jp Link_SendCommandE7  ; F41240 (was T_F41240) -> prom_a 0x0E3D1   x4
 	.fill 0xC, 1, 0x0E  ; 0xF41244: 12 x ret
-T_F41250:	jp sub_F36E21  ; -> prom_b 0x36E21   x1
-T_F41254:	jp sub_F36F8C  ; -> prom_b 0x36F8C   x1
-T_F41258:	jp sub_F379AB  ; -> prom_b 0x379AB   x1
-T_F4125C:	jp sub_F37D17  ; -> prom_b 0x37D17   x1
+; Evidence: slot 0xF41250 is `jp 0xF36E21`; prom_b 0xF36E21 carries the label
+;           SysExThirdRegion_FetchNextChunk (graded CONTENT).  DERIVATIVE name.
+T_SysExThirdRegion_FetchNextChunk:	jp SysExThirdRegion_FetchNextChunk  ; F41250 (was T_F41250) -> prom_b 0x36E21   x1
+; Evidence: slot 0xF41254 is `jp 0xF36F8C`; prom_b 0xF36F8C carries the label
+;           SysExThirdRegion_AcceptRequest (graded CONTENT).  DERIVATIVE name.
+T_SysExThirdRegion_AcceptRequest:	jp SysExThirdRegion_AcceptRequest  ; F41254 (was T_F41254) -> prom_b 0x36F8C   x1
+; Evidence: slot 0xF41258 is `jp 0xF379AB`; prom_b 0xF379AB carries the label
+;           SysExToneImage_WriteByte (graded CONTENT).  DERIVATIVE name.
+T_SysExToneImage_WriteByte:	jp SysExToneImage_WriteByte  ; F41258 (was T_F41258) -> prom_b 0x379AB   x1
+; Evidence: slot 0xF4125C is `jp 0xF37D17`; prom_b 0xF37D17 carries the label
+;           SysExParam_ExecSoundWriteRequest (graded CONTENT).  DERIVATIVE name.
+T_SysExParam_ExecSoundWriteRequest:	jp SysExParam_ExecSoundWriteRequest  ; F4125C (was T_F4125C) -> prom_b 0x37D17   x1
 T_F41260:	jp sub_F37DAE  ; -> prom_b 0x37DAE   x3
 T_F41264:	jp sub_F37E1C  ; -> prom_b 0x37E1C   x1
 	.fill 0x148, 1, 0x0E  ; 0xF41268: 328 x ret
@@ -91420,8 +91550,12 @@ T_Paint_MidiFileL0ad:	jp Paint_MidiFileL0ad  ; F42400 (was T_F42400) -> prom_a 0
 T_ScreenLeave_MidiFileL0ad:	jp ScreenLeave_MidiFileL0ad  ; -> prom_a 0x7520C
 T_PanelButtonDispatch_MidiFileL0ad:	jp PanelButtonDispatch_MidiFileL0ad  ; -> prom_a 0x7522F
 T_F4240C:	jp T_F4240C_Nop  ; -> prom_a 0x75489
-T_F42410:	jp sub_FF70B6  ; -> prom_a 0x770B6   x1
-T_F42414:	jp sub_FF70D8  ; -> prom_a 0x770D8   x1
+; Evidence: slot 0xF42410 is `jp 0xFF70B6`; prom_a 0xFF70B6 carries the label
+;           MidiFilePlay_SnapshotRecordBytes (graded CONTENT).  DERIVATIVE name.
+T_MidiFilePlay_SnapshotRecordBytes:	jp MidiFilePlay_SnapshotRecordBytes  ; F42410 (was T_F42410) -> prom_a 0x770B6   x1
+; Evidence: slot 0xF42414 is `jp 0xFF70D8`; prom_a 0xFF70D8 carries the label
+;           PartRecords_RestoreShadowedField (graded CONTENT).  DERIVATIVE name.
+T_PartRecords_RestoreShadowedField:	jp PartRecords_RestoreShadowedField  ; F42414 (was T_F42414) -> prom_a 0x770D8   x1
 ; Evidence: slot 0xF42418 is `jp 0xFF48F0`; prom_a 0xFF48F0 carries the label
 ;           DiskLoad_SetContentTypeFromSelectedEntry (graded CONTENT).  DERIVATIVE name.
 T_DiskLoad_SetContentTypeFromSelectedEntry:	jp DiskLoad_SetContentTypeFromSelectedEntry  ; F42418 (was T_F42418) -> prom_a 0x748F0   x1
@@ -91533,7 +91667,9 @@ T_DiskApi_DeleteFile_Call:	jp DiskApi_DeleteFile_Call  ; -> prom_a 0x61C55   x11
 ; Evidence: slot 0xF425B4 is `jp 0xFE1C5D`; prom_a 0xFE1C5D carries the label
 ;           DiskLoadScreen_MountAndScanDirectory (graded CONTENT).  DERIVATIVE name.
 T_DiskLoadScreen_MountAndScanDirectory:	jp DiskLoadScreen_MountAndScanDirectory  ; F425B4 (was T_F425B4) -> prom_a 0x61C5D   x3
-T_F425B8:	jp sub_FE1C67  ; -> prom_a 0x61C67   x2
+; Evidence: slot 0xF425B8 is `jp 0xFE1C67`; prom_a 0xFE1C67 carries the label
+;           DiskSaveScreen_MountAndScanDirectory (graded CONTENT).  DERIVATIVE name.
+T_DiskSaveScreen_MountAndScanDirectory:	jp DiskSaveScreen_MountAndScanDirectory  ; F425B8 (was T_F425B8) -> prom_a 0x61C67   x2
 T_SysPartMidi_ResetBlock1Default_Call:	jp SysPartMidi_ResetBlock1Default_Call  ; -> prom_a 0x61BCA
 ; Evidence: slot 0xF425C0 is `jp 0xFE1C71`; prom_a 0xFE1C71 carries the label
 ;           Notes_ReleaseAllSources_Call_Call (graded CONTENT).  DERIVATIVE name.
@@ -91550,12 +91686,16 @@ T_NameEdit_MoveCursor_Call:	jp NameEdit_MoveCursor_Call  ; F425D4 (was T_F425D4)
 ; Evidence: slot 0xF425D8 is `jp 0xFE1CA3`; prom_a 0xFE1CA3 carries the label
 ;           NameEdit_StepChar_Call (graded CONTENT).  DERIVATIVE name.
 T_NameEdit_StepChar_Call:	jp NameEdit_StepChar_Call  ; F425D8 (was T_F425D8) -> prom_a 0x61CA3   x3
-T_F425DC:	jp sub_FE1CA7  ; -> prom_a 0x61CA7   x3
+; Evidence: slot 0xF425DC is `jp 0xFE1CA7`; prom_a 0xFE1CA7 carries the label
+;           Playback_AcceptMidiStartAgain (graded CONTENT).  DERIVATIVE name.
+T_Playback_AcceptMidiStartAgain:	jp Playback_AcceptMidiStartAgain  ; F425DC (was T_F425DC) -> prom_a 0x61CA7   x3
 ; Evidence: slot 0xF425E0 is `jp 0xFE1CAB`; prom_a 0xFE1CAB carries the label
 ;           Disk_SaveFileName_Call (graded CONTENT).  DERIVATIVE name.
 T_Disk_SaveFileName_Call:	jp Disk_SaveFileName_Call  ; F425E0 (was T_F425E0) -> prom_a 0x61CAB
 T_DiskApi_CloseFile_Call:	jp DiskApi_CloseFile_Call  ; -> prom_a 0x61CAF   x5
-T_F425E8:	jp sub_FE1CB3  ; -> prom_a 0x61CB3   x5
+; Evidence: slot 0xF425E8 is `jp 0xFE1CB3`; prom_a 0xFE1CB3 carries the label
+;           DiskSave_CheckFreeSpace (graded CONTENT).  DERIVATIVE name.
+T_DiskSave_CheckFreeSpace:	jp DiskSave_CheckFreeSpace  ; F425E8 (was T_F425E8) -> prom_a 0x61CB3   x5
 ; Evidence: slot 0xF425EC is `jp 0xFE1CC0`; prom_a 0xFE1CC0 carries the label
 ;           Disk_ResetAndMountFloppy_Call (graded CONTENT).  DERIVATIVE name.
 T_Disk_ResetAndMountFloppy_Call:	jp Disk_ResetAndMountFloppy_Call  ; F425EC (was T_F425EC) -> prom_a 0x61CC0
@@ -91604,7 +91744,9 @@ T_Disk_SaveSqfFromStaging_Entry:	jp Disk_SaveSqfFromStaging_Entry  ; F4262C (was
 T_Disk_SaveSeqFile_Entry:	jp Disk_SaveSeqFile_Entry  ; F42630 (was T_F42630) -> prom_a 0x61C03
 T_MidiFileSave_Page3_LcdKeyRow3:	jp MidiFileSave_Page3_LcdKeyRow3  ; -> prom_a 0x61C59   x1
 	.fill 0x28, 1, 0x0E  ; 0xF42638: 40 x ret
-T_F42660:	jp sub_F38800  ; -> prom_b 0x38800   x1
+; Evidence: slot 0xF42660 is `jp 0xF38800`; prom_b 0xF38800 carries the label
+;           ParamImage_CopyToSongWorkspace (graded CONTENT).  DERIVATIVE name.
+T_ParamImage_CopyToSongWorkspace:	jp ParamImage_CopyToSongWorkspace  ; F42660 (was T_F42660) -> prom_b 0x38800   x1
 T_F42664:	jp sub_F38843  ; -> prom_b 0x38843   x1
 	.fill 0x8, 1, 0x0E  ; 0xF42668: 8 x ret
 T_Screen_Initial_Enter:	jp Screen_Initial_Enter  ; -> prom_a 0x2129D
@@ -91716,8 +91858,12 @@ T_F427E0:	jp sub_F64838  ; -> prom_b 0x64838
 T_BStore_StubTable:	jp BStore_StubTable  ; F427E4 (was T_F427E4) -> prom_b 0x62C08   x9
 T_F427E8:	jp sub_F62C0C  ; -> prom_b 0x62C0C   x3
 T_F427EC:	jp sub_F62C10  ; -> prom_b 0x62C10   x4
-T_F427F0:	jp sub_F62C14  ; -> prom_b 0x62C14   x3
-T_F427F4:	jp sub_F62C18  ; -> prom_b 0x62C18   x3
+; Evidence: slot 0xF427F0 is `jp 0xF62C14`; prom_b 0xF62C14 carries the label
+;           BStore_LoadStartBeatsPerBar (graded CONTENT).  DERIVATIVE name.
+T_BStore_LoadStartBeatsPerBar:	jp BStore_LoadStartBeatsPerBar  ; F427F0 (was T_F427F0) -> prom_b 0x62C14   x3
+; Evidence: slot 0xF427F4 is `jp 0xF62C18`; prom_b 0xF62C18 carries the label
+;           BStore_TimeSigNextMeasure_Call (graded CONTENT).  DERIVATIVE name.
+T_BStore_TimeSigNextMeasure_Call:	jp BStore_TimeSigNextMeasure_Call  ; F427F4 (was T_F427F4) -> prom_b 0x62C18   x3
 T_BStore_OpenChain_Call:	jp BStore_OpenChain_Call  ; -> prom_b 0x62C1C   x4
 ; Evidence: slot 0xF427FC is `jp 0xF62C20`; prom_b 0xF62C20 carries the label
 ;           BStore_LoadGeometry_Call (graded CONTENT).  DERIVATIVE name.
@@ -91741,7 +91887,9 @@ T_F4282C:	jp sub_F64B1B  ; -> prom_b 0x64B1B   x1
 T_BStore_MoveWorkspaceToNextBank:	jp BStore_MoveWorkspaceToNextBank  ; F42830 (was T_F42830) -> prom_b 0x64BB6   x1
 	.fill 0x4C, 1, 0x0E  ; 0xF42834: 76 x ret
 T_F42880:	jp sub_F7A400  ; -> prom_b 0x7A400   x2
-T_F42884:	jp sub_F7A402  ; -> prom_b 0x7A402   x17
+; Evidence: slot 0xF42884 is `jp 0xF7A402`; prom_b 0xF7A402 carries the label
+;           BStore_AllocBlock_Veneer (graded CONTENT).  DERIVATIVE name.
+T_BStore_AllocBlock_Veneer:	jp BStore_AllocBlock_Veneer  ; F42884 (was T_F42884) -> prom_b 0x7A402   x17
 T_F42888:	jp sub_F7A404  ; -> prom_b 0x7A404   x7
 T_F4288C:	jp sub_F7A406  ; -> prom_b 0x7A406
 T_BStore_LatchHeapBase_Veneer:	jp BStore_LatchHeapBase_Veneer  ; -> prom_b 0x7A408   x1
@@ -91863,8 +92011,12 @@ T_Transp0se_SelectField1:	jp Transp0se_SelectField1  ; -> prom_b 0x7C672   x1
 T_Transp0se_SelectField2:	jp Transp0se_SelectField2  ; -> prom_b 0x7C682   x1
 T_Transp0se_SelectField3:	jp Transp0se_SelectField3  ; -> prom_b 0x7C692   x1
 T_Transp0se_SelectField4:	jp Transp0se_SelectField4  ; -> prom_b 0x7C6A2   x1
-T_F42A50:	jp sub_F7C6B2  ; -> prom_b 0x7C6B2   x2
-T_F42A54:	jp sub_F7C6FB  ; -> prom_b 0x7C6FB   x2
+; Evidence: slot 0xF42A50 is `jp 0xF7C6B2`; prom_b 0xF7C6B2 carries the label
+;           Transp0se_StepFieldUp (graded CONTENT).  DERIVATIVE name.
+T_Transp0se_StepFieldUp:	jp Transp0se_StepFieldUp  ; F42A50 (was T_F42A50) -> prom_b 0x7C6B2   x2
+; Evidence: slot 0xF42A54 is `jp 0xF7C6FB`; prom_b 0xF7C6FB carries the label
+;           Transp0se_StepSelectedFieldDown (graded CONTENT).  DERIVATIVE name.
+T_Transp0se_StepSelectedFieldDown:	jp Transp0se_StepSelectedFieldDown  ; F42A54 (was T_F42A54) -> prom_b 0x7C6FB   x2
 T_Transp0se_LcdKeyRow2:	jp Transp0se_LcdKeyRow2  ; -> prom_b 0x7C7F0   x2
 ; Evidence: slot 0xF42A5C is `jp 0xF7C843`; prom_b 0xF7C843 carries the label
 ;           Transp0se_ReturnToStageZero (graded CONTENT).  DERIVATIVE name.
@@ -91888,8 +92040,12 @@ T_N0teChange_SelectField2:	jp N0teChange_SelectField2  ; -> prom_b 0x7C8D8   x1
 T_N0teChange_SelectField3:	jp N0teChange_SelectField3  ; -> prom_b 0x7C8E8   x1
 T_N0teChange_SelectField4:	jp N0teChange_SelectField4  ; -> prom_b 0x7C8F8   x1
 T_N0teChange_SelectField5:	jp N0teChange_SelectField5  ; -> prom_b 0x7C908   x1
-T_F42AA4:	jp sub_F7C918  ; -> prom_b 0x7C918   x2
-T_F42AA8:	jp sub_F7C964  ; -> prom_b 0x7C964   x2
+; Evidence: slot 0xF42AA4 is `jp 0xF7C918`; prom_b 0xF7C918 carries the label
+;           N0teChange_StepSelectedFieldUp (graded CONTENT).  DERIVATIVE name.
+T_N0teChange_StepSelectedFieldUp:	jp N0teChange_StepSelectedFieldUp  ; F42AA4 (was T_F42AA4) -> prom_b 0x7C918   x2
+; Evidence: slot 0xF42AA8 is `jp 0xF7C964`; prom_b 0xF7C964 carries the label
+;           N0teChange_StepFieldDown (graded CONTENT).  DERIVATIVE name.
+T_N0teChange_StepFieldDown:	jp N0teChange_StepFieldDown  ; F42AA8 (was T_F42AA8) -> prom_b 0x7C964   x2
 T_N0teChange_LcdKeyRow4:	jp N0teChange_LcdKeyRow4  ; -> prom_b 0x7CA6F   x2
 ; Evidence: slot 0xF42AB0 is `jp 0xF7CAC2`; prom_b 0xF7CAC2 carries the label
 ;           N0teChange_ReturnToStageZero (graded CONTENT).  DERIVATIVE name.
@@ -92171,7 +92327,9 @@ T_CallbackQueue_Post:	jp CallbackQueue_Post  ; F42E84 (was T_F42E84) -> prom_a 0
 ;           Task2_CallbackDispatcher, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Task2_CallbackDispatcher:	jp Task2_CallbackDispatcher  ; F42E88 (was T_F42E88) -> prom_a 0x0DA00
 	.fill 0x4, 1, 0x0E  ; 0xF42E8C: 4 x ret
-T_F42E90:	jp sub_FB9DA0  ; -> prom_a 0x39DA0   x2
+; Evidence: slot 0xF42E90 is `jp 0xFB9DA0`; prom_a 0xFB9DA0 carries the label
+;           Medley_ToggleMidiFileStream (graded CONTENT).  DERIVATIVE name.
+T_Medley_ToggleMidiFileStream:	jp Medley_ToggleMidiFileStream  ; F42E90 (was T_F42E90) -> prom_a 0x39DA0   x2
 T_F42E94:	jp sub_FB9D2C  ; -> prom_a 0x39D2C   x3
 T_F42E98:	jp sub_FB9D43  ; -> prom_a 0x39D43   x2
 	.fill 0x24, 1, 0x0E  ; 0xF42E9C: 36 x ret
@@ -92233,7 +92391,9 @@ T_SoundEditNaming_SoftKeyCol7:	jp SoundEditNaming_SoftKeyCol7  ; -> prom_b 0x0BD
 T_SoundEditNaming_SoftKeyCol8:	jp SoundEditNaming_SoftKeyCol8  ; -> prom_b 0x0BE44   x3
 T_SoundEditNaming_LcdKeyRow1:	jp SoundEditNaming_LcdKeyRow1  ; -> prom_b 0x0BEBF   x6
 T_SoundEditNaming_LcdKeyRow2:	jp SoundEditNaming_LcdKeyRow2  ; -> prom_b 0x0BF04   x4
-T_F42FAC:	jp sub_FDA252  ; -> prom_a 0x5A252   x2
+; Evidence: slot 0xF42FAC is `jp 0xFDA252`; prom_a 0xFDA252 carries the label
+;           DrumSoundNames_FetchNext (graded CONTENT).  DERIVATIVE name.
+T_DrumSoundNames_FetchNext:	jp DrumSoundNames_FetchNext  ; F42FAC (was T_F42FAC) -> prom_a 0x5A252   x2
 	.fill 0x20, 1, 0x0E  ; 0xF42FB0: 32 x ret
 ; ⚠ T_F42FD0-T_DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8 -- THIRTEEN STALE DIRECTORY SLOTS (header added
 ;   2026-09-25, lane promb).  All thirteen are `jp` into 0xF19C18-0xF1A0C7,
@@ -92596,7 +92756,9 @@ T_MidiIn_ReqRebuild_Msg03_0A:	jp MidiIn_ReqRebuild_Msg03_0A  ; F43354 (was T_F43
 T_MidiIn_PumpPortB:	jp MidiIn_PumpPortB  ; F43358 (was T_F43358) -> prom_a 0x260C2   x1
 	.fill 0x24, 1, 0x0E  ; 0xF4335C: 36 x ret
 T_MidiFileL0ad_LcdKeyRow1:	jp MidiFileL0ad_LcdKeyRow1  ; -> prom_b 0x6F400   x1
-T_F43384:	jp sub_F6F404  ; -> prom_b 0x6F404   x2
+; Evidence: slot 0xF43384 is `jp 0xF6F404`; prom_b 0xF6F404 carries the label
+;           MidiFileSave_WriteSeqBankSmf (graded CONTENT).  DERIVATIVE name.
+T_MidiFileSave_WriteSeqBankSmf:	jp MidiFileSave_WriteSeqBankSmf  ; F43384 (was T_F43384) -> prom_b 0x6F404   x2
 	.fill 0x38, 1, 0x0E  ; 0xF43388: 56 x ret
 ; Evidence: slot 0xF433C0 is `jp 0xFE02AB`; prom_a 0xFE02AB carries the label
 ;           MidiFileStream_ReaderTask (graded CONTENT).  DERIVATIVE name.
@@ -92629,7 +92791,9 @@ T_PartSettings_ResetToDefault:	jp PartSettings_ResetToDefault  ; -> prom_a 0x2AE
 T_SystemSettings_ResetToDefault:	jp SystemSettings_ResetToDefault  ; -> prom_a 0x2AF91   x2
 T_ParamMsg_ResendTwoAssignedCtrls:	jp ParamMsg_ResendTwoAssignedCtrls  ; -> prom_a 0x2BFFF
 T_ParamRecord_SetPartsField18Bit0:	jp ParamRecord_SetPartsField18Bit0  ; -> prom_a 0x2C7C4   x3
-T_F43450:	jp sub_FAABB3  ; -> prom_a 0x2ABB3   x1
+; Evidence: slot 0xF43450 is `jp 0xFAABB3`; prom_a 0xFAABB3 carries the label
+;           Mode_InitSavedPartBlocks (graded CONTENT).  DERIVATIVE name.
+T_Mode_InitSavedPartBlocks:	jp Mode_InitSavedPartBlocks  ; F43450 (was T_F43450) -> prom_a 0x2ABB3   x1
 T_Queue2E00_PostParam98Fields:	jp Queue2E00_PostParam98Fields  ; -> prom_a 0x2C80F   x3
 	.fill 0x8, 1, 0x0E  ; 0xF43458: 8 x ret
 ; Evidence: slot 0xF43460 is `jp 0xFE7200`; prom_a 0xFE7200 carries the label
@@ -93010,7 +93174,7 @@ BStore_BootPhase2And4:		; <- T_F44008, T_F44010
 ; --------------------------------------------------------------------------
 ; BStore_CopyWorkspaceToAllBanks: Copies the 0xC00-byte song workspace at 0x603400 into each of the ten bank copies at
 ;   0x610000 + n*0xC00 (n = 0..9), 0x600 words per bank (ldirw). Basis: callers + body -- runs right after the
-;   workspace reset (sub_F44260) in both of its callers. (notes/naming-pilot-2026-10-06/proposals_wave2_d.json)
+;   workspace reset (BStore_ResetWorkspaceToDefault) in both of its callers. (notes/naming-pilot-2026-10-06/proposals_wave2_d.json)
 BStore_CopyWorkspaceToAllBanks:		; <- T_BStore_CopyWorkspaceToAllBanks
 	xor	xwa, xwa	; F440A0  xor XWA,XWA
 sub_F440A0_Loop:
@@ -93032,7 +93196,7 @@ sub_F440A0_Loop:
 ; Called from: T_BStore_BootPhase3 (x0)
 ; Touches: (0x34D3) (0x3552) (0x360A) (0x360C)
 ; Calls:   TimedEventRing_Discard SeqBufRing_Discard Seq_RequestRewind T_BStore_LoadGeometry_Call T_SongEdit_ResetJobFields T_BStore_LatchHeapBase_Veneer
-;          sub_F44505 T_NoteRouting_RebuildForSong sub_F44143 BStore_ClearPasswordProtectedBanks T_EditScreen_BootPhase2And4 sub_F44237 +1
+;          sub_F44505 T_NoteRouting_RebuildForSong BStore_CopyByteD6ToAllBanks BStore_ClearPasswordProtectedBanks T_EditScreen_BootPhase2And4 SeqCycle_ResetSettings +1
 ;          more
 ; Evidence: thunk slot T_BStore_BootPhase3 holds `jp 0x00F440C4`, and 0xF440C4 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -93065,7 +93229,7 @@ sub_F440A0_Skip2:
 	calr	sub_F44505	; F44100  calr 0xf44505
 	call	T_NoteRouting_RebuildForSong	; F44103  call 0xf411b8
 	ld	(6304982:24), 0	; F44107  ld (0x6034d6),0x00
-	calr	sub_F44143	; F4410D  calr 0xf44143
+	calr	BStore_CopyByteD6ToAllBanks	; F4410D  calr 0xf44143
 	ld	a, (6304981:24)	; F44110  ld A,(0x6034d5)
 	ld	(BStore_CurrentBank:16), a	; F44115  ld (0x360a),A
 	ld	xwa, (13836:16)	; F44119  ld XWA,(0x360c)
@@ -93074,7 +93238,7 @@ sub_F440A0_Skip2:
 	pop	xwa	; F44121  pop XWA
 	ld	(13836:16), xwa	; F44122  ld (0x360c),XWA
 	call	T_EditScreen_BootPhase2And4	; F44126  call 0xf40300
-	calr	sub_F44237	; F4412A  calr 0xf44237
+	calr	SeqCycle_ResetSettings	; F4412A  calr 0xf44237
 	calr	Seq_ApplySongBeatsPerBar	; F4412D  calr 0xf44131
 	ret	; F44130  ret
 
@@ -93091,7 +93255,7 @@ sub_F440A0_Skip2:
 ; --------------------------------------------------------------------------
 ; Seq_ApplySongBeatsPerBar: Copies the song's beats per bar (workspace 0x6034D7) to TransportA_BeatsPerBar, (0xC3) and
 ;   the TIME SIG. field (0x0DE3). Run after a song is loaded or reset: BStore_BootPhase3, SeqFile_Load(AllBanks),
-;   S0ngSelectName_LoadSongFromBank, and sub_F44260 right after 0x6034D7 := 4. Basis: callers + body. (notes/naming-
+;   S0ngSelectName_LoadSongFromBank, and BStore_ResetWorkspaceToDefault right after 0x6034D7 := 4. Basis: callers + body. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave2_e.json)
 Seq_ApplySongBeatsPerBar:		; <- T_Seq_ApplySongBeatsPerBar
 	ld	a, (6304983:24)	; F44131  ld A,(0x6034d7)
@@ -93101,7 +93265,7 @@ Seq_ApplySongBeatsPerBar:		; <- T_Seq_ApplySongBeatsPerBar
 	ret	; F44142  ret
 
 ; --------------------------------------------------------------------------
-; sub_F44143
+; BStore_CopyByteD6ToAllBanks
 ; Called from: in-module: 0xF4410D
 ; Touches:   |  0x6034C8 0x6034D6 0x610000
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -93110,7 +93274,11 @@ Seq_ApplySongBeatsPerBar:		; <- T_Seq_ApplySongBeatsPerBar
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F44143:
+; BStore_CopyByteD6ToAllBanks: Copies workspace byte +0xD6 (0x6034D6) to the same offset of all ten bank images (bank
+;   n at 0x610000 + n*0xC00), keeping that byte identical in every bank. BStore_BootPhase3 zeroes (0x6034D6) and then
+;   calls it; sub_F4D238 ends with the same loop. What the byte holds is not established. Basis: caller + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave3_i.json)
+BStore_CopyByteD6ToAllBanks:
 	push	xwa	; F44143  push XWA
 	push	xix	; F44144  push XIX
 	push	xiy	; F44145  push XIY
@@ -93221,7 +93389,7 @@ sub_F441AB_Skip2:
 	ret	; F44236  ret
 
 ; --------------------------------------------------------------------------
-; sub_F44237
+; SeqCycle_ResetSettings
 ; Called from: in-module: 0xF4412A 0xF442B7
 ; Touches: (0x360B) (0x361E) (0x3620) (0x3622) (0x3624) (0x3627) (0x36CE)
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -93230,7 +93398,11 @@ sub_F441AB_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F44237:
+; SeqCycle_ResetSettings: CYCLE PLAY range (0x361E/0x3620) and CYCLE RECORD range (0x3622/0x3624) := measure 1..1,
+;   both CYCLE switches ((0x360B) bits 0/1) off, both screens' field cursors (0x3627, 0x36CE) := 0. Last step of
+;   BStore_BootPhase3 and of BStore_ResetWorkspaceToDefault. Basis: callers + body + the CYCLE screens' StageValues
+;   routines. (notes/naming-pilot-2026-10-06/proposals_wave3_i.json)
+SeqCycle_ResetSettings:
 	ldw	(13854:16), 1	; F44237  ld (0x361e),0x0001
 	ldw	(13856:16), 1	; F4423D  ld (0x3620),0x0001
 	ldw	(13858:16), 1	; F44243  ld (0x3622),0x0001
@@ -93259,7 +93431,7 @@ T_F44004_Nop:		; <- T_F44004
 ; Called from: in-module: 0xF44095 0xF455A0
 ; Touches: (0x20A9) (0x34D9) (0x3552) (0x360A) (0x360C)
 ; Calls:   sub_F45D19 sub_F45D80 BStore_ResetWorkspaceFields sub_F443CC T_F40C70 T_F40CB4
-;          T_NoteRouting_RebuildForSong BStore_SongName_LoadDefault Seq_ApplySongBeatsPerBar sub_F44237 T_EditScreen_BootPhase2And4
+;          T_NoteRouting_RebuildForSong BStore_SongName_LoadDefault Seq_ApplySongBeatsPerBar SeqCycle_ResetSettings T_EditScreen_BootPhase2And4
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44260 is an instruction boundary.
 ;           The name IS the address.
@@ -93293,7 +93465,7 @@ BStore_ResetWorkspaceToDefault:
 	ld	a, 4:opc	; F442AD  ld A,0x04
 	ld	(6304983:24), a	; F442AF  ld (0x6034d7),A
 	calr	Seq_ApplySongBeatsPerBar	; F442B4  calr 0xf44131
-	calr	sub_F44237	; F442B7  calr 0xf44237
+	calr	SeqCycle_ResetSettings	; F442B7  calr 0xf44237
 	call	T_EditScreen_BootPhase2And4	; F442BA  call 0xf40300
 	m_and_mi8 MB16, 0x20a9, 0xfe	; F442BE  and (0x20a9),0xfe
 	ret	; F442C3  ret
@@ -93397,7 +93569,7 @@ sub_F442DA_Loop3:
 ; BStore_ResetWorkspaceFields: Resets part of the song workspace from WorkspaceDefaults: bytes +0x00..+0x07
 ;   (0x5A5A5A5A 00 04 00 00) and +0x08 = 0, words +0x14..+0x1A, words +0x46..+0x50 cleared, and +0xC6 = 0xFF when
 ;   (0x7F4D) bit 2 else 0. Basis: callers + body -- run after a bank clear (SongClear_ClearBank), at STEP RECORD leave
-;   and from BStore_WriteCursorByte; sub_F44260's full reset calls it too. (notes/naming-
+;   and from BStore_WriteCursorByte; BStore_ResetWorkspaceToDefault's full reset calls it too. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave2_d.json)
 BStore_ResetWorkspaceFields:		; <- T_F40A1C, T_F40A8C
 	push	xix	; F44367  push XIX
@@ -93599,21 +93771,27 @@ sub_F44516_Skip2:
 	ret	; F44581  ret
 
 ; --------------------------------------------------------------------------
-; sub_F44582
-; Called from: T_F409C8 (x2)
+; Seq_MainLoopService
+; Called from: T_Seq_MainLoopService (x2)
 ; Touches: (0x207A) (0x207C) (0x2095) (0x3000) (0x349F) (0x34B2) (0x34D4)
 ;          (0x34D9) (0x3738) (0x373A) +1 more
 ; Calls:   sub_F44623 sub_F44809 sub_F4491C sub_F4493E sub_F4495A T_F40D14
 ;          sub_F45FCA Seq_LocateToSongPosition sub_F44964 T_F40BD0 sub_F44D94 Seq_StopPlaybackOnRequest
 ;          +1 more
-; Evidence: thunk slot T_F409C8 holds `jp 0x00F44582`, and 0xF44582 is an
+; Evidence: thunk slot T_Seq_MainLoopService holds `jp 0x00F44582`, and 0xF44582 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F44582:		; <- T_F409C8
+; Seq_MainLoopService: The sequencer's once-per-pass service: on Variant_Flag 2 zeroes the playing-track mask
+;   (0x60341E) and record mask (0x3000); runs the request consumers sub_F44623, sub_F44809 ((0x34D3) bit 0,
+;   Seq_RequestRewind's flag), Seq_LocateToSongPosition, Seq_StopPlaybackOnRequest ((0x34D2) bit 1) and others, then
+;   sub_F44E8E for each track 0..16 set in (0x3738)/(0x373A); ends (0x34B2) := (0x60341E). Called at the end of every
+;   MainTask_Loop pass and by Transport_StopWhileRecording. Basis: callers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_j.json)
+Seq_MainLoopService:		; <- T_Seq_MainLoopService
 	m_cp_mi8 MB8, Variant_Flag, 0x02	; F44582  cp (0xc4),0x02
 	jr	nz, sub_F44516_Skip3	; F44586  jr NZ,0xf44593
 	xor	xwa, xwa	; F44588  xor XWA,XWA
@@ -93720,7 +93898,7 @@ sub_F44623_Return:
 ; Called from: in-module: 0xF445D7
 ; Touches: (0x0C55) (0x0D4A) (0x207C) (0x3456) (0x3458) (0x345E) (0x349A)
 ;          (0x349C) (0x349F) (0x34BB) +3 more  |  0x000000
-; Calls:   Seq_RewindToStart_Veneer sub_F455E6 T_F40C90 sub_F45FE5 sub_F4477F T_F40B54
+; Calls:   Seq_RewindToStart_Veneer SeqMasterTrack_UpdateActive T_F40C90 sub_F45FE5 Seq_SeekTrackToBeatTick T_F40B54
 ;          TimedEventRing_Discard_Veneer Nop_CallsEmptyDirectorySlot_Veneer
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4466D is an instruction boundary.
@@ -93728,11 +93906,11 @@ sub_F44623_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Seq_LocateToSongPosition: from the sequencer tick (sub_F44582): when MidiIn_SongPositionHi bit 7 is set -- MidiIn_SongPosition stored a
+; Seq_LocateToSongPosition: from the sequencer tick (Seq_MainLoopService): when MidiIn_SongPositionHi bit 7 is set -- MidiIn_SongPosition stored a
 ;   received 0xF2 -- while (0x60341E) has tracks and transport B is stopped: TransportB_Beat = the 14-bit position
 ;   >> 2 (sixteenths to beats) and Seq_BeatTick = WorkspaceDefaults+0x77[position & 3] -- the bytes 0 / 24 / 48 / 72,
 ;   a sixteenth at 96 ticks a beat.  Position 0 goes to Seq_RewindToStart_Veneer; any other locates each of the 17 tracks
-;   (T_F40C90 per track, sub_F4477F) and collects the located ones in (0x349A) / (0x349C).  The pending bit is cleared
+;   (T_F40C90 per track, Seq_SeekTrackToBeatTick) and collects the located ones in (0x349A) / (0x349C).  The pending bit is cleared
 ;   at the end.  Basis: body + the writer's header (MidiIn_SongPosition).
 Seq_LocateToSongPosition:
 	bit	7, (MidiIn_SongPositionHi:8)	; F4466D  bit 7,(0xa5)
@@ -93769,7 +93947,7 @@ sub_F4466D_Skip:
 sub_F4466D_Skip2:
 	xor	xde, xde	; F446CF  xor XDE,XDE
 	ld	(13466:16), xde	; F446D1  ld (0x349a),XDE
-	calr	sub_F455E6	; F446D5  calr 0xf455e6
+	calr	SeqMasterTrack_UpdateActive	; F446D5  calr 0xf455e6
 	ld	(13471:16), 0	; F446D8  ld (0x349f),0x00
 sub_F4466D_Loop:
 	ld	a, (13471:16)	; F446DD  ld A,(0x349f)
@@ -93791,7 +93969,7 @@ sub_F4466D_Loop:
 sub_F4466D_Skip3:
 	ld	a, (Seq_BeatTick:8)	; F44710  ld A,(0x93)
 	ld	(13643:16), a	; F44713  ld (0x354b),A
-	calr	sub_F4477F	; F44717  calr 0xf4477f
+	calr	Seq_SeekTrackToBeatTick	; F44717  calr 0xf4477f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4471A  cp (0x0d4a),0x00
 	jr	nz, sub_F4466D_Skip5	; F4471F  jr NZ,0xf4474d
 	ld	c, (13471:16)	; F44721  ld C,(0x349f)
@@ -93831,7 +94009,7 @@ sub_F4466D_Join2:
 	ret	; F4477E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4477F
+; Seq_SeekTrackToBeatTick
 ; Called from: in-module: 0xF44717
 ; Touches: (0x0D4A) (0x345C) (0x345E) (0x354B)
 ; Calls:   T_BStore_ReadCursorByte T_F40C50
@@ -93841,7 +94019,11 @@ sub_F4466D_Join2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4477F:
+; Seq_SeekTrackToBeatTick: With the track cursor at the start of a beat: leaves it on the first event whose tick byte
+;   (the byte after its status byte) is >= (0x354B), or on the beat's closing 0x81 marker; BStore_ErrorCode := 1 when
+;   the 0x82 end tag comes first. Seq_LocateToSongPosition sets (0x354B) = Seq_BeatTick and calls it per track after
+;   seeking the beat. Basis: caller + body. (notes/naming-pilot-2026-10-06/proposals_wave3_h.json)
+Seq_SeekTrackToBeatTick:
 	ld	(BStore_ErrorCode:16), 0	; F4477F  ld (0x0d4a),0x00
 	m_cp_mi8 MB16, 0x354b, 0x00	; F44784  cp (0x354b),0x00
 	jr	nz, sub_F4477F_Skip	; F44789  jr NZ,0xf4479b
@@ -94342,7 +94524,7 @@ sub_F44AEE_Return:
 ; Called from: T_F40AAC (x2); in-module: 0xF44A3B 0xF44C4D
 ; Touches: (0x345B) (0x34BB) (0x34D2) (0x34D4) (0x355A)  |  0x000000
 ;          0x0033EA
-; Calls:   TimedEventRing_Discard sub_F44BE8 sub_F44B95
+; Calls:   TimedEventRing_Discard sub_F44BE8 Seq_ResetPositionToSongStart
 ; Evidence: thunk slot T_F40AAC holds `jp 0x00F44B2D`, and 0xF44B2D is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -94383,12 +94565,12 @@ sub_F44B2D_Skip:
 	calr	sub_F44BE8	; F44B8C  calr 0xf44be8
 	jr	sub_F44B2D_Return	; F44B8F  jr T,0xf44b94
 sub_F44B2D_Skip2:
-	calr	sub_F44B95	; F44B91  calr 0xf44b95
+	calr	Seq_ResetPositionToSongStart	; F44B91  calr 0xf44b95
 sub_F44B2D_Return:
 	ret	; F44B94  ret
 
 ; --------------------------------------------------------------------------
-; sub_F44B95
+; Seq_ResetPositionToSongStart
 ; Called from: in-module: 0xF44B91 0xF4510E 0xF45B44
 ; Touches: (0x3456) (0x3458) (0x345B) (0x34D0) (0x34D9) (0x3552)  |
 ;          0x0033EA
@@ -94399,7 +94581,12 @@ sub_F44B2D_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F44B95:
+; Seq_ResetPositionToSongStart: Song position := the start: (0x345B), TransportB_Beat, Seq_BeatTick and the 17 per-
+;   track beat words at 0x33EA := 0, (0x3458) := TransportA_BeatsPerBar, (0x3456) := 0, current measure (0x3552) := 1
+;   unless (0x34D9) b1; then TimedEventRing_Discard and the per-track re-arm calls. The shared tail of
+;   Seq_RewindToStart and Seq_RewindAfterSongLoad. Basis: callers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_g.json)
+Seq_ResetPositionToSongStart:
 	ld	(13403:16), 0	; F44B95  ld (0x345b),0x00
 	ldw	(TransportB_Beat:8), 0:io	; F44B9A  ld (0x91),0x0000
 	ld	(Seq_BeatTick:8), 0:io	; F44B9E  ld (0x93),0x00
@@ -94480,7 +94667,7 @@ sub_F44C15:
 ; sub_F44C37
 ; Called from: in-module: 0xF44C1E
 ; Touches: (0x0C05)
-; Calls:   sub_F45BD3 T_PartNotes_ReleaseAllTrackNotes T_F41F18 sub_F44B2D
+; Calls:   Seq_LocateToCurrentMeasure T_PartNotes_ReleaseAllTrackNotes T_F41F18 sub_F44B2D
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44C37 is an instruction boundary.
 ;           The name IS the address.
@@ -94491,7 +94678,7 @@ sub_F44C37:
 	m_bit 7, MD16, 0x0c05	; F44C37  bit 7,(0x0c05)
 	jr	z, sub_F44C37_Return	; F44C3B  jr Z,0xf44c50
 	ld	(3077:16), 0	; F44C3D  ld (0x0c05),0x00
-	calr	sub_F45BD3	; F44C42  calr 0xf45bd3
+	calr	Seq_LocateToCurrentMeasure	; F44C42  calr 0xf45bd3
 	call	T_PartNotes_ReleaseAllTrackNotes	; F44C45  call 0xf413c8
 	call	T_F41F18	; F44C49  call 0xf41f18
 	calr	sub_F44B2D	; F44C4D  calr 0xf44b2d
@@ -95058,7 +95245,7 @@ sub_F450B2_Return:
 ; Seq_RewindAfterSongLoad
 ; Called from: T_Seq_RewindAfterSongLoad (x4)
 ; Touches: (0x3008) (0x300C) (0x34BB) (0x34D4)
-; Calls:   sub_F45119 sub_F44B95 sub_F4598A T_NoteRouting_RebuildForSong
+; Calls:   Seq_ApplyLoadedSongSetup Seq_ResetPositionToSongStart sub_F4598A T_NoteRouting_RebuildForSong
 ; Evidence: thunk slot T_Seq_RewindAfterSongLoad holds `jp 0x00F450F7`, and 0xF450F7 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -95066,7 +95253,7 @@ sub_F450B2_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Seq_RewindAfterSongLoad: Zeroes (0x3008)/(0x300C), sub_F45119, clears (0x34BB) b3 and (0x34D4) b2, sub_F44B95 (beat
+; Seq_RewindAfterSongLoad: Zeroes (0x3008)/(0x300C), Seq_ApplyLoadedSongSetup, clears (0x34BB) b3 and (0x34D4) b2, Seq_ResetPositionToSongStart (beat
 ;   counters 0, measure 1, TimedEventRing_Discard), sub_F4598A, NoteRouting_RebuildForSong: Seq_RewindToStart's steps
 ;   plus the route rebuild. Called right after SeqFile_Load / SeqFile_LoadAllBanks load a song and by Medley_Tick
 ;   before the next INT song starts. Basis: callers + body + sibling. (notes/naming-
@@ -95075,16 +95262,16 @@ Seq_RewindAfterSongLoad:		; <- T_Seq_RewindAfterSongLoad
 	xor	xwa, xwa	; F450F7  xor XWA,XWA
 	ld	(12296:16), xwa	; F450F9  ld (0x3008),XWA
 	ld	(12300:16), xwa	; F450FD  ld (0x300c),XWA
-	calr	sub_F45119	; F45101  calr 0xf45119
+	calr	Seq_ApplyLoadedSongSetup	; F45101  calr 0xf45119
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F45104  and (0x34bb),0xf7
 	m_and_mi8 MB16, 0x34d4, 0xfb	; F45109  and (0x34d4),0xfb
-	calr	sub_F44B95	; F4510E  calr 0xf44b95
+	calr	Seq_ResetPositionToSongStart	; F4510E  calr 0xf44b95
 	calr	sub_F4598A	; F45111  calr 0xf4598a
 	call	T_NoteRouting_RebuildForSong	; F45114  call 0xf411b8
 	ret	; F45118  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45119
+; Seq_ApplyLoadedSongSetup
 ; Called from: in-module: 0xF45101
 ; Touches: (0x124C) (0x207A) (0x220B) (0x34BB) (0x7F4D)  |  0x000000
 ; Calls:   sub_F4598A T_F40CB4 T_F42578 sub_F448A3 T_Queue2C00_AppendRegs T_Queue2C00_DrainPassAB
@@ -95094,7 +95281,12 @@ Seq_RewindAfterSongLoad:		; <- T_Seq_RewindAfterSongLoad
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45119:
+; Seq_ApplyLoadedSongSetup: After a song load, when its playing-track mask (0x60341E) is non-zero: restores the song's
+;   stored parameter image (T_F42578), on the SEQUENCER MEDLEY latch with source 0 applies its stored tempo
+;   (sub_F448A3), and sets GM mode (0x7F4D) bit 2 from the song's GM flag (0x6034C6 == 0xFF), posting the record-0x91
+;   byte-3 bit-2 event. First clears (0x34BB) bit 3 and runs sub_F4598A. Run by Seq_RewindAfterSongLoad. Basis: caller
+;   + body + the store twin. (notes/naming-pilot-2026-10-06/proposals_wave3_i.json)
+Seq_ApplyLoadedSongSetup:
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F45119  and (0x34bb),0xf7
 	calr	sub_F4598A	; F4511E  calr 0xf4598a
 	call	T_F40CB4	; F45121  call 0xf40cb4
@@ -95468,7 +95660,7 @@ sub_F453E9_Skip2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Seq_RequestRewind: If any track plays ((0x60341E) non-zero) and transport B is stopped, sets (0x34D3) bit 0; the
-;   sequencer tick (sub_F44582 -> sub_F44809) consumes it and moves to the cycle start measure or calls
+;   sequencer tick (Seq_MainLoopService -> sub_F44809) consumes it and moves to the cycle start measure or calls
 ;   Seq_RewindToStart. Called after the song changes: edit-job OnLeave handlers, song load, SMF read. Basis: callers +
 ;   body + consumer. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
 Seq_RequestRewind:		; <- T_Seq_RequestRewind
@@ -95482,18 +95674,22 @@ sub_F4542D_Return:
 	ret	; F45444  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45445
-; Called from: T_F409E4 (x1)
+; Seq_RewindOnMidiStart
+; Called from: T_Seq_RewindOnMidiStart (x1)
 ; Touches: (0x34D0)  |  0x000000
 ; Calls:   Seq_RewindToStart
-; Evidence: thunk slot T_F409E4 holds `jp 0x00F45445`, and 0xF45445 is an
+; Evidence: thunk slot T_Seq_RewindOnMidiStart holds `jp 0x00F45445`, and 0xF45445 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45445:		; <- T_F409E4
+; Seq_RewindOnMidiStart: When tracks play ((0x60341E) non-zero) Seq_RewindToStart; then clears (0x34D0) bit 5, the
+;   flag MIDI_RT_Start sets on a received MIDI Start (0xFA). TimedEvents_Service runs it, followed by
+;   MIDI_Clock_CatchUpIfAnySlot, whenever it finds that bit set. Basis: caller + body + the flag's setter.
+;   (notes/naming-pilot-2026-10-06/proposals_wave3_j.json)
+Seq_RewindOnMidiStart:		; <- T_Seq_RewindOnMidiStart
 	ld	xwa, (6304798:24)	; F45445  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4544A  cp XWA,0x00000000
 	jr	z, sub_F4542D_Skip	; F45450  jr Z,0xf45455
@@ -95587,18 +95783,22 @@ sub_F45478:
 	ret	; F45488  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45489
-; Called from: T_F409F4 (x2)
+; Seq_RestoreTrackMaskAndRewind
+; Called from: T_Seq_RestoreTrackMaskAndRewind (x2)
 ; Touches: (0x3010)  |  0x000000
 ; Calls:   T_F40CB4 Seq_RewindToStart T_NoteRouting_RebuildForSong
-; Evidence: thunk slot T_F409F4 holds `jp 0x00F45489`, and 0xF45489 is an
+; Evidence: thunk slot T_Seq_RestoreTrackMaskAndRewind holds `jp 0x00F45489`, and 0xF45489 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45489:		; <- T_F409F4
+; Seq_RestoreTrackMaskAndRewind: Song track mask (0x60341E) := the copy in (0x3010) that Seq_SaveTrackMaskAndStopAll saved; when non-
+;   zero, Seq_RewindToStart and NoteRouting_RebuildForSong. The Leave half of screen 0xF43040 (via
+;   BStore_AppendBytes_Join4_Veneer, which then clears (0x34BB) b2); its Enter half saves the mask and stops
+;   transports. Basis: callers + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave3_g.json)
+Seq_RestoreTrackMaskAndRewind:		; <- T_Seq_RestoreTrackMaskAndRewind
 	ld	xwa, (12304:16)	; F45489  ld XWA,(0x3010)
 	ld	(6304798:24), xwa	; F4548D  ld (0x60341e),XWA
 	call	T_F40CB4	; F45492  call 0xf40cb4
@@ -95610,18 +95810,22 @@ sub_F45478_Return:
 	ret	; F454A5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F454A6
-; Called from: T_F409F8 (x2)
+; Seq_SaveTrackMaskAndStopAll
+; Called from: T_Seq_SaveTrackMaskAndStopAll (x2)
 ; Touches: (0x3010)
 ; Calls:   sub_F455CC
-; Evidence: thunk slot T_F409F8 holds `jp 0x00F454A6`, and 0xF454A6 is an
+; Evidence: thunk slot T_Seq_SaveTrackMaskAndStopAll holds `jp 0x00F454A6`, and 0xF454A6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F454A6:		; <- T_F409F8
+; Seq_SaveTrackMaskAndStopAll: (0x3010) := the playing-track mask (0x60341E), then sub_F455CC:
+;   Transport_StopAllRunning, (0x3008)/(0x300C) := 0, TimedEventRing_Discard, (0x34D2) bit 1, (0xA8) := 0. Reached
+;   from ModeEnter_Edit; the leave path's Seq_RestoreTrackMaskAndRewind (T_Seq_RestoreTrackMaskAndRewind) restores the mask from (0x3010) and rewinds. Basis:
+;   caller chain + body + undo twin. (notes/naming-pilot-2026-10-06/proposals_wave3_h.json)
+Seq_SaveTrackMaskAndStopAll:		; <- T_Seq_SaveTrackMaskAndStopAll
 	ld	xwa, (6304798:24)	; F454A6  ld XWA,(0x60341e)
 	ld	(12304:16), xwa	; F454AB  ld (0x3010),XWA
 	calr	sub_F455CC	; F454AF  calr 0xf455cc
@@ -95681,18 +95885,22 @@ sub_F454B3_Epilogue:
 	ret	; F45523  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45524
-; Called from: T_F40A0C (x1)
+; TimedEvents_ClearEndedTrackBits
+; Called from: T_TimedEvents_ClearEndedTrackBits (x1)
 ; Touches: (0x3008) (0x300A) (0x349A) (0x349C)  |  0x600800
 ; Calls:   T_F40C7C T_F40C80
-; Evidence: thunk slot T_F40A0C holds `jp 0x00F45524`, and 0xF45524 is an
+; Evidence: thunk slot T_TimedEvents_ClearEndedTrackBits holds `jp 0x00F45524`, and 0xF45524 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45524:		; <- T_F40A0C
+; TimedEvents_ClearEndedTrackBits: Class-3 consumer of TimedEvents_DispatchDueRun (status 0x82, the block store's end-
+;   of-chain tag): for each {0x82, n} in the run clears bit n of (0x3008)/(0x300A) and of (0x349A)/(0x349C) (n >= 16
+;   in the second word), until the run end (ring+4); a run not starting with 0x82 is skipped (read index := run end).
+;   Basis: caller + body. (notes/naming-pilot-2026-10-06/proposals_wave3_i.json)
+TimedEvents_ClearEndedTrackBits:		; <- T_TimedEvents_ClearEndedTrackBits
 	push	xwa	; F45524  push XWA
 	push	xbc	; F45525  push XBC
 	push	xde	; F45526  push XDE
@@ -95787,7 +95995,7 @@ Sequencer_ResetToDefault:		; <- T_Sequencer_ResetToDefault
 ; sub_F455C5
 ; Called from: T_F40A20 (x3)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F455E6 sub_F455CC
+; Calls:   SeqMasterTrack_UpdateActive sub_F455CC
 ; Evidence: thunk slot T_F40A20 holds `jp 0x00F455C5`, and 0xF455C5 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -95796,7 +96004,7 @@ Sequencer_ResetToDefault:		; <- T_Sequencer_ResetToDefault
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F455C5:		; <- T_F40A20
-	calr	sub_F455E6	; F455C5  calr 0xf455e6
+	calr	SeqMasterTrack_UpdateActive	; F455C5  calr 0xf455e6
 	calr	sub_F455CC	; F455C8  calr 0xf455cc
 	ret	; F455CB  ret
 
@@ -95822,17 +96030,22 @@ sub_F455CC:
 	ret	; F455E5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F455E6
-; Called from: T_F40AA8 (x5); in-module: 0xF446D5 0xF455C5 0xF45C18 0xF45CD1
+; SeqMasterTrack_UpdateActive
+; Called from: T_SeqMasterTrack_UpdateActive (x5); in-module: 0xF446D5 0xF455C5 0xF45C18 0xF45CD1
 ; Touches: (0x0C8A) (0x0E4F) (0x0E51) (0x3752)  |  0x603422 0x603500
-; Evidence: thunk slot T_F40AA8 holds `jp 0x00F455E6`, and 0xF455E6 is an
+; Evidence: thunk slot T_SeqMasterTrack_UpdateActive holds `jp 0x00F455E6`, and 0xF455E6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F455E6:		; <- T_F40AA8
+; SeqMasterTrack_UpdateActive: Finds the track whose BStore_TrackToPart entry is 0x20 (the master track's part; the
+;   identity map gives it to track 17); if it is in the song's track mask, MASTER is ON ((0x3752) = 1) and its
+;   directory entry is in use: (0x0E51) := track + 1, (0x0E4F) |= 1, (0x0C8A) |= 4; otherwise those bits cleared and W
+;   = 0. Called by Seq_LocateToSongPosition, the measure locate Seq_LocateToCurrentMeasure and the edit seeks (T_SeqMasterTrack_UpdateActive). Basis:
+;   caller + body + flag owners. (notes/naming-pilot-2026-10-06/proposals_wave3_g.json)
+SeqMasterTrack_UpdateActive:		; <- T_SeqMasterTrack_UpdateActive
 	ld	xix, BStore_TrackToPart	; F455E6  ld XIX,0x00603422
 	xor	bc, bc	; F455EB  xor BC,BC
 	ld	c, 17:opc	; F455ED  ld C,0x11
@@ -95969,18 +96182,22 @@ sub_F455E6_Return2:
 	ret	; F456EB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F456EC
-; Called from: T_F40A24 (x2)
+; SeqRecord_StartOnFirstEvent
+; Called from: T_SeqRecord_StartOnFirstEvent (x2)
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F456F0
-; Evidence: thunk slot T_F40A24 holds `jp 0x00F456EC`, and 0xF456EC is an
+; Evidence: thunk slot T_SeqRecord_StartOnFirstEvent holds `jp 0x00F456EC`, and 0xF456EC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F456EC:		; <- T_F40A24
+; SeqRecord_StartOnFirstEvent: sub_F456F0: when no track plays, tracks are armed ((0x3000) != 0), transport B is idle,
+;   recording has not begun ((0x3004) == 0) and the sequencer buffer ring holds an event: sub_F45761 starts the take
+;   ((0x3004) := (0x3000)), then beat/tick := 0 and T_Transport_StartAllFromZero. Called by the event encoders' tail
+;   after an event is queued. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave3_h.json)
+SeqRecord_StartOnFirstEvent:		; <- T_SeqRecord_StartOnFirstEvent
 	calr	sub_F456F0	; F456EC  calr 0xf456f0
 	ret	; F456EF  ret
 
@@ -96521,7 +96738,7 @@ TimedEventRing_Discard:		; <- T_TimedEventRing_Discard
 ; Seq_RewindToStart
 ; Called from: in-module: 0xF44890 0xF45452 0xF4549E 0xF45C07
 ; Touches: (0x3008) (0x300C) (0x34BB) (0x34D0)
-; Calls:   sub_F459AA sub_F44B95
+; Calls:   sub_F459AA Seq_ResetPositionToSongStart
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF45B1F is an instruction boundary.
 ;           The name IS the address.
@@ -96529,7 +96746,7 @@ TimedEventRing_Discard:		; <- T_TimedEventRing_Discard
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Seq_RewindToStart: under ei 6 TransportB_Beat = 0 and Seq_BeatTick = 0; unless (0x34D0) bit 5, the 32-bit (0x3008) and (0x300C) = 0;
-;   (0x34BB) bit 3 cleared, sub_F459AA, sub_F44B95.  Seq_LocateToSongPosition calls it (through the veneer
+;   (0x34BB) bit 3 cleared, sub_F459AA, Seq_ResetPositionToSongStart.  Seq_LocateToSongPosition calls it (through the veneer
 ;   Seq_RewindToStart_Veneer) for a received position of 0.  Basis: body + caller.
 Seq_RewindToStart:
 	ei	6	; F45B1F  ei 0x06
@@ -96546,7 +96763,7 @@ sub_F45B1F_Skip:
 	calr	sub_F459AA	; F45B3F  calr 0xf459aa
 	jr	sub_F45B1F_Join	; F45B42  jr T,0xf45b44
 sub_F45B1F_Join:
-	calr	sub_F44B95	; F45B44  calr 0xf44b95
+	calr	Seq_ResetPositionToSongStart	; F45B44  calr 0xf44b95
 	ret	; F45B47  ret
 
 ; --------------------------------------------------------------------------
@@ -96632,35 +96849,45 @@ sub_F45B6E:
 	ret	; F45BCC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45BCD
-; Called from: T_F40AB0 (x1)
+; SeqCycle_LocateTracksToCurrentMeasure
+; Called from: T_SeqCycle_LocateTracksToCurrentMeasure (x1)
 ; Touches: (0x3735)
-; Evidence: thunk slot T_F40AB0 holds `jp 0x00F45BCD`, and 0xF45BCD is an
+; Evidence: thunk slot T_SeqCycle_LocateTracksToCurrentMeasure holds `jp 0x00F45BCD`, and 0xF45BCD is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45BCD:		; <- T_F40AB0
+; SeqCycle_LocateTracksToCurrentMeasure: (0x3735) bit 0 := 1, then Seq_LocateToCurrentMeasure's body: every track sought to the
+;   current measure (0x3552) by BStore_SeekChainToMeasure, beats per bar / beat latched, located tracks in
+;   (0x349A)/(0x349C), (0x34BB) b3 set; measure 1 or a count-in rewinds instead. Bit 0 picks the cycle variants
+;   (sub_F45B48, (0x3759)). SeqCycle_LocateToStart's 'locates every track there'. Basis: caller + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_g.json)
+SeqCycle_LocateTracksToCurrentMeasure:		; <- T_SeqCycle_LocateTracksToCurrentMeasure
 	m_set 0, MD16, 0x3735	; F45BCD  set 0,(0x3735)
 	jr	sub_F45BD3_Join	; F45BD1  jr T,0xf45bd7
 
 ; --------------------------------------------------------------------------
-; sub_F45BD3
-; Called from: T_F409DC (x1); in-module: 0xF44C42
+; Seq_LocateToCurrentMeasure
+; Called from: T_Seq_LocateToCurrentMeasure (x1); in-module: 0xF44C42
 ; Touches: (0x0C90) (0x0D4A) (0x3456) (0x3458) (0x345E) (0x349A) (0x349C)
 ;          (0x349F) (0x34BB) (0x34D4) +6 more  |  0x000000
-; Calls:   Seq_RewindToStart sub_F45B48 sub_F44CA7 sub_F455E6 T_BStore_SeekChainToMeasure T_F40B54
+; Calls:   Seq_RewindToStart sub_F45B48 sub_F44CA7 SeqMasterTrack_UpdateActive T_BStore_SeekChainToMeasure T_F40B54
 ;          TimedEventRing_Discard Nop_CallsEmptyDirectorySlot
-; Evidence: thunk slot T_F409DC holds `jp 0x00F45BD3`, and 0xF45BD3 is an
+; Evidence: thunk slot T_Seq_LocateToCurrentMeasure holds `jp 0x00F45BD3`, and 0xF45BD3 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45BD3:		; <- T_F409DC
+; Seq_LocateToCurrentMeasure: Locates every track to the current measure (0x3552): measure <= 1 rewinds
+;   (Seq_RewindToStart), else each of the 17 tracks is sought there (T_BStore_SeekChainToMeasure, master track from
+;   SeqMasterTrack_UpdateActive), beats per bar and TransportB_Beat set, located tracks collected in (0x349A)/(0x349C) -> (0x36C6),
+;   (0x34BB) bit 3 set. SeqCycle_LocateToStart enters at SeqCycle_LocateTracksToCurrentMeasure. Basis: body + entry twin + sibling.
+;   (notes/naming-pilot-2026-10-06/proposals_wave3_h.json)
+Seq_LocateToCurrentMeasure:		; <- T_Seq_LocateToCurrentMeasure
 	m_res 0, MD16, 0x3735	; F45BD3  res 0,(0x3735)
 sub_F45BD3_Join:
 	m_bit 0, MD16, 0x34d9	; F45BD7  bit 0,(0x34d9)
@@ -96689,7 +96916,7 @@ sub_F45BD3_Join2:
 	ld	(168:8), 0:io	; F45C12  ld (0xa8),0x00
 	jrl	sub_F45BD3_Join4	; F45C15  jrl T,0xf45cb6
 sub_F45BD3_Skip4:
-	calr	sub_F455E6	; F45C18  calr 0xf455e6
+	calr	SeqMasterTrack_UpdateActive	; F45C18  calr 0xf455e6
 sub_F45BD3_Loop:
 	ld	a, (13471:16)	; F45C1B  ld A,(0x349f)
 	inc	1, a	; F45C1F  inc 1,A
@@ -96750,22 +96977,27 @@ sub_F45BD3_Join4:
 	ret	; F45CC3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45CC4
-; Called from: T_F40A9C (x3)
+; SeqTrackCursors_LocateAllToCurrentMeasure
+; Called from: T_SeqTrackCursors_LocateAllToCurrentMeasure (x3)
 ; Touches: (0x0C90) (0x0D4A) (0x345E) (0x349F) (0x34BB) (0x3552)
-; Calls:   sub_F455E6 T_BStore_SeekChainToMeasure T_F40B54
-; Evidence: thunk slot T_F40A9C holds `jp 0x00F45CC4`, and 0xF45CC4 is an
+; Calls:   SeqMasterTrack_UpdateActive T_BStore_SeekChainToMeasure T_F40B54
+; Evidence: thunk slot T_SeqTrackCursors_LocateAllToCurrentMeasure holds `jp 0x00F45CC4`, and 0xF45CC4 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45CC4:		; <- T_F40A9C
+; SeqTrackCursors_LocateAllToCurrentMeasure: Seeks each of the 17 tracks' chains (track + 1) to the current measure
+;   (0x3552) with BStore_SeekChainToMeasure (meter source chosen first by SeqMasterTrack_UpdateActive) and stores the cursor as that
+;   track's saved cursor (0x3460/0x3482 via sub_F483B2); a track whose seek fails keeps its cursor. Clears (0x34BB)
+;   bit 2. SeqCycle_CaptureEndCursors runs it to locate to CYCLE END + 1. Basis: callers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_i.json)
+SeqTrackCursors_LocateAllToCurrentMeasure:		; <- T_SeqTrackCursors_LocateAllToCurrentMeasure
 	ld	(13471:16), 0	; F45CC4  ld (0x349f),0x00
 	ld	wa, (13650:16)	; F45CC9  ld WA,(0x3552)
 	ld	(3216:16), wa	; F45CCD  ld (0x0c90),WA
-	calr	sub_F455E6	; F45CD1  calr 0xf455e6
+	calr	SeqMasterTrack_UpdateActive	; F45CD1  calr 0xf455e6
 sub_F45BD3_Loop2:
 	ld	a, (13471:16)	; F45CD4  ld A,(0x349f)
 	inc	1, a	; F45CD8  inc 1,A
@@ -96806,18 +97038,24 @@ Nop_CallsEmptyDirectorySlot:
 	ret	; F45D08  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45D09
-; Called from: T_F40A28 (x1)
+; SeqRecord_TerminateTracksIfRecording
+; Called from: T_SeqRecord_TerminateTracksIfRecording (x1)
 ; Touches: (0x3000)  |  0x000000
 ; Calls:   sub_F453E9
-; Evidence: thunk slot T_F40A28 holds `jp 0x00F45D09`, and 0xF45D09 is an
+; Evidence: thunk slot T_SeqRecord_TerminateTracksIfRecording holds `jp 0x00F45D09`, and 0xF45D09 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45D09:		; <- T_F40A28
+; SeqRecord_TerminateTracksIfRecording: If the record mask (0x3000) is non-zero, sub_F453E9: for each track in
+;   (0x3004)/(0x3006), T_F40BC0, sub_F458FE -- a 0x81 beat mark and the 0x82 end tag at its cursor, the cursor saved
+;   as the track's entry in 0x60347E / 0x6034A0 -- and T_F40BC4; sub_F45348 (T_F409D8, which RealtimeRecord_Disarm
+;   calls) runs the same pass. NMI_PowerFail_SaveAndHalt calls it, so a song being recorded is closed before the
+;   power-fail checksums. Basis: caller + body + the tag meanings. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_j.json)
+SeqRecord_TerminateTracksIfRecording:		; <- T_SeqRecord_TerminateTracksIfRecording
 	ld	xwa, (12288:16)	; F45D09  ld XWA,(0x3000)
 	cp	xwa, 0	; F45D0D  cp XWA,0x00000000
 	jr	z, Nop_CallsEmptyDirectorySlot_Return	; F45D13  jr Z,0xf45d18
@@ -99375,7 +99613,7 @@ sub_F4840E_Nop:
 ; Touches: (0x207A) (0x2095) (0x349A) (0x349C) (0x349F) (0x34D4) (0x3552)
 ;          (0x361E) (0x3622) (0x36C6) +2 more  |  0x003460 0x003482 0x00362A
 ;          0x00364C
-; Calls:   SeqTrackCursors_ResetAll T_F40AB0 T_F40BE4 sub_F47804 T_Nop_CallsEmptyDirectorySlot_Veneer T_PartNotes_ReleaseAllTrackNotes
+; Calls:   SeqTrackCursors_ResetAll T_SeqCycle_LocateTracksToCurrentMeasure T_F40BE4 sub_F47804 T_Nop_CallsEmptyDirectorySlot_Veneer T_PartNotes_ReleaseAllTrackNotes
 ;          T_F41F18
 ; Evidence: thunk slot T_SeqCycle_LocateToStart holds `jp 0x00F48464`, and 0xF48464 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -99385,7 +99623,7 @@ sub_F4840E_Nop:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SeqCycle_LocateToStart: (0x3552), the CURRENT MEASURE, := the CYCLE START MEASURE (CyclePlay's 0x361E, or
-;   CycleRecord's 0x3622 when UI_ScreenLatch is 6/8); locates every track there (T_F40AB0 with the playing mask forced
+;   CycleRecord's 0x3622 when UI_ScreenLatch is 6/8); locates every track there (T_SeqCycle_LocateTracksToCurrentMeasure with the playing mask forced
 ;   to all ones), saves the 17 track cursors 0x3460/0x3482 to 0x362A/0x364C (restored at the cycle wrap), releases
 ;   notes and resets controllers. Basis: callers + DL captions + body. (wsa1/notes/naming-
 ;   pilot-2026-10-06/proposals_prom_b.json)
@@ -99406,7 +99644,7 @@ sub_F48463_Join:
 	push	xwa	; F4848D  push XWA
 	ld	xwa, 4294967295	; F4848E  ld XWA,0xffffffff
 	ld	(6304798:24), xwa	; F48493  ld (0x60341e),XWA
-	call	T_F40AB0	; F48498  call 0xf40ab0
+	call	T_SeqCycle_LocateTracksToCurrentMeasure	; F48498  call 0xf40ab0
 	pop	xwa	; F4849C  pop XWA
 	ld	(6304798:24), xwa	; F4849D  ld (0x60341e),XWA
 	m_cp_mi16 MW16, 0x3552, 0x0001	; F484A2  cp (0x3552),0x0001
@@ -99495,7 +99733,7 @@ sub_F48463_Skip5:
 ; Called from: T_SeqCycle_CaptureEndCursors (x13)
 ; Touches: (0x207A) (0x3552) (0x3620) (0x3624)  |  0x003460 0x003482
 ;          0x00365E 0x003680
-; Calls:   sub_F4869B SeqTrackCursors_ResetAll T_F40A9C sub_F485D7 sub_F486BA
+; Calls:   sub_F4869B SeqTrackCursors_ResetAll T_SeqTrackCursors_LocateAllToCurrentMeasure sub_F485D7 sub_F486BA
 ; Evidence: thunk slot T_SeqCycle_CaptureEndCursors holds `jp 0x00F48580`, and 0xF48580 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -99523,7 +99761,7 @@ sub_F48463_Join4:
 	inc	1, wa	; F485A0  inc 1,WA
 	ld	(13650:16), wa	; F485A2  ld (0x3552),WA
 	calr	SeqTrackCursors_ResetAll	; F485A6  calr 0xf486d9
-	call	T_F40A9C	; F485A9  call 0xf40a9c
+	call	T_SeqTrackCursors_LocateAllToCurrentMeasure	; F485A9  call 0xf40a9c
 	calr	sub_F485D7	; F485AD  calr 0xf485d7
 	ldw	bc, 17	; F485B0  ld BC,0x0011
 	ld	xde, 13918	; F485B3  ld XDE,0x0000365e
@@ -99721,7 +99959,7 @@ sub_F486D9_Loop2:
 ; Called from: T_F40B70 (x1)
 ; Touches: (0x349F) (0x3552) (0x3622) (0x36D6)  |  0x003460 0x003482
 ;          0x00362A 0x00364C
-; Calls:   T_F40A9C sub_F47804
+; Calls:   T_SeqTrackCursors_LocateAllToCurrentMeasure sub_F47804
 ; Evidence: thunk slot T_F40B70 holds `jp 0x00F48707`, and 0xF48707 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -99738,7 +99976,7 @@ sub_F48707:		; <- T_F40B70
 	push	xwa	; F48719  push XWA
 	ld	xwa, 4294967295	; F4871A  ld XWA,0xffffffff
 	ld	(6304798:24), xwa	; F4871F  ld (0x60341e),XWA
-	call	T_F40A9C	; F48724  call 0xf40a9c
+	call	T_SeqTrackCursors_LocateAllToCurrentMeasure	; F48724  call 0xf40a9c
 	pop	xwa	; F48728  pop XWA
 	ld	(6304798:24), xwa	; F48729  ld (0x60341e),XWA
 	m_cp_mi16 MW16, 0x3552, 0x0001	; F4872E  cp (0x3552),0x0001
@@ -99786,7 +100024,7 @@ sub_F486D9_Skip2:
 ; sub_F487A7
 ; Called from: T_F40B74 (x1)
 ; Touches: (0x3552) (0x3624)  |  0x003460 0x003482 0x00365E 0x003680
-; Calls:   sub_F4869B SeqTrackCursors_ResetAll T_F40A9C sub_F485D7 sub_F486BA
+; Calls:   sub_F4869B SeqTrackCursors_ResetAll T_SeqTrackCursors_LocateAllToCurrentMeasure sub_F485D7 sub_F486BA
 ; Evidence: thunk slot T_F40B74 holds `jp 0x00F487A7`, and 0xF487A7 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -99802,7 +100040,7 @@ sub_F487A7:		; <- T_F40B74
 	inc	1, wa	; F487B3  inc 1,WA
 	ld	(13650:16), wa	; F487B5  ld (0x3552),WA
 	calr	SeqTrackCursors_ResetAll	; F487B9  calr 0xf486d9
-	call	T_F40A9C	; F487BC  call 0xf40a9c
+	call	T_SeqTrackCursors_LocateAllToCurrentMeasure	; F487BC  call 0xf40a9c
 	calr	sub_F485D7	; F487C0  calr 0xf485d7
 	ldw	bc, 17	; F487C3  ld BC,0x0011
 	ld	xde, 13918	; F487C6  ld XDE,0x0000365e
@@ -102627,18 +102865,23 @@ sub_F4A56C:
 	ret	; F4A57D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4A57E
-; Called from: T_F40BD8 (x3)
+; SeqRecord_SaveCursorBaseline
+; Called from: T_SeqRecord_SaveCursorBaseline (x3)
 ; Touches: (0x36FA) (0x36FC)
 ; Calls:   sub_F4A58E
-; Evidence: thunk slot T_F40BD8 holds `jp 0x00F4A57E`, and 0xF4A57E is an
+; Evidence: thunk slot T_SeqRecord_SaveCursorBaseline holds `jp 0x00F4A57E`, and 0xF4A57E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4A57E:		; <- T_F40BD8
+; SeqRecord_SaveCursorBaseline: Copies the 17 saved track cursors (workspace +0x7E block words, +0xA0 offsets) to the
+;   backup 0x36FE/0x3720 that sub_F4B414 restores before each cycle-record pass, then sets the take-chain heads
+;   0x36FA/0x36FC to 0xFFFF without freeing them. Run on entering REALTIME RECORD and on both stop arms of
+;   Transport_StopWhileRecording. Basis: callers + body + restore/free siblings. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_h.json)
+SeqRecord_SaveCursorBaseline:		; <- T_SeqRecord_SaveCursorBaseline
 	calr	sub_F4A58E	; F4A57E  calr 0xf4a58e
 	ldw	(14074:16), 65535	; F4A581  ld (0x36fa),0xffff
 	ldw	(14076:16), 65535	; F4A587  ld (0x36fc),0xffff
@@ -102680,7 +102923,7 @@ sub_F4A58E:
 ; CycleRecord_SetUpRecordTrack: Clears (0x3731) bit 0, then sub_F4A5B5: if the record mask (0x3000) is non-zero, the
 ;   lowest armed track becomes (0x36D6), gets its bit in (0x60341E), and has its block-store cursors placed at cycle-
 ;   record start (0x3622) and end+1 (0x3624) by sub_F4A756. Every caller runs it only with cycle record on: (0x360B)
-;   bit 1 tested directly, or sub_F4E30F returning 0 (screen 6/8 + that bit). Basis: callers + body. (notes/naming-
+;   bit 1 tested directly, or CycleRecord_CheckOn returning 0 (screen 6/8 + that bit). Basis: callers + body. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave2_f.json)
 CycleRecord_SetUpRecordTrack:		; <- T_CycleRecord_SetUpRecordTrack
 	m_res 0, MD16, 0x3731	; F4A5AD  res 0,(0x3731)
@@ -102929,7 +103172,7 @@ sub_F4A6FF_Join:
 ; Called from: in-module: 0xF4A640 0xF4B064
 ; Touches: (0x0C90) (0x0D4A) (0x345C) (0x345E) (0x3622) (0x3624) (0x36D6)
 ;          (0x36D8) (0x36DA) (0x36DC) +1 more  |  0x603500
-; Calls:   T_F40AA8 T_BStore_SeekChainToMeasure sub_F4A813 sub_F4A976 T_F40B6C sub_F4AA88
+; Calls:   T_SeqMasterTrack_UpdateActive T_BStore_SeekChainToMeasure sub_F4A813 sub_F4A976 T_F40B6C sub_F4AA88
 ;          sub_F4A7FE
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A756 is an instruction boundary.
@@ -102949,7 +103192,7 @@ sub_F4A756:
 sub_F4A756_Skip:
 	ld	wa, (13858:16)	; F4A76C  ld WA,(0x3622)
 	ld	(3216:16), wa	; F4A770  ld (0x0c90),WA
-	call	T_F40AA8	; F4A774  call 0xf40aa8
+	call	T_SeqMasterTrack_UpdateActive	; F4A774  call 0xf40aa8
 	ld	a, (14038:16)	; F4A778  ld A,(0x36d6)
 	add	a, 1	; F4A77C  add A,0x01
 	call	T_BStore_SeekChainToMeasure	; F4A77F  call 0xf40c5c
@@ -102968,7 +103211,7 @@ sub_F4A756_Skip2:
 	ld	wa, (13860:16)	; F4A7A7  ld WA,(0x3624)
 	inc	1, wa	; F4A7AB  inc 1,WA
 	ld	(3216:16), wa	; F4A7AD  ld (0x0c90),WA
-	call	T_F40AA8	; F4A7B1  call 0xf40aa8
+	call	T_SeqMasterTrack_UpdateActive	; F4A7B1  call 0xf40aa8
 	ld	a, (14038:16)	; F4A7B5  ld A,(0x36d6)
 	add	a, 1	; F4A7B9  add A,0x01
 	call	T_BStore_SeekChainToMeasure	; F4A7BC  call 0xf40c5c
@@ -103082,7 +103325,7 @@ sub_F4A82C_Return:
 ; sub_F4A88A
 ; Called from: in-module: 0xF4A821 0xF4A9AD
 ; Touches: (0x0C8A) (0x0D1D)
-; Calls:   T_F40AA8 sub_F4A8F0 sub_F4A8A1
+; Calls:   T_SeqMasterTrack_UpdateActive sub_F4A8F0 sub_F4A8A1
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A88A is an instruction boundary.
 ;           The name IS the address.
@@ -103090,7 +103333,7 @@ sub_F4A82C_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4A88A:
-	call	T_F40AA8	; F4A88A  call 0xf40aa8
+	call	T_SeqMasterTrack_UpdateActive	; F4A88A  call 0xf40aa8
 	m_bit 2, MD16, 0x0c8a	; F4A88E  bit 2,(0x0c8a)
 	jr	nz, sub_F4A88A_Skip	; F4A892  jr NZ,0xf4a899
 	calr	sub_F4A8F0	; F4A894  calr 0xf4a8f0
@@ -103279,7 +103522,7 @@ sub_F4A976_Skip:
 ; Called from: in-module: 0xF4A9B0
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C90) (0x0D4A)
 ;          (0x345C) (0x345E) (0x3622) +4 more  |  0x60347E 0x6034A0
-; Calls:   T_F40AA8 T_BStore_SeekChainToMeasure sub_F4B462 sub_F4ADCC sub_F4AB42
+; Calls:   T_SeqMasterTrack_UpdateActive T_BStore_SeekChainToMeasure sub_F4B462 sub_F4ADCC sub_F4AB42
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A9D3 is an instruction boundary.
 ;           The name IS the address.
@@ -103290,7 +103533,7 @@ sub_F4A9D3:
 	ld	(BStore_ErrorCode:16), 0	; F4A9D3  ld (0x0d4a),0x00
 	ld	wa, (13858:16)	; F4A9D8  ld WA,(0x3622)
 	ld	(3216:16), wa	; F4A9DC  ld (0x0c90),WA
-	call	T_F40AA8	; F4A9E0  call 0xf40aa8
+	call	T_SeqMasterTrack_UpdateActive	; F4A9E0  call 0xf40aa8
 	ld	a, (14038:16)	; F4A9E4  ld A,(0x36d6)
 	inc	1, a	; F4A9E8  inc 1,A
 	call	T_BStore_SeekChainToMeasure	; F4A9EA  call 0xf40c5c
@@ -104322,7 +104565,7 @@ sub_F4B20D_Return:
 ; sub_F4B258
 ; Called from: in-module: 0xF4B1E6
 ; Touches: (0x0C8A) (0x0D1D)
-; Calls:   T_F40AA8 sub_F4B295 sub_F4B26F
+; Calls:   T_SeqMasterTrack_UpdateActive sub_F4B295 sub_F4B26F
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4B258 is an instruction boundary.
 ;           The name IS the address.
@@ -104330,7 +104573,7 @@ sub_F4B20D_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4B258:
-	call	T_F40AA8	; F4B258  call 0xf40aa8
+	call	T_SeqMasterTrack_UpdateActive	; F4B258  call 0xf40aa8
 	m_bit 2, MD16, 0x0c8a	; F4B25C  bit 2,(0x0c8a)
 	jr	nz, sub_F4B258_Skip	; F4B260  jr NZ,0xf4b267
 	calr	sub_F4B295	; F4B262  calr 0xf4b295
@@ -107255,7 +107498,7 @@ sub_F4D238_Return:
 ; Touches: (0x0C55) (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C70)
 ;          (0x0D1C) (0x0D1D) (0x0D4A) +11 more  |  0x003460 0x003482
 ;          0x0034EE 0x003510 0x003532 0x60347E +4 more
-; Calls:   sub_F4D89D T_BStore_LoadGeometry_Call T_F427E8 T_BStore_AppendBytes_Veneer T_BStore_OpenChain_Call T_F427F0 T_F427F4
+; Calls:   sub_F4D89D T_BStore_LoadGeometry_Call T_F427E8 T_BStore_AppendBytes_Veneer T_BStore_OpenChain_Call T_BStore_LoadStartBeatsPerBar T_BStore_TimeSigNextMeasure_Call
 ;          sub_F4D758
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4D346 is an instruction boundary.
@@ -107496,7 +107739,7 @@ sub_F4D346_Join4:
 	ld	wa, (BStore_CursorBlock:16)	; F4D5E4  ld WA,(0x345c)
 	push	xhl	; F4D5E8  push XHL
 	pushw	iy	; F4D5E9  push IY
-	call	T_F427F0	; F4D5EA  call 0xf427f0
+	call	T_BStore_LoadStartBeatsPerBar	; F4D5EA  call 0xf427f0
 	popw	iy	; F4D5EE  pop IY
 	pop	xhl	; F4D5EF  pop XHL
 	xor	de, de	; F4D5F0  xor DE,DE
@@ -107511,7 +107754,7 @@ sub_F4D346_Loop:
 	pushw	de	; F4D601  push DE
 	pushw	iy	; F4D602  push IY
 	pushw	ix	; F4D603  push IX
-	call	T_F427F4	; F4D604  call 0xf427f4
+	call	T_BStore_TimeSigNextMeasure_Call	; F4D604  call 0xf427f4
 	popw	ix	; F4D608  pop IX
 	popw	iy	; F4D609  pop IY
 	popw	de	; F4D60A  pop DE
@@ -107597,7 +107840,7 @@ sub_F4D651_Join2:
 ; BStore_SeekChainToMeasure
 ; Called from: T_BStore_SeekChainToMeasure (x7)
 ; Touches: (0x0C90) (0x0D1C) (0x0D1D) (0x0D4A) (0x126E)
-; Calls:   T_BStore_LoadGeometry_Call T_BStore_OpenChain_Call T_F427F0 sub_F4D651 T_F427F4
+; Calls:   T_BStore_LoadGeometry_Call T_BStore_OpenChain_Call T_BStore_LoadStartBeatsPerBar sub_F4D651 T_BStore_TimeSigNextMeasure_Call
 ; Evidence: thunk slot T_BStore_SeekChainToMeasure holds `jp 0x00F4D690`, and 0xF4D690 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -107634,7 +107877,7 @@ BStore_SeekChainToMeasure:		; <- T_BStore_SeekChainToMeasure
 	ldw	iy, 5	; F4D6BA  ld IY,0x0005
 	push	xhl	; F4D6BD  push XHL
 	pushw	iy	; F4D6BE  push IY
-	call	T_F427F0	; F4D6BF  call 0xf427f0
+	call	T_BStore_LoadStartBeatsPerBar	; F4D6BF  call 0xf427f0
 	popw	iy	; F4D6C3  pop IY
 	pop	xhl	; F4D6C4  pop XHL
 	xor	de, de	; F4D6C5  xor DE,DE
@@ -107655,7 +107898,7 @@ sub_F4D651_Skip3:
 	pushw	de	; F4D6E8  push DE
 	pushw	iy	; F4D6E9  push IY
 	pushw	ix	; F4D6EA  push IX
-	call	T_F427F4	; F4D6EB  call 0xf427f4
+	call	T_BStore_TimeSigNextMeasure_Call	; F4D6EB  call 0xf427f4
 	popw	ix	; F4D6EF  pop IX
 	popw	iy	; F4D6F0  pop IY
 	popw	de	; F4D6F1  pop DE
@@ -107668,7 +107911,7 @@ sub_F4D651_Return:
 ; sub_F4D6F6
 ; Called from: T_F40C60 (x2)
 ; Touches: (0x0C55) (0x0C8A) (0x0D1C) (0x0D1D) (0x0D4A)
-; Calls:   T_BStore_LoadGeometry_Call T_F427F0 T_F427F4
+; Calls:   T_BStore_LoadGeometry_Call T_BStore_LoadStartBeatsPerBar T_BStore_TimeSigNextMeasure_Call
 ; Evidence: thunk slot T_F40C60 holds `jp 0x00F4D6F6`, and 0xF4D6F6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -107697,7 +107940,7 @@ sub_F4D6F6:		; <- T_F40C60
 	jr	sub_F4D651_Return2	; F4D727  jr T,0xf4d757
 sub_F4D651_Skip4:
 	ld	(3357:16), w	; F4D729  ld (0x0d1d),W
-	call	T_F427F0	; F4D72D  call 0xf427f0
+	call	T_BStore_LoadStartBeatsPerBar	; F4D72D  call 0xf427f0
 	xor	wa, wa	; F4D731  xor WA,WA
 	ld	a, (3356:16)	; F4D733  ld A,(0x0d1c)
 	ld	bc, (3157:16)	; F4D737  ld BC,(0x0c55)
@@ -107710,7 +107953,7 @@ sub_F4D651_Join4:
 	inc	1, de	; F4D745  inc 1,DE
 	pushw	bc	; F4D747  push BC
 	pushw	de	; F4D748  push DE
-	call	T_F427F4	; F4D749  call 0xf427f4
+	call	T_BStore_TimeSigNextMeasure_Call	; F4D749  call 0xf427f4
 	popw	de	; F4D74D  pop DE
 	popw	bc	; F4D74E  pop BC
 	xor	wa, wa	; F4D74F  xor WA,WA
@@ -108188,7 +108431,7 @@ sub_F4E05B_Return:
 ; sub_F4E151
 ; Called from: in-module: 0xF4E0B5 0xF4E0F0 0xF4E5D5
 ; Touches: (0x0C05) (0x2078) (0x3000) (0x3002) (0x3736)  |  0x000000
-; Calls:   T_SeqScreen_QueueTrackRecPlayLabels T_TimedEventRing_Discard T_F409D0 sub_F4E30F T_CycleRecord_SetUpRecordTrack T_NoteRouting_RebuildForSong
+; Calls:   T_SeqScreen_QueueTrackRecPlayLabels T_TimedEventRing_Discard T_F409D0 CycleRecord_CheckOn T_CycleRecord_SetUpRecordTrack T_NoteRouting_RebuildForSong
 ;          sub_F4E1B6
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4E151 is an instruction boundary.
@@ -108226,7 +108469,7 @@ sub_F4E151_Skip2:
 	jr	sub_F4E151_Join2	; F4E199  jr T,0xf4e1ae
 sub_F4E151_Skip3:
 	call	T_F409D0	; F4E19B  call 0xf409d0
-	calr	sub_F4E30F	; F4E19F  calr 0xf4e30f
+	calr	CycleRecord_CheckOn	; F4E19F  calr 0xf4e30f
 	cp	a, 0:i3	; F4E1A2  cp A,0
 	jr	nz, sub_F4E151_Skip4	; F4E1A4  jr NZ,0xf4e1aa
 	call	T_CycleRecord_SetUpRecordTrack	; F4E1A6  call 0xf40bdc
@@ -108347,7 +108590,7 @@ sub_F4E1B6_Return:
 ; Called from: in-module: 0xF4E0FE
 ; Touches: (0x0C05) (0x2078) (0x207A) (0x3000) (0x3002) (0x34BB) (0x34D4)
 ;          (0x360B) (0x3736)  |  0x000000
-; Calls:   T_SeqScreen_QueueTrackRecPlayLabels T_TimedEventRing_Discard T_F409D0 sub_F4E30F T_CycleRecord_SetUpRecordTrack T_NoteRouting_RebuildForSong T_Transport_StopAllRunning
+; Calls:   T_SeqScreen_QueueTrackRecPlayLabels T_TimedEventRing_Discard T_F409D0 CycleRecord_CheckOn T_CycleRecord_SetUpRecordTrack T_NoteRouting_RebuildForSong T_Transport_StopAllRunning
 ;          sub_F4E1B6
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4E259 is an instruction boundary.
@@ -108411,7 +108654,7 @@ sub_F4E259_Join2:
 sub_F4E259_Skip5:
 	m_or_mi8 MB16, 0x34d4, 0x10	; F4E2E7  or (0x34d4),0x10
 	call	T_F409D0	; F4E2EC  call 0xf409d0
-	calr	sub_F4E30F	; F4E2F0  calr 0xf4e30f
+	calr	CycleRecord_CheckOn	; F4E2F0  calr 0xf4e30f
 	cp	a, 0:i3	; F4E2F3  cp A,0
 	jr	nz, sub_F4E259_Skip6	; F4E2F5  jr NZ,0xf4e2fb
 	call	T_CycleRecord_SetUpRecordTrack	; F4E2F7  call 0xf40bdc
@@ -108427,17 +108670,20 @@ sub_F4E259_Skip7:
 	ret	; F4E30E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4E30F
-; Called from: T_F40CCC (x2); in-module: 0xF4E19F 0xF4E2F0
+; CycleRecord_CheckOn
+; Called from: T_CycleRecord_CheckOn (x2); in-module: 0xF4E19F 0xF4E2F0
 ; Touches: (0x207A) (0x360B)
-; Evidence: thunk slot T_F40CCC holds `jp 0x00F4E30F`, and 0xF4E30F is an
+; Evidence: thunk slot T_CycleRecord_CheckOn holds `jp 0x00F4E30F`, and 0xF4E30F is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4E30F:		; <- T_F40CCC
+; CycleRecord_CheckOn: A := 0 when the screen latch is a CYCLE RECORD screen (UI_ScreenLatch 6 or 8) and its CYCLE
+;   switch ((0x360B) bit 1) is on; otherwise A := 0xFF. Preserves BC. Both callers branch on A == 0 to the cycle-
+;   record path. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave3_i.json)
+CycleRecord_CheckOn:		; <- T_CycleRecord_CheckOn
 	xor	a, a	; F4E30F  xor A,A
 	pushw	bc	; F4E311  push BC
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F4E312  cp (0x207a),0x06
@@ -109053,18 +109299,23 @@ sub_F4EC2F_Skip:
 	ret	; F4EC55  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4EC56
-; Called from: T_F40CEC (x2)
+; RealtimeRecord_Disarm
+; Called from: T_RealtimeRecord_Disarm (x2)
 ; Touches: (0x0DB5) (0x0DE4) (0x2250) (0x34D3)
 ; Calls:   T_Queue2E00_AppendRegs T_F409D8 T_Transport_StopAllRunning T_F40CB4 T_SeqBufRing_Discard
-; Evidence: thunk slot T_F40CEC holds `jp 0x00F4EC56`, and 0xF4EC56 is an
+; Evidence: thunk slot T_RealtimeRecord_Disarm holds `jp 0x00F4EC56`, and 0xF4EC56 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4EC56:		; <- T_F40CEC
+; RealtimeRecord_Disarm: If (0x34D3) bit 1 is set (sub_F4EC2F sets it; ModeEnter_RealtimeRecord reaches that through
+;   T_F40CE8): UI_PartIndex := 0, Queue2E00 post (W 0xFF, DE 0x1090), T_F409D8 (sub_F45348), Transport_StopAllRunning,
+;   (0x0DB5) bit 0 := 0; then always clears that bit and empties SeqBuf_Ring. Called by ModeLeave_RealtimeRecord and
+;   by Transport_StopWhileRecording, which sets the bit again afterwards. Basis: callers + body + the setter.
+;   (notes/naming-pilot-2026-10-06/proposals_wave3_j.json)
+RealtimeRecord_Disarm:		; <- T_RealtimeRecord_Disarm
 	ld	(3556:16), 0	; F4EC56  ld (0x0de4),0x00
 	m_bit 1, MD16, 0x34d3	; F4EC5B  bit 1,(0x34d3)
 	jr	z, sub_F4EC2F_Skip2	; F4EC5F  jr Z,0xf4ec80
@@ -109191,7 +109442,7 @@ sub_F4ED0C:		; <- T_F40D14
 ; sub_F4ED10
 ; Called from: in-module: 0xF4ED0C
 ; Touches: (0x0C05) (0x207C) (0x2084) (0x2088) (0x34BB)
-; Calls:   T_F409DC
+; Calls:   T_Seq_LocateToCurrentMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4ED10 is an instruction boundary.
 ;           The name IS the address.
@@ -109241,7 +109492,7 @@ sub_F4ED10_Join:
 	jr	sub_F4ED10_Return	; F4ED78  jr T,0xf4ed83
 sub_F4ED10_Skip4:
 	ld	(3077:16), 0	; F4ED7A  ld (0x0c05),0x00
-	call	T_F409DC	; F4ED7F  call 0xf409dc
+	call	T_Seq_LocateToCurrentMeasure	; F4ED7F  call 0xf409dc
 sub_F4ED10_Return:
 	ret	; F4ED83  ret
 
@@ -113348,7 +113599,7 @@ LcdKeyRow5_DrawbarScreen_Epilogue:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; DrawbarScreen_StepParamAtCursor: Runs DispatchTable_F542D1[(0x28A1)], the drawbar parameter page's cursor (0..3,
-;   moved by sub_F531F5, drawn by DL_ParamCursorBar): each entry steps one signed nibble of (0x2890)/(0x2891) by +-1
+;   moved by DrawbarSettingPage_StepCursorRow, drawn by DL_ParamCursorBar): each entry steps one signed nibble of (0x2890)/(0x2891) by +-1
 ;   within -5..+5 per PanelEvent_Flags bit 0 and repaints. LcdKeyRow4/5_DrawbarScreen call it on that page ((0x289E) =
 ;   1). Basis: callers + body + table. (notes/naming-pilot-2026-10-06/proposals_wave2_f.json)
 DrawbarScreen_StepParamAtCursor:
@@ -119413,19 +119664,23 @@ LCD_ShowAllLayers_Copy:
 	ret	; F55C43  ret
 
 ; --------------------------------------------------------------------------
-; sub_F55C44
+; SeqScreen_DrawCountInMeasure
 ; Called from: in-module: 0xF55CAB 0xF55D5C 0xF55F6D
 ; Touches: (0x12F6) (0x2540) (0x2652) (0x3552) (0x3753)  |  0xF341B6 0xF34256
 ;          0xF3434C 0xF34361 0xF343B6 0xF343BC +9 more
 ; Calls:   T_DLB_Handler_StringTable LCD_BlankThenSetPanel3Layer_Layer0 T_DisplayList_Run SeqScreen_DrawTrackPartLabels
-;          SeqScreen_QueueTrackRecPlayLabels SeqPlayScreen_StageValues T_DisplayListB_Run sub_F55C44 T_PanelDial_QueueValueRedraw_Entry
+;          SeqScreen_QueueTrackRecPlayLabels SeqPlayScreen_StageValues T_DisplayListB_Run SeqScreen_DrawCountInMeasure T_PanelDial_QueueValueRedraw_Entry
 ;          LCD_ShowAllLayers_Copy RealtimeRecordScreen_StageValues
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF55C44 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F55C44:
+; SeqScreen_DrawCountInMeasure: WA = the current measure (0x3552): 0x8002 -> entry 1, 0x8001 -> entry 0 of
+;   DLTable_F3435B (' -2' / ' -1') drawn through the caller's string-table record XIY; any other value draws nothing.
+;   0x8002/0x8001 are the count-in bars (bit 15 = count-in). Called by the SEQ PLAY, REALTIME RECORD and CYCLE RECORD
+;   value painters. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave3_g.json)
+SeqScreen_DrawCountInMeasure:
 	cp	wa, 32770	; F55C44  cp WA,0x8002
 	jr	nz, sub_F55C44_Skip	; F55C48  jr NZ,0xf55c51
 	ld	(DisplayListB_Stage:16), 1	; F55C4A  ld (0x12f6),0x01
@@ -119458,7 +119713,7 @@ Draw_CycleMasterS0ngMeasureTimeSig:
 	call	T_DisplayListB_Run	; F55C9E  call 0xf417f4
 	ld	wa, (13650:16)	; F55CA2  ld WA,(0x3552)
 	ld	xiy, DL_F3434C	; F55CA6  ld XIY,0x00f3434c
-	calr	sub_F55C44	; F55CAB  calr 0xf55c44
+	calr	SeqScreen_DrawCountInMeasure	; F55CAB  calr 0xf55c44
 	call	T_PanelDial_QueueValueRedraw_Entry	; F55CAE  call 0xf415bc
 	calr	LCD_ShowAllLayers_Copy	; F55CB2  calr 0xf55c3d
 	ret	; F55CB5  ret
@@ -119507,7 +119762,7 @@ Draw_RealtimeRecordSongMeasureQuantiTimeSigMasterCycle:
 	ret	; F55D3C  ret
 ; RealtimeRecordScreen_DrawValues: REALTIME RECORD screen values: RealtimeRecordScreen_StageValues, then on layer 2
 ;   interpreter B from DL_F34361 to DLText_OffOn_F343B6 (the two OFF/ON readouts, MASTER, SONG, MEASURE, TIME SIG.),
-;   the measure's special 0x8001/0x8002 text (sub_F55C44, DL_F3434C), PanelDial value redraw, show layers. Basis:
+;   the measure's special 0x8001/0x8002 text (SeqScreen_DrawCountInMeasure, DL_F3434C), PanelDial value redraw, show layers. Basis:
 ;   callers + body -- posted as a callback by the screen's ENTER and its LcdKeyRow1/2 handlers. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave2_d.json)
 RealtimeRecordScreen_DrawValues:
@@ -119518,7 +119773,7 @@ RealtimeRecordScreen_DrawValues:
 	call	T_DisplayListB_Run	; F55D4F  call 0xf417f4
 	ld	wa, (13650:16)	; F55D53  ld WA,(0x3552)
 	ld	xiy, DL_F3434C	; F55D57  ld XIY,0x00f3434c
-	calr	sub_F55C44	; F55D5C  calr 0xf55c44
+	calr	SeqScreen_DrawCountInMeasure	; F55D5C  calr 0xf55c44
 	call	T_PanelDial_QueueValueRedraw_Entry	; F55D5F  call 0xf415bc
 	calr	LCD_ShowAllLayers_Copy	; F55D63  calr 0xf55c3d
 	ret	; F55D66  ret
@@ -119640,7 +119895,7 @@ sub_F55D90_Join:
 ;          0xF3437F 0xF3438E 0xF343A2 0xF343AC 0xF34C9A 0xF34CA2 +18 more
 ; Calls:   T_DisplayList_Run Nop_Ret_F55C2E T_DLB_Handler_Array8 T_DLB_Handler_Array6
 ;          LCD_BlankThenSetPanel3Layer_Layer0 CyclePlayEditScreen_StageValues T_DisplayListB_Run T_DLB_Handler_Array8_2 LCD_ShowAllLayers_Copy CyclePlayScreen_StageValues
-;          CycleRecordScreen_StageValues sub_F55C44 +1 more
+;          CycleRecordScreen_StageValues SeqScreen_DrawCountInMeasure +1 more
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF55E20 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -119754,7 +120009,7 @@ sub_F55F45:
 	ld	(LCD_CurrentLayer:16), 0	; F55F5F  ld (0x2540),0x00
 	ld	wa, (13650:16)	; F55F64  ld WA,(0x3552)
 	ld	xiy, Data_F351F9	; F55F68  ld XIY,0x00f351f9
-	calr	sub_F55C44	; F55F6D  calr 0xf55c44
+	calr	SeqScreen_DrawCountInMeasure	; F55F6D  calr 0xf55c44
 	ld	(LCD_CurrentLayer:16), 1	; F55F70  ld (0x2540),0x01
 	ld	a, (14165:16)	; F55F75  ld A,(0x3755)
 	ld	(DisplayListB_Stage:16), a	; F55F79  ld (0x12f6),A
@@ -119819,7 +120074,7 @@ DisplayListB_Run_MasterSongMeasure:
 ; ModeEnter_RealtimeRecord
 ; Called from: in-module: 0xF55800
 ; Touches: nothing with an absolute address
-; Calls:   T_F40CF0 Seq_RestorePlayingTrackMask T_F40CE8 T_F40BD8
+; Calls:   T_F40CF0 Seq_RestorePlayingTrackMask T_F40CE8 T_SeqRecord_SaveCursorBaseline
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF5602C is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -119831,14 +120086,14 @@ ModeEnter_RealtimeRecord:
 	call	T_F40CF0	; F5602C  call 0xf40cf0
 	calr	Seq_RestorePlayingTrackMask	; F56030  calr 0xf57433
 	call	T_F40CE8	; F56033  call 0xf40ce8
-	call	T_F40BD8	; F56037  call 0xf40bd8
+	call	T_SeqRecord_SaveCursorBaseline	; F56037  call 0xf40bd8
 	ret	; F5603B  ret
 
 ; --------------------------------------------------------------------------
 ; ModeLeave_RealtimeRecord
 ; Called from: in-module: 0xF55804
 ; Touches: (0x34D1) (0x36C6) (0x36CA) (0x3758)
-; Calls:   T_F40CEC Seq_SavePlayingTrackMask
+; Calls:   T_RealtimeRecord_Disarm Seq_SavePlayingTrackMask
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF5603C is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -119847,7 +120102,7 @@ ModeEnter_RealtimeRecord:
 ; ModeLeave_RealtimeRecord: the +4 LEAVE of panel mode 5 (thunk T_ModeLeave_RealtimeRecord_Fwd).
 ModeLeave_RealtimeRecord:
 	m_and_mi8 MB16, 0x34d1, 0xef	; F5603C  and (0x34d1),0xef
-	call	T_F40CEC	; F56041  call 0xf40cec
+	call	T_RealtimeRecord_Disarm	; F56041  call 0xf40cec
 	xor	xwa, xwa	; F56045  xor XWA,XWA
 	ld	(14026:16), xwa	; F56047  ld (0x36ca),XWA
 	ld	(14022:16), xwa	; F5604B  ld (0x36c6),XWA
@@ -120671,7 +120926,7 @@ sub_F56129_Return4:
 ; RealtimeRecordScreen_LcdKeyRow3
 ; Called from: in-module: 0xF56479
 ; Touches: (0x0DE3) (0x1309) (0x2646) (0x3458) (0x34D9) (0x3752)
-; Calls:   SeqMasterTrack_SwitchOff T_CallbackQueue_Post T_Kernel_SemaSignal T_F40CCC
+; Calls:   SeqMasterTrack_SwitchOff T_CallbackQueue_Post T_Kernel_SemaSignal T_CycleRecord_CheckOn
 ;          T_CycleRecord_SetUpRecordTrack
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF56492 is an instruction boundary.
@@ -120708,7 +120963,7 @@ sub_F56492_Join:
 	ld	(0xc3:8), a	; F564E0  ld (0xc3),A
 	ld	(13400:16), a	; F564E3  ld (0x3458),A
 	pushw	wa	; F564E7  push WA
-	call	T_F40CCC	; F564E8  call 0xf40ccc
+	call	T_CycleRecord_CheckOn	; F564E8  call 0xf40ccc
 	cp	a, 0:i3	; F564EC  cp A,0
 	jr	nz, sub_F56492_Skip3	; F564EE  jr NZ,0xf564f4
 	call	T_CycleRecord_SetUpRecordTrack	; F564F0  call 0xf40bdc
@@ -120787,7 +121042,7 @@ Nop_Ret_F56524:
 ; Transport_StopWhileRecording
 ; Called from: T_Transport_StopWhileRecording (0xF40E18, x2)
 ; Touches: (0x34D3) (0x34D4) (0x3614)
-; Calls:   T_F40CEC Transport_StopAllAndWaitC T_F42578 T_F409C8 T_F40CCC T_F40BD8 T_NoteRouting_RebuildForSong
+; Calls:   T_RealtimeRecord_Disarm Transport_StopAllAndWaitC T_F42578 T_Seq_MainLoopService T_CycleRecord_CheckOn T_SeqRecord_SaveCursorBaseline T_NoteRouting_RebuildForSong
 ;          T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart T_Seq_SetTrackBeatsFromTransportB SeqScreen_QueueTrackRecPlayLabels
 ; Evidence: thunk slot T_Transport_StopWhileRecording holds `jp 0x00F56525`, and 0xF56525 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -120795,28 +121050,28 @@ Nop_Ret_F56524:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Transport_StopWhileRecording: The stop arm of the START/STOP keys while recording: T_F40CEC under (0x3614) bit 1,
-;   Transport_StopAllAndWaitC, T_F42578, T_F409C8 (sub_F44582's stop/teardown), then (0x34D3) bit 1 + T_F40BD8, and on
-;   a cycle-record screen (sub_F4E30F A = 0) SeqCycle_CaptureEndCursors/LocateToStart; ends with sub_F55D90. Basis:
+; Transport_StopWhileRecording: The stop arm of the START/STOP keys while recording: T_RealtimeRecord_Disarm under (0x3614) bit 1,
+;   Transport_StopAllAndWaitC, T_F42578, T_Seq_MainLoopService (Seq_MainLoopService's stop/teardown), then (0x34D3) bit 1 + T_SeqRecord_SaveCursorBaseline, and on
+;   a cycle-record screen (CycleRecord_CheckOn A = 0) SeqCycle_CaptureEndCursors/LocateToStart; ends with SeqScreen_QueueTrackRecPlayLabels. Basis:
 ;   callers + body. (notes/naming-pilot-2026-10-06/proposals_wave2_f.json)
 Transport_StopWhileRecording:		; <- T_Transport_StopWhileRecording
 	m_set 1, MD16, 0x3614	; F56525  set 1,(0x3614)
-	call	T_F40CEC	; F56529  call 0xf40cec
+	call	T_RealtimeRecord_Disarm	; F56529  call 0xf40cec
 	m_res 1, MD16, 0x3614	; F5652D  res 1,(0x3614)
 	calr	Transport_StopAllAndWaitC	; F56531  calr 0xf56579
 	call	T_F42578	; F56534  call 0xf42578
-	call	T_F409C8	; F56538  call 0xf409c8
-	call	T_F40CCC	; F5653C  call 0xf40ccc
+	call	T_Seq_MainLoopService	; F56538  call 0xf409c8
+	call	T_CycleRecord_CheckOn	; F5653C  call 0xf40ccc
 	cp	a, 0:i3	; F56540  cp A,0
 	jr	z, Nop_Ret_F56524_Skip	; F56542  jr Z,0xf56557
 	m_set 1, MD16, 0x34d3	; F56544  set 1,(0x34d3)
-	call	T_F40BD8	; F56548  call 0xf40bd8
+	call	T_SeqRecord_SaveCursorBaseline	; F56548  call 0xf40bd8
 	m_or_mi8 MB16, 0x34d4, 0x10	; F5654C  or (0x34d4),0x10
 	call	T_NoteRouting_RebuildForSong	; F56551  call 0xf411b8
 	jr	Nop_Ret_F56524_Join	; F56555  jr T,0xf56574
 Nop_Ret_F56524_Skip:
 	m_set 1, MD16, 0x34d3	; F56557  set 1,(0x34d3)
-	call	T_F40BD8	; F5655B  call 0xf40bd8
+	call	T_SeqRecord_SaveCursorBaseline	; F5655B  call 0xf40bd8
 	m_or_mi8 MB16, 0x34d4, 0x10	; F5655F  or (0x34d4),0x10
 	call	T_SeqCycle_CaptureEndCursors	; F56564  call 0xf40b60
 	call	T_SeqCycle_LocateToStart	; F56568  call 0xf40b5c
@@ -123842,7 +124097,7 @@ Nop_Ret_F57432:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Seq_RestorePlayingTrackMask: Playing-track mask (0x60341E) := (0x360C), its saved copy, then
-;   T_NoteRouting_RebuildForSong. The ENTER of panel modes SEQ PLAY and REALTIME RECORD; twin sub_F57443
+;   T_NoteRouting_RebuildForSong. The ENTER of panel modes SEQ PLAY and REALTIME RECORD; twin Seq_SavePlayingTrackMask
 ;   (Seq_SavePlayingTrackMask, batch f) copies it back on the mode LEAVEs. Basis: callers + body + twin.
 ;   (notes/naming-pilot-2026-10-06/proposals_wave2_e.json)
 Seq_RestorePlayingTrackMask:
@@ -123864,7 +124119,7 @@ Seq_RestorePlayingTrackMask:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Seq_SavePlayingTrackMask: (0x360C) := the playing-track mask (0x60341E), 32-bit, then NoteRouting_RebuildForSong.
-;   Called by the LEAVE methods of panel modes 5 and 8; its twin sub_F57433 copies (0x360C) back on their ENTER
+;   Called by the LEAVE methods of panel modes 5 and 8; its twin Seq_RestorePlayingTrackMask copies (0x360C) back on their ENTER
 ;   methods. Basis: callers + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave2_f.json)
 Seq_SavePlayingTrackMask:
 	push	xwa	; F57443  push XWA
@@ -131003,7 +131258,7 @@ sub_F5BF9F_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoundEdit_PaintPageLabelBackdrop: LCD_CurrentLayer := 0, then T_UiPaint_PageLabelBackdrop (sub_F31899, the rounded backdrop behind the
+; SoundEdit_PaintPageLabelBackdrop: LCD_CurrentLayer := 0, then T_UiPaint_PageLabelBackdrop (UiPaint_PageLabelBackdrop, the rounded backdrop behind the
 ;   'PAGEn/m' legend), which restores the layer it saved -- so the caller carries on drawing in layer 0. Basis:
 ;   callers + body -- called only by the sound-edit / modeling tone-edit page painters of DispatchTable_F5B8F8 next to
 ;   the list that prints their 'PAGEn/m'. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
@@ -131995,7 +132250,7 @@ Draw_Keyoff_Skip2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SoundEdit_PaintPage12Label: Prints the 'PAGE1/2' legend (DL_F04672, one text record at layer offset 0x0110) and its
-;   rounded backdrop (sub_F5BFBD). Basis: callers + body -- called by the AMP ENVELOPE1 and six filter-type page
+;   rounded backdrop (SoundEdit_PaintPageLabelBackdrop). Basis: callers + body -- called by the AMP ENVELOPE1 and six filter-type page
 ;   painters, each only when (0x27F5) != 1. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
 SoundEdit_PaintPage12Label:
 	ld	xiy, DL_F04672	; F5C916  ld XIY,0x00f04672
@@ -133171,7 +133426,7 @@ sub_F5D47A_Return:
 ; --------------------------------------------------------------------------
 ; SoundEditToneLayerPanning_PaintPanAmounts: For fields 12..15 of the TONE LAYER PANNING page (layers 1..4's pan
 ;   amount) runs record [n] of Data_F32992+0x28 -- a decimal readout of ModelingPage_Fields+n -- skipping zero amounts
-;   (centre). prom_a's ToneLayerPan_SplitSideAndAmount (sub_FD7D18) writes these fields. Called by the page's Paint
+;   (centre). prom_a's ToneLayerPan_SplitSideAndAmount (ToneLayerPan_SplitSideAndAmount) writes these fields. Called by the page's Paint
 ;   and RepaintField. Basis: callers + body + writer. (notes/naming-pilot-2026-10-06/proposals_wave2_e.json)
 SoundEditToneLayerPanning_PaintPanAmounts:
 	ld	a, 12:opc	; F5D497  ld A,0x0c
@@ -136466,7 +136721,7 @@ sub_F5F02C_Join7:
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C70) (0x0C71)
 ;          (0x0C73) (0x0C75) (0x0C8A) +32 more  |  0x000D50 0x000D70
 ;          0x60347E 0x6034A0 0x603500
-; Calls:   T_BStore_OpenChain T_F42884 T_BStore_SeekBlock T_BStore_ValidateSavedCursor T_Seq_FindMasterTrack T_BStore_SeekMeasure T_F42798
+; Calls:   T_BStore_OpenChain T_BStore_AllocBlock_Veneer T_BStore_SeekBlock T_BStore_ValidateSavedCursor T_Seq_FindMasterTrack T_BStore_SeekMeasure T_F42798
 ;          T_F42808 sub_F5F9C1 T_BStore_AllocChain T_BStore_SaveCursor T_F4277C +4 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5F476 is an instruction boundary.
@@ -136496,7 +136751,7 @@ sub_F5F476_Skip:
 	ld	(BStore_ErrorCode:16), 5	; F5F4BB  ld (0x0d4a),0x05
 	jrl	sub_F5F476_Join9	; F5F4C0  jrl T,0xf5f9a6
 sub_F5F476_Skip2:
-	call	T_F42884	; F5F4C3  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F5F4C3  call 0xf42884
 	xor	hl, hl	; F5F4C7  xor HL,HL
 	ld	l, (3215:16)	; F5F4C9  ld L,(0x0c8f)
 	dec	1, hl	; F5F4CD  dec 1,HL
@@ -137463,7 +137718,7 @@ sub_F5FB04_Return:
 ;          (0x0C94) (0x0CA2) (0x0CB6) +11 more  |  0x603422 0x603500
 ;          0x60A000 0x60A100
 ; Calls:   T_BStore_LoadGeometry T_F4280C T_BStore_OpenChain sub_F6079E sub_F60548 T_BStore_SeekBlock
-;          sub_F60514 T_F42884 sub_F60338 sub_F602F0 sub_F60267 sub_F6027D
+;          sub_F60514 T_BStore_AllocBlock_Veneer sub_F60338 sub_F602F0 sub_F60267 sub_F6027D
 ;          +5 more
 ; Evidence: thunk slot T_F426E8 holds `jp 0x00F60012`, and 0xF60012 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -137608,7 +137863,7 @@ sub_F5FB04_Join11:
 	call	T_BStore_SeekBlock	; F60196  call 0xf427bc
 	call	sub_F60514	; F6019A  call 0xf60514
 	ld	(3328:16), iy	; F6019E  ld (0x0d00),IY
-	call	T_F42884	; F601A2  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F601A2  call 0xf42884
 	xor	hl, hl	; F601A6  xor HL,HL
 	ld	l, (3186:16)	; F601A8  ld L,(0x0c72)
 	dec	1, hl	; F601AC  dec 1,HL
@@ -137948,7 +138203,7 @@ sub_F603E9_Skip:
 ; sub_F60457
 ; Called from: in-module: 0xF602B3 0xF6038F 0xF603B3 0xF603F8 0xF60421
 ; Touches: (0x0CA4) (0x0D04) (0x0D4A) (0x126E)
-; Calls:   T_F42884 T_BStore_SeekBlock
+; Calls:   T_BStore_AllocBlock_Veneer T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF60457 is an instruction boundary.
 ;           The name IS the address.
@@ -137969,7 +138224,7 @@ sub_F60457_Skip:
 	m_rd_pushx RLX, 0x38	; F6046E  push XDE3
 	push	xiy	; F60471  push XIY
 	pushw	bc	; F60472  push BC
-	call	T_F42884	; F60473  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F60473  call 0xf42884
 	popw	bc	; F60477  pop BC
 	pop	xiy	; F60478  pop XIY
 	m_rd_popx RLX, 0x38	; F60479  pop XDE3
@@ -139373,7 +139628,7 @@ sub_F610E3_Loop2:
 ; Touches: (0x0C70) (0x0E02) (0x0E0C) (0x0E0D) (0x0E0E) (0x0E0F) (0x0E10)
 ;          (0x0E19) (0x126E) (0x134C) +8 more  |  0x000005 0x00001E 0x000022
 ;          0x00007E 0x0000A0 0x000100 +5 more
-; Calls:   sub_F60F4F sub_F615C2 sub_F61907 sub_F61880 T_BStore_SeekBlock T_F42884
+; Calls:   sub_F60F4F sub_F615C2 sub_F61907 sub_F61880 T_BStore_SeekBlock T_BStore_AllocBlock_Veneer
 ; Evidence: thunk slot T_F4271C holds `jp 0x00F6119A`, and 0xF6119A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -139562,7 +139817,7 @@ sub_F610E3_Join3:
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F6139F  cp (0x6034ba),0x0000
 	jrl	z, sub_F610E3_Skip20	; F613A6  jrl Z,0xf615a4
 	push	xiy	; F613A9  push XIY
-	call	T_F42884	; F613AA  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F613AA  call 0xf42884
 	pop	xiy	; F613AE  pop XIY
 	ld	hl, (BStore_CursorBlock:16)	; F613AF  ld HL,(0x345c)
 	call	T_BStore_SeekBlock	; F613B3  call 0xf427bc
@@ -139757,7 +140012,7 @@ sub_F610E3_Return:
 ; Touches: (0x0C70) (0x0E02) (0x0E0C) (0x0E0D) (0x126E) (0x2880) (0x345C)
 ;          (0x360A) (0x360C) (0x360E) +1 more  |  0x000005 0x000011 0x00001E
 ;          0x000022 0x00007E 0x0000A0 +7 more
-; Calls:   sub_F61880 T_BStore_SeekBlock T_F42884 sub_F60F4F
+; Calls:   sub_F61880 T_BStore_SeekBlock T_BStore_AllocBlock_Veneer sub_F60F4F
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF615C2 is an instruction boundary.
 ;           The name IS the address.
@@ -139824,7 +140079,7 @@ sub_F615C2_Join:
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F61663  cp (0x6034ba),0x0000
 	jrl	z, sub_F615C2_Skip10	; F6166A  jrl Z,0xf61862
 	push	xiy	; F6166D  push XIY
-	call	T_F42884	; F6166E  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F6166E  call 0xf42884
 	pop	xiy	; F61672  pop XIY
 	ld	hl, (BStore_CursorBlock:16)	; F61673  ld HL,(0x345c)
 	call	T_BStore_SeekBlock	; F61677  call 0xf427bc
@@ -140016,7 +140271,7 @@ sub_F615C2_Return:
 ; Called from: in-module: 0xF6136C 0xF61632
 ; Touches: (0x0C70) (0x0E0D) (0x126E) (0x345C) (0x360A)  |  0x000100
 ;          0x603500 0x610000
-; Calls:   T_F42884 T_BStore_SeekBlock
+; Calls:   T_BStore_AllocBlock_Veneer T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF61880 is an instruction boundary.
 ;           The name IS the address.
@@ -140026,7 +140281,7 @@ sub_F615C2_Return:
 sub_F61880:
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F61880  cp (0x6034ba),0x0000
 	jr	z, sub_F61880_Return	; F61887  jr Z,0xf61906
-	call	T_F42884	; F61889  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F61889  call 0xf42884
 	ld	(BStore_CursorBlock:16), ix	; F6188D  ld (0x345c),IX
 	ld	hl, ix	; F61891  ld HL,IX
 	call	T_BStore_SeekBlock	; F61893  call 0xf427bc
@@ -141219,7 +141474,7 @@ sub_F62201_Return:
 ; sub_F6220D
 ; Called from: in-module: 0xF62209
 ; Touches: (0x0C8E) (0x126E)  |  0x60347E 0x6034A0 0x617800
-; Calls:   T_F42884 T_BStore_SeekBlock
+; Calls:   T_BStore_AllocBlock_Veneer T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF6220D is an instruction boundary.
 ;           The name IS the address.
@@ -141249,7 +141504,7 @@ sub_F6220D_Skip:
 	jr	z, sub_F6220D_Join	; F62246  jr Z,0xf622a1
 	mx_ld_mi8 MXD, ra_HL, ra_IY, 0x81	; F62248  ld (XHL+IY),0x81
 	push	xhl	; F6224E  push XHL
-	call	T_F42884	; F6224F  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F6224F  call 0xf42884
 	pop	xhl	; F62253  pop XHL
 	ld	(xhl+3), ix	; F62254  ld (XHL+0x03),IX
 	sub	xhl, 6387712	; F62257  sub XHL,0x00617800
@@ -141400,7 +141655,7 @@ sub_F622AA_Join:
 ;           the directory head block number is 0xFFFF -- the chain is empty
 ;     0x05   4 sites: 0xF639F1 0xF63A2F 0xF64655 0xF647C4
 ;           more blocks needed than (0x6034BA) reports free (0xF639F1), or the
-;           allocator at thunk T_F42884 returned failure (0xF63A2F).  The two
+;           allocator at thunk T_BStore_AllocBlock_Veneer returned failure (0xF63A2F).  The two
 ;           further sites are not read
 ;     0x06   1 site : 0xF6350A
 ;           the tag byte at the cursor is 0x84 (`cp (XHL+IY),0x84` at
@@ -141488,10 +141743,19 @@ sub_F62C0C:		; <- T_F427E8
 sub_F62C10:		; <- T_F427EC
 	calr	sub_F6306A	; F62C10  calr 0xf6306a
 	ret	; F62C13  ret
-sub_F62C14:		; <- T_F427F0
+; BStore_LoadStartBeatsPerBar: T_BStore_LoadStartBeatsPerBar entry: sub_F6364D -- (0x0D1C) := the song's beats per bar (0x6034D7); when
+;   (0x0C8A) bit 2 (a master track was found) it opens chain (0x0D1D) and takes the value from its leading tag-0x87
+;   records (next byte + 1) up to the first 0x81 beat mark. BStore_CursorBlock is preserved. Callers then count
+;   (0x0D1C) beat marks per measure. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave3_h.json)
+BStore_LoadStartBeatsPerBar:		; <- T_BStore_LoadStartBeatsPerBar
 	calr	sub_F6364D	; F62C14  calr 0xf6364d
 	ret	; F62C17  ret
-sub_F62C18:		; <- T_F427F4
+; BStore_TimeSigNextMeasure_Call: `calr sub_F63749 / ret` (BStore_StubTable slot behind T_BStore_TimeSigNextMeasure_Call). sub_F63749 steps
+;   the time-signature cursor (0x0CF0)/(0x0CF4) one measure (past (0x0D1C) 0x81 beat marks), so (0x0D1C) = the beats
+;   per bar of the measure entered (a 0x87 record there sets it). Run once per measure by BStore_SeekChainToMeasure,
+;   sub_F4D346 and sub_F4D6F6 after counting a measure's beats. Basis: callers + body (target read). (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_i.json)
+BStore_TimeSigNextMeasure_Call:		; <- T_BStore_TimeSigNextMeasure_Call
 	calr	sub_F63749	; F62C18  calr 0xf63749
 	ret	; F62C1B  ret
 BStore_OpenChain_Call:		; <- T_BStore_OpenChain_Call
@@ -142970,7 +143234,7 @@ BStore_SaveCursor:		; <- T_BStore_SaveCursor
 ;   same 0xFFFF BStore_OpenChain tests the directory head against.
 ; Evidence: also 0xF639EA `cp WA,(0x6034BA)` -> error 5, which is what makes
 ;   the workspace word at +0xBA the free-block count.
-; Unknown: the allocator itself is not here -- 0xF63A18 calls thunk T_F42884
+; Unknown: the allocator itself is not here -- 0xF63A18 calls thunk T_BStore_AllocBlock_Veneer
 ;   -> 0xF7A402, in another module.
 ; --------------------------------------------------------------------------
 BStore_AllocChain:		; <- T_BStore_AllocChain
@@ -143025,7 +143289,7 @@ BStore_AllocChain_Join:
 	push	xhl	; F63A15  push XHL
 	pushw	bc	; F63A16  push BC
 	pushw	de	; F63A17  push DE
-	call	T_F42884	; F63A18  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F63A18  call 0xf42884
 	popw	de	; F63A1C  pop DE
 	popw	bc	; F63A1D  pop BC
 	pop	xhl	; F63A1E  pop XHL
@@ -144926,7 +145190,7 @@ BStore_Workspace_SaveToBank:
 ; from code there needs an ASCII rule with a null this round does not have (at
 ; 20 bytes the rule misses most of those runs; at 10 it has three false
 ; positives).  Above that, only 2 thunk slot(s) point anywhere into
-; 0xF6D002-0xF77FFF at all -- T_MidiFileL0ad_LcdKeyRow1 -> 0xF6F400, T_F43384 -> 0xF6F404, so a split there would rest on a linear decode.
+; 0xF6D002-0xF77FFF at all -- T_MidiFileL0ad_LcdKeyRow1 -> 0xF6F400, T_MidiFileSave_WriteSeqBankSmf -> 0xF6F404, so a split there would rest on a linear decode.
 ;
 ; REGENERATE:  python3 notes/gen_prom_b_f65000_module.py
 ; CHECKS:      python3 notes/gen_prom_b_f65000_module.py --checks
@@ -146478,7 +146742,7 @@ T_F42B78_Nop:		; <- T_F42B78
 ; SequencerMedley_InitOnEntry
 ; Called from: T_SequencerMedley_InitOnEntry (x1)
 ; Touches: (0x0DC1) (0x0E48) (0x207A) (0x207B) (0x22D0) (0x7F4D)
-; Calls:   BStore_LoadBankDirectory T_F42410 Blink_EnableThenStop
+; Calls:   BStore_LoadBankDirectory T_MidiFilePlay_SnapshotRecordBytes Blink_EnableThenStop
 ; Evidence: thunk slot T_SequencerMedley_InitOnEntry holds `jp 0x00F660ED`, and 0xF660ED is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -146487,7 +146751,7 @@ T_F42B78_Nop:		; <- T_F42B78
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SequencerMedley_InitOnEntry: on a newly entered screen: (0x0E48) = (0x7F4D), Medley_Playing = 0, (0x22D0) = 0, (0x605068) |= 0x8000,
-;   BStore_LoadBankDirectory, T_F42410; then Blink_EnableThenStop unless the medley plays.  Called by Paint_SequencerMedley.
+;   BStore_LoadBankDirectory, T_MidiFilePlay_SnapshotRecordBytes; then Blink_EnableThenStop unless the medley plays.  Called by Paint_SequencerMedley.
 SequencerMedley_InitOnEntry:		; <- T_SequencerMedley_InitOnEntry
 	ld	a, (UI_ScreenLatch:16)	; F660ED  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F660F1  cp A,(0x207b)
@@ -146499,7 +146763,7 @@ SequencerMedley_InitOnEntry:		; <- T_SequencerMedley_InitOnEntry
 	ld	(Medley_Countdown:16), a	; F66105  ld (0x22d0),A
 	m_or_mi16 MW24, 0x605068, 0x8000	; F66109  or (0x605068),0x8000
 	call	BStore_LoadBankDirectory	; F66110  call 0xf66123
-	call	T_F42410	; F66114  call 0xf42410
+	call	T_MidiFilePlay_SnapshotRecordBytes	; F66114  call 0xf42410
 sub_F660A0_Skip5:
 	m_cp_mi8 MB16, Medley_Playing, 0x01	; F66118  cp (0x0dc1),0x01
 	jr	z, sub_F660A0_Return	; F6611D  jr Z,0xf66122
@@ -146539,7 +146803,7 @@ BStore_LoadBankDirectory:
 ; SequencerMedley_OnLeave
 ; Called from: T_SequencerMedley_OnLeave (x1)
 ; Touches: (0x0DC1) (0x0E48) (0x207A) (0x22D0) (0x34BB) (0x34D0)
-; Calls:   SequencerMedley_StopPlayback T_Disk_PortA3_Release_Entry T_F42E94 T_F42E98 T_F42414 T_NoteRouting_RebuildForSong
+; Calls:   SequencerMedley_StopPlayback T_Disk_PortA3_Release_Entry T_F42E94 T_F42E98 T_PartRecords_RestoreShadowedField T_NoteRouting_RebuildForSong
 ; Evidence: thunk slot T_SequencerMedley_OnLeave holds `jp 0x00F6614E`, and 0xF6614E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -146565,7 +146829,7 @@ SequencerMedley_OnLeave:		; <- T_SequencerMedley_OnLeave
 sub_F66123_Skip:
 	call	T_F42E98	; F6617F  call 0xf42e98
 sub_F66123_Join:
-	call	T_F42414	; F66183  call 0xf42414
+	call	T_PartRecords_RestoreShadowedField	; F66183  call 0xf42414
 	ld	(Medley_Playing:16), 0	; F66187  ld (0x0dc1),0x00
 	call	T_NoteRouting_RebuildForSong	; F6618C  call 0xf411b8
 sub_F66123_Return:
@@ -148234,7 +148498,7 @@ sub_F6746C:
 ; Format_ChordName_Call
 ; Called from: T_Format_ChordName_Call (x0)
 ; Touches: nothing with an absolute address
-; Calls:   0xF6DAA6 sub_F6B399
+; Calls:   0xF6DAA6 StepRecord_BStoreAppendBytes
 ; Evidence: thunk slot T_Format_ChordName_Call holds `jp 0x00F67470`, and 0xF67470 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -148246,7 +148510,7 @@ sub_F6746C:
 Format_ChordName_Call:		; <- T_Format_ChordName_Call
 	call	Format_ChordName	; F67470  call 0xf6daa6
 	ret	; F67474  ret
-	calr	sub_F6B399	; F67475  calr 0xf6b399
+	calr	StepRecord_BStoreAppendBytes	; F67475  calr 0xf6b399
 	ret	; F67478  ret
 
 ; --------------------------------------------------------------------------
@@ -150287,7 +150551,7 @@ DispatchTable_F6828B:
 ; SoftKeyCol1_StepRecordSub16
 ; Called from: in-module: 0xF685A3
 ; Touches: (0x1002) (0x106D) (0x12B2)
-; Calls:   StepRecordSub16_SoftKeyCol1 sub_F6A1F1 sub_F683D4 T_F431C4 StepRecord_RedrawMeasureRows
+; Calls:   StepRecordSub16_SoftKeyCol1 sub_F6A1F1 StepRecord_BuildCurrentMeasureRow T_F431C4 StepRecord_RedrawMeasureRows
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6830B is an instruction
 ;           boundary.  The name IS the address.
@@ -150311,7 +150575,7 @@ sub_F6830B_Join:
 	ld	wa, (4786:16)	; F68327  ld WA,(0x12b2)
 	m_cp_rm MW16, 0x1002, 0	; F6832B  cp WA,(0x1002)
 	jr	nz, sub_F6830B_Skip2	; F6832F  jr NZ,0xf6833a
-	calr	sub_F683D4	; F68331  calr 0xf683d4
+	calr	StepRecord_BuildCurrentMeasureRow	; F68331  calr 0xf683d4
 	call	T_F431C4	; F68334  call 0xf431c4
 	jr	sub_F6830B_Return	; F68338  jr T,0xf6833d
 sub_F6830B_Skip2:
@@ -150323,7 +150587,7 @@ sub_F6830B_Return:
 ; StepRecord_RedrawMeasureRows
 ; Called from: in-module: 0xF6833A 0xF689CE 0xF68F5E 0xF6AC00
 ; Touches: nothing with an absolute address
-; Calls:   sub_F68354 sub_F683D4 sub_F68473 T_F431C8 T_F431C4 T_F431CC
+; Calls:   sub_F68354 StepRecord_BuildCurrentMeasureRow sub_F68473 T_F431C8 T_F431C4 T_F431CC
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6833E is an instruction
 ;           boundary.  The name IS the address.
@@ -150331,13 +150595,13 @@ sub_F6830B_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; StepRecord_RedrawMeasureRows: STEP RECORD: rebuilds the previous, current and next measure rows (sub_F68354: measure
-;   (0x12B2)-1, sub_F683D4: (0x12B2) via StepRecord_LoadMeasureBeat, sub_F68473: (0x12B2)+1 -- each capped at 1000,
+;   (0x12B2)-1, StepRecord_BuildCurrentMeasureRow: (0x12B2) via StepRecord_LoadMeasureBeat, sub_F68473: (0x12B2)+1 -- each capped at 1000,
 ;   BStore_SeekMeasure for its beats per bar, '(n/4)' when over 4) and repaints them through the T_F431C8 / C4 / CC
 ;   veneers (prom_a sub_F81C90 etc., screen 0x0E, 'END' at 1000). Basis: callers + body. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave2_d.json)
 StepRecord_RedrawMeasureRows:
 	calr	sub_F68354	; F6833E  calr 0xf68354
-	calr	sub_F683D4	; F68341  calr 0xf683d4
+	calr	StepRecord_BuildCurrentMeasureRow	; F68341  calr 0xf683d4
 	calr	sub_F68473	; F68344  calr 0xf68473
 	call	T_F431C8	; F68347  call 0xf431c8
 	call	T_F431C4	; F6834B  call 0xf431c4
@@ -150401,7 +150665,7 @@ sub_F68354_Return:
 	ret	; F683D3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F683D4
+; StepRecord_BuildCurrentMeasureRow
 ; Called from: in-module: 0xF68331 0xF68341
 ; Touches: (0x0C90) (0x0E5C) (0x0F60) (0x0F65) (0x0FD4) (0x0FD6) (0x1006)
 ;          (0x1008) (0x106C) (0x12B2)
@@ -150413,7 +150677,12 @@ sub_F68354_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F683D4:
+; StepRecord_BuildCurrentMeasureRow: STEP RECORD: builds the current-measure row -- StepRecord_LoadMeasureBeat,
+;   (0x0F60) := measure (0x12B2) capped at 1000, its beats per bar (BStore_StubTable) in (0x1006), the row text at
+;   0x1030 (sub_F68504, C = 2), '(n/4)' at 0x103F when the bar has more than 4 beats. The middle row of
+;   StepRecord_RedrawMeasureRows; SoftKeyCol1_StepRecordSub16 rebuilds only it, then repaints with T_F431C4, when the
+;   measure did not change. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave3_j.json)
+StepRecord_BuildCurrentMeasureRow:
 	m_and_mi8 MB16, 0x106c, 0xf3	; F683D4  and (0x106c),0xf3
 	calr	StepRecord_LoadMeasureBeat	; F683D9  calr 0xf6a20f
 	ld	wa, (4786:16)	; F683DC  ld WA,(0x12b2)
@@ -153961,7 +154230,7 @@ sub_F69AFF_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; StepRecord_AdjustEventByte: Adds (0x0EFA) (+1 upper switch, 0xFF lower) to the byte (0x0EFB) bytes into the event at
-;   the song position, keeping the old value if the sum leaves 0..127; writes it back (sub_F6B9DF) and to the display
+;   the song position, keeping the old value if the sum leaves 0..127; writes it back (BStore_WriteByteAtSongPosition) and to the display
 ;   cell *(0x0EF0). Gated by sub_F6C43C; position slot 0 brackets it. Basis: callers + body. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave2_f.json)
 StepRecord_AdjustEventByte:
@@ -157489,37 +157758,41 @@ sub_F6B2EE_Skip3:
 ; Called from: in-module: 0xF690D1 0xF690FC 0xF69507 0xF6974D 0xF6A3F2
 ;              0xF6A593 0xF6A6A8 0xF6A9A3 +7 more
 ; Touches: (0x1008) (0x20A9) (0x3614)
-; Calls:   sub_F6B399
+; Calls:   StepRecord_BStoreAppendBytes
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B387 is an instruction
 ;           boundary.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; StepRecord_AppendBytesToCurrentEntry: sub_F6B399(A = BStore_DirEntry, W = count, XIY = source) -- prom_b's step-
+; StepRecord_AppendBytesToCurrentEntry: StepRecord_BStoreAppendBytes(A = BStore_DirEntry, W = count, XIY = source) -- prom_b's step-
 ;   record copy of BStore_AppendBytes -- then (0x20A9) |= 1 and (0x3614) |= 1. Step-record handlers call it with W
 ;   bytes they built (W = 6 from 0x12EE for a CTL event). Basis: callers + body + twin. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave2_c.json)
 StepRecord_AppendBytesToCurrentEntry:
 	ld	a, (BStore_DirEntry:16)	; F6B387  ld A,(0x1008)
-	calr	sub_F6B399	; F6B38B  calr 0xf6b399
+	calr	StepRecord_BStoreAppendBytes	; F6B38B  calr 0xf6b399
 	m_or_mi8 MB16, 0x20a9, 0x01	; F6B38E  or (0x20a9),0x01
 	m_or_mi8 MB16, 0x3614, 0x01	; F6B393  or (0x3614),0x01
 	ret	; F6B398  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B399
+; StepRecord_BStoreAppendBytes
 ; Called from: in-module: 0xF67475 0xF6B38B
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x1008) (0x126E)
 ;          (0x1272) (0x2070) (0x2075) +1 more  |  0x60347E
-; Calls:   BStore_DirEntryOffsetX2 T_F427EC sub_F6B50C T_F42884 BStore_SetCursorBlockAddrFromIY sub_F67481
+; Calls:   BStore_DirEntryOffsetX2 T_F427EC sub_F6B50C T_BStore_AllocBlock_Veneer BStore_SetCursorBlockAddrFromIY sub_F67481
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B399 is an instruction
 ;           boundary.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6B399:
+; StepRecord_BStoreAppendBytes: The step-record module's own variant of BStore_AppendBytes(A = directory entry, W =
+;   count, XIY = source): same opening stores and chain/heap logic, with local copies of the helpers (calr
+;   BStore_DirEntryOffsetX2, sub_F6B50C) and 16-bit saves. Its named caller StepRecord_AppendBytesToCurrentEntry
+;   already reads it that way. Basis: caller + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave3_g.json)
+StepRecord_BStoreAppendBytes:
 	pushw	bc	; F6B399  push BC
 	ld	(4722:16), xiy	; F6B39A  ld (0x1272),XIY
 	ld	(BStore_DirEntry:16), a	; F6B39E  ld (0x1008),A
@@ -157605,7 +157878,7 @@ sub_F6B399_Skip2:
 	sub	wa, 251	; F6B47D  sub WA,0x00fb
 	ld	(3165:16), wa	; F6B481  ld (0x0c5d),WA
 	pushw	de	; F6B485  push DE
-	call	T_F42884	; F6B486  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F6B486  call 0xf42884
 	popw	de	; F6B48A  pop DE
 	cp	w, 255	; F6B48B  cp W,0xff
 	jrl	z, sub_F6B399_Loop	; F6B48E  jrl Z,0xf6b4f5
@@ -157659,7 +157932,7 @@ sub_F6B399_Loop:
 ; sub_F6B50C
 ; Called from: in-module: 0xF67479 0xF6B476 0xF6B4EE
 ; Touches: (0x1008) (0x126E) (0x1272)  |  0x603500
-; Calls:   BStore_SetCursorBlockAddrFromIY T_F42884
+; Calls:   BStore_SetCursorBlockAddrFromIY T_BStore_AllocBlock_Veneer
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B50C is an instruction
 ;           boundary.  The name IS the address.
@@ -157746,7 +158019,7 @@ sub_F6B50C_Epilogue:
 	ret	; F6B5E8  ret
 sub_F6B50C_Skip3:
 	push	xix	; F6B5E9  push XIX
-	call	T_F42884	; F6B5EA  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F6B5EA  call 0xf42884
 	ld	iy, ix	; F6B5EE  ld IY,IX
 	pop	xix	; F6B5F0  pop XIX
 	cp	w, 255	; F6B5F1  cp W,0xff
@@ -159445,7 +159718,7 @@ Map_0EF5_F6C282:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; StepRecord_SaveCursorToSlot: Saves the current entry's song position (block 0x3460[n], offset 0x3482[n]) and
-;   (0x0E53), (0x0E54), (0x0E56) into slot A&7 of the 8-byte records at 0x0F11. sub_F6C2E5
+;   (0x0E53), (0x0E54), (0x0E56) into slot A&7 of the 8-byte records at 0x0F11. StepRecord_RestoreCursorFromSlot
 ;   (StepRecord_RestoreCursorFromSlot, batch f) restores the same record; step-record handlers save slot 0/1, rewrite
 ;   the stream, then restore. Basis: callers + body + restore twin. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave2_e.json)
@@ -159496,7 +159769,7 @@ StepRecord_SaveCursorToSlot:
 ; --------------------------------------------------------------------------
 ; StepRecord_RestoreCursorFromSlot: A = slot 0..7: reloads the current track's cursor (0x3460[track] word,
 ;   0x3482[track] byte; track = BStore_DirEntry-1) and the words (0x0E54)/(0x0E56) from the 8-byte record at 0x0F11 +
-;   8*slot. sub_F6C292 saves the same record; STEP RECORD edits save, scan or write forward, then restore with the
+;   8*slot. StepRecord_SaveCursorToSlot saves the same record; STEP RECORD edits save, scan or write forward, then restore with the
 ;   same slot. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave2_f.json)
 StepRecord_RestoreCursorFromSlot:
 	pushw	wa	; F6C2E5  push WA
@@ -160417,7 +160690,7 @@ sub_F6C877_Return:
 ; sub_F67440_Nop2
 ; Called from: in-module: 0xF67444
 ; Touches: (0x0E5C) (0x0E63) (0x0EF5) (0x12EC)
-; Calls:   T_F431B0 sub_F6C984 MsgLine_PanKeyShiftTuningBendSens StepRecord_BuildPartParamEvent
+; Calls:   T_F431B0 StepRecord_LoadPartParamValue MsgLine_PanKeyShiftTuningBendSens StepRecord_BuildPartParamEvent
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C8F3 is an instruction
 ;           boundary.
@@ -160449,7 +160722,7 @@ LcdKeyRow3_StepRecord:
 	ld	(UI_StepRecord_SubScreen:16), 11	; F6C918  ld (0x0ef5),0x0b
 	call	T_F431B0	; F6C91D  call 0xf431b0
 	ld	(4844:16), 0	; F6C921  ld (0x12ec),0x00
-	call	sub_F6C984	; F6C926  call 0xf6c984
+	call	StepRecord_LoadPartParamValue	; F6C926  call 0xf6c984
 	call	MsgLine_PanKeyShiftTuningBendSens	; F6C92A  call 0xf6c9c7
 	call	StepRecord_BuildPartParamEvent	; F6C92E  call 0xf6c935
 sub_F6C877_Epilogue:
@@ -160502,7 +160775,7 @@ sub_F6C935_Skip2:
 	ret	; F6C983  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6C984
+; StepRecord_LoadPartParamValue
 ; Called from: in-module: 0xF6C926 0xF6CB06
 ; Touches: (0x0E5C) (0x12EC) (0x12ED)  |  0x603422
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -160511,7 +160784,11 @@ sub_F6C935_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6C984:
+; StepRecord_LoadPartParamValue: (0x12ED) := byte 8 + (0x12EC) of the RAM part record (RamPtrTable_F6CA63) of the part
+;   that track (0x0E5C) plays (BStore_TrackToPart) -- the current PAN / KEY SHIFT / TUNING / BEND SENS value. Called
+;   when step-record sub-screen 11 opens and when its soft key 2 changes (0x12EC); MsgLine_PanKeyShiftTuningBendSens
+;   then draws it. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave3_h.json)
+StepRecord_LoadPartParamValue:
 	push	xix	; F6C984  push XIX
 	xor	hl, hl	; F6C985  xor HL,HL
 	ld	l, (3676:16)	; F6C987  ld L,(0x0e5c)
@@ -160684,7 +160961,7 @@ RamPtrTable_F6CA63:
 ; Map_12EC_F6CAE3 -- 0xF6CAE3-0xF6CAE6, 4 bytes: 0x08 0x09 0x0A 0x0B.
 ;   Converted 2026-09-25 (lane promb): the source framed them, with the first
 ;   byte of the routine after them, as `ld (0x09),0x0a` / `push 0xd7cf`.
-; Read by: StepRecord_BuildPartParamEvent at 0xF6C974 and sub_F6C984 at 0xF6C9B2, both indexing
+; Read by: StepRecord_BuildPartParamEvent at 0xF6C974 and StepRecord_LoadPartParamValue at 0xF6C9B2, both indexing
 ;   it with the byte (0x12EC) (`ld A,(XIY+HL)` / `ld A,(XIX+WA)`).
 ; Entry count: 4 -- 0xF6CAE7, the next byte, is a routine start two `.long`
 ;   entries name.
@@ -160712,7 +160989,7 @@ sub_F6CAE7_Skip:
 	ld	h, 3:opc	; F6CAFC  ld H,0x03
 	call	StepRecordSub11_SoftKeyCol2	; F6CAFE  call 0xf6cb52
 	ld	(4844:16), a	; F6CB02  ld (0x12ec),A
-	call	sub_F6C984	; F6CB06  call 0xf6c984
+	call	StepRecord_LoadPartParamValue	; F6CB06  call 0xf6c984
 	call	MsgLine_PanKeyShiftTuningBendSens	; F6CB0A  call 0xf6c9c7
 	call	StepRecord_BuildPartParamEvent	; F6CB0E  call 0xf6c935
 sub_F6CAE7_Return:
@@ -161357,7 +161634,7 @@ sub_F6CFCB:
 ; notes/prom_b_module_frontier.py ranks whole thunk RUNS by the contiguous
 ; unconverted extent of their targets, and by that measure this span is
 ; THIRTEENTH of fourteen: it owns exactly two `jp` slots of the 0xF40000 routine
-; directory, T_MidiFileL0ad_LcdKeyRow1 -> 0xF6F400 and T_F43384 -> 0xF6F404, an extent of 4 bytes.
+; directory, T_MidiFileL0ad_LcdKeyRow1 -> 0xF6F400 and T_MidiFileSave_WriteSeqBankSmf -> 0xF6F404, an extent of 4 bytes.
 ; That tool is blind to a module entered by DIRECT CALL, and this one is.
 ; notes/prom_b_span_frontier.py ranks the `.incbin` SPANS instead, by how many
 ; DISTINCT addresses inside them an ALREADY-TRANSCRIBED instruction calls or
@@ -161431,7 +161708,7 @@ sub_F6CFCB:
 ;     (0x21D0)-(0x21D2), an 8.3 filename EXTENSION field.
 ;
 ; ⚠ WHAT IS NOT ESTABLISHED ABOUT IT.  WHERE the bytes come from: the refill
-; leaves prom_b through T_DiskApi_ReadFileToWindow_Entry/T_DiskApi_DeleteFile_Call/T_F425E8 into prom_a 0xFE1C3A /
+; leaves prom_b through T_DiskApi_ReadFileToWindow_Entry/T_DiskApi_DeleteFile_Call/T_DiskSave_CheckFreeSpace into prom_a 0xFE1C3A /
 ; 0xFE1C55 / 0xFE1CB3, all three of which are `sub_` there.  And whose buffer
 ; 0x60A700 is: it lies inside the 0x60A000 region prom_a's block/remote reader
 ; passes as a DESTINATION -- `lda_24 XBC,(0x60a000)` at 21 sites in prom_a's
@@ -166934,7 +167211,7 @@ sub_F6EC43_Return:
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0C8A) (0x0E02) (0x0E4F) (0x12F6) (0x2070) (0x207B) (0x207E)
 ;          (0x20A9) (0x212E) (0x215E) +3 more  |  0x603422
-; Calls:   T_F409F8 T_F409F4 OldCopy_SongStore_LoadSongHeaderToDisplay
+; Calls:   T_Seq_SaveTrackMaskAndStopAll T_Seq_RestoreTrackMaskAndRewind OldCopy_SongStore_LoadSongHeaderToDisplay
 ; ⚠ CORRECTED 2026-09-25: this routine ends with the `ret` at 0xF6EC9F (the
 ;   first byte of the 0x0E fill that its two jumps target).  The `Calls:`
 ;   and part of the `Touches:` above counted 0xF6F000-0xF6F3FF, which is an
@@ -167008,14 +167285,14 @@ OldCopy_BStore_AppendBytes_Join3_Veneer:
 OldCopy_BStore_AppendBytes_Join4_Veneer:
 	jr	OldCopy_F7AA1F	; F6F002  jr T,0xf6f01f
 OldCopy_F7AA04:
-	call	T_F409F8	; F6F004  call 0xf409f8
+	call	T_Seq_SaveTrackMaskAndStopAll	; F6F004  call 0xf409f8
 	ld	(UI_ScreenStage:16), 0	; F6F008  ld (0x207e),0x00
 	ldw	(8542:16), 0	; F6F00D  ld (0x215e),0x0000
 	m_or_mi16 MW16, 0x212e, 0x0100	; F6F013  or (0x212e),0x0100
 	m_or_mi8 MB16, 0x34bb, 0x04	; F6F019  or (0x34bb),0x04
 	ret	; F6F01E  ret
 OldCopy_F7AA1F:
-	call	T_F409F4	; F6F01F  call 0xf409f4
+	call	T_Seq_RestoreTrackMaskAndRewind	; F6F01F  call 0xf409f4
 	m_and_mi8 MB16, 0x34bb, 0xfb	; F6F023  and (0x34bb),0xfb
 	ret	; F6F028  ret
 OldCopy_sub_F7AA29:
@@ -167460,7 +167737,7 @@ OldCopy_TrackMerge_ReturnToStageZero:
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  Only TWO slots reach this module -- T_MidiFileL0ad_LcdKeyRow1
-;                   and T_F43384 -- which is why the thunk-run frontier
+;                   and T_MidiFileSave_WriteSeqBankSmf -- which is why the thunk-run frontier
 ;                   ranks it thirteenth and why it was chosen with a
 ;                   different tool.  0xF6F400 is an instruction boundary of
 ;                   this transcription, re-asserted on every emit.  The name
@@ -167473,13 +167750,13 @@ MidiFileL0ad_LcdKeyRow1:		; <- T_MidiFileL0ad_LcdKeyRow1
 	jp	sub_F6F408	; F6F400  jp 0xf6f408
 
 ; --------------------------------------------------------------------------
-; sub_F6F404
-; Called from: T_F43384 (x2)
+; MidiFileSave_WriteSeqBankSmf
+; Called from: T_MidiFileSave_WriteSeqBankSmf (x2)
 ; Touches: nothing with an absolute address
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  Only TWO slots reach this module -- T_MidiFileL0ad_LcdKeyRow1
-;                   and T_F43384 -- which is why the thunk-run frontier
+;                   and T_MidiFileSave_WriteSeqBankSmf -- which is why the thunk-run frontier
 ;                   ranks it thirteenth and why it was chosen with a
 ;                   different tool.  0xF6F404 is an instruction boundary of
 ;                   this transcription, re-asserted on every emit.  The name
@@ -167487,7 +167764,12 @@ MidiFileL0ad_LcdKeyRow1:		; <- T_MidiFileL0ad_LcdKeyRow1
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6F404:		; <- T_F43384
+; MidiFileSave_WriteSeqBankSmf: `jp sub_F6F440`: unless Disk_SeqBank is already BStore_CurrentBank, saves the
+;   workspace to the current bank, makes Disk_SeqBank current and loads it (sub_F6F4A3), applies its beats per bar;
+;   then Smf_WriteFile (writes the song as a Standard MIDI File) and re-inits the playback rings. Run by the MIDI FILE
+;   SAVE row keys. Twin of MidiFileL0ad_LcdKeyRow1's load path. Basis: callers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_i.json)
+MidiFileSave_WriteSeqBankSmf:		; <- T_MidiFileSave_WriteSeqBankSmf
 	jp	sub_F6F440	; F6F404  jp 0xf6f440
 
 ; --------------------------------------------------------------------------
@@ -167754,10 +168036,10 @@ Smf_ReadFile:
 	ld	(4711:16), a	; F6F54B  ld (0x1267),A
 	ld	(4992:16), 255	; F6F54F  ld (0x1380),0xff
 	calr	sub_F6F90C	; F6F554  calr 0xf6f90c
-	calr	sub_F6FB38	; F6F557  calr 0xf6fb38
-	calr	sub_F6F929	; F6F55A  calr 0xf6f929
+	calr	Smf_ClearPendingNoteSlots	; F6F557  calr 0xf6fb38
+	calr	Smf_ClearChannelBankSelects	; F6F55A  calr 0xf6f929
 	xor	l, l	; F6F55D  xor L,L
-	calr	sub_F7659B	; F6F55F  calr 0xf7659b
+	calr	InputStream_OpenAndReadFirstBlock	; F6F55F  calr 0xf7659b
 	ld	w, a	; F6F562  ld W,A
 	ld	(InputStream_Status:16), w	; F6F564  ld (0x124a),W
 	cp	w, 4:i3	; F6F568  cp W,4
@@ -167884,7 +168166,7 @@ Smf_ReadFile_Skip7:
 	xor	xiy, xiy	; F6F6D1  xor XIY,XIY
 Smf_ReadFile_Loop2:
 	push	xiy	; F6F6D3  push XIY
-	calr	sub_F710E7	; F6F6D4  calr 0xf710e7
+	calr	Smf_ApplyDeltaTime	; F6F6D4  calr 0xf710e7
 	pop	xiy	; F6F6D7  pop XIY
 	inc	1, xiy	; F6F6D8  inc 1,XIY
 	cp	xiy, 16	; F6F6DA  cp XIY,0x00000010
@@ -167985,7 +168267,7 @@ Smf_ReadFile_Join4:
 	jrl	Smf_ReadFile_Join8	; F6F7E0  jrl T,0xf6f89f
 Smf_ReadFile_Join5:
 	call	T_F40CB4	; F6F7E3  call 0xf40cb4
-	calr	sub_F6F94E	; F6F7E7  calr 0xf6f94e
+	calr	Smf_ResetTrackAssignToIdentity	; F6F7E7  calr 0xf6f94e
 	ld	(UI_StatusCode:16), 35	; F6F7EA  ld (0x2880),0x23
 	call	T_MessageScreen_Paint	; F6F7EF  call 0xf41600
 	calr	Smf_BusyDelay	; F6F7F3  calr 0xf72f20
@@ -168132,7 +168414,7 @@ sub_F6F90C:
 	ret	; F6F928  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6F929
+; Smf_ClearChannelBankSelects
 ; Called from: in-module: 0xF6F55A 0xF71BB1
 ; Touches: nothing with an absolute address
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
@@ -168144,7 +168426,11 @@ sub_F6F90C:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6F929:
+; Smf_ClearChannelBankSelects: Zeroes the 16-byte per-channel bank-select tables at 0x1092 (MSB, CC 0) and 0x10A4
+;   (LSB, CC 32) that SmfCC_BankSelectMsb / SmfCC_BankSelectLsb fill by MIDI channel. Smf_ReadFile calls it before
+;   reading, Smf_ReadMultiTrack before every track chunk. Basis: callers + body + the tables' writers. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_j.json)
+Smf_ClearChannelBankSelects:
 	push	xwa	; F6F929  push XWA
 	push	xbc	; F6F92A  push XBC
 	push	xix	; F6F92B  push XIX
@@ -168163,7 +168449,7 @@ sub_F6F929:
 	ret	; F6F94D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6F94E
+; Smf_ResetTrackAssignToIdentity
 ; Called from: in-module: 0xF6F7E7 0xF71BE2
 ; Touches: (0x1239)  |  0x603422 0x603433
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -168174,7 +168460,11 @@ sub_F6F929:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6F94E:
+; Smf_ResetTrackAssignToIdentity: BStore_TrackToPart[0..16] := 0..15, 0x20 and the 16 track MIDI channels at 0x603433
+;   := 0..15 (from ByteMap_F6F985/_F6F9A7; (0x1239) only picks a byte-identical copy). Run by both SMF readers after a
+;   file is read, so an SMF lands with track n on part n / channel n. Basis: callers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_g.json)
+Smf_ResetTrackAssignToIdentity:
 	ld	xiy, ByteMap_F6F985	; F6F94E  ld XIY,0x00f6f985
 	m_cp_mi8 MB16, 0x1239, 0x00	; F6F953  cp (0x1239),0x00
 	jr	z, sub_F6F94E_Skip	; F6F958  jr Z,0xf6f95f
@@ -168215,16 +168505,16 @@ sub_F6F94E_Skip2:
 ;           (24,16) and (16,16) (`python3 notes/prom_b_f6d002_layout.py
 ;           --null-ptr`).
 ; Unknown: what the two index spaces ARE.  (Who reads it is answered by the
-;          CORRECTED paragraph below: sub_F6F94E.)
+;          CORRECTED paragraph below: Smf_ResetTrackAssignToIdentity.)
 ; --------------------------------------------------------------------------
 ; ⚠ CORRECTED 2026-09-25 (lane promb): the object is 66 bytes, four maps of
 ;   17, 17, 16 and 16, not 70 with a 20-byte fourth map.  The reader fixes the
-;   lengths: sub_F6F94E (0xF6F94E) copies 17 bytes (`ld BC,0x0011 / ldir`)
+;   lengths: Smf_ResetTrackAssignToIdentity (0xF6F94E) copies 17 bytes (`ld BC,0x0011 / ldir`)
 ;   from 0xF6F985 or 0xF6F996 to 0x603422, choosing on (0x1239) == 0, then 16
 ;   bytes (`ld BC,0x0010 / ldir`) from 0xF6F9A7 or 0xF6F9B7 to 0x603433 on
 ;   the same test.  The four bytes the old framing ended on, 0x28 0x29 0x3C
 ;   0xD8 at 0xF6F9C7, begin ClearRam10D3_34Bytes below, which the `calr` at
-;   0xF6F61B reaches.  So "who reads it" above is answered (sub_F6F94E), and
+;   0xF6F61B reaches.  So "who reads it" above is answered (Smf_ResetTrackAssignToIdentity), and
 ;   the maps are PAIRS OF IDENTICAL COPIES: 0xF6F985 == 0xF6F996 (0x00..0x0F,
 ;   then 0x20) and 0xF6F9A7 == 0xF6F9B7 (0x00..0x0F) -- (0x1239) selects
 ;   between byte-identical tables.  What 0x603422 / 0x603433 hold is not
@@ -168269,7 +168559,7 @@ ClearRam10D3_34Bytes_Loop:
 ; sub_F6F9DE
 ; Called from: in-module: 0xF6F6AA
 ; Touches: (0x126E) (0x349F) (0x3608)  |  0x603500
-; Calls:   T_F42884 SongStore_SeekBlock_Copy
+; Calls:   T_BStore_AllocBlock_Veneer SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6F9DE is an instruction boundary of this
@@ -168287,7 +168577,7 @@ sub_F6F9DE_Loop:
 	jrl	c, sub_F6F9DE_Return	; F6F9EE  jrl C,0xf6fa6f
 	push	xiy	; F6F9F1  push XIY
 	push	xix	; F6F9F2  push XIX
-	call	T_F42884	; F6F9F3  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F6F9F3  call 0xf42884
 	ld	wa, ix	; F6F9F7  ld WA,IX
 	pop	xix	; F6F9F9  pop XIX
 	pop	xiy	; F6F9FA  pop XIY
@@ -168500,7 +168790,7 @@ sub_F6FB16:
 	ret	; F6FB37  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6FB38
+; Smf_ClearPendingNoteSlots
 ; Called from: in-module: 0xF6F557 0xF71BAB
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -168511,7 +168801,11 @@ sub_F6FB16:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6FB38:
+; Smf_ClearPendingNoteSlots: Clears byte 0 (bit 7 = in use | channel) of all 33 seven-byte pending-note records at
+;   0x305A..0x313A, the slots SmfEvent_NoteOn fills and SmfEvent_NoteOff matches. Run by Smf_ReadFile before reading
+;   and by Smf_ReadMultiTrack before each track chunk. Basis: callers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_h.json)
+Smf_ClearPendingNoteSlots:
 	ld	xhl, 12378	; F6FB38  ld XHL,0x0000305a
 	xor	iy, iy	; F6FB3D  xor IY,IY
 	xor	a, a	; F6FB3F  xor A,A
@@ -168630,7 +168924,7 @@ sub_F6FB51_Return:
 ; Called from: in-module: 0xF6FBF7
 ; Touches: (0x1078) (0x107A) (0x108C) (0x108D) (0x108E) (0x108F) (0x11B2)
 ;          (0x1238) (0x124A) (0x360C) +1 more
-; Calls:   InputStream_GetByte sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 TrackCursor_Save
+; Calls:   InputStream_GetByte Smf_ClampTrackToSlot TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FC10 is an instruction boundary of this
@@ -168691,7 +168985,7 @@ sub_F6FC10_Join:
 	jr	z, sub_F6FC10_Skip4	; F6FC95  jr Z,0xf6fca0
 	ld	iy, (4530:16)	; F6FC97  ld IY,(0x11b2)
 	extz	xiy	; F6FC9B  extz XIY
-	calr	sub_F70C3F	; F6FC9D  calr 0xf70c3f
+	calr	Smf_ClampTrackToSlot	; F6FC9D  calr 0xf70c3f
 sub_F6FC10_Skip4:
 	pushw	wa	; F6FCA0  push WA
 	calr	TrackCursor_Load	; F6FCA1  calr 0xf7124e
@@ -168718,7 +169012,7 @@ sub_F6FC10_Skip5:
 	jr	z, sub_F6FC10_Skip6	; F6FCDD  jr Z,0xf6fce8
 	ld	iy, (4530:16)	; F6FCDF  ld IY,(0x11b2)
 	extz	xiy	; F6FCE3  extz XIY
-	calr	sub_F70C3F	; F6FCE5  calr 0xf70c3f
+	calr	Smf_ClampTrackToSlot	; F6FCE5  calr 0xf70c3f
 sub_F6FC10_Skip6:
 	sla	iy, 1	; F6FCE8  sla 0x01,IY
 	push	xix	; F6FCEB  push XIX
@@ -168759,7 +169053,7 @@ sub_F6FC10_Skip6:
 	jr	z, sub_F6FC10_Skip7	; F6FD40  jr Z,0xf6fd4b
 	ld	iy, (4530:16)	; F6FD42  ld IY,(0x11b2)
 	extz	xiy	; F6FD46  extz XIY
-	calr	sub_F70C3F	; F6FD48  calr 0xf70c3f
+	calr	Smf_ClampTrackToSlot	; F6FD48  calr 0xf70c3f
 sub_F6FC10_Skip7:
 	ld	bc, iy	; F6FD4B  ld BC,IY
 	ld	de, (13836:16)	; F6FD4D  ld DE,(0x360c)
@@ -169231,7 +169525,7 @@ sub_F6FFAE_Return:
 ; SmfEvent_ProgramChange
 ; Called from: in-module: 0xF6FFAA
 ; Touches: (0x10D0) (0x10D1) (0x11B1) (0x1238) (0x1239) (0x124B) (0x2732)
-; Calls:   SmfPart_ResetAllRecords sub_F701F1 T_PartSound_FromProgramChange TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96
+; Calls:   SmfPart_ResetAllRecords SmfPart_SetSoundFromProgramChange T_PartSound_FromProgramChange TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96
 ;          SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -169259,7 +169553,7 @@ sub_F70008_Skip2:
 sub_F70008_Loop:
 	m_bit 0, MD16, 0x11b1	; F70031  bit 0,(0x11b1)
 	jr	nz, sub_F70008_Skip3	; F70035  jr NZ,0xf7003f
-	calr	sub_F701F1	; F70037  calr 0xf701f1
+	calr	SmfPart_SetSoundFromProgramChange	; F70037  calr 0xf701f1
 	ld	(4664:16), 0	; F7003A  ld (0x1238),0x00
 sub_F70008_Skip3:
 	m_cp_mi8 MB16, 0x1239, 0x00	; F7003F  cp (0x1239),0x00
@@ -169431,7 +169725,7 @@ sub_F70008_Return:
 	ret	; F701F0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F701F1
+; SmfPart_SetSoundFromProgramChange
 ; Called from: in-module: 0xF70037 0xF71EC2
 ; Touches: (0x10D0) (0x10D1) (0x1239)
 ; Calls:   0xF702B8 T_PartSound_FromProgramChange
@@ -169443,7 +169737,12 @@ sub_F70008_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F701F1:
+; SmfPart_SetSoundFromProgramChange: SMF import, program change on channel (Smf_EventStatus & 0x0F): XIY = the
+;   channel's part record (SmfPart_GetRecordPtr). In GM mode ((0x1239) != 0) record +2/+3 :=
+;   PartSound_FromProgramChange(bank LSB (0x10A4)[ch], bank MSB (0x1092)[ch], program (0x10D1), ByteMap_F702A8[ch]);
+;   otherwise +2 := program and +3 := its bit 7 | (MSB & 7) << 3 | (LSB & 0x70) >> 4. First step of both
+;   SmfEvent_ProgramChange variants. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave3_i.json)
+SmfPart_SetSoundFromProgramChange:
 	push	xiy	; F701F1  push XIY
 	calr	SmfPart_GetRecordPtr	; F701F2  calr 0xf702b8
 	m_cp_mi8 MB16, 0x1239, 0x00	; F701F5  cp (0x1239),0x00
@@ -170378,7 +170677,7 @@ sub_F725D9_Nop:
 ; Called from: in-module: 0xF70835
 ; Touches: (0x1078) (0x107A) (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x11B2)
 ;          (0x1238)
-; Calls:   sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
+; Calls:   Smf_ClampTrackToSlot TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7083B is an instruction boundary of this
@@ -170398,7 +170697,7 @@ sub_F7083B:
 	m_cp_mi8 MB16, Smf_TrackCount, 0x02	; F70853  cp (0x107a),0x02
 	jr	lt, sub_F7083B_Skip	; F70858  jr LT,0xf70862
 	ld	iy, (4530:16)	; F7085A  ld IY,(0x11b2)
-	call	sub_F70C3F	; F7085E  call 0xf70c3f
+	call	Smf_ClampTrackToSlot	; F7085E  call 0xf70c3f
 sub_F7083B_Skip:
 	push	xiy	; F70862  push XIY
 	pushw	bc	; F70863  push BC
@@ -170464,7 +170763,7 @@ sub_F7083B_Skip:
 	m_cp_mi8 MB16, Smf_TrackCount, 0x02	; F70903  cp (0x107a),0x02
 	jr	lt, sub_F7083B_Skip2	; F70908  jr LT,0xf70912
 	ld	iy, (4530:16)	; F7090A  ld IY,(0x11b2)
-	call	sub_F70C3F	; F7090E  call 0xf70c3f
+	call	Smf_ClampTrackToSlot	; F7090E  call 0xf70c3f
 sub_F7083B_Skip2:
 	call	TrackCursor_Save	; F70912  call 0xf71275
 	ld	(4664:16), 0	; F70916  ld (0x1238),0x00
@@ -170864,7 +171163,7 @@ sub_F70AE9_Return:
 ; sub_F70B22
 ; Called from: in-module: 0xF70B1E
 ; Touches: (0x1078) (0x107A) (0x10D0) (0x11AF) (0x11B2) (0x1238) (0x1239)
-; Calls:   sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
+; Calls:   Smf_ClampTrackToSlot TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70B22 is an instruction boundary of this
@@ -170881,7 +171180,7 @@ sub_F70B22:
 	jr	c, sub_F70B22_Skip	; F70B31  jr C,0xf70b3c
 	ld	iy, (4530:16)	; F70B33  ld IY,(0x11b2)
 	extz	xiy	; F70B37  extz XIY
-	calr	sub_F70C3F	; F70B39  calr 0xf70c3f
+	calr	Smf_ClampTrackToSlot	; F70B39  calr 0xf70c3f
 sub_F70B22_Skip:
 	push	xiy	; F70B3C  push XIY
 	pushw	bc	; F70B3D  push BC
@@ -170977,7 +171276,7 @@ sub_F70B22_Join:
 	jr	c, sub_F70B22_Skip5	; F70C27  jr C,0xf70c32
 	ld	iy, (4530:16)	; F70C29  ld IY,(0x11b2)
 	extz	xiy	; F70C2D  extz XIY
-	calr	sub_F70C3F	; F70C2F  calr 0xf70c3f
+	calr	Smf_ClampTrackToSlot	; F70C2F  calr 0xf70c3f
 sub_F70B22_Skip5:
 	calr	TrackCursor_Save	; F70C32  calr 0xf71275
 	ld	(4664:16), 0	; F70C35  ld (0x1238),0x00
@@ -171009,7 +171308,7 @@ Data_F70C3C:
 
 
 ; --------------------------------------------------------------------------
-; sub_F70C3F
+; Smf_ClampTrackToSlot
 ; Called from: in-module: 0xF6FC9D 0xF6FCE5 0xF6FD48 0xF7085E 0xF7090E
 ;              0xF70B39 0xF70C2F 0xF71AB8 +1 more
 ; Touches: nothing with an absolute address
@@ -171022,7 +171321,12 @@ Data_F70C3C:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70C3F:
+; Smf_ClampTrackToSlot: XIY := min(zero-extended IY, 1): SMF track 0 keeps cursor slot 0, every later track shares
+;   slot 1 -- the same clamp as Smf_TrackToSlot, which the *_MultiTrack handlers use. The shared SMF event handlers
+;   (SmfMeta_SetTempo, SmfCC_PutParamEventWithNumber, sub_F7083B, sub_F70B22) apply it to the track counter (0x11B2)
+;   for format 1 with 2+ tracks before TrackCursor_Load. Basis: callers + body + twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_j.json)
+Smf_ClampTrackToSlot:
 	extz	xiy	; F70C3F  extz XIY
 	cp	xiy, 1	; F70C41  cp XIY,0x00000001
 	jr	ule, sub_F70C3F_Return	; F70C47  jr ULE,0xf70c4e
@@ -171036,11 +171340,11 @@ sub_F70C3F_Return:
 ;   0x09-0x0E each move up one.  Converted 2026-09-25 (lane promb): the source
 ;   framed the bytes as instructions (`nop`, `normal`, `push SR`, `pop SR`,
 ;   `max`, `halt`, `ei 7`, `ld (0x0f),0x09`, `ld (0x0b),0x0d0c`, `ret`) after
-;   the `ret` that ends sub_F70C3F; nothing branches into them.
+;   the `ret` that ends Smf_ClampTrackToSlot; nothing branches into them.
 ; Unknown: the reader.  No 24- or 32-bit spelling of 0xF70C4F-0xF70C6E occurs
 ;   in prom_a or prom_b; the identity map ByteMap_F70C5F follows it directly,
 ;   the same shape as the flag-selected pairs ByteMap_F6F985/F6F996 that
-;   sub_F6F94E copies -- a pattern, not a reader.
+;   Smf_ResetTrackAssignToIdentity copies -- a pattern, not a reader.
 ; --------------------------------------------------------------------------
 ByteMap_F70C4F:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x0F, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E	; F70C4F  [0..15]
@@ -171123,7 +171427,7 @@ SmfCC_Nrpn:
 ; SmfCC_RpnMsb
 ; Called from: in-module: 0xF70484 0xF7231A
 ; Touches: (0x10D0) (0x10D2) (0x11B4) (0x11B6)
-; Calls:   sub_F70DD6
+; Calls:   SmfCC_UpdateSelectedRpn
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70CBA is an instruction boundary of this
@@ -171164,7 +171468,7 @@ SmfCC_RpnMsb:
 	jr	c, sub_F70CBA_Return	; F70D07  jr C,0xf70d41
 sub_F70CBA_Skip:
 	pushw	bc	; F70D09  push BC
-	calr	sub_F70DD6	; F70D0A  calr 0xf70dd6
+	calr	SmfCC_UpdateSelectedRpn	; F70D0A  calr 0xf70dd6
 	popw	bc	; F70D0D  pop BC
 	cp	a, 255	; F70D0E  cp A,0xff
 	jr	nz, sub_F70CBA_Return	; F70D11  jr NZ,0xf70d41
@@ -171189,7 +171493,7 @@ sub_F70CBA_Return:
 ; SmfCC_RpnLsb
 ; Called from: in-module: 0xF70489 0xF7231F
 ; Touches: (0x10D0) (0x10D2) (0x11B4) (0x11B6)
-; Calls:   sub_F70DD6
+; Calls:   SmfCC_UpdateSelectedRpn
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70D42 is an instruction boundary of this
@@ -171234,7 +171538,7 @@ SmfCC_RpnLsb:
 	jr	c, sub_F70D42_Return	; F70D9B  jr C,0xf70dd5
 sub_F70D42_Skip:
 	pushw	bc	; F70D9D  push BC
-	calr	sub_F70DD6	; F70D9E  calr 0xf70dd6
+	calr	SmfCC_UpdateSelectedRpn	; F70D9E  calr 0xf70dd6
 	popw	bc	; F70DA1  pop BC
 	cp	a, 255	; F70DA2  cp A,0xff
 	jr	nz, sub_F70D42_Return	; F70DA5  jr NZ,0xf70dd5
@@ -171256,7 +171560,7 @@ sub_F70D42_Return:
 	ret	; F70DD5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F70DD6
+; SmfCC_UpdateSelectedRpn
 ; Called from: in-module: 0xF70D0A 0xF70D9E
 ; Touches: (0x10D0)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -171267,7 +171571,11 @@ sub_F70D42_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70DD6:
+; SmfCC_UpdateSelectedRpn: For the event's channel (Smf_EventStatus & 15): selected RPN (0x11D8)[ch] := the RPN LSB
+;   (0x11C8)[ch] when the RPN MSB (0x11B8)[ch] is 0 and the LSB is 0..2, else 0xFF (none); returns it in A. The common
+;   tail of SmfCC_RpnMsb (CC 101) and SmfCC_RpnLsb (CC 100); SmfCC_PutSelectedRpnValueEvent consumes (0x11D8). Basis:
+;   callers + body. (notes/naming-pilot-2026-10-06/proposals_wave3_g.json)
+SmfCC_UpdateSelectedRpn:
 	ld	iy, (Smf_EventStatus:16)	; F70DD6  ld IY,(0x10d0)
 	and	iy, 15	; F70DDA  and IY,0x000f
 	push	xix	; F70DDE  push XIX
@@ -171589,7 +171897,7 @@ sub_F70FF8_Return:
 ; SmfEvent_NoteOff
 ; Called from: in-module: 0xF6FF9B
 ; Touches: (0x10D0) (0x10D1) (0x126E) (0x345C) (0x345E)
-; Calls:   SongStore_SeekBlock_Copy sub_F710BA
+; Calls:   SongStore_SeekBlock_Copy Smf_StepCursorOneByte
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71023 is an instruction boundary of this
@@ -171638,7 +171946,7 @@ sub_F71023_Skip:
 	ld	(BStore_CursorBlock:16), hl	; F7107E  ld (0x345c),HL
 	ld	(BStore_CursorOffset:16), ix	; F71082  ld (0x345e),IX
 	pushw	wa	; F71086  push WA
-	calr	sub_F710BA	; F71087  calr 0xf710ba
+	calr	Smf_StepCursorOneByte	; F71087  calr 0xf710ba
 	popw	wa	; F7108A  pop WA
 	push	xix	; F7108B  push XIX
 	push	xiy	; F7108C  push XIY
@@ -171659,7 +171967,7 @@ sub_F71023_Return:
 	ret	; F710B9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F710BA
+; Smf_StepCursorOneByte
 ; Called from: in-module: 0xF71087 0xF72204
 ; Touches: (0x126E) (0x345C) (0x345E)
 ; Calls:   SongStore_SeekBlock_Copy
@@ -171671,7 +171979,11 @@ sub_F71023_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F710BA:
+; Smf_StepCursorOneByte: Steps the saved cursor (BStore_CursorBlock, BStore_CursorOffset) one byte: offset + 1, or at
+;   offset 255 the block's +3 link with offset 5 (seeking (0x126E) to it). Both SMF note-off arms use it to reach the
+;   second duration byte of the pending note-on, which may sit in the next block. Basis: callers + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave3_h.json)
+Smf_StepCursorOneByte:
 	ld	wa, (BStore_CursorOffset:16)	; F710BA  ld WA,(0x345e)
 	cp	wa, 255	; F710BE  cp WA,0x00ff
 	jr	nz, sub_F710BA_Skip	; F710C2  jr NZ,0xf710e0
@@ -171691,7 +172003,7 @@ sub_F710BA_Join:
 	ret	; F710E6  ret
 
 ; --------------------------------------------------------------------------
-; sub_F710E7
+; Smf_ApplyDeltaTime
 ; Called from: in-module: 0xF6F6D4 0xF71C91
 ; Touches: (0x107C) (0x1086) (0x1198) (0x119A)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -171702,7 +172014,11 @@ sub_F710BA_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F710E7:
+; Smf_ApplyDeltaTime: SMF import, after an event's delta time is decoded: adds Smf_VlqValue to slot IY's tick-within-
+;   beat counter (0x10D3)[IY]; every whole Smf_Division (one quarter note) crossed is counted in (0x1086) and written
+;   into the track as 0x81 beat markers (sub_F71203); the remainder stays in (0x10D3)[IY], which the event writers
+;   scale to 96 ppq as the event's tick. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave3_i.json)
+Smf_ApplyDeltaTime:
 	ldw	(4230:16), 0	; F710E7  ld (0x1086),0x0000
 	sla	iy, 1	; F710ED  sla 0x01,IY
 	push	xix	; F710F0  push XIX
@@ -171727,7 +172043,7 @@ sub_F710E7:
 	jr	nov, sub_F710E7_Skip	; F71124  jr PO/NOV,0xf7113d
 
 ; --------------------------------------------------------------------------
-; REACHED CODE, not data (was `Data_F71126`), part of sub_F710E7:
+; REACHED CODE, not data (was `Data_F71126`), part of Smf_ApplyDeltaTime:
 ;   the overflow arm of `jr nov` at 0xF71124: `push WA / ld WA,DE / ld DE,1 / ld HL,(0x107C) /
 ;   ld QWA,DE / div XWA,HL / ld DE,QWA / add (0x1086),WA / pop WA` -- the same
 ;   divide-and-accumulate the routine runs just above it.
@@ -172201,7 +172517,7 @@ InputStream_GetByte_Skip2:
 ; BStore_ExtendChainAtCursor
 ; Called from: in-module: 0xF71012
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   T_F42884 SongStore_SeekBlock_Copy
+; Calls:   T_BStore_AllocBlock_Veneer SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF713E1 is an instruction boundary of this
@@ -172210,11 +172526,11 @@ InputStream_GetByte_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; BStore_ExtendChainAtCursor: IX = a new block from T_F42884; the cursor block's next link (+3) = it, its previous link (+1) = the cursor block,
+; BStore_ExtendChainAtCursor: IX = a new block from T_BStore_AllocBlock_Veneer; the cursor block's next link (+3) = it, its previous link (+1) = the cursor block,
 ;   its next = 0xFFFF; the cursor moves to it at offset 5 (the block header's length).
 BStore_ExtendChainAtCursor:
 	push	xix	; F713E1  push XIX
-	call	T_F42884	; F713E2  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F713E2  call 0xf42884
 	ld	wa, ix	; F713E6  ld WA,IX
 	ld	hl, (BStore_CursorBlock:16)	; F713E8  ld HL,(0x345c)
 	calr	SongStore_SeekBlock_Copy	; F713EC  calr 0xf72f0a
@@ -173078,7 +173394,7 @@ sub_F719EA_Skip3:
 ;              0xF71A91
 ; Touches: (0x1078) (0x107A) (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x11B2)
 ;          (0x1238) (0x1381)
-; Calls:   sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
+; Calls:   Smf_ClampTrackToSlot TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 SmfEvent_MarkChannelUsed TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71A95 is an instruction boundary of this
@@ -173103,7 +173419,7 @@ SmfCC_PutParamEventWithNumber:
 	m_cp_mi8 MB16, Smf_TrackCount, 0x02	; F71AAD  cp (0x107a),0x02
 	jr	lt, sub_F71A95_Skip	; F71AB2  jr LT,0xf71abc
 	ld	iy, (4530:16)	; F71AB4  ld IY,(0x11b2)
-	call	sub_F70C3F	; F71AB8  call 0xf70c3f
+	call	Smf_ClampTrackToSlot	; F71AB8  call 0xf70c3f
 sub_F71A95_Skip:
 	push	xiy	; F71ABC  push XIY
 	pushw	bc	; F71ABD  push BC
@@ -173172,7 +173488,7 @@ sub_F71A95_Skip:
 	m_cp_mi8 MB16, Smf_TrackCount, 0x02	; F71B68  cp (0x107a),0x02
 	jr	lt, sub_F71A95_Skip2	; F71B6D  jr LT,0xf71b77
 	ld	iy, (4530:16)	; F71B6F  ld IY,(0x11b2)
-	call	sub_F70C3F	; F71B73  call 0xf70c3f
+	call	Smf_ClampTrackToSlot	; F71B73  call 0xf70c3f
 sub_F71A95_Skip2:
 	call	TrackCursor_Save	; F71B77  call 0xf71275
 	ld	(4664:16), 0	; F71B7B  ld (0x1238),0x00
@@ -173184,8 +173500,8 @@ sub_F71A95_Epilogue:
 ; Smf_ReadMultiTrack
 ; Called from: in-module: 0xF6F637
 ; Touches: (0x1010) (0x107A) (0x10CB) (0x11B2) (0x1239) (0x124B) (0x360C)
-; Calls:   T_Seq_RequestRewind T_SongClear_ClearCurrentBank sub_F72822 sub_F6FB38 ClearRam10D3_34Bytes_Copy sub_F6F929
-;          Smf_ReadTrackChunk InputStream_RefillDone sub_F729D9 sub_F72F5C sub_F6F94E
+; Calls:   T_Seq_RequestRewind T_SongClear_ClearCurrentBank sub_F72822 Smf_ClearPendingNoteSlots ClearRam10D3_34Bytes_Copy Smf_ClearChannelBankSelects
+;          Smf_ReadTrackChunk InputStream_RefillDone Smf_MergeTrack2IntoTrack1 sub_F72F5C Smf_ResetTrackAssignToIdentity
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71B82 is an instruction boundary of this
@@ -173195,7 +173511,7 @@ sub_F71A95_Epilogue:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Smf_ReadMultiTrack: Smf_ReadFile's branch for format 1 with more than one track (cp (Smf_Format),1 / cp (Smf_TrackCount),1 at 0xF6F626):
-;     for track (0x11B2) = 0 .. Smf_TrackCount-1, Smf_ReadTrackChunk and sub_F729D9; then sub_F72F5C.
+;     for track (0x11B2) = 0 .. Smf_TrackCount-1, Smf_ReadTrackChunk and Smf_MergeTrack2IntoTrack1; then sub_F72F5C.
 Smf_ReadMultiTrack:
 	xor	a, a	; F71B82  xor A,A
 	ld	(4665:16), a	; F71B84  ld (0x1239),A
@@ -173209,16 +173525,16 @@ Smf_ReadMultiTrack:
 sub_F71B82_Loop:
 	ld	(4299:16), 0	; F71BA3  ld (0x10cb),0x00
 	calr	sub_F72822	; F71BA8  calr 0xf72822
-	calr	sub_F6FB38	; F71BAB  calr 0xf6fb38
+	calr	Smf_ClearPendingNoteSlots	; F71BAB  calr 0xf6fb38
 	calr	ClearRam10D3_34Bytes_Copy	; F71BAE  calr 0xf71d4f
-	call	sub_F6F929	; F71BB1  call 0xf6f929
+	call	Smf_ClearChannelBankSelects	; F71BB1  call 0xf6f929
 	calr	Smf_ReadTrackChunk	; F71BB5  calr 0xf71bea
 	m_cp_mi8 MB16, 0x1010, 0x00	; F71BB8  cp (0x1010),0x00
 	jr	z, sub_F71B82_Skip	; F71BBD  jr Z,0xf71bc4
 	calr	InputStream_RefillDone	; F71BBF  calr 0xf765de
 	jr	sub_F71B82_Return	; F71BC2  jr T,0xf71be5
 sub_F71B82_Skip:
-	calr	sub_F729D9	; F71BC4  calr 0xf729d9
+	calr	Smf_MergeTrack2IntoTrack1	; F71BC4  calr 0xf729d9
 	incw	1, (4530:16)	; F71BC7  incw 1,(0x11b2)
 	ld	wa, (4530:16)	; F71BCB  ld WA,(0x11b2)
 	m_cp_rm MW16, Smf_TrackCount, 0	; F71BCF  cp WA,(0x107a)
@@ -173227,7 +173543,7 @@ sub_F71B82_Skip:
 	m_cp_mi8 MB16, 0x1010, 0x00	; F71BD8  cp (0x1010),0x00
 	jr	nz, sub_F71B82_Return	; F71BDD  jr NZ,0xf71be5
 	calr	sub_F72F5C	; F71BDF  calr 0xf72f5c
-	calr	sub_F6F94E	; F71BE2  calr 0xf6f94e
+	calr	Smf_ResetTrackAssignToIdentity	; F71BE2  calr 0xf6f94e
 sub_F71B82_Return:
 	ret	; F71BE5  ret
 
@@ -173255,7 +173571,7 @@ SmfTrackTag:
 ; Smf_ReadTrackChunk
 ; Called from: in-module: 0xF71BB5
 ; Touches: (0x1010) (0x10CB) (0x11B1) (0x11B2) (0x1238) (0x124A) (0x2880)
-; Calls:   InputStream_GetByte Smf_ReadVlqBytes_Copy Smf_DecodeVlq Smf_TrackToSlot sub_F710E7 Smf_AddDeltaToHeldNotes
+; Calls:   InputStream_GetByte Smf_ReadVlqBytes_Copy Smf_DecodeVlq Smf_TrackToSlot Smf_ApplyDeltaTime Smf_AddDeltaToHeldNotes
 ;          SmfEvent_Meta sub_F728A3 SmfEvent_SysEx SmfEvent_ReadWithNewStatus_MultiTrack SmfEvent_ReadWithRunningStatus
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -173332,7 +173648,7 @@ sub_F71BEA_Skip5:
 	calr	Smf_DecodeVlq	; F71C87  calr 0xf6fe1b
 	ld	iy, (4530:16)	; F71C8A  ld IY,(0x11b2)
 	calr	Smf_TrackToSlot	; F71C8E  calr 0xf728fe
-	calr	sub_F710E7	; F71C91  calr 0xf710e7
+	calr	Smf_ApplyDeltaTime	; F71C91  calr 0xf710e7
 	calr	Smf_AddDeltaToHeldNotes	; F71C94  calr 0xf712b6
 	calr	InputStream_GetByte	; F71C97  calr 0xf7138f
 	ld	w, (InputStream_Status:16)	; F71C9A  ld W,(0x124a)
@@ -173618,7 +173934,7 @@ sub_F71E21_Return:
 ; Called from: in-module: 0xF71E1D
 ; Touches: (0x10D0) (0x10D1) (0x11B1) (0x11B2) (0x1238) (0x1239) (0x124B)
 ;          (0x2732)
-; Calls:   SmfPart_ResetAllRecords Smf_TrackToSlot sub_F701F1 T_PartSound_FromProgramChange BStore_LoadTrackCursor BStore_PutByteAndAdvance
+; Calls:   SmfPart_ResetAllRecords Smf_TrackToSlot SmfPart_SetSoundFromProgramChange T_PartSound_FromProgramChange BStore_LoadTrackCursor BStore_PutByteAndAdvance
 ;          Smf_TicksToPpq96 SmfEvent_MarkChannelUsed BStore_SaveTrackCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -173648,7 +173964,7 @@ sub_F71E89_Loop:
 	and	iy, 15	; F71EB8  and IY,0x000f
 	m_bit 0, MD16, 0x11b1	; F71EBC  bit 0,(0x11b1)
 	jr	nz, sub_F71E89_Skip3	; F71EC0  jr NZ,0xf71eca
-	calr	sub_F701F1	; F71EC2  calr 0xf701f1
+	calr	SmfPart_SetSoundFromProgramChange	; F71EC2  calr 0xf701f1
 	ld	(4664:16), 0	; F71EC5  ld (0x1238),0x00
 sub_F71E89_Skip3:
 	m_cp_mi8 MB16, 0x1239, 0x00	; F71ECA  cp (0x1239),0x00
@@ -173965,7 +174281,7 @@ sub_F7208D_Return:
 ; SmfEvent_NoteOff_MultiTrack
 ; Called from: in-module: 0xF71E0E
 ; Touches: (0x10D0) (0x10D1) (0x126E) (0x345C) (0x345E)
-; Calls:   SongStore_SeekBlock_Copy sub_F710BA
+; Calls:   SongStore_SeekBlock_Copy Smf_StepCursorOneByte
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF721A3 is an instruction boundary of this
@@ -174014,7 +174330,7 @@ sub_F721A3_Skip:
 	ld	(BStore_CursorBlock:16), hl	; F721FB  ld (0x345c),HL
 	ld	(BStore_CursorOffset:16), ix	; F721FF  ld (0x345e),IX
 	pushw	wa	; F72203  push WA
-	calr	sub_F710BA	; F72204  calr 0xf710ba
+	calr	Smf_StepCursorOneByte	; F72204  calr 0xf710ba
 	popw	wa	; F72207  pop WA
 	ld	ix, (BStore_CursorOffset:16)	; F72208  ld IX,(0x345e)
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F7220C  ld XHL,(0x126e)
@@ -174971,7 +175287,7 @@ BStore_SaveTrackCursor:
 ; sub_F72822
 ; Called from: in-module: 0xF71BA8
 ; Touches: (0x11B2) (0x126E) (0x3608)  |  0x603500
-; Calls:   Smf_TrackToSlot T_F42884 SongStore_SeekBlock_Copy
+; Calls:   Smf_TrackToSlot T_BStore_AllocBlock_Veneer SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72822 is an instruction boundary of this
@@ -174988,7 +175304,7 @@ sub_F72822:
 	jr	c, sub_F72822_Return	; F72832  jr C,0xf728a2
 	push	xiy	; F72834  push XIY
 	push	xix	; F72835  push XIX
-	call	T_F42884	; F72836  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F72836  call 0xf42884
 	ld	wa, ix	; F7283A  ld WA,IX
 	pop	xix	; F7283C  pop XIX
 	pop	xiy	; F7283D  pop XIY
@@ -175093,7 +175409,7 @@ sub_F728D5_Skip:
 ; Called from: in-module: 0xF71C8E 0xF71E27 0xF71EB5 0xF720D6 0xF72381
 ;              0xF724CF 0xF726CA 0xF72758 +5 more
 ; Touches: nothing with an absolute address
-; Calls:   SongStore_SeekBlock_Copy Smf_BusyDelay sub_F729D9 Smf_ResultToStatusCode
+; Calls:   SongStore_SeekBlock_Copy Smf_BusyDelay Smf_MergeTrack2IntoTrack1 Smf_ResultToStatusCode
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF728FE is an instruction boundary of this
@@ -175114,7 +175430,7 @@ sub_F728FE_Skip:
 	ret	; F7290B  ret
 	calr	Smf_BusyDelay	; F7290C  calr 0xf72f20
 	ret	; F7290F  ret
-	calr	sub_F729D9	; F72910  calr 0xf729d9
+	calr	Smf_MergeTrack2IntoTrack1	; F72910  calr 0xf729d9
 	ret	; F72913  ret
 	calr	Smf_ResultToStatusCode	; F72914  calr 0xf72f2d
 	ret	; F72917  ret
@@ -175225,7 +175541,7 @@ sub_F72918_Return:
 	ret	; F729D8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F729D9
+; Smf_MergeTrack2IntoTrack1
 ; Called from: in-module: 0xF71BC4 0xF72910
 ; Touches: (0x0C70) (0x0C71) (0x0C72)
 ; Calls:   sub_F72A2B
@@ -175237,7 +175553,12 @@ sub_F72918_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F729D9:
+; Smf_MergeTrack2IntoTrack1: (0x0C70) := 1, (0x0C71) := 2, (0x0C72) := 1, then sub_F72A2B: the two-source / one-
+;   destination track merge whose cells TRACK MERGE's OK key loads from its three fields before T_F426E8 (sub_F60012,
+;   same range checks). Smf_ReadMultiTrack runs it after each track chunk: tracks after the first are read into slot 1
+;   (song track 2) and folded into track 1. Basis: callers + body + the TRACK MERGE twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_j.json)
+Smf_MergeTrack2IntoTrack1:
 	xor	a, a	; F729D9  xor A,A
 	ldw	hl, 1	; F729DB  ld HL,0x0001
 	ld	(3184:16), a	; F729DE  ld (0x0c70),A
@@ -175277,7 +175598,7 @@ sub_F729D9_Loop:
 ; Touches: (0x0C70) (0x0C71) (0x0C72) (0x0C8A) (0x0C8B) (0x0CA2) (0x0CB6)
 ;          (0x0CF8) (0x0CFA) (0x0CFE) +7 more  |  0x603500 0x60A000 0x60A100
 ; Calls:   T_BStore_LoadGeometry_Call T_BStore_OpenChain_Call T_F40A04 sub_F72EBA SongStore_SeekBlock_Copy sub_F72E86
-;          T_F42884 sub_F72CBC sub_F72C74 sub_F72BB3 sub_F72BC7 sub_F72BBD
+;          T_BStore_AllocBlock_Veneer sub_F72CBC sub_F72C74 sub_F72BB3 sub_F72BC7 sub_F72BBD
 ;          +2 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -175363,7 +175684,7 @@ sub_F72A2B_Skip4:
 	calr	SongStore_SeekBlock_Copy	; F72B0C  calr 0xf72f0a
 	calr	sub_F72E86	; F72B0F  calr 0xf72e86
 	ld	(3328:16), iy	; F72B12  ld (0x0d00),IY
-	call	T_F42884	; F72B16  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F72B16  call 0xf42884
 	xor	hl, hl	; F72B1A  xor HL,HL
 	ld	l, (3186:16)	; F72B1C  ld L,(0x0c72)
 	dec	1, hl	; F72B20  dec 1,HL
@@ -175742,7 +176063,7 @@ sub_F72D66_Skip:
 ; sub_F72DC8
 ; Called from: in-module: 0xF72BFC 0xF72D13 0xF72D36 0xF72D75 0xF72D98
 ; Touches: (0x0D04) (0x0D4A) (0x126E) (0x3608)
-; Calls:   T_F42884 SongStore_SeekBlock_Copy
+; Calls:   T_BStore_AllocBlock_Veneer SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72DC8 is an instruction boundary of this
@@ -175765,7 +176086,7 @@ sub_F72DC8_Skip:
 	m_rd_pushx RLX, 0x38	; F72DDF  push XDE3
 	push	xiy	; F72DE2  push XIY
 	pushw	bc	; F72DE3  push BC
-	call	T_F42884	; F72DE4  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F72DE4  call 0xf42884
 	popw	bc	; F72DE8  pop BC
 	pop	xiy	; F72DE9  pop XIY
 	m_rd_popx RLX, 0x38	; F72DEA  pop XDE3
@@ -176779,7 +177100,7 @@ sub_F73469:
 ; sub_F7348E
 ; Called from: in-module: 0xF732F9
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   T_F42884 SongStore_SeekBlock_Copy
+; Calls:   T_BStore_AllocBlock_Veneer SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7348E is an instruction boundary of this
@@ -176791,7 +177112,7 @@ sub_F73469:
 sub_F7348E:
 	push	xix	; F7348E  push XIX
 	push	xiy	; F7348F  push XIY
-	call	T_F42884	; F73490  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F73490  call 0xf42884
 	ld	wa, ix	; F73494  ld WA,IX
 	ld	hl, (BStore_CursorBlock:16)	; F73496  ld HL,(0x345c)
 	calr	SongStore_SeekBlock_Copy	; F7349A  calr 0xf72f0a
@@ -176909,7 +177230,7 @@ sub_F734FB_Skip2:
 ; sub_F73566
 ; Called from: in-module: 0xF72F8D
 ; Touches: (0x126E) (0x349F) (0x3608)  |  0x603500
-; Calls:   T_F42884 SongStore_SeekBlock_Copy
+; Calls:   T_BStore_AllocBlock_Veneer SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF73566 is an instruction boundary of this
@@ -176927,7 +177248,7 @@ sub_F73566_Loop:
 	jrl	c, sub_F73566_Return	; F73576  jrl C,0xf735f6
 	pushw	iy	; F73579  push IY
 	pushw	ix	; F7357A  push IX
-	call	T_F42884	; F7357B  call 0xf42884
+	call	T_BStore_AllocBlock_Veneer	; F7357B  call 0xf42884
 	ld	wa, ix	; F7357F  ld WA,IX
 	popw	ix	; F73581  pop IX
 	popw	iy	; F73582  pop IY
@@ -178740,7 +179061,7 @@ Smf_WriteFile_Skip55:
 	jrl	nz, Smf_WriteFile_Join10	; F74758  jrl NZ,0xf747dc
 	m_cp_mi16 MW16, SmfOut_WindowsFlushed, 0x0000	; F7475B  cp (0x126c),0x0000
 	jr	nz, Smf_WriteFile_Skip56	; F74761  jr NZ,0xf74772
-	call	sub_F765E6	; F74763  call 0xf765e6
+	call	SmfWrite_CreateFileWithFirstWindow	; F74763  call 0xf765e6
 	ld	w, a	; F74767  ld W,A
 	ld	(4664:16), w	; F74769  ld (0x1238),W
 	cp	w, 3:i3	; F7476D  cp W,3
@@ -179346,7 +179667,7 @@ sub_F74AC5_Join:
 ;              0xF74A2D 0xF74A42 0xF74A57 +5 more
 ; Touches: (0x1088) (0x1238) (0x1248) (0x126C) (0x21D0) (0x21D1) (0x21D2)
 ;          (0x2724)  |  0x60A480 0x60A700 0x60AAFF
-; Calls:   sub_F765E6 T_DiskProgress_PrintDotForSmf sub_F76661 SmfWrite_SaveFileName T_DiskApi_DeleteFile_Call SmfWrite_RestoreFileName
+; Calls:   SmfWrite_CreateFileWithFirstWindow T_DiskProgress_PrintDotForSmf sub_F76661 SmfWrite_SaveFileName T_DiskApi_DeleteFile_Call SmfWrite_RestoreFileName
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF74B3A is an instruction boundary of this
@@ -179369,7 +179690,7 @@ sub_F74B3A_Skip:
 	jr	nz, sub_F74B3A_Skip2	; F74B55  jr NZ,0xf74b6b
 	ld	c, a	; F74B57  ld C,A
 	pushw	bc	; F74B59  push BC
-	call	sub_F765E6	; F74B5A  call 0xf765e6
+	call	SmfWrite_CreateFileWithFirstWindow	; F74B5A  call 0xf765e6
 	popw	bc	; F74B5E  pop BC
 	ld	w, a	; F74B5F  ld W,A
 	ld	(4664:16), w	; F74B61  ld (0x1238),W
@@ -182014,7 +182335,7 @@ SmfSize_ReadSongByte:
 ; SmfSize_AdvanceSongCursor
 ; Called from: in-module: 0xF75AAE 0xF75AEF 0xF75B4F
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   SongStore_SeekBlock_Copy sub_F7659B InputStream_Refill InputStream_RefillDone
+; Calls:   SongStore_SeekBlock_Copy InputStream_OpenAndReadFirstBlock InputStream_Refill InputStream_RefillDone
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF76567 is an instruction boundary of this
@@ -182040,7 +182361,7 @@ sub_F76567_Skip:
 sub_F76567_Join:
 	ld	(BStore_CursorOffset:16), wa	; F7658A  ld (0x345e),WA
 	ret	; F7658E  ret
-	calr	sub_F7659B	; F7658F  calr 0xf7659b
+	calr	InputStream_OpenAndReadFirstBlock	; F7658F  calr 0xf7659b
 	ret	; F76592  ret
 	calr	InputStream_Refill	; F76593  calr 0xf765d4
 	ret	; F76596  ret
@@ -182048,7 +182369,7 @@ sub_F76567_Join:
 	ret	; F7659A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7659B
+; InputStream_OpenAndReadFirstBlock
 ; Called from: in-module: 0xF6F55F 0xF7658F
 ; Touches: (0x21D0) (0x21D1) (0x21D2) (0x21D3) (0x21D7) (0x21E7)  |
 ;          0x60A700 0x60AB00
@@ -182061,7 +182382,11 @@ sub_F76567_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7659B:
+; InputStream_OpenAndReadFirstBlock: Disk_Flags |= 0x80; unless L = 1 the file extension := 'MID'; window :=
+;   0x60A700-0x60AB00 (the input-stream window) and DiskApi_ReadFileToWindow with Disk_Flags bit 5 (one block) set
+;   around it; A = its status. Smf_ReadFile's first read (L = 0), whose status it then tests. Basis: caller + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave3_g.json)
+InputStream_OpenAndReadFirstBlock:
 	m_or_mi8 MB16, Disk_Flags, 0x80	; F7659B  or (0x21e7),0x80
 	cp	l, 1:i3	; F765A0  cp L,1
 	jr	z, sub_F7659B_Skip	; F765A2  jr Z,0xf765b3
@@ -182133,7 +182458,7 @@ InputStream_RefillDone:
 	ret	; F765E5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F765E6
+; SmfWrite_CreateFileWithFirstWindow
 ; Called from: in-module: 0xF74763 0xF74B5A
 ; Touches: (0x10C5) (0x10C6) (0x10C7)
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
@@ -182145,7 +182470,12 @@ InputStream_RefillDone:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F765E6:
+; SmfWrite_CreateFileWithFirstWindow: Checks free space for the file (SmfOut_TrackLength + 22, >> 4) through T_DiskSave_CheckFreeSpace
+;   / DiskApi_CheckFreeSpace; if OK sets extension 'MID', deletes any old file of that name, sets Disk_Flags bit 7,
+;   points the window at 0x60A700-0x60AB00 and writes it (Disk_Flags bit 5). Returns the disk result in A. Called for
+;   the first 1,024-byte window only (SmfOut_WindowsFlushed == 0). Basis: callers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_h.json)
+SmfWrite_CreateFileWithFirstWindow:
 	xor	de, de	; F765E6  xor DE,DE
 	ld	d, (SmfOut_TrackLength+1:16)	; F765E8  ld D,(0x10c5)
 	ld	w, (SmfOut_TrackLength+2:16)	; F765EC  ld W,(0x10c6)
@@ -182154,7 +182484,7 @@ sub_F765E6:
 	jr	nov, sub_F765E6_Skip	; F765F8  jr PO/NOV,0xf765fc
 
 ; --------------------------------------------------------------------------
-; REACHED CODE, not data (was `Data_F765FA`), part of sub_F765E6:
+; REACHED CODE, not data (was `Data_F765FA`), part of SmfWrite_CreateFileWithFirstWindow:
 ;   the overflow arm of `jr nov` at 0xF765F8.
 ; --------------------------------------------------------------------------
 	inc	1, d	; F765FA  inc 1,D
@@ -182167,7 +182497,7 @@ sub_F765E6_Skip:
 	or	wa, de	; F7660A  or WA,DE
 	ld	bc, wa	; F7660C  ld BC,WA
 	ld	(8773:16), bc	; F7660E  ld (0x2245),BC
-	call	T_F425E8	; F76612  call 0xf425e8
+	call	T_DiskSave_CheckFreeSpace	; F76612  call 0xf425e8
 	ld	w, (Disk_LastError:16)	; F76616  ld W,(0x2243)
 	cp	w, 0:i3	; F7661A  cp W,0
 	jr	nz, sub_F765E6_Return	; F7661C  jr NZ,0xf7664d
@@ -184981,7 +185311,7 @@ sub_F77D4B_Skip:
 	or	wa, de	; F77D6F  or WA,DE
 	ld	bc, wa	; F77D71  ld BC,WA
 	ld	(8773:16), bc	; F77D73  ld (0x2245),BC
-	call	T_F425E8	; F77D77  call 0xf425e8
+	call	T_DiskSave_CheckFreeSpace	; F77D77  call 0xf425e8
 	ld	w, (Disk_LastError:16)	; F77D7B  ld W,(0x2243)
 	cp	w, 0:i3	; F77D7F  cp W,0
 	jr	nz, sub_F77D4B_Return	; F77D81  jr NZ,0xf77db2
@@ -185195,7 +185525,7 @@ sub_F77F20:
 ; Called from: in-module: 0xF77EE3
 ; Touches: (0x10C5) (0x10C6) (0x10C7) (0x21D0) (0x21D1) (0x21D2) (0x21E7)
 ;          (0x2243) (0x2245)
-; Calls:   T_F425E8 T_DiskApi_DeleteFile_Call sub_F77FD6 SmfOut_WriteFirstWindow
+; Calls:   T_DiskSave_CheckFreeSpace T_DiskApi_DeleteFile_Call sub_F77FD6 SmfOut_WriteFirstWindow
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF77F2A is an instruction boundary of this
@@ -185223,7 +185553,7 @@ sub_F77F2A_Skip:
 	or	wa, de	; F77F56  or WA,DE
 	ld	bc, wa	; F77F58  ld BC,WA
 	ld	(8773:16), bc	; F77F5A  ld (0x2245),BC
-	call	T_F425E8	; F77F5E  call 0xf425e8
+	call	T_DiskSave_CheckFreeSpace	; F77F5E  call 0xf425e8
 	ld	w, (Disk_LastError:16)	; F77F62  ld W,(0x2243)
 	cp	w, 0:i3	; F77F66  cp W,0
 	jr	nz, sub_F77F2A_Return	; F77F68  jr NZ,0xf77f99
@@ -186764,7 +187094,7 @@ DLGlyph_118_F7A158:
 ; span, 8,906 bytes of extent, summed reference upper bound 172.  Immediately
 ; below it in the same span sits 0xF42880-0xF42894 (6 slots), whose target
 ; notes/FINDINGS-prom_b-block-store.md had already singled out:
-;     "T_F42884 -> 0xF7A402 is the block allocator itself -- it is what
+;     "T_BStore_AllocBlock_Veneer -> 0xF7A402 is the block allocator itself -- it is what
 ;      BStore_AllocChain calls at 0xF63A18 for each block of a new chain.
 ;      It is the natural next conversion."
 ; Both runs are converted here, in one contiguous span.
@@ -186853,17 +187183,21 @@ sub_F7A400:		; <- T_F42880
 	jr	sub_F7A400_Skip	; F7A400  jr T,0xf7a40a
 
 ; --------------------------------------------------------------------------
-; sub_F7A402 -- veneer.  `jr T,0xF7A40E`, and 0xF7A40E is `calr 0xF7A4DB /
+; BStore_AllocBlock_Veneer -- veneer.  `jr T,0xF7A40E`, and 0xF7A40E is `calr 0xF7A4DB /
 ;               ret`, so this entry point reaches BStore_AllocBlock.
-; Called from: T_F42884 (x17)
+; Called from: T_BStore_AllocBlock_Veneer (x17)
 ; Touches: nothing with an absolute address
-; Evidence: thunk slot T_F42884 holds `jp 0x00F7A402`; the two instructions
+; Evidence: thunk slot T_BStore_AllocBlock_Veneer holds `jp 0x00F7A402`; the two instructions
 ;           the hop passes through (0xF7A40E and 0xF7A411) are read out of
 ;           this transcription by the emitter's veneer_of(), not typed.
 ; Unknown: why the extra hop exists.  prom_b 0xF62C00 opens with the same
 ;          shape and neither module explains it.
 ; --------------------------------------------------------------------------
-sub_F7A402:		; <- T_F42884
+; BStore_AllocBlock_Veneer: Veneer: `jr` to `calr BStore_AllocBlock / ret` -- allocates one block-store block (W = 0,
+;   (0x126E) = its address; W = 0xFF when the free list is empty). Directory slot T_BStore_AllocBlock_Veneer, 17 callers, among them
+;   BStore_AllocChain and BStore_ExtendChainAtCursor. Basis: body (veneer) + callers. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_i.json)
+BStore_AllocBlock_Veneer:		; <- T_BStore_AllocBlock_Veneer
 	jr	sub_F7A408_Join	; F7A402  jr T,0xf7a40e
 
 ; --------------------------------------------------------------------------
@@ -187452,7 +187786,7 @@ BStore_AppendBytes_Join3_Veneer:		; <- T_BStore_AppendBytes_Join3_Veneer
 ; BStore_AppendBytes_Join4_Veneer
 ; Called from: T_BStore_AppendBytes_Join4_Veneer (x1)
 ; Touches: (0x207E) (0x212E) (0x215E) (0x34BB)
-; Calls:   T_F409F8 T_F409F4
+; Calls:   T_Seq_SaveTrackMaskAndStopAll T_Seq_RestoreTrackMaskAndRewind
 ; Evidence: thunk slot T_BStore_AppendBytes_Join4_Veneer holds `jp 0x00F7AA02`, and 0xF7AA02 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -187463,14 +187797,14 @@ BStore_AppendBytes_Join3_Veneer:		; <- T_BStore_AppendBytes_Join3_Veneer
 BStore_AppendBytes_Join4_Veneer:		; <- T_BStore_AppendBytes_Join4_Veneer
 	jr	BStore_AppendBytes_Join4	; F7AA02  jr T,0xf7aa1f
 BStore_AppendBytes_Join3:
-	call	T_F409F8	; F7AA04  call 0xf409f8
+	call	T_Seq_SaveTrackMaskAndStopAll	; F7AA04  call 0xf409f8
 	ld	(UI_ScreenStage:16), 0	; F7AA08  ld (0x207e),0x00
 	ldw	(8542:16), 0	; F7AA0D  ld (0x215e),0x0000
 	m_or_mi16 MW16, 0x212e, 0x0100	; F7AA13  or (0x212e),0x0100
 	m_or_mi8 MB16, 0x34bb, 0x04	; F7AA19  or (0x34bb),0x04
 	ret	; F7AA1E  ret
 BStore_AppendBytes_Join4:
-	call	T_F409F4	; F7AA1F  call 0xf409f4
+	call	T_Seq_RestoreTrackMaskAndRewind	; F7AA1F  call 0xf409f4
 	m_and_mi8 MB16, 0x34bb, 0xfb	; F7AA23  and (0x34bb),0xfb
 	ret	; F7AA28  ret
 
@@ -192080,17 +192414,22 @@ Transp0se_SelectField4:		; <- T_Transp0se_SelectField4
 	ret	; F7C6B1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C6B2
-; Called from: T_F42A50 (x2)
+; Transp0se_StepFieldUp
+; Called from: T_Transp0se_StepFieldUp (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DF6) (0x2075)
-; Evidence: thunk slot T_F42A50 holds `jp 0x00F7C6B2`, and 0xF7C6B2 is an
+; Evidence: thunk slot T_Transp0se_StepFieldUp holds `jp 0x00F7C6B2`, and 0xF7C6B2 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C6B2:		; <- T_F42A50
+; Transp0se_StepFieldUp: TRANSPOSE: UI_RequestBits |= 8, (0x0C4E) := W, (0x0C4F) := W & 0x80 (0 = up at both call
+;   sites), then steps the selected field (0x0DF6) = 1..4 through SongStore_DispatchA_1 (track, measures, ...). Its
+;   callers take it for the UPPER switch (W bit 7 clear) and T_Transp0se_StepSelectedFieldDown (Transp0se_StepSelectedFieldDown) for the lower one -- the
+;   Quantize_StepFieldUp / _StepFieldDown pattern. Basis: callers + body + sibling screens. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_j.json)
+Transp0se_StepFieldUp:		; <- T_Transp0se_StepFieldUp
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C6B2  or (0x2075),0x08
 	ld	(3150:16), w	; F7C6B7  ld (0x0c4e),W
 	and	w, 128	; F7C6BB  and W,0x80
@@ -192161,17 +192500,21 @@ SongStore_DispatchA_1_Nop0:
 	ret	; F7C6FA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C6FB
-; Called from: T_F42A54 (x2)
+; Transp0se_StepSelectedFieldDown
+; Called from: T_Transp0se_StepSelectedFieldDown (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DF6) (0x2075)
-; Evidence: thunk slot T_F42A54 holds `jp 0x00F7C6FB`, and 0xF7C6FB is an
+; Evidence: thunk slot T_Transp0se_StepSelectedFieldDown holds `jp 0x00F7C6FB`, and 0xF7C6FB is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C6FB:		; <- T_F42A54
+; Transp0se_StepSelectedFieldDown: (0x0C4E) := W, (0x0C4F) := W & 0x80 (0x80 = down), UI_RequestBits |= 9, then
+;   SongStore_DispatchA_2[(0x0DF6)] for TRANSP0SE field 1..4 (track via SeqJob_StepTrack17, start/end measure via
+;   SeqJob_StepMeasure, ...). Both TRANSP0SE step keys call it when W bit 7 is set; its twin Transp0se_StepFieldUp
+;   (UI_RequestBits |= 8) when clear. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave3_g.json)
+Transp0se_StepSelectedFieldDown:		; <- T_Transp0se_StepSelectedFieldDown
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C6FB  or (0x2075),0x09
 	ld	(3150:16), w	; F7C700  ld (0x0c4e),W
 	and	w, 128	; F7C704  and W,0x80
@@ -192585,17 +192928,21 @@ N0teChange_SelectField5:		; <- T_N0teChange_SelectField5
 	ret	; F7C917  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C918
-; Called from: T_F42AA4 (x2)
+; N0teChange_StepSelectedFieldUp
+; Called from: T_N0teChange_StepSelectedFieldUp (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DED) (0x2075)
-; Evidence: thunk slot T_F42AA4 holds `jp 0x00F7C918`, and 0xF7C918 is an
+; Evidence: thunk slot T_N0teChange_StepSelectedFieldUp holds `jp 0x00F7C918`, and 0xF7C918 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C918:		; <- T_F42AA4
+; N0teChange_StepSelectedFieldUp: (0x0C4E) := key code W, (0x0C4F) := W & 0x80, then the stepper for N0teChange_Field
+;   1..5 from SongStore_DispatchB_1 (case 1 = SeqJob_StepTrack17 on (0x0DEE), ...). NOTE CHANGE's soft key 5 calls it
+;   for the UPPER switch (W bit 7 clear, so the steppers add); the LOWER switch calls the identical twin N0teChange_StepFieldDown.
+;   Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave3_h.json)
+N0teChange_StepSelectedFieldUp:		; <- T_N0teChange_StepSelectedFieldUp
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C918  or (0x2075),0x09
 	ld	(3150:16), w	; F7C91D  ld (0x0c4e),W
 	and	w, 128	; F7C921  and W,0x80
@@ -192650,17 +192997,21 @@ SongStore_DispatchB_1:
 
 
 ; --------------------------------------------------------------------------
-; sub_F7C964
-; Called from: T_F42AA8 (x2)
+; N0teChange_StepFieldDown
+; Called from: T_N0teChange_StepFieldDown (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DED) (0x2075)
-; Evidence: thunk slot T_F42AA8 holds `jp 0x00F7C964`, and 0xF7C964 is an
+; Evidence: thunk slot T_N0teChange_StepFieldDown holds `jp 0x00F7C964`, and 0xF7C964 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C964:		; <- T_F42AA8
+; N0teChange_StepFieldDown: NOTE CHANGE: (0x0C4E) := W, (0x0C4F) := W & 0x80 (0x80, down: callers pass bit 7 set),
+;   then steps field N0teChange_Field 1..5 through SongStore_DispatchB_2 (SeqJob_StepMeasure etc.). The down twin of
+;   N0teChange_StepSelectedFieldUp (SongStore_DispatchB_1); same shape as AdvanceDelay_StepFieldDown. Basis: callers + body + sibling.
+;   (notes/naming-pilot-2026-10-06/proposals_wave3_i.json)
+N0teChange_StepFieldDown:		; <- T_N0teChange_StepFieldDown
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C964  or (0x2075),0x09
 	ld	(3150:16), w	; F7C969  ld (0x0c4e),W
 	and	w, 128	; F7C96D  and W,0x80
@@ -196456,7 +196807,12 @@ sub_F7E39F_Nop:
 
 ; Evidence: reached from call from prom_b 0xF7EEF4, and from nothing else
 ;           the scans see.
-sub_F7E2ED:
+; LCD_ClearCurrentLayer: Runs DL_F39551, a single op-0E record (IY 0, BC 0x28, HL 0xF0) = SWI7 service 0x0E
+;   LCD_Svc_0E_ClearColumns over 40 byte-columns x 240 rows: zeroes the WHOLE layer (0x2540) selects. Every caller
+;   stores LCD_CurrentLayer first: Paint_StepRecord (layers 0, 1, 2), Paint_StepRecordTrackClrMeas, sub_F81C90,
+;   TrackMerge_DrawFieldHighlight (layer 1). Basis: callers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave3_g.json)
+LCD_ClearCurrentLayer:
 	ld	xiy, DL_F39551	; F7E2ED  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7E2F2  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7E2F7  call 0xf417f0
@@ -196497,7 +196853,11 @@ sub_F7E2FC_Return:
 
 ; Evidence: reached from call from prom_b 0xF7EC9C; call from prom_b
 ;           0xF7ECD5, and from nothing else the scans see.
-sub_F7E354:
+; TrackGrid_DrawPartLabels: Copies the 16 BStore_TrackToPart bytes to DisplayListB_Stage (part 13 drawn as 14 except
+;   on screens 0x0F, 0x12, 0x1C) and runs DL_F3A1CF, 16 string-table readouts of 'P 1'..'P32' (Data_F39559 + 0x49, 3
+;   bytes each). The track-grid layout of SeqScreen_DrawTrackPartLabels; called by the TRACK CLEAR and STEP RECORD
+;   PART SELECT painters. Basis: callers + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave3_j.json)
+TrackGrid_DrawPartLabels:
 	ld	xiy, BStore_TrackToPart	; F7E354  ld XIY,0x00603422
 	ld	xix, DisplayListB_Stage	; F7E359  ld XIX,0x000012f6
 	ld	c, 16:opc	; F7E35E  ld C,0x10
@@ -199343,7 +199703,7 @@ Paint_TrackClear:
 	ld	xiy, DL_TrackClearPressTheUpDown	; F7EC8E  ld XIY,0x00f39f8a
 	ld	xix, Data_F3A0A5	; F7EC93  ld XIX,0x00f3a0a5
 	call	T_DisplayList_Run	; F7EC98  call 0xf417f0
-	call	sub_F7E354	; F7EC9C  call 0xf7e354
+	call	TrackGrid_DrawPartLabels	; F7EC9C  call 0xf7e354
 	ld	(LCD_CurrentLayer:16), 0	; F7ECA0  ld (0x2540),0x00
 	ld	xiy, DL_F3934C	; F7ECA5  ld XIY,0x00f3934c
 	ld	xix, DL_F394E3	; F7ECAA  ld XIX,0x00f394e3
@@ -199359,7 +199719,7 @@ Paint_TrackClear_Skip2:
 	ld	xiy, DL_TrackClearAttenti0nUsing	; F7ECC7  ld XIY,0x00f39c35
 	ld	xix, DL_EditSeqN0teEditS0ngClear	; F7ECCC  ld XIX,0x00f39d3e
 	call	T_DisplayList_Run	; F7ECD1  call 0xf417f0
-	call	sub_F7E354	; F7ECD5  call 0xf7e354
+	call	TrackGrid_DrawPartLabels	; F7ECD5  call 0xf7e354
 	ld	(LCD_CurrentLayer:16), 0	; F7ECD9  ld (0x2540),0x00
 	ld	xiy, DL_F3934C	; F7ECDE  ld XIY,0x00f3934c
 	ld	xix, DL_F394E3	; F7ECE3  ld XIX,0x00f394e3
@@ -200240,7 +200600,7 @@ ScreenLeaveBody_TrackMerge_Return:
 ;   (0x12F9), then this. (notes/naming-pilot-2026-10-06/proposals_wave2_d.json)
 TrackMerge_DrawFieldHighlight:
 	ld	(LCD_CurrentLayer:16), 1	; F7EEEF  ld (0x2540),0x01
-	call	sub_F7E2ED	; F7EEF4  call 0xf7e2ed
+	call	LCD_ClearCurrentLayer	; F7EEF4  call 0xf7e2ed
 	ld	xiy, DL_F3A561 + 0x1E	; F7EEF8  ld XIY,0x00f3a57f
 	call	T_DLB_Handler_Array8	; F7EEFD  call 0xf4181c
 	ret	; F7EF01  ret
@@ -202825,7 +203185,7 @@ Paint_Vel0cityChange_Skip2:
 Paint_Vel0cityChange_Join:
 	ld	(LCD_CurrentLayer:16), 0	; F7F918  ld (0x2540),0x00
 	calr	sub_F7E39F_Nop	; F7F91D  calr 0xf7e2d8
-	calr	sub_F7F935	; F7F920  calr 0xf7f935
+	calr	Vel0cityChange_FormatSignedValue	; F7F920  calr 0xf7f935
 	ld	xiy, DL_F3AB3B	; F7F923  ld XIY,0x00f3ab3b
 	ld	xix, DLBoxes_F3AB74	; F7F928  ld XIX,0x00f3ab74
 	call	T_DisplayListB_Run	; F7F92D  call 0xf417f4
@@ -202834,7 +203194,11 @@ Paint_Vel0cityChange_Join:
 
 ; Evidence: reached from calr from prom_b 0xF7F920; calr from prom_b
 ;           0xF7FA03, and from nothing else the scans see.
-sub_F7F935:
+; Vel0cityChange_FormatSignedValue: Formats the VEL0CITY CHANGE value (0x0C24) as a sign cell + 3 right-justified
+;   digits at 0x2660 (T_Value_ToSignedAsciiDigits3_RightJustified with DE = 127); the BC/HL/XIY/A it then loads are
+;   not used by either caller. Paint_Vel0cityChange and Vel0cityChange_DrawValues call it before the value list runs.
+;   Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave3_g.json)
+Vel0cityChange_FormatSignedValue:
 	ld	a, (3108:16)	; F7F935  ld A,(0x0c24)
 	xor	w, w	; F7F939  xor W,W
 	ldw	de, 127	; F7F93B  ld DE,0x007f
@@ -203098,14 +203462,14 @@ sub_F7F99C_Return2:
 
 ; Evidence: reached from calr from prom_b 0xF7F97B; calr from prom_b
 ;           0xF7F995, and from nothing else the scans see.
-; Vel0cityChange_DrawValues: VEL0CITY CHANGE: on layer 0, formats (0x0C24) as signed digits (sub_F7F935) and runs
+; Vel0cityChange_DrawValues: VEL0CITY CHANGE: on layer 0, formats (0x0C24) as signed digits (Vel0cityChange_FormatSignedValue) and runs
 ;   DL_F3AB3B up to its cursor-box record: the track (0-16/ALL, DisplayListB_Stage+0), two 3-digit values (+1, +3) and
 ;   a signed value (+5). Every VEL0CITY CHANGE field key calls it after changing a field. Basis: callers + body.
 ;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
 Vel0cityChange_DrawValues:
 	ld	(LCD_CurrentLayer:16), 0	; F7F9FB  ld (0x2540),0x00
 	calr	sub_F7E39F_Nop	; F7FA00  calr 0xf7e2d8
-	calr	sub_F7F935	; F7FA03  calr 0xf7f935
+	calr	Vel0cityChange_FormatSignedValue	; F7FA03  calr 0xf7f935
 	ld	xiy, DL_F3AB3B	; F7FA06  ld XIY,0x00f3ab3b
 	ld	xix, DL_F3AB3B + 0x2E	; F7FA0B  ld XIX,0x00f3ab69
 	call	T_DisplayListB_Run	; F7FA10  call 0xf417f4
@@ -203698,10 +204062,10 @@ ScreenLeaveBody_Transp0se_Skip:
 	ld	(3608:16), 1	; F7FCB1  ld (0x0e18),0x01
 	bit	7, w	; F7FCB6  bit 0x07,W
 	jr	z, ScreenLeaveBody_Transp0se_Skip2	; F7FCB9  jr Z,0xf7fcc1
-	call	T_F42A54	; F7FCBB  call 0xf42a54
+	call	T_Transp0se_StepSelectedFieldDown	; F7FCBB  call 0xf42a54
 	jr	ScreenLeaveBody_Transp0se_Join	; F7FCBF  jr T,0xf7fcc5
 ScreenLeaveBody_Transp0se_Skip2:
-	call	T_F42A50	; F7FCC1  call 0xf42a50
+	call	T_Transp0se_StepFieldUp	; F7FCC1  call 0xf42a50
 ScreenLeaveBody_Transp0se_Join:
 	calr	Transp0se_DrawValues	; F7FCC5  calr 0xf7fd45
 	ret	; F7FCC8  ret
@@ -204001,10 +204365,10 @@ sub_F7FD45_Skip2:
 	ld	(3608:16), 4	; F7FD99  ld (0x0e18),0x04
 	bit	7, w	; F7FD9E  bit 0x07,W
 	jr	z, sub_F7FD45_Skip3	; F7FDA1  jr Z,0xf7fda9
-	call	T_F42A54	; F7FDA3  call 0xf42a54
+	call	T_Transp0se_StepSelectedFieldDown	; F7FDA3  call 0xf42a54
 	jr	sub_F7FD45_Join	; F7FDA7  jr T,0xf7fdad
 sub_F7FD45_Skip3:
-	call	T_F42A50	; F7FDA9  call 0xf42a50
+	call	T_Transp0se_StepFieldUp	; F7FDA9  call 0xf42a50
 sub_F7FD45_Join:
 	calr	Transp0se_DrawValues	; F7FDAD  calr 0xf7fd45
 	ret	; F7FDB0  ret

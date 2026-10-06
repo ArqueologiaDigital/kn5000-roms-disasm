@@ -189,7 +189,7 @@ HEADERS = {
    '  same 0xFFFF BStore_OpenChain tests the directory head against.',
    'Evidence: also 0xF639EA `cp WA,(0x6034BA)` -> error 5, which is what makes',
    '  the workspace word at +0xBA the free-block count.',
-   'Unknown: the allocator itself is not here -- 0xF63A18 calls thunk T_F42884',
+   'Unknown: the allocator itself is not here -- 0xF63A18 calls thunk T_BStore_AllocBlock_Veneer',
    '  -> 0xF7A402, in another module.']),
  0xF63BAE: ('BStore_SeekBlock -- point the cursor at block n',
   ['Inputs:  HL = block number, 1-based.   Outputs: (0x126E) = its address.',
@@ -490,7 +490,7 @@ ERROR_GLOSS = {
     0x01: "directory entry number is 0 (0xF638C1), or its bit 7 is clear (0xF638DE)",
     0x02: "the directory head block number is 0xFFFF -- the chain is empty",
     0x05: "more blocks needed than (0x6034BA) reports free (0xF639F1), or the "
-          "allocator at thunk T_F42884 returned failure (0xF63A2F).  The two "
+          "allocator at thunk T_BStore_AllocBlock_Veneer returned failure (0xF63A2F).  The two "
           "further sites are not read",
     0x06: "the tag byte at the cursor is 0x84 (`cp (XHL+IY),0x84` at 0xF63502)",
     0x07: "the tag byte at the cursor is 0x82 (`cp (XHL+IY),0x82` at 0xF6357F)",

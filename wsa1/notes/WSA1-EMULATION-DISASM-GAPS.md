@@ -918,7 +918,7 @@ either machine's CN-numbered panel connector; or a v1/v3 ROM set whose display l
   looked.
 * **What the two prom_b strap sites do.** `0xF440C4` and `0xF44582` zero `(0x60341E)` and
   `(0x3000)` and call `0xF45B0A` / `0xF45975`; both are reached through the thunk table
-  (`T_BStore_BootPhase3`, `T_F409C8`). Unconverted.
+  (`T_BStore_BootPhase3`, `T_Seq_MainLoopService`). Unconverted.
 * **Whether an SX-WSA1R even carries the key-scan device at `0x108000`.** The driver models one on
   CPU 2 either way, because prom_c polls its status port ~34,500 times a second and something has
   to answer.
