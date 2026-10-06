@@ -130,6 +130,8 @@ def main():
         R = routine_of(key, rows, ji)
         if t["name"].endswith("_CaseTable"):
             R = t["name"][:-len("_CaseTable")]   # named for its switch's owner when it was framed
+        if not R and t["name"] and t["name"].endswith("_Data"):
+            R = t["name"][:-len("_Data")]        # a [nakarest] table named after its reader: <Reader>_Data
         if not R:
             continue
         nswitch[R] += 1

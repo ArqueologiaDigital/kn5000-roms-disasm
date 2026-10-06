@@ -194,7 +194,12 @@ GetSoundName_DefaultString_Data:	.incbin "includes/generated/naka_disk_warning.b
 ; [nakarest] Readers: source references MainPmanControl (ui/ui_control_panel.s: `add xwa,
 ; [nakarest] MainPmanControl_Data`).
 MainPmanControl_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0xD4C, 0xC
+	.short	MainPmanCtrl_Case0 - MainPmanCtrl_DispatchTable
+	.short	MainPmanCtrl_Case1 - MainPmanCtrl_DispatchTable
+	.short	MainPmanCtrl_Case2 - MainPmanCtrl_DispatchTable
+	.short	MainPmanCtrl_Case3 - MainPmanCtrl_DispatchTable
+	.short	MainPmanCtrl_Case4 - MainPmanCtrl_DispatchTable
+	.short	MainPmanCtrl_Case5 - MainPmanCtrl_DispatchTable
 ; [nakarest] naka_disk_warning+0xd58  +0xd58..+0xdae (0xea9a04, 86 B)
 ; [nakarest] purpose not established: layout of 86 B at 0xea9a04 not derived; readers below
 ; [nakarest] Readers: source references CtrlPanel_DispatchByIndex (ui/ui_control_panel.s: `lda
@@ -509,7 +514,13 @@ PsGridBoxProc_Data:
 ; [nakarest] Readers: source references AcGridBoxProc (ui/ui_widget_defs.s: `add xwa,
 ; [nakarest] AcGridBoxProc_Data`).
 AcGridBoxProc_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x15AC, 0xE
+	.short	AcGridBoxProc_Evt1C00017 - AcGridBox_Init
+	.short	AcGridBoxProc_Evt1C00018 - AcGridBox_Init
+	.short	AcGridBoxProc_Evt1C00017 - AcGridBox_Init
+	.short	AcGridBoxProc_Evt1C00018 - AcGridBox_Init
+	.short	AcGridBox_Default - AcGridBox_Init
+	.short	AcGridBox_CellSelect - AcGridBox_Init
+	.short	AcGridBox_CellSelect - AcGridBox_Init
 GridCheck_CellSelect_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x15BA, 0x6
 ; [nakarest] naka_disk_warning+0x15c0  +0x15c0..+0x15d6 (0xeaa26c, 22 B)
 ; [nakarest] purpose not established: layout of 22 B at 0xeaa26c not derived; readers below
