@@ -5483,13 +5483,13 @@ SongName_ResetToUnderscores:
 ;   DisplayListB_Stage); today they are decoded as six `pop XSP`, and the code from 0xF8194E on is a separate,
 ;   unlabelled routine. Basis: the three `ld XIY` operand references + ROM bytes. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave8_b8.json)
+; (2026-10-06) Respelled as `.ascii "______"`; the code from 0xF8194E now carries the label sub_F8194E.
 Str_SongNameBlank:   ; entry: named by 3 `ld` operands, first at 0xF818EF
-	pop XSP                                              ; F81948  5f
-	pop XSP                                              ; F81949  5f
-	pop XSP                                              ; F8194A  5f
-	pop XSP                                              ; F8194B  5f
-	pop XSP                                              ; F8194C  5f
-	pop XSP                                              ; F8194D  5f
+	.ascii "______"                                     ; F81948  5f 5f 5f 5f 5f 5f
+; sub_F8194E: no reference found -- no 24-bit address of 0xF8194E in prom_a/b/c (ROM byte search for 4e 19 f8,
+;   2026-10-06) and no branch label there.  It sets 0x0E03 = (0x0C03) - (DisplayListB_Stage), fills UI_DrawScratch, then
+;   copies the track's BStore_TrackToPart and 0x603433 rows into UI_DrawScratch+8 / +24 around sub_F819A2.
+sub_F8194E:
 	ld a, (0x0c03:16)                                   ; F8194E  c1 03 0c 21
 	sub a, (DisplayListB_Stage:16)                                   ; F81952  c1 f6 12 a1
 	ld (0x0e03:16), a                                   ; F81956  f1 03 0e 41

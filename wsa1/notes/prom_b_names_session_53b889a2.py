@@ -8931,4 +8931,5 @@ RENAMES = [
     ("DisplayList_FA4D9A", "SystemTest_SplitNotesForDisplay_DL1"),
     ("DisplayList_FA4E60", "SystemTest_SplitNotesForDisplay_DL4"),
     ("DisplayList_FA4EAB", "SystemTest_SplitNotesForDisplay_DL3"),
+    ("Data_F6D002", "StepRecord_AppendLatchedHoldEvent_Cont"),
 ]

@@ -163730,7 +163730,7 @@ sub_F6CF7A_Return:
 ; StepRecord_AppendLatchedHoldEvent: If the HOLD latch (0x1342) holds a value (not 0xFF; reset to 0xFF) appends the
 ;   6-byte parameter event 0xB4, tick (0x0E53), 0x35, the track's part, value, 0x7F (parameter 0xB5) to the current
 ;   entry. The input arm sub_F6CF7A fills (0x1342) from parameter 0xB5 and shows MsgLine_PartHold. Its last 33 bytes
-;   are the `.byte` block Data_F6D002 and its `ret` is sub_F6CFCB_Nop. Basis: caller + body + paired input arm.
+;   are the `.byte` block StepRecord_AppendLatchedHoldEvent_Cont and its `ret` is sub_F6CFCB_Nop. Basis: caller + body + paired input arm.
 ;   (notes/naming-pilot-2026-10-06/proposals_wave7_x.json)
 StepRecord_AppendLatchedHoldEvent:
 	m_cp_mi8 MB16, 0x1342, 0xff	; F6CFCB  cp (0x1342),0xff
@@ -163898,7 +163898,7 @@ StepRecord_AppendLatchedHoldEvent:
 
 
 ; --------------------------------------------------------------------------
-; Data_F6D002 -- 33 bytes this block could not split.  No content rule
+; StepRecord_AppendLatchedHoldEvent_Cont -- 33 bytes this block could not split.  No content rule
 ;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
 ;                ASCII -- and the code walk never reached it from a thunk
 ;                slot, a proven call site, an opcode-anchored call or an
@@ -163912,10 +163912,22 @@ StepRecord_AppendLatchedHoldEvent:
 ;           such.
 ; Unknown: everything about it except its bytes.
 ; --------------------------------------------------------------------------
-Data_F6D002:
-	.byte	0xC3, 0x07, 0xF0, 0xE0, 0x21, 0x5C, 0xBD, 0x03, 0x41, 0xC1, 0x42, 0x13, 0x21, 0xC9, 0xCC, 0x7F	; F6D002  [0..15]
-	.byte	0xBD, 0x04, 0x41, 0xF1, 0x42, 0x13, 0x00, 0xFF, 0xBD, 0x05, 0x00, 0x7F, 0x20, 0x06, 0x1E, 0x64	; F6D012  [16..31]
-	.byte	0xE3	; F6D022  [32..32]
+; (2026-10-06) CORRECTED: these 33 bytes are CODE, the tail of StepRecord_AppendLatchedHoldEvent, which runs across
+;   this module boundary: its `push xix` / `ld xix, BStore_TrackToPart` are the last two instructions above 0xF6D002.
+;   It stores the track's part and the latched value as event bytes 3-4, resets the latch to 0xFF, stores 0x7F, and
+;   appends 6 bytes with StepRecord_AppendBytesToCurrentEntry; the `ret` it reaches is sub_F6CFCB_Nop's.  Every
+;   instruction was checked against the ROM bytes with llvm-mc -show-encoding.
+StepRecord_AppendLatchedHoldEvent_Cont:
+	ld	a, (xix+wa)	; F6D002  ld A,(XIX+WA)
+	pop	xix	; F6D007  pop XIX
+	ld	(xiy+3), a	; F6D008  ld (XIY+0x03),A
+	ld	a, (0x1342:16)	; F6D00B  ld A,(0x1342)
+	and	a, 0x7f	; F6D00F  and A,0x7f
+	ld	(xiy+4), a	; F6D012  ld (XIY+0x04),A
+	ld	(0x1342:16), 0xff	; F6D015  ld (0x1342),0xff
+	ld	(xiy+5), 0x7f	; F6D01A  ld (XIY+0x05),0x7f
+	ld	w, 6:opc	; F6D01E  ld W,0x06
+	calr	StepRecord_AppendBytesToCurrentEntry	; F6D020  calr 0xf6b387
 
 
 ; --------------------------------------------------------------------------

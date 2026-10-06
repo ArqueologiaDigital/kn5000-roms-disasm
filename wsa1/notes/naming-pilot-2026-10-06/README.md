@@ -49,7 +49,7 @@ older build, but the banner limits that to 0xF6F000-0xF6F3FF.
 **Wave 7** (`proposals_wave7_{w,x,y,z}.json`): the next 120, 116 named and 4 refused. Two of the refusals are the
 reviewer's: batch z had named the empty button-table slots sub_F7E750 / sub_F7E758, whose source header deliberately
 says "NO NAME". Batch x reports two leads for later. `Data_F6D002` is code: the tail of sub_F6CFCB, the HOLD-latch
-append. The local labels `sub_F64A34_Join*` and `sub_F6B2EE_Entry*` sit after their routine's `ret` and belong to
+append (decoded 2026-10-06; the label is now `StepRecord_AppendLatchedHoldEvent_Cont`). The local labels `sub_F64A34_Join*` and `sub_F6B2EE_Entry*` sit after their routine's `ret` and belong to
 other, unlabelled routines.
 
 **Wave 8** (`proposals_wave8_{a8,b8,c8,d8}.json`): 113 named, 7 refused. Leads reported for later:

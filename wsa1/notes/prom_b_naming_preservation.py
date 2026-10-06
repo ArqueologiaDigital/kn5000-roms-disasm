@@ -315,6 +315,14 @@ def main():
             if any(a in newstarts for a in range(a0, a0 + nb)):
                 converted += 1
                 continue
+            # ...or whose bytes are all the tail of one new instruction that starts at most 7 bytes earlier (the
+            # longest TLCS-900 encoding is 7): Data_F6D002's last row `.byte 0xE3` is the third byte of a calr
+            # (2026-10-06)
+            s = next((a0 - k for k in range(1, 8) if a0 - k in newstarts), None)
+            if s is not None and not any(a in newstarts for a in range(a0, a0 + nb)) and \
+                    any(b in newstarts for b in range(a0 + nb, a0 + nb + 8)):
+                converted += 1
+                continue
         # a comment line whose TEXT is quoted verbatim inside a replacement
         body = re.sub(r"\s+", " ", ln.strip().lstrip(";").strip())
         if ln.lstrip().startswith(";") and len(body) > 12 and body in flat:
