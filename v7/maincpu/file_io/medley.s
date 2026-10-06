@@ -4527,13 +4527,13 @@ WakeUpPassword:
 	cp xbc, EVT_DRAW
 	jr z, WakeUp_HandleDirect
 	cp xbc, EVT_ARE_YOU_CLASS_PROC
-	jr z, WakeUp_Return1
+	jr z, WakeUpPassword_OnAreYouClassProc
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
 	jrl WakeUp_Exit
 
-WakeUp_Return1:
+WakeUpPassword_OnAreYouClassProc:
 	ld xhl, 1:i3
 	jrl WakeUp_Exit
 
@@ -4612,7 +4612,7 @@ PasswordOk:
 	cp	xbc, EVT_SW_IN
 	jr	z, PwdOk_HandleConfirm
 	cp	xbc, EVT_GET_STRING_LENGTH
-	jr	z, PwdOk_Return2
+	jr	z, PasswordOk_OnGetStringLength
 	cp	xbc, EVT_GET_NAMING_MODE
 	jr	z, PwdOk_ReturnZero
 	cp	xbc, EVT_GET_STRING
@@ -4624,7 +4624,7 @@ PasswordOk:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	PwdOk_Exit
-PwdOk_Return2:
+PasswordOk_OnGetStringLength:
 	ld xhl, 2:i3
 	jr PwdOk_Exit
 
@@ -4665,7 +4665,7 @@ CheckPasswordOk:
 	cp	xbc, EVT_SW_IN
 	jr	z, CheckOk_HandleConfirm
 	cp	xbc, EVT_GET_STRING_LENGTH
-	jr	z, CheckOk_Return2
+	jr	z, CheckPasswordOk_OnGetStringLength
 	cp	xbc, EVT_GET_NAMING_MODE
 	jrl	z, CheckOk_ReturnZero
 	cp	xbc, EVT_GET_STRING
@@ -4677,7 +4677,7 @@ CheckPasswordOk:
 	inc	8, xsp
 	ld	xhl, xiz
 	jrl	CheckOk_Exit
-CheckOk_Return2:
+CheckPasswordOk_OnGetStringLength:
 	ld xhl, 2:i3
 	jrl CheckOk_Exit
 

@@ -1548,15 +1548,15 @@ AcRotStrBoxProc:
 	ld (xsp + 16), xwa
 	ld xwa, (xsp + 12)
 	cp xwa, EVT_NOT_PARA_DRAW
-	jrl z, Scrollbar_Case1C00001
+	jrl z, AcRotStrBoxProc_OnNotParaDraw
 	cp xwa, EVT_PARA_DRAW
-	jrl z, Scrollbar_Case1E5000A
+	jrl z, AcRotStrBoxProc_OnParaDraw
 	cp xwa, EVT_WAKE_UP_NOW
-	jrl z, Scrollbar_Case1E00068
+	jrl z, AcRotStrBoxProc_OnWakeUpNow
 	cp xwa, EVT_PAINT
-	jr z, Scrollbar_Case1E00069
+	jr z, AcRotStrBoxProc_OnPaint
 	cp xwa, EVT_HIDE
-	jr z, Scrollbar_Case1E00067
+	jr z, AcRotStrBoxProc_OnHide
 	cp xwa, EVT_SHOW
 	jrl nz, Scrollbar_Error
 	ld xwa, (xsp + 16)
@@ -1574,7 +1574,7 @@ AcRotStrBoxProc:
 	ld xbc, (xsp + 12)
 	jr Scrollbar_Update
 
-Scrollbar_Case1E00067:
+AcRotStrBoxProc_OnHide:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
 	ld xiz, xhl
@@ -1595,7 +1595,7 @@ Scrollbar_Case1E00067:
 	call KillApTimer
 	jrl Scrollbar_Done
 
-Scrollbar_Case1E00069:
+AcRotStrBoxProc_OnPaint:
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
@@ -1607,7 +1607,7 @@ Scrollbar_Case1E00069:
 	ld xbc, (xsp + 12)
 	jr Scrollbar_Update
 
-Scrollbar_Case1E00068:
+AcRotStrBoxProc_OnWakeUpNow:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
 	ld xde, (xsp + 16)
@@ -1618,7 +1618,7 @@ Scrollbar_Update:
 	call ApFuncCall
 	jr Scrollbar_Done
 
-Scrollbar_Case1E5000A:
+AcRotStrBoxProc_OnParaDraw:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
 	ld (xsp + 4), xhl
@@ -1655,7 +1655,7 @@ Scrollbar_Done:
 	ld xhl, 0:i3
 	jr Scrollbar_Return
 
-Scrollbar_Case1C00001:
+AcRotStrBoxProc_OnNotParaDraw:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
 	ld xbc, (xhl + 44)
@@ -1701,9 +1701,9 @@ IvIndexSwDelayProc:
 	cp xbc, EVT_INDEXSW_UP
 	jr z, Bounds_Default
 	cp xbc, EVT_GET_STRING
-	jr z, Bounds_Case1E0006A
+	jr z, IvIndexSwDelayProc_OnGetString
 	cp xbc, EVT_DRAW
-	jr z, Bounds_Case1E0006B
+	jr z, IvIndexSwDelayProc_OnDraw
 	cp xbc, EVT_HIDE
 	jrl nz, Bounds_Error
 	ld xwa, (xsp + 8)
@@ -1726,7 +1726,7 @@ IvIndexSwDelayProc:
 	call KillApTimer
 	jrl Bounds_Done
 
-Bounds_Case1E0006B:
+IvIndexSwDelayProc_OnDraw:
 	ld xwa, (xsp + 8)
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -1736,7 +1736,7 @@ Bounds_Case1E0006B:
 	call SendEvent
 	jr Bounds_Done
 
-Bounds_Case1E0006A:
+IvIndexSwDelayProc_OnGetString:
 	pushw IvIndexSwDelayProc_Str_ISD@hi16
 	pushw IvIndexSwDelayProc_Str_ISD@lo16
 	ld xwa, (xsp + 8)
@@ -1802,18 +1802,18 @@ IvWaitWinCtlProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_OFF_WINDOW
-	jr z, Edit_Default
+	jr z, IvWaitWinCtlProc_OnOffWindow
 	cp xbc, EVT_ON_WINDOW
-	jr z, Edit_Case1E00068
+	jr z, IvWaitWinCtlProc_OnOnWindow
 	cp xbc, EVT_GET_STRING
-	jr z, Edit_Case1E00069
+	jr z, IvWaitWinCtlProc_OnGetString
 	cp xbc, EVT_DRAW
-	jr z, Edit_Case1E00067
+	jr z, IvWaitWinCtlProc_OnDraw
 	ld xwa, xiz
 	call InheritedProc
 	jr Edit_Return
 
-Edit_Case1E00067:
+IvWaitWinCtlProc_OnDraw:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
@@ -1821,7 +1821,7 @@ Edit_Case1E00067:
 	ld xde, 0:i3
 	jr Edit_Update
 
-Edit_Case1E00069:
+IvWaitWinCtlProc_OnGetString:
 	pushw IvWaitWinCtlProc_Str_WWC@hi16
 	pushw IvWaitWinCtlProc_Str_WWC@lo16
 	push xde
@@ -1829,7 +1829,7 @@ Edit_Case1E00069:
 	inc 8, xsp
 	jr Edit_NoChange
 
-Edit_Case1E00068:
+IvWaitWinCtlProc_OnOnWindow:
 	ld xwa, xiz
 	call GetViewInstance
 	lda xbc, (xhl + 22)
@@ -1841,7 +1841,7 @@ Edit_Case1E00068:
 	ld xde, 5:i3
 	jr Edit_Update
 
-Edit_Default:
+IvWaitWinCtlProc_OnOffWindow:
 	ld xwa, xiz
 	call GetViewInstance
 	lda xbc, (xhl + 22)
@@ -2217,9 +2217,9 @@ MainAutoFree:
 MainRamControl:
 	lda xsp, (xsp - 16)
 	cp xbc, EVT_RAM_GET
-	jrl z, RamCtrl_Set_Entry
+	jrl z, MainRamControl_OnRamGet
 	cp xbc, EVT_RAM_ADD
-	jrl z, RamCtrl_Adjust_Entry
+	jrl z, MainRamControl_OnRamAdd
 	cp xbc, EVT_RAM_PUT
 	jrl nz, RamCtrl_Return
 	ld (xsp), xde
@@ -2284,7 +2284,7 @@ RamCtrl_Read_Dispatch:
 	ld xde, (xsp + 12)
 	jrl RamCtrl_DispatchAndReturn
 
-RamCtrl_Adjust_Entry:
+MainRamControl_OnRamAdd:
 	ld (xsp), xde
 	ld xwa, (xde)
 	ld (xsp + 4), xwa
@@ -2421,7 +2421,7 @@ RamCtrl_Adjust_Dispatch:
 	ld xde, (xsp + 12)
 	jr RamCtrl_DispatchAndReturn
 
-RamCtrl_Set_Entry:
+MainRamControl_OnRamGet:
 	ld (xsp), xde
 	ld xwa, (xde)
 	ld (xsp + 4), xwa

@@ -1300,7 +1300,7 @@ SqTrAsPs_ReturnZero:
 
 SqTrAsPsTtlFunc:
 	cp xbc, EVT_SW_IN
-	jr z, SqTrAsPsTtl_CaseD
+	jr z, SqTrAsPsTtlFunc_OnSwIn
 	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, SqTrAsPsTtl_ReturnZero
 	dec 2, xde
@@ -1349,7 +1349,7 @@ SqTrAsPsTtlFunc_Case3:
 	jr	SqTrAsPsTtl_ReturnZero
 
 ; SqTrAsPsTtl case D
-SqTrAsPsTtl_CaseD:
+SqTrAsPsTtlFunc_OnSwIn:
 	cp xde, 0xb
 	jr nz, SqTrAsPsTtl_ReturnZero
 	push xde
@@ -1733,7 +1733,7 @@ DisplayMode_RefreshState:
 	jp	FileIO_ReadChunk
 DpMdlyDocTtlFunc:
 	cp xbc, EVT_SW_IN
-	jr z, DpMdlyDoc_CaseA
+	jr z, DpMdlyDocTtlFunc_OnSwIn
 	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpMdlyDoc_ReturnZero
 	dec 2, xde
@@ -1775,7 +1775,7 @@ DpMdlyDocTtlFunc_Case3:
 	jr	DpMdlyDoc_ReturnZero
 
 ; DpMdlyDoc case A
-DpMdlyDoc_CaseA:
+DpMdlyDocTtlFunc_OnSwIn:
 	cp xde, 0xf
 	jr z, DpMdlyDoc_CaseE
 	cp xde, 0x8c
@@ -1827,7 +1827,7 @@ DpMdlyDoc_ReturnZero:
 
 DpMdlyPdTtlFunc:
 	cp xbc, EVT_SW_IN
-	jr z, DpMdlyPd_CaseA
+	jr z, DpMdlyPdTtlFunc_OnSwIn
 	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpMdlyPd_ReturnZero
 	dec 2, xde
@@ -1869,7 +1869,7 @@ DpMdlyPdTtlFunc_Case3:
 	jr	DpMdlyPd_ReturnZero
 
 ; DpMdlyPd case A
-DpMdlyPd_CaseA:
+DpMdlyPdTtlFunc_OnSwIn:
 	cp xde, 0xf
 	jr z, DpMdlyPd_CaseE
 	cp xde, 0x8c
@@ -1921,7 +1921,7 @@ DpMdlyPd_ReturnZero:
 
 DpMdlySmfTtlFunc:
 	cp xbc, EVT_SW_IN
-	jr z, DpMdlySmf_CaseA
+	jr z, DpMdlySmfTtlFunc_OnSwIn
 	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpMdlySmf_ReturnZero
 	dec 2, xde
@@ -1965,7 +1965,7 @@ DpMdlySmfTtlFunc_Case3:
 	pop xde
 	calr SqTrAsPsTtl_CaseF
 	jr DpMdlySmf_ReturnZero
-DpMdlySmf_CaseA:
+DpMdlySmfTtlFunc_OnSwIn:
 	cp xde, 0xf
 	jr z, DpMdlySmf_CaseE
 	cp xde, 0x8c
@@ -2017,7 +2017,7 @@ DpMdlySmf_ReturnZero:
 
 DpMdlySmfLyrTtlFunc:
 	cp xbc, EVT_SW_IN
-	jrl z, DpMdlySmfLyr_CaseA
+	jrl z, DpMdlySmfLyrTtlFunc_OnSwIn
 	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpMdlySmfLyr_ReturnZero
 	dec 2, xde
@@ -2086,7 +2086,7 @@ DpMdlySmfLyrTtlFunc_Case5:
 DpMdlySmfLyrTtlFunc_Join2:
 	call	ApPostEvent
 	jr	DpMdlySmfLyr_ReturnZero
-DpMdlySmfLyr_CaseA:
+DpMdlySmfLyrTtlFunc_OnSwIn:
 	cp xde, 0xf
 	jr z, DpMdlySmfLyr_CaseC
 	cp xde, 0x8c
@@ -2804,11 +2804,11 @@ CDlikeSwTtl_PdNavReturn:
 
 DpDocTtlFunc:
 	cp xbc, EVT_SW_OFF
-	jrl z, DpDoc_CaseI
+	jrl z, DpDocTtlFunc_OnSwOff
 	cp xbc, EVT_SW_ON
-	jrl z, DpDoc_CaseG
+	jrl z, DpDocTtlFunc_OnSwOn
 	cp xbc, EVT_SW_IN
-	jr z, DpDoc_CaseA
+	jr z, DpDocTtlFunc_OnSwIn
 	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpDocTtl_ReturnZero
 	dec 2, xde
@@ -2837,7 +2837,7 @@ DpDocTtlFunc_Case3:
 DpDocTtlFunc_Skip:
 	calr	SqTrAsPsTtl_CaseF
 	jrl	DpDocTtl_ReturnZero
-DpDoc_CaseA:
+DpDocTtlFunc_OnSwIn:
 	ld xwa, xde
 	cp xde, 0x5
 	jr z, DpDoc_CaseE
@@ -2901,7 +2901,7 @@ DpDoc_CaseF:
 	jr DpDocTtl_ReturnZero
 
 ; DpDocTtl case G
-DpDoc_CaseG:
+DpDocTtlFunc_OnSwOn:
 	cp xde, 0x84
 	jr z, DpDoc_CaseH
 	cp xde, 0x4
@@ -2913,7 +2913,7 @@ DpDoc_CaseH:
 	jr DpDocTtl_ReturnZero
 
 ; DpDocTtl case I
-DpDoc_CaseI:
+DpDocTtlFunc_OnSwOff:
 	cp xde, 0x84
 	jr z, DpDoc_CaseJ
 	cp xde, 0x4
@@ -2929,11 +2929,11 @@ DpDocTtl_ReturnZero:
 
 DpPdTtlFunc:
 	cp xbc, EVT_SW_OFF
-	jrl z, DpPd_CaseI
+	jrl z, DpPdTtlFunc_OnSwOff
 	cp xbc, EVT_SW_ON
-	jrl z, DpPd_CaseG
+	jrl z, DpPdTtlFunc_OnSwOn
 	cp xbc, EVT_SW_IN
-	jr z, DpPd_CaseA
+	jr z, DpPdTtlFunc_OnSwIn
 	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpPdTtl_ReturnZero
 	dec 2, xde
@@ -2962,7 +2962,7 @@ DpPdTtlFunc_Case3:
 DpPdTtlFunc_Skip:
 	calr	SqTrAsPsTtl_CaseF
 	jrl	DpPdTtl_ReturnZero
-DpPd_CaseA:
+DpPdTtlFunc_OnSwIn:
 	ld xwa, xde
 	cp xde, 0x5
 	jr z, DpPd_CaseE
@@ -3026,7 +3026,7 @@ DpPd_CaseF:
 	jr DpPdTtl_ReturnZero
 
 ; DpPdTtl case G
-DpPd_CaseG:
+DpPdTtlFunc_OnSwOn:
 	cp xde, 0x84
 	jr z, DpPd_CaseH
 	cp xde, 0x4
@@ -3038,7 +3038,7 @@ DpPd_CaseH:
 	jr DpPdTtl_ReturnZero
 
 ; DpPdTtl case I
-DpPd_CaseI:
+DpPdTtlFunc_OnSwOff:
 	cp xde, 0x84
 	jr z, DpPd_CaseJ
 	cp xde, 0x4
@@ -3054,11 +3054,11 @@ DpPdTtl_ReturnZero:
 
 DpSmfTtlFunc:
 	cp xbc, EVT_SW_OFF
-	jrl z, DpSmf_CaseI
+	jrl z, DpSmfTtlFunc_OnSwOff
 	cp xbc, EVT_SW_ON
-	jrl z, DpSmf_CaseG
+	jrl z, DpSmfTtlFunc_OnSwOn
 	cp xbc, EVT_SW_IN
-	jrl z, DpSmf_CaseA
+	jrl z, DpSmfTtlFunc_OnSwIn
 	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpSmfTtl_ReturnZero
 	dec 2, xde
@@ -3097,7 +3097,7 @@ DpSmfTtlFunc_Case3:
 DpSmfTtlFunc_Skip:
 	calr	SqTrAsPsTtl_CaseF
 	jrl	DpSmfTtl_ReturnZero
-DpSmf_CaseA:
+DpSmfTtlFunc_OnSwIn:
 	ld xwa, xde
 	cp xde, 0x5
 	jr z, DpSmf_CaseE
@@ -3161,7 +3161,7 @@ DpSmf_CaseF:
 	jr DpSmfTtl_ReturnZero
 
 ; DpSmfTtl case G
-DpSmf_CaseG:
+DpSmfTtlFunc_OnSwOn:
 	cp xde, 0x84
 	jr z, DpSmf_CaseH
 	cp xde, 0x4
@@ -3173,7 +3173,7 @@ DpSmf_CaseH:
 	jr DpSmfTtl_ReturnZero
 
 ; DpSmfTtl case I
-DpSmf_CaseI:
+DpSmfTtlFunc_OnSwOff:
 	cp xde, 0x84
 	jr z, DpSmf_CaseJ
 	cp xde, 0x4
@@ -3189,11 +3189,11 @@ DpSmfTtl_ReturnZero:
 
 DpSmfLyrTtlFunc:
 	cp xbc, EVT_SW_OFF
-	jrl z, DpSmfLyr_CaseC
+	jrl z, DpSmfLyrTtlFunc_OnSwOff
 	cp xbc, EVT_SW_ON
-	jrl z, DpSmfLyr_CaseB
+	jrl z, DpSmfLyrTtlFunc_OnSwOn
 	cp xbc, EVT_SW_IN
-	jr z, DpSmfLyr_CaseA
+	jr z, DpSmfLyrTtlFunc_OnSwIn
 	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, SeqStep_ReturnZero
 	dec 2, xde
@@ -3224,7 +3224,7 @@ DpSmfLyrTtlFunc_Join:
 	jrl	SeqStep_ReturnZero
 
 ; DpSmfLyrTtl case A
-DpSmfLyr_CaseA:
+DpSmfLyrTtlFunc_OnSwIn:
 	cp xde, 0x88
 	jr z, DpSmfLyr_SendSoundD6
 	cp xde, 0x85
@@ -3279,7 +3279,7 @@ DpSmfLyr_SendSoundD6:
 	jr SeqStep_ReturnZero
 
 ; DpSmfLyrTtl case B
-DpSmfLyr_CaseB:
+DpSmfLyrTtlFunc_OnSwOn:
 	cp xde, 0x84
 	jr z, DpSmfLyr_ConfirmStart
 	cp xde, 0x4
@@ -3290,7 +3290,7 @@ DpSmfLyr_ConfirmStart:
 	jr SeqStep_ReturnZero
 
 ; DpSmfLyrTtl case C
-DpSmfLyr_CaseC:
+DpSmfLyrTtlFunc_OnSwOff:
 	cp xde, 0x84
 	jr z, DpSmfLyr_ConfirmDispatch
 	cp xde, 0x4

@@ -2615,9 +2615,9 @@ AcMstStyleAlp_Boundary:
 	cp	xwa, EVT_GET_FIXED_COL_STR
 	jrl	z, MasterSetup_GetNameA
 	cp	xwa, EVT_SW_IN
-	jrl	z, AcMstStyleAlp_Boundary_Skip3
+	jrl	z, AcMstStyleAlp_Boundary_OnSwIn
 	cp	xwa, EVT_HIDE
-	jrl	z, AcMstStyleAlp_Boundary_Skip2
+	jrl	z, AcMstStyleAlp_Boundary_OnHide
 	cp	xwa, EVT_SHOW
 	jr	z, AcMstStyleAlp_Boundary_Skip
 	sub	xbc, EVT_INDEXSW_UP
@@ -2684,7 +2684,7 @@ AcMstStyleAlp_Boundary_Skip:
 	ld	xwa, NAKA_MAINFUNC_MainMssSetUp
 	ld	xbc, EVT_OTP_CNT_SET
 	jr	AcMstStyleAlp_Boundary_Join
-AcMstStyleAlp_Boundary_Skip2:
+AcMstStyleAlp_Boundary_OnHide:
 	ld	xwa, (xsp+74)
 	ld	xbc, (xsp+70)
 	ld	xde, (xsp+66)
@@ -2695,7 +2695,7 @@ AcMstStyleAlp_Boundary_Skip2:
 AcMstStyleAlp_Boundary_Join:
 	call	MainFuncCall
 	jrl	SeqFile_ReturnZeroJmp2
-AcMstStyleAlp_Boundary_Skip3:
+AcMstStyleAlp_Boundary_OnSwIn:
 	ld	xwa, (xsp+74)
 	ld	xbc, (xsp+70)
 	ld	xde, (xsp+66)

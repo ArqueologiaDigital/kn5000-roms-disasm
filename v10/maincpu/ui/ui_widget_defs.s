@@ -6765,14 +6765,14 @@ AcMixerVol_Return:
 ScrollDelta_ComputeDirection:
 	ld	hl, de
 	cp	xwa, EVT_SW_IN_AIC
-	jr	z, IvInterruptProc_Skip
+	jr	z, ScrollDelta_ComputeDirection_OnSwInAic
 	cp	xwa, EVT_SW_IN
 	jr	nz, IvInterruptProc_Skip3
 	ld	hl, (xsp+4)
 	bit	7, bc
 	jr	nz, IvInterruptProc_Skip2
 	jr	IvInterruptProc_Return
-IvInterruptProc_Skip:
+ScrollDelta_ComputeDirection_OnSwInAic:
 	bit	7, bc
 	jr	z, IvInterruptProc_Return
 IvInterruptProc_Skip2:
@@ -9464,7 +9464,7 @@ SupportClassProc:
 	sll xhl, 2
 	add xhl, xiy
 	cp xbc, EVT_GET_PROP_SIZE
-	jr z, TitleWidget_Default
+	jr z, SupportClassProc_OnGetPropSize
 	cp xbc, EVT_GET_INSTANCE
 	jr z, SupportClass_PopIzRet
 	cp xbc, EVT_GET_CLASS_SP
@@ -9472,7 +9472,7 @@ SupportClassProc:
 	ld xhl, NAKA_CLASS_SupportClass
 	jr SupportClass_PopIzRet
 
-TitleWidget_Default:
+SupportClassProc_OnGetPropSize:
 	ld hl, (xhl + 6)
 	extz xhl
 	jr SupportClass_PopIzRet
@@ -9519,7 +9519,7 @@ FunctionProc:
 	ld xhl, xde
 	add xhl, xix
 	cp xbc, EVT_GET_FUNCTION
-	jr z, ResourceWidget_Init_Loop
+	jr z, FunctionProc_OnGetFunction
 	cp xbc, EVT_GET_INSTANCE
 	jr z, FuncProc_PopIzSkip4Ret
 	cp xbc, EVT_GET_CLASS_SP
@@ -9532,7 +9532,7 @@ ResourceWidget_Init:
 	ld xhl, NAKA_CLASS_Function
 	jr FuncProc_PopIzSkip4Ret
 
-ResourceWidget_Init_Loop:
+FunctionProc_OnGetFunction:
 	ld xhl, (xhl)
 	jr FuncProc_PopIzSkip4Ret
 
@@ -11061,13 +11061,13 @@ ResEventProc:
 	add xhl, xix
 	ld xhl, (xhl)
 	cp xbc, EVT_GET_NAME
-	jr z, EnumList_Reset_Return
+	jr z, ResEventProc_OnGetName
 	cp xbc, EVT_GET_CLASS_SP
 	jrl nz, ObjectProc
 	ld xhl, NAKA_CLASS_ResEvent
 	ret
 
-EnumList_Reset_Return:
+ResEventProc_OnGetName:
 	ld wa, iy
 	extz xwa
 	sll xwa, 2
@@ -17265,7 +17265,7 @@ NameProc:
 	cp xde, EVT_GET_PROP_MEMBER
 	jr z, NameProc_Init
 	cp xde, EVT_CHECK_PROP_STRING
-	jr z, NameProc_Return
+	jr z, NameProc_OnCheckPropString
 	ld xwa, xbc
 	ld xbc, xde
 	ld xde, xiz
@@ -17304,7 +17304,7 @@ NameProc_DefaultForward:
 	call Strcpy
 	inc 8, xsp
 
-NameProc_Return:
+NameProc_OnCheckPropString:
 	ld xhl, 0:i3
 	jr ConstFlagProc_ReturnZero
 
@@ -17325,7 +17325,7 @@ ConstFlagProc:
 	cp xbc, EVT_SET_PROPERTY_EX
 	jrl z, ConstFlagProc_Default_Result
 	cp xbc, EVT_GET_PROPERTY_EX
-	jr z, ConstFlagProc_Default
+	jr z, ConstFlagProc_OnGetPropertyEx
 	cp xbc, EVT_DUMP_PROPERTY_EX
 	jr z, ConstFlagProc_SetValue_Check
 	cp xbc, EVT_MAKE_DUMP
@@ -17364,7 +17364,7 @@ ConstFlagProc_SetValue_Store:
 	inc 8, xsp
 	jr ConstFlagProc_Default_Forward
 
-ConstFlagProc_Default:
+ConstFlagProc_OnGetPropertyEx:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 8)
 	call GetConst

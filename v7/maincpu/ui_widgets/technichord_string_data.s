@@ -934,9 +934,9 @@ SdpartUpdatePartUI_Data:	.incbin "includes/generated/naka_technichord_strings.bi
 ; [nakarest] naka_technichord_strings+0xf3d4  +0xf3d4..+0xf458 (0xe95322, 132 B)
 ; [nakarest] purpose not established: layout of 132 B at 0xe95322 not derived; readers below
 ; [nakarest] Readers: source references PsMixer_CtlTypeProc3_Skip6 (ui/drawbar_panel_ui.s: `lda
-; [nakarest] xbc, (PsMixer_MidiScanOuterLoop_Data:24)`), PsMixer_CtlTypeProc3_Skip8
+; [nakarest] xbc, (PsMixer_MidiScanOuterLoop_Data:24)`), PsMixer_CtlTypeProc3_OnIndexswBoth
 ; [nakarest] (ui/drawbar_panel_ui.s: `lda xbc, (PsMixer_MidiScanOuterLoop_Data:24)`),
-; [nakarest] PsMixer_CtlTypeProc7_Skip2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] PsMixer_CtlTypeProc7_OnParaDraw (ui/drawbar_panel_ui.s: `lda xbc,
 ; [nakarest] (PsMixer_MidiScanOuterLoop_Data:24)`), PsMixer_CtlTypeProc7_Skip5
 ; [nakarest] (ui/drawbar_panel_ui.s: `lda xbc, (PsMixer_MidiScanOuterLoop_Data:24)`), 15 more.
 PsMixer_MidiScanOuterLoop_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF3D4, 0x84
@@ -945,7 +945,7 @@ PsMixer_MidiScanOuterLoop_Data:	.incbin "includes/generated/naka_technichord_str
 ; [nakarest] Readers: source references PsMixer_CtlTypeProc9_Join3 (ui/drawbar_panel_ui.s: `ld
 ; [nakarest] xwa, (PsMixer_CtlTypeProc2_Data:24)`), PsMixer_CtlTypeProc2_Skip2
 ; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, (PsMixer_CtlTypeProc2_Data:24)`),
-; [nakarest] PsMixer_CtlTypeProc2_Skip5 (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] PsMixer_CtlTypeProc2_OnIndexswBoth (ui/drawbar_panel_ui.s: `ld xwa,
 ; [nakarest] (PsMixer_CtlTypeProc2_Data:24)`).
 PsMixer_CtlTypeProc2_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF458, 0x4
 ; [nakarest] naka_technichord_strings+0xf45c  +0xf45c..+0xf47c (0xe953aa, 32 B)
@@ -964,8 +964,8 @@ IvSdpart_Init_LoadDescriptor_Data:	.incbin "includes/generated/naka_technichord_
 IvSdpart_OK_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF47C, 0x4
 ; [nakarest] naka_technichord_strings+0xf480  +0xf480..+0xf4bc (0xe953ce, 60 B)
 ; [nakarest] purpose not established: layout of 60 B at 0xe953ce not derived; readers below
-; [nakarest] Readers: source references PsMixer_CtlTypeProc1_Skip2 (ui/drawbar_panel_ui.s: `lda
-; [nakarest] xwa, (IvSdpart_ShowHide_Data:24)`), PsMixer_CtlTypeProc1_Skip3
+; [nakarest] Readers: source references PsMixer_CtlTypeProc1_OnParaDraw (ui/drawbar_panel_ui.s: `lda
+; [nakarest] xwa, (IvSdpart_ShowHide_Data:24)`), PsMixer_CtlTypeProc1_OnSoundName
 ; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, IvSdpart_ShowHide_Data`),
 ; [nakarest] AudioCtrl_SetupPartDisplay (ui/drawbar_panel_ui.s: `lda xbc,
 ; [nakarest] (IvSdpart_ShowHide_Data:24)`), IvSdpart_Match_HitTest (ui/drawbar_panel_ui.s:

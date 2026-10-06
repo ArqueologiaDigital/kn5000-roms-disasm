@@ -20037,9 +20037,9 @@ SeqEvent_CaseB:
 
 ApEditSyori:
 	cp xbc, EVT_DEC_VAL
-	jr z, SeqEvent_CaseD
+	jr z, ApEditSyori_OnDecVal
 	cp xbc, EVT_INC_VAL
-	jr z, SeqEvent_CaseC
+	jr z, ApEditSyori_OnIncVal
 	cp xbc, EVT_PAINT
 	jr nz, SeqEvent_CaseE
 	ld (0x2972:16), xde
@@ -20047,13 +20047,13 @@ ApEditSyori:
 	jr SeqEvent_CaseE
 
 ; SeqEvent dispatch case C
-SeqEvent_CaseC:
+ApEditSyori_OnIncVal:
 	ld xwa, xde
 	calr AppEvent_ChainDispatch1
 	jr SeqEvent_CaseE
 
 ; SeqEvent dispatch case D
-SeqEvent_CaseD:
+ApEditSyori_OnDecVal:
 	ld xwa, xde
 	calr AppEvent_InlineHandler
 

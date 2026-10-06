@@ -324,7 +324,7 @@ Boot_InitWorkRAM_ROMCopy2_Start_Data:	.incbin "includes/generated/naka_sequencer
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
 ; [nakarest] 0x0e3e8..0x0e870 (its ld xde/xhl/xbc + ldir blocks), where they are read by
 ; [nakarest] AllocNewVoiceEntry_LoadParam3 (audio/note_voice_mapping.s: `lda xde, (0xe82e:16)`),
-; [nakarest] PsMixer_CtlTypeProc2_Skip7 (ui/drawbar_panel_ui.s: `cp xwa, 0xe808`),
+; [nakarest] PsMixer_CtlTypeProc2_OnLswData (ui/drawbar_panel_ui.s: `cp xwa, 0xe808`),
 ; [nakarest] EffEdit_DSPConfigBlock_Skip3 (sequencer/sequencer_engine.s: `retd 0xe800`),
 ; [nakarest] SeScreenData_0x4E8B (storage/flash_floppy_handlers.s: `ldw (9:8),
 ; [nakarest] 0xe400:io`), 19 more.

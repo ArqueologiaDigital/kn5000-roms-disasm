@@ -1303,7 +1303,7 @@ InOutGridCheck:
 	ld xwa, xde
 	lda xbc, (xsp + 12)
 	cp xde, EVT_REQUEST_GRID_DRAW
-	jrl z, ParaLoadOpt_Entry
+	jrl z, InOutGridCheck_OnRequestGridDraw
 	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, MdPreset_ReturnZero2
@@ -1704,7 +1704,7 @@ InOutGridCheck_Entry:
 	jrl	InOutGridCheck_Join4
 
 ; ParaLoadOpt entry handler
-ParaLoadOpt_Entry:
+InOutGridCheck_OnRequestGridDraw:
 	lda xde, (xsp + 4)
 	ld xwa, xiz
 	srl xwa, 16

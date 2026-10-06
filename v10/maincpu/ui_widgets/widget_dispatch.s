@@ -9627,7 +9627,7 @@ RamInit_MajorMinorPtrs:
 	.long StrMajor
 	.long StrMinor
 ; Initial value of RAM 0x3DA06: 2 x u32 pointers to StrNormal / StrSeventh.
-; Read from RAM by CmpSetP1_GridCheck_Return (0xF1A78B): `lda xhl,(0x3DA06)`, index = value - 1.
+; Read from RAM by CmpSetP1GridCheck_OnRequestGridDraw (0xF1A78B): `lda xhl,(0x3DA06)`, index = value - 1.
 RamInit_NormalSeventhPtrs:
 	.long StrNormal
 	.long StrSeventh

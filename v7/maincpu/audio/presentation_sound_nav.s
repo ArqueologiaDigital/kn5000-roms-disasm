@@ -1120,10 +1120,10 @@ IvDirmdScreenProc:
 	ld (xsp + 12), xwa
 	ld xbc, (xsp + 8)
 	cp xbc, EVT_GET_BOX_BORDER
-	jrl z, DirmdEmu_CaseD
+	jrl z, IvDirmdScreenProc_OnGetBoxBorder
 	ld xwa, (xsp + 8)
 	cp xwa, EVT_OLD_TITLE
-	jr z, DirmdEmu_CaseC
+	jr z, IvDirmdScreenProc_OnOldTitle
 	cp xwa, EVT_NEW_TITLE
 	jr z, DirmdEmu_CaseB
 	sub xbc, EVT_SHOW
@@ -1145,7 +1145,7 @@ DirmdEmu_CaseB:
 	jrl IvDirmd_ForwardToScreen
 
 ; DirmdEmulator dispatch case C
-DirmdEmu_CaseC:
+IvDirmdScreenProc_OnOldTitle:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1240,7 +1240,7 @@ IvDirmd_ForwardAndReturn:
 	jr IvDirmd_ScreenForward
 
 ; DirmdEmulator dispatch case D
-DirmdEmu_CaseD:
+IvDirmdScreenProc_OnGetBoxBorder:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)

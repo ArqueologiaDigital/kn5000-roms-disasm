@@ -11,7 +11,7 @@
 MiddleFuncCall:
 	ld xwa, xbc
 	cp xbc, EVT_LYRICS_CHARA_REQ
-	jrl z, SqTrSel_CaseB
+	jrl z, MiddleFuncCall_OnLyricsCharaReq
 	sub xwa, EVT_DEMO_SONG_SEL
 	cp xwa, 0x0
 	jrl lt, SqTrSel_CaseC
@@ -128,7 +128,7 @@ MiddleFuncCall_OnTrackMidiCall:
 	jr	SqTrSel_CaseC
 
 ; SqTrSelTtl case B
-SqTrSel_CaseB:
+MiddleFuncCall_OnLyricsCharaReq:
 	call SeqFile_ParseHeader
 
 ; SqTrSelTtl case C

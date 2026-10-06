@@ -13,7 +13,7 @@ MainGetSoundName:
 	ld (xsp + 20), xde
 	ld xwa, (xsp + 20)
 	cp xbc, EVT_ADD_SOUND_SW_NO
-	jrl z, Sound_Navigate_Entry
+	jrl z, MainGetSoundName_OnAddSoundSwNo
 	cp xbc, EVT_SET_SOUND_SW_NO
 	jrl z, Sound_SetSelection
 	cp xbc, EVT_GET_SOUND_SW_NO
@@ -138,7 +138,7 @@ Sound_SetSelection:
 	ld wa, 1:i3
 	jrl Sound_Navigate_Notify
 
-Sound_Navigate_Entry:
+MainGetSoundName_OnAddSoundSwNo:
 	ld (xsp + 4), wa
 	cpw (xsp + 4), 0xf
 	jr le, Sound_Navigate_Init

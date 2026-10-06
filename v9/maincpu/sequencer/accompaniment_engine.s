@@ -32524,7 +32524,7 @@ MainCstmNameFunc:
 	ldw bc, 0x3c
 	ldirw
 	cp xde, EVT_CSTM_T_NM_GET
-	jr z, CstmName_HandleEvent2C
+	jr z, MainCstmNameFunc_OnCstmTNmGet
 	cp xde, EVT_CSTM_F_NM_GET
 	jrl nz, CstmName_ReturnZero
 	pushw 0x11
@@ -32554,7 +32554,7 @@ MainCstmNameFunc:
 	ld xde, xiz
 	jr CstmName_PostEventAndReturn
 
-CstmName_HandleEvent2C:
+MainCstmNameFunc_OnCstmTNmGet:
 	pushw 0x11
 	call Malloc
 	ld xiz, xhl
@@ -32596,7 +32596,7 @@ MainS2cFunc:
 	ld xwa, (xsp)
 	dec 2, a
 	cp xbc, EVT_S2C_TR_DN
-	jr z, S2cFunc_HandleEvent11
+	jr z, MainS2cFunc_OnS2cTrDn
 	cp xbc, EVT_S2C_TR_UP
 	jrl nz, EventDelivery_ReturnZero
 	ld (0x3990:16), a
@@ -32625,7 +32625,7 @@ MainS2cFunc:
 	ld xde, 0:i3
 	jr S2cFunc_DeliverAndReturn
 
-S2cFunc_HandleEvent11:
+MainS2cFunc_OnS2cTrDn:
 	ld (0x3990:16), a
 	ld wa, 1:i3
 	call Tempo_AdjustEffect
@@ -32662,7 +32662,7 @@ EventDelivery_ReturnZero:
 MiddleNameFunc:
 	lda xwa, (0x34bc:16)
 	cp xbc, EVT_MSP_NAME_SET
-	jr z, MiddleName_HandleEvent01
+	jr z, MiddleNameFunc_OnMspNameSet
 	cp xbc, EVT_CMP_NAME_SET
 	jr nz, MiddleName_ReturnZero
 	push xde
@@ -32681,7 +32681,7 @@ MiddleNameFunc:
 	ldw wa, 0xb2
 	jr MiddleName_PostModeChange
 
-MiddleName_HandleEvent01:
+MiddleNameFunc_OnMspNameSet:
 	push xde
 	push xwa
 	call Strcpy
@@ -32720,7 +32720,7 @@ MiddleName_ReturnZero:
 
 MiddleCmpClrFunc:
 	cp xbc, EVT_CMP_CLR_NO
-	jr z, MiddleCmpClr_HandleEvent07
+	jr z, MiddleCmpClrFunc_OnCmpClrNo
 	cp xbc, EVT_CMP_CLR_YES
 	jr nz, MiddleCmpClr_ReturnZero
 	set 2, (0x34cd:16)
@@ -32734,7 +32734,7 @@ MiddleCmpClrFunc:
 	call SoundCtrl_SendCommand
 	jr MiddleCmpClr_ReturnZero
 
-MiddleCmpClr_HandleEvent07:
+MiddleCmpClrFunc_OnCmpClrNo:
 	ld (0x350c:16), 0
 	ld xwa, 0xb20012
 	ld xbc, EVT_HIDE
@@ -32758,7 +32758,7 @@ MainCmpCpFunc:
 	ld bc, 6:i3
 	ldirw
 	cp xde, EVT_RHY_VARI_NM_GET
-	jr z, MainCmpCp_HandleEvent03
+	jr z, MainCmpCpFunc_OnRhyVariNmGet
 	cp xde, EVT_RHY_GRP_NM_GET
 	jrl nz, MainCmpSet_Case4
 	pushw 0x11
@@ -32793,7 +32793,7 @@ MainCmpCpFunc:
 	ld xde, xiz
 	jrl MainCmpSet_Case3
 
-MainCmpCp_HandleEvent03:
+MainCmpCpFunc_OnRhyVariNmGet:
 	pushw 0xf
 	call Malloc
 	inc 2, xsp
@@ -33054,11 +33054,11 @@ MainEsCmpFunc:
 	ld a, e
 	dec 2, a
 	cp xbc, EVT_ES_CMP_VARI_DN
-	jrl z, EsCmp_HandleEvent2A
+	jrl z, MainEsCmpFunc_OnEsCmpVariDn
 	cp xbc, EVT_ES_CMP_VARI_UP
-	jrl z, EsCmp_HandleEvent29
+	jrl z, MainEsCmpFunc_OnEsCmpVariUp
 	cp xbc, EVT_ES_CMP_STYL_DN
-	jr z, EsCmp_HandleEvent28
+	jr z, MainEsCmpFunc_OnEsCmpStylDn
 	cp xbc, EVT_ES_CMP_STYL_UP
 	jrl nz, EsCmp_ReturnZero
 	ld (0x39b8:16), a
@@ -33086,7 +33086,7 @@ MainEsCmpFunc:
 	ld xbc, EVT_REQUEST_GRID_DRAW
 	jrl MspBksl_EventDeliver
 
-EsCmp_HandleEvent28:
+MainEsCmpFunc_OnEsCmpStylDn:
 	ld (0x39b8:16), a
 	push xde
 	push xhl
@@ -33113,7 +33113,7 @@ EsCmp_HandleEvent28:
 	ld xbc, EVT_REQUEST_GRID_DRAW
 	jr MspBksl_EventDeliver
 
-EsCmp_HandleEvent29:
+MainEsCmpFunc_OnEsCmpVariUp:
 	ld (0x39b8:16), a
 	push xde
 	push xhl
@@ -33133,7 +33133,7 @@ EsCmp_HandleEvent29:
 	ld xbc, EVT_REQUEST_GRID_DRAW
 	jr MspBksl_EventDeliver
 
-EsCmp_HandleEvent2A:
+MainEsCmpFunc_OnEsCmpVariDn:
 	ld (0x39b8:16), a
 	push xde
 	push xhl
@@ -33278,11 +33278,11 @@ MainMspRgpSetFunc:
 	add xix, xiy
 	lda xwa, (xix + 1)
 	cp xbc, EVT_RGP_PAD_DN
-	jr z, MspMenuTtl_Case1
+	jr z, MainMspRgpSetFunc_OnRgpPadDn
 	cp xbc, EVT_RGP_PAD_UP
 	jr z, MspMenuTtl_Init
 	cp xbc, EVT_RGP_BNK_DN
-	jr z, MspRgpSet_HandleEvent13
+	jr z, MainMspRgpSetFunc_OnRgpBnkDn
 	cp xbc, EVT_RGP_BNK_UP
 	jrl nz, AccBass_ReturnZero
 	cp (0x7f0b:16), 0
@@ -33298,7 +33298,7 @@ MainMspRgpSetFunc:
 	ld xde, xhl
 	jr AccBass_EventDeliver
 
-MspRgpSet_HandleEvent13:
+MainMspRgpSetFunc_OnRgpBnkDn:
 	cp (0x7f0b:16), 0
 	jr nz, AccBass_ReturnZero
 	ld xbc, xix
@@ -33327,7 +33327,7 @@ MspMenuTtl_Init:
 	jr AccBass_EventDeliver
 
 ; MspMenuTtlFunc case 1
-MspMenuTtl_Case1:
+MainMspRgpSetFunc_OnRgpPadDn:
 	cp (0x7f0b:16), 0
 	jr nz, AccBass_ReturnZero
 	ld xbc, xwa
@@ -33697,10 +33697,10 @@ SndArgNm_CheckChannelDone:
 	dec 4, xhl
 	ld xwa, (xsp + 74)
 	cp xwa, EVT_SET_PT_SEL
-	jrl z, SndArgNm_HandleEvent24
+	jrl z, SndArgNm_CheckChannelDone_OnSetPtSel
 	add xhl, xix
 	cp xwa, EVT_ARG_CHO_GET
-	jrl z, SndArgNm_HandleEvent21
+	jrl z, SndArgNm_CheckChannelDone_OnArgChoGet
 	cp xwa, EVT_ARG_TONE_NM_GET
 	jrl nz, SndArgNm_ReturnZero
 	ld xix, xhl
@@ -33753,7 +33753,7 @@ SndArgNm_ProcessEntry:
 	ld xbc, EVT_ARG_TONE_NM_DISP
 	jrl SndArgNm_DeliverAndReturn
 
-SndArgNm_HandleEvent21:
+SndArgNm_CheckChannelDone_OnArgChoGet:
 	or xde, xde
 	jr nz, SndArgNm_HandleEvent21_Copy
 	pushw 0x3
@@ -33807,7 +33807,7 @@ SndArgNm_DeliverAndReturn:
 	call ApDeliveryEvent
 	jr SndArgNm_ReturnZero
 
-SndArgNm_HandleEvent24:
+SndArgNm_CheckChannelDone_OnSetPtSel:
 	ld xwa, (xsp + 2)
 	add xwa, xde
 	mrib4 0x80, 0x19, 0x3a, 0x8d

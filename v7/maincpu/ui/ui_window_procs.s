@@ -408,10 +408,10 @@ WndEvt_DispatchByEventCode_Case3:
 	cp	xwa, EVT_INDEXSW_DOWN_AIC
 	jrl	z, WndEvt_EventCodeDispatch_Skip2
 	cp	xwa, EVT_INDEXSW_UP
-	jr	z, WndEvt_EventCodeDispatch_Skip
+	jr	z, WndEvt_EventCodeDispatch_OnIndexswUp
 	cp	xwa, EVT_INDEXSW_UP_AIC
 	jrl	nz, UIDialog_ReturnZeroJmp
-WndEvt_EventCodeDispatch_Skip:
+WndEvt_EventCodeDispatch_OnIndexswUp:
 	ld	bc, (160990:24)
 	cp	bc, 13
 	jrl	c, UIDialog_ReturnZeroJmp

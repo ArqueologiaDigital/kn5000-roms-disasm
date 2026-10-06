@@ -5785,7 +5785,7 @@ AcCmpSetGridBoxProc:
 	jrl z, CmpSetP1_GridCheck_Case3
 	ld xwa, (xsp + 16)
 	cp xwa, EVT_GET_FIXED_ROW_STR
-	jrl z, CmpSetP1_GridCheck_Case1
+	jrl z, AcCmpSetGridBoxProc_OnGetFixedRowStr
 	cp xwa, EVT_GET_FIXED_COL_STR
 	jrl z, CmpSetP1_GridCheckDispatch
 	cp xwa, EVT_SHOW
@@ -5968,7 +5968,7 @@ CmpSetP1_GridCheckDispatch:
 	jr CmpSetP1_GridCheck_Case2
 
 ; CmpSetP1 grid check case 1
-CmpSetP1_GridCheck_Case1:
+AcCmpSetGridBoxProc_OnGetFixedRowStr:
 	ld xwa, xiz
 	ld xiz, 0x42
 
@@ -6014,7 +6014,7 @@ CmpSetP1GridCheck:
 	lda xsp, (xsp - 28)
 	ld xwa, xbc
 	cp xbc, EVT_REQUEST_GRID_DRAW
-	jrl z, CmpSetP1_GridCheck_Return
+	jrl z, CmpSetP1GridCheck_OnRequestGridDraw
 	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, Widget_PostEvtReturnZero
@@ -6071,7 +6071,7 @@ CmpSetP1GridCheck_Join:
 	jrl	Widget_PostEvtReturnZero
 
 ; CmpSetP1 grid check return
-CmpSetP1_GridCheck_Return:
+CmpSetP1GridCheck_OnRequestGridDraw:
 	lda xbc, (xsp + 20)
 	ld xwa, xde
 	srl xwa, 16

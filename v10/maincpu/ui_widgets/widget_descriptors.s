@@ -1723,8 +1723,8 @@ NoteEditFunc_CaseTable:
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; NoteEditFunc_CaseTable_Strings[10].
-; Readers (claims_lint.py unread-claims, 2026-10-02): SngSelFunc_HandleEvent47 (0xF2FF2D, pushw far
-;   pointer); SngSelFunc_HandleEvent47 (0xF2FF45, pushw far pointer)
+; Readers (claims_lint.py unread-claims, 2026-10-02): SngSelFunc_OnGetRamString (0xF2FF2D, pushw far
+;   pointer); SngSelFunc_OnGetRamString (0xF2FF45, pushw far pointer)
 ; -----------------------------------------------------------------------------
 NoteEditFunc_CaseTable_Strings:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38B4, 0x6
 SngSelFunc_HandleEvent47_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38BA, 0x4

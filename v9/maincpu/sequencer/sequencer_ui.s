@@ -231,13 +231,13 @@ LyricsBoxProc:
 	cp xbc, EVT_LYRICS_ALL_DRAW
 	jr z, LyricsBox_HandleEventA
 	cp xbc, EVT_LYRICS_ALL_CLEAR
-	jr z, LyricsBox_HandleEvent9
+	jr z, LyricsBoxProc_OnLyricsAllClear
 	ld xwa, (xsp + 48)
 	ld xde, xiz
 	call InheritedProc
 	jrl LyricsBox_Epilogue
 
-LyricsBox_HandleEvent9:
+LyricsBoxProc_OnLyricsAllClear:
 	call GetTitleNow
 	cp xhl, TITLE_DPSMFLYR
 	jr z, LyricsBox_MatchedTitle
@@ -1458,18 +1458,18 @@ AcDiskFileNameBoxProc:
 	cp xbc, EVT_PAINT
 	jr z, AcDiskFileName_HandleFocusGained
 	cp xbc, EVT_HIDE
-	jr z, AcDiskFileName_HandleEvent1
+	jr z, AcDiskFileNameBoxProc_OnHide
 	cp xbc, EVT_SHOW
-	jr z, AcDiskFileName_HandleEvent2
+	jr z, AcDiskFileNameBoxProc_OnShow
 	ld xwa, xiz
 	call InheritedProc
 	jr AcDiskFileName_Epilogue
 
-AcDiskFileName_HandleEvent2:
+AcDiskFileNameBoxProc_OnShow:
 	ld xwa, xiz
 	jr AcDiskFileName_CallInherited
 
-AcDiskFileName_HandleEvent1:
+AcDiskFileNameBoxProc_OnHide:
 	ld xwa, xiz
 
 AcDiskFileName_CallInherited:
@@ -1529,18 +1529,18 @@ AcSmfFileNameBoxProc:
 	cp xbc, EVT_PAINT
 	jr z, AcSmfFileName_HandleFocusGained
 	cp xbc, EVT_HIDE
-	jr z, AcSmfFileName_HandleEvent1
+	jr z, AcSmfFileNameBoxProc_OnHide
 	cp xbc, EVT_SHOW
-	jr z, AcSmfFileName_HandleEvent2
+	jr z, AcSmfFileNameBoxProc_OnShow
 	ld xwa, xiz
 	call InheritedProc
 	jr AcSmfFileName_Epilogue
 
-AcSmfFileName_HandleEvent2:
+AcSmfFileNameBoxProc_OnShow:
 	ld xwa, xiz
 	jr AcSmfFileName_CallInherited
 
-AcSmfFileName_HandleEvent1:
+AcSmfFileNameBoxProc_OnHide:
 	ld xwa, xiz
 
 AcSmfFileName_CallInherited:
@@ -1600,18 +1600,18 @@ AcSmfSongNameBoxProc:
 	cp xbc, EVT_PAINT
 	jr z, AcSmfSongName_HandleFocusGained
 	cp xbc, EVT_HIDE
-	jr z, AcSmfSongName_HandleEvent1
+	jr z, AcSmfSongNameBoxProc_OnHide
 	cp xbc, EVT_SHOW
-	jr z, AcSmfSongName_HandleEvent2
+	jr z, AcSmfSongNameBoxProc_OnShow
 	ld xwa, xiz
 	call InheritedProc
 	jr AcSmfSongName_Epilogue
 
-AcSmfSongName_HandleEvent2:
+AcSmfSongNameBoxProc_OnShow:
 	ld xwa, xiz
 	jr AcSmfSongName_CallInherited
 
-AcSmfSongName_HandleEvent1:
+AcSmfSongNameBoxProc_OnHide:
 	ld xwa, xiz
 
 AcSmfSongName_CallInherited:
@@ -1671,18 +1671,18 @@ AcDocSongNameBoxProc:
 	cp xbc, EVT_PAINT
 	jr z, AcDocSongName_HandleFocusGained
 	cp xbc, EVT_HIDE
-	jr z, AcDocSongName_HandleEvent1
+	jr z, AcDocSongNameBoxProc_OnHide
 	cp xbc, EVT_SHOW
-	jr z, AcDocSongName_HandleEvent2
+	jr z, AcDocSongNameBoxProc_OnShow
 	ld xwa, xiz
 	call InheritedProc
 	jr AcDocSongName_Epilogue
 
-AcDocSongName_HandleEvent2:
+AcDocSongNameBoxProc_OnShow:
 	ld xwa, xiz
 	jr AcDocSongName_CallInherited
 
-AcDocSongName_HandleEvent1:
+AcDocSongNameBoxProc_OnHide:
 	ld xwa, xiz
 
 AcDocSongName_CallInherited:
@@ -1742,18 +1742,18 @@ AcDocFileNoBoxProc:
 	cp xbc, EVT_PAINT
 	jr z, AcDocFileNo_HandleFocusGained
 	cp xbc, EVT_HIDE
-	jr z, AcDocFileNo_HandleEvent1
+	jr z, AcDocFileNoBoxProc_OnHide
 	cp xbc, EVT_SHOW
-	jr z, AcDocFileNo_HandleEvent2
+	jr z, AcDocFileNoBoxProc_OnShow
 	ld xwa, xiz
 	call InheritedProc
 	jr AcDocFileNo_Epilogue
 
-AcDocFileNo_HandleEvent2:
+AcDocFileNoBoxProc_OnShow:
 	ld xwa, xiz
 	jr AcDocFileNo_CallInherited
 
-AcDocFileNo_HandleEvent1:
+AcDocFileNoBoxProc_OnHide:
 	ld xwa, xiz
 
 AcDocFileNo_CallInherited:
@@ -1813,18 +1813,18 @@ AcPDSongNameBoxProc:
 	cp xbc, EVT_PAINT
 	jr z, AcPDSongName_HandleFocusGained
 	cp xbc, EVT_HIDE
-	jr z, AcPDSongName_HandleEvent1
+	jr z, AcPDSongNameBoxProc_OnHide
 	cp xbc, EVT_SHOW
-	jr z, AcPDSongName_HandleEvent2
+	jr z, AcPDSongNameBoxProc_OnShow
 	ld xwa, xiz
 	call InheritedProc
 	jr AcPDSongName_Epilogue
 
-AcPDSongName_HandleEvent2:
+AcPDSongNameBoxProc_OnShow:
 	ld xwa, xiz
 	jr AcPDSongName_CallInherited
 
-AcPDSongName_HandleEvent1:
+AcPDSongNameBoxProc_OnHide:
 	ld xwa, xiz
 
 AcPDSongName_CallInherited:
@@ -1884,18 +1884,18 @@ AcPDFileNoBoxProc:
 	cp xbc, EVT_PAINT
 	jr z, AcPDFileNo_HandleFocusGained
 	cp xbc, EVT_HIDE
-	jr z, AcPDFileNo_HandleEvent1
+	jr z, AcPDFileNoBoxProc_OnHide
 	cp xbc, EVT_SHOW
-	jr z, AcPDFileNo_HandleEvent2
+	jr z, AcPDFileNoBoxProc_OnShow
 	ld xwa, xiz
 	call InheritedProc
 	jr AcPDFileNo_Epilogue
 
-AcPDFileNo_HandleEvent2:
+AcPDFileNoBoxProc_OnShow:
 	ld xwa, xiz
 	jr AcPDFileNo_CallInherited
 
-AcPDFileNo_HandleEvent1:
+AcPDFileNoBoxProc_OnHide:
 	ld xwa, xiz
 
 AcPDFileNo_CallInherited:
@@ -2021,9 +2021,9 @@ IvNamingExit_ScreenData:
 	cp	xwa, EVT_SET_SELECTED_FILE_NUM
 	jrl	z, IvNamingExit_ScreenData_Skip4
 	cp	xwa, EVT_PARA_DRAW
-	jrl	z, IvNamingExit_ScreenData_Skip2
+	jrl	z, IvNamingExit_ScreenData_OnParaDraw
 	cp	xwa, EVT_PAINT
-	jr	z, IvNamingExit_ScreenData_Skip
+	jr	z, IvNamingExit_ScreenData_OnPaint
 	cp	xwa, EVT_SHOW
 	jrl	nz, IvNamingExit_ScreenData_Skip6
 	ld	xwa, (xsp+178)
@@ -2050,7 +2050,7 @@ IvNamingExit_ScreenData:
 	ld	wa, 1:i3
 	call	SetDialEnable
 	jrl	IvNamingExit_ScreenData_Join3
-IvNamingExit_ScreenData_Skip:
+IvNamingExit_ScreenData_OnPaint:
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
@@ -2104,7 +2104,7 @@ IvNamingExit_ScreenData_Join:
 	cp	(xsp+20), wa
 	jr	c, IvNamingExit_ScreenData_Loop
 	jrl	IvNamingExit_ScreenData_Join3
-IvNamingExit_ScreenData_Skip2:
+IvNamingExit_ScreenData_OnParaDraw:
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
@@ -3460,18 +3460,18 @@ AcCurrentSongBoxProc:
 	cp xbc, EVT_PAINT
 	jr z, AcCurSongName_HandleFocusGained
 	cp xbc, EVT_HIDE
-	jr z, AcCurSong_HandleEvent1
+	jr z, AcCurrentSongBoxProc_OnHide
 	cp xbc, EVT_SHOW
-	jr z, AcCurSong_HandleEvent2
+	jr z, AcCurrentSongBoxProc_OnShow
 	ld xwa, xiz
 	call InheritedProc
 	jr AcCurSong_Epilogue
 
-AcCurSong_HandleEvent2:
+AcCurrentSongBoxProc_OnShow:
 	ld xwa, xiz
 	jr AcCurSong_CallInherited
 
-AcCurSong_HandleEvent1:
+AcCurrentSongBoxProc_OnHide:
 	ld xwa, xiz
 
 AcCurSong_CallInherited:
@@ -3516,18 +3516,18 @@ AcCurSongNameBoxProc:
 	cp xbc, EVT_PAINT
 	jr z, AcCurSongName_HandleFocusAndInit
 	cp xbc, EVT_HIDE
-	jr z, AcCurSongName_HandleEvent1
+	jr z, AcCurSongNameBoxProc_OnHide
 	cp xbc, EVT_SHOW
-	jr z, AcCurSongName_HandleEvent2
+	jr z, AcCurSongNameBoxProc_OnShow
 	ld xwa, xiz
 	call InheritedProc
 	jr MuteChSel_TtlDefault
 
-AcCurSongName_HandleEvent2:
+AcCurSongNameBoxProc_OnShow:
 	ld xwa, xiz
 	jr AcCurSongName_CallInherited
 
-AcCurSongName_HandleEvent1:
+AcCurSongNameBoxProc_OnHide:
 	ld xwa, xiz
 
 AcCurSongName_CallInherited:
@@ -3681,9 +3681,9 @@ SqAftSetFunc:
 	cp xbc, EVT_GET_DIRECTION
 	jr z, SqAftSet_Case2
 	cp xbc, EVT_GET_BIT
-	jr z, SqAftSet_Case1
+	jr z, SqAftSetFunc_OnGetBit
 	cp xbc, EVT_GET_BIT_ADDRESS
-	jr z, SqAftSet_Case0
+	jr z, SqAftSetFunc_OnGetBitAddress
 	cp xbc, EVT_GET_BIT_STRING
 	jr nz, SqAftSet_Case2
 	ld wa, (xde + 8)
@@ -3699,12 +3699,12 @@ SqAftSetFunc:
 	jr SqAftSet_LookupExit
 
 ; SqAftSetFunc case 0
-SqAftSet_Case0:
+SqAftSetFunc_OnGetBitAddress:
 	lda xhl, (0x00ffc2:24)
 	jr SqAftSet_LookupExit
 
 ; SqAftSetFunc case 1
-SqAftSet_Case1:
+SqAftSetFunc_OnGetBit:
 	ld xhl, 1:i3
 	jr SqAftSet_LookupExit
 
@@ -3984,7 +3984,7 @@ SeqNamingCheck:
 	ld (xsp + 4), xde
 	ld xiz, xwa
 	cp xbc, EVT_GET_STRING_LENGTH
-	jr z, SeqNameOK_Return10
+	jr z, SeqNamingCheck_OnGetStringLength
 	cp xbc, EVT_GET_NAMING_MODE
 	jr z, SeqNameOK_ReturnZero
 	cp xbc, EVT_GET_STRING
@@ -4009,7 +4009,7 @@ SeqNameOK_ReturnZero:
 	ld xhl, 0:i3
 	jr SeqNameOK_Epilogue
 
-SeqNameOK_Return10:
+SeqNamingCheck_OnGetStringLength:
 	ld xhl, 0x10
 
 SeqNameOK_Epilogue:
@@ -7159,11 +7159,11 @@ SngSelFunc:
 	cp xbc, EVT_GET_RAM_ADDRESS
 	jr z, SngSelFunc_LoadTitleCount
 	cp xbc, EVT_GET_RAM_STRING
-	jr z, SngSelFunc_HandleEvent47
+	jr z, SngSelFunc_OnGetRamString
 	ld xhl, 0:i3
 	jr ReturnTitleOrZero
 
-SngSelFunc_HandleEvent47:
+SngSelFunc_OnGetRamString:
 	ld xiz, xde
 	pushw NoteEditFunc_CaseTable_Strings@hi16
 	pushw NoteEditFunc_CaseTable_Strings@lo16
@@ -7584,11 +7584,11 @@ EntertainerGridCheck:
 	lda xwa, (xbc + 4)
 	ld (xsp + 32), xwa
 	cp xde, EVT_RET_EFF_PARA
-	jrl z, EntGridCheck_Default
+	jrl z, EntertainerGridCheck_OnRetEffPara
 	lda xwa, (DspEffectName_PtrTable:24)
 	ld (xsp + 16), xwa
 	cp xde, EVT_RET_EFF_FIX
-	jrl z, EntGridCheck_Return
+	jrl z, EntertainerGridCheck_OnRetEffFix
 	ld xwa, xde
 	cp xwa, EVT_REQUEST_GRID_DRAW
 	jrl z, EntGridCheck_Handler
@@ -7968,7 +7968,7 @@ EntGridCheck_Handle4E13:
 	jrl SndParam_SendEventReturnZero
 
 ; EntertainerGridCheck return
-EntGridCheck_Return:
+EntertainerGridCheck_OnRetEffFix:
 	ldw (xbc), 0x1
 	ld xwa, (xsp + 36)
 	ldw (xwa), 0x4
@@ -7994,7 +7994,7 @@ EntGridCheck_Return:
 	jrl SndParam_SendEventReturnZero
 
 ; EntertainerGridCheck default
-EntGridCheck_Default:
+EntertainerGridCheck_OnRetEffPara:
 	ldw (xbc), 0x1
 	ld xde, (xsp + 58)
 	ld bc, de
@@ -11976,9 +11976,9 @@ EffectBoxProc:
 	cp xwa, EVT_EFF_FIX_DRAW
 	jrl z, EffectBox_HandleScrollEvent
 	cp xwa, EVT_RET_EFF_PARA
-	jrl z, EffectBox_HandleEvent1
+	jrl z, EffectBoxProc_OnRetEffPara
 	cp xwa, EVT_RET_EFF_FIX
-	jrl z, EffectBox_HandleEvent0
+	jrl z, EffectBoxProc_OnRetEffFix
 	cp xwa, EVT_SELE_DRAW
 	jrl z, EffectBox_HandleInitEvent
 	cp xwa, EVT_PAINT
@@ -12066,13 +12066,13 @@ EffectBox_CallDrawDesignFrame:
 	call DrawDesignFrame
 	jrl EffectBoxProc_ReturnZero
 
-EffectBox_HandleEvent0:
+EffectBoxProc_OnRetEffFix:
 	ld XWA, (xsp + 0x0156)
 	ld xbc, EVT_EFF_FIX_DRAW
 	ld xde, 0:i3
 	jr EffectBox_SendEventCommon
 
-EffectBox_HandleEvent1:
+EffectBoxProc_OnRetEffPara:
 	ld XWA, (xsp + 0x0156)
 	call GetViewInstance
 	ld xwa, (xhl + 28)
