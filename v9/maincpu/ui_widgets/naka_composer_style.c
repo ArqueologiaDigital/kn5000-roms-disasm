@@ -1019,27 +1019,27 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t StylCnvWaitScreen;
     char StyleConvert_text[14];
     /* element 1 of Viewable slot 0x10: VwBox (class id 0x01600011) */
-    naka_cls_VwBox_t v10_e1;
+    naka_cls_VwBox_t StylCnvWaitScreen_VwBox;
     /* element 2 of Viewable slot 0x10: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v10_e2;
+    naka_cls_AcLanguageText_t StylCnvWaitScreen_AcLanguageText;
     /* element 0 of Viewable slot 0x11 "StylCnvModlScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t StylCnvModlScreen;
     char StyleTypeSelect_text[18];
     /* element 1 of Viewable slot 0x11: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t v11_e1;
+    naka_cls_IvMainEditSw_t StylCnvModlScreen_IvMainEditSw;
     /* element 2 of Viewable slot 0x11 "StylCnvModlBox": PsParaListBox (class id 0x01640021) */
     naka_cls_PsParaListBox_t StylCnvModlBox;
     /* element 3 of Viewable slot 0x11: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t PREV_VwEditSwBox;
     char PREV_str[6];
     /* element 4 of Viewable slot 0x11: VwWideESBox (class id 0x0160003F) */
-    naka_cls_VwWideESBox_t v11_e4;
+    naka_cls_VwWideESBox_t StylCnvModlScreen_VwWideESBox;
     char str_9[2];
     /* element 5 of Viewable slot 0x11: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t NEXT_VwEditSwBox;
     char NEXT_str[6];
     /* element 6 of Viewable slot 0x11: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t v11_e6;
+    naka_cls_VwEditSwBox_t StylCnvModlScreen_VwEditSwBox;
     char str_11[2];
     /* element 7 of Viewable slot 0x11 "StylCnvVer": PsStylCnvVer (class id 0x01640028) */
     naka_cls_PsStylCnvVer_t StylCnvVer;
@@ -1047,68 +1047,68 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t StylCnvCnvtScreen;
     char StyleConvert_text_2[14];
     /* element 1 of Viewable slot 0x12: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t v12_e1;
+    naka_cls_IvMainEditSw_t StylCnvCnvtScreen_IvMainEditSw;
     /* element 2 of Viewable slot 0x12 "StylCnvCnvtBox": PsParaListBox (class id 0x01640021) */
     naka_cls_PsParaListBox_t StylCnvCnvtBox;
     /* element 3 of Viewable slot 0x12: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t PREV_VwEditSwBox_2;
     char PREV_str_2[6];
     /* element 4 of Viewable slot 0x12: VwWideESBox (class id 0x0160003F) */
-    naka_cls_VwWideESBox_t v12_e4;
+    naka_cls_VwWideESBox_t StylCnvCnvtScreen_VwWideESBox;
     char str_20[2];
     /* element 5 of Viewable slot 0x12: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t NEXT_VwEditSwBox_2;
     char NEXT_str_2[6];
     /* element 6 of Viewable slot 0x12: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t v12_e6;
+    naka_cls_VwEditSwBox_t StylCnvCnvtScreen_VwEditSwBox;
     char str_22[2];
     /* element 0 of Viewable slot 0x13 "StylCnvStorScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t StylCnvStorScreen;
     char StorageData_text[14];
     /* element 1 of Viewable slot 0x13: AcRamEditBox (class id 0x0160001B) */
-    naka_cls_AcRamEditBox_t v13_e1;
+    naka_cls_AcRamEditBox_t StylCnvStorScreen_AcRamEditBox;
     char v13_e1_caption[20];
     /* element 2 of Viewable slot 0x13: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v13_e2;
+    naka_cls_AcIndexWideES_t StylCnvStorScreen_AcIndexWideES;
     /* element 3 of Viewable slot 0x13: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v13_e3;
+    naka_cls_AcFuncEditSw_t StylCnvStorScreen_AcFuncEditSw;
     /* element 0 of Viewable slot 0x14 "StylCnvTxtScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t StylCnvTxtScreen;
     char StyleConvert_text_3[14];
     /* element 1 of Viewable slot 0x14: VwBox (class id 0x01600011) */
-    naka_cls_VwBox_t v14_e1;
+    naka_cls_VwBox_t StylCnvTxtScreen_VwBox;
     /* element 2 of Viewable slot 0x14: PSSCTxtBox2 (class id 0x01640023) */
-    naka_cls_PSSCTxtBox2_t v14_e2;
+    naka_cls_PSSCTxtBox2_t StylCnvTxtScreen_PSSCTxtBox2;
     /* element 3 of Viewable slot 0x14: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t v14_e3;
+    naka_cls_IvMainEditSw_t StylCnvTxtScreen_IvMainEditSw;
     /* element 0 of Viewable slot 0x15 "StylCnvSelScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t StylCnvSelScreen;
     char StyleConvert_text_4[14];
     /* element 1 of Viewable slot 0x15: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t v15_e1;
+    naka_cls_IvMainEditSw_t StylCnvSelScreen_IvMainEditSw;
     /* element 2 of Viewable slot 0x15 "StylCnvSelBox": PsParaListBox (class id 0x01640021) */
     naka_cls_PsParaListBox_t StylCnvSelBox;
     /* element 3 of Viewable slot 0x15: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t PREV_VwEditSwBox_3;
     char PREV_str_3[6];
     /* element 4 of Viewable slot 0x15: VwWideESBox (class id 0x0160003F) */
-    naka_cls_VwWideESBox_t v15_e4;
+    naka_cls_VwWideESBox_t StylCnvSelScreen_VwWideESBox;
     char str_32[2];
     /* element 5 of Viewable slot 0x15: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t NEXT_VwEditSwBox_3;
     char NEXT_str_3[6];
     /* element 6 of Viewable slot 0x15: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t v15_e6;
+    naka_cls_VwEditSwBox_t StylCnvSelScreen_VwEditSwBox;
     char str_34[2];
     /* element 7 of Viewable slot 0x15: PsSCTxtBox (class id 0x01640022) */
-    naka_cls_PsSCTxtBox_t v15_e7;
+    naka_cls_PsSCTxtBox_t StylCnvSelScreen_PsSCTxtBox;
     /* element 0 of Viewable slot 0x16 "StylCnvContScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t StylCnvContScreen;
     char StyleConvert_text_5[14];
     /* element 1 of Viewable slot 0x16: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t v16_e1;
+    naka_cls_IvMainEditSw_t StylCnvContScreen_IvMainEditSw;
     /* element 2 of Viewable slot 0x16: VwBox (class id 0x01600011) */
-    naka_cls_VwBox_t v16_e2;
+    naka_cls_VwBox_t StylCnvContScreen_VwBox;
     /* element 3 of Viewable slot 0x16: Label (class id 0x0160002B) */
     naka_cls_Label_t Continue_Label;
     char Continue_text[10];
@@ -1116,10 +1116,10 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Next_Label;
     char Next_text[8];
     /* element 5 of Viewable slot 0x16: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t v16_e5;
+    naka_cls_VwEditSwBox_t StylCnvContScreen_VwEditSwBox;
     char str_37[2];
     /* element 6 of Viewable slot 0x16: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t v16_e6;
+    naka_cls_VwEditSwBox_t StylCnvContScreen_VwEditSwBox_2;
     char str_38[2];
     /* element 0 of Viewable slot 0xB0 "CmpMenuScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CmpMenuScreen;
@@ -1143,13 +1143,13 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcTitleMenu_t LoadSingleComposer_AcTitleMenu;
     char LoadSingleComposer_text[22];
     /* element 7 of Viewable slot 0xB0: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB0_e7;
+    naka_cls_Line_t CmpMenuScreen_Line;
     /* element 8 of Viewable slot 0xB0: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB0_e8;
+    naka_cls_Line_t CmpMenuScreen_Line_2;
     /* element 9 of Viewable slot 0xB0: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB0_e9;
+    naka_cls_Line_t CmpMenuScreen_Line_3;
     /* element 10 of Viewable slot 0xB0: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB0_e10;
+    naka_cls_Line_t CmpMenuScreen_Line_4;
     /* element 11 of Viewable slot 0xB0: Label (class id 0x0160002B) */
     naka_cls_Label_t Recording_Label;
     char Recording_text[10];
@@ -1157,23 +1157,23 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Memory_Label;
     char Memory_text[8];
     /* element 13 of Viewable slot 0xB0: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t vB0_e13;
+    naka_cls_IvMainEditSw_t CmpMenuScreen_IvMainEditSw;
     /* element 14 of Viewable slot 0xB0: VwMenuBox (class id 0x0160003D) */
-    naka_cls_VwMenuBox_t vB0_e14;
+    naka_cls_VwMenuBox_t CmpMenuScreen_VwMenuBox;
     char A_str[2];
     /* element 15 of Viewable slot 0xB0: VwMenuBox (class id 0x0160003D) */
-    naka_cls_VwMenuBox_t vB0_e15;
+    naka_cls_VwMenuBox_t CmpMenuScreen_VwMenuBox_2;
     char B_str[2];
     /* element 16 of Viewable slot 0xB0: VwMenuBox (class id 0x0160003D) */
-    naka_cls_VwMenuBox_t vB0_e16;
+    naka_cls_VwMenuBox_t CmpMenuScreen_VwMenuBox_3;
     char C_str[2];
     /* element 17 of Viewable slot 0xB0: IvExitMode (class id 0x01600048) */
-    naka_cls_IvExitMode_t vB0_e17;
+    naka_cls_IvExitMode_t CmpMenuScreen_IvExitMode;
     /* element 0 of Viewable slot 0xB1 "CmpBkslScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CmpBkslScreen;
     char RecordMemory_text[14];
     /* element 1 of Viewable slot 0xB1: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t vB1_e1;
+    naka_cls_IvMainEditSw_t CmpBkslScreen_IvMainEditSw;
     /* element 2 of Viewable slot 0xB1: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t Variation_VwMenuBox;
     char Variation_str[12];
@@ -1208,12 +1208,12 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t CmpBkslSScreen;
     char Recording_text_2[10];
     /* element 1 of Viewable slot 0xB2: Box (class id 0x01600031) */
-    naka_cls_Box_t vB2_e1;
+    naka_cls_Box_t CmpBkslSScreen_Box;
     /* element 2 of Viewable slot 0xB2: Label (class id 0x0160002B) */
     naka_cls_Label_t Memory_Label_2;
     char Memory_text_2[8];
     /* element 3 of Viewable slot 0xB2: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t vB2_e3;
+    naka_cls_IvMainEditSw_t CmpBkslSScreen_IvMainEditSw;
     /* element 4 of Viewable slot 0xB2: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t RecordSetting_VwMenuBox;
     char RecordSetting_str[16];
@@ -1221,30 +1221,30 @@ typedef struct __attribute__((packed)) {
     naka_cls_VwEditSwBox_t DRM_VwEditSwBox;
     char DRM_str[4];
     /* element 6 of Viewable slot 0xB2: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vB2_e6;
+    naka_cls_VwEditSwBox_t CmpBkslSScreen_VwEditSwBox;
     char AC3_str[4];
     /* element 7 of Viewable slot 0xB2: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vB2_e7;
+    naka_cls_VwEditSwBox_t CmpBkslSScreen_VwEditSwBox_2;
     char AC2_str[4];
     /* element 8 of Viewable slot 0xB2: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vB2_e8;
+    naka_cls_VwEditSwBox_t CmpBkslSScreen_VwEditSwBox_3;
     char AC1_str[4];
     /* element 9 of Viewable slot 0xB2: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t BAS_VwEditSwBox;
     char BAS_str[4];
     /* element 10 of Viewable slot 0xB2: AcMemNoBox (class id 0x01640000) */
-    naka_cls_AcMemNoBox_t vB2_e10;
+    naka_cls_AcMemNoBox_t CmpBkslSScreen_AcMemNoBox;
     /* element 11 of Viewable slot 0xB2: Label (class id 0x0160002B) */
     naka_cls_Label_t StartRecording_Label;
     char StartRecording_text[16];
     /* element 12 of Viewable slot 0xB2: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB2_e12;
+    naka_cls_Line_t CmpBkslSScreen_Line;
     /* element 13 of Viewable slot 0xB2: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB2_e13;
+    naka_cls_Line_t CmpBkslSScreen_Line_2;
     /* element 14 of Viewable slot 0xB2: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB2_e14;
+    naka_cls_Line_t CmpBkslSScreen_Line_3;
     /* element 15 of Viewable slot 0xB2: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB2_e15;
+    naka_cls_Line_t CmpBkslSScreen_Line_4;
     /* element 16 of Viewable slot 0xB2 "CmpNameMenu": CmpNameMenuBox (class id 0x01640026) */
     naka_cls_CmpNameMenuBox_t CmpNameMenu;
     char VariationNaming_str[18];
@@ -1258,14 +1258,14 @@ typedef struct __attribute__((packed)) {
     /* element 20 of Viewable slot 0xB2 "CmpClrNoSw": AcFuncEditSw (class id 0x01600020) */
     naka_cls_AcFuncEditSw_t CmpClrNoSw;
     /* element 21 of Viewable slot 0xB2: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vB2_e21;
+    naka_cls_AcLanguageText_t CmpClrSure_AcLanguageText;
     /* element 0 of Viewable slot 0xB3 "CmpNamingScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CmpNamingScreen;
     char VariationNaming_text[18];
     /* element 1 of Viewable slot 0xB3: IvNaming (class id 0x0160004D) */
-    naka_cls_IvNaming_t vB3_e1;
+    naka_cls_IvNaming_t CmpNamingScreen_IvNaming;
     /* element 2 of Viewable slot 0xB3: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t vB3_e2;
+    naka_cls_AcFuncEditSw_t CmpNamingScreen_AcFuncEditSw;
     /* element 3 of Viewable slot 0xB3 "NameMemLabel": Label (class id 0x0160002B) */
     naka_cls_Label_t NameMemLabel;
     char Memory_text_3[10];
@@ -1275,7 +1275,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t CmpSetScreen;
     char RecordSetting_text[16];
     /* element 1 of Viewable slot 0xB4: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t vB4_e1;
+    naka_cls_IvMainEditSw_t CmpSetScreen_IvMainEditSw;
     /* element 2 of Viewable slot 0xB4 "CmSetPage": AcWindowPage (class id 0x01600025) */
     naka_cls_AcWindowPage_t CmSetPage;
     /* element 3 of Viewable slot 0xB4 "CmSetP1Ctl": IvPageControl (class id 0x01600028) */
@@ -1283,7 +1283,7 @@ typedef struct __attribute__((packed)) {
     /* element 4 of Viewable slot 0xB4 "CmSetP2Ctl": IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t CmSetP2Ctl;
     /* element 5 of Viewable slot 0xB4: IvShowHide (class id 0x01600064) */
-    naka_cls_IvShowHide_t vB4_e5;
+    naka_cls_IvShowHide_t CmpSetScreen_IvShowHide;
     /* element 6 of Viewable slot 0xB4 "CmSetPage1": Window (class id 0x01600035) */
     naka_cls_Window_t CmSetPage1;
     /* element 7 of Viewable slot 0xB4 "CmSetP1Grid": AcCmpSetGridBox (class id 0x01640016) */
@@ -1294,9 +1294,9 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t RecordSetting_Label;
     char RecordSetting_text_2[16];
     /* element 9 of Viewable slot 0xB4: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vB4_e9;
+    naka_cls_AcIndexWideES_t CmSetPage1_AcIndexWideES;
     /* element 10 of Viewable slot 0xB4: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vB4_e10;
+    naka_cls_AcIndexWideES_t CmSetPage1_AcIndexWideES_2;
     /* element 11 of Viewable slot 0xB4: Label (class id 0x0160002B) */
     naka_cls_Label_t Item_Label;
     char Item_text[6];
@@ -1319,11 +1319,11 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t CmpRealScreen;
     char RealtimeRecording_text[20];
     /* element 1 of Viewable slot 0xB5: Box (class id 0x01600031) */
-    naka_cls_Box_t vB5_e1;
+    naka_cls_Box_t CmpRealScreen_Box;
     /* element 2 of Viewable slot 0xB5 "CmpMem": PsCmpMemBox (class id 0x01640004) */
     naka_cls_PsCmpMemBox_t CmpMem;
     /* element 3 of Viewable slot 0xB5: Label (class id 0x0160002B) */
-    naka_cls_Label_t vB5_e3;
+    naka_cls_Label_t CmpRealScreen_Label;
     char w72_text[2];
     /* element 4 of Viewable slot 0xB5: Label (class id 0x0160002B) */
     naka_cls_Label_t Pattern_Label;
@@ -1341,24 +1341,24 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Memory_Label_3;
     char Memory_text_4[10];
     /* element 9 of Viewable slot 0xB5: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t vB5_e9;
+    naka_cls_IvMainEditSw_t CmpRealScreen_IvMainEditSw;
     /* element 10 of Viewable slot 0xB5: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t DRM_VwEditSwBox_2;
     char DRM_str_2[4];
     /* element 11 of Viewable slot 0xB5: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vB5_e11;
+    naka_cls_VwEditSwBox_t CmpRealScreen_VwEditSwBox;
     char AC3_str_2[4];
     /* element 12 of Viewable slot 0xB5: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vB5_e12;
+    naka_cls_VwEditSwBox_t CmpRealScreen_VwEditSwBox_2;
     char AC2_str_2[4];
     /* element 13 of Viewable slot 0xB5: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vB5_e13;
+    naka_cls_VwEditSwBox_t CmpRealScreen_VwEditSwBox_3;
     char AC1_str_2[4];
     /* element 14 of Viewable slot 0xB5: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t BAS_VwEditSwBox_2;
     char BAS_str_2[4];
     /* element 15 of Viewable slot 0xB5: AcCmpTempoBox (class id 0x01640011) */
-    naka_cls_AcCmpTempoBox_t vB5_e15;
+    naka_cls_AcCmpTempoBox_t CmpRealScreen_AcCmpTempoBox;
     /* element 16 of Viewable slot 0xB5: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t Bal_AcTitleMenu;
     char Bal_text[4];
@@ -1366,7 +1366,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcTitleMenu_t Step_AcTitleMenu;
     char Step_text[6];
     /* element 18 of Viewable slot 0xB5: AcMemNoBox (class id 0x01640000) */
-    naka_cls_AcMemNoBox_t vB5_e18;
+    naka_cls_AcMemNoBox_t CmpRealScreen_AcMemNoBox;
     /* element 19 of Viewable slot 0xB5: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t PartClr_VwMenuBox;
     char PartClr_str[10];
@@ -1405,18 +1405,18 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t CmpNcpScreen;
     char PatternCopy_text_2[14];
     /* element 1 of Viewable slot 0xB8: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t vB8_e1;
+    naka_cls_IvMainEditSw_t CmpNcpScreen_IvMainEditSw;
     /* element 2 of Viewable slot 0xB8 "CmpNcpFitmSw": VwWideESBox (class id 0x0160003F) */
     naka_cls_VwWideESBox_t CmpNcpFitmSw;
     char str_181[2];
     /* element 3 of Viewable slot 0xB8: VwWideESBox (class id 0x0160003F) */
-    naka_cls_VwWideESBox_t vB8_e3;
+    naka_cls_VwWideESBox_t CmpNcpScreen_VwWideESBox;
     char str_184[2];
     /* element 4 of Viewable slot 0xB8 "CmpNcpTitmSw": VwWideESBox (class id 0x0160003F) */
     naka_cls_VwWideESBox_t CmpNcpTitmSw;
     char str_186[2];
     /* element 5 of Viewable slot 0xB8: VwWideESBox (class id 0x0160003F) */
-    naka_cls_VwWideESBox_t vB8_e5;
+    naka_cls_VwWideESBox_t CmpNcpScreen_VwWideESBox_2;
     char str_188[2];
     /* element 6 of Viewable slot 0xB8: Label (class id 0x0160002B) */
     naka_cls_Label_t ItemValueItemValue_Label;
@@ -1425,26 +1425,26 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t From_Label;
     char From_text[6];
     /* element 8 of Viewable slot 0xB8: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB8_e8;
+    naka_cls_Line_t CmpNcpScreen_Line;
     /* element 9 of Viewable slot 0xB8: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB8_e9;
+    naka_cls_Line_t CmpNcpScreen_Line_2;
     /* element 10 of Viewable slot 0xB8: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB8_e10;
+    naka_cls_Line_t CmpNcpScreen_Line_3;
     /* element 11 of Viewable slot 0xB8: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB8_e11;
+    naka_cls_Line_t CmpNcpScreen_Line_4;
     /* element 12 of Viewable slot 0xB8: Label (class id 0x0160002B) */
     naka_cls_Label_t To_Label;
     char To_text[4];
     /* element 13 of Viewable slot 0xB8: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB8_e13;
+    naka_cls_Line_t CmpNcpScreen_Line_5;
     /* element 14 of Viewable slot 0xB8: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB8_e14;
+    naka_cls_Line_t CmpNcpScreen_Line_6;
     /* element 15 of Viewable slot 0xB8: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB8_e15;
+    naka_cls_Line_t CmpNcpScreen_Line_7;
     /* element 16 of Viewable slot 0xB8: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB8_e16;
+    naka_cls_Line_t CmpNcpScreen_Line_8;
     /* element 17 of Viewable slot 0xB8: Box (class id 0x01600031) */
-    naka_cls_Box_t vB8_e17;
+    naka_cls_Box_t CmpNcpScreen_Box;
     /* element 19 of Viewable slot 0xB8: Label (class id 0x0160002B) */
     naka_cls_Label_t Group_Label;
     char Group_text[8];
@@ -1461,10 +1461,10 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t To_Label_2;
     char To_text_2[4];
     /* element 24 of Viewable slot 0xB8: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vB8_e24;
+    naka_cls_VwEditSwBox_t CmpNcpScreen_VwEditSwBox;
     char str_199[2];
     /* element 25 of Viewable slot 0xB8: Box (class id 0x01600031) */
-    naka_cls_Box_t vB8_e25;
+    naka_cls_Box_t CmpNcpScreen_Box_2;
     /* element 28 of Viewable slot 0xB8: Label (class id 0x0160002B) */
     naka_cls_Label_t Memory_Label_4;
     char Memory_text_5[8];
@@ -1472,29 +1472,29 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Pattern_Label_3;
     char Pattern_text_3[10];
     /* element 32 of Viewable slot 0xB8: Yajirushi (class id 0x01640025) */
-    naka_cls_Yajirushi_t vB8_e32;
+    naka_cls_Yajirushi_t CmpNcpScreen_Yajirushi;
     /* element 0 of Viewable slot 0xB9 "S2CScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t S2CScreen;
     char SeqToComposerCopy_text_2[22];
     /* element 1 of Viewable slot 0xB9: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vB9_e1;
+    naka_cls_VwEditSwBox_t S2CScreen_VwEditSwBox;
     char str_205[2];
     /* element 2 of Viewable slot 0xB9: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vB9_e2;
+    naka_cls_VwEditSwBox_t S2CScreen_VwEditSwBox_2;
     char str_206[2];
     /* element 3 of Viewable slot 0xB9: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vB9_e3;
+    naka_cls_VwEditSwBox_t S2CScreen_VwEditSwBox_3;
     char str_207[2];
     /* element 4 of Viewable slot 0xB9: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t vB9_e4;
+    naka_cls_IvMainEditSw_t S2CScreen_IvMainEditSw;
     /* element 5 of Viewable slot 0xB9: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vB9_e5;
+    naka_cls_VwEditSwBox_t S2CScreen_VwEditSwBox_4;
     char str_208[2];
     /* element 6 of Viewable slot 0xB9: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vB9_e6;
+    naka_cls_VwEditSwBox_t S2CScreen_VwEditSwBox_5;
     char str_209[2];
     /* element 7 of Viewable slot 0xB9: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vB9_e7;
+    naka_cls_VwEditSwBox_t S2CScreen_VwEditSwBox_6;
     char str_210[2];
     /* element 8 of Viewable slot 0xB9: Label (class id 0x0160002B) */
     naka_cls_Label_t FirstLast_Label;
@@ -1503,13 +1503,13 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Measure_Label_2;
     char Measure_text_2[8];
     /* element 10 of Viewable slot 0xB9: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB9_e10;
+    naka_cls_Line_t S2CScreen_Line;
     /* element 11 of Viewable slot 0xB9: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB9_e11;
+    naka_cls_Line_t S2CScreen_Line_2;
     /* element 12 of Viewable slot 0xB9: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB9_e12;
+    naka_cls_Line_t S2CScreen_Line_3;
     /* element 13 of Viewable slot 0xB9: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB9_e13;
+    naka_cls_Line_t S2CScreen_Line_4;
     /* element 14 of Viewable slot 0xB9: Label (class id 0x0160002B) */
     naka_cls_Label_t Trans_Label;
     char Trans_text[6];
@@ -1520,9 +1520,9 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Sequencer_Label;
     char Sequencer_text[10];
     /* element 17 of Viewable slot 0xB9: Box (class id 0x01600031) */
-    naka_cls_Box_t vB9_e17;
+    naka_cls_Box_t S2CScreen_Box;
     /* element 18 of Viewable slot 0xB9: Line (class id 0x0160002E) */
-    naka_cls_Line_t vB9_e18;
+    naka_cls_Line_t S2CScreen_Line_5;
     /* element 19 of Viewable slot 0xB9: Label (class id 0x0160002B) */
     naka_cls_Label_t First_Label;
     char First_text[6];
@@ -1536,7 +1536,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Meas_Label_2;
     char Meas_text_2[6];
     /* element 23 of Viewable slot 0xB9: Box (class id 0x01600031) */
-    naka_cls_Box_t vB9_e23;
+    naka_cls_Box_t S2CScreen_Box_2;
     /* element 25 of Viewable slot 0xB9: Label (class id 0x0160002B) */
     naka_cls_Label_t Trn_Label;
     char Trn_text[4];
@@ -1551,30 +1551,30 @@ typedef struct __attribute__((packed)) {
     /* element 30 of Viewable slot 0xB9 "S2cMemNo": AcS2cMemNoBox (class id 0x01640005) */
     naka_cls_AcS2cMemNoBox_t S2cMemNo;
     /* element 32 of Viewable slot 0xB9: Yajirushi (class id 0x01640025) */
-    naka_cls_Yajirushi_t vB9_e32;
+    naka_cls_Yajirushi_t S2CScreen_Yajirushi;
     /* element 33 of Viewable slot 0xB9 "S2cGrid": S2cGridBox (class id 0x01640027) */
     naka_cls_S2cGridBox_t S2cGrid;
     char S2cGrid_fixedrow[38];
     char S2cGrid_fixedcol[14];
     /* element 34 of Viewable slot 0xB9: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t vB9_e34;
+    naka_cls_AcIndexEditSw_t S2CScreen_AcIndexEditSw;
     /* element 35 of Viewable slot 0xB9: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t vB9_e35;
+    naka_cls_AcIndexEditSw_t S2CScreen_AcIndexEditSw_2;
     /* element 36 of Viewable slot 0xB9: IvShowHide (class id 0x01600064) */
-    naka_cls_IvShowHide_t vB9_e36;
+    naka_cls_IvShowHide_t S2CScreen_IvShowHide;
     /* element 0 of Viewable slot 0xBA "CmpEasyScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CmpEasyScreen;
     char EasyComposer_text_2[14];
     /* element 1 of Viewable slot 0xBA: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t vBA_e1;
+    naka_cls_IvMainEditSw_t CmpEasyScreen_IvMainEditSw;
     /* element 2 of Viewable slot 0xBA: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t EDIT_VwMenuBox;
     char EDIT_str[6];
     /* element 3 of Viewable slot 0xBA: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vBA_e3;
+    naka_cls_VwEditSwBox_t CmpEasyScreen_VwEditSwBox;
     char str_248[2];
     /* element 4 of Viewable slot 0xBA: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vBA_e4;
+    naka_cls_VwEditSwBox_t CmpEasyScreen_VwEditSwBox_2;
     char str_249[2];
     /* element 5 of Viewable slot 0xBA: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t SET_VwEditSwBox;
@@ -1586,7 +1586,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Mem_Label_2;
     char Mem_text_2[4];
     /* element 8 of Viewable slot 0xBA: VwBox (class id 0x01600011) */
-    naka_cls_VwBox_t vBA_e8;
+    naka_cls_VwBox_t CmpEasyScreen_VwBox;
     /* element 9 of Viewable slot 0xBA "EsCmpMemNo": AcMemNoBox (class id 0x01640000) */
     naka_cls_AcMemNoBox_t EsCmpMemNo;
     /* element 10 of Viewable slot 0xBA "EasyCmpGrid": AcEasyCmpGridBox (class id 0x01640018) */
@@ -1594,18 +1594,18 @@ typedef struct __attribute__((packed)) {
     char EasyCmpGrid_fixedrow[66];
     char EasyCmpGrid_fixedcol[36];
     /* element 11 of Viewable slot 0xBA: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vBA_e11;
+    naka_cls_AcIndexWideES_t CmpEasyScreen_AcIndexWideES;
     /* element 12 of Viewable slot 0xBA: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vBA_e12;
+    naka_cls_AcIndexWideES_t CmpEasyScreen_AcIndexWideES_2;
     /* element 13 of Viewable slot 0xBA: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t vBA_e13;
+    naka_cls_AcIndexEditSw_t CmpEasyScreen_AcIndexEditSw;
     /* element 0 of Viewable slot 0xBB "CmpBendScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CmpBendScreen;
     char ComposerPitchBendRange_text[34];
     /* element 1 of Viewable slot 0xBB: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vBB_e1;
+    naka_cls_AcIndexWideES_t CmpBendScreen_AcIndexWideES;
     /* element 2 of Viewable slot 0xBB: AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t vBB_e2;
+    naka_cls_AcLswEditBox_t CmpBendScreen_AcLswEditBox;
     char vBB_e2_caption[20];
     /* element 3 of Viewable slot 0xBB: Label (class id 0x0160002B) */
     naka_cls_Label_t Value_Label_2;
@@ -1638,10 +1638,10 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t IntroFillInsEnding_Label;
     char IntroFillInsEnding_text[26];
     /* element 9 of Viewable slot 0xBD: AcCmpMdBox (class id 0x0164000D) */
-    naka_cls_AcCmpMdBox_t vBD_e9;
+    naka_cls_AcCmpMdBox_t CmpModeScreen_AcCmpMdBox;
     char vBD_e9_caption[14];
     /* element 10 of Viewable slot 0xBD: AcCmpMdBox (class id 0x0164000D) */
-    naka_cls_AcCmpMdBox_t vBD_e10;
+    naka_cls_AcCmpMdBox_t CmpModeScreen_AcCmpMdBox_2;
     char vBD_e10_caption[14];
     /* element 0 of Viewable slot 0xBE "CmpCstmCpScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CmpCstmCpScreen;
@@ -1650,7 +1650,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t From_Label_3;
     char From_text_3[6];
     /* element 2 of Viewable slot 0xBE: VwBox (class id 0x01600011) */
-    naka_cls_VwBox_t vBE_e2;
+    naka_cls_VwBox_t CmpCstmCpScreen_VwBox;
     /* element 3 of Viewable slot 0xBE "CstmCpFrmVal": PsCstmCpBnkBox (class id 0x0164000A) */
     naka_cls_PsCstmCpBnkBox_t CstmCpFrmVal;
     /* element 4 of Viewable slot 0xBE "CstmCpFName": PsCstmCpNameBox (class id 0x0164001E) */
@@ -1659,11 +1659,11 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t To_Label_3;
     char To_text_3[4];
     /* element 6 of Viewable slot 0xBE: VwBox (class id 0x01600011) */
-    naka_cls_VwBox_t vBE_e6;
+    naka_cls_VwBox_t CmpCstmCpScreen_VwBox_2;
     /* element 7 of Viewable slot 0xBE: IvMainEditSw (class id 0x01600029) */
-    naka_cls_IvMainEditSw_t vBE_e7;
+    naka_cls_IvMainEditSw_t CmpCstmCpScreen_IvMainEditSw;
     /* element 8 of Viewable slot 0xBE: VwWideESBox (class id 0x0160003F) */
-    naka_cls_VwWideESBox_t vBE_e8;
+    naka_cls_VwWideESBox_t CmpCstmCpScreen_VwWideESBox;
     char str_271[2];
     /* element 9 of Viewable slot 0xBE: VwWideESBox (class id 0x0160003F) */
     naka_cls_VwWideESBox_t DIRECTION_VwWideESBox;
@@ -1674,7 +1674,7 @@ typedef struct __attribute__((packed)) {
     /* element 11 of Viewable slot 0xBE "CstmCpToVal": PsCstmCpBnkBox (class id 0x0164000A) */
     naka_cls_PsCstmCpBnkBox_t CstmCpToVal;
     /* element 12 of Viewable slot 0xBE: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vBE_e12;
+    naka_cls_VwEditSwBox_t CmpCstmCpScreen_VwEditSwBox;
     char str_279[2];
     /* element 13 of Viewable slot 0xBE "CstmCpFChar": PsCstmCpSwBox (class id 0x0164000B) */
     naka_cls_PsCstmCpSwBox_t CstmCpFChar;
@@ -1683,17 +1683,17 @@ typedef struct __attribute__((packed)) {
     /* element 15 of Viewable slot 0xBE "CstmCpTName": PsCstmCpNameBox (class id 0x0164001E) */
     naka_cls_PsCstmCpNameBox_t CstmCpTName;
     /* element 16 of Viewable slot 0xBE: Yajirushi (class id 0x01640025) */
-    naka_cls_Yajirushi_t vBE_e16;
+    naka_cls_Yajirushi_t CmpCstmCpScreen_Yajirushi;
     /* element 17 of Viewable slot 0xBE "CstmMemFulWin": Window (class id 0x01600035) */
     naka_cls_Window_t CstmMemFulWin;
     /* element 18 of Viewable slot 0xBE: VwBox (class id 0x01600011) */
-    naka_cls_VwBox_t vBE_e18;
+    naka_cls_VwBox_t CstmMemFulWin_VwBox;
     /* element 19 of Viewable slot 0xBE: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vBE_e19;
+    naka_cls_AcLanguageText_t CstmMemFulWin_AcLanguageText;
     /* element 20 of Viewable slot 0xBE: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vBE_e20;
+    naka_cls_AcLanguageText_t CstmMemFulWin_AcLanguageText_2;
     /* element 21 of Viewable slot 0xBE: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vBE_e21;
+    naka_cls_AcLanguageText_t CstmMemFulWin_AcLanguageText_3;
     /* element 22 of Viewable slot 0xBE "CtmMFulStr": PsCtmAttStrBox (class id 0x0164000C) */
     naka_cls_PsCtmAttStrBox_t CtmMFulStr;
     /* element 23 of Viewable slot 0xBE: VwEditSwBox (class id 0x0160003E) */
@@ -1705,13 +1705,13 @@ typedef struct __attribute__((packed)) {
     /* element 25 of Viewable slot 0xBE "CstmFuncSelWin": Window (class id 0x01600035) */
     naka_cls_Window_t CstmFuncSelWin;
     /* element 26 of Viewable slot 0xBE: VwBox (class id 0x01600011) */
-    naka_cls_VwBox_t vBE_e26;
+    naka_cls_VwBox_t CstmFuncSelWin_VwBox;
     /* element 27 of Viewable slot 0xBE: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vBE_e27;
+    naka_cls_AcLanguageText_t CstmFuncSelWin_AcLanguageText;
     /* element 28 of Viewable slot 0xBE: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vBE_e28;
+    naka_cls_AcLanguageText_t CstmFuncSelWin_AcLanguageText_2;
     /* element 29 of Viewable slot 0xBE: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vBE_e29;
+    naka_cls_AcLanguageText_t CstmFuncSelWin_AcLanguageText_3;
     /* element 30 of Viewable slot 0xBE "CtmSMemStr": PsCtmAttStrBox (class id 0x0164000C) */
     naka_cls_PsCtmAttStrBox_t CtmSMemStr;
     /* element 31 of Viewable slot 0xBE: VwEditSwBox (class id 0x0160003E) */
@@ -1756,7 +1756,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .StyleConvert_text = "STYLE CONVERT",
 
-    .v10_e1 = {
+    .StylCnvWaitScreen_VwBox = {
         .class_ = 0x01600011,
         .super = 0,
         .sub = 2,
@@ -1769,7 +1769,7 @@ const naka_composer_style_t naka_composer_style_data
         .index = 0xFFFF,
     },
 
-    .v10_e2 = {
+    .StylCnvWaitScreen_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 1,
         .sub = NAKA_NONE,
@@ -1805,7 +1805,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .StyleTypeSelect_text = "STYLE TYPE SELECT",
 
-    .v11_e1 = {
+    .StylCnvModlScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -1855,7 +1855,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .PREV_str = ALIGNED_STRING("PREV"),
 
-    .v11_e4 = {
+    .StylCnvModlScreen_VwWideESBox = {
         .class_ = 0x0160003F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -1898,7 +1898,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .NEXT_str = ALIGNED_STRING("NEXT"),
 
-    .v11_e6 = {
+    .StylCnvModlScreen_VwEditSwBox = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -1953,7 +1953,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .StyleConvert_text_2 = "STYLE CONVERT",
 
-    .v12_e1 = {
+    .StylCnvCnvtScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2003,7 +2003,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .PREV_str_2 = ALIGNED_STRING("PREV"),
 
-    .v12_e4 = {
+    .StylCnvCnvtScreen_VwWideESBox = {
         .class_ = 0x0160003F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2046,7 +2046,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .NEXT_str_2 = ALIGNED_STRING("NEXT"),
 
-    .v12_e6 = {
+    .StylCnvCnvtScreen_VwEditSwBox = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2085,7 +2085,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .StorageData_text = ALIGNED_STRING("STORAGE DATA"),
 
-    .v13_e1 = {
+    .StylCnvStorScreen_AcRamEditBox = {
         .class_ = 0x0160001B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2110,7 +2110,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .v13_e1_caption = "  Data Storage to :",
 
-    .v13_e2 = {
+    .StylCnvStorScreen_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2129,7 +2129,7 @@ const naka_composer_style_t naka_composer_style_data
         .style = 0x0003,
     },
 
-    .v13_e3 = {
+    .StylCnvStorScreen_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2166,7 +2166,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .StyleConvert_text_3 = "STYLE CONVERT",
 
-    .v14_e1 = {
+    .StylCnvTxtScreen_VwBox = {
         .class_ = 0x01600011,
         .super = 0,
         .sub = 2,
@@ -2179,7 +2179,7 @@ const naka_composer_style_t naka_composer_style_data
         .index = 0xFFFF,
     },
 
-    .v14_e2 = {
+    .StylCnvTxtScreen_PSSCTxtBox2 = {
         .class_ = 0x01640023,
         .super = 1,
         .sub = NAKA_NONE,
@@ -2196,7 +2196,7 @@ const naka_composer_style_t naka_composer_style_data
         .lines = 0x0003,
     },
 
-    .v14_e3 = {
+    .StylCnvTxtScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2225,7 +2225,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .StyleConvert_text_4 = "STYLE CONVERT",
 
-    .v15_e1 = {
+    .StylCnvSelScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2275,7 +2275,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .PREV_str_3 = ALIGNED_STRING("PREV"),
 
-    .v15_e4 = {
+    .StylCnvSelScreen_VwWideESBox = {
         .class_ = 0x0160003F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2318,7 +2318,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .NEXT_str_3 = ALIGNED_STRING("NEXT"),
 
-    .v15_e6 = {
+    .StylCnvSelScreen_VwEditSwBox = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2339,7 +2339,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .str_34 = ALIGNED_STRING(""),
 
-    .v15_e7 = {
+    .StylCnvSelScreen_PsSCTxtBox = {
         .class_ = 0x01640022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2373,7 +2373,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .StyleConvert_text_5 = "STYLE CONVERT",
 
-    .v16_e1 = {
+    .StylCnvContScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2384,7 +2384,7 @@ const naka_composer_style_t naka_composer_style_data
         .func = 0x01440021,
     },
 
-    .v16_e2 = {
+    .StylCnvContScreen_VwBox = {
         .class_ = 0x01600011,
         .super = 0,
         .sub = 3,
@@ -2427,7 +2427,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .Next_text = ALIGNED_STRING("Next ?"),
 
-    .v16_e5 = {
+    .StylCnvContScreen_VwEditSwBox = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2448,7 +2448,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .str_37 = ALIGNED_STRING(""),
 
-    .v16_e6 = {
+    .StylCnvContScreen_VwEditSwBox_2 = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2625,7 +2625,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .LoadSingleComposer_text = ALIGNED_STRING("LOAD SINGLE COMPOSER"),
 
-    .vB0_e7 = {
+    .CmpMenuScreen_Line = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2637,7 +2637,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB0_e8 = {
+    .CmpMenuScreen_Line_2 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2649,7 +2649,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB0_e9 = {
+    .CmpMenuScreen_Line_3 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2661,7 +2661,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB0_e10 = {
+    .CmpMenuScreen_Line_4 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2703,7 +2703,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .Memory_text = ALIGNED_STRING("MEMORY"),
 
-    .vB0_e13 = {
+    .CmpMenuScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2714,7 +2714,7 @@ const naka_composer_style_t naka_composer_style_data
         .func = 0x01440005,
     },
 
-    .vB0_e14 = {
+    .CmpMenuScreen_VwMenuBox = {
         .class_ = 0x0160003D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2736,7 +2736,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .A_str = "A",
 
-    .vB0_e15 = {
+    .CmpMenuScreen_VwMenuBox_2 = {
         .class_ = 0x0160003D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2758,7 +2758,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .B_str = "B",
 
-    .vB0_e16 = {
+    .CmpMenuScreen_VwMenuBox_3 = {
         .class_ = 0x0160003D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2780,7 +2780,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .C_str = "C",
 
-    .vB0_e17 = {
+    .CmpMenuScreen_IvExitMode = {
         .class_ = 0x01600048,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2809,7 +2809,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .RecordMemory_text = "RECORD MEMORY",
 
-    .vB1_e1 = {
+    .CmpBkslScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3058,7 +3058,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .Recording_text_2 = "RECORDING",
 
-    .vB2_e1 = {
+    .CmpBkslSScreen_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3085,7 +3085,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .Memory_text_2 = "Memory:",
 
-    .vB2_e3 = {
+    .CmpBkslSScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3139,7 +3139,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .DRM_str = "DRM",
 
-    .vB2_e6 = {
+    .CmpBkslSScreen_VwEditSwBox = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3160,7 +3160,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .AC3_str = "AC3",
 
-    .vB2_e7 = {
+    .CmpBkslSScreen_VwEditSwBox_2 = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3181,7 +3181,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .AC2_str = "AC2",
 
-    .vB2_e8 = {
+    .CmpBkslSScreen_VwEditSwBox_3 = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3223,7 +3223,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .BAS_str = "BAS",
 
-    .vB2_e10 = {
+    .CmpBkslSScreen_AcMemNoBox = {
         .class_ = 0x01640000,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3254,7 +3254,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .StartRecording_text = "START RECORDING",
 
-    .vB2_e12 = {
+    .CmpBkslSScreen_Line = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3266,7 +3266,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB2_e13 = {
+    .CmpBkslSScreen_Line_2 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3278,7 +3278,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB2_e14 = {
+    .CmpBkslSScreen_Line_3 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3290,7 +3290,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB2_e15 = {
+    .CmpBkslSScreen_Line_4 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3399,7 +3399,7 @@ const naka_composer_style_t naka_composer_style_data
         .func = 0x01240006,
     },
 
-    .vB2_e21 = {
+    .CmpClrSure_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 18,
         .sub = NAKA_NONE,
@@ -3435,7 +3435,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .VariationNaming_text = ALIGNED_STRING("VARIATION NAMING"),
 
-    .vB3_e1 = {
+    .CmpNamingScreen_IvNaming = {
         .class_ = 0x0160004D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3446,7 +3446,7 @@ const naka_composer_style_t naka_composer_style_data
         .func = 0x01240001,
     },
 
-    .vB3_e2 = {
+    .CmpNamingScreen_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3514,7 +3514,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .RecordSetting_text = ALIGNED_STRING("RECORD SETTING"),
 
-    .vB4_e1 = {
+    .CmpSetScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3565,7 +3565,7 @@ const naka_composer_style_t naka_composer_style_data
         .window = 0x00B4000D,
     },
 
-    .vB4_e5 = {
+    .CmpSetScreen_IvShowHide = {
         .class_ = 0x01600064,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3637,7 +3637,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .RecordSetting_text_2 = ALIGNED_STRING("RECORD SETTING"),
 
-    .vB4_e9 = {
+    .CmSetPage1_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 6,
         .sub = NAKA_NONE,
@@ -3656,7 +3656,7 @@ const naka_composer_style_t naka_composer_style_data
         .style = 0x000E,
     },
 
-    .vB4_e10 = {
+    .CmSetPage1_AcIndexWideES_2 = {
         .class_ = 0x01600022,
         .super = 6,
         .sub = NAKA_NONE,
@@ -3826,7 +3826,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .RealtimeRecording_text = ALIGNED_STRING("REALTIME RECORDING"),
 
-    .vB5_e1 = {
+    .CmpRealScreen_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = 2,
@@ -3854,7 +3854,7 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
     },
 
-    .vB5_e3 = {
+    .CmpRealScreen_Label = {
         .class_ = 0x0160002B,
         .super = 1,
         .sub = NAKA_NONE,
@@ -3944,7 +3944,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .Memory_text_4 = "MEMORY  =",
 
-    .vB5_e9 = {
+    .CmpRealScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3976,7 +3976,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .DRM_str_2 = "DRM",
 
-    .vB5_e11 = {
+    .CmpRealScreen_VwEditSwBox = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3997,7 +3997,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .AC3_str_2 = "AC3",
 
-    .vB5_e12 = {
+    .CmpRealScreen_VwEditSwBox_2 = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4018,7 +4018,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .AC2_str_2 = "AC2",
 
-    .vB5_e13 = {
+    .CmpRealScreen_VwEditSwBox_3 = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4060,7 +4060,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .BAS_str_2 = "BAS",
 
-    .vB5_e15 = {
+    .CmpRealScreen_AcCmpTempoBox = {
         .class_ = 0x01640011,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4122,7 +4122,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .Step_text = ALIGNED_STRING("STEP"),
 
-    .vB5_e18 = {
+    .CmpRealScreen_AcMemNoBox = {
         .class_ = 0x01640000,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4405,7 +4405,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .PatternCopy_text_2 = ALIGNED_STRING("PATTERN COPY"),
 
-    .vB8_e1 = {
+    .CmpNcpScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4438,7 +4438,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .str_181 = ALIGNED_STRING(""),
 
-    .vB8_e3 = {
+    .CmpNcpScreen_VwWideESBox = {
         .class_ = 0x0160003F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4482,7 +4482,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .str_186 = ALIGNED_STRING(""),
 
-    .vB8_e5 = {
+    .CmpNcpScreen_VwWideESBox_2 = {
         .class_ = 0x0160003F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4534,7 +4534,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .From_text = ALIGNED_STRING("FROM"),
 
-    .vB8_e8 = {
+    .CmpNcpScreen_Line = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4546,7 +4546,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB8_e9 = {
+    .CmpNcpScreen_Line_2 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4558,7 +4558,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB8_e10 = {
+    .CmpNcpScreen_Line_3 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4570,7 +4570,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB8_e11 = {
+    .CmpNcpScreen_Line_4 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4597,7 +4597,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .To_text = ALIGNED_STRING("TO"),
 
-    .vB8_e13 = {
+    .CmpNcpScreen_Line_5 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4609,7 +4609,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB8_e14 = {
+    .CmpNcpScreen_Line_6 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4621,7 +4621,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB8_e15 = {
+    .CmpNcpScreen_Line_7 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4633,7 +4633,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB8_e16 = {
+    .CmpNcpScreen_Line_8 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4645,7 +4645,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB8_e17 = {
+    .CmpNcpScreen_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = 18,
@@ -4732,7 +4732,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .To_text_2 = ALIGNED_STRING("TO"),
 
-    .vB8_e24 = {
+    .CmpNcpScreen_VwEditSwBox = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4753,7 +4753,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .str_199 = ALIGNED_STRING(""),
 
-    .vB8_e25 = {
+    .CmpNcpScreen_Box_2 = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = 26,
@@ -4795,7 +4795,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .Pattern_text_3 = ALIGNED_STRING("PATTERN:"),
 
-    .vB8_e32 = {
+    .CmpNcpScreen_Yajirushi = {
         .class_ = 0x01640025,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4828,7 +4828,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .SeqToComposerCopy_text_2 = ALIGNED_STRING("SEQ TO COMPOSER COPY"),
 
-    .vB9_e1 = {
+    .S2CScreen_VwEditSwBox = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4849,7 +4849,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .str_205 = ALIGNED_STRING(""),
 
-    .vB9_e2 = {
+    .S2CScreen_VwEditSwBox_2 = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4870,7 +4870,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .str_206 = ALIGNED_STRING(""),
 
-    .vB9_e3 = {
+    .S2CScreen_VwEditSwBox_3 = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4891,7 +4891,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .str_207 = ALIGNED_STRING(""),
 
-    .vB9_e4 = {
+    .S2CScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4902,7 +4902,7 @@ const naka_composer_style_t naka_composer_style_data
         .func = 0x01440008,
     },
 
-    .vB9_e5 = {
+    .S2CScreen_VwEditSwBox_4 = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4923,7 +4923,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .str_208 = ALIGNED_STRING(""),
 
-    .vB9_e6 = {
+    .S2CScreen_VwEditSwBox_5 = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4944,7 +4944,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .str_209 = ALIGNED_STRING(""),
 
-    .vB9_e7 = {
+    .S2CScreen_VwEditSwBox_6 = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4995,7 +4995,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .Measure_text_2 = "MEASURE",
 
-    .vB9_e10 = {
+    .S2CScreen_Line = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5007,7 +5007,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB9_e11 = {
+    .S2CScreen_Line_2 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5019,7 +5019,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB9_e12 = {
+    .S2CScreen_Line_3 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5031,7 +5031,7 @@ const naka_composer_style_t naka_composer_style_data
         .linemode = 0x0001,
     },
 
-    .vB9_e13 = {
+    .S2CScreen_Line_4 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5088,7 +5088,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .Sequencer_text = "SEQUENCER",
 
-    .vB9_e17 = {
+    .S2CScreen_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5100,7 +5100,7 @@ const naka_composer_style_t naka_composer_style_data
         .border = 0x00C1,
     },
 
-    .vB9_e18 = {
+    .S2CScreen_Line_5 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5172,7 +5172,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .Meas_text_2 = "MEAS:",
 
-    .vB9_e23 = {
+    .S2CScreen_Box_2 = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = 24,
@@ -5261,7 +5261,7 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
     },
 
-    .vB9_e32 = {
+    .S2CScreen_Yajirushi = {
         .class_ = 0x01640025,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5307,7 +5307,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .S2cGrid_fixedcol = ALIGNED_STRING(" PART |TRACK"),
 
-    .vB9_e34 = {
+    .S2CScreen_AcIndexEditSw = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5325,7 +5325,7 @@ const naka_composer_style_t naka_composer_style_data
         .style = 0x000E,
     },
 
-    .vB9_e35 = {
+    .S2CScreen_AcIndexEditSw_2 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5343,7 +5343,7 @@ const naka_composer_style_t naka_composer_style_data
         .style = 0x0003,
     },
 
-    .vB9_e36 = {
+    .S2CScreen_IvShowHide = {
         .class_ = 0x01600064,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5372,7 +5372,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .EasyComposer_text_2 = "EASY COMPOSER",
 
-    .vBA_e1 = {
+    .CmpEasyScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5405,7 +5405,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .EDIT_str = ALIGNED_STRING("EDIT"),
 
-    .vBA_e3 = {
+    .CmpEasyScreen_VwEditSwBox = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5426,7 +5426,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .str_248 = ALIGNED_STRING(""),
 
-    .vBA_e4 = {
+    .CmpEasyScreen_VwEditSwBox_2 = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5498,7 +5498,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .Mem_text_2 = "MEM",
 
-    .vBA_e8 = {
+    .CmpEasyScreen_VwBox = {
         .class_ = 0x01600011,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5558,7 +5558,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .EasyCmpGrid_fixedcol = ALIGNED_STRING("   PART    |      STYLE      |VARI"),
 
-    .vBA_e11 = {
+    .CmpEasyScreen_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5577,7 +5577,7 @@ const naka_composer_style_t naka_composer_style_data
         .style = 0x000E,
     },
 
-    .vBA_e12 = {
+    .CmpEasyScreen_AcIndexWideES_2 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5596,7 +5596,7 @@ const naka_composer_style_t naka_composer_style_data
         .style = 0x0003,
     },
 
-    .vBA_e13 = {
+    .CmpEasyScreen_AcIndexEditSw = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5632,7 +5632,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .ComposerPitchBendRange_text = "COMPOSER PITCH BEND RANGE SETTING",
 
-    .vBB_e1 = {
+    .CmpBendScreen_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5651,7 +5651,7 @@ const naka_composer_style_t naka_composer_style_data
         .style = 0x0003,
     },
 
-    .vBB_e2 = {
+    .CmpBendScreen_AcLswEditBox = {
         .class_ = 0x0160001A,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5829,7 +5829,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .IntroFillInsEnding_text = ALIGNED_STRING("Intro,Fill-Ins & Ending."),
 
-    .vBD_e9 = {
+    .CmpModeScreen_AcCmpMdBox = {
         .class_ = 0x0164000D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5854,7 +5854,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .vBD_e9_caption = " NORMAL MODE:",
 
-    .vBD_e10 = {
+    .CmpModeScreen_AcCmpMdBox_2 = {
         .class_ = 0x0164000D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5912,7 +5912,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .From_text_3 = ALIGNED_STRING("FROM"),
 
-    .vBE_e2 = {
+    .CmpCstmCpScreen_VwBox = {
         .class_ = 0x01600011,
         .super = 0,
         .sub = 3,
@@ -5976,7 +5976,7 @@ const naka_composer_style_t naka_composer_style_data
 
     .To_text_3 = ALIGNED_STRING("TO"),
 
-    .vBE_e6 = {
+    .CmpCstmCpScreen_VwBox_2 = {
         .class_ = 0x01600011,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5989,7 +5989,7 @@ const naka_composer_style_t naka_composer_style_data
         .index = 0xFFFF,
     },
 
-    .vBE_e7 = {
+    .CmpCstmCpScreen_IvMainEditSw = {
         .class_ = 0x01600029,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6000,7 +6000,7 @@ const naka_composer_style_t naka_composer_style_data
         .func = 0x01440009,
     },
 
-    .vBE_e8 = {
+    .CmpCstmCpScreen_VwWideESBox = {
         .class_ = 0x0160003F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6084,7 +6084,7 @@ const naka_composer_style_t naka_composer_style_data
         ._pad_37 = { 0x00 },
     },
 
-    .vBE_e12 = {
+    .CmpCstmCpScreen_VwEditSwBox = {
         .class_ = 0x0160003E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6159,7 +6159,7 @@ const naka_composer_style_t naka_composer_style_data
         ._pad_37 = { 0x00 },
     },
 
-    .vBE_e16 = {
+    .CmpCstmCpScreen_Yajirushi = {
         .class_ = 0x01640025,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6189,7 +6189,7 @@ const naka_composer_style_t naka_composer_style_data
         .child = 0x0003D71A,
     },
 
-    .vBE_e18 = {
+    .CstmMemFulWin_VwBox = {
         .class_ = 0x01600011,
         .super = 17,
         .sub = 19,
@@ -6202,7 +6202,7 @@ const naka_composer_style_t naka_composer_style_data
         .index = 0xFFFF,
     },
 
-    .vBE_e19 = {
+    .CstmMemFulWin_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 18,
         .sub = NAKA_NONE,
@@ -6220,7 +6220,7 @@ const naka_composer_style_t naka_composer_style_data
         .func = 0x01240040,
     },
 
-    .vBE_e20 = {
+    .CstmMemFulWin_AcLanguageText_2 = {
         .class_ = 0x01600066,
         .super = 18,
         .sub = NAKA_NONE,
@@ -6238,7 +6238,7 @@ const naka_composer_style_t naka_composer_style_data
         .func = 0x01240044,
     },
 
-    .vBE_e21 = {
+    .CstmMemFulWin_AcLanguageText_3 = {
         .class_ = 0x01600066,
         .super = 18,
         .sub = NAKA_NONE,
@@ -6329,7 +6329,7 @@ const naka_composer_style_t naka_composer_style_data
         .child = 0x0003D722,
     },
 
-    .vBE_e26 = {
+    .CstmFuncSelWin_VwBox = {
         .class_ = 0x01600011,
         .super = 25,
         .sub = 27,
@@ -6342,7 +6342,7 @@ const naka_composer_style_t naka_composer_style_data
         .index = 0xFFFF,
     },
 
-    .vBE_e27 = {
+    .CstmFuncSelWin_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 26,
         .sub = NAKA_NONE,
@@ -6360,7 +6360,7 @@ const naka_composer_style_t naka_composer_style_data
         .func = 0x01240040,
     },
 
-    .vBE_e28 = {
+    .CstmFuncSelWin_AcLanguageText_2 = {
         .class_ = 0x01600066,
         .super = 26,
         .sub = NAKA_NONE,
@@ -6378,7 +6378,7 @@ const naka_composer_style_t naka_composer_style_data
         .func = 0x01240042,
     },
 
-    .vBE_e29 = {
+    .CstmFuncSelWin_AcLanguageText_3 = {
         .class_ = 0x01600066,
         .super = 26,
         .sub = NAKA_NONE,

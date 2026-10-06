@@ -299,20 +299,20 @@ typedef struct __attribute__((packed)) {
     uint8_t field_0174;
     uint8_t field_0175;
     /* element 2 of Viewable slot 0x1: AcTempoBox (class id 0x01600014) */
-    naka_cls_AcTempoBox_t v1_e2;
+    naka_cls_AcTempoBox_t normal_AcTempoBox;
     /* element 3 of Viewable slot 0x1: AcPmemName (class id 0x0160003B) */
-    naka_cls_AcPmemName_t v1_e3;
+    naka_cls_AcPmemName_t normal_AcPmemName;
     /* element 4 of Viewable slot 0x1: AcRhythmName (class id 0x0160003A) */
-    naka_cls_AcRhythmName_t v1_e4;
+    naka_cls_AcRhythmName_t normal_AcRhythmName;
     /* element 5 of Viewable slot 0x1: AcSoundName (class id 0x0160002A) */
-    naka_cls_AcSoundName_t v1_e5;
+    naka_cls_AcSoundName_t normal_AcSoundName;
     /* element 6 of Viewable slot 0x1: AcSoundName (class id 0x0160002A) */
-    naka_cls_AcSoundName_t v1_e6;
+    naka_cls_AcSoundName_t normal_AcSoundName_2;
     /* element 7 of Viewable slot 0x1: StringBox (class id 0x01600037) */
     naka_cls_StringBox_t RIGHT2_StringBox;
     char RIGHT2_str[8];
     /* element 8 of Viewable slot 0x1: AcSoundName (class id 0x0160002A) */
-    naka_cls_AcSoundName_t v1_e8;
+    naka_cls_AcSoundName_t normal_AcSoundName_3;
     /* element 9 of Viewable slot 0x1: StringBox (class id 0x01600037) */
     naka_cls_StringBox_t RIGHT1_StringBox;
     char RIGHT1_str[8];
@@ -323,27 +323,27 @@ typedef struct __attribute__((packed)) {
     naka_cls_StringBox_t RHYTHM_StringBox;
     char RHYTHM_str[8];
     /* element 12 of Viewable slot 0x1: TransposeBox (class id 0x01620003) */
-    naka_cls_TransposeBox_t v1_e12;
+    naka_cls_TransposeBox_t normal_TransposeBox;
     /* element 13 of Viewable slot 0x1: ChordBox (class id 0x01620004) */
-    naka_cls_ChordBox_t v1_e13;
+    naka_cls_ChordBox_t normal_ChordBox;
     /* element 14 of Viewable slot 0x1: AcLswBox (class id 0x01600013) */
-    naka_cls_AcLswBox_t v1_e14;
+    naka_cls_AcLswBox_t normal_AcLswBox;
     /* element 15 of Viewable slot 0x1: IvWindowPageControl (class id 0x0162000C) */
-    naka_cls_IvWindowPageControl_t v1_e15;
+    naka_cls_IvWindowPageControl_t normal_IvWindowPageControl;
     /* element 16 of Viewable slot 0x1: FreeSplitBox (class id 0x01620005) */
-    naka_cls_FreeSplitBox_t v1_e16;
+    naka_cls_FreeSplitBox_t normal_FreeSplitBox;
     /* element 17 of Viewable slot 0x1: IvPageOverWr (class id 0x0162001B) */
-    naka_cls_IvPageOverWr_t v1_e17;
+    naka_cls_IvPageOverWr_t normal_IvPageOverWr;
     /* element 18 of Viewable slot 0x1: IvPageOverWr (class id 0x0162001B) */
-    naka_cls_IvPageOverWr_t v1_e18;
+    naka_cls_IvPageOverWr_t normal_IvPageOverWr_2;
     /* element 19 of Viewable slot 0x1: IvPageOverWr (class id 0x0162001B) */
-    naka_cls_IvPageOverWr_t v1_e19;
+    naka_cls_IvPageOverWr_t normal_IvPageOverWr_3;
     /* element 20 of Viewable slot 0x1: IvPageOverWr (class id 0x0162001B) */
-    naka_cls_IvPageOverWr_t v1_e20;
+    naka_cls_IvPageOverWr_t normal_IvPageOverWr_4;
     /* element 21 of Viewable slot 0x1: IvPageOverWr (class id 0x0162001B) */
-    naka_cls_IvPageOverWr_t v1_e21;
+    naka_cls_IvPageOverWr_t normal_IvPageOverWr_5;
     /* element 22 of Viewable slot 0x1: IvPageOverWr (class id 0x0162001B) */
-    naka_cls_IvPageOverWr_t v1_e22;
+    naka_cls_IvPageOverWr_t normal_IvPageOverWr_6;
     naka_dispatch_t w3;  /* 0x47 */
     uint16_t field_047c;
     uint16_t field_047e;
@@ -443,7 +443,7 @@ const naka_normal_mode_t naka_normal_mode_data
 
     .field_0175 = 0xFF,
 
-    .v1_e2 = {
+    .normal_AcTempoBox = {
         .class_ = 0x01600014,
         .super = 1,
         .sub = NAKA_NONE,
@@ -459,7 +459,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .align = 0x0000,
     },
 
-    .v1_e3 = {
+    .normal_AcPmemName = {
         .class_ = 0x0160003B,
         .super = 1,
         .sub = NAKA_NONE,
@@ -475,7 +475,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .align = 0x0000,
     },
 
-    .v1_e4 = {
+    .normal_AcRhythmName = {
         .class_ = 0x0160003A,
         .super = 1,
         .sub = NAKA_NONE,
@@ -491,7 +491,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .align = 0x0000,
     },
 
-    .v1_e5 = {
+    .normal_AcSoundName = {
         .class_ = 0x0160002A,
         .super = 1,
         .sub = NAKA_NONE,
@@ -508,7 +508,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .part = 0x0000,
     },
 
-    .v1_e6 = {
+    .normal_AcSoundName_2 = {
         .class_ = 0x0160002A,
         .super = 1,
         .sub = 7,
@@ -543,7 +543,7 @@ const naka_normal_mode_t naka_normal_mode_data
 
     .RIGHT2_str = ALIGNED_STRING("RIGHT2"),
 
-    .v1_e8 = {
+    .normal_AcSoundName_3 = {
         .class_ = 0x0160002A,
         .super = 1,
         .sub = NAKA_NONE,
@@ -614,7 +614,7 @@ const naka_normal_mode_t naka_normal_mode_data
 
     .RHYTHM_str = ALIGNED_STRING("RHYTHM"),
 
-    .v1_e12 = {
+    .normal_TransposeBox = {
         .class_ = 0x01620003,
         .super = 1,
         .sub = NAKA_NONE,
@@ -630,7 +630,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .align = 0x0000,
     },
 
-    .v1_e13 = {
+    .normal_ChordBox = {
         .class_ = 0x01620004,
         .super = 1,
         .sub = 14,
@@ -646,7 +646,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .align = 0x0000,
     },
 
-    .v1_e14 = {
+    .normal_AcLswBox = {
         .class_ = 0x01600013,
         .super = 13,
         .sub = NAKA_NONE,
@@ -664,7 +664,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .data = 0x0003F400,
     },
 
-    .v1_e15 = {
+    .normal_IvWindowPageControl = {
         .class_ = 0x0162000C,
         .super = 1,
         .sub = NAKA_NONE,
@@ -675,7 +675,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .page = 0x0003F402,
     },
 
-    .v1_e16 = {
+    .normal_FreeSplitBox = {
         .class_ = 0x01620005,
         .super = 1,
         .sub = NAKA_NONE,
@@ -691,7 +691,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .align = 0x0000,
     },
 
-    .v1_e17 = {
+    .normal_IvPageOverWr = {
         .class_ = 0x0162001B,
         .super = 1,
         .sub = NAKA_NONE,
@@ -703,7 +703,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .window = 0x00010018,
     },
 
-    .v1_e18 = {
+    .normal_IvPageOverWr_2 = {
         .class_ = 0x0162001B,
         .super = 1,
         .sub = NAKA_NONE,
@@ -715,7 +715,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .window = 0x00010021,
     },
 
-    .v1_e19 = {
+    .normal_IvPageOverWr_3 = {
         .class_ = 0x0162001B,
         .super = 1,
         .sub = NAKA_NONE,
@@ -727,7 +727,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .window = 0x00010027,
     },
 
-    .v1_e20 = {
+    .normal_IvPageOverWr_4 = {
         .class_ = 0x0162001B,
         .super = 1,
         .sub = NAKA_NONE,
@@ -739,7 +739,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .window = 0x00010030,
     },
 
-    .v1_e21 = {
+    .normal_IvPageOverWr_5 = {
         .class_ = 0x0162001B,
         .super = 1,
         .sub = NAKA_NONE,
@@ -751,7 +751,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .window = 0x00010039,
     },
 
-    .v1_e22 = {
+    .normal_IvPageOverWr_6 = {
         .class_ = 0x0162001B,
         .super = 1,
         .sub = NAKA_NONE,

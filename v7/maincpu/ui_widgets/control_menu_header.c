@@ -109,7 +109,7 @@ typedef struct __attribute__((packed)) {
 
     /* w4: MENU_ITEM "FOOT CONTROLLERS" */
     /* element 3 of Viewable slot 0x40: AcTitleMenu (class id 0x0160001D) */
-    naka_cls_AcTitleMenu_t v40_e3;
+    naka_cls_AcTitleMenu_t ControlMenu_AcTitleMenu;
     char w4_text[18];       /* "FOOT CONTROLLERS" + NUL + 0xFF pad */
 
     /* w5: MENU_ITEM "DISPLAY TIME OUT" */
@@ -124,7 +124,7 @@ typedef struct __attribute__((packed)) {
 
     /* w7: TYPE_0x48 (separator/spacer) */
     /* element 6 of Viewable slot 0x40: IvExitMode (class id 0x01600048) */
-    naka_cls_IvExitMode_t v40_e6;
+    naka_cls_IvExitMode_t ControlMenu_IvExitMode;
 
     /* w8: MENU_ITEM "MUSIC STYLE ARRANGER MODE" */
     /* element 7 of Viewable slot 0x40: AcTitleMenu (class id 0x0160001D) */
@@ -213,7 +213,7 @@ const ctrl_menu_header_t ctrl_menu_header_data
     .OverallTouchSensitivity_text = "OVERALL TOUCH SENSITIVITY",
 
     /* ─── w4: MENU_ITEM "FOOT CONTROLLERS" ─────────────── */
-    .v40_e3 = {
+    .ControlMenu_AcTitleMenu = {
         .class_ = 0x0160001D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -282,7 +282,7 @@ const ctrl_menu_header_t ctrl_menu_header_data
     .PanelMemoryMode_text = "PANEL MEMORY MODE",
 
     /* ─── w7: TYPE_0x48 (separator/spacer) ─────────────── */
-    .v40_e6 = {
+    .ControlMenu_IvExitMode = {
         .class_ = 0x01600048,
         .super = 0,
         .sub = NAKA_NONE,

@@ -1110,11 +1110,11 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t Reverb_TtlScreen;
     char Reverb_text[8];
     /* element 1 of Viewable slot 0xA: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA_e1;
+    naka_cls_AcIndexWideES_t Reverb_AcIndexWideES;
     /* element 2 of Viewable slot 0xA: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA_e2;
+    naka_cls_AcIndexWideES_t Reverb_AcIndexWideES_2;
     /* element 3 of Viewable slot 0xA: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA_e3;
+    naka_cls_AcIndexWideES_t Reverb_AcIndexWideES_3;
     /* element 4 of Viewable slot 0xA: Label (class id 0x0160002B) */
     naka_cls_Label_t Type_Label;
     char Type_text[6];
@@ -1125,16 +1125,16 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Value_Label;
     char Value_text[6];
     /* element 7 of Viewable slot 0xA: EffectBox (class id 0x01680000) */
-    naka_cls_EffectBox_t vA_e7;
+    naka_cls_EffectBox_t Reverb_EffectBox;
     /* element 8 of Viewable slot 0xA: Box (class id 0x01600031) */
-    naka_cls_Box_t vA_e8;
+    naka_cls_Box_t Reverb_Box;
     /* element 9 of Viewable slot 0xA: Label (class id 0x0160002B) */
     naka_cls_Label_t Type_Label_2;
     char Type_text_2[6];
     /* element 10 of Viewable slot 0xA: IvIntEasySet (class id 0x01600063) */
-    naka_cls_IvIntEasySet_t vA_e10;
+    naka_cls_IvIntEasySet_t Reverb_IvIntEasySet;
     /* element 11 of Viewable slot 0xA: IvSdrev (class id 0x01680013) */
-    naka_cls_IvSdrev_t vA_e11;
+    naka_cls_IvSdrev_t Reverb_IvSdrev;
     /* element 0 of Viewable slot 0xB: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DspEffect_TtlScreen;
     char DspEffect_text[12];
@@ -1142,14 +1142,14 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Type_Label_3;
     char Type_text_3[8];
     /* element 2 of Viewable slot 0xB: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vB_e2;
+    naka_cls_AcIndexWideES_t DspEffect_AcIndexWideES;
     /* element 3 of Viewable slot 0xB: Label (class id 0x0160002B) */
     naka_cls_Label_t Type_Label_4;
     char Type_text_4[6];
     /* element 4 of Viewable slot 0xB: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vB_e4;
+    naka_cls_AcIndexWideES_t DspEffect_AcIndexWideES_2;
     /* element 5 of Viewable slot 0xB: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vB_e5;
+    naka_cls_AcIndexWideES_t DspEffect_AcIndexWideES_3;
     /* element 6 of Viewable slot 0xB: Label (class id 0x0160002B) */
     naka_cls_Label_t Parameter_Label_2;
     char Parameter_text_2[10];
@@ -1157,32 +1157,32 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Value_Label_2;
     char Value_text_2[6];
     /* element 8 of Viewable slot 0xB: EffectBox (class id 0x01680000) */
-    naka_cls_EffectBox_t vB_e8;
+    naka_cls_EffectBox_t DspEffect_EffectBox;
     /* element 9 of Viewable slot 0xB: Box (class id 0x01600031) */
-    naka_cls_Box_t vB_e9;
+    naka_cls_Box_t DspEffect_Box;
     /* element 10 of Viewable slot 0xB: IvIntEasySet (class id 0x01600063) */
-    naka_cls_IvIntEasySet_t vB_e10;
+    naka_cls_IvIntEasySet_t DspEffect_IvIntEasySet;
     /* element 11 of Viewable slot 0xB: IvSddsp (class id 0x01680014) */
-    naka_cls_IvSddsp_t vB_e11;
+    naka_cls_IvSddsp_t DspEffect_IvSddsp;
     /* element 0 of Viewable slot 0xC: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t Equalizer_TtlScreen;
     char Equalizer_text[10];
     /* element 1 of Viewable slot 0xC: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t vC_e1;
+    naka_cls_AcIndexEditSw_t Equalizer_AcIndexEditSw;
     /* element 2 of Viewable slot 0xC: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t vC_e2;
+    naka_cls_AcIndexEditSw_t Equalizer_AcIndexEditSw_2;
     /* element 3 of Viewable slot 0xC: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t vC_e3;
+    naka_cls_AcIndexEditSw_t Equalizer_AcIndexEditSw_3;
     /* element 4 of Viewable slot 0xC: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t vC_e4;
+    naka_cls_AcIndexEditSw_t Equalizer_AcIndexEditSw_4;
     /* element 5 of Viewable slot 0xC: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t vC_e5;
+    naka_cls_AcIndexEditSw_t Equalizer_AcIndexEditSw_5;
     /* element 6 of Viewable slot 0xC: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t vC_e6;
+    naka_cls_AcIndexEditSw_t Equalizer_AcIndexEditSw_6;
     /* element 7 of Viewable slot 0xC: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t vC_e7;
+    naka_cls_AcIndexEditSw_t Equalizer_AcIndexEditSw_7;
     /* element 8 of Viewable slot 0xC: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t vC_e8;
+    naka_cls_AcIndexEditSw_t Equalizer_AcIndexEditSw_8;
     /* element 9 of Viewable slot 0xC: Label (class id 0x0160002B) */
     naka_cls_Label_t Freq_Label;
     char Freq_text[6];
@@ -1220,17 +1220,17 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t High_Label;
     char High_text[6];
     /* element 21 of Viewable slot 0xC: Line (class id 0x0160002E) */
-    naka_cls_Line_t vC_e21;
+    naka_cls_Line_t Equalizer_Line;
     /* element 22 of Viewable slot 0xC: Line (class id 0x0160002E) */
-    naka_cls_Line_t vC_e22;
+    naka_cls_Line_t Equalizer_Line_2;
     /* element 23 of Viewable slot 0xC: Line (class id 0x0160002E) */
-    naka_cls_Line_t vC_e23;
+    naka_cls_Line_t Equalizer_Line_3;
     /* element 24 of Viewable slot 0xC: Line (class id 0x0160002E) */
-    naka_cls_Line_t vC_e24;
+    naka_cls_Line_t Equalizer_Line_4;
     /* element 25 of Viewable slot 0xC: EqualizerBox (class id 0x01680001) */
-    naka_cls_EqualizerBox_t vC_e25;
+    naka_cls_EqualizerBox_t Equalizer_EqualizerBox;
     /* element 26 of Viewable slot 0xC: Box (class id 0x01600031) */
-    naka_cls_Box_t vC_e26;
+    naka_cls_Box_t Equalizer_Box;
     /* element 27 of Viewable slot 0xC: Label (class id 0x0160002B) */
     naka_cls_Label_t FreqHz_Label;
     char FreqHz_text[10];
@@ -1250,9 +1250,9 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t High_Label_2;
     char High_text_2[6];
     /* element 33 of Viewable slot 0xC: Line (class id 0x0160002E) */
-    naka_cls_Line_t vC_e33;
+    naka_cls_Line_t Equalizer_Line_5;
     /* element 34 of Viewable slot 0xC: Line (class id 0x0160002E) */
-    naka_cls_Line_t vC_e34;
+    naka_cls_Line_t Equalizer_Line_6;
     /* element 35 of Viewable slot 0xC: Label (class id 0x0160002B) */
     naka_cls_Label_t Freq_Label_5;
     char Freq_text_5[6];
@@ -1264,9 +1264,9 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t AcousticIllusion_TtlScreen;
     char AcousticIllusion_text[18];
     /* element 1 of Viewable slot 0xE: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vE_e1;
+    naka_cls_AcIndexWideES_t AcousticIllusion_AcIndexWideES;
     /* element 2 of Viewable slot 0xE: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vE_e2;
+    naka_cls_AcIndexWideES_t AcousticIllusion_AcIndexWideES_2;
     /* element 3 of Viewable slot 0xE: Label (class id 0x0160002B) */
     naka_cls_Label_t Type_Label_5;
     char Type_text_5[6];
@@ -1274,11 +1274,11 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Level_Label;
     char Level_text[6];
     /* element 5 of Viewable slot 0xE: AccIll (class id 0x01680008) */
-    naka_cls_AccIll_t vE_e5;
+    naka_cls_AccIll_t AcousticIllusion_AccIll;
     /* element 6 of Viewable slot 0xE: Box (class id 0x01600031) */
-    naka_cls_Box_t vE_e6;
+    naka_cls_Box_t AcousticIllusion_Box;
     /* element 7 of Viewable slot 0xE: Box (class id 0x01600031) */
-    naka_cls_Box_t vE_e7;
+    naka_cls_Box_t AcousticIllusion_Box_2;
     /* element 8 of Viewable slot 0xE: Label (class id 0x0160002B) */
     naka_cls_Label_t IllusionLevel_Label;
     char IllusionLevel_text[16];
@@ -1286,9 +1286,9 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Type_Label_6;
     char Type_text_6[6];
     /* element 10 of Viewable slot 0xE: IvSdacc (class id 0x01680015) */
-    naka_cls_IvSdacc_t vE_e10;
+    naka_cls_IvSdacc_t AcousticIllusion_IvSdacc;
     /* element 11 of Viewable slot 0xE: IvIntEasySet (class id 0x01600063) */
-    naka_cls_IvIntEasySet_t vE_e11;
+    naka_cls_IvIntEasySet_t AcousticIllusion_IvIntEasySet;
     /* element 0 of Viewable slot 0x80: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t SequencerMenu_TtlScreen;
     char SequencerMenu_text[16];
@@ -1302,19 +1302,19 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcModeMenu_t EDIT_AcModeMenu;
     char EDIT_str[6];
     /* element 4 of Viewable slot 0x80: IvExitMode (class id 0x01600048) */
-    naka_cls_IvExitMode_t v80_e4;
+    naka_cls_IvExitMode_t SequencerMenu_IvExitMode;
     /* element 5 of Viewable slot 0x80: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v80_e5;
+    naka_cls_AcIndexEditSw_t SequencerMenu_AcIndexEditSw;
     /* element 6 of Viewable slot 0x80: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v80_e6;
+    naka_cls_AcIndexEditSw_t SequencerMenu_AcIndexEditSw_2;
     /* element 7 of Viewable slot 0x80: Box (class id 0x01600031) */
-    naka_cls_Box_t v80_e7;
+    naka_cls_Box_t SequencerMenu_Box;
     /* element 8 of Viewable slot 0x80: SngSel (class id 0x0168000A) */
-    naka_cls_SngSel_t v80_e8;
+    naka_cls_SngSel_t SequencerMenu_SngSel;
     /* element 9 of Viewable slot 0x80: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v80_e9;
+    naka_cls_AcLanguageText_t SequencerMenu_AcLanguageText;
     /* element 10 of Viewable slot 0x80: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v80_e10;
+    naka_cls_AcLanguageText_t SequencerMenu_AcLanguageText_2;
     /* element 11 of Viewable slot 0x80: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t PanelWrite_AcTitleMenu;
     char PanelWrite_text[12];
@@ -1325,22 +1325,22 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Meas_Label;
     char Meas_text[6];
     /* element 2 of Viewable slot 0x81: IvTrackSwitch (class id 0x0160005B) */
-    naka_cls_IvTrackSwitch_t v81_e2;
+    naka_cls_IvTrackSwitch_t SequencerPlay_IvTrackSwitch;
     /* element 3 of Viewable slot 0x81 "CycPlySw": AcFuncToggle (class id 0x01600044) */
     naka_cls_AcFuncToggle_t CycPlySw;
     uint8_t field_0d52;
     char YcleOff_str[9];
     char CycPlySw_stron[10];
     /* element 4 of Viewable slot 0x81: Box (class id 0x01600031) */
-    naka_cls_Box_t v81_e4;
+    naka_cls_Box_t SequencerPlay_Box;
     /* element 5 of Viewable slot 0x81 "SqPlayGamen": SqplyVal (class id 0x01680006) */
     naka_cls_SqplyVal_t SqPlayGamen;
     /* element 6 of Viewable slot 0x81: Box (class id 0x01600031) */
-    naka_cls_Box_t v81_e6;
+    naka_cls_Box_t SequencerPlay_Box_2;
     /* element 7 of Viewable slot 0x81: TrTransposeBox (class id 0x01600067) */
-    naka_cls_TrTransposeBox_t v81_e7;
+    naka_cls_TrTransposeBox_t SequencerPlay_TrTransposeBox;
     /* element 8 of Viewable slot 0x81: TrChordBox (class id 0x01600068) */
-    naka_cls_TrChordBox_t v81_e8;
+    naka_cls_TrChordBox_t SequencerPlay_TrChordBox;
     /* element 9 of Viewable slot 0x81: Label (class id 0x0160002B) */
     naka_cls_Label_t Measure_Label;
     char Measure_text[12];
@@ -1348,18 +1348,18 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t TimeSig_Label;
     char TimeSig_text[12];
     /* element 11 of Viewable slot 0x81: AcTempoBox (class id 0x01600014) */
-    naka_cls_AcTempoBox_t v81_e11;
+    naka_cls_AcTempoBox_t SequencerPlay_AcTempoBox;
     /* element 12 of Viewable slot 0x81: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v81_e12;
+    naka_cls_AcIndexEditSw_t SequencerPlay_AcIndexEditSw;
     /* element 13 of Viewable slot 0x81: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v81_e13;
+    naka_cls_AcIndexEditSw_t SequencerPlay_AcIndexEditSw_2;
     /* element 14 of Viewable slot 0x81: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v81_e14;
+    naka_cls_AcFuncEditSw_t SequencerPlay_AcFuncEditSw;
     /* element 15 of Viewable slot 0x81: Label (class id 0x0160002B) */
     naka_cls_Label_t Mixer_Label;
     char Mixer_text[6];
     /* element 16 of Viewable slot 0x81: IvPlayExit (class id 0x01680010) */
-    naka_cls_IvPlayExit_t v81_e16;
+    naka_cls_IvPlayExit_t SequencerPlay_IvPlayExit;
     /* element 17 of Viewable slot 0x81 "PlySngSel": SngSel (class id 0x0168000A) */
     naka_cls_SngSel_t PlySngSel;
     /* element 18 of Viewable slot 0x81 "SngSelWin1": Window (class id 0x01600035) */
@@ -1368,42 +1368,42 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcTitleMenu_t Medley_AcTitleMenu;
     char Medley_text[8];
     /* element 20 of Viewable slot 0x81: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v81_e20;
+    naka_cls_AcFuncEditSw_t SngSelWin1_AcFuncEditSw;
     /* element 21 of Viewable slot 0x81: Label (class id 0x0160002B) */
     naka_cls_Label_t Song_Label_2;
     char Song_text_2[6];
     /* element 22 of Viewable slot 0x81 "SngSelWin2": Window (class id 0x01600035) */
     naka_cls_Window_t SngSelWin2;
     /* element 23 of Viewable slot 0x81: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v81_e23;
+    naka_cls_AcIndexEditSw_t SngSelWin2_AcIndexEditSw;
     /* element 24 of Viewable slot 0x81: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v81_e24;
+    naka_cls_AcIndexEditSw_t SngSelWin2_AcIndexEditSw_2;
     /* element 25 of Viewable slot 0x81: Label (class id 0x0160002B) */
     naka_cls_Label_t Song_Label_3;
     char Song_text_3[6];
     /* element 26 of Viewable slot 0x81: IvShowHide (class id 0x01600064) */
-    naka_cls_IvShowHide_t v81_e26;
+    naka_cls_IvShowHide_t SngSelWin2_IvShowHide;
     /* element 27 of Viewable slot 0x81: SngSel2 (class id 0x0168000B) */
-    naka_cls_SngSel2_t v81_e27;
+    naka_cls_SngSel2_t SngSelWin2_SngSel2;
     /* element 0 of Viewable slot 0x82: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CyclePlay_TtlScreen;
     char CyclePlay_text[12];
     /* element 1 of Viewable slot 0x82: SqplyVal (class id 0x01680006) */
-    naka_cls_SqplyVal_t v82_e1;
+    naka_cls_SqplyVal_t CyclePlay_SqplyVal;
     /* element 2 of Viewable slot 0x82: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v82_e2;
+    naka_cls_PsEditBox_t CyclePlay_PsEditBox;
     char v82_e2_caption[22];
     /* element 3 of Viewable slot 0x82: Label (class id 0x0160002B) */
     naka_cls_Label_t CurrentMeasure_Label;
     char CurrentMeasure_text[18];
     /* element 4 of Viewable slot 0x82: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v82_e4;
+    naka_cls_PsEditBox_t CyclePlay_PsEditBox_2;
     char v82_e4_caption[8];
     /* element 5 of Viewable slot 0x82: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v82_e5;
+    naka_cls_PsEditBox_t CyclePlay_PsEditBox_3;
     char v82_e5_caption[22];
     /* element 6 of Viewable slot 0x82: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v82_e6;
+    naka_cls_AcIndexWideES_t CyclePlay_AcIndexWideES;
     /* element 7 of Viewable slot 0x82: Label (class id 0x0160002B) */
     naka_cls_Label_t Value_Label_3;
     char Value_text_3[6];
@@ -1414,34 +1414,34 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Song_Label_4;
     char Song_text_4[6];
     /* element 2 of Viewable slot 0x83: IvExitMode (class id 0x01600048) */
-    naka_cls_IvExitMode_t v83_e2;
+    naka_cls_IvExitMode_t EasyRecord_IvExitMode;
     /* element 3 of Viewable slot 0x83: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t Naming_AcTitleMenu;
     char Naming_text[8];
     /* element 4 of Viewable slot 0x83: Box (class id 0x01600031) */
-    naka_cls_Box_t v83_e4;
+    naka_cls_Box_t EasyRecord_Box;
     /* element 5 of Viewable slot 0x83: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v83_e5;
+    naka_cls_AcIndexEditSw_t EasyRecord_AcIndexEditSw;
     /* element 6 of Viewable slot 0x83: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v83_e6;
+    naka_cls_AcIndexEditSw_t EasyRecord_AcIndexEditSw_2;
     /* element 7 of Viewable slot 0x83: SngSel (class id 0x0168000A) */
-    naka_cls_SngSel_t v83_e7;
+    naka_cls_SngSel_t EasyRecord_SngSel;
     /* element 8 of Viewable slot 0x83: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v83_e8;
+    naka_cls_AcFuncEditSw_t EasyRecord_AcFuncEditSw;
     /* element 9 of Viewable slot 0x83: PsTrackSwitch (class id 0x01600058) */
-    naka_cls_PsTrackSwitch_t v83_e9;
+    naka_cls_PsTrackSwitch_t EasyRecord_PsTrackSwitch;
     /* element 10 of Viewable slot 0x83: PsTrackSwitch (class id 0x01600058) */
-    naka_cls_PsTrackSwitch_t v83_e10;
+    naka_cls_PsTrackSwitch_t EasyRecord_PsTrackSwitch_2;
     /* element 11 of Viewable slot 0x83: PsTrackSwitch (class id 0x01600058) */
-    naka_cls_PsTrackSwitch_t v83_e11;
+    naka_cls_PsTrackSwitch_t EasyRecord_PsTrackSwitch_3;
     /* element 12 of Viewable slot 0x83: PsTrackSwitch (class id 0x01600058) */
-    naka_cls_PsTrackSwitch_t v83_e12;
+    naka_cls_PsTrackSwitch_t EasyRecord_PsTrackSwitch_4;
     /* element 13 of Viewable slot 0x83: PsTrackSwitch (class id 0x01600058) */
-    naka_cls_PsTrackSwitch_t v83_e13;
+    naka_cls_PsTrackSwitch_t EasyRecord_PsTrackSwitch_5;
     /* element 14 of Viewable slot 0x83: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v83_e14;
+    naka_cls_AcLanguageText_t EasyRecord_AcLanguageText;
     /* element 15 of Viewable slot 0x83: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v83_e15;
+    naka_cls_AcLanguageText_t EasyRecord_AcLanguageText_2;
     /* element 0 of Viewable slot 0x84: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t Create_TtlScreen;
     char Create_text_2[8];
@@ -1476,9 +1476,9 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t RealtimeRecord_TtlScreen;
     char RealtimeRecord_text[16];
     /* element 1 of Viewable slot 0x85: IvTrackSwitch (class id 0x0160005B) */
-    naka_cls_IvTrackSwitch_t v85_e1;
+    naka_cls_IvTrackSwitch_t RealtimeRecord_IvTrackSwitch;
     /* element 2 of Viewable slot 0x85: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v85_e2;
+    naka_cls_AcFuncEditSw_t RealtimeRecord_AcFuncEditSw;
     /* element 3 of Viewable slot 0x85: Label (class id 0x0160002B) */
     naka_cls_Label_t RecStop_Label;
     char RecStop_text[10];
@@ -1487,7 +1487,7 @@ typedef struct __attribute__((packed)) {
     char CycRecSw_stroff[10];
     char CycRecSw_stron[10];
     /* element 5 of Viewable slot 0x85: Box (class id 0x01600031) */
-    naka_cls_Box_t v85_e5;
+    naka_cls_Box_t RealtimeRecord_Box;
     /* element 6 of Viewable slot 0x85 "MetRecSw": AcFuncToggle (class id 0x01600044) */
     naka_cls_AcFuncToggle_t MetRecSw;
     char MetRecSw_stroff[8];
@@ -1495,7 +1495,7 @@ typedef struct __attribute__((packed)) {
     /* element 7 of Viewable slot 0x85 "SqRealRecGamen": SqplyVal (class id 0x01680006) */
     naka_cls_SqplyVal_t SqRealRecGamen;
     /* element 8 of Viewable slot 0x85: Box (class id 0x01600031) */
-    naka_cls_Box_t v85_e8;
+    naka_cls_Box_t RealtimeRecord_Box_2;
     /* element 9 of Viewable slot 0x85: Label (class id 0x0160002B) */
     naka_cls_Label_t Measure_Label_2;
     char Measure_text_2[12];
@@ -1506,28 +1506,28 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Memory_Label;
     char Memory_text[12];
     /* element 12 of Viewable slot 0x85: AcTempoBox (class id 0x01600014) */
-    naka_cls_AcTempoBox_t v85_e12;
+    naka_cls_AcTempoBox_t RealtimeRecord_AcTempoBox;
     /* element 13 of Viewable slot 0x85: TrTransposeBox (class id 0x01600067) */
-    naka_cls_TrTransposeBox_t v85_e13;
+    naka_cls_TrTransposeBox_t RealtimeRecord_TrTransposeBox;
     /* element 14 of Viewable slot 0x85: TrChordBox (class id 0x01600068) */
-    naka_cls_TrChordBox_t v85_e14;
+    naka_cls_TrChordBox_t RealtimeRecord_TrChordBox;
     /* element 15 of Viewable slot 0x85: Label (class id 0x0160002B) */
-    naka_cls_Label_t v85_e15;
+    naka_cls_Label_t RealtimeRecord_Label;
     char w101_text[2];
     /* element 16 of Viewable slot 0x85: SngSel (class id 0x0168000A) */
-    naka_cls_SngSel_t v85_e16;
+    naka_cls_SngSel_t RealtimeRecord_SngSel;
     /* element 17 of Viewable slot 0x85: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v85_e17;
+    naka_cls_AcFuncEditSw_t RealtimeRecord_AcFuncEditSw_2;
     /* element 18 of Viewable slot 0x85: Label (class id 0x0160002B) */
     naka_cls_Label_t Mixer_Label_2;
     char Mixer_text_2[6];
     char CLEAR_str[6];
     /* element 21 of Viewable slot 0x85: IvRealRecExit (class id 0x01680019) */
-    naka_cls_IvRealRecExit_t v85_e21;
+    naka_cls_IvRealRecExit_t RealtimeRecord_IvRealRecExit;
     /* element 22 of Viewable slot 0x85 "CycClrSw": Window (class id 0x01600035) */
     naka_cls_Window_t CycClrSw;
     /* element 23 of Viewable slot 0x85: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v85_e23;
+    naka_cls_AcFuncEditSw_t CycClrSw_AcFuncEditSw;
     /* element 24 of Viewable slot 0x85: Label (class id 0x0160002B) */
     naka_cls_Label_t Clear_Label;
     char Clear_text[6];
@@ -1535,18 +1535,18 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t RealtimeRecord_TtlScreen_2;
     char RealtimeRecord_text_2[16];
     /* element 1 of Viewable slot 0x86: SqplyVal (class id 0x01680006) */
-    naka_cls_SqplyVal_t v86_e1;
+    naka_cls_SqplyVal_t RealtimeRecord_SqplyVal;
     /* element 2 of Viewable slot 0x86: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v86_e2;
+    naka_cls_PsEditBox_t RealtimeRecord_PsEditBox;
     char v86_e2_caption[22];
     /* element 3 of Viewable slot 0x86: Label (class id 0x0160002B) */
     naka_cls_Label_t CurrentMeasure_Label_2;
     char CurrentMeasure_text_2[18];
     /* element 4 of Viewable slot 0x86: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v86_e4;
+    naka_cls_PsEditBox_t RealtimeRecord_PsEditBox_2;
     char v86_e4_caption[22];
     /* element 5 of Viewable slot 0x86: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v86_e5;
+    naka_cls_AcIndexWideES_t RealtimeRecord_AcIndexWideES;
     /* element 6 of Viewable slot 0x86: Label (class id 0x0160002B) */
     naka_cls_Label_t Value_Label_4;
     char Value_text_4[6];
@@ -1555,24 +1555,24 @@ typedef struct __attribute__((packed)) {
     char MetCycRecSw_stroff[8];
     char MetCycRecSw_stron[6];
     /* element 8 of Viewable slot 0x86: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v86_e8;
+    naka_cls_AcFuncEditSw_t RealtimeRecord_AcFuncEditSw_3;
     /* element 9 of Viewable slot 0x86: Label (class id 0x0160002B) */
     naka_cls_Label_t Clear_Label_2;
     char Clear_text_2[6];
     /* element 10 of Viewable slot 0x86: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v86_e10;
+    naka_cls_PsEditBox_t RealtimeRecord_PsEditBox_3;
     char v86_e10_caption[8];
     /* element 0 of Viewable slot 0x87: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t PunchRecord_TtlScreen;
     char PunchRecord_text_2[14];
     /* element 1 of Viewable slot 0x87: IvTrackSwitch (class id 0x0160005B) */
-    naka_cls_IvTrackSwitch_t v87_e1;
+    naka_cls_IvTrackSwitch_t PunchRecord_IvTrackSwitch;
     /* element 2 of Viewable slot 0x87: Box (class id 0x01600031) */
-    naka_cls_Box_t v87_e2;
+    naka_cls_Box_t PunchRecord_Box;
     /* element 3 of Viewable slot 0x87 "SqPunchGamen": SqplyVal (class id 0x01680006) */
     naka_cls_SqplyVal_t SqPunchGamen;
     /* element 4 of Viewable slot 0x87: Box (class id 0x01600031) */
-    naka_cls_Box_t v87_e4;
+    naka_cls_Box_t PunchRecord_Box_2;
     /* element 5 of Viewable slot 0x87: Label (class id 0x0160002B) */
     naka_cls_Label_t Measure_Label_3;
     char Measure_text_3[12];
@@ -1583,16 +1583,16 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Memory_Label_2;
     char Memory_text_2[12];
     /* element 8 of Viewable slot 0x87: AcTempoBox (class id 0x01600014) */
-    naka_cls_AcTempoBox_t v87_e8;
+    naka_cls_AcTempoBox_t PunchRecord_AcTempoBox;
     /* element 9 of Viewable slot 0x87: TrTransposeBox (class id 0x01600067) */
-    naka_cls_TrTransposeBox_t v87_e9;
+    naka_cls_TrTransposeBox_t PunchRecord_TrTransposeBox;
     /* element 10 of Viewable slot 0x87: TrChordBox (class id 0x01600068) */
-    naka_cls_TrChordBox_t v87_e10;
+    naka_cls_TrChordBox_t PunchRecord_TrChordBox;
     /* element 11 of Viewable slot 0x87: Label (class id 0x0160002B) */
-    naka_cls_Label_t v87_e11;
+    naka_cls_Label_t PunchRecord_Label;
     char w122_text[2];
     /* element 12 of Viewable slot 0x87: SngSel (class id 0x0168000A) */
-    naka_cls_SngSel_t v87_e12;
+    naka_cls_SngSel_t PunchRecord_SngSel;
     /* element 13 of Viewable slot 0x87 "MetPunchSw": AcFuncToggle (class id 0x01600044) */
     naka_cls_AcFuncToggle_t MetPunchSw;
     uint8_t field_1f54;
@@ -1607,18 +1607,18 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Meas_Label_2;
     char Meas_text_2[6];
     /* element 16 of Viewable slot 0x87: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v87_e16;
+    naka_cls_AcIndexEditSw_t PunchRecord_AcIndexEditSw;
     /* element 17 of Viewable slot 0x87: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v87_e17;
+    naka_cls_AcIndexEditSw_t PunchRecord_AcIndexEditSw_2;
     /* element 18 of Viewable slot 0x87: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v87_e18;
+    naka_cls_AcFuncEditSw_t PunchRecord_AcFuncEditSw;
     /* element 19 of Viewable slot 0x87: Label (class id 0x0160002B) */
     naka_cls_Label_t Mixer_Label_3;
     char Mixer_text_3[6];
     /* element 20 of Viewable slot 0x87: IvPunchExit (class id 0x01680016) */
-    naka_cls_IvPunchExit_t v87_e20;
+    naka_cls_IvPunchExit_t PunchRecord_IvPunchExit;
     /* element 21 of Viewable slot 0x87: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v87_e21;
+    naka_cls_AcFuncEditSw_t PunchRecord_AcFuncEditSw_2;
     /* element 22 of Viewable slot 0x87: Label (class id 0x0160002B) */
     naka_cls_Label_t Auto_Label;
     char Auto_text[6];
@@ -1629,7 +1629,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t AutoPunchRecord_TtlScreen;
     char AutoPunchRecord_text[18];
     /* element 1 of Viewable slot 0x88: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v88_e1;
+    naka_cls_AcIndexWideES_t AutoPunchRecord_AcIndexWideES;
     /* element 2 of Viewable slot 0x88: Label (class id 0x0160002B) */
     naka_cls_Label_t Meas_Label_3;
     char Meas_text_3[6];
@@ -1641,20 +1641,20 @@ typedef struct __attribute__((packed)) {
     char MetPunchmSw_stroff[8];
     char MetPunchmSw_stron[6];
     /* element 5 of Viewable slot 0x88: SqplyVal (class id 0x01680006) */
-    naka_cls_SqplyVal_t v88_e5;
+    naka_cls_SqplyVal_t AutoPunchRecord_SqplyVal;
     /* element 6 of Viewable slot 0x88: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v88_e6;
+    naka_cls_PsEditBox_t AutoPunchRecord_PsEditBox;
     char v88_e6_caption[20];
     /* element 7 of Viewable slot 0x88: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v88_e7;
+    naka_cls_PsEditBox_t AutoPunchRecord_PsEditBox_2;
     char v88_e7_caption[20];
     /* element 8 of Viewable slot 0x88: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v88_e8;
+    naka_cls_PsEditBox_t AutoPunchRecord_PsEditBox_3;
     char v88_e8_caption[20];
     /* element 9 of Viewable slot 0x88: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v88_e9;
+    naka_cls_AcLanguageText_t AutoPunchRecord_AcLanguageText;
     /* element 10 of Viewable slot 0x88: IvAutoPunchExit (class id 0x01680017) */
-    naka_cls_IvAutoPunchExit_t v88_e10;
+    naka_cls_IvAutoPunchExit_t AutoPunchRecord_IvAutoPunchExit;
     /* element 11 of Viewable slot 0x88: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t AutoPunchRecord_TtlScreen_2;
     char AutoPunchRecord_text_2[18];
@@ -1662,103 +1662,103 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t PanelWrite_TtlScreen;
     char PanelWrite_text_3[12];
     /* element 1 of Viewable slot 0x8D: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v8D_e1;
+    naka_cls_AcFuncEditSw_t PanelWrite_AcFuncEditSw;
     /* element 2 of Viewable slot 0x8D: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v8D_e2;
+    naka_cls_AcLanguageText_t PanelWrite_AcLanguageText;
     /* element 3 of Viewable slot 0x8D: IvPnlWrExit (class id 0x01680012) */
-    naka_cls_IvPnlWrExit_t v8D_e3;
+    naka_cls_IvPnlWrExit_t PanelWrite_IvPnlWrExit;
     /* element 0 of Viewable slot 0x90: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t SongClear_TtlScreen;
     char SongClear_text_2[12];
     /* element 1 of Viewable slot 0x90: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v90_e1;
+    naka_cls_AcIndexWideES_t SongClear_AcIndexWideES;
     /* element 2 of Viewable slot 0x90: Label (class id 0x0160002B) */
     naka_cls_Label_t SongNoAll_Label;
     char SongNoAll_text[12];
     /* element 3 of Viewable slot 0x90: SqedtVal3 (class id 0x01680007) */
-    naka_cls_SqedtVal3_t v90_e3;
+    naka_cls_SqedtVal3_t SongClear_SqedtVal3;
     /* element 4 of Viewable slot 0x90: Box (class id 0x01600031) */
-    naka_cls_Box_t v90_e4;
+    naka_cls_Box_t SongClear_Box;
     /* element 5 of Viewable slot 0x90: Label (class id 0x0160002B) */
-    naka_cls_Label_t v90_e5;
+    naka_cls_Label_t SongClear_Label;
     char w146_text[2];
     /* element 6 of Viewable slot 0x90: Label (class id 0x0160002B) */
-    naka_cls_Label_t v90_e6;
+    naka_cls_Label_t SongClear_Label_2;
     char w147_text[2];
     /* element 7 of Viewable slot 0x90: MsgToTtl (class id 0x0168000E) */
-    naka_cls_MsgToTtl_t v90_e7;
+    naka_cls_MsgToTtl_t SongClear_MsgToTtl;
     /* element 8 of Viewable slot 0x90: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v90_e8;
+    naka_cls_AcFuncEditSw_t SongClear_AcFuncEditSw;
     /* element 9 of Viewable slot 0x90 "SoclSureDisp": Window (class id 0x01600035) */
     naka_cls_Window_t SoclSureDisp;
     /* element 10 of Viewable slot 0x90: Box (class id 0x01600031) */
-    naka_cls_Box_t v90_e10;
+    naka_cls_Box_t SoclSureDisp_Box;
     /* element 11 of Viewable slot 0x90: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t NO_AcScreenMenu;
     char NO_str[4];
     /* element 12 of Viewable slot 0x90: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v90_e12;
+    naka_cls_AcFuncEditSw_t SoclSureDisp_AcFuncEditSw;
     /* element 13 of Viewable slot 0x90: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t v90_e13;
+    naka_cls_IvExitScreen_t SoclSureDisp_IvExitScreen;
     /* element 14 of Viewable slot 0x90: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v90_e14;
+    naka_cls_AcLanguageText_t SoclSureDisp_AcLanguageText;
     /* element 15 of Viewable slot 0x90: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v90_e15;
+    naka_cls_AcLanguageText_t SoclSureDisp_AcLanguageText_2;
     /* element 16 of Viewable slot 0x90: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v90_e16;
+    naka_cls_AcLanguageText_t SoclSureDisp_AcLanguageText_3;
     /* element 0 of Viewable slot 0x91: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t SongTrackCopy_TtlScreen;
     char SongTrackCopy_text_2[16];
     /* element 1 of Viewable slot 0x91: SqedtVal2 (class id 0x01680003) */
-    naka_cls_SqedtVal2_t v91_e1;
+    naka_cls_SqedtVal2_t SongTrackCopy_SqedtVal2;
     /* element 2 of Viewable slot 0x91: SqedtFix (class id 0x01680004) */
-    naka_cls_SqedtFix_t v91_e2;
+    naka_cls_SqedtFix_t SongTrackCopy_SqedtFix;
     /* element 3 of Viewable slot 0x91: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v91_e3;
+    naka_cls_AcIndexWideES_t SongTrackCopy_AcIndexWideES;
     /* element 4 of Viewable slot 0x91: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v91_e4;
+    naka_cls_AcIndexWideES_t SongTrackCopy_AcIndexWideES_2;
     /* element 5 of Viewable slot 0x91: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v91_e5;
+    naka_cls_AcIndexWideES_t SongTrackCopy_AcIndexWideES_3;
     /* element 6 of Viewable slot 0x91: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v91_e6;
+    naka_cls_AcIndexWideES_t SongTrackCopy_AcIndexWideES_4;
     /* element 7 of Viewable slot 0x91: IvSongCopyExit (class id 0x01680005) */
-    naka_cls_IvSongCopyExit_t v91_e7;
+    naka_cls_IvSongCopyExit_t SongTrackCopy_IvSongCopyExit;
     /* element 8 of Viewable slot 0x91: IvSongCopyExit (class id 0x01680005) */
-    naka_cls_IvSongCopyExit_t v91_e8;
+    naka_cls_IvSongCopyExit_t SongTrackCopy_IvSongCopyExit_2;
     /* element 9 of Viewable slot 0x91: MsgToTtl (class id 0x0168000E) */
-    naka_cls_MsgToTtl_t v91_e9;
+    naka_cls_MsgToTtl_t SongTrackCopy_MsgToTtl;
     /* element 10 of Viewable slot 0x91: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v91_e10;
+    naka_cls_AcFuncEditSw_t SongTrackCopy_AcFuncEditSw;
     /* element 11 of Viewable slot 0x91 "SngCpSureDisp": Window (class id 0x01600035) */
     naka_cls_Window_t SngCpSureDisp;
     /* element 12 of Viewable slot 0x91: Box (class id 0x01600031) */
-    naka_cls_Box_t v91_e12;
+    naka_cls_Box_t SngCpSureDisp_Box;
     /* element 13 of Viewable slot 0x91: Box (class id 0x01600031) */
-    naka_cls_Box_t v91_e13;
+    naka_cls_Box_t SngCpSureDisp_Box_2;
     /* element 14 of Viewable slot 0x91: Box (class id 0x01600031) */
-    naka_cls_Box_t v91_e14;
+    naka_cls_Box_t SngCpSureDisp_Box_3;
     /* element 15 of Viewable slot 0x91: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t NO_AcScreenMenu_2;
     char NO_str_2[4];
     /* element 16 of Viewable slot 0x91: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t v91_e16;
+    naka_cls_IvExitScreen_t SngCpSureDisp_IvExitScreen;
     /* element 17 of Viewable slot 0x91: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v91_e17;
+    naka_cls_AcFuncEditSw_t SngCpSureDisp_AcFuncEditSw;
     /* element 18 of Viewable slot 0x91: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v91_e18;
+    naka_cls_AcLanguageText_t SngCpSureDisp_AcLanguageText;
     /* element 0 of Viewable slot 0x93: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t Edit_TtlScreen;
     char Edit_text[6];
     /* element 1 of Viewable slot 0x93: IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t v93_e1;
+    naka_cls_IvPageControl_t Edit_IvPageControl;
     /* element 2 of Viewable slot 0x93 "EdMenuPage": AcWindowPage (class id 0x01600025) */
     naka_cls_AcWindowPage_t EdMenuPage;
     /* element 3 of Viewable slot 0x93: IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t v93_e3;
+    naka_cls_IvPageControl_t Edit_IvPageControl_2;
     /* element 4 of Viewable slot 0x93: IvExitMode (class id 0x01600048) */
-    naka_cls_IvExitMode_t v93_e4;
+    naka_cls_IvExitMode_t Edit_IvExitMode;
     /* element 5 of Viewable slot 0x93: IvShowHide (class id 0x01600064) */
-    naka_cls_IvShowHide_t v93_e5;
+    naka_cls_IvShowHide_t Edit_IvShowHide;
     /* element 6 of Viewable slot 0x93 "SQEMENU_1": Window (class id 0x01600035) */
     naka_cls_Window_t SQEMENU_1;
     /* element 7 of Viewable slot 0x93: AcTitleMenu (class id 0x0160001D) */
@@ -1797,7 +1797,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcTitleMenu_t Copy_AcTitleMenu;
     char Copy_text[6];
     /* element 19 of Viewable slot 0x93: Line (class id 0x0160002E) */
-    naka_cls_Line_t v93_e19;
+    naka_cls_Line_t Copy_Line;
     /* element 20 of Viewable slot 0x93: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t Erase_AcTitleMenu;
     char Erase_text[6];
@@ -1811,9 +1811,9 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Measure_Label_4;
     char Measure_text_4[8];
     /* element 24 of Viewable slot 0x93: Line (class id 0x0160002E) */
-    naka_cls_Line_t v93_e24;
+    naka_cls_Line_t SQEMENU_2_Line;
     /* element 25 of Viewable slot 0x93: Line (class id 0x0160002E) */
-    naka_cls_Line_t v93_e25;
+    naka_cls_Line_t SQEMENU_2_Line_2;
     /* element 0 of Viewable slot 0x94: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t NoteEdit_TtlScreen;
     char NoteEdit_text_2[12];
@@ -1821,24 +1821,24 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t PartSelect_Label;
     char PartSelect_text[14];
     /* element 2 of Viewable slot 0x94: IvTrackSwitch (class id 0x0160005B) */
-    naka_cls_IvTrackSwitch_t v94_e2;
+    naka_cls_IvTrackSwitch_t NoteEdit_IvTrackSwitch;
     /* element 3 of Viewable slot 0x94: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v94_e3;
+    naka_cls_AcLanguageText_t NoteEdit_AcLanguageText;
     /* element 0 of Viewable slot 0x95: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t NoteEdit_TtlScreen_2;
     char NoteEdit_text_3[10];
     /* element 1 of Viewable slot 0x95: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v95_e1;
+    naka_cls_AcIndexEditSw_t NoteEdit_AcIndexEditSw;
     /* element 2 of Viewable slot 0x95: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v95_e2;
+    naka_cls_AcIndexEditSw_t NoteEdit_AcIndexEditSw_2;
     /* element 3 of Viewable slot 0x95: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v95_e3;
+    naka_cls_AcIndexEditSw_t NoteEdit_AcIndexEditSw_3;
     /* element 4 of Viewable slot 0x95: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v95_e4;
+    naka_cls_AcIndexEditSw_t NoteEdit_AcIndexEditSw_4;
     /* element 5 of Viewable slot 0x95: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v95_e5;
+    naka_cls_AcIndexEditSw_t NoteEdit_AcIndexEditSw_5;
     /* element 6 of Viewable slot 0x95: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v95_e6;
+    naka_cls_AcIndexEditSw_t NoteEdit_AcIndexEditSw_6;
     /* element 7 of Viewable slot 0x95: Label (class id 0x0160002B) */
     naka_cls_Label_t Meas_Label_4;
     char Meas_text_4[6];
@@ -1861,34 +1861,34 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Cursor_Label;
     char Cursor_text[8];
     /* element 14 of Viewable slot 0x95: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v95_e14;
+    naka_cls_AcIndexEditSw_t NoteEdit_AcIndexEditSw_7;
     /* element 15 of Viewable slot 0x95: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v95_e15;
+    naka_cls_AcIndexEditSw_t NoteEdit_AcIndexEditSw_8;
     /* element 16 of Viewable slot 0x95: Label (class id 0x0160002B) */
     naka_cls_Label_t Graph_Label;
     char Graph_text[6];
     /* element 17 of Viewable slot 0x95: NoteEditBox (class id 0x0168000C) */
-    naka_cls_NoteEditBox_t v95_e17;
+    naka_cls_NoteEditBox_t NoteEdit_NoteEditBox;
     /* element 18 of Viewable slot 0x95: Box (class id 0x01600031) */
-    naka_cls_Box_t v95_e18;
+    naka_cls_Box_t NoteEdit_Box;
     /* element 19 of Viewable slot 0x95: VwUserBitmap (class id 0x01600069) */
-    naka_cls_VwUserBitmap_t v95_e19;
+    naka_cls_VwUserBitmap_t NoteEdit_VwUserBitmap;
     /* element 20 of Viewable slot 0x95 "NTBitmap": VwUserBitmap (class id 0x01600069) */
     naka_cls_VwUserBitmap_t NTBitmap;
     /* element 21 of Viewable slot 0x95: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v95_e21;
+    naka_cls_AcIndexEditSw_t NoteEdit_AcIndexEditSw_9;
     /* element 22 of Viewable slot 0x95: Label (class id 0x0160002B) */
     naka_cls_Label_t Ers_Label;
     char Ers_text[4];
     /* element 23 of Viewable slot 0x95: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v95_e23;
+    naka_cls_AcIndexEditSw_t NoteEdit_AcIndexEditSw_10;
     /* element 24 of Viewable slot 0x95: Label (class id 0x0160002B) */
     naka_cls_Label_t Play_Label;
     char Play_text[6];
     /* element 25 of Viewable slot 0x95: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v95_e25;
+    naka_cls_AcIndexEditSw_t NoteEdit_AcIndexEditSw_11;
     /* element 26 of Viewable slot 0x95: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v95_e26;
+    naka_cls_AcIndexEditSw_t NoteEdit_AcIndexEditSw_12;
     /* element 0 of Viewable slot 0x96: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CyclePlay_TtlScreen_2;
     char CyclePlay_text_2[12];
@@ -1896,20 +1896,20 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t CurrentMeasure_Label_4;
     char CurrentMeasure_text_4[18];
     /* element 2 of Viewable slot 0x96: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v96_e2;
+    naka_cls_AcIndexWideES_t CyclePlay_AcIndexWideES_2;
     /* element 3 of Viewable slot 0x96: Label (class id 0x0160002B) */
     naka_cls_Label_t Value_Label_5;
     char Value_text_5[6];
     /* element 4 of Viewable slot 0x96: SqplyVal (class id 0x01680006) */
-    naka_cls_SqplyVal_t v96_e4;
+    naka_cls_SqplyVal_t CyclePlay_SqplyVal_2;
     /* element 5 of Viewable slot 0x96: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v96_e5;
+    naka_cls_PsEditBox_t CyclePlay_PsEditBox_4;
     char v96_e5_caption[8];
     /* element 6 of Viewable slot 0x96: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v96_e6;
+    naka_cls_PsEditBox_t CyclePlay_PsEditBox_5;
     char v96_e6_caption[22];
     /* element 7 of Viewable slot 0x96: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v96_e7;
+    naka_cls_PsEditBox_t CyclePlay_PsEditBox_6;
     char v96_e7_caption[22];
     /* element 0 of Viewable slot 0x97: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DrumEdit_TtlScreen;
@@ -1918,24 +1918,24 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t PartSelect_Label_2;
     char PartSelect_text_2[14];
     /* element 2 of Viewable slot 0x97: IvTrackSwitch (class id 0x0160005B) */
-    naka_cls_IvTrackSwitch_t v97_e2;
+    naka_cls_IvTrackSwitch_t DrumEdit_IvTrackSwitch;
     /* element 3 of Viewable slot 0x97: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v97_e3;
+    naka_cls_AcLanguageText_t DrumEdit_AcLanguageText;
     /* element 0 of Viewable slot 0x98: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DrumEdit_TtlScreen_2;
     char DrumEdit_text_3[10];
     /* element 1 of Viewable slot 0x98: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v98_e1;
+    naka_cls_AcIndexEditSw_t DrumEdit_AcIndexEditSw;
     /* element 2 of Viewable slot 0x98: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v98_e2;
+    naka_cls_AcIndexEditSw_t DrumEdit_AcIndexEditSw_2;
     /* element 3 of Viewable slot 0x98: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v98_e3;
+    naka_cls_AcIndexEditSw_t DrumEdit_AcIndexEditSw_3;
     /* element 4 of Viewable slot 0x98: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v98_e4;
+    naka_cls_AcIndexEditSw_t DrumEdit_AcIndexEditSw_4;
     /* element 5 of Viewable slot 0x98: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v98_e5;
+    naka_cls_AcIndexEditSw_t DrumEdit_AcIndexEditSw_5;
     /* element 6 of Viewable slot 0x98: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v98_e6;
+    naka_cls_AcIndexEditSw_t DrumEdit_AcIndexEditSw_6;
     /* element 7 of Viewable slot 0x98: Label (class id 0x0160002B) */
     naka_cls_Label_t Meas_Label_5;
     char Meas_text_5[6];
@@ -1958,32 +1958,32 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Sound_Label;
     char Sound_text[6];
     /* element 14 of Viewable slot 0x98: Box (class id 0x01600031) */
-    naka_cls_Box_t v98_e14;
+    naka_cls_Box_t DrumEdit_Box;
     /* element 15 of Viewable slot 0x98: NoteEditBox (class id 0x0168000C) */
-    naka_cls_NoteEditBox_t v98_e15;
+    naka_cls_NoteEditBox_t DrumEdit_NoteEditBox;
     /* element 16 of Viewable slot 0x98: VwUserBitmap (class id 0x01600069) */
-    naka_cls_VwUserBitmap_t v98_e16;
+    naka_cls_VwUserBitmap_t DrumEdit_VwUserBitmap;
     /* element 17 of Viewable slot 0x98 "DRBitmap": VwUserBitmap (class id 0x01600069) */
     naka_cls_VwUserBitmap_t DRBitmap;
     /* element 18 of Viewable slot 0x98: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v98_e18;
+    naka_cls_AcIndexEditSw_t DrumEdit_AcIndexEditSw_7;
     /* element 19 of Viewable slot 0x98: Label (class id 0x0160002B) */
     naka_cls_Label_t Enter_Label;
     char Enter_text[6];
     /* element 20 of Viewable slot 0x98: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v98_e20;
+    naka_cls_AcIndexEditSw_t DrumEdit_AcIndexEditSw_8;
     /* element 21 of Viewable slot 0x98: Label (class id 0x0160002B) */
     naka_cls_Label_t Ers_Label_2;
     char Ers_text_2[4];
     /* element 22 of Viewable slot 0x98: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v98_e22;
+    naka_cls_AcIndexEditSw_t DrumEdit_AcIndexEditSw_9;
     /* element 23 of Viewable slot 0x98: Label (class id 0x0160002B) */
     naka_cls_Label_t Play_Label_2;
     char Play_text_2[6];
     /* element 24 of Viewable slot 0x98: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v98_e24;
+    naka_cls_AcIndexEditSw_t DrumEdit_AcIndexEditSw_10;
     /* element 25 of Viewable slot 0x98: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v98_e25;
+    naka_cls_AcIndexEditSw_t DrumEdit_AcIndexEditSw_11;
     /* element 0 of Viewable slot 0x99: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CyclePlay_TtlScreen_3;
     char CyclePlay_text_3[12];
@@ -1991,101 +1991,101 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t CurrentMeasure_Label_5;
     char CurrentMeasure_text_5[18];
     /* element 2 of Viewable slot 0x99: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v99_e2;
+    naka_cls_AcIndexWideES_t CyclePlay_AcIndexWideES_3;
     /* element 3 of Viewable slot 0x99: Label (class id 0x0160002B) */
     naka_cls_Label_t Value_Label_6;
     char Value_text_6[6];
     /* element 4 of Viewable slot 0x99: SqplyVal (class id 0x01680006) */
-    naka_cls_SqplyVal_t v99_e4;
+    naka_cls_SqplyVal_t CyclePlay_SqplyVal_3;
     /* element 5 of Viewable slot 0x99: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v99_e5;
+    naka_cls_PsEditBox_t CyclePlay_PsEditBox_7;
     char v99_e5_caption[8];
     /* element 6 of Viewable slot 0x99: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v99_e6;
+    naka_cls_PsEditBox_t CyclePlay_PsEditBox_8;
     char v99_e6_caption[22];
     /* element 7 of Viewable slot 0x99: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v99_e7;
+    naka_cls_PsEditBox_t CyclePlay_PsEditBox_9;
     char v99_e7_caption[22];
     /* element 0 of Viewable slot 0x9A: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t TrackClear_TtlScreen;
     char TrackClear_text_2[12];
     /* element 1 of Viewable slot 0x9A: IvTrackSwitch (class id 0x0160005B) */
-    naka_cls_IvTrackSwitch_t v9A_e1;
+    naka_cls_IvTrackSwitch_t TrackClear_IvTrackSwitch;
     /* element 2 of Viewable slot 0x9A: MsgToTtl (class id 0x0168000E) */
-    naka_cls_MsgToTtl_t v9A_e2;
+    naka_cls_MsgToTtl_t TrackClear_MsgToTtl;
     /* element 3 of Viewable slot 0x9A: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v9A_e3;
+    naka_cls_AcLanguageText_t TrackClear_AcLanguageText;
     /* element 4 of Viewable slot 0x9A: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v9A_e4;
+    naka_cls_AcLanguageText_t TrackClear_AcLanguageText_2;
     /* element 5 of Viewable slot 0x9A: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v9A_e5;
+    naka_cls_AcFuncEditSw_t TrackClear_AcFuncEditSw;
     /* element 6 of Viewable slot 0x9A "TrkClrSureDisp": Window (class id 0x01600035) */
     naka_cls_Window_t TrkClrSureDisp;
     /* element 7 of Viewable slot 0x9A: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v9A_e7;
+    naka_cls_AcFuncEditSw_t TrkClrSureDisp_AcFuncEditSw;
     /* element 8 of Viewable slot 0x9A: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t NO_AcScreenMenu_3;
     char NO_str_3[4];
     /* element 9 of Viewable slot 0x9A: VwBox (class id 0x01600011) */
-    naka_cls_VwBox_t v9A_e9;
+    naka_cls_VwBox_t TrkClrSureDisp_VwBox;
     /* element 10 of Viewable slot 0x9A: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t v9A_e10;
+    naka_cls_IvExitScreen_t TrkClrSureDisp_IvExitScreen;
     /* element 11 of Viewable slot 0x9A: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v9A_e11;
+    naka_cls_AcLanguageText_t TrkClrSureDisp_AcLanguageText;
     /* element 12 of Viewable slot 0x9A: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v9A_e12;
+    naka_cls_AcLanguageText_t TrkClrSureDisp_AcLanguageText_2;
     /* element 13 of Viewable slot 0x9A: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v9A_e13;
+    naka_cls_AcLanguageText_t TrkClrSureDisp_AcLanguageText_3;
     /* element 0 of Viewable slot 0x9B: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t TrackMerge_TtlScreen;
     char TrackMerge_text_2[12];
     /* element 1 of Viewable slot 0x9B: Line (class id 0x0160002E) */
-    naka_cls_Line_t v9B_e1;
+    naka_cls_Line_t TrackMerge_Line;
     /* element 2 of Viewable slot 0x9B: Line (class id 0x0160002E) */
-    naka_cls_Line_t v9B_e2;
+    naka_cls_Line_t TrackMerge_Line_2;
     /* element 3 of Viewable slot 0x9B: Line (class id 0x0160002E) */
-    naka_cls_Line_t v9B_e3;
+    naka_cls_Line_t TrackMerge_Line_3;
     /* element 4 of Viewable slot 0x9B: Line (class id 0x0160002E) */
-    naka_cls_Line_t v9B_e4;
+    naka_cls_Line_t TrackMerge_Line_4;
     /* element 5 of Viewable slot 0x9B: Line (class id 0x0160002E) */
-    naka_cls_Line_t v9B_e5;
+    naka_cls_Line_t TrackMerge_Line_5;
     /* element 6 of Viewable slot 0x9B: Line (class id 0x0160002E) */
-    naka_cls_Line_t v9B_e6;
+    naka_cls_Line_t TrackMerge_Line_6;
     /* element 7 of Viewable slot 0x9B: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v9B_e7;
+    naka_cls_AcIndexWideES_t TrackMerge_AcIndexWideES;
     /* element 8 of Viewable slot 0x9B: Label (class id 0x0160002B) */
     naka_cls_Label_t Value_Label_7;
     char Value_text_7[6];
     /* element 9 of Viewable slot 0x9B: SqedtVal (class id 0x01680002) */
-    naka_cls_SqedtVal_t v9B_e9;
+    naka_cls_SqedtVal_t TrackMerge_SqedtVal;
     /* element 10 of Viewable slot 0x9B: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9B_e10;
+    naka_cls_PsEditBox_t TrackMerge_PsEditBox;
     char v9B_e10_caption[8];
     /* element 11 of Viewable slot 0x9B: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9B_e11;
+    naka_cls_PsEditBox_t TrackMerge_PsEditBox_2;
     char v9B_e11_caption[8];
     /* element 12 of Viewable slot 0x9B: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9B_e12;
+    naka_cls_PsEditBox_t TrackMerge_PsEditBox_3;
     char v9B_e12_caption[8];
     /* element 13 of Viewable slot 0x9B: MsgToTtl (class id 0x0168000E) */
-    naka_cls_MsgToTtl_t v9B_e13;
+    naka_cls_MsgToTtl_t TrackMerge_MsgToTtl;
     /* element 14 of Viewable slot 0x9B: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v9B_e14;
+    naka_cls_AcFuncEditSw_t TrackMerge_AcFuncEditSw;
     /* element 15 of Viewable slot 0x9B "TrkMrgSureDisp": Window (class id 0x01600035) */
     naka_cls_Window_t TrkMrgSureDisp;
     /* element 16 of Viewable slot 0x9B: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v9B_e16;
+    naka_cls_AcFuncEditSw_t TrkMrgSureDisp_AcFuncEditSw;
     /* element 17 of Viewable slot 0x9B: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t NO_AcScreenMenu_4;
     char NO_str_4[4];
     /* element 18 of Viewable slot 0x9B: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t v9B_e18;
+    naka_cls_IvExitScreen_t TrkMrgSureDisp_IvExitScreen;
     /* element 19 of Viewable slot 0x9B: Box (class id 0x01600031) */
-    naka_cls_Box_t v9B_e19;
+    naka_cls_Box_t TrkMrgSureDisp_Box;
     /* element 20 of Viewable slot 0x9B: Box (class id 0x01600031) */
-    naka_cls_Box_t v9B_e20;
+    naka_cls_Box_t TrkMrgSureDisp_Box_2;
     /* element 21 of Viewable slot 0x9B: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v9B_e21;
+    naka_cls_AcLanguageText_t TrkMrgSureDisp_AcLanguageText;
     /* element 0 of Viewable slot 0x9C: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t Quantize_TtlScreen;
     char Quantize_text_2[10];
@@ -2093,52 +2093,52 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Value_Label_8;
     char Value_text_8[6];
     /* element 2 of Viewable slot 0x9C: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v9C_e2;
+    naka_cls_AcIndexWideES_t Quantize_AcIndexWideES;
     /* element 3 of Viewable slot 0x9C: SqedtVal (class id 0x01680002) */
-    naka_cls_SqedtVal_t v9C_e3;
+    naka_cls_SqedtVal_t Quantize_SqedtVal;
     /* element 4 of Viewable slot 0x9C: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9C_e4;
+    naka_cls_PsEditBox_t Quantize_PsEditBox;
     char v9C_e4_caption[16];
     /* element 5 of Viewable slot 0x9C: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9C_e5;
+    naka_cls_PsEditBox_t Quantize_PsEditBox_2;
     char v9C_e5_caption[10];
     /* element 6 of Viewable slot 0x9C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v9C_e6;
+    naka_cls_Label_t Quantize_Label;
     char w240_text[2];
     /* element 7 of Viewable slot 0x9C: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9C_e7;
+    naka_cls_PsEditBox_t Quantize_PsEditBox_3;
     char v9C_e7_caption[16];
     /* element 8 of Viewable slot 0x9C: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9C_e8;
+    naka_cls_PsEditBox_t Quantize_PsEditBox_4;
     char v9C_e8_caption[16];
     /* element 9 of Viewable slot 0x9C: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9C_e9;
+    naka_cls_PsEditBox_t Quantize_PsEditBox_5;
     char v9C_e9_caption[16];
     /* element 10 of Viewable slot 0x9C: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9C_e10;
+    naka_cls_PsEditBox_t Quantize_PsEditBox_6;
     char v9C_e10_caption[10];
     /* element 11 of Viewable slot 0x9C: Label (class id 0x0160002B) */
-    naka_cls_Label_t v9C_e11;
+    naka_cls_Label_t Quantize_Label_2;
     char w245_text[2];
     /* element 12 of Viewable slot 0x9C: MsgToTtl (class id 0x0168000E) */
-    naka_cls_MsgToTtl_t v9C_e12;
+    naka_cls_MsgToTtl_t Quantize_MsgToTtl;
     /* element 13 of Viewable slot 0x9C: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v9C_e13;
+    naka_cls_AcFuncEditSw_t Quantize_AcFuncEditSw;
     /* element 14 of Viewable slot 0x9C "QtzSureDisp": Window (class id 0x01600035) */
     naka_cls_Window_t QtzSureDisp;
     /* element 15 of Viewable slot 0x9C: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t NO_AcScreenMenu_5;
     char NO_str_5[4];
     /* element 16 of Viewable slot 0x9C: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v9C_e16;
+    naka_cls_AcFuncEditSw_t QtzSureDisp_AcFuncEditSw;
     /* element 17 of Viewable slot 0x9C: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t v9C_e17;
+    naka_cls_IvExitScreen_t QtzSureDisp_IvExitScreen;
     /* element 18 of Viewable slot 0x9C: Box (class id 0x01600031) */
-    naka_cls_Box_t v9C_e18;
+    naka_cls_Box_t QtzSureDisp_Box;
     /* element 19 of Viewable slot 0x9C: Box (class id 0x01600031) */
-    naka_cls_Box_t v9C_e19;
+    naka_cls_Box_t QtzSureDisp_Box_2;
     /* element 20 of Viewable slot 0x9C: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v9C_e20;
+    naka_cls_AcLanguageText_t QtzSureDisp_AcLanguageText;
     /* element 0 of Viewable slot 0x9D: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t Transpose_TtlScreen;
     char Transpose_text_2[10];
@@ -2146,38 +2146,38 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Value_Label_9;
     char Value_text_9[6];
     /* element 2 of Viewable slot 0x9D: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v9D_e2;
+    naka_cls_AcIndexWideES_t Transpose_AcIndexWideES;
     /* element 3 of Viewable slot 0x9D: SqedtVal (class id 0x01680002) */
-    naka_cls_SqedtVal_t v9D_e3;
+    naka_cls_SqedtVal_t Transpose_SqedtVal;
     /* element 4 of Viewable slot 0x9D: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9D_e4;
+    naka_cls_PsEditBox_t Transpose_PsEditBox;
     char v9D_e4_caption[16];
     /* element 5 of Viewable slot 0x9D: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9D_e5;
+    naka_cls_PsEditBox_t Transpose_PsEditBox_2;
     char v9D_e5_caption[16];
     /* element 6 of Viewable slot 0x9D: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9D_e6;
+    naka_cls_PsEditBox_t Transpose_PsEditBox_3;
     char v9D_e6_caption[16];
     /* element 7 of Viewable slot 0x9D: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9D_e7;
+    naka_cls_PsEditBox_t Transpose_PsEditBox_4;
     char v9D_e7_caption[14];
     /* element 8 of Viewable slot 0x9D: MsgToTtl (class id 0x0168000E) */
-    naka_cls_MsgToTtl_t v9D_e8;
+    naka_cls_MsgToTtl_t Transpose_MsgToTtl;
     /* element 9 of Viewable slot 0x9D: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v9D_e9;
+    naka_cls_AcFuncEditSw_t Transpose_AcFuncEditSw;
     /* element 10 of Viewable slot 0x9D "TrnsSureDisp": Window (class id 0x01600035) */
     naka_cls_Window_t TrnsSureDisp;
     /* element 11 of Viewable slot 0x9D: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t NO_AcScreenMenu_6;
     char NO_str_6[4];
     /* element 12 of Viewable slot 0x9D: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v9D_e12;
+    naka_cls_AcFuncEditSw_t TrnsSureDisp_AcFuncEditSw;
     /* element 13 of Viewable slot 0x9D: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t v9D_e13;
+    naka_cls_IvExitScreen_t TrnsSureDisp_IvExitScreen;
     /* element 14 of Viewable slot 0x9D: Box (class id 0x01600031) */
-    naka_cls_Box_t v9D_e14;
+    naka_cls_Box_t TrnsSureDisp_Box;
     /* element 15 of Viewable slot 0x9D: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v9D_e15;
+    naka_cls_AcLanguageText_t TrnsSureDisp_AcLanguageText;
     /* element 0 of Viewable slot 0x9E: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t VelocityChange_TtlScreen;
     char VelocityChange_text_2[16];
@@ -2185,209 +2185,209 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Value_Label_10;
     char Value_text_10[6];
     /* element 2 of Viewable slot 0x9E: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v9E_e2;
+    naka_cls_AcIndexWideES_t VelocityChange_AcIndexWideES;
     /* element 3 of Viewable slot 0x9E: SqedtVal (class id 0x01680002) */
-    naka_cls_SqedtVal_t v9E_e3;
+    naka_cls_SqedtVal_t VelocityChange_SqedtVal;
     /* element 4 of Viewable slot 0x9E: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9E_e4;
+    naka_cls_PsEditBox_t VelocityChange_PsEditBox;
     char v9E_e4_caption[16];
     /* element 5 of Viewable slot 0x9E: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9E_e5;
+    naka_cls_PsEditBox_t VelocityChange_PsEditBox_2;
     char v9E_e5_caption[16];
     /* element 6 of Viewable slot 0x9E: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9E_e6;
+    naka_cls_PsEditBox_t VelocityChange_PsEditBox_3;
     char v9E_e6_caption[16];
     /* element 7 of Viewable slot 0x9E: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9E_e7;
+    naka_cls_PsEditBox_t VelocityChange_PsEditBox_4;
     char v9E_e7_caption[14];
     /* element 8 of Viewable slot 0x9E: MsgToTtl (class id 0x0168000E) */
-    naka_cls_MsgToTtl_t v9E_e8;
+    naka_cls_MsgToTtl_t VelocityChange_MsgToTtl;
     /* element 9 of Viewable slot 0x9E: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v9E_e9;
+    naka_cls_AcFuncEditSw_t VelocityChange_AcFuncEditSw;
     /* element 10 of Viewable slot 0x9E "VeloSureDisp": Window (class id 0x01600035) */
     naka_cls_Window_t VeloSureDisp;
     /* element 11 of Viewable slot 0x9E: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t NO_AcScreenMenu_7;
     char NO_str_7[4];
     /* element 12 of Viewable slot 0x9E: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v9E_e12;
+    naka_cls_AcFuncEditSw_t VeloSureDisp_AcFuncEditSw;
     /* element 13 of Viewable slot 0x9E: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t v9E_e13;
+    naka_cls_IvExitScreen_t VeloSureDisp_IvExitScreen;
     /* element 14 of Viewable slot 0x9E: Box (class id 0x01600031) */
-    naka_cls_Box_t v9E_e14;
+    naka_cls_Box_t VeloSureDisp_Box;
     /* element 15 of Viewable slot 0x9E: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v9E_e15;
+    naka_cls_AcLanguageText_t VeloSureDisp_AcLanguageText;
     /* element 0 of Viewable slot 0x9F: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t NoteChange_TtlScreen;
     char NoteChange_text_2[12];
     /* element 1 of Viewable slot 0x9F: SqedtVal (class id 0x01680002) */
-    naka_cls_SqedtVal_t v9F_e1;
+    naka_cls_SqedtVal_t NoteChange_SqedtVal;
     /* element 2 of Viewable slot 0x9F: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9F_e2;
+    naka_cls_PsEditBox_t NoteChange_PsEditBox;
     char v9F_e2_caption[2];
     /* element 3 of Viewable slot 0x9F: Label (class id 0x0160002B) */
     naka_cls_Label_t ChangeTo_Label;
     char ChangeTo_text[10];
     /* element 4 of Viewable slot 0x9F: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t v9F_e4;
+    naka_cls_AcIndexWideES_t NoteChange_AcIndexWideES;
     /* element 5 of Viewable slot 0x9F: Label (class id 0x0160002B) */
     naka_cls_Label_t Value_Label_11;
     char Value_text_11[6];
     /* element 6 of Viewable slot 0x9F: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9F_e6;
+    naka_cls_PsEditBox_t NoteChange_PsEditBox_2;
     char v9F_e6_caption[16];
     /* element 7 of Viewable slot 0x9F: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9F_e7;
+    naka_cls_PsEditBox_t NoteChange_PsEditBox_3;
     char v9F_e7_caption[2];
     /* element 8 of Viewable slot 0x9F: Label (class id 0x0160002B) */
     naka_cls_Label_t TargetNote_Label;
     char TargetNote_text[12];
     /* element 9 of Viewable slot 0x9F: Line (class id 0x0160002E) */
-    naka_cls_Line_t v9F_e9;
+    naka_cls_Line_t NoteChange_Line;
     /* element 10 of Viewable slot 0x9F: Line (class id 0x0160002E) */
-    naka_cls_Line_t v9F_e10;
+    naka_cls_Line_t NoteChange_Line_2;
     /* element 11 of Viewable slot 0x9F: Line (class id 0x0160002E) */
-    naka_cls_Line_t v9F_e11;
+    naka_cls_Line_t NoteChange_Line_3;
     /* element 12 of Viewable slot 0x9F: Line (class id 0x0160002E) */
-    naka_cls_Line_t v9F_e12;
+    naka_cls_Line_t NoteChange_Line_4;
     /* element 13 of Viewable slot 0x9F: Line (class id 0x0160002E) */
-    naka_cls_Line_t v9F_e13;
+    naka_cls_Line_t NoteChange_Line_5;
     /* element 14 of Viewable slot 0x9F: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9F_e14;
+    naka_cls_PsEditBox_t NoteChange_PsEditBox_4;
     char v9F_e14_caption[16];
     /* element 15 of Viewable slot 0x9F: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t v9F_e15;
+    naka_cls_PsEditBox_t NoteChange_PsEditBox_5;
     char v9F_e15_caption[16];
     /* element 16 of Viewable slot 0x9F: MsgToTtl (class id 0x0168000E) */
-    naka_cls_MsgToTtl_t v9F_e16;
+    naka_cls_MsgToTtl_t NoteChange_MsgToTtl;
     /* element 17 of Viewable slot 0x9F: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v9F_e17;
+    naka_cls_AcFuncEditSw_t NoteChange_AcFuncEditSw;
     /* element 18 of Viewable slot 0x9F "NoteSureDisp": Window (class id 0x01600035) */
     naka_cls_Window_t NoteSureDisp;
     /* element 19 of Viewable slot 0x9F: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t NO_AcScreenMenu_8;
     char NO_str_8[4];
     /* element 20 of Viewable slot 0x9F: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t v9F_e20;
+    naka_cls_AcFuncEditSw_t NoteSureDisp_AcFuncEditSw;
     /* element 21 of Viewable slot 0x9F: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t v9F_e21;
+    naka_cls_IvExitScreen_t NoteSureDisp_IvExitScreen;
     /* element 22 of Viewable slot 0x9F: Box (class id 0x01600031) */
-    naka_cls_Box_t v9F_e22;
+    naka_cls_Box_t NoteSureDisp_Box;
     /* element 23 of Viewable slot 0x9F: Box (class id 0x01600031) */
-    naka_cls_Box_t v9F_e23;
+    naka_cls_Box_t NoteSureDisp_Box_2;
     /* element 24 of Viewable slot 0x9F: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t v9F_e24;
+    naka_cls_AcLanguageText_t NoteSureDisp_AcLanguageText;
     /* element 0 of Viewable slot 0xA0: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t AdvanceDelay_TtlScreen;
     char AdvanceDelay_text_2[14];
     /* element 1 of Viewable slot 0xA0: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA0_e1;
+    naka_cls_AcIndexWideES_t AdvanceDelay_AcIndexWideES;
     /* element 2 of Viewable slot 0xA0: Label (class id 0x0160002B) */
     naka_cls_Label_t Value_Label_12;
     char Value_text_12[6];
     /* element 3 of Viewable slot 0xA0: SqedtVal (class id 0x01680002) */
-    naka_cls_SqedtVal_t vA0_e3;
+    naka_cls_SqedtVal_t AdvanceDelay_SqedtVal;
     /* element 4 of Viewable slot 0xA0: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vA0_e4;
+    naka_cls_PsEditBox_t AdvanceDelay_PsEditBox;
     char vA0_e4_caption[16];
     /* element 5 of Viewable slot 0xA0: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vA0_e5;
+    naka_cls_PsEditBox_t AdvanceDelay_PsEditBox_2;
     char vA0_e5_caption[16];
     /* element 6 of Viewable slot 0xA0: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vA0_e6;
+    naka_cls_PsEditBox_t AdvanceDelay_PsEditBox_3;
     char vA0_e6_caption[16];
     /* element 7 of Viewable slot 0xA0: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vA0_e7;
+    naka_cls_PsEditBox_t AdvanceDelay_PsEditBox_4;
     char vA0_e7_caption[16];
     /* element 8 of Viewable slot 0xA0: MsgToTtl (class id 0x0168000E) */
-    naka_cls_MsgToTtl_t vA0_e8;
+    naka_cls_MsgToTtl_t AdvanceDelay_MsgToTtl;
     /* element 9 of Viewable slot 0xA0: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t vA0_e9;
+    naka_cls_AcFuncEditSw_t AdvanceDelay_AcFuncEditSw;
     /* element 10 of Viewable slot 0xA0 "AdvSureDisp": Window (class id 0x01600035) */
     naka_cls_Window_t AdvSureDisp;
     /* element 11 of Viewable slot 0xA0: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t vA0_e11;
+    naka_cls_AcFuncEditSw_t AdvSureDisp_AcFuncEditSw;
     /* element 12 of Viewable slot 0xA0: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t NO_AcScreenMenu_9;
     char NO_str_9[4];
     /* element 13 of Viewable slot 0xA0: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t vA0_e13;
+    naka_cls_IvExitScreen_t AdvSureDisp_IvExitScreen;
     /* element 14 of Viewable slot 0xA0: Box (class id 0x01600031) */
-    naka_cls_Box_t vA0_e14;
+    naka_cls_Box_t AdvSureDisp_Box;
     /* element 15 of Viewable slot 0xA0: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vA0_e15;
+    naka_cls_AcLanguageText_t AdvSureDisp_AcLanguageText;
     /* element 0 of Viewable slot 0xA1: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t MeasureErase_TtlScreen;
     char MeasureErase_text[14];
     /* element 1 of Viewable slot 0xA1: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA1_e1;
+    naka_cls_AcIndexWideES_t MeasureErase_AcIndexWideES;
     /* element 2 of Viewable slot 0xA1: Label (class id 0x0160002B) */
     naka_cls_Label_t Value_Label_13;
     char Value_text_13[6];
     /* element 3 of Viewable slot 0xA1: SqedtVal (class id 0x01680002) */
-    naka_cls_SqedtVal_t vA1_e3;
+    naka_cls_SqedtVal_t MeasureErase_SqedtVal;
     /* element 4 of Viewable slot 0xA1: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vA1_e4;
+    naka_cls_PsEditBox_t MeasureErase_PsEditBox;
     char vA1_e4_caption[16];
     /* element 5 of Viewable slot 0xA1: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vA1_e5;
+    naka_cls_PsEditBox_t MeasureErase_PsEditBox_2;
     char vA1_e5_caption[16];
     /* element 6 of Viewable slot 0xA1: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vA1_e6;
+    naka_cls_PsEditBox_t MeasureErase_PsEditBox_3;
     char vA1_e6_caption[16];
     /* element 7 of Viewable slot 0xA1: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vA1_e7;
+    naka_cls_PsEditBox_t MeasureErase_PsEditBox_4;
     char vA1_e7_caption[16];
     /* element 8 of Viewable slot 0xA1: MsgToTtl (class id 0x0168000E) */
-    naka_cls_MsgToTtl_t vA1_e8;
+    naka_cls_MsgToTtl_t MeasureErase_MsgToTtl;
     /* element 9 of Viewable slot 0xA1: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t vA1_e9;
+    naka_cls_AcFuncEditSw_t MeasureErase_AcFuncEditSw;
     /* element 10 of Viewable slot 0xA1 "MersSureDisp": Window (class id 0x01600035) */
     naka_cls_Window_t MersSureDisp;
     /* element 11 of Viewable slot 0xA1: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t NO_AcScreenMenu_10;
     char NO_str_10[4];
     /* element 12 of Viewable slot 0xA1: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t vA1_e12;
+    naka_cls_AcFuncEditSw_t MersSureDisp_AcFuncEditSw;
     /* element 13 of Viewable slot 0xA1: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t vA1_e13;
+    naka_cls_IvExitScreen_t MersSureDisp_IvExitScreen;
     /* element 14 of Viewable slot 0xA1: Box (class id 0x01600031) */
-    naka_cls_Box_t vA1_e14;
+    naka_cls_Box_t MersSureDisp_Box;
     /* element 15 of Viewable slot 0xA1: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vA1_e15;
+    naka_cls_AcLanguageText_t MersSureDisp_AcLanguageText;
     /* element 0 of Viewable slot 0xA2: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t MeasureCopy_TtlScreen;
     char MeasureCopy_text[14];
     /* element 1 of Viewable slot 0xA2: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA2_e1;
+    naka_cls_AcIndexWideES_t MeasureCopy_AcIndexWideES;
     /* element 2 of Viewable slot 0xA2: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA2_e2;
+    naka_cls_AcIndexWideES_t MeasureCopy_AcIndexWideES_2;
     /* element 3 of Viewable slot 0xA2: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA2_e3;
+    naka_cls_AcIndexWideES_t MeasureCopy_AcIndexWideES_3;
     /* element 4 of Viewable slot 0xA2: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA2_e4;
+    naka_cls_AcIndexWideES_t MeasureCopy_AcIndexWideES_4;
     /* element 5 of Viewable slot 0xA2: SqedtVal2 (class id 0x01680003) */
-    naka_cls_SqedtVal2_t vA2_e5;
+    naka_cls_SqedtVal2_t MeasureCopy_SqedtVal2;
     /* element 6 of Viewable slot 0xA2: SqedtFix (class id 0x01680004) */
-    naka_cls_SqedtFix_t vA2_e6;
+    naka_cls_SqedtFix_t MeasureCopy_SqedtFix;
     /* element 7 of Viewable slot 0xA2: MsgToTtl (class id 0x0168000E) */
-    naka_cls_MsgToTtl_t vA2_e7;
+    naka_cls_MsgToTtl_t MeasureCopy_MsgToTtl;
     /* element 8 of Viewable slot 0xA2: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t vA2_e8;
+    naka_cls_AcFuncEditSw_t MeasureCopy_AcFuncEditSw;
     /* element 9 of Viewable slot 0xA2 "McpSureDisp": Window (class id 0x01600035) */
     naka_cls_Window_t McpSureDisp;
     /* element 10 of Viewable slot 0xA2: Box (class id 0x01600031) */
-    naka_cls_Box_t vA2_e10;
+    naka_cls_Box_t McpSureDisp_Box;
     /* element 11 of Viewable slot 0xA2: Box (class id 0x01600031) */
-    naka_cls_Box_t vA2_e11;
+    naka_cls_Box_t McpSureDisp_Box_2;
     /* element 12 of Viewable slot 0xA2: Box (class id 0x01600031) */
-    naka_cls_Box_t vA2_e12;
+    naka_cls_Box_t McpSureDisp_Box_3;
     /* element 13 of Viewable slot 0xA2: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t vA2_e13;
+    naka_cls_IvExitScreen_t McpSureDisp_IvExitScreen;
     /* element 14 of Viewable slot 0xA2: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t vA2_e14;
+    naka_cls_AcFuncEditSw_t McpSureDisp_AcFuncEditSw;
     /* element 15 of Viewable slot 0xA2: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vA2_e15;
+    naka_cls_AcLanguageText_t McpSureDisp_AcLanguageText;
     /* element 16 of Viewable slot 0xA2: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t NO_AcScreenMenu_11;
     char NO_str_11[4];
@@ -2398,68 +2398,68 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Value_Label_14;
     char Value_text_14[6];
     /* element 2 of Viewable slot 0xA3: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA3_e2;
+    naka_cls_AcIndexWideES_t MeasureDelete_AcIndexWideES;
     /* element 3 of Viewable slot 0xA3: SqedtVal (class id 0x01680002) */
-    naka_cls_SqedtVal_t vA3_e3;
+    naka_cls_SqedtVal_t MeasureDelete_SqedtVal;
     /* element 4 of Viewable slot 0xA3: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vA3_e4;
+    naka_cls_PsEditBox_t MeasureDelete_PsEditBox;
     char vA3_e4_caption[16];
     /* element 5 of Viewable slot 0xA3: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vA3_e5;
+    naka_cls_PsEditBox_t MeasureDelete_PsEditBox_2;
     char vA3_e5_caption[16];
     /* element 6 of Viewable slot 0xA3: PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vA3_e6;
+    naka_cls_PsEditBox_t MeasureDelete_PsEditBox_3;
     char vA3_e6_caption[14];
     /* element 7 of Viewable slot 0xA3: MsgToTtl (class id 0x0168000E) */
-    naka_cls_MsgToTtl_t vA3_e7;
+    naka_cls_MsgToTtl_t MeasureDelete_MsgToTtl;
     /* element 8 of Viewable slot 0xA3: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t vA3_e8;
+    naka_cls_AcFuncEditSw_t MeasureDelete_AcFuncEditSw;
     /* element 9 of Viewable slot 0xA3 "MdelSureDisp": Window (class id 0x01600035) */
     naka_cls_Window_t MdelSureDisp;
     /* element 10 of Viewable slot 0xA3: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t NO_AcScreenMenu_12;
     char NO_str_12[4];
     /* element 11 of Viewable slot 0xA3: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t vA3_e11;
+    naka_cls_AcFuncEditSw_t MdelSureDisp_AcFuncEditSw;
     /* element 12 of Viewable slot 0xA3: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t vA3_e12;
+    naka_cls_IvExitScreen_t MdelSureDisp_IvExitScreen;
     /* element 13 of Viewable slot 0xA3: Box (class id 0x01600031) */
-    naka_cls_Box_t vA3_e13;
+    naka_cls_Box_t MdelSureDisp_Box;
     /* element 14 of Viewable slot 0xA3: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vA3_e14;
+    naka_cls_AcLanguageText_t MdelSureDisp_AcLanguageText;
     /* element 0 of Viewable slot 0xA4: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t MeasureInsert_TtlScreen;
     char MeasureInsert_text[16];
     /* element 1 of Viewable slot 0xA4: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA4_e1;
+    naka_cls_AcIndexWideES_t MeasureInsert_AcIndexWideES;
     /* element 2 of Viewable slot 0xA4: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA4_e2;
+    naka_cls_AcIndexWideES_t MeasureInsert_AcIndexWideES_2;
     /* element 3 of Viewable slot 0xA4: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA4_e3;
+    naka_cls_AcIndexWideES_t MeasureInsert_AcIndexWideES_3;
     /* element 4 of Viewable slot 0xA4: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vA4_e4;
+    naka_cls_AcIndexWideES_t MeasureInsert_AcIndexWideES_4;
     /* element 5 of Viewable slot 0xA4: SqedtVal2 (class id 0x01680003) */
-    naka_cls_SqedtVal2_t vA4_e5;
+    naka_cls_SqedtVal2_t MeasureInsert_SqedtVal2;
     /* element 6 of Viewable slot 0xA4: SqedtFix (class id 0x01680004) */
-    naka_cls_SqedtFix_t vA4_e6;
+    naka_cls_SqedtFix_t MeasureInsert_SqedtFix;
     /* element 7 of Viewable slot 0xA4: MsgToTtl (class id 0x0168000E) */
-    naka_cls_MsgToTtl_t vA4_e7;
+    naka_cls_MsgToTtl_t MeasureInsert_MsgToTtl;
     /* element 8 of Viewable slot 0xA4: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t vA4_e8;
+    naka_cls_AcFuncEditSw_t MeasureInsert_AcFuncEditSw;
     /* element 9 of Viewable slot 0xA4 "MinsSureDisp": Window (class id 0x01600035) */
     naka_cls_Window_t MinsSureDisp;
     /* element 10 of Viewable slot 0xA4: Box (class id 0x01600031) */
-    naka_cls_Box_t vA4_e10;
+    naka_cls_Box_t MinsSureDisp_Box;
     /* element 11 of Viewable slot 0xA4: Box (class id 0x01600031) */
-    naka_cls_Box_t vA4_e11;
+    naka_cls_Box_t MinsSureDisp_Box_2;
     /* element 12 of Viewable slot 0xA4: Box (class id 0x01600031) */
-    naka_cls_Box_t vA4_e12;
+    naka_cls_Box_t MinsSureDisp_Box_3;
     /* element 13 of Viewable slot 0xA4: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t vA4_e13;
+    naka_cls_IvExitScreen_t MinsSureDisp_IvExitScreen;
     /* element 14 of Viewable slot 0xA4: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t vA4_e14;
+    naka_cls_AcFuncEditSw_t MinsSureDisp_AcFuncEditSw;
     /* element 15 of Viewable slot 0xA4: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vA4_e15;
+    naka_cls_AcLanguageText_t MinsSureDisp_AcLanguageText;
     /* element 16 of Viewable slot 0xA4: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t NO_AcScreenMenu_13;
     char NO_str_13[4];
@@ -2467,12 +2467,12 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t MetronomeBalance_TtlScreen;
     char MetronomeBalance_text[18];
     /* element 1 of Viewable slot 0xAB: AcMixerVol (class id 0x0160003C) */
-    naka_cls_AcMixerVol_t vAB_e1;
+    naka_cls_AcMixerVol_t MetronomeBalance_AcMixerVol;
     /* element 0 of Viewable slot 0xD6 "EnterTainerScr": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t EnterTainerScr;
     char Entertainer_text[12];
     /* element 1 of Viewable slot 0xD6: AcEntertainerGridBox (class id 0x01680009) */
-    naka_cls_AcEntertainerGridBox_t vD6_e1;
+    naka_cls_AcEntertainerGridBox_t EnterTainerScr_AcEntertainerGridBox;
     char vD6_e1_fixedrow[102];
     char vD6_e1_fixedcol[12];
     /* element 2 of Viewable slot 0xD6: Label (class id 0x0160002B) */
@@ -2483,9 +2483,9 @@ typedef struct __attribute__((packed)) {
     char MIXER_str[6];
     char DiskLoad_str[10];
     /* element 7 of Viewable slot 0xD6: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vD6_e7;
+    naka_cls_AcIndexWideES_t EnterTainerScr_AcIndexWideES;
     /* element 8 of Viewable slot 0xD6: AcIndexWideES (class id 0x01600022) */
-    naka_cls_AcIndexWideES_t vD6_e8;
+    naka_cls_AcIndexWideES_t EnterTainerScr_AcIndexWideES_2;
     /* element 9 of Viewable slot 0xD6: Label (class id 0x0160002B) */
     naka_cls_Label_t Item_Label;
     char Item_text[6];
@@ -2493,13 +2493,13 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Value_Label_15;
     char Value_text_15[6];
     /* element 11 of Viewable slot 0xD6: IvExitMode (class id 0x01600048) */
-    naka_cls_IvExitMode_t vD6_e11;
+    naka_cls_IvExitMode_t EnterTainerScr_IvExitMode;
     /* element 12 of Viewable slot 0xD6: AcFuncToggle (class id 0x01600044) */
-    naka_cls_AcFuncToggle_t vD6_e12;
+    naka_cls_AcFuncToggle_t EnterTainerScr_AcFuncToggle;
     char vD6_e12_stroff[14];
     char vD6_e12_stron[14];
     /* element 13 of Viewable slot 0xD6: AcPanicEditSw (class id 0x01680018) */
-    naka_cls_AcPanicEditSw_t vD6_e13;
+    naka_cls_AcPanicEditSw_t EnterTainerScr_AcPanicEditSw;
     /* element 14 of Viewable slot 0xD6: Label (class id 0x0160002B) */
     naka_cls_Label_t Panic_Label;
     char Panic_text[6];
@@ -2507,139 +2507,139 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t HelpFunction_TtlScreen;
     char HelpFunction_text[14];
     /* element 1 of Viewable slot 0xE7: IvExitMode (class id 0x01600048) */
-    naka_cls_IvExitMode_t vE7_e1;
+    naka_cls_IvExitMode_t HelpFunction_IvExitMode;
     /* element 2 of Viewable slot 0xE7 "HelpMenu": AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t HelpMenu;
     /* element 3 of Viewable slot 0xE7: IvShowHide (class id 0x01600064) */
-    naka_cls_IvShowHide_t vE7_e3;
+    naka_cls_IvShowHide_t HelpMenu_IvShowHide;
     /* element 4 of Viewable slot 0xE7: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t vE7_e4;
+    naka_cls_AcFuncEditSw_t HelpFunction_AcFuncEditSw;
     /* element 5 of Viewable slot 0xE7 "HelpNotXWin": Window (class id 0x01600035) */
     naka_cls_Window_t HelpNotXWin;
     /* element 6 of Viewable slot 0xE7: AcIndexWideToggle (class id 0x0168000F) */
-    naka_cls_AcIndexWideToggle_t vE7_e6;
+    naka_cls_AcIndexWideToggle_t HelpNotXWin_AcIndexWideToggle;
     char vE7_e6_stroff[8];
     char vE7_e6_stron[8];
     /* element 7 of Viewable slot 0xE7: AcIndexWideToggle (class id 0x0168000F) */
-    naka_cls_AcIndexWideToggle_t vE7_e7;
+    naka_cls_AcIndexWideToggle_t HelpNotXWin_AcIndexWideToggle_2;
     char vE7_e7_stroff[8];
     char vE7_e7_stron[8];
     /* element 8 of Viewable slot 0xE7: AcIndexWideToggle (class id 0x0168000F) */
-    naka_cls_AcIndexWideToggle_t vE7_e8;
+    naka_cls_AcIndexWideToggle_t HelpNotXWin_AcIndexWideToggle_3;
     char vE7_e8_stroff[8];
     char vE7_e8_stron[8];
     /* element 9 of Viewable slot 0xE7: AcIndexWideToggle (class id 0x0168000F) */
-    naka_cls_AcIndexWideToggle_t vE7_e9;
+    naka_cls_AcIndexWideToggle_t HelpNotXWin_AcIndexWideToggle_4;
     char vE7_e9_stroff[8];
     char vE7_e9_stron[8];
     /* element 10 of Viewable slot 0xE7 "HelpXWin": Window (class id 0x01600035) */
     naka_cls_Window_t HelpXWin;
     /* element 11 of Viewable slot 0xE7: AcIndexWideToggle (class id 0x0168000F) */
-    naka_cls_AcIndexWideToggle_t vE7_e11;
+    naka_cls_AcIndexWideToggle_t HelpXWin_AcIndexWideToggle;
     char vE7_e11_stroff[8];
     char vE7_e11_stron[8];
     /* element 12 of Viewable slot 0xE7: AcIndexWideToggle (class id 0x0168000F) */
-    naka_cls_AcIndexWideToggle_t vE7_e12;
+    naka_cls_AcIndexWideToggle_t HelpXWin_AcIndexWideToggle_2;
     char vE7_e12_stroff[8];
     char vE7_e12_stron[8];
     /* element 13 of Viewable slot 0xE7: AcIndexWideToggle (class id 0x0168000F) */
-    naka_cls_AcIndexWideToggle_t vE7_e13;
+    naka_cls_AcIndexWideToggle_t HelpXWin_AcIndexWideToggle_3;
     char vE7_e13_stroff[10];
     char vE7_e13_stron[10];
     /* element 14 of Viewable slot 0xE7 "HelpSwTtl1Scr": Screen (class id 0x01600033) */
     naka_cls_Screen_t HelpSwTtl1Scr;
     /* element 15 of Viewable slot 0xE7: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t vE7_e15;
+    naka_cls_IvExitScreen_t HelpSwTtl1Scr_IvExitScreen;
     /* element 16 of Viewable slot 0xE7 "HelpTtlStr1": HelpTtl (class id 0x01680011) */
     naka_cls_HelpTtl_t HelpTtlStr1;
     /* element 17 of Viewable slot 0xE7 "HelpLang1": AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t HelpLang1;
     /* element 18 of Viewable slot 0xE7: IvShowHide (class id 0x01600064) */
-    naka_cls_IvShowHide_t vE7_e18;
+    naka_cls_IvShowHide_t HelpLang1_IvShowHide;
     /* element 19 of Viewable slot 0xE7 "HelpLang2P1": Window (class id 0x01600035) */
     naka_cls_Window_t HelpLang2P1;
     /* element 20 of Viewable slot 0xE7: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vE7_e20;
+    naka_cls_AcLanguageText_t HelpLang2P1_AcLanguageText;
     /* element 21 of Viewable slot 0xE7 "HelpLang2P2": Window (class id 0x01600035) */
     naka_cls_Window_t HelpLang2P2;
     /* element 22 of Viewable slot 0xE7: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vE7_e22;
+    naka_cls_AcLanguageText_t HelpLang2P2_AcLanguageText;
     /* element 23 of Viewable slot 0xE7 "HelpSwTtl2Scr": Screen (class id 0x01600033) */
     naka_cls_Screen_t HelpSwTtl2Scr;
     /* element 24 of Viewable slot 0xE7: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t vE7_e24;
+    naka_cls_IvExitScreen_t HelpSwTtl2Scr_IvExitScreen;
     /* element 25 of Viewable slot 0xE7 "HelpTtlStr2": HelpTtl (class id 0x01680011) */
     naka_cls_HelpTtl_t HelpTtlStr2;
     /* element 26 of Viewable slot 0xE7: IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t vE7_e26;
+    naka_cls_IvPageControl_t HelpSwTtl2Scr_IvPageControl;
     /* element 27 of Viewable slot 0xE7: IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t vE7_e27;
+    naka_cls_IvPageControl_t HelpSwTtl2Scr_IvPageControl_2;
     /* element 28 of Viewable slot 0xE7 "Help_P2": AcWindowPage (class id 0x01600025) */
     naka_cls_AcWindowPage_t Help_P2;
     /* element 29 of Viewable slot 0xE7: IvShowHide (class id 0x01600064) */
-    naka_cls_IvShowHide_t vE7_e29;
+    naka_cls_IvShowHide_t HelpSwTtl2Scr_IvShowHide;
     /* element 30 of Viewable slot 0xE7 "HelpLang3P1": Window (class id 0x01600035) */
     naka_cls_Window_t HelpLang3P1;
     /* element 31 of Viewable slot 0xE7: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vE7_e31;
+    naka_cls_AcLanguageText_t HelpLang3P1_AcLanguageText;
     /* element 32 of Viewable slot 0xE7 "HelpLang3P2": Window (class id 0x01600035) */
     naka_cls_Window_t HelpLang3P2;
     /* element 33 of Viewable slot 0xE7: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vE7_e33;
+    naka_cls_AcLanguageText_t HelpLang3P2_AcLanguageText;
     /* element 34 of Viewable slot 0xE7 "HelpLang3P3": Window (class id 0x01600035) */
     naka_cls_Window_t HelpLang3P3;
     /* element 35 of Viewable slot 0xE7: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vE7_e35;
+    naka_cls_AcLanguageText_t HelpLang3P3_AcLanguageText;
     /* element 36 of Viewable slot 0xE7 "HelpSwTtl3Scr": Screen (class id 0x01600033) */
     naka_cls_Screen_t HelpSwTtl3Scr;
     /* element 37 of Viewable slot 0xE7: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t vE7_e37;
+    naka_cls_IvExitScreen_t HelpSwTtl3Scr_IvExitScreen;
     /* element 38 of Viewable slot 0xE7 "HelpTtlStr3": HelpTtl (class id 0x01680011) */
     naka_cls_HelpTtl_t HelpTtlStr3;
     /* element 39 of Viewable slot 0xE7 "Help_P3": AcWindowPage (class id 0x01600025) */
     naka_cls_AcWindowPage_t Help_P3;
     /* element 40 of Viewable slot 0xE7: IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t vE7_e40;
+    naka_cls_IvPageControl_t HelpSwTtl3Scr_IvPageControl;
     /* element 41 of Viewable slot 0xE7: IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t vE7_e41;
+    naka_cls_IvPageControl_t HelpSwTtl3Scr_IvPageControl_2;
     /* element 42 of Viewable slot 0xE7: IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t vE7_e42;
+    naka_cls_IvPageControl_t HelpSwTtl3Scr_IvPageControl_3;
     /* element 43 of Viewable slot 0xE7: IvShowHide (class id 0x01600064) */
-    naka_cls_IvShowHide_t vE7_e43;
+    naka_cls_IvShowHide_t HelpSwTtl3Scr_IvShowHide;
     /* element 44 of Viewable slot 0xE7 "HelpSwTtl4Scr": Screen (class id 0x01600033) */
     naka_cls_Screen_t HelpSwTtl4Scr;
     /* element 45 of Viewable slot 0xE7: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t vE7_e45;
+    naka_cls_IvExitScreen_t HelpSwTtl4Scr_IvExitScreen;
     /* element 46 of Viewable slot 0xE7 "Help_P4": AcWindowPage (class id 0x01600025) */
     naka_cls_AcWindowPage_t Help_P4;
     /* element 47 of Viewable slot 0xE7 "HelpTtlStr4": HelpTtl (class id 0x01680011) */
     naka_cls_HelpTtl_t HelpTtlStr4;
     /* element 48 of Viewable slot 0xE7: IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t vE7_e48;
+    naka_cls_IvPageControl_t HelpSwTtl4Scr_IvPageControl;
     /* element 49 of Viewable slot 0xE7: IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t vE7_e49;
+    naka_cls_IvPageControl_t HelpSwTtl4Scr_IvPageControl_2;
     /* element 50 of Viewable slot 0xE7: IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t vE7_e50;
+    naka_cls_IvPageControl_t HelpSwTtl4Scr_IvPageControl_3;
     /* element 51 of Viewable slot 0xE7: IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t vE7_e51;
+    naka_cls_IvPageControl_t HelpSwTtl4Scr_IvPageControl_4;
     /* element 52 of Viewable slot 0xE7: IvShowHide (class id 0x01600064) */
-    naka_cls_IvShowHide_t vE7_e52;
+    naka_cls_IvShowHide_t HelpSwTtl4Scr_IvShowHide;
     /* element 53 of Viewable slot 0xE7 "HelpLang4P1": Window (class id 0x01600035) */
     naka_cls_Window_t HelpLang4P1;
     /* element 54 of Viewable slot 0xE7: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vE7_e54;
+    naka_cls_AcLanguageText_t HelpLang4P1_AcLanguageText;
     /* element 55 of Viewable slot 0xE7 "HelpLang4P2": Window (class id 0x01600035) */
     naka_cls_Window_t HelpLang4P2;
     /* element 56 of Viewable slot 0xE7: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vE7_e56;
+    naka_cls_AcLanguageText_t HelpLang4P2_AcLanguageText;
     /* element 57 of Viewable slot 0xE7 "HelpLang4P3": Window (class id 0x01600035) */
     naka_cls_Window_t HelpLang4P3;
     /* element 58 of Viewable slot 0xE7: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vE7_e58;
+    naka_cls_AcLanguageText_t HelpLang4P3_AcLanguageText;
     /* element 59 of Viewable slot 0xE7 "HelpLang4P4": Window (class id 0x01600035) */
     naka_cls_Window_t HelpLang4P4;
     /* element 60 of Viewable slot 0xE7: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vE7_e60;
+    naka_cls_AcLanguageText_t HelpLang4P4_AcLanguageText;
     uint32_t ptrs_4[175];  /* 175 pointers */
     uint16_t field_693c;
     uint16_t field_693e;
@@ -3567,7 +3567,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Reverb_text = ALIGNED_STRING("REVERB"),
 
-    .vA_e1 = {
+    .Reverb_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3586,7 +3586,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vA_e2 = {
+    .Reverb_AcIndexWideES_2 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3605,7 +3605,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000E,
     },
 
-    .vA_e3 = {
+    .Reverb_AcIndexWideES_3 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3669,7 +3669,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Value_text = "VALUE",
 
-    .vA_e7 = {
+    .Reverb_EffectBox = {
         .class_ = 0x01680000,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3687,7 +3687,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_37 = { 0x00 },
     },
 
-    .vA_e8 = {
+    .Reverb_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3714,7 +3714,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Type_text_2 = "TYPE:",
 
-    .vA_e10 = {
+    .Reverb_IvIntEasySet = {
         .class_ = 0x01600063,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3725,7 +3725,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .time = 0x0001,
     },
 
-    .vA_e11 = {
+    .Reverb_IvSdrev = {
         .class_ = 0x01680013,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3768,7 +3768,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Type_text_3 = ALIGNED_STRING("TYPE :"),
 
-    .vB_e2 = {
+    .DspEffect_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3802,7 +3802,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Type_text_4 = ALIGNED_STRING("TYPE"),
 
-    .vB_e4 = {
+    .DspEffect_AcIndexWideES_2 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3821,7 +3821,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000E,
     },
 
-    .vB_e5 = {
+    .DspEffect_AcIndexWideES_3 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3870,7 +3870,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Value_text_2 = "VALUE",
 
-    .vB_e8 = {
+    .DspEffect_EffectBox = {
         .class_ = 0x01680000,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3888,7 +3888,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_37 = { 0x00 },
     },
 
-    .vB_e9 = {
+    .DspEffect_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3900,7 +3900,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C1,
     },
 
-    .vB_e10 = {
+    .DspEffect_IvIntEasySet = {
         .class_ = 0x01600063,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3911,7 +3911,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .time = 0x0001,
     },
 
-    .vB_e11 = {
+    .DspEffect_IvSddsp = {
         .class_ = 0x01680014,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3939,7 +3939,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Equalizer_text = "EQUALIZER",
 
-    .vC_e1 = {
+    .Equalizer_AcIndexEditSw = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3957,7 +3957,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vC_e2 = {
+    .Equalizer_AcIndexEditSw_2 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3975,7 +3975,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vC_e3 = {
+    .Equalizer_AcIndexEditSw_3 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3993,7 +3993,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vC_e4 = {
+    .Equalizer_AcIndexEditSw_4 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4011,7 +4011,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vC_e5 = {
+    .Equalizer_AcIndexEditSw_5 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4029,7 +4029,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vC_e6 = {
+    .Equalizer_AcIndexEditSw_6 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4047,7 +4047,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vC_e7 = {
+    .Equalizer_AcIndexEditSw_7 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4065,7 +4065,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vC_e8 = {
+    .Equalizer_AcIndexEditSw_8 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4263,7 +4263,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .High_text = ALIGNED_STRING("HIGH"),
 
-    .vC_e21 = {
+    .Equalizer_Line = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4275,7 +4275,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .vC_e22 = {
+    .Equalizer_Line_2 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4287,7 +4287,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .vC_e23 = {
+    .Equalizer_Line_3 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4299,7 +4299,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .vC_e24 = {
+    .Equalizer_Line_4 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4311,7 +4311,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .vC_e25 = {
+    .Equalizer_EqualizerBox = {
         .class_ = 0x01680001,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4327,7 +4327,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_33 = { 0x00 },
     },
 
-    .vC_e26 = {
+    .Equalizer_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = 27,
@@ -4429,7 +4429,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .High_text_2 = ALIGNED_STRING("HIGH"),
 
-    .vC_e33 = {
+    .Equalizer_Line_5 = {
         .class_ = 0x0160002E,
         .super = 26,
         .sub = NAKA_NONE,
@@ -4441,7 +4441,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .vC_e34 = {
+    .Equalizer_Line_6 = {
         .class_ = 0x0160002E,
         .super = 26,
         .sub = NAKA_NONE,
@@ -4506,7 +4506,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .AcousticIllusion_text = "ACOUSTIC ILLUSION",
 
-    .vE_e1 = {
+    .AcousticIllusion_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4525,7 +4525,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vE_e2 = {
+    .AcousticIllusion_AcIndexWideES_2 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4574,7 +4574,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Level_text = "LEVEL",
 
-    .vE_e5 = {
+    .AcousticIllusion_AccIll = {
         .class_ = 0x01680008,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4589,7 +4589,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .vE_e6 = {
+    .AcousticIllusion_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4601,7 +4601,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C1,
     },
 
-    .vE_e7 = {
+    .AcousticIllusion_Box_2 = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = 8,
@@ -4643,7 +4643,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Type_text_6 = "TYPE:",
 
-    .vE_e10 = {
+    .AcousticIllusion_IvSdacc = {
         .class_ = 0x01680015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4653,7 +4653,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .vE_e11 = {
+    .AcousticIllusion_IvIntEasySet = {
         .class_ = 0x01600063,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4743,7 +4743,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .EDIT_str = ALIGNED_STRING("EDIT"),
 
-    .v80_e4 = {
+    .SequencerMenu_IvExitMode = {
         .class_ = 0x01600048,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4754,7 +4754,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .mode = 0x01800001,
     },
 
-    .v80_e5 = {
+    .SequencerMenu_AcIndexEditSw = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4772,7 +4772,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0001,
     },
 
-    .v80_e6 = {
+    .SequencerMenu_AcIndexEditSw_2 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4790,7 +4790,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0002,
     },
 
-    .v80_e7 = {
+    .SequencerMenu_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4802,7 +4802,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C1,
     },
 
-    .v80_e8 = {
+    .SequencerMenu_SngSel = {
         .class_ = 0x0168000A,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4818,7 +4818,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_35 = { 0x00 },
     },
 
-    .v80_e9 = {
+    .SequencerMenu_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4836,7 +4836,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x01280030,
     },
 
-    .v80_e10 = {
+    .SequencerMenu_AcLanguageText_2 = {
         .class_ = 0x01600066,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4910,7 +4910,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Meas_text = ALIGNED_STRING("MEAS"),
 
-    .v81_e2 = {
+    .SequencerPlay_IvTrackSwitch = {
         .class_ = 0x0160005B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4942,7 +4942,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .CycPlySw_stron = ALIGNED_STRING("CYCLE:ON"),
 
-    .v81_e4 = {
+    .SequencerPlay_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4969,7 +4969,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v81_e6 = {
+    .SequencerPlay_Box_2 = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = 7,
@@ -4981,7 +4981,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C1,
     },
 
-    .v81_e7 = {
+    .SequencerPlay_TrTransposeBox = {
         .class_ = 0x01600067,
         .super = 6,
         .sub = NAKA_NONE,
@@ -4997,7 +4997,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .align = 0x0000,
     },
 
-    .v81_e8 = {
+    .SequencerPlay_TrChordBox = {
         .class_ = 0x01600068,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5043,7 +5043,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .TimeSig_text = "TIME SIG. =",
 
-    .v81_e11 = {
+    .SequencerPlay_AcTempoBox = {
         .class_ = 0x01600014,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5059,7 +5059,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .align = 0x0000,
     },
 
-    .v81_e12 = {
+    .SequencerPlay_AcIndexEditSw = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5077,7 +5077,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0001,
     },
 
-    .v81_e13 = {
+    .SequencerPlay_AcIndexEditSw_2 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5095,7 +5095,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0002,
     },
 
-    .v81_e14 = {
+    .SequencerPlay_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5129,7 +5129,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Mixer_text = "MIXER",
 
-    .v81_e16 = {
+    .SequencerPlay_IvPlayExit = {
         .class_ = 0x01680010,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5194,7 +5194,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Medley_text = ALIGNED_STRING("MEDLEY"),
 
-    .v81_e20 = {
+    .SngSelWin1_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 18,
         .sub = 21,
@@ -5243,7 +5243,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003DF48,
     },
 
-    .v81_e23 = {
+    .SngSelWin2_AcIndexEditSw = {
         .class_ = 0x0160001F,
         .super = 22,
         .sub = NAKA_NONE,
@@ -5261,7 +5261,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0001,
     },
 
-    .v81_e24 = {
+    .SngSelWin2_AcIndexEditSw_2 = {
         .class_ = 0x0160001F,
         .super = 22,
         .sub = NAKA_NONE,
@@ -5294,7 +5294,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Song_text_3 = ALIGNED_STRING("SONG"),
 
-    .v81_e26 = {
+    .SngSelWin2_IvShowHide = {
         .class_ = 0x01600064,
         .super = 22,
         .sub = NAKA_NONE,
@@ -5305,7 +5305,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x01280023,
     },
 
-    .v81_e27 = {
+    .SngSelWin2_SngSel2 = {
         .class_ = 0x0168000B,
         .super = 22,
         .sub = NAKA_NONE,
@@ -5333,7 +5333,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .CyclePlay_text = ALIGNED_STRING("CYCLE PLAY"),
 
-    .v82_e1 = {
+    .CyclePlay_SqplyVal = {
         .class_ = 0x01680006,
         .super = 0,
         .sub = 2,
@@ -5348,7 +5348,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v82_e2 = {
+    .CyclePlay_PsEditBox = {
         .class_ = 0x01600015,
         .super = 1,
         .sub = NAKA_NONE,
@@ -5386,7 +5386,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .CurrentMeasure_text = "CURRENT MEASURE :",
 
-    .v82_e4 = {
+    .CyclePlay_PsEditBox_2 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5409,7 +5409,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v82_e4_caption = "CYCLE :",
 
-    .v82_e5 = {
+    .CyclePlay_PsEditBox_3 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5432,7 +5432,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v82_e5_caption = "CYCLE END MEASURE   :",
 
-    .v82_e6 = {
+    .CyclePlay_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5499,7 +5499,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Song_text_4 = ALIGNED_STRING("SONG"),
 
-    .v83_e2 = {
+    .EasyRecord_IvExitMode = {
         .class_ = 0x01600048,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5533,7 +5533,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Naming_text = ALIGNED_STRING("NAMING"),
 
-    .v83_e4 = {
+    .EasyRecord_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5545,7 +5545,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C1,
     },
 
-    .v83_e5 = {
+    .EasyRecord_AcIndexEditSw = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5563,7 +5563,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0001,
     },
 
-    .v83_e6 = {
+    .EasyRecord_AcIndexEditSw_2 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5581,7 +5581,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0002,
     },
 
-    .v83_e7 = {
+    .EasyRecord_SngSel = {
         .class_ = 0x0168000A,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5597,7 +5597,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_35 = { 0x00 },
     },
 
-    .v83_e8 = {
+    .EasyRecord_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5616,7 +5616,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001D,
     },
 
-    .v83_e9 = {
+    .EasyRecord_PsTrackSwitch = {
         .class_ = 0x01600058,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5630,7 +5630,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .recplay = 0x0003DF60,
     },
 
-    .v83_e10 = {
+    .EasyRecord_PsTrackSwitch_2 = {
         .class_ = 0x01600058,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5644,7 +5644,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .recplay = 0x0003DF66,
     },
 
-    .v83_e11 = {
+    .EasyRecord_PsTrackSwitch_3 = {
         .class_ = 0x01600058,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5658,7 +5658,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .recplay = 0x0003DF6C,
     },
 
-    .v83_e12 = {
+    .EasyRecord_PsTrackSwitch_4 = {
         .class_ = 0x01600058,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5672,7 +5672,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .recplay = 0x0003DF72,
     },
 
-    .v83_e13 = {
+    .EasyRecord_PsTrackSwitch_5 = {
         .class_ = 0x01600058,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5686,7 +5686,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .recplay = 0x0003DF78,
     },
 
-    .v83_e14 = {
+    .EasyRecord_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5704,7 +5704,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x01280032,
     },
 
-    .v83_e15 = {
+    .EasyRecord_AcLanguageText_2 = {
         .class_ = 0x01600066,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5965,7 +5965,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .RealtimeRecord_text = "REALTIME RECORD",
 
-    .v85_e1 = {
+    .RealtimeRecord_IvTrackSwitch = {
         .class_ = 0x0160005B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5975,7 +5975,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 32, 0, 63, 31 },
     },
 
-    .v85_e2 = {
+    .RealtimeRecord_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = 3,
@@ -6029,7 +6029,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .CycRecSw_stron = ALIGNED_STRING("CYCLE:ON"),
 
-    .v85_e5 = {
+    .RealtimeRecord_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6076,7 +6076,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v85_e8 = {
+    .RealtimeRecord_Box_2 = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6133,7 +6133,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Memory_text = ALIGNED_STRING("MEMORY   ="),
 
-    .v85_e12 = {
+    .RealtimeRecord_AcTempoBox = {
         .class_ = 0x01600014,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6149,7 +6149,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .align = 0x0000,
     },
 
-    .v85_e13 = {
+    .RealtimeRecord_TrTransposeBox = {
         .class_ = 0x01600067,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6165,7 +6165,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .align = 0x0000,
     },
 
-    .v85_e14 = {
+    .RealtimeRecord_TrChordBox = {
         .class_ = 0x01600068,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6181,7 +6181,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .align = 0x0000,
     },
 
-    .v85_e15 = {
+    .RealtimeRecord_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6196,7 +6196,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .w101_text = "%",
 
-    .v85_e16 = {
+    .RealtimeRecord_SngSel = {
         .class_ = 0x0168000A,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6212,7 +6212,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_35 = { 0x00 },
     },
 
-    .v85_e17 = {
+    .RealtimeRecord_AcFuncEditSw_2 = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6248,7 +6248,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .CLEAR_str = "CLEAR",
 
-    .v85_e21 = {
+    .RealtimeRecord_IvRealRecExit = {
         .class_ = 0x01680019,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6273,7 +6273,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003DF9C,
     },
 
-    .v85_e23 = {
+    .CycClrSw_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 22,
         .sub = NAKA_NONE,
@@ -6325,7 +6325,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .RealtimeRecord_text_2 = "REALTIME RECORD",
 
-    .v86_e1 = {
+    .RealtimeRecord_SqplyVal = {
         .class_ = 0x01680006,
         .super = 0,
         .sub = 2,
@@ -6340,7 +6340,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v86_e2 = {
+    .RealtimeRecord_PsEditBox = {
         .class_ = 0x01600015,
         .super = 1,
         .sub = NAKA_NONE,
@@ -6378,7 +6378,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .CurrentMeasure_text_2 = "CURRENT MEASURE :",
 
-    .v86_e4 = {
+    .RealtimeRecord_PsEditBox_2 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6401,7 +6401,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v86_e4_caption = "CYCLE END MEASURE   :",
 
-    .v86_e5 = {
+    .RealtimeRecord_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6455,7 +6455,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .MetCycRecSw_stron = "~a4ON",
 
-    .v86_e8 = {
+    .RealtimeRecord_AcFuncEditSw_3 = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = 9,
@@ -6489,7 +6489,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Clear_text_2 = "CLEAR",
 
-    .v86_e10 = {
+    .RealtimeRecord_PsEditBox_3 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6530,7 +6530,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .PunchRecord_text_2 = ALIGNED_STRING("PUNCH RECORD"),
 
-    .v87_e1 = {
+    .PunchRecord_IvTrackSwitch = {
         .class_ = 0x0160005B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6540,7 +6540,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .v87_e2 = {
+    .PunchRecord_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6567,7 +6567,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v87_e4 = {
+    .PunchRecord_Box_2 = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6624,7 +6624,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Memory_text_2 = ALIGNED_STRING("MEMORY   ="),
 
-    .v87_e8 = {
+    .PunchRecord_AcTempoBox = {
         .class_ = 0x01600014,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6640,7 +6640,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .align = 0x0000,
     },
 
-    .v87_e9 = {
+    .PunchRecord_TrTransposeBox = {
         .class_ = 0x01600067,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6656,7 +6656,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .align = 0x0000,
     },
 
-    .v87_e10 = {
+    .PunchRecord_TrChordBox = {
         .class_ = 0x01600068,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6672,7 +6672,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .align = 0x0000,
     },
 
-    .v87_e11 = {
+    .PunchRecord_Label = {
         .class_ = 0x0160002B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6687,7 +6687,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .w122_text = "%",
 
-    .v87_e12 = {
+    .PunchRecord_SngSel = {
         .class_ = 0x0168000A,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6762,7 +6762,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Meas_text_2 = ALIGNED_STRING("MEAS"),
 
-    .v87_e16 = {
+    .PunchRecord_AcIndexEditSw = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6780,7 +6780,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0001,
     },
 
-    .v87_e17 = {
+    .PunchRecord_AcIndexEditSw_2 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6798,7 +6798,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0002,
     },
 
-    .v87_e18 = {
+    .PunchRecord_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6832,7 +6832,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Mixer_text_3 = "MIXER",
 
-    .v87_e20 = {
+    .PunchRecord_IvPunchExit = {
         .class_ = 0x01680016,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6842,7 +6842,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 32, 0, 63, 31 },
     },
 
-    .v87_e21 = {
+    .PunchRecord_AcFuncEditSw_2 = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6909,7 +6909,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .AutoPunchRecord_text = "AUTO PUNCH RECORD",
 
-    .v88_e1 = {
+    .AutoPunchRecord_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6978,7 +6978,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .MetPunchmSw_stron = "~a4ON",
 
-    .v88_e5 = {
+    .AutoPunchRecord_SqplyVal = {
         .class_ = 0x01680006,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6993,7 +6993,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v88_e6 = {
+    .AutoPunchRecord_PsEditBox = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7016,7 +7016,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v88_e6_caption = "PUNCH IN MEASURE  :",
 
-    .v88_e7 = {
+    .AutoPunchRecord_PsEditBox_2 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7039,7 +7039,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v88_e7_caption = "PUNCH OUT MEASURE :",
 
-    .v88_e8 = {
+    .AutoPunchRecord_PsEditBox_3 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7062,7 +7062,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v88_e8_caption = "MEASURE COUNT IN  :",
 
-    .v88_e9 = {
+    .AutoPunchRecord_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7080,7 +7080,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x01280044,
     },
 
-    .v88_e10 = {
+    .AutoPunchRecord_IvAutoPunchExit = {
         .class_ = 0x01680017,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7126,7 +7126,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .PanelWrite_text_3 = "PANEL WRITE",
 
-    .v8D_e1 = {
+    .PanelWrite_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7145,7 +7145,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001D,
     },
 
-    .v8D_e2 = {
+    .PanelWrite_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7163,7 +7163,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x01280034,
     },
 
-    .v8D_e3 = {
+    .PanelWrite_IvPnlWrExit = {
         .class_ = 0x01680012,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7191,7 +7191,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .SongClear_text_2 = ALIGNED_STRING("SONG CLEAR"),
 
-    .v90_e1 = {
+    .SongClear_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7225,7 +7225,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .SongNoAll_text = "SONG NO/ALL",
 
-    .v90_e3 = {
+    .SongClear_SqedtVal3 = {
         .class_ = 0x01680007,
         .super = 0,
         .sub = 4,
@@ -7238,7 +7238,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001C,
     },
 
-    .v90_e4 = {
+    .SongClear_Box = {
         .class_ = 0x01600031,
         .super = 3,
         .sub = 5,
@@ -7250,7 +7250,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C1,
     },
 
-    .v90_e5 = {
+    .SongClear_Label = {
         .class_ = 0x0160002B,
         .super = 4,
         .sub = NAKA_NONE,
@@ -7265,7 +7265,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .w146_text = ":",
 
-    .v90_e6 = {
+    .SongClear_Label_2 = {
         .class_ = 0x0160002B,
         .super = 4,
         .sub = NAKA_NONE,
@@ -7280,7 +7280,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .w147_text = "%",
 
-    .v90_e7 = {
+    .SongClear_MsgToTtl = {
         .class_ = 0x0168000E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7290,7 +7290,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 60, 84, 259, 131 },
     },
 
-    .v90_e8 = {
+    .SongClear_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7324,7 +7324,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003DFD0,
     },
 
-    .v90_e10 = {
+    .SoclSureDisp_Box = {
         .class_ = 0x01600031,
         .super = 9,
         .sub = NAKA_NONE,
@@ -7359,7 +7359,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .NO_str = ALIGNED_STRING("NO"),
 
-    .v90_e12 = {
+    .SoclSureDisp_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 9,
         .sub = NAKA_NONE,
@@ -7378,7 +7378,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001D,
     },
 
-    .v90_e13 = {
+    .SoclSureDisp_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 9,
         .sub = NAKA_NONE,
@@ -7389,7 +7389,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .screen = 0x00900000,
     },
 
-    .v90_e14 = {
+    .SoclSureDisp_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 9,
         .sub = NAKA_NONE,
@@ -7407,7 +7407,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128002F,
     },
 
-    .v90_e15 = {
+    .SoclSureDisp_AcLanguageText_2 = {
         .class_ = 0x01600066,
         .super = 9,
         .sub = NAKA_NONE,
@@ -7425,7 +7425,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128002E,
     },
 
-    .v90_e16 = {
+    .SoclSureDisp_AcLanguageText_3 = {
         .class_ = 0x01600066,
         .super = 9,
         .sub = NAKA_NONE,
@@ -7461,7 +7461,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .SongTrackCopy_text_2 = "SONG/TRACK COPY",
 
-    .v91_e1 = {
+    .SongTrackCopy_SqedtVal2 = {
         .class_ = 0x01680003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7474,7 +7474,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001C,
     },
 
-    .v91_e2 = {
+    .SongTrackCopy_SqedtFix = {
         .class_ = 0x01680004,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7487,7 +7487,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C1,
     },
 
-    .v91_e3 = {
+    .SongTrackCopy_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7506,7 +7506,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000E,
     },
 
-    .v91_e4 = {
+    .SongTrackCopy_AcIndexWideES_2 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7525,7 +7525,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .v91_e5 = {
+    .SongTrackCopy_AcIndexWideES_3 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7544,7 +7544,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000E,
     },
 
-    .v91_e6 = {
+    .SongTrackCopy_AcIndexWideES_4 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7563,7 +7563,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .v91_e7 = {
+    .SongTrackCopy_IvSongCopyExit = {
         .class_ = 0x01680005,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7573,7 +7573,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .v91_e8 = {
+    .SongTrackCopy_IvSongCopyExit_2 = {
         .class_ = 0x01680005,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7583,7 +7583,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .v91_e9 = {
+    .SongTrackCopy_MsgToTtl = {
         .class_ = 0x0168000E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7593,7 +7593,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 60, 84, 259, 131 },
     },
 
-    .v91_e10 = {
+    .SongTrackCopy_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7627,7 +7627,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003DFDE,
     },
 
-    .v91_e12 = {
+    .SngCpSureDisp_Box = {
         .class_ = 0x01600031,
         .super = 11,
         .sub = NAKA_NONE,
@@ -7639,7 +7639,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C3,
     },
 
-    .v91_e13 = {
+    .SngCpSureDisp_Box_2 = {
         .class_ = 0x01600031,
         .super = 11,
         .sub = NAKA_NONE,
@@ -7651,7 +7651,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .v91_e14 = {
+    .SngCpSureDisp_Box_3 = {
         .class_ = 0x01600031,
         .super = 11,
         .sub = NAKA_NONE,
@@ -7686,7 +7686,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .NO_str_2 = ALIGNED_STRING("NO"),
 
-    .v91_e16 = {
+    .SngCpSureDisp_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 11,
         .sub = NAKA_NONE,
@@ -7697,7 +7697,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .screen = 0x00910000,
     },
 
-    .v91_e17 = {
+    .SngCpSureDisp_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 11,
         .sub = NAKA_NONE,
@@ -7716,7 +7716,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001D,
     },
 
-    .v91_e18 = {
+    .SngCpSureDisp_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 11,
         .sub = NAKA_NONE,
@@ -7752,7 +7752,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Edit_text = ALIGNED_STRING("EDIT"),
 
-    .v93_e1 = {
+    .Edit_IvPageControl = {
         .class_ = 0x01600028,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7780,7 +7780,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .pagemax = 0x0002,
     },
 
-    .v93_e3 = {
+    .Edit_IvPageControl_2 = {
         .class_ = 0x01600028,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7792,7 +7792,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .window = 0x00930011,
     },
 
-    .v93_e4 = {
+    .Edit_IvExitMode = {
         .class_ = 0x01600048,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7803,7 +7803,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .mode = 0x01800008,
     },
 
-    .v93_e5 = {
+    .Edit_IvShowHide = {
         .class_ = 0x01600064,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8097,7 +8097,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Copy_text = ALIGNED_STRING("COPY"),
 
-    .v93_e19 = {
+    .Copy_Line = {
         .class_ = 0x0160002E,
         .super = 18,
         .sub = NAKA_NONE,
@@ -8193,7 +8193,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Measure_text_4 = "MEASURE",
 
-    .v93_e24 = {
+    .SQEMENU_2_Line = {
         .class_ = 0x0160002E,
         .super = 17,
         .sub = NAKA_NONE,
@@ -8205,7 +8205,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .v93_e25 = {
+    .SQEMENU_2_Line_2 = {
         .class_ = 0x0160002E,
         .super = 17,
         .sub = NAKA_NONE,
@@ -8250,7 +8250,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .PartSelect_text = ALIGNED_STRING(":PART SELECT"),
 
-    .v94_e2 = {
+    .NoteEdit_IvTrackSwitch = {
         .class_ = 0x0160005B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8260,7 +8260,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .v94_e3 = {
+    .NoteEdit_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8296,7 +8296,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .NoteEdit_text_3 = "NOTE EDIT",
 
-    .v95_e1 = {
+    .NoteEdit_AcIndexEditSw = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8314,7 +8314,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000E,
     },
 
-    .v95_e2 = {
+    .NoteEdit_AcIndexEditSw_2 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8332,7 +8332,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000E,
     },
 
-    .v95_e3 = {
+    .NoteEdit_AcIndexEditSw_3 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8350,7 +8350,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .v95_e4 = {
+    .NoteEdit_AcIndexEditSw_4 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8368,7 +8368,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .v95_e5 = {
+    .NoteEdit_AcIndexEditSw_5 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8386,7 +8386,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .v95_e6 = {
+    .NoteEdit_AcIndexEditSw_6 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8509,7 +8509,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Cursor_text = ALIGNED_STRING("CURSOR"),
 
-    .v95_e14 = {
+    .NoteEdit_AcIndexEditSw_7 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8527,7 +8527,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000C,
     },
 
-    .v95_e15 = {
+    .NoteEdit_AcIndexEditSw_8 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8560,7 +8560,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Graph_text = "GRAPH",
 
-    .v95_e17 = {
+    .NoteEdit_NoteEditBox = {
         .class_ = 0x0168000C,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8575,7 +8575,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v95_e18 = {
+    .NoteEdit_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8587,7 +8587,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C1,
     },
 
-    .v95_e19 = {
+    .NoteEdit_VwUserBitmap = {
         .class_ = 0x01600069,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8609,7 +8609,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x01280029,
     },
 
-    .v95_e21 = {
+    .NoteEdit_AcIndexEditSw_9 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8642,7 +8642,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Ers_text = "ERS",
 
-    .v95_e23 = {
+    .NoteEdit_AcIndexEditSw_10 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8675,7 +8675,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Play_text = ALIGNED_STRING("PLAY"),
 
-    .v95_e25 = {
+    .NoteEdit_AcIndexEditSw_11 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8693,7 +8693,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000F,
     },
 
-    .v95_e26 = {
+    .NoteEdit_AcIndexEditSw_12 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8744,7 +8744,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .CurrentMeasure_text_4 = "CURRENT MEASURE :",
 
-    .v96_e2 = {
+    .CyclePlay_AcIndexWideES_2 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8778,7 +8778,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Value_text_5 = "VALUE",
 
-    .v96_e4 = {
+    .CyclePlay_SqplyVal_2 = {
         .class_ = 0x01680006,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8793,7 +8793,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v96_e5 = {
+    .CyclePlay_PsEditBox_4 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8816,7 +8816,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v96_e5_caption = ALIGNED_STRING("SOLO :"),
 
-    .v96_e6 = {
+    .CyclePlay_PsEditBox_5 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8839,7 +8839,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v96_e6_caption = "CYCLE START MEASURE :",
 
-    .v96_e7 = {
+    .CyclePlay_PsEditBox_6 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8895,7 +8895,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .PartSelect_text_2 = ALIGNED_STRING(":PART SELECT"),
 
-    .v97_e2 = {
+    .DrumEdit_IvTrackSwitch = {
         .class_ = 0x0160005B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8905,7 +8905,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .v97_e3 = {
+    .DrumEdit_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8941,7 +8941,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .DrumEdit_text_3 = "DRUM EDIT",
 
-    .v98_e1 = {
+    .DrumEdit_AcIndexEditSw = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8959,7 +8959,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000E,
     },
 
-    .v98_e2 = {
+    .DrumEdit_AcIndexEditSw_2 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8977,7 +8977,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000E,
     },
 
-    .v98_e3 = {
+    .DrumEdit_AcIndexEditSw_3 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8995,7 +8995,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .v98_e4 = {
+    .DrumEdit_AcIndexEditSw_4 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9013,7 +9013,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .v98_e5 = {
+    .DrumEdit_AcIndexEditSw_5 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9031,7 +9031,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .v98_e6 = {
+    .DrumEdit_AcIndexEditSw_6 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9154,7 +9154,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Sound_text = "SOUND",
 
-    .v98_e14 = {
+    .DrumEdit_Box = {
         .class_ = 0x01600031,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9166,7 +9166,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C1,
     },
 
-    .v98_e15 = {
+    .DrumEdit_NoteEditBox = {
         .class_ = 0x0168000C,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9181,7 +9181,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v98_e16 = {
+    .DrumEdit_VwUserBitmap = {
         .class_ = 0x01600069,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9203,7 +9203,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128002B,
     },
 
-    .v98_e18 = {
+    .DrumEdit_AcIndexEditSw_7 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = 19,
@@ -9236,7 +9236,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Enter_text = "ENTER",
 
-    .v98_e20 = {
+    .DrumEdit_AcIndexEditSw_8 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9269,7 +9269,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Ers_text_2 = "ERS",
 
-    .v98_e22 = {
+    .DrumEdit_AcIndexEditSw_9 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9302,7 +9302,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Play_text_2 = ALIGNED_STRING("PLAY"),
 
-    .v98_e24 = {
+    .DrumEdit_AcIndexEditSw_10 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9320,7 +9320,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000F,
     },
 
-    .v98_e25 = {
+    .DrumEdit_AcIndexEditSw_11 = {
         .class_ = 0x0160001F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9371,7 +9371,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .CurrentMeasure_text_5 = "CURRENT MEASURE :",
 
-    .v99_e2 = {
+    .CyclePlay_AcIndexWideES_3 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9405,7 +9405,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Value_text_6 = "VALUE",
 
-    .v99_e4 = {
+    .CyclePlay_SqplyVal_3 = {
         .class_ = 0x01680006,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9420,7 +9420,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v99_e5 = {
+    .CyclePlay_PsEditBox_7 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9443,7 +9443,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v99_e5_caption = ALIGNED_STRING("SOLO :"),
 
-    .v99_e6 = {
+    .CyclePlay_PsEditBox_8 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9466,7 +9466,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v99_e6_caption = "CYCLE START MEASURE :",
 
-    .v99_e7 = {
+    .CyclePlay_PsEditBox_9 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9507,7 +9507,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .TrackClear_text_2 = "TRACK CLEAR",
 
-    .v9A_e1 = {
+    .TrackClear_IvTrackSwitch = {
         .class_ = 0x0160005B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9517,7 +9517,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .v9A_e2 = {
+    .TrackClear_MsgToTtl = {
         .class_ = 0x0168000E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9527,7 +9527,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 60, 84, 259, 131 },
     },
 
-    .v9A_e3 = {
+    .TrackClear_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9545,7 +9545,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x01280035,
     },
 
-    .v9A_e4 = {
+    .TrackClear_AcLanguageText_2 = {
         .class_ = 0x01600066,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9563,7 +9563,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x01280036,
     },
 
-    .v9A_e5 = {
+    .TrackClear_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9597,7 +9597,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E042,
     },
 
-    .v9A_e7 = {
+    .TrkClrSureDisp_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 6,
         .sub = NAKA_NONE,
@@ -9639,7 +9639,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .NO_str_3 = ALIGNED_STRING("NO"),
 
-    .v9A_e9 = {
+    .TrkClrSureDisp_VwBox = {
         .class_ = 0x01600011,
         .super = 6,
         .sub = NAKA_NONE,
@@ -9652,7 +9652,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .index = 0xFFFF,
     },
 
-    .v9A_e10 = {
+    .TrkClrSureDisp_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 6,
         .sub = NAKA_NONE,
@@ -9663,7 +9663,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .screen = 0x009A0000,
     },
 
-    .v9A_e11 = {
+    .TrkClrSureDisp_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 6,
         .sub = NAKA_NONE,
@@ -9681,7 +9681,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128002F,
     },
 
-    .v9A_e12 = {
+    .TrkClrSureDisp_AcLanguageText_2 = {
         .class_ = 0x01600066,
         .super = 6,
         .sub = NAKA_NONE,
@@ -9699,7 +9699,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128002E,
     },
 
-    .v9A_e13 = {
+    .TrkClrSureDisp_AcLanguageText_3 = {
         .class_ = 0x01600066,
         .super = 6,
         .sub = NAKA_NONE,
@@ -9735,7 +9735,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .TrackMerge_text_2 = "TRACK MERGE",
 
-    .v9B_e1 = {
+    .TrackMerge_Line = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9747,7 +9747,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .v9B_e2 = {
+    .TrackMerge_Line_2 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9759,7 +9759,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .v9B_e3 = {
+    .TrackMerge_Line_3 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9771,7 +9771,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .v9B_e4 = {
+    .TrackMerge_Line_4 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9783,7 +9783,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .v9B_e5 = {
+    .TrackMerge_Line_5 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9795,7 +9795,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .v9B_e6 = {
+    .TrackMerge_Line_6 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9807,7 +9807,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0000,
     },
 
-    .v9B_e7 = {
+    .TrackMerge_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9841,7 +9841,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Value_text_7 = "VALUE",
 
-    .v9B_e9 = {
+    .TrackMerge_SqedtVal = {
         .class_ = 0x01680002,
         .super = 0,
         .sub = 10,
@@ -9856,7 +9856,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v9B_e10 = {
+    .TrackMerge_PsEditBox = {
         .class_ = 0x01600015,
         .super = 9,
         .sub = NAKA_NONE,
@@ -9879,7 +9879,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9B_e10_caption = "TRACK :",
 
-    .v9B_e11 = {
+    .TrackMerge_PsEditBox_2 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9902,7 +9902,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9B_e11_caption = "TRACK :",
 
-    .v9B_e12 = {
+    .TrackMerge_PsEditBox_3 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9925,7 +9925,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9B_e12_caption = "TRACK :",
 
-    .v9B_e13 = {
+    .TrackMerge_MsgToTtl = {
         .class_ = 0x0168000E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9935,7 +9935,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 60, 84, 259, 131 },
     },
 
-    .v9B_e14 = {
+    .TrackMerge_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -9969,7 +9969,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E056,
     },
 
-    .v9B_e16 = {
+    .TrkMrgSureDisp_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 15,
         .sub = NAKA_NONE,
@@ -10011,7 +10011,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .NO_str_4 = ALIGNED_STRING("NO"),
 
-    .v9B_e18 = {
+    .TrkMrgSureDisp_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 15,
         .sub = NAKA_NONE,
@@ -10022,7 +10022,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .screen = 0x009B0000,
     },
 
-    .v9B_e19 = {
+    .TrkMrgSureDisp_Box = {
         .class_ = 0x01600031,
         .super = 15,
         .sub = NAKA_NONE,
@@ -10034,7 +10034,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .v9B_e20 = {
+    .TrkMrgSureDisp_Box_2 = {
         .class_ = 0x01600031,
         .super = 15,
         .sub = NAKA_NONE,
@@ -10046,7 +10046,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .v9B_e21 = {
+    .TrkMrgSureDisp_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 15,
         .sub = NAKA_NONE,
@@ -10097,7 +10097,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Value_text_8 = "VALUE",
 
-    .v9C_e2 = {
+    .Quantize_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10116,7 +10116,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .v9C_e3 = {
+    .Quantize_SqedtVal = {
         .class_ = 0x01680002,
         .super = 0,
         .sub = 4,
@@ -10131,7 +10131,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v9C_e4 = {
+    .Quantize_PsEditBox = {
         .class_ = 0x01600015,
         .super = 3,
         .sub = NAKA_NONE,
@@ -10154,7 +10154,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9C_e4_caption = ALIGNED_STRING("LAST MEASURE :"),
 
-    .v9C_e5 = {
+    .Quantize_PsEditBox_2 = {
         .class_ = 0x01600015,
         .super = 3,
         .sub = 6,
@@ -10177,7 +10177,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9C_e5_caption = "WINDOW  :",
 
-    .v9C_e6 = {
+    .Quantize_Label = {
         .class_ = 0x0160002B,
         .super = 5,
         .sub = NAKA_NONE,
@@ -10192,7 +10192,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .w240_text = "%",
 
-    .v9C_e7 = {
+    .Quantize_PsEditBox_3 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10215,7 +10215,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9C_e7_caption = ALIGNED_STRING("TRACK        :"),
 
-    .v9C_e8 = {
+    .Quantize_PsEditBox_4 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10238,7 +10238,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9C_e8_caption = ALIGNED_STRING("FIRST MEASURE:"),
 
-    .v9C_e9 = {
+    .Quantize_PsEditBox_5 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10261,7 +10261,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9C_e9_caption = ALIGNED_STRING("VALUE        :"),
 
-    .v9C_e10 = {
+    .Quantize_PsEditBox_6 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = 11,
@@ -10284,7 +10284,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9C_e10_caption = "STRENGTH:",
 
-    .v9C_e11 = {
+    .Quantize_Label_2 = {
         .class_ = 0x0160002B,
         .super = 10,
         .sub = NAKA_NONE,
@@ -10299,7 +10299,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .w245_text = "%",
 
-    .v9C_e12 = {
+    .Quantize_MsgToTtl = {
         .class_ = 0x0168000E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10309,7 +10309,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 60, 84, 259, 131 },
     },
 
-    .v9C_e13 = {
+    .Quantize_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10366,7 +10366,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .NO_str_5 = ALIGNED_STRING("NO"),
 
-    .v9C_e16 = {
+    .QtzSureDisp_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 14,
         .sub = NAKA_NONE,
@@ -10385,7 +10385,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001D,
     },
 
-    .v9C_e17 = {
+    .QtzSureDisp_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 14,
         .sub = NAKA_NONE,
@@ -10396,7 +10396,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .screen = 0x009C0000,
     },
 
-    .v9C_e18 = {
+    .QtzSureDisp_Box = {
         .class_ = 0x01600031,
         .super = 14,
         .sub = NAKA_NONE,
@@ -10408,7 +10408,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .v9C_e19 = {
+    .QtzSureDisp_Box_2 = {
         .class_ = 0x01600031,
         .super = 14,
         .sub = NAKA_NONE,
@@ -10420,7 +10420,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .v9C_e20 = {
+    .QtzSureDisp_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 14,
         .sub = NAKA_NONE,
@@ -10471,7 +10471,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Value_text_9 = "VALUE",
 
-    .v9D_e2 = {
+    .Transpose_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10490,7 +10490,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .v9D_e3 = {
+    .Transpose_SqedtVal = {
         .class_ = 0x01680002,
         .super = 0,
         .sub = 4,
@@ -10505,7 +10505,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v9D_e4 = {
+    .Transpose_PsEditBox = {
         .class_ = 0x01600015,
         .super = 3,
         .sub = NAKA_NONE,
@@ -10528,7 +10528,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9D_e4_caption = ALIGNED_STRING("LAST MEASURE :"),
 
-    .v9D_e5 = {
+    .Transpose_PsEditBox_2 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10551,7 +10551,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9D_e5_caption = ALIGNED_STRING("TRACK        :"),
 
-    .v9D_e6 = {
+    .Transpose_PsEditBox_3 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10574,7 +10574,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9D_e6_caption = ALIGNED_STRING("FIRST MEASURE:"),
 
-    .v9D_e7 = {
+    .Transpose_PsEditBox_4 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10597,7 +10597,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9D_e7_caption = "TRANSPOSE   :",
 
-    .v9D_e8 = {
+    .Transpose_MsgToTtl = {
         .class_ = 0x0168000E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10607,7 +10607,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 60, 84, 259, 131 },
     },
 
-    .v9D_e9 = {
+    .Transpose_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10664,7 +10664,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .NO_str_6 = ALIGNED_STRING("NO"),
 
-    .v9D_e12 = {
+    .TrnsSureDisp_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 10,
         .sub = NAKA_NONE,
@@ -10683,7 +10683,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001D,
     },
 
-    .v9D_e13 = {
+    .TrnsSureDisp_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 10,
         .sub = NAKA_NONE,
@@ -10694,7 +10694,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .screen = 0x009D0000,
     },
 
-    .v9D_e14 = {
+    .TrnsSureDisp_Box = {
         .class_ = 0x01600031,
         .super = 10,
         .sub = NAKA_NONE,
@@ -10706,7 +10706,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .v9D_e15 = {
+    .TrnsSureDisp_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 10,
         .sub = NAKA_NONE,
@@ -10757,7 +10757,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Value_text_10 = "VALUE",
 
-    .v9E_e2 = {
+    .VelocityChange_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10776,7 +10776,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .v9E_e3 = {
+    .VelocityChange_SqedtVal = {
         .class_ = 0x01680002,
         .super = 0,
         .sub = 4,
@@ -10791,7 +10791,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v9E_e4 = {
+    .VelocityChange_PsEditBox = {
         .class_ = 0x01600015,
         .super = 3,
         .sub = NAKA_NONE,
@@ -10814,7 +10814,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9E_e4_caption = ALIGNED_STRING("LAST MEASURE :"),
 
-    .v9E_e5 = {
+    .VelocityChange_PsEditBox_2 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10837,7 +10837,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9E_e5_caption = ALIGNED_STRING("TRACK        :"),
 
-    .v9E_e6 = {
+    .VelocityChange_PsEditBox_3 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10860,7 +10860,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9E_e6_caption = ALIGNED_STRING("FIRST MEASURE:"),
 
-    .v9E_e7 = {
+    .VelocityChange_PsEditBox_4 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10883,7 +10883,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9E_e7_caption = "VELOCITY    :",
 
-    .v9E_e8 = {
+    .VelocityChange_MsgToTtl = {
         .class_ = 0x0168000E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10893,7 +10893,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 60, 84, 259, 131 },
     },
 
-    .v9E_e9 = {
+    .VelocityChange_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -10950,7 +10950,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .NO_str_7 = ALIGNED_STRING("NO"),
 
-    .v9E_e12 = {
+    .VeloSureDisp_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 10,
         .sub = NAKA_NONE,
@@ -10969,7 +10969,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001D,
     },
 
-    .v9E_e13 = {
+    .VeloSureDisp_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 10,
         .sub = NAKA_NONE,
@@ -10980,7 +10980,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .screen = 0x009E0000,
     },
 
-    .v9E_e14 = {
+    .VeloSureDisp_Box = {
         .class_ = 0x01600031,
         .super = 10,
         .sub = NAKA_NONE,
@@ -10992,7 +10992,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .v9E_e15 = {
+    .VeloSureDisp_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 10,
         .sub = NAKA_NONE,
@@ -11028,7 +11028,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .NoteChange_text_2 = "NOTE CHANGE",
 
-    .v9F_e1 = {
+    .NoteChange_SqedtVal = {
         .class_ = 0x01680002,
         .super = 0,
         .sub = 2,
@@ -11043,7 +11043,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .v9F_e2 = {
+    .NoteChange_PsEditBox = {
         .class_ = 0x01600015,
         .super = 1,
         .sub = 3,
@@ -11081,7 +11081,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ChangeTo_text = "CHANGE TO",
 
-    .v9F_e4 = {
+    .NoteChange_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11115,7 +11115,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Value_text_11 = "VALUE",
 
-    .v9F_e6 = {
+    .NoteChange_PsEditBox_2 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11138,7 +11138,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9F_e6_caption = ALIGNED_STRING("TRACK        :"),
 
-    .v9F_e7 = {
+    .NoteChange_PsEditBox_3 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = 8,
@@ -11176,7 +11176,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .TargetNote_text = "TARGET NOTE",
 
-    .v9F_e9 = {
+    .NoteChange_Line = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11188,7 +11188,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .v9F_e10 = {
+    .NoteChange_Line_2 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11200,7 +11200,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .v9F_e11 = {
+    .NoteChange_Line_3 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11212,7 +11212,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .v9F_e12 = {
+    .NoteChange_Line_4 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11224,7 +11224,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0001,
     },
 
-    .v9F_e13 = {
+    .NoteChange_Line_5 = {
         .class_ = 0x0160002E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11236,7 +11236,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .linemode = 0x0000,
     },
 
-    .v9F_e14 = {
+    .NoteChange_PsEditBox_4 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11259,7 +11259,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9F_e14_caption = ALIGNED_STRING("FIRST MEASURE:"),
 
-    .v9F_e15 = {
+    .NoteChange_PsEditBox_5 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11282,7 +11282,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .v9F_e15_caption = ALIGNED_STRING("LAST MEASURE :"),
 
-    .v9F_e16 = {
+    .NoteChange_MsgToTtl = {
         .class_ = 0x0168000E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11292,7 +11292,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 60, 84, 259, 131 },
     },
 
-    .v9F_e17 = {
+    .NoteChange_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11349,7 +11349,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .NO_str_8 = ALIGNED_STRING("NO"),
 
-    .v9F_e20 = {
+    .NoteSureDisp_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 18,
         .sub = NAKA_NONE,
@@ -11368,7 +11368,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001D,
     },
 
-    .v9F_e21 = {
+    .NoteSureDisp_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 18,
         .sub = NAKA_NONE,
@@ -11379,7 +11379,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .screen = 0x009F0000,
     },
 
-    .v9F_e22 = {
+    .NoteSureDisp_Box = {
         .class_ = 0x01600031,
         .super = 18,
         .sub = NAKA_NONE,
@@ -11391,7 +11391,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .v9F_e23 = {
+    .NoteSureDisp_Box_2 = {
         .class_ = 0x01600031,
         .super = 18,
         .sub = NAKA_NONE,
@@ -11403,7 +11403,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .v9F_e24 = {
+    .NoteSureDisp_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 18,
         .sub = NAKA_NONE,
@@ -11439,7 +11439,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .AdvanceDelay_text_2 = "ADVANCE/DELAY",
 
-    .vA0_e1 = {
+    .AdvanceDelay_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11473,7 +11473,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Value_text_12 = "VALUE",
 
-    .vA0_e3 = {
+    .AdvanceDelay_SqedtVal = {
         .class_ = 0x01680002,
         .super = 0,
         .sub = 4,
@@ -11488,7 +11488,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .vA0_e4 = {
+    .AdvanceDelay_PsEditBox = {
         .class_ = 0x01600015,
         .super = 3,
         .sub = NAKA_NONE,
@@ -11511,7 +11511,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vA0_e4_caption = ALIGNED_STRING("FIRST MEASURE:"),
 
-    .vA0_e5 = {
+    .AdvanceDelay_PsEditBox_2 = {
         .class_ = 0x01600015,
         .super = 3,
         .sub = NAKA_NONE,
@@ -11534,7 +11534,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vA0_e5_caption = ALIGNED_STRING("LAST MEASURE :"),
 
-    .vA0_e6 = {
+    .AdvanceDelay_PsEditBox_3 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11557,7 +11557,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vA0_e6_caption = ALIGNED_STRING("TRACK        :"),
 
-    .vA0_e7 = {
+    .AdvanceDelay_PsEditBox_4 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11580,7 +11580,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vA0_e7_caption = ALIGNED_STRING("ADVANCE/DELAY:"),
 
-    .vA0_e8 = {
+    .AdvanceDelay_MsgToTtl = {
         .class_ = 0x0168000E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11590,7 +11590,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 60, 84, 259, 131 },
     },
 
-    .vA0_e9 = {
+    .AdvanceDelay_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11624,7 +11624,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E0CA,
     },
 
-    .vA0_e11 = {
+    .AdvSureDisp_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 10,
         .sub = NAKA_NONE,
@@ -11666,7 +11666,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .NO_str_9 = ALIGNED_STRING("NO"),
 
-    .vA0_e13 = {
+    .AdvSureDisp_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 10,
         .sub = NAKA_NONE,
@@ -11677,7 +11677,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .screen = 0x00A00000,
     },
 
-    .vA0_e14 = {
+    .AdvSureDisp_Box = {
         .class_ = 0x01600031,
         .super = 10,
         .sub = NAKA_NONE,
@@ -11689,7 +11689,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .vA0_e15 = {
+    .AdvSureDisp_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 10,
         .sub = NAKA_NONE,
@@ -11725,7 +11725,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .MeasureErase_text = "MEASURE ERASE",
 
-    .vA1_e1 = {
+    .MeasureErase_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11759,7 +11759,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Value_text_13 = "VALUE",
 
-    .vA1_e3 = {
+    .MeasureErase_SqedtVal = {
         .class_ = 0x01680002,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11774,7 +11774,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .vA1_e4 = {
+    .MeasureErase_PsEditBox = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11797,7 +11797,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vA1_e4_caption = ALIGNED_STRING("TRACK        :"),
 
-    .vA1_e5 = {
+    .MeasureErase_PsEditBox_2 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11820,7 +11820,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vA1_e5_caption = ALIGNED_STRING("FIRST MEASURE:"),
 
-    .vA1_e6 = {
+    .MeasureErase_PsEditBox_3 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11843,7 +11843,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vA1_e6_caption = ALIGNED_STRING("LAST MEASURE :"),
 
-    .vA1_e7 = {
+    .MeasureErase_PsEditBox_4 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11866,7 +11866,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vA1_e7_caption = ALIGNED_STRING("ERASE DATA   :"),
 
-    .vA1_e8 = {
+    .MeasureErase_MsgToTtl = {
         .class_ = 0x0168000E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11876,7 +11876,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 60, 84, 259, 131 },
     },
 
-    .vA1_e9 = {
+    .MeasureErase_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -11933,7 +11933,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .NO_str_10 = ALIGNED_STRING("NO"),
 
-    .vA1_e12 = {
+    .MersSureDisp_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 10,
         .sub = NAKA_NONE,
@@ -11952,7 +11952,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001D,
     },
 
-    .vA1_e13 = {
+    .MersSureDisp_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 10,
         .sub = NAKA_NONE,
@@ -11963,7 +11963,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .screen = 0x00A10000,
     },
 
-    .vA1_e14 = {
+    .MersSureDisp_Box = {
         .class_ = 0x01600031,
         .super = 10,
         .sub = NAKA_NONE,
@@ -11975,7 +11975,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .vA1_e15 = {
+    .MersSureDisp_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 10,
         .sub = NAKA_NONE,
@@ -12011,7 +12011,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .MeasureCopy_text = ALIGNED_STRING("MEASURE COPY"),
 
-    .vA2_e1 = {
+    .MeasureCopy_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12030,7 +12030,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000E,
     },
 
-    .vA2_e2 = {
+    .MeasureCopy_AcIndexWideES_2 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12049,7 +12049,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vA2_e3 = {
+    .MeasureCopy_AcIndexWideES_3 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12068,7 +12068,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000E,
     },
 
-    .vA2_e4 = {
+    .MeasureCopy_AcIndexWideES_4 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12087,7 +12087,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vA2_e5 = {
+    .MeasureCopy_SqedtVal2 = {
         .class_ = 0x01680003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12100,7 +12100,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001C,
     },
 
-    .vA2_e6 = {
+    .MeasureCopy_SqedtFix = {
         .class_ = 0x01680004,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12113,7 +12113,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C1,
     },
 
-    .vA2_e7 = {
+    .MeasureCopy_MsgToTtl = {
         .class_ = 0x0168000E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12123,7 +12123,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 60, 84, 259, 131 },
     },
 
-    .vA2_e8 = {
+    .MeasureCopy_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12157,7 +12157,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E0EE,
     },
 
-    .vA2_e10 = {
+    .McpSureDisp_Box = {
         .class_ = 0x01600031,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12169,7 +12169,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C3,
     },
 
-    .vA2_e11 = {
+    .McpSureDisp_Box_2 = {
         .class_ = 0x01600031,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12181,7 +12181,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .vA2_e12 = {
+    .McpSureDisp_Box_3 = {
         .class_ = 0x01600031,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12193,7 +12193,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .vA2_e13 = {
+    .McpSureDisp_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12204,7 +12204,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .screen = 0x00A20000,
     },
 
-    .vA2_e14 = {
+    .McpSureDisp_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12223,7 +12223,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001D,
     },
 
-    .vA2_e15 = {
+    .McpSureDisp_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12297,7 +12297,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Value_text_14 = "VALUE",
 
-    .vA3_e2 = {
+    .MeasureDelete_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12316,7 +12316,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vA3_e3 = {
+    .MeasureDelete_SqedtVal = {
         .class_ = 0x01680002,
         .super = 0,
         .sub = 4,
@@ -12331,7 +12331,7 @@ const naka_effects_seq_t naka_effects_seq_data
         ._pad_31 = { 0x00 },
     },
 
-    .vA3_e4 = {
+    .MeasureDelete_PsEditBox = {
         .class_ = 0x01600015,
         .super = 3,
         .sub = NAKA_NONE,
@@ -12354,7 +12354,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vA3_e4_caption = ALIGNED_STRING("FIRST MEASURE:"),
 
-    .vA3_e5 = {
+    .MeasureDelete_PsEditBox_2 = {
         .class_ = 0x01600015,
         .super = 3,
         .sub = NAKA_NONE,
@@ -12377,7 +12377,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vA3_e5_caption = ALIGNED_STRING("LAST MEASURE :"),
 
-    .vA3_e6 = {
+    .MeasureDelete_PsEditBox_3 = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12400,7 +12400,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vA3_e6_caption = ALIGNED_STRING("TRACK      :"),
 
-    .vA3_e7 = {
+    .MeasureDelete_MsgToTtl = {
         .class_ = 0x0168000E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12410,7 +12410,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 60, 84, 259, 131 },
     },
 
-    .vA3_e8 = {
+    .MeasureDelete_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12467,7 +12467,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .NO_str_12 = ALIGNED_STRING("NO"),
 
-    .vA3_e11 = {
+    .MdelSureDisp_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12486,7 +12486,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001D,
     },
 
-    .vA3_e12 = {
+    .MdelSureDisp_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12497,7 +12497,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .screen = 0x00A30000,
     },
 
-    .vA3_e13 = {
+    .MdelSureDisp_Box = {
         .class_ = 0x01600031,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12509,7 +12509,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .vA3_e14 = {
+    .MdelSureDisp_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12545,7 +12545,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .MeasureInsert_text = ALIGNED_STRING("MEASURE INSERT"),
 
-    .vA4_e1 = {
+    .MeasureInsert_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12564,7 +12564,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000E,
     },
 
-    .vA4_e2 = {
+    .MeasureInsert_AcIndexWideES_2 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12583,7 +12583,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vA4_e3 = {
+    .MeasureInsert_AcIndexWideES_3 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12602,7 +12602,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000E,
     },
 
-    .vA4_e4 = {
+    .MeasureInsert_AcIndexWideES_4 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12621,7 +12621,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x0003,
     },
 
-    .vA4_e5 = {
+    .MeasureInsert_SqedtVal2 = {
         .class_ = 0x01680003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12634,7 +12634,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001C,
     },
 
-    .vA4_e6 = {
+    .MeasureInsert_SqedtFix = {
         .class_ = 0x01680004,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12647,7 +12647,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C1,
     },
 
-    .vA4_e7 = {
+    .MeasureInsert_MsgToTtl = {
         .class_ = 0x0168000E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12657,7 +12657,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .rect = { 60, 84, 259, 131 },
     },
 
-    .vA4_e8 = {
+    .MeasureInsert_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12691,7 +12691,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E110,
     },
 
-    .vA4_e10 = {
+    .MinsSureDisp_Box = {
         .class_ = 0x01600031,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12703,7 +12703,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x00C3,
     },
 
-    .vA4_e11 = {
+    .MinsSureDisp_Box_2 = {
         .class_ = 0x01600031,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12715,7 +12715,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .vA4_e12 = {
+    .MinsSureDisp_Box_3 = {
         .class_ = 0x01600031,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12727,7 +12727,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .border = 0x0000,
     },
 
-    .vA4_e13 = {
+    .MinsSureDisp_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12738,7 +12738,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .screen = 0x00A40000,
     },
 
-    .vA4_e14 = {
+    .MinsSureDisp_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12757,7 +12757,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128001D,
     },
 
-    .vA4_e15 = {
+    .MinsSureDisp_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 9,
         .sub = NAKA_NONE,
@@ -12816,7 +12816,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .MetronomeBalance_text = "METRONOME BALANCE",
 
-    .vAB_e1 = {
+    .MetronomeBalance_AcMixerVol = {
         .class_ = 0x0160003C,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12849,7 +12849,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Entertainer_text = "ENTERTAINER",
 
-    .vD6_e1 = {
+    .EnterTainerScr_AcEntertainerGridBox = {
         .class_ = 0x01680009,
         .super = 0,
         .sub = 2,
@@ -12903,7 +12903,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .DiskLoad_str = "DISK LOAD",
 
-    .vD6_e7 = {
+    .EnterTainerScr_AcIndexWideES = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12922,7 +12922,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .style = 0x000E,
     },
 
-    .vD6_e8 = {
+    .EnterTainerScr_AcIndexWideES_2 = {
         .class_ = 0x01600022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12971,7 +12971,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .Value_text_15 = "VALUE",
 
-    .vD6_e11 = {
+    .EnterTainerScr_IvExitMode = {
         .class_ = 0x01600048,
         .super = 0,
         .sub = NAKA_NONE,
@@ -12982,7 +12982,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .mode = 0x01800001,
     },
 
-    .vD6_e12 = {
+    .EnterTainerScr_AcFuncToggle = {
         .class_ = 0x01600044,
         .super = 0,
         .sub = NAKA_NONE,
@@ -13002,7 +13002,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vD6_e12_stron = "MUTE KEYS:ON ",
 
-    .vD6_e13 = {
+    .EnterTainerScr_AcPanicEditSw = {
         .class_ = 0x01680018,
         .super = 0,
         .sub = NAKA_NONE,
@@ -13055,7 +13055,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .HelpFunction_text = "HELP FUNCTION",
 
-    .vE7_e1 = {
+    .HelpFunction_IvExitMode = {
         .class_ = 0x01600048,
         .super = 0,
         .sub = NAKA_NONE,
@@ -13084,7 +13084,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x01280041,
     },
 
-    .vE7_e3 = {
+    .HelpMenu_IvShowHide = {
         .class_ = 0x01600064,
         .super = 2,
         .sub = NAKA_NONE,
@@ -13095,7 +13095,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128003C,
     },
 
-    .vE7_e4 = {
+    .HelpFunction_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -13129,7 +13129,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E140,
     },
 
-    .vE7_e6 = {
+    .HelpNotXWin_AcIndexWideToggle = {
         .class_ = 0x0168000F,
         .super = 5,
         .sub = NAKA_NONE,
@@ -13152,7 +13152,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vE7_e6_stron = "ENGLISH",
 
-    .vE7_e7 = {
+    .HelpNotXWin_AcIndexWideToggle_2 = {
         .class_ = 0x0168000F,
         .super = 5,
         .sub = NAKA_NONE,
@@ -13175,7 +13175,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vE7_e7_stron = ALIGNED_STRING("GERMAN"),
 
-    .vE7_e8 = {
+    .HelpNotXWin_AcIndexWideToggle_3 = {
         .class_ = 0x0168000F,
         .super = 5,
         .sub = NAKA_NONE,
@@ -13198,7 +13198,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vE7_e8_stron = ALIGNED_STRING("FRENCH"),
 
-    .vE7_e9 = {
+    .HelpNotXWin_AcIndexWideToggle_4 = {
         .class_ = 0x0168000F,
         .super = 5,
         .sub = NAKA_NONE,
@@ -13236,7 +13236,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E150,
     },
 
-    .vE7_e11 = {
+    .HelpXWin_AcIndexWideToggle = {
         .class_ = 0x0168000F,
         .super = 10,
         .sub = NAKA_NONE,
@@ -13259,7 +13259,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .vE7_e11_stron = "ENGLISH",
 
-    .vE7_e12 = {
+    .HelpXWin_AcIndexWideToggle_2 = {
         .class_ = 0x0168000F,
         .super = 10,
         .sub = NAKA_NONE,
@@ -13283,7 +13283,7 @@ const naka_effects_seq_t naka_effects_seq_data
     .vE7_e12_stron = "SPANISH",
 
 /* 16-bit pair 0x0008, 0x00EC (8, 236); the generator had made it a pointer to 0xEC0008, 4 bytes into StyleSong_Titles[512] -- not a pointer */
-    .vE7_e13 = {
+    .HelpXWin_AcIndexWideToggle_3 = {
         .class_ = 0x0168000F,
         .super = 10,
         .sub = NAKA_NONE,
@@ -13320,7 +13320,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .window = 0x0003E15A,
     },
 
-    .vE7_e15 = {
+    .HelpSwTtl1Scr_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 14,
         .sub = NAKA_NONE,
@@ -13364,7 +13364,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128003D,
     },
 
-    .vE7_e18 = {
+    .HelpLang1_IvShowHide = {
         .class_ = 0x01600064,
         .super = 17,
         .sub = NAKA_NONE,
@@ -13390,7 +13390,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E162,
     },
 
-    .vE7_e20 = {
+    .HelpLang2P1_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 19,
         .sub = NAKA_NONE,
@@ -13423,7 +13423,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E16A,
     },
 
-    .vE7_e22 = {
+    .HelpLang2P2_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 21,
         .sub = NAKA_NONE,
@@ -13455,7 +13455,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .window = 0x0003E16E,
     },
 
-    .vE7_e24 = {
+    .HelpSwTtl2Scr_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 23,
         .sub = NAKA_NONE,
@@ -13481,7 +13481,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128003B,
     },
 
-    .vE7_e26 = {
+    .HelpSwTtl2Scr_IvPageControl = {
         .class_ = 0x01600028,
         .super = 23,
         .sub = NAKA_NONE,
@@ -13493,7 +13493,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .window = 0x00E70013,
     },
 
-    .vE7_e27 = {
+    .HelpSwTtl2Scr_IvPageControl_2 = {
         .class_ = 0x01600028,
         .super = 23,
         .sub = NAKA_NONE,
@@ -13521,7 +13521,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .pagemax = 0x0002,
     },
 
-    .vE7_e29 = {
+    .HelpSwTtl2Scr_IvShowHide = {
         .class_ = 0x01600064,
         .super = 23,
         .sub = NAKA_NONE,
@@ -13547,7 +13547,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E178,
     },
 
-    .vE7_e31 = {
+    .HelpLang3P1_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 30,
         .sub = NAKA_NONE,
@@ -13580,7 +13580,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E180,
     },
 
-    .vE7_e33 = {
+    .HelpLang3P2_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 32,
         .sub = NAKA_NONE,
@@ -13613,7 +13613,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E188,
     },
 
-    .vE7_e35 = {
+    .HelpLang3P3_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 34,
         .sub = NAKA_NONE,
@@ -13645,7 +13645,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .window = 0x0003E18C,
     },
 
-    .vE7_e37 = {
+    .HelpSwTtl3Scr_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 36,
         .sub = NAKA_NONE,
@@ -13687,7 +13687,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .pagemax = 0x0003,
     },
 
-    .vE7_e40 = {
+    .HelpSwTtl3Scr_IvPageControl = {
         .class_ = 0x01600028,
         .super = 36,
         .sub = NAKA_NONE,
@@ -13699,7 +13699,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .window = NAKA_ADDR(NakaData_Tables2Pad2),
     },
 
-    .vE7_e41 = {
+    .HelpSwTtl3Scr_IvPageControl_2 = {
         .class_ = 0x01600028,
         .super = 36,
         .sub = NAKA_NONE,
@@ -13711,7 +13711,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .window = 0x00E70020,
     },
 
-    .vE7_e42 = {
+    .HelpSwTtl3Scr_IvPageControl_3 = {
         .class_ = 0x01600028,
         .super = 36,
         .sub = NAKA_NONE,
@@ -13723,7 +13723,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .window = 0x00E70022,
     },
 
-    .vE7_e43 = {
+    .HelpSwTtl3Scr_IvShowHide = {
         .class_ = 0x01600064,
         .super = 36,
         .sub = NAKA_NONE,
@@ -13748,7 +13748,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .window = 0x0003E192,
     },
 
-    .vE7_e45 = {
+    .HelpSwTtl4Scr_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 44,
         .sub = NAKA_NONE,
@@ -13790,7 +13790,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x0128003B,
     },
 
-    .vE7_e48 = {
+    .HelpSwTtl4Scr_IvPageControl = {
         .class_ = 0x01600028,
         .super = 44,
         .sub = NAKA_NONE,
@@ -13802,7 +13802,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .window = 0x00E70035,
     },
 
-    .vE7_e49 = {
+    .HelpSwTtl4Scr_IvPageControl_2 = {
         .class_ = 0x01600028,
         .super = 44,
         .sub = NAKA_NONE,
@@ -13814,7 +13814,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .window = 0x00E70037,
     },
 
-    .vE7_e50 = {
+    .HelpSwTtl4Scr_IvPageControl_3 = {
         .class_ = 0x01600028,
         .super = 44,
         .sub = NAKA_NONE,
@@ -13826,7 +13826,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .window = 0x00E70039,
     },
 
-    .vE7_e51 = {
+    .HelpSwTtl4Scr_IvPageControl_4 = {
         .class_ = 0x01600028,
         .super = 44,
         .sub = NAKA_NONE,
@@ -13838,7 +13838,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .window = 0x00E7003B,
     },
 
-    .vE7_e52 = {
+    .HelpSwTtl4Scr_IvShowHide = {
         .class_ = 0x01600064,
         .super = 44,
         .sub = NAKA_NONE,
@@ -13864,7 +13864,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E19C,
     },
 
-    .vE7_e54 = {
+    .HelpLang4P1_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 53,
         .sub = NAKA_NONE,
@@ -13897,7 +13897,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E1A4,
     },
 
-    .vE7_e56 = {
+    .HelpLang4P2_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 55,
         .sub = NAKA_NONE,
@@ -13930,7 +13930,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E1AC,
     },
 
-    .vE7_e58 = {
+    .HelpLang4P3_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 57,
         .sub = NAKA_NONE,
@@ -13963,7 +13963,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .child = 0x0003E1B4,
     },
 
-    .vE7_e60 = {
+    .HelpLang4P4_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 59,
         .sub = NAKA_NONE,
@@ -13983,40 +13983,40 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ptrs_4 = {
         SELF(Reverb_TtlScreen),
-        SELF(vA_e1),
-        SELF(vA_e2),
-        SELF(vA_e3),
+        SELF(Reverb_AcIndexWideES),
+        SELF(Reverb_AcIndexWideES_2),
+        SELF(Reverb_AcIndexWideES_3),
         SELF(Type_Label),
         SELF(Parameter_Label),
         SELF(Value_Label),
-        SELF(vA_e7),
-        SELF(vA_e8),
+        SELF(Reverb_EffectBox),
+        SELF(Reverb_Box),
         SELF(Type_Label_2),
-        SELF(vA_e10),
-        SELF(vA_e11),
+        SELF(Reverb_IvIntEasySet),
+        SELF(Reverb_IvSdrev),
         0x00000000,
         SELF(DspEffect_TtlScreen),
         SELF(Type_Label_3),
-        SELF(vB_e2),
+        SELF(DspEffect_AcIndexWideES),
         SELF(Type_Label_4),
-        SELF(vB_e4),
-        SELF(vB_e5),
+        SELF(DspEffect_AcIndexWideES_2),
+        SELF(DspEffect_AcIndexWideES_3),
         SELF(Parameter_Label_2),
         SELF(Value_Label_2),
-        SELF(vB_e8),
-        SELF(vB_e9),
-        SELF(vB_e10),
-        SELF(vB_e11),
+        SELF(DspEffect_EffectBox),
+        SELF(DspEffect_Box),
+        SELF(DspEffect_IvIntEasySet),
+        SELF(DspEffect_IvSddsp),
         0x00000000,
         SELF(Equalizer_TtlScreen),
-        SELF(vC_e1),
-        SELF(vC_e2),
-        SELF(vC_e3),
-        SELF(vC_e4),
-        SELF(vC_e5),
-        SELF(vC_e6),
-        SELF(vC_e7),
-        SELF(vC_e8),
+        SELF(Equalizer_AcIndexEditSw),
+        SELF(Equalizer_AcIndexEditSw_2),
+        SELF(Equalizer_AcIndexEditSw_3),
+        SELF(Equalizer_AcIndexEditSw_4),
+        SELF(Equalizer_AcIndexEditSw_5),
+        SELF(Equalizer_AcIndexEditSw_6),
+        SELF(Equalizer_AcIndexEditSw_7),
+        SELF(Equalizer_AcIndexEditSw_8),
         SELF(Freq_Label),
         SELF(Gain_Label),
         SELF(Freq_Label_2),
@@ -14029,103 +14029,103 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(MidLow_Label),
         SELF(MidHigh_Label),
         SELF(High_Label),
-        SELF(vC_e21),
-        SELF(vC_e22),
-        SELF(vC_e23),
-        SELF(vC_e24),
-        SELF(vC_e25),
-        SELF(vC_e26),
+        SELF(Equalizer_Line),
+        SELF(Equalizer_Line_2),
+        SELF(Equalizer_Line_3),
+        SELF(Equalizer_Line_4),
+        SELF(Equalizer_EqualizerBox),
+        SELF(Equalizer_Box),
         SELF(FreqHz_Label),
         SELF(GainDB_Label),
         SELF(Low_Label_2),
         SELF(MidLow_Label_2),
         SELF(MidHigh_Label_2),
         SELF(High_Label_2),
-        SELF(vC_e33),
-        SELF(vC_e34),
+        SELF(Equalizer_Line_5),
+        SELF(Equalizer_Line_6),
         SELF(Freq_Label_5),
         SELF(EqOnOff),
         0x00000000,
         SELF(AcousticIllusion_TtlScreen),
-        SELF(vE_e1),
-        SELF(vE_e2),
+        SELF(AcousticIllusion_AcIndexWideES),
+        SELF(AcousticIllusion_AcIndexWideES_2),
         SELF(Type_Label_5),
         SELF(Level_Label),
-        SELF(vE_e5),
-        SELF(vE_e6),
-        SELF(vE_e7),
+        SELF(AcousticIllusion_AccIll),
+        SELF(AcousticIllusion_Box),
+        SELF(AcousticIllusion_Box_2),
         SELF(IllusionLevel_Label),
         SELF(Type_Label_6),
-        SELF(vE_e10),
-        SELF(vE_e11),
+        SELF(AcousticIllusion_IvSdacc),
+        SELF(AcousticIllusion_IvIntEasySet),
         0x00000000,
         SELF(SequencerMenu_TtlScreen),
         SELF(Create_AcTitleMenu),
         SELF(Song_Label),
         SELF(EDIT_AcModeMenu),
-        SELF(v80_e4),
-        SELF(v80_e5),
-        SELF(v80_e6),
-        SELF(v80_e7),
-        SELF(v80_e8),
-        SELF(v80_e9),
-        SELF(v80_e10),
+        SELF(SequencerMenu_IvExitMode),
+        SELF(SequencerMenu_AcIndexEditSw),
+        SELF(SequencerMenu_AcIndexEditSw_2),
+        SELF(SequencerMenu_Box),
+        SELF(SequencerMenu_SngSel),
+        SELF(SequencerMenu_AcLanguageText),
+        SELF(SequencerMenu_AcLanguageText_2),
         SELF(PanelWrite_AcTitleMenu),
         0x00000000,
         SELF(SequencerPlay_TtlScreen),
         SELF(Meas_Label),
-        SELF(v81_e2),
+        SELF(SequencerPlay_IvTrackSwitch),
         SELF(CycPlySw),
-        SELF(v81_e4),
+        SELF(SequencerPlay_Box),
         SELF(SqPlayGamen),
-        SELF(v81_e6),
-        SELF(v81_e7),
-        SELF(v81_e8),
+        SELF(SequencerPlay_Box_2),
+        SELF(SequencerPlay_TrTransposeBox),
+        SELF(SequencerPlay_TrChordBox),
         SELF(Measure_Label),
         SELF(TimeSig_Label),
-        SELF(v81_e11),
-        SELF(v81_e12),
-        SELF(v81_e13),
-        SELF(v81_e14),
+        SELF(SequencerPlay_AcTempoBox),
+        SELF(SequencerPlay_AcIndexEditSw),
+        SELF(SequencerPlay_AcIndexEditSw_2),
+        SELF(SequencerPlay_AcFuncEditSw),
         SELF(Mixer_Label),
-        SELF(v81_e16),
+        SELF(SequencerPlay_IvPlayExit),
         SELF(PlySngSel),
         SELF(SngSelWin1),
         SELF(Medley_AcTitleMenu),
-        SELF(v81_e20),
+        SELF(SngSelWin1_AcFuncEditSw),
         SELF(Song_Label_2),
         SELF(SngSelWin2),
-        SELF(v81_e23),
-        SELF(v81_e24),
+        SELF(SngSelWin2_AcIndexEditSw),
+        SELF(SngSelWin2_AcIndexEditSw_2),
         SELF(Song_Label_3),
-        SELF(v81_e26),
-        SELF(v81_e27),
+        SELF(SngSelWin2_IvShowHide),
+        SELF(SngSelWin2_SngSel2),
         0x00000000,
         SELF(CyclePlay_TtlScreen),
-        SELF(v82_e1),
-        SELF(v82_e2),
+        SELF(CyclePlay_SqplyVal),
+        SELF(CyclePlay_PsEditBox),
         SELF(CurrentMeasure_Label),
-        SELF(v82_e4),
-        SELF(v82_e5),
-        SELF(v82_e6),
+        SELF(CyclePlay_PsEditBox_2),
+        SELF(CyclePlay_PsEditBox_3),
+        SELF(CyclePlay_AcIndexWideES),
         SELF(Value_Label_3),
         0x00000000,
         SELF(EasyRecord_TtlScreen),
         SELF(Song_Label_4),
-        SELF(v83_e2),
+        SELF(EasyRecord_IvExitMode),
         SELF(Naming_AcTitleMenu),
-        SELF(v83_e4),
-        SELF(v83_e5),
-        SELF(v83_e6),
-        SELF(v83_e7),
-        SELF(v83_e8),
-        SELF(v83_e9),
-        SELF(v83_e10),
-        SELF(v83_e11),
-        SELF(v83_e12),
-        SELF(v83_e13),
-        SELF(v83_e14),
-        SELF(v83_e15),
+        SELF(EasyRecord_Box),
+        SELF(EasyRecord_AcIndexEditSw),
+        SELF(EasyRecord_AcIndexEditSw_2),
+        SELF(EasyRecord_SngSel),
+        SELF(EasyRecord_AcFuncEditSw),
+        SELF(EasyRecord_PsTrackSwitch),
+        SELF(EasyRecord_PsTrackSwitch_2),
+        SELF(EasyRecord_PsTrackSwitch_3),
+        SELF(EasyRecord_PsTrackSwitch_4),
+        SELF(EasyRecord_PsTrackSwitch_5),
+        SELF(EasyRecord_AcLanguageText),
+        SELF(EasyRecord_AcLanguageText_2),
         0x00000000,
         SELF(Create_TtlScreen),
         SELF(TrackAssign_AcTitleMenu),
@@ -14139,23 +14139,23 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(PunchRecord_AcTitleMenu),
         0x00000000,
         SELF(RealtimeRecord_TtlScreen),
-        SELF(v85_e1),
-        SELF(v85_e2),
+        SELF(RealtimeRecord_IvTrackSwitch),
+        SELF(RealtimeRecord_AcFuncEditSw),
         SELF(RecStop_Label),
         SELF(CycRecSw),
-        SELF(v85_e5),
+        SELF(RealtimeRecord_Box),
         SELF(MetRecSw),
         SELF(SqRealRecGamen),
-        SELF(v85_e8),
+        SELF(RealtimeRecord_Box_2),
         SELF(Measure_Label_2),
         SELF(TimeSig_Label_2),
         SELF(Memory_Label),
-        SELF(v85_e12),
-        SELF(v85_e13),
-        SELF(v85_e14),
-        SELF(v85_e15),
-        SELF(v85_e16),
-        SELF(v85_e17),
+        SELF(RealtimeRecord_AcTempoBox),
+        SELF(RealtimeRecord_TrTransposeBox),
+        SELF(RealtimeRecord_TrChordBox),
+        SELF(RealtimeRecord_Label),
+        SELF(RealtimeRecord_SngSel),
+        SELF(RealtimeRecord_AcFuncEditSw_2),
         SELF(Mixer_Label_2),
     },
 
@@ -14168,110 +14168,110 @@ const naka_effects_seq_t naka_effects_seq_data
     .field_6942 = 0x0003,
 
     .ptrs_5 = {
-        SELF(v85_e21),
+        SELF(RealtimeRecord_IvRealRecExit),
         SELF(CycClrSw),
-        SELF(v85_e23),
+        SELF(CycClrSw_AcFuncEditSw),
         SELF(Clear_Label),
         0x00000000,
         SELF(RealtimeRecord_TtlScreen_2),
-        SELF(v86_e1),
-        SELF(v86_e2),
+        SELF(RealtimeRecord_SqplyVal),
+        SELF(RealtimeRecord_PsEditBox),
         SELF(CurrentMeasure_Label_2),
-        SELF(v86_e4),
-        SELF(v86_e5),
+        SELF(RealtimeRecord_PsEditBox_2),
+        SELF(RealtimeRecord_AcIndexWideES),
         SELF(Value_Label_4),
         SELF(MetCycRecSw),
-        SELF(v86_e8),
+        SELF(RealtimeRecord_AcFuncEditSw_3),
         SELF(Clear_Label_2),
-        SELF(v86_e10),
+        SELF(RealtimeRecord_PsEditBox_3),
         0x00000000,
         SELF(PunchRecord_TtlScreen),
-        SELF(v87_e1),
-        SELF(v87_e2),
+        SELF(PunchRecord_IvTrackSwitch),
+        SELF(PunchRecord_Box),
         SELF(SqPunchGamen),
-        SELF(v87_e4),
+        SELF(PunchRecord_Box_2),
         SELF(Measure_Label_3),
         SELF(TimeSig_Label_3),
         SELF(Memory_Label_2),
-        SELF(v87_e8),
-        SELF(v87_e9),
-        SELF(v87_e10),
-        SELF(v87_e11),
-        SELF(v87_e12),
+        SELF(PunchRecord_AcTempoBox),
+        SELF(PunchRecord_TrTransposeBox),
+        SELF(PunchRecord_TrChordBox),
+        SELF(PunchRecord_Label),
+        SELF(PunchRecord_SngSel),
         SELF(MetPunchSw),
         SELF(PunchInOutSw),
         SELF(Meas_Label_2),
-        SELF(v87_e16),
-        SELF(v87_e17),
-        SELF(v87_e18),
+        SELF(PunchRecord_AcIndexEditSw),
+        SELF(PunchRecord_AcIndexEditSw_2),
+        SELF(PunchRecord_AcFuncEditSw),
         SELF(Mixer_Label_3),
-        SELF(v87_e20),
-        SELF(v87_e21),
+        SELF(PunchRecord_IvPunchExit),
+        SELF(PunchRecord_AcFuncEditSw_2),
         SELF(Auto_Label),
         SELF(Punch_Label),
         0x00000000,
         SELF(AutoPunchRecord_TtlScreen),
-        SELF(v88_e1),
+        SELF(AutoPunchRecord_AcIndexWideES),
         SELF(Meas_Label_3),
         SELF(CurrentMeasure_Label_3),
         SELF(MetPunchmSw),
-        SELF(v88_e5),
-        SELF(v88_e6),
-        SELF(v88_e7),
-        SELF(v88_e8),
-        SELF(v88_e9),
-        SELF(v88_e10),
+        SELF(AutoPunchRecord_SqplyVal),
+        SELF(AutoPunchRecord_PsEditBox),
+        SELF(AutoPunchRecord_PsEditBox_2),
+        SELF(AutoPunchRecord_PsEditBox_3),
+        SELF(AutoPunchRecord_AcLanguageText),
+        SELF(AutoPunchRecord_IvAutoPunchExit),
         SELF(AutoPunchRecord_TtlScreen_2),
         0x00000000,
         SELF(PanelWrite_TtlScreen),
-        SELF(v8D_e1),
-        SELF(v8D_e2),
-        SELF(v8D_e3),
+        SELF(PanelWrite_AcFuncEditSw),
+        SELF(PanelWrite_AcLanguageText),
+        SELF(PanelWrite_IvPnlWrExit),
         0x00000000,
         SELF(SongClear_TtlScreen),
-        SELF(v90_e1),
+        SELF(SongClear_AcIndexWideES),
         SELF(SongNoAll_Label),
-        SELF(v90_e3),
-        SELF(v90_e4),
-        SELF(v90_e5),
-        SELF(v90_e6),
-        SELF(v90_e7),
-        SELF(v90_e8),
+        SELF(SongClear_SqedtVal3),
+        SELF(SongClear_Box),
+        SELF(SongClear_Label),
+        SELF(SongClear_Label_2),
+        SELF(SongClear_MsgToTtl),
+        SELF(SongClear_AcFuncEditSw),
         SELF(SoclSureDisp),
-        SELF(v90_e10),
+        SELF(SoclSureDisp_Box),
         SELF(NO_AcScreenMenu),
-        SELF(v90_e12),
-        SELF(v90_e13),
-        SELF(v90_e14),
-        SELF(v90_e15),
-        SELF(v90_e16),
+        SELF(SoclSureDisp_AcFuncEditSw),
+        SELF(SoclSureDisp_IvExitScreen),
+        SELF(SoclSureDisp_AcLanguageText),
+        SELF(SoclSureDisp_AcLanguageText_2),
+        SELF(SoclSureDisp_AcLanguageText_3),
         0x00000000,
         SELF(SongTrackCopy_TtlScreen),
-        SELF(v91_e1),
-        SELF(v91_e2),
-        SELF(v91_e3),
-        SELF(v91_e4),
-        SELF(v91_e5),
-        SELF(v91_e6),
-        SELF(v91_e7),
-        SELF(v91_e8),
-        SELF(v91_e9),
-        SELF(v91_e10),
+        SELF(SongTrackCopy_SqedtVal2),
+        SELF(SongTrackCopy_SqedtFix),
+        SELF(SongTrackCopy_AcIndexWideES),
+        SELF(SongTrackCopy_AcIndexWideES_2),
+        SELF(SongTrackCopy_AcIndexWideES_3),
+        SELF(SongTrackCopy_AcIndexWideES_4),
+        SELF(SongTrackCopy_IvSongCopyExit),
+        SELF(SongTrackCopy_IvSongCopyExit_2),
+        SELF(SongTrackCopy_MsgToTtl),
+        SELF(SongTrackCopy_AcFuncEditSw),
         SELF(SngCpSureDisp),
-        SELF(v91_e12),
-        SELF(v91_e13),
-        SELF(v91_e14),
+        SELF(SngCpSureDisp_Box),
+        SELF(SngCpSureDisp_Box_2),
+        SELF(SngCpSureDisp_Box_3),
         SELF(NO_AcScreenMenu_2),
-        SELF(v91_e16),
-        SELF(v91_e17),
-        SELF(v91_e18),
+        SELF(SngCpSureDisp_IvExitScreen),
+        SELF(SngCpSureDisp_AcFuncEditSw),
+        SELF(SngCpSureDisp_AcLanguageText),
         0x00000000,
         SELF(Edit_TtlScreen),
-        SELF(v93_e1),
+        SELF(Edit_IvPageControl),
         SELF(EdMenuPage),
-        SELF(v93_e3),
-        SELF(v93_e4),
-        SELF(v93_e5),
+        SELF(Edit_IvPageControl_2),
+        SELF(Edit_IvExitMode),
+        SELF(Edit_IvShowHide),
         SELF(SQEMENU_1),
         SELF(NoteEdit_AcTitleMenu),
         SELF(DrumEdit_AcTitleMenu),
@@ -14285,26 +14285,26 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(AdvanceDelay_AcTitleMenu),
         SELF(SQEMENU_2),
         SELF(Copy_AcTitleMenu),
-        SELF(v93_e19),
+        SELF(Copy_Line),
         SELF(Erase_AcTitleMenu),
         SELF(Delete_AcTitleMenu),
         SELF(Insert_AcTitleMenu),
         SELF(Measure_Label_4),
-        SELF(v93_e24),
-        SELF(v93_e25),
+        SELF(SQEMENU_2_Line),
+        SELF(SQEMENU_2_Line_2),
         0x00000000,
         SELF(NoteEdit_TtlScreen),
         SELF(PartSelect_Label),
-        SELF(v94_e2),
-        SELF(v94_e3),
+        SELF(NoteEdit_IvTrackSwitch),
+        SELF(NoteEdit_AcLanguageText),
         0x00000000,
         SELF(NoteEdit_TtlScreen_2),
-        SELF(v95_e1),
-        SELF(v95_e2),
-        SELF(v95_e3),
-        SELF(v95_e4),
-        SELF(v95_e5),
-        SELF(v95_e6),
+        SELF(NoteEdit_AcIndexEditSw),
+        SELF(NoteEdit_AcIndexEditSw_2),
+        SELF(NoteEdit_AcIndexEditSw_3),
+        SELF(NoteEdit_AcIndexEditSw_4),
+        SELF(NoteEdit_AcIndexEditSw_5),
+        SELF(NoteEdit_AcIndexEditSw_6),
         SELF(Meas_Label_4),
         SELF(Pos_Label),
         SELF(Note_Label),
@@ -14312,41 +14312,41 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(Len_Label),
         SELF(Inc_Label),
         SELF(Cursor_Label),
-        SELF(v95_e14),
-        SELF(v95_e15),
+        SELF(NoteEdit_AcIndexEditSw_7),
+        SELF(NoteEdit_AcIndexEditSw_8),
         SELF(Graph_Label),
-        SELF(v95_e17),
-        SELF(v95_e18),
-        SELF(v95_e19),
+        SELF(NoteEdit_NoteEditBox),
+        SELF(NoteEdit_Box),
+        SELF(NoteEdit_VwUserBitmap),
         SELF(NTBitmap),
-        SELF(v95_e21),
+        SELF(NoteEdit_AcIndexEditSw_9),
         SELF(Ers_Label),
-        SELF(v95_e23),
+        SELF(NoteEdit_AcIndexEditSw_10),
         SELF(Play_Label),
-        SELF(v95_e25),
-        SELF(v95_e26),
+        SELF(NoteEdit_AcIndexEditSw_11),
+        SELF(NoteEdit_AcIndexEditSw_12),
         0x00000000,
         SELF(CyclePlay_TtlScreen_2),
         SELF(CurrentMeasure_Label_4),
-        SELF(v96_e2),
+        SELF(CyclePlay_AcIndexWideES_2),
         SELF(Value_Label_5),
-        SELF(v96_e4),
-        SELF(v96_e5),
-        SELF(v96_e6),
-        SELF(v96_e7),
+        SELF(CyclePlay_SqplyVal_2),
+        SELF(CyclePlay_PsEditBox_4),
+        SELF(CyclePlay_PsEditBox_5),
+        SELF(CyclePlay_PsEditBox_6),
         0x00000000,
         SELF(DrumEdit_TtlScreen),
         SELF(PartSelect_Label_2),
-        SELF(v97_e2),
-        SELF(v97_e3),
+        SELF(DrumEdit_IvTrackSwitch),
+        SELF(DrumEdit_AcLanguageText),
         0x00000000,
         SELF(DrumEdit_TtlScreen_2),
-        SELF(v98_e1),
-        SELF(v98_e2),
-        SELF(v98_e3),
-        SELF(v98_e4),
-        SELF(v98_e5),
-        SELF(v98_e6),
+        SELF(DrumEdit_AcIndexEditSw),
+        SELF(DrumEdit_AcIndexEditSw_2),
+        SELF(DrumEdit_AcIndexEditSw_3),
+        SELF(DrumEdit_AcIndexEditSw_4),
+        SELF(DrumEdit_AcIndexEditSw_5),
+        SELF(DrumEdit_AcIndexEditSw_6),
         SELF(Meas_Label_5),
         SELF(Pos_Label_2),
         SELF(Snd_Label),
@@ -14354,241 +14354,241 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(Inc_Label_2),
         SELF(Cursor_Label_2),
         SELF(Sound_Label),
-        SELF(v98_e14),
-        SELF(v98_e15),
-        SELF(v98_e16),
+        SELF(DrumEdit_Box),
+        SELF(DrumEdit_NoteEditBox),
+        SELF(DrumEdit_VwUserBitmap),
         SELF(DRBitmap),
-        SELF(v98_e18),
+        SELF(DrumEdit_AcIndexEditSw_7),
         SELF(Enter_Label),
-        SELF(v98_e20),
+        SELF(DrumEdit_AcIndexEditSw_8),
         SELF(Ers_Label_2),
-        SELF(v98_e22),
+        SELF(DrumEdit_AcIndexEditSw_9),
         SELF(Play_Label_2),
-        SELF(v98_e24),
-        SELF(v98_e25),
+        SELF(DrumEdit_AcIndexEditSw_10),
+        SELF(DrumEdit_AcIndexEditSw_11),
         0x00000000,
         SELF(CyclePlay_TtlScreen_3),
         SELF(CurrentMeasure_Label_5),
-        SELF(v99_e2),
+        SELF(CyclePlay_AcIndexWideES_3),
         SELF(Value_Label_6),
-        SELF(v99_e4),
-        SELF(v99_e5),
-        SELF(v99_e6),
-        SELF(v99_e7),
+        SELF(CyclePlay_SqplyVal_3),
+        SELF(CyclePlay_PsEditBox_7),
+        SELF(CyclePlay_PsEditBox_8),
+        SELF(CyclePlay_PsEditBox_9),
         0x00000000,
         SELF(TrackClear_TtlScreen),
-        SELF(v9A_e1),
-        SELF(v9A_e2),
-        SELF(v9A_e3),
-        SELF(v9A_e4),
-        SELF(v9A_e5),
+        SELF(TrackClear_IvTrackSwitch),
+        SELF(TrackClear_MsgToTtl),
+        SELF(TrackClear_AcLanguageText),
+        SELF(TrackClear_AcLanguageText_2),
+        SELF(TrackClear_AcFuncEditSw),
         SELF(TrkClrSureDisp),
-        SELF(v9A_e7),
+        SELF(TrkClrSureDisp_AcFuncEditSw),
         SELF(NO_AcScreenMenu_3),
-        SELF(v9A_e9),
-        SELF(v9A_e10),
-        SELF(v9A_e11),
-        SELF(v9A_e12),
-        SELF(v9A_e13),
+        SELF(TrkClrSureDisp_VwBox),
+        SELF(TrkClrSureDisp_IvExitScreen),
+        SELF(TrkClrSureDisp_AcLanguageText),
+        SELF(TrkClrSureDisp_AcLanguageText_2),
+        SELF(TrkClrSureDisp_AcLanguageText_3),
         0x00000000,
         SELF(TrackMerge_TtlScreen),
-        SELF(v9B_e1),
-        SELF(v9B_e2),
-        SELF(v9B_e3),
-        SELF(v9B_e4),
-        SELF(v9B_e5),
-        SELF(v9B_e6),
-        SELF(v9B_e7),
+        SELF(TrackMerge_Line),
+        SELF(TrackMerge_Line_2),
+        SELF(TrackMerge_Line_3),
+        SELF(TrackMerge_Line_4),
+        SELF(TrackMerge_Line_5),
+        SELF(TrackMerge_Line_6),
+        SELF(TrackMerge_AcIndexWideES),
         SELF(Value_Label_7),
-        SELF(v9B_e9),
-        SELF(v9B_e10),
-        SELF(v9B_e11),
-        SELF(v9B_e12),
-        SELF(v9B_e13),
-        SELF(v9B_e14),
+        SELF(TrackMerge_SqedtVal),
+        SELF(TrackMerge_PsEditBox),
+        SELF(TrackMerge_PsEditBox_2),
+        SELF(TrackMerge_PsEditBox_3),
+        SELF(TrackMerge_MsgToTtl),
+        SELF(TrackMerge_AcFuncEditSw),
         SELF(TrkMrgSureDisp),
-        SELF(v9B_e16),
+        SELF(TrkMrgSureDisp_AcFuncEditSw),
         SELF(NO_AcScreenMenu_4),
-        SELF(v9B_e18),
-        SELF(v9B_e19),
-        SELF(v9B_e20),
-        SELF(v9B_e21),
+        SELF(TrkMrgSureDisp_IvExitScreen),
+        SELF(TrkMrgSureDisp_Box),
+        SELF(TrkMrgSureDisp_Box_2),
+        SELF(TrkMrgSureDisp_AcLanguageText),
         0x00000000,
         SELF(Quantize_TtlScreen),
         SELF(Value_Label_8),
-        SELF(v9C_e2),
-        SELF(v9C_e3),
-        SELF(v9C_e4),
-        SELF(v9C_e5),
-        SELF(v9C_e6),
-        SELF(v9C_e7),
-        SELF(v9C_e8),
-        SELF(v9C_e9),
-        SELF(v9C_e10),
-        SELF(v9C_e11),
-        SELF(v9C_e12),
-        SELF(v9C_e13),
+        SELF(Quantize_AcIndexWideES),
+        SELF(Quantize_SqedtVal),
+        SELF(Quantize_PsEditBox),
+        SELF(Quantize_PsEditBox_2),
+        SELF(Quantize_Label),
+        SELF(Quantize_PsEditBox_3),
+        SELF(Quantize_PsEditBox_4),
+        SELF(Quantize_PsEditBox_5),
+        SELF(Quantize_PsEditBox_6),
+        SELF(Quantize_Label_2),
+        SELF(Quantize_MsgToTtl),
+        SELF(Quantize_AcFuncEditSw),
         SELF(QtzSureDisp),
         SELF(NO_AcScreenMenu_5),
-        SELF(v9C_e16),
-        SELF(v9C_e17),
-        SELF(v9C_e18),
-        SELF(v9C_e19),
-        SELF(v9C_e20),
+        SELF(QtzSureDisp_AcFuncEditSw),
+        SELF(QtzSureDisp_IvExitScreen),
+        SELF(QtzSureDisp_Box),
+        SELF(QtzSureDisp_Box_2),
+        SELF(QtzSureDisp_AcLanguageText),
         0x00000000,
         SELF(Transpose_TtlScreen),
         SELF(Value_Label_9),
-        SELF(v9D_e2),
-        SELF(v9D_e3),
-        SELF(v9D_e4),
-        SELF(v9D_e5),
-        SELF(v9D_e6),
-        SELF(v9D_e7),
-        SELF(v9D_e8),
-        SELF(v9D_e9),
+        SELF(Transpose_AcIndexWideES),
+        SELF(Transpose_SqedtVal),
+        SELF(Transpose_PsEditBox),
+        SELF(Transpose_PsEditBox_2),
+        SELF(Transpose_PsEditBox_3),
+        SELF(Transpose_PsEditBox_4),
+        SELF(Transpose_MsgToTtl),
+        SELF(Transpose_AcFuncEditSw),
         SELF(TrnsSureDisp),
         SELF(NO_AcScreenMenu_6),
-        SELF(v9D_e12),
-        SELF(v9D_e13),
-        SELF(v9D_e14),
-        SELF(v9D_e15),
+        SELF(TrnsSureDisp_AcFuncEditSw),
+        SELF(TrnsSureDisp_IvExitScreen),
+        SELF(TrnsSureDisp_Box),
+        SELF(TrnsSureDisp_AcLanguageText),
         0x00000000,
         SELF(VelocityChange_TtlScreen),
         SELF(Value_Label_10),
-        SELF(v9E_e2),
-        SELF(v9E_e3),
-        SELF(v9E_e4),
-        SELF(v9E_e5),
-        SELF(v9E_e6),
-        SELF(v9E_e7),
-        SELF(v9E_e8),
-        SELF(v9E_e9),
+        SELF(VelocityChange_AcIndexWideES),
+        SELF(VelocityChange_SqedtVal),
+        SELF(VelocityChange_PsEditBox),
+        SELF(VelocityChange_PsEditBox_2),
+        SELF(VelocityChange_PsEditBox_3),
+        SELF(VelocityChange_PsEditBox_4),
+        SELF(VelocityChange_MsgToTtl),
+        SELF(VelocityChange_AcFuncEditSw),
         SELF(VeloSureDisp),
         SELF(NO_AcScreenMenu_7),
-        SELF(v9E_e12),
-        SELF(v9E_e13),
-        SELF(v9E_e14),
-        SELF(v9E_e15),
+        SELF(VeloSureDisp_AcFuncEditSw),
+        SELF(VeloSureDisp_IvExitScreen),
+        SELF(VeloSureDisp_Box),
+        SELF(VeloSureDisp_AcLanguageText),
         0x00000000,
         SELF(NoteChange_TtlScreen),
-        SELF(v9F_e1),
-        SELF(v9F_e2),
+        SELF(NoteChange_SqedtVal),
+        SELF(NoteChange_PsEditBox),
         SELF(ChangeTo_Label),
-        SELF(v9F_e4),
+        SELF(NoteChange_AcIndexWideES),
         SELF(Value_Label_11),
-        SELF(v9F_e6),
-        SELF(v9F_e7),
+        SELF(NoteChange_PsEditBox_2),
+        SELF(NoteChange_PsEditBox_3),
         SELF(TargetNote_Label),
-        SELF(v9F_e9),
-        SELF(v9F_e10),
-        SELF(v9F_e11),
-        SELF(v9F_e12),
-        SELF(v9F_e13),
-        SELF(v9F_e14),
-        SELF(v9F_e15),
-        SELF(v9F_e16),
-        SELF(v9F_e17),
+        SELF(NoteChange_Line),
+        SELF(NoteChange_Line_2),
+        SELF(NoteChange_Line_3),
+        SELF(NoteChange_Line_4),
+        SELF(NoteChange_Line_5),
+        SELF(NoteChange_PsEditBox_4),
+        SELF(NoteChange_PsEditBox_5),
+        SELF(NoteChange_MsgToTtl),
+        SELF(NoteChange_AcFuncEditSw),
         SELF(NoteSureDisp),
         SELF(NO_AcScreenMenu_8),
-        SELF(v9F_e20),
-        SELF(v9F_e21),
-        SELF(v9F_e22),
-        SELF(v9F_e23),
-        SELF(v9F_e24),
+        SELF(NoteSureDisp_AcFuncEditSw),
+        SELF(NoteSureDisp_IvExitScreen),
+        SELF(NoteSureDisp_Box),
+        SELF(NoteSureDisp_Box_2),
+        SELF(NoteSureDisp_AcLanguageText),
         0x00000000,
         SELF(AdvanceDelay_TtlScreen),
-        SELF(vA0_e1),
+        SELF(AdvanceDelay_AcIndexWideES),
         SELF(Value_Label_12),
-        SELF(vA0_e3),
-        SELF(vA0_e4),
-        SELF(vA0_e5),
-        SELF(vA0_e6),
-        SELF(vA0_e7),
-        SELF(vA0_e8),
-        SELF(vA0_e9),
+        SELF(AdvanceDelay_SqedtVal),
+        SELF(AdvanceDelay_PsEditBox),
+        SELF(AdvanceDelay_PsEditBox_2),
+        SELF(AdvanceDelay_PsEditBox_3),
+        SELF(AdvanceDelay_PsEditBox_4),
+        SELF(AdvanceDelay_MsgToTtl),
+        SELF(AdvanceDelay_AcFuncEditSw),
         SELF(AdvSureDisp),
-        SELF(vA0_e11),
+        SELF(AdvSureDisp_AcFuncEditSw),
         SELF(NO_AcScreenMenu_9),
-        SELF(vA0_e13),
-        SELF(vA0_e14),
-        SELF(vA0_e15),
+        SELF(AdvSureDisp_IvExitScreen),
+        SELF(AdvSureDisp_Box),
+        SELF(AdvSureDisp_AcLanguageText),
         0x00000000,
         SELF(MeasureErase_TtlScreen),
-        SELF(vA1_e1),
+        SELF(MeasureErase_AcIndexWideES),
         SELF(Value_Label_13),
-        SELF(vA1_e3),
-        SELF(vA1_e4),
-        SELF(vA1_e5),
-        SELF(vA1_e6),
-        SELF(vA1_e7),
-        SELF(vA1_e8),
-        SELF(vA1_e9),
+        SELF(MeasureErase_SqedtVal),
+        SELF(MeasureErase_PsEditBox),
+        SELF(MeasureErase_PsEditBox_2),
+        SELF(MeasureErase_PsEditBox_3),
+        SELF(MeasureErase_PsEditBox_4),
+        SELF(MeasureErase_MsgToTtl),
+        SELF(MeasureErase_AcFuncEditSw),
         SELF(MersSureDisp),
         SELF(NO_AcScreenMenu_10),
-        SELF(vA1_e12),
-        SELF(vA1_e13),
-        SELF(vA1_e14),
-        SELF(vA1_e15),
+        SELF(MersSureDisp_AcFuncEditSw),
+        SELF(MersSureDisp_IvExitScreen),
+        SELF(MersSureDisp_Box),
+        SELF(MersSureDisp_AcLanguageText),
         0x00000000,
         SELF(MeasureCopy_TtlScreen),
-        SELF(vA2_e1),
-        SELF(vA2_e2),
-        SELF(vA2_e3),
-        SELF(vA2_e4),
-        SELF(vA2_e5),
-        SELF(vA2_e6),
-        SELF(vA2_e7),
-        SELF(vA2_e8),
+        SELF(MeasureCopy_AcIndexWideES),
+        SELF(MeasureCopy_AcIndexWideES_2),
+        SELF(MeasureCopy_AcIndexWideES_3),
+        SELF(MeasureCopy_AcIndexWideES_4),
+        SELF(MeasureCopy_SqedtVal2),
+        SELF(MeasureCopy_SqedtFix),
+        SELF(MeasureCopy_MsgToTtl),
+        SELF(MeasureCopy_AcFuncEditSw),
         SELF(McpSureDisp),
-        SELF(vA2_e10),
-        SELF(vA2_e11),
-        SELF(vA2_e12),
-        SELF(vA2_e13),
-        SELF(vA2_e14),
-        SELF(vA2_e15),
+        SELF(McpSureDisp_Box),
+        SELF(McpSureDisp_Box_2),
+        SELF(McpSureDisp_Box_3),
+        SELF(McpSureDisp_IvExitScreen),
+        SELF(McpSureDisp_AcFuncEditSw),
+        SELF(McpSureDisp_AcLanguageText),
         SELF(NO_AcScreenMenu_11),
         0x00000000,
         SELF(MeasureDelete_TtlScreen),
         SELF(Value_Label_14),
-        SELF(vA3_e2),
-        SELF(vA3_e3),
-        SELF(vA3_e4),
-        SELF(vA3_e5),
-        SELF(vA3_e6),
-        SELF(vA3_e7),
-        SELF(vA3_e8),
+        SELF(MeasureDelete_AcIndexWideES),
+        SELF(MeasureDelete_SqedtVal),
+        SELF(MeasureDelete_PsEditBox),
+        SELF(MeasureDelete_PsEditBox_2),
+        SELF(MeasureDelete_PsEditBox_3),
+        SELF(MeasureDelete_MsgToTtl),
+        SELF(MeasureDelete_AcFuncEditSw),
         SELF(MdelSureDisp),
         SELF(NO_AcScreenMenu_12),
-        SELF(vA3_e11),
-        SELF(vA3_e12),
-        SELF(vA3_e13),
-        SELF(vA3_e14),
+        SELF(MdelSureDisp_AcFuncEditSw),
+        SELF(MdelSureDisp_IvExitScreen),
+        SELF(MdelSureDisp_Box),
+        SELF(MdelSureDisp_AcLanguageText),
         0x00000000,
         SELF(MeasureInsert_TtlScreen),
-        SELF(vA4_e1),
-        SELF(vA4_e2),
-        SELF(vA4_e3),
-        SELF(vA4_e4),
-        SELF(vA4_e5),
-        SELF(vA4_e6),
-        SELF(vA4_e7),
-        SELF(vA4_e8),
+        SELF(MeasureInsert_AcIndexWideES),
+        SELF(MeasureInsert_AcIndexWideES_2),
+        SELF(MeasureInsert_AcIndexWideES_3),
+        SELF(MeasureInsert_AcIndexWideES_4),
+        SELF(MeasureInsert_SqedtVal2),
+        SELF(MeasureInsert_SqedtFix),
+        SELF(MeasureInsert_MsgToTtl),
+        SELF(MeasureInsert_AcFuncEditSw),
         SELF(MinsSureDisp),
-        SELF(vA4_e10),
-        SELF(vA4_e11),
-        SELF(vA4_e12),
-        SELF(vA4_e13),
-        SELF(vA4_e14),
-        SELF(vA4_e15),
+        SELF(MinsSureDisp_Box),
+        SELF(MinsSureDisp_Box_2),
+        SELF(MinsSureDisp_Box_3),
+        SELF(MinsSureDisp_IvExitScreen),
+        SELF(MinsSureDisp_AcFuncEditSw),
+        SELF(MinsSureDisp_AcLanguageText),
         SELF(NO_AcScreenMenu_13),
         0x00000000,
         0x00000000,
         0x00000000,
         SELF(MetronomeBalance_TtlScreen),
-        SELF(vAB_e1),
+        SELF(MetronomeBalance_AcMixerVol),
         0x00000000,
         SELF(EnterTainerScr),
-        SELF(vD6_e1),
+        SELF(EnterTainerScr_AcEntertainerGridBox),
         SELF(VocalReverb_Label),
     },
 
@@ -14609,76 +14609,76 @@ const naka_effects_seq_t naka_effects_seq_data
     .field_6fea = 0x0003,
 
     .ptrs_6 = {
-        SELF(vD6_e7),
-        SELF(vD6_e8),
+        SELF(EnterTainerScr_AcIndexWideES),
+        SELF(EnterTainerScr_AcIndexWideES_2),
         SELF(Item_Label),
         SELF(Value_Label_15),
-        SELF(vD6_e11),
-        SELF(vD6_e12),
-        SELF(vD6_e13),
+        SELF(EnterTainerScr_IvExitMode),
+        SELF(EnterTainerScr_AcFuncToggle),
+        SELF(EnterTainerScr_AcPanicEditSw),
         SELF(Panic_Label),
         0x00000000,
         SELF(HelpFunction_TtlScreen),
-        SELF(vE7_e1),
+        SELF(HelpFunction_IvExitMode),
         SELF(HelpMenu),
-        SELF(vE7_e3),
-        SELF(vE7_e4),
+        SELF(HelpMenu_IvShowHide),
+        SELF(HelpFunction_AcFuncEditSw),
         SELF(HelpNotXWin),
-        SELF(vE7_e6),
-        SELF(vE7_e7),
-        SELF(vE7_e8),
-        SELF(vE7_e9),
+        SELF(HelpNotXWin_AcIndexWideToggle),
+        SELF(HelpNotXWin_AcIndexWideToggle_2),
+        SELF(HelpNotXWin_AcIndexWideToggle_3),
+        SELF(HelpNotXWin_AcIndexWideToggle_4),
         SELF(HelpXWin),
-        SELF(vE7_e11),
-        SELF(vE7_e12),
-        SELF(vE7_e13),
+        SELF(HelpXWin_AcIndexWideToggle),
+        SELF(HelpXWin_AcIndexWideToggle_2),
+        SELF(HelpXWin_AcIndexWideToggle_3),
         SELF(HelpSwTtl1Scr),
-        SELF(vE7_e15),
+        SELF(HelpSwTtl1Scr_IvExitScreen),
         SELF(HelpTtlStr1),
         SELF(HelpLang1),
-        SELF(vE7_e18),
+        SELF(HelpLang1_IvShowHide),
         SELF(HelpLang2P1),
-        SELF(vE7_e20),
+        SELF(HelpLang2P1_AcLanguageText),
         SELF(HelpLang2P2),
-        SELF(vE7_e22),
+        SELF(HelpLang2P2_AcLanguageText),
         SELF(HelpSwTtl2Scr),
-        SELF(vE7_e24),
+        SELF(HelpSwTtl2Scr_IvExitScreen),
         SELF(HelpTtlStr2),
-        SELF(vE7_e26),
-        SELF(vE7_e27),
+        SELF(HelpSwTtl2Scr_IvPageControl),
+        SELF(HelpSwTtl2Scr_IvPageControl_2),
         SELF(Help_P2),
-        SELF(vE7_e29),
+        SELF(HelpSwTtl2Scr_IvShowHide),
         SELF(HelpLang3P1),
-        SELF(vE7_e31),
+        SELF(HelpLang3P1_AcLanguageText),
         SELF(HelpLang3P2),
-        SELF(vE7_e33),
+        SELF(HelpLang3P2_AcLanguageText),
         SELF(HelpLang3P3),
-        SELF(vE7_e35),
+        SELF(HelpLang3P3_AcLanguageText),
         SELF(HelpSwTtl3Scr),
-        SELF(vE7_e37),
+        SELF(HelpSwTtl3Scr_IvExitScreen),
         SELF(HelpTtlStr3),
         SELF(Help_P3),
-        SELF(vE7_e40),
-        SELF(vE7_e41),
-        SELF(vE7_e42),
-        SELF(vE7_e43),
+        SELF(HelpSwTtl3Scr_IvPageControl),
+        SELF(HelpSwTtl3Scr_IvPageControl_2),
+        SELF(HelpSwTtl3Scr_IvPageControl_3),
+        SELF(HelpSwTtl3Scr_IvShowHide),
         SELF(HelpSwTtl4Scr),
-        SELF(vE7_e45),
+        SELF(HelpSwTtl4Scr_IvExitScreen),
         SELF(Help_P4),
         SELF(HelpTtlStr4),
-        SELF(vE7_e48),
-        SELF(vE7_e49),
-        SELF(vE7_e50),
-        SELF(vE7_e51),
-        SELF(vE7_e52),
+        SELF(HelpSwTtl4Scr_IvPageControl),
+        SELF(HelpSwTtl4Scr_IvPageControl_2),
+        SELF(HelpSwTtl4Scr_IvPageControl_3),
+        SELF(HelpSwTtl4Scr_IvPageControl_4),
+        SELF(HelpSwTtl4Scr_IvShowHide),
         SELF(HelpLang4P1),
-        SELF(vE7_e54),
+        SELF(HelpLang4P1_AcLanguageText),
         SELF(HelpLang4P2),
-        SELF(vE7_e56),
+        SELF(HelpLang4P2_AcLanguageText),
         SELF(HelpLang4P3),
-        SELF(vE7_e58),
+        SELF(HelpLang4P3_AcLanguageText),
         SELF(HelpLang4P4),
-        SELF(vE7_e60),
+        SELF(HelpLang4P4_AcLanguageText),
         0x00000000,
         SELF(str_761),
         SELF(str_760),

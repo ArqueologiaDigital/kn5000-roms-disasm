@@ -406,33 +406,33 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t DebugTime_Label;
     char DebugTime_text[14];
     /* element 9 of Viewable slot 0x0: DbDebugMenu (class id 0x01600057) */
-    naka_cls_DbDebugMenu_t v0_e9;
+    naka_cls_DbDebugMenu_t DebugWindow_DbDebugMenu;
     /* element 10 of Viewable slot 0x0 "NamingWindow": AcNamingWindow (class id 0x0160004B) */
     naka_cls_AcNamingWindow_t NamingWindow;
     /* element 11 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v0_e11;
+    naka_cls_AcIndexEditSw_t NamingWindow_AcIndexEditSw;
     /* element 12 of Viewable slot 0x0: Label (class id 0x0160002B) */
     naka_cls_Label_t Del_Label;
     char Del_text[4];
     /* element 13 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v0_e13;
+    naka_cls_AcIndexEditSw_t NamingWindow_AcIndexEditSw_2;
     /* element 14 of Viewable slot 0x0: Label (class id 0x0160002B) */
     naka_cls_Label_t Ins_Label;
     char Ins_text[4];
     /* element 15 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v0_e15;
+    naka_cls_AcIndexEditSw_t NamingWindow_AcIndexEditSw_3;
     /* element 16 of Viewable slot 0x0: Label (class id 0x0160002B) */
     naka_cls_Label_t Clr_Label;
     char Clr_text[4];
     /* element 17 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v0_e17;
+    naka_cls_AcIndexEditSw_t NamingWindow_AcIndexEditSw_4;
     /* element 18 of Viewable slot 0x0: Label (class id 0x0160002B) */
-    naka_cls_Label_t v0_e18;
+    naka_cls_Label_t NamingWindow_Label;
     char w8_text[8];
     /* element 19 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v0_e19;
+    naka_cls_AcIndexEditSw_t NamingWindow_AcIndexEditSw_5;
     /* element 20 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v0_e20;
+    naka_cls_AcIndexEditSw_t NamingWindow_AcIndexEditSw_6;
     /* element 21 of Viewable slot 0x0: Label (class id 0x0160002B) */
     naka_cls_Label_t Position_Label;
     char Position_text[10];
@@ -445,60 +445,60 @@ typedef struct __attribute__((packed)) {
     char str_33[4];
     char str_34[4];
     /* element 26 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v0_e26;
+    naka_cls_AcIndexEditSw_t NamingWindow_AcIndexEditSw_7;
     /* element 27 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v0_e27;
+    naka_cls_AcIndexEditSw_t NamingWindow_AcIndexEditSw_8;
     /* element 28 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v0_e28;
+    naka_cls_AcIndexEditSw_t NamingWindow_AcIndexEditSw_9;
     /* element 29 of Viewable slot 0x0 "NamingLabel": PsParaBox (class id 0x01600012) */
     naka_cls_PsParaBox_t NamingLabel;
     /* element 30 of Viewable slot 0x0 "MemoWindow": Window (class id 0x01600035) */
     naka_cls_Window_t MemoWindow;
     /* element 31 of Viewable slot 0x0: DbMemo (class id 0x01600046) */
-    naka_cls_DbMemo_t v0_e31;
+    naka_cls_DbMemo_t MemoWindow_DbMemo;
     /* element 32 of Viewable slot 0x0 "TrackSwitchWindow": Window (class id 0x01600035) */
     naka_cls_Window_t TrackSwitchWindow;
     /* element 33 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e33;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch;
     /* element 34 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e34;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_2;
     /* element 35 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e35;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_3;
     /* element 36 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e36;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_4;
     /* element 37 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e37;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_5;
     /* element 38 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e38;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_6;
     /* element 39 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e39;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_7;
     /* element 40 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e40;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_8;
     /* element 41 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e41;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_9;
     /* element 42 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e42;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_10;
     /* element 43 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e43;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_11;
     /* element 44 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e44;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_12;
     /* element 45 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e45;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_13;
     /* element 46 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e46;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_14;
     /* element 47 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e47;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_15;
     /* element 48 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v0_e48;
+    naka_cls_AcTrackSwitch_t TrackSwitchWindow_AcTrackSwitch_16;
     /* element 49 of Viewable slot 0x0 "MemDumpWindow": Window (class id 0x01600035) */
     naka_cls_Window_t MemDumpWindow;
     /* element 50 of Viewable slot 0x0: DbMemoryDump (class id 0x0160005D) */
-    naka_cls_DbMemoryDump_t v0_e50;
+    naka_cls_DbMemoryDump_t MemDumpWindow_DbMemoryDump;
     /* element 0 of Viewable slot 0xFF "CheckTitle": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CheckTitle;
     char CheckTitle_text_2[12];
     /* element 1 of Viewable slot 0xFF: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t vFF_e1;
+    naka_cls_IvExitScreen_t CheckTitle_IvExitScreen;
     /* element 2 of Viewable slot 0xFF: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t Naming_AcScreenMenu;
     char Naming_str[8];
@@ -509,9 +509,9 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t CheckNaming;
     char CheckNaming_text[14];
     /* element 5 of Viewable slot 0xFF: IvNaming (class id 0x0160004D) */
-    naka_cls_IvNaming_t vFF_e5;
+    naka_cls_IvNaming_t CheckNaming_IvNaming;
     /* element 6 of Viewable slot 0xFF: IvExitScreen (class id 0x01600049) */
-    naka_cls_IvExitScreen_t vFF_e6;
+    naka_cls_IvExitScreen_t CheckNaming_IvExitScreen;
     /* element 7 of Viewable slot 0xFF "CheckWall": Screen (class id 0x01600033) */
     naka_cls_Screen_t CheckWall;
     char I_str[2];
@@ -1335,7 +1335,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .DebugTime_text = ALIGNED_STRING("DEBUG TIME !"),
 
-    .v0_e9 = {
+    .DebugWindow_DbDebugMenu = {
         .class_ = 0x01600057,
         .super = 7,
         .sub = NAKA_NONE,
@@ -1369,7 +1369,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .child = 0x0003F0C8,
     },
 
-    .v0_e11 = {
+    .NamingWindow_AcIndexEditSw = {
         .class_ = 0x0160001F,
         .super = 10,
         .sub = 12,
@@ -1402,7 +1402,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .Del_text = "DEL",
 
-    .v0_e13 = {
+    .NamingWindow_AcIndexEditSw_2 = {
         .class_ = 0x0160001F,
         .super = 10,
         .sub = 14,
@@ -1435,7 +1435,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .Ins_text = "INS",
 
-    .v0_e15 = {
+    .NamingWindow_AcIndexEditSw_3 = {
         .class_ = 0x0160001F,
         .super = 10,
         .sub = 16,
@@ -1468,7 +1468,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .Clr_text = "CLR",
 
-    .v0_e17 = {
+    .NamingWindow_AcIndexEditSw_4 = {
         .class_ = 0x0160001F,
         .super = 10,
         .sub = 18,
@@ -1486,7 +1486,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .style = 0x0000,
     },
 
-    .v0_e18 = {
+    .NamingWindow_Label = {
         .class_ = 0x0160002B,
         .super = 17,
         .sub = NAKA_NONE,
@@ -1501,7 +1501,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w8_text = "~8d ~8b",
 
-    .v0_e19 = {
+    .NamingWindow_AcIndexEditSw_5 = {
         .class_ = 0x0160001F,
         .super = 10,
         .sub = NAKA_NONE,
@@ -1519,7 +1519,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .style = 0x000F,
     },
 
-    .v0_e20 = {
+    .NamingWindow_AcIndexEditSw_6 = {
         .class_ = 0x0160001F,
         .super = 10,
         .sub = NAKA_NONE,
@@ -1581,7 +1581,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .str_34 = "!#$",
 
-    .v0_e26 = {
+    .NamingWindow_AcIndexEditSw_7 = {
         .class_ = 0x0160001F,
         .super = 10,
         .sub = NAKA_NONE,
@@ -1599,7 +1599,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .style = 0x000F,
     },
 
-    .v0_e27 = {
+    .NamingWindow_AcIndexEditSw_8 = {
         .class_ = 0x0160001F,
         .super = 10,
         .sub = NAKA_NONE,
@@ -1617,7 +1617,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .style = 0x000E,
     },
 
-    .v0_e28 = {
+    .NamingWindow_AcIndexEditSw_9 = {
         .class_ = 0x0160001F,
         .super = 10,
         .sub = NAKA_NONE,
@@ -1666,7 +1666,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .child = 0x0003F0D8,
     },
 
-    .v0_e31 = {
+    .MemoWindow_DbMemo = {
         .class_ = 0x01600046,
         .super = 30,
         .sub = NAKA_NONE,
@@ -1691,7 +1691,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .child = 0x0003F0E0,
     },
 
-    .v0_e33 = {
+    .TrackSwitchWindow_AcTrackSwitch = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1705,7 +1705,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F0E8,
     },
 
-    .v0_e34 = {
+    .TrackSwitchWindow_AcTrackSwitch_2 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1719,7 +1719,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F0EE,
     },
 
-    .v0_e35 = {
+    .TrackSwitchWindow_AcTrackSwitch_3 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1733,7 +1733,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F0F4,
     },
 
-    .v0_e36 = {
+    .TrackSwitchWindow_AcTrackSwitch_4 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1747,7 +1747,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F0FA,
     },
 
-    .v0_e37 = {
+    .TrackSwitchWindow_AcTrackSwitch_5 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1761,7 +1761,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F100,
     },
 
-    .v0_e38 = {
+    .TrackSwitchWindow_AcTrackSwitch_6 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1775,7 +1775,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F106,
     },
 
-    .v0_e39 = {
+    .TrackSwitchWindow_AcTrackSwitch_7 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1789,7 +1789,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F10C,
     },
 
-    .v0_e40 = {
+    .TrackSwitchWindow_AcTrackSwitch_8 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1803,7 +1803,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F112,
     },
 
-    .v0_e41 = {
+    .TrackSwitchWindow_AcTrackSwitch_9 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1817,7 +1817,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F118,
     },
 
-    .v0_e42 = {
+    .TrackSwitchWindow_AcTrackSwitch_10 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1831,7 +1831,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F11E,
     },
 
-    .v0_e43 = {
+    .TrackSwitchWindow_AcTrackSwitch_11 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1845,7 +1845,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F124,
     },
 
-    .v0_e44 = {
+    .TrackSwitchWindow_AcTrackSwitch_12 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1859,7 +1859,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F12A,
     },
 
-    .v0_e45 = {
+    .TrackSwitchWindow_AcTrackSwitch_13 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1873,7 +1873,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F130,
     },
 
-    .v0_e46 = {
+    .TrackSwitchWindow_AcTrackSwitch_14 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1887,7 +1887,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F136,
     },
 
-    .v0_e47 = {
+    .TrackSwitchWindow_AcTrackSwitch_15 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1901,7 +1901,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F13C,
     },
 
-    .v0_e48 = {
+    .TrackSwitchWindow_AcTrackSwitch_16 = {
         .class_ = 0x01600059,
         .super = 32,
         .sub = NAKA_NONE,
@@ -1930,7 +1930,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .child = 0x0003F148,
     },
 
-    .v0_e50 = {
+    .MemDumpWindow_DbMemoryDump = {
         .class_ = 0x0160005D,
         .super = 49,
         .sub = NAKA_NONE,
@@ -1959,7 +1959,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .CheckTitle_text_2 = "CHECK TITLE",
 
-    .vFF_e1 = {
+    .CheckTitle_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2034,7 +2034,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .CheckNaming_text = ALIGNED_STRING("Check Naming"),
 
-    .vFF_e5 = {
+    .CheckNaming_IvNaming = {
         .class_ = 0x0160004D,
         .super = 4,
         .sub = NAKA_NONE,
@@ -2045,7 +2045,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .func = 0x01200005,
     },
 
-    .vFF_e6 = {
+    .CheckNaming_IvExitScreen = {
         .class_ = 0x01600049,
         .super = 4,
         .sub = NAKA_NONE,
@@ -2101,18 +2101,18 @@ const naka_debug_naming_t naka_debug_naming_data
         SELF(ClipBoard),
         SELF(DebugWindow),
         SELF(DebugTime_Label),
-        SELF(v0_e9),
+        SELF(DebugWindow_DbDebugMenu),
         SELF(NamingWindow),
-        SELF(v0_e11),
+        SELF(NamingWindow_AcIndexEditSw),
         SELF(Del_Label),
-        SELF(v0_e13),
+        SELF(NamingWindow_AcIndexEditSw_2),
         SELF(Ins_Label),
-        SELF(v0_e15),
+        SELF(NamingWindow_AcIndexEditSw_3),
         SELF(Clr_Label),
-        SELF(v0_e17),
-        SELF(v0_e18),
-        SELF(v0_e19),
-        SELF(v0_e20),
+        SELF(NamingWindow_AcIndexEditSw_4),
+        SELF(NamingWindow_Label),
+        SELF(NamingWindow_AcIndexEditSw_5),
+        SELF(NamingWindow_AcIndexEditSw_6),
         SELF(Position_Label),
         SELF(NamingCursorBox),
     },
@@ -2130,39 +2130,39 @@ const naka_debug_naming_t naka_debug_naming_data
     .field_08dc = 0x0003,
 
     .ptrs_3 = {
-        SELF(v0_e26),
-        SELF(v0_e27),
-        SELF(v0_e28),
+        SELF(NamingWindow_AcIndexEditSw_7),
+        SELF(NamingWindow_AcIndexEditSw_8),
+        SELF(NamingWindow_AcIndexEditSw_9),
         SELF(NamingLabel),
         SELF(MemoWindow),
-        SELF(v0_e31),
+        SELF(MemoWindow_DbMemo),
         SELF(TrackSwitchWindow),
-        SELF(v0_e33),
-        SELF(v0_e34),
-        SELF(v0_e35),
-        SELF(v0_e36),
-        SELF(v0_e37),
-        SELF(v0_e38),
-        SELF(v0_e39),
-        SELF(v0_e40),
-        SELF(v0_e41),
-        SELF(v0_e42),
-        SELF(v0_e43),
-        SELF(v0_e44),
-        SELF(v0_e45),
-        SELF(v0_e46),
-        SELF(v0_e47),
-        SELF(v0_e48),
+        SELF(TrackSwitchWindow_AcTrackSwitch),
+        SELF(TrackSwitchWindow_AcTrackSwitch_2),
+        SELF(TrackSwitchWindow_AcTrackSwitch_3),
+        SELF(TrackSwitchWindow_AcTrackSwitch_4),
+        SELF(TrackSwitchWindow_AcTrackSwitch_5),
+        SELF(TrackSwitchWindow_AcTrackSwitch_6),
+        SELF(TrackSwitchWindow_AcTrackSwitch_7),
+        SELF(TrackSwitchWindow_AcTrackSwitch_8),
+        SELF(TrackSwitchWindow_AcTrackSwitch_9),
+        SELF(TrackSwitchWindow_AcTrackSwitch_10),
+        SELF(TrackSwitchWindow_AcTrackSwitch_11),
+        SELF(TrackSwitchWindow_AcTrackSwitch_12),
+        SELF(TrackSwitchWindow_AcTrackSwitch_13),
+        SELF(TrackSwitchWindow_AcTrackSwitch_14),
+        SELF(TrackSwitchWindow_AcTrackSwitch_15),
+        SELF(TrackSwitchWindow_AcTrackSwitch_16),
         SELF(MemDumpWindow),
-        SELF(v0_e50),
+        SELF(MemDumpWindow_DbMemoryDump),
         0x00000000,
         SELF(CheckTitle),
-        SELF(vFF_e1),
+        SELF(CheckTitle_IvExitScreen),
         SELF(Naming_AcScreenMenu),
         SELF(Wall_AcScreenMenu),
         SELF(CheckNaming),
-        SELF(vFF_e5),
-        SELF(vFF_e6),
+        SELF(CheckNaming_IvNaming),
+        SELF(CheckNaming_IvExitScreen),
         SELF(CheckWall),
         SELF(I_str),
         0x00000000,

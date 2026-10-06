@@ -214,9 +214,9 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t ftdemo02;
     char w1_text[2];
     /* element 3 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e3;
+    naka_cls_Box_t ftdemo02_Box;
     /* element 4 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e4;
+    naka_cls_Box_t ftdemo02_Box_2;
     /* element 5 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Preset_Label;
     char Preset_text[12];
@@ -224,12 +224,12 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Performance_Label;
     char Performance_text[12];
     /* element 7 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e7;
+    naka_cls_Box_t ftdemo02_Box_3;
     /* element 8 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Custom_Label;
     char Custom_text[10];
     /* element 9 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e9;
+    naka_cls_Box_t ftdemo02_Box_4;
     /* element 10 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Composer_Label;
     char Composer_text[12];
@@ -237,54 +237,54 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t BackUp_Label;
     char BackUp_text[8];
     /* element 12 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e12;
+    naka_cls_Line_t ftdemo02_Line;
     /* element 13 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e13;
+    naka_cls_Line_t ftdemo02_Line_2;
     /* element 14 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e14;
+    naka_cls_Line_t ftdemo02_Line_3;
     /* element 15 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e15;
+    naka_cls_Label_t ftdemo02_Label;
     char w11_text[4];
     /* element 16 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e16;
+    naka_cls_Line_t ftdemo02_Line_4;
     /* element 17 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e17;
+    naka_cls_Line_t ftdemo02_Line_5;
     /* element 18 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e18;
+    naka_cls_Label_t ftdemo02_Label_2;
     char w12_text[4];
     /* element 19 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e19;
+    naka_cls_Line_t ftdemo02_Line_6;
     /* element 20 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e20;
+    naka_cls_Line_t ftdemo02_Line_7;
     /* element 21 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e21;
+    naka_cls_Line_t ftdemo02_Line_8;
     /* element 22 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e22;
+    naka_cls_Line_t ftdemo02_Line_9;
     /* element 23 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e23;
+    naka_cls_Line_t ftdemo02_Line_10;
     /* element 24 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e24;
+    naka_cls_Line_t ftdemo02_Line_11;
     /* element 25 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e25;
+    naka_cls_Line_t ftdemo02_Line_12;
     /* element 26 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e26;
+    naka_cls_Label_t ftdemo02_Label_3;
     char w13_text[4];
     /* element 27 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e27;
+    naka_cls_Box_t ftdemo02_Box_5;
     /* element 28 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e28;
+    naka_cls_Box_t ftdemo02_Box_6;
     /* element 29 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Fd_Label;
     char Fd_text[4];
     /* element 30 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e30;
+    naka_cls_Label_t ftdemo02_Label_4;
     char w17_text[4];
     /* element 31 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e31;
+    naka_cls_Box_t ftdemo02_Box_7;
     /* element 32 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e32;
+    naka_cls_Box_t ftdemo02_Box_8;
     /* element 33 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e33;
+    naka_cls_Label_t ftdemo02_Label_5;
     char w20_text[4];
     /* element 34 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Volatile_Label;
@@ -296,157 +296,157 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t PlayOnly_Label;
     char PlayOnly_text[10];
     /* element 37 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e37;
+    naka_cls_Label_t ftdemo02_Label_6;
     char w24_text[4];
     /* element 38 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e38;
+    naka_cls_Line_t ftdemo02_Line_13;
     /* element 39 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e39;
+    naka_cls_Line_t ftdemo02_Line_14;
     /* element 40 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e40;
+    naka_cls_Line_t ftdemo02_Line_15;
     /* element 41 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e41;
+    naka_cls_Line_t ftdemo02_Line_16;
     /* element 42 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e42;
+    naka_cls_Line_t ftdemo02_Line_17;
     /* element 43 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e43;
+    naka_cls_Line_t ftdemo02_Line_18;
     /* element 44 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e44;
+    naka_cls_Line_t ftdemo02_Line_19;
     /* element 45 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e45;
+    naka_cls_Line_t ftdemo02_Line_20;
     /* element 46 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e46;
+    naka_cls_Line_t ftdemo02_Line_21;
     /* element 47 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e47;
+    naka_cls_Line_t ftdemo02_Line_22;
     /* element 48 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e48;
+    naka_cls_Line_t ftdemo02_Line_23;
     /* element 49 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e49;
+    naka_cls_Line_t ftdemo02_Line_24;
     /* element 50 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e50;
+    naka_cls_Line_t ftdemo02_Line_25;
     /* element 51 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e51;
+    naka_cls_Line_t ftdemo02_Line_26;
     /* element 52 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e52;
+    naka_cls_Line_t ftdemo02_Line_27;
     /* element 53 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e53;
+    naka_cls_Line_t ftdemo02_Line_28;
     /* element 54 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e54;
+    naka_cls_Line_t ftdemo02_Line_29;
     /* element 55 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e55;
+    naka_cls_Line_t ftdemo02_Line_30;
     /* element 56 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e56;
+    naka_cls_Line_t ftdemo02_Line_31;
     /* element 57 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e57;
+    naka_cls_Line_t ftdemo02_Line_32;
     /* element 58 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e58;
+    naka_cls_Line_t ftdemo02_Line_33;
     /* element 59 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e59;
+    naka_cls_Line_t ftdemo02_Line_34;
     /* element 60 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e60;
+    naka_cls_Line_t ftdemo02_Line_35;
     /* element 61 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e61;
+    naka_cls_Line_t ftdemo02_Line_36;
     /* element 62 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e62;
+    naka_cls_Line_t ftdemo02_Line_37;
     /* element 63 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e63;
+    naka_cls_Line_t ftdemo02_Line_38;
     /* element 64 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e64;
+    naka_cls_Line_t ftdemo02_Line_39;
     /* element 65 of Viewable slot 0xFD "ftdemo03": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo03;
     char w25_text[2];
     /* element 66 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e66;
+    naka_cls_Box_t ftdemo03_Box;
     /* element 67 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t StyleData_Label;
     char StyleData_text[12];
     /* element 68 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e68;
+    naka_cls_Box_t ftdemo03_Box_2;
     /* element 69 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Custom_Label_2;
     char Custom_text_2[10];
     /* element 70 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e70;
+    naka_cls_Box_t ftdemo03_Box_3;
     /* element 71 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Composer_Label_2;
     char Composer_text_2[12];
     /* element 72 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e72;
+    naka_cls_Label_t ftdemo03_Label;
     char w32_text[4];
     /* element 73 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e73;
+    naka_cls_Line_t ftdemo03_Line;
     /* element 74 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e74;
+    naka_cls_Line_t ftdemo03_Line_2;
     /* element 75 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e75;
+    naka_cls_Line_t ftdemo03_Line_3;
     /* element 76 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e76;
+    naka_cls_Line_t ftdemo03_Line_4;
     /* element 77 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e77;
+    naka_cls_Line_t ftdemo03_Line_5;
     /* element 78 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e78;
+    naka_cls_Line_t ftdemo03_Line_6;
     /* element 79 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e79;
+    naka_cls_Line_t ftdemo03_Line_7;
     /* element 80 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e80;
+    naka_cls_Line_t ftdemo03_Line_8;
     /* element 81 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e81;
+    naka_cls_Line_t ftdemo03_Line_9;
     /* element 82 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t StyleConvert_Label;
     char StyleConvert_text[14];
     /* element 83 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e83;
+    naka_cls_Line_t ftdemo03_Line_10;
     /* element 84 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e84;
+    naka_cls_Line_t ftdemo03_Line_11;
     /* element 85 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e85;
+    naka_cls_Box_t ftdemo03_Box_4;
     /* element 86 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e86;
+    naka_cls_Box_t ftdemo03_Box_5;
     /* element 87 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e87;
+    naka_cls_Box_t ftdemo03_Box_6;
     /* element 88 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e88;
+    naka_cls_Box_t ftdemo03_Box_7;
     /* element 89 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e89;
+    naka_cls_Label_t ftdemo03_Label_2;
     char w38_text[4];
     /* element 90 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e90;
+    naka_cls_Box_t ftdemo03_Box_8;
     /* element 91 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e91;
+    naka_cls_Box_t ftdemo03_Box_9;
     /* element 92 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e92;
+    naka_cls_Box_t ftdemo03_Box_10;
     /* element 93 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e93;
+    naka_cls_Box_t ftdemo03_Box_11;
     /* element 94 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e94;
+    naka_cls_Label_t ftdemo03_Label_3;
     char w43_text[4];
     /* element 95 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e95;
+    naka_cls_Box_t ftdemo03_Box_12;
     /* element 96 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e96;
+    naka_cls_Box_t ftdemo03_Box_13;
     /* element 97 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e97;
+    naka_cls_Box_t ftdemo03_Box_14;
     /* element 98 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e98;
+    naka_cls_Box_t ftdemo03_Box_15;
     /* element 99 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e99;
+    naka_cls_Label_t ftdemo03_Label_4;
     char w48_text[4];
     /* element 100 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e100;
+    naka_cls_Box_t ftdemo03_Box_16;
     /* element 101 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e101;
+    naka_cls_Box_t ftdemo03_Box_17;
     /* element 102 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Fd_Label_2;
     char Fd_text_2[4];
     /* element 103 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e103;
+    naka_cls_Box_t ftdemo03_Box_18;
     /* element 104 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e104;
+    naka_cls_Box_t ftdemo03_Box_19;
     /* element 105 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e105;
+    naka_cls_Label_t ftdemo03_Label_5;
     char w54_text[4];
     /* element 106 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e106;
+    naka_cls_Label_t ftdemo03_Label_6;
     char w55_text[4];
     /* element 107 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t ConvertFrom_Label;
@@ -461,25 +461,25 @@ typedef struct __attribute__((packed)) {
     naka_cls_VwUserBitmapByName_t ftdemobmp3D;
     char ftdemobmp3D_file[8];
     /* element 111 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e111;
+    naka_cls_AcLanguageText_t ftdemo04_AcLanguageText;
     /* element 112 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e112;
+    naka_cls_Box_t ftdemo04_Box;
     /* element 113 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e113;
+    naka_cls_AcLanguageText_t ftdemo04_AcLanguageText_2;
     /* element 114 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e114;
+    naka_cls_AcLanguageText_t ftdemo04_AcLanguageText_3;
     /* element 115 of Viewable slot 0xFD "ftdemo05": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo05;
     char w60_text[2];
     /* element 116 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e116;
+    naka_cls_AcLanguageText_t ftdemo05_AcLanguageText;
     /* element 117 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e117;
+    naka_cls_AcLanguageText_t ftdemo05_AcLanguageText_2;
     /* element 118 of Viewable slot 0xFD "ftdemo06": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo06;
     char w61_text[2];
     /* element 119 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e119;
+    naka_cls_AcLanguageText_t ftdemo06_AcLanguageText;
     /* element 120 of Viewable slot 0xFD "ftdemobmpsoft": VwUserBitmapByName (class id 0x0160006C) */
     naka_cls_VwUserBitmapByName_t ftdemobmpsoft;
     char ftdemobmpsoft_file[8];
@@ -490,33 +490,33 @@ typedef struct __attribute__((packed)) {
     naka_cls_VwUserBitmapByName_t ftdemobmpcnv;
     char ftdemobmpcnv_file[8];
     /* element 123 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e123;
+    naka_cls_AcLanguageText_t ftdemo07_AcLanguageText;
     /* element 124 of Viewable slot 0xFD "ftdemo08": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo08;
     char w63_text[2];
     /* element 125 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e125;
+    naka_cls_AcLanguageText_t ftdemo08_AcLanguageText;
     /* element 126 of Viewable slot 0xFD "ftdemo09": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo09;
     char w64_text[2];
     /* element 127 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e127;
+    naka_cls_AcLanguageText_t ftdemo09_AcLanguageText;
     /* element 128 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e128;
+    naka_cls_AcLanguageText_t ftdemo09_AcLanguageText_2;
     /* element 129 of Viewable slot 0xFD "ftdemo10": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo10;
     char w65_text[2];
     /* element 130 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e130;
+    naka_cls_AcLanguageText_t ftdemo10_AcLanguageText;
     /* element 131 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e131;
+    naka_cls_AcLanguageText_t ftdemo10_AcLanguageText_2;
     /* element 132 of Viewable slot 0xFD "ftdemo20": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo20;
     char w66_text[2];
     /* element 133 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e133;
+    naka_cls_AcLanguageText_t ftdemo20_AcLanguageText;
     /* element 134 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e134;
+    naka_cls_AcLanguageText_t ftdemo20_AcLanguageText_2;
     /* element 135 of Viewable slot 0xFD "ftdemobmpill": VwUserBitmapByName (class id 0x0160006C) */
     naka_cls_VwUserBitmapByName_t ftdemobmpill;
     char ftdemobmpill_file[8];
@@ -524,22 +524,22 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t ftdemo21;
     char w67_text[2];
     /* element 137 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
-    naka_cls_AcLanguageText_t vFD_e137;
+    naka_cls_AcLanguageText_t ftdemo21_AcLanguageText;
     /* element 138 of Viewable slot 0xFD "ftdemo22": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo22;
     char BankView_text[10];
     /* element 139 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e139;
+    naka_cls_Box_t ftdemo22_Box;
     /* element 140 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t BankForDinnerShow_Label;
     char BankForDinnerShow_text[24];
     /* element 141 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e141;
+    naka_cls_PsEditSwBox_t ftdemo22_PsEditSwBox;
     /* element 142 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e142;
+    naka_cls_Label_t ftdemo22_Label;
     char w71_text[4];
     /* element 143 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e143;
+    naka_cls_Label_t ftdemo22_Label_2;
     char w72_text[4];
     naka_slider_t w73;  /* NAKA_TYPE_SLIDER */
     naka_slider_t w74;  /* NAKA_TYPE_SLIDER */
@@ -556,7 +556,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Naming_Label_2;
     char Naming_text_2[8];
     /* element 150 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e150;
+    naka_cls_Line_t ftdemo22_Line;
     /* element 151 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t CurtainCall_Label;
     char CurtainCall_text[18];
@@ -585,7 +585,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Bank_Label_2;
     char Bank_text_2[6];
     /* element 160 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e160;
+    naka_cls_Box_t ftdemo22_Box_2;
     /* element 161 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Page_Label;
     char Page_text[10];
@@ -596,13 +596,13 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Aa_Label;
     char Aa_text[8];
     /* element 164 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e164;
+    naka_cls_Label_t ftdemo23_Label;
     char w92_text[4];
     /* element 165 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Mic_Label;
     char Mic_text[4];
     /* element 166 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e166;
+    naka_cls_Box_t ftdemo23_Box;
     /* element 167 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t OhIWantTo_Label;
     char OhIWantTo_text[28];
@@ -622,41 +622,41 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t WhenTheSaints_Label;
     char WhenTheSaints_text[16];
     /* element 173 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e173;
+    naka_cls_Label_t ftdemo23_Label_2;
     char w101_text[2];
     /* element 174 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Play_Label;
     char Play_text[6];
     /* element 175 of Viewable slot 0xFD: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vFD_e175;
+    naka_cls_VwEditSwBox_t ftdemo23_VwEditSwBox;
     char str_276[2];
     /* element 176 of Viewable slot 0xFD: Bitmap (class id 0x0160002C) */
-    naka_cls_Bitmap_t vFD_e176;
+    naka_cls_Bitmap_t ftdemo23_Bitmap;
     /* element 177 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e177;
+    naka_cls_PsEditSwBox_t ftdemo23_PsEditSwBox;
     /* element 178 of Viewable slot 0xFD: Bitmap (class id 0x0160002C) */
-    naka_cls_Bitmap_t vFD_e178;
+    naka_cls_Bitmap_t ftdemo23_Bitmap_2;
     /* element 179 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e179;
+    naka_cls_PsEditSwBox_t ftdemo23_PsEditSwBox_2;
     /* element 180 of Viewable slot 0xFD: Bitmap (class id 0x0160002C) */
-    naka_cls_Bitmap_t vFD_e180;
+    naka_cls_Bitmap_t ftdemo23_Bitmap_3;
     /* element 181 of Viewable slot 0xFD: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vFD_e181;
+    naka_cls_VwEditSwBox_t ftdemo23_VwEditSwBox_2;
     char str_284[2];
     /* element 182 of Viewable slot 0xFD: Bitmap (class id 0x0160002C) */
-    naka_cls_Bitmap_t vFD_e182;
+    naka_cls_Bitmap_t ftdemo23_Bitmap_4;
     /* element 183 of Viewable slot 0xFD: VwEditSwBox (class id 0x0160003E) */
-    naka_cls_VwEditSwBox_t vFD_e183;
+    naka_cls_VwEditSwBox_t ftdemo23_VwEditSwBox_3;
     char str_288[2];
     /* element 184 of Viewable slot 0xFD: Bitmap (class id 0x0160002C) */
-    naka_cls_Bitmap_t vFD_e184;
+    naka_cls_Bitmap_t ftdemo23_Bitmap_5;
     /* element 185 of Viewable slot 0xFD "ftdemo24": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo24;
     char Entertainer_text[12];
     /* element 186 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e186;
+    naka_cls_Box_t ftdemo24_Box;
     /* element 187 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e187;
+    naka_cls_Line_t ftdemo24_Line;
     /* element 188 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t MicBalance_Label;
     char MicBalance_text[24];
@@ -682,24 +682,24 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Volume_Label;
     char Volume_text[24];
     /* element 196 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e196;
+    naka_cls_Box_t ftdemo24_Box_2;
     /* element 197 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Stage_Label;
     char Stage_text[6];
     /* element 198 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e198;
+    naka_cls_Label_t ftdemo24_Label;
     char w118_text[4];
     /* element 199 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e199;
+    naka_cls_Label_t ftdemo24_Label_2;
     char w119_text[4];
     /* element 200 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e200;
+    naka_cls_Label_t ftdemo24_Label_3;
     char w120_text[4];
     /* element 201 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e201;
+    naka_cls_Label_t ftdemo24_Label_4;
     char w121_text[4];
     /* element 202 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e202;
+    naka_cls_Label_t ftdemo24_Label_5;
     char w122_text[4];
     /* element 203 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Vocalist_Label;
@@ -720,34 +720,34 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t DiskLoad_Label;
     char DiskLoad_text[10];
     /* element 209 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e209;
+    naka_cls_Box_t ftdemo24_Box_3;
     /* element 210 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t MuteKeysOff_Label;
     char MuteKeysOff_text[14];
     /* element 211 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e211;
+    naka_cls_Box_t ftdemo24_Box_4;
     /* element 212 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Panic_Label;
     char Panic_text[6];
     /* element 213 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e213;
+    naka_cls_Box_t ftdemo24_Box_5;
     /* element 214 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e214;
+    naka_cls_Label_t ftdemo24_Label_6;
     char w134_text[4];
     /* element 215 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e215;
+    naka_cls_Line_t ftdemo24_Line_2;
     /* element 216 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e216;
+    naka_cls_Label_t ftdemo24_Label_7;
     char w135_text[4];
     /* element 217 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e217;
+    naka_cls_Box_t ftdemo24_Box_6;
     /* element 218 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e218;
+    naka_cls_Label_t ftdemo24_Label_8;
     char w137_text[4];
     /* element 219 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e219;
+    naka_cls_Line_t ftdemo24_Line_3;
     /* element 220 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e220;
+    naka_cls_Label_t ftdemo24_Label_9;
     char w138_text[4];
     /* element 221 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Item_Label;
@@ -756,7 +756,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Value_Label;
     char Value_text[6];
     /* element 223 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
-    naka_cls_Frame_t vFD_e223;
+    naka_cls_Frame_t ftdemo24_Frame;
     /* element 224 of Viewable slot 0xFD "ftdemo25": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo25;
     char w141_text[2];
@@ -767,7 +767,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t ftdemo26;
     char FadeInOutSetting_text[20];
     /* element 227 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e227;
+    naka_cls_Box_t ftdemo26_Box;
     /* element 228 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t FadeIn_Label;
     char FadeIn_text[8];
@@ -790,39 +790,39 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t AutoStopSeqOn_Label;
     char AutoStopSeqOn_text[28];
     /* element 235 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
-    naka_cls_Frame_t vFD_e235;
+    naka_cls_Frame_t ftdemo26_Frame;
     /* element 236 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e236;
+    naka_cls_Box_t ftdemo26_Box_2;
     /* element 237 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Measure_Label;
     char Measure_text[10];
     /* element 238 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e238;
+    naka_cls_PsEditSwBox_t ftdemo26_PsEditSwBox;
     /* element 239 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e239;
+    naka_cls_Label_t ftdemo26_Label;
     char w153_text[4];
     /* element 240 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e240;
+    naka_cls_Label_t ftdemo26_Label_2;
     char w154_text[4];
     /* element 241 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e241;
+    naka_cls_Line_t ftdemo26_Line;
     /* element 242 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e242;
+    naka_cls_PsEditSwBox_t ftdemo26_PsEditSwBox_2;
     /* element 243 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e243;
+    naka_cls_Label_t ftdemo26_Label_3;
     char w155_text[4];
     /* element 244 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e244;
+    naka_cls_Label_t ftdemo26_Label_4;
     char w156_text[4];
     /* element 245 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e245;
+    naka_cls_Line_t ftdemo26_Line_2;
     /* element 246 of Viewable slot 0xFD "ftdemo40": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo40;
     char w157_text[2];
     /* element 247 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e247;
+    naka_cls_Box_t ftdemo40_Box;
     /* element 248 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e248;
+    naka_cls_Box_t ftdemo40_Box_2;
     /* element 249 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t MusicStylist_Label;
     char MusicStylist_text[14];
@@ -839,7 +839,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t ftdemo41;
     char StyleExplorer_text[16];
     /* element 254 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e254;
+    naka_cls_Box_t ftdemo41_Box;
     /* element 255 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t EasyListening_Label;
     char EasyListening_text[16];
@@ -871,37 +871,37 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t LatinWorld_Label;
     char LatinWorld_text[14];
     /* element 265 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
-    naka_cls_Frame_t vFD_e265;
+    naka_cls_Frame_t ftdemo41_Frame;
     /* element 266 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e266;
+    naka_cls_PsEditSwBox_t ftdemo41_PsEditSwBox;
     /* element 267 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Ok_Label;
     char Ok_text[4];
     /* element 268 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e268;
+    naka_cls_PsEditSwBox_t ftdemo41_PsEditSwBox_2;
     /* element 269 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e269;
+    naka_cls_Label_t ftdemo41_Label;
     char w177_text[4];
     /* element 270 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e270;
+    naka_cls_Label_t ftdemo41_Label_2;
     char w178_text[4];
     /* element 271 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e271;
+    naka_cls_Line_t ftdemo41_Line;
     /* element 272 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e272;
+    naka_cls_PsEditSwBox_t ftdemo41_PsEditSwBox_3;
     /* element 273 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e273;
+    naka_cls_Label_t ftdemo41_Label_3;
     char w179_text[4];
     /* element 274 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e274;
+    naka_cls_Label_t ftdemo41_Label_4;
     char w180_text[4];
     /* element 275 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e275;
+    naka_cls_Line_t ftdemo41_Line_2;
     /* element 276 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t MainCategory_Label;
     char MainCategory_text[14];
     /* element 277 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e277;
+    naka_cls_Box_t ftdemo41_Box_2;
     /* element 278 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t GlamrockPiano_Label;
     char GlamrockPiano_text[16];
@@ -933,18 +933,18 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t RockGig_Label;
     char RockGig_text[10];
     /* element 288 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
-    naka_cls_Frame_t vFD_e288;
+    naka_cls_Frame_t ftdemo41_Frame_2;
     /* element 289 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t SubCategory_Label;
     char SubCategory_text[14];
     /* element 290 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e290;
+    naka_cls_Label_t ftdemo41_Label_5;
     char w194_text[4];
     /* element 291 of Viewable slot 0xFD "ftdemo42": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo42;
     char StyleExplorer_text_2[16];
     /* element 292 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e292;
+    naka_cls_Box_t ftdemo42_Box;
     /* element 293 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t EasyListening_Label_2;
     char EasyListening_text_2[16];
@@ -976,37 +976,37 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t LatinWorld_Label_2;
     char LatinWorld_text_2[14];
     /* element 303 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
-    naka_cls_Frame_t vFD_e303;
+    naka_cls_Frame_t ftdemo42_Frame;
     /* element 304 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e304;
+    naka_cls_PsEditSwBox_t ftdemo42_PsEditSwBox;
     /* element 305 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Ok_Label_2;
     char Ok_text_2[4];
     /* element 306 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e306;
+    naka_cls_PsEditSwBox_t ftdemo42_PsEditSwBox_2;
     /* element 307 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e307;
+    naka_cls_Label_t ftdemo42_Label;
     char w208_text[4];
     /* element 308 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e308;
+    naka_cls_Label_t ftdemo42_Label_2;
     char w209_text[4];
     /* element 309 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e309;
+    naka_cls_Line_t ftdemo42_Line;
     /* element 310 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e310;
+    naka_cls_PsEditSwBox_t ftdemo42_PsEditSwBox_3;
     /* element 311 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e311;
+    naka_cls_Label_t ftdemo42_Label_3;
     char w210_text[4];
     /* element 312 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e312;
+    naka_cls_Label_t ftdemo42_Label_4;
     char w211_text[4];
     /* element 313 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e313;
+    naka_cls_Line_t ftdemo42_Line_2;
     /* element 314 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t MainCategory_Label_2;
     char MainCategory_text_2[14];
     /* element 315 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e315;
+    naka_cls_Box_t ftdemo42_Box_2;
     /* element 316 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t GlamrockPiano_Label_2;
     char GlamrockPiano_text_2[16];
@@ -1038,18 +1038,18 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t RockGig_Label_2;
     char RockGig_text_2[10];
     /* element 326 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
-    naka_cls_Frame_t vFD_e326;
+    naka_cls_Frame_t ftdemo42_Frame_2;
     /* element 327 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t SubCategory_Label_2;
     char SubCategory_text_2[14];
     /* element 328 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e328;
+    naka_cls_Label_t ftdemo42_Label_5;
     char w225_text[4];
     /* element 329 of Viewable slot 0xFD "ftdemo44": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo44;
     char StyleExplorer_text_3[16];
     /* element 330 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e330;
+    naka_cls_Box_t ftdemo44_Box;
     /* element 331 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t EuroPopShuffleTempo_Label;
     char EuroPopShuffleTempo_text[38];
@@ -1081,30 +1081,30 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t SaxProduction_Label;
     char SaxProduction_text[32];
     /* element 341 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
-    naka_cls_Frame_t vFD_e341;
+    naka_cls_Frame_t ftdemo44_Frame;
     /* element 342 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e342;
+    naka_cls_PsEditSwBox_t ftdemo44_PsEditSwBox;
     /* element 343 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Skip_Label;
     char Skip_text[6];
     /* element 344 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e344;
+    naka_cls_Label_t ftdemo44_Label;
     char w239_text[4];
     /* element 345 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e345;
+    naka_cls_Label_t ftdemo44_Label_2;
     char w240_text[4];
     /* element 346 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e346;
+    naka_cls_Line_t ftdemo44_Line;
     /* element 347 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e347;
+    naka_cls_PsEditSwBox_t ftdemo44_PsEditSwBox_2;
     /* element 348 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e348;
+    naka_cls_Label_t ftdemo44_Label_3;
     char w241_text[4];
     /* element 349 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e349;
+    naka_cls_Label_t ftdemo44_Label_4;
     char w242_text[4];
     /* element 350 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e350;
+    naka_cls_Line_t ftdemo44_Line_2;
     /* element 351 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t CategoryRockPop_Label;
     char CategoryRockPop_text[22];
@@ -1112,7 +1112,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t ftdemo45;
     char StyleExplorer_text_4[16];
     /* element 353 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e353;
+    naka_cls_Box_t ftdemo45_Box;
     /* element 354 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t EuroPopShuffleTempo_Label_2;
     char EuroPopShuffleTempo_text_2[38];
@@ -1144,30 +1144,30 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t SaxProduction_Label_2;
     char SaxProduction_text_2[32];
     /* element 364 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
-    naka_cls_Frame_t vFD_e364;
+    naka_cls_Frame_t ftdemo45_Frame;
     /* element 365 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e365;
+    naka_cls_PsEditSwBox_t ftdemo45_PsEditSwBox;
     /* element 366 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Skip_Label_2;
     char Skip_text_2[6];
     /* element 367 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e367;
+    naka_cls_Label_t ftdemo45_Label;
     char w257_text[4];
     /* element 368 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e368;
+    naka_cls_Label_t ftdemo45_Label_2;
     char w258_text[4];
     /* element 369 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e369;
+    naka_cls_Line_t ftdemo45_Line;
     /* element 370 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e370;
+    naka_cls_PsEditSwBox_t ftdemo45_PsEditSwBox_2;
     /* element 371 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e371;
+    naka_cls_Label_t ftdemo45_Label_3;
     char w259_text[4];
     /* element 372 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e372;
+    naka_cls_Label_t ftdemo45_Label_4;
     char w260_text[4];
     /* element 373 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e373;
+    naka_cls_Line_t ftdemo45_Line_2;
     /* element 374 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t CategoryRockPop_Label_2;
     char CategoryRockPop_text_2[22];
@@ -1175,12 +1175,12 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t ftdemo46;
     char AlphabeticalExplorer_text[22];
     /* element 376 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e376;
+    naka_cls_Box_t ftdemo46_Box;
     /* element 377 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t BTempo_Label;
     char BTempo_text[36];
     /* element 378 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
-    naka_cls_Frame_t vFD_e378;
+    naka_cls_Frame_t BTempo_Frame;
     /* element 379 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t BallroomFiddle_Label;
     char BallroomFiddle_text[32];
@@ -1209,36 +1209,36 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t BridgeTooFar_Label;
     char BridgeTooFar_text[32];
     /* element 388 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e388;
+    naka_cls_PsEditSwBox_t ftdemo46_PsEditSwBox;
     /* element 389 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e389;
+    naka_cls_Label_t ftdemo46_Label;
     char w274_text[4];
     /* element 390 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e390;
+    naka_cls_Label_t ftdemo46_Label_2;
     char w275_text[4];
     /* element 391 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e391;
+    naka_cls_Label_t ftdemo46_Label_3;
     char w276_text[4];
     /* element 392 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e392;
+    naka_cls_Line_t ftdemo46_Line;
     /* element 393 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e393;
+    naka_cls_PsEditSwBox_t ftdemo46_PsEditSwBox_2;
     /* element 394 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Skip_Label_3;
     char Skip_text_3[6];
     /* element 395 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e395;
+    naka_cls_Label_t ftdemo46_Label_4;
     char w278_text[4];
     /* element 396 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e396;
+    naka_cls_Label_t ftdemo46_Label_5;
     char w279_text[4];
     /* element 397 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e397;
+    naka_cls_Line_t ftdemo46_Line_2;
     /* element 398 of Viewable slot 0xFD "ftdemo47": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo47;
     char AlphabeticalExplorer_text_2[22];
     /* element 399 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e399;
+    naka_cls_Box_t ftdemo47_Box;
     /* element 400 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t CTempo_Label;
     char CTempo_text[36];
@@ -1264,38 +1264,38 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t CurtainUp_Label;
     char CurtainUp_text[32];
     /* element 408 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
-    naka_cls_Frame_t vFD_e408;
+    naka_cls_Frame_t ftdemo47_Frame;
     /* element 409 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e409;
+    naka_cls_PsEditSwBox_t ftdemo47_PsEditSwBox;
     /* element 410 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e410;
+    naka_cls_Label_t ftdemo47_Label;
     char w290_text[4];
     /* element 411 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e411;
+    naka_cls_Label_t ftdemo47_Label_2;
     char w291_text[4];
     /* element 412 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e412;
+    naka_cls_Label_t ftdemo47_Label_3;
     char w292_text[4];
     /* element 413 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e413;
+    naka_cls_Line_t ftdemo47_Line;
     /* element 414 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e414;
+    naka_cls_PsEditSwBox_t ftdemo47_PsEditSwBox_2;
     /* element 415 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Skip_Label_4;
     char Skip_text_4[6];
     /* element 416 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e416;
+    naka_cls_Label_t ftdemo47_Label_4;
     char w294_text[4];
     /* element 417 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e417;
+    naka_cls_Label_t ftdemo47_Label_5;
     char w295_text[4];
     /* element 418 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e418;
+    naka_cls_Line_t ftdemo47_Line_2;
     /* element 419 of Viewable slot 0xFD "ftdemo48": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo48;
     char AlphabeticalExplorer_text_3[22];
     /* element 420 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e420;
+    naka_cls_Box_t ftdemo48_Box;
     /* element 421 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t CTempo_Label_2;
     char CTempo_text_2[36];
@@ -1321,38 +1321,38 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t CurtainUp_Label_2;
     char CurtainUp_text_2[32];
     /* element 429 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
-    naka_cls_Frame_t vFD_e429;
+    naka_cls_Frame_t ftdemo48_Frame;
     /* element 430 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e430;
+    naka_cls_PsEditSwBox_t ftdemo48_PsEditSwBox;
     /* element 431 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e431;
+    naka_cls_Label_t ftdemo48_Label;
     char w306_text[4];
     /* element 432 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e432;
+    naka_cls_Label_t ftdemo48_Label_2;
     char w307_text[4];
     /* element 433 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e433;
+    naka_cls_Label_t ftdemo48_Label_3;
     char w308_text[4];
     /* element 434 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e434;
+    naka_cls_Line_t ftdemo48_Line;
     /* element 435 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e435;
+    naka_cls_PsEditSwBox_t ftdemo48_PsEditSwBox_2;
     /* element 436 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Skip_Label_5;
     char Skip_text_5[6];
     /* element 437 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e437;
+    naka_cls_Label_t ftdemo48_Label_4;
     char w310_text[4];
     /* element 438 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e438;
+    naka_cls_Label_t ftdemo48_Label_5;
     char w311_text[4];
     /* element 439 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e439;
+    naka_cls_Line_t ftdemo48_Line_2;
     /* element 440 of Viewable slot 0xFD "ftdemo43": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ftdemo43;
     char StyleExplorer_text_5[16];
     /* element 441 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e441;
+    naka_cls_Box_t ftdemo43_Box;
     /* element 442 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t EasyListening_Label_3;
     char EasyListening_text_3[16];
@@ -1384,37 +1384,37 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t LatinWorld_Label_3;
     char LatinWorld_text_3[14];
     /* element 452 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
-    naka_cls_Frame_t vFD_e452;
+    naka_cls_Frame_t ftdemo43_Frame;
     /* element 453 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e453;
+    naka_cls_PsEditSwBox_t ftdemo43_PsEditSwBox;
     /* element 454 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t Ok_Label_3;
     char Ok_text_3[4];
     /* element 455 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e455;
+    naka_cls_PsEditSwBox_t ftdemo43_PsEditSwBox_2;
     /* element 456 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e456;
+    naka_cls_Label_t ftdemo43_Label;
     char w325_text[4];
     /* element 457 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e457;
+    naka_cls_Label_t ftdemo43_Label_2;
     char w326_text[4];
     /* element 458 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e458;
+    naka_cls_Line_t ftdemo43_Line;
     /* element 459 of Viewable slot 0xFD: PsEditSwBox (class id 0x0160001E) */
-    naka_cls_PsEditSwBox_t vFD_e459;
+    naka_cls_PsEditSwBox_t ftdemo43_PsEditSwBox_3;
     /* element 460 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e460;
+    naka_cls_Label_t ftdemo43_Label_3;
     char w327_text[4];
     /* element 461 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e461;
+    naka_cls_Label_t ftdemo43_Label_4;
     char w328_text[4];
     /* element 462 of Viewable slot 0xFD: Line (class id 0x0160002E) */
-    naka_cls_Line_t vFD_e462;
+    naka_cls_Line_t ftdemo43_Line_2;
     /* element 463 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t MainCategory_Label_3;
     char MainCategory_text_3[14];
     /* element 464 of Viewable slot 0xFD: Box (class id 0x01600031) */
-    naka_cls_Box_t vFD_e464;
+    naka_cls_Box_t ftdemo43_Box_2;
     /* element 465 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t GlamrockPiano_Label_3;
     char GlamrockPiano_text_3[16];
@@ -1446,12 +1446,12 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t RockGig_Label_3;
     char RockGig_text_3[10];
     /* element 475 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
-    naka_cls_Frame_t vFD_e475;
+    naka_cls_Frame_t ftdemo43_Frame_2;
     /* element 476 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t SubCategory_Label_3;
     char SubCategory_text_3[14];
     /* element 477 of Viewable slot 0xFD: Label (class id 0x0160002B) */
-    naka_cls_Label_t vFD_e477;
+    naka_cls_Label_t ftdemo43_Label_5;
     char w342_text[4];
     uint32_t ptrs_0[958];  /* 958 pointers */
     char str_388[2];
@@ -2200,7 +2200,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w1_text = ALIGNED_STRING(""),
 
-    .vFD_e3 = {
+    .ftdemo02_Box = {
         .class_ = 0x01600031,
         .super = 2,
         .sub = 4,
@@ -2212,7 +2212,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e4 = {
+    .ftdemo02_Box_2 = {
         .class_ = 0x01600031,
         .super = 3,
         .sub = 5,
@@ -2254,7 +2254,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Performance_text = "Performance",
 
-    .vFD_e7 = {
+    .ftdemo02_Box_3 = {
         .class_ = 0x01600031,
         .super = 3,
         .sub = 8,
@@ -2281,7 +2281,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Custom_text = "20 Custom",
 
-    .vFD_e9 = {
+    .ftdemo02_Box_4 = {
         .class_ = 0x01600031,
         .super = 3,
         .sub = 10,
@@ -2323,7 +2323,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .BackUp_text = "Back-up",
 
-    .vFD_e12 = {
+    .ftdemo02_Line = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2335,7 +2335,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e13 = {
+    .ftdemo02_Line_2 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2347,7 +2347,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e14 = {
+    .ftdemo02_Line_3 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = 15,
@@ -2359,7 +2359,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e15 = {
+    .ftdemo02_Label = {
         .class_ = 0x0160002B,
         .super = 14,
         .sub = NAKA_NONE,
@@ -2374,7 +2374,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w11_text = "~81",
 
-    .vFD_e16 = {
+    .ftdemo02_Line_4 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2386,7 +2386,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0000,
     },
 
-    .vFD_e17 = {
+    .ftdemo02_Line_5 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = 18,
@@ -2398,7 +2398,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e18 = {
+    .ftdemo02_Label_2 = {
         .class_ = 0x0160002B,
         .super = 17,
         .sub = NAKA_NONE,
@@ -2413,7 +2413,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w12_text = "~7f",
 
-    .vFD_e19 = {
+    .ftdemo02_Line_6 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2425,7 +2425,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e20 = {
+    .ftdemo02_Line_7 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2437,7 +2437,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e21 = {
+    .ftdemo02_Line_8 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2449,7 +2449,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e22 = {
+    .ftdemo02_Line_9 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2461,7 +2461,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0000,
     },
 
-    .vFD_e23 = {
+    .ftdemo02_Line_10 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2473,7 +2473,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e24 = {
+    .ftdemo02_Line_11 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2485,7 +2485,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e25 = {
+    .ftdemo02_Line_12 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2497,7 +2497,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e26 = {
+    .ftdemo02_Label_3 = {
         .class_ = 0x0160002B,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2512,7 +2512,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w13_text = "~85",
 
-    .vFD_e27 = {
+    .ftdemo02_Box_5 = {
         .class_ = 0x01600031,
         .super = 3,
         .sub = 28,
@@ -2524,7 +2524,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e28 = {
+    .ftdemo02_Box_6 = {
         .class_ = 0x01600031,
         .super = 27,
         .sub = 29,
@@ -2551,7 +2551,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Fd_text = ALIGNED_STRING("FD"),
 
-    .vFD_e30 = {
+    .ftdemo02_Label_4 = {
         .class_ = 0x0160002B,
         .super = 28,
         .sub = NAKA_NONE,
@@ -2566,7 +2566,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w17_text = "~7f",
 
-    .vFD_e31 = {
+    .ftdemo02_Box_7 = {
         .class_ = 0x01600031,
         .super = 27,
         .sub = 32,
@@ -2578,7 +2578,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e32 = {
+    .ftdemo02_Box_8 = {
         .class_ = 0x01600031,
         .super = 31,
         .sub = NAKA_NONE,
@@ -2590,7 +2590,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e33 = {
+    .ftdemo02_Label_5 = {
         .class_ = 0x0160002B,
         .super = 27,
         .sub = NAKA_NONE,
@@ -2650,7 +2650,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .PlayOnly_text = "Play Only",
 
-    .vFD_e37 = {
+    .ftdemo02_Label_6 = {
         .class_ = 0x0160002B,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2665,7 +2665,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w24_text = "~7f",
 
-    .vFD_e38 = {
+    .ftdemo02_Line_13 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2677,7 +2677,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e39 = {
+    .ftdemo02_Line_14 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2689,7 +2689,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e40 = {
+    .ftdemo02_Line_15 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2701,7 +2701,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e41 = {
+    .ftdemo02_Line_16 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2713,7 +2713,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e42 = {
+    .ftdemo02_Line_17 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2725,7 +2725,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e43 = {
+    .ftdemo02_Line_18 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2737,7 +2737,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e44 = {
+    .ftdemo02_Line_19 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2749,7 +2749,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e45 = {
+    .ftdemo02_Line_20 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2761,7 +2761,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e46 = {
+    .ftdemo02_Line_21 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = 47,
@@ -2773,7 +2773,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e47 = {
+    .ftdemo02_Line_22 = {
         .class_ = 0x0160002E,
         .super = 46,
         .sub = NAKA_NONE,
@@ -2785,7 +2785,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e48 = {
+    .ftdemo02_Line_23 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2797,7 +2797,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e49 = {
+    .ftdemo02_Line_24 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2809,7 +2809,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e50 = {
+    .ftdemo02_Line_25 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2821,7 +2821,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0000,
     },
 
-    .vFD_e51 = {
+    .ftdemo02_Line_26 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = 52,
@@ -2833,7 +2833,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0000,
     },
 
-    .vFD_e52 = {
+    .ftdemo02_Line_27 = {
         .class_ = 0x0160002E,
         .super = 51,
         .sub = NAKA_NONE,
@@ -2845,7 +2845,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e53 = {
+    .ftdemo02_Line_28 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = 54,
@@ -2857,7 +2857,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0000,
     },
 
-    .vFD_e54 = {
+    .ftdemo02_Line_29 = {
         .class_ = 0x0160002E,
         .super = 53,
         .sub = NAKA_NONE,
@@ -2869,7 +2869,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e55 = {
+    .ftdemo02_Line_30 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2881,7 +2881,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e56 = {
+    .ftdemo02_Line_31 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2893,7 +2893,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0000,
     },
 
-    .vFD_e57 = {
+    .ftdemo02_Line_32 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2905,7 +2905,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e58 = {
+    .ftdemo02_Line_33 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2917,7 +2917,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e59 = {
+    .ftdemo02_Line_34 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2929,7 +2929,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e60 = {
+    .ftdemo02_Line_35 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2941,7 +2941,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e61 = {
+    .ftdemo02_Line_36 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2953,7 +2953,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e62 = {
+    .ftdemo02_Line_37 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2965,7 +2965,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e63 = {
+    .ftdemo02_Line_38 = {
         .class_ = 0x0160002E,
         .super = 3,
         .sub = NAKA_NONE,
@@ -2977,7 +2977,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e64 = {
+    .ftdemo02_Line_39 = {
         .class_ = 0x0160002E,
         .super = 2,
         .sub = NAKA_NONE,
@@ -3007,7 +3007,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w25_text = ALIGNED_STRING(""),
 
-    .vFD_e66 = {
+    .ftdemo03_Box = {
         .class_ = 0x01600031,
         .super = 65,
         .sub = 67,
@@ -3034,7 +3034,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .StyleData_text = ALIGNED_STRING("Style Data"),
 
-    .vFD_e68 = {
+    .ftdemo03_Box_2 = {
         .class_ = 0x01600031,
         .super = 66,
         .sub = 69,
@@ -3061,7 +3061,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Custom_text_2 = "20 Custom",
 
-    .vFD_e70 = {
+    .ftdemo03_Box_3 = {
         .class_ = 0x01600031,
         .super = 66,
         .sub = 71,
@@ -3088,7 +3088,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Composer_text_2 = ALIGNED_STRING("3 Composer"),
 
-    .vFD_e72 = {
+    .ftdemo03_Label = {
         .class_ = 0x0160002B,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3103,7 +3103,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w32_text = "~7f",
 
-    .vFD_e73 = {
+    .ftdemo03_Line = {
         .class_ = 0x0160002E,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3115,7 +3115,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e74 = {
+    .ftdemo03_Line_2 = {
         .class_ = 0x0160002E,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3127,7 +3127,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e75 = {
+    .ftdemo03_Line_3 = {
         .class_ = 0x0160002E,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3139,7 +3139,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e76 = {
+    .ftdemo03_Line_4 = {
         .class_ = 0x0160002E,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3151,7 +3151,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e77 = {
+    .ftdemo03_Line_5 = {
         .class_ = 0x0160002E,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3163,7 +3163,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e78 = {
+    .ftdemo03_Line_6 = {
         .class_ = 0x0160002E,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3175,7 +3175,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0000,
     },
 
-    .vFD_e79 = {
+    .ftdemo03_Line_7 = {
         .class_ = 0x0160002E,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3187,7 +3187,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e80 = {
+    .ftdemo03_Line_8 = {
         .class_ = 0x0160002E,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3199,7 +3199,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e81 = {
+    .ftdemo03_Line_9 = {
         .class_ = 0x0160002E,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3226,7 +3226,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .StyleConvert_text = "Style Convert",
 
-    .vFD_e83 = {
+    .ftdemo03_Line_10 = {
         .class_ = 0x0160002E,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3238,7 +3238,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e84 = {
+    .ftdemo03_Line_11 = {
         .class_ = 0x0160002E,
         .super = 66,
         .sub = NAKA_NONE,
@@ -3250,7 +3250,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e85 = {
+    .ftdemo03_Box_4 = {
         .class_ = 0x01600031,
         .super = 66,
         .sub = 86,
@@ -3262,7 +3262,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e86 = {
+    .ftdemo03_Box_5 = {
         .class_ = 0x01600031,
         .super = 85,
         .sub = NAKA_NONE,
@@ -3274,7 +3274,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e87 = {
+    .ftdemo03_Box_6 = {
         .class_ = 0x01600031,
         .super = 85,
         .sub = 88,
@@ -3286,7 +3286,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e88 = {
+    .ftdemo03_Box_7 = {
         .class_ = 0x01600031,
         .super = 87,
         .sub = NAKA_NONE,
@@ -3298,7 +3298,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e89 = {
+    .ftdemo03_Label_2 = {
         .class_ = 0x0160002B,
         .super = 85,
         .sub = NAKA_NONE,
@@ -3313,7 +3313,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w38_text = "~7f",
 
-    .vFD_e90 = {
+    .ftdemo03_Box_8 = {
         .class_ = 0x01600031,
         .super = 66,
         .sub = 91,
@@ -3325,7 +3325,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e91 = {
+    .ftdemo03_Box_9 = {
         .class_ = 0x01600031,
         .super = 90,
         .sub = NAKA_NONE,
@@ -3337,7 +3337,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e92 = {
+    .ftdemo03_Box_10 = {
         .class_ = 0x01600031,
         .super = 90,
         .sub = 93,
@@ -3349,7 +3349,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e93 = {
+    .ftdemo03_Box_11 = {
         .class_ = 0x01600031,
         .super = 92,
         .sub = NAKA_NONE,
@@ -3361,7 +3361,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e94 = {
+    .ftdemo03_Label_3 = {
         .class_ = 0x0160002B,
         .super = 90,
         .sub = NAKA_NONE,
@@ -3376,7 +3376,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w43_text = "~7f",
 
-    .vFD_e95 = {
+    .ftdemo03_Box_12 = {
         .class_ = 0x01600031,
         .super = 66,
         .sub = 96,
@@ -3388,7 +3388,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e96 = {
+    .ftdemo03_Box_13 = {
         .class_ = 0x01600031,
         .super = 95,
         .sub = NAKA_NONE,
@@ -3400,7 +3400,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e97 = {
+    .ftdemo03_Box_14 = {
         .class_ = 0x01600031,
         .super = 95,
         .sub = 98,
@@ -3412,7 +3412,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e98 = {
+    .ftdemo03_Box_15 = {
         .class_ = 0x01600031,
         .super = 97,
         .sub = NAKA_NONE,
@@ -3424,7 +3424,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e99 = {
+    .ftdemo03_Label_4 = {
         .class_ = 0x0160002B,
         .super = 95,
         .sub = NAKA_NONE,
@@ -3439,7 +3439,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w48_text = "~7f",
 
-    .vFD_e100 = {
+    .ftdemo03_Box_16 = {
         .class_ = 0x01600031,
         .super = 66,
         .sub = 101,
@@ -3451,7 +3451,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e101 = {
+    .ftdemo03_Box_17 = {
         .class_ = 0x01600031,
         .super = 100,
         .sub = 102,
@@ -3478,7 +3478,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Fd_text_2 = ALIGNED_STRING("FD"),
 
-    .vFD_e103 = {
+    .ftdemo03_Box_18 = {
         .class_ = 0x01600031,
         .super = 100,
         .sub = 104,
@@ -3490,7 +3490,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e104 = {
+    .ftdemo03_Box_19 = {
         .class_ = 0x01600031,
         .super = 103,
         .sub = NAKA_NONE,
@@ -3502,7 +3502,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x0000,
     },
 
-    .vFD_e105 = {
+    .ftdemo03_Label_5 = {
         .class_ = 0x0160002B,
         .super = 100,
         .sub = NAKA_NONE,
@@ -3517,7 +3517,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w54_text = "~80",
 
-    .vFD_e106 = {
+    .ftdemo03_Label_6 = {
         .class_ = 0x0160002B,
         .super = 100,
         .sub = NAKA_NONE,
@@ -3593,7 +3593,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .ftdemobmp3D_file = "FTBMP02",
 
-    .vFD_e111 = {
+    .ftdemo04_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 109,
         .sub = NAKA_NONE,
@@ -3611,7 +3611,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B0002,
     },
 
-    .vFD_e112 = {
+    .ftdemo04_Box = {
         .class_ = 0x01600031,
         .super = 109,
         .sub = NAKA_NONE,
@@ -3623,7 +3623,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e113 = {
+    .ftdemo04_AcLanguageText_2 = {
         .class_ = 0x01600066,
         .super = 109,
         .sub = NAKA_NONE,
@@ -3641,7 +3641,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B0000,
     },
 
-    .vFD_e114 = {
+    .ftdemo04_AcLanguageText_3 = {
         .class_ = 0x01600066,
         .super = 109,
         .sub = NAKA_NONE,
@@ -3677,7 +3677,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w60_text = ALIGNED_STRING(""),
 
-    .vFD_e116 = {
+    .ftdemo05_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 115,
         .sub = NAKA_NONE,
@@ -3695,7 +3695,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B0003,
     },
 
-    .vFD_e117 = {
+    .ftdemo05_AcLanguageText_2 = {
         .class_ = 0x01600066,
         .super = 115,
         .sub = NAKA_NONE,
@@ -3731,7 +3731,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w61_text = ALIGNED_STRING(""),
 
-    .vFD_e119 = {
+    .ftdemo06_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 118,
         .sub = NAKA_NONE,
@@ -3793,7 +3793,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .ftdemobmpcnv_file = "FTBMP04",
 
-    .vFD_e123 = {
+    .ftdemo07_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 121,
         .sub = NAKA_NONE,
@@ -3829,7 +3829,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w63_text = ALIGNED_STRING(""),
 
-    .vFD_e125 = {
+    .ftdemo08_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 124,
         .sub = NAKA_NONE,
@@ -3865,7 +3865,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w64_text = ALIGNED_STRING(""),
 
-    .vFD_e127 = {
+    .ftdemo09_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 126,
         .sub = NAKA_NONE,
@@ -3883,7 +3883,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B0008,
     },
 
-    .vFD_e128 = {
+    .ftdemo09_AcLanguageText_2 = {
         .class_ = 0x01600066,
         .super = 126,
         .sub = NAKA_NONE,
@@ -3919,7 +3919,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w65_text = ALIGNED_STRING(""),
 
-    .vFD_e130 = {
+    .ftdemo10_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 129,
         .sub = NAKA_NONE,
@@ -3937,7 +3937,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B000A,
     },
 
-    .vFD_e131 = {
+    .ftdemo10_AcLanguageText_2 = {
         .class_ = 0x01600066,
         .super = 129,
         .sub = NAKA_NONE,
@@ -3973,7 +3973,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w66_text = ALIGNED_STRING(""),
 
-    .vFD_e133 = {
+    .ftdemo20_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 132,
         .sub = NAKA_NONE,
@@ -3991,7 +3991,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B000C,
     },
 
-    .vFD_e134 = {
+    .ftdemo20_AcLanguageText_2 = {
         .class_ = 0x01600066,
         .super = 132,
         .sub = NAKA_NONE,
@@ -4040,7 +4040,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w67_text = ALIGNED_STRING(""),
 
-    .vFD_e137 = {
+    .ftdemo21_AcLanguageText = {
         .class_ = 0x01600066,
         .super = 136,
         .sub = NAKA_NONE,
@@ -4076,7 +4076,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .BankView_text = "BANK VIEW",
 
-    .vFD_e139 = {
+    .ftdemo22_Box = {
         .class_ = 0x01600031,
         .super = 138,
         .sub = 140,
@@ -4103,7 +4103,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .BankForDinnerShow_text = ALIGNED_STRING("BANK 1:For Dinner Show"),
 
-    .vFD_e141 = {
+    .ftdemo22_PsEditSwBox = {
         .class_ = 0x0160001E,
         .super = 138,
         .sub = 142,
@@ -4120,7 +4120,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e142 = {
+    .ftdemo22_Label = {
         .class_ = 0x0160002B,
         .super = 141,
         .sub = 143,
@@ -4135,7 +4135,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w71_text = "~9b",
 
-    .vFD_e143 = {
+    .ftdemo22_Label_2 = {
         .class_ = 0x0160002B,
         .super = 142,
         .sub = NAKA_NONE,
@@ -4256,7 +4256,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Naming_text_2 = ALIGNED_STRING("NAMING"),
 
-    .vFD_e150 = {
+    .ftdemo22_Line = {
         .class_ = 0x0160002E,
         .super = 138,
         .sub = NAKA_NONE,
@@ -4403,7 +4403,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Bank_text_2 = ALIGNED_STRING("BANK"),
 
-    .vFD_e160 = {
+    .ftdemo22_Box_2 = {
         .class_ = 0x01600031,
         .super = 138,
         .sub = 161,
@@ -4463,7 +4463,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Aa_text = "~aa=115",
 
-    .vFD_e164 = {
+    .ftdemo23_Label = {
         .class_ = 0x0160002B,
         .super = 162,
         .sub = NAKA_NONE,
@@ -4493,7 +4493,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Mic_text = "MIC",
 
-    .vFD_e166 = {
+    .ftdemo23_Box = {
         .class_ = 0x01600031,
         .super = 162,
         .sub = 167,
@@ -4595,7 +4595,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .WhenTheSaints_text = "When The Saints",
 
-    .vFD_e173 = {
+    .ftdemo23_Label_2 = {
         .class_ = 0x0160002B,
         .super = 162,
         .sub = NAKA_NONE,
@@ -4625,7 +4625,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Play_text = ALIGNED_STRING("PLAY"),
 
-    .vFD_e175 = {
+    .ftdemo23_VwEditSwBox = {
         .class_ = 0x0160003E,
         .super = 162,
         .sub = 176,
@@ -4646,7 +4646,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_276 = ALIGNED_STRING(""),
 
-    .vFD_e176 = {
+    .ftdemo23_Bitmap = {
         .class_ = 0x0160002C,
         .super = 175,
         .sub = NAKA_NONE,
@@ -4657,7 +4657,7 @@ const naka_perf_style_t naka_perf_style_data
         .bmp = 0x00000008,
     },
 
-    .vFD_e177 = {
+    .ftdemo23_PsEditSwBox = {
         .class_ = 0x0160001E,
         .super = 162,
         .sub = 178,
@@ -4675,7 +4675,7 @@ const naka_perf_style_t naka_perf_style_data
     },
 
 /* 16-bit pair 0x00C0, 0x00EC (192, 236); the generator had made it a pointer to 0xEC00C0, 18 bytes into StyleSong_Titles[517] -- not a pointer */
-    .vFD_e178 = {
+    .ftdemo23_Bitmap_2 = {
         .class_ = 0x0160002C,
         .super = 177,
         .sub = NAKA_NONE,
@@ -4686,7 +4686,7 @@ const naka_perf_style_t naka_perf_style_data
         .bmp = 0x00000006,
     },
 
-    .vFD_e179 = {
+    .ftdemo23_PsEditSwBox_2 = {
         .class_ = 0x0160001E,
         .super = 162,
         .sub = 180,
@@ -4704,7 +4704,7 @@ const naka_perf_style_t naka_perf_style_data
     },
 
 /* 16-bit pair 0x0098, 0x00EC (152, 236); the generator had made it a pointer to 0xEC0098, 12 bytes into StyleSong_Titles[516] -- not a pointer */
-    .vFD_e180 = {
+    .ftdemo23_Bitmap_3 = {
         .class_ = 0x0160002C,
         .super = 179,
         .sub = NAKA_NONE,
@@ -4715,7 +4715,7 @@ const naka_perf_style_t naka_perf_style_data
         .bmp = 0x00000009,
     },
 
-    .vFD_e181 = {
+    .ftdemo23_VwEditSwBox_2 = {
         .class_ = 0x0160003E,
         .super = 162,
         .sub = 182,
@@ -4736,7 +4736,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_284 = ALIGNED_STRING(""),
 
-    .vFD_e182 = {
+    .ftdemo23_Bitmap_4 = {
         .class_ = 0x0160002C,
         .super = 181,
         .sub = NAKA_NONE,
@@ -4747,7 +4747,7 @@ const naka_perf_style_t naka_perf_style_data
         .bmp = 0x0000000A,
     },
 
-    .vFD_e183 = {
+    .ftdemo23_VwEditSwBox_3 = {
         .class_ = 0x0160003E,
         .super = 162,
         .sub = 184,
@@ -4768,7 +4768,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_288 = ALIGNED_STRING(""),
 
-    .vFD_e184 = {
+    .ftdemo23_Bitmap_5 = {
         .class_ = 0x0160002C,
         .super = 183,
         .sub = NAKA_NONE,
@@ -4797,7 +4797,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Entertainer_text = "ENTERTAINER",
 
-    .vFD_e186 = {
+    .ftdemo24_Box = {
         .class_ = 0x01600031,
         .super = 185,
         .sub = 187,
@@ -4809,7 +4809,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e187 = {
+    .ftdemo24_Line = {
         .class_ = 0x0160002E,
         .super = 186,
         .sub = NAKA_NONE,
@@ -4941,7 +4941,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Volume_text = ALIGNED_STRING("VOLUME     :        84"),
 
-    .vFD_e196 = {
+    .ftdemo24_Box_2 = {
         .class_ = 0x01600031,
         .super = 186,
         .sub = 197,
@@ -4968,7 +4968,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Stage_text = "STAGE",
 
-    .vFD_e198 = {
+    .ftdemo24_Label = {
         .class_ = 0x0160002B,
         .super = 185,
         .sub = NAKA_NONE,
@@ -4983,7 +4983,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w118_text = "~7f",
 
-    .vFD_e199 = {
+    .ftdemo24_Label_2 = {
         .class_ = 0x0160002B,
         .super = 185,
         .sub = NAKA_NONE,
@@ -4998,7 +4998,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w119_text = "~7f",
 
-    .vFD_e200 = {
+    .ftdemo24_Label_3 = {
         .class_ = 0x0160002B,
         .super = 185,
         .sub = NAKA_NONE,
@@ -5013,7 +5013,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w120_text = "~7f",
 
-    .vFD_e201 = {
+    .ftdemo24_Label_4 = {
         .class_ = 0x0160002B,
         .super = 185,
         .sub = NAKA_NONE,
@@ -5028,7 +5028,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w121_text = "~7f",
 
-    .vFD_e202 = {
+    .ftdemo24_Label_5 = {
         .class_ = 0x0160002B,
         .super = 185,
         .sub = NAKA_NONE,
@@ -5133,7 +5133,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .DiskLoad_text = "DISK LOAD",
 
-    .vFD_e209 = {
+    .ftdemo24_Box_3 = {
         .class_ = 0x01600031,
         .super = 185,
         .sub = 210,
@@ -5160,7 +5160,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .MuteKeysOff_text = "MUTE KEYS:OFF",
 
-    .vFD_e211 = {
+    .ftdemo24_Box_4 = {
         .class_ = 0x01600031,
         .super = 185,
         .sub = 212,
@@ -5187,7 +5187,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Panic_text = "PANIC",
 
-    .vFD_e213 = {
+    .ftdemo24_Box_5 = {
         .class_ = 0x01600031,
         .super = 185,
         .sub = 214,
@@ -5199,7 +5199,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C9,
     },
 
-    .vFD_e214 = {
+    .ftdemo24_Label_6 = {
         .class_ = 0x0160002B,
         .super = 213,
         .sub = NAKA_NONE,
@@ -5214,7 +5214,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w134_text = "~85",
 
-    .vFD_e215 = {
+    .ftdemo24_Line_2 = {
         .class_ = 0x0160002E,
         .super = 213,
         .sub = NAKA_NONE,
@@ -5226,7 +5226,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e216 = {
+    .ftdemo24_Label_7 = {
         .class_ = 0x0160002B,
         .super = 185,
         .sub = NAKA_NONE,
@@ -5241,7 +5241,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w135_text = "~81",
 
-    .vFD_e217 = {
+    .ftdemo24_Box_6 = {
         .class_ = 0x01600031,
         .super = 185,
         .sub = 218,
@@ -5253,7 +5253,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C9,
     },
 
-    .vFD_e218 = {
+    .ftdemo24_Label_8 = {
         .class_ = 0x0160002B,
         .super = 217,
         .sub = NAKA_NONE,
@@ -5268,7 +5268,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w137_text = "~9b",
 
-    .vFD_e219 = {
+    .ftdemo24_Line_3 = {
         .class_ = 0x0160002E,
         .super = 217,
         .sub = NAKA_NONE,
@@ -5280,7 +5280,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e220 = {
+    .ftdemo24_Label_9 = {
         .class_ = 0x0160002B,
         .super = 185,
         .sub = NAKA_NONE,
@@ -5325,7 +5325,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Value_text = "VALUE",
 
-    .vFD_e223 = {
+    .ftdemo24_Frame = {
         .class_ = 0x0160002F,
         .super = 185,
         .sub = NAKA_NONE,
@@ -5387,7 +5387,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .FadeInOutSetting_text = "FADE IN/OUT SETTING",
 
-    .vFD_e227 = {
+    .ftdemo26_Box = {
         .class_ = 0x01600031,
         .super = 226,
         .sub = 228,
@@ -5504,7 +5504,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .AutoStopSeqOn_text = ALIGNED_STRING("Auto stop Seq      :    ON"),
 
-    .vFD_e235 = {
+    .ftdemo26_Frame = {
         .class_ = 0x0160002F,
         .super = 227,
         .sub = 236,
@@ -5517,7 +5517,7 @@ const naka_perf_style_t naka_perf_style_data
         .color = 0x00F2,
     },
 
-    .vFD_e236 = {
+    .ftdemo26_Box_2 = {
         .class_ = 0x01600031,
         .super = 235,
         .sub = 237,
@@ -5544,7 +5544,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Measure_text = "2 measure",
 
-    .vFD_e238 = {
+    .ftdemo26_PsEditSwBox = {
         .class_ = 0x0160001E,
         .super = 226,
         .sub = 239,
@@ -5561,7 +5561,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e239 = {
+    .ftdemo26_Label = {
         .class_ = 0x0160002B,
         .super = 238,
         .sub = 240,
@@ -5576,7 +5576,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w153_text = "~9b",
 
-    .vFD_e240 = {
+    .ftdemo26_Label_2 = {
         .class_ = 0x0160002B,
         .super = 239,
         .sub = NAKA_NONE,
@@ -5591,7 +5591,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w154_text = "~98",
 
-    .vFD_e241 = {
+    .ftdemo26_Line = {
         .class_ = 0x0160002E,
         .super = 238,
         .sub = NAKA_NONE,
@@ -5603,7 +5603,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e242 = {
+    .ftdemo26_PsEditSwBox_2 = {
         .class_ = 0x0160001E,
         .super = 226,
         .sub = 243,
@@ -5620,7 +5620,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e243 = {
+    .ftdemo26_Label_3 = {
         .class_ = 0x0160002B,
         .super = 242,
         .sub = 244,
@@ -5635,7 +5635,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w155_text = "~85",
 
-    .vFD_e244 = {
+    .ftdemo26_Label_4 = {
         .class_ = 0x0160002B,
         .super = 243,
         .sub = NAKA_NONE,
@@ -5650,7 +5650,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w156_text = "~81",
 
-    .vFD_e245 = {
+    .ftdemo26_Line_2 = {
         .class_ = 0x0160002E,
         .super = 226,
         .sub = NAKA_NONE,
@@ -5680,7 +5680,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w157_text = ALIGNED_STRING(""),
 
-    .vFD_e247 = {
+    .ftdemo40_Box = {
         .class_ = 0x01600031,
         .super = 246,
         .sub = 248,
@@ -5692,7 +5692,7 @@ const naka_perf_style_t naka_perf_style_data
         .border = 0x00C1,
     },
 
-    .vFD_e248 = {
+    .ftdemo40_Box_2 = {
         .class_ = 0x01600031,
         .super = 247,
         .sub = 249,
@@ -5782,7 +5782,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .StyleExplorer_text = ALIGNED_STRING("STYLE EXPLORER"),
 
-    .vFD_e254 = {
+    .ftdemo41_Box = {
         .class_ = 0x01600031,
         .super = 253,
         .sub = 255,
@@ -5944,7 +5944,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .LatinWorld_text = "Latin / World",
 
-    .vFD_e265 = {
+    .ftdemo41_Frame = {
         .class_ = 0x0160002F,
         .super = 254,
         .sub = NAKA_NONE,
@@ -5957,7 +5957,7 @@ const naka_perf_style_t naka_perf_style_data
         .color = 0x00F2,
     },
 
-    .vFD_e266 = {
+    .ftdemo41_PsEditSwBox = {
         .class_ = 0x0160001E,
         .super = 253,
         .sub = 267,
@@ -5989,7 +5989,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Ok_text = ALIGNED_STRING("OK"),
 
-    .vFD_e268 = {
+    .ftdemo41_PsEditSwBox_2 = {
         .class_ = 0x0160001E,
         .super = 253,
         .sub = 269,
@@ -6006,7 +6006,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e269 = {
+    .ftdemo41_Label = {
         .class_ = 0x0160002B,
         .super = 268,
         .sub = 270,
@@ -6021,7 +6021,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w177_text = "~85",
 
-    .vFD_e270 = {
+    .ftdemo41_Label_2 = {
         .class_ = 0x0160002B,
         .super = 269,
         .sub = NAKA_NONE,
@@ -6036,7 +6036,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w178_text = "~81",
 
-    .vFD_e271 = {
+    .ftdemo41_Line = {
         .class_ = 0x0160002E,
         .super = 268,
         .sub = NAKA_NONE,
@@ -6048,7 +6048,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e272 = {
+    .ftdemo41_PsEditSwBox_3 = {
         .class_ = 0x0160001E,
         .super = 253,
         .sub = 273,
@@ -6065,7 +6065,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e273 = {
+    .ftdemo41_Label_3 = {
         .class_ = 0x0160002B,
         .super = 272,
         .sub = 274,
@@ -6080,7 +6080,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w179_text = "~85",
 
-    .vFD_e274 = {
+    .ftdemo41_Label_4 = {
         .class_ = 0x0160002B,
         .super = 273,
         .sub = NAKA_NONE,
@@ -6095,7 +6095,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w180_text = "~81",
 
-    .vFD_e275 = {
+    .ftdemo41_Line_2 = {
         .class_ = 0x0160002E,
         .super = 272,
         .sub = NAKA_NONE,
@@ -6122,7 +6122,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .MainCategory_text = "MAIN CATEGORY",
 
-    .vFD_e277 = {
+    .ftdemo41_Box_2 = {
         .class_ = 0x01600031,
         .super = 253,
         .sub = 278,
@@ -6284,7 +6284,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .RockGig_text = ALIGNED_STRING("Rock Gig"),
 
-    .vFD_e288 = {
+    .ftdemo41_Frame_2 = {
         .class_ = 0x0160002F,
         .super = 277,
         .sub = NAKA_NONE,
@@ -6312,7 +6312,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .SubCategory_text = ALIGNED_STRING("SUB CATEGORY"),
 
-    .vFD_e290 = {
+    .ftdemo41_Label_5 = {
         .class_ = 0x0160002B,
         .super = 253,
         .sub = NAKA_NONE,
@@ -6345,7 +6345,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .StyleExplorer_text_2 = ALIGNED_STRING("STYLE EXPLORER"),
 
-    .vFD_e292 = {
+    .ftdemo42_Box = {
         .class_ = 0x01600031,
         .super = 291,
         .sub = 293,
@@ -6507,7 +6507,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .LatinWorld_text_2 = "Latin / World",
 
-    .vFD_e303 = {
+    .ftdemo42_Frame = {
         .class_ = 0x0160002F,
         .super = 292,
         .sub = NAKA_NONE,
@@ -6520,7 +6520,7 @@ const naka_perf_style_t naka_perf_style_data
         .color = 0x00F2,
     },
 
-    .vFD_e304 = {
+    .ftdemo42_PsEditSwBox = {
         .class_ = 0x0160001E,
         .super = 291,
         .sub = 305,
@@ -6552,7 +6552,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Ok_text_2 = ALIGNED_STRING("OK"),
 
-    .vFD_e306 = {
+    .ftdemo42_PsEditSwBox_2 = {
         .class_ = 0x0160001E,
         .super = 291,
         .sub = 307,
@@ -6569,7 +6569,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e307 = {
+    .ftdemo42_Label = {
         .class_ = 0x0160002B,
         .super = 306,
         .sub = 308,
@@ -6584,7 +6584,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w208_text = "~85",
 
-    .vFD_e308 = {
+    .ftdemo42_Label_2 = {
         .class_ = 0x0160002B,
         .super = 307,
         .sub = NAKA_NONE,
@@ -6599,7 +6599,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w209_text = "~81",
 
-    .vFD_e309 = {
+    .ftdemo42_Line = {
         .class_ = 0x0160002E,
         .super = 306,
         .sub = NAKA_NONE,
@@ -6611,7 +6611,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e310 = {
+    .ftdemo42_PsEditSwBox_3 = {
         .class_ = 0x0160001E,
         .super = 291,
         .sub = 311,
@@ -6628,7 +6628,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e311 = {
+    .ftdemo42_Label_3 = {
         .class_ = 0x0160002B,
         .super = 310,
         .sub = 312,
@@ -6643,7 +6643,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w210_text = "~85",
 
-    .vFD_e312 = {
+    .ftdemo42_Label_4 = {
         .class_ = 0x0160002B,
         .super = 311,
         .sub = NAKA_NONE,
@@ -6658,7 +6658,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w211_text = "~81",
 
-    .vFD_e313 = {
+    .ftdemo42_Line_2 = {
         .class_ = 0x0160002E,
         .super = 310,
         .sub = NAKA_NONE,
@@ -6685,7 +6685,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .MainCategory_text_2 = "MAIN CATEGORY",
 
-    .vFD_e315 = {
+    .ftdemo42_Box_2 = {
         .class_ = 0x01600031,
         .super = 291,
         .sub = 316,
@@ -6847,7 +6847,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .RockGig_text_2 = ALIGNED_STRING("Rock Gig"),
 
-    .vFD_e326 = {
+    .ftdemo42_Frame_2 = {
         .class_ = 0x0160002F,
         .super = 315,
         .sub = NAKA_NONE,
@@ -6875,7 +6875,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .SubCategory_text_2 = ALIGNED_STRING("SUB CATEGORY"),
 
-    .vFD_e328 = {
+    .ftdemo42_Label_5 = {
         .class_ = 0x0160002B,
         .super = 291,
         .sub = NAKA_NONE,
@@ -6908,7 +6908,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .StyleExplorer_text_3 = ALIGNED_STRING("STYLE EXPLORER"),
 
-    .vFD_e330 = {
+    .ftdemo44_Box = {
         .class_ = 0x01600031,
         .super = 329,
         .sub = 331,
@@ -7070,7 +7070,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .SaxProduction_text = "Sax Production              106",
 
-    .vFD_e341 = {
+    .ftdemo44_Frame = {
         .class_ = 0x0160002F,
         .super = 330,
         .sub = NAKA_NONE,
@@ -7083,7 +7083,7 @@ const naka_perf_style_t naka_perf_style_data
         .color = 0x00F2,
     },
 
-    .vFD_e342 = {
+    .ftdemo44_PsEditSwBox = {
         .class_ = 0x0160001E,
         .super = 329,
         .sub = NAKA_NONE,
@@ -7115,7 +7115,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Skip_text = ALIGNED_STRING("SKIP"),
 
-    .vFD_e344 = {
+    .ftdemo44_Label = {
         .class_ = 0x0160002B,
         .super = 329,
         .sub = NAKA_NONE,
@@ -7130,7 +7130,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w239_text = "~9b",
 
-    .vFD_e345 = {
+    .ftdemo44_Label_2 = {
         .class_ = 0x0160002B,
         .super = 329,
         .sub = NAKA_NONE,
@@ -7145,7 +7145,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w240_text = "~98",
 
-    .vFD_e346 = {
+    .ftdemo44_Line = {
         .class_ = 0x0160002E,
         .super = 329,
         .sub = NAKA_NONE,
@@ -7157,7 +7157,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e347 = {
+    .ftdemo44_PsEditSwBox_2 = {
         .class_ = 0x0160001E,
         .super = 329,
         .sub = 348,
@@ -7174,7 +7174,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e348 = {
+    .ftdemo44_Label_3 = {
         .class_ = 0x0160002B,
         .super = 347,
         .sub = 349,
@@ -7189,7 +7189,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w241_text = "~85",
 
-    .vFD_e349 = {
+    .ftdemo44_Label_4 = {
         .class_ = 0x0160002B,
         .super = 348,
         .sub = NAKA_NONE,
@@ -7204,7 +7204,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w242_text = "~81",
 
-    .vFD_e350 = {
+    .ftdemo44_Line_2 = {
         .class_ = 0x0160002E,
         .super = 347,
         .sub = NAKA_NONE,
@@ -7249,7 +7249,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .StyleExplorer_text_4 = ALIGNED_STRING("STYLE EXPLORER"),
 
-    .vFD_e353 = {
+    .ftdemo45_Box = {
         .class_ = 0x01600031,
         .super = 352,
         .sub = 354,
@@ -7411,7 +7411,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .SaxProduction_text_2 = "Sax Production              106",
 
-    .vFD_e364 = {
+    .ftdemo45_Frame = {
         .class_ = 0x0160002F,
         .super = 353,
         .sub = NAKA_NONE,
@@ -7424,7 +7424,7 @@ const naka_perf_style_t naka_perf_style_data
         .color = 0x00F2,
     },
 
-    .vFD_e365 = {
+    .ftdemo45_PsEditSwBox = {
         .class_ = 0x0160001E,
         .super = 352,
         .sub = NAKA_NONE,
@@ -7456,7 +7456,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Skip_text_2 = ALIGNED_STRING("SKIP"),
 
-    .vFD_e367 = {
+    .ftdemo45_Label = {
         .class_ = 0x0160002B,
         .super = 352,
         .sub = NAKA_NONE,
@@ -7471,7 +7471,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w257_text = "~9b",
 
-    .vFD_e368 = {
+    .ftdemo45_Label_2 = {
         .class_ = 0x0160002B,
         .super = 352,
         .sub = NAKA_NONE,
@@ -7486,7 +7486,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w258_text = "~98",
 
-    .vFD_e369 = {
+    .ftdemo45_Line = {
         .class_ = 0x0160002E,
         .super = 352,
         .sub = NAKA_NONE,
@@ -7498,7 +7498,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e370 = {
+    .ftdemo45_PsEditSwBox_2 = {
         .class_ = 0x0160001E,
         .super = 352,
         .sub = 371,
@@ -7515,7 +7515,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e371 = {
+    .ftdemo45_Label_3 = {
         .class_ = 0x0160002B,
         .super = 370,
         .sub = 372,
@@ -7530,7 +7530,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w259_text = "~85",
 
-    .vFD_e372 = {
+    .ftdemo45_Label_4 = {
         .class_ = 0x0160002B,
         .super = 371,
         .sub = NAKA_NONE,
@@ -7545,7 +7545,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w260_text = "~81",
 
-    .vFD_e373 = {
+    .ftdemo45_Line_2 = {
         .class_ = 0x0160002E,
         .super = 370,
         .sub = NAKA_NONE,
@@ -7590,7 +7590,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .AlphabeticalExplorer_text = "ALPHABETICAL EXPLORER",
 
-    .vFD_e376 = {
+    .ftdemo46_Box = {
         .class_ = 0x01600031,
         .super = 375,
         .sub = 377,
@@ -7617,7 +7617,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .BTempo_text = ALIGNED_STRING("B:                           TEMPO"),
 
-    .vFD_e378 = {
+    .BTempo_Frame = {
         .class_ = 0x0160002F,
         .super = 377,
         .sub = NAKA_NONE,
@@ -7765,7 +7765,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .BridgeTooFar_text = ALIGNED_STRING("Bridge Too Far             128"),
 
-    .vFD_e388 = {
+    .ftdemo46_PsEditSwBox = {
         .class_ = 0x0160001E,
         .super = 375,
         .sub = 389,
@@ -7782,7 +7782,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e389 = {
+    .ftdemo46_Label = {
         .class_ = 0x0160002B,
         .super = 388,
         .sub = 390,
@@ -7797,7 +7797,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w274_text = "~9b",
 
-    .vFD_e390 = {
+    .ftdemo46_Label_2 = {
         .class_ = 0x0160002B,
         .super = 389,
         .sub = 391,
@@ -7812,7 +7812,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w275_text = "~98",
 
-    .vFD_e391 = {
+    .ftdemo46_Label_3 = {
         .class_ = 0x0160002B,
         .super = 390,
         .sub = NAKA_NONE,
@@ -7827,7 +7827,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w276_text = "~98",
 
-    .vFD_e392 = {
+    .ftdemo46_Line = {
         .class_ = 0x0160002E,
         .super = 388,
         .sub = NAKA_NONE,
@@ -7839,7 +7839,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e393 = {
+    .ftdemo46_PsEditSwBox_2 = {
         .class_ = 0x0160001E,
         .super = 375,
         .sub = NAKA_NONE,
@@ -7871,7 +7871,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Skip_text_3 = ALIGNED_STRING("SKIP"),
 
-    .vFD_e395 = {
+    .ftdemo46_Label_4 = {
         .class_ = 0x0160002B,
         .super = 375,
         .sub = NAKA_NONE,
@@ -7886,7 +7886,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w278_text = "~9b",
 
-    .vFD_e396 = {
+    .ftdemo46_Label_5 = {
         .class_ = 0x0160002B,
         .super = 375,
         .sub = NAKA_NONE,
@@ -7901,7 +7901,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w279_text = "~98",
 
-    .vFD_e397 = {
+    .ftdemo46_Line_2 = {
         .class_ = 0x0160002E,
         .super = 375,
         .sub = NAKA_NONE,
@@ -7931,7 +7931,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .AlphabeticalExplorer_text_2 = "ALPHABETICAL EXPLORER",
 
-    .vFD_e399 = {
+    .ftdemo47_Box = {
         .class_ = 0x01600031,
         .super = 398,
         .sub = 400,
@@ -8063,7 +8063,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .CurtainUp_text = ALIGNED_STRING("Curtain Up!                116"),
 
-    .vFD_e408 = {
+    .ftdemo47_Frame = {
         .class_ = 0x0160002F,
         .super = 399,
         .sub = NAKA_NONE,
@@ -8076,7 +8076,7 @@ const naka_perf_style_t naka_perf_style_data
         .color = 0x00F2,
     },
 
-    .vFD_e409 = {
+    .ftdemo47_PsEditSwBox = {
         .class_ = 0x0160001E,
         .super = 398,
         .sub = 410,
@@ -8093,7 +8093,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e410 = {
+    .ftdemo47_Label = {
         .class_ = 0x0160002B,
         .super = 409,
         .sub = 411,
@@ -8108,7 +8108,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w290_text = "~9b",
 
-    .vFD_e411 = {
+    .ftdemo47_Label_2 = {
         .class_ = 0x0160002B,
         .super = 410,
         .sub = 412,
@@ -8123,7 +8123,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w291_text = "~98",
 
-    .vFD_e412 = {
+    .ftdemo47_Label_3 = {
         .class_ = 0x0160002B,
         .super = 411,
         .sub = NAKA_NONE,
@@ -8138,7 +8138,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w292_text = "~98",
 
-    .vFD_e413 = {
+    .ftdemo47_Line = {
         .class_ = 0x0160002E,
         .super = 409,
         .sub = NAKA_NONE,
@@ -8150,7 +8150,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e414 = {
+    .ftdemo47_PsEditSwBox_2 = {
         .class_ = 0x0160001E,
         .super = 398,
         .sub = NAKA_NONE,
@@ -8182,7 +8182,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Skip_text_4 = ALIGNED_STRING("SKIP"),
 
-    .vFD_e416 = {
+    .ftdemo47_Label_4 = {
         .class_ = 0x0160002B,
         .super = 398,
         .sub = NAKA_NONE,
@@ -8197,7 +8197,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w294_text = "~9b",
 
-    .vFD_e417 = {
+    .ftdemo47_Label_5 = {
         .class_ = 0x0160002B,
         .super = 398,
         .sub = NAKA_NONE,
@@ -8212,7 +8212,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w295_text = "~98",
 
-    .vFD_e418 = {
+    .ftdemo47_Line_2 = {
         .class_ = 0x0160002E,
         .super = 398,
         .sub = NAKA_NONE,
@@ -8242,7 +8242,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .AlphabeticalExplorer_text_3 = "ALPHABETICAL EXPLORER",
 
-    .vFD_e420 = {
+    .ftdemo48_Box = {
         .class_ = 0x01600031,
         .super = 419,
         .sub = 421,
@@ -8374,7 +8374,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .CurtainUp_text_2 = ALIGNED_STRING("Curtain Up!                116"),
 
-    .vFD_e429 = {
+    .ftdemo48_Frame = {
         .class_ = 0x0160002F,
         .super = 420,
         .sub = NAKA_NONE,
@@ -8387,7 +8387,7 @@ const naka_perf_style_t naka_perf_style_data
         .color = 0x00F2,
     },
 
-    .vFD_e430 = {
+    .ftdemo48_PsEditSwBox = {
         .class_ = 0x0160001E,
         .super = 419,
         .sub = 431,
@@ -8404,7 +8404,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e431 = {
+    .ftdemo48_Label = {
         .class_ = 0x0160002B,
         .super = 430,
         .sub = 432,
@@ -8419,7 +8419,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w306_text = "~9b",
 
-    .vFD_e432 = {
+    .ftdemo48_Label_2 = {
         .class_ = 0x0160002B,
         .super = 431,
         .sub = 433,
@@ -8434,7 +8434,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w307_text = "~98",
 
-    .vFD_e433 = {
+    .ftdemo48_Label_3 = {
         .class_ = 0x0160002B,
         .super = 432,
         .sub = NAKA_NONE,
@@ -8449,7 +8449,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w308_text = "~98",
 
-    .vFD_e434 = {
+    .ftdemo48_Line = {
         .class_ = 0x0160002E,
         .super = 430,
         .sub = NAKA_NONE,
@@ -8461,7 +8461,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e435 = {
+    .ftdemo48_PsEditSwBox_2 = {
         .class_ = 0x0160001E,
         .super = 419,
         .sub = NAKA_NONE,
@@ -8493,7 +8493,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Skip_text_5 = ALIGNED_STRING("SKIP"),
 
-    .vFD_e437 = {
+    .ftdemo48_Label_4 = {
         .class_ = 0x0160002B,
         .super = 419,
         .sub = NAKA_NONE,
@@ -8508,7 +8508,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w310_text = "~9b",
 
-    .vFD_e438 = {
+    .ftdemo48_Label_5 = {
         .class_ = 0x0160002B,
         .super = 419,
         .sub = NAKA_NONE,
@@ -8523,7 +8523,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w311_text = "~98",
 
-    .vFD_e439 = {
+    .ftdemo48_Line_2 = {
         .class_ = 0x0160002E,
         .super = 419,
         .sub = NAKA_NONE,
@@ -8553,7 +8553,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .StyleExplorer_text_5 = ALIGNED_STRING("STYLE EXPLORER"),
 
-    .vFD_e441 = {
+    .ftdemo43_Box = {
         .class_ = 0x01600031,
         .super = 440,
         .sub = 442,
@@ -8715,7 +8715,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .LatinWorld_text_3 = "Latin / World",
 
-    .vFD_e452 = {
+    .ftdemo43_Frame = {
         .class_ = 0x0160002F,
         .super = 441,
         .sub = NAKA_NONE,
@@ -8728,7 +8728,7 @@ const naka_perf_style_t naka_perf_style_data
         .color = 0x00F2,
     },
 
-    .vFD_e453 = {
+    .ftdemo43_PsEditSwBox = {
         .class_ = 0x0160001E,
         .super = 440,
         .sub = 454,
@@ -8760,7 +8760,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .Ok_text_3 = ALIGNED_STRING("OK"),
 
-    .vFD_e455 = {
+    .ftdemo43_PsEditSwBox_2 = {
         .class_ = 0x0160001E,
         .super = 440,
         .sub = 456,
@@ -8777,7 +8777,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e456 = {
+    .ftdemo43_Label = {
         .class_ = 0x0160002B,
         .super = 455,
         .sub = 457,
@@ -8792,7 +8792,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w325_text = "~85",
 
-    .vFD_e457 = {
+    .ftdemo43_Label_2 = {
         .class_ = 0x0160002B,
         .super = 456,
         .sub = NAKA_NONE,
@@ -8807,7 +8807,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w326_text = "~81",
 
-    .vFD_e458 = {
+    .ftdemo43_Line = {
         .class_ = 0x0160002E,
         .super = 455,
         .sub = NAKA_NONE,
@@ -8819,7 +8819,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e459 = {
+    .ftdemo43_PsEditSwBox_3 = {
         .class_ = 0x0160001E,
         .super = 440,
         .sub = 460,
@@ -8836,7 +8836,7 @@ const naka_perf_style_t naka_perf_style_data
         .editsw = 0x0002,
     },
 
-    .vFD_e460 = {
+    .ftdemo43_Label_3 = {
         .class_ = 0x0160002B,
         .super = 459,
         .sub = 461,
@@ -8851,7 +8851,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w327_text = "~85",
 
-    .vFD_e461 = {
+    .ftdemo43_Label_4 = {
         .class_ = 0x0160002B,
         .super = 460,
         .sub = NAKA_NONE,
@@ -8866,7 +8866,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w328_text = "~81",
 
-    .vFD_e462 = {
+    .ftdemo43_Line_2 = {
         .class_ = 0x0160002E,
         .super = 459,
         .sub = NAKA_NONE,
@@ -8893,7 +8893,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .MainCategory_text_3 = "MAIN CATEGORY",
 
-    .vFD_e464 = {
+    .ftdemo43_Box_2 = {
         .class_ = 0x01600031,
         .super = 440,
         .sub = 465,
@@ -9055,7 +9055,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .RockGig_text_3 = ALIGNED_STRING("Rock Gig"),
 
-    .vFD_e475 = {
+    .ftdemo43_Frame_2 = {
         .class_ = 0x0160002F,
         .super = 464,
         .sub = NAKA_NONE,
@@ -9083,7 +9083,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .SubCategory_text_3 = ALIGNED_STRING("SUB CATEGORY"),
 
-    .vFD_e477 = {
+    .ftdemo43_Label_5 = {
         .class_ = 0x0160002B,
         .super = 440,
         .sub = NAKA_NONE,
@@ -9102,154 +9102,154 @@ const naka_perf_style_t naka_perf_style_data
         SELF(ftdemo01),
         SELF(ftdemobmptop),
         SELF(ftdemo02),
-        SELF(vFD_e3),
-        SELF(vFD_e4),
+        SELF(ftdemo02_Box),
+        SELF(ftdemo02_Box_2),
         SELF(Preset_Label),
         SELF(Performance_Label),
-        SELF(vFD_e7),
+        SELF(ftdemo02_Box_3),
         SELF(Custom_Label),
-        SELF(vFD_e9),
+        SELF(ftdemo02_Box_4),
         SELF(Composer_Label),
         SELF(BackUp_Label),
-        SELF(vFD_e12),
-        SELF(vFD_e13),
-        SELF(vFD_e14),
-        SELF(vFD_e15),
-        SELF(vFD_e16),
-        SELF(vFD_e17),
-        SELF(vFD_e18),
-        SELF(vFD_e19),
-        SELF(vFD_e20),
-        SELF(vFD_e21),
-        SELF(vFD_e22),
-        SELF(vFD_e23),
-        SELF(vFD_e24),
-        SELF(vFD_e25),
-        SELF(vFD_e26),
-        SELF(vFD_e27),
-        SELF(vFD_e28),
+        SELF(ftdemo02_Line),
+        SELF(ftdemo02_Line_2),
+        SELF(ftdemo02_Line_3),
+        SELF(ftdemo02_Label),
+        SELF(ftdemo02_Line_4),
+        SELF(ftdemo02_Line_5),
+        SELF(ftdemo02_Label_2),
+        SELF(ftdemo02_Line_6),
+        SELF(ftdemo02_Line_7),
+        SELF(ftdemo02_Line_8),
+        SELF(ftdemo02_Line_9),
+        SELF(ftdemo02_Line_10),
+        SELF(ftdemo02_Line_11),
+        SELF(ftdemo02_Line_12),
+        SELF(ftdemo02_Label_3),
+        SELF(ftdemo02_Box_5),
+        SELF(ftdemo02_Box_6),
         SELF(Fd_Label),
-        SELF(vFD_e30),
-        SELF(vFD_e31),
-        SELF(vFD_e32),
-        SELF(vFD_e33),
+        SELF(ftdemo02_Label_4),
+        SELF(ftdemo02_Box_7),
+        SELF(ftdemo02_Box_8),
+        SELF(ftdemo02_Label_5),
         SELF(Volatile_Label),
         SELF(NonVolatile_Label),
         SELF(PlayOnly_Label),
-        SELF(vFD_e37),
-        SELF(vFD_e38),
-        SELF(vFD_e39),
-        SELF(vFD_e40),
-        SELF(vFD_e41),
-        SELF(vFD_e42),
-        SELF(vFD_e43),
-        SELF(vFD_e44),
-        SELF(vFD_e45),
-        SELF(vFD_e46),
-        SELF(vFD_e47),
-        SELF(vFD_e48),
-        SELF(vFD_e49),
-        SELF(vFD_e50),
-        SELF(vFD_e51),
-        SELF(vFD_e52),
-        SELF(vFD_e53),
-        SELF(vFD_e54),
-        SELF(vFD_e55),
-        SELF(vFD_e56),
-        SELF(vFD_e57),
-        SELF(vFD_e58),
-        SELF(vFD_e59),
-        SELF(vFD_e60),
-        SELF(vFD_e61),
-        SELF(vFD_e62),
-        SELF(vFD_e63),
-        SELF(vFD_e64),
+        SELF(ftdemo02_Label_6),
+        SELF(ftdemo02_Line_13),
+        SELF(ftdemo02_Line_14),
+        SELF(ftdemo02_Line_15),
+        SELF(ftdemo02_Line_16),
+        SELF(ftdemo02_Line_17),
+        SELF(ftdemo02_Line_18),
+        SELF(ftdemo02_Line_19),
+        SELF(ftdemo02_Line_20),
+        SELF(ftdemo02_Line_21),
+        SELF(ftdemo02_Line_22),
+        SELF(ftdemo02_Line_23),
+        SELF(ftdemo02_Line_24),
+        SELF(ftdemo02_Line_25),
+        SELF(ftdemo02_Line_26),
+        SELF(ftdemo02_Line_27),
+        SELF(ftdemo02_Line_28),
+        SELF(ftdemo02_Line_29),
+        SELF(ftdemo02_Line_30),
+        SELF(ftdemo02_Line_31),
+        SELF(ftdemo02_Line_32),
+        SELF(ftdemo02_Line_33),
+        SELF(ftdemo02_Line_34),
+        SELF(ftdemo02_Line_35),
+        SELF(ftdemo02_Line_36),
+        SELF(ftdemo02_Line_37),
+        SELF(ftdemo02_Line_38),
+        SELF(ftdemo02_Line_39),
         SELF(ftdemo03),
-        SELF(vFD_e66),
+        SELF(ftdemo03_Box),
         SELF(StyleData_Label),
-        SELF(vFD_e68),
+        SELF(ftdemo03_Box_2),
         SELF(Custom_Label_2),
-        SELF(vFD_e70),
+        SELF(ftdemo03_Box_3),
         SELF(Composer_Label_2),
-        SELF(vFD_e72),
-        SELF(vFD_e73),
-        SELF(vFD_e74),
-        SELF(vFD_e75),
-        SELF(vFD_e76),
-        SELF(vFD_e77),
-        SELF(vFD_e78),
-        SELF(vFD_e79),
-        SELF(vFD_e80),
-        SELF(vFD_e81),
+        SELF(ftdemo03_Label),
+        SELF(ftdemo03_Line),
+        SELF(ftdemo03_Line_2),
+        SELF(ftdemo03_Line_3),
+        SELF(ftdemo03_Line_4),
+        SELF(ftdemo03_Line_5),
+        SELF(ftdemo03_Line_6),
+        SELF(ftdemo03_Line_7),
+        SELF(ftdemo03_Line_8),
+        SELF(ftdemo03_Line_9),
         SELF(StyleConvert_Label),
-        SELF(vFD_e83),
-        SELF(vFD_e84),
-        SELF(vFD_e85),
-        SELF(vFD_e86),
-        SELF(vFD_e87),
-        SELF(vFD_e88),
-        SELF(vFD_e89),
-        SELF(vFD_e90),
-        SELF(vFD_e91),
-        SELF(vFD_e92),
-        SELF(vFD_e93),
-        SELF(vFD_e94),
-        SELF(vFD_e95),
-        SELF(vFD_e96),
-        SELF(vFD_e97),
-        SELF(vFD_e98),
-        SELF(vFD_e99),
-        SELF(vFD_e100),
-        SELF(vFD_e101),
+        SELF(ftdemo03_Line_10),
+        SELF(ftdemo03_Line_11),
+        SELF(ftdemo03_Box_4),
+        SELF(ftdemo03_Box_5),
+        SELF(ftdemo03_Box_6),
+        SELF(ftdemo03_Box_7),
+        SELF(ftdemo03_Label_2),
+        SELF(ftdemo03_Box_8),
+        SELF(ftdemo03_Box_9),
+        SELF(ftdemo03_Box_10),
+        SELF(ftdemo03_Box_11),
+        SELF(ftdemo03_Label_3),
+        SELF(ftdemo03_Box_12),
+        SELF(ftdemo03_Box_13),
+        SELF(ftdemo03_Box_14),
+        SELF(ftdemo03_Box_15),
+        SELF(ftdemo03_Label_4),
+        SELF(ftdemo03_Box_16),
+        SELF(ftdemo03_Box_17),
         SELF(Fd_Label_2),
-        SELF(vFD_e103),
-        SELF(vFD_e104),
-        SELF(vFD_e105),
-        SELF(vFD_e106),
+        SELF(ftdemo03_Box_18),
+        SELF(ftdemo03_Box_19),
+        SELF(ftdemo03_Label_5),
+        SELF(ftdemo03_Label_6),
         SELF(ConvertFrom_Label),
         SELF(VariousInstruments_Label),
         SELF(ftdemo04),
         SELF(ftdemobmp3D),
-        SELF(vFD_e111),
-        SELF(vFD_e112),
-        SELF(vFD_e113),
-        SELF(vFD_e114),
+        SELF(ftdemo04_AcLanguageText),
+        SELF(ftdemo04_Box),
+        SELF(ftdemo04_AcLanguageText_2),
+        SELF(ftdemo04_AcLanguageText_3),
         SELF(ftdemo05),
-        SELF(vFD_e116),
-        SELF(vFD_e117),
+        SELF(ftdemo05_AcLanguageText),
+        SELF(ftdemo05_AcLanguageText_2),
         SELF(ftdemo06),
-        SELF(vFD_e119),
+        SELF(ftdemo06_AcLanguageText),
         SELF(ftdemobmpsoft),
         SELF(ftdemo07),
         SELF(ftdemobmpcnv),
-        SELF(vFD_e123),
+        SELF(ftdemo07_AcLanguageText),
         SELF(ftdemo08),
-        SELF(vFD_e125),
+        SELF(ftdemo08_AcLanguageText),
         SELF(ftdemo09),
-        SELF(vFD_e127),
-        SELF(vFD_e128),
+        SELF(ftdemo09_AcLanguageText),
+        SELF(ftdemo09_AcLanguageText_2),
         SELF(ftdemo10),
-        SELF(vFD_e130),
-        SELF(vFD_e131),
+        SELF(ftdemo10_AcLanguageText),
+        SELF(ftdemo10_AcLanguageText_2),
         SELF(ftdemo20),
-        SELF(vFD_e133),
-        SELF(vFD_e134),
+        SELF(ftdemo20_AcLanguageText),
+        SELF(ftdemo20_AcLanguageText_2),
         SELF(ftdemobmpill),
         SELF(ftdemo21),
-        SELF(vFD_e137),
+        SELF(ftdemo21_AcLanguageText),
         SELF(ftdemo22),
-        SELF(vFD_e139),
+        SELF(ftdemo22_Box),
         SELF(BankForDinnerShow_Label),
-        SELF(vFD_e141),
-        SELF(vFD_e142),
-        SELF(vFD_e143),
+        SELF(ftdemo22_PsEditSwBox),
+        SELF(ftdemo22_Label),
+        SELF(ftdemo22_Label_2),
         SELF(w73),
         SELF(w74),
         SELF(Bank_Label),
         SELF(Naming_Label),
         SELF(Memory_Label),
         SELF(Naming_Label_2),
-        SELF(vFD_e150),
+        SELF(ftdemo22_Line),
         SELF(CurtainCall_Label),
         SELF(HotelCombo_Label),
         SELF(PubSingAlong_Label),
@@ -9259,34 +9259,34 @@ const naka_perf_style_t naka_perf_style_data
         SELF(Overture_Label),
         SELF(LateAtNight_Label),
         SELF(Bank_Label_2),
-        SELF(vFD_e160),
+        SELF(ftdemo22_Box_2),
         SELF(Page_Label),
         SELF(ftdemo23),
         SELF(Aa_Label),
-        SELF(vFD_e164),
+        SELF(ftdemo23_Label),
         SELF(Mic_Label),
-        SELF(vFD_e166),
+        SELF(ftdemo23_Box),
         SELF(OhIWantTo_Label),
         SELF(Ber_Label),
         SELF(OhWhenTheSaints_Label),
         SELF(WhenTheSaintsGo_Label),
         SELF(GoMarchinIn_Label),
         SELF(WhenTheSaints_Label),
-        SELF(vFD_e173),
+        SELF(ftdemo23_Label_2),
         SELF(Play_Label),
-        SELF(vFD_e175),
-        SELF(vFD_e176),
-        SELF(vFD_e177),
-        SELF(vFD_e178),
-        SELF(vFD_e179),
-        SELF(vFD_e180),
-        SELF(vFD_e181),
-        SELF(vFD_e182),
-        SELF(vFD_e183),
-        SELF(vFD_e184),
+        SELF(ftdemo23_VwEditSwBox),
+        SELF(ftdemo23_Bitmap),
+        SELF(ftdemo23_PsEditSwBox),
+        SELF(ftdemo23_Bitmap_2),
+        SELF(ftdemo23_PsEditSwBox_2),
+        SELF(ftdemo23_Bitmap_3),
+        SELF(ftdemo23_VwEditSwBox_2),
+        SELF(ftdemo23_Bitmap_4),
+        SELF(ftdemo23_VwEditSwBox_3),
+        SELF(ftdemo23_Bitmap_5),
         SELF(ftdemo24),
-        SELF(vFD_e186),
-        SELF(vFD_e187),
+        SELF(ftdemo24_Box),
+        SELF(ftdemo24_Line),
         SELF(MicBalance_Label),
         SELF(VocalReverb_Label),
         SELF(ReverbTime_Label),
@@ -9295,38 +9295,38 @@ const naka_perf_style_t naka_perf_style_data
         SELF(ExciterFcKHz_Label),
         SELF(ExciterG_Label),
         SELF(Volume_Label),
-        SELF(vFD_e196),
+        SELF(ftdemo24_Box_2),
         SELF(Stage_Label),
-        SELF(vFD_e198),
-        SELF(vFD_e199),
-        SELF(vFD_e200),
-        SELF(vFD_e201),
-        SELF(vFD_e202),
+        SELF(ftdemo24_Label),
+        SELF(ftdemo24_Label_2),
+        SELF(ftdemo24_Label_3),
+        SELF(ftdemo24_Label_4),
+        SELF(ftdemo24_Label_5),
         SELF(Vocalist_Label),
         SELF(Workstation_Label),
         SELF(FadeInOut_Label),
         SELF(Setting_Label),
         SELF(Mixer_Label),
         SELF(DiskLoad_Label),
-        SELF(vFD_e209),
+        SELF(ftdemo24_Box_3),
         SELF(MuteKeysOff_Label),
-        SELF(vFD_e211),
+        SELF(ftdemo24_Box_4),
         SELF(Panic_Label),
-        SELF(vFD_e213),
-        SELF(vFD_e214),
-        SELF(vFD_e215),
-        SELF(vFD_e216),
-        SELF(vFD_e217),
-        SELF(vFD_e218),
-        SELF(vFD_e219),
-        SELF(vFD_e220),
+        SELF(ftdemo24_Box_5),
+        SELF(ftdemo24_Label_6),
+        SELF(ftdemo24_Line_2),
+        SELF(ftdemo24_Label_7),
+        SELF(ftdemo24_Box_6),
+        SELF(ftdemo24_Label_8),
+        SELF(ftdemo24_Line_3),
+        SELF(ftdemo24_Label_9),
         SELF(Item_Label),
         SELF(Value_Label),
-        SELF(vFD_e223),
+        SELF(ftdemo24_Frame),
         SELF(ftdemo25),
         SELF(ftdemobmpend),
         SELF(ftdemo26),
-        SELF(vFD_e227),
+        SELF(ftdemo26_Box),
         SELF(FadeIn_Label),
         SELF(Time_Label),
         SELF(FadeOut_Label),
@@ -9334,26 +9334,26 @@ const naka_perf_style_t naka_perf_style_data
         SELF(AutoResetOn_Label),
         SELF(AutoStopRhythmOn_Label),
         SELF(AutoStopSeqOn_Label),
-        SELF(vFD_e235),
-        SELF(vFD_e236),
+        SELF(ftdemo26_Frame),
+        SELF(ftdemo26_Box_2),
         SELF(Measure_Label),
-        SELF(vFD_e238),
-        SELF(vFD_e239),
-        SELF(vFD_e240),
-        SELF(vFD_e241),
-        SELF(vFD_e242),
-        SELF(vFD_e243),
-        SELF(vFD_e244),
-        SELF(vFD_e245),
+        SELF(ftdemo26_PsEditSwBox),
+        SELF(ftdemo26_Label),
+        SELF(ftdemo26_Label_2),
+        SELF(ftdemo26_Line),
+        SELF(ftdemo26_PsEditSwBox_2),
+        SELF(ftdemo26_Label_3),
+        SELF(ftdemo26_Label_4),
+        SELF(ftdemo26_Line_2),
         SELF(ftdemo40),
-        SELF(vFD_e247),
-        SELF(vFD_e248),
+        SELF(ftdemo40_Box),
+        SELF(ftdemo40_Box_2),
         SELF(MusicStylist_Label),
         SELF(StylesOfWorldWide_Label),
         SELF(StyleExplorerByGenre_Label),
         SELF(AlphabeticalStyleSelect_Label),
         SELF(ftdemo41),
-        SELF(vFD_e254),
+        SELF(ftdemo41_Box),
         SELF(EasyListening_Label),
         SELF(RockPop_Label),
         SELF(PartyMusic_Label),
@@ -9364,19 +9364,19 @@ const naka_perf_style_t naka_perf_style_data
         SELF(TradFolk_Label),
         SELF(Country_Label),
         SELF(LatinWorld_Label),
-        SELF(vFD_e265),
-        SELF(vFD_e266),
+        SELF(ftdemo41_Frame),
+        SELF(ftdemo41_PsEditSwBox),
         SELF(Ok_Label),
-        SELF(vFD_e268),
-        SELF(vFD_e269),
-        SELF(vFD_e270),
-        SELF(vFD_e271),
-        SELF(vFD_e272),
-        SELF(vFD_e273),
-        SELF(vFD_e274),
-        SELF(vFD_e275),
+        SELF(ftdemo41_PsEditSwBox_2),
+        SELF(ftdemo41_Label),
+        SELF(ftdemo41_Label_2),
+        SELF(ftdemo41_Line),
+        SELF(ftdemo41_PsEditSwBox_3),
+        SELF(ftdemo41_Label_3),
+        SELF(ftdemo41_Label_4),
+        SELF(ftdemo41_Line_2),
         SELF(MainCategory_Label),
-        SELF(vFD_e277),
+        SELF(ftdemo41_Box_2),
         SELF(GlamrockPiano_Label),
         SELF(Hits_Label),
         SELF(EuroPopShuffle_Label),
@@ -9387,11 +9387,11 @@ const naka_perf_style_t naka_perf_style_data
         SELF(BeatGroove_Label),
         SELF(PopBallads_Label),
         SELF(RockGig_Label),
-        SELF(vFD_e288),
+        SELF(ftdemo41_Frame_2),
         SELF(SubCategory_Label),
-        SELF(vFD_e290),
+        SELF(ftdemo41_Label_5),
         SELF(ftdemo42),
-        SELF(vFD_e292),
+        SELF(ftdemo42_Box),
         SELF(EasyListening_Label_2),
         SELF(RockPop_Label_2),
         SELF(PartyMusic_Label_2),
@@ -9402,19 +9402,19 @@ const naka_perf_style_t naka_perf_style_data
         SELF(TradFolk_Label_2),
         SELF(Country_Label_2),
         SELF(LatinWorld_Label_2),
-        SELF(vFD_e303),
-        SELF(vFD_e304),
+        SELF(ftdemo42_Frame),
+        SELF(ftdemo42_PsEditSwBox),
         SELF(Ok_Label_2),
-        SELF(vFD_e306),
-        SELF(vFD_e307),
-        SELF(vFD_e308),
-        SELF(vFD_e309),
-        SELF(vFD_e310),
-        SELF(vFD_e311),
-        SELF(vFD_e312),
-        SELF(vFD_e313),
+        SELF(ftdemo42_PsEditSwBox_2),
+        SELF(ftdemo42_Label),
+        SELF(ftdemo42_Label_2),
+        SELF(ftdemo42_Line),
+        SELF(ftdemo42_PsEditSwBox_3),
+        SELF(ftdemo42_Label_3),
+        SELF(ftdemo42_Label_4),
+        SELF(ftdemo42_Line_2),
         SELF(MainCategory_Label_2),
-        SELF(vFD_e315),
+        SELF(ftdemo42_Box_2),
         SELF(GlamrockPiano_Label_2),
         SELF(Hits_Label_2),
         SELF(EuroPopShuffle_Label_2),
@@ -9425,11 +9425,11 @@ const naka_perf_style_t naka_perf_style_data
         SELF(BeatGroove_Label_2),
         SELF(PopBallads_Label_2),
         SELF(RockGig_Label_2),
-        SELF(vFD_e326),
+        SELF(ftdemo42_Frame_2),
         SELF(SubCategory_Label_2),
-        SELF(vFD_e328),
+        SELF(ftdemo42_Label_5),
         SELF(ftdemo44),
-        SELF(vFD_e330),
+        SELF(ftdemo44_Box),
         SELF(EuroPopShuffleTempo_Label),
         SELF(ShuffleSynth_Label),
         SELF(JumpBrass_Label),
@@ -9440,19 +9440,19 @@ const naka_perf_style_t naka_perf_style_data
         SELF(DonFret_Label),
         SELF(EpOfThe_Label),
         SELF(SaxProduction_Label),
-        SELF(vFD_e341),
-        SELF(vFD_e342),
+        SELF(ftdemo44_Frame),
+        SELF(ftdemo44_PsEditSwBox),
         SELF(Skip_Label),
-        SELF(vFD_e344),
-        SELF(vFD_e345),
-        SELF(vFD_e346),
-        SELF(vFD_e347),
-        SELF(vFD_e348),
-        SELF(vFD_e349),
-        SELF(vFD_e350),
+        SELF(ftdemo44_Label),
+        SELF(ftdemo44_Label_2),
+        SELF(ftdemo44_Line),
+        SELF(ftdemo44_PsEditSwBox_2),
+        SELF(ftdemo44_Label_3),
+        SELF(ftdemo44_Label_4),
+        SELF(ftdemo44_Line_2),
         SELF(CategoryRockPop_Label),
         SELF(ftdemo45),
-        SELF(vFD_e353),
+        SELF(ftdemo45_Box),
         SELF(EuroPopShuffleTempo_Label_2),
         SELF(ShuffleSynth_Label_2),
         SELF(JumpBrass_Label_2),
@@ -9463,21 +9463,21 @@ const naka_perf_style_t naka_perf_style_data
         SELF(DonFret_Label_2),
         SELF(EpOfThe_Label_2),
         SELF(SaxProduction_Label_2),
-        SELF(vFD_e364),
-        SELF(vFD_e365),
+        SELF(ftdemo45_Frame),
+        SELF(ftdemo45_PsEditSwBox),
         SELF(Skip_Label_2),
-        SELF(vFD_e367),
-        SELF(vFD_e368),
-        SELF(vFD_e369),
-        SELF(vFD_e370),
-        SELF(vFD_e371),
-        SELF(vFD_e372),
-        SELF(vFD_e373),
+        SELF(ftdemo45_Label),
+        SELF(ftdemo45_Label_2),
+        SELF(ftdemo45_Line),
+        SELF(ftdemo45_PsEditSwBox_2),
+        SELF(ftdemo45_Label_3),
+        SELF(ftdemo45_Label_4),
+        SELF(ftdemo45_Line_2),
         SELF(CategoryRockPop_Label_2),
         SELF(ftdemo46),
-        SELF(vFD_e376),
+        SELF(ftdemo46_Box),
         SELF(BTempo_Label),
-        SELF(vFD_e378),
+        SELF(BTempo_Frame),
         SELF(BallroomFiddle_Label),
         SELF(BebopSolo_Label),
         SELF(BarbarShop_Label),
@@ -9487,18 +9487,18 @@ const naka_perf_style_t naka_perf_style_data
         SELF(BonjourParis_Label),
         SELF(BreathyNight_Label),
         SELF(BridgeTooFar_Label),
-        SELF(vFD_e388),
-        SELF(vFD_e389),
-        SELF(vFD_e390),
-        SELF(vFD_e391),
-        SELF(vFD_e392),
-        SELF(vFD_e393),
+        SELF(ftdemo46_PsEditSwBox),
+        SELF(ftdemo46_Label),
+        SELF(ftdemo46_Label_2),
+        SELF(ftdemo46_Label_3),
+        SELF(ftdemo46_Line),
+        SELF(ftdemo46_PsEditSwBox_2),
         SELF(Skip_Label_3),
-        SELF(vFD_e395),
-        SELF(vFD_e396),
-        SELF(vFD_e397),
+        SELF(ftdemo46_Label_4),
+        SELF(ftdemo46_Label_5),
+        SELF(ftdemo46_Line_2),
         SELF(ftdemo47),
-        SELF(vFD_e399),
+        SELF(ftdemo47_Box),
         SELF(CTempo_Label),
         SELF(CafeJazz_Label),
         SELF(CharmingWaltz_Label),
@@ -9507,19 +9507,19 @@ const naka_perf_style_t naka_perf_style_data
         SELF(ClickPiano_Label),
         SELF(CrystalDance_Label),
         SELF(CurtainUp_Label),
-        SELF(vFD_e408),
-        SELF(vFD_e409),
-        SELF(vFD_e410),
-        SELF(vFD_e411),
-        SELF(vFD_e412),
-        SELF(vFD_e413),
-        SELF(vFD_e414),
+        SELF(ftdemo47_Frame),
+        SELF(ftdemo47_PsEditSwBox),
+        SELF(ftdemo47_Label),
+        SELF(ftdemo47_Label_2),
+        SELF(ftdemo47_Label_3),
+        SELF(ftdemo47_Line),
+        SELF(ftdemo47_PsEditSwBox_2),
         SELF(Skip_Label_4),
-        SELF(vFD_e416),
-        SELF(vFD_e417),
-        SELF(vFD_e418),
+        SELF(ftdemo47_Label_4),
+        SELF(ftdemo47_Label_5),
+        SELF(ftdemo47_Line_2),
         SELF(ftdemo48),
-        SELF(vFD_e420),
+        SELF(ftdemo48_Box),
         SELF(CTempo_Label_2),
         SELF(CafeJazz_Label_2),
         SELF(CharmingWaltz_Label_2),
@@ -9528,19 +9528,19 @@ const naka_perf_style_t naka_perf_style_data
         SELF(ClickPiano_Label_2),
         SELF(CrystalDance_Label_2),
         SELF(CurtainUp_Label_2),
-        SELF(vFD_e429),
-        SELF(vFD_e430),
-        SELF(vFD_e431),
-        SELF(vFD_e432),
-        SELF(vFD_e433),
-        SELF(vFD_e434),
-        SELF(vFD_e435),
+        SELF(ftdemo48_Frame),
+        SELF(ftdemo48_PsEditSwBox),
+        SELF(ftdemo48_Label),
+        SELF(ftdemo48_Label_2),
+        SELF(ftdemo48_Label_3),
+        SELF(ftdemo48_Line),
+        SELF(ftdemo48_PsEditSwBox_2),
         SELF(Skip_Label_5),
-        SELF(vFD_e437),
-        SELF(vFD_e438),
-        SELF(vFD_e439),
+        SELF(ftdemo48_Label_4),
+        SELF(ftdemo48_Label_5),
+        SELF(ftdemo48_Line_2),
         SELF(ftdemo43),
-        SELF(vFD_e441),
+        SELF(ftdemo43_Box),
         SELF(EasyListening_Label_3),
         SELF(RockPop_Label_3),
         SELF(PartyMusic_Label_3),
@@ -9551,19 +9551,19 @@ const naka_perf_style_t naka_perf_style_data
         SELF(TradFolk_Label_3),
         SELF(Country_Label_3),
         SELF(LatinWorld_Label_3),
-        SELF(vFD_e452),
-        SELF(vFD_e453),
+        SELF(ftdemo43_Frame),
+        SELF(ftdemo43_PsEditSwBox),
         SELF(Ok_Label_3),
-        SELF(vFD_e455),
-        SELF(vFD_e456),
-        SELF(vFD_e457),
-        SELF(vFD_e458),
-        SELF(vFD_e459),
-        SELF(vFD_e460),
-        SELF(vFD_e461),
-        SELF(vFD_e462),
+        SELF(ftdemo43_PsEditSwBox_2),
+        SELF(ftdemo43_Label),
+        SELF(ftdemo43_Label_2),
+        SELF(ftdemo43_Line),
+        SELF(ftdemo43_PsEditSwBox_3),
+        SELF(ftdemo43_Label_3),
+        SELF(ftdemo43_Label_4),
+        SELF(ftdemo43_Line_2),
         SELF(MainCategory_Label_3),
-        SELF(vFD_e464),
+        SELF(ftdemo43_Box_2),
         SELF(GlamrockPiano_Label_3),
         SELF(Hits_Label_3),
         SELF(EuroPopShuffle_Label_3),
@@ -9574,9 +9574,9 @@ const naka_perf_style_t naka_perf_style_data
         SELF(BeatGroove_Label_3),
         SELF(PopBallads_Label_3),
         SELF(RockGig_Label_3),
-        SELF(vFD_e475),
+        SELF(ftdemo43_Frame_2),
         SELF(SubCategory_Label_3),
-        SELF(vFD_e477),
+        SELF(ftdemo43_Label_5),
         0x00000000,
         SELF(ftdemo01_str),
         SELF(ftdemobmptop_str),

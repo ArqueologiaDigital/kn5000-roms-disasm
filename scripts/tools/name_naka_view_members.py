@@ -23,7 +23,9 @@ QUESTION IT ANSWERS / WHAT IT DOES
        (a derivative name: "the pointer to X"); one aimed at a placeholder member keeps its name;
     6. the decoder's wN_text / wN_name / wN_code strings with words -> <first words>_text / _name / _code;
     7. a widget element still named by position whose fields point (SELF) at a named string ->
-       <that string's stem>_<its class> (HardDiskMainMenu_TtlScreen).  (Steps 6 and 7 run before step 5.)
+       <that string's stem>_<its class> (HardDiskMainMenu_TtlScreen);
+    8. a widget element still named by position whose parent (.super, an element index in the same view) has a
+       name -> <parent's stem>_<its class>, repeated so names reach grandchildren.  (Steps 6-8 run before 5.)
   Only member names change, never a type, size or order, so every compiled blob must stay byte-identical
   (`make all`).  Comments are kept; the position stays in the element comments.
 
@@ -151,6 +153,38 @@ def plan_file(text):
                 nm, k = "%s_%d" % (base, k), k + 1
             ren[el] = nm
             used.add(nm)
+            break
+    # 8. a widget still named by position whose PARENT (.super = element index in the same view) has a name
+    #    -> <parent's stem>_<its class>; repeated so names reach grandchildren.  Element (slot, index) -> member
+    #    comes from the declaration comments, which keep the position whatever the member is called now.
+    pos, cls_of = {}, {}
+    for mm in re.finditer(r'/\*\s*element (\d+) of Viewable slot 0x([0-9A-Fa-f]+)[^*]*\*/\s*\n\s*naka_cls_(\w+)_t\s+(\w+)\s*;',
+                          text):
+        pos[mm.group(4)] = (mm.group(2).upper(), int(mm.group(1)))
+        cls_of[mm.group(4)] = mm.group(3)
+    at = {v: k for k, v in pos.items()}
+    sup = {}
+    for m in re.finditer(r'\n    \.(\w+) = \{(.*?)\n    \},', text, re.S):
+        sm = re.search(r'\.super\s*=\s*(\d+)\s*,', m.group(2))
+        if sm and m.group(1) in pos:
+            sup[m.group(1)] = at.get((pos[m.group(1)][0], int(sm.group(1))))
+    for _ in range(5):
+        grew = False
+        for el, par in sup.items():
+            if not par or el in ren or not re.match(r'^v[0-9A-Fa-f]+_e\d+$', el):
+                continue
+            pname = ren.get(par, par)
+            if re.match(r'^v[0-9A-Fa-f]+_e\d+$', pname):
+                continue
+            pstem = re.sub(r'_%s(_\d+)?$' % re.escape(cls_of.get(par, "")), '', pname)
+            base = "%s_%s" % (pstem, cls_of[el])
+            nm, k = base, 2
+            while nm in used:
+                nm, k = "%s_%d" % (base, k), k + 1
+            ren[el] = nm
+            used.add(nm)
+            grew = True
+        if not grew:
             break
     # 5. a ptr_XXXX member that holds NAKA_ADDR(Name) or SELF(member) -> <Name or member's name>_ptr
     for m in re.finditer(r'\n\s+\.(ptr_[0-9a-f]+)\s*=\s*(?:NAKA_ADDR\((\w+)\)|SELF\((\w+)\))\s*,', text):
