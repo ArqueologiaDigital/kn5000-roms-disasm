@@ -2260,7 +2260,7 @@ FontGlyph_ByteData:
 	ld	a, (xde+wa)
 	ld	(xbc), a
 	ret
-SeMenu_CopyWriteUpdate_Step3_Helper18:
+Text_GlyphToCharCode:
 	ld	e, (xwa)
 	cp	e, 32
 	jr	z, FontGlyph_ByteData_Skip

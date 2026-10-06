@@ -3040,13 +3040,13 @@ SeqStep_RebuildReturn:
 
 ; -----------------------------------------------------------------------------
 ; SeqStep_ByteBlockEA5F (address-derived name kept: midi_dispatch_handlers.s
-; and the positional alias MidiSysEx_ProcessBlock_Helper12 in
+; and the positional alias MidiSysEx_RestoreSongSelection in
 ; shared/positional_labels.s -- other lanes' files -- use it).  Two routines:
 ;  +0x00: save RAM 0xFFE3 (byte) / 0xFFEC (word) into 0xF247 / 0xF248, run
 ;         SeqData_CopyBlockToBuffer and SeqStep_FindAndCompact for part
 ;         (0xFFE3), then VoicePreset_LoadAndInitPan for it, preserving RAM
 ;         0xF1CE, 0xF231 and 0xF22F across the call.
-;  +0x4E (MidiSysEx_ProcessBlock_Helper12): restore 0xFFE3 / 0xFFEC from
+;  +0x4E (MidiSysEx_RestoreSongSelection): restore 0xFFE3 / 0xFFEC from
 ;         0xF247 / 0xF248 (clearing those), set word 0x2668 := 1, clear bit 3
 ;         of 0x28A7, and tail-jump to SeqStep_FindAndCompactEntry.
 ;  Callers: midi/midi_dispatch_handlers.s calls both by name (v10: the
@@ -3075,7 +3075,7 @@ SeqStep_ByteBlockEA5F:
 	pop	xiz
 	inc	2, xsp
 	ret
-MidiSysEx_ProcessBlock_Helper12:
+MidiSysEx_RestoreSongSelection:
 	ld	a, (62023:16)
 	ld	(65507:24), a
 	ld	(62023:16), 0

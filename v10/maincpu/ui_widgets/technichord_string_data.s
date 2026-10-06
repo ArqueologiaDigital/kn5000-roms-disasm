@@ -3182,17 +3182,17 @@ AcWelcomScreen_Activate_Data:	.incbin "includes/generated/naka_technichord_strin
 AcWelcomScreen_Select_CaseTable:
 	.short	AcWelcomScreen_RenderBytecode - AcWelcomScreen_RenderBytecode
 	.short	AcWelcomScreen_Select_NextStep - AcWelcomScreen_RenderBytecode
-	.short	AcWelcomScreen_Select_Case2 - AcWelcomScreen_RenderBytecode
-	.short	AcWelcomScreen_Select_Case3 - AcWelcomScreen_RenderBytecode
-	.short	AcWelcomScreen_Select_Case4 - AcWelcomScreen_RenderBytecode
-	.short	AcWelcomScreen_Select_Case5 - AcWelcomScreen_RenderBytecode
-	.short	AcWelcomScreen_Select_Case6 - AcWelcomScreen_RenderBytecode
-	.short	AcWelcomScreen_Select_Case7 - AcWelcomScreen_RenderBytecode
-	.short	AcWelcomScreen_Select_Case8 - AcWelcomScreen_RenderBytecode
-	.short	AcWelcomScreen_Select_Case9 - AcWelcomScreen_RenderBytecode
-	.short	AcWelcomScreen_Select_Case10 - AcWelcomScreen_RenderBytecode
-	.short	AcWelcomScreen_Select_Case11 - AcWelcomScreen_RenderBytecode
-	.short	AcWelcomScreen_Select_Case9 - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_OpMoveBlit - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_OpRepaint - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_OpDrawGlyphC - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_OpDrawGlyphO - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_OpDrawGlyphL - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_OpDrawGlyphR - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_OpDrawGlyphsIn - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_OpDrawColorWord - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_OpCaptureLcd - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_OpDrawGlyphU - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_OpDrawColorWord - AcWelcomScreen_RenderBytecode
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] PsMixer_ControlProcTable
 ; PsMixer_ControlProcTable  --  11 x u32 code addresses

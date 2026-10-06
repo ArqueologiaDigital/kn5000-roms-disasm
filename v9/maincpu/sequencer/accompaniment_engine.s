@@ -25003,7 +25003,7 @@ RhythmVariation_Return:
 RhythmVariation_InlineCode:
 	calr	DrumKit_UpdateStatusFlags
 	ret
-AccScreen_DataBlock_Helper:
+CmpStep_SetStepModeAndBlockSustain:
 	push	xiz
 	calr	RhythmVariation_Select_Helper4
 	pop	xiz
@@ -25017,7 +25017,7 @@ RhythmVariation_Select_Skip4:
 	and	(0xe3e2:16), 254
 	or	(0x34cd:16), 8
 	ret
-AccScreen_DataBlock_Helper2:
+CmpStep_ClearSustainBlockFlag:
 	push	xiz
 	calr	RhythmVariation_Select_Helper5
 	pop	xiz
@@ -31253,7 +31253,7 @@ CmpNcpTtl_Dispatch_Code_Skip2:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case128:	; cases 128, 129
+CmpNcpTtl_TableDispatch_OnFromItemNext:	; cases 128, 129
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde
@@ -31296,7 +31296,7 @@ CmpNcpTtl_Dispatch_Code_Skip3:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case118:	; cases 118, 119
+CmpNcpTtl_TableDispatch_OnFromValueUp:	; cases 118, 119
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde
@@ -31364,7 +31364,7 @@ CmpNcpTtl_Dispatch_Code_Skip6:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case130:	; cases 130, 131
+CmpNcpTtl_TableDispatch_OnFromValueDown:	; cases 130, 131
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde
@@ -31432,7 +31432,7 @@ CmpNcpTtl_Dispatch_Code_Skip9:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case120:	; cases 120, 121
+CmpNcpTtl_TableDispatch_OnToItemPrev:	; cases 120, 121
 	push	xde
 	push	xhl
 	push	xix
@@ -31473,7 +31473,7 @@ CmpNcpTtl_Dispatch_Code_Skip13:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case132:	; cases 132, 133
+CmpNcpTtl_TableDispatch_OnToItemNext:	; cases 132, 133
 	push	xde	; four pushes and `ld w, 0x80`, spelled as .ascii ":;<> \x80" until 2026-10-06
 	push	xhl
 	push	xix
@@ -31514,7 +31514,7 @@ CmpNcpTtl_Dispatch_Code_Skip14:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case122:	; cases 122, 123
+CmpNcpTtl_TableDispatch_OnToValueUp:	; cases 122, 123
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde
@@ -31575,7 +31575,7 @@ CmpNcpTtl_Dispatch_Code_Skip10:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case134:	; cases 134, 135
+CmpNcpTtl_TableDispatch_OnToValueDown:	; cases 134, 135
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde
@@ -31638,7 +31638,7 @@ CmpNcpTtl_Dispatch_Code_Skip11:
 CmpNcpTtl_Dispatch_Code_Join2:
 	call	ApDeliveryEvent
 	jr	CmEsy_ReturnZero
-CmpNcpTtl_TableDispatch_Case127:
+CmpNcpTtl_TableDispatch_OnRightRow4Switch:
 	set	0, (0x34d1:16)	; was .byte 0xf1, 0xd1, 0x34, 0xb8
 
 CmEsy_ReturnZero:
@@ -33950,7 +33950,7 @@ CmpStep_SetupAndQueueDraw:
 	and	(0xe3e0:16), 239
 	and	(0xe3de:16), 239
 AccDraw_Secondary_Helper2_Skip:
-	call	AccScreen_DataBlock_Helper
+	call	CmpStep_SetStepModeAndBlockSustain
 	bit	4, (0xe3e0:16)
 	jr	nz, AccDraw_Secondary_Helper2_Skip2
 	ld	xwa, AccScreen_DataBlock_Code
@@ -34005,7 +34005,7 @@ CmpStep_OnHide:
 	pop	xiz
 	ret
 CmpStep_UnblockSustainInput:
-	call	AccScreen_DataBlock_Helper2
+	call	CmpStep_ClearSustainBlockFlag
 	ret
 CmpStep_DispatchSwitch:
 	push	xiz

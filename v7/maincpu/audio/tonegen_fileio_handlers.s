@@ -98,7 +98,7 @@ PanelTlv_ApplyResetMasks_Loop:
 PanelTlv_WriteAllHeaders:
 	calr	PanelTlv_WriteLivePanelHeaders
 	jrl	PanelTlv_WritePanelMemoryHeaders
-SeqChan_WriteField_Data_E_Helper2:
+PanelTlv_ValidateSongPanel:
 	lda	xwa, (0xf480:16)
 	jrl	PanelTlv_ValidateBlock0
 ; a jr to PanelTlv_ResolvePartCompanions, for callers outside its calr reach
@@ -331,34 +331,34 @@ PanelTlv_ApplyFieldRule:
 	add	de, de
 	lda	xix, (PanelTlv_ApplyFieldRule_CaseOffsets:24)
 	ld	de, (xix+de)
-	lda	xix, (PanelTlv_ApplyFieldRule_Case0:24)
+	lda	xix, (PanelTlv_ApplyFieldRule_OnKeepBits:24)
 	jp	t, (xix+de)
 ; the nine cases, by type byte, through PanelTlv_ApplyFieldRule_CaseOffsets
-PanelTlv_ApplyFieldRule_Case0:
+PanelTlv_ApplyFieldRule_OnKeepBits:
 	calr	PanelTlv_Rule_KeepBits
 	jr	PanelTlv_ApplyFieldRule_Return
-PanelTlv_ApplyFieldRule_Case1:
+PanelTlv_ApplyFieldRule_OnClearBits:
 	calr	PanelTlv_Rule_ClearBits
 	jr	PanelTlv_ApplyFieldRule_Return
-PanelTlv_ApplyFieldRule_Case2:
+PanelTlv_ApplyFieldRule_OnSetBits:
 	calr	PanelTlv_Rule_SetBits
 	jr	PanelTlv_ApplyFieldRule_Return
-PanelTlv_ApplyFieldRule_Case3:
+PanelTlv_ApplyFieldRule_OnResetOutsideRange:
 	calr	PanelTlv_Rule_ResetOutsideRange
 	jr	PanelTlv_ApplyFieldRule_Return
-PanelTlv_ApplyFieldRule_Case4:
+PanelTlv_ApplyFieldRule_OnResetInsideRange:
 	calr	PanelTlv_Rule_ResetInsideRange
 	jr	PanelTlv_ApplyFieldRule_Return
-PanelTlv_ApplyFieldRule_Case5:
+PanelTlv_ApplyFieldRule_OnResetUnlessListed:
 	calr	PanelTlv_Rule_ResetUnlessListed
 	jr	PanelTlv_ApplyFieldRule_Return
-PanelTlv_ApplyFieldRule_Case6:
+PanelTlv_ApplyFieldRule_OnResetIfListed:
 	calr	PanelTlv_Rule_ResetIfListed
 	jr	PanelTlv_ApplyFieldRule_Return
-PanelTlv_ApplyFieldRule_Case7:
+PanelTlv_ApplyFieldRule_OnStoreByte:
 	calr	PanelTlv_Rule_StoreByte
 	jr	PanelTlv_ApplyFieldRule_Return
-PanelTlv_ApplyFieldRule_Case8:
+PanelTlv_ApplyFieldRule_OnZeroByte:
 	calr	PanelTlv_Rule_ZeroByte
 	jr	PanelTlv_ApplyFieldRule_Return
 ; a type byte above 8 counts as a 1-byte rule

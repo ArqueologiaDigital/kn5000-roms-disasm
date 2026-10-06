@@ -372,12 +372,12 @@ TitleFunc_LifecycleTable_Data_6:
 	.asciz "Debug Test"
 TitleFunc_LifecycleDispatch_CaseTable:
 	.short	TitleFunc_LifecycleTable - TitleFunc_LifecycleTable
-	.short	TitleFunc_LifecycleDispatch_Case1 - TitleFunc_LifecycleTable
-	.short	TitleFunc_LifecycleDispatch_Case2 - TitleFunc_LifecycleTable
-	.short	TitleFunc_LifecycleDispatch_Case3 - TitleFunc_LifecycleTable
-	.short	TitleFunc_LifecycleDispatch_Case4 - TitleFunc_LifecycleTable
-	.short	TitleFunc_LifecycleDispatch_Case5 - TitleFunc_LifecycleTable
-	.short	TitleFunc_LifecycleDispatch_Case6 - TitleFunc_LifecycleTable
+	.short	TitleFunc_LifecycleDispatch_OnStopFddTest - TitleFunc_LifecycleTable
+	.short	TitleFunc_LifecycleDispatch_OnFddTestLoop - TitleFunc_LifecycleTable
+	.short	TitleFunc_LifecycleDispatch_OnListDirectory - TitleFunc_LifecycleTable
+	.short	TitleFunc_LifecycleDispatch_OnFormat2dd - TitleFunc_LifecycleTable
+	.short	TitleFunc_LifecycleDispatch_OnFormat2hd - TitleFunc_LifecycleTable
+	.short	TitleFunc_LifecycleDispatch_OnListLswFiles - TitleFunc_LifecycleTable
 	.short	TitleFunc_Return - TitleFunc_LifecycleTable
 TestTitleFunc_CaseTable:
 	.short	TitleFunc_ActionDispatch - TitleFunc_ActionDispatch

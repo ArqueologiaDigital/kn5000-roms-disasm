@@ -264,14 +264,14 @@ WndEvt_DispatchByEventCode:
 ; Computed jump: target = WndEvt_EventCodeDispatch + WndEvt_DispatchByEventCode_CaseTable[i], WndEvt_DispatchByEventCode_CaseTable = 16-bit offsets (9 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
 ;   0 -> WndEvt_EventCodeDispatch
-;   1 -> WndEvt_DispatchByEventCode_Case1
-;   2 -> WndEvt_DispatchByEventCode_Case2
-;   3 -> WndEvt_DispatchByEventCode_Case3
-;   4 -> WndEvt_DispatchByEventCode_Case4
-;   5 -> WndEvt_DispatchByEventCode_Case5
-;   6 -> WndEvt_DispatchByEventCode_Case6
-;   7 -> WndEvt_DispatchByEventCode_Case7
-;   8 -> WndEvt_DispatchByEventCode_Case8
+;   1 -> WndEvt_DispatchByEventCode_CursorRight
+;   2 -> WndEvt_DispatchByEventCode_PrevChar
+;   3 -> WndEvt_DispatchByEventCode_CharRowUpDown
+;   4 -> WndEvt_DispatchByEventCode_NextChar
+;   5 -> WndEvt_DispatchByEventCode_InsertBlank
+;   6 -> WndEvt_DispatchByEventCode_DeleteChar
+;   7 -> WndEvt_DispatchByEventCode_CenterName
+;   8 -> WndEvt_DispatchByEventCode_ClearName
 	jp	t, (xix+wa)
 
 ; Window event dispatch by event code
@@ -290,7 +290,9 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	WndEvt_EventCodeDispatch_Join3
-WndEvt_DispatchByEventCode_Case1:
+; WndEvt_DispatchByEventCode_CursorRight: button 2: cursor (0x274D8) + 1 while below the name length (0x274D6),
+;   EVT_SET_CURSOR
+WndEvt_DispatchByEventCode_CursorRight:
 	ld	wa, (0x0274d8:24)
 	ld	bc, wa
 	inc	1, bc
@@ -307,7 +309,9 @@ WndEvt_DispatchByEventCode_Case1:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	WndEvt_EventCodeDispatch_Join3
-WndEvt_DispatchByEventCode_Case2:
+; WndEvt_DispatchByEventCode_PrevChar: button 3 (dial down): previous character of the page (0x274DE - 1) written at
+;   the cursor
+WndEvt_DispatchByEventCode_PrevChar:
 	ld	bc, (0x0274de:24)
 	cp	bc, 0:i3
 	jrl	z, UIDialog_ReturnZeroJmp
@@ -346,7 +350,9 @@ WndEvt_DispatchByEventCode_Case2:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	WndEvt_EventCodeDispatch_Join3
-WndEvt_DispatchByEventCode_Case3:
+; WndEvt_DispatchByEventCode_CharRowUpDown: button 4: UP moves the character selection one 13-char row up, DOWN one
+;   row down, and writes it at the cursor
+WndEvt_DispatchByEventCode_CharRowUpDown:
 	lda	xde, (AcNaming_PageCharLists:24)
 	lda	xwa, (xsp+12)
 	ld	(xsp+8), xwa
@@ -495,7 +501,9 @@ WndEvt_EventCodeDispatch_Join:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	WndEvt_EventCodeDispatch_Join3
-WndEvt_DispatchByEventCode_Case4:
+; WndEvt_DispatchByEventCode_NextChar: button 5 (dial up): next character of the page (0x274DE + 1) written at the
+;   cursor
+WndEvt_DispatchByEventCode_NextChar:
 	ld	bc, (0x0274da:24)
 	ld	wa, bc
 	extz	xwa
@@ -558,7 +566,9 @@ WndEvt_EventCodeDispatch_Join2:
 WndEvt_EventCodeDispatch_Join3:
 	calr	SetAutoInc
 	jrl	UIDialog_ReturnZeroJmp
-WndEvt_DispatchByEventCode_Case5:
+; WndEvt_DispatchByEventCode_InsertBlank: button 6: shift the name right from the cursor and put the fill character at
+;   the cursor
+WndEvt_DispatchByEventCode_InsertBlank:
 	ld	iz, (0x0274d6:24)
 	dec	1, iz
 	cp iz, (160984:24)
@@ -600,7 +610,9 @@ WndEvt_EventCodeDispatch_Skip7:
 	ld	xwa, (xsp+50)
 	ld	xbc, EVT_SET_CURSOR
 	jrl	WndScroll_SendAndReturn
-WndEvt_DispatchByEventCode_Case6:
+; WndEvt_DispatchByEventCode_DeleteChar: button 7: delete at the cursor, shift the rest left and put the fill
+;   character at the end
+WndEvt_DispatchByEventCode_DeleteChar:
 	ld	iz, (0x0274d8:24)
 	cp iz, (160982:24)
 	jr	nc, WndEvt_EventCodeDispatch_Skip8
@@ -642,7 +654,9 @@ WndEvt_EventCodeDispatch_Skip8:
 	ld	xwa, (xsp+50)
 	ld	xbc, EVT_SET_CURSOR
 	jrl	WndScroll_SendAndReturn
-WndEvt_DispatchByEventCode_Case7:
+; WndEvt_DispatchByEventCode_CenterName: button 8: re-pad the name so the leading and trailing fill characters are
+;   split evenly
+WndEvt_DispatchByEventCode_CenterName:
 	ld qiz, 0
 	ld iz, 0:i3
 	ld	de, (0x0274d6:24)
@@ -770,7 +784,8 @@ WndEvt_EventCodeDispatch_Skip10_Skip2:
 	ld	xwa, (xsp+50)
 	ld	xbc, EVT_SET_CURSOR
 	jrl	WndScroll_SendAndReturn
-WndEvt_DispatchByEventCode_Case8:
+; WndEvt_DispatchByEventCode_ClearName: button 9: fill the whole name with the fill character and move the cursor to 0
+WndEvt_DispatchByEventCode_ClearName:
 	ld	iz, 0:i3
 	cpw	(0x0274d6:24), 0
 	jr	ule, WndEvt_EventCodeDispatch_Loop4_Skip

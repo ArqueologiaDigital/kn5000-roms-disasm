@@ -1481,18 +1481,18 @@ NoteEdit_FormatEntry_CaseTable:
 ; NoteEditBox_GridDispatch2_CaseTable[12].
 ; -----------------------------------------------------------------------------
 NoteEditBox_GridDispatch2_CaseTable:
-	.short	NoteEditBox_GridDispatch2_Case3 - NoteEditBox_EventDispatch2
-	.short	NoteEditBox_GridDispatch2_Case4 - NoteEditBox_EventDispatch2
+	.short	NoteEditBox_GridDispatch2_DrawNtBitmap - NoteEditBox_EventDispatch2
+	.short	NoteEditBox_GridDispatch2_DrawDrBitmap - NoteEditBox_EventDispatch2
 	.short	NoteEditBox_EventDispatch2 - NoteEditBox_EventDispatch2
 	.short	NoteEditBoxProc_ClassifyGridPosition - NoteEditBox_EventDispatch2
-	.short	NoteEditBox_GridDispatch2_Case7 - NoteEditBox_EventDispatch2
-	.short	NoteEditBox_GridDispatch2_Case8 - NoteEditBox_EventDispatch2
-	.short	NoteEditBox_GridDispatch2_Case9 - NoteEditBox_EventDispatch2
-	.short	NoteEditBox_GridDispatch2_Case10 - NoteEditBox_EventDispatch2
-	.short	NoteEditBox_GridDispatch2_Case11 - NoteEditBox_EventDispatch2
-	.short	NoteEditBox_GridDispatch2_Case12 - NoteEditBox_EventDispatch2
-	.short	NoteEditBox_GridDispatch2_Case13 - NoteEditBox_EventDispatch2
-	.short	NoteEditBox_GridDispatch2_Case14 - NoteEditBox_EventDispatch2
+	.short	NoteEditBox_GridDispatch2_DrawLineAtLinePos - NoteEditBox_EventDispatch2
+	.short	NoteEditBox_GridDispatch2_DrawNoteMeasureRuler - NoteEditBox_EventDispatch2
+	.short	NoteEditBox_GridDispatch2_DrawNoteBars - NoteEditBox_EventDispatch2
+	.short	NoteEditBox_GridDispatch2_DrawNoteBars2 - NoteEditBox_EventDispatch2
+	.short	NoteEditBox_GridDispatch2_DrawKeyNames - NoteEditBox_EventDispatch2
+	.short	NoteEditBox_GridDispatch2_DrawNoteHilight - NoteEditBox_EventDispatch2
+	.short	NoteEditBox_GridDispatch2_DrawDrumMeasureRuler - NoteEditBox_EventDispatch2
+	.short	NoteEditBox_GridDispatch2_DrawDrumRowNames - NoteEditBox_EventDispatch2
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEditBox_SetupGrid_CaseTable
 ; NoteEditBox_SetupGrid_CaseTable -- jump table of a compiled `switch`
@@ -1505,15 +1505,15 @@ NoteEditBox_GridDispatch2_CaseTable:
 ; -----------------------------------------------------------------------------
 NoteEditBox_SetupGrid_CaseTable:
 	.short	NoteEditBox_EventDispatch1 - NoteEditBox_EventDispatch1
-	.short	NoteEditBox_SetupGrid_Case2 - NoteEditBox_EventDispatch1
-	.short	NoteEditBox_SetupGrid_Case3 - NoteEditBox_EventDispatch1
-	.short	NoteEditBox_SetupGrid_Case4 - NoteEditBox_EventDispatch1
-	.short	NoteEditBox_SetupGrid_Case5 - NoteEditBox_EventDispatch1
-	.short	NoteEditBox_SetupGrid_Case6 - NoteEditBox_EventDispatch1
-	.short	NoteEditBox_SetupGrid_Case7 - NoteEditBox_EventDispatch1
-	.short	NoteEditBox_SetupGrid_Case7 - NoteEditBox_EventDispatch1
-	.short	NoteEditBox_SetupGrid_Case6 - NoteEditBox_EventDispatch1
-	.short	NoteEditBox_SetupGrid_Case10 - NoteEditBox_EventDispatch1
+	.short	NoteEditBox_SetupGrid_DrawPosString - NoteEditBox_EventDispatch1
+	.short	NoteEditBox_SetupGrid_DrawNoteString - NoteEditBox_EventDispatch1
+	.short	NoteEditBox_SetupGrid_DrawVelString - NoteEditBox_EventDispatch1
+	.short	NoteEditBox_SetupGrid_DrawLenString - NoteEditBox_EventDispatch1
+	.short	NoteEditBox_SetupGrid_DrawIncString - NoteEditBox_EventDispatch1
+	.short	NoteEditBox_SetupGrid_DrawInputLenString - NoteEditBox_EventDispatch1
+	.short	NoteEditBox_SetupGrid_DrawInputLenString - NoteEditBox_EventDispatch1
+	.short	NoteEditBox_SetupGrid_DrawIncString - NoteEditBox_EventDispatch1
+	.short	NoteEditBox_SetupGrid_DrawInputVelString - NoteEditBox_EventDispatch1
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEditBox_SetupGrid_CaseTable_Strings
 ; NoteEditBox_SetupGrid_CaseTable_Strings -- 12 bytes of NUL-terminated
@@ -2586,15 +2586,15 @@ SqplyFunc_HandlePartQuery_CaseTable:
 SqplyFunc_HandleGetValue_CaseTable:
 	.short	SqplyFunc_GetValueDispatch - SqplyFunc_GetValueDispatch
 	.short	SqplyFunc_GetValueDispatch - SqplyFunc_GetValueDispatch
-	.short	SqplyFunc_HandleGetValue_Case3 - SqplyFunc_GetValueDispatch
-	.short	SqplyFunc_HandleGetValue_Case4 - SqplyFunc_GetValueDispatch
-	.short	SqplyFunc_HandleGetValue_Case5 - SqplyFunc_GetValueDispatch
-	.short	SqplyFunc_HandleGetValue_Case6 - SqplyFunc_GetValueDispatch
-	.short	SqplyFunc_HandleGetValue_Case7 - SqplyFunc_GetValueDispatch
-	.short	SqplyFunc_HandleGetValue_Case8 - SqplyFunc_GetValueDispatch
-	.short	SqplyFunc_HandleGetValue_Case9 - SqplyFunc_GetValueDispatch
-	.short	SqplyFunc_HandleGetValue_Case10 - SqplyFunc_GetValueDispatch
-	.short	SqplyFunc_HandleGetValue_Case11 - SqplyFunc_GetValueDispatch
+	.short	SqplyFunc_HandleGetValue_MeasureAddr - SqplyFunc_GetValueDispatch
+	.short	SqplyFunc_HandleGetValue_CycleOnOffAddr - SqplyFunc_GetValueDispatch
+	.short	SqplyFunc_HandleGetValue_CycleStartMeasureAddr - SqplyFunc_GetValueDispatch
+	.short	SqplyFunc_HandleGetValue_CycleEndMeasureAddr - SqplyFunc_GetValueDispatch
+	.short	SqplyFunc_HandleGetValue_PunchMeasureAddr - SqplyFunc_GetValueDispatch
+	.short	SqplyFunc_HandleGetValue_PunchInMeasureAddr - SqplyFunc_GetValueDispatch
+	.short	SqplyFunc_HandleGetValue_PunchOutMeasureAddr - SqplyFunc_GetValueDispatch
+	.short	SqplyFunc_HandleGetValue_PunchCountInAddr - SqplyFunc_GetValueDispatch
+	.short	SqplyFunc_HandleGetValue_SoloOnOffAddr - SqplyFunc_GetValueDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_CaseTable
 ; SqplyFunc_CaseTable -- jump table of a compiled `switch` in SqplyFunc
@@ -3226,16 +3226,16 @@ SqedtFunc_CaseTable:
 ; SqedtFunc_StateChainB_CaseTable[14].
 ; -----------------------------------------------------------------------------
 SqedtFunc_StateChainB_CaseTable:
-	.short	SqedtFunc_StateChainB_Case155 - SeqFormat_DispatchB
-	.short	SqedtFunc_StateChainB_Case156 - SeqFormat_DispatchB
-	.short	SqedtFunc_StateChainB_Case157 - SeqFormat_DispatchB
-	.short	SqedtFunc_StateChainB_Case158 - SeqFormat_DispatchB
-	.short	SqedtFunc_StateChainB_Case159 - SeqFormat_DispatchB
+	.short	SqedtFunc_StateChainB_OnSqTrkMrg - SeqFormat_DispatchB
+	.short	SqedtFunc_StateChainB_OnSqQtz - SeqFormat_DispatchB
+	.short	SqedtFunc_StateChainB_OnSqTrns - SeqFormat_DispatchB
+	.short	SqedtFunc_StateChainB_OnSqVeloCng - SeqFormat_DispatchB
+	.short	SqedtFunc_StateChainB_OnSqNoteCng - SeqFormat_DispatchB
 	.short	SqedtFunc_GetFieldAddr_BySelector - SeqFormat_DispatchB
-	.short	SqedtFunc_StateChainB_Case161 - SeqFormat_DispatchB
-	.short	SqedtFunc_StateChainB_Case162 - SeqFormat_DispatchB
-	.short	SqedtFunc_StateChainB_Case163 - SeqFormat_DispatchB
-	.short	SqedtFunc_StateChainB_Case164 - SeqFormat_DispatchB
+	.short	SqedtFunc_StateChainB_OnSqMers - SeqFormat_DispatchB
+	.short	SqedtFunc_StateChainB_OnSqMcp - SeqFormat_DispatchB
+	.short	SqedtFunc_StateChainB_OnSqMdel - SeqFormat_DispatchB
+	.short	SqedtFunc_StateChainB_OnSqMins - SeqFormat_DispatchB
 	.short	SqedtFunc_GetFieldAddr_BySelector - SeqFormat_DispatchB
 	.short	SqedtFunc_GetFieldAddr_BySelector - SeqFormat_DispatchB
 	.short	SqedtFunc_GetFieldAddr_BySelector - SeqFormat_DispatchB
@@ -3263,14 +3263,14 @@ SqedtFunc_StateChainB_CaseTable_Strings:	.incbin "includes/generated/naka_widget
 ; -----------------------------------------------------------------------------
 DspItem0_TypeChangeHandler_CaseTable:
 	.short	DspItem0_TypeDispatch - DspItem0_TypeDispatch
-	.short	DspItem0_TypeChangeHandler_Case1 - DspItem0_TypeDispatch
-	.short	DspItem0_TypeChangeHandler_Case2 - DspItem0_TypeDispatch
-	.short	DspItem0_TypeChangeHandler_Case3 - DspItem0_TypeDispatch
-	.short	DspItem0_TypeChangeHandler_Case4 - DspItem0_TypeDispatch
-	.short	DspItem0_TypeChangeHandler_Case5 - DspItem0_TypeDispatch
-	.short	DspItem0_TypeChangeHandler_Case6 - DspItem0_TypeDispatch
-	.short	DspItem0_TypeChangeHandler_Case7 - DspItem0_TypeDispatch
-	.short	DspItem0_TypeChangeHandler_Case8 - DspItem0_TypeDispatch
+	.short	DspItem0_TypeChangeHandler_EffDlt0Addr - DspItem0_TypeDispatch
+	.short	DspItem0_TypeChangeHandler_EffDlt1Addr - DspItem0_TypeDispatch
+	.short	DspItem0_TypeChangeHandler_EffDlt2Addr - DspItem0_TypeDispatch
+	.short	DspItem0_TypeChangeHandler_EffDlt3Addr - DspItem0_TypeDispatch
+	.short	DspItem0_TypeChangeHandler_EffDlt4Addr - DspItem0_TypeDispatch
+	.short	DspItem0_TypeChangeHandler_EffDlt5Addr - DspItem0_TypeDispatch
+	.short	DspItem0_TypeChangeHandler_EffDlt6Addr - DspItem0_TypeDispatch
+	.short	DspItem0_TypeChangeHandler_EffDlt7Addr - DspItem0_TypeDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] DspItem0CngFunc_CaseTable
 ; DspItem0CngFunc_CaseTable -- jump table of a compiled `switch` in
@@ -4494,17 +4494,17 @@ NoteEditSy_HandleUpScroll_CaseTable:
 ; MainExeCall_CaseTable[17].
 ; -----------------------------------------------------------------------------
 MainExeCall_CaseTable:
-	.short	MainExeCall_Case154 - MainExe_HandleD6
-	.short	MainExeCall_Case155 - MainExe_HandleD6
-	.short	MainExeCall_Case156 - MainExe_HandleD6
-	.short	MainExeCall_Case157 - MainExe_HandleD6
-	.short	MainExeCall_Case158 - MainExe_HandleD6
-	.short	MainExeCall_Case159 - MainExe_HandleD6
-	.short	MainExeCall_Case160 - MainExe_HandleD6
-	.short	MainExeCall_Case161 - MainExe_HandleD6
-	.short	MainExeCall_Case162 - MainExe_HandleD6
+	.short	MainExeCall_OnTitleSqtrkclr - MainExe_HandleD6
+	.short	MainExeCall_OnTitleSqtrkmrg - MainExe_HandleD6
+	.short	MainExeCall_OnTitleSqqtz - MainExe_HandleD6
+	.short	MainExeCall_OnTitleSqtrns - MainExe_HandleD6
+	.short	MainExeCall_OnTitleSqvelocng - MainExe_HandleD6
+	.short	MainExeCall_OnTitleSqnotecng - MainExe_HandleD6
+	.short	MainExeCall_OnTitleSqadvdly - MainExe_HandleD6
+	.short	MainExeCall_OnTitleSqmers - MainExe_HandleD6
+	.short	MainExeCall_OnTitleSqmcp - MainExe_HandleD6
 	.short	MainExe_InlineByteData - MainExe_HandleD6
-	.short	MainExeCall_Case164 - MainExe_HandleD6
+	.short	MainExeCall_OnTitleSqmins - MainExe_HandleD6
 	.short	MainExe_ReturnZero - MainExe_HandleD6
 	.short	MainExe_ReturnZero - MainExe_HandleD6
 	.short	MainExe_ReturnZero - MainExe_HandleD6
@@ -5830,24 +5830,24 @@ CmpBksl_STtlFunc_CaseTable:
 CmpNcpTtl_TableDispatch_CaseTable:
 	.short	CmpNcpTtl_Dispatch2 - CmpNcpTtl_Dispatch2
 	.short	CmpNcpTtl_Dispatch2 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case118 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case118 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case120 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case120 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case122 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case122 - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnFromValueUp - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnFromValueUp - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnToItemPrev - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnToItemPrev - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnToValueUp - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnToValueUp - CmpNcpTtl_Dispatch2
 	.short	CmEsy_ReturnZero - CmpNcpTtl_Dispatch2
 	.short	CmEsy_ReturnZero - CmpNcpTtl_Dispatch2
 	.short	CmEsy_ReturnZero - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case127 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case128 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case128 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case130 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case130 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case132 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case132 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case134 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case134 - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnRightRow4Switch - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnFromItemNext - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnFromItemNext - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnFromValueDown - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnFromValueDown - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnToItemNext - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnToItemNext - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnToValueDown - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnToValueDown - CmpNcpTtl_Dispatch2
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] CmpNcpTtlFunc_CaseTable
 ; CmpNcpTtlFunc_CaseTable -- jump table of a compiled `switch` in

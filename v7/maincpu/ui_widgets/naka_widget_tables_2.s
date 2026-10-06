@@ -2184,14 +2184,14 @@ Data_ParaLoadOptDispatch_Str_Fmt3d_4:	.incbin "includes/generated/naka_widget_ta
 ; -----------------------------------------------------------------------------
 Data_InOutGridDispatch_CaseTable:
 	.short	Data_ParaLoadOptDispatch - Data_ParaLoadOptDispatch
-	.short	Data_InOutGridDispatch_Case1 - Data_ParaLoadOptDispatch
-	.short	Data_InOutGridDispatch_Case2 - Data_ParaLoadOptDispatch
-	.short	Data_InOutGridDispatch_Case3 - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_AutoPlayChordInput - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_VelocityInput - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_VelocityOffsetOrFix - Data_ParaLoadOptDispatch
 	.short	MdPreset_ReturnZero2 - Data_ParaLoadOptDispatch
-	.short	Data_InOutGridDispatch_Case5 - Data_ParaLoadOptDispatch
-	.short	Data_InOutGridDispatch_Case6 - Data_ParaLoadOptDispatch
-	.short	Data_InOutGridDispatch_Case7 - Data_ParaLoadOptDispatch
-	.short	Data_InOutGridDispatch_Case8 - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_TechniChordOutput - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_TransposeOutput - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_DrumPatternOutput - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_AutoPlayChordOutput - Data_ParaLoadOptDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Data_InOutGridDispatch_CaseTable_2
 ; Data_InOutGridDispatch_CaseTable_2 -- jump table of a compiled
@@ -2456,18 +2456,18 @@ ParaLoadOpt_AudioFlagCheck_CaseTable:
 ; -----------------------------------------------------------------------------
 ParaLoadOpt_AudioFlagCheck_B_CaseTable:
 	.short	ParaLoadOpt_DispatchTable_B - ParaLoadOpt_DispatchTable_B
-	.short	ParaLoadOpt_AudioFlagCheck_B_Case1 - ParaLoadOpt_DispatchTable_B
-	.short	ParaLoadOpt_AudioFlagCheck_B_Case2 - ParaLoadOpt_DispatchTable_B
-	.short	ParaLoadOpt_AudioFlagCheck_B_Case3 - ParaLoadOpt_DispatchTable_B
-	.short	ParaLoadOpt_AudioFlagCheck_B_Case4 - ParaLoadOpt_DispatchTable_B
-	.short	ParaLoadOpt_AudioFlagCheck_B_Case5 - ParaLoadOpt_DispatchTable_B
-	.short	ParaLoadOpt_AudioFlagCheck_B_Case6 - ParaLoadOpt_DispatchTable_B
-	.short	ParaLoadOpt_AudioFlagCheck_B_Case7 - ParaLoadOpt_DispatchTable_B
-	.short	ParaLoadOpt_AudioFlagCheck_B_Case8 - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_PmemReceiving - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_PmemCompleted - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_SmemReceiving - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_SmemCompleted - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_CompReceiving - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_CompCompleted - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_SeqReceiving - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_SeqCompleted - ParaLoadOpt_DispatchTable_B
 	.short	MidiFunc_SendEventReturn - ParaLoadOpt_DispatchTable_B
 	.short	MidiFunc_SendEventReturn - ParaLoadOpt_DispatchTable_B
-	.short	ParaLoadOpt_AudioFlagCheck_B_Case11 - ParaLoadOpt_DispatchTable_B
-	.short	ParaLoadOpt_AudioFlagCheck_B_Case12 - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_MspReceiving - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_MspCompleted - ParaLoadOpt_DispatchTable_B
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ParaLoadOpt_GridReturn_Table
 ; ParaLoadOpt_GridReturn_Table -- read by ParaLoadOpt_GridReturn (v10/v9

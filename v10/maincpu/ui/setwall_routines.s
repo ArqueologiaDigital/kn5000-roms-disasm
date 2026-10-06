@@ -1921,7 +1921,14 @@ SetWall_ForwardSkip_Return:
 
 SetWall_InlineCodeBlock3:
 	ret
-SqTrAs_CondCheck_Helper:
+; SqSngSel_CalcSongUsageOnEnter: Song-select title, activation phase 2 (the title becomes current): runs
+;   AccWrap_PlayModeDispatch, sets bit 2 of 0x28A7, copies word 0xFFEC to 0xF19E and fills the 10-byte table 0x1145
+;   with each song's memory use in percent (SetWall_InlineCodeBlock3_Helper: sum over the song's used tracks * 100 /
+;   (0x286D) + 1, capped at 99, 0 for an empty song; the current song is read from 0xF250, others from SEQ_SONG_SLOTS
+;   + 2048*n + 208). Basis: callers + body -- SqSngSelTtlFunc dispatches EVT_ACTIVATE_STATE phase 2 to
+;   SqTrAs_CondCheck, which calls it (phase 3 goes to SqTrAs_CondCheck_Helper2, which clears 0x28A7 bit 2 again);
+;   SongBank_LookupTableEntry prints 0x1145[song] with "%3d%%".
+SqSngSel_CalcSongUsageOnEnter:
 	call	AccWrap_PlayModeDispatch
 	or (10407:16), 4
 	ld	wa, (0xffec:24)

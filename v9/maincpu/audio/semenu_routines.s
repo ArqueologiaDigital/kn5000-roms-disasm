@@ -413,7 +413,7 @@ SeMenu_RegisterParamDisplay_Data_Join:
 	popw	iz
 	lda	xsp, (xsp+20)
 	ret
-SeMenu_CopyWriteUpdate_Step3_Helper:
+SeMenu_SendToneIndex:
 	lda	xsp, (xsp-22)
 	pushw	iz
 	ld	iz, de
@@ -1225,13 +1225,13 @@ SeMenu_StepParamField_Skip:
 SeMenu_StepParamField_Skip2:
 	cp	(xwa+9), 0
 	jr	lt, SeMenu_StepParamField_Skip3
-	calr	SeMenu_TransferPartValues_EndData_Helper_Helper
+	calr	SeMenu_StepParamFieldUnsigned
 	jr	SeMenu_StepParamField_Return
 SeMenu_StepParamField_Skip3:
-	calr	SeMenu_TransferPartValues_EndData_Helper_Helper2
+	calr	SeMenu_StepParamFieldSigned
 SeMenu_StepParamField_Return:
 	ret
-SeMenu_TransferPartValues_EndData_Helper_Helper:
+SeMenu_StepParamFieldUnsigned:
 	lda	xsp, (xsp-16)
 	push	xiz
 	ld	xiz, xwa
@@ -1311,7 +1311,7 @@ SeMenu_BitShiftMask_End_Skip3:
 SeMenu_BitShiftMask_End_Join2:
 	ld	(xiz), a
 	jr	SeMenu_BitShiftMask_End_Join
-SeMenu_TransferPartValues_EndData_Helper_Helper2:
+SeMenu_StepParamFieldSigned:
 	lda	xsp, (xsp-16)
 	push	xiz
 	ld	xiz, xwa
@@ -1484,7 +1484,7 @@ SeMenu_TransferPartValues_AltLoop:
 	lda	xwa, (xwa+bc)
 	ld (xde), a
 	jr SeMenu_TransferPartValues_Data
-SeMenu_TransferPartValues_EndData_Helper2:
+SeMenu_GetLfoPartSwitchParamId:
 	cp a, 1:i3
 	jr nz, SeMenu_TransferPartValues_AltData
 	ld a, 0x6:opc
@@ -1820,7 +1820,7 @@ SeMenu_TransferPartValues_EndData_Join6:
 	ld	a, (xsp+12)
 	extz	wa
 	lda	xbc, (xsp+2)
-	calr	SeMenu_TransferPartValues_EndData_Helper2
+	calr	SeMenu_GetLfoPartSwitchParamId
 	ld	a, (xsp+10)
 	extz	wa
 	ld	c, (xsp+2)
@@ -2316,7 +2316,7 @@ SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5:
 	lda	xde, (0x020bf3:24)
 	ld	(xde+wa), c
 	ret
-SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6:
+SeMenu_GetNameBufferChar:
 	cp a, 15
 	ret	ugt
 	extz	wa
@@ -3848,7 +3848,7 @@ SeMenu_ApplyPartEdit_Skip42:
 	ldw	wa, 51
 	ldw	bc, 146
 	ld	de, (xsp+6)
-	calr	SeMenu_ApplyPartEdit_Helper6
+	calr	SeMenu_DrawClippedEnvSegment
 	ld	bc, hl
 	cp	bc, 0:i3
 	jr	nz, SeMenu_ApplyPartEdit_Skip43
@@ -3856,7 +3856,7 @@ SeMenu_ApplyPartEdit_Skip42:
 	ld	wa, (xsp+6)
 	ld	bc, (xsp+8)
 	ld	de, (xsp+10)
-	calr	SeMenu_ApplyPartEdit_Helper6
+	calr	SeMenu_DrawClippedEnvSegment
 	ld	bc, hl
 	cp	bc, 0:i3
 	jr	nz, SeMenu_ApplyPartEdit_Skip43
@@ -3864,7 +3864,7 @@ SeMenu_ApplyPartEdit_Skip42:
 	ld	wa, (xsp+10)
 	ld	bc, (xsp+12)
 	ld	de, iz
-	calr	SeMenu_ApplyPartEdit_Helper6
+	calr	SeMenu_DrawClippedEnvSegment
 	ld	bc, hl
 	cp	bc, 0:i3
 	jr	nz, SeMenu_ApplyPartEdit_Skip43
@@ -3872,7 +3872,7 @@ SeMenu_ApplyPartEdit_Skip42:
 	ld	wa, iz
 	ld	bc, qiz
 	ldw	de, 213
-	calr	SeMenu_ApplyPartEdit_Helper6
+	calr	SeMenu_DrawClippedEnvSegment
 	ld	bc, qiz
 SeMenu_ApplyPartEdit_Skip43:
 	ld	l, (xsp+22)
@@ -3900,11 +3900,11 @@ SeMenu_ApplyPartEdit_Join10:
 	add	de, 213
 	pushw	146
 	ldw	wa, 214
-	calr	SeMenu_ApplyPartEdit_Helper6
+	calr	SeMenu_DrawClippedEnvSegment
 	pop	xiz
 	lda	xsp, (xsp+22)
 	ret
-SeMenu_ApplyPartEdit_Helper6:
+SeMenu_DrawClippedEnvSegment:
 	pushw	iz
 	ld	iz, 0:i3
 	ld	ix, bc
@@ -4287,7 +4287,7 @@ SeMenu_ApplyPartEdit_Join13:
 	ld	wa, (xsp+10)
 	pushw	wa
 	ldw	wa, 51
-	calr	SeMenu_ApplyPartEdit_Helper6
+	calr	SeMenu_DrawClippedEnvSegment
 	ld	iz, hl
 	cp	iz, 0:i3
 	jr	nz, SeMenu_ApplyPartEdit_Skip21
@@ -4296,7 +4296,7 @@ SeMenu_ApplyPartEdit_Join13:
 	ld	de, (xsp+12)
 	ld	hl, (xsp+14)
 	pushw	hl
-	calr	SeMenu_ApplyPartEdit_Helper6
+	calr	SeMenu_DrawClippedEnvSegment
 	ld	iz, hl
 	cp	iz, 0:i3
 	jr	nz, SeMenu_ApplyPartEdit_Skip21
@@ -4305,7 +4305,7 @@ SeMenu_ApplyPartEdit_Join13:
 	ld	de, (xsp+16)
 	ld	hl, (xsp+18)
 	pushw	hl
-	calr	SeMenu_ApplyPartEdit_Helper6
+	calr	SeMenu_DrawClippedEnvSegment
 	ld	iz, hl
 	cp	iz, 0:i3
 	jr	nz, SeMenu_ApplyPartEdit_Skip21
@@ -4313,7 +4313,7 @@ SeMenu_ApplyPartEdit_Join13:
 	ld	bc, (xsp+18)
 	pushw	bc
 	ldw	de, 213
-	calr	SeMenu_ApplyPartEdit_Helper6
+	calr	SeMenu_DrawClippedEnvSegment
 	ld	iz, (xsp+18)
 SeMenu_ApplyPartEdit_Skip21:
 	lda	xbc, (xsp+22)
@@ -4368,7 +4368,7 @@ SeMenu_ApplyPartEdit_Helper7_Join4:
 	pushw	wa
 	ldw	wa, 214
 	ld	bc, iz
-	calr	SeMenu_ApplyPartEdit_Helper6
+	calr	SeMenu_DrawClippedEnvSegment
 	cp	hl, 0:i3
 	jr	nz, SeMenu_ApplyPartEdit_Helper7_Epilogue
 	inc 1, qiz
@@ -4376,7 +4376,7 @@ SeMenu_ApplyPartEdit_Helper7_Join4:
 	ld	bc, (xsp+20)
 	pushw	bc
 	ldw	de, 258
-	calr	SeMenu_ApplyPartEdit_Helper6
+	calr	SeMenu_DrawClippedEnvSegment
 SeMenu_ApplyPartEdit_Helper7_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+32)
@@ -6190,10 +6190,10 @@ SeMenu_SetDisplayState:
 SeMenu_DisplayState_Data:
 	ld	(xwa), (0x6c5)
 	ret
-SeMenu_CopyWriteUpdate_Step3_Helper15:
+SeMenu_SetLastSwitch:
 	ld	(1626:16), a
 	ret
-SeMenu_CopyWriteUpdate_Step3_Helper16:
+SeMenu_GetLastSwitch:
 	ld	(xwa), (0x65a)
 	ret
 

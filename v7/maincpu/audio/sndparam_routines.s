@@ -2198,7 +2198,7 @@ SndParam_WriteFieldDirect_Data_Skip:
 	ld	a, (xde)
 	ld	(xbc+3), a
 	ld	xwa, xbc
-	calr	SndParam_WriteFieldDirect_Data_Helper
+	calr	SndParam_DispatchPackedEvent
 	ld	hl, 0:i3
 	inc	4, xsp
 	ret
@@ -2237,7 +2237,7 @@ SndParam_WriteFieldSub_Data_Skip2:
 	ld	a, (xde)
 	ld	(xbc+3), a
 	ld	xwa, xbc
-	calr	SndParam_WriteFieldDirect_Data_Helper
+	calr	SndParam_DispatchPackedEvent
 	ld	hl, 0:i3
 	inc	4, xsp
 	ret
@@ -2255,7 +2255,7 @@ SndParam_PackAndWrite:
 	and	bc, 127
 	ld	(xhl+3), c
 	ld	xwa, xhl
-	calr	SndParam_WriteFieldDirect_Data_Helper
+	calr	SndParam_DispatchPackedEvent
 	ld	hl, 0:i3
 	inc	4, xsp
 	ret
@@ -2357,7 +2357,7 @@ SndParam_BatchUpdate_Data_Join:
 	ld	(xwa+2), c
 	ldto_berp	c, 249
 	ld	(xwa+3), c
-	calr	SndParam_WriteFieldDirect_Data_Helper
+	calr	SndParam_DispatchPackedEvent
 	lda	xwa, (xsp+16)
 	ld	xbc, (xsp+22)
 	ld	c, (xbc+4)
@@ -2366,12 +2366,12 @@ SndParam_BatchUpdate_Data_Join:
 	ldto_berp	c, 251
 	ld	(xwa+2), c
 	ld	(xwa+3), 255
-	calr	SndParam_WriteFieldDirect_Data_Helper
+	calr	SndParam_DispatchPackedEvent
 	ld	hl, 0:i3
 	pop	xiz
 	lda	xsp, (xsp+22)
 	ret
-SndParam_WriteFieldDirect_Data_Helper:
+SndParam_DispatchPackedEvent:
 	ld	c, (xwa)
 	ld	b, (xwa+1)
 	ld	e, (xwa+2)

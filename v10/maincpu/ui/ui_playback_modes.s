@@ -374,10 +374,14 @@ PlayMode_ArmStartCountdown:
 	cp (3380:16), 0
 	jr	nz, PlayMode_InitFlagBlock_Return
 	ld	(3380:16), 1
-	call	PlayMode_InitFlagBlock_Helper2
+	call	PlayMode_LoadStartCountdown
 PlayMode_InitFlagBlock_Return:
 	ret
-PlayMode_InitFlagBlock_Helper2:
+; PlayMode_LoadStartCountdown: Sets bit 2 of 0x28AC and loads the playback countdown (0x1144) = 10. Basis: callers +
+;   body -- PlayMode_ArmStartCountdown calls it once per arming; CDlikeSwitch_PlaybackTimer counts 0x1144 down (at 5
+;   it restarts the accompaniment, at 0 starts the transport on titles 120/122), SeqRestart_CheckAndDispatch and
+;   SeqRestart_SendPlaybackNotify act only while 0x28AC bit 2 is set, and PlayMode_DispatchAndClearBit2 clears it.
+PlayMode_LoadStartCountdown:
 	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
@@ -1128,7 +1132,7 @@ SqTrAs_CondCheck:
 	push xhl
 	push xix
 	push xiz
-	call	SqTrAs_CondCheck_Helper
+	call	SqSngSel_CalcSongUsageOnEnter
 	pop xiz
 	pop xix
 	pop xhl

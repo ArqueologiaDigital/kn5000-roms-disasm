@@ -919,17 +919,17 @@ PanelTlv_ResetMasks:	.incbin "includes/generated/naka_extension_device.bin", 0x2
 ; PanelTlv_ResolvePartCompanions (audio/tonegen_fileio_handlers.s), which refreshes each record's
 ; companion from its sound; typed in ui_widgets/naka_extension_device.c.
 PanelTlv_CompanionPartTags:	.incbin "includes/generated/naka_extension_device.bin", 0x2B26, 0x18
-; PanelTlv_ApplyFieldRule_CaseOffsets -- 9 x int16: the case offsets of PanelTlv_ApplyFieldRule's compiled switch, relative to PanelTlv_ApplyFieldRule_Case0
+; PanelTlv_ApplyFieldRule_CaseOffsets -- 9 x int16: the case offsets of PanelTlv_ApplyFieldRule's compiled switch, relative to PanelTlv_ApplyFieldRule_OnKeepBits
 PanelTlv_ApplyFieldRule_CaseOffsets:
-	.short	PanelTlv_ApplyFieldRule_Case0 - PanelTlv_ApplyFieldRule_Case0
-	.short	PanelTlv_ApplyFieldRule_Case1 - PanelTlv_ApplyFieldRule_Case0
-	.short	PanelTlv_ApplyFieldRule_Case2 - PanelTlv_ApplyFieldRule_Case0
-	.short	PanelTlv_ApplyFieldRule_Case3 - PanelTlv_ApplyFieldRule_Case0
-	.short	PanelTlv_ApplyFieldRule_Case4 - PanelTlv_ApplyFieldRule_Case0
-	.short	PanelTlv_ApplyFieldRule_Case5 - PanelTlv_ApplyFieldRule_Case0
-	.short	PanelTlv_ApplyFieldRule_Case6 - PanelTlv_ApplyFieldRule_Case0
-	.short	PanelTlv_ApplyFieldRule_Case7 - PanelTlv_ApplyFieldRule_Case0
-	.short	PanelTlv_ApplyFieldRule_Case8 - PanelTlv_ApplyFieldRule_Case0
+	.short	PanelTlv_ApplyFieldRule_OnKeepBits - PanelTlv_ApplyFieldRule_OnKeepBits
+	.short	PanelTlv_ApplyFieldRule_OnClearBits - PanelTlv_ApplyFieldRule_OnKeepBits
+	.short	PanelTlv_ApplyFieldRule_OnSetBits - PanelTlv_ApplyFieldRule_OnKeepBits
+	.short	PanelTlv_ApplyFieldRule_OnResetOutsideRange - PanelTlv_ApplyFieldRule_OnKeepBits
+	.short	PanelTlv_ApplyFieldRule_OnResetInsideRange - PanelTlv_ApplyFieldRule_OnKeepBits
+	.short	PanelTlv_ApplyFieldRule_OnResetUnlessListed - PanelTlv_ApplyFieldRule_OnKeepBits
+	.short	PanelTlv_ApplyFieldRule_OnResetIfListed - PanelTlv_ApplyFieldRule_OnKeepBits
+	.short	PanelTlv_ApplyFieldRule_OnStoreByte - PanelTlv_ApplyFieldRule_OnKeepBits
+	.short	PanelTlv_ApplyFieldRule_OnZeroByte - PanelTlv_ApplyFieldRule_OnKeepBits
 ; SndParamBank_OptionDefault_NN -- the defaults of the five fields of the 0x50-byte block at Custom Data Flash
 ; 0x3D3400 (+0x00 2 B -- this slice is 4 B, of which the first 2 are copied --, +0x10 12 B, +0x20 4 B, +0x30 4 B,
 ; +0x40 6 B).  SndParamBank_WriteFlashDefaults builds the block from them; SndParamBank_RestoreOptionBlock (factory

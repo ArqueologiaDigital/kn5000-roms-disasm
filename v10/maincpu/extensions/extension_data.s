@@ -3347,7 +3347,7 @@ ExtData_ToneParam_AltBody_CaseTable:
 	.short	ExtData_ToneParam_AltBody_Case5 - ExtData_ToneParam_AltBody_Code
 	.short	ExtData_ToneParam_AltBody_Case5 - ExtData_ToneParam_AltBody_Code
 	.short	ExtData_ToneParam_AltBody_Case7 - ExtData_ToneParam_AltBody_Code
-	.short	ExtData_ToneParam_AltBody_Case8 - ExtData_ToneParam_AltBody_Code
+	.short	ExtData_ToneParam_AltBody_OnTempo - ExtData_ToneParam_AltBody_Code
 	; +0x8D2: 4 bytes, indexed by a value & 3 in ExtData_ToneParam_MultiChannel.
 ExtData_ToneParam_MultiChannel_Data:
 	.byte 1, 1, 2, 3

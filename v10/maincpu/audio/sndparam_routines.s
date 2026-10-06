@@ -2642,7 +2642,7 @@ SndParam_WriteFieldDirect_Data_Skip:
 	ld	a, (xde)
 	ld	(xbc+3), a
 	ld	xwa, xbc
-	calr	SndParam_WriteFieldDirect_Data_Helper
+	calr	SndParam_DispatchPackedEvent
 	ld	hl, 0:i3
 	inc	4, xsp
 	ret
@@ -2681,7 +2681,7 @@ SndParam_WriteFieldSub_Data_Skip2:
 	ld	a, (xde)
 	ld	(xbc+3), a
 	ld	xwa, xbc
-	calr	SndParam_WriteFieldDirect_Data_Helper
+	calr	SndParam_DispatchPackedEvent
 	ld	hl, 0:i3
 	inc	4, xsp
 	ret
@@ -2699,7 +2699,7 @@ SndParam_PackAndWrite:
 	and	bc, 127
 	ld	(xhl+3), c
 	ld	xwa, xhl
-	calr	SndParam_WriteFieldDirect_Data_Helper
+	calr	SndParam_DispatchPackedEvent
 	ld	hl, 0:i3
 	inc	4, xsp
 	ret
@@ -2800,7 +2800,7 @@ SndParam_BatchUpdate_Data_Join:
 	ld	(xwa+2), c
 	ldto_berp	c, 249
 	ld	(xwa+3), c
-	calr	SndParam_WriteFieldDirect_Data_Helper
+	calr	SndParam_DispatchPackedEvent
 	lda	xwa, (xsp+16)
 	ld	xbc, (xsp+22)
 	ld	c, (xbc+4)
@@ -2809,12 +2809,17 @@ SndParam_BatchUpdate_Data_Join:
 	ldto_berp	c, 251
 	ld	(xwa+2), c
 	ld	(xwa+3), 255
-	calr	SndParam_WriteFieldDirect_Data_Helper
+	calr	SndParam_DispatchPackedEvent
 	ld	hl, 0:i3
 	pop	xiz
 	lda	xsp, (xsp+22)
 	ret
-SndParam_WriteFieldDirect_Data_Helper:
+; SndParam_DispatchPackedEvent: Loads the 4-byte parameter event at XWA into C, B, E, D and runs MIDI_DispatchCC on it
+;   (handler chosen by byte 0 from the 192-entry MidiDispatchCC_HandlerTable; BC/DE kept at 0x964C/0x964E), preserving
+;   XDE/XHL/XIX/XIZ. Basis: callers + body -- SndParam_PackAndWrite packs {field +4, field +5, value & 127, value >> 7
+;   & 127} into a stack record and passes it here; SndParam_WriteFieldDirect_Data, SndParam_WriteFieldSub_Data and
+;   SndParam_BatchUpdate_Data do the same with their own packed records.
+SndParam_DispatchPackedEvent:
 	ld	c, (xwa)
 	ld	b, (xwa+1)
 	ld	e, (xwa+2)

@@ -935,7 +935,7 @@ UpdSeSel_DetailedUpdate_Loop4:
 	ldto_berp a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	SeMenu_TransferPartValues_EndData_Helper2
+	call	SeMenu_GetLfoPartSwitchParamId
 	ldib_erp 250, 1
 UpdSeSel_DetailedUpdate_Loop14:
 	ldto_berp a, 250
@@ -2516,7 +2516,7 @@ SeMenu_CopyWriteUpdate_Loop:
 	lda	xbc, (xsp+6)
 	lda	xbc, (xbc+wa)
 	ld xwa, xbc
-	call	SeMenu_CopyWriteUpdate_Step3_Helper18
+	call	Text_GlyphToCharCode
 	inc1b_erp 251
 	cp_erpb 251, 16
 	jr	c, SeMenu_CopyWriteUpdate_Loop
@@ -3138,14 +3138,14 @@ SeMenu_CopyWriteUpdate_Skip4:
 	cp	l, 0:i3
 	jr	z, SeMenu_CopyWriteUpdate_Skip5
 	lda	xwa, (xsp+4)
-	call	SeMenu_CopyWriteUpdate_Step3_Helper16
+	call	SeMenu_GetLastSwitch
 	ld	a, (xsp+10)
 	cp	a, (xsp+4)
 	jr	nz, SeMenu_CopyWriteUpdate_Epilogue6
 SeMenu_CopyWriteUpdate_Skip5:
 	ld	a, (xsp+10)
 	extz	wa
-	call	SeMenu_CopyWriteUpdate_Step3_Helper15
+	call	SeMenu_SetLastSwitch
 	ld	a, (xsp+8)
 	extz	wa
 	ld	c, (xsp+10)
@@ -5082,7 +5082,7 @@ SeMenu_CopyWriteUpdate_Join11:
 	ld	c, (xsp+2)
 	extz	bc
 	ld	de, (xsp)
-	call	SeMenu_CopyWriteUpdate_Step3_Helper
+	call	SeMenu_SendToneIndex
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+2)
@@ -5128,7 +5128,7 @@ SeMenu_CopyWriteUpdate_Join12:
 	ld	c, (xsp+4)
 	extz	bc
 	ld	de, (xsp+2)
-	call	SeMenu_CopyWriteUpdate_Step3_Helper
+	call	SeMenu_SendToneIndex
 	ld	a, (xsp+6)
 	extz	wa
 	ld	c, (xsp+4)
@@ -6648,7 +6648,7 @@ SeMenu_CopyWriteUpdate_Skip81:
 	push	qiz
 	cp	a, 0:i3
 	jr	nz, SeMenu_CopyWriteUpdate_Skip82
-	calr	SeMenu_CopyWriteUpdate_Helper
+	calr	SeWrtSnd_ClearName
 	jr	SeMenu_CopyWriteUpdate_Data_Epilogue4_Epilogue
 SeMenu_CopyWriteUpdate_Skip82:
 	lda	xwa, (xsp+2)
@@ -6660,7 +6660,7 @@ SeMenu_CopyWriteUpdate_Data_Loop:
 	ldto_berp a, 251
 	extz	wa
 	lda	xbc, (xsp+4)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	lda	xbc, (xsp+4)
 	ld	xwa, xbc
 	call	FontGlyph_ByteData
@@ -6722,7 +6722,7 @@ SeMenu_CopyWriteUpdate_Data_Loop3:
 	ldto_berp a, 251
 	extz	wa
 	lda	xbc, (xsp+20)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	ldto_berp a, 251
 	extz	wa
 	extz	xwa
@@ -6757,7 +6757,7 @@ SeMenu_CopyWriteUpdate_Data_Skip2:
 	call	SeMenu_StorePartParam
 	lda	xbc, (xsp+2)
 	ld	wa, 0:i3
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp)
@@ -6799,7 +6799,7 @@ SeMenu_CopyWriteUpdate_Data_Join3:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp)
@@ -6838,7 +6838,7 @@ SeMenu_CopyWriteUpdate_Data_Join4:
 	ld	a, (xsp+6)
 	extz	wa
 	lda	xbc, (xsp+4)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
@@ -6869,7 +6869,7 @@ SeMenu_CopyWriteUpdate_Entry6_Code_Loop:
 	extz	wa
 	lda	xbc, (xsp+6)
 	lda	xbc, (xbc+wa)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	inc1b_erp	251
 	cp_erpb	251, 15
 	jr	ule, SeMenu_CopyWriteUpdate_Entry6_Code_Loop
@@ -6947,7 +6947,7 @@ SeMenu_CopyWriteUpdate_Data_Skip3_Loop:
 	extz	wa
 	lda	xbc, (xsp+6)
 	lda	xbc, (xbc+wa)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	inc1b_erp	251
 	cp_erpb	251, 15
 	jr	ule, SeMenu_CopyWriteUpdate_Data_Skip3_Loop
@@ -7014,7 +7014,7 @@ SeMenu_CopyWriteUpdate_Data_Epilogue4_Join2:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	lda	xde, (xsp+2)
 	ld	a, (xde)
 	cp	a, 65
@@ -7164,7 +7164,14 @@ SeMenu_CopyWriteUpdate_Data_Epilogue4_Join5:
 SeMenu_CopyWriteUpdate_Data_Epilogue9_Epilogue:
 	inc	6, xsp
 	ret
-SeMenu_CopyWriteUpdate_Helper:
+; SeWrtSnd_ClearName: Name-entry screen (0x3F) of the WRITE SOUND title: fills the 16-character name buffer at 0x20BF3
+;   with spaces (SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5, C = 32, positions 0..15), sets page params 0 (cursor
+;   position) and 1 (character) to 0 and redraws fields 0 and 1 of screen 0x3F (SeMenu_ShowConfirmDialog). Basis:
+;   callers + body -- its only caller is the A = 0 branch of entry 8 (side row 1) of ToneGen_ParamTable_0x216, the
+;   switch-handler table SeWrtSndTitleFunc_DispatchSwitch indexes; that handler has no label and follows
+;   SeWrtMem_OnSwitch15, which is why the caller list names SeWrtMem_OnSwitch15. The other branch sends the 16 name
+;   characters and moves on to screen 62.
+SeWrtSnd_ClearName:
 	push	qiz
 	ldib_erp	251, 0
 SeMenu_CopyWriteUpdate_Data_Epilogue9_Loop:
@@ -7206,7 +7213,7 @@ SeMenu_CopyWriteUpdate_Helper_Loop:
 	extz	wa
 	lda	xbc, (xsp+28)
 	lda	xbc, (xbc+wa)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	inc1b_erp	250
 	cp_erpb	250, 15
 	jr	ule, SeMenu_CopyWriteUpdate_Helper_Loop
@@ -8381,7 +8388,7 @@ SeMenu_ClearRect:
 	pop	xiz
 	ret
 ; SeMenu_DrawKeyboardGraphic: Draws the sound editor's 7-octave mini keyboard at the origin held in RAM 0x06C6/0x06C8:
-;   seven 28-px octave cells (SeMenu_ShowConfirmDialog_Helper: outline, 5 black keys at x+3..25, 6 white-key lines)
+;   seven 28-px octave cells (SeMenu_DrawKeyboardOctave: outline, 5 black keys at x+3..25, 6 white-key lines)
 ;   and the frame lines and boxes around them. Basis: callers + body -- the FX, filter and utility page draws set the
 ;   origin (56,139 or 47,51) and call it before the SOLO button and part selector.
 SeMenu_DrawKeyboardGraphic:
@@ -8393,7 +8400,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop:
 	pushw	ix
 	pushw	iy
 	push	c
-	call	SeMenu_ShowConfirmDialog_Helper
+	call	SeMenu_DrawKeyboardOctave
 	pop	c
 	popw	iy
 	popw	ix
@@ -8462,7 +8469,12 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop:
 	addw	(0x6d2:16), 14
 	call	SeGfx_StaticOp09_FromBuf
 	ret
-SeMenu_ShowConfirmDialog_Helper:
+; SeMenu_DrawKeyboardOctave: Draws one 28-px octave of the sound editor's mini keyboard at (IX, IY): the outline (an
+;   op-02 and an op-09 line), the five black keys at the x offsets in the table after it (3-5, 7-9, 15-17, 19-21,
+;   23-25; y+1..y+7) and six white-key separators every 4 px (y+1..y+11). Basis: callers + body --
+;   SeMenu_DrawKeyboardGraphic calls it seven times, adding 28 to IX each time, and its header already calls these the
+;   octave cells.
+SeMenu_DrawKeyboardOctave:
 	ld	(1740:16), ix
 	ld	(1744:16), ix
 	ld	(1742:16), iy
@@ -8712,13 +8724,13 @@ SeMenu_WaveformSelect_Data_Skip:
 	ld	xiy, SeMenu_WaveformSelect_Apply_Data
 	ld	xix, SeScreenData_0x0685
 	call	SeGfx_DrawStaticList
-	call	SeMenu_WaveformSelect_Apply_Helper
+	call	SeMenu_DrawOriginalEditedBadge
 	jr	SeMenu_WaveformSelect_Data_Return
 SeMenu_WaveformSelect_Data_Skip2:
 	ld	xiy, SeScreenData_0x5120
 	ld	xix, SeScreenData_0x53EC
 	call	SeGfx_DrawStaticList
-	call	SeMenu_WaveformSelect_Apply_Helper4
+	call	SeMenu_DrawTwoPartRadioButtons
 	ld	xiy, DrumDetailEdit_Entry_01
 	ld	xix, SeScreenData_0x54EB
 	call	SeGfx_DrawBoundList
@@ -8730,7 +8742,11 @@ SeMenu_WaveformSelect_Data_Skip2:
 	ld	(COLORBLIT_MODE:24), 0
 SeMenu_WaveformSelect_Data_Return:
 	ret
-SeMenu_WaveformSelect_Apply_Helper:
+; SeMenu_DrawOriginalEditedBadge: Draws the "ORIGINAL" badge (SeScreenData_0x0685) at (236,31)-(308,50), or "EDITED"
+;   (SeScreenData_0x06B1) when page param 1 (0x661) is 1. Basis: callers + body -- the screen-0x20 draw
+;   SeMenu_WaveformSelect_Data (entry 0 of SeMenu_ShowPopupDialog_Draw) and its field redraw SeMenu_PresetManager_Init
+;   (entry 0 of SeMenu_ShowConfirmDialog_Data) call it in the layout used when (0x6AE) != 1.
+SeMenu_DrawOriginalEditedBadge:
 	ld	(COLORBLIT_MODE:24), 0
 	cp	(0x661:16), 1
 	jr	z, SeMenu_WaveformSelect_Data_Skip3
@@ -8772,7 +8788,7 @@ SeMenu_WaveformSelect_Data_Return3:
 SeMenu_PresetManager_Init:
 	cp	(0x6ae:16), 1
 	jr	z, SeMenu_PresetManager_Init_Skip
-	call	SeMenu_WaveformSelect_Apply_Helper
+	call	SeMenu_DrawOriginalEditedBadge
 	jrl	SeMenu_PresetManager_Init_Code_Return
 SeMenu_PresetManager_Init_Skip:
 	cp	a, 0:i3
@@ -8813,7 +8829,7 @@ SeMenu_PresetManager_Init_Skip3:
 	call	SeMenu_WaveformSelect_Apply_Helper2
 	jr	SeMenu_PresetManager_Init_Code_Return
 SeMenu_PresetManager_Init_Skip4:
-	call	SeMenu_WaveformSelect_Apply_Helper4
+	call	SeMenu_DrawTwoPartRadioButtons
 	jr	SeMenu_PresetManager_Init_Code_Return
 SeMenu_PresetManager_Init_Skip5:
 	ld	(COLORBLIT_MODE:24), 0
@@ -8983,7 +8999,12 @@ SeMenu_DrawPartRadioButtons_Skip2:
 SeMenu_DrawPartRadioButtons_Join2:
 	djnz8	c, -84
 	ret
-SeMenu_WaveformSelect_Apply_Helper4:
+; SeMenu_DrawTwoPartRadioButtons: Two-part variant of SeMenu_DrawPartRadioButtons: for parts 2 and 1 (C = 2 down to 1)
+;   tests the part bit in the mask 0x65E and draws a RadioOn button (SeScreenData_0x0D14) or a RadioOff button
+;   (SeScreenData_0x0D4E), each labelled "1ST"/"2ND" at rows y 119/149. Basis: callers + body --
+;   SeMenu_PresetManager_Init and SeMenu_WaveformSelect_Data call it only when the mode byte 0x6AE is 1, the case in
+;   which SeMenu_DrawPartRadioButtons limits itself to 2 parts; the bit test and loop are byte-for-byte the same.
+SeMenu_DrawTwoPartRadioButtons:
 	ld	(COLORBLIT_MODE:24), 0
 	ld	c, 2:opc
 	ld	w, (1630:16)
@@ -9085,8 +9106,8 @@ SeMenu_PresetBrowser_Select_Sub:
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetBrowser_Select_Helper
 	call	SeMenu_DrawSoloButton
-	call	SeMenu_PresetBrowser_Select_Helper2
-	call	SeMenu_PresetBrowser_Select_Helper3
+	call	SeMenu_DrawLfoPartSwitches
+	call	SeMenu_DrawLfoSelectedPartLine
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x287D
 	ld	xix, SeScreenData_0x28CE
@@ -9124,7 +9145,14 @@ SeMenu_PresetBrowser_Select_Helper_Skip:
 SeMenu_PresetBrowser_Select_Helper_Join:
 	djnz8	c, -84
 	ret
-SeMenu_PresetBrowser_Select_Helper2:
+; SeMenu_DrawLfoPartSwitches: LFO pages: blits the op-1B areas SeScreenData_0x296E, 0x29BE and 0x29C8 (the part column
+;   and the area right of it), then for each part 1..4 whose LFO byte (page params 5..8, RAM 0x665..0x668) has bit 5
+;   (on) set: its records from SeScreenData_0x29A0 and SeScreenData_0x2B02, the kind graphic picked by bits 6-7 from
+;   SeScreenData_0x2AD6, the bound value record SeScreenData_0x2920 and the part's record from
+;   SeMenu_PresetBrowser_Select_Sub_Data_2+36. Basis: callers + body -- the body shared by the three LFO page draws
+;   (screens 0x2A, 0x2F, 0x39) and their field-redraw handler Data_UnknownBlock (fields >= 5) call it;
+;   SeMenu_CyclePartLfoState sets bit 5 and bits 6-7 in param C+4 for part C.
+SeMenu_DrawLfoPartSwitches:
 	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x296E
 	ld	xix, SeScreenData_0x2978
@@ -9848,7 +9876,7 @@ Data_UnknownBlock_Skip8:
 	ld	xiy, Data_UnknownBlock_Records5
 	ld	xix, SeScreenData_0x296E
 	call	SeGfx_DrawStaticList
-	call	SeMenu_PresetBrowser_Select_Helper3
+	call	SeMenu_DrawLfoSelectedPartLine
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Skip:
 	ld	(COLORBLIT_MODE:24), 0
@@ -9863,7 +9891,7 @@ Data_UnknownBlock_Skip2:
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Skip9:
-	call	SeMenu_PresetBrowser_Select_Helper2
+	call	SeMenu_DrawLfoPartSwitches
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Join2:
 	ld	(COLORBLIT_MODE:24), 0
@@ -9871,7 +9899,13 @@ Data_UnknownBlock_Join2:
 	call	SeGfx_DrawIndexedBoundRecord
 Data_UnknownBlock_Return:
 	ret
-SeMenu_PresetBrowser_Select_Helper3:
+; SeMenu_DrawLfoSelectedPartLine: LFO pages: draws the op-1B box (221,68)-(237,203) and then the connector from the
+;   selected part's row -- page param 0, rows y 68/100/130/162 for parts 1..4 (0 as 1) -- right to x = 237 and down to
+;   y = 203 (SeScreenData_0x2A22[param 0]). Basis: callers + body -- the LFO page body SeMenu_PresetBrowser_Select_Sub
+;   and the field-0 redraw of Data_UnknownBlock call it; page param 0 is the selected part (SeMenu_SelectPartAndRedraw
+;   stores it in edit-buffer byte 0), and the part rows are at y 62-75, 93-106, 124-137, 156-169
+;   (SeScreenData_0x2978..0x2996).
+SeMenu_DrawLfoSelectedPartLine:
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x29B4
 	ld	xix, SeScreenData_0x29BE
@@ -10066,7 +10100,7 @@ Data_UnknownBlock_Join8:
 	push	xwa
 	push	xbc
 	push	d
-	call	SeMenu_CopyWriteUpdate_Step3_Helper18
+	call	Text_GlyphToCharCode
 	pop	d
 	pop	xbc
 	pop	xwa
@@ -19340,7 +19374,13 @@ StylCnvStorOkFunc_DataBlock_Join:
 	call	DrawLine
 	inc	8, xsp
 	retd	2
-StylCnvStorBnk_ProcDataBlock_Helper:
+; PaintArrow_DrawFilled: Paints a solid arrow in the client box XWA with colour BC: direction from the first stack
+;   word (2 and 3 swap x and y; 1 and 3 point the head opposite to 2 and the other values), tail_x_rate DE and
+;   tail_y_rate (second stack word) as percentages of the box width and height; draws head and tail as runs of
+;   parallel lines (StylCnvStorOkFunc_DataBlock, DrawLine with optional x/y swap); retd 4. Basis: callers + body --
+;   PaintArrowProc (the firmware name of StylCnvStorBnk_ProcDataBlock) calls it on EVT_PAINT when the Arrow property
+;   frame_only (+24) is 0, passing color +22, dir +26, tail_x_rate +28, tail_y_rate +30.
+PaintArrow_DrawFilled:
 	lda	xsp, (xsp-30)
 	push	xiz
 	ld	(xsp+32), bc
@@ -19527,7 +19567,11 @@ StylCnvStorOkFunc_DataBlock_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+30)
 	retd	4
-StylCnvStorBnk_ProcDataBlock_Helper2:
+; PaintArrow_DrawOutline: Outline twin of PaintArrow_DrawFilled: same arguments (box XWA, colour BC, tail_x_rate DE,
+;   direction and tail_y_rate on the stack) and the same geometry, but draws only the arrow's edges as single line
+;   segments (StylCnvStorOkFunc_DataBlock -> DrawLine); retd 4. Basis: callers + body -- PaintArrowProc calls it on
+;   EVT_PAINT instead of PaintArrow_DrawFilled when the Arrow property frame_only (+24) is non-zero.
+PaintArrow_DrawOutline:
 	lda	xsp, (xsp-32)
 	push	xiz
 	ld	(xsp+34), bc
@@ -19760,12 +19804,12 @@ StylCnvStorBnk_ProcDataBlock_OnPaint:
 	jr	z, StylCnvStorBnk_ProcDataBlock_Skip2
 	pushm	(xix)
 	pushm	(xhl)
-	calr	StylCnvStorBnk_ProcDataBlock_Helper2
+	calr	PaintArrow_DrawOutline
 	jr	StylCnvStorBnk_ProcDataBlock_Join
 StylCnvStorBnk_ProcDataBlock_Skip2:
 	pushm	(xix)
 	pushm	(xhl)
-	calr	StylCnvStorBnk_ProcDataBlock_Helper
+	calr	PaintArrow_DrawFilled
 StylCnvStorBnk_ProcDataBlock_Join:
 	ld	xhl, 0:i3
 StylCnvStorBnk_ProcDataBlock_Epilogue:

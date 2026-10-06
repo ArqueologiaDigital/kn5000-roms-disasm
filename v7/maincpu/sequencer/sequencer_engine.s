@@ -387,7 +387,7 @@ SeqPlay_DataBlock_BBE:
 	jr	ule, SeqPlay_DataBlock_BBE_Skip
 	ldw	(0xf238:16), 998
 SeqPlay_DataBlock_BBE_Skip:
-	calr	SeqPlay_DataBlock_BBE_Helper
+	calr	SeqPlay_UpdateStartFromPunchIn
 	ld	wa, (0xf238:16)
 	cp wa, (62010:16)
 	jr	c, SeqPlay_DataBlock_BBE_Skip2
@@ -404,7 +404,7 @@ SeqPlay_DataBlock_BBE_0x2C:
 SeqPlay_DataBlock_BBE_Skip3:
 	calr	SeqPlay_DataBlock_BBE_Helper2
 	jrl	SeqAcc_SetupRepeatCount
-SeqPlay_DataBlock_BBE_Helper:
+SeqPlay_UpdateStartFromPunchIn:
 	bit	0, (10418:16)
 	jr	z, SeqPlay_DataBlock_BBE_Helper_Skip2
 	ldw_d16	wa, (62008)
@@ -480,7 +480,7 @@ SeqPlay_DataBlock_BBE_Join:
 	ret	c
 	dec	1, wa
 	ld	(0xf238:16), wa
-	calr	SeqPlay_DataBlock_BBE_Helper
+	calr	SeqPlay_UpdateStartFromPunchIn
 	calr	SeqAcc_SetupRepeatCount
 	ret
 SeqPlay_DataBlock_BBE_0x126:
@@ -25021,7 +25021,7 @@ MainExe_Handle91:
 MainExe_SongMemoryLoop:
 	calr SoundCtrl_SendCmd_EE
 	jrl MainExe_ReturnZero
-MainExeCall_Case154:
+MainExeCall_OnTitleSqtrkclr:
 	cpw (9704:16), 0
 	jr nz, MainExe_SongMemStart
 	ldw wa, 0x9a
@@ -25063,7 +25063,7 @@ MainExe_SongMemNextPart:
 MainExe_CallSongHandler:
 	calr	SoundCtrl_SaveAndSendCmd_EE
 	jrl	MainExe_ReturnZero
-MainExeCall_Case155:
+MainExeCall_OnTitleSqtrkmrg:
 	ldmm8	10359, 61907
 	ldmm8	9858, 61908
 	ldmm8	9860, 61909
@@ -25169,7 +25169,7 @@ MainExe_MaskTertiary:
 	and bc, de
 	ld (0x2875:16), bc
 	jrl MainExe_SongMemoryLoop
-MainExeCall_Case156:
+MainExeCall_OnTitleSqqtz:
 	ld a, (0xf1f1:16)
 	cp a, 0x11
 	jr nz, MainExe_StorePartDirect
@@ -25195,7 +25195,7 @@ MainExe_PatternLoad:
 	jrl	nz, MainExe_SongMemoryLoop
 	ldw	wa, 156
 	jrl	MainExe_CallModeSwitch
-MainExeCall_Case157:
+MainExeCall_OnTitleSqtrns:
 	ldmm8	10359, 9756
 	ld	wa, (9758:16)
 	ld	(9778:16), wa
@@ -25208,7 +25208,7 @@ MainExeCall_Case157:
 	jrl	nz, MainExe_SongMemoryLoop
 	ldw	wa, 157
 	jrl	MainExe_CallModeSwitch
-MainExeCall_Case158:
+MainExeCall_OnTitleSqvelocng:
 	ld	a, (61992:16)
 	cp	a, 17
 	jr	nz, MainExe_RhythmStorePartDirect
@@ -25231,7 +25231,7 @@ MainExe_RhythmLoad:
 	jrl	nz, MainExe_SongMemoryLoop
 	ldw	wa, 158
 	jrl	MainExe_CallModeSwitch
-MainExeCall_Case159:
+MainExeCall_OnTitleSqnotecng:
 	ldmm8	10359, 9742
 	ld	wa, (9744:16)
 	ld	(9778:16), wa
@@ -25244,7 +25244,7 @@ MainExeCall_Case159:
 	jrl	nz, MainExe_SongMemoryLoop
 	ldw	wa, 159
 	jrl	MainExe_CallModeSwitch
-MainExeCall_Case160:
+MainExeCall_OnTitleSqadvdly:
 	ldmm8	10359, 9732
 	ld	wa, (9734:16)
 	ld	(9778:16), wa
@@ -25257,7 +25257,7 @@ MainExeCall_Case160:
 	jrl	nz, MainExe_SongMemoryLoop
 	ldw	wa, 160
 	jrl	MainExe_CallModeSwitch
-MainExeCall_Case161:
+MainExeCall_OnTitleSqmers:
 	ld	a, (61915:16)
 	cp	a, 17
 	jr	nz, MainExe_AccompStorePartDirect
@@ -25280,7 +25280,7 @@ MainExe_AccompLoad:
 	jrl	nz, MainExe_SongMemoryLoop
 	ldw	wa, 161
 	jrl	MainExe_CallModeSwitch
-MainExeCall_Case162:
+MainExeCall_OnTitleSqmcp:
 	ld	wa, (61930:16)
 	ld	(9778:16), wa
 	ldmm16	9862, 61935
@@ -25356,7 +25356,7 @@ MainExe_SongLoadFinish_Code_Join:
 	jrl	nz, MainExe_SongMemoryLoop
 	ldw	wa, 163
 	jr	MainExe_CallModeSwitch
-MainExeCall_Case164:
+MainExeCall_OnTitleSqmins:
 	ld	wa, (61922:16)
 	ld	(9778:16), wa
 	ldmm16	9862, 61927

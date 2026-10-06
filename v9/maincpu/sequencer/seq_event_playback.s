@@ -3222,7 +3222,7 @@ VocalistGridCheck_Join3:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGridCheck_Switch2_Case11522:
+VocalistGridCheck_LswDrawProgram:
 	ld	wa, (xbc)
 	inc	1, wa
 	pushw	wa
@@ -3237,7 +3237,7 @@ VocalistGridCheck_Switch2_Case11522:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGridCheck_Switch2_Case11524:
+VocalistGridCheck_LswDrawHarmony:
 	ld	wa, (xbc)
 	inc	1, wa
 	pushw	wa
@@ -3252,7 +3252,7 @@ VocalistGridCheck_Switch2_Case11524:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGridCheck_Switch2_Case11526:
+VocalistGridCheck_LswDrawKey:
 	ld	wa, (xbc)
 	sla	wa, 2
 	lda	xbc, (MidiPart_NoteNameTable:24)
@@ -3269,7 +3269,7 @@ VocalistGridCheck_Switch2_Case11526:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGridCheck_Switch2_Case11528:
+VocalistGridCheck_LswDrawProgramChangeOption:
 	ld	wa, (xbc)
 	cp	wa, 3:i3
 	jr	z, VocalistGridCheck_Skip6
@@ -3301,7 +3301,7 @@ VocalistGridCheck_Skip18:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGridCheck_Switch2_Case11530:
+VocalistGridCheck_LswDrawControlVolume:
 	ld	wa, (xbc)
 	cp	wa, 120
 	jr	z, VocalistGridCheck_Skip7
@@ -3332,7 +3332,7 @@ VocalistGridCheck_Join6:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGridCheck_Switch2_Case11532:	; cases 11532, 11536
+VocalistGridCheck_LswDrawKeySplitPoint:	; cases 11532, 11536
 	ld	bc, (xbc)
 	ld	de, bc
 	and	de, 127
@@ -3367,7 +3367,7 @@ VocalistGridCheck_Switch2_Case11532:	; cases 11532, 11536
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGridCheck_Switch2_Case11521:	; cases 11521, 11523, 11525, 11527, 11529, 11531, 11535, 11539
+VocalistGridCheck_LswDrawOnOffColumn:	; cases 11521, 11523, 11525, 11527, 11529, 11531, 11535, 11539
 	ld	xwa, VocalistGrid_DispatchData_Str_9
 	cpw	(xbc), 0
 	jr	z, VocalistGridCheck_Skip19
@@ -3450,7 +3450,7 @@ VocalistGridCheck_Join8:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGrid_DispatchData_Case11522:
+VocalistGrid_DispatchData_DrawProgram:
 	ld	xwa, 0x2d02
 	call	SndParam_LookupReadOnly
 	inc	1, hl
@@ -3466,7 +3466,7 @@ VocalistGrid_DispatchData_Case11522:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGrid_DispatchData_Case11524:
+VocalistGrid_DispatchData_DrawHarmony:
 	ld	xwa, 0x2d04
 	call	SndParam_LookupReadOnly
 	inc	1, hl
@@ -3482,7 +3482,7 @@ VocalistGrid_DispatchData_Case11524:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGrid_DispatchData_Case11526:
+VocalistGrid_DispatchData_DrawKey:
 	ld	xwa, 0x2d06
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
@@ -3500,7 +3500,7 @@ VocalistGrid_DispatchData_Case11526:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGrid_DispatchData_Case11528:
+VocalistGrid_DispatchData_DrawPcngOption:
 	ld	xwa, 0x2d08
 	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
@@ -3533,7 +3533,7 @@ VocalistGridCheck_Skip13:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGrid_DispatchData_Case11530:
+VocalistGrid_DispatchData_DrawControlVol:
 	ld	xwa, 0x2d0a
 	call	SndParam_LookupReadOnly
 	lda	xbc, (xsp+20)
@@ -3567,7 +3567,7 @@ VocalistGridCheck_Join11:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGrid_DispatchData_Case11532:
+VocalistGrid_DispatchData_DrawVocoderKeySplit:
 	ld	xwa, 0x2d0d
 	call	SndParam_LookupReadOnly
 	exts	xhl
@@ -3602,7 +3602,7 @@ VocalistGrid_DispatchData_Case11532:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
-VocalistGrid_DispatchData_Case11536:
+VocalistGrid_DispatchData_DrawChordalKeySplit:
 	ld	xwa, 0x2d11
 	call	SndParam_LookupReadOnly
 	exts	xhl
@@ -3637,7 +3637,7 @@ VocalistGrid_DispatchData_Case11536:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jr	VocalistGridCheck_Join12
-VocalistGrid_DispatchData_Case11521:	; cases 11521, 11523, 11525, 11527, 11529, 11531, 11535, 11539
+VocalistGrid_DispatchData_DrawOnOffCell:	; cases 11521, 11523, 11525, 11527, 11529, 11531, 11535, 11539
 	ld	xwa, (xsp+4)
 	ld	wa, (xwa)
 	sla	wa, 2

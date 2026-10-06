@@ -9270,9 +9270,9 @@ MidiSeq_ClearSyncFlag_Helper:
 	ld	xiz, xwa
 	lda	xwa, (0xf980:16)
 	ld	(xiz), xwa
-	calr	SeqVoice_DispatchProcess_Data_Helper2
+	calr	MidiPkt_GetUsedSize_SeqEvents
 	ld	(xsp+4), xhl
-	calr	SeqVoice_DispatchProcess_Data_Helper3
+	calr	MidiPkt_GetUsedSize_AccompBlocks
 	lda	xwa, (0xffbe:16)
 	sub	xwa, 0xf980
 	add	xwa, 0x12cb2
@@ -9291,7 +9291,7 @@ MidiSeq_ClearSyncFlag_Helper_Skip3:
 	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
 	jr	z, MidiSeq_ClearSyncFlag_Helper_Skip4
-	calr	SeqVoice_DispatchProcess_Data_Helper
+	calr	MidiPkt_GetUsedSize_StyleImage
 	add	(xiz+8), xhl
 MidiSeq_ClearSyncFlag_Helper_Skip4:
 	ld	xwa, (xiz+8)
@@ -9371,7 +9371,7 @@ MidiSeq_ClearSyncFlag_Helper4:
 	ld	(xiz+8), xwa
 	bit	6, (0xbc7c:16)
 	jr	z, MidiSeq_ClearSyncFlag_Helper4_Epilogue2
-	calr	SeqVoice_DispatchProcess_Data_Helper
+	calr	MidiPkt_GetUsedSize_StyleImage
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
@@ -9408,7 +9408,7 @@ MidiPkt_SetXferBlock_StyleImagePool:
 	ld	(xiz+8), xwa
 	bit	6, (0xbc7c:16)
 	jr	z, MidiPkt_SetXferBlock_StyleImagePool_Epilogue3
-	calr	SeqVoice_DispatchProcess_Data_Helper
+	calr	MidiPkt_GetUsedSize_StyleImage
 	lda	xde, (0x94860:24)
 	lda	xbc, (0x95bc0:24)
 	sub	xbc, xde
@@ -9435,7 +9435,7 @@ MidiPkt_SetXferTotal_SeqData:
 	ld	(xiz+8), xwa
 	bit	6, (0xbc7c:16)
 	jr	z, MidiPkt_SetXferTotal_SeqData_Epilogue4
-	calr	SeqVoice_DispatchProcess_Data_Helper2
+	calr	MidiPkt_GetUsedSize_SeqEvents
 	lda	xwa, (xhl+22528)
 	add	xwa, (xiz)
 	ld	(xiz+4), xwa
@@ -9472,7 +9472,7 @@ MidiPkt_ArpPopReturn_Helper10:
 	ld	(xiz+8), xwa
 	bit	6, (0xbc7c:16)
 	jr	z, MidiPkt_ArpPopReturn_Helper10_Epilogue5
-	calr	SeqVoice_DispatchProcess_Data_Helper2
+	calr	MidiPkt_GetUsedSize_SeqEvents
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
@@ -9494,7 +9494,7 @@ MidiSeq_ClearSyncFlag_Helper6:
 	ld	(xiz+8), xwa
 	bit	6, (0xbc7c:16)
 	jr	z, MidiSeq_ClearSyncFlag_Helper6_Epilogue6
-	calr	SeqVoice_DispatchProcess_Data_Helper3
+	calr	MidiPkt_GetUsedSize_AccompBlocks
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
@@ -9533,7 +9533,7 @@ MidiPkt_SetXferBlock_AccompBlockPool:
 	ld	(xiz+8), xwa
 	bit	6, (0xbc7c:16)
 	jr	z, MidiPkt_SetXferBlock_AccompBlockPool_Epilogue7
-	calr	SeqVoice_DispatchProcess_Data_Helper3
+	calr	MidiPkt_GetUsedSize_AccompBlocks
 	lda	xde, (0x1e8820:24)
 	lda	xbc, (0x1e8b00:24)
 	sub	xbc, xde
@@ -9549,7 +9549,7 @@ MidiPkt_SetXferBlock_AccompBlockPool:
 MidiPkt_SetXferBlock_AccompBlockPool_Epilogue7:
 	pop	xiz
 	ret
-SeqVoice_DispatchProcess_Data_Helper:
+MidiPkt_GetUsedSize_StyleImage:
 	push	xde
 	push	xhl
 	push	xix
@@ -9563,7 +9563,7 @@ SeqVoice_DispatchProcess_Data_Helper:
 	extz	xhl
 	sll	xhl, 4
 	ret
-SeqVoice_DispatchProcess_Data_Helper2:
+MidiPkt_GetUsedSize_SeqEvents:
 	push	xde
 	push	xhl
 	push	xix
@@ -9577,7 +9577,7 @@ SeqVoice_DispatchProcess_Data_Helper2:
 	extz	xhl
 	sll	xhl, 4
 	ret
-SeqVoice_DispatchProcess_Data_Helper3:
+MidiPkt_GetUsedSize_AccompBlocks:
 	push	xde
 	push	xhl
 	push	xix
@@ -11284,9 +11284,9 @@ MidiSysEx_ProcessBlock_Helper9:
 	push	xhl
 	push	xix
 	push	xiz
-	call	SeqChan_WriteField_Data_E_Helper2
+	call	PanelTlv_ValidateSongPanel
 	call	PanelTlv_ResolvePartCompanions_Entry
-	call	SeqChan_WriteField_Data_E_Helper
+	call	MidiSysEx_RestoreSongSelection
 	pop	xiz
 	pop	xix
 	pop	xhl

@@ -12979,20 +12979,20 @@ HDAE5000_Str_Blank1:	; 0x2E21C4
 ;
 ; HDAE5000_AcHddNamingWindowProc_CaseTable (0x2E21C6, 9 x u16): the switch of HDAE5000_AcHddNamingWindowProc
 ; (dispatch at 0x2819FA, hd-ae5000_v2_06i.s:2472: `dec 1,xwa`, bound `cp xwa,8`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
-; `lda xix,(HDAE5000_AcHddNamingWindowProc_Case1)`, `jp T,XIX+WA`).  Entry i is the offset from
-; HDAE5000_AcHddNamingWindowProc_Case1 of the case for value 1+i; 9 entries, pinned by the bound
+; `lda xix,(HDAE5000_AcHddNamingWindowProc_OnPositionLeft)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_AcHddNamingWindowProc_OnPositionLeft of the case for value 1+i; 9 entries, pinned by the bound
 ; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
 ;
 HDAE5000_AcHddNamingWindowProc_CaseTable:
-	.short	HDAE5000_AcHddNamingWindowProc_Case1 - HDAE5000_AcHddNamingWindowProc_Case1	; 1
-	.short	HDAE5000_AcHddNamingWindowProc_Case2 - HDAE5000_AcHddNamingWindowProc_Case1	; 2
-	.short	HDAE5000_AcHddNamingWindowProc_Case3 - HDAE5000_AcHddNamingWindowProc_Case1	; 3
-	.short	HDAE5000_AcHddNamingWindowProc_Case4 - HDAE5000_AcHddNamingWindowProc_Case1	; 4
-	.short	HDAE5000_AcHddNamingWindowProc_Case5 - HDAE5000_AcHddNamingWindowProc_Case1	; 5
-	.short	HDAE5000_AcHddNamingWindowProc_Case6 - HDAE5000_AcHddNamingWindowProc_Case1	; 6
-	.short	HDAE5000_AcHddNamingWindowProc_Case7 - HDAE5000_AcHddNamingWindowProc_Case1	; 7
-	.short	HDAE5000_AcHddNamingWindowProc_Case8 - HDAE5000_AcHddNamingWindowProc_Case1	; 8
-	.short	HDAE5000_AcHddNamingWindowProc_Case9 - HDAE5000_AcHddNamingWindowProc_Case1	; 9
+	.short	HDAE5000_AcHddNamingWindowProc_OnPositionLeft - HDAE5000_AcHddNamingWindowProc_OnPositionLeft	; 1
+	.short	HDAE5000_AcHddNamingWindowProc_OnPositionRight - HDAE5000_AcHddNamingWindowProc_OnPositionLeft	; 2
+	.short	HDAE5000_AcHddNamingWindowProc_OnPrevCharacter - HDAE5000_AcHddNamingWindowProc_OnPositionLeft	; 3
+	.short	HDAE5000_AcHddNamingWindowProc_OnCharacterRowUpDown - HDAE5000_AcHddNamingWindowProc_OnPositionLeft	; 4
+	.short	HDAE5000_AcHddNamingWindowProc_OnNextCharacter - HDAE5000_AcHddNamingWindowProc_OnPositionLeft	; 5
+	.short	HDAE5000_AcHddNamingWindowProc_OnInsert - HDAE5000_AcHddNamingWindowProc_OnPositionLeft	; 6
+	.short	HDAE5000_AcHddNamingWindowProc_OnDelete - HDAE5000_AcHddNamingWindowProc_OnPositionLeft	; 7
+	.short	HDAE5000_AcHddNamingWindowProc_OnCenterName - HDAE5000_AcHddNamingWindowProc_OnPositionLeft	; 8
+	.short	HDAE5000_AcHddNamingWindowProc_OnClear - HDAE5000_AcHddNamingWindowProc_OnPositionLeft	; 9
 HDAE5000_Str_Name:	; 0x2E21D8
 	; read by IvHddNamingProc at 0x2826DD (lda operand)
 	.asciz "Name"
@@ -14103,33 +14103,33 @@ HDAE5000_Str_FMT:	; 0x2E2CDC
 ;
 ; HDAE5000_AttenHDFormatSwCatch_CaseTable (0x2E2CE2, 8 x u16): the switch of HDAE5000_AttenHDFormatSwCatch
 ; (dispatch at 0x286728, hdae5000_hd_driver.s:5233: bound `cp xwa,7`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
-; `lda xix,(HDAE5000_AttenHDFormatSwCatch_Case0)`, `jp T,XIX+WA`).  Entry i is the offset from
-; HDAE5000_AttenHDFormatSwCatch_Case0 of the case for value 0+i; 8 entries, pinned by the bound
+; `lda xix,(HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1 of the case for value 0+i; 8 entries, pinned by the bound
 ; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
 ;
 HDAE5000_AttenHDFormatSwCatch_CaseTable:
-	.short	HDAE5000_AttenHDFormatSwCatch_Case0 - HDAE5000_AttenHDFormatSwCatch_Case0	; 0
-	.short	HDAE5000_AttenHDFormatSwCatch_Case1 - HDAE5000_AttenHDFormatSwCatch_Case0	; 1
-	.short	HDAE5000_AttenHDFormatSwCatch_Case2 - HDAE5000_AttenHDFormatSwCatch_Case0	; 2
-	.short	HDAE5000_AttenHDFormatSwCatch_Case3 - HDAE5000_AttenHDFormatSwCatch_Case0	; 3
-	.short	HDAE5000_AttenHDFormatSwCatch_Case4 - HDAE5000_AttenHDFormatSwCatch_Case0	; 4
-	.short	.LCHSC__post_switch - HDAE5000_AttenHDFormatSwCatch_Case0	; 5 (default)
-	.short	HDAE5000_AttenHDFormatSwCatch_Case6 - HDAE5000_AttenHDFormatSwCatch_Case0	; 6
-	.short	HDAE5000_AttenHDFormatSwCatch_Case6 - HDAE5000_AttenHDFormatSwCatch_Case0	; 7
+	.short	HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1 - HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1	; 0
+	.short	HDAE5000_AttenHDFormatSwCatch_OnCodeDigit2Or3 - HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1	; 1
+	.short	HDAE5000_AttenHDFormatSwCatch_OnCodeDigit4Or5 - HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1	; 2
+	.short	HDAE5000_AttenHDFormatSwCatch_OnCodeDigit6Or7 - HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1	; 3
+	.short	HDAE5000_AttenHDFormatSwCatch_OnCodeDigit8Or9 - HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1	; 4
+	.short	.LCHSC__post_switch - HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1	; 5 (default)
+	.short	HDAE5000_AttenHDFormatSwCatch_OnCancel - HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1	; 6
+	.short	HDAE5000_AttenHDFormatSwCatch_OnCancel - HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1	; 7
 ;
 ; HDAE5000_Lbn_StepDigit_CaseTable (0x2E2CF2, 6 x u16): the switch of HDAE5000_Lbn_StepDigit
 ; (dispatch at 0x286A49, hdae5000_hd_driver.s:5493: bound `cp xwa,5`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
-; `lda xix,(HDAE5000_Lbn_StepDigit_Case0)`, `jp T,XIX+WA`).  Entry i is the offset from
-; HDAE5000_Lbn_StepDigit_Case0 of the case for value 0+i; 6 entries, pinned by the bound
+; `lda xix,(HDAE5000_Lbn_StepDigit_NoDigitTyped)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_Lbn_StepDigit_NoDigitTyped of the case for value 0+i; 6 entries, pinned by the bound
 ; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
 ;
 HDAE5000_Lbn_StepDigit_CaseTable:
-	.short	HDAE5000_Lbn_StepDigit_Case0 - HDAE5000_Lbn_StepDigit_Case0	; 0
-	.short	HDAE5000_Lbn_StepDigit_Case1 - HDAE5000_Lbn_StepDigit_Case0	; 1
-	.short	HDAE5000_Lbn_StepDigit_Case2 - HDAE5000_Lbn_StepDigit_Case0	; 2
-	.short	HDAE5000_Lbn_StepDigit_Case3 - HDAE5000_Lbn_StepDigit_Case0	; 3
-	.short	HDAE5000_Lbn_StepDigit_Case4 - HDAE5000_Lbn_StepDigit_Case0	; 4
-	.short	HDAE5000_Lbn_StepDigit_Case5 - HDAE5000_Lbn_StepDigit_Case0	; 5
+	.short	HDAE5000_Lbn_StepDigit_NoDigitTyped - HDAE5000_Lbn_StepDigit_NoDigitTyped	; 0
+	.short	HDAE5000_Lbn_StepDigit_DirHundreds - HDAE5000_Lbn_StepDigit_NoDigitTyped	; 1
+	.short	HDAE5000_Lbn_StepDigit_DirTens - HDAE5000_Lbn_StepDigit_NoDigitTyped	; 2
+	.short	HDAE5000_Lbn_StepDigit_DirUnits - HDAE5000_Lbn_StepDigit_NoDigitTyped	; 3
+	.short	HDAE5000_Lbn_StepDigit_SongTens - HDAE5000_Lbn_StepDigit_NoDigitTyped	; 4
+	.short	HDAE5000_Lbn_StepDigit_SongUnits - HDAE5000_Lbn_StepDigit_NoDigitTyped	; 5
 HDAE5000_Str_LBNS:	; 0x2E2CFE
 	; read by LBNPage1SwCatch at 0x286BB7 (lda operand)
 	.asciz "LBNS"
@@ -14137,24 +14137,24 @@ HDAE5000_Str_LBNS:	; 0x2E2CFE
 ;
 ; HDAE5000_LBNPage1SwCatch_CaseTable (0x2E2D04, 13 x u16): the switch of HDAE5000_LBNPage1SwCatch
 ; (dispatch at 0x286C15, hdae5000_hd_driver.s:5660: bound `cp xwa,12`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
-; `lda xix,(HDAE5000_LBNPage1SwCatch_Case12)`, `jp T,XIX+WA`).  Entry i is the offset from
-; HDAE5000_LBNPage1SwCatch_Case12 of the case for value 0+i; 13 entries, pinned by the bound
+; `lda xix,(HDAE5000_LBNPage1SwCatch_OnClear)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LBNPage1SwCatch_OnClear of the case for value 0+i; 13 entries, pinned by the bound
 ; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
 ;
 HDAE5000_LBNPage1SwCatch_CaseTable:
-	.short	HDAE5000_LBNPage1SwCatch_Case0 - HDAE5000_LBNPage1SwCatch_Case12	; 0
-	.short	HDAE5000_LBNPage1SwCatch_Case1 - HDAE5000_LBNPage1SwCatch_Case12	; 1
-	.short	HDAE5000_LBNPage1SwCatch_Case2 - HDAE5000_LBNPage1SwCatch_Case12	; 2
-	.short	HDAE5000_LBNPage1SwCatch_Case3 - HDAE5000_LBNPage1SwCatch_Case12	; 3
-	.short	HDAE5000_LBNPage1SwCatch_Case4 - HDAE5000_LBNPage1SwCatch_Case12	; 4
-	.short	HDAE5000_LBNPage1SwCatch_Case5 - HDAE5000_LBNPage1SwCatch_Case12	; 5
-	.short	HDAE5000_LBNPage1SwCatch_Case5 - HDAE5000_LBNPage1SwCatch_Case12	; 6
-	.short	HDAE5000_LBNPage1SwCatch_Case5 - HDAE5000_LBNPage1SwCatch_Case12	; 7
-	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_Case12	; 8 (default)
-	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_Case12	; 9 (default)
-	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_Case12	; 10 (default)
-	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_Case12	; 11 (default)
-	.short	HDAE5000_LBNPage1SwCatch_Case12 - HDAE5000_LBNPage1SwCatch_Case12	; 12
+	.short	HDAE5000_LBNPage1SwCatch_OnDigit0Or1 - HDAE5000_LBNPage1SwCatch_OnClear	; 0
+	.short	HDAE5000_LBNPage1SwCatch_OnDigit2Or3 - HDAE5000_LBNPage1SwCatch_OnClear	; 1
+	.short	HDAE5000_LBNPage1SwCatch_OnDigit4Or5 - HDAE5000_LBNPage1SwCatch_OnClear	; 2
+	.short	HDAE5000_LBNPage1SwCatch_OnDigit6Or7 - HDAE5000_LBNPage1SwCatch_OnClear	; 3
+	.short	HDAE5000_LBNPage1SwCatch_OnDigit8Or9 - HDAE5000_LBNPage1SwCatch_OnClear	; 4
+	.short	HDAE5000_LBNPage1SwCatch_OnStepDigit - HDAE5000_LBNPage1SwCatch_OnClear	; 5
+	.short	HDAE5000_LBNPage1SwCatch_OnStepDigit - HDAE5000_LBNPage1SwCatch_OnClear	; 6
+	.short	HDAE5000_LBNPage1SwCatch_OnStepDigit - HDAE5000_LBNPage1SwCatch_OnClear	; 7
+	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_OnClear	; 8 (default)
+	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_OnClear	; 9 (default)
+	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_OnClear	; 10 (default)
+	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_OnClear	; 11 (default)
+	.short	HDAE5000_LBNPage1SwCatch_OnClear - HDAE5000_LBNPage1SwCatch_OnClear	; 12
 HDAE5000_Str_LBN:	; 0x2E2D1E
 	; read by LBNLoadSwCatch at 0x286D7A (lda operand)
 	.asciz "LBN!"
@@ -14179,18 +14179,18 @@ HDAE5000_Fmt_2_2d_Lbn_ShowEntry_2:	; 0x2E2D3E
 ;
 ; HDAE5000_Lbn_ShowEntry_CaseTable (0x2E2D46, 7 x u16): the switch of HDAE5000_Lbn_ShowEntry
 ; (dispatch at 0x2870FC, hdae5000_filesystem.s:17: bound `cp xwa,6`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
-; `lda xix,(HDAE5000_Lbn_ShowEntry_Case0)`, `jp T,XIX+WA`).  Entry i is the offset from
-; HDAE5000_Lbn_ShowEntry_Case0 of the case for value 0+i; 7 entries, pinned by the bound
+; `lda xix,(HDAE5000_Lbn_ShowEntry_NoDigitTyped)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_Lbn_ShowEntry_NoDigitTyped of the case for value 0+i; 7 entries, pinned by the bound
 ; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
 ;
 HDAE5000_Lbn_ShowEntry_CaseTable:
-	.short	HDAE5000_Lbn_ShowEntry_Case0 - HDAE5000_Lbn_ShowEntry_Case0	; 0
-	.short	HDAE5000_Lbn_ShowEntry_Case1 - HDAE5000_Lbn_ShowEntry_Case0	; 1
-	.short	HDAE5000_Lbn_ShowEntry_Case2 - HDAE5000_Lbn_ShowEntry_Case0	; 2
-	.short	HDAE5000_Lbn_ShowEntry_Case3 - HDAE5000_Lbn_ShowEntry_Case0	; 3
-	.short	HDAE5000_Lbn_ShowEntry_Case4 - HDAE5000_Lbn_ShowEntry_Case0	; 4
-	.short	HDAE5000_Lbn_ShowEntry_Case5 - HDAE5000_Lbn_ShowEntry_Case0	; 5
-	.short	HDAE5000_Lbn_ShowEntry_Case6 - HDAE5000_Lbn_ShowEntry_Case0	; 6
+	.short	HDAE5000_Lbn_ShowEntry_NoDigitTyped - HDAE5000_Lbn_ShowEntry_NoDigitTyped	; 0
+	.short	HDAE5000_Lbn_ShowEntry_DirHundredsTyped - HDAE5000_Lbn_ShowEntry_NoDigitTyped	; 1
+	.short	HDAE5000_Lbn_ShowEntry_DirTensTyped - HDAE5000_Lbn_ShowEntry_NoDigitTyped	; 2
+	.short	HDAE5000_Lbn_ShowEntry_DirUnitsTyped - HDAE5000_Lbn_ShowEntry_NoDigitTyped	; 3
+	.short	HDAE5000_Lbn_ShowEntry_SongTensTyped - HDAE5000_Lbn_ShowEntry_NoDigitTyped	; 4
+	.short	HDAE5000_Lbn_ShowEntry_SongUnitsTyped - HDAE5000_Lbn_ShowEntry_NoDigitTyped	; 5
+	.short	HDAE5000_Lbn_ShowEntry_Reset - HDAE5000_Lbn_ShowEntry_NoDigitTyped	; 6
 HDAE5000_Str_Blank26:	; 0x2E2D54
 	; read by FileLBNNameCheck at 0x2875C4 (pushed operand)
 	.asciz "                          "

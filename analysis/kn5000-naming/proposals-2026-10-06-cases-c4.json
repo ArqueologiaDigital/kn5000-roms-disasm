@@ -1,0 +1,945 @@
+[
+ {
+  "old": "MainExeCall_Case154",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainExeCall_OnTitleSqtrkclr",
+  "header": "EXECUTE on TT_SQTRKCLR: calls SeqVoice_InitJmpNop for each track 1-16 whose bit is set in mask word 9704, drops those bits from 0x2875 and zeroes 9704; with an empty mask it only re-posts the title.",
+  "basis": "switch value meaning (ACTIVE_TITLE id) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:15696 `ld xwa, NAKA_MAINFUNC_MainExeCall` -- MainExeFunc posts MainExeCall on EVT_SW_IN (the EXECUTE switch); SureJudgeFunc does the same after the are-you-sure check (15708)",
+   "sequencer/sequencer_engine.s:24906 `ld a, (ACTIVE_TITLE:16)` -- the switched value is the title on screen (shared/ram_variables.s:44)",
+   "sequencer/sequencer_engine.s:24922 `sub wa, 0x9a` / 24925 `cp wa, 0x10` -- titles 0x9A..0xAA index MainExeCall_CaseTable",
+   "ui_widgets/widget_descriptors.s:4511 `.short MainExe_Handle91 - MainExe_HandleD6` -- slot 0xA8 (TT_SQSNGCPC, the second song-copy title) goes to the TT_SQSNGCP (0x91) handler and slot 0xAA (TT_SQPNLWRM) to the TT_SQPNLWR (0x8D) handler (4513): the slots are title ids",
+   "sequencer/sequencer_engine.s:25010 `ldw wa, 0x9a` -- each case re-posts its own title through UI_PostModeChangeEvent, which posts EVT_CHANGE_TITLE (ui/ui_control_panel.s:2907); cases 155..164 post 0x9b..0xa4",
+   "shared/event_codes.s:73 `.equ TITLE_SQTRKCLR, 0x1a0009a` -- title 0x9A = TT_SQTRKCLR, the track-clear page",
+   "sequencer/sequencer_engine.s:25008 `cpw (9704:16), 0` / 25029 `call SeqVoice_InitJmpNop` / 25044 `ldw (9704:16), 0` -- the case's body: per selected track, then clears the mask"
+  ]
+ },
+ {
+  "old": "MainExeCall_Case155",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainExeCall_OnTitleSqtrkmrg",
+  "header": "EXECUTE on TT_SQTRKMRG: merges MrgTrA (0xf1d3) and MrgTrB (0xf1d4) into MrgTrC (0xf1d5) through SeqPart_Compare and moves the tracks' bits in 0x2875 / 0xffec from A and B to C.",
+  "basis": "switch value meaning (ACTIVE_TITLE id) + body",
+  "evidence": [
+   "shared/event_codes.s:1974 `.equ TITLE_SQTRKMRG, 0x1a0009b` -- title 0x9B = TT_SQTRKMRG (track merge)",
+   "sequencer/sequencer_engine.s:25051 `ldmm8 0x2877, 0xf1d3` -- copies MrgTrA/B/C (0xf1d3/0xf1d4/0xf1d5, read by SqedtFunc_OnGetMrgTr*String, sequencer/sequencer_ui.s:14300..14320) to 0x2877/9858/9860",
+   "sequencer/sequencer_engine.s:25056 `call SeqPart_Compare` / 25105 `or (0x2875:16), bc` -- runs the merge, clears tracks A and B in 0x2875/0xffec and sets track C",
+   "sequencer/sequencer_engine.s:25118 `ldw wa, 0x9b` -- re-posts TT_SQTRKMRG on success"
+  ]
+ },
+ {
+  "old": "MainExeCall_Case156",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainExeCall_OnTitleSqqtz",
+  "header": "EXECUTE on TT_SQQTZ: track 0xf1f1 (0x11 = all, passed as 127) from measure 0xf1f2, value 0xf1f6 doubled into 9726, then SeqPart_VelocityEditSetup.",
+  "basis": "switch value meaning (ACTIVE_TITLE id) + body",
+  "evidence": [
+   "shared/event_codes.s:1975 `.equ TITLE_SQQTZ, 0x1a0009c` -- title 0x9C = TT_SQQTZ (quantize)",
+   "sequencer/sequencer_engine.s:25159 `ld a, (0xf1f1:16)` -- the quantize page's track byte (SqedtFunc_TrkString_OnTitleSqqtz reads 0xf1f1, sequencer/sequencer_ui.s:14008); 0x11 (all) is passed as 127",
+   "sequencer/sequencer_engine.s:25180 `call SeqPart_VelocityEditSetup` -- the edit routine (its name does not fit a quantize)",
+   "sequencer/sequencer_engine.s:25183 `ldw wa, 0x9c` -- re-posts TT_SQQTZ on success"
+  ]
+ },
+ {
+  "old": "MainExeCall_Case157",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainExeCall_OnTitleSqtrns",
+  "header": "EXECUTE on TT_SQTRNS: track 9756 from measure 9758 to 9760, then SeqPart_PartSelect.",
+  "basis": "switch value meaning (ACTIVE_TITLE id) + body",
+  "evidence": [
+   "shared/event_codes.s:1976 `.equ TITLE_SQTRNS, 0x1a0009d` -- title 0x9D = TT_SQTRNS (transpose)",
+   "sequencer/sequencer_engine.s:25186 `ldmm8 0x2877, 9756` -- the transpose page's track byte (SqedtFunc_TrkString_OnTitleSqtrns reads 9756, sequencer/sequencer_ui.s:13999)",
+   "sequencer/sequencer_engine.s:25193 `call SeqPart_PartSelect` / 25196 `ldw wa, 0x9d`"
+  ]
+ },
+ {
+  "old": "MainExeCall_Case158",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainExeCall_OnTitleSqvelocng",
+  "header": "EXECUTE on TT_SQVELOCNG: track 0xf228 from measure 0xf229, velocity amount 0xf22e into 9812, then SeqPart_TransposeSetup (name does not fit).",
+  "basis": "switch value meaning (ACTIVE_TITLE id) + body",
+  "evidence": [
+   "shared/event_codes.s:1977 `.equ TITLE_SQVELOCNG, 0x1a0009e` -- title 0x9E = TT_SQVELOCNG (velocity change)",
+   "sequencer/sequencer_engine.s:25199 `ld a, (0xf228:16)` -- the velocity-change page's track byte (SqedtFunc_TrkString_OnTitleSqvelocng, sequencer/sequencer_ui.s:14011)",
+   "sequencer/sequencer_engine.s:25215 `ldmm8 9812, 0xf22e` -- the velocity amount (SqedtFunc_OnGetVeloString formats 0xf22e, sequencer/sequencer_ui.s:14163)",
+   "sequencer/sequencer_engine.s:25218 `call SeqPart_TransposeSetup` / 25221 `ldw wa, 0x9e`"
+  ]
+ },
+ {
+  "old": "MainExeCall_Case159",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainExeCall_OnTitleSqnotecng",
+  "header": "EXECUTE on TT_SQNOTECNG: track 9742 from measure 9744 to 9746, then SeqPart_PartVoiceCheck.",
+  "basis": "switch value meaning (ACTIVE_TITLE id) + body",
+  "evidence": [
+   "shared/event_codes.s:1978 `.equ TITLE_SQNOTECNG, 0x1a0009f` -- title 0x9F = TT_SQNOTECNG (note change)",
+   "sequencer/sequencer_engine.s:25224 `ldmm8 0x2877, 9742` -- track byte 9742 (Sqedt_ParamDispatch_Code reads it for this title, sequencer/sequencer_ui.s:13996)",
+   "sequencer/sequencer_engine.s:25231 `call SeqPart_PartVoiceCheck` / 25234 `ldw wa, 0x9f`"
+  ]
+ },
+ {
+  "old": "MainExeCall_Case160",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainExeCall_OnTitleSqadvdly",
+  "header": "EXECUTE on TT_SQADVDLY: track 9732 from measure 9734 to 9736, then SeqPart_VoiceCheckModeB.",
+  "basis": "switch value meaning (ACTIVE_TITLE id) + body",
+  "evidence": [
+   "shared/event_codes.s:1979 `.equ TITLE_SQADVDLY, 0x1a000a0` -- title 0xA0 = TT_SQADVDLY (advance/delay)",
+   "sequencer/sequencer_engine.s:25237 `ldmm8 0x2877, 9732` -- track byte 9732 (Sqedt_ParamDispatch_Skip, the default title of SqedtFunc's track string, sequencer/sequencer_ui.s:14014)",
+   "sequencer/sequencer_engine.s:25244 `call SeqPart_VoiceCheckModeB` / 25247 `ldw wa, 0xa0`"
+  ]
+ },
+ {
+  "old": "MainExeCall_Case161",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainExeCall_OnTitleSqmers",
+  "header": "EXECUTE on TT_SQMERS: track 0xf1db from measure 0xf1dc, MERS choice 0xf1e0 into 9808, then SeqPart_SinglePartLoad.",
+  "basis": "switch value meaning (ACTIVE_TITLE id) + body",
+  "evidence": [
+   "shared/event_codes.s:1980 `.equ TITLE_SQMERS, 0x1a000a1` -- title 0xA1 = TT_SQMERS (measure erase)",
+   "sequencer/sequencer_engine.s:25250 `ld a, (0xf1db:16)` -- track byte 0xf1db (SqedtFunc_TrkString_OnTitleSqmers, sequencer/sequencer_ui.s:14005)",
+   "sequencer/sequencer_engine.s:25266 `ldmm8 9808, 0xf1e0` -- the MERS choice byte (SqedtFunc_OnGetMersString indexes its strings with 0xf1e0, sequencer/sequencer_ui.s:14191)",
+   "sequencer/sequencer_engine.s:25269 `call SeqPart_SinglePartLoad` / 25272 `ldw wa, 0xa1`"
+  ]
+ },
+ {
+  "old": "MainExeCall_Case162",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainExeCall_OnTitleSqmcp",
+  "header": "EXECUTE on TT_SQMCP: source track 0xf1e9 from measure 0xf1ea, destination track 0xf1ee at measure 0xf1ef, then SeqPart_DualPartLoad (SeqPart_LoadAndValidateData after error 0x23).",
+  "basis": "switch value meaning (ACTIVE_TITLE id) + body",
+  "evidence": [
+   "shared/event_codes.s:1981 `.equ TITLE_SQMCP, 0x1a000a2` -- title 0xA2 = TT_SQMCP (measure copy)",
+   "sequencer/sequencer_engine.s:25275 `ld wa, (0xf1ea:16)` -- McpFm (SqedtFunc_OnGetMcpFmString, sequencer/sequencer_ui.s:14336); 25282 `ldmm8 9858, 0xf1ee` McpTrB; 0xf1ef McpSm; 0xf1e9 McpTrA",
+   "sequencer/sequencer_engine.s:25295 `call SeqPart_DualPartLoad` / 25305 `call SeqPart_LoadAndValidateData` (retry on error 0x23) / 25299 `ldw wa, 0xa2`"
+  ]
+ },
+ {
+  "old": "MainExeCall_Case164",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainExeCall_OnTitleSqmins",
+  "header": "EXECUTE on TT_SQMINS: track 0xf1e1 from measure 0xf1e2, second track 0xf1e6 at measure 0xf1e7, then SeqPart_ByteBlockA95A (SeqPart_LoadDualPartData after error 0x23).",
+  "basis": "switch value meaning (ACTIVE_TITLE id) + body",
+  "evidence": [
+   "shared/event_codes.s:1983 `.equ TITLE_SQMINS, 0x1a000a4` -- title 0xA4 = TT_SQMINS (measure insert)",
+   "sequencer/sequencer_engine.s:25356 `ld wa, (0xf1e2:16)` -- MinsFm (SqedtFunc_OnGetMinsFmString, sequencer/sequencer_ui.s:14380); 25363 `ldmm8 9858, 61926` MinsTrB (0xf1e6); 25364 `ld a, (0xf1e1:16)` MinsTrA",
+   "sequencer/sequencer_engine.s:25374 `call SeqPart_ByteBlockA95A` / 25383 `call SeqPart_LoadDualPartData` (retry on error 0x23) / 25378 `ldw wa, 164`"
+  ]
+ },
+ {
+  "old": "AcWelcomScreen_Select_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcWelcomScreen_Select_OpMoveBlit",
+  "header": "Welcome-script op 2: blits at the position saved in slot arg (0/1, table 0x03ea0c) with ClipBlit_Direct, blits at the step's x,y with ClipBlit_Replace, and saves the step in the slot.",
+  "basis": "switch value meaning (welcome-script step op, welcome_step_t +8) + body",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11135 `ld bc, (0x024784:24)` -- step index; the step is (0x024786) + 12*index",
+   "ui/drawbar_panel_ui.s:11144 `ld hl, (xwa + 8)` -- the step's op word; 11146 `lda xde, (xwa + 10)` its arg",
+   "ui/drawbar_panel_ui.s:11149 `cp hl, 0xc` -- ops 0..12 through AcWelcomScreen_Select_CaseTable",
+   "ui_widgets/technichord_string_data.s:3074 `WelcomeScript_Steps_A` header -- the two welcome-screen scripts (region code 2 / others), record +0 delay, +4 x, +6 y, +8 op, +10 arg; op histogram op 2 x125",
+   "ui/drawbar_panel_ui.s:11162 `ld iz, (xbc+10)` / 11163 `cp iz, 2:i3` -- arg = slot 0 or 1 of the 12-byte slot table at 0x03ea0c (11167)",
+   "ui/drawbar_panel_ui.s:11179 `call ClipBlit_Direct` -- at the slot's saved position (skipped while the slot's +10 is 0xffff); 11194 `call ClipBlit_Replace` at the step's x,y; 11208 `ldirw` copies the step into the slot"
+  ]
+ },
+ {
+  "old": "AcWelcomScreen_Select_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcWelcomScreen_Select_OpRepaint",
+  "header": "",
+  "basis": "switch value meaning (welcome-script step op, welcome_step_t +8) + body",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11212 `ld xbc, EVT_REPAINT` -- SendEvent to the screen object itself, then the next step"
+  ]
+ },
+ {
+  "old": "AcWelcomScreen_Select_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcWelcomScreen_Select_OpDrawGlyphC",
+  "header": "",
+  "basis": "switch value meaning (welcome-script step op, welcome_step_t +8) + body",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11224 `ld xbc, AcWelcomScreen_RenderBytecode_Data` -- the 16x17 glyph 'C' (ui_widgets/technichord_string_data.s:2991, checked by rendering its bits), drawn by DrawBitmapSP2 at the step's x,y",
+   "ui/drawbar_panel_ui.s:11222 `pushw (xde)` -- colour = the step's arg"
+  ]
+ },
+ {
+  "old": "AcWelcomScreen_Select_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcWelcomScreen_Select_OpDrawGlyphO",
+  "header": "",
+  "basis": "switch value meaning (welcome-script step op, welcome_step_t +8) + body",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11235 `ld xbc, AcWelcomScreen_RenderBytecode_Data_3` -- glyph 'O' (third glyph of Bitmap_DigitL's block, ui_widgets/technichord_string_data.s:3033), colour = arg (11233)"
+  ]
+ },
+ {
+  "old": "AcWelcomScreen_Select_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcWelcomScreen_Select_OpDrawGlyphL",
+  "header": "",
+  "basis": "switch value meaning (welcome-script step op, welcome_step_t +8) + body",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11246 `ld xbc, Bitmap_DigitL` -- glyph 'L' (ui_widgets/technichord_string_data.s:3031), colour = arg (11244)"
+  ]
+ },
+ {
+  "old": "AcWelcomScreen_Select_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcWelcomScreen_Select_OpDrawGlyphU",
+  "header": "",
+  "basis": "switch value meaning (welcome-script step op, welcome_step_t +8) + body",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11257 `ld xbc, Bitmap_DigitD` -- glyph 'U' despite the label name (ui_widgets/technichord_string_data.s:3071), colour = arg (11255)"
+  ]
+ },
+ {
+  "old": "AcWelcomScreen_Select_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcWelcomScreen_Select_OpDrawGlyphR",
+  "header": "",
+  "basis": "switch value meaning (welcome-script step op, welcome_step_t +8) + body",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11268 `ld xbc, Bitmap_DigitR` -- glyph 'R' (ui_widgets/technichord_string_data.s:3051), colour = arg (11266)"
+  ]
+ },
+ {
+  "old": "AcWelcomScreen_Select_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcWelcomScreen_Select_OpDrawGlyphsIn",
+  "header": "Welcome-script op 8: draws the letters I and N side by side in colour 255.",
+  "basis": "switch value meaning (welcome-script step op, welcome_step_t +8) + body",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11280 `ld xbc, Bitmap_Digit1` -- glyph 'I' (ui_widgets/technichord_string_data.s:3010) at x,y in colour 255 (11278)",
+   "ui/drawbar_panel_ui.s:11288 `ld xbc, AcWelcomScreen_RenderBytecode_Data_2` -- then glyph 'N' 16 pixels to the right"
+  ]
+ },
+ {
+  "old": "AcWelcomScreen_Select_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcWelcomScreen_Select_OpDrawColorWord",
+  "header": "Welcome-script ops 9 and 12: erase the word's previous box (slot 0x03ea24) and draw COLOR (op 9) or COLOUR (op 12) at the step's x,y in colour arg.",
+  "basis": "switch value meaning (welcome-script step op, welcome_step_t +8) + body",
+  "evidence": [
+   "ui_widgets/technichord_string_data.s:3192 `.short AcWelcomScreen_Select_Case9 - AcWelcomScreen_RenderBytecode` -- op 9; the same entry again at 3195 for op 12",
+   "ui/drawbar_panel_ui.s:11294 `lda xhl, (0x03ea24:24)` -- slot 2: DrawBox colour 245 (11322) over the word's previous box, 80 wide (+16 for op 12)",
+   "ui/drawbar_panel_ui.s:11347 `ld xbc, AcWelcomScreen_RenderBytecode_Data` .. 11434 `ld xbc, Bitmap_DigitR` -- C, O, L, O, [U only when op == 12, 11418], R in colour arg",
+   "ui_widgets/technichord_string_data.s:2985 -- script A (region code 2) uses op 9 (COLOR), script B op 12 (COLOUR)",
+   "ui/drawbar_panel_ui.s:11446 `ldirw` -- saves the step in slot 2"
+  ]
+ },
+ {
+  "old": "AcWelcomScreen_Select_Case10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcWelcomScreen_Select_OpCaptureLcd",
+  "header": "",
+  "basis": "switch value meaning (welcome-script step op, welcome_step_t +8) + body",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11450 `ld xbc, EVT_SLEEP_MAIN_TASK` / 11453 `call CaptureLcd` / 11455 EVT_WAKE_UP_MAIN_TASK -- captures the LCD with the main task asleep"
+  ]
+ },
+ {
+  "old": "SqplyFunc_HandleGetValue_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyFunc_HandleGetValue_MeasureAddr",
+  "header": "Field 3 (the measure field of the cycle pages): address of the current measure word 9832.",
+  "basis": "switch value meaning (SqplyVal field number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13549 `cp xbc, EVT_GET_RAM_ADDRESS` -- SqplyFunc (the ApFunction of the SqplyVal widgets, ui_widgets/naka_effects_seq.c:5012 `.func = 0x01280020`) enters the switch on EVT_GET_RAM_ADDRESS",
+   "sequencer/sequencer_ui.s:13761 `ld xwa, (xsp + 4)` / 13762 `dec 1, xwa` -- the switched value is XDE",
+   "sequencer/sequencer_ui.s:8377 `ld xbc, EVT_GET_RAM_ADDRESS` / 8378 `ld xde, (xsp + 60)` -- SqplyValProc asks for field N's RAM address on EVT_PARA_DRAW N, then formats field N: 0/3/7 EVT_KUBO_GET_MEAS_STRING (8396, 8398, 8406), 4 CYC_EN (8470), 5 CYC_SRT_M (8490), 6 CYC_END_M (8494), 8 P_IN_MEAS (8498), 9 P_OUT_MEAS (8502), 10 P_CNT_IN (8506), 11 SOLO_EN (8510)",
+   "sequencer/sequencer_ui.s:13778 `lda xhl, (9832:16)` -- the current measure word (formatted by the MEAS string, SqplyFunc_FormatCases)"
+  ]
+ },
+ {
+  "old": "SqplyFunc_HandleGetValue_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyFunc_HandleGetValue_CycleOnOffAddr",
+  "header": "",
+  "basis": "switch value meaning (SqplyVal field number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13781 `lda xhl, (0x28b1:16)` -- field 4 = cycle on/off; SqplyFunc_OnGetCycEnString tests bit 0 of 0x28b1 on title 130 (13621) and bit 1 otherwise (13634)"
+  ]
+ },
+ {
+  "old": "SqplyFunc_HandleGetValue_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyFunc_HandleGetValue_CycleStartMeasureAddr",
+  "header": "",
+  "basis": "switch value meaning (SqplyVal field number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13785 `cp l, 0x82` / 13787 `lda xhl, (9500:16)` / 13791 `lda xhl, (9504:16)` -- field 5 = cycle start measure: 0x251c on TT_SQCYCPLY, else 0x2520, the two words SqplyFunc_OnGetCycSrtMString formats (13664 ff.)"
+  ]
+ },
+ {
+  "old": "SqplyFunc_HandleGetValue_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyFunc_HandleGetValue_CycleEndMeasureAddr",
+  "header": "",
+  "basis": "switch value meaning (SqplyVal field number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13795 `cp l, 0x82` / 13797 `lda xhl, (9502:16)` / 13801 `lda xhl, (9506:16)` -- field 6 = cycle end measure: 0x251e / 0x2522, the words SqplyFunc_OnGetCycEndMString formats (13680, 13684)"
+  ]
+ },
+ {
+  "old": "SqplyFunc_HandleGetValue_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyFunc_HandleGetValue_PunchMeasureAddr",
+  "header": "Field 7 (the measure field of the punch pages): address of word 9964, which the punch start code sets with the current measure.",
+  "basis": "switch value meaning (SqplyVal field number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13804 `lda xhl, (9964:16)` -- field 7, a measure field (drawn with the MEAS string, 8396)",
+   "sequencer/sequencer_engine.s:22920 `ld xbc, EVT_PARA_DRAW` / 22922 `ld xde, 7:i3` -- ApPlaySyori's TT_SQPUNCHM (0x88) case redraws fields 7, 8, 9, 10 together; SqplyVal_HandleScrollEvent_Table puts field 7 at (178,42) above fields 8-10, as field 3 sits above the cycle fields 4-6",
+   "sequencer/sequencer_engine.s:22907 `ld (9964:16), wa` -- the punch start code sets 9964 together with 9832 to punch-in measure 0xf238 minus count-in 0xf23f"
+  ]
+ },
+ {
+  "old": "SqplyFunc_HandleGetValue_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyFunc_HandleGetValue_PunchInMeasureAddr",
+  "header": "",
+  "basis": "switch value meaning (SqplyVal field number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13807 `lda xhl, (0xf238:16)` -- field 8 = EVT_GET_P_IN_MEAS_STRING's word (shared/event_codes.s:690; SqplyFunc_FormatIntro pushes 0xf238, 13722)"
+  ]
+ },
+ {
+  "old": "SqplyFunc_HandleGetValue_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyFunc_HandleGetValue_PunchOutMeasureAddr",
+  "header": "",
+  "basis": "switch value meaning (SqplyVal field number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13810 `lda xhl, (0xf23a:16)` -- field 9 = EVT_GET_P_OUT_MEAS_STRING's word (shared/event_codes.s:691; 13729)"
+  ]
+ },
+ {
+  "old": "SqplyFunc_HandleGetValue_Case10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyFunc_HandleGetValue_PunchCountInAddr",
+  "header": "",
+  "basis": "switch value meaning (SqplyVal field number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13813 `lda xhl, (0xf23f:16)` -- field 10 = EVT_GET_P_CNT_IN_STRING's word (shared/event_codes.s:692; 13743)"
+  ]
+ },
+ {
+  "old": "SqplyFunc_HandleGetValue_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyFunc_HandleGetValue_SoloOnOffAddr",
+  "header": "",
+  "basis": "switch value meaning (SqplyVal field number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13816 `lda xhl, (0x283a:16)` -- field 11 = solo on/off; SqplyFunc_OnGetSoloEnString tests 0x283a (13648)"
+  ]
+ },
+ {
+  "old": "CmpNcpTtl_TableDispatch_Case128",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcpTtl_TableDispatch_OnFromItemNext",
+  "header": "Switches 0x80/0x81 (FROM ITEM box, other button): next FROM item (0x39A7 + 1, up to 2), then the repaints and dial binding.",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMPNCP; the real value, not N) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31285 `cp xbc, EVT_SW_IN` -- CmpNcpTtlFunc (TT_CMPNCP, 'PATTERN COPY') switches on the panel switch number in XDE",
+   "sequencer/accompaniment_engine.s:31374 `cp xde, 0xb` -- switches 0..11 index the table directly; 31376 `sub xde, 0x74` / 31377 `cp xde, 0xc` / 31379 `cp xde, 0x13` -- switches 0x80..0x87 use slots 12..19, so N = 116 + slot is the real switch only for 128..135; Case118/120/122/127 are switches 2-3, 4-5, 6-7 and 11",
+   "ui_widgets/naka_composer_style.c:4433 `.editsw = 0x0000` / 4434 `.editsw2 = 0x0001` -- CmpNcpFitmSw (the FROM item box under LCD columns 1-2); 4455/4456 switches 2/3 = the next box, 4477/4478 switches 4/5 = CmpNcpTitmSw (TO item), 4499/4500 switches 6/7; 4520 labels the row 'ITEM VALUE ITEM VALUE'",
+   "../../../technics-docs/ui-framework.md:441 -- a button pair posts EVT_SW_IN with its number, or the number OR 0x80 for the pair's other button",
+   "sequencer/accompaniment_engine.s:31440 `ld w, 128:opc` / 31441 `call CmpNcp_StepItemA_Wrap` -- W bit 7 set: CmpNcp_StepItemA increments the FROM item index 0x39a7 (25664 `bit 7, w`, 25668 `inc 1, a`), max 2 (GROUP/RHYTHM/PATTERN, 4673/4688/4703)"
+  ]
+ },
+ {
+  "old": "CmpNcpTtl_TableDispatch_Case118",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcpTtl_TableDispatch_OnFromValueUp",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMPNCP; the real value, not N) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31483 `ld w, 0:opc` / 31484 `call CmpNcpTtl_Dispatch2_Helper2` -- switches 2/3 (FROM VALUE box, ui_widgets/naka_composer_style.c:4455): runs the FROM item's handler (CmpNcp_ItemA_HandlerIndex[(0x39a7)], 25684) with W bit 7 clear",
+   "sequencer/accompaniment_engine.s:26105 `; Bit 7 of W set = step down, clear = step up.` -- the item step routines step up when W bit 7 is clear (26116 `bit 7, w`, 26118 `inc 1, l`)"
+  ]
+ },
+ {
+  "old": "CmpNcpTtl_TableDispatch_Case130",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcpTtl_TableDispatch_OnFromValueDown",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMPNCP; the real value, not N) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31551 `ld w, 128:opc` / 31552 `call CmpNcpTtl_Dispatch2_Helper2` -- switches 0x82/0x83: the FROM item's handler with W bit 7 set (step down)"
+  ]
+ },
+ {
+  "old": "CmpNcpTtl_TableDispatch_Case120",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcpTtl_TableDispatch_OnToItemPrev",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMPNCP; the real value, not N) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31617 `ld w, 0:opc` / 31618 `call DrumVoice_Handler7_Data_3_Sub` -- switches 4/5 (CmpNcpTtl TO ITEM box, ui_widgets/naka_composer_style.c:4477): decrements the TO item index 0x39a8 (25702 `bit 7, w`, 25711 `dec 1, a`), min 0 (MEMORY/PATTERN, 4781/4796); sets 0x3a80 = 1 (dial on the TO side)"
+  ]
+ },
+ {
+  "old": "CmpNcpTtl_TableDispatch_Case132",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcpTtl_TableDispatch_OnToItemNext",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMPNCP; the real value, not N) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31658 `ld w, 0x80:opc` / 31659 `call DrumVoice_Handler7_Data_3_Sub` -- switches 0x84/0x85: increments the TO item index 0x39a8 (25706 `inc 1, a`), max 1"
+  ]
+ },
+ {
+  "old": "CmpNcpTtl_TableDispatch_Case122",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcpTtl_TableDispatch_OnToValueUp",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMPNCP; the real value, not N) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31701 `ld w, 0:opc` / 31702 `call CmpNcpTtl_Dispatch2_Helper3` -- switches 6/7 (TO VALUE box, ui_widgets/naka_composer_style.c:4499): the TO item's handler (CmpNcp_ItemB_HandlerIndex[(0x39a8)], 25722) with W bit 7 clear (step up)"
+  ]
+ },
+ {
+  "old": "CmpNcpTtl_TableDispatch_Case134",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcpTtl_TableDispatch_OnToValueDown",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMPNCP; the real value, not N) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31762 `ld w, 128:opc` / 31763 `call CmpNcpTtl_Dispatch2_Helper3` -- switches 0x86/0x87: the TO item's handler with W bit 7 set (step down)"
+  ]
+ },
+ {
+  "old": "CmpNcpTtl_TableDispatch_Case127",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcpTtl_TableDispatch_OnRightRow4Switch",
+  "header": "Switch 11 (right side row 4): sets request bit 0 of 0x34D1, which AccPat_DispatchNoteChange consumes.",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMPNCP; the real value, not N) + body",
+  "evidence": [
+   "ui_widgets/naka_composer_style.c:4749 `.editsw = 0x000B` -- switch 11 is the VwEditSwBox at (281,160)-(311,177); ../../../technics-docs/ui-framework.md:447 -- switches 8-12 are side rows 1-5, the plain number on the RIGHT",
+   "sequencer/accompaniment_engine.s:31819 `set 0, (0x34d1:16)` -- the case's only action; AccPat_DispatchNoteChange runs its pattern processing only when that bit is set and clears it (22210, 22223)"
+  ]
+ },
+ {
+  "old": "DspItem0_TypeChangeHandler_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DspItem0_TypeChangeHandler_EffDlt0Addr",
+  "header": "EVT_GET_RAM_ADDRESS for effect parameter row 0 (EffDlt0): address of word 0x2978[top item 0x021098 + 0].",
+  "basis": "switch value meaning (effect-box row number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:15208 `cp xix, EVT_GET_RAM_ADDRESS` -- DspItem0CngFunc enters DspItem0_TypeChangeHandler on EVT_GET_RAM_ADDRESS; 15386 `cp xde, 0x8` -- the switched value is XDE 0..8",
+   "sequencer/sequencer_ui.s:12144 `ld xde, 0:i3` -- EffectBoxProc asks for row 0's address (the effect type, EVT_GET_EFF_FIX_STRING at 12193); 12477 `ld XDE, (xsp + 0x014e)` / 12478 `inc 1, xde` / 12481 `ld xbc, EVT_GET_RAM_ADDRESS` -- parameter row k asks with XDE = k+1, then draws EVT_GET_EFF_DLT<k>_STR (12533 DLT0, 12503 DLT1 .. DLT7)",
+   "sequencer/sequencer_ui.s:15167 `ld l, (0x021098:24)` -- the first displayed item (EVT_SET_ITEM_TOP, shared/event_codes.s:625); 15168 `lda xwa, (0x2978:16)` -- the parameter word array",
+   "sequencer/sequencer_ui.s:15396 `lda xhl, (0x2976:16)` -- XDE 0 (default): the effect-type word that DspItem0_DisplayEffectName shows",
+   "sequencer/sequencer_ui.s:15399 `sla bc, 1` -- address of word 0x2978[(0x021098) + 0], the value EVT_GET_EFF_DLT0_STR formats"
+  ]
+ },
+ {
+  "old": "DspItem0_TypeChangeHandler_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DspItem0_TypeChangeHandler_EffDlt1Addr",
+  "header": "",
+  "basis": "switch value meaning (effect-box row number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:15404 `sla wa, 1` -- address of word 0x2978[(0x021098) + 1], the value EVT_GET_EFF_DLT1_STR formats"
+  ]
+ },
+ {
+  "old": "DspItem0_TypeChangeHandler_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DspItem0_TypeChangeHandler_EffDlt2Addr",
+  "header": "",
+  "basis": "switch value meaning (effect-box row number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:15410 `ld bc, (xsp + 8)` -- address of word 0x2978[(0x021098) + 2], the value EVT_GET_EFF_DLT2_STR formats"
+  ]
+ },
+ {
+  "old": "DspItem0_TypeChangeHandler_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DspItem0_TypeChangeHandler_EffDlt3Addr",
+  "header": "",
+  "basis": "switch value meaning (effect-box row number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:15416 `ld bc, (xsp + 10)` -- address of word 0x2978[(0x021098) + 3], the value EVT_GET_EFF_DLT3_STR formats"
+  ]
+ },
+ {
+  "old": "DspItem0_TypeChangeHandler_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DspItem0_TypeChangeHandler_EffDlt4Addr",
+  "header": "",
+  "basis": "switch value meaning (effect-box row number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:15422 `ld bc, (xsp + 12)` -- address of word 0x2978[(0x021098) + 4], the value EVT_GET_EFF_DLT4_STR formats"
+  ]
+ },
+ {
+  "old": "DspItem0_TypeChangeHandler_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DspItem0_TypeChangeHandler_EffDlt5Addr",
+  "header": "",
+  "basis": "switch value meaning (effect-box row number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:15428 `ld bc, (xsp + 14)` -- address of word 0x2978[(0x021098) + 5], the value EVT_GET_EFF_DLT5_STR formats"
+  ]
+ },
+ {
+  "old": "DspItem0_TypeChangeHandler_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DspItem0_TypeChangeHandler_EffDlt6Addr",
+  "header": "",
+  "basis": "switch value meaning (effect-box row number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:15434 `ld bc, (xsp + 16)` -- address of word 0x2978[(0x021098) + 6], the value EVT_GET_EFF_DLT6_STR formats"
+  ]
+ },
+ {
+  "old": "DspItem0_TypeChangeHandler_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DspItem0_TypeChangeHandler_EffDlt7Addr",
+  "header": "",
+  "basis": "switch value meaning (effect-box row number in XDE of EVT_GET_RAM_ADDRESS) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:15440 `ld bc, (xsp + 18)` -- address of word 0x2978[(0x021098) + 7], the value EVT_GET_EFF_DLT7_STR formats"
+  ]
+ },
+ {
+  "old": "SysEx_DispatchByChannel_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switched value is byte 11 of the active MIDISEQ buffer (SeqData_ReadFieldByIndex(MIDISEQ_ACTIVE_BUF_PTR, 11)), 0..7, which selects one of eight default word lists written to DSP parameter ids 0x4910+i of block 0x49; what field 11 means (an effect type? a voice?) is not established, so the cases would only restate the list index.",
+  "new": null,
+  "header": "",
+  "basis": "switch value not established",
+  "evidence": [
+   "audio/dsp_config_sysex.s:85 `ldw bc, 11` / 86 `call SeqData_ReadFieldByIndex` -- SysEx_ApplyToSlot49_Data reads field 11 of the active buffer into (xsp+4)",
+   "audio/dsp_config_sysex.s:106 `ld a, (xsp+4)` / 110 `calr SysEx_DispatchByChannel` -- A = that field, C = the DSP slot loop index",
+   "audio/dsp_config_sysex.s:210 `cp wa, 7:i3` -- 8 values, each picking a SysEx4B_ChannelWords list (ui_widgets/widget_dispatch.s:1811 ff.)",
+   "midi/midi_dispatch_handlers.s:8514 `SeqData_ReadFieldByIndex:` -- returns byte N of the buffer; no name for field 11 anywhere",
+   "audio/dsp_config_sysex.s:226 `ld xwa, SysEx4B_ChannelWords1` -- the case returns word C of list 1 (0xd8f0 when C is out of range)"
+  ]
+ },
+ {
+  "old": "SysEx_DispatchByChannel_Case2",
+  "verdict": "refuse",
+  "why_refused": "The switched value is byte 11 of the active MIDISEQ buffer (SeqData_ReadFieldByIndex(MIDISEQ_ACTIVE_BUF_PTR, 11)), 0..7, which selects one of eight default word lists written to DSP parameter ids 0x4910+i of block 0x49; what field 11 means (an effect type? a voice?) is not established, so the cases would only restate the list index.",
+  "new": null,
+  "header": "",
+  "basis": "switch value not established",
+  "evidence": [
+   "audio/dsp_config_sysex.s:231 `ld xwa, SysEx4B_ChannelWords2` -- the case returns word C of list 2 (0xd8f0 when C is out of range)"
+  ]
+ },
+ {
+  "old": "SysEx_DispatchByChannel_Case3",
+  "verdict": "refuse",
+  "why_refused": "The switched value is byte 11 of the active MIDISEQ buffer (SeqData_ReadFieldByIndex(MIDISEQ_ACTIVE_BUF_PTR, 11)), 0..7, which selects one of eight default word lists written to DSP parameter ids 0x4910+i of block 0x49; what field 11 means (an effect type? a voice?) is not established, so the cases would only restate the list index.",
+  "new": null,
+  "header": "",
+  "basis": "switch value not established",
+  "evidence": [
+   "audio/dsp_config_sysex.s:236 `ld xwa, SysEx4B_ChannelWords3` -- the case returns word C of list 3 (0xd8f0 when C is out of range)"
+  ]
+ },
+ {
+  "old": "SysEx_DispatchByChannel_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switched value is byte 11 of the active MIDISEQ buffer (SeqData_ReadFieldByIndex(MIDISEQ_ACTIVE_BUF_PTR, 11)), 0..7, which selects one of eight default word lists written to DSP parameter ids 0x4910+i of block 0x49; what field 11 means (an effect type? a voice?) is not established, so the cases would only restate the list index.",
+  "new": null,
+  "header": "",
+  "basis": "switch value not established",
+  "evidence": [
+   "audio/dsp_config_sysex.s:241 `ld xwa, SysEx4B_ChannelWords4` -- the case returns word C of list 4 (0xd8f0 when C is out of range)"
+  ]
+ },
+ {
+  "old": "SysEx_DispatchByChannel_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched value is byte 11 of the active MIDISEQ buffer (SeqData_ReadFieldByIndex(MIDISEQ_ACTIVE_BUF_PTR, 11)), 0..7, which selects one of eight default word lists written to DSP parameter ids 0x4910+i of block 0x49; what field 11 means (an effect type? a voice?) is not established, so the cases would only restate the list index.",
+  "new": null,
+  "header": "",
+  "basis": "switch value not established",
+  "evidence": [
+   "audio/dsp_config_sysex.s:246 `ld xwa, SysEx4B_ChannelWords5` -- the case returns word C of list 5 (0xd8f0 when C is out of range)"
+  ]
+ },
+ {
+  "old": "SysEx_DispatchByChannel_Case6",
+  "verdict": "refuse",
+  "why_refused": "The switched value is byte 11 of the active MIDISEQ buffer (SeqData_ReadFieldByIndex(MIDISEQ_ACTIVE_BUF_PTR, 11)), 0..7, which selects one of eight default word lists written to DSP parameter ids 0x4910+i of block 0x49; what field 11 means (an effect type? a voice?) is not established, so the cases would only restate the list index.",
+  "new": null,
+  "header": "",
+  "basis": "switch value not established",
+  "evidence": [
+   "audio/dsp_config_sysex.s:251 `ld xwa, SysEx4B_ChannelWords6` -- the case returns word C of list 6 (0xd8f0 when C is out of range)"
+  ]
+ },
+ {
+  "old": "SysEx_DispatchByChannel_Case7",
+  "verdict": "refuse",
+  "why_refused": "The switched value is byte 11 of the active MIDISEQ buffer (SeqData_ReadFieldByIndex(MIDISEQ_ACTIVE_BUF_PTR, 11)), 0..7, which selects one of eight default word lists written to DSP parameter ids 0x4910+i of block 0x49; what field 11 means (an effect type? a voice?) is not established, so the cases would only restate the list index.",
+  "new": null,
+  "header": "",
+  "basis": "switch value not established",
+  "evidence": [
+   "audio/dsp_config_sysex.s:256 `ld xwa, SysEx4B_ChannelWords7` -- the case returns word C of list 7 (0xd8f0 when C is out of range)"
+  ]
+ },
+ {
+  "old": "MidiSysMsg_Handler_Case241",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiSysMsg_Handler_SkipF1Event",
+  "header": "Song-stream status 0xF1: one data byte, discarded.",
+  "basis": "switch value meaning (0xFn status byte in the format-2/3 song stream) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:22336 `and c, 0xf0` / 22337 `cp c, 0xf0` / 22340 `sub wa, 0xf0` / 22343 `cp wa, 0xf` -- the switched value is a status byte 0xF0..0xFF; other statuses go to Dispatch_LoadParam (2- or 3-byte channel events)",
+   "audio/note_voice_mapping.s:19759 `calr MidiSysMsg_Handler` -- AccSong_ProcessRecord feeds each byte read by FileIO_ReadNextRecord to it when the song format (0xe9e4) is 2 or 3 (19739..19745), set from the file's 0x21 / 0x40 header byte (21785, 21800)",
+   "audio/note_voice_mapping.s:19729 `cp (0xe9e7:16), xiz` -- events are read while their time 0xe9e7 has been reached",
+   "audio/note_voice_mapping.s:22365 `cp iz, 1:i3` -- 0xF1: reads and discards one data byte"
+  ]
+ },
+ {
+  "old": "MidiSysMsg_Handler_Case242",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiSysMsg_Handler_OnF2EndOfTrack",
+  "header": "Song-stream status 0xF2: end of the track (returns 0xFFFD, as the SMF reader does for meta 0x2F).",
+  "basis": "switch value meaning (0xFn status byte in the format-2/3 song stream) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:22379 `ldw hl, 0xfffd` -- 0xF2 returns -3",
+   "audio/note_voice_mapping.s:20865 `ldw hl, 0xfffd` -- the SMF reader returns the same code for meta event 0x2F, End of Track (20801 `cp a, 0x2f`)",
+   "audio/note_voice_mapping.s:19681 `cp wa, 0xfffd` -- MIDI_OutputFlush then stops the song with status 0, where 0xfffe/0xffff are errors"
+  ]
+ },
+ {
+  "old": "MidiSysMsg_Handler_Case243",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiSysMsg_Handler_OnF3ShortDeltaTime",
+  "header": "Song-stream status 0xF3: one-byte (7-bit) delta-time added to the event time 0xE9E7.",
+  "basis": "switch value meaning (0xFn status byte in the format-2/3 song stream) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:22401 `ldw wa, 243` / 22403 `add (0xe9e7:16), xhl` -- one data byte, decoded by Dispatch_Data (22542 `cp a, 243`, 22545 `res 7, l`) as a 7-bit value added to the next-event time 0xe9e7",
+   "audio/note_voice_mapping.s:20684 `add (0xe9e7:16), xhl` -- the SMF reader adds each variable-length delta-time to the same word"
+  ]
+ },
+ {
+  "old": "MidiSysMsg_Handler_Case244",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiSysMsg_Handler_OnF4LongDeltaTime",
+  "header": "Song-stream status 0xF4: two-byte (14-bit) delta-time added to the event time 0xE9E7.",
+  "basis": "switch value meaning (0xFn status byte in the format-2/3 song stream) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:22425 `ldw wa, 244` / 22427 `add (0xe9e7:16), xhl` -- two data bytes combined by Dispatch_Data (22540 `cp a, 244`, 22551/22553 `res 7`, 22555 `sll a, 7`) into a 14-bit delta-time"
+  ]
+ },
+ {
+  "old": "MidiSysMsg_Handler_Case249",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiSysMsg_Handler_SkipF9Event",
+  "header": "Song-stream status 0xF9: two data bytes, discarded.",
+  "basis": "switch value meaning (0xFn status byte in the format-2/3 song stream) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:22431 `cp iz, 2:i3` -- 0xF9: reads and discards two data bytes"
+  ]
+ },
+ {
+  "old": "MidiSysMsg_Handler_Case251",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiSysMsg_Handler_OnFBTempo",
+  "header": "Song-stream status 0xFB: tempo (14-bit value * (0xE9EB) / 1000, clamped to 40..300), then SeqTimer_UpdateTempoReg.",
+  "basis": "switch value meaning (0xFn status byte in the format-2/3 song stream) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:22463 `calr MidiSysMsg_Handler_Helper` -- 0xFB: two data bytes to the helper",
+   "audio/note_voice_mapping.s:22580 `sll a, 7` / 22592 `ld xbc, (0xe9eb:16)` / 22596 `ld xbc, 1000` -- 14-bit value scaled by 0xe9eb / 1000",
+   "audio/note_voice_mapping.s:22600 `cp xiz, 40` / 22606 `cp xiz, 300` -- clamped to 40..300; 22613/22616 bit 0 of 0xfc63 = value >= 256; 22623 `call SeqTimer_UpdateTempoReg`"
+  ]
+ },
+ {
+  "old": "MidiSysMsg_Handler_Case254",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiSysMsg_Handler_SkipFEEvent",
+  "header": "Song-stream status 0xFE: two data bytes, discarded.",
+  "basis": "switch value meaning (0xFn status byte in the format-2/3 song stream) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:22467 `cp iz, 2:i3` -- 0xFE: reads and discards two data bytes"
+  ]
+ },
+ {
+  "old": "VocalistGridCheck_Switch2_Case11522",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VocalistGridCheck_LswDrawProgram",
+  "header": "Lsw 0x2D02, the Vocalist PROGRAM value: prints value+1 with \"%3d\" into the grid cell.",
+  "basis": "switch value meaning (Lsw parameter id 0x2D00+k of the Vocalist grid) + body",
+  "evidence": [
+   "sequencer/seq_event_playback.s:3048 `sub xwa, EVT_INDEXSW_UP` -- slot 5 = EVT_LSW_DATA (shared/event_codes.s:169) goes to VocalistGridCheck_OnLswData (3135)",
+   "sequencer/seq_event_playback.s:3176 `ld xwa, (xde)` / 3177 `lda xbc, (xde+4)` / 3178 `sub xwa, 0x2d00` / 3181 `cp xwa, 19` -- switch 2 is on the Lsw id of the delivered record; N = 0x2D00 + k is the id itself",
+   "ui_widgets/naka_widget_tables_2.s:1130 VocalistGridCheck_Table -- 12 rows x 2 ids: rows 2-7 (0x2d00,0x2d01) .. (0x2d0a,0x2d0b), rows 10-11 (0x2d0c,0x2d0f), (0x2d10,0x2d13) (decoded from the .bin)",
+   "ui_widgets/naka_midi_reverb.c:6686 `.VocalistPage2Box_fixedrow = \" |-|MIDI CHANNEL|PROGRAM     |HARMONY     |KEY         |P.CNG OPTION|CONTROL VOL.|-| |VOCODER     |CHORDAL     \"` -- the grid's row labels; columns ITEM / VALUE / SEND (6733)",
+   "sequencer/seq_event_playback.s:3224 `pushw VocalistGrid_DispatchData_Str_Fmt3d@hi16` -- 0x2d02 (row PROGRAM, VALUE column) printed as value+1, '%3d'"
+  ]
+ },
+ {
+  "old": "VocalistGridCheck_Switch2_Case11524",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VocalistGridCheck_LswDrawHarmony",
+  "header": "",
+  "basis": "switch value meaning (Lsw parameter id 0x2D00+k of the Vocalist grid) + body",
+  "evidence": [
+   "sequencer/seq_event_playback.s:3239 `pushw VocalistGrid_DispatchData_Str_Fmtd@hi16` -- 0x2d04 (row HARMONY) printed as value+1, '%d'"
+  ]
+ },
+ {
+  "old": "VocalistGridCheck_Switch2_Case11526",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VocalistGridCheck_LswDrawKey",
+  "header": "",
+  "basis": "switch value meaning (Lsw parameter id 0x2D00+k of the Vocalist grid) + body",
+  "evidence": [
+   "sequencer/seq_event_playback.s:3253 `lda xbc, (MidiPart_NoteNameTable:24)` -- 0x2d06 (row KEY) printed as a note name"
+  ]
+ },
+ {
+  "old": "VocalistGridCheck_Switch2_Case11528",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VocalistGridCheck_LswDrawProgramChangeOption",
+  "header": "",
+  "basis": "switch value meaning (Lsw parameter id 0x2D00+k of the Vocalist grid) + body",
+  "evidence": [
+   "sequencer/seq_event_playback.s:3277 `ld xwa, MidiPart_OctaveStr_m2 + 0xcc` / 3280 Str_3 / 3283 Str_4 / 3286 Str_5 -- 0x2d08 (row P.CNG OPTION): values 0..3 print 'OFF', 'Recv', 'Trans', 'Recv+Trans' (strings decoded from naka_widget_tables_2.bin 0x24B8A..)"
+  ]
+ },
+ {
+  "old": "VocalistGridCheck_Switch2_Case11530",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VocalistGridCheck_LswDrawControlVolume",
+  "header": "Lsw 0x2D0A, the Vocalist CONTROL VOL. source: 120 = AFTER(touch), 121 = NONE, else a CC number.",
+  "basis": "switch value meaning (Lsw parameter id 0x2D00+k of the Vocalist grid) + body",
+  "evidence": [
+   "sequencer/seq_event_playback.s:3301 `cp wa, 120` / 3303 `cp wa, 121` -- 0x2d0a (row CONTROL VOL.): 120 prints 'AFTER' (Str_7, 3308), 121 'NONE' (Str_6, 3305), any other value 'CC%3d' (3318)"
+  ]
+ },
+ {
+  "old": "VocalistGridCheck_Switch2_Case11532",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VocalistGridCheck_LswDrawKeySplitPoint",
+  "header": "Lsw 0x2D0C / 0x2D10 (VOCODER / CHORDAL key split): prints ABOVE or BELOW (bit 7) and the note with octave (bits 0-6).",
+  "basis": "switch value meaning (Lsw parameter id 0x2D00+k of the Vocalist grid) + body",
+  "evidence": [
+   "ui_widgets/naka_widget_tables_2.s:1400 -- ids 0x2d0c and 0x2d10 share this case: the VALUE cells of rows VOCODER and CHORDAL, under the 'KEY SPLIT' label (ui_widgets/naka_midi_reverb.c:6748)",
+   "sequencer/seq_event_playback.s:3338 `lda xhl, (MidiPart_OctaveTable:24)` / 3345 NoteNameTable / 3351 `lda xwa, (VocalistGrid_DispatchData_PtrTable:24)` -- note (bits 0-6) with octave, and bit 7 picking ABOVE/BELOW"
+  ]
+ },
+ {
+  "old": "VocalistGridCheck_Switch2_Case11521",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VocalistGridCheck_LswDrawOnOffColumn",
+  "header": "Second-column Lsw ids (SEND for rows MIDI CHANNEL..CONTROL VOL., plus 0x2D0F/0x2D13): prints ON or OFF.",
+  "basis": "switch value meaning (Lsw parameter id 0x2D00+k of the Vocalist grid) + body",
+  "evidence": [
+   "ui_widgets/naka_widget_tables_2.s:1385 -- odd ids 0x2d01..0x2d0b, 0x2d0f and 0x2d13 (the second column of each grid row) share this case",
+   "sequencer/seq_event_playback.s:3366 `ld xwa, VocalistGrid_DispatchData_Str_9` / 3367 `cpw (xbc), 0` / 3369 Str_8 -- prints ' OFF ' for 0, ' ON ' otherwise"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_AltBody_Case3",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the changed byte offset (0x912F) inside panel record 0x48 (style + tempo, at 0xFC5A); offset 0 is the style program and 8 the tempo, but the field at this offset is not identified, so a name would only restate the offset.",
+  "new": null,
+  "header": "",
+  "basis": "field at offset not identified",
+  "evidence": [
+   "extensions/extension_data.s:3037 `.long ExtData_ToneParam_AltBody` -- entry 0x48 of SoundProgram_DispatchTable (record tag 0x48; entry 0x43 at 3032 is the microphone record's handler)",
+   "audio/audio_control_engine.s:5248 `ld a, (0x912f:16)` / 5252 `cp wa, 8` -- switch on the event's byte offset 0..8 in that record",
+   "../../docs/kn-disk-file-formats.md:618 -- tag 0x48 = style + tempo record",
+   "audio/audio_control_engine.s:5261 `jr ExtData_ToneParam_AltBody_Join2` -- ExtData_ToneParam_AltBody_Helper(7), toggles field 8, ToneGen_DispatchByMode when DATA3 & 7, MIDI_WriteResetSequence"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_AltBody_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the changed byte offset (0x912F) inside panel record 0x48 (style + tempo, at 0xFC5A); offset 0 is the style program and 8 the tempo, but the field at this offset is not identified, so a name would only restate the offset.",
+  "new": null,
+  "header": "",
+  "basis": "field at offset not identified",
+  "evidence": [
+   "audio/audio_control_engine.s:5263 `jrl ExtData_ToneParam_AltBody_Join3` -- toggles TLV bits 80 and flushes"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_AltBody_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the changed byte offset (0x912F) inside panel record 0x48 (style + tempo, at 0xFC5A); offset 0 is the style program and 8 the tempo, but the field at this offset is not identified, so a name would only restate the offset.",
+  "new": null,
+  "header": "",
+  "basis": "field at offset not identified",
+  "evidence": [
+   "audio/audio_control_engine.s:5265 `jrl ExtData_ToneParam_AltBody_Entry` -- offsets 5 and 6: posts the raw event bytes 0x9130/0x9131"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_AltBody_Case7",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the changed byte offset (0x912F) inside panel record 0x48 (style + tempo, at 0xFC5A); offset 0 is the style program and 8 the tempo, but the field at this offset is not identified, so a name would only restate the offset.",
+  "new": null,
+  "header": "",
+  "basis": "field at offset not identified",
+  "evidence": [
+   "audio/audio_control_engine.s:5267 `jrl ExtData_ToneParam_AltBody_Join4` -- sets TLV field mask 48 and flushes"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_AltBody_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_ToneParam_AltBody_OnTempo",
+  "header": "Offset 8 of style/tempo record 0x48 (0xFC5A): stores a changed tempo into 0xFC62/0xFC63, posts it and calls SeqTimer_UpdateTempoReg.",
+  "basis": "switch value meaning (byte offset in style/tempo record 0x48) + body",
+  "evidence": [
+   "audio/audio_control_engine.s:5269 `calr ExtData_ToneParam_AltBody_Helper2` -- offset 8",
+   "audio/audio_control_engine.s:5329 `lda xiz, (0xfc5a:16)` / 5330 `lda xbc, (xiz+8)` / 5331 `lda xhl, (xiz+9)` -- stores the event value into 0xfc62/0xfc63 when it changed, posts both, then calls SeqTimer_UpdateTempoReg",
+   "audio/note_voice_mapping.s:22613 `res 0, (0xfc63:16)` / 22616 `set 0, (0xfc63:16)` -- the song-file tempo event (40..300) keeps tempo bit 8 in bit 0 of 0xfc63, so +8/+9 are the tempo"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_AltBody_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the changed byte offset (0x912F) inside panel record 0x48 (style + tempo, at 0xFC5A); offset 0 is the style program and 8 the tempo, but the field at this offset is not identified, so a name would only restate the offset.",
+  "new": null,
+  "header": "",
+  "basis": "field at offset not identified",
+  "evidence": [
+   "audio/audio_control_engine.s:5271 `ret` -- offsets 1 and 2 need no follow-up (also the fall-through end of offset 8)"
+  ]
+ },
+ {
+  "old": "TitleFunc_LifecycleDispatch_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TitleFunc_LifecycleDispatch_OnStopFddTest",
+  "header": "Switch 1 on the FDD test title: stops the switch-2 test loop timer and prints STOP FDD TEST.",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the FDD-test title) + body",
+  "evidence": [
+   "factory_test/test_init.s:133 `cp xbc, EVT_SW_IN` / 134 `jr z, TitleFunc_LifecycleDispatch` -- TestTitleFunc enters this switch on EVT_SW_IN (not on the title lifecycle: that is EVT_ACTIVATE_STATE, 135..148, the 'Title new/old/...' strings)",
+   "factory_test/test_init.s:178 `cp xwa, 0x7` -- XDE = switch 0..7, the eight button columns under the LCD (../../../technics-docs/ui-framework.md:446)",
+   "factory_test/test_init.s:204 `call KillApTimer` -- stops the (EVT_SW_IN, 2) repeat timer that case 2 arms; 205 prints \"STOP FDD TEST\" (factory_test/fd_test_data.s:362)",
+   "factory_test/test_init.s:186 -- the comment block above the table describes the EVT_ACTIVATE_STATE switch, not this one"
+  ]
+ },
+ {
+  "old": "TitleFunc_LifecycleDispatch_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TitleFunc_LifecycleDispatch_OnFddTestLoop",
+  "header": "Switch 2 on the FDD test title: one FDD test pass, then re-arms a timer that posts switch 2 again.",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the FDD-test title) + body",
+  "evidence": [
+   "factory_test/test_init.s:210 `lda xwa, (TitleFunc_LifecycleTable_Data_3:24)` -- prints \"START FDD TEST LOOP\" (factory_test/fd_test_data.s:365)",
+   "factory_test/test_init.s:212 `calr RunTestCounters_Entry` / 218 `ld xwa, 0x53` / 220 `call SetApTimer` -- runs one test pass and re-posts EVT_SW_IN 2 after 0x53 ticks, so the switch repeats itself"
+  ]
+ },
+ {
+  "old": "TitleFunc_LifecycleDispatch_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TitleFunc_LifecycleDispatch_OnListDirectory",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the FDD-test title) + body",
+  "evidence": [
+   "factory_test/test_init.s:224 `lda xwa, (TitleFunc_LifecycleTable_Data_4:24)` -- prints \"DIR\" (factory_test/fd_test_data.s:367); 226 `calr FDListDirectory`"
+  ]
+ },
+ {
+  "old": "TitleFunc_LifecycleDispatch_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TitleFunc_LifecycleDispatch_OnFormat2dd",
+  "header": "Switch 4 on the FDD test title: formats a 2DD disk and labels it TEST_HAMA (RegHamaTitle1_Entry).",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the FDD-test title) + body",
+  "evidence": [
+   "factory_test/test_init.s:231 `calr RegHamaTitle1_Entry` -- prints \"Debug Test\" first (229)",
+   "factory_test/test_init.s:364 `ld wa, 2:i3` / 365 `call format_FD` / 366 label \"TEST_HAMA\" -- RegHamaTitle1_Entry formats a disk (its 'registers title' header is wrong)",
+   "sequencer/smf_event_processor.s:8474 `cp wa, 2:i3` / 8476 `jr FDC_Format2DD_Start` -- format type 2 = 2DD"
+  ]
+ },
+ {
+  "old": "TitleFunc_LifecycleDispatch_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TitleFunc_LifecycleDispatch_OnFormat2hd",
+  "header": "Switch 5 on the FDD test title: formats a 2HD disk and labels it TESTHAMA2HD (RegHamaTitle2_Entry).",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the FDD-test title) + body",
+  "evidence": [
+   "factory_test/test_init.s:236 `calr RegHamaTitle2_Entry` -- prints \"Debug Test\" first (234)",
+   "factory_test/test_init.s:374 `ld wa, 3:i3` / 375 `call format_FD` / 376 label \"TESTHAMA2HD\"",
+   "sequencer/smf_event_processor.s:8472 `cp wa, 3:i3` / 8473 `jrl z, FDC_Format2HD_Start` -- format type 3 = 2HD"
+  ]
+ },
+ {
+  "old": "TitleFunc_LifecycleDispatch_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TitleFunc_LifecycleDispatch_OnListLswFiles",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the FDD-test title) + body",
+  "evidence": [
+   "factory_test/test_init.s:239 `calr ListDir2_Entry` -- lists \"A:\\\\HAMA\\\\*.LSW\" (factory_test/fd_test_data.s:390) with _findfirst / FDTest_PrintDiag"
+  ]
+ }
+]

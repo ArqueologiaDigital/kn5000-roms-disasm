@@ -30521,7 +30521,7 @@ CmpNcpTtl_Dispatch_Code_Skip13:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case132:	; cases 132, 133
+CmpNcpTtl_TableDispatch_OnToItemNext:	; cases 132, 133
 	push	xde	; four pushes and `ld w, 0x80`, spelled as six .byte lines until 2026-10-06
 	push	xhl
 	push	xix
@@ -30564,7 +30564,7 @@ CmpNcpTtl_Dispatch_Code_Skip14:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case122:	; cases 122, 123
+CmpNcpTtl_TableDispatch_OnToValueUp:	; cases 122, 123
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde

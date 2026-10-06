@@ -18,9 +18,10 @@ HDAE5000_Lbn_ShowEntry:	; 0x2870D6 (3711 bytes)
 	add	wa, wa
 	lda xix, (HDAE5000_Lbn_ShowEntry_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda xix, (HDAE5000_Lbn_ShowEntry_Case0:24)
+	lda xix, (HDAE5000_Lbn_ShowEntry_NoDigitTyped:24)
 	jp	t, (xix+wa)	; jp T,XIX+WA
-HDAE5000_Lbn_ShowEntry_Case0:
+; HDAE5000_Lbn_ShowEntry_NoDigitTyped: blank the directory number, directory name, song number and song name fields
+HDAE5000_Lbn_ShowEntry_NoDigitTyped:
 	pushw 0x0005
 	lda xwa, (HDAE5000_Str_Blank3Tab:24)
 	push xwa
@@ -48,7 +49,8 @@ HDAE5000_Lbn_ShowEntry_Case0:
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+10)
 	jrl t, .LFS_7334                       ; [78 de 01] jrl T,0x287334
-HDAE5000_Lbn_ShowEntry_Case1:
+; HDAE5000_Lbn_ShowEntry_DirHundredsTyped: show the directory number's first digit (dir/100, %1.1d)
+HDAE5000_Lbn_ShowEntry_DirHundredsTyped:
 	ld	wa, iz
 	extz xwa
 	div wa, 0x0064
@@ -69,7 +71,8 @@ HDAE5000_Lbn_ShowEntry_Case1:
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+24)
 	jrl t, .LFS_7334                       ; [78 aa 01] jrl T,0x287334
-HDAE5000_Lbn_ShowEntry_Case2:
+; HDAE5000_Lbn_ShowEntry_DirTensTyped: show the directory number's first two digits (dir/10, %2.2d)
+HDAE5000_Lbn_ShowEntry_DirTensTyped:
 	ld	wa, iz
 	extz xwa
 	div wa, 0x000a
@@ -90,7 +93,9 @@ HDAE5000_Lbn_ShowEntry_Case2:
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+24)
 	jrl t, .LFS_7334                       ; [78 76 01] jrl T,0x287334
-HDAE5000_Lbn_ShowEntry_Case3:
+; HDAE5000_Lbn_ShowEntry_DirUnitsTyped: show the 3-digit directory number and, for 1..120, the directory name;
+;   otherwise return -1
+HDAE5000_Lbn_ShowEntry_DirUnitsTyped:
 	pushw iz                                ; push IZ
 	pushw HDAE5000_Fmt_3_3d_Lbn_ShowEntry@hi16
 	pushw HDAE5000_Fmt_3_3d_Lbn_ShowEntry@lo16		; low half of HDAE5000_Fmt_3_3d_Lbn_ShowEntry
@@ -124,7 +129,8 @@ HDAE5000_Lbn_ShowEntry_Case3:
 .LFS_720d:
 	ldw (xsp + 0x02), 65535
 	jrl t, .LFS_7334                       ; [78 1f 01] jrl T,0x287334
-HDAE5000_Lbn_ShowEntry_Case4:
+; HDAE5000_Lbn_ShowEntry_SongTensTyped: show the song number's first digit (song/10, " %1.1d")
+HDAE5000_Lbn_ShowEntry_SongTensTyped:
 	ld	wa, (xsp+36)
 	extz xwa
 	div wa, 0x000a
@@ -145,7 +151,9 @@ HDAE5000_Lbn_ShowEntry_Case4:
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+24)
 	jrl t, .LFS_7334                       ; [78 ea 00] jrl T,0x287334
-HDAE5000_Lbn_ShowEntry_Case5:
+; HDAE5000_Lbn_ShowEntry_SongUnitsTyped: show the 2-digit song number and, for directory 1..120 and song 1..16, the
+;   song name; otherwise return -2 (bad song) or -1
+HDAE5000_Lbn_ShowEntry_SongUnitsTyped:
 	pushm	(xsp+36)
 	pushw HDAE5000_Fmt_2_2d_Lbn_ShowEntry_2@hi16
 	pushw HDAE5000_Fmt_2_2d_Lbn_ShowEntry_2@lo16		; low half of HDAE5000_Fmt_2_2d_Lbn_ShowEntry_2
@@ -188,7 +196,8 @@ HDAE5000_Lbn_ShowEntry_Case5:
 .LFS_72b5:
 	ldw (xsp + 0x02), 65535
 	jr t, .LFS_7334                        ; [68 78] jr T,0x287334
-HDAE5000_Lbn_ShowEntry_Case6:
+; HDAE5000_Lbn_ShowEntry_Reset: blank the fields, zero LbnDir/LbnSong/LbnDigitPos and rebuild LBN_OPTION with no song
+HDAE5000_Lbn_ShowEntry_Reset:
 	pushw 0x0005
 	lda xwa, (HDAE5000_Str_Blank3Tab:24)
 	push xwa

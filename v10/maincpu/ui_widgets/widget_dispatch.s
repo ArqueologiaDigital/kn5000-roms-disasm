@@ -1900,13 +1900,13 @@ SysEx49_ChannelWords7:
 ; lda xix,(0xFDAD9A); jp_rr 8,xix,..` -- targets 0xFDAD9A (SysEx_ChannelHandler_49_Data) + offset (no labels yet).
 SysEx49_ChannelSwitch:
 	.short	SysEx_ChannelHandler_49_Data - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_Case1 - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_Case2 - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_Case3 - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_Case4 - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_Case5 - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_Case6 - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_Case7 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_ReverbMacroRoom2 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_ReverbMacroRoom3 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_ReverbMacroHall1 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_ReverbMacroHall2 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_ReverbMacroPlate - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_ReverbMacroDelay - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_ReverbMacroPanningDelay - SysEx_ChannelHandler_49_Data
 ; MIDI system-exclusive bytes (0xF0 ...) sent by MidiTable_FlushArpNotes (0xFD7B2F): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_3594:
@@ -1919,11 +1919,11 @@ SysEx_Msg_359A:
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_35A0:
 	.byte 0xf0, 0x50, 0x27, 0x7e, 0xf7, 0xff
-; MIDI system-exclusive bytes (0xF0 ...) sent by SysEx_SendDispatch_Helper2 (0xFD7A59): `ld xwa,<this>;
+; MIDI system-exclusive bytes (0xF0 ...) sent by SysEx_FinishBulkSend (0xFD7A59): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_35A6:
 	.byte 0xf0, 0x50, 0x28, 0x7e, 0xf7, 0xff
-; MIDI system-exclusive bytes (0xF0 ...) sent by SysEx_SendDispatch_Helper2 (0xFD7A59): `ld xwa,<this>;
+; MIDI system-exclusive bytes (0xF0 ...) sent by SysEx_FinishBulkSend (0xFD7A59): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_35AC:
 	.byte 0xf0, 0x50, 0x29, 0x7e, 0xf7, 0xff
@@ -8604,20 +8604,20 @@ ESeq_FileSignature:
 ; lda xix,(0xFED772); jp_rr 8,xix,wa` -- targets 0xFED772 + offset (no labels yet).
 MidiSysMsg_SwitchOffsets:
 	.short	MidiSysMsg_Dispatch - MidiSysMsg_Dispatch
-	.short	MidiSysMsg_Handler_Case241 - MidiSysMsg_Dispatch
-	.short	MidiSysMsg_Handler_Case242 - MidiSysMsg_Dispatch
-	.short	MidiSysMsg_Handler_Case243 - MidiSysMsg_Dispatch
-	.short	MidiSysMsg_Handler_Case244 - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_SkipF1Event - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_OnF2EndOfTrack - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_OnF3ShortDeltaTime - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_OnF4LongDeltaTime - MidiSysMsg_Dispatch
 	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
 	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
 	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
 	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
-	.short	MidiSysMsg_Handler_Case249 - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_SkipF9Event - MidiSysMsg_Dispatch
 	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
-	.short	MidiSysMsg_Handler_Case251 - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_OnFBTempo - MidiSysMsg_Dispatch
 	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
 	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
-	.short	MidiSysMsg_Handler_Case254 - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_SkipFEEvent - MidiSysMsg_Dispatch
 	.short	MidiSysMsg_Handler_Loop7 - MidiSysMsg_Dispatch
 ; Six 16-byte slot maps (permutations of 0..0x13): SoundParam_InitDefaultBanks
 ; (0xFEDDA2) copies each into its frame (`ld xiy,<map>; lda xix,(xsp+82/66/
@@ -9470,24 +9470,24 @@ CType_ClassTable:
 ; jp_rr 8,xix,..` -- targets 0xFF1237 + offset (no labels yet).
 Sprintf_TypeSwitch:
 	.short	Sprintf_Format_Percent - Sprintf_Format_Percent
-	.short	Sprintf_CheckLengthLL_Case100 - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_ConvSignedDecimal - Sprintf_Format_Percent
 	.short	Sprintf_FormatFloat_Entry - Sprintf_Format_Percent
 	.short	Sprintf_FormatFloat_Entry - Sprintf_Format_Percent
 	.short	Sprintf_FormatFloat_Entry - Sprintf_Format_Percent
 	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
-	.short	Sprintf_CheckLengthLL_Case100 - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_ConvSignedDecimal - Sprintf_Format_Percent
 	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
 	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
 	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
 	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
-	.short	Sprintf_CheckLengthLL_Case110 - Sprintf_Format_Percent
-	.short	Sprintf_CheckLengthLL_Case111 - Sprintf_Format_Percent
-	.short	Sprintf_CheckLengthLL_Case112 - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_ConvStoreCount - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_ConvOctal - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_ConvPointer - Sprintf_Format_Percent
 	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
 	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
-	.short	Sprintf_CheckLengthLL_Case115 - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_ConvString - Sprintf_Format_Percent
 	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
-	.short	Sprintf_CheckLengthLL_Case117 - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_ConvUnsignedDecimal - Sprintf_Format_Percent
 	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
 	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
 	.short	Sprintf_Hex_GetArg - Sprintf_Format_Percent

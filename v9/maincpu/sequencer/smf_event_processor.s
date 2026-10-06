@@ -5343,7 +5343,7 @@ FatPath_Next83Component_CheckDotEntry:
 FatPath_Next83Component_Return:
 	pop	xiz
 	ret
-SeqByteBlock_PathNormalize_Helper6_Helper:
+Fat_LookupPath:
 	lda	xsp, (xsp-32)
 	pushw	iz
 	ld	xwa, (xsp+38)
@@ -5744,7 +5744,7 @@ SeqByteBlock_PathNormalize_Epilogue:
 	popw	iz
 	lda	xsp, (xsp+32)
 	ret
-SeqByteBlock_PathNormalize_Helper4:
+Fat_CreateDirEntry:
 	lda	xsp, (xsp-30)
 	push	xiz
 	ld	xiz, (xsp+38)
@@ -6561,7 +6561,7 @@ SeqByteBlock_ChannelContainer_Skip11:
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper6_Helper
+	calr	Fat_LookupPath
 	inc	8, xsp
 	ld	iz, hl
 	ld	xwa, (xsp+14)
@@ -6575,7 +6575,7 @@ SeqByteBlock_ChannelContainer_Skip11:
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper4
+	calr	Fat_CreateDirEntry
 	inc	8, xsp
 	ld	iz, hl
 	jr	SeqByteBlock_PathNormalize_Join6
@@ -7950,7 +7950,7 @@ SeqChan_ByteBlockB:
 SeqChan_ByteBlockC:
 	push	xiz
 	ld	xiz, (xsp+20)
-	call	SeqChan_ByteBlockC_Helper
+	call	FDC_ReadDiskChangeStatus
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockC_Skip
 	call	FDC_ClearDiskChangeStatus
@@ -8394,7 +8394,7 @@ FDC_ClearDiskChangeStatus:
 	ld	a, (0x3e3e4:24)
 	ld	(0x3e3e2:24), a
 	ret
-SeqChan_ByteBlockC_Helper:
+FDC_ReadDiskChangeStatus:
 	ld	hl, (0x3e3e6:24)
 	ret
 

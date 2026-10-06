@@ -478,14 +478,14 @@ AcNaming_FillCharSpace:	.incbin "includes/generated/naka_disk_warning.bin", 0x12
 ; WndEvt_DispatchByEventCode_CaseTable -- 9 x int16: the case offsets of WndEvt_DispatchByEventCode's compiled switch, relative to WndEvt_EventCodeDispatch
 WndEvt_DispatchByEventCode_CaseTable:
 	.short	WndEvt_EventCodeDispatch - WndEvt_EventCodeDispatch
-	.short	WndEvt_DispatchByEventCode_Case1 - WndEvt_EventCodeDispatch
-	.short	WndEvt_DispatchByEventCode_Case2 - WndEvt_EventCodeDispatch
-	.short	WndEvt_DispatchByEventCode_Case3 - WndEvt_EventCodeDispatch
-	.short	WndEvt_DispatchByEventCode_Case4 - WndEvt_EventCodeDispatch
-	.short	WndEvt_DispatchByEventCode_Case5 - WndEvt_EventCodeDispatch
-	.short	WndEvt_DispatchByEventCode_Case6 - WndEvt_EventCodeDispatch
-	.short	WndEvt_DispatchByEventCode_Case7 - WndEvt_EventCodeDispatch
-	.short	WndEvt_DispatchByEventCode_Case8 - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_CursorRight - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_PrevChar - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_CharRowUpDown - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_NextChar - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_InsertBlank - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_DeleteChar - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_CenterName - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_ClearName - WndEvt_EventCodeDispatch
 ModeEdit_HandlePaint_Data:			.incbin "includes/generated/naka_disk_warning.bin", 0x125C, 0xC
 TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts:	.incbin "includes/generated/naka_disk_warning.bin", 0x1268, 0xC	; "0x%02X : %s"
 ; UserBitmapCheck_Bitmap24x24 -- a 24 x 24 bitmap, one byte per pixel.  UserBitmapCheck answers

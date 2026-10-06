@@ -5411,10 +5411,12 @@ HDAE5000_AttenHDFormatSwCatch:
 	add xwa, xwa				; XWA * 2
 	add xwa, HDAE5000_AttenHDFormatSwCatch_CaseTable			; jump table base
 	ld wa, (xwa)				; WA = offset
-	lda xix, (HDAE5000_AttenHDFormatSwCatch_Case0:24); dispatch base
+	lda xix, (HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1:24); dispatch base
 	jp	t, (xix+wa)	; jp (XIX + WA)
 	; Case 0: bit test → call with 0/1
-HDAE5000_AttenHDFormatSwCatch_Case0:
+; HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1: edit switch 0 (no caption on ATTEN_HD_FORMAT): append code digit 0
+;   (switch code bit 7 set) or 1
+HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1:
 	bit 0x07, iz
 	jr z, .LCHSC__c0_even
 	ld wa, 0:i3
@@ -5426,7 +5428,9 @@ HDAE5000_AttenHDFormatSwCatch_Case0:
 	ld (xsp + 0x04), hl
 	jr t, .LCHSC__post_switch
 	; Case 1: bit test → call with 2/3
-HDAE5000_AttenHDFormatSwCatch_Case1:
+; HDAE5000_AttenHDFormatSwCatch_OnCodeDigit2Or3: edit switch 1 (no caption on ATTEN_HD_FORMAT): append code digit 2
+;   (switch code bit 7 set) or 3
+HDAE5000_AttenHDFormatSwCatch_OnCodeDigit2Or3:
 	bit 0x07, iz
 	jr z, .LCHSC__c1_even
 	ld wa, 2:i3
@@ -5438,7 +5442,9 @@ HDAE5000_AttenHDFormatSwCatch_Case1:
 	ld (xsp + 0x04), hl
 	jr t, .LCHSC__post_switch
 	; Case 2: bit test → call with 4/5
-HDAE5000_AttenHDFormatSwCatch_Case2:
+; HDAE5000_AttenHDFormatSwCatch_OnCodeDigit4Or5: edit switch 2 (no caption on ATTEN_HD_FORMAT): append code digit 4
+;   (switch code bit 7 set) or 5
+HDAE5000_AttenHDFormatSwCatch_OnCodeDigit4Or5:
 	bit 0x07, iz
 	jr z, .LCHSC__c2_even
 	ld wa, 4:i3
@@ -5450,7 +5456,9 @@ HDAE5000_AttenHDFormatSwCatch_Case2:
 	ld (xsp + 0x04), hl
 	jr t, .LCHSC__post_switch
 	; Case 3: bit test → call with 6/7
-HDAE5000_AttenHDFormatSwCatch_Case3:
+; HDAE5000_AttenHDFormatSwCatch_OnCodeDigit6Or7: edit switch 3 (no caption on ATTEN_HD_FORMAT): append code digit 6
+;   (switch code bit 7 set) or 7
+HDAE5000_AttenHDFormatSwCatch_OnCodeDigit6Or7:
 	bit 0x07, iz
 	jr z, .LCHSC__c3_even
 	ld wa, 6:i3
@@ -5462,7 +5470,9 @@ HDAE5000_AttenHDFormatSwCatch_Case3:
 	ld (xsp + 0x04), hl
 	jr t, .LCHSC__post_switch
 	; Case 4: bit test → call with 8/9 (ldw for values > 7)
-HDAE5000_AttenHDFormatSwCatch_Case4:
+; HDAE5000_AttenHDFormatSwCatch_OnCodeDigit8Or9: edit switch 4 (no caption on ATTEN_HD_FORMAT): append code digit 8
+;   (switch code bit 7 set) or 9
+HDAE5000_AttenHDFormatSwCatch_OnCodeDigit8Or9:
 	bit 0x07, iz
 	jr z, .LCHSC__c4_even
 	ldw wa, 0x0008
@@ -5474,7 +5484,9 @@ HDAE5000_AttenHDFormatSwCatch_Case4:
 	ld (xsp + 0x04), hl
 	jr t, .LCHSC__post_switch
 	; Case 6/7: clear buffer + display setup
-HDAE5000_AttenHDFormatSwCatch_Case6:
+; HDAE5000_AttenHDFormatSwCatch_OnCancel: edit switches 6 and 7, the CANCEL key: clear the code buffer and show
+;   SETUPS_TOOLS
+HDAE5000_AttenHDFormatSwCatch_OnCancel:
 	pushw 0x000a
 	pushw 0x0000
 	lda xwa, (0x22ad9c:24)
@@ -5680,13 +5692,15 @@ HDAE5000_Lbn_StepDigit:	; 0x286A28 (1064 bytes)
 	add wa, wa			; state * 2
 	lda xix, (HDAE5000_Lbn_StepDigit_CaseTable:24); jump table base
 	ld	wa, (xix+wa)
-	lda xix, (HDAE5000_Lbn_StepDigit_Case0:24); dispatch base
+	lda xix, (HDAE5000_Lbn_StepDigit_NoDigitTyped:24); dispatch base
 	jp	t, (xix+wa)	; jp (XIX + WA)
 	; Case 0 (offset 0x0000): jump to FS_Init directly
-HDAE5000_Lbn_StepDigit_Case0:
+; HDAE5000_Lbn_StepDigit_NoDigitTyped: nothing typed yet: no step and no redraw
+HDAE5000_Lbn_StepDigit_NoDigitTyped:
 	jrl t, .LHD_SR__cleanup
-	; Case 1 (offset 0x0003): cylinder digit * 100
-HDAE5000_Lbn_StepDigit_Case1:
+	; Case 1 (offset 0x0003): directory hundreds digit
+; HDAE5000_Lbn_StepDigit_DirHundreds: step the directory number by 100, clamped to 0..100
+HDAE5000_Lbn_StepDigit_DirHundreds:
 	ld wa, hl
 	muls wa, 0x0064			; WA = digit * 100
 	add de, wa			; DE += WA
@@ -5699,8 +5713,9 @@ HDAE5000_Lbn_StepDigit_Case1:
 	jr gt, .LHD_SR__apply
 	ld de, 0:i3			; clamp to 0
 	jr t, .LHD_SR__apply
-	; Case 2 (offset 0x001E): cylinder digit * 10
-HDAE5000_Lbn_StepDigit_Case2:
+	; Case 2 (offset 0x001E): directory tens digit
+; HDAE5000_Lbn_StepDigit_DirTens: step the directory number by 10, at most 120 (1 or less becomes 0)
+HDAE5000_Lbn_StepDigit_DirTens:
 	ld wa, hl
 	muls wa, 0x000a			; WA = digit * 10
 	add de, wa
@@ -5713,8 +5728,9 @@ HDAE5000_Lbn_StepDigit_Case2:
 	jr gt, .LHD_SR__apply
 	ld de, 0:i3
 	jr t, .LHD_SR__apply
-	; Case 3 (offset 0x0039): cylinder unit digit
-HDAE5000_Lbn_StepDigit_Case3:
+	; Case 3 (offset 0x0039): directory units digit
+; HDAE5000_Lbn_StepDigit_DirUnits: step the directory number by 1, clamped to 1..120
+HDAE5000_Lbn_StepDigit_DirUnits:
 	add de, hl
 	cp de, 0x0078
 	jr le, .LHD_SR__c3_lo
@@ -5725,8 +5741,9 @@ HDAE5000_Lbn_StepDigit_Case3:
 	jr gt, .LHD_SR__apply
 	ld de, 1:i3
 	jr t, .LHD_SR__apply
-	; Case 4 (offset 0x004E): head digit * 10
-HDAE5000_Lbn_StepDigit_Case4:
+	; Case 4 (offset 0x004E): song tens digit
+; HDAE5000_Lbn_StepDigit_SongTens: step the song number by 10, clamped to 0..10
+HDAE5000_Lbn_StepDigit_SongTens:
 	ld wa, hl
 	muls wa, 0x000a
 	add bc, wa
@@ -5739,8 +5756,10 @@ HDAE5000_Lbn_StepDigit_Case4:
 	jr gt, .LHD_SR__apply
 	ld bc, 0:i3
 	jr t, .LHD_SR__apply
-	; Case 5 (offset 0x0069): head unit digit
-HDAE5000_Lbn_StepDigit_Case5:
+	; Case 5 (offset 0x0069): song units digit
+; HDAE5000_Lbn_StepDigit_SongUnits: step the song number by 1, clamped to 1..16; the complete number is then looked up
+;   (HDAE5000_Song_PartMask)
+HDAE5000_Lbn_StepDigit_SongUnits:
 	add bc, hl
 	cp bc, 0x0010			; BC >= 16?
 	jr le, .LHD_SR__c5_lo
@@ -5751,8 +5770,8 @@ HDAE5000_Lbn_StepDigit_Case5:
 	jr gt, .LHD_SR__apply
 	ld bc, 1:i3
 .LHD_SR__apply:				; store results
-	ld (HDAE5000_RAM_LbnDir:24), de; store cylinder
-	ld (HDAE5000_RAM_LbnSong:24), bc; store head
+	ld (HDAE5000_RAM_LbnDir:24), de; store the directory number
+	ld (HDAE5000_RAM_LbnSong:24), bc; store the song number
 	cpw (HDAE5000_RAM_LbnDigitPos:24), 0x0005; state == 5?
 	jr nz, .LHD_SR__fs_init
 	; State 5: complete — do table lookup and seek
@@ -5853,18 +5872,22 @@ HDAE5000_LBNPage1SwCatch:
 	add xwa, xwa			; index * 2
 	add xwa, HDAE5000_LBNPage1SwCatch_CaseTable
 	ld wa, (xwa)
-	lda xix, (HDAE5000_LBNPage1SwCatch_Case12:24); dispatch base
+	lda xix, (HDAE5000_LBNPage1SwCatch_OnClear:24); dispatch base
 	jp	t, (xix+wa)	; jp (XIX + WA)
 	; Case 0: re-init FS
-HDAE5000_LBNPage1SwCatch_Case12:
+; HDAE5000_LBNPage1SwCatch_OnClear: edit switch 12, the CLEAR key: reset the load-by-number entry (Lbn_ShowEntry
+;   position 6)
+HDAE5000_LBNPage1SwCatch_OnClear:
 	pushw 0x0001
 	ld wa, 0:i3
 	ld bc, 0:i3
 	ld de, 6:i3
 	calr HDAE5000_Lbn_ShowEntry
 	jrl t, .LHD_SR__a_exit
-	; Case 1: toggle read/write direction
-HDAE5000_LBNPage1SwCatch_Case5:
+	; edit switches 5-7 (the CHS-era reading "toggle read/write direction" was wrong)
+; HDAE5000_LBNPage1SwCatch_OnStepDigit: edit switches 5-7: step the last typed digit +1 (switch code bit 7 clear) or
+;   -1 (set)
+HDAE5000_LBNPage1SwCatch_OnStepDigit:
 	ld xwa, (xsp + 0x04)
 	bit 0x07, wa			; bit 7?
 	jr nz, .LHD_SR__a_c1_set
@@ -5879,8 +5902,10 @@ HDAE5000_LBNPage1SwCatch_Case5:
 	ld de, (HDAE5000_RAM_LbnDigitPos:24)
 	calr HDAE5000_Lbn_StepDigit	; recursive call
 	jrl t, .LHD_SR__a_exit
-	; Case 2: sector write (BC=0 or 1)
-HDAE5000_LBNPage1SwCatch_Case0:
+	; edit switch 0: digit 0 or 1
+; HDAE5000_LBNPage1SwCatch_OnDigit0Or1: edit switch 0: type digit 0 (lower half, switch code bit 7 set) or 1 (upper
+;   half)
+HDAE5000_LBNPage1SwCatch_OnDigit0Or1:
 	ld xwa, (xsp + 0x04)
 	bit 0x07, wa
 	jr z, .LHD_SR__a_c2b
@@ -5893,8 +5918,10 @@ HDAE5000_LBNPage1SwCatch_Case0:
 	ld bc, 1:i3
 	calr HDAE5000_Lbn_TypeDigit
 	jr t, .LHD_SR__a_exit
-	; Case 3: sector write (BC=2 or 3)
-HDAE5000_LBNPage1SwCatch_Case1:
+	; edit switch 1: digit 2 or 3
+; HDAE5000_LBNPage1SwCatch_OnDigit2Or3: edit switch 1: type digit 2 (lower half, switch code bit 7 set) or 3 (upper
+;   half)
+HDAE5000_LBNPage1SwCatch_OnDigit2Or3:
 	ld xwa, (xsp + 0x04)
 	bit 0x07, wa
 	jr z, .LHD_SR__a_c3b
@@ -5907,8 +5934,10 @@ HDAE5000_LBNPage1SwCatch_Case1:
 	ld bc, 3:i3
 	calr HDAE5000_Lbn_TypeDigit
 	jr t, .LHD_SR__a_exit
-	; Case 4: sector write (BC=4 or 5)
-HDAE5000_LBNPage1SwCatch_Case2:
+	; edit switch 2: digit 4 or 5
+; HDAE5000_LBNPage1SwCatch_OnDigit4Or5: edit switch 2: type digit 4 (lower half, switch code bit 7 set) or 5 (upper
+;   half)
+HDAE5000_LBNPage1SwCatch_OnDigit4Or5:
 	ld xwa, (xsp + 0x04)
 	bit 0x07, wa
 	jr z, .LHD_SR__a_c4b
@@ -5921,8 +5950,10 @@ HDAE5000_LBNPage1SwCatch_Case2:
 	ld bc, 5:i3
 	calr HDAE5000_Lbn_TypeDigit
 	jr t, .LHD_SR__a_exit
-	; Case 5: sector write (BC=6 or 7)
-HDAE5000_LBNPage1SwCatch_Case3:
+	; edit switch 3: digit 6 or 7
+; HDAE5000_LBNPage1SwCatch_OnDigit6Or7: edit switch 3: type digit 6 (lower half, switch code bit 7 set) or 7 (upper
+;   half)
+HDAE5000_LBNPage1SwCatch_OnDigit6Or7:
 	ld xwa, (xsp + 0x04)
 	bit 0x07, wa
 	jr z, .LHD_SR__a_c5b
@@ -5935,8 +5966,10 @@ HDAE5000_LBNPage1SwCatch_Case3:
 	ld bc, 7:i3
 	calr HDAE5000_Lbn_TypeDigit
 	jr t, .LHD_SR__a_exit
-	; Case 6: sector write (BC=8 or 9)
-HDAE5000_LBNPage1SwCatch_Case4:
+	; edit switch 4: digit 8 or 9
+; HDAE5000_LBNPage1SwCatch_OnDigit8Or9: edit switch 4: type digit 8 (lower half, switch code bit 7 set) or 9 (upper
+;   half)
+HDAE5000_LBNPage1SwCatch_OnDigit8Or9:
 	ld xwa, (xsp + 0x04)
 	bit 0x07, wa
 	jr z, .LHD_SR__a_c6b
@@ -6169,10 +6202,10 @@ HDAE5000_Lbn_TypeDigit:	; 0x286E50 (646 bytes)
 	jrl nz, .Lsw_exit			; 7e xx xx — error → exit
 
 	; --- Compute sector address and look up in table ---
-	ld wa, (HDAE5000_RAM_LbnDir:24); d2 5e aa 22 20 — cylinder
+	ld wa, (HDAE5000_RAM_LbnDir:24); d2 5e aa 22 20 — directory number
 	dec 1, wa				; d8 69
 	ld (HDAE5000_RAM_CurDir:24), wa; f2 92 a0 23 50
-	ld wa, (HDAE5000_RAM_LbnSong:24); d2 60 aa 22 20 — head
+	ld wa, (HDAE5000_RAM_LbnSong:24); d2 60 aa 22 20 — song number
 	dec 1, wa				; d8 69
 	ld (HDAE5000_RAM_CurSong:24), wa; f2 94 a0 23 50
 	ld wa, (HDAE5000_RAM_CurDir:24); d2 92 a0 23 20

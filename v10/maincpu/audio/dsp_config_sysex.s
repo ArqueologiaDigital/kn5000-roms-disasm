@@ -279,37 +279,51 @@ SysEx_ChannelHandler_49_Data:
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords0
 	jr	SysEx_DispatchByChannel_49_Entry
-SysEx_DispatchByChannel_49_Case1:
+; SysEx_DispatchByChannel_49_ReverbMacroRoom2: GS reverb macro 1 (Room 2): value i of SysEx49_ChannelWords1, written
+;   by the callers to DSP param 0x4B10+i
+SysEx_DispatchByChannel_49_ReverbMacroRoom2:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords1
 	jr	SysEx_DispatchByChannel_49_Entry
-SysEx_DispatchByChannel_49_Case2:
+; SysEx_DispatchByChannel_49_ReverbMacroRoom3: GS reverb macro 2 (Room 3): value i of SysEx49_ChannelWords2, written
+;   by the callers to DSP param 0x4B10+i
+SysEx_DispatchByChannel_49_ReverbMacroRoom3:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords2
 	jr	SysEx_DispatchByChannel_49_Entry
-SysEx_DispatchByChannel_49_Case3:
+; SysEx_DispatchByChannel_49_ReverbMacroHall1: GS reverb macro 3 (Hall 1): value i of SysEx49_ChannelWords3, written
+;   by the callers to DSP param 0x4B10+i
+SysEx_DispatchByChannel_49_ReverbMacroHall1:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords3
 	jr	SysEx_DispatchByChannel_49_Entry
-SysEx_DispatchByChannel_49_Case4:
+; SysEx_DispatchByChannel_49_ReverbMacroHall2: GS reverb macro 4 (Hall 2): value i of SysEx49_ChannelWords4, written
+;   by the callers to DSP param 0x4B10+i
+SysEx_DispatchByChannel_49_ReverbMacroHall2:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords4
 	jr	SysEx_DispatchByChannel_49_Entry
-SysEx_DispatchByChannel_49_Case5:
+; SysEx_DispatchByChannel_49_ReverbMacroPlate: GS reverb macro 5 (Plate): value i of SysEx49_ChannelWords5, written by
+;   the callers to DSP param 0x4B10+i
+SysEx_DispatchByChannel_49_ReverbMacroPlate:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords5
 	jr	SysEx_DispatchByChannel_49_Entry
-SysEx_DispatchByChannel_49_Case6:
+; SysEx_DispatchByChannel_49_ReverbMacroDelay: GS reverb macro 6 (Delay): value i of SysEx49_ChannelWords6, written by
+;   the callers to DSP param 0x4B10+i
+SysEx_DispatchByChannel_49_ReverbMacroDelay:
 	cp	c, 6:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords6
 	jr	SysEx_DispatchByChannel_49_Entry
-SysEx_DispatchByChannel_49_Case7:
+; SysEx_DispatchByChannel_49_ReverbMacroPanningDelay: GS reverb macro 7 (Panning Delay): value i of
+;   SysEx49_ChannelWords7, written by the callers to DSP param 0x4B10+i
+SysEx_DispatchByChannel_49_ReverbMacroPanningDelay:
 	cp	c, 6:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords7

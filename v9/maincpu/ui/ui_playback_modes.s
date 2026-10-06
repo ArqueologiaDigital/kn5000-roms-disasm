@@ -367,10 +367,10 @@ PlayMode_ArmStartCountdown:
 	cp (3380:16), 0
 	jr	nz, PlayMode_InitFlagBlock_Return
 	ld	(3380:16), 1
-	call	PlayMode_InitFlagBlock_Helper2
+	call	PlayMode_LoadStartCountdown
 PlayMode_InitFlagBlock_Return:
 	ret
-PlayMode_InitFlagBlock_Helper2:
+PlayMode_LoadStartCountdown:
 	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
@@ -1117,7 +1117,7 @@ SqTrAs_CondCheck:
 	push xhl
 	push xix
 	push xiz
-	call	SqTrAs_CondCheck_Helper
+	call	SqSngSel_CalcSongUsageOnEnter
 	pop xiz
 	pop xix
 	pop xhl

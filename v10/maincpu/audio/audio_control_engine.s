@@ -5266,7 +5266,9 @@ ExtData_ToneParam_AltBody_Case5:	; cases 5, 6
 	jrl	ExtData_ToneParam_AltBody_Entry
 ExtData_ToneParam_AltBody_Case7:
 	jrl	ExtData_ToneParam_AltBody_Join4
-ExtData_ToneParam_AltBody_Case8:
+; ExtData_ToneParam_AltBody_OnTempo: Offset 8 of style/tempo record 0x48 (0xFC5A): stores a changed tempo into
+;   0xFC62/0xFC63, posts it and calls SeqTimer_UpdateTempoReg.
+ExtData_ToneParam_AltBody_OnTempo:
 	calr	ExtData_ToneParam_AltBody_Helper2
 ExtData_ToneParam_AltBody_Case1:	; cases 1, 2
 	ret

@@ -33,3 +33,15 @@ firmware's own name table skips. Finding: for switches that serve several value 
 `frame_switch_cases.py` set N to the table index plus only the last bias subtracted, so N is not the switch value
 there (DrawDesignBox_Impl, DSPCfg_ApplyParamStructFull, GetClientBox2, DrawDesignBox_PartGroupStyle). The names now
 in the source state the right values; the remaining `_CaseN` labels of such switches need re-checking.
+
+**Batches k-l and case batches c3-c6** (`proposals-2026-10-06-helpers-{k,l}.json`, `-cases-{c3,c4,c5,c6}.json`):
+44 helpers and 236 cases named. c5 is the sub-CPU payload (`--tree v142/subcpu`) and c6 is HD-AE5000
+(`--tree hdae5000`); the applier takes that option for single-version images. Leads the passes reported for later:
+- `ToneGen_ParamTable_0x216` is the WRITE SOUND title's 18-entry switch-handler table, `.incbin`'d, and its targets
+  have no labels. `ToneGen_ParamTable_0x25E` (SeDigEff) looks the same. These are census detector gaps.
+- Data spelled as instructions: `SeMenu_ShowConfirmDialog_Code` (the black-key offset table) and
+  `RhythmVariation_InlineCode_Code` (32 bytes indexed by (0x379B) & 31).
+- Wrong names: `SysEx_BytecodeDispatcher` (TT_SQSTEP panel-button action dispatcher), `Part_LoadAndApplyVoiceTable`
+  (maps SEQ_ERROR_CODE to GLOBAL_ERROR_CODE), `DrawProgressRectH/V` (ArrowProc copies), `RegHamaTitle1/2_Entry`
+  (format 2DD/2HD floppies), `Bitmap_DigitD` (holds "U"), `SqplyFunc_FormatIntro/Ending/FillIn` (the punch-in,
+  punch-out and count-in fields), `NakaInst_OK` (holds "ON"), `ENCODER_STATE_BASE` (the panel LED row image).

@@ -10090,9 +10090,9 @@ MidiSeq_ClearSyncFlag_Helper:
 	ld	xiz, xwa
 	lda	xwa, (0xf980:16)
 	ld	(xiz), xwa
-	calr	SeqVoice_DispatchProcess_Data_Helper2
+	calr	MidiPkt_GetUsedSize_SeqEvents
 	ld	(xsp+4), xhl
-	calr	SeqVoice_DispatchProcess_Data_Helper3
+	calr	MidiPkt_GetUsedSize_AccompBlocks
 	lda	xwa, (0xffbe:16)
 	sub	xwa, 0xf980
 	add	xwa, 0x12cb2
@@ -10111,7 +10111,7 @@ MidiSeq_ClearSyncFlag_Helper_Skip3:
 	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
 	jr	z, MidiSeq_ClearSyncFlag_Helper_Skip4
-	calr	SeqVoice_DispatchProcess_Data_Helper
+	calr	MidiPkt_GetUsedSize_StyleImage
 	add	(xiz+8), xhl
 MidiSeq_ClearSyncFlag_Helper_Skip4:
 	ld	xwa, (xiz+8)
@@ -10202,7 +10202,7 @@ MidiSeq_ClearSyncFlag_Helper4:
 	ld	(xiz+8), xwa
 	bit	6, (0xbd18:16)
 	jr	z, MidiSeq_ClearSyncFlag_Helper4_Epilogue2
-	calr	SeqVoice_DispatchProcess_Data_Helper
+	calr	MidiPkt_GetUsedSize_StyleImage
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
@@ -10230,7 +10230,7 @@ MidiPkt_ArpPopReturn_Helper6:
 	ret
 ; MidiPkt_SetXferBlock_StyleImagePool: Fills the transfer descriptor at XWA for block 3 of the style-image transfer:
 ;   {start 0x95BC0, end 0xAB000 (SEQ_SONG_SLOTS), length 0x15440}, the pattern block pool behind RHYTHM_PATTERN_BUF_B.
-;   With bit 6 of 0xBD18 set, the length is the used size ((0x9482E) * 16, SeqVoice_DispatchProcess_Data_Helper) less
+;   With bit 6 of 0xBD18 set, the length is the used size ((0x9482E) * 16, MidiPkt_GetUsedSize_StyleImage) less
 ;   blocks 1-2 (0x60 + 0x1360). Basis: callers + body -- MidiPkt_ArpExtHandler_G (command 17, state 9) points the
 ;   block descriptor 0xBCEC with it and then takes the length from the message (MidiPkt_SetXferLengthFromMsg); blocks
 ;   1-2 are RHYTHM_PATTERN_BUF_A (0x60) and 0x94860 (0x1360); the group's end step makes MidiSysEx_ProcessBlock run
@@ -10246,7 +10246,7 @@ MidiPkt_SetXferBlock_StyleImagePool:
 	ld	(xiz+8), xwa
 	bit	6, (0xbd18:16)
 	jr	z, MidiPkt_SetXferBlock_StyleImagePool_Epilogue3
-	calr	SeqVoice_DispatchProcess_Data_Helper
+	calr	MidiPkt_GetUsedSize_StyleImage
 	lda	xde, (0x94860:24)
 	lda	xbc, (0x95bc0:24)
 	sub	xbc, xde
@@ -10264,7 +10264,7 @@ MidiPkt_SetXferBlock_StyleImagePool_Epilogue3:
 	ret
 ; MidiPkt_SetXferTotal_SeqData: Fills the transfer descriptor at XWA for the whole sequencer transfer: start 0xF180,
 ;   length 0x53000 = 0x800 (current song) + 0x5000 (song slots) + 0x4D800 (event memory from 0xB0000); with bit 6 of
-;   0xBD18 set, the length is 0x5800 + the used event size ((0xF1CE) * 16, SeqVoice_DispatchProcess_Data_Helper2). +4
+;   0xBD18 set, the length is 0x5800 + the used event size ((0xF1CE) * 16, MidiPkt_GetUsedSize_SeqEvents). +4
 ;   = start + length (the blocks are not contiguous). Basis: callers + body -- MidiPkt_ArpExtHandler_K (command 18)
 ;   points the total descriptor 0xBCDC with it before the block descriptor (MidiPkt_SetXferBlock_CurrentSong);
 ;   SysEx_ResetAndReturn_Helper2 uses it for the send-side total 0xBCBC.
@@ -10279,7 +10279,7 @@ MidiPkt_SetXferTotal_SeqData:
 	ld	(xiz+8), xwa
 	bit	6, (0xbd18:16)
 	jr	z, MidiPkt_SetXferTotal_SeqData_Epilogue4
-	calr	SeqVoice_DispatchProcess_Data_Helper2
+	calr	MidiPkt_GetUsedSize_SeqEvents
 	lda	xwa, (xhl+22528)
 	add	xwa, (xiz)
 	ld	(xiz+4), xwa
@@ -10325,7 +10325,7 @@ MidiPkt_ArpPopReturn_Helper10:
 	ld	(xiz+8), xwa
 	bit	6, (0xbd18:16)
 	jr	z, MidiPkt_ArpPopReturn_Helper10_Epilogue5
-	calr	SeqVoice_DispatchProcess_Data_Helper2
+	calr	MidiPkt_GetUsedSize_SeqEvents
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
@@ -10347,7 +10347,7 @@ MidiSeq_ClearSyncFlag_Helper6:
 	ld	(xiz+8), xwa
 	bit	6, (0xbd18:16)
 	jr	z, MidiSeq_ClearSyncFlag_Helper6_Epilogue6
-	calr	SeqVoice_DispatchProcess_Data_Helper3
+	calr	MidiPkt_GetUsedSize_AccompBlocks
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
@@ -10378,7 +10378,7 @@ MidiPkt_ArpPopReturn_Helper12:
 ; MidiPkt_SetXferBlock_AccompBlockPool: Fills the transfer descriptor at XWA for block 3 of the accompaniment-block-
 ;   area transfer: {start 0x1E8B00, end 0x1EC400, length 0x3900}, the 57 x 256-byte block pool
 ;   (msp_factory_defaults.s). With bit 6 of 0xBD18 set, the length is the used size ((0x1E881C) * 16,
-;   SeqVoice_DispatchProcess_Data_Helper3) less blocks 1-2 (0x20 + 0x2E0). Basis: callers + body --
+;   MidiPkt_GetUsedSize_AccompBlocks) less blocks 1-2 (0x20 + 0x2E0). Basis: callers + body --
 ;   MidiPkt_ArpExtHandler_J (command 25, state 20) points the block descriptor 0xBCEC with it, then takes the length
 ;   from the message (MidiPkt_SetXferLengthFromMsg); blocks 1-2 are 0x1E8800 (0x20) and 0x1E8820 (0x2E0), the area
 ;   Voice_InitBankTables initialises.
@@ -10393,7 +10393,7 @@ MidiPkt_SetXferBlock_AccompBlockPool:
 	ld	(xiz+8), xwa
 	bit	6, (0xbd18:16)
 	jr	z, MidiPkt_SetXferBlock_AccompBlockPool_Epilogue7
-	calr	SeqVoice_DispatchProcess_Data_Helper3
+	calr	MidiPkt_GetUsedSize_AccompBlocks
 	lda	xde, (0x1e8820:24)
 	lda	xbc, (0x1e8b00:24)
 	sub	xbc, xde
@@ -10409,7 +10409,13 @@ MidiPkt_SetXferBlock_AccompBlockPool:
 MidiPkt_SetXferBlock_AccompBlockPool_Epilogue7:
 	pop	xiz
 	ret
-SeqVoice_DispatchProcess_Data_Helper:
+; MidiPkt_GetUsedSize_StyleImage: Re-packs the style image's pattern blocks (AccPatch_ClearModeFlag +
+;   AccPatch_InitSlotChain_WithAddr, which walks the slot chain at RHYTHM_PATTERN_BUF_A swapping blocks into order and
+;   stores the used size, rounded up to 1 KB, /16 at +46 = 0x9482E) and returns XHL = (0x9482E) * 16, the used size in
+;   bytes; XDE/XHL/XIX/XIZ preserved. Basis: callers + body -- with bit 6 of 0xBD18 set
+;   MidiPkt_SetXferBlock_StyleImagePool and the style-image total (MidiSeq_ClearSyncFlag_Helper4) take their transfer
+;   length from it.
+MidiPkt_GetUsedSize_StyleImage:
 	push	xde
 	push	xhl
 	push	xix
@@ -10423,7 +10429,12 @@ SeqVoice_DispatchProcess_Data_Helper:
 	extz	xhl
 	sll	xhl, 4
 	ret
-SeqVoice_DispatchProcess_Data_Helper2:
+; MidiPkt_GetUsedSize_SeqEvents: Compacts the sequencer event memory (SeqStep_ByteBlockEA5F: SeqData_CopyBlockToBuffer
+;   + SeqStep_FindAndCompact for the current song, which stores the used block count * 16 in 0xF1CE) and returns XHL =
+;   (0xF1CE) * 16, the used event-memory size in bytes; XDE/XHL/XIX/XIZ preserved. Basis: callers + body -- with bit 6
+;   of 0xBD18 set MidiPkt_SetXferTotal_SeqData (length 0x5800 + this) and the event-memory block
+;   MidiPkt_ArpPopReturn_Helper10 take their transfer length from it.
+MidiPkt_GetUsedSize_SeqEvents:
 	push	xde
 	push	xhl
 	push	xix
@@ -10437,7 +10448,12 @@ SeqVoice_DispatchProcess_Data_Helper2:
 	extz	xhl
 	sll	xhl, 4
 	ret
-SeqVoice_DispatchProcess_Data_Helper3:
+; MidiPkt_GetUsedSize_AccompBlocks: Recomputes the used size of the accompaniment block area at 0x1E8800
+;   (Voice_RefreshBankData -> Voice_ComputeAllocSize: highest in-use block, rounded up to 1 KB, /16 into 0x1E881C) and
+;   returns XHL = (0x1E881C) * 16, the used size in bytes; XDE/XHL/XIX/XIZ preserved. Basis: callers + body -- with
+;   bit 6 of 0xBD18 set MidiPkt_SetXferBlock_AccompBlockPool and the area total (MidiSeq_ClearSyncFlag_Helper6) take
+;   their transfer length from it.
+MidiPkt_GetUsedSize_AccompBlocks:
 	push	xde
 	push	xhl
 	push	xix
@@ -11045,7 +11061,14 @@ MidiSeq_PartConfigure_Data:
 	ret
 	ldw	wa, 238
 	jp	SoundCtrl_SendCommand
-SysEx_SendDispatch_Helper:
+; SysEx_SendAllData: Case 0 (ALL) of SysEx_InitiateSend: with bit 3 of 0xBD18 set, points the send-side total
+;   descriptor 0xBCBC at the size of everything (MidiSeq_ClearSyncFlag_Helper: panel + 0x1E0000 area + accompaniment
+;   block area + style image + sequencer, the gated groups only when present) and sends every group in turn
+;   (MidiPkt_ArpConfigChain_Data: panel, 0x1E0000 area, 0x1E8800 area, style image, sequencer, each closed by F0 50 27
+;   7E F7), then clears bit 3. Basis: callers + body -- SysEx_InitiateSend jumps through SysExSend_SwitchOffsets;
+;   entry 0 is SysEx_SendDispatch, which calls this, while cases 1-6 (SysEx_ResetAndReturn_Helper..6) each send one
+;   group with that group's own total; MainExcSend maps menu index 0 to code 0.
+SysEx_SendAllData:
 	set	3, (0xbd18:16)
 	ld	xwa, 0xbcbc
 	call	MidiSeq_ClearSyncFlag_Helper
@@ -11425,7 +11448,13 @@ MidiPkt_ArpConfigChain_Data_Helper18:
 	call	SeqBuf_FlushNoteOffs
 	call	MidiStream_PrevBankCheck
 	ret
-SysEx_SendDispatch_Helper2:
+; SysEx_FinishBulkSend: Last step of every SysEx_InitiateSend case: when the transfer status (field 4 of the active
+;   MIDI buffer) is 0 it queues F0 50 28 7E F7 and runs MidiStream_PrevBankCheck (the post-send handshake / pause);
+;   when the status is 24 it queues F0 50 29 7E F7. Basis: callers + body -- SysEx_SendDispatch falls into it after
+;   case 0 and cases 1-6 jump back to SysEx_InitiateSend_Join, which calls it; each group already ends with F0 50 27
+;   7E F7 (MidiPkt_ArpConfigChain_Data_Helper18), and every group sender skips when that status is non-zero. What
+;   0x28/0x29 mean to the receiver is not established.
+SysEx_FinishBulkSend:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	call	SeqData_ReadFieldByIndex
@@ -12233,8 +12262,8 @@ MidiSysEx_FinishStyleImageXfer:
 	ret
 ; MidiSysEx_FinishSeqXfer: End-of-transfer step for the sequencer group: if bit 4 of 0xBD1A is set (the sequencer
 ;   blocks were received), validates the block-0 panel records at 0xF480, inside the received current-song record
-;   (MidiSysEx_ProcessBlock_Helper13 -> PanelTlv_ValidateBlock0), resolves the part companions, restores the song
-;   selection 0xFFE3/0xFFEC saved in 0xF247/0xF248 (MidiSysEx_ProcessBlock_Helper12), sets bit 1 of 0xBD18 and clears
+;   (PanelTlv_ValidateSongPanel -> PanelTlv_ValidateBlock0), resolves the part companions, restores the song
+;   selection 0xFFE3/0xFFEC saved in 0xF247/0xF248 (MidiSysEx_RestoreSongSelection), sets bit 1 of 0xBD18 and clears
 ;   bit 4. Basis: callers + body -- MidiSysEx_ProcessBlock (command 4, transfer done) calls it after
 ;   MidiSysEx_FinishPanelXfer and MidiSysEx_FinishSoundRamXfer; bit 4 is set only by SeqChan_WriteField_Data_D, the
 ;   end step (state 14) of the sequencer blocks 11-14 (current song 0xF180, song slots, event memory).
@@ -12245,9 +12274,9 @@ MidiSysEx_FinishSeqXfer:
 	push	xhl
 	push	xix
 	push	xiz
-	call	MidiSysEx_ProcessBlock_Helper13
+	call	PanelTlv_ValidateSongPanel
 	call	PanelTlv_ResolvePartCompanions_Entry
-	call	MidiSysEx_ProcessBlock_Helper12
+	call	MidiSysEx_RestoreSongSelection
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -13573,9 +13602,9 @@ SysEx_InitiateSend:
 
 ; SysEx send dispatch
 SysEx_SendDispatch:
-	call	SysEx_SendDispatch_Helper
+	call	SysEx_SendAllData
 SysEx_InitiateSend_Join:
-	call	SysEx_SendDispatch_Helper2
+	call	SysEx_FinishBulkSend
 	call	MidiSeq_PartLookup_Data
 
 SysEx_ResetAndReturn:

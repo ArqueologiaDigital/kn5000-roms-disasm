@@ -935,7 +935,7 @@ UpdSeSel_DetailedUpdate_SetDisplayState_Join4:
 	ld_erpb_rr a, 0xfb
 	extz WA
 	lda xbc, (xsp + 0x02)
-	call SeMenu_TransferPartValues_EndData_Helper2
+	call SeMenu_GetLfoPartSwitchParamId
 	lds_erpb 0xfa, 1
 .Lc_f0aa24:
 	ld_erpb_rr a, 0xfa
@@ -2514,7 +2514,7 @@ SeMenu_CopyWriteUpdate_Loop:
 	lda	xbc, (xsp+6)
 	lda	xbc, (xbc+wa)
 	ld	xwa, xbc
-	call	SeMenu_CopyWriteUpdate_Helper19
+	call	Text_GlyphToCharCode
 	inc1b_erp	251
 	cp_erpb	251, 16
 	jr	c, SeMenu_CopyWriteUpdate_Loop
@@ -3136,14 +3136,14 @@ SeMenuTitleFunc_DispatchSwitch:
 	cp l, 0:i3
 	jr z, .Lc_f0bf6c
 	lda xwa, (xsp + 0x04)
-	call SeMenu_CopyWriteUpdate_Step3_Helper2
+	call SeMenu_GetLastSwitch
 	ld A,(XSP+0x0a)
 	cp A,(XSP+0x04)
 	jr nz, .Lc_f0bf8f
 .Lc_f0bf6c:
 	ld A,(XSP+0x0a)
 	extz WA
-	call SeMenu_CopyWriteUpdate_Step3_Helper
+	call SeMenu_SetLastSwitch
 	ld A,(XSP+0x08)
 	extz WA
 	ld C,(XSP+0x0a)
@@ -5078,7 +5078,7 @@ SeMenu_CopyWriteUpdate_Join21:
 	ld	c, (xsp+2)
 	extz	bc
 	ld	de, (xsp)
-	call	SeMenu_CopyWriteUpdate_Helper
+	call	SeMenu_SendToneIndex
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+2)
@@ -5124,7 +5124,7 @@ SeMenu_CopyWriteUpdate_Join22:
 	ld	c, (xsp+4)
 	extz	bc
 	ld	de, (xsp+2)
-	call	SeMenu_CopyWriteUpdate_Helper
+	call	SeMenu_SendToneIndex
 	ld	a, (xsp+6)
 	extz	wa
 	ld	c, (xsp+4)
@@ -6650,7 +6650,7 @@ Scoop_SoundEditorData_Helper_Loop2:
 	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+4)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	lda	xbc, (xsp+4)
 	ld	xwa, xbc
 	call	FontGlyph_ByteData
@@ -6712,7 +6712,7 @@ Scoop_SoundEditorData_Helper_Loop4:
 	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+20)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	ldto_berp	a, 251
 	extz	wa
 	extz	xwa
@@ -6747,7 +6747,7 @@ Scoop_SoundEditorData_Helper_Skip28:
 	call	SeMenu_StorePartParam
 	lda	xbc, (xsp+2)
 	ld	wa, 0:i3
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp)
@@ -6789,7 +6789,7 @@ Scoop_SoundEditorData_Helper_Join18:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp)
@@ -6828,7 +6828,7 @@ Scoop_SoundEditorData_Helper_Join19:
 	ld	a, (xsp+6)
 	extz	wa
 	lda	xbc, (xsp+4)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
@@ -6859,7 +6859,7 @@ Scoop_SoundEditorData_Helper_Loop5:
 	extz	wa
 	lda	xbc, (xsp+6)
 	lda	xbc, (xbc+wa)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	inc1b_erp	251
 	cp_erpb	251, 15
 	jr	ule, Scoop_SoundEditorData_Helper_Loop5
@@ -6937,7 +6937,7 @@ Scoop_SoundEditorData_Helper_Loop7:
 	extz	wa
 	lda	xbc, (xsp+6)
 	lda	xbc, (xbc+wa)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	inc1b_erp	251
 	cp_erpb	251, 15
 	jr	ule, Scoop_SoundEditorData_Helper_Loop7
@@ -7004,7 +7004,7 @@ Scoop_SoundEditorData_Helper_Join22:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	lda	xde, (xsp+2)
 	ld	a, (xde)
 	cp	a, 65
@@ -7196,7 +7196,7 @@ Scoop_SoundEditorData_Helper_Loop10:
 	extz	wa
 	lda	xbc, (xsp+28)
 	lda	xbc, (xbc+wa)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6
+	call	SeMenu_GetNameBufferChar
 	inc1b_erp	250
 	cp_erpb	250, 15
 	jr	ule, Scoop_SoundEditorData_Helper_Loop10
@@ -8361,7 +8361,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop:
 	pushw ix
 	pushw iy
 	push C
-	call SeMenu_ShowConfirmDialog_Helper
+	call SeMenu_DrawKeyboardOctave
 	pop C
 	popw iy
 	popw ix
@@ -8430,7 +8430,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop:
 	addw (0x06d2:16), 0x000e
 	call SeGfx_StaticOp09_FromBuf
 	ret
-SeMenu_ShowConfirmDialog_Helper:
+SeMenu_DrawKeyboardOctave:
 	ld (0x06cc:16), ix
 	ld (0x06d0:16), ix
 	ld (0x06ce:16), iy
@@ -8680,7 +8680,7 @@ SeMenu_WaveformSelect_Data_Skip2:
 	ld	xiy, SeScreenData_0x5120
 	ld	xix, SeScreenData_0x53EC
 	call	SeGfx_DrawStaticList
-	call	SeMenu_WaveformSelect_Apply_Helper4
+	call	SeMenu_DrawTwoPartRadioButtons
 	ld	xiy, DrumDetailEdit_Entry_01
 	ld	xix, SeScreenData_0x54EB
 	call	SeGfx_DrawBoundList
@@ -8775,7 +8775,7 @@ SeMenu_PresetManager_Init_Skip3:
 	call	SeMenu_WaveformSelect_Apply_Helper2
 	jr	SeMenu_PresetManager_Init_Code_Return
 SeMenu_PresetManager_Init_Skip4:
-	call	SeMenu_WaveformSelect_Apply_Helper4
+	call	SeMenu_DrawTwoPartRadioButtons
 	jr	SeMenu_PresetManager_Init_Code_Return
 SeMenu_PresetManager_Init_Skip5:
 	ld	(COLORBLIT_MODE:24), 0
@@ -8937,7 +8937,7 @@ SeMenu_DrawPartRadioButtons_Skip2:
 SeMenu_DrawPartRadioButtons_Join2:
 	djnz8	c, -84
 	ret
-SeMenu_WaveformSelect_Apply_Helper4:
+SeMenu_DrawTwoPartRadioButtons:
 	ld (COLORBLIT_MODE:24), 0x00
 	ld C, 0x02:opc
 	ld w, (0x065e:16)
@@ -9021,8 +9021,8 @@ SeMenu_FilterEdit_DataBlock1_Helper:
 	call SeGfx_DrawStaticList
 	call SeMenu_PresetBrowser_Select_Helper
 	call SeMenu_DrawSoloButton
-	call SeMenu_PresetBrowser_Select_Helper2
-	call SeMenu_PresetBrowser_Select_Helper3
+	call SeMenu_DrawLfoPartSwitches
+	call SeMenu_DrawLfoSelectedPartLine
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x287D
 	ld	xix, SeScreenData_0x28CE
@@ -9060,7 +9060,7 @@ SeMenu_PresetBrowser_Select_Helper_Skip:
 SeMenu_PresetBrowser_Data_Code_Join:
 	djnz8	c, -84
 	ret
-SeMenu_PresetBrowser_Select_Helper2:
+SeMenu_DrawLfoPartSwitches:
 	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x296E
 	ld	xix, SeScreenData_0x2978
@@ -9756,7 +9756,7 @@ Data_UnknownBlock_Skip:
 	ld	xiy, Data_UnknownBlock_Records5
 	ld	xix, SeScreenData_0x296E
 	call	SeGfx_DrawStaticList
-	call	SeMenu_PresetBrowser_Select_Helper3
+	call	SeMenu_DrawLfoSelectedPartLine
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Skip2:
 	ld	(COLORBLIT_MODE:24), 0
@@ -9771,7 +9771,7 @@ Data_UnknownBlock_Skip3:
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Skip4:
-	call	SeMenu_PresetBrowser_Select_Helper2
+	call	SeMenu_DrawLfoPartSwitches
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Join:
 	ld	(COLORBLIT_MODE:24), 0
@@ -9779,7 +9779,7 @@ Data_UnknownBlock_Join:
 	call	SeGfx_DrawIndexedBoundRecord
 Data_UnknownBlock_Return:
 	ret
-SeMenu_PresetBrowser_Select_Helper3:
+SeMenu_DrawLfoSelectedPartLine:
 	ld (COLORBLIT_MODE:24), 0x00
 	ld XIY,SeScreenData_0x29B4
 	ld XIX,SeScreenData_0x29BE
@@ -9968,7 +9968,7 @@ Data_UnknownBlock_Join8:
 	push	xwa
 	push	xbc
 	push	d
-	call	SeMenu_CopyWriteUpdate_Helper19
+	call	Text_GlyphToCharCode
 	pop	d
 	pop	xbc
 	pop	xwa
@@ -19657,7 +19657,7 @@ StylCnvStorOkFunc_DataBlock_Join:
 	call	DrawLine
 	inc	8, xsp
 	retd	2
-StylCnvStorBnk_ProcDataBlock_Helper:
+PaintArrow_DrawFilled:
 	lda	xsp, (xsp-30)
 	push	xiz
 	ld	(xsp+32), bc
@@ -19849,7 +19849,7 @@ StylCnvStorOkFunc_DataBlock_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+30)
 	retd	4
-StylCnvStorBnk_ProcDataBlock_Helper2:
+PaintArrow_DrawOutline:
 	lda	xsp, (xsp-32)
 	push	xiz
 	ld	(xsp+34), bc
@@ -20094,12 +20094,12 @@ StylCnvStorBnk_ProcDataBlock_OnPaint:
 	jr	z, StylCnvStorBnk_ProcDataBlock_Skip2
 	pushm	(xix)
 	pushm	(xhl)
-	calr	StylCnvStorBnk_ProcDataBlock_Helper2
+	calr	PaintArrow_DrawOutline
 	jr	StylCnvStorBnk_ProcDataBlock_Join
 StylCnvStorBnk_ProcDataBlock_Skip2:
 	pushm	(xix)
 	pushm	(xhl)
-	calr	StylCnvStorBnk_ProcDataBlock_Helper
+	calr	PaintArrow_DrawFilled
 StylCnvStorBnk_ProcDataBlock_Join:
 	ld	xhl, 0:i3
 StylCnvStorBnk_ProcDataBlock_Epilogue:

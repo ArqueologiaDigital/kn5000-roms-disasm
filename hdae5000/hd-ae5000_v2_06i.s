@@ -2664,9 +2664,11 @@ HDAE5000_AcHddNamingWindowProc:
 	add	xwa, xwa
 	add	xwa, HDAE5000_AcHddNamingWindowProc_CaseTable
 	ld	wa, (xwa)
-	lda xix, (HDAE5000_AcHddNamingWindowProc_Case1:24)
+	lda xix, (HDAE5000_AcHddNamingWindowProc_OnPositionLeft:24)
 	jp	t, (xix+wa)	; jp T,XIX+WA
-HDAE5000_AcHddNamingWindowProc_Case1:
+; HDAE5000_AcHddNamingWindowProc_OnPositionLeft: index switch 1, the left key under POSITION: move the name cursor one
+;   place left (auto-repeats)
+HDAE5000_AcHddNamingWindowProc_OnPositionLeft:
 	cpw	(0x22A028:24), 0
 	jrl z, .LRF_21da                       ; [76 d1 07] jrl Z,0x2821da
 	decw	1, (0x22A028:24)
@@ -2686,7 +2688,9 @@ HDAE5000_AcHddNamingWindowProc_Case1:
 	ld	xhl, (xhl + RootFn_SetAutoInc)
 	call	(xhl)
 	jrl t, .LRF_21da                       ; [78 8f 07] jrl T,0x2821da
-HDAE5000_AcHddNamingWindowProc_Case2:
+; HDAE5000_AcHddNamingWindowProc_OnPositionRight: index switch 2, the right key under POSITION: move the name cursor
+;   one place right, below the name length 0x22A026 (auto-repeats)
+HDAE5000_AcHddNamingWindowProc_OnPositionRight:
 	ld	wa, (0x22A028:24)
 	inc	1, wa
 	cp	wa, (0x22A026:24)
@@ -2708,7 +2712,9 @@ HDAE5000_AcHddNamingWindowProc_Case2:
 	ld	xhl, (xhl + RootFn_SetAutoInc)
 	call	(xhl)
 	jrl t, .LRF_21da                       ; [78 3e 07] jrl T,0x2821da
-HDAE5000_AcHddNamingWindowProc_Case3:
+; HDAE5000_AcHddNamingWindowProc_OnPrevCharacter: index switch 3 (also the dial-down binding): select the previous
+;   character of the page and write it at the cursor
+HDAE5000_AcHddNamingWindowProc_OnPrevCharacter:
 	cpw	(0x22A02E:24), 0
 	jrl z, .LRF_21da                       ; [76 34 07] jrl Z,0x2821da
 	ld	wa, (0x22A02A:24)
@@ -2761,7 +2767,9 @@ HDAE5000_AcHddNamingWindowProc_Case3:
 	ld	xhl, (xhl + RootFn_SetAutoInc)
 	call	(xhl)
 	jrl t, .LRF_21da                       ; [78 80 06] jrl T,0x2821da
-HDAE5000_AcHddNamingWindowProc_Case4:
+; HDAE5000_AcHddNamingWindowProc_OnCharacterRowUpDown: index switch 4: UP moves the character selection one row (13
+;   characters) back, DOWN one row forward, and writes it at the cursor
+HDAE5000_AcHddNamingWindowProc_OnCharacterRowUpDown:
 	ld xwa, (xsp + 0x2c)
 	cp	xwa, EVT_INDEXSW_DOWN
 	jrl z, .LRF_1c40                       ; [76 da 00] jrl Z,0x281c40
@@ -2937,7 +2945,9 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	ld	xhl, (xhl + RootFn_SetAutoInc)
 	call	(xhl)
 	jrl t, .LRF_21da                       ; [78 24 04] jrl T,0x2821da
-HDAE5000_AcHddNamingWindowProc_Case5:
+; HDAE5000_AcHddNamingWindowProc_OnNextCharacter: index switch 5 (also the dial-up binding): select the next character
+;   of the page and write it at the cursor
+HDAE5000_AcHddNamingWindowProc_OnNextCharacter:
 	ld	wa, (0x22A02A:24)
 	extz xwa
 	sll	xwa, 0x02
@@ -3013,7 +3023,9 @@ HDAE5000_AcHddNamingWindowProc_Case5:
 	ld	xhl, (xhl + RootFn_SetAutoInc)
 	call	(xhl)
 	jrl t, .LRF_21da                       ; [78 26 03] jrl T,0x2821da
-HDAE5000_AcHddNamingWindowProc_Case6:
+; HDAE5000_AcHddNamingWindowProc_OnInsert: INS: shift the name right from the cursor and put the fill character
+;   (0x22A034) at the cursor
+HDAE5000_AcHddNamingWindowProc_OnInsert:
 	ld	iz, (0x22A026:24)
 	dec	1, iz
 	cp	iz, (0x22A028:24)
@@ -3058,7 +3070,9 @@ HDAE5000_AcHddNamingWindowProc_Case6:
 	ld	xbc, EVT_SET_CURSOR
 	call	(xhl)
 	jrl t, .LRF_21da                       ; [78 97 02] jrl T,0x2821da
-HDAE5000_AcHddNamingWindowProc_Case7:
+; HDAE5000_AcHddNamingWindowProc_OnDelete: DEL: shift the name left over the cursor and put the fill character at the
+;   end
+HDAE5000_AcHddNamingWindowProc_OnDelete:
 	ld	iz, (0x22A028:24)
 	cp	iz, (0x22A026:24)
 	jr nc, .LRF_1f74                       ; [6f 25] jr NC,0x281f74
@@ -3103,7 +3117,9 @@ HDAE5000_AcHddNamingWindowProc_Case7:
 	ld	xbc, EVT_SET_CURSOR
 	call	(xhl)
 	jrl t, .LRF_21da                       ; [78 08 02] jrl T,0x2821da
-HDAE5000_AcHddNamingWindowProc_Case8:
+; HDAE5000_AcHddNamingWindowProc_OnCenterName: centre the name: count leading and trailing fill characters and re-pad
+;   the trimmed text with half of them on each side
+HDAE5000_AcHddNamingWindowProc_OnCenterName:
 	ldw (xsp + 0x04), 0
 	ld	iz, 0:i3
 	cp	iz, (0x22A026:24)
@@ -3237,7 +3253,8 @@ HDAE5000_AcHddNamingWindowProc_Case8:
 	ld	xbc, EVT_SET_CURSOR
 	call	(xhl)
 	jrl t, .LRF_21da                       ; [78 80 00] jrl T,0x2821da
-HDAE5000_AcHddNamingWindowProc_Case9:
+; HDAE5000_AcHddNamingWindowProc_OnClear: CLR: fill the whole name with the fill character and put the cursor at 0
+HDAE5000_AcHddNamingWindowProc_OnClear:
 	ld	iz, 0:i3
 	cp	iz, (0x22A026:24)
 	jr nc, .LRF_2180                       ; [6f 1d] jr NC,0x282180

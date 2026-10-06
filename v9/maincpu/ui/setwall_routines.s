@@ -1903,7 +1903,7 @@ SetWall_ForwardSkip_Return:
 
 SetWall_InlineCodeBlock3:
 	ret
-SqTrAs_CondCheck_Helper:
+SqSngSel_CalcSongUsageOnEnter:
 	call	AccWrap_PlayModeDispatch
 	or (10407:16), 4
 	ld	wa, (0xffec:24)

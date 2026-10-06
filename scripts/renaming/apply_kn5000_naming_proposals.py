@@ -15,6 +15,7 @@ QUESTION IT ANSWERS
 
 RUN (repository root)
   python3 scripts/renaming/apply_kn5000_naming_proposals.py TAG proposals.json ... [--apply]
+  python3 scripts/renaming/apply_kn5000_naming_proposals.py --tree v142/subcpu TAG proposals.json ... [--apply]
   then: make all; harmonize_version_labels.py --to v9 --apply; --to v7 --apply; make gate-all;
         python3 scripts/analysis/l2_symbol_reference.py --regen && --check
 """
@@ -35,6 +36,12 @@ APPLY = "--apply" in sys.argv
 # Scoop_SoundEditorData_Helper5 is v10's SeMenu_CyclePartLfoState).  v9 and v7 take the new names afterwards from
 # scripts/renaming/harmonize_version_labels.py, which matches code by address and proves it by the bytes.
 TREES = ("v10",)
+# --tree DIR: a single-version image instead (v142/subcpu, hdae5000, subcpu/boot); evidence paths are relative to it
+TREE_DIR = None
+if "--tree" in sys.argv:
+    TREE_DIR = sys.argv[sys.argv.index("--tree") + 1]
+    sys.argv[sys.argv.index("--tree"):sys.argv.index("--tree") + 2] = []
+    TREES = (TREE_DIR,)
 ARGS = [a for a in sys.argv[1:] if a != "--apply"]
 TAG, FILES = ARGS[0], ARGS[1:]
 
@@ -45,7 +52,7 @@ def main():
     news = [r["new"] for r in recs]
     assert len(set(olds)) == len(olds) and len(set(news)) == len(news), "duplicate old or new name"
     for tree in TREES:
-        tdir = os.path.join(ROOT, tree, "maincpu")
+        tdir = os.path.join(ROOT, tree if TREE_DIR else os.path.join(tree, "maincpu"))
         srcs = sorted(glob.glob(os.path.join(tdir, "**", "*.s"), recursive=True))
         defs = {}
         for p in srcs:
@@ -97,7 +104,7 @@ def main():
             data = t.encode("latin-1")
             open(q + ".tmp", "wb").write(data)
             os.replace(q + ".tmp", q)
-        sed = os.path.join(ROOT, "scripts/renaming/rename_kn5000_naming_%s_%s.sed" % (TAG, tree))
+        sed = os.path.join(ROOT, "scripts/renaming/rename_kn5000_naming_%s_%s.sed" % (TAG, tree.replace("/", "_")))
         open(sed, "w").write("# written by scripts/renaming/apply_kn5000_naming_proposals.py\n"
                              + "".join("s/\\b%s\\b/%s/g\n" % (o, n) for o, n in rmap.items()))
         print("    renamed in %d files" % len(hit))

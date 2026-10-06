@@ -237,7 +237,7 @@ Sprintf_Percent_PadRightLoop:
 	cpw	(xsp + 8), 0x0
 	jr	gt, Sprintf_Percent_PadRight
 	jrl	Sprintf_MainLoop_ReadNext
-Sprintf_CheckLengthLL_Case115:
+Sprintf_CheckLengthLL_ConvString:
 	ld	xbc, (xsp + 86)
 	ld	xwa, 4:i3
 	add	(xbc), xwa
@@ -312,7 +312,7 @@ Sprintf_String_PadRightLoop:
 	cp	wa, 0:i3
 	jr	nz, Sprintf_String_PadRightSpace
 	jrl	Sprintf_MainLoop_ReadNext
-Sprintf_CheckLengthLL_Case100:	; cases 100, 105
+Sprintf_CheckLengthLL_ConvSignedDecimal:	; cases 100, 105
 	ld	wa, (xsp + 6)
 	bit	6, wa
 	jr	z, Sprintf_Decimal_GetShortArg
@@ -489,7 +489,7 @@ Sprintf_Decimal_PadRightLoop:
 	cp	wa, 0:i3
 	jr	nz, Sprintf_Decimal_PadRightSpace
 	jrl	Sprintf_MainLoop_ReadNext
-Sprintf_CheckLengthLL_Case117:
+Sprintf_CheckLengthLL_ConvUnsignedDecimal:
 	ld	wa, (xsp + 6)
 	bit	6, wa
 	jr	z, Sprintf_Unsigned_GetShortArg
@@ -602,7 +602,7 @@ Sprintf_Unsigned_PadRightLoop:
 	cp	wa, 0:i3
 	jr	nz, Sprintf_Unsigned_PadRightSpace
 	jrl	Sprintf_MainLoop_ReadNext
-Sprintf_CheckLengthLL_Case112:
+Sprintf_CheckLengthLL_ConvPointer:
 	setm	6, (xsp + 6)
 Sprintf_Hex_GetArg:
 	ld	wa, (xsp + 6)
@@ -760,7 +760,7 @@ Sprintf_Hex_PadRightLoop:
 	cp	wa, 0:i3
 	jr	nz, Sprintf_Hex_PadRightSpace
 	jrl	Sprintf_MainLoop_ReadNext
-Sprintf_CheckLengthLL_Case111:
+Sprintf_CheckLengthLL_ConvOctal:
 	ld	wa, (xsp + 6)
 	bit	6, wa
 	jr	z, Sprintf_Octal_GetShortArg
@@ -908,7 +908,7 @@ Sprintf_Octal_PadRightLoop:
 	cp	wa, 0:i3
 	jr	nz, Sprintf_Octal_PadRightSpace
 	jr	Sprintf_MainLoop_ReadNext
-Sprintf_CheckLengthLL_Case110:
+Sprintf_CheckLengthLL_ConvStoreCount:
 	ld	xbc, (xsp + 86)
 	ld	xwa, 4:i3
 	add	(xbc), xwa

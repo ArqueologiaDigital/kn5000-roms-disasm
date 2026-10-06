@@ -7797,7 +7797,7 @@ SysEx_BytecodeDispatcher:
 	jp	SysEx_BytecodeDispatcher_Return
 SysEx_BytecodeDispatcher_Skip:
 	call	SysEx_BytecodeDispatcher_Helper5
-	call	SysEx_BytecodeDispatcher_Helper8
+	call	SqStep_LowestSetBitOfByte
 	xor	h, h
 	push	xix
 	ld	xix, SysInit_BytecodeBlock
@@ -7829,7 +7829,7 @@ SysEx_BytecodeDispatcher_Skip2:
 	push	xiy
 	call	Timer_ModeHandler_0_Helper2
 	pop	xiy
-	call	SysEx_BytecodeDispatcher_Helper8
+	call	SqStep_LowestSetBitOfByte
 	xor	h, h
 	sla	hl, 2
 	push	xix
@@ -7840,7 +7840,7 @@ SysEx_BytecodeDispatcher_Skip2:
 	jp	SysEx_BytecodeDispatcher_Join
 SysEx_BytecodeDispatcher_Skip3:
 	call	SysEx_BytecodeDispatcher_Helper5
-	call	SysEx_BytecodeDispatcher_Helper9
+	call	SqStep_LowestSetBitOfWord
 	call	SysEx_BytecodeDispatcher_Helper4
 	call	SysEx_BytecodeDispatcher_Helper6
 	call	SysEx_BytecodeDispatcher_Helper7
@@ -8193,7 +8193,7 @@ VoiceState_DataBlock2_Helper6_Loop:
 	cp	(0x0d6a:16), 0
 	jrl	nz, VoiceState_DataBlock2_Helper6_Skip
 	ld	a, 4:opc
-	call	MemConfig_Handler_1_Helper4
+	call	VoiceSlot_CompareSavedMarkerCount
 	cp	w, 1:i3
 	jrl	z, VoiceState_DataBlock2_Helper6_Skip
 	cp	w, 2:i3
@@ -8238,12 +8238,12 @@ ScoopDisp_FlagSetAndDispatch_Helper:
 	call	VoiceSlot_SaveState
 	ldb_d8	a, (0x0d5c)
 	add	a, (0x0d5d:16)
-	call	MemConfig_Handler_1_Helper2
+	call	ScoopDisp_SeekBackWrapMarkers
 	call	AccPedal_CheckBitAndUpdate
 	cp	(0x0d5c:16), 0
 	jrl	z, VoiceState_DataBlock2_Helper6_Skip4
 	ldb_d8	a, (0x0d5c)
-	call	MemConfig_Handler_1_Helper2
+	call	ScoopDisp_SeekBackWrapMarkers
 VoiceState_DataBlock2_Helper6_Skip4:
 	ld	a, 4:opc
 	call	VoiceSlot_SaveState
@@ -8257,7 +8257,7 @@ VoiceState_DataBlock2_Helper6_Loop3:
 	cp	(0x0d6a:16), 0
 	jrl	nz, MemConfig_Handler_1_Skip9
 	ld	a, 4:opc
-	call	MemConfig_Handler_1_Helper4
+	call	VoiceSlot_CompareSavedMarkerCount
 	cp	w, 1:i3
 	jrl	z, VoiceState_DataBlock2_Helper6_Skip5
 	cp	w, 2:i3
@@ -8289,7 +8289,7 @@ MemConfig_Handler_1_Skip10:
 	ldb_d8	a, (0x0d5c)
 	stb_d8	(0x367d), a
 	ret
-MemConfig_Handler_1_Helper2:
+ScoopDisp_SeekBackWrapMarkers:
 	stb_d8	(0x0dfe), a
 VoiceState_DataBlock2_Helper6_Loop4:
 	call	VoiceSlot_CompareAndBranch
@@ -9167,7 +9167,7 @@ SysEx_BytecodeDispatcher_Helper3_Sub:
 	jrl	z, SysEx_BytecodeDispatcher_Helper3_Loop
 SysEx_BytecodeDispatcher_Helper3_Skip:
 	ld	xiy, 0x0dbf
-	call	SysEx_BytecodeDispatcher_Helper8
+	call	SqStep_LowestSetBitOfByte
 	cp	l, 255
 	jrl	z, SysEx_BytecodeDispatcher_Helper3_Return
 	xor	h, h
@@ -9532,7 +9532,7 @@ PortConfig_DataTable_A_Helper:
 	popw	hl
 	pop	xix
 	ret
-SysEx_BytecodeDispatcher_Helper8:
+SqStep_LowestSetBitOfByte:
 	pushw	bc
 	xor	c, c
 SysEx_BytecodeDispatcher_Helper4_Loop4:
@@ -9554,7 +9554,7 @@ SysEx_BytecodeDispatcher_Helper4_Skip16:
 	jp	SysInit_BytecodeBlock_Join7
 SysInit_BytecodeBlock_Return5:
 	ret
-SysEx_BytecodeDispatcher_Helper9:
+SqStep_LowestSetBitOfWord:
 	push	xiy
 	pushw	bc
 	xor	c, c
@@ -11504,7 +11504,7 @@ VoiceState_DataBlock2_Epilogue:
 	pop	xiz
 	pop	xhl
 	ret
-MemConfig_Handler_1_Helper4:
+VoiceSlot_CompareSavedMarkerCount:
 	push	xhl
 	xor	w, w
 	and	a, 7

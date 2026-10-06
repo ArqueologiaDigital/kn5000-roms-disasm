@@ -5349,7 +5349,16 @@ FatPath_Next83Component_CheckDotEntry:
 FatPath_Next83Component_Return:
 	pop	xiz
 	ret
-SeqByteBlock_PathNormalize_Helper6_Helper:
+; Fat_LookupPath: Fat_LookupPath(file, path): resolves the path to its directory entry and loads it into the handle.
+;   First asks the device (block op 7) whether the medium changed and, if so, drops its sectors from the 10-entry
+;   cache at 0x2121A (HL = 6 when one is dirty) and sets device +2 bit 1; then walks the 8.3 components
+;   (FatPath_Next83Component), comparing 11-byte names in the root directory and then in each subdirectory cluster
+;   chain, loading a match with SeqStep_FileSectorComplete (slot +51, first cluster +69 -> +42,
+;   Fat_CountContiguousClusters). HL = 0, 11 bad name, 12 component not a directory, 7 path not found, 5 file not
+;   found, 13 directory/file kind mismatch with handle +3 bit 6, 14 read-only entry opened writable (+3 bit 1), or a
+;   sector-cache error. Basis: callers + body -- the open slot SeqByteBlock_ChannelContainer calls it first and treats
+;   5 as "create" (Fat_CreateDirEntry).
+Fat_LookupPath:
 	lda	xsp, (xsp-32)
 	pushw	iz
 	ld	xwa, (xsp+38)
@@ -5750,7 +5759,15 @@ SeqByteBlock_PathNormalize_Epilogue:
 	popw	iz
 	lda	xsp, (xsp+32)
 	ret
-SeqByteBlock_PathNormalize_Helper4:
+; Fat_CreateDirEntry: Fat_CreateDirEntry(file, path): creates the directory entry of a file being opened for writing:
+;   finds a free slot (first name byte 0x00 or 0xE5) in the root directory (single-component path; vol +28 start, +44
+;   entries; HL = 16 when full) or in the subdirectory the lookup left in +42, extending that directory with a zeroed
+;   cluster (Fat_AllocateClusters(file, 1, 1)) when its chain ends; it then fills the in-memory entry (slot +51, 8.3
+;   name +52, attribute +64 = 0, first cluster +69 = 0, size +71 = 0), lets the device stamp the time +65 (block op
+;   6), packs it into the sector (SeqStep_FileSectorReturn) and marks the sector dirty. Basis: callers + body -- the
+;   open slot SeqByteBlock_ChannelContainer calls it only when Fat_LookupPath returned 5 (not found) and handle +3 bit
+;   7 is set.
+Fat_CreateDirEntry:
 	lda	xsp, (xsp-30)
 	push	xiz
 	ld	xiz, (xsp+38)
@@ -6589,7 +6606,7 @@ SeqByteBlock_ChannelContainer_Skip11:
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper6_Helper
+	calr	Fat_LookupPath
 	inc	8, xsp
 	ld	iz, hl
 	ld	xwa, (xsp+14)
@@ -6603,7 +6620,7 @@ SeqByteBlock_ChannelContainer_Skip11:
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper4
+	calr	Fat_CreateDirEntry
 	inc	8, xsp
 	ld	iz, hl
 	jr	SeqByteBlock_PathNormalize_Join6
@@ -8009,7 +8026,7 @@ SeqChan_ByteBlockB:
 SeqChan_ByteBlockC:
 	push	xiz
 	ld	xiz, (xsp+20)
-	call	SeqChan_ByteBlockC_Helper
+	call	FDC_ReadDiskChangeStatus
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockC_Skip
 	call	FDC_ClearDiskChangeStatus
@@ -8459,7 +8476,10 @@ FDC_ClearDiskChangeStatus:
 	ld	a, (0x3e3e4:24)
 	ld	(0x3e3e2:24), a
 	ret
-SeqChan_ByteBlockC_Helper:
+; FDC_ReadDiskChangeStatus: Returns HL = the DiskChanged word of FDC_DiskTypeState (0x3E3E6): 1 after
+;   FDC_StoreDiskType, 0 after FDC_ClearDiskChangeStatus. Basis: callers + body -- SeqChan_ByteBlockC calls it first
+;   and, when non-zero, acknowledges with FDC_ClearDiskChangeStatus and returns 6 (disk changed).
+FDC_ReadDiskChangeStatus:
 	ld	hl, (0x3e3e6:24)
 	ret
 

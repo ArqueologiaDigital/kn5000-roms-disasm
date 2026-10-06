@@ -604,42 +604,42 @@ Pitch_OctaveShift_CaseOffsets:
 ; (6 entries), doubled, then the same ldw_sri / jp t, (xrr+rr) computed goto.
 TVF_Build_CaseOffsets:
 	.short TVF_Build_Dispatch_Table - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 0
-	.short TVF_Build_Dispatch_Case1 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 1
-	.short TVF_Build_Dispatch_Case2 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 2
-	.short TVF_Build_Dispatch_Case3 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 3
-	.short TVF_Build_Dispatch_Case4 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 4
-	.short TVF_Build_Dispatch_Case5 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 5
+	.short TVF_Build_Dispatch_Mode1_SingleCutoff - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 1
+	.short TVF_Build_Dispatch_Mode2_SingleCutoffBit7 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 2
+	.short TVF_Build_Dispatch_Mode3_SharedCutoff - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 3
+	.short TVF_Build_Dispatch_Mode4_SharedCutoffBit7 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 4
+	.short TVF_Build_Dispatch_Mode5_DualCutoff - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 5
 ; --- 0x00F6B3-0x00F6BE  6 x u16 case offsets from TVF_BuildEmit_Short_Dispatch_Table (0x02432C).
 ; Read by TVF_BuildEmit_Short_Dispatch (0x024300): index = (tonerec+0x0F) & 7,
 ; range-checked 0..5 (6 entries), doubled, ldw_sri / jp t, (xrr+rr).
 TVF_BuildEmit_Short_CaseOffsets:
 	.short TVF_BuildEmit_Short_Dispatch_Table - TVF_BuildEmit_Short_Dispatch_Table			; (tonerec+0x0F)&7 = 0
-	.short TVF_BuildEmit_Short_Case1 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 1
-	.short TVF_BuildEmit_Short_Case2 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 2
-	.short TVF_BuildEmit_Short_Case3 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 3
-	.short TVF_BuildEmit_Short_Case4 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 4
-	.short TVF_BuildEmit_Short_Case5 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 5
+	.short TVF_BuildEmit_Short_Mode1_SingleCutoff - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 1
+	.short TVF_BuildEmit_Short_Mode2_SingleCutoffBit7 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 2
+	.short TVF_BuildEmit_Short_Mode3_SharedCutoff - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 3
+	.short TVF_BuildEmit_Short_Mode4_SharedCutoffBit7 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 4
+	.short TVF_BuildEmit_Short_Mode5_DualCutoff - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 5
 ; --- 0x00F6BF-0x00F6CA  6 x u16 case offsets from TVF_Emit_Registers_Table (0x024472).
 ; Read by TVF_Emit_Registers (0x024444): index = (tonerec+54) & 7, range-checked 0..5
 ; (6 entries), doubled, ldw_sri / jp t, (xrr+rr).  Cases 1 and 2 share one body.
 TVF_Emit_Registers_CaseOffsets:
 	.short TVF_Emit_Registers_Table - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 0
-	.short TVF_Emit_Registers_Case1 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 1
-	.short TVF_Emit_Registers_Case1 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 2
-	.short TVF_Emit_Registers_Case3 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 3
-	.short TVF_Emit_Registers_Case4 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 4
-	.short TVF_Emit_Registers_Case5 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 5
+	.short TVF_Emit_Registers_Mode1Or2_OffsetCutoffWord - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 1
+	.short TVF_Emit_Registers_Mode1Or2_OffsetCutoffWord - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 2
+	.short TVF_Emit_Registers_Mode3_OffsetOneOrBothWords - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 3
+	.short TVF_Emit_Registers_Mode4_OffsetBothWords - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 4
+	.short TVF_Emit_Registers_Mode5_OffsetEachWord - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 5
 ; --- 0x00F6CB-0x00F6D6  6 x u16 case offsets from Voice_PanReg_WriteDispatchB_Table (0x024582); the same six
 ; values as TVF_Emit_Registers_CaseOffsets, for the twin landing pad.
 ; Read by Voice_PanReg_WriteDispatchB (0x024554): index = (tonerec+0x0F) & 7, range-checked
 ; 0..5 (6 entries), doubled, ldw_sri / jp t, (xrr+rr).  Cases 1 and 2 share one body.
 Voice_PanReg_WriteDispatchB_CaseOffsets:
 	.short Voice_PanReg_WriteDispatchB_Table - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 0
-	.short Voice_PanReg_WriteDispatchB_Case1 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 1
-	.short Voice_PanReg_WriteDispatchB_Case1 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 2
-	.short Voice_PanReg_WriteDispatchB_Case3 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 3
-	.short Voice_PanReg_WriteDispatchB_Case4 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 4
-	.short Voice_PanReg_WriteDispatchB_Case5 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 5
+	.short Voice_PanReg_WriteDispatchB_Mode1Or2_OffsetCutoffWord - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 1
+	.short Voice_PanReg_WriteDispatchB_Mode1Or2_OffsetCutoffWord - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 2
+	.short Voice_PanReg_WriteDispatchB_Mode3_OffsetOneOrBothWords - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 3
+	.short Voice_PanReg_WriteDispatchB_Mode4_OffsetBothWords - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 4
+	.short Voice_PanReg_WriteDispatchB_Mode5_OffsetEachWord - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 5
 ; --- 0x00F6D7-0x00F6DE  two 4-byte bit tables, one byte per output bus w = 0..3
 ; Read by AudioMod_Apply_BusRouting (0x02833C): per bus w it loads byte [table + w]
 ; from each (`lda xiy,(table:24) / ld L,(XIY+HL)`, HL = w, loop bound w < 4) and ANDs it
@@ -917,13 +917,13 @@ DSP_VOICEPARAM_DEFAULT_TABLE:
 ; --- 0x00F965-0x00F972  VOICEPARAM_TONE_OPTION_JUMPTABLE -- 7 u16 jump offsets, base 0x02E89B
 ; Computed jump in VoiceParam_Set_Tone_Option (option index 0..6): `jp T, 0x02E89B + table[index*2]`.
 VOICEPARAM_TONE_OPTION_JUMPTABLE:
-	.short VoiceParam_Set_Tone_Option_Case0 - VoiceParam_Set_Tone_Option_Case0	; index 0
-	.short VoiceParam_Set_Tone_Option_Case1 - VoiceParam_Set_Tone_Option_Case0	; index 1
-	.short VoiceParam_Set_Tone_Option_Case2 - VoiceParam_Set_Tone_Option_Case0	; index 2
-	.short VoiceParam_Set_Tone_Option_Case3 - VoiceParam_Set_Tone_Option_Case0	; index 3
-	.short VoiceParam_Set_Tone_Option_Epilogue - VoiceParam_Set_Tone_Option_Case0	; index 4
-	.short VoiceParam_Set_Tone_Option_Case5 - VoiceParam_Set_Tone_Option_Case0	; index 5
-	.short VoiceParam_Set_Tone_Option_Case6 - VoiceParam_Set_Tone_Option_Case0	; index 6
+	.short VoiceParam_Set_Tone_Option_CutoffOffset - VoiceParam_Set_Tone_Option_CutoffOffset	; index 0
+	.short VoiceParam_Set_Tone_Option_LfoDepthOffset - VoiceParam_Set_Tone_Option_CutoffOffset	; index 1
+	.short VoiceParam_Set_Tone_Option_Case2 - VoiceParam_Set_Tone_Option_CutoffOffset	; index 2
+	.short VoiceParam_Set_Tone_Option_LfoDelayOffset - VoiceParam_Set_Tone_Option_CutoffOffset	; index 3
+	.short VoiceParam_Set_Tone_Option_Epilogue - VoiceParam_Set_Tone_Option_CutoffOffset	; index 4
+	.short VoiceParam_Set_Tone_Option_AttackOffset - VoiceParam_Set_Tone_Option_CutoffOffset	; index 5
+	.short VoiceParam_Set_Tone_Option_EnvALevelOffset - VoiceParam_Set_Tone_Option_CutoffOffset	; index 6
 
 ; --- 0x00F973-0x00F99A  AUDIO_CMD_TONEEDIT_JUMPTABLE -- 20 u16 jump offsets, base 0x02EDB9
 ; Computed jump in Audio_Cmd_ToneEdit_TableJump (opcodes 0x00..0x13): `jp T, 0x02EDB9 + table[index*2]`.
@@ -1126,29 +1126,29 @@ AUDIO_CMD_TONEEDIT_REPLY_JUMPTABLE:
 ; Offset 0x0282 (entries 2, 3, 20, 21, 22) is the shared "no-op/return" arm.
 DSP_SETCOEFF_MASTERCONFIG_JUMPTABLE:
 	.short DSP_SetCoeff_MasterConfig_CaseBase - DSP_SetCoeff_MasterConfig_CaseBase	; index 0
-	.short DSP_SetCoeff_MasterConfig_Case1 - DSP_SetCoeff_MasterConfig_CaseBase	; index 1
+	.short DSP_SetCoeff_MasterConfig_AlgoSelect - DSP_SetCoeff_MasterConfig_CaseBase	; index 1
 	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 2
 	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 3
-	.short DSP_SetCoeff_MasterConfig_Case4 - DSP_SetCoeff_MasterConfig_CaseBase	; index 4
-	.short DSP_SetCoeff_MasterConfig_Case5 - DSP_SetCoeff_MasterConfig_CaseBase	; index 5
-	.short DSP_SetCoeff_MasterConfig_Case6 - DSP_SetCoeff_MasterConfig_CaseBase	; index 6
-	.short DSP_SetCoeff_MasterConfig_Case7 - DSP_SetCoeff_MasterConfig_CaseBase	; index 7
-	.short DSP_SetCoeff_MasterConfig_Case8 - DSP_SetCoeff_MasterConfig_CaseBase	; index 8
-	.short DSP_SetCoeff_MasterConfig_Case9 - DSP_SetCoeff_MasterConfig_CaseBase	; index 9
-	.short DSP_SetCoeff_MasterConfig_Case10 - DSP_SetCoeff_MasterConfig_CaseBase	; index 10
-	.short DSP_SetCoeff_MasterConfig_Case11 - DSP_SetCoeff_MasterConfig_CaseBase	; index 11
-	.short DSP_SetCoeff_MasterConfig_Case12 - DSP_SetCoeff_MasterConfig_CaseBase	; index 12
-	.short DSP_SetCoeff_MasterConfig_Case13 - DSP_SetCoeff_MasterConfig_CaseBase	; index 13
-	.short DSP_SetCoeff_MasterConfig_Case14 - DSP_SetCoeff_MasterConfig_CaseBase	; index 14
-	.short DSP_SetCoeff_MasterConfig_Case15 - DSP_SetCoeff_MasterConfig_CaseBase	; index 15
-	.short DSP_SetCoeff_MasterConfig_Case16 - DSP_SetCoeff_MasterConfig_CaseBase	; index 16
-	.short DSP_SetCoeff_MasterConfig_Case17 - DSP_SetCoeff_MasterConfig_CaseBase	; index 17
-	.short DSP_SetCoeff_MasterConfig_Case18 - DSP_SetCoeff_MasterConfig_CaseBase	; index 18
-	.short DSP_SetCoeff_MasterConfig_Case19 - DSP_SetCoeff_MasterConfig_CaseBase	; index 19
+	.short DSP_SetCoeff_MasterConfig_ToneNameAndMode - DSP_SetCoeff_MasterConfig_CaseBase	; index 4
+	.short DSP_SetCoeff_MasterConfig_SourceNameA_BySelector - DSP_SetCoeff_MasterConfig_CaseBase	; index 5
+	.short DSP_SetCoeff_MasterConfig_SourceNameB_BySelector - DSP_SetCoeff_MasterConfig_CaseBase	; index 6
+	.short DSP_SetCoeff_MasterConfig_SourceNameA_ByRow - DSP_SetCoeff_MasterConfig_CaseBase	; index 7
+	.short DSP_SetCoeff_MasterConfig_SourceNameB_ByRow - DSP_SetCoeff_MasterConfig_CaseBase	; index 8
+	.short DSP_SetCoeff_MasterConfig_SlotSourceNameA - DSP_SetCoeff_MasterConfig_CaseBase	; index 9
+	.short DSP_SetCoeff_MasterConfig_SlotPairSourceNameB - DSP_SetCoeff_MasterConfig_CaseBase	; index 10
+	.short DSP_SetCoeff_MasterConfig_CatalogueFooter - DSP_SetCoeff_MasterConfig_CaseBase	; index 11
+	.short DSP_SetCoeff_MasterConfig_ToneOptions - DSP_SetCoeff_MasterConfig_CaseBase	; index 12
+	.short DSP_SetCoeff_MasterConfig_AlgorithmType - DSP_SetCoeff_MasterConfig_CaseBase	; index 13
+	.short DSP_SetCoeff_MasterConfig_DrumSourceName_BySelector - DSP_SetCoeff_MasterConfig_CaseBase	; index 14
+	.short DSP_SetCoeff_MasterConfig_DrumSourceName_ByRow - DSP_SetCoeff_MasterConfig_CaseBase	; index 15
+	.short DSP_SetCoeff_MasterConfig_KitNoteSourceName - DSP_SetCoeff_MasterConfig_CaseBase	; index 16
+	.short DSP_SetCoeff_MasterConfig_PercSourceName_ByRow - DSP_SetCoeff_MasterConfig_CaseBase	; index 17
+	.short DSP_SetCoeff_MasterConfig_SubToneLayerSourceName - DSP_SetCoeff_MasterConfig_CaseBase	; index 18
+	.short DSP_SetCoeff_MasterConfig_SubToneLayerPairSourceName - DSP_SetCoeff_MasterConfig_CaseBase	; index 19
 	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 20
 	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 21
 	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 22
-	.short DSP_SetCoeff_MasterConfig_Case23 - DSP_SetCoeff_MasterConfig_CaseBase	; index 23
+	.short DSP_SetCoeff_MasterConfig_PartModeBytes - DSP_SetCoeff_MasterConfig_CaseBase	; index 23
 
 ; --- 0x00FB1E-0x00FB2D  VOICEPARAM_FINALIZE_QUERY_JUMPTABLE -- 8 u16 jump offsets, base 0x031B5B
 ; Computed jump in VoiceParamFinalize_SecondaryDispatch (status bit 3 CLEAR -> "queries"): `jp T, 0x031B5B + table[index*2]`.
@@ -1166,13 +1166,13 @@ VOICEPARAM_FINALIZE_QUERY_JUMPTABLE:
 ; Computed jump in Voice_ParamFinalize (status bit 3 SET -> "actions"): `jp T, 0x031AA1 + table[index*2]`.
 VOICEPARAM_FINALIZE_ACTION_JUMPTABLE:
 	.short ToneCmd_DispatchTable_Body - ToneCmd_DispatchTable_Body	; index 0
-	.short VoiceParam_Action_Case1 - ToneCmd_DispatchTable_Body	; index 1
-	.short VoiceParam_Action_Case2 - ToneCmd_DispatchTable_Body	; index 2
-	.short VoiceParam_Action_Case3 - ToneCmd_DispatchTable_Body	; index 3
-	.short VoiceParam_Action_Case4 - ToneCmd_DispatchTable_Body	; index 4
-	.short VoiceParam_Action_Case5 - ToneCmd_DispatchTable_Body	; index 5
-	.short VoiceParam_Action_Case6 - ToneCmd_DispatchTable_Body	; index 6
-	.short VoiceParam_Action_Case7 - ToneCmd_DispatchTable_Body	; index 7
+	.short VoiceParam_Action_EffectParam - ToneCmd_DispatchTable_Body	; index 1
+	.short VoiceParam_Action_Partial0Or1Param - ToneCmd_DispatchTable_Body	; index 2
+	.short VoiceParam_Action_Partial2Or3Param - ToneCmd_DispatchTable_Body	; index 3
+	.short VoiceParam_Action_VelSplitParam - ToneCmd_DispatchTable_Body	; index 4
+	.short VoiceParam_Action_PatchByteEcho - ToneCmd_DispatchTable_Body	; index 5
+	.short VoiceParam_Action_SubToneByteReply - ToneCmd_DispatchTable_Body	; index 6
+	.short VoiceParam_Action_SubToneLayerByteReply - ToneCmd_DispatchTable_Body	; index 7
 
 ; --- 0x00FB3E-0x00FB4D  VoiceParamFinalize_HandlerParams -- 16 bytes, UNREFERENCED
 ; No direct code reference located. Sits between the two VoiceParamFinalize

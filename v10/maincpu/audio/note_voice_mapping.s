@@ -22360,7 +22360,8 @@ MidiSysMsg_Handler_Skip:
 	cp	l, 247
 	jr	nz, MidiSysMsg_Dispatch
 	jrl	Dispatch_InitVal2
-MidiSysMsg_Handler_Case241:
+; MidiSysMsg_Handler_SkipF1Event: Song-stream status 0xF1: one data byte, discarded.
+MidiSysMsg_Handler_SkipF1Event:
 	ld	iz, 0:i3
 	cp	iz, 1:i3
 	jrl	ge, Dispatch_InitVal2
@@ -22375,10 +22376,14 @@ MidiSysMsg_Handler_Skip2:
 	cp	iz, 1:i3
 	jr	lt, MidiSysMsg_Handler_Loop
 	jrl	Dispatch_InitVal2
-MidiSysMsg_Handler_Case242:
+; MidiSysMsg_Handler_OnF2EndOfTrack: Song-stream status 0xF2: end of the track (returns 0xFFFD, as the SMF reader does
+;   for meta 0x2F).
+MidiSysMsg_Handler_OnF2EndOfTrack:
 	ldw	hl, 0xfffd
 	jrl	Dispatch_Epilogue
-MidiSysMsg_Handler_Case243:
+; MidiSysMsg_Handler_OnF3ShortDeltaTime: Song-stream status 0xF3: one-byte (7-bit) delta-time added to the event time
+;   0xE9E7.
+MidiSysMsg_Handler_OnF3ShortDeltaTime:
 	ld	iz, 0:i3
 	cp	iz, 1:i3
 	jr	ge, MidiSysMsg_Handler_Skip4
@@ -22402,7 +22407,9 @@ MidiSysMsg_Handler_Skip4:
 	calr	Dispatch_Data
 	add	(0xe9e7:16), xhl
 	jrl	Dispatch_InitVal2
-MidiSysMsg_Handler_Case244:
+; MidiSysMsg_Handler_OnF4LongDeltaTime: Song-stream status 0xF4: two-byte (14-bit) delta-time added to the event time
+;   0xE9E7.
+MidiSysMsg_Handler_OnF4LongDeltaTime:
 	ld	iz, 0:i3
 	cp	iz, 2:i3
 	jr	ge, MidiSysMsg_Handler_Skip6
@@ -22426,7 +22433,8 @@ MidiSysMsg_Handler_Skip6:
 	calr	Dispatch_Data
 	add	(0xe9e7:16), xhl
 	jrl	Dispatch_InitVal2
-MidiSysMsg_Handler_Case249:
+; MidiSysMsg_Handler_SkipF9Event: Song-stream status 0xF9: two data bytes, discarded.
+MidiSysMsg_Handler_SkipF9Event:
 	ld	iz, 0:i3
 	cp	iz, 2:i3
 	jrl	ge, Dispatch_InitVal2
@@ -22441,7 +22449,9 @@ MidiSysMsg_Handler_Skip7:
 	cp	iz, 2:i3
 	jr	lt, MidiSysMsg_Handler_Loop4
 	jrl	Dispatch_InitVal2
-MidiSysMsg_Handler_Case251:
+; MidiSysMsg_Handler_OnFBTempo: Song-stream status 0xFB: tempo (14-bit value * (0xE9EB) / 1000, clamped to 40..300),
+;   then SeqTimer_UpdateTempoReg.
+MidiSysMsg_Handler_OnFBTempo:
 	ld	iz, 0:i3
 	cp	iz, 2:i3
 	jr	ge, MidiSysMsg_Handler_Skip9
@@ -22462,7 +22472,8 @@ MidiSysMsg_Handler_Skip9:
 	lda	xwa, (xsp+4)
 	calr	MidiSysMsg_Handler_Helper
 	jr	Dispatch_InitVal2
-MidiSysMsg_Handler_Case254:
+; MidiSysMsg_Handler_SkipFEEvent: Song-stream status 0xFE: two data bytes, discarded.
+MidiSysMsg_Handler_SkipFEEvent:
 	ld	iz, 0:i3
 	cp	iz, 2:i3
 	jr	ge, Dispatch_InitVal2

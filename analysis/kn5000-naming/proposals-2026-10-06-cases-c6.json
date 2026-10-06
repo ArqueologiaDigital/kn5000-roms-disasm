@@ -1,0 +1,443 @@
+[
+ {
+  "old": "HDAE5000_AcHddNamingWindowProc_Case1",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AcHddNamingWindowProc_OnPositionLeft",
+  "header": "index switch 1, the left key under POSITION: move the name cursor one place left (auto-repeats)",
+  "basis": "switch value meaning (index of the AcIndexEditSw that sent EVT_INDEXSW_*) + on-screen key + body",
+  "evidence": [
+   "hd-ae5000_v2_06i.s:2228 `ld (xsp + 0x28), xde` -- the event PARAM is saved at (xsp+0x28)",
+   "hd-ae5000_v2_06i.s:2246 `cp xwa, EVT_INDEXSW_DOWN` -- EVT_INDEXSW_DOWN/_DOWN_AIC/_UP/_UP_AIC (2246-2252) all reach the switch",
+   "hd-ae5000_v2_06i.s:2658 `ld xwa, (xsp + 0x28)` -- the switched value is that PARAM, `dec 1,xwa` / `cp xwa,8`: values 1..9",
+   "../v10/maincpu/ui/ui_widget_defs.s:3703 `ld xbc, EVT_GET_INDEX` -- AcIndexEditSwProc (class 0x0160001F, the HD-AE5000 records' class) asks its own index on EVT_SW_IN",
+   "../v10/maincpu/ui/ui_widget_defs.s:3743 `ld de, (xsp+4)` -- ... and sends that index as the PARAM of EVT_INDEXSW_DOWN (3749, raw switch code bit 7 set) / EVT_INDEXSW_UP (3753)",
+   "shared/event_codes.s:272 `.equ EVT_GET_INDEX` -- 'Returns the box's index field (VwBox +26 word)'; ../v10/maincpu/ui_widgets/naka_effects_seq.c:243 `uint16_t index; /* +26 A */` of naka_cls_AcIndexEditSw_t",
+   "hdae5000_data_tables.s:5686 `.short 0x0007, 0x00c9, 0x0001, ...` -- child #439 of HddNamingWindow, box 4,216-35,238: +0x1A index = 1; #441 caption \"POSITION\" (5709, box 6,201-73,219) spans keys 1 and 2",
+   "hdae5000_data_tables.s:5696/5735/5745/5755/5620/5598/5664/5642 -- index 2 (x 44), 3 (x 204), 4 (x 244), 5 (x 284), 6 = \"INS\" (left, 5633), 7 = \"DEL\" (left, 5611), 8 = \"~8d ~8b\" (right, 5677), 9 = \"CLR\" (right, 5655)",
+   "hd-ae5000_v2_06i.s:2392 `ld xhl, (xbc + RootFn_SetDialUp)` -- the dial is bound as EVT_INDEXSW_UP param 5 (2394) and EVT_INDEXSW_DOWN param 3 (2401)",
+   "hd-ae5000_v2_06i.s:2670 `cpw (0x22A028:24), 0` / 2672 `decw 1, (0x22A028:24)` -- cursor position 0x22A028 decremented, then EVT_SET_CURSOR; 2686 SetAutoInc"
+  ]
+ },
+ {
+  "old": "HDAE5000_AcHddNamingWindowProc_Case2",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AcHddNamingWindowProc_OnPositionRight",
+  "header": "index switch 2, the right key under POSITION: move the name cursor one place right, below the name length 0x22A026 (auto-repeats)",
+  "basis": "switch value meaning (index of the AcIndexEditSw that sent EVT_INDEXSW_*) + on-screen key + body",
+  "evidence": [
+   "hdae5000_data_tables.s:5696 `.short 0x0007, 0x00c9, 0x0002, ...` -- #440, box 44,216-75,238, index 2",
+   "hd-ae5000_v2_06i.s:2692 `cp wa, (0x22A026:24)` / 2694 `incw 1, (0x22A028:24)` -- cursor +1 while below the length, then EVT_SET_CURSOR"
+  ]
+ },
+ {
+  "old": "HDAE5000_AcHddNamingWindowProc_Case3",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AcHddNamingWindowProc_OnPrevCharacter",
+  "header": "index switch 3 (also the dial-down binding): select the previous character of the page and write it at the cursor",
+  "basis": "switch value meaning (index of the AcIndexEditSw that sent EVT_INDEXSW_*) + on-screen key + body",
+  "evidence": [
+   "hdae5000_data_tables.s:5735 `.short 0x0007, 0x00c9, 0x0003, ...` -- #446, box 204,216-235,238, index 3",
+   "hd-ae5000_v2_06i.s:2401 `ld xde, 3:i3` -- dial down is EVT_INDEXSW_DOWN with param 3",
+   "hd-ae5000_v2_06i.s:2712 `cpw (0x22A02E:24), 0` / 2721 `decw 1, (0x22A02E:24)` -- selected character index -1, its text (ConvertStrings) stored at 0x22A000+cursor, then EVT_PARA_DRAW / EVT_SELE_DRAW"
+  ]
+ },
+ {
+  "old": "HDAE5000_AcHddNamingWindowProc_Case4",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AcHddNamingWindowProc_OnCharacterRowUpDown",
+  "header": "index switch 4: UP moves the character selection one row (13 characters) back, DOWN one row forward, and writes it at the cursor",
+  "basis": "switch value meaning (index of the AcIndexEditSw that sent EVT_INDEXSW_*) + on-screen key + body",
+  "evidence": [
+   "hdae5000_data_tables.s:5745 `.short 0x0007, 0x00c9, 0x0004, ...` -- #447, box 244,216-275,238, index 4",
+   "hd-ae5000_v2_06i.s:2766 `cp xwa, EVT_INDEXSW_DOWN` -- the only case that tests the event: DOWN/_AIC -> .LRF_1c40, UP/_AIC -> 2775",
+   "hd-ae5000_v2_06i.s:2777 `subw (0x22A02E:24), 13` / 2876 `addw (0x22A02E:24), 13` -- one row of the 13-column character grid (EVT_SELE_DRAW draws column i%13, row i/13)"
+  ]
+ },
+ {
+  "old": "HDAE5000_AcHddNamingWindowProc_Case5",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AcHddNamingWindowProc_OnNextCharacter",
+  "header": "index switch 5 (also the dial-up binding): select the next character of the page and write it at the cursor",
+  "basis": "switch value meaning (index of the AcIndexEditSw that sent EVT_INDEXSW_*) + on-screen key + body",
+  "evidence": [
+   "hdae5000_data_tables.s:5755 `.short 0x0007, 0x00c9, 0x0005, ...` -- #448, box 284,216-315,238, index 5",
+   "hd-ae5000_v2_06i.s:2394 `ld xde, 5:i3` -- dial up is EVT_INDEXSW_UP with param 5",
+   "hd-ae5000_v2_06i.s:2957 `cp wa, (xbc)` -- bounded by the page's last index (HDAE5000_Str_Chr25_AcHddNamingWindowProc), then 2959 `incw 1, (0x22A02E:24)`"
+  ]
+ },
+ {
+  "old": "HDAE5000_AcHddNamingWindowProc_Case6",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AcHddNamingWindowProc_OnInsert",
+  "header": "INS: shift the name right from the cursor and put the fill character (0x22A034) at the cursor",
+  "basis": "switch value meaning (index of the AcIndexEditSw that sent EVT_INDEXSW_*) + on-screen key + body",
+  "evidence": [
+   "hdae5000_data_tables.s:5620 `.short 0x0007, 0x00c1, 0x0006, ...` -- #433, box 8,34-38,51, index 6, caption \"INS\" (5633)",
+   "hd-ae5000_v2_06i.s:3017 `ld iz, (0x22A026:24)` -- copies buf[i-1] to buf[i] from the end down to the cursor, then stores the fill character at the cursor (3041)"
+  ]
+ },
+ {
+  "old": "HDAE5000_AcHddNamingWindowProc_Case7",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AcHddNamingWindowProc_OnDelete",
+  "header": "DEL: shift the name left over the cursor and put the fill character at the end",
+  "basis": "switch value meaning (index of the AcIndexEditSw that sent EVT_INDEXSW_*) + on-screen key + body",
+  "evidence": [
+   "hdae5000_data_tables.s:5598 `.short 0x0007, 0x00c1, 0x0007, ...` -- #431, box 8,76-38,93, index 7, caption \"DEL\" (5611)",
+   "hd-ae5000_v2_06i.s:3062 `ld iz, (0x22A028:24)` -- copies buf[i+1] to buf[i] from the cursor up, then the fill character at length-1 (3086)"
+  ]
+ },
+ {
+  "old": "HDAE5000_AcHddNamingWindowProc_Case8",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AcHddNamingWindowProc_OnCenterName",
+  "header": "centre the name: count leading and trailing fill characters and re-pad the trimmed text with half of them on each side",
+  "basis": "switch value meaning (index of the AcIndexEditSw that sent EVT_INDEXSW_*) + on-screen key + body",
+  "evidence": [
+   "hdae5000_data_tables.s:5664 `.short 0x0007, 0x00c1, 0x0008, ...` -- #437, box 281,76-311,93, index 8, caption \"~8d ~8b\" (5677)",
+   "hd-ae5000_v2_06i.s:3107 `ldw (xsp + 0x04), 0` -- counts leading fill chars into (xsp+4), trailing ones into (xsp+6); all fill -> nothing",
+   "hd-ae5000_v2_06i.s:3152 `srlw_rid8 xsp, 0x08` -- half = (lead+trail)/2; the trimmed text is copied to 0x22A000+half and both ends are re-filled"
+  ]
+ },
+ {
+  "old": "HDAE5000_AcHddNamingWindowProc_Case9",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AcHddNamingWindowProc_OnClear",
+  "header": "CLR: fill the whole name with the fill character and put the cursor at 0",
+  "basis": "switch value meaning (index of the AcIndexEditSw that sent EVT_INDEXSW_*) + on-screen key + body",
+  "evidence": [
+   "hdae5000_data_tables.s:5642 `.short 0x0007, 0x00c1, 0x0009, ...` -- #435, box 281,34-311,51, index 9, caption \"CLR\" (5655)",
+   "hd-ae5000_v2_06i.s:3241 `ld iz, 0:i3` -- loop stores the fill character (0x22A034) over all 0x22A026 positions, then EVT_SET_CURSOR 0"
+  ]
+ },
+ {
+  "old": "HDAE5000_Lbn_ShowEntry_Case0",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Lbn_ShowEntry_NoDigitTyped",
+  "header": "blank the directory number, directory name, song number and song name fields",
+  "basis": "switch value meaning (load-by-number digit position = digits typed so far; 6 = reset) + body",
+  "evidence": [
+   "hdae5000_filesystem.s:15 `ld wa, de` / 16 `cp wa, 6:i3` -- the switched value is argument DE, 0..6",
+   "hdae5000_hd_driver.s:6111 `calr HDAE5000_Lbn_ShowEntry` -- Lbn_TypeDigit calls it with DE = HDAE5000_RAM_LbnDigitPos after setting it to 1 (6106), 2 (6120), 3 (6132), 4 (6146), 5 (6158)",
+   "hdae5000_hd_driver.s:6103 `mul wa, 0x0064` -- digit 1 is the directory hundreds (6118 tens x10, 6131 units), digit 4 the song tens (6144), digit 5 the song units (6157)",
+   "hdae5000_hd_driver.s:5863 `ld de, 6:i3` -- 6 is passed by the CLEAR key and after a load / on init (259, 688, 6050, 6230, hdae5000_ui_display.s:888), always with WA = BC = 0",
+   "hdae5000_filesystem.s:25 `lda xwa, (HDAE5000_Str_Blank3Tab:24)` -- blank strings copied into 0x22AA62/68/7A/80"
+  ]
+ },
+ {
+  "old": "HDAE5000_Lbn_ShowEntry_Case1",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Lbn_ShowEntry_DirHundredsTyped",
+  "header": "show the directory number's first digit (dir/100, %1.1d)",
+  "basis": "switch value meaning (load-by-number digit position = digits typed so far; 6 = reset) + body",
+  "evidence": [
+   "hdae5000_filesystem.s:54 `div wa, 0x0064` -- dir/100 printed with HDAE5000_Fmt_1_1d (56) into 0x22AA62"
+  ]
+ },
+ {
+  "old": "HDAE5000_Lbn_ShowEntry_Case2",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Lbn_ShowEntry_DirTensTyped",
+  "header": "show the directory number's first two digits (dir/10, %2.2d)",
+  "basis": "switch value meaning (load-by-number digit position = digits typed so far; 6 = reset) + body",
+  "evidence": [
+   "hdae5000_filesystem.s:75 `div wa, 0x000a` -- dir/10 printed with \"%2.2d\" (77)"
+  ]
+ },
+ {
+  "old": "HDAE5000_Lbn_ShowEntry_Case3",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Lbn_ShowEntry_DirUnitsTyped",
+  "header": "show the 3-digit directory number and, for 1..120, the directory name; otherwise return -1",
+  "basis": "switch value meaning (load-by-number digit position = digits typed so far; 6 = reset) + body",
+  "evidence": [
+   "hdae5000_filesystem.s:94 `pushw iz` -- full dir printed with \"%3.3d\" (95)",
+   "hdae5000_filesystem.s:112 `cp iz, 0x0078` / 117 `call HDAE5000_DirName_Address` -- name of directory dir-1 copied to 0x22AA68; 125 `ldw (xsp + 0x02), 65535` otherwise"
+  ]
+ },
+ {
+  "old": "HDAE5000_Lbn_ShowEntry_Case4",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Lbn_ShowEntry_SongTensTyped",
+  "header": "show the song number's first digit (song/10, \" %1.1d\")",
+  "basis": "switch value meaning (load-by-number digit position = digits typed so far; 6 = reset) + body",
+  "evidence": [
+   "hdae5000_filesystem.s:130 `div wa, 0x000a` -- song (xsp+36) /10 printed with \" %1.1d\" (132) into 0x22AA7A"
+  ]
+ },
+ {
+  "old": "HDAE5000_Lbn_ShowEntry_Case5",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Lbn_ShowEntry_SongUnitsTyped",
+  "header": "show the 2-digit song number and, for directory 1..120 and song 1..16, the song name; otherwise return -2 (bad song) or -1",
+  "basis": "switch value meaning (load-by-number digit position = digits typed so far; 6 = reset) + body",
+  "evidence": [
+   "hdae5000_filesystem.s:149 `pushm (xsp+36)` -- full song printed with \" %2.2d\" (150)",
+   "hdae5000_filesystem.s:171 `cpw (xsp+36), 0x0010` / 178 `call HDAE5000_SongRecord_Address` -- song name to 0x22AA80; 186 `ldw (xsp + 0x02), 65534`, 189 65535"
+  ]
+ },
+ {
+  "old": "HDAE5000_Lbn_ShowEntry_Case6",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Lbn_ShowEntry_Reset",
+  "header": "blank the fields, zero LbnDir/LbnSong/LbnDigitPos and rebuild LBN_OPTION with no song",
+  "basis": "switch value meaning (load-by-number digit position = digits typed so far; 6 = reset) + body",
+  "evidence": [
+   "hdae5000_filesystem.s:193 `lda xwa, (HDAE5000_Str_Blank3Tab:24)` -- same blanking as position 0, then `ldw (HDAE5000_RAM_LbnDir:24), 0`, LbnSong, LbnDigitPos = 0 and HDAE5000_PartList_Build(LBN_OPTION, 0xffff...)",
+   "hdae5000_hd_driver.s:5863 `ld de, 6:i3` -- the CLEAR key's call (LBNPage1SwCatch value 12)"
+  ]
+ },
+ {
+  "old": "HDAE5000_AttenHDFormatSwCatch_Case0",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AttenHDFormatSwCatch_OnCodeDigit0Or1",
+  "header": "edit switch 0 (no caption on ATTEN_HD_FORMAT): append code digit 0 (switch code bit 7 set) or 1",
+  "basis": "switch value meaning (edit-switch id from MT_MakeEditSwID of the EVT_SW_IN code) + on-screen key + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5359 `ld xiz, xde` -- IZ = event param",
+   "hdae5000_hd_driver.s:5364 `cp xwa, EVT_SW_IN` -- the switch is reached on a panel switch press",
+   "hdae5000_hd_driver.s:5405 `ld xwa, 0x02600024` / 5406 `ld xbc, EVT_MAKE_EDIT_SW_ID` -- the switched value is the edit-switch id of the pressed switch, bound `cp xwa, 7` (5409)",
+   "shared/event_codes.s:232 `.equ EVT_MAKE_EDIT_SW_ID` -- sent to the EditSwID type object 0x02600024 with a raw panel switch code, returns the edit-switch id",
+   "../v10/maincpu/ui/ui_widget_defs.s:14540 `EditSwIDProc_OnMakeEditSwId:` -- codes 0x80-0x87 -> 0-7 (sub 0x80), 0x90 -> 0x10, any other code returned unchanged; so 0-7 are the two halves (bit 7) of eight switches",
+   "hdae5000_data_tables.s:5686/5696/5735/5745/5755 `+0x24 editsw = 0,1,5,6,7` -- the naming window's bottom AcIndexEditSw keys at x = 4, 44, 204, 244, 284: edit switch n sits at x = 4 + 40n under the display, 0 = leftmost (../v10/maincpu/ui_widgets/naka_effects_seq.c:247 `uint16_t editsw; /* +36 e */`)",
+   "hdae5000_hd_driver.s:5292 `; (Not CHS: the digits typed on the HD-format attention dialog ...` -- FormatDialog_CodeDigit appends the digit at 0x22AD9E and after six compares with \"050354\" / \"965768\" (the HD-format unlock codes)",
+   "hdae5000_hd_driver.s:5418 `bit 0x07, iz` -- raw switch code bit 7 set -> digit 0 (5420), clear -> 1, passed to HDAE5000_FormatDialog_CodeDigit"
+  ]
+ },
+ {
+  "old": "HDAE5000_AttenHDFormatSwCatch_Case1",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AttenHDFormatSwCatch_OnCodeDigit2Or3",
+  "header": "edit switch 1 (no caption on ATTEN_HD_FORMAT): append code digit 2 (switch code bit 7 set) or 3",
+  "basis": "switch value meaning (edit-switch id from MT_MakeEditSwID of the EVT_SW_IN code) + on-screen key + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5430 `bit 0x07, iz` -- raw switch code bit 7 set -> digit 2 (5432), clear -> 3, passed to HDAE5000_FormatDialog_CodeDigit"
+  ]
+ },
+ {
+  "old": "HDAE5000_AttenHDFormatSwCatch_Case2",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AttenHDFormatSwCatch_OnCodeDigit4Or5",
+  "header": "edit switch 2 (no caption on ATTEN_HD_FORMAT): append code digit 4 (switch code bit 7 set) or 5",
+  "basis": "switch value meaning (edit-switch id from MT_MakeEditSwID of the EVT_SW_IN code) + on-screen key + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5442 `bit 0x07, iz` -- raw switch code bit 7 set -> digit 4 (5444), clear -> 5, passed to HDAE5000_FormatDialog_CodeDigit"
+  ]
+ },
+ {
+  "old": "HDAE5000_AttenHDFormatSwCatch_Case3",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AttenHDFormatSwCatch_OnCodeDigit6Or7",
+  "header": "edit switch 3 (no caption on ATTEN_HD_FORMAT): append code digit 6 (switch code bit 7 set) or 7",
+  "basis": "switch value meaning (edit-switch id from MT_MakeEditSwID of the EVT_SW_IN code) + on-screen key + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5454 `bit 0x07, iz` -- raw switch code bit 7 set -> digit 6 (5456), clear -> 7, passed to HDAE5000_FormatDialog_CodeDigit"
+  ]
+ },
+ {
+  "old": "HDAE5000_AttenHDFormatSwCatch_Case4",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AttenHDFormatSwCatch_OnCodeDigit8Or9",
+  "header": "edit switch 4 (no caption on ATTEN_HD_FORMAT): append code digit 8 (switch code bit 7 set) or 9",
+  "basis": "switch value meaning (edit-switch id from MT_MakeEditSwID of the EVT_SW_IN code) + on-screen key + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5466 `bit 0x07, iz` -- raw switch code bit 7 set -> digit 8 (5468), clear -> 9, passed to HDAE5000_FormatDialog_CodeDigit"
+  ]
+ },
+ {
+  "old": "HDAE5000_AttenHDFormatSwCatch_Case6",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_AttenHDFormatSwCatch_OnCancel",
+  "header": "edit switches 6 and 7, the CANCEL key: clear the code buffer and show SETUPS_TOOLS",
+  "basis": "switch value meaning (edit-switch id from MT_MakeEditSwID of the EVT_SW_IN code) + on-screen key + body",
+  "evidence": [
+   "hdae5000_data_tables.s:14117 `.short HDAE5000_AttenHDFormatSwCatch_Case6 - ...` -- values 6 and 7 (14118) share this case; 5 is the default",
+   "hdae5000_data_tables.s:6881 `.short 0x0007, 0x00c0, 0xffff, ... 0x0006` -- #545 under ATTEN_HD_FORMAT, box 244,216-315,238 (edit switches 6 and 7), caption \"CANCEL\" (6885)",
+   "hdae5000_hd_driver.s:5480 `lda xwa, (0x22ad9c:24)` / 5482 `call HDAE5000_MemFill` -- clears the digit buffer; 5487 `ld xwa, HDAE5000_OBJ_SETUPS_TOOLS` + EVT_SHOW"
+  ]
+ },
+ {
+  "old": "HDAE5000_Lbn_StepDigit_Case0",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Lbn_StepDigit_NoDigitTyped",
+  "header": "nothing typed yet: no step and no redraw",
+  "basis": "switch value meaning (load-by-number digit position = digits typed so far) + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5677 `ld wa, (HDAE5000_RAM_LbnDigitPos:24)` -- the switched value is the digit position, bound 5",
+   "hdae5000_hd_driver.s:5675 `ld hl, (xsp + 0x06)` -- HL = the step (+1 / -1 from LBNPage1SwCatch, 5871/5874); DE = directory, BC = song",
+   "hdae5000_hd_driver.s:6106 `ldw (HDAE5000_RAM_LbnDigitPos:24), 0x0001` -- Lbn_TypeDigit sets 1 after the directory hundreds digit, 2 tens, 3 units, 4 song tens, 5 song units",
+   "hdae5000_hd_driver.s:5687 `jrl t, .LHD_SR__cleanup` -- returns without storing or redrawing"
+  ]
+ },
+ {
+  "old": "HDAE5000_Lbn_StepDigit_Case1",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Lbn_StepDigit_DirHundreds",
+  "header": "step the directory number by 100, clamped to 0..100",
+  "basis": "switch value meaning (load-by-number digit position = digits typed so far) + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5691 `muls wa, 0x0064` -- DE += step*100; 5693 `cp de, 0x0064` clamp"
+  ]
+ },
+ {
+  "old": "HDAE5000_Lbn_StepDigit_Case2",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Lbn_StepDigit_DirTens",
+  "header": "step the directory number by 10, at most 120 (1 or less becomes 0)",
+  "basis": "switch value meaning (load-by-number digit position = digits typed so far) + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5705 `muls wa, 0x000a` -- DE += step*10; 5707 `cp de, 0x0078`, 5712 `cp de, 1:i3`"
+  ]
+ },
+ {
+  "old": "HDAE5000_Lbn_StepDigit_Case3",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Lbn_StepDigit_DirUnits",
+  "header": "step the directory number by 1, clamped to 1..120",
+  "basis": "switch value meaning (load-by-number digit position = digits typed so far) + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5718 `add de, hl` -- DE += step; 5719 `cp de, 0x0078`, 5724 `cp de, 0:i3`"
+  ]
+ },
+ {
+  "old": "HDAE5000_Lbn_StepDigit_Case4",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Lbn_StepDigit_SongTens",
+  "header": "step the song number by 10, clamped to 0..10",
+  "basis": "switch value meaning (load-by-number digit position = digits typed so far) + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5731 `muls wa, 0x000a` -- BC (song) += step*10; 5733 `cp bc, 0x000a`"
+  ]
+ },
+ {
+  "old": "HDAE5000_Lbn_StepDigit_Case5",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Lbn_StepDigit_SongUnits",
+  "header": "step the song number by 1, clamped to 1..16; the complete number is then looked up (HDAE5000_Song_PartMask)",
+  "basis": "switch value meaning (load-by-number digit position = digits typed so far) + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5744 `add bc, hl` -- BC (song) += step; 5745 `cp bc, 0x0010`",
+   "hdae5000_hd_driver.s:5756 `cpw (HDAE5000_RAM_LbnDigitPos:24), 0x0005` -- only at position 5 is the song looked up and LBN_OPTION rebuilt"
+  ]
+ },
+ {
+  "old": "HDAE5000_LBNPage1SwCatch_Case12",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_LBNPage1SwCatch_OnClear",
+  "header": "edit switch 12, the CLEAR key: reset the load-by-number entry (Lbn_ShowEntry position 6)",
+  "basis": "switch value meaning (edit-switch id from MT_MakeEditSwID of the EVT_SW_IN code) + on-screen key + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5811 `ld (xsp + 0x04), xde` -- event param saved",
+   "hdae5000_hd_driver.s:5815 `cp xwa, EVT_SW_IN` -- reached on a panel switch press",
+   "hdae5000_hd_driver.s:5847 `ld xwa, 0x02600024` / 5848 `ld xbc, EVT_MAKE_EDIT_SW_ID` -- the switched value is the edit-switch id, bound `cp xwa, 0x0000000c` (5851)",
+   "shared/event_codes.s:232 `.equ EVT_MAKE_EDIT_SW_ID` -- sent to the EditSwID type object 0x02600024 with a raw panel switch code, returns the edit-switch id",
+   "../v10/maincpu/ui/ui_widget_defs.s:14540 `EditSwIDProc_OnMakeEditSwId:` -- codes 0x80-0x87 -> 0-7 (sub 0x80), 0x90 -> 0x10, any other code returned unchanged; so 0-7 are the two halves (bit 7) of eight switches",
+   "hdae5000_data_tables.s:5686/5696/5735/5745/5755 `+0x24 editsw = 0,1,5,6,7` -- the naming window's bottom AcIndexEditSw keys at x = 4, 44, 204, 244, 284: edit switch n sits at x = 4 + 40n under the display, 0 = leftmost (../v10/maincpu/ui_widgets/naka_effects_seq.c:247 `uint16_t editsw; /* +36 e */`)",
+   "hdae5000_data_tables.s:14157 `.short HDAE5000_LBNPage1SwCatch_Case12 - ...` -- table entry 12 (this label is also the table base); 8-11 are the default",
+   "hdae5000_data_tables.s:2302 `.short 0x0007, 0x00c0, 0xffff, ... 0x000c` -- #150 under LBN_P1, box 263,203-311,220, editsw 12, child caption \"CLEAR\" (2315)",
+   "hdae5000_hd_driver.s:5863 `ld de, 6:i3` -- Lbn_ShowEntry(0, 0, 6) = reset"
+  ]
+ },
+ {
+  "old": "HDAE5000_LBNPage1SwCatch_Case5",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_LBNPage1SwCatch_OnStepDigit",
+  "header": "edit switches 5-7: step the last typed digit +1 (switch code bit 7 clear) or -1 (set)",
+  "basis": "switch value meaning (edit-switch id from MT_MakeEditSwID of the EVT_SW_IN code) + on-screen key + body",
+  "evidence": [
+   "hdae5000_data_tables.s:14150 `.short HDAE5000_LBNPage1SwCatch_Case5 - ...` -- values 5, 6 and 7 (14151, 14152) share this case",
+   "hdae5000_data_tables.s:2596 `.short 0x0007, 0x00c9, 0xffff, ... 0x0005` -- #173 under LBN_P1, box 204,221-315,239 (edit switches 5..7), +0x26 0x0007 (2597)",
+   "hdae5000_hd_driver.s:5869 `bit 0x07, wa` -- 1 (5871) or 0xffff (5874) pushed, then 5880 `calr HDAE5000_Lbn_StepDigit`"
+  ]
+ },
+ {
+  "old": "HDAE5000_LBNPage1SwCatch_Case0",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_LBNPage1SwCatch_OnDigit0Or1",
+  "header": "edit switch 0: type digit 0 (lower half, switch code bit 7 set) or 1 (upper half)",
+  "basis": "switch value meaning (edit-switch id from MT_MakeEditSwID of the EVT_SW_IN code) + on-screen key + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5885 `bit 0x07, wa` -- raw switch code bit 7 set -> HDAE5000_Lbn_TypeDigit(0), clear -> (1)",
+   "hdae5000_data_tables.s:2401 `.asciz \"0\"` / 2414 `\"1\"` -- LBN_P1 digit captions at x 8: \"0\" in the lower half (y 210-235), \"1\" in the upper (y 179-204) of edit switch 0"
+  ]
+ },
+ {
+  "old": "HDAE5000_LBNPage1SwCatch_Case1",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_LBNPage1SwCatch_OnDigit2Or3",
+  "header": "edit switch 1: type digit 2 (lower half, switch code bit 7 set) or 3 (upper half)",
+  "basis": "switch value meaning (edit-switch id from MT_MakeEditSwID of the EVT_SW_IN code) + on-screen key + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5899 `bit 0x07, wa` -- raw switch code bit 7 set -> HDAE5000_Lbn_TypeDigit(2), clear -> (3)",
+   "hdae5000_data_tables.s:2427 `.asciz \"2\"` / 2440 `\"3\"` -- LBN_P1 digit captions at x 48: \"2\" in the lower half (y 210-235), \"3\" in the upper (y 179-204) of edit switch 1"
+  ]
+ },
+ {
+  "old": "HDAE5000_LBNPage1SwCatch_Case2",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_LBNPage1SwCatch_OnDigit4Or5",
+  "header": "edit switch 2: type digit 4 (lower half, switch code bit 7 set) or 5 (upper half)",
+  "basis": "switch value meaning (edit-switch id from MT_MakeEditSwID of the EVT_SW_IN code) + on-screen key + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5913 `bit 0x07, wa` -- raw switch code bit 7 set -> HDAE5000_Lbn_TypeDigit(4), clear -> (5)",
+   "hdae5000_data_tables.s:2453 `.asciz \"4\"` / 2466 `\"5\"` -- LBN_P1 digit captions at x 88: \"4\" in the lower half (y 210-235), \"5\" in the upper (y 179-204) of edit switch 2"
+  ]
+ },
+ {
+  "old": "HDAE5000_LBNPage1SwCatch_Case3",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_LBNPage1SwCatch_OnDigit6Or7",
+  "header": "edit switch 3: type digit 6 (lower half, switch code bit 7 set) or 7 (upper half)",
+  "basis": "switch value meaning (edit-switch id from MT_MakeEditSwID of the EVT_SW_IN code) + on-screen key + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5927 `bit 0x07, wa` -- raw switch code bit 7 set -> HDAE5000_Lbn_TypeDigit(6), clear -> (7)",
+   "hdae5000_data_tables.s:2479 `.asciz \"6\"` / 2492 `\"7\"` -- LBN_P1 digit captions at x 128: \"6\" in the lower half (y 210-235), \"7\" in the upper (y 179-204) of edit switch 3"
+  ]
+ },
+ {
+  "old": "HDAE5000_LBNPage1SwCatch_Case4",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_LBNPage1SwCatch_OnDigit8Or9",
+  "header": "edit switch 4: type digit 8 (lower half, switch code bit 7 set) or 9 (upper half)",
+  "basis": "switch value meaning (edit-switch id from MT_MakeEditSwID of the EVT_SW_IN code) + on-screen key + body",
+  "evidence": [
+   "hdae5000_hd_driver.s:5941 `bit 0x07, wa` -- raw switch code bit 7 set -> HDAE5000_Lbn_TypeDigit(8), clear -> (9)",
+   "hdae5000_data_tables.s:2505 `.asciz \"8\"` / 2518 `\"9\"` -- LBN_P1 digit captions at x 168: \"8\" in the lower half (y 210-235), \"9\" in the upper (y 179-204) of edit switch 4"
+  ]
+ }
+]

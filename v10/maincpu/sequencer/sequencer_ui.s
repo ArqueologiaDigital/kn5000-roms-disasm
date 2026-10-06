@@ -5858,33 +5858,35 @@ NoteEditBox_EventDispatch1:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_HAKU_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
-NoteEditBox_SetupGrid_Case2:
+NoteEditBox_SetupGrid_DrawPosString:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_POS_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
-NoteEditBox_SetupGrid_Case3:
+NoteEditBox_SetupGrid_DrawNoteString:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_NOTE_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
-NoteEditBox_SetupGrid_Case4:
+NoteEditBox_SetupGrid_DrawVelString:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_VEL_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
-NoteEditBox_SetupGrid_Case5:
+NoteEditBox_SetupGrid_DrawLenString:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_LEN_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
-NoteEditBox_SetupGrid_Case6:	; cases 6, 9
+; NoteEditBox_SetupGrid_DrawIncString: parameters 6 and 9: the increment string (EVT_GET_INC_STRING)
+NoteEditBox_SetupGrid_DrawIncString:	; cases 6, 9
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_INC_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
-NoteEditBox_SetupGrid_Case7:	; cases 7, 8
+; NoteEditBox_SetupGrid_DrawInputLenString: parameters 7 and 8: the input-length string (EVT_GET_INPUT_LEN_STRING)
+NoteEditBox_SetupGrid_DrawInputLenString:	; cases 7, 8
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_INPUT_LEN_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
-NoteEditBox_SetupGrid_Case10:
+NoteEditBox_SetupGrid_DrawInputVelString:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_INPUT_VEL_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
@@ -6071,7 +6073,9 @@ NoteEditBox_EventDispatch2_Skip3:
 	pushw	0xfb	; colour pair for DrawString (by value), not a pointer
 	pushw	0xf5
 	jrl	NoteEditBox_EventDispatch2_Join7
-NoteEditBox_GridDispatch2_Case7:
+; NoteEditBox_GridDispatch2_DrawLineAtLinePos: part 7 (note edit only): DrawLine (colour 242) at the x from
+;   EVT_GET_LINE_POS
+NoteEditBox_GridDispatch2_DrawLineAtLinePos:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_LINE_POS
@@ -6092,19 +6096,25 @@ NoteEditBox_GridDispatch2_Case7:
 	ldw	de, 242
 	call	DrawLine
 	jrl	NoteEdit_ReturnZero
-NoteEditBox_GridDispatch2_Case3:
+; NoteEditBox_GridDispatch2_DrawNtBitmap: part 3 (note edit): EVT_DRAW to object 0x950014 = TT_SQNOTEEDT viewable 20,
+;   NakaWidget_NTBitmap
+NoteEditBox_GridDispatch2_DrawNtBitmap:
 	ld	xwa, 0x950014
 	ld	xbc, EVT_DRAW
 	ld	xde, (xsp+90)
 	jr	NoteEditBox_EventDispatch2_Join
-NoteEditBox_GridDispatch2_Case4:
+; NoteEditBox_GridDispatch2_DrawDrBitmap: part 4 (drum edit): EVT_DRAW to object 0x980011 = TT_SQDRMEDT viewable 17,
+;   NakaWidget_DRBitmap
+NoteEditBox_GridDispatch2_DrawDrBitmap:
 	ld	xwa, 0x980011
 	ld	xbc, EVT_DRAW
 	ld	xde, (xsp+90)
 NoteEditBox_EventDispatch2_Join:
 	call	SendEvent
 	jrl	NoteEdit_ReturnZero
-NoteEditBox_GridDispatch2_Case8:
+; NoteEditBox_GridDispatch2_DrawNoteMeasureRuler: part 8 (note edit): 11-column measure/beat ruler -- measure number
+;   where EVT_GET_MEAS_CNG_SV is set, else the beat count
+NoteEditBox_GridDispatch2_DrawNoteMeasureRuler:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_MEAS_TOP_NUM_SV
@@ -6198,7 +6208,9 @@ NoteEditBox_EventDispatch2_Join3:
 	cp_erpb 251, 11
 	jrl c, NoteEditBox_EventDispatch2_Loop
 	jrl	NoteEdit_ReturnZero
-NoteEditBox_GridDispatch2_Case13:
+; NoteEditBox_GridDispatch2_DrawDrumMeasureRuler: part 13 (drum edit): 8-column measure/beat ruler, same scheme as
+;   part 8
+NoteEditBox_GridDispatch2_DrawDrumMeasureRuler:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_MEAS_TOP_NUM_SV
@@ -6292,19 +6304,19 @@ NoteEditBox_EventDispatch2_Join5:
 	cp_erpb 251, 8
 	jrl c, NoteEditBox_EventDispatch2_Loop2
 	jrl	NoteEdit_ReturnZero
-NoteEditBox_GridDispatch2_Case9:
+NoteEditBox_GridDispatch2_DrawNoteBars:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_NOTE_BAR_DISP
 	ld	xde, 0:i3
 	jr	NoteEditBox_EventDispatch2_Join6
-NoteEditBox_GridDispatch2_Case10:
+NoteEditBox_GridDispatch2_DrawNoteBars2:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_NOTE_BAR_DISP2
 	ld	xde, 0:i3
 	jr	NoteEditBox_EventDispatch2_Join6
-NoteEditBox_GridDispatch2_Case12:
+NoteEditBox_GridDispatch2_DrawNoteHilight:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_NOTE_HILIGHT_DISP
@@ -6312,7 +6324,9 @@ NoteEditBox_GridDispatch2_Case12:
 NoteEditBox_EventDispatch2_Join6:
 	call	ApFuncCall
 	jrl	NoteEdit_ReturnZero
-NoteEditBox_GridDispatch2_Case11:
+; NoteEditBox_GridDispatch2_DrawKeyNames: part 11 (note edit): the two key-name labels from EVT_GET_KB1_STR /
+;   EVT_GET_KB2_STR
+NoteEditBox_GridDispatch2_DrawKeyNames:
 	lda	xix, (xsp+28)
 	ldw (xix), 5
 	lda	xbc, (xix+2)
@@ -6410,7 +6424,9 @@ NoteEditBox_EventDispatch2_Loop3:
 NoteEditBox_EventDispatch2_Join7:
 	call	DrawStringLeftJustify
 	jrl	NoteEdit_ReturnZero
-NoteEditBox_GridDispatch2_Case14:
+; NoteEditBox_GridDispatch2_DrawDrumRowNames: part 14 (drum edit): 12 rows of drum note number + instrument name, the
+;   row equal to RAM 0x27A0 highlighted
+NoteEditBox_GridDispatch2_DrawDrumRowNames:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_RAM_ADDRESS
@@ -13774,13 +13790,15 @@ SqplyFunc_GetValueDispatch:
 	ld xhl, 0:i3
 	ld l, (0x02109c:24)
 	jrl SqplyFunc_Epilogue
-SqplyFunc_HandleGetValue_Case3:
+; SqplyFunc_HandleGetValue_MeasureAddr: Field 3 (the measure field of the cycle pages): address of the current measure
+;   word 9832.
+SqplyFunc_HandleGetValue_MeasureAddr:
 	lda xhl, (9832:16)
 	jr SqplyFunc_GetValueReturn
-SqplyFunc_HandleGetValue_Case4:
+SqplyFunc_HandleGetValue_CycleOnOffAddr:
 	lda xhl, (0x28b1:16)
 	jr SqplyFunc_GetValueDone
-SqplyFunc_HandleGetValue_Case5:
+SqplyFunc_HandleGetValue_CycleStartMeasureAddr:
 	call GetTitleNow
 	cp l, 0x82
 	jr nz, SqplyFunc_GetValNonPlay
@@ -13790,7 +13808,7 @@ SqplyFunc_HandleGetValue_Case5:
 SqplyFunc_GetValNonPlay:
 	lda xhl, (9504:16)
 	jr SqplyFunc_GetValueReturn
-SqplyFunc_HandleGetValue_Case6:
+SqplyFunc_HandleGetValue_CycleEndMeasureAddr:
 	call GetTitleNow
 	cp l, 0x82
 	jr nz, SqplyFunc_GetValNonPlay2
@@ -13800,19 +13818,21 @@ SqplyFunc_HandleGetValue_Case6:
 SqplyFunc_GetValNonPlay2:
 	lda xhl, (9506:16)
 	jr SqplyFunc_GetValueReturn
-SqplyFunc_HandleGetValue_Case7:
+; SqplyFunc_HandleGetValue_PunchMeasureAddr: Field 7 (the measure field of the punch pages): address of word 9964,
+;   which the punch start code sets with the current measure.
+SqplyFunc_HandleGetValue_PunchMeasureAddr:
 	lda xhl, (9964:16)
 	jr SqplyFunc_GetValueReturn
-SqplyFunc_HandleGetValue_Case8:
+SqplyFunc_HandleGetValue_PunchInMeasureAddr:
 	lda xhl, (0xf238:16)
 	jr SqplyFunc_GetValueReturn
-SqplyFunc_HandleGetValue_Case9:
+SqplyFunc_HandleGetValue_PunchOutMeasureAddr:
 	lda xhl, (0xf23a:16)
 	jr SqplyFunc_GetValueReturn
-SqplyFunc_HandleGetValue_Case10:
+SqplyFunc_HandleGetValue_PunchCountInAddr:
 	lda xhl, (0xf23f:16)
 	jr SqplyFunc_GetValueReturn
-SqplyFunc_HandleGetValue_Case11:
+SqplyFunc_HandleGetValue_SoloOnOffAddr:
 	lda xhl, (0x283a:16)
 
 SqplyFunc_GetValueDone:
@@ -14875,7 +14895,9 @@ SeqFmt_Field_LoadB:
 SeqFmt_Field_LoadC:
 	lda xhl, (0x2878:16)
 	jrl SqedtFunc_Epilogue
-SqedtFunc_StateChainB_Case159:
+; SqedtFunc_StateChainB_OnSqNoteCng: EVT_GET_RAM_ADDRESS on title 0x9F TT_SQNOTECNG: parameter 1 -> 0x2610, 2 ->
+;   0x2612, 10 -> 0x2616, 11 -> 0x2658, others -> 0x260E
+SqedtFunc_StateChainB_OnSqNoteCng:
 	cp xiz, 0xb
 	jr z, SeqFmt_Field_LoadF
 	cp xiz, 0xa
@@ -14902,7 +14924,9 @@ SeqFmt_Field_LoadF:
 SeqFmt_Field_LoadG:
 	lda xhl, (9742:16)
 	jrl SqedtFunc_Epilogue
-SqedtFunc_StateChainB_Case157:
+; SqedtFunc_StateChainB_OnSqTrns: EVT_GET_RAM_ADDRESS on title 0x9D TT_SQTRNS: parameter 1 -> 0x261E, 2 -> 0x2620, 4
+;   -> 0x2622, others -> 0x261C
+SqedtFunc_StateChainB_OnSqTrns:
 	cp xiz, 0x4
 	jr z, SeqFmt_Field_LoadI
 	cp xiz, 0x2
@@ -14923,7 +14947,9 @@ SeqFmt_Field_LoadI:
 SeqFmt_Field_LoadJ:
 	lda xhl, (9756:16)
 	jrl SqedtFunc_Epilogue
-SqedtFunc_StateChainB_Case163:
+; SqedtFunc_StateChainB_OnSqMdel: EVT_GET_RAM_ADDRESS on title 0xA3 TT_SQMDEL: parameter 1 -> 0xF1D7, 2 -> 0x262C,
+;   others -> 0xF1D6
+SqedtFunc_StateChainB_OnSqMdel:
 	cp xiz, 0x2
 	jr z, SeqFmt_Field_LoadK
 	cp xiz, 0x1
@@ -14938,7 +14964,9 @@ SeqFmt_Field_LoadK:
 SeqFmt_Field_LoadL:
 	lda xhl, (0xf1d6:16)
 	jrl SqedtFunc_Epilogue
-SqedtFunc_StateChainB_Case161:
+; SqedtFunc_StateChainB_OnSqMers: EVT_GET_RAM_ADDRESS on title 0xA1 TT_SQMERS: parameter 1 -> 0xF1DC, 2 -> 0x2626, 6
+;   -> 0xF1E0, others -> 0xF1DB
+SqedtFunc_StateChainB_OnSqMers:
 	cp xiz, 0x6
 	jr z, SeqFmt_Field_LoadN
 	cp xiz, 0x2
@@ -14959,7 +14987,9 @@ SeqFmt_Field_LoadN:
 SeqFmt_Field_LoadO:
 	lda xhl, (0xf1db:16)
 	jrl SqedtFunc_Epilogue
-SqedtFunc_StateChainB_Case156:
+; SqedtFunc_StateChainB_OnSqQtz: EVT_GET_RAM_ADDRESS on title 0x9C TT_SQQTZ: parameter 1 -> 0xF1F2, 2 -> 0x25FC, 7 ->
+;   0xF1F6, 8 -> 0x2600, 9 -> 0x2602, others -> 0xF1F1
+SqedtFunc_StateChainB_OnSqQtz:
 	cp xiz, 0x9
 	jr z, SeqFmt_Field_LoadS
 	cp xiz, 0x8
@@ -14992,7 +15022,9 @@ SeqFmt_Field_LoadS:
 SeqFmt_Field_LoadT:
 	lda xhl, (0xf1f1:16)
 	jrl SqedtFunc_Epilogue
-SqedtFunc_StateChainB_Case158:
+; SqedtFunc_StateChainB_OnSqVeloCng: EVT_GET_RAM_ADDRESS on title 0x9E TT_SQVELOCNG: parameter 1 -> 0xF229, 2 ->
+;   0x25FA, 5 -> 0xF22E, others -> 0xF228
+SqedtFunc_StateChainB_OnSqVeloCng:
 	cp xiz, 0x5
 	jr z, SeqFmt_Field_LoadV
 	cp xiz, 0x2
@@ -15013,7 +15045,9 @@ SeqFmt_Field_LoadV:
 SeqFmt_Field_LoadW:
 	lda xhl, (0xf228:16)
 	jrl SqedtFunc_Epilogue
-SqedtFunc_StateChainB_Case155:
+; SqedtFunc_StateChainB_OnSqTrkMrg: EVT_GET_RAM_ADDRESS on title 0x9B TT_SQTRKMRG: parameter 13 -> 0xF1D4, 14 ->
+;   0xF1D5, others -> 0xF1D3
+SqedtFunc_StateChainB_OnSqTrkMrg:
 	cp xiz, 0xe
 	jr z, SeqFmt_Field_LoadX
 	cp xiz, 0xd
@@ -15028,7 +15062,9 @@ SeqFmt_Field_LoadX:
 SeqFmt_Field_LoadY:
 	lda xhl, (0xf1d3:16)
 	jrl SqedtFunc_Epilogue
-SqedtFunc_StateChainB_Case162:
+; SqedtFunc_StateChainB_OnSqMcp: EVT_GET_RAM_ADDRESS on title 0xA2 TT_SQMCP: parameter 16 -> 0xF1EA, 17 -> 0x2628, 18
+;   -> 0xF1EE, 19 -> 0xF1EF, 20 -> 0x262A, others -> 0xF1E9
+SqedtFunc_StateChainB_OnSqMcp:
 	cp xiz, 0x14
 	jr z, SeqFmt_Field_LoadAC
 	cp xiz, 0x13
@@ -15061,7 +15097,9 @@ SeqFmt_Field_LoadAC:
 SeqFmt_Field_LoadAD:
 	lda xhl, (0xf1e9:16)
 	jrl SqedtFunc_Epilogue
-SqedtFunc_StateChainB_Case164:
+; SqedtFunc_StateChainB_OnSqMins: EVT_GET_RAM_ADDRESS on title 0xA4 TT_SQMINS: parameter 22 -> 0xF1E2, 23 -> 0x262E,
+;   24 -> 0xF1E6, 25 -> 0xF1E7, 26 -> 0x2630, others -> 0xF1E1
+SqedtFunc_StateChainB_OnSqMins:
 	cp xiz, 0x1a
 	jr z, SeqFmt_Field_LoadAH
 	cp xiz, 0x19
@@ -15395,48 +15433,50 @@ DspItem0_TypeChangeHandler:
 DspItem0_TypeDispatch:
 	lda xhl, (0x2976:16)
 	jrl DspItem0_Epilogue
-DspItem0_TypeChangeHandler_Case1:
+; DspItem0_TypeChangeHandler_EffDlt0Addr: EVT_GET_RAM_ADDRESS for effect parameter row 0 (EffDlt0): address of word
+;   0x2978[top item 0x021098 + 0].
+DspItem0_TypeChangeHandler_EffDlt0Addr:
 	sla bc, 1
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jrl DspItem0_Epilogue
-DspItem0_TypeChangeHandler_Case2:
+DspItem0_TypeChangeHandler_EffDlt1Addr:
 	sla wa, 1
 	ld bc, wa
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jrl DspItem0_Epilogue
-DspItem0_TypeChangeHandler_Case3:
+DspItem0_TypeChangeHandler_EffDlt2Addr:
 	ld bc, (xsp + 8)
 	sla bc, 1
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jrl DspItem0_Epilogue
-DspItem0_TypeChangeHandler_Case4:
+DspItem0_TypeChangeHandler_EffDlt3Addr:
 	ld bc, (xsp + 10)
 	add bc, bc
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jr DspItem0_Epilogue
-DspItem0_TypeChangeHandler_Case5:
+DspItem0_TypeChangeHandler_EffDlt4Addr:
 	ld bc, (xsp + 12)
 	add bc, bc
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jr DspItem0_Epilogue
-DspItem0_TypeChangeHandler_Case6:
+DspItem0_TypeChangeHandler_EffDlt5Addr:
 	ld bc, (xsp + 14)
 	add bc, bc
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jr DspItem0_Epilogue
-DspItem0_TypeChangeHandler_Case7:
+DspItem0_TypeChangeHandler_EffDlt6Addr:
 	ld bc, (xsp + 16)
 	add bc, bc
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jr DspItem0_Epilogue
-DspItem0_TypeChangeHandler_Case8:
+DspItem0_TypeChangeHandler_EffDlt7Addr:
 	ld bc, (xsp + 18)
 	add bc, bc
 	ld xwa, (xsp + 4)

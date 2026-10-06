@@ -326,7 +326,7 @@ TitleFunc_LifecycleTable:
 	calr FDTest_PrintDiag
 	call TitleFunc_LifecycleTable_Helper
 	jr TitleFunc_Return
-TitleFunc_LifecycleDispatch_Case1:
+TitleFunc_LifecycleDispatch_OnStopFddTest:
 	ld xwa, EVT_SW_IN
 	push xwa
 	ld xwa, 2:i3
@@ -339,7 +339,7 @@ TitleFunc_LifecycleDispatch_Case1:
 	calr FDTest_PrintDiag
 	ld wa, 0:i3
 	jr TitleFunc_Return
-TitleFunc_LifecycleDispatch_Case2:
+TitleFunc_LifecycleDispatch_OnFddTestLoop:
 	lda xwa, (TitleFunc_LifecycleTable_Data_3:24)
 	calr FDTest_PrintDiag
 	calr RunTestCounters_Entry
@@ -353,22 +353,22 @@ TitleFunc_LifecycleDispatch_Case2:
 	call SetApTimer
 	ld wa, 1:i3
 	jr TitleFunc_Return
-TitleFunc_LifecycleDispatch_Case3:
+TitleFunc_LifecycleDispatch_OnListDirectory:
 	lda xwa, (TitleFunc_LifecycleTable_Data_4:24)
 	calr FDTest_PrintDiag
 	calr FDListDirectory
 	jr TitleFunc_Return
-TitleFunc_LifecycleDispatch_Case4:
+TitleFunc_LifecycleDispatch_OnFormat2dd:
 	lda xwa, (TitleFunc_LifecycleTable_Data_5:24)
 	calr FDTest_PrintDiag
 	calr RegHamaTitle1_Entry
 	jr TitleFunc_Return
-TitleFunc_LifecycleDispatch_Case5:
+TitleFunc_LifecycleDispatch_OnFormat2hd:
 	lda xwa, (TitleFunc_LifecycleTable_Data_6:24)
 	calr FDTest_PrintDiag
 	calr RegHamaTitle2_Entry
 	jr TitleFunc_Return
-TitleFunc_LifecycleDispatch_Case6:
+TitleFunc_LifecycleDispatch_OnListLswFiles:
 	calr ListDir2_Entry
 
 TitleFunc_Return:

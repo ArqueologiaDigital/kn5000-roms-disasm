@@ -11503,7 +11503,7 @@ AcWelcomScreen_RenderBytecode:
 	ld	xbc, EVT_SET_KEEP
 	ld	xde, 0:i3
 	jrl	AcWelcomScreen_DispatchEvent
-AcWelcomScreen_Select_Case2:
+AcWelcomScreen_Select_OpMoveBlit:
 	ld	iz, (xbc+10)
 	cp	iz, 2:i3
 	jrl	ge, AcWelcomScreen_Select_NextStep
@@ -11558,7 +11558,7 @@ AcWelcomScreen_Select_Case3:
 	ld	xde, 0:i3
 	call	SendEvent
 	jrl	AcWelcomScreen_Select_NextStep
-AcWelcomScreen_Select_Case4:
+AcWelcomScreen_Select_OpDrawGlyphC:
 	lda	xix, (xsp+12)
 	ldiw
 	ldiw
@@ -11569,7 +11569,7 @@ AcWelcomScreen_Select_Case4:
 	ld	xbc, AcWelcomScreen_RenderBytecode_Data
 	ldw	de, 16
 	jrl	AcWelcomScreen_RenderBytecode_Join
-AcWelcomScreen_Select_Case5:
+AcWelcomScreen_Select_OpDrawGlyphO:
 	lda	xix, (xsp+12)
 	ldiw
 	ldiw
@@ -11580,7 +11580,7 @@ AcWelcomScreen_Select_Case5:
 	ld	xbc, AcWelcomScreen_RenderBytecode_Data_3
 	ldw	de, 16
 	jrl	AcWelcomScreen_RenderBytecode_Join
-AcWelcomScreen_Select_Case6:
+AcWelcomScreen_Select_OpDrawGlyphL:
 	lda	xix, (xsp+12)
 	ldiw
 	ldiw
@@ -11591,7 +11591,7 @@ AcWelcomScreen_Select_Case6:
 	ld	xbc, Bitmap_DigitL
 	ldw	de, 16
 	jr	AcWelcomScreen_RenderBytecode_Join
-AcWelcomScreen_Select_Case11:
+AcWelcomScreen_Select_OpDrawGlyphU:
 	lda	xix, (xsp+12)
 	ldiw
 	ldiw
@@ -11602,7 +11602,7 @@ AcWelcomScreen_Select_Case11:
 	ld	xbc, Bitmap_DigitD
 	ldw	de, 16
 	jr	AcWelcomScreen_RenderBytecode_Join
-AcWelcomScreen_Select_Case7:
+AcWelcomScreen_Select_OpDrawGlyphR:
 	lda	xix, (xsp+12)
 	ldiw
 	ldiw
@@ -11613,7 +11613,7 @@ AcWelcomScreen_Select_Case7:
 	ld	xbc, Bitmap_DigitR
 	ldw	de, 16
 	jr	AcWelcomScreen_RenderBytecode_Join
-AcWelcomScreen_Select_Case8:
+AcWelcomScreen_Select_OpDrawGlyphsIn:
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
 	ldiw
@@ -11635,7 +11635,7 @@ AcWelcomScreen_Select_Case8:
 AcWelcomScreen_RenderBytecode_Join:
 	call	DrawBitmapSP2
 	jrl	AcWelcomScreen_Select_NextStep
-AcWelcomScreen_Select_Case9:	; cases 9, 12
+AcWelcomScreen_Select_OpDrawColorWord:	; cases 9, 12
 	lda	xhl, (0x03ea24:24)
 	cpw	(xhl+10), 65535
 	jr	z, AcWelcomScreen_RenderBytecode_Skip2
@@ -11790,7 +11790,7 @@ AcWelcomScreen_RenderBytecode_Skip3:
 	ld	bc, 6:i3
 	ldirw
 	jr	AcWelcomScreen_Select_NextStep
-AcWelcomScreen_Select_Case10:
+AcWelcomScreen_Select_OpCaptureLcd:
 	ld	xwa, NAKA_APFUNC_ApTaskControl
 	ld	xbc, EVT_SLEEP_MAIN_TASK
 	ld	xde, 0:i3

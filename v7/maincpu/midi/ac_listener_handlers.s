@@ -1738,7 +1738,7 @@ Data_ParaLoadOptDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
-Data_InOutGridDispatch_Case1:
+Data_InOutGridDispatch_AutoPlayChordInput:
 	ld	xwa, 8449
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
@@ -1754,7 +1754,7 @@ Data_InOutGridDispatch_Case1:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
-Data_InOutGridDispatch_Case2:
+Data_InOutGridDispatch_VelocityInput:
 	ld	xwa, 20480
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
@@ -1824,7 +1824,7 @@ InOutGridCheck_Skip15:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
-Data_InOutGridDispatch_Case3:
+Data_InOutGridDispatch_VelocityOffsetOrFix:
 	ld	xwa, 20480
 	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
@@ -1875,7 +1875,7 @@ InOutGridCheck_Skip17:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
-Data_InOutGridDispatch_Case5:
+Data_InOutGridDispatch_TechniChordOutput:
 	ld	xwa, 8577
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
@@ -1891,7 +1891,7 @@ Data_InOutGridDispatch_Case5:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
-Data_InOutGridDispatch_Case6:
+Data_InOutGridDispatch_TransposeOutput:
 	ld	xwa, 8580
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
@@ -1907,7 +1907,7 @@ Data_InOutGridDispatch_Case6:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jr	InOutGridCheck_Join4	; -> 0xF75DF0
-Data_InOutGridDispatch_Case7:
+Data_InOutGridDispatch_DrumPatternOutput:
 	ld	xwa, 8578
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
@@ -1923,7 +1923,7 @@ Data_InOutGridDispatch_Case7:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jr	InOutGridCheck_Join4	; -> 0xF75DF0
-Data_InOutGridDispatch_Case8:
+Data_InOutGridDispatch_AutoPlayChordOutput:
 	ld	xwa, 8579
 	call	SndParam_LookupReadOnly
 	sla	hl, 2

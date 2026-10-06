@@ -5330,7 +5330,7 @@ FatPath_Next83Component_CheckDotEntry:
 FatPath_Next83Component_Return:
 	pop	xiz
 	ret
-SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper:
+Fat_LookupPath:
 	lda	xsp, (xsp-32)
 	pushw	iz
 	ld	xwa, (xsp+38)
@@ -5731,7 +5731,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper_Epilogue4:
 	popw	iz
 	lda	xsp, (xsp+32)
 	ret
-SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper2:
+Fat_CreateDirEntry:
 	lda	xsp, (xsp-30)
 	push	xiz
 	ld	xiz, (xsp+38)
@@ -6549,7 +6549,7 @@ SeqByteBlock_ChannelContainer_Skip11:
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper
+	calr	Fat_LookupPath
 	inc	8, xsp
 	ld	iz, hl
 	ld	xwa, (xsp+14)
@@ -6563,7 +6563,7 @@ SeqByteBlock_ChannelContainer_Skip11:
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper2
+	calr	Fat_CreateDirEntry
 	inc	8, xsp
 	ld	iz, hl
 	jr	SeqByteBlock_StyleBitmapRef_Code_Join
@@ -7938,7 +7938,7 @@ SeqChan_ByteBlockB:
 SeqChan_ByteBlockC:
 	push	xiz
 	ld	xiz, (xsp+20)
-	call	FDC_ClearDiskChangeStatus_0x12
+	call	FDC_ReadDiskChangeStatus
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockC_Skip
 	call	FDC_ClearDiskChangeStatus
@@ -8418,7 +8418,7 @@ FDC_ClearDiskChangeStatus:
 	ld	a, (0x3e3e4:24)
 	ld	(0x3e3e2:24), a
 	ret
-FDC_ClearDiskChangeStatus_0x12:
+FDC_ReadDiskChangeStatus:
 	ld	hl, (0x3e3e6:24)
 	ret
 

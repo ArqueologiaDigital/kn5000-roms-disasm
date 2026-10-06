@@ -364,7 +364,7 @@ SeqPlay_DataBlock_BBE:
 	jr	ule, SeqPlay_DataBlock_BBE_Skip
 	ldw	(0xf238:16), 998
 SeqPlay_DataBlock_BBE_Skip:
-	calr	SeqPlay_DataBlock_BBE_Helper
+	calr	SeqPlay_UpdateStartFromPunchIn
 	ld	wa, (0xf238:16)
 	cp wa, (62010:16)
 	jr	c, SeqPlay_DataBlock_BBE_Skip2
@@ -381,7 +381,14 @@ SeqAccomp_SubHandlerB_Helper:
 SeqPlay_DataBlock_BBE_Skip3:
 	calr	SeqPlay_DataBlock_BBE_Helper2
 	jrl	SeqAcc_SetupRepeatCount
-SeqPlay_DataBlock_BBE_Helper:
+; SeqPlay_UpdateStartFromPunchIn: After the punch-in measure (0xF238, the "P" in-measure of MT_GetPInMeasString) has
+;   changed, recomputes the playback start measure (words 0x2668 and 0x26EC) as punch-in minus the count in 0xF23F,
+;   first clamping 0xF23F to punch-in - 1 (0x28C3, SeqAcc_UpdateEndPosition); with bit 0 of 0x28B2 set, punch-in 2
+;   instead gives start 0x8002 and 0xF23F = 3, punch-in 3 gives start 1 and 0xF23F = 2, and punch-in 1 leaves both
+;   alone. Basis: callers + body -- SeqPlay_DataBlock_BBE (play-screen case 8) calls it after incrementing 0xF238,
+;   SeqAccomp_SubHandlerA_Helper (case 9, punch-out up) after pulling 0xF238 below 0xF23A;
+;   SeqAcc_StartPlaybackFromPosition does the same subtraction when playback starts.
+SeqPlay_UpdateStartFromPunchIn:
 	bit	0, (10418:16)
 	jr	z, SeqPlay_DataBlock_BBE_Helper_Skip2
 	ldw_d16	wa, (62008)
@@ -457,7 +464,7 @@ SeqPlay_DataBlock_BBE_Join:
 	ret	c
 	dec	1, wa
 	ld	(0xf238:16), wa
-	calr	SeqPlay_DataBlock_BBE_Helper
+	calr	SeqPlay_UpdateStartFromPunchIn
 	calr	SeqAcc_SetupRepeatCount
 	ret
 SeqAccomp_SubHandlerB_Helper2:
@@ -25004,7 +25011,9 @@ MainExe_Handle91:
 MainExe_SongMemoryLoop:
 	calr SoundCtrl_SendCmd_EE
 	jrl MainExe_ReturnZero
-MainExeCall_Case154:
+; MainExeCall_OnTitleSqtrkclr: EXECUTE on TT_SQTRKCLR: calls SeqVoice_InitJmpNop for each track 1-16 whose bit is set
+;   in mask word 9704, drops those bits from 0x2875 and zeroes 9704; with an empty mask it only re-posts the title.
+MainExeCall_OnTitleSqtrkclr:
 	cpw (9704:16), 0
 	jr nz, MainExe_SongMemStart
 	ldw wa, 0x9a
@@ -25047,7 +25056,9 @@ MainExe_SongMemNextPart:
 MainExe_CallSongHandler:
 	calr SoundCtrl_SaveAndSendCmd_EE
 	jrl MainExe_ReturnZero
-MainExeCall_Case155:
+; MainExeCall_OnTitleSqtrkmrg: EXECUTE on TT_SQTRKMRG: merges MrgTrA (0xf1d3) and MrgTrB (0xf1d4) into MrgTrC (0xf1d5)
+;   through SeqPart_Compare and moves the tracks' bits in 0x2875 / 0xffec from A and B to C.
+MainExeCall_OnTitleSqtrkmrg:
 	ldmm8 0x2877, 0xf1d3
 	ldmm8 9858, 0xf1d4
 	ldmm8 9860, 0xf1d5
@@ -25155,7 +25166,9 @@ MainExe_MaskTertiary:
 	and bc, de
 	ld (0x2875:16), bc
 	jrl MainExe_SongMemoryLoop
-MainExeCall_Case156:
+; MainExeCall_OnTitleSqqtz: EXECUTE on TT_SQQTZ: track 0xf1f1 (0x11 = all, passed as 127) from measure 0xf1f2, value
+;   0xf1f6 doubled into 9726, then SeqPart_VelocityEditSetup.
+MainExeCall_OnTitleSqqtz:
 	ld a, (0xf1f1:16)
 	cp a, 0x11
 	jr nz, MainExe_StorePartDirect
@@ -25182,7 +25195,8 @@ MainExe_PatternLoad:
 	jrl nz, MainExe_SongMemoryLoop
 	ldw wa, 0x9c
 	jrl MainExe_CallModeSwitch
-MainExeCall_Case157:
+; MainExeCall_OnTitleSqtrns: EXECUTE on TT_SQTRNS: track 9756 from measure 9758 to 9760, then SeqPart_PartSelect.
+MainExeCall_OnTitleSqtrns:
 	ldmm8 0x2877, 9756
 	ld wa, (9758:16)
 	ld (9778:16), wa
@@ -25195,7 +25209,9 @@ MainExeCall_Case157:
 	jrl nz, MainExe_SongMemoryLoop
 	ldw wa, 0x9d
 	jrl MainExe_CallModeSwitch
-MainExeCall_Case158:
+; MainExeCall_OnTitleSqvelocng: EXECUTE on TT_SQVELOCNG: track 0xf228 from measure 0xf229, velocity amount 0xf22e into
+;   9812, then SeqPart_TransposeSetup (name does not fit).
+MainExeCall_OnTitleSqvelocng:
 	ld a, (0xf228:16)
 	cp a, 0x11
 	jr nz, MainExe_RhythmStorePartDirect
@@ -25220,7 +25236,9 @@ MainExe_RhythmLoad:
 	jrl nz, MainExe_SongMemoryLoop
 	ldw wa, 0x9e
 	jrl MainExe_CallModeSwitch
-MainExeCall_Case159:
+; MainExeCall_OnTitleSqnotecng: EXECUTE on TT_SQNOTECNG: track 9742 from measure 9744 to 9746, then
+;   SeqPart_PartVoiceCheck.
+MainExeCall_OnTitleSqnotecng:
 	ldmm8 0x2877, 9742
 	ld wa, (9744:16)
 	ld (9778:16), wa
@@ -25233,7 +25251,9 @@ MainExeCall_Case159:
 	jrl nz, MainExe_SongMemoryLoop
 	ldw wa, 0x9f
 	jrl MainExe_CallModeSwitch
-MainExeCall_Case160:
+; MainExeCall_OnTitleSqadvdly: EXECUTE on TT_SQADVDLY: track 9732 from measure 9734 to 9736, then
+;   SeqPart_VoiceCheckModeB.
+MainExeCall_OnTitleSqadvdly:
 	ldmm8 0x2877, 9732
 	ld wa, (9734:16)
 	ld (9778:16), wa
@@ -25246,7 +25266,9 @@ MainExeCall_Case160:
 	jrl nz, MainExe_SongMemoryLoop
 	ldw wa, 0xa0
 	jrl MainExe_CallModeSwitch
-MainExeCall_Case161:
+; MainExeCall_OnTitleSqmers: EXECUTE on TT_SQMERS: track 0xf1db from measure 0xf1dc, MERS choice 0xf1e0 into 9808,
+;   then SeqPart_SinglePartLoad.
+MainExeCall_OnTitleSqmers:
 	ld a, (0xf1db:16)
 	cp a, 0x11
 	jr nz, MainExe_AccompStorePartDirect
@@ -25271,7 +25293,9 @@ MainExe_AccompLoad:
 	jrl nz, MainExe_SongMemoryLoop
 	ldw wa, 0xa1
 	jrl MainExe_CallModeSwitch
-MainExeCall_Case162:
+; MainExeCall_OnTitleSqmcp: EXECUTE on TT_SQMCP: source track 0xf1e9 from measure 0xf1ea, destination track 0xf1ee at
+;   measure 0xf1ef, then SeqPart_DualPartLoad (SeqPart_LoadAndValidateData after error 0x23).
+MainExeCall_OnTitleSqmcp:
 	ld wa, (0xf1ea:16)
 	ld (9778:16), wa
 	ldmm16 9862, 0xf1ef
@@ -25352,7 +25376,9 @@ EtmenuTitleFunc_Join:
 	jrl	nz, MainExe_SongMemoryLoop
 	ldw	wa, 163
 	jr	MainExe_CallModeSwitch
-MainExeCall_Case164:
+; MainExeCall_OnTitleSqmins: EXECUTE on TT_SQMINS: track 0xf1e1 from measure 0xf1e2, second track 0xf1e6 at measure
+;   0xf1e7, then SeqPart_ByteBlockA95A (SeqPart_LoadDualPartData after error 0x23).
+MainExeCall_OnTitleSqmins:
 	ld	wa, (0xf1e2:16)
 	ld	(9778:16), wa
 	ldmm16	9862, 61927

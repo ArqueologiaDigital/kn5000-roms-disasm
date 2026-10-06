@@ -1,0 +1,615 @@
+[
+ {
+  "old": "SlotPair_Decode_Case1",
+  "verdict": "name",
+  "new": "ExtVoice_Fold_SlotNumber_Group0Or1_IndexInBank",
+  "header": "Groups 0 and 1 (group 0 falls in from the test above): L = slot & 0x3F, the slot's index inside its 64-slot bank.",
+  "basis": "switch value meaning + body (group id 0..3 from Voice_PolyphonyLimits_Table / sub-slot index; slot banks from Quad_Decode_A_To_L)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:3465 `ExtVoice_Fold_SlotNumber:` -- the owner routine; these case labels kept the prefix of its old name SlotPair_Decode_C_To_L (renamed in 173872caa), so the new names take the current owner name",
+   "kn5000_subprogram_v142.s:3466 `and c, 0x3` -- switched value = C & 3",
+   "subcpu_data_tables.s:371 `; Values 00 00 00 00 01 01 01 01 02 02 02 02 03 00 03 00 01 01 01 01 then 12 x 00 -- a group id` -- Voice_PolyphonyLimits_Table holds a group id 0..3 per part",
+   "kn5000_subprogram_v142.s:4240 `lda xbc, (Voice_PolyphonyLimits_Table:24)` -- ExtVoice_Alloc_StreamSlot: group = table[part & 0x1F] (kept in QWA/FA) ...",
+   "kn5000_subprogram_v142.s:4278 `calr ExtVoice_Fold_SlotNumber` -- ... and passed as C to this routine (WA = the slot number)",
+   "kn5000_subprogram_v142.s:4552 `calr ExtVoice_Fold_SlotNumber` -- Voice_Build_PartSlot_List passes C = i, the index of the byte at +8+i of the 12-byte record -- one slot byte per group",
+   "kn5000_subprogram_v142.s:3442 `cp a, 0x40` -- Quad_Decode_A_To_L: slot numbers come in three 64-slot banks 0x00-0x3F / 0x40-0x7F / 0x80-0xBF (-> 0/4/8)",
+   "kn5000_subprogram_v142.s:3473 `cp c, 0:i3` -- group 0 falls through into this case too (ret nz only for an impossible value)",
+   "kn5000_subprogram_v142.s:3477 `and a, 0x3F` -- groups 0 and 1: L = slot & 0x3F, the index inside one 64-slot bank"
+  ]
+ },
+ {
+  "old": "SlotPair_Decode_Case2",
+  "verdict": "name",
+  "new": "ExtVoice_Fold_SlotNumber_Group2_IndexFromBank1",
+  "header": "Group 2 spans banks 1 and 2: L = (slot - 0x40) & 0x7F.",
+  "basis": "switch value meaning + body (group id 0..3 from Voice_PolyphonyLimits_Table / sub-slot index; slot banks from Quad_Decode_A_To_L)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:3482 `sub a, 0x40` -- group 2: L = (slot - 0x40) & 0x7F, an index over banks 1 and 2 together (0x40-0xBF -> 0..0x7F)",
+   "kn5000_subprogram_v142.s:3484 `res 7, l` -- keeps 7 bits: the 128-slot span of group 2"
+  ]
+ },
+ {
+  "old": "SlotPair_Decode_Case3",
+  "verdict": "name",
+  "new": "ExtVoice_Fold_SlotNumber_Group3_IndexInBank2",
+  "header": "",
+  "basis": "switch value meaning + body (group id 0..3 from Voice_PolyphonyLimits_Table / sub-slot index; slot banks from Quad_Decode_A_To_L)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:3487 `SlotPair_Decode_Case3:` -- group 3",
+   "kn5000_subprogram_v142.s:3488 `ld l, a` -- L = slot & 0x7F: a bank-2 slot 0x80-0xBF folds to 0..0x3F (ExtVoice_Lookup_SlotFallback serves group 3 from the bank-2 column)"
+  ]
+ },
+ {
+  "old": "ExtVoice_Lookup_SlotFallback_Case1",
+  "verdict": "name",
+  "new": "ExtVoice_Lookup_SlotFallback_Group1_Bank1",
+  "header": "",
+  "basis": "switch value meaning + body (group id; row 26 of the 27x27 slot table, columns 0/4/8 = banks)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:4186 `lda xbc, (8459:16)` -- 0x210B = 0x1E4D + 27*26: row 26 of the 27-byte-row slot table at 0x1E4D (7757); rows 0..25 are parts (ExtVoice_Alloc_StreamSlot rejects A >= 0x1A)",
+   "kn5000_subprogram_v142.s:4187 `and wa, 0x3` -- switched value = WA & 3, the group id",
+   "kn5000_subprogram_v142.s:4294 `calr ExtVoice_Lookup_SlotFallback` -- caller passes WA = FA = Voice_PolyphonyLimits_Table[part & 0x1F], the group id",
+   "kn5000_subprogram_v142.s:4170 `calr Quad_Decode_A_To_L` -- at reset every slot 0..0xBF is linked into row 0x1A (26) at column Quad_Decode(slot) = 0/4/8, i.e. one column per 64-slot bank",
+   "kn5000_subprogram_v142.s:4175 `ldw bc, 0x1A` -- row 26 passed to VoiceSlot_UpdateNoteSource with DE = the 0/4/8 column",
+   "kn5000_subprogram_v142.s:4196 `ld l, (xbc)` -- group 0 (inline) reads column 0 = bank 0",
+   "kn5000_subprogram_v142.s:4200 `ld l, (xbc + 4)` -- group 1 reads column 4 = bank 1"
+  ]
+ },
+ {
+  "old": "ExtVoice_Lookup_SlotFallback_Case2",
+  "verdict": "name",
+  "new": "ExtVoice_Lookup_SlotFallback_Group2_Bank2ElseBank1",
+  "header": "Group 2: the bank-2 column, falling back to the bank-1 column when it holds no slot (> 0xC0).",
+  "basis": "switch value meaning + body (group id; row 26 of the 27x27 slot table, columns 0/4/8 = banks)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:4204 `ld l, (xbc + 8)` -- group 2 reads column 8 (bank 2) ...",
+   "kn5000_subprogram_v142.s:4206 `ret ule` -- ... and keeps it when <= 0xC0 ...",
+   "kn5000_subprogram_v142.s:4207 `ld l, (xbc + 4)` -- ... else falls back to column 4 (bank 1) -- group 2 spans banks 1 and 2 (see ExtVoice_Fold_SlotNumber)"
+  ]
+ },
+ {
+  "old": "ExtVoice_Lookup_SlotFallback_Case3",
+  "verdict": "name",
+  "new": "ExtVoice_Lookup_SlotFallback_Group3_Bank2",
+  "header": "",
+  "basis": "switch value meaning + body (group id; row 26 of the 27x27 slot table, columns 0/4/8 = banks)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:4211 `ld l, (xbc + 8)` -- group 3 reads column 8 = bank 2 only"
+  ]
+ },
+ {
+  "old": "TVF_Build_Dispatch_Case1",
+  "verdict": "name",
+  "new": "TVF_Build_Dispatch_Mode1_SingleCutoff",
+  "header": "",
+  "basis": "switch value meaning + body (filter mode (tonerec+0x36)&7; 0 = TVF_Set_Bypass; which of the +0x100/+0x140 words carries a cutoff)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10023 `ld xbc, (xwa + 23)` -- XBC = voice+0x17, the tone/partial record",
+   "kn5000_subprogram_v142.s:10024 `ld c, (xbc + 54)` -- switched value = (tonerec+0x36) ...",
+   "kn5000_subprogram_v142.s:10025 `and c, 0x7` -- ... & 7, range-checked 0..5",
+   "kn5000_subprogram_v142.s:7173 `; FILTER BYPASS: write the neutral pair (XWA+0x42) = 0x017F and (XWA+0x44) = 0x7F7F.` -- mode 0 is TVF_Set_Bypass, 'the filter-mode dispatch table ... selected when (patch+0x36) & 7 == 0'",
+   "kn5000_subprogram_v142.s:10044 `jrl TVF_Build_Full` -- mode 1 -> TVF_Build_Full ('FILTER REGISTER BUILDER, MODE 1 (single cutoff + coefficient)')",
+   "kn5000_subprogram_v142.s:9588 `set 10, de` -- TVF_Build_Full: +0x42 = cutoff | (patch+0x4E)<<13 | bit 10; +0x44 is the bias/depth pair, not a cutoff"
+  ]
+ },
+ {
+  "old": "TVF_Build_Dispatch_Case2",
+  "verdict": "name",
+  "new": "TVF_Build_Dispatch_Mode2_SingleCutoffBit7",
+  "header": "",
+  "basis": "switch value meaning + body (filter mode (tonerec+0x36)&7; 0 = TVF_Set_Bypass; which of the +0x100/+0x140 words carries a cutoff)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10046 `jrl Voice_PitchPack_Mode2` -- mode 2",
+   "kn5000_subprogram_v142.s:9681 `set 7, bc` -- Voice_PitchPack_Mode2: the mode-1 packing with bit 7 forced in the +0x42 word; +0x44 is still the bias/depth pair"
+  ]
+ },
+ {
+  "old": "TVF_Build_Dispatch_Case3",
+  "verdict": "name",
+  "new": "TVF_Build_Dispatch_Mode3_SharedCutoff",
+  "header": "With bit 9 of (voice+0x23)->[2] set, Voice_PitchPack_Mode3 packs like mode 1 instead (cutoff in the +0x100 word only).",
+  "basis": "switch value meaning + body (filter mode (tonerec+0x36)&7; 0 = TVF_Set_Bypass; which of the +0x100/+0x140 words carries a cutoff)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10048 `jrl Voice_PitchPack_Mode3` -- mode 3",
+   "kn5000_subprogram_v142.s:9853 `ld (xwa + 68), iz` -- Voice_PitchPack_Mode3 (bit-9-clear arm): +0x44 = the same cutoff, +0x42 = cutoff | slope<<10 | slope<<13"
+  ]
+ },
+ {
+  "old": "TVF_Build_Dispatch_Case4",
+  "verdict": "name",
+  "new": "TVF_Build_Dispatch_Mode4_SharedCutoffBit7",
+  "header": "",
+  "basis": "switch value meaning + body (filter mode (tonerec+0x36)&7; 0 = TVF_Set_Bypass; which of the +0x100/+0x140 words carries a cutoff)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10050 `jrl Voice_PitchPack_Mode4_Single` -- mode 4",
+   "kn5000_subprogram_v142.s:9919 `set 7, hl` -- Voice_PitchPack_Mode4_Single: +0x44 = the cutoff | bit 7, +0x42 = cutoff | slope<<10 | slope<<13 | bit 7"
+  ]
+ },
+ {
+  "old": "TVF_Build_Dispatch_Case5",
+  "verdict": "name",
+  "new": "TVF_Build_Dispatch_Mode5_DualCutoff",
+  "header": "",
+  "basis": "switch value meaning + body (filter mode (tonerec+0x36)&7; 0 = TVF_Set_Bypass; which of the +0x100/+0x140 words carries a cutoff)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10052 `calr Voice_PitchPack_Mode5_Dual` -- mode 5 (calr, returns through the dispatcher)",
+   "kn5000_subprogram_v142.s:9987 `calr TVF_Calc_Cutoff` -- Voice_PitchPack_Mode5_Finalize calls TVF_Calc_Cutoff twice, from (patch+0x4D) and (patch+0x4F): two independent cutoffs in +0x42 / +0x44"
+  ]
+ },
+ {
+  "old": "TVF_BuildEmit_Short_Case1",
+  "verdict": "name",
+  "new": "TVF_BuildEmit_Short_Mode1_SingleCutoff",
+  "header": "",
+  "basis": "switch value meaning + body (short-set filter mode (tonerec+0x0F)&7, same six modes as (tonerec+0x36)&7)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10263 `ld xwa, (xiz + 23)` -- XWA = voice+0x17, the tone record",
+   "kn5000_subprogram_v142.s:10264 `ld a, (xwa + 15)` -- switched value = (tonerec+0x0F) ...",
+   "kn5000_subprogram_v142.s:10265 `and a, 0x7` -- ... & 7, range-checked 0..5; mode 0 is the inline TVF_Set_Bypass body",
+   "kn5000_subprogram_v142.s:10291 `calr TVF_Build_Short` -- mode 1 -> TVF_Build_Short: +0x42 = cutoff(tonerec+0x11) | (tonerec+0x12)<<13 | bit 10, +0x44 = bias/depth pair"
+  ]
+ },
+ {
+  "old": "TVF_BuildEmit_Short_Case2",
+  "verdict": "name",
+  "new": "TVF_BuildEmit_Short_Mode2_SingleCutoffBit7",
+  "header": "",
+  "basis": "switch value meaning + body (short-set filter mode (tonerec+0x0F)&7, same six modes as (tonerec+0x36)&7)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10295 `calr Voice_PitchPack_RouteB` -- mode 2 -> RouteB: 'Identical to route A except that bit 7 is additionally set in the reg-0x100 word'"
+  ]
+ },
+ {
+  "old": "TVF_BuildEmit_Short_Case3",
+  "verdict": "name",
+  "new": "TVF_BuildEmit_Short_Mode3_SharedCutoff",
+  "header": "",
+  "basis": "switch value meaning + body (short-set filter mode (tonerec+0x0F)&7, same six modes as (tonerec+0x36)&7)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10299 `calr Voice_PitchPack_RouteC` -- mode 3 -> RouteC: +0x44 = the same cutoff value, +0x42 = cutoff | slope<<10 | slope<<13"
+  ]
+ },
+ {
+  "old": "TVF_BuildEmit_Short_Case4",
+  "verdict": "name",
+  "new": "TVF_BuildEmit_Short_Mode4_SharedCutoffBit7",
+  "header": "",
+  "basis": "switch value meaning + body (short-set filter mode (tonerec+0x0F)&7, same six modes as (tonerec+0x36)&7)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10303 `calr Voice_PitchPack_RouteD` -- mode 4 -> RouteD: 'Byte-for-byte route C plus set 7 on BOTH' words"
+  ]
+ },
+ {
+  "old": "TVF_BuildEmit_Short_Case5",
+  "verdict": "name",
+  "new": "TVF_BuildEmit_Short_Mode5_DualCutoff",
+  "header": "",
+  "basis": "switch value meaning + body (short-set filter mode (tonerec+0x0F)&7, same six modes as (tonerec+0x36)&7)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10307 `calr Voice_PitchPack_RouteE` -- mode 5 -> RouteE, 'the two-source variant': cutoffs from tonerec+0x11 and tonerec+0x13"
+  ]
+ },
+ {
+  "old": "TVF_Emit_Registers_Case1",
+  "verdict": "name",
+  "new": "TVF_Emit_Registers_Mode1Or2_OffsetCutoffWord",
+  "header": "Modes 1 and 2 (single cutoff): the part offset is applied to the +0x100 word only.",
+  "basis": "switch value meaning + body (filter mode (tonerec+0x36)&7; the live offset goes to whichever words carry a cutoff)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10429 `ld a, (xwa + 54)` -- switched value = (tonerec+0x36) & 7, the same mode TVF_Build_Dispatch builds from",
+   "subcpu_data_tables.s:628 `.short TVF_Emit_Registers_Case1 - TVF_Emit_Registers_Table ; (tonerec+54)&7 = 2` -- modes 1 and 2 share this body",
+   "kn5000_subprogram_v142.s:10458 `calr TVF_Emit_Offset_Reg100` -- offset applied to the +0x100 (cutoff) word only: in modes 1/2 the +0x140 word is the bias/depth pair"
+  ]
+ },
+ {
+  "old": "TVF_Emit_Registers_Case3",
+  "verdict": "name",
+  "new": "TVF_Emit_Registers_Mode3_OffsetOneOrBothWords",
+  "header": "",
+  "basis": "switch value meaning + body (filter mode (tonerec+0x36)&7; the live offset goes to whichever words carry a cutoff)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10463 `bit 9, wa` -- mode 3: bit 9 set -> TVF_Emit_Offset_Reg100 (Voice_PitchPack_Mode3 built the mode-1 form), clear -> TVF_Emit_Offset_Both (shared cutoff)"
+  ]
+ },
+ {
+  "old": "TVF_Emit_Registers_Case4",
+  "verdict": "name",
+  "new": "TVF_Emit_Registers_Mode4_OffsetBothWords",
+  "header": "",
+  "basis": "switch value meaning + body (filter mode (tonerec+0x36)&7; the live offset goes to whichever words carry a cutoff)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10477 `calr TVF_Emit_Offset_Both` -- mode 4 (shared cutoff): one clamped offset merged into both words"
+  ]
+ },
+ {
+  "old": "TVF_Emit_Registers_Case5",
+  "verdict": "name",
+  "new": "TVF_Emit_Registers_Mode5_OffsetEachWord",
+  "header": "",
+  "basis": "switch value meaning + body (filter mode (tonerec+0x36)&7; the live offset goes to whichever words carry a cutoff)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10492 `and bc, 0x7F` -- mode 5 (dual cutoff): the offset is applied to voice+66 and voice+68 separately ...",
+   "kn5000_subprogram_v142.s:10522 `; Clamps both offsets to 0..120 independently, merges each under 0xFF80 and stores to` -- ... and each is clamped on its own"
+  ]
+ },
+ {
+  "old": "Voice_PanReg_WriteDispatchB_Case1",
+  "verdict": "name",
+  "new": "Voice_PanReg_WriteDispatchB_Mode1Or2_OffsetCutoffWord",
+  "header": "Modes 1 and 2 (single cutoff): the part offset is applied to the +0x100 word only.",
+  "basis": "switch value meaning + body (short-set filter mode (tonerec+0x0F)&7; twin of TVF_Emit_Registers)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10563 `ld a, (xwa + 15)` -- switched value = (tonerec+0x0F) & 7, the short-set mode TVF_BuildEmit_Short_Dispatch builds from",
+   "subcpu_data_tables.s:639 `.short Voice_PanReg_WriteDispatchB_Case1 - Voice_PanReg_WriteDispatchB_Table ; (tonerec+0x0F)&7 = 2` -- modes 1 and 2 share this body",
+   "kn5000_subprogram_v142.s:10585 `calr TVF_Emit_Offset_Reg100` -- offset to the +0x100 (cutoff) word only"
+  ]
+ },
+ {
+  "old": "Voice_PanReg_WriteDispatchB_Case3",
+  "verdict": "name",
+  "new": "Voice_PanReg_WriteDispatchB_Mode3_OffsetOneOrBothWords",
+  "header": "",
+  "basis": "switch value meaning + body (short-set filter mode (tonerec+0x0F)&7; twin of TVF_Emit_Registers)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10590 `bit 9, wa` -- mode 3: bit 9 set -> Reg100 only, clear -> both words"
+  ]
+ },
+ {
+  "old": "Voice_PanReg_WriteDispatchB_Case4",
+  "verdict": "name",
+  "new": "Voice_PanReg_WriteDispatchB_Mode4_OffsetBothWords",
+  "header": "",
+  "basis": "switch value meaning + body (short-set filter mode (tonerec+0x0F)&7; twin of TVF_Emit_Registers)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10604 `calr TVF_Emit_Offset_Both` -- mode 4 (shared cutoff)"
+  ]
+ },
+ {
+  "old": "Voice_PanReg_WriteDispatchB_Case5",
+  "verdict": "name",
+  "new": "Voice_PanReg_WriteDispatchB_Mode5_OffsetEachWord",
+  "header": "",
+  "basis": "switch value meaning + body (short-set filter mode (tonerec+0x0F)&7; twin of TVF_Emit_Registers)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:10619 `and bc, 0x7F` -- mode 5 (dual cutoff): offset applied to voice+66 and voice+68 separately, each clamped"
+  ]
+ },
+ {
+  "old": "VoiceParam_Set_Tone_Option_Case0",
+  "verdict": "name",
+  "new": "VoiceParam_Set_Tone_Option_CutoffOffset",
+  "header": "",
+  "basis": "switch value meaning + body (option index C = which byte of the live option array 0x0451A6+C was written; each case refreshes the per-part byte derived from it and its reader)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:30340 `add de, 472` -- E is stored at 282574 (0x044FCE) + 0x1D8 + C = 0x0451A6 + C ...",
+   "kn5000_subprogram_v142.s:30348 `cp wa, 6:i3` -- ... then C (0..6) is the switched value",
+   "kn5000_subprogram_v142.s:31071 `ld a, (xiz+3)` -- caller Audio_Cmd_ToneEdit_Op0B_Alt: C = command byte +3 (option index), E = +4 (value)",
+   "kn5000_subprogram_v142.s:30359 `call Voice_ActiveFlag_CheckAndLoad` -- option 0 refreshes part+0x67 ...",
+   "kn5000_subprogram_v142.s:40870 `ld a, (0x0451a6:24)` -- ... = (0x0451A6) << 2 (plus the secondary parameter)",
+   "kn5000_subprogram_v142.s:9563 `ld a, (xwa + 103)` -- TVF_Build_Full adds (part+0x67) to the cutoff seed (patch+0x4D) before TVF_Calc_Cutoff",
+   "kn5000_subprogram_v142.s:33703 `; 0x0451A6 << 2 -> slot+0x4D (and slot+0x4F for shape 5), clamped by TVF_Clamp_Cutoff` -- DSP_AdjustVoiceParams applies the same byte to the partial's cutoff field +0x4D"
+  ]
+ },
+ {
+  "old": "VoiceParam_Set_Tone_Option_Case1",
+  "verdict": "name",
+  "new": "VoiceParam_Set_Tone_Option_LfoDepthOffset",
+  "header": "0xF5 is the 'unset' sentinel: Voice_Part_ResetSlotRouting re-derives the slot flags from it and the part+0x68 refresh is skipped.",
+  "basis": "switch value meaning + body (option index C = which byte of the live option array 0x0451A6+C was written; each case refreshes the per-part byte derived from it and its reader); depth = the value Voice_UpdateAllLFO fades in",
+  "evidence": [
+   "kn5000_subprogram_v142.s:30365 `cp (xsp), 245` -- 0xF5 = 'unset' sentinel (also the factory default of this option, DSP_VOICEPARAM_DEFAULT_TABLE)",
+   "kn5000_subprogram_v142.s:30369 `call DSP_SlotParam_Write_Slot0` -- refreshes part+0x68 = (0x0451A7) << 1",
+   "kn5000_subprogram_v142.s:11212 `ld a, (xwa + 104)` -- Voice_OpSlot_WriteParams adds (part+0x68) to the patch slot entry's byte 0 ...",
+   "kn5000_subprogram_v142.s:11222 `ld (xiz + 1), l` -- ... and stores it to +1 of the 9-byte LFO sub-record (0x04424E array): the EGEnv_Compute_A base index",
+   "kn5000_subprogram_v142.s:15388 `; scratch words 0x04520C / 0x045204 / 0x04520E, and unless the phase was exactly 0x0100` -- Voice_UpdateAllLFO scales EGEnv_Compute_A's value by the hold-then-ramp phase: it is the amount the LFO delay fades in, i.e. the depth"
+  ]
+ },
+ {
+  "old": "VoiceParam_Set_Tone_Option_Case2",
+  "verdict": "refuse",
+  "why_refused": "Option 2 offsets LFO sub-record byte +3 (EGEnv_Compute_A_Simple -> TG +0x580, written unfaded at note-on). It is probably the LFO rate (the Easy Edit screen lists VIBRAT0 DEPTH/SPEED/DELAY), but nothing in the sub-CPU shows that +0x580 is a rate, and the option-index to Easy-Edit-label mapping is not traced on the main CPU.",
+  "new": "",
+  "header": "",
+  "basis": "switch value meaning established (offset to LFO sub-record +3); what that field means is not",
+  "evidence": [
+   "kn5000_subprogram_v142.s:30379 `call DSP_SlotParam_Write_Slot1` -- refreshes part+0x69 = (0x0451A8) << 1",
+   "kn5000_subprogram_v142.s:11224 `ld a, (xwa + 105)` -- Voice_OpSlot_WriteParams adds it to slot entry byte 1 ...",
+   "kn5000_subprogram_v142.s:11234 `ld (xiz + 3), l` -- ... into LFO sub-record +3, which EGEnv_Compute_A_Simple turns into the TG +0x580 word at note-on (not faded)"
+  ]
+ },
+ {
+  "old": "VoiceParam_Set_Tone_Option_Case3",
+  "verdict": "name",
+  "new": "VoiceParam_Set_Tone_Option_LfoDelayOffset",
+  "header": "",
+  "basis": "switch value meaning + body (option index C = which byte of the live option array 0x0451A6+C was written; each case refreshes the per-part byte derived from it and its reader)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:30388 `call DSP_SlotParam_Write_Slot2` -- refreshes part+0x6A = (0x0451A9) << 1",
+   "kn5000_subprogram_v142.s:11236 `ld a, (xwa + 106)` -- Voice_OpSlot_WriteParams adds it to slot entry byte 3 & 0x3F, clamped 0..0x1E ...",
+   "kn5000_subprogram_v142.s:11247 `ld (xiz + 7), l` -- ... into LFO sub-record +7",
+   "kn5000_subprogram_v142.s:15312 `; The sub-record fields used are: +0 flags/mode, +7 period, +8 phase counter.` -- Voice_AdvanceLFOPhase: +7 is the period of the hold phase and of the ramp that follows it -- the LFO delay"
+  ]
+ },
+ {
+  "old": "VoiceParam_Set_Tone_Option_Case5",
+  "verdict": "name",
+  "new": "VoiceParam_Set_Tone_Option_AttackOffset",
+  "header": "",
+  "basis": "switch value meaning + body (option index C = which byte of the live option array 0x0451A6+C was written; each case refreshes the per-part byte derived from it and its reader)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:30397 `call DSP_SlotParam_Write_Slot3` -- refreshes part+0x6B = (0x0451AB) << 2",
+   "kn5000_subprogram_v142.s:12700 `; Segment 0's TARGET index: (i8)tonerec[0x6B] + paramA+0x27, clamped 0..0x64, then curved` -- Voice_Calc_LevelPair_PatchAtk adds part+0x6B to the attack segment's target index, curved through Voice_LevelPair_AttackCurve",
+   "kn5000_subprogram_v142.s:12710 `ld a, (xbc + 107)` -- the read of part+0x6B"
+  ]
+ },
+ {
+  "old": "VoiceParam_Set_Tone_Option_Case6",
+  "verdict": "name",
+  "new": "VoiceParam_Set_Tone_Option_EnvALevelOffset",
+  "header": "Also re-runs Voice_AllNotes_SustainRetrigger so held notes pick up the new envelope-A level.",
+  "basis": "switch value meaning + body (option index C = which byte of the live option array 0x0451A6+C was written; each case refreshes the per-part byte derived from it and its reader)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:30402 `call DSP_SlotParam_Write_Slot4` -- refreshes part+0x6C = (0x0451AC) << 2",
+   "kn5000_subprogram_v142.s:14760 `ld a, (xwa + 108)` -- Voice_Calc_LevelPair_EGA adds part+0x6C to partial byte +0x2D (clamped 0..0x64, Voice_EnvelopeLevel_Curve) -> envelope A level pair, TG +0x800/+0x840",
+   "kn5000_subprogram_v142.s:30408 `call Voice_AllNotes_SustainRetrigger` -- then re-applies it to the part's held notes"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case1",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_AlgoSelect",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:35840 `ld a, (xwa+2)` -- switched value = request[+2] ...",
+   "kn5000_subprogram_v142.s:35841 `res 7, a` -- ... with bit 7 cleared, range-checked 0..23",
+   "kn5000_subprogram_v142.s:35812 `; The 24-opcode query interpreter behind status bytes 0x80..0x87 opcode 0.` -- this owner is the query interpreter (VoiceParamFinalize_SecondaryBody, query case 0)",
+   "kn5000_subprogram_v142.s:35867 `calr CheckStatusBits_40` -- op 1: if the part is in mode 0x40, Voice_Slot_CalcArticParams first ...",
+   "kn5000_subprogram_v142.s:35886 `calr DSP_AlgoSelect` -- ... then DSP_AlgoSelect(part = request[+1], algorithm = request[+3]) writes its 1-byte status to the payload"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case4",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_ToneNameAndMode",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:35901 `calr DSP_MixSendConfig` -- op 4: DSP_MixSendConfig copies the first 0x11 bytes of ToneDB_Find_ToneRecord's record = 16-char tone name + the +0x10 part-mode byte"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case5",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_SourceNameA_BySelector",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:35914 `calr DSP_RouteCoeffs_TypeA` -- op 5: selector pair (request[+3], request[+1]) -> index map (Root+0x44/48/4C) -> 13 bytes of the 16-byte row at Root+0x50 = wave-source name catalogue A"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case6",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_SourceNameB_BySelector",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:35927 `calr DSP_RouteCoeffs_TypeB` -- op 6: same through Root+0x58/5C/60 -> rows at Root+0x64 = catalogue B"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case7",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_SourceNameA_ByRow",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:35940 `calr DSP_CopyCoeffs_TypeA` -- op 7: row number request[+1]<<8 | request[+3] -> 13 bytes of catalogue A (Root+0x50)"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case8",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_SourceNameB_ByRow",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:35953 `calr DSP_CopyCoeffs_TypeB` -- op 8: row number -> 13 bytes of catalogue B (Root+0x64)"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case9",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_SlotSourceNameA",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:35966 `calr DSP_VoiceCoeffRoute` -- op 9: part request[+1], slot request[+3]: the slot record's partial pointer gives the +2/+3 wave-select pair -> catalogue A row name + 3 trailer bytes"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case10",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_SlotPairSourceNameB",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:35979 `calr DSP_VoiceCoeffRoute2` -- op 10: the slot record's second pointer, pair k = request[+3]>>4 at +3+2k (written by VoiceParam_SubSlot_Apply_Catalog64 from catalogue B) -> catalogue B row name"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case11",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_CatalogueFooter",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:35986 `calr DSP_AlgoCoeffLookup` -- op 11: bank request[+3] 0..4 -> the footer at Root+0x54/0x68/0x84/0x90/0x98 (each name catalogue's count block), self-sized by its byte +2"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case12",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_ToneOptions",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36005 `calr DSP_VoiceParamReadWrite` -- op 12: eight calls, index 0..7 -> payload[i] = option byte 0x044FCE+0x1D8+i = 0x0451A6+i (the array VoiceParam_Set_Tone_Option writes)"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case13",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_AlgorithmType",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36022 `calr DSP_ReadVoiceParam5D` -- op 13: 1 byte = ToneDB_Find_ToneRecord's record +0x5D, the algorithm-type byte"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case14",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_DrumSourceName_BySelector",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36037 `calr DSP_VoiceParam_Dispatch` -- op 14: selector -> DrumKit_NoteMapB (Root+0x7C) -> 13-byte row of ToneDB_DrumSourceNameList (Root+0x80); selector bit 5 instead copies 13 bytes of the tone record"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case15",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_DrumSourceName_ByRow",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36050 `calr DSP_SetCoeff_CopyDirect` -- op 15: row number -> 13 bytes of Root+0x80 (ToneDB_DrumSourceNameList)"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case16",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_KitNoteSourceName",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36063 `calr DSP_SetCoeff_RouteComplex` -- op 16: the {lo,hi} pair at patchrec+0x27+2*i (a kit's per-note pair, i = request[+3]) -> Root+0x7C -> Root+0x80 name row, or the RAM user area when hi bit 5 is set"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case17",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_PercSourceName_ByRow",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36076 `calr DSP_SetCoeff_CopyDirect2` -- op 17: row number -> 13 bytes of Root+0x8C (ToneDB_PercSourceNameList1)"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case18",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_SubToneLayerSourceName",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36085 `ld a, (xwa+29351)` -- op 18: C = the edit index at ToneDB_RamBankA+0x72A7 ...",
+   "kn5000_subprogram_v142.s:36093 `calr DSP_SetCoeff_RouteWithCallback` -- ... ToneDB_Find_SubToneRecord; layer L = request[+3]&0x0F at +0x10+0x15*L supplies the pair -> Root+0x4C -> Root+0x8C name row"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case19",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_SubToneLayerPairSourceName",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36110 `calr DSP_SetCoeff_FullPipeline` -- op 19: same sub-tone layer, pair k = request[+3]>>4 at +3+2k -> Root+0x60 -> Root+0x94 (ToneDB_PercSourceNameList2) name row"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_MasterConfig_Case23",
+  "verdict": "name",
+  "new": "DSP_SetCoeff_MasterConfig_PartModeBytes",
+  "header": "",
+  "basis": "switch value meaning + body (query opcode = request[+2] & 0x7F of a status-0x80 query packet; reply payload at 0x045216; ToneDB directory slots per technics-docs/tone-database.md)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36117 `calr DSP_SetCoeff_WriteParams` -- op 23: 2 bytes = patchrec+0x10 (part-mode byte) and patchrec+0x5F when (patchrec+0x5D & 0x0F) == 0x0C, else 0"
+  ]
+ },
+ {
+  "old": "VoiceParam_Action_Case1",
+  "verdict": "name",
+  "new": "VoiceParam_Action_EffectParam",
+  "header": "Status 0x89.",
+  "basis": "switch value meaning + body (status & 7 of an action packet, status 0x88..0x8F = bit 3 set; each case routes to one edit handler of the staged tone at 0x044FCE)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36176 `and a, 0x7` -- switched value = status & 7 ...",
+   "kn5000_subprogram_v142.s:36177 `bitm 3, (xiz)` -- ... for statuses with bit 3 set (0x88..0x8F, packet staged at 0x2AEE by MIDI_Status_NoteOn_Extended); bit 3 clear goes to the query table",
+   "kn5000_subprogram_v142.s:36207 `calr Audio_Cmd_EffectParam_Dispatch` -- status 0x89: Audio_Cmd_EffectParam_Dispatch (stores the value at 0x044FCE + opcode, then the effect-parameter stages)"
+  ]
+ },
+ {
+  "old": "VoiceParam_Action_Case2",
+  "verdict": "name",
+  "new": "VoiceParam_Action_Partial0Or1Param",
+  "header": "Status 0x8A: bit 7 of the opcode byte selects partial 0 or 1.",
+  "basis": "switch value meaning + body (status & 7 of an action packet, status 0x88..0x8F = bit 3 set; each case routes to one edit handler of the staged tone at 0x044FCE)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36216 `and a, 128` -- status 0x8A: bit 7 of the opcode byte picks unit 0 or 1 ...",
+   "kn5000_subprogram_v142.s:36223 `calr Audio_Cmd_DSPUnit_Param` -- ... Audio_Cmd_DSPUnit_Param stores into 0x044FCE + 0x66 + unit*0x51 + opcode: the 81-byte partial blocks of the staged tone record (record +0x66)"
+  ]
+ },
+ {
+  "old": "VoiceParam_Action_Case3",
+  "verdict": "name",
+  "new": "VoiceParam_Action_Partial2Or3Param",
+  "header": "Status 0x8B: bit 7 of the opcode byte selects partial 2 or 3.",
+  "basis": "switch value meaning + body (status & 7 of an action packet, status 0x88..0x8F = bit 3 set; each case routes to one edit handler of the staged tone at 0x044FCE)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36242 `ld bc, 2:i3` -- status 0x8B: the same handler with unit 2 or 3"
+  ]
+ },
+ {
+  "old": "VoiceParam_Action_Case4",
+  "verdict": "name",
+  "new": "VoiceParam_Action_VelSplitParam",
+  "header": "Status 0x8C.",
+  "basis": "switch value meaning + body (status & 7 of an action packet, status 0x88..0x8F = bit 3 set; each case routes to one edit handler of the staged tone at 0x044FCE); 'VelSplit' from the 11-byte stride (= the ToneDB velocity-split record stride, dir word +0xEA) and the existing UserTone_VelSplit_Base name -- medium confidence",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36256 `calr Audio_Cmd_DSPGlobal_Param_Store` -- status 0x8C: stores at 0x044FCE + 0x1AA + (opcode>>6)*0x0B + (opcode & 0x3F): four 11-byte records right after the 426-byte staged tone (UserTone_VelSplit_Base +0x1AA)"
+  ]
+ },
+ {
+  "old": "VoiceParam_Action_Case5",
+  "verdict": "name",
+  "new": "VoiceParam_Action_PatchByteEcho",
+  "header": "Status 0x8D.",
+  "basis": "switch value meaning + body (status & 7 of an action packet, status 0x88..0x8F = bit 3 set; each case routes to one edit handler of the staged tone at 0x044FCE)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36261 `calr Audio_Cmd_PatchByte_Write_And_Echo` -- status 0x8D: writes patch[opcode] and DMAs that byte to the main CPU's mirror"
+  ]
+ },
+ {
+  "old": "VoiceParam_Action_Case6",
+  "verdict": "name",
+  "new": "VoiceParam_Action_SubToneByteReply",
+  "header": "Status 0x8E.",
+  "basis": "switch value meaning + body (status & 7 of an action packet, status 0x88..0x8F = bit 3 set; each case routes to one edit handler of the staged tone at 0x044FCE)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36266 `calr Audio_Cmd_ToneEdit_Write_And_Reply` -- status 0x8E: stores into the ToneDB_Find_SubToneRecord buffer at [opcode] and always sends the 58-byte reply"
+  ]
+ },
+ {
+  "old": "VoiceParam_Action_Case7",
+  "verdict": "name",
+  "new": "VoiceParam_Action_SubToneLayerByteReply",
+  "header": "Status 0x8F.",
+  "basis": "switch value meaning + body (status & 7 of an action packet, status 0x88..0x8F = bit 3 set; each case routes to one edit handler of the staged tone at 0x044FCE)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36271 `calr Audio_Cmd_ToneEdit_Field_Write_And_Reply` -- status 0x8F: opcode bits 7:6 = layer group, bits 5:0 = byte; writes it and DMAs the one byte back"
+  ]
+ }
+]

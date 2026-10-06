@@ -415,7 +415,7 @@ SeMenu_RegisterParamDisplay_Data_Join:
 	popw	iz
 	lda	xsp, (xsp+20)
 	ret
-SeMenu_CopyWriteUpdate_Helper:
+SeMenu_SendToneIndex:
 	lda	xsp, (xsp-22)
 	pushw	iz
 	ld	iz, de
@@ -1226,13 +1226,13 @@ SeMenu_RefreshPartDisplay_Data_2_Code_Skip:
 SeMenu_RefreshPartDisplay_Data_2_Code_Skip2:
 	cp	(xwa+9), 0
 	jr	lt, SeMenu_RefreshPartDisplay_Data_2_Code_Skip3
-	calr	SeMenu_RefreshPartDisplay_Data_2_Code_Helper
+	calr	SeMenu_StepParamFieldUnsigned
 	jr	SeMenu_RefreshPartDisplay_Data_2_Code_Return
 SeMenu_RefreshPartDisplay_Data_2_Code_Skip3:
-	calr	SeMenu_RefreshPartDisplay_Data_2_Code_Helper2
+	calr	SeMenu_StepParamFieldSigned
 SeMenu_RefreshPartDisplay_Data_2_Code_Return:
 	ret
-SeMenu_RefreshPartDisplay_Data_2_Code_Helper:
+SeMenu_StepParamFieldUnsigned:
 	lda	xsp, (xsp-16)
 	push	xiz
 	ld	xiz, xwa
@@ -1312,7 +1312,7 @@ SeMenu_BitShiftMask_End_Skip3:
 SeMenu_BitShiftMask_End_Join2:
 	ld	(xiz), a
 	jr	SeMenu_BitShiftMask_End_Join
-SeMenu_RefreshPartDisplay_Data_2_Code_Helper2:
+SeMenu_StepParamFieldSigned:
 	lda	xsp, (xsp-16)
 	push	xiz
 	ld	xiz, xwa
@@ -1489,7 +1489,7 @@ SeMenu_TransferPartValues_AltLoop:
 	lda	xwa, (xwa+bc)
 	ld (xde), a
 	jr SeMenu_TransferPartValues_Data
-SeMenu_TransferPartValues_EndData_Helper2:
+SeMenu_GetLfoPartSwitchParamId:
 	cp a, 1:i3
 	jr nz, SeMenu_TransferPartValues_AltData
 	ld a, 0x6:opc
@@ -1830,7 +1830,7 @@ SeMenu_TransferPartValues_EndData_Join6:
 	ld	a, (xsp+12)
 	extz	wa
 	lda	xbc, (xsp+2)
-	calr	SeMenu_TransferPartValues_EndData_Helper2
+	calr	SeMenu_GetLfoPartSwitchParamId
 	ld	a, (xsp+10)
 	extz	wa
 	ld	c, (xsp+2)
@@ -2328,7 +2328,7 @@ SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5:
 	lda	xde, (0x20bf3:24)
 	ld	(xde+wa), c
 	ret
-SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6:
+SeMenu_GetNameBufferChar:
 	cp	a, 15
 	ret	ugt
 	extz	wa
@@ -6205,10 +6205,10 @@ SeMenu_SetDisplayState:
 SeMenu_DisplayState_Data:
 	ld	(xwa), (0x6c5)
 	ret
-SeMenu_CopyWriteUpdate_Step3_Helper:
+SeMenu_SetLastSwitch:
 	ld	(1626:16), a
 	ret
-SeMenu_CopyWriteUpdate_Step3_Helper2:
+SeMenu_GetLastSwitch:
 	ld	(xwa), (0x65a)
 	ret
 

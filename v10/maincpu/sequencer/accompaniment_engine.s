@@ -25041,7 +25041,13 @@ RhythmVariation_Return:
 RhythmVariation_InlineCode:
 	calr	DrumKit_UpdateStatusFlags
 	ret
-AccScreen_DataBlock_Helper:
+; CmpStep_SetStepModeAndBlockSustain: XIZ-preserving call of RhythmVariation_Select_Helper4: when the TT_CMSTEP screen
+;   is entered from another title (PREVIOUS_TITLE != 0xB6) it sets the step mode (0x3712) = 4 and bit 0 of 0x8D88; it
+;   always clears bit 0 of 0xE3E2 and sets 0x34CD bit 3, the flag that makes PanelButton_Sustain and
+;   PanelAction_PedalFn_Code40 ignore the sustain input. Basis: callers + body -- CmpStep_SetupAndQueueDraw (the
+;   TT_CMSTEP draw method) is its only caller and its header lists these effects; the hide method clears bit 3 again
+;   (CmpStep_UnblockSustainInput -> CmpStep_ClearSustainBlockFlag).
+CmpStep_SetStepModeAndBlockSustain:
 	push	xiz
 	calr	RhythmVariation_Select_Helper4
 	pop	xiz
@@ -25055,7 +25061,11 @@ RhythmVariation_Select_Skip4:
 	and	(0xe3e2:16), 254
 	or	(0x34cd:16), 8
 	ret
-AccScreen_DataBlock_Helper2:
+; CmpStep_ClearSustainBlockFlag: XIZ-preserving call of RhythmVariation_Select_Helper5, which clears 0x34CD bit 3 --
+;   the flag that makes PanelButton_Sustain and PanelAction_PedalFn_Code40 ignore the sustain input. Basis: callers +
+;   body -- CmpStep_UnblockSustainInput, the TT_CMSTEP hide-method body, is its only caller and its header describes
+;   exactly this; CmpStep_SetStepModeAndBlockSustain sets the bit on draw.
+CmpStep_ClearSustainBlockFlag:
 	push	xiz
 	calr	RhythmVariation_Select_Helper5
 	pop	xiz
@@ -31430,7 +31440,9 @@ CmpNcpTtl_Dispatch_Code_Skip2:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case128:	; cases 128, 129
+; CmpNcpTtl_TableDispatch_OnFromItemNext: Switches 0x80/0x81 (FROM ITEM box, other button): next FROM item (0x39A7 +
+;   1, up to 2), then the repaints and dial binding.
+CmpNcpTtl_TableDispatch_OnFromItemNext:	; cases 128, 129
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde
@@ -31473,7 +31485,7 @@ CmpNcpTtl_Dispatch_Code_Skip3:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case118:	; cases 118, 119
+CmpNcpTtl_TableDispatch_OnFromValueUp:	; cases 118, 119
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde
@@ -31541,7 +31553,7 @@ CmpNcpTtl_Dispatch_Code_Skip6:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case130:	; cases 130, 131
+CmpNcpTtl_TableDispatch_OnFromValueDown:	; cases 130, 131
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde
@@ -31609,7 +31621,7 @@ CmpNcpTtl_Dispatch_Code_Skip9:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case120:	; cases 120, 121
+CmpNcpTtl_TableDispatch_OnToItemPrev:	; cases 120, 121
 	push	xde
 	push	xhl
 	push	xix
@@ -31650,7 +31662,7 @@ CmpNcpTtl_Dispatch_Code_Skip13:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case132:	; cases 132, 133
+CmpNcpTtl_TableDispatch_OnToItemNext:	; cases 132, 133
 	push	xde	; four pushes and `ld w, 0x80`, spelled as .ascii ":;<> \x80" until 2026-10-06
 	push	xhl
 	push	xix
@@ -31691,7 +31703,7 @@ CmpNcpTtl_Dispatch_Code_Skip14:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case122:	; cases 122, 123
+CmpNcpTtl_TableDispatch_OnToValueUp:	; cases 122, 123
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde
@@ -31752,7 +31764,7 @@ CmpNcpTtl_Dispatch_Code_Skip10:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case134:	; cases 134, 135
+CmpNcpTtl_TableDispatch_OnToValueDown:	; cases 134, 135
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde
@@ -31815,7 +31827,9 @@ CmpNcpTtl_Dispatch_Code_Skip11:
 CmpNcpTtl_Dispatch_Code_Join2:
 	call	ApDeliveryEvent
 	jr	CmEsy_ReturnZero
-CmpNcpTtl_TableDispatch_Case127:
+; CmpNcpTtl_TableDispatch_OnRightRow4Switch: Switch 11 (right side row 4): sets request bit 0 of 0x34D1, which
+;   AccPat_DispatchNoteChange consumes.
+CmpNcpTtl_TableDispatch_OnRightRow4Switch:
 	set	0, (0x34d1:16)	; was .byte 0xf1, 0xd1, 0x34, 0xb8
 
 CmEsy_ReturnZero:
@@ -34116,7 +34130,7 @@ AccDraw_Secondary_Helper:
 	ret
 ; CmpStep_DrawScreen: XIZ-preserving body of TT_CMSTEP's draw method (method 0 of CmpStepTitleFunc_ProcTable, run on
 ;   EVT_ALL_PAINT and EVT_PARA_DRAW): through CmpStep_SetupAndQueueDraw it calls AccPlayback_InitOrUpdate and sets
-;   0x3525 = 0xB6 when entered from another title (PREVIOUS_TITLE != 0xB6), runs AccScreen_DataBlock_Helper ((0x3712)
+;   0x3525 = 0xB6 when entered from another title (PREVIOUS_TITLE != 0xB6), runs CmpStep_SetStepModeAndBlockSustain ((0x3712)
 ;   = 4 on entry, 0x34CD bit 3 set), and queues the draw functions AccScreen_DataBlock_Code (static frame; skipped on
 ;   a partial redraw, 0xE3E0 bit 4) and AccScreen_DataBlock_Code2 (values). Basis: callers + body -- its only caller
 ;   is the method-0 stub CmpStepTitle_OnPaint (0xF6A2FF = CmpStepTitleFunc_ProcTable[0]); DirmdEmulator calls method 0 on
@@ -34128,7 +34142,7 @@ CmpStep_DrawScreen:
 	ret
 ; CmpStep_SetupAndQueueDraw: Body of the TT_CMSTEP draw method: when entered from another title (PREVIOUS_TITLE !=
 ;   0xB6) runs AccPlayback_InitOrUpdate, sets 0x3525 = 0xB6 and clears bit 4 of 0xE3E0 / 0xE3DE; then
-;   AccScreen_DataBlock_Helper (0x3712 = 4 on entry, 0x34CD bit 3 set) and queues the draw functions
+;   CmpStep_SetStepModeAndBlockSustain (0x3712 = 4 on entry, 0x34CD bit 3 set) and queues the draw functions
 ;   AccScreen_DataBlock_Code (static frame, skipped when 0xE3E0 bit 4 is set) and AccScreen_DataBlock_Code2 (values)
 ;   with DrawFunc_StackEntry. Basis: callers + body -- its only caller is CmpStep_DrawScreen, the XIZ-preserving
 ;   method-0 body whose header describes exactly these steps.
@@ -34140,7 +34154,7 @@ CmpStep_SetupAndQueueDraw:
 	and	(0xe3e0:16), 239
 	and	(0xe3de:16), 239
 AccDraw_Secondary_Helper2_Skip:
-	call	AccScreen_DataBlock_Helper
+	call	CmpStep_SetStepModeAndBlockSustain
 	bit	4, (0xe3e0:16)
 	jr	nz, AccDraw_Secondary_Helper2_Skip2
 	ld	xwa, AccScreen_DataBlock_Code
@@ -34190,7 +34204,7 @@ AccScreen_DataBlock_Code2:
 	calr	AccScreen_RefreshScreen
 	ret
 ; CmpStep_OnHide: XIZ-preserving body of TT_CMSTEP's hide method (method 1 of CmpStepTitleFunc_ProcTable, EVT_HIDE):
-;   through CmpStep_UnblockSustainInput and AccScreen_DataBlock_Helper2 it only clears 0x34CD bit 3, the bit the draw
+;   through CmpStep_UnblockSustainInput and CmpStep_ClearSustainBlockFlag it only clears 0x34CD bit 3, the bit the draw
 ;   method sets and that makes PanelButton_Sustain and PanelAction_PedalFn_Code40 ignore the sustain input. Basis:
 ;   callers + body -- its only caller is the method-1 stub at 0xF6A32C (CmpStepTitleFunc_ProcTable[1]); DirmdEmulator
 ;   calls method 1 on EVT_HIDE.
@@ -34199,12 +34213,12 @@ CmpStep_OnHide:
 	calr	CmpStep_UnblockSustainInput
 	pop	xiz
 	ret
-; CmpStep_UnblockSustainInput: Body of the TT_CMSTEP hide method: through the XIZ wrapper AccScreen_DataBlock_Helper2
+; CmpStep_UnblockSustainInput: Body of the TT_CMSTEP hide method: through the XIZ wrapper CmpStep_ClearSustainBlockFlag
 ;   it clears 0x34CD bit 3, the bit the draw method sets and that makes PanelButton_Sustain and the bit-3 test of the
 ;   pedal-function handler ignore the sustain input. Basis: callers + body -- its only caller is CmpStep_OnHide
 ;   (method 1, EVT_HIDE), whose header says this is all it does; RhythmVariation_Select_Helper4 sets the bit on draw.
 CmpStep_UnblockSustainInput:
-	call	AccScreen_DataBlock_Helper2
+	call	CmpStep_ClearSustainBlockFlag
 	ret
 ; CmpStep_DispatchSwitch: Body of the CmpStep title's switch-in method: dispatches switch number HL (0..15; W carries
 ;   the switch's bit 7) to its handler in AccDraw_SecondarySub_Handlers through AccDraw_Secondary_Sub, preserving XIZ.
