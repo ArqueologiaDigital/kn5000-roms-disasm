@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 52,953
-#   semantic names ........... 52,114 (98.4%)
+#   symbols .................. 52,959
+#   semantic names ........... 52,120 (98.4%)
 #   positional names ......... 839
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -34008,6 +34008,7 @@ Tempo_EffectReturn 00F65F7D
 Tempo_IncrementTimeSigNum 00F65F80
 Tempo_DecrementTimeSigNum 00F65FA1
 Tempo_TimeSigCodeBlock 00F65FC1
+Tempo_EditParam84 00F65FE1
 Tempo_DecrementTimeSigNum_Skip 00F66004
 Tempo_DecrementTimeSigNum_Entry 00F66010
 Tempo_DecrementTimeSigNum_Epilogue 00F66014
@@ -34015,6 +34016,7 @@ Tempo_EditBPM 00F66017
 Tempo_EditBPMDec 00F66036
 Tempo_EditBPMClamp 00F66043
 Tempo_EditBPMApply 00F6604C
+Tempo_EditParam92 00F66058
 Tempo_EditBPMClamp_Code_Skip 00F66084
 Tempo_EditBPMClamp_Code_Skip2 00F6608E
 Tempo_EditBPMClamp_Code_Skip3 00F660A2
@@ -34022,6 +34024,7 @@ Tempo_EditBPMClamp_Code_Join 00F660AA
 Tempo_EditBPMClamp_Code_Skip4 00F660BC
 Tempo_EditBPMClamp_Code_Entry 00F660C6
 Tempo_EditBPMClamp_Code_Epilogue 00F660CA
+Tempo_EditParam93 00F660CD
 Tempo_EditBPMClamp_Code_Skip5 00F660FC
 Tempo_EditBPMClamp_Code_Skip6 00F66108
 Tempo_EditBPMClamp_Code_Skip7 00F6611E
@@ -34029,9 +34032,12 @@ Tempo_EditBPMClamp_Code_Join2 00F6612A
 Tempo_EditBPMClamp_Code_Skip8 00F66138
 Tempo_EditBPMClamp_Code_Entry2 00F66144
 Tempo_EditBPMClamp_Code_Epilogue2 00F66148
+Tempo_AdjustQuantize_WideArg 00F6614B
+Tempo_AdjustEffect_WideArg 00F66150
 Tempo_DisplayParamCommon 00F66155
 Tempo_DisplayParamSkipClear 00F66163
 Tempo_DisplayParamFormat 00F6616E
+TimeSig_ProcNop 00F66178
 Tempo_DisplayParamReturn 00F66179
 Tempo_DisplayStartMeasure 00F661C5
 Tempo_DisplayEndMeasure 00F66202

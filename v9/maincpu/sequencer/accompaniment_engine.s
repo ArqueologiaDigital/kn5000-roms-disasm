@@ -11558,8 +11558,7 @@ AccStyle_SC0ByteSelect_Join2:
 	ld	a, (0x338e:16)
 	and	a, 31
 	jr	nz, AccStyle_SC0ByteSelect_Code_Skip3
-	.long Pad_AfterBitmap_Dredt0k
-	rcf
+	ld	(0xe3de:16), 16
 AccStyle_SC0ByteSelect_Code_Skip3:
 	ld	(0x338e:16), 8
 	ret
@@ -27096,6 +27095,7 @@ Tempo_TimeSigCodeBlock:
 	ld	(0x3990:16), a
 	set	4, (0xe3e0:16)
 	ret
+Tempo_EditParam84:
 	dec	2, xsp
 	ld	(xsp), a
 	ldw	wa, 132
@@ -27153,6 +27153,7 @@ Tempo_EditBPMApply:
 	ldw	wa, 176
 	call	UI_PostModeChangeEvent
 	ret
+Tempo_EditParam92:
 	dec	2, xsp
 	ld	(xsp), a
 	ldw	wa, 146
@@ -27200,6 +27201,7 @@ Tempo_EditBPM_Entry:
 Tempo_EditBPM_Epilogue:
 	inc	2, xsp
 	ret
+Tempo_EditParam93:
 	dec	2, xsp
 	ld	(xsp), a
 	ldw	wa, 147
@@ -27251,8 +27253,10 @@ Tempo_EditBPM_Entry2:
 Tempo_EditBPM_Epilogue2:
 	inc	2, xsp
 	ret
+Tempo_AdjustQuantize_WideArg:
 	extz	wa
 	jrl	Tempo_AdjustQuantize
+Tempo_AdjustEffect_WideArg:
 	extz	wa
 	jrl	Tempo_AdjustEffect
 
@@ -27267,11 +27271,10 @@ Tempo_DisplayParamSkipClear:
 	ldw wa, 0xee
 	jp SoundCtrl_SendCommand
 Tempo_DisplayParamFormat:
-	.long Pad_AfterBitmap_Dredt0k
-	cp	a, (xwa)
-	or	hl, ix
-	.byte 0x41
+	ld	(0xe3de:16), 0x80
+	ld	(0xe3dc:16), a
 	ret
+TimeSig_ProcNop:
 	ret
 
 Tempo_DisplayParamReturn:

@@ -20,9 +20,6 @@
 
 /* ── External symbols (resolved by linker script) ── */
 
-extern const char SeqPlay_AdvanceMeasure;
-extern const char SeqPlay_CountInEnd;
-extern const char SeqPlay_CountInToLastBar;
 extern const char AcCtlMsgGridBoxProc;
 extern const char AcFadeSetGridBoxProc;
 extern const char AcGMOnOffBoxProc;
@@ -80,7 +77,10 @@ extern const char SeqInit_JumpToPartInit;
 extern const char SeqInit_ReturnStub;
 extern const char SeqInit_SetBaseAddress;
 extern const char SeqNotify_DataBlock;
+extern const char SeqPlay_AdvanceMeasure;
 extern const char SeqPlay_BufferUpdateBlock;
+extern const char SeqPlay_CountInEnd;
+extern const char SeqPlay_CountInToLastBar;
 extern const char SeqStep_TimerNop;
 extern const char SplitPointFunc;
 extern const char StsAreYouSureCheck;
@@ -89,14 +89,20 @@ extern const char StsGMOffCheck;
 extern const char StsGMOnCheck;
 extern const char StsSplitCheck;
 extern const char Tempo_AdjustEffect;
+extern const char Tempo_AdjustEffect_WideArg;
 extern const char Tempo_AdjustEndMeasure;
 extern const char Tempo_AdjustQuantize;
+extern const char Tempo_AdjustQuantize_WideArg;
 extern const char Tempo_AdjustStartMeasure;
 extern const char Tempo_DecrementTimeSigNum;
 extern const char Tempo_EditBPM;
 extern const char Tempo_EditBPMApply;
+extern const char Tempo_EditParam84;
+extern const char Tempo_EditParam92;
+extern const char Tempo_EditParam93;
 extern const char Tempo_IncrementTimeSigNum;
 extern const char Tempo_TimeSigCodeBlock;
+extern const char TimeSig_ProcNop;
 extern const char TtComSet;
 extern const char TtComputerConnection;
 extern const char TtFadeInOut;
@@ -12015,30 +12021,30 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .AccTone_ExtendAndDispatch_PopRet_Table = { 0x0D, 0x13, 0x19, 0xFF },
 
     .TimeSig_ProcTable = {
-        0x00F6657C,
+        NAKA_ADDR(TimeSig_ProcNop),
         NAKA_ADDR(Tempo_AdjustStartMeasure),
         NAKA_ADDR(Tempo_AdjustEndMeasure),
-        0x00F6657C,
+        NAKA_ADDR(TimeSig_ProcNop),
         NAKA_ADDR(Tempo_AdjustQuantize),
-        0x00F6657C,
+        NAKA_ADDR(TimeSig_ProcNop),
         NAKA_ADDR(Tempo_AdjustEffect),
-        0x00F6657C,
+        NAKA_ADDR(TimeSig_ProcNop),
         NAKA_ADDR(Tempo_IncrementTimeSigNum),
         NAKA_ADDR(Tempo_DecrementTimeSigNum),
         NAKA_ADDR(Tempo_TimeSigCodeBlock),
-        0x00F663E5,
+        NAKA_ADDR(Tempo_EditParam84),
         NAKA_ADDR(Tempo_EditBPM),
-        0x00F6657C,
-        0x00F6657C,
+        NAKA_ADDR(TimeSig_ProcNop),
+        NAKA_ADDR(TimeSig_ProcNop),
         NAKA_ADDR(Tempo_EditBPMApply),
-        0x00F6657C,
-        0x00F6657C,
-        0x00F6645C,
-        0x00F664D1,
-        0x00F6657C,
-        0x00F6654F,
-        0x00F6657C,
-        0x00F66554,
+        NAKA_ADDR(TimeSig_ProcNop),
+        NAKA_ADDR(TimeSig_ProcNop),
+        NAKA_ADDR(Tempo_EditParam92),
+        NAKA_ADDR(Tempo_EditParam93),
+        NAKA_ADDR(TimeSig_ProcNop),
+        NAKA_ADDR(Tempo_AdjustQuantize_WideArg),
+        NAKA_ADDR(TimeSig_ProcNop),
+        NAKA_ADDR(Tempo_AdjustEffect_WideArg),
     },
 
     .Tempo_AdjustEffect_Table = {

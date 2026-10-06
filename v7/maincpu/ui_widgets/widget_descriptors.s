@@ -5874,7 +5874,7 @@ TimeSig_ProcTable:
 	.long	Tempo_IncrementTimeSigNum
 	.long	Tempo_DecrementTimeSigNum
 	.long	Tempo_TimeSigCodeBlock
-	.long	0x00f65fe1
+	.long	Tempo_EditParam84
 	.long	Tempo_EditBPM
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19218, 0x2c
 ; -----------------------------------------------------------------------------

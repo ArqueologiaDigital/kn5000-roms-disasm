@@ -26034,6 +26034,7 @@ Tempo_TimeSigCodeBlock:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	ret
+Tempo_EditParam84:
 	dec	2, xsp
 	ld	(xsp), a
 	ldw	wa, 132
@@ -26093,6 +26094,7 @@ Tempo_EditBPMApply:
 	ldw	wa, 176
 	call	UI_PostModeChangeEvent
 	ret
+Tempo_EditParam92:
 	dec	2, xsp
 	ld	(xsp), a
 	ldw	wa, 146
@@ -26140,6 +26142,7 @@ Tempo_EditBPMClamp_Code_Entry:
 Tempo_EditBPMClamp_Code_Epilogue:
 	inc	2, xsp
 	ret
+Tempo_EditParam93:
 	dec	2, xsp
 	ld	(xsp), a
 	ldw	wa, 147
@@ -26191,8 +26194,10 @@ Tempo_EditBPMClamp_Code_Entry2:
 Tempo_EditBPMClamp_Code_Epilogue2:
 	inc	2, xsp
 	ret
+Tempo_AdjustQuantize_WideArg:
 	extz	wa
 	jrl	Tempo_AdjustQuantize
+Tempo_AdjustEffect_WideArg:
 	extz	wa
 	jrl	Tempo_AdjustEffect
 Tempo_DisplayParamCommon:
@@ -26205,7 +26210,11 @@ Tempo_DisplayParamSkipClear:
 	ldw	wa, 238
 	jp	SoundCtrl_SendCommand
 Tempo_DisplayParamFormat:
-	.incbin "includes/romslices/v7_transplant_Tempo_DisplayParamFormat.bin"
+	ld	(0xe318:16), 0x80
+	ld	(0xe316:16), a
+	ret
+TimeSig_ProcNop:
+	ret
 Tempo_DisplayParamReturn:
 	push QIZ
 	lds_erpb 0xfb, 0

@@ -5871,30 +5871,30 @@ AccTone_ExtendAndDispatch_PopRet_Table:
 ; Typed in naka_widget_descriptors.c as uint32_t TimeSig_ProcTable[24].
 ; -----------------------------------------------------------------------------
 TimeSig_ProcTable:
-	.long	0x00f6657c
+	.long	TimeSig_ProcNop
 	.long	Tempo_AdjustStartMeasure
 	.long	Tempo_AdjustEndMeasure
-	.long	0x00f6657c
+	.long	TimeSig_ProcNop
 	.long	Tempo_AdjustQuantize
-	.long	0x00f6657c
+	.long	TimeSig_ProcNop
 	.long	Tempo_AdjustEffect
-	.long	0x00f6657c
+	.long	TimeSig_ProcNop
 	.long	Tempo_IncrementTimeSigNum
 	.long	Tempo_DecrementTimeSigNum
 	.long	Tempo_TimeSigCodeBlock
-	.long	0x00f663e5
+	.long	Tempo_EditParam84
 	.long	Tempo_EditBPM
-	.long	0x00f6657c
-	.long	0x00f6657c
+	.long	TimeSig_ProcNop
+	.long	TimeSig_ProcNop
 	.long	Tempo_EditBPMApply
-	.long	0x00f6657c
-	.long	0x00f6657c
-	.long	0x00f6645c
-	.long	0x00f664d1
-	.long	0x00f6657c
-	.long	0x00f6654f
-	.long	0x00f6657c
-	.long	0x00f66554
+	.long	TimeSig_ProcNop
+	.long	TimeSig_ProcNop
+	.long	Tempo_EditParam92
+	.long	Tempo_EditParam93
+	.long	TimeSig_ProcNop
+	.long	Tempo_AdjustQuantize_WideArg
+	.long	TimeSig_ProcNop
+	.long	Tempo_AdjustEffect_WideArg
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Tempo_AdjustEffect_Table
 ; Tempo_AdjustEffect_Table -- read by Tempo_AdjustEffect (v10/v9
