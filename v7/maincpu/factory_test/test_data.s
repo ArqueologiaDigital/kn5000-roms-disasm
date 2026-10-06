@@ -11,7 +11,7 @@ Hama_ModeInit_Table:
 	.long NakaInst_SelectSoundForPart_D
 InitializeHama_PtrTable:	.byte 0xce, 0xe7, 0xf1, 0x00, 0xa4, 0xe8
 	.byte	0xf1, 0x00, 0x00, 0x00, 0x00, 0x00
-HamaObj_429_Data:	.byte	0x6c, 0xf0
+Hama_ApFuncTable_429:	.byte	0x6c, 0xf0
 	.byte 0xe1, 0x00
 	.long HamaStr_hamadeb
 	.long HamaStr_Empty
@@ -36,20 +36,20 @@ HamaStr_HamaList:
 	aligned_string	"HamaList"
 InitializeHama_Data_3:
 	.byte	0x01, 0x00
-HamaObj_1C9_Data:	.byte	0xc6, 0xf0, 0xe1, 0x00, 0x00, 0x00
+Hama_ResEventTable_1C9:	.byte	0xc6, 0xf0, 0xe1, 0x00, 0x00, 0x00
 	.byte	0x00, 0x00
 HamaStr_EV_INDEX_PUTS:
 	aligned_string	"EV_INDEX_PUTS"
 InitializeHama_Data_5:
 	.byte	0x01, 0x00
-HamaObj_1E9_Data:	.byte	0xde, 0xf0, 0xe1, 0x00, 0x00, 0x00
+Hama_ResMethodTable_1E9:	.byte	0xde, 0xf0, 0xe1, 0x00, 0x00, 0x00
 	.byte	0x00, 0x00
 HamaStr_MT_CONTINUE:
 	aligned_string	"MT_CONTINUE"
 InitializeHama_Data_7:
 	.byte	0x01, 0x00
-; table of 85 code pointers, ending in 0 (object 0x409 holds their names); as v10's HamaObj_109_Data
-HamaObj_109_Data:
+; table of 85 code pointers, ending in 0 (object 0x409 holds their names); as v10's Hama_FunctionTable_109
+Hama_FunctionTable_109:
 	.long	HamaListProc
 	.long	FDLoadSaveTest
 	.long	GetMediaType

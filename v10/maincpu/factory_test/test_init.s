@@ -97,12 +97,12 @@
 InitializeHama:
 	lda xsp, (xsp - 14)
 
-	RegObjTableHama NAKA_CLASS_Class, ClassProc, HamaStr_HamaList + 0xa, HamaObj_169_Data, 0x169
-	RegObjTableHama NAKA_CLASS_ResEvent, ResEventProc, HamaStr_EV_INDEX_PUTS + 0xe, HamaObj_1C9_Data, 0x1c9
-	RegObjTableHama NAKA_CLASS_ResMethod, ResMethodProc, HamaStr_MT_CONTINUE + 0xc, HamaObj_1E9_Data, 0x1e9
-	RegObjTablHama NAKA_CLASS_ApFunction, ApFunctionProc, 0x2, HamaObj_129_Data, 0x129
-	RegObjTablHama NAKA_CLASS_ApFunction, ApFunctionProc, 0x2, HamaObj_429_Data, 0x429
-	RegObjTablHama NAKA_CLASS_Function, FunctionProc, 0x4b, HamaObj_109_Data, 0x109
+	RegObjTableHama NAKA_CLASS_Class, ClassProc, HamaStr_HamaList + 0xa, Hama_ClassTable_169, 0x169
+	RegObjTableHama NAKA_CLASS_ResEvent, ResEventProc, HamaStr_EV_INDEX_PUTS + 0xe, Hama_ResEventTable_1C9, 0x1c9
+	RegObjTableHama NAKA_CLASS_ResMethod, ResMethodProc, HamaStr_MT_CONTINUE + 0xc, Hama_ResMethodTable_1E9, 0x1e9
+	RegObjTablHama NAKA_CLASS_ApFunction, ApFunctionProc, 0x2, Hama_ApFuncTable_129, 0x129
+	RegObjTablHama NAKA_CLASS_ApFunction, ApFunctionProc, 0x2, Hama_ApFuncTable_429, 0x429
+	RegObjTablHama NAKA_CLASS_Function, FunctionProc, 0x4b, Hama_FunctionTable_109, 0x109
 	RegObjTablHama NAKA_CLASS_Function, FunctionProc, 0x4b, Hama_ModeParam_Table, 0x409
 	RegObjTablHama NAKA_CLASS_MainFunction, MainFunctionProc, 0x1, FDTest_CfgName_FDDTest + 0x1e, 0x149
 	RegObjTablHama NAKA_CLASS_MainFunction, MainFunctionProc, 0x1, FDTest_CfgName_FDDTest + 0x26, 0x449

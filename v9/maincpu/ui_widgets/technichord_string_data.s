@@ -6687,7 +6687,7 @@ CmpDst_HandleShow_PtrTable:	.incbin "includes/generated/naka_technichord_strings
 ; DiskSel_EmptyFileName point XIZ / XBC at them (the second was the positional alias Data_SaveLoadMenuTable + 0x64)
 Str_EmptyFileName_Cmp:		.byte	0, 0xff
 Str_EmptyFileName_DiskSel:	.byte	0, 0xff
-InitializeCheap_PtrTable:	.long InsertOptionText
+Cheap_ApFuncTable_125:	.long InsertOptionText
 	.long TypePriorityText
 	.long JumpInsertFunc
 	.long FilePriorityFunc

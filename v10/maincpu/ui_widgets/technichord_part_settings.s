@@ -791,7 +791,7 @@ NakaWidget_Sdpart_16_AcStrRadioBox_Name:	.incbin "includes/generated/naka_techni
 ; [nakarest] naka_technichord_part+0x4022  +0x4022..+0x4038 (0xe85cf0, 22 B)
 ; [nakarest] the table itself: ResName slot 0x304 (table 0xe85cf0, 4 entries, InitializeMurai),
 ; [nakarest] 4 entry pointers x 4 bytes.
-InitializeMurai_PtrTable:	.incbin "includes/generated/naka_technichord_part.bin", 0x4022, 0x16
+Murai_ResNameTable_304:	.incbin "includes/generated/naka_technichord_part.bin", 0x4022, 0x16
 ; [nakarest] naka_technichord_part+0x4038  +0x4038..+0x4046 (0xe85d06, 14 B)
 ; [nakarest] name strings, entries 0-3 of ResName slot 0x304 (table 0xe85cf0, 4 entries,
 ; [nakarest] InitializeMurai) (names for Viewable slot 0x4): "", "", "", "Sdmtune".
@@ -799,7 +799,7 @@ InitializeMurai_PtrTable:	.incbin "includes/generated/naka_technichord_part.bin"
 ; [nakarest] naka_technichord_part+0x4046  +0x4046..+0x4124 (0xe85d14, 222 B)
 ; [nakarest] the table itself: ResName slot 0x305 (table 0xe85d14, 54 entries, InitializeMurai),
 ; [nakarest] 54 entry pointers x 4 bytes.
-InitializeMurai_PtrTable_2:	.incbin "includes/generated/naka_technichord_part.bin", 0x4046, 0xDE
+Murai_ResNameTable_305:	.incbin "includes/generated/naka_technichord_part.bin", 0x4046, 0xDE
 ; [nakarest] naka_technichord_part+0x4124  +0x4124..+0x423c (0xe85df2, 280 B)
 ; [nakarest] name strings, entries 0-53 of ResName slot 0x305 (table 0xe85d14, 54 entries,
 ; [nakarest] InitializeMurai) (names for Viewable slot 0x5): "", "", "", "", "", "", ....
@@ -807,7 +807,7 @@ InitializeMurai_PtrTable_2:	.incbin "includes/generated/naka_technichord_part.bi
 ; [nakarest] naka_technichord_part+0x423c  +0x423c..+0x424e (0xe85f0a, 18 B)
 ; [nakarest] the table itself: ResName slot 0x307 (table 0xe85f0a, 3 entries, InitializeMurai),
 ; [nakarest] 3 entry pointers x 4 bytes.
-InitializeMurai_PtrTable_3:	.incbin "includes/generated/naka_technichord_part.bin", 0x423C, 0x12
+Murai_ResNameTable_307:	.incbin "includes/generated/naka_technichord_part.bin", 0x423C, 0x12
 ; [nakarest] naka_technichord_part+0x424e  +0x424e..+0x425c (0xe85f1c, 14 B)
 ; [nakarest] name strings, entries 0-2 of ResName slot 0x307 (table 0xe85f0a, 3 entries,
 ; [nakarest] InitializeMurai) (names for Viewable slot 0x7): "", "", "Sdlfthld".
@@ -815,7 +815,7 @@ InitializeMurai_PtrTable_3:	.incbin "includes/generated/naka_technichord_part.bi
 ; [nakarest] naka_technichord_part+0x425c  +0x425c..+0x4272 (0xe85f2a, 22 B)
 ; [nakarest] the table itself: ResName slot 0x308 (table 0xe85f2a, 4 entries, InitializeMurai),
 ; [nakarest] 4 entry pointers x 4 bytes.
-InitializeMurai_PtrTable_4:	.incbin "includes/generated/naka_technichord_part.bin", 0x425C, 0x16
+Murai_ResNameTable_308:	.incbin "includes/generated/naka_technichord_part.bin", 0x425C, 0x16
 ; [nakarest] naka_technichord_part+0x4272  +0x4272..+0x4280 (0xe85f40, 14 B)
 ; [nakarest] name strings, entries 0-3 of ResName slot 0x308 (table 0xe85f2a, 4 entries,
 ; [nakarest] InitializeMurai) (names for Viewable slot 0x8): "", "", "", "Sdmixer".

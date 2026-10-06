@@ -4516,13 +4516,13 @@ InitializeMurai:
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x54, Murai_ViewableTable_003, 0x3
 	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x54, Murai_ResNameTable_303, 0x303
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x4, Murai_ViewableTable_004, 0x4
-	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x4, InitializeMurai_PtrTable, 0x304
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x4, Murai_ResNameTable_304, 0x304
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x36, Murai_ViewableTable_005, 0x5
-	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x36, InitializeMurai_PtrTable_2, 0x305
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x36, Murai_ResNameTable_305, 0x305
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x3, Murai_ViewableTable_007, 0x7
-	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x3, InitializeMurai_PtrTable_3, 0x307
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x3, Murai_ResNameTable_307, 0x307
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x4, Murai_ViewableTable_008, 0x8
-	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x4, InitializeMurai_PtrTable_4, 0x308
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x4, Murai_ResNameTable_308, 0x308
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x1d, Murai_ViewableTable_00D, 0xd
 	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x1d, NakaData_TechniChordStrings, 0x30d
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x4, Murai_ViewableTable_0A5, 0xa5

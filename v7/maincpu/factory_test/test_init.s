@@ -106,7 +106,7 @@ InitializeHama:
 	ld	(xsp+4), xwa
 	ld	wa, (InitializeHama_Data_5:24)
 	ld	(xsp+8), wa
-	lda	xwa, (HamaObj_1C9_Data:24)
+	lda	xwa, (Hama_ResEventTable_1C9:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -118,7 +118,7 @@ InitializeHama:
 	ld	(xsp+4), xwa
 	ld	wa, (InitializeHama_Data_7:24)
 	ld	(xsp+8), wa
-	lda	xwa, (HamaObj_1E9_Data:24)
+	lda	xwa, (Hama_ResMethodTable_1E9:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -140,7 +140,7 @@ InitializeHama:
 	lda	xwa, (ApFunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 2
-	lda	xwa, (HamaObj_429_Data:24)
+	lda	xwa, (Hama_ApFuncTable_429:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -151,7 +151,7 @@ InitializeHama:
 	lda	xwa, (FunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 75
-	lda	xwa, (HamaObj_109_Data:24)
+	lda	xwa, (Hama_FunctionTable_109:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa

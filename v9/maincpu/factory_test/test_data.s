@@ -14,13 +14,13 @@ Hama_ModeInit_Table:
 	.long	NakaInst_SelectSoundForPart_D
 ; table of 3 code pointers, ending in 0 (object 0x429 holds their names)
 ; evidence: InitializeHama `RegObjTablHama 0x1600002, ApFunctionProc, 0x2, <this>, 0x129` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
-HamaObj_129_Data:
+Hama_ApFuncTable_129:
 	.long	FDTestDialogProc
 	.long	HamaEvtDisp_Entry
 	.long	0
 ; table of 3 pointers to the NAME strings of the functions in object 0x129's table
 ; evidence: InitializeHama `RegObjTablHama 0x1600002, ApFunctionProc, 0x2, <this>, 0x429` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
-HamaObj_429_Data:
+Hama_ApFuncTable_429:
 	.long	HamaStr_HamaPage1Func
 	.long	HamaStr_hamadeb
 	.long	HamaStr_Empty
@@ -36,7 +36,7 @@ HamaList_EntryStr_Empty:
 	aligned_string ""
 ; parameter block of object 0x169 (class 0x01600004, proc ClassProc); its descriptor's +8 word is read from HamaStr_HamaList + 0xa
 ; evidence: InitializeHama `RegObjTableHama 0x1600004, ClassProc, HamaStr_HamaList + 0xa, <this>, 0x169` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
-HamaObj_169_Data:
+Hama_ClassTable_169:
 	.long	HamaListProc
 	.byte	0x55, 0x00, 0x60, 0x01, 0x30, 0x00, 0x00, 0x00
 	.long	HamaStr_HamaList
@@ -50,7 +50,7 @@ HamaStr_HamaList:
 	.byte	0x01, 0x00
 ; parameter block of object 0x1C9 (class 0x0160000C, proc ResEventProc); its descriptor's +8 word is read from HamaStr_EV_INDEX_PUTS + 0xe
 ; evidence: InitializeHama `RegObjTableHama 0x160000c, ResEventProc, HamaStr_EV_INDEX_PUTS + 0xe, <this>, 0x1c9` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
-HamaObj_1C9_Data:
+Hama_ResEventTable_1C9:
 	.long	HamaStr_EV_INDEX_PUTS
 	.byte	0x00, 0x00, 0x00, 0x00
 HamaStr_EV_INDEX_PUTS:
@@ -58,7 +58,7 @@ HamaStr_EV_INDEX_PUTS:
 	.byte	0x01, 0x00
 ; parameter block of object 0x1E9 (class 0x0160000D, proc ResMethodProc); its descriptor's +8 word is read from HamaStr_MT_CONTINUE + 0xc
 ; evidence: InitializeHama `RegObjTableHama 0x160000d, ResMethodProc, HamaStr_MT_CONTINUE + 0xc, <this>, 0x1e9` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
-HamaObj_1E9_Data:
+Hama_ResMethodTable_1E9:
 	.long	HamaStr_MT_CONTINUE
 	.byte	0x00, 0x00, 0x00, 0x00
 HamaStr_MT_CONTINUE:
@@ -66,7 +66,7 @@ HamaStr_MT_CONTINUE:
 	.byte	0x01, 0x00
 ; table of 85 code pointers, ending in 0 (object 0x409 holds their names)
 ; evidence: InitializeHama `RegObjTablHama 0x1600001, FunctionProc, 0x4b, <this>, 0x109` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
-HamaObj_109_Data:
+Hama_FunctionTable_109:
 	.long	HamaListProc
 	.long	FDLoadSaveTest
 	.long	GetMediaType
