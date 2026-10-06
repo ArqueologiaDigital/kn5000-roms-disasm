@@ -8260,8 +8260,8 @@ HDAE5000_TableData_Write_Skip6:
 	ld	xwa, Debug_SWI_JumpTable_Code
 	ldw	ix, 331
 	extz	xix
-	.byte	0xe9, 0xee
-	.long	SeqCh_SystemHandlerData
+	sll	xbc, 16
+	sll	xbc, 16
 	ld	(xix), 128
 	jp	(xwa)
 	pop	qiz
