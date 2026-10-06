@@ -462,12 +462,12 @@ EffectMode_DisplayName_CheckC2C5:
 
 EffectMode_DisplayName_LookupC2C5:
 	ld wa, iz
-	calr EffectMode_SearchPresetTableC2C5
+	calr StyleName_FindOverride_C2C5
 	cp xhl, 0xffffffff
 	jr z, EffectMode_DisplayName_FallbackC2C5
 	pushw 0x10
 	ld wa, iz
-	calr EffectMode_SearchPresetTableC2C5
+	calr StyleName_FindOverride_C2C5
 	push xhl
 	jr EffectMode_DisplayName_Render
 
@@ -477,12 +477,12 @@ EffectMode_DisplayName_FallbackC2C5:
 
 EffectMode_DisplayName_LookupC0:
 	ld wa, iz
-	calr EffectMode_SearchPresetTableC0
+	calr StyleName_FindOverride_Default
 	cp xhl, 0xffffffff
 	jr z, EffectMode_DisplayName_FallbackC0
 	pushw 0x10
 	ld wa, iz
-	calr EffectMode_SearchPresetTableC0
+	calr StyleName_FindOverride_Default
 	push xhl
 	jr EffectMode_DisplayName_Render
 
@@ -511,11 +511,11 @@ EffectMode_DisplayName_Done:
 	popw iz
 	ret
 
-EffectMode_SearchPresetTableC2C5:
+StyleName_FindOverride_C2C5:
 	ld ix, 0:i3
-	lda xhl, (EffectMode_SearchPresetTableC2C5_Data:24)
+	lda xhl, (StyleNameOverride_C2C5:24)
 
-EffectMode_SearchPresetTableC2C5_Loop:
+StyleName_FindOverride_C2C5_Loop:
 	ld bc, ix
 	extz xbc
 	ld xde, xbc
@@ -525,22 +525,22 @@ EffectMode_SearchPresetTableC2C5_Loop:
 	ld xbc, xhl
 	add xbc, xde
 	cp wa, (xbc)
-	jr nz, EffectMode_SearchPresetTableC2C5_Next
+	jr nz, StyleName_FindOverride_C2C5_Next
 	lda xhl, (xbc + 2)
 	ret
 
-EffectMode_SearchPresetTableC2C5_Next:
+StyleName_FindOverride_C2C5_Next:
 	inc 1, ix
 	cp ix, 0x16
-	jr c, EffectMode_SearchPresetTableC2C5_Loop
+	jr c, StyleName_FindOverride_C2C5_Loop
 	ld xhl, 0xffffffff
 	ret
 
-EffectMode_SearchPresetTableC0:
+StyleName_FindOverride_Default:
 	ld ix, 0:i3
-	lda xhl, (EffectMode_SearchPresetTableC0_Data:24)
+	lda xhl, (StyleNameOverride_Default:24)
 
-EffectMode_SearchPresetTableC0_Loop:
+StyleName_FindOverride_Default_Loop:
 	ld bc, ix
 	extz xbc
 	ld xde, xbc
@@ -550,14 +550,14 @@ EffectMode_SearchPresetTableC0_Loop:
 	ld xbc, xhl
 	add xbc, xde
 	cp wa, (xbc)
-	jr nz, EffectMode_SearchPresetTableC0_Next
+	jr nz, StyleName_FindOverride_Default_Next
 	lda xhl, (xbc + 2)
 	ret
 
-EffectMode_SearchPresetTableC0_Next:
+StyleName_FindOverride_Default_Next:
 	inc 1, ix
 	cp ix, 5:i3
-	jr c, EffectMode_SearchPresetTableC0_Loop
+	jr c, StyleName_FindOverride_Default_Loop
 	ld xhl, 0xffffffff
 	ret
 
@@ -10578,13 +10578,13 @@ NormScreenProc_Skip:
 NormScreenProc_Skip2:
 	ld	xwa, (xbc)
 	dec	1, xwa
-	call	EffectMode_SearchPresetTableC0
+	call	StyleName_FindOverride_Default
 	ld	xwa, (xiz+14)
 	dec	1, xwa
 	cp	xhl, 0xffffffff
 	jr	z, NormScreenProc_Skip3
 	pushw	16
-	call	EffectMode_SearchPresetTableC0
+	call	StyleName_FindOverride_Default
 	push	xhl
 	ld	xwa, (xiz+18)
 	push	xwa

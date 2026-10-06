@@ -262,17 +262,17 @@ OneTchFUNC_CaseTable:
 	.short	BitMapOut_ApplyWidgetPatch - BitMapOut_ByteData_WidgetTable
 	.short	BitMapOut_ApplyWidgetPatch - BitMapOut_ByteData_WidgetTable
 	.short	BitMapOut_ApplyWidgetPatch - BitMapOut_ByteData_WidgetTable
-; [nakarest] naka_style_bitmaps+0xae2  +0xae2..+0xc6e (0xeb7ca0, 396 B)
-; [nakarest] Text (396 B at 0xeb7ca0), first string "IModern Vibes Moscow Mandolins\xD5Sing
-; [nakarest] It, P"; no registered NAKA table points into it; reached through source references
-; [nakarest] EffectMode_SearchPresetTableC2C5 (ui/ui_mode_handlers.s: `lda xhl,
-; [nakarest] (EffectMode_SearchPresetTableC2C5_Data:24)`).
-EffectMode_SearchPresetTableC2C5_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAE2, 0x18C
-; [nakarest] naka_style_bitmaps+0xc6e  +0xc6e..+0xcce (0xeb7e2c, 96 B)
-; [nakarest] purpose not established: layout of 96 B at 0xeb7e2c not derived; readers below
-; [nakarest] Readers: source references EffectMode_SearchPresetTableC0 (ui/ui_mode_handlers.s:
-; [nakarest] `lda xhl, (EffectMode_SearchPresetTableC0_Data:24)`).
-EffectMode_SearchPresetTableC0_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC6E, 0x5A
+; StyleNameOverride_C2C5 -- 22 x {u16 style index, char name[16]}: display names that replace the table_data
+; style record's own (record + 43) while the title is TT_MSCTSEL / TT_MSALPSEL (0xC2 / 0xC5).  Searched by
+; StyleName_FindOverride_C2C5 for EffectMode_DisplayPresetName; on a miss the name comes from
+; STYLEREC_PTRTABLE_C2C5 (0x986000).  Typed in ui_widgets/naka_style_bitmaps.c
+; (scripts/converters/style_name_override_retype.py).
+StyleNameOverride_C2C5:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAE2, 0x18C
+; StyleNameOverride_Default -- 5 x {u16 style index, char name[16]}: the same overrides for TT_ONETCH (0xC0) and
+; NormScreenProc, whose fallback is STYLEREC_PTRTABLE_DEFAULT (0x987000).  Searched by
+; StyleName_FindOverride_Default.  Typed in ui_widgets/naka_style_bitmaps.c
+; (scripts/converters/style_name_override_retype.py).
+StyleNameOverride_Default:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC6E, 0x5A
 EffectMode_DiagSeq_AnimFrame_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCC8, 0x6
 ; PanelButton_LedMap -- [22 panel segments][8 button bits] x {LED row, LED pattern}.  EffectMode_MidiSetLEDs
 ; reads entry [segment][lowest set bit of the change mask] and calls Set_LEDs(row, pattern or 0); the row

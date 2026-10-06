@@ -1,0 +1,9 @@
+# rename_style_name_override_v7.sed -- written by scripts/converters/style_name_override_retype.py
+s/\bEffectMode_SearchPresetTableC2C5_Data\b/StyleNameOverride_C2C5/g
+s/\bEffectMode_SearchPresetTableC0_Data\b/StyleNameOverride_Default/g
+s/\bEffectMode_SearchPresetTableC2C5_Loop\b/StyleName_FindOverride_C2C5_Loop/g
+s/\bEffectMode_SearchPresetTableC2C5_Next\b/StyleName_FindOverride_C2C5_Next/g
+s/\bEffectMode_SearchPresetTableC0_Loop\b/StyleName_FindOverride_Default_Loop/g
+s/\bEffectMode_SearchPresetTableC0_Next\b/StyleName_FindOverride_Default_Next/g
+s/\bEffectMode_SearchPresetTableC2C5\b/StyleName_FindOverride_C2C5/g
+s/\bEffectMode_SearchPresetTableC0\b/StyleName_FindOverride_Default/g

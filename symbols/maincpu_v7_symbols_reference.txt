@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 52,800
-#   semantic names ........... 51,961 (98.4%)
-#   positional names ......... 839
+#   semantic names ........... 51,959 (98.4%)
+#   positional names ......... 841
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -10517,8 +10517,8 @@ BitMapOut_DeltaEncode_Type90Final_Data_2 00EB7A90
 BitMapOut_UpdateDisplayWidget_Str_Non_Panel_Memory 00EB7BC8
 EffectMode_UpdateBitFlags_CheckCount_Data 00EB7BDA
 OneTchFUNC_CaseTable 00EB7C94
-EffectMode_SearchPresetTableC2C5_Data 00EB7CA0
-EffectMode_SearchPresetTableC0_Data 00EB7E2C
+StyleNameOverride_C2C5 00EB7CA0
+StyleNameOverride_Default 00EB7E2C
 EffectMode_DiagSeq_AnimFrame_Data 00EB7E86
 PanelButton_LedMap 00EB7E8C
 EffectMode_SetAllLEDs_SetOne_Data 00EB7FEC
@@ -44553,12 +44553,12 @@ EffectMode_DisplayName_FallbackC0 00FB667C
 EffectMode_DisplayName_DefaultLookup 00FB6681
 EffectMode_DisplayName_Render 00FB6693
 EffectMode_DisplayName_Done 00FB66A6
-EffectMode_SearchPresetTableC2C5 00FB66A8
-EffectMode_SearchPresetTableC2C5_Loop 00FB66AF
-EffectMode_SearchPresetTableC2C5_Next 00FB66C8
-EffectMode_SearchPresetTableC0 00FB66D6
-EffectMode_SearchPresetTableC0_Loop 00FB66DD
-EffectMode_SearchPresetTableC0_Next 00FB66F6
+StyleName_FindOverride_C2C5 00FB66A8
+StyleName_FindOverride_C2C5_Loop 00FB66AF
+StyleName_FindOverride_C2C5_Next 00FB66C8
+StyleName_FindOverride_Default 00FB66D6
+StyleName_FindOverride_Default_Loop 00FB66DD
+StyleName_FindOverride_Default_Next 00FB66F6
 EffectMode_UpdateDisplay 00FB6702
 EffectMode_UpdateDisplay_NoPatch 00FB671F
 EffectMode_UpdateDisplay_CopyVoice 00FB6722
