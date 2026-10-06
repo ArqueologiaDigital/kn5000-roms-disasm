@@ -19,13 +19,13 @@
 
 SingleLoadModeFunc:
 	cp xbc, EVT_PAINT
-	jr z, SLMode_HandleShow
+	jr z, SingleLoadModeFunc_OnPaint
 	cp xbc, EVT_PS_FILE_NAME_BOX_ID
 	jr nz, SLMode_Return
 	ld (0x81b6:16), xde
 	jr SLMode_Return
 
-SLMode_HandleShow:
+SingleLoadModeFunc_OnPaint:
 	ld a, (0x89f8:16)
 	extz wa
 	sla wa, 2
@@ -41,13 +41,13 @@ SLMode_Return:
 
 SingleLoadDstBankFunc:
 	cp xbc, EVT_PAINT
-	jr z, SLDstBank_HandleShow
+	jr z, SingleLoadDstBankFunc_OnPaint
 	cp xbc, EVT_PS_FILE_NAME_BOX_ID
 	jr nz, SLDstBank_Return
 	ld (0x81ba:16), xde
 	jr SLDstBank_Return
 
-SLDstBank_HandleShow:
+SingleLoadDstBankFunc_OnPaint:
 	ld a, (0x89f8:16)
 	extz wa
 	sla wa, 2
@@ -63,13 +63,13 @@ SLDstBank_Return:
 
 SingleLoadDstMemFunc:
 	cp xbc, EVT_PAINT
-	jr z, SLDstMem_HandleShow
+	jr z, SingleLoadDstMemFunc_OnPaint
 	cp xbc, EVT_PS_FILE_NAME_BOX_ID
 	jr nz, SLDstMem_Return
 	ld (0x81be:16), xde
 	jr SLDstMem_Return
 
-SLDstMem_HandleShow:
+SingleLoadDstMemFunc_OnPaint:
 	ld xwa, (0x81be:16)
 	lda xde, (SLDstMem_HandleShow_PtrTable:24)
 	cp (0x89fa:16), 0
@@ -96,13 +96,13 @@ SLDstMem_Return:
 
 SingleLoadSrcBankFunc:
 	cp xbc, EVT_PAINT
-	jr z, SLSrcBank_HandleShow
+	jr z, SingleLoadSrcBankFunc_OnPaint
 	cp xbc, EVT_PS_FILE_NAME_BOX_ID
 	jr nz, SLSrcBank_Return
 	ld (0x81c2:16), xde
 	jr SLSrcBank_Return
 
-SLSrcBank_HandleShow:
+SingleLoadSrcBankFunc_OnPaint:
 	ld xwa, (0x81c2:16)
 	lda xde, (SLDstBank_HandleShow_PtrTable:24)
 	ld c, (0x89f8:16)
@@ -129,13 +129,13 @@ SLSrcBank_Return:
 
 SingleLoadSrcMemFunc:
 	cp xbc, EVT_PAINT
-	jr z, SLSrcMem_HandleShow
+	jr z, SingleLoadSrcMemFunc_OnPaint
 	cp xbc, EVT_PS_FILE_NAME_BOX_ID
 	jr nz, SLSrcMem_Return
 	ld (0x81c6:16), xde
 	jr SLSrcMem_Return
 
-SLSrcMem_HandleShow:
+SingleLoadSrcMemFunc_OnPaint:
 	ld xwa, (0x81c6:16)
 	lda xde, (SLDstMem_HandleShow_PtrTable:24)
 	ld c, (0x89f8:16)
@@ -1396,7 +1396,7 @@ SingleLoadSrcFunc:
 	cp xwa, EVT_INDEXSW_UP
 	jr z, SLSrc_HandleScroll
 	cp xwa, EVT_PAINT
-	jr z, SLSrc_HandleShow
+	jr z, SingleLoadSrcFunc_OnPaint
 	cp xwa, EVT_PS_FILE_NAME_BOX_ID
 	jrl nz, SLSrc_Return
 	ld xwa, xiz
@@ -1406,7 +1406,7 @@ SingleLoadSrcFunc:
 	call ApPostEvent
 	jrl SLSrc_Return
 
-SLSrc_HandleShow:
+SingleLoadSrcFunc_OnPaint:
 	ld xwa, (0x81e0:16)
 	ld xbc, EVT_SET_SELECTED_FILE_NUMBER
 	ld xde, 0xffffffff
@@ -2732,7 +2732,7 @@ SingleLoadDstFunc:
 	cp xwa, EVT_PARA_DRAW
 	jrl z, SLDst_HandleConfirm
 	cp xwa, EVT_PAINT
-	jr z, SLDst_HandleShow
+	jr z, SingleLoadDstFunc_OnPaint
 	cp xwa, EVT_PS_FILE_NAME_BOX_ID
 	jr nz, SLDst_Return
 	ld xwa, (xsp + 4)
@@ -2775,7 +2775,7 @@ SLDst_Return:
 	ld xhl, 0:i3
 	jrl SLDst_Epilogue
 
-SLDst_HandleShow:
+SingleLoadDstFunc_OnPaint:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3295,7 +3295,7 @@ CmpSingleLoadDstFunc:
 	cp xwa, EVT_INDEXSW_UP
 	jrl z, CmpDst_HandleScroll
 	cp xwa, EVT_PAINT
-	jr z, CmpDst_HandleShow
+	jr z, CmpSingleLoadDstFunc_OnPaint
 	cp xwa, EVT_PS_FILE_NAME_BOX_ID
 	jrl nz, CmpDst_Return
 	ld xwa, (xsp + 4)
@@ -3305,7 +3305,7 @@ CmpSingleLoadDstFunc:
 	call ApPostEvent
 	jrl CmpDst_Return
 
-CmpDst_HandleShow:
+CmpSingleLoadDstFunc_OnPaint:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3534,7 +3534,7 @@ CmpSingleLoadFileFunc:
 	cp xbc, EVT_INDEXSW_UP
 	jr z, CmpFile_HandleScroll
 	cp xbc, EVT_PAINT
-	jr z, CmpFile_HandleShow
+	jr z, CmpSingleLoadFileFunc_OnPaint
 	cp xbc, EVT_PS_FILE_NAME_BOX_ID
 	jrl nz, CmpFile_Return
 	ld (0x81fc:16), xde
@@ -3550,7 +3550,7 @@ CmpFile_Selection_Clamp:
 	ld xde, 0xffffffff
 	jr CmpFile_ShowDispatch
 
-CmpFile_HandleShow:
+CmpSingleLoadFileFunc_OnPaint:
 	ld (0x8870:16), 0
 	cp (0x89f8:16), 2
 	jr nz, CmpFile_ShowDefault

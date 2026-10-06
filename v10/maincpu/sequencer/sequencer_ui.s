@@ -10420,7 +10420,7 @@ SqedtVal2Proc:
 	ld (xsp + 74), xwa
 	ld xwa, (xsp + 70)
 	cp xwa, EVT_INDEXSW_DOWN
-	jrl z, SqedtVal2_HandleUpScrollInner
+	jrl z, SqedtVal2Proc_OnIndexswDown
 	cp xwa, EVT_INDEXSW_UP
 	jrl z, SqedtVal2_HandleSelectEvent
 	cp xwa, EVT_SELE_DRAW
@@ -11247,7 +11247,7 @@ SqedtVal2_SelectCase4_PostEvent:
 	ld xde, (xsp + 66)
 	jrl AccIll_CallSetDialDown
 
-SqedtVal2_HandleUpScrollInner:
+SqedtVal2Proc_OnIndexswDown:
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)

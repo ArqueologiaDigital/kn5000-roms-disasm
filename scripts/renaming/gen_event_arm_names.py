@@ -11,7 +11,10 @@ QUESTION IT ANSWERS / WHAT IT DOES
       an arm several events share is named for the set: OnPaintOrRepaint, OnIndexswAny (UP / DOWN and their
       _AIC repeats), OnIndexswUpOrDown ...; a set of more than three other events is left alone;
     - and its current name is generic: semantic_score's GENERIC, POSITIONAL or CONTINUATION patterns, or a
-      _CaseX / _HandleEvt* / _HandleEvent<digit>* / _Evt<X> / _Handler<n> / _Return<n> / _Path<n> suffix.
+      _CaseX / _HandleEvt* / _HandleEvent<digit>* / _Evt<X> / _Handler<n> / _Return<n> / _Path<n> suffix;
+      or it contradicts the event: Handle<Show|Hide|Paint|Draw|Repaint> on an arm that event does not reach
+      (Label_HandlePaint runs on EVT_DRAW), or Up/Inc vs Down/Dec on an index-switch arm of the other
+      direction (AcLswBox_HandleScrollDown runs on EVT_INDEXSW_UP).
   The new name is <dispatcher>_On<Event>.  The event is spelled as frame_switch_cases.py spells it (EVT_GET_STRING ->
   OnGetString).  The dispatcher is the nearest label above the compare that is not itself generic in that sense,
   with a continuation suffix stripped.
@@ -53,6 +56,23 @@ def code(x):
 
 def spell(evt):
     return "On" + "".join(w.capitalize() for w in evt[4:].split("_"))
+
+
+SINGLE = {"Show": "EVT_SHOW", "Hide": "EVT_HIDE", "Paint": "EVT_PAINT", "Draw": "EVT_DRAW", "Repaint": "EVT_REPAINT"}
+
+
+def contradicts(name, evts):
+    """True when the old name names another event: Handle<Show|Hide|Paint|Draw|Repaint> / _On<...> for an arm
+    those events do not reach, or Up/Inc vs Down/Dec on an index-switch arm of the other direction."""
+    m = re.search(r'(?:Handle|_On)(Show|Hide|Paint|Draw|Repaint)(?![a-z])', name)
+    if m and SINGLE[m.group(1)] not in evts:
+        return True
+    if evts and all("INDEXSW" in e for e in evts):
+        up, dn = any("_UP" in e for e in evts), any("_DOWN" in e for e in evts)
+        if up != dn and ((up and re.search(r'(Down|Dec)(?![a-z])', name)) or
+                         (dn and re.search(r'(Up|Inc)(?![a-z])', name))):
+            return True
+    return False
 
 
 IDX = {"EVT_INDEXSW_UP", "EVT_INDEXSW_DOWN", "EVT_INDEXSW_UP_AIC", "EVT_INDEXSW_DOWN_AIC"}
@@ -120,7 +140,7 @@ def plan(tree):
     for t, uses in sorted(arms.items()):
         evts = {e for e, _ in uses}
         disps = {d for _, d in uses}
-        if len(disps) != 1 or None in disps or refs[t] != len(uses) or not generic(t):
+        if len(disps) != 1 or None in disps or refs[t] != len(uses) or not (generic(t) or contradicts(t, evts)):
             continue
         ev = spell_set(evts)
         if ev is None:

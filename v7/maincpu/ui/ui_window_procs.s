@@ -1197,13 +1197,13 @@ ModeEditProc:
 	cp xbc, EVT_CHANGE_PROPERTY
 	jrl z, ModeEdit_HandleViewUpdate
 	cp xbc, EVT_DRAW
-	jr z, ModeEdit_HandlePaint
+	jr z, ModeEditProc_OnDraw
 	ld XWA, (xsp + 0x0114)
 	ld XDE, (xsp + 0x0110)
 	calr BoxProc
 	jrl ModeEdit_Epilogue
 
-ModeEdit_HandlePaint:
+ModeEditProc_OnDraw:
 	ld	xwa, (xsp+276)
 	ld	xde, (xsp+272)
 	calr	BoxProc
@@ -1329,13 +1329,13 @@ TitleEditProc:
 	cp xbc, EVT_CHANGE_PROPERTY
 	jrl z, TitleEdit_HandleViewUpdate
 	cp xbc, EVT_DRAW
-	jr z, TitleEdit_HandlePaint
+	jr z, TitleEditProc_OnDraw
 	ld XWA, (xsp + 0x0114)
 	ld XDE, (xsp + 0x0110)
 	calr BoxProc
 	jrl TitleEdit_Epilogue
 
-TitleEdit_HandlePaint:
+TitleEditProc_OnDraw:
 	ld	xwa, (xsp+276)
 	ld	xde, (xsp+272)
 	calr	BoxProc
@@ -1458,12 +1458,12 @@ StringBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_DRAW
-	jr z, StringBox_HandlePaint
+	jr z, StringBoxProc_OnDraw
 	ld xwa, xiz
 	calr BoxProc
 	jr StringBox_Epilogue
 
-StringBox_HandlePaint:
+StringBoxProc_OnDraw:
 	ld xwa, xiz
 	calr BoxProc
 	ld xwa, xiz
@@ -1504,12 +1504,12 @@ LabelProc:	; SysData_F9C4B6
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_DRAW
-	jr z, Label_HandlePaint
+	jr z, LabelProc_OnDraw
 	ld xwa, xiz
 	call ViewableProc
 	jr Label_Epilogue
 
-Label_HandlePaint:
+LabelProc_OnDraw:
 	ld xwa, xiz
 	call ViewableProc
 	ld xwa, xiz
@@ -1545,12 +1545,12 @@ BitmapProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_DRAW
-	jr z, Bitmap_HandlePaint
+	jr z, BitmapProc_OnDraw
 	ld xwa, xiz
 	call ViewableProc
 	jr Bitmap_Epilogue
 
-Bitmap_HandlePaint:
+BitmapProc_OnDraw:
 	ld xwa, xiz
 	call ViewableProc
 	ld xwa, xiz
@@ -1574,12 +1574,12 @@ VwUserBitmapProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_DRAW
-	jr z, VwUserBitmap_HandlePaint
+	jr z, VwUserBitmapProc_OnDraw
 	ld xwa, xiz
 	call ViewableProc
 	jr VwUserBitmap_Epilogue
 
-VwUserBitmap_HandlePaint:
+VwUserBitmapProc_OnDraw:
 	ld xwa, xiz
 	call ViewableProc
 	ld xwa, xiz
@@ -1728,12 +1728,12 @@ IconProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_DRAW
-	jr z, Icon_HandlePaint
+	jr z, IconProc_OnDraw
 	ld xwa, xiz
 	call ViewableProc
 	jr Icon_Epilogue
 
-Icon_HandlePaint:
+IconProc_OnDraw:
 	ld xwa, xiz
 	call ViewableProc
 	ld xwa, xiz
@@ -1778,12 +1778,12 @@ LineProc:
 	push xiz
 	ld (xsp + 20), xwa
 	cp xbc, EVT_DRAW
-	jr z, Line_HandlePaint
+	jr z, LineProc_OnDraw
 	ld xwa, (xsp + 20)
 	call ViewableProc
 	jr Line_Epilogue
 
-Line_HandlePaint:
+LineProc_OnDraw:
 	ld xwa, (xsp + 20)
 	call ViewableProc
 	ld xwa, (xsp + 20)
@@ -1840,14 +1840,14 @@ FrameProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	cp xwa, EVT_DRAW
-	jr z, Frame_HandlePaint
+	jr z, FrameProc_OnDraw
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	call ViewableProc
 	jr Frame_Epilogue
 
-Frame_HandlePaint:
+FrameProc_OnDraw:
 	ld xwa, xiz
 	call GetVisible
 	cp hl, 0:i3
@@ -2260,12 +2260,12 @@ TextBoxProc:
 	push xiz
 	ld (xsp + 38), xwa
 	cp xbc, EVT_DRAW
-	jr z, TextBox_HandlePaint
+	jr z, TextBoxProc_OnDraw
 	ld xwa, (xsp + 38)
 	calr BoxProc
 	jrl TextBox_Epilogue
 
-TextBox_HandlePaint:
+TextBoxProc_OnDraw:
 	ld	xwa, (xsp+38)
 	calr	BoxProc
 	ld	xwa, (xsp+38)
@@ -2583,17 +2583,17 @@ AcLswBoxProc:
 	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcLswBox_HandlePageDown
 	cp xbc, EVT_INDEXSW_DOWN_AIC
-	jrl z, AcLswBox_HandlePageUp
+	jrl z, AcLswBoxProc_OnIndexswDownAic
 	cp xbc, EVT_INDEXSW_UP
-	jrl z, AcLswBox_HandleScrollDown
+	jrl z, AcLswBoxProc_OnIndexswUp
 	cp xbc, EVT_INDEXSW_UP_AIC
 	jrl z, AcLswBox_HandleScrollUp
 	cp xbc, EVT_LSW_DATA
 	jrl z, AcLswBox_HandleWriteBack
 	cp xbc, EVT_REPAINT
-	jr z, AcLswBox_HandleShowHide
+	jr z, AcLswBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, AcLswBox_HandleShowHide
+	jr z, AcLswBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, AcLswBox_HandleClose
 	cp xbc, EVT_SHOW
@@ -2632,7 +2632,7 @@ AcLswBox_CallPsParaBox:
 	calr PsParaBoxProc
 	jrl AcLswBox_ReturnZeroJmp
 
-AcLswBox_HandleShowHide:
+AcLswBoxProc_OnPaintOrRepaint:
 	ld xwa, (xsp + 20)
 	ld xde, (xsp + 16)
 	calr PsParaBoxProc
@@ -2690,7 +2690,7 @@ AcLswBox_HandleScrollUp:
 	ld xbc, EVT_CALC_PARAM
 	jrl Ac_SendUIEvent_Common
 
-AcLswBox_HandleScrollDown:
+AcLswBoxProc_OnIndexswUp:
 	ld xwa, (xsp + 20)
 	ld xde, (xsp + 16)
 	calr PsParaBoxProc
@@ -2705,7 +2705,7 @@ AcLswBox_HandleScrollDown:
 	ld xbc, EVT_CALC_PARAM
 	jr Ac_SendUIEvent_Common
 
-AcLswBox_HandlePageUp:
+AcLswBoxProc_OnIndexswDownAic:
 	ld xwa, (xsp + 20)
 	ld xde, (xsp + 16)
 	calr PsParaBoxProc
@@ -2765,9 +2765,9 @@ AcRamBoxProc:
 	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcRamBox_HandlePageDown
 	cp xbc, EVT_INDEXSW_DOWN_AIC
-	jrl z, AcRamBox_HandlePageUp
+	jrl z, AcRamBoxProc_OnIndexswDownAic
 	cp xbc, EVT_INDEXSW_UP
-	jrl z, AcRamBox_HandleScrollDown
+	jrl z, AcRamBoxProc_OnIndexswUp
 	cp xbc, EVT_INDEXSW_UP_AIC
 	jrl z, AcRamBox_HandleScrollUp
 	cp xbc, EVT_RAM_DATA
@@ -2775,9 +2775,9 @@ AcRamBoxProc:
 	cp xbc, EVT_REFRESH_PARA_DRAW
 	jr z, AcRamBox_HandleDataRefresh
 	cp xbc, EVT_REPAINT
-	jr z, AcRamBox_HandleShowHide
+	jr z, AcRamBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, AcRamBox_HandleShowHide
+	jr z, AcRamBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_GET_STRING
 	jrl nz, AcRamBox_DefaultHandler
 	ld xwa, (xsp + 34)
@@ -2799,7 +2799,7 @@ AcRamBoxProc:
 	call ApFuncCall
 	jrl AcRamBox_EventReturn
 
-AcRamBox_HandleShowHide:
+AcRamBoxProc_OnPaintOrRepaint:
 	ld xwa, (xsp + 34)
 	ld xde, (xsp + 30)
 	calr PsParaBoxProc
@@ -2866,7 +2866,7 @@ AcRamBox_HandleScrollUp:
 	ld xbc, EVT_CALC_PARAM
 	jrl AcRamBox_SendUIEvent_Common
 
-AcRamBox_HandleScrollDown:
+AcRamBoxProc_OnIndexswUp:
 	ld xwa, (xsp + 34)
 	ld xde, (xsp + 30)
 	calr PsParaBoxProc
@@ -2881,7 +2881,7 @@ AcRamBox_HandleScrollDown:
 	ld xbc, EVT_CALC_PARAM
 	jr AcRamBox_SendUIEvent_Common
 
-AcRamBox_HandlePageUp:
+AcRamBoxProc_OnIndexswDownAic:
 	ld xwa, (xsp + 34)
 	ld xde, (xsp + 30)
 	calr PsParaBoxProc
@@ -2941,9 +2941,9 @@ AcTempoBoxProc:
 	cp xbc, EVT_LSW_DATA
 	jr z, AcTempoBox_HandleConfirm
 	cp xbc, EVT_REPAINT
-	jr z, AcTempoBox_HandleShowHide
+	jr z, AcTempoBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, AcTempoBox_HandleShowHide
+	jr z, AcTempoBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, AcTempoBox_HandleClose
 	cp xbc, EVT_SHOW
@@ -2966,7 +2966,7 @@ AcTempoBox_CallPsParaBox:
 	calr PsParaBoxProc
 	jr PsRadioBox_EventReturn
 
-AcTempoBox_HandleShowHide:
+AcTempoBoxProc_OnPaintOrRepaint:
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	calr PsParaBoxProc
@@ -3831,13 +3831,13 @@ AcListBoxProc:
 	cp xbc, EVT_GET_STRING
 	jrl z, AcListBox_GetText
 	cp xbc, EVT_INDEXSW_DOWN
-	jrl z, AcListBox_ScrollDownInc
+	jrl z, AcListBoxProc_OnIndexswDownAny
 	cp xbc, EVT_INDEXSW_DOWN_AIC
-	jrl z, AcListBox_ScrollDownInc
+	jrl z, AcListBoxProc_OnIndexswDownAny
 	cp xbc, EVT_INDEXSW_UP
-	jr z, AcListBox_ScrollUpDown
+	jr z, AcListBoxProc_OnIndexswUpAny
 	cp xbc, EVT_INDEXSW_UP_AIC
-	jr z, AcListBox_ScrollUpDown
+	jr z, AcListBoxProc_OnIndexswUpAny
 	cp xbc, EVT_SHOW
 	jrl nz, AcListBox_Default
 	ld xwa, (xsp + 12)
@@ -3861,7 +3861,7 @@ AcListBoxProc:
 	ld wa, 1:i3
 	jrl AcListBox_EnableDials
 
-AcListBox_ScrollUpDown:
+AcListBoxProc_OnIndexswUpAny:
 	ld xwa, (xsp + 12)
 	ld xde, (xsp + 8)
 	calr PsListBoxProc
@@ -3902,7 +3902,7 @@ AcListBox_ScrollUpDown:
 	ld wa, 1:i3
 	jr AcListBox_EnableDials
 
-AcListBox_ScrollDownInc:
+AcListBoxProc_OnIndexswDownAny:
 	ld xwa, (xsp + 12)
 	ld xde, (xsp + 8)
 	calr PsListBoxProc

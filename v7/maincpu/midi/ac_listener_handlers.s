@@ -17,9 +17,9 @@ AcLswFuncBoxProc:
 	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcLswBox_HandleScrollDownEvt
 	cp xbc, EVT_INDEXSW_DOWN_AIC
-	jrl z, AcLswBox_HandleScrollUpEvt
+	jrl z, AcLswFuncBoxProc_OnIndexswDownAic
 	cp xbc, EVT_INDEXSW_UP
-	jrl z, AcLswBox_HandleDialDecEvt
+	jrl z, AcLswFuncBoxProc_OnIndexswUp
 	cp xbc, EVT_INDEXSW_UP_AIC
 	jrl z, AcLswBox_HandleDialIncEvt
 	cp xbc, EVT_LSW_DATA
@@ -152,7 +152,7 @@ AcLswBox_HandleDialIncEvt:
 	ld xde, 1:i3
 	jr AudioMix_SendEventAlt
 
-AcLswBox_HandleDialDecEvt:
+AcLswFuncBoxProc_OnIndexswUp:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -167,7 +167,7 @@ AcLswBox_HandleDialDecEvt:
 	ld xde, 1:i3
 	jr AudioMix_SendEventAlt
 
-AcLswBox_HandleScrollUpEvt:
+AcLswFuncBoxProc_OnIndexswDownAic:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -245,9 +245,9 @@ AcLswFuncEditBoxProc:
 	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcLswEdit_HandleScrollDownEvt
 	cp xbc, EVT_INDEXSW_DOWN_AIC
-	jrl z, AcLswEdit_HandleScrollUpEvt
+	jrl z, AcLswFuncEditBoxProc_OnIndexswDownAic
 	cp xbc, EVT_INDEXSW_UP
-	jrl z, AcLswEdit_HandleDialDecEvt
+	jrl z, AcLswFuncEditBoxProc_OnIndexswUp
 	cp xbc, EVT_INDEXSW_UP_AIC
 	jrl z, AcLswEdit_HandleDialIncEvt
 	cp xbc, EVT_LSW_DATA
@@ -380,7 +380,7 @@ AcLswEdit_HandleDialIncEvt:
 	ld xde, 1:i3
 	jr AudioMix_SendEvent
 
-AcLswEdit_HandleDialDecEvt:
+AcLswFuncEditBoxProc_OnIndexswUp:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -395,7 +395,7 @@ AcLswEdit_HandleDialDecEvt:
 	ld xde, 1:i3
 	jr AudioMix_SendEvent
 
-AcLswEdit_HandleScrollUpEvt:
+AcLswFuncEditBoxProc_OnIndexswDownAic:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc

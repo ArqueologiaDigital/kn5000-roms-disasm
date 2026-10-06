@@ -11363,7 +11363,7 @@ AcPmBkEditBoxProc:
 	cp xbc, EVT_SW_IN
 	jrl z, AcPmBkEdit_OK
 	cp xbc, EVT_INDEXSW_DOWN
-	jrl z, AcPmBkEdit_AutoIncDown
+	jrl z, AcPmBkEditBoxProc_OnIndexswDown
 	cp xbc, EVT_INDEXSW_DOWN_AIC
 	jrl z, AcPmBkEdit_ScrollDown
 	cp xbc, EVT_INDEXSW_UP
@@ -11712,7 +11712,7 @@ AcPmBkEdit_ScrollDown:
 	ld xde, xhl
 	jr AcPmBkEdit_DispatchAndReturn
 
-AcPmBkEdit_AutoIncDown:
+AcPmBkEditBoxProc_OnIndexswDown:
 	ld XWA, (xsp + 0x0132)
 	ld XDE, (xsp + 0x012e)
 	call InheritedProc
@@ -11962,9 +11962,9 @@ VariScreenProc:
 	cp xwa, EVT_SELE_DRAW
 	jrl z, VariScreen_HandleSelect
 	cp xwa, EVT_DRAW
-	jrl z, VariScreen_HandlePaint
+	jrl z, VariScreenProc_OnDraw
 	cp xwa, EVT_PAINT
-	jr z, VariScreen_HandleShow
+	jr z, VariScreenProc_OnPaint
 	cp xwa, EVT_TVARI_PAINT
 	jr z, VariScreen_RefreshAfterInit
 	cp xwa, EVT_SHOW
@@ -11986,7 +11986,7 @@ VariScreen_RefreshAfterInit:
 	ld xde, 0:i3
 	jrl VariScreen_SendAndReturn
 
-VariScreen_HandleShow:
+VariScreenProc_OnPaint:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 42 of 50 slots byte-identical
 	ld	xwa, (xsp+566)
 	call	GetViewInstance
@@ -12042,7 +12042,7 @@ VariScreen_CallInherited:
 	call InheritedProc
 	jrl FileBrowser_ReturnZero
 
-VariScreen_HandlePaint:
+VariScreenProc_OnDraw:
 	ld XWA,(XSP+0x0236)
 	ld XBC,(XSP+0x0232)
 	ld XDE,(XSP+0x022e)

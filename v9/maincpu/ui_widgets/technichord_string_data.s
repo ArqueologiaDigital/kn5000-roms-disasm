@@ -5273,37 +5273,37 @@ DiskTypeCode_Dashes1:	.incbin "includes/generated/naka_technichord_strings.bin",
 DiskTypeCode_Dashes2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A646, 0x4
 ; [nakarest] StorageArea_NameTable  +0x1a64a..+0x1a65e (0xea0598, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xea0598 not derived; readers below
-; [nakarest] Readers: source references SLMode_HandleShow (file_io/single_load.s: `lda xbc,
+; [nakarest] Readers: source references SingleLoadModeFunc_OnPaint (file_io/single_load.s: `lda xbc,
 ; [nakarest] (StorageArea_NameTable:24)`).
 StorageArea_NameTable:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A64A, 0x14
 ; [nakarest] StorageAreaName_Blank  +0x1a65e..+0x1a66c (0xea05ac, 14 B)
 ; [nakarest] Text (14 B at 0xea05ac), first string ""; no registered NAKA table points into it;
 ; [nakarest] reached through 1 data word in StorageArea_NameTable (at 0xea05a8), which is read
-; [nakarest] by SLMode_HandleShow (file_io/single_load.s: `lda xbc,
+; [nakarest] by SingleLoadModeFunc_OnPaint (file_io/single_load.s: `lda xbc,
 ; [nakarest] (StorageArea_NameTable:24)`).
 StorageAreaName_Blank:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A65E, 0xE
 ; [nakarest] StorageAreaName_SoundMemory  +0x1a66c..+0x1a67a (0xea05ba, 14 B)
 ; [nakarest] Text (14 B at 0xea05ba), first string ""; no registered NAKA table points into it;
 ; [nakarest] reached through 1 data word in StorageArea_NameTable (at 0xea05a4), which is read
-; [nakarest] by SLMode_HandleShow (file_io/single_load.s: `lda xbc,
+; [nakarest] by SingleLoadModeFunc_OnPaint (file_io/single_load.s: `lda xbc,
 ; [nakarest] (StorageArea_NameTable:24)`).
 StorageAreaName_SoundMemory:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A66C, 0xE
 ; [nakarest] StorageAreaName_Composer  +0x1a67a..+0x1a688 (0xea05c8, 14 B)
 ; [nakarest] Text (14 B at 0xea05c8), first string ""; no registered NAKA table points into it;
 ; [nakarest] reached through 1 data word in StorageArea_NameTable (at 0xea05a0), which is read
-; [nakarest] by SLMode_HandleShow (file_io/single_load.s: `lda xbc,
+; [nakarest] by SingleLoadModeFunc_OnPaint (file_io/single_load.s: `lda xbc,
 ; [nakarest] (StorageArea_NameTable:24)`).
 StorageAreaName_Composer:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A67A, 0xE
 ; [nakarest] StorageAreaName_Sequencer  +0x1a688..+0x1a696 (0xea05d6, 14 B)
 ; [nakarest] Text (14 B at 0xea05d6), first string ""; no registered NAKA table points into it;
 ; [nakarest] reached through 1 data word in StorageArea_NameTable (at 0xea059c), which is read
-; [nakarest] by SLMode_HandleShow (file_io/single_load.s: `lda xbc,
+; [nakarest] by SingleLoadModeFunc_OnPaint (file_io/single_load.s: `lda xbc,
 ; [nakarest] (StorageArea_NameTable:24)`).
 StorageAreaName_Sequencer:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A688, 0xE
 ; [nakarest] StorageAreaName_PanelMemory  +0x1a696..+0x1a6a4 (0xea05e4, 14 B)
 ; [nakarest] Text (14 B at 0xea05e4), first string ""; no registered NAKA table points into it;
 ; [nakarest] reached through 1 data word in StorageArea_NameTable (at 0xea0598), which is read
-; [nakarest] by SLMode_HandleShow (file_io/single_load.s: `lda xbc,
+; [nakarest] by SingleLoadModeFunc_OnPaint (file_io/single_load.s: `lda xbc,
 ; [nakarest] (StorageArea_NameTable:24)`).
 StorageAreaName_PanelMemory:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A696, 0xE
 ; [nakarest] naka_technichord_strings+0x1a6a4  +0x1a6a4..+0x1a6b8 (0xea05f2, 20 B)
@@ -5312,7 +5312,7 @@ StorageAreaName_PanelMemory:	.incbin "includes/generated/naka_technichord_string
 ; [nakarest] (SLDstBank_HandleShow_PtrTable:24)`), SLDstBankList_FuncBody_Helper3
 ; [nakarest] (file_io/single_load.s: `lda xde, (SLDstBank_HandleShow_PtrTable:24)`),
 ; [nakarest] SLDstBankList_FuncBody_Helper5 (file_io/single_load.s: `lda xde,
-; [nakarest] (SLDstBank_HandleShow_PtrTable:24)`), SLDstBank_HandleShow
+; [nakarest] (SLDstBank_HandleShow_PtrTable:24)`), SingleLoadDstBankFunc_OnPaint
 ; [nakarest] (file_io/single_load.s: `lda xbc, (SLDstBank_HandleShow_PtrTable:24)`), 4 more.
 SLDstBank_HandleShow_PtrTable:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A6A4, 0x14	; 5 x 32-bit pointer
 ; [nakarest] BankStr_Dashes  +0x1a6b8..+0x1a6be (0xea0606, 6 B)
@@ -5769,7 +5769,7 @@ SLSrcBankList_FuncBody_Entry_Data_2:	.incbin "includes/generated/naka_technichor
 SLSrcBankList_FuncBody_Data_4:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA46, 0x2
 ; [nakarest] naka_technichord_strings+0x1aa48  +0x1aa48..+0x1aa5c (0xea0996, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xea0996 not derived; readers below
-; [nakarest] Readers: source references SLSrc_HandleShow (file_io/single_load.s: `lda xde,
+; [nakarest] Readers: source references SingleLoadSrcFunc_OnPaint (file_io/single_load.s: `lda xde,
 ; [nakarest] (SLSrc_HandleShow_PtrTable:24)`), SLSrc_ScrollMode40 (file_io/single_load.s: `lda
 ; [nakarest] xde, (SLSrc_HandleShow_PtrTable:24)`), SLSrc_ScrollMode5_Dispatch
 ; [nakarest] (file_io/single_load.s: `lda xde, (SLSrc_HandleShow_PtrTable:24)`),
@@ -5876,7 +5876,7 @@ SLDstBankList_FuncBody_Data_8:	.incbin "includes/generated/naka_technichord_stri
 ; [nakarest] purpose not established: layout of 20 B at 0xea0a16 not derived; readers below
 ; [nakarest] Readers: source references SLDst_HandleConfirm (file_io/single_load.s: `lda xde,
 ; [nakarest] (SLDst_HandleShow_PtrTable:24)`), SLDst_HandleScroll (file_io/single_load.s: `lda
-; [nakarest] xde, (SLDst_HandleShow_PtrTable:24)`), SLDst_HandleShow (file_io/single_load.s:
+; [nakarest] xde, (SLDst_HandleShow_PtrTable:24)`), SingleLoadDstFunc_OnPaint (file_io/single_load.s:
 ; [nakarest] `lda xde, (SLDst_HandleShow_PtrTable:24)`), SLDst_ScrollDispatch
 ; [nakarest] (file_io/single_load.s: `lda xde, (SLDst_HandleShow_PtrTable:24)`), 8 more.
 SLDst_HandleShow_PtrTable:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAC8, 0x14	; 15 x 32-bit pointer
@@ -5892,7 +5892,7 @@ CmpSrc_HandleShow_PtrTable:	.incbin "includes/generated/naka_technichord_strings
 ; [nakarest] naka_technichord_strings+0x1aaf0  +0x1aaf0..+0x1ab00 (0xea0a3e, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xea0a3e not derived; readers below
 ; [nakarest] Readers: source references CmpDst_HandleScroll (file_io/single_load.s: `lda xde,
-; [nakarest] (CmpDst_HandleShow_PtrTable:24)`), CmpDst_HandleShow (file_io/single_load.s: `lda
+; [nakarest] (CmpDst_HandleShow_PtrTable:24)`), CmpSingleLoadDstFunc_OnPaint (file_io/single_load.s: `lda
 ; [nakarest] xde, (CmpDst_HandleShow_PtrTable:24)`), CmpDst_ScrollMode5 (file_io/single_load.s:
 ; [nakarest] `lda xde, (CmpDst_HandleShow_PtrTable:24)`), CmpDst_ScrollMode6
 ; [nakarest] (file_io/single_load.s: `lda xde, (CmpDst_HandleShow_PtrTable:24)`), 4 more.

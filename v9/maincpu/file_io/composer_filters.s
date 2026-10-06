@@ -17,7 +17,7 @@ FmmComposerLoadFunc:
 	cp xbc, EVT_INDEXSW_UP
 	jrl z, CompLoad_HandleScroll
 	cp xbc, EVT_PAINT
-	jrl z, CompLoad_HandleShow
+	jrl z, FmmComposerLoadFunc_OnPaint
 	cp xbc, EVT_PS_FILE_NAME_BOX_ID
 	jrl z, CompLoad_HandleSelection
 	cp xbc, EVT_ACTIVATE_STATE
@@ -140,7 +140,7 @@ CompLoad_Selection_Negative:
 	ld xde, 0:i3
 	jrl CompLoad_DispatchWidget
 
-CompLoad_HandleShow:
+FmmComposerLoadFunc_OnPaint:
 	ld iz, 0:i3
 
 CompLoad_DrawItemLoop:
@@ -422,14 +422,14 @@ FmmLoadFilterFunc:
 	cp xbc, EVT_INDEXSW_UP
 	jr z, LoadFilter_HandleScroll
 	cp xbc, EVT_PAINT
-	jr z, LoadFilter_HandleShow
+	jr z, FmmLoadFilterFunc_OnPaint
 	cp xbc, EVT_PS_FILE_NAME_BOX_ID
 	jrl nz, LoadFilter_Return
 	ld xwa, (xsp + 2)
 	ld (0x7f82:16), xwa
 	jrl LoadFilter_Return
 
-LoadFilter_HandleShow:
+FmmLoadFilterFunc_OnPaint:
 	ldw (xsp), 0x0
 
 LoadFilter_DrawLoop:
@@ -643,14 +643,14 @@ FmmSaveFilterFunc:
 	cp xbc, EVT_INDEXSW_UP
 	jr z, SaveFilter_HandleScroll
 	cp xbc, EVT_PAINT
-	jr z, SaveFilter_HandleShow
+	jr z, FmmSaveFilterFunc_OnPaint
 	cp xbc, EVT_PS_FILE_NAME_BOX_ID
 	jrl nz, SaveFilter_Return
 	ld xwa, (xsp + 2)
 	ld (0x8006:16), xwa
 	jrl SaveFilter_Return
 
-SaveFilter_HandleShow:
+FmmSaveFilterFunc_OnPaint:
 	ldw (xsp), 0x0
 
 SaveFilter_DrawLoop:

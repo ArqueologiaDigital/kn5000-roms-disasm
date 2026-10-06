@@ -888,7 +888,7 @@ AcNumEditBoxProc:
 	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcNumEdit_ScrollDown
 	cp xbc, EVT_INDEXSW_DOWN_AIC
-	jrl z, AcNumEdit_AutoIncDown
+	jrl z, AcNumEditBoxProc_OnIndexswDownAic
 	cp xbc, EVT_INDEXSW_UP
 	jrl z, AcNumEdit_ScrollUp
 	cp xbc, EVT_INDEXSW_UP_AIC
@@ -1043,7 +1043,7 @@ AcNumEdit_ScrollUp:
 	ld xbc, EVT_CALC_PARAM
 	jr AcNumEdit_Dispatch
 
-AcNumEdit_AutoIncDown:
+AcNumEditBoxProc_OnIndexswDownAic:
 	ld xwa, (xsp + 32)
 	ld xde, (xsp + 28)
 	calr PsEditBoxProc
@@ -1109,7 +1109,7 @@ AcLswEditBoxProc:
 	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcLswEdit_ScrollDown
 	cp xbc, EVT_INDEXSW_DOWN_AIC
-	jrl z, AcLswEdit_AutoIncDown
+	jrl z, AcLswEditBoxProc_OnIndexswDownAic
 	cp xbc, EVT_INDEXSW_UP
 	jrl z, AcLswEdit_ScrollUp
 	cp xbc, EVT_INDEXSW_UP_AIC
@@ -1298,7 +1298,7 @@ AcLswEdit_ScrollUp:
 	ld xbc, EVT_CALC_PARAM
 	jrl AcLswEdit_Dispatch
 
-AcLswEdit_AutoIncDown:
+AcLswEditBoxProc_OnIndexswDownAic:
 	ld xwa, (xsp + 26)
 	ld xde, (xsp + 22)
 	calr PsEditBoxProc
@@ -1653,7 +1653,7 @@ AcRamEditBoxProc:
 	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcRamEdit_ScrollDown
 	cp xbc, EVT_INDEXSW_DOWN_AIC
-	jrl z, AcRamEdit_AutoIncDown
+	jrl z, AcRamEditBoxProc_OnIndexswDownAic
 	cp xbc, EVT_INDEXSW_UP
 	jrl z, AcRamEdit_ScrollUp
 	cp xbc, EVT_INDEXSW_UP_AIC
@@ -1853,7 +1853,7 @@ AcRamEdit_ScrollUp:
 	ld xbc, EVT_CALC_PARAM
 	jrl AcRamEdit_Dispatch
 
-AcRamEdit_AutoIncDown:
+AcRamEditBoxProc_OnIndexswDownAic:
 	ld xwa, (xsp + 34)
 	ld xde, (xsp + 30)
 	calr PsEditBoxProc

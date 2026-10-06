@@ -3534,7 +3534,7 @@ NakaInst_MEMORY_A_ECFDF4:	.incbin "includes/generated/naka_style_bitmaps.bin", 0
 ; [nakarest] naka_style_bitmaps+0x18c40  +0x18c40..+0x18d22 (0xecfdfe, 226 B)
 ; [nakarest] Text (226 B at 0xecfdfe), first string "RIGHT1 RIGHT2 LEFT PART4 PART5 PART6 PART7
 ; [nakarest] "; no registered NAKA table points into it; reached through source references
-; [nakarest] VariScreen_HandlePaint (ui/ui_mode_handlers.s: `lda xhl,
+; [nakarest] VariScreenProc_OnDraw (ui/ui_mode_handlers.s: `lda xhl,
 ; [nakarest] (VariScreen_HandlePaint_Data:24)`).
 VariScreen_HandlePaint_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C40, 0xE2
 ; [nakarest] Naka_MemoryC_Screens  +0x18d22..+0x18d62 (0xecfee0, 64 B)

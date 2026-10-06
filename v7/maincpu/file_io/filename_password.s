@@ -239,7 +239,7 @@ FmmFileNameFunc:
 	cp	xwa, EVT_INDEXSW_UP
 	jrl	z, FileName_HandleScroll
 	cp	xwa, EVT_PAINT
-	jr	z, FileName_HandleShow
+	jr	z, FmmFileNameFunc_OnPaint
 	cp	xwa, EVT_PS_FILE_NAME_BOX_ID
 	jrl	nz, FileName_Return
 	ld	(32470:16), xbc
@@ -262,7 +262,7 @@ FileName_ListSelect_Forward:
 	ld	xwa, 0:i3
 	ld	(32474:16), xwa
 	jrl	FileName_Return
-FileName_HandleShow:
+FmmFileNameFunc_OnPaint:
 	ldw (xsp + 6), 0x0
 FileName_DrawItemLoop:
 	ld	wa, (xsp+6)

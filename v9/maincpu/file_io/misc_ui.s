@@ -538,7 +538,7 @@ PsFileNameBoxProc:
 	cp xwa, EVT_PARA_DRAW
 	jrl z, PsFileNameBox_HandleConfirm
 	cp xwa, EVT_PAINT
-	jrl z, PsFileNameBox_HandleShow
+	jrl z, PsFileNameBoxProc_OnPaint
 	cp xwa, EVT_SHOW
 	jrl nz, PsFileNameBox_DefaultHandler
 	ld	xwa, (xsp+170)
@@ -587,7 +587,7 @@ PsFileNameBox_Init_Forward:
 	ld	xde, (xsp+162)
 	jrl PsFileNameBox_DispatchParent
 
-PsFileNameBox_HandleShow:
+PsFileNameBoxProc_OnPaint:
 	ld	xwa, (xsp+170)
 	ld	xbc, (xsp+166)
 	ld	xde, (xsp+162)

@@ -9838,13 +9838,13 @@ IvSdtecd1Proc:
 	cp xbc, EVT_LSW_DATA
 	jrl z, Sdtecd1_Match
 	cp xbc, EVT_INDEXSW_DOWN_AIC
-	jrl z, Sdtecd1_ScrollUp
+	jrl z, IvSdtecd1Proc_OnIndexswDownAny
 	cp xbc, EVT_INDEXSW_DOWN
-	jrl z, Sdtecd1_ScrollUp
+	jrl z, IvSdtecd1Proc_OnIndexswDownAny
 	cp xbc, EVT_INDEXSW_UP_AIC
-	jr z, Sdtecd1_ScrollDown
+	jr z, IvSdtecd1Proc_OnIndexswUpAny
 	cp xbc, EVT_INDEXSW_UP
-	jr z, Sdtecd1_ScrollDown
+	jr z, IvSdtecd1Proc_OnIndexswUpAny
 	cp xbc, EVT_PAINT
 	jrl nz, Sdtecd1_ForwardToBase
 	ld xwa, (xsp + 4)
@@ -9870,7 +9870,7 @@ IvSdtecd1Proc:
 	call SetDialEnable
 	jrl IvSdtecd1_ReturnDefault
 
-Sdtecd1_ScrollDown:
+IvSdtecd1Proc_OnIndexswUpAny:
 	ld xwa, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
@@ -9916,7 +9916,7 @@ Sdtecd1_ScrollDown_Lookup:
 	ld de, 3:i3
 	jrl Sdtecd1_PutAndReturn
 
-Sdtecd1_ScrollUp:
+IvSdtecd1Proc_OnIndexswDownAny:
 	ld xwa, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
