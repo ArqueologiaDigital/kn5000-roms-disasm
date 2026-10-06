@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,414
-#   semantic names ........... 52,673 (98.6%)
-#   positional names ......... 741
+#   symbols .................. 53,445
+#   semantic names ........... 52,706 (98.6%)
+#   positional names ......... 739
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -878,8 +878,8 @@ ToneGen_ParamTable_0x2EE 00E0E6F5
 ToneGen_ParamTable_0x306 00E0E70D
 ToneGen_ParamTable_0x31A 00E0E721
 ToneGen_ParamTable_0x326 00E0E72D
-ToneGen_ParamTable_0x3A7 00E0E7AE
-ToneGen_ParamTable_0x3F3 00E0E7FA
+Naka_ApFuncTable_12B 00E0E7AE
+Naka_ApFuncNameTable_42B 00E0E7FA
 ToneGen_ParamTable_0x53D 00E0E944
 Naka_ClassCount_16B 00E0E95C
 ToneGen_ParamTable_0x557 00E0E95E
@@ -19343,6 +19343,7 @@ SeFilLfo1_OnSideRow2_Skip52 00F06103
 SeFilLfo1_OnSideRow3 00F0610B
 SeFilLfo1_OnSideRow4 00F06118
 SeFilLfo1_OnSideRow5 00F06125
+SeFilLfo1_OnSwitch15 00F06132
 SeMenu_SendEvent 00F06146
 SeMenu_SendEvent_Indirect 00F06157
 SeMenu_SendEvent_StoreAndReturn 00F0615B
@@ -21459,23 +21460,41 @@ SeMenu_NameEdit_SetupPath_Records 00F16575
 SeMenu_NameEdit_SetupPath_Records2 00F1657F
 InitializeNaka 00F165C1
 NAKA_InitDataBlock 00F16784
+FtLangText01 00F16785
 InitializeNaka_Skip 00F16793
+FtLangText01S 00F16796
 InitializeNaka_Skip2 00F167A4
+FtLangText02 00F167A7
 InitializeNaka_Skip3 00F167B5
+FtLangText03 00F167B8
 InitializeNaka_Skip4 00F167C6
+FtLangText04 00F167C9
 InitializeNaka_Skip5 00F167D7
+FtLangText05 00F167DA
 InitializeNaka_Skip6 00F167E8
+FtLangText06 00F167EB
 InitializeNaka_Skip7 00F167F9
+FtLangText07 00F167FC
 InitializeNaka_Skip8 00F1680A
+FtLangText08 00F1680D
 InitializeNaka_Skip9 00F1681B
+FtLangText09 00F1681E
 InitializeNaka_Skip10 00F1682C
+FtLangText10 00F1682F
 InitializeNaka_Skip11 00F1683D
+FtLangText11 00F16840
 InitializeNaka_Skip12 00F1684E
+FtLangText12 00F16851
 InitializeNaka_Skip13 00F1685F
+FtLangText13 00F16862
 InitializeNaka_Skip14 00F16870
+FtLangText14 00F16873
 InitializeNaka_Skip15 00F16881
+FtLangText15 00F16884
 InitializeNaka_Skip16 00F16892
+FtLangText16 00F16895
 InitializeNaka_Skip17 00F168A3
+FtLangText17 00F168A6
 InitializeNaka_Skip18 00F168B4
 InitializeNaka_Join 00F168B7
 NoteEvent_LoadSoundGenParams 00F168F5
@@ -40045,6 +40064,7 @@ SLSrcBankList_FuncBody_Skip 00F8EDC6
 SLSrcBankList_FuncBody_Epilogue 00F8EE0B
 SLSrcBankList_FuncBody_Helper10 00F8EE0F
 SLSrcBankList_FuncBody_Epilogue2 00F8EE53
+SingleLoadSrc_PanelMemListProc 00F8EE57
 SLSrcBankList_FuncBody_Skip2 00F8EE8E
 SLSrcBankList_FuncBody_Skip3 00F8EEC9
 SLSrcBankList_FuncBody_Skip4 00F8EF15
@@ -40060,6 +40080,7 @@ SLSrcBankList_FuncBody_Join3 00F8F04A
 SLSrcBankList_FuncBody_Skip11 00F8F057
 SLSrcBankList_FuncBody_Skip12 00F8F078
 SLSrcBankList_FuncBody_Join4 00F8F08E
+SingleLoadSrc_SequencerListProc 00F8F094
 SLSrcBankList_FuncBody_Skip13 00F8F167
 SLSrcBankList_FuncBody_Helper11 00F8F16D
 SLSrcBankList_FuncBody_Helper12 00F8F1E4
@@ -40069,6 +40090,7 @@ SLSrcBankList_FuncBody_Join5 00F8F2B3
 SLSrcBankList_FuncBody_Epilogue3 00F8F2B7
 SLSrcBankList_FuncBody_Helper13 00F8F2BB
 SLSrcBankList_FuncBody_Epilogue4 00F8F315
+SingleLoadSrc_ComposerListProc 00F8F319
 SLSrcBankList_FuncBody_Skip15 00F8F363
 SLSrcBankList_FuncBody_Skip16 00F8F3A8
 SLSrcBankList_FuncBody_Join6 00F8F3D2
@@ -40102,6 +40124,7 @@ SLSrcBankList_FuncBody_Helper18 00F8F6F0
 SLSrcBankList_FuncBody_Skip30 00F8F722
 SLSrcBankList_FuncBody_Join12 00F8F72C
 SLSrcBankList_FuncBody_Epilogue8 00F8F74A
+SingleLoadSrc_SoundMemListProc 00F8F74E
 SLSrcBankList_FuncBody_Skip31 00F8F7AC
 SLSrcBankList_FuncBody_Skip32 00F8F7E1
 SLSrcBankList_FuncBody_Join13 00F8F7E5
@@ -40122,6 +40145,7 @@ SLSrcBankList_FuncBody_Join17 00F8F9F3
 SLSrcBankList_FuncBody_Skip43 00F8FA00
 SLSrcBankList_FuncBody_Skip44 00F8FA1E
 SLSrcBankList_FuncBody_Join18 00F8FA34
+SingleLoadSrc_BlankListProc 00F8FA3A
 SLSrcBankList_FuncBody_Loop 00F8FA4A
 SLSrcBankList_FuncBody_Skip45 00F8FA90
 SingleLoadSrcFunc 00F8FA96
@@ -40142,6 +40166,7 @@ SLDstBankList_FuncBody 00F8FC68
 SLDstBankList_FuncBody_Helper6 00F8FD0A
 SLDstBankList_FuncBody_Skip 00F8FD6A
 SLDstBankList_FuncBody_Join 00F8FDB4
+SingleLoadDst_PanelMemListProc 00F8FDD8
 SLDstBankList_FuncBody_Skip2 00F8FE18
 SLDstBankList_FuncBody_Skip3 00F8FE5D
 SLDstBankList_FuncBody_Join2 00F8FE87
@@ -40158,6 +40183,7 @@ SLDstBankList_FuncBody_Skip10 00F8FF94
 SLDstBankList_FuncBody_Skip11 00F8FFC5
 SLDstBankList_FuncBody_Epilogue 00F8FFD7
 SLDstBankList_FuncBody_Helper7 00F8FFDB
+SingleLoadDst_SequencerListProc 00F90072
 SLDstBankList_FuncBody_Skip12 00F900D5
 SLDstBankList_FuncBody_Join5 00F90104
 SLDstBankList_FuncBody_Loop2 00F90107
@@ -40172,6 +40198,7 @@ SLDstBankList_FuncBody_Helper9 00F901DA
 SLDstBankList_FuncBody_Skip17 00F90237
 SLDstBankList_FuncBody_Skip18 00F90260
 SLDstBankList_FuncBody_Join7 00F9027C
+SingleLoadDst_ComposerListProc 00F902A0
 SLDstBankList_FuncBody_Skip19 00F902E0
 SLDstBankList_FuncBody_Skip20 00F90325
 SLDstBankList_FuncBody_Join8 00F9034F
@@ -40195,6 +40222,7 @@ SLDstBankList_FuncBody_Helper11 00F90528
 SLDstBankList_FuncBody_Skip30 00F9058A
 SLDstBankList_FuncBody_Skip31 00F90606
 SLDstBankList_FuncBody_Join13 00F90660
+SingleLoadDst_SoundMemListProc 00F90684
 SLDstBankList_FuncBody_Skip32 00F906C4
 SLDstBankList_FuncBody_Skip33 00F906F9
 SLDstBankList_FuncBody_Join14 00F906FD
@@ -40216,7 +40244,7 @@ SLDstBankList_FuncBody_Skip43 00F908EA
 SLDstBankList_FuncBody_Skip44 00F90911
 SLDstBankList_FuncBody_Skip45 00F90940
 SLDstBankList_FuncBody_Epilogue4 00F90952
-CmpDst_HandleShow_PtrTable_Target0 00F90956
+SingleLoadDst_BlankListProc 00F90956
 SLDstBankList_FuncBody_Loop5 00F90966
 SLDstBankList_FuncBody_Skip46 00F909AC
 SingleLoadDstFunc 00F909B2
@@ -41709,8 +41737,11 @@ IvDirmd_Epilogue 00F9A9DE
 GetDirmdFlag 00F9A9E3
 PostTitle_Function 00F9A9E3
 DirmdTitleFunc 00F9A9E9
-DirmdEmu_CaseF 00F9AA05
+DirmdTitle_New 00F9AA05
 PostTitle_Function_Skip 00F9AA28
+DirmdTitle_Old 00F9AA35
+DirmdTitle_ESw 00F9AA42
+DirmdTitle_Cur 00F9AA7D
 DirmdEmulator 00F9AA8A
 DirmdEmulator_Entry 00F9AA8A
 DirmdEmulator_Dispatch 00F9AAB9

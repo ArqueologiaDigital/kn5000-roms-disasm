@@ -1,0 +1,811 @@
+[
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 0,
+  "addr": "0xF167AF",
+  "new": "FtLangText01",
+  "header": "Naka ApFunction 0x12B0000, named by entry 0 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable (6 language pointers, English \"Bass Port Speaker\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[0] -> 0xE0E936 \"FtLangText01\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText01 = 0x12B0000 (entry 0 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:948): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 1,
+  "addr": "0xF167C0",
+  "new": "FtLangText01S",
+  "header": "Naka ApFunction 0x12B0001, named by entry 1 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = FDemo_BassPortSpanishHeading_Texts (6 language pointers, only Spanish filled: \"Altavoz con port<0xF3>n para bajos\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[1] -> 0xE0E928 \"FtLangText01S\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText01S = 0x12B0001 (entry 1 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:955): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (FDemo_BassPortSpanishHeading_Texts:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 2,
+  "addr": "0xF167D1",
+  "new": "FtLangText02",
+  "header": "Naka ApFunction 0x12B0002, named by entry 2 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_3 (6 language pointers, English \"The KN5000's Special Woofer & Bass Port produce a Rich & Powerful sound!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[2] -> 0xE0E91A \"FtLangText02\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText02 = 0x12B0002 (entry 2 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:962): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable_3:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 3,
+  "addr": "0xF167E2",
+  "new": "FtLangText03",
+  "header": "Naka ApFunction 0x12B0003, named by entry 3 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_4 (6 language pointers, English \"Huge Styles\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[3] -> 0xE0E90C \"FtLangText03\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText03 = 0x12B0003 (entry 3 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:969): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable_4:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 4,
+  "addr": "0xF167F3",
+  "new": "FtLangText04",
+  "header": "Naka ApFunction 0x12B0004, named by entry 4 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_5 (6 language pointers, English \"Explore 1000 Musical Styles with the Music Stylist.\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[4] -> 0xE0E8FE \"FtLangText04\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText04 = 0x12B0004 (entry 4 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:976): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable_5:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 5,
+  "addr": "0xF16804",
+  "new": "FtLangText05",
+  "header": "Naka ApFunction 0x12B0005, named by entry 5 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_6 (6 language pointers, English \"Add to your enjoyment with a wide range of Technics Software\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[5] -> 0xE0E8F0 \"FtLangText05\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText05 = 0x12B0005 (entry 5 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:983): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable_6:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 6,
+  "addr": "0xF16815",
+  "new": "FtLangText06",
+  "header": "Naka ApFunction 0x12B0006, named by entry 6 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_7 (6 language pointers, English \"And convert software from almost any other manufacturer!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[6] -> 0xE0E8E2 \"FtLangText06\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText06 = 0x12B0006 (entry 6 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:990): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable_7:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 7,
+  "addr": "0xF16826",
+  "new": "FtLangText07",
+  "header": "Naka ApFunction 0x12B0007, named by entry 7 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_8 (6 language pointers, English \"Store your favorite software patterns in the Custom Rhythm Group .....permanently!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[7] -> 0xE0E8D4 \"FtLangText07\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText07 = 0x12B0007 (entry 7 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:997): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable_8:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 8,
+  "addr": "0xF16837",
+  "new": "FtLangText08",
+  "header": "Naka ApFunction 0x12B0008, named by entry 8 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_9 (6 language pointers, English \"Accordion Register\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[8] -> 0xE0E8C6 \"FtLangText08\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText08 = 0x12B0008 (entry 8 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:1004): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable_9:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 9,
+  "addr": "0xF16848",
+  "new": "FtLangText09",
+  "header": "Naka ApFunction 0x12B0009, named by entry 9 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_10 (6 language pointers, English \"A World of Accordion Sounds at your fingertips with the Accordion Register!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[9] -> 0xE0E8B8 \"FtLangText09\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText09 = 0x12B0009 (entry 9 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:1011): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable_10:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 10,
+  "addr": "0xF16859",
+  "new": "FtLangText10",
+  "header": "Naka ApFunction 0x12B000A, named by entry 10 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_11 (6 language pointers, English \"Digital Drawbar\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[10] -> 0xE0E8AA \"FtLangText10\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText10 = 0x12B000A (entry 10 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:1018): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable_11:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 11,
+  "addr": "0xF1686A",
+  "new": "FtLangText11",
+  "header": "Naka ApFunction 0x12B000B, named by entry 11 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = FtLangText11_Texts (6 language pointers, English \"Classic Organ Sounds with Jazz and Rock Drawbars!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[11] -> 0xE0E89C \"FtLangText11\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText11 = 0x12B000B (entry 11 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:1025): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (FtLangText11_Texts:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 12,
+  "addr": "0xF1687B",
+  "new": "FtLangText12",
+  "header": "Naka ApFunction 0x12B000C, named by entry 12 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_13 (6 language pointers, English \"Acoustic Illusion\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[12] -> 0xE0E88E \"FtLangText12\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText12 = 0x12B000C (entry 12 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:1032): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable_13:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 13,
+  "addr": "0xF1688C",
+  "new": "FtLangText13",
+  "header": "Naka ApFunction 0x12B000D, named by entry 13 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_14 (6 language pointers, English \"Acoustic Illusion broadens your music to 3-Dimensions!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[13] -> 0xE0E880 \"FtLangText13\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText13 = 0x12B000D (entry 13 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:1039): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable_14:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 14,
+  "addr": "0xF1689D",
+  "new": "FtLangText14",
+  "header": "Naka ApFunction 0x12B000E, named by entry 14 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_15 (6 language pointers, English \"A host of features to suit any style of performance!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[14] -> 0xE0E872 \"FtLangText14\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText14 = 0x12B000E (entry 14 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:1046): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable_15:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 15,
+  "addr": "0xF168AE",
+  "new": "FtLangText15",
+  "header": "Naka ApFunction 0x12B000F, named by entry 15 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_16 (6 language pointers, English \"Huge Styles\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[15] -> 0xE0E864 \"FtLangText15\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText15 = 0x12B000F (entry 15 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:1053): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (NAKA_InitDataBlock_PtrTable_16:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 16,
+  "addr": "0xF168BF",
+  "new": "FtLangText16",
+  "header": "Naka ApFunction 0x12B0010, named by entry 16 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = FtLangText16_LangStrings (6 language pointers, English \"Huge Styles\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[16] -> 0xE0E856 \"FtLangText16\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText16 = 0x12B0010 (entry 16 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:1060): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (FtLangText16_LangStrings:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "table": "ToneGen_ParamTable_0x3A7",
+  "index": 17,
+  "addr": "0xF168D0",
+  "new": "FtLangText17",
+  "header": "Naka ApFunction 0x12B0011, named by entry 17 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = FtLangText17_Texts (6 language pointers, English \"Huge Styles\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body",
+  "evidence": [
+   "InitializeNaka (storage/flash_floppy_handlers.s:933-934): RegObjTabl ApFunction, 0x12 entries, ToneGen_ParamTable_0x3A7 as slot 0x12B and ToneGen_ParamTable_0x3F3 as slot 0x42B -- the same proc/name pairing as Cheap_ApFuncTable_125 / PtrTbl_DiskFuncNames (slot 0x425), whose procs carry their firmware names (InsertOptionText ... CheckPasswordNo)",
+   "name table 0xE0E7FA[17] -> 0xE0E848 \"FtLangText17\"",
+   "shared/event_codes.s already defines NAKA_APFUNC_FtLangText17 = 0x12B0011 (entry 17 of the Naka ApFunction table)",
+   "body (flash_floppy_handlers.s:1067): cp xbc, EVT_GET_LANGUAGE_PTR / jr nz / lda xhl, (FtLangText17_Texts:24) / ret -- the same shape as AttnLngCheck, PartSelLangCheck, FDemoText",
+   "existing data labels already follow this mapping: entry 11 returns FtLangText11_Texts, 16 FtLangText16_LangStrings, 17 FtLangText17_Texts"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip",
+  "new": "FtLangText01_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText01; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip is the `jr nz` target of FtLangText01: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip2",
+  "new": "FtLangText01S_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText01S; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip2 is the `jr nz` target of FtLangText01S: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip3",
+  "new": "FtLangText02_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText02; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip3 is the `jr nz` target of FtLangText02: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip4",
+  "new": "FtLangText03_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText03; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip4 is the `jr nz` target of FtLangText03: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip5",
+  "new": "FtLangText04_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText04; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip5 is the `jr nz` target of FtLangText04: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip6",
+  "new": "FtLangText05_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText05; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip6 is the `jr nz` target of FtLangText05: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip7",
+  "new": "FtLangText06_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText06; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip7 is the `jr nz` target of FtLangText06: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip8",
+  "new": "FtLangText07_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText07; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip8 is the `jr nz` target of FtLangText07: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip9",
+  "new": "FtLangText08_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText08; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip9 is the `jr nz` target of FtLangText08: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip10",
+  "new": "FtLangText09_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText09; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip10 is the `jr nz` target of FtLangText09: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip11",
+  "new": "FtLangText10_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText10; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip11 is the `jr nz` target of FtLangText10: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip12",
+  "new": "FtLangText11_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText11; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip12 is the `jr nz` target of FtLangText11: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip13",
+  "new": "FtLangText12_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText12; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip13 is the `jr nz` target of FtLangText12: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip14",
+  "new": "FtLangText13_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText13; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip14 is the `jr nz` target of FtLangText13: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip15",
+  "new": "FtLangText14_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText14; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip15 is the `jr nz` target of FtLangText14: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip16",
+  "new": "FtLangText15_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText15; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip16 is the `jr nz` target of FtLangText15: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip17",
+  "new": "FtLangText16_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText16; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip17 is the `jr nz` target of FtLangText16: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "label_rename": "InitializeNaka_Skip18",
+  "new": "FtLangText17_ReturnZero",
+  "optional": true,
+  "basis": "positional inner label of proc FtLangText17; sibling style AttnLngCheck_ReturnZero / PartSelLang_ReturnZero",
+  "evidence": [
+   "InitializeNaka_Skip18 is the `jr nz` target of FtLangText17: ld xhl, 0:i3 / ret (event is not EVT_GET_LANGUAGE_PTR)"
+  ]
+ },
+ {
+  "table_rename": "ToneGen_ParamTable_0x3A7",
+  "new": "Naka_ApFuncTable_12B",
+  "basis": "registration + sibling naming",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:933 InitializeNaka: RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x12, ToneGen_ParamTable_0x3A7, 0x12b",
+   "18 code pointers + a 0 terminator (76 B), all to EVT_GET_LANGUAGE_PTR text procs; nothing about tone generation",
+   "siblings: Cheap_ApFuncTable_125, Murai_ApFuncTable_121, Kubo_ApFuncTable_128; Naka owner as in Naka_MainFunctionTable_14B, Naka_ResNameTable_3FD; event_codes.s calls it 'the Naka ApFunction table (registry slot 0x12B, table 0xE0E7AE)'",
+   "the C blob audio/tonegen_param_table.c itself says 'Despite its name, this table is used by the Feature Demo text system' (section E naka_init_ptrs)"
+  ]
+ },
+ {
+  "table_rename": "ToneGen_ParamTable_0x3F3",
+  "new": "Naka_ApFuncNameTable_42B",
+  "optional": true,
+  "basis": "companion name table of the above (not in the census list)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:934: RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x12, ToneGen_ParamTable_0x3F3, 0x42b",
+   "19 pointers to \"FtLangText01\", \"FtLangText01S\", \"FtLangText02\" .. \"FtLangText17\", \"\" (tonegen_param_table.c section G)",
+   "siblings: Murai_ApFuncNameTable_421, Kubo_ApFuncNameTable_428"
+  ]
+ },
+ {
+  "table": "GUI_DisplayStructData_0x1100",
+  "index": 1,
+  "slot_in_owner_table": 15,
+  "addr": "0xF0615C",
+  "new": "SeFilLfo1_OnSwitch15",
+  "header": "LFO 1 (filter) page, switch 15 (SeFilLfo1TitleFunc_SwitchHandlers[15]): when A == 0, SeMenu_SetupMenuDisplay(0) then SeMenu_SendEvent(WA = 32, C = 0), a mode change to screen 32; same body as SeFilEnv1_OnSwitch15 / SeFilEnv2_OnSwitch15 / SeFilFil2_OnSwitch15",
+  "basis": "reader + sibling pattern (scripts/tools/name_semenu_switch_handlers.py slot_name: index 15 -> <Page>_OnSwitch15)",
+  "evidence": [
+   "kn5000_v10_program.s:738-740: SeFilLfo1TitleFunc_SwitchHandlers lists entries 0..13 as .long, then the comment 'the rest of the code-pointer table ... from entry 14 on' and GUI_DisplayStructData_0x1100 (16 B)",
+   "words at 0xE0E0DE: SeMenu_BitShift_Stub, 0xF0615C, SeMenu_BitShift_Stub, 0 -> entries 14, 15, 16, 17 (terminator), the 18-entry shape of every SeXxxTitleFunc_SwitchHandlers",
+   "SeFilLfo1TitleFunc_DispatchSwitch+0x1E (0xF0501A) loads the table, adds BC*4 and calls the entry",
+   "body at display/scoop_editor_data.s:3854 (after SeFilLfo1_OnSideRow5's ret): cp a,0 / ret nz / ld wa,0 / call SeMenu_SetupMenuDisplay / ldw wa,32 / ld bc,0 / call SeMenu_SendEvent / ret -- byte-identical shape to SeFilEnv1_OnSwitch15 (scoop_editor_data.s:3681)",
+   "entry 16 is SeMenu_BitShift_Stub, so LFO 1 has no OnSwitch25"
+  ]
+ },
+ {
+  "table_rename": "GUI_DisplayStructData_0x1100",
+  "new": null,
+  "action": "remove the label: respell the 16 bytes as `.long SeMenu_BitShift_Stub` / `.long SeFilLfo1_OnSwitch15` / `.long SeMenu_BitShift_Stub` / `.long 0` continuing SeFilLfo1TitleFunc_SwitchHandlers (as 5533ad36d did for SeWrtSnd/SeDigEff)",
+  "fallback_new": "SeFilLfo1TitleFunc_SwitchSlot14",
+  "basis": "it is not a table of its own and not GUI display data",
+  "evidence": [
+   "it is entries 14-17 of SeFilLfo1TitleFunc_SwitchHandlers (the preceding source comment says so); the table's 14 + 4 = 18 entries match its 30+ siblings",
+   "no code references GUI_DisplayStructData_0x1100 (command grep: only its definition in v10/v9/v7 and census snapshots)"
+  ]
+ },
+ {
+  "table": "SingleLoadSrc_ListProcByMode",
+  "index": 0,
+  "addr": "0xF8F264",
+  "new": "SingleLoadSrc_PanelMemListProc",
+  "header": "Single-load source list for area 0 PANEL MEMORY: EVT_PAINT draws the bank/name rows (SLSrcBankList_FuncBody, _Helper2, _Helper, _Helper3); event parameter 5 pages by SingleLoadSrc_PanelMemBankSize (8) up to 80 (RAM 0x89FC), parameter 6 steps by 1, 40 redraws the pending rows; entry [0] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadSrcFunc (lines 1410-1530) and CmpSingleLoadSrcFunc (3141-3265): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 0 = area 0 PANEL MEMORY (StorageArea_NameTable)",
+   "body at file_io/single_load.s:309",
+   "uses SingleLoadSrc_PanelMemBankSize (the existing comment on that byte already names this routine 'SingleLoadSrc_ListProcByMode[0]')"
+  ]
+ },
+ {
+  "table": "SingleLoadSrc_ListProcByMode",
+  "index": 1,
+  "addr": "0xF8F4A1",
+  "new": "SingleLoadSrc_SequencerListProc",
+  "header": "Single-load source list for area 1 SEQUENCER: EVT_PAINT only -- blank row 0, row 1 '<StorageArea_UnitNames[1] SONG>:', row 2 the file's entry 0 name (SLSrcBankList_FuncBody_Helper14(0)), blank row 3; no paging (one song); entry [1] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadSrcFunc (lines 1410-1530) and CmpSingleLoadSrcFunc (3141-3265): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 1 = area 1 SEQUENCER (StorageArea_NameTable)",
+   "body at file_io/single_load.s:499",
+   "SingleLoadSrcFunc's scroll code special-cases mode 1 (cp (0x89f8),1): on parameter 5/6 it posts EVT_SET_SELECTED_FILE_NUMBER -1 where the other modes post 1 or 3"
+  ]
+ },
+ {
+  "table": "SingleLoadSrc_ListProcByMode",
+  "index": 2,
+  "addr": "0xF8F726",
+  "new": "SingleLoadSrc_ComposerListProc",
+  "header": "Single-load source list for area 2 COMPOSER: 30 items laid out in columns of SLSrcComposer_RowsPerColumn (10) -- parameter 5 moves the cursor (RAM 0x89FE) by +-10, parameter 6 by +-1; EVT_PAINT draws via SLSrcBankList_FuncBody_Helper5/_Helper4/_Helper6 (WP_GetPresetName1, WP_GetBankMemName); entry [2] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadSrcFunc (lines 1410-1530) and CmpSingleLoadSrcFunc (3141-3265): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 2 = area 2 COMPOSER (StorageArea_NameTable)",
+   "body at file_io/single_load.s:708",
+   "uses SLSrcComposer_RowsPerColumn (its comment already calls this 'the mode-2 routine of SingleLoadSrc_ListProcByMode')"
+  ]
+ },
+ {
+  "table": "SingleLoadSrc_ListProcByMode",
+  "index": 3,
+  "addr": "0xF8FB5B",
+  "new": "SingleLoadSrc_SoundMemListProc",
+  "header": "Single-load source list for area 3 SOUND MEMORY: pages of SingleLoadSrc_SoundMemPageSize (20) over RAM 0x8A00; EVT_PAINT draws via SLSrcBankList_FuncBody_Helper8/_Helper10/_Helper9/_Helper11; entry [3] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadSrcFunc (lines 1410-1530) and CmpSingleLoadSrcFunc (3141-3265): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 3 = area 3 SOUND MEMORY (StorageArea_NameTable)",
+   "body at file_io/single_load.s:1093",
+   "uses SingleLoadSrc_SoundMemPageSize (its comment already names this 'SingleLoadSrc_ListProcByMode[3]')"
+  ]
+ },
+ {
+  "table": "SingleLoadSrc_ListProcByMode",
+  "index": 4,
+  "addr": "0xF8FE47",
+  "new": "SingleLoadSrc_BlankListProc",
+  "header": "Single-load source list for area 4 (none): on EVT_PAINT writes cell index + empty text into the four 21-byte rows at RAM 0x894E, pads each (TrimAndPadSmfFilename) and posts EVT_PARA_DRAW -- four blank rows; ignores every other event; entry [4] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadSrcFunc (lines 1410-1530) and CmpSingleLoadSrcFunc (3141-3265): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 4 = area 4 (no area: StorageArea_NameTable[4] is 12 blanks) (StorageArea_NameTable)",
+   "body at file_io/single_load.s:1347",
+   "StorageArea_NameTable[4] / SingleLoad_BankCaptionByMode[4] / StorageArea_UnitNames[4] are all blanks or dashes"
+  ]
+ },
+ {
+  "table": "CmpSingleLoadSrc_ListProcByMode",
+  "index": 0,
+  "addr": "0xF8F264",
+  "new": "SingleLoadSrc_PanelMemListProc",
+  "header": "Single-load source list for area 0 PANEL MEMORY: EVT_PAINT draws the bank/name rows (SLSrcBankList_FuncBody, _Helper2, _Helper, _Helper3); event parameter 5 pages by SingleLoadSrc_PanelMemBankSize (8) up to 80 (RAM 0x89FC), parameter 6 steps by 1, 40 redraws the pending rows; entry [0] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadSrcFunc (lines 1410-1530) and CmpSingleLoadSrcFunc (3141-3265): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 0 = area 0 PANEL MEMORY (StorageArea_NameTable)",
+   "body at file_io/single_load.s:309",
+   "uses SingleLoadSrc_PanelMemBankSize (the existing comment on that byte already names this routine 'SingleLoadSrc_ListProcByMode[0]')",
+   "same address as SingleLoadSrc_ListProcByMode[0]: one label serves both tables"
+  ]
+ },
+ {
+  "table": "CmpSingleLoadSrc_ListProcByMode",
+  "index": 1,
+  "addr": "0xF8F4A1",
+  "new": "SingleLoadSrc_SequencerListProc",
+  "header": "Single-load source list for area 1 SEQUENCER: EVT_PAINT only -- blank row 0, row 1 '<StorageArea_UnitNames[1] SONG>:', row 2 the file's entry 0 name (SLSrcBankList_FuncBody_Helper14(0)), blank row 3; no paging (one song); entry [1] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadSrcFunc (lines 1410-1530) and CmpSingleLoadSrcFunc (3141-3265): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 1 = area 1 SEQUENCER (StorageArea_NameTable)",
+   "body at file_io/single_load.s:499",
+   "SingleLoadSrcFunc's scroll code special-cases mode 1 (cp (0x89f8),1): on parameter 5/6 it posts EVT_SET_SELECTED_FILE_NUMBER -1 where the other modes post 1 or 3",
+   "same address as SingleLoadSrc_ListProcByMode[1]: one label serves both tables"
+  ]
+ },
+ {
+  "table": "CmpSingleLoadSrc_ListProcByMode",
+  "index": 2,
+  "addr": "0xF8F726",
+  "new": "SingleLoadSrc_ComposerListProc",
+  "header": "Single-load source list for area 2 COMPOSER: 30 items laid out in columns of SLSrcComposer_RowsPerColumn (10) -- parameter 5 moves the cursor (RAM 0x89FE) by +-10, parameter 6 by +-1; EVT_PAINT draws via SLSrcBankList_FuncBody_Helper5/_Helper4/_Helper6 (WP_GetPresetName1, WP_GetBankMemName); entry [2] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadSrcFunc (lines 1410-1530) and CmpSingleLoadSrcFunc (3141-3265): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 2 = area 2 COMPOSER (StorageArea_NameTable)",
+   "body at file_io/single_load.s:708",
+   "uses SLSrcComposer_RowsPerColumn (its comment already calls this 'the mode-2 routine of SingleLoadSrc_ListProcByMode')",
+   "same address as SingleLoadSrc_ListProcByMode[2]: one label serves both tables"
+  ]
+ },
+ {
+  "table": "CmpSingleLoadSrc_ListProcByMode",
+  "index": 3,
+  "addr": "0xF8FB5B",
+  "new": "SingleLoadSrc_SoundMemListProc",
+  "header": "Single-load source list for area 3 SOUND MEMORY: pages of SingleLoadSrc_SoundMemPageSize (20) over RAM 0x8A00; EVT_PAINT draws via SLSrcBankList_FuncBody_Helper8/_Helper10/_Helper9/_Helper11; entry [3] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadSrcFunc (lines 1410-1530) and CmpSingleLoadSrcFunc (3141-3265): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 3 = area 3 SOUND MEMORY (StorageArea_NameTable)",
+   "body at file_io/single_load.s:1093",
+   "uses SingleLoadSrc_SoundMemPageSize (its comment already names this 'SingleLoadSrc_ListProcByMode[3]')",
+   "same address as SingleLoadSrc_ListProcByMode[3]: one label serves both tables"
+  ]
+ },
+ {
+  "table": "CmpSingleLoadSrc_ListProcByMode",
+  "index": 4,
+  "addr": "0xF8FE47",
+  "new": "SingleLoadSrc_BlankListProc",
+  "header": "Single-load source list for area 4 (none): on EVT_PAINT writes cell index + empty text into the four 21-byte rows at RAM 0x894E, pads each (TrimAndPadSmfFilename) and posts EVT_PARA_DRAW -- four blank rows; ignores every other event; entry [4] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadSrcFunc (lines 1410-1530) and CmpSingleLoadSrcFunc (3141-3265): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 4 = area 4 (no area: StorageArea_NameTable[4] is 12 blanks) (StorageArea_NameTable)",
+   "body at file_io/single_load.s:1347",
+   "StorageArea_NameTable[4] / SingleLoad_BankCaptionByMode[4] / StorageArea_UnitNames[4] are all blanks or dashes",
+   "same address as SingleLoadSrc_ListProcByMode[4]: one label serves both tables"
+  ]
+ },
+ {
+  "table": "SingleLoadDst_AreaListProcs",
+  "index": 0,
+  "addr": "0xF901E5",
+  "new": "SingleLoadDst_PanelMemListProc",
+  "header": "Single-load destination list for area 0 PANEL MEMORY: banks of SingleLoadDst_PanelMemBankSize (8) up to 80 over RAM 0x8A02 (parameter 7 pages); EVT_PAINT draws SLDstBankList_FuncBody (bank caption + WP_GetConfigName) and SLDstBankList_FuncBody_Helper; entry [0] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadDstFunc_OnPaint / SLDst_HandleConfirm / scroll (lines 2778-3103) and CmpSingleLoadDstFunc (3308-3509): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 0 = area 0 PANEL MEMORY (StorageArea_NameTable)",
+   "body at file_io/single_load.s:1668",
+   "uses SingleLoadDst_PanelMemBankSize (its comment already names this 'SingleLoadDst_AreaListProcs[0]')"
+  ]
+ },
+ {
+  "table": "SingleLoadDst_AreaListProcs",
+  "index": 1,
+  "addr": "0xF9047F",
+  "new": "SingleLoadDst_SequencerListProc",
+  "header": "Single-load destination list for area 1 SEQUENCER: EVT_PAINT blanks rows 0/3 and draws 'SONG: n' + slot label (SLDstBankList_FuncBody_Helper2, BuildSlotLabel); parameter 8 steps the song number RAM 0x8A04 up to SLDstBankList_FuncBody_Data_6; parameter 10 returns SLDstBankList_FuncBody_Helper8(song); entry [1] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadDstFunc_OnPaint / SLDst_HandleConfirm / scroll (lines 2778-3103) and CmpSingleLoadDstFunc (3308-3509): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 1 = area 1 SEQUENCER (StorageArea_NameTable)",
+   "body at file_io/single_load.s:1897",
+   "the routine follows SLDstBankList_FuncBody_Helper2, which it calls to redraw after each step"
+  ]
+ },
+ {
+  "table": "SingleLoadDst_AreaListProcs",
+  "index": 2,
+  "addr": "0xF906AD",
+  "new": "SingleLoadDst_ComposerListProc",
+  "header": "Single-load destination list for area 2 COMPOSER: banks of SingleLoadDst_ComposerBankSize (10) up to 30 over RAM 0x8A06; EVT_PAINT draws SLDstBankList_FuncBody_Helper3 and _Helper4; entry [2] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadDstFunc_OnPaint / SLDst_HandleConfirm / scroll (lines 2778-3103) and CmpSingleLoadDstFunc (3308-3509): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 2 = area 2 COMPOSER (StorageArea_NameTable)",
+   "body at file_io/single_load.s:2088",
+   "uses SingleLoadDst_ComposerBankSize (its comment already names this 'SingleLoadDst_AreaListProcs[2]')"
+  ]
+ },
+ {
+  "table": "SingleLoadDst_AreaListProcs",
+  "index": 3,
+  "addr": "0xF90A91",
+  "new": "SingleLoadDst_SoundMemListProc",
+  "header": "Single-load destination list for area 3 SOUND MEMORY: columns of SLDstSoundMem_RowsPerColumn (20) over RAM 0x8A08 (parameter 7 moves +-20); EVT_PAINT draws SLDstBankList_FuncBody_Helper5 and _Helper6; entry [3] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadDstFunc_OnPaint / SLDst_HandleConfirm / scroll (lines 2778-3103) and CmpSingleLoadDstFunc (3308-3509): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 3 = area 3 SOUND MEMORY (StorageArea_NameTable)",
+   "body at file_io/single_load.s:2426",
+   "uses SLDstSoundMem_RowsPerColumn (its comment already calls this 'the mode-3 routine of SingleLoadDst_AreaListProcs')"
+  ]
+ },
+ {
+  "table": "CmpSingleLoadDst_AreaListProcs",
+  "index": 0,
+  "addr": "0xF901E5",
+  "new": "SingleLoadDst_PanelMemListProc",
+  "header": "Single-load destination list for area 0 PANEL MEMORY: banks of SingleLoadDst_PanelMemBankSize (8) up to 80 over RAM 0x8A02 (parameter 7 pages); EVT_PAINT draws SLDstBankList_FuncBody (bank caption + WP_GetConfigName) and SLDstBankList_FuncBody_Helper; entry [0] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadDstFunc_OnPaint / SLDst_HandleConfirm / scroll (lines 2778-3103) and CmpSingleLoadDstFunc (3308-3509): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 0 = area 0 PANEL MEMORY (StorageArea_NameTable)",
+   "body at file_io/single_load.s:1668",
+   "uses SingleLoadDst_PanelMemBankSize (its comment already names this 'SingleLoadDst_AreaListProcs[0]')",
+   "same address as SingleLoadDst_AreaListProcs[0]: one label serves both tables"
+  ]
+ },
+ {
+  "table": "CmpSingleLoadDst_AreaListProcs",
+  "index": 1,
+  "addr": "0xF9047F",
+  "new": "SingleLoadDst_SequencerListProc",
+  "header": "Single-load destination list for area 1 SEQUENCER: EVT_PAINT blanks rows 0/3 and draws 'SONG: n' + slot label (SLDstBankList_FuncBody_Helper2, BuildSlotLabel); parameter 8 steps the song number RAM 0x8A04 up to SLDstBankList_FuncBody_Data_6; parameter 10 returns SLDstBankList_FuncBody_Helper8(song); entry [1] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadDstFunc_OnPaint / SLDst_HandleConfirm / scroll (lines 2778-3103) and CmpSingleLoadDstFunc (3308-3509): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 1 = area 1 SEQUENCER (StorageArea_NameTable)",
+   "body at file_io/single_load.s:1897",
+   "the routine follows SLDstBankList_FuncBody_Helper2, which it calls to redraw after each step",
+   "same address as SingleLoadDst_AreaListProcs[1]: one label serves both tables"
+  ]
+ },
+ {
+  "table": "CmpSingleLoadDst_AreaListProcs",
+  "index": 2,
+  "addr": "0xF906AD",
+  "new": "SingleLoadDst_ComposerListProc",
+  "header": "Single-load destination list for area 2 COMPOSER: banks of SingleLoadDst_ComposerBankSize (10) up to 30 over RAM 0x8A06; EVT_PAINT draws SLDstBankList_FuncBody_Helper3 and _Helper4; entry [2] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadDstFunc_OnPaint / SLDst_HandleConfirm / scroll (lines 2778-3103) and CmpSingleLoadDstFunc (3308-3509): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 2 = area 2 COMPOSER (StorageArea_NameTable)",
+   "body at file_io/single_load.s:2088",
+   "uses SingleLoadDst_ComposerBankSize (its comment already names this 'SingleLoadDst_AreaListProcs[2]')",
+   "same address as SingleLoadDst_AreaListProcs[2]: one label serves both tables"
+  ]
+ },
+ {
+  "table": "CmpSingleLoadDst_AreaListProcs",
+  "index": 3,
+  "addr": "0xF90A91",
+  "new": "SingleLoadDst_SoundMemListProc",
+  "header": "Single-load destination list for area 3 SOUND MEMORY: columns of SLDstSoundMem_RowsPerColumn (20) over RAM 0x8A08 (parameter 7 moves +-20); EVT_PAINT draws SLDstBankList_FuncBody_Helper5 and _Helper6; entry [3] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body",
+  "evidence": [
+   "file_io/single_load.s SingleLoadDstFunc_OnPaint / SLDst_HandleConfirm / scroll (lines 2778-3103) and CmpSingleLoadDstFunc (3308-3509): ld c,(0x89f8) / sla bc,2 / lda xde,(table) / call entry",
+   "area 3 = area 3 SOUND MEMORY (StorageArea_NameTable)",
+   "body at file_io/single_load.s:2426",
+   "uses SLDstSoundMem_RowsPerColumn (its comment already calls this 'the mode-3 routine of SingleLoadDst_AreaListProcs')",
+   "same address as SingleLoadDst_AreaListProcs[3]: one label serves both tables"
+  ]
+ },
+ {
+  "label_rename": "CmpDst_HandleShow_PtrTable_Target0",
+  "new": "SingleLoadDst_BlankListProc",
+  "optional": true,
+  "addr": "0xF90D63",
+  "header": "Single-load destination list for area 4 (none): on EVT_PAINT writes four blank rows (RAM 0x89A2, 21 B each) and posts EVT_PARA_DRAW for each; entry [4] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs",
+  "basis": "reader + body; the current name is positional and wrong (it is not a CmpDst show handler and not 'Target0')",
+  "evidence": [
+   "SingleLoadDst_AreaListProcs[4] and CmpSingleLoadDst_AreaListProcs[4] (the `.long` after the 16-byte slice) both point here",
+   "body file_io/single_load.s:2679: the twin of SingleLoadSrc_BlankListProc (single_load.s:1347) on the destination buffer 0x89A2",
+   "also referenced as NAKA_ADDR(CmpDst_HandleShow_PtrTable_Target0) in ui_widgets/naka_technichord_strings.c:97,10707,10723 and naka_technichord_strings_link.ld:96 (v10/v9/v7) -- rename there too"
+  ]
+ },
+ {
+  "table": "DirmdTitle_EmulatorMethods",
+  "index": 1,
+  "addr": "0xF9AE42",
+  "new": "DirmdTitle_Old",
+  "header": "DirmdTitle emulator method [1] (Old), called by DirmdEmulator on EVT_HIDE: posts the trace memo \"DirmdTitleOld();\" (DbMemo_PostString) and tail-jumps to an empty `ret` (PsMixer_CtlTypeProc8_Return2)",
+  "basis": "table layout {New, Old, ESw, Cur} + the firmware's own trace memo in the body",
+  "evidence": [
+   "ui_widgets/disk_warning_strings.s:296-300 DirmdTitle_EmulatorMethods: DirmdTitleFunc copies the 16 bytes to its frame and passes the copy to DirmdEmulator",
+   "DirmdEmulator (audio/presentation_sound_nav.s): DirmdEmulator_Dispatch calls (xiz+4) on EVT_HIDE, DirmdEmu_OnAllPaint/OnParaDraw call (xiz), DirmdEmu_OnSwitchIn calls (xiz+8); +12 is never called",
+   "body audio/presentation_sound_nav.s:1315: ld xwa / lda ... DirmdTitleFunc_Str_DirmdTitleOld",
+   "firmware name preserved in the header (memo text); label in Owner_Meaning form"
+  ]
+ },
+ {
+  "table": "DirmdTitle_EmulatorMethods",
+  "index": 2,
+  "addr": "0xF9AE4F",
+  "new": "DirmdTitle_ESw",
+  "header": "DirmdTitle emulator method [2] (ESw), called by DirmdEmulator on EVT_SW_IN with the switch number (& 31) and its bit-7 flag: formats and posts the trace memo \"DirmdTitleESw(%d, %d);\" then calls DirmdTitle_SwitchInNullRet(WA = switch, BC = flag), an empty routine",
+  "basis": "table layout {New, Old, ESw, Cur} + the firmware's own trace memo in the body",
+  "evidence": [
+   "ui_widgets/disk_warning_strings.s:296-300 DirmdTitle_EmulatorMethods: DirmdTitleFunc copies the 16 bytes to its frame and passes the copy to DirmdEmulator",
+   "DirmdEmulator (audio/presentation_sound_nav.s): DirmdEmulator_Dispatch calls (xiz+4) on EVT_HIDE, DirmdEmu_OnAllPaint/OnParaDraw call (xiz), DirmdEmu_OnSwitchIn calls (xiz+8); +12 is never called",
+   "body audio/presentation_sound_nav.s:1318: ld xwa / lda ... DirmdTitleFunc_Str_DirmdTitleESw",
+   "firmware name preserved in the header (memo text); label in Owner_Meaning form"
+  ]
+ },
+ {
+  "table": "DirmdTitle_EmulatorMethods",
+  "index": 3,
+  "addr": "0xF9AE8A",
+  "new": "DirmdTitle_Cur",
+  "header": "DirmdTitle emulator method [3] (Cur): posts the trace memo \"DirmdTitleCur();\" and tail-jumps to an empty `ret` (PsMixer_CtlTypeProc8_Return3); DirmdEmulator never calls slot 3",
+  "basis": "table layout {New, Old, ESw, Cur} + the firmware's own trace memo in the body",
+  "evidence": [
+   "ui_widgets/disk_warning_strings.s:296-300 DirmdTitle_EmulatorMethods: DirmdTitleFunc copies the 16 bytes to its frame and passes the copy to DirmdEmulator",
+   "DirmdEmulator (audio/presentation_sound_nav.s): DirmdEmulator_Dispatch calls (xiz+4) on EVT_HIDE, DirmdEmu_OnAllPaint/OnParaDraw call (xiz), DirmdEmu_OnSwitchIn calls (xiz+8); +12 is never called",
+   "body audio/presentation_sound_nav.s:1337: ld xwa / lda ... DirmdTitleFunc_Str_DirmdTitleCur",
+   "firmware name preserved in the header (memo text); label in Owner_Meaning form"
+  ]
+ },
+ {
+  "label_rename": "DirmdEmu_CaseF",
+  "new": "DirmdTitle_New",
+  "optional": true,
+  "addr": "0xF9AE12",
+  "header": "DirmdTitle emulator method [0] (New), called by DirmdEmulator on EVT_ALL_PAINT / EVT_PARA_DRAW: if ACTIVE_TITLE changed since ACTIVE_TITLE_PREVIOUS, resets the drawing state (GraphicsRender_ByteData 255, background 245, fixed palette bands), then posts the trace memo \"DirmdTitleNew();\" and tail-jumps to an empty `ret`",
+  "basis": "DirmdTitle_EmulatorMethods[0]; the current name says it is a DirmdEmulator switch case, which it is not",
+  "evidence": [
+   "DirmdEmu_CaseF is referenced only by DirmdTitle_EmulatorMethods[0] (naka_disk_warning.c:1957 NAKA_ADDR(DirmdEmu_CaseF)) -- not by DirmdEmulator_CaseTable",
+   "its inner label PostTitle_Function_Skip (the memo post) could become DirmdTitle_New_PostMemo"
+  ]
+ }
+]

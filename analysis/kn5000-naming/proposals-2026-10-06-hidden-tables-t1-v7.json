@@ -1,0 +1,68 @@
+[
+ {
+  "addr": "0xF8EE57",
+  "new": "SingleLoadSrc_PanelMemListProc",
+  "header": "Single-load source list for area 0 PANEL MEMORY: EVT_PAINT draws the bank/name rows (SLSrcBankList_FuncBody, _Helper2, _Helper, _Helper3); event parameter 5 pages by SingleLoadSrc_PanelMemBankSize (8) up to 80 (RAM 0x89FC), parameter 6 steps by 1, 40 redraws the pending rows; entry [0] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "v7 slot 0 of SingleLoadSrc_ListProcByMode (v10 record)"
+ },
+ {
+  "addr": "0xF8F094",
+  "new": "SingleLoadSrc_SequencerListProc",
+  "header": "Single-load source list for area 1 SEQUENCER: EVT_PAINT only -- blank row 0, row 1 '<StorageArea_UnitNames[1] SONG>:', row 2 the file's entry 0 name (SLSrcBankList_FuncBody_Helper14(0)), blank row 3; no paging (one song); entry [1] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "v7 slot 1 of SingleLoadSrc_ListProcByMode (v10 record)"
+ },
+ {
+  "addr": "0xF8F319",
+  "new": "SingleLoadSrc_ComposerListProc",
+  "header": "Single-load source list for area 2 COMPOSER: 30 items laid out in columns of SLSrcComposer_RowsPerColumn (10) -- parameter 5 moves the cursor (RAM 0x89FE) by +-10, parameter 6 by +-1; EVT_PAINT draws via SLSrcBankList_FuncBody_Helper5/_Helper4/_Helper6 (WP_GetPresetName1, WP_GetBankMemName); entry [2] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "v7 slot 2 of SingleLoadSrc_ListProcByMode (v10 record)"
+ },
+ {
+  "addr": "0xF8F74E",
+  "new": "SingleLoadSrc_SoundMemListProc",
+  "header": "Single-load source list for area 3 SOUND MEMORY: pages of SingleLoadSrc_SoundMemPageSize (20) over RAM 0x8A00; EVT_PAINT draws via SLSrcBankList_FuncBody_Helper8/_Helper10/_Helper9/_Helper11; entry [3] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "v7 slot 3 of SingleLoadSrc_ListProcByMode (v10 record)"
+ },
+ {
+  "addr": "0xF8FA3A",
+  "new": "SingleLoadSrc_BlankListProc",
+  "header": "Single-load source list for area 4 (none): on EVT_PAINT writes cell index + empty text into the four 21-byte rows at RAM 0x894E, pads each (TrimAndPadSmfFilename) and posts EVT_PARA_DRAW -- four blank rows; ignores every other event; entry [4] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "v7 slot 4 of SingleLoadSrc_ListProcByMode (v10 record)"
+ },
+ {
+  "addr": "0xF8FDD8",
+  "new": "SingleLoadDst_PanelMemListProc",
+  "header": "Single-load destination list for area 0 PANEL MEMORY: banks of SingleLoadDst_PanelMemBankSize (8) up to 80 over RAM 0x8A02 (parameter 7 pages); EVT_PAINT draws SLDstBankList_FuncBody (bank caption + WP_GetConfigName) and SLDstBankList_FuncBody_Helper; entry [0] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "v7 slot 0 of SingleLoadDst_AreaListProcs (v10 record)"
+ },
+ {
+  "addr": "0xF90072",
+  "new": "SingleLoadDst_SequencerListProc",
+  "header": "Single-load destination list for area 1 SEQUENCER: EVT_PAINT blanks rows 0/3 and draws 'SONG: n' + slot label (SLDstBankList_FuncBody_Helper2, BuildSlotLabel); parameter 8 steps the song number RAM 0x8A04 up to SLDstBankList_FuncBody_Data_6; parameter 10 returns SLDstBankList_FuncBody_Helper8(song); entry [1] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "v7 slot 1 of SingleLoadDst_AreaListProcs (v10 record)"
+ },
+ {
+  "addr": "0xF902A0",
+  "new": "SingleLoadDst_ComposerListProc",
+  "header": "Single-load destination list for area 2 COMPOSER: banks of SingleLoadDst_ComposerBankSize (10) up to 30 over RAM 0x8A06; EVT_PAINT draws SLDstBankList_FuncBody_Helper3 and _Helper4; entry [2] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "v7 slot 2 of SingleLoadDst_AreaListProcs (v10 record)"
+ },
+ {
+  "addr": "0xF90684",
+  "new": "SingleLoadDst_SoundMemListProc",
+  "header": "Single-load destination list for area 3 SOUND MEMORY: columns of SLDstSoundMem_RowsPerColumn (20) over RAM 0x8A08 (parameter 7 moves +-20); EVT_PAINT draws SLDstBankList_FuncBody_Helper5 and _Helper6; entry [3] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "v7 slot 3 of SingleLoadDst_AreaListProcs (v10 record)"
+ },
+ {
+  "addr": "0xF9AA35",
+  "new": "DirmdTitle_Old",
+  "header": "DirmdTitle emulator method [1] (Old), called by DirmdEmulator on EVT_HIDE: posts the trace memo \"DirmdTitleOld();\" (DbMemo_PostString) and tail-jumps to an empty `ret` (PsMixer_CtlTypeProc8_Return2)",
+  "basis": "v7 slot 1 of DirmdTitle_EmulatorMethods (v10 record)"
+ },
+ {
+  "addr": "0xF9AA7D",
+  "new": "DirmdTitle_Cur",
+  "header": "DirmdTitle emulator method [3] (Cur): posts the trace memo \"DirmdTitleCur();\" and tail-jumps to an empty `ret` (PsMixer_CtlTypeProc8_Return3); DirmdEmulator never calls slot 3",
+  "basis": "v7 slot 3 of DirmdTitle_EmulatorMethods (v10 record)"
+ }
+]

@@ -1297,7 +1297,7 @@ DirmdTitleFunc:
 	ret
 
 ; DirmdEmulator dispatch case F
-DirmdEmu_CaseF:
+DirmdTitle_New:
 	ld	a, (ACTIVE_TITLE:16)
 	cp	a, (ACTIVE_TITLE_PREVIOUS:16)
 	jr	z, PostTitle_Function_Skip
@@ -1312,9 +1312,16 @@ PostTitle_Function_Skip:
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleNew
 	call	DbMemo_PostString
 	jp	PsMixer_CtlTypeProc8_Return
+; DirmdTitle_Old: DirmdTitle emulator method [1] (Old), called by DirmdEmulator on EVT_HIDE: posts the trace memo
+;   "DirmdTitleOld();" (DbMemo_PostString) and tail-jumps to an empty `ret` (PsMixer_CtlTypeProc8_Return2)
+DirmdTitle_Old:
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleOld
 	call	DbMemo_PostString
 	jp	PsMixer_CtlTypeProc8_Return2
+; DirmdTitle_ESw: DirmdTitle emulator method [2] (ESw), called by DirmdEmulator on EVT_SW_IN with the switch number (&
+;   31) and its bit-7 flag: formats and posts the trace memo "DirmdTitleESw(%d, %d);" then calls
+;   DirmdTitle_SwitchInNullRet(WA = switch, BC = flag), an empty routine
+DirmdTitle_ESw:
 	lda	xsp, (xsp-256)
 	pushw	iz
 	pushm	(xsp+264)
@@ -1334,6 +1341,9 @@ PostTitle_Function_Skip:
 	popw	iz
 	lda	xsp, (xsp+256)
 	ret
+; DirmdTitle_Cur: DirmdTitle emulator method [3] (Cur): posts the trace memo "DirmdTitleCur();" and tail-jumps to an
+;   empty `ret` (PsMixer_CtlTypeProc8_Return3); DirmdEmulator never calls slot 3
+DirmdTitle_Cur:
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleCur
 	call	DbMemo_PostString
 	jp	PsMixer_CtlTypeProc8_Return3

@@ -1,0 +1,208 @@
+[
+ {
+  "addr": "0xF167AF",
+  "new": "FtLangText01",
+  "header": "Naka ApFunction 0x12B0000, named by entry 0 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable (6 language pointers, English \"Bass Port Speaker\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF167C0",
+  "new": "FtLangText01S",
+  "header": "Naka ApFunction 0x12B0001, named by entry 1 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = FDemo_BassPortSpanishHeading_Texts (6 language pointers, only Spanish filled: \"Altavoz con port<0xF3>n para bajos\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF167D1",
+  "new": "FtLangText02",
+  "header": "Naka ApFunction 0x12B0002, named by entry 2 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_3 (6 language pointers, English \"The KN5000's Special Woofer & Bass Port produce a Rich & Powerful sound!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF167E2",
+  "new": "FtLangText03",
+  "header": "Naka ApFunction 0x12B0003, named by entry 3 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_4 (6 language pointers, English \"Huge Styles\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF167F3",
+  "new": "FtLangText04",
+  "header": "Naka ApFunction 0x12B0004, named by entry 4 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_5 (6 language pointers, English \"Explore 1000 Musical Styles with the Music Stylist.\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF16804",
+  "new": "FtLangText05",
+  "header": "Naka ApFunction 0x12B0005, named by entry 5 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_6 (6 language pointers, English \"Add to your enjoyment with a wide range of Technics Software\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF16815",
+  "new": "FtLangText06",
+  "header": "Naka ApFunction 0x12B0006, named by entry 6 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_7 (6 language pointers, English \"And convert software from almost any other manufacturer!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF16826",
+  "new": "FtLangText07",
+  "header": "Naka ApFunction 0x12B0007, named by entry 7 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_8 (6 language pointers, English \"Store your favorite software patterns in the Custom Rhythm Group .....permanently!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF16837",
+  "new": "FtLangText08",
+  "header": "Naka ApFunction 0x12B0008, named by entry 8 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_9 (6 language pointers, English \"Accordion Register\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF16848",
+  "new": "FtLangText09",
+  "header": "Naka ApFunction 0x12B0009, named by entry 9 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_10 (6 language pointers, English \"A World of Accordion Sounds at your fingertips with the Accordion Register!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF16859",
+  "new": "FtLangText10",
+  "header": "Naka ApFunction 0x12B000A, named by entry 10 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_11 (6 language pointers, English \"Digital Drawbar\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF1686A",
+  "new": "FtLangText11",
+  "header": "Naka ApFunction 0x12B000B, named by entry 11 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = FtLangText11_Texts (6 language pointers, English \"Classic Organ Sounds with Jazz and Rock Drawbars!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF1687B",
+  "new": "FtLangText12",
+  "header": "Naka ApFunction 0x12B000C, named by entry 12 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_13 (6 language pointers, English \"Acoustic Illusion\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF1688C",
+  "new": "FtLangText13",
+  "header": "Naka ApFunction 0x12B000D, named by entry 13 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_14 (6 language pointers, English \"Acoustic Illusion broadens your music to 3-Dimensions!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF1689D",
+  "new": "FtLangText14",
+  "header": "Naka ApFunction 0x12B000E, named by entry 14 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_15 (6 language pointers, English \"A host of features to suit any style of performance!\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF168AE",
+  "new": "FtLangText15",
+  "header": "Naka ApFunction 0x12B000F, named by entry 15 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_16 (6 language pointers, English \"Huge Styles\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF168BF",
+  "new": "FtLangText16",
+  "header": "Naka ApFunction 0x12B0010, named by entry 16 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = FtLangText16_LangStrings (6 language pointers, English \"Huge Styles\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "addr": "0xF168D0",
+  "new": "FtLangText17",
+  "header": "Naka ApFunction 0x12B0011, named by entry 17 of the ApFunction name slot 0x42B: feature-demo caption text; on EVT_GET_LANGUAGE_PTR returns XHL = FtLangText17_Texts (6 language pointers, English \"Huge Styles\"), else XHL = 0",
+  "basis": "firmware name table (ApFunction slot 0x42B entry k names slot 0x12B entry k) + body"
+ },
+ {
+  "table_rename": "ToneGen_ParamTable_0x3A7",
+  "new": "Naka_ApFuncTable_12B",
+  "basis": "registration + sibling naming"
+ },
+ {
+  "table_rename": "ToneGen_ParamTable_0x3F3",
+  "new": "Naka_ApFuncNameTable_42B",
+  "basis": "companion name table of the above (not in the census list)"
+ },
+ {
+  "addr": "0xF0615C",
+  "new": "SeFilLfo1_OnSwitch15",
+  "header": "LFO 1 (filter) page, switch 15 (SeFilLfo1TitleFunc_SwitchHandlers[15]): when A == 0, SeMenu_SetupMenuDisplay(0) then SeMenu_SendEvent(WA = 32, C = 0), a mode change to screen 32; same body as SeFilEnv1_OnSwitch15 / SeFilEnv2_OnSwitch15 / SeFilFil2_OnSwitch15",
+  "basis": "reader + sibling pattern (scripts/tools/name_semenu_switch_handlers.py slot_name: index 15 -> <Page>_OnSwitch15)"
+ },
+ {
+  "addr": "0xF8F264",
+  "new": "SingleLoadSrc_PanelMemListProc",
+  "header": "Single-load source list for area 0 PANEL MEMORY: EVT_PAINT draws the bank/name rows (SLSrcBankList_FuncBody, _Helper2, _Helper, _Helper3); event parameter 5 pages by SingleLoadSrc_PanelMemBankSize (8) up to 80 (RAM 0x89FC), parameter 6 steps by 1, 40 redraws the pending rows; entry [0] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body"
+ },
+ {
+  "addr": "0xF8F4A1",
+  "new": "SingleLoadSrc_SequencerListProc",
+  "header": "Single-load source list for area 1 SEQUENCER: EVT_PAINT only -- blank row 0, row 1 '<StorageArea_UnitNames[1] SONG>:', row 2 the file's entry 0 name (SLSrcBankList_FuncBody_Helper14(0)), blank row 3; no paging (one song); entry [1] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body"
+ },
+ {
+  "addr": "0xF8F726",
+  "new": "SingleLoadSrc_ComposerListProc",
+  "header": "Single-load source list for area 2 COMPOSER: 30 items laid out in columns of SLSrcComposer_RowsPerColumn (10) -- parameter 5 moves the cursor (RAM 0x89FE) by +-10, parameter 6 by +-1; EVT_PAINT draws via SLSrcBankList_FuncBody_Helper5/_Helper4/_Helper6 (WP_GetPresetName1, WP_GetBankMemName); entry [2] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body"
+ },
+ {
+  "addr": "0xF8FB5B",
+  "new": "SingleLoadSrc_SoundMemListProc",
+  "header": "Single-load source list for area 3 SOUND MEMORY: pages of SingleLoadSrc_SoundMemPageSize (20) over RAM 0x8A00; EVT_PAINT draws via SLSrcBankList_FuncBody_Helper8/_Helper10/_Helper9/_Helper11; entry [3] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body"
+ },
+ {
+  "addr": "0xF8FE47",
+  "new": "SingleLoadSrc_BlankListProc",
+  "header": "Single-load source list for area 4 (none): on EVT_PAINT writes cell index + empty text into the four 21-byte rows at RAM 0x894E, pads each (TrimAndPadSmfFilename) and posts EVT_PARA_DRAW -- four blank rows; ignores every other event; entry [4] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body"
+ },
+ {
+  "addr": "0xF901E5",
+  "new": "SingleLoadDst_PanelMemListProc",
+  "header": "Single-load destination list for area 0 PANEL MEMORY: banks of SingleLoadDst_PanelMemBankSize (8) up to 80 over RAM 0x8A02 (parameter 7 pages); EVT_PAINT draws SLDstBankList_FuncBody (bank caption + WP_GetConfigName) and SLDstBankList_FuncBody_Helper; entry [0] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body"
+ },
+ {
+  "addr": "0xF9047F",
+  "new": "SingleLoadDst_SequencerListProc",
+  "header": "Single-load destination list for area 1 SEQUENCER: EVT_PAINT blanks rows 0/3 and draws 'SONG: n' + slot label (SLDstBankList_FuncBody_Helper2, BuildSlotLabel); parameter 8 steps the song number RAM 0x8A04 up to SLDstBankList_FuncBody_Data_6; parameter 10 returns SLDstBankList_FuncBody_Helper8(song); entry [1] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body"
+ },
+ {
+  "addr": "0xF906AD",
+  "new": "SingleLoadDst_ComposerListProc",
+  "header": "Single-load destination list for area 2 COMPOSER: banks of SingleLoadDst_ComposerBankSize (10) up to 30 over RAM 0x8A06; EVT_PAINT draws SLDstBankList_FuncBody_Helper3 and _Helper4; entry [2] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body"
+ },
+ {
+  "addr": "0xF90A91",
+  "new": "SingleLoadDst_SoundMemListProc",
+  "header": "Single-load destination list for area 3 SOUND MEMORY: columns of SLDstSoundMem_RowsPerColumn (20) over RAM 0x8A08 (parameter 7 moves +-20); EVT_PAINT draws SLDstBankList_FuncBody_Helper5 and _Helper6; entry [3] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter",
+  "basis": "reader (index = single-load area byte RAM 0x89F8) + body"
+ },
+ {
+  "table_rename": "CmpDst_HandleShow_PtrTable_Target0",
+  "new": "SingleLoadDst_BlankListProc",
+  "basis": "reader + body; the current name is positional and wrong (it is not a CmpDst show handler and not 'Target0')"
+ },
+ {
+  "addr": "0xF9AE42",
+  "new": "DirmdTitle_Old",
+  "header": "DirmdTitle emulator method [1] (Old), called by DirmdEmulator on EVT_HIDE: posts the trace memo \"DirmdTitleOld();\" (DbMemo_PostString) and tail-jumps to an empty `ret` (PsMixer_CtlTypeProc8_Return2)",
+  "basis": "table layout {New, Old, ESw, Cur} + the firmware's own trace memo in the body"
+ },
+ {
+  "addr": "0xF9AE4F",
+  "new": "DirmdTitle_ESw",
+  "header": "DirmdTitle emulator method [2] (ESw), called by DirmdEmulator on EVT_SW_IN with the switch number (& 31) and its bit-7 flag: formats and posts the trace memo \"DirmdTitleESw(%d, %d);\" then calls DirmdTitle_SwitchInNullRet(WA = switch, BC = flag), an empty routine",
+  "basis": "table layout {New, Old, ESw, Cur} + the firmware's own trace memo in the body"
+ },
+ {
+  "addr": "0xF9AE8A",
+  "new": "DirmdTitle_Cur",
+  "header": "DirmdTitle emulator method [3] (Cur): posts the trace memo \"DirmdTitleCur();\" and tail-jumps to an empty `ret` (PsMixer_CtlTypeProc8_Return3); DirmdEmulator never calls slot 3",
+  "basis": "table layout {New, Old, ESw, Cur} + the firmware's own trace memo in the body"
+ },
+ {
+  "table_rename": "DirmdEmu_CaseF",
+  "new": "DirmdTitle_New",
+  "basis": "DirmdTitle_EmulatorMethods[0]; the current name says it is a DirmdEmulator switch case, which it is not"
+ }
+]

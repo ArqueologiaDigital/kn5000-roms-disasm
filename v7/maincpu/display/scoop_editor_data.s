@@ -3882,6 +3882,7 @@ SeFilLfo1_OnSideRow5:
 	ld	bc, 4:i3
 	call	SeMenu_CyclePartLfoState
 	ret
+SeFilLfo1_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ld	wa, 0:i3

@@ -737,7 +737,10 @@ SeFilLfo1TitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
 ; the rest of the code-pointer table at SeFilLfo1TitleFunc_SwitchHandlers, from entry 14 on;
 ; the table runs across this boundary (file slice)
-GUI_DisplayStructData_0x1100:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1100, 0x10
+GUI_DisplayStructData_0x1100:	.long SeMenu_BitShift_Stub
+	.long SeFilLfo1_OnSwitch15
+	.long SeMenu_BitShift_Stub
+	.long 0
 ; data read by SeMenu_ApplyPartEdit_Join17+0x13 (0xF08A33)
 ; evidence: `lda xde, (this)` then `ld E,(XDE+WA) / mul L,0x1c`
 GUI_DisplayStructData_0x1110:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1110, 0xD
@@ -1181,10 +1184,28 @@ ToneGen_ParamTable_0x326:
 	.incbin "includes/generated/tonegen_param_table.bin", 0x3a6, 0x1
 ; parameter block of object 0x12b (class 0x01600002, proc ApFunctionProc), registered by InitializeNaka+0x91
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 76 B; the proc's read length was not measured
-ToneGen_ParamTable_0x3A7:	.incbin "includes/generated/tonegen_param_table.bin", 0x3A7, 0x4C
+Naka_ApFuncTable_12B:	.long FtLangText01
+	.long FtLangText01S
+	.long FtLangText02
+	.long FtLangText03
+	.long FtLangText04
+	.long FtLangText05
+	.long FtLangText06
+	.long FtLangText07
+	.long FtLangText08
+	.long FtLangText09
+	.long FtLangText10
+	.long FtLangText11
+	.long FtLangText12
+	.long FtLangText13
+	.long FtLangText14
+	.long FtLangText15
+	.long FtLangText16
+	.long FtLangText17
+	.long 0
 ; parameter block of object 0x42b (class 0x01600002, proc ApFunctionProc), registered by InitializeNaka+0xB6
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 330 B; the proc's read length was not measured
-ToneGen_ParamTable_0x3F3:	.incbin "includes/generated/tonegen_param_table.bin", 0x3F3, 0x14A
+Naka_ApFuncNameTable_42B:	.incbin "includes/generated/tonegen_param_table.bin", 0x3F3, 0x14A
 ; parameter block of object 0x16b (class 0x01600004, proc ClassProc), registered by InitializeNaka+0x1C
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 26 B; the proc's read length was not measured
 ToneGen_ParamTable_0x53D:	.incbin "includes/generated/tonegen_param_table.bin", 0x53D, 0x18

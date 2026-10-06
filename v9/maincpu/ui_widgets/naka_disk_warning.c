@@ -30,7 +30,7 @@ extern const char ColorBlit_WithPaletteSave;
 extern const char Data_WidgetNamesCharMapBlock;
 extern const char DefaultClassProc;
 extern const char DefaultFunction;
-extern const char DirmdEmu_CaseF;
+extern const char DirmdTitle_New;
 extern const char DrawFunc_Init;
 extern const char DrawFunc_Init_Variant1;
 extern const char DrawText_ExtLayout_Variant1;
@@ -91,6 +91,9 @@ extern const char SeGfx_BoundOp08_ColorBlit;
 extern const char SeGfx_BoundOp09_FormatNumber;
 extern const char SeGfx_BoundOp0A_FormatNumber;
 extern const char SeGfx_BoundOp0B_FormatNumber;
+extern const char DirmdTitle_Cur;
+extern const char DirmdTitle_ESw;
+extern const char DirmdTitle_Old;
 
 #define BASE  0x00EA8CACu
 
@@ -1954,10 +1957,10 @@ const naka_disk_warning_t naka_disk_warning_data
     },
 
     .DirmdTitle_EmulatorMethods = {
-        NAKA_ADDR(DirmdEmu_CaseF),
-        0x00F9AE42,
-        0x00F9AE4F,
-        0x00F9AE8A,
+        NAKA_ADDR(DirmdTitle_New),
+        NAKA_ADDR(DirmdTitle_Old),
+        NAKA_ADDR(DirmdTitle_ESw),
+        NAKA_ADDR(DirmdTitle_Cur),
     },
 
     .DirmdTitleNew_str = ALIGNED_STRING("DirmdTitleNew();"),

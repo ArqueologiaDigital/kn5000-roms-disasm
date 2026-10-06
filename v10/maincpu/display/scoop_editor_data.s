@@ -3851,6 +3851,10 @@ SeFilLfo1_OnSideRow5:
 	ld	bc, 4:i3
 	call	SeMenu_CyclePartLfoState
 	ret
+; SeFilLfo1_OnSwitch15: LFO 1 (filter) page, switch 15 (SeFilLfo1TitleFunc_SwitchHandlers[15]): when A == 0,
+;   SeMenu_SetupMenuDisplay(0) then SeMenu_SendEvent(WA = 32, C = 0), a mode change to screen 32; same body as
+;   SeFilEnv1_OnSwitch15 / SeFilEnv2_OnSwitch15 / SeFilFil2_OnSwitch15
+SeFilLfo1_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ld	wa, 0:i3

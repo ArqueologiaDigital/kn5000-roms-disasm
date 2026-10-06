@@ -306,6 +306,7 @@ SLSrcBankList_FuncBody_Helper3_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
+SingleLoadSrc_PanelMemListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
@@ -496,6 +497,7 @@ SLSrcBankList_FuncBody_Join4:
 	pop	xiz
 	inc	4, xsp
 	ret
+SingleLoadSrc_SequencerListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
@@ -705,6 +707,7 @@ SLSrcBankList_FuncBody_Helper6_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
+SingleLoadSrc_ComposerListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
@@ -1090,6 +1093,7 @@ SLSrcBankList_FuncBody_Helper11_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
+SingleLoadSrc_SoundMemListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
@@ -1344,6 +1348,7 @@ SLSrcBankList_FuncBody_Join17:
 	pop	xiz
 	inc	4, xsp
 	ret
+SingleLoadSrc_BlankListProc:
 	dec	4, xsp
 	pushw	iz
 	ld	(xsp+2), xwa
@@ -1665,6 +1670,7 @@ SLDstBankList_FuncBody_Join:
 	pop	xiz
 	inc	6, xsp
 	ret
+SingleLoadDst_PanelMemListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
@@ -1894,6 +1900,7 @@ SLDstBankList_FuncBody_Helper2:
 	pop	xiz
 	inc	4, xsp
 	ret
+SingleLoadDst_SequencerListProc:
 	push	xiz
 	ld	xiz, xwa
 	cp	xbc, EVT_INDEXSW_DOWN
@@ -2085,6 +2092,7 @@ SLDstBankList_FuncBody_Helper4_Join:
 	pop	xiz
 	inc	6, xsp
 	ret
+SingleLoadDst_ComposerListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
@@ -2423,6 +2431,7 @@ SLDstBankList_FuncBody_Helper6_Join:
 	pop	xiz
 	inc	6, xsp
 	ret
+SingleLoadDst_SoundMemListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
@@ -2676,7 +2685,7 @@ SLDstBankList_FuncBody_Epilogue4:
 	pop	xiz
 	inc	4, xsp
 	ret
-CmpDst_HandleShow_PtrTable_Target0:
+SingleLoadDst_BlankListProc:
 	dec	4, xsp
 	pushw	iz
 	ld	(xsp+2), xwa

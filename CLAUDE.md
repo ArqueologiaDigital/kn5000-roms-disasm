@@ -910,6 +910,12 @@ that we can have strong evidence whenever we reach true full code-coverage"*.
    instruction-start words as the frame. It found 7 more tables per maincpu tree, with 31 unlabelled targets, so
    KN5000 v10/v9/v7 show U-NOT 7 again. The census half does not hold for KN5000 until those targets are
    labelled.
+   **Restored (`dispatch-census-2026-10-06-30`).** The 31 targets per tree were named from their tables
+   (FtLangText01..17, the SingleLoad*/CmpSingleLoad* area list procs, DirmdTitle_New/Old/ESw/Cur,
+   SeFilLfo1_OnSwitch15) and placed by scripts/tools/place_kn5000_labels.py; v7's 11 by table-slot correspondence.
+   The C tables now name them through NAKA_ADDR.  The two blobs without a link script hold them as `.long` lines
+   (scripts/tools/respell_c_slice_tables_as_long.py).  Every KN5000 image is again NOT = newT = U-NOT = U-newT =
+   D-unres = 0, this time with the C-SLICE detector.
 
 ### Semantic Score Badges
 

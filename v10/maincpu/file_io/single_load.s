@@ -306,6 +306,12 @@ SLSrcBankList_FuncBody_Helper3_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
+; SingleLoadSrc_PanelMemListProc: Single-load source list for area 0 PANEL MEMORY: EVT_PAINT draws the bank/name rows
+;   (SLSrcBankList_FuncBody, _Helper2, _Helper, _Helper3); event parameter 5 pages by SingleLoadSrc_PanelMemBankSize
+;   (8) up to 80 (RAM 0x89FC), parameter 6 steps by 1, 40 redraws the pending rows; entry [0] of
+;   SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event,
+;   XDE = parameter
+SingleLoadSrc_PanelMemListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
@@ -496,6 +502,11 @@ SLSrcBankList_FuncBody_Join4:
 	pop	xiz
 	inc	4, xsp
 	ret
+; SingleLoadSrc_SequencerListProc: Single-load source list for area 1 SEQUENCER: EVT_PAINT only -- blank row 0, row 1
+;   '<StorageArea_UnitNames[1] SONG>:', row 2 the file's entry 0 name (SLSrcBankList_FuncBody_Helper14(0)), blank row
+;   3; no paging (one song); entry [1] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called
+;   with XWA = file-name box, XBC = event, XDE = parameter
+SingleLoadSrc_SequencerListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
@@ -705,6 +716,12 @@ SLSrcBankList_FuncBody_Helper6_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
+; SingleLoadSrc_ComposerListProc: Single-load source list for area 2 COMPOSER: 30 items laid out in columns of
+;   SLSrcComposer_RowsPerColumn (10) -- parameter 5 moves the cursor (RAM 0x89FE) by +-10, parameter 6 by +-1;
+;   EVT_PAINT draws via SLSrcBankList_FuncBody_Helper5/_Helper4/_Helper6 (WP_GetPresetName1, WP_GetBankMemName); entry
+;   [2] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC =
+;   event, XDE = parameter
+SingleLoadSrc_ComposerListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
@@ -1090,6 +1107,11 @@ SLSrcBankList_FuncBody_Helper11_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
+; SingleLoadSrc_SoundMemListProc: Single-load source list for area 3 SOUND MEMORY: pages of
+;   SingleLoadSrc_SoundMemPageSize (20) over RAM 0x8A00; EVT_PAINT draws via
+;   SLSrcBankList_FuncBody_Helper8/_Helper10/_Helper9/_Helper11; entry [3] of SingleLoadSrc_ListProcByMode and
+;   CmpSingleLoadSrc_ListProcByMode, called with XWA = file-name box, XBC = event, XDE = parameter
+SingleLoadSrc_SoundMemListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
@@ -1344,6 +1366,11 @@ SLSrcBankList_FuncBody_Join17:
 	pop	xiz
 	inc	4, xsp
 	ret
+; SingleLoadSrc_BlankListProc: Single-load source list for area 4 (none): on EVT_PAINT writes cell index + empty text
+;   into the four 21-byte rows at RAM 0x894E, pads each (TrimAndPadSmfFilename) and posts EVT_PARA_DRAW -- four blank
+;   rows; ignores every other event; entry [4] of SingleLoadSrc_ListProcByMode and CmpSingleLoadSrc_ListProcByMode,
+;   called with XWA = file-name box, XBC = event, XDE = parameter
+SingleLoadSrc_BlankListProc:
 	dec	4, xsp
 	pushw	iz
 	ld	(xsp+2), xwa
@@ -1665,6 +1692,12 @@ SLDstBankList_FuncBody_Join:
 	pop	xiz
 	inc	6, xsp
 	ret
+; SingleLoadDst_PanelMemListProc: Single-load destination list for area 0 PANEL MEMORY: banks of
+;   SingleLoadDst_PanelMemBankSize (8) up to 80 over RAM 0x8A02 (parameter 7 pages); EVT_PAINT draws
+;   SLDstBankList_FuncBody (bank caption + WP_GetConfigName) and SLDstBankList_FuncBody_Helper; entry [0] of
+;   SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE
+;   = parameter
+SingleLoadDst_PanelMemListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
@@ -1894,6 +1927,12 @@ SLDstBankList_FuncBody_Helper2:
 	pop	xiz
 	inc	4, xsp
 	ret
+; SingleLoadDst_SequencerListProc: Single-load destination list for area 1 SEQUENCER: EVT_PAINT blanks rows 0/3 and
+;   draws 'SONG: n' + slot label (SLDstBankList_FuncBody_Helper2, BuildSlotLabel); parameter 8 steps the song number
+;   RAM 0x8A04 up to SLDstBankList_FuncBody_Data_6; parameter 10 returns SLDstBankList_FuncBody_Helper8(song); entry
+;   [1] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC =
+;   event, XDE = parameter
+SingleLoadDst_SequencerListProc:
 	push	xiz
 	ld	xiz, xwa
 	cp	xbc, EVT_INDEXSW_DOWN
@@ -2085,6 +2124,11 @@ SLDstBankList_FuncBody_Helper4_Join:
 	pop	xiz
 	inc	6, xsp
 	ret
+; SingleLoadDst_ComposerListProc: Single-load destination list for area 2 COMPOSER: banks of
+;   SingleLoadDst_ComposerBankSize (10) up to 30 over RAM 0x8A06; EVT_PAINT draws SLDstBankList_FuncBody_Helper3 and
+;   _Helper4; entry [2] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name
+;   box, XBC = event, XDE = parameter
+SingleLoadDst_ComposerListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
@@ -2423,6 +2467,11 @@ SLDstBankList_FuncBody_Helper6_Join:
 	pop	xiz
 	inc	6, xsp
 	ret
+; SingleLoadDst_SoundMemListProc: Single-load destination list for area 3 SOUND MEMORY: columns of
+;   SLDstSoundMem_RowsPerColumn (20) over RAM 0x8A08 (parameter 7 moves +-20); EVT_PAINT draws
+;   SLDstBankList_FuncBody_Helper5 and _Helper6; entry [3] of SingleLoadDst_AreaListProcs and
+;   CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC = event, XDE = parameter
+SingleLoadDst_SoundMemListProc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
@@ -2676,7 +2725,7 @@ SLDstBankList_FuncBody_Epilogue4:
 	pop	xiz
 	inc	4, xsp
 	ret
-CmpDst_HandleShow_PtrTable_Target0:
+SingleLoadDst_BlankListProc:
 	dec	4, xsp
 	pushw	iz
 	ld	(xsp+2), xwa

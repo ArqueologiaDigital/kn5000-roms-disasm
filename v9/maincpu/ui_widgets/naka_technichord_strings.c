@@ -94,7 +94,7 @@ extern const char TypePriorityText;
 extern const char VwScreenTitleProc;
 extern const char WaitingFunc;
 extern const char WakeUpPassword;
-extern const char CmpDst_HandleShow_PtrTable_Target0;
+extern const char SingleLoadDst_BlankListProc;
 extern const char PsMixer_CtlTypeProc0;
 extern const char PsMixer_CtlTypeProc1;
 extern const char PsMixer_CtlTypeProc10;
@@ -106,6 +106,15 @@ extern const char PsMixer_CtlTypeProc6;
 extern const char PsMixer_CtlTypeProc7;
 extern const char PsMixer_CtlTypeProc8;
 extern const char PsMixer_CtlTypeProc9;
+extern const char SingleLoadDst_ComposerListProc;
+extern const char SingleLoadDst_PanelMemListProc;
+extern const char SingleLoadDst_SequencerListProc;
+extern const char SingleLoadDst_SoundMemListProc;
+extern const char SingleLoadSrc_BlankListProc;
+extern const char SingleLoadSrc_ComposerListProc;
+extern const char SingleLoadSrc_PanelMemListProc;
+extern const char SingleLoadSrc_SequencerListProc;
+extern const char SingleLoadSrc_SoundMemListProc;
 
 #define BASE  0x00E85F4Eu
 
@@ -10652,11 +10661,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .SLSrcBankList_FuncBody_Data_4 = 0xFFA8,
 
     .SingleLoadSrc_ListProcByMode = {
-        0x00F8F264,
-        0x00F8F4A1,
-        0x00F8F726,
-        0x00F8FB5B,
-        0x00F8FE47,
+        NAKA_ADDR(SingleLoadSrc_PanelMemListProc),
+        NAKA_ADDR(SingleLoadSrc_SequencerListProc),
+        NAKA_ADDR(SingleLoadSrc_ComposerListProc),
+        NAKA_ADDR(SingleLoadSrc_SoundMemListProc),
+        NAKA_ADDR(SingleLoadSrc_BlankListProc),
     },
 
     .SLDstBankList_FuncBody_Str_Colon = ALIGNED_STRING(": "),
@@ -10700,27 +10709,27 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .SLDstBankList_FuncBody_Data_8 = 0xFFA8,
 
     .SingleLoadDst_AreaListProcs = {
-        0x00F901E5,
-        0x00F9047F,
-        0x00F906AD,
-        0x00F90A91,
-        NAKA_ADDR(CmpDst_HandleShow_PtrTable_Target0),
+        NAKA_ADDR(SingleLoadDst_PanelMemListProc),
+        NAKA_ADDR(SingleLoadDst_SequencerListProc),
+        NAKA_ADDR(SingleLoadDst_ComposerListProc),
+        NAKA_ADDR(SingleLoadDst_SoundMemListProc),
+        NAKA_ADDR(SingleLoadDst_BlankListProc),
     },
 
     .CmpSingleLoadSrc_ListProcByMode = {
-        0x00F8F264,
-        0x00F8F4A1,
-        0x00F8F726,
-        0x00F8FB5B,
-        0x00F8FE47,
+        NAKA_ADDR(SingleLoadSrc_PanelMemListProc),
+        NAKA_ADDR(SingleLoadSrc_SequencerListProc),
+        NAKA_ADDR(SingleLoadSrc_ComposerListProc),
+        NAKA_ADDR(SingleLoadSrc_SoundMemListProc),
+        NAKA_ADDR(SingleLoadSrc_BlankListProc),
     },
 
     .CmpSingleLoadDst_AreaListProcs = {
-        0x00F901E5,
-        0x00F9047F,
-        0x00F906AD,
-        0x00F90A91,
-        NAKA_ADDR(CmpDst_HandleShow_PtrTable_Target0),
+        NAKA_ADDR(SingleLoadDst_PanelMemListProc),
+        NAKA_ADDR(SingleLoadDst_SequencerListProc),
+        NAKA_ADDR(SingleLoadDst_ComposerListProc),
+        NAKA_ADDR(SingleLoadDst_SoundMemListProc),
+        NAKA_ADDR(SingleLoadDst_BlankListProc),
     },
 
     .str_1596 = ALIGNED_STRING(""),

@@ -1012,7 +1012,7 @@ InitializeNaka:
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0012
-	lda xwa, (ToneGen_ParamTable_0x3A7:24)
+	lda xwa, (Naka_ApFuncTable_12B:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x012b
 	call RegisterObjectTable
@@ -1022,7 +1022,7 @@ InitializeNaka:
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0012
-	lda xwa, (ToneGen_ParamTable_0x3F3:24)
+	lda xwa, (Naka_ApFuncNameTable_42B:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x042b
 	call RegisterObjectTable
@@ -1097,6 +1097,7 @@ InitializeNaka:
 	ret
 NAKA_InitDataBlock:
 	ret
+FtLangText01:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip
 	lda	xhl, (NAKA_InitDataBlock_PtrTable:24)
@@ -1104,6 +1105,7 @@ NAKA_InitDataBlock:
 InitializeNaka_Skip:
 	ld	xhl, 0:i3
 	ret
+FtLangText01S:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip2
 	lda	xhl, (FDemo_BassPortSpanishHeading_Texts:24)
@@ -1111,6 +1113,7 @@ InitializeNaka_Skip:
 InitializeNaka_Skip2:
 	ld	xhl, 0:i3
 	ret
+FtLangText02:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip3
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_3:24)
@@ -1118,6 +1121,7 @@ InitializeNaka_Skip2:
 InitializeNaka_Skip3:
 	ld	xhl, 0:i3
 	ret
+FtLangText03:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip4
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_4:24)
@@ -1125,6 +1129,7 @@ InitializeNaka_Skip3:
 InitializeNaka_Skip4:
 	ld	xhl, 0:i3
 	ret
+FtLangText04:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip5
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_5:24)
@@ -1132,6 +1137,7 @@ InitializeNaka_Skip4:
 InitializeNaka_Skip5:
 	ld	xhl, 0:i3
 	ret
+FtLangText05:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip6
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_6:24)
@@ -1139,6 +1145,7 @@ InitializeNaka_Skip5:
 InitializeNaka_Skip6:
 	ld	xhl, 0:i3
 	ret
+FtLangText06:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip7
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_7:24)
@@ -1146,6 +1153,7 @@ InitializeNaka_Skip6:
 InitializeNaka_Skip7:
 	ld	xhl, 0:i3
 	ret
+FtLangText07:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip8
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_8:24)
@@ -1153,6 +1161,7 @@ InitializeNaka_Skip7:
 InitializeNaka_Skip8:
 	ld	xhl, 0:i3
 	ret
+FtLangText08:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip9
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_9:24)
@@ -1160,6 +1169,7 @@ InitializeNaka_Skip8:
 InitializeNaka_Skip9:
 	ld	xhl, 0:i3
 	ret
+FtLangText09:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip10
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_10:24)
@@ -1167,6 +1177,7 @@ InitializeNaka_Skip9:
 InitializeNaka_Skip10:
 	ld	xhl, 0:i3
 	ret
+FtLangText10:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip11
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_11:24)
@@ -1174,6 +1185,7 @@ InitializeNaka_Skip10:
 InitializeNaka_Skip11:
 	ld	xhl, 0:i3
 	ret
+FtLangText11:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip12
 	lda	xhl, (FtLangText11_Texts:24)
@@ -1181,6 +1193,7 @@ InitializeNaka_Skip11:
 InitializeNaka_Skip12:
 	ld	xhl, 0:i3
 	ret
+FtLangText12:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip13
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_13:24)
@@ -1188,6 +1201,7 @@ InitializeNaka_Skip12:
 InitializeNaka_Skip13:
 	ld	xhl, 0:i3
 	ret
+FtLangText13:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip14
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_14:24)
@@ -1195,6 +1209,7 @@ InitializeNaka_Skip13:
 InitializeNaka_Skip14:
 	ld	xhl, 0:i3
 	ret
+FtLangText14:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip15
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_15:24)
@@ -1202,6 +1217,7 @@ InitializeNaka_Skip14:
 InitializeNaka_Skip15:
 	ld	xhl, 0:i3
 	ret
+FtLangText15:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip16
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_16:24)
@@ -1209,6 +1225,7 @@ InitializeNaka_Skip15:
 InitializeNaka_Skip16:
 	ld	xhl, 0:i3
 	ret
+FtLangText16:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip17
 	lda	xhl, (FtLangText16_LangStrings:24)
@@ -1216,6 +1233,7 @@ InitializeNaka_Skip16:
 InitializeNaka_Skip17:
 	ld	xhl, 0:i3
 	ret
+FtLangText17:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip18
 	lda	xhl, (FtLangText17_Texts:24)

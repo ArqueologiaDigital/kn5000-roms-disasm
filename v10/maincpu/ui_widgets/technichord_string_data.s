@@ -5786,7 +5786,7 @@ SLDstBankList_FuncBody_Data_8:	.incbin "includes/generated/naka_technichord_stri
 ; SingleLoadDst_AreaListProcs -- 5 x uint32_t: destination-list event routine for storage area 0-4
 ; (PANEL MEMORY, SEQUENCER, COMPOSER, SOUND MEMORY, blank). SingleLoadDstFunc (file_io/single_load.s) calls
 ; entry [area byte 0x89f8] with the file-name box (0x81f0) and the event (EVT_PAINT, EVT_INDEXSW_UP/DOWN, ...);
-; the routines are the unlabelled bodies after `ret` in file_io/single_load.s (the last is CmpDst_HandleShow_PtrTable_Target0).
+; the routines are the unlabelled bodies after `ret` in file_io/single_load.s (the last is SingleLoadDst_BlankListProc).
 SingleLoadDst_AreaListProcs:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAC8, 0x14
 ; CmpSingleLoadSrc_ListProcByMode -- 5 x code pointer: the same five source-list routines as SingleLoadSrc_ListProcByMode,
 ; per single-load mode (RAM 0x89F8), for the composer single-load screen: CmpSingleLoadSrcFunc calls entry [mode] with XWA = its
@@ -5796,7 +5796,7 @@ CmpSingleLoadSrc_ListProcByMode:	.incbin "includes/generated/naka_technichord_st
 ; four routines as SingleLoadDst_AreaListProcs[0-3]. CmpSingleLoadDstFunc (file_io/single_load.s) calls entry
 ; [area byte 0x89f8] with its file-name box (0x81f8) and the event.
 CmpSingleLoadDst_AreaListProcs:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAF0, 0x10
-	.long CmpDst_HandleShow_PtrTable_Target0
+	.long SingleLoadDst_BlankListProc
 ; two empty file names (NUL + 0xFF pad), drawn when there is no file: CmpFile_ShowDefault and
 ; DiskSel_EmptyFileName point XIZ / XBC at them (the second was the positional alias Data_SaveLoadMenuTable + 0x64)
 Str_EmptyFileName_Cmp:		.byte	0, 0xff

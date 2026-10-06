@@ -930,8 +930,8 @@ InitializeNaka:
 	RegObjTable NAKA_CLASS_Class, ClassProc, Naka_ClassCount_16B, ToneGen_ParamTable_0x53D, 0x16b
 	RegObjTable NAKA_CLASS_ResEvent, ResEventProc, Naka_ResEventCount_1CB, ToneGen_ParamTable_0x557, 0x1cb
 	RegObjTable NAKA_CLASS_ResMethod, ResMethodProc, Naka_ResMethodCount_1EB, ToneGen_ParamTable_0x55D, 0x1eb
-	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x12, ToneGen_ParamTable_0x3A7, 0x12b
-	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x12, ToneGen_ParamTable_0x3F3, 0x42b
+	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x12, Naka_ApFuncTable_12B, 0x12b
+	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x12, Naka_ApFuncNameTable_42B, 0x42b
 	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x0, ToneGen_ParamTable_0x563, 0x10b
 	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x0, ToneGen_ParamTable_0x567, 0x40b
 	RegObjTabl NAKA_CLASS_MainFunction, MainFunctionProc, 0x0, Naka_MainFunctionTable_14B, 0x14b
@@ -945,6 +945,10 @@ InitializeNaka:
 
 NAKA_InitDataBlock:
 	ret
+; FtLangText01: Naka ApFunction 0x12B0000, named by entry 0 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable (6 language pointers, English "Bass Port
+;   Speaker"), else XHL = 0
+FtLangText01:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip
 	lda	xhl, (NAKA_InitDataBlock_PtrTable:24)
@@ -952,6 +956,10 @@ NAKA_InitDataBlock:
 InitializeNaka_Skip:
 	ld	xhl, 0:i3
 	ret
+; FtLangText01S: Naka ApFunction 0x12B0001, named by entry 1 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = FDemo_BassPortSpanishHeading_Texts (6 language pointers, only Spanish
+;   filled: "Altavoz con port<0xF3>n para bajos"), else XHL = 0
+FtLangText01S:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip2
 	lda	xhl, (FDemo_BassPortSpanishHeading_Texts:24)
@@ -959,6 +967,10 @@ InitializeNaka_Skip:
 InitializeNaka_Skip2:
 	ld	xhl, 0:i3
 	ret
+; FtLangText02: Naka ApFunction 0x12B0002, named by entry 2 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_3 (6 language pointers, English "The
+;   KN5000's Special Woofer & Bass Port produce a Rich & Powerful sound!"), else XHL = 0
+FtLangText02:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip3
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_3:24)
@@ -966,6 +978,10 @@ InitializeNaka_Skip2:
 InitializeNaka_Skip3:
 	ld	xhl, 0:i3
 	ret
+; FtLangText03: Naka ApFunction 0x12B0003, named by entry 3 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_4 (6 language pointers, English "Huge
+;   Styles"), else XHL = 0
+FtLangText03:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip4
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_4:24)
@@ -973,6 +989,10 @@ InitializeNaka_Skip3:
 InitializeNaka_Skip4:
 	ld	xhl, 0:i3
 	ret
+; FtLangText04: Naka ApFunction 0x12B0004, named by entry 4 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_5 (6 language pointers, English "Explore
+;   1000 Musical Styles with the Music Stylist."), else XHL = 0
+FtLangText04:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip5
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_5:24)
@@ -980,6 +1000,10 @@ InitializeNaka_Skip4:
 InitializeNaka_Skip5:
 	ld	xhl, 0:i3
 	ret
+; FtLangText05: Naka ApFunction 0x12B0005, named by entry 5 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_6 (6 language pointers, English "Add to
+;   your enjoyment with a wide range of Technics Software"), else XHL = 0
+FtLangText05:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip6
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_6:24)
@@ -987,6 +1011,10 @@ InitializeNaka_Skip5:
 InitializeNaka_Skip6:
 	ld	xhl, 0:i3
 	ret
+; FtLangText06: Naka ApFunction 0x12B0006, named by entry 6 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_7 (6 language pointers, English "And
+;   convert software from almost any other manufacturer!"), else XHL = 0
+FtLangText06:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip7
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_7:24)
@@ -994,6 +1022,10 @@ InitializeNaka_Skip6:
 InitializeNaka_Skip7:
 	ld	xhl, 0:i3
 	ret
+; FtLangText07: Naka ApFunction 0x12B0007, named by entry 7 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_8 (6 language pointers, English "Store
+;   your favorite software patterns in the Custom Rhythm Group .....permanently!"), else XHL = 0
+FtLangText07:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip8
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_8:24)
@@ -1001,6 +1033,10 @@ InitializeNaka_Skip7:
 InitializeNaka_Skip8:
 	ld	xhl, 0:i3
 	ret
+; FtLangText08: Naka ApFunction 0x12B0008, named by entry 8 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_9 (6 language pointers, English "Accordion
+;   Register"), else XHL = 0
+FtLangText08:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip9
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_9:24)
@@ -1008,6 +1044,10 @@ InitializeNaka_Skip8:
 InitializeNaka_Skip9:
 	ld	xhl, 0:i3
 	ret
+; FtLangText09: Naka ApFunction 0x12B0009, named by entry 9 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_10 (6 language pointers, English "A World
+;   of Accordion Sounds at your fingertips with the Accordion Register!"), else XHL = 0
+FtLangText09:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip10
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_10:24)
@@ -1015,6 +1055,10 @@ InitializeNaka_Skip9:
 InitializeNaka_Skip10:
 	ld	xhl, 0:i3
 	ret
+; FtLangText10: Naka ApFunction 0x12B000A, named by entry 10 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_11 (6 language pointers, English "Digital
+;   Drawbar"), else XHL = 0
+FtLangText10:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip11
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_11:24)
@@ -1022,6 +1066,10 @@ InitializeNaka_Skip10:
 InitializeNaka_Skip11:
 	ld	xhl, 0:i3
 	ret
+; FtLangText11: Naka ApFunction 0x12B000B, named by entry 11 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = FtLangText11_Texts (6 language pointers, English "Classic Organ Sounds
+;   with Jazz and Rock Drawbars!"), else XHL = 0
+FtLangText11:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip12
 	lda	xhl, (FtLangText11_Texts:24)
@@ -1029,6 +1077,10 @@ InitializeNaka_Skip11:
 InitializeNaka_Skip12:
 	ld	xhl, 0:i3
 	ret
+; FtLangText12: Naka ApFunction 0x12B000C, named by entry 12 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_13 (6 language pointers, English "Acoustic
+;   Illusion"), else XHL = 0
+FtLangText12:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip13
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_13:24)
@@ -1036,6 +1088,10 @@ InitializeNaka_Skip12:
 InitializeNaka_Skip13:
 	ld	xhl, 0:i3
 	ret
+; FtLangText13: Naka ApFunction 0x12B000D, named by entry 13 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_14 (6 language pointers, English "Acoustic
+;   Illusion broadens your music to 3-Dimensions!"), else XHL = 0
+FtLangText13:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip14
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_14:24)
@@ -1043,6 +1099,10 @@ InitializeNaka_Skip13:
 InitializeNaka_Skip14:
 	ld	xhl, 0:i3
 	ret
+; FtLangText14: Naka ApFunction 0x12B000E, named by entry 14 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_15 (6 language pointers, English "A host
+;   of features to suit any style of performance!"), else XHL = 0
+FtLangText14:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip15
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_15:24)
@@ -1050,6 +1110,10 @@ InitializeNaka_Skip14:
 InitializeNaka_Skip15:
 	ld	xhl, 0:i3
 	ret
+; FtLangText15: Naka ApFunction 0x12B000F, named by entry 15 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = NAKA_InitDataBlock_PtrTable_16 (6 language pointers, English "Huge
+;   Styles"), else XHL = 0
+FtLangText15:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip16
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_16:24)
@@ -1057,6 +1121,10 @@ InitializeNaka_Skip15:
 InitializeNaka_Skip16:
 	ld	xhl, 0:i3
 	ret
+; FtLangText16: Naka ApFunction 0x12B0010, named by entry 16 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = FtLangText16_LangStrings (6 language pointers, English "Huge Styles"),
+;   else XHL = 0
+FtLangText16:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip17
 	lda	xhl, (FtLangText16_LangStrings:24)
@@ -1064,6 +1132,10 @@ InitializeNaka_Skip16:
 InitializeNaka_Skip17:
 	ld	xhl, 0:i3
 	ret
+; FtLangText17: Naka ApFunction 0x12B0011, named by entry 17 of the ApFunction name slot 0x42B: feature-demo caption
+;   text; on EVT_GET_LANGUAGE_PTR returns XHL = FtLangText17_Texts (6 language pointers, English "Huge Styles"), else
+;   XHL = 0
+FtLangText17:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip18
 	lda	xhl, (FtLangText17_Texts:24)

@@ -1295,7 +1295,7 @@ DirmdTitleFunc:
 	ret
 
 ; DirmdEmulator dispatch case F
-DirmdEmu_CaseF:
+DirmdTitle_New:
 	ld	a, (ACTIVE_TITLE:16)
 	cp	a, (ACTIVE_TITLE_PREVIOUS:16)
 	jr	z, PostTitle_Function_Skip
@@ -1310,9 +1310,11 @@ PostTitle_Function_Skip:
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleNew
 	call	DbMemo_PostString
 	jp	PsMixer_CtlTypeProc8_Return
+DirmdTitle_Old:
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleOld
 	call	DbMemo_PostString
 	jp	PsMixer_CtlTypeProc8_Return2
+DirmdTitle_ESw:
 	lda	xsp, (xsp-256)
 	pushw	iz
 	pushm	(xsp+264)
@@ -1332,6 +1334,7 @@ PostTitle_Function_Skip:
 	popw	iz
 	lda	xsp, (xsp+256)
 	ret
+DirmdTitle_Cur:
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleCur
 	call	DbMemo_PostString
 	jp	PsMixer_CtlTypeProc8_Return3
