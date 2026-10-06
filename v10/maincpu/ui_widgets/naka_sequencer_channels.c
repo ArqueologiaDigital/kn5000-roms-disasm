@@ -262,156 +262,203 @@ typedef struct __attribute__((packed)) {
     uint32_t NakaData_RomEnd_ptr;
     uint16_t field_0037;
     uint8_t pad_1[1];
-    uint8_t DpSmf_AcRamEditBox_Value[10];
-    uint16_t field_0044;
+    uint8_t DpSmf_AcRamEditBox_Value[4];
+    uint8_t SMFMuteSw_Onoff[2];
+    uint8_t MIXER_VwMenuBox_Selected[2];
+    uint8_t MIC_VwMenuBox_Selected[2];
+    uint16_t SmfMedley_TtlScreen_Window;
     uint16_t field_0046;
-    uint8_t pad_2[6];  /* zero padding */
-    uint16_t field_004e;
+    uint8_t Mixer_AcTitleMenu_Selected[2];
+    uint8_t Mic_AcTitleMenu_Selected[2];
+    uint8_t Lyrics_AcTitleMenu_2_Selected[2];
+    uint16_t CDswWindow_Parent;
     uint16_t field_0050;
-    uint16_t field_0052;
+    uint16_t CDswWindow_Child;
     uint16_t field_0054;
     uint16_t PauseDisp_Value;
     uint8_t pad_3[2];  /* zero padding */
     uint16_t PlayDisp_Value;
     uint8_t pad_4[2];  /* zero padding */
-    uint16_t field_005e;
+    uint16_t Lyrics_Parent;
     uint16_t field_0060;
-    uint16_t field_0062;
+    uint16_t Lyrics_Child;
     uint16_t field_0064;
-    uint16_t field_0066;
+    uint16_t DpDoc_Window;
     uint16_t field_0068;
-    uint16_t field_006a;
-    uint8_t pad_5[8];  /* zero padding */
-    uint16_t field_0074;
+    uint16_t DOCR1Sw_Onoff;
+    uint8_t DOCR2Sw_Onoff[2];
+    uint8_t DOCOrchSw_Onoff[2];
+    uint8_t MIXER_VwMenuBox_2_Selected[2];
+    uint8_t MIC_VwMenuBox_2_Selected[2];
+    uint16_t DpPd_Window;
     uint16_t field_0076;
-    uint16_t field_0078;
-    uint8_t pad_6[6];  /* zero padding */
-    uint16_t field_0080;
+    uint16_t PDR1Sw_Onoff;
+    uint8_t PDOrchSw_Onoff[2];
+    uint8_t MIXER_VwMenuBox_3_Selected[2];
+    uint8_t MIC_VwMenuBox_3_Selected[2];
+    uint16_t DpSmfLyr_Window;
     uint16_t field_0082;
-    uint8_t pad_7[2];  /* zero padding */
-    uint16_t field_0086;
+    uint8_t MIC_VwMenuBox_4_Selected[2];
+    uint16_t DpMdlySmf_Window;
     uint16_t field_0088;
-    uint8_t pad_8[2];  /* zero padding */
-    uint16_t field_008c;
-    uint8_t DpMdlySmf_AcRamEditBox_Value[10];
-    uint16_t field_0098;
+    uint8_t Lyrics_AcTitleMenu_3_Selected[2];
+    uint16_t DpMdlySmf_AcRamEditBox_Selected;
+    uint8_t DpMdlySmf_AcRamEditBox_Value[6];
+    uint8_t MIXER_VwMenuBox_4_Selected[2];
+    uint8_t MIC_VwMenuBox_5_Selected[2];
+    uint16_t SmfMedley_TtlScreen_2_Window;
     uint16_t field_009a;
-    uint16_t field_009c;
+    uint16_t DpMdlyDoc_Window;
     uint16_t field_009e;
     uint16_t field_00a0;
-    uint8_t pad_10[8];  /* zero padding */
-    uint16_t field_00aa;
+    uint8_t DOCMedR2Sw_Onoff[2];
+    uint8_t DOCMedOrchSw_Onoff[2];
+    uint8_t MIXER_VwMenuBox_5_Selected[2];
+    uint8_t MIC_VwMenuBox_6_Selected[2];
+    uint16_t DpMdlyPd_Window;
     uint16_t field_00ac;
     uint16_t field_00ae;
-    uint8_t pad_11[6];  /* zero padding */
-    uint16_t field_00b6;
+    uint8_t PDMedOrchSw_Onoff[2];
+    uint8_t MIXER_VwMenuBox_6_Selected[2];
+    uint8_t MIC_VwMenuBox_7_Selected[2];
+    uint16_t DpMdlySmfLyr_Window;
     uint16_t field_00b8;
     uint8_t pad_12[2];  /* zero padding */
-    uint16_t field_00bc;
+    uint16_t DkMdlyPly_Window;
     uint16_t field_00be;
     uint8_t pad_13[2];  /* zero padding */
-    uint16_t field_00c2;
+    uint16_t NakaWidget_SongMdlyOrchSel_Parent;
     uint16_t field_00c4;
-    uint16_t field_00c6;
+    uint16_t NakaWidget_SongMdlyOrchSel_Child;
     uint16_t field_00c8;
-    uint16_t field_00ca;
-    uint8_t pad_14[6];  /* zero padding */
-    uint16_t field_00d2;
-    uint8_t pad_15[2];  /* zero padding */
-    uint16_t field_00d6;
-    uint16_t field_00d8;
-    uint8_t pad_16[4];  /* zero padding */
-    uint16_t field_00de;
-    uint8_t pad_17[2];  /* zero padding */
-    uint16_t field_00e2;
-    uint16_t field_00e4;
-    uint8_t pad_18[4];  /* zero padding */
-    uint16_t field_00ea;
-    uint8_t pad_19[2];  /* zero padding */
-    uint16_t field_00ee;
-    uint16_t field_00f0;
-    uint8_t pad_20[4];  /* zero padding */
-    uint16_t field_00f6;
-    uint8_t pad_21[4];  /* zero padding */
-    uint16_t field_00fc;
-    uint8_t pad_22[2];  /* zero padding */
-    uint16_t field_0100;
-    uint16_t field_0102;
-    uint8_t pad_23[4];  /* zero padding */
-    uint16_t field_0108;
-    uint8_t pad_24[2];  /* zero padding */
-    uint16_t field_010c;
-    uint16_t field_010e;
-    uint8_t pad_25[4];  /* zero padding */
-    uint16_t field_0114;
-    uint8_t pad_26[2];  /* zero padding */
-    uint16_t field_0118;
-    uint16_t field_011a;
-    uint8_t pad_27[4];  /* zero padding */
-    uint16_t field_0120;
-    uint8_t pad_28[2];  /* zero padding */
-    uint16_t field_0124;
-    uint16_t field_0126;
-    uint8_t pad_29[2];  /* zero padding */
-    uint16_t field_012a;
+    uint16_t NakaWidget_SongMdlySongSel1_Onoff;
+    uint8_t NakaWidget_SongMdlySongSel1_Part[2];
+    uint8_t NakaWidget_SongMdlySongSel1_Recplay[2];
+    uint8_t NakaWidget_SongMdlySongSel2_Onoff[2];
+    uint16_t NakaWidget_SongMdlySongSel2_Part;
+    uint8_t NakaWidget_SongMdlySongSel2_Recplay[2];
+    uint16_t NakaWidget_SongMdlySongSel3_Onoff;
+    uint16_t NakaWidget_SongMdlySongSel3_Part;
+    uint8_t NakaWidget_SongMdlySongSel3_Recplay[2];
+    uint8_t NakaWidget_SongMdlySongSel4_Onoff[2];
+    uint16_t NakaWidget_SongMdlySongSel4_Part;
+    uint8_t NakaWidget_SongMdlySongSel4_Recplay[2];
+    uint16_t NakaWidget_SongMdlySongSel5_Onoff;
+    uint16_t NakaWidget_SongMdlySongSel5_Part;
+    uint8_t NakaWidget_SongMdlySongSel5_Recplay[2];
+    uint8_t NakaWidget_SongMdlySongSel6_Onoff[2];
+    uint16_t NakaWidget_SongMdlySongSel6_Part;
+    uint8_t NakaWidget_SongMdlySongSel6_Recplay[2];
+    uint16_t NakaWidget_SongMdlySongSel7_Onoff;
+    uint16_t NakaWidget_SongMdlySongSel7_Part;
+    uint8_t NakaWidget_SongMdlySongSel7_Recplay[2];
+    uint8_t NakaWidget_SongMdlySongSel8_Onoff[2];
+    uint16_t NakaWidget_SongMdlySongSel8_Part;
+    uint8_t NakaWidget_SongMdlySongSel8_Recplay[2];
+    uint8_t NakaWidget_SongMdlySongSel9_Onoff[2];
+    uint16_t NakaWidget_SongMdlySongSel9_Part;
+    uint8_t NakaWidget_SongMdlySongSel9_Recplay[2];
+    uint16_t NakaWidget_SongMdlySongSel10_Onoff;
+    uint16_t NakaWidget_SongMdlySongSel10_Part;
+    uint8_t NakaWidget_SongMdlySongSel10_Recplay[2];
+    uint8_t NakaWidget_SongMdlySongSel11_Onoff[2];
+    uint16_t NakaWidget_SongMdlySongSel11_Part;
+    uint8_t NakaWidget_SongMdlySongSel11_Recplay[2];
+    uint16_t NakaWidget_SongMdlySongSel12_Onoff;
+    uint16_t NakaWidget_SongMdlySongSel12_Part;
+    uint8_t NakaWidget_SongMdlySongSel12_Recplay[2];
+    uint8_t NakaWidget_SongMdlySongSel13_Onoff[2];
+    uint16_t NakaWidget_SongMdlySongSel13_Part;
+    uint8_t NakaWidget_SongMdlySongSel13_Recplay[2];
+    uint16_t NakaWidget_SongMdlySongSel14_Onoff;
+    uint16_t NakaWidget_SongMdlySongSel14_Part;
+    uint8_t NakaWidget_SongMdlySongSel14_Recplay[2];
+    uint8_t NakaWidget_SongMdlySongSel15_Onoff[2];
+    uint16_t NakaWidget_SongMdlySongSel15_Part;
+    uint8_t NakaWidget_SongMdlySongSel15_Recplay[2];
+    uint16_t NakaWidget_SongMdlySongSel16_Onoff;
+    uint16_t NakaWidget_SongMdlySongSel16_Part;
+    uint8_t NakaWidget_SongMdlySongSel16_Recplay[2];
+    uint16_t SqMdlyPly_Window;
     uint16_t field_012c;
     uint8_t pad_30[2];  /* zero padding */
-    uint16_t field_0130;
+    uint16_t SqTrSel_Window;
     uint16_t field_0132;
-    uint16_t field_0134;
+    uint16_t NakaWidget_StepRecSubPanel_Window;
     uint16_t field_0136;
-    uint16_t field_0138;
+    uint16_t SqTrAs_Window;
     uint16_t field_013a;
-    uint8_t pad_31[2];  /* zero padding */
-    uint16_t field_013e;
-    uint16_t field_0140;
-    uint16_t field_0142;
+    uint8_t Preset_AcTitleMenu_Selected[2];
+    uint16_t TrAsGrid_Selrow;
+    uint16_t TrAsGrid_Selcol;
+    uint16_t TrAsGrid_Pcol;
     uint16_t field_0144;
-    uint16_t field_0146;
+    uint16_t TrAsGrid_Prow;
     uint16_t field_0148;
-    uint16_t field_014a;
+    uint16_t TrAsGrid_Crow;
     uint16_t field_014c;
-    uint16_t field_014e;
+    uint16_t SqTrAsSure_Window;
     uint16_t field_0150;
-    uint16_t field_0152;
+    uint16_t SqTrAsPs_Window;
     uint16_t field_0154;
-    uint16_t field_0156;
+    uint16_t SqTrAsPs_AcRamEditBox_Selected;
     uint8_t SqTrAsPs_Song_Value[4];
-    uint16_t field_015c;
-    uint8_t pad_33[4];  /* zero padding */
-    uint16_t field_0162;
+    uint16_t TrAsPsIniSel_Selected;
+    uint8_t TrAsPsTechSel_Selected[2];
+    uint8_t TrAsPsGmSel_Selected[2];
+    uint16_t SqTrAsPsSure1_Window;
     uint16_t field_0164;
-    uint16_t field_0166;
+    uint16_t SqTrAsPsSure2_Window;
     uint16_t field_0168;
-    uint16_t field_016a;
+    uint16_t SqSngSel_Window;
     uint16_t field_016c;
-    uint8_t pad_34[2];  /* zero padding */
-    uint16_t field_0170;
-    uint16_t field_0172;
-    uint16_t field_0174;
+    uint8_t Naming_AcTitleMenu_Se_016E_Value[2];
+    uint16_t SqSngSel_PsSongSelBox_Sel_num;
+    uint16_t SqSngSel_PsSongSelBox_2_Sel_num;
+    uint16_t SqNameing_Window;
     uint16_t field_0176;
-    uint16_t field_0178;
+    uint16_t AfterTouchSet_Window;
     uint16_t field_017a;
-    uint16_t field_017c;
+    uint16_t AfterTouchSet_AcBitEditBox_Selected;
     uint8_t AfterTouchSet_AfterTouchRecord_Value[2];
-    uint16_t field_0180;
+    uint16_t StepPartBal_Window;
     uint16_t field_0182;
-    uint16_t field_0184;
+    uint16_t DemoMenu_Window;
     uint16_t field_0186;
-    uint8_t pad_36[4];  /* zero padding */
-    uint16_t field_018c;
+    uint8_t Performances_AcTitleMenu_Selected[2];
+    uint8_t FeaturePresentation_AcTitleMenu_Selected[2];
+    uint16_t DemoStyle_Window;
     uint16_t field_018e;
-    uint8_t pad_37[12];  /* zero padding */
-    uint16_t field_019c;
-    uint8_t pad_38[4];  /* zero padding */
-    uint16_t field_01a2;
+    uint8_t DemoSong0_Selected[2];
+    uint8_t DemoSong1_Selected[2];
+    uint8_t DemoSong2_Selected[2];
+    uint8_t DemoSong3_Selected[2];
+    uint8_t DemoSong4_Selected[2];
+    uint8_t DemoSong5_Selected[2];
+    uint16_t DemoStyle_PsWideToggle_Onoff;
+    uint8_t DemoStyle_PsWideToggle_2_Onoff[2];
+    uint8_t DemoStyle_PsWideToggle_3_Onoff[2];
+    uint16_t DemoSound_Window;
     uint16_t field_01a4;
-    uint8_t pad_39[14];  /* zero padding */
-    uint16_t field_01b4;
-    uint8_t pad_40[2];  /* zero padding */
-    uint16_t field_01b8;
+    uint8_t DemoSong6_Selected[2];
+    uint8_t DemoSong7_Selected[2];
+    uint8_t DemoSong8_Selected[2];
+    uint8_t DemoSong9_Selected[2];
+    uint8_t DemoSong10_Selected[2];
+    uint8_t DemoSong11_Selected[2];
+    uint8_t DemoSound_PsWideToggle_Onoff[2];
+    uint16_t DemoSound_PsWideToggle_2_Onoff;
+    uint8_t DemoSound_PsWideToggle_3_Onoff[2];
+    uint16_t DemoRhy_Window;
     uint16_t field_01ba;
-    uint8_t pad_41[16];  /* zero padding */
+    uint8_t DemoSong12_Selected[2];
+    uint8_t DemoSong13_Selected[2];
+    uint8_t DemoSong14_Selected[2];
+    uint8_t DemoSong15_Selected[2];
+    uint8_t DemoSong16_Selected[2];
+    uint8_t DemoSong17_Selected[2];
+    uint8_t DemoRhy_PsWideToggle_Onoff[2];
+    uint8_t DemoRhy_PsWideToggle_2_Onoff[2];
     uint16_t field_01cc;
     naka_dispatch_t w1;  /* 0x3E */
     uint16_t field_01e6;
@@ -441,292 +488,338 @@ typedef struct __attribute__((packed)) {
     uint16_t field_023a;
     uint8_t pad_44[4];  /* zero padding */
     uint32_t Naka_ReverbScreen_EmptyStr_ptr;
-    uint16_t field_0244;
+    uint16_t Reverb_TtlScreen_Window;
     uint16_t field_0246;
-    uint16_t field_0248;
+    uint16_t DspEffect_TtlScreen_Window;
     uint16_t field_024a;
-    uint16_t field_024c;
+    uint16_t Equalizer_TtlScreen_Window;
     uint16_t field_024e;
-    uint8_t pad_45[2];  /* zero padding */
-    uint16_t field_0252;
+    uint8_t EqOnOff_Onoff[2];
+    uint16_t AcousticIllusion_TtlScreen_Window;
     uint16_t field_0254;
-    uint16_t field_0256;
+    uint16_t SequencerMenu_TtlScreen_Window;
     uint16_t field_0258;
-    uint8_t pad_46[6];  /* zero padding */
-    uint16_t field_0260;
+    uint8_t Create_AcTitleMenu_Selected[2];
+    uint8_t EDIT_AcModeMenu_Selected[2];
+    uint8_t PanelWrite_AcTitleMenu_Selected[2];
+    uint16_t SequencerPlay_TtlScreen_Window;
     uint16_t field_0262;
-    uint8_t pad_47[2];  /* zero padding */
-    uint16_t field_0266;
+    uint8_t CycPlySw_Onoff[2];
+    uint16_t SngSelWin1_Parent;
     uint16_t field_0268;
-    uint16_t field_026a;
+    uint16_t SngSelWin1_Child;
     uint16_t field_026c;
-    uint8_t pad_48[2];  /* zero padding */
-    uint16_t field_0270;
+    uint8_t Medley_AcTitleMenu_Selected[2];
+    uint16_t SngSelWin2_Parent;
     uint16_t field_0272;
-    uint16_t field_0274;
+    uint16_t SngSelWin2_Child;
     uint16_t field_0276;
-    uint16_t field_0278;
+    uint16_t CyclePlay_TtlScreen_Window;
     uint16_t field_027a;
-    uint8_t pad_49[2];  /* zero padding */
-    uint16_t field_027e;
-    uint8_t pad_50[2];  /* zero padding */
-    uint16_t field_0282;
+    uint8_t CyclePlay_PsEditBox_Selected[2];
+    uint16_t CyclePlay_PsEditBox_2_Selected;
+    uint8_t CyclePlay_PsEditBox_3_Selected[2];
+    uint16_t EasyRecord_TtlScreen_Window;
     uint16_t field_0284;
-    uint8_t pad_51[6];  /* zero padding */
-    uint16_t field_028c;
-    uint8_t pad_52[2];  /* zero padding */
-    uint16_t field_0290;
-    uint16_t field_0292;
-    uint8_t pad_53[2];  /* zero padding */
-    uint16_t field_0296;
-    uint16_t field_0298;
-    uint8_t pad_54[2];  /* zero padding */
-    uint16_t field_029c;
-    uint16_t field_029e;
-    uint8_t pad_55[2];  /* zero padding */
-    uint16_t field_02a2;
-    uint16_t field_02a4;
-    uint16_t field_02a6;
+    uint8_t Naming_AcTitleMenu_Se_0286_Value[2];
+    uint8_t EasyRecord_PsTrackSwitch_Onoff[2];
+    uint8_t EasyRecord_PsTrackSwitch_Part[2];
+    uint16_t EasyRecord_PsTrackSwitch_Recplay;
+    uint8_t EasyRecord_PsTrackSwitch_2_Onoff[2];
+    uint16_t EasyRecord_PsTrackSwitch_2_Part;
+    uint16_t EasyRecord_PsTrackSwitch_2_Recplay;
+    uint8_t EasyRecord_PsTrackSwitch_3_Onoff[2];
+    uint16_t EasyRecord_PsTrackSwitch_3_Part;
+    uint16_t EasyRecord_PsTrackSwitch_3_Recplay;
+    uint8_t EasyRecord_PsTrackSwitch_4_Onoff[2];
+    uint16_t EasyRecord_PsTrackSwitch_4_Part;
+    uint16_t EasyRecord_PsTrackSwitch_4_Recplay;
+    uint8_t EasyRecord_PsTrackSwitch_5_Onoff[2];
+    uint16_t EasyRecord_PsTrackSwitch_5_Part;
+    uint16_t EasyRecord_PsTrackSwitch_5_Recplay;
+    uint16_t Create_TtlScreen_Window;
     uint16_t field_02a8;
-    uint8_t pad_56[18];  /* zero padding */
-    uint16_t field_02bc;
+    uint8_t TrackAssign_AcTitleMenu_Selected[2];
+    uint8_t PanelWrite_AcTitleMenu_2_Selected[2];
+    uint8_t SongSelectNaming_AcTitleMenu_Selected[2];
+    uint8_t SongClear_AcTitleMenu_Selected[2];
+    uint8_t SongTrackCopy_AcTitleMenu_Selected[2];
+    uint8_t AfterTouchSet_AcTitleMenu_Selected[2];
+    uint8_t RealtimeRecord_AcModeMenu_Selected[2];
+    uint8_t StepRecord_AcModeMenu_Selected[2];
+    uint8_t PunchRecord_AcTitleMenu_Selected[2];
+    uint16_t RealtimeRecord_TtlScreen_Window;
     uint16_t field_02be;
-    uint8_t pad_57[4];  /* zero padding */
-    uint16_t field_02c4;
+    uint8_t CycRecSw_Onoff[2];
+    uint8_t MetRecSw_Onoff[2];
+    uint16_t CycClrSw_Parent;
     uint16_t field_02c6;
-    uint16_t field_02c8;
+    uint16_t CycClrSw_Child;
     uint16_t field_02ca;
-    uint16_t field_02cc;
+    uint16_t RealtimeRecord_TtlScreen_2_Window;
     uint16_t field_02ce;
-    uint8_t pad_58[6];  /* zero padding */
-    uint16_t field_02d6;
-    uint16_t field_02d8;
+    uint8_t RealtimeRecord_PsEditBox_Selected[2];
+    uint8_t RealtimeRecord_PsEditBox_2_Selected[2];
+    uint8_t MetCycRecSw_Onoff[2];
+    uint16_t RealtimeRecord_PsEditBox_3_Selected;
+    uint16_t PunchRecord_TtlScreen_Window;
     uint16_t field_02da;
-    uint8_t pad_59[4];  /* zero padding */
-    uint16_t field_02e0;
+    uint8_t MetPunchSw_Onoff[2];
+    uint8_t PunchInOutSw_Onoff[2];
+    uint16_t AutoPunchRecord_TtlScreen_Window;
     uint16_t field_02e2;
-    uint8_t pad_60[2];  /* zero padding */
-    uint16_t field_02e6;
-    uint8_t pad_61[4];  /* zero padding */
-    uint16_t field_02ec;
+    uint8_t MetPunchmSw_Onoff[2];
+    uint16_t AutoPunchRecord_PsEditBox_Selected;
+    uint8_t AutoPunchRecord_PsEditBox_2_Selected[2];
+    uint8_t AutoPunchRecord_PsEditBox_3_Selected[2];
+    uint16_t AutoPunchRecord_TtlScreen_2_Window;
     uint16_t field_02ee;
-    uint16_t field_02f0;
+    uint16_t PanelWrite_TtlScreen_Window;
     uint16_t field_02f2;
-    uint16_t field_02f4;
+    uint16_t SongClear_TtlScreen_Window;
     uint16_t field_02f6;
-    uint16_t field_02f8;
+    uint16_t SoclSureDisp_Parent;
     uint16_t field_02fa;
-    uint16_t field_02fc;
+    uint16_t SoclSureDisp_Child;
     uint16_t field_02fe;
-    uint8_t pad_62[2];  /* zero padding */
-    uint16_t field_0302;
+    uint8_t NO_AcScreenMenu_Selected[2];
+    uint16_t SongTrackCopy_TtlScreen_Window;
     uint16_t field_0304;
-    uint16_t field_0306;
+    uint16_t SngCpSureDisp_Parent;
     uint16_t field_0308;
-    uint16_t field_030a;
+    uint16_t SngCpSureDisp_Child;
     uint16_t field_030c;
-    uint8_t pad_63[2];  /* zero padding */
-    uint16_t field_0310;
+    uint8_t NO_AcScreenMenu_2_Selected[2];
+    uint16_t Edit_TtlScreen_Window;
     uint16_t field_0312;
-    uint16_t field_0314;
-    uint16_t field_0316;
+    uint16_t EdMenuPage_Page;
+    uint16_t SQEMENU_1_Parent;
     uint16_t field_0318;
-    uint16_t field_031a;
+    uint16_t SQEMENU_1_Child;
     uint16_t field_031c;
-    uint8_t pad_64[20];  /* zero padding */
-    uint16_t field_0332;
+    uint8_t NoteEdit_AcTitleMenu_Selected[2];
+    uint8_t DrumEdit_AcTitleMenu_Selected[2];
+    uint8_t SongTrackCopy_AcTitleMenu_2_Selected[2];
+    uint8_t TrackClear_AcTitleMenu_Selected[2];
+    uint8_t TrackMerge_AcTitleMenu_Selected[2];
+    uint8_t Quantize_AcTitleMenu_Selected[2];
+    uint8_t Transpose_AcTitleMenu_Selected[2];
+    uint8_t VelocityChange_AcTitleMenu_Selected[2];
+    uint8_t NoteChange_AcTitleMenu_Selected[2];
+    uint8_t AdvanceDelay_AcTitleMenu_Selected[2];
+    uint16_t SQEMENU_2_Parent;
     uint16_t field_0334;
-    uint16_t field_0336;
+    uint16_t SQEMENU_2_Child;
     uint16_t field_0338;
-    uint8_t pad_65[8];  /* zero padding */
-    uint16_t field_0342;
+    uint8_t Copy_AcTitleMenu_Selected[2];
+    uint8_t Erase_AcTitleMenu_Selected[2];
+    uint8_t Delete_AcTitleMenu_Selected[2];
+    uint8_t Insert_AcTitleMenu_Selected[2];
+    uint16_t NoteEdit_TtlScreen_Window;
     uint16_t field_0344;
-    uint16_t field_0346;
+    uint16_t NoteEdit_TtlScreen_2_Window;
     uint16_t field_0348;
-    uint16_t field_034a;
+    uint16_t CyclePlay_TtlScreen_2_Window;
     uint16_t field_034c;
-    uint16_t field_034e;
-    uint8_t pad_66[4];  /* zero padding */
-    uint16_t field_0354;
+    uint16_t CyclePlay_PsEditBox_4_Selected;
+    uint8_t CyclePlay_PsEditBox_5_Selected[2];
+    uint8_t CyclePlay_PsEditBox_6_Selected[2];
+    uint16_t DrumEdit_TtlScreen_Window;
     uint16_t field_0356;
-    uint16_t field_0358;
+    uint16_t DrumEdit_TtlScreen_2_Window;
     uint16_t field_035a;
-    uint16_t field_035c;
+    uint16_t CyclePlay_TtlScreen_3_Window;
     uint16_t field_035e;
-    uint16_t field_0360;
-    uint8_t pad_67[4];  /* zero padding */
-    uint16_t field_0366;
+    uint16_t CyclePlay_PsEditBox_7_Selected;
+    uint8_t CyclePlay_PsEditBox_8_Selected[2];
+    uint8_t CyclePlay_PsEditBox_9_Selected[2];
+    uint16_t TrackClear_TtlScreen_Window;
     uint16_t field_0368;
-    uint16_t field_036a;
+    uint16_t TrkClrSureDisp_Parent;
     uint16_t field_036c;
-    uint16_t field_036e;
+    uint16_t TrkClrSureDisp_Child;
     uint16_t field_0370;
-    uint8_t pad_68[2];  /* zero padding */
-    uint16_t field_0374;
+    uint8_t NO_AcScreenMenu_3_Selected[2];
+    uint16_t TrackMerge_TtlScreen_Window;
     uint16_t field_0376;
-    uint8_t pad_69[2];  /* zero padding */
-    uint16_t field_037a;
-    uint8_t pad_70[2];  /* zero padding */
-    uint16_t field_037e;
+    uint8_t TrackMerge_PsEditBox_Selected[2];
+    uint16_t TrackMerge_PsEditBox_2_Selected;
+    uint8_t TrackMerge_PsEditBox_3_Selected[2];
+    uint16_t TrkMrgSureDisp_Parent;
     uint16_t field_0380;
-    uint16_t field_0382;
+    uint16_t TrkMrgSureDisp_Child;
     uint16_t field_0384;
-    uint8_t pad_71[2];  /* zero padding */
-    uint16_t field_0388;
+    uint8_t NO_AcScreenMenu_4_Selected[2];
+    uint16_t Quantize_TtlScreen_Window;
     uint16_t field_038a;
-    uint8_t pad_72[4];  /* zero padding */
-    uint16_t field_0390;
-    uint8_t pad_73[6];  /* zero padding */
-    uint16_t field_0398;
+    uint8_t Quantize_PsEditBox_Selected[2];
+    uint8_t Quantize_PsEditBox_2_Selected[2];
+    uint16_t Quantize_PsEditBox_3_Selected;
+    uint8_t Quantize_PsEditBox_4_Selected[2];
+    uint8_t Quantize_PsEditBox_5_Selected[2];
+    uint8_t Quantize_PsEditBox_6_Selected[2];
+    uint16_t QtzSureDisp_Parent;
     uint16_t field_039a;
-    uint16_t field_039c;
+    uint16_t QtzSureDisp_Child;
     uint16_t field_039e;
-    uint8_t pad_74[2];  /* zero padding */
-    uint16_t field_03a2;
+    uint8_t NO_AcScreenMenu_5_Selected[2];
+    uint16_t Transpose_TtlScreen_Window;
     uint16_t field_03a4;
-    uint8_t pad_75[2];  /* zero padding */
-    uint16_t field_03a8;
-    uint8_t pad_76[4];  /* zero padding */
-    uint16_t field_03ae;
+    uint8_t Transpose_PsEditBox_Selected[2];
+    uint16_t Transpose_PsEditBox_2_Selected;
+    uint8_t Transpose_PsEditBox_3_Selected[2];
+    uint8_t Transpose_PsEditBox_4_Selected[2];
+    uint16_t TrnsSureDisp_Parent;
     uint16_t field_03b0;
-    uint16_t field_03b2;
+    uint16_t TrnsSureDisp_Child;
     uint16_t field_03b4;
-    uint8_t pad_77[2];  /* zero padding */
-    uint16_t field_03b8;
+    uint8_t NO_AcScreenMenu_6_Selected[2];
+    uint16_t VelocityChange_TtlScreen_Window;
     uint16_t field_03ba;
-    uint8_t pad_78[2];  /* zero padding */
-    uint16_t field_03be;
-    uint8_t pad_79[4];  /* zero padding */
-    uint16_t field_03c4;
+    uint8_t VelocityChange_PsEditBox_Selected[2];
+    uint16_t VelocityChange_PsEditBox_2_Selected;
+    uint8_t VelocityChange_PsEditBox_3_Selected[2];
+    uint8_t VelocityChange_PsEditBox_4_Selected[2];
+    uint16_t VeloSureDisp_Parent;
     uint16_t field_03c6;
-    uint16_t field_03c8;
+    uint16_t VeloSureDisp_Child;
     uint16_t field_03ca;
-    uint8_t pad_80[2];  /* zero padding */
-    uint16_t field_03ce;
+    uint8_t NO_AcScreenMenu_7_Selected[2];
+    uint16_t NoteChange_TtlScreen_Window;
     uint16_t field_03d0;
-    uint8_t pad_81[2];  /* zero padding */
-    uint16_t field_03d4;
-    uint8_t pad_82[6];  /* zero padding */
-    uint16_t field_03dc;
+    uint8_t NoteChange_PsEditBox_Selected[2];
+    uint16_t NoteChange_PsEditBox_2_Selected;
+    uint8_t NoteChange_PsEditBox_3_Selected[2];
+    uint8_t NoteChange_PsEditBox_4_Selected[2];
+    uint8_t NoteChange_PsEditBox_5_Selected[2];
+    uint16_t NoteSureDisp_Parent;
     uint16_t field_03de;
-    uint16_t field_03e0;
+    uint16_t NoteSureDisp_Child;
     uint16_t field_03e2;
-    uint8_t pad_83[2];  /* zero padding */
-    uint16_t field_03e6;
+    uint8_t NO_AcScreenMenu_8_Selected[2];
+    uint16_t AdvanceDelay_TtlScreen_Window;
     uint16_t field_03e8;
-    uint8_t pad_84[4];  /* zero padding */
-    uint16_t field_03ee;
-    uint8_t pad_85[2];  /* zero padding */
-    uint16_t field_03f2;
+    uint8_t AdvanceDelay_PsEditBox_Selected[2];
+    uint8_t AdvanceDelay_PsEditBox_2_Selected[2];
+    uint16_t AdvanceDelay_PsEditBox_3_Selected;
+    uint8_t AdvanceDelay_PsEditBox_4_Selected[2];
+    uint16_t AdvSureDisp_Parent;
     uint16_t field_03f4;
-    uint16_t field_03f6;
+    uint16_t AdvSureDisp_Child;
     uint16_t field_03f8;
-    uint8_t pad_86[2];  /* zero padding */
-    uint16_t field_03fc;
+    uint8_t NO_AcScreenMenu_9_Selected[2];
+    uint16_t MeasureErase_TtlScreen_Window;
     uint16_t field_03fe;
-    uint16_t field_0400;
-    uint8_t pad_87[6];  /* zero padding */
-    uint16_t field_0408;
+    uint16_t MeasureErase_PsEditBox_Selected;
+    uint8_t MeasureErase_PsEditBox_2_Selected[2];
+    uint8_t MeasureErase_PsEditBox_3_Selected[2];
+    uint8_t MeasureErase_PsEditBox_4_Selected[2];
+    uint16_t MersSureDisp_Parent;
     uint16_t field_040a;
-    uint16_t field_040c;
+    uint16_t MersSureDisp_Child;
     uint16_t field_040e;
-    uint8_t pad_88[2];  /* zero padding */
-    uint16_t field_0412;
+    uint8_t NO_AcScreenMenu_10_Selected[2];
+    uint16_t MeasureCopy_TtlScreen_Window;
     uint16_t field_0414;
-    uint16_t field_0416;
+    uint16_t McpSureDisp_Parent;
     uint16_t field_0418;
-    uint16_t field_041a;
+    uint16_t McpSureDisp_Child;
     uint16_t field_041c;
-    uint8_t pad_89[2];  /* zero padding */
-    uint16_t field_0420;
+    uint8_t NO_AcScreenMenu_11_Selected[2];
+    uint16_t MeasureDelete_TtlScreen_Window;
     uint16_t field_0422;
-    uint8_t pad_90[4];  /* zero padding */
-    uint16_t field_0428;
-    uint16_t field_042a;
+    uint8_t MeasureDelete_PsEditBox_Selected[2];
+    uint8_t MeasureDelete_PsEditBox_2_Selected[2];
+    uint16_t MeasureDelete_PsEditBox_3_Selected;
+    uint16_t MdelSureDisp_Parent;
     uint16_t field_042c;
-    uint16_t field_042e;
+    uint16_t MdelSureDisp_Child;
     uint16_t field_0430;
-    uint8_t pad_91[2];  /* zero padding */
-    uint16_t field_0434;
+    uint8_t NO_AcScreenMenu_12_Selected[2];
+    uint16_t MeasureInsert_TtlScreen_Window;
     uint16_t field_0436;
-    uint16_t field_0438;
+    uint16_t MinsSureDisp_Parent;
     uint16_t field_043a;
-    uint16_t field_043c;
+    uint16_t MinsSureDisp_Child;
     uint16_t field_043e;
-    uint8_t pad_92[2];  /* zero padding */
-    uint16_t field_0442;
+    uint8_t NO_AcScreenMenu_13_Selected[2];
+    uint16_t MetronomeBalance_TtlScreen_Window;
     uint16_t field_0444;
-    uint16_t field_0446;
+    uint16_t EnterTainerScr_Window;
     uint16_t field_0448;
-    uint16_t field_044a;
-    uint16_t field_044c;
-    uint16_t field_044e;
+    uint16_t EnterTainerScr_AcEntertainerGridBox_Selrow;
+    uint16_t EnterTainerScr_AcEntertainerGridBox_Selcol;
+    uint16_t EnterTainerScr_AcEntertainerGridBox_Pcol;
     uint16_t field_0450;
-    uint16_t field_0452;
+    uint16_t EnterTainerScr_AcEntertainerGridBox_Prow;
     uint16_t field_0454;
-    uint16_t field_0456;
+    uint16_t EnterTainerScr_AcEntertainerGridBox_Crow;
     uint16_t field_0458;
-    uint8_t pad_93[10];  /* zero padding */
-    uint16_t field_0464;
+    uint8_t pad_93[8];
+    uint8_t EnterTainerScr_AcFuncToggle_Onoff[2];
+    uint16_t HelpFunction_TtlScreen_Window;
     uint16_t field_0466;
-    uint16_t field_0468;
+    uint16_t HelpNotXWin_Parent;
     uint16_t field_046a;
-    uint16_t field_046c;
+    uint16_t HelpNotXWin_Child;
     uint16_t field_046e;
-    uint16_t field_0470;
-    uint8_t pad_94[6];  /* zero padding */
-    uint16_t field_0478;
+    uint16_t HelpNotXWin_AcIndexWideToggle_Onoff;
+    uint8_t HelpNotXWin_AcIndexWideToggle_2_Onoff[2];
+    uint8_t HelpNotXWin_AcIndexWideToggle_3_Onoff[2];
+    uint8_t HelpNotXWin_AcIndexWideToggle_4_Onoff[2];
+    uint16_t HelpXWin_Parent;
     uint16_t field_047a;
-    uint16_t field_047c;
+    uint16_t HelpXWin_Child;
     uint16_t field_047e;
-    uint16_t field_0480;
-    uint8_t pad_95[4];  /* zero padding */
-    uint16_t field_0486;
+    uint16_t HelpXWin_AcIndexWideToggle_Onoff;
+    uint8_t HelpXWin_AcIndexWideToggle_2_Onoff[2];
+    uint8_t HelpXWin_AcIndexWideToggle_3_Onoff[2];
+    uint16_t HelpSwTtl1Scr_Window;
     uint16_t field_0488;
-    uint16_t field_048a;
+    uint16_t HelpLang2P1_Parent;
     uint16_t field_048c;
-    uint16_t field_048e;
+    uint16_t HelpLang2P1_Child;
     uint16_t field_0490;
-    uint16_t field_0492;
+    uint16_t HelpLang2P2_Parent;
     uint16_t field_0494;
-    uint16_t field_0496;
+    uint16_t HelpLang2P2_Child;
     uint16_t field_0498;
-    uint16_t field_049a;
+    uint16_t HelpSwTtl2Scr_Window;
     uint16_t field_049c;
-    uint16_t field_049e;
-    uint16_t field_04a0;
+    uint16_t Help_P2_Page;
+    uint16_t HelpLang3P1_Parent;
     uint16_t field_04a2;
-    uint16_t field_04a4;
+    uint16_t HelpLang3P1_Child;
     uint16_t field_04a6;
-    uint16_t field_04a8;
+    uint16_t HelpLang3P2_Parent;
     uint16_t field_04aa;
-    uint16_t field_04ac;
+    uint16_t HelpLang3P2_Child;
     uint16_t field_04ae;
-    uint16_t field_04b0;
+    uint16_t HelpLang3P3_Parent;
     uint16_t field_04b2;
-    uint16_t field_04b4;
+    uint16_t HelpLang3P3_Child;
     uint16_t field_04b6;
-    uint16_t field_04b8;
+    uint16_t HelpSwTtl3Scr_Window;
     uint16_t field_04ba;
-    uint16_t field_04bc;
-    uint16_t field_04be;
+    uint16_t Help_P3_Page;
+    uint16_t HelpSwTtl4Scr_Window;
     uint16_t field_04c0;
-    uint16_t field_04c2;
-    uint16_t field_04c4;
+    uint16_t Help_P4_Page;
+    uint16_t HelpLang4P1_Parent;
     uint16_t field_04c6;
-    uint16_t field_04c8;
+    uint16_t HelpLang4P1_Child;
     uint16_t field_04ca;
-    uint16_t field_04cc;
+    uint16_t HelpLang4P2_Parent;
     uint16_t field_04ce;
-    uint16_t field_04d0;
+    uint16_t HelpLang4P2_Child;
     uint16_t field_04d2;
-    uint16_t field_04d4;
+    uint16_t HelpLang4P3_Parent;
     uint16_t field_04d6;
-    uint16_t field_04d8;
+    uint16_t HelpLang4P3_Child;
     uint16_t field_04da;
-    uint16_t field_04dc;
+    uint16_t HelpLang4P4_Parent;
     uint16_t field_04de;
-    uint16_t field_04e0;
+    uint16_t HelpLang4P4_Child;
     uint16_t field_04e2;
     naka_dispatch_t w3;  /* 0x20 */
     uint16_t field_04fc;
@@ -771,231 +864,275 @@ typedef struct __attribute__((packed)) {
     uint16_t field_071b;
     char str_3[2];
     uint32_t NakaData_RomEnd_ptr_2;
-    uint8_t pad_103[5];  /* zero padding */
-    uint16_t field_0728;
+    uint8_t pad_103[1];
+    uint8_t EqualizerPresets_AcTitleMenu_Selected[2];
+    uint8_t ReverbEqualizerPresets_AcTitleMenu_Selected[2];
+    uint16_t R12OctaveSetting_Window;
     uint16_t field_072a;
-    uint16_t field_072c;
+    uint16_t R12OctaveSetting_AcLswEditBox_Selected;
     uint8_t R12OctaveSetting_Octave_Value[2];
-    uint16_t field_0730;
+    uint16_t ReverbPreset_Window;
     uint16_t field_0732;
-    uint8_t pad_105[4];  /* zero padding */
-    uint16_t field_0738;
-    uint8_t pad_106[14];  /* zero padding */
-    uint16_t field_0748;
+    uint8_t HugeRoom_AcStrRadioBox_Selected[2];
+    uint8_t BoxRoom_AcStrRadioBox_Selected[2];
+    uint16_t SmallPlate_AcStrRadioBox_Selected;
+    uint8_t SportsHall_AcStrRadioBox_Selected[2];
+    uint8_t BrightHall_AcStrRadioBox_Selected[2];
+    uint8_t DarkConfines_AcStrRadioBox_Selected[2];
+    uint8_t Reflection_AcStrRadioBox_Selected[2];
+    uint8_t HighOpen_AcStrRadioBox_Selected[2];
+    uint8_t LeftToRight_AcStrRadioBox_Selected[2];
+    uint8_t Cavernous_AcStrRadioBox_Selected[2];
+    uint16_t EqualizerPreset_Window;
     uint16_t field_074a;
-    uint8_t pad_107[10];  /* zero padding */
-    uint16_t field_0756;
-    uint8_t pad_108[8];  /* zero padding */
-    uint16_t field_0760;
+    uint8_t MakeUp_AcStrRadioBox_Selected[2];
+    uint8_t MiddleCut_AcStrRadioBox_Selected[2];
+    uint8_t TransistorRadio_AcStrRadioBox_Selected[2];
+    uint8_t TrebleBoost_AcStrRadioBox_Selected[2];
+    uint8_t TrebleCut_AcStrRadioBox_Selected[2];
+    uint16_t NoHiHat_AcStrRadioBox_Selected;
+    uint8_t TubbyBass_AcStrRadioBox_Selected[2];
+    uint8_t BassCut_AcStrRadioBox_Selected[2];
+    uint8_t TooBright_AcStrRadioBox_Selected[2];
+    uint8_t EqOnOffBox_Onoff[2];
+    uint16_t ReverbEqualizerPreset_Window;
     uint16_t field_0762;
-    uint8_t pad_109[14];  /* zero padding */
-    uint16_t field_0772;
-    uint8_t pad_110[4];  /* zero padding */
-    uint16_t field_0778;
+    uint8_t WarmWide_AcStrRadioBox_Selected[2];
+    uint8_t InYourFace_AcStrRadioBox_Selected[2];
+    uint8_t OilTank_AcStrRadioBox_Selected[2];
+    uint8_t WarmPlate_AcStrRadioBox_Selected[2];
+    uint8_t LightShade_AcStrRadioBox_Selected[2];
+    uint8_t WarmFuzzy_AcStrRadioBox_Selected[2];
+    uint8_t IceBox_AcStrRadioBox_Selected[2];
+    uint16_t Stadium_AcStrRadioBox_Selected;
+    uint8_t LiveRoom_AcStrRadioBox_Selected[2];
+    uint8_t RevEqOnOffBox_Onoff[2];
+    uint16_t MidiMenu_Window;
     uint16_t field_077a;
-    uint16_t field_077c;
-    uint16_t field_077e;
+    uint16_t MdmenuPage_Page;
+    uint16_t MidiMenuPage1_Parent;
     uint16_t field_0780;
-    uint16_t field_0782;
+    uint16_t MidiMenuPage1_Child;
     uint16_t field_0784;
-    uint8_t pad_111[20];  /* zero padding */
-    uint16_t field_079a;
+    uint8_t PartSetting_AcTitleMenu_Selected[2];
+    uint8_t ControlMessages_AcTitleMenu_Selected[2];
+    uint8_t RealtimeMessages_AcTitleMenu_Selected[2];
+    uint8_t CommonSetting_AcTitleMenu_Selected[2];
+    uint8_t InputOutputSetting_AcTitleMenu_Selected[2];
+    uint8_t MidiPresets_AcTitleMenu_Selected[2];
+    uint8_t SysexBulkDump_AcTitleMenu_Selected[2];
+    uint8_t GeneralMidi_AcTitleMenu_Selected[2];
+    uint8_t ProgChangeMidiOut_AcTitleMenu_Selected[2];
+    uint8_t PMemOutput_AcTitleMenu_Selected[2];
+    uint16_t MidiMenuPage2_Parent;
     uint16_t field_079c;
-    uint16_t field_079e;
+    uint16_t MidiMenuPage2_Child;
     uint16_t field_07a0;
-    uint8_t pad_112[4];  /* zero padding */
-    uint16_t field_07a6;
+    uint8_t ComputerConnection_AcTitleMenu_Selected[2];
+    uint8_t MidiSettingsLoadOption_AcTitleMenu_Selected[2];
+    uint16_t MidiPartSetting_Window;
     uint16_t field_07a8;
-    uint16_t field_07aa;
-    uint16_t field_07ac;
-    uint16_t field_07ae;
+    uint16_t MdPartSetGridBox_Selrow;
+    uint16_t MdPartSetGridBox_Selcol;
+    uint16_t MdPartSetGridBox_Pcol;
     uint16_t field_07b0;
-    uint16_t field_07b2;
+    uint16_t MdPartSetGridBox_Prow;
     uint16_t field_07b4;
-    uint16_t field_07b6;
+    uint16_t MdPartSetGridBox_Crow;
     uint16_t field_07b8;
-    uint8_t pad_113[2];  /* zero padding */
-    uint16_t field_07bc;
+    uint8_t MdPartSetGridBox_Page[2];
+    uint16_t MidiControlMessage_Window;
     uint16_t field_07be;
-    uint16_t field_07c0;
-    uint16_t field_07c2;
-    uint16_t field_07c4;
-    uint16_t field_07c6;
+    uint16_t MidiControlMessage_PsPageBox_Page;
+    uint16_t CtlMsgGridBox_Selrow;
+    uint16_t CtlMsgGridBox_Selcol;
+    uint16_t CtlMsgGridBox_Pcol;
     uint16_t field_07c8;
-    uint16_t field_07ca;
+    uint16_t CtlMsgGridBox_Prow;
     uint16_t field_07cc;
-    uint16_t field_07ce;
+    uint16_t CtlMsgGridBox_Crow;
     uint16_t field_07d0;
-    uint8_t pad_114[2];  /* zero padding */
-    uint16_t field_07d4;
+    uint8_t CtlMsgGridBox_Page[2];
+    uint16_t MidiRealtimeMessage_Window;
     uint16_t field_07d6;
-    uint16_t field_07d8;
-    uint8_t RealtimeCommandBox_Value[4];
+    uint16_t RealtimeCommandBox_Selected;
+    uint8_t RealtimeCommandBox_Value[2];
+    uint8_t ClockBox_Selected[2];
     uint8_t ClockBox_Value[2];
-    uint16_t field_07e0;
+    uint16_t MidiCommonSetting_Window;
     uint16_t field_07e2;
-    uint8_t pad_116[2];  /* zero padding */
-    uint16_t field_07e6;
-    uint16_t field_07e8;
+    uint8_t ComSetGridBox_Selrow[2];
+    uint16_t ComSetGridBox_Selcol;
+    uint16_t ComSetGridBox_Pcol;
     uint16_t field_07ea;
-    uint16_t field_07ec;
+    uint16_t ComSetGridBox_Prow;
     uint16_t field_07ee;
-    uint16_t field_07f0;
+    uint16_t ComSetGridBox_Crow;
     uint16_t field_07f2;
-    uint16_t field_07f4;
+    uint16_t MidiInOutSetting_Window;
     uint16_t field_07f6;
-    uint8_t pad_117[2];  /* zero padding */
-    uint16_t field_07fa;
-    uint16_t field_07fc;
+    uint8_t InOutGridBox_Selrow[2];
+    uint16_t InOutGridBox_Selcol;
+    uint16_t InOutGridBox_Pcol;
     uint16_t field_07fe;
-    uint16_t field_0800;
+    uint16_t InOutGridBox_Prow;
     uint16_t field_0802;
-    uint16_t field_0804;
+    uint16_t InOutGridBox_Crow;
     uint16_t field_0806;
-    uint16_t field_0808;
+    uint16_t MidiPresets_Window;
     uint16_t field_080a;
-    uint16_t field_080c;
-    uint16_t field_080e;
+    uint16_t MdPresetPageBox_Page;
+    uint16_t MidiPresetSlaveWithout_Parent;
     uint16_t field_0810;
-    uint16_t field_0812;
+    uint16_t MidiPresetSlaveWithout_Child;
     uint16_t field_0814;
-    uint8_t pad_118[2];  /* zero padding */
-    uint16_t field_0818;
+    uint8_t MpstSlaveWithoutList_Selected[2];
+    uint16_t MidiPresetSlaveWith_Parent;
     uint16_t field_081a;
-    uint16_t field_081c;
+    uint16_t MidiPresetSlaveWith_Child;
     uint16_t field_081e;
-    uint8_t pad_119[2];  /* zero padding */
-    uint16_t field_0822;
+    uint8_t MpstSlaveWithList_Selected[2];
+    uint16_t MidiPresetPage3_Parent;
     uint16_t field_0824;
-    uint16_t field_0826;
+    uint16_t MidiPresetPage3_Child;
     uint16_t field_0828;
-    uint8_t pad_120[2];  /* zero padding */
-    uint16_t field_082c;
+    uint8_t MdPresetUserLoadList_Selected[2];
+    uint16_t MidiPresetPage4_Parent;
     uint16_t field_082e;
-    uint16_t field_0830;
+    uint16_t MidiPresetPage4_Child;
     uint16_t field_0832;
-    uint8_t pad_121[4];  /* zero padding */
-    uint16_t field_0838;
+    uint8_t MdPresetUserWriteList_Selected[2];
+    uint8_t MdpstSplitBox_Onoff[2];
+    uint16_t MidiPresetMasterWithout_Parent;
     uint16_t field_083a;
-    uint16_t field_083c;
+    uint16_t MidiPresetMasterWithout_Child;
     uint16_t field_083e;
-    uint8_t pad_122[2];  /* zero padding */
-    uint16_t field_0842;
+    uint8_t MpstMasterWithoutList_Selected[2];
+    uint16_t MidiPresetMasterWith_Parent;
     uint16_t field_0844;
-    uint16_t field_0846;
+    uint16_t MidiPresetMasterWith_Child;
     uint16_t field_0848;
-    uint8_t pad_123[2];  /* zero padding */
-    uint16_t field_084c;
+    uint8_t MpstMasterWithList_Selected[2];
+    uint16_t MidiExclusive_Window;
     uint16_t field_084e;
-    uint8_t pad_124[2];  /* zero padding */
-    uint16_t field_0852;
+    uint8_t ExcListBox_Selected[2];
+    uint16_t ExcSendWindow_Parent;
     uint16_t field_0854;
-    uint16_t field_0856;
+    uint16_t ExcSendWindow_Child;
     uint16_t field_0858;
-    uint8_t pad_125[2];
-    uint8_t ExcSendPmemBox_Value[6];
-    uint8_t ExcSendSmemBox_Value[6];
-    uint8_t ExcSendCmpBox_Value[6];
-    uint8_t ExcSendSeqBox_Value[6];
+    uint8_t ExcSendPmemBox_Selected[2];
+    uint8_t ExcSendPmemBox_Value[4];
+    uint8_t ExcSendSmemBox_Selected[2];
+    uint8_t ExcSendSmemBox_Value[4];
+    uint8_t ExcSendCmpBox_Selected[2];
+    uint8_t ExcSendCmpBox_Value[4];
+    uint8_t ExcSendSeqBox_Selected[2];
+    uint8_t ExcSendSeqBox_Value[4];
+    uint8_t ExcSendMspBox_Selected[2];
     uint8_t ExcSendMspBox_Value[4];
     uint8_t ExcSendDotBox_Value[4];
-    uint16_t field_087c;
+    uint16_t ExcRcvWindow_Parent;
     uint16_t field_087e;
-    uint16_t field_0880;
+    uint16_t ExcRcvWindow_Child;
     uint16_t field_0882;
-    uint8_t pad_126[2];
-    uint8_t ExcRcvPmemBox_Value[6];
-    uint8_t ExcRcvSmemBox_Value[6];
-    uint8_t ExcRcvCmpBox_Value[6];
-    uint8_t ExcRcvSeqBox_Value[6];
+    uint8_t ExcRcvPmemBox_Selected[2];
+    uint8_t ExcRcvPmemBox_Value[4];
+    uint8_t ExcRcvSmemBox_Selected[2];
+    uint8_t ExcRcvSmemBox_Value[4];
+    uint8_t ExcRcvCmpBox_Selected[2];
+    uint8_t ExcRcvCmpBox_Value[4];
+    uint8_t ExcRcvSeqBox_Selected[2];
+    uint8_t ExcRcvSeqBox_Value[4];
+    uint8_t ExcRcvMspBox_Selected[2];
     uint8_t ExcRcvMspBox_Value[4];
     uint8_t ExcRcvDotBox_Value[4];
-    uint16_t field_08a6;
+    uint16_t MidiGmMode_Window;
     uint16_t field_08a8;
-    uint16_t field_08aa;
-    uint8_t pad_127[2];  /* zero padding */
-    uint16_t field_08ae;
+    uint16_t GMOnOffBox_Selected;
+    uint8_t GMOnOffBox_Onoff[2];
+    uint16_t GMONSure_Parent;
     uint16_t field_08b0;
-    uint16_t field_08b2;
+    uint16_t GMONSure_Child;
     uint16_t field_08b4;
-    uint16_t field_08b6;
+    uint16_t GMOFFSure_Parent;
     uint16_t field_08b8;
-    uint16_t field_08ba;
+    uint16_t GMOFFSure_Child;
     uint16_t field_08bc;
-    uint16_t field_08be;
+    uint16_t MidiPcgOutput_Window;
     uint16_t field_08c0;
-    uint8_t pad_128[2];  /* zero padding */
-    uint16_t field_08c4;
-    uint16_t field_08c6;
+    uint8_t PcgOutGridBox_Selrow[2];
+    uint16_t PcgOutGridBox_Selcol;
+    uint16_t PcgOutGridBox_Pcol;
     uint16_t field_08c8;
-    uint16_t field_08ca;
+    uint16_t PcgOutGridBox_Prow;
     uint16_t field_08cc;
-    uint16_t field_08ce;
+    uint16_t PcgOutGridBox_Crow;
     uint16_t field_08d0;
     uint16_t field_08d2;
-    uint16_t field_08d4;
+    uint16_t MidiComputerConnection_Window;
     uint16_t field_08d6;
-    uint16_t field_08d8;
+    uint16_t MidiComputerConnection_AcLswEditBox_Selected;
     uint8_t MidiComputerConnection_Mode_Value[2];
-    uint16_t field_08dc;
+    uint16_t MidiPanelMemoryOutput_Window;
     uint16_t field_08de;
-    uint8_t pad_130[2];  /* zero padding */
-    uint16_t field_08e2;
-    uint16_t field_08e4;
+    uint8_t PmemOutLeft_Selrow[2];
+    uint16_t PmemOutLeft_Selcol;
+    uint16_t PmemOutLeft_Pcol;
     uint16_t field_08e6;
-    uint16_t field_08e8;
+    uint16_t PmemOutLeft_Prow;
     uint16_t field_08ea;
-    uint16_t field_08ec;
+    uint16_t PmemOutLeft_Crow;
     uint16_t field_08ee;
-    uint16_t field_08f0;
-    uint16_t field_08f2;
-    uint16_t field_08f4;
+    uint16_t PmemOutRight_Selrow;
+    uint16_t PmemOutRight_Selcol;
+    uint16_t PmemOutRight_Pcol;
     uint16_t field_08f6;
-    uint16_t field_08f8;
+    uint16_t PmemOutRight_Prow;
     uint16_t field_08fa;
-    uint16_t field_08fc;
+    uint16_t PmemOutRight_Crow;
     uint16_t field_08fe;
-    uint16_t field_0900;
+    uint16_t MidiSetup_Window;
     uint16_t field_0902;
-    uint16_t field_0904;
-    uint16_t field_0906;
-    uint16_t field_0908;
+    uint16_t MdSetOptGridBox_Selrow;
+    uint16_t MdSetOptGridBox_Selcol;
+    uint16_t MdSetOptGridBox_Pcol;
     uint16_t field_090a;
-    uint16_t field_090c;
+    uint16_t MdSetOptGridBox_Prow;
     uint16_t field_090e;
-    uint16_t field_0910;
+    uint16_t MdSetOptGridBox_Crow;
     uint16_t field_0912;
-    uint16_t field_0914;
+    uint16_t EntertainerVocal_Window;
     uint16_t field_0916;
-    uint16_t field_0918;
-    uint16_t field_091a;
+    uint16_t VocalistPage_Page;
+    uint16_t VocalistPage1_Parent;
     uint16_t field_091c;
-    uint16_t field_091e;
+    uint16_t VocalistPage1_Child;
     uint16_t field_0920;
-    uint8_t pad_131[4];  /* zero padding */
-    uint16_t field_0926;
+    uint8_t VocalistListBox_Selected[2];
+    uint8_t HarmOnOffBox_Onoff[2];
+    uint16_t VocalistPage2_Parent;
     uint16_t field_0928;
-    uint16_t field_092a;
+    uint16_t VocalistPage2_Child;
     uint16_t field_092c;
-    uint16_t field_092e;
-    uint16_t field_0930;
-    uint16_t field_0932;
+    uint16_t VocalistPage2Box_Selrow;
+    uint16_t VocalistPage2Box_Selcol;
+    uint16_t VocalistPage2Box_Pcol;
     uint16_t field_0934;
-    uint16_t field_0936;
+    uint16_t VocalistPage2Box_Prow;
     uint16_t field_0938;
-    uint16_t field_093a;
+    uint16_t VocalistPage2Box_Crow;
     uint16_t field_093c;
-    uint16_t field_093e;
+    uint16_t EntertainerFade_Window;
     uint16_t field_0940;
-    uint16_t field_0942;
-    uint16_t field_0944;
-    uint16_t field_0946;
+    uint16_t FadeInOutGridBox_Selrow;
+    uint16_t FadeInOutGridBox_Selcol;
+    uint16_t FadeInOutGridBox_Pcol;
     uint16_t field_0948;
-    uint16_t field_094a;
+    uint16_t FadeInOutGridBox_Prow;
     uint16_t field_094c;
-    uint16_t field_094e;
+    uint16_t FadeInOutGridBox_Crow;
     uint16_t field_0950;
-    uint16_t field_0952;
+    uint16_t SplitSetting_Window;
     uint16_t field_0954;
     uint8_t SplitSetting_AcLswBox_Value[2];
     uint16_t field_0958;
@@ -1022,7 +1159,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_0984;
     uint16_t field_0988;
     uint16_t field_098a;
-    uint16_t field_098c;
+    uint16_t Sdmenu_Window;
     uint16_t field_098e;
     uint16_t field_0990;
     uint16_t field_0992;
@@ -1035,242 +1172,331 @@ typedef struct __attribute__((packed)) {
     uint16_t field_09b2;
     uint16_t field_09b4;
     uint8_t pad_139[4];  /* zero padding */
-    uint16_t field_09ba;
+    uint16_t Sdpart_Window;
     uint16_t field_09bc;
-    uint8_t pad_140[16];  /* zero padding */
-    uint16_t field_09ce;
+    uint8_t VOL_AcStrRadioBox_Selected[2];
+    uint8_t PAN_AcStrRadioBox_Selected[2];
+    uint8_t Sdpart_AcStrRadioBox_Selected[2];
+    uint8_t SUS_AcStrRadioBox_Selected[2];
+    uint8_t KEY_AcStrRadioBox_Selected[2];
+    uint8_t TUN_AcStrRadioBox_Selected[2];
+    uint8_t BND_AcStrRadioBox_Selected[2];
+    uint8_t OTH_AcStrRadioBox_Selected[2];
+    uint16_t SdpartMain_Parent;
     uint16_t field_09d0;
-    uint16_t field_09d2;
+    uint16_t SdpartMain_Child;
     uint16_t field_09d4;
-    uint8_t pad_141[2];
-    uint8_t SdpartMain_Pan_Value[4];
-    uint8_t SdpartMain_RevDepth_Value[4];
-    uint8_t SdpartMain_DspEffect_Value[4];
-    uint8_t SdpartMain_DigEffect_Value[4];
-    uint8_t SdpartMain_Sustain_Value[4];
-    uint8_t SdpartMain_SusLength_Value[4];
-    uint8_t SdpartMain_KeyShift_Value[4];
-    uint8_t SdpartMain_Tuning_Value[4];
-    uint8_t SdpartMain_BendRange_Value[4];
-    uint8_t SdpartMain_GlidePedal_Value[4];
-    uint8_t SdpartMain_SustPedal_Value[4];
+    uint8_t SdpartMain_AcLswPartEditBox_Selected[2];
+    uint8_t SdpartMain_Pan_Value[2];
+    uint8_t SdpartMain_AcLswPartEditBox_2_Selected[2];
+    uint8_t SdpartMain_RevDepth_Value[2];
+    uint8_t SdpartMain_AcLswPartEditBox_3_Selected[2];
+    uint8_t SdpartMain_DspEffect_Value[2];
+    uint8_t SdpartMain_AcLswPartEditBox_4_Selected[2];
+    uint8_t SdpartMain_DigEffect_Value[2];
+    uint8_t SdpartMain_AcLswPartEditBox_5_Selected[2];
+    uint8_t SdpartMain_Sustain_Value[2];
+    uint8_t SdpartMain_AcLswPartEditBox_6_Selected[2];
+    uint8_t SdpartMain_SusLength_Value[2];
+    uint8_t SdpartMain_AcLswPartEditBox_7_Selected[2];
+    uint8_t SdpartMain_KeyShift_Value[2];
+    uint8_t SdpartMain_AcLswPartEditBox_8_Selected[2];
+    uint8_t SdpartMain_Tuning_Value[2];
+    uint8_t SdpartMain_AcLswPartEditBox_9_Selected[2];
+    uint8_t SdpartMain_BendRange_Value[2];
+    uint8_t SdpartMain_AcLswPartEditBox_10_Selected[2];
+    uint8_t SdpartMain_GlidePedal_Value[2];
+    uint8_t SdpartMain_AcLswPartEditBox_11_Selected[2];
+    uint8_t SdpartMain_SustPedal_Value[2];
+    uint8_t SdpartMain_AcVolPartEditBox_Selected[2];
     uint8_t SdpartMain_Volume_Value[2];
-    uint16_t field_0a06;
+    uint16_t SdpartVol_Parent;
     uint16_t field_0a08;
-    uint16_t field_0a0a;
+    uint16_t SdpartVol_Child;
     uint16_t field_0a0c;
-    uint16_t field_0a0e;
+    uint16_t SdpartVol_AcVolPartEditBox_Selected;
     uint8_t SdpartVol_Volume_Value[2];
-    uint16_t field_0a12;
+    uint16_t SdpartPan_Parent;
     uint16_t field_0a14;
-    uint16_t field_0a16;
+    uint16_t SdpartPan_Child;
     uint16_t field_0a18;
-    uint16_t field_0a1a;
+    uint16_t SdpartPan_AcLswPartEditBox_Selected;
     uint8_t SdpartPan_Pan_Value[2];
     uint8_t SdpartPan_AcLswPartPan_Value[2];
-    uint16_t field_0a20;
+    uint16_t SdpartEff_Parent;
     uint16_t field_0a22;
-    uint16_t field_0a24;
+    uint16_t SdpartEff_Child;
     uint16_t field_0a26;
-    uint16_t field_0a28;
-    uint8_t SdpartEff_ReverbDepth_Value[4];
-    uint8_t SdpartEff_DspEffect_Value[4];
+    uint16_t SdpartEff_AcLswPartEditBox_Selected;
+    uint8_t SdpartEff_ReverbDepth_Value[2];
+    uint8_t SdpartEff_AcLswPartEditBox_2_Selected[2];
+    uint8_t SdpartEff_DspEffect_Value[2];
+    uint8_t SdpartEff_AcLswPartEditBox_3_Selected[2];
     uint8_t SdpartEff_DigitalEff_Value[2];
-    uint16_t field_0a34;
+    uint16_t SdpartSus_Parent;
     uint16_t field_0a36;
-    uint16_t field_0a38;
+    uint16_t SdpartSus_Child;
     uint16_t field_0a3a;
-    uint16_t field_0a3c;
-    uint8_t SdpartSus_SustainOnOff_Value[4];
+    uint16_t SdpartSus_AcLswPartEditBox_Selected;
+    uint8_t SdpartSus_SustainOnOff_Value[2];
+    uint8_t SdpartSus_AcLswPartEditBox_2_Selected[2];
     uint8_t SdpartSus_SustainLength_Value[2];
-    uint16_t field_0a44;
+    uint16_t SdpartKey_Parent;
     uint16_t field_0a46;
-    uint16_t field_0a48;
+    uint16_t SdpartKey_Child;
     uint16_t field_0a4a;
-    uint16_t field_0a4c;
+    uint16_t SdpartKey_AcLswPartEditBox_Selected;
     uint8_t SdpartKey_KeyShift_Value[2];
-    uint16_t field_0a50;
+    uint16_t SdpartTun_Parent;
     uint16_t field_0a52;
-    uint16_t field_0a54;
+    uint16_t SdpartTun_Child;
     uint16_t field_0a56;
-    uint16_t field_0a58;
+    uint16_t SdpartTun_AcLswPartEditBox_Selected;
     uint8_t SdpartTun_Tuning_Value[2];
-    uint16_t field_0a5c;
+    uint16_t SdpartBnd_Parent;
     uint16_t field_0a5e;
-    uint16_t field_0a60;
+    uint16_t SdpartBnd_Child;
     uint16_t field_0a62;
-    uint16_t field_0a64;
+    uint16_t SdpartBnd_AcLswPartEditBox_Selected;
     uint8_t SdpartBnd_PitchBendRange_Value[2];
-    uint16_t field_0a68;
+    uint16_t SdpartOth_Parent;
     uint16_t field_0a6a;
-    uint16_t field_0a6c;
+    uint16_t SdpartOth_Child;
     uint16_t field_0a6e;
-    uint16_t field_0a70;
-    uint8_t SdpartOth_GlidePedal_Value[4];
-    uint8_t SdpartOth_SustainPdl_Value[4];
-    uint8_t SdpartOth_AfterTouch_Value[4];
-    uint8_t SdpartOth_KeyScaling_Value[4];
+    uint16_t SdpartOth_AcLswPartEditBox_Selected;
+    uint8_t SdpartOth_GlidePedal_Value[2];
+    uint8_t SdpartOth_AcLswPartEditBox_2_Selected[2];
+    uint8_t SdpartOth_SustainPdl_Value[2];
+    uint8_t SdpartOth_AcLswPartEditBox_3_Selected[2];
+    uint8_t SdpartOth_AfterTouch_Value[2];
+    uint8_t SdpartOth_AcLswPartEditBox_4_Selected[2];
+    uint8_t SdpartOth_KeyScaling_Value[2];
+    uint8_t SdpartOth_AcLswPartEditBox_5_Selected[2];
     uint8_t SdpartOth_PartExpPdl_Value[2];
-    uint16_t field_0a84;
+    uint16_t Sdmtune_Window;
     uint16_t field_0a86;
-    uint16_t field_0a88;
+    uint16_t Sdmtune_AcLswEditBox_Selected;
     uint8_t Sdmtune_MasterTuning_Value[2];
-    uint16_t field_0a8c;
+    uint16_t Sdscltyp_Window;
     uint16_t field_0a8e;
-    uint16_t field_0a90;
-    uint16_t field_0a92;
+    uint16_t SdscltypPage_Page;
+    uint16_t Sdscltyp1_Parent;
     uint16_t field_0a94;
-    uint16_t field_0a96;
+    uint16_t Sdscltyp1_Child;
     uint16_t field_0a98;
-    uint16_t field_0a9a;
-    uint8_t ScalingType_Value[4];
+    uint16_t ScalingType_Selected;
+    uint8_t ScalingType_Value[2];
+    uint8_t Sdscltyp1_AcLswEditBox_Selected[2];
     uint8_t Sdscltyp1_ScalingShift_Value[2];
-    uint8_t Sdscltyp1_AcLswBox_Value[4];
+    uint8_t Sdscltyp1_AcLswBox_Value[2];
+    uint8_t Sdscltyp1_AcLswEditBox_2_Selected[2];
     uint8_t Sdscltyp1_ScalingMode_Value[2];
-    uint16_t field_0aa8;
+    uint16_t Sdscltyp2_Parent;
     uint16_t field_0aaa;
-    uint16_t field_0aac;
+    uint16_t Sdscltyp2_Child;
     uint16_t field_0aae;
-    uint16_t field_0ab0;
-    uint8_t ScalingKey1_Value[4];
-    uint8_t ScalingKey2_Value[4];
-    uint8_t ScalingKey3_Value[4];
-    uint8_t ScalingKey4_Value[4];
-    uint8_t ScalingKey5_Value[4];
-    uint8_t ScalingKey6_Value[4];
-    uint8_t ScalingKey7_Value[4];
-    uint8_t ScalingKey8_Value[4];
-    uint8_t ScalingKey9_Value[4];
-    uint8_t ScalingKey10_Value[4];
-    uint8_t ScalingKey11_Value[4];
+    uint16_t ScalingKey1_Selected;
+    uint8_t ScalingKey1_Value[2];
+    uint8_t ScalingKey2_Selected[2];
+    uint8_t ScalingKey2_Value[2];
+    uint8_t ScalingKey3_Selected[2];
+    uint8_t ScalingKey3_Value[2];
+    uint8_t ScalingKey4_Selected[2];
+    uint8_t ScalingKey4_Value[2];
+    uint8_t ScalingKey5_Selected[2];
+    uint8_t ScalingKey5_Value[2];
+    uint8_t ScalingKey6_Selected[2];
+    uint8_t ScalingKey6_Value[2];
+    uint8_t ScalingKey7_Selected[2];
+    uint8_t ScalingKey7_Value[2];
+    uint8_t ScalingKey8_Selected[2];
+    uint8_t ScalingKey8_Value[2];
+    uint8_t ScalingKey9_Selected[2];
+    uint8_t ScalingKey9_Value[2];
+    uint8_t ScalingKey10_Selected[2];
+    uint8_t ScalingKey10_Value[2];
+    uint8_t ScalingKey11_Selected[2];
+    uint8_t ScalingKey11_Value[2];
+    uint8_t ScalingKey12_Selected[2];
     uint8_t ScalingKey12_Value[2];
-    uint16_t field_0ae0;
+    uint16_t Sdlfthld_Window;
     uint16_t field_0ae2;
-    uint16_t field_0ae4;
+    uint16_t Sdlfthld_AcLswEditBox_Selected;
     uint8_t Sdlfthld_LeftHold_Value[2];
-    uint16_t field_0ae8;
+    uint16_t Sdmixer_Window;
     uint16_t field_0aea;
-    uint16_t field_0aec;
+    uint16_t Sdmixer_AcResetPage_Page;
     uint16_t field_0aee;
     uint16_t field_0af0;
-    uint16_t field_0af2;
-    uint16_t field_0af4;
+    uint16_t SdtecdPage_Page;
+    uint16_t Sdtecd1_Parent;
     uint16_t field_0af6;
-    uint16_t field_0af8;
+    uint16_t Sdtecd1_Child;
     uint16_t field_0afa;
-    uint8_t pad_154[2];  /* zero padding */
-    uint16_t field_0afe;
-    uint8_t pad_155[52];  /* zero padding */
-    uint16_t field_0b34;
+    uint8_t TcClose_Selected[2];
+    uint16_t TcClose_Dialfocus;
+    uint8_t TcOpen1_Selected[2];
+    uint8_t TcOpen1_Dialfocus[2];
+    uint8_t TcOpen2_Selected[2];
+    uint8_t TcOpen2_Dialfocus[2];
+    uint8_t TcDuet1_Selected[2];
+    uint8_t TcDuet1_Dialfocus[2];
+    uint8_t TcDuet2_Selected[2];
+    uint8_t TcDuet2_Dialfocus[2];
+    uint8_t TcCountry_Selected[2];
+    uint8_t TcCountry_Dialfocus[2];
+    uint8_t TcTheatre_Selected[2];
+    uint8_t TcTheatre_Dialfocus[2];
+    uint8_t TcHymn_Selected[2];
+    uint8_t TcHymn_Dialfocus[2];
+    uint8_t TcBigBandBrass_Selected[2];
+    uint8_t TcBigBandBrass_Dialfocus[2];
+    uint8_t TcBigBandReeds_Selected[2];
+    uint8_t TcBigBandReeds_Dialfocus[2];
+    uint8_t TcOctave_Selected[2];
+    uint8_t TcOctave_Dialfocus[2];
+    uint8_t TcBlock_Selected[2];
+    uint8_t TcBlock_Dialfocus[2];
+    uint8_t TcHardRock_Selected[2];
+    uint8_t TcHardRock_Dialfocus[2];
+    uint8_t TcFanfare_Selected[2];
+    uint8_t TcFanfare_Dialfocus[2];
+    uint16_t Sdtecd2_Parent;
     uint16_t field_0b36;
-    uint16_t field_0b38;
+    uint16_t Sdtecd2_Child;
     uint16_t field_0b3a;
-    uint16_t field_0b3c;
+    uint16_t Sdtecd2_AcLswEditBox_Selected;
     uint8_t Sdtecd2_Orchestrator_Value[2];
-    uint16_t field_0b40;
+    uint16_t Sqmixer_Window;
     uint16_t field_0b42;
-    uint16_t field_0b44;
+    uint16_t Sqmixer_AcResetPage_Page;
     uint16_t field_0b46;
     uint16_t field_0b48;
-    uint8_t pad_157[2];  /* zero padding */
-    uint16_t field_0b4c;
+    uint8_t StartTheInternalDemo_AcPresentationBox_Selected[2];
+    uint16_t Demofeature1_Parent;
     uint16_t field_0b4e;
-    uint16_t field_0b50;
+    uint16_t Demofeature1_Child;
     uint16_t field_0b52;
-    uint16_t field_0b54;
+    uint16_t Demofeature2_Parent;
     uint16_t field_0b56;
-    uint16_t field_0b58;
+    uint16_t Demofeature2_Child;
     uint16_t field_0b5a;
-    uint8_t pad_158[2];  /* zero padding */
-    uint16_t field_0b5e;
+    uint8_t StartTheLoadedDemo_AcPresentationBox_Selected[2];
+    uint16_t PlainScreen_Window;
     uint16_t field_0b60;
-    uint16_t field_0b62;
+    uint16_t PresentationControl_Parent;
     uint16_t field_0b64;
-    uint16_t field_0b66;
+    uint16_t PresentationControl_Child;
     uint16_t field_0b68;
-    uint16_t field_0b6a;
+    uint16_t LoadingPresentation_Window;
     uint16_t field_0b6c;
-    uint16_t field_0b6e;
+    uint16_t Drawbar_Window;
     uint16_t field_0b70;
-    uint8_t pad_159[6];  /* zero padding */
-    uint16_t field_0b78;
+    uint8_t DrawPerc4_Onoff[2];
+    uint8_t DrawPerc223_Onoff[2];
+    uint8_t DrawSetting_Onoff[2];
+    uint16_t Drawbar1_Parent;
     uint16_t field_0b7a;
-    uint16_t field_0b7c;
+    uint16_t Drawbar1_Child;
     uint16_t field_0b7e;
-    uint16_t field_0b80;
+    uint16_t Drawbar2_Parent;
     uint16_t field_0b82;
-    uint16_t field_0b84;
+    uint16_t Drawbar2_Child;
     uint16_t field_0b86;
-    uint16_t field_0b88;
-    uint8_t Drawbar2_Decay_Value[4];
-    uint8_t Drawbar2_Level_Value[4];
-    uint8_t Drawbar2_AttackTime_Value[4];
+    uint16_t Drawbar2_AcDrawEditBox_Selected;
+    uint8_t Drawbar2_Decay_Value[2];
+    uint8_t Drawbar2_AcDrawEditBox_2_Selected[2];
+    uint8_t Drawbar2_Level_Value[2];
+    uint8_t Drawbar2_AcDrawEditBox_3_Selected[2];
+    uint8_t Drawbar2_AttackTime_Value[2];
+    uint8_t Drawbar2_AcDrawEditBox_4_Selected[2];
     uint8_t Drawbar2_ReleaseTime_Value[2];
-    uint16_t field_0b98;
+    uint16_t DrawbarNorm_Parent;
     uint16_t field_0b9a;
-    uint16_t field_0b9c;
+    uint16_t DrawbarNorm_Child;
     uint16_t field_0b9e;
-    uint8_t pad_161[2];  /* zero padding */
-    uint16_t field_0ba2;
+    uint8_t DrawTremolo_Onoff[2];
+    uint16_t DrawbarSndE_Parent;
     uint16_t field_0ba4;
-    uint16_t field_0ba6;
+    uint16_t DrawbarSndE_Child;
     uint16_t field_0ba8;
-    uint8_t pad_162[2];  /* zero padding */
-    uint16_t field_0bac;
+    uint8_t Write_AcTitleMenu_Selected[2];
+    uint16_t Accordion_Window;
     uint16_t field_0bae;
-    uint16_t field_0bb0;
+    uint16_t Accordion1_Parent;
     uint16_t field_0bb2;
-    uint16_t field_0bb4;
+    uint16_t Accordion1_Child;
     uint16_t field_0bb6;
-    uint8_t pad_163[20];  /* zero padding */
-    uint16_t field_0bcc;
+    uint8_t Accordion1_AcIndexToggle_Onoff[2];
+    uint8_t Accordion1_AcIndexToggle_2_Onoff[2];
+    uint8_t Accordion1_AcAccordionTab_Onoff[2];
+    uint8_t Accordion1_AcAccordionTab_2_Onoff[2];
+    uint8_t Accordion1_AcAccordionTab_3_Onoff[2];
+    uint8_t Accordion1_AcAccordionTab_4_Onoff[2];
+    uint8_t Accordion1_AcAccordionTab_5_Onoff[2];
+    uint8_t Accordion1_AcAccordionTab_6_Onoff[2];
+    uint8_t Accordion1_AcAccordionTab_7_Onoff[2];
+    uint8_t Accordion1_AcAccordionTab_8_Onoff[2];
+    uint16_t Accordion2_Parent;
     uint16_t field_0bce;
-    uint16_t field_0bd0;
+    uint16_t Accordion2_Child;
     uint16_t field_0bd2;
-    uint8_t pad_164[20];  /* zero padding */
-    uint16_t field_0be8;
+    uint8_t Accordion2_AcIndexToggle_Onoff[2];
+    uint8_t Accordion2_AcIndexToggle_2_Onoff[2];
+    uint8_t Accordion2_AcAccordionTab_Onoff[2];
+    uint8_t Accordion2_AcAccordionTab_2_Onoff[2];
+    uint8_t Accordion2_AcAccordionTab_3_Onoff[2];
+    uint8_t Accordion2_AcAccordionTab_4_Onoff[2];
+    uint8_t Accordion2_AcAccordionTab_5_Onoff[2];
+    uint8_t Accordion2_AcAccordionTab_6_Onoff[2];
+    uint8_t Accordion2_AcAccordionTab_7_Onoff[2];
+    uint8_t Accordion2_AcAccordionTab_8_Onoff[2];
+    uint16_t Mesage_Window;
     uint16_t field_0bea;
-    uint16_t field_0bec;
+    uint16_t Completed_Parent;
     uint16_t field_0bee;
-    uint16_t field_0bf0;
+    uint16_t Completed_Child;
     uint16_t field_0bf2;
-    uint16_t field_0bf4;
+    uint16_t Reminder_Parent;
     uint16_t field_0bf6;
-    uint16_t field_0bf8;
+    uint16_t Reminder_Child;
     uint16_t field_0bfa;
-    uint16_t field_0bfc;
+    uint16_t Error_Parent;
     uint16_t field_0bfe;
-    uint16_t field_0c00;
+    uint16_t Error_Child;
     uint16_t field_0c02;
-    uint16_t field_0c04;
+    uint16_t Other_Parent;
     uint16_t field_0c06;
-    uint16_t field_0c08;
+    uint16_t Other_Child;
     uint16_t field_0c0a;
-    uint16_t field_0c0c;
+    uint16_t CheckMessage_Parent;
     uint16_t field_0c0e;
-    uint16_t field_0c10;
+    uint16_t CheckMessage_Child;
     uint16_t field_0c12;
     uint8_t CheckMessage_AcRamBox_Value[4];
     uint8_t CheckMessage_AcRamBox_2_Value[4];
-    uint16_t field_0c1c;
+    uint16_t NoMessage_Parent;
     uint16_t field_0c1e;
-    uint16_t field_0c20;
+    uint16_t NoMessage_Child;
     uint16_t field_0c22;
     char NoMessage_AcRamBox_Value[2];
     uint8_t pad_166[2];  /* zero padding */
-    uint16_t field_0c28;
+    uint16_t PleaseWait_Parent;
     uint16_t field_0c2a;
-    uint16_t field_0c2c;
+    uint16_t PleaseWait_Child;
     uint16_t field_0c2e;
-    uint16_t field_0c30;
+    uint16_t Welcom_Window;
     uint16_t field_0c32;
-    uint16_t field_0c34;
+    uint16_t AllInitial_Window;
     uint16_t field_0c36;
-    uint16_t field_0c38;
+    uint16_t MPVersion_Window;
     uint16_t field_0c3a;
-    uint16_t field_0c3c;
+    uint16_t Softver_Window;
     uint16_t field_0c3e;
-    uint8_t pad_167[8];  /* zero padding */
+    uint8_t MainProgram_Selected[2];
+    uint8_t MainTable_Selected[2];
+    uint8_t SubProgram_Selected[2];
+    uint8_t SoundTable_Selected[2];
     /* MixerPart_NamePtrTable: 32 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
     uint32_t MixerPart_NamePtrTable[32];
     uint16_t field_0cc8;
@@ -1321,265 +1547,339 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_5[9];  /* 9 pointers */
     uint16_t field_0f78;
     uint16_t field_0f7a;
-    uint16_t field_0f7c;
+    uint16_t DiskMenu_Window;
     uint16_t field_0f7e;
-    uint16_t field_0f80;
+    uint16_t StyleConvert_AcTitleMenu_Selected;
     uint16_t field_0f82;
-    uint16_t field_0f84;
-    uint16_t field_0f86;
-    uint16_t field_0f88;
-    uint8_t pad_171[6];  /* zero padding */
-    uint16_t field_0f90;
+    uint16_t Preferences_AcTitleMenu_Selected;
+    uint16_t Save_AcTitleMenu_Selected;
+    uint16_t DiskTools_AcTtlJgBox_Selected;
+    uint8_t LOAD_AcTtlJgBox_Selected[2];
+    uint8_t DirectPlay_AcTtlJgBox_Selected[2];
+    uint8_t SongMedley_AcTtlJgBox_Selected[2];
+    uint16_t IntSongMedley_Window;
     uint16_t field_0f92;
-    uint8_t pad_172[6];  /* zero padding */
-    uint16_t field_0f9a;
-    uint8_t pad_173[6];  /* zero padding */
-    uint16_t field_0fa2;
+    uint8_t IntSongMedley_PsFileNameBox_Sel_num[2];
+    uint8_t IntSongMedley_PsFileNameBox_Paintok[2];
+    uint8_t IntSongMedley_PsFileNameBox_Aicok[2];
+    uint16_t IntSongMedley_PsFileNameBox_2_Sel_num;
+    uint8_t IntSongMedley_PsFileNameBox_2_Paintok[2];
+    uint8_t IntSongMedley_PsFileNameBox_2_Aicok[2];
+    uint8_t IntSongMedley_AcMonoIndexToggle_Onoff[2];
+    uint16_t DiskSaveName_Window;
     uint16_t field_0fa4;
-    uint16_t field_0fa6;
+    uint16_t ComposerLoad_Window;
     uint16_t field_0fa8;
-    uint8_t pad_174[10];  /* zero padding */
-    uint16_t field_0fb4;
+    uint8_t ComposerLoad_PsFileNameBox_Sel_num[2];
+    uint8_t ComposerLoad_PsFileNameBox_Paintok[2];
+    uint8_t ComposerLoad_PsFileNameBox_Aicok[2];
+    uint8_t ComposerLoad_AcParaStrBox_Paintok[2];
+    uint8_t ComposerLoad_AcParaStrBox_2_Paintok[2];
+    uint16_t DiskWaitWin_Parent;
     uint16_t field_0fb6;
-    uint16_t field_0fb8;
+    uint16_t DiskWaitWin_Child;
     uint16_t field_0fba;
-    uint8_t pad_175[2];  /* zero padding */
-    uint16_t field_0fbe;
+    uint8_t DiskWaitWin_AcRotStrBox_Paintok[2];
+    uint16_t DiskSaveNameSMF_Window;
     uint16_t field_0fc0;
-    uint16_t field_0fc2;
+    uint16_t WallpaperLoad_Window;
     uint16_t field_0fc4;
-    uint8_t pad_176[10];  /* zero padding */
-    uint16_t field_0fd0;
+    uint8_t WallpaperLoad_AcParaStrBox_Paintok[2];
+    uint8_t WallpaperLoad_AcParaStrBox_2_Paintok[2];
+    uint8_t WallpaperLoad_PsFileNameBox_Sel_num[2];
+    uint8_t WallpaperLoad_PsFileNameBox_Paintok[2];
+    uint8_t WallpaperLoad_PsFileNameBox_Aicok[2];
+    uint16_t DiskSaveSureWin_Parent;
     uint16_t field_0fd2;
-    uint16_t field_0fd4;
+    uint16_t DiskSaveSureWin_Child;
     uint16_t field_0fd6;
-    uint16_t field_0fd8;
+    uint16_t PasswordWin_Parent;
     uint16_t field_0fda;
-    uint16_t field_0fdc;
+    uint16_t PasswordWin_Child;
     uint16_t field_0fde;
-    uint16_t field_0fe0;
+    uint16_t CheckPasswordWin_Parent;
     uint16_t field_0fe2;
-    uint16_t field_0fe4;
+    uint16_t CheckPasswordWin_Child;
     uint16_t field_0fe6;
-    uint16_t field_0fe8;
+    uint16_t DiskLoad_Window;
     uint16_t field_0fea;
-    uint16_t field_0fec;
-    uint16_t field_0fee;
+    uint16_t DiskLoadPage_Page;
+    uint16_t DiskLoadP1_Parent;
     uint16_t field_0ff0;
-    uint16_t field_0ff2;
+    uint16_t DiskLoadP1_Child;
     uint16_t field_0ff4;
-    uint8_t pad_177[4];  /* zero padding */
-    uint16_t field_0ffa;
-    uint8_t pad_178[8];  /* zero padding */
-    uint16_t field_1004;
+    uint8_t DiskLoadP1_PsFileNameBox_Sel_num[2];
+    uint8_t DiskLoadP1_PsFileNameBox_Paintok[2];
+    uint16_t DiskLoadP1_PsFileNameBox_Aicok;
+    uint8_t DiskLoadP1_AcFileSfxBox_Paintok[2];
+    uint8_t Smf_AcTitleMenu_Selected[2];
+    uint8_t DiskLoadP1_AcParaStrBox_Paintok[2];
+    uint8_t DiskLoadP1_AcParaStrBox_2_Paintok[2];
+    uint16_t DiskLoadP2_Parent;
     uint16_t field_1006;
-    uint16_t field_1008;
+    uint16_t DiskLoadP2_Child;
     uint16_t field_100a;
-    uint8_t pad_179[2];  /* zero padding */
-    uint16_t field_100e;
-    uint8_t pad_180[2];  /* zero padding */
-    uint16_t field_1012;
-    uint16_t field_1014;
+    uint8_t DiskLoadP2_AcParaStrBox_Paintok[2];
+    uint16_t DiskLoadP2_PsFileNameBox_Sel_num;
+    uint8_t DiskLoadP2_PsFileNameBox_Paintok[2];
+    uint16_t DiskLoadP2_PsFileNameBox_Aicok;
+    uint16_t DiskLoadP3_Parent;
     uint16_t field_1016;
-    uint16_t field_1018;
+    uint16_t DiskLoadP3_Child;
     uint16_t field_101a;
-    uint16_t field_101c;
-    uint8_t pad_181[2];  /* zero padding */
-    uint16_t field_1020;
-    uint8_t pad_182[2];  /* zero padding */
-    uint16_t field_1024;
-    uint8_t pad_183[2];  /* zero padding */
-    uint16_t field_1028;
-    uint16_t field_102a;
-    uint8_t pad_184[2];  /* zero padding */
-    uint16_t field_102e;
-    uint16_t field_1030;
-    uint8_t pad_185[2];  /* zero padding */
-    uint16_t field_1034;
-    uint16_t field_1036;
-    uint8_t pad_186[2];  /* zero padding */
-    uint16_t field_103a;
-    uint16_t field_103c;
-    uint8_t pad_187[2];  /* zero padding */
-    uint16_t field_1040;
-    uint16_t field_1042;
-    uint8_t pad_188[2];  /* zero padding */
-    uint16_t field_1046;
+    uint16_t DiskLoadP3_PsFileNameBox_Sel_num;
+    uint8_t DiskLoadP3_PsFileNameBox_Paintok[2];
+    uint16_t DiskLoadP3_PsFileNameBox_Aicok;
+    uint8_t DiskLoadP3_AcParaStrBox_Paintok[2];
+    uint16_t DiskLoadP3_PsFileNameBox_2_Sel_num;
+    uint8_t DiskLoadP3_PsFileNameBox_2_Paintok[2];
+    uint16_t DiskLoadP3_PsFileNameBox_2_Aicok;
+    uint16_t DiskLoadP3_PsFileNameBox_3_Sel_num;
+    uint8_t DiskLoadP3_PsFileNameBox_3_Paintok[2];
+    uint16_t DiskLoadP3_PsFileNameBox_3_Aicok;
+    uint16_t DiskLoadP3_PsFileNameBox_4_Sel_num;
+    uint8_t DiskLoadP3_PsFileNameBox_4_Paintok[2];
+    uint16_t DiskLoadP3_PsFileNameBox_4_Aicok;
+    uint16_t DiskLoadP3_PsFileNameBox_5_Sel_num;
+    uint8_t DiskLoadP3_PsFileNameBox_5_Paintok[2];
+    uint16_t DiskLoadP3_PsFileNameBox_5_Aicok;
+    uint16_t DiskLoadP3_PsFileNameBox_6_Sel_num;
+    uint8_t DiskLoadP3_PsFileNameBox_6_Paintok[2];
+    uint16_t DiskLoadP3_PsFileNameBox_6_Aicok;
+    uint16_t DiskLoadP3_PsFileNameBox_7_Sel_num;
+    uint8_t DiskLoadP3_PsFileNameBox_7_Paintok[2];
+    uint16_t DiskLoadP3_PsFileNameBox_7_Aicok;
     uint8_t pad_189[2];  /* zero padding */
-    uint16_t field_104a;
+    uint16_t DiskLoadSMF_Window;
     uint16_t field_104c;
-    uint8_t pad_190[6];  /* zero padding */
-    uint16_t field_1054;
-    uint8_t pad_191[2];  /* zero padding */
-    uint16_t field_1058;
-    uint8_t pad_192[2];  /* zero padding */
-    uint16_t field_105c;
-    uint16_t field_105e;
-    uint8_t pad_193[2];  /* zero padding */
-    uint16_t field_1062;
-    uint16_t field_1064;
-    uint8_t pad_194[2];  /* zero padding */
-    uint16_t field_1068;
-    uint16_t field_106a;
+    uint8_t Tech_AcTitleMenu_Selected[2];
+    uint8_t DiskLoadSMF_PsFileNameBox_Sel_num[2];
+    uint8_t DiskLoadSMF_PsFileNameBox_Paintok[2];
+    uint16_t DiskLoadSMF_PsFileNameBox_Aicok;
+    uint8_t DiskLoadSMF_PsWindowToggle_Onoff[2];
+    uint16_t DiskLoadSMF_PsFileNameBox_2_Sel_num;
+    uint8_t DiskLoadSMF_PsFileNameBox_2_Paintok[2];
+    uint16_t DiskLoadSMF_PsFileNameBox_2_Aicok;
+    uint16_t DiskLoadSMF_PsFileNameBox_3_Sel_num;
+    uint8_t DiskLoadSMF_PsFileNameBox_3_Paintok[2];
+    uint16_t DiskLoadSMF_PsFileNameBox_3_Aicok;
+    uint16_t DiskLoadSMF_PsFileNameBox_4_Sel_num;
+    uint8_t DiskLoadSMF_PsFileNameBox_4_Paintok[2];
+    uint16_t DiskLoadSMF_PsFileNameBox_4_Aicok;
+    uint16_t SongNameSmfLdWin_Parent;
     uint16_t field_106c;
-    uint16_t field_106e;
+    uint16_t SongNameSmfLdWin_Child;
     uint16_t field_1070;
-    uint8_t pad_195[2];  /* zero padding */
-    uint16_t field_1074;
+    uint8_t SongNameSmfLdWin_AcParaStrBox_Paintok[2];
+    uint16_t DiskInfoSmfLdWin_Parent;
     uint16_t field_1076;
-    uint16_t field_1078;
+    uint16_t DiskInfoSmfLdWin_Child;
     uint16_t field_107a;
-    uint8_t pad_196[4];  /* zero padding */
-    uint16_t field_1080;
+    uint8_t DiskInfoSmfLdWin_AcParaStrBox_Paintok[2];
+    uint8_t DiskInfoSmfLdWin_AcParaStrBox_2_Paintok[2];
+    uint16_t CmpSingleLoad_Window;
     uint16_t field_1082;
-    uint16_t field_1084;
-    uint8_t pad_197[4];  /* zero padding */
-    uint16_t field_108a;
-    uint8_t pad_198[4];  /* zero padding */
-    uint16_t field_1090;
-    uint8_t pad_199[6];  /* zero padding */
-    uint16_t field_1098;
-    uint8_t pad_200[4];  /* zero padding */
-    uint16_t field_109e;
-    uint8_t pad_201[4];  /* zero padding */
-    uint16_t field_10a4;
-    uint8_t pad_202[4];  /* zero padding */
-    uint16_t field_10aa;
-    uint8_t pad_203[4];  /* zero padding */
-    uint16_t field_10b0;
+    uint16_t CmpSingleLoad_PsFileNameBox_Sel_num;
+    uint8_t CmpSingleLoad_PsFileNameBox_Paintok[2];
+    uint8_t CmpSingleLoad_PsFileNameBox_Aicok[2];
+    uint16_t CmpSingleLoad_PsFileNameBox_2_Sel_num;
+    uint8_t CmpSingleLoad_PsFileNameBox_2_Paintok[2];
+    uint8_t CmpSingleLoad_PsFileNameBox_2_Aicok[2];
+    uint16_t CmpSingleLoad_PsFileNameBox_3_Sel_num;
+    uint8_t CmpSingleLoad_PsFileNameBox_3_Paintok[2];
+    uint8_t CmpSingleLoad_PsFileNameBox_3_Aicok[2];
+    uint8_t CmpSingleLoad_AcMonoIndexToggle_Onoff[2];
+    uint16_t CmpSingleLoad_PsFileNameBox_4_Sel_num;
+    uint8_t CmpSingleLoad_PsFileNameBox_4_Paintok[2];
+    uint8_t CmpSingleLoad_PsFileNameBox_4_Aicok[2];
+    uint16_t CmpSingleLoad_PsFileNameBox_5_Sel_num;
+    uint8_t CmpSingleLoad_PsFileNameBox_5_Paintok[2];
+    uint8_t CmpSingleLoad_PsFileNameBox_5_Aicok[2];
+    uint16_t CmpSingleLoad_PsFileNameBox_6_Sel_num;
+    uint8_t CmpSingleLoad_PsFileNameBox_6_Paintok[2];
+    uint8_t CmpSingleLoad_PsFileNameBox_6_Aicok[2];
+    uint16_t CmpSingleLoad_PsFileNameBox_7_Sel_num;
+    uint8_t CmpSingleLoad_PsFileNameBox_7_Paintok[2];
+    uint8_t CmpSingleLoad_PsFileNameBox_7_Aicok[2];
+    uint16_t DiskSaveMenu_Window;
     uint16_t field_10b2;
-    uint8_t pad_204[4];  /* zero padding */
-    uint16_t field_10b8;
+    uint8_t TechnicsFormat_AcTtlJgBox_Selected[2];
+    uint8_t SmfFormat_AcTtlJgBox_Selected[2];
+    uint16_t DiskSave_Window;
     uint16_t field_10ba;
-    uint16_t field_10bc;
-    uint16_t field_10be;
+    uint16_t DiskSavePage_Page;
+    uint16_t DiskSaveP1_Parent;
     uint16_t field_10c0;
-    uint16_t field_10c2;
+    uint16_t DiskSaveP1_Child;
     uint16_t field_10c4;
-    uint8_t pad_205[10];  /* zero padding */
-    uint16_t field_10d0;
-    uint8_t pad_206[2];  /* zero padding */
-    uint16_t field_10d4;
+    uint8_t DiskSaveP1_AcParaStrBox_Paintok[2];
+    uint8_t DiskSaveP1_AcParaStrBox_2_Paintok[2];
+    uint8_t Name_AcTitleMenu_Selected[2];
+    uint8_t DiskSaveP1_PsFileNameBox_Sel_num[2];
+    uint8_t DiskSaveP1_PsFileNameBox_Paintok[2];
+    uint16_t DiskSaveP1_PsFileNameBox_Aicok;
+    uint8_t DiskSaveP1_AcFileSfxBox_Paintok[2];
+    uint16_t DiskSaveP2_Parent;
     uint16_t field_10d6;
-    uint16_t field_10d8;
+    uint16_t DiskSaveP2_Child;
     uint16_t field_10da;
-    uint16_t field_10dc;
-    uint8_t pad_207[2];  /* zero padding */
-    uint16_t field_10e0;
-    uint8_t pad_208[2];  /* zero padding */
-    uint16_t field_10e4;
+    uint16_t DiskSaveP2_PsFileNameBox_Sel_num;
+    uint8_t DiskSaveP2_PsFileNameBox_Paintok[2];
+    uint16_t DiskSaveP2_PsFileNameBox_Aicok;
+    uint8_t DiskSaveP2_AcParaStrBox_Paintok[2];
+    uint16_t DiskSaveP3_Parent;
     uint16_t field_10e6;
-    uint16_t field_10e8;
+    uint16_t DiskSaveP3_Child;
     uint16_t field_10ea;
-    uint8_t pad_209[4];  /* zero padding */
-    uint16_t field_10f0;
-    uint8_t pad_210[2];  /* zero padding */
-    uint16_t field_10f4;
+    uint8_t DiskSaveP3_PsFileNameBox_Sel_num[2];
+    uint8_t DiskSaveP3_PsFileNameBox_Paintok[2];
+    uint16_t DiskSaveP3_PsFileNameBox_Aicok;
+    uint8_t DiskSaveP3_AcParaStrBox_Paintok[2];
+    uint16_t DiskSmfSave_Window;
     uint16_t field_10f6;
-    uint8_t pad_211[4];  /* zero padding */
-    uint16_t field_10fc;
-    uint8_t pad_212[8];  /* zero padding */
-    uint16_t field_1106;
-    uint8_t pad_213[2];  /* zero padding */
-    uint16_t field_110a;
-    uint16_t field_110c;
-    uint8_t pad_214[2];  /* zero padding */
-    uint16_t field_1110;
-    uint16_t field_1112;
-    uint8_t pad_215[2];  /* zero padding */
-    uint16_t field_1116;
-    uint16_t field_1118;
+    uint8_t DiskSmfSave_PsFileNameBox_Sel_num[2];
+    uint8_t DiskSmfSave_PsFileNameBox_Paintok[2];
+    uint16_t DiskSmfSave_PsFileNameBox_Aicok;
+    uint8_t DiskSmfSave_AcMonoIndexToggle_Onoff[2];
+    uint8_t DiskSmfSave_AcMonoIndexToggle_2_Onoff[2];
+    uint8_t Name_AcTitleMenu_2_Selected[2];
+    uint8_t DiskSmfSave_AcParaStrBox_Paintok[2];
+    uint16_t DiskSmfSave_PsFileNameBox_2_Sel_num;
+    uint8_t DiskSmfSave_PsFileNameBox_2_Paintok[2];
+    uint16_t DiskSmfSave_PsFileNameBox_2_Aicok;
+    uint16_t DiskSmfSave_PsFileNameBox_3_Sel_num;
+    uint8_t DiskSmfSave_PsFileNameBox_3_Paintok[2];
+    uint16_t DiskSmfSave_PsFileNameBox_3_Aicok;
+    uint16_t DiskSmfSave_PsFileNameBox_4_Sel_num;
+    uint8_t DiskSmfSave_PsFileNameBox_4_Paintok[2];
+    uint16_t DiskSmfSave_PsFileNameBox_4_Aicok;
+    uint16_t DiskSmfDirectPlay_Window;
     uint16_t field_111a;
-    uint8_t pad_216[4];  /* zero padding */
-    uint16_t field_1120;
-    uint16_t field_1122;
-    uint8_t pad_217[2];  /* zero padding */
-    uint16_t field_1126;
-    uint8_t pad_218[4];  /* zero padding */
-    uint16_t field_112c;
-    uint8_t pad_219[2];  /* zero padding */
-    uint16_t field_1130;
+    uint8_t DiskSmfDirectPlay_PsFileNameBox_Sel_num[2];
+    uint8_t DiskSmfDirectPlay_PsFileNameBox_Paintok[2];
+    uint16_t DiskSmfDirectPlay_PsFileNameBox_Aicok;
+    uint16_t DiskSmfDirectPlay_PsFileNameBox_2_Sel_num;
+    uint8_t DiskSmfDirectPlay_PsFileNameBox_2_Paintok[2];
+    uint16_t DiskSmfDirectPlay_PsFileNameBox_2_Aicok;
+    uint8_t DiskSmfDirectPlay_PsWindowToggle_Onoff[2];
+    uint8_t DiskSmfDirectPlay_AcMonoIndexToggle_Onoff[2];
+    uint16_t DiskSmfDirectPlay_AcMonoIndexToggle_2_Onoff;
+    uint8_t SmfMidiOut_Onoff[2];
+    uint16_t SongNameDPSmfWin_Parent;
     uint16_t field_1132;
-    uint16_t field_1134;
+    uint16_t SongNameDPSmfWin_Child;
     uint16_t field_1136;
-    uint8_t pad_220[2];  /* zero padding */
-    uint16_t field_113a;
+    uint8_t SongNameDPSmfWin_AcParaStrBox_Paintok[2];
+    uint16_t DiskInfoDPSmfWin_Parent;
     uint16_t field_113c;
-    uint16_t field_113e;
+    uint16_t DiskInfoDPSmfWin_Child;
     uint16_t field_1140;
-    uint8_t pad_221[4];  /* zero padding */
-    uint16_t field_1146;
+    uint8_t DiskInfoDPSmfWin_AcParaStrBox_Paintok[2];
+    uint8_t DiskInfoDPSmfWin_AcParaStrBox_2_Paintok[2];
+    uint16_t DiskDocDirectPlay_Window;
     uint16_t field_1148;
-    uint8_t pad_222[6];  /* zero padding */
-    uint16_t field_1150;
-    uint8_t pad_223[8];  /* zero padding */
-    uint16_t field_115a;
+    uint8_t DiskDocDirectPlay_PsFileNameBox_Sel_num[2];
+    uint8_t DiskDocDirectPlay_PsFileNameBox_Paintok[2];
+    uint8_t DiskDocDirectPlay_PsFileNameBox_Aicok[2];
+    uint16_t DiskDocDirectPlay_PsFileNameBox_2_Sel_num;
+    uint8_t DiskDocDirectPlay_PsFileNameBox_2_Paintok[2];
+    uint8_t DiskDocDirectPlay_PsFileNameBox_2_Aicok[2];
+    uint8_t DiskDocDirectPlay_AcMonoIndexToggle_Onoff[2];
+    uint8_t DiskDocDirectPlay_AcParaStrBox_Paintok[2];
+    uint16_t DiskPdDirectPlay_Window;
     uint16_t field_115c;
-    uint8_t pad_224[6];  /* zero padding */
-    uint16_t field_1164;
-    uint8_t pad_225[6];  /* zero padding */
-    uint16_t field_116c;
+    uint8_t DiskPdDirectPlay_PsFileNameBox_Sel_num[2];
+    uint8_t DiskPdDirectPlay_PsFileNameBox_Paintok[2];
+    uint8_t DiskPdDirectPlay_PsFileNameBox_Aicok[2];
+    uint16_t DiskPdDirectPlay_PsFileNameBox_2_Sel_num;
+    uint8_t DiskPdDirectPlay_PsFileNameBox_2_Paintok[2];
+    uint8_t DiskPdDirectPlay_PsFileNameBox_2_Aicok[2];
+    uint8_t DiskPdDirectPlay_AcMonoIndexToggle_Onoff[2];
+    uint16_t DiskSongMedley_Window;
     uint16_t field_116e;
-    uint8_t pad_226[4];  /* zero padding */
-    uint16_t field_1174;
-    uint16_t field_1176;
-    uint8_t pad_227[2];  /* zero padding */
-    uint16_t field_117a;
-    uint16_t field_117c;
-    uint8_t pad_228[2];  /* zero padding */
-    uint16_t field_1180;
-    uint8_t pad_229[8];  /* zero padding */
-    uint16_t field_118a;
+    uint8_t DiskSongMedley_PsFileNameBox_Sel_num[2];
+    uint8_t DiskSongMedley_PsFileNameBox_Paintok[2];
+    uint16_t DiskSongMedley_PsFileNameBox_Aicok;
+    uint16_t DiskSongMedley_PsFileNameBox_2_Sel_num;
+    uint8_t DiskSongMedley_PsFileNameBox_2_Paintok[2];
+    uint16_t DiskSongMedley_PsFileNameBox_2_Aicok;
+    uint16_t DiskSongMedley_PsFileNameBox_3_Sel_num;
+    uint8_t DiskSongMedley_PsFileNameBox_3_Paintok[2];
+    uint16_t DiskSongMedley_PsFileNameBox_3_Aicok;
+    uint8_t SongMedleyDiskName_Paintok[2];
+    uint8_t SongMedleyDiskInfo_Paintok[2];
+    uint8_t DiskSongMedley_AcMonoIndexToggle_Onoff[2];
+    uint8_t DiskSongMedley_AcMonoIndexToggle_2_Onoff[2];
+    uint16_t DiskUtility_Window;
     uint16_t field_118c;
-    uint8_t pad_230[16];  /* zero padding */
-    uint16_t field_119e;
-    uint16_t field_11a0;
+    uint8_t Smf_AcTitleMenu_2_Selected[2];
+    uint8_t DiskUtility_AcTitleMenu_Selected[2];
+    uint8_t DiskUtility_AcScreenMenu_Selected[2];
+    uint8_t COPY_AcScreenMenu_Selected[2];
+    uint8_t DiskUtility_AcParaStrBox_Paintok[2];
+    uint8_t DiskUtility_AcParaStrBox_2_Paintok[2];
+    uint8_t DiskUtility_PsFileNameBox_Sel_num[2];
+    uint8_t DiskUtility_PsFileNameBox_Paintok[2];
+    uint16_t DiskUtility_PsFileNameBox_Aicok;
+    uint16_t FileRename_Window;
     uint16_t field_11a2;
-    uint16_t field_11a4;
+    uint16_t DiskFormat_Window;
     uint16_t field_11a6;
-    uint16_t field_11a8;
+    uint16_t DiskUtilitySMF_Window;
     uint16_t field_11aa;
-    uint8_t pad_231[14];  /* zero padding */
-    uint16_t field_11ba;
+    uint8_t Tech_AcTitleMenu_2_Selected[2];
+    uint8_t DiskUtilitySMF_PsFileNameBox_Sel_num[2];
+    uint8_t DiskUtilitySMF_PsFileNameBox_Paintok[2];
+    uint8_t DiskUtilitySMF_PsFileNameBox_Aicok[2];
+    uint8_t DiskUtilitySMF_PsWindowToggle_Onoff[2];
+    uint8_t DiskUtilitySMF_AcTitleMenu_Selected[2];
+    uint8_t DiskUtilitySMF_AcScreenMenu_Selected[2];
+    uint16_t DiskInfoWin_Parent;
     uint16_t field_11bc;
-    uint16_t field_11be;
+    uint16_t DiskInfoWin_Child;
     uint16_t field_11c0;
-    uint8_t pad_232[4];  /* zero padding */
-    uint16_t field_11c6;
+    uint8_t DiskInfoWin_AcParaStrBox_Paintok[2];
+    uint8_t DiskInfoWin_AcParaStrBox_2_Paintok[2];
+    uint16_t SongNameWin_Parent;
     uint16_t field_11c8;
-    uint16_t field_11ca;
+    uint16_t SongNameWin_Child;
     uint16_t field_11cc;
-    uint8_t pad_233[2];  /* zero padding */
-    uint16_t field_11d0;
+    uint8_t SongNameWin_AcParaStrBox_Paintok[2];
+    uint16_t DiskFormatNamingWin_Parent;
     uint16_t field_11d2;
-    uint16_t field_11d4;
+    uint16_t DiskFormatNamingWin_Child;
     uint16_t field_11d6;
-    uint16_t field_11d8;
+    uint16_t DiskFormatSureWin_Parent;
     uint16_t field_11da;
-    uint16_t field_11dc;
+    uint16_t DiskFormatSureWin_Child;
     uint16_t field_11de;
-    uint16_t field_11e0;
+    uint16_t DiskFormatSelectWin_Parent;
     uint16_t field_11e2;
-    uint16_t field_11e4;
+    uint16_t DiskFormatSelectWin_Child;
     uint16_t field_11e6;
-    uint8_t pad_234[4];  /* zero padding */
-    uint16_t field_11ec;
+    uint8_t KByteFormatDd_VwMenuBox_Selected[2];
+    uint8_t MByteFormatHd_VwMenuBox_Selected[2];
+    uint16_t FileCopy_Window;
     uint16_t field_11ee;
-    uint8_t pad_235[8];  /* zero padding */
-    uint16_t field_11f8;
+    uint8_t FileCopy_AcParaStrBox_Paintok[2];
+    uint8_t FileCopy_PsFileNameBox_Sel_num[2];
+    uint8_t FileCopy_PsFileNameBox_Paintok[2];
+    uint8_t FileCopy_PsFileNameBox_Aicok[2];
+    uint16_t FileRenameSMF_Window;
     uint16_t field_11fa;
-    uint16_t field_11fc;
+    uint16_t DiskDeleteSureWin_Parent;
     uint16_t field_11fe;
-    uint16_t field_1200;
+    uint16_t DiskDeleteSureWin_Child;
     uint16_t field_1202;
-    uint16_t field_1204;
+    uint16_t DiskDeleteSureScr_Window;
     uint16_t field_1206;
-    uint16_t field_1208;
+    uint16_t DiskSaveSureScr_Window;
     uint16_t field_120a;
-    uint16_t field_120c;
+    uint16_t DiskSetup_Window;
     uint16_t field_120e;
-    uint16_t field_1210;
-    uint8_t DiskSetup_DiskInsertOption_Value[6];
+    uint16_t DiskSetup_AcRamEditBox_Selected;
+    uint8_t DiskSetup_DiskInsertOption_Value[4];
+    uint8_t DiskSetup_AcBitEditBox_Selected[2];
     uint8_t DiskSetup_FileTypePriority_Value[2];
     naka_menu_item_t w9;  /* NAKA_TYPE_MENU_ITEM */
     uint16_t field_1250;
@@ -1633,81 +1933,92 @@ typedef struct __attribute__((packed)) {
     uint32_t Naka_DrawbarDisplay_Table2[32];
     uint16_t field_13d8;
     uint16_t field_13da;
-    uint8_t pad_248[4];  /* zero padding */
-    uint16_t field_13e0;
+    uint8_t CheckTitle_AcTitleMenu_Selected[2];
+    uint8_t DebugWindow_AcWindowMenu_Selected[2];
+    uint16_t ClipBoard_Window;
     uint16_t field_13e2;
-    uint16_t field_13e4;
+    uint16_t DebugWindow_Parent;
     uint16_t field_13e6;
-    uint16_t field_13e8;
+    uint16_t DebugWindow_Child;
     uint16_t field_13ea;
-    uint8_t pad_249[2];  /* zero padding */
-    uint16_t field_13ee;
-    uint16_t field_13f0;
+    uint8_t DebugWindow_DbDebugMenu_Selected[2];
+    uint16_t DebugWindow_DbDebugMenu_Page;
+    uint16_t NamingWindow_Parent;
     uint16_t field_13f2;
-    uint16_t field_13f4;
+    uint16_t NamingWindow_Child;
     uint16_t field_13f6;
-    uint8_t pad_250[2];  /* zero padding */
+    uint8_t NamingCursorBox_Cursor[2];
     uint16_t field_13fa;
     uint8_t pad_251[4];  /* zero padding */
-    uint16_t field_1400;
+    uint16_t MemoWindow_Parent;
     uint16_t field_1402;
-    uint16_t field_1404;
+    uint16_t MemoWindow_Child;
     uint16_t field_1406;
-    uint16_t field_1408;
+    uint16_t TrackSwitchWindow_Parent;
     uint16_t field_140a;
-    uint16_t field_140c;
+    uint16_t TrackSwitchWindow_Child;
     uint16_t field_140e;
-    uint16_t field_1410;
-    uint8_t pad_252[6];  /* zero padding */
-    uint16_t field_1418;
-    uint8_t pad_253[2];  /* zero padding */
-    uint16_t field_141c;
-    uint16_t field_141e;
-    uint8_t pad_254[4];  /* zero padding */
-    uint16_t field_1424;
-    uint8_t pad_255[2];  /* zero padding */
-    uint16_t field_1428;
-    uint16_t field_142a;
-    uint8_t pad_256[4];  /* zero padding */
-    uint16_t field_1430;
-    uint8_t pad_257[2];  /* zero padding */
-    uint16_t field_1434;
-    uint16_t field_1436;
-    uint8_t pad_258[4];  /* zero padding */
-    uint16_t field_143c;
-    uint8_t pad_259[4];  /* zero padding */
-    uint16_t field_1442;
-    uint8_t pad_260[2];  /* zero padding */
-    uint16_t field_1446;
-    uint16_t field_1448;
-    uint8_t pad_261[4];  /* zero padding */
-    uint16_t field_144e;
-    uint8_t pad_262[2];  /* zero padding */
-    uint16_t field_1452;
-    uint16_t field_1454;
-    uint8_t pad_263[4];  /* zero padding */
-    uint16_t field_145a;
-    uint8_t pad_264[2];  /* zero padding */
-    uint16_t field_145e;
-    uint16_t field_1460;
-    uint8_t pad_265[4];  /* zero padding */
-    uint16_t field_1466;
-    uint8_t pad_266[2];  /* zero padding */
-    uint16_t field_146a;
-    uint16_t field_146c;
-    uint8_t pad_267[2];  /* zero padding */
-    uint16_t field_1470;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_Onoff;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_Part[2];
+    uint8_t TrackSwitchWindow_AcTrackSwitch_Recplay[2];
+    uint8_t TrackSwitchWindow_AcTrackSwitch_2_Onoff[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_2_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_2_Recplay[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_3_Onoff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_3_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_3_Recplay[2];
+    uint8_t TrackSwitchWindow_AcTrackSwitch_4_Onoff[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_4_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_4_Recplay[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_5_Onoff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_5_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_5_Recplay[2];
+    uint8_t TrackSwitchWindow_AcTrackSwitch_6_Onoff[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_6_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_6_Recplay[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_7_Onoff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_7_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_7_Recplay[2];
+    uint8_t TrackSwitchWindow_AcTrackSwitch_8_Onoff[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_8_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_8_Recplay[2];
+    uint8_t TrackSwitchWindow_AcTrackSwitch_9_Onoff[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_9_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_9_Recplay[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_10_Onoff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_10_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_10_Recplay[2];
+    uint8_t TrackSwitchWindow_AcTrackSwitch_11_Onoff[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_11_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_11_Recplay[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_12_Onoff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_12_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_12_Recplay[2];
+    uint8_t TrackSwitchWindow_AcTrackSwitch_13_Onoff[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_13_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_13_Recplay[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_14_Onoff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_14_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_14_Recplay[2];
+    uint8_t TrackSwitchWindow_AcTrackSwitch_15_Onoff[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_15_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_15_Recplay[2];
+    uint16_t TrackSwitchWindow_AcTrackSwitch_16_Onoff;
+    uint16_t TrackSwitchWindow_AcTrackSwitch_16_Part;
+    uint8_t TrackSwitchWindow_AcTrackSwitch_16_Recplay[2];
+    uint16_t MemDumpWindow_Parent;
     uint16_t field_1472;
-    uint16_t field_1474;
+    uint16_t MemDumpWindow_Child;
     uint16_t field_1476;
-    uint16_t field_1478;
+    uint16_t MemDumpWindow_DbMemoryDump_Adr;
     uint8_t pad_268[2];  /* zero padding */
-    uint16_t field_147c;
+    uint16_t CheckTitle_Window;
     uint16_t field_147e;
-    uint8_t pad_269[4];  /* zero padding */
-    uint16_t field_1484;
+    uint8_t Naming_AcScreenMenu_Selected[2];
+    uint8_t Wall_AcScreenMenu_Selected[2];
+    uint16_t CheckNaming_Window;
     uint16_t field_1486;
-    uint16_t field_1488;
+    uint16_t CheckWall_Window;
     uint16_t field_148a;
     naka_dispatch_t w10;  /* 0x4E */
     uint8_t pad_270[2];  /* zero padding */
@@ -1865,12 +2176,12 @@ typedef struct __attribute__((packed)) {
     uint16_t field_171e;
     uint16_t field_1720;
     uint16_t field_1722;
-    uint16_t field_1724;
+    uint16_t Normal_Window;
     uint16_t field_1726;
-    uint16_t field_1728;
+    uint16_t normal_Window;
     uint16_t field_172a;
     uint8_t normal_AcLswBox_Value[2];
-    uint16_t field_172e;
+    uint16_t normal_IvWindowPageControl_Page;
     uint16_t field_1730;
     uint16_t field_1732;
     uint16_t field_1734;
@@ -1898,147 +2209,155 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1760;
     uint16_t field_1762;
     uint8_t pad_277[14];  /* zero padding */
-    uint16_t field_1772;
+    uint16_t ControlIni_Window;
     uint16_t field_1774;
-    uint8_t pad_278[2];  /* zero padding */
-    uint16_t field_1778;
+    uint8_t SYSINI_Selected[2];
+    uint16_t Initial_TtlScreen_Window;
     uint16_t field_177a;
-    uint16_t field_177c;
+    uint16_t SYSINISURE_Window;
     uint16_t field_177e;
-    uint16_t field_1780;
+    uint16_t ControlFsw_Window;
     uint16_t field_1782;
-    uint16_t field_1784;
-    uint16_t field_1786;
-    uint16_t field_1788;
+    uint16_t ControlFsw_AcFSWAssGridBox_Selrow;
+    uint16_t ControlFsw_AcFSWAssGridBox_Selcol;
+    uint16_t ControlFsw_AcFSWAssGridBox_Pcol;
     uint16_t field_178a;
-    uint16_t field_178c;
+    uint16_t ControlFsw_AcFSWAssGridBox_Prow;
     uint16_t field_178e;
-    uint16_t field_1790;
+    uint16_t ControlFsw_AcFSWAssGridBox_Crow;
     uint16_t field_1792;
-    uint16_t field_1794;
+    uint16_t ControlSns_Window;
     uint16_t field_1796;
-    uint16_t field_1798;
-    uint16_t field_179a;
-    uint16_t field_179c;
+    uint16_t ControlSns_AcTchSensGridBox_Selrow;
+    uint16_t ControlSns_AcTchSensGridBox_Selcol;
+    uint16_t ControlSns_AcTchSensGridBox_Pcol;
     uint16_t field_179e;
-    uint16_t field_17a0;
+    uint16_t ControlSns_AcTchSensGridBox_Prow;
     uint16_t field_17a2;
-    uint16_t field_17a4;
+    uint16_t ControlSns_AcTchSensGridBox_Crow;
     uint16_t field_17a6;
-    uint16_t field_17a8;
+    uint16_t NakaWidget_ToshiView044_0_MsaModeScreen_Window;
     uint16_t field_17aa;
-    uint8_t pad_279[4];  /* zero padding */
-    uint16_t field_17b0;
+    uint8_t NakaWidget_ToshiView044_0_MsaModeScreen_Newmsamode[2];
+    uint8_t NakaWidget_ToshiView044_0_MsaModeScreen_Oldmsamode[2];
+    uint16_t NakaWidget_ToshiView044_10_MsaModeScreen_Window;
     uint16_t field_17b2;
-    uint16_t field_17b4;
-    uint16_t field_17b6;
-    uint16_t field_17b8;
+    uint16_t NakaWidget_ToshiView044_10_MsaModeScreen_Newmsamode;
+    uint16_t NakaWidget_ToshiView044_10_MsaModeScreen_Oldmsamode;
+    uint16_t PanelMemoryMode_TtlScreen_Window;
     uint16_t field_17ba;
-    uint16_t field_17bc;
-    uint16_t field_17be;
+    uint16_t PanelMemoryMode_IvPmemWindowPageCtl_Page;
+    uint16_t PMEM1_Parent;
     uint16_t field_17c0;
-    uint16_t field_17c2;
+    uint16_t PMEM1_Child;
     uint16_t field_17c4;
-    uint8_t pad_280[4];  /* zero padding */
-    uint16_t field_17ca;
+    uint8_t PMEM1_PmemModeBox_Newpmemmode[2];
+    uint8_t PMEM1_PmemModeBox_Oldpmemmode[2];
+    uint16_t PMEM2_Parent;
     uint16_t field_17cc;
-    uint16_t field_17ce;
+    uint16_t PMEM2_Child;
     uint16_t field_17d0;
-    uint16_t field_17d2;
-    uint16_t field_17d4;
-    uint16_t field_17d6;
+    uint16_t PMEM2_AcPmExpFilterGridBox_Selrow;
+    uint16_t PMEM2_AcPmExpFilterGridBox_Selcol;
+    uint16_t PMEM2_AcPmExpFilterGridBox_Pcol;
     uint16_t field_17d8;
-    uint16_t field_17da;
+    uint16_t PMEM2_AcPmExpFilterGridBox_Prow;
     uint16_t field_17dc;
-    uint16_t field_17de;
+    uint16_t PMEM2_AcPmExpFilterGridBox_Crow;
     uint16_t field_17e0;
-    uint16_t field_17e2;
+    uint16_t NakaWidget_ToshiView045_18_Window_Parent;
     uint16_t field_17e4;
-    uint16_t field_17e6;
+    uint16_t NakaWidget_ToshiView045_18_Window_Child;
     uint16_t field_17e8;
-    uint16_t field_17ea;
+    uint16_t ControlSys_Window;
     uint16_t field_17ec;
-    uint16_t field_17ee;
-    uint16_t field_17f0;
-    uint16_t field_17f2;
+    uint16_t ControlSys_AcDispTimeSetGridBox_Selrow;
+    uint16_t ControlSys_AcDispTimeSetGridBox_Selcol;
+    uint16_t ControlSys_AcDispTimeSetGridBox_Pcol;
     uint16_t field_17f4;
-    uint16_t field_17f6;
+    uint16_t ControlSys_AcDispTimeSetGridBox_Prow;
     uint16_t field_17f8;
-    uint16_t field_17fa;
+    uint16_t ControlSys_AcDispTimeSetGridBox_Crow;
     uint16_t field_17fc;
-    uint16_t field_17fe;
+    uint16_t WallpaperSetting_TtlScreen_Window;
     uint16_t field_1800;
-    uint8_t pad_281[2];  /* zero padding */
-    uint16_t field_1804;
+    uint8_t Load_AcTitleMenu_Selected[2];
+    uint16_t ControlWallSet_Window;
     uint16_t field_1806;
-    uint8_t pad_282[2];  /* zero padding */
-    uint16_t field_180a;
-    uint8_t ControlWallSet_AcRamEditBox_Value[6];
-    uint8_t ControlWallSet_MenuPages_Value[6];
+    uint8_t Load_AcTitleMenu_2_Selected[2];
+    uint16_t ControlWallSet_AcRamEditBox_Selected;
+    uint8_t ControlWallSet_AcRamEditBox_Value[4];
+    uint8_t ControlWallSet_AcRamEditBox_2_Selected[2];
+    uint8_t ControlWallSet_MenuPages_Value[4];
+    uint8_t ControlWallSet_AcRamEditBox_3_Selected[2];
     uint8_t ControlWallSet_Others_Value[4];
-    uint16_t field_181c;
+    uint16_t WALLSETSURE_Window;
     uint16_t field_181e;
-    uint16_t field_1820;
+    uint16_t ONETCH_Window;
     uint16_t field_1822;
     uint8_t ONETCH_AcRamBox_Value[4];
-    uint16_t field_1828;
+    uint16_t MUSICSTYL_Window;
     uint16_t field_182a;
-    uint8_t pad_285[4];  /* zero padding */
-    uint16_t field_1830;
+    uint8_t StyleExplorer_AcTitleMenu_Selected[2];
+    uint8_t StyleAlphabetical_AcTitleMenu_Selected[2];
+    uint16_t MSCTSEL_Window;
     uint16_t field_1832;
-    uint16_t field_1834;
-    uint16_t field_1836;
+    uint16_t MSCTSEL_IvMstStyleWindowPgCtl_Page;
+    uint16_t STYLE1_Parent;
     uint16_t field_1838;
-    uint16_t field_183a;
+    uint16_t STYLE1_Child;
     uint16_t field_183c;
-    uint8_t pad_286[2];  /* zero padding */
-    uint16_t field_1840;
-    uint16_t field_1842;
+    uint8_t STYLE1_AcMstStyle1GridBox_Selrow[2];
+    uint16_t STYLE1_AcMstStyle1GridBox_Selcol;
+    uint16_t STYLE1_AcMstStyle1GridBox_Pcol;
     uint16_t field_1844;
-    uint16_t field_1846;
+    uint16_t STYLE1_AcMstStyle1GridBox_Prow;
     uint16_t field_1848;
-    uint16_t field_184a;
+    uint16_t STYLE1_AcMstStyle1GridBox_Crow;
     uint16_t field_184c;
-    uint16_t field_184e;
-    uint16_t field_1850;
-    uint16_t field_1852;
-    uint8_t pad_287[4];  /* zero padding */
-    uint16_t field_1858;
+    uint16_t STYLE1_AcMstStyle1GridBox_Nowstylectgdtno;
+    uint16_t STYLE1_AcMstStyle1GridBox_Nowstylectgmaxpage;
+    uint16_t STYLE1_AcMstStyle1GridBox_Nowstylectgpage;
+    uint8_t STYLE1_AcMstStyle1SubGridBox_Selrow[2];
+    uint8_t STYLE1_AcMstStyle1SubGridBox_Selcol[2];
+    uint16_t STYLE1_AcMstStyle1SubGridBox_Pcol;
     uint16_t field_185a;
-    uint16_t field_185c;
+    uint16_t STYLE1_AcMstStyle1SubGridBox_Prow;
     uint16_t field_185e;
-    uint16_t field_1860;
+    uint16_t STYLE1_AcMstStyle1SubGridBox_Crow;
     uint16_t field_1862;
-    uint16_t field_1864;
-    uint16_t field_1866;
-    uint16_t field_1868;
-    uint16_t field_186a;
+    uint16_t STYLE1_AcMstStyle1SubGridBox_Nowstylesubctgdtno;
+    uint16_t STYLE1_AcMstStyle1SubGridBox_Nowstylesubctgmaxpage;
+    uint16_t STYLE1_AcMstStyle1SubGridBox_Nowstylesubctgpage;
+    uint16_t STYLE2_Parent;
     uint16_t field_186c;
-    uint16_t field_186e;
+    uint16_t STYLE2_Child;
     uint16_t field_1870;
-    uint8_t pad_288[4];  /* zero padding */
-    uint16_t field_1876;
+    uint8_t STYLE2_AcMstStyle2GridBox_Selrow[2];
+    uint8_t STYLE2_AcMstStyle2GridBox_Selcol[2];
+    uint16_t STYLE2_AcMstStyle2GridBox_Pcol;
     uint16_t field_1878;
-    uint16_t field_187a;
+    uint16_t STYLE2_AcMstStyle2GridBox_Prow;
     uint16_t field_187c;
-    uint16_t field_187e;
+    uint16_t STYLE2_AcMstStyle2GridBox_Crow;
     uint16_t field_1880;
-    uint16_t field_1882;
-    uint16_t field_1884;
-    uint16_t field_1886;
-    uint8_t pad_289[2];  /* zero padding */
-    uint16_t field_188a;
-    uint16_t field_188c;
-    uint16_t field_188e;
-    uint16_t field_1890;
+    uint16_t STYLE2_AcMstStyle2GridBox_Nowstylesubctgdtno;
+    uint16_t STYLE2_AcMstStyle2GridBox_Nowstylesubctgmaxpage;
+    uint16_t STYLE2_AcMstStyle2GridBox_Nowstylesubctgpage;
+    uint8_t STYLE2_AcMstStyle2GridBox_Nowstylesubctg[2];
+    uint16_t STYLE2_AcMstStyle2GridBox_Nowstyle;
+    uint16_t STYLE2_AcMstStyle2GridBox_Nowstylesubsubdtno1;
+    uint16_t STYLE2_AcMstStyle2GridBox_Nowstylesubsubdtno2;
+    uint16_t MSSCTSEL_Window;
     uint16_t field_1892;
-    uint16_t field_1894;
-    uint16_t field_1896;
+    uint16_t MSSCTSEL_IvMstStyleWindowPgCtl_Page;
+    uint16_t SONG1_Parent;
     uint16_t field_1898;
-    uint16_t field_189a;
+    uint16_t SONG1_Child;
     uint16_t field_189c;
-    uint16_t field_189e;
-    uint8_t pad_290[3];  /* zero padding */
+    uint16_t SONG1_AcMstSong1GridBox_Selrow;
+    uint8_t SONG1_AcMstSong1GridBox_Selcol[2];
+    uint8_t SONG1_AcMstSong1GridBox_Pcol[1];
     uint16_t field_18a3;
     uint16_t field_18a5;
     uint16_t field_18a7;
@@ -2051,63 +2370,65 @@ typedef struct __attribute__((packed)) {
     uint16_t field_18b5;
     uint16_t field_18b7;
     uint32_t NakaData_RomEnd_ptr_3;
-    uint8_t pad_291[3];  /* zero padding */
-    uint16_t field_18c0;
+    uint8_t pad_291[1];
+    uint8_t SONG2_AcMstSong2GridBox_Selcol[2];
+    uint16_t SONG2_AcMstSong2GridBox_Pcol;
     uint16_t field_18c2;
-    uint16_t field_18c4;
+    uint16_t SONG2_AcMstSong2GridBox_Prow;
     uint16_t field_18c6;
-    uint16_t field_18c8;
+    uint16_t SONG2_AcMstSong2GridBox_Crow;
     uint16_t field_18ca;
-    uint16_t field_18cc;
-    uint16_t field_18ce;
-    uint16_t field_18d0;
-    uint8_t pad_292[2];  /* zero padding */
-    uint16_t field_18d4;
-    uint16_t field_18d6;
-    uint16_t field_18d8;
-    uint16_t field_18da;
+    uint16_t SONG2_AcMstSong2GridBox_Nowsongsubctgdtno;
+    uint16_t SONG2_AcMstSong2GridBox_Nowsongsubctgmaxpage;
+    uint16_t SONG2_AcMstSong2GridBox_Nowsongsubctgpage;
+    uint8_t SONG2_AcMstSong2GridBox_Nowsongsubctg[2];
+    uint16_t SONG2_AcMstSong2GridBox_Nowsong;
+    uint16_t SONG2_AcMstSong2GridBox_Nowsongsubsubdtno1;
+    uint16_t SONG2_AcMstSong2GridBox_Nowsongsubsubdtno2;
+    uint16_t MSSONGLIST_Window;
     uint16_t field_18dc;
-    uint16_t field_18de;
-    uint8_t pad_293[2];  /* zero padding */
-    uint16_t field_18e2;
+    uint16_t MSSONGLIST_AcMstSugAlpGridBox_Selrow;
+    uint8_t MSSONGLIST_AcMstSugAlpGridBox_Selcol[2];
+    uint16_t MSSONGLIST_AcMstSugAlpGridBox_Pcol;
     uint16_t field_18e4;
-    uint16_t field_18e6;
+    uint16_t MSSONGLIST_AcMstSugAlpGridBox_Prow;
     uint16_t field_18e8;
-    uint16_t field_18ea;
+    uint16_t MSSONGLIST_AcMstSugAlpGridBox_Crow;
     uint16_t field_18ec;
-    char A_str[2];
-    uint8_t pad_294[2];  /* zero padding */
-    char str_14[2];
-    uint16_t field_18f4;
-    uint16_t field_18f6;
-    uint16_t field_18f8;
-    uint16_t field_18fa;
-    uint16_t field_18fc;
+    char MSSONGLIST_AcMstSugAlpGridBox_Nowalph[2];
+    uint8_t MSSONGLIST_AcMstSugAlpGridBox_Nowalphtop[2];
+    char MSSONGLIST_AcMstSugAlpGridBox_Nowalphdtno[2];
+    uint16_t MSSONGLIST_AcMstSugAlpGridBox_Nowalphmaxpage;
+    uint16_t MSSONGLIST_AcMstSugAlpGridBox_Nowalphpage;
+    uint16_t MSSONGLIST_AcMstSugAlpGridBox_Nowalphselsong;
+    uint16_t MSSONGLIST_AcMstSugAlpGridBox_Nowttlselsong;
+    uint16_t MSSTLSEL_Window;
     uint16_t field_18fe;
-    uint8_t pad_295[4];  /* zero padding */
-    uint16_t field_1904;
+    uint8_t MSSTLSEL_AcMstStyleAlpGridBox_Selrow[2];
+    uint8_t MSSTLSEL_AcMstStyleAlpGridBox_Selcol[2];
+    uint16_t MSSTLSEL_AcMstStyleAlpGridBox_Pcol;
     uint16_t field_1906;
-    uint16_t field_1908;
+    uint16_t MSSTLSEL_AcMstStyleAlpGridBox_Prow;
     uint16_t field_190a;
-    uint16_t field_190c;
+    uint16_t MSSTLSEL_AcMstStyleAlpGridBox_Crow;
     uint16_t field_190e;
-    char A_str_2[2];
-    uint16_t field_1912;
-    char str_16[2];
-    uint16_t field_1916;
-    uint16_t field_1918;
-    uint16_t field_191a;
+    char MSSTLSEL_AcMstStyleAlpGridBox_Nowalph[2];
+    uint16_t MSSTLSEL_AcMstStyleAlpGridBox_Nowalphtop;
+    char MSSTLSEL_AcMstStyleAlpGridBox_Nowalphdtno[2];
+    uint16_t MSSTLSEL_AcMstStyleAlpGridBox_Nowalphmaxpage;
+    uint16_t MSSTLSEL_AcMstStyleAlpGridBox_Nowalphpage;
+    uint16_t PMBANK_Window;
     uint16_t field_191c;
-    uint16_t field_191e;
-    uint16_t field_1920;
-    uint16_t field_1922;
-    uint16_t field_1924;
-    uint16_t field_1926;
+    uint16_t PMBANK_Page;
+    uint16_t PMBANK_Nowbank;
+    uint16_t PMBANK_Oldbank;
+    uint16_t PMBANK_PsPageBox_Page;
+    uint16_t PMVIEW_Window;
     uint16_t field_1928;
-    uint16_t field_192a;
+    uint16_t PMVIEW_AcPmBkEditBox_Selected;
     uint8_t PMVIEW_AcPmBkEditBox_Value[4];
-    uint16_t field_1930;
-    uint16_t field_1932;
+    uint16_t PMVIEW_PsPageBox_Page;
+    uint16_t PMNAME_Window;
     uint16_t field_1934;
     uint16_t field_1936;
     uint16_t field_1938;
@@ -2118,84 +2439,87 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1942;
     uint8_t pad_298[4];  /* zero padding */
     uint16_t field_1948;
-    uint16_t field_194a;
+    uint16_t RVARI_Window;
     uint16_t field_194c;
-    uint16_t field_194e;
+    uint16_t RVARI_Page;
     char H_str[2];
-    uint16_t field_1952;
-    uint8_t pad_299[6];  /* zero padding */
-    uint16_t field_195a;
+    uint16_t RVARI_Varisu;
+    uint8_t RVARI_Nowswno[2];
+    uint8_t RVARI_Nowvari[2];
+    uint8_t RVARI_Oldvari[2];
+    uint16_t vF4_e0_Window;
     uint16_t field_195c;
-    uint16_t field_195e;
+    uint16_t TEST1RAM_Parent;
     uint16_t field_1960;
-    uint16_t field_1962;
+    uint16_t TEST1RAM_Child;
     uint16_t field_1964;
-    uint16_t field_1966;
+    uint16_t TEST1CP_Parent;
     uint16_t field_1968;
-    uint16_t field_196a;
+    uint16_t TEST1CP_Child;
     uint16_t field_196c;
-    uint16_t field_196e;
+    uint16_t vF4_e13_Window;
     uint16_t field_1970;
-    uint16_t field_1972;
+    uint16_t TEST2_Window;
     uint16_t field_1974;
-    uint16_t field_1976;
+    uint16_t TEST2OKOK_Parent;
     uint16_t field_1978;
-    uint16_t field_197a;
+    uint16_t TEST2OKOK_Child;
     uint16_t field_197c;
-    uint16_t field_197e;
+    uint16_t TEST2NGNG_Parent;
     uint16_t field_1980;
-    uint16_t field_1982;
+    uint16_t TEST2NGNG_Child;
     uint16_t field_1984;
-    uint16_t field_1986;
+    uint16_t TEST2NGOK_Parent;
     uint16_t field_1988;
-    uint16_t field_198a;
+    uint16_t TEST2NGOK_Child;
     uint16_t field_198c;
-    uint16_t field_198e;
+    uint16_t TEST2OKNG_Parent;
     uint16_t field_1990;
-    uint16_t field_1992;
+    uint16_t TEST2OKNG_Child;
     uint16_t field_1994;
-    uint16_t field_1996;
+    uint16_t TEST3_Window;
     uint16_t field_1998;
-    uint8_t pad_300[4];  /* zero padding */
-    uint16_t field_199e;
+    uint8_t TEST3_Nowswno[2];
+    uint8_t TEST3_Oldswno[2];
+    uint16_t TEST4_Window;
     uint16_t field_19a0;
-    uint16_t field_19a2;
+    uint16_t TEST5_Window;
     uint16_t field_19a4;
-    uint16_t field_19a6;
+    uint16_t TEST51_Parent;
     uint16_t field_19a8;
-    uint16_t field_19aa;
+    uint16_t TEST51_Child;
     uint16_t field_19ac;
-    uint16_t field_19ae;
+    uint16_t TEST52_Parent;
     uint16_t field_19b0;
-    uint16_t field_19b2;
+    uint16_t TEST52_Child;
     uint16_t field_19b4;
-    uint16_t field_19b6;
+    uint16_t TEST53_Parent;
     uint16_t field_19b8;
-    uint16_t field_19ba;
+    uint16_t TEST53_Child;
     uint16_t field_19bc;
-    uint16_t field_19be;
+    uint16_t TEST54_Parent;
     uint16_t field_19c0;
-    uint16_t field_19c2;
+    uint16_t TEST54_Child;
     uint16_t field_19c4;
-    uint16_t field_19c6;
+    uint16_t TEST55_Parent;
     uint16_t field_19c8;
-    uint16_t field_19ca;
+    uint16_t TEST55_Child;
     uint16_t field_19cc;
-    uint16_t field_19ce;
+    uint16_t TEST56_Parent;
     uint16_t field_19d0;
-    uint16_t field_19d2;
+    uint16_t TEST56_Child;
     uint16_t field_19d4;
-    uint16_t field_19d6;
+    uint16_t TEST6_Window;
     uint16_t field_19d8;
-    uint16_t field_19da;
+    uint16_t TEST6OK_Parent;
     uint16_t field_19dc;
-    uint16_t field_19de;
+    uint16_t TEST6OK_Child;
     uint16_t field_19e0;
-    uint16_t field_19e2;
+    uint16_t TEST6NG_Parent;
     uint16_t field_19e4;
-    uint16_t field_19e6;
+    uint16_t TEST6NG_Child;
     uint16_t field_19e8;
-    uint16_t field_19ea;
+    uint16_t EXT_Window;
     uint16_t field_19ec;
     char str_18[2];
     uint8_t pad_301[5];  /* zero padding */
@@ -2793,17 +3117,27 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .DpSmf_AcRamEditBox_Value = { 0 },
 
-    .field_0044 = NAKA_NONE,
+    .SMFMuteSw_Onoff = { 0 },
+
+    .MIXER_VwMenuBox_Selected = { 0 },
+
+    .MIC_VwMenuBox_Selected = { 0 },
+
+    .SmfMedley_TtlScreen_Window = NAKA_NONE,
 
     .field_0046 = NAKA_NONE,
 
-    .pad_2 = { 0 },
+    .Mixer_AcTitleMenu_Selected = { 0 },
 
-    .field_004e = NAKA_NONE,
+    .Mic_AcTitleMenu_Selected = { 0 },
+
+    .Lyrics_AcTitleMenu_2_Selected = { 0 },
+
+    .CDswWindow_Parent = NAKA_NONE,
 
     .field_0050 = NAKA_NONE,
 
-    .field_0052 = NAKA_NONE,
+    .CDswWindow_Child = NAKA_NONE,
 
     .field_0054 = NAKA_NONE,
 
@@ -2815,281 +3149,365 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_4 = { 0 },
 
-    .field_005e = NAKA_NONE,
+    .Lyrics_Parent = NAKA_NONE,
 
     .field_0060 = NAKA_NONE,
 
-    .field_0062 = NAKA_NONE,
+    .Lyrics_Child = NAKA_NONE,
 
     .field_0064 = NAKA_NONE,
 
-    .field_0066 = NAKA_NONE,
+    .DpDoc_Window = NAKA_NONE,
 
     .field_0068 = NAKA_NONE,
 
-    .field_006a = 0x0001,
+    .DOCR1Sw_Onoff = 0x0001,
 
-    .pad_5 = { 0 },
+    .DOCR2Sw_Onoff = { 0 },
 
-    .field_0074 = NAKA_NONE,
+    .DOCOrchSw_Onoff = { 0 },
+
+    .MIXER_VwMenuBox_2_Selected = { 0 },
+
+    .MIC_VwMenuBox_2_Selected = { 0 },
+
+    .DpPd_Window = NAKA_NONE,
 
     .field_0076 = NAKA_NONE,
 
-    .field_0078 = 0x0001,
+    .PDR1Sw_Onoff = 0x0001,
 
-    .pad_6 = { 0 },
+    .PDOrchSw_Onoff = { 0 },
 
-    .field_0080 = NAKA_NONE,
+    .MIXER_VwMenuBox_3_Selected = { 0 },
+
+    .MIC_VwMenuBox_3_Selected = { 0 },
+
+    .DpSmfLyr_Window = NAKA_NONE,
 
     .field_0082 = NAKA_NONE,
 
-    .pad_7 = { 0 },
+    .MIC_VwMenuBox_4_Selected = { 0 },
 
-    .field_0086 = NAKA_NONE,
+    .DpMdlySmf_Window = NAKA_NONE,
 
     .field_0088 = NAKA_NONE,
 
-    .pad_8 = { 0 },
+    .Lyrics_AcTitleMenu_3_Selected = { 0 },
 
-    .field_008c = 0x0001,
+    .DpMdlySmf_AcRamEditBox_Selected = 0x0001,
 
     .DpMdlySmf_AcRamEditBox_Value = { 0 },
 
-    .field_0098 = NAKA_NONE,
+    .MIXER_VwMenuBox_4_Selected = { 0 },
+
+    .MIC_VwMenuBox_5_Selected = { 0 },
+
+    .SmfMedley_TtlScreen_2_Window = NAKA_NONE,
 
     .field_009a = NAKA_NONE,
 
-    .field_009c = NAKA_NONE,
+    .DpMdlyDoc_Window = NAKA_NONE,
 
     .field_009e = NAKA_NONE,
 
     .field_00a0 = 0x0001,
 
-    .pad_10 = { 0 },
+    .DOCMedR2Sw_Onoff = { 0 },
 
-    .field_00aa = NAKA_NONE,
+    .DOCMedOrchSw_Onoff = { 0 },
+
+    .MIXER_VwMenuBox_5_Selected = { 0 },
+
+    .MIC_VwMenuBox_6_Selected = { 0 },
+
+    .DpMdlyPd_Window = NAKA_NONE,
 
     .field_00ac = NAKA_NONE,
 
     .field_00ae = 0x0001,
 
-    .pad_11 = { 0 },
+    .PDMedOrchSw_Onoff = { 0 },
 
-    .field_00b6 = NAKA_NONE,
+    .MIXER_VwMenuBox_6_Selected = { 0 },
+
+    .MIC_VwMenuBox_7_Selected = { 0 },
+
+    .DpMdlySmfLyr_Window = NAKA_NONE,
 
     .field_00b8 = NAKA_NONE,
 
     .pad_12 = { 0 },
 
-    .field_00bc = NAKA_NONE,
+    .DkMdlyPly_Window = NAKA_NONE,
 
     .field_00be = NAKA_NONE,
 
     .pad_13 = { 0 },
 
-    .field_00c2 = NAKA_NONE,
+    .NakaWidget_SongMdlyOrchSel_Parent = NAKA_NONE,
 
     .field_00c4 = NAKA_NONE,
 
-    .field_00c6 = NAKA_NONE,
+    .NakaWidget_SongMdlyOrchSel_Child = NAKA_NONE,
 
     .field_00c8 = NAKA_NONE,
 
-    .field_00ca = 0x0001,
+    .NakaWidget_SongMdlySongSel1_Onoff = 0x0001,
 
-    .pad_14 = { 0 },
+    .NakaWidget_SongMdlySongSel1_Part = { 0 },
 
-    .field_00d2 = 0x0001,
+    .NakaWidget_SongMdlySongSel1_Recplay = { 0 },
 
-    .pad_15 = { 0 },
+    .NakaWidget_SongMdlySongSel2_Onoff = { 0 },
 
-    .field_00d6 = 0x0001,
+    .NakaWidget_SongMdlySongSel2_Part = 0x0001,
 
-    .field_00d8 = 0x0002,
+    .NakaWidget_SongMdlySongSel2_Recplay = { 0 },
 
-    .pad_16 = { 0 },
+    .NakaWidget_SongMdlySongSel3_Onoff = 0x0001,
 
-    .field_00de = 0x0003,
+    .NakaWidget_SongMdlySongSel3_Part = 0x0002,
 
-    .pad_17 = { 0 },
+    .NakaWidget_SongMdlySongSel3_Recplay = { 0 },
 
-    .field_00e2 = 0x0001,
+    .NakaWidget_SongMdlySongSel4_Onoff = { 0 },
 
-    .field_00e4 = 0x0004,
+    .NakaWidget_SongMdlySongSel4_Part = 0x0003,
 
-    .pad_18 = { 0 },
+    .NakaWidget_SongMdlySongSel4_Recplay = { 0 },
 
-    .field_00ea = 0x0005,
+    .NakaWidget_SongMdlySongSel5_Onoff = 0x0001,
 
-    .pad_19 = { 0 },
+    .NakaWidget_SongMdlySongSel5_Part = 0x0004,
 
-    .field_00ee = 0x0001,
+    .NakaWidget_SongMdlySongSel5_Recplay = { 0 },
 
-    .field_00f0 = 0x0006,
+    .NakaWidget_SongMdlySongSel6_Onoff = { 0 },
 
-    .pad_20 = { 0 },
+    .NakaWidget_SongMdlySongSel6_Part = 0x0005,
 
-    .field_00f6 = 0x0007,
+    .NakaWidget_SongMdlySongSel6_Recplay = { 0 },
 
-    .pad_21 = { 0 },
+    .NakaWidget_SongMdlySongSel7_Onoff = 0x0001,
 
-    .field_00fc = 0x0008,
+    .NakaWidget_SongMdlySongSel7_Part = 0x0006,
 
-    .pad_22 = { 0 },
+    .NakaWidget_SongMdlySongSel7_Recplay = { 0 },
 
-    .field_0100 = 0x0001,
+    .NakaWidget_SongMdlySongSel8_Onoff = { 0 },
 
-    .field_0102 = 0x0009,
+    .NakaWidget_SongMdlySongSel8_Part = 0x0007,
 
-    .pad_23 = { 0 },
+    .NakaWidget_SongMdlySongSel8_Recplay = { 0 },
 
-    .field_0108 = 0x000A,
+    .NakaWidget_SongMdlySongSel9_Onoff = { 0 },
 
-    .pad_24 = { 0 },
+    .NakaWidget_SongMdlySongSel9_Part = 0x0008,
 
-    .field_010c = 0x0001,
+    .NakaWidget_SongMdlySongSel9_Recplay = { 0 },
 
-    .field_010e = 0x000B,
+    .NakaWidget_SongMdlySongSel10_Onoff = 0x0001,
 
-    .pad_25 = { 0 },
+    .NakaWidget_SongMdlySongSel10_Part = 0x0009,
 
-    .field_0114 = 0x000C,
+    .NakaWidget_SongMdlySongSel10_Recplay = { 0 },
 
-    .pad_26 = { 0 },
+    .NakaWidget_SongMdlySongSel11_Onoff = { 0 },
 
-    .field_0118 = 0x0001,
+    .NakaWidget_SongMdlySongSel11_Part = 0x000A,
 
-    .field_011a = 0x000D,
+    .NakaWidget_SongMdlySongSel11_Recplay = { 0 },
 
-    .pad_27 = { 0 },
+    .NakaWidget_SongMdlySongSel12_Onoff = 0x0001,
 
-    .field_0120 = 0x000E,
+    .NakaWidget_SongMdlySongSel12_Part = 0x000B,
 
-    .pad_28 = { 0 },
+    .NakaWidget_SongMdlySongSel12_Recplay = { 0 },
 
-    .field_0124 = 0x0001,
+    .NakaWidget_SongMdlySongSel13_Onoff = { 0 },
 
-    .field_0126 = 0x000F,
+    .NakaWidget_SongMdlySongSel13_Part = 0x000C,
 
-    .pad_29 = { 0 },
+    .NakaWidget_SongMdlySongSel13_Recplay = { 0 },
 
-    .field_012a = NAKA_NONE,
+    .NakaWidget_SongMdlySongSel14_Onoff = 0x0001,
+
+    .NakaWidget_SongMdlySongSel14_Part = 0x000D,
+
+    .NakaWidget_SongMdlySongSel14_Recplay = { 0 },
+
+    .NakaWidget_SongMdlySongSel15_Onoff = { 0 },
+
+    .NakaWidget_SongMdlySongSel15_Part = 0x000E,
+
+    .NakaWidget_SongMdlySongSel15_Recplay = { 0 },
+
+    .NakaWidget_SongMdlySongSel16_Onoff = 0x0001,
+
+    .NakaWidget_SongMdlySongSel16_Part = 0x000F,
+
+    .NakaWidget_SongMdlySongSel16_Recplay = { 0 },
+
+    .SqMdlyPly_Window = NAKA_NONE,
 
     .field_012c = NAKA_NONE,
 
     .pad_30 = { 0 },
 
-    .field_0130 = NAKA_NONE,
+    .SqTrSel_Window = NAKA_NONE,
 
     .field_0132 = NAKA_NONE,
 
-    .field_0134 = NAKA_NONE,
+    .NakaWidget_StepRecSubPanel_Window = NAKA_NONE,
 
     .field_0136 = NAKA_NONE,
 
-    .field_0138 = NAKA_NONE,
+    .SqTrAs_Window = NAKA_NONE,
 
     .field_013a = NAKA_NONE,
 
-    .pad_31 = { 0 },
+    .Preset_AcTitleMenu_Selected = { 0 },
 
-    .field_013e = 0x0009,
+    .TrAsGrid_Selrow = 0x0009,
 
-    .field_0140 = 0x0001,
+    .TrAsGrid_Selcol = 0x0001,
 
-    .field_0142 = 0x3768,
+    .TrAsGrid_Pcol = 0x3768,
 
     .field_0144 = 0x00CD,
 
-    .field_0146 = 0x3778,
+    .TrAsGrid_Prow = 0x3778,
 
     .field_0148 = 0x00CD,
 
-    .field_014a = 0x3794,
+    .TrAsGrid_Crow = 0x3794,
 
     .field_014c = 0x00CD,
 
-    .field_014e = NAKA_NONE,
+    .SqTrAsSure_Window = NAKA_NONE,
 
     .field_0150 = NAKA_NONE,
 
-    .field_0152 = NAKA_NONE,
+    .SqTrAsPs_Window = NAKA_NONE,
 
     .field_0154 = NAKA_NONE,
 
-    .field_0156 = 0x0001,
+    .SqTrAsPs_AcRamEditBox_Selected = 0x0001,
 
     .SqTrAsPs_Song_Value = { 0 },
 
-    .field_015c = 0x0001,
+    .TrAsPsIniSel_Selected = 0x0001,
 
-    .pad_33 = { 0 },
+    .TrAsPsTechSel_Selected = { 0 },
 
-    .field_0162 = NAKA_NONE,
+    .TrAsPsGmSel_Selected = { 0 },
+
+    .SqTrAsPsSure1_Window = NAKA_NONE,
 
     .field_0164 = NAKA_NONE,
 
-    .field_0166 = NAKA_NONE,
+    .SqTrAsPsSure2_Window = NAKA_NONE,
 
     .field_0168 = NAKA_NONE,
 
-    .field_016a = NAKA_NONE,
+    .SqSngSel_Window = NAKA_NONE,
 
     .field_016c = NAKA_NONE,
 
-    .pad_34 = { 0 },
+    .Naming_AcTitleMenu_Se_016E_Value = { 0 },
 
-    .field_0170 = 0x0009,
+    .SqSngSel_PsSongSelBox_Sel_num = 0x0009,
 
-    .field_0172 = 0x0009,
+    .SqSngSel_PsSongSelBox_2_Sel_num = 0x0009,
 
-    .field_0174 = NAKA_NONE,
+    .SqNameing_Window = NAKA_NONE,
 
     .field_0176 = NAKA_NONE,
 
-    .field_0178 = NAKA_NONE,
+    .AfterTouchSet_Window = NAKA_NONE,
 
     .field_017a = NAKA_NONE,
 
-    .field_017c = 0x0001,
+    .AfterTouchSet_AcBitEditBox_Selected = 0x0001,
 
     .AfterTouchSet_AfterTouchRecord_Value = { 0 },
 
-    .field_0180 = NAKA_NONE,
+    .StepPartBal_Window = NAKA_NONE,
 
     .field_0182 = NAKA_NONE,
 
-    .field_0184 = NAKA_NONE,
+    .DemoMenu_Window = NAKA_NONE,
 
     .field_0186 = NAKA_NONE,
 
-    .pad_36 = { 0 },
+    .Performances_AcTitleMenu_Selected = { 0 },
 
-    .field_018c = NAKA_NONE,
+    .FeaturePresentation_AcTitleMenu_Selected = { 0 },
+
+    .DemoStyle_Window = NAKA_NONE,
 
     .field_018e = NAKA_NONE,
 
-    .pad_37 = { 0 },
+    .DemoSong0_Selected = { 0 },
 
-    .field_019c = 0x0001,
+    .DemoSong1_Selected = { 0 },
 
-    .pad_38 = { 0 },
+    .DemoSong2_Selected = { 0 },
 
-    .field_01a2 = NAKA_NONE,
+    .DemoSong3_Selected = { 0 },
+
+    .DemoSong4_Selected = { 0 },
+
+    .DemoSong5_Selected = { 0 },
+
+    .DemoStyle_PsWideToggle_Onoff = 0x0001,
+
+    .DemoStyle_PsWideToggle_2_Onoff = { 0 },
+
+    .DemoStyle_PsWideToggle_3_Onoff = { 0 },
+
+    .DemoSound_Window = NAKA_NONE,
 
     .field_01a4 = NAKA_NONE,
 
-    .pad_39 = { 0 },
+    .DemoSong6_Selected = { 0 },
 
-    .field_01b4 = 0x0001,
+    .DemoSong7_Selected = { 0 },
 
-    .pad_40 = { 0 },
+    .DemoSong8_Selected = { 0 },
 
-    .field_01b8 = NAKA_NONE,
+    .DemoSong9_Selected = { 0 },
+
+    .DemoSong10_Selected = { 0 },
+
+    .DemoSong11_Selected = { 0 },
+
+    .DemoSound_PsWideToggle_Onoff = { 0 },
+
+    .DemoSound_PsWideToggle_2_Onoff = 0x0001,
+
+    .DemoSound_PsWideToggle_3_Onoff = { 0 },
+
+    .DemoRhy_Window = NAKA_NONE,
 
     .field_01ba = NAKA_NONE,
 
-    .pad_41 = { 0 },
+    .DemoSong12_Selected = { 0 },
+
+    .DemoSong13_Selected = { 0 },
+
+    .DemoSong14_Selected = { 0 },
+
+    .DemoSong15_Selected = { 0 },
+
+    .DemoSong16_Selected = { 0 },
+
+    .DemoSong17_Selected = { 0 },
+
+    .DemoRhy_PsWideToggle_Onoff = { 0 },
+
+    .DemoRhy_PsWideToggle_2_Onoff = { 0 },
 
     .field_01cc = 0x0001,
 
@@ -3165,577 +3583,669 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .Naka_ReverbScreen_EmptyStr_ptr = NAKA_ADDR(Naka_ReverbScreen_EmptyStr),
 
-    .field_0244 = NAKA_NONE,
+    .Reverb_TtlScreen_Window = NAKA_NONE,
 
     .field_0246 = NAKA_NONE,
 
-    .field_0248 = NAKA_NONE,
+    .DspEffect_TtlScreen_Window = NAKA_NONE,
 
     .field_024a = NAKA_NONE,
 
-    .field_024c = NAKA_NONE,
+    .Equalizer_TtlScreen_Window = NAKA_NONE,
 
     .field_024e = NAKA_NONE,
 
-    .pad_45 = { 0 },
+    .EqOnOff_Onoff = { 0 },
 
-    .field_0252 = NAKA_NONE,
+    .AcousticIllusion_TtlScreen_Window = NAKA_NONE,
 
     .field_0254 = NAKA_NONE,
 
-    .field_0256 = NAKA_NONE,
+    .SequencerMenu_TtlScreen_Window = NAKA_NONE,
 
     .field_0258 = NAKA_NONE,
 
-    .pad_46 = { 0 },
+    .Create_AcTitleMenu_Selected = { 0 },
 
-    .field_0260 = NAKA_NONE,
+    .EDIT_AcModeMenu_Selected = { 0 },
+
+    .PanelWrite_AcTitleMenu_Selected = { 0 },
+
+    .SequencerPlay_TtlScreen_Window = NAKA_NONE,
 
     .field_0262 = NAKA_NONE,
 
-    .pad_47 = { 0 },
+    .CycPlySw_Onoff = { 0 },
 
-    .field_0266 = NAKA_NONE,
+    .SngSelWin1_Parent = NAKA_NONE,
 
     .field_0268 = NAKA_NONE,
 
-    .field_026a = NAKA_NONE,
+    .SngSelWin1_Child = NAKA_NONE,
 
     .field_026c = NAKA_NONE,
 
-    .pad_48 = { 0 },
+    .Medley_AcTitleMenu_Selected = { 0 },
 
-    .field_0270 = NAKA_NONE,
+    .SngSelWin2_Parent = NAKA_NONE,
 
     .field_0272 = NAKA_NONE,
 
-    .field_0274 = NAKA_NONE,
+    .SngSelWin2_Child = NAKA_NONE,
 
     .field_0276 = NAKA_NONE,
 
-    .field_0278 = NAKA_NONE,
+    .CyclePlay_TtlScreen_Window = NAKA_NONE,
 
     .field_027a = NAKA_NONE,
 
-    .pad_49 = { 0 },
+    .CyclePlay_PsEditBox_Selected = { 0 },
 
-    .field_027e = 0x0001,
+    .CyclePlay_PsEditBox_2_Selected = 0x0001,
 
-    .pad_50 = { 0 },
+    .CyclePlay_PsEditBox_3_Selected = { 0 },
 
-    .field_0282 = NAKA_NONE,
+    .EasyRecord_TtlScreen_Window = NAKA_NONE,
 
     .field_0284 = NAKA_NONE,
 
-    .pad_51 = { 0 },
+    .Naming_AcTitleMenu_Se_0286_Value = { 0 },
 
-    .field_028c = 0x0001,
+    .EasyRecord_PsTrackSwitch_Onoff = { 0 },
 
-    .pad_52 = { 0 },
+    .EasyRecord_PsTrackSwitch_Part = { 0 },
 
-    .field_0290 = 0x0002,
+    .EasyRecord_PsTrackSwitch_Recplay = 0x0001,
 
-    .field_0292 = 0x0001,
+    .EasyRecord_PsTrackSwitch_2_Onoff = { 0 },
 
-    .pad_53 = { 0 },
+    .EasyRecord_PsTrackSwitch_2_Part = 0x0002,
 
-    .field_0296 = 0x0001,
+    .EasyRecord_PsTrackSwitch_2_Recplay = 0x0001,
 
-    .field_0298 = 0x0001,
+    .EasyRecord_PsTrackSwitch_3_Onoff = { 0 },
 
-    .pad_54 = { 0 },
+    .EasyRecord_PsTrackSwitch_3_Part = 0x0001,
 
-    .field_029c = 0x000E,
+    .EasyRecord_PsTrackSwitch_3_Recplay = 0x0001,
 
-    .field_029e = 0x0001,
+    .EasyRecord_PsTrackSwitch_4_Onoff = { 0 },
 
-    .pad_55 = { 0 },
+    .EasyRecord_PsTrackSwitch_4_Part = 0x000E,
 
-    .field_02a2 = 0x000F,
+    .EasyRecord_PsTrackSwitch_4_Recplay = 0x0001,
 
-    .field_02a4 = 0x0001,
+    .EasyRecord_PsTrackSwitch_5_Onoff = { 0 },
 
-    .field_02a6 = NAKA_NONE,
+    .EasyRecord_PsTrackSwitch_5_Part = 0x000F,
+
+    .EasyRecord_PsTrackSwitch_5_Recplay = 0x0001,
+
+    .Create_TtlScreen_Window = NAKA_NONE,
 
     .field_02a8 = NAKA_NONE,
 
-    .pad_56 = { 0 },
+    .TrackAssign_AcTitleMenu_Selected = { 0 },
 
-    .field_02bc = NAKA_NONE,
+    .PanelWrite_AcTitleMenu_2_Selected = { 0 },
+
+    .SongSelectNaming_AcTitleMenu_Selected = { 0 },
+
+    .SongClear_AcTitleMenu_Selected = { 0 },
+
+    .SongTrackCopy_AcTitleMenu_Selected = { 0 },
+
+    .AfterTouchSet_AcTitleMenu_Selected = { 0 },
+
+    .RealtimeRecord_AcModeMenu_Selected = { 0 },
+
+    .StepRecord_AcModeMenu_Selected = { 0 },
+
+    .PunchRecord_AcTitleMenu_Selected = { 0 },
+
+    .RealtimeRecord_TtlScreen_Window = NAKA_NONE,
 
     .field_02be = NAKA_NONE,
 
-    .pad_57 = { 0 },
+    .CycRecSw_Onoff = { 0 },
 
-    .field_02c4 = NAKA_NONE,
+    .MetRecSw_Onoff = { 0 },
+
+    .CycClrSw_Parent = NAKA_NONE,
 
     .field_02c6 = NAKA_NONE,
 
-    .field_02c8 = NAKA_NONE,
+    .CycClrSw_Child = NAKA_NONE,
 
     .field_02ca = NAKA_NONE,
 
-    .field_02cc = NAKA_NONE,
+    .RealtimeRecord_TtlScreen_2_Window = NAKA_NONE,
 
     .field_02ce = NAKA_NONE,
 
-    .pad_58 = { 0 },
+    .RealtimeRecord_PsEditBox_Selected = { 0 },
 
-    .field_02d6 = 0x0001,
+    .RealtimeRecord_PsEditBox_2_Selected = { 0 },
 
-    .field_02d8 = NAKA_NONE,
+    .MetCycRecSw_Onoff = { 0 },
+
+    .RealtimeRecord_PsEditBox_3_Selected = 0x0001,
+
+    .PunchRecord_TtlScreen_Window = NAKA_NONE,
 
     .field_02da = NAKA_NONE,
 
-    .pad_59 = { 0 },
+    .MetPunchSw_Onoff = { 0 },
 
-    .field_02e0 = NAKA_NONE,
+    .PunchInOutSw_Onoff = { 0 },
+
+    .AutoPunchRecord_TtlScreen_Window = NAKA_NONE,
 
     .field_02e2 = NAKA_NONE,
 
-    .pad_60 = { 0 },
+    .MetPunchmSw_Onoff = { 0 },
 
-    .field_02e6 = 0x0001,
+    .AutoPunchRecord_PsEditBox_Selected = 0x0001,
 
-    .pad_61 = { 0 },
+    .AutoPunchRecord_PsEditBox_2_Selected = { 0 },
 
-    .field_02ec = NAKA_NONE,
+    .AutoPunchRecord_PsEditBox_3_Selected = { 0 },
+
+    .AutoPunchRecord_TtlScreen_2_Window = NAKA_NONE,
 
     .field_02ee = NAKA_NONE,
 
-    .field_02f0 = NAKA_NONE,
+    .PanelWrite_TtlScreen_Window = NAKA_NONE,
 
     .field_02f2 = NAKA_NONE,
 
-    .field_02f4 = NAKA_NONE,
+    .SongClear_TtlScreen_Window = NAKA_NONE,
 
     .field_02f6 = NAKA_NONE,
 
-    .field_02f8 = NAKA_NONE,
+    .SoclSureDisp_Parent = NAKA_NONE,
 
     .field_02fa = NAKA_NONE,
 
-    .field_02fc = NAKA_NONE,
+    .SoclSureDisp_Child = NAKA_NONE,
 
     .field_02fe = NAKA_NONE,
 
-    .pad_62 = { 0 },
+    .NO_AcScreenMenu_Selected = { 0 },
 
-    .field_0302 = NAKA_NONE,
+    .SongTrackCopy_TtlScreen_Window = NAKA_NONE,
 
     .field_0304 = NAKA_NONE,
 
-    .field_0306 = NAKA_NONE,
+    .SngCpSureDisp_Parent = NAKA_NONE,
 
     .field_0308 = NAKA_NONE,
 
-    .field_030a = NAKA_NONE,
+    .SngCpSureDisp_Child = NAKA_NONE,
 
     .field_030c = NAKA_NONE,
 
-    .pad_63 = { 0 },
+    .NO_AcScreenMenu_2_Selected = { 0 },
 
-    .field_0310 = NAKA_NONE,
+    .Edit_TtlScreen_Window = NAKA_NONE,
 
     .field_0312 = NAKA_NONE,
 
-    .field_0314 = 0x0001,
+    .EdMenuPage_Page = 0x0001,
 
-    .field_0316 = NAKA_NONE,
+    .SQEMENU_1_Parent = NAKA_NONE,
 
     .field_0318 = NAKA_NONE,
 
-    .field_031a = NAKA_NONE,
+    .SQEMENU_1_Child = NAKA_NONE,
 
     .field_031c = NAKA_NONE,
 
-    .pad_64 = { 0 },
+    .NoteEdit_AcTitleMenu_Selected = { 0 },
 
-    .field_0332 = NAKA_NONE,
+    .DrumEdit_AcTitleMenu_Selected = { 0 },
+
+    .SongTrackCopy_AcTitleMenu_2_Selected = { 0 },
+
+    .TrackClear_AcTitleMenu_Selected = { 0 },
+
+    .TrackMerge_AcTitleMenu_Selected = { 0 },
+
+    .Quantize_AcTitleMenu_Selected = { 0 },
+
+    .Transpose_AcTitleMenu_Selected = { 0 },
+
+    .VelocityChange_AcTitleMenu_Selected = { 0 },
+
+    .NoteChange_AcTitleMenu_Selected = { 0 },
+
+    .AdvanceDelay_AcTitleMenu_Selected = { 0 },
+
+    .SQEMENU_2_Parent = NAKA_NONE,
 
     .field_0334 = NAKA_NONE,
 
-    .field_0336 = NAKA_NONE,
+    .SQEMENU_2_Child = NAKA_NONE,
 
     .field_0338 = NAKA_NONE,
 
-    .pad_65 = { 0 },
+    .Copy_AcTitleMenu_Selected = { 0 },
 
-    .field_0342 = NAKA_NONE,
+    .Erase_AcTitleMenu_Selected = { 0 },
+
+    .Delete_AcTitleMenu_Selected = { 0 },
+
+    .Insert_AcTitleMenu_Selected = { 0 },
+
+    .NoteEdit_TtlScreen_Window = NAKA_NONE,
 
     .field_0344 = NAKA_NONE,
 
-    .field_0346 = NAKA_NONE,
+    .NoteEdit_TtlScreen_2_Window = NAKA_NONE,
 
     .field_0348 = NAKA_NONE,
 
-    .field_034a = NAKA_NONE,
+    .CyclePlay_TtlScreen_2_Window = NAKA_NONE,
 
     .field_034c = NAKA_NONE,
 
-    .field_034e = 0x0001,
+    .CyclePlay_PsEditBox_4_Selected = 0x0001,
 
-    .pad_66 = { 0 },
+    .CyclePlay_PsEditBox_5_Selected = { 0 },
 
-    .field_0354 = NAKA_NONE,
+    .CyclePlay_PsEditBox_6_Selected = { 0 },
+
+    .DrumEdit_TtlScreen_Window = NAKA_NONE,
 
     .field_0356 = NAKA_NONE,
 
-    .field_0358 = NAKA_NONE,
+    .DrumEdit_TtlScreen_2_Window = NAKA_NONE,
 
     .field_035a = NAKA_NONE,
 
-    .field_035c = NAKA_NONE,
+    .CyclePlay_TtlScreen_3_Window = NAKA_NONE,
 
     .field_035e = NAKA_NONE,
 
-    .field_0360 = 0x0001,
+    .CyclePlay_PsEditBox_7_Selected = 0x0001,
 
-    .pad_67 = { 0 },
+    .CyclePlay_PsEditBox_8_Selected = { 0 },
 
-    .field_0366 = NAKA_NONE,
+    .CyclePlay_PsEditBox_9_Selected = { 0 },
+
+    .TrackClear_TtlScreen_Window = NAKA_NONE,
 
     .field_0368 = NAKA_NONE,
 
-    .field_036a = NAKA_NONE,
+    .TrkClrSureDisp_Parent = NAKA_NONE,
 
     .field_036c = NAKA_NONE,
 
-    .field_036e = NAKA_NONE,
+    .TrkClrSureDisp_Child = NAKA_NONE,
 
     .field_0370 = NAKA_NONE,
 
-    .pad_68 = { 0 },
+    .NO_AcScreenMenu_3_Selected = { 0 },
 
-    .field_0374 = NAKA_NONE,
+    .TrackMerge_TtlScreen_Window = NAKA_NONE,
 
     .field_0376 = NAKA_NONE,
 
-    .pad_69 = { 0 },
+    .TrackMerge_PsEditBox_Selected = { 0 },
 
-    .field_037a = 0x0001,
+    .TrackMerge_PsEditBox_2_Selected = 0x0001,
 
-    .pad_70 = { 0 },
+    .TrackMerge_PsEditBox_3_Selected = { 0 },
 
-    .field_037e = NAKA_NONE,
+    .TrkMrgSureDisp_Parent = NAKA_NONE,
 
     .field_0380 = NAKA_NONE,
 
-    .field_0382 = NAKA_NONE,
+    .TrkMrgSureDisp_Child = NAKA_NONE,
 
     .field_0384 = NAKA_NONE,
 
-    .pad_71 = { 0 },
+    .NO_AcScreenMenu_4_Selected = { 0 },
 
-    .field_0388 = NAKA_NONE,
+    .Quantize_TtlScreen_Window = NAKA_NONE,
 
     .field_038a = NAKA_NONE,
 
-    .pad_72 = { 0 },
+    .Quantize_PsEditBox_Selected = { 0 },
 
-    .field_0390 = 0x0001,
+    .Quantize_PsEditBox_2_Selected = { 0 },
 
-    .pad_73 = { 0 },
+    .Quantize_PsEditBox_3_Selected = 0x0001,
 
-    .field_0398 = NAKA_NONE,
+    .Quantize_PsEditBox_4_Selected = { 0 },
+
+    .Quantize_PsEditBox_5_Selected = { 0 },
+
+    .Quantize_PsEditBox_6_Selected = { 0 },
+
+    .QtzSureDisp_Parent = NAKA_NONE,
 
     .field_039a = NAKA_NONE,
 
-    .field_039c = NAKA_NONE,
+    .QtzSureDisp_Child = NAKA_NONE,
 
     .field_039e = NAKA_NONE,
 
-    .pad_74 = { 0 },
+    .NO_AcScreenMenu_5_Selected = { 0 },
 
-    .field_03a2 = NAKA_NONE,
+    .Transpose_TtlScreen_Window = NAKA_NONE,
 
     .field_03a4 = NAKA_NONE,
 
-    .pad_75 = { 0 },
+    .Transpose_PsEditBox_Selected = { 0 },
 
-    .field_03a8 = 0x0001,
+    .Transpose_PsEditBox_2_Selected = 0x0001,
 
-    .pad_76 = { 0 },
+    .Transpose_PsEditBox_3_Selected = { 0 },
 
-    .field_03ae = NAKA_NONE,
+    .Transpose_PsEditBox_4_Selected = { 0 },
+
+    .TrnsSureDisp_Parent = NAKA_NONE,
 
     .field_03b0 = NAKA_NONE,
 
-    .field_03b2 = NAKA_NONE,
+    .TrnsSureDisp_Child = NAKA_NONE,
 
     .field_03b4 = NAKA_NONE,
 
-    .pad_77 = { 0 },
+    .NO_AcScreenMenu_6_Selected = { 0 },
 
-    .field_03b8 = NAKA_NONE,
+    .VelocityChange_TtlScreen_Window = NAKA_NONE,
 
     .field_03ba = NAKA_NONE,
 
-    .pad_78 = { 0 },
+    .VelocityChange_PsEditBox_Selected = { 0 },
 
-    .field_03be = 0x0001,
+    .VelocityChange_PsEditBox_2_Selected = 0x0001,
 
-    .pad_79 = { 0 },
+    .VelocityChange_PsEditBox_3_Selected = { 0 },
 
-    .field_03c4 = NAKA_NONE,
+    .VelocityChange_PsEditBox_4_Selected = { 0 },
+
+    .VeloSureDisp_Parent = NAKA_NONE,
 
     .field_03c6 = NAKA_NONE,
 
-    .field_03c8 = NAKA_NONE,
+    .VeloSureDisp_Child = NAKA_NONE,
 
     .field_03ca = NAKA_NONE,
 
-    .pad_80 = { 0 },
+    .NO_AcScreenMenu_7_Selected = { 0 },
 
-    .field_03ce = NAKA_NONE,
+    .NoteChange_TtlScreen_Window = NAKA_NONE,
 
     .field_03d0 = NAKA_NONE,
 
-    .pad_81 = { 0 },
+    .NoteChange_PsEditBox_Selected = { 0 },
 
-    .field_03d4 = 0x0001,
+    .NoteChange_PsEditBox_2_Selected = 0x0001,
 
-    .pad_82 = { 0 },
+    .NoteChange_PsEditBox_3_Selected = { 0 },
 
-    .field_03dc = NAKA_NONE,
+    .NoteChange_PsEditBox_4_Selected = { 0 },
+
+    .NoteChange_PsEditBox_5_Selected = { 0 },
+
+    .NoteSureDisp_Parent = NAKA_NONE,
 
     .field_03de = NAKA_NONE,
 
-    .field_03e0 = NAKA_NONE,
+    .NoteSureDisp_Child = NAKA_NONE,
 
     .field_03e2 = NAKA_NONE,
 
-    .pad_83 = { 0 },
+    .NO_AcScreenMenu_8_Selected = { 0 },
 
-    .field_03e6 = NAKA_NONE,
+    .AdvanceDelay_TtlScreen_Window = NAKA_NONE,
 
     .field_03e8 = NAKA_NONE,
 
-    .pad_84 = { 0 },
+    .AdvanceDelay_PsEditBox_Selected = { 0 },
 
-    .field_03ee = 0x0001,
+    .AdvanceDelay_PsEditBox_2_Selected = { 0 },
 
-    .pad_85 = { 0 },
+    .AdvanceDelay_PsEditBox_3_Selected = 0x0001,
 
-    .field_03f2 = NAKA_NONE,
+    .AdvanceDelay_PsEditBox_4_Selected = { 0 },
+
+    .AdvSureDisp_Parent = NAKA_NONE,
 
     .field_03f4 = NAKA_NONE,
 
-    .field_03f6 = NAKA_NONE,
+    .AdvSureDisp_Child = NAKA_NONE,
 
     .field_03f8 = NAKA_NONE,
 
-    .pad_86 = { 0 },
+    .NO_AcScreenMenu_9_Selected = { 0 },
 
-    .field_03fc = NAKA_NONE,
+    .MeasureErase_TtlScreen_Window = NAKA_NONE,
 
     .field_03fe = NAKA_NONE,
 
-    .field_0400 = 0x0001,
+    .MeasureErase_PsEditBox_Selected = 0x0001,
 
-    .pad_87 = { 0 },
+    .MeasureErase_PsEditBox_2_Selected = { 0 },
 
-    .field_0408 = NAKA_NONE,
+    .MeasureErase_PsEditBox_3_Selected = { 0 },
+
+    .MeasureErase_PsEditBox_4_Selected = { 0 },
+
+    .MersSureDisp_Parent = NAKA_NONE,
 
     .field_040a = NAKA_NONE,
 
-    .field_040c = NAKA_NONE,
+    .MersSureDisp_Child = NAKA_NONE,
 
     .field_040e = NAKA_NONE,
 
-    .pad_88 = { 0 },
+    .NO_AcScreenMenu_10_Selected = { 0 },
 
-    .field_0412 = NAKA_NONE,
+    .MeasureCopy_TtlScreen_Window = NAKA_NONE,
 
     .field_0414 = NAKA_NONE,
 
-    .field_0416 = NAKA_NONE,
+    .McpSureDisp_Parent = NAKA_NONE,
 
     .field_0418 = NAKA_NONE,
 
-    .field_041a = NAKA_NONE,
+    .McpSureDisp_Child = NAKA_NONE,
 
     .field_041c = NAKA_NONE,
 
-    .pad_89 = { 0 },
+    .NO_AcScreenMenu_11_Selected = { 0 },
 
-    .field_0420 = NAKA_NONE,
+    .MeasureDelete_TtlScreen_Window = NAKA_NONE,
 
     .field_0422 = NAKA_NONE,
 
-    .pad_90 = { 0 },
+    .MeasureDelete_PsEditBox_Selected = { 0 },
 
-    .field_0428 = 0x0001,
+    .MeasureDelete_PsEditBox_2_Selected = { 0 },
 
-    .field_042a = NAKA_NONE,
+    .MeasureDelete_PsEditBox_3_Selected = 0x0001,
+
+    .MdelSureDisp_Parent = NAKA_NONE,
 
     .field_042c = NAKA_NONE,
 
-    .field_042e = NAKA_NONE,
+    .MdelSureDisp_Child = NAKA_NONE,
 
     .field_0430 = NAKA_NONE,
 
-    .pad_91 = { 0 },
+    .NO_AcScreenMenu_12_Selected = { 0 },
 
-    .field_0434 = NAKA_NONE,
+    .MeasureInsert_TtlScreen_Window = NAKA_NONE,
 
     .field_0436 = NAKA_NONE,
 
-    .field_0438 = NAKA_NONE,
+    .MinsSureDisp_Parent = NAKA_NONE,
 
     .field_043a = NAKA_NONE,
 
-    .field_043c = NAKA_NONE,
+    .MinsSureDisp_Child = NAKA_NONE,
 
     .field_043e = NAKA_NONE,
 
-    .pad_92 = { 0 },
+    .NO_AcScreenMenu_13_Selected = { 0 },
 
-    .field_0442 = NAKA_NONE,
+    .MetronomeBalance_TtlScreen_Window = NAKA_NONE,
 
     .field_0444 = NAKA_NONE,
 
-    .field_0446 = NAKA_NONE,
+    .EnterTainerScr_Window = NAKA_NONE,
 
     .field_0448 = NAKA_NONE,
 
-    .field_044a = 0x0008,
+    .EnterTainerScr_AcEntertainerGridBox_Selrow = 0x0008,
 
-    .field_044c = 0x0001,
+    .EnterTainerScr_AcEntertainerGridBox_Selcol = 0x0001,
 
-    .field_044e = 0x37B4,
+    .EnterTainerScr_AcEntertainerGridBox_Pcol = 0x37B4,
 
     .field_0450 = 0x00D2,
 
-    .field_0452 = 0x37C4,
+    .EnterTainerScr_AcEntertainerGridBox_Prow = 0x37C4,
 
     .field_0454 = 0x00D2,
 
-    .field_0456 = 0x37DC,
+    .EnterTainerScr_AcEntertainerGridBox_Crow = 0x37DC,
 
     .field_0458 = 0x00D2,
 
     .pad_93 = { 0 },
 
-    .field_0464 = NAKA_NONE,
+    .EnterTainerScr_AcFuncToggle_Onoff = { 0 },
+
+    .HelpFunction_TtlScreen_Window = NAKA_NONE,
 
     .field_0466 = NAKA_NONE,
 
-    .field_0468 = NAKA_NONE,
+    .HelpNotXWin_Parent = NAKA_NONE,
 
     .field_046a = NAKA_NONE,
 
-    .field_046c = NAKA_NONE,
+    .HelpNotXWin_Child = NAKA_NONE,
 
     .field_046e = NAKA_NONE,
 
-    .field_0470 = 0x0001,
+    .HelpNotXWin_AcIndexWideToggle_Onoff = 0x0001,
 
-    .pad_94 = { 0 },
+    .HelpNotXWin_AcIndexWideToggle_2_Onoff = { 0 },
 
-    .field_0478 = NAKA_NONE,
+    .HelpNotXWin_AcIndexWideToggle_3_Onoff = { 0 },
+
+    .HelpNotXWin_AcIndexWideToggle_4_Onoff = { 0 },
+
+    .HelpXWin_Parent = NAKA_NONE,
 
     .field_047a = NAKA_NONE,
 
-    .field_047c = NAKA_NONE,
+    .HelpXWin_Child = NAKA_NONE,
 
     .field_047e = NAKA_NONE,
 
-    .field_0480 = 0x0001,
+    .HelpXWin_AcIndexWideToggle_Onoff = 0x0001,
 
-    .pad_95 = { 0 },
+    .HelpXWin_AcIndexWideToggle_2_Onoff = { 0 },
 
-    .field_0486 = NAKA_NONE,
+    .HelpXWin_AcIndexWideToggle_3_Onoff = { 0 },
+
+    .HelpSwTtl1Scr_Window = NAKA_NONE,
 
     .field_0488 = NAKA_NONE,
 
-    .field_048a = NAKA_NONE,
+    .HelpLang2P1_Parent = NAKA_NONE,
 
     .field_048c = NAKA_NONE,
 
-    .field_048e = NAKA_NONE,
+    .HelpLang2P1_Child = NAKA_NONE,
 
     .field_0490 = NAKA_NONE,
 
-    .field_0492 = NAKA_NONE,
+    .HelpLang2P2_Parent = NAKA_NONE,
 
     .field_0494 = NAKA_NONE,
 
-    .field_0496 = NAKA_NONE,
+    .HelpLang2P2_Child = NAKA_NONE,
 
     .field_0498 = NAKA_NONE,
 
-    .field_049a = NAKA_NONE,
+    .HelpSwTtl2Scr_Window = NAKA_NONE,
 
     .field_049c = NAKA_NONE,
 
-    .field_049e = 0x0001,
+    .Help_P2_Page = 0x0001,
 
-    .field_04a0 = NAKA_NONE,
+    .HelpLang3P1_Parent = NAKA_NONE,
 
     .field_04a2 = NAKA_NONE,
 
-    .field_04a4 = NAKA_NONE,
+    .HelpLang3P1_Child = NAKA_NONE,
 
     .field_04a6 = NAKA_NONE,
 
-    .field_04a8 = NAKA_NONE,
+    .HelpLang3P2_Parent = NAKA_NONE,
 
     .field_04aa = NAKA_NONE,
 
-    .field_04ac = NAKA_NONE,
+    .HelpLang3P2_Child = NAKA_NONE,
 
     .field_04ae = NAKA_NONE,
 
-    .field_04b0 = NAKA_NONE,
+    .HelpLang3P3_Parent = NAKA_NONE,
 
     .field_04b2 = NAKA_NONE,
 
-    .field_04b4 = NAKA_NONE,
+    .HelpLang3P3_Child = NAKA_NONE,
 
     .field_04b6 = NAKA_NONE,
 
-    .field_04b8 = NAKA_NONE,
+    .HelpSwTtl3Scr_Window = NAKA_NONE,
 
     .field_04ba = NAKA_NONE,
 
-    .field_04bc = 0x0001,
+    .Help_P3_Page = 0x0001,
 
-    .field_04be = NAKA_NONE,
+    .HelpSwTtl4Scr_Window = NAKA_NONE,
 
     .field_04c0 = NAKA_NONE,
 
-    .field_04c2 = 0x0001,
+    .Help_P4_Page = 0x0001,
 
-    .field_04c4 = NAKA_NONE,
+    .HelpLang4P1_Parent = NAKA_NONE,
 
     .field_04c6 = NAKA_NONE,
 
-    .field_04c8 = NAKA_NONE,
+    .HelpLang4P1_Child = NAKA_NONE,
 
     .field_04ca = NAKA_NONE,
 
-    .field_04cc = NAKA_NONE,
+    .HelpLang4P2_Parent = NAKA_NONE,
 
     .field_04ce = NAKA_NONE,
 
-    .field_04d0 = NAKA_NONE,
+    .HelpLang4P2_Child = NAKA_NONE,
 
     .field_04d2 = NAKA_NONE,
 
-    .field_04d4 = NAKA_NONE,
+    .HelpLang4P3_Parent = NAKA_NONE,
 
     .field_04d6 = NAKA_NONE,
 
-    .field_04d8 = NAKA_NONE,
+    .HelpLang4P3_Child = NAKA_NONE,
 
     .field_04da = NAKA_NONE,
 
-    .field_04dc = NAKA_NONE,
+    .HelpLang4P4_Parent = NAKA_NONE,
 
     .field_04de = NAKA_NONE,
 
-    .field_04e0 = NAKA_NONE,
+    .HelpLang4P4_Child = NAKA_NONE,
 
     .field_04e2 = NAKA_NONE,
 
@@ -3967,453 +4477,541 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_103 = { 0 },
 
-    .field_0728 = NAKA_NONE,
+    .EqualizerPresets_AcTitleMenu_Selected = { 0 },
+
+    .ReverbEqualizerPresets_AcTitleMenu_Selected = { 0 },
+
+    .R12OctaveSetting_Window = NAKA_NONE,
 
     .field_072a = NAKA_NONE,
 
-    .field_072c = 0x0001,
+    .R12OctaveSetting_AcLswEditBox_Selected = 0x0001,
 
     .R12OctaveSetting_Octave_Value = { 0 },
 
-    .field_0730 = NAKA_NONE,
+    .ReverbPreset_Window = NAKA_NONE,
 
     .field_0732 = NAKA_NONE,
 
-    .pad_105 = { 0 },
+    .HugeRoom_AcStrRadioBox_Selected = { 0 },
 
-    .field_0738 = 0x0001,
+    .BoxRoom_AcStrRadioBox_Selected = { 0 },
 
-    .pad_106 = { 0 },
+    .SmallPlate_AcStrRadioBox_Selected = 0x0001,
 
-    .field_0748 = NAKA_NONE,
+    .SportsHall_AcStrRadioBox_Selected = { 0 },
+
+    .BrightHall_AcStrRadioBox_Selected = { 0 },
+
+    .DarkConfines_AcStrRadioBox_Selected = { 0 },
+
+    .Reflection_AcStrRadioBox_Selected = { 0 },
+
+    .HighOpen_AcStrRadioBox_Selected = { 0 },
+
+    .LeftToRight_AcStrRadioBox_Selected = { 0 },
+
+    .Cavernous_AcStrRadioBox_Selected = { 0 },
+
+    .EqualizerPreset_Window = NAKA_NONE,
 
     .field_074a = NAKA_NONE,
 
-    .pad_107 = { 0 },
+    .MakeUp_AcStrRadioBox_Selected = { 0 },
 
-    .field_0756 = 0x0001,
+    .MiddleCut_AcStrRadioBox_Selected = { 0 },
 
-    .pad_108 = { 0 },
+    .TransistorRadio_AcStrRadioBox_Selected = { 0 },
 
-    .field_0760 = NAKA_NONE,
+    .TrebleBoost_AcStrRadioBox_Selected = { 0 },
+
+    .TrebleCut_AcStrRadioBox_Selected = { 0 },
+
+    .NoHiHat_AcStrRadioBox_Selected = 0x0001,
+
+    .TubbyBass_AcStrRadioBox_Selected = { 0 },
+
+    .BassCut_AcStrRadioBox_Selected = { 0 },
+
+    .TooBright_AcStrRadioBox_Selected = { 0 },
+
+    .EqOnOffBox_Onoff = { 0 },
+
+    .ReverbEqualizerPreset_Window = NAKA_NONE,
 
     .field_0762 = NAKA_NONE,
 
-    .pad_109 = { 0 },
+    .WarmWide_AcStrRadioBox_Selected = { 0 },
 
-    .field_0772 = 0x0001,
+    .InYourFace_AcStrRadioBox_Selected = { 0 },
 
-    .pad_110 = { 0 },
+    .OilTank_AcStrRadioBox_Selected = { 0 },
 
-    .field_0778 = NAKA_NONE,
+    .WarmPlate_AcStrRadioBox_Selected = { 0 },
+
+    .LightShade_AcStrRadioBox_Selected = { 0 },
+
+    .WarmFuzzy_AcStrRadioBox_Selected = { 0 },
+
+    .IceBox_AcStrRadioBox_Selected = { 0 },
+
+    .Stadium_AcStrRadioBox_Selected = 0x0001,
+
+    .LiveRoom_AcStrRadioBox_Selected = { 0 },
+
+    .RevEqOnOffBox_Onoff = { 0 },
+
+    .MidiMenu_Window = NAKA_NONE,
 
     .field_077a = NAKA_NONE,
 
-    .field_077c = 0x0001,
+    .MdmenuPage_Page = 0x0001,
 
-    .field_077e = NAKA_NONE,
+    .MidiMenuPage1_Parent = NAKA_NONE,
 
     .field_0780 = NAKA_NONE,
 
-    .field_0782 = NAKA_NONE,
+    .MidiMenuPage1_Child = NAKA_NONE,
 
     .field_0784 = NAKA_NONE,
 
-    .pad_111 = { 0 },
+    .PartSetting_AcTitleMenu_Selected = { 0 },
 
-    .field_079a = NAKA_NONE,
+    .ControlMessages_AcTitleMenu_Selected = { 0 },
+
+    .RealtimeMessages_AcTitleMenu_Selected = { 0 },
+
+    .CommonSetting_AcTitleMenu_Selected = { 0 },
+
+    .InputOutputSetting_AcTitleMenu_Selected = { 0 },
+
+    .MidiPresets_AcTitleMenu_Selected = { 0 },
+
+    .SysexBulkDump_AcTitleMenu_Selected = { 0 },
+
+    .GeneralMidi_AcTitleMenu_Selected = { 0 },
+
+    .ProgChangeMidiOut_AcTitleMenu_Selected = { 0 },
+
+    .PMemOutput_AcTitleMenu_Selected = { 0 },
+
+    .MidiMenuPage2_Parent = NAKA_NONE,
 
     .field_079c = NAKA_NONE,
 
-    .field_079e = NAKA_NONE,
+    .MidiMenuPage2_Child = NAKA_NONE,
 
     .field_07a0 = NAKA_NONE,
 
-    .pad_112 = { 0 },
+    .ComputerConnection_AcTitleMenu_Selected = { 0 },
 
-    .field_07a6 = NAKA_NONE,
+    .MidiSettingsLoadOption_AcTitleMenu_Selected = { 0 },
+
+    .MidiPartSetting_Window = NAKA_NONE,
 
     .field_07a8 = NAKA_NONE,
 
-    .field_07aa = 0x0002,
+    .MdPartSetGridBox_Selrow = 0x0002,
 
-    .field_07ac = 0x0001,
+    .MdPartSetGridBox_Selcol = 0x0001,
 
-    .field_07ae = 0x37E4,
+    .MdPartSetGridBox_Pcol = 0x37E4,
 
     .field_07b0 = 0x00D1,
 
-    .field_07b2 = 0x37F4,
+    .MdPartSetGridBox_Prow = 0x37F4,
 
     .field_07b4 = 0x00D1,
 
-    .field_07b6 = 0x3810,
+    .MdPartSetGridBox_Crow = 0x3810,
 
     .field_07b8 = 0x00D1,
 
-    .pad_113 = { 0 },
+    .MdPartSetGridBox_Page = { 0 },
 
-    .field_07bc = NAKA_NONE,
+    .MidiControlMessage_Window = NAKA_NONE,
 
     .field_07be = NAKA_NONE,
 
-    .field_07c0 = 0x0001,
+    .MidiControlMessage_PsPageBox_Page = 0x0001,
 
-    .field_07c2 = 0x0002,
+    .CtlMsgGridBox_Selrow = 0x0002,
 
-    .field_07c4 = 0x0001,
+    .CtlMsgGridBox_Selcol = 0x0001,
 
-    .field_07c6 = 0x37E4,
+    .CtlMsgGridBox_Pcol = 0x37E4,
 
     .field_07c8 = 0x00D1,
 
-    .field_07ca = 0x37F4,
+    .CtlMsgGridBox_Prow = 0x37F4,
 
     .field_07cc = 0x00D1,
 
-    .field_07ce = 0x3810,
+    .CtlMsgGridBox_Crow = 0x3810,
 
     .field_07d0 = 0x00D1,
 
-    .pad_114 = { 0 },
+    .CtlMsgGridBox_Page = { 0 },
 
-    .field_07d4 = NAKA_NONE,
+    .MidiRealtimeMessage_Window = NAKA_NONE,
 
     .field_07d6 = NAKA_NONE,
 
-    .field_07d8 = 0x0001,
+    .RealtimeCommandBox_Selected = 0x0001,
 
     .RealtimeCommandBox_Value = { 0 },
 
+    .ClockBox_Selected = { 0 },
+
     .ClockBox_Value = { 0 },
 
-    .field_07e0 = NAKA_NONE,
+    .MidiCommonSetting_Window = NAKA_NONE,
 
     .field_07e2 = NAKA_NONE,
 
-    .pad_116 = { 0 },
+    .ComSetGridBox_Selrow = { 0 },
 
-    .field_07e6 = 0x0001,
+    .ComSetGridBox_Selcol = 0x0001,
 
-    .field_07e8 = 0x37E4,
+    .ComSetGridBox_Pcol = 0x37E4,
 
     .field_07ea = 0x00D1,
 
-    .field_07ec = 0x37F4,
+    .ComSetGridBox_Prow = 0x37F4,
 
     .field_07ee = 0x00D1,
 
-    .field_07f0 = 0x3810,
+    .ComSetGridBox_Crow = 0x3810,
 
     .field_07f2 = 0x00D1,
 
-    .field_07f4 = NAKA_NONE,
+    .MidiInOutSetting_Window = NAKA_NONE,
 
     .field_07f6 = NAKA_NONE,
 
-    .pad_117 = { 0 },
+    .InOutGridBox_Selrow = { 0 },
 
-    .field_07fa = 0x0001,
+    .InOutGridBox_Selcol = 0x0001,
 
-    .field_07fc = 0x37E4,
+    .InOutGridBox_Pcol = 0x37E4,
 
     .field_07fe = 0x00D1,
 
-    .field_0800 = 0x37F4,
+    .InOutGridBox_Prow = 0x37F4,
 
     .field_0802 = 0x00D1,
 
-    .field_0804 = 0x3810,
+    .InOutGridBox_Crow = 0x3810,
 
     .field_0806 = 0x00D1,
 
-    .field_0808 = NAKA_NONE,
+    .MidiPresets_Window = NAKA_NONE,
 
     .field_080a = NAKA_NONE,
 
-    .field_080c = 0x0001,
+    .MdPresetPageBox_Page = 0x0001,
 
-    .field_080e = NAKA_NONE,
+    .MidiPresetSlaveWithout_Parent = NAKA_NONE,
 
     .field_0810 = NAKA_NONE,
 
-    .field_0812 = NAKA_NONE,
+    .MidiPresetSlaveWithout_Child = NAKA_NONE,
 
     .field_0814 = NAKA_NONE,
 
-    .pad_118 = { 0 },
+    .MpstSlaveWithoutList_Selected = { 0 },
 
-    .field_0818 = NAKA_NONE,
+    .MidiPresetSlaveWith_Parent = NAKA_NONE,
 
     .field_081a = NAKA_NONE,
 
-    .field_081c = NAKA_NONE,
+    .MidiPresetSlaveWith_Child = NAKA_NONE,
 
     .field_081e = NAKA_NONE,
 
-    .pad_119 = { 0 },
+    .MpstSlaveWithList_Selected = { 0 },
 
-    .field_0822 = NAKA_NONE,
+    .MidiPresetPage3_Parent = NAKA_NONE,
 
     .field_0824 = NAKA_NONE,
 
-    .field_0826 = NAKA_NONE,
+    .MidiPresetPage3_Child = NAKA_NONE,
 
     .field_0828 = NAKA_NONE,
 
-    .pad_120 = { 0 },
+    .MdPresetUserLoadList_Selected = { 0 },
 
-    .field_082c = NAKA_NONE,
+    .MidiPresetPage4_Parent = NAKA_NONE,
 
     .field_082e = NAKA_NONE,
 
-    .field_0830 = NAKA_NONE,
+    .MidiPresetPage4_Child = NAKA_NONE,
 
     .field_0832 = NAKA_NONE,
 
-    .pad_121 = { 0 },
+    .MdPresetUserWriteList_Selected = { 0 },
 
-    .field_0838 = NAKA_NONE,
+    .MdpstSplitBox_Onoff = { 0 },
+
+    .MidiPresetMasterWithout_Parent = NAKA_NONE,
 
     .field_083a = NAKA_NONE,
 
-    .field_083c = NAKA_NONE,
+    .MidiPresetMasterWithout_Child = NAKA_NONE,
 
     .field_083e = NAKA_NONE,
 
-    .pad_122 = { 0 },
+    .MpstMasterWithoutList_Selected = { 0 },
 
-    .field_0842 = NAKA_NONE,
+    .MidiPresetMasterWith_Parent = NAKA_NONE,
 
     .field_0844 = NAKA_NONE,
 
-    .field_0846 = NAKA_NONE,
+    .MidiPresetMasterWith_Child = NAKA_NONE,
 
     .field_0848 = NAKA_NONE,
 
-    .pad_123 = { 0 },
+    .MpstMasterWithList_Selected = { 0 },
 
-    .field_084c = NAKA_NONE,
+    .MidiExclusive_Window = NAKA_NONE,
 
     .field_084e = NAKA_NONE,
 
-    .pad_124 = { 0 },
+    .ExcListBox_Selected = { 0 },
 
-    .field_0852 = NAKA_NONE,
+    .ExcSendWindow_Parent = NAKA_NONE,
 
     .field_0854 = NAKA_NONE,
 
-    .field_0856 = NAKA_NONE,
+    .ExcSendWindow_Child = NAKA_NONE,
 
     .field_0858 = NAKA_NONE,
 
-    .pad_125 = { 0 },
+    .ExcSendPmemBox_Selected = { 0 },
 
     .ExcSendPmemBox_Value = { 0 },
 
+    .ExcSendSmemBox_Selected = { 0 },
+
     .ExcSendSmemBox_Value = { 0 },
+
+    .ExcSendCmpBox_Selected = { 0 },
 
     .ExcSendCmpBox_Value = { 0 },
 
+    .ExcSendSeqBox_Selected = { 0 },
+
     .ExcSendSeqBox_Value = { 0 },
+
+    .ExcSendMspBox_Selected = { 0 },
 
     .ExcSendMspBox_Value = { 0 },
 
     .ExcSendDotBox_Value = { 0 },
 
-    .field_087c = NAKA_NONE,
+    .ExcRcvWindow_Parent = NAKA_NONE,
 
     .field_087e = NAKA_NONE,
 
-    .field_0880 = NAKA_NONE,
+    .ExcRcvWindow_Child = NAKA_NONE,
 
     .field_0882 = NAKA_NONE,
 
-    .pad_126 = { 0 },
+    .ExcRcvPmemBox_Selected = { 0 },
 
     .ExcRcvPmemBox_Value = { 0 },
 
+    .ExcRcvSmemBox_Selected = { 0 },
+
     .ExcRcvSmemBox_Value = { 0 },
+
+    .ExcRcvCmpBox_Selected = { 0 },
 
     .ExcRcvCmpBox_Value = { 0 },
 
+    .ExcRcvSeqBox_Selected = { 0 },
+
     .ExcRcvSeqBox_Value = { 0 },
+
+    .ExcRcvMspBox_Selected = { 0 },
 
     .ExcRcvMspBox_Value = { 0 },
 
     .ExcRcvDotBox_Value = { 0 },
 
-    .field_08a6 = NAKA_NONE,
+    .MidiGmMode_Window = NAKA_NONE,
 
     .field_08a8 = NAKA_NONE,
 
-    .field_08aa = 0x0001,
+    .GMOnOffBox_Selected = 0x0001,
 
-    .pad_127 = { 0 },
+    .GMOnOffBox_Onoff = { 0 },
 
-    .field_08ae = NAKA_NONE,
+    .GMONSure_Parent = NAKA_NONE,
 
     .field_08b0 = NAKA_NONE,
 
-    .field_08b2 = NAKA_NONE,
+    .GMONSure_Child = NAKA_NONE,
 
     .field_08b4 = NAKA_NONE,
 
-    .field_08b6 = NAKA_NONE,
+    .GMOFFSure_Parent = NAKA_NONE,
 
     .field_08b8 = NAKA_NONE,
 
-    .field_08ba = NAKA_NONE,
+    .GMOFFSure_Child = NAKA_NONE,
 
     .field_08bc = NAKA_NONE,
 
-    .field_08be = NAKA_NONE,
+    .MidiPcgOutput_Window = NAKA_NONE,
 
     .field_08c0 = NAKA_NONE,
 
-    .pad_128 = { 0 },
+    .PcgOutGridBox_Selrow = { 0 },
 
-    .field_08c4 = 0x0001,
+    .PcgOutGridBox_Selcol = 0x0001,
 
-    .field_08c6 = 0x37E4,
+    .PcgOutGridBox_Pcol = 0x37E4,
 
     .field_08c8 = 0x00D1,
 
-    .field_08ca = 0x37F4,
+    .PcgOutGridBox_Prow = 0x37F4,
 
     .field_08cc = 0x00D1,
 
-    .field_08ce = 0x3804,
+    .PcgOutGridBox_Crow = 0x3804,
 
     .field_08d0 = 0x00D1,
 
     .field_08d2 = 0x00C1,
 
-    .field_08d4 = NAKA_NONE,
+    .MidiComputerConnection_Window = NAKA_NONE,
 
     .field_08d6 = NAKA_NONE,
 
-    .field_08d8 = 0x0001,
+    .MidiComputerConnection_AcLswEditBox_Selected = 0x0001,
 
     .MidiComputerConnection_Mode_Value = { 0 },
 
-    .field_08dc = NAKA_NONE,
+    .MidiPanelMemoryOutput_Window = NAKA_NONE,
 
     .field_08de = NAKA_NONE,
 
-    .pad_130 = { 0 },
+    .PmemOutLeft_Selrow = { 0 },
 
-    .field_08e2 = 0x0001,
+    .PmemOutLeft_Selcol = 0x0001,
 
-    .field_08e4 = 0x37E4,
+    .PmemOutLeft_Pcol = 0x37E4,
 
     .field_08e6 = 0x00D1,
 
-    .field_08e8 = 0x37F4,
+    .PmemOutLeft_Prow = 0x37F4,
 
     .field_08ea = 0x00D1,
 
-    .field_08ec = 0x3804,
+    .PmemOutLeft_Crow = 0x3804,
 
     .field_08ee = 0x00D1,
 
-    .field_08f0 = NAKA_NONE,
+    .PmemOutRight_Selrow = NAKA_NONE,
 
-    .field_08f2 = 0xFFFD,
+    .PmemOutRight_Selcol = 0xFFFD,
 
-    .field_08f4 = 0x3814,
+    .PmemOutRight_Pcol = 0x3814,
 
     .field_08f6 = 0x00D1,
 
-    .field_08f8 = 0x3824,
+    .PmemOutRight_Prow = 0x3824,
 
     .field_08fa = 0x00D1,
 
-    .field_08fc = 0x3834,
+    .PmemOutRight_Crow = 0x3834,
 
     .field_08fe = 0x00D1,
 
-    .field_0900 = NAKA_NONE,
+    .MidiSetup_Window = NAKA_NONE,
 
     .field_0902 = NAKA_NONE,
 
-    .field_0904 = 0x0002,
+    .MdSetOptGridBox_Selrow = 0x0002,
 
-    .field_0906 = 0x0001,
+    .MdSetOptGridBox_Selcol = 0x0001,
 
-    .field_0908 = 0x37F8,
+    .MdSetOptGridBox_Pcol = 0x37F8,
 
     .field_090a = 0x00D1,
 
-    .field_090c = 0x3808,
+    .MdSetOptGridBox_Prow = 0x3808,
 
     .field_090e = 0x00D1,
 
-    .field_0910 = 0x3820,
+    .MdSetOptGridBox_Crow = 0x3820,
 
     .field_0912 = 0x00D1,
 
-    .field_0914 = NAKA_NONE,
+    .EntertainerVocal_Window = NAKA_NONE,
 
     .field_0916 = NAKA_NONE,
 
-    .field_0918 = 0x0001,
+    .VocalistPage_Page = 0x0001,
 
-    .field_091a = NAKA_NONE,
+    .VocalistPage1_Parent = NAKA_NONE,
 
     .field_091c = NAKA_NONE,
 
-    .field_091e = NAKA_NONE,
+    .VocalistPage1_Child = NAKA_NONE,
 
     .field_0920 = NAKA_NONE,
 
-    .pad_131 = { 0 },
+    .VocalistListBox_Selected = { 0 },
 
-    .field_0926 = NAKA_NONE,
+    .HarmOnOffBox_Onoff = { 0 },
+
+    .VocalistPage2_Parent = NAKA_NONE,
 
     .field_0928 = NAKA_NONE,
 
-    .field_092a = NAKA_NONE,
+    .VocalistPage2_Child = NAKA_NONE,
 
     .field_092c = NAKA_NONE,
 
-    .field_092e = 0x0002,
+    .VocalistPage2Box_Selrow = 0x0002,
 
-    .field_0930 = 0x0001,
+    .VocalistPage2Box_Selcol = 0x0001,
 
-    .field_0932 = 0x383C,
+    .VocalistPage2Box_Pcol = 0x383C,
 
     .field_0934 = 0x00D1,
 
-    .field_0936 = 0x384C,
+    .VocalistPage2Box_Prow = 0x384C,
 
     .field_0938 = 0x00D1,
 
-    .field_093a = 0x386C,
+    .VocalistPage2Box_Crow = 0x386C,
 
     .field_093c = 0x00D1,
 
-    .field_093e = NAKA_NONE,
+    .EntertainerFade_Window = NAKA_NONE,
 
     .field_0940 = NAKA_NONE,
 
-    .field_0942 = 0x0001,
+    .FadeInOutGridBox_Selrow = 0x0001,
 
-    .field_0944 = 0x0001,
+    .FadeInOutGridBox_Selcol = 0x0001,
 
-    .field_0946 = 0x4264,
+    .FadeInOutGridBox_Pcol = 0x4264,
 
     .field_0948 = 0x00D1,
 
-    .field_094a = 0x4274,
+    .FadeInOutGridBox_Prow = 0x4274,
 
     .field_094c = 0x00D1,
 
-    .field_094e = 0x4288,
+    .FadeInOutGridBox_Crow = 0x4288,
 
     .field_0950 = 0x00D1,
 
-    .field_0952 = NAKA_NONE,
+    .SplitSetting_Window = NAKA_NONE,
 
     .field_0954 = NAKA_NONE,
 
@@ -4467,7 +5065,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_098a = 0x0003,
 
-    .field_098c = NAKA_NONE,
+    .Sdmenu_Window = NAKA_NONE,
 
     .field_098e = NAKA_NONE,
 
@@ -4493,433 +5091,605 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_139 = { 0 },
 
-    .field_09ba = NAKA_NONE,
+    .Sdpart_Window = NAKA_NONE,
 
     .field_09bc = NAKA_NONE,
 
-    .pad_140 = { 0 },
+    .VOL_AcStrRadioBox_Selected = { 0 },
 
-    .field_09ce = NAKA_NONE,
+    .PAN_AcStrRadioBox_Selected = { 0 },
+
+    .Sdpart_AcStrRadioBox_Selected = { 0 },
+
+    .SUS_AcStrRadioBox_Selected = { 0 },
+
+    .KEY_AcStrRadioBox_Selected = { 0 },
+
+    .TUN_AcStrRadioBox_Selected = { 0 },
+
+    .BND_AcStrRadioBox_Selected = { 0 },
+
+    .OTH_AcStrRadioBox_Selected = { 0 },
+
+    .SdpartMain_Parent = NAKA_NONE,
 
     .field_09d0 = NAKA_NONE,
 
-    .field_09d2 = NAKA_NONE,
+    .SdpartMain_Child = NAKA_NONE,
 
     .field_09d4 = NAKA_NONE,
 
-    .pad_141 = { 0 },
+    .SdpartMain_AcLswPartEditBox_Selected = { 0 },
 
     .SdpartMain_Pan_Value = { 0 },
 
+    .SdpartMain_AcLswPartEditBox_2_Selected = { 0 },
+
     .SdpartMain_RevDepth_Value = { 0 },
+
+    .SdpartMain_AcLswPartEditBox_3_Selected = { 0 },
 
     .SdpartMain_DspEffect_Value = { 0 },
 
+    .SdpartMain_AcLswPartEditBox_4_Selected = { 0 },
+
     .SdpartMain_DigEffect_Value = { 0 },
+
+    .SdpartMain_AcLswPartEditBox_5_Selected = { 0 },
 
     .SdpartMain_Sustain_Value = { 0 },
 
+    .SdpartMain_AcLswPartEditBox_6_Selected = { 0 },
+
     .SdpartMain_SusLength_Value = { 0 },
+
+    .SdpartMain_AcLswPartEditBox_7_Selected = { 0 },
 
     .SdpartMain_KeyShift_Value = { 0 },
 
+    .SdpartMain_AcLswPartEditBox_8_Selected = { 0 },
+
     .SdpartMain_Tuning_Value = { 0 },
+
+    .SdpartMain_AcLswPartEditBox_9_Selected = { 0 },
 
     .SdpartMain_BendRange_Value = { 0 },
 
+    .SdpartMain_AcLswPartEditBox_10_Selected = { 0 },
+
     .SdpartMain_GlidePedal_Value = { 0 },
+
+    .SdpartMain_AcLswPartEditBox_11_Selected = { 0 },
 
     .SdpartMain_SustPedal_Value = { 0 },
 
+    .SdpartMain_AcVolPartEditBox_Selected = { 0 },
+
     .SdpartMain_Volume_Value = { 0 },
 
-    .field_0a06 = NAKA_NONE,
+    .SdpartVol_Parent = NAKA_NONE,
 
     .field_0a08 = NAKA_NONE,
 
-    .field_0a0a = NAKA_NONE,
+    .SdpartVol_Child = NAKA_NONE,
 
     .field_0a0c = NAKA_NONE,
 
-    .field_0a0e = 0x0001,
+    .SdpartVol_AcVolPartEditBox_Selected = 0x0001,
 
     .SdpartVol_Volume_Value = { 0 },
 
-    .field_0a12 = NAKA_NONE,
+    .SdpartPan_Parent = NAKA_NONE,
 
     .field_0a14 = NAKA_NONE,
 
-    .field_0a16 = NAKA_NONE,
+    .SdpartPan_Child = NAKA_NONE,
 
     .field_0a18 = NAKA_NONE,
 
-    .field_0a1a = 0x0001,
+    .SdpartPan_AcLswPartEditBox_Selected = 0x0001,
 
     .SdpartPan_Pan_Value = { 0 },
 
     .SdpartPan_AcLswPartPan_Value = { 0 },
 
-    .field_0a20 = NAKA_NONE,
+    .SdpartEff_Parent = NAKA_NONE,
 
     .field_0a22 = NAKA_NONE,
 
-    .field_0a24 = NAKA_NONE,
+    .SdpartEff_Child = NAKA_NONE,
 
     .field_0a26 = NAKA_NONE,
 
-    .field_0a28 = 0x0001,
+    .SdpartEff_AcLswPartEditBox_Selected = 0x0001,
 
     .SdpartEff_ReverbDepth_Value = { 0 },
 
+    .SdpartEff_AcLswPartEditBox_2_Selected = { 0 },
+
     .SdpartEff_DspEffect_Value = { 0 },
+
+    .SdpartEff_AcLswPartEditBox_3_Selected = { 0 },
 
     .SdpartEff_DigitalEff_Value = { 0 },
 
-    .field_0a34 = NAKA_NONE,
+    .SdpartSus_Parent = NAKA_NONE,
 
     .field_0a36 = NAKA_NONE,
 
-    .field_0a38 = NAKA_NONE,
+    .SdpartSus_Child = NAKA_NONE,
 
     .field_0a3a = NAKA_NONE,
 
-    .field_0a3c = 0x0001,
+    .SdpartSus_AcLswPartEditBox_Selected = 0x0001,
 
     .SdpartSus_SustainOnOff_Value = { 0 },
 
+    .SdpartSus_AcLswPartEditBox_2_Selected = { 0 },
+
     .SdpartSus_SustainLength_Value = { 0 },
 
-    .field_0a44 = NAKA_NONE,
+    .SdpartKey_Parent = NAKA_NONE,
 
     .field_0a46 = NAKA_NONE,
 
-    .field_0a48 = NAKA_NONE,
+    .SdpartKey_Child = NAKA_NONE,
 
     .field_0a4a = NAKA_NONE,
 
-    .field_0a4c = 0x0001,
+    .SdpartKey_AcLswPartEditBox_Selected = 0x0001,
 
     .SdpartKey_KeyShift_Value = { 0 },
 
-    .field_0a50 = NAKA_NONE,
+    .SdpartTun_Parent = NAKA_NONE,
 
     .field_0a52 = NAKA_NONE,
 
-    .field_0a54 = NAKA_NONE,
+    .SdpartTun_Child = NAKA_NONE,
 
     .field_0a56 = NAKA_NONE,
 
-    .field_0a58 = 0x0001,
+    .SdpartTun_AcLswPartEditBox_Selected = 0x0001,
 
     .SdpartTun_Tuning_Value = { 0 },
 
-    .field_0a5c = NAKA_NONE,
+    .SdpartBnd_Parent = NAKA_NONE,
 
     .field_0a5e = NAKA_NONE,
 
-    .field_0a60 = NAKA_NONE,
+    .SdpartBnd_Child = NAKA_NONE,
 
     .field_0a62 = NAKA_NONE,
 
-    .field_0a64 = 0x0001,
+    .SdpartBnd_AcLswPartEditBox_Selected = 0x0001,
 
     .SdpartBnd_PitchBendRange_Value = { 0 },
 
-    .field_0a68 = NAKA_NONE,
+    .SdpartOth_Parent = NAKA_NONE,
 
     .field_0a6a = NAKA_NONE,
 
-    .field_0a6c = NAKA_NONE,
+    .SdpartOth_Child = NAKA_NONE,
 
     .field_0a6e = NAKA_NONE,
 
-    .field_0a70 = 0x0001,
+    .SdpartOth_AcLswPartEditBox_Selected = 0x0001,
 
     .SdpartOth_GlidePedal_Value = { 0 },
 
+    .SdpartOth_AcLswPartEditBox_2_Selected = { 0 },
+
     .SdpartOth_SustainPdl_Value = { 0 },
+
+    .SdpartOth_AcLswPartEditBox_3_Selected = { 0 },
 
     .SdpartOth_AfterTouch_Value = { 0 },
 
+    .SdpartOth_AcLswPartEditBox_4_Selected = { 0 },
+
     .SdpartOth_KeyScaling_Value = { 0 },
+
+    .SdpartOth_AcLswPartEditBox_5_Selected = { 0 },
 
     .SdpartOth_PartExpPdl_Value = { 0 },
 
-    .field_0a84 = NAKA_NONE,
+    .Sdmtune_Window = NAKA_NONE,
 
     .field_0a86 = NAKA_NONE,
 
-    .field_0a88 = 0x0001,
+    .Sdmtune_AcLswEditBox_Selected = 0x0001,
 
     .Sdmtune_MasterTuning_Value = { 0 },
 
-    .field_0a8c = NAKA_NONE,
+    .Sdscltyp_Window = NAKA_NONE,
 
     .field_0a8e = NAKA_NONE,
 
-    .field_0a90 = 0x0001,
+    .SdscltypPage_Page = 0x0001,
 
-    .field_0a92 = NAKA_NONE,
+    .Sdscltyp1_Parent = NAKA_NONE,
 
     .field_0a94 = NAKA_NONE,
 
-    .field_0a96 = NAKA_NONE,
+    .Sdscltyp1_Child = NAKA_NONE,
 
     .field_0a98 = NAKA_NONE,
 
-    .field_0a9a = 0x0001,
+    .ScalingType_Selected = 0x0001,
 
     .ScalingType_Value = { 0 },
+
+    .Sdscltyp1_AcLswEditBox_Selected = { 0 },
 
     .Sdscltyp1_ScalingShift_Value = { 0 },
 
     .Sdscltyp1_AcLswBox_Value = { 0 },
 
+    .Sdscltyp1_AcLswEditBox_2_Selected = { 0 },
+
     .Sdscltyp1_ScalingMode_Value = { 0 },
 
-    .field_0aa8 = NAKA_NONE,
+    .Sdscltyp2_Parent = NAKA_NONE,
 
     .field_0aaa = NAKA_NONE,
 
-    .field_0aac = NAKA_NONE,
+    .Sdscltyp2_Child = NAKA_NONE,
 
     .field_0aae = NAKA_NONE,
 
-    .field_0ab0 = 0x0001,
+    .ScalingKey1_Selected = 0x0001,
 
     .ScalingKey1_Value = { 0 },
 
+    .ScalingKey2_Selected = { 0 },
+
     .ScalingKey2_Value = { 0 },
+
+    .ScalingKey3_Selected = { 0 },
 
     .ScalingKey3_Value = { 0 },
 
+    .ScalingKey4_Selected = { 0 },
+
     .ScalingKey4_Value = { 0 },
+
+    .ScalingKey5_Selected = { 0 },
 
     .ScalingKey5_Value = { 0 },
 
+    .ScalingKey6_Selected = { 0 },
+
     .ScalingKey6_Value = { 0 },
+
+    .ScalingKey7_Selected = { 0 },
 
     .ScalingKey7_Value = { 0 },
 
+    .ScalingKey8_Selected = { 0 },
+
     .ScalingKey8_Value = { 0 },
+
+    .ScalingKey9_Selected = { 0 },
 
     .ScalingKey9_Value = { 0 },
 
+    .ScalingKey10_Selected = { 0 },
+
     .ScalingKey10_Value = { 0 },
+
+    .ScalingKey11_Selected = { 0 },
 
     .ScalingKey11_Value = { 0 },
 
+    .ScalingKey12_Selected = { 0 },
+
     .ScalingKey12_Value = { 0 },
 
-    .field_0ae0 = NAKA_NONE,
+    .Sdlfthld_Window = NAKA_NONE,
 
     .field_0ae2 = NAKA_NONE,
 
-    .field_0ae4 = 0x0001,
+    .Sdlfthld_AcLswEditBox_Selected = 0x0001,
 
     .Sdlfthld_LeftHold_Value = { 0 },
 
-    .field_0ae8 = NAKA_NONE,
+    .Sdmixer_Window = NAKA_NONE,
 
     .field_0aea = NAKA_NONE,
 
-    .field_0aec = 0x0001,
+    .Sdmixer_AcResetPage_Page = 0x0001,
 
     .field_0aee = NAKA_NONE,
 
     .field_0af0 = NAKA_NONE,
 
-    .field_0af2 = 0x0001,
+    .SdtecdPage_Page = 0x0001,
 
-    .field_0af4 = NAKA_NONE,
+    .Sdtecd1_Parent = NAKA_NONE,
 
     .field_0af6 = NAKA_NONE,
 
-    .field_0af8 = NAKA_NONE,
+    .Sdtecd1_Child = NAKA_NONE,
 
     .field_0afa = NAKA_NONE,
 
-    .pad_154 = { 0 },
+    .TcClose_Selected = { 0 },
 
-    .field_0afe = 0x0001,
+    .TcClose_Dialfocus = 0x0001,
 
-    .pad_155 = { 0 },
+    .TcOpen1_Selected = { 0 },
 
-    .field_0b34 = NAKA_NONE,
+    .TcOpen1_Dialfocus = { 0 },
+
+    .TcOpen2_Selected = { 0 },
+
+    .TcOpen2_Dialfocus = { 0 },
+
+    .TcDuet1_Selected = { 0 },
+
+    .TcDuet1_Dialfocus = { 0 },
+
+    .TcDuet2_Selected = { 0 },
+
+    .TcDuet2_Dialfocus = { 0 },
+
+    .TcCountry_Selected = { 0 },
+
+    .TcCountry_Dialfocus = { 0 },
+
+    .TcTheatre_Selected = { 0 },
+
+    .TcTheatre_Dialfocus = { 0 },
+
+    .TcHymn_Selected = { 0 },
+
+    .TcHymn_Dialfocus = { 0 },
+
+    .TcBigBandBrass_Selected = { 0 },
+
+    .TcBigBandBrass_Dialfocus = { 0 },
+
+    .TcBigBandReeds_Selected = { 0 },
+
+    .TcBigBandReeds_Dialfocus = { 0 },
+
+    .TcOctave_Selected = { 0 },
+
+    .TcOctave_Dialfocus = { 0 },
+
+    .TcBlock_Selected = { 0 },
+
+    .TcBlock_Dialfocus = { 0 },
+
+    .TcHardRock_Selected = { 0 },
+
+    .TcHardRock_Dialfocus = { 0 },
+
+    .TcFanfare_Selected = { 0 },
+
+    .TcFanfare_Dialfocus = { 0 },
+
+    .Sdtecd2_Parent = NAKA_NONE,
 
     .field_0b36 = NAKA_NONE,
 
-    .field_0b38 = NAKA_NONE,
+    .Sdtecd2_Child = NAKA_NONE,
 
     .field_0b3a = NAKA_NONE,
 
-    .field_0b3c = 0x0001,
+    .Sdtecd2_AcLswEditBox_Selected = 0x0001,
 
     .Sdtecd2_Orchestrator_Value = { 0 },
 
-    .field_0b40 = NAKA_NONE,
+    .Sqmixer_Window = NAKA_NONE,
 
     .field_0b42 = NAKA_NONE,
 
-    .field_0b44 = 0x0001,
+    .Sqmixer_AcResetPage_Page = 0x0001,
 
     .field_0b46 = NAKA_NONE,
 
     .field_0b48 = NAKA_NONE,
 
-    .pad_157 = { 0 },
+    .StartTheInternalDemo_AcPresentationBox_Selected = { 0 },
 
-    .field_0b4c = NAKA_NONE,
+    .Demofeature1_Parent = NAKA_NONE,
 
     .field_0b4e = NAKA_NONE,
 
-    .field_0b50 = NAKA_NONE,
+    .Demofeature1_Child = NAKA_NONE,
 
     .field_0b52 = NAKA_NONE,
 
-    .field_0b54 = NAKA_NONE,
+    .Demofeature2_Parent = NAKA_NONE,
 
     .field_0b56 = NAKA_NONE,
 
-    .field_0b58 = NAKA_NONE,
+    .Demofeature2_Child = NAKA_NONE,
 
     .field_0b5a = NAKA_NONE,
 
-    .pad_158 = { 0 },
+    .StartTheLoadedDemo_AcPresentationBox_Selected = { 0 },
 
-    .field_0b5e = NAKA_NONE,
+    .PlainScreen_Window = NAKA_NONE,
 
     .field_0b60 = NAKA_NONE,
 
-    .field_0b62 = NAKA_NONE,
+    .PresentationControl_Parent = NAKA_NONE,
 
     .field_0b64 = NAKA_NONE,
 
-    .field_0b66 = NAKA_NONE,
+    .PresentationControl_Child = NAKA_NONE,
 
     .field_0b68 = NAKA_NONE,
 
-    .field_0b6a = NAKA_NONE,
+    .LoadingPresentation_Window = NAKA_NONE,
 
     .field_0b6c = NAKA_NONE,
 
-    .field_0b6e = NAKA_NONE,
+    .Drawbar_Window = NAKA_NONE,
 
     .field_0b70 = NAKA_NONE,
 
-    .pad_159 = { 0 },
+    .DrawPerc4_Onoff = { 0 },
 
-    .field_0b78 = NAKA_NONE,
+    .DrawPerc223_Onoff = { 0 },
+
+    .DrawSetting_Onoff = { 0 },
+
+    .Drawbar1_Parent = NAKA_NONE,
 
     .field_0b7a = NAKA_NONE,
 
-    .field_0b7c = NAKA_NONE,
+    .Drawbar1_Child = NAKA_NONE,
 
     .field_0b7e = NAKA_NONE,
 
-    .field_0b80 = NAKA_NONE,
+    .Drawbar2_Parent = NAKA_NONE,
 
     .field_0b82 = NAKA_NONE,
 
-    .field_0b84 = NAKA_NONE,
+    .Drawbar2_Child = NAKA_NONE,
 
     .field_0b86 = NAKA_NONE,
 
-    .field_0b88 = 0x0001,
+    .Drawbar2_AcDrawEditBox_Selected = 0x0001,
 
     .Drawbar2_Decay_Value = { 0 },
 
+    .Drawbar2_AcDrawEditBox_2_Selected = { 0 },
+
     .Drawbar2_Level_Value = { 0 },
+
+    .Drawbar2_AcDrawEditBox_3_Selected = { 0 },
 
     .Drawbar2_AttackTime_Value = { 0 },
 
+    .Drawbar2_AcDrawEditBox_4_Selected = { 0 },
+
     .Drawbar2_ReleaseTime_Value = { 0 },
 
-    .field_0b98 = NAKA_NONE,
+    .DrawbarNorm_Parent = NAKA_NONE,
 
     .field_0b9a = NAKA_NONE,
 
-    .field_0b9c = NAKA_NONE,
+    .DrawbarNorm_Child = NAKA_NONE,
 
     .field_0b9e = NAKA_NONE,
 
-    .pad_161 = { 0 },
+    .DrawTremolo_Onoff = { 0 },
 
-    .field_0ba2 = NAKA_NONE,
+    .DrawbarSndE_Parent = NAKA_NONE,
 
     .field_0ba4 = NAKA_NONE,
 
-    .field_0ba6 = NAKA_NONE,
+    .DrawbarSndE_Child = NAKA_NONE,
 
     .field_0ba8 = NAKA_NONE,
 
-    .pad_162 = { 0 },
+    .Write_AcTitleMenu_Selected = { 0 },
 
-    .field_0bac = NAKA_NONE,
+    .Accordion_Window = NAKA_NONE,
 
     .field_0bae = NAKA_NONE,
 
-    .field_0bb0 = NAKA_NONE,
+    .Accordion1_Parent = NAKA_NONE,
 
     .field_0bb2 = NAKA_NONE,
 
-    .field_0bb4 = NAKA_NONE,
+    .Accordion1_Child = NAKA_NONE,
 
     .field_0bb6 = NAKA_NONE,
 
-    .pad_163 = { 0 },
+    .Accordion1_AcIndexToggle_Onoff = { 0 },
 
-    .field_0bcc = NAKA_NONE,
+    .Accordion1_AcIndexToggle_2_Onoff = { 0 },
+
+    .Accordion1_AcAccordionTab_Onoff = { 0 },
+
+    .Accordion1_AcAccordionTab_2_Onoff = { 0 },
+
+    .Accordion1_AcAccordionTab_3_Onoff = { 0 },
+
+    .Accordion1_AcAccordionTab_4_Onoff = { 0 },
+
+    .Accordion1_AcAccordionTab_5_Onoff = { 0 },
+
+    .Accordion1_AcAccordionTab_6_Onoff = { 0 },
+
+    .Accordion1_AcAccordionTab_7_Onoff = { 0 },
+
+    .Accordion1_AcAccordionTab_8_Onoff = { 0 },
+
+    .Accordion2_Parent = NAKA_NONE,
 
     .field_0bce = NAKA_NONE,
 
-    .field_0bd0 = NAKA_NONE,
+    .Accordion2_Child = NAKA_NONE,
 
     .field_0bd2 = NAKA_NONE,
 
-    .pad_164 = { 0 },
+    .Accordion2_AcIndexToggle_Onoff = { 0 },
 
-    .field_0be8 = NAKA_NONE,
+    .Accordion2_AcIndexToggle_2_Onoff = { 0 },
+
+    .Accordion2_AcAccordionTab_Onoff = { 0 },
+
+    .Accordion2_AcAccordionTab_2_Onoff = { 0 },
+
+    .Accordion2_AcAccordionTab_3_Onoff = { 0 },
+
+    .Accordion2_AcAccordionTab_4_Onoff = { 0 },
+
+    .Accordion2_AcAccordionTab_5_Onoff = { 0 },
+
+    .Accordion2_AcAccordionTab_6_Onoff = { 0 },
+
+    .Accordion2_AcAccordionTab_7_Onoff = { 0 },
+
+    .Accordion2_AcAccordionTab_8_Onoff = { 0 },
+
+    .Mesage_Window = NAKA_NONE,
 
     .field_0bea = NAKA_NONE,
 
-    .field_0bec = NAKA_NONE,
+    .Completed_Parent = NAKA_NONE,
 
     .field_0bee = NAKA_NONE,
 
-    .field_0bf0 = NAKA_NONE,
+    .Completed_Child = NAKA_NONE,
 
     .field_0bf2 = NAKA_NONE,
 
-    .field_0bf4 = NAKA_NONE,
+    .Reminder_Parent = NAKA_NONE,
 
     .field_0bf6 = NAKA_NONE,
 
-    .field_0bf8 = NAKA_NONE,
+    .Reminder_Child = NAKA_NONE,
 
     .field_0bfa = NAKA_NONE,
 
-    .field_0bfc = NAKA_NONE,
+    .Error_Parent = NAKA_NONE,
 
     .field_0bfe = NAKA_NONE,
 
-    .field_0c00 = NAKA_NONE,
+    .Error_Child = NAKA_NONE,
 
     .field_0c02 = NAKA_NONE,
 
-    .field_0c04 = NAKA_NONE,
+    .Other_Parent = NAKA_NONE,
 
     .field_0c06 = NAKA_NONE,
 
-    .field_0c08 = NAKA_NONE,
+    .Other_Child = NAKA_NONE,
 
     .field_0c0a = NAKA_NONE,
 
-    .field_0c0c = NAKA_NONE,
+    .CheckMessage_Parent = NAKA_NONE,
 
     .field_0c0e = NAKA_NONE,
 
-    .field_0c10 = NAKA_NONE,
+    .CheckMessage_Child = NAKA_NONE,
 
     .field_0c12 = NAKA_NONE,
 
@@ -4927,11 +5697,11 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .CheckMessage_AcRamBox_2_Value = { 0 },
 
-    .field_0c1c = NAKA_NONE,
+    .NoMessage_Parent = NAKA_NONE,
 
     .field_0c1e = NAKA_NONE,
 
-    .field_0c20 = NAKA_NONE,
+    .NoMessage_Child = NAKA_NONE,
 
     .field_0c22 = NAKA_NONE,
 
@@ -4939,31 +5709,37 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_166 = { 0 },
 
-    .field_0c28 = NAKA_NONE,
+    .PleaseWait_Parent = NAKA_NONE,
 
     .field_0c2a = NAKA_NONE,
 
-    .field_0c2c = NAKA_NONE,
+    .PleaseWait_Child = NAKA_NONE,
 
     .field_0c2e = NAKA_NONE,
 
-    .field_0c30 = NAKA_NONE,
+    .Welcom_Window = NAKA_NONE,
 
     .field_0c32 = NAKA_NONE,
 
-    .field_0c34 = NAKA_NONE,
+    .AllInitial_Window = NAKA_NONE,
 
     .field_0c36 = NAKA_NONE,
 
-    .field_0c38 = NAKA_NONE,
+    .MPVersion_Window = NAKA_NONE,
 
     .field_0c3a = NAKA_NONE,
 
-    .field_0c3c = NAKA_NONE,
+    .Softver_Window = NAKA_NONE,
 
     .field_0c3e = NAKA_NONE,
 
-    .pad_167 = { 0 },
+    .MainProgram_Selected = { 0 },
+
+    .MainTable_Selected = { 0 },
+
+    .SubProgram_Selected = { 0 },
+
+    .SoundTable_Selected = { 0 },
 
     .MixerPart_NamePtrTable = {
         NAKA_ADDR(MixerPartTable_Start),
@@ -5247,523 +6023,671 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0f7a = NAKA_NONE,
 
-    .field_0f7c = NAKA_NONE,
+    .DiskMenu_Window = NAKA_NONE,
 
     .field_0f7e = NAKA_NONE,
 
-    .field_0f80 = 0x0001,
+    .StyleConvert_AcTitleMenu_Selected = 0x0001,
 
     .field_0f82 = 0x0001,
 
-    .field_0f84 = 0x0001,
+    .Preferences_AcTitleMenu_Selected = 0x0001,
 
-    .field_0f86 = 0x0001,
+    .Save_AcTitleMenu_Selected = 0x0001,
 
-    .field_0f88 = 0x0001,
+    .DiskTools_AcTtlJgBox_Selected = 0x0001,
 
-    .pad_171 = { 0 },
+    .LOAD_AcTtlJgBox_Selected = { 0 },
 
-    .field_0f90 = NAKA_NONE,
+    .DirectPlay_AcTtlJgBox_Selected = { 0 },
+
+    .SongMedley_AcTtlJgBox_Selected = { 0 },
+
+    .IntSongMedley_Window = NAKA_NONE,
 
     .field_0f92 = NAKA_NONE,
 
-    .pad_172 = { 0 },
+    .IntSongMedley_PsFileNameBox_Sel_num = { 0 },
 
-    .field_0f9a = NAKA_NONE,
+    .IntSongMedley_PsFileNameBox_Paintok = { 0 },
 
-    .pad_173 = { 0 },
+    .IntSongMedley_PsFileNameBox_Aicok = { 0 },
 
-    .field_0fa2 = NAKA_NONE,
+    .IntSongMedley_PsFileNameBox_2_Sel_num = NAKA_NONE,
+
+    .IntSongMedley_PsFileNameBox_2_Paintok = { 0 },
+
+    .IntSongMedley_PsFileNameBox_2_Aicok = { 0 },
+
+    .IntSongMedley_AcMonoIndexToggle_Onoff = { 0 },
+
+    .DiskSaveName_Window = NAKA_NONE,
 
     .field_0fa4 = NAKA_NONE,
 
-    .field_0fa6 = NAKA_NONE,
+    .ComposerLoad_Window = NAKA_NONE,
 
     .field_0fa8 = NAKA_NONE,
 
-    .pad_174 = { 0 },
+    .ComposerLoad_PsFileNameBox_Sel_num = { 0 },
 
-    .field_0fb4 = NAKA_NONE,
+    .ComposerLoad_PsFileNameBox_Paintok = { 0 },
+
+    .ComposerLoad_PsFileNameBox_Aicok = { 0 },
+
+    .ComposerLoad_AcParaStrBox_Paintok = { 0 },
+
+    .ComposerLoad_AcParaStrBox_2_Paintok = { 0 },
+
+    .DiskWaitWin_Parent = NAKA_NONE,
 
     .field_0fb6 = NAKA_NONE,
 
-    .field_0fb8 = NAKA_NONE,
+    .DiskWaitWin_Child = NAKA_NONE,
 
     .field_0fba = NAKA_NONE,
 
-    .pad_175 = { 0 },
+    .DiskWaitWin_AcRotStrBox_Paintok = { 0 },
 
-    .field_0fbe = NAKA_NONE,
+    .DiskSaveNameSMF_Window = NAKA_NONE,
 
     .field_0fc0 = NAKA_NONE,
 
-    .field_0fc2 = NAKA_NONE,
+    .WallpaperLoad_Window = NAKA_NONE,
 
     .field_0fc4 = NAKA_NONE,
 
-    .pad_176 = { 0 },
+    .WallpaperLoad_AcParaStrBox_Paintok = { 0 },
 
-    .field_0fd0 = NAKA_NONE,
+    .WallpaperLoad_AcParaStrBox_2_Paintok = { 0 },
+
+    .WallpaperLoad_PsFileNameBox_Sel_num = { 0 },
+
+    .WallpaperLoad_PsFileNameBox_Paintok = { 0 },
+
+    .WallpaperLoad_PsFileNameBox_Aicok = { 0 },
+
+    .DiskSaveSureWin_Parent = NAKA_NONE,
 
     .field_0fd2 = NAKA_NONE,
 
-    .field_0fd4 = NAKA_NONE,
+    .DiskSaveSureWin_Child = NAKA_NONE,
 
     .field_0fd6 = NAKA_NONE,
 
-    .field_0fd8 = NAKA_NONE,
+    .PasswordWin_Parent = NAKA_NONE,
 
     .field_0fda = NAKA_NONE,
 
-    .field_0fdc = NAKA_NONE,
+    .PasswordWin_Child = NAKA_NONE,
 
     .field_0fde = NAKA_NONE,
 
-    .field_0fe0 = NAKA_NONE,
+    .CheckPasswordWin_Parent = NAKA_NONE,
 
     .field_0fe2 = NAKA_NONE,
 
-    .field_0fe4 = NAKA_NONE,
+    .CheckPasswordWin_Child = NAKA_NONE,
 
     .field_0fe6 = NAKA_NONE,
 
-    .field_0fe8 = NAKA_NONE,
+    .DiskLoad_Window = NAKA_NONE,
 
     .field_0fea = NAKA_NONE,
 
-    .field_0fec = 0x0001,
+    .DiskLoadPage_Page = 0x0001,
 
-    .field_0fee = NAKA_NONE,
+    .DiskLoadP1_Parent = NAKA_NONE,
 
     .field_0ff0 = NAKA_NONE,
 
-    .field_0ff2 = NAKA_NONE,
+    .DiskLoadP1_Child = NAKA_NONE,
 
     .field_0ff4 = NAKA_NONE,
 
-    .pad_177 = { 0 },
+    .DiskLoadP1_PsFileNameBox_Sel_num = { 0 },
 
-    .field_0ffa = 0x0001,
+    .DiskLoadP1_PsFileNameBox_Paintok = { 0 },
 
-    .pad_178 = { 0 },
+    .DiskLoadP1_PsFileNameBox_Aicok = 0x0001,
 
-    .field_1004 = NAKA_NONE,
+    .DiskLoadP1_AcFileSfxBox_Paintok = { 0 },
+
+    .Smf_AcTitleMenu_Selected = { 0 },
+
+    .DiskLoadP1_AcParaStrBox_Paintok = { 0 },
+
+    .DiskLoadP1_AcParaStrBox_2_Paintok = { 0 },
+
+    .DiskLoadP2_Parent = NAKA_NONE,
 
     .field_1006 = NAKA_NONE,
 
-    .field_1008 = NAKA_NONE,
+    .DiskLoadP2_Child = NAKA_NONE,
 
     .field_100a = NAKA_NONE,
 
-    .pad_179 = { 0 },
+    .DiskLoadP2_AcParaStrBox_Paintok = { 0 },
 
-    .field_100e = NAKA_NONE,
+    .DiskLoadP2_PsFileNameBox_Sel_num = NAKA_NONE,
 
-    .pad_180 = { 0 },
+    .DiskLoadP2_PsFileNameBox_Paintok = { 0 },
 
-    .field_1012 = 0x0001,
+    .DiskLoadP2_PsFileNameBox_Aicok = 0x0001,
 
-    .field_1014 = NAKA_NONE,
+    .DiskLoadP3_Parent = NAKA_NONE,
 
     .field_1016 = NAKA_NONE,
 
-    .field_1018 = NAKA_NONE,
+    .DiskLoadP3_Child = NAKA_NONE,
 
     .field_101a = NAKA_NONE,
 
-    .field_101c = NAKA_NONE,
+    .DiskLoadP3_PsFileNameBox_Sel_num = NAKA_NONE,
 
-    .pad_181 = { 0 },
+    .DiskLoadP3_PsFileNameBox_Paintok = { 0 },
 
-    .field_1020 = 0x0001,
+    .DiskLoadP3_PsFileNameBox_Aicok = 0x0001,
 
-    .pad_182 = { 0 },
+    .DiskLoadP3_AcParaStrBox_Paintok = { 0 },
 
-    .field_1024 = NAKA_NONE,
+    .DiskLoadP3_PsFileNameBox_2_Sel_num = NAKA_NONE,
 
-    .pad_183 = { 0 },
+    .DiskLoadP3_PsFileNameBox_2_Paintok = { 0 },
 
-    .field_1028 = 0x0001,
+    .DiskLoadP3_PsFileNameBox_2_Aicok = 0x0001,
 
-    .field_102a = NAKA_NONE,
+    .DiskLoadP3_PsFileNameBox_3_Sel_num = NAKA_NONE,
 
-    .pad_184 = { 0 },
+    .DiskLoadP3_PsFileNameBox_3_Paintok = { 0 },
 
-    .field_102e = 0x0001,
+    .DiskLoadP3_PsFileNameBox_3_Aicok = 0x0001,
 
-    .field_1030 = NAKA_NONE,
+    .DiskLoadP3_PsFileNameBox_4_Sel_num = NAKA_NONE,
 
-    .pad_185 = { 0 },
+    .DiskLoadP3_PsFileNameBox_4_Paintok = { 0 },
 
-    .field_1034 = 0x0001,
+    .DiskLoadP3_PsFileNameBox_4_Aicok = 0x0001,
 
-    .field_1036 = NAKA_NONE,
+    .DiskLoadP3_PsFileNameBox_5_Sel_num = NAKA_NONE,
 
-    .pad_186 = { 0 },
+    .DiskLoadP3_PsFileNameBox_5_Paintok = { 0 },
 
-    .field_103a = 0x0001,
+    .DiskLoadP3_PsFileNameBox_5_Aicok = 0x0001,
 
-    .field_103c = NAKA_NONE,
+    .DiskLoadP3_PsFileNameBox_6_Sel_num = NAKA_NONE,
 
-    .pad_187 = { 0 },
+    .DiskLoadP3_PsFileNameBox_6_Paintok = { 0 },
 
-    .field_1040 = 0x0001,
+    .DiskLoadP3_PsFileNameBox_6_Aicok = 0x0001,
 
-    .field_1042 = NAKA_NONE,
+    .DiskLoadP3_PsFileNameBox_7_Sel_num = NAKA_NONE,
 
-    .pad_188 = { 0 },
+    .DiskLoadP3_PsFileNameBox_7_Paintok = { 0 },
 
-    .field_1046 = 0x0001,
+    .DiskLoadP3_PsFileNameBox_7_Aicok = 0x0001,
 
     .pad_189 = { 0 },
 
-    .field_104a = NAKA_NONE,
+    .DiskLoadSMF_Window = NAKA_NONE,
 
     .field_104c = NAKA_NONE,
 
-    .pad_190 = { 0 },
+    .Tech_AcTitleMenu_Selected = { 0 },
 
-    .field_1054 = 0x0001,
+    .DiskLoadSMF_PsFileNameBox_Sel_num = { 0 },
 
-    .pad_191 = { 0 },
+    .DiskLoadSMF_PsFileNameBox_Paintok = { 0 },
 
-    .field_1058 = NAKA_NONE,
+    .DiskLoadSMF_PsFileNameBox_Aicok = 0x0001,
 
-    .pad_192 = { 0 },
+    .DiskLoadSMF_PsWindowToggle_Onoff = { 0 },
 
-    .field_105c = 0x0001,
+    .DiskLoadSMF_PsFileNameBox_2_Sel_num = NAKA_NONE,
 
-    .field_105e = NAKA_NONE,
+    .DiskLoadSMF_PsFileNameBox_2_Paintok = { 0 },
 
-    .pad_193 = { 0 },
+    .DiskLoadSMF_PsFileNameBox_2_Aicok = 0x0001,
 
-    .field_1062 = 0x0001,
+    .DiskLoadSMF_PsFileNameBox_3_Sel_num = NAKA_NONE,
 
-    .field_1064 = NAKA_NONE,
+    .DiskLoadSMF_PsFileNameBox_3_Paintok = { 0 },
 
-    .pad_194 = { 0 },
+    .DiskLoadSMF_PsFileNameBox_3_Aicok = 0x0001,
 
-    .field_1068 = 0x0001,
+    .DiskLoadSMF_PsFileNameBox_4_Sel_num = NAKA_NONE,
 
-    .field_106a = NAKA_NONE,
+    .DiskLoadSMF_PsFileNameBox_4_Paintok = { 0 },
+
+    .DiskLoadSMF_PsFileNameBox_4_Aicok = 0x0001,
+
+    .SongNameSmfLdWin_Parent = NAKA_NONE,
 
     .field_106c = NAKA_NONE,
 
-    .field_106e = NAKA_NONE,
+    .SongNameSmfLdWin_Child = NAKA_NONE,
 
     .field_1070 = NAKA_NONE,
 
-    .pad_195 = { 0 },
+    .SongNameSmfLdWin_AcParaStrBox_Paintok = { 0 },
 
-    .field_1074 = NAKA_NONE,
+    .DiskInfoSmfLdWin_Parent = NAKA_NONE,
 
     .field_1076 = NAKA_NONE,
 
-    .field_1078 = NAKA_NONE,
+    .DiskInfoSmfLdWin_Child = NAKA_NONE,
 
     .field_107a = NAKA_NONE,
 
-    .pad_196 = { 0 },
+    .DiskInfoSmfLdWin_AcParaStrBox_Paintok = { 0 },
 
-    .field_1080 = NAKA_NONE,
+    .DiskInfoSmfLdWin_AcParaStrBox_2_Paintok = { 0 },
+
+    .CmpSingleLoad_Window = NAKA_NONE,
 
     .field_1082 = NAKA_NONE,
 
-    .field_1084 = NAKA_NONE,
+    .CmpSingleLoad_PsFileNameBox_Sel_num = NAKA_NONE,
 
-    .pad_197 = { 0 },
+    .CmpSingleLoad_PsFileNameBox_Paintok = { 0 },
 
-    .field_108a = NAKA_NONE,
+    .CmpSingleLoad_PsFileNameBox_Aicok = { 0 },
 
-    .pad_198 = { 0 },
+    .CmpSingleLoad_PsFileNameBox_2_Sel_num = NAKA_NONE,
 
-    .field_1090 = NAKA_NONE,
+    .CmpSingleLoad_PsFileNameBox_2_Paintok = { 0 },
 
-    .pad_199 = { 0 },
+    .CmpSingleLoad_PsFileNameBox_2_Aicok = { 0 },
 
-    .field_1098 = NAKA_NONE,
+    .CmpSingleLoad_PsFileNameBox_3_Sel_num = NAKA_NONE,
 
-    .pad_200 = { 0 },
+    .CmpSingleLoad_PsFileNameBox_3_Paintok = { 0 },
 
-    .field_109e = NAKA_NONE,
+    .CmpSingleLoad_PsFileNameBox_3_Aicok = { 0 },
 
-    .pad_201 = { 0 },
+    .CmpSingleLoad_AcMonoIndexToggle_Onoff = { 0 },
 
-    .field_10a4 = NAKA_NONE,
+    .CmpSingleLoad_PsFileNameBox_4_Sel_num = NAKA_NONE,
 
-    .pad_202 = { 0 },
+    .CmpSingleLoad_PsFileNameBox_4_Paintok = { 0 },
 
-    .field_10aa = NAKA_NONE,
+    .CmpSingleLoad_PsFileNameBox_4_Aicok = { 0 },
 
-    .pad_203 = { 0 },
+    .CmpSingleLoad_PsFileNameBox_5_Sel_num = NAKA_NONE,
 
-    .field_10b0 = NAKA_NONE,
+    .CmpSingleLoad_PsFileNameBox_5_Paintok = { 0 },
+
+    .CmpSingleLoad_PsFileNameBox_5_Aicok = { 0 },
+
+    .CmpSingleLoad_PsFileNameBox_6_Sel_num = NAKA_NONE,
+
+    .CmpSingleLoad_PsFileNameBox_6_Paintok = { 0 },
+
+    .CmpSingleLoad_PsFileNameBox_6_Aicok = { 0 },
+
+    .CmpSingleLoad_PsFileNameBox_7_Sel_num = NAKA_NONE,
+
+    .CmpSingleLoad_PsFileNameBox_7_Paintok = { 0 },
+
+    .CmpSingleLoad_PsFileNameBox_7_Aicok = { 0 },
+
+    .DiskSaveMenu_Window = NAKA_NONE,
 
     .field_10b2 = NAKA_NONE,
 
-    .pad_204 = { 0 },
+    .TechnicsFormat_AcTtlJgBox_Selected = { 0 },
 
-    .field_10b8 = NAKA_NONE,
+    .SmfFormat_AcTtlJgBox_Selected = { 0 },
+
+    .DiskSave_Window = NAKA_NONE,
 
     .field_10ba = NAKA_NONE,
 
-    .field_10bc = 0x0001,
+    .DiskSavePage_Page = 0x0001,
 
-    .field_10be = NAKA_NONE,
+    .DiskSaveP1_Parent = NAKA_NONE,
 
     .field_10c0 = NAKA_NONE,
 
-    .field_10c2 = NAKA_NONE,
+    .DiskSaveP1_Child = NAKA_NONE,
 
     .field_10c4 = NAKA_NONE,
 
-    .pad_205 = { 0 },
+    .DiskSaveP1_AcParaStrBox_Paintok = { 0 },
 
-    .field_10d0 = 0x0001,
+    .DiskSaveP1_AcParaStrBox_2_Paintok = { 0 },
 
-    .pad_206 = { 0 },
+    .Name_AcTitleMenu_Selected = { 0 },
 
-    .field_10d4 = NAKA_NONE,
+    .DiskSaveP1_PsFileNameBox_Sel_num = { 0 },
+
+    .DiskSaveP1_PsFileNameBox_Paintok = { 0 },
+
+    .DiskSaveP1_PsFileNameBox_Aicok = 0x0001,
+
+    .DiskSaveP1_AcFileSfxBox_Paintok = { 0 },
+
+    .DiskSaveP2_Parent = NAKA_NONE,
 
     .field_10d6 = NAKA_NONE,
 
-    .field_10d8 = NAKA_NONE,
+    .DiskSaveP2_Child = NAKA_NONE,
 
     .field_10da = NAKA_NONE,
 
-    .field_10dc = NAKA_NONE,
+    .DiskSaveP2_PsFileNameBox_Sel_num = NAKA_NONE,
 
-    .pad_207 = { 0 },
+    .DiskSaveP2_PsFileNameBox_Paintok = { 0 },
 
-    .field_10e0 = 0x0001,
+    .DiskSaveP2_PsFileNameBox_Aicok = 0x0001,
 
-    .pad_208 = { 0 },
+    .DiskSaveP2_AcParaStrBox_Paintok = { 0 },
 
-    .field_10e4 = NAKA_NONE,
+    .DiskSaveP3_Parent = NAKA_NONE,
 
     .field_10e6 = NAKA_NONE,
 
-    .field_10e8 = NAKA_NONE,
+    .DiskSaveP3_Child = NAKA_NONE,
 
     .field_10ea = NAKA_NONE,
 
-    .pad_209 = { 0 },
+    .DiskSaveP3_PsFileNameBox_Sel_num = { 0 },
 
-    .field_10f0 = 0x0001,
+    .DiskSaveP3_PsFileNameBox_Paintok = { 0 },
 
-    .pad_210 = { 0 },
+    .DiskSaveP3_PsFileNameBox_Aicok = 0x0001,
 
-    .field_10f4 = NAKA_NONE,
+    .DiskSaveP3_AcParaStrBox_Paintok = { 0 },
+
+    .DiskSmfSave_Window = NAKA_NONE,
 
     .field_10f6 = NAKA_NONE,
 
-    .pad_211 = { 0 },
+    .DiskSmfSave_PsFileNameBox_Sel_num = { 0 },
 
-    .field_10fc = 0x0001,
+    .DiskSmfSave_PsFileNameBox_Paintok = { 0 },
 
-    .pad_212 = { 0 },
+    .DiskSmfSave_PsFileNameBox_Aicok = 0x0001,
 
-    .field_1106 = NAKA_NONE,
+    .DiskSmfSave_AcMonoIndexToggle_Onoff = { 0 },
 
-    .pad_213 = { 0 },
+    .DiskSmfSave_AcMonoIndexToggle_2_Onoff = { 0 },
 
-    .field_110a = 0x0001,
+    .Name_AcTitleMenu_2_Selected = { 0 },
 
-    .field_110c = NAKA_NONE,
+    .DiskSmfSave_AcParaStrBox_Paintok = { 0 },
 
-    .pad_214 = { 0 },
+    .DiskSmfSave_PsFileNameBox_2_Sel_num = NAKA_NONE,
 
-    .field_1110 = 0x0001,
+    .DiskSmfSave_PsFileNameBox_2_Paintok = { 0 },
 
-    .field_1112 = NAKA_NONE,
+    .DiskSmfSave_PsFileNameBox_2_Aicok = 0x0001,
 
-    .pad_215 = { 0 },
+    .DiskSmfSave_PsFileNameBox_3_Sel_num = NAKA_NONE,
 
-    .field_1116 = 0x0001,
+    .DiskSmfSave_PsFileNameBox_3_Paintok = { 0 },
 
-    .field_1118 = NAKA_NONE,
+    .DiskSmfSave_PsFileNameBox_3_Aicok = 0x0001,
+
+    .DiskSmfSave_PsFileNameBox_4_Sel_num = NAKA_NONE,
+
+    .DiskSmfSave_PsFileNameBox_4_Paintok = { 0 },
+
+    .DiskSmfSave_PsFileNameBox_4_Aicok = 0x0001,
+
+    .DiskSmfDirectPlay_Window = NAKA_NONE,
 
     .field_111a = NAKA_NONE,
 
-    .pad_216 = { 0 },
+    .DiskSmfDirectPlay_PsFileNameBox_Sel_num = { 0 },
 
-    .field_1120 = 0x0001,
+    .DiskSmfDirectPlay_PsFileNameBox_Paintok = { 0 },
 
-    .field_1122 = NAKA_NONE,
+    .DiskSmfDirectPlay_PsFileNameBox_Aicok = 0x0001,
 
-    .pad_217 = { 0 },
+    .DiskSmfDirectPlay_PsFileNameBox_2_Sel_num = NAKA_NONE,
 
-    .field_1126 = 0x0001,
+    .DiskSmfDirectPlay_PsFileNameBox_2_Paintok = { 0 },
 
-    .pad_218 = { 0 },
+    .DiskSmfDirectPlay_PsFileNameBox_2_Aicok = 0x0001,
 
-    .field_112c = 0x0001,
+    .DiskSmfDirectPlay_PsWindowToggle_Onoff = { 0 },
 
-    .pad_219 = { 0 },
+    .DiskSmfDirectPlay_AcMonoIndexToggle_Onoff = { 0 },
 
-    .field_1130 = NAKA_NONE,
+    .DiskSmfDirectPlay_AcMonoIndexToggle_2_Onoff = 0x0001,
+
+    .SmfMidiOut_Onoff = { 0 },
+
+    .SongNameDPSmfWin_Parent = NAKA_NONE,
 
     .field_1132 = NAKA_NONE,
 
-    .field_1134 = NAKA_NONE,
+    .SongNameDPSmfWin_Child = NAKA_NONE,
 
     .field_1136 = NAKA_NONE,
 
-    .pad_220 = { 0 },
+    .SongNameDPSmfWin_AcParaStrBox_Paintok = { 0 },
 
-    .field_113a = NAKA_NONE,
+    .DiskInfoDPSmfWin_Parent = NAKA_NONE,
 
     .field_113c = NAKA_NONE,
 
-    .field_113e = NAKA_NONE,
+    .DiskInfoDPSmfWin_Child = NAKA_NONE,
 
     .field_1140 = NAKA_NONE,
 
-    .pad_221 = { 0 },
+    .DiskInfoDPSmfWin_AcParaStrBox_Paintok = { 0 },
 
-    .field_1146 = NAKA_NONE,
+    .DiskInfoDPSmfWin_AcParaStrBox_2_Paintok = { 0 },
+
+    .DiskDocDirectPlay_Window = NAKA_NONE,
 
     .field_1148 = NAKA_NONE,
 
-    .pad_222 = { 0 },
+    .DiskDocDirectPlay_PsFileNameBox_Sel_num = { 0 },
 
-    .field_1150 = NAKA_NONE,
+    .DiskDocDirectPlay_PsFileNameBox_Paintok = { 0 },
 
-    .pad_223 = { 0 },
+    .DiskDocDirectPlay_PsFileNameBox_Aicok = { 0 },
 
-    .field_115a = NAKA_NONE,
+    .DiskDocDirectPlay_PsFileNameBox_2_Sel_num = NAKA_NONE,
+
+    .DiskDocDirectPlay_PsFileNameBox_2_Paintok = { 0 },
+
+    .DiskDocDirectPlay_PsFileNameBox_2_Aicok = { 0 },
+
+    .DiskDocDirectPlay_AcMonoIndexToggle_Onoff = { 0 },
+
+    .DiskDocDirectPlay_AcParaStrBox_Paintok = { 0 },
+
+    .DiskPdDirectPlay_Window = NAKA_NONE,
 
     .field_115c = NAKA_NONE,
 
-    .pad_224 = { 0 },
+    .DiskPdDirectPlay_PsFileNameBox_Sel_num = { 0 },
 
-    .field_1164 = NAKA_NONE,
+    .DiskPdDirectPlay_PsFileNameBox_Paintok = { 0 },
 
-    .pad_225 = { 0 },
+    .DiskPdDirectPlay_PsFileNameBox_Aicok = { 0 },
 
-    .field_116c = NAKA_NONE,
+    .DiskPdDirectPlay_PsFileNameBox_2_Sel_num = NAKA_NONE,
+
+    .DiskPdDirectPlay_PsFileNameBox_2_Paintok = { 0 },
+
+    .DiskPdDirectPlay_PsFileNameBox_2_Aicok = { 0 },
+
+    .DiskPdDirectPlay_AcMonoIndexToggle_Onoff = { 0 },
+
+    .DiskSongMedley_Window = NAKA_NONE,
 
     .field_116e = NAKA_NONE,
 
-    .pad_226 = { 0 },
+    .DiskSongMedley_PsFileNameBox_Sel_num = { 0 },
 
-    .field_1174 = 0x0001,
+    .DiskSongMedley_PsFileNameBox_Paintok = { 0 },
 
-    .field_1176 = NAKA_NONE,
+    .DiskSongMedley_PsFileNameBox_Aicok = 0x0001,
 
-    .pad_227 = { 0 },
+    .DiskSongMedley_PsFileNameBox_2_Sel_num = NAKA_NONE,
 
-    .field_117a = 0x0001,
+    .DiskSongMedley_PsFileNameBox_2_Paintok = { 0 },
 
-    .field_117c = NAKA_NONE,
+    .DiskSongMedley_PsFileNameBox_2_Aicok = 0x0001,
 
-    .pad_228 = { 0 },
+    .DiskSongMedley_PsFileNameBox_3_Sel_num = NAKA_NONE,
 
-    .field_1180 = 0x0001,
+    .DiskSongMedley_PsFileNameBox_3_Paintok = { 0 },
 
-    .pad_229 = { 0 },
+    .DiskSongMedley_PsFileNameBox_3_Aicok = 0x0001,
 
-    .field_118a = NAKA_NONE,
+    .SongMedleyDiskName_Paintok = { 0 },
+
+    .SongMedleyDiskInfo_Paintok = { 0 },
+
+    .DiskSongMedley_AcMonoIndexToggle_Onoff = { 0 },
+
+    .DiskSongMedley_AcMonoIndexToggle_2_Onoff = { 0 },
+
+    .DiskUtility_Window = NAKA_NONE,
 
     .field_118c = NAKA_NONE,
 
-    .pad_230 = { 0 },
+    .Smf_AcTitleMenu_2_Selected = { 0 },
 
-    .field_119e = 0x0001,
+    .DiskUtility_AcTitleMenu_Selected = { 0 },
 
-    .field_11a0 = NAKA_NONE,
+    .DiskUtility_AcScreenMenu_Selected = { 0 },
+
+    .COPY_AcScreenMenu_Selected = { 0 },
+
+    .DiskUtility_AcParaStrBox_Paintok = { 0 },
+
+    .DiskUtility_AcParaStrBox_2_Paintok = { 0 },
+
+    .DiskUtility_PsFileNameBox_Sel_num = { 0 },
+
+    .DiskUtility_PsFileNameBox_Paintok = { 0 },
+
+    .DiskUtility_PsFileNameBox_Aicok = 0x0001,
+
+    .FileRename_Window = NAKA_NONE,
 
     .field_11a2 = NAKA_NONE,
 
-    .field_11a4 = NAKA_NONE,
+    .DiskFormat_Window = NAKA_NONE,
 
     .field_11a6 = NAKA_NONE,
 
-    .field_11a8 = NAKA_NONE,
+    .DiskUtilitySMF_Window = NAKA_NONE,
 
     .field_11aa = NAKA_NONE,
 
-    .pad_231 = { 0 },
+    .Tech_AcTitleMenu_2_Selected = { 0 },
 
-    .field_11ba = NAKA_NONE,
+    .DiskUtilitySMF_PsFileNameBox_Sel_num = { 0 },
+
+    .DiskUtilitySMF_PsFileNameBox_Paintok = { 0 },
+
+    .DiskUtilitySMF_PsFileNameBox_Aicok = { 0 },
+
+    .DiskUtilitySMF_PsWindowToggle_Onoff = { 0 },
+
+    .DiskUtilitySMF_AcTitleMenu_Selected = { 0 },
+
+    .DiskUtilitySMF_AcScreenMenu_Selected = { 0 },
+
+    .DiskInfoWin_Parent = NAKA_NONE,
 
     .field_11bc = NAKA_NONE,
 
-    .field_11be = NAKA_NONE,
+    .DiskInfoWin_Child = NAKA_NONE,
 
     .field_11c0 = NAKA_NONE,
 
-    .pad_232 = { 0 },
+    .DiskInfoWin_AcParaStrBox_Paintok = { 0 },
 
-    .field_11c6 = NAKA_NONE,
+    .DiskInfoWin_AcParaStrBox_2_Paintok = { 0 },
+
+    .SongNameWin_Parent = NAKA_NONE,
 
     .field_11c8 = NAKA_NONE,
 
-    .field_11ca = NAKA_NONE,
+    .SongNameWin_Child = NAKA_NONE,
 
     .field_11cc = NAKA_NONE,
 
-    .pad_233 = { 0 },
+    .SongNameWin_AcParaStrBox_Paintok = { 0 },
 
-    .field_11d0 = NAKA_NONE,
+    .DiskFormatNamingWin_Parent = NAKA_NONE,
 
     .field_11d2 = NAKA_NONE,
 
-    .field_11d4 = NAKA_NONE,
+    .DiskFormatNamingWin_Child = NAKA_NONE,
 
     .field_11d6 = NAKA_NONE,
 
-    .field_11d8 = NAKA_NONE,
+    .DiskFormatSureWin_Parent = NAKA_NONE,
 
     .field_11da = NAKA_NONE,
 
-    .field_11dc = NAKA_NONE,
+    .DiskFormatSureWin_Child = NAKA_NONE,
 
     .field_11de = NAKA_NONE,
 
-    .field_11e0 = NAKA_NONE,
+    .DiskFormatSelectWin_Parent = NAKA_NONE,
 
     .field_11e2 = NAKA_NONE,
 
-    .field_11e4 = NAKA_NONE,
+    .DiskFormatSelectWin_Child = NAKA_NONE,
 
     .field_11e6 = NAKA_NONE,
 
-    .pad_234 = { 0 },
+    .KByteFormatDd_VwMenuBox_Selected = { 0 },
 
-    .field_11ec = NAKA_NONE,
+    .MByteFormatHd_VwMenuBox_Selected = { 0 },
+
+    .FileCopy_Window = NAKA_NONE,
 
     .field_11ee = NAKA_NONE,
 
-    .pad_235 = { 0 },
+    .FileCopy_AcParaStrBox_Paintok = { 0 },
 
-    .field_11f8 = NAKA_NONE,
+    .FileCopy_PsFileNameBox_Sel_num = { 0 },
+
+    .FileCopy_PsFileNameBox_Paintok = { 0 },
+
+    .FileCopy_PsFileNameBox_Aicok = { 0 },
+
+    .FileRenameSMF_Window = NAKA_NONE,
 
     .field_11fa = NAKA_NONE,
 
-    .field_11fc = NAKA_NONE,
+    .DiskDeleteSureWin_Parent = NAKA_NONE,
 
     .field_11fe = NAKA_NONE,
 
-    .field_1200 = NAKA_NONE,
+    .DiskDeleteSureWin_Child = NAKA_NONE,
 
     .field_1202 = NAKA_NONE,
 
-    .field_1204 = NAKA_NONE,
+    .DiskDeleteSureScr_Window = NAKA_NONE,
 
     .field_1206 = NAKA_NONE,
 
-    .field_1208 = NAKA_NONE,
+    .DiskSaveSureScr_Window = NAKA_NONE,
 
     .field_120a = NAKA_NONE,
 
-    .field_120c = NAKA_NONE,
+    .DiskSetup_Window = NAKA_NONE,
 
     .field_120e = NAKA_NONE,
 
-    .field_1210 = 0x0001,
+    .DiskSetup_AcRamEditBox_Selected = 0x0001,
 
     .DiskSetup_DiskInsertOption_Value = { 0 },
+
+    .DiskSetup_AcBitEditBox_Selected = { 0 },
 
     .DiskSetup_FileTypePriority_Value = { 0 },
 
@@ -5958,155 +6882,177 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_13da = NAKA_NONE,
 
-    .pad_248 = { 0 },
+    .CheckTitle_AcTitleMenu_Selected = { 0 },
 
-    .field_13e0 = NAKA_NONE,
+    .DebugWindow_AcWindowMenu_Selected = { 0 },
+
+    .ClipBoard_Window = NAKA_NONE,
 
     .field_13e2 = NAKA_NONE,
 
-    .field_13e4 = NAKA_NONE,
+    .DebugWindow_Parent = NAKA_NONE,
 
     .field_13e6 = NAKA_NONE,
 
-    .field_13e8 = NAKA_NONE,
+    .DebugWindow_Child = NAKA_NONE,
 
     .field_13ea = NAKA_NONE,
 
-    .pad_249 = { 0 },
+    .DebugWindow_DbDebugMenu_Selected = { 0 },
 
-    .field_13ee = 0x0002,
+    .DebugWindow_DbDebugMenu_Page = 0x0002,
 
-    .field_13f0 = NAKA_NONE,
+    .NamingWindow_Parent = NAKA_NONE,
 
     .field_13f2 = NAKA_NONE,
 
-    .field_13f4 = NAKA_NONE,
+    .NamingWindow_Child = NAKA_NONE,
 
     .field_13f6 = NAKA_NONE,
 
-    .pad_250 = { 0 },
+    .NamingCursorBox_Cursor = { 0 },
 
     .field_13fa = 0x0001,
 
     .pad_251 = { 0 },
 
-    .field_1400 = NAKA_NONE,
+    .MemoWindow_Parent = NAKA_NONE,
 
     .field_1402 = NAKA_NONE,
 
-    .field_1404 = NAKA_NONE,
+    .MemoWindow_Child = NAKA_NONE,
 
     .field_1406 = NAKA_NONE,
 
-    .field_1408 = NAKA_NONE,
+    .TrackSwitchWindow_Parent = NAKA_NONE,
 
     .field_140a = NAKA_NONE,
 
-    .field_140c = NAKA_NONE,
+    .TrackSwitchWindow_Child = NAKA_NONE,
 
     .field_140e = NAKA_NONE,
 
-    .field_1410 = 0x0001,
+    .TrackSwitchWindow_AcTrackSwitch_Onoff = 0x0001,
 
-    .pad_252 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_Part = { 0 },
 
-    .field_1418 = 0x0001,
+    .TrackSwitchWindow_AcTrackSwitch_Recplay = { 0 },
 
-    .pad_253 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_2_Onoff = { 0 },
 
-    .field_141c = 0x0001,
+    .TrackSwitchWindow_AcTrackSwitch_2_Part = 0x0001,
 
-    .field_141e = 0x0002,
+    .TrackSwitchWindow_AcTrackSwitch_2_Recplay = { 0 },
 
-    .pad_254 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_3_Onoff = 0x0001,
 
-    .field_1424 = 0x0003,
+    .TrackSwitchWindow_AcTrackSwitch_3_Part = 0x0002,
 
-    .pad_255 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_3_Recplay = { 0 },
 
-    .field_1428 = 0x0001,
+    .TrackSwitchWindow_AcTrackSwitch_4_Onoff = { 0 },
 
-    .field_142a = 0x0004,
+    .TrackSwitchWindow_AcTrackSwitch_4_Part = 0x0003,
 
-    .pad_256 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_4_Recplay = { 0 },
 
-    .field_1430 = 0x0005,
+    .TrackSwitchWindow_AcTrackSwitch_5_Onoff = 0x0001,
 
-    .pad_257 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_5_Part = 0x0004,
 
-    .field_1434 = 0x0001,
+    .TrackSwitchWindow_AcTrackSwitch_5_Recplay = { 0 },
 
-    .field_1436 = 0x0006,
+    .TrackSwitchWindow_AcTrackSwitch_6_Onoff = { 0 },
 
-    .pad_258 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_6_Part = 0x0005,
 
-    .field_143c = 0x0007,
+    .TrackSwitchWindow_AcTrackSwitch_6_Recplay = { 0 },
 
-    .pad_259 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_7_Onoff = 0x0001,
 
-    .field_1442 = 0x0008,
+    .TrackSwitchWindow_AcTrackSwitch_7_Part = 0x0006,
 
-    .pad_260 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_7_Recplay = { 0 },
 
-    .field_1446 = 0x0001,
+    .TrackSwitchWindow_AcTrackSwitch_8_Onoff = { 0 },
 
-    .field_1448 = 0x0009,
+    .TrackSwitchWindow_AcTrackSwitch_8_Part = 0x0007,
 
-    .pad_261 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_8_Recplay = { 0 },
 
-    .field_144e = 0x000A,
+    .TrackSwitchWindow_AcTrackSwitch_9_Onoff = { 0 },
 
-    .pad_262 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_9_Part = 0x0008,
 
-    .field_1452 = 0x0001,
+    .TrackSwitchWindow_AcTrackSwitch_9_Recplay = { 0 },
 
-    .field_1454 = 0x000B,
+    .TrackSwitchWindow_AcTrackSwitch_10_Onoff = 0x0001,
 
-    .pad_263 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_10_Part = 0x0009,
 
-    .field_145a = 0x000C,
+    .TrackSwitchWindow_AcTrackSwitch_10_Recplay = { 0 },
 
-    .pad_264 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_11_Onoff = { 0 },
 
-    .field_145e = 0x0001,
+    .TrackSwitchWindow_AcTrackSwitch_11_Part = 0x000A,
 
-    .field_1460 = 0x000D,
+    .TrackSwitchWindow_AcTrackSwitch_11_Recplay = { 0 },
 
-    .pad_265 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_12_Onoff = 0x0001,
 
-    .field_1466 = 0x000E,
+    .TrackSwitchWindow_AcTrackSwitch_12_Part = 0x000B,
 
-    .pad_266 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_12_Recplay = { 0 },
 
-    .field_146a = 0x0001,
+    .TrackSwitchWindow_AcTrackSwitch_13_Onoff = { 0 },
 
-    .field_146c = 0x000F,
+    .TrackSwitchWindow_AcTrackSwitch_13_Part = 0x000C,
 
-    .pad_267 = { 0 },
+    .TrackSwitchWindow_AcTrackSwitch_13_Recplay = { 0 },
 
-    .field_1470 = NAKA_NONE,
+    .TrackSwitchWindow_AcTrackSwitch_14_Onoff = 0x0001,
+
+    .TrackSwitchWindow_AcTrackSwitch_14_Part = 0x000D,
+
+    .TrackSwitchWindow_AcTrackSwitch_14_Recplay = { 0 },
+
+    .TrackSwitchWindow_AcTrackSwitch_15_Onoff = { 0 },
+
+    .TrackSwitchWindow_AcTrackSwitch_15_Part = 0x000E,
+
+    .TrackSwitchWindow_AcTrackSwitch_15_Recplay = { 0 },
+
+    .TrackSwitchWindow_AcTrackSwitch_16_Onoff = 0x0001,
+
+    .TrackSwitchWindow_AcTrackSwitch_16_Part = 0x000F,
+
+    .TrackSwitchWindow_AcTrackSwitch_16_Recplay = { 0 },
+
+    .MemDumpWindow_Parent = NAKA_NONE,
 
     .field_1472 = NAKA_NONE,
 
-    .field_1474 = NAKA_NONE,
+    .MemDumpWindow_Child = NAKA_NONE,
 
     .field_1476 = NAKA_NONE,
 
-    .field_1478 = 0xF980,
+    .MemDumpWindow_DbMemoryDump_Adr = 0xF980,
 
     .pad_268 = { 0 },
 
-    .field_147c = NAKA_NONE,
+    .CheckTitle_Window = NAKA_NONE,
 
     .field_147e = NAKA_NONE,
 
-    .pad_269 = { 0 },
+    .Naming_AcScreenMenu_Selected = { 0 },
 
-    .field_1484 = NAKA_NONE,
+    .Wall_AcScreenMenu_Selected = { 0 },
+
+    .CheckNaming_Window = NAKA_NONE,
 
     .field_1486 = NAKA_NONE,
 
-    .field_1488 = NAKA_NONE,
+    .CheckWall_Window = NAKA_NONE,
 
     .field_148a = NAKA_NONE,
 
@@ -6514,17 +7460,17 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1722 = 0x0003,
 
-    .field_1724 = NAKA_NONE,
+    .Normal_Window = NAKA_NONE,
 
     .field_1726 = NAKA_NONE,
 
-    .field_1728 = NAKA_NONE,
+    .normal_Window = NAKA_NONE,
 
     .field_172a = NAKA_NONE,
 
     .normal_AcLswBox_Value = { 0 },
 
-    .field_172e = 0x0001,
+    .normal_IvWindowPageControl_Page = 0x0001,
 
     .field_1730 = NAKA_NONE,
 
@@ -6580,287 +7526,303 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_277 = { 0 },
 
-    .field_1772 = NAKA_NONE,
+    .ControlIni_Window = NAKA_NONE,
 
     .field_1774 = NAKA_NONE,
 
-    .pad_278 = { 0 },
+    .SYSINI_Selected = { 0 },
 
-    .field_1778 = NAKA_NONE,
+    .Initial_TtlScreen_Window = NAKA_NONE,
 
     .field_177a = NAKA_NONE,
 
-    .field_177c = NAKA_NONE,
+    .SYSINISURE_Window = NAKA_NONE,
 
     .field_177e = NAKA_NONE,
 
-    .field_1780 = NAKA_NONE,
+    .ControlFsw_Window = NAKA_NONE,
 
     .field_1782 = NAKA_NONE,
 
-    .field_1784 = 0x0002,
+    .ControlFsw_AcFSWAssGridBox_Selrow = 0x0002,
 
-    .field_1786 = 0x0001,
+    .ControlFsw_AcFSWAssGridBox_Selcol = 0x0001,
 
-    .field_1788 = 0x3814,
+    .ControlFsw_AcFSWAssGridBox_Pcol = 0x3814,
 
     .field_178a = 0x00D1,
 
-    .field_178c = 0x3824,
+    .ControlFsw_AcFSWAssGridBox_Prow = 0x3824,
 
     .field_178e = 0x00D1,
 
-    .field_1790 = 0x3840,
+    .ControlFsw_AcFSWAssGridBox_Crow = 0x3840,
 
     .field_1792 = 0x00D1,
 
-    .field_1794 = NAKA_NONE,
+    .ControlSns_Window = NAKA_NONE,
 
     .field_1796 = NAKA_NONE,
 
-    .field_1798 = 0x0001,
+    .ControlSns_AcTchSensGridBox_Selrow = 0x0001,
 
-    .field_179a = 0x0001,
+    .ControlSns_AcTchSensGridBox_Selcol = 0x0001,
 
-    .field_179c = 0x3814,
+    .ControlSns_AcTchSensGridBox_Pcol = 0x3814,
 
     .field_179e = 0x00D1,
 
-    .field_17a0 = 0x3824,
+    .ControlSns_AcTchSensGridBox_Prow = 0x3824,
 
     .field_17a2 = 0x00D1,
 
-    .field_17a4 = 0x3838,
+    .ControlSns_AcTchSensGridBox_Crow = 0x3838,
 
     .field_17a6 = 0x00D1,
 
-    .field_17a8 = NAKA_NONE,
+    .NakaWidget_ToshiView044_0_MsaModeScreen_Window = NAKA_NONE,
 
     .field_17aa = NAKA_NONE,
 
-    .pad_279 = { 0 },
+    .NakaWidget_ToshiView044_0_MsaModeScreen_Newmsamode = { 0 },
 
-    .field_17b0 = NAKA_NONE,
+    .NakaWidget_ToshiView044_0_MsaModeScreen_Oldmsamode = { 0 },
+
+    .NakaWidget_ToshiView044_10_MsaModeScreen_Window = NAKA_NONE,
 
     .field_17b2 = NAKA_NONE,
 
-    .field_17b4 = 0x0003,
+    .NakaWidget_ToshiView044_10_MsaModeScreen_Newmsamode = 0x0003,
 
-    .field_17b6 = 0x0002,
+    .NakaWidget_ToshiView044_10_MsaModeScreen_Oldmsamode = 0x0002,
 
-    .field_17b8 = NAKA_NONE,
+    .PanelMemoryMode_TtlScreen_Window = NAKA_NONE,
 
     .field_17ba = NAKA_NONE,
 
-    .field_17bc = 0x0001,
+    .PanelMemoryMode_IvPmemWindowPageCtl_Page = 0x0001,
 
-    .field_17be = NAKA_NONE,
+    .PMEM1_Parent = NAKA_NONE,
 
     .field_17c0 = NAKA_NONE,
 
-    .field_17c2 = NAKA_NONE,
+    .PMEM1_Child = NAKA_NONE,
 
     .field_17c4 = NAKA_NONE,
 
-    .pad_280 = { 0 },
+    .PMEM1_PmemModeBox_Newpmemmode = { 0 },
 
-    .field_17ca = NAKA_NONE,
+    .PMEM1_PmemModeBox_Oldpmemmode = { 0 },
+
+    .PMEM2_Parent = NAKA_NONE,
 
     .field_17cc = NAKA_NONE,
 
-    .field_17ce = NAKA_NONE,
+    .PMEM2_Child = NAKA_NONE,
 
     .field_17d0 = NAKA_NONE,
 
-    .field_17d2 = 0x0002,
+    .PMEM2_AcPmExpFilterGridBox_Selrow = 0x0002,
 
-    .field_17d4 = 0x0001,
+    .PMEM2_AcPmExpFilterGridBox_Selcol = 0x0001,
 
-    .field_17d6 = 0x37F8,
+    .PMEM2_AcPmExpFilterGridBox_Pcol = 0x37F8,
 
     .field_17d8 = 0x00B4,
 
-    .field_17da = 0x3808,
+    .PMEM2_AcPmExpFilterGridBox_Prow = 0x3808,
 
     .field_17dc = 0x00B4,
 
-    .field_17de = 0x3828,
+    .PMEM2_AcPmExpFilterGridBox_Crow = 0x3828,
 
     .field_17e0 = 0x00B4,
 
-    .field_17e2 = NAKA_NONE,
+    .NakaWidget_ToshiView045_18_Window_Parent = NAKA_NONE,
 
     .field_17e4 = NAKA_NONE,
 
-    .field_17e6 = NAKA_NONE,
+    .NakaWidget_ToshiView045_18_Window_Child = NAKA_NONE,
 
     .field_17e8 = NAKA_NONE,
 
-    .field_17ea = NAKA_NONE,
+    .ControlSys_Window = NAKA_NONE,
 
     .field_17ec = NAKA_NONE,
 
-    .field_17ee = 0x0002,
+    .ControlSys_AcDispTimeSetGridBox_Selrow = 0x0002,
 
-    .field_17f0 = 0x0001,
+    .ControlSys_AcDispTimeSetGridBox_Selcol = 0x0001,
 
-    .field_17f2 = 0x3814,
+    .ControlSys_AcDispTimeSetGridBox_Pcol = 0x3814,
 
     .field_17f4 = 0x00D1,
 
-    .field_17f6 = 0x3824,
+    .ControlSys_AcDispTimeSetGridBox_Prow = 0x3824,
 
     .field_17f8 = 0x00D1,
 
-    .field_17fa = 0x3840,
+    .ControlSys_AcDispTimeSetGridBox_Crow = 0x3840,
 
     .field_17fc = 0x00D1,
 
-    .field_17fe = NAKA_NONE,
+    .WallpaperSetting_TtlScreen_Window = NAKA_NONE,
 
     .field_1800 = NAKA_NONE,
 
-    .pad_281 = { 0 },
+    .Load_AcTitleMenu_Selected = { 0 },
 
-    .field_1804 = NAKA_NONE,
+    .ControlWallSet_Window = NAKA_NONE,
 
     .field_1806 = NAKA_NONE,
 
-    .pad_282 = { 0 },
+    .Load_AcTitleMenu_2_Selected = { 0 },
 
-    .field_180a = 0x0001,
+    .ControlWallSet_AcRamEditBox_Selected = 0x0001,
 
     .ControlWallSet_AcRamEditBox_Value = { 0 },
 
+    .ControlWallSet_AcRamEditBox_2_Selected = { 0 },
+
     .ControlWallSet_MenuPages_Value = { 0 },
+
+    .ControlWallSet_AcRamEditBox_3_Selected = { 0 },
 
     .ControlWallSet_Others_Value = { 0 },
 
-    .field_181c = NAKA_NONE,
+    .WALLSETSURE_Window = NAKA_NONE,
 
     .field_181e = NAKA_NONE,
 
-    .field_1820 = NAKA_NONE,
+    .ONETCH_Window = NAKA_NONE,
 
     .field_1822 = NAKA_NONE,
 
     .ONETCH_AcRamBox_Value = { 0 },
 
-    .field_1828 = NAKA_NONE,
+    .MUSICSTYL_Window = NAKA_NONE,
 
     .field_182a = NAKA_NONE,
 
-    .pad_285 = { 0 },
+    .StyleExplorer_AcTitleMenu_Selected = { 0 },
 
-    .field_1830 = NAKA_NONE,
+    .StyleAlphabetical_AcTitleMenu_Selected = { 0 },
+
+    .MSCTSEL_Window = NAKA_NONE,
 
     .field_1832 = NAKA_NONE,
 
-    .field_1834 = 0x0001,
+    .MSCTSEL_IvMstStyleWindowPgCtl_Page = 0x0001,
 
-    .field_1836 = NAKA_NONE,
+    .STYLE1_Parent = NAKA_NONE,
 
     .field_1838 = NAKA_NONE,
 
-    .field_183a = NAKA_NONE,
+    .STYLE1_Child = NAKA_NONE,
 
     .field_183c = NAKA_NONE,
 
-    .pad_286 = { 0 },
+    .STYLE1_AcMstStyle1GridBox_Selrow = { 0 },
 
-    .field_1840 = 0x0001,
+    .STYLE1_AcMstStyle1GridBox_Selcol = 0x0001,
 
-    .field_1842 = 0x37F8,
+    .STYLE1_AcMstStyle1GridBox_Pcol = 0x37F8,
 
     .field_1844 = 0x00D1,
 
-    .field_1846 = 0x3808,
+    .STYLE1_AcMstStyle1GridBox_Prow = 0x3808,
 
     .field_1848 = 0x00D1,
 
-    .field_184a = 0x3824,
+    .STYLE1_AcMstStyle1GridBox_Crow = 0x3824,
 
     .field_184c = 0x00D1,
 
-    .field_184e = 0x000A,
+    .STYLE1_AcMstStyle1GridBox_Nowstylectgdtno = 0x000A,
 
-    .field_1850 = 0x0001,
+    .STYLE1_AcMstStyle1GridBox_Nowstylectgmaxpage = 0x0001,
 
-    .field_1852 = 0x0001,
+    .STYLE1_AcMstStyle1GridBox_Nowstylectgpage = 0x0001,
 
-    .pad_287 = { 0 },
+    .STYLE1_AcMstStyle1SubGridBox_Selrow = { 0 },
 
-    .field_1858 = 0x3840,
+    .STYLE1_AcMstStyle1SubGridBox_Selcol = { 0 },
+
+    .STYLE1_AcMstStyle1SubGridBox_Pcol = 0x3840,
 
     .field_185a = 0x00D1,
 
-    .field_185c = 0x3850,
+    .STYLE1_AcMstStyle1SubGridBox_Prow = 0x3850,
 
     .field_185e = 0x00D1,
 
-    .field_1860 = 0x386C,
+    .STYLE1_AcMstStyle1SubGridBox_Crow = 0x386C,
 
     .field_1862 = 0x00D1,
 
-    .field_1864 = 0x001B,
+    .STYLE1_AcMstStyle1SubGridBox_Nowstylesubctgdtno = 0x001B,
 
-    .field_1866 = 0x0003,
+    .STYLE1_AcMstStyle1SubGridBox_Nowstylesubctgmaxpage = 0x0003,
 
-    .field_1868 = 0x0001,
+    .STYLE1_AcMstStyle1SubGridBox_Nowstylesubctgpage = 0x0001,
 
-    .field_186a = NAKA_NONE,
+    .STYLE2_Parent = NAKA_NONE,
 
     .field_186c = NAKA_NONE,
 
-    .field_186e = NAKA_NONE,
+    .STYLE2_Child = NAKA_NONE,
 
     .field_1870 = NAKA_NONE,
 
-    .pad_288 = { 0 },
+    .STYLE2_AcMstStyle2GridBox_Selrow = { 0 },
 
-    .field_1876 = 0x37F8,
+    .STYLE2_AcMstStyle2GridBox_Selcol = { 0 },
+
+    .STYLE2_AcMstStyle2GridBox_Pcol = 0x37F8,
 
     .field_1878 = 0x00D1,
 
-    .field_187a = 0x3808,
+    .STYLE2_AcMstStyle2GridBox_Prow = 0x3808,
 
     .field_187c = 0x00D1,
 
-    .field_187e = 0x3820,
+    .STYLE2_AcMstStyle2GridBox_Crow = 0x3820,
 
     .field_1880 = 0x00D1,
 
-    .field_1882 = 0x0018,
+    .STYLE2_AcMstStyle2GridBox_Nowstylesubctgdtno = 0x0018,
 
-    .field_1884 = 0x000D,
+    .STYLE2_AcMstStyle2GridBox_Nowstylesubctgmaxpage = 0x000D,
 
-    .field_1886 = 0x0001,
+    .STYLE2_AcMstStyle2GridBox_Nowstylesubctgpage = 0x0001,
 
-    .pad_289 = { 0 },
+    .STYLE2_AcMstStyle2GridBox_Nowstylesubctg = { 0 },
 
-    .field_188a = 0x0001,
+    .STYLE2_AcMstStyle2GridBox_Nowstyle = 0x0001,
 
-    .field_188c = 0x0003,
+    .STYLE2_AcMstStyle2GridBox_Nowstylesubsubdtno1 = 0x0003,
 
-    .field_188e = 0x0003,
+    .STYLE2_AcMstStyle2GridBox_Nowstylesubsubdtno2 = 0x0003,
 
-    .field_1890 = NAKA_NONE,
+    .MSSCTSEL_Window = NAKA_NONE,
 
     .field_1892 = NAKA_NONE,
 
-    .field_1894 = 0x0001,
+    .MSSCTSEL_IvMstStyleWindowPgCtl_Page = 0x0001,
 
-    .field_1896 = NAKA_NONE,
+    .SONG1_Parent = NAKA_NONE,
 
     .field_1898 = NAKA_NONE,
 
-    .field_189a = NAKA_NONE,
+    .SONG1_Child = NAKA_NONE,
 
     .field_189c = NAKA_NONE,
 
-    .field_189e = 0x0006,
+    .SONG1_AcMstSong1GridBox_Selrow = 0x0006,
 
-    .pad_290 = { 0 },
+    .SONG1_AcMstSong1GridBox_Selcol = { 0 },
+
+    .SONG1_AcMstSong1GridBox_Pcol = { 0 },
 
     .field_18a3 = 0xCF6A,
 
@@ -6888,117 +7850,121 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_291 = { 0 },
 
-    .field_18c0 = 0x3D6C,
+    .SONG2_AcMstSong2GridBox_Selcol = { 0 },
+
+    .SONG2_AcMstSong2GridBox_Pcol = 0x3D6C,
 
     .field_18c2 = 0x00CF,
 
-    .field_18c4 = 0x3D7C,
+    .SONG2_AcMstSong2GridBox_Prow = 0x3D7C,
 
     .field_18c6 = 0x00CF,
 
-    .field_18c8 = 0x3D94,
+    .SONG2_AcMstSong2GridBox_Crow = 0x3D94,
 
     .field_18ca = 0x00CF,
 
-    .field_18cc = 0x0004,
+    .SONG2_AcMstSong2GridBox_Nowsongsubctgdtno = 0x0004,
 
-    .field_18ce = 0x0003,
+    .SONG2_AcMstSong2GridBox_Nowsongsubctgmaxpage = 0x0003,
 
-    .field_18d0 = 0x0001,
+    .SONG2_AcMstSong2GridBox_Nowsongsubctgpage = 0x0001,
 
-    .pad_292 = { 0 },
+    .SONG2_AcMstSong2GridBox_Nowsongsubctg = { 0 },
 
-    .field_18d4 = 0x0001,
+    .SONG2_AcMstSong2GridBox_Nowsong = 0x0001,
 
-    .field_18d6 = 0x0003,
+    .SONG2_AcMstSong2GridBox_Nowsongsubsubdtno1 = 0x0003,
 
-    .field_18d8 = 0x0003,
+    .SONG2_AcMstSong2GridBox_Nowsongsubsubdtno2 = 0x0003,
 
-    .field_18da = NAKA_NONE,
+    .MSSONGLIST_Window = NAKA_NONE,
 
     .field_18dc = NAKA_NONE,
 
-    .field_18de = NAKA_NONE,
+    .MSSONGLIST_AcMstSugAlpGridBox_Selrow = NAKA_NONE,
 
-    .pad_293 = { 0 },
+    .MSSONGLIST_AcMstSugAlpGridBox_Selcol = { 0 },
 
-    .field_18e2 = 0x3844,
+    .MSSONGLIST_AcMstSugAlpGridBox_Pcol = 0x3844,
 
     .field_18e4 = 0x00D0,
 
-    .field_18e6 = 0x3854,
+    .MSSONGLIST_AcMstSugAlpGridBox_Prow = 0x3854,
 
     .field_18e8 = 0x00D0,
 
-    .field_18ea = 0x386C,
+    .MSSONGLIST_AcMstSugAlpGridBox_Crow = 0x386C,
 
     .field_18ec = 0x00D0,
 
-    .A_str = "A",
+    .MSSONGLIST_AcMstSugAlpGridBox_Nowalph = "A",
 
-    .pad_294 = { 0 },
+    .MSSONGLIST_AcMstSugAlpGridBox_Nowalphtop = { 0 },
 
-    .str_14 = "%",
+    .MSSONGLIST_AcMstSugAlpGridBox_Nowalphdtno = "%",
 
-    .field_18f4 = 0x0005,
+    .MSSONGLIST_AcMstSugAlpGridBox_Nowalphmaxpage = 0x0005,
 
-    .field_18f6 = 0x0002,
+    .MSSONGLIST_AcMstSugAlpGridBox_Nowalphpage = 0x0002,
 
-    .field_18f8 = 0x0001,
+    .MSSONGLIST_AcMstSugAlpGridBox_Nowalphselsong = 0x0001,
 
-    .field_18fa = 0x0001,
+    .MSSONGLIST_AcMstSugAlpGridBox_Nowttlselsong = 0x0001,
 
-    .field_18fc = NAKA_NONE,
+    .MSSTLSEL_Window = NAKA_NONE,
 
     .field_18fe = NAKA_NONE,
 
-    .pad_295 = { 0 },
+    .MSSTLSEL_AcMstStyleAlpGridBox_Selrow = { 0 },
 
-    .field_1904 = 0x37F8,
+    .MSSTLSEL_AcMstStyleAlpGridBox_Selcol = { 0 },
+
+    .MSSTLSEL_AcMstStyleAlpGridBox_Pcol = 0x37F8,
 
     .field_1906 = 0x00D1,
 
-    .field_1908 = 0x3808,
+    .MSSTLSEL_AcMstStyleAlpGridBox_Prow = 0x3808,
 
     .field_190a = 0x00D1,
 
-    .field_190c = 0x3820,
+    .MSSTLSEL_AcMstStyleAlpGridBox_Crow = 0x3820,
 
     .field_190e = 0x00D1,
 
-    .A_str_2 = "A",
+    .MSSTLSEL_AcMstStyleAlpGridBox_Nowalph = "A",
 
-    .field_1912 = 0x0015,
+    .MSSTLSEL_AcMstStyleAlpGridBox_Nowalphtop = 0x0015,
 
-    .str_16 = "+",
+    .MSSTLSEL_AcMstStyleAlpGridBox_Nowalphdtno = "+",
 
-    .field_1916 = 0x0005,
+    .MSSTLSEL_AcMstStyleAlpGridBox_Nowalphmaxpage = 0x0005,
 
-    .field_1918 = 0x0001,
+    .MSSTLSEL_AcMstStyleAlpGridBox_Nowalphpage = 0x0001,
 
-    .field_191a = NAKA_NONE,
+    .PMBANK_Window = NAKA_NONE,
 
     .field_191c = NAKA_NONE,
 
-    .field_191e = 0x0001,
+    .PMBANK_Page = 0x0001,
 
-    .field_1920 = 0x0002,
+    .PMBANK_Nowbank = 0x0002,
 
-    .field_1922 = 0x0002,
+    .PMBANK_Oldbank = 0x0002,
 
-    .field_1924 = 0x0001,
+    .PMBANK_PsPageBox_Page = 0x0001,
 
-    .field_1926 = NAKA_NONE,
+    .PMVIEW_Window = NAKA_NONE,
 
     .field_1928 = NAKA_NONE,
 
-    .field_192a = 0x0001,
+    .PMVIEW_AcPmBkEditBox_Selected = 0x0001,
 
     .PMVIEW_AcPmBkEditBox_Value = { 0 },
 
-    .field_1930 = 0x0001,
+    .PMVIEW_PsPageBox_Page = 0x0001,
 
-    .field_1932 = NAKA_NONE,
+    .PMNAME_Window = NAKA_NONE,
 
     .field_1934 = NAKA_NONE,
 
@@ -7020,161 +7986,167 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1948 = 0x0003,
 
-    .field_194a = NAKA_NONE,
+    .RVARI_Window = NAKA_NONE,
 
     .field_194c = NAKA_NONE,
 
-    .field_194e = 0x0001,
+    .RVARI_Page = 0x0001,
 
     .H_str = "H",
 
-    .field_1952 = 0x000D,
+    .RVARI_Varisu = 0x000D,
 
-    .pad_299 = { 0 },
+    .RVARI_Nowswno = { 0 },
 
-    .field_195a = NAKA_NONE,
+    .RVARI_Nowvari = { 0 },
+
+    .RVARI_Oldvari = { 0 },
+
+    .vF4_e0_Window = NAKA_NONE,
 
     .field_195c = NAKA_NONE,
 
-    .field_195e = NAKA_NONE,
+    .TEST1RAM_Parent = NAKA_NONE,
 
     .field_1960 = NAKA_NONE,
 
-    .field_1962 = NAKA_NONE,
+    .TEST1RAM_Child = NAKA_NONE,
 
     .field_1964 = NAKA_NONE,
 
-    .field_1966 = NAKA_NONE,
+    .TEST1CP_Parent = NAKA_NONE,
 
     .field_1968 = NAKA_NONE,
 
-    .field_196a = NAKA_NONE,
+    .TEST1CP_Child = NAKA_NONE,
 
     .field_196c = NAKA_NONE,
 
-    .field_196e = NAKA_NONE,
+    .vF4_e13_Window = NAKA_NONE,
 
     .field_1970 = NAKA_NONE,
 
-    .field_1972 = NAKA_NONE,
+    .TEST2_Window = NAKA_NONE,
 
     .field_1974 = NAKA_NONE,
 
-    .field_1976 = NAKA_NONE,
+    .TEST2OKOK_Parent = NAKA_NONE,
 
     .field_1978 = NAKA_NONE,
 
-    .field_197a = NAKA_NONE,
+    .TEST2OKOK_Child = NAKA_NONE,
 
     .field_197c = NAKA_NONE,
 
-    .field_197e = NAKA_NONE,
+    .TEST2NGNG_Parent = NAKA_NONE,
 
     .field_1980 = NAKA_NONE,
 
-    .field_1982 = NAKA_NONE,
+    .TEST2NGNG_Child = NAKA_NONE,
 
     .field_1984 = NAKA_NONE,
 
-    .field_1986 = NAKA_NONE,
+    .TEST2NGOK_Parent = NAKA_NONE,
 
     .field_1988 = NAKA_NONE,
 
-    .field_198a = NAKA_NONE,
+    .TEST2NGOK_Child = NAKA_NONE,
 
     .field_198c = NAKA_NONE,
 
-    .field_198e = NAKA_NONE,
+    .TEST2OKNG_Parent = NAKA_NONE,
 
     .field_1990 = NAKA_NONE,
 
-    .field_1992 = NAKA_NONE,
+    .TEST2OKNG_Child = NAKA_NONE,
 
     .field_1994 = NAKA_NONE,
 
-    .field_1996 = NAKA_NONE,
+    .TEST3_Window = NAKA_NONE,
 
     .field_1998 = NAKA_NONE,
 
-    .pad_300 = { 0 },
+    .TEST3_Nowswno = { 0 },
 
-    .field_199e = NAKA_NONE,
+    .TEST3_Oldswno = { 0 },
+
+    .TEST4_Window = NAKA_NONE,
 
     .field_19a0 = NAKA_NONE,
 
-    .field_19a2 = NAKA_NONE,
+    .TEST5_Window = NAKA_NONE,
 
     .field_19a4 = NAKA_NONE,
 
-    .field_19a6 = NAKA_NONE,
+    .TEST51_Parent = NAKA_NONE,
 
     .field_19a8 = NAKA_NONE,
 
-    .field_19aa = NAKA_NONE,
+    .TEST51_Child = NAKA_NONE,
 
     .field_19ac = NAKA_NONE,
 
-    .field_19ae = NAKA_NONE,
+    .TEST52_Parent = NAKA_NONE,
 
     .field_19b0 = NAKA_NONE,
 
-    .field_19b2 = NAKA_NONE,
+    .TEST52_Child = NAKA_NONE,
 
     .field_19b4 = NAKA_NONE,
 
-    .field_19b6 = NAKA_NONE,
+    .TEST53_Parent = NAKA_NONE,
 
     .field_19b8 = NAKA_NONE,
 
-    .field_19ba = NAKA_NONE,
+    .TEST53_Child = NAKA_NONE,
 
     .field_19bc = NAKA_NONE,
 
-    .field_19be = NAKA_NONE,
+    .TEST54_Parent = NAKA_NONE,
 
     .field_19c0 = NAKA_NONE,
 
-    .field_19c2 = NAKA_NONE,
+    .TEST54_Child = NAKA_NONE,
 
     .field_19c4 = NAKA_NONE,
 
-    .field_19c6 = NAKA_NONE,
+    .TEST55_Parent = NAKA_NONE,
 
     .field_19c8 = NAKA_NONE,
 
-    .field_19ca = NAKA_NONE,
+    .TEST55_Child = NAKA_NONE,
 
     .field_19cc = NAKA_NONE,
 
-    .field_19ce = NAKA_NONE,
+    .TEST56_Parent = NAKA_NONE,
 
     .field_19d0 = NAKA_NONE,
 
-    .field_19d2 = NAKA_NONE,
+    .TEST56_Child = NAKA_NONE,
 
     .field_19d4 = NAKA_NONE,
 
-    .field_19d6 = NAKA_NONE,
+    .TEST6_Window = NAKA_NONE,
 
     .field_19d8 = NAKA_NONE,
 
-    .field_19da = NAKA_NONE,
+    .TEST6OK_Parent = NAKA_NONE,
 
     .field_19dc = NAKA_NONE,
 
-    .field_19de = NAKA_NONE,
+    .TEST6OK_Child = NAKA_NONE,
 
     .field_19e0 = NAKA_NONE,
 
-    .field_19e2 = NAKA_NONE,
+    .TEST6NG_Parent = NAKA_NONE,
 
     .field_19e4 = NAKA_NONE,
 
-    .field_19e6 = NAKA_NONE,
+    .TEST6NG_Child = NAKA_NONE,
 
     .field_19e8 = NAKA_NONE,
 
-    .field_19ea = NAKA_NONE,
+    .EXT_Window = NAKA_NONE,
 
     .field_19ec = NAKA_NONE,
 

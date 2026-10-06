@@ -8,6 +8,9 @@ naka_sequencer_channels.c is the work-RAM initial image: Boot_InitWorkRAM copies
 carry a `data` field (type character 'n') that is the RAM address of their value cell: SdpartMain's PAN box points
 at 0x3E6AC, its REV. DEPTH box at 0x3E6B0, and so on.  In the C image those cells were zero `pad_N` runs or
 `field_XXXX` words.
+Every other RAM-address field of a widget (selected, onoff, page, selrow, window, parent, nowstyle ... -- the class
+system's own field names) points at a cell of its own too: 1,367 distinct cells, none shared.  Those cells are named
+<widget>_<Field> (EqOnOff_Onoff, STYLE2_AcMstStyle2GridBox_Nowstyle).
 For every widget record in a v10 naka_*.c blob whose `.data` is a RAM address inside copy 1, this script names
 the cell at that offset after the widget: <view>_<Caption>_Value, where <view> is the widget label's prefix
 (SdpartMain_AcLswPartEditBox_2 -> SdpartMain) and <Caption> its caption text in CamelCase ("REV. DEPTH :" ->
@@ -52,6 +55,12 @@ def cells_v10():
         t = open(c, encoding="latin-1").read()
         for m in re.finditer(r'\n    \.(\w+) = \{\s*\n((?:\s+\.\w+ = [^\n]*\n)+?)\s*\}', t):
             body = m.group(2)
+            # every other property cell: <widget>_<Field>, the field name being the class system's own
+            for fm in re.finditer(r'\.(\w+) = (0x[0-9A-Fa-f]{8})', body):
+                a = int(fm.group(2), 16)
+                if fm.group(1) != "data" and IMG0 <= a < IMG0 + IMGN:
+                    assert a - IMG0 not in out, (hex(a), m.group(1), fm.group(1))
+                    out[a - IMG0] = "%s_%s" % (m.group(1), fm.group(1).capitalize())
             d = re.search(r'\.data = (0x[0-9A-Fa-f]+)', body)
             if not d:
                 continue
@@ -87,10 +96,15 @@ def plan(cb, cells):
             continue
         by_member.setdefault(mb.name, (mb, []))[1].append((off, name))
     for mname, (mb, lst) in sorted(by_member.items(), key=lambda kv: kv[1][0].offset):
-        if not SS.placeholder_field(mb.name):
+        if lst == [(mb.offset, mb.name)]:
+            continue                                                        # already carries the cell's name
+        own = mb.name in set(cells.values()) and mb.ctype == "uint8_t"      # a piece this script cut earlier
+        if not own and not SS.placeholder_field(mb.name):
             skipped.extend((o, n, "inside named member %s" % mb.name) for o, n in lst)
             continue
-        if re.match(r'^_?pad_\d+$', mb.name):
+        if own and lst == [(mb.offset, mb.name)]:
+            continue                                                        # already named, nothing inside it
+        if re.match(r'^_?pad_\d+$', mb.name) or own:
             pieces = []
             if lst[0][0] > mb.offset:
                 pieces.append((mb.offset, lst[0][0], mb.name))
@@ -126,7 +140,7 @@ def main():
                 assert not any(blob[a:b]), (tree, n, "non-zero")
                 new.append(M.NewMember("uint8_t", n, "[%d]" % (b - a), b - a, "{ 0 }", []))
             cb.retype(start, end, new, blob)
-            done += sum(1 for _, _, n in pieces if n.endswith("_Value"))
+            done += sum(1 for _, _, n in pieces if n in set(cells.values()))
         text = cb.render()
         if renames:
             from name_resname_strings import segments
