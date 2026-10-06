@@ -6465,6 +6465,7 @@ SePitLfo1TitleFunc_DispatchSwitch:
 SeMenu_RefreshPartDisplay_Epilogue4:
 	inc	4, xsp
 	ret
+SePitPit1_OnColumn2:
 	lda	xsp, (xsp-16)
 	push	qiz
 	ld	(xsp+16), a
@@ -6501,6 +6502,7 @@ SeMenu_RefreshPartDisplay_Epilogue4:
 	pop qiz
 	lda	xsp, (xsp+16)
 	ret
+SePitPit1_OnColumn3:
 	lda	xsp, (xsp-16)
 	push	qiz
 	ld	(xsp+16), a
@@ -6537,6 +6539,7 @@ SeMenu_RefreshPartDisplay_Epilogue4:
 	pop qiz
 	lda	xsp, (xsp+16)
 	ret
+SePitPit1_OnColumn4:
 	lda	xsp, (xsp-16)
 	push	qiz
 	ld	(xsp+16), a
@@ -6571,6 +6574,7 @@ SeMenu_RefreshPartDisplay_Epilogue4:
 	pop qiz
 	lda	xsp, (xsp+16)
 	ret
+SePitPit1_OnColumn6:
 	lda	xsp, (xsp-18)
 	push	qiz
 	ld	(xsp+18), a
@@ -6673,11 +6677,13 @@ SeMenu_RefreshPartDisplay_Join3:
 	pop qiz
 	lda	xsp, (xsp+18)
 	ret
+SePitPit1_OnSideRow1:
 	cp	a, 0:i3
 	jp	nz, (Scoop_SoundEditorData_Helper3:24)
 	ldw	wa, 40
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
+SePitPit1_OnSideRow2:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 39
@@ -6685,6 +6691,7 @@ SeMenu_RefreshPartDisplay_Join3:
 	ld	de, 1:i3
 	call	Scoop_SoundEditorData_Helper9
 	ret
+SePitPit1_OnSideRow3:
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip4
 	ldw	wa, 42
@@ -6695,6 +6702,7 @@ SeMenu_RefreshPartDisplay_Skip4:
 	ld	bc, 2:i3
 	ld	de, 1:i3
 	jp	Scoop_SoundEditorData_Helper9
+SePitPit1_OnSideRow4:
 	dec	2, xsp
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip13
@@ -6721,6 +6729,7 @@ SeMenu_RefreshPartDisplay_Skip13:
 SeMenu_RefreshPartDisplay_Epilogue5:
 	inc	2, xsp
 	ret
+SePitPit1_OnSideRow5:
 	dec	2, xsp
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip14
@@ -6747,6 +6756,7 @@ SeMenu_RefreshPartDisplay_Skip14:
 SeMenu_RefreshPartDisplay_Epilogue6:
 	inc	2, xsp
 	ret
+SePitPit1_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ld	wa, 0:i3
@@ -6755,38 +6765,47 @@ SeMenu_RefreshPartDisplay_Epilogue6:
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SePitEnv1_OnColumn1:
 	extz	wa
 	ldw	bc, 9
 	ld	de, 0:i3
 	jp	SeMenu_ApplyPartEdit_AltStore_Join8
+SePitEnv1_OnColumn2:
 	extz	wa
 	ldw	bc, 10
 	ld	de, 0:i3
 	jp	SeMenu_ApplyPartEdit_AltStore_Join9
+SePitEnv1_OnColumn3:
 	extz	wa
 	ldw	bc, 8
 	ldw	de, 11
 	jp	SeMenu_ApplyPartEdit_AltStore_Join10
+SePitEnv1_OnColumn4:
 	extz	wa
 	ldw	bc, 12
 	ld	de, 0:i3
 	jp	SeMenu_ApplyPartEdit_AltStore_Join11
+SePitEnv1_OnColumn5:
 	extz	wa
 	ldw	bc, 16
 	ldw	de, 13
 	jp	SeMenu_ApplyPartEdit_AltStore_Join12
+SePitEnv1_OnColumn6:
 	extz	wa
 	ldw	bc, 14
 	ld	de, 0:i3
 	jp	SeMenu_ApplyPartEdit_AltStore_Join13
+SePitEnv1_OnColumn7:
 	extz	wa
 	ld	bc, 7:i3
 	ldw	de, 15
 	jp	SeMenu_ApplyPartEdit_AltStore_Join14
+SePitEnv1_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
 	call	Scoop_SoundEditorData_Helper3
 	ret
+SePitEnv1_OnSideRow2:
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip5
 	ldw	wa, 39
@@ -6802,6 +6821,7 @@ SeMenu_RefreshPartDisplay_Skip5:
 SeMenu_RefreshPartDisplay_Join4:
 	call	SeMenu_SendEvent
 	ret
+SePitEnv1_OnSideRow3:
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip6
 	ldw	wa, 42
@@ -6817,6 +6837,7 @@ SeMenu_RefreshPartDisplay_Skip6:
 SeMenu_RefreshPartDisplay_Join5:
 	call	SeMenu_SendEvent
 	ret
+SePitEnv1_OnSideRow4:
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip7
 	ld	wa, 0:i3
@@ -6830,6 +6851,7 @@ SeMenu_RefreshPartDisplay_Skip7:
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
 	ret
+SePitEnv1_OnSideRow5:
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip8
 	ld	wa, 1:i3
@@ -6843,12 +6865,14 @@ SeMenu_RefreshPartDisplay_Skip8:
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
 	ret
+SePitEnv1_OnSwitch25:
 	cp	a, 0:i3
 	ret	nz
 	ldw	wa, 41
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SePitEnv1_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ld	wa, 0:i3
@@ -6857,28 +6881,36 @@ SeMenu_RefreshPartDisplay_Skip8:
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SePitEnv2_OnColumn2:
 	extz	wa
 	ldw	bc, 20
 	jp	SeMenu_ApplyPartEdit_AltStore_Join15
+SePitEnv2_OnColumn3:
 	extz	wa
 	ldw	bc, 21
 	jp	SeMenu_ApplyPartEdit_AltStore_Join16
+SePitEnv2_OnColumn4:
 	extz	wa
 	ldw	bc, 22
 	jp	SeMenu_ApplyPartEdit_AltStore_Join17
+SePitEnv2_OnColumn5:
 	extz	wa
 	ldw	bc, 19
 	jp	SeMenu_ApplyPartEdit_AltStore_Join18
+SePitEnv2_OnColumn7:
 	extz	wa
 	ldw	bc, 17
 	jp	SeMenu_ApplyPartEdit_AltStore_Join19
+SePitEnv2_OnColumn8:
 	extz	wa
 	ldw	bc, 18
 	jp	SeMenu_ApplyPartEdit_AltStore_Join20
+SePitEnv2_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
 	call	Scoop_SoundEditorData_Helper3
 	ret
+SePitEnv2_OnSideRow2:
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip9
 	ldw	wa, 39
@@ -6894,6 +6926,7 @@ SeMenu_RefreshPartDisplay_Skip9:
 SeMenu_RefreshPartDisplay_Join6:
 	call	SeMenu_SendEvent
 	ret
+SePitEnv2_OnSideRow3:
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip10
 	ldw	wa, 42
@@ -6909,6 +6942,7 @@ SeMenu_RefreshPartDisplay_Skip10:
 SeMenu_RefreshPartDisplay_Join7:
 	call	SeMenu_SendEvent
 	ret
+SePitEnv2_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 3:i3
@@ -6919,6 +6953,7 @@ SeMenu_RefreshPartDisplay_Join7:
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
 	ret
+SePitEnv2_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 4:i3
@@ -6929,12 +6964,14 @@ SeMenu_RefreshPartDisplay_Join7:
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
 	ret
+SePitEnv2_OnSwitch25:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 40
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SePitEnv2_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ld	wa, 0:i3
@@ -6943,32 +6980,41 @@ SeMenu_RefreshPartDisplay_Join7:
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SePitLfo1_OnColumn2:
 	extz	wa
 	ld	bc, 1:i3
 	jp	SeMenu_ApplyPartEdit_Data2
+SePitLfo1_OnColumn3:
 	extz	wa
 	ld	bc, 1:i3
 	jp	SeMenu_ApplyPartEdit_AltStore_Join
+SePitLfo1_OnColumn4:
 	extz	wa
 	ld	bc, 1:i3
 	jp	SeMenu_ApplyPartEdit_AltStore_Join2
+SePitLfo1_OnColumn5:
 	extz	wa
 	ld	bc, 1:i3
 	jp	SeMenu_ApplyPartEdit_AltStore_Join3
+SePitLfo1_OnColumn6:
 	extz	wa
 	ld	bc, 1:i3
 	jp	SeMenu_ApplyPartEdit_AltStore_Join4
+SePitLfo1_OnColumn7:
 	extz	wa
 	ld	bc, 1:i3
 	jp	SeMenu_ApplyPartEdit_AltStore_Join5
+SePitLfo1_OnColumn8:
 	extz	wa
 	ld	bc, 1:i3
 	jp	SeMenu_ApplyPartEdit_AltStore_Join6
+SePitLfo1_OnSideRow1:
 	cp	a, 0:i3
 	jp	nz, (Scoop_SoundEditorData_Helper3:24)
 	ldw	wa, 40
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
+SePitLfo1_OnSideRow2:
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip11
 	ldw	wa, 39
@@ -6978,24 +7024,28 @@ SeMenu_RefreshPartDisplay_Skip11:
 	ld	wa, 1:i3
 	ld	bc, 1:i3
 	jp	Scoop_SoundEditorData_Helper6
+SePitLfo1_OnSideRow3:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
 	ld	bc, 2:i3
 	call	Scoop_SoundEditorData_Helper6
 	ret
+SePitLfo1_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
 	ld	bc, 3:i3
 	call	Scoop_SoundEditorData_Helper6
 	ret
+SePitLfo1_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
 	ld	bc, 4:i3
 	call	Scoop_SoundEditorData_Helper6
 	ret
+SePitLfo1_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ld	wa, 0:i3

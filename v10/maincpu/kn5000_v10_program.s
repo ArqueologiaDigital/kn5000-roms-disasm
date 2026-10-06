@@ -431,113 +431,113 @@ SeWrtSndTitleFunc_Methods:
 SeAmpAmp1TitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue5+0x3
-	.long Scoop_SoundEditorData_Skip3+0xA
-	.long Scoop_SoundEditorData_Join4+0x25
+	.long SeAmpAmp1_OnColumn3
+	.long SeAmpAmp1_OnColumn4
+	.long SeAmpAmp1_OnColumn5
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Join4+0x97
-	.long Scoop_SoundEditorData_Join4+0xA7
-	.long Scoop_SoundEditorData_Join4+0xB7
-	.long Scoop_SoundEditorData_Join4+0xE6
-	.long Scoop_SoundEditorData_Join4+0x10A
+	.long SeAmpAmp1_OnSideRow1
+	.long SeAmpAmp1_OnSideRow2
+	.long SeAmpAmp1_OnSideRow3
+	.long SeAmpAmp1_OnSideRow4
+	.long SeAmpAmp1_OnSideRow5
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Join4+0x150
-	.long Scoop_SoundEditorData_Join4+0x12E
+	.long SeAmpAmp1_OnSwitch15
+	.long SeAmpAmp1_OnSwitch25
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeAmpAmp2TitleFunc_DispatchSwitch+0x1E (0xF03DFF) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeAmpAmp2TitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue6+0x3
-	.long Scoop_SoundEditorData_Skip6+0xA
-	.long Scoop_SoundEditorData_Skip7+0x9
-	.long Scoop_SoundEditorData_Skip8+0xA
+	.long SeAmpAmp2_OnColumn3
+	.long SeAmpAmp2_OnColumn4
+	.long SeAmpAmp2_OnColumn5
+	.long SeAmpAmp2_OnColumn6
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Skip9+0x9
-	.long Scoop_SoundEditorData_Skip9+0x19
-	.long Scoop_SoundEditorData_Skip9+0x31
-	.long Scoop_SoundEditorData_Join6+0x5
-	.long Scoop_SoundEditorData_Join6+0x1D
+	.long SeAmpAmp2_OnSideRow1
+	.long SeAmpAmp2_OnSideRow2
+	.long SeAmpAmp2_OnSideRow3
+	.long SeAmpAmp2_OnSideRow4
+	.long SeAmpAmp2_OnSideRow5
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Join6+0x43
-	.long Scoop_SoundEditorData_Join6+0x35
+	.long SeAmpAmp2_OnSwitch15
+	.long SeAmpAmp2_OnSwitch25
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeAmpEnv1TitleFunc_DispatchSwitch+0x1E (0xF03E2D) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeAmpEnv1TitleFunc_SwitchHandlers:
-	.long Scoop_SoundEditorData_Join6+0x57
-	.long Scoop_SoundEditorData_Join7+0x29
-	.long Scoop_SoundEditorData_Join8+0x29
-	.long Scoop_SoundEditorData_Join9+0x29
-	.long Scoop_SoundEditorData_Join10+0x29
-	.long Scoop_SoundEditorData_Join12+0x29
-	.long Scoop_SoundEditorData_Join14+0x29
-	.long Scoop_SoundEditorData_Join14+0x8C
-	.long Scoop_SoundEditorData_Join14+0xFC
-	.long Scoop_SoundEditorData_Join14+0x105
-	.long Scoop_SoundEditorData_Join15+0x5
-	.long Scoop_SoundEditorData_Epilogue7+0x3
-	.long Scoop_SoundEditorData_Epilogue7+0x2F
+	.long SeAmpEnv1_OnColumn1
+	.long SeAmpEnv1_OnColumn2
+	.long SeAmpEnv1_OnColumn3
+	.long SeAmpEnv1_OnColumn4
+	.long SeAmpEnv1_OnColumn5
+	.long SeAmpEnv1_OnColumn6
+	.long SeAmpEnv1_OnColumn7
+	.long SeAmpEnv1_OnColumn8
+	.long SeAmpEnv1_OnSideRow1
+	.long SeAmpEnv1_OnSideRow2
+	.long SeAmpEnv1_OnSideRow3
+	.long SeAmpEnv1_OnSideRow4
+	.long SeAmpEnv1_OnSideRow5
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue8+0x25
-	.long Scoop_SoundEditorData_Epilogue8+0x3
+	.long SeAmpEnv1_OnSwitch15
+	.long SeAmpEnv1_OnSwitch25
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeAmpEnv2TitleFunc_DispatchSwitch+0x1E (0xF03E5B) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeAmpEnv2TitleFunc_SwitchHandlers:
-	.long Scoop_SoundEditorData_Epilogue9+0x3
-	.long Scoop_SoundEditorData_Epilogue9+0x97
-	.long Scoop_SoundEditorData_Epilogue9+0x12B
-	.long Scoop_SoundEditorData_Epilogue9+0x1BF
-	.long Scoop_SoundEditorData_Skip21+0x9
-	.long Scoop_SoundEditorData_Skip22+0xA
-	.long Scoop_SoundEditorData_Skip23+0x9
-	.long Scoop_SoundEditorData_Skip23+0x5B
-	.long Scoop_SoundEditorData_Skip23+0xAE
-	.long Scoop_SoundEditorData_Skip23+0xB7
-	.long Scoop_SoundEditorData_Join19+0x5
-	.long Scoop_SoundEditorData_Join20+0x5
-	.long Scoop_SoundEditorData_Join20+0x1D
+	.long SeAmpEnv2_OnColumn1
+	.long SeAmpEnv2_OnColumn2
+	.long SeAmpEnv2_OnColumn3
+	.long SeAmpEnv2_OnColumn4
+	.long SeAmpEnv2_OnColumn5
+	.long SeAmpEnv2_OnColumn6
+	.long SeAmpEnv2_OnColumn7
+	.long SeAmpEnv2_OnColumn8
+	.long SeAmpEnv2_OnSideRow1
+	.long SeAmpEnv2_OnSideRow2
+	.long SeAmpEnv2_OnSideRow3
+	.long SeAmpEnv2_OnSideRow4
+	.long SeAmpEnv2_OnSideRow5
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Join20+0x43
-	.long Scoop_SoundEditorData_Join20+0x35
+	.long SeAmpEnv2_OnSwitch15
+	.long SeAmpEnv2_OnSwitch25
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeAmpLfo1TitleFunc_DispatchSwitch+0x1E (0xF03E89) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeAmpLfo1TitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Join20+0x57
-	.long Scoop_SoundEditorData_Join20+0x5F
-	.long Scoop_SoundEditorData_Join20+0x67
-	.long Scoop_SoundEditorData_Join20+0x6F
-	.long Scoop_SoundEditorData_Join20+0x77
-	.long Scoop_SoundEditorData_Join20+0x7F
-	.long Scoop_SoundEditorData_Join20+0x87
-	.long Scoop_SoundEditorData_Join20+0x8F
-	.long Scoop_SoundEditorData_Join20+0x9F
-	.long Scoop_SoundEditorData_Skip26+0x8
-	.long Scoop_SoundEditorData_Skip26+0x15
-	.long Scoop_SoundEditorData_Skip26+0x22
+	.long SeAmpLfo1_OnColumn2
+	.long SeAmpLfo1_OnColumn3
+	.long SeAmpLfo1_OnColumn4
+	.long SeAmpLfo1_OnColumn5
+	.long SeAmpLfo1_OnColumn6
+	.long SeAmpLfo1_OnColumn7
+	.long SeAmpLfo1_OnColumn8
+	.long SeAmpLfo1_OnSideRow1
+	.long SeAmpLfo1_OnSideRow2
+	.long SeAmpLfo1_OnSideRow3
+	.long SeAmpLfo1_OnSideRow4
+	.long SeAmpLfo1_OnSideRow5
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Skip26+0x2F
+	.long SeAmpLfo1_OnSwitch15
 	.long SeMenu_BitShift_Stub
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeFilLpq1TitleFunc_DispatchSwitch+0x1E (0xF04E7C) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeFilLpq1TitleFunc_SwitchHandlers:
-	.long Scoop_SoundEditorData_Epilogue19+0x3
-	.long Scoop_SoundEditorData_Helper+0x87
-	.long Scoop_SoundEditorData_Helper2+0x87
-	.long Scoop_SoundEditorData_Join21+0x87
+	.long SeFilLpq1_OnColumn1
+	.long SeFilLpq1_OnColumn2
+	.long SeFilLpq1_OnColumn3
+	.long SeFilLpq1_OnColumn4
 	.long SeMenu_BitShift_Stub
 	.long Scoop_SoundEditorData_Join23
 	.long Scoop_SoundEditorData_Join24
@@ -545,96 +545,96 @@ SeFilLpq1TitleFunc_SwitchHandlers:
 	.long Scoop_SoundEditorData_Join26
 	.long Scoop_SoundEditorData_Join27
 	.long Scoop_SoundEditorData_Join28
-	.long Scoop_SoundEditorData_Epilogue21+0x3
+	.long SeFilLpq1_OnSideRow4
 	.long Scoop_SoundEditorData_Join30
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Join30+0x4E
-	.long Scoop_SoundEditorData_Join30+0x2C
+	.long SeFilLpq1_OnSwitch15
+	.long SeFilLpq1_OnSwitch25
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeFilHpq1TitleFunc_DispatchSwitch+0x1E (0xF04EAA) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeFilHpq1TitleFunc_SwitchHandlers:
-	.long Scoop_SoundEditorData_Epilogue22+0x3
-	.long Scoop_SoundEditorData_Epilogue22+0x15
-	.long Scoop_SoundEditorData_Epilogue22+0x27
-	.long Scoop_SoundEditorData_Epilogue22+0x31
+	.long SeFilHpq1_OnColumn1
+	.long SeFilHpq1_OnColumn2
+	.long SeFilHpq1_OnColumn3
+	.long SeFilHpq1_OnColumn4
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue22+0x3B
-	.long Scoop_SoundEditorData_Epilogue22+0x40
-	.long Scoop_SoundEditorData_Epilogue22+0x45
-	.long Scoop_SoundEditorData_Epilogue22+0x4A
-	.long Scoop_SoundEditorData_Epilogue22+0x4F
-	.long Scoop_SoundEditorData_Epilogue22+0x54
-	.long Scoop_SoundEditorData_Epilogue22+0x59
-	.long Scoop_SoundEditorData_Epilogue23+0x3
+	.long SeFilHpq1_OnColumn6
+	.long SeFilHpq1_OnColumn7
+	.long SeFilHpq1_OnColumn8
+	.long SeFilHpq1_OnSideRow1
+	.long SeFilHpq1_OnSideRow2
+	.long SeFilHpq1_OnSideRow3
+	.long SeFilHpq1_OnSideRow4
+	.long SeFilHpq1_OnSideRow5
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue24+0x3
-	.long Scoop_SoundEditorData_Epilogue23+0x8
+	.long SeFilHpq1_OnSwitch15
+	.long SeFilHpq1_OnSwitch25
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeFilL241TitleFunc_DispatchSwitch+0x1E (0xF04ED8) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeFilL241TitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue25+0x3
-	.long Scoop_SoundEditorData_Epilogue25+0x15
-	.long Scoop_SoundEditorData_Epilogue25+0x27
-	.long Scoop_SoundEditorData_Epilogue25+0x31
+	.long SeFilL241_OnColumn3
+	.long SeFilL241_OnColumn4
+	.long SeFilL241_OnColumn5
+	.long SeFilL241_OnColumn6
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
 	.long Scoop_SoundEditorData_Join33
 	.long Scoop_SoundEditorData_Join34
 	.long Scoop_SoundEditorData_Join35
-	.long Scoop_SoundEditorData_Epilogue27+0x3
-	.long Scoop_SoundEditorData_Epilogue27+0x4F
+	.long SeFilL241_OnSideRow4
+	.long Scoop_SoundEditorData_Helper2_Join11
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue27+0x9D
-	.long Scoop_SoundEditorData_Epilogue27+0x7B
+	.long SeFilL241_OnSwitch15
+	.long SeFilL241_OnSwitch25
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeFilH241TitleFunc_DispatchSwitch+0x1E (0xF04F06) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeFilH241TitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue28+0x3
-	.long Scoop_SoundEditorData_Epilogue28+0x15
-	.long Scoop_SoundEditorData_Epilogue28+0x27
-	.long Scoop_SoundEditorData_Epilogue28+0x31
+	.long SeFilH241_OnColumn3
+	.long SeFilH241_OnColumn4
+	.long SeFilH241_OnColumn5
+	.long SeFilH241_OnColumn6
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue28+0x3B
-	.long Scoop_SoundEditorData_Epilogue28+0x40
-	.long Scoop_SoundEditorData_Epilogue28+0x45
-	.long Scoop_SoundEditorData_Epilogue28+0x4A
-	.long Scoop_SoundEditorData_Epilogue28+0x97
+	.long SeFilH241_OnSideRow1
+	.long SeFilH241_OnSideRow2
+	.long SeFilH241_OnSideRow3
+	.long SeFilH241_OnSideRow4
+	.long SeFilH241_OnSideRow5
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue28+0xBE
-	.long Scoop_SoundEditorData_Epilogue28+0x9C
+	.long SeFilH241_OnSwitch15
+	.long SeFilH241_OnSwitch25
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeFilBpf1TitleFunc_DispatchSwitch+0x1E (0xF04F34) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeFilBpf1TitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue29+0x3
-	.long Scoop_SoundEditorData_Epilogue29+0x8E
-	.long Scoop_SoundEditorData_Epilogue29+0x9C
-	.long Scoop_SoundEditorData_Epilogue29+0x12B
-	.long Scoop_SoundEditorData_Epilogue29+0x1AD
-	.long Scoop_SoundEditorData_Epilogue29+0x1B7
+	.long SeFilBpf1_OnColumn2
+	.long SeFilBpf1_OnColumn3
+	.long SeFilBpf1_OnColumn4
+	.long SeFilBpf1_OnColumn5
+	.long SeFilBpf1_OnColumn6
+	.long SeFilBpf1_OnColumn7
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue29+0x1C1
-	.long Scoop_SoundEditorData_Epilogue30+0x3
-	.long Scoop_SoundEditorData_Epilogue30+0x1B
-	.long Scoop_SoundEditorData_Epilogue31+0x3
-	.long Scoop_SoundEditorData_Epilogue31+0x4C
+	.long SeFilBpf1_OnSideRow1
+	.long SeFilBpf1_OnSideRow2
+	.long SeFilBpf1_OnSideRow3
+	.long SeFilBpf1_OnSideRow4
+	.long SeFilBpf1_OnSideRow5
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue31+0x9A
-	.long Scoop_SoundEditorData_Epilogue31+0x78
+	.long SeFilBpf1_OnSwitch15
+	.long SeFilBpf1_OnSwitch25
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeFilBcf1TitleFunc_DispatchSwitch+0x1E (0xF04F62) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
@@ -647,95 +647,95 @@ SeFilBcf1TitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue32+0x3
-	.long Scoop_SoundEditorData_Epilogue33+0x3
-	.long Scoop_SoundEditorData_Epilogue33+0x1B
-	.long Scoop_SoundEditorData_Epilogue34+0x3
-	.long Scoop_SoundEditorData_Epilogue34+0x4F
+	.long SeFilBcf1_OnSideRow1
+	.long SeFilBcf1_OnSideRow2
+	.long SeFilBcf1_OnSideRow3
+	.long SeFilBcf1_OnSideRow4
+	.long SeFilBcf1_OnSideRow5
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue34+0x9D
-	.long Scoop_SoundEditorData_Epilogue34+0x7B
+	.long SeFilBcf1_OnSwitch15
+	.long SeFilBcf1_OnSwitch25
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeFilFil2TitleFunc_DispatchSwitch+0x1E (0xF04F90) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeFilFil2TitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Epilogue35+0x3
-	.long Scoop_SoundEditorData_Skip41+0xA
-	.long Scoop_SoundEditorData_Skip42+0x9
-	.long Scoop_SoundEditorData_Skip43+0xA
+	.long SeFilFil2_OnColumn3
+	.long SeFilFil2_OnColumn4
+	.long SeFilFil2_OnColumn5
+	.long SeFilFil2_OnColumn6
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Skip44+0x9
-	.long Scoop_SoundEditorData_Skip44+0x19
-	.long Scoop_SoundEditorData_Skip44+0x31
-	.long Scoop_SoundEditorData_Join43+0x5
-	.long Scoop_SoundEditorData_Join43+0x1D
+	.long SeFilFil2_OnSideRow1
+	.long SeFilFil2_OnSideRow2
+	.long SeFilFil2_OnSideRow3
+	.long SeFilFil2_OnSideRow4
+	.long SeFilFil2_OnSideRow5
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Join43+0x43
-	.long Scoop_SoundEditorData_Join43+0x35
+	.long SeFilFil2_OnSwitch15
+	.long SeFilFil2_OnSwitch25
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeFilEnv1TitleFunc_DispatchSwitch+0x1E (0xF04FBE) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeFilEnv1TitleFunc_SwitchHandlers:
-	.long Scoop_SoundEditorData_Join43+0x57
-	.long Scoop_SoundEditorData_Join43+0x62
-	.long Scoop_SoundEditorData_Join43+0x6D
-	.long Scoop_SoundEditorData_Join43+0x79
-	.long Scoop_SoundEditorData_Join43+0x84
-	.long Scoop_SoundEditorData_Join43+0x90
-	.long Scoop_SoundEditorData_Join43+0x9B
+	.long SeFilEnv1_OnColumn1
+	.long SeFilEnv1_OnColumn2
+	.long SeFilEnv1_OnColumn3
+	.long SeFilEnv1_OnColumn4
+	.long SeFilEnv1_OnColumn5
+	.long SeFilEnv1_OnColumn6
+	.long SeFilEnv1_OnColumn7
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Join43+0xA7
-	.long Scoop_SoundEditorData_Join43+0xB0
-	.long Scoop_SoundEditorData_Join44+0x5
-	.long Scoop_SoundEditorData_Join45+0x5
-	.long Scoop_SoundEditorData_Skip48+0x14
+	.long SeFilEnv1_OnSideRow1
+	.long SeFilEnv1_OnSideRow2
+	.long SeFilEnv1_OnSideRow3
+	.long SeFilEnv1_OnSideRow4
+	.long SeFilEnv1_OnSideRow5
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Skip49+0x22
-	.long Scoop_SoundEditorData_Skip49+0x14
+	.long SeFilEnv1_OnSwitch15
+	.long SeFilEnv1_OnSwitch25
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeFilEnv2TitleFunc_DispatchSwitch+0x1E (0xF04FEC) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeFilEnv2TitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Skip49+0x36
-	.long Scoop_SoundEditorData_Skip49+0x3F
-	.long Scoop_SoundEditorData_Skip49+0x48
-	.long Scoop_SoundEditorData_Skip49+0x51
+	.long SeFilEnv2_OnColumn2
+	.long SeFilEnv2_OnColumn3
+	.long SeFilEnv2_OnColumn4
+	.long SeFilEnv2_OnColumn5
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Skip49+0x5A
-	.long Scoop_SoundEditorData_Skip49+0x63
-	.long Scoop_SoundEditorData_Skip49+0x6C
-	.long Scoop_SoundEditorData_Skip49+0x75
-	.long Scoop_SoundEditorData_Join46+0x5
-	.long Scoop_SoundEditorData_Join47+0x5
-	.long Scoop_SoundEditorData_Join47+0x1D
+	.long SeFilEnv2_OnColumn7
+	.long SeFilEnv2_OnColumn8
+	.long SeFilEnv2_OnSideRow1
+	.long SeFilEnv2_OnSideRow2
+	.long SeFilEnv2_OnSideRow3
+	.long SeFilEnv2_OnSideRow4
+	.long SeFilEnv2_OnSideRow5
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Join47+0x43
-	.long Scoop_SoundEditorData_Join47+0x35
+	.long SeFilEnv2_OnSwitch15
+	.long SeFilEnv2_OnSwitch25
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeFilLfo1TitleFunc_DispatchSwitch+0x1E (0xF0501A) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeFilLfo1TitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_Join47+0x57
-	.long Scoop_SoundEditorData_Join47+0x5F
-	.long Scoop_SoundEditorData_Join47+0x67
-	.long Scoop_SoundEditorData_Join47+0x6F
-	.long Scoop_SoundEditorData_Join47+0x77
-	.long Scoop_SoundEditorData_Join47+0x7F
-	.long Scoop_SoundEditorData_Join47+0x87
-	.long Scoop_SoundEditorData_Join47+0x8F
-	.long Scoop_SoundEditorData_Join47+0x9F
-	.long Scoop_SoundEditorData_Skip52+0x8
-	.long Scoop_SoundEditorData_Skip52+0x15
-	.long Scoop_SoundEditorData_Skip52+0x22
+	.long SeFilLfo1_OnColumn2
+	.long SeFilLfo1_OnColumn3
+	.long SeFilLfo1_OnColumn4
+	.long SeFilLfo1_OnColumn5
+	.long SeFilLfo1_OnColumn6
+	.long SeFilLfo1_OnColumn7
+	.long SeFilLfo1_OnColumn8
+	.long SeFilLfo1_OnSideRow1
+	.long SeFilLfo1_OnSideRow2
+	.long SeFilLfo1_OnSideRow3
+	.long SeFilLfo1_OnSideRow4
+	.long SeFilLfo1_OnSideRow5
 	.long SeMenu_BitShift_Stub
 ; the rest of the code-pointer table at SeFilLfo1TitleFunc_SwitchHandlers, from entry 14 on;
 ; the table runs across this boundary (file slice)
@@ -768,19 +768,87 @@ GUI_DisplayStructData_0x120F:
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SePitPit1TitleFunc_DispatchSwitch+0x1E (0xF09AEE) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SePitPit1TitleFunc_SwitchHandlers:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x1222, 0x48
+	.long SeMenu_BitShift_Stub
+	.long SePitPit1_OnColumn2
+	.long SePitPit1_OnColumn3
+	.long SePitPit1_OnColumn4
+	.long SeMenu_BitShift_Stub
+	.long SePitPit1_OnColumn6
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SePitPit1_OnSideRow1
+	.long SePitPit1_OnSideRow2
+	.long SePitPit1_OnSideRow3
+	.long SePitPit1_OnSideRow4
+	.long SePitPit1_OnSideRow5
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SePitPit1_OnSwitch15
+	.long SeMenu_BitShift_Stub
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SePitEnv1TitleFunc_DispatchSwitch+0x1E (0xF09B1C) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SePitEnv1TitleFunc_SwitchHandlers:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x126A, 0x48
+	.long SePitEnv1_OnColumn1
+	.long SePitEnv1_OnColumn2
+	.long SePitEnv1_OnColumn3
+	.long SePitEnv1_OnColumn4
+	.long SePitEnv1_OnColumn5
+	.long SePitEnv1_OnColumn6
+	.long SePitEnv1_OnColumn7
+	.long SeMenu_BitShift_Stub
+	.long SePitEnv1_OnSideRow1
+	.long SePitEnv1_OnSideRow2
+	.long SePitEnv1_OnSideRow3
+	.long SePitEnv1_OnSideRow4
+	.long SePitEnv1_OnSideRow5
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SePitEnv1_OnSwitch15
+	.long SePitEnv1_OnSwitch25
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SePitEnv2TitleFunc_DispatchSwitch+0x1E (0xF09B4A) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SePitEnv2TitleFunc_SwitchHandlers:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x12B2, 0x48
+	.long SeMenu_BitShift_Stub
+	.long SePitEnv2_OnColumn2
+	.long SePitEnv2_OnColumn3
+	.long SePitEnv2_OnColumn4
+	.long SePitEnv2_OnColumn5
+	.long SeMenu_BitShift_Stub
+	.long SePitEnv2_OnColumn7
+	.long SePitEnv2_OnColumn8
+	.long SePitEnv2_OnSideRow1
+	.long SePitEnv2_OnSideRow2
+	.long SePitEnv2_OnSideRow3
+	.long SePitEnv2_OnSideRow4
+	.long SePitEnv2_OnSideRow5
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SePitEnv2_OnSwitch15
+	.long SePitEnv2_OnSwitch25
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SePitLfo1TitleFunc_DispatchSwitch+0x1E (0xF09B78) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SePitLfo1TitleFunc_SwitchHandlers:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x12FA, 0x48
+	.long SeMenu_BitShift_Stub
+	.long SePitLfo1_OnColumn2
+	.long SePitLfo1_OnColumn3
+	.long SePitLfo1_OnColumn4
+	.long SePitLfo1_OnColumn5
+	.long SePitLfo1_OnColumn6
+	.long SePitLfo1_OnColumn7
+	.long SePitLfo1_OnColumn8
+	.long SePitLfo1_OnSideRow1
+	.long SePitLfo1_OnSideRow2
+	.long SePitLfo1_OnSideRow3
+	.long SePitLfo1_OnSideRow4
+	.long SePitLfo1_OnSideRow5
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SePitLfo1_OnSwitch15
+	.long SeMenu_BitShift_Stub
+	.long 0
 ; data read by SeMenu_RefreshPartDisplay_Epilogue4+0x171 (0xF09CF6)
 ; evidence: `lda xde, (this)` then `ld A,(XDE+WA) / ld (XBC),A`
 GUI_DisplayStructData_0x1342:
@@ -792,11 +860,45 @@ GUI_DisplayStructData_0x1362:
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeCtr2TitleFunc_DispatchSwitch+0x1E (0xF0BD4D) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeCtr2TitleFunc_SwitchHandlers:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x136F, 0x48
+	.long SeMenu_BitShift_Stub
+	.long SeCtr2_OnColumn2
+	.long SeMenu_BitShift_Stub
+	.long SeCtr2_OnColumn4
+	.long SeCtr2_OnColumn5
+	.long SeCtr2_OnColumn6
+	.long SeCtr2_OnColumn7
+	.long SeCtr2_OnColumn8
+	.long SeMenu_BitShift_Stub
+	.long SeCtr2_OnSideRow2
+	.long SeCtr2_OnSideRow3
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeCtr2_OnSwitch15
+	.long SeCtr2_OnSwitch25
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeCtr3TitleFunc_DispatchSwitch+0x1E (0xF0BD7B) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeCtr3TitleFunc_SwitchHandlers:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x13B7, 0x48
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeCtr3_OnColumn3
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeCtr3_OnColumn6
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeCtr3_OnSwitch15
+	.long SeCtr3_OnSwitch25
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeMenu_CopyWriteUpdate_Skip5+0x16 (0xF0BFAC) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0x13FF:
@@ -808,31 +910,150 @@ ToneGen_ParamTable:
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeTonTon1TitleFunc_DispatchSwitch+0x1E (0xF0C6F7) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeTonTon1TitleFunc_SwitchHandlers:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x1E, 0x48
+	.long SeTonTon1_OnColumn1
+	.long SeTonTon1_OnColumn2
+	.long SeTonTon1_OnColumn3
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeTonTon1_OnColumn6
+	.long SeTonTon1_OnColumn7
+	.long SeTonTon1_OnColumn8
+	.long SeTonTon1_OnSideRow1
+	.long SeTonTon1_OnSideRow2
+	.long SeTonTon1_OnSideRow3
+	.long SeTonTon1_OnSideRow4
+	.long SeTonTon1_OnSideRow5
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeTonTon1_OnSwitch15
+	.long SeTonTon1_OnSwitch25
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeTonTon2TitleFunc_DispatchSwitch+0x1E (0xF0C725) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeTonTon2TitleFunc_SwitchHandlers:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x66, 0x48
+	.long SeMenu_BitShift_Stub
+	.long SeTonTon2_OnColumn2
+	.long SeMenu_BitShift_Stub
+	.long SeTonTon2_OnColumn4
+	.long SeMenu_BitShift_Stub
+	.long SeTonTon2_OnColumn6
+	.long SeTonTon2_OnColumn7
+	.long SeMenu_BitShift_Stub
+	.long SeTonTon2_OnSideRow1
+	.long SeTonTon2_OnSideRow2
+	.long SeTonTon2_OnSideRow3
+	.long SeTonTon2_OnSideRow4
+	.long SeTonTon2_OnSideRow5
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeTonTon2_OnSwitch15
+	.long SeTonTon2_OnSwitch25
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeTonRan1TitleFunc_DispatchSwitch+0x1E (0xF0C753) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeTonRan1TitleFunc_SwitchHandlers:
-	.incbin "includes/generated/tonegen_param_table.bin", 0xAE, 0x48
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeTonRan1_OnColumn3
+	.long SeTonRan1_OnColumn4
+	.long SeTonRan1_OnColumn5
+	.long SeTonRan1_OnColumn6
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeTonRan1_OnSideRow1
+	.long SeTonRan1_OnSideRow2
+	.long SeTonRan1_OnSideRow3
+	.long SeTonRan1_OnSideRow4
+	.long SeTonRan1_OnSideRow5
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeTonRan1_OnSwitch15
+	.long SeMenu_BitShift_Stub
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeTonRan2TitleFunc_DispatchSwitch+0x1E (0xF0C781) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeTonRan2TitleFunc_SwitchHandlers:
-	.incbin "includes/generated/tonegen_param_table.bin", 0xF6, 0x48
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeTonRan2_OnColumn3
+	.long SeTonRan2_OnColumn4
+	.long SeTonRan2_OnColumn5
+	.long SeTonRan2_OnColumn6
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeTonRan2_OnSideRow1
+	.long SeTonRan2_OnSideRow2
+	.long SeTonRan2_OnSideRow3
+	.long SeTonRan2_OnSideRow4
+	.long SeTonRan2_OnSideRow5
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeTonRan2_OnSwitch15
+	.long SeMenu_BitShift_Stub
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeTonHyb1TitleFunc_DispatchSwitch+0x1E (0xF0C7AF) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeTonHyb1TitleFunc_SwitchHandlers:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x13E, 0x48
+	.long SeMenu_BitShift_Stub
+	.long SeTonHyb1_OnColumn2
+	.long SeTonHyb1_OnColumn3
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeTonHyb1_OnColumn6
+	.long SeMenu_BitShift_Stub
+	.long SeTonHyb1_OnColumn8
+	.long SeTonHyb1_OnSideRow1
+	.long SeTonHyb1_OnSideRow2
+	.long SeTonHyb1_OnSideRow3
+	.long SeTonHyb1_OnSideRow4
+	.long SeTonHyb1_OnSideRow5
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeTonHyb1_OnSwitch15
+	.long SeTonHyb1_OnSwitch25
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeEasyTitleFunc_DispatchSwitch+0x1E (0xF0D72E) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeEasyTitleFunc_SwitchHandlers:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x186, 0x48
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeEasy_OnColumn4
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeEasy_OnSideRow1
+	.long SeEasy_OnSideRow2
+	.long SeEasy_OnSideRow3
+	.long SeEasy_OnSideRow4
+	.long SeEasy_OnSideRow5
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeEasy_OnSwitch15
+	.long SeMenu_BitShift_Stub
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeWrtMemTitleFunc_DispatchSwitch+0x1E (0xF0D78A) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeWrtMemTitleFunc_SwitchHandlers:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x1CE, 0x48
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeWrtMem_OnSideRow1
+	.long SeMenu_BitShift_Stub
+	.long SeWrtMem_OnSideRow3
+	.long SeWrtMem_OnSideRow4
+	.long SeWrtMem_OnSideRow5
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeWrtMem_OnSwitch15
+	.long SeMenu_BitShift_Stub
+	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Helper12+0x1E (0xF0D7B8) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 ToneGen_ParamTable_0x216:
@@ -844,7 +1065,24 @@ ToneGen_ParamTable_0x25E:
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeCopyTitleFunc_DispatchSwitch+0x1E (0xF0D75C) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeCopyTitleFunc_SwitchHandlers:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x2A6, 0x48
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeCopy_OnSideRow2
+	.long SeCopy_OnSideRow3
+	.long SeMenu_BitShift_Stub
+	.long SeCopy_OnSideRow5
+	.long SeMenu_BitShift_Stub
+	.long SeMenu_BitShift_Stub
+	.long SeCopy_OnSwitch15
+	.long SeMenu_BitShift_Stub
+	.long 0
 ; data read by SeMenu_CopyWriteUpdate_Epilogue34+0x46 (0xF0DC77)
 ; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0dc8b`
 ToneGen_ParamTable_0x2EE:

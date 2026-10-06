@@ -2916,19 +2916,24 @@ SeCtr3TitleFunc_DispatchSwitch:
 .Lc_f0bd5e:
 	inc 4,XSP
 	ret
+SeCtr2_OnColumn2:
 	extz	wa
 	ld	bc, 2:i3
 	jp	SeMenu_ApplyPartEdit_Join6
+SeCtr2_OnColumn4:
 	extz	wa
 	jp	SeMenu_ApplyPartEdit_Join10
+SeCtr2_OnColumn5:
 	ld	c, a
 	extz	bc
 	ld	wa, 1:i3
 	jp	SeMenu_CopyWriteUpdate_Helper6
+SeCtr2_OnColumn6:
 	ld	c, a
 	extz	bc
 	ld	wa, 2:i3
 	jp	SeMenu_CopyWriteUpdate_Helper6
+SeCtr2_OnColumn7:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
@@ -2942,6 +2947,7 @@ SeCtr3TitleFunc_DispatchSwitch:
 SeMenu_CopyWriteUpdate_Epilogue2:
 	inc	4, xsp
 	ret
+SeCtr2_OnColumn8:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
@@ -2955,6 +2961,7 @@ SeMenu_CopyWriteUpdate_Epilogue2:
 SeMenu_CopyWriteUpdate_Epilogue3:
 	inc	4, xsp
 	ret
+SeCtr2_OnSideRow2:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
@@ -2978,6 +2985,7 @@ SeMenu_CopyWriteUpdate_Join2:
 SeMenu_CopyWriteUpdate_Epilogue4:
 	inc	4, xsp
 	ret
+SeCtr2_OnSideRow3:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
@@ -3001,6 +3009,7 @@ SeMenu_CopyWriteUpdate_Join3:
 SeMenu_CopyWriteUpdate_Epilogue5:
 	inc	4, xsp
 	ret
+SeCtr2_OnSwitch25:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
@@ -3015,6 +3024,7 @@ SeMenu_CopyWriteUpdate_Epilogue5:
 SeMenu_CopyWriteUpdate_Epilogue6:
 	inc	4, xsp
 	ret
+SeCtr2_OnSwitch15:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
@@ -3034,6 +3044,7 @@ SeMenu_CopyWriteUpdate_Join4:
 SeMenu_CopyWriteUpdate_Epilogue7:
 	inc	4, xsp
 	ret
+SeCtr3_OnColumn3:
 	lda	xsp, (xsp-14)
 	ld	(xsp+12), a
 	lda	xbc, (xsp)
@@ -3059,6 +3070,7 @@ SeMenu_CopyWriteUpdate_Epilogue7:
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	lda	xsp, (xsp+14)
 	ret
+SeCtr3_OnColumn6:
 	lda	xsp, (xsp-14)
 	ld	(xsp+12), a
 	lda	xbc, (xsp)
@@ -3084,12 +3096,14 @@ SeMenu_CopyWriteUpdate_Epilogue7:
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	lda	xsp, (xsp+14)
 	ret
+SeCtr3_OnSwitch25:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 59
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SeCtr3_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ldw	wa, 32
@@ -3928,6 +3942,7 @@ SeTonHyb1TitleFunc_DispatchSwitch:
 .Lc_f0c792:
 	inc 4,XSP
 	ret
+SeTonTon1_OnColumn1:
 	dec	4, xsp
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+4), a
@@ -3964,6 +3979,7 @@ SeMenu_CopyWriteUpdate_Epilogue21:
 	pop qiz
 	inc	4, xsp
 	ret
+SeTonTon1_OnColumn2:
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
 	lda	xbc, (xsp+2)
@@ -4009,6 +4025,7 @@ SeMenu_CopyWriteUpdate_Join14:
 SeMenu_CopyWriteUpdate_Epilogue22:
 	lda	xsp, (xsp+10)
 	ret
+SeTonTon1_OnColumn3:
 	dec	8, xsp
 	ld	(xsp+6), a
 	lda	xbc, (xsp+4)
@@ -4048,6 +4065,7 @@ SeMenu_CopyWriteUpdate_Join15:
 SeMenu_CopyWriteUpdate_Epilogue23:
 	inc	8, xsp
 	ret
+SeTonTon1_OnColumn6:
 	lda	xsp, (xsp-16)
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+16), a
@@ -4093,6 +4111,7 @@ SeMenu_CopyWriteUpdate_Skip21:
 	pop qiz
 	lda	xsp, (xsp+16)
 	ret
+SeTonTon1_OnColumn7:
 	lda	xsp, (xsp-16)
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+16), a
@@ -4128,6 +4147,7 @@ SeMenu_CopyWriteUpdate_Skip21:
 	pop qiz
 	lda	xsp, (xsp+16)
 	ret
+SeTonTon1_OnColumn8:
 	lda	xsp, (xsp-16)
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+16), a
@@ -4165,10 +4185,12 @@ SeMenu_CopyWriteUpdate_Skip21:
 	pop qiz
 	lda	xsp, (xsp+16)
 	ret
+SeTonTon1_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
 	call	SeMenu_CopyWriteUpdate_Helper3
 	ret
+SeTonTon1_OnSideRow2:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 34
@@ -4176,6 +4198,7 @@ SeMenu_CopyWriteUpdate_Skip21:
 	ld	de, 0:i3
 	call	SeMenu_CopyWriteUpdate_Helper8
 	ret
+SeTonTon1_OnSideRow3:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 34
@@ -4183,6 +4206,7 @@ SeMenu_CopyWriteUpdate_Skip21:
 	ld	de, 0:i3
 	call	SeMenu_CopyWriteUpdate_Helper8
 	ret
+SeTonTon1_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 34
@@ -4190,6 +4214,7 @@ SeMenu_CopyWriteUpdate_Skip21:
 	ld	de, 0:i3
 	call	SeMenu_CopyWriteUpdate_Helper8
 	ret
+SeTonTon1_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 34
@@ -4197,11 +4222,13 @@ SeMenu_CopyWriteUpdate_Skip21:
 	ld	de, 0:i3
 	call	SeMenu_CopyWriteUpdate_Helper8
 	ret
+SeTonTon1_OnSwitch25:
 	cp	a, 0:i3
 	ret	nz
 	ldw	wa, 38
 	call	SeMenu_CopyWriteUpdate_Entry7_Code_Helper
 	ret
+SeTonTon1_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ldw	wa, 32
@@ -4209,6 +4236,7 @@ SeMenu_CopyWriteUpdate_Skip21:
 	ld	wa, 0:i3
 	call	SeMenu_SetupMenuDisplay
 	ret
+SeTonTon2_OnColumn2:
 	dec	8, xsp
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+8), a
@@ -4308,6 +4336,7 @@ SeMenu_CopyWriteUpdate_Epilogue24:
 	pop qiz
 	inc	8, xsp
 	ret
+SeTonTon2_OnColumn4:
 	lda	xsp, (xsp-16)
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+16), a
@@ -4342,6 +4371,7 @@ SeMenu_CopyWriteUpdate_Epilogue24:
 	pop qiz
 	lda	xsp, (xsp+16)
 	ret
+SeTonTon2_OnColumn6:
 	lda	xsp, (xsp-10)
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+10), a
@@ -4409,6 +4439,7 @@ SeMenu_CopyWriteUpdate_Epilogue25:
 	pop qiz
 	lda	xsp, (xsp+10)
 	ret
+SeTonTon2_OnColumn7:
 	lda	xsp, (xsp-14)
 	ld	(xsp+12), a
 	lda	xbc, (xsp)
@@ -4434,10 +4465,12 @@ SeMenu_CopyWriteUpdate_Epilogue25:
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	lda	xsp, (xsp+14)
 	ret
+SeTonTon2_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
 	call	SeMenu_CopyWriteUpdate_Helper3
 	ret
+SeTonTon2_OnSideRow2:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 35
@@ -4445,6 +4478,7 @@ SeMenu_CopyWriteUpdate_Epilogue25:
 	ld	de, 1:i3
 	call	SeMenu_CopyWriteUpdate_Helper8
 	ret
+SeTonTon2_OnSideRow3:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 35
@@ -4452,6 +4486,7 @@ SeMenu_CopyWriteUpdate_Epilogue25:
 	ld	de, 1:i3
 	call	SeMenu_CopyWriteUpdate_Helper8
 	ret
+SeTonTon2_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 35
@@ -4459,6 +4494,7 @@ SeMenu_CopyWriteUpdate_Epilogue25:
 	ld	de, 1:i3
 	call	SeMenu_CopyWriteUpdate_Helper8
 	ret
+SeTonTon2_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 35
@@ -4466,12 +4502,14 @@ SeMenu_CopyWriteUpdate_Epilogue25:
 	ld	de, 1:i3
 	call	SeMenu_CopyWriteUpdate_Helper8
 	ret
+SeTonTon2_OnSwitch25:
 	cp	a, 0:i3
 	ret	z
 	ldw	wa, 38
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SeTonTon2_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ld	wa, 0:i3
@@ -4480,6 +4518,7 @@ SeMenu_CopyWriteUpdate_Epilogue25:
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SeTonRan1_OnColumn3:
 	dec	8, xsp
 	ld	(xsp+6), a
 	lda	xbc, (xsp+4)
@@ -4521,6 +4560,7 @@ SeMenu_CopyWriteUpdate_Skip24:
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	inc	8, xsp
 	ret
+SeTonRan1_OnColumn4:
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
 	lda	xbc, (xsp+6)
@@ -4565,6 +4605,7 @@ SeMenu_CopyWriteUpdate_Skip25:
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	lda	xsp, (xsp+10)
 	ret
+SeTonRan1_OnColumn5:
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
 	lda	xbc, (xsp+6)
@@ -4610,6 +4651,7 @@ SeMenu_CopyWriteUpdate_Skip26:
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	lda	xsp, (xsp+10)
 	ret
+SeTonRan1_OnColumn6:
 	dec	8, xsp
 	ld	(xsp+6), a
 	lda	xbc, (xsp+4)
@@ -4649,10 +4691,12 @@ SeMenu_CopyWriteUpdate_Skip27:
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	inc	8, xsp
 	ret
+SeTonRan1_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
 	call	SeMenu_CopyWriteUpdate_Helper3
 	ret
+SeTonRan1_OnSideRow2:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
@@ -4663,6 +4707,7 @@ SeMenu_CopyWriteUpdate_Skip27:
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
 	ret
+SeTonRan1_OnSideRow3:
 	cp	a, 0:i3
 	jr	nz, SeMenu_CopyWriteUpdate_Skip28
 	ldw	wa, 37
@@ -4678,6 +4723,7 @@ SeMenu_CopyWriteUpdate_Skip28:
 SeMenu_CopyWriteUpdate_Join18:
 	call	SeMenu_SendEvent
 	ret
+SeTonRan1_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 3:i3
@@ -4688,6 +4734,7 @@ SeMenu_CopyWriteUpdate_Join18:
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
 	ret
+SeTonRan1_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 4:i3
@@ -4698,6 +4745,7 @@ SeMenu_CopyWriteUpdate_Join18:
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
 	ret
+SeTonRan1_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ld	wa, 0:i3
@@ -4706,6 +4754,7 @@ SeMenu_CopyWriteUpdate_Join18:
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SeTonRan2_OnColumn3:
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xbc, (xsp+12)
@@ -4747,6 +4796,7 @@ SeMenu_CopyWriteUpdate_Skip29:
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	lda	xsp, (xsp+18)
 	ret
+SeTonRan2_OnColumn4:
 	lda	xsp, (xsp-20)
 	ld	(xsp+18), a
 	lda	xbc, (xsp+14)
@@ -4792,6 +4842,7 @@ SeMenu_CopyWriteUpdate_Skip30:
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	lda	xsp, (xsp+20)
 	ret
+SeTonRan2_OnColumn5:
 	lda	xsp, (xsp-20)
 	ld	(xsp+18), a
 	lda	xbc, (xsp+14)
@@ -4837,6 +4888,7 @@ SeMenu_CopyWriteUpdate_Skip31:
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	lda	xsp, (xsp+20)
 	ret
+SeTonRan2_OnColumn6:
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xbc, (xsp+12)
@@ -4878,10 +4930,12 @@ SeMenu_CopyWriteUpdate_Skip32:
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	lda	xsp, (xsp+18)
 	ret
+SeTonRan2_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
 	call	SeMenu_CopyWriteUpdate_Helper3
 	ret
+SeTonRan2_OnSideRow2:
 	cp	a, 0:i3
 	jr	nz, SeMenu_CopyWriteUpdate_Skip33
 	ldw	wa, 36
@@ -4897,6 +4951,7 @@ SeMenu_CopyWriteUpdate_Skip33:
 SeMenu_CopyWriteUpdate_Join19:
 	call	SeMenu_SendEvent
 	ret
+SeTonRan2_OnSideRow3:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 2:i3
@@ -4907,6 +4962,7 @@ SeMenu_CopyWriteUpdate_Join19:
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
 	ret
+SeTonRan2_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 3:i3
@@ -4917,6 +4973,7 @@ SeMenu_CopyWriteUpdate_Join19:
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
 	ret
+SeTonRan2_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 4:i3
@@ -4927,6 +4984,7 @@ SeMenu_CopyWriteUpdate_Join19:
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
 	ret
+SeTonRan2_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ld	wa, 0:i3
@@ -4935,6 +4993,7 @@ SeMenu_CopyWriteUpdate_Join19:
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SeTonHyb1_OnColumn8:
 	dec	4, xsp
 	push	qiz
 	ldfr_berp	a, 251
@@ -4974,6 +5033,7 @@ SeMenu_CopyWriteUpdate_Epilogue26:
 	pop qiz
 	inc	4, xsp
 	ret
+SeTonHyb1_OnColumn2:
 	lda	xsp, (xsp-12)
 	ld	(xsp+10), a
 	lda	xbc, (xsp+2)
@@ -5025,6 +5085,7 @@ SeMenu_CopyWriteUpdate_Join21:
 SeMenu_CopyWriteUpdate_Epilogue27:
 	lda	xsp, (xsp+12)
 	ret
+SeTonHyb1_OnColumn3:
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
 	lda	xbc, (xsp+4)
@@ -5070,6 +5131,7 @@ SeMenu_CopyWriteUpdate_Join22:
 SeMenu_CopyWriteUpdate_Epilogue28:
 	lda	xsp, (xsp+10)
 	ret
+SeTonHyb1_OnColumn6:
 	lda	xsp, (xsp-22)
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+22), a
@@ -5339,10 +5401,12 @@ SeMenu_CopyWriteUpdate_Epilogue29:
 	pop qiz
 	lda	xsp, (xsp+22)
 	ret
+SeTonHyb1_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
 	call	SeMenu_CopyWriteUpdate_Helper3
 	ret
+SeTonHyb1_OnSideRow2:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
@@ -5353,6 +5417,7 @@ SeMenu_CopyWriteUpdate_Epilogue29:
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
 	ret
+SeTonHyb1_OnSideRow3:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 2:i3
@@ -5363,6 +5428,7 @@ SeMenu_CopyWriteUpdate_Epilogue29:
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
 	ret
+SeTonHyb1_OnSideRow4:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
@@ -5381,6 +5447,7 @@ SeMenu_CopyWriteUpdate_Epilogue29:
 SeMenu_CopyWriteUpdate_Epilogue30:
 	inc	4, xsp
 	ret
+SeTonHyb1_OnSideRow5:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
@@ -5399,6 +5466,7 @@ SeMenu_CopyWriteUpdate_Epilogue30:
 SeMenu_CopyWriteUpdate_Epilogue31:
 	inc	4, xsp
 	ret
+SeTonHyb1_OnSwitch25:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
@@ -5418,6 +5486,7 @@ SeMenu_CopyWriteUpdate_Join27:
 SeMenu_CopyWriteUpdate_Epilogue32:
 	inc	4, xsp
 	ret
+SeTonHyb1_OnSwitch15:
 	dec	2, xsp
 	cp	a, 0:i3
 	jr	nz, SeMenu_CopyWriteUpdate_Epilogue33
@@ -5553,6 +5622,7 @@ SeDigEffTitleFunc_DispatchSwitch:
 	popw iz
 	inc 8,XSP
 	ret
+SeEasy_OnColumn4:
 	lda	xsp, (xsp-20)
 	push	qiz
 	ld	(xsp+20), a
@@ -5745,6 +5815,7 @@ Scoop_SoundEditorData_Helper_Epilogue2:
 	pop	qiz
 	lda	xsp, (xsp+20)
 	ret
+SeEasy_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 0:i3
@@ -5753,6 +5824,7 @@ Scoop_SoundEditorData_Helper_Epilogue2:
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SeEasy_OnSideRow2:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
@@ -5779,6 +5851,7 @@ Scoop_SoundEditorData_Helper_Join5:
 Scoop_SoundEditorData_Helper_Epilogue3:
 	inc	4, xsp
 	ret
+SeEasy_OnSideRow3:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
@@ -5805,6 +5878,7 @@ Scoop_SoundEditorData_Helper_Join6:
 Scoop_SoundEditorData_Helper_Epilogue4:
 	inc	4, xsp
 	ret
+SeEasy_OnSideRow4:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
@@ -5831,6 +5905,7 @@ Scoop_SoundEditorData_Helper_Join7:
 Scoop_SoundEditorData_Helper_Epilogue5:
 	inc	4, xsp
 	ret
+SeEasy_OnSideRow5:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
@@ -5857,6 +5932,7 @@ Scoop_SoundEditorData_Helper_Join8:
 Scoop_SoundEditorData_Helper_Epilogue6:
 	inc	4, xsp
 	ret
+SeEasy_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ldw	wa, 32
@@ -6410,6 +6486,7 @@ Scoop_SoundEditorData_Helper_Epilogue16:
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SeWrtMem_OnSideRow1:
 	dec	2, xsp
 	cp	a, 0:i3
 	jr	z, Scoop_SoundEditorData_Helper_Epilogue17
@@ -6431,6 +6508,7 @@ Scoop_SoundEditorData_Helper_Epilogue16:
 Scoop_SoundEditorData_Helper_Epilogue17:
 	inc	2, xsp
 	ret
+SeWrtMem_OnSideRow3:
 	dec	6, xsp
 	cp	a, 0:i3
 	jr	nz, Scoop_SoundEditorData_Helper_Epilogue18
@@ -6475,6 +6553,7 @@ Scoop_SoundEditorData_Helper_Epilogue17:
 Scoop_SoundEditorData_Helper_Epilogue18:
 	inc	6, xsp
 	ret
+SeWrtMem_OnSideRow4:
 	dec	6, xsp
 	cp	a, 0:i3
 	jr	nz, Scoop_SoundEditorData_Helper_Epilogue19
@@ -6519,12 +6598,14 @@ Scoop_SoundEditorData_Helper_Epilogue18:
 Scoop_SoundEditorData_Helper_Epilogue19:
 	inc	6, xsp
 	ret
+SeWrtMem_OnSideRow5:
 	cp	a, 0:i3
 	ret	nz
 	ldw	wa, 63
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+SeWrtMem_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ld	wa, 0:i3
@@ -7240,6 +7321,7 @@ Scoop_SoundEditorData_Helper_Epilogue29:
 	pop	xiz
 	lda	xsp, (xsp+42)
 	ret
+SeCopy_OnSideRow2:
 	cp	a, 0:i3
 	jr	nz, Scoop_SoundEditorData_Helper_Skip39
 	ldw	wa, 38
@@ -7250,6 +7332,7 @@ Scoop_SoundEditorData_Helper_Skip39:
 	ld	bc, 0:i3
 Scoop_SoundEditorData_Helper_Join29:
 	jp	SeMenu_SendEvent
+SeCopy_OnSideRow3:
 	cp	a, 0:i3
 	jr	nz, Scoop_SoundEditorData_Helper_Skip40
 	ldw	wa, 59
@@ -7260,6 +7343,7 @@ Scoop_SoundEditorData_Helper_Skip40:
 	ld	bc, 0:i3
 Scoop_SoundEditorData_Helper_Join30:
 	jp	SeMenu_SendEvent
+SeCopy_OnSideRow5:
 	cp	a, 0:i3
 	ret	nz
 	ldw	wa, 63
@@ -7268,6 +7352,7 @@ Scoop_SoundEditorData_Helper_Join30:
 	ld	wa, 2:i3
 	call	SeMenu_SetSelectedRow
 	ret
+SeCopy_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ldw	wa, 32
