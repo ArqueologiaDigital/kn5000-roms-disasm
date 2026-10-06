@@ -5117,7 +5117,7 @@ SeqStep_FileSectorPopReturn_Loop3:
 SeqStep_FileSectorPopReturn_Skip4:
 	ld	xwa, (xsp+20)
 	push	xwa
-	calr	SeqStep_FileSectorPopReturn_Helper
+	calr	Fat_WriteDirEntry
 	ld	xwa, (xsp+24)
 	push	xwa
 	calr	SeqStep_FileBufferFinal
@@ -5981,7 +5981,7 @@ SeqByteBlock_PathNormalize_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+30)
 	ret
-SeqStep_FileSectorPopReturn_Helper:
+Fat_WriteDirEntry:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, (xsp+12)
@@ -6069,7 +6069,7 @@ SeqByteBlock_PathNormalize_Skip11:
 SeqByteBlock_PathNormalize_Helper5_Epilogue:
 	pop	xiz
 	ret
-SeqByteBlock_PathNormalize_Helper6:
+Fat_MountVolume:
 	lda	xsp, (xsp-34)
 	push	xiz
 	ldw (xsp+18), 0
@@ -6534,7 +6534,7 @@ SeqByteBlock_PathNormalize_Helper6_Skip9:
 	jr	nz, SeqByteBlock_PathNormalize_Skip17
 	ld	xwa, (xsp+2)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper6
+	calr	Fat_MountVolume
 	inc	4, xsp
 	ld	iz, hl
 	cp	iz, 0:i3
@@ -6835,7 +6835,7 @@ SeqByteBlock_PathNormalize_Epilogue7:
 	pop	xiz
 	inc	6, xsp
 	ret
-SeqByteBlock_PathNormalize_Helper9_Helper:
+Fat_TransferSectorsDirect:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, (xsp+20)
@@ -7136,7 +7136,7 @@ SeqByteBlock_PathNormalize_Helper9_Skip6:
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper9_Helper
+	calr	Fat_TransferSectorsDirect
 	lda	xsp, (xsp+12)
 	ld	iz, hl
 	ld	xwa, (xsp+10)
@@ -7373,7 +7373,7 @@ SeqByteBlock_PathNormalize_Helper10_Skip6:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper9_Helper
+	calr	Fat_TransferSectorsDirect
 	lda	xsp, (xsp+12)
 	ld	iz, hl
 	ld	xwa, (xsp+12)
@@ -7525,7 +7525,7 @@ SeqByteBlock_PathNormalize_Entry3:
 	bitm	7, (xiz+3)
 	jr	z, SeqByteBlock_PathNormalize_Helper10_Skip16
 	push	xiz
-	calr	SeqStep_FileSectorPopReturn_Helper
+	calr	Fat_WriteDirEntry
 	inc	4, xsp
 	cp	hl, 0:i3
 	jr	nz, SeqByteBlock_PathNormalize_Epilogue11
@@ -7707,7 +7707,7 @@ SeqChan_WritePatchData:
 	ld	xiz, (xsp+10)
 	ld	(xiz+52), 229
 	push	xiz
-	calr	SeqStep_FileSectorPopReturn_Helper
+	calr	Fat_WriteDirEntry
 	ld	(xsp+8), hl
 	push	xiz
 	calr	SeqStep_FileBufferFinal
@@ -8062,7 +8062,7 @@ SeqChan_ByteBlockD_Skip:
 	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_PathNormalize_Helper6
+	call	Fat_MountVolume
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Entry
@@ -8079,7 +8079,7 @@ SeqChan_ByteBlockD_Helper_Skip2:
 	ld	xwa, (xwa+26)
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_PathNormalize_Helper6
+	call	Fat_MountVolume
 	inc	4, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Entry2
@@ -8097,7 +8097,7 @@ SeqChan_ByteBlockD_Helper_Skip3:
 	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_PathNormalize_Helper6
+	call	Fat_MountVolume
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Skip2
@@ -8115,7 +8115,7 @@ SeqChan_ByteBlockD_Skip3:
 	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_PathNormalize_Helper6
+	call	Fat_MountVolume
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Helper_Skip4

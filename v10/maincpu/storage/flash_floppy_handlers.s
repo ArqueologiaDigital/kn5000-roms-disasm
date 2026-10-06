@@ -1349,7 +1349,7 @@ Flash_InitBytecodeBlock_Skip5:
 	cp	wa, 0:i3
 	jr	nz, Flash_InitBytecodeBlock_Skip6
 	ld	wa, bc
-	calr	Flash_InitBytecodeBlock_Helper
+	calr	Flash_AssignSlotsToBlocks
 	ld	a, (xsp+6)
 	extz	wa
 	calr	Flash_StoreBaseAndInitAccPatch_Sub
@@ -1359,8 +1359,8 @@ Flash_InitBytecodeBlock_Skip5:
 	calr	NoteEventBuffer_Store
 	ld	a, (xsp+10)
 	extz	wa
-	calr	Flash_InitBytecodeBlock_Helper2
-	calr	Flash_InitBytecodeBlock_Helper3
+	calr	Flash_WriteSlotOwnerMap
+	calr	Flash_CopyBlocksToSlots
 	call	TmFlash_CopyToExtMem
 	jrl	Flash_InitBytecodeBlock_Entry
 Flash_InitBytecodeBlock_Skip6:
@@ -2120,7 +2120,12 @@ Flash_StoreBaseAndInitAccPatch_Skip2:
 	ld a, (xbc)
 	ld (xhl), a
 	ret
-Flash_InitBytecodeBlock_Helper:
+; Flash_AssignSlotsToBlocks: For owner A, builds the slot assignment list at RAM 0x7A0 from the block list at RAM
+;   0x6D4: the large block (entry 0) gets the first of the 4 large slots whose owner byte is 0 or A, each following
+;   block the next such small slot (of 40); records are {block, 0x500 | slot} with bit 7 set for small slots. Basis:
+;   callers + body -- Flash_InitBytecodeBlock runs it first on its write path (no shortfall), with A = its owner
+;   argument (CstmCp's 0x39B7); Flash_WriteSlotOwnerMap and Flash_CopyBlocksToSlots consume the list.
+Flash_AssignSlotsToBlocks:
 	dec 2, xsp
 	pushw iz
 	ld	(xsp+2), a
@@ -2461,7 +2466,11 @@ Flash_StoreBaseAndInitAccPatch_Sub_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
-Flash_InitBytecodeBlock_Helper2:
+; Flash_WriteSlotOwnerMap: Copies the 64 KB section-7 sector into its RAM image at (0x0C96), writes owner A into the
+;   owner byte of every slot in the assignment list at RAM 0x7A0, clears A from the remaining slots after them, then
+;   erases and rewrites the sector (Flash_EraseSectorAndWrite). Basis: callers + body -- Flash_InitBytecodeBlock calls
+;   it on its write path after Flash_AssignSlotsToBlocks built the list, with the same owner A.
+Flash_WriteSlotOwnerMap:
 	ld	xix, (3222:16)
 	ld	xiy, (FLASH_SECTION_PTR_7:16)
 	ldw	bc, 0x8000
@@ -2561,7 +2570,11 @@ Flash_StoreBaseAndInitAccPatch_Skip11:
 	ld	xde, (FLASH_SECTION_PTR_7:16)
 	ld	wa, 1:i3
 	jp	Flash_EraseSectorAndWrite
-Flash_InitBytecodeBlock_Helper3:
+; Flash_CopyBlocksToSlots: Copies every block in the assignment list at RAM 0x7A0 from the RAM work area at 0x1E0000
+;   into its slot in the RAM image of the section-7 sector (large block 10,535 bytes, small blocks 470), then erases
+;   and rewrites the sector. Basis: callers + body -- Flash_InitBytecodeBlock calls it right after
+;   Flash_WriteSlotOwnerMap on its write path; TmFlash_WriteRoutine supplies the source and destination addresses.
+Flash_CopyBlocksToSlots:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xix, (3222:16)
@@ -3342,7 +3355,11 @@ Flash_StoreBaseAndInitAccPatch_Join5:
 	ld	xde, (FLASH_SECTION_PTR_7:16)
 	ld	wa, 1:i3
 	jp	Flash_EraseSectorAndWrite
-Flash_SlotUpdateOpsBlock_Helper:
+; Flash_CountFreeOrOwnedSlots: Counts the owner bytes in the section-7 sector (FLASH_SECTION_PTR_7) that are 0 or
+;   equal C: A = 0 scans the 40 small-slot bytes at +0x10, otherwise the 4 large-slot bytes at +0x50; L = the count.
+;   Basis: callers + body -- Flash_SlotUpdateOpsBlock compares it with the blocks listed at RAM 0x6D4 to report the
+;   large- and small-slot shortfall that Flash_InitBytecodeBlock tests before writing.
+Flash_CountFreeOrOwnedSlots:
 	ld	l, 0:opc
 	ld	xde, (FLASH_SECTION_PTR_7:16)
 	ld	b, 0:opc
@@ -3788,7 +3805,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 1:i3
-	calr	Flash_SlotUpdateOpsBlock_Helper
+	calr	Flash_CountFreeOrOwnedSlots
 	cp	l, 0:i3
 	jr	nz, Flash_SlotUpdateOpsBlock_Skip
 	ldw	(xsp), 1
@@ -3798,7 +3815,7 @@ Flash_SlotUpdateOpsBlock_Skip:
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 0:i3
-	calr	Flash_SlotUpdateOpsBlock_Helper
+	calr	Flash_CountFreeOrOwnedSlots
 	ld	e, 0:opc
 	lda	xbc, (1748:16)
 Flash_SlotUpdateOpsBlock_Loop:
@@ -3901,8 +3918,8 @@ Flash_InitBytecodeBlock_Helper8:
 	calr	NoteEventBuffer_Store
 	ld	a, (xsp+6)
 	extz	wa
-	calr	Flash_InitBytecodeBlock_Helper2
-	calr	Flash_InitBytecodeBlock_Helper3
+	calr	Flash_WriteSlotOwnerMap
+	calr	Flash_CopyBlocksToSlots
 	call	TmFlash_CopyToExtMem
 	lda	xwa, (2360:16)
 	cpw	(xwa+0x2), 0xffff
@@ -4088,7 +4105,12 @@ Flash_WriteBackSlotTable_Skip4:
 	ldirw
 	inc	2, xsp
 	ret
-LoadRegion6_OpenSuccess_Helper:
+; FileIO_LoadRcmToFlash: Loads an .RCM file into the custom-data flash: checks the 1 KB header starts 'H',0,'K', then
+;   for flash sections 0..6 resets the buffer at (0x0C72) (NoteEvent_LoadSoundGenParams), reads the length held in
+;   header dword +68+4*i and stores it (NoteEventBuffer_Store i+1); finally reads 0xF400 bytes over the section-7
+;   image, rewrites that sector and calls TmFlash_CopyToExtMem. HL = read result, 0xFF9A on a bad header. Basis:
+;   callers + body -- FileIO_LoadRegion6_Simple (.RCM, extension index 6) calls it once the region signature matched.
+FileIO_LoadRcmToFlash:
 	lda xsp, (xsp-1024)
 	pushw	iz
 	calr	Flash_InitExtMemAddrs
@@ -5369,7 +5391,12 @@ DualVoice_LoopCheckNext:
 DualVoice_WriteBackSlots:
 	calr Flash_WriteBackSlotTable
 	jr DualVoice_LoadDoneRetVal
-LoadRegion5_AltPath_Helper:
+; FileIO_LoadMspAltFormat: Loads an .MSP file whose header fails the native signature check: between msp_ld_mae and
+;   msp_ld_ato reads it into 0x1E8800..0x1EC400, then FileHdr_ValidateSignature converts 'G',0,'K' / 'LKE' / 'MKB'
+;   files to the native layout (moves +0x100.. up 512 bytes, zero-fills the gap, writes the native header); HL = read
+;   result. Basis: callers + body -- FileIO_LoadRegion5_VRAM (.MSP, extension index 5) runs it when
+;   FileIO_CheckRegionSignature(5) fails, in place of its plain read between the same hooks.
+FileIO_LoadMspAltFormat:
 	pushw iz
 	call msp_ld_mae
 	lda xwa, (0x1e8800:24)

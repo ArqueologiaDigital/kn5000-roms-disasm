@@ -3848,16 +3848,16 @@ BitMapOut_UpdateWidget_Done_Skip:
 BitMapOut_UpdateWidget_Done_Join:
 	call	ApPostEvent
 	ret
-FileIO_ByteBlock_DemoProc1_Helper4:
+PanelMemory_PreSlotLoad:
 	ret
-FileIO_ByteBlock_DemoProc1_Helper5:
+PanelMemory_PostSlotLoad:
 	extz	wa
 	cp	bc, 0:i3
 	jp	lt, (VoiceData_InitAndCopyParams:24)
 	jp	PanelTlv_ValidatePanelMemory
-LoadRegion1_OpenSuccess_Helper:
+PanelMemory_PreBankLoad:
 	ret
-LoadRegion1_OpenSuccess_Helper2:
+PanelMemory_PostBankLoad:
 	dec	2, xsp
 	push qiz
 	ld	(xsp+2), a

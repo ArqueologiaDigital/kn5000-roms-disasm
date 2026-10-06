@@ -1248,7 +1248,7 @@ FDemoText_ByteData_DisplayRefresh_Join:
 FDemoText_ByteData_DisplayRefresh_Epilogue:
 	pop	xiz
 	ret
-FDemoText_TextDispatch_Helper:
+FDemoText_GetInstanceID:
 	lda xsp, (xsp-136)
 	push	xiz
 	push	xwa
@@ -1309,7 +1309,7 @@ FDemoText_ByteData_DisplayRefresh_Skip4:
 	jr	ge, FDemoText_ByteData_DisplayRefresh_Loop
 	.byte 0x40
 	.long ErrStr_GetInstanceID
-	call	FDemoText_ByteData_DisplayRefresh_Helper
+	call	DbMemo_PostString
 	ld	xhl, 0xffffffff
 FDemoText_ByteData_DisplayRefresh_Epilogue2:
 	pop	xiz
@@ -2010,7 +2010,7 @@ FDemoText_TextDispatch_Skip13:
 	jr	z, FDemoText_TextDispatch_Skip14
 	cpw	(xsp+138), 0
 	jr	nz, FDemoText_TextDispatch_Join4
-	calr	FDemoText_TextDispatch_Helper2
+	calr	FDemoText_ResetLayoutState
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 1:i3
@@ -2368,7 +2368,7 @@ FDemoText_TextDispatch_Skip11:
 	lda	xwa, (xsp+4)
 	cp	(xwa), 0
 	jr	z, FDemoText_TextDispatch_Skip12
-	calr	FDemoText_TextDispatch_Helper
+	calr	FDemoText_GetInstanceID
 	ld	xwa, xhl
 	cp	xwa, 0xffffffff
 	jr	z, FDemoText_TextDispatch_Skip12
@@ -2384,7 +2384,7 @@ FDemoText_TextDispatch_Skip12:
 	pop	xiz
 	lda xsp, (xsp+206)
 	ret
-FDemoText_TextDispatch_Helper2:
+FDemoText_ResetLayoutState:
 	lda	xbc, (0x0251da:24)
 	ld	xwa, xbc
 	lda xbc, (xbc+2400)

@@ -769,7 +769,7 @@ FDC_ResultPhase_Read_Epilogue3:
 	pop	xiz
 	inc	2, xsp
 	ret
-FDC_WaitReady_Helper3_Helper:
+FDC_SendCommandByte:
 	dec 2,XSP
 	ld (XSP),A
 	calr FDC_ResultPhase_Read
@@ -778,7 +778,7 @@ FDC_WaitReady_Helper3_Helper:
 	calr FDC_Write_Data
 	inc 2,XSP
 	ret
-FDC_WaitReady_Helper3_Helper2:
+FDC_SendParameterByte:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_ResultPhase_Read_Code_Helper
@@ -1008,7 +1008,7 @@ FDC_HardwareSetup_Skip5:
 FDC_HardwareSetup_Skip6:
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_WaitReady_Helper3_Helper
+	calr	FDC_SendCommandByte
 	cp	(FDC_ERROR_CODE:16), 0
 	jr	nz, FDC_HardwareSetup_Epilogue
 	cp	(xsp), 8
@@ -1030,7 +1030,7 @@ FDC_HardwareSetup_Skip7:
 	ld	a, e
 	set	0, a
 	extz	wa
-	calr	FDC_WaitReady_Helper3_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (xsp)
 	cp	a, 15
 	jr	z, FDC_HardwareSetup_Skip10
@@ -1097,7 +1097,7 @@ FDC_HardwareSetup_Join:
 	ld	a, (0x8999:16)
 	and	a, 3
 	extz	wa
-	jrl	FDC_WaitReady_Helper3_Helper2
+	jrl	FDC_SendParameterByte
 FDC_HardwareSetup_Helper6:
 	ld	a, (0x899b:16)
 	sll	a, 4
@@ -1108,7 +1108,7 @@ FDC_HardwareSetup_Helper6:
 	ld	a, e
 	or	a, c
 	extz	wa
-	calr	FDC_WaitReady_Helper3_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x899d:16)
 	sll	a, 1
 	ld	e, a
@@ -1118,46 +1118,46 @@ FDC_HardwareSetup_Helper6:
 	ld	a, e
 	or	a, c
 	extz	wa
-	jrl	FDC_WaitReady_Helper3_Helper2
+	jrl	FDC_SendParameterByte
 FDC_HardwareSetup_Helper7:
 	ld	a, (0x8992:16)
 	and	a, 7
 	extz	wa
-	calr	FDC_WaitReady_Helper3_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8996:16)
 	extz	wa
-	calr	FDC_WaitReady_Helper3_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8997:16)
 	extz	wa
-	calr	FDC_WaitReady_Helper3_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8998:16)
 	extz	wa
-	jrl	FDC_WaitReady_Helper3_Helper2
+	jrl	FDC_SendParameterByte
 FDC_HardwareSetup_Helper8:
 	ld	a, (FDC_TARGET_TRACK:16)
 	extz	wa
-	jrl	FDC_WaitReady_Helper3_Helper2
+	jrl	FDC_SendParameterByte
 FDC_HardwareSetup_Helper9:
 	ld	a, (0x898f:16)
 	extz	wa
-	calr	FDC_WaitReady_Helper3_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8990:16)
 	and	a, 1
 	extz	wa
-	calr	FDC_WaitReady_Helper3_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8991:16)
 	extz	wa
-	calr	FDC_WaitReady_Helper3_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8992:16)
 	and	a, 7
 	extz	wa
-	calr	FDC_WaitReady_Helper3_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8993:16)
 	extz	wa
-	calr	FDC_WaitReady_Helper3_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8994:16)
 	extz	wa
-	calr	FDC_WaitReady_Helper3_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x898c:16)
 	cp	a, 221
 	jr	z, FDC_HardwareSetup_Skip16
@@ -1170,7 +1170,7 @@ FDC_HardwareSetup_Skip16:
 FDC_HardwareSetup_Skip17:
 	ld	a, (0x8995:16)
 	extz	wa
-	calr	FDC_WaitReady_Helper3_Helper2
+	calr	FDC_SendParameterByte
 	ret
 FDC_DETECT_CHECK:
 	cpw	(0x89aa:16), 0

@@ -2034,7 +2034,12 @@ EffectMode_ByteData_DiagEvents_Join:
 	call	ApPostEvent
 	pop qiz
 	ret
-EffectMode_MidiSetLEDs_Helper:
+; TEST3FUNC_InitVoicesOnEnter: On entry to the TEST3 title (PREVIOUS_TITLE != CURRENT_TITLE; a re-activation does
+;   nothing) passes (0x4002, 128, 3) to SndParam_LookupByKey -- parameter 0x4002 is tag 0x60 payload+1 bit 7, the
+;   DIGITAL REVERB on/off bit (docs/kn-disk-file-formats.md:469) -- and reinitialises every voice with
+;   Voice_InitializeAll. Basis: callers + body -- TEST3FUNC calls it for EVT_ACTIVATE_STATE state 2 (case 0 of
+;   TEST3FUNC_CaseTable); TEST3 (title 0xF6) is the Wave ROM check screen (technics-docs test-modes.md).
+TEST3FUNC_InitVoicesOnEnter:
 	ld	a, (PREVIOUS_TITLE:16)
 	cp a, (CURRENT_TITLE:16)
 	ret	z
@@ -2265,7 +2270,7 @@ TEST3FUNC:
 	jp	t, (xix+de)
 ; TEST3FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST3FUNC_DispatchReturn:
-	calr	EffectMode_MidiSetLEDs_Helper
+	calr	TEST3FUNC_InitVoicesOnEnter
 
 TableDispatch_Return4:
 	ld xhl, 0:i3

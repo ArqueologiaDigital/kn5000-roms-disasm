@@ -8082,7 +8082,12 @@ HDAE5000_ROM_Transfer_Success:
 
 HDAE5000_ROM_Transfer_Return:
 	retd 0x2
-HDAE5000_TableData_Write_Helper:
+; HDAE5000_ProgramCustomDataFlash: Programs the 1 MB custom-data flash at 0x300000 word by word (Flash_ProgramWord,
+;   chip 1) from the 512 KB window at 0x200000, banks 0 and 1 selected through port 0x160000. Basis: callers + body --
+;   HDAE5000_Init_BytecodeBlock erases that flash when it is not blank, calls this with bit 0 of the LED port 0x160004
+;   set, then compares 0x300000 against the same window and banks (HDAE5000_ROM_Transfer) and halts blinking bit 3 on
+;   a mismatch.
+HDAE5000_ProgramCustomDataFlash:
 	lda xsp, (xsp - 10)
 	push xiz
 	lda xwa, (0x300000:24)
@@ -8251,7 +8256,7 @@ HDAE5000_TableData_Write_Skip5:
 	ld	xwa, 0xdbba0
 	calr	BusyWait_XWA_Cycles
 	set	0, (0x160004:24)
-	calr	HDAE5000_TableData_Write_Helper
+	calr	HDAE5000_ProgramCustomDataFlash
 	res	0, (0x160004:24)
 	set	1, (0x160004:24)
 	pushw	3

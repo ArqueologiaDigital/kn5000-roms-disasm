@@ -1,0 +1,467 @@
+[
+ {
+  "old": "DrumVoice_Handler7_Code_Helper2_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcp_StepSlotInGroup1",
+  "header": "Steps the composer pattern slot in A (0x34D6) within group 1 (0x34CD bit 5) in the order 31, 4..7, 18..23: W bit 7 clear = up (stops at 23; 31 -> 4 also resets 0x34EF through TimeSig_DisplayStrings_Code_Helper), set = down (stops at 31; 4 -> 31 also sets 0x34EF = 26). Returns the new slot in A.\nBasis: callers + body -- CmpNcp_ItemStep4 calls it when (0x34CD) bit 5 is set and stores A to 0x34D6; DrumSlot_OffsetCalc_Simple/_Extended put group 1 at slots 4..7 and 18..23, CmpNcp_ItemStep3 gives it slot 31.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:26396 `ld a, (0x34d6:16)` / 26402 `bit 5, (0x34cd:16)` / 26404 `calr DrumVoice_Handler7_Code_Helper2_Helper2` / 26409 `ld (0x34d6:16), a` -- CmpNcp_ItemStep4 (header 26394: steps 0x34D6 through one of three helpers chosen by bits 4/5 of 0x34CD)",
+   "sequencer/accompaniment_engine.s:26467 `bit 7, w` / 26469 `inc 1, a` / 26470 `cp a, 32` / 26472 `calr TimeSig_DisplayStrings_Code_Helper` / 26473 `ld a, 4:opc` -- up from 31 wraps to 4",
+   "sequencer/accompaniment_engine.s:26476 `cp a, 8` / 26478 `ld a, 18:opc` / 26481 `cp a, 24` / 26483 `ld a, 23:opc` -- 7 -> 18, capped at 23",
+   "sequencer/accompaniment_engine.s:26487 `dec 1, a` / 26488 `cp a, 30` / 26490 `ld a, 31:opc` / 26493 `cp a, 3:i3` / 26495 `ld a, 31:opc` / 26496 `ld (0x34ef:16), 26` / 26499 `cp a, 17` / 26501 `ld a, 7:opc` -- down: 18 -> 7, 4 -> 31",
+   "sequencer/accompaniment_engine.s:24760-24771 `ld e, (0x34cd:16)` / `and e, 0x30` / `cp e, 0x20` / `add l, 0x04` / `add l, 0x08` and 24777-24789 `add l, 0x08` / `add l, 0x0e` / `add l, 0x14` -- DrumSlot_OffsetCalc_*: bit 5 = group 1 = slots 4..7, 18..23",
+   "sequencer/accompaniment_engine.s:26360-26375 -- CmpNcp_ItemStep3 cycles 0x34CD bits 5/4 and sets slot 30/31/32 with 0x34EF = 26",
+   "sequencer/accompaniment_engine.s:14384-14395 -- AccPatch_GetCurrentSlotAddr: 0x34D6 is the current patch slot index (0..29)"
+  ]
+ },
+ {
+  "old": "DrumVoice_Handler7_Code_Helper2_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcp_StepSlotInGroup2",
+  "header": "Steps the composer pattern slot in A (0x34D6) within group 2 (0x34CD bit 4) in the order 32, 8..11, 24..29: W bit 7 clear = up (stops at 29; 32 -> 8 also resets 0x34EF through TimeSig_DisplayStrings_Code_Helper), set = down (stops at 32; 8 -> 32 also sets 0x34EF = 26). Returns the new slot in A.\nBasis: callers + body -- CmpNcp_ItemStep4 calls it when (0x34CD) bit 4 is set and stores A to 0x34D6; DrumSlot_OffsetCalc_Simple/_Extended put group 2 at slots 8..11 and 24..29, CmpNcp_ItemStep3 gives it slot 32.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:26397 `bit 4, (0x34cd:16)` / 26399 `calr DrumVoice_Handler7_Code_Helper2_Helper3` / 26409 `ld (0x34d6:16), a` -- CmpNcp_ItemStep4",
+   "sequencer/accompaniment_engine.s:26512 `inc 1, a` / 26513 `cp a, 33` / 26515 `calr TimeSig_DisplayStrings_Code_Helper` / 26516 `ld a, 8:opc` / 26519 `cp a, 12` / 26521 `ld a, 24:opc` / 26524 `cp a, 30` / 26526 `ld a, 29:opc` -- up",
+   "sequencer/accompaniment_engine.s:26531 `dec 1, a` / 26532 `cp a, 31` / 26534 `ld a, 32:opc` / 26537 `cp a, 7:i3` / 26539 `ld a, 32:opc` / 26540 `ld (0x34ef:16), 26` / 26543 `cp a, 23` / 26545 `ld a, 11:opc` -- down",
+   "sequencer/accompaniment_engine.s:24770-24771 `add l, 0x08` and 24788-24789 `add l, 0x14` -- DrumSlot_OffsetCalc_*: 0x34CD & 0x30 = 0x10 = group 2 = slots 8..11, 24..29",
+   "note: the unlisted DrumVoice_Handler7_Code_Helper2_Helper (accompaniment_engine.s:26411) is the group-0 twin (30, 0..3, 12..17)"
+  ]
+ },
+ {
+  "old": "DrumVoice_Handler7_Data_3_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcp_StepItemA",
+  "header": "Steps the Composer NCP item-A selector (0x39A7) within 0..2: W bit 7 set = up, clear = down; no wrap.\nBasis: callers + body -- its only caller is the XIZ wrapper CmpNcp_StepItemA_Wrap, which CmpNcpTtl_Dispatch2 (W = 0) and the case-128/129 handler (W = 128) call; CmpNcp_ItemA_HandlerIndex maps 0x39A7 to a CmpNcp_ItemHandlerTable index.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:25652-25656 `push xiz` / `call DrumVoice_Handler7_Data_3_Helper` / `pop xiz` -- CmpNcp_StepItemA_Wrap (header 25648-25651)",
+   "sequencer/accompaniment_engine.s:31325 `ld w, 0:opc` / 31326 `call CmpNcp_StepItemA_Wrap` -- CmpNcpTtl_Dispatch2; 31368-31369 the same with `ld w, 128:opc` (cases 128, 129)",
+   "sequencer/accompaniment_engine.s:25658 `ld a, (0x39a7:16)` / 25659 `bit 7, w` / 25661 `cp a, 2:i3` / 25663 `inc 1, a` / 25666 `cp a, 0:i3` / 25668 `dec 1, a` / 25670 `ld (0x39a7:16), a`",
+   "sequencer/accompaniment_engine.s:25679-25683 `ld a, (0x39a7:16)` / `ld xix, CmpNcp_ItemA_HandlerIndex` / `call DrumVoice_Handler7_Data_3_Helper5` -- the selector's reader"
+  ]
+ },
+ {
+  "old": "DrumVoice_Handler7_Data_3_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcp_CallItemHandler",
+  "header": "Calls entry (HL & 7) of CmpNcp_ItemHandlerTable (0-4 = CmpNcp_ItemHandler0-4, 5/6 = DrumVoice_NullHandler), passing W (the step direction) through.\nBasis: callers + body -- DrumVoice_Handler7_Data_3_Helper2 / _Helper4 load HL from CmpNcp_ItemA_HandlerIndex[(0x39A7)] / CmpNcp_ItemB_HandlerIndex[(0x39A8)] and call it; the CmpNcp title's case handlers reach those with W = 0 or 128.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:25679-25683 `ld a, (0x39a7:16)` / `sll a, 1` / `ld xix, CmpNcp_ItemA_HandlerIndex` / `ld hl, (xix+a)` / `call DrumVoice_Handler7_Data_3_Helper5` -- item A",
+   "sequencer/accompaniment_engine.s:25717-25721 `ld a, (0x39a8:16)` / ... / `ld xix, CmpNcp_ItemB_HandlerIndex` / `call DrumVoice_Handler7_Data_3_Helper5` -- item B; 25728-25731 an unlabelled XIZ wrapper passes its caller's HL (no reference to it found: probe kf_pointer_and_tagtable_probe.py)",
+   "sequencer/accompaniment_engine.s:25733-25740 `pushw hl` / `ld xhl, 0:i3` / `popw hl` / `and hl, 7` / `sll hl, 2` / `add xhl, CmpNcp_ItemHandlerTable` / `ld xhl, (xhl)` / `call (xhl)`",
+   "sequencer/accompaniment_engine.s:25742-25756 -- CmpNcp_ItemHandlerTable: ItemHandler0..4, DrumVoice_NullHandler x2",
+   "sequencer/accompaniment_engine.s:31411-31412 `ld w, 0:opc` / `call CmpNcpTtl_Dispatch2_Helper2` (cases 118/119) and 31479-31480 `ld w, 128:opc` (cases 130/131)"
+  ]
+ },
+ {
+  "old": "DrumVoice_Handler7_Helper",
+  "verdict": "refuse",
+  "why_refused": "Its only caller is the unlabelled XIZ wrapper at accompaniment_engine.s:25558-25566, which follows DrumVoice_Handler7's `ret` and is reached by nothing found (no label, no fall-through, no 24-bit pointer 0xF654DC anywhere in the v10 ROM), so no caller context exists; DrumVoice_Handler7 is a label-scope attribution, not a caller. Body only: sets 0x8D88 bit 0, clears 0xE3E2 bit 3, and unless RHYTHM_PATTERN_BUF_A+16 bit 0 is set or the slot 0x34D6 >= 12 calls DrumVoice_Handler7_Helper_Helper, which compares the bar length (TimeSig_DisplayStrings+7, stride 8) of 0x34F0 with that of 0x34D8 and either writes 0xFC5A/0xFC5B into the slot record +16/+17 (GLOBAL_ERROR_CODE 21) or reports 22 and sends SysEx command 8. Naming it ('assign current rhythm to slot') would be body-only.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:25556-25566 `ret` / `push xiz` / `bit 0, (0x34d3:16)` / `cp (0x34d6:16), 12` / `calr DrumVoice_Handler7_Helper` / `pop xiz` / `ret` -- unreferenced wrapper",
+   "probe ~/compartilhado/tmp/kn5000-naming/agent_f/probes/kf_pointer_and_tagtable_probe.py: 0xF654DC (wrapper) and 0xF654EF (this routine) have no 24-bit LE occurrence in original_ROMs/kn5000_v10_program.rom",
+   "sequencer/accompaniment_engine.s:25568-25577 `or (0x8d88:16), 1` / `and (0xe3e2:16), 247` / `cp (0x34d6:16), 12` / `calr DrumVoice_Handler7_Helper_Helper`",
+   "sequencer/accompaniment_engine.s:25956-25986 `ld l, (0x34f0:16)` ... `ld l, (13528:16)` ... `call AccPatch_GetCurrentSlotAddr` / `ld (xiy+16), a` / `ld (xiy+17), a` / `ld (GLOBAL_ERROR_CODE:16), 21` ... `ld (GLOBAL_ERROR_CODE:16), 22` / `call MIDI_SendSysExCmd`"
+  ]
+ },
+ {
+  "old": "DrumVoice_Handler7_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpSet_StepRhythmBank",
+  "header": "Steps the rhythm bank 0xFC5B of the current rhythm program 0xFC5A (vocabulary of Rhythm_LoadCurrentTimeSig) up (W bit 7 clear) or down (set), clamped to 0..AccVoice_GetChannelCount(program) (kept in 0x342D); remembers it as that program's bank in 0xFF92[program] (tag 0x49's payload), applies the pair with SndParam_ApplyProgramChange_Safe and stores 0xFC5A/0xFC5B. It first passes the old pair to PartCtrl_WriteProgramChange (0x90F7 = 72).\nBasis: callers + body -- DrumVoice_Handler7, entry 7 of DrumVoice_DispatchTable (DrumVoice_Select from the composer-set page-1 Up/Dn events, W = 0 / 0x80), calls it before DrumKit_PostMidiEvents and Rhythm_LoadCurrentTimeSig; DrumVoice_Handler6_Helper steps the program and recalls its bank from 0xFF92[program].",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:25544-25555 `ldw (0xe3e4:16), 1927` ... `calr DrumVoice_Handler7_Helper2` / `calr DrumKit_PostMidiEvents` / `calr Rhythm_LoadCurrentTimeSig` -- DrumVoice_Handler7",
+   "sequencer/accompaniment_engine.s:25343-25364 -- DrumVoice_Dispatch / DrumVoice_DispatchTable entry 7; 25323-25333 DrumVoice_Select indexes it with (0x3540)-1",
+   "sequencer/accompaniment_engine.s:33080-33093 `ld (0x3540:16), c` ... `ld w, 0:opc` / `call DrumVoice_Select` -- MainCmpSetFunc_OnCmpSetP1Up; 33105-33118 OnCmpSetP1Dn with `ld w, 128:opc`",
+   "sequencer/accompaniment_engine.s:25918-25928 `ld l, (0xfc5a:16)` / `ld h, (0xfc5b:16)` / `ld (0x90f7:16), a` / `call PartCtrl_WriteProgramChange` / `ld a, h` / `call AccVoice_GetChannelCount_Direct` / `ld (0x342d:16), l`",
+   "sequencer/accompaniment_engine.s:25931-25942 `bit 7, w` / `inc 1, a` / `cp a, (13357:16)` / `ld a, (13357:16)` / `dec 1, a` / `ld a, 0:opc` -- clamp 0..(0x342D)",
+   "sequencer/accompaniment_engine.s:25944-25953 `ld xwa, 0xff92` / `ld (xwa+l), h` / `ld (0x90f6:16), a` / `call SndParam_ApplyProgramChange_Safe` / `ld (0xfc5a:16), l` / `ld (0xfc5b:16), h`",
+   "sequencer/accompaniment_engine.s:10747-10764 -- AccVoice_GetChannelCount: L < 16 -> 16-entry byte table (15, 12, 16, 9, ...), the per-program limit",
+   "sequencer/accompaniment_engine.s:25855-25887 -- DrumVoice_Handler6_Helper steps L (0xFC5A) in 0..13 and loads H from 0xFF92[L]; 26141-26195 CmpNcp_ItemStep1 is the CmpNcp twin of this routine",
+   "extensions/extension_data.s:3244 -- PanelTlv_PayloadByTag[0x48] = 0xFC5A, [0x49] = 0xFF92"
+  ]
+ },
+ {
+  "old": "EffEdit_DSPConfigBlock_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_RecordFieldToParamId",
+  "header": "Maps a SwbtWr change event on a DSP-block panel record -- A = object code 0x61..0x66 ('a'..'f'), C = byte offset (SWBTWR_PAYLOAD_1), E = changed-bit mask (SWBTWR_PAYLOAD_3) -- to a DSP parameter id stored through the stacked pointer: the block base 0x4900/0x4A00/0x4B00/0x4C00/0x4D00/0x4E00, or for C = 1..16 base + 0x10 + the parameter index that DSPCfg_Data_ParamDispatch_Helper finds at field C-1 of the effect type's DspFxRecListPtrTable list. HL = 0, or 0xFFFF for a bad code / no parameter there; retd 4.\nBasis: callers + body -- EffEdit_DSPConfigBlock (in the SwbtWr lists of codes 0x61, 0x63-0x66) passes the event and then treats id base+0 as an effect-type change (EVT_RET_EFF_FIX) and base+0x10+n as parameter n (EVT_RET_EFF_PARA).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:22183-22191 `ld a, (SWBTWR_EVENT_TYPE:16)` / `ld c, (SWBTWR_PAYLOAD_1:16)` / `ld e, (SWBTWR_PAYLOAD_3:16)` / `lda xhl, (xsp+2)` / `push xhl` / `call EffEdit_DSPConfigBlock_Helper` -- EffEdit_DSPConfigBlock",
+   "sequencer/sequencer_engine.s:22206-22220 `cp xwa, 0x4b00` / `cp xwa, 0x4b47` / ... `ld xbc, EVT_RET_EFF_FIX` and 22243-22257 `sub xwa, 0x4b10` ... `ld xbc, EVT_RET_EFF_PARA` -- how the id is used",
+   "ui_widgets/widget_dispatch.s:4365-4373 -- DspBlock_ObjectCode_Table 0x61, 0x63, 0x65, 0x66, 0x64: the SwbtWr bank-2 lists of these codes contain EffEdit_DSPConfigBlock",
+   "audio/dsp_config_sysex.s:4039-4072 `sub wa, 97` / `cp wa, 5:i3` / jump by DspCfg_OpLetter_JumpOffsets: `ld xiz, 0x4900` .. `ld xiz, 0x4e00` with block index 0/1/1/4/2/3",
+   "audio/dsp_config_sysex.s:4076-4097 `cp (xsp+12), 1` / `cp (xsp+12), 17` / `calr DSPCfg_LookupMidiMap` / `calr DSPCfg_GetParamCount` / `ld xbc, DspFxRecListPtrTable` / `dec 1, e` / `calr DSPCfg_Data_ParamDispatch_Helper`",
+   "audio/dsp_config_sysex.s:4098-4109 `cp hl, 0xffff` / `add hl, 16` / `add xiz, xhl` / `ld (xwa), xiz` / `ld hl, (xsp+4)`",
+   "audio/dsp_config_sysex.s:6240-6262 -- UIStateEvt_ChannelConfig_Data reads SWBTWR_PAYLOAD_1 as the offset, _2 as the value, _3 as the changed-bit mask (event = [tag, offset, value, mask], docs/kn-disk-file-formats.md:746)"
+  ]
+ },
+ {
+  "old": "EffectMode_MidiSetLEDs_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TEST3FUNC_InitVoicesOnEnter",
+  "header": "On entry to the TEST3 title (PREVIOUS_TITLE != CURRENT_TITLE; a re-activation does nothing) passes (0x4002, 128, 3) to SndParam_LookupByKey -- parameter 0x4002 is tag 0x60 payload+1 bit 7, the DIGITAL REVERB on/off bit (docs/kn-disk-file-formats.md:469) -- and reinitialises every voice with Voice_InitializeAll.\nBasis: callers + body -- TEST3FUNC calls it for EVT_ACTIVATE_STATE state 2 (case 0 of TEST3FUNC_CaseTable); TEST3 (title 0xF6) is the Wave ROM check screen (technics-docs test-modes.md).",
+  "basis": "callers + body",
+  "evidence": [
+   "ui/ui_mode_handlers.s:2246-2265 `cp xbc, EVT_ACTIVATE_STATE` / `dec 2, xde` / ... `lda xix, (TEST3FUNC_DispatchReturn:24)` / `jp t, (xix+de)` -- TEST3FUNC, case 0 -> TEST3FUNC_DispatchReturn",
+   "ui/ui_mode_handlers.s:2267-2268 `TEST3FUNC_DispatchReturn:` / `calr EffectMode_MidiSetLEDs_Helper`",
+   "ui/ui_mode_handlers.s:2038-2040 `ld a, (PREVIOUS_TITLE:16)` / `cp a, (CURRENT_TITLE:16)` / `ret z`",
+   "ui/ui_mode_handlers.s:2041-2045 `ld xwa, 0x4002` / `ldw bc, 128` / `ld de, 3:i3` / `call SndParam_LookupByKey` / `call Voice_InitializeAll`",
+   "ui/ui_mode_handlers.s:2048-2050 `cp (CURRENT_TITLE:16), 246` -- the next routine, Voice_EmitNoteWithVelocity, acts only in title 0xF6 (TT_TEST3, shared/event_codes.s:97)",
+   "audio/audio_control_engine.s:7761-7764 `ld xwa, 0x4002` ... `call SoundParam_NotifyChange` -- ReverbPreset_Load notifies 0x4002 after loading the reverb record"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_CheckMode_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_Tag43_SetByte1Fields",
+  "header": "Applies an incoming event to byte +1 of panel record 0x43 as two fields, bit 7 and bits 0-6 (ExtData_SetTlvField 0x80, then 0x7F), and posts the change with SwbtWr_FlushAndAppendParams.\nBasis: callers + body -- ExtData_ToneParam_CheckMode is entry 0x43 of SoundProgram_DispatchTable and calls it when the event offset (0x912F) is 1; record 0x43 is identified in docs/kn-disk-file-formats.md:534 as the microphone record (on/off, a 0..127 level, a second on/off; 'microphone' is that page's inference).",
+  "basis": "callers + body",
+  "evidence": [
+   "extensions/extension_data.s:3032 `.long ExtData_ToneParam_CheckMode` -- entry 0x43 (67) of SoundProgram_DispatchTable (2965 = entry 0); header 2944-2962: entry = command byte = tag",
+   "audio/audio_control_engine.s:5157-5166 `calr SndParam_WriteLookupAndStore` / `ld a, (0x912f:16)` / `cp a, 1:i3` / `jr z` / `calr ExtData_ToneParam_CheckMode_Helper` -- offset 1; offset 0 sets field 0x80 only (5168-5171)",
+   "audio/audio_control_engine.s:5173-5177 `ldw wa, 128` / `calr ExtData_SetTlvField` / `ldw wa, 127` / `calr ExtData_SetTlvField` / `jrl SwbtWr_FlushAndAppendParams`",
+   "ui_widgets/naka_extension_device.c:5013-5017 -- PanelTlv_Rules_Tag43: RULE_KEEP_BITS(0, 0x80), RULE_ZERO(2), RULE_ZERO(3): byte 0 holds only bit 7, byte 1 is the two-field byte",
+   "(repo root) docs/kn-disk-file-formats.md:469 and :534 -- 0x4140 = tag 0x43 +0 bit 7 (slot 3 on/off); 0x43 = microphone record"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_MultiChannel_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_PostRawValueAndMask",
+  "header": "Posts the incoming event unchanged: MIDI_MSG_DATA2 := value (0x9130), MIDI_MSG_DATA3 := mask (0x9131), then SwbtWr_FlushAndAppendParams (which appends it when the mask is non-zero); no panel record byte is touched.\nBasis: callers + body -- ExtData_ToneParam_MultiChannel (entry 0x90 of SoundProgram_DispatchTable) calls it for offset 16, outside tag 0x90's 6-byte record; ExtData_Voice_CopyAndJump (entry 0xA8) is the same body.",
+  "basis": "callers + body",
+  "evidence": [
+   "extensions/extension_data.s:3109 `.long ExtData_ToneParam_MultiChannel` -- entry 0x90 (144) of SoundProgram_DispatchTable",
+   "audio/audio_control_engine.s:5331-5334 `calr SndParam_WriteLookupAndStore` / `ld a, (0x912f:16)` / `cp a, 16` / `jr z, ExtData_ToneParam_MultiChannel_Skip2` / 5346 `calr ExtData_ToneParam_MultiChannel_Helper`",
+   "audio/audio_control_engine.s:5587-5589 `ld (MIDI_MSG_DATA2), (37168:16)` / `ld (MIDI_MSG_DATA3), (37169:16)` / `jrl SwbtWr_FlushAndAppendParams` -- 37168 = 0x9130 value, 37169 = 0x9131 mask",
+   "audio/audio_control_engine.s:6674-6691 -- SwbtWr_FlushAndAppendParams: `cp (MIDI_MSG_DATA3:16), 0` / `ret z` ... `calr SwbtWr_AppendFixedParamBlock`",
+   "audio/audio_control_engine.s:5789-5792 -- ExtData_Voice_CopyAndJump, identical body (entry 0xA8, extension_data.s:3133)",
+   "ui_widgets/naka_extension_device.c:1121 -- tag 0x90 record len 6"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_MultiChannel_Helper2",
+  "verdict": "refuse",
+  "why_refused": "Mechanics only: for events on tag 0x90 offsets 0/1 it ORs value&mask into the byte pair 0x915F[offset], merges it into 0x9161[offset]; if 0x9161/0x9162 are both 0 it clears 0x915F/0x9160, otherwise (when 0x915F&3 or 0x9161 bit 1) it writes ExtData_ToneParam_MultiChannel_Data[0x915F&3] = {1,1,2,3} to 0xFC66 and flags the 0x90F9 reset sequence if FC66/FC67 differ from 0x9163. Neither tag 0x90 (payload 0xFC66, len 6) nor the 0x915F/0x9161 pairs are identified anywhere, and the caller is the unnamed offset-0/1 path of a misnamed handler, so a name would be a guess.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "extensions/extension_data.s:3109 `.long ExtData_ToneParam_MultiChannel` -- tag 0x90 handler",
+   "audio/audio_control_engine.s:5339-5344 `cp a, 1:i3` / `jr z` ... `jrl ExtData_ToneParam_MultiChannel_Join3` -- offsets 0/1; 5400-5442 Join3 ... `calr ExtData_ToneParam_MultiChannel_Helper2` / `call ToneGen_DispatchByMode` / `jrl MIDI_WriteResetSequence`",
+   "audio/audio_control_engine.s:5447-5463 `lda xix, (0x915f:16)` / `lda xhl, (0x9161:16)` / `or (xix+de), a` / `and (xhl+bc), a` / `or (xhl+bc), a`",
+   "audio/audio_control_engine.s:5479-5491 `lda xbc, (ExtData_ToneParam_MultiChannel_Data:24)` / `ld (xde), c` / `cp bc, (37219:16)` / `set 0, (0x90f9:16)`"
+  ]
+ },
+ {
+  "old": "ExtData_Voice_CheckMode3_Helper_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_ForceSetTlvField",
+  "header": "If mask A is enabled in (0x9131), sets field A of the panel TLV byte (tag MIDI_MSG_STATUS, offset (0x912F)) to (0x9130) & A and, unlike ExtData_SetTlvField, always records it -- byte to (0x9132) and MIDI_MSG_DATA2, A ORed into MIDI_MSG_DATA3 -- even when the byte did not change.\nBasis: callers + body -- ExtData_Voice_FullHandler (tag 0x98 offsets 1 and 2, masks 0x80 / 0x40, 0x80) and ExtData_Voice_CheckMode3_Helper (mask 8) call it per field before flushing, exactly as the ExtData_SetTlvField callers do.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/audio_control_engine.s:5718-5724 `ldw wa, 128` / `calr ExtData_Voice_CheckMode3_Helper_Helper` / `and (37170:16), 128` / `ldw wa, 127` / `calr VoiceParam_CompareAndUpdate` / `jrl SwbtWr_FlushAndAppendParams` -- ExtData_Voice_FullHandler, offset 1",
+   "audio/audio_control_engine.s:5733-5739 `ldw wa, 64` / `calr ExtData_Voice_CheckMode3_Helper_Helper` / `ldw wa, 128` / `calr ...` / `jrl SwbtWr_FlushAndAppendParams` -- offset 2",
+   "audio/audio_control_engine.s:5078-5079 `ldw wa, 8` / `calr ExtData_Voice_CheckMode3_Helper_Helper` -- ExtData_Voice_CheckMode3_Helper",
+   "audio/audio_control_engine.s:6948-6957 `ld (xsp), a` / `ld a, (0x9131:16)` / `and a, (xsp)` / `jr z` / `calr PanelTlv_PayloadOfTag` -- gate and record lookup",
+   "audio/audio_control_engine.s:6958-6972 `lda xhl, (xhl+wa)` / `cpl a` / `and a, (xhl)` / `ld a, (37168:16)` / `and a, (xsp)` / `or a, c` / `ld (xhl), a` / `ld (0x9132:16), a` / `ld (MIDI_MSG_DATA2:16), a` / `or (MIDI_MSG_DATA3:16), a` -- no compare",
+   "audio/audio_control_engine.s:6820-6824 `or a, (0x9130:16)` / `ld a, (0x9132:16)` / `cp c, a` / `jr z` -- ExtData_SetTlvField skips an unchanged byte; this one does not"
+  ]
+ },
+ {
+  "old": "ExtData_Voice_CheckMode_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_ToggleReverbIllusionOnOff",
+  "header": "Toggles bits 7 and 6 of panel record 0x60 byte +1 -- the DIGITAL REVERB and ACOUSTIC ILLUSION on/off bits -- by the incoming event (ExtData_ToggleTlvBits with mask 0xC0) and posts the change with SwbtWr_FlushAndAppendParams; bit 5 (EQUALIZER) is not handled here.\nBasis: callers + body -- ExtData_Voice_CheckMode (entry 0x60 of SoundProgram_DispatchTable) calls it for offset 1; the bit meanings are docs/kn-disk-file-formats.md:469 (0x4002/0x4004/0x4006 = tag 0x60 +1 bits 7/6/5 for slots 1/2/4), confirmed by BitMapOut_RestoreExtra.",
+  "basis": "callers + body",
+  "evidence": [
+   "extensions/extension_data.s:3061 `.long ExtData_Voice_CheckMode` -- entry 0x60 (96) of SoundProgram_DispatchTable",
+   "audio/audio_control_engine.s:5590-5595 `calr SndParam_WriteLookupAndStore` / `ld a, (0x912f:16)` / `cp a, 1:i3` / `ret nz` / `calr ExtData_Voice_CheckMode_Helper`",
+   "audio/audio_control_engine.s:5598-5600 `ldw wa, 192` / `calr ExtData_ToggleTlvBits` / `jrl SwbtWr_FlushAndAppendParams`",
+   "ui_widgets/naka_extension_device.c:5046-5050 -- PanelTlv_Rules_Tag60: RULE_KEEP_BITS(1, 0xE0): byte 1 holds bits 7/6/5 only",
+   "ui/bitmap_out_routines.s:2327-2340 `lda xde, (0xfc6f:16)` / `res 6, c` ... `lda xwa, (0xfcc2:16)` -- bit 6 restored together with tag 0x65 (ACOUSTIC ILLUSION) payload; 2357-2370 bit 5 with 0xFCA8 (tag 0x64, EQUALIZER)",
+   "audio/audio_control_engine.s:7746-7764 -- ReverbPreset_Load sends the 0xFC8E (tag 0x63, DIGITAL REVERB) record, then notifies parameter 0x4002",
+   "(repo root) docs/kn-disk-file-formats.md:452-457 -- slot table: 1 = 0x63 DIGITAL REVERB, 2 = 0x65 ACOUSTIC ILLUSION, 4 = 0x64 EQUALIZER"
+  ]
+ },
+ {
+  "old": "ExtData_Voice_CompareAndDispatch_Helper",
+  "verdict": "refuse",
+  "why_refused": "Mechanics: for tag 0xB0 offset 0 (no panel record; PanelTlv_PayloadByTag[0xB0] = 0xFFFFFFFF) it copies MIDI_CC_EXPRESSION_VALUE|0x80 to MIDI_CC_EXPRESSION_PENDING, runs Audio_FlushPendingBankSelects (which posts {0xB0, 0, that value, 0x7F}), then stores {0xB0, 0, value 0x9130, mask 0x9131} at 0x917E and jumps to MIDI_LoadParamsAndDispatchCC. The variable it re-arms is labelled 'expression', commented 'CC#0' and flushed by a routine named for bank selects -- three readings that disagree -- so what the event is cannot be named without guessing.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "extensions/extension_data.s:3141 `.long ExtData_Voice_CompareAndDispatch` -- entry 0xB0; 3142-3154 entries 0xB1.. are the MidiCh_Iterate* loops",
+   "audio/audio_control_engine.s:5793-5801 `ld a, (0x912f:16)` / `cp a, 0:i3` / `jr z` ... `calr ExtData_Voice_CompareAndDispatch_Helper` -- offset 0 (offset 1 -> MidiCh_ConfigVoiceAndParts)",
+   "audio/audio_control_engine.s:5804-5812 `ld a, (MIDI_CC_EXPRESSION_VALUE:16)` / `set 7, a` / `ld (MIDI_CC_EXPRESSION_PENDING:16), a` / `calr Audio_FlushPendingBankSelects` / `ld (0x917e:16), 176` / `ld (0x917f:16), 0` / `jp MIDI_LoadParamsAndDispatchCC`",
+   "audio/audio_control_engine.s:7059-7069 -- Audio_FlushPendingBankSelects posts `ld (MIDI_MSG_DATA1:16), 0` with the PENDING value",
+   "midi_encoder_constants.s:27-29 -- MIDI_CC_EXPRESSION_PENDING / _VALUE commented 'Expression' and 'CC#0'"
+  ]
+ },
+ {
+  "old": "ExtData_Voice_FullHandler_Helper",
+  "verdict": "refuse",
+  "why_refused": "Mechanics are clear but the field is not identified: for tag 0x98 offset 11 it toggles bits 7 and 6 of 0xFDA1 (ExtData_ToggleTlvBits 0x80 then 0x40), keeps them mutually exclusive (if both end up set it clears the one that did not just change), then posts the byte with the changed bits as the mask. What record 0x98 (payload 0xFD96, len 18) and its byte 11 bits 7/6 control is not established anywhere in the tree or docs.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "extensions/extension_data.s:3117 `.long ExtData_Voice_FullHandler` -- entry 0x98 (152)",
+   "audio/audio_control_engine.s:5703-5716 `ld a, (0x912f:16)` / `cp a, 11` / `jr z` ... `calr ExtData_Voice_FullHandler_Helper`",
+   "audio/audio_control_engine.s:5741-5743 `.byte 0xd7` / `swi 2` / `.byte 0x04` -- the routine opens with bytes d7 fa 04 (it ends with `pop qiz`), spelled as data",
+   "audio/audio_control_engine.s:5744-5764 `ld a, (0xfda1:16)` / `and a, 192` ... `calr ExtData_ToggleTlvBits` x2 / `cp a, 192` / `bit 7, (MIDI_MSG_DATA3:16)` / `res 6, c` / `res 7, c`",
+   "ui_widgets/naka_extension_device.c:5182-5200 -- PanelTlv_Rules_Tag98: RULE_KEEP_BITS(11, 0xC0)"
+  ]
+ },
+ {
+  "old": "ExtData_Voice_MixedHandler_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_ApplyTransposeEvent",
+  "header": "Applies a panel event to the TRANSPOSE byte, panel record 0x70 byte +2 (0xFD04, 0..11 = -5..+6 semitones, 5 = none): mask 0xFF sets it from the value; otherwise, unless 0xE3E2 bit 1 is set, value bits 0-1 = 1 step down (floor 0), 2 step up (cap 11), 0 or 3 reset to 5. When the posted value is 5 it sets the 0x8D3C display countdown to 24; then SwbtWr_FlushAndAppendParams.\nBasis: callers + body -- ExtData_Voice_MixedHandler (entry 0x70 of SoundProgram_DispatchTable) calls it for offset 2; the record rule (0..11, default 5), EffectSelect_StepTable (-5..+6 applied per channel from 0xFD04) and AcTransposeBoxProc (labels G..F# with C at 5, blank at 5 once 0x8D3C runs out) identify the byte.",
+  "basis": "callers + body",
+  "evidence": [
+   "extensions/extension_data.s:3077 `.long ExtData_Voice_MixedHandler` -- entry 0x70 (112)",
+   "audio/audio_control_engine.s:5604-5612 `calr SndParam_WriteLookupAndStore` / `ld a, (0x912f:16)` / `cp a, 2:i3` / `jr z` / `calr ExtData_Voice_MixedHandler_Helper`",
+   "audio/audio_control_engine.s:5644-5650 `ld c, (0x9131:16)` / `cp a, 255` / `ldw wa, 255` / `calr ExtData_SetTlvField` -- whole-byte set",
+   "audio/audio_control_engine.s:5653-5676 `bit 1, (58338:16)` / `and c, 3` / `ld a, (0x9130:16)` / `cp a, 1:i3` (step 255, limit 255 -> 0) / `cp a, 2:i3` (step 1, limit 12 -> 11) / `calr ExtData_StepTlvField`",
+   "audio/audio_control_engine.s:5679-5689 `lda xbc, (0xfd04:16)` / `ld (xbc), 5` / `ld (MIDI_MSG_DATA2:16), 5` ... `cp (MIDI_MSG_DATA2:16), 5` / `ld (0x8d3c:16), 24` / `jrl SwbtWr_FlushAndAppendParams`",
+   "ui_widgets/naka_extension_device.c:5061-5064 -- PanelTlv_Rules_Tag70: RULE_RANGE(2, 0xFF, 0, 11, 5)",
+   "ui_widgets/widget_dispatch.s:7202-7206 EffectSelect_StepTable -5..+6; audio/dsp_config_sysex.s:6275-6283 `ldb_d8 a, (0xfd04)` / `lda xbc, (EffectSelect_StepTable:24)` -- per-channel transpose nibble",
+   "display/graphics_text_vga.s:5496-5497 `ld xwa, 3:i3` / `call MainLswGet` and 5507-5512 `cp wa, 5:i3` / `cp (0x8d3c:16), 0` -- AcTransposeBoxProc; extensions/extension_data.s:1237-1250 labels G, Ab .. C (index 5) .. F#",
+   "ui/bitmap_out_routines.s:279-295 -- 0x8D3C is a countdown (default 64) that re-reads LSW key 3 when it reaches 0"
+  ]
+ },
+ {
+  "old": "FDC_CMD_EXEC_Helper6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_SubmitReadDataCmd",
+  "header": "Issues MT|MF READ DATA (0xC6): stores the opcode in 0x8A28, arms DMA channel 3 for I/O->memory (FDC_Setup_DMA_Mode), clears the result buffer (FDC_TIMING_DELAY), sends the command with FDC_CMD_SEND and, if no error, waits for the result (FDC_POST_OP).\nBasis: callers + body + twin -- FDC_CMD_EXEC (read sectors, FDC command 3) calls it per same-track burst; instruction twin of the bootloader's FDC_SubmitReadDataCmd.",
+  "basis": "callers + body + bootloader twin",
+  "evidence": [
+   "storage/fdc_routines.s:1486-1488 `ld (0x8a4a:16), iz` / `ldmm16 0x8a48, 0x8b10` / `calr FDC_CMD_EXEC_Helper6` -- FDC_CMD_EXEC burst loop",
+   "storage/fdc_routines.s:1404-1411 `ld (0x8a28:16), 198` / `calr FDC_Setup_DMA_Mode` / `calr FDC_TIMING_DELAY` / `ldw wa, 198` / `calr FDC_CMD_SEND` / `cp (FDC_ERROR_CODE:16), 0` / `ret nz` / `jrl FDC_POST_OP`",
+   "storage/fdc_routines.s:602-621 -- FDC_Setup_DMA_Mode: 0xC6 -> FDC_Setup_DMA_Ack_Dest (source 0x120000, destination buffer, mode 0x00 = I/O->memory)",
+   "storage/fdc_routines.s:1289-1311 -- FDC_TIMING_DELAY sets 0x8A60 = 0xFF; FDC_POST_OP waits until it changes (timeout -> status 9)",
+   "(repo root) table_data/boot_fdc_driver.s:1517-1528 -- FDC_SubmitReadDataCmd: same sequence, 0xC6 = MT|MF READ DATA",
+   "(repo root) ../technics-docs/fdc-subsystem.md:556-577 -- FDC_CMD_EXEC = read sectors (FDC_CmdReadSectors)"
+  ]
+ },
+ {
+  "old": "FDC_CMD_EXEC_Helper7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_SubmitWriteDataCmd",
+  "header": "Issues MT|MF WRITE DATA (0xC5): stores the opcode in 0x8A28, arms DMA channel 3 for memory->I/O (FDC_Setup_DMA_Mode), clears the result buffer, sends the command with FDC_CMD_SEND and, if no error, waits for the result (FDC_POST_OP).\nBasis: callers + body + twin -- FDC_SECTOR_XFER (write sectors, FDC command 4) calls it per burst; instruction twin of the bootloader's FDC_SubmitWriteDataCmd.",
+  "basis": "callers + body + bootloader twin",
+  "evidence": [
+   "storage/fdc_routines.s:1588-1590 `ld (0x8a4a:16), iz` / `ldmm16 0x8a48, 0x8b10` / `calr FDC_CMD_EXEC_Helper7` -- FDC_SECTOR_XFER burst loop",
+   "storage/fdc_routines.s:1641-1648 `ld (0x8a28:16), 197` / `calr FDC_Setup_DMA_Mode` / `calr FDC_TIMING_DELAY` / `ldw wa, 197` / `calr FDC_CMD_SEND` / `ret nz` / `jrl FDC_POST_OP`",
+   "storage/fdc_routines.s:588-589 `cp a, 0xc5` / `jr z, FDC_Setup_DMA_Read_Mode` -> 623-630 FDC_Setup_DMA_Src_Ack (source buffer, destination 0x120000, mode 0x08 = memory->I/O)",
+   "(repo root) table_data/boot_fdc_driver.s:1760-1771 -- FDC_SubmitWriteDataCmd: same sequence, 0xC5 = MT|MF WRITE DATA",
+   "(repo root) ../technics-docs/fdc-subsystem.md:557, 578 -- FDC_SECTOR_XFER = write sectors"
+  ]
+ },
+ {
+  "old": "FDC_HardwareSetup_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_SendCommandByte",
+  "header": "Drains any pending result phase (FDC_ResultPhase_Read) and writes A to the uPD72068 data register 0x11000A -- the first byte of a uPD765-style command.\nBasis: callers + body + twin -- FDC_CMD_SEND sends every non-auxiliary opcode through it before the parameter bytes; bootloader twin FDC_SendCommandByte.",
+  "basis": "callers + body + bootloader twin",
+  "evidence": [
+   "storage/fdc_routines.s:945-1049 -- FDC_CMD_SEND (A = opcode): FDC_WaitReady, opcode -> 0x8A28, validate, then dispatch by opcode",
+   "storage/fdc_routines.s:1001-1007 `ld a, (xsp)` / `calr FDC_HardwareSetup_Helper` / `cp (FDC_ERROR_CODE:16), 0` / `cp (xsp), 8` -- opcode 8 (SENSE INTERRUPT STATUS) has no parameters",
+   "storage/fdc_routines.s:774-781 `ld (xsp), a` / `calr FDC_ResultPhase_Read` / `ld a, (xsp)` / `calr FDC_Write_Data`",
+   "storage/fdc_routines.s:41-43 -- FDC_Write_Data: `ld (0x11000a:24), a`; 722-772 FDC_ResultPhase_Read reads result bytes until MSR shows 0x80 (ready for a command)",
+   "(repo root) table_data/boot_fdc_driver.s:830-841 -- FDC_SendCommandByte, same body",
+   "(repo root) ../technics-docs/fdc-subsystem.md:605-606 -- 0x110008 MSR / aux command, 0x11000A data register"
+  ]
+ },
+ {
+  "old": "FDC_HardwareSetup_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_SendParameterByte",
+  "header": "Waits (500-tick timeout, status 1) until the main status register shows RQM|CB (0x90) and writes A to the data register 0x11000A -- one command parameter byte.\nBasis: callers + body + twin -- FDC_CMD_SEND sends the unit/head byte through it and the SPECIFY / SEEK / FORMAT / READ-WRITE parameter senders call it once per byte; bootloader twin FDC_SendParameterByte.",
+  "basis": "callers + body + bootloader twin",
+  "evidence": [
+   "storage/fdc_routines.s:1013-1025 `ld a, (0x8a29:16)` ... `set 0, a` / `calr FDC_HardwareSetup_Helper2` -- FDC_CMD_SEND, the unit/head byte (head<<2 | 1; the drive bits are ORed and then discarded, as in the twin)",
+   "storage/fdc_routines.s:1103, 1118-1127, 1131, 1135-1165 -- FDC_HardwareSetup_Helper6/7/8/9 send each parameter through it",
+   "storage/fdc_routines.s:783-790 `ld (xsp), a` / `calr FDC_ResultPhase_Read_Helper` / `ld a, (xsp)` / `calr FDC_Write_Data`",
+   "storage/fdc_routines.s:84-112 -- FDC_ResultPhase_Read_Helper: `calr FDC_Read_Status` / `and l, 144` / `cp l, 144`, timeout 500 -> FDC_Set_Status 1",
+   "(repo root) table_data/boot_fdc_driver.s:844-855 -- FDC_SendParameterByte ('wait for parameter-phase ready (MSR RQM|CB)')"
+  ]
+ },
+ {
+  "old": "FDC_HardwareSetup_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_SendAuxCmd",
+  "header": "Checked auxiliary-command send: drains the result phase and, if no FDC error is pending, writes A to the auxiliary command register 0x110008 through FDC_ResultPhase_Read_Helper2.\nBasis: callers + body + twin -- FDC_CMD_SEND routes the aux opcodes 0x35, 0x36 and 0x47 here (no result byte); bootloader twin FDC_SendAuxCmd.",
+  "basis": "callers + body + bootloader twin",
+  "evidence": [
+   "storage/fdc_routines.s:961-971 `cp a, 54` / `cp a, 53` / `cp a, 71` ... `calr FDC_HardwareSetup_Helper3` -- FDC_CMD_SEND",
+   "storage/fdc_routines.s:801-811 `calr FDC_ResultPhase_Read` / `cp (FDC_ERROR_CODE:16), 0` / `jr nz` / `ld a, (xsp)` / `calr FDC_ResultPhase_Read_Helper2`",
+   "storage/fdc_routines.s:791-799 -- FDC_ResultPhase_Read_Helper2: drain, then `calr FDC_Send_Command`; 33-35 FDC_Send_Command `ld (0x110008:24), a`",
+   "(repo root) table_data/boot_fdc_driver.s:871-889 -- FDC_SendAuxCmd, same body",
+   "observation: FDC_HardwareSetup_Helper5 rejects 0x36 (0x36 & 0x1F = 0x16) before this dispatch, so FDC_CMD_SEND(0x36) returns without sending; FDC_INIT (fdc_routines.s:113-119) writes 0x36 with FDC_Send_Command directly"
+  ]
+ },
+ {
+  "old": "FDC_HardwareSetup_Helper4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_SendAuxCmdReadResult",
+  "header": "Auxiliary command with a one-byte reply: drains the result phase, and if no error is pending writes A to the aux register 0x110008, waits for the FDC to offer a byte (FDC_Wait_Ready_Timeout, status 2 on timeout) and stores the byte read from 0x11000A in 0x8A61.\nBasis: callers + body + twin -- FDC_CMD_SEND routes the aux opcodes 0x33, 0x34, 0x4F/0x5F (select format), xB (control internal mode) and xE (enable motors) here; bootloader twin FDC_SendAuxCmdReadResult (byte to 0x0C8F).",
+  "basis": "callers + body + bootloader twin",
+  "evidence": [
+   "storage/fdc_routines.s:957-960, 972-976 `cp a, 51` / `cp a, 52` ... `calr FDC_HardwareSetup_Helper4`; 977-985 `res 4, a` / `cp a, 79`; 986-998 `and a, 15` / `cp a, 14` / `cp a, 11` -- FDC_CMD_SEND",
+   "storage/fdc_routines.s:813-826 `calr FDC_ResultPhase_Read` / `cp (FDC_ERROR_CODE:16), 0` / `calr FDC_ResultPhase_Read_Helper2` / `calr FDC_Wait_Ready_Timeout` / `calr FDC_Read_Data` / `ld (0x8a61:16), l`",
+   "storage/fdc_routines.s:636-672 -- FDC_Wait_Ready_Timeout waits for MSR 0xC0 (byte to read), timeout -> FDC_Set_Status 2",
+   "(repo root) table_data/boot_fdc_driver.s:891-906 -- FDC_SendAuxCmdReadResult ('aux commands that acknowledge with ST0')",
+   "(repo root) ../technics-docs/fdc-subsystem.md:605 -- aux commands: 0x36 reset, 0x33 enable external mode, rate|0x0B control internal mode, drives|0x0E enable motors, 0x4F select format"
+  ]
+ },
+ {
+  "old": "FDC_HardwareSetup_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_ValidateOpcode",
+  "header": "Checks the opcode in 0x8A28: L = 0 for the aux opcodes 0x4F/0x33/0x34/0x47/0x35 and for opcodes whose low 5 bits are 0x02-0x0F, 0x11, 0x19, 0x1D or 0x1E (0x10 excluded); L = 1 otherwise.\nBasis: callers + body + twin -- FDC_CMD_SEND stores the opcode, calls it and returns at once when L != 0; bootloader twin FDC_ValidateOpcode.",
+  "basis": "callers + body + bootloader twin",
+  "evidence": [
+   "storage/fdc_routines.s:951-955 `ld (0x8a28:16), a` / `calr FDC_HardwareSetup_Helper5` / `cp l, 0:i3` / `jrl nz, FDC_HardwareSetup_Epilogue` -- FDC_CMD_SEND",
+   "storage/fdc_routines.s:1051-1064 `ld a, (0x8a28:16)` / `cp a, 79` / `cp a, 51` / `cp a, 52` / `cp a, 71` / `cp a, 53` / `ld l, 0:opc`",
+   "storage/fdc_routines.s:1066-1087 `and a, 31` / `cp a, 30` / `cp a, 29` / `cp a, 25` / `cp a, 16` -> L=1 / `cp a, 17` / `cp a, 15` ugt -> L=1 / `cp a, 2` c -> L=1",
+   "(repo root) table_data/boot_fdc_driver.s:1134-1177 -- FDC_ValidateOpcode, same tests ('Returns L = 0 when valid, 1 when not')"
+  ]
+ },
+ {
+  "old": "FDC_HardwareSetup_Helper6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_SendParams_Specify",
+  "header": "Sends the two SPECIFY parameter bytes: SRT<<4 | HUT (0x8A37, 0x8A38 & 0x0F) and HLT<<1 | ND (0x8A39, 0x8A3A & 1), each through FDC_SendParameterByte.\nBasis: callers + body + twin -- FDC_CMD_SEND calls it for opcode 3 (SPECIFY) right after the command byte; bootloader twin FDC_SendParams_Specify.",
+  "basis": "callers + body + bootloader twin",
+  "evidence": [
+   "storage/fdc_routines.s:1008-1011 `cp (xsp), 3` / `jr nz` / `calr FDC_HardwareSetup_Helper6` -- FDC_CMD_SEND",
+   "storage/fdc_routines.s:1094-1103 `ld a, (0x8a37:16)` / `sll a, 4` / `ld a, (0x8a38:16)` / `and a, 15` / `or a, c` / `calr FDC_HardwareSetup_Helper2`",
+   "storage/fdc_routines.s:1104-1113 `ld a, (0x8a39:16)` / `sll a, 1` / `ld a, (0x8a3a:16)` / `and a, 1` / `or a, c` / `jrl FDC_HardwareSetup_Helper2`",
+   "(repo root) table_data/boot_fdc_driver.s:1188-1213 -- FDC_SendParams_Specify ('send SRT<<4|HUT then HLT<<1|ND')"
+  ]
+ },
+ {
+  "old": "FDC_HardwareSetup_Helper7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_SendParams_Format",
+  "header": "Sends the FORMAT TRACK parameters N (0x8A2E & 7), SC (0x8A32), GPL (0x8A33) and filler D (0x8A34) through FDC_SendParameterByte.\nBasis: callers + body + twin -- FDC_CMD_SEND calls it for opcode 0x4D (FORMAT TRACK) after the unit/head byte; FDC_MODE_CONFIG fills 0x8A2E/0x8A33/0x8A34 (N, gap 80/108/116, fill 0xE5); bootloader twin FDC_SendParams_Format.",
+  "basis": "callers + body + bootloader twin",
+  "evidence": [
+   "storage/fdc_routines.s:1029-1030, 1039-1040 `cp a, 77` / `jr z` ... `calr FDC_HardwareSetup_Helper7` -- FDC_CMD_SEND",
+   "storage/fdc_routines.s:1115-1127 `ld a, (0x8a2e:16)` / `and a, 7` / ... `ld a, (0x8a32:16)` ... `ld a, (0x8a33:16)` ... `ld a, (0x8a34:16)` / `jrl FDC_HardwareSetup_Helper2`",
+   "storage/fdc_routines.s:1681-1694 -- FDC_MODE_CONFIG: `ld (0x8a2e:16), 2|3` / `ld (0x8a33:16), 80|108|116` / `ld (0x8a34:16), 229`",
+   "(repo root) table_data/boot_fdc_driver.s:1213-1231 -- FDC_SendParams_Format ('send N, SC, GPL(format), D for FORMAT TRACK')"
+  ]
+ },
+ {
+  "old": "FDC_HardwareSetup_Helper8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_SendParam_SeekTrack",
+  "header": "Sends the SEEK target track NCN (FDC_TARGET_TRACK, 0x8A36) through FDC_SendParameterByte.\nBasis: callers + body + twin -- FDC_CMD_SEND calls it for opcode 0x0F (SEEK) after the unit/head byte, as issued by FDC_CmdSeek; bootloader twin FDC_SendParam_SeekTrack.",
+  "basis": "callers + body + bootloader twin",
+  "evidence": [
+   "storage/fdc_routines.s:1027-1028, 1042-1043 `cp a, 15` / `jr z` ... `calr FDC_HardwareSetup_Helper8` -- FDC_CMD_SEND",
+   "storage/fdc_routines.s:1129-1131 `ld a, (FDC_TARGET_TRACK:16)` / `extz wa` / `jrl FDC_HardwareSetup_Helper2`",
+   "storage/fdc_routines.s:1386-1395 -- FDC_CmdSeek: `ld a, (FDC_TARGET_TRACK:16)` ... `ldw wa, 15` / `calr FDC_CMD_SEND`",
+   "(repo root) table_data/boot_fdc_driver.s:1231-1237 -- FDC_SendParam_SeekTrack"
+  ]
+ },
+ {
+  "old": "FDC_HardwareSetup_Helper9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_SendParams_ReadWrite",
+  "header": "Sends the data-command parameters C (0x8A2B), H (0x8A2C & 1), R (0x8A2D), N (0x8A2E & 7), EOT (0x8A2F), GPL (0x8A30), then DTL (0x8A31) -- or STP ((0x8A35) & 3) for the scan opcodes 0xD1/0xD9/0xDD -- through FDC_SendParameterByte.\nBasis: callers + body + twin -- FDC_CMD_SEND calls it for every opcode not handled earlier (READ/WRITE DATA 0xC6/0xC5 among them); bootloader twin FDC_SendParams_ReadWrite.",
+  "basis": "callers + body + bootloader twin",
+  "evidence": [
+   "storage/fdc_routines.s:1031-1036, 1045-1046 `cp a, 7` / `cp a, 4` / `cp a, 74` / `jr nz, FDC_HardwareSetup_Skip11` ... `calr FDC_HardwareSetup_Helper9` -- FDC_CMD_SEND (RECALIBRATE, SENSE DRIVE STATUS, READ ID send no more)",
+   "storage/fdc_routines.s:1133-1152 `ld a, (0x8a2b:16)` ... `ld a, (0x8a2c:16)` / `and a, 1` ... `ld a, (0x8a2d:16)` ... `ld a, (0x8a2e:16)` / `and a, 7` ... `ld a, (0x8a2f:16)` ... `ld a, (0x8a30:16)` -- six calrs to FDC_HardwareSetup_Helper2",
+   "storage/fdc_routines.s:1153-1165 `cp a, 221` / `cp a, 217` / `cp a, 209` / `jrl FDC_HardwareSetup_Join` (STP, 1088-1092) else `ld a, (0x8a31:16)` / `calr FDC_HardwareSetup_Helper2`",
+   "(repo root) table_data/boot_fdc_driver.s:1240-1279 -- FDC_SendParams_ReadWrite ('send C,H,R,N,EOT,GPL then DTL (or STP for the scan opcodes 0xD1/0xD9/0xDD)')"
+  ]
+ },
+ {
+  "old": "FDemoText_ByteData_DisplayRefresh_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DbMemo_PostString",
+  "header": "Prints a string in the debug memo window asynchronously: copies it into a Malloc'd buffer, posts EVT_MEMO_DRAW with the copy (broadcast 0xFFFFFFFF), then EVT_AUTO_FREE so the copy is freed after delivery.\nBasis: callers + body -- the DIRMD title's trace calls (\"DirmdTitleNew();\", \"DirmdTitleESw(%d, %d);\" ...) and FDemoText_GetInstanceID's \"Error! (GetInstanceID)\" pass their message to it; DbMemoProc draws EVT_MEMO_DRAW strings.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/presentation_sound_nav.s:1310-1311 `ld xwa, DirmdTitleFunc_Str_DirmdTitleNew` / `call FDemoText_ByteData_DisplayRefresh_Helper` -- DirmdEmu_CaseF; 1313-1314 (DirmdTitleOld), 1321-1328 (Sprintf'd DirmdTitleESw), 1335-1336 (DirmdTitleCur)",
+   "demo/fdemotext_routines.s:1310-1312 `.byte 0x40` / `.long ErrStr_GetInstanceID` / `call FDemoText_ByteData_DisplayRefresh_Helper` -- `ld xwa, ErrStr_GetInstanceID` spelled as bytes",
+   "ui/ui_widget_defs.s:6926-6936 `push xwa` / `call Strlen` / `inc 1, hl` / `call Malloc` / `call Strcpy`",
+   "ui/ui_widget_defs.s:6938-6945 `ld xwa, 0xffffffff` / `ld xbc, EVT_MEMO_DRAW` / `ld xde, xiz` / `call PostEvent` / `ld xbc, EVT_AUTO_FREE` / `call PostEvent`",
+   "shared/event_codes.s:178 EVT_MEMO_DRAW ('Append/draw a text line in the debug memo window'), :226 EVT_AUTO_FREE ('Frees the heap block given as the parameter')",
+   "ui/ui_widget_defs.s:6786-6792 -- DbMemoProc handles EVT_MEMO_DRAW; ui_widgets/disk_warning_strings.s:305, 311 -- the DIRMD strings"
+  ]
+ },
+ {
+  "old": "FDemoText_TextDispatch_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDemoText_GetInstanceID",
+  "header": "Finds the view object whose name equals the string XWA: walks classes 255..0 and their instances (CountObject, CheckViewObject), compares each object's name (FDemoText_ByteData_DisplayRefresh) and returns its id class<<16 | instance in XHL; if none matches it posts \"Error! (GetInstanceID)\" to the debug memo and returns 0xFFFFFFFF.\nBasis: callers + body -- the feature-demo <SHOW> tag handler passes the OBJ attribute and sends EVT_SHOW to the id it returns; the firmware's own error string names the routine GetInstanceID.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/fdemotext_routines.s:2319 `lda xsp, (xsp-206)` -- the <SHOW> handler (0xF85D0F, FDemoText_MarkupTag_HandlerColumn record 6; probe kf_pointer_and_tagtable_probe.py), inside FDemoText_ByteData_LayoutEngine's label scope",
+   "demo/fdemotext_routines.s:2362 `lda xwa, (ObjAttr_NameTable:24)` -- OBJ attribute; 2374-2383 `lda xwa, (xsp+4)` / `calr FDemoText_TextDispatch_Helper` / `cp xwa, 0xffffffff` / `ld xbc, EVT_SHOW` / `call SendEvent`",
+   "demo/fdemotext_routines.s:1252-1268 `call Strcpy` / `ld xwa, 255` / `call CountObject`",
+   "demo/fdemotext_routines.s:1274-1298 `sll xwa, 16` / `add xwa, xbc` / `call CheckViewObject` / `calr FDemoText_ByteData_DisplayRefresh` / `call Strcmp` / `ld xhl, xwa`",
+   "demo/fdemotext_routines.s:1305-1313 `sub (xsp+4), xwa` (next class) ... `.long ErrStr_GetInstanceID` / `call FDemoText_ByteData_DisplayRefresh_Helper` / `ld xhl, 0xffffffff`",
+   "demo/fdemotext_routines.s:1207-1250 -- FDemoText_ByteData_DisplayRefresh returns the object's name (EVT_GET_NAME, \"NONE\" for -1, or the title name with the instance)",
+   "ui_widgets/technichord_string_data.s:4324 ErrStr_GetInstanceID = \"Error! (GetInstanceID)\"; 4488-4491 the OBJ value 'is looked up by FDemoText_TextDispatch_Helper and shown with EVT_SHOW'"
+  ]
+ },
+ {
+  "old": "FDemoText_TextDispatch_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDemoText_ResetLayoutState",
+  "header": "Resets the feature-demo page layout: marks all 40 x 60 cells of the occupancy map at RAM 0x251DA free (0x54), zeroes the cursor (0x25B3A x/y) and the depths of the <FONT> font stack (0x25B3E), colour stack (0x25B60) and <CENTER> stack (0x25B72), and refills their 8 entries with the defaults 5, 0x00FF and 1.\nBasis: callers + body -- the <ACT> tag handler calls it on an opening tag before showing PlainScreen and PresentationControl and drawing the wall; the FONT, /FONT, CENTER, /CENTER handlers push and pop those stacks and FDemoText_CalcTextExtent scans the 0x54 cells.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/fdemotext_routines.s:1940 `lda xsp, (xsp-142)` -- the <ACT> handler (0xF858D5, FDemoText_MarkupTag_HandlerColumn record 8; probe kf_pointer_and_tagtable_probe.py)",
+   "demo/fdemotext_routines.s:2017-2036 `cpw (xsp+138), 0` / `calr FDemoText_TextDispatch_Helper2` / `ld xbc, EVT_SET_NOT_DRAW_FLAG` ... `ld xwa, NAKA_VIEW_PlainScreen` / `ld xbc, EVT_SHOW` ... `call DrawWall`",
+   "demo/fdemotext_routines.s:2394-2406 `lda xbc, (0x0251da:24)` / `lda xbc, (xbc+2400)` / `ld (xde+), 84` / `lda xwa, (xwa+40)` -- 60 rows of 40 bytes := 0x54",
+   "demo/fdemotext_routines.s:2407-2424 `ldw (xwa), 0` / `ldw (xwa+2), 0` (0x25B3A) / `ldw (0x025b3e:24), 0` / `ldw (0x025b60:24), 0` / `ldw (0x025b72:24), 0` / loop `ld (xhl+), xwa` (5) / `ldw (xde+), 0x00ff` / `ld (xbc+), 1` x8",
+   "demo/fdemotext_routines.s:2103-2203 (FONT: pushes font 0x25B40[0x25B3E] and colour 0x25B62[0x25B60]), 2204-2228 (/FONT: pops, restores 5 / 0x00FF), 2068-2101 (CENTER / /CENTER: 0x25B72 / 0x25B74)",
+   "demo/fdemotext_routines.s:2468-2478 `lda xde, (0x0251da:24)` / `cp (xde+bc), 0x54` -- FDemoText_CalcTextExtent scans free cells, 40 per row"
+  ]
+ }
+]

@@ -111,7 +111,7 @@ MidiPkt_BuildControl:
 	lda	xwa, (xsp+4)
 	ld	(xwa), xbc
 	ld	(xwa+4), xiz
-	calr	MidiPkt_BuildControl_Helper
+	calr	MidiPkt_SendCtlValueSysEx
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
@@ -257,7 +257,7 @@ MidiPkt_BuildControl_Join:
 	lda	xwa, (xsp+6)
 	ld	(xwa), xbc
 	ld	(xwa+4), xde
-	calr	MidiPkt_BuildControl_Helper
+	calr	MidiPkt_SendCtlValueSysEx
 MidiPkt_BuildControl_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+18)
@@ -1059,7 +1059,7 @@ MidiPkt_EnqueueControl_3368_Return:
 
 MidiPkt_EnqueueExtended2_Data:
 	ret
-MidiPkt_BuildControl_Helper:
+MidiPkt_SendCtlValueSysEx:
 	lda	xsp, (xsp-10)
 	push	xiz
 	ld	xiz, xwa

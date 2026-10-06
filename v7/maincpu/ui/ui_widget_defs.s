@@ -7027,7 +7027,7 @@ DbMemo_DrawContent_Loop:
 	extz	xwa
 	add	(xsp+6), xwa
 	jr	DbMemo_DrawContent_Loop
-DbMemo_DrawContent_Loop_0x61:
+DbMemo_PostString:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa

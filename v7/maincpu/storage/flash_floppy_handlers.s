@@ -1510,8 +1510,8 @@ Flash_InitBytecodeBlock_Skip3:
 	calr	NoteEventBuffer_Store
 	ld	a, (xsp+10)
 	extz	wa
-	calr	Flash_InitBytecodeBlock_Helper4
-	calr	Flash_InitBytecodeBlock_Helper5
+	calr	Flash_WriteSlotOwnerMap
+	calr	Flash_CopyBlocksToSlots
 	call	TmFlash_CopyToExtMem
 	jrl	Flash_InitBytecodeBlock_Join5
 Flash_InitBytecodeBlock_Skip4:
@@ -2610,7 +2610,7 @@ Flash_StoreBaseAndInitAccPatch_Sub_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
-Flash_InitBytecodeBlock_Helper4:
+Flash_WriteSlotOwnerMap:
 	ld	xix, (3222:16)
 	ld	xiy, (FLASH_SECTION_PTR_7:16)
 	ldw	bc, 0x8000
@@ -2710,7 +2710,7 @@ Flash_StoreBaseAndInitAccPatch_Skip11:
 	ld	xde, (FLASH_SECTION_PTR_7:16)
 	ld	wa, 1:i3
 	jp	Flash_EraseSectorAndWrite
-Flash_InitBytecodeBlock_Helper5:
+Flash_CopyBlocksToSlots:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xix, (3222:16)
@@ -3491,7 +3491,7 @@ Flash_ExtendedOpsBlock_Code_Join:
 	ld xde, (FLASH_SECTION_PTR_7:16)
 	ld wa, 1:i3
 	jp Flash_EraseSectorAndWrite
-Flash_SlotUpdateOpsBlock_Helper:
+Flash_CountFreeOrOwnedSlots:
 	ld L, 0x00:opc
 	ld xde, (FLASH_SECTION_PTR_7:16)
 	ld B, 0x00:opc
@@ -3936,7 +3936,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 1:i3
-	calr	Flash_SlotUpdateOpsBlock_Helper
+	calr	Flash_CountFreeOrOwnedSlots
 	cp	l, 0:i3
 	jr	nz, Flash_SlotUpdateOpsBlock_Skip
 	ldw	(xsp), 1
@@ -3946,7 +3946,7 @@ Flash_SlotUpdateOpsBlock_Skip:
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 0:i3
-	calr	Flash_SlotUpdateOpsBlock_Helper
+	calr	Flash_CountFreeOrOwnedSlots
 	ld	e, 0:opc
 	lda	xbc, (1748:16)
 Flash_SlotUpdateOpsBlock_Loop:
@@ -4049,8 +4049,8 @@ Flash_InitBytecodeBlock_Helper6:
 	calr	NoteEventBuffer_Store
 	ld	a, (xsp+6)
 	extz	wa
-	calr	Flash_InitBytecodeBlock_Helper4
-	calr	Flash_InitBytecodeBlock_Helper5
+	calr	Flash_WriteSlotOwnerMap
+	calr	Flash_CopyBlocksToSlots
 	call	TmFlash_CopyToExtMem
 	lda	xwa, (2360:16)
 	cpw	(xwa+0x2), 0xffff
@@ -4236,7 +4236,7 @@ Flash_WriteBackSlotTable_Skip4:
 	ldirw
 	inc	2, xsp
 	ret
-LoadRegion6_OpenSuccess_Helper:
+FileIO_LoadRcmToFlash:
 	lda xsp, (xsp - 0x0400)
 	pushw iz
 	calr Flash_InitExtMemAddrs
@@ -5513,7 +5513,7 @@ DualVoice_LoopCheckNext:
 DualVoice_WriteBackSlots:
 	calr Flash_WriteBackSlotTable
 	jr DualVoice_LoadDoneRetVal
-LoadRegion5_AltPath_Helper:
+FileIO_LoadMspAltFormat:
 	pushw iz
 	call msp_ld_mae
 	lda xwa, (0x1e8800:24)

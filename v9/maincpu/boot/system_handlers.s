@@ -8082,7 +8082,7 @@ HDAE5000_ROM_Transfer_Success:
 
 HDAE5000_ROM_Transfer_Return:
 	retd 0x2
-HDAE5000_TableData_Write_Helper:
+HDAE5000_ProgramCustomDataFlash:
 	lda xsp, (xsp - 10)
 	push xiz
 	lda xwa, (0x300000:24)
@@ -8251,7 +8251,7 @@ HDAE5000_TableData_Write_Skip5:
 	ld	xwa, 0xdbba0
 	calr	BusyWait_XWA_Cycles
 	set	0, (0x160004:24)
-	calr	HDAE5000_TableData_Write_Helper
+	calr	HDAE5000_ProgramCustomDataFlash
 	res	0, (0x160004:24)
 	set	1, (0x160004:24)
 	pushw	3

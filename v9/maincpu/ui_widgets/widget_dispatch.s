@@ -1419,11 +1419,11 @@ SeqChan_WriteFieldHandlers:
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
 	.long SeqChan_WriteField_Data_E
-; 6-byte template: MidiSysEx_ProcessBlock_Helper7 (0xFD81EE) copies it into its frame (`ld xiy,<this>; ld xix,xsp; ld bc,3; ldirw`).
+; 6-byte template: MidiSysEx_FinishSoundRamXfer (0xFD81EE) copies it into its frame (`ld xiy,<this>; ld xix,xsp; ld bc,3; ldirw`).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiSysEx_BlockTemplate:
 	.byte 0x88, 0x00, 0x18, 0x00, 0x00, 0x00
-; 22 x u32 routine pointers; MidiSysEx_ProcessBlock_Helper11 (0xFD827D): `lda xbc,(<this>); ld xhl, (xbc+wa); call (xhl)` -- entries point 0-4 bytes apart into one run of short entry points at 0xFD829B.
+; 22 x u32 routine pointers; MidiSysEx_RecoverAbortedXferGroup (0xFD827D): `lda xbc,(<this>); ld xhl, (xbc+wa); call (xhl)` -- entries point 0-4 bytes apart into one run of short entry points at 0xFD829B.
 ; Index: byte +3 of the spare MIDI-sequence buffer (MIDISEQ_SPARE_BUF_PTR), 0..21; each stub is labelled for its destination (scripts/tools/label_sysex_block_ops.py).
 ; Extent: to the next object's base (loaded by its own reader).
 MidiSysEx_BlockHandlers:
@@ -1788,7 +1788,7 @@ MidiPkt_MsgTemplate_3364:
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_3368:
 	.byte 0x00, 0x00, 0x00, 0xff
-; 4-byte template: MidiPkt_BuildControl_Helper (0xFDA6CE) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
+; 4-byte template: MidiPkt_SendCtlValueSysEx (0xFDA6CE) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_336C:
 	.byte 0x00, 0x00, 0x00, 0xff

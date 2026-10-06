@@ -1,0 +1,444 @@
+[
+ {
+  "old": "FDemo_DisplayResourceData_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDemo_ResetAllocBuffer",
+  "header": "Resets the feature-demo load arena: stores SEQ_SONG_SLOTS (the arena start) in the next-free pointer at RAM 0x25B7E that FDemo_AllocBuffer bumps.\nBasis: callers + body -- FDemo_DisplayResourceData calls it once after opening the .SQT file and before allocating a 256-byte FDemo_AllocBuffer block per file block.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:37 `call FileIO_OpenWithMode` / 40 `jrl lt, FDemo_DisplayResourceData_Skip6` / 41 `calr FDemo_DisplayResourceData_Helper` -- caller resets once, right after a successful open",
+   "demo/file_demo_proc.s:47 `ld xwa, 256` / 48 `calr FDemo_AllocBuffer` -- then allocates per 256-byte block (also 67, 96)",
+   "demo/file_demo_proc.s:116 `lda xwa, (SEQ_SONG_SLOTS:24)` / 117 `ld (0x25b7e:24), xwa` -- body: pointer := arena start",
+   "demo/file_demo_proc.s:124 `lda xhl, (SEQ_SONG_SLOTS:24)` / 128 `ld xde, (0x25b7e:24)` / 136 `ld (0x25b7e:24), xde` -- FDemo_AllocBuffer reads and advances the same pointer"
+  ]
+ },
+ {
+  "old": "FDemo_LinkedListLookupField_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDemo_RegisterLoadedFile",
+  "header": "Copies name XWA into the first free entry (data pointer at +16 == 0) of the 63-entry, 24-byte loaded-file table at RAM 0x249D8 and stores data pointer XBC at +16; HL = 1, or 0 when the table is full.\nBasis: callers + body -- FDemo_FileOpenAndProcess, after FDemo_LinkedListSearchInsert found the name neither in this table nor in the ROM directory, reads the whole file into an FDemo_AllocBuffer block, closes it and registers name + block here.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:493 `lda xwa, (xsp+10)` / 494 `calr FDemo_LinkedListSearchInsert` / 496 `jr z, FDemo_FileOpen_DoOpen` -- caller only loads when the name is not found yet",
+   "demo/file_demo_proc.s:412 `lda xwa, (0x249d8:24)` .. 420 `call Strcmp` / 424 `ld xwa, 24` / 427 `cp iz, 63` -- the lookup side walks the same 63 x 24-byte RAM table by name, then falls back to the ROM directory at (0x880008)",
+   "demo/file_demo_proc.s:512 `ld xwa, xiz` / 513 `calr FDemo_AllocBuffer` .. 520 `call FileIO_ReadBlock` -- caller reads the whole file into the arena block",
+   "demo/file_demo_proc.s:523 `lda xwa, (xsp+10)` / 524 `ld xbc, (xsp+6)` / 525 `calr FDemo_LinkedListLookupField_Helper` -- XWA = file name, XBC = the loaded block",
+   "demo/file_demo_proc.s:445 `lda xiz, (0x249d8:24)` / 448 `ld xbc, (xiz+16)` / 449 `or xbc, xbc` / 451 `lda xiz, (xiz+24)` / 453 `cp de, 63` -- body: find first entry with a null pointer",
+   "demo/file_demo_proc.s:458 `push xwa` / 459 `push xiz` / 460 `call Strcpy` / 463 `ld (xiz+16), xwa` / 464 `ld hl, 1:i3` -- copy name, store pointer, return 1 (0 at 467 when full)",
+   "ui/ui_window_procs.s:1593 `call FDemo_LinkedListLookupField` / 1598 `call DrawBitmapFile` -- the stored pointer is later drawn as a bitmap by name"
+  ]
+ },
+ {
+  "old": "FileData_AllocLoadAndParse_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileData_ImportM4M6PanelMemories",
+  "header": "Foreign .LSW import, stage 2 for header classes 1 ('M4', 24 memories) and 2 ('M6', 10): between PrePmLoad and PostPmLoad, reads 0x300-byte records one at a time and converts each into panel memory j at 0x1ED400 + 960*j; HL = 0, 0xFF38 when out of memory, or the read error.\nBasis: callers + body -- FileData_AllocLoadAndParse (the .LSW loader's alternate path) runs it after stage 1 (FileData_RawDataBlock) for classes 1 and 2.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:1774 `call FileData_AllocLoadAndParse` -- FileIO_LoadRegion0_VRAM (.LSW, extension index 0) alternate path when the native signature check fails",
+   "midi/midi_dispatch_handlers.s:3092 `calr DataBuf_CheckFormatPair` / 3093 `ld (0xb7ea:16), hl` -- class from header bytes 4,5: 7033/7036 'M','4' -> 1, 7042/7044 'M','6' -> 2, 7049/7051 'N','N' -> 3",
+   "midi/midi_dispatch_handlers.s:3101 `calr FileData_RawDataBlock` / 3105 `calr FileData_AllocLoadAndParse_Helper` -- caller: class 1/2 stage 1 then this",
+   "midi/midi_dispatch_handlers.s:3312 `ld wa, (0xb7ea:16)` / 3317 `ldw (xsp+12), 10` / 3360 `ldw (xsp+12), 24` -- count 10 for class 2, 24 for class 1",
+   "midi/midi_dispatch_handlers.s:3319 `call PrePmLoad` / 3483 `call PostPmLoad` -- bracketed by the firmware's own panel-memory load hooks",
+   "midi/midi_dispatch_handlers.s:3336 `pushw 768` / 3348 `ld xbc, 768` / 3349 `call FileIO_ReadBlock` -- one 0x300 record per pass",
+   "midi/midi_dispatch_handlers.s:3366 `ld wa, (xsp+10)` .. 3371 `sll xbc, 6` / 3372 `lda xwa, (0x1ed400:24)` -- destination 0x1ED400 + 960*j",
+   "analysis/disk-format-probes/README-lsw-region-to-block-map.md section 2 (repo root) documents the importer: stage 2 reads 0x300 at a time into panel memory 0x1ED400 + 960*j, 24 times for format 1 and 10 times for format 2, bracketed by PrePmLoad / PostPmLoad"
+  ]
+ },
+ {
+  "old": "FileData_AllocLoadAndParse_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileData_ImportNNLivePanel",
+  "header": "Foreign .LSW import, stage 1 for header class 3 ('N','N'): between PreLswLoad and PostLswLoad, reads 0x420 bytes after the 32-byte header and converts its records into the live panel area at 0xF980; HL = 0, 0xFF38 when out of memory, or the read error.\nBasis: callers + body -- FileData_AllocLoadAndParse runs it for class 3, where FileData_RawDataBlock (0x660 bytes, same Pre/PostLswLoad bracket) serves classes 1 and 2.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:3094 `cp hl, 3:i3` / 3095 `jr z, FileData_AllocLoadAndParse_Skip3` / 3109 `calr FileData_AllocLoadAndParse_Helper2` -- caller: class 3 path, then 3113 Helper3",
+   "midi/midi_dispatch_handlers.s:5654 `call PreLswLoad` / 5762 `call PostLswLoad` -- live-panel load hooks",
+   "midi/midi_dispatch_handlers.s:5656 `lda xwa, (0xf980:16)` -- destination is the live panel area",
+   "midi/midi_dispatch_handlers.s:5658 `pushw 1088` / 5669 `add xwa, 32` / 5670 `ld xbc, 1056` -- 0x440 buffer, reads 0x420 after the already-read 32-byte header",
+   "midi/midi_dispatch_handlers.s:3166 `call PreLswLoad` / 3168 `lda xwa, (0xf980:16)` / 3182 `ld xbc, 1632` -- the class 1/2 counterpart FileData_RawDataBlock has the same shape"
+  ]
+ },
+ {
+  "old": "FileData_AllocLoadAndParse_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileData_ImportNNPanelMemories",
+  "header": "Foreign .LSW import, stage 2 for header class 3 ('N','N'): between PrePmLoad and PostPmLoad, reads 24 records of 336 bytes and converts each into panel memory j at 0x1ED400 + 960*j; HL = 0, 0xFF38 when out of memory, or the read error.\nBasis: callers + body -- FileData_AllocLoadAndParse runs it after FileData_ImportNNLivePanel succeeded, as FileData_ImportM4M6PanelMemories follows stage 1 for classes 1 and 2.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:3109 `calr FileData_AllocLoadAndParse_Helper2` / 3111 `cp iz, 0:i3` / 3113 `calr FileData_AllocLoadAndParse_Helper3` -- caller: after class-3 stage 1",
+   "midi/midi_dispatch_handlers.s:5775 `call PrePmLoad` / 5878 `call PostPmLoad` -- panel-memory load hooks",
+   "midi/midi_dispatch_handlers.s:5785 `pushw 336` / 5798 `ld xbc, 336` / 5799 `call FileIO_ReadBlock` -- one 336-byte record per pass",
+   "midi/midi_dispatch_handlers.s:5810 `ld wa, (xsp+6)` .. 5815 `sll xbc, 6` / 5816 `lda xwa, (0x1ed400:24)` / 5875 `cpw (xsp+6), 24` -- destination 0x1ED400 + 960*j for j = 0..23"
+  ]
+ },
+ {
+  "old": "FileIO_ByteBlock_DemoProc1_Helper4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelMemory_PreSlotLoad",
+  "header": "Empty hook (ret) run before one panel memory is read from a .PMT file; WA = destination memory index.\nBasis: callers + body -- FileIO_ByteBlock_DemoProc1 (the single-memory load reached from SLDstBankList) calls it right before reading the memory into 0x1ED400 + size*index, the slot where the whole-file load calls PrePmLoad (also a bare ret).",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:3138 `ld wa, (0x1ed35d:24)` .. 3146 `add xiz, 176` -- caller: source offset = header size field * source index + 0xB0",
+   "demo/file_demo_proc.s:3160 `ld wa, (xsp+36)` / 3162 `call FileIO_ByteBlock_DemoProc1_Helper4` / 3163 `lda xwa, (0x1ed350:24)` / 3166 `call FileIO_ReadBlock` -- hook, then read into 0x1ED350 + 0xB0 + size*dest",
+   "ui/bitmap_out_routines.s:3851 `FileIO_ByteBlock_DemoProc1_Helper4:` / 3852 `ret` -- body",
+   "demo/file_demo_proc.s:1832 `call PrePmLoad` / 1841 `call PostPmLoad` -- FileIO_LoadRegion1_VRAM (.PMT, extension index 1) brackets its whole-file read with the firmware's own hooks; audio/dsp_config_sysex.s:1071 PrePmLoad is also a bare `ret`",
+   "file_io/single_load.s:1842 `call FileIO_ByteBlock_DemoProc1` -- reached from the single-load destination list"
+  ]
+ },
+ {
+  "old": "FileIO_ByteBlock_DemoProc1_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelMemory_PostSlotLoad",
+  "header": "Hook run after one panel memory was read: BC < 0 (read failed) restores memory WA from its ROM default (VoiceData_InitAndCopyParams), otherwise validates it (PanelTlv_ValidatePanelMemory).\nBasis: callers + body -- FileIO_ByteBlock_DemoProc1 passes WA = destination index and BC = the read result, in the place PostPmLoad (which calls PanelTlv_ValidatePanelMemories) takes for a whole-file load.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:3166 `call FileIO_ReadBlock` / 3167 `call FileIO_ReturnError` / 3168 `ld iz, hl` / 3169 `ld wa, (xsp+36)` / 3171 `ld bc, iz` / 3172 `call FileIO_ByteBlock_DemoProc1_Helper5` -- caller: WA = dest memory, BC = read result",
+   "ui/bitmap_out_routines.s:3855 `cp bc, 0:i3` / 3856 `jp lt, (VoiceData_InitAndCopyParams:24)` / 3857 `jp PanelTlv_ValidatePanelMemory` -- body",
+   "audio/audio_control_engine.s:4190 `cpw (xsp + 4), 0x50` / 4192 `pushw 0x3c0` / 4200 `ld xwa, 0x1ed400` / 4210 `add xhl, 0x99eca0` -- VoiceData_InitAndCopyParams rebuilds panel memory WA (of 80) from ROM defaults",
+   "audio/tonegen_fileio_handlers.s:55 `PanelTlv_ValidatePanelMemory:` -- validates 0x1ED400 + 960*WA",
+   "audio/dsp_config_sysex.s:1074 `PostPmLoad:` / `cp wa, 0:i3` / `ret lt` / `call PanelTlv_ValidatePanelMemories` -- the whole-file counterpart"
+  ]
+ },
+ {
+  "old": "LoadRegion1_OpenSuccess_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelMemory_PreBankLoad",
+  "header": "Empty hook (ret) run before one panel-memory bank (16-byte bank name + 8 memories) is read from a .PMT file; WA = destination bank.\nBasis: callers + body -- FileIO_LoadRegion1_VRAM (bank 0 of a one-bank file) and SLDstBankList_FuncBody_Helper7 (bank load) call it before the reads, where the whole-file path calls PrePmLoad.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:1807 `ld wa, 0:i3` / 1808 `call LoadRegion1_OpenSuccess_Helper` / 1812 `lda xwa, (0x1ed350:24)` / 1813 `add xwa, 0x00000010` -- caller: hook, then the 16-byte bank name at 0x1ED360",
+   "demo/file_demo_proc.s:1819 `lda xwa, (0x1ed350:24)` / 1820 `ld bc, (xwa + 13)` / 1822 `sll xbc, 3` -- then 8 memories of the header size field",
+   "demo/file_demo_proc.s:1832 `call PrePmLoad` -- the other branch of the same loader uses the firmware hook",
+   "demo/file_demo_proc.s:3237 `ld wa, (xsp+36)` / 3239 `call LoadRegion1_OpenSuccess_Helper` / 3247 `sll xwa, 3` -- bank loader: WA = destination bank, 8 memories",
+   "ui/bitmap_out_routines.s:3858 `LoadRegion1_OpenSuccess_Helper:` / 3859 `ret` -- body"
+  ]
+ },
+ {
+  "old": "LoadRegion1_OpenSuccess_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelMemory_PostBankLoad",
+  "header": "Hook run after a panel-memory bank was read: BC < 0 (read failed) restores bank WA's ROM default name (VoiceData_ExtendedParamSetup), otherwise validates its 8 memories WA*8+0..7 (PanelTlv_ValidatePanelMemory).\nBasis: callers + body -- FileIO_LoadRegion1_VRAM and the bank loader pass WA = bank and BC = the read result, where the whole-file path calls PostPmLoad.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:1825 `call FileIO_ReturnError` / 1826 `ld iz, hl` / 1827 `ld wa, 0:i3` / 1828 `ld bc, iz` / 1829 `call LoadRegion1_OpenSuccess_Helper2` -- caller: bank 0, read result",
+   "demo/file_demo_proc.s:3271 `ld wa, (xsp+36)` / 3273 `ld bc, iz` / 3274 `call LoadRegion1_OpenSuccess_Helper2` -- bank loader, destination bank",
+   "ui/bitmap_out_routines.s:3864 `cp bc, 0:i3` / 3867 `extz wa` / 3868 `call VoiceData_ExtendedParamSetup` -- failure path",
+   "audio/audio_control_engine.s:4248 `cp wa, 10` / 4253 `add xde, 0x99ec00` / 4254 `lda xbc, (0x1ed360:24)` / 4256 `pushw 16` -- VoiceData_ExtendedParamSetup copies the 16-byte default name of bank WA (of 10)",
+   "ui/bitmap_out_routines.s:3871 `ldib_erp 251, 0` .. 3877 `sll wa, 3` / 3878 `add wa, bc` / 3879 `call PanelTlv_ValidatePanelMemory` / 3881 `cp_erpb 251, 8` -- success path: memories bank*8 + 0..7"
+  ]
+ },
+ {
+  "old": "FileIO_BytecodeData_Code_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelButton_ModeKey_FilterTarget",
+  "header": "Vets the target mode in byte +2 of the mode-key event frame XWA; sets frame byte 0 to 0xFF (no event) in MD_DEMO unless the target is 0 or 19, when panel parameter 0xC0 is 1 and the target is 9/14/15/17/19, when SeqState_GetFlags & 7 and the target is 7, and for targets 19/20 while word 0x28A8 is nonzero; remaps 9 -> 8 when byte 0x26FC is 1 and 8 -> 10 when bit 0 of 0x266A is set.\nBasis: callers + body -- PanelButton_ModeKey stores the mapped mode at +2, calls it, then posts nothing when byte 0 came back 0xFF.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/audio_control_engine.s:160 `lda xde, (xiz+2)` / 161 `ld (xde), l` .. 194 `ld (xde), a` -- caller stores the mapped target mode in frame+2",
+   "audio/audio_control_engine.s:150 `ld xwa, xiz` / 151 `calr FileIO_BytecodeData_Code_Helper` / 152 `cp (xiz), 255` / 153 `jr nz, PanelButton_ModeKey_Skip7` -- caller posts the frame pair only if not cancelled",
+   "audio/audio_control_engine.s:48 `cp (xwa), 0xff` / 49 `ret z` -- PanelEvent_Post: an id of 0xFF is no event",
+   "audio/audio_control_engine.s:209 `cp (CURRENT_MODE:16), 19` .. 214 `cp a, 0:i3` / 216 `ld (xiz), 255` -- MD_DEMO (NAKA mode 19) only lets 0/19 through",
+   "audio/audio_control_engine.s:218 `ld xwa, 192` / 219 `call SndParam_LookupReadOnly` .. 231 `cp a, 14` / 234 `ld (xiz), 255` -- parameter 0xC0 blocks 15/17/19/9/14",
+   "audio/audio_control_engine.s:236 `call SeqState_GetFlags` / 237 `and hl, 7` / 239 `cp (xiz+2), 7` / 241 `ld (xiz), 255`",
+   "audio/audio_control_engine.s:244 `cp (xwa), 9` / 246 `cp (9980:16), 1` / 248 `ld (xwa), 8` / 254 `bit 0, (0x266a:16)` / 256 `ld (xwa), 10` -- remaps",
+   "audio/audio_control_engine.s:258 `cpw (10408:16), 0` .. 263 `cp a, 20` / 266 `ld (xiz), 255` / 269 `res 0, (0x266a:16)`",
+   "shared/event_codes.s:1852-1862 -- NAKA modes 7 MD_ENTERTAINER, 8 MD_SEQ, 9 MD_SEQ_EREC, 10 MD_SEQ_PLAY, 14 MD_CMP, 15 MD_MSP, 17 MD_SND_ARG, 19 MD_DEMO, 20 MD_HELP"
+  ]
+ },
+ {
+  "old": "Flash_SlotUpdateOpsBlock_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Flash_CountFreeOrOwnedSlots",
+  "header": "Counts the owner bytes in the section-7 sector (FLASH_SECTION_PTR_7) that are 0 or equal C: A = 0 scans the 40 small-slot bytes at +0x10, otherwise the 4 large-slot bytes at +0x50; L = the count.\nBasis: callers + body -- Flash_SlotUpdateOpsBlock compares it with the blocks listed at RAM 0x6D4 to report the large- and small-slot shortfall that Flash_InitBytecodeBlock tests before writing.",
+  "basis": "callers + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:3786 `cpw (0x6d4:16), 0xffff` .. 3790 `ld wa, 1:i3` / 3791 `calr Flash_SlotUpdateOpsBlock_Helper` / 3792 `cp l, 0:i3` -- caller: no usable large slot -> high byte 1",
+   "storage/flash_floppy_handlers.s:3800 `ld wa, 0:i3` / 3801 `calr Flash_SlotUpdateOpsBlock_Helper` / 3803 `lda xbc, (1748:16)` .. 3812 `cp e, 50` / 3815 `cp l, e` / 3817 `sub l, e` -- caller: small slots available vs blocks listed",
+   "storage/flash_floppy_handlers.s:1345 `calr Flash_SlotUpdateOpsBlock` / 1349 `cp wa, 0:i3` / 1350 `jr nz, Flash_InitBytecodeBlock_Skip6` -- write only when there is no shortfall",
+   "storage/flash_floppy_handlers.s:3347 `ld xde, (FLASH_SECTION_PTR_7:16)` / 3354 `add ix, 16` / 3356 `cp h, 0:i3` / 3358 `cp h, c` / 3361 `inc 1, l` / 3365 `cp b, 40` -- body, small map",
+   "storage/flash_floppy_handlers.s:3372 `add ix, 80` / 3376 `cp h, c` / 3383 `cp b, 4:i3` -- body, large map",
+   "storage/flash_floppy_handlers.s:3388 `VoiceParam_ComputeOffset:` / 3390 `cp e, 0x28` / 3392 `ld xhl, 0x10` / 3397 `ld xhl, 0x50` -- owner byte of slot e lives at +0x10+e (e < 40) or +0x50+(e-40) of the sector image"
+  ]
+ },
+ {
+  "old": "Flash_InitBytecodeBlock_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Flash_AssignSlotsToBlocks",
+  "header": "For owner A, builds the slot assignment list at RAM 0x7A0 from the block list at RAM 0x6D4: the large block (entry 0) gets the first of the 4 large slots whose owner byte is 0 or A, each following block the next such small slot (of 40); records are {block, 0x500 | slot} with bit 7 set for small slots.\nBasis: callers + body -- Flash_InitBytecodeBlock runs it first on its write path (no shortfall), with A = its owner argument (CstmCp's 0x39B7); Flash_WriteSlotOwnerMap and Flash_CopyBlocksToSlots consume the list.",
+  "basis": "callers + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1347 `ld c, (xsp+10)` / 1351 `ld wa, bc` / 1352 `calr Flash_InitBytecodeBlock_Helper` -- caller, write path",
+   "sequencer/accompaniment_engine.s:32529 `ld a, (0x39b6:16)` / 32531 `ld c, (0x39b7:16)` / 32533 `call Flash_InitBytecodeBlock` -- CstmCp passes the owner in C",
+   "storage/flash_floppy_handlers.s:2127 `calr SlotTable_ExtendedOpsBlock` -- clears the list at 0x7A0 (1952) to 0xFFFF",
+   "storage/flash_floppy_handlers.s:2132 `ld xbc, (FLASH_SECTION_PTR_7:16)` / 2136 `add wa, 80` / 2140 `cp a, (xsp+0x2)` / 2143 `lda xbc, (1952:16)` / 2147 `or hl, 1280` -- large slot: owner byte 0 or A",
+   "storage/flash_floppy_handlers.s:2166 `cp l, 40` / 2171 `add de, 16` / 2176 `cp a, (xsp+0x2)` / 2189 `set 7, a` / 2191 `or wa, 1280` -- small slots, bit 7 marks them",
+   "storage/flash_floppy_handlers.s:3388 `VoiceParam_ComputeOffset:` / 3390 `cp e, 0x28` / 3392 `ld xhl, 0x10` / 3397 `ld xhl, 0x50` -- owner byte of slot e lives at +0x10+e (e < 40) or +0x50+(e-40) of the sector image"
+  ]
+ },
+ {
+  "old": "Flash_InitBytecodeBlock_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Flash_WriteSlotOwnerMap",
+  "header": "Copies the 64 KB section-7 sector into its RAM image at (0x0C96), writes owner A into the owner byte of every slot in the assignment list at RAM 0x7A0, clears A from the remaining slots after them, then erases and rewrites the sector (Flash_EraseSectorAndWrite).\nBasis: callers + body -- Flash_InitBytecodeBlock calls it on its write path after Flash_AssignSlotsToBlocks built the list, with the same owner A.",
+  "basis": "callers + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1360 `ld a, (xsp+10)` / 1362 `calr Flash_InitBytecodeBlock_Helper2` / 1363 `calr Flash_InitBytecodeBlock_Helper3` -- caller",
+   "storage/flash_floppy_handlers.s:2465 `ld xix, (3222:16)` / 2466 `ld xiy, (FLASH_SECTION_PTR_7:16)` / 2467 `ldw bc, 0x8000` / 2468 `ldirw` -- sector -> RAM image",
+   "storage/flash_floppy_handlers.s:2469 `lda xhl, (1952:16)` / 2470 `ld bc, (xhl+2)` / 2473 `and bc, 127` -- slot numbers from the assignment list",
+   "storage/flash_floppy_handlers.s:2479 `ld (xbc+de), a` (de = 80 + slot) and the `cp (xbc), a` / `ld (xbc), 0` loops -- set owner, clear A elsewhere (large map +80, small map +16)",
+   "storage/flash_floppy_handlers.s:2560 `ld xbc, (3222:16)` / 2561 `ld xde, (FLASH_SECTION_PTR_7:16)` / 2563 `jp Flash_EraseSectorAndWrite`",
+   "storage/flash_floppy_handlers.s:3388 `VoiceParam_ComputeOffset:` / 3390 `cp e, 0x28` / 3392 `ld xhl, 0x10` / 3397 `ld xhl, 0x50` -- owner byte of slot e lives at +0x10+e (e < 40) or +0x50+(e-40) of the sector image"
+  ]
+ },
+ {
+  "old": "Flash_InitBytecodeBlock_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Flash_CopyBlocksToSlots",
+  "header": "Copies every block in the assignment list at RAM 0x7A0 from the RAM work area at 0x1E0000 into its slot in the RAM image of the section-7 sector (large block 10,535 bytes, small blocks 470), then erases and rewrites the sector.\nBasis: callers + body -- Flash_InitBytecodeBlock calls it right after Flash_WriteSlotOwnerMap on its write path; TmFlash_WriteRoutine supplies the source and destination addresses.",
+  "basis": "callers + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1363 `calr Flash_InitBytecodeBlock_Helper3` / 1364 `call TmFlash_CopyToExtMem` -- caller",
+   "storage/flash_floppy_handlers.s:2567 `ld xix, (3222:16)` / 2568 `ld xiy, (FLASH_SECTION_PTR_7:16)` / 2570 `ldirw` -- refresh the RAM image",
+   "storage/flash_floppy_handlers.s:2642 `ld wa, 0:i3` / 2643 `call TmFlash_WriteRoutine` / 2654 `ld wa, 1:i3` / 2655 `call TmFlash_WriteRoutine` / 2657 `sub xix, 0x346800` -- source = RAM small block, destination = flash slot rebased into the image (0x3B0000 - 0x69800)",
+   "storage/flash_floppy_handlers.s:2664 `Flash_InitBytecodeBlock_Helper3_Loop3:` .. 2670 `ld (xde), a` -- byte copy of the returned length",
+   "storage/flash_floppy_handlers.s:2680 `ld xbc, (3222:16)` / 2683 `call Flash_EraseSectorAndWrite`",
+   "audio/note_voice_mapping.s:27790 `ld xbc, 470` / 27795 `lda xiz, (0x300000:24)` / 27796 `add xiz, 0xb0400` / 27805 `ld xbc, 0x2927` / 27834 `lda xbc, (0x1e0000:24)` -- TmFlash_WriteRoutine(mode, slot) gives an address + length: bit 0 = sector 7 (0x3B0400) vs RAM 0x1E0000, bit 1 = 10535-byte vs 470-byte slot"
+  ]
+ },
+ {
+  "old": "Flash_InitBytecodeBlock_Helper4",
+  "verdict": "refuse",
+  "why_refused": "Runs on the shortfall path (Flash_SlotUpdateOpsBlock nonzero) with WA = the shortfall word and C = owner: clears the list at RAM 0x86C (2156), calls two unnamed helpers, and when the large-slot byte is nonzero finds the large slot with the highest owner byte, then fills the 0x86C list from the 0x6D4/0x7A0 lists. It looks like choosing which stored owners to displace for the \"memory full\" dialog, but neither the caller (no header, placeholder name) nor the body says what the selection criterion means.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1350 `jr nz, Flash_InitBytecodeBlock_Skip6` / 1367 `calr Flash_InitBytecodeBlock_Helper4` / 1368 `calr Flash_InitBytecodeBlock_Helper5` / 1369 `calr Flash_InitBytecodeBlock_Helper6` / 1370 `calr Flash_InitBytecodeBlock_Helper7` -- the shortfall path of the (placeholder-named, header-less) caller; result 2 makes CstmCp show dialog 0xBE0019",
+   "sequencer/accompaniment_engine.s:32534 `cp l, 2:i3` / 32552 `cp (0x39b6:16), 3` .. 32558 `ld xwa, 0xbe0019` / 32559 `ld xbc, EVT_SHOW` -- what the caller of the caller does with result 2",
+   "storage/flash_floppy_handlers.s:2805 `calr SlotTable_ExtendedOpsBlock` / 2806 `calr Flash_InitBytecodeBlock_Helper4_Helper` / 2809 `and wa, 0xff00` -- body start",
+   "storage/flash_floppy_handlers.s:2814 `ld xhl, (FLASH_SECTION_PTR_7:16)` .. `add wa, 80` / `cp w, b` -- max owner byte over the 4 large slots"
+  ]
+ },
+ {
+  "old": "Flash_InitBytecodeBlock_Helper5",
+  "verdict": "refuse",
+  "why_refused": "Shortfall path: fills 29 bytes at RAM (0x3A4F) with spaces, then for the entries of the list at RAM 0x86C (2156) calls Flash_StoreBaseAndInitAccPatch_Helper/_Helper2 and writes characters (e.g. 46 '.') -- it composes a text line for the shortfall dialog, but which names/entries it lists is not established from the placeholder-named caller.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1350 `jr nz, Flash_InitBytecodeBlock_Skip6` / 1367 `calr Flash_InitBytecodeBlock_Helper4` / 1368 `calr Flash_InitBytecodeBlock_Helper5` / 1369 `calr Flash_InitBytecodeBlock_Helper6` / 1370 `calr Flash_InitBytecodeBlock_Helper7` -- the shortfall path of the (placeholder-named, header-less) caller; result 2 makes CstmCp show dialog 0xBE0019",
+   "sequencer/accompaniment_engine.s:32534 `cp l, 2:i3` / 32552 `cp (0x39b6:16), 3` .. 32558 `ld xwa, 0xbe0019` / 32559 `ld xbc, EVT_SHOW` -- what the caller of the caller does with result 2",
+   "storage/flash_floppy_handlers.s:2971 `lda xbc, (0x3a4f:16)` / 2973 `lda xbc, (xbc+29)` / 2975 `ld (xwa+), 32` -- space-fill a 29-byte text buffer",
+   "storage/flash_floppy_handlers.s:2979 `lda xwa, (2156:16)` / 2980 `cpw (xwa), 0xffff` -- walks the 0x86C list"
+  ]
+ },
+ {
+  "old": "Flash_InitBytecodeBlock_Helper6",
+  "verdict": "refuse",
+  "why_refused": "Shortfall path: clears the table at RAM 0x938 (2360) (Helper6_Helper), copies the two words of list 0x86C (2156) entry 0 swapped into it, then copies up to 50 list records into +6+2i, +106+4i (and zeroes +108+4i). Mechanically a list builder for a dialog/table, but what the 0x938 table is (which widget reads it) is not shown by the placeholder-named caller.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1350 `jr nz, Flash_InitBytecodeBlock_Skip6` / 1367 `calr Flash_InitBytecodeBlock_Helper4` / 1368 `calr Flash_InitBytecodeBlock_Helper5` / 1369 `calr Flash_InitBytecodeBlock_Helper6` / 1370 `calr Flash_InitBytecodeBlock_Helper7` -- the shortfall path of the (placeholder-named, header-less) caller; result 2 makes CstmCp show dialog 0xBE0019",
+   "sequencer/accompaniment_engine.s:32534 `cp l, 2:i3` / 32552 `cp (0x39b6:16), 3` .. 32558 `ld xwa, 0xbe0019` / 32559 `ld xbc, EVT_SHOW` -- what the caller of the caller does with result 2",
+   "storage/flash_floppy_handlers.s:3242 `lda xhl, (2156:16)` / 3245 `lda xbc, (2360:16)` / 3248 `ld wa, (xhl)` / 3249 `ld (xbc+2), wa`",
+   "storage/flash_floppy_handlers.s:3277 `add bc, 106` / 3278 `ld (xix+bc), de` / 3279 `add wa, 108` / 3280 `ldw (xix+wa), 0x0000`"
+  ]
+ },
+ {
+  "old": "Flash_InitBytecodeBlock_Helper7",
+  "verdict": "refuse",
+  "why_refused": "Shortfall path twin of Helper6 for the table at RAM 0xA6A (2666): stores block-list (0x6D4) entry 0 at +2 and each following entry at +106+4i (zeroing +108+4i). Same reason as Helper6: the consumer of 0xA6A is not identified, so \"dialog list of the blocks to store\" would be a guess.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1350 `jr nz, Flash_InitBytecodeBlock_Skip6` / 1367 `calr Flash_InitBytecodeBlock_Helper4` / 1368 `calr Flash_InitBytecodeBlock_Helper5` / 1369 `calr Flash_InitBytecodeBlock_Helper6` / 1370 `calr Flash_InitBytecodeBlock_Helper7` -- the shortfall path of the (placeholder-named, header-less) caller; result 2 makes CstmCp show dialog 0xBE0019",
+   "sequencer/accompaniment_engine.s:32534 `cp l, 2:i3` / 32552 `cp (0x39b6:16), 3` .. 32558 `ld xwa, 0xbe0019` / 32559 `ld xbc, EVT_SHOW` -- what the caller of the caller does with result 2",
+   "storage/flash_floppy_handlers.s:3288 `lda xbc, (1748:16)` / 3291 `lda xde, (2666:16)` / 3293 `ld (xde+2), wa`",
+   "storage/flash_floppy_handlers.s:3312 `add ix, 106` / 3314 `ld (xde+ix), iy` / 3315 `add wa, 108`"
+  ]
+ },
+ {
+  "old": "GraphicsRender_ByteData_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Display_FillPaletteBandFromEntry_Impl",
+  "header": "Immediate body of Display_FillPaletteBandFromEntry: records WA at 0x3EFA6, sets palette entries 64..191 to the RGB of palette entry WA (shadow table 0x324FC) and flags a palette upload (PALETTE_INDEX_CACHED = 4, PALETTE_UPDATE_FLAG = 1).\nBasis: callers + body -- Display_FillPaletteBandFromEntry calls it directly on the draw task and otherwise posts GraphicsRender_ByteData_Code, which jumps here with the queued WA.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/graphics_text_vga.s:104 `calr IS_XSP_INSIDE_4K_REGION_AT_1C032` / 106 `jr z, GraphicsRender_ByteData_Skip` / 108 `calr GraphicsRender_ByteData_Helper` -- caller, direct path",
+   "display/graphics_text_vga.s:114 `lda xbc, (GraphicsRender_ByteData_Code:24)` / 116 `ld (xwa+4), iz` / 122 `ld wa, (xwa+4)` / 123 `jr GraphicsRender_ByteData_Helper` -- deferred path lands here too",
+   "display/graphics_text_vga.s:127 `ld (0x03efa6:24), wa` / 128 `call Table_LookupDword` / 130 `ldw iz, 64` / 134 `call SetPaletteRGB` / 136 `cp iz, 192` -- body",
+   "display/graphics_text_vga.s:138 `ldw (PALETTE_INDEX_CACHED:24), 4` / 139 `ldw (PALETTE_UPDATE_FLAG:24), 1`",
+   "display/graphics_text_vga.s:2338 `ld xbc, 0x324fc` -- Table_LookupDword reads the RGB shadow table"
+  ]
+ },
+ {
+  "old": "HDAE5000_TableData_Write_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "HDAE5000_ProgramCustomDataFlash",
+  "header": "Programs the 1 MB custom-data flash at 0x300000 word by word (Flash_ProgramWord, chip 1) from the 512 KB window at 0x200000, banks 0 and 1 selected through port 0x160000.\nBasis: callers + body -- HDAE5000_Init_BytecodeBlock erases that flash when it is not blank, calls this with bit 0 of the LED port 0x160004 set, then compares 0x300000 against the same window and banks (HDAE5000_ROM_Transfer) and halts blinking bit 3 on a mismatch.",
+  "basis": "callers + body",
+  "evidence": [
+   "boot/system_handlers.s:8229 `lda xwa, (0x300000:24)` / 8231 `add xbc, 0x100000` / 8232 `calr TableData_ROM_Verify` / 8235 `ld wa, 1:i3` / 8236 `call Flash_ChipErase` -- caller erases 0x300000..0x3FFFFF unless blank",
+   "boot/system_handlers.s:8253 `set 0, (0x160004:24)` / 8254 `calr HDAE5000_TableData_Write_Helper` / 8255 `res 0, (0x160004:24)` -- caller",
+   "boot/system_handlers.s:8264 `pushw 1` / 8265 `ld xwa, 0x300000` / 8266 `ld xbc, 0x200000` / 8267 `ld de, 0:i3` / 8268 `calr HDAE5000_ROM_Transfer` / 8270 `call nz, (LED_BlinkBit3Forever:24)` -- caller verifies banks 0..1",
+   "boot/system_handlers.s:8088 `lda xwa, (0x300000:24)` / 8094 `ld (0x160000:24), a` / 8095 `lda xwa, (0x200000:24)` / 8104 `ld DE, (xwa+)` / 8106 `ld wa, 1:i3` / 8107 `call Flash_ProgramWord` / 8109 `cp xiz, 0x40000` / 8112 `cp (xsp + 12), 0x2` -- body",
+   "boot/system_handlers.s:6241 `cp a, 1:i3` / 6243 `lda xiz, (0x300000:24)` -- Flash_ProgramWord chip 1 is the 0x300000 flash"
+  ]
+ },
+ {
+  "old": "LoadRegion5_AltPath_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileIO_LoadMspAltFormat",
+  "header": "Loads an .MSP file whose header fails the native signature check: between msp_ld_mae and msp_ld_ato reads it into 0x1E8800..0x1EC400, then FileHdr_ValidateSignature converts 'G',0,'K' / 'LKE' / 'MKB' files to the native layout (moves +0x100.. up 512 bytes, zero-fills the gap, writes the native header); HL = read result.\nBasis: callers + body -- FileIO_LoadRegion5_VRAM (.MSP, extension index 5) runs it when FileIO_CheckRegionSignature(5) fails, in place of its plain read between the same hooks.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:2174 `ld de, 5:i3` / 2184 `ld wa, 5:i3` / 2185 `calr FileIO_CheckRegionSignature` / 2187 `jr z, LoadRegion5_AltPath` -- caller: file type 5, signature check",
+   "demo/file_demo_proc.s:2188 `call msp_ld_mae` / 2189 `lda xwa, (0x1e8800:24)` .. 2197 `call msp_ld_ato` -- the native path it replaces",
+   "demo/file_demo_proc.s:2200 `call LoadRegion5_AltPath_Helper` -- caller, alternate path",
+   "storage/flash_floppy_handlers.s:5374 `call msp_ld_mae` / 5375 `lda xwa, (0x1e8800:24)` / 5377 `lda xbc, (0x1ec400:24)` / 5379 `call FileIO_ReadBlock` / 5382 `calr FileHdr_ValidateSignature` / 5384 `call msp_ld_ato` -- body",
+   "storage/flash_floppy_handlers.s:5395 `cp l, 0x47` / 5403 `cp l, 0x4c` / 5411 `cp l, 0x4d` / 5425 `ld (xbc+512), a` -- 'G\\0K' / 'LKE' / 'MKB', shift up 512",
+   "storage/flash_floppy_handlers.s:5439 `lda xbc, (xbc+256)` / 5444 `ld (xwa+), 0x00` / 5448 `lda xwa, (Composer_SettingsBlock:24)` -- zero-fill the gap and write the native 'H',0,'K' header",
+   "ROM 0xEA0340 FileIO_TypeExtensions[5] -> \"MSP\" (read from original_ROMs/kn5000_v10_program.rom)"
+  ]
+ },
+ {
+  "old": "LoadRegion6_OpenSuccess_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileIO_LoadRcmToFlash",
+  "header": "Loads an .RCM file into the custom-data flash: checks the 1 KB header starts 'H',0,'K', then for flash sections 0..6 resets the buffer at (0x0C72) (NoteEvent_LoadSoundGenParams), reads the length held in header dword +68+4*i and stores it (NoteEventBuffer_Store i+1); finally reads 0xF400 bytes over the section-7 image, rewrites that sector and calls TmFlash_CopyToExtMem. HL = read result, 0xFF9A on a bad header.\nBasis: callers + body -- FileIO_LoadRegion6_Simple (.RCM, extension index 6) calls it once the region signature matched.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:2216 `ld de, 6:i3` / 2226 `ld wa, 6:i3` / 2227 `calr FileIO_CheckRegionSignature` / 2230 `call LoadRegion6_OpenSuccess_Helper` -- caller: file type 6",
+   "storage/flash_floppy_handlers.s:4096 `ld xbc, 1024` / 4103 `cp (xwa), 72` / 4105 `cp (xwa+0x1), 0` / 4107 `cp (xwa+0x2), 75` -- header check",
+   "storage/flash_floppy_handlers.s:4109 `calr NoteEvent_LoadSoundGenParams` / 4110 `ld xwa, (3186:16)` / 4111 `ld xbc, (xsp+70)` / 4112 `call FileIO_ReadBlock` / 4117 `ld wa, 1:i3` / 4118 `calr NoteEventBuffer_Store` -- section 0 (repeated for wa = 2..7 with +74..+94)",
+   "storage/flash_floppy_handlers.s:1937 `add wa, wa` .. 1945 `ld xwa, (FLASH_SECTION_PTR_0:16)` / 1947 `jrl Flash_WriteSectorWithMirrorCopy` -- NoteEventBuffer_Store(i+1) writes flash section i",
+   "storage/flash_floppy_handlers.s:4179 `ld xix, (3222:16)` / 4180 `ld xiy, (FLASH_SECTION_PTR_7:16)` / 4184 `ld xbc, 0xf400` / 4193 `call Flash_EraseSectorAndWrite` / 4194 `call TmFlash_CopyToExtMem` -- section 7",
+   "ROM 0xEA0340 FileIO_TypeExtensions[6] -> \"RCM\" (read from original_ROMs/kn5000_v10_program.rom)"
+  ]
+ },
+ {
+  "old": "MemConfig_Handler_1_Helper3",
+  "verdict": "refuse",
+  "why_refused": "Clears byte 0x3728, copies clock 0x0D57 to 0x0DC1, classifies the event at the sequence cursor (MemConfig_Handler_3_Helper4 returns 0..10 from the status byte and its neighbours) and calls SndDispatch_JumpTable_Main[class] -- an event dispatcher, but the classes and their handlers are unnamed. Every caller in this scoop_display.s block is a placeholder (MemConfig_Handler_N dispatched from SysEx_BytecodeDispatcher, VoiceSlot_*, VoiceState_DataBlock2), the event-byte classes (0x81, 0x82, 0x84, 0x90 at the cursor) are not identified, and the earlier batch refused SysEx_BytecodeDispatcher_Helper3 from the same block for that reason.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:8303 `MemConfig_Handler_3:` / 8305 `call MemConfig_Handler_1_Helper3` -- caller (also MemConfig_Handler_1 8177/8241, MemConfig_Handler_4 8847, VoiceState_DataBlock2 12138)",
+   "display/scoop_display.s:8367 `ld (0x3728:16), 0` / 8368 `ld a, (3415:16)` / 8369 `ld (3521:16), a` / 8370 `call MemConfig_Handler_3_Helper4` / 8375 `ld xix, SndDispatch_JumpTable_Main` / 8378 `call (xhl)` -- body",
+   "display/scoop_display.s:8551 `call VoiceSlot_ReadCurrentParams` / 8554 `cp a, 129` / 8571 `cp a, 144` -- classifier"
+  ]
+ },
+ {
+  "old": "MemConfig_Handler_1_Helper4",
+  "verdict": "refuse",
+  "why_refused": "Saves cursor 1, calls VoiceSlot_TableSetup_Helper6; on W = 0 clears 0x0D57/0x0D6A and returns; otherwise remembers clock 0x0D57 in 0x0E4B, advances twice (MemConfig_Handler_4_Loop2), zeroes the clock and loops MemConfig_Handler_1_Helper3 + VoiceState_DataBlock2 until it returns 1 or 2. A step/locate loop of the sequence cursor whose stopping condition is not understood. Every caller in this scoop_display.s block is a placeholder (MemConfig_Handler_N dispatched from SysEx_BytecodeDispatcher, VoiceSlot_*, VoiceState_DataBlock2), the event-byte classes (0x81, 0x82, 0x84, 0x90 at the cursor) are not identified, and the earlier batch refused SysEx_BytecodeDispatcher_Helper3 from the same block for that reason.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:8825 `call MemConfig_SnapshotSongPosition` / 8826 `call MemConfig_Handler_1_Helper4` / 8827 `call MemConfig_Handler_5_Helper12` -- caller MemConfig_Handler_4 (also MemConfig_Handler_1 8235)",
+   "display/scoop_display.s:8834 `ld a, 1:opc` / 8835 `call VoiceSlot_SaveState` / 8836 `call VoiceSlot_TableSetup_Helper6` / 8841 `call MemConfig_Handler_4_Loop2` / 8847 `call MemConfig_Handler_1_Helper3` / 8849 `call VoiceState_DataBlock2` -- body"
+  ]
+ },
+ {
+  "old": "MemConfig_Handler_1_Helper5",
+  "verdict": "refuse",
+  "why_refused": "Stores dword (0x1D5A) at 0x110A, WA at 0x0CE6, swaps IY into 0xF22F, then walks the linked records from VoiceSlot_UpdateCurrentPointer (next index at +3, 0xFFFF ends) clearing bit 7 of byte +0 and writing 0x82 to +5 for 0x0CE6 records -- a record-chain rewrite whose meaning (what 0x82 marks) is not established. Every caller in this scoop_display.s block is a placeholder (MemConfig_Handler_N dispatched from SysEx_BytecodeDispatcher, VoiceSlot_*, VoiceState_DataBlock2), the event-byte classes (0x81, 0x82, 0x84, 0x90 at the cursor) are not identified, and the earlier batch refused SysEx_BytecodeDispatcher_Helper3 from the same block for that reason.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:9949 `call MemConfig_Handler_1_Helper5` -- caller VoiceSlot_RetZ (also MemConfig_Handler_1 8146)",
+   "display/scoop_display.s:10382 `ld xhl, 4362` / 10384 `ld xde, (7514:16)` / 10387 `ld (3302:16), wa` / 10389 `ld (0xf22f:16), iy` -- body start",
+   "display/scoop_display.s:10407 `ld iy, (xhl+3)` / 10408 `cp iy, 0xffff` / 10411 `andmi8 (xhl), 127` / 10412 `ld (xhl+5), 130` -- record walk"
+  ]
+ },
+ {
+  "old": "MemConfig_Handler_3_Helper3",
+  "verdict": "refuse",
+  "why_refused": "Compares the position with the MemConfig_SnapshotSongPosition snapshot: measure changed -> MemConfig_Handler_5_Helper12; word 0x0D58 changed -> beat-dependent choice between Helper12 and MemConfig_Handler_3_Helper6 + Display_UpdateRegion2; only the clock changed -> MemConfig_Handler_3_Helper, then Helper6 + region 2 if it returned W != 0. \"Refresh after a position change\" fits, but Helper12 does more than redraw (VoiceBank_ProcessCommand, SubCPU_ToneParamRet_*), so the name would overclaim. Every caller in this scoop_display.s block is a placeholder (MemConfig_Handler_N dispatched from SysEx_BytecodeDispatcher, VoiceSlot_*, VoiceState_DataBlock2), the event-byte classes (0x81, 0x82, 0x84, 0x90 at the cursor) are not identified, and the earlier batch refused SysEx_BytecodeDispatcher_Helper3 from the same block for that reason.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:8305 `call MemConfig_Handler_1_Helper3` / 8306 `call MemConfig_Handler_3_Helper3` -- caller MemConfig_Handler_3, right after MemConfig_SnapshotSongPosition (8304)",
+   "display/scoop_display.s:8331 `ld wa, (3816:16)` / 8332 `cp wa, (14106:16)` / 8334 `ld wa, (3818:16)` / 8335 `cp wa, (3416:16)` / 8337 `ld a, (3820:16)` / 8338 `cp a, (3415:16)` -- compares with the snapshot",
+   "display/scoop_display.s:8340 `call MemConfig_Handler_3_Helper` / 8354 `call MemConfig_Handler_3_Helper6` / 8355 `call Display_UpdateRegion2` / 8358 `call MemConfig_Handler_5_Helper12`",
+   "display/scoop_display.s:12971 `call VoiceBank_ProcessCommand` -- Helper12 is not only a redraw"
+  ]
+ },
+ {
+  "old": "MemConfig_Handler_4_Helper3",
+  "verdict": "refuse",
+  "why_refused": "Sends SysEx-from-W code 0x72 (MIDI_SendSysExFromW), then Timer_ParamCompareAlt_Helper4, VoiceState_DataBlock2_Tbl_Helper and _Helper2 (refresh chain ending in MemConfig_Handler_5_Helper12/11), W = 0. Runs when bit 1 of 0x10F9 is set (and clears it, then sets bit 2). What that flag requests is unknown. Every caller in this scoop_display.s block is a placeholder (MemConfig_Handler_N dispatched from SysEx_BytecodeDispatcher, VoiceSlot_*, VoiceState_DataBlock2), the event-byte classes (0x81, 0x82, 0x84, 0x90 at the cursor) are not identified, and the earlier batch refused SysEx_BytecodeDispatcher_Helper3 from the same block for that reason.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:8817 `ld xhl, 4345` / 8818 `bitm 1, (xhl)` / 8820 `resm 1, (xhl)` / 8821 `call MemConfig_Handler_4_Helper3` / 8822 `set 2, (0x10f9:16)` -- caller MemConfig_Handler_4",
+   "display/scoop_display.s:12079 `ld w, 114:opc` / 12080 `call MIDI_SendSysExFromW` / 12081 `call Timer_ParamCompareAlt_Helper4` / 12082 `call VoiceState_DataBlock2_Tbl_Helper` / 12083 `call VoiceState_DataBlock2_Tbl_Helper2` -- body"
+  ]
+ },
+ {
+  "old": "MemConfig_Handler_5_Helper",
+  "verdict": "refuse",
+  "why_refused": "Taken when the event at the cursor is 0x81: if clock 0x0D57 != 48 calls MemConfig_Handler_5_Helper3 (VoiceSlot_RetZ with W = 1); at clock 48 calls it only unless the next byte (VoiceSlot_FlagCheck) is 0x82/0x84, and also MemConfig_Handler_5_Helper6 unless that byte is 48; then sets bit 0 of 0x8D88. Mechanics only; the meaning of 0x81 and clock 48 is not established. Every caller in this scoop_display.s block is a placeholder (MemConfig_Handler_N dispatched from SysEx_BytecodeDispatcher, VoiceSlot_*, VoiceState_DataBlock2), the event-byte classes (0x81, 0x82, 0x84, 0x90 at the cursor) are not identified, and the earlier batch refused SysEx_BytecodeDispatcher_Helper3 from the same block for that reason.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:3493 `cp a, 129` / 3494 `jrl z, MemConfig_Handler_5_Skip15` / 3519 `call MemConfig_Handler_5_Helper` -- caller MemConfig_Handler_5",
+   "display/scoop_display.s:3528 `cp (0x0d57:16), 48` / 3530 `call MemConfig_Handler_5_Helper3` / 3532 `or (0x8d88:16), 1` -- body",
+   "display/scoop_display.s:3560 `ld w, 1:opc` / 3561 `call VoiceSlot_RetZ` -- Helper3"
+  ]
+ },
+ {
+  "old": "MemConfig_Handler_5_Helper10",
+  "verdict": "refuse",
+  "why_refused": "Sets byte 0x0D68 = 2 and 0x0D67 = 4, then Audio_CheckSubsystemReady. Siblings set the same pair to 0/0 (Interrupt_ClearModeRegs) or 0x0D68 = 3 (Interrupt_SendAllNotesOff), so 0x0D68 is a state code -- but what state 2/4 means is not shown; MemConfig_Handler_5 calls it when the cursor event is 0x90. Every caller in this scoop_display.s block is a placeholder (MemConfig_Handler_N dispatched from SysEx_BytecodeDispatcher, VoiceSlot_*, VoiceState_DataBlock2), the event-byte classes (0x81, 0x82, 0x84, 0x90 at the cursor) are not identified, and the earlier batch refused SysEx_BytecodeDispatcher_Helper3 from the same block for that reason.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:3505 `call VoiceSlot_ReadCurrentParams` / 3506 `cp a, 144` / 3508 `call MemConfig_Handler_5_Helper10` -- caller MemConfig_Handler_5 (also 7972, 8772, 12097, 12109)",
+   "display/scoop_display.s:7154 `ld (3432:16), 2` / 7155 `ld (3431:16), 4` / 7156 `call Audio_CheckSubsystemReady` -- body",
+   "display/scoop_display.s:7160 `ld (3432:16), 3` (Interrupt_SendAllNotesOff) / 7197 `ld (3432:16), a` (Interrupt_ClearModeRegs, a = 0) -- siblings"
+  ]
+ },
+ {
+  "old": "MemConfig_Handler_5_Helper2",
+  "verdict": "refuse",
+  "why_refused": "If byte 0x0DF4 is 0x90 calls MemConfig_Handler_5_Helper4 (reads two cursor bytes into 0x0DF7/0x0DF8 and continues), otherwise ToneParam_Evt09_BytecodeHandler_Sub; both callees are unnamed. Every caller in this scoop_display.s block is a placeholder (MemConfig_Handler_N dispatched from SysEx_BytecodeDispatcher, VoiceSlot_*, VoiceState_DataBlock2), the event-byte classes (0x81, 0x82, 0x84, 0x90 at the cursor) are not identified, and the earlier batch refused SysEx_BytecodeDispatcher_Helper3 from the same block for that reason.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:3499 `cp (0x0d57:16), 48` / 3502 `call MemConfig_Handler_5_Helper2` -- caller MemConfig_Handler_5",
+   "display/scoop_display.s:3552 `cp (0x0df4:16), 144` / 3554 `call MemConfig_Handler_5_Helper4` / 3557 `call ToneParam_Evt09_BytecodeHandler_Sub` -- body"
+  ]
+ }
+]

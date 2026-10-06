@@ -25518,10 +25518,10 @@ Param_SignExtendReturn_Skip17:
 	cp	a, 80
 	jr	z, Param_SignExtendReturn_Skip18
 	cp	a, 81
-	jr	nz, Param_SignExtendReturn_Skip19
+	jr	nz, Param_SignExtendReturn_Skip20
 Param_SignExtendReturn_Skip18:
 	cp	w, 2:i3
-	jr	nc, Param_SignExtendReturn_Skip19
+	jr	nc, Param_SignExtendReturn_Skip20
 	ld	(0xe193:16), xde
 	ld	wa, 3:i3
 	ldw	bc, 21
@@ -25529,7 +25529,7 @@ Param_SignExtendReturn_Join4:
 	call	sendCOMM
 	ld	hl, 0:i3
 	jr	Param_SignExtendReturn_Return
-Param_SignExtendReturn_Skip19:
+Param_SignExtendReturn_Skip20:
 	ld	hl, 1:i3
 Param_SignExtendReturn_Return:
 	ret

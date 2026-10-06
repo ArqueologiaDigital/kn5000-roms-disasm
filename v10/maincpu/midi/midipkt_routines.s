@@ -111,7 +111,7 @@ MidiPkt_BuildControl:
 	lda	xwa, (xsp+4)
 	ld	(xwa), xbc
 	ld	(xwa+4), xiz
-	calr	MidiPkt_BuildControl_Helper
+	calr	MidiPkt_SendCtlValueSysEx
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
@@ -257,7 +257,7 @@ MidiPkt_BuildControl_Join:
 	lda	xwa, (xsp+6)
 	ld	(xwa), xbc
 	ld	(xwa+4), xde
-	calr	MidiPkt_BuildControl_Helper
+	calr	MidiPkt_SendCtlValueSysEx
 MidiPkt_BuildControl_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+18)
@@ -1059,7 +1059,15 @@ MidiPkt_EnqueueControl_3368_Return:
 
 MidiPkt_EnqueueExtended2_Data:
 	ret
-MidiPkt_BuildControl_Helper:
+; MidiPkt_SendCtlValueSysEx: Sends one MIDI-control-record value as a Technics SysEx: given XWA -> {packet, record},
+;   it returns early on MidiPkt_CheckGateCondition = 0xFFFF, on MidiCtl_NullRecord, or when record+8 & packet[3] = 0.
+;   Otherwise it queues SysEx_Msg_35DC (F0 50 2C 01 28 12), a 6-byte block whose byte 1 is packet[0] | 0x20, and the
+;   value (packet[2] & record+8) >> (record+11 & 15) as two nibbles, high first, plus a zero byte. It then closes and
+;   sends the message (ArpQueue_ComputeAndEnqueue, SeqOut_FlushTimedBuffer, ArpQueue_SwapBuffers). Basis: callers +
+;   body -- both callers (MidiPkt_BuildControl and the routine after it, labels MidiPkt_BuildControl_Skip2/_Join)
+;   build the 4-byte packet {record+6 | (field 10 - 32), record+7, value, record+8} and pass {packet, record}; it is
+;   the 0x336C member of the MidiPkt_EnqueueControl_33xx family, whose 3364 variant queues the same header and record.
+MidiPkt_SendCtlValueSysEx:
 	lda	xsp, (xsp-10)
 	push	xiz
 	ld	xiz, xwa
@@ -1377,7 +1385,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2:
 	push	xhl
 	push	xix
 	push	xiz
-	call	MidiRx_ProgramChange_Helper
+	call	MidiRx_ApplyProgramChange
 	call	SwbtWr_ReinitOutputBank
 	pop	xiz
 	pop	xix

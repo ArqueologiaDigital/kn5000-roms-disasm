@@ -4020,7 +4020,7 @@ DSPCfg_Data_ParamDispatch_Helper_Skip3:
 	popw	iz
 	lda	xsp, (xsp+0x18)
 	retd	4
-EffEdit_DSPConfigBlock_Helper:
+DSPCfg_RecordFieldToParamId:
 	lda	xsp, (xsp-0xa)
 	push	xiz
 	ld	(xsp+0xa), e

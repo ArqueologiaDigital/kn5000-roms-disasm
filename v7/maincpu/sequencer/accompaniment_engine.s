@@ -24432,7 +24432,7 @@ DrumVoice_Handler6_Code:
 	ld	a, (xiy)
 	bit	0, a
 	jr	nz, DrumVoice_Handler6_Return
-	calr	DrumVoice_Handler6_Helper
+	calr	Rhythm_StepProgram
 	calr	DrumKit_PostMidiEvents
 	calr	Rhythm_LoadCurrentTimeSig
 DrumVoice_Handler6_Return:
@@ -24447,7 +24447,7 @@ DrumVoice_Handler7:
 	ld	a, (xiy)
 	bit	0, a
 	jr	nz, DrumVoice_Handler7_Return
-	calr	DrumVoice_Handler7_Helper2
+	calr	CmpSet_StepRhythmBank
 	calr	DrumKit_PostMidiEvents
 	calr	Rhythm_LoadCurrentTimeSig
 DrumVoice_Handler7_Return:
@@ -24573,7 +24573,7 @@ DrumVoice_Handler7_Data_3_Helper2:
 	sll	a, 1
 	ld	xix, CmpNcp_ItemA_HandlerIndex
 	ld	hl, (xix+a)
-	call	DrumVoice_Handler7_Data_3_Helper5
+	call	CmpNcp_CallItemHandler
 	ret
 CmpNcp_ItemA_HandlerIndex:
 	; (0x390B), stepped between 0 and 2 by DrumVoice_Handler7_Data_3_Helper -> the
@@ -24611,7 +24611,7 @@ DrumVoice_Handler7_Data_3_Helper4:
 	sll	a, 1
 	ld	xix, CmpNcp_ItemB_HandlerIndex
 	ld	hl, (xix+a)
-	call	DrumVoice_Handler7_Data_3_Helper5
+	call	CmpNcp_CallItemHandler
 	ret
 CmpNcp_ItemB_HandlerIndex:
 	; (0x390C), stepped between 0 and 1 by DrumVoice_Handler7_Data_3_Helper3 -> the
@@ -24619,10 +24619,10 @@ CmpNcp_ItemB_HandlerIndex:
 	; Reached through CmpNcpTtl_Dispatch2_Helper3.
 	.short	3, 4
 	push	xiz
-	call	DrumVoice_Handler7_Data_3_Helper5
+	call	CmpNcp_CallItemHandler
 	pop	xiz
 	ret
-DrumVoice_Handler7_Data_3_Helper5:
+CmpNcp_CallItemHandler:
 	pushw	hl
 	ld	xhl, 0:i3
 	popw	hl
@@ -24633,9 +24633,9 @@ DrumVoice_Handler7_Data_3_Helper5:
 	call	(xhl)
 	ret
 CmpNcp_ItemHandlerTable:
-	; DrumVoice_Handler7_Data_3_Helper5 calls entry (HL & 7).  DrumVoice_Handler7_Data_3_Helper2
+	; CmpNcp_CallItemHandler calls entry (HL & 7).  DrumVoice_Handler7_Data_3_Helper2
 	; and _Helper4 pass 0..4 from the two tables above; the wrapper just before
-	; DrumVoice_Handler7_Data_3_Helper5 passes its caller's HL.  5 and 6 are DrumVoice_NullHandler;
+	; CmpNcp_CallItemHandler passes its caller's HL.  5 and 6 are DrumVoice_NullHandler;
 	; an index of 7 would read the first four bytes of CmpNcp_ItemHandler0.  Each handler sets bits
 	; of (0xE31C) and stores its own word in (0xE31E): 0x0080, 0x0181, 0x0282, 0x8505, 0x0686.
 	.long	CmpNcp_ItemHandler0
@@ -24743,7 +24743,7 @@ DrumVoice_Handler7_Code_Return6:
 	ld	(0x343a:16), 0
 	calr	DrumKit_SendProgramChange
 	ret
-DrumVoice_Handler6_Helper:
+Rhythm_StepProgram:
 	push	w
 	ld	l, (0xfc5a:16)
 	and	l, 255
@@ -24799,7 +24799,7 @@ DrumVoice_Handler7_Code_Join4:
 	ld	a, (xix+976)
 	ld	(0x3454:16), a
 	ret
-DrumVoice_Handler7_Helper2:
+CmpSet_StepRhythmBank:
 	push	w
 	ld	l, (0xfc5a:16)
 	and	l, 255
@@ -25284,12 +25284,12 @@ CmpNcp_ItemStep4:
 	ld	a, (13370:16)
 	bit	4, (0x3431:16)
 	jr	z, DrumVoice_NotifyEE_Entry
-	calr	DrumVoice_NotifyEE_Helper4
+	calr	CmpNcp_StepSlotInGroup2
 	jr	DrumVoice_NotifyEE_Join7
 DrumVoice_NotifyEE_Entry:
 	bit	5, (0x3431:16)
 	jr	z, DrumVoice_NotifyEE_Skip19
-	calr	DrumVoice_NotifyEE_Helper3
+	calr	CmpNcp_StepSlotInGroup1
 	jr	DrumVoice_NotifyEE_Join7
 DrumVoice_NotifyEE_Skip19:
 	calr	DrumVoice_NotifyEE_Helper
@@ -25351,7 +25351,7 @@ DrumVoice_NotifyEE_Skip26:
 	ld	(13395:16), 0
 TimeSig_DisplayStrings_Code_Return5:
 	ret
-DrumVoice_NotifyEE_Helper3:
+CmpNcp_StepSlotInGroup1:
 	bit	7, w
 	jr	nz, TimeSig_DisplayStrings_Code_Skip23
 	inc	1, a
@@ -25394,7 +25394,7 @@ TimeSig_DisplayStrings_Code_Skip26:
 	ld	a, 23:opc
 TimeSig_DisplayStrings_Code_Return6:
 	ret
-DrumVoice_NotifyEE_Helper4:
+CmpNcp_StepSlotInGroup2:
 	bit	7, w
 	jr	nz, TimeSig_DisplayStrings_Code_Skip29
 	inc	1, a
@@ -27485,7 +27485,7 @@ VoiceSlot_Dispatch_Return_Helper:
 DrumParam_ProcessChannel:
 	push xiz
 	calr DrumParam_LookupChannelBit
-	call DrumParam_ProcessChannel_Helper
+	call DrumParam_StepChannelStyle
 	pop xiz
 	ret
 
@@ -27506,7 +27506,7 @@ PatIdx_Lookup_Return:
 	ld	(P4:8), 32:io
 	.byte 0x40
 
-DrumParam_ProcessChannel_Helper:
+DrumParam_StepChannelStyle:
 	push_a
 	calr DrumParam_ReadVoiceCount
 	ld L,A

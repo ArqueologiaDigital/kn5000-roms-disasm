@@ -803,7 +803,11 @@ PlayModeStop_ClearFlagBlock:
 	ret
 	ret
 	ret
-DpMdlySmfLyrTtl_Dispatch_Helper:
+; DpMdlySmfLyrTtl_NullRet: Empty routine (`ret`): DpMdlySmfLyrTtl_Dispatch calls it instead of the screen re-
+;   initialisation and DpMdlySmfTtl_Dispatch_Helper when PREVIOUS_TITLE is not 108 (TT_DKDPSMF). Basis: callers + body
+;   -- its only caller is the register-saving call on DpMdlySmfLyrTtl_Dispatch's not-108 branch; the body is a single
+;   `ret` (this file's X_NullRet convention: PlayMode_NullRet, PartFormat_NullRet).
+DpMdlySmfLyrTtl_NullRet:
 	ret
 DpMdlySmfLyrTtl_Dispatch_Helper2:
 	cp (CURRENT_TITLE:16), 108
@@ -2100,7 +2104,7 @@ DpMdlySmfLyrTtlFunc_Skip2:
 	push xhl
 	push xix
 	push xiz
-	call	DpMdlySmfLyrTtl_Dispatch_Helper
+	call	DpMdlySmfLyrTtl_NullRet
 	pop xiz
 	pop xix
 	pop xhl

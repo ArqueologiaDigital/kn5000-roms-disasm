@@ -1347,7 +1347,7 @@ Flash_InitBytecodeBlock_Skip5:
 	cp	wa, 0:i3
 	jr	nz, Flash_InitBytecodeBlock_Skip6
 	ld	wa, bc
-	calr	Flash_InitBytecodeBlock_Helper
+	calr	Flash_AssignSlotsToBlocks
 	ld	a, (xsp+6)
 	extz	wa
 	calr	Flash_StoreBaseAndInitAccPatch_Sub
@@ -1357,8 +1357,8 @@ Flash_InitBytecodeBlock_Skip5:
 	calr	NoteEventBuffer_Store
 	ld	a, (xsp+10)
 	extz	wa
-	calr	Flash_InitBytecodeBlock_Helper2
-	calr	Flash_InitBytecodeBlock_Helper3
+	calr	Flash_WriteSlotOwnerMap
+	calr	Flash_CopyBlocksToSlots
 	call	TmFlash_CopyToExtMem
 	jrl	Flash_InitBytecodeBlock_Entry
 Flash_InitBytecodeBlock_Skip6:
@@ -2118,7 +2118,7 @@ Flash_StoreBaseAndInitAccPatch_Skip2:
 	ld a, (xbc)
 	ld (xhl), a
 	ret
-Flash_InitBytecodeBlock_Helper:
+Flash_AssignSlotsToBlocks:
 	dec 2, xsp
 	pushw iz
 	ld	(xsp+2), a
@@ -2459,7 +2459,7 @@ Flash_StoreBaseAndInitAccPatch_Sub_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
-Flash_InitBytecodeBlock_Helper2:
+Flash_WriteSlotOwnerMap:
 	ld	xix, (3222:16)
 	ld	xiy, (FLASH_SECTION_PTR_7:16)
 	ldw	bc, 0x8000
@@ -2559,7 +2559,7 @@ Flash_StoreBaseAndInitAccPatch_Skip11:
 	ld	xde, (FLASH_SECTION_PTR_7:16)
 	ld	wa, 1:i3
 	jp	Flash_EraseSectorAndWrite
-Flash_InitBytecodeBlock_Helper3:
+Flash_CopyBlocksToSlots:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xix, (3222:16)
@@ -3340,7 +3340,7 @@ Flash_StoreBaseAndInitAccPatch_Join5:
 	ld	xde, (FLASH_SECTION_PTR_7:16)
 	ld	wa, 1:i3
 	jp	Flash_EraseSectorAndWrite
-Flash_SlotUpdateOpsBlock_Helper:
+Flash_CountFreeOrOwnedSlots:
 	ld	l, 0:opc
 	ld	xde, (FLASH_SECTION_PTR_7:16)
 	ld	b, 0:opc
@@ -3786,7 +3786,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 1:i3
-	calr	Flash_SlotUpdateOpsBlock_Helper
+	calr	Flash_CountFreeOrOwnedSlots
 	cp	l, 0:i3
 	jr	nz, Flash_SlotUpdateOpsBlock_Skip
 	ldw	(xsp), 1
@@ -3796,7 +3796,7 @@ Flash_SlotUpdateOpsBlock_Skip:
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 0:i3
-	calr	Flash_SlotUpdateOpsBlock_Helper
+	calr	Flash_CountFreeOrOwnedSlots
 	ld	e, 0:opc
 	lda	xbc, (1748:16)
 Flash_SlotUpdateOpsBlock_Loop:
@@ -3899,8 +3899,8 @@ Flash_InitBytecodeBlock_Helper8:
 	calr	NoteEventBuffer_Store
 	ld	a, (xsp+6)
 	extz	wa
-	calr	Flash_InitBytecodeBlock_Helper2
-	calr	Flash_InitBytecodeBlock_Helper3
+	calr	Flash_WriteSlotOwnerMap
+	calr	Flash_CopyBlocksToSlots
 	call	TmFlash_CopyToExtMem
 	lda	xwa, (2360:16)
 	cpw	(xwa+0x2), 0xffff
@@ -4086,7 +4086,7 @@ Flash_WriteBackSlotTable_Skip4:
 	ldirw
 	inc	2, xsp
 	ret
-LoadRegion6_OpenSuccess_Helper:
+FileIO_LoadRcmToFlash:
 	lda xsp, (xsp-1024)
 	pushw	iz
 	calr	Flash_InitExtMemAddrs
@@ -5367,7 +5367,7 @@ DualVoice_LoopCheckNext:
 DualVoice_WriteBackSlots:
 	calr Flash_WriteBackSlotTable
 	jr DualVoice_LoadDoneRetVal
-LoadRegion5_AltPath_Helper:
+FileIO_LoadMspAltFormat:
 	pushw iz
 	call msp_ld_mae
 	lda xwa, (0x1e8800:24)

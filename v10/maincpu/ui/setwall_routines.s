@@ -30,7 +30,13 @@ SetWall_UpdateSlotIndex:
 SetWall_InlineCodeBlock:
 	call	SetWall_InlineCodeBlock2
 	ret
-MiddleFuncCall_DispatchData_Code_Helper:
+; SqTrAs_CursorNextTrack: Track-assign page, next track: applies the pending edit of the cursor track
+;   (SetWall_InlineCodeBlock2), redraws the cursor row (CDlikeSwTtl_SendEvt4, EVT_REQUEST_GRID_DRAW to 0x8B0004)
+;   unless the cursor is 7 (last row of page 1), posts EVT_SET_VISIBLE 0 to 0x8B0003, moves the cursor (0xCDF) up by
+;   one (max 15) and reloads the edited value (0x2873) from the assignment table 0xF1A0 (SetWall_UpdateSlotIndex).
+;   Basis: callers + body -- the only caller is MiddleFuncCall_OnTrAsTrackInc, the handler of EVT_TR_AS_TRACK_INC
+;   (MT_TrAsTrackInc, 'track-assign grid: next track').
+SqTrAs_CursorNextTrack:
 	call	SetWall_InlineCodeBlock2
 	cp (3295:16), 7
 	jr	z, MiddleFuncCall_DispatchData_Code_Helper_Skip
@@ -45,7 +51,13 @@ MiddleFuncCall_DispatchData_Code_Helper_Skip2:
 	ld	(3295:16), a
 	call	SetWall_UpdateSlotIndex
 	ret
-MiddleFuncCall_DispatchData_Code_Helper2:
+; SqTrAs_CursorPrevTrack: Track-assign page, previous track: applies the pending edit of the cursor track
+;   (SetWall_InlineCodeBlock2), redraws the cursor row (CDlikeSwTtl_SendEvt4) unless the cursor is 8 (first row of
+;   page 2), posts EVT_SET_VISIBLE 0 to 0x8B0003, moves the cursor (0xCDF) down by one (min 0) and reloads the edited
+;   value (0x2873) from the assignment table 0xF1A0. Basis: callers + body -- the only caller is
+;   MiddleFuncCall_OnTrAsTrackDec, the handler of EVT_TR_AS_TRACK_DEC (MT_TrAsTrackDec, 'track-assign grid: previous
+;   track'); mirror image of SqTrAs_CursorNextTrack.
+SqTrAs_CursorPrevTrack:
 	call	SetWall_InlineCodeBlock2
 	cp (3295:16), 8
 	jr	z, MiddleFuncCall_DispatchData_Code_Helper2_Skip
@@ -259,7 +271,13 @@ SetWall_InitCallSequences:
 	ld	(3295:16), 8
 	call	SetWall_UpdateSlotIndex
 	ret
-MiddleFuncCall_DispatchData_Code_Helper3:
+; SqTrAs_CursorToFirstPage: Track-assign page, previous page: applies the pending edit of the cursor track
+;   (SetWall_InlineCodeBlock2), posts EVT_SET_VISIBLE 0 to 0x8B0003, sets the cursor (0xCDF) to track index 0 and
+;   reloads the edited value (0x2873) from 0xF1A0. Its twin SetWall_InitCallSequences (EVT_TR_AS_PAGE_INC) sets the
+;   cursor to 8, so the grid has two pages of 8 tracks. Basis: callers + body -- the only caller is
+;   MiddleFuncCall_OnTrAsPageDec, the handler of EVT_TR_AS_PAGE_DEC (MT_TrAsPageDec, 'track-assign grid: previous
+;   page').
+SqTrAs_CursorToFirstPage:
 	call	SetWall_InlineCodeBlock2
 	call	CDlikeSwTtl_SendStartEvt
 	ld	(3295:16), 0
@@ -1947,7 +1965,12 @@ SetWall_RetStub2:
 SetWall_MiscDataAndCode:
 	ret
 	ret
-MiddleFuncCall_DispatchData_Helper2:
+; SqSngName_ApplyNameAndExit: Applies a song name just typed: copies the 16 bytes at 0x1159 to the current song name
+;   (0xF280) and to the name field (+0x100) of the current song slot (SEQ_SONG_SLOTS + 0x800 * (0xFFE3)), then leaves
+;   the naming page: title 0x83 (TITLE_SQEASYREC) when the current title is 0xA7 (TITLE_SQEASYNAME), else 0x8E
+;   (TITLE_SQSNGSEL), through UI_PostModeChangeEvent. Basis: callers + body -- the only caller is
+;   MiddleFuncCall_OnSongNameSet (EVT_SONG_NAME_SET, MT_SongNameSet), which first Strcpys the name into 0x1159 (4441).
+SqSngName_ApplyNameAndExit:
 	ld	xix, 0xf280
 	ld	xiy, 4441
 	ldw	bc, 16

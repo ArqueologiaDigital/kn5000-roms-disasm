@@ -5110,7 +5110,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop4:
 SeqByteBlock_StyleBitmapRef_Code_Helper_Skip5:
 	ld	xwa, (xsp+20)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper2
+	calr	Fat_WriteDirEntry
 	ld	xwa, (xsp+24)
 	push	xwa
 	calr	SeqStep_FileBufferFinal
@@ -5968,7 +5968,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Epilogue5:
 	pop	xiz
 	lda	xsp, (xsp+30)
 	ret
-SeqByteBlock_StyleBitmapRef_Code_Helper2:
+Fat_WriteDirEntry:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, (xsp+12)
@@ -6056,7 +6056,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper2_Skip2:
 SeqByteBlock_StyleBitmapRef_Code_Helper2_Epilogue2:
 	pop	xiz
 	ret
-SeqByteBlock_StyleBitmapRef_Code_Helper3:
+Fat_MountVolume:
 	lda	xsp, (xsp-34)
 	push	xiz
 	ldw	(xsp+18), 0
@@ -6522,7 +6522,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip:
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip2
 	ld	xwa, (xsp+2)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper3
+	calr	Fat_MountVolume
 	inc	4, xsp
 	ld	iz, hl
 	cp	iz, 0:i3
@@ -6823,7 +6823,7 @@ SeqByteBlock_StyleBitmapRef_Code_Epilogue3:
 	pop	xiz
 	inc	6, xsp
 	ret
-SeqByteBlock_StyleBitmapRef_Code_Helper6_Helper:
+Fat_TransferSectorsDirect:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, (xsp+20)
@@ -7124,7 +7124,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip6:
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper6_Helper
+	calr	Fat_TransferSectorsDirect
 	lda	xsp, (xsp+12)
 	ld	iz, hl
 	ld	xwa, (xsp+10)
@@ -7362,7 +7362,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip6:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper6_Helper
+	calr	Fat_TransferSectorsDirect
 	lda	xsp, (xsp+12)
 	ld	iz, hl
 	ld	xwa, (xsp+12)
@@ -7514,7 +7514,7 @@ SeqByteBlock_StyleBitmapRef_Code_Entry:
 	bitm	7, (xiz+3)
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip16
 	push	xiz
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper2
+	calr	Fat_WriteDirEntry
 	inc	4, xsp
 	cp	hl, 0:i3
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Epilogue7
@@ -7696,7 +7696,7 @@ SeqChan_WritePatchData:
 	ld	xiz, (xsp+10)
 	ld	(xiz+52), 229
 	push	xiz
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper2
+	calr	Fat_WriteDirEntry
 	ld	(xsp+8), hl
 	push	xiz
 	calr	SeqStep_FileBufferFinal
@@ -8050,7 +8050,7 @@ SeqChan_ByteBlockD_Skip:
 	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_StyleBitmapRef_Code_Helper3
+	call	Fat_MountVolume
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Entry
@@ -8067,7 +8067,7 @@ SeqChan_ByteBlockD_Helper_Skip2:
 	ld	xwa, (xwa+26)
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_StyleBitmapRef_Code_Helper3
+	call	Fat_MountVolume
 	inc	4, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Entry2
@@ -8085,7 +8085,7 @@ SeqChan_ByteBlockD_Helper_Skip3:
 	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_StyleBitmapRef_Code_Helper3
+	call	Fat_MountVolume
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Skip2
@@ -8103,7 +8103,7 @@ SeqChan_ByteBlockD_Skip3:
 	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_StyleBitmapRef_Code_Helper3
+	call	Fat_MountVolume
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Helper_Skip4

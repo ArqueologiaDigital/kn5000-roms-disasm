@@ -1,0 +1,460 @@
+[
+ {
+  "old": "MemConfig_Handler_5_Helper6",
+  "verdict": "refuse",
+  "why_refused": "Mechanics are clear, meaning is not. It saves the slot state (VoiceSlot_SaveState), sets (3577) = 2 when (0x0D57) = 48 else 1, then loops: reads the current event byte (VoiceSlot_ReadCurrentParams); stops on 0x84/0x82; otherwise it steps through MemConfig_Handler_5_Helper7 (when (0x0DF9) = 1) or MemConfig_Handler_5_Helper8 until W = 0xFF, and restores the slot state. Both callers are placeholder names in the scoop_display.s player block: MemConfig_Handler_5 (slot 5 of MemoryConfig_Handler_Table, read by SysEx_BytecodeDispatcher) and SystemInit_StepHandler_0 (after advancing the tick count (3415) modulo 96). The value 48 in (0x0D57) and the event codes 0x81/0x82/0x84/0x90 and 47/48/95 in VoiceSlot_FlagCheck are not identified. A name like 'catch up events to the position' would be a guess. Same situation as SysEx_BytecodeDispatcher_Helper3, which batch d refused.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:3523 `cp a, 48` / 3525 `call MemConfig_Handler_5_Helper6` -- caller MemConfig_Handler_5; also 3549, 3610, 3619",
+   "display/scoop_display.s:7873 `.long MemConfig_Handler_5` -- entry 5 of MemoryConfig_Handler_Table (SysEx_BytecodeDispatcher)",
+   "display/scoop_display.s:9193 `cp a, (0x0dfa:16)` / 9196 `call MemConfig_Handler_5_Helper6` -- SystemInit_StepHandler_0, after (3415) is advanced modulo 96",
+   "display/scoop_display.s:3641 `xor a, a` / 3642 `call VoiceSlot_SaveState` / 3643 `ld xiy, 3577` / 3646 `ld (xiy), 2` -- (3577) = 2 when (0x0D57) = 48, else 1",
+   "display/scoop_display.s:3650 `call VoiceSlot_ReadCurrentParams` / 3651 `cp a, 132` / 3656 `cp (0x0df9:16), 1` / 3658 `call MemConfig_Handler_5_Helper8` / 3659 `cp w, 255` -- the loop; 3666 `call MemConfig_Handler_5_Helper7` is the other path"
+  ]
+ },
+ {
+  "old": "MiddleFuncCall_DispatchData_Code_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqTrAs_CursorNextTrack",
+  "header": "Track-assign page, next track: applies the pending edit of the cursor track (SetWall_InlineCodeBlock2), redraws the cursor row (CDlikeSwTtl_SendEvt4, EVT_REQUEST_GRID_DRAW to 0x8B0004) unless the cursor is 7 (last row of page 1), posts EVT_SET_VISIBLE 0 to 0x8B0003, moves the cursor (0xCDF) up by one (max 15) and reloads the edited value (0x2873) from the assignment table 0xF1A0 (SetWall_UpdateSlotIndex).\nBasis: callers + body -- the only caller is MiddleFuncCall_OnTrAsTrackInc, the handler of EVT_TR_AS_TRACK_INC (MT_TrAsTrackInc, 'track-assign grid: next track').",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/demo_seq_bridge.s:59 `call MiddleFuncCall_DispatchData_Code_Helper` -- MiddleFuncCall_OnTrAsTrackInc",
+   "ui/sepaout_config.s:224 `.short MiddleFuncCall_OnTrAsTrackInc - MiddleFuncCall_DispatchData` -- case 4 of MiddleFuncCall_CaseTable = EVT_DEMO_SONG_SEL + 4 = EVT_TR_AS_TRACK_INC (shared/event_codes.s:591)",
+   "ui/setwall_routines.s:35 `cp (3295:16), 7` / 37 `call CDlikeSwTtl_SendEvt4` -- the row redraw is skipped when leaving index 7",
+   "ui/setwall_routines.s:41 `cp a, 15` / 43 `inc 1, a` / 45 `ld (3295:16), a` / 46 `call SetWall_UpdateSlotIndex` -- cursor + 1, clamped at 15",
+   "demo/demo_seq_bridge.s:456-468 CDlikeSwTtl_SendEvt4: `bit 0, (0xce0:16)`, row = cursor + 2 (page 0) or cursor - 6 (page 1), `ld xbc, EVT_REQUEST_GRID_DRAW` -- 8 rows per page",
+   "ui/setwall_routines.s:22 `ld xhl, 0xf1a0` / 26 `ld a, (xhl+iy)` / 27 `ld (0x2873:16), a` -- SetWall_UpdateSlotIndex",
+   "note: the SetWall_* routines in ui/setwall_routines.s are the SqTrAs (sequencer track-assign) page: SqTrAs_Setup / SqTrAs_InitWall (ui/ui_playback_modes.s:1075/1084) copy the same 16-byte table 0xF1A0 <-> 0xCCE, SqTrAsTtlFunc case 0 calls SetWall_JumpStubData, SqTrAs_EventHandler calls SetWall_EventHandler, SqTrAsSureFunc calls SetWall_SlotSetup; the file header 'Wallpaper & Wall Display' is wrong"
+  ]
+ },
+ {
+  "old": "MiddleFuncCall_DispatchData_Code_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqTrAs_CursorPrevTrack",
+  "header": "Track-assign page, previous track: applies the pending edit of the cursor track (SetWall_InlineCodeBlock2), redraws the cursor row (CDlikeSwTtl_SendEvt4) unless the cursor is 8 (first row of page 2), posts EVT_SET_VISIBLE 0 to 0x8B0003, moves the cursor (0xCDF) down by one (min 0) and reloads the edited value (0x2873) from the assignment table 0xF1A0.\nBasis: callers + body -- the only caller is MiddleFuncCall_OnTrAsTrackDec, the handler of EVT_TR_AS_TRACK_DEC (MT_TrAsTrackDec, 'track-assign grid: previous track'); mirror image of SqTrAs_CursorNextTrack.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/demo_seq_bridge.s:70 `call MiddleFuncCall_DispatchData_Code_Helper2` -- MiddleFuncCall_OnTrAsTrackDec",
+   "ui/sepaout_config.s:225 `.short MiddleFuncCall_OnTrAsTrackDec - MiddleFuncCall_DispatchData` -- case 5 = EVT_TR_AS_TRACK_DEC (shared/event_codes.s:592)",
+   "ui/setwall_routines.s:50 `cp (3295:16), 8` / 52 `call CDlikeSwTtl_SendEvt4` -- row redraw skipped when leaving index 8",
+   "ui/setwall_routines.s:56 `cp a, 0:i3` / 58 `dec 1, a` / 60 `ld (3295:16), a` / 61 `call SetWall_UpdateSlotIndex` -- cursor - 1, clamped at 0"
+  ]
+ },
+ {
+  "old": "MiddleFuncCall_DispatchData_Code_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqTrAs_CursorToFirstPage",
+  "header": "Track-assign page, previous page: applies the pending edit of the cursor track (SetWall_InlineCodeBlock2), posts EVT_SET_VISIBLE 0 to 0x8B0003, sets the cursor (0xCDF) to track index 0 and reloads the edited value (0x2873) from 0xF1A0. Its twin SetWall_InitCallSequences (EVT_TR_AS_PAGE_INC) sets the cursor to 8, so the grid has two pages of 8 tracks.\nBasis: callers + body -- the only caller is MiddleFuncCall_OnTrAsPageDec, the handler of EVT_TR_AS_PAGE_DEC (MT_TrAsPageDec, 'track-assign grid: previous page').",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/demo_seq_bridge.s:92 `call MiddleFuncCall_DispatchData_Code_Helper3` -- MiddleFuncCall_OnTrAsPageDec",
+   "ui/sepaout_config.s:229 `.short MiddleFuncCall_OnTrAsPageDec - MiddleFuncCall_DispatchData` -- case 9 = EVT_TR_AS_PAGE_DEC (shared/event_codes.s:596)",
+   "ui/setwall_routines.s:263 `call SetWall_InlineCodeBlock2` / 264 `call CDlikeSwTtl_SendStartEvt` / 265 `ld (3295:16), 0` / 266 `call SetWall_UpdateSlotIndex`",
+   "ui/setwall_routines.s:259 `ld (3295:16), 8` -- SetWall_InitCallSequences, called by MiddleFuncCall_OnTrAsPageInc (demo/demo_seq_bridge.s:81); same body with 8 (candidate name SqTrAs_CursorToSecondPage)"
+  ]
+ },
+ {
+  "old": "MiddleFuncCall_DispatchData_Helper",
+  "verdict": "refuse",
+  "why_refused": "A two-instruction thunk, `call NoRef_SetWall_SlotMap20x2_Helper / ret`, byte-identical to SetWall_InlineCodeBlock_Sub, which serves EVT_TR_AS_PART_INC; this one serves EVT_TR_AS_PART_DEC. Both part events run the same code, so the part value itself is changed elsewhere. The callee posts EVT_SET_VISIBLE 1 to object 0x8B0003 when the edited value (0x2873) or the stored assignment 0xF1A0[cursor] is 13, 14, 15 or 16 (the values whose SetWall_SlotMaskTable mask is 0), otherwise EVT_SET_VISIBLE 0. Neither what object 0x8B0003 is nor what assignment values 13-16 mean is established, so any name beyond 'part-dec thunk' would be a guess.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "demo/demo_seq_bridge.s:114 `call MiddleFuncCall_DispatchData_Helper` -- MiddleFuncCall_OnTrAsPartDec (EVT_TR_AS_PART_DEC, shared/event_codes.s:594)",
+   "demo/demo_seq_bridge.s:103 `call SetWall_InlineCodeBlock_Sub` -- MiddleFuncCall_OnTrAsPartInc; ui/setwall_routines.s:72-74 is the same thunk",
+   "ui/setwall_routines.s:105 `call NoRef_SetWall_SlotMap20x2_Helper` / 106 `ret`",
+   "ui/setwall_routines.s:76 `ld a, (0x2873:16)` / 77-84 `cp a, 13/16/15/14` / 85 `call CDlikeSwTtl_SendStartEvt` / 90 `ld a, (xhl+iy)` / 91-98 same compares / 101 `call CDlikeSwTtl_SendStartEvtArg1`",
+   "demo/demo_seq_bridge.s:481-491 -- CDlikeSwTtl_SendStartEvtArg1 / _SendStartEvt post EVT_SET_VISIBLE with XDE = 1 / 0 to 0x8B0003"
+  ]
+ },
+ {
+  "old": "MiddleFuncCall_DispatchData_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqSngName_ApplyNameAndExit",
+  "header": "Applies a song name just typed: copies the 16 bytes at 0x1159 to the current song name (0xF280) and to the name field (+0x100) of the current song slot (SEQ_SONG_SLOTS + 0x800 * (0xFFE3)), then leaves the naming page: title 0x83 (TITLE_SQEASYREC) when the current title is 0xA7 (TITLE_SQEASYNAME), else 0x8E (TITLE_SQSNGSEL), through UI_PostModeChangeEvent.\nBasis: callers + body -- the only caller is MiddleFuncCall_OnSongNameSet (EVT_SONG_NAME_SET, MT_SongNameSet), which first Strcpys the name into 0x1159 (4441).",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/demo_seq_bridge.s:41 `pushw 4441` / 42 `call Strcpy` / 48 `call MiddleFuncCall_DispatchData_Helper2` -- MiddleFuncCall_OnSongNameSet",
+   "shared/event_codes.s:588 `.equ EVT_SONG_NAME_SET` -- 'store a song name (Strcpy XDE -> RAM 0x1159) and apply it'",
+   "ui/setwall_routines.s:1951 `ld xix, 0xf280` / 1952 `ld xiy, 4441` / 1953 `ldw bc, 16` / 1954 `ldir85` -- name -> 0xF280",
+   "ui/setwall_routines.s:1956 `ld a, (0xffe3:24)` / 1957 `sla xwa, 11` / 1958 `ld xix, SEQ_SONG_SLOTS` / 1960 `ld xwa, 256` / 1964 `ldir85` -- name -> slot + 0x100",
+   "ui/setwall_routines.s:1965 `cp (CURRENT_TITLE:16), 143` / 1967 `cp (CURRENT_TITLE:16), 167` / 1970 `ld a, 142:opc` / 1974 `ld a, 131:opc` -- 0x8F/0xA7 -> 0x8E/0x83 (shared/event_codes.s:62,67,68,75)",
+   "ui/ui_playback_modes.s:2189 `pushw 0xf280` .. EVT_CUR_SONG_NAME -- 0xF280 is the current song name shown with (0xFFE3)+1"
+  ]
+ },
+ {
+  "old": "MidiCC_Handler_BitManipulation_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiCC_RxCC83_SetParamBitsAndQueue",
+  "header": "CC83 on part 25: merges bits 6-7 of E into the byte at 0xFDA1 (bits 0-5 kept), puts the result in E and queues the event BC/DE (BC = 0x0B98: param 0x0B of target 0x98, D = 0xC0 mask) on the SwbtWr queue; marks (0x90F8) = 0xFF. What bits 6-7 of that byte control is not established.\nBasis: callers + body -- the only caller MidiCC_Handler_BitManipulation is CC function 18 <- CC83, taken only for part 25 with bit 2 of (0xFD51) set, E from MidiCC_CC83_ValueMap (value 0/1/2 -> 0x00/0x80/0x40).",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:305 `ld xix, MidiCC_CC83_ValueMap` / 308 `ldw bc, 2968` / 309 `ld d, 192:opc` / 314 `call MidiCC_Handler_BitManipulation_Helper` -- caller",
+   "midi/midi_dispatch_handlers.s:319-324 comment on MidiCC_CC83_ValueMap -- 'CC function 18 <- CC83 ... only for part 25, with bit 2, (0xfd51) set'",
+   "audio/audio_control_engine.s:10955 `ld a, (0xfda1:16)` / 10956 `and a, 63` / 10958 `and w, 192` / 10959 `or a, w` / 10960 `ld (0xfda1:16), a` / 10961 `ld e, a`",
+   "audio/audio_control_engine.s:10962 `ld (MIDI_MSG_STATUS:16), bc` / 10963 `ld (MIDI_MSG_DATA2:16), de` / 10964 `call SwbtWr_WriteVoiceParam_PreserveRegs`",
+   "audio/dsp_config_sysex.s:1205 `lda xbc, (0xfd96:16)` / 1208 `ld a, (xbc + 11)` -- 0xFDA1 = 0xFD96 + 0x0B; dsp_config_sysex.s:1336-1345 sends it as target 0x98 (`ldw wa, 0x98`), consistent with BC = 0x0B98"
+  ]
+ },
+ {
+  "old": "MidiCC_Handler_TableDispatch_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiCC_AllSoundOff_QueuePartParam",
+  "header": "CC120 (All Sound Off) copy of MidiCC_QueuePartParam: queues the saved part event ((0x9644) = 0xAE / part, (0x9646) = value / 0x7F -> MIDI_MSG_STATUS / DATA2) on the SwbtWr queue without writing a part parameter; marks (0x90F8) = 0xFF. Same as the first six instructions of MidiCC_ResetAllControllers.\nBasis: callers + body -- the only caller MidiCC_Handler_TableDispatch reads MidiCC_PartTargets_CC120_AllSoundOff (function 41 <- CC120).",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:922 `ld xix, MidiCC_PartTargets_CC120_AllSoundOff` / 932 `call MidiCC_Handler_TableDispatch_Helper` -- caller",
+   "midi/midi_dispatch_handlers.s:2441-2448 -- MidiCC_PartTargets_CC120_AllSoundOff: 'function 41 <- CC120', selectors 0x00AE..0x15AE",
+   "audio/audio_control_engine.s:11146 `ld bc, (0x9644:16)` / 11147 `ld de, (0x9646:16)` / 11148 `ld (0x90f8:16), 255` / 11149 `ld (MIDI_MSG_STATUS:16), bc` / 11150 `ld (MIDI_MSG_DATA2:16), de` / 11151 `call SwbtWr_WriteVoiceParam_PreserveRegs`",
+   "audio/audio_control_engine.s:11091 MidiCC_QueuePartParam -- the same effect through WA; 11106 MidiCC_ResetAllControllers starts with the same six instructions"
+  ]
+ },
+ {
+  "old": "MidiCC_Helper_ConditionalESetup_Store_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiCC_Switch_WritePartParamAndQueue",
+  "header": "Switch-controller copy of MidiCC_WritePartParamAndQueue: writes E under mask D into parameter byte B of part C's block (MIDI_WriteVoiceParamDirect, the same body as MIDI_WriteVoiceParamCC) and queues the event on the SwbtWr queue; marks (0x90F8) = 0xFF. The caller has already set E to D (on) or 0 (off).\nBasis: callers + body -- reached only from MidiCC_Helper_ConditionalESetup, the on/off tail (value >= 0x40) shared by CC64 Sustain, CC94 and CC91's target 0x60.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:940 `cp a, 0x40` / 942 `ld e, d` / 944 `ld (0x9646:16), de` / 945 `call MidiCC_Helper_ConditionalESetup_Store_Helper` -- caller (label MidiCC_Helper_ConditionalESetup_Store)",
+   "midi/midi_dispatch_handlers.s:477 / 653 / 680 `calr MidiCC_Helper_ConditionalESetup` -- MidiCC_RxCC64_Sustain, MidiCC_RxCC94_Celeste, MidiCC_RxCC91_Reverb (only when C = 96, line 675)",
+   "audio/audio_control_engine.s:10998 `ld (0x90f8:16), 255` / 10999 `call MIDI_WriteVoiceParamDirect` / 11000 `call SwbtWr_WriteVoiceParam_PreserveRegs`",
+   "audio/audio_control_engine.s:8127 MIDI_WriteVoiceParamDirect = 8090 MIDI_WriteVoiceParamCC body: `ld xix, (0x90f2:16)` part table, `and e, d` / `or e, a` / `ld (xix+hl), e`, then MIDI_MSG_STATUS/DATA2 := BC/DE",
+   "audio/audio_control_engine.s:11158 MidiCC_WritePartParamAndQueue -- same effect with BC/DE reloaded from 0x9644/0x9646"
+  ]
+ },
+ {
+  "old": "MidiCC_RxCC11_Expression_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiCC_SetPendingPartExpression",
+  "header": "Defers a received CC11 (Expression): for target C = 0xB3 and part B <= 31 it stores E | 0x80 in the pending byte 0x9432[B]; the one target C = 0xB0 (part 25's record {0xB0, 0x01}) stores E | 0x80 in 0x94F2 instead. MidiStream_LoadAllPresets later sends each flagged 0x9432 byte as event 0xB3 and 0x94F2 as status 0xB0, data 1.\nBasis: callers + body -- the only caller is MidiCC_RxCC11_Expression (MidiCC_PartTargets_CC11_Expression); sibling of MidiCC_SetPendingPartVolume.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:576 `ld xix, MidiCC_PartTargets_CC11_Expression` / 587 `call MidiCC_RxCC11_Expression_Helper` -- caller",
+   "midi/midi_dispatch_handlers.s:2297-2306 -- records {0xB3, part, 0x7F} for parts 0-19 and 23, {0xB0, 0x01, 0x7F} at index 25",
+   "audio/audio_control_engine.s:11027 `cp c, 176` / 11029 `set 7, e` / 11030 `ld (0x94f2:16), e` -- the 0xB0 target",
+   "audio/audio_control_engine.s:11033 `cp b, 31` / 11035 `set 7, e` / 11036 `ld xix, 0x9432` / 11037 `ld (xix+b), e`",
+   "audio/audio_control_engine.s:11169 `ld xiy, 0x9432` / 11170 `ld w, 0xb3:opc` / 11171 `calr MidiStream_LoadVoicePreset` (11185 `bit 7, a` / 11187 `res 7, a` / 11190 `ld (MIDI_MSG_STATUS:16), w`) and 11203 `ld xiy, 0x94f2` / 11212 `ld (MIDI_MSG_STATUS:16), 176` / 11213 `ld (MIDI_MSG_DATA1:16), 1` -- the flush, run from MidiSerial_PumpDone (midi/midi_dispatch_handlers.s:38)",
+   "audio/audio_control_engine.s:11125 `ld e, 179:opc` / 11127 `ldw wa, 0x7f7f` -- MidiCC_ResetAllControllers resets event 0xB3 to 127, the expression default"
+  ]
+ },
+ {
+  "old": "MidiCC_RxCC1_Modulation_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiCC_SetPendingPartModulation",
+  "header": "Defers a received CC1 (Modulation): for part B <= 31 stores E | 0x80 in the pending byte 0x9452[B]; MidiStream_LoadAllPresets later sends each flagged byte as event 0xB2 and clears the flag.\nBasis: callers + body -- the only caller is MidiCC_RxCC1_Modulation (MidiCC_PartTargets_CC1_Modulation, records {0xB2, part, 0x7F}); sibling of MidiCC_SetPendingPartVolume.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:532 `ld xix, MidiCC_PartTargets_CC1_Modulation` / 543 `call MidiCC_RxCC1_Modulation_Helper` -- caller",
+   "audio/audio_control_engine.s:11053 `cp b, 31` / 11055 `set 7, e` / 11056 `ld xix, 0x9452` / 11057 `ld (xix+b), e`",
+   "audio/audio_control_engine.s:11173 `ld xiy, 0x9452` / 11174 `ld w, 0xb2:opc` / 11175 `calr MidiStream_LoadVoicePreset` -- flush as event 0xB2",
+   "audio/audio_control_engine.s:11121 `ld e, 178:opc` / 11123 `ldw wa, 0x7f00` -- MidiCC_ResetAllControllers resets event 0xB2 to 0 (its header: 'modulation 0 (0xB2)')",
+   "side finding: audio/audio_control_engine.s:10442-10500 label the scanners of these arrays PendingVol (0x9452), PendingPan (0x9472) and PendingBank (0x9432), and 10081 VoiceParam_StoreVolume writes 0x9452; by the event codes these are modulation (0xB2), pitch bend (0xB1) and expression (0xB3)"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpChordHandler_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_RecoverIfXferAborted",
+  "header": "At the end of the MIDI data-transfer command loop: if the active message's status field (+4) is non-zero (an error or abort code), runs MidiSysEx_ProcessBlock_Helper11, which repairs the data group whose transfer was in progress; otherwise does nothing.\nBasis: callers + body -- the only caller ArpChord_FinalizePass runs after the loop that dispatches SeqChan_CommandHandlers until field 4 is set (the loop runs only on title 0x57, TITLE_MDEXC).",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:11406 `calr MidiPkt_ArpChordHandler_Helper` -- ArpChord_FinalizePass",
+   "midi/midi_dispatch_handlers.s:11381 `cp (CURRENT_TITLE:16), 87` / 11393 `ld bc, 4:i3` / 11394 `call SeqData_ReadFieldByIndex` / 11395 `cp l, 0:i3` -- the loop ends when field 4 is non-zero",
+   "midi/midi_dispatch_handlers.s:12158 `ld xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)` / 12159 `cp (xwa+4), 0` / 12160 `ret z` / 12161 `calr MidiSysEx_ProcessBlock_Helper11`",
+   "field 4 codes: 8218 `ld (xwa+4), 32`, 8229 `ld (xwa+4), 24` (no reply after 3 tries), 11645 `ldw de, 30` + `jp MIDI_ReadChannelParam` (wrong block), 12165 `ld (xwa+4), 23` (command 5)"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpPopReturn_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_SetXferBlock_LivePanel",
+  "header": "Fills the transfer descriptor at XWA for the live-panel block: {start 0xF980, end 0xFFC0, length 0x640}, which holds the live panel's block 0 (0xF9A0) and block 1 (0xFD60). It is block 1 of the panel transfer; block 2 is the 80 panel memories at 0x1ED350 (MidiPkt_ArpPopReturn_Helper2).\nBasis: callers + body -- MidiPkt_ArpExtHandler_A (command 11, state 0) writes all panel TLV headers, then points the total descriptor 0xBCDC (MidiSeq_ClearSyncFlag_Helper2) and the block descriptor 0xBCEC (this) and starts step 1; the send side MidiPkt_ArpConfigChain_Data_Helper2 uses it for 0xBCCC.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:11497 `cp l, 0:i3` / 11499 `call MidiChan_TimerDispatch_Data` / 11502 `ld xwa, 0xbcec` / 11503 `call MidiPkt_ArpPopReturn_Helper` / 11504 `jrl SeqChan_StepCmd_Field1to2` -- MidiPkt_ArpExtHandler_A",
+   "midi/midi_dispatch_handlers.s:11086 `ld xwa, 0xbccc` / 11087 `call MidiPkt_ArpPopReturn_Helper` -- send side",
+   "midi/midi_dispatch_handlers.s:10106 `lda xde, (0xf980:16)` / 10108 `lda xbc, (0xffbe:16)` / 10109 `sub xbc, xde` / 10110 `inc 2, xbc` / 10113 `ld (xwa+4), xhl` / 10114 `ld (xwa+8), xbc` -- 0xF980, length 0x640",
+   "audio/tonegen_fileio_handlers.s:176 PanelTlv_WriteLivePanelHeaders: 177 `ld xwa, 0xf9a0` / 179 `ld xwa, 0xfd60` -- 'record headers of the live panel: block 0 at RAM 0xF9A0, block 1 at 0xFD60'",
+   "note: descriptor layout {+0 write/read cursor = start, +4 end, +8 bytes left}: MidiPkt_UnpackNibblesToXfer (midi/midi_dispatch_handlers.s:9959, 9968 `lda xiy, (0xbcec:16)`, 9970 `lda xwa, (0xbce4:16)`) writes through +0 of 0xBCEC and counts +8 of 0xBCEC and 0xBCDC down. The same helpers fill the send-side pair 0xBCCC/0xBCBC (MidiPkt_ArpConfigChain_Data_Helper*, SysEx_ResetAndReturn_Helper*)",
+   "note: transfer groups (state = byte +3 of the spare message; SeqChan_StepCmdHandlers / SeqChan_WriteFieldHandlers / MidiSysEx_BlockHandlers in ui_widgets/widget_dispatch.s:1320-1397): blocks 1-2 panel (0xF980 live panel, 0x1ED350 panel memories), end 3 sets 0xBD1A bit 7; 4-5 sound RAM (0x1E0000 'KN5000 SOUND RAM' id + 0x1E0010), end 6 bit 6; 7-9 style image (RHYTHM_PATTERN_BUF_A 0x60, 0x94860 0x1360, 0x95BC0 0x15440), end 10 bit 5; 11-13 sequencer (0xF180 current song, SEQ_SONG_SLOTS 0x5000, 0xB0000 0x4D800), end 14 bit 4; 15-17 unused; 18-20 accompaniment block area (0x1E8800 0x20, 0x1E8820 0x2E0, 0x1E8B00 0x3900), end 21 bit 2"
+  ]
+ },
+ {
+  "old": "MidiSeq_ClearSyncFlag_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_SetXferTotal_Panel",
+  "header": "Fills the transfer descriptor at XWA for the whole panel transfer: start 0xF980, length 0x132F0 = 0x640 (live panel, 0xF980..0xFFBF) + 0x12CB0 (panel memories from 0x1ED350), +4 = start + length (a running end, the second block is elsewhere).\nBasis: callers + body -- MidiPkt_ArpExtHandler_A (command 11) points the total descriptor 0xBCDC with it before the block descriptor 0xBCEC (MidiPkt_ArpPopReturn_Helper); SysEx_ResetAndReturn_Helper4 uses it for the send-side total 0xBCBC.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:11500 `ld xwa, 0xbcdc` / 11501 `call MidiSeq_ClearSyncFlag_Helper2` -- MidiPkt_ArpExtHandler_A",
+   "midi/midi_dispatch_handlers.s:10990 `ld xwa, 0xbcbc` / 10991 `call MidiSeq_ClearSyncFlag_Helper2` / `jrl MidiPkt_ArpConfigChain_Data_Helper` -- send side",
+   "midi/midi_dispatch_handlers.s:10093 `lda xde, (0xf980:16)` / 10095 `lda xbc, (0xffbe:16)` / 10096 `sub xbc, xde` / 10098 `add xde, 0x12cb2` / 10102 `ld (xwa+4), xhl` / 10103 `ld (xwa+8), xde` -- 0x63E + 0x12CB2 = 0x640 + 0x12CB0",
+   "midi/midi_dispatch_handlers.s:10117 `lda xbc, (0x1ed350:24)` / 10119 `add xbc, 0x12cb0` -- MidiPkt_ArpPopReturn_Helper2, block 2; technics-docs panel-memory-factory-data.md: 0x1ED350 = 'HK' signature + 10 bank names + 80 preset records (PanelTlv_WritePanelMemoryHeaders: 0x1ED400 + 960*n, 80 of them)",
+   "note: descriptor layout {+0 write/read cursor = start, +4 end, +8 bytes left}: MidiPkt_UnpackNibblesToXfer (midi/midi_dispatch_handlers.s:9959, 9968 `lda xiy, (0xbcec:16)`, 9970 `lda xwa, (0xbce4:16)`) writes through +0 of 0xBCEC and counts +8 of 0xBCEC and 0xBCDC down. The same helpers fill the send-side pair 0xBCCC/0xBCBC (MidiPkt_ArpConfigChain_Data_Helper*, SysEx_ResetAndReturn_Helper*)"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpPopReturn_Helper7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_SetXferBlock_StyleImagePool",
+  "header": "Fills the transfer descriptor at XWA for block 3 of the style-image transfer: {start 0x95BC0, end 0xAB000 (SEQ_SONG_SLOTS), length 0x15440}, the pattern block pool behind RHYTHM_PATTERN_BUF_B. With bit 6 of 0xBD18 set, the length is the used size ((0x9482E) * 16, SeqVoice_DispatchProcess_Data_Helper) less blocks 1-2 (0x60 + 0x1360).\nBasis: callers + body -- MidiPkt_ArpExtHandler_G (command 17, state 9) points the block descriptor 0xBCEC with it and then takes the length from the message (MidiPkt_SetXferLengthFromMsg); blocks 1-2 are RHYTHM_PATTERN_BUF_A (0x60) and 0x94860 (0x1360); the group's end step makes MidiSysEx_ProcessBlock run AccPatch_EnsureStyleImageHeader.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:11589 `cp l, 9` / 11591 `ld xwa, 0xbcec` / 11592 `call MidiPkt_ArpPopReturn_Helper7` / 11593 `call MidiPkt_SetXferLengthFromMsg` -- MidiPkt_ArpExtHandler_G; send side 11208",
+   "midi/midi_dispatch_handlers.s:10192 `lda xwa, (0x95bc0:24)` / 10194 `add xwa, 0x15440` / 10196 `ld xwa, 0x15440`",
+   "midi/midi_dispatch_handlers.s:10198 `bit 6, (0xbd18:16)` / 10200 `calr SeqVoice_DispatchProcess_Data_Helper` / 10201-10206 (0x94860-0x94800) + (0x95BC0-0x94860) / 10211 `sub xhl, xde` / 10212 `ld (xiz+8), xhl`",
+   "midi/midi_dispatch_handlers.s:10351 `ld hl, (0x9482e:24)` / 10353 `sll xhl, 4` -- used size in 16-byte units",
+   "sequencer/accompaniment_engine.s:5242 / 5258 `ld xhl, 0x95bc0` for index 0xFFFE, else 0x95C00 + 256*n (RHYTHM_PATTERN_BUF_B) -- the pool",
+   "sequencer/accompaniment_engine.s:15879 AccPatch_EnsureStyleImageHeader header -- 'the style image at RHYTHM_PATTERN_BUF_A (0x94800)'"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpPopReturn_Helper8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_SetXferBlock_CurrentSong",
+  "header": "Fills the transfer descriptor at XWA for the current song record: {start 0xF180, end 0xF980, length 0x800}, block 1 of the sequencer transfer (block 2 = the ten song slots, block 3 = the event memory at 0xB0000).\nBasis: callers + body -- MidiPkt_ArpExtHandler_K (command 18, state 0) points the total descriptor 0xBCDC (MidiSeq_ClearSyncFlag_Helper5) and the block descriptor 0xBCEC (this) and starts step 11; the send side uses it at 11236.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:11650 `cp l, 0:i3` / 11654 `ld xwa, 0xbcec` / 11655 `call MidiPkt_ArpPopReturn_Helper8` / 11656 `jrl SeqChan_StepCmd_Field11_Data` -- MidiPkt_ArpExtHandler_K",
+   "midi/midi_dispatch_handlers.s:10238 `lda xbc, (0xf180:16)` / 10240 `lda xbc, (xbc+2048)` / 10242 `ld xbc, 0x800`",
+   "technics-docs memory-map.md: '0xF180 2KB Current playback buffer (active song copied here)'; 0xF280 = 0xF180 + 0x100 is the current song name (ui/ui_playback_modes.s:2189), as +0x100 is the name in each 0x800 song slot",
+   "boot/system_handlers.s:58 `ld xwa, 0xf180` / 59 `ldw bc, 0x800` / 60 `call Checksum_ComputeComplement` -- NMI_StorePayloadChecksums at power-off"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpPopReturn_Helper9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_SetXferBlock_SongSlots",
+  "header": "Fills the transfer descriptor at XWA for the ten song slots: {start SEQ_SONG_SLOTS (0xAB000), end 0xB0000, length 0x5000}, block 2 of the sequencer transfer.\nBasis: callers + body -- MidiPkt_ArpExtHandler_L (command 19, state 12) points the block descriptor 0xBCEC with it and continues step 12; the send side uses it at 11253.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:11666 `cp l, 12` / 11668 `ld xwa, 0xbcec` / 11669 `call MidiPkt_ArpPopReturn_Helper9` / 11670 `jrl SeqChan_StepCmd_Field12_Data` -- MidiPkt_ArpExtHandler_L",
+   "midi/midi_dispatch_handlers.s:10246 `lda xbc, (SEQ_SONG_SLOTS:24)` / 10248 `lda xbc, (xbc+20480)` / 10250 `ld xbc, 0x5000`",
+   "shared/ram_variables.s:135 `.equ SEQ_SONG_SLOTS, 0xab000 ; 10 song slots of 0x800 bytes`",
+   "midi/midi_dispatch_handlers.s:10254-10257 MidiPkt_ArpPopReturn_Helper10 (block 3): `lda xwa, (0xb0000:24)` / `add xwa, 0x4d800` -- starts where the slots end"
+  ]
+ },
+ {
+  "old": "MidiSeq_ClearSyncFlag_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_SetXferTotal_SeqData",
+  "header": "Fills the transfer descriptor at XWA for the whole sequencer transfer: start 0xF180, length 0x53000 = 0x800 (current song) + 0x5000 (song slots) + 0x4D800 (event memory from 0xB0000); with bit 6 of 0xBD18 set, the length is 0x5800 + the used event size ((0xF1CE) * 16, SeqVoice_DispatchProcess_Data_Helper2). +4 = start + length (the blocks are not contiguous).\nBasis: callers + body -- MidiPkt_ArpExtHandler_K (command 18) points the total descriptor 0xBCDC with it before the block descriptor (MidiPkt_ArpPopReturn_Helper8); SysEx_ResetAndReturn_Helper2 uses it for the send-side total 0xBCBC.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:11652 `ld xwa, 0xbcdc` / 11653 `call MidiSeq_ClearSyncFlag_Helper5` -- MidiPkt_ArpExtHandler_K",
+   "midi/midi_dispatch_handlers.s:10982 `ld xwa, 0xbcbc` / 10983 `call MidiSeq_ClearSyncFlag_Helper5` -- send side",
+   "midi/midi_dispatch_handlers.s:10219 `lda xwa, (0xf180:16)` / 10221 `add xwa, 0x53000` / 10223 `ld xwa, 0x53000`",
+   "midi/midi_dispatch_handlers.s:10225 `bit 6, (0xbd18:16)` / 10227 `calr SeqVoice_DispatchProcess_Data_Helper2` / 10228 `lda xwa, (xhl+22528)` / 10231 `ld xwa, 0x5800` / 10232 `add xwa, xhl`",
+   "midi/midi_dispatch_handlers.s:10365 `ld hl, (0xf1ce:16)` / 10367 `sll xhl, 4` -- used size from a word of the current song record",
+   "note: 0x800 + 0x5000 + 0x4D800 = 0x53000 (blocks MidiPkt_ArpPopReturn_Helper8/9/10)"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpPopReturn_Helper13",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_SetXferBlock_AccompBlockPool",
+  "header": "Fills the transfer descriptor at XWA for block 3 of the accompaniment-block-area transfer: {start 0x1E8B00, end 0x1EC400, length 0x3900}, the 57 x 256-byte block pool (msp_factory_defaults.s). With bit 6 of 0xBD18 set, the length is the used size ((0x1E881C) * 16, SeqVoice_DispatchProcess_Data_Helper3) less blocks 1-2 (0x20 + 0x2E0).\nBasis: callers + body -- MidiPkt_ArpExtHandler_J (command 25, state 20) points the block descriptor 0xBCEC with it, then takes the length from the message (MidiPkt_SetXferLengthFromMsg); blocks 1-2 are 0x1E8800 (0x20) and 0x1E8820 (0x2E0), the area Voice_InitBankTables initialises.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:11635 `cp l, 20` / 11637 `ld xwa, 0xbcec` / 11638 `call MidiPkt_ArpPopReturn_Helper13` / 11639 `call MidiPkt_SetXferLengthFromMsg` -- MidiPkt_ArpExtHandler_J; send side 11330",
+   "midi/midi_dispatch_handlers.s:10317 `lda xwa, (0x1e8b00:24)` / 10319 `lda xwa, (xwa+0x3900)` / 10321 `ld xwa, 0x3900`",
+   "midi/midi_dispatch_handlers.s:10323 `bit 6, (0xbd18:16)` / 10325 `calr SeqVoice_DispatchProcess_Data_Helper3` / 10326-10331 (0x1E8820-0x1E8800) + (0x1E8B00-0x1E8820) / 10336 `sub xhl, xde`",
+   "msp_factory_defaults.s:3-6 -- 'Voice_GetSlotAddress computes 0x1e8b00 + (index << 8) ... the pool's 57' blocks (57 x 256 = 0x3900)",
+   "kn5000_v10_program.s:2111-2136 Voice_InitBankTables -- writes 0x1E8800 header, 0x1E8A00/0x1E8A40/0x1E8A80 headers and the 0x1E8B00 pool",
+   "note: batch d's AccompSeq_GetBlockBase uses the same pool (0x1E8B00 + 256 * block)"
+  ]
+ },
+ {
+  "old": "MidiPkt_BuildControl_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_SendCtlValueSysEx",
+  "header": "Sends one MIDI-control-record value as a Technics SysEx: given XWA -> {packet, record}, it returns early on MidiPkt_CheckGateCondition = 0xFFFF, on MidiCtl_NullRecord, or when record+8 & packet[3] = 0. Otherwise it queues SysEx_Msg_35DC (F0 50 2C 01 28 12), a 6-byte block whose byte 1 is packet[0] | 0x20, and the value (packet[2] & record+8) >> (record+11 & 15) as two nibbles, high first, plus a zero byte. It then closes and sends the message (ArpQueue_ComputeAndEnqueue, SeqOut_FlushTimedBuffer, ArpQueue_SwapBuffers).\nBasis: callers + body -- both callers (MidiPkt_BuildControl and the routine after it, labels MidiPkt_BuildControl_Skip2/_Join) build the 4-byte packet {record+6 | (field 10 - 32), record+7, value, record+8} and pass {packet, record}; it is the 0x336C member of the MidiPkt_EnqueueControl_33xx family, whose 3364 variant queues the same header and record.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midipkt_routines.s:94 `sub l, 32` / 96 `ld l, (xiz+6)` / 97 `or l, c` / 106 `call Part_LookupTableEntry` / 108 `ld (xbc+2), l` / 112 `ld (xwa), xbc` / 113 `ld (xwa+4), xiz` / 114 `calr MidiPkt_BuildControl_Helper` -- MidiPkt_BuildControl; second caller at 260",
+   "midi/midipkt_routines.s:1071 `calr MidiPkt_CheckGateCondition` / 1074 `lda xbc, (MidiCtl_NullRecord:24)` / 1079 `ld a, (xwa+8)` / 1080 `and a, (xbc+3)` -- the three early exits",
+   "midi/midipkt_routines.s:1082 `ld xwa, SysEx_Msg_35DC` / 1083 `ld bc, 6:i3` / 1084 `call ArpQueue_Enqueue` -- ui_widgets/widget_dispatch.s:1960-1961 `.byte 0xf0, 0x50, 0x2c, 0x01, 0x28, 0x12`",
+   "midi/midipkt_routines.s:1094 `ld c, (xbc)` / 1095 `set 5, c` / 1096 `ld (xwa+1), c` / 1098 `call ArpQueue_Enqueue` -- the 6-byte block",
+   "midi/midipkt_routines.s:1101 `ld a, (xde+8)` / 1102 `and a, (xbc+2)` / 1104 `ld a, (xde+11)` / 1107 `srl a,c` / 1111 `and c, 15` / 1114 `srl c, 4` / 1116 `ld bc, 3:i3` / 1117 `call ArpQueue_Enqueue` -- value nibbles",
+   "midi/midipkt_routines.s:924 MidiPkt_EnqueueControl_3364: 941 `ld xwa, SysEx_Msg_35DC` / 944 `ld xwa, (xiz + 4)` / 946 `call ArpQueue_Enqueue` queues the record's own 6 bytes",
+   "caveat [as written]: 1085-1090 `pushw 6` / `lda xwa, (xsp+10)` / `push xwa` / `ld xwa, (xiz+4)` / `push xwa` / `call Mem_Copy` passes the record as Mem_Copy's destination (first argument, as in PanelMemory_BackupLivePanel and midi_dispatch_handlers.s:7106-7109) and the uninitialised frame as source, so 5 of the 6 queued bytes are stack contents; the 3364 variant suggests the record bytes were meant. Not checked at run time"
+  ]
+ },
+ {
+  "old": "MidiRx_PitchBend_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiRx_SetPendingPartPitchBend",
+  "header": "Defers a received pitch bend: for part B <= 31 stores the word DE (E = LSB | 0x80 as the pending flag, D = MSB) in 0x9472[2 * B]; MidiStream_LoadMultiPartPreset later sends each flagged word as event 0xB1 and clears the flag.\nBasis: callers + body -- the only caller is MidiRx_PitchBend (status Ex, MidiPB_PartTargets {0xB1, part}, E = LSB 0x9635, D = MSB 0x9636); sibling of MidiCC_SetPendingPartVolume.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:985 `ld xix, MidiPB_PartTargets` / 989 `ld e, (0x9635:16)` / 990 `ld d, (0x9636:16)` / 995 `call MidiRx_PitchBend_Helper` -- caller",
+   "audio/audio_control_engine.s:11043 `cp b, 31` / 11045 `set 7, e` / 11046 `ld xix, 0x9472` / 11047 `sll b, 1` / 11048 `ld (xix+b), de`",
+   "audio/audio_control_engine.s:11222 `ld xiy, 0x9472` / 11228 `bit 7, a` / 11230 `res 7, a` / 11233 `ld c, 0xb1:opc` -- the flush (MidiStream_LoadMultiPartPreset, from MidiStream_LoadAllPresets)",
+   "audio/audio_control_engine.s:11113 `ld e, 177:opc` / 11115 `ldw wa, 0x4000` -- MidiCC_ResetAllControllers centres event 0xB1 (pitch bend)"
+  ]
+ },
+ {
+  "old": "MidiRx_ProgramChange_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiRx_ApplyProgramChange",
+  "header": "Applies a received program change for the part in (0x9644) (E = program): part 20 is taken as part 72; in modes 14 (MD_CMP) and 17 (MD_SND_ARG) part 72 is ignored; marks (0x90F8) = 0xFF. Part 0 with bit 3 of (0xFD50) set and program < 80 writes program + 1 into param 1 of target 0x98 and queues it. Otherwise it calls the MIDI-mode handler for (0xFD50) bits 0-1 (MidiStream_ExtendedDispatch_Data: Mode0 / Mode1 / nothing / Mode3), which ends in MidiStream_SetPartProgram.\nBasis: callers + body -- the only caller is MidiRx_ProgramChange (status Cx, MidiPC_PartTargets, gated by bit 4 of 0xFD57).",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:965 `ld xix, MidiPC_PartTargets` / 969 `ld e, (0x9635:16)` / 975 `call MidiRx_ProgramChange_Helper` -- caller",
+   "audio/audio_control_engine.s:11586 `cp (0x9644:16), 20` / 11588 `ld (0x9644:16), 72` -- part 20 -> 72; 11591-11597 `cp (CURRENT_MODE:16), 14 / 17` + `cp c, 72` -- ignored in those modes",
+   "audio/audio_control_engine.s:11600 `cp c, 0:i3` / 11602 `bit 3, (0xfd50:16)` / 11608 `cp e, 80` / 11610 `inc 1, e` / 11611 `ldw bc, 0x198` / 11613 `call MIDI_WriteVoiceParamCC`",
+   "audio/audio_control_engine.s:11620 `ldb_d8 l, (0xfd50)` / 11621 `and l, 3` / 11623 `ld xix, MidiStream_ExtendedDispatch_Data` / 11625 `call (xix)` -- mode dispatch; 11639-11643 the 4-entry table",
+   "shared/event_codes.s:1857 NAKA_MODE_MD_CMP = entry 14, 1860 NAKA_MODE_MD_SND_ARG = entry 17"
+  ]
+ },
+ {
+  "old": "MidiStream_ExtendedDispatch_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiStream_GetCategoryLastSlot",
+  "header": "Register-preserving call of CharMap_ActivePreamb_Prologue2: returns in A the last slot index of sound category A (the per-category tables at descriptor +0x3C/+0x40/+0x44/+0x48/+0x4C, chosen by part and mode), all other registers kept. The part comes from PART_SELECT (GetCurrentPartSelect), not from the B the caller loads.\nBasis: callers + body -- the only caller MidiStream_ExtDispatch_Mode0 takes the received program E (<= 17, the category count - 1) as a category and drops the change when the part's bank byte 0x9412[part] (the slot) is above this value.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/audio_control_engine.s:11669 `ld a, e` / 11671 `ld b, c` / 11672 `call MidiStream_ExtendedDispatch_Helper2` -- MidiStream_ExtDispatch_Mode0",
+   "audio/audio_control_engine.s:11655 `ld a, 17:opc` / 11658 `ld a, 15:opc` (part 72) / 11660 `cp e, a` / 11661 `jr ugt, ...Return` -- E is at most 17 (15 for part 72)",
+   "audio/audio_control_engine.s:11681 `ld xiy, 0x9412` / 11682 `ld h, (xiy+hl)` / 11683 `cp h, a` / 11684 `jr ugt, MidiStream_ExtendedDispatch_Return` -- slot above the last one: ignored",
+   "audio/audio_control_engine.s:8343 `push xwa` / 8344 `call CharMap_ActivePreamb_Prologue2` / 8345 `pop xwa` / 8346 `ld a, l` -- result in A, other registers saved",
+   "audio/note_voice_mapping.s:24098-24107 CharMap_ActivePreamb_Prologue2: `call GetCurrentPartSelect` / `ld c, (xsp)` / `ld wa, hl` / `calr CharMap_ActivePreamb_Prologue`",
+   "technics-docs sound-categories.md (slot table): +0x3C 'per-category last slot index ... reader CharMap_ActivePreamb_Prologue', +0x40 part 15, +0x44 part 20, +0x48/+0x4C mode 1"
+  ]
+ },
+ {
+  "old": "MidiStream_ExtendedDispatch_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiStream_ResolveVoiceIndex",
+  "header": "Register-preserving call of SndBuf_WriteParamEntries: builds a sound-selection record from the received bank-select pair at (0x90EA) (+0 = CC32 byte, +1 = CC0 byte) and the program and part at (0x90EC) (+2 = program, +5 = part). SndParam_CheckAndApplyMode resolves the record's (program, bank): the +2 voice index goes through the +0x1C / +0x30 tables (SndParam_LookupOscEnvelope, +1 selecting the variation), or SndParam_ApplyVoiceValue in mode 1. The result is left at (0x90EE).\nBasis: callers + body -- the only caller MidiStream_ExtDispatch_Mode3 (MIDI mode 3) fills 0x90EA/0x90EC from 0x93D2[2p] and DE, then passes (0x90EE) to MidiStream_SetPartProgram as program E and bank B.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/audio_control_engine.s:11738 `ld xiy, 0x93d2` / 11739 `ld wa, (xiy+hl)` / 11740 `ld (0x90ea:16), wa` / 11741 `ld (0x90ec:16), de` / 11742 `call MidiStream_ExtendedDispatch_Helper3` -- MidiStream_ExtDispatch_Mode3",
+   "audio/audio_control_engine.s:11743 `ldw_d16 de, (0x90ee)` / 11745 `ld b, d` / 11747 `call MidiStream_SetPartProgram` -- result used as (program, bank)",
+   "audio/audio_control_engine.s:8362 `call SndBuf_WriteParamEntries` between full register save/restore (8355-8361, 8363-8369)",
+   "audio/audio_control_engine.s:7240-7249 `lda xde, (0x90ea:16)` / `ld (xwa), c` / `ld (xwa+1), c` / `ld (xwa+2), c` / `ld (xwa+5), c` / 7250 `call SndParam_CheckAndApplyMode` / 7251-7256 +3/+4 -> (0x90EE)",
+   "audio/note_voice_mapping.s:24726-24738 SndParam_CheckAndApplyMode: mode 1 -> SndParam_ApplyVoiceValue else SndParam_LookupOscEnvelope; 24636-24690 LookupOscEnvelope reads +2 (voice index), +1, +5 and writes +3/+4",
+   "audio/audio_control_engine.s:11871 MidiCC_ApplyBankSelect header -- 'E (CC32) into 0x93D2[2p] or ... D (CC0) into 0x93D3[2p]'"
+  ]
+ },
+ {
+  "old": "MidiStream_ExtendedDispatch_Helper_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiStream_CheckPartProgramAllowed",
+  "header": "Pre-check of MidiStream_SetPartProgram (part C, program E, bank B): clears bit 1 of 0x90FA. If bit 0 is set, it clears it and replaces E with the category of (E, B) (PartCtrl_WriteProgramChange, or RegBitManip_Handler_4_Code in MIDI mode 1). It then sets bit 1 (refuse) when part 15 or 20 gets a category other than 15 (drum kits), when parts 16-19, 21 or 22 get category 15, or when part 20 or 16-22 is used while (0x379B) & 0x1F = 0. Registers are preserved.\nBasis: callers + body -- the only caller MidiStream_SetPartProgram sets bit 0 of 0x90FA, calls it, and skips the program write when bit 1 comes back set.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/audio_control_engine.s:11760 `set 0, (0x90fa:16)` / 11761 `calr MidiStream_ExtendedDispatch_Helper_Helper` / 11762 `bit 1, (0x90fa:16)` / 11763 `jr nz, MidiStream_ExtendedDispatch_Epilogue` -- MidiStream_SetPartProgram",
+   "audio/audio_control_engine.s:11807 `and (0x90fa:16), 253` / 11808 `bit 0, (0x90fa:16)` / 11814 `ld xix, RegBitManip_Handler_4_Code` / 11819 `ld xix, PartCtrl_WriteProgramChange` / 11821 `call (xix)` / 11822 `ld e, l`",
+   "audio/audio_control_engine.s:8011-8030 PartCtrl_WriteProgramChange: (0x90EA) = HL, (0x90EC) = part, SndParam_FetchAndStore -> HL = (0x90EE), i.e. record +0/+1 (category, slot) from (program, bank)",
+   "audio/audio_control_engine.s:11824-11839 part 15/20 -> MidiStream_ExtendedDispatch_Skip7, parts 16-19/21/22 -> _Skip6; 11863-11868 MidiStream_ExtendedDispatch_Helper_Helper2: carry iff E = 15",
+   "audio/audio_control_engine.s:11845 `call ..._Helper_Helper2` / 11846 `jr nc, ..._Skip3` / 11847 `cp c, 15` / 11851 `ldb_d8 a, (0x379b)` / 11852 `and a, 31` / 11854 `jr nz, ..._Epilogue2` / 11856 `set 1, (0x90fa:16)`",
+   "technics-docs sound-categories.md -- the part-15 table lists 'only category 15, 16 drum kits'"
+  ]
+ },
+ {
+  "old": "MidiStream_PrevBankCheck_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiStream_Delay25Ticks",
+  "header": "Busy-waits until SYSTEM_TIMESTAMP has advanced 25 ticks from entry (DE = the start value).\nBasis: callers + body -- the only caller MidiStream_PrevBankCheck, the post-send step of the MIDI data transfer, runs it when bit 7 of 0xBD18 (wait for the receiver's reply) is clear, after SeqBuf_WaitForEmpty has drained the MIDI output buffer: a fixed pause between messages instead of the handshake.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8208 `bit 7, (0xbd18:16)` / 8209 `jr z, MidiStream_PrevBankCheck_Skip2` / 8232 `calr SeqBuf_WaitForEmpty` / 8233 `calr MidiStream_PrevBankCheck_Helper` -- caller",
+   "midi/midi_dispatch_handlers.s:8211-8229 -- the other path: up to 3 tries waiting for a reply, field 4 := 24 when none comes",
+   "midi/midi_dispatch_handlers.s:10430 `ld de, (SYSTEM_TIMESTAMP:16)` / 10433 `ld bc, (SYSTEM_TIMESTAMP:16)` / 10434 `sub bc, wa` / 10435 `cp bc, 25` / 10436 `jr lt, ...Loop`",
+   "midi/midi_dispatch_handlers.s:9743, 11348, 11359 -- MidiStream_PrevBankCheck is called right after a message is flushed (SeqOut_FlushWithChunking / SeqBuf_FlushNoteOffs)"
+  ]
+ },
+ {
+  "old": "MidiSysEx_ProcessBlock_Helper10",
+  "verdict": "refuse",
+  "why_refused": "A bare `ret`. MidiSysEx_ProcessBlock calls its completion steps in the order of the 0xBD1A flag bits: Helper4 (bit 7, panel), Helper7 (bit 6, sound RAM), Helper8 (bit 5, style image), Helper9 (bit 4, sequencer), this one, then _Join (bit 2, accompaniment block area). By position it would be the step for bit 3, i.e. the unused transfer group (blocks 15-17, whose handlers are all `ret` stubs and whose end step SeqChan_RetStub_C sets no flag). That reading rests on position alone, and the routine does nothing, so there is nothing in the body to confirm a name.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:12000-12005 `calr MidiSysEx_ProcessBlock_Helper4/7/8/9/10` / `jrl MidiSysEx_ProcessBlock_Join` -- caller MidiSysEx_ProcessBlock",
+   "midi/midi_dispatch_handlers.s:12133 `MidiSysEx_ProcessBlock_Helper10:` / 12134 `ret`",
+   "midi/midi_dispatch_handlers.s:11961/11968/11975/11982/11991 -- the only 0xBD1A setters set bits 7, 6, 5, 4, 2 (none sets bit 3)",
+   "ui_widgets/widget_dispatch.s:1363 `.long SeqChan_RetStub_C` -- WriteField handler for state 17, the end of the unused group"
+  ]
+ },
+ {
+  "old": "MidiSysEx_ProcessBlock_Helper11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiSysEx_RecoverAbortedXferGroup",
+  "header": "After a failed or aborted MIDI data transfer, runs the recovery for the data group that the spare message's state byte (+3, 0..21) belongs to, through MidiSysEx_BlockHandlers. States 1-3 (panel): Audio_ResetAfterPayloadError, MidiMsg_ParseChannelStream, SeqTimer_UpdateTempoReg. States 4-6 (sound RAM): SendPartDataBlock_DoGetError and MIDI_PitchBendData_Block. States 7-10 (style image): AccDemo_InitDone. States 11-14 (sequencer): MidiSysEx_ProcessBlock_PtrTable[0]. States 18-21 (accompaniment block area): Voice_InitBankDataSafe. Other states do nothing.\nBasis: callers + body -- MidiPkt_ArpChordHandler_Helper calls it when the transfer loop ends with a non-zero status (field 4), and SeqChan_UnhandledCmd_0x12 (command 5) sets status 23 and jumps to it.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:12159 `cp (xwa+4), 0` / 12161 `calr MidiSysEx_ProcessBlock_Helper11` -- MidiPkt_ArpChordHandler_Helper",
+   "midi/midi_dispatch_handlers.s:12165 `ld (xwa+4), 23` / 12166 `jr MidiSysEx_ProcessBlock_Helper11` -- SeqChan_UnhandledCmd_0x12, entry 5 of SeqChan_CommandHandlers (ui_widgets/widget_dispatch.s:1284)",
+   "midi/midi_dispatch_handlers.s:12168 `ld xwa, (MIDISEQ_SPARE_BUF_PTR:16)` / 12169 `ld a, (xwa+3)` / 12170 `cp a, 22` / 12174 `lda xbc, (MidiSysEx_BlockHandlers:24)` / 12176 `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:1375-1397 MidiSysEx_BlockHandlers -- 0 Ret, 1-3 ToParseStream, 4-6 ToPartDataAndBend, 7-10 ToAccDemoInit, 11-14 ToCallHandler, 15-17 Ret2, 18-21 ToVoiceBankInit",
+   "midi/midi_dispatch_handlers.s:12198 `ld xhl, (MidiSysEx_ProcessBlock_Data:24)` -- extensions/extension_data.s:3289-3290: that cell is `.long Audio_ResetAfterPayloadError`",
+   "note: transfer groups (state = byte +3 of the spare message; SeqChan_StepCmdHandlers / SeqChan_WriteFieldHandlers / MidiSysEx_BlockHandlers in ui_widgets/widget_dispatch.s:1320-1397): blocks 1-2 panel (0xF980 live panel, 0x1ED350 panel memories), end 3 sets 0xBD1A bit 7; 4-5 sound RAM (0x1E0000 'KN5000 SOUND RAM' id + 0x1E0010), end 6 bit 6; 7-9 style image (RHYTHM_PATTERN_BUF_A 0x60, 0x94860 0x1360, 0x95BC0 0x15440), end 10 bit 5; 11-13 sequencer (0xF180 current song, SEQ_SONG_SLOTS 0x5000, 0xB0000 0x4D800), end 14 bit 4; 15-17 unused; 18-20 accompaniment block area (0x1E8800 0x20, 0x1E8820 0x2E0, 0x1E8B00 0x3900), end 21 bit 2"
+  ]
+ },
+ {
+  "old": "MidiSysEx_ProcessBlock_Helper4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiSysEx_FinishPanelXfer",
+  "header": "End-of-transfer step for the panel group: if bit 7 of 0xBD1A is set (the panel blocks were received), it rewrites and validates the panel TLV records of the live panel and the 80 memories, resolves the part companions and re-applies the tone generator (MidiSysEx_ProcessBlock_Helper). It then posts the sound-parameter changes (SoundParam_NotifyMultipleChanges) and re-initialises the SwbtWr output (SwbtWr_ReinitOutputBank, SwbtWr_CallProcessAll). After each of the three it sets bit 0 of (4330) when the sequencer group is also pending (bit 4). Finally it clears bit 7.\nBasis: callers + body -- MidiSysEx_ProcessBlock (command 4, transfer done) calls it first; bit 7 is set only by SeqChan_WriteField_Data_A, the end step (state 3) of blocks 1-2 = live panel 0xF980 + panel memories 0x1ED350.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:12000 `calr MidiSysEx_ProcessBlock_Helper4` -- MidiSysEx_ProcessBlock",
+   "midi/midi_dispatch_handlers.s:11961 `set 7, (0xbd1a:16)` -- SeqChan_WriteField_Data_A, entry 3 of SeqChan_WriteFieldHandlers (ui_widgets/widget_dispatch.s:1349)",
+   "midi/midi_dispatch_handlers.s:12062 `bit 7, (0xbd1a:16)` / 12064 `calr MidiSysEx_ProcessBlock_Helper` / 12066 `..._Helper2` / 12068 `..._Helper3` / 12070 `res 7, (0xbd1a:16)`",
+   "midi/midi_dispatch_handlers.s:12011 `call PanelTlv_WriteAllHeaders` / 12012 `call PanelTlv_ValidateAll` / 12013 `call PanelTlv_ResolvePartCompanions_Entry` / 12014 `call ToneGen_DispatchByMode`",
+   "midi/midi_dispatch_handlers.s:12073 `bit 4, (0xbd1a:16)` / 12075 `set 0, (4330:16)` -- MidiSysEx_ProcessBlock_Helper5",
+   "midi/midi_dispatch_handlers.s:11500-11503 -- blocks 1-2 are the live panel (MidiPkt_ArpPopReturn_Helper) and the panel memories (MidiPkt_ArpPopReturn_Helper2)"
+  ]
+ },
+ {
+  "old": "MidiSysEx_ProcessBlock_Helper7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiSysEx_FinishSoundRamXfer",
+  "header": "End-of-transfer step for the sound-RAM group: if bit 6 of 0xBD1A is set (blocks 4-5 received: the 16-byte 'KN5000 SOUND RAM' id at 0x1E0000 and the data from 0x1E0010), it sends command packet {4, 0xF0, 0x50, 0x92, 0} (MIDI_PitchBendData_Block via MidiSysEx_ProcessBlock_Helper6) and clears bit 6. It also copies the 6-byte MidiSysEx_BlockTemplate into its frame and never reads it.\nBasis: callers + body -- MidiSysEx_ProcessBlock (command 4) calls it second; bit 6 is set only by SeqChan_WriteField_Data_B, the end step (state 6) of blocks 4-5. The abort path for the same group (MidiSysEx_BlockOp_ToPartDataAndBend) sends the same packet.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:12001 `calr MidiSysEx_ProcessBlock_Helper7` -- MidiSysEx_ProcessBlock",
+   "midi/midi_dispatch_handlers.s:11968 `set 6, (0xbd1a:16)` -- SeqChan_WriteField_Data_B, entry 6 of SeqChan_WriteFieldHandlers (ui_widgets/widget_dispatch.s:1352)",
+   "midi/midi_dispatch_handlers.s:12090 `ld xiy, MidiSysEx_BlockTemplate` / 12093 `ldirw` / 12094 `bit 6, (0xbd1a:16)` / 12096 `calr MidiSysEx_ProcessBlock_Helper6` / 12097 `res 6, (0xbd1a:16)`",
+   "audio/note_voice_mapping.s:19580-19585 MIDI_PitchBendData_Block: `ldw wa, 80` / `ldw bc, 146` / `ld de, 0:i3` / `calr SeqVoice_CheckAndRet_Prologue` (packet {4, 0xF0, A, C, E} -> MIDI_SendCmdPacket)",
+   "midi/midi_dispatch_handlers.s:10125 / 10134 / 10143 -- blocks 4-5 descriptors: `lda xbc, (0x1e0000:24)`, lengths 16 and 0x729A (total 0x72AA)",
+   "ui_widgets/widget_dispatch.s:9357-9359 SoundRam_Id_KN5000 'KN5000 SOUND RAM', compared with 0x1E0000 by SendPartDataBlock_ClearByte4 (audio/note_voice_mapping.s:26387 `lda xde, (0x1e0000:24)` / 26388 `lda xhl, (SoundRam_Id_KN5000:24)`)",
+   "midi/midi_dispatch_handlers.s:12213 `call SendPartDataBlock_DoGetError` / 12214 `call MIDI_PitchBendData_Block` -- the abort path of this group"
+  ]
+ }
+]

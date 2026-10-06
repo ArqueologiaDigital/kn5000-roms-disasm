@@ -105,7 +105,7 @@ Display_FillPaletteBandFromEntry:
 	cp	hl, 0:i3
 	jr	z, GraphicsRender_ByteData_Skip
 	ld	wa, iz
-	calr	GraphicsRender_ByteData_Helper
+	calr	Display_FillPaletteBandFromEntry_Impl
 	jr	GraphicsRender_ByteData_Epilogue
 GraphicsRender_ByteData_Skip:
 	ld	wa, 6:i3
@@ -120,8 +120,13 @@ GraphicsRender_ByteData_Epilogue:
 	ret
 GraphicsRender_ByteData_Code:
 	ld	wa, (xwa+4)
-	jr	GraphicsRender_ByteData_Helper
-GraphicsRender_ByteData_Helper:
+	jr	Display_FillPaletteBandFromEntry_Impl
+; Display_FillPaletteBandFromEntry_Impl: Immediate body of Display_FillPaletteBandFromEntry: records WA at 0x3EFA6,
+;   sets palette entries 64..191 to the RGB of palette entry WA (shadow table 0x324FC) and flags a palette upload
+;   (PALETTE_INDEX_CACHED = 4, PALETTE_UPDATE_FLAG = 1). Basis: callers + body -- Display_FillPaletteBandFromEntry
+;   calls it directly on the draw task and otherwise posts GraphicsRender_ByteData_Code, which jumps here with the
+;   queued WA.
+Display_FillPaletteBandFromEntry_Impl:
 	dec	4, xsp
 	pushw	iz
 	ld	(0x03efa6:24), wa

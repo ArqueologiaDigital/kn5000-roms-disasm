@@ -770,7 +770,7 @@ FDC_ResultPhase_Read_Epilogue3:
 	pop	xiz
 	inc	2, xsp
 	ret
-FDC_HardwareSetup_Helper:
+FDC_SendCommandByte:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_ResultPhase_Read
@@ -779,7 +779,7 @@ FDC_HardwareSetup_Helper:
 	calr	FDC_Write_Data
 	inc	2, xsp
 	ret
-FDC_HardwareSetup_Helper2:
+FDC_SendParameterByte:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_ResultPhase_Read_Helper
@@ -797,7 +797,7 @@ FDC_ResultPhase_Read_Helper2:
 	calr	FDC_Send_Command
 	inc	2, xsp
 	ret
-FDC_HardwareSetup_Helper3:
+FDC_SendAuxCmd:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_ResultPhase_Read
@@ -809,7 +809,7 @@ FDC_HardwareSetup_Helper3:
 FDC_ResultPhase_Read_Epilogue:
 	inc	2, xsp
 	ret
-FDC_HardwareSetup_Helper4:
+FDC_SendAuxCmdReadResult:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_ResultPhase_Read
@@ -950,7 +950,7 @@ FDC_CMD_SEND:
 	jrl	nz, FDC_HardwareSetup_Epilogue
 	ld	a, (xsp)
 	ld	(0x8a28:16), a
-	calr	FDC_HardwareSetup_Helper5
+	calr	FDC_ValidateOpcode
 	cp	l, 0:i3
 	jrl	nz, FDC_HardwareSetup_Epilogue
 	ld	a, (xsp)
@@ -967,12 +967,12 @@ FDC_CMD_SEND:
 FDC_HardwareSetup_Skip:
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper3
+	calr	FDC_SendAuxCmd
 	jrl	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip2:
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper4
+	calr	FDC_SendAuxCmdReadResult
 	jrl	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip3:
 	ld	a, (xsp)
@@ -981,7 +981,7 @@ FDC_HardwareSetup_Skip3:
 	jr	nz, FDC_HardwareSetup_Skip4
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper4
+	calr	FDC_SendAuxCmdReadResult
 	jrl	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip4:
 	ld	a, (xsp)
@@ -995,19 +995,19 @@ FDC_HardwareSetup_Skip4:
 FDC_HardwareSetup_Skip5:
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper4
+	calr	FDC_SendAuxCmdReadResult
 	jr	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip6:
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper
+	calr	FDC_SendCommandByte
 	cp	(FDC_ERROR_CODE:16), 0
 	jr	nz, FDC_HardwareSetup_Epilogue
 	cp	(xsp), 8
 	jr	z, FDC_HardwareSetup_Epilogue
 	cp	(xsp), 3
 	jr	nz, FDC_HardwareSetup_Skip7
-	calr	FDC_HardwareSetup_Helper6
+	calr	FDC_SendParams_Specify
 	jr	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip7:
 	ld	a, (0x8a29:16)
@@ -1022,7 +1022,7 @@ FDC_HardwareSetup_Skip7:
 	ld	a, e
 	set	0, a
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (xsp)
 	cp	a, 15
 	jr	z, FDC_HardwareSetup_Skip10
@@ -1037,17 +1037,17 @@ FDC_HardwareSetup_Skip7:
 FDC_HardwareSetup_Skip8:
 	jr	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip9:
-	calr	FDC_HardwareSetup_Helper7
+	calr	FDC_SendParams_Format
 	jr	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip10:
-	calr	FDC_HardwareSetup_Helper8
+	calr	FDC_SendParam_SeekTrack
 	jr	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip11:
-	calr	FDC_HardwareSetup_Helper9
+	calr	FDC_SendParams_ReadWrite
 FDC_HardwareSetup_Epilogue:
 	inc	2, xsp
 	ret
-FDC_HardwareSetup_Helper5:
+FDC_ValidateOpcode:
 	ld	a, (0x8a28:16)
 	cp	a, 79
 	jr	z, FDC_HardwareSetup_Skip12
@@ -1089,8 +1089,8 @@ FDC_HardwareSetup_Join:
 	ld	a, (0x8a35:16)
 	and	a, 3
 	extz	wa
-	jrl	FDC_HardwareSetup_Helper2
-FDC_HardwareSetup_Helper6:
+	jrl	FDC_SendParameterByte
+FDC_SendParams_Specify:
 	ld	a, (0x8a37:16)
 	sll	a, 4
 	ld	e, a
@@ -1100,7 +1100,7 @@ FDC_HardwareSetup_Helper6:
 	ld	a, e
 	or	a, c
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a39:16)
 	sll	a, 1
 	ld	e, a
@@ -1110,46 +1110,46 @@ FDC_HardwareSetup_Helper6:
 	ld	a, e
 	or	a, c
 	extz	wa
-	jrl	FDC_HardwareSetup_Helper2
-FDC_HardwareSetup_Helper7:
+	jrl	FDC_SendParameterByte
+FDC_SendParams_Format:
 	ld	a, (0x8a2e:16)
 	and	a, 7
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a32:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a33:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a34:16)
 	extz	wa
-	jrl	FDC_HardwareSetup_Helper2
-FDC_HardwareSetup_Helper8:
+	jrl	FDC_SendParameterByte
+FDC_SendParam_SeekTrack:
 	ld	a, (FDC_TARGET_TRACK:16)
 	extz	wa
-	jrl	FDC_HardwareSetup_Helper2
-FDC_HardwareSetup_Helper9:
+	jrl	FDC_SendParameterByte
+FDC_SendParams_ReadWrite:
 	ld	a, (0x8a2b:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a2c:16)
 	and	a, 1
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a2d:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a2e:16)
 	and	a, 7
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a2f:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a30:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a28:16)
 	cp	a, 221
 	jr	z, FDC_HardwareSetup_Skip16
@@ -1162,7 +1162,7 @@ FDC_HardwareSetup_Skip16:
 FDC_HardwareSetup_Skip17:
 	ld	a, (0x8a31:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ret
 FDC_DETECT_CHECK:
 	cpw	(0x8a46:16), 0
@@ -1400,7 +1400,7 @@ FDC_CmdSeek:
 FDC_CMD_EXEC_Helper5_Skip:
 	ldw	wa, 16
 	jrl	SOME_DELAY
-FDC_CMD_EXEC_Helper6:
+FDC_SubmitReadDataCmd:
 	ld	(0x8a28:16), 198
 	calr	FDC_Setup_DMA_Mode
 	calr	FDC_TIMING_DELAY
@@ -1485,7 +1485,7 @@ FDC_CMD_EXEC_Join2:
 FDC_CMD_EXEC_Skip6:
 	ld	(0x8a4a:16), iz
 	ldmm16	0x8a48, 0x8b10
-	calr	FDC_CMD_EXEC_Helper6
+	calr	FDC_SubmitReadDataCmd
 	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_CMD_EXEC_Skip8
 	cp	(FDC_ERROR_CODE:16), 9
@@ -1587,7 +1587,7 @@ FDC_CMD_EXEC_Join4:
 FDC_CMD_EXEC_Skip12:
 	ld	(0x8a4a:16), iz
 	ldmm16	0x8a48, 0x8b10
-	calr	FDC_CMD_EXEC_Helper7
+	calr	FDC_SubmitWriteDataCmd
 	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_CMD_EXEC_Skip14
 	cp	(FDC_ERROR_CODE:16), 9
@@ -1637,7 +1637,7 @@ FDC_CMD_EXEC_Join5:
 FDC_CMD_EXEC_Epilogue2:
 	popw	iz
 	ret
-FDC_CMD_EXEC_Helper7:
+FDC_SubmitWriteDataCmd:
 	ld	(0x8a28:16), 197
 	calr	FDC_Setup_DMA_Mode
 	calr	FDC_TIMING_DELAY

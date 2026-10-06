@@ -25485,7 +25485,7 @@ DrumVoice_Handler6:
 	ld	a, (xiy)
 	bit	0, a
 	jr	nz, DrumVoice_Handler6_Return
-	calr	DrumVoice_Handler6_Helper
+	calr	Rhythm_StepProgram
 	calr	DrumKit_PostMidiEvents
 	calr	Rhythm_LoadCurrentTimeSig
 DrumVoice_Handler6_Return:
@@ -25499,7 +25499,7 @@ DrumVoice_Handler7:
 	ld	a, (xiy)
 	bit	0, a
 	jr	nz, DrumVoice_Handler7_Return
-	calr	DrumVoice_Handler7_Helper2
+	calr	CmpSet_StepRhythmBank
 	calr	DrumKit_PostMidiEvents
 	calr	Rhythm_LoadCurrentTimeSig
 DrumVoice_Handler7_Return:
@@ -25596,10 +25596,10 @@ DrumVoice_Handler7_Code_Return3:
 	ret
 CmpNcp_StepItemA_Wrap:
 	push	xiz
-	call	DrumVoice_Handler7_Data_3_Helper
+	call	CmpNcp_StepItemA
 	pop	xiz
 	ret
-DrumVoice_Handler7_Data_3_Helper:
+CmpNcp_StepItemA:
 	ld	a, (0x39a7:16)
 	bit	7, w
 	jr	z, DrumVoice_Handler7_Code_Skip
@@ -25625,10 +25625,10 @@ DrumVoice_Handler7_Data_3_Helper2:
 	sll	a, 1
 	ld	xix, CmpNcp_ItemA_HandlerIndex
 	ld	hl, (xix+a)
-	call	DrumVoice_Handler7_Data_3_Helper5
+	call	CmpNcp_CallItemHandler
 	ret
 CmpNcp_ItemA_HandlerIndex:
-	; (0x39A7), stepped between 0 and 2 by DrumVoice_Handler7_Data_3_Helper -> the
+	; (0x39A7), stepped between 0 and 2 by CmpNcp_StepItemA -> the
 	; CmpNcp_ItemHandlerTable index that DrumVoice_Handler7_Data_3_Helper2 dispatches.
 	; Reached through CmpNcp_StepItemA_Wrap / _Helper2.
 	.short	0, 1, 2
@@ -25663,7 +25663,7 @@ DrumVoice_Handler7_Data_3_Helper4:
 	sll	a, 1
 	ld	xix, CmpNcp_ItemB_HandlerIndex
 	ld	hl, (xix+a)
-	call	DrumVoice_Handler7_Data_3_Helper5
+	call	CmpNcp_CallItemHandler
 	ret
 CmpNcp_ItemB_HandlerIndex:
 	; (0x39A8), stepped between 0 and 1 by DrumVoice_Handler7_Data_3_Helper3 -> the
@@ -25671,10 +25671,10 @@ CmpNcp_ItemB_HandlerIndex:
 	; Reached through CmpNcpTtl_Dispatch2_Helper3.
 	.short	3, 4
 	push	xiz
-	call	DrumVoice_Handler7_Data_3_Helper5
+	call	CmpNcp_CallItemHandler
 	pop	xiz
 	ret
-DrumVoice_Handler7_Data_3_Helper5:
+CmpNcp_CallItemHandler:
 	pushw	hl
 	ld	xhl, 0:i3
 	popw	hl
@@ -25685,9 +25685,9 @@ DrumVoice_Handler7_Data_3_Helper5:
 	call	(xhl)
 	ret
 CmpNcp_ItemHandlerTable:
-	; DrumVoice_Handler7_Data_3_Helper5 calls entry (HL & 7).  DrumVoice_Handler7_Data_3_Helper2
+	; CmpNcp_CallItemHandler calls entry (HL & 7).  DrumVoice_Handler7_Data_3_Helper2
 	; and _Helper4 pass 0..4 from the two tables above; the wrapper just before
-	; DrumVoice_Handler7_Data_3_Helper5 passes its caller's HL.  5 and 6 are DrumVoice_NullHandler;
+	; CmpNcp_CallItemHandler passes its caller's HL.  5 and 6 are DrumVoice_NullHandler;
 	; an index of 7 would read the first four bytes of CmpNcp_ItemHandler0.  Each handler sets bits
 	; of (0xE3E2) and stores its own word in (0xE3E4): 0x0080, 0x0181, 0x0282, 0x8505, 0x0686.
 	; This table and the five handlers were decoded as code (`jrl ule, ...`, `.byte 0xc1, 0xe2,
@@ -25797,7 +25797,7 @@ DrumVoice_Handler7_Code_Return6:
 	ld	(0x34d6:16), 0
 	calr	DrumKit_SendProgramChange
 	ret
-DrumVoice_Handler6_Helper:
+Rhythm_StepProgram:
 	push	w
 	ld	l, (0xfc5a:16)
 	and	l, 255
@@ -25853,7 +25853,7 @@ DrumVoice_Handler7_Code_Join4:
 	ld	a, (xix+976)
 	ld	(0x34f0:16), a
 	ret
-DrumVoice_Handler7_Helper2:
+CmpSet_StepRhythmBank:
 	push	w
 	ld	l, (0xfc5a:16)
 	and	l, 255
@@ -26336,12 +26336,12 @@ CmpNcp_ItemStep4:
 	ld	a, (0x34d6:16)
 	bit	4, (0x34cd:16)
 	jr	z, DrumVoice_Handler7_Code_Helper2_Skip
-	calr	DrumVoice_Handler7_Code_Helper2_Helper3
+	calr	CmpNcp_StepSlotInGroup2
 	jr	DrumVoice_Handler7_Code_Helper2_Join
 DrumVoice_Handler7_Code_Helper2_Skip:
 	bit	5, (0x34cd:16)
 	jr	z, DrumVoice_Handler7_Code_Helper2_Skip2
-	calr	DrumVoice_Handler7_Code_Helper2_Helper2
+	calr	CmpNcp_StepSlotInGroup1
 	jr	DrumVoice_Handler7_Code_Helper2_Join
 DrumVoice_Handler7_Code_Helper2_Skip2:
 	calr	DrumVoice_Handler7_Code_Helper2_Helper
@@ -26403,7 +26403,7 @@ TimeSig_DisplayStrings_Code_Skip20:
 	ld	(0x34ef:16), 0
 TimeSig_DisplayStrings_Code_Return5:
 	ret
-DrumVoice_Handler7_Code_Helper2_Helper2:
+CmpNcp_StepSlotInGroup1:
 	bit	7, w
 	jr	nz, TimeSig_DisplayStrings_Code_Skip23
 	inc	1, a
@@ -26446,7 +26446,7 @@ TimeSig_DisplayStrings_Code_Skip26:
 	ld	a, 23:opc
 TimeSig_DisplayStrings_Code_Return6:
 	ret
-DrumVoice_Handler7_Code_Helper2_Helper3:
+CmpNcp_StepSlotInGroup2:
 	bit	7, w
 	jr	nz, TimeSig_DisplayStrings_Code_Skip29
 	inc	1, a
@@ -28548,7 +28548,7 @@ VoiceSlot_Dispatch_Return_Helper:
 DrumParam_ProcessChannel:
 	push xiz
 	calr DrumParam_LookupChannelBit
-	call DrumParam_ProcessChannel_Helper
+	call DrumParam_StepChannelStyle
 	pop xiz
 	ret
 
@@ -28570,7 +28570,7 @@ PatIdx_Lookup_Return:
 	ld	(P4:8), 32:io
 	.byte 0x40
 
-DrumParam_ProcessChannel_Helper:
+DrumParam_StepChannelStyle:
 	push_a
 	calr DrumParam_ReadVoiceCount
 	ld l, a
@@ -29521,13 +29521,13 @@ AccPatch_ResolveEntryAddr_Helper6:
 	ld	(xbc), xwa
 	push	xbc
 	ld	xbc, 1:i3
-	calr	AccPatch_ResolveEntryAddr_Helper8
+	calr	AccPatch_CopyEventToCursor
 	pop	xbc
 	ld	a, 129:opc
 	jr	AccPatch_ResolveEntryAddr_Helper6_Join
 AccPatch_ResolveEntryAddr_Skip2:
 	push_a
-	calr	AccPatch_ResolveEntryAddr_Helper8
+	calr	AccPatch_CopyEventToCursor
 	pop_a
 AccPatch_ResolveEntryAddr_Helper6_Join:
 	cp	a, 129
@@ -29587,7 +29587,7 @@ AccPatch_ResolveEntryAddr_Skip7:
 	nop
 AccPatch_ResolveEntryAddr_Return3:
 	ret
-AccPatch_ResolveEntryAddr_Helper8:
+AccPatch_CopyEventToCursor:
 	calr	Rhythm_MapChannelToDrumIndex
 	sll	xbc, 2
 	add	xbc, 0x3898
@@ -29695,7 +29695,7 @@ AccPatch_AppendPatternEndCode:
 	ld	xwa, Rhythm_EndPattern
 	ld	(xbc), xwa
 	ld	c, 1:opc
-	calr	AccPatch_ResolveEntryAddr_Helper8
+	calr	AccPatch_CopyEventToCursor
 	ret
 Rhythm_EndPattern:
 	; A pattern stream that is only its end code 0x83 (RhythmVoice_WriteToBuffer stops at 0x83);
@@ -29828,14 +29828,14 @@ AccPatch_ResolveEntryAddr_Helper12:
 	jr	z, AccPatch_ResolveEntryAddr_Skip11
 	calr	AccPatch_ResolveEntryAddr_Helper16
 	ld	(0x37c9:16), l
-	calr	AccPatch_ResolveEntryAddr_Helper8
+	calr	AccPatch_CopyEventToCursor
 	jrl	AccPatch_ResolveEntryAddr_Helper12
 AccPatch_ResolveEntryAddr_Skip11:
 	ld	a, 1:opc
 	ld	(0x37c9:16), a
 	ld	xbc, 0:i3
 	ld	c, 1:opc
-	calr	AccPatch_ResolveEntryAddr_Helper8
+	calr	AccPatch_CopyEventToCursor
 	ld	a, 2:opc
 	ld	(0x37c9:16), a
 	calr	Rhythm_MapChannelToDrumIndex
@@ -33848,7 +33848,7 @@ CmpStep_DataBlock:
 	push	xhl
 	push	xix
 	push	xiz
-	call	CmpStep_DataBlock_Helper
+	call	CmpStep_DrawScreen
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -33858,7 +33858,7 @@ CmpStep_DataBlock:
 	push	xhl
 	push	xix
 	push	xiz
-	call	CmpStep_DataBlock_Helper2
+	call	CmpStep_OnHide
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -33936,7 +33936,7 @@ AccDraw_Secondary_Helper:
 	call	ColorBlit_Variant_ByteData
 	pop	xwa
 	ret
-CmpStep_DataBlock_Helper:
+CmpStep_DrawScreen:
 	push	xiz
 	calr	AccDraw_Secondary_Helper2
 	pop	xiz
@@ -33998,7 +33998,7 @@ AccScreen_DataBlock_Code2:
 	calr	AccDraw_Secondary_Helper10
 	calr	AccScreen_RefreshScreen
 	ret
-CmpStep_DataBlock_Helper2:
+CmpStep_OnHide:
 	push	xiz
 	calr	AccDraw_Secondary_Helper3
 	pop	xiz
@@ -34008,10 +34008,10 @@ AccDraw_Secondary_Helper3:
 	ret
 CmpStep_DispatchSwitch:
 	push	xiz
-	calr	AccDraw_Secondary_Helper4
+	calr	CmpStep_CallSwitchHandler
 	pop	xiz
 	ret
-AccDraw_Secondary_Helper4:
+CmpStep_CallSwitchHandler:
 	ld	xix, AccDraw_SecondarySub_Handlers
 	calr	AccDraw_Secondary_Sub
 	ret

@@ -22228,7 +22228,7 @@ EffEdit_DSPConfigBlock:
 	extz	de
 	lda	xhl, (xsp+2)
 	push	xhl
-	call	EffEdit_DSPConfigBlock_Helper
+	call	DSPCfg_RecordFieldToParamId
 	cp	hl, 0:i3
 	jrl	lt, .Lc_f457bd
 	ldb_d8	a, (ACTIVE_TITLE)

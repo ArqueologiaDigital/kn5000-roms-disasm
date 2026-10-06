@@ -4029,7 +4029,14 @@ DSPCfg_Data_ParamDispatch_Helper_Skip3:
 	popw	iz
 	lda	xsp, (xsp+0x18)
 	retd	4
-EffEdit_DSPConfigBlock_Helper:
+; DSPCfg_RecordFieldToParamId: Maps a SwbtWr change event on a DSP-block panel record -- A = object code 0x61..0x66
+;   ('a'..'f'), C = byte offset (SWBTWR_PAYLOAD_1), E = changed-bit mask (SWBTWR_PAYLOAD_3) -- to a DSP parameter id
+;   stored through the stacked pointer: the block base 0x4900/0x4A00/0x4B00/0x4C00/0x4D00/0x4E00, or for C = 1..16
+;   base + 0x10 + the parameter index that DSPCfg_Data_ParamDispatch_Helper finds at field C-1 of the effect type's
+;   DspFxRecListPtrTable list. HL = 0, or 0xFFFF for a bad code / no parameter there; retd 4. Basis: callers + body --
+;   EffEdit_DSPConfigBlock (in the SwbtWr lists of codes 0x61, 0x63-0x66) passes the event and then treats id base+0
+;   as an effect-type change (EVT_RET_EFF_FIX) and base+0x10+n as parameter n (EVT_RET_EFF_PARA).
+DSPCfg_RecordFieldToParamId:
 	lda	xsp, (xsp-0xa)
 	push	xiz
 	ld	(xsp+0xa), e

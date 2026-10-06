@@ -2034,7 +2034,7 @@ EffectMode_ByteData_DiagEvents_Join:
 	call	ApPostEvent
 	pop qiz
 	ret
-EffectMode_MidiSetLEDs_Helper:
+TEST3FUNC_InitVoicesOnEnter:
 	ld	a, (PREVIOUS_TITLE:16)
 	cp a, (CURRENT_TITLE:16)
 	ret	z
@@ -2265,7 +2265,7 @@ TEST3FUNC:
 	jp	t, (xix+de)
 ; TEST3FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST3FUNC_DispatchReturn:
-	calr	EffectMode_MidiSetLEDs_Helper
+	calr	TEST3FUNC_InitVoicesOnEnter
 
 TableDispatch_Return4:
 	ld xhl, 0:i3

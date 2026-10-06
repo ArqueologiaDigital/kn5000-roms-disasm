@@ -30,7 +30,7 @@ SetWall_UpdateSlotIndex:
 SetWall_InlineCodeBlock:
 	call	SetWall_InlineCodeBlock2
 	ret
-MiddleFuncCall_DispatchData_Code_Helper:
+SqTrAs_CursorNextTrack:
 	call	SetWall_InlineCodeBlock2
 	cp (3295:16), 7
 	jr	z, MiddleFuncCall_DispatchData_Code_Helper_Skip
@@ -45,7 +45,7 @@ MiddleFuncCall_DispatchData_Code_Helper_Skip2:
 	ld	(3295:16), a
 	call	SetWall_UpdateSlotIndex
 	ret
-MiddleFuncCall_DispatchData_Code_Helper2:
+SqTrAs_CursorPrevTrack:
 	call	SetWall_InlineCodeBlock2
 	cp (3295:16), 8
 	jr	z, MiddleFuncCall_DispatchData_Code_Helper2_Skip
@@ -259,7 +259,7 @@ SetWall_InitCallSequences:
 	ld	(3295:16), 8
 	call	SetWall_UpdateSlotIndex
 	ret
-MiddleFuncCall_DispatchData_Code_Helper3:
+SqTrAs_CursorToFirstPage:
 	call	SetWall_InlineCodeBlock2
 	call	CDlikeSwTtl_SendStartEvt
 	ld	(3295:16), 0
@@ -1947,7 +1947,7 @@ SetWall_RetStub2:
 SetWall_MiscDataAndCode:
 	ret
 	ret
-MiddleFuncCall_DispatchData_Helper2:
+SqSngName_ApplyNameAndExit:
 	ld	xix, 0xf280
 	ld	xiy, 4441
 	ldw	bc, 16

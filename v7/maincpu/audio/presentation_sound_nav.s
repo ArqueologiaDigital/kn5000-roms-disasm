@@ -1292,10 +1292,10 @@ DirmdEmu_CaseF:
 	call	Display_FillPaletteBandFromEntry
 PostTitle_Function_Skip:
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleNew
-	call	DbMemo_DrawContent_Loop_0x61
+	call	DbMemo_PostString
 	jp	PsMixer_CtlTypeProc8_Return
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleOld
-	call	DbMemo_DrawContent_Loop_0x61
+	call	DbMemo_PostString
 	jp	PsMixer_CtlTypeProc8_Return2
 	lda	xsp, (xsp-256)
 	pushw	iz
@@ -1309,15 +1309,15 @@ PostTitle_Function_Skip:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+2)
-	call	DbMemo_DrawContent_Loop_0x61
+	call	DbMemo_PostString
 	ld	wa, iz
 	ld	bc, (xsp+264)
-	call	PostTitle_Function_Helper
+	call	DirmdTitle_SwitchInNullRet
 	popw	iz
 	lda	xsp, (xsp+256)
 	ret
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleCur
-	call	DbMemo_DrawContent_Loop_0x61
+	call	DbMemo_PostString
 	jp	PsMixer_CtlTypeProc8_Return3
 DirmdEmulator_Entry:
 

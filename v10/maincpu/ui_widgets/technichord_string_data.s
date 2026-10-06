@@ -4488,7 +4488,7 @@ ObjAttr_Obj:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A068,
 ; FDemoText_ObjValueInit -- 65 x char: all-zero initialiser of a 65-char local buffer (C `char obj[65] = ""`)
 ; Copied with ldirw x32 + ldi to (xsp+4) by the routine at FDemoText_TextDispatch_Skip9 (demo/fdemotext_routines.s);
 ; the OBJ key (ObjAttr_NameTable entry 0) is Strcpy'd in, and a non-empty value
-; is looked up by FDemoText_TextDispatch_Helper and shown with EVT_SHOW.
+; is looked up by FDemoText_GetInstanceID and shown with EVT_SHOW.
 FDemoText_ObjValueInit:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A06C, 0x41
 ; FDemoText_ObjValueInit_Pad -- 1 x uint8_t: 0xFF fill after the 65-byte initialiser
 FDemoText_ObjValueInit_Pad:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0AD, 0x1

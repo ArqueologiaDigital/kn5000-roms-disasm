@@ -770,7 +770,10 @@ FDC_ResultPhase_Read_Epilogue3:
 	pop	xiz
 	inc	2, xsp
 	ret
-FDC_HardwareSetup_Helper:
+; FDC_SendCommandByte: Drains any pending result phase (FDC_ResultPhase_Read) and writes A to the uPD72068 data
+;   register 0x11000A -- the first byte of a uPD765-style command. Basis: callers + body + twin -- FDC_CMD_SEND sends
+;   every non-auxiliary opcode through it before the parameter bytes; bootloader twin FDC_SendCommandByte.
+FDC_SendCommandByte:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_ResultPhase_Read
@@ -779,7 +782,11 @@ FDC_HardwareSetup_Helper:
 	calr	FDC_Write_Data
 	inc	2, xsp
 	ret
-FDC_HardwareSetup_Helper2:
+; FDC_SendParameterByte: Waits (500-tick timeout, status 1) until the main status register shows RQM|CB (0x90) and
+;   writes A to the data register 0x11000A -- one command parameter byte. Basis: callers + body + twin -- FDC_CMD_SEND
+;   sends the unit/head byte through it and the SPECIFY / SEEK / FORMAT / READ-WRITE parameter senders call it once
+;   per byte; bootloader twin FDC_SendParameterByte.
+FDC_SendParameterByte:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_ResultPhase_Read_Helper
@@ -797,7 +804,10 @@ FDC_ResultPhase_Read_Helper2:
 	calr	FDC_Send_Command
 	inc	2, xsp
 	ret
-FDC_HardwareSetup_Helper3:
+; FDC_SendAuxCmd: Checked auxiliary-command send: drains the result phase and, if no FDC error is pending, writes A to
+;   the auxiliary command register 0x110008 through FDC_ResultPhase_Read_Helper2. Basis: callers + body + twin --
+;   FDC_CMD_SEND routes the aux opcodes 0x35, 0x36 and 0x47 here (no result byte); bootloader twin FDC_SendAuxCmd.
+FDC_SendAuxCmd:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_ResultPhase_Read
@@ -809,7 +819,12 @@ FDC_HardwareSetup_Helper3:
 FDC_ResultPhase_Read_Epilogue:
 	inc	2, xsp
 	ret
-FDC_HardwareSetup_Helper4:
+; FDC_SendAuxCmdReadResult: Auxiliary command with a one-byte reply: drains the result phase, and if no error is
+;   pending writes A to the aux register 0x110008, waits for the FDC to offer a byte (FDC_Wait_Ready_Timeout, status 2
+;   on timeout) and stores the byte read from 0x11000A in 0x8A61. Basis: callers + body + twin -- FDC_CMD_SEND routes
+;   the aux opcodes 0x33, 0x34, 0x4F/0x5F (select format), xB (control internal mode) and xE (enable motors) here;
+;   bootloader twin FDC_SendAuxCmdReadResult (byte to 0x0C8F).
+FDC_SendAuxCmdReadResult:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_ResultPhase_Read
@@ -950,7 +965,7 @@ FDC_CMD_SEND:
 	jrl	nz, FDC_HardwareSetup_Epilogue
 	ld	a, (xsp)
 	ld	(0x8a28:16), a
-	calr	FDC_HardwareSetup_Helper5
+	calr	FDC_ValidateOpcode
 	cp	l, 0:i3
 	jrl	nz, FDC_HardwareSetup_Epilogue
 	ld	a, (xsp)
@@ -967,12 +982,12 @@ FDC_CMD_SEND:
 FDC_HardwareSetup_Skip:
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper3
+	calr	FDC_SendAuxCmd
 	jrl	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip2:
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper4
+	calr	FDC_SendAuxCmdReadResult
 	jrl	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip3:
 	ld	a, (xsp)
@@ -981,7 +996,7 @@ FDC_HardwareSetup_Skip3:
 	jr	nz, FDC_HardwareSetup_Skip4
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper4
+	calr	FDC_SendAuxCmdReadResult
 	jrl	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip4:
 	ld	a, (xsp)
@@ -995,19 +1010,19 @@ FDC_HardwareSetup_Skip4:
 FDC_HardwareSetup_Skip5:
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper4
+	calr	FDC_SendAuxCmdReadResult
 	jr	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip6:
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper
+	calr	FDC_SendCommandByte
 	cp	(FDC_ERROR_CODE:16), 0
 	jr	nz, FDC_HardwareSetup_Epilogue
 	cp	(xsp), 8
 	jr	z, FDC_HardwareSetup_Epilogue
 	cp	(xsp), 3
 	jr	nz, FDC_HardwareSetup_Skip7
-	calr	FDC_HardwareSetup_Helper6
+	calr	FDC_SendParams_Specify
 	jr	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip7:
 	ld	a, (0x8a29:16)
@@ -1022,7 +1037,7 @@ FDC_HardwareSetup_Skip7:
 	ld	a, e
 	set	0, a
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (xsp)
 	cp	a, 15
 	jr	z, FDC_HardwareSetup_Skip10
@@ -1037,17 +1052,21 @@ FDC_HardwareSetup_Skip7:
 FDC_HardwareSetup_Skip8:
 	jr	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip9:
-	calr	FDC_HardwareSetup_Helper7
+	calr	FDC_SendParams_Format
 	jr	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip10:
-	calr	FDC_HardwareSetup_Helper8
+	calr	FDC_SendParam_SeekTrack
 	jr	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip11:
-	calr	FDC_HardwareSetup_Helper9
+	calr	FDC_SendParams_ReadWrite
 FDC_HardwareSetup_Epilogue:
 	inc	2, xsp
 	ret
-FDC_HardwareSetup_Helper5:
+; FDC_ValidateOpcode: Checks the opcode in 0x8A28: L = 0 for the aux opcodes 0x4F/0x33/0x34/0x47/0x35 and for opcodes
+;   whose low 5 bits are 0x02-0x0F, 0x11, 0x19, 0x1D or 0x1E (0x10 excluded); L = 1 otherwise. Basis: callers + body +
+;   twin -- FDC_CMD_SEND stores the opcode, calls it and returns at once when L != 0; bootloader twin
+;   FDC_ValidateOpcode.
+FDC_ValidateOpcode:
 	ld	a, (0x8a28:16)
 	cp	a, 79
 	jr	z, FDC_HardwareSetup_Skip12
@@ -1089,8 +1108,11 @@ FDC_HardwareSetup_Join:
 	ld	a, (0x8a35:16)
 	and	a, 3
 	extz	wa
-	jrl	FDC_HardwareSetup_Helper2
-FDC_HardwareSetup_Helper6:
+	jrl	FDC_SendParameterByte
+; FDC_SendParams_Specify: Sends the two SPECIFY parameter bytes: SRT<<4 | HUT (0x8A37, 0x8A38 & 0x0F) and HLT<<1 | ND
+;   (0x8A39, 0x8A3A & 1), each through FDC_SendParameterByte. Basis: callers + body + twin -- FDC_CMD_SEND calls it
+;   for opcode 3 (SPECIFY) right after the command byte; bootloader twin FDC_SendParams_Specify.
+FDC_SendParams_Specify:
 	ld	a, (0x8a37:16)
 	sll	a, 4
 	ld	e, a
@@ -1100,7 +1122,7 @@ FDC_HardwareSetup_Helper6:
 	ld	a, e
 	or	a, c
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a39:16)
 	sll	a, 1
 	ld	e, a
@@ -1110,46 +1132,57 @@ FDC_HardwareSetup_Helper6:
 	ld	a, e
 	or	a, c
 	extz	wa
-	jrl	FDC_HardwareSetup_Helper2
-FDC_HardwareSetup_Helper7:
+	jrl	FDC_SendParameterByte
+; FDC_SendParams_Format: Sends the FORMAT TRACK parameters N (0x8A2E & 7), SC (0x8A32), GPL (0x8A33) and filler D
+;   (0x8A34) through FDC_SendParameterByte. Basis: callers + body + twin -- FDC_CMD_SEND calls it for opcode 0x4D
+;   (FORMAT TRACK) after the unit/head byte; FDC_MODE_CONFIG fills 0x8A2E/0x8A33/0x8A34 (N, gap 80/108/116, fill
+;   0xE5); bootloader twin FDC_SendParams_Format.
+FDC_SendParams_Format:
 	ld	a, (0x8a2e:16)
 	and	a, 7
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a32:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a33:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a34:16)
 	extz	wa
-	jrl	FDC_HardwareSetup_Helper2
-FDC_HardwareSetup_Helper8:
+	jrl	FDC_SendParameterByte
+; FDC_SendParam_SeekTrack: Sends the SEEK target track NCN (FDC_TARGET_TRACK, 0x8A36) through FDC_SendParameterByte.
+;   Basis: callers + body + twin -- FDC_CMD_SEND calls it for opcode 0x0F (SEEK) after the unit/head byte, as issued
+;   by FDC_CmdSeek; bootloader twin FDC_SendParam_SeekTrack.
+FDC_SendParam_SeekTrack:
 	ld	a, (FDC_TARGET_TRACK:16)
 	extz	wa
-	jrl	FDC_HardwareSetup_Helper2
-FDC_HardwareSetup_Helper9:
+	jrl	FDC_SendParameterByte
+; FDC_SendParams_ReadWrite: Sends the data-command parameters C (0x8A2B), H (0x8A2C & 1), R (0x8A2D), N (0x8A2E & 7),
+;   EOT (0x8A2F), GPL (0x8A30), then DTL (0x8A31) -- or STP ((0x8A35) & 3) for the scan opcodes 0xD1/0xD9/0xDD --
+;   through FDC_SendParameterByte. Basis: callers + body + twin -- FDC_CMD_SEND calls it for every opcode not handled
+;   earlier (READ/WRITE DATA 0xC6/0xC5 among them); bootloader twin FDC_SendParams_ReadWrite.
+FDC_SendParams_ReadWrite:
 	ld	a, (0x8a2b:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a2c:16)
 	and	a, 1
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a2d:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a2e:16)
 	and	a, 7
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a2f:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a30:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ld	a, (0x8a28:16)
 	cp	a, 221
 	jr	z, FDC_HardwareSetup_Skip16
@@ -1162,7 +1195,7 @@ FDC_HardwareSetup_Skip16:
 FDC_HardwareSetup_Skip17:
 	ld	a, (0x8a31:16)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper2
+	calr	FDC_SendParameterByte
 	ret
 FDC_DETECT_CHECK:
 	cpw	(0x8a46:16), 0
@@ -1400,7 +1433,11 @@ FDC_CmdSeek:
 FDC_CMD_EXEC_Helper5_Skip:
 	ldw	wa, 16
 	jrl	SOME_DELAY
-FDC_CMD_EXEC_Helper6:
+; FDC_SubmitReadDataCmd: Issues MT|MF READ DATA (0xC6): stores the opcode in 0x8A28, arms DMA channel 3 for
+;   I/O->memory (FDC_Setup_DMA_Mode), clears the result buffer (FDC_TIMING_DELAY), sends the command with FDC_CMD_SEND
+;   and, if no error, waits for the result (FDC_POST_OP). Basis: callers + body + twin -- FDC_CMD_EXEC (read sectors,
+;   FDC command 3) calls it per same-track burst; instruction twin of the bootloader's FDC_SubmitReadDataCmd.
+FDC_SubmitReadDataCmd:
 	ld	(0x8a28:16), 198
 	calr	FDC_Setup_DMA_Mode
 	calr	FDC_TIMING_DELAY
@@ -1485,7 +1522,7 @@ FDC_CMD_EXEC_Join2:
 FDC_CMD_EXEC_Skip6:
 	ld	(0x8a4a:16), iz
 	ldmm16	0x8a48, 0x8b10
-	calr	FDC_CMD_EXEC_Helper6
+	calr	FDC_SubmitReadDataCmd
 	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_CMD_EXEC_Skip8
 	cp	(FDC_ERROR_CODE:16), 9
@@ -1587,7 +1624,7 @@ FDC_CMD_EXEC_Join4:
 FDC_CMD_EXEC_Skip12:
 	ld	(0x8a4a:16), iz
 	ldmm16	0x8a48, 0x8b10
-	calr	FDC_CMD_EXEC_Helper7
+	calr	FDC_SubmitWriteDataCmd
 	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_CMD_EXEC_Skip14
 	cp	(FDC_ERROR_CODE:16), 9
@@ -1637,7 +1674,11 @@ FDC_CMD_EXEC_Join5:
 FDC_CMD_EXEC_Epilogue2:
 	popw	iz
 	ret
-FDC_CMD_EXEC_Helper7:
+; FDC_SubmitWriteDataCmd: Issues MT|MF WRITE DATA (0xC5): stores the opcode in 0x8A28, arms DMA channel 3 for
+;   memory->I/O (FDC_Setup_DMA_Mode), clears the result buffer, sends the command with FDC_CMD_SEND and, if no error,
+;   waits for the result (FDC_POST_OP). Basis: callers + body + twin -- FDC_SECTOR_XFER (write sectors, FDC command 4)
+;   calls it per burst; instruction twin of the bootloader's FDC_SubmitWriteDataCmd.
+FDC_SubmitWriteDataCmd:
 	ld	(0x8a28:16), 197
 	calr	FDC_Setup_DMA_Mode
 	calr	FDC_TIMING_DELAY

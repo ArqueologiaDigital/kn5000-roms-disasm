@@ -6920,7 +6920,12 @@ DbMemo_DrawContent_Loop:
 	extz xwa
 	add (xsp + 6), xwa
 	jr DbMemo_DrawContent_Loop
-FDemoText_ByteData_DisplayRefresh_Helper:
+; DbMemo_PostString: Prints a string in the debug memo window asynchronously: copies it into a Malloc'd buffer, posts
+;   EVT_MEMO_DRAW with the copy (broadcast 0xFFFFFFFF), then EVT_AUTO_FREE so the copy is freed after delivery. Basis:
+;   callers + body -- the DIRMD title's trace calls ("DirmdTitleNew();", "DirmdTitleESw(%d, %d);" ...) and
+;   FDemoText_GetInstanceID's "Error! (GetInstanceID)" pass their message to it; DbMemoProc draws EVT_MEMO_DRAW
+;   strings.
+DbMemo_PostString:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa

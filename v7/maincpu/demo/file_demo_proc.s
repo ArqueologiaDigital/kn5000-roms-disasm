@@ -46,7 +46,7 @@ FDemo_DisplayResourceData_Loop:
 	ld	(xsp+4), hl
 	cpw	(xsp+0x4), 0
 	jrl	lt, FDemo_DisplayResourceData_Skip6
-	calr	FDemo_DisplayResourceData_Helper
+	calr	FDemo_ResetAllocBuffer
 	lda	xwa, (xsp+8)
 	ld	xbc, 256
 	call	FileIO_ReadBlock
@@ -120,7 +120,7 @@ FDemo_DisplayResourceData_Skip6:
 	pop	xiz
 	lda	xsp, (xsp+0x124)
 	ret
-FDemo_DisplayResourceData_Helper:
+FDemo_ResetAllocBuffer:
 	lda xwa, (SEQ_SONG_SLOTS:24)
 	ld (0x025b7e:24), xwa
 	ret
@@ -441,7 +441,7 @@ FDemo_LinkedListSearchInsert_Epilogue:
 	popw	iz
 	inc	8, xsp
 	ret
-FDemo_LinkedListLookupField_Helper:
+FDemo_RegisterLoadedFile:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xbc
@@ -523,7 +523,7 @@ FDemo_FileOpen_CloseHandle:
 	call FileIO_CloseHandle
 	lda	xwa, (xsp+10)
 	ld xbc, (xsp+6)
-	calr	FDemo_LinkedListLookupField_Helper
+	calr	FDemo_RegisterLoadedFile
 FDemo_FileOpen_GetResult:
 	ld hl, (xsp+4)
 FDemo_FileOpen_Exit:
@@ -1807,7 +1807,7 @@ LoadRegion1_OpenSuccess:
 	cp hl, 0:i3
 	jr z, LoadRegion1_AltPmLoad
 	ld	wa, 0:i3
-	call LoadRegion1_OpenSuccess_Helper
+	call PanelMemory_PreBankLoad
 	ld xwa, 0x00000010
 	ld	bc, 0:i3
 	call FileIO_SeekAndReadBlock				; set region param
@@ -1828,7 +1828,7 @@ LoadRegion1_OpenSuccess:
 	ld iz, hl
 	ld	wa, 0:i3
 	ld bc, iz
-	call LoadRegion1_OpenSuccess_Helper2
+	call PanelMemory_PostBankLoad
 	jr LoadRegion1_Finalize
 LoadRegion1_AltPmLoad:
 	call	PrePmLoad
@@ -2189,7 +2189,7 @@ LoadRegion5_OpenSuccess:
 	call msp_ld_ato
 	jr LoadRegion5_Finalize
 LoadRegion5_AltPath:
-	call LoadRegion5_AltPath_Helper				; alternate path
+	call FileIO_LoadMspAltFormat				; alternate path
 	ld iz, hl
 LoadRegion5_Finalize:
 	call FileIO_CloseHandle
@@ -2219,7 +2219,7 @@ LoadRegion6_OpenSuccess:
 	calr FileIO_CheckRegionSignature
 	cp hl, 0:i3
 	jr z, LoadRegion6_ModeError
-	call LoadRegion6_OpenSuccess_Helper
+	call FileIO_LoadRcmToFlash
 	ld iz, hl
 	jr LoadRegion6_Finalize
 LoadRegion6_ModeError:
@@ -3233,7 +3233,7 @@ FileIO_ByteBlock_DemoProc1_Skip5:
 	jrl	lt, FileIO_ByteBlock_DemoProc1_Join2
 	ld	wa, (xsp+36)
 	extz	wa
-	call	LoadRegion1_OpenSuccess_Helper
+	call	PanelMemory_PreBankLoad
 	lda	xwa, (2020176:24)
 	add	xwa, (xsp+0x4)
 	ld	xbc, 16
@@ -3268,7 +3268,7 @@ FileIO_ByteBlock_DemoProc1_Skip5:
 	ld	wa, (xsp+36)
 	extz	wa
 	ld	bc, iz
-	call	LoadRegion1_OpenSuccess_Helper2
+	call	PanelMemory_PostBankLoad
 	jr	FileIO_ByteBlock_DemoProc1_Join2
 FileIO_ByteBlock_DemoProc1_Skip6:
 	ldw	iz, 65434

@@ -311,7 +311,7 @@ MidiCC_Handler_BitManipulation_Skip:
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
-	call	MidiCC_Handler_BitManipulation_Helper
+	call	MidiCC_RxCC83_SetParamBitsAndQueue
 MidiCC_Handler_BitManipulation_Return:
 	ret
 ; 0xFF filler after the `ret`; nothing reads it (the table below starts at +1).
@@ -320,7 +320,7 @@ MidiCC_Handler_BitManipulation_Return:
 ; MidiCC_Handler_BitManipulation (0xFCFC74), CC function 18 <- CC83
 ; (MidiCC_ChannelMappingData): only for part 25, with `bit 2, (0xfd51)` set;
 ; `ld a, (0x9636) / cp a, 2 / jr ugt` (E stays 0 above 2) / `ld e, (xix+a)`,
-; then BC = 0x0B98, D = 0xC0 -> MidiCC_Handler_BitManipulation_Helper.
+; then BC = 0x0B98, D = 0xC0 -> MidiCC_RxCC83_SetParamBitsAndQueue.
 ; Previously spelled `.byte 0x80, 0x40` behind a `nop`.
 MidiCC_CC83_ValueMap:
 	.byte 0x00, 0x80, 0x40
@@ -540,7 +540,7 @@ MidiCC_RxCC1_Modulation:
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
-	call	MidiCC_RxCC1_Modulation_Helper
+	call	MidiCC_SetPendingPartModulation
 MidiCC_RxCC1_Modulation_Return:
 	ret
 MidiCC_RxCC7_Volume:
@@ -584,7 +584,7 @@ MidiCC_RxCC11_Expression:
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
-	call	MidiCC_RxCC11_Expression_Helper
+	call	MidiCC_SetPendingPartExpression
 MidiCC_RxCC11_Expression_Return:
 	ret
 MidiCC_RxCC10_Pan:
@@ -929,7 +929,7 @@ MidiCC_Handler_TableDispatch:
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
-	call MidiCC_Handler_TableDispatch_Helper
+	call MidiCC_AllSoundOff_QueuePartParam
 MidiCC_Handler_TableDispatch_Ret:
 	ret
 MidiCC_Helper_ConditionalESetup:
@@ -942,7 +942,7 @@ MidiCC_Helper_ConditionalESetup:
 	ld e, d
 MidiCC_Helper_ConditionalESetup_Store:
 	ld	(0x9646:16), de
-	call MidiCC_Helper_ConditionalESetup_Store_Helper
+	call MidiCC_Switch_WritePartParamAndQueue
 	ret
 MidiCC_Helper_EntryWithEqA:
 	; --- Subroutine 3: entry variant with E=A (23 bytes) ---
@@ -972,7 +972,7 @@ MidiRx_ProgramChange:
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
-	call	MidiRx_ProgramChange_Helper
+	call	MidiRx_ApplyProgramChange
 MidiRx_ProgramChange_Return:
 	ret
 MidiRx_PitchBend:
@@ -992,7 +992,7 @@ MidiRx_PitchBend:
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
-	call	MidiRx_PitchBend_Helper
+	call	MidiRx_SetPendingPartPitchBend
 MidiRx_PitchBend_Return:
 	ret
 MidiRx_ChannelPressure:
@@ -2273,7 +2273,7 @@ MidiCC_PartTargets_Func09:
 	.byte 0xb6, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC1_Modulation (+0x200): function 1 <- CC1, reader
-; MidiCC_RxCC1_Modulation (0xFCFECD) -> MidiCC_RxCC1_Modulation_Helper.
+; MidiCC_RxCC1_Modulation (0xFCFECD) -> MidiCC_SetPendingPartModulation.
 MidiCC_PartTargets_CC1_Modulation:
 	.byte 0xb2, 0x00, 0x7f, 0xb2, 0x01, 0x7f, 0xb2, 0x02, 0x7f, 0xb2, 0x03, 0x7f
 	.byte 0xb2, 0x04, 0x7f, 0xb2, 0x05, 0x7f, 0xb2, 0x06, 0x7f, 0xb2, 0x07, 0x7f
@@ -2295,7 +2295,7 @@ MidiCC_PartTargets_CC7_Volume:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC11_Expression (+0x2C0): function 3 <- CC11, reader
-; MidiCC_RxCC11_Expression (0xFCFF4F) -> MidiCC_RxCC11_Expression_Helper.
+; MidiCC_RxCC11_Expression (0xFCFF4F) -> MidiCC_SetPendingPartExpression.
 MidiCC_PartTargets_CC11_Expression:
 	.byte 0xb3, 0x00, 0x7f, 0xb3, 0x01, 0x7f, 0xb3, 0x02, 0x7f, 0xb3, 0x03, 0x7f
 	.byte 0xb3, 0x04, 0x7f, 0xb3, 0x05, 0x7f, 0xb3, 0x06, 0x7f, 0xb3, 0x07, 0x7f
@@ -2440,7 +2440,7 @@ MidiCC_PartTargets_CC121_ResetAll:
 	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
 ; MidiCC_PartTargets_CC120_AllSoundOff (+0x720): function 41 <- CC120, reader
 ; MidiCC_Handler_TableDispatch (0xFD0335, which loads this address as the
-; literal 0x00fd1587), D = 0x7F, -> MidiCC_Handler_TableDispatch_Helper.
+; literal 0x00fd1587), D = 0x7F, -> MidiCC_AllSoundOff_QueuePartParam.
 MidiCC_PartTargets_CC120_AllSoundOff:
 	.short 0x00ae, 0x01ae, 0x02ae, 0x03ae, 0x04ae, 0x05ae, 0x06ae, 0x07ae
 	.short 0x08ae, 0x09ae, 0x0aae, 0x0bae, 0x0cae, 0x0dae, 0x0eae, 0x0fae
@@ -2449,7 +2449,7 @@ MidiCC_PartTargets_CC120_AllSoundOff:
 ; MidiPC_PartTargets (+0x760): PROGRAM CHANGE (status Cx).  Reader
 ; MidiRx_ProgramChange (0xFD039C, MidiCC_LowRange_Table slot 4):
 ; E = program number (0x9635), D = 0xFF, gated by bit 4 of (0xFD57),
-; -> MidiRx_ProgramChange_Helper.
+; -> MidiRx_ApplyProgramChange.
 MidiPC_PartTargets:
 	.short 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007
 	.short 0x0008, 0x0009, 0x000a, 0x000b, 0x000c, 0x000d, 0x000e, 0x000f
@@ -2457,7 +2457,7 @@ MidiPC_PartTargets:
 	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
 ; MidiPB_PartTargets (+0x7A0): PITCH BEND (status Ex).  Reader
 ; MidiRx_PitchBend (0xFD03D8, slot 6): E = LSB (0x9635),
-; D = MSB (0x9636), gated by bit 6 of (0xFD57), -> MidiRx_PitchBend_Helper.
+; D = MSB (0x9636), gated by bit 6 of (0xFD57), -> MidiRx_SetPendingPartPitchBend.
 MidiPB_PartTargets:
 	.short 0x00b1, 0x01b1, 0x02b1, 0x03b1, 0x04b1, 0x05b1, 0x06b1, 0x07b1
 	.short 0x08b1, 0x09b1, 0x0ab1, 0x0bb1, 0x0cb1, 0x0db1, 0x0eb1, 0xffff
@@ -3102,15 +3102,15 @@ FileData_AllocLoadAndParse_Skip2:
 	ld	iz, hl
 	cp	iz, 0:i3
 	jr	lt, FileData_AllocLoadAndParse_Join
-	calr	FileData_AllocLoadAndParse_Helper
+	calr	FileData_ImportM4M6PanelMemories
 	ld	iz, hl
 	jr	FileData_AllocLoadAndParse_Join
 FileData_AllocLoadAndParse_Skip3:
-	calr	FileData_AllocLoadAndParse_Helper2
+	calr	FileData_ImportNNLivePanel
 	ld	iz, hl
 	cp	iz, 0:i3
 	jr	lt, FileData_AllocLoadAndParse_Join
-	calr	FileData_AllocLoadAndParse_Helper3
+	calr	FileData_ImportNNPanelMemories
 	ld	iz, hl
 	jr	FileData_AllocLoadAndParse_Join
 FileData_AllocLoadAndParse_Skip4:
@@ -3306,7 +3306,12 @@ FileData_RawDataBlock_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
-FileData_AllocLoadAndParse_Helper:
+; FileData_ImportM4M6PanelMemories: Foreign .LSW import, stage 2 for header classes 1 ('M4', 24 memories) and 2 ('M6',
+;   10): between PrePmLoad and PostPmLoad, reads 0x300-byte records one at a time and converts each into panel memory
+;   j at 0x1ED400 + 960*j; HL = 0, 0xFF38 when out of memory, or the read error. Basis: callers + body --
+;   FileData_AllocLoadAndParse (the .LSW loader's alternate path) runs it after stage 1 (FileData_RawDataBlock) for
+;   classes 1 and 2.
+FileData_ImportM4M6PanelMemories:
 	lda	xsp, (xsp-14)
 	push	xiz
 	ld	wa, (0xb7ea:16)
@@ -5648,7 +5653,12 @@ DataBuf_CopyBulkBitfields_Large_Loop:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
-FileData_AllocLoadAndParse_Helper2:
+; FileData_ImportNNLivePanel: Foreign .LSW import, stage 1 for header class 3 ('N','N'): between PreLswLoad and
+;   PostLswLoad, reads 0x420 bytes after the 32-byte header and converts its records into the live panel area at
+;   0xF980; HL = 0, 0xFF38 when out of memory, or the read error. Basis: callers + body -- FileData_AllocLoadAndParse
+;   runs it for class 3, where FileData_RawDataBlock (0x660 bytes, same Pre/PostLswLoad bracket) serves classes 1 and
+;   2.
+FileData_ImportNNLivePanel:
 	lda	xsp, (xsp-10)
 	push	xiz
 	call	PreLswLoad
@@ -5769,7 +5779,11 @@ DataBuf_CopyBulkBitfields_Large_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
-FileData_AllocLoadAndParse_Helper3:
+; FileData_ImportNNPanelMemories: Foreign .LSW import, stage 2 for header class 3 ('N','N'): between PrePmLoad and
+;   PostPmLoad, reads 24 records of 336 bytes and converts each into panel memory j at 0x1ED400 + 960*j; HL = 0,
+;   0xFF38 when out of memory, or the read error. Basis: callers + body -- FileData_AllocLoadAndParse runs it after
+;   FileData_ImportNNLivePanel succeeded, as FileData_ImportM4M6PanelMemories follows stage 1 for classes 1 and 2.
+FileData_ImportNNPanelMemories:
 	lda	xsp, (xsp-14)
 	pushw	iz
 	call	PrePmLoad
@@ -8230,7 +8244,7 @@ MidiStream_PrevBankCheck_Skip:
 	jr	MidiStream_PrevBankCheck_Epilogue
 MidiStream_PrevBankCheck_Skip2:
 	calr	SeqBuf_WaitForEmpty
-	calr	MidiStream_PrevBankCheck_Helper
+	calr	MidiStream_Delay25Ticks
 MidiStream_PrevBankCheck_Epilogue:
 	pop qiz
 	ret
@@ -10089,7 +10103,12 @@ SeqVoice_DispatchProcess_Data_Skip4:
 	pop	xiz
 	inc	4, xsp
 	ret
-MidiSeq_ClearSyncFlag_Helper2:
+; MidiPkt_SetXferTotal_Panel: Fills the transfer descriptor at XWA for the whole panel transfer: start 0xF980, length
+;   0x132F0 = 0x640 (live panel, 0xF980..0xFFBF) + 0x12CB0 (panel memories from 0x1ED350), +4 = start + length (a
+;   running end, the second block is elsewhere). Basis: callers + body -- MidiPkt_ArpExtHandler_A (command 11) points
+;   the total descriptor 0xBCDC with it before the block descriptor 0xBCEC (MidiPkt_SetXferBlock_LivePanel);
+;   SysEx_ResetAndReturn_Helper4 uses it for the send-side total 0xBCBC.
+MidiPkt_SetXferTotal_Panel:
 	lda	xde, (0xf980:16)
 	ld	(xwa), xde
 	lda	xbc, (0xffbe:16)
@@ -10102,7 +10121,13 @@ MidiSeq_ClearSyncFlag_Helper2:
 	ld	(xwa+4), xhl
 	ld	(xwa+8), xde
 	ret
-MidiPkt_ArpPopReturn_Helper:
+; MidiPkt_SetXferBlock_LivePanel: Fills the transfer descriptor at XWA for the live-panel block: {start 0xF980, end
+;   0xFFC0, length 0x640}, which holds the live panel's block 0 (0xF9A0) and block 1 (0xFD60). It is block 1 of the
+;   panel transfer; block 2 is the 80 panel memories at 0x1ED350 (MidiPkt_ArpPopReturn_Helper2). Basis: callers + body
+;   -- MidiPkt_ArpExtHandler_A (command 11, state 0) writes all panel TLV headers, then points the total descriptor
+;   0xBCDC (MidiPkt_SetXferTotal_Panel) and the block descriptor 0xBCEC (this) and starts step 1; the send side
+;   MidiPkt_ArpConfigChain_Data_Helper2 uses it for 0xBCCC.
+MidiPkt_SetXferBlock_LivePanel:
 	lda	xde, (0xf980:16)
 	ld	(xwa), xde
 	lda	xbc, (0xffbe:16)
@@ -10186,7 +10211,14 @@ MidiPkt_ArpPopReturn_Helper6:
 	ld	(xwa+4), xde
 	ld	(xwa+8), xbc
 	ret
-MidiPkt_ArpPopReturn_Helper7:
+; MidiPkt_SetXferBlock_StyleImagePool: Fills the transfer descriptor at XWA for block 3 of the style-image transfer:
+;   {start 0x95BC0, end 0xAB000 (SEQ_SONG_SLOTS), length 0x15440}, the pattern block pool behind RHYTHM_PATTERN_BUF_B.
+;   With bit 6 of 0xBD18 set, the length is the used size ((0x9482E) * 16, SeqVoice_DispatchProcess_Data_Helper) less
+;   blocks 1-2 (0x60 + 0x1360). Basis: callers + body -- MidiPkt_ArpExtHandler_G (command 17, state 9) points the
+;   block descriptor 0xBCEC with it and then takes the length from the message (MidiPkt_SetXferLengthFromMsg); blocks
+;   1-2 are RHYTHM_PATTERN_BUF_A (0x60) and 0x94860 (0x1360); the group's end step makes MidiSysEx_ProcessBlock run
+;   AccPatch_EnsureStyleImageHeader.
+MidiPkt_SetXferBlock_StyleImagePool:
 	push	xiz
 	ld	xiz, xwa
 	lda	xwa, (0x95bc0:24)
@@ -10213,7 +10245,13 @@ MidiPkt_ArpPopReturn_Helper7:
 SeqVoice_DispatchProcess_Data_Epilogue3:
 	pop	xiz
 	ret
-MidiSeq_ClearSyncFlag_Helper5:
+; MidiPkt_SetXferTotal_SeqData: Fills the transfer descriptor at XWA for the whole sequencer transfer: start 0xF180,
+;   length 0x53000 = 0x800 (current song) + 0x5000 (song slots) + 0x4D800 (event memory from 0xB0000); with bit 6 of
+;   0xBD18 set, the length is 0x5800 + the used event size ((0xF1CE) * 16, SeqVoice_DispatchProcess_Data_Helper2). +4
+;   = start + length (the blocks are not contiguous). Basis: callers + body -- MidiPkt_ArpExtHandler_K (command 18)
+;   points the total descriptor 0xBCDC with it before the block descriptor (MidiPkt_SetXferBlock_CurrentSong);
+;   SysEx_ResetAndReturn_Helper2 uses it for the send-side total 0xBCBC.
+MidiPkt_SetXferTotal_SeqData:
 	push	xiz
 	ld	xiz, xwa
 	lda	xwa, (0xf180:16)
@@ -10234,7 +10272,12 @@ MidiSeq_ClearSyncFlag_Helper5:
 SeqVoice_DispatchProcess_Data_Epilogue4:
 	pop	xiz
 	ret
-MidiPkt_ArpPopReturn_Helper8:
+; MidiPkt_SetXferBlock_CurrentSong: Fills the transfer descriptor at XWA for the current song record: {start 0xF180,
+;   end 0xF980, length 0x800}, block 1 of the sequencer transfer (block 2 = the ten song slots, block 3 = the event
+;   memory at 0xB0000). Basis: callers + body -- MidiPkt_ArpExtHandler_K (command 18, state 0) points the total
+;   descriptor 0xBCDC (MidiPkt_SetXferTotal_SeqData) and the block descriptor 0xBCEC (this) and starts step 11; the
+;   send side uses it at 11236.
+MidiPkt_SetXferBlock_CurrentSong:
 	lda	xbc, (0xf180:16)
 	ld	(xwa), xbc
 	lda	xbc, (xbc+2048)
@@ -10242,7 +10285,11 @@ MidiPkt_ArpPopReturn_Helper8:
 	ld	xbc, 0x800
 	ld	(xwa+8), xbc
 	ret
-MidiPkt_ArpPopReturn_Helper9:
+; MidiPkt_SetXferBlock_SongSlots: Fills the transfer descriptor at XWA for the ten song slots: {start SEQ_SONG_SLOTS
+;   (0xAB000), end 0xB0000, length 0x5000}, block 2 of the sequencer transfer. Basis: callers + body --
+;   MidiPkt_ArpExtHandler_L (command 19, state 12) points the block descriptor 0xBCEC with it and continues step 12;
+;   the send side uses it at 11253.
+MidiPkt_SetXferBlock_SongSlots:
 	lda	xbc, (SEQ_SONG_SLOTS:24)
 	ld	(xwa), xbc
 	lda	xbc, (xbc+20480)
@@ -10311,7 +10358,14 @@ MidiPkt_ArpPopReturn_Helper12:
 	ld	(xwa+4), xhl
 	ld	(xwa+8), xbc
 	ret
-MidiPkt_ArpPopReturn_Helper13:
+; MidiPkt_SetXferBlock_AccompBlockPool: Fills the transfer descriptor at XWA for block 3 of the accompaniment-block-
+;   area transfer: {start 0x1E8B00, end 0x1EC400, length 0x3900}, the 57 x 256-byte block pool
+;   (msp_factory_defaults.s). With bit 6 of 0xBD18 set, the length is the used size ((0x1E881C) * 16,
+;   SeqVoice_DispatchProcess_Data_Helper3) less blocks 1-2 (0x20 + 0x2E0). Basis: callers + body --
+;   MidiPkt_ArpExtHandler_J (command 25, state 20) points the block descriptor 0xBCEC with it, then takes the length
+;   from the message (MidiPkt_SetXferLengthFromMsg); blocks 1-2 are 0x1E8800 (0x20) and 0x1E8820 (0x2E0), the area
+;   Voice_InitBankTables initialises.
+MidiPkt_SetXferBlock_AccompBlockPool:
 	push	xiz
 	ld	xiz, xwa
 	lda	xwa, (0x1e8b00:24)
@@ -10426,7 +10480,11 @@ MidiChan_TimerDispatch_Data:
 	pop	xhl
 	pop	xde
 	ret
-MidiStream_PrevBankCheck_Helper:
+; MidiStream_Delay25Ticks: Busy-waits until SYSTEM_TIMESTAMP has advanced 25 ticks from entry (DE = the start value).
+;   Basis: callers + body -- the only caller MidiStream_PrevBankCheck, the post-send step of the MIDI data transfer,
+;   runs it when bit 7 of 0xBD18 (wait for the receiver's reply) is clear, after SeqBuf_WaitForEmpty has drained the
+;   MIDI output buffer: a fixed pause between messages instead of the handshake.
+MidiStream_Delay25Ticks:
 	ld	de, (SYSTEM_TIMESTAMP:16)
 MidiChan_TimerDispatch_Data_Code_Loop:
 	ld	wa, de
@@ -10980,7 +11038,7 @@ SysEx_ResetAndReturn_Helper:
 	jrl	MidiPkt_ArpConfigChain_Data_Helper7
 SysEx_ResetAndReturn_Helper2:
 	ld	xwa, 0xbcbc
-	call	MidiSeq_ClearSyncFlag_Helper5
+	call	MidiPkt_SetXferTotal_SeqData
 	jrl	MidiPkt_ArpConfigChain_Data_Join
 SysEx_ResetAndReturn_Helper3:
 	ld	xwa, 0xbcbc
@@ -10988,7 +11046,7 @@ SysEx_ResetAndReturn_Helper3:
 	jrl	MidiPkt_ArpConfigChain_Data_Helper4
 SysEx_ResetAndReturn_Helper4:
 	ld	xwa, 0xbcbc
-	call	MidiSeq_ClearSyncFlag_Helper2
+	call	MidiPkt_SetXferTotal_Panel
 	jrl	MidiPkt_ArpConfigChain_Data_Helper
 SysEx_ResetAndReturn_Helper5:
 	ret
@@ -11084,7 +11142,7 @@ MidiPkt_ArpConfigChain_Data_Helper2:
 	ld	de, 1:i3
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbccc
-	call	MidiPkt_ArpPopReturn_Helper
+	call	MidiPkt_SetXferBlock_LivePanel
 	ld	xwa, SysEx_TechMsg_35E2
 	ldw	bc, 12
 	call	SeqBuf_FlushNoteOffs
@@ -11205,7 +11263,7 @@ MidiPkt_ArpConfigChain_Data_Helper10:
 	ldw	de, 9
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbccc
-	call	MidiPkt_ArpPopReturn_Helper7
+	call	MidiPkt_SetXferBlock_StyleImagePool
 	ld	xwa, SysEx_TechMsg_362A
 	ldw	bc, 9
 	call	SeqBuf_FlushNoteOffs
@@ -11233,7 +11291,7 @@ MidiPkt_ArpConfigChain_Data_Helper11:
 	ldw	de, 11
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbccc
-	call	MidiPkt_ArpPopReturn_Helper8
+	call	MidiPkt_SetXferBlock_CurrentSong
 	ld	xwa, SysEx_TechMsg_3634
 	ldw	bc, 12
 	call	SeqBuf_FlushNoteOffs
@@ -11250,7 +11308,7 @@ MidiPkt_ArpConfigChain_Data_Helper12:
 	ldw	de, 12
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbccc
-	call	MidiPkt_ArpPopReturn_Helper9
+	call	MidiPkt_SetXferBlock_SongSlots
 	ld	xwa, SysEx_TechMsg_3640
 	ldw	bc, 12
 	call	SeqBuf_FlushNoteOffs
@@ -11327,7 +11385,7 @@ MidiPkt_ArpConfigChain_Data_Helper17:
 	ldw	de, 20
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbccc
-	call	MidiPkt_ArpPopReturn_Helper13
+	call	MidiPkt_SetXferBlock_AccompBlockPool
 	ld	xwa, SysEx_TechMsg_366E
 	ldw	bc, 9
 	call	SeqBuf_FlushNoteOffs
@@ -11403,7 +11461,7 @@ ArpChord_DispatchAndLoop:
 	bit	4, (0xbd18:16)
 	jr nz, ArpChord_CheckPlaybackDone
 ArpChord_FinalizePass:
-	calr	MidiPkt_ArpChordHandler_Helper
+	calr	MidiPkt_RecoverIfXferAborted
 	call MidiSeq_PartLookup_Data
 ArpChord_ClearBitAndReturn:
 	res	4, (0xbd18:16)
@@ -11498,9 +11556,9 @@ MidiPkt_ArpExtHandler_A:
 	jr	nz, MidiPkt_ArpExtHandler_A_Skip
 	call	MidiChan_TimerDispatch_Data
 	ld	xwa, 0xbcdc
-	call	MidiSeq_ClearSyncFlag_Helper2
+	call	MidiPkt_SetXferTotal_Panel
 	ld	xwa, 0xbcec
-	call	MidiPkt_ArpPopReturn_Helper
+	call	MidiPkt_SetXferBlock_LivePanel
 	jrl	SeqChan_StepCmd_Field1to2
 MidiPkt_ArpExtHandler_A_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -11589,7 +11647,7 @@ MidiPkt_ArpExtHandler_G:
 	cp	l, 9
 	jr	nz, MidiPkt_ArpExtHandler_G_Skip
 	ld	xwa, 0xbcec
-	call	MidiPkt_ArpPopReturn_Helper7
+	call	MidiPkt_SetXferBlock_StyleImagePool
 	call	MidiPkt_SetXferLengthFromMsg
 	jrl	SeqChan_StepCmd_Field9to10
 MidiPkt_ArpExtHandler_G_Skip:
@@ -11635,7 +11693,7 @@ MidiPkt_ArpExtHandler_J:
 	cp	l, 20
 	jr	nz, MidiPkt_ArpExtHandler_J_Skip
 	ld	xwa, 0xbcec
-	call	MidiPkt_ArpPopReturn_Helper13
+	call	MidiPkt_SetXferBlock_AccompBlockPool
 	call	MidiPkt_SetXferLengthFromMsg
 	jrl	SeqChan_StepCmd_Field20to21
 MidiPkt_ArpExtHandler_J_Skip:
@@ -11650,9 +11708,9 @@ MidiPkt_ArpExtHandler_K:
 	cp	l, 0:i3
 	jr	nz, MidiPkt_ArpExtHandler_K_Skip
 	ld	xwa, 0xbcdc
-	call	MidiSeq_ClearSyncFlag_Helper5
+	call	MidiPkt_SetXferTotal_SeqData
 	ld	xwa, 0xbcec
-	call	MidiPkt_ArpPopReturn_Helper8
+	call	MidiPkt_SetXferBlock_CurrentSong
 	jrl	SeqChan_StepCmd_Field11_Data
 MidiPkt_ArpExtHandler_K_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -11666,7 +11724,7 @@ MidiPkt_ArpExtHandler_L:
 	cp	l, 12
 	jr	nz, MidiPkt_ArpExtHandler_L_Skip
 	ld	xwa, 0xbcec
-	call	MidiPkt_ArpPopReturn_Helper9
+	call	MidiPkt_SetXferBlock_SongSlots
 	jrl	SeqChan_StepCmd_Field12_Data
 MidiPkt_ArpExtHandler_L_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -11997,8 +12055,8 @@ MidiSysEx_ProcessBlock:
 	ld	de, 0:i3
 	call	MIDI_ReadChannelParam
 	res	4, (0xbd18:16)
-	calr	MidiSysEx_ProcessBlock_Helper4
-	calr	MidiSysEx_ProcessBlock_Helper7
+	calr	MidiSysEx_FinishPanelXfer
+	calr	MidiSysEx_FinishSoundRamXfer
 	calr	MidiSysEx_ProcessBlock_Helper8
 	calr	MidiSysEx_ProcessBlock_Helper9
 	calr	MidiSysEx_ProcessBlock_Helper10
@@ -12058,7 +12116,15 @@ MidiSysEx_ProcessBlock_Helper3:
 	pop	xhl
 	pop	xde
 	ret
-MidiSysEx_ProcessBlock_Helper4:
+; MidiSysEx_FinishPanelXfer: End-of-transfer step for the panel group: if bit 7 of 0xBD1A is set (the panel blocks
+;   were received), it rewrites and validates the panel TLV records of the live panel and the 80 memories, resolves
+;   the part companions and re-applies the tone generator (MidiSysEx_ProcessBlock_Helper). It then posts the sound-
+;   parameter changes (SoundParam_NotifyMultipleChanges) and re-initialises the SwbtWr output
+;   (SwbtWr_ReinitOutputBank, SwbtWr_CallProcessAll). After each of the three it sets bit 0 of (4330) when the
+;   sequencer group is also pending (bit 4). Finally it clears bit 7. Basis: callers + body -- MidiSysEx_ProcessBlock
+;   (command 4, transfer done) calls it first; bit 7 is set only by SeqChan_WriteField_Data_A, the end step (state 3)
+;   of blocks 1-2 = live panel 0xF980 + panel memories 0x1ED350.
+MidiSysEx_FinishPanelXfer:
 	bit	7, (0xbd1a:16)
 	ret	z
 	calr	MidiSysEx_ProcessBlock_Helper
@@ -12085,7 +12151,14 @@ MidiSysEx_ProcessBlock_Helper6:
 	pop	xhl
 	pop	xde
 	ret
-MidiSysEx_ProcessBlock_Helper7:
+; MidiSysEx_FinishSoundRamXfer: End-of-transfer step for the sound-RAM group: if bit 6 of 0xBD1A is set (blocks 4-5
+;   received: the 16-byte 'KN5000 SOUND RAM' id at 0x1E0000 and the data from 0x1E0010), it sends command packet {4,
+;   0xF0, 0x50, 0x92, 0} (MIDI_PitchBendData_Block via MidiSysEx_ProcessBlock_Helper6) and clears bit 6. It also
+;   copies the 6-byte MidiSysEx_BlockTemplate into its frame and never reads it. Basis: callers + body --
+;   MidiSysEx_ProcessBlock (command 4) calls it second; bit 6 is set only by SeqChan_WriteField_Data_B, the end step
+;   (state 6) of blocks 4-5. The abort path for the same group (MidiSysEx_BlockOp_ToPartDataAndBend) sends the same
+;   packet.
+MidiSysEx_FinishSoundRamXfer:
 	dec	6, xsp
 	ld	xiy, MidiSysEx_BlockTemplate
 	ld	xix, xsp
@@ -12154,17 +12227,30 @@ SeqChan_UnhandledCmd_0x02:
 	ret
 SeqChan_UnhandledCmd_0x03:
 	ret
-MidiPkt_ArpChordHandler_Helper:
+; MidiPkt_RecoverIfXferAborted: At the end of the MIDI data-transfer command loop: if the active message's status
+;   field (+4) is non-zero (an error or abort code), runs MidiSysEx_RecoverAbortedXferGroup, which repairs the data
+;   group whose transfer was in progress; otherwise does nothing. Basis: callers + body -- the only caller
+;   ArpChord_FinalizePass runs after the loop that dispatches SeqChan_CommandHandlers until field 4 is set (the loop
+;   runs only on title 0x57, TITLE_MDEXC).
+MidiPkt_RecoverIfXferAborted:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	cp	(xwa+4), 0
 	ret	z
-	calr	MidiSysEx_ProcessBlock_Helper11
+	calr	MidiSysEx_RecoverAbortedXferGroup
 	ret
 SeqChan_UnhandledCmd_0x12:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	(xwa+4), 23
-	jr	MidiSysEx_ProcessBlock_Helper11
-MidiSysEx_ProcessBlock_Helper11:
+	jr	MidiSysEx_RecoverAbortedXferGroup
+; MidiSysEx_RecoverAbortedXferGroup: After a failed or aborted MIDI data transfer, runs the recovery for the data
+;   group that the spare message's state byte (+3, 0..21) belongs to, through MidiSysEx_BlockHandlers. States 1-3
+;   (panel): Audio_ResetAfterPayloadError, MidiMsg_ParseChannelStream, SeqTimer_UpdateTempoReg. States 4-6 (sound
+;   RAM): SendPartDataBlock_DoGetError and MIDI_PitchBendData_Block. States 7-10 (style image): AccDemo_InitDone.
+;   States 11-14 (sequencer): MidiSysEx_ProcessBlock_PtrTable[0]. States 18-21 (accompaniment block area):
+;   Voice_InitBankDataSafe. Other states do nothing. Basis: callers + body -- MidiPkt_RecoverIfXferAborted calls it
+;   when the transfer loop ends with a non-zero status (field 4), and SeqChan_UnhandledCmd_0x12 (command 5) sets
+;   status 23 and jumps to it.
+MidiSysEx_RecoverAbortedXferGroup:
 	ld	xwa, (MIDISEQ_SPARE_BUF_PTR:16)
 	ld	a, (xwa+3)
 	cp	a, 22

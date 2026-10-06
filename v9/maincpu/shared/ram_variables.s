@@ -123,7 +123,7 @@
 ; the playback and demo handlers test it with `cpw (..),0`
 	.equ SEQ_ACTIVE_PARTS,		0x28b4	; word: one bit per sequencer part that is playing
 ; sequencer.md "10 song slots (0x800 bytes each)", 20 KB -- the code: a slot is `slot << 11` past it
-; (file_demo_proc.s), MidiPkt_ArpPopReturn_Helper9 records it with its size 0x5000
+; (file_demo_proc.s), MidiPkt_SetXferBlock_SongSlots records it with its size 0x5000
 	.equ SEQ_SONG_SLOTS,		0xab000	; 10 song slots of 0x800 bytes
 ; code: one-instruction accessors with the firmware's own names (GetModeNow, GetTitleOld ... are entries
 ; of the exported name table) -- each `ld xhl,(N) / ret` or `ld (N),xwa / ret`

@@ -4966,13 +4966,13 @@ ExtData_ToneParam_CheckMode:
 	ret	nz
 	jr	ExtData_ToneParam_CheckMode_Join
 ExtData_ToneParam_CheckMode_Skip:
-	calr	ExtData_ToneParam_CheckMode_Helper
+	calr	ExtData_Tag43_SetByte1Fields
 	ret
 ExtData_ToneParam_CheckMode_Join:
 	ldw	wa, 128
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	jrl	SwbtWr_FlushAndAppendParams
-ExtData_ToneParam_CheckMode_Helper:
+ExtData_Tag43_SetByte1Fields:
 	ldw	wa, 128
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	ldw	wa, 127
@@ -5395,9 +5395,9 @@ ExtData_Voice_CheckMode:
 	ld	a, (0x9093:16)
 	cp	a, 1:i3
 	ret	nz
-	calr	ExtData_Voice_CheckMode_Helper
+	calr	ExtData_ToggleReverbIllusionOnOff
 	ret
-ExtData_Voice_CheckMode_Helper:
+ExtData_ToggleReverbIllusionOnOff:
 	ldw	wa, 192
 	calr	ExtData_ToneParam_DispatchHandler_Helper
 	jrl	SwbtWr_FlushAndAppendParams
@@ -7999,7 +7999,7 @@ VoiceMode_ParamHandler_4_Helper:
 	pop	xbc
 	pop	xwa
 	ret
-MidiStream_CmdPedalNotify_Helper:
+MidiStream_GetCategoryLastSlot:
 	push	xbc
 	push	xde
 	push	xhl
@@ -8017,7 +8017,7 @@ MidiStream_CmdPedalNotify_Helper:
 	pop	xde
 	pop	xbc
 	ret
-MidiStream_CmdPedalNotify_Helper2:
+MidiStream_ResolveVoiceIndex:
 	push	xwa
 	push	xbc
 	push	xde
@@ -11085,7 +11085,7 @@ MidiStream_ExtendedDispatch_Skip2:
 	ld	a, e
 	pushw	bc
 	ld	b, c
-	call	MidiStream_CmdPedalNotify_Helper
+	call	MidiStream_GetCategoryLastSlot
 	popw	bc
 MidiStream_ExtendedDispatch_Join:
 	extz	hl
@@ -11155,7 +11155,7 @@ MidiStream_ExtDispatch_Mode3:
 	ld	wa, (xiy+hl)
 	ld	(0x904e:16), wa
 	ld	(0x9050:16), de
-	call	MidiStream_CmdPedalNotify_Helper2
+	call	MidiStream_ResolveVoiceIndex
 	ldw_d16	de, (0x9052)
 	ldb_d8	c, (0x95a8)
 	ld	b, d

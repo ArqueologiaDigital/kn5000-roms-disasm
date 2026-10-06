@@ -594,7 +594,7 @@ MidiPkt_EnqueueControl_3368_Return:
 	ret
 MidiPkt_EnqueueExtended2_Data:
 	ret
-MidiPkt_BuildControl_Helper:
+MidiPkt_SendCtlValueSysEx:
 	lda	xsp, (xsp-10)
 	push	xiz
 	ld	xiz, xwa

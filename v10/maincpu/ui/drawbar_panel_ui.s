@@ -15336,7 +15336,12 @@ PsMixer_CtlTypeProc8_Return:
 	ret
 PsMixer_CtlTypeProc8_Return2:
 	ret
-DirmdEmu_CaseF_Helper:
+; DirmdTitle_SwitchInNullRet: Empty routine (`ret`) that the DirmdTitle emulator's switch-in method calls with WA =
+;   switch number and BC = its bit-7 flag right after posting the trace memo "DirmdTitleESw(%d, %d);" with the same
+;   two values -- the memo names this call, whose body is empty in this build. Basis: callers + body -- its only
+;   caller is DirmdTitle_EmulatorMethods[2] (0xF9AE4F), the method DirmdEmulator calls on EVT_SW_IN; the New/Old/Cur
+;   methods tail-jump to the three neighbouring `ret`s.
+DirmdTitle_SwitchInNullRet:
 	ret
 PsMixer_CtlTypeProc8_Return3:
 	ret

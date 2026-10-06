@@ -15756,7 +15756,7 @@ PsMixer_CtlTypeProc8_Return:
 	ret
 PsMixer_CtlTypeProc8_Return2:
 	ret
-PostTitle_Function_Helper:
+DirmdTitle_SwitchInNullRet:
 	ret
 PsMixer_CtlTypeProc8_Return3:
 	ret

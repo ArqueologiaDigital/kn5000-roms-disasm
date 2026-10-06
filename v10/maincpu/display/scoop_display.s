@@ -715,7 +715,7 @@ Display_InitParamLoader2:
 	ret
 Display_CallMenuInit:
 	; --- Simple wrapper: call EFA133 ---
-	call Display_CallMenuInit_Helper
+	call SqStep_InitOnEnter
 	ret
 Display_ConditionalCompare:
 	; --- Conditional handler: call EF6047, compare mem, ret ---
@@ -727,7 +727,7 @@ Display_ConditionalCompare_Ret:
 	ret
 Display_CallMenuConfig:
 	; --- Simple wrapper: call EFA8CE ---
-	call Display_CallMenuConfig_Helper
+	call SqStep_RestoreOnLeave
 	ret
 Display_PollAudioAndUpdate:
 	; --- Polling function with loop ---
@@ -4513,7 +4513,7 @@ TempoRingBuf_DispatchEvents:
 DisplayMode_Handler_3_Skip16:
 	ld	(3537:16), a
 DisplayMode_Handler_3_Loop4:
-	call	DisplayMode_Handler_3_Helper12
+	call	TempoRingBuf_PeekStatusByte
 	ld	e, a
 	and	e, 240
 	cp	(0x0d55:16), 255
@@ -4565,41 +4565,48 @@ DisplayMode_Handler_3_Loop:
 	call	VoiceState_DataBlock2_Code_Loop
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip2:
-	call	DisplayMode_Handler_3_Helper3
+	call	TempoRingBuf_OnNoteEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip3:
 	call	VoiceCtrl_ParamSetupBytecode
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip4:
-	call	DisplayMode_Handler_3_Helper5
+	call	TempoRingBuf_OnProgramChangeEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip5:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, DisplayMode_Handler_3_Loop
-	call	DisplayMode_Handler_3_Helper6
+	call	TempoRingBuf_OnTempoEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip6:
-	call	DisplayMode_Handler_3_Helper8
+	call	TempoRingBuf_OnStyleStartEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip7:
-	call	DisplayMode_Handler_3_Helper7
+	call	TempoRingBuf_OnStyleStopEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip36:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, DisplayMode_Handler_3_Loop
-	call	DisplayMode_Handler_3_Helper9
+	call	TempoRingBuf_OnModulationEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip37:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, DisplayMode_Handler_3_Loop
-	call	DisplayMode_Handler_3_Helper10
+	call	TempoRingBuf_OnPitchBendEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Return13:
 	ret
-DisplayMode_Handler_3_Helper3:
+; TempoRingBuf_OnNoteEvent: Note event (0x9n) from TempoRingBuf: on a note track ((0x0D65) = 1)
+;   DisplayMode_Handler_3_Helper4 consumes the 6-byte event (note -> 0x342D, velocity -> 0x342E), adding each key-on
+;   to the held-note list at 0x0DD6 (count 0x0DD4, max 8) and counting key-offs; when the last key is released (0x0D54
+;   bit 1) it builds one 6-byte record per collected note at 0x0D8F (note also to 0x3718, drum-mapped on track type
+;   12, velocity to 0x3717), passes them to SystemInit_StepHandler_0_Helper2 (W = 6 * count) and moves on
+;   (ToneParam_ModeGuardEntry_Helper4 / _Helper2). On other tracks it only consumes the status byte. Basis: callers +
+;   body -- TempoRingBuf_DispatchEvents sends every event whose status high nibble is 0x90 here.
+TempoRingBuf_OnNoteEvent:
 	call	Timer_ParamCompareAlt_Helper5
 	cp	(0x0d65:16), 1
 	jrl	z, DisplayMode_Handler_3_Skip17
@@ -5032,13 +5039,20 @@ DisplayMode_Handler_3_Return9:
 PerfMode_EventTable_0_Target2:
 	bit	7, w
 	jrl	nz, DisplayMode_Handler_3_Skip32
-	call	DisplayMode_Handler_3_Helper
+	call	PerfMode_IncNoteVelocity
 	jp	PerfMode_EventTable_0_Target2_Return
 DisplayMode_Handler_3_Skip32:
 	call	PerfMode_EventTable_0_Target2_Helper
 PerfMode_EventTable_0_Target2_Return:
 	ret
-DisplayMode_Handler_3_Helper:
+; PerfMode_IncNoteVelocity: Raises by 1 the velocity (byte +3) of the note-on event at the song-data cursor: sets step
+;   (3570) = +1 and field (3571) = 3, and only on a note track ((0x0D65) = 1) when the cursor's event is 0x9n on the
+;   current channel (3415) it lets PerfMode_EventTable_0_Target1_Helper8 add the step (a result above 127 keeps the
+;   old value) and store it at 0x3717, then shows note name and velocity (Disp_ShowNoteNameAndVelocity) and redraws
+;   region 3. Basis: callers + body -- PerfMode_EventTable_0_Target2 (entry 2 of the PerfMode_EventTable_0 switch
+;   table) calls it when W bit 7 is clear and its twin PerfMode_EventTable_0_Target2_Helper (step -1) when set; 0x3717
+;   is the value Disp_ShowNoteNameAndVelocity prints after 'V'.
+PerfMode_IncNoteVelocity:
 	ld	(3570:16), 1
 	ld	(3571:16), 3
 	cp	(0x0d65:16), 1
@@ -6299,7 +6313,14 @@ VoiceCtrl_ParamSetupBytecode_Skip25:
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
 	ret
-DisplayMode_Handler_3_Helper5:
+; TempoRingBuf_OnProgramChangeEvent: Program-change event (0xCn) from TempoRingBuf: unless the display mode (0x0D65)
+;   is 0, consumes the 6-byte event into 0x0D8F (byte +2, with status bit 2 as bit 7, is the part -> (0x90F7); byte
+;   +4, with status bit 0 as bit 7, -> 0x3722; byte +5 -> 0x0EF5), shows it (part <= 15: pop-up 1; part 72: the RHYTHM
+;   line), applies it with PartCtrl_WriteProgramChange, passes the 6-byte record to SystemInit_StepHandler_0_Helper2
+;   unless VoiceCtrl_ParamSetupBytecode_Tbl3_Helper returns 1, then MIDI_SendSysExFromW with W = 98. Basis: callers +
+;   body -- TempoRingBuf_DispatchEvents sends every event whose status high nibble is 0xC0 here; 0xC0 is the stored
+;   program-change event (technics-docs sequencer.md, event table).
+TempoRingBuf_OnProgramChangeEvent:
 	cp	(3429:16), 0
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Skip26
 	jp	VoiceCtrl_ParamSetupBytecode_Tbl3_Return
@@ -6433,7 +6454,13 @@ VoiceCtrl_ParamSetupBytecode_Skip14:
 	jp	VoiceCtrl_ParamSetupBytecode_Loop2
 VoiceCtrl_ParamSetupBytecode_Tbl3_Return:
 	ret
-DisplayMode_Handler_3_Helper6:
+; TempoRingBuf_OnTempoEvent: Tempo event (status 0x80) from TempoRingBuf: consumes the 4-byte event into 0x0D8F,
+;   stores the 9-bit tempo byte2 | (byte3 bit 0) << 7 | (byte3 bit 1) << 8 at 0x0EF2, record length (0x0DD2) = 4, sets
+;   0x0D53 bit 4, makes the pop-up 16 (display mode 3) or 6 and shows "TEMPO =" with the value
+;   (VoiceCtrl_ParamSetupBytecode_Tbl3_Helper10). Basis: callers + body -- TempoRingBuf_DispatchEvents sends status
+;   0x80 (exact) here when SeqState_HasModeChanged is 0; the stored word is what
+;   PerfMode_EventTable_0_Target1_Helper11 prints after Str_TempoEq.
+TempoRingBuf_OnTempoEvent:
 	ld	xiy, 3471
 	call	TempoRingBuf_ReadByte
 	ld	wa, hl
@@ -6476,12 +6503,23 @@ VoiceCtrl_ParamSetupBytecode_Skip27:
 VoiceCtrl_ParamSetupBytecode_Skip15:
 	call	VoiceCtrl_ParamSetupBytecode_Tbl3_Helper10
 	ret
-DisplayMode_Handler_3_Helper7:
+; TempoRingBuf_OnStyleStopEvent: Style STOP event (status 0x86) from TempoRingBuf: style-section index (0x3728) = 2
+;   ("STOP" in DisplayStr_StyleSectionNames), then VoiceCtrl_ParamSetupBytecode_Tbl3_Helper4: only on track type 15 or
+;   16 it shows the section name, passes the 2-byte record {0x86, channel} to SystemInit_StepHandler_0_Helper2 and
+;   calls MIDI_SendSysExFromW with W = 98; on other tracks it only consumes the status byte. Basis: callers + body --
+;   TempoRingBuf_DispatchEvents sends status 0x86 here; its twin for 0x85 sets index 1 ("START").
+TempoRingBuf_OnStyleStopEvent:
 	ld	a, 134:opc
 	ld	(0x3728:16), 2
 	call	VoiceCtrl_ParamSetupBytecode_Tbl3_Helper4
 	ret
-DisplayMode_Handler_3_Helper8:
+; TempoRingBuf_OnStyleStartEvent: Style START event (status 0x85) from TempoRingBuf: style-section index (0x3728) = 1
+;   ("START" in DisplayStr_StyleSectionNames), then VoiceCtrl_ParamSetupBytecode_Tbl3_Helper4: only on track type 15
+;   or 16 (0xF1A0[track]) it shows the section name for the display mode (SerialPort_ModeSelect_Table), passes the
+;   2-byte record {0x85, channel} to SystemInit_StepHandler_0_Helper2 and calls MIDI_SendSysExFromW with W = 98; on
+;   other tracks it only consumes the status byte. Basis: callers + body -- TempoRingBuf_DispatchEvents sends status
+;   0x85 here; its twin for 0x86 sets index 2 ("STOP").
+TempoRingBuf_OnStyleStartEvent:
 	ld	a, 133:opc
 	ld	(0x3728:16), 1
 	call	VoiceCtrl_ParamSetupBytecode_Tbl3_Helper4
@@ -6566,7 +6604,12 @@ SerialPort_ModeHandler_3:
 SerialPort_ModeHandler_0:
 	call	DisplayStr_CopyStyleSectionName
 	ret
-DisplayMode_Handler_3_Helper9:
+; TempoRingBuf_OnModulationEvent: Modulation event (status 0xD1) from TempoRingBuf: except in display mode 3 (then it
+;   only consumes one byte), consumes the event into 0x0D8F, value byte +2 -> 0x3721, record length (0x0DD2) = 3,
+;   control-name index (0x3720) = 2 ("MOD. =" in Str_PBendModExpEq) and shows the CONTROL line with the value (pop-up
+;   2). Basis: callers + body -- TempoRingBuf_DispatchEvents sends status 0xD1 here; VoiceSlot_StatusRet's display of
+;   a stored event maps 0xD1 to the same index 2 (0xD0 -> 5 AFT., 0xD2 -> 1 P.BEND, 0xD3 -> 3 EXP.).
+TempoRingBuf_OnModulationEvent:
 	cp	(0x0d65:16), 3
 	jrl	nz, SerialPort_ModeHandler_0_Skip
 	call	TempoRingBuf_ReadByte
@@ -6601,7 +6644,13 @@ SerialPort_ModeHandler_0_Join4:
 	ld	(3540:16), 0
 SerialPort_ModeHandler_0_Return5:
 	ret
-DisplayMode_Handler_3_Helper10:
+; TempoRingBuf_OnPitchBendEvent: Pitch-bend event (status 0xD2) from TempoRingBuf: except in display mode 3 (then it
+;   only consumes one byte), consumes the event into 0x0D8F, value bytes +2 -> 0x3721 and +3 -> 0x1112, record length
+;   (0x0DD2) = 4, control-name index (0x3720) = 1 ("P.BEND=") and shows the CONTROL line with the bend value
+;   (Display_BytecodeBlock_F_Tbl2_Helper2 reads 0x3721 and 0x1112). Basis: callers + body --
+;   TempoRingBuf_DispatchEvents sends status 0xD2 here; VoiceSlot_StatusRet maps a stored 0xD2 event to the same index
+;   1.
+TempoRingBuf_OnPitchBendEvent:
 	cp	(0x0d65:16), 3
 	jrl	nz, SerialPort_ModeHandler_0_Skip2
 	call	TempoRingBuf_ReadByte
@@ -6880,7 +6929,14 @@ SerialPort_ModeHandler_0_Data:
 SerialPort_ModeHandler_0_Data2:
 	.byte	0x03, 0x03, 0x03, 0x03, 0x03
 	.byte	0x03, 0x03, 0x03, 0x04
-Display_CallMenuInit_Helper:
+; SqStep_InitOnEnter: TT_SQSTEP state set-up run from the title's draw method: when the title is entered
+;   (CURRENT_TITLE != PREVIOUS_TITLE) it resets the sequencer buffers (SeqBuf_Init), clears error and flag bytes,
+;   saves (0xFC5D) to 0x1128, derives the display mode (0x0D65) from the track type (PortConfig_Handler_0_Helper2), in
+;   display mode 0 clears 0xFC5D bit 3 and posts it, then sets up the cursor / step state; on a redraw within the
+;   title it only re-runs PortConfig_Handler_0_Return and ClockConfig_Handler_0_Helper. Basis: callers + body -- only
+;   caller chain: SqStepTtlFunc_Data[0] (Display_InitGraphicsAndScreen) -> Display_InitScreenLayout ->
+;   Display_CallMenuInit; the hide-method body (SqStep_RestoreOnLeave) restores (0xFC5D) from 0x1128.
+SqStep_InitOnEnter:
 	ld	(4346:16), 0
 	ld	a, (CURRENT_TITLE:16)
 	cp	a, (PREVIOUS_TITLE:16)
@@ -7593,7 +7649,13 @@ ScoopParam_ValueTable_Sub_Helper2:
 	popw	bc
 	ld	(0x371c:16), 32
 	ret
-Display_CallMenuConfig_Helper:
+; SqStep_RestoreOnLeave: TT_SQSTEP hide-method body: always clears the step-cursor highlight (0x370F = 0, region 2)
+;   and a few state bytes; when the title really changes (PREVIOUS_TITLE != CURRENT_TITLE) it sends note-offs if
+;   0x0F54 bit 0 is set, restores (0xFC5D) from the copy the entry set-up saved at 0x1128 and posts it, resets the
+;   step / cursor state and runs Part_InitVoiceDefaults. Basis: callers + body -- only caller chain:
+;   SqStepTtlFunc_Data[1] (Display_CallConditionalCompare, the EVT_HIDE method) -> Display_ConditionalCompare ->
+;   Display_CallMenuConfig.
+SqStep_RestoreOnLeave:
 	ld	(0x370f:16), 0
 	call	Display_UpdateRegion2_Wrap
 	ld	(3413:16), 255
@@ -11655,7 +11717,7 @@ VoiceState_DataBlock2_Code_Loop:
 	ld	wa, hl
 	cp	wa, 0xffff
 	jrl	z, VoiceState_DataBlock2_Code_Return
-	call	DisplayMode_Handler_3_Helper12
+	call	TempoRingBuf_PeekStatusByte
 	bit	7, a
 	jrl	nz, VoiceState_DataBlock2_Code_Return
 	call	TempoRingBuf_ReadByte
@@ -11664,7 +11726,12 @@ VoiceState_DataBlock2_Code_Loop:
 	jrl	nz, VoiceState_DataBlock2_Code_Loop
 VoiceState_DataBlock2_Code_Return:
 	ret
-DisplayMode_Handler_3_Helper12:
+; TempoRingBuf_PeekStatusByte: Returns the next TempoRingBuf byte in WA without consuming it (TempoRingBuf_SaveReadPos
+;   copies the read index 0x1E74B to the look-ahead index 0x1E749, TempoRingBuf_ReadAlternate reads there; 0xFFFF when
+;   empty), preserving XIX -- the WA-returning twin of TempoRingBuf_PeekByte. Basis: callers + body --
+;   TempoRingBuf_DispatchEvents peeks each event's status byte with it before choosing the handler that then consumes
+;   the event, and VoiceState_DataBlock2_Code_Loop uses it to stop skipping at the next byte with bit 7 set.
+TempoRingBuf_PeekStatusByte:
 	push	xix
 	call	TempoRingBuf_SaveReadPos
 	call	TempoRingBuf_ReadAlternate
@@ -14184,7 +14251,12 @@ Str_Rhythm_Helper:
 Str_VarivariOff:
 	.byte 0x56, 0x41, 0x52
 	.ascii "IVARI OFF"
-DisplayStr_BytecodeBlock_C_Helper:
+; DisplayStr_ClearAndCopyStyleSectionName: Blanks the 27-character LCD text line at 0x0ECD (DisplayStr_ClearRegion)
+;   and copies the 8-character style-section name DisplayStr_StyleSectionNames[(0x3728)] to 0x0ED8; the caller does
+;   the region update. Basis: callers + body -- DisplayStr_BytecodeBlock_C (entries 1 and 2 of
+;   Display_ModePopupDispatch_Tbl and of SerialPort_ModeSelect_Table) calls it after drawing its RHYTHM label (region
+;   5) and before Display_UpdateRegion3.
+DisplayStr_ClearAndCopyStyleSectionName:
 	call	DisplayStr_ClearRegion
 	ld	xiy, DisplayStr_StyleSectionNames
 	ld	xix, 3800
@@ -14203,7 +14275,7 @@ DisplayStr_BytecodeBlock_C:
 	ldw	bc, 9
 	ldir85
 	call	Display_UpdateRegion5
-	call	DisplayStr_BytecodeBlock_C_Helper
+	call	DisplayStr_ClearAndCopyStyleSectionName
 	call	Display_UpdateRegion3
 	ret
 VoiceCtrl_ParamSetupBytecode_Tbl3_Helper10:

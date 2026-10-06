@@ -715,7 +715,7 @@ Display_InitParamLoader2:
 	ret
 Display_CallMenuInit:
 	; --- Simple wrapper: call EFA133 ---
-	call Display_CallMenuInit_Helper
+	call SqStep_InitOnEnter
 	ret
 Display_ConditionalCompare:
 	; --- Conditional handler: call EF6047, compare mem, ret ---
@@ -727,7 +727,7 @@ Display_ConditionalCompare_Ret:
 	ret
 Display_CallMenuConfig:
 	; --- Simple wrapper: call EFA8CE ---
-	call Display_CallMenuConfig_Helper
+	call SqStep_RestoreOnLeave
 	ret
 Display_PollAudioAndUpdate:
 	; --- Polling function with loop ---
@@ -4490,7 +4490,7 @@ TempoRingBuf_DispatchEvents:
 DisplayMode_Handler_3_Skip16:
 	ld	(3537:16), a
 DisplayMode_Handler_3_Loop4:
-	call	DisplayMode_Handler_3_Helper12
+	call	TempoRingBuf_PeekStatusByte
 	ld	e, a
 	and	e, 240
 	cp	(0x0d55:16), 255
@@ -4542,41 +4542,41 @@ DisplayMode_Handler_3_Loop:
 	call	VoiceState_DataBlock2_Code_Loop
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip2:
-	call	DisplayMode_Handler_3_Helper3
+	call	TempoRingBuf_OnNoteEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip3:
 	call	VoiceCtrl_ParamSetupBytecode
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip4:
-	call	DisplayMode_Handler_3_Helper5
+	call	TempoRingBuf_OnProgramChangeEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip5:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, DisplayMode_Handler_3_Loop
-	call	DisplayMode_Handler_3_Helper6
+	call	TempoRingBuf_OnTempoEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip6:
-	call	DisplayMode_Handler_3_Helper8
+	call	TempoRingBuf_OnStyleStartEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip7:
-	call	DisplayMode_Handler_3_Helper7
+	call	TempoRingBuf_OnStyleStopEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip36:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, DisplayMode_Handler_3_Loop
-	call	DisplayMode_Handler_3_Helper9
+	call	TempoRingBuf_OnModulationEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip37:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, DisplayMode_Handler_3_Loop
-	call	DisplayMode_Handler_3_Helper10
+	call	TempoRingBuf_OnPitchBendEvent
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Return13:
 	ret
-DisplayMode_Handler_3_Helper3:
+TempoRingBuf_OnNoteEvent:
 	call	Timer_ParamCompareAlt_Helper5
 	cp	(0x0d65:16), 1
 	jrl	z, DisplayMode_Handler_3_Skip17
@@ -5009,13 +5009,13 @@ DisplayMode_Handler_3_Return9:
 PerfMode_EventTable_0_Target2:
 	bit	7, w
 	jrl	nz, DisplayMode_Handler_3_Skip32
-	call	DisplayMode_Handler_3_Helper
+	call	PerfMode_IncNoteVelocity
 	jp	PerfMode_EventTable_0_Target2_Return
 DisplayMode_Handler_3_Skip32:
 	call	PerfMode_EventTable_0_Target2_Helper
 PerfMode_EventTable_0_Target2_Return:
 	ret
-DisplayMode_Handler_3_Helper:
+PerfMode_IncNoteVelocity:
 	ld	(3570:16), 1
 	ld	(3571:16), 3
 	cp	(0x0d65:16), 1
@@ -6276,7 +6276,7 @@ VoiceCtrl_ParamSetupBytecode_Skip25:
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
 	ret
-DisplayMode_Handler_3_Helper5:
+TempoRingBuf_OnProgramChangeEvent:
 	cp	(3429:16), 0
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Skip26
 	jp	VoiceCtrl_ParamSetupBytecode_Tbl3_Return
@@ -6410,7 +6410,7 @@ VoiceCtrl_ParamSetupBytecode_Skip14:
 	jp	VoiceCtrl_ParamSetupBytecode_Loop2
 VoiceCtrl_ParamSetupBytecode_Tbl3_Return:
 	ret
-DisplayMode_Handler_3_Helper6:
+TempoRingBuf_OnTempoEvent:
 	ld	xiy, 3471
 	call	TempoRingBuf_ReadByte
 	ld	wa, hl
@@ -6453,12 +6453,12 @@ VoiceCtrl_ParamSetupBytecode_Skip27:
 VoiceCtrl_ParamSetupBytecode_Skip15:
 	call	VoiceCtrl_ParamSetupBytecode_Tbl3_Helper10
 	ret
-DisplayMode_Handler_3_Helper7:
+TempoRingBuf_OnStyleStopEvent:
 	ld	a, 134:opc
 	ld	(0x3728:16), 2
 	call	VoiceCtrl_ParamSetupBytecode_Tbl3_Helper4
 	ret
-DisplayMode_Handler_3_Helper8:
+TempoRingBuf_OnStyleStartEvent:
 	ld	a, 133:opc
 	ld	(0x3728:16), 1
 	call	VoiceCtrl_ParamSetupBytecode_Tbl3_Helper4
@@ -6543,7 +6543,7 @@ SerialPort_ModeHandler_3:
 SerialPort_ModeHandler_0:
 	call	DisplayStr_CopyStyleSectionName
 	ret
-DisplayMode_Handler_3_Helper9:
+TempoRingBuf_OnModulationEvent:
 	cp	(0x0d65:16), 3
 	jrl	nz, SerialPort_ModeHandler_0_Skip
 	call	TempoRingBuf_ReadByte
@@ -6578,7 +6578,7 @@ SerialPort_ModeHandler_0_Join4:
 	ld	(3540:16), 0
 SerialPort_ModeHandler_0_Return5:
 	ret
-DisplayMode_Handler_3_Helper10:
+TempoRingBuf_OnPitchBendEvent:
 	cp	(0x0d65:16), 3
 	jrl	nz, SerialPort_ModeHandler_0_Skip2
 	call	TempoRingBuf_ReadByte
@@ -6857,7 +6857,7 @@ SerialPort_ModeHandler_0_Data:
 SerialPort_ModeHandler_0_Data2:
 	.byte	0x03, 0x03, 0x03, 0x03, 0x03
 	.byte	0x03, 0x03, 0x03, 0x04
-Display_CallMenuInit_Helper:
+SqStep_InitOnEnter:
 	ld	(4346:16), 0
 	ld	a, (CURRENT_TITLE:16)
 	cp	a, (PREVIOUS_TITLE:16)
@@ -7570,7 +7570,7 @@ ScoopParam_ValueTable_Sub_Helper2:
 	popw	bc
 	ld	(0x371c:16), 32
 	ret
-Display_CallMenuConfig_Helper:
+SqStep_RestoreOnLeave:
 	ld	(0x370f:16), 0
 	call	Display_UpdateRegion2_Wrap
 	ld	(3413:16), 255
@@ -11626,7 +11626,7 @@ VoiceState_DataBlock2_Code_Loop:
 	ld	wa, hl
 	cp	wa, 0xffff
 	jrl	z, VoiceState_DataBlock2_Code_Return
-	call	DisplayMode_Handler_3_Helper12
+	call	TempoRingBuf_PeekStatusByte
 	bit	7, a
 	jrl	nz, VoiceState_DataBlock2_Code_Return
 	call	TempoRingBuf_ReadByte
@@ -11635,7 +11635,7 @@ VoiceState_DataBlock2_Code_Loop:
 	jrl	nz, VoiceState_DataBlock2_Code_Loop
 VoiceState_DataBlock2_Code_Return:
 	ret
-DisplayMode_Handler_3_Helper12:
+TempoRingBuf_PeekStatusByte:
 	push	xix
 	call	TempoRingBuf_SaveReadPos
 	call	TempoRingBuf_ReadAlternate
@@ -14144,7 +14144,7 @@ Str_Rhythm_Helper:
 Str_VarivariOff:
 	.byte 0x56, 0x41, 0x52
 	.ascii "IVARI OFF"
-DisplayStr_BytecodeBlock_C_Helper:
+DisplayStr_ClearAndCopyStyleSectionName:
 	call	DisplayStr_ClearRegion
 	ld	xiy, DisplayStr_StyleSectionNames
 	ld	xix, 3800
@@ -14163,7 +14163,7 @@ DisplayStr_BytecodeBlock_C:
 	ldw	bc, 9
 	ldir85
 	call	Display_UpdateRegion5
-	call	DisplayStr_BytecodeBlock_C_Helper
+	call	DisplayStr_ClearAndCopyStyleSectionName
 	call	Display_UpdateRegion3
 	ret
 VoiceCtrl_ParamSetupBytecode_Tbl3_Helper10:

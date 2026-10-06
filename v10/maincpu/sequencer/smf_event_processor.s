@@ -5123,7 +5123,7 @@ SeqStep_FileSectorPopReturn_Loop3:
 SeqStep_FileSectorPopReturn_Skip4:
 	ld	xwa, (xsp+20)
 	push	xwa
-	calr	SeqStep_FileSectorPopReturn_Helper
+	calr	Fat_WriteDirEntry
 	ld	xwa, (xsp+24)
 	push	xwa
 	calr	SeqStep_FileBufferFinal
@@ -5987,7 +5987,15 @@ SeqByteBlock_PathNormalize_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+30)
 	ret
-SeqStep_FileSectorPopReturn_Helper:
+; Fat_WriteDirEntry: Writes an open file's directory entry back: lets the device stamp the time word +65 (block op 6;
+;   drive A's FDC_ReturnZeroLong stores 0), fetches the directory sector (+26) through the sector cache
+;   (SeqStep_FileIoCheck flags 0x1A, which include the dirty bit 1) and packs the in-memory entry at +52 (name,
+;   attribute +64, time, date, first cluster +69, size +71) into slot +51 with SeqStep_FileSectorReturn, then releases
+;   the entry's bits 3/4. HL = 0, or 10 when no cache buffer was available. Basis: callers + body -- the close slot
+;   (SeqChan_ValidateAndDispatch, FileIO_DriveAFileOps[5]) calls it when the file is dirty (+3 bit 7),
+;   SeqChan_WritePatchData after setting the first name byte to 0xE5 (deleted), and Fat_AllocateClusters before
+;   failing with 15 (no free cluster).
+Fat_WriteDirEntry:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, (xsp+12)
@@ -6080,7 +6088,16 @@ SeqByteBlock_PathNormalize_Skip11:
 SeqByteBlock_PathNormalize_Helper5_Epilogue:
 	pop	xiz
 	ret
-SeqByteBlock_PathNormalize_Helper6:
+; Fat_MountVolume: Mounts the FAT volume of the device record on the stack (volume = device +26): clears the mounted
+;   flag (+2 bit 0), reads the boot sector into a 538-byte (26 + 512) buffer -- on a partitioned device (+4 bit 7)
+;   first sector 0, checking 0x55AA at +510 and walking the partition table (+446) to entry device +5 -- parses the
+;   BPB into the volume (bytes/sector +38, sectors/cluster +32, reserved +42, FATs +58, root entries +44, total
+;   sectors +8, sectors/FAT +48, geometry +50/+52), derives the FAT, root and data starts and the cluster count +54 (>
+;   4087 -> FAT16 mask 0xFFFF, else 0xFFF, in +36), sets +2 bit 0 and returns HL = 0 or an error (3 no memory, 22 no
+;   0x55AA, 23 broken partition chain, 40 zero bytes/sector or sectors/cluster). Basis: callers + body -- the open
+;   slot FileIO_DriveAFileOps[0] (SeqByteBlock_ChannelContainer) calls it when +2 bit 0 is clear, and
+;   Fat_HandleDiskIoError calls it to re-mount after a disk error.
+Fat_MountVolume:
 	lda	xsp, (xsp-34)
 	push	xiz
 	ldw (xsp+18), 0
@@ -6545,7 +6562,7 @@ SeqByteBlock_PathNormalize_Helper6_Skip9:
 	jr	nz, SeqByteBlock_PathNormalize_Skip17
 	ld	xwa, (xsp+2)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper6
+	calr	Fat_MountVolume
 	inc	4, xsp
 	ld	iz, hl
 	cp	iz, 0:i3
@@ -6851,7 +6868,15 @@ SeqByteBlock_PathNormalize_Epilogue7:
 	pop	xiz
 	inc	6, xsp
 	ret
-SeqByteBlock_PathNormalize_Helper9_Helper:
+; Fat_TransferSectorsDirect: Fat_TransferSectorsDirect(file, buffer, count, is_read): moves the whole-sector part of a
+;   file read or write straight between the caller's buffer and the disk -- maps the position (+22) to its contiguous
+;   sector run (SeqByteBlock_PathNormalize_Helper7), takes a sector-cache entry (+34; SeqStep_FileIoCheck flags 0x28
+;   when the old one holds dirty data), points the entry's data pointer +12 at the caller's buffer, sets its sector
+;   count +16 = min(count / bytes-per-sector, run), calls block op +16 (read) or +20 (write), then restores +12 and
+;   invalidates the entry (+22 = 0). Returns HL = bytes moved; on error 0, with the status in file +6 and 0x1E53C.
+;   Basis: callers + body -- Fat_ReadFile (is_read 1) and Fat_WriteFile (is_read 0) call it with count rounded down to
+;   whole sectors (count & ~(volume +4), +4 = bytes/sector - 1) between their partial-sector copies through the cache.
+Fat_TransferSectorsDirect:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, (xsp+20)
@@ -7157,7 +7182,7 @@ SeqByteBlock_PathNormalize_Helper9_Skip6:
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper9_Helper
+	calr	Fat_TransferSectorsDirect
 	lda	xsp, (xsp+12)
 	ld	iz, hl
 	ld	xwa, (xsp+10)
@@ -7399,7 +7424,7 @@ SeqByteBlock_PathNormalize_Helper10_Skip6:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper9_Helper
+	calr	Fat_TransferSectorsDirect
 	lda	xsp, (xsp+12)
 	ld	iz, hl
 	ld	xwa, (xsp+12)
@@ -7551,7 +7576,7 @@ SeqByteBlock_PathNormalize_Entry3:
 	bitm	7, (xiz+3)
 	jr	z, SeqByteBlock_PathNormalize_Helper10_Skip16
 	push	xiz
-	calr	SeqStep_FileSectorPopReturn_Helper
+	calr	Fat_WriteDirEntry
 	inc	4, xsp
 	cp	hl, 0:i3
 	jr	nz, SeqByteBlock_PathNormalize_Epilogue11
@@ -7733,7 +7758,7 @@ SeqChan_WritePatchData:
 	ld	xiz, (xsp+10)
 	ld	(xiz+52), 229
 	push	xiz
-	calr	SeqStep_FileSectorPopReturn_Helper
+	calr	Fat_WriteDirEntry
 	ld	(xsp+8), hl
 	push	xiz
 	calr	SeqStep_FileBufferFinal
@@ -8053,7 +8078,7 @@ SeqChan_ByteBlockD:
 	ret
 ; Fat_HandleDiskIoError: After a floppy sector transfer, handles its error word (*arg1): 0 -> HL = 0. Otherwise counts
 ;   the attempt (word 0x2271E) and maps the FDC code: 0x2F write-protect -> 31 (HL = 0 at once), 0x30/0x31 -> 32,
-;   0x33/0x35 -> 33, 6 (disk changed) -> 6, other -> 36; re-mounts the volume (SeqByteBlock_PathNormalize_Helper6) and
+;   0x33/0x35 -> 33, 6 (disk changed) -> 6, other -> 36; re-mounts the volume (Fat_MountVolume) and
 ;   returns HL = 1 (retry) only if the re-mount succeeded on a 33/6/36 path and 0x2271E is then below 1. Basis:
 ;   callers + body -- SeqChan_ByteBlockE (read loop, FDC command 3) and SeqChan_ByteBlockF (write loop, command 4)
 ;   call it after every transfer and loop while it returns non-zero.
@@ -8094,7 +8119,7 @@ SeqChan_ByteBlockD_Skip:
 	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_PathNormalize_Helper6
+	call	Fat_MountVolume
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Entry
@@ -8111,7 +8136,7 @@ SeqChan_ByteBlockD_Helper_Skip2:
 	ld	xwa, (xwa+26)
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_PathNormalize_Helper6
+	call	Fat_MountVolume
 	inc	4, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Entry2
@@ -8129,7 +8154,7 @@ SeqChan_ByteBlockD_Helper_Skip3:
 	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_PathNormalize_Helper6
+	call	Fat_MountVolume
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Skip2
@@ -8147,7 +8172,7 @@ SeqChan_ByteBlockD_Skip3:
 	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_PathNormalize_Helper6
+	call	Fat_MountVolume
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Helper_Skip4

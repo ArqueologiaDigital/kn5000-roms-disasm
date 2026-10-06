@@ -44,7 +44,7 @@ MiddleFuncCall_OnSongNameSet:
 	push	xhl
 	push	xix
 	push	xiz
-	call	MiddleFuncCall_DispatchData_Code_Helper5
+	call	SqSngName_ApplyNameAndExit
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -55,7 +55,7 @@ MiddleFuncCall_OnTrAsTrackInc:
 	push	xhl
 	push	xix
 	push	xiz
-	call	MiddleFuncCall_DispatchData_Code_Helper
+	call	SqTrAs_CursorNextTrack
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -66,7 +66,7 @@ MiddleFuncCall_OnTrAsTrackDec:
 	push	xhl
 	push	xix
 	push	xiz
-	call	MiddleFuncCall_DispatchData_Code_Helper2
+	call	SqTrAs_CursorPrevTrack
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -88,7 +88,7 @@ MiddleFuncCall_OnTrAsPageDec:
 	push	xhl
 	push	xix
 	push	xiz
-	call	MiddleFuncCall_DispatchData_Code_Helper4
+	call	SqTrAs_CursorToFirstPage
 	pop	xiz
 	pop	xix
 	pop	xhl

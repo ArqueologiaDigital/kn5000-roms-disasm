@@ -148,7 +148,7 @@ PanelButton_ModeKey:
 PanelButton_ModeKey_Join:
 	ld	(xiz+3), 255
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData_Code_Helper
+	calr	PanelButton_ModeKey_FilterTarget
 	cp	(xiz), 255
 	jr	nz, PanelButton_ModeKey_Skip7
 	ld	xwa, xiz
@@ -203,7 +203,7 @@ PanelButton_ModeKey_Join3:
 PanelButton_ModeKey_Epilogue:
 	pop	xiz
 	ret
-FileIO_BytecodeData_Code_Helper:
+PanelButton_ModeKey_FilterTarget:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
@@ -5152,13 +5152,13 @@ ExtData_ToneParam_CheckMode:
 	ret	nz
 	jr	ExtData_ToneParam_CheckMode_Join
 ExtData_ToneParam_CheckMode_Skip:
-	calr	ExtData_ToneParam_CheckMode_Helper
+	calr	ExtData_Tag43_SetByte1Fields
 	ret
 ExtData_ToneParam_CheckMode_Join:
 	ldw	wa, 128
 	calr	ExtData_SetTlvField
 	jrl	SwbtWr_FlushAndAppendParams
-ExtData_ToneParam_CheckMode_Helper:
+ExtData_Tag43_SetByte1Fields:
 	ldw	wa, 128
 	calr	ExtData_SetTlvField
 	ldw	wa, 127
@@ -5332,7 +5332,7 @@ ExtData_ToneParam_MultiChannel:
 ExtData_ToneParam_MultiChannel_Skip:
 	jrl	ExtData_ToneParam_MultiChannel_Join3
 ExtData_ToneParam_MultiChannel_Skip2:
-	calr	ExtData_ToneParam_MultiChannel_Helper
+	calr	ExtData_PostRawValueAndMask
 	ret
 ExtData_ToneParam_MultiChannel_Skip3:
 	ld	c, (0x9131:16)
@@ -5572,7 +5572,7 @@ ExtData_Voice_UpdateFlags:
 	ld	(xbc), a
 	calr	MIDI_WriteResetSequence
 	ret
-ExtData_ToneParam_MultiChannel_Helper:
+ExtData_PostRawValueAndMask:
 	ld	(MIDI_MSG_DATA2), (37168:16)
 	ld	(MIDI_MSG_DATA3), (37169:16)
 	jrl	SwbtWr_FlushAndAppendParams
@@ -5581,9 +5581,9 @@ ExtData_Voice_CheckMode:
 	ld	a, (0x912f:16)
 	cp	a, 1:i3
 	ret	nz
-	calr	ExtData_Voice_CheckMode_Helper
+	calr	ExtData_ToggleReverbIllusionOnOff
 	ret
-ExtData_Voice_CheckMode_Helper:
+ExtData_ToggleReverbIllusionOnOff:
 	ldw	wa, 192
 	calr	ExtData_ToggleTlvBits
 	jrl	SwbtWr_FlushAndAppendParams
@@ -5598,7 +5598,7 @@ ExtData_Voice_MixedHandler:
 	ret	nz
 	jr	ExtData_Voice_MixedHandler_Join
 ExtData_Voice_MixedHandler_Skip:
-	calr	ExtData_Voice_MixedHandler_Helper
+	calr	ExtData_ApplyTransposeEvent
 	ret
 ExtData_Voice_MixedHandler_Join:
 	ld	wa, 4:i3
@@ -5629,7 +5629,7 @@ ExtData_Voice_MixedHandler_Join4:
 	ldw	wa, 69
 	call	CtrlPanel_SetIndicatorBit
 	ret
-ExtData_Voice_MixedHandler_Helper:
+ExtData_ApplyTransposeEvent:
 	ld	c, (0x9131:16)
 	ld	a, c
 	and	a, 255
@@ -8297,7 +8297,7 @@ VoiceMode_ParamHandler_4_Helper:
 	pop	xbc
 	pop	xwa
 	ret
-MidiStream_ExtendedDispatch_Helper2:
+MidiStream_GetCategoryLastSlot:
 	push	xbc
 	push	xde
 	push	xhl
@@ -8315,7 +8315,7 @@ MidiStream_ExtendedDispatch_Helper2:
 	pop	xde
 	pop	xbc
 	ret
-MidiStream_ExtendedDispatch_Helper3:
+MidiStream_ResolveVoiceIndex:
 	push	xwa
 	push	xbc
 	push	xde
@@ -10888,7 +10888,7 @@ MidiStream_InitFromLookup_Data:
 	.byte 0xb2, 0x13, 0x7f, 0x00, 0xb3, 0x13, 0x7f, 0x02
 	.byte 0x13, 0x04, 0x08, 0x03, 0x13, 0x08, 0x7f, 0x04
 	.fill 8, 1, 0xff
-MidiCC_Handler_BitManipulation_Helper:
+MidiCC_RxCC83_SetParamBitsAndQueue:
 	ld	(0x90f8:16), 255
 	ld	a, (0xfda1:16)
 	and	a, 63
@@ -10932,7 +10932,7 @@ MidiStream_ApplyDone:
 MidiStream_DispatchData:
 	calr	MidiStream_ExtendedDispatch
 	ret
-MidiCC_Helper_ConditionalESetup_Store_Helper:
+MidiCC_Switch_WritePartParamAndQueue:
 	ld	(0x90f8:16), 255
 	call	MIDI_WriteVoiceParamDirect
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
@@ -10956,7 +10956,7 @@ MidiStream_ApplyPendingParams_Return:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
-MidiCC_RxCC11_Expression_Helper:
+MidiCC_SetPendingPartExpression:
 	cp	c, 176
 	jr	nz, MidiStream_ApplyPendingParams_Skip2
 	set	7, e
@@ -10972,7 +10972,7 @@ MidiStream_ApplyPendingParams_Return2:
 	ret
 	calr MidiStream_ExtendedDispatch
 	ret
-MidiRx_PitchBend_Helper:
+MidiRx_SetPendingPartPitchBend:
 	cp	b, 31
 	jr	ugt, MidiStream_ApplyPendingParams_Return2
 	set	7, e
@@ -10982,7 +10982,7 @@ MidiRx_PitchBend_Helper:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
-MidiCC_RxCC1_Modulation_Helper:
+MidiCC_SetPendingPartModulation:
 	cp	b, 31
 	jr	ugt, MidiStream_ApplyPendingParams_Return2
 	set	7, e
@@ -11059,7 +11059,7 @@ MidiCC_ResetAllControllers:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
-MidiCC_Handler_TableDispatch_Helper:
+MidiCC_AllSoundOff_QueuePartParam:
 	ld	bc, (0x9644:16)
 	ld	de, (0x9646:16)
 	ld	(0x90f8:16), 255
@@ -11583,7 +11583,7 @@ MidiStream_ExtendedDispatch_Skip2:
 	ld	a, e
 	pushw	bc
 	ld	b, c
-	call	MidiStream_ExtendedDispatch_Helper2
+	call	MidiStream_GetCategoryLastSlot
 	popw	bc
 MidiStream_ExtendedDispatch_Join:
 	extz	hl
@@ -11653,7 +11653,7 @@ MidiStream_ExtDispatch_Mode3:
 	ld	wa, (xiy+hl)
 	ld	(0x90ea:16), wa
 	ld	(0x90ec:16), de
-	call	MidiStream_ExtendedDispatch_Helper3
+	call	MidiStream_ResolveVoiceIndex
 	ldw_d16	de, (0x90ee)
 	ldb_d8	c, (0x9644)
 	ld	b, d
@@ -11667,7 +11667,7 @@ MidiStream_SetPartProgram:
 	pushw	bc
 	pushw	de
 	set	0, (0x90fa:16)
-	calr	MidiStream_ExtendedDispatch_Helper_Helper
+	calr	MidiStream_CheckPartProgramAllowed
 	bit	1, (0x90fa:16)
 	jr	nz, MidiStream_ExtendedDispatch_Epilogue
 	stb_d8	(0x90f7), c
@@ -11708,7 +11708,7 @@ MidiStream_ExtendedDispatch_Epilogue:
 	popw	hl
 	pop	xix
 	ret
-MidiStream_ExtendedDispatch_Helper_Helper:
+MidiStream_CheckPartProgramAllowed:
 	push	xix
 	pushw	hl
 	pushw	bc

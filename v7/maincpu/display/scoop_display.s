@@ -4615,7 +4615,7 @@ DisplayMode_Handler_3_Skip25:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, DisplayMode_Handler_3_Loop
-	call	SerialPort_ModeHandler_0_0x5
+	call	TempoRingBuf_OnModulationEvent
 	jp	DisplayMode_Handler_3_0x9D
 DisplayMode_Handler_3_Skip26:
 	call	SeqState_HasModeChanged
@@ -5058,13 +5058,13 @@ DisplayMode_Handler_3_Helper9_Return3:
 PerfMode_EventTable_0_Target2:
 	bit	7, w
 	jrl	nz, DisplayMode_Handler_3_Helper9_Skip3
-	call	DisplayMode_Handler_3_Helper9_Helper
+	call	PerfMode_IncNoteVelocity
 	jp	PerfMode_EventTable_0_Target2_Return
 DisplayMode_Handler_3_Helper9_Skip3:
 	call	PerfMode_EventTable_0_Target2_Helper
 PerfMode_EventTable_0_Target2_Return:
 	ret
-DisplayMode_Handler_3_Helper9_Helper:
+PerfMode_IncNoteVelocity:
 	ld	(0x0df2:16), 1
 	ld	(0x0df3:16), 3
 	cp	(0x0d65:16), 1
@@ -6580,7 +6580,7 @@ SerialPort_ModeHandler_3:
 SerialPort_ModeHandler_0:
 	call	DisplayStr_CopyStyleSectionName
 	ret
-SerialPort_ModeHandler_0_0x5:
+TempoRingBuf_OnModulationEvent:
 	cp	(3429:16), 3
 	jrl	nz, SerialPort_ModeHandler_0_Skip
 	call	TempoRingBuf_ReadByte
@@ -14181,7 +14181,7 @@ Str_Rhythm_Helper:
 	; copies 4 byte(s) per use (`ld bc, 4` + ldir) into the LCD text buffer
 Str_VarivariOff:
 	.ascii	"VARIVARI OFF"
-DisplayStr_BytecodeBlock_C_Helper:
+DisplayStr_ClearAndCopyStyleSectionName:
 	call DisplayStr_ClearRegion
 	ld XIY,DisplayStr_StyleSectionNames
 	ld XIX,0x00000ed8
@@ -14200,7 +14200,7 @@ DisplayStr_BytecodeBlock_C:
 	ldw	bc, 9
 	ldir85
 	call	Display_UpdateRegion5
-	call	DisplayStr_BytecodeBlock_C_Helper
+	call	DisplayStr_ClearAndCopyStyleSectionName
 	call	Display_UpdateRegion3
 	ret
 DisplayStr_BytecodeBlock_C_0x24:

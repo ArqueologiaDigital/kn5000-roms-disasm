@@ -1421,7 +1421,7 @@ SeqChan_WriteFieldHandlers:
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
 	.long SeqChan_WriteField_Data_E
-; 6-byte template: MidiSysEx_ProcessBlock_Helper7 (0xFD7A1D) copies it into its frame (`ld xiy,<this>; ld xix,xsp; ld bc,3; ldirw`).
+; 6-byte template: MidiSysEx_FinishSoundRamXfer (0xFD7A1D) copies it into its frame (`ld xiy,<this>; ld xix,xsp; ld bc,3; ldirw`).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiSysEx_BlockTemplate:
 	.byte 0x88, 0x00, 0x18, 0x00, 0x00, 0x00
@@ -1790,7 +1790,7 @@ MidiPkt_MsgTemplate_3364:
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_3368:
 	.byte 0x00, 0x00, 0x00, 0xff
-; 4-byte template: MidiPkt_BuildControl_Helper (0xFD9EFD) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
+; 4-byte template: MidiPkt_SendCtlValueSysEx (0xFD9EFD) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_336C:
 	.byte 0x00, 0x00, 0x00, 0xff

@@ -3848,16 +3848,32 @@ BitMapOut_UpdateWidget_Done_Skip:
 BitMapOut_UpdateWidget_Done_Join:
 	call	ApPostEvent
 	ret
-FileIO_ByteBlock_DemoProc1_Helper4:
+; PanelMemory_PreSlotLoad: Empty hook (ret) run before one panel memory is read from a .PMT file; WA = destination
+;   memory index. Basis: callers + body -- FileIO_ByteBlock_DemoProc1 (the single-memory load reached from
+;   SLDstBankList) calls it right before reading the memory into 0x1ED400 + size*index, the slot where the whole-file
+;   load calls PrePmLoad (also a bare ret).
+PanelMemory_PreSlotLoad:
 	ret
-FileIO_ByteBlock_DemoProc1_Helper5:
+; PanelMemory_PostSlotLoad: Hook run after one panel memory was read: BC < 0 (read failed) restores memory WA from its
+;   ROM default (VoiceData_InitAndCopyParams), otherwise validates it (PanelTlv_ValidatePanelMemory). Basis: callers +
+;   body -- FileIO_ByteBlock_DemoProc1 passes WA = destination index and BC = the read result, in the place PostPmLoad
+;   (which calls PanelTlv_ValidatePanelMemories) takes for a whole-file load.
+PanelMemory_PostSlotLoad:
 	extz	wa
 	cp	bc, 0:i3
 	jp	lt, (VoiceData_InitAndCopyParams:24)
 	jp	PanelTlv_ValidatePanelMemory
-LoadRegion1_OpenSuccess_Helper:
+; PanelMemory_PreBankLoad: Empty hook (ret) run before one panel-memory bank (16-byte bank name + 8 memories) is read
+;   from a .PMT file; WA = destination bank. Basis: callers + body -- FileIO_LoadRegion1_VRAM (bank 0 of a one-bank
+;   file) and SLDstBankList_FuncBody_Helper7 (bank load) call it before the reads, where the whole-file path calls
+;   PrePmLoad.
+PanelMemory_PreBankLoad:
 	ret
-LoadRegion1_OpenSuccess_Helper2:
+; PanelMemory_PostBankLoad: Hook run after a panel-memory bank was read: BC < 0 (read failed) restores bank WA's ROM
+;   default name (VoiceData_ExtendedParamSetup), otherwise validates its 8 memories WA*8+0..7
+;   (PanelTlv_ValidatePanelMemory). Basis: callers + body -- FileIO_LoadRegion1_VRAM and the bank loader pass WA =
+;   bank and BC = the read result, where the whole-file path calls PostPmLoad.
+PanelMemory_PostBankLoad:
 	dec	2, xsp
 	push qiz
 	ld	(xsp+2), a
