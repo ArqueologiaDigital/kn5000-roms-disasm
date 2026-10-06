@@ -41,6 +41,8 @@ TABLE DETECTORS (each a separate, stated rule)
      >= 3 consecutive LE32 words (stride 4, any offset) each equal to a LABELLED
      instruction start, >= 3 distinct; grown both ways over words equal to ANY
      instruction start.  Null control: anchor test against "labelled start + 1".
+     Also at STRIDE 8 (2026-10-06), outside the stride-4 runs: one code pointer per 8-byte record (the
+     KN5000 control-panel action lists, found by hand first).
      Inside a compiled-C .incbin an entry counts as symbolic iff its value is named
      in that bin's generated <stem>_link.ld (NAKA_ADDR(Name) / extern).
 
@@ -544,7 +546,7 @@ def c_link_addrs(key, incpath):
     return _LD[ck]
 
 
-def detect_U(key, shift=0, minrun=3, mindistinct=3):
+def detect_U(key, shift=0, minrun=3, mindistinct=3, stride=4, skip=None):
     """UNFRAMED runs of code pointers in bytes that are not a `.long` line.
 
     ANCHOR: >= minrun consecutive LE32 words (stride 4, any byte offset) each equal
@@ -552,7 +554,10 @@ def detect_U(key, shift=0, minrun=3, mindistinct=3):
     distinct values (repeated u16-pair filler such as 0x00F000F0 is not a table).
     EXTENSION: the anchor is then grown both ways while the next word equals ANY
     instruction start (labelled or not), so a table's unlabelled targets are counted.
-    NULL CONTROL: shift=1 runs the anchor test against "labelled start + 1"."""
+    NULL CONTROL: shift=1 runs the anchor test against "labelled start + 1".
+    STRIDE 8 (added 2026-10-06): the same rule with the words 8 bytes apart finds one code pointer per
+    8-byte record -- the KN5000 control-panel action lists (PanelButton_ActionListPool) were invisible
+    at stride 4.  `skip` = byte ranges the stride-4 pass already reported, so no table counts twice."""
     m = load(key)
     rows = m["rows"]
     lab, anys = set(), set()
@@ -577,23 +582,26 @@ def detect_U(key, shift=0, minrun=3, mindistinct=3):
         return 0 <= o and o + 4 <= n and elig[o] and elig[o + 3] and w(o) in S
 
     hits, covered, o = [], bytearray(n), 0
+    for a0, b0 in (skip or ()):
+        if b0 > a0:
+            covered[max(a0 - base, 0):max(b0 - base, 0)] = b"\x01" * (max(b0 - base, 0) - max(a0 - base, 0))
     while o + 4 <= n:
         if covered[o]:
             o += 1
             continue
         j = o
-        while good(j, lab):
-            j += 4
-        k = (j - o) // 4
-        if k >= minrun and len({raw[x:x + 4] for x in range(o, j, 4)}) >= mindistinct:
+        while good(j, lab) and not covered[j]:
+            j += stride
+        k = (j - o) // stride
+        if k >= minrun and len({raw[x:x + 4] for x in range(o, j, stride)}) >= mindistinct:
             lo, hi = o, j
             if not shift:
-                while good(lo - 4, anys) and not covered[lo - 4]:
-                    lo -= 4
-                while good(hi, anys):
-                    hi += 4
+                while good(lo - stride, anys) and not covered[lo - stride]:
+                    lo -= stride
+                while good(hi, anys) and not covered[hi]:
+                    hi += stride
             covered[lo:hi] = b"\x01" * (hi - lo)
-            hits.append((base + lo, (hi - lo) // 4))
+            hits.append((base + lo, (hi - lo) // stride))
             o = hi
             continue
         o += 1
@@ -611,13 +619,13 @@ def detect_U(key, shift=0, minrun=3, mindistinct=3):
             ldaddrs = c_link_addrs(key, re.search(r'"([^"]+)"', r[6]).group(1))
         ents = []
         for q in range(k):
-            val = le(m, a + 4 * q, 4)
+            val = le(m, a + stride * q, 4)
             e = mk_entry(key, val, val not in ldaddrs, "C-ld" if val in ldaddrs else "raw")
             if e:
-                e["at"] = a + 4 * q
+                e["at"] = a + stride * q
                 e["jump"] = True            # every word is an instruction-start pointer
                 ents.append(e)
-        tables.append(dict(kind="U", addr=a, name=label_of(m, rows, ri) if r else None,
+        tables.append(dict(kind="U", addr=a, name=label_of(m, rows, ri) if r else None, stride=stride,
                            nwords=k, file="%s:%d (%s %s)" % (r[2], r[3] + 1, r[4], r[5]) if r else "?",
                            ents=ents, host=(r[4], r[5]) if r else None))
     return tables
@@ -670,7 +678,9 @@ def main():
         tabs = detect_A(key) + detect_J(key) + o_tabs + detect_D(key, {t["addr"] for t in o_tabs})
         tabs = [t for t in tabs if t["ents"] and is_code_table(t)]
         un = detect_U(key)
-        null = detect_U(key, shift=1)
+        spans = [(t["addr"], t["addr"] + 4 * t["nwords"]) for t in un]
+        un += detect_U(key, stride=8, skip=spans)
+        null = detect_U(key, shift=1) + detect_U(key, shift=1, stride=8, skip=spans)
         res[key] = dict(tables=tabs, unframed=un, null=len(null), d_unresolved=UNRESOLVED.get(key, 0))
     if "--json" in args:
         json.dump(res, open(args[args.index("--json") + 1], "w"), indent=0, default=str)

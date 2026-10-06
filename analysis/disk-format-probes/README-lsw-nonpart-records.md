@@ -56,7 +56,7 @@ Both accessors take the same 4-byte descriptor `{ u8 part_tag, u8 ?, u8 index, u
 off the message bus and forwards `(tag, index, value)`. The writers' callers are the
 **sound-select** paths: `Sound_SetSelection` (`0x00F98DEA`), `Sound_Navigate_ApplyChange`
 (`0x00F98F77`), `MainVariSet`, `MIDI_SetupChannelParams` (`0x00FCA2CD`). The reader is
-called from `FileIO_BytecodeData` (`0x00FC5CB1`, `0x00FC5D63`).
+called from `PanelButton_SoundGroup` and `PanelButton_RhythmGroup` (`0x00FC5CB1`, `0x00FC5D63`; named 2026-10-06, the code was inside the old `FileIO_BytecodeData` label).
 
 At boot, `PanelTlv_ResolvePartCompanions_Loop` walks the 23 tags of the ROM list at `0x00ED92F2`
 (`00 01 … 14 17 48 FF`) and, for each, does

@@ -1319,7 +1319,7 @@ Encoder_ValueScanAndSync:
 
 Encoder_ScanAndSync:
 	calr Encoder_ReadNextEntry
-	calr Encoder_PrepareCallback
+	calr PanelButton_DispatchChange
 
 Encoder_SyncLoop:
 	call MidiCC_SyncForceResync
@@ -1352,17 +1352,21 @@ Encoder_ReadNextEntry:
 	inc 1, (0x8e8c:16)
 	ret
 
-Encoder_PrepareCallback:
+; One queued panel change {event index, old byte, new byte} (RAM 0x8E78, the index also at 0x8E90): walk
+; PanelButton_ActionLists[index] (PanelButton_HelpModeActionLists in mode 20, MD_HELP).  The frame at
+; (0x8E7C) gets {0xAA, index, old, new} at +4; per action, +0..+3 = {event_id, event_arg, old & mask,
+; new & mask} shifted by the action's shift, and the handler is called when the new value is not 0.
+PanelButton_DispatchChange:
 	push xiz
 	ld c, (0x8e90:16)
 	extz bc
 	sla bc, 2
-	ld xwa, Encoder_PrepareCallback_PtrTable
+	ld xwa, PanelButton_ActionLists
 	cp (CURRENT_MODE:16), 20
-	jr nz, Encoder_ResolveCallbackAddr
-	ld xwa, Encoder_PrepareCallback_PtrTable_2
+	jr nz, PanelButton_DispatchChange_Frame
+	ld xwa, PanelButton_HelpModeActionLists
 
-Encoder_ResolveCallbackAddr:
+PanelButton_DispatchChange_Frame:
 	ld	xiz, (xwa+bc)
 	lda xbc, (0x8e7c:16)
 	ld (xbc + 4), 0xaa
@@ -1372,9 +1376,9 @@ Encoder_ResolveCallbackAddr:
 	ld (xbc + 6), a
 	ld a, (xde + 2)
 	ld (xbc + 7), a
-	jr FileIO_MainLoop
+	jr PanelButton_DispatchChange_Loop
 
-FileIO_ProcessMaskAndShift:
+PanelButton_DispatchChange_Action:
 	lda xhl, (0x8e78:16)
 	ld e, (xiz + 3)
 	ld d, e
@@ -1383,22 +1387,22 @@ FileIO_ProcessMaskAndShift:
 	ld l, e
 	ld e, (xiz + 2)
 	bit 4, e
-	jr z, FileIO_AudioControlStart
+	jr z, PanelButton_DispatchChange_ShiftRight
 	res 4, e
 	ld a, e
 	and a, 0xf
-	jr z, FileIO_ShiftLeftLow
+	jr z, PanelButton_DispatchChange_ShiftNewLeft
 	slla d
 
-FileIO_ShiftLeftLow:
+PanelButton_DispatchChange_ShiftNewLeft:
 	ld a, e
 	and a, 0xf
-	jr z, FileIO_ShiftDone
+	jr z, PanelButton_DispatchChange_Shifted
 	slla l
 
-FileIO_ShiftDone:
-	jr FileIO_CallbackHandler
+PanelButton_DispatchChange_Shifted:
+	jr PanelButton_DispatchChange_Call
 
-FileIO_AudioControlStart:
+PanelButton_DispatchChange_ShiftRight:
 
 ; --- Audio Control, File I/O & MIDI Processing ---

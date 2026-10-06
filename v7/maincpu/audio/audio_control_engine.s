@@ -11,20 +11,20 @@
 ; bytes with no byte-identical v10 counterpart.  Comments carried over
 ; from v10 may cite v10 addresses.
 
-FileIO_AudioControlStart:
+PanelButton_DispatchChange_ShiftRight:
 	ld	a, e
 	and	a, 0xf
-	jr	z, FileIO_ShiftD
+	jr	z, PanelButton_DispatchChange_ShiftNewRight
 	srla	d
-FileIO_ShiftD:
+PanelButton_DispatchChange_ShiftNewRight:
 	ld	a, e
 	and	a, 0xf
-	jr	z, FileIO_CallbackHandler
+	jr	z, PanelButton_DispatchChange_Call
 	srla	l
 ; File I/O callback handler
-FileIO_CallbackHandler:
+PanelButton_DispatchChange_Call:
 	cp	l, 0:i3
-	jr	z, FileIO_AdvancePointer
+	jr	z, PanelButton_DispatchChange_Next
 	ld	a, (xiz + 1)
 	ld	(xbc + 1), a
 	ld	(xbc + 2), d
@@ -32,22 +32,24 @@ FileIO_CallbackHandler:
 	ld	xhl, (xiz + 4)
 	ld	xwa, xbc
 	call	(xhl)
-FileIO_AdvancePointer:
+PanelButton_DispatchChange_Next:
 	inc	8, xiz
-FileIO_MainLoop:
+PanelButton_DispatchChange_Loop:
 	lda	xbc, (0x8de0:16)
 	ld	a, (xiz)
 	ld	(xbc), a
 	cp	a, 0xff
-	jr	nz, FileIO_ProcessMaskAndShift
+	jr	nz, PanelButton_DispatchChange_Action
 	pop	xiz
 	ret
-FileIO_BytecodeData:
-	.byte	0x80, 0x3f, 0xff
+; xwa -> a 4-byte panel event; an id of 0xFF is no event.  Append it to the event queue at (0xC039),
+; count at RAM 0x8E8E, 16 deep; when full, mark the event 0xFF instead.
+PanelEvent_Post:
+	.byte	0x80, 0x3f, 0xff	; cp (xwa), 0xff -- an id of 0xFF is no event
 	ret	z
 	ld	c, (0x8df2:16)
 	cp	c, 15
-	jr	ugt, FileIO_BytecodeData_Code_Skip
+	jr	ugt, PanelEvent_Post_Skip
 	ld	e, c
 	inc	1, c
 	ld	(0x8df2:16), c
@@ -60,90 +62,97 @@ FileIO_BytecodeData:
 	add	xix, xde
 	ld	xiy, xwa
 	.byte	0x95, 0x10, 0x95, 0x10
-FileIO_BytecodeData_Code_Skip:
+PanelEvent_Post_Skip:
 	ld	(xwa), 255
 	ret
+; unless MD_DEMO: FileIO_BytecodeData_Code_Helper2 on the frame, then post both events
+PanelAction_PostUnlessDemo:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue
+	jr	z, PanelAction_PostUnlessDemo_Epilogue
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData_Code_Helper2
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue:
+	calr	PanelEvent_Post
+PanelAction_PostUnlessDemo_Epilogue:
 	pop	xiz
 	ret
+; unless MD_DEMO or panel parameter 0xC0 (tag 0x91 +3 bit 2) is 1: post both
+PanelAction_PostUnlessDemoOrParamC0:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue2
+	jr	z, PanelAction_PostUnlessDemoOrParamC0_Epilogue
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
-	jr	z, FileIO_BytecodeData_Code_Epilogue2
+	jr	z, PanelAction_PostUnlessDemoOrParamC0_Epilogue
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData_Code_Helper2
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue2:
+	calr	PanelEvent_Post
+PanelAction_PostUnlessDemoOrParamC0_Epilogue:
 	pop	xiz
 	ret
+PanelButton_PanelMemorySet:
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 14
-	jr	z, FileIO_BytecodeData_Code_Skip2
+	jr	z, PanelButton_PanelMemorySet_Skip
 	cp	a, 19
-	jr	z, FileIO_BytecodeData_Code_Skip2
+	jr	z, PanelButton_PanelMemorySet_Skip
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
-	jr	nz, FileIO_BytecodeData_Code_Skip3
-FileIO_BytecodeData_Code_Skip2:
-	jr	FileIO_BytecodeData_Code_Epilogue3
-FileIO_BytecodeData_Code_Skip3:
+	jr	nz, PanelButton_PanelMemorySet_Skip2
+PanelButton_PanelMemorySet_Skip:
+	jr	PanelButton_PanelMemorySet_Epilogue
+PanelButton_PanelMemorySet_Skip2:
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData_Code_Helper2
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue3:
+	calr	PanelEvent_Post
+PanelButton_PanelMemorySet_Epilogue:
 	pop	xiz
 	ret
+PanelButton_AcousticIllusion:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	pop	xiz
 	ret
+PanelButton_ModeKey:
 	push	xiz
 	ld	xiz, xwa
 	lda	xbc, (xiz+2)
 	ld	a, (xbc)
 	cp	a, 0:i3
-	jr	nz, FileIO_BytecodeData_Code_Skip4
+	jr	nz, PanelButton_ModeKey_Skip
 	ld	(xbc), 0
-FileIO_BytecodeData_Code_Join:
+PanelButton_ModeKey_Join:
 	ld	(xiz+3), 255
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData_Code_Helper
 	.byte	0x86, 0x3f, 0xff
-	jr	nz, FileIO_BytecodeData_Code_Skip10
+	jr	nz, PanelButton_ModeKey_Skip7
 	ld	xwa, xiz
-	jr	FileIO_BytecodeData_Code_Join3
-FileIO_BytecodeData_Code_Skip4:
+	jr	PanelButton_ModeKey_Join3
+PanelButton_ModeKey_Skip:
 	ld	w, 0:opc
 	extz	xwa
 	call	Util_FindLowestSetBit
@@ -152,44 +161,44 @@ FileIO_BytecodeData_Code_Skip4:
 	ld	a, (0x8df4:16)
 	extz	hl
 	cp	a, 21
-	jr	z, FileIO_BytecodeData_Code_Skip9
+	jr	z, PanelButton_ModeKey_Skip6
 	cp	a, 16
-	jr	z, FileIO_BytecodeData_Code_Skip8
+	jr	z, PanelButton_ModeKey_Skip5
 	cp	a, 15
-	jr	z, FileIO_BytecodeData_Code_Skip7
+	jr	z, PanelButton_ModeKey_Skip4
 	cp	a, 10
-	jr	z, FileIO_BytecodeData_Code_Skip6
+	jr	z, PanelButton_ModeKey_Skip3
 	cp	a, 3:i3
-	jr	z, FileIO_BytecodeData_Code_Skip5
+	jr	z, PanelButton_ModeKey_Skip2
 	cp	a, 1:i3
 	.ascii	"n=@.ùÌ"
 	nop
-	jr	FileIO_BytecodeData_Code_Join2
-FileIO_BytecodeData_Code_Skip5:
+	jr	PanelButton_ModeKey_Join2
+PanelButton_ModeKey_Skip2:
 	ld	xwa, FileIO_BytecodeData_Data
-	jr	FileIO_BytecodeData_Code_Join2
-FileIO_BytecodeData_Code_Skip6:
+	jr	PanelButton_ModeKey_Join2
+PanelButton_ModeKey_Skip3:
 	ld	xwa, FileIO_BytecodeData_Data_2
-	jr	FileIO_BytecodeData_Code_Join2
-FileIO_BytecodeData_Code_Skip7:
+	jr	PanelButton_ModeKey_Join2
+PanelButton_ModeKey_Skip4:
 	ld	xwa, FileIO_BytecodeData_Data_3
-	jr	FileIO_BytecodeData_Code_Join2
-FileIO_BytecodeData_Code_Skip8:
+	jr	PanelButton_ModeKey_Join2
+PanelButton_ModeKey_Skip5:
 	ld	xwa, FileIO_BytecodeData_Data_4
-	jr	FileIO_BytecodeData_Code_Join2
-FileIO_BytecodeData_Code_Skip9:
+	jr	PanelButton_ModeKey_Join2
+PanelButton_ModeKey_Skip6:
 	ld	xwa, FileIO_BytecodeData_Data_5
-FileIO_BytecodeData_Code_Join2:
+PanelButton_ModeKey_Join2:
 	ld	a, (xwa+hl)
 	ld	(xde), a
-	jr	FileIO_BytecodeData_Code_Join
-FileIO_BytecodeData_Code_Skip10:
+	jr	PanelButton_ModeKey_Join
+PanelButton_ModeKey_Skip7:
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-FileIO_BytecodeData_Code_Join3:
-	calr	FileIO_BytecodeData
+PanelButton_ModeKey_Join3:
+	calr	PanelEvent_Post
 	pop	xiz
 	ret
 FileIO_BytecodeData_Code_Helper:
@@ -259,159 +268,165 @@ FileIO_BytecodeData_Code_Entry3:
 FileIO_BytecodeData_Code_Epilogue4:
 	pop	xiz
 	ret
+PanelButton_SequencerPlay:
 	push	xiz
 	ld	xiz, xwa
 	lda	xbc, (xiz+2)
 	ld	a, (xbc)
 	cp	a, 0:i3
-	jr	z, FileIO_BytecodeData_Code_Epilogue5
+	jr	z, PanelButton_SequencerPlay_Epilogue
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue5
+	jr	z, PanelButton_SequencerPlay_Epilogue
 	.byte	0xf1, 0x21, 0x04, 0xca
-	jr	nz, FileIO_BytecodeData_Code_Skip18
+	jr	nz, PanelButton_SequencerPlay_Skip2
 	ld	a, (10405:16)
 	xor	a, 1
 	ld	(10405:16), a
 	ld	c, (CURRENT_MODE:16)
 	cp	c, 13
-	jr	ugt, FileIO_BytecodeData_Code_Skip17
+	jr	ugt, PanelButton_SequencerPlay_Skip
 	cp	c, 8
-	jr	c, FileIO_BytecodeData_Code_Skip17
-FileIO_BytecodeData_Code_Loop:
+	jr	c, PanelButton_SequencerPlay_Skip
+PanelButton_SequencerPlay_Loop:
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	ld	(xiz), 169
 	ld	(xiz+1), 32
 	ld	(xiz+2), 10
 	ld	(xiz+3), 255
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	jr	FileIO_BytecodeData_Code_Join4
-FileIO_BytecodeData_Code_Skip17:
+	jr	PanelButton_SequencerPlay_Join
+PanelButton_SequencerPlay_Skip:
 	bit	0, a
-	jr	nz, FileIO_BytecodeData_Code_Loop
+	jr	nz, PanelButton_SequencerPlay_Loop
 	cp	c, 14
-	jr	z, FileIO_BytecodeData_Code_Loop
+	jr	z, PanelButton_SequencerPlay_Loop
 	call	SeqPlay_SaveStateAndCleanup
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	jr	FileIO_BytecodeData_Code_Join4
-FileIO_BytecodeData_Code_Skip18:
+	jr	PanelButton_SequencerPlay_Join
+PanelButton_SequencerPlay_Skip2:
 	ld	(xiz), 169
 	ld	(xiz+1), 32
 	ld	(xbc), 10
 	ld	(xiz+3), 255
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-FileIO_BytecodeData_Code_Join4:
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue5:
+PanelButton_SequencerPlay_Join:
+	calr	PanelEvent_Post
+PanelButton_SequencerPlay_Epilogue:
 	pop	xiz
 	ret
+PanelButton_PairDown:
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (xiz+1)
 	cp	a, 14
-	jr	nz, FileIO_BytecodeData_Code_Skip19
+	jr	nz, PanelButton_PairDown_Skip
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue6
-FileIO_BytecodeData_Code_Skip19:
+	jr	z, PanelButton_PairDown_Epilogue
+PanelButton_PairDown_Skip:
 	extz	wa
 	call	CtrlPanel_LookupIndicatorEntry
 	lda	xbc, (xiz+2)
 	.byte	0x81, 0x3f, 0x00
-	jr	z, FileIO_BytecodeData_Code_Skip20
+	jr	z, PanelButton_PairDown_Skip2
 	.byte	0xe1, 0xe8, 0x8d, 0xeb
-	jr	FileIO_BytecodeData_Code_Join5
-FileIO_BytecodeData_Code_Skip20:
+	jr	PanelButton_PairDown_Join
+PanelButton_PairDown_Skip2:
 	ld	xwa, xhl
 	cpl	wa
 	cpl	qwa
 	.byte	0xe1, 0xe8, 0x8d, 0xc8
-FileIO_BytecodeData_Code_Join5:
+PanelButton_PairDown_Join:
 	ld	xwa, (0x8dec:16)
 	and	xwa, xhl
-	jr	z, FileIO_BytecodeData_Code_Skip21
+	jr	z, PanelButton_PairDown_Skip3
 	.byte	0xb1, 0xb9
-FileIO_BytecodeData_Code_Skip21:
+PanelButton_PairDown_Skip3:
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue6:
+	calr	PanelEvent_Post
+PanelButton_PairDown_Epilogue:
 	pop	xiz
 	ret
+PanelButton_PairUp:
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (xiz+1)
 	cp	a, 14
-	jr	nz, FileIO_BytecodeData_Code_Skip22
+	jr	nz, PanelButton_PairUp_Skip
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue7
-FileIO_BytecodeData_Code_Skip22:
+	jr	z, PanelButton_PairUp_Epilogue
+PanelButton_PairUp_Skip:
 	extz	wa
 	call	CtrlPanel_LookupIndicatorEntry
 	lda	xbc, (xiz+2)
 	.byte	0x81, 0x3f, 0x00
-	jr	z, FileIO_BytecodeData_Code_Skip23
+	jr	z, PanelButton_PairUp_Skip2
 	.byte	0xe1, 0xec, 0x8d, 0xeb
-	jr	FileIO_BytecodeData_Code_Join6
-FileIO_BytecodeData_Code_Skip23:
+	jr	PanelButton_PairUp_Join
+PanelButton_PairUp_Skip2:
 	ld	xwa, xhl
 	cpl	wa
 	cpl	qwa
 	.byte	0xe1, 0xec, 0x8d, 0xc8
-FileIO_BytecodeData_Code_Join6:
+PanelButton_PairUp_Join:
 	ld	xwa, (0x8de8:16)
 	and	xwa, xhl
-	jr	z, FileIO_BytecodeData_Code_Skip24
+	jr	z, PanelButton_PairUp_Skip3
 	.byte	0xb1, 0xb8
-FileIO_BytecodeData_Code_Skip24:
+PanelButton_PairUp_Skip3:
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue7:
+	calr	PanelEvent_Post
+PanelButton_PairUp_Epilogue:
 	pop	xiz
 	ret
+PanelButton_StartStop:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	nz, FileIO_BytecodeData_Code_Skip25
+	jr	nz, PanelButton_StartStop_Skip
 	ld	(xiz), 168
 	ld	(xiz+1), 1
-FileIO_BytecodeData_Code_Skip25:
+PanelButton_StartStop_Skip:
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	pop	xiz
 	ret
+PanelButton_SynchroBreak:
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
-	jr	z, FileIO_BytecodeData_Code_Epilogue8
+	jr	z, PanelButton_SynchroBreak_Epilogue
 	cp	a, 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue8
+	jr	z, PanelButton_SynchroBreak_Epilogue
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue8:
+	calr	PanelEvent_Post
+PanelButton_SynchroBreak_Epilogue:
 	pop	xiz
 	ret
+PanelButton_SoundGroup:
 	dec	4, xsp
 	push	qiz
 	ld	(xsp+2), xwa
@@ -421,18 +436,18 @@ FileIO_BytecodeData_Code_Epilogue8:
 	jrl	z, FileIO_BytecodeData_Code_Epilogue9
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 14
-	jr	z, FileIO_BytecodeData_Code_Skip27
+	jr	z, PanelButton_SoundGroup_Skip2
 	cp	a, 3:i3
-	jr	z, FileIO_BytecodeData_Code_Skip26
+	jr	z, PanelButton_SoundGroup_Skip
 	cp	a, 19
-	jr	nz, FileIO_BytecodeData_Code_Skip28
-FileIO_BytecodeData_Code_Skip26:
+	jr	nz, PanelButton_SoundGroup_Skip3
+PanelButton_SoundGroup_Skip:
 	jrl	FileIO_BytecodeData_Code_Epilogue9
-FileIO_BytecodeData_Code_Skip27:
+PanelButton_SoundGroup_Skip2:
 	ld	a, (0x36ff:24)
 	and	a, 31
 	jrl	z, FileIO_BytecodeData_Code_Epilogue9
-FileIO_BytecodeData_Code_Skip28:
+PanelButton_SoundGroup_Skip3:
 	ld	b, 0:opc
 	extz	xbc
 	ld	xwa, xbc
@@ -443,25 +458,25 @@ FileIO_BytecodeData_Code_Skip28:
 	ld	a, (0x8df4:16)
 	extz	hl
 	cp	a, 20
-	jr	z, FileIO_BytecodeData_Code_Skip30
+	jr	z, PanelButton_SoundGroup_Skip5
 	cp	a, 13
-	jr	z, FileIO_BytecodeData_Code_Skip29
+	jr	z, PanelButton_SoundGroup_Skip4
 	cp	a, 12
 	jrl	nz, FileIO_BytecodeData_Code_Epilogue9
 	ld	xwa, FileIO_BytecodeData_Data_6
-FileIO_BytecodeData_Code_Join7:
+PanelButton_SoundGroup_Join:
 	ld	a, (xwa+hl)
 	ld	(xde), a
 	cp	a, 17
-	jr	ule, FileIO_BytecodeData_Code_Skip31
+	jr	ule, PanelButton_SoundGroup_Skip6
 	jrl	FileIO_BytecodeData_Code_Epilogue9
-FileIO_BytecodeData_Code_Skip29:
+PanelButton_SoundGroup_Skip4:
 	ld	xwa, FileIO_BytecodeData_Data_7
-	jr	FileIO_BytecodeData_Code_Join7
-FileIO_BytecodeData_Code_Skip30:
+	jr	PanelButton_SoundGroup_Join
+PanelButton_SoundGroup_Skip5:
 	ld	xwa, FileIO_BytecodeData_Data_8
-	jr	FileIO_BytecodeData_Code_Join7
-FileIO_BytecodeData_Code_Skip31:
+	jr	PanelButton_SoundGroup_Join
+PanelButton_SoundGroup_Skip6:
 	extz	wa
 	call	CharMap_ActivePreamb_Prologue2
 	cp	l, 255
@@ -471,10 +486,10 @@ FileIO_BytecodeData_Code_Skip31:
 	ld	xwa, (xsp+2)
 	inc	2, xwa
 	cpib_erp	251, 2
-	jr	ule, FileIO_BytecodeData_Code_Skip32
+	jr	ule, PanelButton_SoundGroup_Skip7
 	.byte	0x80, 0x3f, 0x0c
 	jr	z, FileIO_BytecodeData_Code_Epilogue9
-FileIO_BytecodeData_Code_Skip32:
+PanelButton_SoundGroup_Skip7:
 	cp_erpb	251, 15
 	jr	z, FileIO_BytecodeData_Code_Entry4
 	cp_erpb	251, 20
@@ -520,37 +535,38 @@ FileIO_BytecodeData_Code_Skip37:
 	ld	xwa, (xsp+2)
 	ld	(xwa+3), l
 	ld	xwa, (xsp+2)
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	ld	xwa, 4:i3
 	add	(xsp+2), xwa
 	ld	xwa, (xsp+2)
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Epilogue9:
 	pop	qiz
 	inc	4, xsp
 	ret
+PanelButton_RhythmGroup:
 	push	xiz
 	ld	xiz, xwa
 	ld	c, (xiz+2)
 	cp	c, 0:i3
-	jrl	z, FileIO_BytecodeData_Code_Epilogue10
+	jrl	z, PanelButton_RhythmGroup_Epilogue
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 19
-	jrl	z, FileIO_BytecodeData_Code_Epilogue10
+	jrl	z, PanelButton_RhythmGroup_Epilogue
 	.byte	0xf1, 0x37, 0x33, 0xc8
-	jrl	nz, FileIO_BytecodeData_Code_Epilogue10
+	jrl	nz, PanelButton_RhythmGroup_Epilogue
 	cp	a, 14
-	jr	nz, FileIO_BytecodeData_Code_Skip38
+	jr	nz, PanelButton_RhythmGroup_Skip
 	ld	a, (CURRENT_TITLE:16)
 	cp	a, 184
-	jr	z, FileIO_BytecodeData_Code_Skip38
+	jr	z, PanelButton_RhythmGroup_Skip
 	cp	a, 180
-	jr	nz, FileIO_BytecodeData_Code_Epilogue10
+	jr	nz, PanelButton_RhythmGroup_Epilogue
 	.byte	0xf1, 0x37, 0x34, 0xc8
-	jr	nz, FileIO_BytecodeData_Code_Epilogue10
+	jr	nz, PanelButton_RhythmGroup_Epilogue
 	cp	(0x343a:16), 12
-	jr	nc, FileIO_BytecodeData_Code_Epilogue10
-FileIO_BytecodeData_Code_Skip38:
+	jr	nc, PanelButton_RhythmGroup_Epilogue
+PanelButton_RhythmGroup_Skip:
 	ld	b, 0:opc
 	extz	xbc
 	ld	xwa, xbc
@@ -560,72 +576,73 @@ FileIO_BytecodeData_Code_Skip38:
 	ld	a, (0x8df4:16)
 	extz	hl
 	cp	a, 6:i3
-	jr	z, FileIO_BytecodeData_Code_Skip40
+	jr	z, PanelButton_RhythmGroup_Skip3
 	cp	a, 1:i3
-	jr	z, FileIO_BytecodeData_Code_Skip39
+	jr	z, PanelButton_RhythmGroup_Skip2
 	cp	a, 0:i3
-	jr	nz, FileIO_BytecodeData_Code_Epilogue10
+	jr	nz, PanelButton_RhythmGroup_Epilogue
 	ld	xwa, FileIO_BytecodeData_Data_9
-FileIO_BytecodeData_Code_Join8:
+PanelButton_RhythmGroup_Join:
 	ld	a, (xwa+hl)
 	ld	(xde), a
 	ld	c, a
 	cp	c, 15
-	jr	ule, FileIO_BytecodeData_Code_Skip41
-	jr	FileIO_BytecodeData_Code_Epilogue10
-FileIO_BytecodeData_Code_Skip39:
+	jr	ule, PanelButton_RhythmGroup_Skip4
+	jr	PanelButton_RhythmGroup_Epilogue
+PanelButton_RhythmGroup_Skip2:
 	ld	xwa, FileIO_BytecodeData_Data_10
-	jr	FileIO_BytecodeData_Code_Join8
-FileIO_BytecodeData_Code_Skip40:
+	jr	PanelButton_RhythmGroup_Join
+PanelButton_RhythmGroup_Skip3:
 	ld	xwa, FileIO_BytecodeData_Data_11
-	jr	FileIO_BytecodeData_Code_Join8
-FileIO_BytecodeData_Code_Skip41:
+	jr	PanelButton_RhythmGroup_Join
+PanelButton_RhythmGroup_Skip4:
 	cp	(CURRENT_TITLE:16), 184
-	jr	nz, FileIO_BytecodeData_Code_Skip42
+	jr	nz, PanelButton_RhythmGroup_Skip5
 	cp	c, 14
-	jr	z, FileIO_BytecodeData_Code_Epilogue10
-FileIO_BytecodeData_Code_Skip42:
+	jr	z, PanelButton_RhythmGroup_Epilogue
+PanelButton_RhythmGroup_Skip5:
 	extz	bc
 	ldw	wa, 72
 	call	VoiceData_DistributeToChannels
 	ld	(xiz+3), l
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue10:
+	calr	PanelEvent_Post
+PanelButton_RhythmGroup_Epilogue:
 	pop	xiz
 	ret
+PanelButton_PanelMemoryNumber:
 	dec	2, xsp
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
-	jr	z, FileIO_BytecodeData_Code_Skip43
+	jr	z, PanelButton_PanelMemoryNumber_Skip
 	cp	a, 15
-	jr	z, FileIO_BytecodeData_Code_Skip43
+	jr	z, PanelButton_PanelMemoryNumber_Skip
 	cp	a, 14
-	jr	z, FileIO_BytecodeData_Code_Skip43
+	jr	z, PanelButton_PanelMemoryNumber_Skip
 	cp	a, 17
-	jr	z, FileIO_BytecodeData_Code_Skip43
+	jr	z, PanelButton_PanelMemoryNumber_Skip
 	cp	a, 3:i3
-	jr	z, FileIO_BytecodeData_Code_Skip43
+	jr	z, PanelButton_PanelMemoryNumber_Skip
 	cp	a, 19
-	jr	nz, FileIO_BytecodeData_Code_Skip44
-FileIO_BytecodeData_Code_Skip43:
+	jr	nz, PanelButton_PanelMemoryNumber_Skip2
+PanelButton_PanelMemoryNumber_Skip:
 	jr	FileIO_BytecodeData_Code_Epilogue11
-FileIO_BytecodeData_Code_Skip44:
+PanelButton_PanelMemoryNumber_Skip2:
 	ld	a, (ACTIVE_TITLE:16)
 	cp	a, 211
-	jr	z, FileIO_BytecodeData_Code_Skip45
+	jr	z, PanelButton_PanelMemoryNumber_Skip3
 	cp	a, 210
-	jr	z, FileIO_BytecodeData_Code_Skip45
+	jr	z, PanelButton_PanelMemoryNumber_Skip3
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
 	jr	nz, FileIO_BytecodeData_Code_Entry5
-FileIO_BytecodeData_Code_Skip45:
+PanelButton_PanelMemoryNumber_Skip3:
 	jr	FileIO_BytecodeData_Code_Epilogue11
 FileIO_BytecodeData_Code_Entry5:
 	.byte	0x8e, 0x02, 0x3f, 0x00
@@ -641,127 +658,132 @@ FileIO_BytecodeData_Code_Entry5:
 	ld	(xiz+2), l
 	ld	(xiz+3), 127
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Skip46:
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Epilogue11:
 	pop	xiz
 	inc	2, xsp
 	ret
+PanelButton_PanelMemoryNextBank:
 	push	xiz
 	ld	xiz, xwa
 	.byte	0x8e, 0x02, 0x3f, 0x00
-	jr	z, FileIO_BytecodeData_Code_Epilogue12
+	jr	z, PanelButton_PanelMemoryNextBank_Epilogue
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
-	jr	z, FileIO_BytecodeData_Code_Skip47
+	jr	z, PanelButton_PanelMemoryNextBank_Skip
 	cp	a, 15
-	jr	z, FileIO_BytecodeData_Code_Skip47
+	jr	z, PanelButton_PanelMemoryNextBank_Skip
 	cp	a, 14
-	jr	z, FileIO_BytecodeData_Code_Skip47
+	jr	z, PanelButton_PanelMemoryNextBank_Skip
 	cp	a, 17
-	jr	z, FileIO_BytecodeData_Code_Skip47
+	jr	z, PanelButton_PanelMemoryNextBank_Skip
 	cp	a, 3:i3
-	jr	z, FileIO_BytecodeData_Code_Skip47
+	jr	z, PanelButton_PanelMemoryNextBank_Skip
 	cp	a, 19
-	jr	nz, FileIO_BytecodeData_Code_Skip48
-FileIO_BytecodeData_Code_Skip47:
-	jr	FileIO_BytecodeData_Code_Epilogue12
-FileIO_BytecodeData_Code_Skip48:
+	jr	nz, PanelButton_PanelMemoryNextBank_Skip2
+PanelButton_PanelMemoryNextBank_Skip:
+	jr	PanelButton_PanelMemoryNextBank_Epilogue
+PanelButton_PanelMemoryNextBank_Skip2:
 	ld	a, (ACTIVE_TITLE:16)
 	cp	a, 211
-	jr	z, FileIO_BytecodeData_Code_Skip49
+	jr	z, PanelButton_PanelMemoryNextBank_Skip3
 	cp	a, 210
-	jr	z, FileIO_BytecodeData_Code_Skip49
+	jr	z, PanelButton_PanelMemoryNextBank_Skip3
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
-	jr	nz, FileIO_BytecodeData_Code_Skip50
-FileIO_BytecodeData_Code_Skip49:
-	jr	FileIO_BytecodeData_Code_Epilogue12
-FileIO_BytecodeData_Code_Skip50:
+	jr	nz, PanelButton_PanelMemoryNextBank_Skip4
+PanelButton_PanelMemoryNextBank_Skip3:
+	jr	PanelButton_PanelMemoryNextBank_Epilogue
+PanelButton_PanelMemoryNextBank_Skip4:
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue12:
+	calr	PanelEvent_Post
+PanelButton_PanelMemoryNextBank_Epilogue:
 	pop	xiz
 	ret
+PanelButton_SplitPoint:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue13
+	jr	z, PanelButton_SplitPoint_Epilogue
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue13:
+	calr	PanelEvent_Post
+PanelButton_SplitPoint_Epilogue:
 	pop	xiz
 	ret
+PanelButton_Octave:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue14
+	jr	z, PanelButton_Octave_Epilogue
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	ld	(xiz), 168
 	ld	(xiz+1), 5
 	lda	xbc, (xiz+2)
 	lda	xde, (xiz+3)
 	ld	a, (xde)
 	.byte	0x81, 0xc1
-	jr	z, FileIO_BytecodeData_Code_Skip51
+	jr	z, PanelButton_Octave_Skip
 	ld	(xbc), 64
-	jr	FileIO_BytecodeData_Code_Join9
-FileIO_BytecodeData_Code_Skip51:
+	jr	PanelButton_Octave_Join
+PanelButton_Octave_Skip:
 	ld	(xbc), 0
-FileIO_BytecodeData_Code_Join9:
+PanelButton_Octave_Join:
 	ld	(xde), 64
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue14:
+	calr	PanelEvent_Post
+PanelButton_Octave_Epilogue:
 	pop	xiz
 	ret
+PanelButton_AutoPlayChord:
 	push	xiz
 	ld	xiz, xwa
 	.byte	0x8e, 0x02, 0x3f, 0x00
-	jr	z, FileIO_BytecodeData_Code_Epilogue15
+	jr	z, PanelButton_AutoPlayChord_Epilogue
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue15
+	jr	z, PanelButton_AutoPlayChord_Epilogue
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
-	jr	z, FileIO_BytecodeData_Code_Epilogue15
+	jr	z, PanelButton_AutoPlayChord_Epilogue
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	.byte	0xf1, 0x1e, 0x04, 0xca
-	jr	z, FileIO_BytecodeData_Code_Skip52
+	jr	z, PanelButton_AutoPlayChord_Skip
 	ld	xwa, 163968
 	call	AcApcToggleProc_Helper
 	cp	hl, 0:i3
-	jr	nz, FileIO_BytecodeData_Code_Skip53
-FileIO_BytecodeData_Code_Skip52:
+	jr	nz, PanelButton_AutoPlayChord_Skip2
+PanelButton_AutoPlayChord_Skip:
 	ld	(xiz), 72
 	ld	(xiz+1), 3
 	ld	a, (65480:24)
 	ld	(xiz+2), a
 	ld	(xiz+3), 7
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Skip53:
+	calr	PanelEvent_Post
+PanelButton_AutoPlayChord_Skip2:
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue15:
+	calr	PanelEvent_Post
+PanelButton_AutoPlayChord_Epilogue:
 	pop	xiz
 	ret
+PanelButton_PartSelect:
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (xiz+2)
@@ -769,18 +791,18 @@ FileIO_BytecodeData_Code_Epilogue15:
 	jr	z, FileIO_BytecodeData_Code_Epilogue16
 	ld	c, (CURRENT_MODE:16)
 	cp	c, 16
-	jr	z, FileIO_BytecodeData_Code_Skip54
+	jr	z, PanelButton_PartSelect_Skip
 	cp	c, 15
-	jr	z, FileIO_BytecodeData_Code_Skip54
+	jr	z, PanelButton_PartSelect_Skip
 	cp	c, 14
-	jr	z, FileIO_BytecodeData_Code_Skip54
+	jr	z, PanelButton_PartSelect_Skip
 	cp	c, 3:i3
-	jr	z, FileIO_BytecodeData_Code_Skip54
+	jr	z, PanelButton_PartSelect_Skip
 	cp	c, 19
-	jr	z, FileIO_BytecodeData_Code_Skip54
+	jr	z, PanelButton_PartSelect_Skip
 	cp	(CURRENT_TITLE:16), 81
 	jr	nz, FileIO_BytecodeData_Code_Entry6
-FileIO_BytecodeData_Code_Skip54:
+PanelButton_PartSelect_Skip:
 	jr	FileIO_BytecodeData_Code_Epilogue16
 FileIO_BytecodeData_Code_Entry6:
 	.byte	0xf1, 0xe2, 0x26, 0xc8
@@ -795,68 +817,71 @@ FileIO_BytecodeData_Code_Entry6:
 	ld	(PART_SELECT:16), a
 	ld	(xiz+3), 255
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Epilogue16:
 	pop	xiz
 	ret
+PanelButton_Conductor:
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
-	jr	z, FileIO_BytecodeData_Code_Epilogue17
+	jr	z, PanelButton_Conductor_Epilogue
 	cp	a, 15
-	jr	z, FileIO_BytecodeData_Code_Epilogue17
+	jr	z, PanelButton_Conductor_Epilogue
 	cp	a, 14
-	jr	z, FileIO_BytecodeData_Code_Epilogue17
+	jr	z, PanelButton_Conductor_Epilogue
 	cp	a, 3:i3
-	jr	z, FileIO_BytecodeData_Code_Epilogue17
+	jr	z, PanelButton_Conductor_Epilogue
 	cp	a, 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue17
+	jr	z, PanelButton_Conductor_Epilogue
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue17:
+	calr	PanelEvent_Post
+PanelButton_Conductor_Epilogue:
 	pop	xiz
 	ret
+PanelButton_DigitalEffect:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue18
+	jr	z, PanelButton_DigitalEffect_Epilogue
 	calr	FileIO_BytecodeData_Code_Helper3
 	.byte	0x83, 0x3f, 0x0f
-	jr	z, FileIO_BytecodeData_Code_Epilogue18
+	jr	z, PanelButton_DigitalEffect_Epilogue
 	.byte	0x83, 0x3f, 0x0c
-	jr	z, FileIO_BytecodeData_Code_Epilogue18
+	jr	z, PanelButton_DigitalEffect_Epilogue
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData_Code_Helper2
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue18:
+	calr	PanelEvent_Post
+PanelButton_DigitalEffect_Epilogue:
 	pop	xiz
 	ret
+PanelButton_DspEffect:
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 17
-	jr	z, FileIO_BytecodeData_Code_Skip55
+	jr	z, PanelButton_DspEffect_Skip
 	cp	a, 14
-	jr	z, FileIO_BytecodeData_Code_Skip55
+	jr	z, PanelButton_DspEffect_Skip
 	cp	a, 19
-	jr	z, FileIO_BytecodeData_Code_Skip55
+	jr	z, PanelButton_DspEffect_Skip
 	ld	a, (PART_SELECT:16)
 	cp	a, 15
-	jr	ule, FileIO_BytecodeData_Code_Skip56
-FileIO_BytecodeData_Code_Skip55:
+	jr	ule, PanelButton_DspEffect_Skip2
+PanelButton_DspEffect_Skip:
 	jr	FileIO_BytecodeData_Code_Epilogue19
-FileIO_BytecodeData_Code_Skip56:
+PanelButton_DspEffect_Skip2:
 	lda	xbc, (xiz+2)
 	ld	a, (xbc)
 	cp	a, 0:i3
@@ -870,10 +895,10 @@ FileIO_BytecodeData_Code_Skip56:
 	lda	xde, (xiz+3)
 	lda	xbc, (xiz+2)
 	cp	hl, 0:i3
-	jr	z, FileIO_BytecodeData_Code_Skip57
+	jr	z, PanelButton_DspEffect_Skip3
 	ld	(xbc), 0
-	jr	FileIO_BytecodeData_Code_Join10
-FileIO_BytecodeData_Code_Skip57:
+	jr	PanelButton_DspEffect_Join
+PanelButton_DspEffect_Skip3:
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	lda	xhl, (0x90f1:16)
@@ -881,7 +906,7 @@ FileIO_BytecodeData_Code_Skip57:
 	add	xwa, xhl
 	ld	a, (xwa)
 	ld	(xbc), a
-FileIO_BytecodeData_Code_Join10:
+PanelButton_DspEffect_Join:
 	ld	(xde), 127
 	jr	FileIO_BytecodeData_Code_Join11
 FileIO_BytecodeData_Code_Entry7:
@@ -892,83 +917,87 @@ FileIO_BytecodeData_Code_Join11:
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData_Code_Helper2
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Epilogue19:
 	pop	xiz
 	ret
+PanelButton_DigitalReverb:
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 17
-	jr	z, FileIO_BytecodeData_Code_Epilogue20
+	jr	z, PanelButton_DigitalReverb_Epilogue
 	cp	a, 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue20
+	jr	z, PanelButton_DigitalReverb_Epilogue
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue20:
+	calr	PanelEvent_Post
+PanelButton_DigitalReverb_Epilogue:
 	pop	xiz
 	ret
+PanelButton_Sustain:
 	push	xiz
 	ld	xiz, xwa
 	.byte	0xf1, 0x31, 0x34, 0xcb
 	jr	nz, FileIO_BytecodeData_Code_Epilogue21
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 17
-	jr	z, FileIO_BytecodeData_Code_Skip58
+	jr	z, PanelButton_Sustain_Skip
 	cp	a, 19
-	jr	z, FileIO_BytecodeData_Code_Skip58
+	jr	z, PanelButton_Sustain_Skip
 	calr	FileIO_BytecodeData_Code_Helper3
 	.byte	0x83, 0x3f, 0x0f
 	jr	nz, FileIO_BytecodeData_Code_Entry8
-FileIO_BytecodeData_Code_Skip58:
+PanelButton_Sustain_Skip:
 	jr	FileIO_BytecodeData_Code_Epilogue21
 FileIO_BytecodeData_Code_Entry8:
 	.byte	0xf1, 0x5d, 0x90, 0xb1
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData_Code_Helper2
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Epilogue21:
 	pop	xiz
 	ret
+PanelButton_MusicStyleArranger:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue22
+	jr	z, PanelButton_MusicStyleArranger_Epilogue
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
-	jr	z, FileIO_BytecodeData_Code_Epilogue22
+	jr	z, PanelButton_MusicStyleArranger_Epilogue
 	.byte	0x8e, 0x02, 0x3f, 0x00
-	jr	z, FileIO_BytecodeData_Code_Skip59
+	jr	z, PanelButton_MusicStyleArranger_Skip
 	.byte	0xf1, 0xb6, 0x8c, 0xbb
-FileIO_BytecodeData_Code_Skip59:
+PanelButton_MusicStyleArranger_Skip:
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	inc	4, xiz
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue22:
+	calr	PanelEvent_Post
+PanelButton_MusicStyleArranger_Epilogue:
 	pop	xiz
 	ret
+PanelButton_MspNumber:
 	dec	4, xsp
 	push	qiz
 	ld	(xsp+2), xwa
 	cp	(CURRENT_MODE:16), 19
-	jrl	z, FileIO_BytecodeData_Code_Epilogue23
+	jrl	z, PanelButton_MspNumber_Epilogue
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
-	jr	z, FileIO_BytecodeData_Code_Epilogue23
+	jr	z, PanelButton_MspNumber_Epilogue
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+3)
 	extz	wa
@@ -982,9 +1011,9 @@ FileIO_BytecodeData_Code_Epilogue22:
 	ld	wa, bc
 	sla	wa, 2
 	cp	hl, 18
-	jr	z, FileIO_BytecodeData_Code_Skip60
+	jr	z, PanelButton_MspNumber_Skip
 	cp	hl, 17
-	jr	nz, FileIO_BytecodeData_Code_Skip61
+	jr	nz, PanelButton_MspNumber_Skip2
 	lda	xde, (FileIO_BytecodeData_Data_13:24)
 	ld	c, (xde+bc)
 	lda	xde, (FileIO_BytecodeData_Code_Entry8_PtrTable:24)
@@ -992,8 +1021,8 @@ FileIO_BytecodeData_Code_Epilogue22:
 	ld	xwa, (xsp+2)
 	ld	xhl, (xde)
 	call	(xhl)
-	jr	FileIO_BytecodeData_Code_Join12
-FileIO_BytecodeData_Code_Skip60:
+	jr	PanelButton_MspNumber_Join
+PanelButton_MspNumber_Skip:
 	lda	xde, (FileIO_BytecodeData_Data_14:24)
 	ld	c, (xde+bc)
 	lda	xde, (FileIO_BytecodeData_Code_Entry8_PtrTable_2:24)
@@ -1001,19 +1030,20 @@ FileIO_BytecodeData_Code_Skip60:
 	ld	xwa, (xsp+2)
 	ld	xhl, (xde)
 	call	(xhl)
-	jr	FileIO_BytecodeData_Code_Join12
-FileIO_BytecodeData_Code_Skip61:
+	jr	PanelButton_MspNumber_Join
+PanelButton_MspNumber_Skip2:
 	ld	xwa, (xsp+2)
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Join12:
+	calr	PanelEvent_Post
+PanelButton_MspNumber_Join:
 	ld	xwa, 4:i3
 	add	(xsp+2), xwa
 	ld	xwa, (xsp+2)
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue23:
+	calr	PanelEvent_Post
+PanelButton_MspNumber_Epilogue:
 	pop	qiz
 	inc	4, xsp
 	ret
+PanelButton_Variation:
 	lda	xsp, (xsp-10)
 	push	qiz
 	ld	(xsp+8), xwa
@@ -1021,12 +1051,12 @@ FileIO_BytecodeData_Code_Epilogue23:
 	ld	a, (xwa+2)
 	ldfr_berp	a, 251
 	cpib_erp	251, 0
-	jrl	z, FileIO_BytecodeData_Code_Epilogue24
+	jrl	z, PanelButton_Variation_Epilogue
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 14
-	jr	z, FileIO_BytecodeData_Code_Skip62
+	jr	z, PanelButton_Variation_Skip
 	cp	a, 19
-	jr	z, FileIO_BytecodeData_Code_Skip62
+	jr	z, PanelButton_Variation_Skip
 	ld	xwa, 0:i3
 	ldto_berp	a, 251
 	call	Util_FindLowestSetBit
@@ -1045,7 +1075,7 @@ FileIO_BytecodeData_Code_Epilogue23:
 	lda	xbc, (xwa+2)
 	lda	xde, (xwa+3)
 	.byte	0x83, 0x3f, 0x0e
-	jr	nc, FileIO_BytecodeData_Code_Skip63
+	jr	nc, PanelButton_Variation_Skip2
 	ldto_berp	a, 251
 	extz	wa
 	lda	xhl, (FileIO_BytecodeData_Data_15:24)
@@ -1053,10 +1083,10 @@ FileIO_BytecodeData_Code_Epilogue23:
 	ld	(xbc), a
 	ld	(xde), 48
 	.byte	0xf1, 0xb6, 0x8c, 0xbb
-	jr	FileIO_BytecodeData_Code_Join13
-FileIO_BytecodeData_Code_Skip62:
-	jr	FileIO_BytecodeData_Code_Epilogue24
-FileIO_BytecodeData_Code_Skip63:
+	jr	PanelButton_Variation_Join
+PanelButton_Variation_Skip:
+	jr	PanelButton_Variation_Epilogue
+PanelButton_Variation_Skip2:
 	ld	xwa, (xsp+8)
 	ld	(xwa+1), 0
 	ld	a, (xhl)
@@ -1073,149 +1103,169 @@ FileIO_BytecodeData_Code_Skip63:
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), l
-FileIO_BytecodeData_Code_Join13:
+PanelButton_Variation_Join:
 	ld	xwa, (xsp+8)
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	ld	xwa, 4:i3
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue24:
+	calr	PanelEvent_Post
+PanelButton_Variation_Epilogue:
 	pop	qiz
 	lda	xsp, (xsp+10)
 	ret
+; event 28 bit 0: per panel parameter 0x2886 (tag 0x99 payload byte 4)
+PanelAction_Event28Bit0:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue25
+	jr	z, PanelAction_Event28Bit0_Epilogue
 	ld	xwa, 10374
 	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	FileIO_BytecodeData_Code_Helper4
-FileIO_BytecodeData_Code_Epilogue25:
+PanelAction_Event28Bit0_Epilogue:
 	pop	xiz
 	ret
+; event 28 bit 1: per panel parameter 0x2888 (tag 0x99 payload byte 5)
+PanelAction_Event28Bit1:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue26
+	jr	z, PanelAction_Event28Bit1_Epilogue
 	ld	xwa, 10376
 	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	FileIO_BytecodeData_Code_Helper4
-FileIO_BytecodeData_Code_Epilogue26:
+PanelAction_Event28Bit1_Epilogue:
 	pop	xiz
 	ret
+; event 29 bit 0: per panel parameter 0x288A (tag 0x99 payload byte 6)
+PanelAction_Event29Bit0:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue27
+	jr	z, PanelAction_Event29Bit0_Epilogue
 	ld	xwa, 10378
 	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	FileIO_BytecodeData_Code_Helper4
-FileIO_BytecodeData_Code_Epilogue27:
+PanelAction_Event29Bit0_Epilogue:
 	pop	xiz
 	ret
+; event 29 bit 1: per panel parameter 0x288C (tag 0x99 payload byte 7)
+PanelAction_Event29Bit1:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue28
+	jr	z, PanelAction_Event29Bit1_Epilogue
 	ld	xwa, 10380
 	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	FileIO_BytecodeData_Code_Helper4
-FileIO_BytecodeData_Code_Epilogue28:
+PanelAction_Event29Bit1_Epilogue:
 	pop	xiz
 	ret
+; event 29 bit 2: per panel parameter 0x288E (tag 0x99 payload byte 8)
+PanelAction_Event29Bit2:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue29
+	jr	z, PanelAction_Event29Bit2_Epilogue
 	ld	xwa, 10382
 	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	FileIO_BytecodeData_Code_Helper4
-FileIO_BytecodeData_Code_Epilogue29:
+PanelAction_Event29Bit2_Epilogue:
 	pop	xiz
 	ret
+; event 29 bit 3: per panel parameter 0x2890 (tag 0x99 payload byte 9)
+PanelAction_Event29Bit3:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue30
+	jr	z, PanelAction_Event29Bit3_Epilogue
 	ld	xwa, 10384
 	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
 	calr	FileIO_BytecodeData_Code_Helper4
-FileIO_BytecodeData_Code_Epilogue30:
+PanelAction_Event29Bit3_Epilogue:
 	pop	xiz
 	ret
+; event 22 (left-panel header 0xD1): the byte as two 7-bit values ((b & 1) << 6, b >> 1)
+PanelAction_Event22:
 	cp	(CURRENT_MODE:16), 19
 	ret	z
 	lda	xhl, (xwa+2)
 	lda	xix, (xwa+3)
 	ld	e, (xhl)
 	cp	e, 255
-	jr	nz, FileIO_BytecodeData_Code_Skip64
+	jr	nz, PanelAction_Event22_Skip
 	ld	(xhl), 127
 	ld	(xix), 127
-	jr	FileIO_BytecodeData_Code_Join14
-FileIO_BytecodeData_Code_Skip64:
+	jr	PanelAction_Event22_Join
+PanelAction_Event22_Skip:
 	ld	c, e
 	and	c, 1
 	sll	c, 6
 	ld	(xhl), c
 	srl	e, 1
 	ld	(xix), e
-FileIO_BytecodeData_Code_Join14:
-	jrl	FileIO_BytecodeData
+PanelAction_Event22_Join:
+	jrl	PanelEvent_Post
+; event 26: depends on panel parameter 0x2880 (tag 0x99 payload byte 2) being 182 or 183
+PanelAction_Event26:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, 10368
 	call	AcApcToggleProc_Helper
 	cp	hl, 183
-	jr	z, FileIO_BytecodeData_Code_Skip65
+	jr	z, PanelAction_Event26_Skip
 	cp	hl, 182
-	jr	nz, FileIO_BytecodeData_Code_Epilogue31
+	jr	nz, PanelAction_Event26_Epilogue
 	ld	xwa, xiz
-	jr	FileIO_BytecodeData_Code_Join15
-FileIO_BytecodeData_Code_Skip65:
+	jr	PanelAction_Event26_Join
+PanelAction_Event26_Skip:
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue31
+	jr	z, PanelAction_Event26_Epilogue
 	ld	(xiz), 179
 	ld	(xiz+1), 0
 	ld	xwa, xiz
-FileIO_BytecodeData_Code_Join15:
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue31:
+PanelAction_Event26_Join:
+	calr	PanelEvent_Post
+PanelAction_Event26_Epilogue:
 	pop	xiz
 	ret
+; event 23 (left-panel header 0xD2): post unless MD_DEMO
+PanelAction_Event23:
 	cp	(CURRENT_MODE:16), 19
 	ret	z
-	jrl	FileIO_BytecodeData
+	jrl	PanelEvent_Post
+; event 27: post when panel parameter 0x104 (tag 0x93 payload byte 6 bit 7) is set
+PanelAction_Event27:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
-	jr	z, FileIO_BytecodeData_Code_Epilogue32
+	jr	z, PanelAction_Event27_Epilogue
 	ld	xwa, 260
 	call	AcApcToggleProc_Helper
 	cp	hl, 0:i3
-	jr	z, FileIO_BytecodeData_Code_Epilogue32
+	jr	z, PanelAction_Event27_Epilogue
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue32:
+	calr	PanelEvent_Post
+PanelAction_Event27_Epilogue:
 	pop	xiz
 	ret
 FileIO_BytecodeData_Code_Helper2:
@@ -1310,7 +1360,7 @@ FileIO_BytecodeData_Code_Loop2:
 	ld	(xiz+2), a
 	ld	(xiz+3), 8
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Skip67:
 	incw	1, (xsp+6)
 	.byte	0x9f, 0x06, 0x3f, 0x10, 0x00
@@ -1334,7 +1384,7 @@ FileIO_BytecodeData_Code_Skip68:
 	ld	(xde), 0
 FileIO_BytecodeData_Code_Join16:
 	ld	(xhl), 1
-	jrl	FileIO_BytecodeData
+	jrl	PanelEvent_Post
 FileIO_BytecodeData_Code_Loop3:
 	push	xiz
 	ld	xiz, xwa
@@ -1377,7 +1427,7 @@ FileIO_BytecodeData_Code_Skip71:
 FileIO_BytecodeData_Code_Join17:
 	ld	(xiz+3), 127
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Epilogue34:
 	pop	xiz
 	ret
@@ -1423,7 +1473,7 @@ FileIO_BytecodeData_Code_Skip74:
 FileIO_BytecodeData_Code_Join19:
 	ld	(xiz+3), 127
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Epilogue35:
 	pop	xiz
 	ret
@@ -1442,7 +1492,7 @@ FileIO_BytecodeData_Code_Skip75:
 	ld	(xde), 0
 FileIO_BytecodeData_Code_Join20:
 	ld	(xhl), 64
-	jrl	FileIO_BytecodeData
+	jrl	PanelEvent_Post
 ExtDev_SndParam_Block48_Var80:
 	set	1, (0x905d:16)
 	ld	(xwa), 72
@@ -1458,7 +1508,7 @@ FileIO_BytecodeData_Code_Skip76:
 	ld	(xde), 0
 FileIO_BytecodeData_Code_Join21:
 	ld	(xhl), 128
-	jrl	FileIO_BytecodeData
+	jrl	PanelEvent_Post
 ExtDev_SndParam_Block48_Var04:
 	set	1, (0x905d:16)
 	ld	(xwa), 72
@@ -1474,7 +1524,7 @@ FileIO_BytecodeData_Code_Skip77:
 	ld	(xde), 0
 FileIO_BytecodeData_Code_Join22:
 	ld	(xhl), 4
-	jrl	FileIO_BytecodeData
+	jrl	PanelEvent_Post
 ExtDev_SndParam_Block48_Var04_B:
 	set	1, (0x905d:16)
 	ld	(xwa), 72
@@ -1490,7 +1540,7 @@ FileIO_BytecodeData_Code_Skip78:
 	ld	(xde), 0
 FileIO_BytecodeData_Code_Helper4_Join:
 	ld	(xhl), 4
-	jrl	FileIO_BytecodeData
+	jrl	PanelEvent_Post
 ExtDev_SndParam_Write98_Block:
 	push	xiz
 	ld	xiz, xwa
@@ -1515,7 +1565,7 @@ FileIO_BytecodeData_Code_Helper4_Skip:
 FileIO_BytecodeData_Code_Helper4_Join2:
 	ld	(xde), 128
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Helper4_Epilogue:
 	pop	xiz
 	ret
@@ -1534,7 +1584,7 @@ FileIO_BytecodeData_Code_Helper4_Skip2:
 	ld	(xde), 0
 FileIO_BytecodeData_Code_Helper4_Join3:
 	ld	(xhl), 64
-	jrl	FileIO_BytecodeData
+	jrl	PanelEvent_Post
 ExtDev_SndParam_BlockA9_Var02:
 	cp	(CURRENT_TITLE:16), 135
 	ret	nz
@@ -1552,7 +1602,7 @@ FileIO_BytecodeData_Code_Helper4_Skip3:
 	ld	(xde), 0
 FileIO_BytecodeData_Code_Helper4_Join4:
 	ld	(xhl), 2
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	ret
 ExtDev_SndParam_Block98_Var80:
 	set	1, (0x905d:16)
@@ -1569,7 +1619,7 @@ FileIO_BytecodeData_Code_Skip79:
 	ld	(xde), 0
 FileIO_BytecodeData_Code_Join23:
 	ld	(xhl), 128
-	jrl	FileIO_BytecodeData
+	jrl	PanelEvent_Post
 ExtDev_SndParam_Block98_Var40_B:
 	set	1, (0x905d:16)
 	ld	(xwa), 152
@@ -1585,7 +1635,7 @@ FileIO_BytecodeData_Code_Helper4_Skip4:
 	ld	(xde), 0
 FileIO_BytecodeData_Code_Helper4_Join5:
 	ld	(xhl), 64
-	jrl	FileIO_BytecodeData
+	jrl	PanelEvent_Post
 ; (pre-port v7 note about the bytes at 0xFC5EF6:)
 ; framing ported from v10's source for the same label (same span length, statement for statement); 24 of 35 slots byte-identical
 ExtDev_SndParam_ConfigAndWrite:
@@ -1617,7 +1667,7 @@ FileIO_BytecodeData_Code_Helper4_Skip5:
 FileIO_BytecodeData_Code_Join24:
 	ld	(xiz+3), 127
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 NakaData_WidgetInit1_Code_Epilogue:
 	pop	xiz
 	ret
@@ -1633,7 +1683,7 @@ ExtDev_SndParam_Block14_Dual:
 	ld	(xwa+1), 4
 	ld	(xhl), 64
 	ld	(xix), 64
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 	ret
 ExtDev_SndParam_Write48_Block:
 	push	xiz
@@ -1657,7 +1707,7 @@ FileIO_BytecodeData_Code_Helper4_Skip6:
 FileIO_BytecodeData_Code_Helper4_Join6:
 	ld	(xde), 64
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Helper4_Epilogue2:
 	pop	xiz
 	ret
@@ -1678,7 +1728,7 @@ FileIO_BytecodeData_Code_Skip80:
 	ld	(xde), 0
 FileIO_BytecodeData_Code_Join25:
 	ld	(xhl), 2
-	jrl	FileIO_BytecodeData
+	jrl	PanelEvent_Post
 ExtDev_SndParam_Block70_Var04:
 	set	1, (0x905d:16)
 	ld	(xwa), 112
@@ -1694,7 +1744,7 @@ FileIO_BytecodeData_Code_Skip81:
 	ld	(xde), 0
 FileIO_BytecodeData_Code_Join26:
 	ld	(xhl), 4
-	jrl	FileIO_BytecodeData
+	jrl	PanelEvent_Post
 ExtDev_SndParam_DispatchAndWriteA8:
 	push	xiz
 	ld	xiz, xwa
@@ -1730,7 +1780,7 @@ FileIO_BytecodeData_Code_Helper4_Skip7:
 	ld	(xde), 2
 	ld	(xhl), 2
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Helper4_Epilogue3:
 	pop	xiz
 	ret
@@ -1769,7 +1819,7 @@ FileIO_BytecodeData_Code_Helper4_Skip8:
 	ld	(xde), 1
 	ld	(xhl), 1
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Helper4_Epilogue4:
 	pop	xiz
 	ret
@@ -1825,16 +1875,18 @@ FileIO_BytecodeData_Code_Helper4_Skip9:
 	ld	(xiz+2), w
 	ld	(xiz+3), 127
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
+	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Helper4_Epilogue5:
 	pop	xiz
 	inc	2, xsp
 	ret
+; every button but the LCD ones and HELP, in MD_HELP (PanelButton_HelpModeActionLists)
+PanelButton_HelpMode:
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (xiz+2)
 	cp	a, 0:i3
-	jr	z, FileIO_BytecodeData_Code_Epilogue36
+	jr	z, PanelButton_HelpMode_Epilogue
 	ld	w, 0:opc
 	extz	xwa
 	call	Util_FindLowestSetBit
@@ -1846,16 +1898,16 @@ FileIO_BytecodeData_Code_Helper4_Epilogue5:
 	lda	xde, (ExtDev_SndParam_DispatchComplex_PtrTable:24)
 	ld	xde, (xde+wa)
 	or	xde, xde
-	jr	z, FileIO_BytecodeData_Code_Epilogue36
+	jr	z, PanelButton_HelpMode_Epilogue
 	extz	hl
 	ld	a, (xde+hl)
 	ld	(xbc), a
 	cp	a, 255
-	jr	z, FileIO_BytecodeData_Code_Epilogue36
+	jr	z, PanelButton_HelpMode_Epilogue
 	ld	(xiz+3), 255
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData
-FileIO_BytecodeData_Code_Epilogue36:
+	calr	PanelEvent_Post
+PanelButton_HelpMode_Epilogue:
 	pop	xiz
 	ret
 VoiceEntry_FindMasterVolume:

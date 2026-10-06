@@ -26,5 +26,10 @@ Known limits. These are stated so that a zero is never over-read:
   are counted in the `D-unres` column and listed by `--unresolved KEY`. Offsets are sign-extended, as the
   CPU does. A two-level switch is bounded by its byte map's largest entry. In v10, 99.8% of D's 2,642
   entries land on instruction starts. The other 4 are code spelled as text or bytes;
-- unframed runs carry about 10% false positives, which the null-control column measures;
+- unframed runs carry about 10% false positives, which the null-control column measures. Since 2026-10-06
+  U also runs at stride 8, outside the stride-4 runs: one code pointer per 8-byte record. The KN5000
+  control-panel action lists (`PanelButton_ActionListPool`) were found by hand first and were invisible at
+  stride 4. Its first run found them, `SeqStep_TimerDispatch_ProcTables` in v10/v9/v7 and v7's
+  `TimeSig_ProcTable`, and nothing in the stride-8 null control. Records with other strides (6, 10, 12,
+  ...) are still not searched;
 - the code-table test leaves out record tables whose pointers are mostly data.

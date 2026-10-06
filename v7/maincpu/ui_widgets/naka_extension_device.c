@@ -10,6 +10,43 @@
 
 /* ── External symbols (resolved by linker script) ── */
 
+extern const char PanelAction_Event22;
+extern const char PanelAction_Event23;
+extern const char PanelAction_Event26;
+extern const char PanelAction_Event27;
+extern const char PanelAction_Event28Bit0;
+extern const char PanelAction_Event28Bit1;
+extern const char PanelAction_Event29Bit0;
+extern const char PanelAction_Event29Bit1;
+extern const char PanelAction_Event29Bit2;
+extern const char PanelAction_Event29Bit3;
+extern const char PanelAction_PostUnlessDemo;
+extern const char PanelAction_PostUnlessDemoOrParamC0;
+extern const char PanelButton_AcousticIllusion;
+extern const char PanelButton_AutoPlayChord;
+extern const char PanelButton_Conductor;
+extern const char PanelButton_DigitalEffect;
+extern const char PanelButton_DigitalReverb;
+extern const char PanelButton_DspEffect;
+extern const char PanelButton_HelpMode;
+extern const char PanelButton_ModeKey;
+extern const char PanelButton_MspNumber;
+extern const char PanelButton_MusicStyleArranger;
+extern const char PanelButton_Octave;
+extern const char PanelButton_PairDown;
+extern const char PanelButton_PairUp;
+extern const char PanelButton_PanelMemoryNextBank;
+extern const char PanelButton_PanelMemoryNumber;
+extern const char PanelButton_PanelMemorySet;
+extern const char PanelButton_PartSelect;
+extern const char PanelButton_RhythmGroup;
+extern const char PanelButton_SequencerPlay;
+extern const char PanelButton_SoundGroup;
+extern const char PanelButton_SplitPoint;
+extern const char PanelButton_StartStop;
+extern const char PanelButton_Sustain;
+extern const char PanelButton_SynchroBreak;
+extern const char PanelButton_Variation;
 extern const char Audio_CopyStateFromROM;
 extern const char Audio_NullHandler_A;
 extern const char Audio_NullHandler_B;
@@ -50,7 +87,7 @@ extern const char ExtDev_SndParam_DispatchComplex;
 extern const char ExtDev_SndParam_MultiReg_Iterate;
 extern const char ExtDev_SndParam_Write48_Block;
 extern const char ExtDev_SndParam_Write98_Block;
-extern const char FileIO_BytecodeData;
+extern const char PanelEvent_Post;
 extern const char NakaData_WidgetInit1;
 extern const char FileIO_BytecodeData_Code_Loop3;
 extern const char FileIO_BytecodeData_Code_Join18;
@@ -223,6 +260,19 @@ typedef struct __attribute__((packed)) {
     uint8_t  mask;       /* SndParam_ApplyMaskBlock: *address = (*address & ~mask) | value */
     uint8_t  value;
 } snd_param_mask_entry_t;
+
+/* One control-panel button action (8 bytes; scripts/converters/panel_button_actions_retype.py).  For a change of
+ * panel segment byte old -> new, PanelButton_DispatchChange takes (old & mask) and (new & mask), shifts both by
+ * shift & 0x0F (left when bit 4 of shift is set, else right) and, when the new value is not 0, calls handler with
+ * the frame {event_id, event_arg, old, new} + {0xAA, segment index, old byte, new byte}.  A list ends with
+ * event_id 0xFF. */
+typedef struct __attribute__((packed)) {
+    uint8_t  event_id;
+    uint8_t  event_arg;
+    uint8_t  shift;
+    uint8_t  mask;
+    uint32_t handler;
+} panel_button_action_t;
 
 /* -- Panel TLV schema (+0x230E..+0x2B0C; scripts/converters/panel_tlv_schema_retype.py) --
  * The live panel (RAM 0xF9A0 = block 0, 0xFD60 = block 1) and each of the 80 panel memories (RAM
@@ -1157,616 +1207,124 @@ typedef struct __attribute__((packed)) {
     char str_530[2];
     char V_str[2];
     char r_str[2];
-    char H_str_3[2];
-    uint16_t field_2e74;
-    uint32_t ptr_2e76;
-    uint16_t field_2e7a;
-    uint16_t field_2e7c;
-    uint32_t Encoder_AlignByte_ptr;
-    uint16_t field_2e82;
-    uint16_t field_2e84;
-    uint32_t ptr_2e86;
-    uint16_t field_2e8a;
-    uint16_t field_2e8c;
-    uint32_t Encoder_AlignByte_ptr_2;
-    char H_str_4[2];
-    uint16_t field_2e94;
-    uint32_t ptr_2e96;
-    uint16_t field_2e9a;
-    uint16_t field_2e9c;
-    uint32_t ptr_2e9e;
-    uint16_t field_2ea2;
-    uint16_t field_2ea4;
-    uint32_t ptr_2ea6;
-    uint16_t field_2eaa;
-    uint16_t field_2eac;
-    uint32_t ptr_2eae;
-    uint16_t field_2eb2;
-    uint16_t field_2eb4;
-    uint32_t ptr_2eb6;
-    uint16_t field_2eba;
-    uint16_t field_2ebc;
-    uint32_t ptr_2ebe;
-    uint16_t field_2ec2;
-    uint16_t field_2ec4;
-    uint32_t ptr_2ec6;
-    uint16_t field_2eca;
-    uint16_t field_2ecc;
-    uint32_t Encoder_AlignByte_ptr_3;
-    uint16_t field_2ed2;
-    uint16_t field_2ed4;
-    uint32_t ptr_2ed6;
-    uint16_t field_2eda;
-    uint16_t field_2edc;
-    uint32_t Encoder_AlignByte_ptr_4;
-    uint16_t field_2ee2;
-    uint16_t field_2ee4;
-    uint32_t ptr_2ee6;
-    uint16_t field_2eea;
-    uint16_t field_2eec;
-    uint32_t ptr_2eee;
-    uint16_t field_2ef2;
-    uint16_t field_2ef4;
-    uint32_t ptr_2ef6;
-    uint16_t field_2efa;
-    uint16_t field_2efc;
-    uint32_t ptr_2efe;
-    uint16_t field_2f02;
-    uint16_t field_2f04;
-    uint32_t ptr_2f06;
-    uint16_t field_2f0a;
-    uint16_t field_2f0c;
-    uint32_t ptr_2f0e;
-    uint16_t field_2f12;
-    uint16_t field_2f14;
-    uint32_t Encoder_AlignByte_ptr_5;
-    uint16_t field_2f1a;
-    uint16_t field_2f1c;
-    uint32_t ptr_2f1e;
-    uint16_t field_2f22;
-    uint16_t field_2f24;
-    uint32_t ptr_2f26;
-    uint16_t field_2f2a;
-    uint16_t field_2f2c;
-    uint32_t ptr_2f2e;
-    uint16_t field_2f32;
-    uint16_t field_2f34;
-    uint32_t Encoder_AlignByte_ptr_6;
-    uint16_t field_2f3a;
-    uint16_t field_2f3c;
-    uint32_t ptr_2f3e;
-    uint16_t field_2f42;
-    uint16_t field_2f44;
-    uint32_t ptr_2f46;
-    uint16_t field_2f4a;
-    uint16_t field_2f4c;
-    uint32_t ptr_2f4e;
-    uint16_t field_2f52;
-    uint16_t field_2f54;
-    uint32_t ptr_2f56;
-    uint16_t field_2f5a;
-    uint16_t field_2f5c;
-    uint32_t Encoder_AlignByte_ptr_7;
-    uint16_t field_2f62;
-    uint16_t field_2f64;
-    uint32_t ptr_2f66;
-    uint16_t field_2f6a;
-    uint16_t field_2f6c;
-    uint32_t Encoder_AlignByte_ptr_8;
-    uint16_t field_2f72;
-    uint16_t field_2f74;
-    uint32_t ptr_2f76;
-    uint16_t field_2f7a;
-    uint16_t field_2f7c;
-    uint32_t ptr_2f7e;
-    char p_str[2];
-    uint16_t field_2f84;
-    uint32_t ptr_2f86;
-    uint16_t field_2f8a;
-    uint16_t field_2f8c;
-    uint32_t ptr_2f8e;
-    uint16_t field_2f92;
-    uint16_t field_2f94;
-    uint32_t Encoder_AlignByte_ptr_9;
-    uint16_t field_2f9a;
-    uint16_t field_2f9c;
-    uint32_t ptr_2f9e;
-    uint16_t field_2fa2;
-    uint16_t field_2fa4;
-    uint32_t Encoder_AlignByte_ptr_10;
-    uint16_t field_2faa;
-    uint16_t field_2fac;
-    uint32_t ptr_2fae;
-    uint16_t field_2fb2;
-    uint16_t field_2fb4;
-    uint32_t Encoder_AlignByte_ptr_11;
-    uint16_t field_2fba;
-    uint16_t field_2fbc;
-    uint32_t ptr_2fbe;
-    uint16_t field_2fc2;
-    uint16_t field_2fc4;
-    uint32_t Encoder_AlignByte_ptr_12;
-    char H_str_5[2];
-    char str_537[2];
-    uint32_t ptr_2fce;
-    uint16_t field_2fd2;
-    uint16_t field_2fd4;
-    uint32_t Encoder_AlignByte_ptr_13;
-    uint16_t field_2fda;
-    char str_538[2];
-    uint32_t ptr_2fde;
-    uint16_t field_2fe2;
-    uint16_t field_2fe4;
-    uint32_t Encoder_AlignByte_ptr_14;
-    uint16_t field_2fea;
-    uint16_t field_2fec;
-    uint32_t ptr_2fee;
-    uint16_t field_2ff2;
-    uint16_t field_2ff4;
-    uint32_t ptr_2ff6;
-    uint16_t field_2ffa;
-    uint16_t field_2ffc;
-    uint32_t ptr_2ffe;
-    uint16_t field_3002;
-    uint16_t field_3004;
-    uint32_t ptr_3006;
-    uint16_t field_300a;
-    uint16_t field_300c;
-    uint32_t ptr_300e;
-    uint16_t field_3012;
-    uint16_t field_3014;
-    uint32_t ptr_3016;
-    uint16_t field_301a;
-    uint16_t field_301c;
-    uint32_t ptr_301e;
-    uint16_t field_3022;
-    uint16_t field_3024;
-    uint32_t ptr_3026;
-    uint16_t field_302a;
-    uint16_t field_302c;
-    uint32_t Encoder_AlignByte_ptr_15;
-    uint16_t field_3032;
-    uint16_t field_3034;
-    uint32_t ptr_3036;
-    uint16_t field_303a;
-    uint16_t field_303c;
-    uint32_t ptr_303e;
-    uint16_t field_3042;
-    uint16_t field_3044;
-    uint32_t ptr_3046;
-    uint16_t field_304a;
-    uint16_t field_304c;
-    uint32_t ptr_304e;
-    uint16_t field_3052;
-    uint16_t field_3054;
-    uint32_t ptr_3056;
-    uint16_t field_305a;
-    uint16_t field_305c;
-    uint32_t ptr_305e;
-    uint16_t field_3062;
-    uint16_t field_3064;
-    uint32_t ptr_3066;
-    uint16_t field_306a;
-    uint16_t field_306c;
-    uint32_t ptr_306e;
-    uint16_t field_3072;
-    uint16_t field_3074;
-    uint32_t Encoder_AlignByte_ptr_16;
-    uint16_t field_307a;
-    uint16_t field_307c;
-    uint32_t ptr_307e;
-    uint16_t field_3082;
-    uint16_t field_3084;
-    uint32_t ptr_3086;
-    uint16_t field_308a;
-    uint16_t field_308c;
-    uint32_t ptr_308e;
-    uint16_t field_3092;
-    uint16_t field_3094;
-    uint32_t ptr_3096;
-    uint16_t field_309a;
-    uint16_t field_309c;
-    uint32_t ptr_309e;
-    uint16_t field_30a2;
-    uint16_t field_30a4;
-    uint32_t ptr_30a6;
-    uint16_t field_30aa;
-    uint16_t field_30ac;
-    uint32_t ptr_30ae;
-    uint16_t field_30b2;
-    uint16_t field_30b4;
-    uint32_t Encoder_AlignByte_ptr_17;
-    uint16_t field_30ba;
-    uint16_t field_30bc;
-    uint32_t ptr_30be;
-    uint16_t field_30c2;
-    uint16_t field_30c4;
-    uint32_t ptr_30c6;
-    uint16_t field_30ca;
-    uint16_t field_30cc;
-    uint32_t ptr_30ce;
-    uint16_t field_30d2;
-    uint16_t field_30d4;
-    uint32_t ptr_30d6;
-    uint16_t field_30da;
-    uint16_t field_30dc;
-    uint32_t ptr_30de;
-    uint16_t field_30e2;
-    uint16_t field_30e4;
-    uint32_t ptr_30e6;
-    uint16_t field_30ea;
-    uint16_t field_30ec;
-    uint32_t ptr_30ee;
-    uint16_t field_30f2;
-    uint16_t field_30f4;
-    uint32_t Encoder_AlignByte_ptr_18;
-    uint16_t field_30fa;
-    uint16_t field_30fc;
-    uint32_t ptr_30fe;
-    uint16_t field_3102;
-    uint16_t field_3104;
-    uint32_t ptr_3106;
-    uint16_t field_310a;
-    uint16_t field_310c;
-    uint32_t ptr_310e;
-    uint16_t field_3112;
-    uint16_t field_3114;
-    uint32_t ptr_3116;
-    uint16_t field_311a;
-    uint16_t field_311c;
-    uint32_t ptr_311e;
-    uint16_t field_3122;
-    uint16_t field_3124;
-    uint32_t ptr_3126;
-    uint16_t field_312a;
-    uint16_t field_312c;
-    uint32_t ptr_312e;
-    uint16_t field_3132;
-    uint16_t field_3134;
-    uint32_t ptr_3136;
-    uint16_t field_313a;
-    uint16_t field_313c;
-    uint32_t Encoder_AlignByte_ptr_19;
-    uint16_t field_3142;
-    uint16_t field_3144;
-    uint32_t ptr_3146;
-    uint16_t field_314a;
-    uint16_t field_314c;
-    uint32_t ptr_314e;
-    uint16_t field_3152;
-    uint16_t field_3154;
-    uint32_t ptr_3156;
-    uint16_t field_315a;
-    uint16_t field_315c;
-    uint32_t ptr_315e;
-    uint16_t field_3162;
-    uint16_t field_3164;
-    uint32_t ptr_3166;
-    uint16_t field_316a;
-    uint16_t field_316c;
-    uint32_t ptr_316e;
-    uint16_t field_3172;
-    uint16_t field_3174;
-    uint32_t ptr_3176;
-    uint16_t field_317a;
-    uint16_t field_317c;
-    uint32_t ptr_317e;
-    uint16_t field_3182;
-    uint16_t field_3184;
-    uint32_t Encoder_AlignByte_ptr_20;
-    uint16_t field_318a;
-    uint16_t field_318c;
-    uint32_t ptr_318e;
-    uint16_t field_3192;
-    uint16_t field_3194;
-    uint32_t ptr_3196;
-    uint16_t field_319a;
-    uint16_t field_319c;
-    uint32_t Encoder_AlignByte_ptr_21;
-    uint16_t field_31a2;
-    uint16_t field_31a4;
-    uint32_t ptr_31a6;
-    uint16_t field_31aa;
-    uint16_t field_31ac;
-    uint32_t Encoder_AlignByte_ptr_22;
-    uint8_t pad_228[3];  /* zero padding */
-    uint16_t field_31b5;
-    uint16_t field_31b7;
-    char str_539[2];
-    uint16_t field_31bb;
-    uint16_t field_31bd;
-    uint16_t field_31bf;
-    uint16_t field_31c1;
-    uint16_t field_31c3;
-    uint16_t field_31c5;
-    uint16_t field_31c7;
-    char str_540[2];
-    uint16_t field_31cb;
-    uint16_t field_31cd;
-    uint16_t field_31cf;
-    uint8_t pad_229[4];  /* zero padding */
-    uint16_t field_31d5;
-    uint16_t field_31d7;
-    char str_541[2];
-    uint16_t field_31db;
-    uint16_t field_31dd;
-    uint16_t field_31df;
-    uint16_t field_31e1;
-    uint16_t field_31e3;
-    uint16_t field_31e5;
-    uint16_t field_31e7;
-    char str_542[2];
-    uint16_t field_31eb;
-    uint16_t field_31ed;
-    uint16_t field_31ef;
-    uint8_t pad_230[2];  /* zero padding */
-    uint16_t field_31f3;
-    uint16_t field_31f5;
-    uint16_t field_31f7;
-    uint8_t pad_231[2];  /* zero padding */
-    uint16_t field_31fb;
-    uint16_t field_31fd;
-    uint16_t field_31ff;
-    uint8_t pad_232[2];  /* zero padding */
-    uint16_t field_3203;
-    uint16_t field_3205;
-    uint16_t field_3207;
-    uint16_t field_3209;
-    uint16_t field_320b;
-    uint16_t field_320d;
-    uint16_t field_320f;
-    uint16_t field_3211;
-    uint16_t field_3213;
-    uint16_t field_3215;
-    uint16_t field_3217;
-    char str_543[2];
-    uint16_t field_321b;
-    uint16_t field_321d;
-    uint16_t field_321f;
-    uint16_t field_3221;
-    uint16_t field_3223;
-    uint16_t field_3225;
-    uint16_t field_3227;
-    char str_544[2];
-    uint16_t field_322b;
-    uint16_t field_322d;
-    uint16_t field_322f;
-    uint16_t field_3231;
-    uint16_t field_3233;
-    uint16_t field_3235;
-    uint16_t field_3237;
-    uint16_t field_3239;
-    uint16_t field_323b;
-    uint16_t field_323d;
-    uint16_t field_323f;
-    uint16_t field_3241;
-    uint16_t field_3243;
-    uint16_t field_3245;
-    uint16_t field_3247;
-    uint16_t field_3249;
-    uint16_t field_324b;
-    uint16_t field_324d;
-    uint16_t field_324f;
-    uint16_t field_3251;
-    uint16_t field_3253;
-    uint16_t field_3255;
-    uint16_t field_3257;
-    uint16_t field_3259;
-    uint16_t field_325b;
-    uint16_t field_325d;
-    uint16_t field_325f;
-    char str_545[2];
-    uint16_t field_3263;
-    uint16_t field_3265;
-    uint16_t field_3267;
-    uint16_t field_3269;
-    uint16_t field_326b;
-    uint16_t field_326d;
-    uint16_t field_326f;
-    char str_546[2];
-    uint16_t field_3273;
-    uint16_t field_3275;
-    uint16_t field_3277;
-    uint16_t field_3279;
-    uint16_t field_327b;
-    uint16_t field_327d;
-    uint16_t field_327f;
-    uint16_t field_3281;
-    uint16_t field_3283;
-    uint16_t field_3285;
-    uint16_t field_3287;
-    uint16_t field_3289;
-    uint16_t field_328b;
-    uint16_t field_328d;
-    uint16_t field_328f;
-    char str_547[2];
-    uint16_t field_3293;
-    uint16_t field_3295;
-    uint16_t field_3297;
-    uint16_t field_3299;
-    uint16_t field_329b;
-    uint16_t field_329d;
-    uint16_t field_329f;
-    char str_548[2];
-    uint16_t field_32a3;
-    uint16_t field_32a5;
-    uint16_t field_32a7;
-    uint16_t field_32a9;
-    uint16_t field_32ab;
-    uint16_t field_32ad;
-    uint16_t field_32af;
-    char str_549[2];
-    uint16_t field_32b3;
-    uint16_t field_32b5;
-    uint16_t field_32b7;
-    uint16_t field_32b9;
-    uint16_t field_32bb;
-    uint16_t field_32bd;
-    uint16_t field_32bf;
-    char str_550[2];
-    uint16_t field_32c3;
-    uint16_t field_32c5;
-    uint16_t field_32c7;
-    uint16_t field_32c9;
-    uint16_t field_32cb;
-    uint16_t field_32cd;
-    uint16_t field_32cf;
-    uint16_t field_32d1;
-    uint16_t field_32d3;
-    uint16_t field_32d5;
-    uint16_t field_32d7;
-    uint16_t field_32d9;
-    uint16_t field_32db;
-    uint16_t field_32dd;
-    uint16_t field_32df;
-    char str_551[2];
-    uint16_t field_32e3;
-    uint16_t field_32e5;
-    uint16_t field_32e7;
-    uint16_t field_32e9;
-    uint16_t field_32eb;
-    uint16_t field_32ed;
-    uint16_t field_32ef;
-    char str_552[2];
-    uint16_t field_32f3;
-    uint16_t field_32f5;
-    uint16_t field_32f7;
-    uint16_t field_32f9;
-    uint16_t field_32fb;
-    uint16_t field_32fd;
-    uint16_t field_32ff;
-    uint16_t field_3301;
-    uint16_t field_3303;
-    uint16_t field_3305;
-    uint16_t field_3307;
-    uint16_t field_3309;
-    uint16_t field_330b;
-    uint16_t field_330d;
-    uint16_t field_330f;
-    uint16_t field_3311;
-    uint16_t field_3313;
-    uint16_t field_3315;
-    uint16_t field_3317;
-    char str_553[2];
-    uint16_t field_331b;
-    uint16_t field_331d;
-    uint16_t field_331f;
-    uint16_t field_3321;
-    uint16_t field_3323;
-    uint16_t field_3325;
-    uint16_t field_3327;
-    char str_554[2];
-    uint16_t field_332b;
-    uint16_t field_332d;
-    uint16_t field_332f;
-    uint8_t pad_233[3];  /* zero padding */
-    uint16_t field_3334;
-    uint32_t ptr_3336;
-    uint16_t field_333a;
-    uint16_t field_333c;
-    uint32_t Encoder_AlignByte_ptr_23;
-    uint16_t field_3342;
-    uint16_t field_3344;
-    uint32_t ptr_3346;
-    uint16_t field_334a;
-    uint16_t field_334c;
-    uint32_t Encoder_AlignByte_ptr_24;
-    uint16_t field_3352;
-    uint16_t field_3354;
-    uint32_t ptr_3356;
-    uint16_t field_335a;
-    uint16_t field_335c;
-    uint32_t ptr_335e;
-    uint16_t field_3362;
-    uint16_t field_3364;
-    uint32_t ptr_3366;
-    uint16_t field_336a;
-    uint16_t field_336c;
-    uint32_t ptr_336e;
-    uint16_t field_3372;
-    uint16_t field_3374;
-    uint32_t Encoder_AlignByte_ptr_25;
-    uint16_t field_337a;
-    uint16_t field_337c;
-    uint32_t ptr_337e;
-    uint16_t field_3382;
-    uint16_t field_3384;
-    uint32_t Encoder_AlignByte_ptr_26;
-    uint16_t field_338a;
-    char str_555[2];
-    uint32_t ptr_338e;
-    uint16_t field_3392;
-    uint16_t field_3394;
-    uint32_t Encoder_AlignByte_ptr_27;
-    uint16_t field_339a;
-    uint16_t field_339c;
-    uint32_t ptr_339e;
-    uint16_t field_33a2;
-    uint16_t field_33a4;
-    uint32_t Encoder_AlignByte_ptr_28;
-    uint16_t field_33aa;
-    uint16_t field_33ac;
-    uint32_t FileIO_BytecodeData_ptr;
-    uint16_t field_33b2;
-    uint16_t field_33b4;
-    uint32_t Encoder_AlignByte_ptr_29;
-    uint16_t field_33ba;
-    char str_556[2];
-    uint32_t ptr_33be;
-    uint16_t field_33c2;
-    uint16_t field_33c4;
-    uint32_t Encoder_AlignByte_ptr_30;
-    uint16_t field_33ca;
-    char str_557[2];
-    uint32_t ptr_33ce;
-    uint16_t field_33d2;
-    uint16_t field_33d4;
-    uint32_t Encoder_AlignByte_ptr_31;
-    uint16_t field_33da;
-    uint16_t field_33dc;
-    uint32_t ptr_33de;
-    uint16_t field_33e2;
-    uint16_t field_33e4;
-    uint32_t Encoder_AlignByte_ptr_32;
-    uint16_t field_33ea;
-    uint16_t field_33ec;
-    uint32_t ptr_33ee;
-    uint16_t field_33f2;
-    uint16_t field_33f4;
-    uint32_t Encoder_AlignByte_ptr_33;
-    uint16_t field_33fa;
-    uint16_t field_33fc;
-    uint32_t ptr_33fe;
-    uint16_t field_3402;
-    uint16_t field_3404;
-    uint32_t ptr_3406;
-    uint16_t field_340a;
-    uint16_t field_340c;
-    uint32_t Encoder_AlignByte_ptr_34;
-    uint16_t field_3412;
-    uint16_t field_3414;
-    uint32_t ptr_3416;
-    uint16_t field_341a;
-    uint16_t field_341c;
-    uint32_t ptr_341e;
-    uint16_t field_3422;
-    uint16_t field_3424;
-    uint32_t ptr_3426;
-    uint16_t field_342a;
-    uint16_t field_342c;
-    uint32_t ptr_342e;
-    uint16_t field_3432;
-    uint16_t field_3434;
-    uint32_t Encoder_AlignByte_ptr_35;
-    uint16_t field_343a;
-    uint16_t field_343c;
-    uint32_t FileIO_BytecodeData_ptr_2;
-    uint16_t field_3442;
-    uint16_t field_3444;
-    uint32_t Encoder_AlignByte_ptr_36;
-    uint16_t field_344a;
-    uint16_t field_344c;
-    uint32_t ptrs_26[69];  /* 69 pointers */
+    /* ---------------------------------------------------------------------
+     * The 53 control-panel action lists (panel_button_action_t, defined above), in ROM order.
+     * Each is named after its first user: PanelActions_LeftSegN / RightSegN = panel segment N (event
+     * index N / N + 11), EventN = event index N, Help* = used only by PanelButton_HelpModeActionLists.
+     * Button names per mask bit are the MAME driver's (kn5000.cpp, PORT_START("CPL_SEGn"/"CPR_SEGn")).
+     * --------------------------------------------------------------------- */
+    /* PanelActions_LeftSeg0: index 0 */
+    panel_button_action_t PanelActions_LeftSeg0[2];
+    /* PanelActions_HelpLeftSeg0: help index 0 */
+    panel_button_action_t PanelActions_HelpLeftSeg0[2];
+    /* PanelActions_LeftSeg1: index 1 */
+    panel_button_action_t PanelActions_LeftSeg1[8];
+    /* PanelActions_HelpLeftSeg1: help index 1 */
+    panel_button_action_t PanelActions_HelpLeftSeg1[2];
+    /* PanelActions_LeftSeg2: index 2 */
+    panel_button_action_t PanelActions_LeftSeg2[7];
+    /* PanelActions_HelpLeftSeg2: help index 2 */
+    panel_button_action_t PanelActions_HelpLeftSeg2[4];
+    /* PanelActions_LeftSeg3: index 3 */
+    panel_button_action_t PanelActions_LeftSeg3[5];
+    /* PanelActions_HelpLeftSeg3: help index 3 */
+    panel_button_action_t PanelActions_HelpLeftSeg3[2];
+    /* PanelActions_LeftSeg4: index 4 */
+    panel_button_action_t PanelActions_LeftSeg4[5];
+    /* PanelActions_HelpLeftSeg4: help index 4 */
+    panel_button_action_t PanelActions_HelpLeftSeg4[2];
+    /* PanelActions_LeftSeg5: index 5 */
+    panel_button_action_t PanelActions_LeftSeg5[2];
+    /* PanelActions_HelpLeftSeg5: help index 5 */
+    panel_button_action_t PanelActions_HelpLeftSeg5[2];
+    /* PanelActions_LeftSeg6: index 6 */
+    panel_button_action_t PanelActions_LeftSeg6[2];
+    /* PanelActions_HelpLeftSeg6: help index 6 */
+    panel_button_action_t PanelActions_HelpLeftSeg6[2];
+    /* PanelActions_LeftSeg7: index 7 */
+    panel_button_action_t PanelActions_LeftSeg7[9];
+    /* PanelActions_HelpLeftSeg7: help index 7 */
+    panel_button_action_t PanelActions_HelpLeftSeg7[9];
+    /* PanelActions_LeftSeg8: index 8, help index 8 */
+    panel_button_action_t PanelActions_LeftSeg8[8];
+    /* PanelActions_LeftSeg9: index 9, help index 9 */
+    panel_button_action_t PanelActions_LeftSeg9[8];
+    /* PanelActions_LeftSeg10: index 10 */
+    panel_button_action_t PanelActions_LeftSeg10[9];
+    /* PanelActions_HelpLeftSeg10: help index 10 */
+    panel_button_action_t PanelActions_HelpLeftSeg10[9];
+    /* PanelActions_RightSeg0: index 11 */
+    panel_button_action_t PanelActions_RightSeg0[3];
+    /* PanelActions_HelpRightSeg0: help index 11 */
+    panel_button_action_t PanelActions_HelpRightSeg0[2];
+    /* PanelActions_RightSeg1: index 12 */
+    panel_button_action_t PanelActions_RightSeg1[2];
+    /* PanelActions_HelpRightSeg1: help index 12 */
+    panel_button_action_t PanelActions_HelpRightSeg1[2];
+    /* PanelActions_RightSeg2: index 13 */
+    panel_button_action_t PanelActions_RightSeg2[2];
+    /* PanelActions_HelpRightSeg2: help index 13 */
+    panel_button_action_t PanelActions_HelpRightSeg2[2];
+    /* PanelActions_RightSeg3: index 14 */
+    panel_button_action_t PanelActions_RightSeg3[6];
+    /* PanelActions_HelpRightSeg3: help index 14 */
+    panel_button_action_t PanelActions_HelpRightSeg3[2];
+    /* PanelActions_RightSeg4: index 15 */
+    panel_button_action_t PanelActions_RightSeg4[7];
+    /* PanelActions_HelpRightSeg4: help index 15 */
+    panel_button_action_t PanelActions_HelpRightSeg4[2];
+    /* PanelActions_RightSeg5: index 16 */
+    panel_button_action_t PanelActions_RightSeg5[4];
+    /* PanelActions_HelpRightSeg5: help index 16 */
+    panel_button_action_t PanelActions_HelpRightSeg5[2];
+    /* PanelActions_RightSeg6: index 17 */
+    panel_button_action_t PanelActions_RightSeg6[2];
+    /* PanelActions_HelpRightSeg6: help index 17 */
+    panel_button_action_t PanelActions_HelpRightSeg6[2];
+    /* PanelActions_RightSeg7: index 18 */
+    panel_button_action_t PanelActions_RightSeg7[4];
+    /* PanelActions_HelpRightSeg7: help index 18 */
+    panel_button_action_t PanelActions_HelpRightSeg7[2];
+    /* PanelActions_RightSeg8: index 19 */
+    panel_button_action_t PanelActions_RightSeg8[5];
+    /* PanelActions_HelpRightSeg8: help index 19 */
+    panel_button_action_t PanelActions_HelpRightSeg8[2];
+    /* PanelActions_RightSeg9: index 20 */
+    panel_button_action_t PanelActions_RightSeg9[2];
+    /* PanelActions_HelpRightSeg9: help index 20 */
+    panel_button_action_t PanelActions_HelpRightSeg9[2];
+    /* PanelActions_RightSeg10: index 21 */
+    panel_button_action_t PanelActions_RightSeg10[5];
+    /* PanelActions_HelpRightSeg10: help index 21 */
+    panel_button_action_t PanelActions_HelpRightSeg10[2];
+    /* PanelActions_Event22: index 22, help index 22 */
+    panel_button_action_t PanelActions_Event22[2];
+    /* PanelActions_Event23: index 23, help index 23 */
+    panel_button_action_t PanelActions_Event23[2];
+    /* PanelActions_Event24: index 24, help index 24 */
+    panel_button_action_t PanelActions_Event24[2];
+    /* PanelActions_Event25: index 25 */
+    panel_button_action_t PanelActions_Event25[2];
+    /* PanelActions_HelpEvent25: help index 25 */
+    panel_button_action_t PanelActions_HelpEvent25[2];
+    /* PanelActions_Event26: index 26, help index 26 */
+    panel_button_action_t PanelActions_Event26[2];
+    /* PanelActions_Event27: index 27, help index 27 */
+    panel_button_action_t PanelActions_Event27[2];
+    /* PanelActions_Event28: index 28, help index 28 */
+    panel_button_action_t PanelActions_Event28[3];
+    /* PanelActions_Event29: index 29, help index 29 */
+    panel_button_action_t PanelActions_Event29[5];
+    /* PanelActions_Event30: index 30, help index 30 */
+    panel_button_action_t PanelActions_Event30[2];
+    /* PanelActions_Event31: index 31, help index 31 */
+    panel_button_action_t PanelActions_Event31[1];
+    /* PanelButton_ActionLists: one action list per event index (0..31), read by PanelButton_DispatchChange */
+    uint32_t PanelButton_ActionLists[32];
+    /* PanelButton_HelpModeActionLists: one action list per event index (0..31), used instead in mode 20, MD_HELP */
+    uint32_t PanelButton_HelpModeActionLists[32];
+    /* the first 4 words of SoundParam_EncoderMappingData (ui_widgets/extension_device_screens.s), as the generator had them */
+    uint32_t SoundParam_EncoderMappingData_Head[4];
     uint16_t field_3562;
     uint16_t field_3564;
     uint16_t field_3566;
@@ -6355,1290 +5913,424 @@ const naka_extension_device_t naka_extension_device_data
 
     .r_str = "r",
 
-    .H_str_3 = "H",
-
-    .field_2e74 = 0x7F00,
-
-    .ptr_2e76 = 0x00FC5CD2,
-
-    .field_2e7a = NAKA_NONE,
-
-    .field_2e7c = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_2e82 = 0x13A8,
-
-    .field_2e84 = 0x7F00,
-
-    .ptr_2e86 = 0x00FC68F6,
-
-    .field_2e8a = NAKA_NONE,
-
-    .field_2e8c = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_2 = NAKA_ADDR(Encoder_AlignByte),
-
-    .H_str_4 = "H",
-
-    .field_2e94 = 0x0100,
-
-    .ptr_2e96 = 0x00FC5CD2,
-
-    .field_2e9a = 0x20A9,
-
-    .field_2e9c = 0x0201,
-
-    .ptr_2e9e = 0x00FC5930,
-
-    .field_2ea2 = 0x20A9,
-
-    .field_2ea4 = 0x0401,
-
-    .ptr_2ea6 = 0x00FC5930,
-
-    .field_2eaa = 0x06A8,
-
-    .field_2eac = 0x0803,
-
-    .ptr_2eae = 0x00FC58C2,
-
-    .field_2eb2 = 0x02A8,
-
-    .field_2eb4 = 0x1004,
-
-    .ptr_2eb6 = 0x00FC58C2,
-
-    .field_2eba = 0x0B98,
-
-    .field_2ebc = 0x2012,
-
-    .ptr_2ebe = 0x00FC58A5,
-
-    .field_2ec2 = 0x0B98,
-
-    .field_2ec4 = 0x4000,
-
-    .ptr_2ec6 = 0x00FC58A5,
-
-    .field_2eca = NAKA_NONE,
-
-    .field_2ecc = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_3 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_2ed2 = 0x13A8,
-
-    .field_2ed4 = 0x7F00,
-
-    .ptr_2ed6 = 0x00FC68F6,
-
-    .field_2eda = NAKA_NONE,
-
-    .field_2edc = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_4 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_2ee2 = 0x0548,
-
-    .field_2ee4 = 0x0116,
-
-    .ptr_2ee6 = 0x00FC58A5,
-
-    .field_2eea = 0x0548,
-
-    .field_2eec = 0x0216,
-
-    .ptr_2eee = 0x00FC58A5,
-
-    .field_2ef2 = 0x0548,
-
-    .field_2ef4 = 0x0400,
-
-    .ptr_2ef6 = 0x00FC58A5,
-
-    .field_2efa = 0x0648,
-
-    .field_2efc = 0x0801,
-
-    .ptr_2efe = 0x00FC58A5,
-
-    .field_2f02 = 0x10A9,
-
-    .field_2f04 = 0x4006,
-
-    .ptr_2f06 = 0x00FC5AE0,
-
-    .field_2f0a = 0x10A9,
-
-    .field_2f0c = 0x8006,
-
-    .ptr_2f0e = 0x00FC5B29,
-
-    .field_2f12 = NAKA_NONE,
-
-    .field_2f14 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_5 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_2f1a = 0x13A8,
-
-    .field_2f1c = 0x0F00,
-
-    .ptr_2f1e = 0x00FC68F6,
-
-    .field_2f22 = 0x10A9,
-
-    .field_2f24 = 0x4006,
-
-    .ptr_2f26 = 0x00FC5AE0,
-
-    .field_2f2a = 0x10A9,
-
-    .field_2f2c = 0x8006,
-
-    .ptr_2f2e = 0x00FC5B29,
-
-    .field_2f32 = NAKA_NONE,
-
-    .field_2f34 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_6 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_2f3a = 0x20A9,
-
-    .field_2f3c = 0x0100,
-
-    .ptr_2f3e = 0x00FC5930,
-
-    .field_2f42 = 0x09A8,
-
-    .field_2f44 = 0x0215,
-
-    .ptr_2f46 = 0x00FC58C2,
-
-    .field_2f4a = 0x20A9,
-
-    .field_2f4c = 0x0401,
-
-    .ptr_2f4e = 0x00FC5930,
-
-    .field_2f52 = 0x09A8,
-
-    .field_2f54 = 0x0814,
-
-    .ptr_2f56 = 0x00FC58C2,
-
-    .field_2f5a = NAKA_NONE,
-
-    .field_2f5c = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_7 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_2f62 = 0x13A8,
-
-    .field_2f64 = 0x0F00,
-
-    .ptr_2f66 = 0x00FC68F6,
-
-    .field_2f6a = NAKA_NONE,
-
-    .field_2f6c = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_8 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_2f72 = 0x0748,
-
-    .field_2f74 = 0x0F00,
-
-    .ptr_2f76 = 0x00FC6152,
-
-    .field_2f7a = 0x0398,
-
-    .field_2f7c = 0x1004,
-
-    .ptr_2f7e = 0x00FC6085,
-
-    .p_str = "p",
-
-    .field_2f84 = 0x2005,
-
-    .ptr_2f86 = 0x00FC5E49,
-
-    .field_2f8a = 0x05A8,
-
-    .field_2f8c = 0x4005,
-
-    .ptr_2f8e = 0x00FC5E9C,
-
-    .field_2f92 = NAKA_NONE,
-
-    .field_2f94 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_9 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_2f9a = 0x13A8,
-
-    .field_2f9c = 0x7F00,
-
-    .ptr_2f9e = 0x00FC68F6,
-
-    .field_2fa2 = NAKA_NONE,
-
-    .field_2fa4 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_10 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_2faa = 0x09A8,
-
-    .field_2fac = 0x3F00,
-
-    .ptr_2fae = 0x00FC60B4,
-
-    .field_2fb2 = NAKA_NONE,
-
-    .field_2fb4 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_11 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_2fba = 0x13A8,
-
-    .field_2fbc = 0x3F00,
-
-    .ptr_2fbe = 0x00FC68F6,
-
-    .field_2fc2 = NAKA_NONE,
-
-    .field_2fc4 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_12 = NAKA_ADDR(Encoder_AlignByte),
-
-    .H_str_5 = "H",
-
-    .str_537 = ALIGNED_STRING(""),
-
-    .ptr_2fce = 0x00FC5CD2,
-
-    .field_2fd2 = NAKA_NONE,
-
-    .field_2fd4 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_13 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_2fda = 0x13A8,
-
-    .str_538 = ALIGNED_STRING(""),
-
-    .ptr_2fde = 0x00FC68F6,
-
-    .field_2fe2 = NAKA_NONE,
-
-    .field_2fe4 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_14 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_2fea = 0x0CA9,
-
-    .field_2fec = 0x0111,
-
-    .ptr_2fee = 0x00FC5B29,
-
-    .field_2ff2 = 0x0BA9,
-
-    .field_2ff4 = 0x0200,
-
-    .ptr_2ff6 = 0x00FC5B29,
-
-    .field_2ffa = 0x03A8,
-
-    .field_2ffc = 0x0402,
-
-    .ptr_2ffe = 0x00FC58A5,
-
-    .field_3002 = 0x0FA9,
-
-    .field_3004 = 0x0802,
-
-    .ptr_3006 = 0x00FC5B29,
-
-    .field_300a = 0x06A9,
-
-    .field_300c = 0x1004,
-
-    .ptr_300e = 0x00FC5AE0,
-
-    .field_3012 = 0x06A9,
-
-    .field_3014 = 0x2004,
-
-    .ptr_3016 = 0x00FC5B29,
-
-    .field_301a = 0x07A9,
-
-    .field_301c = 0x4006,
-
-    .ptr_301e = 0x00FC5AE0,
-
-    .field_3022 = 0x07A9,
-
-    .field_3024 = 0x8006,
-
-    .ptr_3026 = 0x00FC5B29,
-
-    .field_302a = NAKA_NONE,
-
-    .field_302c = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_15 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_3032 = 0x0CA9,
-
-    .field_3034 = 0x0111,
-
-    .ptr_3036 = 0x00FC5B29,
-
-    .field_303a = 0x0BA9,
-
-    .field_303c = 0x0200,
-
-    .ptr_303e = 0x00FC5B29,
-
-    .field_3042 = 0x13A8,
-
-    .field_3044 = 0x0400,
-
-    .ptr_3046 = 0x00FC68F6,
-
-    .field_304a = 0x0FA9,
-
-    .field_304c = 0x0802,
-
-    .ptr_304e = 0x00FC5B29,
-
-    .field_3052 = 0x06A9,
-
-    .field_3054 = 0x1004,
-
-    .ptr_3056 = 0x00FC5AE0,
-
-    .field_305a = 0x06A9,
-
-    .field_305c = 0x2004,
-
-    .ptr_305e = 0x00FC5B29,
-
-    .field_3062 = 0x07A9,
-
-    .field_3064 = 0x4006,
-
-    .ptr_3066 = 0x00FC5AE0,
-
-    .field_306a = 0x07A9,
-
-    .field_306c = 0x8006,
-
-    .ptr_306e = 0x00FC5B29,
-
-    .field_3072 = NAKA_NONE,
-
-    .field_3074 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_16 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_307a = 0x0AA9,
-
-    .field_307c = 0x0111,
-
-    .ptr_307e = 0x00FC5B29,
-
-    .field_3082 = 0x09A9,
-
-    .field_3084 = 0x0200,
-
-    .ptr_3086 = 0x00FC5B29,
-
-    .field_308a = 0x08A9,
-
-    .field_308c = 0x0401,
-
-    .ptr_308e = 0x00FC5B29,
-
-    .field_3092 = 0x04A9,
-
-    .field_3094 = 0x1004,
-
-    .ptr_3096 = 0x00FC5AE0,
-
-    .field_309a = 0x04A9,
-
-    .field_309c = 0x2004,
-
-    .ptr_309e = 0x00FC5B29,
-
-    .field_30a2 = 0x05A9,
-
-    .field_30a4 = 0x4006,
-
-    .ptr_30a6 = 0x00FC5AE0,
-
-    .field_30aa = 0x05A9,
-
-    .field_30ac = 0x8006,
-
-    .ptr_30ae = 0x00FC5B29,
-
-    .field_30b2 = NAKA_NONE,
-
-    .field_30b4 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_17 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_30ba = 0x0CA9,
-
-    .field_30bc = 0x0100,
-
-    .ptr_30be = 0x00FC5AE0,
-
-    .field_30c2 = 0x0BA9,
-
-    .field_30c4 = 0x0201,
-
-    .ptr_30c6 = 0x00FC5AE0,
-
-    .field_30ca = 0x0AA9,
-
-    .field_30cc = 0x0402,
-
-    .ptr_30ce = 0x00FC5AE0,
-
-    .field_30d2 = 0x02A9,
-
-    .field_30d4 = 0x1004,
-
-    .ptr_30d6 = 0x00FC5AE0,
-
-    .field_30da = 0x02A9,
-
-    .field_30dc = 0x2004,
-
-    .ptr_30de = 0x00FC5B29,
-
-    .field_30e2 = 0x03A9,
-
-    .field_30e4 = 0x4006,
-
-    .ptr_30e6 = 0x00FC5AE0,
-
-    .field_30ea = 0x03A9,
-
-    .field_30ec = 0x8006,
-
-    .ptr_30ee = 0x00FC5B29,
-
-    .field_30f2 = NAKA_NONE,
-
-    .field_30f4 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_18 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_30fa = 0x09A9,
-
-    .field_30fc = 0x0100,
-
-    .ptr_30fe = 0x00FC5AE0,
-
-    .field_3102 = 0x08A9,
-
-    .field_3104 = 0x0201,
-
-    .ptr_3106 = 0x00FC5AE0,
-
-    .field_310a = 0x20A9,
-
-    .field_310c = 0x0402,
-
-    .ptr_310e = 0x00FC5930,
-
-    .field_3112 = 0x0FA9,
-
-    .field_3114 = 0x0803,
-
-    .ptr_3116 = 0x00FC5AE0,
-
-    .field_311a = 0x00A9,
-
-    .field_311c = 0x1004,
-
-    .ptr_311e = 0x00FC5AE0,
-
-    .field_3122 = 0x00A9,
-
-    .field_3124 = 0x2004,
-
-    .ptr_3126 = 0x00FC5B29,
-
-    .field_312a = 0x01A9,
-
-    .field_312c = 0x4006,
-
-    .ptr_312e = 0x00FC5AE0,
-
-    .field_3132 = 0x01A9,
-
-    .field_3134 = 0x8006,
-
-    .ptr_3136 = 0x00FC5B29,
-
-    .field_313a = NAKA_NONE,
-
-    .field_313c = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_19 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_3142 = 0x09A9,
-
-    .field_3144 = 0x0100,
-
-    .ptr_3146 = 0x00FC5AE0,
-
-    .field_314a = 0x08A9,
-
-    .field_314c = 0x0201,
-
-    .ptr_314e = 0x00FC5AE0,
-
-    .field_3152 = 0x20A9,
-
-    .field_3154 = 0x0402,
-
-    .ptr_3156 = 0x00FC5930,
-
-    .field_315a = 0x13A8,
-
-    .field_315c = 0x0800,
-
-    .ptr_315e = 0x00FC68F6,
-
-    .field_3162 = 0x00A9,
-
-    .field_3164 = 0x1004,
-
-    .ptr_3166 = 0x00FC5AE0,
-
-    .field_316a = 0x00A9,
-
-    .field_316c = 0x2004,
-
-    .ptr_316e = 0x00FC5B29,
-
-    .field_3172 = 0x01A9,
-
-    .field_3174 = 0x4006,
-
-    .ptr_3176 = 0x00FC5AE0,
-
-    .field_317a = 0x01A9,
-
-    .field_317c = 0x8006,
-
-    .ptr_317e = 0x00FC5B29,
-
-    .field_3182 = NAKA_NONE,
-
-    .field_3184 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_20 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_318a = 0x0EA9,
-
-    .field_318c = 0x2005,
-
-    .ptr_318e = 0x00FC5AE0,
-
-    .field_3192 = 0x0EA9,
-
-    .field_3194 = 0x4005,
-
-    .ptr_3196 = 0x00FC5B29,
-
-    .field_319a = NAKA_NONE,
-
-    .field_319c = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_21 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_31a2 = 0x13A8,
-
-    .field_31a4 = 0x6000,
-
-    .ptr_31a6 = 0x00FC68F6,
-
-    .field_31aa = NAKA_NONE,
-
-    .field_31ac = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_22 = NAKA_ADDR(Encoder_AlignByte),
-
-    .pad_228 = { 0 },
-
-    .field_31b5 = 0xB0FF,
-
-    .field_31b7 = 0xFC5B,
-
-    .str_539 = ALIGNED_STRING(""),
-
-    .field_31bb = NAKA_NONE,
-
-    .field_31bd = 0x60FF,
-
-    .field_31bf = 0xFC57,
-
-    .field_31c1 = 0xA800,
-
-    .field_31c3 = 0x0013,
-
-    .field_31c5 = 0xF6FF,
-
-    .field_31c7 = 0xFC68,
-
-    .str_540 = ALIGNED_STRING(""),
-
-    .field_31cb = NAKA_NONE,
-
-    .field_31cd = 0x60FF,
-
-    .field_31cf = 0xFC57,
-
-    .pad_229 = { 0 },
-
-    .field_31d5 = 0xB0FF,
-
-    .field_31d7 = 0xFC5B,
-
-    .str_541 = ALIGNED_STRING(""),
-
-    .field_31db = NAKA_NONE,
-
-    .field_31dd = 0x60FF,
-
-    .field_31df = 0xFC57,
-
-    .field_31e1 = 0xA800,
-
-    .field_31e3 = 0x0013,
-
-    .field_31e5 = 0xF6FF,
-
-    .field_31e7 = 0xFC68,
-
-    .str_542 = ALIGNED_STRING(""),
-
-    .field_31eb = NAKA_NONE,
-
-    .field_31ed = 0x60FF,
-
-    .field_31ef = 0xFC57,
-
-    .pad_230 = { 0 },
-
-    .field_31f3 = 0x1304,
-
-    .field_31f5 = 0x4D01,
-
-    .field_31f7 = 0xFC60,
-
-    .pad_231 = { 0 },
-
-    .field_31fb = 0x1504,
-
-    .field_31fd = 0x8102,
-
-    .field_31ff = 0xFC5F,
-
-    .pad_232 = { 0 },
-
-    .field_3203 = 0x0005,
-
-    .field_3205 = 0xAB04,
-
-    .field_3207 = 0xFC5F,
-
-    .field_3209 = 0x6000,
-
-    .field_320b = 0x1401,
-
-    .field_320d = 0x2E08,
-
-    .field_320f = 0xFC60,
-
-    .field_3211 = 0x6000,
-
-    .field_3213 = 0x1201,
-
-    .field_3215 = 0x1F10,
-
-    .field_3217 = 0xFC59,
-
-    .str_543 = ALIGNED_STRING(""),
-
-    .field_321b = NAKA_NONE,
-
-    .field_321d = 0x60FF,
-
-    .field_321f = 0xFC57,
-
-    .field_3221 = 0xA800,
-
-    .field_3223 = 0x0013,
-
-    .field_3225 = 0xF61F,
-
-    .field_3227 = 0xFC68,
-
-    .str_544 = ALIGNED_STRING(""),
-
-    .field_322b = NAKA_NONE,
-
-    .field_322d = 0x60FF,
-
-    .field_322f = 0xFC57,
-
-    .field_3231 = 0x9000,
-
-    .field_3233 = 0x0010,
-
-    .field_3235 = 0xF207,
-
-    .field_3237 = 0xFC5E,
-
-    .field_3239 = 0xA900,
-
-    .field_323b = 0x0320,
-
-    .field_323d = 0x3008,
-
-    .field_323f = 0xFC59,
-
-    .field_3241 = 0x9000,
-
-    .field_3243 = 0x0301,
-
-    .field_3245 = 0x5410,
-
-    .field_3247 = 0xFC5F,
-
-    .field_3249 = 0x9000,
-
-    .field_324b = 0x0400,
-
-    .field_324d = 0x5420,
-
-    .field_324f = 0xFC5F,
-
-    .field_3251 = 0x9000,
-
-    .field_3253 = 0x0600,
-
-    .field_3255 = 0x5440,
-
-    .field_3257 = 0xFC5F,
-
-    .field_3259 = 0x4800,
-
-    .field_325b = 0x0104,
-
-    .field_325d = 0xC280,
-
-    .field_325f = 0xFC58,
-
-    .str_545 = ALIGNED_STRING(""),
-
-    .field_3263 = NAKA_NONE,
-
-    .field_3265 = 0x60FF,
-
-    .field_3267 = 0xFC57,
-
-    .field_3269 = 0xA800,
-
-    .field_326b = 0x0013,
-
-    .field_326d = 0xF6FF,
-
-    .field_326f = 0xFC68,
-
-    .str_546 = ALIGNED_STRING(""),
-
-    .field_3273 = NAKA_NONE,
-
-    .field_3275 = 0x60FF,
-
-    .field_3277 = 0xFC57,
-
-    .field_3279 = 0xA800,
-
-    .field_327b = 0x0314,
-
-    .field_327d = 0x5808,
-
-    .field_327f = 0xFC5A,
-
-    .field_3281 = 0xA900,
-
-    .field_3283 = 0x0420,
-
-    .field_3285 = 0x3010,
-
-    .field_3287 = 0xFC59,
-
-    .field_3289 = 0xA900,
-
-    .field_328b = 0x0420,
-
-    .field_328d = 0x3020,
-
-    .field_328f = 0xFC59,
-
-    .str_547 = ALIGNED_STRING(""),
-
-    .field_3293 = NAKA_NONE,
-
-    .field_3295 = 0x60FF,
-
-    .field_3297 = 0xFC57,
-
-    .field_3299 = 0xA800,
-
-    .field_329b = 0x0013,
-
-    .field_329d = 0xF638,
-
-    .field_329f = 0xFC68,
-
-    .str_548 = ALIGNED_STRING(""),
-
-    .field_32a3 = NAKA_NONE,
-
-    .field_32a5 = 0x60FF,
-
-    .field_32a7 = 0xFC57,
-
-    .field_32a9 = 0x9800,
-
-    .field_32ab = 0x0001,
-
-    .field_32ad = 0x78FF,
-
-    .field_32af = 0xFC5D,
-
-    .str_549 = ALIGNED_STRING(""),
-
-    .field_32b3 = NAKA_NONE,
-
-    .field_32b5 = 0x60FF,
-
-    .field_32b7 = 0xFC57,
-
-    .field_32b9 = 0xA800,
-
-    .field_32bb = 0x0013,
-
-    .field_32bd = 0xF6FF,
-
-    .field_32bf = 0xFC68,
-
-    .str_550 = ALIGNED_STRING(""),
-
-    .field_32c3 = NAKA_NONE,
-
-    .field_32c5 = 0x60FF,
-
-    .field_32c7 = 0xFC57,
-
-    .field_32c9 = 0x9800,
-
-    .field_32cb = 0x1701,
-
-    .field_32cd = 0xEC01,
-
-    .field_32cf = 0xFC58,
-
-    .field_32d1 = 0xA800,
-
-    .field_32d3 = 0x0004,
-
-    .field_32d5 = 0xF202,
-
-    .field_32d7 = 0xFC5D,
-
-    .field_32d9 = 0xA800,
-
-    .field_32db = 0x1305,
-
-    .field_32dd = 0xEC04,
-
-    .field_32df = 0xFC58,
-
-    .str_551 = ALIGNED_STRING(""),
-
-    .field_32e3 = NAKA_NONE,
-
-    .field_32e5 = 0x60FF,
-
-    .field_32e7 = 0xFC57,
-
-    .field_32e9 = 0xA800,
-
-    .field_32eb = 0x0013,
-
-    .field_32ed = 0xF60F,
-
-    .field_32ef = 0xFC68,
-
-    .str_552 = ALIGNED_STRING(""),
-
-    .field_32f3 = NAKA_NONE,
-
-    .field_32f5 = 0x60FF,
-
-    .field_32f7 = 0xFC57,
-
-    .field_32f9 = 0x9000,
-
-    .field_32fb = 0x0304,
-
-    .field_32fd = 0x6118,
-
-    .field_32ff = 0xFC5E,
-
-    .field_3301 = 0x4800,
-
-    .field_3303 = 0x0505,
-
-    .field_3305 = 0x7220,
-
-    .field_3307 = 0xFC5B,
-
-    .field_3309 = 0x4800,
-
-    .field_330b = 0x0505,
-
-    .field_330d = 0x9140,
-
-    .field_330f = 0xFC5B,
-
-    .field_3311 = 0xA800,
-
-    .field_3313 = 0x0712,
-
-    .field_3315 = 0xA580,
-
-    .field_3317 = 0xFC58,
-
-    .str_553 = ALIGNED_STRING(""),
-
-    .field_331b = NAKA_NONE,
-
-    .field_331d = 0x60FF,
-
-    .field_331f = 0xFC57,
-
-    .field_3321 = 0xA800,
-
-    .field_3323 = 0x0013,
-
-    .field_3325 = 0xF6F8,
-
-    .field_3327 = 0xFC68,
-
-    .str_554 = ALIGNED_STRING(""),
-
-    .field_332b = NAKA_NONE,
-
-    .field_332d = 0x60FF,
-
-    .field_332f = 0xFC57,
-
-    .pad_233 = { 0 },
-
-    .field_3334 = 0xC006,
-
-    .ptr_3336 = 0x00FC5BB0,
-
-    .field_333a = NAKA_NONE,
-
-    .field_333c = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_23 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_3342 = 0x13A8,
-
-    .field_3344 = 0xC000,
-
-    .ptr_3346 = 0x00FC68F6,
-
-    .field_334a = NAKA_NONE,
-
-    .field_334c = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_24 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_3352 = 0x20A9,
-
-    .field_3354 = 0x0402,
-
-    .ptr_3356 = 0x00FC5930,
-
-    .field_335a = 0x20A9,
-
-    .field_335c = 0x0802,
-
-    .ptr_335e = 0x00FC5930,
-
-    .field_3362 = 0x20A9,
-
-    .field_3364 = 0x1002,
-
-    .ptr_3366 = 0x00FC5930,
-
-    .field_336a = 0x20A9,
-
-    .field_336c = 0x2002,
-
-    .ptr_336e = 0x00FC5930,
-
-    .field_3372 = NAKA_NONE,
-
-    .field_3374 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_25 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_337a = 0x13A8,
-
-    .field_337c = 0x3C00,
-
-    .ptr_337e = 0x00FC68F6,
-
-    .field_3382 = NAKA_NONE,
-
-    .field_3384 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_26 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_338a = 0x00B1,
-
-    .str_555 = ALIGNED_STRING(""),
-
-    .ptr_338e = 0x00FC62C9,
-
-    .field_3392 = NAKA_NONE,
-
-    .field_3394 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_27 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_339a = 0x00B2,
-
-    .field_339c = 0x7F00,
-
-    .ptr_339e = 0x00FC6328,
-
-    .field_33a2 = NAKA_NONE,
-
-    .field_33a4 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_28 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_33aa = 0x00B0,
-
-    .field_33ac = 0x7F00,
-
-    .FileIO_BytecodeData_ptr = NAKA_ADDR(FileIO_BytecodeData),
-
-    .field_33b2 = NAKA_NONE,
-
-    .field_33b4 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_29 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_33ba = 0x21A9,
-
-    .str_556 = ALIGNED_STRING(""),
-
-    .ptr_33be = 0x00FC58A5,
-
-    .field_33c2 = NAKA_NONE,
-
-    .field_33c4 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_30 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_33ca = 0x13A8,
-
-    .str_557 = ALIGNED_STRING(""),
-
-    .ptr_33ce = 0x00FC68F6,
-
-    .field_33d2 = NAKA_NONE,
-
-    .field_33d4 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_31 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_33da = 0x01B0,
-
-    .field_33dc = 0x7F00,
-
-    .ptr_33de = 0x00FC62F7,
-
-    .field_33e2 = NAKA_NONE,
-
-    .field_33e4 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_32 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_33ea = 0x00B4,
-
-    .field_33ec = 0x7F00,
-
-    .ptr_33ee = 0x00FC6332,
-
-    .field_33f2 = NAKA_NONE,
-
-    .field_33f4 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_33 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_33fa = 0x32A9,
-
-    .field_33fc = 0x0100,
-
-    .ptr_33fe = 0x00FC6215,
-
-    .field_3402 = 0x33A9,
-
-    .field_3404 = 0x0201,
-
-    .ptr_3406 = 0x00FC6233,
-
-    .field_340a = NAKA_NONE,
-
-    .field_340c = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_34 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_3412 = 0x34A9,
-
-    .field_3414 = 0x0100,
-
-    .ptr_3416 = 0x00FC6251,
-
-    .field_341a = 0x35A9,
-
-    .field_341c = 0x0201,
-
-    .ptr_341e = 0x00FC626F,
-
-    .field_3422 = 0x36A9,
-
-    .field_3424 = 0x0402,
-
-    .ptr_3426 = 0x00FC628D,
-
-    .field_342a = 0x37A9,
-
-    .field_342c = 0x0803,
-
-    .ptr_342e = 0x00FC62AB,
-
-    .field_3432 = NAKA_NONE,
-
-    .field_3434 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_35 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_343a = 0x41A8,
-
-    .field_343c = 0x0100,
-
-    .FileIO_BytecodeData_ptr_2 = NAKA_ADDR(FileIO_BytecodeData),
-
-    .field_3442 = NAKA_NONE,
-
-    .field_3444 = NAKA_NONE,
-
-    .Encoder_AlignByte_ptr_36 = NAKA_ADDR(Encoder_AlignByte),
-
-    .field_344a = NAKA_NONE,
-
-    .field_344c = NAKA_NONE,
-
-    .ptrs_26 = {
-        NAKA_ADDR(Encoder_AlignByte),
-        SELF(H_str_3),
-        SELF(H_str_4),
-        SELF(field_2ee2),
-        SELF(field_2f3a),
-        SELF(field_2f72),
-        SELF(field_2faa),
-        SELF(H_str_5),
-        SELF(field_2fea),
-        SELF(field_307a),
-        SELF(field_30ba),
-        SELF(field_30fa),
-        SELF(field_318a),
-        SELF(pad_228),
-        0x00ED999E,
-        0x00ED99BE,
-        0x00ED99FE,
-        0x00ED9A46,
-        0x00ED9A76,
-        0x00ED9A96,
-        0x00ED9AC6,
-        0x00ED9AFE,
-        SELF(field_3352),
-        SELF(field_338a),
-        SELF(field_339a),
-        SELF(field_33aa),
-        SELF(field_33ba),
-        SELF(field_33da),
-        SELF(field_33ea),
-        SELF(field_33fa),
-        SELF(field_3412),
-        SELF(field_343a),
-        SELF(field_344a),
-        SELF(field_2e82),
-        SELF(field_2ed2),
-        SELF(field_2f1a),
-        SELF(field_2f62),
-        SELF(field_2f9a),
-        SELF(field_2fba),
-        SELF(field_2fda),
-        SELF(field_3032),
-        SELF(field_307a),
-        SELF(field_30ba),
-        SELF(field_3142),
-        SELF(field_31a2),
-        0x00ED998E,
-        0x00ED99AE,
-        0x00ED99EE,
-        0x00ED9A36,
-        0x00ED9A66,
-        0x00ED9A86,
-        0x00ED9AB6,
-        0x00ED9AEE,
-        SELF(field_3342),
-        SELF(field_337a),
-        SELF(field_338a),
-        SELF(field_339a),
-        SELF(field_33aa),
-        SELF(field_33ca),
-        SELF(field_33da),
-        SELF(field_33ea),
-        SELF(field_33fa),
-        SELF(field_3412),
-        SELF(field_343a),
-        SELF(field_344a),
+    .PanelActions_LeftSeg0 = {
+        { 0x48, 0x00, 0x00, 0x7F, NAKA_ADDR(PanelButton_RhythmGroup) },  /* STANDARD ROCK, R & ROLL & BLUES, POP & BALLAD, FUNK & FUSION, SOUL & MODERN DANCE, BIG BAND & SWING, JAZZ COMBO */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpLeftSeg0 = {
+        { 0xA8, 0x13, 0x00, 0x7F, NAKA_ADDR(PanelButton_HelpMode) },  /* STANDARD ROCK, R & ROLL & BLUES, POP & BALLAD, FUNK & FUSION, SOUL & MODERN DANCE, BIG BAND & SWING, JAZZ COMBO */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_LeftSeg1 = {
+        { 0x48, 0x00, 0x00, 0x01, NAKA_ADDR(PanelButton_RhythmGroup) },  /* MEMORY */
+        { 0xA9, 0x20, 0x01, 0x02, NAKA_ADDR(PanelButton_ModeKey) },  /* MENU */
+        { 0xA9, 0x20, 0x01, 0x04, NAKA_ADDR(PanelButton_ModeKey) },  /* SET */
+        { 0xA8, 0x06, 0x03, 0x08, NAKA_ADDR(PanelAction_PostUnlessDemoOrParamC0) },  /* ON/OFF */
+        { 0xA8, 0x02, 0x04, 0x10, NAKA_ADDR(PanelAction_PostUnlessDemoOrParamC0) },  /* MUSIC STYLIST */
+        { 0x98, 0x0B, 0x12, 0x20, NAKA_ADDR(PanelAction_PostUnlessDemo) },  /* FADE IN */
+        { 0x98, 0x0B, 0x00, 0x40, NAKA_ADDR(PanelAction_PostUnlessDemo) },  /* FADE OUT */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpLeftSeg1 = {
+        { 0xA8, 0x13, 0x00, 0x7F, NAKA_ADDR(PanelButton_HelpMode) },  /* MEMORY, MENU, SET, ON/OFF, MUSIC STYLIST, FADE IN, FADE OUT */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_LeftSeg2 = {
+        { 0x48, 0x05, 0x16, 0x01, NAKA_ADDR(PanelAction_PostUnlessDemo) },  /* FILL IN 1 */
+        { 0x48, 0x05, 0x16, 0x02, NAKA_ADDR(PanelAction_PostUnlessDemo) },  /* FILL IN 2 */
+        { 0x48, 0x05, 0x00, 0x04, NAKA_ADDR(PanelAction_PostUnlessDemo) },  /* INTRO & ENDING 1 */
+        { 0x48, 0x06, 0x01, 0x08, NAKA_ADDR(PanelAction_PostUnlessDemo) },  /* INTRO & ENDING 2 */
+        { 0xA9, 0x10, 0x06, 0x40, NAKA_ADDR(PanelButton_PairDown) },  /* PAGE DOWN */
+        { 0xA9, 0x10, 0x06, 0x80, NAKA_ADDR(PanelButton_PairUp) },  /* PAGE UP */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpLeftSeg2 = {
+        { 0xA8, 0x13, 0x00, 0x0F, NAKA_ADDR(PanelButton_HelpMode) },  /* FILL IN 1, FILL IN 2, INTRO & ENDING 1, INTRO & ENDING 2 */
+        { 0xA9, 0x10, 0x06, 0x40, NAKA_ADDR(PanelButton_PairDown) },  /* PAGE DOWN */
+        { 0xA9, 0x10, 0x06, 0x80, NAKA_ADDR(PanelButton_PairUp) },  /* PAGE UP */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_LeftSeg3 = {
+        { 0xA9, 0x20, 0x00, 0x01, NAKA_ADDR(PanelButton_ModeKey) },  /* DEMO */
+        { 0xA8, 0x09, 0x15, 0x02, NAKA_ADDR(PanelAction_PostUnlessDemoOrParamC0) },  /* MSP BANK */
+        { 0xA9, 0x20, 0x01, 0x04, NAKA_ADDR(PanelButton_ModeKey) },  /* MSP MENU */
+        { 0xA8, 0x09, 0x14, 0x08, NAKA_ADDR(PanelAction_PostUnlessDemoOrParamC0) },  /* MSP STOP/RECORD */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpLeftSeg3 = {
+        { 0xA8, 0x13, 0x00, 0x0F, NAKA_ADDR(PanelButton_HelpMode) },  /* DEMO, MSP BANK, MSP MENU, MSP STOP/RECORD */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_LeftSeg4 = {
+        { 0x48, 0x07, 0x00, 0x0F, NAKA_ADDR(PanelButton_Variation) },  /* VARIATION 1, VARIATION 2, VARIATION 3, VARIATION 4 */
+        { 0x98, 0x03, 0x04, 0x10, NAKA_ADDR(PanelButton_MusicStyleArranger) },  /* MUSIC STYLE ARRANGER */
+        { 0x70, 0x00, 0x05, 0x20, NAKA_ADDR(PanelButton_SplitPoint) },  /* SPLIT POINT */
+        { 0xA8, 0x05, 0x05, 0x40, NAKA_ADDR(PanelButton_AutoPlayChord) },  /* AUTO PLAY CHORD */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpLeftSeg4 = {
+        { 0xA8, 0x13, 0x00, 0x7F, NAKA_ADDR(PanelButton_HelpMode) },  /* VARIATION 1, VARIATION 2, VARIATION 3, VARIATION 4, MUSIC STYLE ARRANGER, SPLIT POINT, AUTO PLAY CHORD */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_LeftSeg5 = {
+        { 0xA8, 0x09, 0x00, 0x3F, NAKA_ADDR(PanelButton_MspNumber) },  /* MSP 1, MSP 2, MSP 3, MSP 4, MSP 5, MSP 6 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpLeftSeg5 = {
+        { 0xA8, 0x13, 0x00, 0x3F, NAKA_ADDR(PanelButton_HelpMode) },  /* MSP 1, MSP 2, MSP 3, MSP 4, MSP 5, MSP 6 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_LeftSeg6 = {
+        { 0x48, 0x00, 0x00, 0xFF, NAKA_ADDR(PanelButton_RhythmGroup) },  /* U.S. TRAD, COUNTRY, LATIN, MARCH & WALTZ, PARTY TIME, SHOWTIME & TRAD DANCE, WORLD, CUSTOM */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpLeftSeg6 = {
+        { 0xA8, 0x13, 0x00, 0xFF, NAKA_ADDR(PanelButton_HelpMode) },  /* U.S. TRAD, COUNTRY, LATIN, MARCH & WALTZ, PARTY TIME, SHOWTIME & TRAD DANCE, WORLD, CUSTOM */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_LeftSeg7 = {
+        { 0xA9, 0x0C, 0x11, 0x01, NAKA_ADDR(PanelButton_PairUp) },  /* RIGHT 5 */
+        { 0xA9, 0x0B, 0x00, 0x02, NAKA_ADDR(PanelButton_PairUp) },  /* RIGHT 4 */
+        { 0xA8, 0x03, 0x02, 0x04, NAKA_ADDR(PanelAction_PostUnlessDemo) },  /* DISPLAY HOLD */
+        { 0xA9, 0x0F, 0x02, 0x08, NAKA_ADDR(PanelButton_PairUp) },  /* EXIT */
+        { 0xA9, 0x06, 0x04, 0x10, NAKA_ADDR(PanelButton_PairDown) },  /* DOWN 7 */
+        { 0xA9, 0x06, 0x04, 0x20, NAKA_ADDR(PanelButton_PairUp) },  /* UP 7 */
+        { 0xA9, 0x07, 0x06, 0x40, NAKA_ADDR(PanelButton_PairDown) },  /* DOWN 8 */
+        { 0xA9, 0x07, 0x06, 0x80, NAKA_ADDR(PanelButton_PairUp) },  /* UP 8 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpLeftSeg7 = {
+        { 0xA9, 0x0C, 0x11, 0x01, NAKA_ADDR(PanelButton_PairUp) },  /* RIGHT 5 */
+        { 0xA9, 0x0B, 0x00, 0x02, NAKA_ADDR(PanelButton_PairUp) },  /* RIGHT 4 */
+        { 0xA8, 0x13, 0x00, 0x04, NAKA_ADDR(PanelButton_HelpMode) },  /* DISPLAY HOLD */
+        { 0xA9, 0x0F, 0x02, 0x08, NAKA_ADDR(PanelButton_PairUp) },  /* EXIT */
+        { 0xA9, 0x06, 0x04, 0x10, NAKA_ADDR(PanelButton_PairDown) },  /* DOWN 7 */
+        { 0xA9, 0x06, 0x04, 0x20, NAKA_ADDR(PanelButton_PairUp) },  /* UP 7 */
+        { 0xA9, 0x07, 0x06, 0x40, NAKA_ADDR(PanelButton_PairDown) },  /* DOWN 8 */
+        { 0xA9, 0x07, 0x06, 0x80, NAKA_ADDR(PanelButton_PairUp) },  /* UP 8 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_LeftSeg8 = {
+        { 0xA9, 0x0A, 0x11, 0x01, NAKA_ADDR(PanelButton_PairUp) },  /* RIGHT 3 */
+        { 0xA9, 0x09, 0x00, 0x02, NAKA_ADDR(PanelButton_PairUp) },  /* RIGHT 2 */
+        { 0xA9, 0x08, 0x01, 0x04, NAKA_ADDR(PanelButton_PairUp) },  /* RIGHT 1 */
+        { 0xA9, 0x04, 0x04, 0x10, NAKA_ADDR(PanelButton_PairDown) },  /* DOWN 5 */
+        { 0xA9, 0x04, 0x04, 0x20, NAKA_ADDR(PanelButton_PairUp) },  /* UP 5 */
+        { 0xA9, 0x05, 0x06, 0x40, NAKA_ADDR(PanelButton_PairDown) },  /* DOWN 6 */
+        { 0xA9, 0x05, 0x06, 0x80, NAKA_ADDR(PanelButton_PairUp) },  /* UP 6 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_LeftSeg9 = {
+        { 0xA9, 0x0C, 0x00, 0x01, NAKA_ADDR(PanelButton_PairDown) },  /* LEFT 5 */
+        { 0xA9, 0x0B, 0x01, 0x02, NAKA_ADDR(PanelButton_PairDown) },  /* LEFT 4 */
+        { 0xA9, 0x0A, 0x02, 0x04, NAKA_ADDR(PanelButton_PairDown) },  /* LEFT 3 */
+        { 0xA9, 0x02, 0x04, 0x10, NAKA_ADDR(PanelButton_PairDown) },  /* DOWN 3 */
+        { 0xA9, 0x02, 0x04, 0x20, NAKA_ADDR(PanelButton_PairUp) },  /* UP 3 */
+        { 0xA9, 0x03, 0x06, 0x40, NAKA_ADDR(PanelButton_PairDown) },  /* DOWN 4 */
+        { 0xA9, 0x03, 0x06, 0x80, NAKA_ADDR(PanelButton_PairUp) },  /* UP 4 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_LeftSeg10 = {
+        { 0xA9, 0x09, 0x00, 0x01, NAKA_ADDR(PanelButton_PairDown) },  /* LEFT 2 */
+        { 0xA9, 0x08, 0x01, 0x02, NAKA_ADDR(PanelButton_PairDown) },  /* LEFT 1 */
+        { 0xA9, 0x20, 0x02, 0x04, NAKA_ADDR(PanelButton_ModeKey) },  /* HELP */
+        { 0xA9, 0x0F, 0x03, 0x08, NAKA_ADDR(PanelButton_PairDown) },  /* OTHER PARTS/TR */
+        { 0xA9, 0x00, 0x04, 0x10, NAKA_ADDR(PanelButton_PairDown) },  /* DOWN 1 */
+        { 0xA9, 0x00, 0x04, 0x20, NAKA_ADDR(PanelButton_PairUp) },  /* UP 1 */
+        { 0xA9, 0x01, 0x06, 0x40, NAKA_ADDR(PanelButton_PairDown) },  /* DOWN 2 */
+        { 0xA9, 0x01, 0x06, 0x80, NAKA_ADDR(PanelButton_PairUp) },  /* UP 2 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpLeftSeg10 = {
+        { 0xA9, 0x09, 0x00, 0x01, NAKA_ADDR(PanelButton_PairDown) },  /* LEFT 2 */
+        { 0xA9, 0x08, 0x01, 0x02, NAKA_ADDR(PanelButton_PairDown) },  /* LEFT 1 */
+        { 0xA9, 0x20, 0x02, 0x04, NAKA_ADDR(PanelButton_ModeKey) },  /* HELP */
+        { 0xA8, 0x13, 0x00, 0x08, NAKA_ADDR(PanelButton_HelpMode) },  /* OTHER PARTS/TR */
+        { 0xA9, 0x00, 0x04, 0x10, NAKA_ADDR(PanelButton_PairDown) },  /* DOWN 1 */
+        { 0xA9, 0x00, 0x04, 0x20, NAKA_ADDR(PanelButton_PairUp) },  /* UP 1 */
+        { 0xA9, 0x01, 0x06, 0x40, NAKA_ADDR(PanelButton_PairDown) },  /* DOWN 2 */
+        { 0xA9, 0x01, 0x06, 0x80, NAKA_ADDR(PanelButton_PairUp) },  /* UP 2 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_RightSeg0 = {
+        { 0xA9, 0x0E, 0x05, 0x20, NAKA_ADDR(PanelButton_PairDown) },  /* TRANSPOSE - */
+        { 0xA9, 0x0E, 0x05, 0x40, NAKA_ADDR(PanelButton_PairUp) },  /* TRANSPOSE + */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpRightSeg0 = {
+        { 0xA8, 0x13, 0x00, 0x60, NAKA_ADDR(PanelButton_HelpMode) },  /* TRANSPOSE -, TRANSPOSE + */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_RightSeg1 = {
+        { 0x00, 0x00, 0x00, 0xFF, NAKA_ADDR(PanelButton_SoundGroup) },  /* ORGAN & ACCORDION, ORCHESTRAL PAD, SYNTH, BASS, DIGITAL DRAWBAR, ACCORDION REGISTER, GM SPECIAL, DRUM KITS */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpRightSeg1 = {
+        { 0xA8, 0x13, 0x00, 0xFF, NAKA_ADDR(PanelButton_HelpMode) },  /* ORGAN & ACCORDION, ORCHESTRAL PAD, SYNTH, BASS, DIGITAL DRAWBAR, ACCORDION REGISTER, GM SPECIAL, DRUM KITS */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_RightSeg2 = {
+        { 0x00, 0x00, 0x00, 0xFF, NAKA_ADDR(PanelButton_SoundGroup) },  /* PIANO, GUITAR, STRINGS & VOCAL, BRASS, FLUTE, SAX & REED, MALLET & ORCH PERC, WORLD PERC */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpRightSeg2 = {
+        { 0xA8, 0x13, 0x00, 0xFF, NAKA_ADDR(PanelButton_HelpMode) },  /* PIANO, GUITAR, STRINGS & VOCAL, BRASS, FLUTE, SAX & REED, MALLET & ORCH PERC, WORLD PERC */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_RightSeg3 = {
+        { 0x00, 0x04, 0x13, 0x01, NAKA_ADDR(PanelButton_Sustain) },  /* SUSTAIN */
+        { 0x00, 0x04, 0x15, 0x02, NAKA_ADDR(PanelButton_DigitalEffect) },  /* DIGITAL EFFECT */
+        { 0x00, 0x05, 0x00, 0x04, NAKA_ADDR(PanelButton_DspEffect) },  /* DSP EFFECT */
+        { 0x60, 0x01, 0x14, 0x08, NAKA_ADDR(PanelButton_DigitalReverb) },  /* DIGITAL REVERB */
+        { 0x60, 0x01, 0x12, 0x10, NAKA_ADDR(PanelButton_AcousticIllusion) },  /* ACOUSTIC ILLUSION */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpRightSeg3 = {
+        { 0xA8, 0x13, 0x00, 0x1F, NAKA_ADDR(PanelButton_HelpMode) },  /* SUSTAIN, DIGITAL EFFECT, DSP EFFECT, DIGITAL REVERB, ACOUSTIC ILLUSION */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_RightSeg4 = {
+        { 0x90, 0x10, 0x00, 0x07, NAKA_ADDR(PanelButton_PartSelect) },  /* LEFT, RIGHT 2, RIGHT 1 */
+        { 0xA9, 0x20, 0x03, 0x08, NAKA_ADDR(PanelButton_ModeKey) },  /* ENTERTAINER */
+        { 0x90, 0x01, 0x03, 0x10, NAKA_ADDR(PanelButton_Conductor) },  /* CONDUCTOR: LEFT */
+        { 0x90, 0x00, 0x04, 0x20, NAKA_ADDR(PanelButton_Conductor) },  /* CONDUCTOR: RIGHT 2 */
+        { 0x90, 0x00, 0x06, 0x40, NAKA_ADDR(PanelButton_Conductor) },  /* CONDUCTOR: RIGHT 1 */
+        { 0x48, 0x04, 0x01, 0x80, NAKA_ADDR(PanelAction_PostUnlessDemoOrParamC0) },  /* TECHNI CHORD */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpRightSeg4 = {
+        { 0xA8, 0x13, 0x00, 0xFF, NAKA_ADDR(PanelButton_HelpMode) },  /* LEFT, RIGHT 2, RIGHT 1, ENTERTAINER, CONDUCTOR: LEFT, CONDUCTOR: RIGHT 2, CONDUCTOR: RIGHT 1, TECHNI CHORD */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_RightSeg5 = {
+        { 0xA8, 0x14, 0x03, 0x08, NAKA_ADDR(PanelButton_SequencerPlay) },  /* SEQUENCER: PLAY */
+        { 0xA9, 0x20, 0x04, 0x10, NAKA_ADDR(PanelButton_ModeKey) },  /* SEQUENCER: EASY REC */
+        { 0xA9, 0x20, 0x04, 0x20, NAKA_ADDR(PanelButton_ModeKey) },  /* SEQUENCER: MENU */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpRightSeg5 = {
+        { 0xA8, 0x13, 0x00, 0x38, NAKA_ADDR(PanelButton_HelpMode) },  /* SEQUENCER: PLAY, SEQUENCER: EASY REC, SEQUENCER: MENU */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_RightSeg6 = {
+        { 0x98, 0x01, 0x00, 0xFF, NAKA_ADDR(PanelButton_PanelMemoryNumber) },  /* PM 1, PM 2, PM 3, PM 4, PM 5, PM 6, PM 7, PM 8 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpRightSeg6 = {
+        { 0xA8, 0x13, 0x00, 0xFF, NAKA_ADDR(PanelButton_HelpMode) },  /* PM 1, PM 2, PM 3, PM 4, PM 5, PM 6, PM 7, PM 8 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_RightSeg7 = {
+        { 0x98, 0x01, 0x17, 0x01, NAKA_ADDR(PanelButton_PanelMemorySet) },  /* PANEL MEMORY: SET */
+        { 0xA8, 0x04, 0x00, 0x02, NAKA_ADDR(PanelButton_PanelMemoryNextBank) },  /* PANEL MEMORY: NEXT BANK */
+        { 0xA8, 0x05, 0x13, 0x04, NAKA_ADDR(PanelButton_PanelMemorySet) },  /* PANEL MEMORY: BANK VIEW */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpRightSeg7 = {
+        { 0xA8, 0x13, 0x00, 0x0F, NAKA_ADDR(PanelButton_HelpMode) },  /* PANEL MEMORY: SET, PANEL MEMORY: NEXT BANK, PANEL MEMORY: BANK VIEW */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_RightSeg8 = {
+        { 0x90, 0x04, 0x03, 0x18, NAKA_ADDR(PanelButton_Octave) },  /* R1/R2 OCTAVE -, R1/R2 OCTAVE + */
+        { 0x48, 0x05, 0x05, 0x20, NAKA_ADDR(PanelButton_StartStop) },  /* START/STOP */
+        { 0x48, 0x05, 0x05, 0x40, NAKA_ADDR(PanelButton_SynchroBreak) },  /* SYNCHRO & BREAK */
+        { 0xA8, 0x12, 0x07, 0x80, NAKA_ADDR(PanelAction_PostUnlessDemo) },  /* TAP TEMPO */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpRightSeg8 = {
+        { 0xA8, 0x13, 0x00, 0xF8, NAKA_ADDR(PanelButton_HelpMode) },  /* R1/R2 OCTAVE -, R1/R2 OCTAVE +, START/STOP, SYNCHRO & BREAK, TAP TEMPO */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_RightSeg9 = {
+        { 0x00, 0x00, 0x06, 0xC0, NAKA_ADDR(PanelButton_SoundGroup) },  /* MEMORY A, MEMORY B */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpRightSeg9 = {
+        { 0xA8, 0x13, 0x00, 0xC0, NAKA_ADDR(PanelButton_HelpMode) },  /* MEMORY A, MEMORY B */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_RightSeg10 = {
+        { 0xA9, 0x20, 0x02, 0x04, NAKA_ADDR(PanelButton_ModeKey) },  /* MENU: SOUND */
+        { 0xA9, 0x20, 0x02, 0x08, NAKA_ADDR(PanelButton_ModeKey) },  /* MENU: CONTROL */
+        { 0xA9, 0x20, 0x02, 0x10, NAKA_ADDR(PanelButton_ModeKey) },  /* MENU: MIDI */
+        { 0xA9, 0x20, 0x02, 0x20, NAKA_ADDR(PanelButton_ModeKey) },  /* MENU: DISK */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpRightSeg10 = {
+        { 0xA8, 0x13, 0x00, 0x3C, NAKA_ADDR(PanelButton_HelpMode) },  /* MENU: SOUND, MENU: CONTROL, MENU: MIDI, MENU: DISK */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_Event22 = {
+        { 0xB1, 0x00, 0x00, 0xFF, NAKA_ADDR(PanelAction_Event22) },  /* event 22 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_Event23 = {
+        { 0xB2, 0x00, 0x00, 0x7F, NAKA_ADDR(PanelAction_Event23) },  /* event 23 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_Event24 = {
+        { 0xB0, 0x00, 0x00, 0x7F, NAKA_ADDR(PanelEvent_Post) },  /* event 24 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_Event25 = {
+        { 0xA9, 0x21, 0x00, 0xFF, NAKA_ADDR(PanelAction_PostUnlessDemo) },  /* event 25 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_HelpEvent25 = {
+        { 0xA8, 0x13, 0x00, 0xFF, NAKA_ADDR(PanelButton_HelpMode) },  /* event 25 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_Event26 = {
+        { 0xB0, 0x01, 0x00, 0x7F, NAKA_ADDR(PanelAction_Event26) },  /* event 26 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_Event27 = {
+        { 0xB4, 0x00, 0x00, 0x7F, NAKA_ADDR(PanelAction_Event27) },  /* event 27 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_Event28 = {
+        { 0xA9, 0x32, 0x00, 0x01, NAKA_ADDR(PanelAction_Event28Bit0) },  /* event 28 */
+        { 0xA9, 0x33, 0x01, 0x02, NAKA_ADDR(PanelAction_Event28Bit1) },  /* event 28 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_Event29 = {
+        { 0xA9, 0x34, 0x00, 0x01, NAKA_ADDR(PanelAction_Event29Bit0) },  /* event 29 */
+        { 0xA9, 0x35, 0x01, 0x02, NAKA_ADDR(PanelAction_Event29Bit1) },  /* event 29 */
+        { 0xA9, 0x36, 0x02, 0x04, NAKA_ADDR(PanelAction_Event29Bit2) },  /* event 29 */
+        { 0xA9, 0x37, 0x03, 0x08, NAKA_ADDR(PanelAction_Event29Bit3) },  /* event 29 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_Event30 = {
+        { 0xA8, 0x41, 0x00, 0x01, NAKA_ADDR(PanelEvent_Post) },  /* event 30 */
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelActions_Event31 = {
+        { 0xFF, 0xFF, 0xFF, 0xFF, NAKA_ADDR(Encoder_AlignByte) },  /* end */
+    },
+
+    .PanelButton_ActionLists = {
+        SELF(PanelActions_LeftSeg0),  /*  0 CPL segment 0 */
+        SELF(PanelActions_LeftSeg1),  /*  1 CPL segment 1 */
+        SELF(PanelActions_LeftSeg2),  /*  2 CPL segment 2 */
+        SELF(PanelActions_LeftSeg3),  /*  3 CPL segment 3 */
+        SELF(PanelActions_LeftSeg4),  /*  4 CPL segment 4 */
+        SELF(PanelActions_LeftSeg5),  /*  5 CPL segment 5 */
+        SELF(PanelActions_LeftSeg6),  /*  6 CPL segment 6 */
+        SELF(PanelActions_LeftSeg7),  /*  7 CPL segment 7 */
+        SELF(PanelActions_LeftSeg8),  /*  8 CPL segment 8 */
+        SELF(PanelActions_LeftSeg9),  /*  9 CPL segment 9 */
+        SELF(PanelActions_LeftSeg10),  /* 10 CPL segment 10 */
+        SELF(PanelActions_RightSeg0),  /* 11 CPR segment 0 */
+        SELF(PanelActions_RightSeg1),  /* 12 CPR segment 1 */
+        SELF(PanelActions_RightSeg2),  /* 13 CPR segment 2 */
+        SELF(PanelActions_RightSeg3),  /* 14 CPR segment 3 */
+        SELF(PanelActions_RightSeg4),  /* 15 CPR segment 4 */
+        SELF(PanelActions_RightSeg5),  /* 16 CPR segment 5 */
+        SELF(PanelActions_RightSeg6),  /* 17 CPR segment 6 */
+        SELF(PanelActions_RightSeg7),  /* 18 CPR segment 7 */
+        SELF(PanelActions_RightSeg8),  /* 19 CPR segment 8 */
+        SELF(PanelActions_RightSeg9),  /* 20 CPR segment 9 */
+        SELF(PanelActions_RightSeg10),  /* 21 CPR segment 10 */
+        SELF(PanelActions_Event22),  /* 22 event */
+        SELF(PanelActions_Event23),  /* 23 event */
+        SELF(PanelActions_Event24),  /* 24 event */
+        SELF(PanelActions_Event25),  /* 25 event */
+        SELF(PanelActions_Event26),  /* 26 event */
+        SELF(PanelActions_Event27),  /* 27 event */
+        SELF(PanelActions_Event28),  /* 28 event */
+        SELF(PanelActions_Event29),  /* 29 event */
+        SELF(PanelActions_Event30),  /* 30 event */
+        SELF(PanelActions_Event31),  /* 31 event */
+    },
+
+    .PanelButton_HelpModeActionLists = {
+        SELF(PanelActions_HelpLeftSeg0),  /*  0 CPL segment 0 */
+        SELF(PanelActions_HelpLeftSeg1),  /*  1 CPL segment 1 */
+        SELF(PanelActions_HelpLeftSeg2),  /*  2 CPL segment 2 */
+        SELF(PanelActions_HelpLeftSeg3),  /*  3 CPL segment 3 */
+        SELF(PanelActions_HelpLeftSeg4),  /*  4 CPL segment 4 */
+        SELF(PanelActions_HelpLeftSeg5),  /*  5 CPL segment 5 */
+        SELF(PanelActions_HelpLeftSeg6),  /*  6 CPL segment 6 */
+        SELF(PanelActions_HelpLeftSeg7),  /*  7 CPL segment 7 */
+        SELF(PanelActions_LeftSeg8),  /*  8 CPL segment 8 */
+        SELF(PanelActions_LeftSeg9),  /*  9 CPL segment 9 */
+        SELF(PanelActions_HelpLeftSeg10),  /* 10 CPL segment 10 */
+        SELF(PanelActions_HelpRightSeg0),  /* 11 CPR segment 0 */
+        SELF(PanelActions_HelpRightSeg1),  /* 12 CPR segment 1 */
+        SELF(PanelActions_HelpRightSeg2),  /* 13 CPR segment 2 */
+        SELF(PanelActions_HelpRightSeg3),  /* 14 CPR segment 3 */
+        SELF(PanelActions_HelpRightSeg4),  /* 15 CPR segment 4 */
+        SELF(PanelActions_HelpRightSeg5),  /* 16 CPR segment 5 */
+        SELF(PanelActions_HelpRightSeg6),  /* 17 CPR segment 6 */
+        SELF(PanelActions_HelpRightSeg7),  /* 18 CPR segment 7 */
+        SELF(PanelActions_HelpRightSeg8),  /* 19 CPR segment 8 */
+        SELF(PanelActions_HelpRightSeg9),  /* 20 CPR segment 9 */
+        SELF(PanelActions_HelpRightSeg10),  /* 21 CPR segment 10 */
+        SELF(PanelActions_Event22),  /* 22 event */
+        SELF(PanelActions_Event23),  /* 23 event */
+        SELF(PanelActions_Event24),  /* 24 event */
+        SELF(PanelActions_HelpEvent25),  /* 25 event */
+        SELF(PanelActions_Event26),  /* 26 event */
+        SELF(PanelActions_Event27),  /* 27 event */
+        SELF(PanelActions_Event28),  /* 28 event */
+        SELF(PanelActions_Event29),  /* 29 event */
+        SELF(PanelActions_Event30),  /* 30 event */
+        SELF(PanelActions_Event31),  /* 31 event */
+    },
+
+    .SoundParam_EncoderMappingData_Head = {
         NAKA_ADDR(Encoder_MarkInvalid),
         NAKA_ADDR(Encoder_Stub1),
         NAKA_ADDR(Encoder_Stub2),

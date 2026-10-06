@@ -930,7 +930,7 @@ groups:
 | `0x028` | 43 | `FSWAssGrid_EventDispatch` (28), `FSWAssGrid_CellSelect` | the FSW assignment grid |
 | `0x02D` | 42 | `VocalistGrid_CheckDispData` (14) | the Vocalist grid |
 | `0x280` | 41 | `SndParam_VoiceEntryLookup_ViaReg8000` | sound-parameter voice entries |
-| `0x000` | 41 | `FileIO_BytecodeData`, `ComSetGridCheck_JumpTable` | mixed / general |
+| `0x000` | 41 | `PanelEvent_Post`, `ComSetGridCheck_JumpTable` | mixed / general |
 | `0x042` | 19 | `SendEpilogue_Data`, `Sdtecd_InitCase3`, `IvSdtecd1Proc` | the Sdtecd (TechniChord) path |
 | `0x050` | 17 | `Data_ParaLoadOptDispatch`, `UIStateEvt_VolumeMixer_Data` | parameter load / volume mixer |
 | `0x040` | 14 | `IvSdrev_CheckParam`, `IvSdacc_CheckParam`, `EqOnOff_HandleToggleOn` | reverb / accomp / EQ |

@@ -286,7 +286,7 @@ recognised faster next time.
    code. What would have been wrong is not the binary but the CLAIM, published with a green test
    behind it.
      * The cheap screens do NOT work, and both were tested: reference kind fails
-       (`FileIO_BytecodeData` is also a `jrl` target and is 80 instructions of real code), and
+       (`PanelEvent_Post` is also a `jrl` target and is 80 instructions of real code), and
        rarity fails (`swi` occurs 3,804 times in committed v7 code).
      * What works is implausibility in context -- CPU-control instructions (`swi`, `normal`,
        `max`, `halt`, `ldio`, `ldwio`) inside a short would-be routine. It fires on exactly six

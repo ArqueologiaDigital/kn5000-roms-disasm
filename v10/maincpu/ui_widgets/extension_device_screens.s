@@ -990,12 +990,12 @@ Audio_DispatchCommand_Data:
 ; [nakarest] Readers: source references PanelDisplay_DispatchByMode
 ; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
 ; [nakarest] (PanelDisplay_DispatchByMode_Data:24)`); 32 data words in
-; [nakarest] Encoder_PrepareCallback_PtrTable (at 0xed9c1e, 0xed9c22, 0xed9c26), which is read
-; [nakarest] by Encoder_PrepareCallback (audio/tonegen_fileio_handlers.s: `ld xwa,
-; [nakarest] Encoder_PrepareCallback_PtrTable`); 32 data words in
-; [nakarest] Encoder_PrepareCallback_PtrTable_2 (at 0xed9c9e, 0xed9ca2, 0xed9ca6), which is read
-; [nakarest] by Encoder_PrepareCallback (audio/tonegen_fileio_handlers.s: `ld xwa,
-; [nakarest] Encoder_PrepareCallback_PtrTable_2`).
+; [nakarest] PanelButton_ActionLists (at 0xed9c1e, 0xed9c22, 0xed9c26), which is read
+; [nakarest] by PanelButton_DispatchChange (audio/tonegen_fileio_handlers.s: `ld xwa,
+; [nakarest] PanelButton_ActionLists`); 32 data words in
+; [nakarest] PanelButton_HelpModeActionLists (at 0xed9c9e, 0xed9ca2, 0xed9ca6), which is read
+; [nakarest] by PanelButton_DispatchChange (audio/tonegen_fileio_handlers.s: `ld xwa,
+; [nakarest] PanelButton_HelpModeActionLists`).
 PanelDisplay_DispatchByMode_Data:
 	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData
 	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData
@@ -1006,17 +1006,20 @@ PanelDisplay_DispatchByMode_Data:
 	.short	PanelDisplay_DispatchByMode_Case6 - PanelDisplay_DispatchData
 	.short	PanelDisplay_DispatchByMode_Case7 - PanelDisplay_DispatchData
 	.short	PanelDisplay_DispatchByMode_Case8 - PanelDisplay_DispatchData
-	.incbin "includes/generated/naka_extension_device.bin", 0x2e72, 0x5e0
-; [nakarest] naka_extension_device+0x3452  +0x3452..+0x34d2 (0xed9c1e, 128 B)
-; [nakarest] purpose not established: layout of 128 B at 0xed9c1e not derived; readers below
-; [nakarest] Readers: source references Encoder_PrepareCallback
-; [nakarest] (audio/tonegen_fileio_handlers.s: `ld xwa, Encoder_PrepareCallback_PtrTable`).
-Encoder_PrepareCallback_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x3452, 0x80	; 68 x 32-bit pointer
-; [nakarest] naka_extension_device+0x34d2  +0x34d2..+0x3552 (0xed9c9e, 128 B)
-; [nakarest] purpose not established: layout of 128 B at 0xed9c9e not derived; readers below
-; [nakarest] Readers: source references Encoder_PrepareCallback
-; [nakarest] (audio/tonegen_fileio_handlers.s: `ld xwa, Encoder_PrepareCallback_PtrTable_2`).
-Encoder_PrepareCallback_PtrTable_2:	.incbin "includes/generated/naka_extension_device.bin", 0x34D2, 0x80	; 36 x 32-bit pointer
+; PanelButton_ActionListPool -- the 53 control-panel action lists: 8-byte actions {event_id, event_arg,
+; shift, mask, u32 handler}, each list ended by event_id 0xFF.  PanelButton_ActionLists and
+; PanelButton_HelpModeActionLists point into it, one list per panel event index; PanelButton_DispatchChange
+; (audio/tonegen_fileio_handlers.s) walks them.  Typed in ui_widgets/naka_extension_device.c
+; (panel_button_action_t, PanelActions_*), each action commented with the buttons its mask selects
+; (MAME kn5000.cpp names); scripts/converters/panel_button_actions_retype.py.
+PanelButton_ActionListPool:	.incbin "includes/generated/naka_extension_device.bin", 0x2e72, 0x5e0
+; PanelButton_ActionLists -- 32 list pointers, one per panel event index: 0..10 = left-panel segments
+; 0..10, 11..21 = right-panel segments 0..10, 22..30 = other inputs, 31 = an empty list.  Read by
+; PanelButton_DispatchChange (`ld xwa, PanelButton_ActionLists`).
+PanelButton_ActionLists:	.incbin "includes/generated/naka_extension_device.bin", 0x3452, 0x80
+; PanelButton_HelpModeActionLists -- the same, used instead in mode 20 (MD_HELP): every button but the LCD
+; ones and HELP goes to PanelButton_HelpMode.
+PanelButton_HelpModeActionLists:	.incbin "includes/generated/naka_extension_device.bin", 0x34D2, 0x80
 ; [nakarest] SoundParam_EncoderMappingData  +0x3552..+0x37d8 (0xed9d1e, 646 B)
 ; [nakarest] purpose not established: layout of 646 B at 0xed9d1e not derived; readers below
 ; [nakarest] Readers: source references SystemConfig_PointerTable (ui_widgets/widget_dispatch.s:
