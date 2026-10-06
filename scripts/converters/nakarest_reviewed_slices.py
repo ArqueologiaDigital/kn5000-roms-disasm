@@ -307,14 +307,35 @@ def pieces(r):
     return [p]
 
 
-def find_slice(tree, rel, label):
+INC_U = re.compile(r'^\s+\.incbin\s+"includes/generated/(naka_\w+)\.bin",\s*(0x[0-9A-Fa-f]+|\d+),\s*(0x[0-9A-Fa-f]+|\d+)\s*(;.*)?$')
+
+
+def locate(L, r):
+    """index of the record's .incbin line in L: by its label, or (an unlabelled line, label None) as the first
+    unlabelled .incbin line of the record's blob and size after the line `<after_label>:`."""
+    if r["label"]:
+        return next((i for i, x in enumerate(L) if INC.match(x) and INC.match(x).group(1) == r["label"]), None)
+    a = next((i for i, x in enumerate(L) if re.match(r'^%s:' % re.escape(r["after_label"]), x)), None)
+    if a is None:
+        return None
+    for i in range(a, min(len(L), a + 400)):
+        m = INC_U.match(L[i])
+        if m and m.group(1) == r["blob"] and int(m.group(3), 0) == r["size"]:
+            return i
+        if i > a and re.match(r'^[A-Za-z_]\w*:', L[i]) and not INC.match(L[i]):
+            break
+    return None
+
+
+def find_slice(tree, rel, r):
     p = os.path.join(ROOT, tree, "maincpu", rel)
     L = open(p, "rb").read().decode("latin-1").split("\n")
-    for i, x in enumerate(L):
-        m = INC.match(x)
-        if m and m.group(1) == label:
-            return p, L, i, m.group(3), int(m.group(4), 0), int(m.group(5), 0)
-    return p, L, None, None, None, None
+    i = locate(L, r)
+    if i is None:
+        return p, L, None, None, None, None
+    m = INC.match(L[i]) if r["label"] else INC_U.match(L[i])
+    g = (m.group(3), m.group(4), m.group(5)) if r["label"] else (m.group(1), m.group(2), m.group(3))
+    return p, L, i, g[0], int(g[1], 0), int(g[2], 0)
 
 
 def main():
@@ -342,7 +363,7 @@ def main():
         kept_init_comments = []
         for r in recs:
             ps = pieces(r)
-            path, L, k, blob, off, size = find_slice(tree, r["asm"], r["label"])
+            path, L, k, blob, off, size = find_slice(tree, r["asm"], r)
             if k is None:
                 skipped.append((r["label"], "label not found"))
                 continue
@@ -352,7 +373,7 @@ def main():
             if size != r["size"]:
                 skipped.append((r["label"], "size %d != %d" % (size, r["size"])))
                 continue
-            assert not any(p["new_label"] == r["label"] for p in ps[1:]), ("a later piece keeps the old label", r["label"])
+            assert not r["label"] or not any(p["new_label"] == r["label"] for p in ps[1:]), ("a later piece keeps the old label", r["label"])
             assert sum(p["size"] for p in ps) == size and [p["off_in_slice"] for p in ps] == \
                 [sum(q["size"] for q in ps[:i]) for i in range(len(ps))], r["label"]
             raw = open(os.path.join(tdir, "includes/generated", blob + ".bin"), "rb").read()
@@ -482,7 +503,7 @@ def main():
             if path not in asm:
                 asm[path] = L
             L = asm[path]
-            k = next(i for i, x in enumerate(L) if INC.match(x) and INC.match(x).group(1) == r["label"])
+            k = locate(L, r)
             j = k
             while L[j - 1].startswith("; [nakarest]"):
                 j -= 1
@@ -491,9 +512,9 @@ def main():
                 new += p["header"]
                 o = off + p["off_in_slice"]
                 new.append('%s:\t.incbin "includes/generated/%s.bin", 0x%X, 0x%X' % (
-                    r["label"] if p is ps[0] else p["new_label"], blob, o, p["size"]))
+                    (r["label"] or p["new_label"]) if p is ps[0] else p["new_label"], blob, o, p["size"]))
             L[j:k + 1] = new
-            if ps[0]["new_label"] != r["label"]:
+            if r["label"] and ps[0]["new_label"] != r["label"]:
                 renames.append((r["label"], ps[0]["new_label"]))
             done += 1
         print("%s: %d slices typed, %d renames, %d skipped; NAKA_ADDR externs %d; ROM-range numbers left numeric %d"
