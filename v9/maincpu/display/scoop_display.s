@@ -19141,7 +19141,7 @@ Scoop_EventLoop_36Entry_Join:
 	and	a, 15
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
+	lda	xbc, (TextStyle_NibbleFontTable:24)
 	ld	xix, (xbc+wa)
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -19282,7 +19282,7 @@ Scoop_EventLoop_36Entry_Join3:
 	and	a, 15
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
+	lda	xbc, (TextStyle_NibbleFontTable:24)
 	ld	xix, (xbc+wa)
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -19348,7 +19348,7 @@ Scoop_EventLoop_36Entry_Join4:
 	and	a, 15
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
+	lda	xbc, (TextStyle_NibbleFontTable:24)
 	ld	xix, (xbc+wa)
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -19422,7 +19422,7 @@ Scoop_EventLoop_36Entry_Skip15:
 	and	a, 15
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
+	lda	xbc, (TextStyle_NibbleFontTable:24)
 	ld	xix, (xbc+wa)
 	lda	xwa, (xsp+266)
 	ld	xhl, xwa

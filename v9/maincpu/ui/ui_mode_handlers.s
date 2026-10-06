@@ -681,7 +681,7 @@ EffectMode_UpdateBitFlags_Loop:
 	add xwa, xwa
 	add xwa, xde
 	add xwa, xwa
-	ld xix, EffectMode_UpdateBitFlags_CheckCount_Data
+	ld xix, EffectMode_PresetFieldMap
 	add xix, xwa
 	ld xwa, (xix)
 	cp xwa, 0xff
@@ -1105,7 +1105,7 @@ DramTest_IC10IC9_NextChip:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0xa
-	lda xbc, (DramTest_IC10IC9_NextChip_Data:24)
+	lda xbc, (DramTest_IC10IC9_Regions:24)
 	lda	xde, (xbc+wa)
 	ld xhl, (xde)
 	ld xiz, (xde + 4)
@@ -1183,7 +1183,7 @@ SramTest_IC21_Loop:
 	ld c, l
 	extz bc
 	muls bc, 0xa
-	lda xde, (Test_SRAM_IC21_Data:24)
+	lda xde, (SramTest_IC21Regions:24)
 	lda	xde, (xde+bc)
 	ld xiy, (xde)
 	ld xbc, (xde + 4)
@@ -1960,7 +1960,7 @@ EffectMode_DiagSeq_AnimFrame:
 	cp c, 0:i3
 	jr nz, EffectMode_DiagSeq_DecrementDelay
 	extz wa
-	lda xbc, (EffectMode_DiagSeq_AnimFrame_Data:24)
+	lda xbc, (EffectMode_DiagSeq_TitleCycle:24)
 	ld xde, 0:i3
 	ld	e, (xbc+wa)
 	add xde, TITLE_PS
@@ -2094,7 +2094,7 @@ EffectMode_SetAllLEDs_Loop:
 	ldto_berp A, 0xfb
 	extz wa
 	add wa, wa
-	lda xbc, (EffectMode_SetAllLEDs_SetOne_Data:24)
+	lda xbc, (LED_AllOnPatternByRow:24)
 	ld	bc, (xbc+wa)
 	cp bc, 0xffff
 	jr nz, EffectMode_SetAllLEDs_SetOne
@@ -2116,7 +2116,7 @@ LED_SetAll_BlankLoop:
 	ldto_berp A, 0xfb
 	extz wa
 	add wa, wa
-	lda xbc, (EffectMode_SetAllLEDs_SetOne_Data:24)
+	lda xbc, (LED_AllOnPatternByRow:24)
 	ld	wa, (xbc+wa)
 	cp wa, 0xffff
 	jr nz, LED_SetAll_BlankOne
@@ -10911,7 +10911,7 @@ MsaMode_Select:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 48)
-	lda xbc, (MsaMode_Select_Data:24)
+	lda xbc, (MsaMode_EditSwByValue:24)
 	ld wa, (xwa)
 	ld	a, (xbc+wa)
 	extz wa
@@ -10944,7 +10944,7 @@ MsaMode_Select_DrawHighlight1:
 	call DrawDesignFrame
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 44)
-	lda xbc, (MsaMode_Select_Data:24)
+	lda xbc, (MsaMode_EditSwByValue:24)
 	ld wa, (xwa)
 	ld	a, (xbc+wa)
 	extz wa
@@ -13889,7 +13889,7 @@ RVari_Select:
 	exts xwa
 	divs wa, 0x4
 	ldto_werp WA, 0xe2
-	lda xbc, (RVari_Select_Data:24)
+	lda xbc, (RVari_SlotEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+532)
@@ -13945,7 +13945,7 @@ RVari_Select_CheckSameBank:
 	exts xwa
 	divs wa, 0x4
 	ldto_werp WA, 0xe2
-	lda xbc, (RVari_Select_Data:24)
+	lda xbc, (RVari_SlotEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	call DrawEditSw
@@ -13954,7 +13954,7 @@ RVari_Select_CheckSameBank:
 	exts xwa
 	divs wa, 0x4
 	ldto_werp WA, 0xe2
-	lda xbc, (RVari_Select_Data:24)
+	lda xbc, (RVari_SlotEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+532)
@@ -14028,7 +14028,7 @@ RVari_Select_CheckSameBank:
 	exts xwa
 	divs wa, 0x4
 	ldto_werp WA, 0xe2
-	lda xbc, (RVari_Select_Data:24)
+	lda xbc, (RVari_SlotEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+532)
@@ -14066,7 +14066,7 @@ RVari_Select_CheckSameBank:
 	exts xwa
 	divs wa, 0x4
 	ldto_werp WA, 0xe2
-	lda xbc, (RVari_Select_Data:24)
+	lda xbc, (RVari_SlotEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	call DrawEditSw
@@ -14075,7 +14075,7 @@ RVari_Select_CheckSameBank:
 	exts xwa
 	divs wa, 0x4
 	ldto_werp WA, 0xe2
-	lda xbc, (RVari_Select_Data:24)
+	lda xbc, (RVari_SlotEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+532)
@@ -14137,7 +14137,7 @@ RVari_Select_CheckSameBank:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	lda xbc, (RVari_Select_CheckSameBank_Data:24)
+	lda xbc, (RVari_SubItemEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+532)
@@ -14182,7 +14182,7 @@ RVari_Select_CheckSameBank:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	lda xbc, (RVari_Select_CheckSameBank_Data:24)
+	lda xbc, (RVari_SubItemEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+532)

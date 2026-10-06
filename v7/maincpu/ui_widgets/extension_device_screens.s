@@ -1047,7 +1047,10 @@ FileIO_BytecodeData_Code_Entry8_PtrTable_3:	.incbin "includes/generated/naka_ext
 ExtDevScreen_UserInitWallpaper_Flag:		.incbin "includes/generated/naka_extension_device.bin", 0x3788, 0x8
 ExtDevScreen_UserInitWallpaper_Data:		.incbin "includes/generated/naka_extension_device.bin", 0x3790, 0x48
 ExtDev_SndParam_DispatchComplex_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x37D8, 0x7C	; 8 x 32-bit pointer
-PanelInput_PedalRecordDefaults:			.incbin "includes/generated/naka_extension_device.bin", 0x3854, 0xC
+; PanelInput_PedalRecordDefaults -- 3 x {u8 event index, u8 raw, u8 previous raw, u8 state}: pedal-port records
+; PanelInput_InitPedalRecords copies them to RAM 0x8EB6/0x8EBA/0x8EBE; PanelInput_ScanPedalPorts feeds PG.3-2, PG.7-4
+; and PD.6 to PanelInput_UpdatePedalRecord, which queues {index, state, changed bits} when the debounced state changes.
+PanelInput_PedalRecordDefaults:	.incbin "includes/generated/naka_extension_device.bin", 0x3854, 0xC
 ; [nakarest] EffectMode_DispatchTable  +0x3860..+0x3870 (0xeda02c, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeda02c not derived; readers below
 ; [nakarest] Readers: source references SystemConfig_PointerTable (ui_widgets/widget_dispatch.s:
@@ -1065,7 +1068,8 @@ PanelInput_EventIndexByHeader:	.incbin "includes/generated/naka_extension_device
 ; [nakarest] Readers: source references CPanel_EncoderDispatch (midi/midi_encoder_routines.s:
 ; [nakarest] `lda xde, (ENCODER_HANDLER_TABLE:24)`).
 ENCODER_HANDLER_TABLE:	.incbin "includes/generated/naka_extension_device.bin", 0x38F0, 0x80
-; [nakarest] ENCODER_LUT_MODWHEEL  +0x3970..+0x3994 (0xeda13c, 36 B)
-; [nakarest] 36 B at 0xeda13c: split since into the labelled pieces below; code or data uses ENCODER_LUT_MODWHEEL.
+; ENCODER_LUT_MODWHEEL -- 36 x u8: entries 0..35 of the 128-entry modulation-wheel curve (raw position -> CC value)
+; Encoder_ProcessModwheel indexes it with (~raw) >> 1 and stores the byte in MIDI_CC_MODWHEEL_VALUE.
+; Entries 36..127 are the `.byte` rows after this blob in extensions/extension_data.s; the curve is non-decreasing.
 ENCODER_LUT_MODWHEEL:	.incbin "includes/generated/naka_extension_device.bin", 0x3970, 0x24
 ; External label offsets within the binary blob above.

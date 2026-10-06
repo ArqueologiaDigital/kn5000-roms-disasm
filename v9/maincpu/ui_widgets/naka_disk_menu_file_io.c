@@ -2439,7 +2439,8 @@ typedef struct __attribute__((packed)) {
     char DiskSmfSave_name[12];
     /* Cheap_ResNameTable_36C: 84 pointers (cut from ptrs_9 by split_naka_pointer_arrays.py) */
     uint32_t Cheap_ResNameTable_36C[84];
-    char str_1200[2];
+    /* "" + 0xFF fill: the name after the last of the 83 entries of ResName table 0x36C */
+    char Cheap_ResNameTable_36C_EndName[2];
     char ResName_DiskSmfDirectPlay_82_Label[2];
     char ResName_DiskSmfDirectPlay_81_Label[2];
     char ResName_DiskSmfDirectPlay_80_Line[2];
@@ -13066,10 +13067,10 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(ResName_DiskSmfDirectPlay_80_Line),
         SELF(ResName_DiskSmfDirectPlay_81_Label),
         SELF(ResName_DiskSmfDirectPlay_82_Label),
-        SELF(str_1200),
+        SELF(Cheap_ResNameTable_36C_EndName),
     },
 
-    .str_1200 = ALIGNED_STRING(""),
+    .Cheap_ResNameTable_36C_EndName = "\x00\xFF",
 
     .ResName_DiskSmfDirectPlay_82_Label = ALIGNED_STRING(""),
 

@@ -7138,7 +7138,7 @@ ChangeWall_Impl:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	ld xwa, ChangeWall_Impl_Data
+	ld xwa, ChangeWall_WallpaperTable
 	add xwa, xbc
 	ld xwa, (xwa)
 	ld (0x03ef98:24), xwa
@@ -7258,7 +7258,7 @@ ChangePalette_Impl:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	lda xwa, (ChangePalette_Impl_Data:24)
+	lda xwa, (ChangePalette_WallpaperPalettes:24)
 	add xwa, xbc
 	ld xwa, (xwa)
 	ld (PALETTE_DATA_PTR_CACHED:24), xwa
@@ -7482,7 +7482,7 @@ ClipBlit_Replace_ScanlineLoop:
 	pushw bc
 	call Math_AbsInt16
 	add hl, hl
-	lda	xwa, (ClipBlit_Replace_ScanlineLoop_Data:24)
+	lda	xwa, (ClipBlit_DiscHalfWidth:24)
 	ld	de, (xwa+hl)
 	ldw bc, 0x001e
 	sub bc, de

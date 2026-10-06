@@ -3730,7 +3730,7 @@ AcIndexEdit_DispatchDSP:
 	jrl mi, AcIndexEdit_ReturnZeroJmp
 	cp wa, 0x10
 	jrl gt, AcIndexEdit_ReturnZeroJmp
-	lda xix, (AcIndexEdit_DispatchDSP_Data:24)
+	lda xix, (AcIndexEdit_SwitchDirCaseMap:24)
 	ld	wa, (xix+wa)
 	extz wa
 	sll wa, 1
@@ -6492,7 +6492,7 @@ AcMixerVol_PartSelect_DrawIcon:
 	ld (xwa + 2), bc
 	ld bc, (xsp + 10)
 	sla bc, 2
-	lda xde, (AcMixerVol_PartSelect_DrawIcon_Data:24)
+	lda xde, (AcMixerVol_GroupIconBitmap:24)
 	ld	xbc, (xde+bc)
 	call DrawBitmapFast
 	jrl UIList_ReturnZeroJmp
@@ -7660,7 +7660,7 @@ PsTrackSwitchProc:
 	lda xix, (xsp + 18)
 	ldw bc, 0xa
 	ldirw
-	ld xiy, PsTrackSwitchProc_Data
+	ld xiy, PsTrkSw_SelectStateColor
 	lda xix, (xsp + 8)
 	ld bc, 5:i3
 	ldirw
@@ -8930,7 +8930,7 @@ InputDialog_Confirm:
 	add xwa, xbc
 	ld xwa, (xwa + 10)
 	add xix, xwa
-	lda xwa, (InputDialog_Confirm_Data:24)
+	lda xwa, (RegisterObject_Str_EmptyName:24)
 	ld (xix), xwa
 	incw 1, (xhl + 8)
 	ld xhl, (xsp + 8)
@@ -8981,7 +8981,7 @@ UnRegisterObject:
 	add xix, xhl
 	ld xwa, (xix + 10)
 	add xde, xwa
-	lda xwa, (UnRegisterObject_Data:24)
+	lda xwa, (UnRegisterObject_EmptyName:24)
 	ld (xde), xwa
 	decw	1, (xbc+8)
 	pop xiz
@@ -9996,7 +9996,7 @@ UnregisteredMode:
 	ld xwa, 0xffffffff
 	ld (xbc + 4), xwa
 	ldw (xbc + 8), 0xffff
-	lda xwa, (UnregisteredMode_Data:24)
+	lda xwa, (Mode_UnregisteredName:24)
 	ld (xbc + 10), xwa
 	ret
 
@@ -10034,7 +10034,7 @@ UnregisteredTitle:
 	ld xwa, 0xffffffff
 	ld (xbc + 4), xwa
 	ldw (xbc + 8), 0xffff
-	lda xwa, (UnregisteredTitle_Data:24)
+	lda xwa, (UnregisteredTitle_EmptyName:24)
 	ld (xbc + 10), xwa
 	ld xwa, 0xffffffff
 	ld (xbc + 14), xwa
@@ -10082,7 +10082,7 @@ TitleProc:
 	sll xwa, 3
 	sub xwa, (xsp + 30)
 	add xwa, xwa
-	ld xbc, TitleProc_Data
+	ld xbc, TitleProc_EasySetTable
 	add xbc, xwa
 	ld xwa, (xbc + 8)
 	cp xiz, EVT_EASY_SET_OFF
@@ -10845,7 +10845,7 @@ EnumList_OK_ScrollUp_Done:
 	sll xwa, 3
 	sub xwa, (xsp + 30)
 	add xwa, xwa
-	ld xbc, TitleProc_Data
+	ld xbc, TitleProc_EasySetTable
 	add xbc, xwa
 	ld xwa, (xbc + 8)
 	ld xbc, (xbc)
@@ -10867,7 +10867,7 @@ EnumList_HitTest:
 	sll xbc, 3
 	sub xbc, (xsp + 30)
 	add xbc, xbc
-	lda xwa, (EnumList_HitTest_Data:24)
+	lda xwa, (TitleProc_EasySetHold0Tail:24)
 	add xwa, xbc
 	ld xwa, (xwa)
 	cp xwa, EVT_CHANGE_TITLE
@@ -10890,7 +10890,7 @@ EnumList_HitTest_Loop:
 	sll xbc, 3
 	sub xbc, (xsp + 30)
 	add xbc, xbc
-	ld xwa, TitleProc_Data
+	ld xwa, TitleProc_EasySetTable
 	add xwa, xbc
 	ld xbc, (xwa + 4)
 	ld xde, (xwa)
@@ -10992,7 +10992,7 @@ EnumList_Reset:
 	ld wa, iz
 	extz xwa
 	add xwa, xwa
-	ld xbc, EnumList_Reset_Data
+	ld xbc, Title_InterruptTimeTicks
 	add xbc, xwa
 	ld wa, (xbc)
 	ld (0x02bc32:24), wa
@@ -17277,7 +17277,7 @@ NameProc_Init:
 	jr NameProc_Close
 
 NameProc_Init_SetPtr:
-	ld xwa, NameProc_Init_SetPtr_Data
+	ld xwa, NameProc_MakeDump_Str_Empty
 
 NameProc_Close:
 	push xwa
@@ -17344,7 +17344,7 @@ ConstFlagProc_GetValue:
 	jr ConstFlagProc_SetValue
 
 ConstFlagProc_GetValue_Set:
-	ld xwa, ConstFlagProc_GetValue_Set_Data
+	ld xwa, ConstFlagProc_DumpText
 
 ConstFlagProc_SetValue:
 	push xwa

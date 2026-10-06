@@ -2945,7 +2945,7 @@ ComSetGridCheck_CaseTable:
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t
 ; ComSetGridCheck_CaseTable_Tail[14].
-; Readers (claims_lint.py unread-claims, 2026-10-02): Naka_ReverbScreen_EmptyStr (0xE28588, 32-bit
+; Readers (claims_lint.py unread-claims, 2026-10-02): Kubo_FunctionNameTable_408_EndName (0xE28588, 32-bit
 ;   pointer); AcPmemOutLGridBoxProc (0xF7837B, 32-bit pointer); a 32-bit word
 ;   at 0xE10276 (pointer-shaped); NakaWidget_SmfDpMuteCtrl5 (0xE2163E, 32-bit pointer)
 ; -----------------------------------------------------------------------------

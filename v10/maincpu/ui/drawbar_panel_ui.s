@@ -4965,7 +4965,7 @@ IvSdpart_Init_ResetPart:
 IvSdpart_Init_LoadDescriptor:
 	ld wa, (0x03e99c:24)
 	sla wa, 2
-	lda xbc, (IvSdpart_Init_LoadDescriptor_Data:24)
+	lda xbc, (IvSdpart_PageViews:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
@@ -4997,7 +4997,7 @@ IvSdpart_ShowHide:
 	cpw (0x3e99e:24), 18
 	jr ge, IvSdpart_ShowHide_UpdateUI
 	call GetPartSelect
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	ld bc, hl
 	calr SdpartLookupPartId
 	ld de, hl
@@ -5030,7 +5030,7 @@ IvSdpart_OK:
 	cp wa, 0x8
 	jr z, IvSdpart_OK_ExitToMenu
 	sla wa, 2
-	lda xbc, (IvSdpart_Init_LoadDescriptor_Data:24)
+	lda xbc, (IvSdpart_PageViews:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
@@ -5040,7 +5040,7 @@ IvSdpart_OK:
 	ld xde, 0x8
 	call SendEvent
 	ldw (0x03e99c:24), 0x0008
-	ld xwa, (IvSdpart_OK_Data:24)
+	ld xwa, (IvSdpart_TopPageViewId:24)
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jrl IvSdpart_DispatchEvent
@@ -5075,7 +5075,7 @@ IvSdpart_PageSelect:
 	cp iz, 0xffff
 	jrl z, IvSdpart_ReturnHandled
 	sla wa, 2
-	lda xbc, (IvSdpart_Init_LoadDescriptor_Data:24)
+	lda xbc, (IvSdpart_PageViews:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
@@ -5083,7 +5083,7 @@ IvSdpart_PageSelect:
 	ld (0x03e99c:24), iz
 	ld wa, iz
 	sla wa, 2
-	lda xbc, (IvSdpart_Init_LoadDescriptor_Data:24)
+	lda xbc, (IvSdpart_PageViews:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
@@ -5122,7 +5122,7 @@ IvSdpartProc_OnIndexswUp:
 	call SendEvent
 	ld wa, (0x03e99e:24)
 	sla wa, 1
-	lda xbc, (IvSdpart_ShowHide_Data:24)
+	lda xbc, (IvSdpart_PartNumberByRow:24)
 	ld	de, (xbc+wa)
 	exts xde
 	ld xwa, NAKA_MAINFUNC_MainPmanControl
@@ -5130,7 +5130,7 @@ IvSdpartProc_OnIndexswUp:
 	call MainFuncCall
 	ld wa, (0x03e99c:24)
 	sla wa, 2
-	lda xbc, (IvSdpart_Init_LoadDescriptor_Data:24)
+	lda xbc, (IvSdpart_PageViews:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_PAINT
 	ld xde, 0:i3
@@ -5149,7 +5149,7 @@ IvSdpart_Refresh:
 	cpw (0x3e99e:24), 18
 	jrl ge, IvSdpart_ReturnHandled
 	call GetPartSelect
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	ld bc, hl
 	calr SdpartLookupPartId
 	ld de, hl
@@ -5168,7 +5168,7 @@ IvSdpart_Refresh:
 	call SendEvent
 	ld wa, (0x03e99c:24)
 	sla wa, 2
-	lda xbc, (IvSdpart_Init_LoadDescriptor_Data:24)
+	lda xbc, (IvSdpart_PageViews:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_PAINT
 	ld xde, 0:i3
@@ -5180,7 +5180,7 @@ IvSdpartProc_OnLswData:
 	call InheritedProc
 	ld wa, (0x03e99e:24)
 	sla wa, 1
-	lda xbc, (IvSdpart_ShowHide_Data:24)
+	lda xbc, (IvSdpart_PartNumberByRow:24)
 	ld	de, (xbc+wa)
 	exts xde
 	ld xbc, xde
@@ -5206,7 +5206,7 @@ IvSdpartProc_OnSoundName:
 	call InheritedProc
 	ld wa, (0x03e99e:24)
 	sla wa, 1
-	lda xbc, (IvSdpart_ShowHide_Data:24)
+	lda xbc, (IvSdpart_PartNumberByRow:24)
 	ld	bc, (xbc+wa)
 	ld xwa, (xsp + 4)
 	cp bc, (xwa)
@@ -6690,7 +6690,7 @@ SdpartUpdatePartUI:
 	bit_erpw 0xe2, 0x0f
 	jr z, SdpartUpdatePartUI_Confirm
 	add bc, bc
-	lda xwa, (IvSdpart_ShowHide_Data:24)
+	lda xwa, (IvSdpart_PartNumberByRow:24)
 	ld	de, (xwa+bc)
 	exts xde
 	ld xwa, NAKA_MAINFUNC_MainGetSoundName
@@ -6756,7 +6756,7 @@ LswSound_GetPartId:
 
 LswSound_LookupPartOffset:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -6865,7 +6865,7 @@ LswVolume_GetPartId:
 
 LswVolume_LookupPartOffset:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -6990,7 +6990,7 @@ LswMute_GetPartId:
 
 LswMute_LookupPartOffset:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7123,7 +7123,7 @@ LswPan_ReturnThis:
 
 LswPan_GetPartId:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7230,7 +7230,7 @@ LswReverb_GetPartId:
 
 LswReverb_LookupPartOffset:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7339,7 +7339,7 @@ LswDSPEff_ReturnThis:
 
 LswDSPEff_GetPartId:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7437,7 +7437,7 @@ LswDigEff_CopyStr:
 
 LswDigEff_GetPartId:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7535,7 +7535,7 @@ LswSust_CopyStr:
 
 LswSust_GetPartId:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7634,7 +7634,7 @@ LswSustLen_ReturnThis:
 
 LswSustLen_GetPartId:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7744,7 +7744,7 @@ LswKeyShift_ReturnThis:
 
 LswKeyShift_GetPartId:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7862,7 +7862,7 @@ LswTuning_ReturnThis:
 
 LswTuning_GetPartId:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7967,7 +7967,7 @@ LswBendRng_ReturnThis:
 
 LswBendRng_GetPartId:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8065,7 +8065,7 @@ LswGlide_CopyStr:
 
 LswGlide_GetPartId:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8165,7 +8165,7 @@ LswSustPedal_CopyStr:
 
 LswSustPedal_GetPartId:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8265,7 +8265,7 @@ LswKeyScale_CopyStr:
 
 LswKeyScale_GetPartId:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8365,7 +8365,7 @@ LswAfterTouch_CopyStr:
 
 LswAfterTouch_GetPartId:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8465,7 +8465,7 @@ LswPartExp_StrCopyReturn:
 
 LswPartExp_PartIdLookup:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8565,7 +8565,7 @@ LswLocal_StrCopyReturn:
 
 LswLocal_PartIdLookup:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8613,7 +8613,7 @@ LswMidiChannel:
 	push xiz
 	ld xiz, xde
 	ld (xsp + 4), xwa
-	lda xde, (IvSdpart_ShowHide_Data:24)
+	lda xde, (IvSdpart_PartNumberByRow:24)
 	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswLocalZeroReturn
@@ -9853,7 +9853,7 @@ IvSdtecd1Proc:
 	ld xwa, 0x4202
 	call SndParam_LookupReadOnly
 	sla hl, 2
-	lda xwa, (IvSdtecd1Proc_Data:24)
+	lda xwa, (Sdtecd1_TypeButtonView:24)
 	ld	xwa, (xwa+hl)
 	ld xbc, EVT_SET_DIAL_FOCUS
 	ld xde, 1:i3
@@ -9902,7 +9902,7 @@ Sdtecd1_ScrollDown_Lookup:
 	ld xwa, 0x4202
 	call SndParam_LookupReadOnly
 	ld bc, hl
-	ld xwa, Sdtecd1_ScrollDown_Lookup_Data
+	ld xwa, Sdtecd1_ValueScreenOrder
 	calr SdpartLookupPartId
 	ld wa, hl
 	inc 7, wa
@@ -9910,7 +9910,7 @@ Sdtecd1_ScrollDown_Lookup:
 	jrl gt, IvSdtecd1_ReturnDefault
 	inc 7, hl
 	add hl, hl
-	lda xwa, (Sdtecd1_ScrollDown_Lookup_Data:24)
+	lda xwa, (Sdtecd1_ValueScreenOrder:24)
 	ld	bc, (xwa+hl)
 	ld xwa, 0x4202
 	ld de, 3:i3
@@ -9948,14 +9948,14 @@ Sdtecd1_ScrollUp_Lookup:
 	ld xwa, 0x4202
 	call SndParam_LookupReadOnly
 	ld bc, hl
-	ld xwa, Sdtecd1_ScrollDown_Lookup_Data
+	ld xwa, Sdtecd1_ValueScreenOrder
 	calr SdpartLookupPartId
 	ld wa, hl
 	sub wa, 0x7
 	jr lt, IvSdtecd1_ReturnDefault
 	dec 7, hl
 	add hl, hl
-	lda xwa, (Sdtecd1_ScrollDown_Lookup_Data:24)
+	lda xwa, (Sdtecd1_ValueScreenOrder:24)
 	ld	bc, (xwa+hl)
 	ld xwa, 0x4202
 	ld de, 3:i3
@@ -9973,7 +9973,7 @@ Sdtecd1_Match:
 	jr nz, IvSdtecd1_ReturnDefault
 	ld wa, (xiz + 4)
 	sla wa, 2
-	lda xbc, (IvSdtecd1Proc_Data:24)
+	lda xbc, (Sdtecd1_TypeButtonView:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_SET_DIAL_FOCUS
 	ld xde, 1:i3
@@ -10289,7 +10289,7 @@ LswMasterTuning:
 	cp xde, EVT_GET_LSW_STRING
 	jrl nz, StringOp_ReturnZero
 	ld iz, 1:i3
-	lda xde, (LswMasterTuning_Data:24)
+	lda xde, (LswMasterTuning_ValueByStep:24)
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 4)
 
@@ -10430,7 +10430,7 @@ IvSdscltyp2Proc:
 	call SendEvent
 	ld wa, (0x02478e:24)
 	sla wa, 2
-	lda xbc, (IvSdscltyp2Proc_Data:24)
+	lda xbc, (Sdscltyp2_KeyWidgetIds:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_SET_SELECTED
 	ld xde, 1:i3
@@ -10464,7 +10464,7 @@ Sdscltyp2_ScrollDown:
 	call SendEvent
 	ld wa, (0x02478e:24)
 	sla wa, 2
-	lda xbc, (IvSdscltyp2Proc_Data:24)
+	lda xbc, (Sdscltyp2_KeyWidgetIds:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_SET_SELECTED
 	ld xde, 1:i3
@@ -10499,7 +10499,7 @@ Sdscltyp2_ScrollUp:
 	call SendEvent
 	ld wa, (0x02478e:24)
 	sla wa, 2
-	lda xbc, (IvSdscltyp2Proc_Data:24)
+	lda xbc, (Sdscltyp2_KeyWidgetIds:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_SET_SELECTED
 	ld xde, 1:i3
@@ -10566,7 +10566,7 @@ LswScalingType:
 	cp xbc, EVT_GET_LSW_STRING
 	jr nz, LswScaleType_ReturnZero
 	ld bc, (xiz + 4)
-	ld xwa, LswScalingType_Data
+	ld xwa, LswScalingType_TypeCodes
 	calr SdpartLookupPartId
 	ld xbc, (xiz + 8)
 	cp hl, 0xffff
@@ -10807,7 +10807,7 @@ LswScaleKeyX_LoopBody:
 	extz xwa
 	ld xbc, xwa
 	sll xbc, 2
-	ld xde, IvSdscltyp2Proc_Data
+	ld xde, Sdscltyp2_KeyWidgetIds
 	add xde, xbc
 	cp (xde), xhl
 	jr nz, LswScaleKeyX_LoopNext
@@ -10822,7 +10822,7 @@ LswScaleKeyX_LoopCheck:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
-	ld xbc, IvSdscltyp2Proc_Data
+	ld xbc, Sdscltyp2_KeyWidgetIds
 	add xbc, xwa
 	ld xwa, (xbc)
 	cp xwa, 0xffffffff
@@ -11820,7 +11820,7 @@ PsMixer_GridLoop:
 	ldfr_werp HL, 0xfa
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (IvSdpart_ShowHide_Data:24)
+	lda xbc, (IvSdpart_PartNumberByRow:24)
 	ld	de, (xbc+wa)
 	exts xde
 	ld xwa, NAKA_MAINFUNC_MainGetSoundName
@@ -11880,7 +11880,7 @@ PsMixer_ControlCase5:
 	calr PsMixer_ReadWordArrayEntry
 	extz xhl
 	add xhl, xhl
-	ld xbc, IvSdpart_ShowHide_Data
+	ld xbc, IvSdpart_PartNumberByRow
 	add xbc, xhl
 	ld de, (xbc)
 	exts xde
@@ -11918,7 +11918,7 @@ PsMixer_ControlCase5:
 	calr PsMixer_ReadWordArrayEntry
 	extz xhl
 	add xhl, xhl
-	ld xbc, IvSdpart_ShowHide_Data
+	ld xbc, IvSdpart_PartNumberByRow
 	add xbc, xhl
 	ld de, (xbc)
 	exts xde
@@ -12064,7 +12064,7 @@ AudioCtrl_PageAdvance:
 AudioCtrl_SetupPartDisplay:
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (IvSdpart_ShowHide_Data:24)
+	lda xbc, (IvSdpart_PartNumberByRow:24)
 	ld	de, (xbc+wa)
 	exts xde
 	ld xwa, NAKA_MAINFUNC_MainPmanControl
@@ -12072,7 +12072,7 @@ AudioCtrl_SetupPartDisplay:
 	call MainFuncCall
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (IvSdpart_ShowHide_Data:24)
+	lda xbc, (IvSdpart_PartNumberByRow:24)
 	ld	de, (xbc+wa)
 	exts xde
 	ld xwa, NAKA_MAINFUNC_MainGetSoundName
@@ -12291,7 +12291,7 @@ PsMixer_MidiScanOuterLoop:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa)
 	sla wa, 2
-	lda xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp + 14), xwa
 	ld iz, (0x024794:24)
@@ -12390,7 +12390,7 @@ PsMixer_UnmatchedPartScan:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa)
 	sla wa, 2
-	lda xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp + 14), xwa
 	ld iz, (0x024794:24)
@@ -12485,12 +12485,12 @@ PsMixer_ControlCase9:
 	calr PsMixer_ReadWordArrayEntry
 	extz xhl
 	add xhl, xhl
-	ld xbc, IvSdpart_ShowHide_Data
+	ld xbc, IvSdpart_PartNumberByRow
 	add xbc, xhl
 	cpw (xbc), 0x10
 	jrl ge, AudioCtrl_ReturnZero
 	call GetPartSelect
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	ld bc, hl
 	calr SdpartLookupPartId
 	ldfr_werp HL, 0xfa
@@ -12556,7 +12556,7 @@ PsMixer_VolumeSelect_Continue:
 	ld (0x024794:24), wa
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (IvSdpart_ShowHide_Data:24)
+	lda xbc, (IvSdpart_PartNumberByRow:24)
 	ld	de, (xbc+wa)
 	exts xde
 	ld xwa, NAKA_MAINFUNC_MainGetSoundName
@@ -12601,7 +12601,7 @@ PsMixerControlProc_OnSoundName:
 	ldfr_werp HL, 0xfa
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (IvSdpart_ShowHide_Data:24)
+	lda xbc, (IvSdpart_PartNumberByRow:24)
 	ld	bc, (xbc+wa)
 	ld xwa, (xsp + 82)
 	cp bc, (xwa)
@@ -12638,7 +12638,7 @@ PsMixer_EventForwardHelper:
 	ld xde, (xsp + 4)
 	ld wa, (xde)
 	sla wa, 2
-	lda xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp + 14), xwa
 	cp xwa, NAKA_APFUNC_LswSound
@@ -12706,7 +12706,7 @@ AcPartMixerProc:
 PartMixer_Init:
 	ld xwa, PartMixer_Init_Data
 	calr Util_StorePartArrayBase
-	ld xwa, PartMixer_Init_Data_2
+	ld xwa, PartMixer_ColumnPartMap
 	calr Util_StoreGridArrayBase
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -12725,7 +12725,7 @@ AcTrackMixerProc:
 	ld (xsp + 42), xde
 	ld (xsp + 46), xbc
 	ld (xsp + 50), xwa
-	ld xiy, AcTrackMixerProc_Data
+	ld xiy, TrackMixer_PartCodeToItem
 	lda xix, (xsp + 2)
 	ldw bc, 0x14
 	ldirw
@@ -13255,7 +13255,7 @@ PsMixer_CtlTypeProc5_OnIndexswAny:
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+4)
@@ -13405,7 +13405,7 @@ PsMixer_CtlTypeProc6_OnIndexswAny:
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+4)
@@ -13530,7 +13530,7 @@ PsMixer_CtlTypeProc3_OnParaDraw:
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp+6), xwa
 	lda xwa, (xsp+62)
@@ -13621,7 +13621,7 @@ PsMixer_CtlTypeProc3_Join2:
 	ld	xwa, (xsp+6)
 	ld	xbc, EVT_CHECK_PART
 	call	ApFuncCall
-	lda	xbc, (PsMixer_CtlTypeProc3_Data:24)
+	lda	xbc, (PsMixer_KnobPointerOffsets:24)
 	or	xhl, xhl
 	jr	z, PsMixer_CtlTypeProc3_Skip5
 	lda	xhl, (xsp+58)
@@ -13660,7 +13660,7 @@ PsMixer_CtlTypeProc3_OnIndexswAny:
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+6), xwa
 	ld	de, (xsp+4)
@@ -13728,7 +13728,7 @@ PsMixer_CtlTypeProc3_OnIndexswBoth:
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+6), xwa
 	ld	de, (xsp+4)
@@ -13850,7 +13850,7 @@ PsMixer_CtlTypeProc7_OnParaDraw:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp+8), xwa
 	lda xwa, (xsp+64)
@@ -13938,7 +13938,7 @@ PsMixer_CtlTypeProc7_OnIndexswAny:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp+8), xwa
 	ld de, (xsp+6)
@@ -14003,7 +14003,7 @@ PsMixer_CtlTypeProc7_OnIndexswBoth:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp+8), xwa
 	ld de, (xsp+6)
@@ -14121,7 +14121,7 @@ PsMixer_CtlTypeProc4_OnParaDraw:
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp+6), xwa
 	lda xwa, (xsp+66)
@@ -14232,7 +14232,7 @@ PsMixer_CtlTypeProc4_OnIndexswAny:
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+6), xwa
 	ld	de, (xsp+4)
@@ -14354,7 +14354,7 @@ PsMixer_CtlTypeProc9_OnParaDraw:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp+8), xwa
 	lda xwa, (xsp+64)
@@ -14470,7 +14470,7 @@ PsMixer_CtlTypeProc9_OnIndexswAny:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp+8), xwa
 	ld de, (xsp+6)
@@ -14564,7 +14564,7 @@ PsMixer_CtlTypeProc2:
 	ld	wa, (xsp+10)
 	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+6), hl
-	ld	xwa, (PsMixer_CtlTypeProc2_Data:24)
+	ld	xwa, (PsMixer_MuteApFuncId:24)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+6)
 	exts	xde
@@ -14641,7 +14641,7 @@ PsMixer_CtlTypeProc2_OnIndexswAny:
 	ld	wa, bc
 	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+6), hl
-	ld	xwa, (PsMixer_CtlTypeProc2_Data:24)
+	ld	xwa, (PsMixer_MuteApFuncId:24)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+6)
 	exts	xde
@@ -14699,7 +14699,7 @@ PsMixer_CtlTypeProc2_Join:
 	calr	Util_SignExtendAndDouble
 	ld	wa, (xhl)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp+12), xwa
 	ld de, (xsp+6)
@@ -14761,7 +14761,7 @@ PsMixer_CtlTypeProc2_OnIndexswBoth:
 	ld	wa, bc
 	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+6), hl
-	ld	xwa, (PsMixer_CtlTypeProc2_Data:24)
+	ld	xwa, (PsMixer_MuteApFuncId:24)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+6)
 	exts	xde
@@ -14949,7 +14949,7 @@ PsMixer_CtlTypeProc1_OnParaDraw:
 	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+8), hl
 	add	hl, hl
-	lda	xwa, (IvSdpart_ShowHide_Data:24)
+	lda	xwa, (IvSdpart_PartNumberByRow:24)
 	ld	de, (xwa+hl)
 	exts xde
 	ld	xwa, NAKA_MAINFUNC_MainGetSoundName
@@ -14969,7 +14969,7 @@ PsMixer_CtlTypeProc1_Loop2:
 	ld	xiz, xhl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+14), xwa
 	cp	xwa, NAKA_APFUNC_LswSound
@@ -14985,7 +14985,7 @@ PsMixer_CtlTypeProc1_Loop3:
 	ld	(xsp+8), hl
 	ld	xwa, (xsp+4)
 	ld	bc, (xwa)
-	ld	xwa, IvSdpart_ShowHide_Data
+	ld	xwa, IvSdpart_PartNumberByRow
 	calr	SdpartLookupPartId
 	cp	hl, (xsp+8)
 	jrl	nz, PsMixer_CtlTypeProc1_Skip5
@@ -15060,7 +15060,7 @@ PsMixer_CtlTypeProc1_OnIndexswAny:
 	ld	(xsp+8), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp+14), xwa
 	ld de, (xsp+8)
@@ -15220,7 +15220,7 @@ PsMixer_CtlTypeProc8_OnIndexswAny:
 	ld	xwa, (xsp+12)
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
+	lda	xbc, (PsMixer_RowKindApFuncId:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp+10), xwa
 	ld de, (xsp+8)
@@ -16410,7 +16410,7 @@ LswPercDecay:
 
 LswPercDecay_PartIdLookup:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -16527,7 +16527,7 @@ LswPercLevel:
 
 LswPercLevel_PartIdLookup:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -16614,7 +16614,7 @@ LswDrawAttack:
 
 LswDrawAttack_PartIdLookup:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -16701,7 +16701,7 @@ LswDrawRelease:
 
 LswDrawRelease_PartIdLookup:
 	add xde, xde
-	ld xwa, IvSdpart_ShowHide_Data
+	ld xwa, IvSdpart_PartNumberByRow
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -16830,7 +16830,7 @@ IvDrawbar1_LoadVals_Loop:
 	ld bc, iz
 	extz xbc
 	add xbc, xbc
-	ld xde, IvDrawbar1_LoadVals_Data
+	ld xde, IvDrawbar1_DrawbarParamIds
 	add xde, xbc
 	ld bc, (xde)
 	call SndParam_LookupViaEncode
@@ -16948,7 +16948,7 @@ IvDrawbar1_OK_ComputeNewValue:
 	ld wa, (0x02479a:24)
 	ldto_werp BC, 0xfa
 	add bc, bc
-	lda xde, (IvDrawbar1_LoadVals_Data:24)
+	lda xde, (IvDrawbar1_DrawbarParamIds:24)
 	ld	bc, (xde+bc)
 	pushw 0x4
 	ld de, iz
@@ -16989,7 +16989,7 @@ IvDrawbar1_OK_ScrollDown:
 	cp xhl, NAKA_MODE_MD_SOUNDEDIT
 	jr z, IvDrawbar1_OK_ScrollDown_DualMode
 	ld wa, (0x02479a:24)
-	lda xde, (IvDrawbar1_LoadVals_Data:24)
+	lda xde, (IvDrawbar1_DrawbarParamIds:24)
 	ld	bc, (xde+bc)
 	pushw 0x4
 	ld de, iz
@@ -17564,7 +17564,7 @@ DrawbarBitmapHelper:
 	lda xwa, (xsp)
 	ld hl, de
 	add hl, hl
-	lda xix, (DrawbarBitmapHelper_Data:24)
+	lda xix, (DrawbarBitmap_SliderX:24)
 	ld	hl, (xix+hl)
 	ld (xwa), hl
 	ldw (xwa + 2), 0x72
@@ -17572,7 +17572,7 @@ DrawbarBitmapHelper:
 	lda xhl, (0x03ec28:24)
 	ld	xde, (xhl+de)
 	sla bc, 2
-	lda xhl, (DrawbarBitmapHelper_Data_2:24)
+	lda xhl, (Drawbar_LevelBitmapOffsets:24)
 	ld	xbc, (xhl+bc)
 	add xbc, xbc
 	add xde, xbc
@@ -17626,7 +17626,7 @@ MemDraw_ParamLoopBody:
 	ld wa, iz
 	extz xwa
 	add xwa, xwa
-	ld xbc, MemDraw_ParamLoopBody_Data
+	ld xbc, MemDraw_LswIdTable
 	add xbc, xwa
 	ld wa, (xbc)
 	extz xwa
@@ -17737,7 +17737,7 @@ DemoMenu_BuildItemWorkspace:
 	ld de, (xsp + 6)
 	extz xde
 	add xde, xde
-	ld xbc, MemDraw_ParamLoopBody_Data
+	ld xbc, MemDraw_LswIdTable
 	add xbc, xde
 	ld hl, (xbc)
 	extz xhl

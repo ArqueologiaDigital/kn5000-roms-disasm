@@ -99,6 +99,14 @@ extern const char Naka_PresentationRootState;
  * parent Screen; allsize 42.  Field names and type characters are the
  * class chain's own propname / propdata (see THE CLASS SYSTEM in
  * scripts/analysis/nakarest_objtab_map.py). */
+/* PanelInput_PedalRecordDefaults's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint8_t event_index;
+    uint8_t raw;
+    uint8_t prev_raw;
+    uint8_t state;
+} PanelInput_PedalRecordDefaults_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t class_;            /* +0 M */
     uint16_t super;             /* +4 [ */
@@ -1555,34 +1563,16 @@ typedef struct __attribute__((packed)) {
     uint16_t field_37d4;
     uint16_t field_37d6;
     uint32_t ExtDev_SndParam_DispatchComplex_PtrTable[31];  /* 31 pointers */
-    uint16_t field_3854;
-    uint8_t pad_234[2];  /* zero padding */
-    uint16_t field_3858;
-    uint16_t field_385a;
-    uint16_t field_385c;
-    uint8_t pad_235[2];  /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* Initial pedal records copied to RAM 0x8EB6: foot switch (event 28), foot controller (29, raw/state 0x0F = none engaged), PD.6 input (30) */
+    PanelInput_PedalRecordDefaults_t PanelInput_PedalRecordDefaults[3];
     uint32_t EffectMode_DispatchTable[4];  /* 4 pointers */
     /* PanelInput_EventIndexByHeader: [(h & 0xC0) >> 1 | (h & 0x1F)] of a control-panel packet header h -> panel event index (0-10 left segments, 11-21 right, 22-24 headers D1-D3, 25 the data wheel D7, 0x1F none); read by PanelInput_EventIndexOfHeader */
     uint8_t PanelInput_EventIndexByHeader[128];
     uint32_t ENCODER_HANDLER_TABLE[32];  /* 32 pointers */
-    uint16_t field_3970;
-    uint16_t field_3972;
-    uint16_t field_3974;
-    uint16_t field_3976;
-    uint16_t field_3978;
-    uint16_t field_397a;
-    uint16_t field_397c;
-    uint16_t field_397e;
-    uint16_t field_3980;
-    uint16_t field_3982;
-    uint16_t field_3984;
-    uint16_t field_3986;
-    uint16_t field_3988;
-    uint16_t field_398a;
-    uint16_t field_398c;
-    uint16_t field_398e;
-    uint16_t field_3990;
-    uint16_t field_3992;
+    /* Modulation-wheel curve, entries 0..35 of 128: MIDI CC value for (~raw) >> 1; entries 36..127 continue in extensions/extension_data.s */
+    uint8_t ENCODER_LUT_MODWHEEL[36];
 } naka_extension_device_t;
 
 #define SELF(field) \
@@ -6785,17 +6775,11 @@ const naka_extension_device_t naka_extension_device_data
         0x00000000,
     },
 
-    .field_3854 = 0x001C,
-
-    .pad_234 = { 0 },
-
-    .field_3858 = 0x001D,
-
-    .field_385a = 0x0F0F,
-
-    .field_385c = 0x001E,
-
-    .pad_235 = { 0 },
+    .PanelInput_PedalRecordDefaults = {
+        { 0x1C, 0x00, 0x00, 0x00 },
+        { 0x1D, 0x00, 0x0F, 0x0F },
+        { 0x1E, 0x00, 0x00, 0x00 },
+    },
 
     .EffectMode_DispatchTable = {
         NAKA_ADDR(PanelInput_InitPedalRecords),
@@ -6850,41 +6834,11 @@ const naka_extension_device_t naka_extension_device_data
         NAKA_ADDR(Encoder_PassthroughIdentity),
     },
 
-    .field_3970 = 0x0200,
-
-    .field_3972 = 0x0403,
-
-    .field_3974 = 0x0605,
-
-    .field_3976 = 0x0706,
-
-    .field_3978 = 0x0908,
-
-    .field_397a = 0x0B0A,
-
-    .field_397c = 0x0D0C,
-
-    .field_397e = 0x0E0E,
-
-    .field_3980 = 0x100F,
-
-    .field_3982 = 0x1211,
-
-    .field_3984 = 0x1413,
-
-    .field_3986 = 0x1515,
-
-    .field_3988 = 0x1716,
-
-    .field_398a = 0x1918,
-
-    .field_398c = 0x1B1A,
-
-    .field_398e = 0x1D1C,
-
-    .field_3990 = 0x1E1D,
-
-    .field_3992 = 0x201F,
+    .ENCODER_LUT_MODWHEEL = {
+        0x00, 0x02, 0x03, 0x04, 0x05, 0x06, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0E,
+        0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D,
+        0x1D, 0x1E, 0x1F, 0x20,
+    },
 
 };
 

@@ -35,7 +35,7 @@ extern const char NakaStr_Chara2Fnt;
 extern const char NakaStr_Chara1Fnt;
 extern const char NakaData_RomEnd;
 extern const char MidiParam_PanelCfgTable;
-extern const char Midi_PartToChMappingTable;
+extern const char PsMixer_DefaultGridPartRows;
 extern const char MixerPartTable_Start;
 extern const char NakaColor_Palette1;
 extern const char NakaColor_Palette10;
@@ -66,7 +66,7 @@ extern const char NakaInst_CHARA5W;
 extern const char NakaInst_CHARA6;
 extern const char NakaInst_CHORD;
 extern const char NakaInst_CONTROL;
-extern const char NakaInst_CharaList_Pad;
+extern const char NakaStr_FontFileBlank;
 extern const char NakaInst_DRUM_E9D8E8;
 extern const char NakaInst_FADE_IN_OUT_SETTING;
 extern const char NakaInst_LEFT_E9D99C;
@@ -94,7 +94,7 @@ extern const char NakaInst_chara1w_fnt;
 extern const char NakaInst_chara2w_fnt;
 extern const char NakaInst_chara5w_fnt;
 extern const char Naka_PresentationRootState;
-extern const char Naka_ReverbScreen_EmptyStr;
+extern const char Kubo_FunctionNameTable_408_EndName;
 extern const char NoteNameStr_Table_1;
 extern const char NoteNameStr_Table_2;
 extern const char NoteNameStr_Table_3;
@@ -168,11 +168,11 @@ extern const char SeqChan_ByteBlockD;
 extern const char SeqChan_ByteBlockE;
 extern const char SeqChan_ByteBlockF;
 extern const char SeqChan_InitChannelState;
-extern const char SeqChan_Map_10ch;
+extern const char EditSw_SplitMap10;
 extern const char SeqChan_Map_2ch;
-extern const char SeqChan_Map_4ch;
-extern const char SeqChan_Map_6ch;
-extern const char SeqChan_Map_8ch;
+extern const char EditSw_PageMap4;
+extern const char VariScreen_EditSwLayout6;
+extern const char VariScreen_EditSwLayout8;
 extern const char SeqChan_ProcessEventArg0;
 extern const char SeqChan_ProcessEventArg1;
 extern const char SeqChan_ReadNextFromLoop;
@@ -3581,7 +3581,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_44 = { 0 },
 
-    .Naka_ReverbScreen_EmptyStr_ptr = NAKA_ADDR(Naka_ReverbScreen_EmptyStr),
+    .Naka_ReverbScreen_EmptyStr_ptr = NAKA_ADDR(Kubo_FunctionNameTable_408_EndName),
 
     .Reverb_TtlScreen_Window = NAKA_NONE,
 
@@ -5841,7 +5841,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .MidiPart_ConfigNameTable = {
         NAKA_ADDR(MidiParam_PanelCfgTable),
-        NAKA_ADDR(Midi_PartToChMappingTable),
+        NAKA_ADDR(PsMixer_DefaultGridPartRows),
         NAKA_ADDR(PartName6_Right1),
         NAKA_ADDR(PartName6_Right2),
         NAKA_ADDR(PartName6_Left),
@@ -6854,7 +6854,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
         NAKA_ADDR(NakaInst_chara1w_fnt),
         NAKA_ADDR(NakaInst_chara2w_fnt),
         NAKA_ADDR(NakaInst_chara5w_fnt),
-        NAKA_ADDR(NakaInst_CharaList_Pad),
+        NAKA_ADDR(NakaStr_FontFileBlank),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -7146,10 +7146,10 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
         NAKA_ADDR(NakaColor_PaletteBlank),
         NAKA_ADDR(NakaColor_PaletteBlank),
         NAKA_ADDR(SeqChan_Map_2ch),
-        NAKA_ADDR(SeqChan_Map_4ch),
-        NAKA_ADDR(SeqChan_Map_6ch),
-        NAKA_ADDR(SeqChan_Map_8ch),
-        NAKA_ADDR(SeqChan_Map_10ch),
+        NAKA_ADDR(EditSw_PageMap4),
+        NAKA_ADDR(VariScreen_EditSwLayout6),
+        NAKA_ADDR(VariScreen_EditSwLayout8),
+        NAKA_ADDR(EditSw_SplitMap10),
         NAKA_ADDR(SeqChanContainer_ChordTypeRef_A),
         NAKA_ADDR(SeqChanContainer_ChordTypeRef_A),
         NAKA_ADDR(SeqChanContainer_ChordTypeRef_A),

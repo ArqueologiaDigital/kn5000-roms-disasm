@@ -1251,13 +1251,11 @@ InitializeCheap_PtrTable_5:
 	.long NakaWidget_DiskSmfDirectPlay_80_Line_Name
 	.long NakaWidget_DiskSmfDirectPlay_81_Label_Name
 	.long NakaWidget_DiskSmfDirectPlay_82_Label_Name
-	.long InitializeCheap_PtrTable_5_EndName
-; [nakarest] naka_disk_menu_file_io+0x65fc  +0x65fc..+0x65fe (0xea79c8, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xea79c8 not derived; readers below
-; [nakarest] Readers: source references InitializeCheap_PtrTable_5
-; [nakarest] (ui_widgets/disk_menu_file_io_screens.s: `.long 0x00ea79c8`); 1 data word in
-; [nakarest] InitializeCheap_PtrTable_5 (at 0xea79c4).
-InitializeCheap_PtrTable_5_EndName:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x65FC, 0x2
+	.long Cheap_ResNameTable_36C_EndName
+; Cheap_ResNameTable_36C_EndName -- 2 x char: "" + 0xFF fill, end-of-table name of ResName slot 0x36C
+; Pointer [83] of Cheap_ResNameTable_36C, one past the 83 entries InitializeCheap registers (RegObjTabl ... 0x53);
+; Cheap_ResNameTable_36B ends the same way (21 entries + a 22nd pointer to "").
+Cheap_ResNameTable_36C_EndName:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x65FC, 0x2
 ; [nakarest] naka_disk_menu_file_io+0x65fe  +0x65fe..+0x66fe (0xea79ca, 256 B)
 ; [nakarest] name strings, entries 0-82 of ResName slot 0x36c (table 0xea7878, 83 entries,
 ; [nakarest] InitializeCheap) (names for Viewable slot 0x6c): "", "", "", "", "", "", ....

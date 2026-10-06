@@ -54,39 +54,55 @@ NakaInst_iduRoot:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14, 0x8
 ; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb78a8, 0xeb78b4), which is read
 ; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaInst_False_EB71DA:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1C, 0x2E
-; [nakarest] NakaInst_pSword_EmptyStr  +0x4a..+0x4c (0xeb7208, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xeb7208 not derived; readers below
-; [nakarest] Readers: 1 data word in NakaInst_False_EB71DA (at 0xeb7200).
+; NakaInst_pSword_EmptyStr -- 2 x char: "" + 0xFF fill, name of the {"", 0} end entry of the pSword enum table
+; That table (0xEB7200, inside NakaInst_False_EB71DA) is +8 of the pSwordProc SupportClass record in
+; ExitWindow_OK_Data_2 (count 0); CommonIDProc (ui/ui_widget_defs.s) stops on this empty name.
 NakaInst_pSword_EmptyStr:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4A, 0x2
-; [nakarest] NakaInst_pUword_FormatData  +0x4c..+0x60 (0xeb720a, 20 B)
-; [nakarest] purpose not established: layout of 20 B at 0xeb720a not derived; readers below
-; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb78c0, 0xeb78cc), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
-NakaInst_pUword_FormatData:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4C, 0x14
-; [nakarest] NakaInst_pUchar_FormatData  +0x60..+0x72 (0xeb721e, 18 B)
-; [nakarest] purpose not established: layout of 18 B at 0xeb721e not derived; readers below
-; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb78d8, 0xeb78e4), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
-NakaInst_pUchar_FormatData:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x60, 0x12
-; [nakarest] NakaInst_pSlong_EmptyStr  +0x72..+0x74 (0xeb7230, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xeb7230 not derived; readers below
-; [nakarest] Readers: 1 data word in NakaInst_pUchar_FormatData (at 0xeb7228).
-NakaInst_pSlong_EmptyStr:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x72, 0x2
-; [nakarest] NakaInst_pUlong_FormatData  +0x74..+0x88 (0xeb7232, 20 B)
-; [nakarest] purpose not established: layout of 20 B at 0xeb7232 not derived; readers below
-; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb78f0, 0xeb78fc), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
-NakaInst_pUlong_FormatData:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x74, 0x14
+; NakaInst_pUword_EnumTable -- 1 x {char *name, u32 value}: the enum table of property type "pUword", holding only its {"", 0} terminator.
+; Pointed to by word +8 of SupportClass descriptor 46 (ExitWindow_OK_Data_2, slot 0x260); CommonIDProc
+; (ui/ui_widget_defs.s) walks such tables in 8-byte steps until name[0] == 0, but this type's count word (+4) is 0.
+NakaInst_pUword_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4C, 0x8
+; NakaInst_pUword_EmptyStr -- 2 x char: "" plus a 0xFF alignment pad, the name of the pUword enum table's terminator.
+NakaInst_pUword_EmptyStr:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x54, 0x2
+; NakaInst_pSchar_EnumTable -- 1 x {char *name, u32 value}: the enum table of property type "pSchar", holding only its {"", 0} terminator.
+; Pointed to by word +8 of SupportClass descriptor 47 (ExitWindow_OK_Data_2, slot 0x260); CommonIDProc
+; (ui/ui_widget_defs.s) walks such tables in 8-byte steps until name[0] == 0, but this type's count word (+4) is 0.
+NakaInst_pSchar_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x56, 0x8
+; NakaInst_pSchar_EmptyStr -- 2 x char: "" plus a 0xFF alignment pad, the name of the pSchar enum table's terminator.
+NakaInst_pSchar_EmptyStr:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x5E, 0x2
+; SupportClass_PUcharValueNames -- 1 x {u32 end_name, s32 end_value, char end_text[2]}: empty value-name list of the pUcharProc property type
+; +8 of SupportClass record 48 (ExitWindow_OK_Data_2, 12 B/record) points here; its count (+4) is 0
+; list format read by CommonIDProc (ui/ui_widget_defs.s): 8-byte {name ptr, s32 value} entries ended
+; by an entry whose name is "" -- here only that end entry, then the "" it points at (00 FF)
+SupportClass_PUcharValueNames:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x60, 0xA
+; SupportClass_PSlongValueNames -- 1 x {u32 end_name, s32 end_value}: end entry of the pSlong property type's value-name list
+; +8 of SupportClass record 49 (ExitWindow_OK_Data_2) points here; name -> the "" right after (next slice)
+; list format read by CommonIDProc (ui/ui_widget_defs.s)
+SupportClass_PSlongValueNames:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x6A, 0x8
+; SupportClass_PSlongValueNamesEndText -- 1 x char[2]: "" + 0xFF pad, the end-entry name of pSlongProc's
+; empty value-name list (the 8-byte entry just before points here); CommonIDProc stops at an empty name
+SupportClass_PSlongValueNamesEndText:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x72, 0x2
+; NakaInst_pUlong_EnumTable -- 1 x {char *name; int32 value}: empty pUlong enum, only the {"", 0} end entry
+; +8 of the pUlongProc SupportClass record (0xEB78E8) in ExitWindow_OK_Data_2, whose count is 0;
+; CommonIDProc (ui/ui_widget_defs.s) stops at once on the empty name.
+NakaInst_pUlong_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x74, 0x8
+; NakaInst_pUlong_EmptyStr -- 2 x char: "" + 0xFF fill, name of the end entry of NakaInst_pUlong_EnumTable
+NakaInst_pUlong_EmptyStr:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x7C, 0x2
+; NakaInst_WindowID_EnumTable -- 1 x {char *name; int32 value}: empty WindowID enum, only the {"", 0} end entry
+; +8 of the WindowIDProc SupportClass record (0xEB78F4) in ExitWindow_OK_Data_2, whose count is 0;
+; CommonIDProc (ui/ui_widget_defs.s) stops at once on the empty name.
+NakaInst_WindowID_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x7E, 0x8
+; NakaInst_WindowID_EmptyStr -- 2 x char: "" + 0xFF fill, name of the end entry of NakaInst_WindowID_EnumTable
+NakaInst_WindowID_EmptyStr:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x86, 0x2
 ; [nakarest] NakaInst_PartID_EnumTable  +0x88..+0x33a (0xeb7246, 690 B)
 ; [nakarest] purpose not established: layout of 690 B at 0xeb7246 not derived; readers below
 ; [nakarest] Readers: 2 data words in NakaInst_WindowID_Cont (at 0xeb7908, 0xeb7914), which is
 ; [nakarest] read by FileIO_ByteBlock_DemoProc1_Skip16 (demo/file_demo_proc.s: `.long
 ; [nakarest] NakaInst_WindowID_Cont`).
 NakaInst_PartID_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x88, 0x2B2
-; [nakarest] NakaInst_TrackID_EmptyStr  +0x33a..+0x33c (0xeb74f8, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xeb74f8 not derived; readers below
-; [nakarest] Readers: 1 data word in NakaInst_PartID_EnumTable (at 0xeb74f0).
-NakaInst_TrackID_EmptyStr:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x33A, 0x2
+; TrackIDProc_NameListEnd -- 2 x char: "" + 0xFF fill, the name of record 17 (the terminator) of TrackIDProc's
+; value-name list {TR_Track1..TR_Track16, TR_All (0xFF)}; CommonIDProc stops at the record whose name starts with 0.
+TrackIDProc_NameListEnd:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x33A, 0x2
 ; [nakarest] NakaInst_TR_All  +0x33c..+0x344 (0xeb74fa, 8 B)
 ; [nakarest] Text (8 B at 0xeb74fa), first string "TR_All"; no registered NAKA table points into
 ; [nakarest] it; reached through 1 data word in NakaInst_PartID_EnumTable (at 0xeb74e8).
@@ -161,9 +177,8 @@ NakaInst_TR_Track1:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x3E8, 
 ; [nakarest] FileIO_ByteBlock_DemoProc1_Skip16 (demo/file_demo_proc.s: `.long
 ; [nakarest] NakaInst_WindowID_Cont`).
 NakaInst_IntTimeID_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x3F2, 0x70
-; [nakarest] NakaInst_IntTimeID_EmptyStr  +0x462..+0x464 (0xeb7620, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xeb7620 not derived; readers below
-; [nakarest] Readers: 1 data word in NakaInst_IntTimeID_EnumTable (at 0xeb7618).
+; NakaInst_IntTimeID_EmptyStr -- 2 x char: "" plus a 0xFF alignment pad, the name of the {"", 0} terminator of
+; NakaInst_IntTimeID_EnumTable (13 values IT_Off..IT_10Sec); CommonIDProc stops its walk at this empty name.
 NakaInst_IntTimeID_EmptyStr:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x462, 0x2
 ; [nakarest] NakaInst_IT_10Sec  +0x464..+0x46e (0xeb7622, 10 B)
 ; [nakarest] Text (10 B at 0xeb7622), first string "IT_10Sec"; no registered NAKA table points
@@ -242,22 +257,28 @@ WidgetStyleDataTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x774
 ; PanelMemory_RecallRecords and the other panel-memory readers in ui/bitmap_out_routines.s; typed in
 ; ui_widgets/naka_style_bitmaps.c (scripts/converters/panel_memory_slot_table_retype.py).
 PanelMemory_SlotAddresses:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x784, 0x144
-; [nakarest] naka_style_bitmaps+0x8c8  +0x8c8..+0x8d2 (0xeb7a86, 10 B)
-; [nakarest] purpose not established: layout of 10 B at 0xeb7a86 not derived; readers below
-; [nakarest] Readers: source references BitMapOut_DeltaEncode_Type90Final
-; [nakarest] (ui/bitmap_out_routines.s: `ld xde, BitMapOut_DeltaEncode_Type90Final_Data`).
-BitMapOut_DeltaEncode_Type90Final_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8C8, 0xA
-; [nakarest] naka_style_bitmaps+0x8d2  +0x8d2..+0xa1c (0xeb7a90, 330 B)
-; [nakarest] purpose not established: layout of 330 B at 0xeb7a90 not derived; readers below
-; [nakarest] Readers: source references BitMapOut_DeltaEncode_Type90Final
-; [nakarest] (ui/bitmap_out_routines.s: `lda xhl, (BitMapOut_DeltaEncode_Type90Final_Data_2:24)`).
-BitMapOut_DeltaEncode_Type90Final_Data_2:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8D2, 0x138
+; PanelMemory_PartResolveTable -- 1 x {u32, u32, u8, u8}: the first 10 bytes of record 0 of a 23 x 14-byte table
+; Record: {u32 ptr to byte 0 and u32 ptr to byte 1 of a 26-byte part record in the live panel stream (RAM 0xF9B6 +
+; 26*i), u8 code (0..20, 0x17, 0x48), u8 0, u32 dest table}.  BitMapOut_DeltaEncode_Type90Final passes {*p0, *p1 & 0x7F,
+; code} to SndParam_ResolveVoiceEntry and stores result[1] at dest[result[0]].  Rest of the table: the _Data_2 label (= this + 10).
+PanelMemory_PartResolveTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8C8, 0xA
+; PanelTlv_PartResolveRecs_CompanionCol -- 1 x uint32_t: companion-record pointer of part-resolve record 0 (RAM 0xFDDA)
+; Base of the companion_ptr column of the 23 x 14-byte records that start 10 B earlier at
+; PanelMemory_PartResolveTable. BitMapOut_DeltaEncode_Type90Final (ui/bitmap_out_routines.s)
+; adds 14*i, loads the pointer and stores the byte SndParam_ResolveVoiceEntry returned at companion[ret.offset].
+PanelTlv_PartResolveRecs_CompanionCol:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8D2, 0x4
+; PanelTlv_PartResolveRecsTail -- 22 x 14-byte struct: part-resolve records 1-22 (tags 0x01-0x14, 0x17, 0x48)
+; {u32 &payload[0], u32 &payload[1], u8 tag, u8 0, u32 &companion}; payload = 0xF9B6 + 26*tag
+; (PanelTlv_PayloadByTag), companion = 0xFDDA + 20*k (PanelTlv_CompanionByPart), 0xFF92 for 0x48.
+; Read by BitMapOut_DeltaEncode_Type90Final (ui/bitmap_out_routines.s), same job as PanelTlv_ResolvePartCompanions.
+PanelTlv_PartResolveRecsTail:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8D6, 0x134
 BitMapOut_UpdateDisplayWidget_Str_Non_Panel_Memory:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA0A, 0x12	; "Non Panel Memory"
-; [nakarest] naka_style_bitmaps+0xa1c  +0xa1c..+0xad6 (0xeb7bda, 186 B)
-; [nakarest] purpose not established: layout of 186 B at 0xeb7bda not derived; readers below
-; [nakarest] Readers: source references EffectMode_UpdateBitFlags_Loop (ui/ui_mode_handlers.s:
-; [nakarest] `ld xix, EffectMode_UpdateBitFlags_CheckCount_Data`).
-EffectMode_UpdateBitFlags_CheckCount_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA1C, 0xBA
+; EffectMode_PresetFieldMap -- 31 x {u32 block_offset, u8 byte_offset, u8 byte_count}: preset field map, end = block_offset 0xFF
+; EffectMode_UpdateBitFlags walks it (index*6) and copies byte_count bytes, in order, from the style
+; record data at *(0x8D60) (EffectMode_ClampAndLookupPreset: record + record[+4]) to
+; 0x3C2C4 + block_offset + byte_offset -- 0x3C2C4 is the backup of the panel block 0xF9A0..0xFD5F
+; (EffectMode_BackupParamBlock), so block_offset is relative to 0xF9A0
+EffectMode_PresetFieldMap:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA1C, 0xBA
 ; [nakarest] naka_style_bitmaps+0xad6  +0xad6..+0xae2 (0xeb7c94, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeb7c94 not derived; readers below
 ; [nakarest] Readers: source references OneTchFUNC (ui/bitmap_out_routines.s: `add xde,
@@ -280,38 +301,33 @@ StyleNameOverride_C2C5:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA
 ; StyleName_FindOverride_Default.  Typed in ui_widgets/naka_style_bitmaps.c
 ; (scripts/converters/style_name_override_retype.py).
 StyleNameOverride_Default:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC6E, 0x5A
-; [nakarest] naka_style_bitmaps+0xcc8  +0xcc8..+0xcce (0xeb7e86, 6 B)
-; [nakarest] purpose not established: layout of 6 B at 0xeb7e86 not derived; readers below
-; [nakarest] Readers: source references EffectMode_DiagSeq_AnimFrame (ui/ui_mode_handlers.s:
-; [nakarest] `lda xbc, (EffectMode_DiagSeq_AnimFrame_Data:24)`).
-EffectMode_DiagSeq_AnimFrame_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCC8, 0x6
+; EffectMode_DiagSeq_TitleCycle -- 6 x u8: step -> title number posted with EVT_INTERRUPT_TITLE (title id = TITLE_PS + n).
+; EffectMode_DiagSeq_AnimFrame (ui/ui_mode_handlers.s) indexes it with the step at RAM 0x8D7A, which runs 1..5 and wraps
+; to 1, every 30 calls: TITLE_NORMAL, TITLE_SDMENU, TITLE_CMMENU, TITLE_PMNAME, TITLE_SQEASYREC (entry 0 = TITLE_NORMAL).
+EffectMode_DiagSeq_TitleCycle:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCC8, 0x6
 ; PanelButton_LedMap -- [22 panel segments][8 button bits] x {LED row, LED pattern}.  EffectMode_MidiSetLEDs
 ; reads entry [segment][lowest set bit of the change mask] and calls Set_LEDs(row, pattern or 0); the row
 ; indexes Protocol_values_for_LED_rows.  {0x0E, 0x0F} (row 14, the four START/STOP beat LEDs) fills the
 ; buttons that have no LED of their own.  Typed in ui_widgets/naka_style_bitmaps.c
 ; (scripts/converters/panel_led_map_retype.py).
 PanelButton_LedMap:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCCE, 0x160
-; [nakarest] naka_style_bitmaps+0xe2e  +0xe2e..+0xe4e (0xeb7fec, 32 B)
-; [nakarest] purpose not established: layout of 32 B at 0xeb7fec not derived; readers below
-; [nakarest] Readers: source references EffectMode_SetAllLEDs_Loop (ui/ui_mode_handlers.s: `lda
-; [nakarest] xbc, (EffectMode_SetAllLEDs_SetOne_Data:24)`), LED_SetAll_BlankLoop
-; [nakarest] (ui/ui_mode_handlers.s: `lda xbc, (EffectMode_SetAllLEDs_SetOne_Data:24)`).
-EffectMode_SetAllLEDs_SetOne_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE2E, 0x20
+; LED_AllOnPatternByRow -- 16 x uint16_t: (LED row << 8) | pattern with every LED of that row on, 0xFFFF-terminated
+; EffectMode_SetAllLEDs (ui/ui_mode_handlers.s) calls Set_LEDs(row = word >> 8, C = low byte) per entry;
+; LED_SetAll_WithBlank walks the same rows with pattern 0. Rows 3/5/11/12/13/14 have 6/1/4/2/4/4 LEDs.
+LED_AllOnPatternByRow:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE2E, 0x20
 ; [nakarest] naka_style_bitmaps+0xe4e  +0xe4e..+0xe70 (0xeb800c, 34 B)
 ; [nakarest] purpose not established: layout of 34 B at 0xeb800c not derived; readers below
 ; [nakarest] Readers: source references RhythmRomTest_Compare (ui/ui_mode_handlers.s: `lda xix,
 ; [nakarest] (RhythmRomTest_Compare_Data:24)`).
 RhythmRomTest_Compare_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE4E, 0x22
-; [nakarest] naka_style_bitmaps+0xe70  +0xe70..+0xe7a (0xeb802e, 10 B)
-; [nakarest] purpose not established: layout of 10 B at 0xeb802e not derived; readers below
-; [nakarest] Readers: source references DramTest_IC10IC9_NextChip (ui/ui_mode_handlers.s: `lda
-; [nakarest] xbc, (DramTest_IC10IC9_NextChip_Data:24)`).
-DramTest_IC10IC9_NextChip_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE70, 0xA
-; [nakarest] naka_style_bitmaps+0xe7a  +0xe7a..+0xe84 (0xeb8038, 10 B)
-; [nakarest] purpose not established: layout of 10 B at 0xeb8038 not derived; readers below
-; [nakarest] Readers: source references SramTest_IC21_Loop (ui/ui_mode_handlers.s: `lda xde,
-; [nakarest] (Test_SRAM_IC21_Data:24)`).
-Test_SRAM_IC21_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE7A, 0xA
+; DramTest_IC10IC9_Regions -- 1 x {u32 start, u32 length, u8 low_half_fail_bit, u8 high_half_fail_bit}: start 0x4000, length 0x80000.
+; Test_DRAM_IC10_and_IC9 (ui/ui_mode_handlers.s) writes 0x5A5A5A5A then 0xA5A5A5A5 to each 32-bit word, length/8 iterations
+; of two words, and ORs bit +8 into its result when the low 16-bit half reads back wrong, bit +9 for the high half.
+DramTest_IC10IC9_Regions:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE70, 0xA
+; SramTest_IC21Regions -- 1 x {u32 base, u32 size, u8 fail bits[2]}: the region Test_SRAM_IC21 checks
+; Per byte pair: 0x5A into the first byte, 0xA5 into the second, each compared and restored; a miscompare ORs fail_mask[0] (0x04) into
+; the result passed on from Test_DRAM_IC10_and_IC9, whose own table has the same 10-byte shape (bits 0x01/0x02).
+SramTest_IC21Regions:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE7A, 0xA
 ; [nakarest] naka_style_bitmaps+0xe84  +0xe84..+0xe90 (0xeb8042, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeb8042 not derived; readers below
 ; [nakarest] Readers: source references TEST2FUNC (ui/ui_mode_handlers.s: `add xde,
@@ -3443,61 +3459,45 @@ NakaInst_Dance_Pop:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BB4
 ; [nakarest] NakaInst_Rock_Pop  +0x18bc6..+0x18bea (0xecfd84, 36 B)
 ; [nakarest] group name strings (16 characters): "Rock & Pop", "Easy Listening".
 NakaInst_Rock_Pop:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BC6, 0x24
-; [nakarest] naka_style_bitmaps+0x18bea  +0x18bea..+0x18bee (0xecfda8, 4 B)
-; [nakarest] purpose not established: layout of 4 B at 0xecfda8 not derived; readers below
-; [nakarest] Readers: source references RVari_ConfirmF_CheckSelected (ui/rvari_routines.s: `lda
-; [nakarest] xbc, (RVari_Select_Data:24)`), RVari_EnumNotifyF_CheckSelected
-; [nakarest] (ui/rvari_routines.s: `lda xbc, (RVari_Select_Data:24)`), RVari_Select
-; [nakarest] (ui/ui_mode_handlers.s: `lda xbc, (RVari_Select_Data:24)`),
-; [nakarest] RVari_Select_CheckSameBank (ui/ui_mode_handlers.s: `lda xbc,
-; [nakarest] (RVari_Select_Data:24)`).
-RVari_Select_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BEA, 0x4
-; [nakarest] naka_style_bitmaps+0x18bee  +0x18bee..+0x18bf2 (0xecfdac, 4 B)
-; [nakarest] purpose not established: layout of 4 B at 0xecfdac not derived; readers below
-; [nakarest] Readers: source references RVari_Confirm_TypeF_SubItems (ui/rvari_routines.s: `lda
-; [nakarest] xbc, (RVari_Select_CheckSameBank_Data:24)`), RVari_Select_CheckSameBank
-; [nakarest] (ui/ui_mode_handlers.s: `lda xbc, (RVari_Select_CheckSameBank_Data:24)`).
-RVari_Select_CheckSameBank_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BEE, 0x4
-; [nakarest] naka_style_bitmaps+0x18bf2  +0x18bf2..+0x18bf6 (0xecfdb0, 4 B)
-; [nakarest] purpose not established: layout of 4 B at 0xecfdb0 not derived; readers below
-; [nakarest] Readers: source references MsaMode_Select (ui/ui_mode_handlers.s: `lda xbc,
-; [nakarest] (MsaMode_Select_Data:24)`), MsaMode_Select_DrawHighlight1
-; [nakarest] (ui/ui_mode_handlers.s: `lda xbc, (MsaMode_Select_Data:24)`).
-MsaMode_Select_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BF2, 0x4
+; RVari_SlotEditSw -- 4 x u8: slot 0..3 -> edit-switch number 9..12 (right display column, rows 2-5).
+; RVari_Select / RVari_ConfirmF / RVari_EnumNotifyF (ui/ui_mode_handlers.s, ui/rvari_routines.s) take the slot as the
+; selected value mod 4 (`divs wa, 4` leaves the remainder in QWA) and pass entry [slot] to DrawEditSw / GetEditSwPoint.
+RVari_SlotEditSw:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BEA, 0x4
+; RVari_SubItemEditSw -- 4 x uint8_t: edit-switch id for sub-items 0-2 (0x89, 0x8A, 0x8B = left rows 1-3), then 0xFF
+; RVari_Confirm_TypeF_SubItems (ui/rvari_routines.s, loop 0..2) passes the byte to DrawEditSw and GetEditSwPoint
+; and draws the item's string beside it; RVari_Select_CheckSameBank (ui/ui_mode_handlers.s) uses value/4 as the index.
+RVari_SubItemEditSw:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BEE, 0x4
+; MsaMode_EditSwByValue -- 4 x uint8_t: edit switch for each value 0-3 of LSW 0x401 (value 0 shares 0x89)
+; MsaMode_Select (ui/ui_mode_handlers.s) indexes it with the old and new value words of the view
+; instance (+48, +44) and passes the byte to GetEditSwPoint to place the highlight frames
+; MsaMode_OK is the inverse: edit switch 0x89/0x8A/0x8B -> MainLswPut(0x401, 1/2/3)
+MsaMode_EditSwByValue:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BF2, 0x4
 ; [nakarest] naka_style_bitmaps+0x18bf6  +0x18bf6..+0x18bf8 (0xecfdb4, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xecfdb4 not derived; readers below
 ; [nakarest] Readers: source references PmemMode_Select (ui/ui_mode_handlers.s: `lda xbc,
 ; [nakarest] (PmemMode_Select_Data:24)`), PmemMode_Select_DrawHighlight1
 ; [nakarest] (ui/ui_mode_handlers.s: `lda xbc, (PmemMode_Select_Data:24)`).
 PmemMode_Select_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BF6, 0x2
-; [nakarest] SeqChan_Map_10ch  +0x18bf8..+0x18c02 (0xecfdb6, 10 B)
-; [nakarest] purpose not established: layout of 10 B at 0xecfdb6 not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long SeqChan_Map_10ch`),
-; [nakarest] PmBank_BankChanged_Lookup (display/graphics_text_vga.s: `lda xbc,
-; [nakarest] (SeqChan_Map_10ch:24)`), PmBank_Select (display/graphics_text_vga.s: `lda xbc,
-; [nakarest] (SeqChan_Map_10ch:24)`), PmBank_Select_DrawFirstRow (display/graphics_text_vga.s:
-; [nakarest] `lda xbc, (SeqChan_Map_10ch:24)`); 1 data word in Naka_DrawbarReg_Table (at
-; [nakarest] 0xeef5c8).
-SeqChan_Map_10ch:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BF8, 0xA
-; [nakarest] SeqChan_Map_8ch  +0x18c02..+0x18c0a (0xecfdc0, 8 B)
-; [nakarest] purpose not established: layout of 8 B at 0xecfdc0 not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long SeqChan_Map_8ch`); 1 data word
-; [nakarest] in Naka_DrawbarReg_Table (at 0xeef5c4).
-SeqChan_Map_8ch:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C02, 0x8
-; [nakarest] SeqChan_Map_6ch  +0x18c0a..+0x18c10 (0xecfdc8, 6 B)
-; [nakarest] purpose not established: layout of 6 B at 0xecfdc8 not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long SeqChan_Map_6ch`); 1 data word
-; [nakarest] in Naka_DrawbarReg_Table (at 0xeef5c0).
-SeqChan_Map_6ch:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C0A, 0x6
-; [nakarest] SeqChan_Map_4ch  +0x18c10..+0x18c14 (0xecfdce, 4 B)
-; [nakarest] purpose not established: layout of 4 B at 0xecfdce not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long SeqChan_Map_4ch`); 1 data word
-; [nakarest] in Naka_DrawbarReg_Table (at 0xeef5bc).
-SeqChan_Map_4ch:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C10, 0x4
+; EditSw_SplitMap10 -- 10 x u8: item index -> edit-switch number for a 10-item list split over the two display button columns.
+; Items 0-4 -> left buttons 0x88-0x8C (x 0), items 5-9 -> right buttons 8-12 (x 319), top to bottom (GetEditSwPoint).
+; PmBank_Select / PmBank_BankChanged_Lookup (display/graphics_text_vga.s) map the PM bank number with it before
+; GetEditSwPoint / DrawEditSw; it is also entry 16 of the 2/4/6/8/10-item map list in Naka_DrawbarReg_Table.
+EditSw_SplitMap10:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BF8, 0xA
+; VariScreen_EditSwLayout8 -- 8 x uint8_t: edit-switch id of each item of a 8-item list
+; 0x88+r = left-column switch row r (x 0), 0x08+r = right-column row r (x 319), per GetEditSwPoint.
+; Not read by name: Naka_DrawbarReg_Table entry 15 points here, which Boot_InitWorkRAM copies to RAM 0x3F1E4;
+; the RVari_* and VariScreen_* drawers index the pointer array at RAM 0x3F214 by (item count / 2) * 4.
+VariScreen_EditSwLayout8:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C02, 0x8
+; VariScreen_EditSwLayout6 -- 6 x uint8_t: edit-switch id of each item of a 6-item list
+; 0x88+r = left-column switch row r (x 0), 0x08+r = right-column row r (x 319), per GetEditSwPoint.
+; Not read by name: Naka_DrawbarReg_Table entry 14 points here, which Boot_InitWorkRAM copies to RAM 0x3F1E4;
+; the RVari_* and VariScreen_* drawers index the pointer array at RAM 0x3F214 by (item count / 2) * 4.
+VariScreen_EditSwLayout6:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C0A, 0x6
+; EditSw_PageMap4 -- 4 x u8: LCD edit-switch code for each item of a page of 3-4 items
+; 0x88+n = left column switch n (x 0), 0x08+n = right column switch n (x 0x13F) in GetEditSwPoint.
+; Entry 13 of Naka_DrawbarReg_Table, copied with the work-RAM image to RAM 0x3F218; the RVari screens pick
+; map[(visible items - 1) >> 1] from RAM 0x3F214 and index it with the item's position mod 10.
+EditSw_PageMap4:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C10, 0x4
 ; [nakarest] SeqChan_Map_2ch  +0x18c14..+0x18c16 (0xecfdd2, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xecfdd2 not derived; readers below
 ; [nakarest] Readers: source references Naka_DrawbarReg_Table

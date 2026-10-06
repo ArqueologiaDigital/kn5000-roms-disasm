@@ -965,10 +965,10 @@ NakaInst_CHARA2:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x6
 ; [nakarest] Text (8 B at 0xeadae0), first string "CHARA1"; no registered NAKA table points into
 ; [nakarest] it; reached through 1 data word in Naka_DrawbarDisplay_Table1 (at 0xeef350).
 NakaInst_CHARA1:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x670, 0x8
-; [nakarest] NakaInst_CharaList_Pad  +0x678..+0x67a (0xeadae8, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xeadae8 not derived; readers below
-; [nakarest] Readers: 1 data word in Naka_DrawbarDisplay_Table2 (at 0xeef3f8).
-NakaInst_CharaList_Pad:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x678, 0x2
+; NakaStr_FontFileBlank -- 1 x char[2]: "" + 0xFF pad, entry 10 of the font file-name pointer table
+; (Naka_DrawbarDisplay_Table2, copied to RAM 0x3F02C by Boot_InitWorkRAM; entries 0-9 are chara*.fnt);
+; parallel to entry 10 of the font-name table at RAM 0x3EFAC that FontIDProc reads (also "")
+NakaStr_FontFileBlank:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x678, 0x2
 ; [nakarest] NakaInst_chara5w_fnt  +0x67a..+0x686 (0xeadaea, 12 B)
 ; [nakarest] Text (12 B at 0xeadaea), first string "chara5w.fnt"; no registered NAKA table
 ; [nakarest] points into it; reached through 1 data word in Naka_DrawbarDisplay_Table2 (at
@@ -2699,10 +2699,9 @@ IconIDProc_PtrTable:	.incbin "includes/generated/naka_widget_names_charmap.bin",
 ; [nakarest] naka_widget_names_charmap+0x4700  +0x4700..+0x48cc (0xeb1b70, 460 B)
 ; [nakarest] 460 B at 0xeb1b70: entries 141-176 of IconIDProc_PtrTable (pointers), then 79 zero words (slots 177-255).  IconIDProc_PtrTable holds 177 pointers from 0xeb193c, then zero words; its readers index it from there.
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4700, 0x1CC
-; [nakarest] IconName_Empty  +0x48cc..+0x48ce (0xeb1d3c, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xeb1d3c not derived; readers below
-; [nakarest] Readers: 1 data word in IconIDProc_PtrTable (at
-; [nakarest] 0xeb1bfc).
+; IconName_Empty -- 2 x char: "" + 0xFF fill, the name pointed to by IconIDProc_PtrTable entry 176
+; IconIDProc reports 176 entries (IconIDProc_EntryCount) but its name search walks the pointer table to the NULL
+; after this entry, so "" is compared too.
 IconName_Empty:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x48CC, 0x2
 ; [nakarest] IconName_i173  +0x48ce..+0x48d4 (0xeb1d3e, 6 B)
 ; [nakarest] Text (6 B at 0xeb1d3e), first string "i173"; no registered NAKA table points into
@@ -4012,11 +4011,8 @@ IconBitmapNamePtrTable:
 ; [nakarest] naka_widget_names_charmap+0x4f00  +0x4f00..+0x5028 (0xeb2370, 296 B)
 ; [nakarest] 296 B at 0xeb2370: 74 zero words (slots 182-255).  IconBitmapNamePtrTable holds 177 pointers from 0xeb2098, then zero words; its readers index it from there.
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4F00, 0x128
-; [nakarest] IconBitmapName_Empty  +0x5028..+0x502a (0xeb2498, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xeb2498 not derived; readers below
-; [nakarest] Readers: source references IconBitmapNamePtrTable
-; [nakarest] (ui_widgets/widget_names_charmap.s: `.long IconBitmapName_Empty`); 1 data word in
-; [nakarest] IconBitmapNamePtrTable (at 0xeb2358).
+; IconBitmapName_Empty -- 2 x char: "" plus a 0xFF alignment pad, IconBitmapNamePtrTable[176], the last non-null entry;
+; IconIDProc_PtrTable[176] is "" too.  IconBitmapNamePtrTable has no reader in the ROM (development-time table).
 IconBitmapName_Empty:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5028, 0x2
 ; [nakarest] IconBitmapName_i173  +0x502a..+0x5034 (0xeb249a, 10 B)
 ; [nakarest] Text (10 B at 0xeb249a), first string "i173.bmp"; no registered NAKA table points

@@ -1102,7 +1102,8 @@ typedef struct __attribute__((packed)) {
 } naka_cls_HelpTtl_t;
 
 typedef struct __attribute__((packed)) {
-    char str_0[2];
+    /* "" (NUL + 0xFF pad): end name of Kubo's empty Function name table (slot 0x408) */
+    char Kubo_FunctionNameTable_408_EndName[2];
     /* element 0 of Viewable slot 0xA: TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t Reverb_TtlScreen;
     char Reverb_text[8];
@@ -3662,7 +3663,7 @@ _Static_assert(sizeof(naka_effects_seq_t) == 36540,
 const naka_effects_seq_t naka_effects_seq_data
     __attribute__((section(".text"), used)) = {
 
-    .str_0 = ALIGNED_STRING(""),
+    .Kubo_FunctionNameTable_408_EndName = "\x00\xFF",
 
     .Reverb_TtlScreen = {
         .class_ = 0x01600034,

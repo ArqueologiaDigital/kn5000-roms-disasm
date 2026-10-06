@@ -44,6 +44,215 @@ extern const char WidgetName_PtrBlock_I1;
  * parent Viewable; allsize 32.  Field names and type characters are the
  * class chain's own propname / propdata (see THE CLASS SYSTEM in
  * scripts/analysis/nakarest_objtab_map.py). */
+/* NakaInst_LineModeID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_FrameID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_pFunc_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_pProc_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_RectX1_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_RectY1_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_TitleID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_IconID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_NameValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_ConstFlagValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_SwordValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_UwordValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_PPropValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_PStringValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_RectX2ValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_RectY2ValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_BitmapIDValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_ApFuncIDValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_UcharValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_ScharValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_ClassIDValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_ScreenIDValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_POINTWValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_PointXValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_ViewIDValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_slong_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_ulong_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_EventID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_RECTW_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_PointY_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_String_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    uint32_t value;
+} NakaInst_String_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    uint32_t value;
+} NakaInst_PointY_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    uint32_t value;
+} NakaInst_RECTW_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    uint32_t value;
+} NakaInst_EventID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    uint32_t value;
+} NakaInst_ulong_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    uint32_t value;
+} NakaInst_slong_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name_ptr;
+    uint32_t end_value;
+    char end_name[2];
+} SupportClass_ViewIDValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name_ptr;
+    uint32_t end_value;
+    char end_name[2];
+} SupportClass_PointXValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name_ptr;
+    uint32_t end_value;
+    char end_name[2];
+} SupportClass_POINTWValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name_ptr;
+    uint32_t end_value;
+    char end_name[2];
+} SupportClass_ScreenIDValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name_ptr;
+    uint32_t end_value;
+    char end_name[2];
+} SupportClass_ClassIDValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name_ptr;
+    uint32_t end_value;
+    char end_name[2];
+} SupportClass_ScharValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name_ptr;
+    uint32_t end_value;
+    char end_name[2];
+} SupportClass_UcharValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name;
+    int32_t end_value;
+    char end_text[2];
+} SupportClass_ApFuncIDValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name;
+    int32_t end_value;
+    char end_text[2];
+} SupportClass_BitmapIDValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name;
+    int32_t end_value;
+    char end_text[2];
+} SupportClass_RectY2ValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name;
+    int32_t end_value;
+    char end_text[2];
+} SupportClass_RectX2ValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name;
+    int32_t end_value;
+    char end_text[2];
+} SupportClass_PStringValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name;
+    int32_t end_value;
+    char end_text[2];
+} SupportClass_PPropValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name;
+    int32_t end_value;
+    char end_text[2];
+} SupportClass_UwordValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name;
+    int32_t end_value;
+    char end_text[2];
+} SupportClass_SwordValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t allram_name;
+    int32_t allram_value;
+    uint32_t allrom_name;
+    int32_t allrom_value;
+    uint32_t end_name;
+    int32_t end_value;
+    char end_text[2];
+    char allrom_text[10];
+    char allram_text[10];
+} SupportClass_ConstFlagValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name;
+    int32_t end_value;
+    char end_text[2];
+} SupportClass_NameValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_IconID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_TitleID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_RectY1_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_RectX1_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_pProc_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_pFunc_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_FrameID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_LineModeID_EnumTable_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t class_;            /* +0 M */
     uint16_t super;             /* +4 [ */
@@ -647,24 +856,29 @@ typedef struct __attribute__((packed)) {
     uint8_t NakaColor_Palette10[256][4];
     /* NakaColor_PaletteBlank: a wallpaper palette, entries 10, 11 of the wallpaper-palette table Naka_DrawbarReg_Table (RAM 0x3F1E4 after Boot_InitWorkRAM), read by GetWallPaletteRGB.  256 x {3 colour bytes, 0}; the channel order was not traced. */
     uint8_t NakaColor_PaletteBlank[256][4];
-    uint32_t ptr_3ce0;
-    uint8_t pad_75[5];  /* zero padding */
-    uint16_t field_3ce9;
-    uint16_t field_3ceb;
-    uint8_t pad_76[6];  /* zero padding */
-    uint16_t field_3cf3;
-    uint16_t field_3cf5;
-    uint8_t pad_77[6];  /* zero padding */
-    uint16_t field_3cfd;
-    uint16_t field_3cff;
-    uint8_t pad_78[6];  /* zero padding */
-    uint16_t field_3d07;
-    uint16_t field_3d09;
-    uint8_t pad_79[6];  /* zero padding */
-    uint16_t field_3d11;
-    uint16_t field_3d13;
-    uint8_t pad_80[6];  /* zero padding */
-    uint16_t field_3d1b;
+    /* zero padding */
+    /* zero padding */
+    /* value-name list of SupportClass swordProc (entry 0, named-value count 0): only the end entry {end_text, 0}, end_text = "" + 0xFF pad (end_name points at it, +8) */
+    SupportClass_SwordValueNames_t SupportClass_SwordValueNames;
+    /* value-name list of SupportClass uwordProc (entry 1, named-value count 0): only the end entry {end_text, 0}, end_text = "" + 0xFF pad (end_name points at it, +8) */
+    SupportClass_UwordValueNames_t SupportClass_UwordValueNames;
+    /* zero padding */
+    /* zero padding */
+    /* ucharProc's value-name list: count 0 (SupportClass entry 2, word +4), so only the terminator {"", 0} and its own "" string */
+    SupportClass_UcharValueNames_t SupportClass_UcharValueNames;
+    /* scharProc's value-name list: count 0 (SupportClass entry 3, word +4), so only the terminator {"", 0} and its own "" string */
+    SupportClass_ScharValueNames_t SupportClass_ScharValueNames;
+    /* zero padding */
+    /* zero padding */
+    /* enum table of property type slong: only the {"", 0} terminator (type has no named values) */
+    NakaInst_slong_EnumTable_t NakaInst_slong_EnumTable[1];
+    /* "" (NUL + 0xFF alignment pad): name of the terminator entry of the slong enum table */
+    char NakaInst_slong_EmptyStr[2];
+    /* enum table of property type ulong: only the {"", 0} terminator (type has no named values) */
+    NakaInst_ulong_EnumTable_t NakaInst_ulong_EnumTable[1];
+    /* "" (NUL + 0xFF alignment pad): name of the terminator entry of the ulong enum table */
+    char NakaInst_ulong_EmptyStr[2];
+    uint8_t field_3d1c;
     uint16_t field_3d1d;
     uint16_t field_3d1f;
     uint8_t pad_81[3];  /* zero padding */
@@ -674,71 +888,83 @@ typedef struct __attribute__((packed)) {
     char True_str[6];
     uint32_t ptr_3d42;
     uint8_t pad_82[5];  /* zero padding */
-    uint16_t field_3d4b;
-    uint16_t field_3d4d;
-    uint8_t pad_83[6];  /* zero padding */
-    uint16_t field_3d55;
-    uint16_t field_3d57;
-    uint8_t pad_84[6];  /* zero padding */
-    uint16_t field_3d5f;
-    uint16_t field_3d61;
-    uint8_t pad_85[6];  /* zero padding */
-    uint16_t field_3d69;
-    uint16_t field_3d6b;
-    uint8_t pad_86[6];  /* zero padding */
-    uint16_t field_3d73;
-    uint16_t field_3d75;
-    uint8_t pad_87[6];  /* zero padding */
-    uint16_t field_3d7d;
-    uint16_t field_3d7f;
-    uint8_t pad_88[6];  /* zero padding */
-    uint16_t field_3d87;
-    uint16_t field_3d89;
-    uint8_t pad_89[6];  /* zero padding */
-    uint16_t field_3d91;
-    uint16_t field_3d93;
-    uint8_t pad_90[6];  /* zero padding */
-    uint16_t field_3d9b;
-    uint16_t field_3d9d;
-    uint8_t pad_91[6];  /* zero padding */
-    uint16_t field_3da5;
-    uint16_t field_3da7;
-    uint8_t pad_92[6];  /* zero padding */
-    uint16_t field_3daf;
-    uint16_t field_3db1;
-    uint8_t pad_93[6];  /* zero padding */
-    uint16_t field_3db9;
-    uint16_t field_3dbb;
-    uint8_t pad_94[6];  /* zero padding */
-    uint16_t field_3dc3;
-    uint16_t field_3dc5;
-    uint8_t pad_95[6];  /* zero padding */
-    uint16_t field_3dcd;
-    uint16_t field_3dcf;
-    uint8_t pad_96[6];  /* zero padding */
-    uint16_t field_3dd7;
-    uint16_t field_3dd9;
-    uint8_t pad_97[6];  /* zero padding */
-    uint16_t field_3de1;
-    uint16_t field_3de3;
-    uint8_t pad_98[6];  /* zero padding */
-    uint16_t field_3deb;
-    uint16_t field_3ded;
-    uint8_t pad_99[6];  /* zero padding */
-    uint16_t field_3df5;
-    uint16_t field_3df7;
-    uint8_t pad_100[5];  /* zero padding */
-    uint32_t ptr_3dfe;
-    uint16_t field_3e02;
-    uint8_t pad_101[2];  /* zero padding */
-    uint32_t ptr_3e06;
-    uint8_t pad_102[5];  /* zero padding */
-    uint16_t field_3e0f;
-    char F_AllRom_str[9];
-    char CF_AllRam_str[10];
-    uint32_t ptr_3e24;
-    uint8_t pad_103[5];  /* zero padding */
-    uint16_t field_3e2d;
+    uint8_t field_3d4b;
+    /* zero padding */
+    /* zero padding */
+    /* pFunc property enum: only the end entry {"", 0} (count 0: values are plain integers) */
+    NakaInst_pFunc_EnumTable_t NakaInst_pFunc_EnumTable[1];
+    /* "" naming the end entry of NakaInst_pFunc_EnumTable, plus 0xFF fill */
+    char NakaInst_pFunc_EmptyStr[2];
+    /* pProc property enum: only the end entry {"", 0} (count 0: values are plain integers) */
+    NakaInst_pProc_EnumTable_t NakaInst_pProc_EnumTable[1];
+    /* "" naming the end entry of NakaInst_pProc_EnumTable, plus 0xFF fill */
+    char NakaInst_pProc_EmptyStr[2];
+    /* zero padding */
+    /* zero padding */
+    /* value-name list of SupportClass pPropProc (entry 10, named-value count 0): only the end entry {end_text, 0}, end_text = "" + 0xFF pad (end_name points at it, +8) */
+    SupportClass_PPropValueNames_t SupportClass_PPropValueNames;
+    /* value-name list of SupportClass pStringProc (entry 11, named-value count 0): only the end entry {end_text, 0}, end_text = "" + 0xFF pad (end_name points at it, +8) */
+    SupportClass_PStringValueNames_t SupportClass_PStringValueNames;
+    /* zero padding */
+    /* zero padding */
+    /* ClassIDProc's value-name list: count 0 (SupportClass entry 12, word +4), so only the terminator {"", 0} and its own "" string */
+    SupportClass_ClassIDValueNames_t SupportClass_ClassIDValueNames;
+    /* ScreenIDProc's value-name list: count 0 (SupportClass entry 13, word +4), so only the terminator {"", 0} and its own "" string */
+    SupportClass_ScreenIDValueNames_t SupportClass_ScreenIDValueNames;
+    /* zero padding */
+    /* zero padding */
+    /* enum table of property type EventID: only the {"", 0} terminator (type has no named values) */
+    NakaInst_EventID_EnumTable_t NakaInst_EventID_EnumTable[1];
+    /* "" (NUL + 0xFF alignment pad): name of the terminator entry of the EventID enum table */
+    char NakaInst_EventID_EmptyStr[2];
+    /* enum table of property type RECTW: only the {"", 0} terminator (type has no named values) */
+    NakaInst_RECTW_EnumTable_t NakaInst_RECTW_EnumTable[1];
+    /* "" (NUL + 0xFF alignment pad): name of the terminator entry of the RECTW enum table */
+    char NakaInst_RECTW_EmptyStr[2];
+    /* zero padding */
+    /* zero padding */
+    /* RectX1 property enum: only the end entry {"", 0} (count 0: values are plain integers) */
+    NakaInst_RectX1_EnumTable_t NakaInst_RectX1_EnumTable[1];
+    /* "" naming the end entry of NakaInst_RectX1_EnumTable, plus 0xFF fill */
+    char NakaInst_RectX1_EmptyStr[2];
+    /* RectY1 property enum: only the end entry {"", 0} (count 0: values are plain integers) */
+    NakaInst_RectY1_EnumTable_t NakaInst_RectY1_EnumTable[1];
+    /* "" naming the end entry of NakaInst_RectY1_EnumTable, plus 0xFF fill */
+    char NakaInst_RectY1_EmptyStr[2];
+    /* zero padding */
+    /* zero padding */
+    /* value-name list of SupportClass RectX2Proc (entry 18, named-value count 0): only the end entry {end_text, 0}, end_text = "" + 0xFF pad (end_name points at it, +8) */
+    SupportClass_RectX2ValueNames_t SupportClass_RectX2ValueNames;
+    /* value-name list of SupportClass RectY2Proc (entry 19, named-value count 0): only the end entry {end_text, 0}, end_text = "" + 0xFF pad (end_name points at it, +8) */
+    SupportClass_RectY2ValueNames_t SupportClass_RectY2ValueNames;
+    /* zero padding */
+    /* zero padding */
+    /* POINTWProc's value-name list: count 0 (SupportClass entry 20, word +4), so only the terminator {"", 0} and its own "" string */
+    SupportClass_POINTWValueNames_t SupportClass_POINTWValueNames;
+    /* PointXProc's value-name list: count 0 (SupportClass entry 21, word +4), so only the terminator {"", 0} and its own "" string */
+    SupportClass_PointXValueNames_t SupportClass_PointXValueNames;
+    /* zero padding */
+    /* zero padding */
+    /* enum table of property type PointY: only the {"", 0} terminator (type has no named values) */
+    NakaInst_PointY_EnumTable_t NakaInst_PointY_EnumTable[1];
+    /* "" (NUL + 0xFF alignment pad): name of the terminator entry of the PointY enum table */
+    char NakaInst_PointY_EmptyStr[2];
+    /* enum table of property type String: only the {"", 0} terminator (type has no named values) */
+    NakaInst_String_EnumTable_t NakaInst_String_EnumTable[1];
+    /* "" (NUL + 0xFF alignment pad): name of the terminator entry of the String enum table */
+    char NakaInst_String_EmptyStr[2];
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* value-name list of SupportClass NameProc (entry 24, named-value count 0): only the end entry {end_text, 0}, end_text = "" + 0xFF pad (end_name points at it, +8) */
+    SupportClass_NameValueNames_t SupportClass_NameValueNames;
+    /* value names of the ConstFlag property type: {"CF_AllRam", 0}, {"CF_AllRom", 1}, end {"", 0}, then the three strings */
+    SupportClass_ConstFlagValueNames_t SupportClass_ConstFlagValueNames;
+    /* zero padding */
+    /* ViewIDProc's value-name list: count 0 (SupportClass entry 26, word +4), so only the terminator {"", 0} and its own "" string */
+    SupportClass_ViewIDValueNames_t SupportClass_ViewIDValueNames;
+    uint8_t field_3e2e;
     uint16_t field_3e2f;
     uint8_t pad_104[5];  /* zero padding */
     uint32_t VF_Invisible_str_ptr;
@@ -967,13 +1193,18 @@ typedef struct __attribute__((packed)) {
     char BD_None_str[8];
     uint32_t ptr_4264;
     uint8_t pad_160[5];  /* zero padding */
-    uint16_t field_426d;
-    uint16_t field_426f;
-    uint8_t pad_161[6];  /* zero padding */
-    uint16_t field_4277;
-    uint16_t field_4279;
-    uint8_t pad_162[6];  /* zero padding */
-    uint16_t field_4281;
+    uint8_t field_426d;
+    /* zero padding */
+    /* zero padding */
+    /* TitleID property enum: only the end entry {"", 0} (count 0: values are plain integers) */
+    NakaInst_TitleID_EnumTable_t NakaInst_TitleID_EnumTable[1];
+    /* "" naming the end entry of NakaInst_TitleID_EnumTable, plus 0xFF fill */
+    char NakaInst_TitleID_EmptyStr[2];
+    /* IconID property enum: only the end entry {"", 0} (count 0: values are plain integers) */
+    NakaInst_IconID_EnumTable_t NakaInst_IconID_EnumTable[1];
+    /* "" naming the end entry of NakaInst_IconID_EnumTable, plus 0xFF fill */
+    char NakaInst_IconID_EmptyStr[2];
+    uint8_t field_4282;
     uint16_t field_4283;
     uint8_t pad_163[6];  /* zero padding */
     uint16_t field_428b;
@@ -1141,32 +1372,34 @@ typedef struct __attribute__((packed)) {
     char SS_Up_str[6];
     char SS_Special_str[12];
     /* NakaInst_LM_RightDown: 3 pointers (cut from ptrs_11 by split_naka_pointer_arrays.py) */
-    uint32_t NakaInst_LM_RightDown[3];
-    uint16_t field_4588;
-    uint8_t pad_205[2];  /* zero padding */
-    uint32_t ptr_458c;
-    uint8_t pad_206[5];  /* zero padding */
-    uint16_t field_4595;
-    char M_RightDown_str[12];
-    uint16_t field_45a3;
-    char M_RightUp_str[10];
-    uint16_t field_45af;
-    uint16_t field_45b1;
-    uint8_t pad_207[5];  /* zero padding */
-    uint32_t ptr_45b8;
-    uint16_t field_45bc;
-    uint8_t pad_208[2];  /* zero padding */
-    uint32_t ptr_45c0;
-    uint8_t pad_209[5];  /* zero padding */
-    uint16_t field_45c9;
-    char R_Single_str[9];
-    char FR_None_str[8];
-    uint32_t ptr_45dc;
-    uint8_t pad_210[5];  /* zero padding */
-    uint16_t field_45e5;
-    uint16_t field_45e7;
-    uint8_t pad_211[6];  /* zero padding */
-    uint16_t field_45ef;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* LineModeID property values: {"LM_RightUp",0}, {"LM_RightDown",1}, {"",0} end */
+    NakaInst_LineModeID_EnumTable_t NakaInst_LineModeID_EnumTable[3];
+    /* "" ending the LineModeID enum table, plus 0xFF fill */
+    char NakaInst_LineModeID_EmptyStr[2];
+    /* "LM_RightDown" + 0xFF fill (LineModeID value 1) */
+    char NakaInst_LM_RightDown_Str[14];
+    /* "LM_RightUp" + 0xFF fill (LineModeID value 0) */
+    char NakaInst_LM_RightUp[12];
+    /* FrameID property values: {"FR_None",0}, {"FR_Single",1}, {"",0} end */
+    NakaInst_FrameID_EnumTable_t NakaInst_FrameID_EnumTable[3];
+    /* "" ending the FrameID enum table, plus 0xFF fill */
+    char NakaInst_FrameID_EmptyStr[2];
+    /* "FR_Single" (FrameID value 1) */
+    char NakaInst_FR_Single[10];
+    /* "FR_None" (FrameID value 0) */
+    char NakaInst_FR_None[8];
+    /* zero padding */
+    /* zero padding */
+    /* value-name list of SupportClass BitmapIDProc (entry 40, named-value count 0): only the end entry {end_text, 0}, end_text = "" + 0xFF pad (end_name points at it, +8) */
+    SupportClass_BitmapIDValueNames_t SupportClass_BitmapIDValueNames;
+    /* value-name list of SupportClass ApFuncIDProc (entry 41, named-value count 0): only the end entry {end_text, 0}, end_text = "" + 0xFF pad (end_name points at it, +8) */
+    SupportClass_ApFuncIDValueNames_t SupportClass_ApFuncIDValueNames;
+    uint8_t field_45f0;
     uint16_t field_45f1;
     uint8_t pad_212[6];  /* zero padding */
     uint16_t field_45f9;
@@ -5555,41 +5788,27 @@ const naka_debug_naming_t naka_debug_naming_data
         /* 255 */ { 0x00, 0x00, 0x00, 0x00 },
     },
 
-    .ptr_3ce0 = 0x00EB67E6,
+    .SupportClass_SwordValueNames = { SELF(SupportClass_SwordValueNames.end_text), 0, "\x00\xFF" },
 
-    .pad_75 = { 0 },
+    .SupportClass_UwordValueNames = { SELF(SupportClass_UwordValueNames.end_text), 0, "\x00\xFF" },
 
-    .field_3ce9 = 0xF0FF,
+    .SupportClass_UcharValueNames = { SELF(SupportClass_UcharValueNames.end_name), 0x00000000, "\x00\xFF" },
 
-    .field_3ceb = 0xEB67,
+    .SupportClass_ScharValueNames = { SELF(SupportClass_ScharValueNames.end_name), 0x00000000, "\x00\xFF" },
 
-    .pad_76 = { 0 },
+    .NakaInst_slong_EnumTable = {
+        { SELF(NakaInst_slong_EmptyStr), 0x00000000 },
+    },
 
-    .field_3cf3 = 0xFAFF,
+    .NakaInst_slong_EmptyStr = "\x00\xFF",
 
-    .field_3cf5 = 0xEB67,
+    .NakaInst_ulong_EnumTable = {
+        { SELF(NakaInst_ulong_EmptyStr), 0x00000000 },
+    },
 
-    .pad_77 = { 0 },
+    .NakaInst_ulong_EmptyStr = "\x00\xFF",
 
-    .field_3cfd = 0x04FF,
-
-    .field_3cff = 0xEB68,
-
-    .pad_78 = { 0 },
-
-    .field_3d07 = 0x0EFF,
-
-    .field_3d09 = 0xEB68,
-
-    .pad_79 = { 0 },
-
-    .field_3d11 = 0x18FF,
-
-    .field_3d13 = 0xEB68,
-
-    .pad_80 = { 0 },
-
-    .field_3d1b = 0x3AFF,
+    .field_3d1c = 0x3A,
 
     .field_3d1d = 0xEB68,
 
@@ -5614,135 +5833,79 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_82 = { 0 },
 
-    .field_3d4b = 0x52FF,
+    .field_3d4b = 0xFF,
 
-    .field_3d4d = 0xEB68,
+    .NakaInst_pFunc_EnumTable = {
+        { SELF(NakaInst_pFunc_EmptyStr), 0 },
+    },
 
-    .pad_83 = { 0 },
+    .NakaInst_pFunc_EmptyStr = "\x00\xFF",
 
-    .field_3d55 = 0x5CFF,
+    .NakaInst_pProc_EnumTable = {
+        { SELF(NakaInst_pProc_EmptyStr), 0 },
+    },
 
-    .field_3d57 = 0xEB68,
+    .NakaInst_pProc_EmptyStr = "\x00\xFF",
 
-    .pad_84 = { 0 },
+    .SupportClass_PPropValueNames = { SELF(SupportClass_PPropValueNames.end_text), 0, "\x00\xFF" },
 
-    .field_3d5f = 0x66FF,
+    .SupportClass_PStringValueNames = { SELF(SupportClass_PStringValueNames.end_text), 0, "\x00\xFF" },
 
-    .field_3d61 = 0xEB68,
+    .SupportClass_ClassIDValueNames = { SELF(SupportClass_ClassIDValueNames.end_name), 0x00000000, "\x00\xFF" },
 
-    .pad_85 = { 0 },
+    .SupportClass_ScreenIDValueNames = { SELF(SupportClass_ScreenIDValueNames.end_name), 0x00000000, "\x00\xFF" },
 
-    .field_3d69 = 0x70FF,
+    .NakaInst_EventID_EnumTable = {
+        { SELF(NakaInst_EventID_EmptyStr), 0x00000000 },
+    },
 
-    .field_3d6b = 0xEB68,
+    .NakaInst_EventID_EmptyStr = "\x00\xFF",
 
-    .pad_86 = { 0 },
+    .NakaInst_RECTW_EnumTable = {
+        { SELF(NakaInst_RECTW_EmptyStr), 0x00000000 },
+    },
 
-    .field_3d73 = 0x7AFF,
+    .NakaInst_RECTW_EmptyStr = "\x00\xFF",
 
-    .field_3d75 = 0xEB68,
+    .NakaInst_RectX1_EnumTable = {
+        { SELF(NakaInst_RectX1_EmptyStr), 0 },
+    },
 
-    .pad_87 = { 0 },
+    .NakaInst_RectX1_EmptyStr = "\x00\xFF",
 
-    .field_3d7d = 0x84FF,
+    .NakaInst_RectY1_EnumTable = {
+        { SELF(NakaInst_RectY1_EmptyStr), 0 },
+    },
 
-    .field_3d7f = 0xEB68,
+    .NakaInst_RectY1_EmptyStr = "\x00\xFF",
 
-    .pad_88 = { 0 },
+    .SupportClass_RectX2ValueNames = { SELF(SupportClass_RectX2ValueNames.end_text), 0, "\x00\xFF" },
 
-    .field_3d87 = 0x8EFF,
+    .SupportClass_RectY2ValueNames = { SELF(SupportClass_RectY2ValueNames.end_text), 0, "\x00\xFF" },
 
-    .field_3d89 = 0xEB68,
+    .SupportClass_POINTWValueNames = { SELF(SupportClass_POINTWValueNames.end_name), 0x00000000, "\x00\xFF" },
 
-    .pad_89 = { 0 },
+    .SupportClass_PointXValueNames = { SELF(SupportClass_PointXValueNames.end_name), 0x00000000, "\x00\xFF" },
 
-    .field_3d91 = 0x98FF,
+    .NakaInst_PointY_EnumTable = {
+        { SELF(NakaInst_PointY_EmptyStr), 0x00000000 },
+    },
 
-    .field_3d93 = 0xEB68,
+    .NakaInst_PointY_EmptyStr = "\x00\xFF",
 
-    .pad_90 = { 0 },
+    .NakaInst_String_EnumTable = {
+        { SELF(NakaInst_String_EmptyStr), 0x00000000 },
+    },
 
-    .field_3d9b = 0xA2FF,
+    .NakaInst_String_EmptyStr = "\x00\xFF",
 
-    .field_3d9d = 0xEB68,
+    .SupportClass_NameValueNames = { SELF(SupportClass_NameValueNames.end_text), 0, "\x00\xFF" },
 
-    .pad_91 = { 0 },
+    .SupportClass_ConstFlagValueNames = { SELF(SupportClass_ConstFlagValueNames.allram_text), 0, SELF(SupportClass_ConstFlagValueNames.allrom_text), 1, SELF(SupportClass_ConstFlagValueNames.end_text), 0, "\x00\xFF", "CF_AllRom", "CF_AllRam" },
 
-    .field_3da5 = 0xACFF,
+    .SupportClass_ViewIDValueNames = { SELF(SupportClass_ViewIDValueNames.end_name), 0x00000000, "\x00\xFF" },
 
-    .field_3da7 = 0xEB68,
-
-    .pad_92 = { 0 },
-
-    .field_3daf = 0xB6FF,
-
-    .field_3db1 = 0xEB68,
-
-    .pad_93 = { 0 },
-
-    .field_3db9 = 0xC0FF,
-
-    .field_3dbb = 0xEB68,
-
-    .pad_94 = { 0 },
-
-    .field_3dc3 = 0xCAFF,
-
-    .field_3dc5 = 0xEB68,
-
-    .pad_95 = { 0 },
-
-    .field_3dcd = 0xD4FF,
-
-    .field_3dcf = 0xEB68,
-
-    .pad_96 = { 0 },
-
-    .field_3dd7 = 0xDEFF,
-
-    .field_3dd9 = 0xEB68,
-
-    .pad_97 = { 0 },
-
-    .field_3de1 = 0xE8FF,
-
-    .field_3de3 = 0xEB68,
-
-    .pad_98 = { 0 },
-
-    .field_3deb = 0xF2FF,
-
-    .field_3ded = 0xEB68,
-
-    .pad_99 = { 0 },
-
-    .field_3df5 = 0x18FF,
-
-    .field_3df7 = 0xEB69,
-
-    .pad_100 = { 0 },
-
-    .ptr_3dfe = 0x00EB690E,
-
-    .field_3e02 = 0x0001,
-
-    .pad_101 = { 0 },
-
-    .ptr_3e06 = 0x00EB690C,
-
-    .pad_102 = { 0 },
-
-    .field_3e0f = 0x43FF,
-
-    .F_AllRom_str = ALIGNED_STRING("F_AllRom"),
-
-    .CF_AllRam_str = "CF_AllRam",
-
-    .ptr_3e24 = 0x00EB692A,
-
-    .pad_103 = { 0 },
-
-    .field_3e2d = 0xA2FF,
+    .field_3e2e = 0xA2,
 
     .field_3e2f = 0xEB69,
 
@@ -6206,19 +6369,21 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_160 = { 0 },
 
-    .field_426d = 0x74FF,
+    .field_426d = 0xFF,
 
-    .field_426f = 0xEB6D,
+    .NakaInst_TitleID_EnumTable = {
+        { SELF(NakaInst_TitleID_EmptyStr), 0 },
+    },
 
-    .pad_161 = { 0 },
+    .NakaInst_TitleID_EmptyStr = "\x00\xFF",
 
-    .field_4277 = 0x7EFF,
+    .NakaInst_IconID_EnumTable = {
+        { SELF(NakaInst_IconID_EmptyStr), 0 },
+    },
 
-    .field_4279 = 0xEB6D,
+    .NakaInst_IconID_EmptyStr = "\x00\xFF",
 
-    .pad_162 = { 0 },
-
-    .field_4281 = 0x88FF,
+    .field_4282 = 0x88,
 
     .field_4283 = 0xEB6D,
 
@@ -6558,61 +6723,35 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .SS_Special_str = ALIGNED_STRING("SS_Special"),
 
-    .NakaInst_LM_RightDown = {
-        0x00EB70A2,
-        0x00000000,
-        0x00EB7094,
+    .NakaInst_LineModeID_EnumTable = {
+        { SELF(NakaInst_LM_RightUp), 0 },
+        { SELF(NakaInst_LM_RightDown_Str), 1 },
+        { SELF(NakaInst_LineModeID_EmptyStr), 0 },
     },
 
-    .field_4588 = 0x0001,
+    .NakaInst_LineModeID_EmptyStr = "\x00\xFF",
 
-    .pad_205 = { 0 },
+    .NakaInst_LM_RightDown_Str = "LM_RightDown\x00\xFF",
 
-    .ptr_458c = 0x00EB7092,
+    .NakaInst_LM_RightUp = "LM_RightUp\x00\xFF",
 
-    .pad_206 = { 0 },
+    .NakaInst_FrameID_EnumTable = {
+        { SELF(NakaInst_FR_None), 0 },
+        { SELF(NakaInst_FR_Single), 1 },
+        { SELF(NakaInst_FrameID_EmptyStr), 0 },
+    },
 
-    .field_4595 = 0x4CFF,
+    .NakaInst_FrameID_EmptyStr = "\x00\xFF",
 
-    .M_RightDown_str = "M_RightDown",
+    .NakaInst_FR_Single = "FR_Single",
 
-    .field_45a3 = 0x4CFF,
+    .NakaInst_FR_None = "FR_None",
 
-    .M_RightUp_str = "M_RightUp",
+    .SupportClass_BitmapIDValueNames = { SELF(SupportClass_BitmapIDValueNames.end_text), 0, "\x00\xFF" },
 
-    .field_45af = 0xD2FF,
+    .SupportClass_ApFuncIDValueNames = { SELF(SupportClass_ApFuncIDValueNames.end_text), 0, "\x00\xFF" },
 
-    .field_45b1 = 0xEB70,
-
-    .pad_207 = { 0 },
-
-    .ptr_45b8 = 0x00EB70C8,
-
-    .field_45bc = 0x0001,
-
-    .pad_208 = { 0 },
-
-    .ptr_45c0 = 0x00EB70C6,
-
-    .pad_209 = { 0 },
-
-    .field_45c9 = 0x46FF,
-
-    .R_Single_str = ALIGNED_STRING("R_Single"),
-
-    .FR_None_str = "FR_None",
-
-    .ptr_45dc = 0x00EB70E2,
-
-    .pad_210 = { 0 },
-
-    .field_45e5 = 0xECFF,
-
-    .field_45e7 = 0xEB70,
-
-    .pad_211 = { 0 },
-
-    .field_45ef = 0xF6FF,
+    .field_45f0 = 0xF6,
 
     .field_45f1 = 0xEB70,
 

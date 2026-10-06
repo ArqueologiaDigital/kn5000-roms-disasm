@@ -3430,7 +3430,7 @@ GroupBoxProc:
 
 ; Control panel function dispatch
 CtrlPanel_FuncDispatch:
-	add xwa, CtrlPanel_FuncDispatch_Data
+	add xwa, GroupBox_EventCaseMap
 	ld wa, (xwa)
 	extz wa
 	sll wa, 1
@@ -3859,7 +3859,7 @@ GroupBox_HandleStateCompare:
 	ldiw_erp 0xee, 0
 	extz xhl
 	sll xhl, 2
-	lda xwa, (GroupBox_HandleStateCompare_Data:24)
+	lda xwa, (GroupBox_ModeSwitchGroup:24)
 	ld xde, xwa
 	add xde, xhl
 	ld xbc, (xsp + 30)

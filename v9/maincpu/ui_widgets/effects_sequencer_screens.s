@@ -462,10 +462,9 @@
 ; 14*0x448.
 ; -----------------------------------------------------------------------------
 
-; [nakarest] Naka_ReverbScreen_EmptyStr  +0x0..+0x2 (0xe27fa4, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xe27fa4 not derived; readers below
-; [nakarest] Readers: 1 data word in NakaData_SeqChannels (at 0xeee2b8).
-Naka_ReverbScreen_EmptyStr:	.incbin "includes/generated/naka_effects_seq.bin", 0x0, 0x2
+; Kubo_FunctionNameTable_408_EndName -- 2 x char: "" plus a 0xFF alignment pad, the only entry of Kubo's Function
+; name table: InitializeKubo registers RAM 0x3DF14 (slot 0x408, 0 entries), and the work-RAM image puts this address there.
+Kubo_FunctionNameTable_408_EndName:	.incbin "includes/generated/naka_effects_seq.bin", 0x0, 0x2
 ; [nakarest] naka_effects_seq+0x2  +0x2..+0x1bc (0xe27fa6, 442 B)
 ; [nakarest] widget records, elements 0-11 of Viewable slot 0xa (table 0xe2e624, 12 entries,
 ; [nakarest] InitializeKubo): TtlScreen (42 B), AcIndexWideES (42 B) x3, Label (32 B) x4,

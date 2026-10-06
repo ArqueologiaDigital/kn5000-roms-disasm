@@ -99,6 +99,34 @@ extern const char VwBoxProc;
  * contributing nothing); propdata one type character per own field;
  * propname points at len(propdata) + 1 field-name pointers, the last to an
  * empty string (THE CLASS SYSTEM, scripts/analysis/nakarest_objtab_map.py). */
+/* ChangePalette_WallpaperPalettes's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* ChangeWall_WallpaperRecords's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* TitleProc_EasySetHold0Tail's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* TitleProc_EasySetHold1to11's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t title_id;
+    uint32_t title_event;
+    uint32_t hold_ticks;
+    uint16_t reserved;
+} TitleProc_EasySetHold1to11_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t title_event;
+    uint32_t hold_ticks;
+    uint16_t reserved;
+} TitleProc_EasySetHold0Tail_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t bitmap;
+    uint32_t palette;
+    uint16_t reserved;
+} ChangeWall_WallpaperRecords_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t palette;
+    uint16_t reserved;
+} ChangePalette_WallpaperPalettes_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t proc;        /* +0  J  class procedure */
     uint32_t parent;      /* +4  M  parent class id */
@@ -205,133 +233,58 @@ typedef struct __attribute__((packed)) {
     uint16_t FDC_COMMAND_DISPATCHER_CaseTable[12];
     /* FDC_CommandEntry_CopyParams_CaseTable: 12 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t FDC_CommandEntry_CopyParams_CaseTable[12];
-    uint16_t field_0c36;
-    uint8_t pad_4[2];  /* zero padding */
-    uint16_t field_0c3a;
-    uint8_t pad_5[2];  /* zero padding */
-    uint16_t field_0c3e;
-    uint8_t pad_6[2];  /* zero padding */
-    uint16_t field_0c42;
-    uint8_t pad_7[2];  /* zero padding */
-    uint16_t field_0c46;
-    uint8_t pad_8[2];  /* zero padding */
-    uint16_t field_0c4a;
-    uint8_t pad_9[2];  /* zero padding */
-    uint16_t field_0c4e;
-    uint8_t pad_10[2];  /* zero padding */
-    uint16_t field_0c52;
-    uint8_t pad_11[2];  /* zero padding */
-    uint16_t field_0c56;
-    uint8_t pad_12[2];  /* zero padding */
-    uint16_t field_0c5a;
-    uint8_t pad_13[2];  /* zero padding */
-    uint16_t field_0c5e;
-    uint8_t pad_14[2];  /* zero padding */
-    uint16_t field_0c62;
-    uint8_t pad_15[2];  /* zero padding */
-    uint16_t field_0c66;
-    uint8_t pad_16[2];  /* zero padding */
-    uint16_t field_0c6a;
-    uint8_t pad_17[2];  /* zero padding */
-    uint16_t field_0c6e;
-    uint8_t pad_18[2];  /* zero padding */
-    uint16_t field_0c72;
-    uint8_t pad_19[6];  /* zero padding */
-    uint16_t field_0c7a;
-    uint16_t field_0c7c;
-    uint16_t field_0c7e;
-    uint16_t field_0c80;
-    uint16_t field_0c82;
-    uint16_t field_0c84;
-    uint16_t field_0c86;
-    uint16_t field_0c88;
-    uint16_t field_0c8a;
-    uint16_t field_0c8c;
-    uint16_t field_0c8e;
-    uint16_t field_0c90;
-    uint16_t field_0c92;
-    uint16_t field_0c94;
-    uint16_t field_0c96;
-    uint16_t field_0c98;
-    uint16_t field_0c9a;
-    uint16_t field_0c9c;
-    uint16_t field_0c9e;
-    uint16_t field_0ca0;
-    uint16_t field_0ca2;
-    uint16_t field_0ca4;
-    uint16_t field_0ca6;
-    uint16_t field_0ca8;
-    uint16_t field_0caa;
-    uint16_t field_0cac;
-    uint16_t field_0cae;
-    uint16_t field_0cb0;
-    uint16_t field_0cb2;
-    uint16_t field_0cb4;
-    uint16_t field_0cb6;
-    uint16_t field_0cb8;
-    uint16_t field_0cba;
-    uint8_t pad_20[2];  /* zero padding */
-    uint16_t field_0cbe;
-    uint8_t pad_21[2];  /* zero padding */
-    uint16_t field_0cc2;
-    uint8_t pad_22[2];  /* zero padding */
-    uint16_t field_0cc6;
-    uint8_t pad_23[2];  /* zero padding */
-    uint16_t field_0cca;
-    uint8_t pad_24[2];  /* zero padding */
-    char str_76[2];
-    uint8_t pad_25[2];  /* zero padding */
-    char str_77[2];
-    uint8_t pad_26[2];  /* zero padding */
-    uint16_t field_0cd6;
-    uint8_t pad_27[3];  /* zero padding */
-    uint16_t field_0cdb;
-    uint8_t pad_28[2];  /* zero padding */
-    uint16_t field_0cdf;
-    uint8_t pad_29[2];  /* zero padding */
-    uint16_t field_0ce3;
-    uint8_t pad_30[2];  /* zero padding */
-    uint16_t field_0ce7;
-    uint8_t pad_31[2];  /* zero padding */
-    uint16_t field_0ceb;
-    uint8_t pad_32[2];  /* zero padding */
-    char str_78[2];
-    uint8_t pad_33[2];  /* zero padding */
-    char str_79[2];
-    uint8_t pad_34[2];  /* zero padding */
-    uint16_t field_0cf7;
-    uint8_t pad_35[3];  /* zero padding */
-    uint16_t field_0cfc;
-    uint8_t pad_36[2];  /* zero padding */
-    uint16_t field_0d00;
-    uint8_t pad_37[2];  /* zero padding */
-    uint16_t field_0d04;
-    uint8_t pad_38[2];  /* zero padding */
-    uint16_t field_0d08;
-    uint8_t pad_39[2];  /* zero padding */
-    uint16_t field_0d0c;
-    uint8_t pad_40[2];  /* zero padding */
-    char str_80[2];
-    uint8_t pad_41[2];  /* zero padding */
-    char str_81[2];
-    uint8_t pad_42[2];  /* zero padding */
-    uint16_t field_0d18;
-    uint8_t pad_43[3];  /* zero padding */
-    uint16_t field_0d1d;
-    uint8_t pad_44[2];  /* zero padding */
-    uint16_t field_0d21;
-    uint8_t pad_45[2];  /* zero padding */
-    uint16_t field_0d25;
-    uint8_t pad_46[2];  /* zero padding */
-    uint16_t field_0d29;
-    uint8_t pad_47[2];  /* zero padding */
-    uint16_t field_0d2d;
-    uint8_t pad_48[2];  /* zero padding */
-    char str_82[2];
-    uint8_t pad_49[2];  /* zero padding */
-    char str_83[2];
-    uint8_t pad_50[2];  /* zero padding */
-    uint16_t field_0d39;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* EVT_DIAL step for a panel dial packet's signed delta d = -16..+16, at index d+16; negated and limited to +-7 */
+    int32_t CtrlPanel_DialStepByDelta[33];
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* 1 << i: the bit of panel switch row i in the two 32-bit held-switch masks */
+    uint32_t CtrlPanel_SwitchRowBit[32];
+    uint8_t field_0d3a;
     char str_84[16];
     uint8_t field_0d4b;
     /* MainPmanControl_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
@@ -376,71 +329,38 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0da6;
     uint16_t field_0da8;
     uint16_t field_0daa;
-    uint32_t ptr_0dac;
-    uint8_t pad_52[2];  /* zero padding */
-    uint16_t field_0db2;
-    uint8_t pad_53[2];  /* zero padding */
-    uint16_t field_0db6;
-    uint8_t pad_54[2];  /* zero padding */
-    uint16_t field_0dba;
-    uint8_t pad_55[2];  /* zero padding */
-    uint16_t field_0dbe;
-    uint8_t pad_56[2];  /* zero padding */
-    uint16_t field_0dc2;
-    uint8_t pad_57[2];  /* zero padding */
-    uint16_t field_0dc6;
-    uint8_t pad_58[2];  /* zero padding */
-    uint16_t field_0dca;
-    uint8_t pad_59[2];  /* zero padding */
-    uint16_t field_0dce;
-    uint8_t pad_60[2];  /* zero padding */
-    uint16_t field_0dd2;
-    uint8_t pad_61[2];  /* zero padding */
-    uint16_t field_0dd6;
-    uint8_t pad_62[2];  /* zero padding */
-    uint16_t field_0dda;
-    uint8_t pad_63[2];  /* zero padding */
-    uint16_t field_0dde;
-    uint8_t pad_64[2];  /* zero padding */
-    uint16_t field_0de2;
-    uint8_t pad_65[2];  /* zero padding */
-    uint16_t field_0de6;
-    uint8_t pad_66[2];  /* zero padding */
-    uint16_t field_0dea;
-    uint8_t pad_67[2];  /* zero padding */
-    uint16_t field_0dee;
-    uint8_t pad_68[2];  /* zero padding */
-    uint16_t field_0df2;
-    uint8_t pad_69[2];  /* zero padding */
-    uint16_t field_0df6;
-    uint8_t pad_70[2];  /* zero padding */
-    uint16_t field_0dfa;
-    uint8_t pad_71[3];  /* zero padding */
-    uint16_t field_0dff;
-    char str_91[2];
-    uint8_t pad_72[3];  /* zero padding */
-    uint16_t field_0e06;
-    uint32_t ptrs_8[9];  /* 9 pointers */
-    uint8_t pad_73[2];  /* zero padding */
-    uint16_t field_0e2e;
-    uint16_t field_0e30;
-    uint16_t field_0e32;
-    uint16_t field_0e34;
-    uint16_t field_0e36;
-    uint16_t field_0e38;
-    uint16_t field_0e3a;
-    uint8_t pad_74[3];  /* zero padding */
-    uint16_t field_0e3f;
-    uint8_t pad_75[3];  /* zero padding */
-    uint16_t field_0e44;
-    uint16_t field_0e46;
-    uint16_t field_0e48;
-    uint16_t field_0e4a;
-    uint16_t field_0e4c;
-    uint16_t field_0e4e;
-    uint16_t field_0e50;
-    uint16_t field_0e52;
-    char str_92[2];
+    uint8_t bytes_0dac[2];
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* 9 pointers */
+    /* zero padding */
+    /* Per Mode-table slot (mode id & 0xFFFF): a group key; a mode switch whose mode has the current mode's key returns to MD_NORMAL; 0xFF = no group */
+    uint32_t GroupBox_ModeSwitchGroup[32];
+    /* zero padding */
+    /* zero padding */
+    /* GroupBoxProc switch byte map: event slot -> case 0-12 of CtrlPanel_FuncDispatch_CaseTable (0 = to current title, 1 = BoxProc, 2 = return 0) */
+    uint8_t GroupBox_EventCaseMap[39];
+    /* 0xFF alignment fill before the 16-bit CtrlPanel_FuncDispatch_CaseTable */
+    uint8_t GroupBox_EventCaseMap_Pad[1];
     /* CtrlPanel_FuncDispatch_CaseTable: 13 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t CtrlPanel_FuncDispatch_CaseTable[13];
     /* GetEditSwPoint_CaseTable: 13 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
@@ -658,15 +578,10 @@ typedef struct __attribute__((packed)) {
     char NO_str[4];
     /* ButtonState_DispatchDSP_CaseTable: 17 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t ButtonState_DispatchDSP_CaseTable[17];
-    uint16_t field_1690;
-    uint16_t field_1692;
-    uint16_t field_1694;
-    uint16_t field_1696;
-    uint16_t field_1698;
-    uint16_t field_169a;
-    uint16_t field_169c;
-    uint16_t field_169e;
-    uint16_t field_16a0;
+    /* AcIndexEdit OK switch: instance byte 0..16 -> case 0 (UP/DOWN by sign of the parameter), 1 (EVT_INDEXSW_UP), 2 (EVT_INDEXSW_DOWN) */
+    uint8_t AcIndexEdit_SwitchDirCaseMap[17];
+    /* 0xFF alignment fill before the 16-bit AcIndexEdit_DispatchDSP_CaseTable */
+    uint8_t AcIndexEdit_SwitchDirCaseMap_Pad[1];
     /* AcIndexEdit_DispatchDSP_CaseTable: 3 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t AcIndexEdit_DispatchDSP_CaseTable[3];
     char Page_str[12];
@@ -722,62 +637,40 @@ typedef struct __attribute__((packed)) {
     char RT1_str[4];
     /* AcMixerVol_Channels: [mixer channel] = {volume_key, mute_key, lsw_word}; channel names in AcMixerVol_ChannelNamePtrs.  Part tags 0-22 = channels 0-22. */
     mixer_channel_t AcMixerVol_Channels[28];
-    uint8_t field_1978;
-    uint8_t pad_159[3];  /* zero padding */
-    uint16_t field_197c;
-    uint8_t pad_160[2];  /* zero padding */
-    uint16_t field_1980;
-    uint8_t pad_161[2];  /* zero padding */
-    uint16_t field_1984;
-    uint8_t pad_162[2];  /* zero padding */
-    uint16_t field_1988;
-    uint8_t pad_163[2];  /* zero padding */
-    uint16_t field_198c;
-    uint8_t pad_164[2];  /* zero padding */
-    uint16_t field_1990;
-    uint8_t pad_165[2];  /* zero padding */
-    uint16_t field_1994;
-    uint8_t pad_166[2];  /* zero padding */
-    uint16_t field_1998;
-    uint8_t pad_167[2];  /* zero padding */
-    uint16_t field_199c;
-    uint8_t pad_168[2];  /* zero padding */
-    uint16_t field_19a0;
-    uint8_t pad_169[2];  /* zero padding */
-    uint16_t field_19a4;
-    uint8_t pad_170[2];  /* zero padding */
-    uint16_t field_19a8;
-    uint8_t pad_171[2];  /* zero padding */
-    uint16_t field_19ac;
-    uint8_t pad_172[2];  /* zero padding */
-    uint16_t field_19b0;
-    uint8_t pad_173[2];  /* zero padding */
-    uint16_t field_19b4;
-    uint8_t pad_174[2];  /* zero padding */
-    uint16_t field_19b8;
-    uint8_t pad_175[2];  /* zero padding */
-    uint16_t field_19bc;
-    uint8_t pad_176[2];  /* zero padding */
-    char str_352[2];
-    uint8_t pad_177[2];  /* zero padding */
-    char str_353[2];
-    uint8_t pad_178[62];  /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* sound-group number (bits 24-28 of the EVT_SOUND_SW_NO parameter; 18/19 forced for the METR/MIC channels) -> BitmapDescriptorTable index of the 32x32 icon */
+    uint32_t AcMixerVol_GroupIconBitmap[35];
     char AcMixerVol_DrawChannel_Str_Fmt3d[4];
     char MUTE_str[6];
     char DebugTime_str[12];
     char XX_str[12];
     char XXXX_str[40];
-    uint8_t pad_179[2];  /* zero padding */
-    uint16_t field_1a50;
-    uint8_t pad_180[2];  /* zero padding */
-    uint16_t field_1a54;
-    uint16_t field_1a56;
-    uint8_t pad_181[3];  /* zero padding */
-    uint16_t field_1a5b;
-    uint16_t field_1a5d;
-    uint8_t pad_182[3];  /* zero padding */
-    uint16_t field_1a62;
-    uint8_t pad_183[2];  /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* Memory-dump debugger address steps for edit switches 2..7: 0x100000, 0x10000, 0x1000, 0x100, 0x10, 1 */
+    uint32_t DbMemDump_StepTable[6];
     /* DbDebugMenu_Confirm_PtrTable: 4 pointers (cut from ptrs_16 by split_naka_pointer_arrays.py) */
     uint32_t DbDebugMenu_Confirm_PtrTable[4];
     char str_359[2];
@@ -819,10 +712,8 @@ typedef struct __attribute__((packed)) {
     char PLAY_str[6];
     char REC_str[4];
     char str_388[2];
-    uint16_t field_1b6e;
-    uint16_t field_1b70;
-    uint32_t ptr_1b72;
-    uint16_t field_1b76;
+    /* DrawBox colour of a track switch for selection state 0-4 (parallel to the 5 strings of PsTrackSwitchProc_PtrTable_2) */
+    uint16_t PsTrkSw_SelectStateColor[5];
     char PsTrkSw_Confirm_DrawGeometry_Str_Fmtd[4];
     uint16_t AcTrkSw_Select_Data;
     char PsTextBox_code[10];
@@ -855,100 +746,41 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1c38;
     uint32_t ptrs_20[3];  /* 3 pointers */
     char str_399[2];
-    char str_400[2];
-    char str_401[2];
+    /* "" + 0xFF pad: the name RegisterObject gives a newly registered object */
+    char RegisterObject_Str_EmptyName[2];
+    /* "" (+ 0xFF alignment byte): the name UnRegisterObject gives a freed object's slot */
+    char UnRegisterObject_EmptyName[2];
     /* ClassProc_CaseTable: 8 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t ClassProc_CaseTable[8];
     /* ModeProc_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t ModeProc_CaseTable[6];
-    char str_407[2];
-    char str_408[2];
-    uint16_t field_1c6c;
-    uint16_t field_1c6e;
-    uint16_t field_1c70;
-    uint16_t field_1c72;
-    char str_409[2];
-    uint8_t pad_190[4];  /* zero padding */
-    char E_str_2[2];
-    uint16_t field_1c7c;
-    uint16_t field_1c7e;
-    uint16_t field_1c80;
-    char d_str_5[2];
-    uint8_t pad_191[4];  /* zero padding */
-    uint16_t field_1c88;
-    uint16_t field_1c8a;
-    uint16_t field_1c8c;
-    uint16_t field_1c8e;
-    char str_412[2];
-    uint8_t pad_192[4];  /* zero padding */
-    uint16_t field_1c96;
-    uint16_t field_1c98;
-    uint16_t field_1c9a;
-    uint16_t field_1c9c;
-    char str_413[2];
-    uint8_t pad_193[4];  /* zero padding */
-    char D_str_3[2];
-    uint16_t field_1ca6;
-    uint16_t field_1ca8;
-    uint16_t field_1caa;
-    char str_415[2];
-    uint8_t pad_194[4];  /* zero padding */
-    uint16_t field_1cb2;
-    uint16_t field_1cb4;
-    uint16_t field_1cb6;
-    uint16_t field_1cb8;
-    char str_416[2];
-    uint8_t pad_195[4];  /* zero padding */
-    char a_str_3[2];
-    uint16_t field_1cc2;
-    uint16_t field_1cc4;
-    uint16_t field_1cc6;
-    char str_418[2];
-    uint8_t pad_196[4];  /* zero padding */
-    uint16_t field_1cce;
-    uint16_t field_1cd0;
-    uint16_t field_1cd2;
-    uint16_t field_1cd4;
-    char str_419[2];
-    uint8_t pad_197[4];  /* zero padding */
-    uint16_t field_1cdc;
-    uint16_t field_1cde;
-    uint16_t field_1ce0;
-    uint16_t field_1ce2;
-    char str_420[2];
-    uint8_t pad_198[4];  /* zero padding */
-    uint16_t field_1cea;
-    uint16_t field_1cec;
-    uint16_t field_1cee;
-    uint16_t field_1cf0;
-    char str_421[2];
-    uint8_t pad_199[4];  /* zero padding */
-    uint16_t field_1cf8;
-    uint16_t field_1cfa;
-    uint16_t field_1cfc;
-    uint16_t field_1cfe;
-    char str_422[2];
-    uint8_t pad_200[4];  /* zero padding */
-    uint16_t field_1d06;
-    uint16_t field_1d08;
-    uint16_t field_1d0a;
-    uint16_t field_1d0c;
-    char str_423[2];
-    uint8_t pad_201[4];  /* zero padding */
+    /* "" (NUL + 0xFF pad): name given to a mode slot by UnregisteredMode */
+    char Mode_UnregisteredName[2];
+    /* "" + 0xFF fill: the name given to title slots that were never registered */
+    char UnregisteredTitle_EmptyName[2];
+    /* title id of press-and-hold (easy set) entry 0: TITLE_SDTECD (0x01A0000D); start of the 12 x 14-byte easy-set table */
+    uint32_t TitleProc_EasySetTable;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* Record 0 of the 12 x 14-byte easy-set hold table, from its title_event field on (title_id is TitleProc_Data) */
+    TitleProc_EasySetHold0Tail_t TitleProc_EasySetHold0Tail;
+    /* Easy-set buttons 1..11: title to open when the button is held, the event that opens it, hold time in ApTimer ticks, an unread word */
+    TitleProc_EasySetHold1to11_t TitleProc_EasySetHold1to11[11];
     /* TitleProc_Str_j: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t TitleProc_Str_j[6];
-    uint8_t pad_202[2];  /* zero padding */
-    uint16_t field_1d22;
-    uint16_t field_1d24;
-    char str_427[2];
-    char S_str_5[2];
-    char str_429[2];
-    uint16_t field_1d2c;
-    uint32_t ptr_1d2e;
-    uint16_t field_1d32;
-    uint16_t field_1d34;
-    uint16_t field_1d36;
-    uint16_t field_1d38;
+    /* zero padding */
+    /* IntTimeID (IT_Off, IT_Default, IT_Hold, IT_1Sec..IT_10Sec) -> interrupt-screen timeout in ApTimer ticks (1 s = 41.67 ticks); 0 = no timeout */
+    int16_t Title_InterruptTimeTicks[13];
     /* ViewableProc_CaseTable: 7 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t ViewableProc_CaseTable[7];
     /* BoxStyle7_Setup_Data: text (the asm slice of the same name) */
@@ -1026,10 +858,12 @@ typedef struct __attribute__((packed)) {
     char Title_code[8];
     char Title_name[8];
     char name_str_2[6];
-    char str_493[2];
+    /* "" + 0xFF pad: the text NameProc copies out for EVT_MAKE_DUMP */
+    char NameProc_MakeDump_Str_Empty[2];
     char NameProc_GetText_Str_Empty[2];
     char romram_str_2[8];
-    char str_496[2];
+    /* "" (+ 0xFF alignment byte): the text ConstFlagProc copies for EVT_MAKE_DUMP */
+    char ConstFlagProc_DumpText[2];
     char ConstFlagProc_SetValue_Check_Str_Empty[2];
     char str_498[2];
     /* CommonIDProc_CaseTable: 7 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
@@ -1049,83 +883,26 @@ typedef struct __attribute__((packed)) {
     uint8_t field_21a4;
     char KlcdBmp_str[13];
     char wb_str[4];
-    uint16_t field_21b6;
-    uint16_t field_21b8;
-    uint16_t field_21ba;
-    uint16_t field_21bc;
-    uint8_t pad_205[4];  /* zero padding */
-    uint16_t field_21c2;
-    uint16_t field_21c4;
-    uint16_t field_21c6;
-    uint8_t pad_206[4];  /* zero padding */
-    char str_508[2];
-    uint16_t field_21ce;
-    char str_509[2];
-    uint8_t pad_207[3];  /* zero padding */
-    uint16_t field_21d5;
-    uint8_t pad_208[2];  /* zero padding */
-    uint16_t field_21d9;
-    uint8_t pad_209[5];  /* zero padding */
-    char str_510[2];
-    uint16_t field_21e2;
-    char str_511[2];
-    uint8_t pad_210[2];  /* zero padding */
-    uint16_t field_21e8;
-    uint16_t field_21ea;
-    uint16_t field_21ec;
-    uint16_t field_21ee;
-    uint16_t field_21f0;
-    uint16_t field_21f2;
-    uint16_t field_21f4;
-    uint16_t field_21f6;
-    uint16_t field_21f8;
-    uint16_t field_21fa;
-    uint16_t field_21fc;
-    uint16_t field_21fe;
-    uint16_t field_2200;
-    uint16_t field_2202;
-    uint16_t field_2204;
-    uint16_t field_2206;
-    uint16_t field_2208;
-    uint16_t field_220a;
-    uint16_t field_220c;
-    uint16_t field_220e;
-    uint16_t field_2210;
-    uint16_t field_2212;
-    uint16_t field_2214;
-    uint16_t field_2216;
-    uint16_t field_2218;
-    uint16_t field_221a;
-    uint16_t field_221c;
-    uint16_t field_221e;
-    uint16_t field_2220;
-    uint16_t field_2222;
-    uint8_t pad_211[4];  /* zero padding */
-    uint16_t field_2228;
-    uint16_t field_222a;
-    uint16_t field_222c;
-    uint16_t field_222e;
-    uint16_t field_2230;
-    uint16_t field_2232;
-    uint16_t field_2234;
-    uint16_t field_2236;
-    uint8_t pad_212[16];  /* zero padding */
-    uint16_t field_2248;
-    uint16_t field_224a;
-    uint16_t field_224c;
-    uint16_t field_224e;
-    uint16_t field_2250;
-    uint16_t field_2252;
-    uint16_t field_2254;
-    uint16_t field_2256;
-    uint16_t field_2258;
-    uint16_t field_225a;
-    uint16_t field_225c;
-    uint16_t field_225e;
-    uint16_t field_2260;
-    uint16_t field_2262;
-    /* Pad_AfterStr_No_Tail: the last bytes of the asm slice Pad_AfterStr_No */
-    uint8_t Pad_AfterStr_No_Tail[4];
+    /* Wallpaper 0's bitmap address (0x8ED000); first field of a 5 x 10-byte {bitmap, palette, u16} table that continues at ChangePalette_Impl_Data */
+    uint32_t ChangeWall_WallpaperTable;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* palette pointer (0x8FFC00) and zero word of wallpaper record 0; record 0's bitmap is the 4 bytes before (ChangeWall_Impl_Data) */
+    ChangePalette_WallpaperPalettes_t ChangePalette_WallpaperPalettes;
+    /* wallpaper records 1-4 {320x240 8-bpp bitmap, its 256 x 4-byte palette = bitmap + 76800, 0} */
+    ChangeWall_WallpaperRecords_t ChangeWall_WallpaperRecords[4];
+    /* zero padding */
+    /* half-width in pixels of a radius-30 disc at vertical distance |dy| from its centre: round(sqrt(900 - dy*dy)), dy = 0..30; [31] = 0 */
+    uint16_t ClipBlit_DiscHalfWidth[32];
+    /* zero padding */
+    /* colour index (into the 256 x 4-byte palette at RAM 0x324FC) loaded into DAC entries 32..63 */
+    uint8_t GraphicsRender_LowBandColorIndex[32];
+    /* for palette slots 192..223: the palette entry whose RGB is copied into slot 192+i */
+    uint8_t GraphicsRender_PaletteSrc192[32];
     /* GraphicsRender_ProcessEntries_PtrTable: the static display-record handler of each op (scripts/tools/label_segfx_ops.py) */
     uint32_t GraphicsRender_ProcessEntries_PtrTable[36];
     /* GraphicsRender_Start_PtrTable: the bound display-record handler of each op */
@@ -1134,14 +911,8 @@ typedef struct __attribute__((packed)) {
     uint16_t SeGfx_TextClipBoxes[6][4];
     /* TextStyle_FontTable: text style (& 0x3f) -> font index passed to DrawText_QueueOrDirect (read in display/graphics_text_vga.s) */
     uint32_t TextStyle_FontTable[64];
-    uint16_t field_2458;
-    uint16_t field_245a;
-    uint16_t field_245c;
-    uint16_t field_245e;
-    uint16_t field_2460;
-    uint16_t field_2462;
-    uint16_t field_2464;
-    uint16_t field_2466;
+    /* text style nibble (record byte +6 & 15) -> font number; all 3 (6x8 font) except style 12 -> 4 (11x16 font) */
+    uint8_t TextStyle_NibbleFontTable[16];
     uint8_t pad_216[4];  /* zero padding */
     uint32_t ptrs_23[1];
     /* DrawText_ExtLayout_Variant1_Data: 2 pointers (cut from ptrs_23 by split_naka_pointer_arrays.py) */
@@ -2039,259 +1810,30 @@ const naka_disk_warning_t naka_disk_warning_data
         0x0037, 0x003C, 0x0041, 0x0046,
     },
 
-    .field_0c36 = 0x0007,
-
-    .pad_4 = { 0 },
-
-    .field_0c3a = 0x0007,
-
-    .pad_5 = { 0 },
-
-    .field_0c3e = 0x0007,
-
-    .pad_6 = { 0 },
-
-    .field_0c42 = 0x0007,
-
-    .pad_7 = { 0 },
-
-    .field_0c46 = 0x0007,
-
-    .pad_8 = { 0 },
-
-    .field_0c4a = 0x0006,
-
-    .pad_9 = { 0 },
-
-    .field_0c4e = 0x0006,
-
-    .pad_10 = { 0 },
-
-    .field_0c52 = 0x0006,
-
-    .pad_11 = { 0 },
-
-    .field_0c56 = 0x0005,
-
-    .pad_12 = { 0 },
-
-    .field_0c5a = 0x0005,
-
-    .pad_13 = { 0 },
-
-    .field_0c5e = 0x0005,
-
-    .pad_14 = { 0 },
-
-    .field_0c62 = 0x0004,
-
-    .pad_15 = { 0 },
-
-    .field_0c66 = 0x0004,
-
-    .pad_16 = { 0 },
-
-    .field_0c6a = 0x0003,
-
-    .pad_17 = { 0 },
-
-    .field_0c6e = 0x0002,
-
-    .pad_18 = { 0 },
-
-    .field_0c72 = 0x0001,
-
-    .pad_19 = { 0 },
-
-    .field_0c7a = NAKA_NONE,
-
-    .field_0c7c = NAKA_NONE,
-
-    .field_0c7e = 0xFFFE,
-
-    .field_0c80 = NAKA_NONE,
-
-    .field_0c82 = 0xFFFD,
-
-    .field_0c84 = NAKA_NONE,
-
-    .field_0c86 = 0xFFFC,
-
-    .field_0c88 = NAKA_NONE,
-
-    .field_0c8a = 0xFFFC,
-
-    .field_0c8c = NAKA_NONE,
-
-    .field_0c8e = 0xFFFB,
-
-    .field_0c90 = NAKA_NONE,
-
-    .field_0c92 = 0xFFFB,
-
-    .field_0c94 = NAKA_NONE,
-
-    .field_0c96 = 0xFFFB,
-
-    .field_0c98 = NAKA_NONE,
-
-    .field_0c9a = 0xFFFA,
-
-    .field_0c9c = NAKA_NONE,
-
-    .field_0c9e = 0xFFFA,
-
-    .field_0ca0 = NAKA_NONE,
-
-    .field_0ca2 = 0xFFFA,
-
-    .field_0ca4 = NAKA_NONE,
-
-    .field_0ca6 = 0xFFF9,
-
-    .field_0ca8 = NAKA_NONE,
-
-    .field_0caa = 0xFFF9,
-
-    .field_0cac = NAKA_NONE,
-
-    .field_0cae = 0xFFF9,
-
-    .field_0cb0 = NAKA_NONE,
-
-    .field_0cb2 = 0xFFF9,
-
-    .field_0cb4 = NAKA_NONE,
-
-    .field_0cb6 = 0xFFF9,
-
-    .field_0cb8 = NAKA_NONE,
-
-    .field_0cba = 0x0001,
-
-    .pad_20 = { 0 },
-
-    .field_0cbe = 0x0002,
-
-    .pad_21 = { 0 },
-
-    .field_0cc2 = 0x0004,
-
-    .pad_22 = { 0 },
-
-    .field_0cc6 = 0x0008,
-
-    .pad_23 = { 0 },
-
-    .field_0cca = 0x0010,
-
-    .pad_24 = { 0 },
-
-    .str_76 = " ",
-
-    .pad_25 = { 0 },
-
-    .str_77 = "@",
-
-    .pad_26 = { 0 },
-
-    .field_0cd6 = 0x0080,
-
-    .pad_27 = { 0 },
-
-    .field_0cdb = 0x0001,
-
-    .pad_28 = { 0 },
-
-    .field_0cdf = 0x0002,
-
-    .pad_29 = { 0 },
-
-    .field_0ce3 = 0x0004,
-
-    .pad_30 = { 0 },
-
-    .field_0ce7 = 0x0008,
-
-    .pad_31 = { 0 },
-
-    .field_0ceb = 0x0010,
-
-    .pad_32 = { 0 },
-
-    .str_78 = " ",
-
-    .pad_33 = { 0 },
-
-    .str_79 = "@",
-
-    .pad_34 = { 0 },
-
-    .field_0cf7 = 0x0080,
-
-    .pad_35 = { 0 },
-
-    .field_0cfc = 0x0001,
-
-    .pad_36 = { 0 },
-
-    .field_0d00 = 0x0002,
-
-    .pad_37 = { 0 },
-
-    .field_0d04 = 0x0004,
-
-    .pad_38 = { 0 },
-
-    .field_0d08 = 0x0008,
-
-    .pad_39 = { 0 },
-
-    .field_0d0c = 0x0010,
-
-    .pad_40 = { 0 },
-
-    .str_80 = " ",
-
-    .pad_41 = { 0 },
-
-    .str_81 = "@",
-
-    .pad_42 = { 0 },
-
-    .field_0d18 = 0x0080,
-
-    .pad_43 = { 0 },
-
-    .field_0d1d = 0x0001,
-
-    .pad_44 = { 0 },
-
-    .field_0d21 = 0x0002,
-
-    .pad_45 = { 0 },
-
-    .field_0d25 = 0x0004,
-
-    .pad_46 = { 0 },
-
-    .field_0d29 = 0x0008,
-
-    .pad_47 = { 0 },
-
-    .field_0d2d = 0x0010,
-
-    .pad_48 = { 0 },
-
-    .str_82 = " ",
-
-    .pad_49 = { 0 },
-
-    .str_83 = "@",
-
-    .pad_50 = { 0 },
-
-    .field_0d39 = 0x2080,
+    .CtrlPanel_DialStepByDelta = {
+        7, 7, 7, 7,
+        7, 6, 6, 6,
+        5, 5, 5, 4,
+        4, 3, 2, 1,
+        0, -1, -2, -3,
+        -4, -4, -5, -5,
+        -5, -6, -6, -6,
+        -7, -7, -7, -7,
+        -7,
+    },
+
+    .CtrlPanel_SwitchRowBit = {
+        0x00000001, 0x00000002, 0x00000004, 0x00000008,
+        0x00000010, 0x00000020, 0x00000040, 0x00000080,
+        0x00000100, 0x00000200, 0x00000400, 0x00000800,
+        0x00001000, 0x00002000, 0x00004000, 0x00008000,
+        0x00010000, 0x00020000, 0x00040000, 0x00080000,
+        0x00100000, 0x00200000, 0x00400000, 0x00800000,
+        0x01000000, 0x02000000, 0x04000000, 0x08000000,
+        0x10000000, 0x20000000, 0x40000000, 0x80000000,
+    },
+
+    .field_0d3a = 0x20,
 
     .str_84 = "    ------     ",
 
@@ -2381,145 +1923,28 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_0daa = 0x00A5,
 
-    .ptr_0dac = 0x00FF00A5,
+    .bytes_0dac = { 0xA5, 0x00 },
 
-    .pad_52 = { 0 },
-
-    .field_0db2 = 0x00FF,
-
-    .pad_53 = { 0 },
-
-    .field_0db6 = 0x0101,
-
-    .pad_54 = { 0 },
-
-    .field_0dba = 0x0101,
-
-    .pad_55 = { 0 },
-
-    .field_0dbe = 0x0102,
-
-    .pad_56 = { 0 },
-
-    .field_0dc2 = 0x0103,
-
-    .pad_57 = { 0 },
-
-    .field_0dc6 = 0x0104,
-
-    .pad_58 = { 0 },
-
-    .field_0dca = 0x0113,
-
-    .pad_59 = { 0 },
-
-    .field_0dce = 0x0106,
-
-    .pad_60 = { 0 },
-
-    .field_0dd2 = 0x0105,
-
-    .pad_61 = { 0 },
-
-    .field_0dd6 = 0x0107,
-
-    .pad_62 = { 0 },
-
-    .field_0dda = 0x0106,
-
-    .pad_63 = { 0 },
-
-    .field_0dde = 0x0106,
-
-    .pad_64 = { 0 },
-
-    .field_0de2 = 0x0106,
-
-    .pad_65 = { 0 },
-
-    .field_0de6 = 0x010B,
-
-    .pad_66 = { 0 },
-
-    .field_0dea = 0x0110,
-
-    .pad_67 = { 0 },
-
-    .field_0dee = 0x0112,
-
-    .pad_68 = { 0 },
-
-    .field_0df2 = 0x010E,
-
-    .pad_69 = { 0 },
-
-    .field_0df6 = 0x010A,
-
-    .pad_70 = { 0 },
-
-    .field_0dfa = 0x010F,
-
-    .pad_71 = { 0 },
-
-    .field_0dff = 0x0001,
-
-    .str_91 = ALIGNED_STRING(""),
-
-    .pad_72 = { 0 },
-
-    .field_0e06 = 0x00FF,
-
-    .ptrs_8 = {
-        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
-        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
-        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
-        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
-        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
-        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
-        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
-        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
-        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
+    .GroupBox_ModeSwitchGroup = {
+        0x000000FF, 0x000000FF, 0x00000101, 0x00000101,
+        0x00000102, 0x00000103, 0x00000104, 0x00000113,
+        0x00000106, 0x00000105, 0x00000107, 0x00000106,
+        0x00000106, 0x00000106, 0x0000010B, 0x00000110,
+        0x00000112, 0x0000010E, 0x0000010A, 0x0000010F,
+        0x00000100, 0x000000FF, 0x000000FF, 0x000000FF,
+        0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF,
+        0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF,
     },
 
-    .pad_73 = { 0 },
+    .GroupBox_EventCaseMap = {
+        0x07, 0x08, 0x01, 0x01, 0x01, 0x01, 0x09, 0x0A, 0x0B, 0x0C, 0x02, 0x05, 0x06, 0x00, 0x00, 0x00,
+        0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x01, 0x02, 0x02, 0x02, 0x02, 0x03,
+        0x01, 0x01, 0x00, 0x04, 0x01, 0x01, 0x00,
+    },
 
-    .field_0e2e = 0x0807,
-
-    .field_0e30 = 0x0101,
-
-    .field_0e32 = 0x0101,
-
-    .field_0e34 = 0x0A09,
-
-    .field_0e36 = 0x0C0B,
-
-    .field_0e38 = 0x0502,
-
-    .field_0e3a = 0x0006,
-
-    .pad_74 = { 0 },
-
-    .field_0e3f = 0x0101,
-
-    .pad_75 = { 0 },
-
-    .field_0e44 = 0x0101,
-
-    .field_0e46 = 0x0001,
-
-    .field_0e48 = 0x0201,
-
-    .field_0e4a = 0x0202,
-
-    .field_0e4c = 0x0302,
-
-    .field_0e4e = 0x0101,
-
-    .field_0e50 = 0x0400,
-
-    .field_0e52 = 0x0101,
-
-    .str_92 = ALIGNED_STRING(""),
+    .GroupBox_EventCaseMap_Pad = {
+        0xFF,
+    },
 
     .CtrlPanel_FuncDispatch_CaseTable = {
         0x0B0F, 0x0BC9, 0x0BC5, 0x0B2B, 0x0B4E, 0x0B1D, 0x0B24, 0x054C,
@@ -3108,23 +2533,14 @@ const naka_disk_warning_t naka_disk_warning_data
         0x0059,
     },
 
-    .field_1690 = 0x0100,
+    .AcIndexEdit_SwitchDirCaseMap = {
+        0x00, 0x01, 0x02, 0x00, 0x01, 0x02, 0x00, 0x02, 0x01, 0x01, 0x02, 0x00, 0x01, 0x02, 0x00, 0x02,
+        0x01,
+    },
 
-    .field_1692 = 0x0002,
-
-    .field_1694 = 0x0201,
-
-    .field_1696 = 0x0200,
-
-    .field_1698 = 0x0101,
-
-    .field_169a = 0x0002,
-
-    .field_169c = 0x0201,
-
-    .field_169e = 0x0200,
-
-    .field_16a0 = 0xFF01,
+    .AcIndexEdit_SwitchDirCaseMap_Pad = {
+        0xFF,
+    },
 
     .AcIndexEdit_DispatchDSP_CaseTable = {
         0x0000, 0x0027, 0x0039,
@@ -3292,85 +2708,17 @@ const naka_disk_warning_t naka_disk_warning_data
         { 0x00004141, 0x00004142, 3 },  /* 27 MIC */
     },
 
-    .field_1978 = 0x17,
-
-    .pad_159 = { 0 },
-
-    .field_197c = 0x0010,
-
-    .pad_160 = { 0 },
-
-    .field_1980 = 0x0019,
-
-    .pad_161 = { 0 },
-
-    .field_1984 = 0x000D,
-
-    .pad_162 = { 0 },
-
-    .field_1988 = 0x000F,
-
-    .pad_163 = { 0 },
-
-    .field_198c = 0x0018,
-
-    .pad_164 = { 0 },
-
-    .field_1990 = 0x0012,
-
-    .pad_165 = { 0 },
-
-    .field_1994 = 0x0011,
-
-    .pad_166 = { 0 },
-
-    .field_1998 = 0x0015,
-
-    .pad_167 = { 0 },
-
-    .field_199c = 0x0016,
-
-    .pad_168 = { 0 },
-
-    .field_19a0 = 0x001A,
-
-    .pad_169 = { 0 },
-
-    .field_19a4 = 0x000C,
-
-    .pad_170 = { 0 },
-
-    .field_19a8 = 0x001B,
-
-    .pad_171 = { 0 },
-
-    .field_19ac = 0x001C,
-
-    .pad_172 = { 0 },
-
-    .field_19b0 = 0x001F,
-
-    .pad_173 = { 0 },
-
-    .field_19b4 = 0x000E,
-
-    .pad_174 = { 0 },
-
-    .field_19b8 = 0x0013,
-
-    .pad_175 = { 0 },
-
-    .field_19bc = 0x0014,
-
-    .pad_176 = { 0 },
-
-    .str_352 = " ",
-
-    .pad_177 = { 0 },
-
-    .str_353 = "!",
-
-    .pad_178 = { 0 },
+    .AcMixerVol_GroupIconBitmap = {
+        0x00000017, 0x00000010, 0x00000019, 0x0000000D,
+        0x0000000F, 0x00000018, 0x00000012, 0x00000011,
+        0x00000015, 0x00000016, 0x0000001A, 0x0000000C,
+        0x0000001B, 0x0000001C, 0x0000001F, 0x0000000E,
+        0x00000013, 0x00000014, 0x00000020, 0x00000021,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000,
+    },
 
     .AcMixerVol_DrawChannel_Str_Fmt3d = "%3d",
 
@@ -3382,27 +2730,10 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .XXXX_str = "%02X %02X %02X %02X %02X %02X %02X %02X",
 
-    .pad_179 = { 0 },
-
-    .field_1a50 = 0x0010,
-
-    .pad_180 = { 0 },
-
-    .field_1a54 = 0x0001,
-
-    .field_1a56 = 0x1000,
-
-    .pad_181 = { 0 },
-
-    .field_1a5b = 0x0001,
-
-    .field_1a5d = 0x1000,
-
-    .pad_182 = { 0 },
-
-    .field_1a62 = 0x0001,
-
-    .pad_183 = { 0 },
+    .DbMemDump_StepTable = {
+        0x00100000, 0x00010000, 0x00001000, 0x00000100,
+        0x00000010, 0x00000001,
+    },
 
     .DbDebugMenu_Confirm_PtrTable = {
         SELF(MemoryDump_str),
@@ -3512,13 +2843,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_388 = ALIGNED_STRING(""),
 
-    .field_1b6e = 0x00F5,
-
-    .field_1b70 = 0x000A,
-
-    .ptr_1b72 = 0x00FF000D,
-
-    .field_1b76 = 0x00FF,
+    .PsTrkSw_SelectStateColor = {
+        0x00F5, 0x000A, 0x000D, 0x00FF, 0x00FF,
+    },
 
     .PsTrkSw_Confirm_DrawGeometry_Str_Fmtd = ALIGNED_STRING("%d"),
 
@@ -3595,9 +2922,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_399 = ALIGNED_STRING(""),
 
-    .str_400 = ALIGNED_STRING(""),
+    .RegisterObject_Str_EmptyName = "\x00\xFF",
 
-    .str_401 = ALIGNED_STRING(""),
+    .UnRegisterObject_EmptyName = "\x00\xFF",
 
     .ClassProc_CaseTable = {
         0x0000, 0x0005, 0x000A, 0x0018, 0x0020, 0x007A, 0x0104, 0x011E,
@@ -3607,181 +2934,36 @@ const naka_disk_warning_t naka_disk_warning_data
         0x001C, 0x003D, 0x0053, 0x009A, 0x00A2, 0x006A,
     },
 
-    .str_407 = ALIGNED_STRING(""),
-
-    .str_408 = ALIGNED_STRING(""),
-
-    .field_1c6c = 0x000D,
-
-    .field_1c6e = 0x01A0,
-
-    .field_1c70 = 0x0016,
-
-    .field_1c72 = 0x01C0,
-
-    .str_409 = "<",
-
-    .pad_190 = { 0 },
-
-    .E_str_2 = "E",
-
-    .field_1c7c = 0x01A0,
-
-    .field_1c7e = 0x0016,
-
-    .field_1c80 = 0x01C0,
-
-    .d_str_5 = "d",
-
-    .pad_191 = { 0 },
-
-    .field_1c88 = 0x000A,
-
-    .field_1c8a = 0x01A0,
-
-    .field_1c8c = 0x0016,
-
-    .field_1c8e = 0x01C0,
-
-    .str_412 = "<",
-
-    .pad_192 = { 0 },
-
-    .field_1c96 = 0x000B,
-
-    .field_1c98 = 0x01A0,
-
-    .field_1c9a = 0x0016,
-
-    .field_1c9c = 0x01C0,
-
-    .str_413 = "<",
-
-    .pad_193 = { 0 },
-
-    .D_str_3 = "D",
-
-    .field_1ca6 = 0x01A0,
-
-    .field_1ca8 = 0x0016,
-
-    .field_1caa = 0x01C0,
-
-    .str_415 = "<",
-
-    .pad_194 = { 0 },
-
-    .field_1cb2 = 0x00EC,
-
-    .field_1cb4 = 0x01A0,
-
-    .field_1cb6 = 0x0016,
-
-    .field_1cb8 = 0x01C0,
-
-    .str_416 = "<",
-
-    .pad_195 = { 0 },
-
-    .a_str_3 = "a",
-
-    .field_1cc2 = 0x01A0,
-
-    .field_1cc4 = 0x0015,
-
-    .field_1cc6 = 0x01C0,
-
-    .str_418 = "<",
-
-    .pad_196 = { 0 },
-
-    .field_1cce = 0x00BC,
-
-    .field_1cd0 = 0x01A0,
-
-    .field_1cd2 = 0x0015,
-
-    .field_1cd4 = 0x01C0,
-
-    .str_419 = "<",
-
-    .pad_197 = { 0 },
-
-    .field_1cdc = 0x00D8,
-
-    .field_1cde = 0x01A0,
-
-    .field_1ce0 = 0x0016,
-
-    .field_1ce2 = 0x01C0,
-
-    .str_420 = "<",
-
-    .pad_198 = { 0 },
-
-    .field_1cea = 0x000E,
-
-    .field_1cec = 0x01A0,
-
-    .field_1cee = 0x0016,
-
-    .field_1cf0 = 0x01C0,
-
-    .str_421 = "<",
-
-    .pad_199 = { 0 },
-
-    .field_1cf8 = 0x00D1,
-
-    .field_1cfa = 0x01A0,
-
-    .field_1cfc = 0x0016,
-
-    .field_1cfe = 0x01C0,
-
-    .str_422 = "<",
-
-    .pad_200 = { 0 },
-
-    .field_1d06 = 0x007F,
-
-    .field_1d08 = 0x01A0,
-
-    .field_1d0a = 0x0015,
-
-    .field_1d0c = 0x01C0,
-
-    .str_423 = "<",
-
-    .pad_201 = { 0 },
+    .Mode_UnregisteredName = "\x00\xFF",
+
+    .UnregisteredTitle_EmptyName = "\x00\xFF",
+
+    .TitleProc_EasySetTable = 0x01A0000D,
+
+    .TitleProc_EasySetHold0Tail = { 0x01C00016, 0x0000003C, 0x0000 },
+
+    .TitleProc_EasySetHold1to11 = {
+        { 0x01A00045, 0x01C00016, 0x00000064, 0x0000 },
+        { 0x01A0000A, 0x01C00016, 0x0000003C, 0x0000 },
+        { 0x01A0000B, 0x01C00016, 0x0000003C, 0x0000 },
+        { 0x01A00044, 0x01C00016, 0x0000003C, 0x0000 },
+        { 0x01A000EC, 0x01C00016, 0x0000003C, 0x0000 },
+        { 0x01A00061, 0x01C00015, 0x0000003C, 0x0000 },
+        { 0x01A000BC, 0x01C00015, 0x0000003C, 0x0000 },
+        { 0x01A000D8, 0x01C00016, 0x0000003C, 0x0000 },
+        { 0x01A0000E, 0x01C00016, 0x0000003C, 0x0000 },
+        { 0x01A000D1, 0x01C00016, 0x0000003C, 0x0000 },
+        { 0x01A0007F, 0x01C00015, 0x0000003C, 0x0000 },
+    },
 
     .TitleProc_Str_j = {
         0x006A, 0x001C, 0x003D, 0x0053, 0x009A, 0x00A2,
     },
 
-    .pad_202 = { 0 },
-
-    .field_1d22 = 0x00A7,
-
-    .field_1d24 = 0x00A7,
-
-    .str_427 = "*",
-
-    .S_str_5 = "S",
-
-    .str_429 = "}",
-
-    .field_1d2c = 0x00A7,
-
-    .ptr_1d2e = 0x00FA00D0,
-
-    .field_1d32 = 0x0124,
-
-    .field_1d34 = 0x014D,
-
-    .field_1d36 = 0x0177,
-
-    .field_1d38 = 0x01A1,
+    .Title_InterruptTimeTicks = {
+        0, 167, 167, 42, 83, 125, 167, 208,
+        250, 292, 333, 375, 417,
+    },
 
     .ViewableProc_CaseTable = {
         0x004B, 0x0091, 0x00C2, 0x00C2, 0x00C2, 0x0333, 0x00C2,
@@ -3923,13 +3105,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .name_str_2 = ALIGNED_STRING("name"),
 
-    .str_493 = ALIGNED_STRING(""),
+    .NameProc_MakeDump_Str_Empty = "\x00\xFF",
 
     .NameProc_GetText_Str_Empty = ALIGNED_STRING(""),
 
     .romram_str_2 = ALIGNED_STRING("romram"),
 
-    .str_496 = ALIGNED_STRING(""),
+    .ConstFlagProc_DumpText = "\x00\xFF",
 
     .ConstFlagProc_SetValue_Check_Str_Empty = ALIGNED_STRING(""),
 
@@ -3998,157 +3180,33 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .wb_str = ALIGNED_STRING("wb"),
 
-    .field_21b6 = 0xD000,
-
-    .field_21b8 = 0x008E,
-
-    .field_21ba = 0xFC00,
-
-    .field_21bc = 0x008F,
-
-    .pad_205 = { 0 },
-
-    .field_21c2 = 0x0090,
-
-    .field_21c4 = 0x2C00,
-
-    .field_21c6 = 0x0091,
-
-    .pad_206 = { 0 },
-
-    .str_508 = "<",
-
-    .field_21ce = 0x2C00,
-
-    .str_509 = "=",
-
-    .pad_207 = { 0 },
-
-    .field_21d5 = 0x0568,
-
-    .pad_208 = { 0 },
-
-    .field_21d9 = 0x0694,
-
-    .pad_209 = { 0 },
-
-    .str_510 = "<",
-
-    .field_21e2 = 0x2C00,
-
-    .str_511 = "=",
-
-    .pad_210 = { 0 },
-
-    .field_21e8 = 0x001E,
-
-    .field_21ea = 0x001E,
-
-    .field_21ec = 0x001E,
-
-    .field_21ee = 0x001E,
-
-    .field_21f0 = 0x001E,
-
-    .field_21f2 = 0x001E,
-
-    .field_21f4 = 0x001D,
-
-    .field_21f6 = 0x001D,
-
-    .field_21f8 = 0x001D,
-
-    .field_21fa = 0x001D,
-
-    .field_21fc = 0x001C,
-
-    .field_21fe = 0x001C,
-
-    .field_2200 = 0x001B,
-
-    .field_2202 = 0x001B,
-
-    .field_2204 = 0x001B,
-
-    .field_2206 = 0x001A,
-
-    .field_2208 = 0x0019,
-
-    .field_220a = 0x0019,
-
-    .field_220c = 0x0018,
-
-    .field_220e = 0x0017,
-
-    .field_2210 = 0x0016,
-
-    .field_2212 = 0x0015,
-
-    .field_2214 = 0x0014,
-
-    .field_2216 = 0x0013,
-
-    .field_2218 = 0x0012,
-
-    .field_221a = 0x0011,
-
-    .field_221c = 0x000F,
-
-    .field_221e = 0x000D,
-
-    .field_2220 = 0x000B,
-
-    .field_2222 = 0x0008,
-
-    .pad_211 = { 0 },
-
-    .field_2228 = 0x06FF,
-
-    .field_222a = 0x0405,
-
-    .field_222c = 0x0203,
-
-    .field_222e = 0xF801,
-
-    .field_2230 = 0x0AFF,
-
-    .field_2232 = 0xFF09,
-
-    .field_2234 = NAKA_NONE,
-
-    .field_2236 = NAKA_NONE,
-
-    .pad_212 = { 0 },
-
-    .field_2248 = NAKA_NONE,
-
-    .field_224a = NAKA_NONE,
-
-    .field_224c = NAKA_NONE,
-
-    .field_224e = NAKA_NONE,
-
-    .field_2250 = NAKA_NONE,
-
-    .field_2252 = NAKA_NONE,
-
-    .field_2254 = NAKA_NONE,
-
-    .field_2256 = NAKA_NONE,
-
-    .field_2258 = 0xFCF3,
-
-    .field_225a = 0xF009,
-
-    .field_225c = 0xFF09,
-
-    .field_225e = NAKA_NONE,
-
-    .field_2260 = 0xFE07,
-
-    .field_2262 = 0xFCFD,
-
-    .Pad_AfterStr_No_Tail = {0xFB, 0xFA, 0xF9, 0x00},
+    .ChangeWall_WallpaperTable = 0x008ED000,
+
+    .ChangePalette_WallpaperPalettes = { 0x008FFC00, 0x0000 },
+
+    .ChangeWall_WallpaperRecords = {
+        { 0x00900000, 0x00912C00, 0x0000 },
+        { 0x003C0000, 0x003D2C00, 0x0000 },
+        { 0x00056800, 0x00069400, 0x0000 },
+        { 0x003C0000, 0x003D2C00, 0x0000 },
+    },
+
+    .ClipBlit_DiscHalfWidth = {
+        0x001E, 0x001E, 0x001E, 0x001E, 0x001E, 0x001E, 0x001D, 0x001D,
+        0x001D, 0x001D, 0x001C, 0x001C, 0x001B, 0x001B, 0x001B, 0x001A,
+        0x0019, 0x0019, 0x0018, 0x0017, 0x0016, 0x0015, 0x0014, 0x0013,
+        0x0012, 0x0011, 0x000F, 0x000D, 0x000B, 0x0008, 0x0000, 0x0000,
+    },
+
+    .GraphicsRender_LowBandColorIndex = {
+        0xFF, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0xF8, 0xFF, 0x0A, 0x09, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    },
+
+    .GraphicsRender_PaletteSrc192 = {
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xF3, 0xFC, 0x09, 0xF0, 0x09, 0xFF, 0xFF, 0xFF, 0x07, 0xFE, 0xFD, 0xFC, 0xFB, 0xFA, 0xF9, 0x00,
+    },
 
     .GraphicsRender_ProcessEntries_PtrTable = {
         NAKA_ADDR(SeGfx_StaticOp00_Line), NAKA_ADDR(SeGfx_StaticOp01_Line), NAKA_ADDR(SeGfx_StaticOp02_Line), NAKA_ADDR(SeGfx_StaticOp03_Bitmap),
@@ -4184,21 +3242,9 @@ const naka_disk_warning_t naka_disk_warning_data
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* styles 48.. */
     },
 
-    .field_2458 = 0x0303,
-
-    .field_245a = 0x0303,
-
-    .field_245c = 0x0303,
-
-    .field_245e = 0x0303,
-
-    .field_2460 = 0x0303,
-
-    .field_2462 = 0x0303,
-
-    .field_2464 = 0x0304,
-
-    .field_2466 = 0x0303,
+    .TextStyle_NibbleFontTable = {
+        0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x04, 0x03, 0x03, 0x03,
+    },
 
     .pad_216 = { 0 },
 

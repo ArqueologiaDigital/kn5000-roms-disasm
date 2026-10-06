@@ -592,7 +592,8 @@ typedef struct __attribute__((packed)) {
     char CHARA3_str[8];
     char CHARA2_str[8];
     char CHARA1_str[8];
-    char str_24[2];
+    /* "" + 0xFF pad: entry 10 of the font file-name table (after chara1.fnt .. chara5w.fnt) */
+    char NakaStr_FontFileBlank[2];
     char Chara5wFnt_str[12];
     char Chara2wFnt_str[12];
     char Chara1wFnt_str[12];
@@ -1331,7 +1332,8 @@ typedef struct __attribute__((packed)) {
     uint16_t IconIDProc_EntryCount;
     /* IconIDProc_PtrTable: 256 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
     uint32_t IconIDProc_PtrTable[256];
-    char str_567[2];
+    /* "" (+ 0xFF alignment byte): name of icon-table entry 176, one past IconIDProc_EntryCount (176); a NULL pointer follows it */
+    char IconName_Empty[2];
     char i173_str[6];
     char i172_str[6];
     char i171_str[6];
@@ -1510,7 +1512,8 @@ typedef struct __attribute__((packed)) {
     char None_str[6];
     /* IconBitmapNamePtrTable: 256 pointers (cut from ptrs_6 by split_naka_pointer_arrays.py) */
     uint32_t IconBitmapNamePtrTable[256];
-    char str_742[2];
+    /* "" (NUL + 0xFF pad): IconBitmapNamePtrTable[176], parallel to the "" at IconIDProc_PtrTable[176] */
+    char IconBitmapName_Empty[2];
     char I173Bmp_str[10];
     char I172Bmp_str[10];
     char I171Bmp_str[10];
@@ -2167,7 +2170,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .CHARA1_str = ALIGNED_STRING("CHARA1"),
 
-    .str_24 = ALIGNED_STRING(""),
+    .NakaStr_FontFileBlank = "\x00\xFF",
 
     .Chara5wFnt_str = "chara5w.fnt",
 
@@ -5285,7 +5288,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(i171_str),
         SELF(i172_str),
         SELF(i173_str),
-        SELF(str_567),
+        SELF(IconName_Empty),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -5367,7 +5370,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         0x00000000,
     },
 
-    .str_567 = ALIGNED_STRING(""),
+    .IconName_Empty = "\x00\xFF",
 
     .i173_str = ALIGNED_STRING("i173"),
 
@@ -5898,7 +5901,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(I171Bmp_str),
         SELF(I172Bmp_str),
         SELF(I173Bmp_str),
-        SELF(str_742),
+        SELF(IconBitmapName_Empty),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -5980,7 +5983,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         0x00000000,
     },
 
-    .str_742 = ALIGNED_STRING(""),
+    .IconBitmapName_Empty = "\x00\xFF",
 
     .I173Bmp_str = ALIGNED_STRING("i173.bmp"),
 

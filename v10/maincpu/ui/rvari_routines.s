@@ -818,13 +818,13 @@ RVari_Confirm_TypeF_Loop:
 RVari_ConfirmF_CheckSelected:
 	ld a, (xsp + 8)
 	extz wa
-	lda xbc, (RVari_Select_Data:24)
+	lda xbc, (RVari_SlotEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	call DrawEditSw
 	ld a, (xsp + 8)
 	extz wa
-	lda xbc, (RVari_Select_Data:24)
+	lda xbc, (RVari_SlotEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+532)
@@ -922,13 +922,13 @@ RVari_ConfirmF_Btn_Draw:
 RVari_Confirm_TypeF_SubItems:
 	ld a, (xsp + 8)
 	extz wa
-	lda xbc, (RVari_Select_CheckSameBank_Data:24)
+	lda xbc, (RVari_SubItemEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	call DrawEditSw
 	ld a, (xsp + 8)
 	extz wa
-	lda xbc, (RVari_Select_CheckSameBank_Data:24)
+	lda xbc, (RVari_SubItemEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+532)
@@ -1354,14 +1354,14 @@ RVari_EnumNotifyF_CheckSelected:
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	extz wa
-	lda xbc, (RVari_Select_Data:24)
+	lda xbc, (RVari_SlotEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	call DrawEditSw
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	extz wa
-	lda xbc, (RVari_Select_Data:24)
+	lda xbc, (RVari_SlotEditSw:24)
 	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+532)

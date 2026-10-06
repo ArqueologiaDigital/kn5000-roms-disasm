@@ -671,11 +671,12 @@ NAKA_InitDataBlock_PtrTable_17:	.incbin "includes/generated/naka_perf_style.bin"
 ; [nakarest] Readers: source references InitializeNaka_Skip17 (storage/flash_floppy_handlers.s:
 ; [nakarest] `lda xhl, (NAKA_InitDataBlock_PtrTable_18:24)`).
 NAKA_InitDataBlock_PtrTable_18:	.incbin "includes/generated/naka_perf_style.bin", 0x704C, 0x60	; 6 x 32-bit pointer
-; [nakarest] naka_perf_style+0x70ac  +0x70ac..+0x71ac (0xe15a20, 256 B)
-; [nakarest] purpose not established: layout of 256 B at 0xe15a20 not derived; readers below
-; [nakarest] Readers: source references NoteEvent_LoadSoundGenParams
-; [nakarest] (storage/flash_floppy_handlers.s: `ld xiy, NoteEvent_LoadSoundGenParams_Data`).
-NoteEvent_LoadSoundGenParams_Data:	.incbin "includes/generated/naka_perf_style.bin", 0x70AC, 0x100
+; NoteEvent_DefaultPatternSlot -- 1 x {u8 flags, u16 prev_slot, u16 next_slot, u8 events[251]}: default 256-byte pattern slot
+; NoteEvent_LoadSoundGenParams (storage/flash_floppy_handlers.s) copies it (ldirw 0x80 words) into all 340
+; slots at *(0xC72)+0x1400 (0x100 apart, 0..0x153) and clears byte 0 for slots 150 on
+; slot layout as AccPatch_FindFreeSlot / AccPatch_ClearLinkedListEntries use it (sequencer/accompaniment_engine.s):
+; bit 7 of +0 = allocated, +1 = previous slot, +3 = next slot (0xFFFF = none); events from +5
+NoteEvent_DefaultPatternSlot:	.incbin "includes/generated/naka_perf_style.bin", 0x70AC, 0x100
 ; [nakarest] naka_perf_style+0x71ac  +0x71ac..+0x71ec (0xe15b20, 64 B)
 ; [nakarest] purpose not established: layout of 64 B at 0xe15b20 not derived; readers below
 ; [nakarest] Readers: source references NoteEvent_LoadSoundGenParams

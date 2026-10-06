@@ -1,0 +1,37 @@
+"""merge_proposals.py WORKDIR N ... -- WORKDIR/proposals_batchN.json + WORKDIR/inventory.json -> WORKDIR/reviewed-batchN.json.
+Adds asm, size, blob and off_v10 from the inventory.  A piece check that is false on the piece's own bytes but true on
+the slice's is marked check_on = "slice" (written with slice offsets).  A later piece that kept the slice's old label is
+renamed, because the converter moves the old label to piece 0."""
+import json, os, struct, sys
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+os.chdir(sys.argv[1])
+inv = {x["label"]: x for x in json.load(open("inventory.json"))}
+for n in sys.argv[2:]:
+    P = json.load(open("proposals_batch%s.json" % n))
+    out = []
+    for r in P:
+        x = inv[r["label"]]
+        r = dict(r)
+        r.update(asm=x["asm"], size=x["size"], blob=x["blob"], off_v10=x["off"])
+        sb = open(os.path.join(ROOT, "v10/maincpu/includes/generated", x["blob"] + ".bin"), "rb").read()[x["off"]:x["off"] + x["size"]]
+        for p in (r.get("pieces") or []):
+            if not p.get("check"):
+                continue
+            pb = sb[p["off_in_slice"]:p["off_in_slice"] + p["size"]]
+            def ev(b):
+                try:
+                    return bool(eval(p["check"], {"struct": struct, "b": b}))
+                except Exception:
+                    return False
+            if not ev(pb):
+                assert ev(sb), (r["label"], p["new_label"], "check false on piece and slice")
+                p["check_on"] = "slice"         # the check was written with slice offsets
+        for i, p in enumerate(r.get("pieces") or []):
+            if i and p["new_label"] == r["label"]:      # a later piece may not keep the slice's old name (the rename moves it)
+                new = p["new_label"] + ("_Str" if p["ctype"] == "char" else "_Item")
+                p["header"] = [h.replace(p["new_label"] + " --", new + " --", 1) for h in p["header"]]
+                p["new_label"] = new
+                r.setdefault("review_notes", []).append("piece %d renamed %s: the slice's old label moves to piece 0" % (i, new))
+        out.append(r)
+    json.dump(out, open("reviewed-batch%s.json" % n, "w"), indent=1)
+    print(n, len(out), sum(r.get("verdict") == "type" for r in out))

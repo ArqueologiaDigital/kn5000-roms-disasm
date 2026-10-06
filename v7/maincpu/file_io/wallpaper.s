@@ -323,7 +323,7 @@ WP_ScanAvailability:
 WPScan_LoopBody:
 	ld bc, iz
 	extz xbc
-	ld xwa, WPScan_LoopBody_Data
+	ld xwa, WPScan_SlotFlagBits
 	add xwa, xbc
 	ld c, (xwa)
 	ld de, 1:i3
@@ -342,7 +342,7 @@ WPScan_CheckAvail:
 	jrl z, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
-	ld xbc, WPScan_LoopBody_Data
+	ld xbc, WPScan_SlotFlagBits
 	add xbc, xwa
 	ld de, 1:i3
 	ld a, (xbc)
@@ -367,7 +367,7 @@ WPScan_TypeNotThree:
 	jr nz, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
-	ld xbc, WPScan_LoopBody_Data
+	ld xbc, WPScan_SlotFlagBits
 	add xbc, xwa
 	ld de, 1:i3
 	ld a, (xbc)
@@ -386,7 +386,7 @@ WPScan_TypeGeneric:
 	jr z, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
-	ld xbc, WPScan_LoopBody_Data
+	ld xbc, WPScan_SlotFlagBits
 	add xbc, xwa
 	ld de, 1:i3
 	ld a, (xbc)
@@ -419,7 +419,7 @@ WP_FindNextSlot:
 	ld	iz, 1:i3
 	extz	wa
 	ld	qbc, wa
-	lda	xde, (WPScan_LoopBody_Data:24)
+	lda	xde, (WPScan_SlotFlagBits:24)
 WPFind_SearchLoop:
 	ldto_werp HL, 0xe6
 	add hl, iz

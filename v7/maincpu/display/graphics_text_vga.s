@@ -153,7 +153,7 @@ GraphicsRender_ByteData_Loop2:
 	ld	wa, iz
 	sub	wa, 32
 	extz	xwa
-	ld	xbc, GraphicsRender_ByteData_Data
+	ld	xbc, GraphicsRender_LowBandColorIndex
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
@@ -169,7 +169,7 @@ GraphicsRender_ByteData_Loop3:
 	ld	wa, iz
 	sub	wa, 192
 	extz	xwa
-	ld	xbc, Pad_AfterStr_No
+	ld	xbc, GraphicsRender_PaletteSrc192
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
@@ -1290,7 +1290,7 @@ DrawText_ExtendedLayout_Skip:
 	ld	a, (xwa+6)
 	and	a, 15
 	extz	wa
-	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
+	lda	xbc, (TextStyle_NibbleFontTable:24)
 	ld	c, (xbc+wa)
 	extz	bc
 	extz	xbc
@@ -1592,7 +1592,7 @@ AccDraw_Secondary_Helper20_Join:
 	ld	a, (xiz+6)
 	and	a, 15
 	extz	wa
-	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
+	lda	xbc, (TextStyle_NibbleFontTable:24)
 	ld	xhl, 0:i3
 	ld	l, (xbc+wa)
 	lda	xwa, (xsp+264)
@@ -1692,7 +1692,7 @@ AccDraw_Secondary_Helper20_Join5:
 	ld	a, (xiz+6)
 	and	a, 15
 	extz	wa
-	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
+	lda	xbc, (TextStyle_NibbleFontTable:24)
 	ld	xhl, 0:i3
 	ld	l, (xbc+wa)
 	lda	xwa, (xsp+264)
@@ -1747,7 +1747,7 @@ AccDraw_Secondary_Helper20_Join7:
 	ld	a, (xiz+6)
 	and	a, 15
 	extz	wa
-	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
+	lda	xbc, (TextStyle_NibbleFontTable:24)
 	ld	xhl, 0:i3
 	ld	l, (xbc+wa)
 	lda	xwa, (xsp+264)
@@ -3600,7 +3600,7 @@ PmBank_Select:
 	extz wa
 	ld (xbc), wa
 	ld xwa, (xhl)
-	lda xbc, (SeqChan_Map_10ch:24)
+	lda xbc, (EditSw_SplitMap10:24)
 	ld wa, (xwa)
 	ld	a, (xbc+wa)
 	extz wa
@@ -3641,7 +3641,7 @@ PmBank_Select_DrawFirstRow:
 	call MainFuncCall
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 48)
-	lda xbc, (SeqChan_Map_10ch:24)
+	lda xbc, (EditSw_SplitMap10:24)
 	ld wa, (xwa)
 	ld	a, (xbc+wa)
 	extz wa
@@ -3721,14 +3721,14 @@ PmBank_BankChanged_Lookup:
 	ld XWA, (xsp + 0x0114)
 	ld a, (xwa)
 	extz wa
-	lda xbc, (SeqChan_Map_10ch:24)
+	lda xbc, (EditSw_SplitMap10:24)
 	ld	a, (xbc+wa)
 	extz wa
 	call DrawEditSw
 	ld XWA, (xsp + 0x0114)
 	ld a, (xwa)
 	extz wa
-	lda xbc, (SeqChan_Map_10ch:24)
+	lda xbc, (EditSw_SplitMap10:24)
 	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+264)

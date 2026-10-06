@@ -106,6 +106,55 @@ extern const char WakeUpPassword;
  * skipped) with the address of `arg` in xde; the single-glyph ops copy
  * {x, y} to their frame (lda xix, xsp+12; ldiw; ldiw) as the draw position
  * and push `arg` as DrawBitmapSP2's colour (a palette index). */
+/* FDemoText_VoiceActiveBit's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* FDemoText_SongSrcInit's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* FDemoText_ScreenClipRect's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* PsMixer_KnobPointerOffsets's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* FDemoText_ImgSrcBufInit's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* FileIO_StatusToErrorCode's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* FDemoText_PartialResendBit's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* FDemoText_ImgAltInit's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    char alt[65];
+    uint8_t align_pad;
+} FDemoText_ImgAltInit_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t bit[3];
+    uint8_t align_pad;
+} FDemoText_PartialResendBit_t;
+
+typedef struct __attribute__((packed)) {
+    int16_t status;
+    uint8_t error_code;
+    uint8_t pad;
+} FileIO_StatusToErrorCode_t;
+
+typedef struct __attribute__((packed)) {
+    char text[65];
+    uint8_t align_fill;
+} FDemoText_ImgSrcBufInit_t;
+
+typedef struct __attribute__((packed)) {
+    int16_t dx;
+    int16_t dy;
+} PsMixer_KnobPointerOffsets_t;
+
+typedef struct __attribute__((packed)) {
+    uint16_t left;
+    uint16_t top;
+} FDemoText_ScreenClipRect_t;
+
+typedef struct __attribute__((packed)) {
+    char src[13];
+    uint8_t align_pad;
+} FDemoText_SongSrcInit_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t active_bit[3];
+    uint8_t align_pad;
+} FDemoText_VoiceActiveBit_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t delay;  /* +0  SetApTimer duration before this step runs */
     int16_t  x;      /* +4  draw position / op operand */
@@ -187,7 +236,8 @@ typedef struct __attribute__((packed)) {
     char SdtecdPage_name[12];
     char Sdtecd_str[8];
     uint32_t Murai_ResNameTable_3A5[5];  /* 5 pointers */
-    char str_10[2];
+    /* "" + 0xFF fill: the name after the last of the 4 entries of ResName table 0x3A5 */
+    char Murai_ResNameTable_3A5_EndName[2];
     char ResName_Sqmixer_3_IvExit[2];
     char ResName_Sqmixer_2_AcTrackMixer[2];
     char w10_code[2];
@@ -259,7 +309,8 @@ typedef struct __attribute__((packed)) {
     char w23_code[2];
     char Drawbar_name[8];
     uint32_t Murai_ResNameTable_3EB[38];  /* 38 pointers */
-    char str_48[2];
+    /* "" + 0xFF pad: word 37 of the slot 0x3EB name table, the name paired with the NULL that ends Viewable table 0xEB */
+    char Murai_ResNameEB_End[2];
     char ResName_Accordion_36_IvAccordionX[2];
     char ResName_Accordion_35_AcAccordionTab[2];
     char ResName_Accordion_34_AcAccordionTab[2];
@@ -648,122 +699,17 @@ typedef struct __attribute__((packed)) {
     char ERR_str[4];
     /* PartParam_EnableMask: [part index] = bit set of the part parameters that may be edited (bit numbers: the asm header) */
     uint32_t PartParam_EnableMask[30];
-    uint16_t field_f3d4;
-    uint16_t field_f3d6;
-    uint16_t field_f3d8;
-    uint16_t field_f3da;
-    uint16_t field_f3dc;
-    uint16_t field_f3de;
-    uint16_t field_f3e0;
-    uint16_t field_f3e2;
-    uint16_t field_f3e4;
-    uint16_t field_f3e6;
-    uint16_t field_f3e8;
-    uint16_t field_f3ea;
-    uint16_t field_f3ec;
-    uint16_t field_f3ee;
-    uint16_t field_f3f0;
-    uint16_t field_f3f2;
-    uint16_t field_f3f4;
-    uint16_t field_f3f6;
-    uint16_t field_f3f8;
-    uint16_t field_f3fa;
-    uint16_t field_f3fc;
-    uint16_t field_f3fe;
-    uint16_t field_f400;
-    uint16_t field_f402;
-    uint16_t field_f404;
-    uint16_t field_f406;
-    uint16_t field_f408;
-    uint16_t field_f40a;
-    uint16_t field_f40c;
-    uint16_t field_f40e;
-    uint16_t field_f410;
-    uint16_t field_f412;
-    uint16_t field_f414;
-    uint16_t field_f416;
-    uint16_t field_f418;
-    uint16_t field_f41a;
-    uint16_t field_f41c;
-    uint16_t field_f41e;
-    uint16_t field_f420;
-    uint16_t field_f422;
-    uint16_t field_f424;
-    uint16_t field_f426;
-    uint16_t field_f428;
-    uint16_t field_f42a;
-    uint16_t field_f42c;
-    uint16_t field_f42e;
-    uint16_t field_f430;
-    uint16_t field_f432;
-    uint16_t field_f434;
-    uint16_t field_f436;
-    uint16_t field_f438;
-    uint16_t field_f43a;
-    uint16_t field_f43c;
-    uint16_t field_f43e;
-    uint16_t field_f440;
-    uint16_t field_f442;
-    uint16_t field_f444;
-    uint16_t field_f446;
-    uint16_t field_f448;
-    uint16_t field_f44a;
-    uint16_t field_f44c;
-    uint16_t field_f44e;
-    char str_180[2];
-    uint16_t field_f452;
-    uint16_t field_f454;
-    uint16_t field_f456;
-    uint16_t field_f458;
-    uint16_t field_f45a;
-    char str_181[2];
-    uint16_t field_f45e;
-    char str_182[2];
-    uint16_t field_f462;
-    char str_183[2];
-    uint16_t field_f466;
-    char str_184[2];
-    uint16_t field_f46a;
-    char A_str[2];
-    uint16_t field_f46e;
-    char E_str[2];
-    uint16_t field_f472;
-    char I_str[2];
-    uint16_t field_f476;
-    char M_str[2];
-    uint16_t field_f47a;
-    uint16_t field_f47c;
-    uint16_t field_f47e;
-    uint8_t pad_1532[2];  /* zero padding */
-    uint16_t field_f482;
-    uint16_t field_f484;
-    uint16_t field_f486;
-    uint16_t field_f488;
-    uint16_t field_f48a;
-    uint16_t field_f48c;
-    uint16_t field_f48e;
-    uint16_t field_f490;
-    uint16_t field_f492;
-    uint16_t field_f494;
-    uint16_t field_f496;
-    uint16_t field_f498;
-    uint16_t field_f49a;
-    uint16_t field_f49c;
-    uint16_t field_f49e;
-    uint16_t field_f4a0;
-    uint16_t field_f4a2;
-    uint16_t field_f4a4;
-    uint16_t field_f4a6;
-    uint16_t field_f4a8;
-    uint16_t field_f4aa;
-    uint16_t field_f4ac;
-    uint16_t field_f4ae;
-    uint16_t field_f4b0;
-    char str_189[2];
-    char str_190[2];
-    uint16_t field_f4b6;
-    char str_191[2];
-    uint16_t field_f4ba;
+    /* mixer row kind (word +0 of a 12-byte row record) -> Murai ApFunction object id (0x0121xxxx) of the row's Lsw* function; 0xFFFFFFFF = none */
+    uint32_t PsMixer_RowKindApFuncId[33];
+    /* ApFunction object id 0x01210011 (Murai slot 0x121 entry 17, LswMute) */
+    uint32_t PsMixer_MuteApFuncId;
+    /* NAKA view id (slot 3, TT_SDPART screen) of each of the 8 part-edit pages: SdpartVol, Pan, Eff, Sus, Key, Tun, Bnd, Oth */
+    uint32_t IvSdpart_PageViews[8];
+    /* view object id 0x0003001D shown for sound-part page 8 (element [8] of the page -> view table that starts at IvSdpart_Init_LoadDescriptor_Data) */
+    uint32_t IvSdpart_TopPageViewId;
+    /* zero padding */
+    /* part number for each of the 29 rows of the sound-part list (rows 0-15 = parts 0-15), -1 terminated */
+    int16_t IvSdpart_PartNumberByRow[30];
     char Str_PartName_Empty[10];
     char Rhythm_str[12];
     char Control_str[10];
@@ -1590,49 +1536,11 @@ typedef struct __attribute__((packed)) {
     char Acdn_code[6];
     char Acdn_name[6];
     char TeCd_str[6];
-    uint16_t field_17a7e;
-    uint16_t field_17a80;
-    uint16_t field_17a82;
-    uint16_t field_17a84;
-    uint16_t field_17a86;
-    uint16_t field_17a88;
-    uint16_t field_17a8a;
-    uint16_t field_17a8c;
-    uint16_t field_17a8e;
-    uint16_t field_17a90;
-    uint16_t field_17a92;
-    uint16_t field_17a94;
-    uint16_t field_17a96;
-    uint16_t field_17a98;
-    uint16_t field_17a9a;
-    uint16_t field_17a9c;
-    uint16_t field_17a9e;
-    uint16_t field_17aa0;
-    uint16_t field_17aa2;
-    uint16_t field_17aa4;
-    uint16_t field_17aa6;
-    uint16_t field_17aa8;
-    uint16_t field_17aaa;
-    uint16_t field_17aac;
-    uint16_t field_17aae;
-    uint16_t field_17ab0;
-    uint16_t field_17ab2;
-    uint16_t field_17ab4;
-    uint8_t pad_1550[2];  /* zero padding */
-    uint16_t field_17ab8;
-    uint16_t field_17aba;
-    uint16_t field_17abc;
-    uint16_t field_17abe;
-    uint16_t field_17ac0;
-    uint16_t field_17ac2;
-    uint16_t field_17ac4;
-    uint16_t field_17ac6;
-    uint16_t field_17ac8;
-    uint16_t field_17aca;
-    uint16_t field_17acc;
-    uint16_t field_17ace;
-    uint16_t field_17ad0;
-    uint16_t field_17ad2;
+    /* NAKA view id (slot 0x0D, the TT_SDTECD screen) of the TechniChord type button for each value 0-13 of LSW 0x4202 */
+    uint32_t Sdtecd1_TypeButtonView[14];
+    /* zero padding */
+    /* The 14 values of LSW setting 0x4202 in on-screen order (value 13 is 4th), 0xFFFF-terminated; INDEX up/down moves 7 places */
+    uint16_t Sdtecd1_ValueScreenOrder[15];
     char TeC1_str[6];
     uint32_t Naka_TechniChord1_Screens[17];  /* 17 pointers */
     char CONDUCTOR_str[10];
@@ -1653,90 +1561,16 @@ typedef struct __attribute__((packed)) {
     char Right_str_5[10];
     char Right_str_6[10];
     char CONDUCTOR_str_2[10];
-    uint16_t field_17bd2;
-    uint16_t field_17bd4;
-    uint16_t field_17bd6;
-    uint16_t field_17bd8;
-    uint16_t field_17bda;
-    uint16_t field_17bdc;
-    uint16_t field_17bde;
-    uint16_t field_17be0;
-    uint16_t field_17be2;
-    uint16_t field_17be4;
-    uint16_t field_17be6;
-    uint16_t field_17be8;
-    uint16_t field_17bea;
-    uint16_t field_17bec;
-    uint16_t field_17bee;
-    uint16_t field_17bf0;
-    uint16_t field_17bf2;
-    uint16_t field_17bf4;
-    uint32_t ptr_17bf6;
-    uint16_t field_17bfa;
-    uint16_t field_17bfc;
-    uint16_t field_17bfe;
-    uint16_t field_17c00;
-    uint16_t field_17c02;
-    uint16_t field_17c04;
-    uint16_t field_17c06;
-    uint16_t field_17c08;
-    uint16_t field_17c0a;
-    uint16_t field_17c0c;
-    uint16_t field_17c0e;
-    uint16_t field_17c10;
-    uint16_t field_17c12;
-    uint16_t field_17c14;
-    uint16_t field_17c16;
-    uint16_t field_17c18;
-    uint16_t field_17c1a;
-    uint16_t field_17c1c;
-    uint16_t field_17c1e;
-    uint16_t field_17c20;
+    /* master-tuning byte for display step i (427.0 + i/3 Hz shown as 4xx.0/.3/.6); 0x00 at i=39 (440.0 Hz), 0xC0..0x3F = -64..+63; [79]=0xFF unused */
+    uint8_t LswMasterTuning_ValueByStep[80];
     char LswMasterTuning_Str_N440_0[6];
     char LswTuning_SearchLoop_Str_N4_Fmtd_0[6];
-    uint16_t field_17c2e;
-    uint16_t field_17c30;
-    uint16_t field_17c32;
-    uint16_t field_17c34;
-    uint16_t field_17c36;
-    uint16_t field_17c38;
-    uint16_t field_17c3a;
-    uint16_t field_17c3c;
-    uint16_t field_17c3e;
-    uint16_t field_17c40;
-    uint16_t field_17c42;
-    uint16_t field_17c44;
-    uint16_t field_17c46;
-    uint16_t field_17c48;
-    uint16_t field_17c4a;
-    uint16_t field_17c4c;
-    uint16_t field_17c4e;
-    uint16_t field_17c50;
-    uint16_t field_17c52;
-    uint16_t field_17c54;
-    uint16_t field_17c56;
-    uint16_t field_17c58;
-    uint16_t field_17c5a;
-    uint16_t field_17c5c;
-    uint16_t field_17c5e;
-    uint16_t field_17c60;
+    /* Object ids of the 12 per-key scale-tuning fields of the Sdscltyp2 page (0x00050011..0x0005001C), 0xFFFFFFFF-terminated */
+    uint32_t Sdscltyp2_KeyWidgetIds[13];
     char Scl2_str[6];
-    uint8_t pad_1551[2];  /* zero padding */
-    char str_728[2];
-    char A_str_2[2];
-    char B_str[2];
-    uint16_t field_17c70;
-    uint16_t field_17c72;
-    uint16_t field_17c74;
-    uint16_t field_17c76;
-    uint16_t field_17c78;
-    uint16_t field_17c7a;
-    uint16_t field_17c7c;
-    uint16_t field_17c7e;
-    uint16_t field_17c80;
-    uint16_t field_17c82;
-    uint16_t field_17c84;
-    uint16_t field_17c86;
+    /* zero padding */
+    /* 15 scale-tuning type codes + 0xFFFF end; position k selects name k of Naka_Scale2_Screens */
+    uint16_t LswScalingType_TypeCodes[16];
     uint32_t Naka_Scale2_Screens[17];  /* 17 pointers */
     char NoType_str[14];
     char User_str[14];
@@ -2080,8 +1914,10 @@ typedef struct __attribute__((packed)) {
     char LOCAL_str[6];
     char MIDI_str[6];
     char str_1140[2];
-    char str_1141[2];
-    char str_1142[2];
+    /* caption of mixer row 10 of MidiParam_PanelCfgTable: "" + 0xFF pad */
+    char MidiParamStr1_BlankRow10[2];
+    /* caption of mixer row 9 of MidiParam_PanelCfgTable: "" + 0xFF pad */
+    char MidiParamStr1_BlankRow9[2];
     char KeyShift_str[10];
     char DigitalEff_str[12];
     char DspEff_str[8];
@@ -2090,32 +1926,12 @@ typedef struct __attribute__((packed)) {
     char VOLUME_str[8];
     char PAN_str[4];
     char SOUND_str_2[6];
-    char str_1151[2];
-    uint8_t pad_2012[2];  /* zero padding */
-    uint16_t field_19300;
-    uint16_t field_19302;
-    uint16_t field_19304;
-    uint16_t field_19306;
-    uint16_t field_19308;
-    uint16_t field_1930a;
-    uint16_t field_1930c;
-    uint16_t field_1930e;
-    uint16_t field_19310;
-    uint16_t field_19312;
-    uint16_t field_19314;
-    uint16_t field_19316;
-    uint16_t field_19318;
-    uint16_t field_1931a;
-    uint16_t field_1931c;
-    uint16_t field_1931e;
-    uint16_t field_19320;
-    uint16_t field_19322;
-    uint16_t field_19324;
-    uint16_t field_19326;
-    uint16_t field_19328;
-    uint16_t field_1932a;
-    uint32_t ptrs_252[4];  /* 4 pointers */
-    uint16_t field_1933c;
+    /* "" (+ 0xFF alignment byte): caption of control record 0 of MidiParam_PanelCfgTable */
+    char MidiParam_Ctl0Caption[2];
+    /* zero padding */
+    /* 4 pointers */
+    /* default mixer grid: cell (page*8 + column) -> row of IvSdpart_PartNumberByRow; 0x00FF = empty cell */
+    uint16_t PsMixer_DefaultGridPartRows[32];
     char str_1152[8];
     char RHYTHM_str[8];
     char Ctrl_str[8];
@@ -2293,11 +2109,14 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19718;
     uint8_t pad_2026[4];  /* zero padding */
     uint32_t ptr_1971e;
-    char str_1268[2];
+    /* "" (NUL + 0xFF pad): caption of PartMixer_Init_Data row 14 (a blank row, kind 32) */
+    char PartMixer_Row14Caption[2];
     char LOCAL_str_2[6];
     char MIDI_str_2[6];
-    char str_1271[2];
-    char str_1272[2];
+    /* Caption of part-mixer control 11: "" (+ 0xFF alignment byte) */
+    char PartMixer_Ctl11Caption[2];
+    /* Caption of part-mixer control 10: "" (+ 0xFF alignment byte) */
+    char PartMixer_Ctl10Caption[2];
     char str_1273[2];
     char KeyShift_str_2[10];
     char DigitalEff_str_2[12];
@@ -2308,31 +2127,10 @@ typedef struct __attribute__((packed)) {
     char PAN_str_2[4];
     char SOUND_str_3[6];
     char str_1282[2];
-    uint8_t pad_2027[2];  /* zero padding */
-    uint16_t field_19774;
-    uint16_t field_19776;
-    uint16_t field_19778;
-    uint16_t field_1977a;
-    uint16_t field_1977c;
-    uint16_t field_1977e;
-    uint16_t field_19780;
-    uint16_t field_19782;
-    uint16_t field_19784;
-    uint16_t field_19786;
-    uint16_t field_19788;
-    uint16_t field_1978a;
-    uint16_t field_1978c;
-    uint16_t field_1978e;
-    uint16_t field_19790;
-    uint16_t field_19792;
-    uint16_t field_19794;
-    uint16_t field_19796;
-    uint16_t field_19798;
-    uint16_t field_1979a;
-    uint16_t field_1979c;
-    uint16_t field_1979e;
-    uint32_t ptrs_253[4];  /* 4 pointers */
-    uint16_t field_197b0;
+    /* zero padding */
+    /* 4 pointers */
+    /* part index shown in each mixer column (4 pages x 8); 0x00FF = no column (page end) */
+    uint16_t PartMixer_ColumnPartMap[32];
     char str_1283[2];
     uint8_t pad_2028[6];  /* zero padding */
     uint32_t ptr_197ba;
@@ -2402,8 +2200,10 @@ typedef struct __attribute__((packed)) {
     char LOCAL_str_3[6];
     char MIDI_str_3[6];
     char str_1292[2];
-    char str_1293[2];
-    char str_1294[2];
+    /* "" (NUL + 0xFF pad): caption of TrackMixer_Init_Data row 10 (a blank row, kind 32) */
+    char TrackMixer_Row10Caption[2];
+    /* "" (NUL + 0xFF pad): caption of TrackMixer_Init_Data row 9 (a blank row, kind 32) */
+    char TrackMixer_Row9Caption[2];
     char KeyShift_str_3[10];
     char DigitalEff_str_3[12];
     char DspEff_str_3[8];
@@ -2412,88 +2212,22 @@ typedef struct __attribute__((packed)) {
     char VOLUME_str_3[8];
     char PAN_str_3[4];
     char SOUND_str_4[6];
-    char str_1303[2];
-    uint8_t pad_2042[2];  /* zero padding */
-    uint16_t field_198b8;
-    uint16_t field_198ba;
-    uint16_t field_198bc;
-    uint16_t field_198be;
-    uint16_t field_198c0;
-    uint16_t field_198c2;
-    uint16_t field_198c4;
-    uint16_t field_198c6;
-    uint16_t field_198c8;
-    uint16_t field_198ca;
-    uint16_t field_198cc;
-    uint16_t field_198ce;
-    uint16_t field_198d0;
-    uint16_t field_198d2;
-    uint16_t field_198d4;
-    uint16_t field_198d6;
-    uint16_t field_198d8;
-    uint16_t field_198da;
-    uint16_t field_198dc;
-    uint16_t field_198de;
-    uint16_t field_198e0;
-    uint16_t field_198e2;
-    uint16_t field_198e4;
-    uint16_t field_198e6;
-    uint16_t field_198e8;
-    uint16_t field_198ea;
-    uint16_t field_198ec;
-    uint16_t field_198ee;
-    uint16_t field_198f0;
-    uint16_t field_198f2;
-    uint16_t field_198f4;
-    uint16_t field_198f6;
-    uint16_t field_198f8;
-    uint16_t field_198fa;
-    uint16_t field_198fc;
-    uint16_t field_198fe;
-    uint16_t field_19900;
-    uint16_t field_19902;
-    uint16_t field_19904;
-    uint16_t field_19906;
-    uint16_t field_19908;
-    uint16_t field_1990a;
-    uint16_t field_1990c;
-    uint16_t field_1990e;
-    uint16_t field_19910;
-    uint16_t field_19912;
-    uint16_t field_19914;
-    uint16_t field_19916;
-    uint16_t field_19918;
-    uint16_t field_1991a;
-    uint16_t field_1991c;
+    /* "" + 0xFF fill: caption of control record 0 of TrackMixer_Init_Data */
+    char TrackMixer_Ctl0_EmptyCaption[2];
+    /* zero padding */
+    /* track part code (low byte of the EVT_TRSW_PART parameter) -> LSW mixer item index stored for that track column (RAM 0x3EBE8[track]) */
+    uint16_t TrackMixer_PartCodeToItem[20];
+    /* Knob pointer position: {dx, dy} added to the knob bitmap's point, indexed by value >> 3 (16 steps for 0..127); entry 8 (value 64) is used when EVT_CHECK_PART says no part */
+    PsMixer_KnobPointerOffsets_t PsMixer_KnobPointerOffsets[16];
     char MUTE_str_3[6];
     /* PsMixer_CtlTypeProc1_Data: text (the asm slice of the same name) */
     char PsMixer_CtlTypeProc1_Data[4];
     /* PsMixer_CtlTypeProc10_Data: text (the asm slice of the same name) */
     char PsMixer_CtlTypeProc10_Data[4];
-    uint16_t field_1992c;
-    uint16_t field_1992e;
-    uint16_t field_19930;
-    uint16_t field_19932;
-    uint16_t field_19934;
-    uint16_t field_19936;
-    uint16_t field_19938;
-    uint16_t field_1993a;
-    uint16_t field_1993c;
-    uint16_t field_1993e;
-    uint16_t field_19940;
-    uint16_t field_19942;
-    uint16_t field_19944;
-    uint16_t field_19946;
-    uint16_t field_19948;
-    uint16_t field_1994a;
-    uint16_t field_1994c;
-    uint16_t field_1994e;
-    uint16_t field_19950;
-    uint16_t field_19952;
-    uint16_t field_19954;
-    uint16_t field_19956;
-    uint16_t field_19958;
-    uint16_t field_1995a;
+    /* Sound-parameter number of each on-screen drawbar 0..8: 0x280, 0x282, 0x281, 0x283..0x288 */
+    uint16_t IvDrawbar1_DrawbarParamIds[9];
+    /* item 0..14 -> LSW (panel-setting) id; items 0-10 are part-relative (+ part*1024), 11-14 are used as-is */
+    uint16_t MemDraw_LswIdTable[15];
     uint32_t KeyShift_DisplayStrTable[16];  /* 16 pointers */
     char str_1307[4];
     char str_1308[4];
@@ -2517,30 +2251,17 @@ typedef struct __attribute__((packed)) {
     char Drw2_name[6];
     char DrwN_code[6];
     char DrwE_name[6];
-    uint16_t field_19a00;
-    char str_1323[2];
-    char V_str[2];
-    char v_str[2];
-    uint16_t field_19a08;
-    uint16_t field_19a0a;
-    uint32_t ptr_19a0c;
-    uint16_t field_19a10;
-    uint16_t field_19a12;
-    uint8_t pad_2043[2];  /* zero padding */
-    uint16_t field_19a16;
-    uint8_t pad_2044[2];  /* zero padding */
-    uint16_t field_19a1a;
-    uint8_t pad_2045[2];  /* zero padding */
-    uint16_t field_19a1e;
-    uint8_t pad_2046[2];  /* zero padding */
-    uint16_t field_19a22;
-    uint8_t pad_2047[2];  /* zero padding */
-    uint16_t field_19a26;
-    uint8_t pad_2048[2];  /* zero padding */
-    uint16_t field_19a2a;
-    uint8_t pad_2049[2];  /* zero padding */
-    uint16_t field_19a2e;
-    uint8_t bytes_19a30[6];
+    /* screen x of drawbar sliders 0-8 (22 + 32*i); drawn at y 114, 22x117 px */
+    uint16_t DrawbarBitmap_SliderX[9];
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* Source offset into a drawbar's bitmap per drawbar level 0..8 (143*(8-level); DrawbarBitmapHelper doubles it before adding) */
+    uint32_t Drawbar_LevelBitmapOffsets[9];
     /* DemoMenu_WorkspaceFunc_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t DemoMenu_WorkspaceFunc_CaseTable[6];
     /* DemoMenu_DescriptorFunc_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
@@ -2565,14 +2286,14 @@ typedef struct __attribute__((packed)) {
     char ToStartingAnExternal_str_2[134];
     char txt_Um_eine_externe_DEMO_zu_starten[168];
     char ToStartingAnExternal_str_3[134];
-    uint16_t field_19d76;
-    uint16_t field_19d78;
-    uint16_t field_19d7a;
-    uint16_t field_19d7c;
-    uint16_t field_19d7e;
-    uint16_t field_19d80;
-    uint16_t field_19d82;
-    uint16_t field_19d84;
+    /* flag bit 1 << i for part i = 0..2 in the bytes at RAM 0x247EE / 0x247F2; [3] = 0xFF (the 0..2 loops never reach it) */
+    uint8_t FDemoText_PartFlagBit[4];
+    /* bit of demo voice k (0-2) in the voice-state byte at RAM 0x247EE (bits 3-5), + 0xFF alignment pad */
+    FDemoText_VoiceActiveBit_t FDemoText_VoiceActiveBit;
+    /* Pending-send bit per part 0..2 in RAM 0x247EC (0x01, 0x04, 0x10); [3] = 0xFF alignment fill, not read */
+    uint8_t FDemoText_FullSendBitByPart[4];
+    /* unit n (SWBTWR codes 0x44-0x46) -> its odd request bit in RAM 0x247EC (0x02, 0x08, 0x20); then a 0xFF pad */
+    FDemoText_PartialResendBit_t FDemoText_PartialResendBit;
     /* FDemoText_ByteData_VoiceProbeC_CaseTable: 7 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t FDemoText_ByteData_VoiceProbeC_CaseTable[7];
     /* FDemoText_InitFuncTable: 4 pointers (cut from ptrs_256 by split_naka_pointer_arrays.py) */
@@ -2599,14 +2320,19 @@ typedef struct __attribute__((packed)) {
     char FDemoText_ByteData_DisplayRefresh_Str_Fmts_Fmtd[6];
     char ErrorGetInstanceID_str[24];
     uint32_t FileType_NameTable[4];  /* 4 pointers */
-    char str_1351[2];
+    /* "" + 0xFF pad: ends FileType_NameTable, the attribute names of the demo-text SONG tag (SONG, SRC, NAME) */
+    char SongAttrName_Empty[2];
     char NAME_str[6];
     char SRC_str[4];
     char SONG_str[6];
-    uint8_t pad_2054[65];  /* zero padding */
-    uint16_t field_19f09;
-    uint8_t pad_2055[12];  /* zero padding */
-    uint8_t field_19f17;
+    /* zero padding */
+    /* initial (empty) contents of the 65-char local that receives a demo-text line's NAME= value */
+    char FDemoText_NameValueInit[65];
+    /* 0xFF fill (not copied) before FDemoText_ByteData_LayoutEngine_Data_3 */
+    uint8_t FDemoText_NameValueInit_Pad[1];
+    /* zero padding */
+    /* zero initialiser of the 13-byte SRC buffer (8.3 file name) of the demo-text SONG tag, + 0xFF pad */
+    FDemoText_SongSrcInit_t FDemoText_SongSrcInit;
     /* FDemoText_ByteData_LayoutEngine_Str_Fmt8s: text (the asm slice of the same name) */
     char FDemoText_ByteData_LayoutEngine_Str_Fmt8s[4];
     uint32_t FDemoText_ByteData_LayoutEngine_PtrTable[3];  /* 3 pointers */
@@ -2614,29 +2340,24 @@ typedef struct __attribute__((packed)) {
     char PAN_str_4[4];
     char NO_str[4];
     uint32_t FDemoText_ByteData_LayoutEngine_PtrTable_2[3];  /* 3 pointers */
-    char str_1359[2];
+    /* "" (+ 0xFF alignment byte): terminator of the {SIZE, COLOR} attribute-name list */
+    char FDemoText_SizeColorAttrNamesEnd[2];
     char COLOR_str[6];
     char SIZE_str[6];
-    uint16_t field_19f4c;
-    uint8_t pad_2056[2];  /* zero padding */
-    uint16_t field_19f50;
-    uint8_t pad_2057[2];  /* zero padding */
-    uint16_t field_19f54;
-    uint8_t pad_2058[2];  /* zero padding */
-    uint16_t field_19f58;
-    uint8_t pad_2059[2];  /* zero padding */
-    uint16_t field_19f5c;
-    uint8_t pad_2060[6];  /* zero padding */
-    uint16_t field_19f64;
-    uint8_t pad_2061[2];  /* zero padding */
-    uint16_t field_19f68;
-    uint8_t pad_2062[2];  /* zero padding */
-    uint16_t field_19f6c;
-    uint8_t pad_2063[2];  /* zero padding */
-    uint16_t field_19f70;
-    uint8_t pad_2064[2];  /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* Feature-Demo text SIZE attribute value 0..9 -> font number (FontDescriptor_Table index) */
+    uint32_t FDemoText_FontSizeToFont[10];
     uint32_t ImgAttr_NameTable[10];  /* 10 pointers */
-    char str_1362[2];
+    /* "" (NUL + 0xFF pad): end marker of the IMG attribute name list */
+    char ImgAttr_NameListEnd[2];
     char BORDER_str[8];
     char LOWSRC_str[8];
     char HEIGHT_str[8];
@@ -2646,25 +2367,36 @@ typedef struct __attribute__((packed)) {
     char ALIGN_str[6];
     char ALT_str[4];
     char SRC_str_2[4];
-    uint8_t pad_2065[65];  /* zero padding */
-    uint16_t field_1a01b;
-    uint8_t pad_2066[64];  /* zero padding */
-    uint16_t field_1a05d;
-    uint16_t field_1a05f;
-    uint16_t field_1a061;
-    uint16_t field_1a063;
-    uint8_t pad_2067[2];  /* zero padding */
-    uint16_t field_1a067;
+    /* zero padding */
+    /* Initial value ("", 65 zero bytes) of the 65-byte SRC attribute buffer of the image-tag handler, + 0xFF alignment byte */
+    FDemoText_ImgSrcBufInit_t FDemoText_ImgSrcBufInit;
+    /* zero padding */
+    /* initial value (all NUL) of the IMG tag handler's 65-byte ALT attribute buffer; then a 0xFF pad */
+    FDemoText_ImgAltInit_t FDemoText_ImgAltInit;
+    /* attribute names of the demo-text OBJ tag: "OBJ" (ObjAttr_Obj), then "" (ObjAttr_Empty) ends the list */
+    uint32_t ObjAttr_NameTable[2];
+    /* zero padding */
+    /* "" + 0xFF fill: end marker of the {"OBJ", ""} attribute-key list */
+    char ObjAttr_EndName[2];
+    uint8_t field_1a068;
     char BJ_str[3];
-    uint8_t pad_2068[65];  /* zero padding */
-    uint16_t field_1a0ad;
-    uint8_t pad_2069[3];  /* zero padding */
+    /* zero padding */
+    /* initial (empty) contents of the 65-char local that receives a demo-text line's OBJ= value */
+    char FDemoText_ObjValueInit[65];
+    /* 0xFF fill (not copied) before FDemoText_RenderTextLine_Data */
+    uint8_t FDemoText_ObjValueInit_Pad[1];
+    /* zero padding */
+    /* left/top (0, 0) of the 320x240 clip RECT DrawString gets from FDemoText_RenderTextLine; right/bottom follow */
+    FDemoText_ScreenClipRect_t FDemoText_ScreenClipRect;
     uint32_t Naka_PresentationRootState_ptr;
     char Seq_InitVoiceStructures_Str_Empty[2];
     char str_1374[2];
     char Presentation_str_2[16];
     char Presentation_str_3[16];
-    uint8_t pad_2070[32];  /* zero padding */
+    /* zero padding */
+    /* First byte of the 32-byte all-zero initializer of Seq_LoadDisplayResource's file-name buffer; bytes 1..31 are the unnamed .incbin after it */
+    char Seq_LoadDisplayResource_NameBufInit[1];
+    uint8_t bytes_1a0db[31];
     char Pre_str[6];
     char rt_str[4];
     char Action_str_2[10];
@@ -2702,27 +2434,10 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a186;
     uint16_t field_1a188;
     uint16_t field_1a18a;
-    uint16_t field_1a18c;
-    uint16_t field_1a18e;
-    uint16_t field_1a190;
-    uint16_t field_1a192;
-    uint16_t field_1a194;
-    char str_1393[2];
-    char str_1394[2];
-    uint16_t field_1a19a;
-    uint16_t field_1a19c;
-    uint16_t field_1a19e;
-    uint16_t field_1a1a0;
-    uint16_t field_1a1a2;
-    uint16_t field_1a1a4;
-    uint16_t field_1a1a6;
-    uint16_t field_1a1a8;
-    uint16_t field_1a1aa;
-    uint16_t field_1a1ac;
-    uint16_t field_1a1ae;
-    uint16_t field_1a1b0;
-    uint16_t field_1a1b2;
-    uint16_t field_1a1b4;
+    /* part index 0..15 -> its bit (1 << index) in a 16-bit part mask */
+    uint16_t Demo_PartBitMask[16];
+    /* order in which file types are tried: LSW, PMT, MSP, CMP, TM, SQT, RCM, MD, SQF, SEQ (indexes into SeqFileType_CodeTable) */
+    uint8_t FileIO_TypeProbeOrder[10];
     uint32_t HK_str_3_ptr;
     uint16_t FileIO_CheckRegionSignature_Data;
     uint16_t field_1a1bc;
@@ -2856,23 +2571,37 @@ typedef struct __attribute__((packed)) {
     char SQT_str[4];
     char PMT_str[4];
     char LSW_str[4];
-    uint16_t field_1a442;
-    uint16_t field_1a444;
-    uint8_t pad_2086[70];  /* zero padding */
+    /* free-space field of the disk-info initial image: 0xFFFFFFFF = not measured yet */
+    uint32_t FileIO_DiskInfoInit;
+    /* zero padding */
+    /* initial (0 = not yet measured) disk-size field at RAM 0x25D70; word +4 of the 76-byte image FileIO_InitRecordTable copies to 0x25D6C */
+    uint32_t FileIO_DiskInfoInit_Capacity;
+    uint8_t bytes_1a44a[66];
     uint16_t GetDiskSizeInfo_Data;
-    uint8_t pad_2087[109];  /* zero padding */
-    uint16_t field_1a4fb;
+    /* zero padding */
+    /* all-zero image of one 12-byte entry of the 20-entry file table at RAM 0x25DB8 (+2 6-char name, +8 its NUL, +10 size flag) */
+    uint8_t FileIO_EmptyFileRecord[12];
+    uint8_t bytes_1a49a[96];
+    /* "" (+ 0xFF alignment byte): the name the file-list getters return for an invalid or unreadable entry */
+    char FileIO_EmptyEntryName[2];
+    uint8_t field_1a4fc;
     char ______str[6];
     uint16_t field_1a503;
     char Mid_str[12];
     uint16_t field_1a511;
     uint16_t field_1a513;
     char ___________str[11];
-    uint8_t pad_2088[32];  /* zero padding */
+    /* zero padding */
+    /* initial value (all NUL) of UpdateFileEntry's 16-byte base file-name buffer */
+    char UpdateFileEntry_BaseNameInit[16];
+    uint8_t bytes_1a530[16];
     char GetEncFileSize_CopyRecordLoop_Str_Star_Dot_Star[4];
     char IndexToRecordLookup_Str_Dot_Star[4];
     char Mid_str_2[6];
-    uint8_t pad_2089[16];  /* zero padding */
+    /* zero padding */
+    /* first byte of the 16-byte all-zero initialiser of ValidateAndSearchFile's local path buffer (C `char path[16] = ""`) */
+    char ValidateAndSearchFile_PathInit[1];
+    uint8_t bytes_1a54f[15];
     char MThd_str[6];
     char MTrk_str[6];
     char ProcessRecord_MatchLoop1_Str_Blank5[6];
@@ -2948,32 +2677,11 @@ typedef struct __attribute__((packed)) {
     char Emory_str_2[8];
     uint8_t ResetProgressIndication_Data[2];  /* zero padding */
     uint32_t DiskOp_ChannelCfgTable[4];  /* 4 pointers */
-    uint16_t field_1a72e;
-    uint16_t field_1a730;
-    uint16_t field_1a732;
-    uint16_t field_1a734;
-    uint16_t field_1a736;
-    uint16_t field_1a738;
-    uint16_t field_1a73a;
-    uint16_t field_1a73c;
-    uint16_t field_1a73e;
-    uint8_t pad_2091[2];  /* zero padding */
-    uint16_t field_1a742;
-    uint16_t field_1a744;
-    uint16_t field_1a746;
-    uint16_t field_1a748;
-    uint16_t field_1a74a;
-    uint16_t field_1a74c;
-    uint16_t field_1a74e;
-    uint8_t pad_2092[2];  /* zero padding */
-    uint16_t field_1a752;
-    uint16_t field_1a754;
-    uint16_t field_1a756;
-    char str_1519[2];
-    uint16_t field_1a75a;
-    uint16_t field_1a75c;
-    uint8_t pad_2093[2];  /* zero padding */
-    uint16_t field_1a760;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* negative file-operation status -> GLOBAL_ERROR_CODE value; terminated by {0, 0xFF} (0xFF = keep the caller's default in C) */
+    FileIO_StatusToErrorCode_t FileIO_StatusToErrorCode[13];
     char FeaturePre_str[14];
     char FRename_TextChange_Error_Str_Under_Under_Under_Under[8];
     char FRenameSmf_TextChange_Error_Str_Under_Under_Under_Under[10];
@@ -2981,7 +2689,8 @@ typedef struct __attribute__((packed)) {
     char DiskInfo_RenderStrings_Str_Colon[4];
     char KbFree_str[10];
     char Used_str[8];
-    char str_1527[2];
+    /* "" + 0xFF pad: the name drawn for a Composer-load list slot that has no file */
+    char CompLoad_Str_EmptyFileName[2];
     char RenderFilterDisplay_Str_Dash_Dash_Dash_Dash[6];
     char Yes_str[6];
     char No_str[6];
@@ -3007,8 +2716,8 @@ typedef struct __attribute__((packed)) {
     char Mid_str_5[14];
     /* FmmSmfFileNameFunc_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t FmmSmfFileNameFunc_CaseTable[6];
-    uint16_t field_1a85c;
-    uint16_t field_1a85e;
+    /* Per scan slot 0..3: bit number (1..4) tested in the drive record's flag word and set in the availability mask at RAM 0x89F6 */
+    uint8_t WPScan_SlotFlagBits[4];
     uint32_t WP_GetPresetName1_PtrTable[3];  /* 3 pointers */
     char MemoryC_str[16];
     char MemoryB_str[16];
@@ -3016,11 +2725,16 @@ typedef struct __attribute__((packed)) {
     /* PtrTbl_VariationNames: 10 pointers (cut from ptrs_269 by split_naka_pointer_arrays.py) */
     uint32_t PtrTbl_VariationNames[10];
     char str_1550[2];
-    char str_1551[2];
-    char str_1552[2];
-    char str_1553[2];
-    char str_1554[2];
-    char str_1555[2];
+    /* "" (+ 0xFF alignment byte): entry 8 of PtrTbl_VariationNames (entries 4-9 are empty; 0-3 are "VARI 1".."VARI 4") */
+    char WP_VariationName8_Empty[2];
+    /* "" (NUL + 0xFF pad): name of variation slot 8 (PtrTbl_VariationNames[7]) */
+    char Str_Variation8_Empty[2];
+    /* "" (NUL + 0xFF pad): name of variation slot 7 (PtrTbl_VariationNames[6]) */
+    char Str_Variation7_Empty[2];
+    /* "" (NUL + 0xFF pad): name of variation slot 6 (PtrTbl_VariationNames[5]) */
+    char Str_Variation6_Empty[2];
+    /* "" + 0xFF fill: name of entry 4 of PtrTbl_VariationNames (entries 0-3 are "VARI 1".."VARI 4", 4-9 empty) */
+    char Str_Variation5_Empty[2];
     char Vari_str[8];
     char Vari_str_2[8];
     char Vari_str_3[8];
@@ -3033,9 +2747,12 @@ typedef struct __attribute__((packed)) {
     char Intro_str[18];
     char Intro_str_2[18];
     char str_1566[2];
-    char str_1567[2];
-    char str_1568[2];
-    char str_1569[2];
+    /* "" + 0xFF pad: ROM name for section index 2 (VARI 3); unused because indices 0-3 take the RAM name path */
+    char WP_SectionName_Vari3Blank[2];
+    /* "" (+ 0xFF alignment byte): entry 1 of WP_GetBankMemName_FromROM_PtrTable; entries 0-3 are "" because DE < 4 is read from RAM */
+    char WP_BankMemName1_Empty[2];
+    /* "" (NUL + 0xFF pad): WP_GetBankMemName_FromROM_PtrTable[0], a memory slot named from RAM instead */
+    char Str_BankMem0_Empty[2];
     /* WP_GetPresetName3_PtrTable: 10 pointers (cut from ptrs_271 by split_naka_pointer_arrays.py) */
     uint32_t WP_GetPresetName3_PtrTable[10];
     char UserKit_str[18];
@@ -3284,7 +3001,8 @@ typedef struct __attribute__((packed)) {
     uint32_t Cheap_FunctionTable_105[14];
     /* PtrTbl_NakaModuleHandlers: 14 pointers (cut from ptrs_286 by split_naka_pointer_arrays.py) */
     uint32_t PtrTbl_NakaModuleHandlers[14];
-    char str_1700[2];
+    /* "" + 0xFF fill: the name after the last of the 13 entries of name table 0x405 (PtrTbl_NakaModuleHandlers) */
+    char Cheap_FuncNameTable_405_EndName[2];
 } naka_technichord_strings_t;
 
 #define SELF(field) \
@@ -3397,10 +3115,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(w10_code),
         SELF(ResName_Sqmixer_2_AcTrackMixer),
         SELF(ResName_Sqmixer_3_IvExit),
-        SELF(str_10),
+        SELF(Murai_ResNameTable_3A5_EndName),
     },
 
-    .str_10 = ALIGNED_STRING(""),
+    .Murai_ResNameTable_3A5_EndName = "\x00\xFF",
 
     .ResName_Sqmixer_3_IvExit = ALIGNED_STRING(""),
 
@@ -3640,10 +3358,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(ResName_Accordion_34_AcAccordionTab),
         SELF(ResName_Accordion_35_AcAccordionTab),
         SELF(ResName_Accordion_36_IvAccordionX),
-        SELF(str_48),
+        SELF(Murai_ResNameEB_End),
     },
 
-    .str_48 = ALIGNED_STRING(""),
+    .Murai_ResNameEB_End = "\x00\xFF",
 
     .ResName_Accordion_36_IvAccordionX = ALIGNED_STRING(""),
 
@@ -7106,237 +6824,33 @@ const naka_technichord_strings_t naka_technichord_strings_data
         0x00008000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,  /* parts 24-29 */
     },
 
-    .field_f3d4 = 0x001E,
-
-    .field_f3d6 = 0x0121,
-
-    .field_f3d8 = 0x001F,
-
-    .field_f3da = 0x0121,
-
-    .field_f3dc = 0x000F,
-
-    .field_f3de = 0x0121,
-
-    .field_f3e0 = 0x0006,
-
-    .field_f3e2 = 0x0121,
-
-    .field_f3e4 = 0x000E,
-
-    .field_f3e6 = 0x0121,
-
-    .field_f3e8 = 0x000D,
-
-    .field_f3ea = 0x0121,
-
-    .field_f3ec = 0x000C,
-
-    .field_f3ee = 0x0121,
-
-    .field_f3f0 = 0x000B,
-
-    .field_f3f2 = 0x0121,
-
-    .field_f3f4 = 0x000A,
-
-    .field_f3f6 = 0x0121,
-
-    .field_f3f8 = 0x0009,
-
-    .field_f3fa = 0x0121,
-
-    .field_f3fc = 0x0008,
-
-    .field_f3fe = 0x0121,
-
-    .field_f400 = 0x0007,
-
-    .field_f402 = 0x0121,
-
-    .field_f404 = 0x0005,
-
-    .field_f406 = 0x0121,
-
-    .field_f408 = 0x0004,
-
-    .field_f40a = 0x0121,
-
-    .field_f40c = 0x0003,
-
-    .field_f40e = 0x0121,
-
-    .field_f410 = 0x0002,
-
-    .field_f412 = 0x0121,
-
-    .field_f414 = 0x0010,
-
-    .field_f416 = 0x0121,
-
-    .field_f418 = NAKA_NONE,
-
-    .field_f41a = NAKA_NONE,
-
-    .field_f41c = NAKA_NONE,
-
-    .field_f41e = NAKA_NONE,
-
-    .field_f420 = NAKA_NONE,
-
-    .field_f422 = NAKA_NONE,
-
-    .field_f424 = NAKA_NONE,
-
-    .field_f426 = NAKA_NONE,
-
-    .field_f428 = NAKA_NONE,
-
-    .field_f42a = NAKA_NONE,
-
-    .field_f42c = NAKA_NONE,
-
-    .field_f42e = NAKA_NONE,
-
-    .field_f430 = NAKA_NONE,
-
-    .field_f432 = NAKA_NONE,
-
-    .field_f434 = NAKA_NONE,
-
-    .field_f436 = NAKA_NONE,
-
-    .field_f438 = NAKA_NONE,
-
-    .field_f43a = NAKA_NONE,
-
-    .field_f43c = NAKA_NONE,
-
-    .field_f43e = NAKA_NONE,
-
-    .field_f440 = NAKA_NONE,
-
-    .field_f442 = NAKA_NONE,
-
-    .field_f444 = NAKA_NONE,
-
-    .field_f446 = NAKA_NONE,
-
-    .field_f448 = NAKA_NONE,
-
-    .field_f44a = NAKA_NONE,
-
-    .field_f44c = NAKA_NONE,
-
-    .field_f44e = NAKA_NONE,
-
-    .str_180 = "'",
-
-    .field_f452 = 0x0121,
-
-    .field_f454 = NAKA_NONE,
-
-    .field_f456 = NAKA_NONE,
-
-    .field_f458 = 0x0011,
-
-    .field_f45a = 0x0121,
-
-    .str_181 = "+",
-
-    .field_f45e = 0x0003,
-
-    .str_182 = "/",
-
-    .field_f462 = 0x0003,
-
-    .str_183 = "6",
-
-    .field_f466 = 0x0003,
-
-    .str_184 = "<",
-
-    .field_f46a = 0x0003,
-
-    .A_str = "A",
-
-    .field_f46e = 0x0003,
-
-    .E_str = "E",
-
-    .field_f472 = 0x0003,
-
-    .I_str = "I",
-
-    .field_f476 = 0x0003,
-
-    .M_str = "M",
-
-    .field_f47a = 0x0003,
-
-    .field_f47c = 0x001D,
-
-    .field_f47e = 0x0003,
-
-    .pad_1532 = { 0 },
-
-    .field_f482 = 0x0001,
-
-    .field_f484 = 0x0002,
-
-    .field_f486 = 0x0003,
-
-    .field_f488 = 0x0004,
-
-    .field_f48a = 0x0005,
-
-    .field_f48c = 0x0006,
-
-    .field_f48e = 0x0007,
-
-    .field_f490 = 0x0008,
-
-    .field_f492 = 0x0009,
-
-    .field_f494 = 0x000A,
-
-    .field_f496 = 0x000B,
-
-    .field_f498 = 0x000C,
-
-    .field_f49a = 0x000D,
-
-    .field_f49c = 0x000E,
-
-    .field_f49e = 0x000F,
-
-    .field_f4a0 = 0x0015,
-
-    .field_f4a2 = 0x0016,
-
-    .field_f4a4 = 0x0010,
-
-    .field_f4a6 = 0x0011,
-
-    .field_f4a8 = 0x0012,
-
-    .field_f4aa = 0x0013,
-
-    .field_f4ac = 0x0014,
-
-    .field_f4ae = 0x0017,
-
-    .field_f4b0 = 0x001A,
-
-    .str_189 = " ",
-
-    .str_190 = "!",
-
-    .field_f4b6 = 0x0019,
-
-    .str_191 = "\"",
-
-    .field_f4ba = NAKA_NONE,
+    .PsMixer_RowKindApFuncId = {
+        0x0121001E, 0x0121001F, 0x0121000F, 0x01210006,
+        0x0121000E, 0x0121000D, 0x0121000C, 0x0121000B,
+        0x0121000A, 0x01210009, 0x01210008, 0x01210007,
+        0x01210005, 0x01210004, 0x01210003, 0x01210002,
+        0x01210010, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x01210027,
+        0xFFFFFFFF,
+    },
+
+    .PsMixer_MuteApFuncId = 0x01210011,
+
+    .IvSdpart_PageViews = {
+        0x0003002B, 0x0003002F, 0x00030036, 0x0003003C,
+        0x00030041, 0x00030045, 0x00030049, 0x0003004D,
+    },
+
+    .IvSdpart_TopPageViewId = 0x0003001D,
+
+    .IvSdpart_PartNumberByRow = {
+        0, 1, 2, 3, 4, 5, 6, 7,
+        8, 9, 10, 11, 12, 13, 14, 15,
+        21, 22, 16, 17, 18, 19, 20, 23,
+        26, 32, 33, 25, 34, -1,
+    },
 
     .Str_PartName_Empty = "         ",
 
@@ -9468,91 +8982,17 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TeCd_str = ALIGNED_STRING("TeCd"),
 
-    .field_17a7e = 0x000A,
+    .Sdtecd1_TypeButtonView = {
+        0x000D000A, 0x000D000B, 0x000D000C, 0x000D000E,
+        0x000D000F, 0x000D0010, 0x000D0011, 0x000D0015,
+        0x000D0012, 0x000D0013, 0x000D0014, 0x000D0016,
+        0x000D0017, 0x000D000D,
+    },
 
-    .field_17a80 = 0x000D,
-
-    .field_17a82 = 0x000B,
-
-    .field_17a84 = 0x000D,
-
-    .field_17a86 = 0x000C,
-
-    .field_17a88 = 0x000D,
-
-    .field_17a8a = 0x000E,
-
-    .field_17a8c = 0x000D,
-
-    .field_17a8e = 0x000F,
-
-    .field_17a90 = 0x000D,
-
-    .field_17a92 = 0x0010,
-
-    .field_17a94 = 0x000D,
-
-    .field_17a96 = 0x0011,
-
-    .field_17a98 = 0x000D,
-
-    .field_17a9a = 0x0015,
-
-    .field_17a9c = 0x000D,
-
-    .field_17a9e = 0x0012,
-
-    .field_17aa0 = 0x000D,
-
-    .field_17aa2 = 0x0013,
-
-    .field_17aa4 = 0x000D,
-
-    .field_17aa6 = 0x0014,
-
-    .field_17aa8 = 0x000D,
-
-    .field_17aaa = 0x0016,
-
-    .field_17aac = 0x000D,
-
-    .field_17aae = 0x0017,
-
-    .field_17ab0 = 0x000D,
-
-    .field_17ab2 = 0x000D,
-
-    .field_17ab4 = 0x000D,
-
-    .pad_1550 = { 0 },
-
-    .field_17ab8 = 0x0001,
-
-    .field_17aba = 0x0002,
-
-    .field_17abc = 0x000D,
-
-    .field_17abe = 0x0003,
-
-    .field_17ac0 = 0x0004,
-
-    .field_17ac2 = 0x0005,
-
-    .field_17ac4 = 0x0006,
-
-    .field_17ac6 = 0x0007,
-
-    .field_17ac8 = 0x0008,
-
-    .field_17aca = 0x0009,
-
-    .field_17acc = 0x000A,
-
-    .field_17ace = 0x000B,
-
-    .field_17ad0 = 0x000C,
-
-    .field_17ad2 = NAKA_NONE,
+    .Sdtecd1_ValueScreenOrder = {
+        0x0000, 0x0001, 0x0002, 0x000D, 0x0003, 0x0004, 0x0005, 0x0006,
+        0x0007, 0x0008, 0x0009, 0x000A, 0x000B, 0x000C, 0xFFFF,
+    },
 
     .TeC1_str = ALIGNED_STRING("TeC1"),
 
@@ -9612,173 +9052,31 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .CONDUCTOR_str_2 = "CONDUCTOR",
 
-    .field_17bd2 = 0xC0C0,
-
-    .field_17bd4 = 0xC3C1,
-
-    .field_17bd6 = 0xC6C4,
-
-    .field_17bd8 = 0xCAC8,
-
-    .field_17bda = 0xCDCB,
-
-    .field_17bdc = 0xD0CF,
-
-    .field_17bde = 0xD4D2,
-
-    .field_17be0 = 0xD7D6,
-
-    .field_17be2 = 0xDBD9,
-
-    .field_17be4 = 0xDEDC,
-
-    .field_17be6 = 0xE2E0,
-
-    .field_17be8 = 0xE5E3,
-
-    .field_17bea = 0xE8E7,
-
-    .field_17bec = 0xECEA,
-
-    .field_17bee = 0xEFED,
-
-    .field_17bf0 = 0xF3F1,
-
-    .field_17bf2 = 0xF6F4,
-
-    .field_17bf4 = 0xF9F8,
-
-    .ptr_17bf6 = 0x00FEFDFB,
-
-    .field_17bfa = 0x0302,
-
-    .field_17bfc = 0x0705,
-
-    .field_17bfe = 0x0A08,
-
-    .field_17c00 = 0x0D0C,
-
-    .field_17c02 = 0x110F,
-
-    .field_17c04 = 0x1412,
-
-    .field_17c06 = 0x1716,
-
-    .field_17c08 = 0x1B19,
-
-    .field_17c0a = 0x1E1C,
-
-    .field_17c0c = 0x2120,
-
-    .field_17c0e = 0x2523,
-
-    .field_17c10 = 0x2826,
-
-    .field_17c12 = 0x2B2A,
-
-    .field_17c14 = 0x2F2D,
-
-    .field_17c16 = 0x3230,
-
-    .field_17c18 = 0x3533,
-
-    .field_17c1a = 0x3837,
-
-    .field_17c1c = 0x3C3A,
-
-    .field_17c1e = 0x3E3D,
-
-    .field_17c20 = 0xFF3F,
+    .LswMasterTuning_ValueByStep = {
+        0xC0, 0xC0, 0xC1, 0xC3, 0xC4, 0xC6, 0xC8, 0xCA, 0xCB, 0xCD, 0xCF, 0xD0, 0xD2, 0xD4, 0xD6, 0xD7,
+        0xD9, 0xDB, 0xDC, 0xDE, 0xE0, 0xE2, 0xE3, 0xE5, 0xE7, 0xE8, 0xEA, 0xEC, 0xED, 0xEF, 0xF1, 0xF3,
+        0xF4, 0xF6, 0xF8, 0xF9, 0xFB, 0xFD, 0xFE, 0x00, 0x02, 0x03, 0x05, 0x07, 0x08, 0x0A, 0x0C, 0x0D,
+        0x0F, 0x11, 0x12, 0x14, 0x16, 0x17, 0x19, 0x1B, 0x1C, 0x1E, 0x20, 0x21, 0x23, 0x25, 0x26, 0x28,
+        0x2A, 0x2B, 0x2D, 0x2F, 0x30, 0x32, 0x33, 0x35, 0x37, 0x38, 0x3A, 0x3C, 0x3D, 0x3E, 0x3F, 0xFF,
+    },
 
     .LswMasterTuning_Str_N440_0 = "440.0",
 
     .LswTuning_SearchLoop_Str_N4_Fmtd_0 = "4%d.0",
 
-    .field_17c2e = 0x0011,
-
-    .field_17c30 = 0x0005,
-
-    .field_17c32 = 0x0012,
-
-    .field_17c34 = 0x0005,
-
-    .field_17c36 = 0x0013,
-
-    .field_17c38 = 0x0005,
-
-    .field_17c3a = 0x0014,
-
-    .field_17c3c = 0x0005,
-
-    .field_17c3e = 0x0015,
-
-    .field_17c40 = 0x0005,
-
-    .field_17c42 = 0x0016,
-
-    .field_17c44 = 0x0005,
-
-    .field_17c46 = 0x0017,
-
-    .field_17c48 = 0x0005,
-
-    .field_17c4a = 0x0018,
-
-    .field_17c4c = 0x0005,
-
-    .field_17c4e = 0x0019,
-
-    .field_17c50 = 0x0005,
-
-    .field_17c52 = 0x001A,
-
-    .field_17c54 = 0x0005,
-
-    .field_17c56 = 0x001B,
-
-    .field_17c58 = 0x0005,
-
-    .field_17c5a = 0x001C,
-
-    .field_17c5c = 0x0005,
-
-    .field_17c5e = NAKA_NONE,
-
-    .field_17c60 = NAKA_NONE,
+    .Sdscltyp2_KeyWidgetIds = {
+        0x00050011, 0x00050012, 0x00050013, 0x00050014,
+        0x00050015, 0x00050016, 0x00050017, 0x00050018,
+        0x00050019, 0x0005001A, 0x0005001B, 0x0005001C,
+        0xFFFFFFFF,
+    },
 
     .Scl2_str = ALIGNED_STRING("Scl2"),
 
-    .pad_1551 = { 0 },
-
-    .str_728 = "@",
-
-    .A_str_2 = "A",
-
-    .B_str = "B",
-
-    .field_17c70 = 0x0003,
-
-    .field_17c72 = 0x0004,
-
-    .field_17c74 = 0x0005,
-
-    .field_17c76 = 0x0010,
-
-    .field_17c78 = 0x0011,
-
-    .field_17c7a = 0x0012,
-
-    .field_17c7c = 0x0013,
-
-    .field_17c7e = 0x0014,
-
-    .field_17c80 = 0x0015,
-
-    .field_17c82 = 0x0016,
-
-    .field_17c84 = 0x0080,
-
-    .field_17c86 = NAKA_NONE,
+    .LswScalingType_TypeCodes = {
+        0x0000, 0x0040, 0x0041, 0x0042, 0x0003, 0x0004, 0x0005, 0x0010,
+        0x0011, 0x0012, 0x0013, 0x0014, 0x0015, 0x0016, 0x0080, 0xFFFF,
+    },
 
     .Naka_Scale2_Screens = {
         SELF(Off_str_2),
@@ -10485,7 +9783,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1998 = { 0 },
 
-    .ptr_19202 = SELF(str_1151),
+    .ptr_19202 = SELF(MidiParam_Ctl0Caption),
 
     .field_19206 = 0x001F,
 
@@ -10571,13 +9869,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2005 = { 0 },
 
-    .ptr_1926e = SELF(str_1142),
+    .ptr_1926e = SELF(MidiParamStr1_BlankRow9),
 
     .str_1134 = " ",
 
     .pad_2006 = { 0 },
 
-    .ptr_1927a = SELF(str_1141),
+    .ptr_1927a = SELF(MidiParamStr1_BlankRow10),
 
     .str_1135 = " ",
 
@@ -10619,9 +9917,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1140 = ALIGNED_STRING(""),
 
-    .str_1141 = ALIGNED_STRING(""),
+    .MidiParamStr1_BlankRow10 = "\x00\xFF",
 
-    .str_1142 = ALIGNED_STRING(""),
+    .MidiParamStr1_BlankRow9 = "\x00\xFF",
 
     .KeyShift_str = "KEY SHIFT",
 
@@ -10639,62 +9937,14 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .SOUND_str_2 = "SOUND",
 
-    .str_1151 = ALIGNED_STRING(""),
+    .MidiParam_Ctl0Caption = "\x00\xFF",
 
-    .pad_2012 = { 0 },
-
-    .field_19300 = 0x0001,
-
-    .field_19302 = 0x0002,
-
-    .field_19304 = 0x0003,
-
-    .field_19306 = 0x0004,
-
-    .field_19308 = 0x0005,
-
-    .field_1930a = 0x0006,
-
-    .field_1930c = 0x0007,
-
-    .field_1930e = 0x0008,
-
-    .field_19310 = 0x0009,
-
-    .field_19312 = 0x000A,
-
-    .field_19314 = 0x000B,
-
-    .field_19316 = 0x000C,
-
-    .field_19318 = 0x000D,
-
-    .field_1931a = 0x000E,
-
-    .field_1931c = 0x000F,
-
-    .field_1931e = 0x0016,
-
-    .field_19320 = 0x0014,
-
-    .field_19322 = 0x0013,
-
-    .field_19324 = 0x0012,
-
-    .field_19326 = 0x0015,
-
-    .field_19328 = 0x0017,
-
-    .field_1932a = 0x0011,
-
-    .ptrs_252 = {
-        0x00FF0010,
-        0x00FF00FF,
-        0x00FF00FF,
-        0x00FF00FF,
+    .PsMixer_DefaultGridPartRows = {
+        0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007,
+        0x0008, 0x0009, 0x000A, 0x000B, 0x000C, 0x000D, 0x000E, 0x000F,
+        0x0016, 0x0014, 0x0013, 0x0012, 0x0015, 0x0017, 0x0011, 0x0010,
+        0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF,
     },
-
-    .field_1933c = 0x00FF,
 
     .str_1152 = ALIGNED_STRING("      "),
 
@@ -11017,13 +10267,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2021 = { 0 },
 
-    .ptr_196ee = SELF(str_1272),
+    .ptr_196ee = SELF(PartMixer_Ctl10Caption),
 
     .str_1266 = " ",
 
     .pad_2022 = { 0 },
 
-    .ptr_196fa = SELF(str_1271),
+    .ptr_196fa = SELF(PartMixer_Ctl11Caption),
 
     .field_196fe = 0x0001,
 
@@ -11049,17 +10299,17 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2026 = { 0 },
 
-    .ptr_1971e = SELF(str_1268),
+    .ptr_1971e = SELF(PartMixer_Row14Caption),
 
-    .str_1268 = ALIGNED_STRING(""),
+    .PartMixer_Row14Caption = "\x00\xFF",
 
     .LOCAL_str_2 = "LOCAL",
 
     .MIDI_str_2 = ALIGNED_STRING("MIDI"),
 
-    .str_1271 = ALIGNED_STRING(""),
+    .PartMixer_Ctl11Caption = "\x00\xFF",
 
-    .str_1272 = ALIGNED_STRING(""),
+    .PartMixer_Ctl10Caption = "\x00\xFF",
 
     .str_1273 = ALIGNED_STRING(""),
 
@@ -11081,66 +10331,18 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1282 = ALIGNED_STRING(""),
 
-    .pad_2027 = { 0 },
-
-    .field_19774 = 0x0001,
-
-    .field_19776 = 0x0002,
-
-    .field_19778 = 0x0003,
-
-    .field_1977a = 0x0004,
-
-    .field_1977c = 0x0005,
-
-    .field_1977e = 0x0006,
-
-    .field_19780 = 0x0007,
-
-    .field_19782 = 0x0008,
-
-    .field_19784 = 0x0009,
-
-    .field_19786 = 0x000A,
-
-    .field_19788 = 0x000B,
-
-    .field_1978a = 0x000C,
-
-    .field_1978c = 0x000D,
-
-    .field_1978e = 0x000E,
-
-    .field_19790 = 0x000F,
-
-    .field_19792 = 0x0016,
-
-    .field_19794 = 0x0014,
-
-    .field_19796 = 0x0013,
-
-    .field_19798 = 0x0012,
-
-    .field_1979a = 0x0015,
-
-    .field_1979c = 0x0017,
-
-    .field_1979e = 0x0011,
-
-    .ptrs_253 = {
-        0x00FF0010,
-        0x00FF00FF,
-        0x00FF00FF,
-        0x00FF00FF,
+    .PartMixer_ColumnPartMap = {
+        0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007,
+        0x0008, 0x0009, 0x000A, 0x000B, 0x000C, 0x000D, 0x000E, 0x000F,
+        0x0016, 0x0014, 0x0013, 0x0012, 0x0015, 0x0017, 0x0011, 0x0010,
+        0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF,
     },
-
-    .field_197b0 = 0x00FF,
 
     .str_1283 = " ",
 
     .pad_2028 = { 0 },
 
-    .ptr_197ba = SELF(str_1303),
+    .ptr_197ba = SELF(TrackMixer_Ctl0_EmptyCaption),
 
     .field_197be = 0x001F,
 
@@ -11226,13 +10428,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2035 = { 0 },
 
-    .ptr_19826 = SELF(str_1294),
+    .ptr_19826 = SELF(TrackMixer_Row9Caption),
 
     .str_1286 = " ",
 
     .pad_2036 = { 0 },
 
-    .ptr_19832 = SELF(str_1293),
+    .ptr_19832 = SELF(TrackMixer_Row10Caption),
 
     .str_1287 = " ",
 
@@ -11274,9 +10476,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1292 = ALIGNED_STRING(""),
 
-    .str_1293 = ALIGNED_STRING(""),
+    .TrackMixer_Row10Caption = "\x00\xFF",
 
-    .str_1294 = ALIGNED_STRING(""),
+    .TrackMixer_Row9Caption = "\x00\xFF",
 
     .KeyShift_str_3 = "KEY SHIFT",
 
@@ -11294,111 +10496,32 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .SOUND_str_4 = "SOUND",
 
-    .str_1303 = ALIGNED_STRING(""),
+    .TrackMixer_Ctl0_EmptyCaption = "\x00\xFF",
 
-    .pad_2042 = { 0 },
+    .TrackMixer_PartCodeToItem = {
+        0x0000, 0x0002, 0x0001, 0x0007, 0x0008, 0x0009, 0x000A, 0x000B,
+        0x0004, 0x0005, 0x0006, 0x0003, 0x000F, 0x0010, 0x001A, 0x001B,
+        0x001C, 0x000C, 0x000D, 0x000E,
+    },
 
-    .field_198b8 = 0x0002,
-
-    .field_198ba = 0x0001,
-
-    .field_198bc = 0x0007,
-
-    .field_198be = 0x0008,
-
-    .field_198c0 = 0x0009,
-
-    .field_198c2 = 0x000A,
-
-    .field_198c4 = 0x000B,
-
-    .field_198c6 = 0x0004,
-
-    .field_198c8 = 0x0005,
-
-    .field_198ca = 0x0006,
-
-    .field_198cc = 0x0003,
-
-    .field_198ce = 0x000F,
-
-    .field_198d0 = 0x0010,
-
-    .field_198d2 = 0x001A,
-
-    .field_198d4 = 0x001B,
-
-    .field_198d6 = 0x001C,
-
-    .field_198d8 = 0x000C,
-
-    .field_198da = 0x000D,
-
-    .field_198dc = 0x000E,
-
-    .field_198de = 0x0005,
-
-    .field_198e0 = 0x0009,
-
-    .field_198e2 = 0x0004,
-
-    .field_198e4 = 0x0008,
-
-    .field_198e6 = 0x0004,
-
-    .field_198e8 = 0x0007,
-
-    .field_198ea = 0x0004,
-
-    .field_198ec = 0x0006,
-
-    .field_198ee = 0x0004,
-
-    .field_198f0 = 0x0006,
-
-    .field_198f2 = 0x0005,
-
-    .field_198f4 = 0x0005,
-
-    .field_198f6 = 0x0006,
-
-    .field_198f8 = 0x0004,
-
-    .field_198fa = 0x0007,
-
-    .field_198fc = 0x0004,
-
-    .field_198fe = 0x0007,
-
-    .field_19900 = 0x0004,
-
-    .field_19902 = 0x0008,
-
-    .field_19904 = 0x0004,
-
-    .field_19906 = 0x0009,
-
-    .field_19908 = 0x0005,
-
-    .field_1990a = 0x000A,
-
-    .field_1990c = 0x0006,
-
-    .field_1990e = 0x000A,
-
-    .field_19910 = 0x0006,
-
-    .field_19912 = 0x000A,
-
-    .field_19914 = 0x0007,
-
-    .field_19916 = 0x000A,
-
-    .field_19918 = 0x0008,
-
-    .field_1991a = 0x0009,
-
-    .field_1991c = 0x0009,
+    .PsMixer_KnobPointerOffsets = {
+        { 5, 9 },
+        { 4, 8 },
+        { 4, 7 },
+        { 4, 6 },
+        { 4, 6 },
+        { 5, 5 },
+        { 6, 4 },
+        { 7, 4 },
+        { 7, 4 },
+        { 8, 4 },
+        { 9, 5 },
+        { 10, 6 },
+        { 10, 6 },
+        { 10, 7 },
+        { 10, 8 },
+        { 9, 9 },
+    },
 
     .MUTE_str_3 = ALIGNED_STRING("MUTE"),
 
@@ -11406,53 +10529,15 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .PsMixer_CtlTypeProc10_Data = "%s:",
 
-    .field_1992c = 0x0280,
+    .IvDrawbar1_DrawbarParamIds = {
+        0x0280, 0x0282, 0x0281, 0x0283, 0x0284, 0x0285, 0x0286, 0x0287,
+        0x0288,
+    },
 
-    .field_1992e = 0x0282,
-
-    .field_19930 = 0x0281,
-
-    .field_19932 = 0x0283,
-
-    .field_19934 = 0x0284,
-
-    .field_19936 = 0x0285,
-
-    .field_19938 = 0x0286,
-
-    .field_1993a = 0x0287,
-
-    .field_1993c = 0x0288,
-
-    .field_1993e = 0x8280,
-
-    .field_19940 = 0x8282,
-
-    .field_19942 = 0x8281,
-
-    .field_19944 = 0x8283,
-
-    .field_19946 = 0x8284,
-
-    .field_19948 = 0x8285,
-
-    .field_1994a = 0x8286,
-
-    .field_1994c = 0x8287,
-
-    .field_1994e = 0x8288,
-
-    .field_19950 = 0x82C1,
-
-    .field_19952 = 0x82C0,
-
-    .field_19954 = 0x82CC,
-
-    .field_19956 = 0x82CB,
-
-    .field_19958 = 0x8293,
-
-    .field_1995a = 0x8294,
+    .MemDraw_LswIdTable = {
+        0x8280, 0x8282, 0x8281, 0x8283, 0x8284, 0x8285, 0x8286, 0x8287,
+        0x8288, 0x82C1, 0x82C0, 0x82CC, 0x82CB, 0x8293, 0x8294,
+    },
 
     .KeyShift_DisplayStrTable = {
         SELF(w46_code),
@@ -11517,53 +10602,16 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .DrwE_name = ALIGNED_STRING("DrwE"),
 
-    .field_19a00 = 0x0016,
+    .DrawbarBitmap_SliderX = {
+        0x0016, 0x0036, 0x0056, 0x0076, 0x0096, 0x00B6, 0x00D6, 0x00F6,
+        0x0116,
+    },
 
-    .str_1323 = "6",
-
-    .V_str = "V",
-
-    .v_str = "v",
-
-    .field_19a08 = 0x0096,
-
-    .field_19a0a = 0x00B6,
-
-    .ptr_19a0c = 0x00F600D6,
-
-    .field_19a10 = 0x0116,
-
-    .field_19a12 = 0x0478,
-
-    .pad_2043 = { 0 },
-
-    .field_19a16 = 0x03E9,
-
-    .pad_2044 = { 0 },
-
-    .field_19a1a = 0x035A,
-
-    .pad_2045 = { 0 },
-
-    .field_19a1e = 0x02CB,
-
-    .pad_2046 = { 0 },
-
-    .field_19a22 = 0x023C,
-
-    .pad_2047 = { 0 },
-
-    .field_19a26 = 0x01AD,
-
-    .pad_2048 = { 0 },
-
-    .field_19a2a = 0x011E,
-
-    .pad_2049 = { 0 },
-
-    .field_19a2e = 0x008F,
-
-    .bytes_19a30 = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    .Drawbar_LevelBitmapOffsets = {
+        0x00000478, 0x000003E9, 0x0000035A, 0x000002CB,
+        0x0000023C, 0x000001AD, 0x0000011E, 0x0000008F,
+        0x00000000,
+    },
 
     .DemoMenu_WorkspaceFunc_CaseTable = {
         0x0000, 0x0007, 0x000E, 0x0015, 0x001C, 0x0023,
@@ -11620,21 +10668,17 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ToStartingAnExternal_str_3 = "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data.",
 
-    .field_19d76 = 0x0201,
+    .FDemoText_PartFlagBit = {
+        0x01, 0x02, 0x04, 0xFF,
+    },
 
-    .field_19d78 = 0xFF04,
+    .FDemoText_VoiceActiveBit = { { 0x08, 0x10, 0x20 }, 0xFF },
 
-    .field_19d7a = 0x1008,
+    .FDemoText_FullSendBitByPart = {
+        0x01, 0x04, 0x10, 0xFF,
+    },
 
-    .field_19d7c = 0xFF20,
-
-    .field_19d7e = 0x0401,
-
-    .field_19d80 = 0xFF10,
-
-    .field_19d82 = 0x0802,
-
-    .field_19d84 = 0xFF20,
+    .FDemoText_PartialResendBit = { { 0x02, 0x08, 0x20 }, 0xFF },
 
     .FDemoText_ByteData_VoiceProbeC_CaseTable = {
         0x0000, 0x0000, 0x0006, 0x0006, 0x0006, 0x0006, 0x000D,
@@ -11721,10 +10765,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(SONG_str),
         SELF(SRC_str),
         SELF(NAME_str),
-        SELF(str_1351),
+        SELF(SongAttrName_Empty),
     },
 
-    .str_1351 = ALIGNED_STRING(""),
+    .SongAttrName_Empty = "\x00\xFF",
 
     .NAME_str = ALIGNED_STRING("NAME"),
 
@@ -11732,13 +10776,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .SONG_str = ALIGNED_STRING("SONG"),
 
-    .pad_2054 = { 0 },
+    .FDemoText_NameValueInit = "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
 
-    .field_19f09 = 0x00FF,
+    .FDemoText_NameValueInit_Pad = {
+        0xFF,
+    },
 
-    .pad_2055 = { 0 },
-
-    .field_19f17 = 0xFF,
+    .FDemoText_SongSrcInit = { "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00", 0xFF },
 
     .FDemoText_ByteData_LayoutEngine_Str_Fmt8s = "%8s",
 
@@ -11757,50 +10801,20 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .FDemoText_ByteData_LayoutEngine_PtrTable_2 = {
         SELF(SIZE_str),
         SELF(COLOR_str),
-        SELF(str_1359),
+        SELF(FDemoText_SizeColorAttrNamesEnd),
     },
 
-    .str_1359 = ALIGNED_STRING(""),
+    .FDemoText_SizeColorAttrNamesEnd = "\x00\xFF",
 
     .COLOR_str = "COLOR",
 
     .SIZE_str = ALIGNED_STRING("SIZE"),
 
-    .field_19f4c = 0x0005,
-
-    .pad_2056 = { 0 },
-
-    .field_19f50 = 0x0007,
-
-    .pad_2057 = { 0 },
-
-    .field_19f54 = 0x0008,
-
-    .pad_2058 = { 0 },
-
-    .field_19f58 = 0x0009,
-
-    .pad_2059 = { 0 },
-
-    .field_19f5c = 0x0003,
-
-    .pad_2060 = { 0 },
-
-    .field_19f64 = 0x0001,
-
-    .pad_2061 = { 0 },
-
-    .field_19f68 = 0x0004,
-
-    .pad_2062 = { 0 },
-
-    .field_19f6c = 0x0002,
-
-    .pad_2063 = { 0 },
-
-    .field_19f70 = 0x0006,
-
-    .pad_2064 = { 0 },
+    .FDemoText_FontSizeToFont = {
+        0x00000005, 0x00000007, 0x00000008, 0x00000009,
+        0x00000003, 0x00000000, 0x00000001, 0x00000004,
+        0x00000002, 0x00000006,
+    },
 
     .ImgAttr_NameTable = {
         SELF(SRC_str_2),
@@ -11812,10 +10826,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(HEIGHT_str),
         SELF(LOWSRC_str),
         SELF(BORDER_str),
-        SELF(str_1362),
+        SELF(ImgAttr_NameListEnd),
     },
 
-    .str_1362 = ALIGNED_STRING(""),
+    .ImgAttr_NameListEnd = "\x00\xFF",
 
     .BORDER_str = ALIGNED_STRING("BORDER"),
 
@@ -11835,31 +10849,27 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .SRC_str_2 = "SRC",
 
-    .pad_2065 = { 0 },
+    .FDemoText_ImgSrcBufInit = { "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00", 0xFF },
 
-    .field_1a01b = 0x00FF,
+    .FDemoText_ImgAltInit = { "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00", 0xFF },
 
-    .pad_2066 = { 0 },
+    .ObjAttr_NameTable = {
+        SELF(field_1a068), SELF(ObjAttr_EndName),
+    },
 
-    .field_1a05d = 0xB6FF,
+    .ObjAttr_EndName = "\x00\xFF",
 
-    .field_1a05f = 0xE9FF,
-
-    .field_1a061 = 0xB400,
-
-    .field_1a063 = 0xE9FF,
-
-    .pad_2067 = { 0 },
-
-    .field_1a067 = 0x4FFF,
+    .field_1a068 = 0x4F,
 
     .BJ_str = ALIGNED_STRING("BJ"),
 
-    .pad_2068 = { 0 },
+    .FDemoText_ObjValueInit = "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
 
-    .field_1a0ad = 0x00FF,
+    .FDemoText_ObjValueInit_Pad = {
+        0xFF,
+    },
 
-    .pad_2069 = { 0 },
+    .FDemoText_ScreenClipRect = { 0x0000, 0x0000 },
 
     .Naka_PresentationRootState_ptr = NAKA_ADDR(Naka_PresentationRootState),
 
@@ -11871,7 +10881,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Presentation_str_3 = "</PRESENTATION>",
 
-    .pad_2070 = { 0 },
+    .Seq_LoadDisplayResource_NameBufInit = "",
+
+    .bytes_1a0db = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
 
     .Pre_str = ALIGNED_STRING(".PRE"),
 
@@ -11948,47 +10960,14 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a18a = 0xE416,
 
-    .field_1a18c = 0x0001,
+    .Demo_PartBitMask = {
+        0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080,
+        0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000,
+    },
 
-    .field_1a18e = 0x0002,
-
-    .field_1a190 = 0x0004,
-
-    .field_1a192 = 0x0008,
-
-    .field_1a194 = 0x0010,
-
-    .str_1393 = " ",
-
-    .str_1394 = "@",
-
-    .field_1a19a = 0x0080,
-
-    .field_1a19c = 0x0100,
-
-    .field_1a19e = 0x0200,
-
-    .field_1a1a0 = 0x0400,
-
-    .field_1a1a2 = 0x0800,
-
-    .field_1a1a4 = 0x1000,
-
-    .field_1a1a6 = 0x2000,
-
-    .field_1a1a8 = 0x4000,
-
-    .field_1a1aa = 0x8000,
-
-    .field_1a1ac = 0x0100,
-
-    .field_1a1ae = 0x0305,
-
-    .field_1a1b0 = 0x0204,
-
-    .field_1a1b2 = 0x0706,
-
-    .field_1a1b4 = 0x0908,
+    .FileIO_TypeProbeOrder = {
+        0x00, 0x01, 0x05, 0x03, 0x04, 0x02, 0x06, 0x07, 0x08, 0x09,
+    },
 
     .HK_str_3_ptr = SELF(HK_str_3),
 
@@ -12267,17 +11246,23 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .LSW_str = "LSW",
 
-    .field_1a442 = NAKA_NONE,
+    .FileIO_DiskInfoInit = 0xFFFFFFFF,
 
-    .field_1a444 = NAKA_NONE,
+    .FileIO_DiskInfoInit_Capacity = 0x00000000,
 
-    .pad_2086 = { 0 },
+    .bytes_1a44a = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
 
     .GetDiskSizeInfo_Data = 0x00FF,
 
-    .pad_2087 = { 0 },
+    .FileIO_EmptyFileRecord = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    },
 
-    .field_1a4fb = 0x5FFF,
+    .bytes_1a49a = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+
+    .FileIO_EmptyEntryName = "\x00\xFF",
+
+    .field_1a4fc = 0x5F,
 
     .______str = "_____",
 
@@ -12291,7 +11276,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .___________str = ALIGNED_STRING("__________"),
 
-    .pad_2088 = { 0 },
+    .UpdateFileEntry_BaseNameInit = "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
+
+    .bytes_1a530 = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
 
     .GetEncFileSize_CopyRecordLoop_Str_Star_Dot_Star = "*.*",
 
@@ -12299,7 +11286,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Mid_str_2 = "*.MID",
 
-    .pad_2089 = { 0 },
+    .ValidateAndSearchFile_PathInit = "",
+
+    .bytes_1a54f = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
 
     .MThd_str = ALIGNED_STRING("MThd"),
 
@@ -12483,57 +11472,21 @@ const naka_technichord_strings_t naka_technichord_strings_data
         NAKA_ADDR(FileIO_DiskRemoved),
     },
 
-    .field_1a72e = 0xFFFE,
-
-    .field_1a730 = 0x0001,
-
-    .field_1a732 = 0xFFFD,
-
-    .field_1a734 = 0x0005,
-
-    .field_1a736 = 0xFFFC,
-
-    .field_1a738 = 0x0007,
-
-    .field_1a73a = 0xFFFA,
-
-    .field_1a73c = 0x0008,
-
-    .field_1a73e = 0xFFF9,
-
-    .pad_2091 = { 0 },
-
-    .field_1a742 = 0xFFF8,
-
-    .field_1a744 = 0x0002,
-
-    .field_1a746 = 0xFFF5,
-
-    .field_1a748 = 0x0006,
-
-    .field_1a74a = 0xFF9B,
-
-    .field_1a74c = 0x0007,
-
-    .field_1a74e = 0xFF9A,
-
-    .pad_2092 = { 0 },
-
-    .field_1a752 = 0xFF98,
-
-    .field_1a754 = 0x0003,
-
-    .field_1a756 = 0xFF97,
-
-    .str_1519 = "=",
-
-    .field_1a75a = 0xFF95,
-
-    .field_1a75c = 0x000F,
-
-    .pad_2093 = { 0 },
-
-    .field_1a760 = 0x00FF,
+    .FileIO_StatusToErrorCode = {
+        { -2, 0x01, 0x00 },
+        { -3, 0x05, 0x00 },
+        { -4, 0x07, 0x00 },
+        { -6, 0x08, 0x00 },
+        { -7, 0x00, 0x00 },
+        { -8, 0x02, 0x00 },
+        { -11, 0x06, 0x00 },
+        { -101, 0x07, 0x00 },
+        { -102, 0x00, 0x00 },
+        { -104, 0x03, 0x00 },
+        { -105, 0x3D, 0x00 },
+        { -107, 0x0F, 0x00 },
+        { 0, 0xFF, 0x00 },
+    },
 
     .FeaturePre_str = ALIGNED_STRING("FEATURE .PRE"),
 
@@ -12549,7 +11502,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Used_str = "% used)",
 
-    .str_1527 = ALIGNED_STRING(""),
+    .CompLoad_Str_EmptyFileName = "\x00\xFF",
 
     .RenderFilterDisplay_Str_Dash_Dash_Dash_Dash = "-----",
 
@@ -12605,9 +11558,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
         0x07B5, 0x07E6, 0x0000, 0x07A0, 0x07A7, 0x07AE,
     },
 
-    .field_1a85c = 0x0201,
-
-    .field_1a85e = 0x0403,
+    .WPScan_SlotFlagBits = {
+        0x01, 0x02, 0x03, 0x04,
+    },
 
     .WP_GetPresetName1_PtrTable = {
         SELF(MemoryA_str),
@@ -12626,25 +11579,25 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(Vari_str_3),
         SELF(Vari_str_2),
         SELF(Vari_str),
-        SELF(str_1555),
-        SELF(str_1554),
-        SELF(str_1553),
-        SELF(str_1552),
-        SELF(str_1551),
+        SELF(Str_Variation5_Empty),
+        SELF(Str_Variation6_Empty),
+        SELF(Str_Variation7_Empty),
+        SELF(Str_Variation8_Empty),
+        SELF(WP_VariationName8_Empty),
         SELF(str_1550),
     },
 
     .str_1550 = ALIGNED_STRING(""),
 
-    .str_1551 = ALIGNED_STRING(""),
+    .WP_VariationName8_Empty = "\x00\xFF",
 
-    .str_1552 = ALIGNED_STRING(""),
+    .Str_Variation8_Empty = "\x00\xFF",
 
-    .str_1553 = ALIGNED_STRING(""),
+    .Str_Variation7_Empty = "\x00\xFF",
 
-    .str_1554 = ALIGNED_STRING(""),
+    .Str_Variation6_Empty = "\x00\xFF",
 
-    .str_1555 = ALIGNED_STRING(""),
+    .Str_Variation5_Empty = "\x00\xFF",
 
     .Vari_str = ALIGNED_STRING("VARI 4"),
 
@@ -12655,9 +11608,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .Vari_str_4 = ALIGNED_STRING("VARI 1"),
 
     .WP_GetBankMemName_FromROM_PtrTable = {
-        SELF(str_1569),
-        SELF(str_1568),
-        SELF(str_1567),
+        SELF(Str_BankMem0_Empty),
+        SELF(WP_BankMemName1_Empty),
+        SELF(WP_SectionName_Vari3Blank),
         SELF(str_1566),
         SELF(Intro_str_2),
         SELF(Intro_str),
@@ -12681,11 +11634,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1566 = ALIGNED_STRING(""),
 
-    .str_1567 = ALIGNED_STRING(""),
+    .WP_SectionName_Vari3Blank = "\x00\xFF",
 
-    .str_1568 = ALIGNED_STRING(""),
+    .WP_BankMemName1_Empty = "\x00\xFF",
 
-    .str_1569 = ALIGNED_STRING(""),
+    .Str_BankMem0_Empty = "\x00\xFF",
 
     .WP_GetPresetName3_PtrTable = {
         SELF(MemoryA_str_2),
@@ -13344,10 +12297,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
         NAKA_ADDR(NakaInst_AcRotStrBoxProc),
         NAKA_ADDR(NakaInst_IvIndexSwDelayProc),
         NAKA_ADDR(NakaInst_IvWaitWinCtlProc),
-        SELF(str_1700),
+        SELF(Cheap_FuncNameTable_405_EndName),
     },
 
-    .str_1700 = ALIGNED_STRING(""),
+    .Cheap_FuncNameTable_405_EndName = "\x00\xFF",
 
 };
 

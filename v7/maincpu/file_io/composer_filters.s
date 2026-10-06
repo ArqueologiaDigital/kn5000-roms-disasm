@@ -165,7 +165,7 @@ CompLoad_DrawItemLoop:
 	ld	xbc, xhl
 	jr	CompLoad_DrawItem_Continue
 CompLoad_DrawItem_Empty:
-	lda xbc, (CompLoad_DrawItem_Empty_Data:24)
+	lda xbc, (CompLoad_Str_EmptyFileName:24)
 
 CompLoad_DrawItem_Continue:
 	ld	de, iz

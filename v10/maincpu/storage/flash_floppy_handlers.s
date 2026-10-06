@@ -1103,7 +1103,7 @@ NoteEvent_LoadSoundGenParams:
 	lda xix, (xsp+272)
 	ldw bc, 0x30
 	ldirw
-	ld xiy, NoteEvent_LoadSoundGenParams_Data
+	ld xiy, NoteEvent_DefaultPatternSlot
 	lda xix, (xsp + 16)
 	ldw bc, 0x80
 	ldirw

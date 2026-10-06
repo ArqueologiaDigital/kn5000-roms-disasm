@@ -170,21 +170,17 @@ FDC_CommandEntry_CopyParams_CaseTable:
 	.short	FDC_HANDLER_09 - FDC_HANDLER_DISPATCH_BASE
 	.short	FDC_HANDLER_10 - FDC_HANDLER_DISPATCH_BASE
 	.short	FDC_HANDLER_11 - FDC_HANDLER_DISPATCH_BASE
-; [nakarest] naka_disk_warning+0xc36  +0xc36..+0xcba (0xea98e2, 132 B)
-; [nakarest] purpose not established: layout of 132 B at 0xea98e2 not derived; readers below
-; [nakarest] Readers: source references CtrlPanel_HandleSerialPort
-; [nakarest] (boot/main_title_ctrl_panel.s: `lda xbc, (CtrlPanel_HandleSerialPort_Data:24)`).
-CtrlPanel_HandleSerialPort_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xC36, 0x84
-; [nakarest] naka_disk_warning+0xcba  +0xcba..+0xd4c (0xea9966, 146 B)
-; [nakarest] purpose not established: layout of 146 B at 0xea9966 not derived; readers below
-; [nakarest] Readers: source references CtrlPanel_CheckButtonRelease
-; [nakarest] (boot/main_title_ctrl_panel.s: `ld xbc, SndParam_SendDiskMenuEvents_Data`),
-; [nakarest] CtrlPanel_CheckDiskMenuRelease (boot/main_title_ctrl_panel.s: `ld xbc,
-; [nakarest] SndParam_SendDiskMenuEvents_Data`), CtrlPanel_ProcessButtonPress
-; [nakarest] (boot/main_title_ctrl_panel.s: `ld xbc, SndParam_SendDiskMenuEvents_Data`),
-; [nakarest] SndParam_SendDiskMenuEvents (boot/main_title_ctrl_panel.s: `ld xbc,
-; [nakarest] SndParam_SendDiskMenuEvents_Data`).
-SndParam_SendDiskMenuEvents_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xCBA, 0x80
+; CtrlPanel_DialStepByDelta -- 33 x int32_t: EVT_DIAL step for dial delta -16..+16 (index = delta + 16)
+; CtrlPanel_HandleSerialPort (boot/main_title_ctrl_panel.s), panel packet with payload1 == 33: payload2 + 16,
+; sign-extended, x4, loads the 32-bit step and posts it as the EVT_DIAL parameter.
+; The table is odd-symmetric (+d -> -step(d)), so the panel delta sign is inverted, and |step| saturates at 7.
+CtrlPanel_DialStepByDelta:	.incbin "includes/generated/naka_disk_warning.bin", 0xC36, 0x84
+; CtrlPanel_SwitchRowBit -- 32 x uint32_t: entry i = 1 << i, the bit for panel switch row i
+; SwbtB3_OnPanelEvent's 0xA9 path (boot/main_title_ctrl_panel.s) indexes it by the row in
+; SWBTWR_PAYLOAD_1 (`sll xwa, 2`): it ORs the bit into TRANSITION_PROGRESS (payload bit 1) or
+; TRANSITION_TIMER (bit 0) on press and ANDs it out on release; the AND of both masks picks combos
+; (0x1100, 0xA1, 0x91, 0x89 in CtrlPanel_DispatchCombinedState). Rows 0..16 are reachable (cp e, 0x10)
+CtrlPanel_SwitchRowBit:	.incbin "includes/generated/naka_disk_warning.bin", 0xCBA, 0x80
 GetSoundName_DefaultString_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xD3A, 0x12
 ; [nakarest] naka_disk_warning+0xd4c  +0xd4c..+0xd58 (0xea99f8, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xea99f8 not derived; readers below
@@ -245,16 +241,18 @@ CtrlPanel_DispatchByIndex_CaseTable:
 	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
 	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
 	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
-; [nakarest] naka_disk_warning+0xdae  +0xdae..+0xe2e (0xea9a5a, 128 B)
-; [nakarest] purpose not established: layout of 128 B at 0xea9a5a not derived; readers below
-; [nakarest] Readers: source references GroupBox_HandleStateCompare (ui/ui_control_panel.s: `lda
-; [nakarest] xwa, (GroupBox_HandleStateCompare_Data:24)`).
-GroupBox_HandleStateCompare_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xDAE, 0x80
-; [nakarest] naka_disk_warning+0xe2e  +0xe2e..+0xe56 (0xea9ada, 40 B)
-; [nakarest] purpose not established: layout of 40 B at 0xea9ada not derived; readers below
-; [nakarest] Readers: source references CtrlPanel_FuncDispatch (ui/ui_control_panel.s: `add xwa,
-; [nakarest] CtrlPanel_FuncDispatch_Data`).
-CtrlPanel_FuncDispatch_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xE2E, 0x28
+; GroupBox_ModeSwitchGroup -- 32 x u32: mode-switch group key per Mode-table slot (index = mode id & 0xFFFF)
+; GroupBox_HandleStateCompare (EVT_SW_IN_MODE, param = requested mode) compares key[current] with key[requested]:
+; equal -> EVT_CHANGE_MODE MD_NORMAL, else -> EVT_CHANGE_MODE requested.  E.g. MD_SOUND and MD_SOUNDEDIT share
+; 0x101; MD_SEQ, MD_SEQ_REAL/EDIT/STEP share 0x106.  Slots 21-31 and MD_PS/MD_NORMAL are 0xFF.  The keys are only compared.
+GroupBox_ModeSwitchGroup:	.incbin "includes/generated/naka_disk_warning.bin", 0xDAE, 0x80
+; GroupBox_EventCaseMap -- 39 x uint8_t: case number (0-12) for each event GroupBoxProc switches on
+; Slots 0-9 = EVT_SHOW..EVT_ALL_PAINT (0x1C00001+i), 10-19 = 0x1E0008B+i, 20-38 = 0x1E00091+i.
+; CtrlPanel_FuncDispatch (ui/ui_control_panel.s) reads the byte, doubles it and jumps through
+; CtrlPanel_FuncDispatch_CaseTable: 0 GroupBox_NavUpDown (send to GetTitleNow), 1 BoxProc, 2 return 0, 3-12 own handlers.
+GroupBox_EventCaseMap:	.incbin "includes/generated/naka_disk_warning.bin", 0xE2E, 0x27
+; GroupBox_EventCaseMap_Pad -- 1 x uint8_t: 0xFF fill so CtrlPanel_FuncDispatch_CaseTable (.short) starts even
+GroupBox_EventCaseMap_Pad:	.incbin "includes/generated/naka_disk_warning.bin", 0xE55, 0x1
 ; [nakarest] naka_disk_warning+0xe56  +0xe56..+0xe70 (0xea9b02, 26 B)
 ; [nakarest] purpose not established: layout of 26 B at 0xea9b02 not derived; readers below
 ; [nakarest] Readers: source references CtrlPanel_FuncDispatch (ui/ui_control_panel.s: `ld xix,
@@ -661,11 +659,13 @@ ButtonState_DispatchDSP_CaseTable:
 	.short	ButtonState_Paint_DrawAligned - ButtonState_DispatchDSP_InlineData
 	.short	ButtonState_DispatchDSP_Case15 - ButtonState_DispatchDSP_InlineData
 	.short	ButtonState_DispatchDSP_Case16 - ButtonState_DispatchDSP_InlineData
-; [nakarest] naka_disk_warning+0x1690  +0x1690..+0x16a2 (0xeaa33c, 18 B)
-; [nakarest] purpose not established: layout of 18 B at 0xeaa33c not derived; readers below
-; [nakarest] Readers: source references AcIndexEdit_DispatchDSP (ui/ui_widget_defs.s: `lda xix,
-; [nakarest] (AcIndexEdit_DispatchDSP_Data:24)`).
-AcIndexEdit_DispatchDSP_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1690, 0x12
+; AcIndexEdit_SwitchDirCaseMap -- 17 x uint8_t: case 0-2 for the widget's instance byte (0..16)
+; AcIndexEdit_DispatchDSP (ui/ui_widget_defs.s) reads instance +40 (PsWideESBox) or +38, bounds it 0..16,
+; and jumps through AcIndexEdit_DispatchDSP_CaseTable: 0 = EVT_INDEXSW_DOWN if parameter bit 7 set
+; else EVT_INDEXSW_UP, 1 = EVT_INDEXSW_UP, 2 = EVT_INDEXSW_DOWN.
+AcIndexEdit_SwitchDirCaseMap:	.incbin "includes/generated/naka_disk_warning.bin", 0x1690, 0x11
+; AcIndexEdit_SwitchDirCaseMap_Pad -- 1 x uint8_t: 0xFF fill so AcIndexEdit_DispatchDSP_CaseTable starts even
+AcIndexEdit_SwitchDirCaseMap_Pad:	.incbin "includes/generated/naka_disk_warning.bin", 0x16A1, 0x1
 ; [nakarest] naka_disk_warning+0x16a2  +0x16a2..+0x16d8 (0xeaa34e, 54 B)
 ; [nakarest] Text (54 B at 0xeaa34e), first string ""; no registered NAKA table points into it;
 ; [nakarest] reached through source references AcIndexEdit_DispatchDSP (ui/ui_widget_defs.s: `ld
@@ -728,11 +728,11 @@ AcMixerVol_ChannelNamePtrs:	.incbin "includes/generated/naka_disk_warning.bin", 
 ; (scripts/converters/mixer_channel_table_retype.py).
 AcMixerVol_Channels:	.incbin "includes/generated/naka_disk_warning.bin", 0x1860, 0x118
 	.set AcMixerVol_Channels_MuteKey, AcMixerVol_Channels + 4	; the mute_key column
-; [nakarest] naka_disk_warning+0x1978  +0x1978..+0x1a08 (0xeaa624, 144 B)
-; [nakarest] purpose not established: layout of 144 B at 0xeaa624 not derived; readers below
-; [nakarest] Readers: source references AcMixerVol_PartSelect_DrawIcon (ui/ui_widget_defs.s:
-; [nakarest] `lda xde, (AcMixerVol_PartSelect_DrawIcon_Data:24)`).
-AcMixerVol_PartSelect_DrawIcon_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1978, 0x8C
+; AcMixerVol_GroupIconBitmap -- 35 x u32: sound-group number -> BitmapDescriptorTable index (table_data/ui_bitmaps.s) of the channel icon.
+; AcMixerVol_PartSelect (ui/ui_widget_defs.s, on EVT_SOUND_SW_NO) takes the index from bits 24-28 of the event parameter,
+; or forces 18 for mixer channel 26 (METR) and 19 for channel 27 (MIC), and draws entry [index] with DrawBitmapFast.
+; Entries 0-19 are icon bitmaps 12-28 and 31-33 (18 = Bitmap_SoundIcon_Metronome, 19 = Bitmap_SoundIcon_Microphone); 20-34 are 0.
+AcMixerVol_GroupIconBitmap:	.incbin "includes/generated/naka_disk_warning.bin", 0x1978, 0x8C
 AcMixerVol_DrawChannel_Str_Fmt3d:		.incbin "includes/generated/naka_disk_warning.bin", 0x1A04, 0x4	; "%3d"
 ; [nakarest] naka_disk_warning+0x1a08  +0x1a08..+0x1a0e (0xeaa6b4, 6 B)
 ; [nakarest] Text (6 B at 0xeaa6b4), first string "MUTE"; no registered NAKA table points into
@@ -746,10 +746,9 @@ AcMixerVol_DrawChannel_Str_MUTE:	.incbin "includes/generated/naka_disk_warning.b
 DbMemo_Paint_Str_Debug_Time:					.incbin "includes/generated/naka_disk_warning.bin", 0x1A0E, 0xC	; "Debug Time!"
 DbMemDump_Confirm_RowLoop_Str_Fmt2X_Fmt4X:			.incbin "includes/generated/naka_disk_warning.bin", 0x1A1A, 0xC	; "%02X%04X  "
 DbMemDump_Confirm_RowLoop_Str_Fmt2X_Fmt2X_Fmt2X_Fmt2X_Fmt2X:	.incbin "includes/generated/naka_disk_warning.bin", 0x1A26, 0x28	; "%02X %02X %02X %02X %02X %02X %02X %02X"
-; [nakarest] naka_disk_warning+0x1a4e  +0x1a4e..+0x1a66 (0xeaa6fa, 24 B)
-; [nakarest] purpose not established: layout of 24 B at 0xeaa6fa not derived; readers below
-; [nakarest] Readers: source references DbMemDump_OK (ui/ui_widget_defs.s: `add xwa,
-; [nakarest] DbMemDump_StepTable`).
+; DbMemDump_StepTable -- 6 x u32: address step for each hex digit of the memory-dump debugger's address
+; DbMemDump_OK: index = edit switch - 2 (0..5); the step is added (or subtracted, bit 7 of the param)
+; to the dump address, which is then masked with NakaData_RomEnd.  Switch 0x10 steps 0x80 instead.
 DbMemDump_StepTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x1A4E, 0x18
 ; [nakarest] naka_disk_warning+0x1a66  +0x1a66..+0x1a98 (0xeaa712, 50 B)
 ; [nakarest] purpose not established: layout of 50 B at 0xeaa712 not derived; readers below
@@ -776,11 +775,11 @@ PsTrackSwitchProc_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 
 ; [nakarest] Readers: source references PsTrackSwitchProc (ui/ui_widget_defs.s: `ld xiy,
 ; [nakarest] PsTrackSwitchProc_PtrTable_2`).
 PsTrackSwitchProc_PtrTable_2:	.incbin "includes/generated/naka_disk_warning.bin", 0x1B44, 0x2A	; 5 x 32-bit pointer
-; [nakarest] naka_disk_warning+0x1b6e  +0x1b6e..+0x1b7e (0xeaa81a, 16 B)
-; [nakarest] purpose not established: layout of 16 B at 0xeaa81a not derived; readers below
-; [nakarest] Readers: source references PsTrackSwitchProc (ui/ui_widget_defs.s: `ld xiy,
-; [nakarest] PsTrackSwitchProc_Data`).
-PsTrackSwitchProc_Data:			.incbin "includes/generated/naka_disk_warning.bin", 0x1B6E, 0xA
+; PsTrkSw_SelectStateColor -- 5 x uint16_t: DrawBox colour per select state 0-4
+; PsTrackSwitchProc (ui/ui_widget_defs.s) copies it to a local (5 words); on EVT_SELE_DRAW it indexes it
+; by the state word *(instance+32) (`sla bc, 1`) and passes the word to DrawBox as the colour;
+; the same state indexes the 5 strings copied from PsTrackSwitchProc_PtrTable_2
+PsTrkSw_SelectStateColor:	.incbin "includes/generated/naka_disk_warning.bin", 0x1B6E, 0xA
 PsTrkSw_Confirm_DrawGeometry_Str_Fmtd:	.incbin "includes/generated/naka_disk_warning.bin", 0x1B78, 0x4	; "%d"
 AcTrkSw_Select_Data:			.incbin "includes/generated/naka_disk_warning.bin", 0x1B7C, 0x2
 ; [nakarest] naka_disk_warning+0x1b7e  +0x1b7e..+0x1b88 (0xeaa82a, 10 B)
@@ -837,16 +836,14 @@ ExitWindow_Confirm_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1
 ; [nakarest] Readers: source references ExitWindow_OK (ui/ui_widget_defs.s: `ld xiy,
 ; [nakarest] ExitWindow_OK_Data`).
 ExitWindow_OK_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C30, 0x18
-; [nakarest] naka_disk_warning+0x1c48  +0x1c48..+0x1c4a (0xeaa8f4, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xeaa8f4 not derived; readers below
-; [nakarest] Readers: source references InputDialog_Confirm (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (InputDialog_Confirm_Data:24)`).
-InputDialog_Confirm_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C48, 0x2
-; [nakarest] naka_disk_warning+0x1c4a  +0x1c4a..+0x1c4c (0xeaa8f6, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xeaa8f6 not derived; readers below
-; [nakarest] Readers: source references UnRegisterObject (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (UnRegisterObject_Data:24)`).
-UnRegisterObject_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C4A, 0x2
+; RegisterObject_Str_EmptyName -- 1 x char[2]: "" + 0xFF alignment pad
+; RegisterObject (ui/ui_widget_defs.s) stores its address in the name table (registry slot + 0x300) entry
+; of the element it allocates, so a dynamically registered object starts with an empty name
+RegisterObject_Str_EmptyName:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C48, 0x2
+; UnRegisterObject_EmptyName -- 2 x char: "" + 0xFF fill, stored as the name of an unregistered object
+; UnRegisterObject clears the instance pointer and points the object's entry in the class + 0x300 name table here;
+; that table is what EVT_SET_NAME / EVT_GET_NAME (Viewable_SetName, Strlen) read and write.
+UnRegisterObject_EmptyName:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C4A, 0x2
 ; [nakarest] naka_disk_warning+0x1c4c  +0x1c4c..+0x1c5c (0xeaa8f8, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeaa8f8 not derived; readers below
 ; [nakarest] Readers: source references ClassProc (ui/ui_widget_defs.s: `add xbc,
@@ -870,27 +867,28 @@ ModeProc_CaseTable:
 	.short	ModeProc_OnGetModeNow - NakaWidget_ReturnConst_0x1600006
 	.short	ModeProc_OnGetModeOld - NakaWidget_ReturnConst_0x1600006
 	.short	ModeProc_OnGetUserId - NakaWidget_ReturnConst_0x1600006
-; [nakarest] naka_disk_warning+0x1c68  +0x1c68..+0x1c6a (0xeaa914, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xeaa914 not derived; readers below
-; [nakarest] Readers: source references UnregisteredMode (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (UnregisteredMode_Data:24)`).
-UnregisteredMode_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C68, 0x2
-; [nakarest] naka_disk_warning+0x1c6a  +0x1c6a..+0x1c6c (0xeaa916, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xeaa916 not derived; readers below
-; [nakarest] Readers: source references UnregisteredTitle (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (UnregisteredTitle_Data:24)`).
-UnregisteredTitle_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C6A, 0x2
-; [nakarest] naka_disk_warning+0x1c6c  +0x1c6c..+0x1c70 (0xeaa918, 4 B)
-; [nakarest] purpose not established: layout of 4 B at 0xeaa918 not derived; readers below
-; [nakarest] Readers: source references EnumList_HitTest_Loop (ui/ui_widget_defs.s: `ld xwa,
-; [nakarest] TitleProc_Data`), EnumList_OK_ScrollUp_Done (ui/ui_widget_defs.s: `ld xbc,
-; [nakarest] TitleProc_Data`), TitleProc (ui/ui_widget_defs.s: `ld xbc, TitleProc_Data`).
-TitleProc_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C6C, 0x4
-; [nakarest] naka_disk_warning+0x1c70  +0x1c70..+0x1d14 (0xeaa91c, 164 B)
-; [nakarest] purpose not established: layout of 164 B at 0xeaa91c not derived; readers below
-; [nakarest] Readers: source references EnumList_HitTest (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (EnumList_HitTest_Data:24)`).
-EnumList_HitTest_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C70, 0xA4
+; Mode_UnregisteredName -- 2 x char: "" plus a 0xFF alignment pad, the name UnregisteredMode (ui/ui_widget_defs.s)
+; stores at +10 of a 14-byte mode record (RAM 0x328FC + 14*mode), where RegisterMode stores the mode's name ("MD_NORMAL" ...).
+Mode_UnregisteredName:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C68, 0x2
+; UnregisteredTitle_EmptyName -- 2 x char: "" + 0xFF fill, title name of an unregistered title slot
+; UnregisteredTitle (ui/ui_widget_defs.s) stores its address at +10 of the 22-byte title record
+; (RAM 0x32ABC + 22*n), the field RegisterTitle fills from its name argument.
+UnregisteredTitle_EmptyName:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C6A, 0x2
+; TitleProc_EasySetTable -- 1 x uint32_t: TITLE_SDTECD, the title of entry 0 of the press-and-hold (easy set) table
+; the table is 12 x {u32 title, u32 event, u32 hold period, u16 0}; its other 164 bytes sit under TitleProc_EasySetHold0Tail
+; TitleProc (ui/ui_widget_defs.s) indexes it by the EVT_EASY_SET_* parameter (*14): EASY_SET_ON arms
+; SetApTimer with +8, EASY_SET_GO sends event +4 with param = title +0, EASY_SET_OFF kills the timer
+TitleProc_EasySetTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C6C, 0x4
+; TitleProc_EasySetHold0Tail -- 1 x 10 bytes: fields +4..+13 of record 0 of TitleProc's easy-set hold table
+; The table is 12 x {u32 title id, u32 EVT_CHANGE_TITLE/EVT_INTERRUPT_TITLE, u32 hold ticks, u16 unread},
+; starting at TitleProc_EasySetTable (record 0's title id); EnumList_HitTest reads this label + 14*button as the event column.
+; Better: one label for all 168 bytes at TitleProc_EasySetTable, read here as that label + 4.
+TitleProc_EasySetHold0Tail:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C70, 0xA
+; TitleProc_EasySetHold1to11 -- 11 x 14-byte struct: records 1..11 of TitleProc's easy-set hold table
+; Indexed by the EVT_EASY_SET_* parameter (the button, 0..11; stride 14 = x*8-x, doubled).  EVT_EASY_SET_ON arms
+; SetApTimer(hold_ticks); on EVT_EASY_SET_GO EnumList_HitTest sends title_event(title_id), skipping
+; EVT_CHANGE_TITLE in MD_NORMAL.  The u16 at +12 is not read (0 in every record).
+TitleProc_EasySetHold1to11:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C7A, 0x9A
 ; [nakarest] naka_disk_warning+0x1d14  +0x1d14..+0x1d20 (0xeaa9c0, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeaa9c0 not derived; readers below
 ; [nakarest] Readers: source references TitleProc (ui/ui_widget_defs.s: `add xde,
@@ -902,11 +900,10 @@ TitleProc_Str_j:
 	.short	TitleProc_OnGetStartScreen - TitleProc_EventDispatch
 	.short	TitleProc_OnGetTitleNow - TitleProc_EventDispatch
 	.short	TitleProc_OnGetTitleOld - TitleProc_EventDispatch
-; [nakarest] naka_disk_warning+0x1d20  +0x1d20..+0x1d3a (0xeaa9cc, 26 B)
-; [nakarest] purpose not established: layout of 26 B at 0xeaa9cc not derived; readers below
-; [nakarest] Readers: source references EnumList_Reset (ui/ui_widget_defs.s: `ld xbc,
-; [nakarest] EnumList_Reset_Data`).
-EnumList_Reset_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D20, 0x1A
+; Title_InterruptTimeTicks -- 13 x s16: IntTimeID -> timeout of an interrupt screen, in ApTimer ticks (IT_1Sec..IT_10Sec = 42..417).
+; SetInterruptTime (ui/ui_widget_defs.s) stores entry [id] at RAM 0x2BC32; TitleProc uses it as the interval of the
+; EVT_RETURN_TITLE timer (ResetApTimer).  Ids are the IntTimeID enum: 0 IT_Off (0), 1 IT_Default, 2 IT_Hold (167 each).
+Title_InterruptTimeTicks:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D20, 0x1A
 ; [nakarest] naka_disk_warning+0x1d3a  +0x1d3a..+0x1d48 (0xeaa9e6, 14 B)
 ; [nakarest] purpose not established: layout of 14 B at 0xeaa9e6 not derived; readers below
 ; [nakarest] Readers: source references ViewableProc (ui/ui_widget_defs.s: `add xwa,
@@ -1063,22 +1060,19 @@ TitleID_EnumOpen_SearchLoop_Str_Title_Fmtd:		.incbin "includes/generated/naka_di
 ; [nakarest] it; reached through source references NameProc_Init (ui/ui_widget_defs.s: `ld xwa,
 ; [nakarest] NameProc_Init_Str_name`).
 NameProc_Init_Str_name:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F20, 0x6	; "name"
-; [nakarest] naka_disk_warning+0x1f26  +0x1f26..+0x1f2a (0xeaabd2, 4 B)
-; [nakarest] purpose not established: layout of 4 B at 0xeaabd2 not derived; readers below
-; [nakarest] Readers: source references NameProc_Init_SetPtr (ui/ui_widget_defs.s: `ld xwa,
-; [nakarest] NameProc_Init_SetPtr_Data`).
-NameProc_Init_SetPtr_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F26, 0x2
+; NameProc_MakeDump_Str_Empty -- 1 x char[2]: "" + 0xFF alignment pad
+; NameProc (ui/ui_widget_defs.s) Strcpy's it into the caller's buffer for EVT_MAKE_DUMP
+; (EVT_GET_PROP_MEMBER gives "name", EVT_DUMP_PROPERTY_EX NameProc_GetText_Str_Empty)
+NameProc_MakeDump_Str_Empty:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F26, 0x2
 NameProc_GetText_Str_Empty:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F28, 0x2	; ""
 ; [nakarest] naka_disk_warning+0x1f2a  +0x1f2a..+0x1f32 (0xeaabd6, 8 B)
 ; [nakarest] Text (8 B at 0xeaabd6), first string "romram"; no registered NAKA table points into
 ; [nakarest] it; reached through source references ConstFlagProc_GetValue (ui/ui_widget_defs.s:
 ; [nakarest] `ld xwa, ConstFlagProc_GetValue_Str_romram`).
 ConstFlagProc_GetValue_Str_romram:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F2A, 0x8	; "romram"
-; [nakarest] naka_disk_warning+0x1f32  +0x1f32..+0x1f38 (0xeaabde, 6 B)
-; [nakarest] purpose not established: layout of 6 B at 0xeaabde not derived; readers below
-; [nakarest] Readers: source references ConstFlagProc_GetValue_Set (ui/ui_widget_defs.s: `ld
-; [nakarest] xwa, ConstFlagProc_GetValue_Set_Data`).
-ConstFlagProc_GetValue_Set_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F32, 0x2
+; ConstFlagProc_DumpText -- 2 x char: "" + 0xFF fill, Strcpy'd into the caller's buffer on EVT_MAKE_DUMP
+; (EVT_GET_PROP_MEMBER copies "romram" instead, ConstFlagProc_GetValue_Str_romram).
+ConstFlagProc_DumpText:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F32, 0x2
 ConstFlagProc_SetValue_Check_Str_Empty:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F34, 0x2	; ""
 CommonIDProc_OnDumpPointerEx_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F36, 0x2
 ; [nakarest] naka_disk_warning+0x1f38  +0x1f38..+0x1f46 (0xeaabe4, 14 B)
@@ -1158,31 +1152,35 @@ CaptureLcd_Str_HKLCD_Fmt3d_BMP:	.incbin "includes/generated/naka_disk_warning.bi
 ; [nakarest] reached through source references CaptureLcd (ui/ui_window_procs.s: `ld xbc,
 ; [nakarest] CaptureLcd_Str_wb`).
 CaptureLcd_Str_wb:	.incbin "includes/generated/naka_disk_warning.bin", 0x21B2, 0x4	; "wb"
-; [nakarest] naka_disk_warning+0x21b6  +0x21b6..+0x21ba (0xeaae62, 4 B)
-; [nakarest] purpose not established: layout of 4 B at 0xeaae62 not derived; readers below
-; [nakarest] Readers: source references ChangeWall_Impl (ui/ui_window_procs.s: `ld xwa,
-; [nakarest] ChangeWall_Impl_Data`).
-ChangeWall_Impl_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x21B6, 0x4
-; [nakarest] naka_disk_warning+0x21ba  +0x21ba..+0x21e8 (0xeaae66, 46 B)
-; [nakarest] purpose not established: layout of 46 B at 0xeaae66 not derived; readers below
-; [nakarest] Readers: source references ChangePalette_Impl (ui/ui_window_procs.s: `lda xwa,
-; [nakarest] (ChangePalette_Impl_Data:24)`).
-ChangePalette_Impl_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x21BA, 0x2E
-; [nakarest] naka_disk_warning+0x21e8  +0x21e8..+0x2228 (0xeaae94, 64 B)
-; [nakarest] purpose not established: layout of 64 B at 0xeaae94 not derived; readers below
-; [nakarest] Readers: source references ClipBlit_Replace_ScanlineLoop (ui/ui_window_procs.s:
-; [nakarest] `lda xwa, (ClipBlit_Replace_ScanlineLoop_Data:24)`).
-ClipBlit_Replace_ScanlineLoop_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x21E8, 0x40
-; [nakarest] naka_disk_warning+0x2228  +0x2228..+0x2248 (0xeaaed4, 32 B)
-; [nakarest] purpose not established: layout of 32 B at 0xeaaed4 not derived; readers below
-; [nakarest] Readers: source references GraphicsRender_ByteData_Loop2
-; [nakarest] (display/graphics_text_vga.s: `ld xbc, GraphicsRender_ByteData_Data`).
-GraphicsRender_ByteData_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x2228, 0x20
-; [nakarest] naka_disk_warning+0x2248  +0x2248..+0x2268 (0xeaaef4, 32 B)
-; [nakarest] purpose not established: layout of 32 B at 0xeaaef4 not derived; readers below
-; [nakarest] Readers: source references GraphicsRender_ByteData_Loop3
-; [nakarest] (display/graphics_text_vga.s: `.long Pad_AfterStr_No`).
-Pad_AfterStr_No:	.incbin "includes/generated/naka_disk_warning.bin", 0x2248, 0x20
+; ChangeWall_WallpaperTable -- 1 x u32: bitmap address of wallpaper 0, the first field of the wallpaper table
+; The table is 5 x {u32 bitmap (320 bytes per row), u32 palette, u16 0}; ChangeWall_Impl reads +0 into RAM 0x30452
+; (drawing code reads it as base + y*0x140 + x); ChangePalette_Impl reads ChangePalette_WallpaperPalettes (= this + 4),
+; same stride, as the palette.  Better: one 50-byte label here.
+ChangeWall_WallpaperTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x21B6, 0x4
+; ChangePalette_WallpaperPalettes -- 1 x {u32 palette, u16 reserved}: tail of wallpaper record 0
+; ChangePalette_Impl (ui/ui_window_procs.s) indexes from here with stride 10 (x*5*2) and loads the
+; 32-bit palette pointer, then SetPaletteRGB for DAC entries 0x20..0xDF from it
+; record 0 starts 4 bytes earlier at ChangeWall_WallpaperTable (its bitmap pointer)
+ChangePalette_WallpaperPalettes:	.incbin "includes/generated/naka_disk_warning.bin", 0x21BA, 0x6
+; ChangeWall_WallpaperRecords -- 4 x {u32 bitmap, u32 palette, u16 0}: wallpaper records 1-4
+; ChangeWall_Impl reads +0 (bitmap -> 0x3EF98 / 0x30452), ChangePalette_Impl +4 (palette), stride 10
+; bitmaps: 0x900000 (table data), 0x3C0000 (custom-data flash, twice), 0x56800 (RAM)
+; each palette = bitmap + 76800 (320 x 240 bytes)
+ChangeWall_WallpaperRecords:	.incbin "includes/generated/naka_disk_warning.bin", 0x21C0, 0x28
+; ClipBlit_DiscHalfWidth -- 32 x u16: half-width of a radius-30 disc at |dy| = 0..30 from its centre (round(sqrt(900 - dy^2))); entry 31 is 0.
+; ClipBlit_Replace_Impl (ui/ui_window_procs.s) takes Math_AbsInt16(y - centre y) as the index, copies 2*w pixels per scanline
+; starting 30 - w pixels into the box, i.e. a filled disc of radius 30 from OFFSCREEN_BUFFER_2 into OFFSCREEN_BUFFER_1.
+ClipBlit_DiscHalfWidth:	.incbin "includes/generated/naka_disk_warning.bin", 0x21E8, 0x40
+; GraphicsRender_LowBandColorIndex -- 32 x uint8_t: palette colour for DAC entries 32..63
+; GraphicsRender_ByteData_Join (display/graphics_text_vga.s): for DAC i = 32..63, byte [i-32] ->
+; Table_LookupDword (4-byte RGB at 0x324FC + 4*index) -> SetPaletteRGB(i); GraphicsRender_PaletteSrc192 does
+; the same for DAC 192..223
+GraphicsRender_LowBandColorIndex:	.incbin "includes/generated/naka_disk_warning.bin", 0x2228, 0x20
+; GraphicsRender_PaletteSrc192 -- 32 x uint8_t: source palette index for palette slots 192..223
+; GraphicsRender_ByteData_Loop3 (display/graphics_text_vga.s): for slot = 192..223,
+; SetPaletteRGB(slot, Table_LookupDword(table[slot - 192])) -- both work on the 256 x u32 palette at RAM 0x324FC.
+; GraphicsRender_LowBandColorIndex does the same for slots 32..63.
+GraphicsRender_PaletteSrc192:	.incbin "includes/generated/naka_disk_warning.bin", 0x2248, 0x20
 ; GraphicsRender_ProcessEntries_PtrTable -- 36 x u32, the handler of each static display-list record op
 ; ({u8 op, u8 len, payload}; the sd_* macros of audio/sound_editor_ui.s).  GraphicsRender_ProcessEntries
 ; calls [op] with the record.  Lines 00-02, dotted lines 11/12/15, dotted box 13, box 09, shadowed boxes
@@ -1275,14 +1273,12 @@ DrawText_LayoutAndRender_Variant1_Data_5:	.incbin "includes/generated/naka_disk_
 ; the readers in display/graphics_text_vga.s pass the entry to DrawText_QueueOrDirect as the font.
 ; Typed in ui_widgets/naka_disk_warning.c (scripts/converters/text_tables_retype.py).
 TextStyle_FontTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x2358, 0x100
-; [nakarest] naka_disk_warning+0x2458  +0x2458..+0x2468 (0xeab104, 16 B)
-; [nakarest] purpose not established: layout of 16 B at 0xeab104 not derived; readers below
-; [nakarest] Readers: source references DrawFunc_Init_Join4 (display/graphics_text_vga.s: `lda
-; [nakarest] xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)`), DrawFunc_Init_Join6 (display/graphics_text_vga.s: `lda
-; [nakarest] xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)`), DrawFunc_Init_Join7 (display/graphics_text_vga.s: `lda
-; [nakarest] xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)`), DrawText_ExtendedLayout_Skip
-; [nakarest] (display/graphics_text_vga.s: `lda xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)`), 3 more.
-Scoop_EventLoop_36Entry_Branch3_Data_3:	.incbin "includes/generated/naka_disk_warning.bin", 0x2458, 0x10
+; TextStyle_NibbleFontTable -- 16 x u8: style nibble (byte +6 & 15 of a draw record) -> font number (table_data/fonts.s).
+; DrawText_ExtendedLayout and the DrawFunc_Init number fields (display/graphics_text_vga.s) read entry [nibble] as a byte
+; and pass it to DrawText_QueueOrDirect as the font, the 4-bit companion of TextStyle_FontTable (byte +6 & 0x3f).
+; CONFLICT: four readers in display/scoop_display.s index the same address with `sla wa, 2` / `ld xix, (xbc+wa)` (32-bit stride),
+; which would fetch 0x03030303-style values; that Scoop path cannot be using a valid font from this table.
+TextStyle_NibbleFontTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x2458, 0x10
 ; [nakarest] naka_disk_warning+0x2468  +0x2468..+0x2470 (0xeab114, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeab114 not derived; readers below
 ; [nakarest] Readers: source references DrawText_ExtendedLayout (display/graphics_text_vga.s:

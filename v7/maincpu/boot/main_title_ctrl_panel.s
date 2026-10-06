@@ -165,7 +165,7 @@ SndParam_SendDiskMenuEvents:
 	ld	xde, xiz
 	ld	xwa, xde
 	sll	xwa, 2
-	ld	xbc, SndParam_SendDiskMenuEvents_Data
+	ld	xbc, CtrlPanel_SwitchRowBit
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	or	(TRANSITION_PROGRESS:24), xwa
@@ -184,7 +184,7 @@ CtrlPanel_CheckDiskMenuRelease:
 	call ApPostEvent
 	ld xwa, xiz
 	sll xwa, 2
-	ld xbc, SndParam_SendDiskMenuEvents_Data
+	ld xbc, CtrlPanel_SwitchRowBit
 	add xbc, xwa
 	ld xwa, (xbc)
 	cpl wa
@@ -215,7 +215,7 @@ CtrlPanel_ProcessButtonPress:
 	ld	xde, xiz
 	ld	xwa, xde
 	sll	xwa, 2
-	ld	xbc, SndParam_SendDiskMenuEvents_Data
+	ld	xbc, CtrlPanel_SwitchRowBit
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	or	(TRANSITION_TIMER:24), xwa
@@ -234,7 +234,7 @@ CtrlPanel_CheckButtonRelease:
 	call ApPostEvent
 	ld xwa, xiz
 	sll xwa, 2
-	ld xbc, SndParam_SendDiskMenuEvents_Data
+	ld xbc, CtrlPanel_SwitchRowBit
 	add xbc, xwa
 	ld xwa, (xbc)
 	cpl wa
@@ -303,7 +303,7 @@ CtrlPanel_HandleSerialPort:
 	add	a, 16
 	exts	wa
 	sla	wa, 2
-	lda	xbc, (CtrlPanel_HandleSerialPort_Data:24)
+	lda	xbc, (CtrlPanel_DialStepByDelta:24)
 	ld	xde, (xbc+wa)
 	ld	xwa, 4294967295
 	ld	xbc, EVT_DIAL

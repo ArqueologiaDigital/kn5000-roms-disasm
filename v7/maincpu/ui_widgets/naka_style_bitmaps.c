@@ -40,27 +40,27 @@ extern const char LineModeIDProc;
 extern const char MainFuncIDProc;
 extern const char ModeIDProc;
 extern const char NakaInst_False;
-extern const char NakaInst_LM_RightDown;
-extern const char NakaProp_Align_Header;
+extern const char NakaInst_LineModeID_EnumTable;
+extern const char NakaInst_TitleID_EnumTable;
 extern const char NakaProp_Align_PtrEntry;
-extern const char NakaProp_BoolEntry1;
-extern const char NakaProp_BoolEntry2;
-extern const char NakaProp_BoolEntry3;
-extern const char NakaProp_BoolEntry4;
-extern const char NakaProp_BoolEntry5;
-extern const char NakaProp_BoolEntry6;
-extern const char NakaProp_BoolEntry7;
-extern const char NakaProp_BoolEntry8;
+extern const char NakaInst_pFunc_EnumTable;
+extern const char SupportClass_PPropValueNames;
+extern const char SupportClass_ClassIDValueNames;
+extern const char NakaInst_EventID_EnumTable;
+extern const char NakaInst_RectX1_EnumTable;
+extern const char SupportClass_RectX2ValueNames;
+extern const char SupportClass_POINTWValueNames;
+extern const char NakaInst_PointY_EnumTable;
 extern const char NakaProp_BorderDefs;
-extern const char NakaProp_CFlagEntry;
+extern const char SupportClass_NameValueNames;
 extern const char NakaProp_EditSwitch_Chain;
-extern const char NakaProp_FontEntry0;
-extern const char NakaProp_FontEntry1;
-extern const char NakaProp_FontEntry2;
+extern const char SupportClass_SwordValueNames;
+extern const char SupportClass_UcharValueNames;
+extern const char NakaInst_slong_EnumTable;
 extern const char NakaProp_Frame_Chain;
-extern const char NakaProp_Frame_Header;
+extern const char SupportClass_BitmapIDValueNames;
 extern const char NakaProp_VisFlag_Chain;
-extern const char NakaProp_VisFlag_Header;
+extern const char SupportClass_ViewIDValueNames;
 extern const char NameProc;
 extern const char ObjectIDProc;
 extern const char POINTWProc;
@@ -112,6 +112,82 @@ extern const char uwordProc;
  * (MasterSetup_EventDispatch_Data = table + 4, same 6*k index) and pass it as xde
  * to MainFuncCall(0x142000D, 0x1E20018). */
 /* StyleNameOverride_*'s record (scripts/converters/style_name_override_retype.py). */
+/* PanelTlv_PartResolveRecsTail's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_pUlong_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_WindowID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* EffectMode_PresetFieldMap's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_PUcharValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_PSlongValueNames's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SramTest_IC21Regions's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* PanelMemory_PartResolveTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_pUword_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_pSchar_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* DramTest_IC10IC9_Regions's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t start;
+    uint32_t length;
+    uint8_t low_half_fail_bit;
+    uint8_t high_half_fail_bit;
+} DramTest_IC10IC9_Regions_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    uint32_t value;
+} NakaInst_pSchar_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    uint32_t value;
+} NakaInst_pUword_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t part_byte0_ptr;
+    uint32_t part_byte1_ptr;
+    uint8_t resolve_code;
+    uint8_t unused;
+} PanelMemory_PartResolveTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t base_addr;
+    uint32_t size_bytes;
+    uint8_t fail_mask[2];
+} SramTest_IC21Regions_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name;
+    int32_t end_value;
+} SupportClass_PSlongValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t end_name;
+    int32_t end_value;
+    char end_text[2];
+} SupportClass_PUcharValueNames_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t block_offset;
+    uint8_t byte_offset;
+    uint8_t byte_count;
+} EffectMode_PresetFieldMap_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_WindowID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_pUlong_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t payload_byte0_ptr;
+    uint32_t payload_byte1_ptr;
+    uint8_t part_tag;
+    uint8_t pad;
+    uint32_t companion_ptr;
+} PanelTlv_PartResolveRecsTail_t;
+
 typedef struct __attribute__((packed)) {
     uint16_t style;        /* +0 style record index (the 1-based style number minus one) */
     char name[16];         /* +2 the name shown instead of the record's own */
@@ -152,26 +228,39 @@ typedef struct __attribute__((packed)) {
     char False_name[6];
     char True_str[6];
     uint32_t ptr_0042;
-    uint8_t pad_1[5];  /* zero padding */
-    uint16_t field_004b;
-    uint16_t field_004d;
-    uint8_t pad_2[6];  /* zero padding */
-    uint16_t field_0055;
-    uint16_t field_0057;
-    uint8_t pad_3[6];  /* zero padding */
-    uint16_t field_005f;
-    uint16_t field_0061;
-    uint8_t pad_4[6];  /* zero padding */
-    uint16_t field_0069;
-    uint16_t field_006b;
-    uint8_t pad_5[6];  /* zero padding */
-    uint16_t field_0073;
-    uint16_t field_0075;
-    uint8_t pad_6[6];  /* zero padding */
-    uint16_t field_007d;
-    uint16_t field_007f;
-    uint8_t pad_7[6];  /* zero padding */
-    uint16_t field_0087;
+    uint8_t bytes_0046[4];
+    /* zero padding */
+    /* "" + 0xFF fill: name of the end entry of the pSword enum table (0xEB7200) */
+    char NakaInst_pSword_EmptyStr[2];
+    /* zero padding */
+    /* zero padding */
+    /* enum table of property type pUword: only the {"", 0} terminator (type has no named values) */
+    NakaInst_pUword_EnumTable_t NakaInst_pUword_EnumTable[1];
+    /* "" (NUL + 0xFF alignment pad): name of the terminator entry of the pUword enum table */
+    char NakaInst_pUword_EmptyStr[2];
+    /* enum table of property type pSchar: only the {"", 0} terminator (type has no named values) */
+    NakaInst_pSchar_EnumTable_t NakaInst_pSchar_EnumTable[1];
+    /* "" (NUL + 0xFF alignment pad): name of the terminator entry of the pSchar enum table */
+    char NakaInst_pSchar_EmptyStr[2];
+    /* zero padding */
+    /* zero padding */
+    /* value-name list of SupportClass pUcharProc (entry 48, named-value count 0): only the end entry {end_text, 0}, end_text = "" + 0xFF pad (end_name points at it, +8) */
+    SupportClass_PUcharValueNames_t SupportClass_PUcharValueNames;
+    /* value-name list of pSlongProc (SupportClass record 49, count 0): only the end entry; its "" is the next 2 bytes (NakaInst_pSlong_EmptyStr) */
+    SupportClass_PSlongValueNames_t SupportClass_PSlongValueNames;
+    /* "" + 0xFF pad: name of the end entry of the pSlong value-name list (SupportClass_PSlongValueNames) */
+    char SupportClass_PSlongValueNamesEndText[2];
+    /* zero padding */
+    /* zero padding */
+    /* pUlong property enum: only the end entry {"", 0} (count 0: values are plain integers) */
+    NakaInst_pUlong_EnumTable_t NakaInst_pUlong_EnumTable[1];
+    /* "" naming the end entry of NakaInst_pUlong_EnumTable, plus 0xFF fill */
+    char NakaInst_pUlong_EmptyStr[2];
+    /* WindowID property enum: only the end entry {"", 0} (count 0: values are plain integers) */
+    NakaInst_WindowID_EnumTable_t NakaInst_WindowID_EnumTable[1];
+    /* "" naming the end entry of NakaInst_WindowID_EnumTable, plus 0xFF fill */
+    char NakaInst_WindowID_EmptyStr[2];
+    uint8_t field_0088;
     uint16_t field_0089;
     uint8_t pad_8[5];  /* zero padding */
     uint32_t PT_Part2_str_ptr;
@@ -339,8 +428,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_032e;
     uint8_t pad_53[2];  /* zero padding */
     uint32_t ptr_0332;
-    uint8_t pad_54[5];  /* zero padding */
-    uint16_t field_033b;
+    uint8_t bytes_0336[4];
+    /* zero padding */
+    /* "" (+ 0xFF alignment byte): name of the terminator of TrackIDProc's value-name list */
+    char TrackIDProc_NameListEnd[2];
+    uint8_t field_033c;
     char R_All_str[6];
     uint16_t field_0343;
     char R_Track16_str[10];
@@ -404,8 +496,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0456;
     uint8_t pad_66[2];  /* zero padding */
     uint32_t ptr_045a;
-    uint8_t pad_67[5];  /* zero padding */
-    uint16_t field_0463;
+    uint8_t bytes_045e[4];
+    /* zero padding */
+    /* "" (NUL + 0xFF pad): name of the IntTimeID enum table's terminator entry */
+    char NakaInst_IntTimeID_EmptyStr[2];
+    uint8_t field_0464;
     char T_10Sec_str[8];
     uint16_t field_046d;
     char T_9Sec_str[7];
@@ -644,283 +739,122 @@ typedef struct __attribute__((packed)) {
     uint32_t WidgetStyleDataTable[4];  /* 4 pointers */
     /* PanelMemory_SlotAddresses: the RAM address of each panel-memory slot, 0x1ED400 + 960*n for n < 80; [80] = the Music Stylist record's mirror (read by PanelMemory_Recall and the other panel-memory routines in ui/bitmap_out_routines.s) */
     uint32_t PanelMemory_SlotAddresses[81];
-    uint16_t field_08c8;
-    uint8_t pad_108[2];  /* zero padding */
-    uint16_t field_08cc;
-    uint8_t pad_109[4];  /* zero padding */
-    uint16_t field_08d2;
-    uint8_t pad_110[2];  /* zero padding */
-    uint16_t field_08d6;
-    uint8_t pad_111[2];  /* zero padding */
-    uint16_t field_08da;
-    uint8_t pad_112[2];  /* zero padding */
-    uint16_t field_08de;
-    uint16_t field_08e0;
-    uint8_t pad_113[2];  /* zero padding */
-    uint16_t field_08e4;
-    uint8_t pad_114[2];  /* zero padding */
-    uint16_t field_08e8;
-    uint8_t pad_115[2];  /* zero padding */
-    uint16_t field_08ec;
-    uint16_t field_08ee;
-    uint8_t pad_116[2];  /* zero padding */
-    uint16_t field_08f2;
-    uint8_t pad_117[2];  /* zero padding */
-    uint16_t field_08f6;
-    uint8_t pad_118[2];  /* zero padding */
-    uint16_t field_08fa;
-    uint16_t field_08fc;
-    uint8_t pad_119[2];  /* zero padding */
-    uint16_t field_0900;
-    uint8_t pad_120[2];  /* zero padding */
-    uint16_t field_0904;
-    uint8_t pad_121[2];  /* zero padding */
-    uint16_t field_0908;
-    uint16_t field_090a;
-    uint8_t pad_122[2];  /* zero padding */
-    uint16_t field_090e;
-    uint8_t pad_123[2];  /* zero padding */
-    uint16_t field_0912;
-    uint8_t pad_124[2];  /* zero padding */
-    uint16_t field_0916;
-    uint16_t field_0918;
-    uint8_t pad_125[2];  /* zero padding */
-    uint16_t field_091c;
-    uint8_t pad_126[2];  /* zero padding */
-    uint16_t field_0920;
-    uint8_t pad_127[2];  /* zero padding */
-    uint16_t field_0924;
-    uint16_t field_0926;
-    uint8_t pad_128[2];  /* zero padding */
-    uint16_t field_092a;
-    uint8_t pad_129[2];  /* zero padding */
-    uint16_t field_092e;
-    uint8_t pad_130[2];  /* zero padding */
-    uint16_t field_0932;
-    uint16_t field_0934;
-    uint8_t pad_131[2];  /* zero padding */
-    uint16_t field_0938;
-    uint8_t pad_132[2];  /* zero padding */
-    uint16_t field_093c;
-    uint8_t pad_133[2];  /* zero padding */
-    uint16_t field_0940;
-    uint16_t field_0942;
-    uint8_t pad_134[2];  /* zero padding */
-    uint16_t field_0946;
-    uint8_t pad_135[2];  /* zero padding */
-    uint16_t field_094a;
-    uint8_t pad_136[2];  /* zero padding */
-    uint16_t field_094e;
-    uint16_t field_0950;
-    uint8_t pad_137[2];  /* zero padding */
-    uint16_t field_0954;
-    uint8_t pad_138[2];  /* zero padding */
-    uint16_t field_0958;
-    uint8_t pad_139[2];  /* zero padding */
-    uint16_t field_095c;
-    uint16_t field_095e;
-    uint8_t pad_140[2];  /* zero padding */
-    uint16_t field_0962;
-    uint8_t pad_141[2];  /* zero padding */
-    uint16_t field_0966;
-    uint8_t pad_142[2];  /* zero padding */
-    uint16_t field_096a;
-    uint16_t field_096c;
-    uint8_t pad_143[2];  /* zero padding */
-    uint16_t field_0970;
-    uint8_t pad_144[2];  /* zero padding */
-    uint16_t field_0974;
-    uint8_t pad_145[2];  /* zero padding */
-    uint16_t field_0978;
-    uint16_t field_097a;
-    uint8_t pad_146[2];  /* zero padding */
-    uint16_t field_097e;
-    uint8_t pad_147[2];  /* zero padding */
-    uint16_t field_0982;
-    uint8_t pad_148[2];  /* zero padding */
-    uint16_t field_0986;
-    uint16_t field_0988;
-    uint8_t pad_149[2];  /* zero padding */
-    uint16_t field_098c;
-    uint8_t pad_150[2];  /* zero padding */
-    uint16_t field_0990;
-    uint8_t pad_151[2];  /* zero padding */
-    uint16_t field_0994;
-    uint16_t field_0996;
-    uint8_t pad_152[2];  /* zero padding */
-    uint16_t field_099a;
-    uint8_t pad_153[2];  /* zero padding */
-    uint16_t field_099e;
-    uint8_t pad_154[2];  /* zero padding */
-    uint16_t field_09a2;
-    uint16_t field_09a4;
-    uint8_t pad_155[2];  /* zero padding */
-    uint16_t field_09a8;
-    uint8_t pad_156[2];  /* zero padding */
-    uint16_t field_09ac;
-    uint8_t pad_157[2];  /* zero padding */
-    uint16_t field_09b0;
-    uint16_t field_09b2;
-    uint8_t pad_158[2];  /* zero padding */
-    uint16_t field_09b6;
-    uint8_t pad_159[2];  /* zero padding */
-    uint16_t field_09ba;
-    uint8_t pad_160[2];  /* zero padding */
-    uint16_t field_09be;
-    uint16_t field_09c0;
-    uint8_t pad_161[2];  /* zero padding */
-    uint16_t field_09c4;
-    uint8_t pad_162[2];  /* zero padding */
-    uint16_t field_09c8;
-    uint8_t pad_163[2];  /* zero padding */
-    uint16_t field_09cc;
-    uint16_t field_09ce;
-    uint8_t pad_164[2];  /* zero padding */
-    uint16_t field_09d2;
-    uint8_t pad_165[2];  /* zero padding */
-    uint16_t field_09d6;
-    uint8_t pad_166[2];  /* zero padding */
-    uint16_t field_09da;
-    uint16_t field_09dc;
-    uint8_t pad_167[2];  /* zero padding */
-    uint16_t field_09e0;
-    uint8_t pad_168[2];  /* zero padding */
-    uint16_t field_09e4;
-    uint8_t pad_169[2];  /* zero padding */
-    uint16_t field_09e8;
-    uint16_t field_09ea;
-    uint8_t pad_170[2];  /* zero padding */
-    uint16_t field_09ee;
-    uint8_t pad_171[2];  /* zero padding */
-    uint16_t field_09f2;
-    uint8_t pad_172[2];  /* zero padding */
-    uint16_t field_09f6;
-    uint16_t field_09f8;
-    uint8_t pad_173[2];  /* zero padding */
-    uint16_t field_09fc;
-    uint8_t pad_174[2];  /* zero padding */
-    uint16_t field_0a00;
-    uint8_t pad_175[2];  /* zero padding */
-    char H_str[2];
-    uint16_t field_0a06;
-    uint8_t pad_176[2];  /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* Fields +0..+9 of record 0 of a 23 x 14-byte table {byte ptr, byte ptr, u8 code, u8, dest table ptr}; +10.. continues at BitMapOut_DeltaEncode_Type90Final_Data_2 */
+    PanelMemory_PartResolveTable_t PanelMemory_PartResolveTable;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* record 0's companion_ptr (0xFDDA); the reader uses this address as the base of the companion_ptr column (stride 14) */
+    uint32_t PanelTlv_PartResolveRecs_CompanionCol;
+    /* part-resolve records 1..22: {&payload[0], &payload[1], part tag, 0, &companion} for tags 0x01-0x14, 0x17, 0x48 */
+    PanelTlv_PartResolveRecsTail_t PanelTlv_PartResolveRecsTail[22];
     char NonPanelMemory_str[18];
-    uint16_t field_0a1c;
-    uint8_t pad_177[3];  /* zero padding */
-    uint16_t field_0a21;
-    uint8_t pad_178[4];  /* zero padding */
-    uint16_t field_0a27;
-    uint8_t pad_179[4];  /* zero padding */
-    uint16_t field_0a2d;
-    uint8_t pad_180[3];  /* zero padding */
-    uint16_t field_0a32;
-    char d_str[2];
-    uint8_t pad_181[2];  /* zero padding */
-    uint16_t field_0a38;
-    char d_str_2[2];
-    uint8_t pad_182[2];  /* zero padding */
-    uint16_t field_0a3e;
-    uint16_t field_0a40;
-    uint8_t pad_183[2];  /* zero padding */
-    uint16_t field_0a44;
-    uint16_t field_0a46;
-    uint8_t pad_184[2];  /* zero padding */
-    uint16_t field_0a4a;
-    uint16_t field_0a4c;
-    uint8_t pad_185[2];  /* zero padding */
-    uint16_t field_0a50;
-    uint16_t field_0a52;
-    uint8_t pad_186[2];  /* zero padding */
-    uint16_t field_0a56;
-    uint16_t field_0a58;
-    uint8_t pad_187[2];  /* zero padding */
-    uint16_t field_0a5c;
-    uint16_t field_0a5e;
-    uint8_t pad_188[2];  /* zero padding */
-    uint16_t field_0a62;
-    uint16_t field_0a64;
-    uint8_t pad_189[2];  /* zero padding */
-    uint16_t field_0a68;
-    uint16_t field_0a6a;
-    uint8_t pad_190[2];  /* zero padding */
-    uint16_t field_0a6e;
-    uint16_t field_0a70;
-    uint8_t pad_191[2];  /* zero padding */
-    uint16_t field_0a74;
-    uint16_t field_0a76;
-    uint8_t pad_192[2];  /* zero padding */
-    uint16_t field_0a7a;
-    uint16_t field_0a7c;
-    uint8_t pad_193[3];  /* zero padding */
-    uint16_t field_0a81;
-    uint16_t field_0a83;
-    uint8_t pad_194[2];  /* zero padding */
-    uint16_t field_0a87;
-    uint16_t field_0a89;
-    uint8_t pad_195[2];  /* zero padding */
-    uint16_t field_0a8d;
-    uint16_t field_0a8f;
-    uint8_t pad_196[2];  /* zero padding */
-    uint16_t field_0a93;
-    uint16_t field_0a95;
-    uint16_t field_0a97;
-    uint16_t field_0a99;
-    uint16_t field_0a9b;
-    uint8_t pad_197[2];  /* zero padding */
-    uint16_t field_0a9f;
-    uint16_t field_0aa1;
-    uint16_t field_0aa3;
-    uint16_t field_0aa5;
-    uint16_t field_0aa7;
-    uint8_t pad_198[2];  /* zero padding */
-    uint16_t field_0aab;
-    uint16_t field_0aad;
-    uint16_t field_0aaf;
-    uint16_t field_0ab1;
-    uint16_t field_0ab3;
-    uint8_t pad_199[2];  /* zero padding */
-    uint16_t field_0ab7;
-    uint16_t field_0ab9;
-    uint8_t pad_200[2];  /* zero padding */
-    uint16_t field_0abd;
-    uint16_t field_0abf;
-    uint8_t pad_201[2];  /* zero padding */
-    uint16_t field_0ac3;
-    uint16_t field_0ac5;
-    uint16_t field_0ac7;
-    uint16_t field_0ac9;
-    uint16_t field_0acb;
-    uint16_t field_0acd;
-    uint16_t field_0acf;
-    uint8_t pad_202[3];  /* zero padding */
-    uint16_t field_0ad4;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* 30 {offset into the 0xF9A0 panel block, extra byte offset, byte count} runs (113 bytes in all) + end entry (block_offset == 0xFF): where the bytes of a style record's preset image are scattered in the panel-block backup at 0x3C2C4 */
+    EffectMode_PresetFieldMap_t EffectMode_PresetFieldMap[31];
     /* OneTchFUNC_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t OneTchFUNC_CaseTable[6];
     /* StyleNameOverride_C2C5: {style index, display name} overrides (asm header) */
     style_name_override_t StyleNameOverride_C2C5[22];
     /* StyleNameOverride_Default: {style index, display name} overrides (asm header) */
     style_name_override_t StyleNameOverride_Default[5];
-    uint16_t field_0cc8;
-    uint16_t field_0cca;
-    uint16_t field_0ccc;
+    /* diagnostic sequence step (RAM 0x8D7A, cycles 1..5) -> title number (TITLE_PS + n): 1 NORMAL, 2 SDMENU, 0xB0 CMMENU, 0xD2 PMNAME, 0x83 SQEASYREC */
+    uint8_t EffectMode_DiagSeq_TitleCycle[6];
     /* PanelButton_LedMap: [panel segment][button bit] = {LED row, LED pattern} for Set_LEDs (EffectMode_MidiSetLEDs, ui/ui_mode_handlers.s) */
     uint8_t PanelButton_LedMap[22][8][2];
-    uint16_t field_0e2e;
-    uint16_t field_0e30;
-    uint16_t field_0e32;
-    uint16_t field_0e34;
-    uint16_t field_0e36;
-    uint16_t field_0e38;
-    uint16_t field_0e3a;
-    uint16_t field_0e3c;
-    uint16_t field_0e3e;
-    uint16_t field_0e40;
-    uint16_t field_0e42;
-    uint16_t field_0e44;
-    uint16_t field_0e46;
-    uint16_t field_0e48;
-    uint16_t field_0e4a;
-    uint16_t field_0e4c;
+    /* (row << 8) | all-LEDs-on pattern for panel LED rows 0-14; 0xFFFF terminator */
+    uint16_t LED_AllOnPatternByRow[16];
     uint8_t pad_220[2];  /* zero padding */
     char str_69[2];
     uint16_t field_0e52;
@@ -937,15 +871,13 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0e6a;
     uint16_t field_0e6c;
     uint16_t field_0e6e;
-    uint16_t field_0e70;
-    uint8_t pad_221[4];  /* zero padding */
-    uint16_t field_0e76;
-    uint16_t field_0e78;
-    uint8_t pad_222[2];  /* zero padding */
-    uint16_t field_0e7c;
-    uint16_t field_0e7e;
-    uint8_t pad_223[2];  /* zero padding */
-    uint16_t field_0e82;
+    /* zero padding */
+    /* DRAM region tested by Test_DRAM_IC10_and_IC9: start 0x4000, 0x80000 bytes; result bits 0x01 (low 16-bit half failed) / 0x02 (high half failed) */
+    DramTest_IC10IC9_Regions_t DramTest_IC10IC9_Regions[1];
+    /* zero padding */
+    /* zero padding */
+    /* SRAM IC21 self-test region: 0x1E0000, 0x8000 bytes; failure sets bit 0x04 of the self-test result (fail_mask[1] is the DRAM test's high-word bit, unused here) */
+    SramTest_IC21Regions_t SramTest_IC21Regions[1];
     /* TEST2FUNC_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t TEST2FUNC_CaseTable[6];
     /* TEST3FUNC_CaseTable: 6 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
@@ -2893,27 +2825,21 @@ typedef struct __attribute__((packed)) {
     char StyleGroup2_Name[18];
     char StyleGroup1_Name[18];
     char StyleGroup0_Name[18];
-    uint16_t field_18bea;
-    uint16_t field_18bec;
-    uint16_t field_18bee;
-    uint16_t field_18bf0;
-    uint16_t field_18bf2;
-    uint16_t field_18bf4;
+    /* slot (value mod 4) -> edit-switch number 9..12 (the lower four right-hand display buttons) */
+    uint8_t RVari_SlotEditSw[4];
+    /* edit-switch ids for the 3 sub-items (left-column rows 1-3 = 0x89-0x8B); [3] = 0xFF, not reached by the 0..2 loop */
+    uint8_t RVari_SubItemEditSw[4];
+    /* edit-switch code whose position marks MSA mode value 0-3 (LSW 0x401); MsaMode_OK maps 0x89/0x8A/0x8B back to 1/2/3 */
+    uint8_t MsaMode_EditSwByValue[4];
     uint16_t PmemMode_Select_Data;
-    uint16_t field_18bf8;
-    uint16_t field_18bfa;
-    uint16_t field_18bfc;
-    uint16_t field_18bfe;
-    uint16_t field_18c00;
-    uint16_t field_18c02;
-    uint16_t field_18c04;
-    uint16_t field_18c06;
-    uint16_t field_18c08;
-    uint16_t field_18c0a;
-    uint16_t field_18c0c;
-    uint16_t field_18c0e;
-    uint16_t field_18c10;
-    uint16_t field_18c12;
+    /* item 0..9 -> edit-switch number: items 0-4 the left display buttons 0x88-0x8C, items 5-9 the right buttons 8-12 */
+    uint8_t EditSw_SplitMap10[10];
+    /* edit-switch id for item 0..7 of a 8-item side-button list: left rows 0-3 (0x88+r), then right rows 0-3 (0x08+r) */
+    uint8_t VariScreen_EditSwLayout8[8];
+    /* edit-switch id for item 0..5 of a 6-item side-button list: left rows 0-2 (0x88+r), then right rows 0-2 (0x08+r) */
+    uint8_t VariScreen_EditSwLayout6[6];
+    /* Edit-switch codes for a 3-4 item page: items 0-1 on the left switches 0x88/0x89, items 2-3 on the right switches 0x08/0x09 */
+    uint8_t EditSw_PageMap4[4];
     uint16_t SeqChan_Map_2ch;
     uint32_t RVari_Select_CheckSameBank_PtrTable[3];  /* 3 pointers */
     char MemoryC_str[10];
@@ -2978,45 +2904,41 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0042 = 0x00eb7208,
 
-    .pad_1 = { 0 },
+    .bytes_0046 = { 0x00, 0x00, 0x00, 0x00 },
 
-    .field_004b = 0x12ff,
+    .NakaInst_pSword_EmptyStr = "\x00\xFF",
 
-    .field_004d = 0xeb72,
+    .NakaInst_pUword_EnumTable = {
+        { SELF(NakaInst_pUword_EmptyStr), 0x00000000 },
+    },
 
-    .pad_2 = { 0 },
+    .NakaInst_pUword_EmptyStr = "\x00\xFF",
 
-    .field_0055 = 0x1cff,
+    .NakaInst_pSchar_EnumTable = {
+        { SELF(NakaInst_pSchar_EmptyStr), 0x00000000 },
+    },
 
-    .field_0057 = 0xeb72,
+    .NakaInst_pSchar_EmptyStr = "\x00\xFF",
 
-    .pad_3 = { 0 },
+    .SupportClass_PUcharValueNames = { SELF(SupportClass_PUcharValueNames.end_text), 0, "\x00\xFF" },
 
-    .field_005f = 0x26ff,
+    .SupportClass_PSlongValueNames = { SELF(SupportClass_PSlongValueNamesEndText), 0 },
 
-    .field_0061 = 0xeb72,
+    .SupportClass_PSlongValueNamesEndText = "\x00\xFF",
 
-    .pad_4 = { 0 },
+    .NakaInst_pUlong_EnumTable = {
+        { SELF(NakaInst_pUlong_EmptyStr), 0 },
+    },
 
-    .field_0069 = 0x30ff,
+    .NakaInst_pUlong_EmptyStr = "\x00\xFF",
 
-    .field_006b = 0xeb72,
+    .NakaInst_WindowID_EnumTable = {
+        { SELF(NakaInst_WindowID_EmptyStr), 0 },
+    },
 
-    .pad_5 = { 0 },
+    .NakaInst_WindowID_EmptyStr = "\x00\xFF",
 
-    .field_0073 = 0x3aff,
-
-    .field_0075 = 0xeb72,
-
-    .pad_6 = { 0 },
-
-    .field_007d = 0x44ff,
-
-    .field_007f = 0xeb72,
-
-    .pad_7 = { 0 },
-
-    .field_0087 = 0x5eff,
+    .field_0088 = 0x5E,
 
     .field_0089 = 0xeb74,
 
@@ -3356,9 +3278,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0332 = 0x00eb74f8,
 
-    .pad_54 = { 0 },
+    .bytes_0336 = { 0x00, 0x00, 0x00, 0x00 },
 
-    .field_033b = 0x54ff,
+    .TrackIDProc_NameListEnd = "\x00\xFF",
+
+    .field_033c = 0x54,
 
     .R_All_str = "R_All",
 
@@ -3488,9 +3412,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_045a = 0x00eb7620,
 
-    .pad_67 = { 0 },
+    .bytes_045e = { 0x00, 0x00, 0x00, 0x00 },
 
-    .field_0463 = 0x49ff,
+    .NakaInst_IntTimeID_EmptyStr = "\x00\xFF",
+
+    .field_0464 = 0x49,
 
     .T_10Sec_str = "T_10Sec",
 
@@ -3526,7 +3452,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_04d8 = 0x0002,
 
-    .NakaProp_FontEntry0_ptr = NAKA_ADDR(NakaProp_FontEntry0),
+    .NakaProp_FontEntry0_ptr = NAKA_ADDR(SupportClass_SwordValueNames),
 
     .uwordProc_ptr = NAKA_ADDR(uwordProc),
 
@@ -3542,7 +3468,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_04f0 = 0x0001,
 
-    .NakaProp_FontEntry1_ptr = NAKA_ADDR(NakaProp_FontEntry1),
+    .NakaProp_FontEntry1_ptr = NAKA_ADDR(SupportClass_UcharValueNames),
 
     .scharProc_ptr = NAKA_ADDR(scharProc),
 
@@ -3558,7 +3484,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0508 = 0x0004,
 
-    .NakaProp_FontEntry2_ptr = NAKA_ADDR(NakaProp_FontEntry2),
+    .NakaProp_FontEntry2_ptr = NAKA_ADDR(NakaInst_slong_EnumTable),
 
     .ulongProc_ptr = NAKA_ADDR(ulongProc),
 
@@ -3590,7 +3516,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0538 = 0x0004,
 
-    .NakaProp_BoolEntry1_ptr = NAKA_ADDR(NakaProp_BoolEntry1),
+    .NakaProp_BoolEntry1_ptr = NAKA_ADDR(NakaInst_pFunc_EnumTable),
 
     .pProcProc_ptr = NAKA_ADDR(pProcProc),
 
@@ -3606,7 +3532,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0550 = 0x0004,
 
-    .NakaProp_BoolEntry2_ptr = NAKA_ADDR(NakaProp_BoolEntry2),
+    .NakaProp_BoolEntry2_ptr = NAKA_ADDR(SupportClass_PPropValueNames),
 
     .pStringProc_ptr = NAKA_ADDR(pStringProc),
 
@@ -3622,7 +3548,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0568 = 0x0004,
 
-    .NakaProp_BoolEntry3_ptr = NAKA_ADDR(NakaProp_BoolEntry3),
+    .NakaProp_BoolEntry3_ptr = NAKA_ADDR(SupportClass_ClassIDValueNames),
 
     .ScreenIDProc_ptr = NAKA_ADDR(ScreenIDProc),
 
@@ -3638,7 +3564,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0580 = 0x0004,
 
-    .NakaProp_BoolEntry4_ptr = NAKA_ADDR(NakaProp_BoolEntry4),
+    .NakaProp_BoolEntry4_ptr = NAKA_ADDR(NakaInst_EventID_EnumTable),
 
     .RECTWProc_ptr = NAKA_ADDR(RECTWProc),
 
@@ -3654,7 +3580,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0598 = 0x0002,
 
-    .NakaProp_BoolEntry5_ptr = NAKA_ADDR(NakaProp_BoolEntry5),
+    .NakaProp_BoolEntry5_ptr = NAKA_ADDR(NakaInst_RectX1_EnumTable),
 
     .RectY1Proc_ptr = NAKA_ADDR(RectY1Proc),
 
@@ -3670,7 +3596,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_05b0 = 0x0002,
 
-    .NakaProp_BoolEntry6_ptr = NAKA_ADDR(NakaProp_BoolEntry6),
+    .NakaProp_BoolEntry6_ptr = NAKA_ADDR(SupportClass_RectX2ValueNames),
 
     .RectY2Proc_ptr = NAKA_ADDR(RectY2Proc),
 
@@ -3686,7 +3612,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_05c8 = 0x0004,
 
-    .NakaProp_BoolEntry7_ptr = NAKA_ADDR(NakaProp_BoolEntry7),
+    .NakaProp_BoolEntry7_ptr = NAKA_ADDR(SupportClass_POINTWValueNames),
 
     .PointXProc_ptr = NAKA_ADDR(PointXProc),
 
@@ -3702,7 +3628,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_05e0 = 0x0002,
 
-    .NakaProp_BoolEntry8_ptr = NAKA_ADDR(NakaProp_BoolEntry8),
+    .NakaProp_BoolEntry8_ptr = NAKA_ADDR(NakaInst_PointY_EnumTable),
 
     .StringProc_ptr = NAKA_ADDR(StringProc),
 
@@ -3718,7 +3644,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_05f8 = 0x0004,
 
-    .NakaProp_CFlagEntry_ptr = NAKA_ADDR(NakaProp_CFlagEntry),
+    .NakaProp_CFlagEntry_ptr = NAKA_ADDR(SupportClass_NameValueNames),
 
     .ConstFlagProc_ptr = NAKA_ADDR(ConstFlagProc),
 
@@ -3734,7 +3660,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0610 = 0x0002,
 
-    .NakaProp_VisFlag_Header_ptr = NAKA_ADDR(NakaProp_VisFlag_Header),
+    .NakaProp_VisFlag_Header_ptr = NAKA_ADDR(SupportClass_ViewIDValueNames),
 
     .uwordProc_ptr_2 = NAKA_ADDR(uwordProc),
 
@@ -3782,7 +3708,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0658 = 0x0004,
 
-    .NakaProp_Align_Header_ptr = NAKA_ADDR(NakaProp_Align_Header),
+    .NakaProp_Align_Header_ptr = NAKA_ADDR(NakaInst_TitleID_EnumTable),
 
     .IconIDProc_ptr = NAKA_ADDR(IconIDProc),
 
@@ -3830,7 +3756,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_06a0 = 0x0001,
 
-    .NakaInst_LM_RightDown_ptr = NAKA_ADDR(NakaInst_LM_RightDown),
+    .NakaInst_LM_RightDown_ptr = NAKA_ADDR(NakaInst_LineModeID_EnumTable),
 
     .FrameIDProc_ptr = NAKA_ADDR(FrameIDProc),
 
@@ -3846,7 +3772,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_06b8 = 0x0004,
 
-    .NakaProp_Frame_Header_ptr = NAKA_ADDR(NakaProp_Frame_Header),
+    .NakaProp_Frame_Header_ptr = NAKA_ADDR(SupportClass_BitmapIDValueNames),
 
     .ApFuncIDProc_ptr = NAKA_ADDR(ApFuncIDProc),
 
@@ -4058,505 +3984,70 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         0x03C2C4,  /* the Music Stylist mirror */
     },
 
-    .field_08c8 = 0xf9b6,
-
-    .pad_108 = { 0 },
-
-    .field_08cc = 0xf9b7,
-
-    .pad_109 = { 0 },
-
-    .field_08d2 = 0xfdda,
-
-    .pad_110 = { 0 },
-
-    .field_08d6 = 0xf9d0,
-
-    .pad_111 = { 0 },
-
-    .field_08da = 0xf9d1,
-
-    .pad_112 = { 0 },
-
-    .field_08de = 0x0001,
-
-    .field_08e0 = 0xfdee,
-
-    .pad_113 = { 0 },
-
-    .field_08e4 = 0xf9ea,
-
-    .pad_114 = { 0 },
-
-    .field_08e8 = 0xf9eb,
-
-    .pad_115 = { 0 },
-
-    .field_08ec = 0x0002,
-
-    .field_08ee = 0xfe02,
-
-    .pad_116 = { 0 },
-
-    .field_08f2 = 0xfa04,
-
-    .pad_117 = { 0 },
-
-    .field_08f6 = 0xfa05,
-
-    .pad_118 = { 0 },
-
-    .field_08fa = 0x0003,
-
-    .field_08fc = 0xfe16,
-
-    .pad_119 = { 0 },
-
-    .field_0900 = 0xfa1e,
-
-    .pad_120 = { 0 },
-
-    .field_0904 = 0xfa1f,
-
-    .pad_121 = { 0 },
-
-    .field_0908 = 0x0004,
-
-    .field_090a = 0xfe2a,
-
-    .pad_122 = { 0 },
-
-    .field_090e = 0xfa38,
-
-    .pad_123 = { 0 },
-
-    .field_0912 = 0xfa39,
-
-    .pad_124 = { 0 },
-
-    .field_0916 = 0x0005,
-
-    .field_0918 = 0xfe3e,
-
-    .pad_125 = { 0 },
-
-    .field_091c = 0xfa52,
-
-    .pad_126 = { 0 },
-
-    .field_0920 = 0xfa53,
-
-    .pad_127 = { 0 },
-
-    .field_0924 = 0x0006,
-
-    .field_0926 = 0xfe52,
-
-    .pad_128 = { 0 },
-
-    .field_092a = 0xfa6c,
-
-    .pad_129 = { 0 },
-
-    .field_092e = 0xfa6d,
-
-    .pad_130 = { 0 },
-
-    .field_0932 = 0x0007,
-
-    .field_0934 = 0xfe66,
-
-    .pad_131 = { 0 },
-
-    .field_0938 = 0xfa86,
-
-    .pad_132 = { 0 },
-
-    .field_093c = 0xfa87,
-
-    .pad_133 = { 0 },
-
-    .field_0940 = 0x0008,
-
-    .field_0942 = 0xfe7a,
-
-    .pad_134 = { 0 },
-
-    .field_0946 = 0xfaa0,
-
-    .pad_135 = { 0 },
-
-    .field_094a = 0xfaa1,
-
-    .pad_136 = { 0 },
-
-    .field_094e = 0x0009,
-
-    .field_0950 = 0xfe8e,
-
-    .pad_137 = { 0 },
-
-    .field_0954 = 0xfaba,
-
-    .pad_138 = { 0 },
-
-    .field_0958 = 0xfabb,
-
-    .pad_139 = { 0 },
-
-    .field_095c = 0x000a,
-
-    .field_095e = 0xfea2,
-
-    .pad_140 = { 0 },
-
-    .field_0962 = 0xfad4,
-
-    .pad_141 = { 0 },
-
-    .field_0966 = 0xfad5,
-
-    .pad_142 = { 0 },
-
-    .field_096a = 0x000b,
-
-    .field_096c = 0xfeb6,
-
-    .pad_143 = { 0 },
-
-    .field_0970 = 0xfaee,
-
-    .pad_144 = { 0 },
-
-    .field_0974 = 0xfaef,
-
-    .pad_145 = { 0 },
-
-    .field_0978 = 0x000c,
-
-    .field_097a = 0xfeca,
-
-    .pad_146 = { 0 },
-
-    .field_097e = 0xfb08,
-
-    .pad_147 = { 0 },
-
-    .field_0982 = 0xfb09,
-
-    .pad_148 = { 0 },
-
-    .field_0986 = 0x000d,
-
-    .field_0988 = 0xfede,
-
-    .pad_149 = { 0 },
-
-    .field_098c = 0xfb22,
-
-    .pad_150 = { 0 },
-
-    .field_0990 = 0xfb23,
-
-    .pad_151 = { 0 },
-
-    .field_0994 = 0x000e,
-
-    .field_0996 = 0xfef2,
-
-    .pad_152 = { 0 },
-
-    .field_099a = 0xfb3c,
-
-    .pad_153 = { 0 },
-
-    .field_099e = 0xfb3d,
-
-    .pad_154 = { 0 },
-
-    .field_09a2 = 0x000f,
-
-    .field_09a4 = 0xff06,
-
-    .pad_155 = { 0 },
-
-    .field_09a8 = 0xfb56,
-
-    .pad_156 = { 0 },
-
-    .field_09ac = 0xfb57,
-
-    .pad_157 = { 0 },
-
-    .field_09b0 = 0x0010,
-
-    .field_09b2 = 0xff1a,
-
-    .pad_158 = { 0 },
-
-    .field_09b6 = 0xfb70,
-
-    .pad_159 = { 0 },
-
-    .field_09ba = 0xfb71,
-
-    .pad_160 = { 0 },
-
-    .field_09be = 0x0011,
-
-    .field_09c0 = 0xff2e,
-
-    .pad_161 = { 0 },
-
-    .field_09c4 = 0xfb8a,
-
-    .pad_162 = { 0 },
-
-    .field_09c8 = 0xfb8b,
-
-    .pad_163 = { 0 },
-
-    .field_09cc = 0x0012,
-
-    .field_09ce = 0xff42,
-
-    .pad_164 = { 0 },
-
-    .field_09d2 = 0xfba4,
-
-    .pad_165 = { 0 },
-
-    .field_09d6 = 0xfba5,
-
-    .pad_166 = { 0 },
-
-    .field_09da = 0x0013,
-
-    .field_09dc = 0xff56,
-
-    .pad_167 = { 0 },
-
-    .field_09e0 = 0xfbbe,
-
-    .pad_168 = { 0 },
-
-    .field_09e4 = 0xfbbf,
-
-    .pad_169 = { 0 },
-
-    .field_09e8 = 0x0014,
-
-    .field_09ea = 0xff6a,
-
-    .pad_170 = { 0 },
-
-    .field_09ee = 0xfd62,
-
-    .pad_171 = { 0 },
-
-    .field_09f2 = 0xfd63,
-
-    .pad_172 = { 0 },
-
-    .field_09f6 = 0x0017,
-
-    .field_09f8 = 0xff7e,
-
-    .pad_173 = { 0 },
-
-    .field_09fc = 0xfc5a,
-
-    .pad_174 = { 0 },
-
-    .field_0a00 = 0xfc5b,
-
-    .pad_175 = { 0 },
-
-    .H_str = "H",
-
-    .field_0a06 = 0xff92,
-
-    .pad_176 = { 0 },
+    .PanelMemory_PartResolveTable = { 0x0000F9B6, 0x0000F9B7, 0x00, 0x00 },
+
+    .PanelTlv_PartResolveRecs_CompanionCol = 0x0000FDDA,
+
+    .PanelTlv_PartResolveRecsTail = {
+        { 0x0000F9D0, 0x0000F9D1, 0x01, 0x00, 0x0000FDEE },
+        { 0x0000F9EA, 0x0000F9EB, 0x02, 0x00, 0x0000FE02 },
+        { 0x0000FA04, 0x0000FA05, 0x03, 0x00, 0x0000FE16 },
+        { 0x0000FA1E, 0x0000FA1F, 0x04, 0x00, 0x0000FE2A },
+        { 0x0000FA38, 0x0000FA39, 0x05, 0x00, 0x0000FE3E },
+        { 0x0000FA52, 0x0000FA53, 0x06, 0x00, 0x0000FE52 },
+        { 0x0000FA6C, 0x0000FA6D, 0x07, 0x00, 0x0000FE66 },
+        { 0x0000FA86, 0x0000FA87, 0x08, 0x00, 0x0000FE7A },
+        { 0x0000FAA0, 0x0000FAA1, 0x09, 0x00, 0x0000FE8E },
+        { 0x0000FABA, 0x0000FABB, 0x0A, 0x00, 0x0000FEA2 },
+        { 0x0000FAD4, 0x0000FAD5, 0x0B, 0x00, 0x0000FEB6 },
+        { 0x0000FAEE, 0x0000FAEF, 0x0C, 0x00, 0x0000FECA },
+        { 0x0000FB08, 0x0000FB09, 0x0D, 0x00, 0x0000FEDE },
+        { 0x0000FB22, 0x0000FB23, 0x0E, 0x00, 0x0000FEF2 },
+        { 0x0000FB3C, 0x0000FB3D, 0x0F, 0x00, 0x0000FF06 },
+        { 0x0000FB56, 0x0000FB57, 0x10, 0x00, 0x0000FF1A },
+        { 0x0000FB70, 0x0000FB71, 0x11, 0x00, 0x0000FF2E },
+        { 0x0000FB8A, 0x0000FB8B, 0x12, 0x00, 0x0000FF42 },
+        { 0x0000FBA4, 0x0000FBA5, 0x13, 0x00, 0x0000FF56 },
+        { 0x0000FBBE, 0x0000FBBF, 0x14, 0x00, 0x0000FF6A },
+        { 0x0000FD62, 0x0000FD63, 0x17, 0x00, 0x0000FF7E },
+        { 0x0000FC5A, 0x0000FC5B, 0x48, 0x00, 0x0000FF92 },
+    },
 
     .NonPanelMemory_str = ALIGNED_STRING("Non Panel Memory"),
 
-    .field_0a1c = 0x0016,
-
-    .pad_177 = { 0 },
-
-    .field_0a21 = 0x300a,
-
-    .pad_178 = { 0 },
-
-    .field_0a27 = 0x4a0a,
-
-    .pad_179 = { 0 },
-
-    .field_0a2d = 0x6409,
-
-    .pad_180 = { 0 },
-
-    .field_0a32 = 0x0201,
-
-    .d_str = "d",
-
-    .pad_181 = { 0 },
-
-    .field_0a38 = 0x0203,
-
-    .d_str_2 = "d",
-
-    .pad_182 = { 0 },
-
-    .field_0a3e = 0x0108,
-
-    .field_0a40 = 0x01b6,
-
-    .pad_183 = { 0 },
-
-    .field_0a44 = 0x0103,
-
-    .field_0a46 = 0x01b6,
-
-    .pad_184 = { 0 },
-
-    .field_0a4a = 0x0107,
-
-    .field_0a4c = 0x01d0,
-
-    .pad_185 = { 0 },
-
-    .field_0a50 = 0x0103,
-
-    .field_0a52 = 0x01d0,
-
-    .pad_186 = { 0 },
-
-    .field_0a56 = 0x0107,
-
-    .field_0a58 = 0x01ea,
-
-    .pad_187 = { 0 },
-
-    .field_0a5c = 0x0103,
-
-    .field_0a5e = 0x01ea,
-
-    .pad_188 = { 0 },
-
-    .field_0a62 = 0x0107,
-
-    .field_0a64 = 0x0204,
-
-    .pad_189 = { 0 },
-
-    .field_0a68 = 0x0103,
-
-    .field_0a6a = 0x0204,
-
-    .pad_190 = { 0 },
-
-    .field_0a6e = 0x0107,
-
-    .field_0a70 = 0x021e,
-
-    .pad_191 = { 0 },
-
-    .field_0a74 = 0x0103,
-
-    .field_0a76 = 0x021e,
-
-    .pad_192 = { 0 },
-
-    .field_0a7a = 0x0107,
-
-    .field_0a7c = 0x0286,
-
-    .pad_193 = { 0 },
-
-    .field_0a81 = 0x9208,
-
-    .field_0a83 = 0x0002,
-
-    .pad_194 = { 0 },
-
-    .field_0a87 = 0x9e08,
-
-    .field_0a89 = 0x0002,
-
-    .pad_195 = { 0 },
-
-    .field_0a8d = 0xba08,
-
-    .field_0a8f = 0x0002,
-
-    .pad_196 = { 0 },
-
-    .field_0a93 = 0xba05,
-
-    .field_0a95 = 0x0002,
-
-    .field_0a97 = 0x0700,
-
-    .field_0a99 = 0xc603,
-
-    .field_0a9b = 0x0002,
-
-    .pad_197 = { 0 },
-
-    .field_0a9f = 0xce04,
-
-    .field_0aa1 = 0x0002,
-
-    .field_0aa3 = 0x0100,
-
-    .field_0aa5 = 0xd401,
-
-    .field_0aa7 = 0x0002,
-
-    .pad_198 = { 0 },
-
-    .field_0aab = 0xd411,
-
-    .field_0aad = 0x0002,
-
-    .field_0aaf = 0x1100,
-
-    .field_0ab1 = 0xee01,
-
-    .field_0ab3 = 0x0002,
-
-    .pad_199 = { 0 },
-
-    .field_0ab7 = 0x2209,
-
-    .field_0ab9 = 0x0003,
-
-    .pad_200 = { 0 },
-
-    .field_0abd = 0x6202,
-
-    .field_0abf = 0x0003,
-
-    .pad_201 = { 0 },
-
-    .field_0ac3 = 0x6201,
-
-    .field_0ac5 = 0x0003,
-
-    .field_0ac7 = 0x0300,
-
-    .field_0ac9 = 0x6201,
-
-    .field_0acb = 0x0003,
-
-    .field_0acd = 0x0400,
-
-    .field_0acf = 0xff01,
-
-    .pad_202 = { 0 },
-
-    .field_0ad4 = NAKA_NONE,
+    .EffectMode_PresetFieldMap = {
+        { 0x00000016, 0x00, 0x0A },
+        { 0x00000030, 0x00, 0x0A },
+        { 0x0000004A, 0x00, 0x09 },
+        { 0x00000064, 0x01, 0x02 },
+        { 0x00000064, 0x03, 0x02 },
+        { 0x00000064, 0x08, 0x01 },
+        { 0x000001B6, 0x03, 0x01 },
+        { 0x000001B6, 0x07, 0x01 },
+        { 0x000001D0, 0x03, 0x01 },
+        { 0x000001D0, 0x07, 0x01 },
+        { 0x000001EA, 0x03, 0x01 },
+        { 0x000001EA, 0x07, 0x01 },
+        { 0x00000204, 0x03, 0x01 },
+        { 0x00000204, 0x07, 0x01 },
+        { 0x0000021E, 0x03, 0x01 },
+        { 0x0000021E, 0x07, 0x01 },
+        { 0x00000286, 0x00, 0x08 },
+        { 0x00000292, 0x00, 0x08 },
+        { 0x0000029E, 0x00, 0x08 },
+        { 0x000002BA, 0x00, 0x05 },
+        { 0x000002BA, 0x07, 0x03 },
+        { 0x000002C6, 0x00, 0x04 },
+        { 0x000002CE, 0x01, 0x01 },
+        { 0x000002D4, 0x00, 0x11 },
+        { 0x000002D4, 0x11, 0x01 },
+        { 0x000002EE, 0x00, 0x09 },
+        { 0x00000322, 0x00, 0x02 },
+        { 0x00000362, 0x00, 0x01 },
+        { 0x00000362, 0x03, 0x01 },
+        { 0x00000362, 0x04, 0x01 },
+        { 0x000000FF, 0xFF, 0xFF },
+    },
 
     .OneTchFUNC_CaseTable = {
         0x0000, 0x0018, 0x0018, 0x0018, 0x0018, 0x0018,
@@ -4595,11 +4086,9 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         { 0x2C5, "Fred & Ginger   " },
     },
 
-    .field_0cc8 = 0x0101,
-
-    .field_0cca = 0xb002,
-
-    .field_0ccc = 0x83d2,
+    .EffectMode_DiagSeq_TitleCycle = {
+        0x01, 0x01, 0x02, 0xB0, 0xD2, 0x83,
+    },
 
     .PanelButton_LedMap = {
         {{2, 0x01}, {2, 0x02}, {2, 0x04}, {2, 0x08}, {2, 0x10}, {2, 0x20}, {2, 0x40}, {0, 0x00}},  /* segment 0 */
@@ -4626,37 +4115,10 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         {{0, 0x00}, {0, 0x00}, {11, 0x01}, {11, 0x02}, {11, 0x04}, {11, 0x08}, {0, 0x00}, {0, 0x00}},  /* segment 21 */
     },
 
-    .field_0e2e = 0x00ff,
-
-    .field_0e30 = 0x01ff,
-
-    .field_0e32 = 0x02ff,
-
-    .field_0e34 = 0x033f,
-
-    .field_0e36 = 0x04ff,
-
-    .field_0e38 = 0x0501,
-
-    .field_0e3a = 0x06ff,
-
-    .field_0e3c = 0x07ff,
-
-    .field_0e3e = 0x08ff,
-
-    .field_0e40 = 0x09ff,
-
-    .field_0e42 = 0x0aff,
-
-    .field_0e44 = 0x0b0f,
-
-    .field_0e46 = 0x0c03,
-
-    .field_0e48 = 0x0d0f,
-
-    .field_0e4a = 0x0e0f,
-
-    .field_0e4c = NAKA_NONE,
+    .LED_AllOnPatternByRow = {
+        0x00FF, 0x01FF, 0x02FF, 0x033F, 0x04FF, 0x0501, 0x06FF, 0x07FF,
+        0x08FF, 0x09FF, 0x0AFF, 0x0B0F, 0x0C03, 0x0D0F, 0x0E0F, 0xFFFF,
+    },
 
     .pad_220 = { 0 },
 
@@ -4690,23 +4152,13 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0e6e = 0x0002,
 
-    .field_0e70 = 0x4000,
+    .DramTest_IC10IC9_Regions = {
+        { 0x00004000, 0x00080000, 0x01, 0x02 },
+    },
 
-    .pad_221 = { 0 },
-
-    .field_0e76 = 0x0008,
-
-    .field_0e78 = 0x0201,
-
-    .pad_222 = { 0 },
-
-    .field_0e7c = 0x001e,
-
-    .field_0e7e = 0x8000,
-
-    .pad_223 = { 0 },
-
-    .field_0e82 = 0x0004,
+    .SramTest_IC21Regions = {
+        { 0x001E0000, 0x00008000, { 0x04, 0x00 } },
+    },
 
     .TEST2FUNC_CaseTable = {
         0x0000, 0x0003, 0x0003, 0x0003, 0x0003, 0x0003,
@@ -12163,47 +11615,35 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .StyleGroup0_Name = ALIGNED_STRING("Easy Listening  "),
 
-    .field_18bea = 0x0a09,
+    .RVari_SlotEditSw = {
+        0x09, 0x0A, 0x0B, 0x0C,
+    },
 
-    .field_18bec = 0x0c0b,
+    .RVari_SubItemEditSw = {
+        0x89, 0x8A, 0x8B, 0xFF,
+    },
 
-    .field_18bee = 0x8a89,
-
-    .field_18bf0 = 0xff8b,
-
-    .field_18bf2 = 0x8989,
-
-    .field_18bf4 = 0x8b8a,
+    .MsaMode_EditSwByValue = {
+        0x89, 0x89, 0x8A, 0x8B,
+    },
 
     .PmemMode_Select_Data = 0x8b89,
 
-    .field_18bf8 = 0x8988,
+    .EditSw_SplitMap10 = {
+        0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
+    },
 
-    .field_18bfa = 0x8b8a,
+    .VariScreen_EditSwLayout8 = {
+        0x88, 0x89, 0x8A, 0x8B, 0x08, 0x09, 0x0A, 0x0B,
+    },
 
-    .field_18bfc = 0x088c,
+    .VariScreen_EditSwLayout6 = {
+        0x88, 0x89, 0x8A, 0x08, 0x09, 0x0A,
+    },
 
-    .field_18bfe = 0x0a09,
-
-    .field_18c00 = 0x0c0b,
-
-    .field_18c02 = 0x8988,
-
-    .field_18c04 = 0x8b8a,
-
-    .field_18c06 = 0x0908,
-
-    .field_18c08 = 0x0b0a,
-
-    .field_18c0a = 0x8988,
-
-    .field_18c0c = 0x088a,
-
-    .field_18c0e = 0x0a09,
-
-    .field_18c10 = 0x8988,
-
-    .field_18c12 = 0x0908,
+    .EditSw_PageMap4 = {
+        0x88, 0x89, 0x08, 0x09,
+    },
 
     .SeqChan_Map_2ch = 0x0888,
 

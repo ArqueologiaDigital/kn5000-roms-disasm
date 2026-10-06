@@ -95,7 +95,7 @@ Naka_DrawbarControl_Table:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xD54, 0x8
 MidiPart_ConfigNameTable:
 	.long MidiParam_PanelCfgTable
-	.long Midi_PartToChMappingTable
+	.long PsMixer_DefaultGridPartRows
 	.long PartName6_Right1
 	.long PartName6_Right2
 	.long PartName6_Left
@@ -252,10 +252,10 @@ Naka_DrawbarReg_Table:
 	.long NakaColor_PaletteBlank
 	.long NakaColor_PaletteBlank
 	.long SeqChan_Map_2ch
-	.long SeqChan_Map_4ch
-	.long SeqChan_Map_6ch
-	.long SeqChan_Map_8ch
-	.long SeqChan_Map_10ch
+	.long EditSw_PageMap4
+	.long VariScreen_EditSwLayout6
+	.long VariScreen_EditSwLayout8
+	.long EditSw_SplitMap10
 	.long SeqChanContainer_ChordTypeRef_A
 	.long SeqChanContainer_ChordTypeRef_A
 	.long SeqChanContainer_ChordTypeRef_A

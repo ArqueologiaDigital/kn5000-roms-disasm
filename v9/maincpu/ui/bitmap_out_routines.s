@@ -3341,7 +3341,7 @@ BitMapOut_DeltaEncode_Type90Final:
 	sll xbc, 3
 	sub xbc, xde
 	add xbc, xbc
-	ld xde, BitMapOut_DeltaEncode_Type90Final_Data
+	ld xde, PanelMemory_PartResolveTable
 	add xde, xbc
 	ld xbc, (xde)
 	ld c, (xbc)
@@ -3360,7 +3360,7 @@ BitMapOut_DeltaEncode_Type90Final:
 	sll xbc, 3
 	sub xbc, xwa
 	add xbc, xbc
-	lda xhl, (BitMapOut_DeltaEncode_Type90Final_Data_2:24)
+	lda xhl, (PanelTlv_PartResolveRecs_CompanionCol:24)
 	add xhl, xbc
 	lda xde, (xsp + 2)
 	ld a, (xde)
