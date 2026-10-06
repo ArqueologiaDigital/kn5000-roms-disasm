@@ -917,8 +917,9 @@ typedef struct __attribute__((packed)) {
     uint16_t field_14b1;
     uint16_t field_14b3;
     char BMP_str[4];
-    uint16_t field_14b9;
-    char str_241[3];
+    uint8_t field_14b9;
+    /* EditSw_ByteData_Str_N7f: text (the asm slice of the same name) */
+    char EditSw_ByteData_Str_N7f[4];
     char EditSw_ByteData_Str_N80[4];
     char EditSw_ByteData_Str_N81[4];
     char DrawEditSw_Str_N7f[4];
@@ -1476,40 +1477,26 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1d42;
     uint16_t field_1d44;
     uint16_t field_1d46;
-    uint16_t field_1d48;
-    uint16_t field_1d4a;
-    uint16_t field_1d4c;
-    char str_431[4];
+    /* BoxStyle7_Setup_Data: text (the asm slice of the same name) */
+    char BoxStyle7_Setup_Data[10];
     char BoxStyle7_CalcWidth_Str_Fmts_Fmtd[6];
-    uint16_t field_1d58;
-    uint16_t field_1d5a;
-    uint16_t field_1d5c;
-    char str_433[6];
+    /* BoxStyle8_Setup_Data: text (the asm slice of the same name) */
+    char BoxStyle8_Setup_Data[12];
     char BoxStyle8_CalcWidth_Str_Fmts_Fmtd[6];
-    uint16_t field_1d6a;
-    uint16_t field_1d6c;
-    uint16_t field_1d6e;
-    char str_435[6];
+    /* BoxStyle9_Setup_Data: text (the asm slice of the same name) */
+    char BoxStyle9_Setup_Data[12];
     char BoxStyle9_CalcWidth_Str_Fmts_Fmtd[6];
-    uint16_t field_1d7c;
-    uint16_t field_1d7e;
-    uint16_t field_1d80;
-    char str_437[6];
+    /* BoxStyle10_Setup_Data: text (the asm slice of the same name) */
+    char BoxStyle10_Setup_Data[12];
     char BoxStyle10_CalcWidth_Str_Fmts_Fmtd[6];
-    uint16_t field_1d8e;
-    uint16_t field_1d90;
-    uint16_t field_1d92;
-    char str_439[6];
+    /* BoxStyle11_Setup_Data: text (the asm slice of the same name) */
+    char BoxStyle11_Setup_Data[12];
     char BoxStyle11_CalcWidth_Str_Fmts_Fmtd[6];
-    uint16_t field_1da0;
-    uint16_t field_1da2;
-    uint16_t field_1da4;
-    char str_441[6];
+    /* BoxStyle12_Setup_Data: text (the asm slice of the same name) */
+    char BoxStyle12_Setup_Data[12];
     char BoxStyle12_CalcWidth_Str_Fmts_Fmtd[6];
-    uint16_t field_1db2;
-    uint16_t field_1db4;
-    uint16_t field_1db6;
-    char str_443[6];
+    /* BoxStyle13_Setup_Data: text (the asm slice of the same name) */
+    char BoxStyle13_Setup_Data[12];
     char BoxStyle13_CalcWidth_Str_Fmts_Fmtd[6];
     char Left_str[6];
     char EdgeDraw_TopRight_Inner_Str_LBrace[2];
@@ -1580,9 +1567,9 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1f44;
     /* DrawIcons_PixelPairTable: [icon byte] -> {left, right} colour index of its two 4-bpp pixels, nibble n -> n (n < 8) or 0xF0 + n; read by DrawIcons_Impl (ui/drawing_primitives.s) */
     uint8_t DrawIcons_PixelPairTable[256][2];
-    uint8_t field_2146;
-    char M_str_2[2];
-    uint16_t field_2149;
+    /* DrawBitmapFile_Impl_Data: text (the asm slice of the same name) */
+    char DrawBitmapFile_Impl_Data[4];
+    uint8_t field_214a;
     uint16_t field_214b;
     uint16_t field_214d;
     uint16_t field_214f;
@@ -1623,11 +1610,12 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2195;
     uint16_t field_2197;
     uint16_t field_2199;
-    uint16_t field_219b;
-    char M_str_3[2];
-    uint16_t field_219f;
-    char M_str_4[2];
-    uint16_t field_21a3;
+    uint8_t field_219b;
+    /* Gfx_LoadSplashBMP_Data: text (the asm slice of the same name) */
+    char Gfx_LoadSplashBMP_Data[4];
+    /* CaptureLcd_Str_BM: text (the asm slice of the same name) */
+    char CaptureLcd_Str_BM[4];
+    uint8_t field_21a4;
     char KlcdBmp_str[13];
     char wb_str[4];
     uint16_t field_21b6;
@@ -1749,7 +1737,8 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_220[4];  /* zero padding */
     uint32_t Naka_PresentationRootState_ptr_4;
     char DrawFunc_Init_Entry3_Str_Fmt1d_2[4];
-    char str_528[4];
+    /* FmtStr_pct2d: text (the asm slice of the same name) */
+    char FmtStr_pct2d[4];
     char DrawFunc_Init_Entry4_Str_Fmt3d[4];
     char DrawFunc_Init_Entry5_Str_Fmt2d[4];
     char DrawFunc_Init_Entry5_Str_Fmt3d[4];
@@ -4199,9 +4188,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .BMP_str = "BMP",
 
-    .field_14b9 = 0x7EFF,
+    .field_14b9 = 0xFF,
 
-    .str_241 = ALIGNED_STRING("7f"),
+    .EditSw_ByteData_Str_N7f = "~7f",
 
     .EditSw_ByteData_Str_N80 = "~80",
 
@@ -5389,73 +5378,31 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_1d46 = 0x00C2,
 
-    .field_1d48 = 0x6F62,
-
-    .field_1d4a = 0x6C6F,
-
-    .field_1d4c = 0x2509,
-
-    .str_431 = "s%d",
+    .BoxStyle7_Setup_Data = "bool\011%s%d",
 
     .BoxStyle7_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
-    .field_1d58 = 0x7773,
-
-    .field_1d5a = 0x726F,
-
-    .field_1d5c = 0x0964,
-
-    .str_433 = ALIGNED_STRING("%s%d"),
+    .BoxStyle8_Setup_Data = "sword\011%s%d\000\377",
 
     .BoxStyle8_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
-    .field_1d6a = 0x7775,
-
-    .field_1d6c = 0x726F,
-
-    .field_1d6e = 0x0964,
-
-    .str_435 = ALIGNED_STRING("%s%d"),
+    .BoxStyle9_Setup_Data = "uword\011%s%d\000\377",
 
     .BoxStyle9_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
-    .field_1d7c = 0x6373,
-
-    .field_1d7e = 0x6168,
-
-    .field_1d80 = 0x0972,
-
-    .str_437 = ALIGNED_STRING("%s%d"),
+    .BoxStyle10_Setup_Data = "schar\011%s%d\000\377",
 
     .BoxStyle10_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
-    .field_1d8e = 0x6375,
-
-    .field_1d90 = 0x6168,
-
-    .field_1d92 = 0x0972,
-
-    .str_439 = ALIGNED_STRING("%s%d"),
+    .BoxStyle11_Setup_Data = "uchar\011%s%d\000\377",
 
     .BoxStyle11_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
-    .field_1da0 = 0x6C73,
-
-    .field_1da2 = 0x6E6F,
-
-    .field_1da4 = 0x0967,
-
-    .str_441 = ALIGNED_STRING("%s%d"),
+    .BoxStyle12_Setup_Data = "slong\011%s%d\000\377",
 
     .BoxStyle12_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
-    .field_1db2 = 0x6C75,
-
-    .field_1db4 = 0x6E6F,
-
-    .field_1db6 = 0x0967,
-
-    .str_443 = ALIGNED_STRING("%s%d"),
+    .BoxStyle13_Setup_Data = "ulong\011%s%d\000\377",
 
     .BoxStyle13_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
@@ -5628,11 +5575,9 @@ const naka_disk_warning_t naka_disk_warning_data
         {0xFF, 0xF8}, {0xFF, 0xF9}, {0xFF, 0xFA}, {0xFF, 0xFB}, {0xFF, 0xFC}, {0xFF, 0xFD}, {0xFF, 0xFE}, {0xFF, 0xFF},  /* 0xF8.. */
     },
 
-    .field_2146 = 0x42,
+    .DrawBitmapFile_Impl_Data = "BM\000\377",
 
-    .M_str_2 = "M",
-
-    .field_2149 = 0x63FF,
+    .field_214a = 0x63,
 
     .field_214b = 0x9100,
 
@@ -5714,15 +5659,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_2199 = 0x9C0B,
 
-    .field_219b = 0x420D,
+    .field_219b = 0x0D,
 
-    .M_str_3 = "M",
+    .Gfx_LoadSplashBMP_Data = "BM\000\377",
 
-    .field_219f = 0x42FF,
+    .CaptureLcd_Str_BM = "BM\000\377",
 
-    .M_str_4 = "M",
-
-    .field_21a3 = 0x48FF,
+    .field_21a4 = 0x48,
 
     .KlcdBmp_str = ALIGNED_STRING("KLCD%03d.BMP"),
 
@@ -5988,7 +5931,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DrawFunc_Init_Entry3_Str_Fmt1d_2 = "%1d",
 
-    .str_528 = "%2d",
+    .FmtStr_pct2d = "%2d",
 
     .DrawFunc_Init_Entry4_Str_Fmt3d = "%3d",
 

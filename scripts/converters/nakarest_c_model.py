@@ -53,6 +53,7 @@ CHANGES (lane nakarest)
     (naka_cls_*_t, welcome_step_t...) are learned from the file itself; the
     blob struct is the one the _Static_assert names.
 """
+import os
 import re
 
 TYPE_SIZES = {
@@ -174,6 +175,11 @@ class CBlob:
         with open(path, encoding='latin-1') as f:
             self.lines = f.read().split('\n')
         L = self.lines
+        for inc in re.findall(r'^#include "([\w.]+)"', '\n'.join(L), re.M):
+            h = os.path.join(os.path.dirname(path), inc)
+            if os.path.exists(h):               # a shared header's packed typedefs (naka_class_t, ...)
+                with open(h, encoding='latin-1') as f:
+                    register_local_types(f.read())
         register_local_types('\n'.join(L))
         # the blob struct is the one STRUCT_END_RE closes; a local typedef
         # above it (also `typedef struct __attribute__((packed)) {`) is not it

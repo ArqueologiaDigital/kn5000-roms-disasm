@@ -1300,143 +1300,10 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_227[6];  /* 6 pointers */
     char FileYangSedangAnda_str[156];
     char Error_str_36[10];
-    uint16_t field_14434;
-    uint16_t field_14436;
-    uint16_t field_14438;
-    uint16_t field_1443a;
-    uint16_t field_1443c;
-    uint16_t field_1443e;
-    uint16_t field_14440;
-    uint16_t field_14442;
-    uint16_t field_14444;
-    uint16_t field_14446;
-    uint16_t field_14448;
-    uint16_t field_1444a;
-    uint16_t field_1444c;
-    uint16_t field_1444e;
-    uint16_t field_14450;
-    uint16_t field_14452;
-    uint16_t field_14454;
-    uint16_t field_14456;
-    uint16_t field_14458;
-    uint16_t field_1445a;
-    uint16_t field_1445c;
-    uint16_t field_1445e;
-    uint16_t field_14460;
-    uint16_t field_14462;
-    uint16_t field_14464;
-    uint16_t field_14466;
-    uint16_t field_14468;
-    uint16_t field_1446a;
-    uint16_t field_1446c;
-    uint16_t field_1446e;
-    uint16_t field_14470;
-    uint16_t field_14472;
-    uint16_t field_14474;
-    uint16_t field_14476;
-    uint16_t field_14478;
-    uint16_t field_1447a;
-    uint16_t field_1447c;
-    uint16_t field_1447e;
-    uint16_t field_14480;
-    uint16_t field_14482;
-    uint16_t field_14484;
-    uint16_t field_14486;
-    uint16_t field_14488;
-    uint16_t field_1448a;
-    uint16_t field_1448c;
-    uint16_t field_1448e;
-    uint16_t field_14490;
-    uint16_t field_14492;
-    uint16_t field_14494;
-    uint16_t field_14496;
-    uint16_t field_14498;
-    uint16_t field_1449a;
-    uint16_t field_1449c;
-    uint16_t field_1449e;
-    uint16_t field_144a0;
-    uint16_t field_144a2;
-    uint16_t field_144a4;
-    uint16_t field_144a6;
-    uint16_t field_144a8;
-    uint16_t field_144aa;
-    uint16_t field_144ac;
-    char str_548[2];
-    uint16_t field_144b0;
-    uint16_t field_144b2;
-    uint16_t field_144b4;
-    uint16_t field_144b6;
-    uint16_t field_144b8;
-    uint16_t field_144ba;
-    uint16_t field_144bc;
-    uint16_t field_144be;
-    uint16_t field_144c0;
-    uint16_t field_144c2;
-    uint16_t field_144c4;
-    uint16_t field_144c6;
-    uint16_t field_144c8;
-    uint16_t field_144ca;
-    uint16_t field_144cc;
-    uint16_t field_144ce;
-    uint16_t field_144d0;
-    uint16_t field_144d2;
-    uint16_t field_144d4;
-    uint16_t field_144d6;
-    uint16_t field_144d8;
-    uint16_t field_144da;
-    uint16_t field_144dc;
-    uint16_t field_144de;
-    uint16_t field_144e0;
-    uint16_t field_144e2;
-    uint16_t field_144e4;
-    uint16_t field_144e6;
-    uint16_t field_144e8;
-    uint16_t field_144ea;
-    uint16_t field_144ec;
-    uint16_t field_144ee;
-    uint16_t field_144f0;
-    uint16_t field_144f2;
-    uint16_t field_144f4;
-    uint16_t field_144f6;
-    uint16_t field_144f8;
-    uint16_t field_144fa;
-    uint16_t field_144fc;
-    uint16_t field_144fe;
-    uint16_t field_14500;
-    uint16_t field_14502;
-    uint16_t field_14504;
-    uint16_t field_14506;
-    uint16_t field_14508;
-    uint16_t field_1450a;
-    uint16_t field_1450c;
-    uint16_t field_1450e;
-    uint16_t field_14510;
-    uint16_t field_14512;
-    uint16_t field_14514;
-    uint16_t field_14516;
-    uint16_t field_14518;
-    uint16_t field_1451a;
-    uint16_t field_1451c;
-    uint16_t field_1451e;
-    uint16_t field_14520;
-    uint16_t field_14522;
-    uint16_t field_14524;
-    uint16_t field_14526;
-    uint16_t field_14528;
-    uint16_t field_1452a;
-    uint16_t field_1452c;
-    uint16_t field_1452e;
-    uint16_t field_14530;
-    uint16_t field_14532;
-    uint16_t field_14534;
-    uint16_t field_14536;
-    uint16_t field_14538;
-    uint16_t field_1453a;
-    uint16_t field_1453c;
-    uint16_t field_1453e;
-    uint16_t field_14540;
-    uint16_t field_14542;
-    char str_549[2];
+    /* Str_DiskErr43_Spanish: text (the asm slice of the same name) */
+    char Str_DiskErr43_Spanish[124];
+    /* Str_DiskErr43_French: text (the asm slice of the same name) */
+    char Str_DiskErr43_French[150];
     uint16_t field_14546;
     uint16_t field_14548;
     uint16_t field_1454a;
@@ -1634,9 +1501,8 @@ typedef struct __attribute__((packed)) {
     char txt_RKB_und_LKB_sind_spezielle[172];
     char RkbAndLkbAre_str[134];
     uint32_t ptrs_239[6];  /* 6 pointers */
-    uint16_t field_165ee;
-    uint16_t field_165f0;
-    char str_618[2];
+    /* NakaInst_s_v: text (the asm slice of the same name) */
+    char NakaInst_s_v[6];
     char Error_str_47[10];
     char txt_RKB_y_LKB_son_pistas_especiales[222];
     char txt_RKB_et_LKB_sont_des_pistes_2[200];
@@ -2609,8 +2475,10 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1991a;
     uint16_t field_1991c;
     char MUTE_str_3[6];
-    char str_1305[4];
-    char str_1306[4];
+    /* PsMixer_CtlTypeProc1_Data: text (the asm slice of the same name) */
+    char PsMixer_CtlTypeProc1_Data[4];
+    /* PsMixer_CtlTypeProc10_Data: text (the asm slice of the same name) */
+    char PsMixer_CtlTypeProc10_Data[4];
     uint16_t field_1992c;
     uint16_t field_1992e;
     uint16_t field_19930;
@@ -2753,8 +2621,9 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_2054[65];  /* zero padding */
     uint16_t field_19f09;
     uint8_t pad_2055[12];  /* zero padding */
-    uint16_t field_19f17;
-    char str_1355[3];
+    uint8_t field_19f17;
+    /* FDemoText_ByteData_LayoutEngine_Str_Fmt8s: text (the asm slice of the same name) */
+    char FDemoText_ByteData_LayoutEngine_Str_Fmt8s[4];
     uint32_t FDemoText_ByteData_LayoutEngine_PtrTable[3];  /* 3 pointers */
     char str_1356[2];
     char PAN_str_4[4];
@@ -8878,8 +8747,8 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .ptrs_227 = {
         SELF(TheFileThatYou_str_2),
         SELF(field_14546),
-        SELF(field_144b0),
-        SELF(field_14434),
+        SELF(Str_DiskErr43_French),
+        SELF(Str_DiskErr43_Spanish),
         SELF(Error_str_36),
         SELF(FileYangSedangAnda_str),
     },
@@ -8888,279 +8757,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Error_str_36 = ALIGNED_STRING("ERROR 43"),
 
-    .field_14434 = 0x6C45,
-
-    .field_14436 = 0x6620,
-
-    .field_14438 = 0x6369,
-
-    .field_1443a = 0x6568,
-
-    .field_1443c = 0x6F72,
-
-    .field_1443e = 0x7120,
-
-    .field_14440 = 0x6575,
-
-    .field_14442 = 0x7420,
-
-    .field_14444 = 0x6172,
-
-    .field_14446 = 0x6174,
-
-    .field_14448 = 0x6420,
-
-    .field_1444a = 0x2065,
-
-    .field_1444c = 0x6163,
-
-    .field_1444e = 0x6772,
-
-    .field_14450 = 0x7261,
-
-    .field_14452 = 0x6620,
-
-    .field_14454 = 0x6575,
-
-    .field_14456 = 0x6120,
-
-    .field_14458 = 0x6D6C,
-
-    .field_1445a = 0x6361,
-
-    .field_1445c = 0x6E65,
-
-    .field_1445e = 0x6461,
-
-    .field_14460 = 0x206F,
-
-    .field_14462 = 0x6E65,
-
-    .field_14464 = 0x7520,
-
-    .field_14466 = 0x206E,
-
-    .field_14468 = 0x6574,
-
-    .field_1446a = 0x6C63,
-
-    .field_1446c = 0x6461,
-
-    .field_1446e = 0x206F,
-
-    .field_14470 = 0x4E4B,
-
-    .field_14472 = 0x6120,
-
-    .field_14474 = 0x746E,
-
-    .field_14476 = 0x7265,
-
-    .field_14478 = 0x6F69,
-
-    .field_1447a = 0x2E72,
-
-    .field_1447c = 0x5320,
-
-    .field_1447e = 0x6CF3,
-
-    .field_14480 = 0x206F,
-
-    .field_14482 = 0x7365,
-
-    .field_14484 = 0x7020,
-
-    .field_14486 = 0x736F,
-
-    .field_14488 = 0x6269,
-
-    .field_1448a = 0x656C,
-
-    .field_1448c = 0x6320,
-
-    .field_1448e = 0x7261,
-
-    .field_14490 = 0x6167,
-
-    .field_14492 = 0x2072,
-
-    .field_14494 = 0x7475,
-
-    .field_14496 = 0x6C69,
-
-    .field_14498 = 0x7A69,
-
-    .field_1449a = 0x6E61,
-
-    .field_1449c = 0x6F64,
-
-    .field_1449e = 0x6C20,
-
-    .field_144a0 = 0x2061,
-
-    .field_144a2 = 0x706F,
-
-    .field_144a4 = 0x6963,
-
-    .field_144a6 = 0x6EF3,
-
-    .field_144a8 = 0x9320,
-
-    .field_144aa = 0x4C41,
-
-    .field_144ac = 0x944C,
-
-    .str_548 = ".",
-
-    .field_144b0 = 0x654C,
-
-    .field_144b2 = 0x6620,
-
-    .field_144b4 = 0x6369,
-
-    .field_144b6 = 0x6968,
-
-    .field_144b8 = 0x7265,
-
-    .field_144ba = 0x7120,
-
-    .field_144bc = 0x6575,
-
-    .field_144be = 0x7620,
-
-    .field_144c0 = 0x756F,
-
-    .field_144c2 = 0x2073,
-
-    .field_144c4 = 0x7365,
-
-    .field_144c6 = 0x6173,
-
-    .field_144c8 = 0x6579,
-
-    .field_144ca = 0x207A,
-
-    .field_144cc = 0x6564,
-
-    .field_144ce = 0x6320,
-
-    .field_144d0 = 0x6168,
-
-    .field_144d2 = 0x6772,
-
-    .field_144d4 = 0x7265,
-
-    .field_144d6 = 0x6120,
-
-    .field_144d8 = 0xE920,
-
-    .field_144da = 0xE974,
-
-    .field_144dc = 0x7320,
-
-    .field_144de = 0x7561,
-
-    .field_144e0 = 0x6576,
-
-    .field_144e2 = 0x6167,
-
-    .field_144e4 = 0x6472,
-
-    .field_144e6 = 0x20E9,
-
-    .field_144e8 = 0x20E0,
-
-    .field_144ea = 0x6170,
-
-    .field_144ec = 0x7472,
-
-    .field_144ee = 0x7269,
-
-    .field_144f0 = 0x6420,
-
-    .field_144f2 = 0x7527,
-
-    .field_144f4 = 0x206E,
-
-    .field_144f6 = 0x6C63,
-
-    .field_144f8 = 0x7661,
-
-    .field_144fa = 0x6569,
-
-    .field_144fc = 0x2072,
-
-    .field_144fe = 0x4E4B,
-
-    .field_14500 = 0x6120,
-
-    .field_14502 = 0x746E,
-
-    .field_14504 = 0x72E9,
-
-    .field_14506 = 0x6569,
-
-    .field_14508 = 0x7275,
-
-    .field_1450a = 0x202E,
-
-    .field_1450c = 0x6F56,
-
-    .field_1450e = 0x7375,
-
-    .field_14510 = 0x6E20,
-
-    .field_14512 = 0x2065,
-
-    .field_14514 = 0x6F70,
-
-    .field_14516 = 0x7675,
-
-    .field_14518 = 0x7A65,
-
-    .field_1451a = 0x6C20,
-
-    .field_1451c = 0x2065,
-
-    .field_1451e = 0x6863,
-
-    .field_14520 = 0x7261,
-
-    .field_14522 = 0x6567,
-
-    .field_14524 = 0x2072,
-
-    .field_14526 = 0x7571,
-
-    .field_14528 = 0x6527,
-
-    .field_1452a = 0x206E,
-
-    .field_1452c = 0x7475,
-
-    .field_1452e = 0x6C69,
-
-    .field_14530 = 0x7369,
-
-    .field_14532 = 0x6E61,
-
-    .field_14534 = 0x2074,
-
-    .field_14536 = 0x276C,
-
-    .field_14538 = 0x706F,
-
-    .field_1453a = 0x6974,
-
-    .field_1453c = 0x6E6F,
-
-    .field_1453e = 0x9320,
-
-    .field_14540 = 0x4C41,
-
-    .field_14542 = 0x944C,
-
-    .str_549 = ".",
+    .Str_DiskErr43_Spanish = 
+        "El fichero que trata de cargar fue almacenado en un teclado KN anterior. S\363lo es posible carg"
+        "ar utilizando la opci\363n \223ALL\224.",
+
+    .Str_DiskErr43_French = 
+        "Le fichier que vous essayez de charger a \351t\351 sauvegard\351 \340 partir d'un clavier KN ant"
+        "\351rieur. Vous ne pouvez le charger qu'en utilisant l'option \223ALL\224.",
 
     .field_14546 = 0x6544,
 
@@ -9637,14 +9240,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(txt_RKB_et_LKB_sont_des_pistes_2),
         SELF(txt_RKB_y_LKB_son_pistas_especiales),
         SELF(Error_str_47),
-        SELF(field_165ee),
+        SELF(NakaInst_s_v),
     },
 
-    .field_165ee = 0x7395,
-
-    .field_165f0 = 0x7697,
-
-    .str_618 = ALIGNED_STRING(""),
+    .NakaInst_s_v = "\225s\227v\000\377",
 
     .Error_str_47 = ALIGNED_STRING("ERROR 60"),
 
@@ -11891,9 +11490,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .MUTE_str_3 = ALIGNED_STRING("MUTE"),
 
-    .str_1305 = "%s:",
+    .PsMixer_CtlTypeProc1_Data = "%s:",
 
-    .str_1306 = "%s:",
+    .PsMixer_CtlTypeProc10_Data = "%s:",
 
     .field_1992c = 0x0280,
 
@@ -12243,9 +11842,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2055 = { 0 },
 
-    .field_19f17 = 0x25FF,
+    .field_19f17 = 0xFF,
 
-    .str_1355 = ALIGNED_STRING("8s"),
+    .FDemoText_ByteData_LayoutEngine_Str_Fmt8s = "%8s",
 
     .FDemoText_ByteData_LayoutEngine_PtrTable = {
         SELF(NO_str),
