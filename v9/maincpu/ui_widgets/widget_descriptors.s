@@ -5871,7 +5871,30 @@ AccTone_ExtendAndDispatch_PopRet_Table:
 ; Typed in naka_widget_descriptors.c as uint32_t TimeSig_ProcTable[24].
 ; -----------------------------------------------------------------------------
 TimeSig_ProcTable:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x191E4, 0x60
+	.long	0x00f6657c
+	.long	Tempo_AdjustStartMeasure
+	.long	Tempo_AdjustEndMeasure
+	.long	0x00f6657c
+	.long	Tempo_AdjustQuantize
+	.long	0x00f6657c
+	.long	Tempo_AdjustEffect
+	.long	0x00f6657c
+	.long	Tempo_IncrementTimeSigNum
+	.long	Tempo_DecrementTimeSigNum
+	.long	Tempo_TimeSigCodeBlock
+	.long	0x00f663e5
+	.long	Tempo_EditBPM
+	.long	0x00f6657c
+	.long	0x00f6657c
+	.long	Tempo_EditBPMApply
+	.long	0x00f6657c
+	.long	0x00f6657c
+	.long	0x00f6645c
+	.long	0x00f664d1
+	.long	0x00f6657c
+	.long	0x00f6654f
+	.long	0x00f6657c
+	.long	0x00f66554
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Tempo_AdjustEffect_Table
 ; Tempo_AdjustEffect_Table -- read by Tempo_AdjustEffect (v10/v9

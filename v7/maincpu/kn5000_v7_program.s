@@ -217,7 +217,40 @@ InitializeScoop_Str_TT_SEWRTSND:	.incbin "includes/generated/gui_display_struct_
 ; parameter block of object 0x146 (class 0x01600003, proc MainFunctionProc), registered by InitializeScoop+0x125
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 136 B; the proc's read length was not measured
 GUI_DisplayStructData_0x750:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x750, 0x88
+	.long	SeMenuModeFunc
+	.long	SeMenuTitleFunc
+	.long	SeEasyTitleFunc
+	.long	SeTonTon1TitleFunc
+	.long	SeTonTon2TitleFunc
+	.long	SeTonRan1TitleFunc
+	.long	SeTonRan2TitleFunc
+	.long	SeTonHyb1TitleFunc
+	.long	SePitPit1TitleFunc
+	.long	SePitEnv1TitleFunc
+	.long	SePitEnv2TitleFunc
+	.long	SePitLfo1TitleFunc
+	.long	SeAmpAmp1TitleFunc
+	.long	SeAmpAmp2TitleFunc
+	.long	SeAmpEnv1TitleFunc
+	.long	SeAmpEnv2TitleFunc
+	.long	SeAmpLfo1TitleFunc
+	.long	SeFilLpq1TitleFunc
+	.long	SeFilHpq1TitleFunc
+	.long	SeFilL241TitleFunc
+	.long	SeFilH241TitleFunc
+	.long	SeFilBpf1TitleFunc
+	.long	SeFilBcf1TitleFunc
+	.long	SeFilFil2TitleFunc
+	.long	SeFilEnv1TitleFunc
+	.long	SeFilEnv2TitleFunc
+	.long	SeFilLfo1TitleFunc
+	.long	SeDigEffTitleFunc
+	.long	SeCtr2TitleFunc
+	.long	SeCtr3TitleFunc
+	.long	SeCopyTitleFunc
+	.long	SeWrtMemTitleFunc
+	.long	SeWrtSndTitleFunc
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x7d4, 0x4
 ; parameter block of object 0x446 (class 0x01600003, proc MainFunctionProc), registered by InitializeScoop+0x14A
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 768 B; the proc's read length was not measured
 GUI_DisplayStructData_0x7D8:
@@ -854,7 +887,39 @@ ToneGen_ParamTable_0x31A:
 ; data read by SeMenu_ListSelector_HandleInput+0x1A (0xF0EB24)
 ; evidence: `lda xbc, (this)` then `ld XHL,(XBC+WA) / call T,XHL`
 ToneGen_ParamTable_0x326:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x326, 0x81
+	.long	UpdSeSel_ProcessStep
+	.long	UpdSeSel_ExtendedOps_Data
+	.long	SeMenu_AltUpdate
+	.long	SeMenu_AltUpdate_Data
+	.long	SeMenu_AltUpdate_Step3Plus_Join
+	.long	SeMenu_AltUpdate_Step3Plus_Join2
+	.long	SeMenu_ControllerUpdate
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join2
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join3
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join4
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join5
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join6
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join7
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join8
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join9
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join12
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join13
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join14
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join15
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join16
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join17
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join18
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join19
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join20
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join21
+	.long	SeMenu_CopyWriteUpdate_Step3_Join
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join10
+	.long	UpdSeSel_DetailedUpdate_SetDisplayState_Join11
+	.long	SeMenu_CopyWriteUpdate_Step3_Join2
+	.long	SeMenu_CopyWriteUpdate_Data
+	.long	SeMenu_CopyWriteUpdate_Join
+	.incbin "includes/generated/tonegen_param_table.bin", 0x3a6, 0x1
 ; parameter block of object 0x12b (class 0x01600002, proc ApFunctionProc), registered by InitializeNaka+0x91
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 76 B; the proc's read length was not measured
 ToneGen_ParamTable_0x3A7:

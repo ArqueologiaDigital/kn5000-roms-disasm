@@ -233,7 +233,43 @@ Scoop_CurveUpdate_Finalize_Data:		.incbin "includes/generated/style_ui_screendat
 Scoop_EnvCalc_Handler1_Data:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x123, 0x8
 Scoop_GlideParam_Configure_Data:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x12B, 0x8
 Scoop_GlideCalc_Handler0_Data:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x133, 0x8
-Scoop_EventLoop_12Entry_Data:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x13B, 0x90
+Scoop_EventLoop_12Entry_Data:
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_EnvCalc_Handler2
+	.long	Scoop_Dispatch_CallFAA98A
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_GlideParam_Setup
+	.long	Scoop_GlideParam_Data
+	.long	Scoop_GlideCalc_Handler0
+	.long	Scoop_GlideCalc_Handler1
+	.long	Scoop_GlideCalc_Handler2
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_EnvCalc_Handler0
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_CallFAB273
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_EnvCalc_Handler1
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_Dispatch_Nop
+	.long	Scoop_EnvCalc_Handler3
 Scoop_EventLoop_12Entry_Process_Data:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1CB, 0x8
 Scoop_EventLoop_12Entry_Process_Str_Fmt1d:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1D3, 0x4
 Scoop_EventLoop_12Entry_Process_Str_Fmt2d:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1D7, 0x4

@@ -3628,7 +3628,17 @@ AcWelcomScreen_Select_Data:
 ; Typed as uint32_t PsMixer_ControlProcTable[11].
 ; -----------------------------------------------------------------------------
 PsMixer_ControlHelper_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x191CE, 0x2C
+	.long	PsMixer_CtlTypeProc0
+	.long	PsMixer_CtlTypeProc1
+	.long	PsMixer_CtlTypeProc2
+	.long	PsMixer_CtlTypeProc3
+	.long	PsMixer_CtlTypeProc4
+	.long	PsMixer_CtlTypeProc5
+	.long	PsMixer_CtlTypeProc6
+	.long	PsMixer_CtlTypeProc7
+	.long	PsMixer_CtlTypeProc8
+	.long	PsMixer_CtlTypeProc9
+	.long	PsMixer_CtlTypeProc10
 ; [nakarest] MidiParam_PanelCfgTable  +0x191fa..+0x192ae (0xe9f148, 180 B)
 ; [nakarest] purpose not established: layout of 180 B at 0xe9f148 not derived; readers below
 ; [nakarest] Readers: source references MidiPart_ConfigNameTable

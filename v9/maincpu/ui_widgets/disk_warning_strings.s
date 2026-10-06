@@ -1221,12 +1221,60 @@ Pad_AfterStr_No:	.incbin "includes/generated/naka_disk_warning.bin", 0x2248, 0x2
 ; [nakarest] purpose not established: layout of 144 B at 0xeaaf14 not derived; readers below
 ; [nakarest] Readers: source references GraphicsRender_ProcessEntries
 ; [nakarest] (display/graphics_text_vga.s: `ld xiy, GraphicsRender_ProcessEntries_PtrTable`).
-GraphicsRender_ProcessEntries_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x2268, 0x90	; 48 x 32-bit pointer
+GraphicsRender_ProcessEntries_PtrTable:
+	.long	SeGfx_StaticOp00_FromBuf_Helper
+	.long	0x00fb19fe
+	.long	SeGfx_StaticOp02_FromBuf_Helper
+	.long	SeGfx_StaticOp03_BlitAtCell_Helper
+	.long	GraphicsRender_RetStub
+	.long	SeGfx_StaticOp05_FromBuf_Helper
+	.long	DrawText_LayoutAndRender
+	.long	DrawText_LayoutAndRender_Variant1
+	.long	0x00fb1784
+	.long	SeGfx_StaticOp09_FromBuf_Helper
+	.long	0x00fb1afa
+	.long	GraphicsRender_RetStub
+	.long	GraphicsRender_RetStub
+	.long	GraphicsRender_RetStub
+	.long	ColorBlit_ComputeRectAndBlit
+	.long	GraphicsRender_RetStub
+	.long	GraphicsRender_RetStub
+	.long	0x00fb1a52
+	.long	0x00fb1a7c
+	.long	0x00fb1bdb
+	.long	GraphicsRender_RetStub
+	.long	SeGfx_StaticOp15_FromBuf_Helper
+	.long	GraphicsRender_RetStub
+	.long	0x00fb181f
+	.long	GraphicsRender_RetStub
+	.long	GraphicsRender_RetStub
+	.long	GraphicsRender_RetStub
+	.long	ColorBlit_ByteData
+	.long	0x00fb18ac
+	.long	GraphicsRender_RetStub
+	.long	GraphicsRender_RetStub
+	.long	GraphicsRender_RetStub
+	.long	0x00fb1939
+	.long	GraphicsRender_RetStub
+	.long	0x00fb1c78
+	.long	0x00fb1d48
 ; [nakarest] naka_disk_warning+0x22f8  +0x22f8..+0x2328 (0xeaafa4, 48 B)
 ; [nakarest] purpose not established: layout of 48 B at 0xeaafa4 not derived; readers below
 ; [nakarest] Readers: source references GraphicsRender_Start (display/graphics_text_vga.s: `ld
 ; [nakarest] xiy, GraphicsRender_Start_PtrTable`).
-GraphicsRender_Start_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x22F8, 0x30	; 12 x 32-bit pointer
+GraphicsRender_Start_PtrTable:
+	.long	DrawFunc_Init
+	.long	GraphicsRender_RetStub
+	.long	DrawText_ExtendedLayout
+	.long	ColorBlit_WithPaletteSave
+	.long	ColorBlit_Variant_ByteData
+	.long	DrawFunc_Init_Variant1
+	.long	SeGfx_BoundOp06_Helper
+	.long	DrawText_ExtLayout_Variant1
+	.long	0x00fb25a3
+	.long	0x00fb22a3
+	.long	0x00fb2438
+	.long	0x00fb2346
 ; [nakarest] naka_disk_warning+0x2328  +0x2328..+0x2330 (0xeaafd4, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeaafd4 not derived; readers below
 ; [nakarest] Readers: source references DrawText_LayoutAndRender (display/graphics_text_vga.s:

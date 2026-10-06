@@ -1277,7 +1277,10 @@ SndParam_OutOfMemoryMsg:
 ; (header ported from v10, where the same C layout compiles the v10 bytes; the
 ;  v7 copy is v7/maincpu/ui_widgets/sound_config_lookup.c)
 NakaInst_SoundConfig_LookupTable:
-	.incbin "includes/generated/sound_config_lookup.bin", 0x0, 0x10
+	.long	MIDI_INIT_SEQUENCES
+	.long	MidiInit_Stub1
+	.long	MidiInit_Stub2
+	.long	MidiInit_Stub3
 DataBuf_CopyBulkBitfields_Large_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x10, 0x18
 DSPCfg_ConfigureVoiceSlotA_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x28, 0x10
 DSPCfg_ConfigureVoiceSlotB_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x38, 0x10
