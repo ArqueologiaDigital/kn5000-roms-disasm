@@ -11304,8 +11304,11 @@ MidiSysEx_ProcessBlock_Join:
 	ret
 SeqChan_UnhandledCmd:
 	ret
+SeqChan_UnhandledCmd_0x01:
 	ret
+SeqChan_UnhandledCmd_0x02:
 	ret
+SeqChan_UnhandledCmd_0x03:
 	ret
 MidiPkt_ArpChordHandler_Helper:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -11313,6 +11316,7 @@ MidiPkt_ArpChordHandler_Helper:
 	ret	z
 	calr	MidiSysEx_ProcessBlock_Helper11
 	ret
+SeqChan_UnhandledCmd_0x12:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	(xwa+4), 23
 	jr	MidiSysEx_ProcessBlock_Helper11

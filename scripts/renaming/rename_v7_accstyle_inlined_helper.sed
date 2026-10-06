@@ -1,0 +1,1 @@
+s/\bAccStyle_JumpTable_Data\b/AccStyle_InlinedBlock_Helper/g

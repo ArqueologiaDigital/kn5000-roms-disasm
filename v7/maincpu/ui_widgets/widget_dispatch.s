@@ -1329,12 +1329,12 @@ ArpQueue_ComputeAndEnqueue_Data:	.incbin "includes/generated/sound_config_lookup
 SeqChan_CommandHandlers:
 	.set SeqChan_CommandDispatch_Table, SeqChan_CommandHandlers
 	.long SeqChan_UnhandledCmd
-	.long SeqChan_UnhandledCmd + 1
-	.long SeqChan_UnhandledCmd + 2
+	.long SeqChan_UnhandledCmd_0x01
+	.long SeqChan_UnhandledCmd_0x02
 	.long SeqChan_DispatchByType_Data
 	.long MidiSysEx_ProcessBlock
-	.long MidiPkt_ArpChordHandler_Helper + 14
-	.long SeqChan_UnhandledCmd + 3
+	.long SeqChan_UnhandledCmd_0x12
+	.long SeqChan_UnhandledCmd_0x03
 	.long MidiPkt_InitSingleField_Data
 	.long MidiPkt_HandleCmdCode01
 	.long SeqChan_UnhandledCmd

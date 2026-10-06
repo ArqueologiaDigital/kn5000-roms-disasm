@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 52,936
-#   semantic names ........... 52,101 (98.4%)
-#   positional names ......... 835
+#   symbols .................. 52,947
+#   semantic names ........... 52,108 (98.4%)
+#   positional names ......... 839
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -16145,6 +16145,7 @@ FlashBurn_ProgressLoop 00EF46F0
 FlashBurn_CheckDone 00EF470F
 FlashBurn_Done 00EF4719
 Erase_and_Burn____when_disk_is_valid 00EF471B
+HANDLE_UPDATE_BASE_ADDR 00EF475A
 HANDLE_UPDATE_FILE_TYPE_ID_001h 00EF475A
 HANDLE_UPDATE_FILE_TYPE_ID_003h 00EF477A
 UpdateFile_WriteSectors_AndCleanup 00EF4798
@@ -32298,7 +32299,12 @@ AccStyle_ModeExit 00F5C298
 AccStyle_ModeExit_ClearFlags 00F5C2C6
 AccStyle_ModeExit_Ret 00F5C2CF
 AccStyle_InlinedBlock 00F5C2D0
-AccStyle_JumpTable_Data 00F5C2D6
+AccStyle_InlinedBlock_Helper 00F5C2D6
+AccStyle_InlinedBlock_Skip2 00F5C2FC
+AccStyle_InlinedBlock_Skip3 00F5C440
+AccStyle_InlinedBlock_Skip 00F5C451
+AccStyle_InlinedBlock_Helper_Skip 00F5C46A
+AccStyle_InlinedBlock_Return 00F5C46F
 AccStyle_IndexedLookup_Data 00F5C4B0
 AccVoiceReg_WritePart3 00F5C4D0
 AccVoiceReg_WritePart3_StoreBit4 00F5C4F3
@@ -34640,6 +34646,7 @@ MspRecTtlFunc 00F69B27
 MspRecTtl_Dispatch 00F69B61
 MspRecTtl_Dispatch_Code_Skip 00F69B88
 MspRecTtl_Dispatch_Code_Skip2 00F69BA5
+MspRecTtlFunc_Case3 00F69BAD
 MspRecTtl_SubA 00F69BC2
 MspRecTtl_SubA_CheckRange 00F69BD5
 MspRecTtl_ReturnZero 00F69BF4
@@ -48878,7 +48885,11 @@ MidiSysEx_ProcessBlock_Helper9 00FD7A55
 MidiSysEx_ProcessBlock_Helper10 00FD7A78
 MidiSysEx_ProcessBlock_Join 00FD7A79
 SeqChan_UnhandledCmd 00FD7A90
+SeqChan_UnhandledCmd_0x01 00FD7A91
+SeqChan_UnhandledCmd_0x02 00FD7A92
+SeqChan_UnhandledCmd_0x03 00FD7A93
 MidiPkt_ArpChordHandler_Helper 00FD7A94
+SeqChan_UnhandledCmd_0x12 00FD7AA2
 MidiSysEx_ProcessBlock_Helper11 00FD7AAC
 SeqChan_UnhandledCmd_Join 00FD7AE0
 SeqChan_UnhandledCmd_Join2 00FD7B00

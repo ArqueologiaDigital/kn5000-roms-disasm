@@ -6511,7 +6511,13 @@ MspNameTtlFunc_CaseTable:
 ; MspRecTtlFunc_CaseTable[7].
 ; -----------------------------------------------------------------------------
 MspRecTtlFunc_CaseTable:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B242, 0xE
+	.short	MspRecTtl_Dispatch - MspRecTtl_Dispatch
+	.short	MspRecTtlFunc_Case3 - MspRecTtl_Dispatch
+	.short	MspRecTtl_ReturnZero - MspRecTtl_Dispatch
+	.short	MspRecTtl_ReturnZero - MspRecTtl_Dispatch
+	.short	MspRecTtl_ReturnZero - MspRecTtl_Dispatch
+	.short	MspRecTtl_ReturnZero - MspRecTtl_Dispatch
+	.short	MspRecTtl_ReturnZero - MspRecTtl_Dispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SndArgTtlFunc_CaseTable
 ; SndArgTtlFunc_CaseTable -- jump table of a compiled `switch` in
