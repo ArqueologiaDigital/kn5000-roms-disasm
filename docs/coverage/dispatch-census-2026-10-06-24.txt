@@ -1,0 +1,63 @@
+dispatch-table census, 2026-10-06, measured at d8433c08 (+ uncommitted changes)
+tool: scripts/analysis/dispatch_table_census/ (rules in census.py's docstring)
+
+image      framed  used  NOT   newT newT(x) spellT |   U U-NOT U-newT null | D-unres
+v10           680   680    0      0       0      0 |  22     0      0    3 |       0
+v9            680   680    0      0       0      0 |  22     0      0    3 |       0
+v7            677   677    0      0       0      0 |  25     0      0    2 |       0
+v142           43    43    0      0       0      0 |   0     0      0    0 |       0
+subboot         2     2    0      0       0      0 |   0     0      0    0 |       0
+tabledata      13    13    0      0       0      0 |   0     0      0    0 |       0
+customdata      0     0    0      0       0      0 |   0     0      0    0 |       0
+hdae5000       68    68    0      0       0      0 |   0     0      0    0 |       0
+prom_a        424   421    3     12       0      1 |   0     0      0    0 |       0
+prom_b        291   284    7     44     178      1 |   0     0      0    0 |       0
+prom_c         47    46    1      5       0      0 |   0     0      0    0 |       0
+D-unres: `jp t, (xR+rr)` dispatch sites whose base, table or bound the D detector could not read
+
+distinct new-entry-point targets by blocking class (framed tables, all owners):
+  v10        {}
+  v9         {}
+  v7         {}
+  v142       {}
+  subboot    {}
+  tabledata  {}
+  customdata {}
+  hdae5000   {}
+  prom_a     {'midinsn': 11, 'nolabel': 1}
+  prom_b     {'databyte': 8, 'dataother': 1, 'midinsn': 140, 'nolabel': 69, 'text': 4}
+  prom_c     {'midinsn': 5}
+
+
+== v10: top not-used tables
+
+== v9: top not-used tables
+
+== v7: top not-used tables
+
+== v142: top not-used tables
+
+== subboot: top not-used tables
+
+== tabledata: top not-used tables
+
+== customdata: top not-used tables
+
+== hdae5000: top not-used tables
+
+== prom_a: top not-used tables
+  A 0xF8E77C AddrTable_F8E77C                             entries=8    ptrs=8    unusedT=6    {'midinsn/num': 3, 'numeric': 2, 'midinsn': 2}  prom_a/wsa1_prom_a.s:25805
+  J 0xFAA000 ParamModule_PhaseVector_StaleCopy            entries=5    ptrs=5    unusedT=5    {'midinsn': 4, 'nolabel': 1}  prom_a/wsa1_prom_a.s:77951
+  A 0xF8E7A9 AddrTable_F8E7A9                             entries=9    ptrs=9    unusedT=3    {'midinsn/num': 2, 'numeric': 3}  prom_a/wsa1_prom_a.s:25820
+
+== prom_b: top not-used tables
+  A 0xF014EE PtrArray_F014EE                              entries=196  ptrs=185  unusedT=134  {'nolabel/num': 48, 'midinsn/num': 135, 'numeric': 1}  prom_b/wsa1_prom_b.s:4684
+  A 0xF00762 PtrTable_F00762                              entries=39   ptrs=37   unusedT=22   {'midinsn/num': 31, 'nolabel/num': 6}  prom_b/wsa1_prom_b.s:3110
+  A 0xF0EE6C OldBuild_ValueGlyph_Table                    entries=29   ptrs=29   unusedT=19   {'midinsn': 14, 'nolabel': 5}  prom_b/wsa1_prom_b.s:28671
+  A 0xF00C4E PtrArray_F00C4E                              entries=21   ptrs=21   unusedT=18   {'midinsn/num': 11, 'nolabel/num': 7}  prom_b/wsa1_prom_b.s:3561
+  J 0xF40000 prom_b routine directory                     entries=2002 ptrs=2002 unusedT=18   {'midinsn/num': 5, 'text': 4, 'databyte': 8, 'dataother': 1}  prom_b/wsa1_prom_b.s
+  A 0xF0ED50 OldBuild_DLHandlerTables_Tail                entries=39   ptrs=39   unusedT=12   {'midinsn': 17, 'nolabel': 4}  prom_b/wsa1_prom_b.s:28573
+  A 0xF00340 PtrTable_F00340                              entries=35   ptrs=33   unusedT=1    {'midinsn/num': 7}  prom_b/wsa1_prom_b.s:2733
+
+== prom_c: top not-used tables
+  J 0xFFF0D1 UNREFERENCED_TRAMPOLINES                     entries=5    ptrs=5    unusedT=5    {'midinsn': 5}  prom_c/boot/reset_and_vectors.s:233

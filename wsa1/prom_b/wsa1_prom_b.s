@@ -2019,6 +2019,7 @@
 	.set	T_F42428_Nop, 0xFF7083
 	.set	sub_FF70B6, 0xFF70B6
 	.set	sub_FF70D8, 0xFF70D8
+	.set	DiskScreens_PhaseVector, 0xFF75B6
 	.set	MIDI_UART_Configure_Data, 0xFFFFF8
 ; <<< END prom_a ADDRESS EQUATES
 .equ KERNEL_MEM_OPS_PROVIDED, 1	; records "already provided"; this image does not include the kernel
@@ -89147,6 +89148,9 @@ Default_Record93:
 ; table.  So 23 of these pointers name a 24-byte group of six thunks.  Example
 ; at both ends: T_LCD_EntryThunks = 0x00F8E800, and prom_a 0xF8E800 reads
 ; `jp 0xF8E819` / `jp 0xF8E818` / `jp 0xF8E99F` / three more.
+; ⚠ CORRECTED 2026-10-06: 0xFF75B6 IS a phase vector -- ModuleInitDirectory_F82641[18]'s, through this
+;   slot -- whose six 4-byte slots are short code (`jr` / `nop nop ret`) instead of `jp`, so the thunk-shape
+;   count above saw none.  prom_a labels it DiskScreens_PhaseVector (notes/prom_a_module18_phase_vector.py).
 ;
 ; ⚠ What READS these pointers has not been traced, so what a six-thunk group
 ; means -- a per-object vtable is the obvious guess -- is NOT established.
@@ -91221,7 +91225,9 @@ T_ScreenLeave_SoundEditModelingDriverWaveform:	jp ScreenLeave_SoundEditModelingD
 T_ScreenButton_SoundEditModelingDriverWaveform:	jp ScreenButton_SoundEditModelingDriverWaveform  ; -> prom_a 0x50C07
 T_F421A8:	jp T_F421A8_Nop  ; -> prom_a 0x5E24D
 	.fill 0xA4, 1, 0x0E  ; 0xF421AC: 164 x ret
-T_F42250:	.long 0x00FF75B6	; ptr -> 0xFF75B6 (prom_a 0x775B6)
+; Evidence: slot 0xF42250 is `ptr 0xFF75B6`; prom_a 0xFF75B6 carries the label
+;           DiskScreens_PhaseVector (graded CONTENT).  DERIVATIVE name.
+T_DiskScreens_PhaseVector:	.long DiskScreens_PhaseVector	; F42250 (was T_F42250) ptr -> 0xFF75B6 (prom_a 0x775B6)
 ; Evidence: slot 0xF42254 is `jp 0xFF42B7`; prom_a 0xFF42B7 carries the label
 ;           ModeEnter_SoundCopy (graded CONTENT).  DERIVATIVE name.
 T_ModeEnter_SoundCopy:	jp ModeEnter_SoundCopy  ; F42254 (was T_F42254) -> prom_a 0x742B7

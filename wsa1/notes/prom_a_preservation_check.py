@@ -4947,6 +4947,8 @@ RENAMES = {
     "HandlerTable23_FA1D10": "HandlerTable23_SystemTest",
     "HandlerTable23_FA1D6C": "HandlerTable23_ControllerAssign",
     "HandlerTable23_FA1DED": "HandlerTable23_Initial",
+    "T_F42250": "T_DiskScreens_PhaseVector",
+    ".LFF75CD": "DiskScreens_InitSelectedEntry",   # boot phase 0 of module 18 (notes/prom_a_module18_phase_vector.py)
 }
 
 

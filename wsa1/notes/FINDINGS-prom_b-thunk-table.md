@@ -56,6 +56,10 @@ slots follow each target answers what they point at, sharply:
   else — i.e. each names a 24-byte group of six thunks
 * `0xF57C00` is followed by eight, `0xF53000` by three
 * `0xFF75B6` by none: it is code (`jr T,+0x15`), not a table
+  * ⚠ **Corrected 2026-10-06:** it is a table after all -- module 18's boot phase vector
+    (`ModuleInitDirectory_F82641[18]` reaches it through this slot). Its six 4-byte slots are short
+    code, `jr` / `ret` for phase 0 and `nop / nop / ret` after it, not `jp`, so the thunk-shape count saw
+    none. prom_a now labels it `DiskScreens_PhaseVector` (`notes/prom_a_module18_phase_vector.py`).
 
 Four point into prom_b (`0xF44000`, `0xF53000`, `0xF57C00`, `0xF5A800`), the
 other 22 into prom_a.

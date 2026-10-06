@@ -1701,7 +1701,7 @@
 	.set T_ScreenEnter_SoundEditToneLayerKeyLayer,                                                                      0x00F4217C
 	.set T_ScreenEnter_SoundEditToneLayerVelocityLayer,                                                                      0x00F4218C
 	.set T_ScreenEnter_SoundEditModelingDriverWaveform,                                                                      0x00F4219C
-	.set T_F42250,                                                                      0x00F42250
+	.set T_DiskScreens_PhaseVector,                                                                      0x00F42250
 	.set T_ModeEnter_SoundCopy,                                                                      0x00F42254
 	.set T_ModeEnter_SoundCopy_Call,                                                                      0x00F4225C
 	.set T_Paint_DiskMenu,                                                              0x00F42264
@@ -6967,7 +6967,7 @@ ModuleInitDirectory_F82641:
 	.long T_F40210                                   ; F8267D  [ 15]
 	.long T_F401D0                                   ; F82681  [ 16]
 	.long T_DebugMonitor_PhaseVector                                   ; F82685  [ 17]
-	.long T_F42250                                   ; F82689  [ 18]
+	.long T_DiskScreens_PhaseVector                                   ; F82689  [ 18]
 	.long T_F409C0                                   ; F8268D  [ 19]
 	.long T_Msg0716_InitAllRecords_Entry                                   ; F82691  [ 20]
 	.long T_NoteRouting_PhaseVector                                   ; F82695  [ 21]
@@ -197322,7 +197322,12 @@ UI_StatusCode_Is0or2or4:
 .LFF75B4:
 	popw hl                                              ; FF75B4  4b
 	ret                                                  ; FF75B5  0e
-	jr .LFF75CD                                          ; FF75B6  68 15
+; DiskScreens_PhaseVector: module 18's boot phase vector -- ModuleInitDirectory_F82641[18] reaches it through prom_b's
+;   pointer slot T_DiskScreens_PhaseVector (0xF42250, a word, not a `jp`); the walker calls slot k (4 bytes) for boot
+;   phase k.  The slots are short code: phase 0 `jr DiskScreens_InitSelectedEntry`, phases 1-4 `nop / nop / ret`, and
+;   a sixth slot no phase reaches (notes/prom_a_module18_phase_vector.py).
+DiskScreens_PhaseVector:
+	jr DiskScreens_InitSelectedEntry                                          ; FF75B6  68 15
 	ret                                                  ; FF75B8  0e
 	nop                                                  ; FF75B9  00
 	nop                                                  ; FF75BA  00
@@ -197344,7 +197349,9 @@ UI_StatusCode_Is0or2or4:
 	nop                                                  ; FF75CA  00
 	nop                                                  ; FF75CB  00
 	ret                                                  ; FF75CC  0e
-.LFF75CD:
+; DiskScreens_InitSelectedEntry: boot phase 0 of module 18 -- Disk_SelectedEntry = 0x14, one past the largest entry
+;   (0x13) the Medley code stores.
+DiskScreens_InitSelectedEntry:
 	ld (Disk_SelectedEntry:16), 0x14                                 ; FF75CD  f1 24 27 00 14
 	ret                                                  ; FF75D2  0e
 ; DisplayList_RunOnLayer_SaveRegs(list, xix, layer): LCD_CurrentLayer = layer, then T_DisplayList_Run; C-callable, XIX/XHL/XDE kept.

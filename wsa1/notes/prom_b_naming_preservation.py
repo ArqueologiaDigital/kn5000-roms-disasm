@@ -270,6 +270,20 @@ def main():
             have[c] -= 1
             symbolic += 1
             continue
+        # a renamed slot whose number ALSO became an equate of the same value (the rename helper, then
+        # symbolize_wsa1_rom_addresses.py, on one line; 2026-10-06: T_F42250 -> T_DiskScreens_PhaseVector,
+        # `.long 0x00FF75B6` -> `.long DiskScreens_PhaseVector`), with or without the `(was T_<addr>)` marker
+        if r != ln:
+            cands = [r]
+            mt2 = re.match(r"^(T_([0-9A-F]{6})):", ln)
+            if mt2 and ";" in r:
+                code, _sep, rest = r.partition(";")
+                cands.append(code + "; %s (was %s) %s" % (mt2.group(2), mt2.group(1), rest.strip()))
+            c = next((x for x in map(symbolized, cands) if x is not None), None)
+            if c is not None:
+                have[c] -= 1
+                symbolic += 1
+                continue
         # `Label + 0xN` that became the name of a label now defined AT that address (2026-10-04: a posted painter
         # entry inside another routine's block got its own label); the byte gate checks the address
         if re.search(r"\b\w+ \+ 0x[0-9A-Fa-f]+\b", ln.split(";")[0]):
