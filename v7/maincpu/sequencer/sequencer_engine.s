@@ -25467,7 +25467,7 @@ HelpLang_DispatchDataBlock:
 	cp	e, 2:i3
 	jr	z, HelpLang_DispatchDataBlock_Skip
 	cp	e, 1:i3
-	jr	nz, HelpLang_DispatchDataBlock_Skip4
+	jr	nz, HelpLang_DispatchDataBlock_Skip3
 	ld	xwa, HelpLang_ByteTable1
 	jr	HelpLang_DispatchDataBlock_Join
 HelpLang_DispatchDataBlock_Skip:
@@ -25479,7 +25479,7 @@ HelpLang_DispatchDataBlock_Skip2:
 HelpLang_DispatchDataBlock_Entry:
 	ld	xwa, FontPalette_Gradient7
 	jr	HelpLang_DispatchDataBlock_Join
-HelpLang_DispatchDataBlock_Skip4:
+HelpLang_DispatchDataBlock_Skip3:
 	ld	xwa, HelpLang_ByteTable0
 HelpLang_DispatchDataBlock_Join:
 	ld	a, (xwa+bc)
@@ -29744,10 +29744,10 @@ SeqPart_ByteBlockA207_Code_Skip2:
 SeqPart_ByteBlockA207_Code_Entry:
 	ldmm8	9780, 10359
 	bit	6, (10363:16)
-	jr	z, SeqPart_ByteBlockA207_Skip5
+	jr	z, SeqPart_ByteBlockA207_Skip2
 	cp_erpb	251, 16	; cp qizh,0x10
 	call	z, (15993411:24)
-SeqPart_ByteBlockA207_Skip5:
+SeqPart_ByteBlockA207_Skip2:
 	calr	SeqPart_ByteBlockA207_Code_Helper
 	jrl	SeqPart_ByteBlockA207_Join
 SeqPart_ByteBlockA207_Code_Skip3:

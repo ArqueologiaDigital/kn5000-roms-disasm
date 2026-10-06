@@ -176,3 +176,6 @@ s/\bMainPmanCtrl_Case5\b/MainPmanCtrl_OnLswPartGet/g
 # run 2026-10-06 (outlier anchors dropped)
 s/\bMidiStream_ExtDispatch_ModeJump1_Skip7\b/MidiStream_ExtDispatch_ModeJump1_Skip8/g
 s/\bMidiVoice_DataBlockHandler_Skip\b/MidiVoice_DataBlockHandler_Skip4/g
+# run 2026-10-06
+s/\bMidiStream_ExtDispatch_ModeJump1_Skip6\b/MidiStream_ExtDispatch_ModeJump1_Skip7/g
+s/\bMidiPartCC_WriteAndDispatch_Skip2\b/MidiVoice_DataBlockHandler_Skip/g

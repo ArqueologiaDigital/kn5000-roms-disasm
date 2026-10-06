@@ -3579,11 +3579,11 @@ FileIO_ByteBlock_DemoProc1_Skip21:
 	ld	wa, 4:i3
 	calr	FileIO_CheckRegionSignature
 	cp	hl, 0:i3
-	jr	nz, FileIO_ByteBlock_DemoProc1_Entry
+	jr	nz, FileIO_ByteBlock_DemoProc1_Skip22
 	call	FileIO_CloseHandle
 	ldw	hl, 65434
 	jrl	FileIO_ByteBlock_DemoProc1_Epilogue6
-FileIO_ByteBlock_DemoProc1_Entry:
+FileIO_ByteBlock_DemoProc1_Skip22:
 	cpw	(xsp+38), 2
 	jr	nc, FileIO_ByteBlock_DemoProc1_Skip23
 	ldw	(xsp+8), 9400

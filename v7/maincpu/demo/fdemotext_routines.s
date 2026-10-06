@@ -1344,14 +1344,17 @@ FDemoText_ReadTaggedBlock:
 	ldw (XSP+0x02), 0x0001
 	jr t, .Lc_f84f37
 .Lc_f84f20:
+FDemoText_ReadTaggedBlock_Loop:
 	cp HL,0x003c
 	jr nz, .Lc_f84f37
 	ld iz, 1:i3
 .Lc_f84f28:
+FDemoText_ReadTaggedBlock_Loop2:
 	call FileIO_ReadByte
 	cp hl, 0:i3
 	jr ge, .Lc_f84f4c
 .Lc_f84f30:
+FDemoText_ReadTaggedBlock_Loop3:
 	cpw (XSP+0x02), 0x0000
 	jr z, .Lc_f84f3f
 .Lc_f84f37:
@@ -1374,6 +1377,7 @@ FDemoText_ReadTaggedBlock:
 	jr nz, .Lc_f84f28
 	ldw (XSP+0x02), 0x0000
 .Lc_f84f69:
+FDemoText_ReadTaggedBlock_Skip:
 	ld xwa, 0:i3
 	ld (XSP+0x04),XWA
 .Lc_f84f6e:
@@ -1386,6 +1390,7 @@ FDemoText_ReadTaggedBlock:
 	ldw HL, 0xfffc
 	jrl t, .Lc_f85012
 .Lc_f84f84:
+FDemoText_ReadTaggedBlock_Skip2:
 	cp HL,0x000d
 	jr z, .Lc_f84fb3
 	cp HL,0x000a
@@ -1408,10 +1413,12 @@ FDemoText_ReadTaggedBlock:
 	jr nz, .Lc_f84f6e
 	ld iz, 1:i3
 .Lc_f84fbb:
+FDemoText_ReadTaggedBlock_Loop4:
 	call FileIO_ReadByte
 	cp hl, 0:i3
 	jr ge, .Lc_f84fcc
 .Lc_f84fc3:
+FDemoText_ReadTaggedBlock_Loop5:
 	cpw (XSP+0x02), 0x0001
 	jr z, .Lc_f84f76
 	jr t, .Lc_f84f6e
@@ -1429,6 +1436,7 @@ FDemoText_ReadTaggedBlock:
 	ldw HL, 0xfffb
 	jr t, .Lc_f85012
 .Lc_f84fe8:
+FDemoText_ReadTaggedBlock_Skip3:
 	ld XBC,(XSP+0x1c)
 	ld	a, (xbc+iz)
 	extz WA
@@ -1443,6 +1451,7 @@ FDemoText_ReadTaggedBlock:
 	ld (XWA),0x00
 	jr t, .Lc_f84fc3
 .Lc_f85010:
+FDemoText_ReadTaggedBlock_Skip4:
 	ld hl, 0:i3
 .Lc_f85012:
 	popw iz
@@ -1782,7 +1791,7 @@ FDemoText_ByteData_TextRenderer_Loop:
 	ld	xbc, xwa
 	ld	a, (xwa)
 	cp	a, 34
-	jr	nz, FDemoText_ProcessTextMarkup_Skip
+	jr	nz, FDemoText_ByteData_TextRenderer_Skip
 	inc	1, iz
 	lda	xwa, (xde+iz)
 	push	xwa
@@ -1798,7 +1807,7 @@ FDemoText_ByteData_TextRenderer_Loop:
 	add	xhl, (xsp+18)
 	ld	(xhl), 0
 	jr	FDemoText_ByteData_TextRenderer_Skip2
-FDemoText_ProcessTextMarkup_Skip:
+FDemoText_ByteData_TextRenderer_Skip:
 	push	xbc
 	ld	xwa, (xsp+22)
 	push	xwa

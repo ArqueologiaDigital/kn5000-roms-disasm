@@ -9765,13 +9765,13 @@ MidiVoice_DataBlockHandler:
 	ld	xiy, 0x91b7
 	ld	(0x90e4:16), 0
 	call	PartCtrl_CheckBitmaskBit
-	jr	nc, MidiPartCC_WriteAndDispatch_Skip2
+	jr	nc, MidiVoice_DataBlockHandler_Skip
 	or	(0x90e4:16), 32
 	ld	wa, (xiy)
 	ld	(MIDI_MSG_STATUS:16), wa
 	ld	wa, (xiy+0x2)
 	ld	(MIDI_MSG_DATA2:16), wa
-MidiPartCC_WriteAndDispatch_Skip2:
+MidiVoice_DataBlockHandler_Skip:
 	extz	hl
 	ldb_d8	l, (0x91c8)
 	ld	xix, 0x90ce
@@ -11838,13 +11838,13 @@ MidiStream_ExtDispatch_ModeJump1:
 	srl	a, 4
 	and	a, 15
 	cp	c, 20
-	jr	z, MidiStream_ExtDispatch_ModeJump1_Skip6
+	jr	z, MidiStream_ExtDispatch_ModeJump1_Skip7
 	cp	a, 2:i3
-	jr	c, MidiStream_ExtDispatch_ModeJump1_Skip6
+	jr	c, MidiStream_ExtDispatch_ModeJump1_Skip7
 	cp	a, 6:i3
-	jr	nc, MidiStream_ExtDispatch_ModeJump1_Skip6
+	jr	nc, MidiStream_ExtDispatch_ModeJump1_Skip7
 	xor	a, a
-MidiStream_ExtDispatch_ModeJump1_Skip6:
+MidiStream_ExtDispatch_ModeJump1_Skip7:
 	set	7, a
 	jr	MidiStream_ExtDispatch_ModeJump3_Join2
 MidiStream_ExtDispatch_ModeJump1_Skip8:

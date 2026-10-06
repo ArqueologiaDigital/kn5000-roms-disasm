@@ -2298,6 +2298,7 @@ Flash_AssignSlotsToBlocks:
 	ld L, 0x00:opc
 	ld xbc, (FLASH_SECTION_PTR_7:16)
 .Lc_f17377:
+Flash_AssignSlotsToBlocks_Loop:
 	ld A,L
 	extz WA
 	add WA,0x0050
@@ -2307,6 +2308,7 @@ Flash_AssignSlotsToBlocks:
 	cp A,(XSP+0x02)
 	jr nz, .Lc_f173a0
 .Lc_f1738d:
+Flash_AssignSlotsToBlocks_Skip:
 	lda xbc, (0x07a0:16)
 	ld WA,(XIX)
 	ld (XBC),WA
@@ -2315,14 +2317,17 @@ Flash_AssignSlotsToBlocks:
 	ld (XBC+0x02),HL
 	jr t, .Lc_f173a6
 .Lc_f173a0:
+Flash_AssignSlotsToBlocks_Skip2:
 	inc 1,L
 	cp l, 4:i3
 	jr c, .Lc_f17377
 .Lc_f173a6:
+Flash_AssignSlotsToBlocks_Join:
 	ld H, 0x00:opc
 	ld L, 0x00:opc
 	lds_erpb 0xea, 0
 .Lc_f173ad:
+Flash_AssignSlotsToBlocks_Loop2:
 	ld_erpb_rr a, 0xea
 	extz WA
 	add WA,WA
@@ -2333,6 +2338,7 @@ Flash_AssignSlotsToBlocks:
 	cp L,0x28
 	jr nc, .Lc_f17415
 .Lc_f173c6:
+Flash_AssignSlotsToBlocks_Loop3:
 	ld E,L
 	extz DE
 	add DE,0x0010
@@ -2343,6 +2349,7 @@ Flash_AssignSlotsToBlocks:
 	cp A,(XSP+0x02)
 	jr nz, .Lc_f1740e
 .Lc_f173e0:
+Flash_AssignSlotsToBlocks_Skip3:
 	ld E,H
 	extz DE
 	sla de, 2
@@ -2361,6 +2368,7 @@ Flash_AssignSlotsToBlocks:
 	inc 1,L
 	jr t, .Lc_f17415
 .Lc_f1740e:
+Flash_AssignSlotsToBlocks_Skip4:
 	inc 1,L
 	cp L,0x28
 	jr c, .Lc_f173c6
@@ -2369,6 +2377,7 @@ Flash_AssignSlotsToBlocks:
 	cp_erpb 0xea, 0x32
 	jr c, .Lc_f173ad
 .Lc_f1741e:
+Flash_AssignSlotsToBlocks_Epilogue:
 	popw iz
 	inc 2,XSP
 	ret

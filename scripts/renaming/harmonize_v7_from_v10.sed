@@ -166,3 +166,9 @@ s/\bPortConfig_Handler_0_Skip3\b/PortConfig_Handler_0_Helper_Skip/g
 s/\bMemConfig_Handler_1_Return\b/MemConfig_Handler_1_Return3/g
 s/\bSeqAccomp_SubChain_Case11\b/SeqAccomp_SubChain_DecSoloEnable/g
 s/\bSeScreenData_0x178B\b/SeMenu_Utility_CompareBlock_Data_2/g
+# run 2026-10-06
+s/\bPerfMode_Handler_EvtB_Helper2_Helper2\b/PortConfig_Handler_0_Helper/g
+s/\bHelpLang_DispatchDataBlock_Skip4\b/HelpLang_DispatchDataBlock_Skip3/g
+s/\bFDemoText_ProcessTextMarkup_Skip\b/FDemoText_ByteData_TextRenderer_Skip/g
+s/\bFileIO_ByteBlock_DemoProc1_Entry\b/FileIO_ByteBlock_DemoProc1_Skip22/g
+s/\bSeqPart_ByteBlockA207_Skip5\b/SeqPart_ByteBlockA207_Skip2/g

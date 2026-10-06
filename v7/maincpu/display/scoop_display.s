@@ -6940,7 +6940,7 @@ PerfMode_Handler_EvtB_Helper2:
 	res 7, (0x0d54:16)
 	call PortConfig_Handler_0_Loop
 	call SeqBuf_Init
-	call PerfMode_Handler_EvtB_Helper2_Helper2
+	call PortConfig_Handler_0_Helper
 	call PerfMode_Handler_EvtB_Helper2_Helper9
 	call BitMapOut_ComputeRegionDelta
 	call Timer_ModeHandler_0_Helper2
@@ -7376,10 +7376,11 @@ PortConfig_Handler_0_Helper2:
 	call PortConfig_Handler_0_Helper5
 	jp PortConfig_Handler_0_Return2
 .Lc_efa641:
+PortConfig_Handler_0_Skip3:
 	call Timer_ParamCompareAlt_Helper6
 PortConfig_Handler_0_Return2:
 	ret
-PerfMode_Handler_EvtB_Helper2_Helper2:
+PortConfig_Handler_0_Helper:
 	call	VoiceSlot_ComputeIndex
 	push	xde
 	ld	xde, 62032

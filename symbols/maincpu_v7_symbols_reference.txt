@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,448
-#   semantic names ........... 52,716 (98.6%)
+#   symbols .................. 53,467
+#   semantic names ........... 52,735 (98.6%)
 #   positional names ......... 732
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -17470,8 +17470,9 @@ PortConfig_Handler_0_Skip2 00EFA5EA
 PortConfig_Handler_0_Join 00EFA5F6
 PortConfig_Handler_0_Helper6 00EFA5FB
 PortConfig_Handler_0_Helper2 00EFA612
+PortConfig_Handler_0_Skip3 00EFA641
 PortConfig_Handler_0_Return2 00EFA645
-PerfMode_Handler_EvtB_Helper2_Helper2 00EFA646
+PortConfig_Handler_0_Helper 00EFA646
 PortConfig_Handler_0_Helper_Skip 00EFA67D
 PortConfig_Handler_0_Return 00EFA6A9
 SqStep_SetDisplayModeFromTrack 00EFA6AA
@@ -21594,6 +21595,15 @@ Flash_StoreBaseAndInitAccPatch_Loop2 00F172F7
 Flash_StoreBaseAndInitAccPatch_Epilogue 00F17334
 Flash_StoreBaseAndInitAccPatch_Skip2 00F17359
 Flash_AssignSlotsToBlocks 00F1735E
+Flash_AssignSlotsToBlocks_Loop 00F17377
+Flash_AssignSlotsToBlocks_Skip 00F1738D
+Flash_AssignSlotsToBlocks_Skip2 00F173A0
+Flash_AssignSlotsToBlocks_Join 00F173A6
+Flash_AssignSlotsToBlocks_Loop2 00F173AD
+Flash_AssignSlotsToBlocks_Loop3 00F173C6
+Flash_AssignSlotsToBlocks_Skip3 00F173E0
+Flash_AssignSlotsToBlocks_Skip4 00F1740E
+Flash_AssignSlotsToBlocks_Epilogue 00F1741E
 Flash_InitBytecodeBlock_Helper2 00F17422
 Flash_InitBytecodeBlock_Helper_Skip5 00F17441
 Flash_InitBytecodeBlock_Helper_Loop4 00F17450
@@ -29104,7 +29114,7 @@ HelpLang_DispatchDataBlock 00F47659
 HelpLang_DispatchDataBlock_Skip 00F476A2
 HelpLang_DispatchDataBlock_Skip2 00F476A9
 HelpLang_DispatchDataBlock_Entry 00F476B0
-HelpLang_DispatchDataBlock_Skip4 00F476B7
+HelpLang_DispatchDataBlock_Skip3 00F476B7
 HelpLang_DispatchDataBlock_Join 00F476BC
 HelpLang_DispatchDataBlock_Skip5 00F476E3
 HelpLang_DispatchDataBlock_Skip6 00F47705
@@ -29519,7 +29529,7 @@ SeqPart_ByteBlockA207_Skip 00F49E34
 SeqPart_ByteBlockA207_Code_Skip 00F49E6A
 SeqPart_ByteBlockA207_Code_Skip2 00F49E77
 SeqPart_ByteBlockA207_Code_Entry 00F49E89
-SeqPart_ByteBlockA207_Skip5 00F49E9E
+SeqPart_ByteBlockA207_Skip2 00F49E9E
 SeqPart_ByteBlockA207_Code_Skip3 00F49EA4
 SeqPart_ByteBlockA207_Loop 00F49EA7
 SeqPart_ByteBlockA207_Code_Skip4 00F49EC7
@@ -38429,6 +38439,15 @@ FDemoText_ByteData_DisplayRefresh_Skip3 00F84EDE
 FDemoText_ByteData_DisplayRefresh_Skip4 00F84EE7
 FDemoText_ByteData_DisplayRefresh_Epilogue2 00F84F05
 FDemoText_ReadTaggedBlock 00F84F0C
+FDemoText_ReadTaggedBlock_Loop 00F84F20
+FDemoText_ReadTaggedBlock_Loop2 00F84F28
+FDemoText_ReadTaggedBlock_Loop3 00F84F30
+FDemoText_ReadTaggedBlock_Skip 00F84F69
+FDemoText_ReadTaggedBlock_Skip2 00F84F84
+FDemoText_ReadTaggedBlock_Loop4 00F84FBB
+FDemoText_ReadTaggedBlock_Loop5 00F84FC3
+FDemoText_ReadTaggedBlock_Skip3 00F84FE8
+FDemoText_ReadTaggedBlock_Skip4 00F85010
 FDemoText_ProcessTextMarkup 00F85019
 FDemoText_ProcessMarkup_CheckTagOpen 00F85036
 FDemoText_ProcessMarkup_LookupTag 00F85047
@@ -38455,7 +38474,7 @@ FDemoText_ProcessMarkup_Done 00F85229
 FDemoText_ProcessMarkup_Return 00F8522B
 FDemoText_ByteData_TextRenderer 00F85230
 FDemoText_ByteData_TextRenderer_Loop 00F85295
-FDemoText_ProcessTextMarkup_Skip 00F852EC
+FDemoText_ByteData_TextRenderer_Skip 00F852EC
 FDemoText_ByteData_TextRenderer_Skip3 00F852F9
 FDemoText_ByteData_TextRenderer_Skip2 00F85306
 FDemoText_TextDispatch 00F85317
@@ -38917,7 +38936,7 @@ FileIO_ByteBlock_DemoProc1_Epilogue5 00F88218
 FileIO_ByteBlock_DemoProc1_0x4AC 00F8821D
 FileIO_ByteBlock_DemoProc1_Skip20 00F88235
 FileIO_ByteBlock_DemoProc1_Skip21 00F88270
-FileIO_ByteBlock_DemoProc1_Entry 00F88283
+FileIO_ByteBlock_DemoProc1_Skip22 00F88283
 FileIO_ByteBlock_DemoProc1_Skip23 00F882C6
 FileIO_ByteBlock_DemoProc1_Join6 00F882DC
 FileIO_ByteBlock_DemoProc1_Skip24 00F88315
