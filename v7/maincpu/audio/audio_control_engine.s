@@ -171,8 +171,8 @@ PanelButton_ModeKey_Skip:
 	cp	a, 3:i3
 	jr	z, PanelButton_ModeKey_Skip2
 	cp	a, 1:i3
-	.ascii	"n=@.ùÌ"
-	nop
+	jr	nz, PanelButton_ModeKey_Epilogue
+	ld	xwa, PanelButton_ModeKeyCodes
 	jr	PanelButton_ModeKey_Join2
 PanelButton_ModeKey_Skip2:
 	ld	xwa, FileIO_BytecodeData_Data
@@ -199,6 +199,7 @@ PanelButton_ModeKey_Skip7:
 	ld	xwa, xiz
 PanelButton_ModeKey_Join3:
 	calr	PanelEvent_Post
+PanelButton_ModeKey_Epilogue:
 	pop	xiz
 	ret
 FileIO_BytecodeData_Code_Helper:

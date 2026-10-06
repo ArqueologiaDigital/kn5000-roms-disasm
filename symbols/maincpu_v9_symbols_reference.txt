@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,307
-#   semantic names ........... 52,562 (98.6%)
+#   symbols .................. 53,308
+#   semantic names ........... 52,563 (98.6%)
 #   positional names ......... 745
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -46648,6 +46648,7 @@ PanelButton_ModeKey_Skip6 00FC59A3
 PanelButton_ModeKey_Join2 00FC59A8
 PanelButton_ModeKey_Skip7 00FC59B1
 PanelButton_ModeKey_Join3 00FC59BA
+PanelButton_ModeKey_Epilogue 00FC59BD
 FileIO_BytecodeData_Code_Helper 00FC59BF
 FileIO_BytecodeData_Code_Skip11 00FC59D8
 FileIO_BytecodeData_Code_Skip12 00FC5A01
