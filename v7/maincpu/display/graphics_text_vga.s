@@ -1208,7 +1208,7 @@ DrawText_ExtLayout_NullAndDraw:
 	and a, 0x3f
 	extz wa
 	sla wa, 2
-	lda xbc, (Scoop_EnvelopeCalc_Data_2:24)
+	lda xbc, (TextStyle_FontTable:24)
 	ld	xbc, (xbc+wa)
 	lda xwa, (xsp+276)
 	push xbc
@@ -1364,7 +1364,7 @@ DrawFunc_Init_PushFontAndDraw:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
+	lda	xbc, (TextStyle_FontTable:24)
 	ld	xhl, (xbc+wa)
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
@@ -1474,7 +1474,7 @@ DrawFunc_Init_Join4:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
+	lda	xbc, (TextStyle_FontTable:24)
 	ld	xhl, (xbc+wa)
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
@@ -1532,7 +1532,7 @@ AccDraw_Secondary_Helper20:
 	and A,0x3f
 	extz WA
 	sla WA, 0x02
-	lda xbc, (Scoop_EnvelopeCalc_Data_2:24)
+	lda xbc, (TextStyle_FontTable:24)
 	ld	xhl, (xbc+wa)
 	lda xwa, (xsp + 0x0108)
 	lda xbc, (xsp + 0x0104)
@@ -2227,7 +2227,7 @@ HexCharToNibble_Invalid:
 FontGlyph_ByteData:
 	ld	a, (xwa)
 	extz	wa
-	lda	xde, (TextRender_CharEncodeAndDraw_Data:24)
+	lda	xde, (Text_CharGlyphMap:24)
 	ld	a, (xde+wa)
 	ld	(xbc), a
 	ret
@@ -2243,7 +2243,7 @@ FontGlyph_ByteData_Skip:
 	ret
 FontGlyph_ByteData_Skip2:
 	ld	de, 0:i3
-	lda	xhl, (TextRender_CharEncodeAndDraw_Data:24)
+	lda	xhl, (Text_CharGlyphMap:24)
 	ld	a, (xwa)
 FontGlyph_ByteData_Loop:
 	cp	(xhl+de), a

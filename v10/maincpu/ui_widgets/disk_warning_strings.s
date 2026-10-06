@@ -1322,15 +1322,10 @@ DrawText_LayoutAndRender_Variant1_Data_4:
 ; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data_5`).
 DrawText_LayoutAndRender_Variant1_Data_5:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2350, 0x8
-; [nakarest] naka_disk_warning+0x2358  +0x2358..+0x2458 (0xeab004, 256 B)
-; [nakarest] purpose not established: layout of 256 B at 0xeab004 not derived; readers below
-; [nakarest] Readers: source references DrawFunc_Init_Join2 (display/graphics_text_vga.s: `lda
-; [nakarest] xbc, (Scoop_EnvelopeCalc_Data_2:24)`), DrawFunc_Init_Join3 (display/graphics_text_vga.s: `lda
-; [nakarest] xbc, (Scoop_EnvelopeCalc_Data_2:24)`), DrawFunc_Init_PushFontAndDraw
-; [nakarest] (display/graphics_text_vga.s: `lda xbc, (Scoop_EnvelopeCalc_Data_2:24)`),
-; [nakarest] DrawText_ExtLayout_NullAndDraw (display/graphics_text_vga.s: `lda xbc,
-; [nakarest] (Scoop_EnvelopeCalc_Data_2:24)`), 5 more.
-Scoop_EnvelopeCalc_Data_2:
+; TextStyle_FontTable -- 64 x u32, text style (record byte & 0x3f) -> font index (table_data/fonts.s);
+; the readers in display/graphics_text_vga.s pass the entry to DrawText_QueueOrDirect as the font.
+; Typed in ui_widgets/naka_disk_warning.c (scripts/converters/text_tables_retype.py).
+TextStyle_FontTable:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2358, 0x100
 ; [nakarest] naka_disk_warning+0x2458  +0x2458..+0x2468 (0xeab104, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeab104 not derived; readers below
@@ -1497,12 +1492,11 @@ DrawFunc_Init_Entry5_Str_Fmt2d_2:	.incbin "includes/generated/naka_disk_warning.
 ; [nakarest] it; reached through source references DrawFunc_Init_Join6
 ; [nakarest] (display/graphics_text_vga.s: `ld xwa, DrawFunc_Init_Entry5_Str_Fmt3d_2`).
 DrawFunc_Init_Entry5_Str_Fmt3d_2:	.incbin "includes/generated/naka_disk_warning.bin", 0x2504, 0x4	; "%3d"
-; [nakarest] naka_disk_warning+0x2508  +0x2508..+0x2608 (0xeab1b4, 256 B)
-; [nakarest] purpose not established: layout of 256 B at 0xeab1b4 not derived; readers below
-; [nakarest] Readers: source references FontGlyph_ByteData (display/graphics_text_vga.s: `lda
-; [nakarest] xde, (TextRender_CharEncodeAndDraw_Data:24)`), TextRender_CharEncodeAndDraw
-; [nakarest] (kn5000_v10_program.s: `lda xde, (0xeab1b4:24)`).
-TextRender_CharEncodeAndDraw_Data:
+; Text_CharGlyphMap -- 256 x u8, character code -> font glyph code: ASCII to itself except '\' -> 0xA5,
+; 0x10-0x1F to UI-symbol glyphs, 0x80-0xAB to the Latin-1 letters of the fonts' accent page.
+; FontGlyph_ByteData maps through it; the routine after it searches it for the reverse.
+; Typed in ui_widgets/naka_disk_warning.c (scripts/converters/text_tables_retype.py).
+Text_CharGlyphMap:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2508, 0x100
 ; [nakarest] naka_disk_warning+0x2608  +0x2608..+0x263c (0xeab2b4, 52 B)
 ; [nakarest] the table itself: ApFunction slot 0x120 (table 0xeab2b4, 12 entries,

@@ -2932,7 +2932,7 @@ TextRender_CharEncodeAndDraw:
 	ld xhl, (xsp + 30)
 	ld c, (xhl)
 	extz bc
-	lda xde, (TextRender_CharEncodeAndDraw_Data:24)
+	lda xde, (Text_CharGlyphMap:24)
 	ld	c, (xde+bc)
 	ld (xhl), c
 	ld xbc, (xsp + 4)

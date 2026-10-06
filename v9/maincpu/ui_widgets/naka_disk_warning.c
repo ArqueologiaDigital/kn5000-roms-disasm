@@ -1705,13 +1705,16 @@ typedef struct __attribute__((packed)) {
     uint16_t field_225e;
     uint16_t field_2260;
     uint16_t field_2262;
-    uint32_t ptrs_22[68];  /* 68 pointers */
-    uint16_t field_2374;
-    uint8_t pad_213[2];  /* zero padding */
-    uint16_t field_2378;
-    uint8_t pad_214[94];  /* zero padding */
-    uint16_t field_23d8;
-    uint8_t pad_215[126];  /* zero padding */
+    /* Pad_AfterStr_No_Tail: the last bytes of the asm slice Pad_AfterStr_No */
+    uint8_t Pad_AfterStr_No_Tail[4];
+    /* GraphicsRender_ProcessEntries_PtrTable: the static display-record handler of each op (scripts/tools/label_segfx_ops.py) */
+    uint32_t GraphicsRender_ProcessEntries_PtrTable[36];
+    /* GraphicsRender_Start_PtrTable: the bound display-record handler of each op */
+    uint32_t GraphicsRender_Start_PtrTable[12];
+    /* SeGfx_TextClipBoxes: {x0, y0, x1, y1} copied by the six text handlers (static ops 06, 07, 08, 17, 1C, 20): the full screen */
+    uint16_t SeGfx_TextClipBoxes[6][4];
+    /* TextStyle_FontTable: text style (& 0x3f) -> font index passed to DrawText_QueueOrDirect (read in display/graphics_text_vga.s) */
+    uint32_t TextStyle_FontTable[64];
     uint16_t field_2458;
     uint16_t field_245a;
     uint16_t field_245c;
@@ -1756,134 +1759,8 @@ typedef struct __attribute__((packed)) {
     char DrawFunc_Init_Entry5_Str_Fmt1d[4];
     char DrawFunc_Init_Entry5_Str_Fmt2d_2[4];
     char DrawFunc_Init_Entry5_Str_Fmt3d_2[4];
-    uint16_t field_2508;
-    uint16_t field_250a;
-    uint16_t field_250c;
-    uint16_t field_250e;
-    uint16_t field_2510;
-    uint16_t field_2512;
-    uint16_t field_2514;
-    uint16_t field_2516;
-    uint16_t field_2518;
-    uint16_t field_251a;
-    uint16_t field_251c;
-    uint16_t field_251e;
-    uint16_t field_2520;
-    uint16_t field_2522;
-    uint16_t field_2524;
-    uint16_t field_2526;
-    uint16_t field_2528;
-    uint16_t field_252a;
-    uint16_t field_252c;
-    uint16_t field_252e;
-    uint16_t field_2530;
-    uint16_t field_2532;
-    uint16_t field_2534;
-    uint16_t field_2536;
-    uint16_t field_2538;
-    uint16_t field_253a;
-    uint16_t field_253c;
-    uint16_t field_253e;
-    uint16_t field_2540;
-    uint16_t field_2542;
-    uint16_t field_2544;
-    uint16_t field_2546;
-    uint16_t field_2548;
-    uint16_t field_254a;
-    uint16_t field_254c;
-    uint16_t field_254e;
-    uint16_t field_2550;
-    uint16_t field_2552;
-    uint16_t field_2554;
-    uint16_t field_2556;
-    uint16_t field_2558;
-    uint16_t field_255a;
-    uint16_t field_255c;
-    uint16_t field_255e;
-    uint16_t field_2560;
-    uint16_t field_2562;
-    uint16_t field_2564;
-    uint16_t field_2566;
-    uint16_t field_2568;
-    uint16_t field_256a;
-    uint16_t field_256c;
-    uint16_t field_256e;
-    uint16_t field_2570;
-    uint16_t field_2572;
-    uint16_t field_2574;
-    uint16_t field_2576;
-    uint16_t field_2578;
-    uint16_t field_257a;
-    uint16_t field_257c;
-    uint16_t field_257e;
-    uint16_t field_2580;
-    uint16_t field_2582;
-    uint16_t field_2584;
-    uint16_t field_2586;
-    uint16_t field_2588;
-    uint16_t field_258a;
-    uint16_t field_258c;
-    uint16_t field_258e;
-    uint16_t field_2590;
-    uint16_t field_2592;
-    uint16_t field_2594;
-    uint16_t field_2596;
-    uint16_t field_2598;
-    uint16_t field_259a;
-    uint16_t field_259c;
-    uint16_t field_259e;
-    uint16_t field_25a0;
-    uint16_t field_25a2;
-    uint16_t field_25a4;
-    uint16_t field_25a6;
-    uint16_t field_25a8;
-    uint16_t field_25aa;
-    uint16_t field_25ac;
-    uint16_t field_25ae;
-    uint16_t field_25b0;
-    uint16_t field_25b2;
-    uint16_t field_25b4;
-    uint16_t field_25b6;
-    uint16_t field_25b8;
-    uint16_t field_25ba;
-    uint16_t field_25bc;
-    uint16_t field_25be;
-    uint16_t field_25c0;
-    uint16_t field_25c2;
-    uint16_t field_25c4;
-    uint16_t field_25c6;
-    uint16_t field_25c8;
-    uint16_t field_25ca;
-    uint16_t field_25cc;
-    uint16_t field_25ce;
-    uint16_t field_25d0;
-    uint16_t field_25d2;
-    uint16_t field_25d4;
-    uint16_t field_25d6;
-    uint16_t field_25d8;
-    uint16_t field_25da;
-    uint16_t field_25dc;
-    uint16_t field_25de;
-    uint16_t field_25e0;
-    uint16_t field_25e2;
-    uint16_t field_25e4;
-    uint16_t field_25e6;
-    uint16_t field_25e8;
-    uint16_t field_25ea;
-    uint16_t field_25ec;
-    uint16_t field_25ee;
-    uint16_t field_25f0;
-    uint16_t field_25f2;
-    uint16_t field_25f4;
-    uint16_t field_25f6;
-    uint16_t field_25f8;
-    uint16_t field_25fa;
-    uint16_t field_25fc;
-    uint16_t field_25fe;
-    uint16_t field_2600;
-    uint16_t field_2602;
-    uint16_t field_2604;
-    uint16_t field_2606;
+    /* Text_CharGlyphMap: character code -> font glyph code (FontGlyph_ByteData, display/graphics_text_vga.s) */
+    uint8_t Text_CharGlyphMap[256];
     uint32_t ptrs_24[26];  /* 26 pointers */
     char w11_code[2];
     char ApTaskControl_name[14];
@@ -6001,88 +5878,41 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_2262 = 0xFCFD,
 
-    .ptrs_22 = {
-        0x00F9FAFB,
-        NAKA_ADDR(SeGfx_StaticOp00_Line),
-        NAKA_ADDR(SeGfx_StaticOp01_Line),
-        NAKA_ADDR(SeGfx_StaticOp02_Line),
-        NAKA_ADDR(SeGfx_StaticOp03_Bitmap),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(SeGfx_StaticOp05_FillBoxMode1),
-        NAKA_ADDR(SeGfx_StaticOp06_CellTextFont0),
-        NAKA_ADDR(SeGfx_StaticOp07_CellTextFont1),
-        NAKA_ADDR(SeGfx_StaticOp08_CellTextFont2),
-        NAKA_ADDR(SeGfx_StaticOp09_Box),
-        NAKA_ADDR(SeGfx_StaticOp0A_ShadowBox2),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(ColorBlit_ComputeRectAndBlit),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(SeGfx_StaticOp11_DottedLine),
-        NAKA_ADDR(SeGfx_StaticOp12_DottedLine),
-        NAKA_ADDR(SeGfx_StaticOp13_DottedBox),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(SeGfx_StaticOp15_DottedLine),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(SeGfx_StaticOp17_PixelTextFont3),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(ColorBlit_ByteData),
-        NAKA_ADDR(SeGfx_StaticOp1C_PixelTextFont4),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(SeGfx_StaticOp20_CellTextFont6),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(SeGfx_StaticOp22_ShadowBox1),
-        NAKA_ADDR(SeGfx_StaticOp23_DesignBox),
-        NAKA_ADDR(DrawFunc_Init),
-        NAKA_ADDR(GraphicsRender_RetStub),
-        NAKA_ADDR(DrawText_ExtendedLayout),
-        NAKA_ADDR(ColorBlit_WithPaletteSave),
-        NAKA_ADDR(ColorBlit_Variant_ByteData),
-        NAKA_ADDR(DrawFunc_Init_Variant1),
-        NAKA_ADDR(SeGfx_BoundOp06_Helper),
-        NAKA_ADDR(DrawText_ExtLayout_Variant1),
-        0x00FB25A3,
-        0x00FB22A3,
-        0x00FB2438,
-        0x00FB2346,
-        0x00000000,
-        NAKA_ADDR(Naka_PresentationRootState),
-        0x00000000,
-        NAKA_ADDR(Naka_PresentationRootState),
-        0x00000000,
-        NAKA_ADDR(Naka_PresentationRootState),
-        0x00000000,
-        NAKA_ADDR(Naka_PresentationRootState),
-        0x00000000,
-        NAKA_ADDR(Naka_PresentationRootState),
-        0x00000000,
-        NAKA_ADDR(Naka_PresentationRootState),
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
-        0x00000000,
+    .Pad_AfterStr_No_Tail = {0xFB, 0xFA, 0xF9, 0x00},
+
+    .GraphicsRender_ProcessEntries_PtrTable = {
+        NAKA_ADDR(SeGfx_StaticOp00_Line), NAKA_ADDR(SeGfx_StaticOp01_Line), NAKA_ADDR(SeGfx_StaticOp02_Line), NAKA_ADDR(SeGfx_StaticOp03_Bitmap),
+        NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(SeGfx_StaticOp05_FillBoxMode1), NAKA_ADDR(SeGfx_StaticOp06_CellTextFont0), NAKA_ADDR(SeGfx_StaticOp07_CellTextFont1),
+        NAKA_ADDR(SeGfx_StaticOp08_CellTextFont2), NAKA_ADDR(SeGfx_StaticOp09_Box), NAKA_ADDR(SeGfx_StaticOp0A_ShadowBox2), NAKA_ADDR(GraphicsRender_RetStub),
+        NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(ColorBlit_ComputeRectAndBlit), NAKA_ADDR(GraphicsRender_RetStub),
+        NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(SeGfx_StaticOp11_DottedLine), NAKA_ADDR(SeGfx_StaticOp12_DottedLine), NAKA_ADDR(SeGfx_StaticOp13_DottedBox),
+        NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(SeGfx_StaticOp15_DottedLine), NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(SeGfx_StaticOp17_PixelTextFont3),
+        NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(ColorBlit_ByteData),
+        NAKA_ADDR(SeGfx_StaticOp1C_PixelTextFont4), NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(GraphicsRender_RetStub),
+        NAKA_ADDR(SeGfx_StaticOp20_CellTextFont6), NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(SeGfx_StaticOp22_ShadowBox1), NAKA_ADDR(SeGfx_StaticOp23_DesignBox),
     },
 
-    .field_2374 = 0x0001,
+    .GraphicsRender_Start_PtrTable = {
+        NAKA_ADDR(DrawFunc_Init), NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(DrawText_ExtendedLayout), NAKA_ADDR(ColorBlit_WithPaletteSave),
+        NAKA_ADDR(ColorBlit_Variant_ByteData), NAKA_ADDR(DrawFunc_Init_Variant1), NAKA_ADDR(SeGfx_BoundOp06_Helper), NAKA_ADDR(DrawText_ExtLayout_Variant1),
+        0x00FB25A3, 0x00FB22A3, 0x00FB2438, 0x00FB2346,
+    },
 
-    .pad_213 = { 0 },
+    .SeGfx_TextClipBoxes = {
+        {0, 0, 319, 239},
+        {0, 0, 319, 239},
+        {0, 0, 319, 239},
+        {0, 0, 319, 239},
+        {0, 0, 319, 239},
+        {0, 0, 319, 239},
+    },
 
-    .field_2378 = 0x0002,
-
-    .pad_214 = { 0 },
-
-    .field_23d8 = 0x0006,
-
-    .pad_215 = { 0 },
+    .TextStyle_FontTable = {
+        0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0,  /* styles 0.. */
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* styles 16.. */
+        6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* styles 32.. */
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* styles 48.. */
+    },
 
     .field_2458 = 0x0303,
 
@@ -6178,261 +6008,24 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DrawFunc_Init_Entry5_Str_Fmt3d_2 = "%3d",
 
-    .field_2508 = 0x2000,
-
-    .field_250a = 0x2020,
-
-    .field_250c = 0x2020,
-
-    .field_250e = 0x2020,
-
-    .field_2510 = 0x2020,
-
-    .field_2512 = 0x2020,
-
-    .field_2514 = 0x2020,
-
-    .field_2516 = 0x2020,
-
-    .field_2518 = 0x807F,
-
-    .field_251a = 0xA181,
-
-    .field_251c = 0xAAA6,
-
-    .field_251e = 0xACAB,
-
-    .field_2520 = 0xAFAD,
-
-    .field_2522 = 0xB2B0,
-
-    .field_2524 = 0xB4B3,
-
-    .field_2526 = 0xB8B6,
-
-    .field_2528 = 0x2120,
-
-    .field_252a = 0x2322,
-
-    .field_252c = 0x2524,
-
-    .field_252e = 0x2726,
-
-    .field_2530 = 0x2928,
-
-    .field_2532 = 0x2B2A,
-
-    .field_2534 = 0x2D2C,
-
-    .field_2536 = 0x2F2E,
-
-    .field_2538 = 0x3130,
-
-    .field_253a = 0x3332,
-
-    .field_253c = 0x3534,
-
-    .field_253e = 0x3736,
-
-    .field_2540 = 0x3938,
-
-    .field_2542 = 0x3B3A,
-
-    .field_2544 = 0x3D3C,
-
-    .field_2546 = 0x3F3E,
-
-    .field_2548 = 0x4140,
-
-    .field_254a = 0x4342,
-
-    .field_254c = 0x4544,
-
-    .field_254e = 0x4746,
-
-    .field_2550 = 0x4948,
-
-    .field_2552 = 0x4B4A,
-
-    .field_2554 = 0x4D4C,
-
-    .field_2556 = 0x4F4E,
-
-    .field_2558 = 0x5150,
-
-    .field_255a = 0x5352,
-
-    .field_255c = 0x5554,
-
-    .field_255e = 0x5756,
-
-    .field_2560 = 0x5958,
-
-    .field_2562 = 0x5B5A,
-
-    .field_2564 = 0x5DA5,
-
-    .field_2566 = 0x5F5E,
-
-    .field_2568 = 0x6160,
-
-    .field_256a = 0x6362,
-
-    .field_256c = 0x6564,
-
-    .field_256e = 0x6766,
-
-    .field_2570 = 0x6968,
-
-    .field_2572 = 0x6B6A,
-
-    .field_2574 = 0x6D6C,
-
-    .field_2576 = 0x6F6E,
-
-    .field_2578 = 0x7170,
-
-    .field_257a = 0x7372,
-
-    .field_257c = 0x7574,
-
-    .field_257e = 0x7776,
-
-    .field_2580 = 0x7978,
-
-    .field_2582 = 0x7B7A,
-
-    .field_2584 = 0x7D7C,
-
-    .field_2586 = 0x8B8D,
-
-    .field_2588 = 0xD6C4,
-
-    .field_258a = 0xE4DC,
-
-    .field_258c = 0xFCF6,
-
-    .field_258e = 0xA4DF,
-
-    .field_2590 = 0x96A0,
-
-    .field_2592 = 0xD795,
-
-    .field_2594 = 0x9B9E,
-
-    .field_2596 = 0x8F98,
-
-    .field_2598 = 0xB78E,
-
-    .field_259a = 0xA89D,
-
-    .field_259c = 0xBEBD,
-
-    .field_259e = 0x3F3F,
-
-    .field_25a0 = 0xC79C,
-
-    .field_25a2 = 0xE79C,
-
-    .field_25a4 = 0xE0F4,
-
-    .field_25a6 = 0xE8E2,
-
-    .field_25a8 = 0xEBE9,
-
-    .field_25aa = 0xF9EA,
-
-    .field_25ac = 0xFBFC,
-
-    .field_25ae = 0xEFEE,
-
-    .field_25b0 = 0x8786,
-
-    .field_25b2 = 0x3F88,
-
-    .field_25b4 = 0x973F,
-
-    .field_25b6 = 0x3F90,
-
-    .field_25b8 = 0xC1BB,
-
-    .field_25ba = 0xD1C9,
-
-    .field_25bc = 0xF3E1,
-
-    .field_25be = 0xF1FA,
-
-    .field_25c0 = 0xF2EC,
-
-    .field_25c2 = 0xBF3F,
-
-    .field_25c4 = 0x2020,
-
-    .field_25c6 = 0x2020,
-
-    .field_25c8 = 0x2020,
-
-    .field_25ca = 0x2020,
-
-    .field_25cc = 0x2020,
-
-    .field_25ce = 0x2020,
-
-    .field_25d0 = 0x2020,
-
-    .field_25d2 = 0x2020,
-
-    .field_25d4 = 0x2020,
-
-    .field_25d6 = 0x2020,
-
-    .field_25d8 = 0x2020,
-
-    .field_25da = 0x2020,
-
-    .field_25dc = 0x2020,
-
-    .field_25de = 0x2020,
-
-    .field_25e0 = 0x2020,
-
-    .field_25e2 = 0x2020,
-
-    .field_25e4 = 0x2020,
-
-    .field_25e6 = 0x2020,
-
-    .field_25e8 = 0x2020,
-
-    .field_25ea = 0x2020,
-
-    .field_25ec = 0x2020,
-
-    .field_25ee = 0x2020,
-
-    .field_25f0 = 0x2020,
-
-    .field_25f2 = 0x2020,
-
-    .field_25f4 = 0x2020,
-
-    .field_25f6 = 0x2020,
-
-    .field_25f8 = 0x2020,
-
-    .field_25fa = 0x2020,
-
-    .field_25fc = 0x2020,
-
-    .field_25fe = 0x2020,
-
-    .field_2600 = 0x2020,
-
-    .field_2602 = 0x2020,
-
-    .field_2604 = 0x3F20,
-
-    .field_2606 = 0x3F3F,
+    .Text_CharGlyphMap = {
+        0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,  /* 0x00.. */
+        0x7F, 0x80, 0x81, 0xA1, 0xA6, 0xAA, 0xAB, 0xAC, 0xAD, 0xAF, 0xB0, 0xB2, 0xB3, 0xB4, 0xB6, 0xB8,  /* 0x10.. */
+        0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F,  /* 0x20.. */
+        0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F,  /* 0x30.. */
+        0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F,  /* 0x40.. */
+        0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0xA5, 0x5D, 0x5E, 0x5F,  /* 0x50.. */
+        0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F,  /* 0x60.. */
+        0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A, 0x7B, 0x7C, 0x7D, 0x8D, 0x8B,  /* 0x70.. */
+        0xC4, 0xD6, 0xDC, 0xE4, 0xF6, 0xFC, 0xDF, 0xA4, 0xA0, 0x96, 0x95, 0xD7, 0x9E, 0x9B, 0x98, 0x8F,  /* 0x80.. */
+        0x8E, 0xB7, 0x9D, 0xA8, 0xBD, 0xBE, 0x3F, 0x3F, 0x9C, 0xC7, 0x9C, 0xE7, 0xF4, 0xE0, 0xE2, 0xE8,  /* 0x90.. */
+        0xE9, 0xEB, 0xEA, 0xF9, 0xFC, 0xFB, 0xEE, 0xEF, 0x86, 0x87, 0x88, 0x3F, 0x3F, 0x97, 0x90, 0x3F,  /* 0xA0.. */
+        0xBB, 0xC1, 0xC9, 0xD1, 0xE1, 0xF3, 0xFA, 0xF1, 0xEC, 0xF2, 0x3F, 0xBF, 0x20, 0x20, 0x20, 0x20,  /* 0xB0.. */
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,  /* 0xC0.. */
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,  /* 0xD0.. */
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,  /* 0xE0.. */
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3F, 0x3F, 0x3F,  /* 0xF0.. */
+    },
 
     .ptrs_24 = {
         NAKA_ADDR(DefaultFunction),

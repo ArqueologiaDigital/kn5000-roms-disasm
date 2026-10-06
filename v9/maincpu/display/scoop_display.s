@@ -17982,7 +17982,7 @@ Scoop_EnvelopeCalc:
 	and a, 0x3f
 	extz wa
 	sla wa, 2
-	lda xbc, (Scoop_EnvelopeCalc_Data_2:24)
+	lda xbc, (TextStyle_FontTable:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp + 4), xwa
 	decw	2, (xsp+266)
@@ -18080,7 +18080,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip2:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
+	lda	xbc, (TextStyle_FontTable:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
 	decm	2, (xsp+268)
@@ -18804,7 +18804,7 @@ Scoop_EventLoop_12Entry_Join:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
+	lda	xbc, (TextStyle_FontTable:24)
 	ld	xix, (xbc+wa)
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -18953,7 +18953,7 @@ Scoop_EventLoop_12Entry_Join3:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
+	lda	xbc, (TextStyle_FontTable:24)
 	ld	xix, (xbc+wa)
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -19036,7 +19036,7 @@ Scoop_EventLoop_36Entry_Branch3:
 	and a, 0x3f
 	extz wa
 	sla wa, 2
-	lda xbc, (Scoop_EnvelopeCalc_Data_2:24)
+	lda xbc, (TextStyle_FontTable:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp + 2), xwa
 	ld	wa, (xsp+262)
