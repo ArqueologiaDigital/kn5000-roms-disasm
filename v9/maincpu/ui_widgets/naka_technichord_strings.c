@@ -317,21 +317,21 @@ typedef struct __attribute__((packed)) {
     char Completed_name[10];
     char w35_code[2];
     char Mesage_name[8];
-    uint32_t ptrs_6[12];  /* 12 pointers */
-    char str_87[2];
+    uint32_t StrTable_WelcomVersion[12];  /* 12 pointers */
+    char Str_Version_Empty1[2];
     char MPver_str[6];
-    char str_89[2];
-    char str_90[2];
+    char Str_Version_Empty2[2];
+    char Str_Version_Empty3[2];
     char MPVersion_str[10];
-    char str_92[2];
+    char Str_Version_Empty4[2];
     char w36_code[2];
     char AllInitial_name[12];
-    char str_93[2];
-    char str_94[2];
+    char Str_Version_Empty6[2];
+    char Str_Version_Empty7[2];
     char w37_code[2];
     char Welcom_name[8];
     uint32_t ptrs_7[7];  /* 7 pointers */
-    char str_95[2];
+    char Str_SoftVer_Empty1[2];
     char w38_code[2];
     char SoundTable_name[12];
     char SubProgram_code[12];
@@ -630,8 +630,8 @@ typedef struct __attribute__((packed)) {
      * upright; a wrong width would shear it.
      * --------------------------------------------------------------------- */
     uint8_t Bitmap_KN5000_Logo[36][200];
-    uint8_t bytes_f350[4];
-    char OFF_str[4];
+    uint8_t Str_Mixer_ON[4];
+    char MixerPartTable_Start[4];
     char ERR_str[4];
     uint16_t field_f35c;
     uint16_t field_f35e;
@@ -799,7 +799,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_f4b6;
     char str_191[2];
     uint16_t field_f4ba;
-    char str_192[10];
+    char Str_PartName_Empty[10];
     char Rhythm_str[12];
     char Control_str[10];
     char Apc_str[10];
@@ -893,21 +893,21 @@ typedef struct __attribute__((packed)) {
     char Ch_str[6];
     char Off_str[6];
     char LswMidi_StrOff_Str_Dash_Dash[6];
-    uint32_t ptrs_182[6];  /* 6 pointers */
+    uint32_t StrTable_LangHeaders[6];  /* 6 pointers */
     char IndonesianHeader_str[18];
     char ItalianHeader_str[16];
     char SpanishHeader_str[16];
     char FrenchHeader_str[14];
     char GermanHeader_str[14];
     char EnglishHeader_str[16];
-    uint32_t ptrs_183[6];  /* 6 pointers */
+    uint32_t StrTable_LangTexts[6];  /* 6 pointers */
     char IndonesianText_str[16];
     char ItalianText_str[14];
     char SpanishText_str[14];
     char FrenchText_str[12];
     char GermanText_str[12];
     char EnglishText_str[14];
-    uint32_t ptrs_184[6];  /* 6 pointers */
+    uint32_t StrTable_ErrorLabel[6];  /* 6 pointers */
     char ERROR_str[6];
     char ERROR_str_2[6];
     char ERROR_str_3[6];
@@ -922,7 +922,7 @@ typedef struct __attribute__((packed)) {
     char Rappel_str[10];
     char Hinweis_str[12];
     char Reminder_str_3[12];
-    uint32_t ptrs_186[6];  /* 6 pointers */
+    uint32_t StrTable_CompletedLabel[6];  /* 6 pointers */
     char Lengkapilah_str[14];
     char Completed_str[12];
     uint16_t field_f8ce;
@@ -930,7 +930,7 @@ typedef struct __attribute__((packed)) {
     char Termine_str[10];
     char VorgangBeendet_str[18];
     char Completed_str_2[12];
-    uint32_t ptrs_187[6];  /* 6 pointers */
+    uint32_t StrTable_PleaseWaitLabel[6];  /* 6 pointers */
     char SilahkanTunggu_str[18];
     char PleaseWait_str[14];
     uint16_t field_f93c;
@@ -945,14 +945,14 @@ typedef struct __attribute__((packed)) {
     char txt_La_memoire_interne_est_conservee[168];
     char DerSpeicherinhaltBleibtEtwa_str[130];
     char TheInternalMemoryIs_str[114];
-    uint32_t ptrs_189[6];  /* 6 pointers */
+    uint32_t StrTable_SettingsNotSaved[6];  /* 6 pointers */
     char AturanSudahDibatalkanKarena_str[146];
     char REMINDER_str_2[10];
     char txt_Las_configuraciones_fueron[210];
     char txt_Vous_n_avez_pas_presse_le_bouton[158];
     char txt_Die_Einstellungen_wurden_nicht[166];
     char TheSettingsHaveBeen_str[168];
-    uint32_t ptrs_190[6];  /* 6 pointers */
+    uint32_t StrTable_GenericError[6];  /* 6 pointers */
     char Error_str[8];
     char Error_str_2[8];
     char Error_str_3[8];
@@ -967,7 +967,7 @@ typedef struct __attribute__((packed)) {
     char txt_Die_Daten_auf_dieser_Diskette[60];
     char str_334[4];
     char TheDataOnThe_str[68];
-    uint32_t ptrs_192[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr01[6];  /* 6 pointers */
     char KesalahanSudahTerjadiKetika_str[76];
     char Error_str_7[10];
     char SeHaProducidoUn_str[72];
@@ -989,35 +989,35 @@ typedef struct __attribute__((packed)) {
     char txt_Le_fichier_que_vous_avez_essaye[54];
     char DieDiskettenbankDieSie_str[58];
     char TheFileThatYou_str[42];
-    uint32_t ptrs_195[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr05[6];  /* 6 pointers */
     char KesalahanTerjadiKetikaDisket_str[66];
     char Error_str_10[10];
     char SeHaProducidoUn_str_2[86];
     char txt_Une_erreur_s_est_produite_2[78];
     char BeimSpeichernAufDie_str[90];
     char AnErrorHasOccurred_str_2[68];
-    uint32_t ptrs_196[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr06[6];  /* 6 pointers */
     char DisketYangAndaPergunakan_str[98];
     char Error_str_11[10];
     char txt_El_disco_que_esta_utilizando[120];
     char txt_La_disquette_que_vous_utilisez[114];
     char txt_Ihre_Diskette_ist[102];
     char TheDiskThatYou_str[98];
-    uint32_t ptrs_197[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr07[6];  /* 6 pointers */
     char DisketYangAndaDipergunakan_str[74];
     char Error_str_12[10];
     char txt_El_disco_que_esta_utilizando_2[62];
     char txt_La_disquette_que_vous_utilisez_2[74];
     char IhreDisketteIstVoll_str[56];
     char TheDiskThatYou_str_2[62];
-    uint32_t ptrs_198[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr08[6];  /* 6 pointers */
     char KesalahanSudahTerjadiKetika_str_2[126];
     char Error_str_13[10];
     char txt_Se_ha_producido_un_error[158];
     char txt_Une_erreur_s_est_produite_3[160];
     char BeimFormatierenIstEin_str[78];
     char AnErrorHasOccurred_str_3[132];
-    uint32_t ptrs_199[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr09[6];  /* 6 pointers */
     char DataDidalamDiskDiprotek_str[72];
     char ErrorCpPrtct_str[20];
     char txt_Los_datos_del_disco_estan[82];
@@ -1025,7 +1025,7 @@ typedef struct __attribute__((packed)) {
     char txt_Cette_disquette_est_protegee[66];
     char txt_Die_Daten_auf_dieser_Diskette_2[88];
     char TheDataOnThe_str_2[68];
-    uint32_t ptrs_200[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr10[6];  /* 6 pointers */
     char DataSudahDiprotek_str[22];
     char Error_str_14[10];
     char txt_Los_datos_ya_estan_protegidos[48];
@@ -1044,7 +1044,7 @@ typedef struct __attribute__((packed)) {
     char EsContreLaCopie_str[20];
     char txt_Diese_Daten_sind_bereits[42];
     char TheDataIsAlready_str[36];
-    uint32_t ptrs_201[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr11[6];  /* 6 pointers */
     char PasswordYangAndaMasukkan_str[36];
     char Error_str_15[10];
     char txt_La_contrasena_ingresada_es[40];
@@ -1092,7 +1092,7 @@ typedef struct __attribute__((packed)) {
     char txt_La_resolution_PPQ_que_vous_avez[88];
     char txt_Die_Zeiteinheit_PPQ_Auflosung[104];
     char TheTimebasePpqResolution_str[86];
-    uint32_t ptrs_207[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr19[6];  /* 6 pointers */
     char DisketIniAdalahSatu_str[88];
     char ErrorDctp_str[16];
     char EsteEsUnArchivo_str[66];
@@ -1142,7 +1142,7 @@ typedef struct __attribute__((packed)) {
     char txt_Vous_avez_deja_choisi_une_piste[100];
     char txt_Es_ist_nicht_moglich_zwei_RHYTHM[92];
     char ARhythmTrackAlready_str[80];
-    uint32_t ptrs_213[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr24_Chord[6];  /* 6 pointers */
     char SatuChordTrackSudah_str[78];
     char Error_str_22[10];
     char YaExisteUnaPista_str_2[76];
@@ -1238,7 +1238,7 @@ typedef struct __attribute__((packed)) {
     char txt_Cette_sequence_est_trop_longue[88];
     char DieserTitelIstZu_str[66];
     char ThisSongIsToo_str[50];
-    uint32_t ptrs_220[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr29[6];  /* 6 pointers */
     char MidiFileYangAnda_str[138];
     char Error_str_29[10];
     char ElFicheroMidiQue_str[156];
@@ -1246,7 +1246,7 @@ typedef struct __attribute__((packed)) {
     char Uenceur_str[10];
     char txt_Der_zu_ladende_MIDI_File_Song[152];
     char TheMidiFileThat_str[146];
-    uint32_t ptrs_221[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr30[6];  /* 6 pointers */
     char IniTidakMungkinUntuk_str[202];
     char Error_str_30[10];
     char txt_No_es_posible_cambiar_la_2[202];
@@ -1514,14 +1514,14 @@ typedef struct __attribute__((packed)) {
     uint16_t field_145da;
     char OptionGeladenWerden_str[24];
     char TheFileThatYou_str_2[134];
-    uint32_t ptrs_228[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr44[6];  /* 6 pointers */
     char TidakMungkinUntukMeng_str[130];
     char Error_str_37[10];
     char txt_No_es_posible_editar_un_juego_de[134];
     char txt_Il_est_impossible_d_editer_un[134];
     char txt_Es_ist_nicht_moglich_ein_Drum[130];
     char ItIsImpossibleTo_str_2[112];
-    uint32_t ptrs_229[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr46[6];  /* 6 pointers */
     char HanyaMungkinDimasukkanMelody_str[106];
     char Error_str_38[10];
     char txt_Solo_es_posible_insertar_pistas[118];
@@ -1536,7 +1536,7 @@ typedef struct __attribute__((packed)) {
     char txt_L_utilisation_du_Sound_Arranger[116];
     char txt_Der_Sound_Arranger_kann_nicht[118];
     char ItIsNotPossible_str_2[102];
-    uint32_t ptrs_231[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr48[6];  /* 6 pointers */
     char TipeDisketYangDigunakan_str[96];
     char Err0r_str[10];
     char txt_El_disquete_insertado_es_de_tipo[102];
@@ -1666,7 +1666,7 @@ typedef struct __attribute__((packed)) {
     char Ails_str[8];
     char txt_Das_Format_dieses_Bitmaps_kann[128];
     char ThisBitmapIsIn_str[114];
-    uint32_t ptrs_243[6];  /* 6 pointers */
+    uint32_t StrTable_DiskErr64_PtrEnd[6];  /* 6 pointers */
     char PilihlahPanelMemoryYang_str[52];
     char Error_str_50[10];
     char PorFavorSeleccioneEl_str[62];
@@ -1686,7 +1686,7 @@ typedef struct __attribute__((packed)) {
     char VeuillezPatienter_str_2[20];
     char BitteWarten_str_2[14];
     char PleaseWait_str_4[14];
-    uint32_t ptrs_246[6];  /* 6 pointers */
+    uint32_t Str_PleaseWait_Multilingual[6];  /* 6 pointers */
     char Indonesian_code[12];
     char Italian_name[8];
     char Spanish_code[8];
@@ -1769,7 +1769,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_17ad0;
     uint16_t field_17ad2;
     char TeC1_str[6];
-    uint32_t ptrs_247[17];  /* 17 pointers */
+    uint32_t Naka_TechniChord1_Screens[17];  /* 17 pointers */
     char CONDUCTOR_str[10];
     char Part_str_27[10];
     char Part_str_28[10];
@@ -1872,7 +1872,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_17c82;
     uint16_t field_17c84;
     uint16_t field_17c86;
-    uint32_t ptrs_248[17];  /* 17 pointers */
+    uint32_t Naka_Scale2_Screens[17];  /* 17 pointers */
     char NoType_str[14];
     char User_str[14];
     char User_str_2[14];
@@ -1891,7 +1891,7 @@ typedef struct __attribute__((packed)) {
     char Random_str[14];
     char Off_str_2[14];
     char NoType_str_2[14];
-    uint32_t ptrs_249[12];  /* 12 pointers */
+    uint32_t Scale_Arabic2_NameTable[12];  /* 12 pointers */
     char str_749[4];
     char str_750[4];
     char str_751[4];
@@ -1904,7 +1904,7 @@ typedef struct __attribute__((packed)) {
     char str_758[4];
     char str_759[4];
     char str_760[4];
-    uint32_t ptrs_250[12];  /* 12 pointers */
+    uint32_t Scale_Names_Table[12];  /* 12 pointers */
     char KeyB_str[10];
     char KeyA_str[10];
     char KeyA_str_2[10];
@@ -2635,7 +2635,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19956;
     uint16_t field_19958;
     uint16_t field_1995a;
-    uint32_t ptrs_254[16];  /* 16 pointers */
+    uint32_t KeyShift_DisplayStrTable[16];  /* 16 pointers */
     char str_1307[4];
     char str_1308[4];
     char str_1309[4];
@@ -2706,7 +2706,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19a74;
     uint16_t field_19a76;
     uint16_t field_19a78;
-    uint32_t ptrs_255[6];  /* 6 pointers */
+    uint32_t DemoDisk_LangPromptTable[6];  /* 6 pointers */
     char UntukMemulaiSuatuDemo_str[162];
     char Italian_str[8];
     char ToStartingAnExternal_str[134];
@@ -2745,7 +2745,7 @@ typedef struct __attribute__((packed)) {
     char NONE_str[6];
     char FDemoText_ByteData_DisplayRefresh_Str_Fmts_Fmtd[6];
     char ErrorGetInstanceID_str[24];
-    uint32_t ptrs_257[4];  /* 4 pointers */
+    uint32_t FileType_NameTable[4];  /* 4 pointers */
     char str_1351[2];
     char NAME_str[6];
     char SRC_str[4];
@@ -2781,7 +2781,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_2063[2];  /* zero padding */
     uint16_t field_19f70;
     uint8_t pad_2064[2];  /* zero padding */
-    uint32_t ptrs_260[10];  /* 10 pointers */
+    uint32_t ImgAttr_NameTable[10];  /* 10 pointers */
     char str_1362[2];
     char BORDER_str[8];
     char LOWSRC_str[8];
@@ -2884,7 +2884,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a1b2;
     uint16_t field_1a1b4;
     uint32_t HK_str_3_ptr;
-    uint16_t field_1a1ba;
+    uint16_t FileIO_CheckRegionSignature_Data;
     uint16_t field_1a1bc;
     uint32_t HK_str_2_ptr;
     uint8_t pad_2072[2];  /* zero padding */
@@ -2941,7 +2941,7 @@ typedef struct __attribute__((packed)) {
     char rb_str_15[4];
     char rb_str_16[4];
     char rb_str_17[4];
-    uint16_t field_1a272;
+    uint16_t FileDemo_RecordCallback_Data;
     uint32_t FileIO_LoadRegion4_VRAM_ptr;
     uint8_t pad_2078[2];  /* zero padding */
     uint32_t FileIO_LoadRegion0_VRAM_ptr;
@@ -2965,7 +2965,7 @@ typedef struct __attribute__((packed)) {
     char wb_str_6[4];
     char wb_str_7[4];
     char wb_str_8[4];
-    uint8_t pad_2079[2];  /* zero padding */
+    uint8_t SaveAll_CheckRecordLoop_Data[2];  /* zero padding */
     uint32_t FileIO_SaveRegion0_VRAM_ptr;
     uint16_t field_1a2c8;
     uint32_t FileIO_SaveRegion1_VRAM_ptr;
@@ -3005,7 +3005,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_2085[12];  /* zero padding */
     char wb_str_11[4];
     char rb_str_26[4];
-    uint32_t ptrs_261[10];  /* 10 pointers */
+    uint32_t SeqFileType_CodeTable[10];  /* 10 pointers */
     char SEQ_str[4];
     char SQF_str[4];
     char Md_str[4];
@@ -3019,7 +3019,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a442;
     uint16_t field_1a444;
     uint8_t pad_2086[70];  /* zero padding */
-    uint16_t field_1a48c;
+    uint16_t GetDiskSizeInfo_Data;
     uint8_t pad_2087[109];  /* zero padding */
     uint16_t field_1a4fb;
     char ______str[6];
@@ -3064,7 +3064,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a604;
     uint16_t field_1a606;
     uint16_t field_1a608;
-    uint32_t ptrs_262[8];  /* 8 pointers */
+    uint32_t DiskType_CodeTable[8];  /* 8 pointers */
     char DOC_str[4];
     char DOC_str_2[4];
     char Pd_str[4];
@@ -3073,7 +3073,7 @@ typedef struct __attribute__((packed)) {
     char Dd_str_2[4];
     char str_1502[4];
     char str_1503[4];
-    uint32_t ptrs_263[5];  /* 5 pointers */
+    uint32_t StorageArea_NameTable[5];  /* 5 pointers */
     uint16_t field_1a65e;
     char str_1504[12];
     uint16_t field_1a66c;
@@ -3106,8 +3106,8 @@ typedef struct __attribute__((packed)) {
     char Song_str[8];
     uint16_t field_1a712;
     char Emory_str_2[8];
-    uint8_t pad_2090[2];  /* zero padding */
-    uint32_t ptrs_266[4];  /* 4 pointers */
+    uint8_t ResetProgressIndication_Data[2];  /* zero padding */
+    uint32_t DiskOp_ChannelCfgTable[4];  /* 4 pointers */
     uint16_t field_1a72e;
     uint16_t field_1a730;
     uint16_t field_1a732;
@@ -3206,40 +3206,40 @@ typedef struct __attribute__((packed)) {
     char SLSrcBankList_FuncBody_Str_Colon[4];
     char SLSrcBankList_FuncBody_Str_Colon_2[4];
     char All_str[18];
-    uint16_t field_1aa04;
+    uint16_t SLSrcBankList_FuncBody_Data;
     uint16_t field_1aa06;
     uint16_t field_1aa08;
     char SLSrcBankList_FuncBody_Entry_Str_Colon[2];
     char SLSrcBankList_FuncBody_Entry_Str_Colon_2[4];
     char SLSrcBankList_FuncBody_Entry_Str_Colon_3[4];
     char All_str_2[18];
-    uint16_t field_1aa26;
+    uint16_t SLSrcBankList_FuncBody_Entry_Data;
     uint16_t SLSrcBankList_FuncBody_Data_3;
     char SLSrcBankList_FuncBody_Entry_Str_Colon_4[4];
     char SLSrcBankList_FuncBody_Entry_Str_Colon_5[4];
     char All_str_3[18];
-    uint16_t field_1aa44;
+    uint16_t SLSrcBankList_FuncBody_Entry_Data_2;
     uint16_t SLSrcBankList_FuncBody_Data_4;
     uint32_t SLSrc_HandleShow_PtrTable[5];  /* 5 pointers */
     char SLDstBankList_FuncBody_Str_Colon[4];
     char SLDstBankList_FuncBody_Str_Colon_2[4];
     char All_str_4[18];
     char SLDstBankList_FuncBody_Str_Colon_3[4];
-    uint16_t field_1aa7a;
+    uint16_t SLDstBankList_FuncBody_Data;
     uint16_t SLDstBankList_FuncBody_Data_5;
     char SLDstBankList_FuncBody_Str_Colon_4[4];
     uint16_t SLDstBankList_FuncBody_Data_6;
     char SLDstBankList_FuncBody_Str_Colon_5[4];
     char SLDstBankList_FuncBody_Str_Colon_6[4];
     char All_str_5[18];
-    uint16_t field_1aa9e;
+    uint16_t SLDstBankList_FuncBody_Data_2;
     uint16_t SLDstBankList_FuncBody_Data_7;
     char str_1591[4];
     char SLDstBankList_FuncBody_Str_Colon_7[4];
     char All_str_6[18];
     char SLDstBankList_FuncBody_Str_Colon_8[4];
     char str_1595[4];
-    uint16_t field_1aac4;
+    uint16_t SLDstBankList_FuncBody_Data_4;
     uint16_t SLDstBankList_FuncBody_Data_8;
     uint32_t ptrs_273[15];  /* 15 pointers */
     char str_1596[2];
@@ -3275,8 +3275,8 @@ typedef struct __attribute__((packed)) {
     char JumpInsertFunc_str[16];
     char TypePriorityText_str[18];
     char InsertOptionText_str[18];
-    uint32_t ptrs_275[11];  /* 11 pointers */
-    char str_1616[2];
+    uint32_t PtrTbl_UiWidgetProps_EA0CE8[11];  /* 11 pointers */
+    char Str_UiProp_Empty_EA0D14[2];
     char aicok_str[6];
     char paintok_str[8];
     char auto_inc_str[10];
@@ -3294,14 +3294,14 @@ typedef struct __attribute__((packed)) {
     char onwin_str[6];
     uint32_t main_func_str_3_ptr;
     uint32_t ptr_1ae42;
-    char str_1631[2];
+    char Str_UiProp_Empty_EA0D94[2];
     char main_func_str_3[10];
     uint32_t ptrs_277[3];  /* 3 pointers */
-    char str_1633[2];
+    char Str_UiProp_Empty_EA0DAC[2];
     char paintok_str_2[8];
     char main_func_str_4[10];
-    uint32_t ptrs_278[4];  /* 4 pointers */
-    char str_1636[2];
+    uint32_t PtrTbl_UiWidgetProps_EA0DC0[4];  /* 4 pointers */
+    char Str_UiProp_Empty_EA0DD0[2];
     char paintok_str_3[8];
     char main_func_str_5[10];
     char font_str_2[6];
@@ -3318,35 +3318,35 @@ typedef struct __attribute__((packed)) {
     char page_str[6];
     char icon_str[6];
     char title_str[6];
-    uint32_t ptrs_280[6];  /* 6 pointers */
+    uint32_t PtrTbl_UiWidgetProps_EA0E32[6];  /* 6 pointers */
     char str_1648[2];
     char tail_y_rate_str[12];
     char tail_x_rate_str[12];
     char dir_str[4];
     char frame_only_str[12];
     char color_str[6];
-    uint32_t ptrs_281[6];  /* 6 pointers */
+    uint32_t PtrTbl_UiWidgetProps_EA0E7A[6];  /* 6 pointers */
     char str_1654[2];
     char auto_inc_str_2[10];
     char dial_inv_str[10];
     char dial_str_2[6];
     char index_max_str[10];
     char index_min_str[10];
-    uint32_t ptrs_282[5];  /* 5 pointers */
+    uint32_t PtrTbl_UiWidgetProps_EA0EC2[5];  /* 5 pointers */
     char str_1660[2];
     char paintok_str_4[8];
     char length_str[8];
     char interval_str[10];
     char func_str[6];
-    uint32_t ptrs_283[5];  /* 5 pointers */
-    char str_1665[2];
+    uint32_t PtrTbl_UiWidgetProps_EA0EF8[5];  /* 5 pointers */
+    char Str_UiProp_Empty_EA0F0C[2];
     char send_index_str[12];
     char interval_str_2[10];
     char index_max_str_2[10];
     char index_min_str_2[10];
     uint32_t win_str_ptr;
     uint32_t ptr_1afee;
-    char str_1670[2];
+    char Str_UiProp_Empty_EA0F40[2];
     char win_str[4];
     /* class definition 0x165:0: PsFileNameBox (parent VwBox, allsize 58, fields font, fontcolor, main_func, column, row, sel_num, dial, auto_inc, paintok, aicok) */
     naka_classdef_t classdef_165_0;
@@ -3403,7 +3403,7 @@ typedef struct __attribute__((packed)) {
     char PsFileNameBox_code[12];
     char PsFileNameBox_name[14];
     uint16_t Cheap_ClassCount_165;
-    uint32_t ptrs_284[6];  /* 6 pointers */
+    uint32_t PtrTbl_EventNames_EA1188[6];  /* 6 pointers */
     char EV_WAKEUPPASSWORD_str[18];
     char EV_INDEXSW_DOWN_D_str[18];
     char EV_INDEXSW_UP_D_str[16];
@@ -3937,40 +3937,40 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Mesage_name = ALIGNED_STRING("Mesage"),
 
-    .ptrs_6 = {
+    .StrTable_WelcomVersion = {
         SELF(Welcom_name),
         SELF(w37_code),
-        SELF(str_94),
-        SELF(str_93),
+        SELF(Str_Version_Empty7),
+        SELF(Str_Version_Empty6),
         SELF(AllInitial_name),
         SELF(w36_code),
-        SELF(str_92),
+        SELF(Str_Version_Empty4),
         SELF(MPVersion_str),
-        SELF(str_90),
-        SELF(str_89),
+        SELF(Str_Version_Empty3),
+        SELF(Str_Version_Empty2),
         SELF(MPver_str),
-        SELF(str_87),
+        SELF(Str_Version_Empty1),
     },
 
-    .str_87 = ALIGNED_STRING(""),
+    .Str_Version_Empty1 = ALIGNED_STRING(""),
 
     .MPver_str = "MPver",
 
-    .str_89 = ALIGNED_STRING(""),
+    .Str_Version_Empty2 = ALIGNED_STRING(""),
 
-    .str_90 = ALIGNED_STRING(""),
+    .Str_Version_Empty3 = ALIGNED_STRING(""),
 
     .MPVersion_str = "MPVersion",
 
-    .str_92 = ALIGNED_STRING(""),
+    .Str_Version_Empty4 = ALIGNED_STRING(""),
 
     .w36_code = ALIGNED_STRING(""),
 
     .AllInitial_name = ALIGNED_STRING("AllInitial"),
 
-    .str_93 = ALIGNED_STRING(""),
+    .Str_Version_Empty6 = ALIGNED_STRING(""),
 
-    .str_94 = ALIGNED_STRING(""),
+    .Str_Version_Empty7 = ALIGNED_STRING(""),
 
     .w37_code = ALIGNED_STRING(""),
 
@@ -3983,10 +3983,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(SubProgram_code),
         SELF(SoundTable_name),
         SELF(w38_code),
-        SELF(str_95),
+        SELF(Str_SoftVer_Empty1),
     },
 
-    .str_95 = ALIGNED_STRING(""),
+    .Str_SoftVer_Empty1 = ALIGNED_STRING(""),
 
     .w38_code = ALIGNED_STRING(""),
 
@@ -7226,9 +7226,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
         },
     },
 
-    .bytes_f350 = { 0x4F, 0x4E, 0x20, 0x00 },
+    .Str_Mixer_ON = { 0x4F, 0x4E, 0x20, 0x00 },
 
-    .OFF_str = "OFF",
+    .MixerPartTable_Start = "OFF",
 
     .ERR_str = "ERR",
 
@@ -7564,7 +7564,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_f4ba = NAKA_NONE,
 
-    .str_192 = "         ",
+    .Str_PartName_Empty = "         ",
 
     .Rhythm_str = ALIGNED_STRING("  RHYTHM  "),
 
@@ -7752,7 +7752,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .LswMidi_StrOff_Str_Dash_Dash = ALIGNED_STRING(" -- "),
 
-    .ptrs_182 = {
+    .StrTable_LangHeaders = {
         SELF(EnglishHeader_str),
         SELF(GermanHeader_str),
         SELF(FrenchHeader_str),
@@ -7773,7 +7773,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .EnglishHeader_str = ALIGNED_STRING("English Header"),
 
-    .ptrs_183 = {
+    .StrTable_LangTexts = {
         SELF(EnglishText_str),
         SELF(GermanText_str),
         SELF(FrenchText_str),
@@ -7794,7 +7794,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .EnglishText_str = ALIGNED_STRING("English Text"),
 
-    .ptrs_184 = {
+    .StrTable_ErrorLabel = {
         SELF(ERROR_str_5),
         SELF(ERROR_str_4),
         SELF(ERREUR_str),
@@ -7838,7 +7838,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Reminder_str_3 = ALIGNED_STRING("REMINDER! "),
 
-    .ptrs_186 = {
+    .StrTable_CompletedLabel = {
         SELF(Completed_str_2),
         SELF(VorgangBeendet_str),
         SELF(Termine_str),
@@ -7861,7 +7861,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Completed_str_2 = ALIGNED_STRING("COMPLETED!"),
 
-    .ptrs_187 = {
+    .StrTable_PleaseWaitLabel = {
         SELF(PleaseWait_str_2),
         SELF(BitteWarten_str),
         SELF(VeuillezPatienter_str),
@@ -7905,7 +7905,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheInternalMemoryIs_str = ALIGNED_STRING("The internal memory is retained for about 80 minutes after turning off the power. SAVE your work on Floppy Disk!"),
 
-    .ptrs_189 = {
+    .StrTable_SettingsNotSaved = {
         SELF(TheSettingsHaveBeen_str),
         SELF(txt_Die_Einstellungen_wurden_nicht),
         SELF(txt_Vous_n_avez_pas_presse_le_bouton),
@@ -7926,7 +7926,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheSettingsHaveBeen_str = "The settings have been canceled because the storage procedure was not completed by pressing the OK button. Please enter the settings again and press OK to store them. ",
 
-    .ptrs_190 = {
+    .StrTable_GenericError = {
         SELF(Error_str_5),
         SELF(Error_str_4),
         SELF(Erreur_str),
@@ -7970,7 +7970,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheDataOnThe_str = "The data on the disk that you are using is for a different product.",
 
-    .ptrs_192 = {
+    .StrTable_DiskErr01 = {
         SELF(AnErrorHasOccurred_str),
         SELF(BeimLadenVonDer_str),
         SELF(txt_Une_erreur_s_est_produite),
@@ -8035,7 +8035,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheFileThatYou_str = "The file that you tried to load is empty.",
 
-    .ptrs_195 = {
+    .StrTable_DiskErr05 = {
         SELF(AnErrorHasOccurred_str_2),
         SELF(BeimSpeichernAufDie_str),
         SELF(txt_Une_erreur_s_est_produite_2),
@@ -8056,7 +8056,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .AnErrorHasOccurred_str_2 = ALIGNED_STRING("An error has occurred while the disk was saving. Please try again!"),
 
-    .ptrs_196 = {
+    .StrTable_DiskErr06 = {
         SELF(TheDiskThatYou_str),
         SELF(txt_Ihre_Diskette_ist),
         SELF(txt_La_disquette_que_vous_utilisez),
@@ -8077,7 +8077,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheDiskThatYou_str = "The disk that you are using is write protected. Please remove the write protection and try again.",
 
-    .ptrs_197 = {
+    .StrTable_DiskErr07 = {
         SELF(TheDiskThatYou_str_2),
         SELF(IhreDisketteIstVoll_str),
         SELF(txt_La_disquette_que_vous_utilisez_2),
@@ -8098,7 +8098,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheDiskThatYou_str_2 = "The disk that you are using is full. Please use another disk.",
 
-    .ptrs_198 = {
+    .StrTable_DiskErr08 = {
         SELF(AnErrorHasOccurred_str_3),
         SELF(BeimFormatierenIstEin_str),
         SELF(txt_Une_erreur_s_est_produite_3),
@@ -8119,7 +8119,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .AnErrorHasOccurred_str_3 = "An error has occurred while the disk was formatting. The disk that you are using may be faulty. Please try formatting another disk.",
 
-    .ptrs_199 = {
+    .StrTable_DiskErr09 = {
         SELF(TheDataOnThe_str_2),
         SELF(txt_Die_Daten_auf_dieser_Diskette_2),
         SELF(txt_Cette_disquette_est_protegee),
@@ -8142,7 +8142,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheDataOnThe_str_2 = ALIGNED_STRING("The data on the disk is copy protected. Please enter the password."),
 
-    .ptrs_200 = {
+    .StrTable_DiskErr10 = {
         SELF(TheDataIsAlready_str),
         SELF(txt_Diese_Daten_sind_bereits),
         SELF(field_10f3a),
@@ -8187,7 +8187,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheDataIsAlready_str = "The data is already copy protected.",
 
-    .ptrs_201 = {
+    .StrTable_DiskErr11 = {
         SELF(ThePasswordThatYou_str),
         SELF(DasEingegebenePasswordIst_str),
         SELF(VotreMotDePasse_str),
@@ -8325,7 +8325,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheTimebasePpqResolution_str = "The timebase {PPQ resolution} that you tried to load is not 24/48/96/192/288/384 PPQ.",
 
-    .ptrs_207 = {
+    .StrTable_DiskErr19 = {
         SELF(ThisIsFormatMidi_str),
         SELF(DiesIstEinFormat_str),
         SELF(txt_Ceci_est_une_sequence_STANDARD),
@@ -8467,7 +8467,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ARhythmTrackAlready_str = "A Rhythm Track already exists. It is impossible to assign two Tracks to Rhythm.",
 
-    .ptrs_213 = {
+    .StrTable_DiskErr24_Chord = {
         SELF(AChordTrackAlready_str),
         SELF(txt_Es_ist_nicht_moglich_zwei_CHORD),
         SELF(txt_Vous_avez_deja_choisi_une_piste_2),
@@ -8708,7 +8708,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ThisSongIsToo_str = "This song is too long to be saved as a MIDI FILE.",
 
-    .ptrs_220 = {
+    .StrTable_DiskErr29 = {
         SELF(TheMidiFileThat_str),
         SELF(txt_Der_zu_ladende_MIDI_File_Song),
         SELF(txt_La_sequence_MIDI_File_que_vous),
@@ -8731,7 +8731,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheMidiFileThat_str = ALIGNED_STRING("The MIDI FILE that you have tried to load exceeds the memory capacity of the KN5000 and cannot be played. The Sequencer memory has been cleared."),
 
-    .ptrs_221 = {
+    .StrTable_DiskErr30 = {
         SELF(ItIsNotPossible_str),
         SELF(txt_Nach_einer_Aufnahme_im_COMPOSER),
         SELF(txt_Je_ne_peux_pas_changer_la_mesure),
@@ -9316,7 +9316,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheFileThatYou_str_2 = "The file that you are trying to load was saved on a previous KN keyboard. It is only possible to load using the \"PERFORMANCE\" option.",
 
-    .ptrs_228 = {
+    .StrTable_DiskErr44 = {
         SELF(ItIsImpossibleTo_str_2),
         SELF(txt_Es_ist_nicht_moglich_ein_Drum),
         SELF(txt_Il_est_impossible_d_editer_un),
@@ -9337,7 +9337,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ItIsImpossibleTo_str_2 = "It is impossible to edit a Drum Kit. Please select a different sound from any group except Keyboard Percussion.",
 
-    .ptrs_229 = {
+    .StrTable_DiskErr46 = {
         SELF(ItIsOnlyPossible_str_4),
         SELF(txt_Es_konnen_nur_Melodie_Spuren),
         SELF(txt_Il_est_seulement_possible_d),
@@ -9381,7 +9381,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ItIsNotPossible_str_2 = "It is not possible to use the Sound Arranger with a composer pattern. Please select a preset pattern.",
 
-    .ptrs_231 = {
+    .StrTable_DiskErr48 = {
         SELF(TheTypeOfInserted_str),
         SELF(field_14f4c),
         SELF(txt_La_disquette_inseree_est_de_type),
@@ -9725,7 +9725,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ThisBitmapIsIn_str = ALIGNED_STRING("This Bitmap is in the wrong format for the KN5000 and cannot be loaded. See the Owners Manual for more details. "),
 
-    .ptrs_243 = {
+    .StrTable_DiskErr64_PtrEnd = {
         SELF(PleaseSelectThePanel_str),
         SELF(txt_Bitte_wahlen_Sie_den_Panel),
         SELF(txt_Veuillez_selectionner_le_Panel),
@@ -9747,86 +9747,86 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .PleaseSelectThePanel_str = "Please select the Panel Memory that you want to name.",
 
     .IvMesage_Catalog = {
-        /*  0 */ { 3, 0x0000FFFF, SELF(ptrs_184), SELF(ptrs_191) },
-        /*  1 */ { 3, 0x0001FFFF, SELF(ptrs_184), SELF(ptrs_192) },
-        /*  2 */ { 3, 0x0002FFFF, SELF(ptrs_184), SELF(ptrs_193) },
-        /*  3 */ { 3, 0x0003FFFF, SELF(ptrs_184), SELF(ptrs_194) },
-        /*  4 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /*  5 */ { 3, 0x0005FFFF, SELF(ptrs_184), SELF(ptrs_195) },
-        /*  6 */ { 3, 0x0006FFFF, SELF(ptrs_184), SELF(ptrs_196) },
-        /*  7 */ { 3, 0x0007FFFF, SELF(ptrs_184), SELF(ptrs_197) },
-        /*  8 */ { 3, 0x0008FFFF, SELF(ptrs_184), SELF(ptrs_198) },
-        /*  9 */ { 3, 0x0009FFFF, SELF(ptrs_184), SELF(ptrs_199) },
-        /* 10 */ { 3, 0x000AFFFF, SELF(ptrs_184), SELF(ptrs_200) },
-        /* 11 */ { 3, 0x000BFFFF, SELF(ptrs_184), SELF(ptrs_201) },
-        /* 12 */ { 3, 0x000CFFFF, SELF(ptrs_184), SELF(ptrs_202) },
-        /* 13 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 14 */ { 3, 0x0014FFFF, SELF(ptrs_184), SELF(ptrs_208) },
-        /* 15 */ { 3, 0x0015FFFF, SELF(ptrs_184), SELF(ptrs_209) },
-        /* 16 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 17 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 18 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 19 */ { 3, 0x001EFFFF, SELF(ptrs_184), SELF(ptrs_221) },
-        /* 20 */ { 1, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_186) },
-        /* 21 */ { 1, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_186) },
-        /* 22 */ { 3, 0x001FFFFF, SELF(ptrs_184), SELF(ptrs_222) },
-        /* 23 */ { 3, 0x0020FFFF, SELF(ptrs_184), SELF(ptrs_223) },
-        /* 24 */ { 3, 0x0016FFFF, SELF(ptrs_184), SELF(ptrs_210) },
-        /* 25 */ { 3, 0x0017FFFF, SELF(ptrs_184), SELF(ptrs_211) },
-        /* 26 */ { 3, 0x0018FFFF, SELF(ptrs_184), SELF(ptrs_212) },
-        /* 27 */ { 3, 0x0019FFFF, SELF(ptrs_184), SELF(ptrs_216) },
-        /* 28 */ { 3, 0x001AFFFF, SELF(ptrs_184), SELF(ptrs_217) },
-        /* 29 */ { 3, 0x001BFFFF, SELF(ptrs_184), SELF(ptrs_218) },
-        /* 30 */ { 3, 0x001CFFFF, SELF(ptrs_184), SELF(ptrs_219) },
-        /* 31 */ { 3, 0x001DFFFF, SELF(ptrs_184), SELF(ptrs_220) },
-        /* 32 */ { 3, 0x002AFFFF, SELF(ptrs_184), SELF(ptrs_226) },
-        /* 33 */ { 3, 0x0029FFFF, SELF(ptrs_184), SELF(ptrs_225) },
-        /* 34 */ { 3, 0x0028FFFF, SELF(ptrs_184), SELF(ptrs_224) },
-        /* 35 */ { 1, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_186) },
+        /*  0 */ { 3, 0x0000FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_191) },
+        /*  1 */ { 3, 0x0001FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr01) },
+        /*  2 */ { 3, 0x0002FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_193) },
+        /*  3 */ { 3, 0x0003FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_194) },
+        /*  4 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /*  5 */ { 3, 0x0005FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr05) },
+        /*  6 */ { 3, 0x0006FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr06) },
+        /*  7 */ { 3, 0x0007FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr07) },
+        /*  8 */ { 3, 0x0008FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr08) },
+        /*  9 */ { 3, 0x0009FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr09) },
+        /* 10 */ { 3, 0x000AFFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr10) },
+        /* 11 */ { 3, 0x000BFFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr11) },
+        /* 12 */ { 3, 0x000CFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_202) },
+        /* 13 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 14 */ { 3, 0x0014FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_208) },
+        /* 15 */ { 3, 0x0015FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_209) },
+        /* 16 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 17 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 18 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 19 */ { 3, 0x001EFFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr30) },
+        /* 20 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_CompletedLabel) },
+        /* 21 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_CompletedLabel) },
+        /* 22 */ { 3, 0x001FFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_222) },
+        /* 23 */ { 3, 0x0020FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_223) },
+        /* 24 */ { 3, 0x0016FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_210) },
+        /* 25 */ { 3, 0x0017FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_211) },
+        /* 26 */ { 3, 0x0018FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_212) },
+        /* 27 */ { 3, 0x0019FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_216) },
+        /* 28 */ { 3, 0x001AFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_217) },
+        /* 29 */ { 3, 0x001BFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_218) },
+        /* 30 */ { 3, 0x001CFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_219) },
+        /* 31 */ { 3, 0x001DFFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr29) },
+        /* 32 */ { 3, 0x002AFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_226) },
+        /* 33 */ { 3, 0x0029FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_225) },
+        /* 34 */ { 3, 0x0028FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_224) },
+        /* 35 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_CompletedLabel) },
         /* 36 */ { 2, 0xFFFFFFFF, SELF(ptrs_185), SELF(ptrs_188) },
-        /* 37 */ { 5, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_187) },
-        /* 38 */ { 5, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_187) },
-        /* 39 */ { 5, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_187) },
-        /* 40 */ { 5, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_187) },
-        /* 41 */ { 1, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_186) },
-        /* 42 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 43 */ { 3, 0x002BFFFF, SELF(ptrs_184), SELF(ptrs_227) },
-        /* 44 */ { 1, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_186) },
-        /* 45 */ { 3, 0x002CFFFF, SELF(ptrs_184), SELF(ptrs_228) },
-        /* 46 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 47 */ { 3, 0x000FFFFF, SELF(ptrs_184), SELF(ptrs_203) },
-        /* 48 */ { 3, 0x0010FFFF, SELF(ptrs_184), SELF(ptrs_204) },
-        /* 49 */ { 3, 0x0011FFFF, SELF(ptrs_184), SELF(ptrs_205) },
-        /* 50 */ { 3, 0x0012FFFF, SELF(ptrs_184), SELF(ptrs_206) },
-        /* 51 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 52 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 53 */ { 3, 0x002EFFFF, SELF(ptrs_184), SELF(ptrs_229) },
-        /* 54 */ { 3, 0x002FFFFF, SELF(ptrs_184), SELF(ptrs_230) },
-        /* 55 */ { 3, 0x0030FFFF, SELF(ptrs_184), SELF(ptrs_231) },
-        /* 56 */ { 3, 0x0031FFFF, SELF(ptrs_184), SELF(ptrs_232) },
-        /* 57 */ { 3, 0x0036FFFF, SELF(ptrs_184), SELF(ptrs_233) },
-        /* 58 */ { 3, 0x0037FFFF, SELF(ptrs_184), SELF(ptrs_234) },
-        /* 59 */ { 3, 0x0038FFFF, SELF(ptrs_184), SELF(ptrs_235) },
-        /* 60 */ { 3, 0x0039FFFF, SELF(ptrs_184), SELF(ptrs_236) },
-        /* 61 */ { 3, 0x003AFFFF, SELF(ptrs_184), SELF(ptrs_237) },
-        /* 62 */ { 3, 0x003DFFFF, SELF(ptrs_184), SELF(ptrs_240) },
-        /* 63 */ { 3, 0x0013FFFF, SELF(ptrs_184), SELF(ptrs_207) },
-        /* 64 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 65 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 66 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 67 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 68 */ { 3, 0x003BFFFF, SELF(ptrs_184), SELF(ptrs_238) },
-        /* 69 */ { 3, 0x003CFFFF, SELF(ptrs_184), SELF(ptrs_239) },
-        /* 70 */ { 3, 0x003EFFFF, SELF(ptrs_184), SELF(ptrs_241) },
-        /* 71 */ { 3, 0x003FFFFF, SELF(ptrs_184), SELF(ptrs_242) },
-        /* 72 */ { 2, 0xFFFFFFFF, SELF(ptrs_185), SELF(ptrs_189) },
-        /* 73 */ { 3, 0x0040FFFF, SELF(ptrs_184), SELF(ptrs_243) },
-        /* 74 */ { 4, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_190) },
-        /* 75 */ { 0, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 76 */ { 1, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 77 */ { 2, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 78 */ { 3, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
-        /* 79 */ { 4, 0xFFFFFFFF, SELF(ptrs_182), SELF(ptrs_183) },
+        /* 37 */ { 5, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_PleaseWaitLabel) },
+        /* 38 */ { 5, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_PleaseWaitLabel) },
+        /* 39 */ { 5, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_PleaseWaitLabel) },
+        /* 40 */ { 5, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_PleaseWaitLabel) },
+        /* 41 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_CompletedLabel) },
+        /* 42 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 43 */ { 3, 0x002BFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_227) },
+        /* 44 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_CompletedLabel) },
+        /* 45 */ { 3, 0x002CFFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr44) },
+        /* 46 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 47 */ { 3, 0x000FFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_203) },
+        /* 48 */ { 3, 0x0010FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_204) },
+        /* 49 */ { 3, 0x0011FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_205) },
+        /* 50 */ { 3, 0x0012FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_206) },
+        /* 51 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 52 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 53 */ { 3, 0x002EFFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr46) },
+        /* 54 */ { 3, 0x002FFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_230) },
+        /* 55 */ { 3, 0x0030FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr48) },
+        /* 56 */ { 3, 0x0031FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_232) },
+        /* 57 */ { 3, 0x0036FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_233) },
+        /* 58 */ { 3, 0x0037FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_234) },
+        /* 59 */ { 3, 0x0038FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_235) },
+        /* 60 */ { 3, 0x0039FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_236) },
+        /* 61 */ { 3, 0x003AFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_237) },
+        /* 62 */ { 3, 0x003DFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_240) },
+        /* 63 */ { 3, 0x0013FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr19) },
+        /* 64 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 65 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 66 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 67 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 68 */ { 3, 0x003BFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_238) },
+        /* 69 */ { 3, 0x003CFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_239) },
+        /* 70 */ { 3, 0x003EFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_241) },
+        /* 71 */ { 3, 0x003FFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_242) },
+        /* 72 */ { 2, 0xFFFFFFFF, SELF(ptrs_185), SELF(StrTable_SettingsNotSaved) },
+        /* 73 */ { 3, 0x0040FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr64_PtrEnd) },
+        /* 74 */ { 4, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_GenericError) },
+        /* 75 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 76 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 77 */ { 2, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 78 */ { 3, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
+        /* 79 */ { 4, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
         /* 80 */ { 0, 0xFFFFFFFF, 0x00000000, 0x00000000 },
     },
 
@@ -9857,7 +9857,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .PleaseWait_str_4 = ALIGNED_STRING("PLEASE WAIT!"),
 
-    .ptrs_246 = {
+    .Str_PleaseWait_Multilingual = {
         SELF(English_name),
         SELF(German_code),
         SELF(French_name),
@@ -10030,7 +10030,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TeC1_str = ALIGNED_STRING("TeC1"),
 
-    .ptrs_247 = {
+    .Naka_TechniChord1_Screens = {
         SELF(Right_str_6),
         SELF(Right_str_5),
         SELF(Left_str_3),
@@ -10254,7 +10254,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_17c86 = NAKA_NONE,
 
-    .ptrs_248 = {
+    .Naka_Scale2_Screens = {
         SELF(Off_str_2),
         SELF(Random_str),
         SELF(Piano_str),
@@ -10310,7 +10310,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .NoType_str_2 = ALIGNED_STRING(" NO TYPE !! "),
 
-    .ptrs_249 = {
+    .Scale_Arabic2_NameTable = {
         SELF(str_760),
         SELF(str_759),
         SELF(str_758),
@@ -10349,7 +10349,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_760 = "  0",
 
-    .ptrs_250 = {
+    .Scale_Names_Table = {
         SELF(KeyC_str_2),
         SELF(KeyC_str),
         SELF(KeyD_str_2),
@@ -11943,7 +11943,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1995a = 0x8294,
 
-    .ptrs_254 = {
+    .KeyShift_DisplayStrTable = {
         SELF(w46_code),
         SELF(str_1321),
         SELF(str_1320),
@@ -12102,7 +12102,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_19a78 = 0x0124,
 
-    .ptrs_255 = {
+    .DemoDisk_LangPromptTable = {
         SELF(ToStartingAnExternal_str_3),
         SELF(txt_Um_eine_externe_DEMO_zu_starten),
         SELF(ToStartingAnExternal_str_2),
@@ -12222,7 +12222,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ErrorGetInstanceID_str = ALIGNED_STRING("Error! (GetInstanceID)"),
 
-    .ptrs_257 = {
+    .FileType_NameTable = {
         SELF(SONG_str),
         SELF(SRC_str),
         SELF(NAME_str),
@@ -12307,7 +12307,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2064 = { 0 },
 
-    .ptrs_260 = {
+    .ImgAttr_NameTable = {
         SELF(SRC_str_2),
         SELF(ALT_str),
         SELF(ALIGN_str),
@@ -12524,7 +12524,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .HK_str_3_ptr = SELF(HK_str_3),
 
-    .field_1a1ba = 0x0004,
+    .FileIO_CheckRegionSignature_Data = 0x0004,
 
     .field_1a1bc = 0x0002,
 
@@ -12638,7 +12638,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .rb_str_17 = ALIGNED_STRING("rb"),
 
-    .field_1a272 = 0x0004,
+    .FileDemo_RecordCallback_Data = 0x0004,
 
     .FileIO_LoadRegion4_VRAM_ptr = NAKA_ADDR(FileIO_LoadRegion4_VRAM),
 
@@ -12686,7 +12686,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .wb_str_8 = ALIGNED_STRING("wb"),
 
-    .pad_2079 = { 0 },
+    .SaveAll_CheckRecordLoop_Data = { 0 },
 
     .FileIO_SaveRegion0_VRAM_ptr = NAKA_ADDR(FileIO_SaveRegion0_VRAM),
 
@@ -12766,7 +12766,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .rb_str_26 = ALIGNED_STRING("rb"),
 
-    .ptrs_261 = {
+    .SeqFileType_CodeTable = {
         SELF(LSW_str),
         SELF(PMT_str),
         SELF(SQT_str),
@@ -12805,7 +12805,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2086 = { 0 },
 
-    .field_1a48c = 0x00FF,
+    .GetDiskSizeInfo_Data = 0x00FF,
 
     .pad_2087 = { 0 },
 
@@ -12895,7 +12895,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a608 = 0xFF77,
 
-    .ptrs_262 = {
+    .DiskType_CodeTable = {
         SELF(str_1503),
         SELF(str_1502),
         SELF(Dd_str_2),
@@ -12922,7 +12922,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1503 = "---",
 
-    .ptrs_263 = {
+    .StorageArea_NameTable = {
         SELF(field_1a696),
         SELF(field_1a688),
         SELF(field_1a67a),
@@ -13006,9 +13006,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Emory_str_2 = ALIGNED_STRING("EMORY "),
 
-    .pad_2090 = { 0 },
+    .ResetProgressIndication_Data = { 0 },
 
-    .ptrs_266 = {
+    .DiskOp_ChannelCfgTable = {
         NAKA_ADDR(FileIO_DiskInserted),
         NAKA_ADDR(FileIO_DiskInserted_Stub1),
         NAKA_ADDR(FileIO_DiskInserted_Stub2),
@@ -13252,7 +13252,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .All_str = ALIGNED_STRING("      ALL       "),
 
-    .field_1aa04 = 0xFF08,
+    .SLSrcBankList_FuncBody_Data = 0xFF08,
 
     .field_1aa06 = 0xFF50,
 
@@ -13266,7 +13266,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .All_str_2 = ALIGNED_STRING("      ALL       "),
 
-    .field_1aa26 = 0xFF0A,
+    .SLSrcBankList_FuncBody_Entry_Data = 0xFF0A,
 
     .SLSrcBankList_FuncBody_Data_3 = 0xFF1E,
 
@@ -13276,7 +13276,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .All_str_3 = ALIGNED_STRING("      ALL       "),
 
-    .field_1aa44 = 0xFF14,
+    .SLSrcBankList_FuncBody_Entry_Data_2 = 0xFF14,
 
     .SLSrcBankList_FuncBody_Data_4 = 0xFFA8,
 
@@ -13296,7 +13296,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .SLDstBankList_FuncBody_Str_Colon_3 = ALIGNED_STRING(": "),
 
-    .field_1aa7a = 0xFF08,
+    .SLDstBankList_FuncBody_Data = 0xFF08,
 
     .SLDstBankList_FuncBody_Data_5 = 0xFF50,
 
@@ -13310,7 +13310,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .All_str_5 = ALIGNED_STRING("      ALL       "),
 
-    .field_1aa9e = 0xFF0A,
+    .SLDstBankList_FuncBody_Data_2 = 0xFF0A,
 
     .SLDstBankList_FuncBody_Data_7 = 0xFF1E,
 
@@ -13324,7 +13324,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1595 = ALIGNED_STRING(": "),
 
-    .field_1aac4 = 0xFF14,
+    .SLDstBankList_FuncBody_Data_4 = 0xFF14,
 
     .SLDstBankList_FuncBody_Data_8 = 0xFFA8,
 
@@ -13473,7 +13473,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .InsertOptionText_str = ALIGNED_STRING("InsertOptionText"),
 
-    .ptrs_275 = {
+    .PtrTbl_UiWidgetProps_EA0CE8 = {
         SELF(font_str),
         SELF(fontcolor_str),
         SELF(main_func_str),
@@ -13484,10 +13484,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(auto_inc_str),
         SELF(paintok_str),
         SELF(aicok_str),
-        SELF(str_1616),
+        SELF(Str_UiProp_Empty_EA0D14),
     },
 
-    .str_1616 = ALIGNED_STRING(""),
+    .Str_UiProp_Empty_EA0D14 = ALIGNED_STRING(""),
 
     .aicok_str = "aicok",
 
@@ -13526,32 +13526,32 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .main_func_str_3_ptr = SELF(main_func_str_3),
 
-    .ptr_1ae42 = SELF(str_1631),
+    .ptr_1ae42 = SELF(Str_UiProp_Empty_EA0D94),
 
-    .str_1631 = ALIGNED_STRING(""),
+    .Str_UiProp_Empty_EA0D94 = ALIGNED_STRING(""),
 
     .main_func_str_3 = "main_func",
 
     .ptrs_277 = {
         SELF(main_func_str_4),
         SELF(paintok_str_2),
-        SELF(str_1633),
+        SELF(Str_UiProp_Empty_EA0DAC),
     },
 
-    .str_1633 = ALIGNED_STRING(""),
+    .Str_UiProp_Empty_EA0DAC = ALIGNED_STRING(""),
 
     .paintok_str_2 = "paintok",
 
     .main_func_str_4 = "main_func",
 
-    .ptrs_278 = {
+    .PtrTbl_UiWidgetProps_EA0DC0 = {
         SELF(font_str_2),
         SELF(main_func_str_5),
         SELF(paintok_str_3),
-        SELF(str_1636),
+        SELF(Str_UiProp_Empty_EA0DD0),
     },
 
-    .str_1636 = ALIGNED_STRING(""),
+    .Str_UiProp_Empty_EA0DD0 = ALIGNED_STRING(""),
 
     .paintok_str_3 = "paintok",
 
@@ -13590,7 +13590,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .title_str = "title",
 
-    .ptrs_280 = {
+    .PtrTbl_UiWidgetProps_EA0E32 = {
         SELF(color_str),
         SELF(frame_only_str),
         SELF(dir_str),
@@ -13611,7 +13611,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .color_str = "color",
 
-    .ptrs_281 = {
+    .PtrTbl_UiWidgetProps_EA0E7A = {
         SELF(index_min_str),
         SELF(index_max_str),
         SELF(dial_str_2),
@@ -13632,7 +13632,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .index_min_str = "index_min",
 
-    .ptrs_282 = {
+    .PtrTbl_UiWidgetProps_EA0EC2 = {
         SELF(func_str),
         SELF(interval_str),
         SELF(length_str),
@@ -13650,15 +13650,15 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .func_str = ALIGNED_STRING("func"),
 
-    .ptrs_283 = {
+    .PtrTbl_UiWidgetProps_EA0EF8 = {
         SELF(index_min_str_2),
         SELF(index_max_str_2),
         SELF(interval_str_2),
         SELF(send_index_str),
-        SELF(str_1665),
+        SELF(Str_UiProp_Empty_EA0F0C),
     },
 
-    .str_1665 = ALIGNED_STRING(""),
+    .Str_UiProp_Empty_EA0F0C = ALIGNED_STRING(""),
 
     .send_index_str = ALIGNED_STRING("send_index"),
 
@@ -13670,13 +13670,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .win_str_ptr = SELF(win_str),
 
-    .ptr_1afee = SELF(str_1670),
+    .ptr_1afee = SELF(Str_UiProp_Empty_EA0F40),
 
-    .str_1670 = ALIGNED_STRING(""),
+    .Str_UiProp_Empty_EA0F40 = ALIGNED_STRING(""),
 
     .win_str = "win",
 
-    .classdef_165_0 = { .proc = NAKA_ADDR(PsFileNameBoxProc), .parent = 0x01600011, .allsize = 58, .selfsize = 30, .name = SELF(PsFileNameBox_name), .propdata = SELF(PsFileNameBox_code), .propname = SELF(ptrs_275) },
+    .classdef_165_0 = { .proc = NAKA_ADDR(PsFileNameBoxProc), .parent = 0x01600011, .allsize = 58, .selfsize = 30, .name = SELF(PsFileNameBox_name), .propdata = SELF(PsFileNameBox_code), .propname = SELF(PtrTbl_UiWidgetProps_EA0CE8) },
 
     .classdef_165_1 = { .proc = NAKA_ADDR(PsWindowToggleProc), .parent = 0x01600026, .allsize = 52, .selfsize = 12, .name = SELF(PsWindowToggle_name), .propdata = SELF(PsWindowToggle_code), .propname = SELF(ptrs_276) },
 
@@ -13684,7 +13684,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .classdef_165_3 = { .proc = NAKA_ADDR(AcParaStrBoxProc), .parent = 0x01600012, .allsize = 44, .selfsize = 8, .name = SELF(AcParaStrBox_name), .propdata = SELF(AcParaStrBox_code), .propname = SELF(ptrs_277) },
 
-    .classdef_165_4 = { .proc = NAKA_ADDR(AcFileSfxBoxProc), .parent = 0x01600010, .allsize = 34, .selfsize = 12, .name = SELF(AcFileSfxBox_name), .propdata = SELF(AcFileSfxBox_code), .propname = SELF(ptrs_278) },
+    .classdef_165_4 = { .proc = NAKA_ADDR(AcFileSfxBoxProc), .parent = 0x01600010, .allsize = 34, .selfsize = 12, .name = SELF(AcFileSfxBox_name), .propdata = SELF(AcFileSfxBox_code), .propname = SELF(PtrTbl_UiWidgetProps_EA0DC0) },
 
     .classdef_165_5 = { .proc = NAKA_ADDR(AcMonoIndexToggleProc), .parent = 0x01600026, .allsize = 42, .selfsize = 2, .name = SELF(AcMonoIndexToggle_name), .propdata = SELF(AcMonoIndexToggle_code), .propname = SELF(index_str_ptr) },
 
@@ -13692,13 +13692,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .classdef_165_7 = { .proc = NAKA_ADDR(VwScreenTitleProc), .parent = 0x01600011, .allsize = 38, .selfsize = 10, .name = SELF(classdef_165_0_name_3), .propdata = SELF(XbG_name), .propname = SELF(ptrs_279) },
 
-    .classdef_165_8 = { .proc = NAKA_ADDR(ArrowProc), .parent = 0x01600010, .allsize = 32, .selfsize = 10, .name = SELF(Arrow_code), .propdata = SELF(classdef_165_0_propdata_3), .propname = SELF(ptrs_280) },
+    .classdef_165_8 = { .proc = NAKA_ADDR(ArrowProc), .parent = 0x01600010, .allsize = 32, .selfsize = 10, .name = SELF(Arrow_code), .propdata = SELF(classdef_165_0_propdata_3), .propname = SELF(PtrTbl_UiWidgetProps_EA0E32) },
 
-    .classdef_165_9 = { .proc = NAKA_ADDR(IvIndexSwCtrlProc), .parent = 0x01600027, .allsize = 32, .selfsize = 10, .name = SELF(classdef_165_0_name_2), .propdata = SELF(classdef_165_0_propdata_2), .propname = SELF(ptrs_281) },
+    .classdef_165_9 = { .proc = NAKA_ADDR(IvIndexSwCtrlProc), .parent = 0x01600027, .allsize = 32, .selfsize = 10, .name = SELF(classdef_165_0_name_2), .propdata = SELF(classdef_165_0_propdata_2), .propname = SELF(PtrTbl_UiWidgetProps_EA0E7A) },
 
-    .classdef_165_10 = { .proc = NAKA_ADDR(AcRotStrBoxProc), .parent = 0x01600012, .allsize = 48, .selfsize = 12, .name = SELF(AcRotStrBox_name), .propdata = SELF(AcRotStrBox_code), .propname = SELF(ptrs_282) },
+    .classdef_165_10 = { .proc = NAKA_ADDR(AcRotStrBoxProc), .parent = 0x01600012, .allsize = 48, .selfsize = 12, .name = SELF(AcRotStrBox_name), .propdata = SELF(AcRotStrBox_code), .propname = SELF(PtrTbl_UiWidgetProps_EA0EC2) },
 
-    .classdef_165_11 = { .proc = NAKA_ADDR(IvIndexSwDelayProc), .parent = 0x01600027, .allsize = 30, .selfsize = 8, .name = SELF(classdef_165_0_name), .propdata = SELF(classdef_165_0_propdata), .propname = SELF(ptrs_283) },
+    .classdef_165_11 = { .proc = NAKA_ADDR(IvIndexSwDelayProc), .parent = 0x01600027, .allsize = 30, .selfsize = 8, .name = SELF(classdef_165_0_name), .propdata = SELF(classdef_165_0_propdata), .propname = SELF(PtrTbl_UiWidgetProps_EA0EF8) },
 
     .classdef_165_12 = { .proc = NAKA_ADDR(IvWaitWinCtlProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = SELF(IvWaitWinCtl_name), .propdata = SELF(IvWaitWinCtl_code), .propname = SELF(win_str_ptr) },
 
@@ -13760,7 +13760,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Cheap_ClassCount_165 = 0x000D,
 
-    .ptrs_284 = {
+    .PtrTbl_EventNames_EA1188 = {
         SELF(EV_NOTPARADRAW_str),
         SELF(EV_NOTPOSTAIC_str),
         SELF(EV_INDEXSW_UP_D_str),

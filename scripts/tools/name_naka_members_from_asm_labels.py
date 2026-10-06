@@ -11,6 +11,8 @@ QUESTION IT ANSWERS / WHAT IT DOES
     - the member starts at the slice's offset and has exactly its length (the same object, not a part);
     - the kinds agree: a str_N member takes only a string label (`_Str_` / `Str_` in it), a vSS_eK element
       only a NakaWidget_ label, any other placeholder any label but a NakaWidget_ one;
+    - the label says more than kind words and indexes (IconName_i173 does not: it would only trade one
+      positional name for another);
     - the label is not already a member name in that file.
   The rename covers the declaration, the designated initializer and every SELF(member) in the file (word-
   bounded).  Comments are not touched.  Only names change, so every blob must stay byte-identical.
@@ -38,6 +40,16 @@ ELEMENT = re.compile(r'^v[0-9A-Fa-f]+_e\d+$')
 STRING = re.compile(r'^str_\d+$')
 
 
+KIND_WORDS = {"iconname", "iconbitmapname", "funcname", "nakawidget", "str", "data", "table", "ptrtable", "ptr",
+              "ptrs", "bytes", "label"}
+INDEX = re.compile(r'^(?:0x)?[A-Za-z]?(?:[0-9A-F]+|[0-9a-f]*[0-9][0-9a-f]*)$')
+
+
+def informative(label):
+    """A label made only of kind words and indexes (IconName_i173) says no more than str_N: skip it."""
+    return any(t and not INDEX.match(t) and t.lower() not in KIND_WORDS for t in label.split("_"))
+
+
 def kinds_agree(member, label):
     if STRING.match(member):
         return "_Str_" in label or label.startswith("Str_") or label.endswith("_Str")
@@ -46,13 +58,29 @@ def kinds_agree(member, label):
     return not label.startswith("NakaWidget_")
 
 
+LABEL_ONLY = re.compile(r'^([A-Za-z_]\w*):\s*(;.*)?$')
+INCBIN = re.compile(r'^\s+\.incbin\s+"includes/generated/(\w+)\.bin",\s*(0x[0-9A-Fa-f]+|\d+),\s*(0x[0-9A-Fa-f]+|\d+)')
+
+
 def tree_slices(tree):
+    """bin stem -> {offset: (label, length)}: `Label: .incbin ...` on one line, or a `Label:` line followed by
+    the `.incbin` line (comment lines between them are skipped)."""
     slices = collections.defaultdict(dict)
     for p in glob.glob(os.path.join(REPO, tree, "maincpu", "**", "*.s"), recursive=True):
-        for line in open(p, "rb").read().decode("latin-1").split("\n"):
+        lines = open(p, "rb").read().decode("latin-1").split("\n")
+        for i, line in enumerate(lines):
             m = SLICE.match(line)
             if m:
                 slices[m.group(2)][int(m.group(3), 0)] = (m.group(1), int(m.group(4), 0))
+                continue
+            lm = LABEL_ONLY.match(line)
+            if lm:
+                j = i + 1
+                while j < len(lines) and lines[j].lstrip().startswith(";"):
+                    j += 1
+                im = INCBIN.match(lines[j]) if j < len(lines) else None
+                if im:
+                    slices[im.group(1)][int(im.group(2), 0)] = (lm.group(1), int(im.group(3), 0))
     return slices
 
 
@@ -83,7 +111,7 @@ def main():
             if not hit or not placeholder_field(mb.name):
                 continue
             label, length = hit
-            if length == mb.size and not placeholder_field(label) and kinds_agree(mb.name, label) \
+            if length == mb.size and not placeholder_field(label) and informative(label) and kinds_agree(mb.name, label) \
                     and label not in names and label not in plan.values():
                 plan[mb.name] = label
         if not plan:

@@ -634,7 +634,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0760;
     uint32_t ptrs_3[4];  /* 4 pointers */
     uint16_t field_0772;
-    uint32_t ptrs_4[4];  /* 4 pointers */
+    uint32_t WidgetStyleDataTable[4];  /* 4 pointers */
     /* PanelMemory_SlotAddresses: the RAM address of each panel-memory slot, 0x1ED400 + 960*n for n < 80; [80] = the Music Stylist record's mirror (read by PanelMemory_Recall and the other panel-memory routines in ui/bitmap_out_routines.s) */
     uint32_t PanelMemory_SlotAddresses[81];
     uint16_t field_08c8;
@@ -3297,7 +3297,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_18bf0;
     uint16_t field_18bf2;
     uint16_t field_18bf4;
-    uint16_t field_18bf6;
+    uint16_t PmemMode_Select_Data;
     uint16_t field_18bf8;
     uint16_t field_18bfa;
     uint16_t field_18bfc;
@@ -3312,28 +3312,28 @@ typedef struct __attribute__((packed)) {
     uint16_t field_18c0e;
     uint16_t field_18c10;
     uint16_t field_18c12;
-    uint16_t field_18c14;
+    uint16_t SeqChan_Map_2ch;
     uint32_t RVari_Select_CheckSameBank_PtrTable[3];  /* 3 pointers */
     char MemoryC_str[10];
     char MemoryB_str[10];
     char MemoryA_str[10];
     char Right1Right2LeftPart4_str[226];
-    uint32_t ptrs_34[16];  /* 16 pointers */
+    uint32_t Naka_MemoryC_Screens[16];  /* 16 pointers */
     char str_2527[4];
     char str_2528[4];
     char str_2529[4];
-    char B_str[4];
-    char BA0_str[6];
-    char A_str[4];
-    char AA0_str[6];
+    char MemScreen_NoteB[4];
+    char NakaInst_B_a0[6];
+    char MemScreen_NoteA_Str[4];
+    char NakaInst_A_a0[6];
     char G_str[4];
-    char F_str[6];
-    char F_str_2[4];
-    char E_str[4];
-    char EA0_str[6];
-    char D_str[4];
-    char DA0_str[6];
-    char C_str[4];
+    char NakaInst_F_9e_ECFF44[6];
+    char MemScreen_NoteF[4];
+    char MemScreen_NoteE_Str[4];
+    char NakaInst_E_a0_ECFF52[6];
+    char MemScreen_NoteD[4];
+    char NakaInst_D_a0_ECFF5C[6];
+    char MemScreen_NoteC[4];
     char str_2542[4];
     uint32_t ptrs_35[39];  /* 39 pointers */
     uint16_t field_18e48;
@@ -4364,7 +4364,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0772 = 0x0549,
 
-    .ptrs_4 = {
+    .WidgetStyleDataTable = {
         NAKA_ADDR(VGA_Initialize),
         NAKA_ADDR(VGA_Stub_1),
         NAKA_ADDR(VGA_Stub_2),
@@ -13336,7 +13336,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_18bf4 = 0x8b8a,
 
-    .field_18bf6 = 0x8b89,
+    .PmemMode_Select_Data = 0x8b89,
 
     .field_18bf8 = 0x8988,
 
@@ -13366,7 +13366,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_18c12 = 0x0908,
 
-    .field_18c14 = 0x0888,
+    .SeqChan_Map_2ch = 0x0888,
 
     .RVari_Select_CheckSameBank_PtrTable = {
         SELF(MemoryA_str),
@@ -13382,20 +13382,20 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .Right1Right2LeftPart4_str = ALIGNED_STRING("RIGHT1 RIGHT2 LEFT   PART4  PART5  PART6  PART7  PART8  PART9  PART10 PART11 PART12 PART13 PART14 PART15 PART16 ACCOMP1ACCOMP2ACCOMP3BASS   DRUMS  CHORD  R.BASS MSP    MSP    CONTROLPART27 PART28 PART29 PART30 PART31 PART32 "),
 
-    .ptrs_34 = {
+    .Naka_MemoryC_Screens = {
         SELF(str_2542),
-        SELF(C_str),
-        SELF(DA0_str),
-        SELF(D_str),
-        SELF(EA0_str),
-        SELF(E_str),
-        SELF(F_str_2),
-        SELF(F_str),
+        SELF(MemScreen_NoteC),
+        SELF(NakaInst_D_a0_ECFF5C),
+        SELF(MemScreen_NoteD),
+        SELF(NakaInst_E_a0_ECFF52),
+        SELF(MemScreen_NoteE_Str),
+        SELF(MemScreen_NoteF),
+        SELF(NakaInst_F_9e_ECFF44),
         SELF(G_str),
-        SELF(AA0_str),
-        SELF(A_str),
-        SELF(BA0_str),
-        SELF(B_str),
+        SELF(NakaInst_A_a0),
+        SELF(MemScreen_NoteA_Str),
+        SELF(NakaInst_B_a0),
+        SELF(MemScreen_NoteB),
         SELF(str_2529),
         SELF(str_2528),
         SELF(str_2527),
@@ -13407,29 +13407,29 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .str_2529 = ALIGNED_STRING("  "),
 
-    .B_str = ALIGNED_STRING("B "),
+    .MemScreen_NoteB = ALIGNED_STRING("B "),
 
-    .BA0_str = ALIGNED_STRING("B~a0"),
+    .NakaInst_B_a0 = ALIGNED_STRING("B~a0"),
 
-    .A_str = ALIGNED_STRING("A "),
+    .MemScreen_NoteA_Str = ALIGNED_STRING("A "),
 
-    .AA0_str = ALIGNED_STRING("A~a0"),
+    .NakaInst_A_a0 = ALIGNED_STRING("A~a0"),
 
     .G_str = ALIGNED_STRING("G "),
 
-    .F_str = ALIGNED_STRING("F~9e"),
+    .NakaInst_F_9e_ECFF44 = ALIGNED_STRING("F~9e"),
 
-    .F_str_2 = ALIGNED_STRING("F "),
+    .MemScreen_NoteF = ALIGNED_STRING("F "),
 
-    .E_str = ALIGNED_STRING("E "),
+    .MemScreen_NoteE_Str = ALIGNED_STRING("E "),
 
-    .EA0_str = ALIGNED_STRING("E~a0"),
+    .NakaInst_E_a0_ECFF52 = ALIGNED_STRING("E~a0"),
 
-    .D_str = ALIGNED_STRING("D "),
+    .MemScreen_NoteD = ALIGNED_STRING("D "),
 
-    .DA0_str = ALIGNED_STRING("D~a0"),
+    .NakaInst_D_a0_ECFF5C = ALIGNED_STRING("D~a0"),
 
-    .C_str = ALIGNED_STRING("C "),
+    .MemScreen_NoteC = ALIGNED_STRING("C "),
 
     .str_2542 = ALIGNED_STRING("  "),
 

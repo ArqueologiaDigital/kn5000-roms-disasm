@@ -1435,7 +1435,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_220[4];  /* zero padding */
     char MIC_str_8[4];
     /* element 7 of Viewable slot 0x76: IvFixWin (class id 0x0160004A) */
-    naka_cls_IvFixWin_t v76_e7;
+    naka_cls_IvFixWin_t NakaWidget_SmfMdly2OrchSel;
     /* element 0 of Viewable slot 0x78 "DkMdlyPly": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DkMdlyPly;
     char SongMedley_text[20];
@@ -1484,39 +1484,39 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_244[4];  /* zero padding */
     char MIXER_str_7[6];
     /* element 13 of Viewable slot 0x78: Window (class id 0x01600035) */
-    naka_cls_Window_t v78_e13;
+    naka_cls_Window_t NakaWidget_SongMdlyOrchSel;
     /* element 14 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e14;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel1;
     /* element 15 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e15;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel2;
     /* element 16 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e16;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel3;
     /* element 17 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e17;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel4;
     /* element 18 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e18;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel5;
     /* element 19 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e19;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel6;
     /* element 20 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e20;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel7;
     /* element 21 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e21;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel8;
     /* element 22 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e22;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel9;
     /* element 23 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e23;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel10;
     /* element 24 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e24;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel11;
     /* element 25 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e25;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel12;
     /* element 26 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e26;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel13;
     /* element 27 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e27;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel14;
     /* element 28 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e28;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel15;
     /* element 29 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
-    naka_cls_AcTrackSwitch_t v78_e29;
+    naka_cls_AcTrackSwitch_t NakaWidget_SongMdlySongSel16;
     /* element 0 of Viewable slot 0x7A "SqMdlyPly": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t SqMdlyPly;
     char SongMedley_text_2[12];
@@ -1575,7 +1575,7 @@ typedef struct __attribute__((packed)) {
     /* element 4 of Viewable slot 0x89: IvExitModeTrSel (class id 0x01670015) */
     naka_cls_IvExitModeTrSel_t SqTrSel_IvExitModeTrSel;
     /* element 0 of Viewable slot 0x8A: IvDirmdScreen (class id 0x0160005A) */
-    naka_cls_IvDirmdScreen_t v8A_e0;
+    naka_cls_IvDirmdScreen_t NakaWidget_StepRecSubPanel;
     /* element 0 of Viewable slot 0x8B "SqTrAs": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t SqTrAs;
     char TrackAssign_text[16];
@@ -4043,7 +4043,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .MIC_str_8 = "MIC",
 
-    .v76_e7 = {
+    .NakaWidget_SmfMdly2OrchSel = {
         .class_ = 0x0160004A,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4270,7 +4270,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .MIXER_str_7 = "MIXER",
 
-    .v78_e13 = {
+    .NakaWidget_SongMdlyOrchSel = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 14,
@@ -4285,7 +4285,7 @@ const naka_direct_play_t naka_direct_play_data
         .child = 0x0003DD9A,
     },
 
-    .v78_e14 = {
+    .NakaWidget_SongMdlySongSel1 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4299,7 +4299,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDA2,
     },
 
-    .v78_e15 = {
+    .NakaWidget_SongMdlySongSel2 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4313,7 +4313,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDA8,
     },
 
-    .v78_e16 = {
+    .NakaWidget_SongMdlySongSel3 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4327,7 +4327,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDAE,
     },
 
-    .v78_e17 = {
+    .NakaWidget_SongMdlySongSel4 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4341,7 +4341,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDB4,
     },
 
-    .v78_e18 = {
+    .NakaWidget_SongMdlySongSel5 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4355,7 +4355,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDBA,
     },
 
-    .v78_e19 = {
+    .NakaWidget_SongMdlySongSel6 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4369,7 +4369,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDC0,
     },
 
-    .v78_e20 = {
+    .NakaWidget_SongMdlySongSel7 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4383,7 +4383,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDC6,
     },
 
-    .v78_e21 = {
+    .NakaWidget_SongMdlySongSel8 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4397,7 +4397,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDCC,
     },
 
-    .v78_e22 = {
+    .NakaWidget_SongMdlySongSel9 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4411,7 +4411,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDD2,
     },
 
-    .v78_e23 = {
+    .NakaWidget_SongMdlySongSel10 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4425,7 +4425,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDD8,
     },
 
-    .v78_e24 = {
+    .NakaWidget_SongMdlySongSel11 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4439,7 +4439,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDDE,
     },
 
-    .v78_e25 = {
+    .NakaWidget_SongMdlySongSel12 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4453,7 +4453,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDE4,
     },
 
-    .v78_e26 = {
+    .NakaWidget_SongMdlySongSel13 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4467,7 +4467,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDEA,
     },
 
-    .v78_e27 = {
+    .NakaWidget_SongMdlySongSel14 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4481,7 +4481,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDF0,
     },
 
-    .v78_e28 = {
+    .NakaWidget_SongMdlySongSel15 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4495,7 +4495,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDF6,
     },
 
-    .v78_e29 = {
+    .NakaWidget_SongMdlySongSel16 = {
         .class_ = 0x01600059,
         .super = 13,
         .sub = NAKA_NONE,
@@ -4780,7 +4780,7 @@ const naka_direct_play_t naka_direct_play_data
         .rect = { 0, 64, 31, 95 },
     },
 
-    .v8A_e0 = {
+    .NakaWidget_StepRecSubPanel = {
         .class_ = 0x0160005A,
         .super = NAKA_NONE,
         .sub = NAKA_NONE,

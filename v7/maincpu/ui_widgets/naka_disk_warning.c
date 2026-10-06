@@ -639,7 +639,7 @@ typedef struct __attribute__((packed)) {
     char str_224[2];
     char str_225[2];
     char str_226[2];
-    uint32_t ptrs_14[3];  /* 3 pointers */
+    uint32_t Data_SoundEditorCharsLayout[3];  /* 3 pointers */
     char WndScroll_ItemCountCheck_Str_Chr25[2];
     char str_228[2];
     uint16_t field_1236;
@@ -4026,7 +4026,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_226 = "!",
 
-    .ptrs_14 = {
+    .Data_SoundEditorCharsLayout = {
         SELF(ptrs_11),
         SELF(ptrs_12),
         SELF(ptrs_13),

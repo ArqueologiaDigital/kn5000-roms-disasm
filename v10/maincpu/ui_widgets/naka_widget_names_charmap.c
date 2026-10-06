@@ -580,7 +580,7 @@ typedef struct __attribute__((packed)) {
     char w99_code[2];
     char Object_name[8];
     char Root_ClassCount_160[2];
-    uint16_t field_0624;
+    uint16_t SliderH_Setup_Data;
     char str_13[2];
     char CHARA5W_str[8];
     char CHARA2W_str[8];
@@ -1319,7 +1319,7 @@ typedef struct __attribute__((packed)) {
     char InitializeToshi_str[16];
     char InitializeMurai_str[16];
     char InitializeRoot_str[16];
-    uint16_t field_44ca;
+    uint16_t SliderV_Setup_Data;
     uint32_t ptrs_5[256];  /* 256 pointers */
     char str_567[2];
     char i173_str[6];
@@ -2132,7 +2132,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .Root_ClassCount_160 = "m",
 
-    .field_0624 = 0x000A,
+    .SliderH_Setup_Data = 0x000A,
 
     .str_13 = ALIGNED_STRING(""),
 
@@ -5083,7 +5083,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .InitializeRoot_str = ALIGNED_STRING("InitializeRoot"),
 
-    .field_44ca = 0x00B0,
+    .SliderV_Setup_Data = 0x00B0,
 
     .ptrs_5 = {
         SELF(None_str),

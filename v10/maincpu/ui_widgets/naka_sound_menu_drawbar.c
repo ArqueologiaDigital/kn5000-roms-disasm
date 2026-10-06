@@ -197,7 +197,7 @@ typedef struct __attribute__((packed)) {
     char EV_READPRESENTATION_str[20];
     char EV_ACCORDIONTAB_str[16];
     uint16_t Murai_ResEventCount_1C1;
-    uint32_t ptrs_1[16];  /* 16 pointers */
+    uint32_t Naka_Event_Table3[16];  /* 16 pointers */
     char MT_GetToneMode_str[16];
     char MT_ExitPresentation_str[20];
     char MT_InitPresentation_str[20];
@@ -482,7 +482,7 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
 
     .Murai_ResEventCount_1C1 = 0x000A,
 
-    .ptrs_1 = {
+    .Naka_Event_Table3 = {
         SELF(MT_GetPart_str),
         SELF(MT_GetLswDataNo_str),
         SELF(MT_CheckPart_str),

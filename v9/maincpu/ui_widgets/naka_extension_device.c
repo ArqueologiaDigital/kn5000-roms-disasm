@@ -1582,7 +1582,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_385a;
     uint16_t field_385c;
     uint8_t pad_235[2];  /* zero padding */
-    uint32_t ptrs_31[4];  /* 4 pointers */
+    uint32_t EffectMode_DispatchTable[4];  /* 4 pointers */
     uint16_t field_3870;
     uint16_t field_3872;
     uint16_t field_3874;
@@ -1647,7 +1647,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_38ea;
     uint16_t field_38ec;
     uint16_t field_38ee;
-    uint32_t ptrs_32[32];  /* 32 pointers */
+    uint32_t ENCODER_HANDLER_TABLE[32];  /* 32 pointers */
     uint16_t field_3970;
     uint16_t field_3972;
     uint16_t field_3974;
@@ -6920,7 +6920,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .pad_235 = { 0 },
 
-    .ptrs_31 = {
+    .EffectMode_DispatchTable = {
         NAKA_ADDR(PanelInput_InitPedalRecords),
         NAKA_ADDR(Audio_NullHandler_A),
         NAKA_ADDR(Audio_NullHandler_B),
@@ -7055,7 +7055,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_38ee = 0x1F1F,
 
-    .ptrs_32 = {
+    .ENCODER_HANDLER_TABLE = {
         NAKA_ADDR(Encoder_ReturnDefaultConstant),
         NAKA_ADDR(Encoder_ReturnDefaultConstant),
         NAKA_ADDR(Encoder_ProcessModwheel),
