@@ -9123,6 +9123,14 @@ RENAMES = {
     "DisplayList_FA4E60": "SystemTest_SplitNotesForDisplay_DL4",
     "DisplayList_FA4EAB": "SystemTest_SplitNotesForDisplay_DL3",
     "Data_F6D002": "StepRecord_AppendLatchedHoldEvent_Cont",
+    "OldCopy_sub_F7AA29": "OldCopy_SongClear_InitFields",
+    "OldCopy_sub_F7AB3F": "OldCopy_SongClear_ClearBankTrackMask",
+    "OldCopy_sub_F7AB9C": "OldCopy_TrackClear_ResetSelectionOnEntry",
+    "OldCopy_sub_F7AC9D": "OldCopy_TrackMerge_InitFields",
+    "OldCopy_sub_F7ACE6": "OldCopy_TrackMerge_StepSelectedFieldUp",
+    "OldCopy_sub_F7AD42": "OldCopy_TrackMerge_StepSourceTrack1",
+    "OldCopy_sub_F7AD8F": "OldCopy_TrackMerge_StepSourceTrack2",
+    "OldCopy_sub_F7ADDC": "OldCopy_TrackMerge_StepDestTrack",
 }
 
 

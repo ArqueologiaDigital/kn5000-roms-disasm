@@ -169496,7 +169496,7 @@ OldCopy_F7AA1F:
 	call	T_Seq_RestoreTrackMaskAndRewind	; F6F01F  call 0xf409f4
 	m_and_mi8 MB16, 0x34bb, 0xfb	; F6F023  and (0x34bb),0xfb
 	ret	; F6F028  ret
-OldCopy_sub_F7AA29:
+OldCopy_SongClear_InitFields:
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x1b	; F6F029  cp (0x207b),0x1b
 	jr	z, OldCopy_F7AA49	; F6F02E  jr Z,0xf6f049
 	ld	(UI_StatusCode:16), 255	; F6F030  ld (0x2880),0xff
@@ -169520,7 +169520,7 @@ OldCopy_F7AA5D:
 ; Called from: in-module: 0xF6F043 0xF6F0AA 0xF6F0D8
 ; Touches: (0x0D4A) (0x0E02) (0x12F6) (0x2070) (0x2071) (0x2075) (0x207E)
 ;          (0x2880) (0x3010) (0x360A) +1 more  |  0x610000
-; Calls:   OldCopy_SongStore_LoadSongHeaderToDisplay T_SongClear_ClearBank OldCopy_sub_F7AB3F
+; Calls:   OldCopy_SongStore_LoadSongHeaderToDisplay T_SongClear_ClearBank OldCopy_SongClear_ClearBankTrackMask
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -169601,7 +169601,7 @@ OldCopy_F7AB08:
 	ld	(UI_StatusCode:16), 255	; F6F108  ld (0x2880),0xff
 	ld	(BStore_ErrorCode:16), 0	; F6F10D  ld (0x0d4a),0x00
 	call	T_SongClear_ClearBank	; F6F112  call 0xf426e0
-	call	OldCopy_sub_F7AB3F	; F6F116  call 0xf6f13f
+	call	OldCopy_SongClear_ClearBankTrackMask	; F6F116  call 0xf6f13f
 	ld	a, (3586:16)	; F6F11A  ld A,(0x0e02)
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F6F11E  cp A,(0x360a)
 	jr	nz, OldCopy_F7AB2E	; F6F122  jr NZ,0xf6f12e
@@ -169616,7 +169616,7 @@ OldCopy_F7AB3E:
 	ret	; F6F13E  ret
 
 ; --------------------------------------------------------------------------
-; OldCopy_sub_F7AB3F
+; OldCopy_SongClear_ClearBankTrackMask
 ; Called from: in-module: 0xF6F116
 ; Touches: (0x0E02) (0x360C)  |  0x610000
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
@@ -169630,7 +169630,7 @@ OldCopy_F7AB3E:
 ;   was the address.  See the banner at 0xF6F000: its callers are inside
 ;   that copy, which is dead here.
 ; --------------------------------------------------------------------------
-OldCopy_sub_F7AB3F:
+OldCopy_SongClear_ClearBankTrackMask:
 	m_cp_mi8 MB16, 0x0e02, 0x0a	; F6F13F  cp (0x0e02),0x0a
 	jr	nz, OldCopy_F7AB76	; F6F144  jr NZ,0xf6f176
 	xor	xwa, xwa	; F6F146  xor XWA,XWA
@@ -169701,7 +169701,7 @@ OldCopy_F7AB9B:
 ;   0xF7AB9C-0xF7ADFF -- see the banner at 0xF6F000.  The label
 ;   `Data_F6F19C` is retired; the lines below mirror the live copy's.
 ; --------------------------------------------------------------------------
-OldCopy_sub_F7AB9C:
+OldCopy_TrackClear_ResetSelectionOnEntry:
 	ld	a, (UI_ScreenLatch:16)	; F6F19C  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F6F1A0  cp A,(0x207b)
 	jr	z, OldCopy_F7ABB8	; F6F1A4  jr Z,0xf6f1b8
@@ -169785,7 +169785,7 @@ OldCopy_F7AC5D:
 	ldw	(UI_Request:16), 16555	; F6F296  ld (0x2070),0x40ab
 OldCopy_F7AC9C:
 	ret	; F6F29C  ret
-OldCopy_sub_F7AC9D:
+OldCopy_TrackMerge_InitFields:
 	calr	TrackMerge_LoadSavedFields - 0xBA00	; F6F29D  calr 0xf6f5d8
 	ld	(3514:16), 1	; F6F2A0  ld (0x0dba),0x01
 	ret	; F6F2A5  ret
@@ -169812,23 +169812,23 @@ OldCopy_TrackMerge_SelectField3:
 	ld	(3514:16), 3	; F6F2DB  ld (0x0dba),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F6F2E0  or (0x2075),0x09
 	ret	; F6F2E5  ret
-OldCopy_sub_F7ACE6:
+OldCopy_TrackMerge_StepSelectedFieldUp:
 	ld	(3150:16), w	; F6F2E6  ld (0x0c4e),W
 	and	w, 128	; F6F2EA  and W,0x80
 	ld	(3151:16), w	; F6F2ED  ld (0x0c4f),W
 	m_cp_mi8 MB16, 0x0dba, 0x01	; F6F2F1  cp (0x0dba),0x01
 	jr	nz, OldCopy_F7ACFD	; F6F2F6  jr NZ,0xf6f2fd
-	calr	OldCopy_sub_F7AD42	; F6F2F8  calr 0xf6f342
+	calr	OldCopy_TrackMerge_StepSourceTrack1	; F6F2F8  calr 0xf6f342
 	jr	OldCopy_F7AD13	; F6F2FB  jr T,0xf6f313
 OldCopy_F7ACFD:
 	m_cp_mi8 MB16, 0x0dba, 0x02	; F6F2FD  cp (0x0dba),0x02
 	jr	nz, OldCopy_F7AD09	; F6F302  jr NZ,0xf6f309
-	calr	OldCopy_sub_F7AD8F	; F6F304  calr 0xf6f38f
+	calr	OldCopy_TrackMerge_StepSourceTrack2	; F6F304  calr 0xf6f38f
 	jr	OldCopy_F7AD13	; F6F307  jr T,0xf6f313
 OldCopy_F7AD09:
 	m_cp_mi8 MB16, 0x0dba, 0x03	; F6F309  cp (0x0dba),0x03
 	jr	nz, OldCopy_F7AD13	; F6F30E  jr NZ,0xf6f313
-	calr	OldCopy_sub_F7ADDC	; F6F310  calr 0xf6f3dc
+	calr	OldCopy_TrackMerge_StepDestTrack	; F6F310  calr 0xf6f3dc
 OldCopy_F7AD13:
 	ret	; F6F313  ret
 OldCopy_TrackMerge_StageZero_SoftKeyCol5:
@@ -169837,20 +169837,20 @@ OldCopy_TrackMerge_StageZero_SoftKeyCol5:
 	ld	(3151:16), w	; F6F31B  ld (0x0c4f),W
 	m_cp_mi8 MB16, 0x0dba, 0x01	; F6F31F  cp (0x0dba),0x01
 	jr	nz, OldCopy_F7AD2B	; F6F324  jr NZ,0xf6f32b
-	calr	OldCopy_sub_F7AD42	; F6F326  calr 0xf6f342
+	calr	OldCopy_TrackMerge_StepSourceTrack1	; F6F326  calr 0xf6f342
 	jr	OldCopy_F7AD41	; F6F329  jr T,0xf6f341
 OldCopy_F7AD2B:
 	m_cp_mi8 MB16, 0x0dba, 0x02	; F6F32B  cp (0x0dba),0x02
 	jr	nz, OldCopy_F7AD37	; F6F330  jr NZ,0xf6f337
-	calr	OldCopy_sub_F7AD8F	; F6F332  calr 0xf6f38f
+	calr	OldCopy_TrackMerge_StepSourceTrack2	; F6F332  calr 0xf6f38f
 	jr	OldCopy_F7AD41	; F6F335  jr T,0xf6f341
 OldCopy_F7AD37:
 	m_cp_mi8 MB16, 0x0dba, 0x03	; F6F337  cp (0x0dba),0x03
 	jr	nz, OldCopy_F7AD41	; F6F33C  jr NZ,0xf6f341
-	calr	OldCopy_sub_F7ADDC	; F6F33E  calr 0xf6f3dc
+	calr	OldCopy_TrackMerge_StepDestTrack	; F6F33E  calr 0xf6f3dc
 OldCopy_F7AD41:
 	ret	; F6F341  ret
-OldCopy_sub_F7AD42:
+OldCopy_TrackMerge_StepSourceTrack1:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F6F342  or (0x2075),0x09
 	ld	a, (3091:16)	; F6F347  ld A,(0x0c13)
 	m_cp_mi8 MB16, 0x0c4f, 0x80	; F6F34B  cp (0x0c4f),0x80
@@ -169883,7 +169883,7 @@ OldCopy_F7AD81:
 	ld	(6304857:24), a	; F6F385  ld (0x603459),A
 	ld	(DisplayListB_Stage:16), a	; F6F38A  ld (0x12f6),A
 	ret	; F6F38E  ret
-OldCopy_sub_F7AD8F:
+OldCopy_TrackMerge_StepSourceTrack2:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F6F38F  or (0x2075),0x09
 	ld	a, (3092:16)	; F6F394  ld A,(0x0c14)
 	m_cp_mi8 MB16, 0x0c4f, 0x80	; F6F398  cp (0x0c4f),0x80
@@ -169916,7 +169916,7 @@ OldCopy_F7ADCE:
 	ld	(6304858:24), a	; F6F3D2  ld (0x60345a),A
 	ld	(DisplayListB_Stage+1:16), a	; F6F3D7  ld (0x12f7),A
 	ret	; F6F3DB  ret
-OldCopy_sub_F7ADDC:
+OldCopy_TrackMerge_StepDestTrack:
 	ld	a, (3093:16)	; F6F3DC  ld A,(0x0c15)
 	ld	l, 1:opc	; F6F3E0  ld L,0x01
 	ld	h, 16:opc	; F6F3E2  ld H,0x10
