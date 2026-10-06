@@ -1,4 +1,6 @@
-/* naka_sequencer_exit_link.ld — Linker script for naka_sequencer_exit.c */
+/* naka_sequencer_exit_link.ld — Linker script for naka_sequencer_exit.c  * v7 addresses where v7's own bytes agree:
+ * scripts/generators/generate_v7_naka_link_scripts.py
+ */
 
 ENTRY(0)
 
@@ -24,16 +26,16 @@ NakaDesc_StyleFunc        = 0x00E27160;
 NakaDesc_Empty_J          = 0x00E2717A;
 
 /* Proc handler functions */
-EqOnOffFuncToggleProc     = 0x00F345E4;
-MsgToTtlProc              = 0x00F2EFFA;
-AcIndexWideToggleProc     = 0x00F2ECF1;
-IvPlayExitProc            = 0x00F2EB76;
-HelpTtlProc               = 0x00F2E8A4;
-IvPnlWrExitProc           = 0x00F309D7;
-IvSdrevProc               = 0x00F2E97E;
-IvSddspProc               = 0x00F2EA1D;
-IvSdaccProc               = 0x00F2EAD8;
-IvPunchExitProc           = 0x00F2EBFF;
-IvAutoPunchExitProc       = 0x00F2EC74;
-AcPanicEditSwProc         = 0x00F2E532;
-IvRealRecExitProc         = 0x00F2E490;
+EqOnOffFuncToggleProc     = 0x00F345BA;
+MsgToTtlProc              = 0x00F2EFD0;
+AcIndexWideToggleProc     = 0x00F2ECC7;
+IvPlayExitProc            = 0x00F2EB4C;
+HelpTtlProc               = 0x00F2E87A;
+IvPnlWrExitProc           = 0x00F309AD;
+IvSdrevProc               = 0x00F2E954;
+IvSddspProc               = 0x00F2E9F3;
+IvSdaccProc               = 0x00F2EAAE;
+IvPunchExitProc           = 0x00F2EBD5;
+IvAutoPunchExitProc       = 0x00F2EC4A;
+AcPanicEditSwProc         = 0x00F2E508;
+IvRealRecExitProc         = 0x00F2E466;

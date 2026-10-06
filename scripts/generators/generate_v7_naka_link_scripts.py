@@ -2,7 +2,8 @@
 """generate_v7_naka_link_scripts.py -- give v7's NAKA link scripts v7 addresses, where v7's own bytes agree.
 
 QUESTION IT ANSWERS
-  v7's naka_*.c sources are shared with v9/v10 and spell code pointers as NAKA_ADDR(Name); each
+  v7's naka_*.c sources (and the EXTRA list below: sepaout_config.c, SEPA_ADDR) are shared with v9/v10 and
+  spell code pointers as NAKA_ADDR(Name); each
   v7/maincpu/ui_widgets/naka_<stem>_link.ld defines Name.  Until 2026-10-06 those files were copies of v10's, so
   every pointer compiled to its v10 address and scripts/build/apply_v7_c_divergence.py relocated it afterwards
   (v7_c_divergence.json).  This script sets each symbol to its v7 address -- the v7 ELF's value of the same
@@ -31,6 +32,9 @@ REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 BIN = os.path.expanduser("~/compartilhado/llvm-project/build/bin")
 WID = os.path.join(REPO, "v7", "maincpu", "ui_widgets")
 GEN = os.path.join(REPO, "v7", "maincpu", "includes", "generated")
+# other compiled-C bins of v7 whose link script defines code pointers the same way: (link script, C, bin)
+EXTRA = [("ui/sepaout_config_link.ld", "ui/sepaout_config.c", "sepaout_config.bin")]
+ASSIGN = re.compile(r'^(\w+)(\s*=\s*)0x([0-9A-Fa-f]+);', re.M)
 
 
 def v7_symbols():
@@ -59,14 +63,17 @@ def main():
     moved = kept_drift = 0
     drift = []
     with tempfile.TemporaryDirectory(dir=os.environ.get("TMPDIR")) as tmp:
-        for ld in sorted(glob.glob(os.path.join(WID, "naka_*_link.ld"))):
+        jobs = [(ld, os.path.join(WID, os.path.basename(ld)[:-len("_link.ld")] + ".c"),
+                 os.path.join(GEN, os.path.basename(ld)[:-len("_link.ld")] + ".bin"))
+                for ld in sorted(glob.glob(os.path.join(WID, "naka_*_link.ld")))]
+        jobs += [(os.path.join(REPO, "v7/maincpu", a), os.path.join(REPO, "v7/maincpu", b), os.path.join(GEN, n))
+                 for a, b, n in EXTRA]
+        for ld, c, final in jobs:
             stem = os.path.basename(ld)[:-len("_link.ld")]
-            c = os.path.join(WID, stem + ".c")
-            final = os.path.join(GEN, stem + ".bin")
             if not (os.path.exists(c) and os.path.exists(final)):
                 continue
             text = open(ld, encoding="latin-1").read()
-            cur = {m.group(1): int(m.group(2), 16) for m in re.finditer(r'^(\w+) = 0x([0-9A-Fa-f]+);', text, re.M)}
+            cur = {m.group(1): int(m.group(3), 16) for m in ASSIGN.finditer(text)}
             fb = open(final, "rb").read()
             uses = {}
             for off, sym, addend in relocations(c, ld, tmp):
@@ -83,8 +90,7 @@ def main():
                     kept_drift += 1
                     drift.append((stem, sym, cur[sym], v7[sym], sorted(set(vals))[:3]))
             if apply and new != cur:
-                text2 = re.sub(r'^(\w+) = 0x([0-9A-Fa-f]+);',
-                               lambda m: "%s = 0x%08X;" % (m.group(1), new[m.group(1)]), text, flags=re.M)
+                text2 = ASSIGN.sub(lambda m: "%s%s0x%08X;" % (m.group(1), m.group(2), new[m.group(1)]), text)
                 if "v7 addresses" not in text2:
                     text2 = text2.replace("*/", " * v7 addresses where v7's own bytes agree:\n"
                                                 " * scripts/generators/generate_v7_naka_link_scripts.py\n */", 1)

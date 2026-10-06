@@ -151,7 +151,7 @@ InitializeHama:
 	lda	xwa, (FunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 75
-	lda	xwa, (InitializeHama_Data_8:24)
+	lda	xwa, (HamaObj_109_Data:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa

@@ -3301,7 +3301,7 @@ InitializeHama_Data_5 00E1F0D4
 HamaObj_1E9_Data 00E1F0D6
 HamaStr_MT_CONTINUE 00E1F0DE
 InitializeHama_Data_7 00E1F0EA
-InitializeHama_Data_8 00E1F0EC
+HamaObj_109_Data 00E1F0EC
 Hama_ModeParam_Table 00E1F240
 HamaStr_ModeParam_Empty 00E1F394
 HamaStr_ferror_ext 00E1F396

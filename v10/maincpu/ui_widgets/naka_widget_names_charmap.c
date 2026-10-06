@@ -201,7 +201,7 @@ extern const char IvTrackSwitchProc;
 extern const char KillApTimer;
 extern const char LabelProc;
 extern const char LcdOff;
-extern const char LcdOff_Epilogue;
+extern const char UpdateScreen;
 extern const char LcdOn;
 extern const char LineModeIDProc;
 extern const char LineProc;
@@ -3702,7 +3702,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         NAKA_ADDR(InitializeUser30),
         NAKA_ADDR(InitializeUser31),
         NAKA_ADDR(InitializeGraphics),
-        NAKA_ADDR(LcdOff_Epilogue),
+        NAKA_ADDR(UpdateScreen),
         NAKA_ADDR(SetNeedUpdate),
         NAKA_ADDR(SetChangeRect),
         NAKA_ADDR(ReadPixel),

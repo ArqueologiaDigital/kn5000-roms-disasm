@@ -1,4 +1,6 @@
-/* naka_master_style_link.ld — Linker script for naka_master_style.c */
+/* naka_master_style_link.ld — Linker script for naka_master_style.c  * v7 addresses where v7's own bytes agree:
+ * scripts/generators/generate_v7_naka_link_scripts.py
+ */
 
 ENTRY(0)
 
@@ -77,20 +79,20 @@ NakaDesc_VariScreen                      = 0x00ED2CF4;
 NakaInst_VariScreen                      = 0x00ED2CF6;
 
 /* Proc handler functions */
-PmemExpLng_Boundary                      = 0x00FB8021;
-AcMstStyleAlp_Boundary                   = 0x00FB8028;
+PmemExpLng_Boundary                      = 0x00FB7860;
+AcMstStyleAlp_Boundary                   = 0x00FB7867;
 MstStyle1Grid_Boundary                   = 0x00FB8B0B;
 MstStyle1SubGrid_Boundary                = 0x00FB903D;
 MstStyle2Grid_Boundary                   = 0x00FB978D;
-MstGrid2_Boundary                        = 0x00FBA6E1;
+MstGrid2_Boundary                        = 0x00FB9F16;
 MstSong1Grid_Boundary                    = 0x00FBA6E8;
-MstSong2Grid_Boundary                    = 0x00FBA6EF;
+MstSong2Grid_Boundary                    = 0x00FB9F24;
 TchSensGrid_Boundary                     = 0x00FBA7BB;
 FSWAssGrid_Boundary                      = 0x00FBAD9B;
-IvPmemWindow_Boundary                    = 0x00FBB9D0;
-PmemPageCtl_Boundary                     = 0x00FBBB4C;
+IvPmemWindow_Boundary                    = 0x00FBB205;
+PmemPageCtl_Boundary                     = 0x00FBB381;
 PmExpFilterCheck_Boundary                = 0x00FBC412;
-NormScreen_Boundary                      = 0x00FBCDF1;
+NormScreen_Boundary                      = 0x00FBC626;
 IvWindowPgCtl_Boundary                   = 0x00FBD022;
 MssName_Boundary                         = 0x00FBD3EC;
 AcPmBkNoBox_Boundary                     = 0x00FBD4EB;
@@ -99,8 +101,8 @@ MsaMode_Boundary                         = 0x00FBD841;
 PmemMode_Boundary                        = 0x00FBDB3D;
 GmOnOff_Boundary                         = 0x00FBE1E7;
 IsHalfRangeAbove_End                     = 0x00FBF518;
-RVari_UpdateNotify_End                   = 0x00FC1A22;
-PmBank_Boundary                          = 0x00FC1F26;
-MainMssSetUp_End                         = 0x00FC2D0B;
-AcTranspose_ParamData_End                = 0x00FC2EC3;
-AcChordBoxProc_Entry                     = 0x00FC2FBB;
+RVari_UpdateNotify_End                   = 0x00FC1257;
+PmBank_Boundary                          = 0x00FC175B;
+MainMssSetUp_End                         = 0x00FC2540;
+AcTranspose_ParamData_End                = 0x00FC26F8;
+AcChordBoxProc_Entry                     = 0x00FC27F0;
