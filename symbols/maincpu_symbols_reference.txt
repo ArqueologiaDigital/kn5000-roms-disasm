@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 53,111
-#   semantic names ........... 52,358 (98.6%)
+#   symbols .................. 53,115
+#   semantic names ........... 52,362 (98.6%)
 #   positional names ......... 753
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -44566,10 +44566,12 @@ SeGfx_BoundOp06_Helper 00FB2201
 DrawFunc_Init_Entry2 00FB2253
 DrawFunc_Init_Entry3 00FB225C
 DrawFunc_Init_Join3 00FB2263
+SeGfx_BoundOp09_FormatNumber 00FB22A3
 DrawFunc_Init_Skip14 00FB22D3
 DrawFunc_Init_Skip15 00FB22FB
 DrawFunc_Init_Skip16 00FB2302
 DrawFunc_Init_Join4 00FB2307
+SeGfx_BoundOp0B_FormatNumber 00FB2346
 DrawFunc_Init_Skip17 00FB2376
 DrawFunc_Init_Skip7 00FB239F
 DrawFunc_Init_Skip8 00FB23AB
@@ -44582,6 +44584,7 @@ DrawFunc_Init_Skip10 00FB23ED
 DrawFunc_Init_Skip11 00FB23F4
 DrawFunc_Init_Join6 00FB23F9
 DrawFunc_Init_Join9 00FB23FB
+SeGfx_BoundOp0A_FormatNumber 00FB2438
 DrawFunc_Init_Skip19 00FB247A
 DrawFunc_Init_Skip20 00FB2485
 DrawFunc_Init_Join10 00FB248C
@@ -44590,6 +44593,7 @@ ColorBlit_WithPaletteSave 00FB24CB
 ColorBlit_PalSave_SkipShift 00FB24EC
 ColorBlit_Variant_ByteData 00FB2538
 ColorBlit_WithPaletteSave_Skip 00FB2556
+SeGfx_BoundOp08_ColorBlit 00FB25A3
 ColorBlit_WithPaletteSave_Skip2 00FB25C1
 GetFrameSPSize 00FB25F3
 GetCharHeight 00FB260A

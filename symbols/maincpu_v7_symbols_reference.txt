@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 52,810
-#   semantic names ........... 51,969 (98.4%)
+#   symbols .................. 52,814
+#   semantic names ........... 51,973 (98.4%)
 #   positional names ......... 841
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -44196,10 +44196,12 @@ DrawFunc_Init_Skip8 00FB1DAC
 DrawFunc_Init_Join3 00FB1DB1
 DrawFunc_Init_Join4 00FB1DB6
 AccDraw_Secondary_Helper20 00FB1DF4
+SeGfx_BoundOp09_FormatNumber 00FB1E96
 AccDraw_Secondary_Helper20_Skip 00FB1EC6
 AccDraw_Secondary_Helper20_Skip2 00FB1EEE
 AccDraw_Secondary_Helper20_Skip3 00FB1EF5
 AccDraw_Secondary_Helper20_Join 00FB1EFA
+SeGfx_BoundOp0B_FormatNumber 00FB1F39
 AccDraw_Secondary_Helper20_Skip4 00FB1F69
 AccDraw_Secondary_Helper20_Skip5 00FB1F92
 AccDraw_Secondary_Helper20_Skip6 00FB1F9E
@@ -44212,6 +44214,7 @@ AccDraw_Secondary_Helper20_Skip10 00FB1FE0
 AccDraw_Secondary_Helper20_Skip11 00FB1FE7
 AccDraw_Secondary_Helper20_Join4 00FB1FEC
 AccDraw_Secondary_Helper20_Join5 00FB1FEE
+SeGfx_BoundOp0A_FormatNumber 00FB202B
 AccDraw_Secondary_Helper20_Skip12 00FB206D
 AccDraw_Secondary_Helper20_Skip13 00FB2078
 AccDraw_Secondary_Helper20_Join6 00FB207F
@@ -44220,6 +44223,7 @@ ColorBlit_WithPaletteSave 00FB20BE
 ColorBlit_PalSave_SkipShift 00FB20DF
 ColorBlit_Variant_ByteData 00FB212B
 ColorBlit_Variant_ByteData_Skip 00FB2149
+SeGfx_BoundOp08_ColorBlit 00FB2196
 ColorBlit_Variant_ByteData_Skip2 00FB21B4
 GetFrameSPSize 00FB21E6
 GetCharHeight 00FB21FD

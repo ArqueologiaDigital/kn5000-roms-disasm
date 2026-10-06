@@ -1544,6 +1544,7 @@ AccDraw_Secondary_Helper20:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+SeGfx_BoundOp09_FormatNumber:
 	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
@@ -1604,6 +1605,7 @@ AccDraw_Secondary_Helper20_Join:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+SeGfx_BoundOp0B_FormatNumber:
 	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
@@ -1703,6 +1705,7 @@ AccDraw_Secondary_Helper20_Join5:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+SeGfx_BoundOp0A_FormatNumber:
 	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
@@ -1844,6 +1847,7 @@ ColorBlit_Variant_ByteData_Skip:
 	calr	ColorBlit2
 	inc	8, xsp
 	ret
+SeGfx_BoundOp08_ColorBlit:
 	dec	8, xsp
 	ld	xbc, xwa
 	ld	wa, (xbc+2)

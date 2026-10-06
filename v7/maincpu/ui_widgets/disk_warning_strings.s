@@ -1085,8 +1085,8 @@ GraphicsRender_ProcessEntries_PtrTable:
 	.long	SeGfx_StaticOp22_ShadowBox1
 	.long	SeGfx_StaticOp23_DesignBox
 ; GraphicsRender_Start_PtrTable -- 12 x u32, the handler of each bound display record op (a value read from
-; RAM: the sdb_* macros of audio/sound_editor_ui.s); GraphicsRender_Start calls [op].  Ops 08-0B are not
-; named: their record layouts are not derived yet.
+; RAM: the sdb_* macros of audio/sound_editor_ui.s); GraphicsRender_Start calls [op].  Op 08 blits a bitmap, ops 09-0B print a
+; number (Sprintf %Nd); their record layouts are not derived yet (scripts/tools/label_bound_ops_08_0b.py).
 GraphicsRender_Start_PtrTable:
 	.long	DrawFunc_Init
 	.long	GraphicsRender_RetStub
@@ -1096,10 +1096,10 @@ GraphicsRender_Start_PtrTable:
 	.long	DrawFunc_Init_Variant1
 	.long	AccDraw_Secondary_Helper20
 	.long	DrawText_ExtLayout_Variant1
-	.long	0x00fb2196
-	.long	0x00fb1e96
-	.long	0x00fb202b
-	.long	0x00fb1f39
+	.long	SeGfx_BoundOp08_ColorBlit
+	.long	SeGfx_BoundOp09_FormatNumber
+	.long	SeGfx_BoundOp0A_FormatNumber
+	.long	SeGfx_BoundOp0B_FormatNumber
 ; [nakarest] naka_disk_warning+0x2328  +0x2328..+0x2330 (0xeaafd4, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeaafd4 not derived; readers below
 ; [nakarest] Readers: source references SeGfx_StaticOp06_CellTextFont0 (display/graphics_text_vga.s:
