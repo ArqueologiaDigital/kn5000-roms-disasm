@@ -1810,8 +1810,8 @@
 	.set T_Screen_SoundCopy_Enter,                                                      0x00F426A0
 	.set T_Screen_CombinationCopy_Enter,                                                0x00F426B0
 	.set T_SongClear_ClearCurrentBank,                                                                      0x00F42708
-	.set T_F42828,                                                                      0x00F42828
-	.set T_F4282C,                                                                      0x00F4282C
+	.set T_SongGmFlag_OnEventPassB_Veneer,                                                                      0x00F42828
+	.set T_BStore_LoadSongFromCurrentBank,                                                                      0x00F4282C
 	.set T_BStore_AppendBytes_Veneer,                                                   0x00F42894
 	.set T_MeasureInsert_InitFields,                                                                      0x00F429A8
 	.set T_MeasureInsert_OnLeave,                                                                      0x00F429AC
@@ -16915,7 +16915,7 @@ UiListB_Class91:
 	.long T_GmMode_OnEventPassB                              ; F88BDA  [0]   -> 0xF408F4
 	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_292_14                              ; F88BDE  [1]   -> 0xF41154
 	.long T_F411D8                              ; F88BE2  [2]   -> 0xF411D8
-	.long T_F42828                              ; F88BE6  [3]   -> 0xF42828
+	.long T_SongGmFlag_OnEventPassB_Veneer                              ; F88BE6  [3]   -> 0xF42828
 	.long T_GmMode_RepaintModeScreen                              ; F88BEA  [4]   -> 0xF415A4
 	.long 0xFFFFFFFF                            ; F88BEE  [5]   end of list
 
@@ -68092,7 +68092,7 @@ DisplayList_FA4EAB:
 	popw hl                                              ; FA50BB  4b
 	unlk XIZ                                             ; FA50BC  ee 0d
 	ret                                                  ; FA50BE  0e
-	calr sub_FA528D                                      ; FA50BF  1e cb 01
+	calr UserSoundBank_RemoteGroupAddr_Copy                                      ; FA50BF  1e cb 01
 	ld XIX,XIY                                           ; FA50C2  ed 8c
 	ld C,D                                               ; FA50C4  cc 8b
 	extz BC                                              ; FA50C6  d9 12
@@ -68104,7 +68104,7 @@ DisplayList_FA4EAB:
 	push	(0x2737:16)                          ; FA50D5  c1 37 27 04
 	push 0x00                                            ; FA50D9  09 00
 	push	(0x2736:16)                          ; FA50DB  c1 36 27 04
-	calr sub_FA528D                                      ; FA50DF  1e ab 01
+	calr UserSoundBank_RemoteGroupAddr_Copy                                      ; FA50DF  1e ab 01
 	ld XIX,XIY                                           ; FA50E2  ed 8c
 	ld bc, (0x2738:16)                                 ; FA50E4  d1 38 27 21
 	extz BC                                              ; FA50E8  d9 12
@@ -68119,7 +68119,7 @@ DisplayList_FA4EAB:
 	pushw hl                                             ; FA5103  2b
 	push 0x00                                            ; FA5104  09 00
 	push	(0x2728:16)                          ; FA5106  c1 28 27 04
-	calr sub_FA528D                                      ; FA510A  1e 80 01
+	calr UserSoundBank_RemoteGroupAddr_Copy                                      ; FA510A  1e 80 01
 	ld XIX,XIY                                           ; FA510D  ed 8c
 	ld C,D                                               ; FA510F  cc 8b
 	extz BC                                              ; FA5111  d9 12
@@ -68132,7 +68132,7 @@ DisplayList_FA4EAB:
 	push	(0x2737:16)                          ; FA5121  c1 37 27 04
 	push 0x00                                            ; FA5125  09 00
 	push	(0x2736:16)                          ; FA5127  c1 36 27 04
-	calr sub_FA528D                                      ; FA512B  1e 5f 01
+	calr UserSoundBank_RemoteGroupAddr_Copy                                      ; FA512B  1e 5f 01
 	ld XIX,XIY                                           ; FA512E  ed 8c
 	ld bc, (0x2738:16)                                 ; FA5130  d1 38 27 21
 	extz BC                                              ; FA5134  d9 12
@@ -68249,7 +68249,9 @@ DisplayList_FA4EAB:
 	popw hl                                              ; FA5289  4b
 	unlk XIZ                                             ; FA528A  ee 0d
 	ret                                                  ; FA528C  0e
-sub_FA528D:
+; UserSoundBank_RemoteGroupAddr_Copy: an exact copy of UserSoundBank_RemoteGroupAddr (prom_b 0xF493FA) -- all 68 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+UserSoundBank_RemoteGroupAddr_Copy:
 	link XIZ,0x0000                                      ; FA528D  ee 0c 00 00
 	pushw hl                                             ; FA5291  2b
 	push XIX                                             ; FA5292  3c
@@ -81545,7 +81547,12 @@ List2030_ParamB0_Apply:
 	ld (0x60f17a:24), a                                 ; FABD29  f2 7a f1 60 41
 	call sub_FAA7C4                                      ; FABD2E  1d c4 a7 fa
 	ret                                                  ; FABD32  0e
-sub_FABD33:
+; Seq_PublishPendingParamB0: Clears (0x34D8) bit 7 and runs sub_FAB5EB, the two-field ParamB0_PublishField0IfPending:
+;   each of parameter 0xB0's fields 0 ((0x24F1)) and 1 ((0x24F0)) whose bit-7 pending flag is set is cleared and
+;   published as {0xB0, field, value, 0x7F}. The last call (prom_b slot T_Seq_PublishPendingParamB0) of Seq_RewindOnRequest's rewind and
+;   of Seq_StopWhenTracksEnded's stop, each of which clears (0x34D8) bit 7 just before. Basis: callers + body + twin
+;   header. (notes/naming-pilot-2026-10-06/proposals_wave5_o.json)
+Seq_PublishPendingParamB0:
 	m_res 7, MD16, 0x34d8                                ; FABD33  f1 d8 34 b7
 	calr sub_FAB5EB                                          ; FABD37  1e b1 f8
 	ret                                                  ; FABD3A  0e
@@ -164047,7 +164054,7 @@ Playback_StopAll:
 	calr Transport_StopAllRunning_SaveRegs2                                          ; FE1701  1e 03 eb
 	ret                                                  ; FE1704  0e
 ; Playback_AcceptMidiStartAndRequestPositionReset: (0x34BB) bit 2 := 0 (external MIDI 0xFA/0xFB no longer ignored) and
-;   bit 3 := 0 (the locate flag), (0x34D4) bit 4 := 1 -- the request sub_F44B2D takes in the sequencer pass (song has
+;   bit 3 := 0 (the locate flag), (0x34D4) bit 4 := 1 -- the request Seq_ResetPositionOnRequest takes in the sequencer pass (song has
 ;   tracks, transport B idle), which with bit 3 clear calls Seq_ResetPositionToSongStart. The body of
 ;   Playback_AcceptMidiStartAgain, and called by MidiFilePlay_OnSongSelect after loading the chosen song. Basis:
 ;   callers + body + consumer. (notes/naming-pilot-2026-10-06/proposals_wave4_l.json)
@@ -176272,7 +176279,7 @@ Medley_Next:
 	ret                                                  ; FE7863  0e
 ; Medley_LoadInternalSong: from Medley_PlayingSong to Medley_LastSong (then from Medley_FirstSong once more), the first bank whose copy
 ;   (0x610100 + bank x 0xC00) has an in-use directory entry: Medley_PlayingSong = BStore_CurrentBank = it,
-;   T_F4282C, (0x34D0) |= 4, its 6-character name (0x6034CA) to 0x0E38 + 5 blanks, (0x22D0) = 10.  None in range:
+;   T_BStore_LoadSongFromCurrentBank, (0x34D0) |= 4, its 6-character name (0x6034CA) to 0x0E38 + 5 blanks, (0x22D0) = 10.  None in range:
 ;   UI_StatusCode 0x2F, request 0x40AB, Medley_Playing = 0.
 Medley_LoadInternalSong:
 	ld a, (Medley_PlayingSong:16)                                   ; FE7864  c1 0a 22 21
@@ -176316,7 +176323,7 @@ Medley_LoadInternalSong:
 .LFE78CB:
 	ld (Medley_PlayingSong:16), a                                   ; FE78CB  f1 0a 22 41
 	ld (BStore_CurrentBank:16), a                                   ; FE78CF  f1 0a 36 41
-	call T_F4282C                                        ; FE78D3  1d 2c 28 f4
+	call T_BStore_LoadSongFromCurrentBank                                        ; FE78D3  1d 2c 28 f4
 	m_or_mi8 MB16, 0x34d0, 0x04                          ; FE78D7  c1 d0 34 3e 04
 	ld XIY,BStore_SongName                                    ; FE78DC  45 ca 34 60 00
 	ld XIX,Medley_DisplayName                                    ; FE78E1  44 38 0e 00 00

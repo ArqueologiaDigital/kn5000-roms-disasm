@@ -1,0 +1,523 @@
+[
+ {
+  "old": "sub_F63F90",
+  "verdict": "refuse",
+  "why_refused": "Its callers are the unnamed stream walker sub_F6418E (the batch's 'sub_F6418E_Entry' is a local label of it) and a fall-through from the unnamed sub_F63F88 / sub_F63CE0; the body decodes tag bytes into (0x1258), (0x0D46) bits and (0x0DD1), none of whose meanings is established.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:144890 `calr sub_F63F90` -- the only call, inside unnamed sub_F6418E",
+   "prom_b/wsa1_prom_b.s:144408 `calr sub_F63F88` -- unnamed sub_F63CE0 calls sub_F63F88, which falls through into it",
+   "prom_b/wsa1_prom_b.s:144552 `ld (4696:16), e` -- writes (0x1258) from a stream byte with bit 7 taken from old bit 2",
+   "prom_b/wsa1_prom_b.s:144577 `m_or_mi8 MB16, 0x0d46, 0x01` -- sets an unnamed flag byte"
+  ]
+ },
+ {
+  "old": "sub_F647DD",
+  "verdict": "name",
+  "new": "BStore_BlocksNeededToGrow",
+  "header": "(0x0D3E) := the blocks entry (0x0C8E) must allocate to grow by BStore_AllocBytesWanted bytes past its saved end cursor: 0 if they fit in the 255 - offset (0x6034A0[n-1]) left in the end block, else ceil(rest / 251); a master-track entry (BStore_TrackToPart 0x20) first adds 10 bytes. The free-space pre-checks sub_F64594 (MeasureInsert_Execute, via T_F427D4) and sub_F6466E (SongEdit_CopyMeasures, via T_F427D8) charge it against a copy of BStore_FreeCount in (0x0D40), error 5 when short. Basis: callers + their named callers + body.",
+  "basis": "callers (read) + their named callers + body; the batch's named caller BStore_LoadGeometry_Call is spurious (see evidence)",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:145174 `calr sub_F647DD` -- caller sub_F64594, thunk T_F427D4",
+   "prom_b/wsa1_prom_b.s:145298 `calr sub_F647DD` -- caller sub_F6466E, thunk T_F427D8",
+   "prom_b/wsa1_prom_b.s:136759 `call T_F427D4` -- MeasureInsert_Execute (all-tracks branch) runs sub_F64594",
+   "prom_b/wsa1_prom_b.s:137325 `call T_F427D8` -- SongEdit_CopyMeasures runs sub_F6466E",
+   "prom_b/wsa1_prom_b.s:145192 `ld wa, (BStore_FreeCount:24)` -- the callers start their budget (0x0D40) (next line) from the free-block count",
+   "prom_b/wsa1_prom_b.s:145176 `m_cp_rm MW16, 0x0d3e, 0` -- caller compares the budget with this routine's result ...",
+   "prom_b/wsa1_prom_b.s:145178 `ld (BStore_ErrorCode:16), 5` -- ... and raises error 5, the code BStore_AllocChain raises on its own BStore_FreeCount test (143947)",
+   "prom_b/wsa1_prom_b.s:145181 `m_sub_rm MW16, 0x0d3e, 0` -- ... else spends it from the budget",
+   "prom_b/wsa1_prom_b.s:145319 `mx_cp_mi8 MXB, ra_DE, ra_HL, 0x20` -- BStore_TrackToPart[n-1] == 0x20 (master track) ...",
+   "prom_b/wsa1_prom_b.s:145322 `m_add_mi16 MW16, BStore_AllocBytesWanted, 0x000a` -- ... adds 10 bytes to the request",
+   "prom_b/wsa1_prom_b.s:145327 `ld xde, 6304928` -- 0x6034A0, the saved end-cursor offsets",
+   "prom_b/wsa1_prom_b.s:145328 `mx_sub_rm MXB, ra_DE, ra_HL, 1` -- room = 0xFF - offset",
+   "prom_b/wsa1_prom_b.s:145337 `ldw wa, 256` -- with 145338 `sub wa, 5`: the 251-byte block payload",
+   "prom_b/wsa1_prom_b.s:145344 `div xwa, hl` -- (rest + 250) / 251, rounded up",
+   "prom_b/wsa1_prom_b.s:145347 `ld (3390:16), wa` -- result to (0x0D3E)",
+   "prom_b/wsa1_prom_b.s:142477 `calr sub_F647DD` -- the listed caller: an unlabelled BStore_StubTable slot after BStore_LoadGeometry_Call's `ret` (142435), which nothing reaches"
+  ]
+ },
+ {
+  "old": "sub_F64838",
+  "verdict": "name",
+  "new": "BStore_BlocksFreedByShrink",
+  "header": "(0x0D3E) := the blocks released when entry (0x0C8E) shrinks by BStore_AllocBytesWanted bytes: 0 if they fit in the end block's offset - 5 payload bytes (offset = saved end cursor 0x6034A0[n-1]), else (bytes - used) / 251 + 1. sub_F6466E, SongEdit_CopyMeasures' free-space pre-check (via T_F427D8), adds it back to its free-block budget (0x0D40) for a track whose range shrinks; twin of sub_F647DD. Basis: caller + its named caller + body.",
+  "basis": "caller (read) + its named caller + body; the batch's named caller BStore_LoadGeometry_Call is spurious",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:145286 `calr sub_F64838` -- caller sub_F6466E, on its shrink branch",
+   "prom_b/wsa1_prom_b.s:145288 `m_add_mr MW16, 0x0d40, 0` -- caller adds the result (145287 `ld wa, (3390:16)`) to the budget it seeded from BStore_FreeCount (145192)",
+   "prom_b/wsa1_prom_b.s:137325 `call T_F427D8` -- SongEdit_CopyMeasures runs sub_F6466E",
+   "prom_b/wsa1_prom_b.s:145355 `ld xde, 6304928` -- 0x6034A0, saved end-cursor offsets",
+   "prom_b/wsa1_prom_b.s:145358 `sub wa, 5` -- used = offset - 5 header bytes",
+   "prom_b/wsa1_prom_b.s:145359 `m_cp_mr MW16, BStore_AllocBytesWanted, 0` -- bytes <= used -> 0 blocks",
+   "prom_b/wsa1_prom_b.s:145366 `ldw hl, 256` -- with 145367 `sub hl, 5`: 251-byte payload",
+   "prom_b/wsa1_prom_b.s:145371 `div xwa, hl` -- (bytes - used) / 251 ...",
+   "prom_b/wsa1_prom_b.s:145373 `inc 1, wa` -- ... + 1 (the end block itself)",
+   "prom_b/wsa1_prom_b.s:145375 `ld (3390:16), wa` -- result to (0x0D3E)",
+   "prom_b/wsa1_prom_b.s:142479 `calr sub_F64838` -- the listed caller: unlabelled stub slot after BStore_LoadGeometry_Call's `ret`, unreached"
+  ]
+ },
+ {
+  "old": "sub_F64B1B",
+  "verdict": "name",
+  "new": "BStore_LoadSongFromCurrentBank",
+  "header": "Makes bank BStore_CurrentBank the current song: saves BStore_FreeHead / BStore_FreeCount in (0x0E2B) / (0x0E2D) so BStore_Workspace_LoadFromBank keeps the shared heap's free list across its 0xC00-byte copy, then sub_F64B7A matches GM mode (0x7F4D) bit 2 to the song's +0xC6 flag (posting the change to CPU 2) and rebuilds note routing, then T_Seq_ApplySongBeatsPerBar and (0x360B) bit 0 cleared. Medley_LoadInternalSong calls it (T_F4282C) right after BStore_CurrentBank := the song; prom_a's S0ngSelectName_LoadSongFromBank does the same steps inline. Basis: caller + body.",
+  "basis": "caller + body (+ prom_a twin S0ngSelectName_LoadSongFromBank)",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:176318 `ld (BStore_CurrentBank:16), a` -- Medley_LoadInternalSong selects the song bank ...",
+   "prom_a/wsa1_prom_a.s:176319 `call T_F4282C` -- ... then calls this routine",
+   "prom_b/wsa1_prom_b.s:145642 `ld wa, (BStore_FreeHead:24)` -- free-list head saved to (0x0E2B) (145643); count likewise 145644/145645",
+   "prom_b/wsa1_prom_b.s:145646 `calr BStore_Workspace_LoadFromBank` -- bank (0x360A) -> workspace 0x603400; it restores the two words afterwards (145690/145691)",
+   "prom_b/wsa1_prom_b.s:145647 `calr sub_F64B7A` -- song GM flag -> GM mode",
+   "prom_b/wsa1_prom_b.s:145696 `m_cp_mi8 MB24, 0x6034c6, 0xff` -- sub_F64B7A: workspace +0xC6 == 0xFF (TrackAssignPresets writes 0xFF there for GM SET-UP, 148525/148559)",
+   "prom_b/wsa1_prom_b.s:145698 `m_bit 2, MD16, 0x7f4d` -- GM mode bit (BStore_LoadGmTrackDefaults' header) compared and set/cleared",
+   "prom_b/wsa1_prom_b.s:145713 `call T_Queue2C00_AppendRegs` -- change posted {0x91, 3, 4/0}",
+   "prom_b/wsa1_prom_b.s:145716 `call T_NoteRouting_RebuildForSong` -- note routing rebuilt for the new song",
+   "prom_b/wsa1_prom_b.s:145648 `call T_Seq_ApplySongBeatsPerBar` -- the song's beats per bar applied",
+   "prom_b/wsa1_prom_b.s:145649 `m_and_mi8 MB16, 0x360b, 0xfe` -- (0x360B) bit 0 cleared",
+   "prom_a/wsa1_prom_a.s:5363 `; S0ngSelectName_LoadSongFromBank -- load song (0x360A) from its bank into the workspace` -- the prom_a routine with the same save/copy/restore, 0x6034C6/0x7F4D post, beats-per-bar and (0x360B) steps"
+  ]
+ },
+ {
+  "old": "sub_F65000",
+  "verdict": "name",
+  "new": "SongEdit_SaveTimeSigOfDeletedMeasures",
+  "header": "MEASURE DELETE on the master track, before the measures go: 0x0D92..0x0D9D cleared (sub_F6500C); with Seq_FindMasterTrack's track, unless the range runs into the 0x82 end, sub_F653A5 copies the last 3-byte tag-0x87 time-signature record found at the start (before the first 0x81 beat mark) of measures (0x0C73)..+(0x0C77) to 0x0D92. A jump vector (`jrl` into sub_F6500C's body) behind T_F432C0, which SongEdit_DeleteMeasures calls for a part-0x20 track; T_F432CC re-inserts the record afterwards. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:135728 `mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20` -- SongEdit_DeleteMeasures: only for the part-0x20 (master) track ...",
+   "prom_b/wsa1_prom_b.s:135731 `call T_F432C0` -- ... calls it before sub_F5E570 removes the measures (135733)",
+   "prom_b/wsa1_prom_b.s:145888 `jrl sub_F6500C_Join` -- the vector",
+   "prom_b/wsa1_prom_b.s:145955 `calr sub_F6500C` -- zeroes the words 0x0D92..0x0D9C",
+   "prom_b/wsa1_prom_b.s:145956 `call T_Seq_FindMasterTrack` -- master track (W = 0: nothing)",
+   "prom_b/wsa1_prom_b.s:145979 `m_add_rm MW16, 0x0c77, 2` -- seeks measure (0x0C73)+(0x0C77) ...",
+   "prom_b/wsa1_prom_b.s:145985 `mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82` -- ... and stops if that is the song end",
+   "prom_b/wsa1_prom_b.s:145989 `ld wa, (3191:16)` -- count (0x0C77) -> (0x0DAC); start (0x0C73) -> (0x0DAA)",
+   "prom_b/wsa1_prom_b.s:145991 `ld xix, 3474` -- capture buffer 0x0D92",
+   "prom_b/wsa1_prom_b.s:145992 `calr sub_F653A5` -- the scan",
+   "prom_b/wsa1_prom_b.s:146250 `cp a, 135` -- sub_F653A5: a tag-0x87 (time-signature) record ...",
+   "prom_b/wsa1_prom_b.s:146270 `cp c, 0:i3` -- ... before the measure's first 0x81 beat mark ...",
+   "prom_b/wsa1_prom_b.s:146276 `mx_st_mr8 MXD, ra_IX, ra_HL, 1` -- ... is copied, 3 bytes, to XIX",
+   "prom_b/wsa1_prom_b.s:146310 `call T_F427A8` -- per measure: time-signature cursor to the next measure (sub_F63749)"
+  ]
+ },
+ {
+  "old": "sub_F65003",
+  "verdict": "name",
+  "new": "SongEdit_InsertTimeSigsForMeasureInsert",
+  "header": "MEASURE INSERT on the master track, before MeasureInsert_Execute's sub_F5F02C: unless measure (0x0C73) is the song end, captures the tag-0x87 time-signature record in force at measure (0x0C73) (scan of measures 1..(0x0C73)-1, sub_F653A5) and, when (0x0C75) differs, the one in force at measure (0x0C75); sub_F65489 then inserts each captured 3-byte record at the start of its measure (BStore_AllocChain + T_F4277C gap + sub_F65761). A jump vector behind T_F432C4. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:136725 `mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20` -- MeasureInsert_Execute: master (part 0x20) track only ...",
+   "prom_b/wsa1_prom_b.s:136728 `call T_F432C4` -- ... before `calr sub_F5F02C` (136732)",
+   "prom_b/wsa1_prom_b.s:145902 `jrl sub_F6500C_Join3` -- the vector",
+   "prom_b/wsa1_prom_b.s:146087 `ldw (3498:16), 1` -- scan from measure 1 ...",
+   "prom_b/wsa1_prom_b.s:146090 `ld (3500:16), bc` -- ... for (0x0C73)-1 measures",
+   "prom_b/wsa1_prom_b.s:146092 `calr sub_F653A5` -- record in force at (0x0C73) -> 0x0D92",
+   "prom_b/wsa1_prom_b.s:146096 `m_cp_rm MW16, 0x0c75, 0` -- second capture only when (0x0C75) != (0x0C73)",
+   "prom_b/wsa1_prom_b.s:146115 `ld xix, 3480` -- record in force at (0x0C75) -> 0x0D98",
+   "prom_b/wsa1_prom_b.s:146124 `calr sub_F65489` -- inserts the captured records",
+   "prom_b/wsa1_prom_b.s:146376 `call T_BStore_AllocChain` -- sub_F65489: 3 more bytes (BStore_AllocBytesWanted := 3) ...",
+   "prom_b/wsa1_prom_b.s:146397 `call T_F4277C` -- ... gap opened at the measure start (sub_F6306A) ...",
+   "prom_b/wsa1_prom_b.s:146404 `calr sub_F65761` -- ... record written into it"
+  ]
+ },
+ {
+  "old": "sub_F65006",
+  "verdict": "name",
+  "new": "SongEdit_InsertTimeSigsForMeasureCopy",
+  "header": "MEASURE COPY on the master track, before SongEdit_CopyMeasures' sub_F5FB04: unless source (0x0C73) = destination (0x0C75), captures the tag-0x87 time-signature record in force at measure (0x0C73) and, unless (0x0C75)+(0x0C77) is (0x0C73) or past the end, the one in force at measure (0x0C75)+(0x0C77), then inserts each 3-byte record at the start of its measure (sub_F65489). A jump vector behind T_F432C8. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:137292 `mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20` -- SongEdit_CopyMeasures: master (part 0x20) track only ...",
+   "prom_b/wsa1_prom_b.s:137295 `call T_F432C8` -- ... before `calr sub_F5FB04` (137299)",
+   "prom_b/wsa1_prom_b.s:145916 `jrl sub_F6500C_Join4` -- the vector",
+   "prom_b/wsa1_prom_b.s:146144 `m_cp_rm MW16, 0x0c75, 0` -- source == destination: nothing to do",
+   "prom_b/wsa1_prom_b.s:146168 `m_add_rm MW16, 0x0c77, 0` -- (0x0C75)+(0x0C77) compared with (0x0C73)",
+   "prom_b/wsa1_prom_b.s:146174 `m_add_rm MW16, 0x0c77, 2` -- seek of measure (0x0C75)+(0x0C77) for the second capture",
+   "prom_b/wsa1_prom_b.s:146205 `calr sub_F65489` -- inserts the captured records at (0x0DAE) / (0x0DB0)"
+  ]
+ },
+ {
+  "old": "sub_F65009",
+  "verdict": "name",
+  "new": "SongEdit_ReinsertTimeSigAfterDelete",
+  "header": "MEASURE DELETE on the master track, after the measures went: if T_F432C0 captured a time-signature record (0x0D92 != 0), seeks measure (0x0C73) of the master track, grows its chain by 3 bytes (BStore_AllocChain), opens a 3-byte gap there (T_F4277C = sub_F6306A) and writes the record into it (sub_F65761). A jump vector behind T_F432CC, which SongEdit_DeleteMeasures calls after sub_F5E570 when the track is the master track (0x0D1D). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:135737 `m_cp_rm MB16, 0x0d1d, 1` -- SongEdit_DeleteMeasures: the edited track is the master track ...",
+   "prom_b/wsa1_prom_b.s:135739 `call T_F432CC` -- ... after `calr sub_F5E570` (135733) removed the measures",
+   "prom_b/wsa1_prom_b.s:145930 `jrl sub_F6500C_Join2` -- the vector",
+   "prom_b/wsa1_prom_b.s:145997 `m_cp_mi8 MB16, 0x0d92, 0x00` -- nothing captured -> nothing to do",
+   "prom_b/wsa1_prom_b.s:146003 `call T_BStore_SeekMeasure` -- measure (0x0C73), now the first after the deleted range",
+   "prom_b/wsa1_prom_b.s:146009 `ldw (BStore_AllocBytesWanted:16), 3` -- 3 bytes ...",
+   "prom_b/wsa1_prom_b.s:146027 `call T_BStore_AllocChain` -- ... allocated at the chain end (saved end cursor 0x60347E / 0x6034A0)",
+   "prom_b/wsa1_prom_b.s:146048 `call T_F4277C` -- gap opened at the measure start",
+   "prom_b/wsa1_prom_b.s:146055 `calr sub_F65761` -- record from 0x0D92 written",
+   "prom_b/wsa1_prom_b.s:146595 `mx_st_mr8 MXD, ra_DE, ra_IY, 1` -- sub_F65761 stores the XIX bytes at the cursor"
+  ]
+ },
+ {
+  "old": "sub_F65E98",
+  "verdict": "refuse",
+  "why_refused": "Its live path only clears UI_RequestBits bit 3 and, unless TransportC_State bit 2, sets UI_ScreenStage := 0 when the edited part (0x0C06) already equals BStore_TrackToPart[(0x0C03)] (otherwise it does nothing); the 150 bytes after its `ret` (0xF65EC6-0xF65F5B, a copy of TrackAssign_CommitEditedPart's commit plus a stage-1 'Are You Sure' branch) are unreachable, so what this key does in this build is not pinned.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:147081 `calr sub_F65E98` -- TrackAssign_StageZero_LcdKeyRow3 (only when (0x0DC0) bit 0, 198067)",
+   "prom_b/wsa1_prom_b.s:147109 `m_cp_rm MB16, 0x0c06, 1` -- part unchanged?",
+   "prom_b/wsa1_prom_b.s:147110 `jr nz, sub_F65E98_Return` -- changed: returns with nothing done",
+   "prom_b/wsa1_prom_b.s:147111 `ld (UI_ScreenStage:16), 0` -- unchanged: stage 0",
+   "prom_b/wsa1_prom_b.s:147114 `ret` -- the end of the reachable code",
+   "prom_b/wsa1_prom_b.s:147142 `ld (UI_ScreenStage:16), 1` -- unreachable stage-1 branch (with 147143 `or (0x2071),0x10`)"
+  ]
+ },
+ {
+  "old": "sub_F6657A",
+  "verdict": "name",
+  "new": "AfterT0uchSetting_SetRecordEnable",
+  "header": "AFTER T0UCH SETTING: LCD key row 3 (code 10) sets (0x7FC2) bit 0, row 4 (code 11) clears it; CP2-side presses (W bit 7) are ignored. ScreenButton_AfterT0uchSetting calls it with BC = the code and then redraws (0x7FC2) through DL_AfterTouchRecord (AND mask 0x01) and DLTable_DisableEnable, so bit 0 is the 'AFTER TOUCH RECORD : EN / DIS' setting. Basis: caller + screen text + body.",
+  "basis": "caller + screen text + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:195397 `cp hl, 10` -- ScreenButton_AfterT0uchSetting: codes 10 / 11 ...",
+   "prom_b/wsa1_prom_b.s:195403 `call T_F42BEC` -- ... call it (BC = code, 195402)",
+   "prom_b/wsa1_prom_b.s:195405 `ld a, (32706:16)` -- then (0x7FC2) ...",
+   "prom_b/wsa1_prom_b.s:195407 `call Draw_AfterTouchRecord` -- ... is redrawn",
+   "prom_b/wsa1_prom_b.s:83595 `.byte 0x01` -- DL_AfterTouchRecord takes bit 0 as the index into DLTable_DisableEnable",
+   "prom_b/wsa1_prom_b.s:83637 `.ascii \"ENABLE \"` -- index 1 = ENABLE",
+   "prom_b/wsa1_prom_b.s:83546 `.ascii \"AFTER TOUCH RECORD :\"` -- the caption of the setting; \"EN\" (83543) above \"DIS\" (83552)",
+   "prom_b/wsa1_prom_b.s:151901 `; LcdKeyRow3_StepRecordSub18: row 3 of the five key pairs ... slot 0x0A` -- code 10 = LCD key row 3 (11 = row 4)",
+   "prom_b/wsa1_prom_b.s:148239 `bit 7, w` -- CP2 side ignored",
+   "prom_b/wsa1_prom_b.s:148248 `m_or_mi8 MB16, 0x7fc2, 0x01` -- code 10 (148241): enable",
+   "prom_b/wsa1_prom_b.s:148245 `m_and_mi8 MB16, 0x7fc2, 0xfe` -- code 11 (148243): disable"
+  ]
+ },
+ {
+  "old": "sub_F66668",
+  "verdict": "name",
+  "new": "TrackAssignPresets_ApplyPreset",
+  "header": "TRACK ASSIGN PRESETS: for preset (0x0DFD) 1 = TECHNICS SET-UP1 ( 1-16), 2 = SET-UP2 (17-32), 3 = GM SET-UP, clears song bank (0x0DFE) (T_SongClear_ClearBank; bank 10 = all, via sub_F6682C), writes the preset's 16 track-to-part bytes (+0x22; track 17 := part 0x20), the +0xC6 GM flag and 16 bytes at +0x33 to the bank copy and, for the current bank, the workspace, where GM mode (0x7F4D) bit 2 then follows (CPU-2 post); rebuilds note routing. Called only by TrackAssignPresets_SoftKeyCol6 (page: 'Any existing song will be cleared. Press 0K'). Basis: caller + screen text + body.",
+  "basis": "caller + screen text + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:148468 `call sub_F66668` -- TrackAssignPresets_SoftKeyCol6 ...",
+   "prom_b/wsa1_prom_b.s:148469 `ld (UI_StatusCode:16), 35` -- ... then status 0x23 and request 0x40AB (148470)",
+   "prom_b/wsa1_prom_b.s:148489 `cp a, 3:i3` -- preset (0x0DFD) must be 1..3",
+   "prom_b/wsa1_prom_b.s:80384 `.ascii \"TECHNICS SET-UP1 ( 1-16)\"` -- preset 1; 80390 SET-UP2 (17-32); 80396 \"GM SET-UP\"",
+   "prom_b/wsa1_prom_b.s:80414 `.ascii \"cleared.\"` -- \"Any existing song will be cleared. Press 0K\"",
+   "prom_b/wsa1_prom_b.s:148491 `m_cp_mi8 MB16, 0x0dfe, 0x0a` -- bank 10 -> sub_F6682C (148493), which loops all ten banks (148707 `cp RC3, 10`)",
+   "prom_b/wsa1_prom_b.s:148500 `call T_SongClear_ClearBank` -- bank (0x0E02 := 0x0DFE, 148499) cleared first",
+   "prom_b/wsa1_prom_b.s:148506 `sla l, 4` -- 16 bytes per preset from IndexMap_F667CC (parts 0-15 / 16-31 / 0-15)",
+   "prom_b/wsa1_prom_b.s:148517 `ld xwa, 34` -- bank copy +0x22 = BStore_TrackToPart's offset ...",
+   "prom_b/wsa1_prom_b.s:148521 `ld (xix), 32` -- ... 17th track := 0x20",
+   "prom_b/wsa1_prom_b.s:148543 `ld (xde), a` -- bank +0xC6 := 0xFF for preset 3 (148525), else 0",
+   "prom_b/wsa1_prom_b.s:148550 `ld xix, BStore_TrackToPart` -- current bank: the workspace too",
+   "prom_b/wsa1_prom_b.s:148572 `ld xwa, 51` -- 16 bytes at +0x33",
+   "prom_b/wsa1_prom_b.s:148596 `m_or_mi8 MB16, 0x7f4d, 0x04` -- GM mode on for GM SET-UP (off, 148590, otherwise), posted 148599",
+   "prom_b/wsa1_prom_b.s:148606 `call T_NoteRouting_RebuildForSong` -- routing rebuilt"
+  ]
+ },
+ {
+  "old": "sub_F67404",
+  "verdict": "name",
+  "new": "StepRecordKind3Sub12_ButtonDispatch_Veneer",
+  "header": "`jp sub_F68271`, the button dispatcher of track-kind-3 STEP RECORD sub-screens 12 and 15 (StepRecord_SubScreenButtonTable_Kind3 entries 12 and 15): codes 0..31 index DispatchTable_F6828B -- SoftKeyCol1_StepRecordSub16, SoftKeyCol6/7_StepRecordSub17, LcdKeyRow2_StepRecordSub17, LcdKeyRow4_StepRecord, ExitKey_StepRecord. Unreached in this build: track kind 3 is never written (StepRecord_ButtonBySubScreen_Kind3's header). Basis: table index + body (target read).",
+  "basis": "table index + body (target read)",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:149758 `.long sub_F67404` -- StepRecord_SubScreenButtonTable_Kind3 [12]; also [15] at 149761",
+   "prom_b/wsa1_prom_b.s:149714 `ld e, (UI_StepRecord_SubScreen:16)` -- StepRecord_ButtonBySubScreen_Kind3 indexes that table by the sub-screen",
+   "prom_b/wsa1_prom_b.s:149712 `; ... so kind 3 is not seen set.` -- the table's reader is never selected",
+   "prom_b/wsa1_prom_b.s:148864 `jp sub_F68271` -- the veneer",
+   "prom_b/wsa1_prom_b.s:151156 `ld xix, DispatchTable_F6828B` -- sub_F68271: button table ...",
+   "prom_b/wsa1_prom_b.s:151159 `call (xhl)` -- ... dispatched",
+   "prom_b/wsa1_prom_b.s:151196 `.long SoftKeyCol1_StepRecordSub16` -- DispatchTable_F6828B[0]; [5] SoftKeyCol6_StepRecordSub17 (151201), [9] LcdKeyRow2_StepRecordSub17 (151205), [11] LcdKeyRow4_StepRecord (151207), [15] ExitKey_StepRecord (151211)"
+  ]
+ },
+ {
+  "old": "sub_F67408",
+  "verdict": "name",
+  "new": "StepRecordKind3Sub13_ButtonDispatch_Veneer",
+  "header": "`jp sub_F6859F`, the button handler of track-kind-3 STEP RECORD sub-screens 13 and 14 (StepRecord_SubScreenButtonTable_Kind3 entries 13 and 14): only code 0 is acted on, calling SoftKeyCol1_StepRecordSub16. Unreached in this build: track kind 3 is never written. Basis: table index + body (target read).",
+  "basis": "table index + body (target read)",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:149759 `.long sub_F67408` -- StepRecord_SubScreenButtonTable_Kind3 [13]; also [14] at 149760",
+   "prom_b/wsa1_prom_b.s:149712 `; ... so kind 3 is not seen set.` -- the table's reader is never selected",
+   "prom_b/wsa1_prom_b.s:148866 `jp sub_F6859F` -- the veneer",
+   "prom_b/wsa1_prom_b.s:151646 `cp bc, 0:i3` -- sub_F6859F: code 0 only ...",
+   "prom_b/wsa1_prom_b.s:151648 `calr SoftKeyCol1_StepRecordSub16` -- ... -> the sub-screen-16 soft key 1 handler"
+  ]
+ },
+ {
+  "old": "sub_F6740C",
+  "verdict": "name",
+  "new": "StepRecord_CursorForward_Veneer",
+  "header": "`jp sub_F68B40`: the CURSOR '>' step of STEP RECORD -- entry 2 (W = 2, soft key 8) of the song-track and master-track cursor tables DispatchTable_F67548 / DispatchTable_F675BB, whose entry 1 ('<') is sub_F68B70; sub_F68B40 runs the step sub_F68B91 with W = 0 where sub_F68B70 passes 1. StepRecordSub16_SoftKeyCol1 repeats it until (0x0E53) and (0x0E58) are 0. An unreferenced second `jp sub_F68E4F` follows at 0xF67410. Basis: table index + callers + body (target read).",
+  "basis": "table index (cursor tables) + callers + body (target read)",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:149397 `.long sub_F6740C` -- DispatchTable_F67548[2] (song track, read at 149343 by W & 3)",
+   "prom_b/wsa1_prom_b.s:149464 `.long sub_F6740C` -- DispatchTable_F675BB[2] (master track, read at 149411)",
+   "prom_b/wsa1_prom_b.s:149272 `ld w, 2:opc` -- SoftKeyCol8_StepRecord passes W = 2 to StepRecord_CursorKeyByTrackKind (header 149286: soft keys 7/8 = CURSOR '<' '>')",
+   "prom_b/wsa1_prom_b.s:148879 `jp sub_F68B40` -- the veneer",
+   "prom_b/wsa1_prom_b.s:152486 `ld w, 0:opc` -- sub_F68B40 -> sub_F68B91 (152487) with W = 0 ...",
+   "prom_b/wsa1_prom_b.s:152512 `ld w, 1:opc` -- ... where the '<' entry sub_F68B70 passes W = 1",
+   "prom_b/wsa1_prom_b.s:155685 `calr sub_F6740C` -- StepRecordSub16_SoftKeyCol1 loops it while (0x0E53) (155687) or (0x0E58) (155689) is non-zero",
+   "prom_b/wsa1_prom_b.s:148880 `jp sub_F68E4F` -- second veneer slot, nothing names 0xF67410"
+  ]
+ },
+ {
+  "old": "sub_F6742C",
+  "verdict": "refuse",
+  "why_refused": "Veneer to sub_F6AC24, which returns to the track-kind page when the byte at the song position or the next one is a 0x82 / 0x84 tag and otherwise, when the next byte equals (0x0E53), runs sub_F6B1DF -> sub_F6741C -> sub_F69C8F -> sub_F6743C (all unnamed); what that branch does and what (0x0E53) holds are not established, so its role after the ERS key and the two DispatchTable_F6ABD2 arms is not pinned.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:153148 `calr sub_F6742C` -- StepRecordSub00_LcdKeyRow4 (the ERS key body)",
+   "prom_b/wsa1_prom_b.s:157221 `calr sub_F6742C` -- DispatchTable_F6ABD2 arm sub_F6ABE2; also 157228 (sub_F6ABF5)",
+   "prom_b/wsa1_prom_b.s:157270 `m_cp_rm MB16, 0x0e53, 1` -- the undecided test",
+   "prom_b/wsa1_prom_b.s:157272 `calr sub_F6B1DF` -- -> unnamed chain"
+  ]
+ },
+ {
+  "old": "sub_F67438",
+  "verdict": "name",
+  "new": "TrackCursor_StepOneEvent_Veneer",
+  "header": "`jp sub_F6B77C`, which steps the current track's song position (0x3460 / 0x3482 [BStore_DirEntry-1]) by one event -- W = 1 back (TrackCursor_StepBack), W = 0 forward (sub_F6B740, once it has checked the next byte is not the 0x82 end and the current one not 0x84) -- to the next event lead byte (sub_F6BC89) or 0x81 beat marker, crossing blocks; (0x0ECE) := bytes stepped. Basis: callers + body (target read).",
+  "basis": "callers + body (target read) + TrackCursor_StepBack's header",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158906 `ld w, 1:opc` -- TrackCursor_StepBack: W = 1 ...",
+   "prom_b/wsa1_prom_b.s:158907 `calr sub_F67438` -- ... calls it",
+   "prom_b/wsa1_prom_b.s:158864 `ld w, 0:opc` -- sub_F6B740: W = 0 ...",
+   "prom_b/wsa1_prom_b.s:158865 `calr sub_F67438` -- ... calls it",
+   "prom_b/wsa1_prom_b.s:158903 `;   sub_F6B77C with W = 1 (W = 0, from sub_F6B740, steps forward).` -- TrackCursor_StepBack's header already reads the target",
+   "prom_b/wsa1_prom_b.s:149012 `jp sub_F6B77C` -- the veneer",
+   "prom_b/wsa1_prom_b.s:158958 `cp b, 0:i3` -- direction from W",
+   "prom_b/wsa1_prom_b.s:158966 `cp a, 129` -- stops on a 0x81 beat marker ...",
+   "prom_b/wsa1_prom_b.s:158968 `calr sub_F6BC89` -- ... or an event lead byte",
+   "prom_b/wsa1_prom_b.s:158982 `ld (3790:16), c` -- (0x0ECE) = bytes stepped"
+  ]
+ },
+ {
+  "old": "sub_F67448",
+  "verdict": "name",
+  "new": "StepRecord_RepaintThenMsgLineControl_Veneer",
+  "header": "`jp sub_F6D40C`: T_F431B0 (StubBlock_F7D000 -> Paint_StepRecord) repaints STEP RECORD, then it falls into MsgLine_Control_Cleared. The step-record message-line dispatcher (sub_F6BC89) calls it on its CONTROL-line paths right after switching UI_StepRecord_SubScreen to 1 or 3; when the sub-screen already was that one it calls MsgLine_Control_Cleared directly. Basis: call sites (both arms) + body (target read).",
+  "basis": "call sites (both arms) + body (target read); the batch's caller sub_F6BFF2_Entry is a local label, not a named caller",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:159764 `m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01` -- already sub-screen 1 ...",
+   "prom_b/wsa1_prom_b.s:159766 `call MsgLine_Control_Cleared` -- ... -> the message line only",
+   "prom_b/wsa1_prom_b.s:159769 `ld (UI_StepRecord_SubScreen:16), 1` -- else switch the sub-screen ...",
+   "prom_b/wsa1_prom_b.s:159770 `call sub_F67448` -- ... and call this",
+   "prom_b/wsa1_prom_b.s:160258 `call sub_F67448` -- same shape for sub-screen 3 (160252/160254/160257); also 160270, 160284, 160296",
+   "prom_b/wsa1_prom_b.s:149052 `jp sub_F6D40C` -- the veneer",
+   "prom_b/wsa1_prom_b.s:163115 `call T_F431B0` -- repaint ...",
+   "prom_b/wsa1_prom_b.s:163151 `calr MsgLine_Clear` -- ... then falls into MsgLine_Control_Cleared (its first instruction)",
+   "prom_b/wsa1_prom_b.s:194738 `jrl Paint_StepRecord - 0xF7D003` -- StubBlock_F7D000, T_F431B0's target (92878)"
+  ]
+ },
+ {
+  "old": "sub_F67460",
+  "verdict": "refuse",
+  "why_refused": "A `jp` to a lone `ret` (sub_F67460_Nop), called only from an unreachable `call` after a `ret` in the step-record message-line dispatcher (0xF6C0B1); no field, caption or table identifies what the slot was for.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:149130 `jp sub_F67460_Nop` -- the veneer",
+   "prom_b/wsa1_prom_b.s:166579 `ret` -- its target",
+   "prom_b/wsa1_prom_b.s:160147 `ret` -- preceding instruction: the call below has no label and no jump to it",
+   "prom_b/wsa1_prom_b.s:160150 `call sub_F67460` -- the only call"
+  ]
+ },
+ {
+  "old": "sub_F67464",
+  "verdict": "refuse",
+  "why_refused": "A `jp` to a lone `ret` (sub_F67464_Nop), called only from an unreachable `calr` in the same dead run of the message-line dispatcher (0xF6C0B6); nothing identifies what it was for.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:149143 `jp sub_F67464_Nop` -- the veneer",
+   "prom_b/wsa1_prom_b.s:166631 `ret` -- its target",
+   "prom_b/wsa1_prom_b.s:160152 `calr sub_F67464` -- the only call, after the dead `call sub_F67460 / ret` pair"
+  ]
+ },
+ {
+  "old": "sub_F6746C",
+  "verdict": "name",
+  "new": "StepRecord_ReadScanEvent_Veneer",
+  "header": "`jp sub_F6E9BB`: copies the event at the step-record scan position (block (0x0FD4), offset (0x0FD6)) into the buffer at 0x0FC7 and leaves the position on the next lead byte -- a 0x81 beat mark or 0x82 end alone, otherwise the lead byte and the data bytes after it up to the next byte with bit 7 set (blocks crossed by the +3 link, restarting at offset 5). StepRecord_BuildCurrentMeasureRow (and sub_F68354 / sub_F68473 for the other two rows) load the position from the song position or a measure seek and then read with it. Basis: callers + body (target read).",
+  "basis": "callers + body (target read)",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:151388 `ld (4052:16), wa` -- StepRecord_BuildCurrentMeasureRow: scan block := the entry's song-position block ...",
+   "prom_b/wsa1_prom_b.s:151394 `ld (4054:16), wa` -- ... offset := its offset byte ...",
+   "prom_b/wsa1_prom_b.s:151395 `calr sub_F6746C` -- ... then reads the event",
+   "prom_b/wsa1_prom_b.s:151530 `calr sub_F6746C` -- sub_F68504 reads the following events the same way, testing 0x0FC7",
+   "prom_b/wsa1_prom_b.s:149170 `jp sub_F6E9BB` -- the veneer",
+   "prom_b/wsa1_prom_b.s:167497 `ld xix, 4039` -- destination 0x0FC7",
+   "prom_b/wsa1_prom_b.s:167541 `mx_ld_rm MXB, ra_IY, ra_IX, 1` -- sub_F6E9E6 reads the byte at block (0x0FD4) (167537), offset (0x0FD6)",
+   "prom_b/wsa1_prom_b.s:167500 `cp a, 129` -- 0x81 / 0x82 (167502) copied alone",
+   "prom_b/wsa1_prom_b.s:167510 `bit 7, a` -- stops before the next lead byte",
+   "prom_b/wsa1_prom_b.s:167571 `cp wa, 255` -- sub_F6EA15: past offset 0xFF ...",
+   "prom_b/wsa1_prom_b.s:167576 `ld hl, (xhl+3)` -- ... next block via +3 link, offset 5 (167578)"
+  ]
+ },
+ {
+  "old": "sub_F67479",
+  "verdict": "name",
+  "new": "BStore_WriteBytesAtSongPosition_Call",
+  "header": "Thunk-exposed `calr sub_F6B50C / ret` (T_F42EFC): writes BC bytes from the source pointer (0x1272) at directory entry IZ/2's song position (block word 0x3460[n], offset byte 0x3482[n]) and advances that position, continuing at offset 5 of the next block (+3 link) when it passes 0xFF. BStore_AppendBytes calls it right after T_BStore_CopyRangeBackward_Call opened the gap there -- the second of the two thunks its header calls unread. Basis: caller + body (target read).",
+  "basis": "caller + body (target read)",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:188274 `ld (4722:16), xiy` -- BStore_AppendBytes keeps the source in (0x1272) ...",
+   "prom_b/wsa1_prom_b.s:188277 `call T_BStore_DirEntryOffsetX2_Call` -- ... IZ = (entry-1)*2 ...",
+   "prom_b/wsa1_prom_b.s:188343 `call T_BStore_CopyRangeBackward_Call` -- ... opens the gap at the 0x3460/0x3482 position (cursor set 188315) ...",
+   "prom_b/wsa1_prom_b.s:188351 `call T_F42EFC` -- ... then calls this (again 188394 / 188402 on the new-block path)",
+   "prom_b/wsa1_prom_b.s:188268 `; Unknown: what the two thunk calls around the copy do: 0xF42EF8/0xF42EFC` -- the gap this closes",
+   "prom_b/wsa1_prom_b.s:149204 `calr sub_F6B50C` -- the wrapper",
+   "prom_b/wsa1_prom_b.s:158631 `ld iy, (xix+34)` -- sub_F6B50C: offset byte 0x3460+0x22 = 0x3482[n]",
+   "prom_b/wsa1_prom_b.s:158637 `cp bc, 255` -- fits in this block?",
+   "prom_b/wsa1_prom_b.s:158642 `ld (xix+34), c` -- offset advanced by the count",
+   "prom_b/wsa1_prom_b.s:158655 `ldir85` -- BC bytes from (0x1272) (158654) to block + offset",
+   "prom_b/wsa1_prom_b.s:158676 `sub bc, 251` -- overflow: new offset in the next block",
+   "prom_b/wsa1_prom_b.s:158687 `ld iy, (xhl+3)` -- next block via the +3 link, stored as the position block (158690)"
+  ]
+ },
+ {
+  "old": "sub_F67488",
+  "verdict": "refuse",
+  "why_refused": "UiListC_ClassA9's second handler (after UiEvent_RouteByCode) runs sub_F6CC6E, which acts on STEP RECORD only for class-0xA9 events with byte +1 = 0, byte +2 = 0 and byte +3 & 3 in 1..3; which panel event that is, and what its two near-identical (0x0DCE) bit 7 arms do beyond repainting and re-paging, is not established.",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:17942 `.long T_F42F00` -- UiListC_ClassA9[1]",
+   "prom_b/wsa1_prom_b.s:161874 `ld a, (UiEvent_Byte1:16)` -- condition on the event bytes (also 161883, 161887)",
+   "prom_b/wsa1_prom_b.s:161896 `m_bit 7, MD16, 0x0dce` -- the two arms"
+  ]
+ },
+ {
+  "old": "sub_F678C6",
+  "verdict": "name",
+  "new": "StepRecordSub00_StepValueClamped",
+  "header": "Steps A by the soft key: W bit 7 clear (upper switch) A + 1 capped at H (unsigned compare), set (lower switch) A - 1 floored at L (signed compare). Reached only through StepRecordSub00_StepValueClamped_Veneer, whose header proposed this name: StepRecordSub00's soft keys 4/5/6 step (0x12AC) 1..13, (0x12AD) 0..12 and (0x12AE) 0..3 with it. Basis: callers + body.",
+  "basis": "callers (through the veneer) + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:148862 `jp sub_F678C6` -- its only reference, the veneer",
+   "prom_b/wsa1_prom_b.s:148859 `;   step (0x12AC) 1..13, (0x12AD) 0..12, (0x12AE) 0..3 through it; sub_F678C6 can take the name without the suffix.` -- the veneer's header",
+   "prom_b/wsa1_prom_b.s:149853 `calr StepRecordSub00_StepValueClamped_Veneer` -- callers, also 149864 / 149875 with L/H bounds",
+   "prom_b/wsa1_prom_b.s:149893 `bit 7, w` -- direction from the switch",
+   "prom_b/wsa1_prom_b.s:149896 `cp a, h` -- upper bound (jr ule)",
+   "prom_b/wsa1_prom_b.s:149903 `jr ge, sub_F678C6_Return` -- lower bound, signed"
+  ]
+ },
+ {
+  "old": "sub_F6820F",
+  "verdict": "name",
+  "new": "StepRecord_WriteEventByte",
+  "header": "Unless sub_F6C43C returns W = 0: with the song position saved in slot 0, advances it (0x0EFB) bytes into the current event, stores (0x125A) there (BStore_WriteByteAtSongPosition) and restores the position -- the set-a-value twin of StepRecord_AdjustEventByte. SoftKeyCol5_StepRecordSub10 calls it at all 13 of its sites after stepping (0x125A), each time with (0x0EFB) = 4, the value byte of the 0xB0 parameter event. Basis: caller + body.",
+  "basis": "caller + body (+ StepRecord_AdjustEventByte twin)",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150934 `calr StepByteWithinLH` -- SoftKeyCol5_StepRecordSub10 steps (0x125A) ...",
+   "prom_b/wsa1_prom_b.s:150936 `ld (3835:16), 4` -- ... sets (0x0EFB) = 4 ...",
+   "prom_b/wsa1_prom_b.s:150937 `calr sub_F6820F` -- ... and calls it (13 calls, all in that routine)",
+   "prom_b/wsa1_prom_b.s:151088 `calr sub_F6C43C` -- the same gate StepRecord_AdjustEventByte uses",
+   "prom_b/wsa1_prom_b.s:151092 `calr StepRecord_SaveCursorToSlot` -- slot 0 (A = 0)",
+   "prom_b/wsa1_prom_b.s:151095 `calr TrackCursor_AdvanceBytes` -- E = (0x0EFB) (151093) bytes into the event",
+   "prom_b/wsa1_prom_b.s:151098 `calr BStore_WriteByteAtSongPosition` -- W = (0x125A) (151097) written",
+   "prom_b/wsa1_prom_b.s:151100 `calr StepRecord_RestoreCursorFromSlot` -- position restored",
+   "prom_b/wsa1_prom_b.s:154922 `ld e, (3835:16)` -- StepRecord_AdjustEventByte: same offset variable, adds instead of setting (writes 154935)",
+   "prom_b/wsa1_prom_b.s:161423 `; StepRecord_BuildPartParamEvent: Builds the 6-byte 0xB0 parameter event` -- byte 4 of that event is the value"
+  ]
+ },
+ {
+  "old": "sub_F68234",
+  "verdict": "name",
+  "new": "StepRecord_WriteEventByteSplitBit7",
+  "header": "As sub_F6820F for an 8-bit value: unless sub_F6C43C returns W = 0, sets bit 0 of the event's lead byte at the song position to bit 7 of (0x125A), then stores (0x125A) & 0x7F (0x0EFB) bytes further on; position slot 0 brackets it. Its one caller is SoftKeyCol5_StepRecordSub10's TUNING arm (range 0..255, then MsgLine_PartTuning) -- the '|1 for value bit 7' lead-byte rule of StepRecord_BuildPartParamEvent. Basis: caller + body.",
+  "basis": "caller + body (+ StepRecord_BuildPartParamEvent's event format)",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150963 `ld h, 255:opc` -- TUNING arm: value 0..255 ...",
+   "prom_b/wsa1_prom_b.s:150967 `calr sub_F68234` -- ... written with this ...",
+   "prom_b/wsa1_prom_b.s:150968 `call MsgLine_PartTuning` -- ... TUNING message line",
+   "prom_b/wsa1_prom_b.s:151116 `calr sub_F6C43C` -- gate",
+   "prom_b/wsa1_prom_b.s:151123 `and w, 128` -- value bit 7 ...",
+   "prom_b/wsa1_prom_b.s:151124 `rlc w` -- ... to bit 0 ...",
+   "prom_b/wsa1_prom_b.s:151125 `and a, 254` -- ... of the lead byte, written 151127",
+   "prom_b/wsa1_prom_b.s:151130 `calr TrackCursor_AdvanceBytes` -- (0x0EFB) bytes on",
+   "prom_b/wsa1_prom_b.s:151133 `and w, 127` -- low 7 bits written (151134)",
+   "prom_b/wsa1_prom_b.s:161423 `; StepRecord_BuildPartParamEvent: Builds the 6-byte 0xB0 parameter event at 0x12EE: 0xB0 (|2 for TUNING, |1 for value` -- same convention when the event is built"
+  ]
+ },
+ {
+  "old": "sub_F68354",
+  "verdict": "name",
+  "new": "StepRecord_BuildPrevMeasureRow",
+  "header": "STEP RECORD: builds the previous-measure row -- text 0x1012 blanked (sub_F68575), (0x0F5E) := 0 and left 0 at measure 1, else measure (0x12B2)-1 capped at 1000; seeks it (BStore_StubTable with sub_F684FA's time-signature chain), reads its first event from the seek cursor (sub_F6746C), row flags C = 0 (sub_F68504), (0x0F64) := beats capped at 4 and '(n/4)' at 0x1021 when over 4. First of StepRecord_RedrawMeasureRows' three rows; twin of StepRecord_BuildCurrentMeasureRow. Basis: caller + body + named twin.",
+  "basis": "caller + body + named twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:151283 `calr sub_F68354` -- StepRecord_RedrawMeasureRows, before StepRecord_BuildCurrentMeasureRow (151284) and sub_F68473 (151285)",
+   "prom_b/wsa1_prom_b.s:151305 `ldw (3934:16), 0` -- no previous row by default ...",
+   "prom_b/wsa1_prom_b.s:151308 `cp wa, 1:i3` -- ... and none at measure 1",
+   "prom_b/wsa1_prom_b.s:151310 `dec 1, wa` -- measure - 1 -> (0x0C90), capped and kept in (0x0F5E) (151316)",
+   "prom_b/wsa1_prom_b.s:151319 `call T_BStore_StubTable` -- seek (BStore_SeekMeasure)",
+   "prom_b/wsa1_prom_b.s:151322 `ld (4052:16), wa` -- scan position := seek cursor (151323)",
+   "prom_b/wsa1_prom_b.s:151324 `calr sub_F6746C` -- first event",
+   "prom_b/wsa1_prom_b.s:151327 `ld c, 0:opc` -- row flags bits 0/1 (151328 calr sub_F68504)",
+   "prom_b/wsa1_prom_b.s:151335 `ld (3940:16), a` -- beats capped at 4",
+   "prom_b/wsa1_prom_b.s:151339 `ld xix, 4129` -- '(n/4)' at 0x1021 = 0x1012 + 15",
+   "prom_a/wsa1_prom_a.s:5818 `m_cp_mi16 MW16, 0x0f5e, 0x0000` -- prom_a's row painter skips the row when (0x0F5E) = 0"
+  ]
+ },
+ {
+  "old": "sub_F68473",
+  "verdict": "name",
+  "new": "StepRecord_BuildNextMeasureRow",
+  "header": "STEP RECORD: builds the next-measure row -- text 0x104E blanked (sub_F68587), (0x0F62) := measure (0x12B2)+1 capped at 1000, seek (BStore_StubTable with sub_F684FA); on a seek error (0x1006) := (0x0E59) and no event scan, else first event from the seek cursor (sub_F6746C) and row flags C = 4 (sub_F68504); (0x0F66) := beats capped at 4, '(n/4)' at 0x105D when over 4. Last of StepRecord_RedrawMeasureRows' three rows. Basis: caller + body + named twin.",
+  "basis": "caller + body + named twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:151285 `calr sub_F68473` -- StepRecord_RedrawMeasureRows, third row",
+   "prom_b/wsa1_prom_b.s:151432 `calr sub_F68587` -- blanks 0x104E (151610)",
+   "prom_b/wsa1_prom_b.s:151434 `inc 1, wa` -- measure + 1, capped, to (0x0F62) (151440)",
+   "prom_b/wsa1_prom_b.s:151443 `call T_BStore_StubTable` -- seek",
+   "prom_b/wsa1_prom_b.s:151446 `ld a, (3673:16)` -- seek failed: (0x1006) := (0x0E59)",
+   "prom_b/wsa1_prom_b.s:151452 `ld (4052:16), wa` -- scan position := seek cursor",
+   "prom_b/wsa1_prom_b.s:151454 `calr sub_F6746C` -- first event",
+   "prom_b/wsa1_prom_b.s:151457 `ld c, 4:opc` -- row flags bits 4/5",
+   "prom_b/wsa1_prom_b.s:151466 `ld (3942:16), a` -- beats capped at 4",
+   "prom_b/wsa1_prom_b.s:151470 `ld xix, 4189` -- '(n/4)' at 0x105D = 0x104E + 15"
+  ]
+ },
+ {
+  "old": "sub_F684FA",
+  "verdict": "name",
+  "new": "StepRecord_TimeSigFromCurrentEntry",
+  "header": "W := BStore_DirEntry and (0x0C8A) bit 2 set, so the BStore_SeekMeasure that follows (BStore_StubTable) takes its time-signature records from the current step-record entry's chain: BStore_SeekMeasure stores W in (0x0D1D), and BStore_TimeSigFirstMeasure opens chain (0x0D1D) only when (0x0C8A) bit 2 is set. All nine call sites, StepRecord_BuildCurrentMeasureRow's among them, go on to call T_BStore_StubTable. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:151377 `calr sub_F684FA` -- StepRecord_BuildCurrentMeasureRow ...",
+   "prom_b/wsa1_prom_b.s:151379 `call T_BStore_StubTable` -- ... then seeks (A = (0x0E5C)); same pair at 151317/151319, 151441/151443 and the six sites from 155461",
+   "prom_b/wsa1_prom_b.s:151490 `ld w, (BStore_DirEntry:16)` -- W = the current entry",
+   "prom_b/wsa1_prom_b.s:151491 `m_or_mi8 MB16, 0x0c8a, 0x04` -- time-signature chain enabled",
+   "prom_b/wsa1_prom_b.s:142564 `ld (3357:16), w` -- BStore_SeekMeasure: (0x0D1D) := W",
+   "prom_b/wsa1_prom_b.s:143543 `m_bit 2, MD16, 0x0c8a` -- BStore_TimeSigFirstMeasure: only with bit 2 ...",
+   "prom_b/wsa1_prom_b.s:143545 `ld a, (3357:16)` -- ... does it open chain (0x0D1D) for tag-0x87 records"
+  ]
+ },
+ {
+  "old": "sub_F68504",
+  "verdict": "name",
+  "new": "StepRecord_SetRowEventFlags",
+  "header": "Measure-row flags in (0x106C), bits C and C+1 (C = 0 previous, 2 current, 4 next row): both cleared; if the event already read to 0x0FC7 is not a 0x81 beat mark / 0x82 end, bit C is set and further events are read (sub_F6746C) up to the next 0x81 / 0x82 -- one whose second byte (0x0FC8) is 0 clears bit C and sets bit C+1 instead. prom_a's row painter (sub_F81C33) hands (0x106C) to its display lists; what the two bits show is not established. Basis: callers + body + reader.",
+  "basis": "callers + body + prom_a reader",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:151398 `ld c, 2:opc` -- StepRecord_BuildCurrentMeasureRow: C = 2 ...",
+   "prom_b/wsa1_prom_b.s:151399 `calr sub_F68504` -- ... after reading the row's first event (151395)",
+   "prom_b/wsa1_prom_b.s:151327 `ld c, 0:opc` -- previous row C = 0; next row C = 4 (151457)",
+   "prom_b/wsa1_prom_b.s:151509 `m_stcf_a MD16, 0x106c` -- bit C cleared (C+1 at 151515)",
+   "prom_b/wsa1_prom_b.s:151519 `cp a, 129` -- first item a beat mark or end (151521): both stay 0",
+   "prom_b/wsa1_prom_b.s:151526 `m_stcf_a MD16, 0x106c` -- bit C set",
+   "prom_b/wsa1_prom_b.s:151530 `calr sub_F6746C` -- next event",
+   "prom_b/wsa1_prom_b.s:151537 `m_cp_mi8 MB16, 0x0fc8, 0x00` -- second byte 0 ...",
+   "prom_b/wsa1_prom_b.s:151548 `m_stcf_a MD16, 0x106c` -- ... bit C+1 set (bit C cleared 151542)",
+   "prom_a/wsa1_prom_a.s:5788 `ld a, (0x106c:16)` -- read by the row painter (also 5793, 5803)"
+  ]
+ },
+ {
+  "old": "sub_F6857E",
+  "verdict": "name",
+  "new": "StepRecord_BlankCurrentRowText",
+  "header": "Fills the current-measure row's 30-character text at 0x1030 with spaces (Text_FillSpaces30); StepRecord_BuildCurrentMeasureRow calls it first, as sub_F68575 (0x1012) and sub_F68587 (0x104E) do for the previous and next rows. That row's '(n/4)' suffix goes at 0x1030 + 15. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:151374 `calr sub_F6857E` -- StepRecord_BuildCurrentMeasureRow",
+   "prom_b/wsa1_prom_b.s:151594 `ld xix, 4144` -- 0x1030 ...",
+   "prom_b/wsa1_prom_b.s:151595 `calr Text_FillSpaces30` -- ... 15 words of 0x2020",
+   "prom_b/wsa1_prom_b.s:151578 `ld xix, 4114` -- twin for the previous row (0x1012); 151610 0x104E for the next",
+   "prom_b/wsa1_prom_b.s:151410 `ld xix, 4159` -- the current row's '(n/4)' at 0x103F"
+  ]
+ }
+]

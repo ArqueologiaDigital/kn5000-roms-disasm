@@ -27,3 +27,14 @@ caller was accepted only when its name or header made the role clear and the bod
 
 **Wave 4** (`proposals_wave4_{k,l,m,n}.json`): 111 named and 9 refused, plus one reviewer-authored record,
 `sub_F4D861` -> `BStore_AllocBlock_B`. Batch m had named its veneer assuming that name.
+
+**Wave 5** (`proposals_wave5_{o,p,q,r}.json`, plus `proposals_wave5_review.json`): the next 120 routines that a named
+routine (not `OldCopy_*`) calls, leaving out every routine an earlier wave refused. Almost all of them have one named
+caller. Result: 105 named, 15 refused, and one reviewer-authored record. Reviewer changes, each noted in the record's
+`review` field:
+- batch q's two CYCLE PLAY blink callbacks follow batch p's CYCLE RECORD twins (`..._Readout`);
+- batch q's veneer `BStore_ClearTrack_Call` became `SongEdit_ClearTrack_Call`, because batch p gives
+  `BStore_ClearTrack` to the block store's own routine (sub_F4D346). The veneer's target sub_F6079E (TRACK CLEAR,
+  MEASURE DELETE / COPY, TRACK MERGE) is named `SongEdit_ClearTrack` in the reviewer record.
+Three existing headers got correction notes (CycleRecord_RestartPass, StepRecord_BuildCurrentMeasureRow,
+BStore_AppendBytes); the original text stays.

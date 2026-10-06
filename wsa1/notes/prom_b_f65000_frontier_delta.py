@@ -22,7 +22,7 @@ QUESTION IT ANSWERS
   both and are unaffected; do not quote this script's TOTALS as the tool's.
 
 WHAT IT ASSERTS (non-zero exit if any fails)
-    1. the four runs T_F432C0, T_F42B70, T_F42EC0, T_F42ED0 are in BEFORE
+    1. the four runs T_SongEdit_SaveTimeSigOfDeletedMeasures, T_F42B70, T_F42EC0, T_F42ED0 are in BEFORE
     2. none of the four is in AFTER
     3. no OTHER run disappeared -- a round must not be credited with a run some
        other change removed

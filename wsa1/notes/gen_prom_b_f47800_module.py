@@ -20,7 +20,7 @@ WHY THIS BLOCK (round 3, chosen with the frontier tools, not by address order)
       broke the ties.  notes/prom_b_round3_frontier_delta.py re-derives 11 and 8
       from the ROM and also asserts that nothing else sits at exactly 13.
     * notes/prom_b_module_frontier.py ranks whole RUNS; this span holds nine of
-      them (T_F40B40, T_F40BC0, T_BStore_StepCursorOneByte, T_F40CB0, T_F40CE0, T_F40D60,
+      them (T_F40B40, T_SeqRecord_LoadTakeCursor_Veneer, T_BStore_StepCursorOneByte, T_F40CB0, T_F40CE0, T_SeqTrack_PlayOnWhileStopped,
       T_BStore_CompactBlocks_Veneer, T_ScreenEnter_CreatorSelectController and, past the end of this block, T_F42E40).
     * Summed over the eight modules converted here that is 92 thunk slots -- the
       largest single-span slot count left in prom_b.

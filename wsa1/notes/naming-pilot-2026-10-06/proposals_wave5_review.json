@@ -1,0 +1,18 @@
+[
+ {
+  "old": "sub_F6079E",
+  "verdict": "name",
+  "new": "SongEdit_ClearTrack",
+  "header": "Empties track (0x0C70): frees its chain (BStore_FreeChain via T_F42888), marks its directory entry empty and resets its saved cursors in the workspace and in the current bank's copy (0x610000 + BStore_CurrentBank*0xC00). Called by TRACK CLEAR (SongEdit_ClearTrack_Call), SongEdit_DeleteMeasuresFromTrack, SongEdit_CopyMeasuresToTrack and TrackMerge_Execute; twin of the block store's BStore_ClearTrack. Basis: callers + body.",
+  "basis": "callers + body",
+  "review": "reviewer-authored, from the evidence batches p and q cite for it",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:139279 `calr\tsub_F6079E` -- the whole body of the TRACK CLEAR slot routine sub_F6079A (T_F426E4)",
+   "prom_b/wsa1_prom_b.s:135884 `calr\tsub_F6079E` -- MEASURE DELETE from measure 1 to the end clears the whole track",
+   "prom_b/wsa1_prom_b.s:137826 `calr\tsub_F6079E` -- MEASURE COPY clears a freshly created destination chain on error",
+   "prom_b/wsa1_prom_b.s:138501 `calr\tsub_F6079E` -- TRACK MERGE clears the destination when it is neither source",
+   "prom_b/wsa1_prom_b.s:139341 `call\tT_F42888` -- frees the old chain (T_F42888 -> calr BStore_FreeChain)",
+   "prom_b/wsa1_prom_b.s:139356 `ld\txix, 6356992` -- repeats the directory / cursor reset in bank copy 0x610000 + BStore_CurrentBank*0xC00"
+  ]
+ }
+]

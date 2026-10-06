@@ -1313,7 +1313,7 @@ ROWS = [
      "(BStore_Workspace_LoadFromBank).  Thunk T_BStore_MoveWorkspaceToNextBank, called by BStore_ClearPasswordProtectedBanks."),
     ("F608D0", "SongClear_ClearBank",
      "the SONG CLEAR job's action (SongClear_LcdKeyRow4, through T_SongClear_ClearBank) on bank (0x0E02), 10 = all of them\n"
-     "(sub_F610E3): sub_F60F4F, then in the bank copy the password word +0x1C = 0 and every directory entry's bit\n"
+     "(SongClear_ResetAllBanks): BStore_EmptyBank, then in the bank copy the password word +0x1C = 0 and every directory entry's bit\n"
      "7 cleared and start block 0xFFFF."),
     ("F60B0C", "SongClear_ClearCurrentBank",
      "SongClear_ClearBank with (0x0E02) = BStore_CurrentBank, the old value restored.  Thunk T_SongClear_ClearCurrentBank, called by\n"
@@ -1897,7 +1897,7 @@ ROWS = [
     ("FE7864", "Medley_LoadInternalSong",
      "from Medley_PlayingSong to Medley_LastSong (then from Medley_FirstSong once more), the first bank whose copy\n"
      "(0x610100 + bank x 0xC00) has an in-use directory entry: Medley_PlayingSong = BStore_CurrentBank = it,\n"
-     "T_F4282C, (0x34D0) |= 4, its 6-character name (0x6034CA) to 0x0E38 + 5 blanks, (0x22D0) = 10.  None in range:\n"
+     "T_BStore_LoadSongFromCurrentBank, (0x34D0) |= 4, its 6-character name (0x6034CA) to 0x0E38 + 5 blanks, (0x22D0) = 10.  None in range:\n"
      "UI_StatusCode 0x2F, request 0x40AB, Medley_Playing = 0."),
     ("FE78FB", "Medley_StopInternal",
      "T_Transport_StopAllRunning, (0x34D0) bit 2 cleared, Name11At0E38_Blank."),

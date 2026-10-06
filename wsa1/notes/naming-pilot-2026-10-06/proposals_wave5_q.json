@@ -1,0 +1,405 @@
+[
+ {
+  "old": "sub_F56F96",
+  "verdict": "name",
+  "new": "CyclePlayScreen_BlinkStartMeasureReadout",
+  "header": "The callback CyclePlayScreen_BlinkStartMeasure posts: on layer 0 hands Blink_Command the START measure field's decimal-readout\nrecord DL_F34FF2 + 0x19 (source UI_DrawScratch+18, which the poster has just loaded from (0x361E)). Twin of CyclePlayScreen_BlinkEndMeasureField (END) and of CYCLE RECORD's sub_F5686B. Basis: caller + body.",
+  "basis": "caller (posted callback) + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123561 `ld\txwa, sub_F56F96` -- CyclePlayScreen_BlinkStartMeasure posts this address through T_CallbackQueue_Post",
+   "prom_b/wsa1_prom_b.s:123570 `ld\txiy, DL_F34FF2 + 0x19` -- the START field record: decimal readout of UI_DrawScratch+18, 3 digits (DL_F34FF2 listing)",
+   "prom_b/wsa1_prom_b.s:123572 `call\tT_Blink_Command` -- the whole body is LCD_CurrentLayer := 0 and Blink_Command(record)"
+  ],
+  "review": "renamed from CyclePlayScreen_BlinkStartMeasureField to match its CYCLE RECORD twin (batch p)"
+ },
+ {
+  "old": "sub_F56FC3",
+  "verdict": "name",
+  "new": "CyclePlayScreen_BlinkEndMeasureReadout",
+  "header": "The callback CyclePlayScreen_BlinkEndMeasure posts: on layer 0 hands Blink_Command the END measure field's decimal-readout\nrecord DL_F34FF2 + 0x23 (source UI_DrawScratch+20 = (0x3620)). Twin of CyclePlayScreen_BlinkStartMeasureField and of CYCLE RECORD's sub_F56898. Basis: caller + body.",
+  "basis": "caller (posted callback) + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123593 `ld\txwa, sub_F56FC3` -- CyclePlayScreen_BlinkEndMeasure posts this address through T_CallbackQueue_Post",
+   "prom_b/wsa1_prom_b.s:123602 `ld\txiy, DL_F34FF2 + 0x23` -- the END field record: decimal readout of UI_DrawScratch+20",
+   "prom_b/wsa1_prom_b.s:123604 `call\tT_Blink_Command` -- body = LCD_CurrentLayer := 0, Blink_Command(record)"
+  ],
+  "review": "renamed from CyclePlayScreen_BlinkEndMeasureField to match its CYCLE RECORD twin (batch p)"
+ },
+ {
+  "old": "sub_F5DB97",
+  "verdict": "name",
+  "new": "Quantize_Track",
+  "header": "QUANTIZE on one track: (0x0E12) := RoundMap_Table[(0x0C7F)/2] (the VALUE field's round map), then falls (jr) into sub_F5DBD0, which walks track (0x0C8E)\nfrom measure (0x0C73) for (0x0C77) measures and pulls the timing byte (+1) of each 0x9n event toward the map by STRENGTH (0x0E04) % inside WINDOW (0x0E05). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:134682 `calr\tsub_F5DB97` -- Quantize_Execute, single-track arm, after (0x0C8E) := the track",
+   "prom_b/wsa1_prom_b.s:134705 `call\tsub_F5DB97` -- Quantize_Execute, all-tracks loop (master part 0x20 skipped)",
+   "prom_b/wsa1_prom_b.s:134740 `ld\txde, RoundMap_Table` -- selects the round map by (0x0C7F) shifted left once",
+   "prom_b/wsa1_prom_b.s:134743 `ld\t(3602:16), xiy` -- (0x0E12) := the map pointer",
+   "prom_b/wsa1_prom_b.s:134744 `jr\tsub_F5DBD0` -- falls into the walk; sub_F5DBD0 reads (0x0E12) at 134843 and rewrites the timing byte at 134936 after `and a, 240 / cp a, 144` (134831)",
+   "prom_b/wsa1_prom_b.s:134907 `ld\tl, (3588:16)` -- (0x0E04) STRENGTH scales the correction (mul / div 100)"
+  ]
+ },
+ {
+  "old": "sub_F5E570",
+  "verdict": "name",
+  "new": "SongEdit_DeleteMeasuresFromTrack",
+  "header": "MEASURE DELETE on track (0x0C8E): seeks measure (0x0C73) and measure (0x0C73)+(0x0C77), moves the rest of the chain down over the gap (T_F42778, sub_F62DC9), saves the cursor\nand truncates the chain; deleting from measure 1 to the end instead clears the whole track (sub_F6079E) and its bit in (0x360C)/(0x360E). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:135733 `calr\tsub_F5E570` -- SongEdit_DeleteMeasures, single-track arm",
+   "prom_b/wsa1_prom_b.s:135792 `calr\tsub_F5E570` -- SongEdit_DeleteMeasures, all-tracks loop",
+   "prom_b/wsa1_prom_b.s:135866 `m_add_rm MW16, 0x0c77, 0` -- end measure = first (0x0C73) + count (0x0C77)",
+   "prom_b/wsa1_prom_b.s:135884 `calr\tsub_F6079E` -- measure 1 to the end of the track (0x82 or error 8): the whole track is cleared",
+   "prom_b/wsa1_prom_b.s:135948 `call\tT_F42778` -- forward copy from the end position (0x0C61/0x0C67) down to the start position (0x0C57/0x0C5D)",
+   "prom_b/wsa1_prom_b.s:135966 `call\tT_BStore_TruncateChainAfterBlock` -- the freed tail is cut off"
+  ]
+ },
+ {
+  "old": "sub_F5E83A",
+  "verdict": "name",
+  "new": "MeasureErase_EraseTrack",
+  "header": "MEASURE ERASE on track (0x0C8E): compacts measures (0x0C73)..+(0x0C77) in place keeping the 0x81 beat marks; ERASE DATA (0x0C79) 0 drops every other event, 1 drops only 0x9n events,\n2 keeps only 0x9n events (the master track also keeps its 0x87 records in 0 and 2); then closes the gap (T_F42778), saves the cursor and truncates. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:136045 `calr\tsub_F5E83A` -- MeasureErase_Execute, single-track arm (its header names sub_F5E83A as the per-track erase)",
+   "prom_b/wsa1_prom_b.s:136084 `calr\tsub_F5E83A` -- MeasureErase_Execute, all-tracks loop",
+   "prom_b/wsa1_prom_b.s:136152 `m_cp_mi8 MB16, 0x0c79, 0x00` -- three arms by the ERASE DATA field (0x0C79)",
+   "prom_b/wsa1_prom_b.s:136185 `cp\ta, 135` -- mode 0: only the master track (0x0D1D) keeps tag 0x87",
+   "prom_b/wsa1_prom_b.s:136269 `cp\tw, 144` -- mode 1: 0x9n events are skipped, others copied",
+   "prom_b/wsa1_prom_b.s:136357 `cp\tw, 144` -- mode 2: 0x9n (and master 0x87) copied, others skipped",
+   "prom_b/wsa1_prom_b.s:136443 `call\tT_F42778` -- the remainder of the chain is moved down over the freed bytes"
+  ]
+ },
+ {
+  "old": "sub_F5EE9A",
+  "verdict": "name",
+  "new": "MeasureInsert_InsertToTrack",
+  "header": "MEASURE INSERT core: inserts measures (0x0C73)..+(0x0C77) of track (0x0C8E) into track (0x0C8F) before measure (0x0C75): sizes the range (T_F42798), extends the destination chain (T_BStore_AllocChain),\nopens the gap by moving its tail up (BStore_CopyRangeBackward) and copies the source range into it (BStore_CopyRangeBackward again). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:136682 `calr\tsub_F5EE9A` -- MeasureInsert_Execute when FROM TRACK (0x0C70) and TO TRACK (0x0C71) differ, after (0x0C8E)/(0x0C8F) := them",
+   "prom_b/wsa1_prom_b.s:137005 `calr\tsub_F5EE9A` -- MeasureInsert_InsertWithinTrack defers to it when the source starts at or before the insert point",
+   "prom_b/wsa1_prom_b.s:136907 `call\tT_F42798` -- byte length of the (0x0C77) measures -> BStore_AllocBytesWanted",
+   "prom_b/wsa1_prom_b.s:136922 `call\tT_BStore_AllocChain` -- grows track (0x0C8F) by that many bytes",
+   "prom_b/wsa1_prom_b.s:136943 `call\tT_F4277C` -- first backward copy: destination tail from the insert point to the old end",
+   "prom_b/wsa1_prom_b.s:136966 `call\tT_F4277C` -- second backward copy: the source measures into the gap"
+  ]
+ },
+ {
+  "old": "sub_F5F02C",
+  "verdict": "name",
+  "new": "MeasureInsert_InsertWithinTrack",
+  "header": "MEASURE INSERT when source and destination are the same track (or ALL): if the source starts at or before the insert point it is MeasureInsert_InsertToTrack; otherwise it opens the gap first,\nmoves both source positions up by the inserted length (BStore_MovePosForward twice) and copies the shifted source forward into the gap (T_F42778). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:136732 `calr\tsub_F5F02C` -- MeasureInsert_Execute, FROM TRACK = TO TRACK arm",
+   "prom_b/wsa1_prom_b.s:136789 `calr\tsub_F5F02C` -- MeasureInsert_Execute, all-tracks loop with (0x0C8E) = (0x0C8F)",
+   "prom_b/wsa1_prom_b.s:137005 `calr\tsub_F5EE9A` -- first measure (0x0C73) <= insert measure (0x0C75): the general routine",
+   "prom_b/wsa1_prom_b.s:137084 `call\tT_F42780` -- source start re-based past the gap",
+   "prom_b/wsa1_prom_b.s:137095 `call\tT_F42780` -- source end re-based past the gap",
+   "prom_b/wsa1_prom_b.s:137113 `call\tT_F42778` -- forward copy of the shifted source into the gap"
+  ]
+ },
+ {
+  "old": "sub_F5F476",
+  "verdict": "name",
+  "new": "SongEdit_CopyMeasuresToTrack",
+  "header": "MEASURE COPY core: copies measures (0x0C73)..+(0x0C77) of track (0x0C8E) over the same number of measures of track (0x0C8F) from (0x0C75), creating the destination chain if it is empty\nand growing (AllocChain + BStore_CopyRangeBackward) or shrinking (T_F42778) the destination range to the source's byte length; a failure on a new chain clears it (sub_F6079E). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:137253 `calr\tsub_F5F476` -- SongEdit_CopyMeasures, two different tracks (its header: per track sub_F5F476 copies)",
+   "prom_b/wsa1_prom_b.s:137987 `calr\tsub_F5F476` -- SongEdit_CopyMeasuresWithinTrack when the source lies before the destination",
+   "prom_b/wsa1_prom_b.s:137402 `call\tT_BStore_OpenChain` -- destination chain missing (error 1): one block is allocated and the directory entry set (137415)",
+   "prom_b/wsa1_prom_b.s:137541 `m_cp_rm MW16, BStore_AllocBytesWanted, 0` -- destination range length vs source range length picks grow / equal / shrink",
+   "prom_b/wsa1_prom_b.s:137590 `call\tT_F4277C` -- grow: destination tail moved up",
+   "prom_b/wsa1_prom_b.s:137711 `call\tT_F42778` -- shrink: destination tail moved down",
+   "prom_b/wsa1_prom_b.s:137816 `call\tT_F4277C` -- the source measures copied into the range",
+   "prom_b/wsa1_prom_b.s:137826 `calr\tsub_F6079E` -- on error with a freshly created chain ((0x0C8A) bit 7) the track is cleared again"
+  ]
+ },
+ {
+  "old": "sub_F5FB04",
+  "verdict": "name",
+  "new": "SongEdit_CopyMeasuresWithinTrack",
+  "header": "MEASURE COPY when source and destination are the same track (or ALL): source before destination -> SongEdit_CopyMeasuresToTrack; same measure -> only checks the entry is in use;\nsource after destination -> resizes the destination range itself, re-basing the source positions with BStore_MovePosForward / BStore_MovePosBackward before copying. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:137299 `calr\tsub_F5FB04` -- SongEdit_CopyMeasures, FROM = TO track arm",
+   "prom_b/wsa1_prom_b.s:137355 `calr\tsub_F5FB04` -- SongEdit_CopyMeasures, all-tracks loop",
+   "prom_b/wsa1_prom_b.s:137987 `calr\tsub_F5F476` -- (0x0C73) < (0x0C75): the general copy",
+   "prom_b/wsa1_prom_b.s:138006 `call\tT_BStore_SeekMeasure` -- (0x0C73) = (0x0C75): nothing to move",
+   "prom_b/wsa1_prom_b.s:138133 `call\tT_F42780` -- source position moved forward by the grown length",
+   "prom_b/wsa1_prom_b.s:138184 `call\tT_F42784` -- source position moved back by the shrunk length"
+  ]
+ },
+ {
+  "old": "sub_F60012",
+  "verdict": "name",
+  "new": "TrackMerge_Execute",
+  "header": "The TRACK MERGE job (TrackMerge_LcdKeyRow2 stages its three fields into (0x0C70)/(0x0C71)/(0x0C72) and calls T_F426E8): sources (0x0C70) != (0x0C71) and destination (0x0C72) 1..(0x0CA2) (error 3),\nno master part 0x20 (error 9); clears the destination unless it is a source (sub_F6079E), gives it source 1's part and a new chain, and merges both streams into it. Twin of Smf_MergeTrack2IntoTrack1's sub_F72A2B. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:189216 `ld\t(3186:16), a` -- TrackMerge_LcdKeyRow2 stages (0x0C15) -> (0x0C72) after (0x0C70)/(0x0C71)",
+   "prom_b/wsa1_prom_b.s:189219 `call\tT_F426E8` -- TrackMerge_LcdKeyRow2 runs it; on status 0x23 it clears both sources' bits in (0x3010)/(0x360C) and sets the destination's",
+   "prom_b/wsa1_prom_b.s:138467 `call\tT_F4280C` -- sources with different parts: track (0x0C83) is first reworked for the part",
+   "prom_b/wsa1_prom_b.s:138501 `calr\tsub_F6079E` -- the destination track is cleared when it is neither source",
+   "prom_b/wsa1_prom_b.s:138534 `mx_st_mr8 MXD, ra_IX, ra_HL, 1` -- BStore_TrackToPart[dest] := source 1's part (0x0C94); a fresh block becomes its chain head"
+  ]
+ },
+ {
+  "old": "sub_F60598",
+  "verdict": "name",
+  "new": "Vel0cityChange_Execute",
+  "header": "The VEL0CITY CHANGE job (Vel0cityChange_LcdKeyRow2, through T_F426FC): track (0x0C70) 1..(0x0CA2) or 0x7F = all, measures (0x0C73)/(0x0C77) 1..999, mode (0x0C7A) 0 = add the signed value (0x0C7B)\n(not 0x80), 1 = set it (0..127), else error 3; per track sub_F6068D rewrites the velocity byte (+3) of each 0x9n event, clamped 0..127. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:191808 `ld\t(3195:16), a` -- Vel0cityChange_LcdKeyRow2: (0x0C7B) := the VELOCITY field (0x0C1E), (0x0C7A) := 0",
+   "prom_b/wsa1_prom_b.s:191813 `call\tT_F426FC` -- Vel0cityChange_LcdKeyRow2 runs it",
+   "prom_b/wsa1_prom_b.s:139100 `calr\tsub_F6068D` -- per-track worker",
+   "prom_b/wsa1_prom_b.s:139201 `ld\ta, (3195:16)` -- sub_F6068D: after three cursor steps past a 0x9n tag, adds or stores (0x0C7B)"
+  ]
+ },
+ {
+  "old": "sub_F6079A",
+  "verdict": "name",
+  "new": "SongEdit_ClearTrack_Call",
+  "header": "`calr SongEdit_ClearTrack / ret` behind T_F426E4; TrackClear_LcdKeyRow2 calls it once per track selected in (0x0DBE). Basis: caller + body.",
+  "basis": "caller + body (target read)",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:188863 `ld\t(3184:16), a` -- TrackClear_LcdKeyRow2 (loop at its local label sub_F7AB3F_Entry): (0x0C70) := track",
+   "prom_b/wsa1_prom_b.s:188868 `call\tT_F426E4` -- TrackClear_LcdKeyRow2 calls the slot for each selected track",
+   "prom_b/wsa1_prom_b.s:139279 `calr\tsub_F6079E` -- the whole body",
+   "prom_b/wsa1_prom_b.s:139341 `call\tT_F42888` -- sub_F6079E frees the old chain: T_F42888 -> sub_F7A404 -> calr BStore_FreeChain (187936)",
+   "prom_b/wsa1_prom_b.s:139356 `ld\txix, 6356992` -- sub_F6079E repeats the directory / cursor reset in bank copy 0x610000 + BStore_CurrentBank*0xC00"
+  ],
+  "review": "renamed from BStore_ClearTrack_Call: batch p gives BStore_ClearTrack to the block store's twin sub_F4D346; this veneer's target sub_F6079E becomes SongEdit_ClearTrack (reviewer record)"
+ },
+ {
+  "old": "sub_F60B4E",
+  "verdict": "name",
+  "new": "Transp0se_Execute",
+  "header": "The TRANSP0SE job (Transp0se_LcdKeyRow2 stages track (0x0DF7), measure (0x0DF8), count (0x0E00) and calls T_F42714): track 1..(0x0CA3) or 17 = all, measures 1..999 (error 3), master part 0x20 error 9;\nper track sub_F60C2C adds the signed (0x0DFC) to the note byte (+2) of each 0x9n event, clamped 0..127. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:193399 `call\tT_F42714` -- Transp0se_LcdKeyRow2 runs it after staging (0x0C70)/(0x0C73)/(0x0C77)",
+   "prom_b/wsa1_prom_b.s:139682 `call\tsub_F60C2C` -- per-track worker",
+   "prom_b/wsa1_prom_b.s:139794 `ld\tl, (3580:16)` -- sub_F60C2C: (0x0DFC) sign-extended and added to the byte two steps past a 0x9n tag"
+  ]
+ },
+ {
+  "old": "sub_F60D3E",
+  "verdict": "name",
+  "new": "N0teChange_Execute",
+  "header": "The N0TE CHANGE job (N0teChange_LcdKeyRow4, through T_F42718): track 1..(0x0CA3) or 17 = all, measures 1..999, N0teChange_FromNote / N0teChange_ToNote 0..127 (error 3), nothing when they are equal;\nper track sub_F60E40 rewrites every 0x9n event whose note byte is FromNote to ToNote. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:193917 `call\tT_F42718` -- N0teChange_LcdKeyRow4 runs it after staging (0x0C70)/(0x0C73)/(0x0C77)",
+   "prom_b/wsa1_prom_b.s:139884 `ld\ta, (N0teChange_FromNote:16)` -- equal notes: straight to the status report",
+   "prom_b/wsa1_prom_b.s:139906 `call\tsub_F60E40` -- per-track worker: `cp A,(0x0df4)` then stores (0x0DF5) (prom_b 140018 / 140020)"
+  ]
+ },
+ {
+  "old": "sub_F60F4F",
+  "verdict": "name",
+  "new": "BStore_EmptyBank",
+  "header": "Empties song bank (0x0E02): frees the chains of tracks 1..16 (live directory when it is BStore_CurrentBank, else the bank copy 0x610000+bank*0xC00+0x100), then resets that copy's 17 directory entries,\nsaved cursors (+0x7E 0xFFFF, +0xA0 5), +0x1E dword and password word +0x1C; on the current bank also the live copies. Run by SongClear_ClearBank and by S0ngC0py_Execute for an ALL copy. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:139414 `call\tsub_F60F4F` -- SongClear_ClearBank on one bank (its header names sub_F60F4F as its first step)",
+   "prom_b/wsa1_prom_b.s:140314 `call\tsub_F60F4F` -- S0ngC0py_Execute, ALL tracks: the destination bank ToSong-1 is emptied before the song is copied",
+   "prom_b/wsa1_prom_b.s:140110 `call\tT_F42888` -- each in-use track chain freed (BStore_FreeChain)",
+   "prom_b/wsa1_prom_b.s:140126 `ld\txix, 126` -- bank copy +0x7E: 17 saved cursor blocks := 0xFFFF",
+   "prom_b/wsa1_prom_b.s:140161 `ld\t(13836:16), xwa` -- current bank: (0x360C) and (0x60341E) cleared too"
+  ]
+ },
+ {
+  "old": "sub_F610E3",
+  "verdict": "name",
+  "new": "SongClear_ResetAllBanks",
+  "header": "SONG CLEAR of all songs ((0x0E02) = 10): for each of the ten bank copies resets the password word +0x1C, the 17 directory entries, the saved cursors and +0x1E, then zeroes (0x60341E), (0x360C), (0x3010),\nthe 0x0D50 words and (0x3752). It frees no chain: SongClear_ClearBank follows it with T_F42880 = BStore_FreeList_Init. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:139411 `call\tsub_F610E3` -- SongClear_ClearBank when (0x0E02) = 0x0A (its header: 10 = all of them)",
+   "prom_b/wsa1_prom_b.s:139477 `call\tT_F42880` -- the caller then rebuilds the free list",
+   "prom_b/wsa1_prom_b.s:140268 `cp\tbc, 10` -- the bank loop runs ten times",
+   "prom_b/wsa1_prom_b.s:140283 `ld\t(12304:16), xwa` -- live masks (0x3010)/(0x360C) cleared"
+  ]
+ },
+ {
+  "old": "sub_F6119A",
+  "verdict": "name",
+  "new": "S0ngC0py_Execute",
+  "header": "The SONG COPY job (S0ngC0py_LcdKeyRow2's confirm press, T_F4271C): ALL (S0ngC0py_FromTrack 0x12) empties bank ToSong-1 (BStore_EmptyBank) and copies the song (sub_F615C2); otherwise copies track FromTrack of FromSong onto\nToTrack of ToSong: status 29 when only one side is track 0x11 or master part 0x20, clears the destination (S0ngC0py_ClearDestTrack), duplicates the chain block by block, status 15 when blocks run out. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:192850 `call\tT_F4271C` -- S0ngC0py_LcdKeyRow2 at stage 1",
+   "prom_b/wsa1_prom_b.s:140317 `call\tsub_F615C2` -- ALL: whole-song copy after the destination bank is emptied (140314)",
+   "prom_b/wsa1_prom_b.s:140329 `ld\t(UI_StatusCode:16), 29` -- mismatched track 0x11 / master part refused",
+   "prom_b/wsa1_prom_b.s:140421 `call\tsub_F61907` -- destination track cleared before the copy",
+   "prom_b/wsa1_prom_b.s:140472 `ldir85` -- 251 payload bytes per block copied into a newly allocated block",
+   "prom_b/wsa1_prom_b.s:140668 `ld\t(UI_StatusCode:16), 15` -- free list exhausted: destination cleared again (140667), status 15"
+  ]
+ },
+ {
+  "old": "sub_F61907",
+  "verdict": "name",
+  "new": "S0ngC0py_ClearDestTrack",
+  "header": "Clears track (0x0E19)+1 of song bank (0x0E10): frees its chain (BStore_FreeChain) and empties its directory entry (the live one for BStore_CurrentBank, else the bank copy's), resets its saved cursor in the bank copy (and live).\nS0ngC0py_Execute's two callers set (0x0E10) := ToSong-1, (0x0E19) := ToTrack-1: before a track copy and after running out of blocks. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:140420 `ld\t(3609:16), l` -- S0ngC0py_Execute: (0x0E19) := S0ngC0py_ToTrack - 1 (and (0x0E10) := ToSong - 1 just before)",
+   "prom_b/wsa1_prom_b.s:140421 `call\tsub_F61907` -- before the chain is duplicated",
+   "prom_b/wsa1_prom_b.s:140667 `call\tsub_F61907` -- after the free list ran out mid-copy",
+   "prom_b/wsa1_prom_b.s:141043 `call\tT_F42888` -- the track's chain freed",
+   "prom_b/wsa1_prom_b.s:141058 `ld\txhl, 126` -- bank copy +0x7E / +0xA0: saved cursor := block 0xFFFF, offset 5"
+  ]
+ },
+ {
+  "old": "sub_F61A16",
+  "verdict": "name",
+  "new": "AdvanceDelay_Execute",
+  "header": "The ADVANCE/DELAY job (AdvanceDelay_LcdKeyRow3 stages track (0x0DE6), measure (0x0DE8), count (0x0E06) and calls T_F42720): track 1..(0x0CA3) or 17 = all, measures 1..999 (error 3), master part 0x20 error 9;\nper track sub_F61AF7 adds the signed tick offset (0x0DEC) to each event's timing byte. Ends with BStore_ErrorToStatusByte. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:194359 `call\tT_F42720` -- AdvanceDelay_LcdKeyRow3 runs it after staging (0x0C70)/(0x0C73)/(0x0C77)",
+   "prom_b/wsa1_prom_b.s:141146 `call\tsub_F61AF7` -- per-track worker",
+   "prom_b/wsa1_prom_b.s:141249 `ld\tl, (3564:16)` -- sub_F61AF7: `add A,L` of (0x0DEC) to the byte after each event tag"
+  ]
+ },
+ {
+  "old": "sub_F61C0C",
+  "verdict": "refuse",
+  "why_refused": "Its only caller is the unnamed per-track ADVANCE/DELAY worker sub_F61AF7 (the batch's 'sub_F61AF7_Entry' is a local label of it), and the two routines it chooses between (sub_F61C24 / sub_F61D65) move beat marks across events by tag lengths (0xD0-0xD3, 0x80, 0x9n, 0xBn) not established here.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:141270 `call\tsub_F61C0C` -- called at each 0x81 beat mark inside sub_F61AF7 (unnamed)",
+   "prom_b/wsa1_prom_b.s:141330 `call\tsub_F61C24` -- (0x0C8A) bit 0 and (0x0DEC) >= 0",
+   "prom_b/wsa1_prom_b.s:141333 `call\tsub_F61D65` -- (0x0DEC) < 0"
+  ]
+ },
+ {
+  "old": "sub_F61FBA",
+  "verdict": "refuse",
+  "why_refused": "Only caller is the unnamed sub_F61AF7 (ADVANCE branch, (0x0DEC) < 0) and its work is done by unnamed sub_F62008 / sub_F5E0BD whose effect on the stream is not pinned down.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:141310 `call\tsub_F61FBA` -- sub_F61AF7 when (0x0DEC) bit 7 is set"
+  ]
+ },
+ {
+  "old": "sub_F62089",
+  "verdict": "refuse",
+  "why_refused": "Only caller is the unnamed sub_F61AF7 (DELAY branch, (0x0DEC) >= 0); it seeks measure DE+1 and hands off to the unnamed sub_F5E0BD, whose purpose is not established.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:141307 `call\tsub_F62089` -- sub_F61AF7 when (0x0DEC) bit 7 is clear"
+  ]
+ },
+ {
+  "old": "sub_F62C05",
+  "verdict": "name",
+  "new": "SongGmFlag_OnEventPassB_Veneer",
+  "header": "Veneer (`jrl` to 0xF64A9F, still the local label sub_F64A34_Join) for UiListB_Class91[3]: a user change of record 0x91 byte 3 bit 2, the GM-mode bit (0x7F4D), stops the sequencer (T_F40A20), sets (0x34D4) bit 4 and\nstores it as the song's GM flag (0x6034C6) = 0xFF / 0; skipped once when (0x124C) bit 0 marks the change as the song's own (Seq_ApplyLoadedSongSetup). Basis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:16918 `.long T_F42828` -- UiListB_Class91 entry [3]; T_F42828 jumps here",
+   "prom_b/wsa1_prom_b.s:142377 `jrl\tsub_F64A34_Join` -- the whole routine is this branch",
+   "prom_b/wsa1_prom_b.s:145609 `ld\ta, (UiEvent_Byte1:16)` -- handler: only record byte 3",
+   "prom_b/wsa1_prom_b.s:145616 `bit\t2, w` -- only when the change mask has bit 2 (GM mode, FINDINGS-prom_ab-sound-selection.md)",
+   "prom_b/wsa1_prom_b.s:145620 `m_bit 0, MD16, 0x124c` -- (0x124C) bit 0, set by Seq_ApplyLoadedSongSetup (95529) before it posts the same event, consumes one event",
+   "prom_b/wsa1_prom_b.s:145632 `ld\t(6304966:24), 255` -- GM on -> song flag 0xFF (0 at 145638); Seq_ApplyLoadedSongSetup reads the flag back"
+  ]
+ },
+ {
+  "old": "sub_F6306A",
+  "verdict": "name",
+  "new": "BStore_CopyRangeBackward",
+  "header": "Copies the chain bytes from the cursor (block DE, offset (0x0C6B)) up to the source end (block (0x0C61), offset (0x0C67)) so they end at the destination end ((0x0C57)/(0x0C5D)), back to front with LDDR,\nfollowing the blocks' +1 back links (error 11 on a free block). Opens a gap ahead of inserted bytes. Basis: callers + body (as BStore_CopyRangeBackward_Call's header says).",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:142412 `calr\tsub_F6306A` -- BStore_CopyRangeBackward_Call, whose header describes exactly this",
+   "prom_b/wsa1_prom_b.s:136943 `call\tT_F4277C` -- MeasureInsert_InsertToTrack opening its gap (thunk T_F4277C -> here)",
+   "prom_b/wsa1_prom_b.s:142911 `ld\thl, (3169:16)` -- source end block (0x0C61) and destination end block (0x0C57) seeked first",
+   "prom_b/wsa1_prom_b.s:143090 `.byte 0x83, 0x13` -- lddr: the copy runs downward",
+   "prom_b/wsa1_prom_b.s:143104 `ld\twa, (xiy+1)` -- next source block = the +1 PREVIOUS link",
+   "prom_b/wsa1_prom_b.s:143113 `ld\t(BStore_ErrorCode:16), 11` -- error 11 when that block is not allocated"
+  ]
+ },
+ {
+  "old": "sub_F63317",
+  "verdict": "name",
+  "new": "BStore_MovePosForward",
+  "header": "Moves the chain position (block (0x0CE8), offset (0x0CEA)) forward by BStore_AllocBytesWanted bytes, following +3 next links (251 payload bytes per block, resuming at offset 5); error 10 past BStore_BlockLimit, 11 on a free block.\nMeasureInsert_InsertWithinTrack / SongEdit_CopyMeasuresWithinTrack use it to re-base a source position after the range ahead of it grew. Basis: callers (named in this batch) + body.",
+  "basis": "callers (named in this batch) + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:137084 `call\tT_F42780` -- MeasureInsert_InsertWithinTrack: source start loaded into (0x0CE8)/(0x0CEA), read back after",
+   "prom_b/wsa1_prom_b.s:138133 `call\tT_F42780` -- SongEdit_CopyMeasuresWithinTrack: same pattern",
+   "prom_b/wsa1_prom_b.s:143144 `m_sub_rm MW16, 0x0cea, 0` -- room left in the block = 0x100 - offset",
+   "prom_b/wsa1_prom_b.s:143161 `ld\tbc, (xhl+3)` -- crosses to the +3 NEXT block",
+   "prom_b/wsa1_prom_b.s:143184 `ld\t(3306:16), de` -- new offset = remainder + 5",
+   "prom_b/wsa1_prom_b.s:142444 `calr\tsub_F63317` -- an unlabelled BStore_StubTable stub; the batch's caller BStore_LoadGeometry_Call is only the preceding label"
+  ]
+ },
+ {
+  "old": "sub_F63383",
+  "verdict": "name",
+  "new": "BStore_MovePosBackward",
+  "header": "Moves the chain position (block (0x0CE8), offset (0x0CEA)) back by BStore_AllocBytesWanted bytes, following +1 previous links (continuing at offset 255); error 10 past BStore_BlockLimit, 11 on a free block.\nThe reverse of BStore_MovePosForward; SongEdit_CopyMeasuresToTrack / _WithinTrack use it when a destination range shrinks. Basis: callers (named in this batch) + body.",
+  "basis": "callers (named in this batch) + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:137691 `call\tT_F42784` -- SongEdit_CopyMeasuresToTrack, shrink arm: (0x0CAE) := the size difference, position in (0x0CE8)/(0x0CEA)",
+   "prom_b/wsa1_prom_b.s:138184 `call\tT_F42784` -- SongEdit_CopyMeasuresWithinTrack",
+   "prom_b/wsa1_prom_b.s:143207 `ld\tbc, (xhl+1)` -- crosses to the +1 PREVIOUS block",
+   "prom_b/wsa1_prom_b.s:143231 `ld\t(3306:16), wa` -- new offset = 0xFF - remainder",
+   "prom_b/wsa1_prom_b.s:142446 `calr\tsub_F63383` -- unlabelled BStore_StubTable stub; BStore_LoadGeometry_Call is only the preceding label"
+  ]
+ },
+ {
+  "old": "sub_F6382B",
+  "verdict": "name",
+  "new": "BStore_TimeSigAdvanceOneMeasure",
+  "header": "Shared tail of the time-signature walk: steps the cursor past (0x0D1C) 0x81 beat marks (a 0x84 tag restarts at offset 5 of the chain head (0x0CEC)) and stores the position reached as the time-sig cursor (0x0CF0)/(0x0CF4);\nreaching 0x82 instead sets (0x0C8A) bit 5. Called by BStore_TimeSigFirstMeasure at its first beat mark and by sub_F63749 (BStore_TimeSigNextMeasure_Call's target). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:143614 `call\tsub_F6382B` -- BStore_TimeSigFirstMeasure at the first 0x81 (its header: leaves the time-sig cursor at measure 2)",
+   "prom_b/wsa1_prom_b.s:143701 `call\tsub_F6382B` -- sub_F63749, the next-measure step",
+   "prom_b/wsa1_prom_b.s:143709 `cp\t(3356:16), c` -- counts 0x81 marks up to (0x0D1C), the beats per bar",
+   "prom_b/wsa1_prom_b.s:143727 `ld\txhl, (3308:16)` -- 0x84: back to the chain head saved in (0x0CEC)",
+   "prom_b/wsa1_prom_b.s:143751 `ld\t(3312:16), xwa` -- (0x0CF0) := block address; (0x0CF4) := offset at 143748",
+   "prom_b/wsa1_prom_b.s:143714 `m_or_mi8 MB16, 0x0c8a, 0x20` -- 0x82 end: bit 5"
+  ]
+ },
+ {
+  "old": "sub_F63C02",
+  "verdict": "refuse",
+  "why_refused": "Body is `nop / nop / nop / ret`; its thunk T_F427C8 and its BStore_StubTable stub have no caller anywhere, so there is no caller or table basis, and the name would only restate a no-op.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:144172 `nop` -- first of three nops, then ret",
+   "prom_b/wsa1_prom_b.s:142466 `calr\tsub_F63C02` -- unlabelled stub, never referenced; the batch's BStore_LoadGeometry_Call is only the preceding label"
+  ]
+ },
+ {
+  "old": "sub_F63C41",
+  "verdict": "name",
+  "new": "BStore_ApplyTrackPartChange",
+  "header": "After TRACK ASSIGN moved track (0x0C83) from part (0x0C06) to BStore_TrackToPart[(0x0C83)]: when both are in range and differ, (0x0D44) := BStore_Map32[new part], requests a rewind (T_Seq_RequestRewind)\nand rewrites the track's stream from measure 1 for the new part (sub_F63CE0); then BStore_ResetWorkspaceFields. Reached by T_BStore_Veneers -> F62C00 -> F62C66 stub. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:146907 `call\tT_BStore_Veneers` -- TrackAssign_CommitEditedPart after writing the new part and leaving the old one in (0x0C06) (its header: sub_F63C41 reworks the track)",
+   "prom_b/wsa1_prom_b.s:142373 `jr\tsub_F622AA_Join2` -- BStore_Veneers entry 0 jumps to the stub at F62C66",
+   "prom_b/wsa1_prom_b.s:142469 `calr\tsub_F63C41` -- that stub",
+   "prom_b/wsa1_prom_b.s:144214 `m_cp_rm MB16, 0x0c06, 1` -- unchanged part: nothing done",
+   "prom_b/wsa1_prom_b.s:144224 `ld\txde, BStore_Map32` -- new part mapped into (0x0D44)",
+   "prom_b/wsa1_prom_b.s:144233 `call\tT_Seq_RequestRewind` -- the sequencer is asked to rewind before the stream is touched",
+   "prom_b/wsa1_prom_b.s:144235 `call\tsub_F63CE0` -- the rewrite, with A = track + 1"
+  ]
+ },
+ {
+  "old": "sub_F63F88",
+  "verdict": "refuse",
+  "why_refused": "Its only caller is the unnamed stream rewriter sub_F63CE0 (the batch's 'sub_F63CE0_Entry' is its local label), and the routine it falls into (sub_F63F90) classifies 0xBn events by controller values (0x48, 0xB5-0xBD) whose meaning is not established.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:144408 `calr\tsub_F63F88` -- inside sub_F63CE0, 0xBn arm",
+   "prom_b/wsa1_prom_b.s:144527 `ld\t(3508:16), a` -- (0x0DB4) := (0x0C06), then falls into sub_F63F90",
+   "prom_b/wsa1_prom_b.s:144541 `cp\ta, 72` -- sub_F63F90 compares the controller byte with 0x48"
+  ]
+ }
+]

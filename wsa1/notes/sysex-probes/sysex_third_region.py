@@ -36,7 +36,7 @@ WHERE THE SIGNAL IS
     into (block, index) and hands it to prom_a 0xFD616A (melodic) or 0xFD6704
     (drum), the SAME two routines the panel's own tone editor commits through
     (notes/FINDINGS-l7a1429-field-editors.md section 1c).
-  * THE REPLY, prom_b `sub_F37DB4` / `SysExThirdRegion_SendReplyChunk` (0xF37DB4, 0xF37E1C): header
+  * THE REPLY, prom_b `SysExThirdRegion_BuildReplyHeader` / `SysExThirdRegion_SendReplyChunk` (0xF37DB4, 0xF37E1C): header
     `F0 50 2C 04 nn 11` (the literal is `00`, and SysExTx_PatchModelByteVariant2 rewrites it to
     `01` on the rack), the chunk's own address septets, count `00 00 n`, then
     2n nibble bytes, a `00`, the checksum and `F7`.  `cp WA,0x0078` caps n.

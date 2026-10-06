@@ -1,0 +1,502 @@
+[
+ {
+  "old": "sub_F458EA",
+  "verdict": "name",
+  "new": "Transport_PromoteStartsToRunning",
+  "header": "TransportC_State := 6 and TransportA/B_State := 6 where bit 0 (start request) is set -- the request-to-running step INTTR4_SequencerTick and _Alt make once C runs, done at once. SeqRecord_StartIfEventQueued calls it after T_Transport_StartAllFromZero when MidiCfg_ModeBits bit 2 (the bit that swaps in INTTR4_SequencerTick_Alt). Basis: caller + body + interrupt twin.",
+  "basis": "caller + body + twin (INTTR4_SequencerTick)",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:96490 `call T_Transport_StartAllFromZero` -- caller posts the start requests (state 1)",
+   "prom_b/wsa1_prom_b.s:96491 `m_bit 2, MD16, MidiCfg_ModeBits` -- caller gate",
+   "prom_b/wsa1_prom_b.s:96493 `calr sub_F458EA` -- caller site in SeqRecord_StartIfEventQueued",
+   "prom_b/wsa1_prom_b.s:96680 `ld (TransportC_State:8), 6:io` -- C forced to 6 unconditionally",
+   "prom_b/wsa1_prom_b.s:96681 `bit 0, (TransportA_State:8)` -- start-request bit tested",
+   "prom_b/wsa1_prom_b.s:96683 `ld (TransportA_State:8), 6:io` -- A to 6",
+   "prom_b/wsa1_prom_b.s:96687 `ld (TransportB_State:8), 6:io` -- B to 6",
+   "prom_a/wsa1_prom_a.s:8380 `ld (TransportA_State:8), 0x06:io` -- the tick handler does the same A/B promotion once C runs (8384 for B, 8832ff in the _Alt tail)",
+   "prom_a/wsa1_prom_a.s:8334 `m_bit 2, MD16, MidiCfg_ModeBits` -- the same bit selects INTTR4_SequencerTick_Alt"
+  ]
+ },
+ {
+  "old": "sub_F458FE",
+  "verdict": "name",
+  "new": "SeqRecord_TerminateTrackAtCursor",
+  "header": "At the take cursor: writes a 0x81 beat mark, steps (T_F40C64), writes the 0x82 end tag, cuts the block's next link (+3 := 0xFFFF), saves that position as track (0x349F)'s end cursor 0x60347E[t]/0x6034A0[t], steps again. The per-track body of SeqRecord_TerminateTakeTracks, between its take-cursor load (T_F40BC0) and save (T_F40BC4). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:95870 `call T_F40BC0` -- caller loads track C's take cursor first",
+   "prom_b/wsa1_prom_b.s:95871 `calr sub_F458FE` -- caller site in SeqRecord_TerminateTakeTracks",
+   "prom_b/wsa1_prom_b.s:96703 `ld a, 129:opc` -- 0x81 beat mark",
+   "prom_b/wsa1_prom_b.s:96704 `call T_BStore_WriteCursorByte` -- written at the cursor",
+   "prom_b/wsa1_prom_b.s:96706 `ld a, 130:opc` -- 0x82 end tag",
+   "prom_b/wsa1_prom_b.s:96708 `m_ld_mi16 MDD+r3, 0x03, 0xffff` -- block next link := 0xFFFF",
+   "prom_b/wsa1_prom_b.s:96714 `mx_st_mr16 MXD, ra_IX, ra_HL, 0` -- 0x60347E[t] := BStore_CursorBlock",
+   "prom_b/wsa1_prom_b.s:96719 `ld (xiz), a` -- 0x6034A0[t] := BStore_CursorOffset",
+   "prom_b/wsa1_prom_b.s:96720 `call T_F40C64` -- cursor stepped past the tag"
+  ]
+ },
+ {
+  "old": "sub_F45942",
+  "verdict": "name",
+  "new": "SeqRecord_SetRecordedTracksPlaying",
+  "header": "After a take: the playing-track mask (0x60341E) |= the record mask (0x3000); record mask and take mask (0x3004) := 0; (0x34D2) b0 (the song-param restore request), (0x34D4) |= 0x10, (0x34BB) b3 cleared, TimedEventRing_Discard, (0x34D0) |= 2, NoteRouting_RebuildForSong. SeqRecord_EndTake's 'merges the record mask into the playing mask' step. Basis: caller header + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:95819 `calr sub_F45942` -- caller site in SeqRecord_EndTake (header: merges the record mask into the playing mask)",
+   "prom_b/wsa1_prom_b.s:96735 `ld xwa, (12288:16)` -- record mask (0x3000)",
+   "prom_b/wsa1_prom_b.s:96736 `m_or_mr ML24, 0x60341e, 0` -- OR-ed into the playing-track mask",
+   "prom_b/wsa1_prom_b.s:96739 `ld (12288:16), xwa` -- record mask cleared",
+   "prom_b/wsa1_prom_b.s:96740 `ld (12292:16), xwa` -- take mask cleared",
+   "prom_b/wsa1_prom_b.s:96741 `m_or_mi8 MB16, 0x34d2, 0x01` -- restore request for Seq_RestoreSongParamsOnRequest",
+   "prom_b/wsa1_prom_b.s:96744 `calr TimedEventRing_Discard` -- ring emptied",
+   "prom_b/wsa1_prom_b.s:96746 `call T_NoteRouting_RebuildForSong` -- routing rebuilt"
+  ]
+ },
+ {
+  "old": "sub_F459D9",
+  "verdict": "name",
+  "new": "Seq_RebuildPlayingSet",
+  "header": "Rebuilds the playing set (0x349A)/(0x349C) that SeqTrackCursors_RewindPlaying walks: unless a locate built it ((0x34BB) b3), = tracks whose directory entry 0x603500 is in use, minus the record mask, & 0x1FFFF; (0x34BB) b0 = set or armed non-empty; (0x36D6) := lowest armed track, added back when CycleRecord_CheckIsRecordTrack = 0. Basis: callers + body + consumer.",
+  "basis": "callers + body + consumer",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:95820 `calr sub_F459D9` -- SeqRecord_EndTake, right after the record mask became playing",
+   "prom_b/wsa1_prom_b.s:93882 `calr sub_F459D9` -- sub_F44505, followed at 93884 by `calr SeqTrackCursors_RewindPlaying`",
+   "prom_b/wsa1_prom_b.s:93916 `ld iz, (13466:16)` -- the consumer SeqTrackCursors_RewindPlaying reads (0x349A) as its playing set",
+   "prom_b/wsa1_prom_b.s:96840 `m_bit 3, MD16, 0x34bb` -- b3 set: keep the set a locate built",
+   "prom_b/wsa1_prom_b.s:96855 `ld a, (xix)` -- directory entry flags (XIX from 0x603500, stride 3)",
+   "prom_b/wsa1_prom_b.s:96863 `m_rd_stcf_a RW+r6` -- in-use track bit set in (0x349A)",
+   "prom_b/wsa1_prom_b.s:96881 `jr sub_F459D9_Skip3` -- the (0x60341E) xorcf test is dead: both branches go to Skip3",
+   "prom_b/wsa1_prom_b.s:96896 `m_and_rm ML16, 0x349a, 0` -- set &= ~record mask",
+   "prom_b/wsa1_prom_b.s:96897 `and xwa, 131071` -- 17 tracks",
+   "prom_b/wsa1_prom_b.s:96928 `ld (14038:16), a` -- (0x36D6) := lowest armed track",
+   "prom_b/wsa1_prom_b.s:96937 `call T_CycleRecord_CheckIsRecordTrack` -- cycle-record track test",
+   "prom_b/wsa1_prom_b.s:96945 `m_rd_stcf_a RW+r2` -- record track added to the set"
+  ]
+ },
+ {
+  "old": "sub_F45B6E",
+  "verdict": "name",
+  "new": "SeqTrack_QueueNoteOffAndBendCentre",
+  "header": "Puts two records for track (0x349F) into the timed-event ring: {0x90, 0x7F, 0, 0, t} (note 0, velocity 0) and {0xD2, 0x7F, 0x00, 0x40, t} -- song code 0xD2 = pitch bend (SmfEvent_PitchBend) at the centre 0x00 0x40 (as SeqEvt_ResetPlayingSlotControllers). Part of SeqTrack_QueueSwitchOffEvents' track switch-off events, also in its twin sub_F44F67. Basis: callers + body.",
+  "basis": "callers + body + song-code readers",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:95277 `calr sub_F45B6E` -- caller site in SeqTrack_QueueSwitchOffEvents (header: queues its ring events)",
+   "prom_b/wsa1_prom_b.s:95368 `calr sub_F45B6E` -- twin sub_F44F67",
+   "prom_b/wsa1_prom_b.s:97059 `ld a, 144:opc` -- 0x90",
+   "prom_b/wsa1_prom_b.s:97061 `call T_TimedEventRing_Put` -- each byte to the timed ring",
+   "prom_b/wsa1_prom_b.s:97067 `xor a, a` -- note 0 / velocity 0",
+   "prom_b/wsa1_prom_b.s:97075 `ld a, (13471:16)` -- track (0x349F) last",
+   "prom_b/wsa1_prom_b.s:97079 `ld a, 210:opc` -- 0xD2",
+   "prom_b/wsa1_prom_b.s:97091 `ld a, 64:opc` -- 0x00 0x40 = bend centre",
+   "prom_b/wsa1_prom_b.s:170581 `; SmfEvent_PitchBend: ... song code 0xD2` -- 0xD2 is the pitch-bend song code",
+   "prom_a/wsa1_prom_a.s:86671 `; SeqEvt_ResetPlayingSlotControllers ... pitch bend centre (D2 0x00 0x40)` -- same centre value",
+   "prom_a/wsa1_prom_a.s:121963 `ld L,(XIX+0x03)` -- TimedEvents_ProcessRing maps a 0x90 frame's channel byte (the track) to a part"
+  ]
+ },
+ {
+  "old": "sub_F45E5F",
+  "verdict": "name",
+  "new": "SeqCycle_CountDownDeferredAction",
+  "header": "Counts the cycle screens' deferred-action timer (0x3628) down by one while bit 7 is set and it is above 0x80. First step of SeqCycle_TickDeferredAction (header: counts (0x3628) down while bit 7 is set and above 0x80). Basis: caller header + body.",
+  "basis": "caller header + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:97562 `calr sub_F45E5F` -- caller site in SeqCycle_TickDeferredAction",
+   "prom_b/wsa1_prom_b.s:97577 `m_bit 7, MD16, 0x3628` -- armed bit",
+   "prom_b/wsa1_prom_b.s:97582 `m_cp_mi8 MBI+r4, 0, 0x80` -- stops at 0x80",
+   "prom_b/wsa1_prom_b.s:97586 `decm8 1, (xix)` -- count down"
+  ]
+ },
+ {
+  "old": "sub_F45E76",
+  "verdict": "name",
+  "new": "SeqCycle_RunDueDeferredAction",
+  "header": "When the deferred-action timer (0x3628) has reached 0x80: clears it and calls Dispatch_3629[(0x3629)] (0 SeqCycle_ApplyStartMeasureChange, 1 SeqCycle_OnEndMeasureChanged, 2 SeqCycle_RelocateStartAndEnd). Second step of SeqCycle_TickDeferredAction. Basis: caller header + body + table.",
+  "basis": "caller header + body + table",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:97563 `calr sub_F45E76` -- caller site in SeqCycle_TickDeferredAction",
+   "prom_b/wsa1_prom_b.s:97602 `m_cp_mi8 MBI+r4, 0, 0x80` -- due test",
+   "prom_b/wsa1_prom_b.s:97606 `ld (xix), 0` -- timer cleared",
+   "prom_b/wsa1_prom_b.s:97608 `ld xix, Dispatch_3629` -- the action table",
+   "prom_b/wsa1_prom_b.s:97613 `call (xix)` -- dispatch on (0x3629)"
+  ]
+ },
+ {
+  "old": "sub_F48647",
+  "verdict": "name",
+  "new": "BStore_StepCursorBackToLeadByte",
+  "header": "Steps the block-store cursor back to the previous byte with bit 7 set (an event lead byte, 0x81 or 0x82); below offset 5 it follows the block's previous link (+1) to offset 255; link 0 = chain start: BStore_ErrorCode := 0xFF (else 0). SeqTrackCursors_StepAllBack runs it on every saved cursor; backward twin of BStore_StepCursorOneByte. Basis: caller header + body.",
+  "basis": "caller header + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:100121 `calr sub_F48647` -- caller site in SeqTrackCursors_StepAllBack (header: steps it back to the previous byte with bit 7 set)",
+   "prom_b/wsa1_prom_b.s:104058 `call T_F40B6C` -- also reached through slot T_F40B6C by the cycle-record code",
+   "prom_b/wsa1_prom_b.s:100154 `m_cp_mi16 MW16, BStore_CursorOffset, 0x0005` -- first payload byte reached?",
+   "prom_b/wsa1_prom_b.s:100156 `decw 1, (BStore_CursorOffset:16)` -- step back one byte",
+   "prom_b/wsa1_prom_b.s:100159 `bit 7, a` -- stop on a byte with bit 7",
+   "prom_b/wsa1_prom_b.s:100169 `add xiy, 1` -- block header +1 = previous link",
+   "prom_b/wsa1_prom_b.s:100174 `ldw (BStore_CursorOffset:16), 255` -- last byte of the previous block",
+   "prom_b/wsa1_prom_b.s:100177 `ld (BStore_ErrorCode:16), 255` -- no previous block"
+  ]
+ },
+ {
+  "old": "sub_F493FA",
+  "verdict": "name",
+  "new": "UserSoundBank_RemoteGroupAddr",
+  "header": "(selector, group H): XIY = CPU 2 address of group H's 0x1648-byte record of USER 1 (selector 0, 0xE80090/0xE90090 + 0x1648*H) or USER 2 (1, 0xEA/0xEB), the 0x4C98-byte record at 0xE8B2D0 / 0xEAB2D0 (2 / 3), else 0xFFFFFFFF. Group-level twin of prom_a UserSoundBank_RemoteSoundAddr; DiskFile_BuildLinkCopyRecords' 14 calls. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:101051 `calr sub_F493FA` -- caller site in DiskFile_BuildLinkCopyRecords",
+   "prom_b/wsa1_prom_b.s:101121 `m_ld_mi16 MDD+r4, 0x04, 0x1648` -- caller copies 0x1648 bytes from a selector-0/1 result",
+   "prom_b/wsa1_prom_b.s:101139 `m_ld_mi16 MDD+r1, 0x04, 0x4c98` -- and 0x4C98 from a selector-2/3 result",
+   "prom_b/wsa1_prom_b.s:101355 `ld bc, (xiz+8)` -- selector",
+   "prom_b/wsa1_prom_b.s:101354 `ld h, (xiz+10)` -- group",
+   "prom_b/wsa1_prom_b.s:101369 `ld xix, 15204352` -- 0xE80000",
+   "prom_b/wsa1_prom_b.s:101372 `mul bc, 5704` -- x 0x1648",
+   "prom_b/wsa1_prom_b.s:101373 `add xbc, 144` -- + 0x90",
+   "prom_b/wsa1_prom_b.s:101389 `add xbc, 45776` -- + 0xB2D0 for selector 2",
+   "prom_b/wsa1_prom_b.s:101419 `sub xbc, xbc` -- other selectors -> 0xFFFFFFFF",
+   "prom_a/wsa1_prom_a.s:58330 `add XWA,0x00e80090` -- prom_a UserSoundBank_RemoteSoundAddr: same bases and stride, plus 0x2C9 * member"
+  ]
+ },
+ {
+  "old": "sub_F49800",
+  "verdict": "name",
+  "new": "SeqRecord_LoadTakeCursor_Veneer",
+  "header": "Veneer (slot T_F40BC0): `jr` to sub_F4980D, which loads the block-store cursor from track C's take cursor (block word 0x340C[C], offset byte 0x342E[C]) -- the arrays the take start (sub_F45812) points at each take track's first block, offset 5. SeqRecord_TerminateTakeTracks calls it before writing the end tags. Basis: caller + body + array writer.",
+  "basis": "caller + body + array writer",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:95870 `call T_F40BC0` -- caller site in SeqRecord_TerminateTakeTracks, C = track",
+   "prom_b/wsa1_prom_b.s:101442 `jr sub_F4980D` -- the veneer",
+   "prom_b/wsa1_prom_b.s:101536 `ld (BStore_CursorBlock:16), wa` -- cursor block := 0x340C[C]",
+   "prom_b/wsa1_prom_b.s:101541 `ld (BStore_CursorOffset:16), wa` -- cursor offset := 0x342E[C]",
+   "prom_b/wsa1_prom_b.s:96641 `ld xhl, 13324` -- take start (sub_F45812) stores the new block into 0x340C[t]",
+   "prom_b/wsa1_prom_b.s:96648 `mx_ld_mi8 MXD, ra_HL, ra_IY, 0x05` -- and offset 5 into 0x342E[t]"
+  ]
+ },
+ {
+  "old": "sub_F49802",
+  "verdict": "name",
+  "new": "SeqRecord_SaveTakeCursor_Veneer",
+  "header": "Veneer (slot T_F40BC4): `jr` to sub_F49838, which stores the block-store cursor back into track C's take cursor (0x340C[C] word, 0x342E[C] byte). SeqRecord_TerminateTakeTracks calls it after the end tags; inverse of SeqRecord_LoadTakeCursor_Veneer's target. Basis: caller + body + inverse twin.",
+  "basis": "caller + body + inverse twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:95873 `call T_F40BC4` -- caller site in SeqRecord_TerminateTakeTracks, C = track",
+   "prom_b/wsa1_prom_b.s:101456 `jr sub_F49838` -- the veneer",
+   "prom_b/wsa1_prom_b.s:101561 `mx_st_mr16 MXD, ra_HL, ra_IY, 0` -- 0x340C[C] := BStore_CursorBlock",
+   "prom_b/wsa1_prom_b.s:101565 `mx_st_mr8 MXD, ra_HL, ra_IY, 1` -- 0x342E[C] := BStore_CursorOffset"
+  ]
+ },
+ {
+  "old": "sub_F49806",
+  "verdict": "name",
+  "new": "SeqRecord_DrainEventRingAtTakeEnd",
+  "header": "Veneer (slot T_F40BCC): `jr` to 0xF49868 (sub_F49861_Join): (0x34DD) b1 set around sub_F498A0 -- the drain that writes SeqBuf_Ring's events into the take tracks -- then (0x34DD) b1 and (0x34D4) b1 cleared; unlike SeqRecord_DrainEventRing no (0x3004) test. SeqRecord_EndTake runs it before SeqRecord_TerminateTakeTracks. Basis: caller + body + sibling.",
+  "basis": "caller + body + sibling",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:95815 `call T_F40BCC` -- caller site in SeqRecord_EndTake, just before `calr SeqRecord_TerminateTakeTracks`",
+   "prom_b/wsa1_prom_b.s:101484 `jr sub_F49861_Join` -- the veneer",
+   "prom_b/wsa1_prom_b.s:101584 `m_or_mi8 MB16, 0x34dd, 0x02` -- flag set",
+   "prom_b/wsa1_prom_b.s:101585 `calr sub_F498A0` -- the event-ring drain",
+   "prom_b/wsa1_prom_b.s:101587 `m_and_mi8 MB16, 0x34d4, 0xfd` -- tail shared with the sibling",
+   "prom_b/wsa1_prom_b.s:101590 `ld xwa, (12292:16)` -- the sibling SeqRecord_DrainEventRing entry (0xF4987B) gates on the take mask; this one does not"
+  ]
+ },
+ {
+  "old": "sub_F4A6FF",
+  "verdict": "name",
+  "new": "CycleRecord_PlayTrackFromTakeChain2",
+  "header": "Record track (0x36D6)'s live cursor 0x3460[t]/0x3482[t] := head of take chain 2 (0x36FC), offset 5; the track joins the playing set (0x349A)/(0x349C), which is copied to (0x36CA) and (0x36C6). Last placement step of CycleRecord_RestartPass. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:103374 `calr sub_F4A6FF` -- caller site in CycleRecord_RestartPass",
+   "prom_b/wsa1_prom_b.s:103516 `ld wa, (14076:16)` -- take chain 2 head (0x36FC)",
+   "prom_b/wsa1_prom_b.s:103517 `ld (xix), wa` -- into 0x3460[t]",
+   "prom_b/wsa1_prom_b.s:103522 `ld (xix), 5` -- 0x3482[t] := 5",
+   "prom_b/wsa1_prom_b.s:103528 `m_rd_stcf_a RW+r2` -- track bit set in (0x349A)",
+   "prom_b/wsa1_prom_b.s:103539 `ld (14026:16), xwa` -- set copied to (0x36CA) and (0x36C6)"
+  ]
+ },
+ {
+  "old": "sub_F4A756",
+  "verdict": "name",
+  "new": "CycleRecord_CopyCycleRangeToTakeChain2",
+  "header": "Fills take chain 2 (0x36FC) with record track (0x36D6)'s data from the cycle start measure (0x3622) to the end measure (0x3624): seeks both bounds, copies the range (sub_F4AA88 -> sub_F4B462); a track ending early is padded (sub_F4A976), an empty one gets that many 0x81 beat marks (sub_F4A813); failures -> sub_F4A7FE. CycleRecord_RestartPass step. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:103368 `calr sub_F4A756` -- caller site in CycleRecord_RestartPass (its header says this places the cursors at start and end+1)",
+   "prom_b/wsa1_prom_b.s:103562 `m_bit 7, MDI+r4, 0` -- directory entry in use?",
+   "prom_b/wsa1_prom_b.s:103566 `ld wa, (13858:16)` -- seek to the cycle start measure",
+   "prom_b/wsa1_prom_b.s:103571 `call T_BStore_SeekChainToMeasure` -- first seek",
+   "prom_b/wsa1_prom_b.s:103584 `ld wa, (13860:16)` -- then to end measure + 1",
+   "prom_b/wsa1_prom_b.s:103600 `call T_F40B6C` -- end stepped back to the last lead byte",
+   "prom_b/wsa1_prom_b.s:103605 `calr sub_F4AA88` -- copy step",
+   "prom_b/wsa1_prom_b.s:103992 `calr sub_F4A82C` -- sub_F4AA88 allocates chain 2 (0x36FC, 103671)",
+   "prom_b/wsa1_prom_b.s:104005 `call sub_F4B462` -- range copy (BStore_CopySrcAddr/DestAddr, T_BStore_CopyAcrossBlocks)",
+   "prom_b/wsa1_prom_b.s:103576 `calr sub_F4A813` -- no data: chain 2 filled with beat marks (0x81 at 103816)",
+   "prom_b/wsa1_prom_b.s:103594 `calr sub_F4A976` -- track shorter than the cycle"
+  ]
+ },
+ {
+  "old": "sub_F4AB8A",
+  "verdict": "name",
+  "new": "CycleRecord_AllocRecordChain",
+  "header": "Allocates one block as the cycle-record chain (0x36FA): in use, prev 0, next 0xFFFF, an 0x82 end tag at offset 5, and makes it record track (0x36D6)'s end cursor (0x60347E[t], 0x6034A0[t] = 5); no free block -> sub_F4A7FE (memory full). The chain CycleRecord_FreeRecordChain frees; CycleRecord_RestartPass step. Basis: caller + body + undo twin.",
+  "basis": "caller + body + undo twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:103371 `calr sub_F4AB8A` -- caller site in CycleRecord_RestartPass",
+   "prom_b/wsa1_prom_b.s:104130 `call T_BStore_AllocBlock_B_Veneer` -- allocate",
+   "prom_b/wsa1_prom_b.s:104131 `ld (14074:16), ix` -- (0x36FA) := block",
+   "prom_b/wsa1_prom_b.s:104136 `m_ld_mi16 MDD+r3, 0x03, 0xffff` -- one-block chain",
+   "prom_b/wsa1_prom_b.s:104138 `ld (xhl), 130` -- 0x82 at offset 5",
+   "prom_b/wsa1_prom_b.s:104145 `ld (xix), hl` -- end cursor block",
+   "prom_b/wsa1_prom_b.s:104150 `ld (xix), 5` -- end cursor offset",
+   "prom_b/wsa1_prom_b.s:104153 `calr sub_F4A7FE` -- memory full",
+   "prom_b/wsa1_prom_b.s:103465 `ldw (14074:16), 65535` -- undo twin CycleRecord_FreeRecordChain"
+  ]
+ },
+ {
+  "old": "sub_F4B104",
+  "verdict": "name",
+  "new": "CycleRecord_CommitTake",
+  "header": "Cycle-record end of a take (SeqRecord_EndTake's alternative to SeqRecord_TerminateTakeTracks when sub_F44903 = 0): copies take chain 2's unplayed rest after the recorded data, restores the cursor baseline, splices chain (0x36FA) into record track (0x36D6) (sub_F4B36E, T_F40C8C), frees chain 2; no free block / error: baseline, sub_F4A7FE, both chains freed. Basis: caller + body.",
+  "basis": "caller + body + sibling",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:95809 `calr sub_F44903` -- caller: A = 0 on a CYCLE RECORD screen with CYCLE on",
+   "prom_b/wsa1_prom_b.s:95812 `call T_F40BF0` -- caller site in SeqRecord_EndTake (header: closes the recorded tracks ... or T_F40BF0 on cycle record)",
+   "prom_b/wsa1_prom_b.s:104798 `m_cp_mi16 MW24, BStore_FreeCount, 0x0000` -- no free block -> discard path",
+   "prom_b/wsa1_prom_b.s:104801 `calr sub_F4B2D5` -- copy from the live cursor to the end cursor (sub_F4B462 at 105074)",
+   "prom_b/wsa1_prom_b.s:104806 `calr SeqRecord_RestoreCursorBaseline` -- cursors back to the take start",
+   "prom_b/wsa1_prom_b.s:104813 `calr sub_F4B36E` -- (0x36FA) recorded into the track splice arrays (105160)",
+   "prom_b/wsa1_prom_b.s:104816 `call T_F40C8C` -- splice (sub_F4D346_Join2)",
+   "prom_b/wsa1_prom_b.s:104817 `calr SeqRecord_FreeTakeChain2` -- chain 2 released",
+   "prom_b/wsa1_prom_b.s:104821 `calr sub_F4A7FE` -- discard path: memory full",
+   "prom_b/wsa1_prom_b.s:104823 `calr CycleRecord_FreeRecordChain` -- both chains freed"
+  ]
+ },
+ {
+  "old": "sub_F4C6E0",
+  "verdict": "name",
+  "new": "CreatorSelectController_CopyNameLabels",
+  "header": "(part, bits): looks the pair up through T_F41038 and copies the two 13-character labels it names (T_UiText_CopyLabel13_To_22F0) to 0x2940 and 0x2950 -- the strings DLB_CreatorSelectController_Names draws. CreatorSelectController_LoadNames' worker. Basis: caller header + body.",
+  "basis": "caller header + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:106662 `calr sub_F4C6E0` -- caller site in CreatorSelectController_LoadNames (header: copy two 13-character labels to 0x2940 and 0x2950)",
+   "prom_b/wsa1_prom_b.s:106708 `call T_F41038` -- (part, bits) lookup",
+   "prom_b/wsa1_prom_b.s:106711 `call T_UiText_CopyLabel13_To_22F0` -- first label",
+   "prom_b/wsa1_prom_b.s:106713 `ld xix, 10560` -- to 0x2940",
+   "prom_b/wsa1_prom_b.s:106718 `call T_UiText_CopyLabel13_To_22F0` -- second label",
+   "prom_b/wsa1_prom_b.s:106720 `ld xix, 10576` -- to 0x2950"
+  ]
+ },
+ {
+  "old": "sub_F4C804",
+  "verdict": "name",
+  "new": "BStore_RebuildFreeListAfterLoad",
+  "header": "(0x34CE) := BStore_BlockCount; from block 1 finds the first block whose header bit 7 is clear (sub_F4C89E) and threads it and every later block onto the free list (sub_F4C9B4: BStore_FreeHead/FreeCount, none -> 0xFFFF / 0). The body behind BStore_RebuildFreeListAfterLoad_Veneer; also sub_F4CA64. Basis: caller (veneer header) + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:106768 `jr sub_F4C804` -- BStore_RebuildFreeListAfterLoad_Veneer",
+   "prom_b/wsa1_prom_b.s:107207 `calr sub_F4C804` -- second caller sub_F4CA64",
+   "prom_b/wsa1_prom_b.s:106844 `ld wa, (BStore_BlockCount:16)` -- sub_F4C85A: (0x34CE) := block count",
+   "prom_b/wsa1_prom_b.s:106783 `ldw de, 1` -- scan from block 1",
+   "prom_b/wsa1_prom_b.s:106903 `bit 7, a` -- sub_F4C89E stops at a block not in use",
+   "prom_b/wsa1_prom_b.s:107105 `ld (BStore_FreeHead:24), de` -- free list head",
+   "prom_b/wsa1_prom_b.s:107140 `m_and_mi8 MBD+r3, 0x00, 0x7f` -- each block marked free and linked"
+  ]
+ },
+ {
+  "old": "sub_F4D002",
+  "verdict": "name",
+  "new": "BStore_ExtendChainAtCursor_B",
+  "header": "Allocates a block (BStore_AllocBlock_B), links it after the cursor block (its +3 := new, new +1 := old, new +3 := 0xFFFF), moves the cursor to it at offset 5 and refreshes SongMemory_UpdateFreePercent. prom_b copy of BStore_ExtendChainAtCursor; called by the write-cursor step behind T_F40C64 (twin of BStore_AdvanceCursorForWrite) at offset 255, and via T_F40C68. Basis: twin + caller chain.",
+  "basis": "twin + caller chain + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:107593 `calr sub_F4D002` -- caller: the T_F40C64 target 0xF4D05F (reached by `jr` from sub_F4D000, 107352) -- NOT BStore_StepCursorOneByte, whose ret precedes it",
+   "prom_b/wsa1_prom_b.s:107589 `cp wa, 255` -- caller extends only at offset 255 ...",
+   "prom_b/wsa1_prom_b.s:107591 `m_cp_mi16 MW24, BStore_FreeCount, 0x0000` -- ... with a free block",
+   "prom_b/wsa1_prom_b.s:96705 `call T_F40C64` -- that step is what SeqRecord_TerminateTrackAtCursor uses between written bytes",
+   "prom_b/wsa1_prom_b.s:107602 `calr BStore_AllocBlock_B` -- allocate",
+   "prom_b/wsa1_prom_b.s:107613 `ld (xhl+3), wa` -- old block next := new",
+   "prom_b/wsa1_prom_b.s:107624 `ld (xhl+1), bc` -- new prev := old",
+   "prom_b/wsa1_prom_b.s:107626 `ld (BStore_CursorBlock:16), wa` -- cursor to the new block",
+   "prom_b/wsa1_prom_b.s:107642 `ldw (BStore_CursorOffset:16), 5` -- offset 5",
+   "prom_b/wsa1_prom_b.s:173213 `call T_BStore_AllocBlock_Veneer` -- twin BStore_ExtendChainAtCursor: same links (173218, 173223) and offset 5 (173226)",
+   "prom_b/wsa1_prom_b.s:172566 `calr BStore_ExtendChainAtCursor` -- twin caller BStore_AdvanceCursorForWrite has the shape of 0xF4D05F"
+  ]
+ },
+ {
+  "old": "sub_F4D346",
+  "verdict": "name",
+  "new": "BStore_ClearTrack",
+  "header": "Empties track (0x0C70)-1: its bit cleared in the saved track mask (0x3010)/(0x3012); end cursor 0x60347E/0x6034A0[t] and live cursor 0x3460/0x3482[t] := 0xFFFF / 5; an in-use directory entry loses bit 7 and its chain is freed (BStore_FreeChain_B). Reached via T_F40C74/T_F40A04 (take start, step-record, track-assign, SMF import); twin of TRACK CLEAR's sub_F6079E. Basis: callers + body + twin.",
+  "basis": "callers (via veneers) + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:107940 `calr sub_F4D346` -- caller: guard 1 <= (0x0C70) <= 17 at sub_F4D238_Join, the target of sub_F4D011 / slot T_F40C74 -- not BStore_CopyChainStateToAllBanks, whose ret precedes it",
+   "prom_b/wsa1_prom_b.s:96549 `call T_F40C74` -- realtime take start (sub_F45761) per take track, (0x0C70) := track+1 at 96548",
+   "prom_b/wsa1_prom_b.s:152155 `call T_F40A04` -- StepRecordSub18_LcdKeyRow2 with (0x0C70) := BStore_DirEntry",
+   "prom_b/wsa1_prom_b.s:147297 `call T_F40A04` -- TrackAssign_StageNonZero_LcdKeyRow2",
+   "prom_b/wsa1_prom_b.s:107970 `m_rd_stcf_a RW+r6` -- bit cleared in (0x3010)",
+   "prom_b/wsa1_prom_b.s:107985 `mx_ld_mi8 MXD, ra_IX, ra_IY, 0x05` -- end offset 5 (live offset 107987)",
+   "prom_b/wsa1_prom_b.s:107990 `mx_ld_mi16 MXD, ra_IX, ra_IY, 0xffff` -- end block 0xFFFF (live block 107992)",
+   "prom_b/wsa1_prom_b.s:107998 `mx_and_mi8 MXB, ra_IX, ra_IY, 0x7f` -- directory entry not in use",
+   "prom_b/wsa1_prom_b.s:108006 `calr BStore_FreeChain_B` -- chain freed",
+   "prom_b/wsa1_prom_b.s:188868 `call T_F426E4` -- TrackClear_LcdKeyRow2 runs sub_F6079E per selected track; its body repeats these resets (139311, 139318)"
+  ]
+ },
+ {
+  "old": "sub_F4E1B6",
+  "verdict": "name",
+  "new": "SeqRecord_SelectArmedTrackPart",
+  "header": "Makes the part fed by the lowest record-armed track (BStore_TrackToPart; above 0x1F -> 0; the master part 0x20 is skipped) the current part: UI_PartIndex := it, (0x0DB5) b0 set, and the part-select post Queue2E00 (W 0xFF, DE 0x1090) that RealtimeRecord_Disarm and ModeLeave_SeqPlay also make. Tail of SeqRecord_DisarmTrack and of its arm twin. Basis: callers + body.",
+  "basis": "callers + body + same post elsewhere",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:108968 `calr sub_F4E1B6` -- caller site, last step of SeqRecord_DisarmTrack",
+   "prom_b/wsa1_prom_b.s:109158 `calr sub_F4E1B6` -- last step of sub_F4E259 (track arm)",
+   "prom_b/wsa1_prom_b.s:109002 `ld xwa, (12288:16)` -- record mask scanned from track 0",
+   "prom_b/wsa1_prom_b.s:109053 `mx_ld_rm MXB, ra_HL, ra_IY, 1` -- BStore_TrackToPart[track]",
+   "prom_b/wsa1_prom_b.s:109054 `cp a, 32` -- master part skipped",
+   "prom_b/wsa1_prom_b.s:109063 `ld (UI_PartIndex:16), a` -- current part",
+   "prom_b/wsa1_prom_b.s:109066 `ldw de, 4240` -- post DE 0x1090",
+   "prom_b/wsa1_prom_b.s:109832 `ldw de, 4240` -- RealtimeRecord_Disarm posts the same after UI_PartIndex := 0",
+   "prom_b/wsa1_prom_b.s:122842 `ldw de, 4240` -- ModeLeave_SeqPlay likewise after restoring UI_PartIndex"
+  ]
+ },
+ {
+  "old": "sub_F4E259",
+  "verdict": "name",
+  "new": "SeqRecord_ArmTrack",
+  "header": "Arms track (0x3736) for recording: on CYCLE RECORD (screen latch 6, CYCLE on) the record mask is cleared first; sets its bit in (0x3000)/(0x3002), clears it in the playing mask (0x60341E), re-queues REC/PLAY labels; mode 5: (0x34D4) |= 0x10, T_F409D0, cycle set-up, route rebuild, else (0x0C05) := 0xE4 + ring discard; stops transports unless C starts/runs; SeqRecord_SelectArmedTrackPart. Twin of SeqRecord_DisarmTrack. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:108870 `calr sub_F4E259` -- caller site in SeqTrackKey_UpdateTrackState: track neither armed nor playing, transport B stopped",
+   "prom_b/wsa1_prom_b.s:109102 `ld (12288:16), xwa` -- record mask cleared on cycle record",
+   "prom_b/wsa1_prom_b.s:109110 `m_rd_stcf_a RW+r2` -- track bit SET in the record mask (SeqRecord_DisarmTrack clears it, 108938)",
+   "prom_b/wsa1_prom_b.s:109126 `m_rd_stcf_a RW+r2` -- track bit cleared in the playing mask",
+   "prom_b/wsa1_prom_b.s:109137 `call T_SeqScreen_QueueTrackRecPlayLabels` -- labels",
+   "prom_b/wsa1_prom_b.s:109149 `call T_CycleRecord_SetUpRecordTrack` -- cycle record set-up as in the disarm twin",
+   "prom_b/wsa1_prom_b.s:109156 `call T_Transport_StopAllRunning` -- transports stopped"
+  ]
+ },
+ {
+  "old": "sub_F4E4C4",
+  "verdict": "name",
+  "new": "StepRecordPartSelect_OnTrackKey",
+  "header": "`calr sub_F4E4C8 / ret`: in panel mode 6 on screen 0x0F (StepRecordPartSelect) a track key chooses track C: (0x0E5B) := BStore_TrackToPart[C], the chosen track (0x0E5C) := C + 1 (StepRecordPartSelect_OpenStepRecord needs 1..0x11), repaint. SeqTrackKey_UpdateTrackState's screen-0x0F arm. Basis: caller + body + flag reader.",
+  "basis": "caller + body + reader",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:108907 `calr sub_F4E4C4` -- caller site in SeqTrackKey_UpdateTrackState, the UI_ScreenId 0x0F arm",
+   "prom_b/wsa1_prom_b.s:109430 `calr sub_F4E4C8` -- the wrapped body",
+   "prom_b/wsa1_prom_b.s:109444 `m_cp_mi8 MB16, PanelMode, 0x06` -- mode 6",
+   "prom_b/wsa1_prom_b.s:109446 `m_cp_mi8 MB16, UI_ScreenId, 0x0f` -- screen 0x0F = StepRecordPartSelect (ScreenFieldListPtrs[0x0F], line 62789)",
+   "prom_b/wsa1_prom_b.s:109453 `ld (3675:16), a` -- (0x0E5B) := part of track C",
+   "prom_b/wsa1_prom_b.s:109455 `ld (3676:16), e` -- (0x0E5C) := C + 1",
+   "prom_b/wsa1_prom_b.s:148070 `m_cp_mi8 MB16, 0x0e5c, 0x11` -- StepRecordPartSelect_OpenStepRecord reads it as the chosen part"
+  ]
+ },
+ {
+  "old": "sub_F4E4F6",
+  "verdict": "name",
+  "new": "TrackClear_OnTrackKey",
+  "header": "With UI_ScreenStage != 1 and latch == screen: sub_F4E50B toggles track C's bit (BitWeight_F4E5FC) in the TRACK CLEAR selection mask (0x0DBE) and requests a repaint. SeqTrackKey_UpdateTrackState's screen-0x1C (TRACK CLEAR) arm; TrackClear_LcdKeyRow2 clears every selected track. Basis: caller + body + mask reader.",
+  "basis": "caller + body + mask reader",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:108910 `calr sub_F4E4F6` -- caller site in SeqTrackKey_UpdateTrackState, UI_ScreenId 0x1C (TrackClear, line 62824)",
+   "prom_b/wsa1_prom_b.s:109472 `m_cp_mi8 MB16, UI_ScreenStage, 0x01` -- gate",
+   "prom_b/wsa1_prom_b.s:109477 `calr sub_F4E50B` -- toggle",
+   "prom_b/wsa1_prom_b.s:109494 `ld xix, BitWeight_F4E5FC` -- 1 << C",
+   "prom_b/wsa1_prom_b.s:109496 `m_xor_mr MW16, 0x0dbe, 3` -- (0x0DBE) ^= bit",
+   "prom_b/wsa1_prom_b.s:188854 `ld hl, (3518:16)` -- TrackClear_LcdKeyRow2 walks (0x0DBE) ...",
+   "prom_b/wsa1_prom_b.s:188868 `call T_F426E4` -- ... clearing each selected track"
+  ]
+ },
+ {
+  "old": "sub_F4E545",
+  "verdict": "name",
+  "new": "Seq_RequestRewindIfIdle",
+  "header": "Calls T_Seq_RequestRewind when tracks play ((0x60341E) != 0), none is armed ((0x3000) = 0) and transports A and B are stopped. Seq_RequestRewindOnEvent's body for the class-0xA8 code-0x11 bit-1 event. Basis: caller header + body.",
+  "basis": "caller header + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:109541 `call sub_F4E545` -- caller site in Seq_RequestRewindOnEvent",
+   "prom_b/wsa1_prom_b.s:109557 `ld xwa, (6304798:24)` -- playing mask non-zero",
+   "prom_b/wsa1_prom_b.s:109560 `bit 2, (TransportB_State:8)` -- B stopped",
+   "prom_b/wsa1_prom_b.s:109562 `ld xwa, (12288:16)` -- nothing armed",
+   "prom_b/wsa1_prom_b.s:109565 `bit 2, (TransportA_State:8)` -- A stopped",
+   "prom_b/wsa1_prom_b.s:109568 `call T_Seq_RequestRewind` -- the request"
+  ]
+ },
+ {
+  "old": "sub_F4EC2F",
+  "verdict": "name",
+  "new": "RealtimeRecord_ArmAtFirstMeasure",
+  "header": "Current measure (0x3552) := 1, (0x34D3) b1 := 1 (the flag RealtimeRecord_Disarm tests), (0x34BB) b3 set and cleared again at measure 1, (0x34D4) b4 set, Transport_StopAllRunning. The body behind the RealtimeRecord_Arm stub (ModeEnter_RealtimeRecord). Basis: caller header + body.",
+  "basis": "caller header + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:109783 `calr sub_F4EC2F` -- caller site, the RealtimeRecord_Arm stub",
+   "prom_b/wsa1_prom_b.s:109798 `ldw (13650:16), 1` -- measure 1",
+   "prom_b/wsa1_prom_b.s:109799 `m_or_mi8 MB16, 0x34d3, 0x02` -- armed flag",
+   "prom_b/wsa1_prom_b.s:109803 `m_and_mi8 MB16, 0x34bb, 0xf7` -- b3 cleared at measure 1",
+   "prom_b/wsa1_prom_b.s:109805 `m_or_mi8 MB16, 0x34d4, 0x10` -- position request",
+   "prom_b/wsa1_prom_b.s:109806 `call T_Transport_StopAllRunning` -- transports stopped"
+  ]
+ },
+ {
+  "old": "sub_F4ED10",
+  "verdict": "name",
+  "new": "Seq_DelayedLocateToMeasure",
+  "header": "Unless transport C runs: re-arms the locate countdown (0x0C05) := 0xE4 and sets (0x34BB) b2 while the measure keys are held (screen 0x12: held-pair bits 8/9; screen 0x0A: held bits 10/11), else counts it down and at 0x80 clears it and calls T_Seq_LocateToCurrentMeasure. The body of Seq_DelayedLocateToMeasure_Call. Basis: caller header + body.",
+  "basis": "caller header + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:109956 `calr sub_F4ED10` -- caller site in Seq_DelayedLocateToMeasure_Call",
+   "prom_b/wsa1_prom_b.s:109971 `bit 2, (TransportC_State:8)` -- skipped while C runs",
+   "prom_b/wsa1_prom_b.s:109984 `bit 8, wa` -- held measure keys",
+   "prom_b/wsa1_prom_b.s:110002 `ld (3077:16), 228` -- re-armed",
+   "prom_b/wsa1_prom_b.s:110009 `dec 1, (3077:16)` -- countdown",
+   "prom_b/wsa1_prom_b.s:110013 `call T_Seq_LocateToCurrentMeasure` -- the deferred locate"
+  ]
+ },
+ {
+  "old": "sub_F55E20",
+  "verdict": "name",
+  "new": "SeqScreen_PaintActiveTrackHighlights",
+  "header": "On layer 1: clears the track-label band (op-0E record at Data_F34C6E+0x2C, SWI7 0x0E LCD_Svc_0E_ClearColumns), then for each of 16 tracks set in HL fills its DLTable_F34D18 box (SWI7 0x05 LCD_Svc_05_FillRect) and clears its DLTable_F34CB8 cells otherwise. SeqScreen_PaintTrackRecPlayLabels' tail with HL = PLAY snapshot | record mask. Basis: caller + body + SWI7 services.",
+  "basis": "caller + body + display-list records",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:120438 `m_or_rm MW16, 0x3000, 3` -- caller: HL = (0x3740) PLAY snapshot | record mask",
+   "prom_b/wsa1_prom_b.s:120439 `calr sub_F55E20` -- caller site in SeqScreen_PaintTrackRecPlayLabels",
+   "prom_b/wsa1_prom_b.s:120456 `ld (LCD_CurrentLayer:16), 1` -- layer 1",
+   "prom_b/wsa1_prom_b.s:120461 `call T_DisplayList_Run` -- the op-0E record (73664/73672)",
+   "prom_b/wsa1_prom_b.s:120478 `and hl, wa` -- track bit test",
+   "prom_b/wsa1_prom_b.s:120482 `call T_DLB_Handler_Array8` -- active: record 73693 = SWI7 05 over DLTable_F34D18 (73748)",
+   "prom_b/wsa1_prom_b.s:120486 `call T_DLB_Handler_Array6` -- inactive: record 73714 = SWI7 0x0E over DLTable_F34CB8 (73723)",
+   "prom_a/wsa1_prom_a.s:26325 `.long LCD_Svc_05_FillRect` -- SWI7 service 0x05",
+   "prom_a/wsa1_prom_a.s:26334 `.long LCD_Svc_0E_ClearColumns` -- SWI7 service 0x0E"
+  ]
+ },
+ {
+  "old": "sub_F5686B",
+  "verdict": "name",
+  "new": "CycleRecordScreen_BlinkStartMeasureReadout",
+  "header": "The callback CycleRecordScreen_BlinkStartMeasure posts: on layer 0 hands Blink_Command the start-measure readout record CycleRecordScreen_DrawValues_DL + 0x28 (it shows UI_DrawScratch+22). Basis: caller + caller header + body.",
+  "basis": "caller + caller header + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:122243 `ld xwa, sub_F5686B` -- CycleRecordScreen_BlinkStartMeasure posts it",
+   "prom_b/wsa1_prom_b.s:122245 `call T_CallbackQueue_Post` -- as a callback",
+   "prom_b/wsa1_prom_b.s:122251 `ld (LCD_CurrentLayer:16), 0` -- layer 0",
+   "prom_b/wsa1_prom_b.s:122252 `ld xiy, CycleRecordScreen_DrawValues_DL + 0x28` -- the start readout",
+   "prom_b/wsa1_prom_b.s:122254 `call T_Blink_Command` -- blink"
+  ]
+ },
+ {
+  "old": "sub_F56898",
+  "verdict": "name",
+  "new": "CycleRecordScreen_BlinkEndMeasureReadout",
+  "header": "The callback CycleRecordScreen_BlinkEndMeasure posts: on layer 0 hands Blink_Command the end-measure readout record CycleRecordScreen_DrawValues_DL + 0x32 (it shows UI_DrawScratch+24). Twin of CycleRecordScreen_BlinkStartMeasureReadout. Basis: caller + caller header + body.",
+  "basis": "caller + caller header + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:122276 `ld xwa, sub_F56898` -- CycleRecordScreen_BlinkEndMeasure posts it",
+   "prom_b/wsa1_prom_b.s:122278 `call T_CallbackQueue_Post` -- as a callback",
+   "prom_b/wsa1_prom_b.s:122284 `ld (LCD_CurrentLayer:16), 0` -- layer 0",
+   "prom_b/wsa1_prom_b.s:122285 `ld xiy, CycleRecordScreen_DrawValues_DL + 0x32` -- the end readout",
+   "prom_b/wsa1_prom_b.s:122287 `call T_Blink_Command` -- blink"
+  ]
+ }
+]
