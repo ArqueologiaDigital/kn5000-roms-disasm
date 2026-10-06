@@ -16,23 +16,18 @@ ScreenGroup_ReInit:
 	jp LoadAndRunXapr_Entry
 
 ; ===========================================================================
-; ScreenGroup_Dispatch - Display a screen group and process its widgets
+; ScreenGroup_Dispatch - run init phase WA of every subsystem
 ; ===========================================================================
-; Entry: WA = Screen group ID (0-7+)
-;          0 = Initial boot screen
-;          1 = Normal startup screen
-;          2 = Error state screen (leads to error dialogs)
-;          3 = Additional initialization
-;          4 = Main UI / may trigger Screen Group 7 error dialog
-;          7 = Error dialogs including "CPU data transmission" error
-; Exit:  All widgets in the screen group have been rendered
-; Notes: Uses table at 0xee8c7e to dispatch to widget handlers.
-;        When screen group 2 is selected during boot (error condition),
-;        eventually leads to displaying Screen Group 7 error dialog.
-;
-; See also:
-;   - Show_ScreenGroup (Show_ScreenGroup) - Alternative screen display routine
-;   - ErrorDialog_CPUTransmissionError - Error dialog in Screen Group 7
+; Entry: WA = slot 0-3.  For each table of Subsys_HandlerTableList (19 subsystems, one 4-pointer table
+;        each) it calls table[WA]; the loop counter is ERP bank 0xFA's WA.  The boot code calls it with
+;        0 right after the Sub-CPU payload transfer, then 1 if SubCPU_Payload_GetErrorFlag is 0 or 2 if
+;        not, then 3 (kn5000_v<N>_program.s); MainSysCtrl_DispatchTable's entry 0 calls slot 2 too.
+;        Slot 0 also runs ScreenGroup_InitState first and ScreenGroup_ReInit last.  The audio table reads
+;        Audio_InitAllDefaults | Audio_ReinitToneGenAndOutput | Audio_ResetAfterPayloadError |
+;        Audio_FullReinitWithPreset.
+; Correction (2026-10-06): this header called WA a "screen group ID" (0 = initial boot screen,
+; 1 = normal startup, 2 = error, 4 = main UI, 7 = error dialogs); the routine draws nothing itself --
+; whatever appears on screen comes from the subsystems' phase handlers.  Its name is kept for now.
 ; ===========================================================================
 ScreenGroup_Dispatch:
 ScreenGroup_DispatchAlt:

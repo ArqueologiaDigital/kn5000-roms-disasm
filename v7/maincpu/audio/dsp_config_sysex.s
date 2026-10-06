@@ -4526,6 +4526,15 @@ ScreenGroup_ReInit:
 	call	SndParam_Init
 	call	MainTitle_InitGraphicsAndEvents
 	jp	LoadAndRunXapr_Entry
+; ===========================================================================
+; ScreenGroup_Dispatch - run init phase WA of every subsystem
+; ===========================================================================
+; Entry: WA = slot 0-3.  For each table of Subsys_HandlerTableList (19 subsystems, one 4-pointer table
+;        each) it calls table[WA]; the loop counter is ERP bank 0xFA's WA.  The boot code calls it with
+;        0 right after the Sub-CPU payload transfer, then 1 if SubCPU_Payload_GetErrorFlag is 0 or 2 if
+;        not, then 3 (kn5000_v7_program.s).  Slot 0 also runs ScreenGroup_InitState first and
+;        ScreenGroup_ReInit last.  See v10's boot/screen_group_dispatch.s for the evidence.
+; ===========================================================================
 ScreenGroup_Dispatch:
 	push	xiz
 	ld	iz, wa	; Screen group ID
