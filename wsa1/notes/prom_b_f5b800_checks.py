@@ -61,7 +61,7 @@ for slot, tgt in SLOTS.items():
           (raw[0], int.from_bytes(raw[1:4], "little")), (0x1B, tgt))
 counts = {s: refs(s) for s in SLOTS}
 check("T_F43330 refs (prom_a, prom_b)", counts[0xF43330], (6, 2))
-check("T_F41EEC refs (prom_a, prom_b)", counts[0xF41EEC], (1, 0))
+check("T_List2030_PostSoundSelection refs (prom_a, prom_b)", counts[0xF41EEC], (1, 0))
 check("T_F41EE4 refs (prom_a, prom_b)", counts[0xF41EE4], (23, 0))
 check("T_F41EE8 refs (prom_a, prom_b)", counts[0xF41EE8], (9, 0))
 check("total references", sum(sum(v) for v in counts.values()), 41)

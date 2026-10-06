@@ -157,7 +157,7 @@ that width. Which record reads it is not traced.
 
 ## 7. Still open
 
-* **`0xF86AC7`** (prom_a, unconverted): `sub_F5B81C`'s callee through thunk
+* **`0xF86AC7`** (prom_a, unconverted): `List2030_PostSoundSelection`'s callee through thunk
   `T_F40F40`. Disassembled from the thunk target, so the instruction boundary is
   certain: it appends a 4-byte record `{DE, WA}` to a `0xFF`-terminated list of
   at most **fifteen** slots, `0x2030-0x206B`. ⚠ That is read out of another

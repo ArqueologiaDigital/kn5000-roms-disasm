@@ -128,12 +128,17 @@ def main():
     alt = re.compile(r"\b(" + "|".join(sorted(map(re.escape, ren), key=len, reverse=True)) + r")\b")
 
     def rewrite(line):
-        out = line
+        # a thunk slot's `(was T_F40FF0)` marker records the slot's ADDRESS name and is never renamed: protect it, or
+        # a chain of declarations (T_F40FF0 -> T_Msg0716_PostOp17... -> T_Msg0716_PostClear..., 2026-10-06) rewrites it
+        keep = re.findall(r"\(was T_[0-9A-F]{6}\)", line)
+        out = re.sub(r"\(was T_[0-9A-F]{6}\)", "\x00", line)
         for _ in range(8):
             nxt = alt.sub(lambda m: ren[m.group(1)], out)
             if nxt == out:
                 break
             out = nxt
+        for k in keep:
+            out = out.replace("\x00", k, 1)
         return out
 
     # Two more shapes this round produces on purpose, each of which REPLACES a

@@ -1,0 +1,324 @@
+[
+ {
+  "old": "sub_FE2EF9",
+  "verdict": "name",
+  "new": "Disk_DecrementCountdowns",
+  "header": "The body of Disk_TickCountdowns (`calr` + `ret`): decrements (0x2244) while non-zero; counts down (0x222A), the DISK SAVE password-prompt timeout DiskSaveFile_AskForPassword arms with 0xFA, and at 0 sets UI_ScreenPage := 1, UI_Request_Hi := 0x10; counts down (0x2247), armed to 15 by Medley_LoadNextSongFromDisk, and at 0 calls Transport_ResetAndStartBC_SaveRegs. Basis: caller + body + the counters' writers.",
+  "basis": "caller + body + counter writers",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:165352 `calr sub_FE2EF9` -- Disk_TickCountdowns is only this call and `ret`",
+   "prom_a/wsa1_prom_a.s:167564 `dec 0x01, (0x2244:16)` -- first countdown",
+   "prom_a/wsa1_prom_a.s:167568 `dec 0x01, (0x222a:16)` / 167571 `ld (UI_ScreenPage:16), 0x01` -- password timeout back to page 1",
+   "prom_a/wsa1_prom_a.s:163080 `ld (0x222a:16), 0xfa` -- DiskSaveFile_AskForPassword arms it",
+   "prom_a/wsa1_prom_a.s:167577 `decm8 0x01, (xix)` (XIX = 0x2247) / 167581 `calr Transport_ResetAndStartBC_SaveRegs` -- medley start delay",
+   "prom_a/wsa1_prom_a.s:164608 `ld (0x2247:16), 0x0f` -- Medley_LoadNextSongFromDisk arms it"
+  ]
+ },
+ {
+  "old": "sub_FEF761",
+  "verdict": "name",
+  "new": "EditScreen_ClearCurrentLayer",
+  "header": "Runs DisplayList_FEF770, one op-0E record (IY 0, BC 0x28, HL 0xF0: SWI7 LCD_Svc_0E_ClearColumns over 40 columns x 240 rows), so it clears LCD_CurrentLayer. EditScreen_ClearLayer1 / _ClearLayer2 (and sub_FEF746, layer 0) set the layer first; the edit-screen module's own copy of prom_b LCD_ClearCurrentLayer (same record, DL_F39551). Basis: callers + body + display list + twin.",
+  "basis": "callers + body + display list + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:185543 `calr sub_FEF761` -- EditScreen_ClearLayer1, after LCD_CurrentLayer := 1",
+   "prom_a/wsa1_prom_a.s:185551 `calr sub_FEF761` -- EditScreen_ClearLayer2, after LCD_CurrentLayer := 2",
+   "prom_a/wsa1_prom_a.s:185570 `ld XIY,DisplayList_FEF770` / 185572 `call T_DisplayList_Run`",
+   "prom_a/wsa1_prom_a.s:185578 `.byte 0x0E, 0x08` + `00 00 28 00 F0 00` -- the single op-0E record",
+   "prom_b/wsa1_prom_b.s:78790 DL_F39551 -- the identical record prom_b LCD_ClearCurrentLayer (199509) runs"
+  ]
+ },
+ {
+  "old": "sub_F37DAE",
+  "verdict": "name",
+  "new": "SysExThirdRegion_GetReplyDataBuffer",
+  "header": "XIY := 0x0B0B, the buffer whose bytes SysExThirdRegion_SendReplyChunk sends as nibble pairs (SysExThirdRegion_FetchNextChunk has T_DspParam_ReadByNumber fill it). Cpu2Reply_HandleNext (slot T_F41260) stores CPU 2's reply bytes through it: the Var2812 continuation, the opcode-0x16 two-byte reply and the tag-0x30 block. Basis: callers + body + reader.",
+  "basis": "callers + body + reader",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:77526 `lda xiy, (2827:24)` -- XIY := 0x000B0B, then `ret`",
+   "prom_b/wsa1_prom_b.s:90675 `T_F41260: jp sub_F37DAE` -- the slot, next to T_SysExThirdRegion_SendReplyChunk (0xF41264)",
+   "prom_a/wsa1_prom_a.s:133862 `call T_F41260` -- Cpu2Reply_HandleNext Var2812 arm; 133874 `ld (XBC),A` stores ring bytes at buffer + Var280C",
+   "prom_a/wsa1_prom_a.s:134171 `call T_F41260` / 134174 `ld (XIY),C` -- opcode 0x16 arm stores (0x2336)/(0x2337)",
+   "prom_a/wsa1_prom_a.s:134221 `call T_F41260` -- tag 0x30 arm, block copy at 134235",
+   "prom_b/wsa1_prom_b.s:77604 `ld c, (2827:24)` -- SysExThirdRegion_SendReplyChunk reads 0x0B0B",
+   "prom_b/wsa1_prom_b.s:75642 `lda xwa, (2827:24)` -- SysExThirdRegion_FetchNextChunk passes 0x0B0B to T_DspParam_ReadByNumber"
+  ]
+ },
+ {
+  "old": "sub_F4545F",
+  "verdict": "name",
+  "new": "BStore_TrackToPart_SaveBackup",
+  "header": "`calr` to sub_F45463 (+ `ret`), which copies the 17-byte BStore_TrackToPart map (0x603422) to its backup at 0x34BC (`ldir`, XIX = 0x34BC destination, XIY = 0x603422 source). Slot T_F409EC; MidiFileDirectPlay_SaveTrackToPartMap calls it with registers saved. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:199140 `call T_F409EC` -- MidiFileDirectPlay_SaveTrackToPartMap",
+   "prom_b/wsa1_prom_b.s:89892 `T_F409EC: jp sub_F4545F`",
+   "prom_b/wsa1_prom_b.s:96258 `calr sub_F45463`",
+   "prom_b/wsa1_prom_b.s:96272 `ld xix, 13500` / 96273 `ld xiy, BStore_TrackToPart` / 96276 `ldir85` (BC = 17) -- map -> 0x34BC"
+  ]
+ },
+ {
+  "old": "sub_F45474",
+  "verdict": "name",
+  "new": "BStore_TrackToPart_RestoreBackup",
+  "header": "`calr` to sub_F45478 (+ `ret`), which copies the 17-byte backup at 0x34BC back into BStore_TrackToPart (0x603422) (`ldir`, XIX = 0x603422 destination). Slot T_F409F0; MidiFileDirectPlay_RestoreTrackToPartMap calls it; inverse of BStore_TrackToPart_SaveBackup. Basis: caller + body + inverse.",
+  "basis": "caller + body + inverse",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:199155 `call T_F409F0` -- MidiFileDirectPlay_RestoreTrackToPartMap",
+   "prom_b/wsa1_prom_b.s:89893 `T_F409F0: jp sub_F45474`",
+   "prom_b/wsa1_prom_b.s:96292 `calr sub_F45478`",
+   "prom_b/wsa1_prom_b.s:96306 `ld xiy, 13500` / 96307 `ld xix, BStore_TrackToPart` -- 0x34BC -> map"
+  ]
+ },
+ {
+  "old": "sub_F5B81C",
+  "verdict": "name",
+  "new": "List2030_PostSoundSelection",
+  "header": "From three word arguments (bank, group, member) appends {0, 0, bank, 0x3F} and {0, 0, group, member} to the 0x2030 event list (T_List2030_AppendRegs) -- the bank / group-member record pair GroupSoundDisplayHold_PickSound posts with the part as class. SoundEditMemoryWrite_PostWrittenSoundSel posts the sound just written through slot T_F41EEC. Basis: caller + body + twin poster.",
+  "basis": "caller + body + twin poster",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:142857 `call T_F41EEC` -- SoundEditMemoryWrite_PostWrittenSoundSel pushes member, group, bank (142854 bank last)",
+   "prom_b/wsa1_prom_b.s:91572 `T_F41EEC: jp sub_F5B81C`",
+   "prom_b/wsa1_prom_b.s:131467 `ld w, 63:opc` / 131469 `call T_List2030_AppendRegs` -- {E=0, D=0, A=bank, W=0x3F}",
+   "prom_b/wsa1_prom_b.s:131475 `ld w, l` / 131476 `call T_List2030_AppendRegs` -- {E=0, D=0, A=group, W=member}",
+   "prom_a/wsa1_prom_a.s:36941 GroupSoundDisplayHold_PickSound -- header: posts {part, 0, (0x216A) bank, 0x3F} and {part, 0, (0x2169) group, member}"
+  ]
+ },
+ {
+  "old": "sub_F6B039",
+  "verdict": "name",
+  "new": "BStore_SetSongPositionToChainHead",
+  "header": "Song position of directory entry BStore_DirEntry := its chain's head block (directory word 0x603500 + 3(n-1) + 1 -> 0x3460[n-1], left as is when the head is 0xFFFF) at offset 5 (0x3482[n-1]), the first payload byte. StepRecord_OpenExistingEntry runs it to start the opened entry at its beginning; two step-record paths (0xF6A289, 0xF6C662) run it after StepRecord_SaveCursorToSlot. Basis: caller + caller header + body.",
+  "basis": "caller + caller header + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:159286 `calr sub_F6B039` -- StepRecord_OpenExistingEntry ('puts the entry's song position at its chain head (offset 5)')",
+   "prom_b/wsa1_prom_b.s:159308 `ld xde, 6305024` / 159310 `ld wa, (xde+1)` -- head word of directory entry (IZ = (n-1)*3)",
+   "prom_b/wsa1_prom_b.s:159312 `cp wa, 65535` -- empty chain leaves the block word",
+   "prom_b/wsa1_prom_b.s:159319 `ld (XIX+IZ),WA` (XIX = 0x3460) -- song-position block",
+   "prom_b/wsa1_prom_b.s:159325 `ld (XIX+IZ),0x05` (XIX = 0x3482) -- song-position offset := 5"
+  ]
+ },
+ {
+  "old": "sub_F6B657",
+  "verdict": "name",
+  "new": "BStore_DeleteBytesAtSongPosition",
+  "header": "Deletes W bytes at BStore_DirEntry's song position (0x3460/0x3482): source = position + W (in the next block past offset 0xFF), T_BStore_CopyRangeForward_Call pulls the rest of the chain down to the saved end cursor (0x60347E/0x6034A0), which moves back W bytes, freeing a block it leaves (BStore_FreeChain_C). BStore_DeleteByteAtSongPosition passes W = 1; step-record sites pass 6 or (0x0ECE). Basis: caller + caller header + body.",
+  "basis": "caller + caller header + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:154186 `calr sub_F6B657` -- BStore_DeleteByteAtSongPosition, W := 1",
+   "prom_b/wsa1_prom_b.s:154210 `ld w, 6:opc` then `calr sub_F6B657` -- deletes a 6-byte note event",
+   "prom_b/wsa1_prom_b.s:160233 `ld IY,(XIX+IZ)` (0x3460) / 160238 `ld A,(XIX+0x22)` (0x3482) -- song position",
+   "prom_b/wsa1_prom_b.s:160244 `add wa, bc` -- source offset = offset + W (C = W)",
+   "prom_b/wsa1_prom_b.s:160275 `call T_BStore_CopyRangeForward_Call` -- pulls the tail down",
+   "prom_b/wsa1_prom_b.s:160283 `sub wa, bc` -- end cursor (0x6034A0) moves back W; 160317 `calr BStore_FreeChain_C` when it leaves a block"
+  ]
+ },
+ {
+  "old": "sub_F77DB3",
+  "verdict": "name",
+  "new": "SmfWriteCopy_WriteFirstWindow",
+  "header": "Disk_Flags |= 0x20, T_DiskApi_WriteFileFromWindow_Entry, A := Disk_LastError, the flag cleared again: writes the first 1,024-byte window of the .MID file; byte-identical to copy A's SmfWrite_WriteFirstWindow. SmfOut_CreateFileWithFirstWindow, reached only from copy C (SmfWriteCopy_*), runs it last. SmfOut_WriteFirstWindow is already the label of a third identical copy at 0xF77F9A. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:187926 `call sub_F77DB3` -- last step of SmfOut_CreateFileWithFirstWindow",
+   "prom_b/wsa1_prom_b.s:187945 `or (0x21e7),0x20` / 187946 `call T_DiskApi_WriteFileFromWindow_Entry` / 187948 `and (0x21e7),0xdf`",
+   "prom_b/wsa1_prom_b.s:185098 SmfWrite_WriteFirstWindow -- same five instructions in copy A",
+   "prom_b/wsa1_prom_b.s:185765 `call SmfOut_CreateFileWithFirstWindow` in SmfWriteCopy_CommitOutputByte; 185229 the other caller, in copy C's code (calls SmfWriteCopy_EncodeDeltaTime)",
+   "prom_b/wsa1_prom_b.s:188195 SmfOut_WriteFirstWindow (0xF77F9A) -- name taken by the copy reached only from the unlabelled CreateFile copy at 0xF77F32"
+  ]
+ },
+ {
+  "old": "sub_F77DEF",
+  "verdict": "name",
+  "new": "SmfWriteCopy_SetOutputWindow",
+  "header": "Disk_WindowStart := 0x60A700, Disk_WindowEnd := 0x60AB00 -- the 1,024-byte output window; byte-identical to copy A's SmfWrite_SetOutputWindow. SmfOut_CreateFileWithFirstWindow sets it just before SmfWriteCopy_WriteFirstWindow. The bytes after its `ret` (0xF77E02-0xF77E78) are a separate unreached fragment. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:187925 `call sub_F77DEF` -- SmfOut_CreateFileWithFirstWindow, after the 'MID' extension and the delete",
+   "prom_b/wsa1_prom_b.s:187988 `ld (Disk_WindowStart:16), xwa` (0x60A700) / 187990 `ld (Disk_WindowEnd:16), xwa` (0x60AB00) / 187991 `ret`",
+   "prom_b/wsa1_prom_b.s:185171 SmfWrite_SetOutputWindow -- same instructions in copy A"
+  ]
+ },
+ {
+  "old": "sub_F49ADE",
+  "verdict": "name",
+  "new": "SeqRecord_CloseHeldNotesAtCycleWrap",
+  "header": "When (0x34B8) bit 4 is set -- only 0xF45F95 sets it, when the cycle-record measure (0x3552) reaches the cycle end (0x3624) and is put back to the start (0x3622) -- (0x34B9) := the last event's tick ((0x34AB), 0 after a 0x81 beat mark) and sub_F49BFA closes every held note of every take track at that tick (SeqRecord_CloseHeldNote per slot); bit 4 cleared. SeqRecord_WriteRingEventsToTracks runs it once SeqBuf_Ring is empty. Basis: caller + body + flag writer.",
+  "basis": "caller + body + flag writer",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102029 `calr sub_F49ADE` -- SeqRecord_WriteRingEventsToTracks, ring empty",
+   "prom_b/wsa1_prom_b.s:102261 `bit 4,(0x34b8)` / 102268 `ld (0x34b9),A` / 102269 `calr sub_F49BFA`",
+   "prom_b/wsa1_prom_b.s:102482-102489 sub_F49BFA: (0x34AB) := (0x34B9), (0x34AC) := slot note, (0x34AE) := track, `calr sub_F4A0FF` per held slot",
+   "prom_b/wsa1_prom_b.s:98170 `set 4,(0x34b8)` -- sole writer of bit 4, after `ld (0x3552),WA` = (0x3622) when (0x3552) = (0x3624) on screens 6/8"
+  ]
+ },
+ {
+  "old": "sub_F49AFD",
+  "verdict": "name",
+  "new": "SeqRecord_ResetControllersAfterRingOverflow",
+  "header": "Handles the (0x34B8) flags prom_a's SeqBuf tail ORs in when SeqBuf_Ring has no room for an event ((0x60F31F) & 0xB0 >> 4: modulation 0x10 -> bit 0, pitch bend 0x20 -> bit 1): bit 0 -> sub_F49B43 writes {0xD1, tick, 0} to every take track, bit 1 -> sub_F49B5C {0xD2, tick, 0, 0x40}, bit 2 -> sub_F49BFA closes all held notes; (0x34B8) := 0; SeqRecord_SoundAlert only if ROM byte 0xFFFFF8 >= 0x10 (it is 0x02). Run by SeqRecord_WriteRingEventsToTracks on an empty ring. Basis: caller + body + flag writer.",
+  "basis": "caller + body + flag writer",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102030 `calr sub_F49AFD` -- SeqRecord_WriteRingEventsToTracks, ring empty",
+   "prom_b/wsa1_prom_b.s:102296 `calr sub_F49B43` (bit 0): 102327 `ld (0x34aa),0xd1`, value 0",
+   "prom_b/wsa1_prom_b.s:102300 `calr sub_F49B5C` (bit 1): 102347 `ld (0x34aa),0xd2`, 102351 `ld (0x34ad),0x40`",
+   "prom_b/wsa1_prom_b.s:102304 `calr sub_F49BFA` (bit 2) / 102306 `ld (0x34b8),0x00` / 102310 `calr SeqRecord_SoundAlert` behind `cp (XIY),0x10`",
+   "prom_a/wsa1_prom_a.s:86809 `or (0x34b8:16), a` -- after `and A,0xb0` / `srl a, 0x04`, on the ring-full arm (.LFAEC5E)",
+   "prom_a/wsa1_prom_a.s:86656 SeqBuf_PutPitchBendEvent header: '0x20 is the overflow flag the tail ORs into (0x34B8)'; 86673 modulation flag 0x10",
+   "prom_b/wsa1_prom_b.s:102429 sub_F49BBA `ld (0x34ad),C` -- overwrites the 0x40, and SeqRecord_WritePitchBendToTakeTrack reads the track from 0x34AE: as coded the bit-1 reset writes {D2, tick, 0, n} to the stale track (0x34AE) (firmware bug, recorded not fixed)"
+  ]
+ },
+ {
+  "old": "sub_F49C7D",
+  "verdict": "name",
+  "new": "SeqRecord_SkipUnhandledRingEvent",
+  "header": "Takes the lead byte out of SeqBuf_Ring, then every following byte until the next byte with bit 7 set (the next event's lead) or an empty ring. SeqRecord_WriteRingEventsToTracks's arm for a lead byte that is none of 0x81, 0x9n, 0xBn, 0xCn, 0xD0-0xD3 -- e.g. SeqBuf_PutTempoEvent's 0x80. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102079 `calr sub_F49C7D` -- after the 0x81, 0x90, 0xD0-0xD3, 0xC0, 0xB0 tests (102048-102077) all fail",
+   "prom_b/wsa1_prom_b.s:102519 `call T_SeqBufRing_Get` -- drops the lead byte",
+   "prom_b/wsa1_prom_b.s:102526 `bit 0x07,A` / 102527 `jr Z,sub_F49C7D` -- keeps dropping data bytes until a lead byte",
+   "prom_a/wsa1_prom_a.s:86717 SeqBuf_PutTempoEvent -- {0x80, tick, lo, hi}, a lead byte the drain has no arm for"
+  ]
+ },
+ {
+  "old": "sub_F49CA9",
+  "verdict": "name",
+  "new": "SeqRecord_ReadRingEvent",
+  "header": "Takes BC bytes out of SeqBuf_Ring (T_SeqBufRing_Get) into the event record at 0x34AA[0..BC-1]. SeqRecord_WriteRingEventsToTracks calls it with the event's length: 4 for 0xD0/0xD1/0xD3, 5 for 0x9n and 0xD2, 7 for 0xBn/0xCn -- the layouts of prom_a's SeqBuf_Put*Event. Basis: caller + body + encoders.",
+  "basis": "caller + body + encoders",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102055 `calr sub_F49CA9` after `ldw bc, 4` (0xD3); 102082 `ldw bc, 5` (0x9n); 102107 `ldw bc, 7` (0xCn)",
+   "prom_b/wsa1_prom_b.s:102546 `call T_SeqBufRing_Get` / 102548 `ld (XHL+IX),A` (XHL = 0x34AA) / 102552 loop on BC",
+   "prom_a/wsa1_prom_a.s:86655 SeqBuf_PutPitchBendEvent {0xD2, tick, LSB, MSB, slot}; 86622 SeqBuf_PutParamEvent 7 bytes"
+  ]
+ },
+ {
+  "old": "sub_F49CC2",
+  "verdict": "name",
+  "new": "CycleRecord_WriteNoteOnToRecordTrack",
+  "header": "For the cycle record track (CycleRecord_CheckIsRecordTrack A = 0): (0x34AE) := 0x10, (0x34AF) := 0, making the note event [0x9n, tick, note, velocity, 0x10, 0x00] with the duration placeholder SeqRecord_WriteNoteOn writes; copies 8 bytes of 0x34AA to 0x36E8 and sub_F4ABE8 writes (0x36F0) = 6 of them into track (0x36D6) (sub_F4AEEE: BStore_AppendBytes, entry + 1). The drain's note-on arm for that track. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102104 `calr sub_F49CC2` -- 0x9n arm, velocity non-zero, after `ld (0x36f0),0x06` (102103) and CheckIsRecordTrack = 0",
+   "prom_b/wsa1_prom_b.s:102570 `ld (0x34ae),0x10` / 102571 `ld (0x34af),0x00`",
+   "prom_b/wsa1_prom_b.s:102573 `ld XDE,0x000036e8` / `ldir` BC = 8 / 102576 `calr sub_F4ABE8`",
+   "prom_b/wsa1_prom_b.s:103044 `ld A,0x10` / 103047 `ld A,0x00` written after the velocity in SeqRecord_WriteNoteOn -- same placeholder"
+  ]
+ },
+ {
+  "old": "sub_F49CE6",
+  "verdict": "name",
+  "new": "CycleRecord_WriteEventToRecordTrack",
+  "header": "For the cycle record track (CycleRecord_CheckIsRecordTrack A = 0): copies 8 bytes of the event record 0x34AA to 0x36E8 and sub_F4ABE8 writes (0x36F0) of them into track (0x36D6)'s chain (sub_F4AEEE: BStore_AppendBytes on entry (0x36D6) + 1). The drain's 0xD0-0xD3 and 0xCn arms and SeqRecord_WriteParamEvent set (0x36F0) := 3 / 4 / 6 first. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102068 `calr sub_F49CE6` after `ld (0x36f0),0x03` -- 0xD3; 102170 (0xD0/0xD1, := 3); 102153 (0xD2, := 4 at 102150); 102125 (0xCn, := 6)",
+   "prom_b/wsa1_prom_b.s:103242 `calr sub_F49CE6` -- SeqRecord_WriteParamEvent's cycle arm, (0x36F0) := 6",
+   "prom_b/wsa1_prom_b.s:102596 `ld XDE,0x000036e8` / 102598 `ldir` / 102599 `calr sub_F4ABE8`",
+   "prom_b/wsa1_prom_b.s:105025 sub_F4AEEE `ld XIY,0x000036e8`, A = (0x36D6)+1, W = (0x36F0), `call T_BStore_AppendBytes_Veneer`"
+  ]
+ },
+ {
+  "old": "sub_F49D00",
+  "verdict": "name",
+  "new": "SeqRecord_WriteBeatMarkAndAgeHeldNotes",
+  "header": "On a 0x81 beat mark from SeqBuf_Ring: each track 0..16 of the take ((0x3004)/(0x3006)) other than the cycle record track gets 0x81 at its take cursor (out of free blocks with < 9 bytes left it is dropped from the take and terminated, sub_F4A4F6); then every take track's held-note slots get +1 on their beat count (byte +1), a note reaching 127 beats being split (sub_F49DE6). The drain's 0x81 arm. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102130 `calr sub_F49D00` -- after `ld (0x34aa),0x81` and taking the 0x81 out of the ring",
+   "prom_b/wsa1_prom_b.s:102626 `jrl C,...` after `xorcf A,IZ` on (0x3004) -- only take tracks",
+   "prom_b/wsa1_prom_b.s:102636 `calr CycleRecord_CheckIsRecordTrack` / 102639 `calr SeqRecord_LoadTakeCursor`",
+   "prom_b/wsa1_prom_b.s:102640 `cp (0x6034ba),0x0000` / 102644 `cp WA,0x0009` -- memory-full test; 102657 `stcf` clears the take bit, 102668 `calr sub_F4A4F6`",
+   "prom_b/wsa1_prom_b.s:102647 `ld A,0x81` / 102648 `call T_BStore_WriteCursorByte`",
+   "prom_b/wsa1_prom_b.s:102683 `cp A,0x7f` / 102685 `inc 1,A` / `ld (XHL+0x01),A` -- slot beat count; 102695 `call sub_F49DE6` at 127"
+  ]
+ },
+ {
+  "old": "sub_F49F6D",
+  "verdict": "name",
+  "new": "SeqRecord_WriteNoteOn",
+  "header": "Track (0x34AE), if in the take: writes [0x9n & 0xFA, tick, note, velocity, 0x10, 0x00] at its take cursor and takes a held-note slot off the free list (0x3014) -- note, beats 0, start tick, the note byte's cursor -- appending it to the track's list (0x3016); writes nothing when no slot is free, and out of blocks (< 14 bytes) drops the track (sub_F4A4F6). The drain's velocity > 0 note arm; also re-opens a note split at 127 beats. Basis: caller + body + slot users.",
+  "basis": "caller + body + slot users",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102098 `calr sub_F49F6D` -- 0x9n arm: (0x34AD) != 0 (102088) and not the cycle record track",
+   "prom_b/wsa1_prom_b.s:102938 `cp (XIX),0xff` (XIX = 0x3014) -- no free slot: return",
+   "prom_b/wsa1_prom_b.s:102944 `cp (0x6034ba),0x0000` / 102948 `cp WA,0x000e` -- memory-full test",
+   "prom_b/wsa1_prom_b.s:102972 `and A,0xfa` / 102976 tick / 102981 `ld (XHL),A` -- slot +0 := note, +1 := 0, +2 := tick, +3/+5 := cursor",
+   "prom_b/wsa1_prom_b.s:102998 `ld (XHL+0x07),0xff` / 103008 `ld (XHL+IY),A` (0x3016 head) / 103031 `ld (XIX),A` -- slot linked, free head advanced",
+   "prom_b/wsa1_prom_b.s:103040 velocity, 103044 `ld A,0x10`, 103047 `ld A,0x00` -- duration placeholder; 103051 `calr SeqRecord_SaveTakeCursor`",
+   "prom_b/wsa1_prom_b.s:95945 SeqRecord_ResetSlotLists header -- 64 eight-byte slots at 0x305A, free head 0x3014, per-track (head, tail) at 0x3016"
+  ]
+ },
+ {
+  "old": "sub_F4A0FF",
+  "verdict": "name",
+  "new": "SeqRecord_CloseHeldNote",
+  "header": "Track (0x34AE), if in the take: finds its held-note slot for note (0x34AC), writes the duration -- ticks ((0x34AB) - start tick, borrowing 96 per beat; at least 2) and the slot's beat count -- over the 0x10 0x00 placeholder of the note event, unlinks the slot and returns it to the free list (0x3014). The drain's velocity-0 0x9n arm and sub_F49BFA's close-all. Basis: callers + body + SeqRecord_WriteNoteOn.",
+  "basis": "callers + body + inverse",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102090 `calr sub_F4A0FF` -- 0x9n arm with (0x34AD) = 0",
+   "prom_b/wsa1_prom_b.s:102489 `calr sub_F4A0FF` -- sub_F49BFA, once per held slot",
+   "prom_b/wsa1_prom_b.s:103075 `jrl C,...` after `xorcf` -- only take tracks; 103087 `calr sub_F4A53E` loads the track's list",
+   "prom_b/wsa1_prom_b.s:103101 `cp A,(0x34ac)` -- slot note match; 103108 `add C,0x60` -- tick borrow; 103119 `ld A,0x02` -- minimum",
+   "prom_b/wsa1_prom_b.s:103133 / 103138 `call T_BStore_WriteCursorByte` -- ticks, then beats, two bytes past the slot's saved note-byte cursor",
+   "prom_b/wsa1_prom_b.s:103193 `ld (XHL+0x07),C` / 103195 `ld (XIX),A` (XIX = 0x3014) -- slot pushed on the free list"
+  ]
+ },
+ {
+  "old": "sub_F4A26D",
+  "verdict": "name",
+  "new": "SeqRecord_WriteParamEvent",
+  "header": "The drain's 0xBn arm (SeqBuf_PutParamEvent's {0xB0, tick, number, class, value, mask, slot}): the track is byte 6 of the record (also to (0x349F)); not the cycle record track -> SeqRecord_WriteEventToTakeTrack writes the 6 bytes before the slot; the cycle record track -> (0x36F0) := 6, CycleRecord_WriteEventToRecordTrack. Basis: caller + body + encoder.",
+  "basis": "caller + body + encoder",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102136 `calr sub_F4A26D` -- 0xBn arm, after BC = 7 bytes read and `ldw de, 6`",
+   "prom_b/wsa1_prom_b.s:103228 `ld C,(XIX+HL)` (0x34AA + 6) / 103229 `ld a,(0x34b0)` -> (0x349F)",
+   "prom_b/wsa1_prom_b.s:103232 `calr CycleRecord_CheckIsRecordTrack` / 103236 `calr sub_F4A2C8`",
+   "prom_b/wsa1_prom_b.s:103239 `ld (0x36f0),0x06` / 103242 `calr sub_F49CE6`",
+   "prom_a/wsa1_prom_a.s:86622 SeqBuf_PutParamEvent -- the 7-byte 0xB0 event"
+  ]
+ },
+ {
+  "old": "sub_F4A2A4",
+  "verdict": "name",
+  "new": "SeqRecord_WritePitchBendToTakeTrack",
+  "header": "C := 0x34AA[DE] (the event's slot byte), then SeqRecord_WriteEventToTakeTrack writes the DE bytes before it. Its callers are the drain's 0xD2 (pitch bend) arm and sub_F49BBA's pitch-bend reset, both with DE = 4; byte-identical to SeqRecord_WriteCtrlEventToTakeTrack. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102147 `calr sub_F4A2A4` -- 0xD2 arm, after `ldw de, 4`",
+   "prom_b/wsa1_prom_b.s:102431 `calr sub_F4A2A4` in sub_F49BBA, reached from sub_F49B5C ({0xD2, tick, 0, 0x40}, DE = 4)",
+   "prom_b/wsa1_prom_b.s:103262 `ld C,(XIX+HL)` (XIX = 0x34AA, HL = DE) / 103263 `calr sub_F4A2C8`",
+   "prom_a/wsa1_prom_a.s:86655 SeqBuf_PutPitchBendEvent {0xD2, tick, LSB, MSB, slot}"
+  ]
+ },
+ {
+  "old": "sub_F4A2B6",
+  "verdict": "name",
+  "new": "SeqRecord_WriteCtrlEventToTakeTrack",
+  "header": "C := 0x34AA[DE] (the slot byte), then SeqRecord_WriteEventToTakeTrack writes the DE bytes before it. Callers: the drain's 0xD3 and 0xD0/0xD1 arms (expression, pressure, modulation: {0xDn, tick, value, slot}) and sub_F49B7A's modulation reset, all with DE = 3; twin of SeqRecord_WritePitchBendToTakeTrack. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102062 `calr sub_F4A2B6` -- 0xD3 arm, `ldw de, 3`",
+   "prom_b/wsa1_prom_b.s:102164 `calr sub_F4A2B6` -- 0xD0/0xD1 arm, `ldw de, 3`",
+   "prom_b/wsa1_prom_b.s:102389 `calr sub_F4A2B6` in sub_F49B7A, reached from sub_F49B43 ({0xD1, tick, 0})",
+   "prom_b/wsa1_prom_b.s:103281 `ld C,(XIX+HL)` / 103282 `calr sub_F4A2C8`",
+   "prom_a/wsa1_prom_a.s:86672 / 86686 / 86700 SeqBuf_PutModulation/Expression/ChanPressureEvent -- 4-byte {0xD1/0xD3/0xD0, tick, value, slot}"
+  ]
+ },
+ {
+  "old": "sub_F4A2C8",
+  "verdict": "name",
+  "new": "SeqRecord_WriteEventToTakeTrack",
+  "header": "Track C, if in the take: copies DE bytes of the event record 0x34AA to its take cursor (SeqRecord_LoadTakeCursor / SaveTakeCursor), continuing in a new block through sub_F4A4E3 (T_BStore_ExtendChainAtCursor_B) past offset 0xFF; with no free block and fewer than DE + 8 bytes left it drops the track from the take ((0x3004)/(0x3006) bit cleared) and terminates it (sub_F4A4F6). The drain's 0xCn arm and the three writers above call it. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102119 `calr sub_F4A2C8` -- 0xCn arm, C = (0x34AA+6), DE = 6",
+   "prom_b/wsa1_prom_b.s:103236 / 103263 / 103282 -- SeqRecord_WriteParamEvent and the two slot-byte wrappers",
+   "prom_b/wsa1_prom_b.s:103303 `xorcf A,IZ` on (0x3004) / 103314 `calr SeqRecord_LoadTakeCursor`",
+   "prom_b/wsa1_prom_b.s:103317-103322 `ldw wa, 256` - offset vs DE + 8 with BStore_FreeCount = 0 -> 103332 `stcf` clears the take bit, 103343 `calr sub_F4A4F6`",
+   "prom_b/wsa1_prom_b.s:103352 `cp WA,0x0100` / 103360 `ldir` from XIY = 0x34AA, BC = DE; 103375 `calr sub_F4A4E3` on a block crossing",
+   "prom_b/wsa1_prom_b.s:103399 `calr SeqRecord_SaveTakeCursor`"
+  ]
+ }
+]

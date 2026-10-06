@@ -1,0 +1,344 @@
+[
+ {
+  "old": "sub_FBE26B",
+  "verdict": "name",
+  "new": "CombiEditMixer_DrawPartIconRow",
+  "header": "(y): copies Record_F1AAA9 (an op-03 record blitting Bitmap_F17C59_24x17, BC = 3 bytes, HL = 17 rows) to its frame and blits it 8 times at byte offset 40*y + 1 + 5i -- one 24x17 frame per part column (x = 8 + 40i). The MIXER page-frame painter at 0xFBE135 (posted by ScreenEnterBody_CombiEditMixer) draws such rows at y 0x55 / 0x7C / 0xA7 / 0x2D by CombiEdit_Page. Basis: caller + body + record.",
+  "basis": "caller (posted callback) + body + display-list record",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:108327 `lda xbc, (.LFBE135:24)` -- ScreenEnterBody_CombiEditMixer posts 0xFBE135 with T_CallbackQueue_Post (108329) when CombiEdit_Page changed: the MIXER page-frame painter",
+   "prom_a/wsa1_prom_a.s:108894 `ret` / 108895 `ret` -- CombiEditMixer_ShowOtherParts ends at 0xFBE133; .LFBE135 is a separate routine sitting under that label, so the batch's named caller is really this unnamed callback",
+   "prom_a/wsa1_prom_a.s:108903 `lda xbc, (CombiEditMixer_ShowOtherParts_DL1:24)` / 108905 `lda xwa, (DL_Mixer:24)` -- the callback draws DL_Mixer and the page's caption lists before the rows",
+   "prom_a/wsa1_prom_a.s:108946 `calr sub_FBE26B` (after `pushw 0x55`) -- page 0 in group 0x16; also 0x7C/0xA7 on page 1 and 0x55/0x7C on page 2",
+   "prom_a/wsa1_prom_a.s:109032 `lda xiy, (Record_F1AAA9:24)` -- the 12-byte template (`ldw bc,6` words)",
+   "prom_b/wsa1_prom_b.s:50854 `Record_F1AAA9: .byte 0x03, 0x0c, 0x59, 0x7c, 0xf1, ...` -- op 03 (DLHandler_FarPtr, prom_b/wsa1_prom_b.s:67737): XIY = 0xF17C59, IX = +6, BC = 3, HL = 0x11",
+   "prom_a/wsa1_prom_a.s:109037 `m_mul MWD+r6, 0x08, 1` (BC = 0x28) / 109039 `ld (XIX+0x06),BC` -- IX = 40*y + 1: row y, byte column 1 of a 40-byte (320-pixel) row",
+   "prom_a/wsa1_prom_a.s:109043 `call T_DisplayList_RunOne_Stack` / 109044 `incw 0x05, (xix+0x06)` -- 8 passes (H = 8), 5 bytes = 40 pixels apart",
+   "prom_b/wsa1_prom_b.s:46187 `Bitmap_F17C59_24x17:` -- the 24x17 frame bitmap"
+  ]
+ },
+ {
+  "old": "sub_FBE2A4",
+  "verdict": "name",
+  "new": "CombiEditMixer_DrawPartBoxRow",
+  "header": "(y): copies Record_F1AAB5 (an op-09 record, LCD_Svc_09_DrawBox) to its frame and draws 8 boxes (4 + 40i, y)-(34 + 40i, y + 20), one per part column. The MIXER page-frame painter at 0xFBE135 (posted by ScreenEnterBody_CombiEditMixer) draws such rows at y 0x2E / 0xA7 / 0xCA by CombiEdit_Page. Basis: caller + body + record.",
+  "basis": "caller (posted callback) + body + display-list record",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:108327 `lda xbc, (.LFBE135:24)` -- ScreenEnterBody_CombiEditMixer posts 0xFBE135 with T_CallbackQueue_Post (108329) when CombiEdit_Page changed: the MIXER page-frame painter",
+   "prom_a/wsa1_prom_a.s:108894 `ret` / 108895 `ret` -- CombiEditMixer_ShowOtherParts ends at 0xFBE133; .LFBE135 is a separate routine sitting under that label, so the batch's named caller is really this unnamed callback",
+   "prom_a/wsa1_prom_a.s:108903 `lda xbc, (CombiEditMixer_ShowOtherParts_DL1:24)` / 108905 `lda xwa, (DL_Mixer:24)` -- the callback draws DL_Mixer and the page's caption lists before the rows",
+   "prom_a/wsa1_prom_a.s:108944 `calr sub_FBE2A4` (after `pushw 0x2e`) -- page 0 in group 0x16; 109002 `calr sub_FBE2A4` after `pushw 0xca` closes pages 1 and 2",
+   "prom_a/wsa1_prom_a.s:109060 `lda xiy, (Record_F1AAB5:24)` -- the 10-byte template",
+   "prom_b/wsa1_prom_b.s:50861 `Record_F1AAB5: .byte 0x09, 0x0a, 0x04, 0x00, 0x00, 0x00, 0x22, 0x00, 0x00, 0x00` -- op 09 = four words X0 4, Y0, X1 0x22, Y1 (DLHandler_4Words, prom_b/wsa1_prom_b.s:67689)",
+   "prom_a/wsa1_prom_a.s:109065 `ld (XIX+0x04),BC` / 109068 `ld (XIX+0x08),BC` -- Y0 = y, Y1 = y + 0x14",
+   "prom_a/wsa1_prom_a.s:109073 `m_add_mi16 MWD+r4, 0x02, 0x0028` / 109074 `m_add_mi16 MWD+r4, 0x06, 0x0028` -- X0 and X1 step 40 pixels, 8 passes"
+  ]
+ },
+ {
+  "old": "sub_FC01FA",
+  "verdict": "name",
+  "new": "Msg0716_PostClearSoundRamBanks",
+  "header": "XIX := 0x0716, then sub_FC19E0 builds and Msg0716_Post sends (stream 0) the link request 88 00 17 00 00 00. On CPU 2 bit 3 of byte 0 selects ToneMsg_Dispatch's WRITE table, arm 0 = ToneEdit_Dispatch, whose opcode-0x17 arm calls SoundRam_ClearFourBanks (the four 'WSA SOUND RAM S0..S3' flash banks). First step of Msg0716_PostOp17AndRestageAllParts, i.e. of SysExSession_OnAbort_Sound. Basis: caller + body + CPU-2 dispatch.",
+  "basis": "caller + body + CPU-2 dispatch tables",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:112961 `calr sub_FC01FA` -- Msg0716_PostOp17AndRestageAllParts, called first by SysExSession_OnAbort_Sound (prom_a/wsa1_prom_a.s:100543)",
+   "prom_a/wsa1_prom_a.s:112966 `ld XIX,0x00000716` / 112967 `call sub_FC19E0` -- the Msg0716 staging buffer",
+   "prom_a/wsa1_prom_a.s:115859 `ld (XIX+0x02),0x17` (with 0x88, 0x00 at +0/+1 and zeros at +3..+5) / 115864 `call Msg0716_Post_Trampoline` with BC = 6",
+   "prom_c/tone_db/tone_db_module.s:19625 `and w, 8` / 19626 `jrl z, ToneMsg_Dispatch__FC2777` -- bit 3 CLEAR goes to the query half; 0x88 has it set, so it takes the write table",
+   "prom_c/tone_db/tone_db_module.s:19786 `.long ToneMsg_Dispatch__FC2622 ; entry 0` and 19633 `calr ToneEdit_Dispatch` -- write arm 0",
+   "prom_c/tone_db/tone_db_module.s:5478 `.long ToneEdit_Dispatch__FBAE72 ; entry 23` / 5410 `call SoundRam_ClearFourBanks` -- opcode 0x17",
+   "prom_c/field_accessors.s:938 `SoundRam_ClearFourBanks:` -- its header: clears the banks the ROM calls WSA SOUND RAM S0..S3",
+   "CORRECTION: Msg0716_PostOp17AndRestageAllParts' header says 'query table (request[0] bit 3), arm 0 ToneQuery_Dispatch ... above its 22-opcode guard' -- 0x88 has bit 3 SET, which is the WRITE table; its opcode 0x18 twin (SysExSession_OnEnd_Sound, LinkMsg_AfterSoundRamLoad) reaches ToneEdit entry 24 = ToneEdit_Dispatch__FBAE7D_Nop, a bare `ret` ({CF}:1414)"
+  ]
+ },
+ {
+  "old": "sub_FC0215",
+  "verdict": "name",
+  "new": "PartSound_RequeuePart0IfUserBank",
+  "header": "XIX := 0x76A2 (part 0's record), E := 0, then sub_FC0227: if the bank byte (+1) is 0x08..0x0F -- SoundSel_Bank's U1/U2 codes -- appends {0, 1, bank, 0x7F} and {0, 0, program, 0xFF} to Queue2E00, the PROGRAM CHANGE & BANK pair shape of ParamImage_QueuePartFieldChange. Last step of Msg0716_PostRestageAllParts (after CPU 2 has restaged every part). Basis: caller + body + bank codes.",
+  "basis": "caller + body + bank-code table",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:112978 `calr sub_FC0215` -- Msg0716_PostRestageAllParts, right after Msg0716_PostSysEx50_92",
+   "prom_a/wsa1_prom_a.s:112991 `ld XIX,0x000076a2` / 112992 `ld e, 0x00:opc` / 112993 `call sub_FC0227` -- part 0's record (Msg0716_RecordPtrTable entry 0)",
+   "prom_a/wsa1_prom_a.s:113000 `cp A,0x08` / 113002 `cp A,0x10` -- bank 0x08..0x0F only",
+   "prom_a/wsa1_prom_a.s:113004 `ld d, 0x01:opc` / 113005 `ld w, 0x7f:opc` / 113008 `call T_Queue2E00_AppendRegs` -- {E part, D offset 1, A bank, W mask 0x7F}",
+   "prom_a/wsa1_prom_a.s:113011 `ld w, 0xff:opc` / 113013 `call T_Queue2E00_AppendRegs` -- offset 0, the program, mask 0xFF",
+   "notes/FINDINGS-prom_ab-sound-selection.md:12-16 -- bank codes: U1/U2 0x08/0x09 (E1 0x10, RD 0x20)"
+  ]
+ },
+ {
+  "old": "sub_FC1143",
+  "verdict": "name",
+  "new": "PartSound_GetProgramBankPtr",
+  "header": "(W = part) XIY := Msg0716_GetRecordPtrByIndex(W) + 0 -- the part record's PROGRAM CHANGE & BANK field (program at +0, bank at +1). PartSound_GetBankAndToneFlag's first call; it then reads (XIY+1) and (XIY). Basis: caller + body + parameter table.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:114758 `call sub_FC1143` -- PartSound_GetBankAndToneFlag, then 114759 `ld A,(XIY+0x01)` (the bank)",
+   "prom_a/wsa1_prom_a.s:114777 `call Msg0716_GetRecordPtrByIndex` / 114778 `add XIY,0x00000000` -- field offset 0 (the siblings add 0x20 inline for the second record)",
+   "notes/sysex-probes/sysex_param_addresses.py --dump: `20 00 3 ... 0x76A2` -- PROGRAM CHANGE & BANK is record +0, three bytes"
+  ]
+ },
+ {
+  "old": "sub_FC1220",
+  "verdict": "name",
+  "new": "Cpu2Query_ApplyPartRecordEffects",
+  "header": "Applies the 0x49-byte 81/87 reply (Cpu2Query_SendPartRecordRead87) to part 0 and the effect area: byte 0's nibbles -> MAIN OUT (0x76C5) / SUB OUT (0x76C6), EFFECT2 ON/OFF (0x76A8) := 0x7F when either is 5, else 0; then EFFECT1 SEND (0x76A7), REVERB SEND (0x76A9), EFFECT1/2 OUTPUT SELECT (0x78B7), EFFECT COMMON (0x7634) and effect blocks 0x7642/0x7662/0x7682, each posted to Queue2E00. Cpu2Query_DrainRecordReplies runs it for an 81/87 reply. Basis: caller + body + parameter addresses.",
+  "basis": "caller + body + parameter-address probe",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:116489 `cp C,0x87` / 116495 `calr sub_FC1220` -- Cpu2Query_DrainRecordReplies, reply type 0x81, opcode 0x87",
+   "prom_a/wsa1_prom_a.s:116329 `call Cpu2Query_SendPartRecordRead87` with 116327 `ldw de, 0x49` -- the request is 0x49 bytes; the copies below consume 4 + 1 + 23 + 23 + 21 + 1 = 0x49",
+   "prom_a/wsa1_prom_a.s:114917 `cp a, 0x05:i3` / 114931 `ld (0x76a8:16), h` -- H = 0x7F when either nibble is 5",
+   "prom_a/wsa1_prom_a.s:114932 `ld (0x76c5:16), e` -- MAIN OUT (20/30, record 0x20 +3); 0x76C6 SUB OUT (20/31)",
+   "prom_a/wsa1_prom_a.s:114935 `ld (0x76a7:16), a` / 114937 `ld (0x76a9:16), a` -- EFFECT1 SEND (20/04) and REVERB SEND (20/06)",
+   "prom_a/wsa1_prom_a.s:114939 `ld (0x78b7:16), a` -- EFFECT1/EFFECT2 OUTPUT SELECT (11/01-02, record 0x79 +5)",
+   "prom_a/wsa1_prom_a.s:114941 `ld XIX,0x00007634` / 114944 `ld XIX,0x00007642` / 114948 `0x7662` / 114952 `0x7682` -- EFFECT COMMON ALGORITHM (11/00) and effect blocks 0x61-0x63 (Msg0716_PostOp81_EffectBlock97 and siblings)",
+   "prom_a/wsa1_prom_a.s:114962 `call T_Queue2E00_AppendRegs` ... 115004 -- one {record, offset, value, mask} event per field (records 0, 0x20, 0x79, 0x60-0x63)",
+   "notes/sysex-probes/sysex_param_addresses.py --dump -- 0x76A7/A8/A9 = 20/04-06, 0x76C5/C6 = 20/30-31, 0x7634 = 11/00, 0x78B7 = 11/01-02"
+  ]
+ },
+ {
+  "old": "sub_FC1331",
+  "verdict": "name",
+  "new": "Cpu2Query_ApplyToneRecordEffects",
+  "header": "Twin of Cpu2Query_ApplyPartRecordEffects for the 0x46-byte 85/52 reply (Cpu2Query_SendToneRecordRead52, used when PartSound_GetBankAndToneFlag sets bit 5): EFFECT2 ON/OFF := 0x7F, MAIN OUT := 1, SUB OUT := 0, EFFECT1 SEND and REVERB SEND := 0x5A, then 0x78B7, 0x7634 and the three effect blocks from the reply, with the same Queue2E00 events. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:116504 `cp C,0x52` / 116510 `calr sub_FC1331` -- Cpu2Query_DrainRecordReplies, reply type 0x85, opcode 0x52",
+   "prom_a/wsa1_prom_a.s:116367 `ldw de, 0x46` / 116369 `call Cpu2Query_SendToneRecordRead52` -- 0x46 = 1 + 1 + 23 + 23 + 21 + 1, exactly the bytes copied here",
+   "prom_a/wsa1_prom_a.s:115011 `ld (0x76a8:16), 0x7f` / 115012 `ld (0x76c5:16), 0x01` / 115013 `ld (0x76c6:16), 0x00` -- fixed EFFECT2 ON, MAIN OUT 1, SUB OUT 0",
+   "prom_a/wsa1_prom_a.s:115015 `ld (0x76a7:16), a` / 115017 `ld (0x76a9:16), a` (A = 0x5A) -- fixed EFFECT1 SEND / REVERB SEND",
+   "prom_a/wsa1_prom_a.s:115019 `ld (0x78b7:16), a` -- first reply byte = the output selects; then the same 0x7634 / 0x7642 / 0x7662 / 0x7682 copies as the twin",
+   "prom_a/wsa1_prom_a.s:115042 `call T_Queue2E00_AppendRegs` -- the same ten events as sub_FC1220"
+  ]
+ },
+ {
+  "old": "sub_FC1475",
+  "verdict": "name",
+  "new": "Cpu2Query_ApplyCreatorSelectBits",
+  "header": "(B = part) For an 81/23 or 85/20 reply (two bytes, already & 0x3F): byte 0 -> part B's second record +0x1A, byte 1 -> +0x19 -- the creator-select bit masks CreatorSelectController_LoadNames reads ((0x2870) = 0 -> +0x1A, 1 -> +0x19) -- each stored and posted {0x20 + B, 0x1A / 0x19, value, 0x3F} to Queue2E00 only when it changed. Basis: caller + body + reader.",
+  "basis": "caller + body + the masks' reader",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:116498 `ld XIY,0x00000860` / 116501 `calr sub_FC1475` (and 116516) -- Cpu2Query_DrainRecordReplies masks both bytes with 0x3F first, for 81/23 and 85/20",
+   "prom_a/wsa1_prom_a.s:116680 `ld c, 0x23:opc` (sub_FC1F97, [0x81, B, 0x23, 2, 4, 0]) / 116702 `ld c, 0x20:opc` (sub_FC1FBF, 0x85) -- the two-byte requests",
+   "prom_a/wsa1_prom_a.s:115142 `add E,0x20` / 115145 `calr Msg0716_GetRecordPtrByIndex` -- event record 0x20 + part, the part's second record",
+   "prom_a/wsa1_prom_a.s:115150 `add XIX,0x0000001a` / 115151 `add XIX,0x00000020` / 115154 `ld (XIX),A` -- byte 0 -> second record +0x1A, only when different",
+   "prom_a/wsa1_prom_a.s:115155 `ld d, 0x1a:opc` / 115156 `ld w, 0x3f:opc` -- posted with mask 0x3F; 115163/115168 the same for +0x19",
+   "prom_b/wsa1_prom_b.s:107199 `CreatorSelectController_LoadNames:` -- reads (XIX+0x1a) / (XIX+0x19) & 0x3F of IndexedTable entry 0x20 + part as the creator-select bits",
+   "prom_c/tone_db/tone_db_module.s:130-131 -- CPU-2 part record +0x17/+0x18 come from tone record +0x23/+0x24 (kit record +0x20/+0x21): the offsets requested"
+  ]
+ },
+ {
+  "old": "sub_FC1CD4",
+  "verdict": "name",
+  "new": "Cpu2Query_RequestPartRecordEffects",
+  "header": "Under kernel semaphore 4: Cpu2Query_SendPartRecordRead87 with E = 0x49 and the header at 0x850 -- [0x81, B, 0x87, 0x49, 4, 0], the 73 bytes Cpu2Query_ApplyPartRecordEffects (sub_FC1220) applies when the reply is drained. Cpu2Query_RequestPartSoundRecord's arm for bit 5 clear. Basis: caller + body + reply handler.",
+  "basis": "caller + body + reply handler",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:114903 `calr sub_FC1CD4` -- Cpu2Query_RequestPartSoundRecord when PartSound_GetBankAndToneFlag leaves bit 5 clear",
+   "prom_a/wsa1_prom_a.s:116324 `ld a, 0x04:opc` / `call T_Kernel_SemaWait` -- semaphore 4 around the send",
+   "prom_a/wsa1_prom_a.s:116327 `ldw de, 0x49` / 116329 `call Cpu2Query_SendPartRecordRead87` -- [0x81, B, 0x87, E, 4, 0] (116345 `ld (XIY+0x02),0x87`)",
+   "prom_a/wsa1_prom_a.s:116495 `calr sub_FC1220` -- the 81/87 reply's consumer"
+  ]
+ },
+ {
+  "old": "sub_FC1D22",
+  "verdict": "name",
+  "new": "Cpu2Query_RequestToneRecordEffects",
+  "header": "Under kernel semaphore 4: Cpu2Query_SendToneRecordRead52 with E = 0x46 and the header at 0x850 -- [0x85, B, 0x52, 0x46, 4, 0], the 70 bytes Cpu2Query_ApplyToneRecordEffects (sub_FC1331) applies. Cpu2Query_RequestPartSoundRecord's arm for bit 5 set. Basis: caller + body + reply handler.",
+  "basis": "caller + body + reply handler",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:114906 `calr sub_FC1D22` -- Cpu2Query_RequestPartSoundRecord when bit 5 is set",
+   "prom_a/wsa1_prom_a.s:116367 `ldw de, 0x46` / 116369 `call Cpu2Query_SendToneRecordRead52` -- 116384 `ld (XIY+0x02),0x52`",
+   "prom_a/wsa1_prom_a.s:116510 `calr sub_FC1331` -- the 85/52 reply's consumer"
+  ]
+ },
+ {
+  "old": "sub_FD2512",
+  "verdict": "name",
+  "new": "ModelingPage_OnPercSource1Reply",
+  "header": "Cpu2Reply_HandleNext runs it for a tag-0x10 reply to query 0x12 (or 0x09 on screen 0x82) -- what ToneMsg80_Id12(n, 0x10) asks after SoftKeyCol2_SoundEditMenu / SoftKeyCol2_SoundEditModelingToneTemplate step the source: ModelingPage_StorePercSource1Reply(Fields[0]), Dispatch_Code80 repaints field Fields[0] + 0x0D of screen 0x82 (else + 0x0E of 0x80), then ToneMsg80_Id00(0x10). Basis: caller + body + requesters.",
+  "basis": "caller + body + requesters",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:134137 `cp H,0x12` ... 134155 `cp C,0x10` / 134158 `calr sub_FD2512` -- echoed opcode 0x12, tag (0x2335) 0x10",
+   "prom_a/wsa1_prom_a.s:134063 `cp H,0x09` / 134065 screen 0x82 / 134073 tag 0x10 -> `jrl .LFD2383` -- the same call for opcode 0x09 on the TONE TEMPLATE screen",
+   "prom_a/wsa1_prom_a.s:129852 `call ToneMsg88_Id15` / 129857 `call ToneMsg80_Id12` after `pushw 0x10` -- SoftKeyCol2_SoundEditMenu's request",
+   "prom_a/wsa1_prom_a.s:142107 `ld (XIX+0x02),0x09` / 142110 `ld (XIX+0x02),0x12` -- ToneMsg80_Id12 asks 0x09 for a tone, 0x12 for a drum kit",
+   "prom_a/wsa1_prom_a.s:134337 `call Arr27A6_Get` (field 0) / 134341 `call sub_FD9EB7` -- stores the reply for slot Fields[0]",
+   "prom_a/wsa1_prom_a.s:134347 `m_cp_mi8 MBD+r6, 0xfc, 0x82` / 134353 `pushw 0x82` / 134360 `pushw 0x80` / 134362 `call T_Dispatch_Code80` -- Code80 [0x82] SoundEditModelingToneTemplate_RepaintField, [0x80] SoundEditMenu_RepaintField (prom_b/wsa1_prom_b.s:131776-131778)",
+   "prom_a/wsa1_prom_a.s:134364 `call ToneMsg80_Id00` after `pushw 0x10`"
+  ]
+ },
+ {
+  "old": "sub_FD2569",
+  "verdict": "name",
+  "new": "ModelingPage_OnPercSource2Reply",
+  "header": "Twin for source 2: a tag-0x10 reply to query 0x13 / 0x0A on screen 0x86 or 0xC0 -- requested by ToneMsg80_Id13(.., 0x10) from SoftKeyCol2_SoundEditModelingDriverWaveform and ToneEditPage_A0_Op1 / _Op2: ModelingPage_StorePercSource2Reply(Fields[0]), Dispatch_Code80 repaints field Fields[0] + 7 of UI_ScreenId, then ToneMsg80_Id00(0x10). Basis: caller + body + requesters.",
+  "basis": "caller + body + requesters",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:134079 `cp H,0x13` (and 0x0A) / 134082 screen 0x86 / 134084 screen 0xC0 / 134088 `cp C,0x10` / 134090 `calr sub_FD2569`",
+   "prom_a/wsa1_prom_a.s:142154 `ld (XIX+0x02),0x0a` / 142157 `ld (XIX+0x02),0x13` -- ToneMsg80_Id13's two opcodes",
+   "prom_a/wsa1_prom_a.s:133219 `call ToneMsg80_Id13` (after `pushw 0x10`, SoftKeyCol2_SoundEditModelingDriverWaveform); 137585 / 137637 in ToneEditPage_A0_Op1 / _Op2",
+   "prom_a/wsa1_prom_a.s:134373 `call Arr27A6_Get` / 134377 `call ModelingPage_StorePercSource2Reply` -- slot Fields[0]",
+   "prom_a/wsa1_prom_a.s:134383 `inc 7,BC` / 134388 `call T_Dispatch_Code80` -- field Fields[0] + 7 of the current screen (Code80 [0x86] SoundEditModelingDriverWaveform_RepaintField)",
+   "prom_a/wsa1_prom_a.s:134390 `call ToneMsg80_Id00` after `pushw 0x10`"
+  ]
+ },
+ {
+  "old": "sub_FD25AC",
+  "verdict": "name",
+  "new": "SoundEditCopy_OnDrumSoundNameReply",
+  "header": "Cpu2Reply_HandleNext runs it for the tag-0x9D reply to query 0x15 (CPU 2: ToneQuery_ReplyDrumSourceNameAndIndex for key Fields[5]; asked by ToneMsg80_Id15_Part0 when a tone-name reply arrives): the 13-character name -> SoundEditText slot 1, SOUND EDIT COPY (screen 0x9D) field 5 -- DRUM SOUND number plus the slot-1 text -- repainted, then ToneMsg80_Id00(8). Basis: caller + body + painter.",
+  "basis": "caller + body + repaint list",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:134161 `cp H,0x15` / 134164 `cp C,0x9d` / 134166 `calr sub_FD25AC` -- opcode 0x15, tag 0x9D",
+   "prom_a/wsa1_prom_a.s:133941 `call ToneMsg80_Id15_Part0` with Arr27A6_Get(5) and `pushw 0x9d` -- the request, sent on an opcode-0x04 (tone name) reply",
+   "prom_a/wsa1_prom_a.s:134398 `call Rec2330_CopyData25` / 134403 `call SoundEditText_SetSlot` (slot 1, 0x0D bytes)",
+   "prom_a/wsa1_prom_a.s:134404 `pushw 0x05` / 134405 `pushw 0x9d` / 134406 `call T_Dispatch_Code80` -- Code80 [0x9D] = SoundEditCopy_RepaintField (prom_b/wsa1_prom_b.s:131805)",
+   "prom_b/wsa1_prom_b.s:18115 `cp a, 5:i3` / 18130 `ld xiy, SoundEditCopy_DrumValues_End` -- field 5 runs SoundEditCopy_Field5Values (prom_a/wsa1_prom_a.s:118791: variable 0x27AB and the text at 0x22F0)",
+   "prom_a/wsa1_prom_a.s:118705 `.ascii \"DRUM SOUND:\"` -- the drum-kit label of that field",
+   "prom_c/tone_db/tone_db_module.s:18611 ToneQuery_Dispatch_JumpTable entry 21 -> ToneQuery_Dispatch__FC1E72, which calls ToneQuery_ReplyDrumSourceNameAndIndex for request[3]",
+   "prom_a/wsa1_prom_a.s:134408 `call ToneMsg80_Id00` after `pushw 0x08`"
+  ]
+ },
+ {
+  "old": "sub_FD25E0",
+  "verdict": "name",
+  "new": "SoundEdit_OnStagingFlagsReply",
+  "header": "(tag) Cpu2Reply_HandleNext runs it for every reply to query 0 (ToneQuery_ReplyPartStagingFlags: part record +4 & 3, bit 0 = staged) with the request's tag: Var2807 := the flags; when bit 0 turns on (or off with bit 1 set) it sets (0x216E) to 0 (1) and bit 0x400 of *(0x213A) (sub_FDA829 / sub_FDA808); tags 0x10 / 0x08 clear Var2805, tag 7 re-runs Cpu2Query_RefreshPartSoundRecord(0), tag 9 after a change re-runs it and re-posts the screen. Basis: caller + body + CPU-2 responder.",
+  "basis": "caller + body + CPU-2 responder",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:133984 `ld c, (0x2332:16)` / `cp c, 0x00` / 133987 `ld c, (0x2335:16)` / 133990 `calr sub_FD25E0` -- echoed opcode 0, argument = the tag",
+   "prom_c/tone_db/tone_db_module.s:10529 `ToneQuery_ReplyPartStagingFlags` (ToneQuery entry 0) -- replies one byte, part record +0x04 & 3; bit 0 = staged by ToneStage_EnsurePartLoaded",
+   "prom_a/wsa1_prom_a.s:134425 `m_cp_mi8 MBD+r6, 0xfe, 0x9d` / 134430 `call T_Cpu2Query_RefreshPartSoundRecord` -- tag 0x10 on SOUND EDIT COPY",
+   "prom_a/wsa1_prom_a.s:134435 `cp L,0x08` / 134439 `call Var2805_Set` (0) -- tags 0x10 and 0x08",
+   "prom_a/wsa1_prom_a.s:134456 `call Var2807_Set` -- the new flags byte; 134458 `cp l, 0x07` / 134461 RefreshPartSoundRecord(0)",
+   "prom_a/wsa1_prom_a.s:134478 `call sub_FDA829` / 134481 `call sub_FDA808` (0x400, 1) -- only when bit 0 differs from the stored one",
+   "prom_a/wsa1_prom_a.s:134491 `cp L,0x09` / 134494 RefreshPartSoundRecord(0) / 134515 `call PanelScreen_PostRequest` (UI_ScreenId, 1)",
+   "callers' tags: ToneMsg80_Id00(0x10) ends most SOUND EDIT stages; 0x08 from ScreenEnter_SoundEditCopy and SoundEditCopy_OnDrumSoundNameReply; 0x07 from sub_FDACBD; 0x09 at 0xFD79B7 ({A}:145174, after ToneMsg88_Id00 / DspEffect_SendAllToCpu2)"
+  ]
+ },
+ {
+  "old": "sub_FD26D3",
+  "verdict": "name",
+  "new": "ToneEditPage_A0_OnResonatorTypeReply",
+  "header": "On screen 0xC0, for the tag-0x11 read-back ToneEditField_A0_ResonatorType requests (parameter 0x0B, 2 bytes): Arr2808[Fields[0]] := byte 0 & 0x3F (the resonator type, kept there per that editor's header), Fields[Fields[0] + 1] := byte 0 (its low 6 bits from byte 1 when they are 0); repaints that field, runs ToneEditPage_A0_DeriveGroupBrackets and repaints field 6. Basis: caller + body + requester.",
+  "basis": "caller + body + requester",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:134259 `cp H,0x11` (H = tag 0x2335, non-0x80 reply path) / 134261 screen 0xC0 / 134263 `calr sub_FD26D3`",
+   "prom_a/wsa1_prom_a.s:137722 `pushw 0x11` ... 137726 `call ToneMsg80_SendParam` (param 0x0B, count 2) and 137744 `call ToneMsg85_SendParam` -- ToneEditField_A0_ResonatorType re-requests its field with tag 0x11",
+   "prom_a/wsa1_prom_a.s:137655-137657 (ToneEditField_A0_ResonatorType header) -- parameter 0x0B bits 0-5, value kept in ((u8 *)0x2808)[layer]",
+   "prom_a/wsa1_prom_a.s:134531 `call Arr27A6_Get` (field 0) / 134533 `call Rec2330_CopyData` / 134536 `and H,0x3f` / 134543 `call Arr2808_Set1`",
+   "prom_a/wsa1_prom_a.s:134562 `call Arr27A6_Set` (Fields[n + 1]) / 134568 `call T_Dispatch_Code80` (0xC0, n + 1)",
+   "prom_a/wsa1_prom_a.s:134569 `call ToneEditPage_A0_DeriveGroupBrackets` / 134572 `call T_Dispatch_Code80` (0xC0, 6) -- the GROUP bracket field, as that routine's header says"
+  ]
+ },
+ {
+  "old": "sub_FD9EB7",
+  "verdict": "name",
+  "new": "ModelingPage_StorePercSource1Reply",
+  "header": "(n) Stores CPU 2's reply to ToneMsg80_Id12 (query 0x12, ToneQuery_ReplyPercSourceName1AndIndex; 0x09 for a tone): row byte +0x0D -> Fields[n + 0x0D] on screen 0x82, else Fields[n + 0x0E]; the 13-character name -> SoundEditText slot n (0x82) or n + 1; index (+0x0F:+0x0E) -> word n-1 at 0x27EA. Twin of ModelingPage_StorePercSource2Reply. Basis: callers + body + CPU-2 responder.",
+  "basis": "callers + body + twin + CPU-2 responder",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:152195 `call sub_FD9EB7` (n = 1) / 152206 (n = 2) -- SoundEditMenu_ReadBackDrum, each on the stage after ToneMsg80_Id12 (prom_a/wsa1_prom_a.s:152187); its header calls this the perc-source reply",
+   "prom_a/wsa1_prom_a.s:154543 `call ToneMsg80_Id12` / 154556 `call sub_FD9EB7` -- sub_FDC6CB: request, then store on the next stage; also ModelingPage_OnPercSource1Reply (prom_a/wsa1_prom_a.s:134341)",
+   "prom_a/wsa1_prom_a.s:149461 `calr Rec2330_CopyData25` / 149465 `ld C,(XIX+0x0d)` -- the row byte",
+   "prom_a/wsa1_prom_a.s:149471 `m_cp_mi8 MBD+r6, 0xfe, 0x82` / 149476 `calr Arr27A6_Set` (n + 0x0D) / 149486 (n + 0x0E)",
+   "prom_a/wsa1_prom_a.s:149494 `calr SoundEditText_SetSlot` -- slot n (screen 0x82) or n + 1, 13 bytes",
+   "prom_a/wsa1_prom_a.s:149503 / 149512 `ld (XDE+0x27ea),BC` -- the index word (+0x0F << 8 | +0x0E) at 0x27EA + 2n - 2, as in the twin",
+   "prom_c/tone_db/tone_db_module.s:18611 ToneQuery_Dispatch_JumpTable entry 18 -> ToneQuery_Dispatch__FC1E0E -> ToneQuery_ReplyPercSourceName1AndIndex",
+   "prom_a/wsa1_prom_a.s:149243 ModelingPage_GetItemIndex / prom_a/wsa1_prom_a.s:149672 ModelingPage_GetItemGroup -- the readers of 0x27EA and Fields[n + 0x0E / n + 0x0D]"
+  ]
+ },
+ {
+  "old": "sub_FD92B7",
+  "verdict": "name",
+  "new": "SoundEditEnvelope_DrawSegmentLine",
+  "header": "(x0, y0, x1, y1): on FILTER ENVELOPE 1 (UI_ScreenId 0x97) moves both y up by Fields[1] x 43/50 (signed) and clips the segment to the graph's y band 0x3B..0x92 (interpolating x with Math_MulDivU16, skipping it when wholly outside); on other screens draws it as given; then T_Gfx_DrawLine_Solid. SoundEditEnvelope_DrawGraphSegment's drawing step. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:147523 `calr sub_FD92B7` -- SoundEditEnvelope_DrawGraphSegment, after cutting the segment at x = 0xD5 / 0x102",
+   "prom_a/wsa1_prom_a.s:148099 `calr Arr27A6_Get` (field 1) / 148105 `m_cp_mi8 MBD+r6, 0xfc, 0x97` -- only FILTER ENVELOPE 1",
+   "prom_a/wsa1_prom_a.s:148109 `muls BC,0x002b` / 148111 `divs BC,0x0032` / 148113 `sub HL,BC` / 148114 `sub DE,BC` -- the offset SoundEditEnvelope1_ScaleLevel's header points to",
+   "prom_a/wsa1_prom_a.s:148117 `cp HL,0x003b` / 148122 `cp HL,0x0092` -- the y band",
+   "prom_a/wsa1_prom_a.s:148169 `calr Math_MulDivU16` -- x at the crossing",
+   "prom_a/wsa1_prom_a.s:148229 `call T_Gfx_DrawLine_Solid` -- (x0, y0, x1, y1)"
+  ]
+ },
+ {
+  "old": "sub_FDA43D",
+  "verdict": "name",
+  "new": "Playback_SetMidiStartBlocked",
+  "header": "(flag) (0x34BB) bit 2 := (flag == 1) -- the bit that makes the MIDI real-time handler ignore an external Start / Continue (0xFA / 0xFB), as Playback_StopAllBlockingMidiStart sets it. ModeEnter_SoundEdit sets it (1); sub_FDACBD, the SOUND EDIT exit path, clears it (0). Basis: caller + body + the bit's reader.",
+  "basis": "caller + body + the bit's reader",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:151690 `call sub_FDA43D` after `pushw 0x01` -- ModeEnter_SoundEdit",
+   "prom_a/wsa1_prom_a.s:151714 `call sub_FDA43D` after `pushw 0x00` -- sub_FDACBD",
+   "prom_a/wsa1_prom_a.s:150312 `lda xix, (0x34bb:24)` / 150313 `cp (XIZ+0x08),0x01` / 150315 `m_or_mi8 MBI+r4, 0, 0x04` / 150318 `and (XIX),0xfb`",
+   "prom_a/wsa1_prom_a.s:68883 `m_bit 2, MD16, 0x34bb` / 68885 `cp D,0xfa` / 68887 `cp D,0xfb` -- set bit 2 skips MIDI_RT_Start / MIDI_RT_Continue",
+   "prom_a/wsa1_prom_a.s:164687 `m_set 2, MD16, 0x34bb` -- Playback_StopAllBlockingMidiStart, same bit"
+  ]
+ },
+ {
+  "old": "sub_FDA459",
+  "verdict": "refuse",
+  "why_refused": "(0x28AF) |= arg: ModeEnter_SoundEdit passes 1, and the only reader, ScreenEnterBody_DrawbarScreen, just clears bit 0 without acting on it -- what the flag means is not established (a cell-accessor name like Var28AF_OrByte would be the most the evidence supports).",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:151692 `call sub_FDA459` after `pushw 0x01` -- ModeEnter_SoundEdit",
+   "prom_a/wsa1_prom_a.s:150325 `ld C,(XIZ+0x08)` / 150326 `or (0x28af:16), c` -- the whole body",
+   "prom_b/wsa1_prom_b.s:114515 `ld c, (10415:16)` / 114518 `m_res 0, MD16, 0x28af` -- the only other access: test and clear, no action"
+  ]
+ },
+ {
+  "old": "sub_FE019E",
+  "verdict": "name",
+  "new": "SeqEvt_ResetPlayingSlotControllers_SaveRegs",
+  "header": "Saves XDE / XHL / XIX / XIZ around T_F41F18 (SeqEvt_ResetPlayingSlotControllers) -- the third step of Playback_SilenceAll, whose header already calls it that routine's veneer; same shape as its neighbours TimedEventRing_Discard_SaveRegs_C and PartNotes_ReleaseAllTrackNotes_SaveRegs. Basis: caller + body.",
+  "basis": "caller + body + the tree's _SaveRegs form",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:167519 `calr sub_FE019E` -- Playback_SilenceAll, between PartNotes_ReleaseAllTrackNotes_SaveRegs and Notes_ReleaseAllSources_Call",
+   "prom_a/wsa1_prom_a.s:162185 `call T_F41F18` -- framed by push/pop of XDE, XHL, XIX, XIZ",
+   "prom_b/wsa1_prom_b.s:91589 `T_F41F18: jp SeqEvt_ResetPlayingSlotControllers`"
+  ]
+ },
+ {
+  "old": "sub_FE1522",
+  "verdict": "name",
+  "new": "DiskLoadFile_SendSongSelect",
+  "header": "sub_FE14E9(Disk_SelectedEntry): sends MIDI Song Select (F3, entry with bit 7 cleared, from MidiOut_SongSelectTemplate) through Ring601432_PutBlock / MIDI_PostSendWork when MidiFilter_SongSelect bit 3 allows. DiskLoadFile_SendSongSelectAndLoad calls it before the load unless UI_ScreenLatch is 0x49 / 0x4E. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:162722 `calr sub_FE1522` -- DiskLoadFile_SendSongSelectAndLoad",
+   "prom_a/wsa1_prom_a.s:164471 `m_push MB16, Disk_SelectedEntry` / 164472 `calr sub_FE14E9`",
+   "prom_a/wsa1_prom_a.s:164449 `ld bc, (MidiOut_SongSelectTemplate:24)` / 164455 `res 0x07,A` -- F3 + song number",
+   "prom_a/wsa1_prom_a.s:164451 `ld a, (MidiFilter_SongSelect:16)` / 164452 `and A,0x08` -- the SONG SELECT output filter",
+   "prom_a/wsa1_prom_a.s:164462 `call T_Ring601432_PutBlock` -- two bytes queued for MIDI out"
+  ]
+ },
+ {
+  "old": "sub_FE2642",
+  "verdict": "name",
+  "new": "MidiFileSave_ReturnToPage0",
+  "header": "UI_ScreenPage := 0 and UI_Request_Hi bit 4 (repaint). MidiFileSave_DeleteFile calls it after DiskApi_DeleteFile and its status message when (0x21E8) bit 7 is set (the bit that also makes StatusMsg_ShowByIndex skip its message screen); otherwise it only waits Delay_500Ticks. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:166584 `ld c, (0x21e8:16)` / 166585 `and C,0x80` / 166588 `calr sub_FE2642` -- MidiFileSave_DeleteFile",
+   "prom_a/wsa1_prom_a.s:166591 `calr Delay_500Ticks` -- the other arm",
+   "prom_a/wsa1_prom_a.s:166599 `ld (UI_ScreenPage:16), 0x00` / 166600 `m_set 4, MD16, UI_Request_Hi`",
+   "include/wsa1_ram.inc:518 UI_ScreenPage -- MidiFileSave pages 0..3"
+  ]
+ },
+ {
+  "old": "sub_FE264C",
+  "verdict": "name",
+  "new": "DiskFileDelete_ReportDriveError",
+  "header": "The drive-error exit of both FILE DELETE routines (MidiFileSave_DeleteFile, DiskSaveFile_DeleteEntryFiles) when Disk_RequestSenseDriveStatus returns non-zero: (0x1736) := 0x0C, StatusMsg_ShowByIndex(0x0C), DiskError_SoundAlertAndWait, Delay_Ticks(1500), repaint (UI_Request_Hi bit 4). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:166594 `calr sub_FE264C` -- MidiFileSave_DeleteFile, drive status non-zero",
+   "prom_a/wsa1_prom_a.s:166633 `calr sub_FE264C` -- DiskSaveFile_DeleteEntryFiles, same test",
+   "prom_a/wsa1_prom_a.s:166603 `ld (0x1736:24), 0x0c` / 166604 `pushw 0x0c` + StatusMsg_ShowByIndex",
+   "prom_a/wsa1_prom_a.s:166606 `calr DiskError_SoundAlertAndWait` / 166607 `pushw 0x05dc` + Delay_Ticks / 166609 `m_set 4, MD16, UI_Request_Hi`",
+   "prom_a/wsa1_prom_a.s:162777 `ld (XIX),0x0c` -- DiskSaveFile_CheckDriveThenPassword shows the same index for drive status 0x2F (notes/FINDINGS-prom_a-fdc.md:206: write protected), 8 for others; here every non-zero status gets 0x0C"
+  ]
+ }
+]

@@ -71,3 +71,13 @@ and 904 local labels after their enclosing routine (rename_orphan_locals.py). Le
 - `TrackAssign_IsLocalControlDashed` always returns 0xAA, so its "-- " cell is never drawn.
 - (0x215E) receives a 16-bit track mask at 0xF66054 and 0xF6AEDC.
 - `ScreenButton_SoundEditFilterLfo_AfterOp` is a return point inside another routine (its siblings are `.L` labels).
+
+**Wave 10** (`proposals_wave10_{a10,b10}.json`): the 46 routines whose callers wave 9 had just named; 45 named,
+1 refused. Batch a10 corrected wave 9: 88 00 17 has request[0] bit 3 set, which selects CPU 2's WRITE table
+(ToneEdit_Dispatch), and its opcode 0x17 calls SoundRam_ClearFourBanks. So `Msg0716_PostOp17AndRestageAllParts`
+became `Msg0716_PostClearSoundRamAndRestageAllParts` (with its `_SaveRegs` wrapper and thunk slot); the wave-9
+header stays, with a CORRECTION line under it. Derivative passes: 4 thunk slots, 5 display lists, 80 locals.
+Leads: the 64 slots at 0x305A are held notes, with notes held 127 beats split in two; the pitch-bend repair after
+an event-ring overflow writes the track number over the centre value 0x40 and reads its target track from a stale
+byte (a likely firmware bug, recorded, not changed); the MIXER page-frame painter at 0xFBE135 (after `ret; ret`)
+needs its own label; `SmfOut_WriteFirstWindow` at 0xF77F9A sits on an unreachable copy.
