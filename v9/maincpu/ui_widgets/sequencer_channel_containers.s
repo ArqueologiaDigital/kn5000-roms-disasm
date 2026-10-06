@@ -411,29 +411,76 @@ Naka_DrawbarReg_Table:
 ; [nakarest] 0x3f2d4..0x3f6c2 (its ld xde/xhl/xbc + ldir blocks); no literal RAM reference into
 ; [nakarest] that copy was found.
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1600, 0x3EE
-; [nakarest] naka_sequencer_channels+0x19ee  +0x19ee..+0x1a78 (0xeefa66, 138 B)
-; [nakarest] purpose not established: layout of 138 B at 0xeefa66 not derived; readers below
-; [nakarest] Readers: source references Boot_InitWorkRAM_ROMCopy2_Start (boot/system_handlers.s:
-; [nakarest] `ld xhl, Boot_InitWorkRAM_ROMCopy2_Start_Data`); 1 data word in
-; [nakarest] Boot_InitWorkRAM_ROMCopy2_Start (at 0xef0bd8), which is read by
-; [nakarest] Boot_InitWorkRAM_ROMCopy1_Start (boot/system_handlers.s: `jr z,
-; [nakarest] Boot_InitWorkRAM_ROMCopy2_Start`); work-RAM image: Boot_InitWorkRAM copies these
-; [nakarest] bytes to RAM 0x0e35e..0x0e3e8 (its ld xde/xhl/xbc + ldir blocks), where they are
-; [nakarest] read by AccBankData_FinalizeCheck (sequencer/accompaniment_engine.s: `lda xde,
-; [nakarest] (0xe3ba:16)`), AccDraw_Secondary_Return2 (sequencer/accompaniment_engine.s: `ld
-; [nakarest] (0xe3dc:16), 181`), AccPlayback_CheckStateFlags (sequencer/accompaniment_engine.s:
-; [nakarest] `or (0xe3e0:16), 16`), AccPlayback_ProcessTempoAdvance
-; [nakarest] (sequencer/accompaniment_engine.s: `ld (0xe3e0:16), 16`), 83 more.
-Boot_InitWorkRAM_ROMCopy2_Start_Data:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x19EE, 0x8A
-; [nakarest] Palette_8bit_RGBA_2_Data  +0x1a78..+0x1f00 (0xeefaf0, 1160 B)
-; [nakarest] purpose not established: layout of 1160 B at 0xeefaf0 not derived; readers below
-; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
-; [nakarest] 0x0e3e8..0x0e870 (its ld xde/xhl/xbc + ldir blocks), where they are read by
-; [nakarest] AllocNewVoiceEntry_LoadParam3 (audio/note_voice_mapping.s: `lda xde, (0xe82e:16)`),
-; [nakarest] PsMixer_CtlTypeProc2_OnLswData (ui/drawbar_panel_ui.s: `cp xwa, 0xe808`),
-; [nakarest] EffEdit_DSPConfigBlock_Skip3 (sequencer/sequencer_engine.s: `retd 0xe800`),
-; [nakarest] SeScreenData_0x4E8B (storage/flash_floppy_handlers.s: `ldw (9:8),
-; [nakarest] 0xe400:io`), 19 more.
-Palette_8bit_RGBA_2_Data:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A78, 0x488
+; WorkRamInit_Image2 -- 1 x struct: start of the second work-RAM image (Boot_InitWorkRAM copies 0x95B bytes from
+; here to RAM 0xE35E).  Its first cells are the inter-CPU E1 DMA watchdog: the poll counts ticks while
+; control register 0x40 stays unchanged and, after 10, aborts the transfer and counts it (+0); the wait
+; with a 250-tick timeout counts its aborts at +6.  +8..+11 are not referenced.
+WorkRamInit_Image2:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x19EE, 0xC
+; DrawBitmap_BitMasks -- 8 x uint8_t: 0x80, 0x40 ... 0x01; DrawBitmap_BitLoop indexes it with the bit
+; number (QHL) to pick one pixel of a 1-bpp image byte.
+DrawBitmap_BitMasks:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x19FA, 0x8
+; BmDrEdit_TempoAnimTick -- 1 x struct (1 x uint8_t (+ pad)): BmDrEdit_TempoAnimTimer counts it up to 0x1E, then resets
+; it and runs the tempo/delay checks.
+BmDrEdit_TempoAnimTick:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A02, 0x2
+; SeqBuf_EventTemplateD1 -- 4 x uint8_t: D1 7F 00 nn, a sequencer-buffer event; the note-off path patches
+; +3 with the part number - 1 and passes it with BC = 4 to SeqBuf_WriteMidiEvent.
+SeqBuf_EventTemplateD1:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A04, 0x4
+; SeqBuf_EventTemplateD2 -- 1 x struct (5 x uint8_t (+ pad)): D2 7F 00 40 nn; patched at +4 with the part number - 1 and
+; written with BC = 5 by SeqBuf_WriteMidiEvent right after SeqBuf_EventTemplateD1.
+SeqBuf_EventTemplateD2:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A08, 0x6
+; SeqBuf_EventTemplateB0 -- 1 x struct (7 x uint8_t (+ pad)): B0 7F kk 04 00 08 nn; +2 from PartDetect_LookupAndApply_Table
+; [part], +6 = part number - 1, written with BC = 7 (skipped for parts 0x0C, 0x0D, 0x0F, 0x10).
+SeqBuf_EventTemplateB0:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A0E, 0x8
+; SeqPlay_StartInitActive -- 1 x struct (1 x uint8_t (+ pad)): set by SeqInitStart_SetActiveFlag; SeqPlay_ResetStartState
+; clears it and, when it was 1, also clears bit 2 of the transport byte 0x28A7.
+SeqPlay_StartInitActive:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A16, 0x2
+; SeqAcc_ReInitGuard -- 1 x struct (1 x uint8_t (+ pad)): 1 around SeqAcc_InitPlaybackState; while it is 1
+; Seq_SyncPositionAndOutputMIDITiming clears it and returns without output.
+SeqAcc_ReInitGuard:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A18, 0x2
+; SeqBuffer_MoveEntryMarker -- 1 x struct (1 x uint8_t (+ pad)): SeqBuffer_MoveEntryToHead stores 0xFF here when called
+; with A = 0xFF.  No read of it was found.
+SeqBuffer_MoveEntryMarker:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A1A, 0x2
+; EffEdit_ParamWrittenFlag -- 1 x struct (1 x uint8_t (+ pad)): the effect editor sets it when a parameter change
+; (0x0A / 0x0E / 0xD6) goes to the DSP and clears it after a DSP config block.  No read was found.
+EffEdit_ParamWrittenFlag:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A1C, 0x2
+; PlySngSel_TimerPending -- 1 x struct (1 x uint8_t (+ pad)): 1 after the song-select screen starts its AP timer
+; (SetApTimer); the timer event and IvPlayExit clear it, and IvPlayExit posts EVT_CHANGE_MODE only when 0.
+PlySngSel_TimerPending:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A1E, 0x2
+; PartCtrl_EventQueue -- 10 x struct {uint16 code; uint8 c; uint8 e}: PartCtrl_AppendToEventQueue stores
+; WA, C and E at entry [PartCtrl_EventQueueCount] (`sll ix, 2`) while the count is < 10.  The scan
+; passes codes 0x10 / 0x40; no reader of the entries was found.
+PartCtrl_EventQueue:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A20, 0x28
+; PartCtrl_EventQueueCount -- 1 x uint16_t: number of PartCtrl_EventQueue entries; the append refuses
+; a new one at 10.
+PartCtrl_EventQueueCount:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A48, 0x2
+; AccBankData_Kn3000Signature -- 16 x char "KN3000 SOUND RAM" (no NUL): AccBankData compares 16 bytes of the
+; loaded bank at +0x16C00 with it before copying 0x72A6 bytes to the battery SRAM at 0x1E0000.
+AccBankData_Kn3000Signature:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A4A, 0x10
+; StylCnv_TechnicsTag -- 8 x char "TECHNICS" (no NUL): StylCnvModl_OK_Select compares 8 bytes of each
+; directory entry (+1) with it and records a match in 0x48AC.
+StylCnv_TechnicsTag:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A5A, 0x8
+; StylCnv_DefaultVersionName -- 8 x char " V1.0   ": StylCnvModl_CopyDefaultName Strcpy-s it as a default
+; entry name; it has no NUL of its own, the zero low byte of FDC_InitSequenceCount ends it.
+StylCnv_DefaultVersionName:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A62, 0x8
+; FDC_InitSequenceCount -- 1 x uint16_t: incremented at the end of the FDC initialisation command sequence
+; (specify / recalibrate / seek commands with SOME_DELAY) in storage/fdc_routines.s.
+FDC_InitSequenceCount:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A6A, 0x2
+; Dirmd_PostRequests -- 1 x struct: after each event DirmdEmulator acts on Requests (bit 1 part change, bit 7
+; mode change, bit 6 SoundCtrl command, all with Arg; bit 4 refresh), RedrawMode bit 4 (timer reset) and
+; DisplayRequests bit 3 (UI_PostEvent_0x6E), then clears them; DisplayParamA/B (0xFF = none) carry the
+; values Tempo_DisplayParamCommon sets with bits 0 and 3.  RedrawMode is 16 during EVT_PARA_DRAW.
+Dirmd_PostRequests:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A6C, 0xC
+; Vga_InitPalette -- 256 x struct {red, green, blue, unused}: the palette the VGA init loop writes to the DAC
+; (port 0x3C9) for colours 0..255, each 8-bit component reduced to the DAC's range (>> 4, rounded up when
+; bit 3 is set); entries 0..9 and 246..255 resemble the Windows system palette (black, 0x80 primaries ... white).
+Vga_InitPalette:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A78, 0x400
+; NoteMap_LinkArray32 -- 35 x struct {prev, next}: a circular doubly linked list of 32 slots with head node 32
+; (+65 = head.next, the first slot) plus two empty list heads 33, 34; NoteMap_SwapVoiceLinks /
+; NoteMap_LinkVoiceSlots / LinkVoiceSlots_Block address node n at base + 2n.
+NoteMap_LinkArray32:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1E78, 0x46
+; NoteMap_LinkArray128 -- 33 x struct {prev, next}: nodes 0..32 of a 129-node circular list (128 slots,
+; head node 128 whose next byte NoteMap_AllocNewVoiceEntry reads at RAM 0xE92F); the remaining nodes lie
+; past the end of this blob, in the rest of work-RAM image 2.
+NoteMap_LinkArray128:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1EBE, 0x42
 
 ; External label offsets within the binary blob above.

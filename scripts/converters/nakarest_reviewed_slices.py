@@ -239,6 +239,8 @@ def resolve_pointers(cb, syms, externs, numeric, prefer=None):
             d = designator(cb, v - base)
             if d:
                 return "SELF(%s)" % d
+            mb = cb.members[cb.index_at(v - base)]           # inside a member, off its element grid
+            return "(SELF(%s) + %d)" % (mb.name, v - base - mb.offset)
         elif v in (prefer or {}) or v in syms:
             n = (prefer or {}).get(v) or syms[v]
             externs[n] = v
@@ -398,6 +400,15 @@ def main():
                 if not ps_c:
                     raise KeepC()
                 cb = M.CBlob(c + ".probe")
+                # a member the reading lists as a false pointer that straddles the slice boundary: retype it alone
+                # as plain bytes first, so the slice can be cut there (its bytes are fill or data, not an address)
+                fp_names = {d.get("member") for d in r.get("false_pointer_detail", []) if isinstance(d, dict)}
+                if r.get("false_pointers") and fp_names:
+                    for x in list(cb.members):
+                        if x.name in fp_names and (x.offset < off < x.offset + x.size or
+                                                   x.offset < off + size < x.offset + x.size):
+                            cb.retype(x.offset, x.offset + x.size,
+                                      [M.bytes_member(x.name, raw[x.offset:x.offset + x.size])], raw, false_pointers=[x.name])
                 inside = {x.name for x in cb.members if off <= x.offset < off + size}
                 if any(p["new_label"] in cb.by_name and p["new_label"] not in inside for p in ps):
                     raise SystemExit("C member name taken")

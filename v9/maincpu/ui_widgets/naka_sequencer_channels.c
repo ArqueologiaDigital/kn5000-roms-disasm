@@ -291,6 +291,107 @@ extern const char NakaWidget_NamingCursorBox;
 /* Root_NamingUpperCaseToggleView's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* Root_NamingLowerCaseToggleView's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* Root_NamingSymbolToggleView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* WorkRamInit_Image2's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* BmDrEdit_TempoAnimTick's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SeqBuf_EventTemplateD2's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SeqBuf_EventTemplateB0's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SeqPlay_StartInitActive's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SeqAcc_ReInitGuard's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SeqBuffer_MoveEntryMarker's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* EffEdit_ParamWrittenFlag's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* PlySngSel_TimerPending's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* PartCtrl_EventQueue's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Dirmd_PostRequests's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Vga_InitPalette's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NoteMap_LinkArray32's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NoteMap_LinkArray128's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint8_t Prev;
+    uint8_t Next;
+} NoteMap_LinkArray128_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Prev;
+    uint8_t Next;
+} NoteMap_LinkArray32_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Red;
+    uint8_t Green;
+    uint8_t Blue;
+    uint8_t Unused;
+} Vga_InitPalette_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Arg;
+    uint8_t ArgPad;
+    uint8_t Requests;
+    uint8_t RequestsPad;
+    uint8_t RedrawMode;
+    uint8_t RedrawModePad;
+    uint8_t DisplayRequests;
+    uint8_t DisplayRequestsPad;
+    uint16_t DisplayParamA;
+    uint8_t DisplayParamB;
+    uint8_t DisplayParamBPad;
+} Dirmd_PostRequests_t;
+
+typedef struct __attribute__((packed)) {
+    uint16_t Code;
+    uint8_t ArgC;
+    uint8_t ArgE;
+} PartCtrl_EventQueue_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Value;
+    uint8_t Pad;
+} PlySngSel_TimerPending_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Value;
+    uint8_t Pad;
+} EffEdit_ParamWrittenFlag_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Value;
+    uint8_t Pad;
+} SeqBuffer_MoveEntryMarker_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Value;
+    uint8_t Pad;
+} SeqAcc_ReInitGuard_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Value;
+    uint8_t Pad;
+} SeqPlay_StartInitActive_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Bytes[7];
+    uint8_t Pad;
+} SeqBuf_EventTemplateB0_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Bytes[5];
+    uint8_t Pad;
+} SeqBuf_EventTemplateD2_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t Value;
+    uint8_t Pad;
+} BmDrEdit_TempoAnimTick_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t InterCpuDmaStallAborts;
+    uint8_t InterCpuDmaStallAbortsPad;
+    uint16_t InterCpuDmaStallPolls;
+    uint16_t InterCpuDmaLastCr40;
+    uint8_t InterCpuDmaTimeoutAborts;
+    uint8_t InterCpuDmaTimeoutAbortsPad;
+    uint8_t Unreferenced[4];
+} WorkRamInit_Image2_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t class_;
     uint16_t super;
@@ -2585,559 +2686,63 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19e8;
     uint16_t EXT_Window;
     uint16_t field_19ec;
-    char str_18[2];
-    uint8_t pad_301[5];  /* zero padding */
-    uint16_t field_19f5;
-    uint8_t pad_302[3];  /* zero padding */
-    uint16_t field_19fa;
-    uint16_t field_19fc;
-    uint16_t field_19fe;
-    uint16_t field_1a00;
-    char str_19[2];
-    uint16_t field_1a04;
-    uint8_t pad_303[2];  /* zero padding */
-    uint16_t field_1a08;
-    uint16_t field_1a0a;
-    char str_20[2];
-    uint16_t field_1a0e;
-    uint16_t field_1a10;
-    uint16_t field_1a12;
-    char str_21[2];
-    char str_22[2];
-    char str_23[2];
-    char str_24[2];
-    char str_25[2];
-    char str_26[2];
-    uint8_t pad_304[42];  /* zero padding */
-    char Kn3000SoundRamtechnicsV1_str[33];
-    uint8_t pad_305[2];  /* zero padding */
-    uint32_t ptr_1a6d;
-    uint16_t field_1a71;
-    uint16_t field_1a73;
-    uint32_t NakaData_RomEnd_ptr_4;
-    uint8_t pad_306[3];  /* zero padding */
-    uint16_t field_1a7c;
-    uint8_t pad_307[3];  /* zero padding */
-    uint16_t field_1a81;
-    uint16_t field_1a83;
-    uint16_t field_1a85;
-    uint8_t pad_308[3];  /* zero padding */
-    uint16_t field_1a8a;
-    uint16_t field_1a8c;
-    uint16_t field_1a8e;
-    uint16_t field_1a90;
-    uint16_t field_1a92;
-    uint16_t field_1a94;
-    uint16_t field_1a96;
-    uint16_t field_1a98;
-    uint16_t field_1a9a;
-    uint32_t ptr_1a9c;
-    uint16_t field_1aa0;
-    uint8_t pad_309[2];  /* zero padding */
-    uint16_t field_1aa4;
-    uint8_t pad_310[2];  /* zero padding */
-    uint16_t field_1aa8;
-    uint8_t pad_311[2];  /* zero padding */
-    uint16_t field_1aac;
-    uint16_t field_1aae;
-    uint16_t field_1ab0;
-    uint16_t field_1ab2;
-    uint16_t field_1ab4;
-    uint16_t field_1ab6;
-    uint16_t field_1ab8;
-    uint16_t field_1aba;
-    uint32_t ptr_1abc;
-    uint16_t field_1ac0;
-    char str_28[2];
-    uint16_t field_1ac4;
-    uint16_t field_1ac6;
-    char Rs_str[4];
-    uint16_t field_1acc;
-    char str_30[2];
-    char Ps_str[4];
-    uint16_t field_1ad4;
-    uint16_t field_1ad6;
-    char Hj_str[4];
-    uint16_t field_1adc;
-    uint16_t field_1ade;
-    uint16_t field_1ae0;
-    char str_33[2];
-    uint16_t field_1ae4;
-    uint16_t field_1ae6;
-    uint16_t field_1ae8;
-    char w13_code[2];
-    char Pe_name[4];
-    uint16_t field_1af0;
-    uint16_t field_1af2;
-    char Sc_str[4];
-    uint16_t field_1af8;
-    uint16_t field_1afa;
-    uint16_t field_1afc;
-    uint16_t field_1afe;
-    uint16_t field_1b00;
-    uint16_t field_1b02;
-    uint16_t field_1b04;
-    uint16_t field_1b06;
-    uint16_t field_1b08;
-    uint16_t field_1b0a;
-    uint16_t field_1b0c;
-    uint16_t field_1b0e;
-    uint16_t field_1b10;
-    uint16_t field_1b12;
-    uint16_t field_1b14;
-    char str_35[2];
-    uint16_t field_1b18;
-    uint16_t field_1b1a;
-    uint32_t ptr_1b1c;
-    uint16_t field_1b20;
-    char str_36[2];
-    uint16_t field_1b24;
-    char G_str[2];
-    uint16_t field_1b28;
-    char l_str[2];
-    uint16_t field_1b2c;
-    uint16_t field_1b2e;
-    uint16_t field_1b30;
-    uint16_t field_1b32;
-    uint16_t field_1b34;
-    uint16_t field_1b36;
-    uint16_t field_1b38;
-    uint16_t field_1b3a;
-    uint16_t field_1b3c;
-    uint16_t field_1b3e;
-    uint16_t field_1b40;
-    uint16_t field_1b42;
-    uint16_t field_1b44;
-    uint16_t field_1b46;
-    uint16_t field_1b48;
-    uint16_t field_1b4a;
-    uint16_t field_1b4c;
-    uint16_t field_1b4e;
-    uint16_t field_1b50;
-    uint16_t field_1b52;
-    uint16_t field_1b54;
-    uint16_t field_1b56;
-    uint16_t field_1b58;
-    uint16_t field_1b5a;
-    uint16_t field_1b5c;
-    uint16_t field_1b5e;
-    uint16_t field_1b60;
-    uint16_t field_1b62;
-    uint16_t field_1b64;
-    uint16_t field_1b66;
-    uint16_t field_1b68;
-    uint16_t field_1b6a;
-    uint16_t field_1b6c;
-    uint16_t field_1b6e;
-    uint16_t field_1b70;
-    uint16_t field_1b72;
-    uint16_t field_1b74;
-    uint16_t field_1b76;
-    uint16_t field_1b78;
-    uint16_t field_1b7a;
-    uint16_t field_1b7c;
-    uint16_t field_1b7e;
-    uint16_t field_1b80;
-    uint16_t field_1b82;
-    uint16_t field_1b84;
-    uint16_t field_1b86;
-    uint16_t field_1b88;
-    uint16_t field_1b8a;
-    uint16_t field_1b8c;
-    uint16_t field_1b8e;
-    uint16_t field_1b90;
-    uint16_t field_1b92;
-    uint16_t field_1b94;
-    uint16_t field_1b96;
-    uint16_t field_1b98;
-    uint16_t field_1b9a;
-    uint16_t field_1b9c;
-    uint16_t field_1b9e;
-    uint16_t field_1ba0;
-    char str_39[2];
-    uint16_t field_1ba4;
-    char str_40[2];
-    uint16_t field_1ba8;
-    char G_str_2[2];
-    uint16_t field_1bac;
-    char l_str_2[2];
-    uint16_t field_1bb0;
-    uint16_t field_1bb2;
-    uint16_t field_1bb4;
-    uint16_t field_1bb6;
-    uint16_t field_1bb8;
-    uint16_t field_1bba;
-    uint16_t field_1bbc;
-    char str_43[2];
-    uint16_t field_1bc0;
-    char J_str[2];
-    char str_45[4];
-    uint16_t field_1bc8;
-    uint16_t field_1bca;
-    uint16_t field_1bcc;
-    uint16_t field_1bce;
-    uint16_t field_1bd0;
-    uint16_t field_1bd2;
-    char str_46[4];
-    char str_47[4];
-    char D4_str[4];
-    char Z_str[4];
-    uint16_t field_1be4;
-    uint16_t field_1be6;
-    uint16_t field_1be8;
-    uint16_t field_1bea;
-    char L1_str[4];
-    char FL1_str[4];
-    char DA0_str[4];
-    char ZJ3_str[4];
-    uint16_t field_1bfc;
-    uint16_t field_1bfe;
-    uint16_t field_1c00;
-    uint16_t field_1c02;
-    char Fd3_code[4];
-    char Td3_name[4];
-    char ed3_str[4];
-    char WX3_str[4];
-    uint16_t field_1c14;
-    uint16_t field_1c16;
-    uint16_t field_1c18;
-    uint16_t field_1c1a;
-    uint16_t field_1c1c;
-    uint16_t field_1c1e;
-    uint16_t field_1c20;
-    uint16_t field_1c22;
-    uint16_t field_1c24;
-    uint16_t field_1c26;
-    uint16_t field_1c28;
-    uint16_t field_1c2a;
-    uint16_t field_1c2c;
-    uint16_t field_1c2e;
-    uint16_t field_1c30;
-    char str_56[2];
-    uint16_t field_1c34;
-    char G_str_3[2];
-    uint16_t field_1c38;
-    char G_str_4[2];
-    uint16_t field_1c3c;
-    char l_str_3[2];
-    uint16_t field_1c40;
-    uint16_t field_1c42;
-    uint16_t field_1c44;
-    uint16_t field_1c46;
-    uint16_t field_1c48;
-    char str_60[2];
-    uint16_t field_1c4c;
-    char I_str_2[2];
-    uint16_t field_1c50;
-    char L_str_2[2];
-    char str_63[4];
-    uint16_t field_1c58;
-    uint16_t field_1c5a;
-    uint16_t field_1c5c;
-    uint16_t field_1c5e;
-    uint16_t field_1c60;
-    uint16_t field_1c62;
-    uint16_t field_1c64;
-    char str_64[2];
-    char Cp_str[4];
-    char Hr_str[4];
-    uint16_t field_1c70;
-    uint16_t field_1c72;
-    uint16_t field_1c74;
-    uint16_t field_1c76;
-    uint16_t field_1c78;
-    uint16_t field_1c7a;
-    char L_str_4[4];
-    char Qo_str[4];
-    char INS_str[4];
-    char dOG_str[4];
-    uint16_t field_1c8c;
-    char str_71[2];
-    uint16_t field_1c90;
-    uint16_t field_1c92;
-    char D3_code[4];
-    char SsD_name[4];
-    char hsD_str[4];
-    char faF_str[4];
-    uint16_t field_1ca4;
-    char str_74[2];
-    uint16_t field_1ca8;
-    uint16_t field_1caa;
-    uint16_t field_1cac;
-    uint16_t field_1cae;
-    uint16_t field_1cb0;
-    uint16_t field_1cb2;
-    uint16_t field_1cb4;
-    uint16_t field_1cb6;
-    uint16_t field_1cb8;
-    uint16_t field_1cba;
-    uint16_t field_1cbc;
-    char str_75[2];
-    uint16_t field_1cc0;
-    char str_76[2];
-    uint16_t field_1cc4;
-    char l_str_4[2];
-    uint16_t field_1cc8;
-    char l_str_5[2];
-    uint16_t field_1ccc;
-    char l_str_6[2];
-    uint16_t field_1cd0;
-    uint16_t field_1cd2;
-    uint16_t field_1cd4;
-    uint16_t field_1cd6;
-    uint16_t field_1cd8;
-    char M_str[2];
-    uint16_t field_1cdc;
-    char g_str[2];
-    uint16_t field_1ce0;
-    char l_str_7[2];
-    uint16_t field_1ce4;
-    char l_str_8[2];
-    uint16_t field_1ce8;
-    uint16_t field_1cea;
-    uint16_t field_1cec;
-    uint16_t field_1cee;
-    uint16_t field_1cf0;
-    char str_84[2];
-    uint16_t field_1cf4;
-    char L_str_3[2];
-    char Fr_str[4];
-    char Xt_str[4];
-    uint16_t field_1d00;
-    uint16_t field_1d02;
-    uint16_t field_1d04;
-    uint16_t field_1d06;
-    uint16_t field_1d08;
-    uint16_t field_1d0a;
-    uint16_t field_1d0c;
-    char str_88[2];
-    char Qs_code[4];
-    char Gav_name[4];
-    uint16_t field_1d18;
-    uint16_t field_1d1a;
-    uint16_t field_1d1c;
-    uint16_t field_1d1e;
-    uint16_t field_1d20;
-    uint16_t field_1d22;
-    char str_89[4];
-    char w17_code[4];
-    char Lxb_name[4];
-    char lnk_str[4];
-    uint16_t field_1d34;
-    char str_91[2];
-    uint16_t field_1d38;
-    uint16_t field_1d3a;
-    uint16_t field_1d3c;
-    uint16_t field_1d3e;
-    uint16_t field_1d40;
-    uint16_t field_1d42;
-    uint16_t field_1d44;
-    char str_92[2];
-    uint16_t field_1d48;
-    char str_93[2];
-    uint16_t field_1d4c;
-    char str_94[2];
-    uint16_t field_1d50;
-    char z_str[2];
-    uint16_t field_1d54;
-    uint16_t field_1d56;
-    uint16_t field_1d58;
-    uint16_t field_1d5a;
-    uint16_t field_1d5c;
-    uint16_t field_1d5e;
-    uint16_t field_1d60;
-    uint16_t field_1d62;
-    uint16_t field_1d64;
-    uint16_t field_1d66;
-    uint16_t field_1d68;
-    char n_str[2];
-    uint16_t field_1d6c;
-    uint16_t field_1d6e;
-    uint16_t field_1d70;
-    uint16_t field_1d72;
-    uint16_t field_1d74;
-    uint16_t field_1d76;
-    uint16_t field_1d78;
-    uint16_t field_1d7a;
-    uint16_t field_1d7c;
-    uint16_t field_1d7e;
-    uint16_t field_1d80;
-    char Q_str[2];
-    char Im_str[4];
-    uint16_t field_1d88;
-    uint16_t field_1d8a;
-    uint16_t field_1d8c;
-    uint16_t field_1d8e;
-    uint16_t field_1d90;
-    uint16_t field_1d92;
-    uint16_t field_1d94;
-    uint16_t field_1d96;
-    uint16_t field_1d98;
-    char str_99[2];
-    char DZ_str[4];
-    char Tr_str[4];
-    uint16_t field_1da4;
-    uint16_t field_1da6;
-    uint16_t field_1da8;
-    uint16_t field_1daa;
-    uint16_t field_1dac;
-    uint16_t field_1dae;
-    uint16_t field_1db0;
-    char str_102[2];
-    char DB_str[4];
-    char ST_str[4];
-    char Vu_str[4];
-    uint16_t field_1dc0;
-    uint16_t field_1dc2;
-    uint32_t ptr_1dc4;
-    uint16_t field_1dc8;
-    uint16_t field_1dca;
-    uint16_t field_1dcc;
-    uint16_t field_1dce;
-    uint16_t field_1dd0;
-    uint16_t field_1dd2;
-    uint16_t field_1dd4;
-    uint16_t field_1dd6;
-    uint16_t field_1dd8;
-    char H_str_2[2];
-    uint16_t field_1ddc;
-    char __str[2];
-    uint16_t field_1de0;
-    uint16_t field_1de2;
-    uint16_t field_1de4;
-    uint16_t field_1de6;
-    uint16_t field_1de8;
-    uint16_t field_1dea;
-    uint16_t field_1dec;
-    uint16_t field_1dee;
-    uint16_t field_1df0;
-    uint16_t field_1df2;
-    uint16_t field_1df4;
-    uint16_t field_1df6;
-    uint16_t field_1df8;
-    uint16_t field_1dfa;
-    uint16_t field_1dfc;
-    uint16_t field_1dfe;
-    uint16_t field_1e00;
-    char str_108[2];
-    uint16_t field_1e04;
-    char str_109[2];
-    uint16_t field_1e08;
-    char str_110[2];
-    uint16_t field_1e0c;
-    char B_str[2];
-    uint16_t field_1e10;
-    char K_str[2];
-    uint16_t field_1e14;
-    char S_str[2];
-    uint16_t field_1e18;
-    uint16_t field_1e1a;
-    uint16_t field_1e1c;
-    char str_114[2];
-    uint16_t field_1e20;
-    uint16_t field_1e22;
-    uint16_t field_1e24;
-    char S_str_2[2];
-    uint16_t field_1e28;
-    char d_str[2];
-    uint16_t field_1e2c;
-    char t_str[2];
-    uint16_t field_1e30;
-    uint16_t field_1e32;
-    uint16_t field_1e34;
-    uint8_t pad_312[2];  /* zero padding */
-    char str_118[4];
-    uint16_t field_1e3c;
-    uint8_t pad_313[2];  /* zero padding */
-    char str_119[4];
-    uint16_t field_1e44;
-    uint16_t field_1e46;
-    uint16_t field_1e48;
-    char i_str[2];
-    uint32_t ptr_1e4c;
-    uint32_t ptr_1e50;
-    uint16_t field_1e54;
-    uint16_t field_1e56;
-    char str_121[4];
-    uint16_t field_1e5c;
-    uint8_t pad_314[3];  /* zero padding */
-    uint16_t field_1e61;
-    char str_122[2];
-    uint16_t field_1e65;
-    uint8_t pad_315[3];  /* zero padding */
-    uint32_t ptr_1e6a;
-    uint16_t field_1e6e;
-    char str_123[2];
-    uint16_t field_1e72;
-    uint32_t NakaData_RomEnd_ptr_5;
-    uint16_t field_1e78;
-    uint16_t field_1e7a;
-    uint16_t field_1e7c;
-    uint16_t field_1e7e;
-    uint16_t field_1e80;
-    uint16_t field_1e82;
-    uint16_t field_1e84;
-    uint16_t field_1e86;
-    uint16_t field_1e88;
-    uint16_t field_1e8a;
-    uint16_t field_1e8c;
-    uint16_t field_1e8e;
-    uint16_t field_1e90;
-    uint16_t field_1e92;
-    uint16_t field_1e94;
-    uint16_t field_1e96;
-    uint16_t field_1e98;
-    uint16_t field_1e9a;
-    uint16_t field_1e9c;
-    uint16_t field_1e9e;
-    uint16_t field_1ea0;
-    uint16_t field_1ea2;
-    uint16_t field_1ea4;
-    uint16_t field_1ea6;
-    uint16_t field_1ea8;
-    uint16_t field_1eaa;
-    uint16_t field_1eac;
-    uint16_t field_1eae;
-    uint16_t field_1eb0;
-    uint16_t field_1eb2;
-    uint16_t field_1eb4;
-    uint16_t field_1eb6;
-    uint16_t field_1eb8;
-    uint16_t field_1eba;
-    uint16_t field_1ebc;
-    uint16_t field_1ebe;
-    uint16_t field_1ec0;
-    uint16_t field_1ec2;
-    uint16_t field_1ec4;
-    uint16_t field_1ec6;
-    uint16_t field_1ec8;
-    uint16_t field_1eca;
-    uint16_t field_1ecc;
-    uint16_t field_1ece;
-    uint16_t field_1ed0;
-    uint16_t field_1ed2;
-    uint16_t field_1ed4;
-    uint16_t field_1ed6;
-    uint16_t field_1ed8;
-    uint16_t field_1eda;
-    uint16_t field_1edc;
-    uint16_t field_1ede;
-    uint16_t field_1ee0;
-    uint16_t field_1ee2;
-    uint16_t field_1ee4;
-    uint16_t field_1ee6;
-    uint16_t field_1ee8;
-    uint16_t field_1eea;
-    uint16_t field_1eec;
-    uint16_t field_1eee;
-    uint16_t field_1ef0;
-    uint16_t field_1ef2;
-    uint16_t field_1ef4;
-    uint16_t field_1ef6;
-    uint16_t field_1ef8;
-    uint16_t field_1efa;
-    uint16_t field_1efc;
-    uint16_t field_1efe;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* start of work-RAM image 2 (-> RAM 0xE35E): inter-CPU DMA stall/timeout watch counters */
+    WorkRamInit_Image2_t WorkRamInit_Image2;
+    /* bit masks 0x80 >> n for 1-bpp bitmap drawing */
+    uint8_t DrawBitmap_BitMasks[8];
+    /* tick counter of the BM/DR edit tempo animation (wraps after 0x1E) */
+    BmDrEdit_TempoAnimTick_t BmDrEdit_TempoAnimTick;
+    /* D1 7F 00 <part-1>: sequencer-buffer event written after a part note-off */
+    uint8_t SeqBuf_EventTemplateD1[4];
+    /* D2 7F 00 40 <part-1>: second sequencer-buffer event after a part note-off */
+    SeqBuf_EventTemplateD2_t SeqBuf_EventTemplateD2;
+    /* B0 7F <kind> 04 00 08 <part-1>: sequencer-buffer event for non-drum parts */
+    SeqBuf_EventTemplateB0_t SeqBuf_EventTemplateB0;
+    /* 1 after SeqInitStart; SeqPlay_ResetStartState clears it */
+    SeqPlay_StartInitActive_t SeqPlay_StartInitActive;
+    /* 1 while SeqAcc_InitPlaybackState runs; the MIDI timing sync skips once */
+    SeqAcc_ReInitGuard_t SeqAcc_ReInitGuard;
+    /* set to 0xFF when SeqBuffer_MoveEntryToHead gets A = 0xFF; no reader found */
+    SeqBuffer_MoveEntryMarker_t SeqBuffer_MoveEntryMarker;
+    /* 1 when an effect parameter change is written to the DSP; no reader found */
+    EffEdit_ParamWrittenFlag_t EffEdit_ParamWrittenFlag;
+    /* 1 while the song-select AP timer is pending */
+    PlySngSel_TimerPending_t PlySngSel_TimerPending;
+    /* part-control event queue entries {WA, C, E}; filled by PartCtrl_AppendToEventQueue */
+    PartCtrl_EventQueue_t PartCtrl_EventQueue[10];
+    /* entries in PartCtrl_EventQueue (at most 10) */
+    uint16_t PartCtrl_EventQueueCount;
+    /* "KN3000 SOUND RAM" -- 16-byte signature compared with sound-RAM bank data */
+    char AccBankData_Kn3000Signature[16];
+    /* "TECHNICS" -- 8 bytes the style converter compares with a file name field */
+    char StylCnv_TechnicsTag[8];
+    /* " V1.0   " -- default name the style converter Strcpy-s (terminated by the next word) */
+    char StylCnv_DefaultVersionName[8];
+    /* count of FDC recalibrate/seek initialisation sequences */
+    uint16_t FDC_InitSequenceCount;
+    /* requests the DirmdEmulator posts after each dispatched event, and their arguments */
+    Dirmd_PostRequests_t Dirmd_PostRequests;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* 256-colour palette, 8-bit R,G,B per entry, loaded into the VGA DAC at init */
+    Vga_InitPalette_t Vga_InitPalette[256];
+    /* doubly linked list nodes {prev, next}: slots 0..31, list head 32, heads 33 and 34 (empty) */
+    NoteMap_LinkArray32_t NoteMap_LinkArray32[35];
+    /* first 33 of the 129 {prev, next} nodes (128 slots + head 128 at RAM 0xE92E) of the second link list */
+    NoteMap_LinkArray128_t NoteMap_LinkArray128[33];
 } naka_sequencer_channels_t;
 
 #define SELF(field) \
@@ -5332,1111 +4937,389 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_19ec = NAKA_NONE,
 
-    .str_18 = ALIGNED_STRING(""),
-
-    .pad_301 = { 0 },
-
-    .field_19f5 = 0x00FF,
-
-    .pad_302 = { 0 },
-
-    .field_19fa = 0x4080,
-
-    .field_19fc = 0x1020,
-
-    .field_19fe = 0x0408,
-
-    .field_1a00 = 0x0102,
-
-    .str_19 = ALIGNED_STRING(""),
-
-    .field_1a04 = 0x7FD1,
-
-    .pad_303 = { 0 },
-
-    .field_1a08 = 0x7FD2,
-
-    .field_1a0a = 0x4000,
-
-    .str_20 = ALIGNED_STRING(""),
-
-    .field_1a0e = 0x7FB0,
-
-    .field_1a10 = 0x0400,
-
-    .field_1a12 = 0x0800,
-
-    .str_21 = ALIGNED_STRING(""),
-
-    .str_22 = ALIGNED_STRING(""),
-
-    .str_23 = ALIGNED_STRING(""),
-
-    .str_24 = ALIGNED_STRING(""),
-
-    .str_25 = ALIGNED_STRING(""),
-
-    .str_26 = ALIGNED_STRING(""),
-
-    .pad_304 = { 0 },
-
-    .Kn3000SoundRamtechnicsV1_str = ALIGNED_STRING("KN3000 SOUND RAMTECHNICS V1.0   "),
-
-    .pad_305 = { 0 },
-
-    .ptr_1a6d = 0x00FF00FF,
-
-    .field_1a71 = 0x00FF,
-
-    .field_1a73 = NAKA_NONE,
-
-    .NakaData_RomEnd_ptr_4 = NAKA_ADDR(NakaData_RomEnd),
-
-    .pad_306 = { 0 },
-
-    .field_1a7c = 0x0080,
-
-    .pad_307 = { 0 },
-
-    .field_1a81 = 0x0080,
-
-    .field_1a83 = 0x8000,
-
-    .field_1a85 = 0x0080,
-
-    .pad_308 = { 0 },
-
-    .field_1a8a = 0x0080,
-
-    .field_1a8c = 0x0080,
-
-    .field_1a8e = 0x0080,
-
-    .field_1a90 = 0x8000,
-
-    .field_1a92 = 0x0080,
-
-    .field_1a94 = 0xA0A0,
-
-    .field_1a96 = 0x00A0,
-
-    .field_1a98 = 0xDCC0,
-
-    .field_1a9a = 0x00C0,
-
-    .ptr_1a9c = 0x00F0CAA6,
-
-    .field_1aa0 = 0x00C1,
-
-    .pad_309 = { 0 },
-
-    .field_1aa4 = 0x63CE,
-
-    .pad_310 = { 0 },
-
-    .field_1aa8 = 0x00DE,
-
-    .pad_311 = { 0 },
-
-    .field_1aac = 0x31D6,
-
-    .field_1aae = 0x0094,
-
-    .field_1ab0 = 0xF3FF,
-
-    .field_1ab2 = 0x000C,
-
-    .field_1ab4 = 0xE7E7,
-
-    .field_1ab6 = 0x009C,
-
-    .field_1ab8 = 0xBDBD,
-
-    .field_1aba = 0x00BD,
-
-    .ptr_1abc = 0x00E4E4E4,
-
-    .field_1ac0 = 0x2B19,
-
-    .str_28 = ".",
-
-    .field_1ac4 = 0xA636,
-
-    .field_1ac6 = 0x00BB,
-
-    .Rs_str = "/RS",
-
-    .field_1acc = 0x2012,
-
-    .str_30 = " ",
-
-    .Ps_str = "<ps",
-
-    .field_1ad4 = 0x7F39,
-
-    .field_1ad6 = 0x0081,
-
-    .Hj_str = "6hj",
-
-    .field_1adc = 0xA132,
-
-    .field_1ade = 0x00A7,
-
-    .field_1ae0 = 0x2B16,
-
-    .str_33 = "-",
-
-    .field_1ae4 = 0x9237,
-
-    .field_1ae6 = 0x00B1,
-
-    .field_1ae8 = 0x261F,
-
-    .w13_code = ",",
-
-    .Pe_name = "Pe!",
-
-    .field_1af0 = 0x7A11,
-
-    .field_1af2 = 0x007F,
-
-    .Sc_str = "?Sc",
-
-    .field_1af8 = 0x6747,
-
-    .field_1afa = 0x007F,
-
-    .field_1afc = 0xC906,
-
-    .field_1afe = 0x00D5,
-
-    .field_1b00 = 0x1F0B,
-
-    .field_1b02 = 0x0085,
-
-    .field_1b04 = 0x3657,
-
-    .field_1b06 = 0x0013,
-
-    .field_1b08 = 0x210D,
-
-    .field_1b0a = 0x0098,
-
-    .field_1b0c = 0x4F21,
-
-    .field_1b0e = 0x0099,
-
-    .field_1b10 = 0x6B71,
-
-    .field_1b12 = 0x0018,
-
-    .field_1b14 = 0x7F83,
-
-    .str_35 = "\\",
-
-    .field_1b18 = 0x7C44,
-
-    .field_1b1a = 0x00A7,
-
-    .ptr_1b1c = 0x00E19C39,
-
-    .field_1b20 = 0x0606,
-
-    .str_36 = "&",
-
-    .field_1b24 = 0x0D06,
-
-    .G_str = "G",
-
-    .field_1b28 = 0x1608,
-
-    .l_str = "l",
-
-    .field_1b2c = 0x1E0C,
-
-    .field_1b2e = 0x008D,
-
-    .field_1b30 = 0x1E13,
-
-    .field_1b32 = 0x0006,
-
-    .field_1b34 = 0x1C1B,
-
-    .field_1b36 = 0x0006,
-
-    .field_1b38 = 0x1E2F,
-
-    .field_1b3a = 0x0007,
-
-    .field_1b3c = 0x2146,
-
-    .field_1b3e = 0x000C,
-
-    .field_1b40 = 0x2356,
-
-    .field_1b42 = 0x0012,
-
-    .field_1b44 = 0x276B,
-
-    .field_1b46 = 0x0018,
-
-    .field_1b48 = 0x3321,
-
-    .field_1b4a = 0x0009,
-
-    .field_1b4c = 0x3334,
-
-    .field_1b4e = 0x0009,
-
-    .field_1b50 = 0x2D2E,
-
-    .field_1b52 = 0x0007,
-
-    .field_1b54 = 0x3246,
-
-    .field_1b56 = 0x000C,
-
-    .field_1b58 = 0x3756,
-
-    .field_1b5a = 0x0012,
-
-    .field_1b5c = 0x3E6B,
-
-    .field_1b5e = 0x0018,
-
-    .field_1b60 = 0x4D33,
-
-    .field_1b62 = 0x000D,
-
-    .field_1b64 = 0x4D40,
-
-    .field_1b66 = 0x000D,
-
-    .field_1b68 = 0x4D4E,
-
-    .field_1b6a = 0x000D,
-
-    .field_1b6c = 0x4246,
-
-    .field_1b6e = 0x000C,
-
-    .field_1b70 = 0x4656,
-
-    .field_1b72 = 0x0012,
-
-    .field_1b74 = 0x4C6B,
-
-    .field_1b76 = 0x0018,
-
-    .field_1b78 = 0x613F,
-
-    .field_1b7a = 0x0013,
-
-    .field_1b7c = 0x614E,
-
-    .field_1b7e = 0x0013,
-
-    .field_1b80 = 0x615F,
-
-    .field_1b82 = 0x0013,
-
-    .field_1b84 = 0x605F,
-
-    .field_1b86 = 0x0013,
-
-    .field_1b88 = 0x5254,
-
-    .field_1b8a = 0x0012,
-
-    .field_1b8c = 0x5C6B,
-
-    .field_1b8e = 0x0018,
-
-    .field_1b90 = 0x785D,
-
-    .field_1b92 = 0x0017,
-
-    .field_1b94 = 0x786C,
-
-    .field_1b96 = 0x0017,
-
-    .field_1b98 = 0x7876,
-
-    .field_1b9a = 0x0017,
-
-    .field_1b9c = 0x7675,
-
-    .field_1b9e = 0x0017,
-
-    .field_1ba0 = 0x2006,
-
-    .str_39 = " ",
-
-    .field_1ba4 = 0x1806,
-
-    .str_40 = "&",
-
-    .field_1ba8 = 0x1A06,
-
-    .G_str_2 = "G",
-
-    .field_1bac = 0x2108,
-
-    .l_str_2 = "l",
-
-    .field_1bb0 = 0x270C,
-
-    .field_1bb2 = 0x008D,
-
-    .field_1bb4 = 0x300E,
-
-    .field_1bb6 = 0x00B0,
-
-    .field_1bb8 = 0x1E06,
-
-    .field_1bba = 0x0007,
-
-    .field_1bbc = 0x2119,
-
-    .str_43 = "(",
-
-    .field_1bc0 = 0x251D,
-
-    .J_str = "J",
-
-    .str_45 = "\"/l",
-
-    .field_1bc8 = 0x3724,
-
-    .field_1bca = 0x0091,
-
-    .field_1bcc = 0x1B06,
-
-    .field_1bce = 0x00C0,
-
-    .field_1bd0 = 0x3310,
-
-    .field_1bd2 = 0x0007,
-
-    .str_46 = "(8/",
-
-    .str_47 = "10+",
-
-    .D4_str = "D4/",
-
-    .Z_str = "Z;3",
-
-    .field_1be4 = 0x3E81,
-
-    .field_1be6 = 0x001C,
-
-    .field_1be8 = 0x4D22,
-
-    .field_1bea = 0x000D,
-
-    .L1_str = "8L1",
-
-    .FL1_str = "FL1",
-
-    .DA0_str = "DA0",
-
-    .ZJ3_str = "ZJ3",
-
-    .field_1bfc = 0x5581,
-
-    .field_1bfe = 0x001C,
-
-    .field_1c00 = 0x6133,
-
-    .field_1c02 = 0x0013,
-
-    .Fd3_code = "Fd3",
-
-    .Td3_name = "Td3",
-
-    .ed3_str = "ed3",
-
-    .WX3_str = "WX3",
-
-    .field_1c14 = 0x6981,
-
-    .field_1c16 = 0x001C,
-
-    .field_1c18 = 0x7844,
-
-    .field_1c1a = 0x0017,
-
-    .field_1c1c = 0x925F,
-
-    .field_1c1e = 0x001B,
-
-    .field_1c20 = 0x9274,
-
-    .field_1c22 = 0x001B,
-
-    .field_1c24 = 0x9287,
-
-    .field_1c26 = 0x001B,
-
-    .field_1c28 = 0x9190,
-
-    .field_1c2a = 0x001A,
-
-    .field_1c2c = 0x7B7F,
-
-    .field_1c2e = 0x001C,
-
-    .field_1c30 = 0x3C06,
-
-    .str_56 = ">",
-
-    .field_1c34 = 0x3C06,
-
-    .G_str_3 = "G",
-
-    .field_1c38 = 0x2906,
-
-    .G_str_4 = "G",
-
-    .field_1c3c = 0x2F08,
-
-    .l_str_3 = "l",
-
-    .field_1c40 = 0x380C,
-
-    .field_1c42 = 0x008D,
-
-    .field_1c44 = 0x3D0E,
-
-    .field_1c46 = 0x00B0,
-
-    .field_1c48 = 0x3206,
-
-    .str_60 = "*",
-
-    .field_1c4c = 0x411C,
-
-    .I_str_2 = "I",
-
-    .field_1c50 = 0x351B,
-
-    .L_str_2 = "L",
-
-    .str_63 = "\"=l",
-
-    .field_1c58 = 0x4024,
-
-    .field_1c5a = 0x0091,
-
-    .field_1c5c = 0x2D06,
-
-    .field_1c5e = 0x00C0,
-
-    .field_1c60 = 0x3206,
-
-    .field_1c62 = 0x0013,
-
-    .field_1c64 = 0x341C,
-
-    .str_64 = ".",
-
-    .Cp_str = "2CP",
-
-    .Hr_str = ":Hr",
-
-    .field_1c70 = 0x3313,
-
-    .field_1c72 = 0x00C3,
-
-    .field_1c74 = 0x1D06,
-
-    .field_1c76 = 0x00D1,
-
-    .field_1c78 = 0x4C0E,
-
-    .field_1c7a = 0x000A,
-
-    .L_str_4 = " L#",
-
-    .Qo_str = ";QO",
-
-    .INS_str = "INS",
-
-    .dOG_str = "dOG",
-
-    .field_1c8c = 0x4F92,
-
-    .str_71 = "+",
-
-    .field_1c90 = 0x611E,
-
-    .field_1c92 = 0x000E,
-
-    .D3_code = "8d3",
-
-    .SsD_name = "SsD",
-
-    .hsD_str = "hsD",
-
-    .faF_str = "faF",
-
-    .field_1ca4 = 0x6D92,
-
-    .str_74 = "+",
-
-    .field_1ca8 = 0x782F,
-
-    .field_1caa = 0x0017,
-
-    .field_1cac = 0x9249,
-
-    .field_1cae = 0x001B,
-
-    .field_1cb0 = 0xB068,
-
-    .field_1cb2 = 0x001B,
-
-    .field_1cb4 = 0xB087,
-
-    .field_1cb6 = 0x001B,
-
-    .field_1cb8 = 0xB0AA,
-
-    .field_1cba = 0x001B,
-
-    .field_1cbc = 0x8B90,
-
-    .str_75 = "*",
-
-    .field_1cc0 = 0x5609,
-
-    .str_76 = "[",
-
-    .field_1cc4 = 0x6308,
-
-    .l_str_4 = "l",
-
-    .field_1cc8 = 0x5008,
-
-    .l_str_5 = "l",
-
-    .field_1ccc = 0x3C08,
-
-    .l_str_6 = "l",
-
-    .field_1cd0 = 0x440C,
-
-    .field_1cd2 = 0x008D,
-
-    .field_1cd4 = 0x480E,
-
-    .field_1cd6 = 0x00B0,
-
-    .field_1cd8 = 0x5109,
-
-    .M_str = "M",
-
-    .field_1cdc = 0x611F,
-
-    .g_str = "g",
-
-    .field_1ce0 = 0x561E,
-
-    .l_str_7 = "l",
-
-    .field_1ce4 = 0x471E,
-
-    .l_str_8 = "l",
-
-    .field_1ce8 = 0x4D24,
-
-    .field_1cea = 0x0091,
-
-    .field_1cec = 0x4506,
-
-    .field_1cee = 0x00C0,
-
-    .field_1cf0 = 0x4B09,
-
-    .str_84 = "5",
-
-    .field_1cf4 = 0x4C1D,
-
-    .L_str_3 = "L",
-
-    .Fr_str = "4fr",
-
-    .Xt_str = "3Xt",
-
-    .field_1d00 = 0x5313,
-
-    .field_1d02 = 0x00C3,
-
-    .field_1d04 = 0x4006,
-
-    .field_1d06 = 0x00D1,
-
-    .field_1d08 = 0x4B09,
-
-    .field_1d0a = 0x001D,
-
-    .field_1d0c = 0x4B1D,
-
-    .str_88 = "9",
-
-    .Qs_code = "5QS",
-
-    .Gav_name = "Gav",
-
-    .field_1d18 = 0x461B,
-
-    .field_1d1a = 0x00D4,
-
-    .field_1d1c = 0x2706,
-
-    .field_1d1e = 0x00D8,
-
-    .field_1d20 = 0x600D,
-
-    .field_1d22 = 0x000D,
-
-    .str_89 = "\"d-",
-
-    .w17_code = "1q;",
-
-    .Lxb_name = "Lxb",
-
-    .lnk_str = "lnk",
-
-    .field_1d34 = 0x69A6,
-
-    .str_91 = ":",
-
-    .field_1d38 = 0x7721,
-
-    .field_1d3a = 0x0013,
-
-    .field_1d3c = 0x922C,
-
-    .field_1d3e = 0x0017,
-
-    .field_1d40 = 0xB040,
-
-    .field_1d42 = 0x001B,
-
-    .field_1d44 = 0xC969,
-
-    .str_92 = "%",
-
-    .field_1d48 = 0xC9AA,
-
-    .str_93 = "%",
-
-    .field_1d4c = 0x9EA3,
-
-    .str_94 = ":",
-
-    .field_1d50 = 0x740B,
-
-    .z_str = "z",
-
-    .field_1d54 = 0x850B,
-
-    .field_1d56 = 0x008C,
-
-    .field_1d58 = 0x6E0B,
-
-    .field_1d5a = 0x008C,
-
-    .field_1d5c = 0x640B,
-
-    .field_1d5e = 0x008C,
-
-    .field_1d60 = 0x540B,
-
-    .field_1d62 = 0x008C,
-
-    .field_1d64 = 0x5A0E,
-
-    .field_1d66 = 0x00B0,
-
-    .field_1d68 = 0x700C,
-
-    .n_str = "n",
-
-    .field_1d6c = 0x7F21,
-
-    .field_1d6e = 0x0086,
-
-    .field_1d70 = 0x7A21,
-
-    .field_1d72 = 0x0090,
-
-    .field_1d74 = 0x6821,
-
-    .field_1d76 = 0x0090,
-
-    .field_1d78 = 0x5D21,
-
-    .field_1d7a = 0x0090,
-
-    .field_1d7c = 0x5E06,
-
-    .field_1d7e = 0x00C0,
-
-    .field_1d80 = 0x600B,
-
-    .Q_str = "Q",
-
-    .Im_str = "!im",
-
-    .field_1d88 = 0xA01D,
-
-    .field_1d8a = 0x00AB,
-
-    .field_1d8c = 0x9413,
-
-    .field_1d8e = 0x00BF,
-
-    .field_1d90 = 0x7513,
-
-    .field_1d92 = 0x00BF,
-
-    .field_1d94 = 0x5F06,
-
-    .field_1d96 = 0x00D1,
-
-    .field_1d98 = 0x600B,
-
-    .str_99 = ":",
-
-    .DZ_str = " dZ",
-
-    .Tr_str = ".tr",
-
-    .field_1da4 = 0xB41A,
-
-    .field_1da6 = 0x00D0,
-
-    .field_1da8 = 0x8216,
-
-    .field_1daa = 0x00D5,
-
-    .field_1dac = 0x5E06,
-
-    .field_1dae = 0x00D8,
-
-    .field_1db0 = 0x600B,
-
-    .str_102 = "\"",
-
-    .DB_str = " dB",
-
-    .ST_str = "-sT",
-
-    .Vu_str = "@vu",
-
-    .field_1dc0 = 0x8940,
-
-    .field_1dc2 = 0x00BD,
-
-    .ptr_1dc4 = 0x00E13913,
-
-    .field_1dc8 = 0x790F,
-
-    .field_1dca = 0x000F,
-
-    .field_1dcc = 0x8F15,
-
-    .field_1dce = 0x0017,
-
-    .field_1dd0 = 0xA819,
-
-    .field_1dd2 = 0x0017,
-
-    .field_1dd4 = 0xC220,
-
-    .field_1dd6 = 0x001A,
-
-    .field_1dd8 = 0xCB5C,
-
-    .H_str_2 = "H",
-
-    .field_1ddc = 0xA0A2,
-
-    .__str = "_",
-
-    .field_1de0 = 0x9E0E,
-
-    .field_1de2 = 0x00AE,
-
-    .field_1de4 = 0x900C,
-
-    .field_1de6 = 0x00B2,
-
-    .field_1de8 = 0x820C,
-
-    .field_1dea = 0x00B2,
-
-    .field_1dec = 0x770C,
-
-    .field_1dee = 0x00B2,
-
-    .field_1df0 = 0x8C0F,
-
-    .field_1df2 = 0x008C,
-
-    .field_1df4 = 0xAF06,
-
-    .field_1df6 = 0x00B4,
-
-    .field_1df8 = 0xB106,
-
-    .field_1dfa = 0x00BB,
-
-    .field_1dfc = 0x1908,
-
-    .field_1dfe = 0x0019,
-
-    .field_1e00 = 0x2108,
-
-    .str_108 = "!",
-
-    .field_1e04 = 0x2110,
-
-    .str_109 = "!",
-
-    .field_1e08 = 0x2911,
-
-    .str_110 = ")",
-
-    .field_1e0c = 0x4219,
-
-    .B_str = "B",
-
-    .field_1e10 = 0x4219,
-
-    .K_str = "K",
-
-    .field_1e14 = 0x5319,
-
-    .S_str = "S",
-
-    .field_1e18 = 0x6C09,
-
-    .field_1e1a = 0x008D,
-
-    .field_1e1c = 0x7D09,
-
-    .str_114 = "}",
-
-    .field_1e20 = 0x7D09,
-
-    .field_1e22 = 0x0095,
-
-    .field_1e24 = 0x5319,
-
-    .S_str_2 = "S",
-
-    .field_1e28 = 0x5B19,
-
-    .d_str = "d",
-
-    .field_1e2c = 0x6C19,
-
-    .t_str = "t",
-
-    .field_1e30 = 0x9D19,
-
-    .field_1e32 = 0x00C7,
-
-    .field_1e34 = 0x0800,
-
-    .pad_312 = { 0 },
-
-    .str_118 = "11)",
-
-    .field_1e3c = 0x48FF,
-
-    .pad_313 = { 0 },
-
-    .str_119 = "@@@",
-
-    .field_1e44 = NAKA_NONE,
-
-    .field_1e46 = 0x00A6,
-
-    .field_1e48 = 0xFED6,
-
-    .i_str = "i",
-
-    .ptr_1e4c = 0x00FF9C9C,
-
-    .ptr_1e50 = 0x00F0FBFF,
-
-    .field_1e54 = 0xA0A0,
-
-    .field_1e56 = 0x00A4,
-
-    .str_121 = "```",
-
-    .field_1e5c = 0x00FF,
-
-    .pad_314 = { 0 },
-
-    .field_1e61 = 0x00FF,
-
-    .str_122 = ALIGNED_STRING(""),
-
-    .field_1e65 = 0x00FF,
-
-    .pad_315 = { 0 },
-
-    .ptr_1e6a = 0x00FF00FF,
-
-    .field_1e6e = 0x00FF,
-
-    .str_123 = ALIGNED_STRING(""),
-
-    .field_1e72 = 0x00FF,
-
-    .NakaData_RomEnd_ptr_5 = NAKA_ADDR(NakaData_RomEnd),
-
-    .field_1e78 = 0x0120,
-
-    .field_1e7a = 0x0200,
-
-    .field_1e7c = 0x0301,
-
-    .field_1e7e = 0x0402,
-
-    .field_1e80 = 0x0503,
-
-    .field_1e82 = 0x0604,
-
-    .field_1e84 = 0x0705,
-
-    .field_1e86 = 0x0806,
-
-    .field_1e88 = 0x0907,
-
-    .field_1e8a = 0x0A08,
-
-    .field_1e8c = 0x0B09,
-
-    .field_1e8e = 0x0C0A,
-
-    .field_1e90 = 0x0D0B,
-
-    .field_1e92 = 0x0E0C,
-
-    .field_1e94 = 0x0F0D,
-
-    .field_1e96 = 0x100E,
-
-    .field_1e98 = 0x110F,
-
-    .field_1e9a = 0x1210,
-
-    .field_1e9c = 0x1311,
-
-    .field_1e9e = 0x1412,
-
-    .field_1ea0 = 0x1513,
-
-    .field_1ea2 = 0x1614,
-
-    .field_1ea4 = 0x1715,
-
-    .field_1ea6 = 0x1816,
-
-    .field_1ea8 = 0x1917,
-
-    .field_1eaa = 0x1A18,
-
-    .field_1eac = 0x1B19,
-
-    .field_1eae = 0x1C1A,
-
-    .field_1eb0 = 0x1D1B,
-
-    .field_1eb2 = 0x1E1C,
-
-    .field_1eb4 = 0x1F1D,
-
-    .field_1eb6 = 0x201E,
-
-    .field_1eb8 = 0x001F,
-
-    .field_1eba = 0x2121,
-
-    .field_1ebc = 0x2222,
-
-    .field_1ebe = 0x0180,
-
-    .field_1ec0 = 0x0200,
-
-    .field_1ec2 = 0x0301,
-
-    .field_1ec4 = 0x0402,
-
-    .field_1ec6 = 0x0503,
-
-    .field_1ec8 = 0x0604,
-
-    .field_1eca = 0x0705,
-
-    .field_1ecc = 0x0806,
-
-    .field_1ece = 0x0907,
-
-    .field_1ed0 = 0x0A08,
-
-    .field_1ed2 = 0x0B09,
-
-    .field_1ed4 = 0x0C0A,
-
-    .field_1ed6 = 0x0D0B,
-
-    .field_1ed8 = 0x0E0C,
-
-    .field_1eda = 0x0F0D,
-
-    .field_1edc = 0x100E,
-
-    .field_1ede = 0x110F,
-
-    .field_1ee0 = 0x1210,
-
-    .field_1ee2 = 0x1311,
-
-    .field_1ee4 = 0x1412,
-
-    .field_1ee6 = 0x1513,
-
-    .field_1ee8 = 0x1614,
-
-    .field_1eea = 0x1715,
-
-    .field_1eec = 0x1816,
-
-    .field_1eee = 0x1917,
-
-    .field_1ef0 = 0x1A18,
-
-    .field_1ef2 = 0x1B19,
-
-    .field_1ef4 = 0x1C1A,
-
-    .field_1ef6 = 0x1D1B,
-
-    .field_1ef8 = 0x1E1C,
-
-    .field_1efa = 0x1F1D,
-
-    .field_1efc = 0x201E,
-
-    .field_1efe = 0x211F,
+    .WorkRamInit_Image2 = { 0x00, 0xFF, 0x0000, 0x0000, 0x00, 0xFF, { 0x00, 0x00, 0x00, 0x00 } },
+
+    .DrawBitmap_BitMasks = {
+        0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01,
+    },
+
+    .BmDrEdit_TempoAnimTick = { 0x00, 0xFF },
+
+    .SeqBuf_EventTemplateD1 = {
+        0xD1, 0x7F, 0x00, 0x00,
+    },
+
+    .SeqBuf_EventTemplateD2 = { { 0xD2, 0x7F, 0x00, 0x40, 0x00 }, 0xFF },
+
+    .SeqBuf_EventTemplateB0 = { { 0xB0, 0x7F, 0x00, 0x04, 0x00, 0x08, 0x00 }, 0xFF },
+
+    .SeqPlay_StartInitActive = { 0x00, 0xFF },
+
+    .SeqAcc_ReInitGuard = { 0x00, 0xFF },
+
+    .SeqBuffer_MoveEntryMarker = { 0x00, 0xFF },
+
+    .EffEdit_ParamWrittenFlag = { 0x00, 0xFF },
+
+    .PlySngSel_TimerPending = { 0x00, 0xFF },
+
+    .PartCtrl_EventQueue = {
+        { 0x0000, 0x00, 0x00 },
+        { 0x0000, 0x00, 0x00 },
+        { 0x0000, 0x00, 0x00 },
+        { 0x0000, 0x00, 0x00 },
+        { 0x0000, 0x00, 0x00 },
+        { 0x0000, 0x00, 0x00 },
+        { 0x0000, 0x00, 0x00 },
+        { 0x0000, 0x00, 0x00 },
+        { 0x0000, 0x00, 0x00 },
+        { 0x0000, 0x00, 0x00 },
+    },
+
+    .PartCtrl_EventQueueCount = 0x0000,
+
+    .AccBankData_Kn3000Signature = "KN3000 SOUND RAM",
+
+    .StylCnv_TechnicsTag = "TECHNICS",
+
+    .StylCnv_DefaultVersionName = " V1.0   ",
+
+    .FDC_InitSequenceCount = 0x0000,
+
+    .Dirmd_PostRequests = { 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0xFFFF, 0xFF, 0xFF },
+
+    .Vga_InitPalette = {
+        { 0x00, 0x00, 0x00, 0x00 },
+        { 0x80, 0x00, 0x00, 0x00 },
+        { 0x00, 0x80, 0x00, 0x00 },
+        { 0x80, 0x80, 0x00, 0x00 },
+        { 0x00, 0x00, 0x80, 0x00 },
+        { 0x80, 0x00, 0x80, 0x00 },
+        { 0x00, 0x80, 0x80, 0x00 },
+        { 0xA0, 0xA0, 0xA0, 0x00 },
+        { 0xC0, 0xDC, 0xC0, 0x00 },
+        { 0xA6, 0xCA, 0xF0, 0x00 },
+        { 0xC1, 0x00, 0x00, 0x00 },
+        { 0xCE, 0x63, 0x00, 0x00 },
+        { 0xDE, 0x00, 0x00, 0x00 },
+        { 0xD6, 0x31, 0x94, 0x00 },
+        { 0xFF, 0xF3, 0x0C, 0x00 },
+        { 0xE7, 0xE7, 0x9C, 0x00 },
+        { 0xBD, 0xBD, 0xBD, 0x00 },
+        { 0xE4, 0xE4, 0xE4, 0x00 },
+        { 0x19, 0x2B, 0x2E, 0x00 },
+        { 0x36, 0xA6, 0xBB, 0x00 },
+        { 0x2F, 0x52, 0x53, 0x00 },
+        { 0x12, 0x20, 0x20, 0x00 },
+        { 0x3C, 0x70, 0x73, 0x00 },
+        { 0x39, 0x7F, 0x81, 0x00 },
+        { 0x36, 0x68, 0x6A, 0x00 },
+        { 0x32, 0xA1, 0xA7, 0x00 },
+        { 0x16, 0x2B, 0x2D, 0x00 },
+        { 0x37, 0x92, 0xB1, 0x00 },
+        { 0x1F, 0x26, 0x2C, 0x00 },
+        { 0x50, 0x65, 0x21, 0x00 },
+        { 0x11, 0x7A, 0x7F, 0x00 },
+        { 0x3F, 0x53, 0x63, 0x00 },
+        { 0x47, 0x67, 0x7F, 0x00 },
+        { 0x06, 0xC9, 0xD5, 0x00 },
+        { 0x0B, 0x1F, 0x85, 0x00 },
+        { 0x57, 0x36, 0x13, 0x00 },
+        { 0x0D, 0x21, 0x98, 0x00 },
+        { 0x21, 0x4F, 0x99, 0x00 },
+        { 0x71, 0x6B, 0x18, 0x00 },
+        { 0x83, 0x7F, 0x5C, 0x00 },
+        { 0x44, 0x7C, 0xA7, 0x00 },
+        { 0x39, 0x9C, 0xE1, 0x00 },
+        { 0x06, 0x06, 0x26, 0x00 },
+        { 0x06, 0x0D, 0x47, 0x00 },
+        { 0x08, 0x16, 0x6C, 0x00 },
+        { 0x0C, 0x1E, 0x8D, 0x00 },
+        { 0x13, 0x1E, 0x06, 0x00 },
+        { 0x1B, 0x1C, 0x06, 0x00 },
+        { 0x2F, 0x1E, 0x07, 0x00 },
+        { 0x46, 0x21, 0x0C, 0x00 },
+        { 0x56, 0x23, 0x12, 0x00 },
+        { 0x6B, 0x27, 0x18, 0x00 },
+        { 0x21, 0x33, 0x09, 0x00 },
+        { 0x34, 0x33, 0x09, 0x00 },
+        { 0x2E, 0x2D, 0x07, 0x00 },
+        { 0x46, 0x32, 0x0C, 0x00 },
+        { 0x56, 0x37, 0x12, 0x00 },
+        { 0x6B, 0x3E, 0x18, 0x00 },
+        { 0x33, 0x4D, 0x0D, 0x00 },
+        { 0x40, 0x4D, 0x0D, 0x00 },
+        { 0x4E, 0x4D, 0x0D, 0x00 },
+        { 0x46, 0x42, 0x0C, 0x00 },
+        { 0x56, 0x46, 0x12, 0x00 },
+        { 0x6B, 0x4C, 0x18, 0x00 },
+        { 0x3F, 0x61, 0x13, 0x00 },
+        { 0x4E, 0x61, 0x13, 0x00 },
+        { 0x5F, 0x61, 0x13, 0x00 },
+        { 0x5F, 0x60, 0x13, 0x00 },
+        { 0x54, 0x52, 0x12, 0x00 },
+        { 0x6B, 0x5C, 0x18, 0x00 },
+        { 0x5D, 0x78, 0x17, 0x00 },
+        { 0x6C, 0x78, 0x17, 0x00 },
+        { 0x76, 0x78, 0x17, 0x00 },
+        { 0x75, 0x76, 0x17, 0x00 },
+        { 0x06, 0x20, 0x20, 0x00 },
+        { 0x06, 0x18, 0x26, 0x00 },
+        { 0x06, 0x1A, 0x47, 0x00 },
+        { 0x08, 0x21, 0x6C, 0x00 },
+        { 0x0C, 0x27, 0x8D, 0x00 },
+        { 0x0E, 0x30, 0xB0, 0x00 },
+        { 0x06, 0x1E, 0x07, 0x00 },
+        { 0x19, 0x21, 0x28, 0x00 },
+        { 0x1D, 0x25, 0x4A, 0x00 },
+        { 0x22, 0x2F, 0x6C, 0x00 },
+        { 0x24, 0x37, 0x91, 0x00 },
+        { 0x06, 0x1B, 0xC0, 0x00 },
+        { 0x10, 0x33, 0x07, 0x00 },
+        { 0x28, 0x38, 0x2F, 0x00 },
+        { 0x31, 0x30, 0x2B, 0x00 },
+        { 0x44, 0x34, 0x2F, 0x00 },
+        { 0x5A, 0x3B, 0x33, 0x00 },
+        { 0x81, 0x3E, 0x1C, 0x00 },
+        { 0x22, 0x4D, 0x0D, 0x00 },
+        { 0x38, 0x4C, 0x31, 0x00 },
+        { 0x46, 0x4C, 0x31, 0x00 },
+        { 0x44, 0x41, 0x30, 0x00 },
+        { 0x5A, 0x4A, 0x33, 0x00 },
+        { 0x81, 0x55, 0x1C, 0x00 },
+        { 0x33, 0x61, 0x13, 0x00 },
+        { 0x46, 0x64, 0x33, 0x00 },
+        { 0x54, 0x64, 0x33, 0x00 },
+        { 0x65, 0x64, 0x33, 0x00 },
+        { 0x57, 0x58, 0x33, 0x00 },
+        { 0x81, 0x69, 0x1C, 0x00 },
+        { 0x44, 0x78, 0x17, 0x00 },
+        { 0x5F, 0x92, 0x1B, 0x00 },
+        { 0x74, 0x92, 0x1B, 0x00 },
+        { 0x87, 0x92, 0x1B, 0x00 },
+        { 0x90, 0x91, 0x1A, 0x00 },
+        { 0x7F, 0x7B, 0x1C, 0x00 },
+        { 0x06, 0x3C, 0x3E, 0x00 },
+        { 0x06, 0x3C, 0x47, 0x00 },
+        { 0x06, 0x29, 0x47, 0x00 },
+        { 0x08, 0x2F, 0x6C, 0x00 },
+        { 0x0C, 0x38, 0x8D, 0x00 },
+        { 0x0E, 0x3D, 0xB0, 0x00 },
+        { 0x06, 0x32, 0x2A, 0x00 },
+        { 0x1C, 0x41, 0x49, 0x00 },
+        { 0x1B, 0x35, 0x4C, 0x00 },
+        { 0x22, 0x3D, 0x6C, 0x00 },
+        { 0x24, 0x40, 0x91, 0x00 },
+        { 0x06, 0x2D, 0xC0, 0x00 },
+        { 0x06, 0x32, 0x13, 0x00 },
+        { 0x1C, 0x34, 0x2E, 0x00 },
+        { 0x32, 0x43, 0x50, 0x00 },
+        { 0x3A, 0x48, 0x72, 0x00 },
+        { 0x13, 0x33, 0xC3, 0x00 },
+        { 0x06, 0x1D, 0xD1, 0x00 },
+        { 0x0E, 0x4C, 0x0A, 0x00 },
+        { 0x20, 0x4C, 0x23, 0x00 },
+        { 0x3B, 0x51, 0x4F, 0x00 },
+        { 0x49, 0x4E, 0x53, 0x00 },
+        { 0x64, 0x4F, 0x47, 0x00 },
+        { 0x92, 0x4F, 0x2B, 0x00 },
+        { 0x1E, 0x61, 0x0E, 0x00 },
+        { 0x38, 0x64, 0x33, 0x00 },
+        { 0x53, 0x73, 0x44, 0x00 },
+        { 0x68, 0x73, 0x44, 0x00 },
+        { 0x66, 0x61, 0x46, 0x00 },
+        { 0x92, 0x6D, 0x2B, 0x00 },
+        { 0x2F, 0x78, 0x17, 0x00 },
+        { 0x49, 0x92, 0x1B, 0x00 },
+        { 0x68, 0xB0, 0x1B, 0x00 },
+        { 0x87, 0xB0, 0x1B, 0x00 },
+        { 0xAA, 0xB0, 0x1B, 0x00 },
+        { 0x90, 0x8B, 0x2A, 0x00 },
+        { 0x09, 0x56, 0x5B, 0x00 },
+        { 0x08, 0x63, 0x6C, 0x00 },
+        { 0x08, 0x50, 0x6C, 0x00 },
+        { 0x08, 0x3C, 0x6C, 0x00 },
+        { 0x0C, 0x44, 0x8D, 0x00 },
+        { 0x0E, 0x48, 0xB0, 0x00 },
+        { 0x09, 0x51, 0x4D, 0x00 },
+        { 0x1F, 0x61, 0x67, 0x00 },
+        { 0x1E, 0x56, 0x6C, 0x00 },
+        { 0x1E, 0x47, 0x6C, 0x00 },
+        { 0x24, 0x4D, 0x91, 0x00 },
+        { 0x06, 0x45, 0xC0, 0x00 },
+        { 0x09, 0x4B, 0x35, 0x00 },
+        { 0x1D, 0x4C, 0x4C, 0x00 },
+        { 0x34, 0x66, 0x72, 0x00 },
+        { 0x33, 0x58, 0x74, 0x00 },
+        { 0x13, 0x53, 0xC3, 0x00 },
+        { 0x06, 0x40, 0xD1, 0x00 },
+        { 0x09, 0x4B, 0x1D, 0x00 },
+        { 0x1D, 0x4B, 0x39, 0x00 },
+        { 0x35, 0x51, 0x53, 0x00 },
+        { 0x47, 0x61, 0x76, 0x00 },
+        { 0x1B, 0x46, 0xD4, 0x00 },
+        { 0x06, 0x27, 0xD8, 0x00 },
+        { 0x0D, 0x60, 0x0D, 0x00 },
+        { 0x22, 0x64, 0x2D, 0x00 },
+        { 0x31, 0x71, 0x3B, 0x00 },
+        { 0x4C, 0x78, 0x62, 0x00 },
+        { 0x6C, 0x6E, 0x6B, 0x00 },
+        { 0xA6, 0x69, 0x3A, 0x00 },
+        { 0x21, 0x77, 0x13, 0x00 },
+        { 0x2C, 0x92, 0x17, 0x00 },
+        { 0x40, 0xB0, 0x1B, 0x00 },
+        { 0x69, 0xC9, 0x25, 0x00 },
+        { 0xAA, 0xC9, 0x25, 0x00 },
+        { 0xA3, 0x9E, 0x3A, 0x00 },
+        { 0x0B, 0x74, 0x7A, 0x00 },
+        { 0x0B, 0x85, 0x8C, 0x00 },
+        { 0x0B, 0x6E, 0x8C, 0x00 },
+        { 0x0B, 0x64, 0x8C, 0x00 },
+        { 0x0B, 0x54, 0x8C, 0x00 },
+        { 0x0E, 0x5A, 0xB0, 0x00 },
+        { 0x0C, 0x70, 0x6E, 0x00 },
+        { 0x21, 0x7F, 0x86, 0x00 },
+        { 0x21, 0x7A, 0x90, 0x00 },
+        { 0x21, 0x68, 0x90, 0x00 },
+        { 0x21, 0x5D, 0x90, 0x00 },
+        { 0x06, 0x5E, 0xC0, 0x00 },
+        { 0x0B, 0x60, 0x51, 0x00 },
+        { 0x21, 0x69, 0x6D, 0x00 },
+        { 0x1D, 0xA0, 0xAB, 0x00 },
+        { 0x13, 0x94, 0xBF, 0x00 },
+        { 0x13, 0x75, 0xBF, 0x00 },
+        { 0x06, 0x5F, 0xD1, 0x00 },
+        { 0x0B, 0x60, 0x3A, 0x00 },
+        { 0x20, 0x64, 0x5A, 0x00 },
+        { 0x2E, 0x74, 0x72, 0x00 },
+        { 0x1A, 0xB4, 0xD0, 0x00 },
+        { 0x16, 0x82, 0xD5, 0x00 },
+        { 0x06, 0x5E, 0xD8, 0x00 },
+        { 0x0B, 0x60, 0x22, 0x00 },
+        { 0x20, 0x64, 0x42, 0x00 },
+        { 0x2D, 0x73, 0x54, 0x00 },
+        { 0x40, 0x76, 0x75, 0x00 },
+        { 0x40, 0x89, 0xBD, 0x00 },
+        { 0x13, 0x39, 0xE1, 0x00 },
+        { 0x0F, 0x79, 0x0F, 0x00 },
+        { 0x15, 0x8F, 0x17, 0x00 },
+        { 0x19, 0xA8, 0x17, 0x00 },
+        { 0x20, 0xC2, 0x1A, 0x00 },
+        { 0x5C, 0xCB, 0x48, 0x00 },
+        { 0xA2, 0xA0, 0x5F, 0x00 },
+        { 0x0E, 0x9E, 0xAE, 0x00 },
+        { 0x0C, 0x90, 0xB2, 0x00 },
+        { 0x0C, 0x82, 0xB2, 0x00 },
+        { 0x0C, 0x77, 0xB2, 0x00 },
+        { 0x0F, 0x8C, 0x8C, 0x00 },
+        { 0x06, 0xAF, 0xB4, 0x00 },
+        { 0x06, 0xB1, 0xBB, 0x00 },
+        { 0x08, 0x19, 0x19, 0x00 },
+        { 0x08, 0x21, 0x21, 0x00 },
+        { 0x10, 0x21, 0x21, 0x00 },
+        { 0x11, 0x29, 0x29, 0x00 },
+        { 0x19, 0x42, 0x42, 0x00 },
+        { 0x19, 0x42, 0x4B, 0x00 },
+        { 0x19, 0x53, 0x53, 0x00 },
+        { 0x09, 0x6C, 0x8D, 0x00 },
+        { 0x09, 0x7D, 0x7D, 0x00 },
+        { 0x09, 0x7D, 0x95, 0x00 },
+        { 0x19, 0x53, 0x53, 0x00 },
+        { 0x19, 0x5B, 0x64, 0x00 },
+        { 0x19, 0x6C, 0x74, 0x00 },
+        { 0x19, 0x9D, 0xC7, 0x00 },
+        { 0x00, 0x08, 0x00, 0x00 },
+        { 0x31, 0x31, 0x29, 0x00 },
+        { 0xFF, 0x48, 0x00, 0x00 },
+        { 0x40, 0x40, 0x40, 0x00 },
+        { 0xFF, 0xFF, 0xA6, 0x00 },
+        { 0xD6, 0xFE, 0x69, 0x00 },
+        { 0x9C, 0x9C, 0xFF, 0x00 },
+        { 0xFF, 0xFB, 0xF0, 0x00 },
+        { 0xA0, 0xA0, 0xA4, 0x00 },
+        { 0x60, 0x60, 0x60, 0x00 },
+        { 0xFF, 0x00, 0x00, 0x00 },
+        { 0x00, 0xFF, 0x00, 0x00 },
+        { 0xFF, 0xFF, 0x00, 0x00 },
+        { 0x00, 0x00, 0xFF, 0x00 },
+        { 0xFF, 0x00, 0xFF, 0x00 },
+        { 0x00, 0xFF, 0xFF, 0x00 },
+        { 0xFF, 0xFF, 0xFF, 0x00 },
+    },
+
+    .NoteMap_LinkArray32 = {
+        { 0x20, 0x01 },
+        { 0x00, 0x02 },
+        { 0x01, 0x03 },
+        { 0x02, 0x04 },
+        { 0x03, 0x05 },
+        { 0x04, 0x06 },
+        { 0x05, 0x07 },
+        { 0x06, 0x08 },
+        { 0x07, 0x09 },
+        { 0x08, 0x0A },
+        { 0x09, 0x0B },
+        { 0x0A, 0x0C },
+        { 0x0B, 0x0D },
+        { 0x0C, 0x0E },
+        { 0x0D, 0x0F },
+        { 0x0E, 0x10 },
+        { 0x0F, 0x11 },
+        { 0x10, 0x12 },
+        { 0x11, 0x13 },
+        { 0x12, 0x14 },
+        { 0x13, 0x15 },
+        { 0x14, 0x16 },
+        { 0x15, 0x17 },
+        { 0x16, 0x18 },
+        { 0x17, 0x19 },
+        { 0x18, 0x1A },
+        { 0x19, 0x1B },
+        { 0x1A, 0x1C },
+        { 0x1B, 0x1D },
+        { 0x1C, 0x1E },
+        { 0x1D, 0x1F },
+        { 0x1E, 0x20 },
+        { 0x1F, 0x00 },
+        { 0x21, 0x21 },
+        { 0x22, 0x22 },
+    },
+
+    .NoteMap_LinkArray128 = {
+        { 0x80, 0x01 },
+        { 0x00, 0x02 },
+        { 0x01, 0x03 },
+        { 0x02, 0x04 },
+        { 0x03, 0x05 },
+        { 0x04, 0x06 },
+        { 0x05, 0x07 },
+        { 0x06, 0x08 },
+        { 0x07, 0x09 },
+        { 0x08, 0x0A },
+        { 0x09, 0x0B },
+        { 0x0A, 0x0C },
+        { 0x0B, 0x0D },
+        { 0x0C, 0x0E },
+        { 0x0D, 0x0F },
+        { 0x0E, 0x10 },
+        { 0x0F, 0x11 },
+        { 0x10, 0x12 },
+        { 0x11, 0x13 },
+        { 0x12, 0x14 },
+        { 0x13, 0x15 },
+        { 0x14, 0x16 },
+        { 0x15, 0x17 },
+        { 0x16, 0x18 },
+        { 0x17, 0x19 },
+        { 0x18, 0x1A },
+        { 0x19, 0x1B },
+        { 0x1A, 0x1C },
+        { 0x1B, 0x1D },
+        { 0x1C, 0x1E },
+        { 0x1D, 0x1F },
+        { 0x1E, 0x20 },
+        { 0x1F, 0x21 },
+    },
 
 };
 

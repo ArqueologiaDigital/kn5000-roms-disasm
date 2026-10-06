@@ -127,6 +127,24 @@ extern const char uwordProc;
 /* RomTest_RomSignatures's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* NakaInst_pBool_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* NakaInst_pSword_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_PartID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_TrackID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaInst_IntTimeID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t name_ptr;
+    int32_t value;
+} NakaInst_IntTimeID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    int32_t value;
+} NakaInst_TrackID_EnumTable_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t name;
+    int32_t value;
+} NakaInst_PartID_EnumTable_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t name_ptr;
     int32_t value;
@@ -289,175 +307,117 @@ typedef struct __attribute__((packed)) {
     NakaInst_WindowID_EnumTable_t NakaInst_WindowID_EnumTable[1];
     /* "" naming the end entry of NakaInst_WindowID_EnumTable, plus 0xFF fill */
     char NakaInst_WindowID_EmptyStr[2];
-    uint8_t field_0088;
-    uint16_t field_0089;
-    uint8_t pad_8[5];  /* zero padding */
-    uint32_t PT_Part2_str_ptr;
-    uint16_t field_0094;
-    uint8_t pad_9[2];  /* zero padding */
-    uint32_t PT_Part3_str_ptr;
-    uint16_t field_009c;
-    uint8_t pad_10[2];  /* zero padding */
-    uint32_t PT_Part4_str_ptr;
-    uint16_t field_00a4;
-    uint8_t pad_11[2];  /* zero padding */
-    uint32_t PT_Part5_str_ptr;
-    uint16_t field_00ac;
-    uint8_t pad_12[2];  /* zero padding */
-    uint32_t PT_Part6_str_ptr;
-    uint16_t field_00b4;
-    uint8_t pad_13[2];  /* zero padding */
-    uint32_t PT_Part7_str_ptr;
-    uint16_t field_00bc;
-    uint8_t pad_14[2];  /* zero padding */
-    uint32_t PT_Part8_str_ptr;
-    uint16_t field_00c4;
-    uint8_t pad_15[2];  /* zero padding */
-    uint32_t PT_Part9_str_ptr;
-    uint16_t field_00cc;
-    uint8_t pad_16[2];  /* zero padding */
-    uint32_t PT_Part10_str_ptr;
-    uint16_t field_00d4;
-    uint8_t pad_17[2];  /* zero padding */
-    uint32_t PT_Part11_str_ptr;
-    uint16_t field_00dc;
-    uint8_t pad_18[2];  /* zero padding */
-    uint32_t PT_Part12_str_ptr;
-    uint16_t field_00e4;
-    uint8_t pad_19[2];  /* zero padding */
-    uint32_t PT_Part13_str_ptr;
-    uint16_t field_00ec;
-    uint8_t pad_20[2];  /* zero padding */
-    uint32_t PT_Part14_str_ptr;
-    uint16_t field_00f4;
-    uint8_t pad_21[2];  /* zero padding */
-    uint32_t PT_Part15_str_ptr;
-    uint16_t field_00fc;
-    uint8_t pad_22[2];  /* zero padding */
-    uint32_t PT_Part16_str_ptr;
-    uint16_t field_0104;
-    uint8_t pad_23[2];  /* zero padding */
-    uint32_t PT_Accomp1_str_ptr;
-    uint16_t field_010c;
-    uint8_t pad_24[2];  /* zero padding */
-    uint32_t PT_Accomp2_str_ptr;
-    uint16_t field_0114;
-    uint8_t pad_25[2];  /* zero padding */
-    uint32_t PT_Accomp3_str_ptr;
-    uint16_t field_011c;
-    uint8_t pad_26[2];  /* zero padding */
-    uint32_t PT_Bass_str_ptr;
-    uint16_t field_0124;
-    uint8_t pad_27[2];  /* zero padding */
-    uint32_t PT_Drum_str_ptr;
-    uint16_t field_012c;
-    uint8_t pad_28[2];  /* zero padding */
-    uint32_t PT_Chord_str_ptr;
-    uint16_t field_0134;
-    uint8_t pad_29[2];  /* zero padding */
-    uint32_t PT_RootBass_str_ptr;
-    uint16_t field_013c;
-    uint8_t pad_30[2];  /* zero padding */
-    uint32_t PT_Msp1_str_ptr;
-    uint16_t field_0144;
-    uint8_t pad_31[2];  /* zero padding */
-    uint32_t PT_Msp2_str_ptr;
-    uint16_t field_014c;
-    uint8_t pad_32[2];  /* zero padding */
-    uint32_t PT_Control_str_ptr;
-    uint16_t field_0154;
-    uint8_t pad_33[2];  /* zero padding */
-    uint32_t PT_Metronome_str_ptr;
-    uint16_t field_015c;
-    uint8_t pad_34[2];  /* zero padding */
-    uint32_t PT_Microphone_str_ptr;
-    uint16_t field_0164;
-    uint8_t pad_35[2];  /* zero padding */
-    uint32_t ptr_0168;
-    uint16_t field_016c;
-    uint8_t pad_36[2];  /* zero padding */
-    uint32_t ptr_0170;
-    uint8_t pad_37[5];  /* zero padding */
-    uint16_t field_0179;
-    char T_PartSelect_str[13];
-    char PT_Microphone_str[14];
-    char PT_Metronome_str[14];
-    char PT_Control_str[12];
-    char PT_Msp2_str[8];
-    char PT_Msp1_str[8];
-    char PT_RootBass_str[12];
-    char PT_Chord_str[10];
-    char PT_Drum_str[8];
-    char PT_Bass_str[8];
-    char PT_Accomp3_str[12];
-    char PT_Accomp2_str[12];
-    char PT_Accomp1_str[12];
-    char PT_Part16_str[10];
-    char PT_Part15_str[10];
-    char PT_Part14_str[10];
-    char PT_Part13_str[10];
-    char PT_Part12_str[10];
-    char PT_Part11_str[10];
-    char PT_Part10_str[10];
-    char PT_Part9_str[10];
-    char PT_Part8_str[10];
-    char PT_Part7_str[10];
-    char PT_Part6_str[10];
-    char PT_Part5_str[10];
-    char PT_Part4_str[10];
-    char PT_Part3_str[10];
-    char PT_Part2_str[10];
-    char PT_Part1_str[10];
-    uint32_t ptrs_1[3];  /* 3 pointers */
-    uint16_t field_02b6;
-    uint8_t pad_38[2];  /* zero padding */
-    uint32_t TR_Track3_str_ptr;
-    uint16_t field_02be;
-    uint8_t pad_39[2];  /* zero padding */
-    uint32_t TR_Track4_str_ptr;
-    uint16_t field_02c6;
-    uint8_t pad_40[2];  /* zero padding */
-    uint32_t TR_Track5_str_ptr;
-    uint16_t field_02ce;
-    uint8_t pad_41[2];  /* zero padding */
-    uint32_t TR_Track6_str_ptr;
-    uint16_t field_02d6;
-    uint8_t pad_42[2];  /* zero padding */
-    uint32_t TR_Track7_str_ptr;
-    uint16_t field_02de;
-    uint8_t pad_43[2];  /* zero padding */
-    uint32_t TR_Track8_str_ptr;
-    uint16_t field_02e6;
-    uint8_t pad_44[2];  /* zero padding */
-    uint32_t ptr_02ea;
-    uint16_t field_02ee;
-    uint8_t pad_45[2];  /* zero padding */
-    uint32_t ptr_02f2;
-    uint16_t field_02f6;
-    uint8_t pad_46[2];  /* zero padding */
-    uint32_t ptr_02fa;
-    uint16_t field_02fe;
-    uint8_t pad_47[2];  /* zero padding */
-    uint32_t ptr_0302;
-    uint16_t field_0306;
-    uint8_t pad_48[2];  /* zero padding */
-    uint32_t ptr_030a;
-    uint16_t field_030e;
-    uint8_t pad_49[2];  /* zero padding */
-    uint32_t ptr_0312;
-    uint16_t field_0316;
-    uint8_t pad_50[2];  /* zero padding */
-    uint32_t ptr_031a;
-    uint16_t field_031e;
-    uint8_t pad_51[2];  /* zero padding */
-    uint32_t ptr_0322;
-    uint16_t field_0326;
-    uint8_t pad_52[2];  /* zero padding */
-    uint32_t ptr_032a;
-    uint16_t field_032e;
-    uint8_t pad_53[2];  /* zero padding */
-    uint32_t ptr_0332;
-    uint8_t bytes_0336[4];
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* 3 pointers */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* PartID property value names {name, value}: 29 named values + the {"", 0} end entry (SupportClass record 52, PartIDProc) */
+    NakaInst_PartID_EnumTable_t NakaInst_PartID_EnumTable[30];
+    /* "" + 0xFF fill: name of the end entry of NakaInst_PartID_EnumTable */
+    char NakaInst_PartID_EmptyStr[2];
+    /* "PT_PartSelect": name of PartID value 0xFF */
+    char NakaInst_PT_PartSelect_Str[14];
+    /* "PT_Microphone": name of PartID value 0x1B */
+    char NakaInst_PT_Microphone_Str[14];
+    /* "PT_Metronome" + 0xFF fill: name of PartID value 0x1A */
+    char NakaInst_PT_Metronome_Str[14];
+    /* "PT_Control" + 0xFF fill: name of PartID value 0x19 */
+    char NakaInst_PT_Control_Str[12];
+    /* "PT_Msp2": name of PartID value 0x18 */
+    char NakaInst_PT_Msp2_Str[8];
+    /* "PT_Msp1": name of PartID value 0x17 */
+    char NakaInst_PT_Msp1_Str[8];
+    /* "PT_RootBass": name of PartID value 0x16 */
+    char NakaInst_PT_RootBass_Str[12];
+    /* "PT_Chord" + 0xFF fill: name of PartID value 0x15 */
+    char NakaInst_PT_Chord_Str[10];
+    /* "PT_Drum": name of PartID value 0x14 */
+    char NakaInst_PT_Drum_Str[8];
+    /* "PT_Bass": name of PartID value 0x13 */
+    char NakaInst_PT_Bass_Str[8];
+    /* "PT_Accomp3" + 0xFF fill: name of PartID value 0x12 */
+    char NakaInst_PT_Accomp3_Str[12];
+    /* "PT_Accomp2" + 0xFF fill: name of PartID value 0x11 */
+    char NakaInst_PT_Accomp2_Str[12];
+    /* "PT_Accomp1" + 0xFF fill: name of PartID value 0x10 */
+    char NakaInst_PT_Accomp1_Str[12];
+    /* "PT_Part16": name of PartID value 0x0F */
+    char NakaInst_PT_Part16_Str[10];
+    /* "PT_Part15": name of PartID value 0x0E */
+    char NakaInst_PT_Part15_Str[10];
+    /* "PT_Part14": name of PartID value 0x0D */
+    char NakaInst_PT_Part14_Str[10];
+    /* "PT_Part13": name of PartID value 0x0C */
+    char NakaInst_PT_Part13_Str[10];
+    /* "PT_Part12": name of PartID value 0x0B */
+    char NakaInst_PT_Part12_Str[10];
+    /* "PT_Part11": name of PartID value 0x0A */
+    char NakaInst_PT_Part11_Str[10];
+    /* "PT_Part10": name of PartID value 9 */
+    char NakaInst_PT_Part10_Str[10];
+    /* "PT_Part9" + 0xFF fill: name of PartID value 8 */
+    char NakaInst_PT_Part9_Str[10];
+    /* "PT_Part8" + 0xFF fill: name of PartID value 7 */
+    char NakaInst_PT_Part8_Str[10];
+    /* "PT_Part7" + 0xFF fill: name of PartID value 6 */
+    char NakaInst_PT_Part7_Str[10];
+    /* "PT_Part6" + 0xFF fill: name of PartID value 5 */
+    char NakaInst_PT_Part6_Str[10];
+    /* "PT_Part5" + 0xFF fill: name of PartID value 4 */
+    char NakaInst_PT_Part5_Str[10];
+    /* "PT_Part4" + 0xFF fill: name of PartID value 3 */
+    char NakaInst_PT_Part4_Str[10];
+    /* "PT_Part3" + 0xFF fill: name of PartID value 2 */
+    char NakaInst_PT_Part3_Str[10];
+    /* "PT_Part2" + 0xFF fill: name of PartID value 1 */
+    char NakaInst_PT_Part2_Str[10];
+    /* "PT_Part1" + 0xFF fill: name of PartID value 0 */
+    char NakaInst_PT_Part1_Str[10];
+    /* TrackID property value names {name, value}: TR_Track1..16 = 0..15, TR_All = 0xFF, then the {"", 0} end entry (SupportClass record 53, TrackIDProc) */
+    NakaInst_TrackID_EnumTable_t NakaInst_TrackID_EnumTable[18];
     /* zero padding */
     /* "" (+ 0xFF alignment byte): name of the terminator of TrackIDProc's value-name list */
     char TrackIDProc_NameListEnd[2];
@@ -488,44 +448,20 @@ typedef struct __attribute__((packed)) {
     char TR_Track2_str[10];
     char TR_Track1_str[10];
     /* NakaInst_IntTimeID_EnumTable: 3 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
-    uint32_t NakaInst_IntTimeID_EnumTable[3];
-    uint16_t field_03fe;
-    uint8_t pad_55[2];  /* zero padding */
-    uint32_t IT_Hold_str_ptr;
-    uint16_t field_0406;
-    uint8_t pad_56[2];  /* zero padding */
-    uint32_t IT_1Sec_str_ptr;
-    uint16_t field_040e;
-    uint8_t pad_57[2];  /* zero padding */
-    uint32_t IT_2Sec_str_ptr;
-    uint16_t field_0416;
-    uint8_t pad_58[2];  /* zero padding */
-    uint32_t IT_3Sec_str_ptr;
-    uint16_t field_041e;
-    uint8_t pad_59[2];  /* zero padding */
-    uint32_t IT_4Sec_str_ptr;
-    uint16_t field_0426;
-    uint8_t pad_60[2];  /* zero padding */
-    uint32_t IT_5Sec_str_ptr;
-    uint16_t field_042e;
-    uint8_t pad_61[2];  /* zero padding */
-    uint32_t IT_6Sec_str_ptr;
-    uint16_t field_0436;
-    uint8_t pad_62[2];  /* zero padding */
-    uint32_t IT_7Sec_str_ptr;
-    uint16_t field_043e;
-    uint8_t pad_63[2];  /* zero padding */
-    uint32_t IT_8Sec_str_ptr;
-    uint16_t field_0446;
-    uint8_t pad_64[2];  /* zero padding */
-    uint32_t ptr_044a;
-    uint16_t field_044e;
-    uint8_t pad_65[2];  /* zero padding */
-    uint32_t ptr_0452;
-    uint16_t field_0456;
-    uint8_t pad_66[2];  /* zero padding */
-    uint32_t ptr_045a;
-    uint8_t bytes_045e[4];
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* IntTimeID property value names: IT_Off 0, IT_Default 1, IT_Hold 2, IT_1Sec 3 .. IT_10Sec 12, end {"", 0}; walked by CommonIDProc */
+    NakaInst_IntTimeID_EnumTable_t NakaInst_IntTimeID_EnumTable[14];
     /* zero padding */
     /* "" (NUL + 0xFF pad): name of the IntTimeID enum table's terminator entry */
     char NakaInst_IntTimeID_EmptyStr[2];
@@ -2949,347 +2885,119 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .NakaInst_WindowID_EmptyStr = "\x00\xFF",
 
-    .field_0088 = 0x5E,
-
-    .field_0089 = 0xeb74,
-
-    .pad_8 = { 0 },
-
-    .PT_Part2_str_ptr = SELF(PT_Part2_str),
-
-    .field_0094 = 0x0001,
-
-    .pad_9 = { 0 },
-
-    .PT_Part3_str_ptr = SELF(PT_Part3_str),
-
-    .field_009c = 0x0002,
-
-    .pad_10 = { 0 },
-
-    .PT_Part4_str_ptr = SELF(PT_Part4_str),
-
-    .field_00a4 = 0x0003,
-
-    .pad_11 = { 0 },
-
-    .PT_Part5_str_ptr = SELF(PT_Part5_str),
-
-    .field_00ac = 0x0004,
-
-    .pad_12 = { 0 },
-
-    .PT_Part6_str_ptr = SELF(PT_Part6_str),
-
-    .field_00b4 = 0x0005,
-
-    .pad_13 = { 0 },
-
-    .PT_Part7_str_ptr = SELF(PT_Part7_str),
-
-    .field_00bc = 0x0006,
-
-    .pad_14 = { 0 },
-
-    .PT_Part8_str_ptr = SELF(PT_Part8_str),
-
-    .field_00c4 = 0x0007,
-
-    .pad_15 = { 0 },
-
-    .PT_Part9_str_ptr = SELF(PT_Part9_str),
-
-    .field_00cc = 0x0008,
-
-    .pad_16 = { 0 },
-
-    .PT_Part10_str_ptr = SELF(PT_Part10_str),
-
-    .field_00d4 = 0x0009,
-
-    .pad_17 = { 0 },
-
-    .PT_Part11_str_ptr = SELF(PT_Part11_str),
-
-    .field_00dc = 0x000a,
-
-    .pad_18 = { 0 },
-
-    .PT_Part12_str_ptr = SELF(PT_Part12_str),
-
-    .field_00e4 = 0x000b,
-
-    .pad_19 = { 0 },
-
-    .PT_Part13_str_ptr = SELF(PT_Part13_str),
-
-    .field_00ec = 0x000c,
-
-    .pad_20 = { 0 },
-
-    .PT_Part14_str_ptr = SELF(PT_Part14_str),
-
-    .field_00f4 = 0x000d,
-
-    .pad_21 = { 0 },
-
-    .PT_Part15_str_ptr = SELF(PT_Part15_str),
-
-    .field_00fc = 0x000e,
-
-    .pad_22 = { 0 },
-
-    .PT_Part16_str_ptr = SELF(PT_Part16_str),
-
-    .field_0104 = 0x000f,
-
-    .pad_23 = { 0 },
-
-    .PT_Accomp1_str_ptr = SELF(PT_Accomp1_str),
-
-    .field_010c = 0x0010,
-
-    .pad_24 = { 0 },
-
-    .PT_Accomp2_str_ptr = SELF(PT_Accomp2_str),
-
-    .field_0114 = 0x0011,
-
-    .pad_25 = { 0 },
-
-    .PT_Accomp3_str_ptr = SELF(PT_Accomp3_str),
-
-    .field_011c = 0x0012,
-
-    .pad_26 = { 0 },
-
-    .PT_Bass_str_ptr = SELF(PT_Bass_str),
-
-    .field_0124 = 0x0013,
-
-    .pad_27 = { 0 },
-
-    .PT_Drum_str_ptr = SELF(PT_Drum_str),
-
-    .field_012c = 0x0014,
-
-    .pad_28 = { 0 },
-
-    .PT_Chord_str_ptr = SELF(PT_Chord_str),
-
-    .field_0134 = 0x0015,
-
-    .pad_29 = { 0 },
-
-    .PT_RootBass_str_ptr = SELF(PT_RootBass_str),
-
-    .field_013c = 0x0016,
-
-    .pad_30 = { 0 },
-
-    .PT_Msp1_str_ptr = SELF(PT_Msp1_str),
-
-    .field_0144 = 0x0017,
-
-    .pad_31 = { 0 },
-
-    .PT_Msp2_str_ptr = SELF(PT_Msp2_str),
-
-    .field_014c = 0x0018,
-
-    .pad_32 = { 0 },
-
-    .PT_Control_str_ptr = SELF(PT_Control_str),
-
-    .field_0154 = 0x0019,
-
-    .pad_33 = { 0 },
-
-    .PT_Metronome_str_ptr = SELF(PT_Metronome_str),
-
-    .field_015c = 0x001a,
-
-    .pad_34 = { 0 },
-
-    .PT_Microphone_str_ptr = SELF(PT_Microphone_str),
-
-    .field_0164 = 0x001b,
-
-    .pad_35 = { 0 },
-
-    .ptr_0168 = 0x00eb7338,
-
-    .field_016c = 0x00ff,
-
-    .pad_36 = { 0 },
-
-    .ptr_0170 = 0x00eb7336,
-
-    .pad_37 = { 0 },
-
-    .field_0179 = 0x50ff,
-
-    .T_PartSelect_str = ALIGNED_STRING("T_PartSelect"),
-
-    .PT_Microphone_str = "PT_Microphone",
-
-    .PT_Metronome_str = ALIGNED_STRING("PT_Metronome"),
-
-    .PT_Control_str = ALIGNED_STRING("PT_Control"),
-
-    .PT_Msp2_str = "PT_Msp2",
-
-    .PT_Msp1_str = "PT_Msp1",
-
-    .PT_RootBass_str = "PT_RootBass",
-
-    .PT_Chord_str = ALIGNED_STRING("PT_Chord"),
-
-    .PT_Drum_str = "PT_Drum",
-
-    .PT_Bass_str = "PT_Bass",
-
-    .PT_Accomp3_str = ALIGNED_STRING("PT_Accomp3"),
-
-    .PT_Accomp2_str = ALIGNED_STRING("PT_Accomp2"),
-
-    .PT_Accomp1_str = ALIGNED_STRING("PT_Accomp1"),
-
-    .PT_Part16_str = "PT_Part16",
-
-    .PT_Part15_str = "PT_Part15",
-
-    .PT_Part14_str = "PT_Part14",
-
-    .PT_Part13_str = "PT_Part13",
-
-    .PT_Part12_str = "PT_Part12",
-
-    .PT_Part11_str = "PT_Part11",
-
-    .PT_Part10_str = "PT_Part10",
-
-    .PT_Part9_str = ALIGNED_STRING("PT_Part9"),
-
-    .PT_Part8_str = ALIGNED_STRING("PT_Part8"),
-
-    .PT_Part7_str = ALIGNED_STRING("PT_Part7"),
-
-    .PT_Part6_str = ALIGNED_STRING("PT_Part6"),
-
-    .PT_Part5_str = ALIGNED_STRING("PT_Part5"),
-
-    .PT_Part4_str = ALIGNED_STRING("PT_Part4"),
-
-    .PT_Part3_str = ALIGNED_STRING("PT_Part3"),
-
-    .PT_Part2_str = ALIGNED_STRING("PT_Part2"),
-
-    .PT_Part1_str = ALIGNED_STRING("PT_Part1"),
-
-    .ptrs_1 = {
-        SELF(TR_Track1_str),
-        0x00000000,
-        SELF(TR_Track2_str),
+    .NakaInst_PartID_EnumTable = {
+        { SELF(NakaInst_PT_Part1_Str), 0 },
+        { SELF(NakaInst_PT_Part2_Str), 1 },
+        { SELF(NakaInst_PT_Part3_Str), 2 },
+        { SELF(NakaInst_PT_Part4_Str), 3 },
+        { SELF(NakaInst_PT_Part5_Str), 4 },
+        { SELF(NakaInst_PT_Part6_Str), 5 },
+        { SELF(NakaInst_PT_Part7_Str), 6 },
+        { SELF(NakaInst_PT_Part8_Str), 7 },
+        { SELF(NakaInst_PT_Part9_Str), 8 },
+        { SELF(NakaInst_PT_Part10_Str), 9 },
+        { SELF(NakaInst_PT_Part11_Str), 10 },
+        { SELF(NakaInst_PT_Part12_Str), 11 },
+        { SELF(NakaInst_PT_Part13_Str), 12 },
+        { SELF(NakaInst_PT_Part14_Str), 13 },
+        { SELF(NakaInst_PT_Part15_Str), 14 },
+        { SELF(NakaInst_PT_Part16_Str), 15 },
+        { SELF(NakaInst_PT_Accomp1_Str), 16 },
+        { SELF(NakaInst_PT_Accomp2_Str), 17 },
+        { SELF(NakaInst_PT_Accomp3_Str), 18 },
+        { SELF(NakaInst_PT_Bass_Str), 19 },
+        { SELF(NakaInst_PT_Drum_Str), 20 },
+        { SELF(NakaInst_PT_Chord_Str), 21 },
+        { SELF(NakaInst_PT_RootBass_Str), 22 },
+        { SELF(NakaInst_PT_Msp1_Str), 23 },
+        { SELF(NakaInst_PT_Msp2_Str), 24 },
+        { SELF(NakaInst_PT_Control_Str), 25 },
+        { SELF(NakaInst_PT_Metronome_Str), 26 },
+        { SELF(NakaInst_PT_Microphone_Str), 27 },
+        { SELF(NakaInst_PT_PartSelect_Str), 255 },
+        { SELF(NakaInst_PartID_EmptyStr), 0 },
     },
 
-    .field_02b6 = 0x0001,
+    .NakaInst_PartID_EmptyStr = "\x00\xFF",
 
-    .pad_38 = { 0 },
+    .NakaInst_PT_PartSelect_Str = "PT_PartSelect",
 
-    .TR_Track3_str_ptr = SELF(TR_Track3_str),
+    .NakaInst_PT_Microphone_Str = "PT_Microphone",
 
-    .field_02be = 0x0002,
+    .NakaInst_PT_Metronome_Str = "PT_Metronome\x00\xFF",
 
-    .pad_39 = { 0 },
+    .NakaInst_PT_Control_Str = "PT_Control\x00\xFF",
 
-    .TR_Track4_str_ptr = SELF(TR_Track4_str),
+    .NakaInst_PT_Msp2_Str = "PT_Msp2",
 
-    .field_02c6 = 0x0003,
+    .NakaInst_PT_Msp1_Str = "PT_Msp1",
 
-    .pad_40 = { 0 },
+    .NakaInst_PT_RootBass_Str = "PT_RootBass",
 
-    .TR_Track5_str_ptr = SELF(TR_Track5_str),
+    .NakaInst_PT_Chord_Str = "PT_Chord\x00\xFF",
 
-    .field_02ce = 0x0004,
+    .NakaInst_PT_Drum_Str = "PT_Drum",
 
-    .pad_41 = { 0 },
+    .NakaInst_PT_Bass_Str = "PT_Bass",
 
-    .TR_Track6_str_ptr = SELF(TR_Track6_str),
+    .NakaInst_PT_Accomp3_Str = "PT_Accomp3\x00\xFF",
 
-    .field_02d6 = 0x0005,
+    .NakaInst_PT_Accomp2_Str = "PT_Accomp2\x00\xFF",
 
-    .pad_42 = { 0 },
+    .NakaInst_PT_Accomp1_Str = "PT_Accomp1\x00\xFF",
 
-    .TR_Track7_str_ptr = SELF(TR_Track7_str),
+    .NakaInst_PT_Part16_Str = "PT_Part16",
 
-    .field_02de = 0x0006,
+    .NakaInst_PT_Part15_Str = "PT_Part15",
 
-    .pad_43 = { 0 },
+    .NakaInst_PT_Part14_Str = "PT_Part14",
 
-    .TR_Track8_str_ptr = SELF(TR_Track8_str),
+    .NakaInst_PT_Part13_Str = "PT_Part13",
 
-    .field_02e6 = 0x0007,
+    .NakaInst_PT_Part12_Str = "PT_Part12",
 
-    .pad_44 = { 0 },
+    .NakaInst_PT_Part11_Str = "PT_Part11",
 
-    .ptr_02ea = 0x00eb7556,
+    .NakaInst_PT_Part10_Str = "PT_Part10",
 
-    .field_02ee = 0x0008,
+    .NakaInst_PT_Part9_Str = "PT_Part9\x00\xFF",
 
-    .pad_45 = { 0 },
+    .NakaInst_PT_Part8_Str = "PT_Part8\x00\xFF",
 
-    .ptr_02f2 = 0x00eb754a,
+    .NakaInst_PT_Part7_Str = "PT_Part7\x00\xFF",
 
-    .field_02f6 = 0x0009,
+    .NakaInst_PT_Part6_Str = "PT_Part6\x00\xFF",
 
-    .pad_46 = { 0 },
+    .NakaInst_PT_Part5_Str = "PT_Part5\x00\xFF",
 
-    .ptr_02fa = 0x00eb753e,
+    .NakaInst_PT_Part4_Str = "PT_Part4\x00\xFF",
 
-    .field_02fe = 0x000a,
+    .NakaInst_PT_Part3_Str = "PT_Part3\x00\xFF",
 
-    .pad_47 = { 0 },
+    .NakaInst_PT_Part2_Str = "PT_Part2\x00\xFF",
 
-    .ptr_0302 = 0x00eb7532,
+    .NakaInst_PT_Part1_Str = "PT_Part1\x00\xFF",
 
-    .field_0306 = 0x000b,
-
-    .pad_48 = { 0 },
-
-    .ptr_030a = 0x00eb7526,
-
-    .field_030e = 0x000c,
-
-    .pad_49 = { 0 },
-
-    .ptr_0312 = 0x00eb751a,
-
-    .field_0316 = 0x000d,
-
-    .pad_50 = { 0 },
-
-    .ptr_031a = 0x00eb750e,
-
-    .field_031e = 0x000e,
-
-    .pad_51 = { 0 },
-
-    .ptr_0322 = 0x00eb7502,
-
-    .field_0326 = 0x000f,
-
-    .pad_52 = { 0 },
-
-    .ptr_032a = 0x00eb74fa,
-
-    .field_032e = 0x00ff,
-
-    .pad_53 = { 0 },
-
-    .ptr_0332 = 0x00eb74f8,
-
-    .bytes_0336 = { 0x00, 0x00, 0x00, 0x00 },
+    .NakaInst_TrackID_EnumTable = {
+        { SELF(TR_Track1_str), 0 },
+        { SELF(TR_Track2_str), 1 },
+        { SELF(TR_Track3_str), 2 },
+        { SELF(TR_Track4_str), 3 },
+        { SELF(TR_Track5_str), 4 },
+        { SELF(TR_Track6_str), 5 },
+        { SELF(TR_Track7_str), 6 },
+        { SELF(TR_Track8_str), 7 },
+        { (SELF(field_0397) + 1), 8 },
+        { (SELF(field_038b) + 1), 9 },
+        { (SELF(field_037f) + 1), 10 },
+        { (SELF(field_0373) + 1), 11 },
+        { (SELF(field_0367) + 1), 12 },
+        { (SELF(field_035b) + 1), 13 },
+        { (SELF(field_034f) + 1), 14 },
+        { (SELF(field_0343) + 1), 15 },
+        { SELF(field_033c), 255 },
+        { SELF(TrackIDProc_NameListEnd), 0 },
+    },
 
     .TrackIDProc_NameListEnd = "\x00\xFF",
 
@@ -3346,84 +3054,21 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
     .TR_Track1_str = "TR_Track1",
 
     .NakaInst_IntTimeID_EnumTable = {
-        SELF(IT_Off_str),
-        0x00000000,
-        SELF(IT_Default_str),
+        { SELF(IT_Off_str), 0 },
+        { SELF(IT_Default_str), 1 },
+        { SELF(IT_Hold_str), 2 },
+        { SELF(IT_1Sec_str), 3 },
+        { SELF(IT_2Sec_str), 4 },
+        { SELF(IT_3Sec_str), 5 },
+        { SELF(IT_4Sec_str), 6 },
+        { SELF(IT_5Sec_str), 7 },
+        { SELF(IT_6Sec_str), 8 },
+        { SELF(IT_7Sec_str), 9 },
+        { SELF(IT_8Sec_str), 10 },
+        { (SELF(field_046d) + 1), 11 },
+        { SELF(field_0464), 12 },
+        { SELF(NakaInst_IntTimeID_EmptyStr), 0 },
     },
-
-    .field_03fe = 0x0001,
-
-    .pad_55 = { 0 },
-
-    .IT_Hold_str_ptr = SELF(IT_Hold_str),
-
-    .field_0406 = 0x0002,
-
-    .pad_56 = { 0 },
-
-    .IT_1Sec_str_ptr = SELF(IT_1Sec_str),
-
-    .field_040e = 0x0003,
-
-    .pad_57 = { 0 },
-
-    .IT_2Sec_str_ptr = SELF(IT_2Sec_str),
-
-    .field_0416 = 0x0004,
-
-    .pad_58 = { 0 },
-
-    .IT_3Sec_str_ptr = SELF(IT_3Sec_str),
-
-    .field_041e = 0x0005,
-
-    .pad_59 = { 0 },
-
-    .IT_4Sec_str_ptr = SELF(IT_4Sec_str),
-
-    .field_0426 = 0x0006,
-
-    .pad_60 = { 0 },
-
-    .IT_5Sec_str_ptr = SELF(IT_5Sec_str),
-
-    .field_042e = 0x0007,
-
-    .pad_61 = { 0 },
-
-    .IT_6Sec_str_ptr = SELF(IT_6Sec_str),
-
-    .field_0436 = 0x0008,
-
-    .pad_62 = { 0 },
-
-    .IT_7Sec_str_ptr = SELF(IT_7Sec_str),
-
-    .field_043e = 0x0009,
-
-    .pad_63 = { 0 },
-
-    .IT_8Sec_str_ptr = SELF(IT_8Sec_str),
-
-    .field_0446 = 0x000a,
-
-    .pad_64 = { 0 },
-
-    .ptr_044a = 0x00eb762c,
-
-    .field_044e = 0x000b,
-
-    .pad_65 = { 0 },
-
-    .ptr_0452 = 0x00eb7622,
-
-    .field_0456 = 0x000c,
-
-    .pad_66 = { 0 },
-
-    .ptr_045a = 0x00eb7620,
-
-    .bytes_045e = { 0x00, 0x00, 0x00, 0x00 },
 
     .NakaInst_IntTimeID_EmptyStr = "\x00\xFF",
 
@@ -3887,7 +3532,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0754 = 0x0002,
 
-    .ptr_0756 = SELF(ptrs_1),
+    .ptr_0756 = SELF(NakaInst_TrackID_EnumTable),
 
     .IntTimeIDProc_ptr = NAKA_ADDR(IntTimeIDProc),
 

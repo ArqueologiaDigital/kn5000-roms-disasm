@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,355
-#   semantic names ........... 52,611 (98.6%)
+#   symbols .................. 53,405
+#   semantic names ........... 52,661 (98.6%)
 #   positional names ......... 744
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -10672,6 +10672,37 @@ NakaInst_pUlong_EmptyStr 00EB723A
 NakaInst_WindowID_EnumTable 00EB723C
 NakaInst_WindowID_EmptyStr 00EB7244
 NakaInst_PartID_EnumTable 00EB7246
+NakaInst_PartID_EmptyStr 00EB7336
+NakaInst_PT_PartSelect_Str 00EB7338
+NakaInst_PT_Microphone_Str 00EB7346
+NakaInst_PT_Metronome_Str 00EB7354
+NakaInst_PT_Control_Str 00EB7362
+NakaInst_PT_Msp2_Str 00EB736E
+NakaInst_PT_Msp1_Str 00EB7376
+NakaInst_PT_RootBass_Str 00EB737E
+NakaInst_PT_Chord_Str 00EB738A
+NakaInst_PT_Drum_Str 00EB7394
+NakaInst_PT_Bass_Str 00EB739C
+NakaInst_PT_Accomp3_Str 00EB73A4
+NakaInst_PT_Accomp2_Str 00EB73B0
+NakaInst_PT_Accomp1_Str 00EB73BC
+NakaInst_PT_Part16_Str 00EB73C8
+NakaInst_PT_Part15_Str 00EB73D2
+NakaInst_PT_Part14_Str 00EB73DC
+NakaInst_PT_Part13_Str 00EB73E6
+NakaInst_PT_Part12_Str 00EB73F0
+NakaInst_PT_Part11_Str 00EB73FA
+NakaInst_PT_Part10_Str 00EB7404
+NakaInst_PT_Part9_Str 00EB740E
+NakaInst_PT_Part8_Str 00EB7418
+NakaInst_PT_Part7_Str 00EB7422
+NakaInst_PT_Part6_Str 00EB742C
+NakaInst_PT_Part5_Str 00EB7436
+NakaInst_PT_Part4_Str 00EB7440
+NakaInst_PT_Part3_Str 00EB744A
+NakaInst_PT_Part2_Str 00EB7454
+NakaInst_PT_Part1_Str 00EB745E
+NakaInst_TrackID_EnumTable 00EB7468
 TrackIDProc_NameListEnd 00EB74F8
 NakaInst_TR_All 00EB74FA
 NakaInst_TR_Track16 00EB7502
@@ -15434,8 +15465,27 @@ Root_NamingUpperCaseToggleView 00EEF504
 Root_NamingLowerCaseToggleView 00EEF530
 Root_NamingSymbolToggleView 00EEF55C
 Naka_DrawbarReg_Table 00EEF588
-Boot_InitWorkRAM_ROMCopy2_Start_Data 00EEFA66
-Palette_8bit_RGBA_2_Data 00EEFAF0
+WorkRamInit_Image2 00EEFA66
+DrawBitmap_BitMasks 00EEFA72
+BmDrEdit_TempoAnimTick 00EEFA7A
+SeqBuf_EventTemplateD1 00EEFA7C
+SeqBuf_EventTemplateD2 00EEFA80
+SeqBuf_EventTemplateB0 00EEFA86
+SeqPlay_StartInitActive 00EEFA8E
+SeqAcc_ReInitGuard 00EEFA90
+SeqBuffer_MoveEntryMarker 00EEFA92
+EffEdit_ParamWrittenFlag 00EEFA94
+PlySngSel_TimerPending 00EEFA96
+PartCtrl_EventQueue 00EEFA98
+PartCtrl_EventQueueCount 00EEFAC0
+AccBankData_Kn3000Signature 00EEFAC2
+StylCnv_TechnicsTag 00EEFAD2
+StylCnv_DefaultVersionName 00EEFADA
+FDC_InitSequenceCount 00EEFAE2
+Dirmd_PostRequests 00EEFAE4
+Vga_InitPalette 00EEFAF0
+NoteMap_LinkArray32 00EEFEF0
+NoteMap_LinkArray128 00EEFF36
 WorkRam2_VoiceLinkA_Nodes21 00EEFF78
 CharEncoding_PrintableHi 00EF0000
 NakaData_NormalModeMap 00EF001F

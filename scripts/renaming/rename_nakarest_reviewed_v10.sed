@@ -256,3 +256,5 @@ s/\bSeqCh_SystemHandlerData\b/East_MidiSetupWorkCells/g
 s/\bMixerPart_NamePtrTable\b/LswLeftHold_OnOffStrPtrs/g
 s/\bNaka_DrawbarDisplay_Table1\b/FontIDProc_FontNameTable/g
 s/\bNaka_DrawbarDisplay_Table2\b/Font_FileNamePtrTable/g
+s/\bBoot_InitWorkRAM_ROMCopy2_Start_Data\b/WorkRamInit_Image2/g
+s/\bPalette_8bit_RGBA_2_Data\b/Vga_InitPalette/g

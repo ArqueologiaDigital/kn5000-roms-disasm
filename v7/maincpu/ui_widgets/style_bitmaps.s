@@ -102,10 +102,107 @@ NakaInst_pUlong_EmptyStr:	.incbin "includes/generated/naka_style_bitmaps.bin", 0
 NakaInst_WindowID_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x7E, 0x8
 ; NakaInst_WindowID_EmptyStr -- 2 x char: "" + 0xFF fill, name of the end entry of NakaInst_WindowID_EnumTable
 NakaInst_WindowID_EmptyStr:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x86, 0x2
-; [nakarest] NakaInst_PartID_EnumTable  +0x88..+0x33a (0xeb7246, 690 B)
-; [nakarest] purpose not established: layout of 690 B at 0xeb7246 not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_WindowID_Cont (at 0xeb7908, 0xeb7914).
-NakaInst_PartID_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x88, 0x2B2
+; NakaInst_PartID_EnumTable -- 30 x {u32 name, s32 value}: value names of the PartID property type (29 named + "" end entry)
+; Word +8 of SupportClass record 52 (PartIDProc, count 29) in ExitWindow_OK_Data_2, the 55 x 12-byte table
+; ExitWindow_OK registers as class SupportClass.  CommonIDProc (ui/ui_widget_defs.s) walks it in 8-byte steps:
+; DUMP_PROPERTY_EX matches the 32-bit value and Strcpy's the name, SET_PROPERTY_EX Strcmp's the names; "" ends it.
+; PT_Part1=0, PT_Part2=1, PT_Part3=2, PT_Part4=3, PT_Part5=4, PT_Part6=5, PT_Part7=6, PT_Part8=7, PT_Part9=8, PT_Part10=9, PT_Part11=0x0A, ... (18 more)
+NakaInst_PartID_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x88, 0xF0
+; NakaInst_PartID_EmptyStr -- 2 x char: "" + 0xFF fill, name of the end entry of NakaInst_PartID_EnumTable
+; NakaInst_PartID_EnumTable's last entry {"", 0} points here; CommonIDProc stops at a name whose first byte is 0.
+NakaInst_PartID_EmptyStr:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x178, 0x2
+; NakaInst_PT_PartSelect_Str -- 14 x char: "PT_PartSelect", name of PartID value 0xFF
+; Entry 28 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_PartSelect_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17A, 0xE
+; NakaInst_PT_Microphone_Str -- 14 x char: "PT_Microphone", name of PartID value 0x1B
+; Entry 27 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Microphone_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x188, 0xE
+; NakaInst_PT_Metronome_Str -- 14 x char: "PT_Metronome" + 0xFF fill, name of PartID value 0x1A
+; Entry 26 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Metronome_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x196, 0xE
+; NakaInst_PT_Control_Str -- 12 x char: "PT_Control" + 0xFF fill, name of PartID value 0x19
+; Entry 25 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Control_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1A4, 0xC
+; NakaInst_PT_Msp2_Str -- 8 x char: "PT_Msp2", name of PartID value 0x18
+; Entry 24 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Msp2_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1B0, 0x8
+; NakaInst_PT_Msp1_Str -- 8 x char: "PT_Msp1", name of PartID value 0x17
+; Entry 23 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Msp1_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1B8, 0x8
+; NakaInst_PT_RootBass_Str -- 12 x char: "PT_RootBass", name of PartID value 0x16
+; Entry 22 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_RootBass_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1C0, 0xC
+; NakaInst_PT_Chord_Str -- 10 x char: "PT_Chord" + 0xFF fill, name of PartID value 0x15
+; Entry 21 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Chord_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1CC, 0xA
+; NakaInst_PT_Drum_Str -- 8 x char: "PT_Drum", name of PartID value 0x14
+; Entry 20 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Drum_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1D6, 0x8
+; NakaInst_PT_Bass_Str -- 8 x char: "PT_Bass", name of PartID value 0x13
+; Entry 19 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Bass_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1DE, 0x8
+; NakaInst_PT_Accomp3_Str -- 12 x char: "PT_Accomp3" + 0xFF fill, name of PartID value 0x12
+; Entry 18 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Accomp3_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1E6, 0xC
+; NakaInst_PT_Accomp2_Str -- 12 x char: "PT_Accomp2" + 0xFF fill, name of PartID value 0x11
+; Entry 17 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Accomp2_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1F2, 0xC
+; NakaInst_PT_Accomp1_Str -- 12 x char: "PT_Accomp1" + 0xFF fill, name of PartID value 0x10
+; Entry 16 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Accomp1_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1FE, 0xC
+; NakaInst_PT_Part16_Str -- 10 x char: "PT_Part16", name of PartID value 0x0F
+; Entry 15 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part16_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x20A, 0xA
+; NakaInst_PT_Part15_Str -- 10 x char: "PT_Part15", name of PartID value 0x0E
+; Entry 14 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part15_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x214, 0xA
+; NakaInst_PT_Part14_Str -- 10 x char: "PT_Part14", name of PartID value 0x0D
+; Entry 13 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part14_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x21E, 0xA
+; NakaInst_PT_Part13_Str -- 10 x char: "PT_Part13", name of PartID value 0x0C
+; Entry 12 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part13_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x228, 0xA
+; NakaInst_PT_Part12_Str -- 10 x char: "PT_Part12", name of PartID value 0x0B
+; Entry 11 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part12_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x232, 0xA
+; NakaInst_PT_Part11_Str -- 10 x char: "PT_Part11", name of PartID value 0x0A
+; Entry 10 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part11_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x23C, 0xA
+; NakaInst_PT_Part10_Str -- 10 x char: "PT_Part10", name of PartID value 9
+; Entry 9 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part10_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x246, 0xA
+; NakaInst_PT_Part9_Str -- 10 x char: "PT_Part9" + 0xFF fill, name of PartID value 8
+; Entry 8 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part9_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x250, 0xA
+; NakaInst_PT_Part8_Str -- 10 x char: "PT_Part8" + 0xFF fill, name of PartID value 7
+; Entry 7 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part8_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x25A, 0xA
+; NakaInst_PT_Part7_Str -- 10 x char: "PT_Part7" + 0xFF fill, name of PartID value 6
+; Entry 6 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part7_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x264, 0xA
+; NakaInst_PT_Part6_Str -- 10 x char: "PT_Part6" + 0xFF fill, name of PartID value 5
+; Entry 5 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part6_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x26E, 0xA
+; NakaInst_PT_Part5_Str -- 10 x char: "PT_Part5" + 0xFF fill, name of PartID value 4
+; Entry 4 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part5_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x278, 0xA
+; NakaInst_PT_Part4_Str -- 10 x char: "PT_Part4" + 0xFF fill, name of PartID value 3
+; Entry 3 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part4_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x282, 0xA
+; NakaInst_PT_Part3_Str -- 10 x char: "PT_Part3" + 0xFF fill, name of PartID value 2
+; Entry 2 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part3_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x28C, 0xA
+; NakaInst_PT_Part2_Str -- 10 x char: "PT_Part2" + 0xFF fill, name of PartID value 1
+; Entry 1 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part2_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x296, 0xA
+; NakaInst_PT_Part1_Str -- 10 x char: "PT_Part1" + 0xFF fill, name of PartID value 0
+; Entry 0 of NakaInst_PartID_EnumTable points here.
+NakaInst_PT_Part1_Str:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x2A0, 0xA
+; NakaInst_TrackID_EnumTable -- 18 x {u32 name, s32 value}: value names of the TrackID property type (17 named + "" end entry)
+; Word +8 of SupportClass record 53 (TrackIDProc, count 17) in ExitWindow_OK_Data_2; read by CommonIDProc
+; (ui/ui_widget_defs.s) like every value-name list.  TR_Track1..TR_Track16 = 0..15, TR_All = 0xFF; the names
+; follow this slice (TrackIDProc_NameListEnd is the "" of the end entry, then NakaInst_TR_All .. NakaInst_TR_Track1).
+NakaInst_TrackID_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x2AA, 0x90
 ; TrackIDProc_NameListEnd -- 2 x char: "" + 0xFF fill, the name of record 17 (the terminator) of TrackIDProc's
 ; value-name list {TR_Track1..TR_Track16, TR_All (0xFF)}; CommonIDProc stops at the record whose name starts with 0.
 TrackIDProc_NameListEnd:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x33A, 0x2
@@ -177,9 +274,10 @@ NakaInst_TR_Track2:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x3DE, 
 ; [nakarest] Text (10 B at 0xeb75a6), first string "TR_Track1"; no registered NAKA table points
 ; [nakarest] into it; reached through 1 data word in NakaInst_PartID_EnumTable (at 0xeb7468).
 NakaInst_TR_Track1:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x3E8, 0xA
-; [nakarest] NakaInst_IntTimeID_EnumTable  +0x3f2..+0x462 (0xeb75b0, 112 B)
-; [nakarest] purpose not established: layout of 112 B at 0xeb75b0 not derived; readers below
-; [nakarest] Readers: 1 data word in NakaInst_WindowID_Cont (at 0xeb7920).
+; NakaInst_IntTimeID_EnumTable -- 14 x {u32 name_ptr, s32 value}: IntTimeID value names, ended by {"", 0}
+; IT_Off 0, IT_Default 1, IT_Hold 2, IT_1Sec 3 .. IT_10Sec 12 (the strings follow, IT_10Sec first). +8 of the IntTimeIDProc
+; SupportClass record (entry 54, in the bytes of NakaInst_WindowID_Cont, count 13); IntTimeIDProc reads the 16-bit
+; value and CommonIDProc (ui/ui_widget_defs.s) maps value <-> name through this list.
 NakaInst_IntTimeID_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x3F2, 0x70
 ; NakaInst_IntTimeID_EmptyStr -- 2 x char: "" plus a 0xFF alignment pad, the name of the {"", 0} terminator of
 ; NakaInst_IntTimeID_EnumTable (13 values IT_Off..IT_10Sec); CommonIDProc stops its walk at this empty name.
