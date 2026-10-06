@@ -3469,10 +3469,10 @@ Display_InitGraphicsAndScreen:
 	ldw wa, 0x00ff
 	call GraphicsRender_ByteData
 	ldw wa, 0x00f5
-	call DirmdEmulator_Dispatch_Code_Helper
-	call DirmdEmulator_Dispatch_Code_Helper3
+	call Display_SetBackgroundColor
+	call Display_LoadFixedPaletteBands
 	ldw wa, 0x00ff
-	call DirmdEmulator_Dispatch_Code_Helper2
+	call Display_FillPaletteBandFromEntry
 Display_CallInitScreenLayout:
 	push xde
 	push xhl

@@ -92,7 +92,7 @@ extern const char NakaData_WidgetInit1;
 extern const char FileIO_BytecodeData_Code_Loop3;
 extern const char FileIO_BytecodeData_Code_Join18;
 extern const char Naka_PresentationRootState;
-extern const char FileIO_BytecodeData_Code_Helper4;
+extern const char PanelAction_DispatchPedalFunction;
 
 #define BASE  0x00ED67CCu
 
@@ -6113,7 +6113,7 @@ const naka_extension_device_t naka_extension_device_data
     },
 
     .PanelAction_PedalFunctionHandlers = {
-        (NAKA_ADDR(FileIO_BytecodeData_Code_Helper4) + 36), NAKA_ADDR(NakaData_WidgetInit1), NAKA_ADDR(FileIO_BytecodeData_Code_Loop3), NAKA_ADDR(FileIO_BytecodeData_Code_Join18),
+        (NAKA_ADDR(PanelAction_DispatchPedalFunction) + 36), NAKA_ADDR(NakaData_WidgetInit1), NAKA_ADDR(FileIO_BytecodeData_Code_Loop3), NAKA_ADDR(FileIO_BytecodeData_Code_Join18),
         NAKA_ADDR(ExtDev_SndParam_Block48_Var40), NAKA_ADDR(ExtDev_SndParam_Block48_Var80), NAKA_ADDR(ExtDev_SndParam_Block48_Var04), NAKA_ADDR(ExtDev_SndParam_Block48_Var04_B),
         NAKA_ADDR(ExtDev_SndParam_Write98_Block), NAKA_ADDR(ExtDev_SndParam_ConfigAndWrite), NAKA_ADDR(ExtDev_SndParam_Block14_Dual), NAKA_ADDR(ExtDev_SndParam_Write48_Block),
         NAKA_ADDR(ExtDev_SndParam_Block48_Var02), NAKA_ADDR(ExtDev_SndParam_Block70_Var04), NAKA_ADDR(ExtDev_SndParam_DispatchAndWriteA8), NAKA_ADDR(ExtDev_SndParam_DispatchAndWriteA8_Alt),

@@ -3023,7 +3023,7 @@ Seq_FillBufferLoop:
 	ld xiz, xhl				; XIZ = info ptr
 	call FileIO_SeekRead_ExtReturn				; additional setup
 	ld xwa, xiz
-	calr	Seq_LoadNamedResource_Helper
+	calr	FDemo_AllocBuffer
 	ld xwa, xhl
 	ld (0x0249d0:24), xwa; store result
 	pushw Seq_FillBufferLoop_Str_ACTION@hi16

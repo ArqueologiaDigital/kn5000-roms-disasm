@@ -1,0 +1,608 @@
+[
+ {
+  "old": "Scoop_SoundEditorData_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_SelectPartIfEnabled",
+  "header": "Makes part A (1..4) the sound editor's current part (RAM 0x65D) when it is enabled and not already current; L = 1 if it changed, else 0.\nBasis: callers + body -- every Se*_OnSideRow2..5 handler passes its row's part (1..4) and sends the page's redraw event only when L = 1.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/semenu_routines.s:6948 `ld wa, 3:i3` / 6949 `call Scoop_SoundEditorData_Helper5` -- SePitEnv2_OnSideRow4 passes part 3 (rows 2..5 pass 1..4)",
+   "audio/semenu_routines.s:6950 `cp l, 0:i3` / 6952 `ldw wa, 41` / 6954 `call SeMenu_SendEvent` -- caller redraws (event 41) only when L != 0",
+   "audio/sound_editor_ui.s:4709 `ld wa, 1:i3` / 4710 `call Scoop_SoundEditorData_Helper5` -- same use in SeTonRan1_OnSideRow2 (58 named callers, all OnSideRow2..5)",
+   "audio/semenu_routines.s:1754 `lda xwa, (xsp)` / 1755 `calr SeMenu_ValidatePartNumber` -- reads the current part",
+   "audio/semenu_routines.s:1757 `cp a, (xsp+2)` -- no change when the requested part is already current",
+   "audio/semenu_routines.s:1761 `calr SeMenu_IsPartEnabled` -- refuses a disabled part",
+   "audio/semenu_routines.s:1770 `calr SeMenu_SetupMenuDisplay_Finalize_Data` / 1771 `ld l, 1:opc` -- stores the part, returns 1",
+   "audio/semenu_routines.s:1033 `ld (1629:16), a` -- SeMenu_SetupMenuDisplay_Finalize_Data writes the current part 0x65D (1..4, else 1), the byte SeMenu_ValidatePartNumber reads"
+  ],
+  "review_note": "both batches proposed SeMenu_SelectPart for different routines; the reviewer renamed this one SeMenu_SelectPartIfEnabled (returns L = changed, caller redraws)"
+ },
+ {
+  "old": "SeMenu_ApplyPartEdit_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_SwitchToValueStep",
+  "header": "Writes the signed value step for a column switch to (XBC) (edit-descriptor byte +10): +1 when A's bits 0-6 are 0 (first bank), -1 otherwise, tripled when A bit 7 is set (switches 17..24).\nBasis: callers + body -- the OnColumn handlers fill the descriptor's mask/shift/max/min (+6..+9) and pass their bank byte A from SeTitle_DecodeSwitch.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_editor_data.s:448 `ld (xbc+6), 255` .. 451 `ld (xbc+9), 206` -- SeAmpAmp2_OnColumn3 fills descriptor bytes +6..+9",
+   "display/scoop_editor_data.s:452 `ld a, (xsp+16)` / 454 `lda xbc, (xbc+10)` / 455 `call SeMenu_ApplyPartEdit_Helper5` -- A = handler argument, XBC = descriptor +10",
+   "audio/semenu_routines.s:2173-2180 SeTitle_DecodeSwitch header -- handlers get WA = bank byte: 1 for the second bank, bit 7 set for switches 17..24",
+   "audio/semenu_routines.s:2359 `ld l, a` / 2360 `res 7, l` / 2361 `ld e, 255:opc` / 2364 `ld e, 1:opc` -- step -1, or +1 when bits 0-6 are 0",
+   "audio/semenu_routines.s:2366 `ld (xbc), e` / 2367 `bit 7, a` / 2370 `muls a, 3` -- step stored, x3 when bit 7 set",
+   "audio/semenu_routines.s:1220 `cp (xwa+10), 0` / 1248 `ld a, (xwa+10)` -- SeMenu_TransferPartValues_EndData_Helper reads +10 as the (non-zero) step it applies"
+  ]
+ },
+ {
+  "old": "SeMenu_WaveformSelect_Apply_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeGfx_DrawIndexedBoundRecord",
+  "header": "Draws bound ScreenData record number A of the pointer table at XIY: XIY = table[A], then SeGfx_DrawBoundRecord.\nBasis: callers + body -- all 25 call sites load XIY with a SeScreenData_* pointer table (and A with an index) right before the call.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:8774 `ld a, 0:opc` / 8775 `ld xiy, SeScreenData_0x5525` / 8776 `call SeMenu_WaveformSelect_Apply_Helper5` -- index 0 of a pointer table",
+   "audio/sound_editor_ui.s:9881 `ld xiy, SeScreenData_0x24B8` / 9882 `call SeMenu_WaveformSelect_Apply_Helper5` -- SeMenu_DataBlock_02",
+   "audio/sound_editor_ui.s:13532 `SeScreenData_0x24B8:` / 13533 `.long SeScreenData_0x249A` -- the XIY argument is a table of record pointers",
+   "audio/sound_editor_ui.s:10507 `extz xwa` / 10509 `sla wa, 2` / 10510 `add xiy, xwa` / 10511 `ld xiy, (xiy)` -- XIY = table[A]",
+   "audio/sound_editor_ui.s:10512 `call SeGfx_DrawBoundRecord` -- renders that record (SeGfx_DrawBoundRecord -> GraphicsRender_Start, line 7772)",
+   "note: lines 10514-10528 after its `ret` are an unreached push/pop block, not part of this routine"
+  ]
+ },
+ {
+  "old": "UIState_ProcessKeyEvent_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplyEventField",
+  "header": "Applies the 4-byte event at XWA with its byte 3 temporarily set to C: SndParam_ResolveWidget looks it up; if SndParam_DecodeMidiAddr decodes the result, SndPart_SetParam, else SendEpilogue_Data; byte 3 is restored.\nBasis: callers + body -- the UIState_ProcessKeyEvent cases copy the SwbtWr event to the stack and call this once per masked field of byte 3.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:17156 `ld (xsp+0:8), (SWBTWR_EVENT_TYPE)` .. 17159 `ld (xsp+0x3), (SWBTWR_PAYLOAD_3)` -- parent copies the 4-byte event",
+   "audio/note_voice_mapping.s:17180 `lda xwa, (xsp)` / 17183 `and a, 255` / 17187 `calr UIState_ProcessKeyEvent_Helper` -- case 0 passes XWA = event, C = byte 3",
+   "audio/note_voice_mapping.s:17251 `and a, 64` / 17255 `calr UIState_ProcessKeyEvent_Helper` -- other cases pass a masked field of byte 3 (&7, &8, &64, &0x7f, 127)",
+   "audio/note_voice_mapping.s:18051 `ld a, (xiz+3)` / 18052 `ld (xsp+4), a` / 18053 `ld (xiz+3), c` -- byte 3 saved and replaced by C",
+   "audio/note_voice_mapping.s:18059 `call SndParam_ResolveWidget` -- hash lookup of the event (sndparam_routines.s:321)",
+   "audio/note_voice_mapping.s:18069 `call SndParam_DecodeMidiAddr` / 18075 `calr SndPart_SetParam` -- part parameter set (SndPart_SetParam header 18089-18093: WA part, BC code, DE value)",
+   "audio/note_voice_mapping.s:18080 `calr SendEpilogue_Data` -- fallback when the address is not a part parameter",
+   "audio/note_voice_mapping.s:18082 `ld a, (xsp+4)` / 18083 `ld (xiz+3), a` -- byte 3 restored",
+   "caveat: the parent's own name/header (\"process key event\") is generic; the name describes this routine's mechanism only"
+  ]
+ },
+ {
+  "old": "SeMenu_ApplyPartEdit_Helper11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_DrawKeyScaleGraph",
+  "header": "Clears the box (48,73)-(254,121) and draws the part's keyboard graph: key params A (and A+1, A+2 unless C = 1) placed on x by SeMenu_ApplyPartEdit_Helper10 (note 20..108 -> keyboard x), slope from the signed depth in part param 10.\nBasis: callers + body -- SeAmpAmp2/SeAmpEnv2/SeFilFil2/SePitEnv2 column handlers call it right after storing the edited value into param 10; the x axis is a 12-key octave table.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_editor_data.s:471 `ldw wa, 10` / 472 `call SeMenu_StorePartParam` / 475 `call SeMenu_ApplyPartEdit_Helper11` -- SeAmpAmp2_OnColumn3 copies the edited param 3 into param 10 and redraws (A = 0, C = 0)",
+   "audio/semenu_routines.s:3252 `ld wa, 2:i3` / 3253 `ld bc, 1:i3` / 3254 `calr SeMenu_ApplyPartEdit_Helper11` -- single-key mode (C = 1) from the pitch-envelope path",
+   "audio/semenu_routines.s:4588 `pushw 121` .. 4591 `pushw 48` / 4592 `call SeMenu_ApplyPartEdit_AltStore_Helper3` -- clears the graph box (AltStore_Helper3 -> SeGfx_StaticOp1B_FromBuf -> ColorBlit_ByteData)",
+   "audio/semenu_routines.s:4596 `calr SeMenu_LoadPartParam` (WA = 10) -- depth (signed, `exts wa` at the slope path)",
+   "audio/semenu_routines.s:4575 `lda xde, (GUI_DisplayStructData_0x1110:24)` / 4577 `mul l, 28` -- Helper10: x = 28*octave + table[note%12]; table bytes 0,2,4,6,8,12,14,16,18,20,22,24 = key positions in a 7-white-key octave",
+   "audio/semenu_routines.s:4675 `pushw 97` .. 4679 `call SeMenu_ApplyPartEdit_AltStore_Helper` -- flat baseline y = 97 across x 48..254 when depth = 0 (AltStore_Helper -> SeGfx_StaticOp00_Line)",
+   "caveat: 'key scale' is inferred from the graph's axes (keyboard x, signed depth slope); the title strings were not cross-checked"
+  ]
+ },
+ {
+  "old": "Scoop_SoundEditorData_Helper6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_CyclePartLfoState",
+  "header": "LFO pages: cycles part C's (1..4) LFO byte (page param C+4) off -> on (bit 5, bits 6-7 = the kind's current number - 1) -> on + bit 4 -> off, then redraws and stores it; WA = 0 amp, 1 pitch, 2 filter.\nBasis: callers + body -- only SeAmpLfo1/SePitLfo1/SeFilLfo1 OnSideRow2..5 call it, with WA = page kind and C = row's part.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_editor_data.s:1727 `ld wa, 0:i3` / 1728 `ld bc, 2:i3` / 1729 `call Scoop_SoundEditorData_Helper6` -- SeAmpLfo1_OnSideRow3: kind 0, part 2",
+   "audio/semenu_routines.s:7030 `ld wa, 1:i3` / 7032 `call Scoop_SoundEditorData_Helper6` -- SePitLfo1_OnSideRow3: kind 1",
+   "display/scoop_editor_data.s:3827 `ld wa, 2:i3` / 3829 `call Scoop_SoundEditorData_Helper6` -- SeFilLfo1_OnSideRow3: kind 2",
+   "audio/semenu_routines.s:1781 `calr SeMenu_IsPartEnabled` -- nothing for a disabled part",
+   "audio/semenu_routines.s:1785 `inc 4, a` / 1789 `calr SeMenu_LoadPartParam` -- param index = part + 4",
+   "audio/semenu_routines.s:1792 `bit 5, a` / 1794 `set 5, a` / 1799 `calr SeMenu_TransferPartValues_EndData` / 1806 `sll a, 6` -- off -> on with bits 6-7 = current number (0x68D/0x68E/0x68F, 1..4) - 1",
+   "audio/semenu_routines.s:1811 `bit 4, a` / 1813 `and a, 15` / 1816 `set 4, a` -- on -> on+bit4 -> off",
+   "audio/semenu_routines.s:1830 `calr SeMenu_RegisterElement_Extended` / 1835 `calr SeMenu_StorePartParam` -- redraw, store",
+   "caveat: what bit 4 selects is not established; 'state' is deliberately neutral"
+  ]
+ },
+ {
+  "old": "Scoop_SoundEditorData_Helper8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_DrawAmpEnvGraph",
+  "header": "Clears the box (51,59)-(256,144) and draws the amplitude-envelope graph from the current part's params 0..6 (each clamped to 0..100) as connected line segments.\nBasis: callers + body -- called only by SeAmpEnv1 column handlers after each edit and by the page refresh after its popup 45.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_editor_data.s:1071 `ldw wa, 45` / 1073 `call SeMenu_ApplyPartEdit_Helper2` / 1074 `call Scoop_SoundEditorData_Helper8` -- SeAmpEnv1_OnColumn7 edits a value, then redraws",
+   "display/scoop_editor_data.s:723 `call Scoop_SoundEditorData_Helper8` -- same in SeAmpEnv1_OnColumn1 (676-728); all 8 scoop_editor_data.s callers are SeAmpEnv1_OnColumn1..7",
+   "audio/sound_editor_ui.s:1231 `call Scoop_SoundEditorData_Helper8` -- after `pushw 45` / `call SeMenu_ShowPopupDialog` (Amp Env1 popup id 45)",
+   "audio/semenu_routines.s:3607 `pushw 144` .. 3610 `pushw 51` / 3611 `call SeMenu_ApplyPartEdit_AltStore_Helper3` -- clears the graph box",
+   "audio/semenu_routines.s:3659 `cp l, 100` / 3661 `ld (xwa), 100` -- envelope values clamped to 100",
+   "audio/semenu_routines.s:3851 `calr SeMenu_ApplyPartEdit_Helper6` .. 3903 -- segment draws; Helper6 -> Helper9 -> 4545 `call SeMenu_ApplyPartEdit_AltStore_Helper` (line)"
+  ]
+ },
+ {
+  "old": "UpdSeSel_DetailedUpdate_SetDisplayState_Helper4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_DrawFilterGraph",
+  "header": "Clears and draws the filter response graph of the current part: corner x = 86 + part param 2 (cutoff), peak height from part param 3 (resonance, 0..5); A = 0 low-pass / 1 high-pass shape, C = 0 (Lpq/Hpq pages) or 1 (L24/H24 pages, doubled slope, lower box).\nBasis: callers + body -- the four filter pages call it with (A,C) = (0,0) Lpq1, (1,0) Hpq1, (0,1) L241, (1,1) H241 after editing cutoff/resonance.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_editor_data.s:1969 `ld wa, 0:i3` / 1970 `ld bc, 0:i3` / 1971 `jp UpdSeSel_DetailedUpdate_SetDisplayState_Helper4` -- SeFilLpq1_OnColumn1",
+   "display/scoop_editor_data.s:2489 / 2605 / 2772 -- SeFilHpq1 (1,0), SeFilL241 (0,1), SeFilH241 (1,1) do the same",
+   "audio/sound_editor_ui.s:1596 `call UpdSeSel_DetailedUpdate_SetDisplayState_Helper4` -- page refresh after popup 48",
+   "audio/semenu_routines.s:4999 `ld wa, 2:i3` / 5000 `calr SeMenu_LoadPartParam` / 5001 `resm 7, (xsp+14)` -- param 2",
+   "audio/semenu_routines.s:5003 `ld wa, 3:i3` / 5005 `andmi8 (xsp+12), 7` / 5008 `ld (xsp+12), 5` -- param 3 clamped to 5",
+   "audio/semenu_routines.s:5018 `add wa, 86` / 5019 `ld qiz, wa` -- corner x from param 2",
+   "audio/semenu_routines.s:5023 `mul c, 3` vs 5031 `mul c, 6` -- peak height x3 (C = 0) or x6 (C = 1)",
+   "audio/semenu_routines.s:5043 `call SeMenu_ApplyPartEdit_AltStore_Helper3` / 5053 `call SeMenu_ApplyPartEdit_AltStore_Helper` -- box clear, then line segments (A = 0 path starts at x 67 = flat pass band)"
+  ]
+ },
+ {
+  "old": "FileIO_BytecodeData_Code_Helper4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelAction_DispatchPedalFunction",
+  "header": "Runs the foot-pedal function assigned by code BC: index = PanelAction_PedalAssignHandlerIndex[BC]; if <= 22, calls PanelAction_PedalFunctionHandlers[index] with XWA = the panel event.\nBasis: callers + body -- PanelAction_FootSwitch1/2 and FootController1-4 pass their assignment parameter (0x2886..0x2890) in BC.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/audio_control_engine.s:1118 `; foot switch FS1 (PG.2; event 28 bit 0): acts per panel parameter 0x2886` -- caller header",
+   "audio/audio_control_engine.s:1124 `ld xwa, 10374` / 1125 `call SndParam_LookupReadOnly` / 1128 `ld bc, hl` / 1129 `calr FileIO_BytecodeData_Code_Helper4` -- BC = pedal assignment",
+   "audio/audio_control_engine.s:1312 `lda xde, (PanelAction_PedalAssignHandlerIndex:24)` / 1313 `ld e, (xde+bc)` / 1314 `cp e, 22` / 1315 `ret ugt`",
+   "audio/audio_control_engine.s:1318 `lda xhl, (PanelAction_PedalFunctionHandlers:24)` / 1322 `call (xhl)` -- calls the handler",
+   "ui_widgets/extension_device_screens.s:1029-1039 -- table headers already describe this routine; lines 1030 and 1035 quote the old name and must be updated with the rename"
+  ]
+ },
+ {
+  "old": "VoiceSlot_ReadParamsWithSaveRestore_Helper2",
+  "verdict": "refuse",
+  "why_refused": "Body is mechanically clear but its domain is not: it advances the current stream's (index RAM 0x0EEE) read offset (table 0x0CBE) by DE bytes, crossing 256-byte blocks that carry 251 data bytes (offsets 5..255; `ldw bc, 251` / `div xwa, bc`). Every caller (Timer_ModeHandler_0_Helper4, MemConfig_Handler_5_Helper4, PerfMode_EventTable_0_Target1_Helper4/7, VoiceSlot_ReadParamsWithSaveRestore, VoiceParam_BitManipHelper) sits in the mislabelled scoop_display.s player block and only shows 'save state, advance N, read current byte' -- nothing says what the stream is (song/track data is a guess).",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:3045 `ld de, 3:i3` / 3046 `call VoiceSlot_ReadParamsWithSaveRestore_Helper2` -- caller passes a byte count",
+   "display/scoop_display.s:3559 `ld de, 4:i3` / 3560 call / 3561 `call VoiceSlot_ReadCurrentParams` -- advance then read",
+   "display/scoop_display.s:10289 `add e, (xix+32)` / 10292 `cp de, 255` -- offset + DE past the block end?",
+   "display/scoop_display.s:10317 `ldw bc, 251` / 10319 `div xwa, bc` -- blocks of 251 data bytes",
+   "display/scoop_display.s:10301 `ld (xwa+hl), e` (XWA = 3262) -- new offset stored"
+  ]
+ },
+ {
+  "old": "MemConfig_Handler_5_Helper11",
+  "verdict": "refuse",
+  "why_refused": "Body is only a fixed set of display refreshes: Display_UpdateRegion0, 1, 6, 3, MemConfig_Handler_3_Helper6, Display_UpdateRegion2 (each region routine redraws if dirty, or marks dirty when updates are disabled). All 11 callers are placeholder-named handlers in the same scoop_display.s block (MemConfig_Handler_*, SysEx_BytecodeDispatcher, PortConfig_Handler_0, VoiceState_DataBlock2) and do not say which screen or state this partial refresh belongs to; the region meanings in Display_UpdateDirtyRegions' comments are themselves unverified. A name would be body-only.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:8770 `call Display_UpdateRegion0` .. 8775 `call Display_UpdateRegion2` -- whole body",
+   "display/scoop_display.s:3505 `call MemConfig_Handler_5_Helper11` -- after Helper12 / DMA_FlagCheckWithCalls, then `ld w, 98` / `call MIDI_SendSysExFromW`",
+   "display/scoop_display.s:7834 `call MemConfig_Handler_5_Helper11` -- SysEx_BytecodeDispatcher_Skip",
+   "display/scoop_display.s:76-80 Display_UpdateRegion0 -- sets the dirty bit when DISPLAY_ENABLE_FLAG bit 0 is clear"
+  ]
+ },
+ {
+  "old": "OscScope_Handler_2_Helper",
+  "verdict": "refuse",
+  "why_refused": "Callers are entries 2,3,4,6,7 (and 10..) of OscScope_HandlerTable, dispatched by PerfMode_ParamHandler_11 on an unexplained index; they give no meaning. Body: clears bit 5 and sets bit 6 of byte 0 of the 4-byte record (*(0x1114))[(0x0EC4)] -- the record type is unknown.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:13484 `call OscScope_Handler_2_Helper` -- OscScope_Handler_2 (likewise _3, _4, _6, _7)",
+   "display/scoop_display.s:13453 `ld xde, OscScope_HandlerTable` / 13456 `call (xhl)` -- dispatcher in PerfMode_ParamHandler_11",
+   "display/scoop_display.s:13499 `ld xix, (4372:16)` / 13500 `ld e, (3780:16)` / 13501 `sla e, 2` -- 4-byte record indexed by 0x0EC4",
+   "display/scoop_display.s:13505 `andmi8 (xix), 223` / 13506 `ormi8 (xix), 64` -- bit 5 off, bit 6 on"
+  ]
+ },
+ {
+  "old": "Scoop_SoundEditorData_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_EditFilterResonance",
+  "header": "Steps the current part's filter resonance (part param 3, range 0..5) by the column switch in A and applies it via SeMenu_ApplyPartEdit_Helper2 (popup id E), then posts the column's dial events (SeMenu_ApplyPartEdit_Helper4(C)).\nBasis: callers + body -- filter-page column handlers (Lpq1/Hpq1 col 2, L241/H241 col 4, Bpf1 col 3) call it, then redraw with SeMenu_DrawFilterGraph, which plots param 3 as the peak height.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_editor_data.s:2025 `ld bc, 2:i3` / 2026 `ldw de, 48` / 2027 `calr Scoop_SoundEditorData_Helper2` / 2030 `jp UpdSeSel_DetailedUpdate_SetDisplayState_Helper4` -- SeFilLpq1_OnColumn2",
+   "display/scoop_editor_data.s:2928 `ld bc, 3:i3` / 2930 `calr Scoop_SoundEditorData_Helper2` -- SeFilBpf1_OnColumn3",
+   "display/scoop_editor_data.s:2041 `ld wa, 3:i3` / 2042 `call SeMenu_LoadPartParam` -- param 3",
+   "display/scoop_editor_data.s:2044 `ld (xbc+6), 127` .. 2046 `ld (xbc+8), 5` / 2047 `ld (xbc+9), 0` -- range 0..5",
+   "display/scoop_editor_data.s:2075 `ld bc, 3:i3` / then `call SeMenu_ApplyPartEdit_Helper2` -- applied to param 3",
+   "audio/semenu_routines.s:5005-5008, 5023/5031 -- SeMenu_DrawFilterGraph draws param 3 (<= 5) as the resonance peak height"
+  ]
+ },
+ {
+  "old": "SndDispatch_Handler_1_Helper2",
+  "verdict": "refuse",
+  "why_refused": "Callers are SndDispatch_Handler_1..4 / SndDispatch_TableEntryBegin, table entries with no established meaning. Body clears 0x0DFC/0x0DFD/0x0D6A, masks 0x0D53, then loops reading the current stream byte (VoiceSlot_ReadCurrentParams) and dispatching on codes 0x81/0x82/0x90 (VoiceSlot_DispatchRet / VoiceSlot_LoadAndDispatch); what those codes are (event markers of a song format?) is not established in the source.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:8381 `call SndDispatch_Handler_1_Helper2` -- SndDispatch_Handler_1, a table entry",
+   "display/scoop_display.s:8640 `call VoiceSlot_FlagCheck` / 8641 `cp a, 130`",
+   "display/scoop_display.s:8643 `call VoiceSlot_ReadCurrentParams` / 8645 `cp a, 129` / 8647 `incw 1, (3416:16)`",
+   "display/scoop_display.s:8653 `call VoiceSlot_DispatchRet` / 8656 `call VoiceSlot_LoadAndDispatch`"
+  ]
+ },
+ {
+  "old": "DirmdEmulator_Dispatch_Code_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Display_SetBackgroundColor",
+  "header": "Sets the graphics background colour word (RAM 0x3EFA2) to WA; text and mono-bitmap drawing use it for 0 bits (0xF5 = copy the wallpaper pixel).\nBasis: callers + body -- the four screen-init sequences call it with WA = 0xF5 next to GraphicsRender_ByteData (foreground colour, 0x3EFA4 = 0xFF).",
+  "basis": "callers + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:3469 `ldw wa, 0x00ff` / 3470 `call GraphicsRender_ByteData` / 3471 `ldw wa, 0x00f5` / 3472 `call DirmdEmulator_Dispatch_Code_Helper` -- Display_InitGraphicsAndScreen",
+   "audio/presentation_sound_nav.s:1305 `call DirmdEmulator_Dispatch_Code_Helper` -- DirmdEmu_CaseF (same sequence; also DirmdEmu_OnAllPaint, CmpStep_DataBlock)",
+   "display/graphics_text_vga.s:89 `ld (0x03efa2:24), wa` -- the whole body",
+   "ui/ui_window_procs.s:8286 `; The background colour (bit 0) is the word at 0x03efa2` / 8459 `ld iz, (0x03efa2:24)` -- DrawMonoBitmap reads it as background",
+   "display/graphics_text_vga.s:378 `pushw (0x3efa4:24)` / 379 `pushw (0x3efa2:24)` -- text draws pass fg and bg colours"
+  ]
+ },
+ {
+  "old": "DirmdEmulator_Dispatch_Code_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Display_LoadFixedPaletteBands",
+  "header": "Loads palette slots 32..63 (GraphicsRender_LowBandColorIndex) and 192..223 (GraphicsRender_PaletteSrc192) from the RGB table and flags a palette update; queued on the draw ring when not called from the draw task.\nBasis: callers + body -- the screen-init sequences call it between setting fg/bg colours and loading slots 64..191 from a selectable table (DirmdEmulator_Dispatch_Code_Helper2).",
+  "basis": "callers + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:3473 `call DirmdEmulator_Dispatch_Code_Helper3` / 3474 `ldw wa, 0x00ff` / 3475 `call DirmdEmulator_Dispatch_Code_Helper2` -- Display_InitGraphicsAndScreen",
+   "audio/presentation_sound_nav.s:1306 `call DirmdEmulator_Dispatch_Code_Helper3` -- DirmdEmu_CaseF (also DirmdEmu_OnAllPaint, CmpStep_DataBlock)",
+   "display/graphics_text_vga.s:138 `calr IS_XSP_INSIDE_4K_REGION_AT_1C032` / 142 `calr DrawQueue_Alloc` / 146 `jrl DrawRing_Post` -- deferred when not on the draw task",
+   "display/graphics_text_vga.s:151 `ldw iz, 32` / 156 `ld xbc, GraphicsRender_LowBandColorIndex` / 163 `call SetPaletteRGB` / 165 `cp iz, 64` -- slots 32..63",
+   "display/graphics_text_vga.s:167 `ldw iz, 192` / 172 `ld xbc, GraphicsRender_PaletteSrc192` / 181 `cp iz, 224` -- slots 192..223",
+   "display/graphics_text_vga.s:184 `ldw (PALETTE_UPDATE_FLAG:24), 1` -- update flagged",
+   "display/graphics_text_vga.s:121 `ld (0x03efa6:24), wa` / 124 `ldw iz, 64` / 130 `cp iz, 192` -- by contrast Helper2 fills 64..191 from table index WA, so these two bands are the fixed ones"
+  ]
+ },
+ {
+  "old": "FileIO_BytecodeData_Code_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelEvent_FillSelectedPart",
+  "header": "If byte 0 of the panel event at XWA is 0 and byte 1 is not 3, writes the selected part (PART_SELECT, 0x8D3A) into byte 0.\nBasis: callers + body -- PanelAction_PostUnlessDemo and the other panel actions call it on the event frame immediately before PanelEvent_Post.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/audio_control_engine.s:68 `; unless MD_DEMO: FileIO_BytecodeData_Code_Helper2 on the frame, then post both events` -- caller header (quotes the old name)",
+   "audio/audio_control_engine.s:74 `ld xwa, xiz` / 75 `calr FileIO_BytecodeData_Code_Helper2` / 77 `calr PanelEvent_Post` -- PanelAction_PostUnlessDemo",
+   "audio/audio_control_engine.s:1273 `.byte 0x80, 0x3f, 0x00` / 1274 `ret nz` -- unidasm v10 0xFC6350: cp (XWA),0x00",
+   "audio/audio_control_engine.s:1275 `.byte 0x88, 0x01, 0x3f, 0x03` / 1276 `ret z` -- cp (XWA+0x01),0x03",
+   "audio/audio_control_engine.s:1277 `.byte 0xb0, 0x14, 0x3a, 0x8d` -- ld (XWA),(0x8d3a); shared/ram_variables.s:128 `.equ PART_SELECT, 0x8d3a`",
+   "note: the body is still spelled as .byte; native spelling is `cp (xwa), 0` / `cp (xwa+1), 3` / `ld (xwa), (PART_SELECT)`"
+  ]
+ },
+ {
+  "old": "MemConfig_Handler_5_Helper12",
+  "verdict": "refuse",
+  "why_refused": "Callers are the same placeholder-named scoop_display.s handlers as MemConfig_Handler_5_Helper11 (it is always called just before it). Body: if (0x28BE) = 0xFF, Display_UpdateRegion1; otherwise tests bit 7 of (0xF250)[3*((0x0D60)-1)] and runs SubCPU_ToneParamRet_Helper13/Helper/VoiceBank_ProcessCommand and several 0x0EB5-coded branches. Too many unexplained state bytes to pin a meaning.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:3503 `call MemConfig_Handler_5_Helper12` -- followed by DMA_FlagCheckWithCalls and MemConfig_Handler_5_Helper11",
+   "display/scoop_display.s:12922 `cp (0x28be:16), 255` / 12925 `call Display_UpdateRegion1`",
+   "display/scoop_display.s:12935 `ld xde, 0xf250` / 12936 `bit 7, (xde+hl)`",
+   "display/scoop_display.s:12939 `call SubCPU_ToneParamRet_Helper13` / 12942 `call VoiceBank_ProcessCommand` / 12943 `cp (0x0eb5:16), 129`"
+  ]
+ },
+ {
+  "old": "Scoop_SoundEditorData_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_EditFilterCutoff",
+  "header": "Steps the current part's filter cutoff (part param 2, range 0..127) by the column switch in A and applies it via SeMenu_ApplyPartEdit_Helper2 (popup id E), then posts the column's dial events (SeMenu_ApplyPartEdit_Helper4(C)).\nBasis: callers + body -- filter-page column handlers (Lpq1/Hpq1 col 1, L241/H241 col 3) call it, then redraw with SeMenu_DrawFilterGraph, which places the corner at x = 86 + param 2.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_editor_data.s:1966 `ld bc, 1:i3` / 1967 `ldw de, 48` / 1968 `calr Scoop_SoundEditorData_Helper` / 1971 `jp UpdSeSel_DetailedUpdate_SetDisplayState_Helper4` -- SeFilLpq1_OnColumn1",
+   "display/scoop_editor_data.s:1982 `ld wa, 2:i3` / 1983 `call SeMenu_LoadPartParam` -- param 2",
+   "display/scoop_editor_data.s:1987 `ld (xbc+8), 127` / 1988 `ld (xbc+9), 0` -- range 0..127",
+   "display/scoop_editor_data.s:1992 `call SeMenu_ApplyPartEdit_Helper5` / 2016 `ld bc, 2:i3` / 2017 `call SeMenu_ApplyPartEdit_Helper2` -- step, apply to param 2",
+   "audio/semenu_routines.s:5018 `add wa, 86` -- SeMenu_DrawFilterGraph uses param 2 as the corner x"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Step3_Helper7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeCtr2_OnPartColumn",
+  "header": "SeCtr2 page column 5..8 handler for part A (1..4): steps the part's 2-bit field in page param 12 through 0, 1, 3 (up for a first-bank switch, down otherwise) via SeMenu_ApplyPartEdit_Helper3, then posts dial events with SeMenu_ApplyPartEdit_Helper4(A+4).\nBasis: callers + body -- only SeCtr2_OnColumn5..8 call it, passing part 1..4 in WA and the bank byte in C.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:2929 `ld c, a` / 2931 `ld wa, 1:i3` / 2932 `jp SeMenu_CopyWriteUpdate_Step3_Helper7` -- SeCtr2_OnColumn5 = part 1 (6, 7, 8 pass 2, 3, 4)",
+   "audio/semenu_routines.s:3591 `res 7, c` / 3592 `cp c, 0:i3` / 3593 `scc8 nz, c` -- direction = second bank",
+   "audio/semenu_routines.s:3597 `calr SeMenu_ApplyPartEdit_Helper3` / 3599 `inc 4, a` / 3601 `calr SeMenu_ApplyPartEdit_Helper4`",
+   "audio/semenu_routines.s:1863 `ldw wa, 12` / 1867 `dec 2, a` -- Helper3 works on page param 12 at bit 2*part-2",
+   "audio/semenu_routines.s:1882-1884 `cpib_erp 250, 1` / `ldib_erp 250, 3` and 1896 `ldib_erp 250, 1` / 1901 `ldib_erp 250, 0` -- the 0 -> 1 -> 3 / 3 -> 1 -> 0 steps"
+  ]
+ },
+ {
+  "old": "VoiceSynth_ConditionalUpdate_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VoiceSynth_ApplyLogCurve",
+  "header": "Returns A = SndParam_LogCurve128[A] (via SndParam_CompactLookupStub, which returns it in L).\nBasis: callers + body -- the four VoiceSynth/VoiceParam callers pass the value from RAM 0x0FAD through it only when mode byte 0x11F8 = 2, before storing or using it.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/smf_tonegen_core.s:5110 `ld a, (4013:16)` / 5111 `cp (4600:16), 2` / 5113 `call VoiceSynth_ConditionalUpdate_Helper` / 5115 `ld (4234:16), a` -- caller VoiceSynth_ConditionalUpdate_SetParams",
+   "sequencer/smf_tonegen_core.s:5218-5220, 5327-5329, 5419-5421 -- the same guarded call in VoiceSynth_Algo_PitchModulated, VoiceParam_ReadUpdate_7 and _11",
+   "sequencer/smf_tonegen_core.s:5121 `call SndParam_CompactLookupStub` / 5122 `ld a, l`",
+   "audio/note_voice_mapping.s:24782 `lda xbc, (SndParam_LogCurve128:24)` / 24783 `ld a, (xbc+wa)` -- the lookup",
+   "ui_widgets/widget_dispatch.s:9177 `; 128 x u8 rising curve 0..0x7F (fast start)` -- the table"
+  ]
+ },
+ {
+  "old": "DisplayMode_Handler_3_Helper13",
+  "verdict": "refuse",
+  "why_refused": "A two-instruction wrapper (`call Display_UpdateRegion0` / `ret`). Its callers (DisplayMode_Handler_3, DMA_ChannelHandler_3, PortConfig_Handler_3) are placeholder names that add nothing, and a name would only restate Display_UpdateRegion0, whose own region meaning ('status bar') is an unverified comment. Generic wrapper suffixes are disallowed, so no honest name is available.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:14255 `call Display_UpdateRegion0` / 14256 `ret` -- whole body",
+   "display/scoop_display.s:4460 `call DisplayMode_Handler_3_Helper13` -- DisplayMode_Handler_3",
+   "display/scoop_display.s:5207 `call DisplayMode_Handler_3_Helper13` -- DMA_ChannelHandler_3"
+  ]
+ },
+ {
+  "old": "MidiStream_ExtendedDispatch_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiStream_SetPartProgram",
+  "header": "Sets part C's program to E and bank to B: writes them into the part record ((0x90F2)[C]), PartCtrl_WriteProgramChange, MIDI_SetupChannelParams, two SwbtWr voice-param writes and, unless C = 72, SndParam_UpdateVoiceEntry_Safe; skipped when its pre-check sets bit 1 of 0x90FA.\nBasis: callers + body -- the three MIDI-mode handlers (MidiStream_ExtDispatch_Mode0/1/3, chosen by 0xFD50 bits 0-1) call it with the program and the part's bank from 0x9412.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/audio_control_engine.s:11628 `call SndParam_ApplyProgramChange_Safe` / 11629 `ld b, h` / 11630 `ld e, l` / 11632 `calr MidiStream_ExtendedDispatch_Helper` -- Mode0",
+   "audio/audio_control_engine.s:11652 `ld xiy, 0x9412` / 11653 `ld d, (xiy+hl)` / 11659 `ld b, d` / 11661 `calr MidiStream_ExtendedDispatch_Helper` -- Mode1: B = part bank (0x9412 is written by MidiCC_Handler_PairedParamA_Helper from bank-select CCs)",
+   "audio/audio_control_engine.s:11707 `ld (xix), e` / 11709 `or (xix+0x1), b` -- program and bank into the part record",
+   "audio/audio_control_engine.s:11710 `ld h, b` / 11711 `ld l, e` / 11712 `call PartCtrl_WriteProgramChange`",
+   "audio/audio_control_engine.s:11728 `cp c, 72` / 11732 `call SndParam_UpdateVoiceEntry_Safe`"
+  ]
+ },
+ {
+  "old": "Rhythm_DispatchNote_Helper",
+  "verdict": "refuse",
+  "why_refused": "A one-instruction thunk (`call AccStyle_TempoLookupData_Helper` / `ret`); the target (register-preserving call of AccTone_ReadAndProcess returning its L in E) is itself generically named, and the callers (AccStyle_TempoLookupData, Rhythm_StoreDispatchHelperResult -> stores E to 0x332B, Rhythm_TransposeTrampBlock) don't say what the value is. Name the target first.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:42 `call AccStyle_TempoLookupData_Helper` / 43 `ret` -- whole body",
+   "sequencer/seq_audio_mode.s:1470 `call Rhythm_DispatchNote_Helper` / 1471 `ld (0x332b:16), e`",
+   "sequencer/accompaniment_engine.s:13729 `call AccTone_ReadAndProcess` / 13733 `ld e, a` -- target returns L in E"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Step3_Helper10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_GetEntryCount",
+  "header": "Copies the sound editor's entry-count byte (RAM 0x6AC) to (XWA).\nBasis: callers + body -- SeTonTon1/SeTonHyb1 column 2 use it as the upper bound of the selection index they step; SeMenu_ProcessEffect sets 0x6AC from byte +2 (the count) of the record it loads.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:3995 `lda xwa, (xsp+4)` / 3996 `call SeMenu_CopyWriteUpdate_Step3_Helper10` -- SeTonTon1_OnColumn2",
+   "audio/sound_editor_ui.s:4001 `ld a, (xsp+4)` / 4002 `dec 1, a` / 4003 `cp (xsp+6), a` / 4005 `incm8 1, (xsp+6)` -- index stepped within 0..count-1",
+   "audio/sound_editor_ui.s:5059 `call SeMenu_CopyWriteUpdate_Step3_Helper10` -- SeTonHyb1_OnColumn2, same use",
+   "audio/semenu_routines.s:5434 `ld (xwa), (0x6ac)` -- the whole body",
+   "audio/semenu_routines.s:5453 `mrdb5 0x8a, 0x02, 0x19, 0xac, 0x06` -- unidasm: ld (0x06ac),(XDE+0x02): count byte of the record; 5471-5475 loop runs `cp a, (xde + 2)` times",
+   "audio/semenu_routines.s:5431 `ld (1708:16), a` -- the matching (unlabelled) setter"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Step3_Helper14",
+  "verdict": "refuse",
+  "why_refused": "Setter `ld (0x6B7), a`. The flag is set to 1 only by SeWrtMem_OnSideRow1 (after SeMenu_TriggerNotification 35) and to 0 before event 62 elsewhere; its reader SeMenu_HandleMenuChange_Data feeds SeMenu_CopyWriteUpdate_Data, which calls SeMenu_ClearNotification(2) when it is 1. The notification ids (35 vs 2) don't obviously match, so the flag's meaning is not pinned.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "audio/sound_editor_ui.s:6513 `call SeMenu_TriggerNotification` / 6514 `ld wa, 1:i3` / 6515 `call SeMenu_CopyWriteUpdate_Step3_Helper14` -- SeWrtMem_OnSideRow1",
+   "audio/sound_editor_ui.s:5831 `ld wa, 0:i3` / 5832 call -- SeEasy_OnSideRow1, then event 62",
+   "audio/semenu_routines.s:5976 `ld (xwa), (0x6b7)` -- reader SeMenu_HandleMenuChange_Data",
+   "audio/sound_editor_ui.s:2488 `call SeMenu_HandleMenuChange_Data` / 2489 `cp (xsp+2), 1` / 2492 `call SeMenu_ClearNotification`",
+   "audio/semenu_routines.s:5979 `ld (1719:16), a` -- whole body"
+  ]
+ },
+ {
+  "old": "Seq_LoadNamedResource_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDemo_AllocBuffer",
+  "header": "Bump-allocates XWA bytes from the feature-demo load arena SEQ_SONG_SLOTS..0xFD800 (next-free pointer at RAM 0x25B7E); returns XHL = the block, or 0 when it does not fit.\nBasis: callers + body -- the feature-demo loaders reset the pointer (FDemo_DisplayResourceData_Helper), then call this per 256-byte file block or for a whole file and copy/read into the returned block.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:41 `calr FDemo_DisplayResourceData_Helper` -- resets the arena (116 `lda xwa, (SEQ_SONG_SLOTS:24)` / 117 `ld (0x25b7e:24), xwa`)",
+   "demo/file_demo_proc.s:44 `call FileIO_ReadBlock` / 47 `ld xwa, 256` / 48 `calr Seq_LoadNamedResource_Helper` / 56 `call Mem_Copy` -- 256-byte block copied into the allocation",
+   "demo/file_demo_proc.s:508 `ld xwa, xiz` / 509 `calr Seq_LoadNamedResource_Helper` / 512 `or xwa, xwa` -- FDemo_FileOpen_DoOpen allocates the file size and checks for 0",
+   "demo/file_demo_proc.s:121 `lda xbc, (0xfd800:24)` / 124 `ld xde, (0x25b7e:24)` / 128 `cp xbc, xix` -- fits below 0xFD800?",
+   "demo/file_demo_proc.s:130 `ld xhl, xde` / 131 `add xde, xwa` / 132 `ld (0x25b7e:24), xde` / 135 `ld xhl, 0:i3` -- return old pointer and bump, or 0",
+   "shared/ram_variables.s:135 `.equ SEQ_SONG_SLOTS, 0xab000` -- arena base"
+  ]
+ },
+ {
+  "old": "SubCPU_ToneParamDisplay_Helper",
+  "verdict": "refuse",
+  "why_refused": "Body builds a 6-byte record at RAM 0x111E: {0xB0 | (0x111C = 2 ? 2 : 0) | bit 7 of (0x111D), (0x0D57), PART_SELECT, SubCPU_ToneParamDisplay_Tbl[(0x111C)], (0x111D) & 0x7F, 127}, which SubCPU_ToneFormatDone later passes (W = 6, XIY = 0x111E) to SystemInit_StepHandler_0_Helper2. The callers (SubCPU_ToneParamDisplay, SubCPU_ToneParamRet_Target1_Skip, SubCPU_CallRoutine) are themselves of doubtful names and do not establish what the record is (0xB0 looks like a MIDI control-change status, but that is unconfirmed).",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:12295 `call SubCPU_ToneParamDisplay_Helper` -- SubCPU_ToneParamDisplay",
+   "display/scoop_display.s:12304 `ld xix, 4382` / 12305 `ld (xix), 176` -- record at 0x111E, byte 0 = 0xB0",
+   "display/scoop_display.s:12319 `ld a, (PART_SELECT:16)` / 12320 `ld (xix+2), a`",
+   "display/scoop_display.s:12490 `ld xiy, 4382` / 12491 `call SystemInit_StepHandler_0_Helper2` -- consumer"
+  ]
+ },
+ {
+  "old": "SystemInit_StepHandler_0_Helper2",
+  "verdict": "refuse",
+  "why_refused": "Body: SysEx_BytecodeDispatcher_Tbl2_Helper with A = (0x0EEE) (writes the W bytes at XIY into the current stream's block chain), then sets bit 0 of 0x8D88 and of 0x266A. Callers (ToneParam_HandlerTable_BC_*, PeriphReg_LoadWordAndCall, DisplayMode_Handler_3_Skip19, VoiceCtrl_ParamSetupBytecode_*) are placeholder names in the scoop_display.s player/recorder block; the stream and the two flags are not identified, so 'insert event into track' would be a guess.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:3906 `ld w, 6:opc` / 3907 `ld xiy, 3471` / 3908 `call SystemInit_StepHandler_0_Helper2` -- W bytes from XIY",
+   "display/scoop_display.s:9577 `ld a, (3822:16)` / 9578 `call SysEx_BytecodeDispatcher_Tbl2_Helper`",
+   "display/scoop_display.s:9579 `or (0x8d88:16), 1` / 9580 `or (0x266a:16), 1`",
+   "display/scoop_display.s:9584 `ld (4353:16), xiy` / 9586 `ld c, w` -- the callee takes the source and length"
+  ]
+ },
+ {
+  "old": "Timer_ParamCompareAlt_Helper4",
+  "verdict": "refuse",
+  "why_refused": "Body: unless bit 0 of 0x0F57 is set, dispatches DMA_ChannelSelect_Table[(0x0D65) & 3]. The table, its four handlers (DMA_ChannelHandler_0..3 -- names that look wrong for display/mode code) and all callers (Timer_ParamCompareAlt_*, DisplayMode_Handler_3, SubCPU_ToneClearRegion, ToneParam_ModeGuardEntry) are unexplained; (0x0D65) & 3 is the same mode index used by Timer_ModeSelect_Table and DisplayMode_DispatchTable, but what the four modes are is not established.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:3236 `call Timer_ParamCompareAlt_Helper4` -- one of 6+ callers",
+   "display/scoop_display.s:5154 `bit 0, (0x0f57:16)` / 5156 `ld l, (3429:16)` / 5157 `and l, 3`",
+   "display/scoop_display.s:5161 `ld xix, DMA_ChannelSelect_Table` / 5164 `call (xhl)`"
+  ]
+ },
+ {
+  "old": "AccPatch_ResolveEntryAddr_Helper",
+  "verdict": "refuse",
+  "why_refused": "Body copies an 8-byte entry from the current style slot record (RHYTHM_PATTERN_BUF_A + 0x60 + 0x60*(0x34D6), offset 24 + 8*DrumChannel_MapToIndexA) to 0x37D1 + 8*Rhythm_MapChannelToDrumIndex, both indexes derived from (0x37C9). Callers AccVoice_SetupSlots_DataBlock/_Apply and the surrounding 'Drum'/'MIDIChan' names are speculative; what the 8-byte entry holds is not established.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:29440 `calr AccPatch_ResolveEntryAddr_Helper` -- AccVoice_SetupSlots_DataBlock",
+   "sequencer/accompaniment_engine.s:29715 `calr AccPatch_ResolveEntryAddr_Helper` -- AccVoice_SetupSlots_Apply after `ld (0x37c9:16), a` = 1",
+   "sequencer/accompaniment_engine.s:29447 `sll xbc, 3` / 29448 `add xbc, 0x37d1` -- destination",
+   "sequencer/accompaniment_engine.s:29455 `add bc, 24` / 29457 `ld xbc, 8` / 29458 `ldir85` -- 8-byte copy",
+   "sequencer/accompaniment_engine.s:29413 `ld xix, RHYTHM_PATTERN_BUF_A` -- source record base (AccVoice_SetupStyleSlots_Helper2)"
+  ]
+ },
+ {
+  "old": "AccStyle_InlinedBlock_Helper",
+  "verdict": "refuse",
+  "why_refused": "Callers give no meaning: entry 3 of AccStyle_JumpTable and the XIZ wrapper AccStyle_InlinedBlock. Body: skipped when PREVIOUS_TITLE = 220; if (0xFC5A) >= 128 it sends SysEx cmd 8 and sets GLOBAL_ERROR_CODE 54; otherwise it reloads tuning (AccTuning_LoadFromROM) and copies a series of 0x3246.. parameter records via AccVoiceReg_StoreParamRecord. Error 54 and the records are not identified, so 'load preset style' would be a guess.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:10869 `jp AccStyle_InlinedBlock_Helper` -- AccStyle_JumpTable entry 3",
+   "sequencer/accompaniment_engine.s:11036 `cp (PREVIOUS_TITLE:16), 220`",
+   "sequencer/accompaniment_engine.s:11038 `cp (0xfc5a:16), 128` / 11042 `call MIDI_SendSysExCmd` / 11043 `ld (GLOBAL_ERROR_CODE:16), 54`",
+   "sequencer/accompaniment_engine.s:11052 `call AccTuning_LoadFromROM` / 11072 `call AccVoiceReg_StoreParamRecord`"
+  ]
+ },
+ {
+  "old": "CmpSetTtl_Dispatch2_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpSetTtl_StepEntryIndex",
+  "header": "XIZ-preserving wrapper of TimeSig_DisplayStrings_Helper4: steps the CmpSet title's selected entry index (RAM 0x39AA, 0..3) up, or down when W bit 7 is set.\nBasis: callers + body -- called only by CmpSetTtl_Dispatch2's first case (W = 0, index up) and CmpSetTtl_Case_EntryIndexDown (W = 0x80).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:30369-30372 header -- `call the stepper of the entry index (0x39AA)`; first body is entry-index-up",
+   "sequencer/accompaniment_engine.s:30389 `ld w, 128:opc` / 30390 `call CmpSetTtl_Dispatch2_Helper` -- CmpSetTtl_Case_EntryIndexDown",
+   "sequencer/accompaniment_engine.s:26779 `push xiz` / 26780 `call TimeSig_DisplayStrings_Helper4` / 26781 `pop xiz`",
+   "sequencer/accompaniment_engine.s:26784 `ld a, (0x39aa:16)` / 26785 `bit 7, w` / 26787 `cp a, 3:i3` / 26792 `cp a, 0:i3` / 26796 `ld (0x39aa:16), a` -- clamped 0..3 step"
+  ]
+ },
+ {
+  "old": "CmpSetTtl_Dispatch2_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpSetTtl_StepEntryByte5",
+  "header": "XIZ-preserving wrapper of TimeSig_DisplayStrings_Helper6: steps byte +5 of the selected entry (0x39AA) of the current slot record within 0..11, up, or down when W bit 7 is set.\nBasis: callers + body -- called only by CmpSetTtl_Case_EntryByte5Up (W = 0) and CmpSetTtl_Case_EntryByte5Down (W = 0x80); the field's meaning is not established, so the name keeps the callers' 'EntryByte5'.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:30420 `CmpSetTtl_Case_EntryByte5Up:` ... `ld w, 0:opc` / `call CmpSetTtl_Dispatch2_Helper3`",
+   "sequencer/accompaniment_engine.s:30432 `CmpSetTtl_Case_EntryByte5Down:` ... `ld w, 128:opc` / `call CmpSetTtl_Dispatch2_Helper3`",
+   "sequencer/accompaniment_engine.s:26833 `call TimeSig_DisplayStrings_Helper6` -- wrapper",
+   "sequencer/accompaniment_engine.s:26838 `call AccPatch_GetCurrentSlotAddr` / 26840 `ld xix, TimeSig_SlotFieldOffsets` / 26842 `ld a, (xix+a)` -- offset 37/45/53/61 = byte +5 of entry",
+   "sequencer/accompaniment_engine.s:26846 `cp l, 11` / 26851 `cp l, 0:i3` -- range 0..11",
+   "note: sibling CmpSetTtl_Dispatch2_Helper2 (not in this batch) is the byte +2 stepper (0..127) and would be CmpSetTtl_StepEntryByte2"
+  ]
+ },
+ {
+  "old": "DisplayMode_Dispatch_Mode0_Helper2",
+  "verdict": "refuse",
+  "why_refused": "Body: (0x0DEF) := (0x0DF0), then UIState_EventTable_Target11_Helper. Callers DisplayMode_Dispatch_Mode0 / PerfMode_Handler_EvtB (and DefaultHandler_Ret_Skip2) don't explain the two bytes or the callee.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:2665 `call DisplayMode_Dispatch_Mode0_Helper2` -- PerfMode_Handler_EvtB",
+   "display/scoop_display.s:2875 `ld a, (3568:16)` / 2876 `ld (3567:16), a` / 2877 `call UIState_EventTable_Target11_Helper`"
+  ]
+ },
+ {
+  "old": "DpMdlySmfTtl_Dispatch_Helper",
+  "verdict": "refuse",
+  "why_refused": "Body: unless PREVIOUS_TITLE = 118 (TT_DPMDLYSMFLYR, the lyrics variant of the same screen), and if 0x0D34 is 0, sets 0x0D34 = 1, bit 2 of 0x28AC and 0x1144 = 10 (the same 'InitFlagBlock' pattern as PlayMode_/SongMode_/PartFormat_InitFlagBlock_Helper; PlayMode_StopAbortRetZero undoes it and aborts song playback). Callers are the DpMdlySmf/DpMdlySmfLyr title dispatchers. The guard is clear, but what the flag block means (0x28AC bit 2, 0x1144 = 10) is not established, and the sibling names are themselves vague.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "ui/ui_playback_modes.s:1991 `call DpMdlySmfTtl_Dispatch_Helper` -- DpMdlySmfTtl_Dispatch (title entry)",
+   "ui/ui_playback_modes.s:2092 `call DpMdlySmfTtl_Dispatch_Helper` -- DpMdlySmfLyrTtl_Dispatch",
+   "ui/ui_playback_modes.s:741 `cp (PREVIOUS_TITLE:16), 118` -- sequencer/sequencer_ui.s:78 registers title 0x76 = TT_DPMDLYSMFLYR",
+   "ui/ui_playback_modes.s:747 `cp (3380:16), 0` / 749 `ld (3380:16), 1` / 754 `or (10412:16), 4` / 755 `ld (4420:16), 10`",
+   "ui/ui_playback_modes.s:764-784 PlayMode_StopAbortRetZero -- clears the same bytes, Song_AbortPlayback"
+  ]
+ },
+ {
+  "old": "ExtData_Voice_CheckMode3_Helper",
+  "verdict": "refuse",
+  "why_refused": "Body: two ExtData_ToneParam_DispatchHandler_Helper2 calls with masks 0x80 and 0x7F (each merges a byte from 0x9130 into a panel TLV payload byte when the 0x9131 mask bit differs, recording it in MIDI_MSG_DATA2/3), then tail-jumps SwbtWr_FlushAndAppendParams. Callers are case 3 of ExtData_ToneParam_DispatchHandler and the mode-3/4 paths of ExtData_Voice_CheckMode3 / ExtData_Voice_FullHandler, whose 'ExtData' modes (RAM 0x912F) are not explained; the payload field it edits is unknown.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "audio/audio_control_engine.s:4948 `jrl ExtData_Voice_CheckMode3_Helper` -- ExtData_ToneParam_DispatchHandler_Case3",
+   "audio/audio_control_engine.s:5675-5678 `ld a, (0x912f:16)` / `cp a, 3:i3` / `calr ExtData_Voice_CheckMode3_Helper` -- ExtData_Voice_CheckMode3",
+   "audio/audio_control_engine.s:5023 `ldw wa, 128` / 5024 `calr ExtData_ToneParam_DispatchHandler_Helper2` / 5025 `ldw wa, 127` / 5027 `jrl SwbtWr_FlushAndAppendParams`",
+   "audio/audio_control_engine.s:6779 `ld a, (0x9131:16)` / 6794 `or a, (0x9130:16)` / 6799 `ld (xhl), c` -- the masked merge in Helper2"
+  ]
+ },
+ {
+  "old": "MemConfig_Handler_0_Helper",
+  "verdict": "refuse",
+  "why_refused": "Same block-chain stream machinery as VoiceSlot_ReadParamsWithSaveRestore_Helper2: looks up the current stream's block (table 0x0CBE), bumps its offset (table 0x0CDE) and on overflow past 255 moves to the next block (offset reset to 5 in 0xF218). Callers (MemConfig_Handler_0/1, ScoopParam_ValueTable_Helper9) are placeholder names; the stream is unidentified.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:8028 `call MemConfig_Handler_0_Helper` -- MemConfig_Handler_0",
+   "display/scoop_display.s:8093 `call VoiceSlot_ComputeWordIndex` / 8095 `ld xix, 3230` / 8098 `cp iy, 0xffff`",
+   "display/scoop_display.s:8108 `inc 1, wa` / 8109 `cp wa, 255` / 8112 `ld xix, 0xf218` / 8113 `ld (xix+iz), 0x05`"
+  ]
+ },
+ {
+  "old": "MemConfig_Handler_3_Helper5",
+  "verdict": "refuse",
+  "why_refused": "Body: DMA_FlagCheckWithCalls, then Interrupt_SetFlagBytecode if the current stream byte is 0x90. Both callees and both callers (MemConfig_Handler_3, MemConfig_Handler_4) carry placeholder/misleading names; what 0x90 marks is not established.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:8295 `call MemConfig_Handler_3_Helper5` -- MemConfig_Handler_3",
+   "display/scoop_display.s:8762 `call DMA_FlagCheckWithCalls` / 8763 `call VoiceSlot_ReadCurrentParams` / 8764 `cp a, 144` / 8766 `call Interrupt_SetFlagBytecode`"
+  ]
+ },
+ {
+  "old": "MidiCC_Handler_PairedParamA_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiCC_ApplyBankSelect",
+  "header": "Records a received bank select for part (0x9644): E (CC32) into 0x93D2[2p] or, when E = 0xFF, D (CC0) into 0x93D3[2p]; then derives the part's bank at 0x9412[p] by the MIDI mode in 0xFD50 bits 0-1 (modes 0/2 LSB, 3 MSB, 1 mixed). Part 72 is mapped to 20.\nBasis: callers + body -- MidiCC_Handler_PairedParamA/B are the CC32/CC0 (bank select) handlers; MidiPkt_SysExBulkTransfer_Data_Helper feeds the same 4-byte block.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:2484-2488 -- MidiCC_PartTargets_BankSelect header: functions 24/25 <- CC0 and CC32 (bank select MSB/LSB), readers PairedParamB/A -> this helper",
+   "midi/midi_dispatch_handlers.s:335 `ld xix, MidiCC_PartTargets_BankSelect` / 339 `ld e, (0x9636:16)` / 340 `ld d, 255:opc` / 345 `call MidiCC_Handler_PairedParamA_Helper` -- CC32 value in E",
+   "midi/midipkt_routines.s:1360 `call MidiCC_Handler_PairedParamA_Helper` -- SysEx path copies the same 4 bytes to 0x9644 first",
+   "audio/audio_control_engine.s:11809 `cp (0x9644:16), 72` / 11811 `ld (0x9644:16), 20`",
+   "audio/audio_control_engine.s:11817 `ld xix, 0x93d2` / 11825 `ld (xix+hl), e` / 11830 `ld (xix+hl), d` -- LSB / MSB stored per part",
+   "audio/audio_control_engine.s:11837 `ldb_d8 b, (0xfd50)` / 11841 `ld xiy, (xiy+b)` / 11876 `srl wa, 8` / 11878 `ld (xiz+hl), a` -- mode-dependent bank into 0x9412[p]",
+   "audio/audio_control_engine.s:11652-11653 -- MidiStream_ExtDispatch_Mode1 reads 0x9412[p] as the bank for a program change"
+  ]
+ }
+]

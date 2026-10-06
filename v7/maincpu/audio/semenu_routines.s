@@ -1395,7 +1395,7 @@ SeMenu_BitShiftMask_End_Skip6:
 SeMenu_BitShiftMask_End_Join4:
 	ld	(xiz), a
 	jr	SeMenu_BitShiftMask_End_Join3
-SeMenu_CopyWriteUpdate_Helper3:
+SeMenu_ToggleSolo:
 	dec	2, xsp
 	lda	xwa, (xsp)
 	calr	SeMenu_SetupMenuDisplay_Finalize
@@ -1411,10 +1411,10 @@ SeMenu_BitShiftMask_End_Join5:
 	calr	SeMenu_SetupMenuDisplay_Section3_End
 	ld	wa, 1:i3
 	calr	SeMenu_SetupMenuDisplay
-	call	SeMenu_PresetManager_Data_Helper
+	call	SeMenu_DrawSoloButton
 	inc	2, xsp
 	ret
-Scoop_SoundEditorData_Helper4:
+SeMenu_SetFilterType:
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp+2)
@@ -1701,7 +1701,7 @@ SeMenu_TransferPartValues_EndData_Epilogue:
 	pop qiz
 	lda	xsp, (xsp+22)
 	ret
-SeMenu_ApplyPartEdit_Helper3:
+SeMenu_StepParamFieldAndSend:
 	dec	8, xsp
 	push	xiz
 	ld	(xsp+6), e
@@ -1758,7 +1758,7 @@ SeMenu_TransferPartValues_EndData_Epilogue2:
 	pop	xiz
 	inc	8, xsp
 	retd	6
-SeMenu_CopyWriteUpdate_Helper5:
+SeMenu_SelectPartIfEnabled:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
@@ -1782,7 +1782,7 @@ SeMenu_TransferPartValues_EndData_Skip22:
 SeMenu_TransferPartValues_EndData_Epilogue3:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Helper5:
+SeMenu_CyclePartLfoState:
 	lda	xsp, (xsp-14)
 	ld	(xsp+10), c
 	ld	(xsp+12), a
@@ -2315,7 +2315,7 @@ SeMenu_SetupPartDisplay_End_Epilogue:
 	pop	qiz
 	lda	xsp, (xsp+16)
 	ret
-SeMenu_CopyWriteUpdate_Step3_Code_3_Helper3:
+SeMenu_GetWriteMemSlot:
 	ld	(xwa), (0x6ad)
 	ret
 SeMenu_CopyWriteUpdate_Step3_Code_3_Helper4:
@@ -2350,7 +2350,7 @@ SeMenu_SetupPartDisplay_End_Helper2:
 SeMenu_SetupPartDisplay_End_Skip7:
 	ld	wa, bc
 	jp	UI_PostDialRangeEvent
-SeMenu_ApplyPartEdit_Entry2_Code_Helper:
+SeMenu_BindDialToColumn:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	wa, 1:i3
@@ -2367,7 +2367,7 @@ SeMenu_ApplyPartEdit_Entry2_Code_Helper:
 	calr	SeMenu_SetupPartDisplay_End_Helper2
 	inc	2, xsp
 	ret
-SeMenu_ApplyPartEdit_Helper5:
+SeMenu_SwitchToValueStep:
 	ld L,A
 	res 0x07,L
 	ld E, 0xff:opc
@@ -2617,7 +2617,7 @@ SeMenu_ApplyPartEdit_AltStore_Join:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	a, (xsp+12)
 	inc	3, a
 	extz	wa
@@ -2627,7 +2627,7 @@ SeMenu_ApplyPartEdit_AltStore_Join:
 	ldw	wa, 42
 	ld	bc, 4:i3
 	ld	de, 0:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	.byte 0x8f, 0x10, 0x3f, 0x00
 	jr	nz, SeMenu_ApplyPartEdit_Skip
 	.byte 0x8f, 0x0e, 0x3f, 0x01
@@ -2638,7 +2638,7 @@ SeMenu_ApplyPartEdit_AltStore_Join:
 	calr	SeMenu_StoreEffectParam
 SeMenu_ApplyPartEdit_Skip:
 	ld	wa, 3:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join2:
@@ -2666,7 +2666,7 @@ SeMenu_ApplyPartEdit_AltStore_Join2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	a, (xsp+12)
 	inc	3, a
 	extz	wa
@@ -2676,7 +2676,7 @@ SeMenu_ApplyPartEdit_AltStore_Join2:
 	ldw	wa, 42
 	ld	bc, 4:i3
 	ld	de, 0:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	.byte 0x8f, 0x10, 0x3f, 0x00
 	jr	nz, SeMenu_ApplyPartEdit_Skip2
 	.byte 0x8f, 0x0e, 0x3f, 0x01
@@ -2687,7 +2687,7 @@ SeMenu_ApplyPartEdit_AltStore_Join2:
 	calr	SeMenu_StoreEffectParam
 SeMenu_ApplyPartEdit_Skip2:
 	ld	wa, 4:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join3:
@@ -2715,7 +2715,7 @@ SeMenu_ApplyPartEdit_AltStore_Join3:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	a, (xsp+12)
 	inc	1, a
 	extz	wa
@@ -2725,7 +2725,7 @@ SeMenu_ApplyPartEdit_AltStore_Join3:
 	ldw	wa, 42
 	ld	bc, 2:i3
 	ld	de, 0:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	.byte 0x8f, 0x10, 0x3f, 0x00
 	jr	nz, SeMenu_ApplyPartEdit_Skip3
 	.byte 0x8f, 0x0e, 0x3f, 0x01
@@ -2736,7 +2736,7 @@ SeMenu_ApplyPartEdit_AltStore_Join3:
 	calr	SeMenu_StoreEffectParam
 SeMenu_ApplyPartEdit_Skip3:
 	ld	wa, 5:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join4:
@@ -2764,7 +2764,7 @@ SeMenu_ApplyPartEdit_AltStore_Join4:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	a, (xsp+12)
 	extz	wa
 	pushw	wa
@@ -2773,7 +2773,7 @@ SeMenu_ApplyPartEdit_AltStore_Join4:
 	ldw	wa, 42
 	ld	bc, 1:i3
 	ld	de, 0:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	.byte 0x8f, 0x10, 0x3f, 0x00
 	jr	nz, SeMenu_ApplyPartEdit_Skip4
 	.byte 0x8f, 0x0e, 0x3f, 0x01
@@ -2784,7 +2784,7 @@ SeMenu_ApplyPartEdit_AltStore_Join4:
 	calr	SeMenu_StoreEffectParam
 SeMenu_ApplyPartEdit_Skip4:
 	ld	wa, 6:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join5:
@@ -2812,7 +2812,7 @@ SeMenu_ApplyPartEdit_AltStore_Join5:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	a, (xsp+12)
 	inc	2, a
 	extz	wa
@@ -2822,9 +2822,9 @@ SeMenu_ApplyPartEdit_AltStore_Join5:
 	ldw	wa, 42
 	ld	bc, 3:i3
 	ld	de, 0:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	ld	wa, 7:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join6:
@@ -2852,7 +2852,7 @@ SeMenu_ApplyPartEdit_AltStore_Join6:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	a, (xsp+12)
 	inc	2, a
 	extz	wa
@@ -2862,9 +2862,9 @@ SeMenu_ApplyPartEdit_AltStore_Join6:
 	ldw	wa, 42
 	ld	bc, 3:i3
 	ld	de, 0:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	ldw	wa, 8
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join7:
@@ -2916,7 +2916,7 @@ SeMenu_ApplyPartEdit_AltStore_Join8:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	e, (xsp+12)
 	extz	de
 	ld	a, (xsp+16)
@@ -2926,10 +2926,10 @@ SeMenu_ApplyPartEdit_AltStore_Join8:
 	push	xwa
 	ldw	wa, 55
 	ld	bc, 3:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 1:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 SeMenu_ApplyPartEdit_Epilogue3:
 	lda	xsp, (xsp+20)
 	ret
@@ -2955,7 +2955,7 @@ SeMenu_ApplyPartEdit_AltStore_Join9:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	e, (xsp+12)
 	extz	de
 	ld	a, (xsp+16)
@@ -2965,10 +2965,10 @@ SeMenu_ApplyPartEdit_AltStore_Join9:
 	push	xwa
 	ldw	wa, 55
 	ld	bc, 4:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 2:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 SeMenu_ApplyPartEdit_Epilogue4:
 	lda	xsp, (xsp+20)
 	ret
@@ -3012,7 +3012,7 @@ SeMenu_ApplyPartEdit_Join3:
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ldto_berp	c, 250
 	extz	bc
 	ld	e, (xsp+14)
@@ -3023,10 +3023,10 @@ SeMenu_ApplyPartEdit_Join3:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 55
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 3:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	pop qiz
 	lda	xsp, (xsp+22)
 	ret
@@ -3052,7 +3052,7 @@ SeMenu_ApplyPartEdit_AltStore_Join11:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	e, (xsp+12)
 	extz	de
 	ld	a, (xsp+16)
@@ -3062,10 +3062,10 @@ SeMenu_ApplyPartEdit_AltStore_Join11:
 	push	xwa
 	ldw	wa, 55
 	ld	bc, 6:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 4:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 SeMenu_ApplyPartEdit_Epilogue5:
 	lda	xsp, (xsp+20)
 	ret
@@ -3109,7 +3109,7 @@ SeMenu_ApplyPartEdit_Join4:
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ldto_berp	c, 250
 	extz	bc
 	ld	e, (xsp+14)
@@ -3120,10 +3120,10 @@ SeMenu_ApplyPartEdit_Join4:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 55
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 5:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	pop qiz
 	lda	xsp, (xsp+22)
 	ret
@@ -3149,7 +3149,7 @@ SeMenu_ApplyPartEdit_AltStore_Join13:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	e, (xsp+12)
 	extz	de
 	ld	a, (xsp+16)
@@ -3159,10 +3159,10 @@ SeMenu_ApplyPartEdit_AltStore_Join13:
 	push	xwa
 	ldw	wa, 55
 	ldw	bc, 8
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 6:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 SeMenu_ApplyPartEdit_Epilogue6:
 	lda	xsp, (xsp+20)
 	ret
@@ -3206,7 +3206,7 @@ SeMenu_ApplyPartEdit_Join5:
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ldto_berp	c, 250
 	extz	bc
 	ld	e, (xsp+14)
@@ -3217,10 +3217,10 @@ SeMenu_ApplyPartEdit_Join5:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 55
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 7:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	pop qiz
 	lda	xsp, (xsp+22)
 	ret
@@ -3241,7 +3241,7 @@ SeMenu_ApplyPartEdit_AltStore_Join15:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	e, (xsp+14)
 	extz	de
 	ld	a, (xsp+16)
@@ -3251,7 +3251,7 @@ SeMenu_ApplyPartEdit_AltStore_Join15:
 	push	xwa
 	ldw	wa, 41
 	ld	bc, 3:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	lda	xbc, (xsp+12)
 	ld	wa, 3:i3
 	calr	SeMenu_LoadPartParam
@@ -3276,7 +3276,7 @@ SeMenu_ApplyPartEdit_AltStore_Join15:
 	inc	4, xsp
 SeMenu_ApplyPartEdit_Skip8:
 	ld	wa, 2:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join16:
@@ -3296,7 +3296,7 @@ SeMenu_ApplyPartEdit_AltStore_Join16:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	e, (xsp+14)
 	extz	de
 	ld	a, (xsp+16)
@@ -3306,7 +3306,7 @@ SeMenu_ApplyPartEdit_AltStore_Join16:
 	push	xwa
 	ldw	wa, 41
 	ld	bc, 4:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	lda	xbc, (xsp+12)
 	ld	wa, 4:i3
 	calr	SeMenu_LoadPartParam
@@ -3331,7 +3331,7 @@ SeMenu_ApplyPartEdit_AltStore_Join16:
 	inc	4, xsp
 SeMenu_ApplyPartEdit_Skip9:
 	ld	wa, 3:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join17:
@@ -3351,7 +3351,7 @@ SeMenu_ApplyPartEdit_AltStore_Join17:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	e, (xsp+14)
 	extz	de
 	ld	a, (xsp+16)
@@ -3361,7 +3361,7 @@ SeMenu_ApplyPartEdit_AltStore_Join17:
 	push	xwa
 	ldw	wa, 41
 	ld	bc, 5:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	lda	xbc, (xsp+12)
 	ld	wa, 5:i3
 	calr	SeMenu_LoadPartParam
@@ -3386,7 +3386,7 @@ SeMenu_ApplyPartEdit_AltStore_Join17:
 	inc	4, xsp
 SeMenu_ApplyPartEdit_Skip10:
 	ld	wa, 4:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join18:
@@ -3420,7 +3420,7 @@ SeMenu_ApplyPartEdit_AltStore_Join18:
 	calr	SeMenu_ApplyPartEdit_Helper12
 SeMenu_ApplyPartEdit_Skip11:
 	ld	wa, 5:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	inc	6, xsp
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join19:
@@ -3440,7 +3440,7 @@ SeMenu_ApplyPartEdit_AltStore_Join19:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	e, (xsp+12)
 	extz	de
 	ld	a, (xsp+14)
@@ -3450,9 +3450,9 @@ SeMenu_ApplyPartEdit_AltStore_Join19:
 	push	xwa
 	ldw	wa, 41
 	ld	bc, 0:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	ld	wa, 7:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+18)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join20:
@@ -3472,7 +3472,7 @@ SeMenu_ApplyPartEdit_AltStore_Join20:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	e, (xsp+12)
 	extz	de
 	ld	a, (xsp+14)
@@ -3482,9 +3482,9 @@ SeMenu_ApplyPartEdit_AltStore_Join20:
 	push	xwa
 	ldw	wa, 41
 	ld	bc, 1:i3
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeMenu_StepParamFieldAndSend
 	ldw	wa, 8
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+18)
 	ret
 SeMenu_ApplyPartEdit_Join6:
@@ -3519,7 +3519,7 @@ SeMenu_ApplyPartEdit_Join7:
 	ld	a, (xsp+24)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	lda	xwa, (xsp+2)
 	calr	SeMenu_RefreshPartDisplay_Data_2
 	cp	l, 0:i3
@@ -3571,7 +3571,7 @@ SeMenu_ApplyPartEdit_Skip14:
 	calr	SeMenu_SetupDisplayObject_Alt1
 SeMenu_ApplyPartEdit_Join9:
 	ld	wa, 2:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 SeMenu_ApplyPartEdit_Epilogue7:
 	pop qiz
 	lda	xsp, (xsp+24)
@@ -3585,14 +3585,14 @@ SeMenu_ApplyPartEdit_Join10:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	a, (xsp+2)
 	extz	wa
 	ld	c, (xsp)
 	exts	bc
 	calr	SeMenu_ApplyPartEdit_Helper2
 	ld	wa, 4:i3
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	inc	6, xsp
 	ret
 SeMenu_CopyWriteUpdate_Helper6:
@@ -3608,7 +3608,7 @@ SeMenu_CopyWriteUpdate_Helper6:
 	ld	a, (xsp)
 	inc	4, a
 	extz	wa
-	calr	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	calr	SeMenu_BindDialToColumn
 	inc	2, xsp
 	ret
 UpdSeSel_DetailedUpdate_Helper4:
@@ -6098,7 +6098,7 @@ SeMenu_ApplyPartEdit_Helper14_Skip3:
 	ld	a, (xsp+10)
 	extz	wa
 	lda	xbc, (xsp+2)
-	calr	SeMenu_ApplyPartEdit_Helper5
+	calr	SeMenu_SwitchToValueStep
 	ld	a, (xsp+4)
 	add	a, (xsp+2)
 	ld	(xsp+4), a
@@ -6516,7 +6516,7 @@ SePitPit1_OnColumn2:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
@@ -6525,9 +6525,9 @@ SePitPit1_OnColumn2:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 39
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	ld	wa, 2:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	pop	qiz
 	lda	xsp, (xsp+16)
 	ret
@@ -6553,7 +6553,7 @@ SePitPit1_OnColumn3:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
@@ -6562,9 +6562,9 @@ SePitPit1_OnColumn3:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 39
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	ld	wa, 3:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	pop	qiz
 	lda	xsp, (xsp+16)
 	ret
@@ -6588,7 +6588,7 @@ SePitPit1_OnColumn4:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
@@ -6597,9 +6597,9 @@ SePitPit1_OnColumn4:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 39
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	ld	wa, 4:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	pop	qiz
 	lda	xsp, (xsp+16)
 	ret
@@ -6629,7 +6629,7 @@ SePitPit1_OnColumn6:
 	ld A,(XSP+0x12)
 	extz WA
 	lda xbc, (xbc + 0x0a)
-	call SeMenu_ApplyPartEdit_Helper5
+	call SeMenu_SwitchToValueStep
 	lda xwa, (xsp + 0x02)
 	call SeMenu_RefreshPartDisplay_Data_2
 	cp l, 1:i3
@@ -6689,7 +6689,7 @@ SePitPit1_OnColumn6:
 	ld A,(XSP+0x12)
 	extz WA
 	lda xbc, (xsp + 0x0c)
-	call SeMenu_ApplyPartEdit_Helper5
+	call SeMenu_SwitchToValueStep
 	ld_erpb_rr c, 0xfb
 	extz BC
 	ld_erpb_rr a, 0xfa
@@ -6699,16 +6699,16 @@ SePitPit1_OnColumn6:
 	push XWA
 	ldw WA, 0x0027
 	ld de, 0:i3
-	call SeMenu_ApplyPartEdit_Helper3
+	call SeMenu_StepParamFieldAndSend
 	ld wa, 6:i3
 .Lc_f09dba:
-	call SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call SeMenu_BindDialToColumn
 	pop QIZ
 	lda xsp, (xsp + 0x12)
 	ret
 SePitPit1_OnSideRow1:
 	cp	a, 0:i3
-	jp	nz, (SeMenu_CopyWriteUpdate_Helper3:24)
+	jp	nz, (SeMenu_ToggleSolo:24)
 	ldw	wa, 40
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -6832,7 +6832,7 @@ SePitEnv1_OnColumn7:
 SePitEnv1_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
-	call	SeMenu_CopyWriteUpdate_Helper3
+	call	SeMenu_ToggleSolo
 	ret
 SePitEnv1_OnSideRow2:
 	cp	a, 0:i3
@@ -6842,7 +6842,7 @@ SePitEnv1_OnSideRow2:
 	jr	SeMenu_RefreshPartDisplay_Join
 SeMenu_RefreshPartDisplay_Skip4:
 	ld	wa, 1:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 40
@@ -6858,7 +6858,7 @@ SePitEnv1_OnSideRow3:
 	jr	SeMenu_RefreshPartDisplay_Join2
 SeMenu_RefreshPartDisplay_Skip5:
 	ld	wa, 2:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 40
@@ -6873,7 +6873,7 @@ SePitEnv1_OnSideRow4:
 	jp	SeMenu_ApplyPartEdit_AltStore_Join7
 SeMenu_RefreshPartDisplay_Skip6:
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 40
@@ -6887,7 +6887,7 @@ SePitEnv1_OnSideRow5:
 	jp	SeMenu_ApplyPartEdit_AltStore_Join7
 SeMenu_RefreshPartDisplay_Skip7:
 	ld	wa, 4:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 40
@@ -6937,7 +6937,7 @@ SePitEnv2_OnColumn8:
 SePitEnv2_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
-	call	SeMenu_CopyWriteUpdate_Helper3
+	call	SeMenu_ToggleSolo
 	ret
 SePitEnv2_OnSideRow2:
 	cp	a, 0:i3
@@ -6947,7 +6947,7 @@ SePitEnv2_OnSideRow2:
 	jr	SeMenu_RefreshPartDisplay_Join3
 SeMenu_RefreshPartDisplay_Skip8:
 	ld	wa, 1:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 41
@@ -6963,7 +6963,7 @@ SePitEnv2_OnSideRow3:
 	jr	SeMenu_RefreshPartDisplay_Join4
 SeMenu_RefreshPartDisplay_Skip9:
 	ld	wa, 2:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 41
@@ -6975,7 +6975,7 @@ SePitEnv2_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 41
@@ -6986,7 +6986,7 @@ SePitEnv2_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 4:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 41
@@ -7039,7 +7039,7 @@ SePitLfo1_OnColumn8:
 	jp	SeMenu_ApplyPartEdit_AltStore_Join6
 SePitLfo1_OnSideRow1:
 	cp	a, 0:i3
-	jp	nz, (SeMenu_CopyWriteUpdate_Helper3:24)
+	jp	nz, (SeMenu_ToggleSolo:24)
 	ldw	wa, 40
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -7052,27 +7052,27 @@ SePitLfo1_OnSideRow2:
 SeMenu_RefreshPartDisplay_Skip10:
 	ld	wa, 1:i3
 	ld	bc, 1:i3
-	jp	Scoop_SoundEditorData_Helper5
+	jp	SeMenu_CyclePartLfoState
 SePitLfo1_OnSideRow3:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
 	ld	bc, 2:i3
-	call	Scoop_SoundEditorData_Helper5
+	call	SeMenu_CyclePartLfoState
 	ret
 SePitLfo1_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
 	ld	bc, 3:i3
-	call	Scoop_SoundEditorData_Helper5
+	call	SeMenu_CyclePartLfoState
 	ret
 SePitLfo1_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
 	ld	bc, 4:i3
-	call	Scoop_SoundEditorData_Helper5
+	call	SeMenu_CyclePartLfoState
 	ret
 SePitLfo1_OnSwitch15:
 	cp	a, 0:i3

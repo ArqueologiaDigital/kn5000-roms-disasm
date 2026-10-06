@@ -85,14 +85,20 @@ TextRender_PopAndReturn:
 	pop xiz
 	lda xsp, (xsp+314)
 	retd 0x8
-DirmdEmulator_Dispatch_Code_Helper:
+; Display_SetBackgroundColor: Sets the graphics background colour word (RAM 0x3EFA2) to WA; text and mono-bitmap
+;   drawing use it for 0 bits (0xF5 = copy the wallpaper pixel). Basis: callers + body -- the four screen-init
+;   sequences call it with WA = 0xF5 next to GraphicsRender_ByteData (foreground colour, 0x3EFA4 = 0xFF).
+Display_SetBackgroundColor:
 	ld (0x03efa2:24), wa
 	ret
 
 GraphicsRender_ByteData:
 	ld	(0x03efa4:24), wa
 	ret
-DirmdEmulator_Dispatch_Code_Helper2:
+; Display_FillPaletteBandFromEntry: Sets palette entries 64..191 to the RGB of palette entry WA (shadow table 0x324FC)
+;   and flags a palette upload; runs directly on the draw task, otherwise posts itself to the draw ring. Basis:
+;   callers + body -- screen (re)initialisation calls it with WA = 0xFF.
+Display_FillPaletteBandFromEntry:
 	pushw	iz
 	ld	iz, wa
 	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
@@ -134,7 +140,11 @@ GraphicsRender_ByteData_Loop:
 	popw	iz
 	inc	4, xsp
 	ret
-DirmdEmulator_Dispatch_Code_Helper3:
+; Display_LoadFixedPaletteBands: Loads palette slots 32..63 (GraphicsRender_LowBandColorIndex) and 192..223
+;   (GraphicsRender_PaletteSrc192) from the RGB table and flags a palette update; queued on the draw ring when not
+;   called from the draw task. Basis: callers + body -- the screen-init sequences call it between setting fg/bg
+;   colours and loading slots 64..191 from a selectable table (Display_FillPaletteBandFromEntry).
+Display_LoadFixedPaletteBands:
 	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp	hl, 0:i3
 	jr	nz, GraphicsRender_ByteData_Join

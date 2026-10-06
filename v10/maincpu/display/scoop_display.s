@@ -1769,7 +1769,7 @@ PerfMode_Evt04_VolumeHandler:
 	ldb_d8	a, (0x0ef7)
 	ld	l, 0:opc
 	ld	h, 127:opc
-	call	PerfMode_Evt04_VolumeHandler_Helper
+	call	PerfMode_StepValueInRange
 	ld	(3831:16), a
 	ld	l, (3424:16)
 	dec	1, l
@@ -1810,7 +1810,7 @@ PerfMode_VoiceAddressTable:
 	; 0x0000F1A0 (`ld xix, 0xf1a0 / ld l, (xix+hl)`), scaled by 4, and used as
 	;     ld xix, PerfMode_VoiceAddressTable / ld_rrl xhl, xix, hl / ld (xhl), a
 	; so entries are DATA pointers written through, not handlers.
-	; EXTENT: PerfMode_Evt04_VolumeHandler_Helper = this label + 80 and is the target
+	; EXTENT: PerfMode_StepValueInRange = this label + 80 and is the target
 	; of six `call`s, so 0xEF6C37 is code, not a 21st entry.
 	.long 0x0000f9b9
 	.long 0x0000f9ed
@@ -1833,8 +1833,11 @@ PerfMode_VoiceAddressTable:
 	.long 0x0000fb0b
 	.long 0x0000fb25
 
-	; PerfMode_Evt04_VolumeHandler_Helper: called from six sites.
-PerfMode_Evt04_VolumeHandler_Helper:
+	; PerfMode_StepValueInRange: called from six sites.
+; PerfMode_StepValueInRange: Steps A by one within [L, H]: W bit 7 clear = increment unless A == H, set = decrement
+;   unless A == L (equality test only). Basis: callers + body -- volume (0..127), key shift (0x34..0x4C), tuning
+;   (0..255), bend sense (0..12) dial handlers.
+PerfMode_StepValueInRange:
 	bit 7, w
 	jrl nz, PerfMode_Evt04_VolumeHandler_Skip
 	cp a, h
@@ -1913,7 +1916,7 @@ VoiceParam_MultiDispatch:
 	ld	a, (4339:16)
 	ld l, 0x34:opc
 	ld h, 0x4c:opc
-	call PerfMode_Evt04_VolumeHandler_Helper
+	call PerfMode_StepValueInRange
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
@@ -1924,7 +1927,7 @@ VoiceParam_Case03:
 	ld	a, (4339:16)
 	ld l, 0x00:opc
 	ld h, 0x7f:opc
-	call PerfMode_Evt04_VolumeHandler_Helper
+	call PerfMode_StepValueInRange
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
@@ -1935,7 +1938,7 @@ VoiceParam_Case08:
 	ld	a, (4339:16)
 	ld l, 0x00:opc
 	ld h, 0x7f:opc
-	call PerfMode_Evt04_VolumeHandler_Helper
+	call PerfMode_StepValueInRange
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
@@ -1946,7 +1949,7 @@ VoiceParam_Case0A:
 	ld	a, (4339:16)
 	ld l, 0x00:opc
 	ld h, 0xff:opc
-	call PerfMode_Evt04_VolumeHandler_Helper
+	call PerfMode_StepValueInRange
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceParam_BitManipHelper
@@ -1957,7 +1960,7 @@ VoiceParam_Case0B:
 	ld	a, (4339:16)
 	ld l, 0x00:opc
 	ld h, 0x0c:opc
-	call PerfMode_Evt04_VolumeHandler_Helper
+	call PerfMode_StepValueInRange
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
@@ -1979,7 +1982,7 @@ VoiceSlot_ReadParamsWithSaveRestore:
 	call VoiceSlot_ReadParamsWithSaveRestore_Helper2
 	call VoiceSlot_ReadCurrentParams
 	ld	w, (4339:16)
-	call VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call VoiceSlot_WriteCurrentParam
 	xor	a, a
 	call VoiceSlot_RestoreState
 VoiceParam_SaveRestore_Ret:
@@ -1997,14 +2000,14 @@ VoiceParam_BitManipHelper:
 	rlc	w
 	and a, 0xfe
 	or w, a
-	call VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call VoiceSlot_WriteCurrentParam
 	ld	e, (3571:16)
 	xor d, d
 	call VoiceSlot_ReadParamsWithSaveRestore_Helper2
 	call VoiceSlot_ReadCurrentParams
 	ld	w, (4339:16)
 	and w, 0x7f
-	call VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call VoiceSlot_WriteCurrentParam
 	xor	a, a
 	call VoiceSlot_RestoreState
 VoiceParam_BitManip_Ret:
@@ -2910,7 +2913,7 @@ Timer_ModeSelect_Table:
 	.long	Timer_ModeHandler_3
 Timer_ModeHandler_1:
 	; --- Guard/init function (55 bytes) ---
-	call Timer_ModeHandler_1_Helper2
+	call TempoRingBuf_IsEmpty
 	cp	w, 0:i3
 	jrl nz, Timer_GuardCallSetup_Ret
 	call Timer_ModeHandler_1_Helper
@@ -2931,7 +2934,7 @@ Timer_GuardCallSetup_Ret:
 
 
 Timer_ModeHandler_3:
-	call	Timer_ModeHandler_1_Helper2
+	call	TempoRingBuf_IsEmpty
 	cp	w, 0:i3
 	jrl	nz, Timer_ModeHandler_3_Return
 	cp	(0x0def:16), 18
@@ -2952,7 +2955,7 @@ Timer_ModeHandler_3_Skip:
 Timer_ModeHandler_3_Return:
 	ret
 Timer_ModeHandler_0:
-	call	Timer_ModeHandler_1_Helper2
+	call	TempoRingBuf_IsEmpty
 	cp	w, 0:i3
 	jrl	nz, Timer_ModeHandler_0_Return
 	call	MemConfig_Handler_4_Helper
@@ -3739,7 +3742,7 @@ MemConfig_Handler_5_Helper9:
 	pushw	wa
 	call	VoiceSlot_FinalRetZ
 	popw	wa
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 MemConfig_Handler_5_Return3:
 	ret
 ToneParam_ShortCallHandler:
@@ -4453,7 +4456,7 @@ DisplayMode_Handler_1:
 	ret
 DisplayMode_Handler_2:
 	ld	(3567:16), 8
-	call	DisplayMode_Handler_2_Helper
+	call	DisplayMode_RedrawWithBlankLine
 	ret
 DisplayMode_Handler_3:
 	ld	(3567:16), 15
@@ -4513,7 +4516,7 @@ DisplayMode_Handler_3_Loop4:
 DisplayMode_Handler_3_Loop5:
 	call	VoiceState_DataBlock2_Code_Loop
 DisplayMode_Handler_3_Join2:
-	call	Timer_ModeHandler_1_Helper2
+	call	TempoRingBuf_IsEmpty
 	cp	w, 255
 	jrl	nz, DisplayMode_Handler_3_Loop4
 	bit	4, (0x0d53:16)
@@ -4840,7 +4843,7 @@ DisplayMode_Handler_3_Skip27:
 	jp	PerfMode_EventTable_0_Target1_Join
 DisplayMode_Handler_3_Skip28:
 	ld	w, a
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 PerfMode_EventTable_0_Target1_Join:
 	xor	a, a
 	call	VoiceSlot_RestoreState
@@ -4943,7 +4946,7 @@ DisplayMode_Handler_3_Skip10:
 	and	a, 127
 	ld	w, a
 	pushw	bc
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 	call	VoiceSlot_FinalRetZ
 	popw	bc
 	ld	a, c
@@ -4953,7 +4956,7 @@ DisplayMode_Handler_3_Skip10:
 	sla	b, 1
 	or	a, b
 	ld	w, a
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 	xor	a, a
 	call	VoiceSlot_RestoreState
 DisplayMode_Handler_3_Return:
@@ -5089,7 +5092,7 @@ DisplayMode_Handler_3_Skip12:
 	ld	xhl, (4366:16)
 	ld	(xhl), a
 	ld	w, a
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 	xor	a, a
 	call	VoiceSlot_RestoreState
 DisplayMode_Handler_3_Return2:
@@ -5140,11 +5143,11 @@ DisplayMode_Handler_3_Skip13:
 	ld	(4370:16), c
 	ld	w, a
 	pushw	bc
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 	call	VoiceSlot_FinalRetZ
 	popw	bc
 	ld	w, c
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 DisplayMode_Handler_3_Skip14:
 	xor	a, a
 	call	VoiceSlot_RestoreState
@@ -5192,7 +5195,7 @@ DMA_ChannelHandler_2:
 	jp	DMA_ChannelHandler_2_Return
 DMA_ChannelHandler_2_Skip:
 	ld	(3567:16), 8
-	call	DisplayMode_Handler_2_Helper
+	call	DisplayMode_RedrawWithBlankLine
 DMA_ChannelHandler_2_Return:
 	ret
 DMA_ChannelHandler_0:
@@ -5206,7 +5209,7 @@ DMA_ChannelHandler_3:
 	ld	(3567:16), 15
 	call DisplayMode_Handler_3_Helper13
 DMA_Channel3_CallAndInit:
-	call DMA_Channel3_CallAndInit_Helper
+	call DisplayStr_ShowMeasureNumber
 	ld	(0x3728:16), 0
 	call DisplayStr_StyleSectionInit
 	ret
@@ -5688,7 +5691,7 @@ VoiceSlot_TableSetup_Code_Loop2:
 	jrl	nz, VoiceSlot_TableSetup_Code_Loop2
 	cp	(3420:16), a
 	jrl	nz, VoiceSlot_TableSetup_Code_Loop2
-	call	DMA_Channel3_CallAndInit_Helper
+	call	DisplayStr_ShowMeasureNumber
 	call	VoiceSlot_FlagCheck
 	cp	a, 132
 	jrl	nz, VoiceSlot_TableSetup_Code_Return3
@@ -5706,7 +5709,7 @@ VoiceSlot_TableSetup_Code_Loop3:
 	jrl	nz, VoiceSlot_TableSetup_Code_Loop3
 	cp	(3420:16), a
 	jrl	nz, VoiceSlot_TableSetup_Code_Loop3
-	call	DMA_Channel3_CallAndInit_Helper
+	call	DisplayStr_ShowMeasureNumber
 	ret
 
 AccPedal_CheckBitAndUpdate:
@@ -7264,7 +7267,7 @@ PortConfig_Handler_3:
 	ld	(DISPLAY_CACHED_VAL3:24), 255
 	ld	(DISPLAY_CACHED_VAL2:24), 255
 	call DisplayMode_Handler_3_Helper13
-	call DMA_Channel3_CallAndInit_Helper
+	call DisplayStr_ShowMeasureNumber
 	call ToneParam_Evt09_BytecodeHandler_Helper3
 	call UIState_UpdateMultiRegions
 	call Display_UpdateRegion3
@@ -8018,11 +8021,11 @@ MemConfig_Handler_0_Join:
 	xor	a, a
 	call	VoiceSlot_SaveState
 	ld	w, 129:opc
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 	ld	de, 1:i3
 	call	VoiceSlot_ReadParamsWithSaveRestore_Helper2
 	ld	w, 130:opc
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 	xor	a, a
 	call	VoiceSlot_RestoreState
 	call	MemConfig_Handler_0_Helper
@@ -8069,11 +8072,11 @@ MemConfig_Handler_1_Code_Skip:
 	jrl	nz, MemConfig_Handler_1_Skip
 	ld	w, 132:opc
 MemConfig_Handler_1_Join2:
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 	ld	de, 1:i3
 	call	VoiceSlot_ReadParamsWithSaveRestore_Helper2
 	ld	w, 132:opc
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 	xor	a, a
 	call	VoiceSlot_RestoreState
 	call	MemConfig_Handler_0_Helper
@@ -8289,7 +8292,7 @@ MemConfig_Handler_1_Loop4:
 MemConfig_Handler_1_Code_Return:
 	ret
 MemConfig_Handler_3:
-	call	MemConfig_Handler_3_Helper2
+	call	MemConfig_SnapshotSongPosition
 	call	MemConfig_Handler_1_Helper3
 	call	MemConfig_Handler_3_Helper3
 	call	MemConfig_Handler_3_Helper5
@@ -8299,7 +8302,10 @@ MemConfig_Handler_3:
 MemConfig_Handler_3_Next:
 	ld	w, 0:opc
 	ret
-MemConfig_Handler_3_Helper2:
+; MemConfig_SnapshotSongPosition: Saves the song position -- measure (0x371A), word (0x0D58), clock (0x0D57) and beat
+;   (0x0D5C) -- into 0x0EE8/0x0EEA/0x0EEC/0x0EED; preserves WA. Basis: callers + body -- MemConfig_Handler_3
+;   snapshots, moves the position, then MemConfig_Handler_3_Helper3 compares against the snapshot.
+MemConfig_SnapshotSongPosition:
 	pushw	wa
 	ld	wa, (0x371a:16)
 	ld	(3816:16), wa
@@ -8807,7 +8813,7 @@ MemConfig_Handler_4:
 	set	2, (0x10f9:16)
 	jp	MemConfig_Handler_4_Return2
 MemConfig_Handler_4_Skip9:
-	call	MemConfig_Handler_3_Helper2
+	call	MemConfig_SnapshotSongPosition
 	call	MemConfig_Handler_1_Helper4
 	call	MemConfig_Handler_5_Helper12
 	call	MemConfig_Handler_3_Helper5
@@ -9330,11 +9336,11 @@ ScoopParam_ValueTable_Helper9_Skip:
 	xor	a, a
 	call	VoiceSlot_SaveState
 	ld	w, 132:opc
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 	ld	de, 1:i3
 	call	VoiceSlot_ReadParamsWithSaveRestore_Helper2
 	ld	w, 132:opc
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 	xor	a, a
 	call	VoiceSlot_RestoreState
 	call	MemConfig_Handler_0_Helper
@@ -9420,7 +9426,7 @@ SystemInit_StepHandler_0_Skip14:
 	call	VoiceSlot_ReadCurrentParams
 	dec	1, a
 	ld	w, a
-	call	VoiceSlot_ReadParamsWithSaveRestore_Helper
+	call	VoiceSlot_WriteCurrentParam
 SystemInit_StepHandler_0_Skip15:
 	ld	a, 2:opc
 	call	VoiceSlot_RestoreState
@@ -10256,7 +10262,10 @@ Timer_ModeHandler_0_Helper4:
 	pop	xwa
 	ldb_d8	a, (0x0dc4)
 	ret
-VoiceSlot_ReadParamsWithSaveRestore_Helper:
+; VoiceSlot_WriteCurrentParam: Stores W at the current song-data cursor: block (0x0C9E)[track] (via
+;   VoiceSlot_UpdateCurrentPointer), offset (0x0CBE)[track], track = (0x0EEE). Basis: callers + body -- the write twin
+;   of VoiceSlot_ReadCurrentParams; callers read, modify W and write back, or write marker bytes.
+VoiceSlot_WriteCurrentParam:
 	call	VoiceSlot_ComputeWordIndex
 	push	xde
 	ld	xde, 3230
@@ -11329,7 +11338,7 @@ Display_ModePopupDispatch:
 	call	(xhl)
 	ret
 VoiceState_SaveAndRestore:
-	call	DMA_Channel3_CallAndInit_Helper
+	call	DisplayStr_ShowMeasureNumber
 	call	DisplayStr_StyleSectionInit
 	ret
 	; 4 handlers indexed by (0x0D65) & 3, the display mode; read by Display_ModePopupDispatch
@@ -11653,7 +11662,9 @@ DisplayMode_Handler_3_Helper12:
 	ld	wa, hl
 	pop	xix
 	ret
-Timer_ModeHandler_1_Helper2:
+; TempoRingBuf_IsEmpty: Returns W = 0xFF if the TempoRingBuf ring is empty (TempoRingBuf_CheckEmpty gives HL = 0),
+;   else W = 0. Basis: callers + body -- the Timer_ModeHandler_* tick handlers return early unless it gives W = 0.
+TempoRingBuf_IsEmpty:
 	call	TempoRingBuf_CheckEmpty
 	ld	wa, hl
 	cp	wa, 0:i3
@@ -12291,7 +12302,7 @@ SubCPU_ToneParamDisplay:
 	call	Display_UpdateRegion0
 	ld	(4380:16), 0
 	call	SubCPU_ToneParamDisplay_Helper2
-	call	SubCPU_ToneParamDisplay_Helper3
+	call	DisplayStr_ShowPartParamLine
 	call	SubCPU_ToneParamDisplay_Helper
 SubCPU_ToneParamDisplay_Epilogue:
 	pop	xiy
@@ -12347,7 +12358,11 @@ SubCPU_ToneParamDisplay_Helper2:
 SubCPU_ToneParamDisplay_Epilogue2:
 	pop xix
 	ret
-SubCPU_ToneParamDisplay_Helper3:
+; DisplayStr_ShowPartParamLine: Rebuilds the LCD text line of the part-parameter pop-up: blanks 27 characters at
+;   0x0ECD, copies the 10-character label ("PAN", "KEY SHIFT", "TUNING", "BEND SENS") selected by (0x111C), formats
+;   the value (0x111D) as 3 digits (offset 64 or 128 per (0x111C)) and redraws region 3. Basis: callers + body --
+;   called whenever the selected parameter (0x111C) or its value (0x111D) changes.
+DisplayStr_ShowPartParamLine:
 	ld	xix, 3789
 	ld	a, 32:opc
 	ldw	bc, 27
@@ -12430,7 +12445,7 @@ SubCPU_ToneParamRet_Target1_Skip:
 	call	SubCPU_ToneStoreDigits
 	ld	(4380:16), a
 	call	SubCPU_ToneParamDisplay_Helper2
-	call	SubCPU_ToneParamDisplay_Helper3
+	call	DisplayStr_ShowPartParamLine
 	call	SubCPU_ToneParamDisplay_Helper
 SubCPU_ToneParamRet_Target1_Return:
 	ret
@@ -12455,9 +12470,9 @@ SubCPU_ToneLoadAndStore:
 	jrl nz, SubCPU_CallRoutine
 	ld h, 0xff:opc
 SubCPU_CallRoutine:
-	call PerfMode_Evt04_VolumeHandler_Helper
+	call PerfMode_StepValueInRange
 	ld	(4381:16), a
-	call SubCPU_ToneParamDisplay_Helper3
+	call DisplayStr_ShowPartParamLine
 	call SubCPU_ToneParamDisplay_Helper
 	ret
 SubCPU_ToneStoreDigits:
@@ -14128,7 +14143,7 @@ Str_MSA:
 	.ascii	"M.S.A.    "
 VoiceCtrl_ParamSetupBytecode_Tbl3_Helper9:
 	pushw	bc
-	call	DMA_Channel3_CallAndInit_Helper
+	call	DisplayStr_ShowMeasureNumber
 	call	DisplayStr_ClearRegion
 	popw	bc
 	ld	xix, 3796
@@ -14235,7 +14250,10 @@ DisplayStr_BytecodeBlock_C_Tbl2:
 	.ascii	"  TEMPO  "
 	.byte	0x93
 	.ascii	"=              "
-DisplayMode_Handler_2_Helper:
+; DisplayMode_RedrawWithBlankLine: Redraws region 0, blanks the LCD text line at 0x0ECA (30 bytes, then 25) and
+;   redraws regions 5, 3 and 4. Basis: callers + body -- both callers set the pop-up id (0x0DEF) to 8 and call it;
+;   DMA_ChannelHandler_2 reuses the tail without region 0 when already in that pop-up.
+DisplayMode_RedrawWithBlankLine:
 	call	Display_UpdateRegion0
 DisplayStr_BytecodeBlock_C_Tbl2_Sub:
 	call	PortConfig_Handler_0_Helper8
@@ -14254,7 +14272,10 @@ DisplayStr_BytecodeBlock_C_Text:
 DisplayMode_Handler_3_Helper13:
 	call	Display_UpdateRegion0
 	ret
-DMA_Channel3_CallAndInit_Helper:
+; DisplayStr_ShowMeasureNumber: Writes the measure number (RAM 0x371A) as three right-aligned digits, or "---" when >=
+;   1000, at the start of the LCD text line 0x0ECA. Basis: callers + body -- the dial up/down handlers step the song
+;   position until clock (0x0D57) and beat (0x0D5C) are both 0 and then call it.
+DisplayStr_ShowMeasureNumber:
 	ld	wa, (0x371a:16)
 	cp	wa, 1000
 	jrl	c, DisplayStr_BytecodeBlock_C_Skip3
@@ -14281,7 +14302,7 @@ DisplayStr_FillDashes:
 
 DisplayStr_BytecodeBlock_D:
 	call	Display_UpdateRegion0
-	call	DMA_Channel3_CallAndInit_Helper
+	call	DisplayStr_ShowMeasureNumber
 	ld	h, (0x3723:16)
 	ld	l, (0x3722:16)
 	ld	h, (3829:16)

@@ -65,14 +65,14 @@ PanelEvent_Post:
 PanelEvent_Post_Skip:
 	ld	(xwa), 255
 	ret
-; unless MD_DEMO: FileIO_BytecodeData_Code_Helper2 on the frame, then post both events
+; unless MD_DEMO: PanelEvent_FillSelectedPart on the frame, then post both events
 PanelAction_PostUnlessDemo:
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 19
 	jr	z, PanelAction_PostUnlessDemo_Epilogue
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData_Code_Helper2
+	calr	PanelEvent_FillSelectedPart
 	ld	xwa, xiz
 	calr	PanelEvent_Post
 	inc	4, xiz
@@ -92,7 +92,7 @@ PanelAction_PostUnlessDemoOrParamC0:
 	cp	hl, 1:i3
 	jr	z, PanelAction_PostUnlessDemoOrParamC0_Epilogue
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData_Code_Helper2
+	calr	PanelEvent_FillSelectedPart
 	ld	xwa, xiz
 	calr	PanelEvent_Post
 	inc	4, xiz
@@ -117,7 +117,7 @@ PanelButton_PanelMemorySet_Skip:
 	jr	PanelButton_PanelMemorySet_Epilogue
 PanelButton_PanelMemorySet_Skip2:
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData_Code_Helper2
+	calr	PanelEvent_FillSelectedPart
 	ld	xwa, xiz
 	calr	PanelEvent_Post
 	inc	4, xiz
@@ -526,7 +526,7 @@ FileIO_BytecodeData_Code_Skip36:
 	jr	z, FileIO_BytecodeData_Code_Epilogue9
 FileIO_BytecodeData_Code_Skip37:
 	ld	xwa, (xsp+2)
-	calr	FileIO_BytecodeData_Code_Helper2
+	calr	PanelEvent_FillSelectedPart
 	ld	xbc, (xsp+2)
 	ld	a, (xbc)
 	extz	wa
@@ -858,7 +858,7 @@ PanelButton_DigitalEffect:
 	.byte	0x83, 0x3f, 0x0c
 	jr	z, PanelButton_DigitalEffect_Epilogue
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData_Code_Helper2
+	calr	PanelEvent_FillSelectedPart
 	ld	xwa, xiz
 	calr	PanelEvent_Post
 	inc	4, xiz
@@ -916,7 +916,7 @@ FileIO_BytecodeData_Code_Entry7:
 	ld	(xiz+3), 0
 FileIO_BytecodeData_Code_Join11:
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData_Code_Helper2
+	calr	PanelEvent_FillSelectedPart
 	ld	xwa, xiz
 	calr	PanelEvent_Post
 	inc	4, xiz
@@ -959,7 +959,7 @@ PanelButton_Sustain_Skip:
 FileIO_BytecodeData_Code_Entry8:
 	.byte	0xf1, 0x5d, 0x90, 0xb1
 	ld	xwa, xiz
-	calr	FileIO_BytecodeData_Code_Helper2
+	calr	PanelEvent_FillSelectedPart
 	ld	xwa, xiz
 	calr	PanelEvent_Post
 	inc	4, xiz
@@ -1126,7 +1126,7 @@ PanelAction_FootSwitch1:
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
-	calr	FileIO_BytecodeData_Code_Helper4
+	calr	PanelAction_DispatchPedalFunction
 PanelAction_Event28Bit0_Epilogue:
 	pop	xiz
 	ret
@@ -1141,7 +1141,7 @@ PanelAction_FootSwitch2:
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
-	calr	FileIO_BytecodeData_Code_Helper4
+	calr	PanelAction_DispatchPedalFunction
 PanelAction_Event28Bit1_Epilogue:
 	pop	xiz
 	ret
@@ -1156,7 +1156,7 @@ PanelAction_FootController1:
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
-	calr	FileIO_BytecodeData_Code_Helper4
+	calr	PanelAction_DispatchPedalFunction
 PanelAction_Event29Bit0_Epilogue:
 	pop	xiz
 	ret
@@ -1171,7 +1171,7 @@ PanelAction_FootController2:
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
-	calr	FileIO_BytecodeData_Code_Helper4
+	calr	PanelAction_DispatchPedalFunction
 PanelAction_Event29Bit1_Epilogue:
 	pop	xiz
 	ret
@@ -1186,7 +1186,7 @@ PanelAction_FootController3:
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
-	calr	FileIO_BytecodeData_Code_Helper4
+	calr	PanelAction_DispatchPedalFunction
 PanelAction_Event29Bit2_Epilogue:
 	pop	xiz
 	ret
@@ -1201,7 +1201,7 @@ PanelAction_FootController4:
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
-	calr	FileIO_BytecodeData_Code_Helper4
+	calr	PanelAction_DispatchPedalFunction
 PanelAction_Event29Bit3_Epilogue:
 	pop	xiz
 	ret
@@ -1269,7 +1269,7 @@ PanelAction_Volume:
 PanelAction_Event27_Epilogue:
 	pop	xiz
 	ret
-FileIO_BytecodeData_Code_Helper2:
+PanelEvent_FillSelectedPart:
 	.byte	0x80, 0x3f, 0x00
 	ret	nz
 	.byte	0x88, 0x01, 0x3f, 0x03
@@ -1307,7 +1307,7 @@ FileIO_BytecodeData_Code_Helper3:
 	lda	xhl, (xsp)
 	inc	6, xsp
 	ret
-FileIO_BytecodeData_Code_Helper4:
+PanelAction_DispatchPedalFunction:
 	extz	bc
 	lda	xde, (PanelAction_PedalAssignHandlerIndex:24)
 	ld	e, (xde+bc)

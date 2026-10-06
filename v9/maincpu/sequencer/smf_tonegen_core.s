@@ -5110,13 +5110,13 @@ VoiceSynth_ConditionalUpdate_SetParams:
 	ld	a, (4013:16)
 	cp	(4600:16), 2
 	jr nz, VoiceSynth_ConditionalUpdate_StoreAndCall
-	call VoiceSynth_ConditionalUpdate_Helper
+	call VoiceSynth_ApplyLogCurve
 VoiceSynth_ConditionalUpdate_StoreAndCall:
 	ld	(4234:16), a
 	ld	(4235:16), 127
 	call VoiceChannel_UpdateWithPitch
 	ret
-VoiceSynth_ConditionalUpdate_Helper:
+VoiceSynth_ApplyLogCurve:
 	; --- Helper: call FEEA13, copy L to A (7 bytes) ---
 	call SndParam_CompactLookupStub
 	ld a, l
@@ -5217,7 +5217,7 @@ VoiceSynth_Algo_PitchModulated:
 	ld	a, (4013:16)
 	cp	(4600:16), 2
 	jr	nz, VoiceSynth_Algo_PitchModulated_Skip
-	call	VoiceSynth_ConditionalUpdate_Helper
+	call	VoiceSynth_ApplyLogCurve
 VoiceSynth_Algo_PitchModulated_Skip:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
@@ -5326,7 +5326,7 @@ VoiceParam_ReadUpdate_7_Skip:
 	ld	a, (4013:16)
 	cp	(4600:16), 2
 	jr	nz, VoiceParam_ReadUpdate_7_Skip2
-	call	VoiceSynth_ConditionalUpdate_Helper
+	call	VoiceSynth_ApplyLogCurve
 VoiceParam_ReadUpdate_7_Skip2:
 	ld	(4234:16), a
 	ld	(4235:16), 127
@@ -5418,7 +5418,7 @@ VoiceParam_ReadUpdate_11:
 	ld	a, (4013:16)
 	cp	(4600:16), 2
 	jr	nz, VoiceParam_ReadUpdate_11_Skip
-	call	VoiceSynth_ConditionalUpdate_Helper
+	call	VoiceSynth_ApplyLogCurve
 VoiceParam_ReadUpdate_11_Skip:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh

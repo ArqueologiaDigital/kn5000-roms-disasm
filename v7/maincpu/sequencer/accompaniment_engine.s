@@ -25740,7 +25740,7 @@ TimeSig_DisplayStrings_Code_Join7:
 	ld	(0x390e:16), a
 TimeSig_DisplayStrings_Code_Return9:
 	ret
-CmpSetTtl_Dispatch2_Helper2:
+CmpSetTtl_StepEntryByte2:
 	push	xiz
 	call	TimeSig_DisplayStrings_Helper5
 	pop	xiz
@@ -25772,7 +25772,7 @@ TimeSig_SlotEntryByte2Offsets:
 	; entries, indexed by (0x390E); TimeSig_SlotFieldOffsets are the same entries' byte +5.
 	; TimeSig_DisplayStrings_Helper5 steps the byte within 0..127.
 	.byte	34, 42, 50, 58
-CmpSetTtl_Dispatch2_Helper3:
+CmpSetTtl_StepEntryByte5:
 	push	xiz
 	call	TimeSig_DisplayStrings_Helper6
 	pop	xiz
@@ -28403,7 +28403,7 @@ AccVoice_SetupSlots_DataBlock:
 	cp	a, 0:i3
 	jr	z, AccVoice_SetupSlots_DataBlock_Return
 	calr	AccVoice_SetupSlots_DataBlock_Helper
-	calr	AccVoice_SetupSlots_DataBlock_Helper2
+	calr	AccPatch_SetCursorToChannelStart
 	calr	AccVoice_SetupSlots_DataBlock_Helper3
 AccVoice_SetupSlots_DataBlock_Return:
 	ret
@@ -28423,7 +28423,7 @@ AccVoice_SetupSlots_DataBlock_Helper:
 	; v10 does not spell this byte either
 	ldir85
 	ret
-AccVoice_SetupSlots_DataBlock_Helper2:
+AccPatch_SetCursorToChannelStart:
 	calr	AccVoice_SetupStyleSlots_Helper2
 	calr	DrumChannel_MapToIndexB
 	sll	bc, 1
@@ -28693,7 +28693,7 @@ AccVoice_SetupSlots_Apply:
 	ld	(0x372d:16), a
 	calr	AccVoice_SetupSlots_DataBlock_Helper
 	calr	AccVoice_SetupSlots_DataBlock_Helper10_Helper
-	calr	AccVoice_SetupSlots_DataBlock_Helper2
+	calr	AccPatch_SetCursorToChannelStart
 	calr	AccVoice_SetupSlots_DataBlock_Helper10_Helper2
 	ret
 AccVoice_SetupSlots_DataBlock_Helper10_Helper:
@@ -29394,7 +29394,7 @@ CmpSetTtl_Case_EntryByte2Up:
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	CmpSetTtl_Dispatch2_Helper2
+	call	CmpSetTtl_StepEntryByte2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -29406,7 +29406,7 @@ CmpSetTtl_Case_EntryByte2Down:
 	push	xix
 	push	xiz
 	ld	w, 128:opc
-	call	CmpSetTtl_Dispatch2_Helper2
+	call	CmpSetTtl_StepEntryByte2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -29418,7 +29418,7 @@ CmpSetTtl_Case_EntryByte5Up:
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	CmpSetTtl_Dispatch2_Helper3
+	call	CmpSetTtl_StepEntryByte5
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -29430,7 +29430,7 @@ CmpSetTtl_Case_EntryByte5Down:
 	push	xix
 	push	xiz
 	ld	w, 128:opc
-	call	CmpSetTtl_Dispatch2_Helper3
+	call	CmpSetTtl_StepEntryByte5
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -33351,12 +33351,12 @@ AccDraw_SecondarySub_Handler07:
 AccDraw_SecondarySub_Handler08:
 	or	(0xe31c:16), 8
 	bit	7, w
-	jr	nz, AccDraw_Secondary_Return4
+	jr	nz, AccDraw_SecondarySub_Handler08_Return
 	bit	3, (0x36ff:16)
-	jr	nz, AccDraw_Secondary_Return4
+	jr	nz, AccDraw_SecondarySub_Handler08_Return
 	call	AccDraw_Secondary_Helper2
 	or	(0xe31a:16), 16
-AccDraw_Secondary_Return4:
+AccDraw_SecondarySub_Handler08_Return:
 	ret
 AccDraw_SecondarySub_Handler09:
 	or	(0xe31c:16), 8

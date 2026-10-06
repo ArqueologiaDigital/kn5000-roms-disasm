@@ -1286,10 +1286,10 @@ DirmdEmu_CaseF:
 	ldw	wa, 255
 	call	GraphicsRender_ByteData
 	ldw	wa, 245
-	call	PostTitle_Function_Helper2
-	call	PostTitle_Function_Helper4
+	call	Display_SetBackgroundColor
+	call	Display_LoadFixedPaletteBands
 	ldw	wa, 255
-	call	PostTitle_Function_Helper3
+	call	Display_FillPaletteBandFromEntry
 PostTitle_Function_Skip:
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleNew
 	call	DbMemo_DrawContent_Loop_0x61
@@ -1351,10 +1351,10 @@ DirmdEmu_OnAllPaint:	; EVT_ALL_PAINT: clear the redraw mode, reset the drawing s
 	ldw	wa, 255
 	call	GraphicsRender_ByteData
 	ldw	wa, 245
-	call	PostTitle_Function_Helper2
-	call	PostTitle_Function_Helper4
+	call	Display_SetBackgroundColor
+	call	Display_LoadFixedPaletteBands
 	ldw	wa, 255
-	call	PostTitle_Function_Helper3
+	call	Display_FillPaletteBandFromEntry
 	push	xde
 	push	xhl
 	push	xix

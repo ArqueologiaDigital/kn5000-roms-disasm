@@ -215,7 +215,10 @@ def main():
                 L.insert(li, "%s:" % nf)
             open(p, "wb").write("\n".join(L).encode("latin-1"))
     if a.apply and renames:
-        targets = [f for f in files] + glob.glob(os.path.join(REPO, a.to, "maincpu", "**", "*.c"), recursive=True)
+        # the link scripts too: a NAKA_ADDR(name) in a C blob is defined by its <stem>_link.ld (2026-10-06: the C was
+        # renamed and the .ld kept the old name, so v9/v7's naka_extension_device failed to link)
+        targets = [f for f in files] + glob.glob(os.path.join(REPO, a.to, "maincpu", "**", "*.c"), recursive=True) \
+            + glob.glob(os.path.join(REPO, a.to, "maincpu", "**", "*.ld"), recursive=True)
         subprocess.run(["sed", "-i", "-f", sed] + targets, check=True)
     print("%s <- %s: %s%s" % (a.to, a.frm, dict(stats), "" if a.apply else " (dry run)"))
     if a.report:

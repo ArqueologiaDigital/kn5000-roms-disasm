@@ -1783,7 +1783,7 @@ PerfMode_Evt04_VolumeHandler:
 	ldb_d8	a, (0x0ef7)
 	ld	l, 0:opc
 	ld	h, 127:opc
-	call	PerfMode_Evt04_VolumeHandler_Helper
+	call	PerfMode_StepValueInRange
 	stb_d8	(0x0ef7), a
 	ldb_d8	l, (0x0d60)
 	dec	1, l
@@ -1841,7 +1841,7 @@ PerfMode_VoiceAddressTable:
 	.long	0x0000faf1
 	.long	0x0000fb0b
 	.long	0x0000fb25
-PerfMode_Evt04_VolumeHandler_Helper:
+PerfMode_StepValueInRange:
 	bit 0x07,W
 	jrl nz, .Lc_ef6c1e
 	cp A,H
@@ -1920,7 +1920,7 @@ VoiceParam_MultiDispatch:
 	ld	a, (4339:16)
 	ld l, 0x34:opc
 	ld h, 0x4c:opc
-	call PerfMode_Evt04_VolumeHandler_Helper
+	call PerfMode_StepValueInRange
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
@@ -1931,7 +1931,7 @@ VoiceParam_Case03:
 	ld	a, (4339:16)
 	ld l, 0x00:opc
 	ld h, 0x7f:opc
-	call PerfMode_Evt04_VolumeHandler_Helper
+	call PerfMode_StepValueInRange
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
@@ -1942,7 +1942,7 @@ VoiceParam_Case08:
 	ld	a, (4339:16)
 	ld l, 0x00:opc
 	ld h, 0x7f:opc
-	call PerfMode_Evt04_VolumeHandler_Helper
+	call PerfMode_StepValueInRange
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
@@ -1953,7 +1953,7 @@ VoiceParam_Case0A:
 	ld	a, (4339:16)
 	ld l, 0x00:opc
 	ld h, 0xff:opc
-	call PerfMode_Evt04_VolumeHandler_Helper
+	call PerfMode_StepValueInRange
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceParam_BitManipHelper
@@ -1964,7 +1964,7 @@ VoiceParam_Case0B:
 	ld	a, (4339:16)
 	ld l, 0x00:opc
 	ld h, 0x0c:opc
-	call PerfMode_Evt04_VolumeHandler_Helper
+	call PerfMode_StepValueInRange
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
@@ -4491,7 +4491,7 @@ DisplayMode_Handler_1:
 	ret
 DisplayMode_Handler_2:
 	ld	(3567:16), 8
-	call	DisplayMode_Handler_2_Helper
+	call	DisplayMode_RedrawWithBlankLine
 	ret
 DisplayMode_Handler_3:
 	ld	(3567:16), 15
@@ -5228,7 +5228,7 @@ DMA_ChannelHandler_2:
 	jp	DMA_ChannelHandler_2_Return
 DMA_ChannelHandler_2_Skip:
 	ld	(3567:16), 8
-	call	DisplayMode_Handler_2_Helper
+	call	DisplayMode_RedrawWithBlankLine
 DMA_ChannelHandler_2_Return:
 	ret
 DMA_ChannelHandler_0:
@@ -12306,7 +12306,7 @@ SubCPU_ToneParamDisplay:
 	call	Display_UpdateRegion0
 	ld	(4380:16), 0
 	call	SubCPU_ToneParamDisplay_Helper2
-	call	SubCPU_ToneParamDisplay_Helper3
+	call	DisplayStr_ShowPartParamLine
 	call	SubCPU_ToneParamDisplay_Helper
 SubCPU_ToneParamDisplay_Epilogue:
 	pop	xiy
@@ -12363,7 +12363,7 @@ SubCPU_ToneParamDisplay_Helper2:
 SubCPU_ToneParamDisplay_Epilogue2:
 	pop XIX
 	ret
-SubCPU_ToneParamDisplay_Helper3:
+DisplayStr_ShowPartParamLine:
 	ld XIX,0x00000ecd
 	ld A, 0x20:opc
 	ldw BC, 0x001b
@@ -12432,20 +12432,20 @@ SubCPU_ToneParamDisplay_Tbl:
 SubCPU_ToneParamRet_Target1:
 	xor	l, l
 	bit	7, w
-	jrl	nz, SubCPU_ToneParamDisplay_Skip5
+	jrl	nz, SubCPU_ToneParamRet_Target1_Skip
 	ld	l, 3:opc
-SubCPU_ToneParamDisplay_Skip5:
+SubCPU_ToneParamRet_Target1_Skip:
 	cp	(4380:16), l
-	jrl	z, SubCPU_ToneParamDisplay_Return
+	jrl	z, SubCPU_ToneParamRet_Target1_Return
 	ld	a, (4380:16)
 	xor	l, l
 	ld	h, 3:opc
 	call	SubCPU_ToneStoreDigits
 	ld	(4380:16), a
 	call	SubCPU_ToneParamDisplay_Helper2
-	call	SubCPU_ToneParamDisplay_Helper3
+	call	DisplayStr_ShowPartParamLine
 	call	SubCPU_ToneParamDisplay_Helper
-SubCPU_ToneParamDisplay_Return:
+SubCPU_ToneParamRet_Target1_Return:
 	ret
 SubCPU_ToneHandler_A:
 	or	(0xe31c:16), 8
@@ -12467,9 +12467,9 @@ SubCPU_ToneLoadAndStore:
 	jrl nz, SubCPU_CallRoutine
 	ld h, 0xff:opc
 SubCPU_CallRoutine:
-	call PerfMode_Evt04_VolumeHandler_Helper
+	call PerfMode_StepValueInRange
 	ld	(4381:16), a
-	call SubCPU_ToneParamDisplay_Helper3
+	call DisplayStr_ShowPartParamLine
 	call SubCPU_ToneParamDisplay_Helper
 	ret
 SubCPU_ToneStoreDigits:
@@ -14261,7 +14261,7 @@ DisplayStr_BytecodeBlock_C_Tbl2:
 	.ascii	"  TEMPO  "
 	.byte	0x93
 	.ascii	"=              "
-DisplayMode_Handler_2_Helper:
+DisplayMode_RedrawWithBlankLine:
 	call	Display_UpdateRegion0
 DisplayStr_BytecodeBlock_C_Tbl2_Sub:
 	call Display_BytecodeBlock_F_Sub2

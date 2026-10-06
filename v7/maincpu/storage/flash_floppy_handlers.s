@@ -50,7 +50,7 @@ SeScreenData_0x4D01:
 	.byte	0x00, 0x0a, 0x64, 0x06, 0xff, 0x00, 0x20, 0x14, 0x12, 0x02
 ; [v10] F15930 flags=0x00 len=10
 	.byte	0x00, 0x0a, 0x65, 0x06, 0xff, 0x00, 0x20, 0x6b, 0x14, 0x03
-; table of 6 pointers to the records of the list at 0xF158DD (entry 0 repeated); entry 0 of the per-variant table at 0xF15A77, drawn one record at a time by SeMenu_PatchEdit_Dispatch_Helper (XIY = (XIY + 4*WA))
+; table of 6 pointers to the records of the list at 0xF158DD (entry 0 repeated); entry 0 of the per-variant table at 0xF15A77, drawn one record at a time by SeGfx_DrawIndexedBoundRecord (XIY = (XIY + 4*WA))
 ; evidence: SeMenu_PatchEdit_DataBlock (0xF1011C)
 SeScreenData_0x4D34:
 ; [v10] F1593A..F15952  6 x u32 pointer
@@ -96,7 +96,7 @@ SeScreenData_0x4D7F:
 ; table of 9 pointers, entry = A (0..8; entry 0 repeated): entries 1-6 -> the records
 ; SeScreenData_0x4D56.., entries 7/8 -> FlashRead_BlockData_Field7/_Field8.  The code loads it
 ; into XIY only on SeMenu_PatchEdit_DataBlock's `cp a, 7 / jr nc` path, and
-; SeMenu_PatchEdit_Dispatch_Helper draws entry WA (XIY = (XIY + 4*WA)) -- so the entries that reader
+; SeGfx_DrawIndexedBoundRecord draws entry WA (XIY = (XIY + 4*WA)) -- so the entries that reader
 ; uses are 7 and 8 (corrected 2026-10-02 from "table of 7", Wave 2 claims review)
 ; evidence: SeMenu_PatchEdit_DataBlock_Join+0x6 (0xF10154)
 ; (name SeScreenData_0x4D89 kept: other files use it; the object is ScreenData, see above)
@@ -124,7 +124,7 @@ SeScreenData_0x4DAD:
 	.byte	0x03, 0x00, 0xbb, 0x0f
 ; [v10] F159D6 flags=0x00 len=10
 	.byte	0x00, 0x0a, 0x64, 0x06, 0xff, 0x00, 0x20, 0x13, 0x12, 0x03
-; table of 5 pointers to the records of the list at 0xF15989 (entry 0 repeated); entry 6 of the per-variant table at 0xF15A77, drawn one record at a time by SeMenu_PatchEdit_Dispatch_Helper (XIY = (XIY + 4*WA))
+; table of 5 pointers to the records of the list at 0xF15989 (entry 0 repeated); entry 6 of the per-variant table at 0xF15A77, drawn one record at a time by SeGfx_DrawIndexedBoundRecord (XIY = (XIY + 4*WA))
 ; evidence: SeMenu_PatchEdit_DataBlock (0xF1011C)
 SeScreenData_0x4DDA:
 ; (was .incbin "includes/romslices/v7_transplant_FlashWrite_BlockRef_Type3.bin")
@@ -147,7 +147,7 @@ SeScreenData_0x4DEE:
 	.byte	0x00, 0x0a, 0x63, 0x06, 0xff, 0x00, 0x20, 0xbc, 0x0f, 0x02
 ; [v10] F15A12 flags=0x00 len=10
 	.byte	0x00, 0x0a, 0x64, 0x06, 0xff, 0x00, 0x20, 0x14, 0x12, 0x02
-; table of 5 pointers to the records of the list at 0xF159CA (entry 0 repeated); entry 7 of the per-variant table at 0xF15A77, drawn one record at a time by SeMenu_PatchEdit_Dispatch_Helper (XIY = (XIY + 4*WA))
+; table of 5 pointers to the records of the list at 0xF159CA (entry 0 repeated); entry 7 of the per-variant table at 0xF15A77, drawn one record at a time by SeGfx_DrawIndexedBoundRecord (XIY = (XIY + 4*WA))
 ; evidence: SeMenu_PatchEdit_DataBlock (0xF1011C)
 SeScreenData_0x4E16:
 ; (was .incbin "includes/romslices/v7_transplant_FlashWrite_BlockRef_Type4.bin")
@@ -169,7 +169,7 @@ SeScreenData_0x4E2A:
 	.byte	0x05, 0x0b, 0x63, 0x06, 0xff, 0x00, 0x20, 0xbb, 0x0f, 0x02, 0x00
 ; [v10] F15A50 flags=0x00 len=10
 	.byte	0x00, 0x0a, 0x64, 0x06, 0xff, 0x00, 0x20, 0x13, 0x12, 0x03
-; table of 5 pointers to the records of the list at 0xF15A06 (entry 0 repeated); entry 8 of the per-variant table at 0xF15A77, drawn one record at a time by SeMenu_PatchEdit_Dispatch_Helper (XIY = (XIY + 4*WA))
+; table of 5 pointers to the records of the list at 0xF15A06 (entry 0 repeated); entry 8 of the per-variant table at 0xF15A77, drawn one record at a time by SeGfx_DrawIndexedBoundRecord (XIY = (XIY + 4*WA))
 ; evidence: SeMenu_PatchEdit_DataBlock (0xF1011C)
 SeScreenData_0x4E54:
 ; [v10] F15A5A..F15A6E  5 x u32 pointer
@@ -192,7 +192,7 @@ SeScreenData_0x4E68:
 ; llvm-mc cannot spell this byte
 ; [v10] F15A87 flags=0x00 len=10
 	.byte	0x00, 0x0a, 0x63, 0x06, 0xff, 0x00, 0x20, 0xbb, 0x0f, 0x03
-; table of 4 pointers to the records of the list at 0xF15A44 (entry 0 repeated); entry 10 of the per-variant table at 0xF15A77, drawn one record at a time by SeMenu_PatchEdit_Dispatch_Helper (XIY = (XIY + 4*WA))
+; table of 4 pointers to the records of the list at 0xF15A44 (entry 0 repeated); entry 10 of the per-variant table at 0xF15A77, drawn one record at a time by SeGfx_DrawIndexedBoundRecord (XIY = (XIY + 4*WA))
 ; evidence: SeMenu_PatchEdit_DataBlock (0xF1011C)
 ; (name SeScreenData_0x4E8B kept: other files use it; the object is ScreenData, see above)
 SeScreenData_0x4E8B:
@@ -201,7 +201,7 @@ SeScreenData_0x4E8B:
 	.long	SeScreenData_0x4E68
 	.long	SeScreenData_0x4E68 + 0xf
 	.long	SeScreenData_0x4E68 + 0x19
-; 12 pointers to record-pointer tables, one per screen variant = the byte at RAM 0x670; entry -> SeMenu_PatchEdit_Dispatch_Helper
+; 12 pointers to record-pointer tables, one per screen variant = the byte at RAM 0x670; entry -> SeGfx_DrawIndexedBoundRecord
 ; evidence: SeMenu_PatchEdit_DataBlock (0xF1011C)
 SeScreenData_0x4E9B:
 	.long	SeScreenData_0x4D34
@@ -652,7 +652,7 @@ SeScreenData_0x5503:
 SeScreenData_0x551B:
 ; [v10] F16121
 	.byte	0x1b, 0x0a, 0x0d, 0x00, 0x71, 0x00, 0x18, 0x01, 0xa8, 0x00
-; table of 17 pointers to bound records; the code loads it into XIY and SeMenu_PatchEdit_Dispatch_Helper draws entry WA (XIY = (XIY + 4*WA))
+; table of 17 pointers to bound records; the code loads it into XIY and SeGfx_DrawIndexedBoundRecord draws entry WA (XIY = (XIY + 4*WA))
 ; evidence: SeMenu_WaveformSelect_Apply_Helper3+0x1E (0xF0F5D9), SeMenu_PresetManager_Init+0x61 (0xF0F63F), SeMenu_PresetManager_Init_Code_Skip2+0xB (0xF0F6AA)
 SeScreenData_0x5525:
 ; [v10] F1612B -- a u32 pointer to the record at F160E6; DrumDetailEdit_Menu_Table's label may be one entry late
@@ -789,7 +789,7 @@ SeApplyConfirm_FlaggedR2Rec:
 SeApplyConfirm_CursorRec:
 	.byte	0x03, 0x0b, 0x5d, 0x06, 0x0f, 0x00, 0x05
 	.long	SeScreenData_0x57F9
-; table of 5 pointers to bound records; the code loads it into XIY and SeMenu_PatchEdit_Dispatch_Helper draws entry WA (XIY = (XIY + 4*WA))
+; table of 5 pointers to bound records; the code loads it into XIY and SeGfx_DrawIndexedBoundRecord draws entry WA (XIY = (XIY + 4*WA))
 ; evidence: SeMenu_DataBlock_01+0x6A (0xF103DE)
 SeScreenData_0x57DB:
 	.long	SeApplyConfirm_CursorRec
@@ -835,7 +835,7 @@ SeScreenData_0x583E:
 ; evidence: recptrs table 0xF1642F
 SeScreenData_0x5848:
 	.byte	0x05, 0x0b, 0x67, 0x06, 0xff, 0x00, 0x20, 0x84, 0x22, 0x02, 0x00
-; table of 8 pointers to bound records; the code loads it into XIY and SeMenu_PatchEdit_Dispatch_Helper draws entry WA (XIY = (XIY + 4*WA))
+; table of 8 pointers to bound records; the code loads it into XIY and SeGfx_DrawIndexedBoundRecord draws entry WA (XIY = (XIY + 4*WA))
 ; evidence: SeMenu_DataBlock_03+0x1D (0xF10410), SeMenu_DataBlock_03+0x32 (0xF10425)
 SeScreenData_0x5853:
 	.long	SeScreenData_0x5811
@@ -915,7 +915,7 @@ SeScreenData_0x5900:
 SeScreenData_0x590F:
 	.ascii	"OFF          "
 	.ascii	"OFF          "
-; table of 10 pointers to bound records; the code loads it into XIY and SeMenu_PatchEdit_Dispatch_Helper draws entry WA (XIY = (XIY + 4*WA))
+; table of 10 pointers to bound records; the code loads it into XIY and SeGfx_DrawIndexedBoundRecord draws entry WA (XIY = (XIY + 4*WA))
 ; evidence: SeMenu_NameEdit_DefaultPath+0xB (0xF100F7)
 ; (name EffectParam_Edit_Table kept: other files use it; the object is ScreenData, see above)
 EffectParam_Edit_Table:

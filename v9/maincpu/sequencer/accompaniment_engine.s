@@ -26775,7 +26775,7 @@ TimeSig_DisplayStrings_Code_Helper4_Return:
 	ld	(0x37c9:16), 1
 TimeSig_DisplayStrings_Code_Return8:
 	ret
-CmpSetTtl_Dispatch2_Helper:
+CmpSetTtl_StepEntryIndex:
 	push	xiz
 	call	TimeSig_DisplayStrings_Helper4
 	pop	xiz
@@ -26796,7 +26796,7 @@ TimeSig_DisplayStrings_Code_Join7:
 	ld	(0x39aa:16), a
 TimeSig_DisplayStrings_Code_Return9:
 	ret
-CmpSetTtl_Dispatch2_Helper2:
+CmpSetTtl_StepEntryByte2:
 	push	xiz
 	call	TimeSig_DisplayStrings_Helper5
 	pop	xiz
@@ -26828,7 +26828,7 @@ TimeSig_SlotEntryByte2Offsets:
 	; entries, indexed by (0x39AA); TimeSig_SlotFieldOffsets are the same entries' byte +5.
 	; TimeSig_DisplayStrings_Helper5 steps the byte within 0..127.  Was `ld b, 42 / ldw de, 15930`.
 	.byte	34, 42, 50, 58
-CmpSetTtl_Dispatch2_Helper3:
+CmpSetTtl_StepEntryByte5:
 	push	xiz
 	call	TimeSig_DisplayStrings_Helper6
 	pop	xiz
@@ -29438,7 +29438,7 @@ AccVoice_SetupSlots_DataBlock:
 	cp	a, 0:i3
 	jr	z, AccPatch_ResolveEntryAddr_Return
 	calr	AccPatch_ResolveEntryAddr_Helper
-	calr	AccPatch_ResolveEntryAddr_Helper2
+	calr	AccPatch_SetCursorToChannelStart
 	calr	AccPatch_ResolveEntryAddr_Helper3
 AccPatch_ResolveEntryAddr_Return:
 	ret
@@ -29457,7 +29457,7 @@ AccPatch_ResolveEntryAddr_Helper:
 	ld	xbc, 8
 	ldir85
 	ret
-AccPatch_ResolveEntryAddr_Helper2:
+AccPatch_SetCursorToChannelStart:
 	calr	AccVoice_SetupStyleSlots_Helper2
 	calr	DrumChannel_MapToIndexB
 	sll	bc, 1
@@ -29714,7 +29714,7 @@ AccVoice_SetupSlots_Apply:
 	ld	(0x37c9:16), a
 	calr	AccPatch_ResolveEntryAddr_Helper
 	calr	AccPatch_ResolveEntryAddr_Helper10_Helper
-	calr	AccPatch_ResolveEntryAddr_Helper2
+	calr	AccPatch_SetCursorToChannelStart
 	calr	AccVoice_SetupSlots_ForEachSlot
 	ret
 AccPatch_ResolveEntryAddr_Helper10_Helper:
@@ -30375,7 +30375,7 @@ CmpSetTtl_Dispatch2:
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	CmpSetTtl_Dispatch2_Helper
+	call	CmpSetTtl_StepEntryIndex
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30387,7 +30387,7 @@ CmpSetTtl_Case_EntryIndexDown:
 	push	xix
 	push	xiz
 	ld	w, 128:opc
-	call	CmpSetTtl_Dispatch2_Helper
+	call	CmpSetTtl_StepEntryIndex
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30399,7 +30399,7 @@ CmpSetTtl_Case_EntryByte2Up:
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	CmpSetTtl_Dispatch2_Helper2
+	call	CmpSetTtl_StepEntryByte2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30411,7 +30411,7 @@ CmpSetTtl_Case_EntryByte2Down:
 	push	xix
 	push	xiz
 	ld	w, 128:opc
-	call	CmpSetTtl_Dispatch2_Helper2
+	call	CmpSetTtl_StepEntryByte2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30423,7 +30423,7 @@ CmpSetTtl_Case_EntryByte5Up:
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	CmpSetTtl_Dispatch2_Helper3
+	call	CmpSetTtl_StepEntryByte5
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30435,7 +30435,7 @@ CmpSetTtl_Case_EntryByte5Down:
 	push	xix
 	push	xiz
 	ld	w, 128:opc
-	call	CmpSetTtl_Dispatch2_Helper3
+	call	CmpSetTtl_StepEntryByte5
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -33846,10 +33846,10 @@ CmpStep_DataBlock:
 	ldw	wa, 255
 	call	GraphicsRender_ByteData
 	ldw	wa, 245
-	call	DirmdEmulator_Dispatch_Code_Helper
-	call	DirmdEmulator_Dispatch_Code_Helper3
+	call	Display_SetBackgroundColor
+	call	Display_LoadFixedPaletteBands
 	ldw	wa, 255
-	call	DirmdEmulator_Dispatch_Code_Helper2
+	call	Display_FillPaletteBandFromEntry
 	push	xde
 	push	xhl
 	push	xix

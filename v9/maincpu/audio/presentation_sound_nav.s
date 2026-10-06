@@ -1302,10 +1302,10 @@ DirmdEmu_CaseF:
 	ldw	wa, 255
 	call	GraphicsRender_ByteData
 	ldw	wa, 245
-	call	DirmdEmulator_Dispatch_Code_Helper
-	call	DirmdEmulator_Dispatch_Code_Helper3
+	call	Display_SetBackgroundColor
+	call	Display_LoadFixedPaletteBands
 	ldw	wa, 255
-	call	DirmdEmulator_Dispatch_Code_Helper2
+	call	Display_FillPaletteBandFromEntry
 PostTitle_Function_Skip:
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleNew
 	call	FDemoText_ByteData_DisplayRefresh_Helper
@@ -1367,10 +1367,10 @@ DirmdEmu_OnAllPaint:	; EVT_ALL_PAINT: clear the redraw mode, reset the drawing s
 	ldw	wa, 255
 	call	GraphicsRender_ByteData
 	ldw	wa, 245
-	call	DirmdEmulator_Dispatch_Code_Helper
-	call	DirmdEmulator_Dispatch_Code_Helper3
+	call	Display_SetBackgroundColor
+	call	Display_LoadFixedPaletteBands
 	ldw	wa, 255
-	call	DirmdEmulator_Dispatch_Code_Helper2
+	call	Display_FillPaletteBandFromEntry
 	push	xde
 	push	xhl
 	push	xix

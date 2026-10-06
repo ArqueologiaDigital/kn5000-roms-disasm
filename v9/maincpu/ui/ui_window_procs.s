@@ -8284,7 +8284,7 @@ ColorBlit2_PopReturn:
 ;         rows y = 0 .. < y1-y0 are consumed in order (column-major strips)
 ;   DE  = foreground colour (used where a bit is 1)
 ; The background colour (bit 0) is the word at 0x03efa2 (stored by
-; DirmdEmulator_Dispatch_Code_Helper in display/graphics_text_vga.s).
+; Display_SetBackgroundColor in display/graphics_text_vga.s).
 ; Colour 0xf5 means "copy the pixel from the buffer whose address is at
 ; 0x030452" instead of writing a fixed colour (the same convention as DrawLine).
 ;

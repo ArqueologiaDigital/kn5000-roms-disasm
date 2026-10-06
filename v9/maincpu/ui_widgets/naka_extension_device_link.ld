@@ -91,4 +91,4 @@ PanelButton_StartStop = 0x00FC5B72;
 PanelButton_Sustain = 0x00FC604D;
 PanelButton_SynchroBreak = 0x00FC5B91;
 PanelButton_Variation = 0x00FC6152;
-FileIO_BytecodeData_Code_Helper4 = 0x00FC63BA;
+PanelAction_DispatchPedalFunction = 0x00FC63BA;

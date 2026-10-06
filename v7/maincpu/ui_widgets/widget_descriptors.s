@@ -4011,16 +4011,16 @@ AppEvent_RecordDispatch_BitMasks:	.incbin "includes/generated/naka_widget_descri
 ; SeqEvent_MainHandler_CaseTable[14].
 ; -----------------------------------------------------------------------------
 SeqEvent_MainHandler_CaseTable:
-	.short	SeqEvent_MainHandler_Case155 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case156 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case157 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case158 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case159 - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqtrkmrg - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqqtz - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqtrns - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqvelocng - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqnotecng - SeqEvent_Dispatch
 	.short	AppEvent_PostDefaultEvents - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case161 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case162 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case163 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case164 - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqmers - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqmcp - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqmdel - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqmins - SeqEvent_Dispatch
 	.short	AppEvent_PostDefaultEvents - SeqEvent_Dispatch
 	.short	AppEvent_PostDefaultEvents - SeqEvent_Dispatch
 	.short	AppEvent_PostDefaultEvents - SeqEvent_Dispatch
@@ -4097,14 +4097,14 @@ AppEvtHandler_Branch_006_CaseTable:
 ; AppEvtHandler_Branch_002_CaseTable[8].
 ; -----------------------------------------------------------------------------
 AppEvtHandler_Branch_002_CaseTable:
-	.short	AppEvtHandler_Branch_002_Case156 - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_002_Case157 - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_002_Case158 - AppEvtHandler_Branch_002_Code
+	.short	AppEvtHandler_Branch_002_OnTitleSqqtz - AppEvtHandler_Branch_002_Code
+	.short	AppEvtHandler_Branch_002_OnTitleSqtrns - AppEvtHandler_Branch_002_Code
+	.short	AppEvtHandler_Branch_002_OnTitleSqvelocng - AppEvtHandler_Branch_002_Code
 	.short	AppEvtHandler_Branch_002_Code - AppEvtHandler_Branch_002_Code
 	.short	AppEvtHandler_Branch_003 - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_002_Case161 - AppEvtHandler_Branch_002_Code
+	.short	AppEvtHandler_Branch_002_OnTitleSqmers - AppEvtHandler_Branch_002_Code
 	.short	AppEvtHandler_Branch_003 - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_002_Case163 - AppEvtHandler_Branch_002_Code
+	.short	AppEvtHandler_Branch_002_OnTitleSqmdel - AppEvtHandler_Branch_002_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvtHandler_Branch_002_RamPtrs
 ; AppEvtHandler_Branch_002_RamPtrs -- Nine u32 RAM addresses (0xf1f1,

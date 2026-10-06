@@ -741,7 +741,7 @@ GUI_DisplayStructData_0x1100:	.incbin "includes/generated/gui_display_struct_dat
 ; data read by SeMenu_ApplyPartEdit_Join17+0x13 (0xF08A33)
 ; evidence: `lda xde, (this)` then `ld E,(XDE+WA) / mul L,0x1c`
 GUI_DisplayStructData_0x1110:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1110, 0xD
-; data read by SeMenu_AltUpdate_Step3Plus_Helper+0x20 (0xF08CB8)
+; data read by SeMenu_DrawPartRangeGraph+0x20 (0xF08CB8)
 ; evidence: `lda xbc, (this)` then `ld WA,(XBC+WA) / ld (XSP),WA`
 GUI_DisplayStructData_0x111D:	.incbin "includes/generated/gui_display_struct_data.bin", 0x111D, 0xC
 ; data read by SeMenu_SetupPartDisplay_End_Skip9+0x2 (0xF074E3)

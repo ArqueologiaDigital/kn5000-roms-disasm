@@ -176,7 +176,7 @@ SeAmpAmp1_OnColumn3:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	lda	xhl, (xsp+2)
 	lda	xwa, (xhl+6)
 	lda	xbc, (xhl+7)
@@ -213,7 +213,7 @@ Scoop_SoundEditorData_Join2:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 43
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	cp	(xsp+14), 0
 	jr	nz, Scoop_SoundEditorData_Skip3
 	cp	l, 1:i3
@@ -225,7 +225,7 @@ Scoop_SoundEditorData_Join2:
 	call	SeMenu_StoreParamByte
 Scoop_SoundEditorData_Skip3:
 	ld	wa, 3:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
 	ret
 SeAmpAmp1_OnColumn4:
@@ -254,7 +254,7 @@ Scoop_SoundEditorData_Join3:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	lda	xhl, (xsp+2)
 	lda	xwa, (xhl+6)
 	lda	xbc, (xhl+7)
@@ -291,9 +291,9 @@ Scoop_SoundEditorData_Join4:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 43
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	ld	wa, 4:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	pop	qiz
 	lda	xsp, (xsp+18)
 	ret
@@ -321,7 +321,7 @@ SeAmpAmp1_OnColumn5:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+16)
@@ -330,16 +330,16 @@ SeAmpAmp1_OnColumn5:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 43
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	ld	wa, 5:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 Scoop_SoundEditorData_Epilogue:
 	pop	qiz
 	lda	xsp, (xsp+18)
 	ret
 SeAmpAmp1_OnSideRow1:
 	cp	a, 0:i3
-	jp	nz, (SeMenu_CopyWriteUpdate_Helper3:24)
+	jp	nz, (SeMenu_ToggleSolo:24)
 	ldw	wa, 45
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -457,7 +457,7 @@ SeAmpAmp2_OnColumn3:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	ld	e, (xsp+14)
 	extz	de
 	pushw	29
@@ -465,7 +465,7 @@ SeAmpAmp2_OnColumn3:
 	push	xwa
 	ldw	wa, 44
 	ld	bc, 3:i3
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Skip8
 	lda	xbc, (xsp+12)
@@ -480,7 +480,7 @@ SeAmpAmp2_OnColumn3:
 	call	SeMenu_ApplyPartEdit_Helper12
 Scoop_SoundEditorData_Skip8:
 	ld	wa, 3:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+18)
 	ret
 SeAmpAmp2_OnColumn4:
@@ -520,7 +520,7 @@ SeAmpAmp2_OnColumn4:
 	call	SeMenu_ApplyPartEdit_Helper12
 Scoop_SoundEditorData_Skip9:
 	ld	wa, 4:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	inc	8, xsp
 	ret
 SeAmpAmp2_OnColumn5:
@@ -565,7 +565,7 @@ SeAmpAmp2_OnColumn5:
 	call	SeMenu_ApplyPartEdit_Helper12
 Scoop_SoundEditorData_Skip10:
 	ld	wa, 5:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+10)
 	ret
 SeAmpAmp2_OnColumn6:
@@ -604,12 +604,12 @@ SeAmpAmp2_OnColumn6:
 	call	SeMenu_ApplyPartEdit_Helper12
 Scoop_SoundEditorData_Skip11:
 	ld	wa, 6:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	inc	8, xsp
 	ret
 SeAmpAmp2_OnSideRow1:
 	cp	a, 0:i3
-	jp	nz, (SeMenu_CopyWriteUpdate_Helper3:24)
+	jp	nz, (SeMenu_ToggleSolo:24)
 	ldw	wa, 45
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -617,7 +617,7 @@ SeAmpAmp2_OnSideRow2:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 44
@@ -632,7 +632,7 @@ SeAmpAmp2_OnSideRow3:
 	jr	Scoop_SoundEditorData_Join6
 Scoop_SoundEditorData_Skip12:
 	ld	wa, 2:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 44
@@ -644,7 +644,7 @@ SeAmpAmp2_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 44
@@ -655,7 +655,7 @@ SeAmpAmp2_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 4:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 44
@@ -700,7 +700,7 @@ SeAmpEnv1_OnColumn1:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	cp	(xsp+14), 0
 	jr	nz, Scoop_SoundEditorData_Skip13
 	ld	a, 39:opc
@@ -724,10 +724,10 @@ Scoop_SoundEditorData_Join7:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 45
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	call	UpdSeSel_DetailedUpdate_Helper4
 	ld	wa, 1:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	pop	qiz
 	lda	xsp, (xsp+18)
 	ret
@@ -760,7 +760,7 @@ Scoop_SoundEditorData_Skip14:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	cp	(xsp+14), 0
 	jr	nz, Scoop_SoundEditorData_Skip15
 	ld	a, 40:opc
@@ -784,10 +784,10 @@ Scoop_SoundEditorData_Join8:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 45
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	call	UpdSeSel_DetailedUpdate_Helper4
 	ld	wa, 2:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	pop	qiz
 	lda	xsp, (xsp+18)
 	ret
@@ -820,7 +820,7 @@ Scoop_SoundEditorData_Skip16:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	cp	(xsp+14), 0
 	jr	nz, Scoop_SoundEditorData_Skip17
 	ld	a, 41:opc
@@ -844,10 +844,10 @@ Scoop_SoundEditorData_Join9:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 45
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	call	UpdSeSel_DetailedUpdate_Helper4
 	ld	wa, 3:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	pop	qiz
 	lda	xsp, (xsp+18)
 	ret
@@ -880,7 +880,7 @@ Scoop_SoundEditorData_Skip18:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	cp	(xsp+14), 0
 	jr	nz, Scoop_SoundEditorData_Skip19
 	ld	a, 42:opc
@@ -904,10 +904,10 @@ Scoop_SoundEditorData_Join10:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 45
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	call	UpdSeSel_DetailedUpdate_Helper4
 	ld	wa, 4:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	pop	qiz
 	lda	xsp, (xsp+18)
 	ret
@@ -947,7 +947,7 @@ Scoop_SoundEditorData_Join11:
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	cp	(xsp+16), 0
 	jr	nz, Scoop_SoundEditorData_Skip21
 	ld	a, 43:opc
@@ -971,10 +971,10 @@ Scoop_SoundEditorData_Join12:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 45
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	call	UpdSeSel_DetailedUpdate_Helper4
 	ld	wa, 5:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 Scoop_SoundEditorData_Epilogue7:
 	pop	qiz
 	lda	xsp, (xsp+20)
@@ -1015,7 +1015,7 @@ Scoop_SoundEditorData_Join13:
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	cp	(xsp+16), 0
 	jr	nz, Scoop_SoundEditorData_Skip23
 	ld	a, 44:opc
@@ -1039,10 +1039,10 @@ Scoop_SoundEditorData_Join14:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 45
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	call	UpdSeSel_DetailedUpdate_Helper4
 	ld	wa, 6:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 Scoop_SoundEditorData_Epilogue8:
 	pop	qiz
 	lda	xsp, (xsp+20)
@@ -1067,7 +1067,7 @@ SeAmpEnv1_OnColumn7:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	ld	e, (xsp+14)
 	extz	de
 	pushw	45
@@ -1075,10 +1075,10 @@ SeAmpEnv1_OnColumn7:
 	push	xwa
 	ldw	wa, 45
 	ld	bc, 6:i3
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	call	UpdSeSel_DetailedUpdate_Helper4
 	ld	wa, 7:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 Scoop_SoundEditorData_Epilogue9:
 	lda	xsp, (xsp+18)
 	ret
@@ -1102,7 +1102,7 @@ SeAmpEnv1_OnColumn8:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	ld	a, (xsp+14)
 	dec	1, a
 	extz	wa
@@ -1117,16 +1117,16 @@ SeAmpEnv1_OnColumn8:
 	ldw	wa, 45
 	ld	bc, 7:i3
 	ld	de, 0:i3
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	ldw	wa, 8
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 Scoop_SoundEditorData_Epilogue10:
 	lda	xsp, (xsp+18)
 	ret
 SeAmpEnv1_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
-	call	SeMenu_CopyWriteUpdate_Helper3
+	call	SeMenu_ToggleSolo
 	ret
 SeAmpEnv1_OnSideRow2:
 	cp	a, 0:i3
@@ -1136,7 +1136,7 @@ SeAmpEnv1_OnSideRow2:
 	jr	Scoop_SoundEditorData_Join15
 Scoop_SoundEditorData_Skip24:
 	ld	wa, 1:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 45
@@ -1158,7 +1158,7 @@ SeAmpEnv1_OnSideRow3:
 	jr	Scoop_SoundEditorData_Join16
 Scoop_SoundEditorData_Skip25:
 	ld	wa, 2:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue11
 	ldw	wa, 45
@@ -1178,7 +1178,7 @@ SeAmpEnv1_OnSideRow4:
 	cp	(xsp+2), 0
 	jr	z, Scoop_SoundEditorData_Epilogue12
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue12
 	ldw	wa, 45
@@ -1197,7 +1197,7 @@ SeAmpEnv1_OnSideRow5:
 	cp	(xsp+2), 0
 	jr	nz, Scoop_SoundEditorData_Skip26
 	ld	wa, 4:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue13
 	ldw	wa, 45
@@ -1285,7 +1285,7 @@ SeAmpEnv2_OnColumn1:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	ld	e, (xsp+14)
 	extz	de
 	pushw	51
@@ -1293,7 +1293,7 @@ SeAmpEnv2_OnColumn1:
 	push	xwa
 	ldw	wa, 46
 	ld	bc, 5:i3
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	lda	xbc, (xsp+12)
 	ld	wa, 5:i3
 	call	SeMenu_LoadPartParam
@@ -1318,7 +1318,7 @@ SeAmpEnv2_OnColumn1:
 	inc	4, xsp
 Scoop_SoundEditorData_Skip29:
 	ld	wa, 1:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+18)
 	ret
 SeAmpEnv2_OnColumn2:
@@ -1337,7 +1337,7 @@ SeAmpEnv2_OnColumn2:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	ld	e, (xsp+14)
 	extz	de
 	pushw	52
@@ -1345,7 +1345,7 @@ SeAmpEnv2_OnColumn2:
 	push	xwa
 	ldw	wa, 46
 	ld	bc, 6:i3
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	lda	xbc, (xsp+12)
 	ld	wa, 6:i3
 	call	SeMenu_LoadPartParam
@@ -1370,7 +1370,7 @@ SeAmpEnv2_OnColumn2:
 	inc	4, xsp
 Scoop_SoundEditorData_Skip30:
 	ld	wa, 2:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+18)
 	ret
 SeAmpEnv2_OnColumn3:
@@ -1389,7 +1389,7 @@ SeAmpEnv2_OnColumn3:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	ld	e, (xsp+14)
 	extz	de
 	pushw	53
@@ -1397,7 +1397,7 @@ SeAmpEnv2_OnColumn3:
 	push	xwa
 	ldw	wa, 46
 	ld	bc, 7:i3
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	lda	xbc, (xsp+12)
 	ld	wa, 7:i3
 	call	SeMenu_LoadPartParam
@@ -1422,7 +1422,7 @@ SeAmpEnv2_OnColumn3:
 	inc	4, xsp
 Scoop_SoundEditorData_Skip31:
 	ld	wa, 3:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+18)
 	ret
 SeAmpEnv2_OnColumn4:
@@ -1462,7 +1462,7 @@ SeAmpEnv2_OnColumn4:
 	call	SeMenu_ApplyPartEdit_Helper12
 Scoop_SoundEditorData_Skip32:
 	ld	wa, 4:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	inc	8, xsp
 	ret
 SeAmpEnv2_OnColumn5:
@@ -1507,7 +1507,7 @@ SeAmpEnv2_OnColumn5:
 	call	SeMenu_ApplyPartEdit_Helper12
 Scoop_SoundEditorData_Skip33:
 	ld	wa, 5:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+10)
 	ret
 SeAmpEnv2_OnColumn6:
@@ -1546,7 +1546,7 @@ SeAmpEnv2_OnColumn6:
 	call	SeMenu_ApplyPartEdit_Helper12
 Scoop_SoundEditorData_Skip34:
 	ld	wa, 6:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	inc	8, xsp
 	ret
 SeAmpEnv2_OnColumn7:
@@ -1565,7 +1565,7 @@ SeAmpEnv2_OnColumn7:
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	ld	e, (xsp+12)
 	extz	de
 	pushw	46
@@ -1573,9 +1573,9 @@ SeAmpEnv2_OnColumn7:
 	push	xwa
 	ldw	wa, 46
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	ld	wa, 7:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+16)
 	ret
 SeAmpEnv2_OnColumn8:
@@ -1594,7 +1594,7 @@ SeAmpEnv2_OnColumn8:
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	ld	e, (xsp+12)
 	extz	de
 	pushw	47
@@ -1602,15 +1602,15 @@ SeAmpEnv2_OnColumn8:
 	push	xwa
 	ldw	wa, 46
 	ld	bc, 1:i3
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	ldw	wa, 8
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+16)
 	ret
 SeAmpEnv2_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
-	call	SeMenu_CopyWriteUpdate_Helper3
+	call	SeMenu_ToggleSolo
 	ret
 SeAmpEnv2_OnSideRow2:
 	cp	a, 0:i3
@@ -1620,7 +1620,7 @@ SeAmpEnv2_OnSideRow2:
 	jr	Scoop_SoundEditorData_Join19
 Scoop_SoundEditorData_Skip35:
 	ld	wa, 1:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 46
@@ -1636,7 +1636,7 @@ SeAmpEnv2_OnSideRow3:
 	jr	Scoop_SoundEditorData_Join20
 Scoop_SoundEditorData_Skip36:
 	ld	wa, 2:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 46
@@ -1648,7 +1648,7 @@ SeAmpEnv2_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 46
@@ -1659,7 +1659,7 @@ SeAmpEnv2_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 4:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 46
@@ -1712,7 +1712,7 @@ SeAmpLfo1_OnColumn8:
 	jp	SeMenu_ApplyPartEdit_AltStore_Join6
 SeAmpLfo1_OnSideRow1:
 	cp	a, 0:i3
-	jp	nz, (SeMenu_CopyWriteUpdate_Helper3:24)
+	jp	nz, (SeMenu_ToggleSolo:24)
 	ldw	wa, 45
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -1725,27 +1725,27 @@ SeAmpLfo1_OnSideRow2:
 Scoop_SoundEditorData_Skip37:
 	ld	wa, 0:i3
 	ld	bc, 1:i3
-	jp	Scoop_SoundEditorData_Helper5
+	jp	SeMenu_CyclePartLfoState
 SeAmpLfo1_OnSideRow3:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 0:i3
 	ld	bc, 2:i3
-	call	Scoop_SoundEditorData_Helper5
+	call	SeMenu_CyclePartLfoState
 	ret
 SeAmpLfo1_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 0:i3
 	ld	bc, 3:i3
-	call	Scoop_SoundEditorData_Helper5
+	call	SeMenu_CyclePartLfoState
 	ret
 SeAmpLfo1_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 0:i3
 	ld	bc, 4:i3
-	call	Scoop_SoundEditorData_Helper5
+	call	SeMenu_CyclePartLfoState
 	ret
 SeAmpLfo1_OnSwitch15:
 	cp	a, 0:i3
@@ -1994,7 +1994,7 @@ Scoop_SoundEditorData_Helper2:
 	ld A,(XSP+0x14)
 	extz WA
 	lda xbc, (xbc + 0x0a)
-	call SeMenu_ApplyPartEdit_Helper5
+	call SeMenu_SwitchToValueStep
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f0505c
 	ld C, 0x4d:opc
@@ -2019,21 +2019,21 @@ Scoop_SoundEditorData_Helper2:
 	lda xbc, (xsp + 0x02)
 	push XBC
 	ld bc, 2:i3
-	call SeMenu_ApplyPartEdit_Helper3
+	call SeMenu_StepParamFieldAndSend
 	ld A,(XSP+0x12)
 	extz WA
-	call SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call SeMenu_BindDialToColumn
 	lda xsp, (xsp + 0x16)
 	ret
 SeFilLpq1_OnColumn2:
 	extz	wa
 	ld	bc, 2:i3
 	ldw	de, 48
-	calr	Scoop_SoundEditorData_Helper3
+	calr	SeMenu_EditFilterResonance
 	ld	wa, 0:i3
 	ld	bc, 0:i3
 	jp	UpdSeSel_DetailedUpdate_Helper5
-Scoop_SoundEditorData_Helper3:
+SeMenu_EditFilterResonance:
 	lda xsp, (xsp - 0x16)
 	ld (XSP+0x10),E
 	ld (XSP+0x12),C
@@ -2053,7 +2053,7 @@ Scoop_SoundEditorData_Helper3:
 	ld A,(XSP+0x14)
 	extz WA
 	lda xbc, (xbc + 0x0a)
-	call SeMenu_ApplyPartEdit_Helper5
+	call SeMenu_SwitchToValueStep
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f050f5
 	ld C, 0x4e:opc
@@ -2078,10 +2078,10 @@ Scoop_SoundEditorData_Helper3:
 	lda xbc, (xsp + 0x02)
 	push XBC
 	ld bc, 3:i3
-	call SeMenu_ApplyPartEdit_Helper3
+	call SeMenu_StepParamFieldAndSend
 	ld A,(XSP+0x12)
 	extz WA
-	call SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call SeMenu_BindDialToColumn
 	lda xsp, (xsp + 0x16)
 	ret
 SeFilLpq1_OnColumn3:
@@ -2109,7 +2109,7 @@ Scoop_SoundEditorData_Join21:
 	ld A,(XSP+0x14)
 	extz WA
 	lda xbc, (xbc + 0x0a)
-	call SeMenu_ApplyPartEdit_Helper5
+	call SeMenu_SwitchToValueStep
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f05185
 	ld C, 0x37:opc
@@ -2136,10 +2136,10 @@ Scoop_SoundEditorData_Helper2_Join2:
 	lda xbc, (xsp + 0x02)
 	push XBC
 	ld bc, 1:i3
-	call SeMenu_ApplyPartEdit_Helper3
+	call SeMenu_StepParamFieldAndSend
 	ld A,(XSP+0x12)
 	extz WA
-	call SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call SeMenu_BindDialToColumn
 	lda xsp, (xsp + 0x16)
 	ret
 SeFilLpq1_OnColumn4:
@@ -2167,7 +2167,7 @@ Scoop_SoundEditorData_Join22:
 	ld A,(XSP+0x14)
 	extz WA
 	lda xbc, (xbc + 0x0a)
-	call SeMenu_ApplyPartEdit_Helper5
+	call SeMenu_SwitchToValueStep
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f05215
 	ld C, 0x36:opc
@@ -2194,10 +2194,10 @@ Scoop_SoundEditorData_Helper2_Join3:
 	lda xbc, (xsp + 0x02)
 	push XBC
 	ld bc, 0:i3
-	call SeMenu_ApplyPartEdit_Helper3
+	call SeMenu_StepParamFieldAndSend
 	ld A,(XSP+0x12)
 	extz WA
-	call SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call SeMenu_BindDialToColumn
 	lda xsp, (xsp + 0x16)
 	ret
 Scoop_SoundEditorData_Join23:
@@ -2250,11 +2250,11 @@ Scoop_SoundEditorData_Helper2_Join5:
 	push XBC
 	ldw WA, 0x0030
 	ld bc, 5:i3
-	call SeMenu_ApplyPartEdit_Helper3
+	call SeMenu_StepParamFieldAndSend
 	cp l, 1:i3
 	call z, (UpdSeSel_DetailedUpdate_Helper6:24)
 	ld wa, 6:i3
-	call SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call SeMenu_BindDialToColumn
 	lda xsp, (xsp + 0x12)
 	ret
 Scoop_SoundEditorData_Join24:
@@ -2275,7 +2275,7 @@ Scoop_SoundEditorData_Join24:
 	ld A,(XSP+0x10)
 	extz WA
 	lda xbc, (xbc + 0x0a)
-	call SeMenu_ApplyPartEdit_Helper5
+	call SeMenu_SwitchToValueStep
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f0531d
 	ld A, 0x4f:opc
@@ -2300,11 +2300,11 @@ Scoop_SoundEditorData_Helper2_Join6:
 	push XWA
 	ldw WA, 0x0030
 	ld bc, 4:i3
-	call SeMenu_ApplyPartEdit_Helper3
+	call SeMenu_StepParamFieldAndSend
 	cp l, 1:i3
 	call z, (UpdSeSel_DetailedUpdate_Helper6:24)
 	ld wa, 7:i3
-	call SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call SeMenu_BindDialToColumn
 	lda xsp, (xsp + 0x12)
 	ret
 Scoop_SoundEditorData_Join25:
@@ -2325,7 +2325,7 @@ Scoop_SoundEditorData_Join25:
 	ld A,(XSP+0x10)
 	extz WA
 	lda xbc, (xbc + 0x0a)
-	call SeMenu_ApplyPartEdit_Helper5
+	call SeMenu_SwitchToValueStep
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f0539e
 	ld A, 0x50:opc
@@ -2350,11 +2350,11 @@ Scoop_SoundEditorData_Helper2_Join7:
 	push XWA
 	ldw WA, 0x0030
 	ld bc, 5:i3
-	call SeMenu_ApplyPartEdit_Helper3
+	call SeMenu_StepParamFieldAndSend
 	cp l, 1:i3
 	call z, (UpdSeSel_DetailedUpdate_Helper6:24)
 	ldw WA, 0x0008
-	call SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call SeMenu_BindDialToColumn
 	lda xsp, (xsp + 0x12)
 	ret
 Scoop_SoundEditorData_Join26:
@@ -2371,7 +2371,7 @@ Scoop_SoundEditorData_Join26:
 	call SeMenu_SendEvent
 	jr t, .Lc_f05401
 Scoop_SoundEditorData_Skip38:
-	call SeMenu_CopyWriteUpdate_Helper3
+	call SeMenu_ToggleSolo
 .Lc_f05401:
 	inc 4,XSP
 	ret
@@ -2379,7 +2379,7 @@ Scoop_SoundEditorData_Join27:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 48
@@ -2400,7 +2400,7 @@ Scoop_SoundEditorData_Join28:
 	jr t, .Lc_f05448
 .Lc_f05439:
 	ld wa, 2:i3
-	call SeMenu_CopyWriteUpdate_Helper5
+	call SeMenu_SelectPartIfEnabled
 	cp l, 0:i3
 	jr z, .Lc_f0544c
 	ldw WA, 0x0030
@@ -2424,7 +2424,7 @@ SeFilLpq1_OnSideRow4:
 	setm	1, (xsp+2)
 	ld	a, (xsp+2)
 	extz	wa
-	call	Scoop_SoundEditorData_Helper4
+	call	SeMenu_SetFilterType
 	ldw	wa, 48
 	ld	bc, 0:i3
 	jr	Scoop_SoundEditorData_Join29
@@ -2432,7 +2432,7 @@ Scoop_SoundEditorData_Skip39:
 	cp	(xsp), 1
 	jr	z, Scoop_SoundEditorData_Epilogue16
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue16
 	ldw	wa, 48
@@ -2452,7 +2452,7 @@ Scoop_SoundEditorData_Join30:
 	cp	(xsp), 1
 	jr	z, Scoop_SoundEditorData_Epilogue17
 	ld	wa, 4:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue17
 	ldw	wa, 48
@@ -2510,7 +2510,7 @@ SeFilHpq1_OnColumn2:
 	extz	wa
 	ld	bc, 2:i3
 	ldw	de, 49
-	calr	Scoop_SoundEditorData_Helper3
+	calr	SeMenu_EditFilterResonance
 	ld	wa, 1:i3
 	ld	bc, 0:i3
 	jp	UpdSeSel_DetailedUpdate_Helper5
@@ -2556,7 +2556,7 @@ SeFilHpq1_OnSideRow4:
 	ormi8	(xsp+2), 3
 	ld	a, (xsp+2)
 	extz	wa
-	call	Scoop_SoundEditorData_Helper4
+	call	SeMenu_SetFilterType
 	ldw	wa, 48
 	ld	bc, 0:i3
 	jr	Scoop_SoundEditorData_Join31
@@ -2564,7 +2564,7 @@ Scoop_SoundEditorData_Skip40:
 	cp	(xsp), 0
 	jr	nz, Scoop_SoundEditorData_Epilogue20
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue20
 	ldw	wa, 48
@@ -2626,7 +2626,7 @@ SeFilL241_OnColumn4:
 	extz	wa
 	ld	bc, 4:i3
 	ldw	de, 50
-	calr	Scoop_SoundEditorData_Helper3
+	calr	SeMenu_EditFilterResonance
 	ld	wa, 0:i3
 	ld	bc, 1:i3
 	jp	UpdSeSel_DetailedUpdate_Helper5
@@ -2654,7 +2654,7 @@ Scoop_SoundEditorData_Join33:
 	call	SeMenu_SendEvent
 	jr	Scoop_SoundEditorData_Epilogue23
 Scoop_SoundEditorData_Skip42:
-	call	SeMenu_CopyWriteUpdate_Helper3
+	call	SeMenu_ToggleSolo
 Scoop_SoundEditorData_Epilogue23:
 	inc	4, xsp
 	ret
@@ -2662,7 +2662,7 @@ Scoop_SoundEditorData_Join34:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 48
@@ -2683,7 +2683,7 @@ Scoop_SoundEditorData_Join35:
 	jr	Scoop_SoundEditorData_Join36
 Scoop_SoundEditorData_Skip43:
 	ld	wa, 2:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue24
 	ldw	wa, 48
@@ -2707,7 +2707,7 @@ SeFilL241_OnSideRow4:
 	setm	2, (xsp+2)
 	ld	a, (xsp+2)
 	extz	wa
-	call	Scoop_SoundEditorData_Helper4
+	call	SeMenu_SetFilterType
 	ldw	wa, 48
 	ld	bc, 0:i3
 	jr	Scoop_SoundEditorData_Join37
@@ -2715,7 +2715,7 @@ Scoop_SoundEditorData_Skip44:
 	cp	(xsp), 1
 	jr	z, Scoop_SoundEditorData_Epilogue25
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue25
 	ldw	wa, 48
@@ -2735,7 +2735,7 @@ Scoop_SoundEditorData_Join38:
 	cp	(xsp+2), 0
 	jr	z, Scoop_SoundEditorData_Epilogue26
 	ld	wa, 4:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue26
 	ldw	wa, 48
@@ -2793,7 +2793,7 @@ SeFilH241_OnColumn4:
 	extz	wa
 	ld	bc, 4:i3
 	ldw	de, 51
-	calr	Scoop_SoundEditorData_Helper3
+	calr	SeMenu_EditFilterResonance
 	ld	wa, 1:i3
 	ld	bc, 1:i3
 	jp	UpdSeSel_DetailedUpdate_Helper5
@@ -2830,7 +2830,7 @@ SeFilH241_OnSideRow4:
 	ormi8	(xsp+2), 5
 	ld	a, (xsp+2)
 	extz	wa
-	call	Scoop_SoundEditorData_Helper4
+	call	SeMenu_SetFilterType
 	ldw	wa, 48
 	ld	bc, 0:i3
 	jr	Scoop_SoundEditorData_Join40
@@ -2838,7 +2838,7 @@ Scoop_SoundEditorData_Skip46:
 	cp	(xsp), 1
 	jr	z, Scoop_SoundEditorData_Epilogue29
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue29
 	ldw	wa, 48
@@ -2911,7 +2911,7 @@ SeFilBpf1_OnColumn2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	cp	(xsp+12), 0
 	jr	nz, Scoop_SoundEditorData_Skip48
 	ld	a, 77:opc
@@ -2934,17 +2934,17 @@ Scoop_SoundEditorData_Join42:
 	push	xwa
 	ldw	wa, 52
 	ld	bc, 2:i3
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	call	Scoop_SoundEditorData_Helper7
 	ld	wa, 2:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
 	ret
 SeFilBpf1_OnColumn3:
 	extz	wa
 	ld	bc, 3:i3
 	ldw	de, 52
-	calr	Scoop_SoundEditorData_Helper3
+	calr	SeMenu_EditFilterResonance
 	jp	Scoop_SoundEditorData_Helper7
 SeFilBpf1_OnColumn4:
 	lda	xsp, (xsp-20)
@@ -2969,7 +2969,7 @@ SeFilBpf1_OnColumn4:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	lda	xbc, (xsp)
 	cp	(xsp+12), 0
 	jr	nz, Scoop_SoundEditorData_Skip49
@@ -2995,10 +2995,10 @@ Scoop_SoundEditorData_Skip49:
 	ld	bc, 4:i3
 	ld	de, 0:i3
 Scoop_SoundEditorData_Join43:
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	call	Scoop_SoundEditorData_Helper7
 	ld	wa, 4:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
 	ret
 SeFilBpf1_OnColumn5:
@@ -3019,7 +3019,7 @@ SeFilBpf1_OnColumn5:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	lda	xbc, (xsp)
 	cp	(xsp+12), 0
 	jr	nz, Scoop_SoundEditorData_Skip50
@@ -3045,10 +3045,10 @@ Scoop_SoundEditorData_Skip50:
 	ld	bc, 5:i3
 	ld	de, 0:i3
 Scoop_SoundEditorData_Join44:
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	call	Scoop_SoundEditorData_Helper7
 	ld	wa, 5:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+18)
 	ret
 SeFilBpf1_OnColumn6:
@@ -3075,7 +3075,7 @@ SeFilBpf1_OnSideRow1:
 	call	SeMenu_SendEvent
 	jr	Scoop_SoundEditorData_Epilogue32
 Scoop_SoundEditorData_Skip51:
-	call	SeMenu_CopyWriteUpdate_Helper3
+	call	SeMenu_ToggleSolo
 Scoop_SoundEditorData_Epilogue32:
 	inc	4, xsp
 	ret
@@ -3083,7 +3083,7 @@ SeFilBpf1_OnSideRow2:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 48
@@ -3104,7 +3104,7 @@ SeFilBpf1_OnSideRow3:
 	jr	Scoop_SoundEditorData_Join45
 Scoop_SoundEditorData_Skip52:
 	ld	wa, 2:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue33
 	ldw	wa, 48
@@ -3127,7 +3127,7 @@ SeFilBpf1_OnSideRow4:
 	andmi8	(xsp+2), 248
 	ld	a, (xsp+2)
 	extz	wa
-	call	Scoop_SoundEditorData_Helper4
+	call	SeMenu_SetFilterType
 	ldw	wa, 48
 	ld	bc, 0:i3
 	jr	Scoop_SoundEditorData_Join46
@@ -3135,7 +3135,7 @@ Scoop_SoundEditorData_Skip53:
 	cp	(xsp), 1
 	jr	z, Scoop_SoundEditorData_Epilogue34
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue34
 	ldw	wa, 48
@@ -3155,7 +3155,7 @@ SeFilBpf1_OnSideRow5:
 	cp	(xsp+2), 0
 	jr	z, Scoop_SoundEditorData_Epilogue35
 	ld	wa, 4:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue35
 	ldw	wa, 48
@@ -3215,7 +3215,7 @@ SeFilBcf1_OnSideRow1:
 	call	SeMenu_SendEvent
 	jr	Scoop_SoundEditorData_Epilogue38
 Scoop_SoundEditorData_Skip55:
-	call	SeMenu_CopyWriteUpdate_Helper3
+	call	SeMenu_ToggleSolo
 Scoop_SoundEditorData_Epilogue38:
 	inc	4, xsp
 	ret
@@ -3223,7 +3223,7 @@ SeFilBcf1_OnSideRow2:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 48
@@ -3244,7 +3244,7 @@ SeFilBcf1_OnSideRow3:
 	jr	Scoop_SoundEditorData_Join48
 Scoop_SoundEditorData_Skip56:
 	ld	wa, 2:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue39
 	ldw	wa, 48
@@ -3268,7 +3268,7 @@ SeFilBcf1_OnSideRow4:
 	setm	0, (xsp+2)
 	ld	a, (xsp+2)
 	extz	wa
-	call	Scoop_SoundEditorData_Helper4
+	call	SeMenu_SetFilterType
 	ldw	wa, 48
 	ld	bc, 0:i3
 	jr	Scoop_SoundEditorData_Join49
@@ -3276,7 +3276,7 @@ Scoop_SoundEditorData_Skip57:
 	cp	(xsp), 1
 	jr	z, Scoop_SoundEditorData_Epilogue40
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue40
 	ldw	wa, 48
@@ -3296,7 +3296,7 @@ SeFilBcf1_OnSideRow5:
 	cp	(xsp+2), 0
 	jr	z, Scoop_SoundEditorData_Epilogue41
 	ld	wa, 4:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue41
 	ldw	wa, 48
@@ -3358,7 +3358,7 @@ SeFilFil2_OnColumn3:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_ApplyPartEdit_Helper5
+	call	SeMenu_SwitchToValueStep
 	ld	e, (xsp+14)
 	extz	de
 	pushw	60
@@ -3366,7 +3366,7 @@ SeFilFil2_OnColumn3:
 	push	xwa
 	ldw	wa, 54
 	ld	bc, 3:i3
-	call	SeMenu_ApplyPartEdit_Helper3
+	call	SeMenu_StepParamFieldAndSend
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Skip59
 	lda	xbc, (xsp+12)
@@ -3381,7 +3381,7 @@ SeFilFil2_OnColumn3:
 	call	SeMenu_ApplyPartEdit_Helper12
 Scoop_SoundEditorData_Skip59:
 	ld	wa, 3:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+18)
 	ret
 SeFilFil2_OnColumn4:
@@ -3421,7 +3421,7 @@ SeFilFil2_OnColumn4:
 	call	SeMenu_ApplyPartEdit_Helper12
 Scoop_SoundEditorData_Skip60:
 	ld	wa, 4:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	inc	8, xsp
 	ret
 SeFilFil2_OnColumn5:
@@ -3466,7 +3466,7 @@ SeFilFil2_OnColumn5:
 	call	SeMenu_ApplyPartEdit_Helper12
 Scoop_SoundEditorData_Skip61:
 	ld	wa, 5:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+10)
 	ret
 SeFilFil2_OnColumn6:
@@ -3505,12 +3505,12 @@ SeFilFil2_OnColumn6:
 	call	SeMenu_ApplyPartEdit_Helper12
 Scoop_SoundEditorData_Skip62:
 	ld	wa, 6:i3
-	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
+	call	SeMenu_BindDialToColumn
 	inc	8, xsp
 	ret
 SeFilFil2_OnSideRow1:
 	cp	a, 0:i3
-	jp	nz, (SeMenu_CopyWriteUpdate_Helper3:24)
+	jp	nz, (SeMenu_ToggleSolo:24)
 	ldw	wa, 55
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -3518,7 +3518,7 @@ SeFilFil2_OnSideRow2:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 54
@@ -3533,7 +3533,7 @@ SeFilFil2_OnSideRow3:
 	jr	Scoop_SoundEditorData_Join51
 Scoop_SoundEditorData_Skip63:
 	ld	wa, 2:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 54
@@ -3545,7 +3545,7 @@ SeFilFil2_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 54
@@ -3556,7 +3556,7 @@ SeFilFil2_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 4:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 54
@@ -3617,7 +3617,7 @@ SeFilEnv1_OnColumn7:
 SeFilEnv1_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
-	call	SeMenu_CopyWriteUpdate_Helper3
+	call	SeMenu_ToggleSolo
 	ret
 SeFilEnv1_OnSideRow2:
 	cp	a, 0:i3
@@ -3627,7 +3627,7 @@ SeFilEnv1_OnSideRow2:
 	jr	Scoop_SoundEditorData_Join52
 Scoop_SoundEditorData_Skip64:
 	ld	wa, 1:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 55
@@ -3643,7 +3643,7 @@ SeFilEnv1_OnSideRow3:
 	jr	Scoop_SoundEditorData_Join53
 Scoop_SoundEditorData_Skip65:
 	ld	wa, 2:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 55
@@ -3658,7 +3658,7 @@ SeFilEnv1_OnSideRow4:
 	jp	SeMenu_ApplyPartEdit_AltStore_Join7
 Scoop_SoundEditorData_Skip66:
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 55
@@ -3672,7 +3672,7 @@ SeFilEnv1_OnSideRow5:
 	jp	SeMenu_ApplyPartEdit_AltStore_Join7
 Scoop_SoundEditorData_Skip67:
 	ld	wa, 4:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 55
@@ -3722,7 +3722,7 @@ SeFilEnv2_OnColumn8:
 SeFilEnv2_OnSideRow1:
 	cp	a, 0:i3
 	ret	z
-	call	SeMenu_CopyWriteUpdate_Helper3
+	call	SeMenu_ToggleSolo
 	ret
 SeFilEnv2_OnSideRow2:
 	cp	a, 0:i3
@@ -3732,7 +3732,7 @@ SeFilEnv2_OnSideRow2:
 	jr	Scoop_SoundEditorData_Join54
 Scoop_SoundEditorData_Skip68:
 	ld	wa, 1:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 56
@@ -3748,7 +3748,7 @@ SeFilEnv2_OnSideRow3:
 	jr	Scoop_SoundEditorData_Join55
 Scoop_SoundEditorData_Skip69:
 	ld	wa, 2:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 56
@@ -3760,7 +3760,7 @@ SeFilEnv2_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 3:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 56
@@ -3771,7 +3771,7 @@ SeFilEnv2_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 4:i3
-	call	SeMenu_CopyWriteUpdate_Helper5
+	call	SeMenu_SelectPartIfEnabled
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 56
@@ -3824,7 +3824,7 @@ SeFilLfo1_OnColumn8:
 	jp	SeMenu_ApplyPartEdit_AltStore_Join6
 SeFilLfo1_OnSideRow1:
 	cp	a, 0:i3
-	jp	nz, (SeMenu_CopyWriteUpdate_Helper3:24)
+	jp	nz, (SeMenu_ToggleSolo:24)
 	ldw	wa, 55
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -3837,27 +3837,27 @@ SeFilLfo1_OnSideRow2:
 Scoop_SoundEditorData_Skip70:
 	ld	wa, 2:i3
 	ld	bc, 1:i3
-	jp	Scoop_SoundEditorData_Helper5
+	jp	SeMenu_CyclePartLfoState
 SeFilLfo1_OnSideRow3:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 2:i3
 	ld	bc, 2:i3
-	call	Scoop_SoundEditorData_Helper5
+	call	SeMenu_CyclePartLfoState
 	ret
 SeFilLfo1_OnSideRow4:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 2:i3
 	ld	bc, 3:i3
-	call	Scoop_SoundEditorData_Helper5
+	call	SeMenu_CyclePartLfoState
 	ret
 SeFilLfo1_OnSideRow5:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 2:i3
 	ld	bc, 4:i3
-	call	Scoop_SoundEditorData_Helper5
+	call	SeMenu_CyclePartLfoState
 	ret
 	cp	a, 0:i3
 	ret	nz

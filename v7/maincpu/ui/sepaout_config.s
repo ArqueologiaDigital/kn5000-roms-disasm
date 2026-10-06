@@ -73,12 +73,12 @@ DkMdlyPly_SendAudioCmd_Data:			.incbin "includes/generated/sepaout_config.bin", 
 DkMdlyPly_HandleResult_Data:			.incbin "includes/generated/sepaout_config.bin", 0x8E, 0x40
 DisplayMode_DispatchEvents_CaseTable:
 	.short	DisplayMode_BatchEventSend - DisplayMode_BatchEventSend
-	.short	DisplayMode_DispatchEvents_Case112 - DisplayMode_BatchEventSend
-	.short	DisplayMode_DispatchEvents_Case113 - DisplayMode_BatchEventSend
-	.short	DisplayMode_DispatchEvents_Case114 - DisplayMode_BatchEventSend
-	.short	DisplayMode_DispatchEvents_Case115 - DisplayMode_BatchEventSend
-	.short	DisplayMode_DispatchEvents_Case116 - DisplayMode_BatchEventSend
-	.short	DisplayMode_DispatchEvents_Case117 - DisplayMode_BatchEventSend
+	.short	DisplayMode_DispatchEvents_OnTitleDpdoc - DisplayMode_BatchEventSend
+	.short	DisplayMode_DispatchEvents_OnTitleDppd - DisplayMode_BatchEventSend
+	.short	DisplayMode_DispatchEvents_OnTitleDpsmflyr - DisplayMode_BatchEventSend
+	.short	DisplayMode_DispatchEvents_OnTitleDpmdlysmf - DisplayMode_BatchEventSend
+	.short	DisplayMode_DispatchEvents_OnTitleDpmdlydoc - DisplayMode_BatchEventSend
+	.short	DisplayMode_DispatchEvents_OnTitleDpmdlypd - DisplayMode_BatchEventSend
 DpMdlyDocTtlFunc_CaseTable:
 	.short	DpMdlyDocTtl_Dispatch - DpMdlyDocTtl_Dispatch
 	.short	DpMdlyDocTtlFunc_Case3 - DpMdlyDocTtl_Dispatch

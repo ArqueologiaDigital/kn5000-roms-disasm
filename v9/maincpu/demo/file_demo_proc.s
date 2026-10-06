@@ -45,7 +45,7 @@ FDemo_DisplayResourceData_Loop:
 	or	xhl, xhl
 	jr	z, FDemo_DisplayResourceData_Skip4
 	ld	xwa, 256
-	calr	Seq_LoadNamedResource_Helper
+	calr	FDemo_AllocBuffer
 	lda	xbc, (xsp+8)
 	ld	a, (xbc+4)
 	extz	wa
@@ -64,7 +64,7 @@ FDemo_DisplayResourceData_Loop2:
 	or	xhl, xhl
 	jr	z, FDemo_DisplayResourceData_Skip
 	ld	xwa, 256
-	calr	Seq_LoadNamedResource_Helper
+	calr	FDemo_AllocBuffer
 	pushw	256
 	lda	xwa, (xsp+10)
 	push	xwa
@@ -93,7 +93,7 @@ FDemo_DisplayResourceData_Skip5:
 	jr	z, FDemo_DisplayResourceData_Skip2
 FDemo_DisplayResourceData_Loop4:
 	ld	xwa, 256
-	calr	Seq_LoadNamedResource_Helper
+	calr	FDemo_AllocBuffer
 	pushw	256
 	lda	xwa, (xsp+10)
 	push	xwa
@@ -116,7 +116,7 @@ FDemo_DisplayResourceData_Helper:
 	lda	xwa, (SEQ_SONG_SLOTS:24)
 	ld	(0x25b7e:24), xwa
 	ret
-Seq_LoadNamedResource_Helper:
+FDemo_AllocBuffer:
 	lda	xhl, (SEQ_SONG_SLOTS:24)
 	lda	xbc, (0xfd800:24)
 	sub	xbc, xhl
@@ -506,7 +506,7 @@ FDemo_FileOpen_DoOpen:
 	ld xiz, xhl
 	call FileIO_SeekRead_ExtReturn
 	ld xwa, xiz
-	calr	Seq_LoadNamedResource_Helper
+	calr	FDemo_AllocBuffer
 	ld (xsp+6), xhl
 	ld xwa, (xsp+6)
 	or xwa, xwa

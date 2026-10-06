@@ -85,14 +85,14 @@ TextRender_PopAndReturn:
 	pop xiz
 	lda xsp, (xsp+314)
 	retd 0x8
-DirmdEmulator_Dispatch_Code_Helper:
+Display_SetBackgroundColor:
 	ld (0x03efa2:24), wa
 	ret
 
 GraphicsRender_ByteData:
 	ld	(0x03efa4:24), wa
 	ret
-DirmdEmulator_Dispatch_Code_Helper2:
+Display_FillPaletteBandFromEntry:
 	pushw	iz
 	ld	iz, wa
 	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
@@ -134,7 +134,7 @@ GraphicsRender_ByteData_Loop:
 	popw	iz
 	inc	4, xsp
 	ret
-DirmdEmulator_Dispatch_Code_Helper3:
+Display_LoadFixedPaletteBands:
 	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp	hl, 0:i3
 	jr	nz, GraphicsRender_ByteData_Join

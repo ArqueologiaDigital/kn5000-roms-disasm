@@ -1027,12 +1027,12 @@ FileIO_BytecodeData_Data_14:			.incbin "includes/generated/naka_extension_device
 FileIO_BytecodeData_Data_15:			.incbin "includes/generated/naka_extension_device.bin", 0x35D4, 0x4
 ; PanelAction_PedalAssignHandlerIndex -- 256 x uint8_t: handler number per foot-pedal assignment code, 0xff = no action.
 ; PanelAction_FootSwitch1/2 and PanelAction_FootController1-4 read their assignment (panel parameters 0x2886-0x2890) and
-; FileIO_BytecodeData_Code_Helper4 (audio/audio_control_engine.s) maps it here; a number <= 22 indexes
+; PanelAction_DispatchPedalFunction (audio/audio_control_engine.s) maps it here; a number <= 22 indexes
 ; PanelAction_PedalFunctionHandlers (x4) and that handler is called. 28 codes are used (0x40, 0x88, 0x90-0x99, 0xad,
 ; 0xb0-0xb4, 0xb8, 0xb9, 0xc0-0xc7), mapping to handlers 0-21 (12 unused); all eight of 0xc0-0xc7 share handler 17.
 PanelAction_PedalAssignHandlerIndex:	.incbin "includes/generated/naka_extension_device.bin", 0x35D8, 0x100
 ; PanelAction_PedalFunctionHandlers -- 22 x uint32_t: code pointers, one per foot-pedal function
-; FileIO_BytecodeData_Code_Helper4 (audio/audio_control_engine.s) maps the pedal's assignment parameter (FS1/FS2
+; PanelAction_DispatchPedalFunction (audio/audio_control_engine.s) maps the pedal's assignment parameter (FS1/FS2
 ; 0x2886/0x2888, FC1-4 0x288A-0x2890) through the 256-byte PanelAction_PedalAssignHandlerIndex to an index, returns if it
 ; is above 22, else calls entry [index] (`sla de, 2`). [0] is the unlabelled routine right after Helper4's `ret`;
 ; the map never yields 12 (ExtDev_SndParam_Block48_Var02) nor 22.

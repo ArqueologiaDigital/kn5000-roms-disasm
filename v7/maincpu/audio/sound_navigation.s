@@ -116,7 +116,7 @@ Sound_SetSelection:
 	call	SwbtWr
 	ld	wa, 1:i3
 	jrl	Sound_Navigate_Notify
-Sound_Navigate_Entry:
+MainGetSoundName_OnAddSoundSwNo:
 	ld (xsp + 4), wa
 	cpw (xsp + 4), 0xf
 	jr le, Sound_Navigate_Init

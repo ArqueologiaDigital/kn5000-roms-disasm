@@ -16033,7 +16033,7 @@ UIState_ProcessKeyEvent_Code:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jrl	SndParam_ProcessEntry_Epilogue
 UIState_ProcessKeyEvent_Case1:
 	ld	a, (xsp+0x3)
@@ -16053,7 +16053,7 @@ UIState_ProcessKeyEvent_Case1:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jrl	SndParam_ProcessEntry_Epilogue
 UIState_ProcessKeyEvent_Case3:
 	ld	a, (xsp+0x3)
@@ -16061,7 +16061,7 @@ UIState_ProcessKeyEvent_Case3:
 	jrl	z, SndParam_ProcessEntry_Epilogue
 	lda	xwa, (xsp)
 	ldw	bc, 127
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jrl	SndParam_ProcessEntry_Epilogue
 UIState_ProcessKeyEvent_Case4:
 	ld	a, (xsp+0x3)
@@ -16074,7 +16074,7 @@ UIState_ProcessKeyEvent_Case4:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 SndParam_ProcessEntry_Entry:
 	bitm	3, (xsp+0x3)
 	jr	z, UIState_ProcessKeyEvent_Skip
@@ -16085,7 +16085,7 @@ SndParam_ProcessEntry_Entry:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 UIState_ProcessKeyEvent_Skip:
 	bitm	6, (xsp+0x3)
 	jrl	z, SndParam_ProcessEntry_Epilogue
@@ -16101,7 +16101,7 @@ UIState_ProcessKeyEvent_Skip:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jrl	SndParam_ProcessEntry_Epilogue
 UIState_ProcessKeyEvent_Case5:
 	ld	a, (xsp+0x3)
@@ -16115,7 +16115,7 @@ UIState_ProcessKeyEvent_Case5:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jrl	SndParam_ProcessEntry_Epilogue
 UIState_ProcessKeyEvent_Case7:
 	ld	a, (xsp+0x3)
@@ -16129,7 +16129,7 @@ UIState_ProcessKeyEvent_Case7:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jrl	SndParam_ProcessEntry_Epilogue
 UIState_ProcessKeyEvent_Case8:
 	ld	a, (xsp+0x3)
@@ -16148,7 +16148,7 @@ UIState_ProcessKeyEvent_Case8:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jrl	SndParam_ProcessEntry_Epilogue
 UIState_ProcessKeyEvent_Case9:
 	ld	a, (xsp+0x3)
@@ -16162,7 +16162,7 @@ UIState_ProcessKeyEvent_Case9:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jr	SndParam_ProcessEntry_Epilogue
 UIState_ProcessKeyEvent_Case10:
 	ld	a, (xsp+0x3)
@@ -16175,7 +16175,7 @@ UIState_ProcessKeyEvent_Case10:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jr	SndParam_ProcessEntry_Epilogue
 UIState_ProcessKeyEvent_Case11:
 	ld	a, (xsp+0x3)
@@ -16189,7 +16189,7 @@ UIState_ProcessKeyEvent_Case11:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jr	SndParam_ProcessEntry_Epilogue
 UIState_ProcessKeyEvent_Case12:
 	bitm	3, (xsp+0x3)
@@ -16201,7 +16201,7 @@ UIState_ProcessKeyEvent_Case12:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 UIState_ProcessKeyEvent_Skip2:
 	bitm	5, (xsp+0x3)
 	jr	z, SndParam_ProcessEntry_Epilogue
@@ -16212,7 +16212,7 @@ UIState_ProcessKeyEvent_Skip2:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 SndParam_ProcessEntry_Epilogue:
 	inc	4, xsp
 	ret
@@ -16234,7 +16234,7 @@ HdaeRom_Entry:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_Entry_Skip:
 	bitm	6, (xsp+0x3)
 	jr	z, HdaeRom_Entry_Skip2
@@ -16245,7 +16245,7 @@ HdaeRom_Entry_Skip:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_Entry_Skip2:
 	bitm	5, (xsp+0x3)
 	jr	z, HdaeRom_Entry_Epilogue
@@ -16256,7 +16256,7 @@ HdaeRom_Entry_Skip2:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_Entry_Epilogue:
 	inc	4, xsp
 	ret
@@ -16282,7 +16282,7 @@ HdaeRom_ProcessBlock:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_ProcessBlock_Epilogue:
 	inc	4, xsp
 	ret
@@ -16310,7 +16310,7 @@ SwbtB2_Code63_Listener:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_ReadParam_Epilogue:
 	inc	4, xsp
 	ret
@@ -16336,7 +16336,7 @@ HdaeRom_WriteParam:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_WriteParam_Epilogue:
 	inc	4, xsp
 	ret
@@ -16362,7 +16362,7 @@ HdaeRom_CheckResult:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_CheckResult_Epilogue:
 	inc	4, xsp
 	ret
@@ -16388,7 +16388,7 @@ HdaeRom_FinishBlock:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_FinishBlock_Epilogue:
 	inc	4, xsp
 	ret
@@ -16492,7 +16492,7 @@ UIStateEvt_ProcessHandler:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jr	UIStateEvt_ProcessHandler_Epilogue
 UIStateEvt_ProcessHandler_Skip:
 	ld	a, (xsp+0x3)
@@ -16505,7 +16505,7 @@ UIStateEvt_ProcessHandler_Skip:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jr	UIStateEvt_ProcessHandler_Epilogue
 UIStateEvt_ProcessHandler_Skip2:
 	bitm	0, (xsp+0x3)
@@ -16517,7 +16517,7 @@ UIStateEvt_ProcessHandler_Skip2:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 UIStateEvt_ProcessHandler_Epilogue:
 	inc	4, xsp
 	ret
@@ -16540,7 +16540,7 @@ HdaeRom_AltProcessBlock:
 HdaeRom_AltProcessBlock_Skip:
 	lda	xwa, (xsp)
 	ldw	bc, 255
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jr	HdaeRom_AltProcessBlock_Epilogue
 HdaeRom_AltProcessBlock_Skip2:
 	ld	a, (xsp+0x3)
@@ -16548,18 +16548,18 @@ HdaeRom_AltProcessBlock_Skip2:
 	jr	z, HdaeRom_AltProcessBlock_Entry
 	lda	xwa, (xsp)
 	ldw	bc, 15
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_AltProcessBlock_Entry:
 	bitm	7, (xsp+0x3)
 	jr	z, HdaeRom_AltProcessBlock_Epilogue
 	lda	xwa, (xsp)
 	ldw	bc, 128
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jr	HdaeRom_AltProcessBlock_Epilogue
 HdaeRom_AltProcessBlock_Skip3:
 	lda	xwa, (xsp)
 	ldw	bc, 255
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_AltProcessBlock_Epilogue:
 	inc	4, xsp
 	ret
@@ -16590,7 +16590,7 @@ HdaeRom_AltReadParam:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jr	HdaeRom_AltReadParam_Epilogue
 HdaeRom_AltReadParam_Skip:
 	ld	a, (xsp+0x3)
@@ -16603,7 +16603,7 @@ HdaeRom_AltReadParam_Skip:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_AltReadParam_Epilogue:
 	inc	4, xsp
 	ret
@@ -16633,7 +16633,7 @@ HdaeRom_AltCheckResult_Skip2:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jr	HdaeRom_AltCheckResult_Epilogue
 HdaeRom_AltCheckResult_Skip3:
 	ld	a, (xsp+0x3)
@@ -16710,7 +16710,7 @@ HdaeRom_AltTableEntry0:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	inc	4, xsp
 	ret
 HdaeRom_AltTableEntry1:
@@ -16732,7 +16732,7 @@ HdaeRom_AltTableEntry1:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jr	HdaeRom_AltTableEntry1_Epilogue
 HdaeRom_AltTableEntry1_Skip:
 	lda	xwa, (xsp)
@@ -16741,7 +16741,7 @@ HdaeRom_AltTableEntry1_Skip:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jr	HdaeRom_AltTableEntry1_Epilogue
 HdaeRom_AltTableEntry1_Skip2:
 	lda	xwa, (xsp)
@@ -16750,7 +16750,7 @@ HdaeRom_AltTableEntry1_Skip2:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_AltTableEntry1_Epilogue:
 	inc	4, xsp
 	ret
@@ -16767,7 +16767,7 @@ HdaeRom_AltTableEntry2:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	inc	4, xsp
 	ret
 HdaeRom_AltTableEntry3:
@@ -16783,7 +16783,7 @@ HdaeRom_AltTableEntry3:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	inc	4, xsp
 	ret
 HdaeRom_AltTableEntry4:
@@ -16804,7 +16804,7 @@ HdaeRom_AltTableEntry4_Skip:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_AltTableEntry4_Epilogue:
 	inc	4, xsp
 	ret
@@ -16821,7 +16821,7 @@ HdaeRom_AltTableEntry5:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	inc	4, xsp
 	ret
 HdaeRom_AltTableEntry6:
@@ -16837,7 +16837,7 @@ HdaeRom_AltTableEntry6:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	inc	4, xsp
 	ret
 HdaeRom_AltTableEntry7:
@@ -16864,7 +16864,7 @@ HdaeRom_AltTableEntry9:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 	jr	HdaeRom_AltTableEntry9_Epilogue
 HdaeRom_AltTableEntry9_Skip2:
 	ld	a, (xsp+0x3)
@@ -16878,7 +16878,7 @@ HdaeRom_AltTableEntry9_Skip2:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_AltTableEntry9_Entry:
 	bitm	7, (xsp+0x3)
 	jr	z, HdaeRom_AltTableEntry9_Epilogue
@@ -16889,11 +16889,11 @@ HdaeRom_AltTableEntry9_Entry:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
+	calr	SndParam_ApplyEventField
 HdaeRom_AltTableEntry9_Epilogue:
 	inc	4, xsp
 	ret
-UIState_ProcessKeyEvent_Helper:
+SndParam_ApplyEventField:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, xwa

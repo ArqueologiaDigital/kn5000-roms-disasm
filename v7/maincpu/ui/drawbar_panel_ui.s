@@ -11512,9 +11512,9 @@ AcWelcomScreen_Select_Case2:
 	lda	xwa, (0x03ea0c:24)
 	lda	xwa, (xwa+bc)	; lda xwa, xwa+bc
 	cpw	(xwa+10), 65535
-	jr	z, AcWelcomScreen_RenderBytecode_Skip
+	jr	z, AcWelcomScreen_RenderBytecode_Skip4
 	cp	iz, 65535
-	jr	z, AcWelcomScreen_RenderBytecode_Skip
+	jr	z, AcWelcomScreen_RenderBytecode_Skip4
 	lda	xiy, (xwa+4)
 	lda	xix, (xsp+12)
 	ldiw
@@ -11522,7 +11522,7 @@ AcWelcomScreen_Select_Case2:
 	lda	xwa, (xsp+12)
 	ldw	bc, 30
 	call	ClipBlit_Direct
-AcWelcomScreen_RenderBytecode_Skip:
+AcWelcomScreen_RenderBytecode_Skip4:
 	ld	wa, (0x024784:24)
 	exts	xwa
 	ld	xbc, xwa
@@ -11568,7 +11568,7 @@ AcWelcomScreen_Select_Case4:
 	pushw	247
 	ld	xbc, AcWelcomScreen_RenderBytecode_Data
 	ldw	de, 16
-	jrl	Softver_ShowHide_Code_Join
+	jrl	AcWelcomScreen_RenderBytecode_Join
 AcWelcomScreen_Select_Case5:
 	lda	xix, (xsp+12)
 	ldiw
@@ -11579,7 +11579,7 @@ AcWelcomScreen_Select_Case5:
 	pushw	247
 	ld	xbc, AcWelcomScreen_RenderBytecode_Data_3
 	ldw	de, 16
-	jrl	Softver_ShowHide_Code_Join
+	jrl	AcWelcomScreen_RenderBytecode_Join
 AcWelcomScreen_Select_Case6:
 	lda	xix, (xsp+12)
 	ldiw
@@ -11590,7 +11590,7 @@ AcWelcomScreen_Select_Case6:
 	pushw	247
 	ld	xbc, Bitmap_DigitL
 	ldw	de, 16
-	jr	Softver_ShowHide_Code_Join
+	jr	AcWelcomScreen_RenderBytecode_Join
 AcWelcomScreen_Select_Case11:
 	lda	xix, (xsp+12)
 	ldiw
@@ -11601,7 +11601,7 @@ AcWelcomScreen_Select_Case11:
 	pushw	247
 	ld	xbc, Bitmap_DigitD
 	ldw	de, 16
-	jr	Softver_ShowHide_Code_Join
+	jr	AcWelcomScreen_RenderBytecode_Join
 AcWelcomScreen_Select_Case7:
 	lda	xix, (xsp+12)
 	ldiw
@@ -11612,7 +11612,7 @@ AcWelcomScreen_Select_Case7:
 	pushw	247
 	ld	xbc, Bitmap_DigitR
 	ldw	de, 16
-	jr	Softver_ShowHide_Code_Join
+	jr	AcWelcomScreen_RenderBytecode_Join
 AcWelcomScreen_Select_Case8:
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
@@ -11632,7 +11632,7 @@ AcWelcomScreen_Select_Case8:
 	pushw	247
 	ld	xbc, AcWelcomScreen_RenderBytecode_Data_2
 	ldw	de, 16
-Softver_ShowHide_Code_Join:
+AcWelcomScreen_RenderBytecode_Join:
 	call	DrawBitmapSP2
 	jrl	AcWelcomScreen_Select_NextStep
 AcWelcomScreen_Select_Case9:	; cases 9, 12
