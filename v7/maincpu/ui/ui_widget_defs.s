@@ -14518,13 +14518,13 @@ ColorIDProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, FrameVariant_B_CalcHeight
+	jr z, ColorIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, FrameVariant_B_Setup
+	jr z, ColorIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr nz, FrameVariant_B_CalcWidth
+	jr nz, ColorIDProc_ForwardToCommon
 
-FrameVariant_B_Setup:
+ColorIDProc_OnGetOrDumpPropertyEx:
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld bc, (xhl)
@@ -14532,31 +14532,31 @@ FrameVariant_B_Setup:
 	ld xwa, (xsp + 4)
 	ld (xwa), xbc
 
-FrameVariant_B_CalcWidth:
+ColorIDProc_ForwardToCommon:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
-	jr FrameVariant_B_Done
+	jr ColorIDProc_Epilogue
 
-FrameVariant_B_CalcHeight:
+ColorIDProc_OnSetPropertyEx:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, FrameVariant_B_Execute
+	jr nz, ColorIDProc_ReturnResult
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 4)
 	ld (xhl), wa
 
-FrameVariant_B_Execute:
+ColorIDProc_ReturnResult:
 	ld xhl, xiz
 
-FrameVariant_B_Done:
+ColorIDProc_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -14568,13 +14568,13 @@ BorderIDProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, FrameVariant_C_CalcHeight
+	jr z, BorderIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, FrameVariant_C_Setup
+	jr z, BorderIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr nz, FrameVariant_C_CalcWidth
+	jr nz, BorderIDProc_ForwardToCommon
 
-FrameVariant_C_Setup:
+BorderIDProc_OnGetOrDumpPropertyEx:
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld bc, (xhl)
@@ -14582,31 +14582,31 @@ FrameVariant_C_Setup:
 	ld xwa, (xsp + 4)
 	ld (xwa), xbc
 
-FrameVariant_C_CalcWidth:
+BorderIDProc_ForwardToCommon:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
-	jr FrameVariant_C_Done
+	jr BorderIDProc_Epilogue
 
-FrameVariant_C_CalcHeight:
+BorderIDProc_OnSetPropertyEx:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, FrameVariant_C_Execute
+	jr nz, BorderIDProc_ReturnResult
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 4)
 	ld (xhl), wa
 
-FrameVariant_C_Execute:
+BorderIDProc_ReturnResult:
 	ld xhl, xiz
 
-FrameVariant_C_Done:
+BorderIDProc_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -14618,13 +14618,13 @@ AlignmentIDProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, FrameVariant_D_CalcHeight
+	jr z, AlignmentIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, FrameVariant_D_Setup
+	jr z, AlignmentIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr nz, FrameVariant_D_CalcWidth
+	jr nz, AlignmentIDProc_ForwardToCommon
 
-FrameVariant_D_Setup:
+AlignmentIDProc_OnGetOrDumpPropertyEx:
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xbc, 0:i3
@@ -14632,31 +14632,31 @@ FrameVariant_D_Setup:
 	ld xwa, (xsp + 4)
 	ld (xwa), xbc
 
-FrameVariant_D_CalcWidth:
+AlignmentIDProc_ForwardToCommon:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
-	jr FrameVariant_D_Done
+	jr AlignmentIDProc_Epilogue
 
-FrameVariant_D_CalcHeight:
+AlignmentIDProc_OnSetPropertyEx:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, FrameVariant_D_Execute
+	jr nz, AlignmentIDProc_ReturnResult
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 4)
 	ld (xhl), a
 
-FrameVariant_D_Execute:
+AlignmentIDProc_ReturnResult:
 	ld xhl, xiz
 
-FrameVariant_D_Done:
+AlignmentIDProc_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -14668,13 +14668,13 @@ EditSwStyleIDProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, FrameVariant_E_CalcHeight
+	jr z, EditSwStyleIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, FrameVariant_E_Setup
+	jr z, EditSwStyleIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr nz, FrameVariant_E_CalcWidth
+	jr nz, EditSwStyleIDProc_ForwardToCommon
 
-FrameVariant_E_Setup:
+EditSwStyleIDProc_OnGetOrDumpPropertyEx:
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xbc, 0:i3
@@ -14682,31 +14682,31 @@ FrameVariant_E_Setup:
 	ld xwa, (xsp + 4)
 	ld (xwa), xbc
 
-FrameVariant_E_CalcWidth:
+EditSwStyleIDProc_ForwardToCommon:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
-	jr FrameVariant_E_Done
+	jr EditSwStyleIDProc_Epilogue
 
-FrameVariant_E_CalcHeight:
+EditSwStyleIDProc_OnSetPropertyEx:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, FrameVariant_E_Execute
+	jr nz, EditSwStyleIDProc_ReturnResult
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 4)
 	ld (xhl), a
 
-FrameVariant_E_Execute:
+EditSwStyleIDProc_ReturnResult:
 	ld xhl, xiz
 
-FrameVariant_E_Done:
+EditSwStyleIDProc_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -14718,15 +14718,15 @@ EditSwIDProc:
 	ld xiz, xbc
 	ld (xsp + 12), xwa
 	cp xiz, EVT_MAKE_EDIT_SW_ID
-	jr z, FrameVariant_F_CheckAlt
+	jr z, EditSwIDProc_OnMakeEditSwId
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, FrameVariant_F_CalcHeight
+	jr z, EditSwIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, FrameVariant_F_Setup
+	jr z, EditSwIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr nz, FrameVariant_F_CalcWidth
+	jr nz, EditSwIDProc_ForwardToCommon
 
-FrameVariant_F_Setup:
+EditSwIDProc_OnGetOrDumpPropertyEx:
 	ld xwa, (xsp + 8)
 	calr IDCursorAdvance
 	ld bc, (xhl)
@@ -14734,14 +14734,14 @@ FrameVariant_F_Setup:
 	ld xwa, (xsp + 8)
 	ld (xwa), xbc
 
-FrameVariant_F_CalcWidth:
+EditSwIDProc_ForwardToCommon:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
 	calr CommonIDProc
-	jr FrameVariant_F_Return
+	jr EditSwIDProc_Epilogue
 
-FrameVariant_F_CalcHeight:
+EditSwIDProc_OnSetPropertyEx:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
@@ -14749,42 +14749,42 @@ FrameVariant_F_CalcHeight:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	or xwa, xwa
-	jr nz, FrameVariant_F_Execute
+	jr nz, EditSwIDProc_ReturnResult
 	ld xwa, (xsp + 8)
 	calr IDCursorAdvance
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	ld (xhl), wa
 
-FrameVariant_F_Execute:
+EditSwIDProc_ReturnResult:
 	ld xhl, (xsp + 4)
-	jr FrameVariant_F_Return
+	jr EditSwIDProc_Epilogue
 
-FrameVariant_F_CheckAlt:
+EditSwIDProc_OnMakeEditSwId:
 	ld xwa, (xsp + 8)
 	ld bc, wa
 	ld hl, bc
 	sub hl, 0x80
 	cp xwa, 0x80
-	jr c, FrameVariant_F_DrawAlt
+	jr c, EditSwIDProc_Skip
 	cp xwa, 0x87
-	jr ule, FrameVariant_F_Done
+	jr ule, EditSwIDProc_Join
 
-FrameVariant_F_DrawAlt:
+EditSwIDProc_Skip:
 	ld xwa, (xsp + 8)
 	cp xwa, 0x90
-	jr nz, FrameVariant_F_DoneAlt
+	jr nz, EditSwIDProc_Join2
 
-FrameVariant_F_Done:
-	jr FrameVariant_F_DoneAlt2
+EditSwIDProc_Join:
+	jr EditSwIDProc_Join3
 
-FrameVariant_F_DoneAlt:
+EditSwIDProc_Join2:
 	ld hl, bc
 
-FrameVariant_F_DoneAlt2:
+EditSwIDProc_Join3:
 	extz xhl
 
-FrameVariant_F_Return:
+EditSwIDProc_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -14796,13 +14796,13 @@ LineModeIDProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, FrameVariant_G_CalcHeight
+	jr z, LineModeIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, FrameVariant_G_Setup
+	jr z, LineModeIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr nz, FrameVariant_G_CalcWidth
+	jr nz, LineModeIDProc_ForwardToCommon
 
-FrameVariant_G_Setup:
+LineModeIDProc_OnGetOrDumpPropertyEx:
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xbc, 0:i3
@@ -14810,31 +14810,31 @@ FrameVariant_G_Setup:
 	ld xwa, (xsp + 4)
 	ld (xwa), xbc
 
-FrameVariant_G_CalcWidth:
+LineModeIDProc_ForwardToCommon:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
-	jr FrameVariant_G_Done
+	jr LineModeIDProc_Epilogue
 
-FrameVariant_G_CalcHeight:
+LineModeIDProc_OnSetPropertyEx:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, FrameVariant_G_Execute
+	jr nz, LineModeIDProc_ReturnResult
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 4)
 	ld (xhl), a
 
-FrameVariant_G_Execute:
+LineModeIDProc_ReturnResult:
 	ld xhl, xiz
 
-FrameVariant_G_Done:
+LineModeIDProc_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -14846,13 +14846,13 @@ FrameIDProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, FrameVariant_H_CalcHeight
+	jr z, FrameIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, FrameVariant_H_Setup
+	jr z, FrameIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr nz, FrameVariant_H_CalcWidth
+	jr nz, FrameIDProc_ForwardToCommon
 
-FrameVariant_H_Setup:
+FrameIDProc_OnGetOrDumpPropertyEx:
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld bc, (xhl)
@@ -14860,31 +14860,31 @@ FrameVariant_H_Setup:
 	ld xwa, (xsp + 4)
 	ld (xwa), xbc
 
-FrameVariant_H_CalcWidth:
+FrameIDProc_ForwardToCommon:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
-	jr FrameVariant_H_Done
+	jr FrameIDProc_Epilogue
 
-FrameVariant_H_CalcHeight:
+FrameIDProc_OnSetPropertyEx:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, FrameVariant_H_Execute
+	jr nz, FrameIDProc_ReturnResult
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 4)
 	ld (xhl), wa
 
-FrameVariant_H_Execute:
+FrameIDProc_ReturnResult:
 	ld xhl, xiz
 
-FrameVariant_H_Done:
+FrameIDProc_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -14896,13 +14896,13 @@ UserIDProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, FrameVariant_I_CalcHeight
+	jr z, UserIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, FrameVariant_I_Setup
+	jr z, UserIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr nz, FrameVariant_I_CalcWidth
+	jr nz, UserIDProc_ForwardToCommon
 
-FrameVariant_I_Setup:
+UserIDProc_OnGetOrDumpPropertyEx:
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld bc, (xhl)
@@ -14910,31 +14910,31 @@ FrameVariant_I_Setup:
 	ld xwa, (xsp + 4)
 	ld (xwa), xbc
 
-FrameVariant_I_CalcWidth:
+UserIDProc_ForwardToCommon:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
-	jr FrameVariant_I_Done
+	jr UserIDProc_Epilogue
 
-FrameVariant_I_CalcHeight:
+UserIDProc_OnSetPropertyEx:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, FrameVariant_I_Execute
+	jr nz, UserIDProc_ReturnResult
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 4)
 	ld (xhl), wa
 
-FrameVariant_I_Execute:
+UserIDProc_ReturnResult:
 	ld xhl, xiz
 
-FrameVariant_I_Done:
+UserIDProc_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -14946,13 +14946,13 @@ PartIDProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, FrameVariant_J_CalcHeight
+	jr z, PartIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, FrameVariant_J_Setup
+	jr z, PartIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr nz, FrameVariant_J_CalcWidth
+	jr nz, PartIDProc_ForwardToCommon
 
-FrameVariant_J_Setup:
+PartIDProc_OnGetOrDumpPropertyEx:
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld bc, (xhl)
@@ -14960,31 +14960,31 @@ FrameVariant_J_Setup:
 	ld xwa, (xsp + 4)
 	ld (xwa), xbc
 
-FrameVariant_J_CalcWidth:
+PartIDProc_ForwardToCommon:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
-	jr FrameVariant_J_Done
+	jr PartIDProc_Epilogue
 
-FrameVariant_J_CalcHeight:
+PartIDProc_OnSetPropertyEx:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, FrameVariant_J_Execute
+	jr nz, PartIDProc_ReturnResult
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 4)
 	ld (xhl), wa
 
-FrameVariant_J_Execute:
+PartIDProc_ReturnResult:
 	ld xhl, xiz
 
-FrameVariant_J_Done:
+PartIDProc_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -14996,13 +14996,13 @@ TrackIDProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, FrameVariant_K_CalcHeight
+	jr z, TrackIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, FrameVariant_K_Setup
+	jr z, TrackIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr nz, FrameVariant_K_CalcWidth
+	jr nz, TrackIDProc_ForwardToCommon
 
-FrameVariant_K_Setup:
+TrackIDProc_OnGetOrDumpPropertyEx:
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld bc, (xhl)
@@ -15010,31 +15010,31 @@ FrameVariant_K_Setup:
 	ld xwa, (xsp + 4)
 	ld (xwa), xbc
 
-FrameVariant_K_CalcWidth:
+TrackIDProc_ForwardToCommon:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
-	jr FrameVariant_K_Done
+	jr TrackIDProc_Epilogue
 
-FrameVariant_K_CalcHeight:
+TrackIDProc_OnSetPropertyEx:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, FrameVariant_K_Execute
+	jr nz, TrackIDProc_ReturnResult
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 4)
 	ld (xhl), wa
 
-FrameVariant_K_Execute:
+TrackIDProc_ReturnResult:
 	ld xhl, xiz
 
-FrameVariant_K_Done:
+TrackIDProc_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -15046,13 +15046,13 @@ IntTimeIDProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, FrameVariant_L_CalcHeight
+	jr z, IntTimeIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, FrameVariant_L_Setup
+	jr z, IntTimeIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr nz, FrameVariant_L_CalcWidth
+	jr nz, IntTimeIDProc_ForwardToCommon
 
-FrameVariant_L_Setup:
+IntTimeIDProc_OnGetOrDumpPropertyEx:
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld bc, (xhl)
@@ -15060,31 +15060,31 @@ FrameVariant_L_Setup:
 	ld xwa, (xsp + 4)
 	ld (xwa), xbc
 
-FrameVariant_L_CalcWidth:
+IntTimeIDProc_ForwardToCommon:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
-	jr FrameVariant_L_Done
+	jr IntTimeIDProc_Epilogue
 
-FrameVariant_L_CalcHeight:
+IntTimeIDProc_OnSetPropertyEx:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, FrameVariant_L_Execute
+	jr nz, IntTimeIDProc_ReturnResult
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 4)
 	ld (xhl), wa
 
-FrameVariant_L_Execute:
+IntTimeIDProc_ReturnResult:
 	ld xhl, xiz
 
-FrameVariant_L_Done:
+IntTimeIDProc_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
