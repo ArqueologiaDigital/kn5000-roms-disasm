@@ -30,6 +30,47 @@ extern const char WidgetCharMap_DataEntry1;
  * parent Screen; allsize 42.  Field names and type characters are the
  * class chain's own propname / propdata (see THE CLASS SYSTEM in
  * scripts/analysis/nakarest_objtab_map.py). */
+/* NakaWidget_SVARI's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaWidget_PMBKNAME's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint32_t exit;
+    uint32_t window;
+    uint32_t title;
+    uint32_t icon;
+} NakaWidget_PMBKNAME_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint32_t exit;
+    uint32_t window;
+    uint32_t func;
+    uint32_t font;
+    uint16_t fontcolor;
+    uint32_t page;
+    uint32_t part;
+    uint32_t varisu;
+    uint32_t nowswno;
+    uint32_t nowvari;
+    uint32_t oldvari;
+} NakaWidget_SVARI_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t class_;            /* +0 M */
     uint16_t super;             /* +4 [ */
@@ -1543,24 +1584,14 @@ typedef struct __attribute__((packed)) {
     /* element 5 of Viewable slot 0xD2: EditSw (class id 0x01600030) */
     naka_cls_EditSw_t PMNAME_EditSw;
     uint8_t bytes_2418[4];
-    naka_dispatch_t w121;  /* 0x47 */
-    uint16_t field_2434;
-    uint16_t field_2436;
-    uint16_t field_2438;
-    uint16_t field_243a;
-    uint16_t field_243c;
-    uint16_t field_243e;
-    uint8_t pad_189[4];  /* zero padding */
-    uint32_t Naka_PresentationRootState_ptr;
-    uint16_t field_2448;
-    uint8_t pad_190[4];  /* zero padding */
-    uint16_t field_244e;
-    uint16_t field_2450;
-    uint16_t field_2452;
-    uint32_t NAMING_str_ptr;
-    uint16_t field_2458;
-    uint8_t pad_191[2];  /* zero padding */
-    char NAMING_str[8];
+    uint8_t bytes_241c[22];  /* 0x47 */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* TtlScreen view record "PMBKNAME": the panel-memory bank NAMING screen */
+    NakaWidget_PMBKNAME_t NakaWidget_PMBKNAME;
+    /* "NAMING": title of the TtlScreen NakaWidget_PMBKNAME */
+    char NakaStr_PmBkNameTitle[8];
     /* element 1 of Viewable slot 0xD3: IvNaming (class id 0x0160004D) */
     naka_cls_IvNaming_t NakaWidget_PMBKNAME_1_IvNaming;
     /* element 2 of Viewable slot 0xD3: AcFuncEditSw (class id 0x01600020) */
@@ -1573,36 +1604,13 @@ typedef struct __attribute__((packed)) {
     /* element 5 of Viewable slot 0xD3: EditSw (class id 0x01600030) */
     naka_cls_EditSw_t vD3_e5;
     uint8_t bytes_2522[4];
-    naka_dispatch_t w125;  /* 0x47 */
-    uint16_t field_253e;
-    uint16_t field_2540;
-    uint16_t field_2542;
-    uint16_t field_2544;
-    uint16_t field_2546;
-    uint16_t field_2548;
-    uint8_t pad_198[4];  /* zero padding */
-    uint32_t Naka_PresentationRootState_ptr_2;
-    uint16_t field_2552;
-    uint16_t field_2554;
-    uint8_t pad_199[2];  /* zero padding */
-    uint16_t field_2558;
-    uint16_t field_255a;
-    uint16_t field_255c;
-    uint8_t pad_200[2];  /* zero padding */
-    uint16_t field_2560;
-    uint8_t pad_201[6];  /* zero padding */
-    uint16_t field_2568;
-    uint16_t field_256a;
-    uint16_t field_256c;
-    uint16_t field_256e;
-    uint16_t field_2570;
-    uint16_t field_2572;
-    uint16_t field_2574;
-    uint16_t field_2576;
-    uint16_t field_2578;
-    uint16_t field_257a;
-    uint16_t field_257c;
-    uint16_t field_257e;
+    uint8_t bytes_2526[22];  /* 0x47 */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* VariScreen view record "SVARI": full-screen variation screen, cells page/part/varisu/nowswno/nowvari/oldvari in work RAM */
+    NakaWidget_SVARI_t NakaWidget_SVARI;
     /* element 1 of Viewable slot 0xE8: IvIntVari (class id 0x01600062) */
     naka_cls_IvIntVari_t NakaWidget_SVARI_1_IvIntVari;
     /* element 0 of Viewable slot 0xE9 "RVARI": RVariScreen (class id 0x01620002) */
@@ -4885,49 +4893,11 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .bytes_2418 = { 0x7E, 0x38, 0x30, 0x00 },
 
-    .w121 = {
-        .header    = NAKA_HDR(0x47),
-        .field_04   = 0x0000,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x0005FFFF,
-        .inst_ptr   = NAKA_ADDR(CRTC_LINE_COMPARE),
-        .link_ptr   = 0x001F0000,
-        .proc_addr  = 0x0034001F,
-    },
+    .bytes_241c = { 0x47, 0x00, 0x60, 0x01, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x05, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F, 0x00, 0x1F, 0x00 },
 
-    .field_2434 = 0x0160,
+    .NakaWidget_PMBKNAME = { 0x01600034, 0xFFFF, 0x0001, 0xFFFF, 0xFFFF, 0x000A, { 0, 0, 319, 239 }, 0x00FF, 0x0000, 0x01A00000, 0x0003F60A, SELF(NakaStr_PmBkNameTitle), 0x00000099 },
 
-    .field_2436 = NAKA_NONE,
-
-    .field_2438 = 0x0001,
-
-    .field_243a = NAKA_NONE,
-
-    .field_243c = NAKA_NONE,
-
-    .field_243e = 0x000A,
-
-    .pad_189 = { 0 },
-
-    .Naka_PresentationRootState_ptr = NAKA_ADDR(Naka_PresentationRootState),
-
-    .field_2448 = 0x00FF,
-
-    .pad_190 = { 0 },
-
-    .field_244e = 0x01A0,
-
-    .field_2450 = 0xF60A,
-
-    .field_2452 = 0x0003,
-
-    .NAMING_str_ptr = SELF(NAMING_str),
-
-    .field_2458 = 0x0099,
-
-    .pad_191 = { 0 },
-
-    .NAMING_str = ALIGNED_STRING("NAMING"),
+    .NakaStr_PmBkNameTitle = "NAMING\x00\xFF",
 
     .NakaWidget_PMBKNAME_1_IvNaming = {
         .class_ = 0x0160004D,
@@ -5008,73 +4978,9 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .bytes_2522 = { 0x7E, 0x38, 0x30, 0x00 },
 
-    .w125 = {
-        .header    = NAKA_HDR(0x47),
-        .field_04   = 0x0000,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x0005FFFF,
-        .inst_ptr   = NAKA_ADDR(CRTC_LINE_COMPARE),
-        .link_ptr   = 0x001F0000,
-        .proc_addr  = 0x0001001F,
-    },
+    .bytes_2526 = { 0x47, 0x00, 0x60, 0x01, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x05, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F, 0x00, 0x1F, 0x00 },
 
-    .field_253e = 0x0162,
-
-    .field_2540 = NAKA_NONE,
-
-    .field_2542 = 0x0001,
-
-    .field_2544 = NAKA_NONE,
-
-    .field_2546 = NAKA_NONE,
-
-    .field_2548 = 0x000A,
-
-    .pad_198 = { 0 },
-
-    .Naka_PresentationRootState_ptr_2 = NAKA_ADDR(Naka_PresentationRootState),
-
-    .field_2552 = 0x00FF,
-
-    .field_2554 = 0x0001,
-
-    .pad_199 = { 0 },
-
-    .field_2558 = 0x01A0,
-
-    .field_255a = 0xF60E,
-
-    .field_255c = 0x0003,
-
-    .pad_200 = { 0 },
-
-    .field_2560 = 0x0120,
-
-    .pad_201 = { 0 },
-
-    .field_2568 = 0xF612,
-
-    .field_256a = 0x0003,
-
-    .field_256c = 0xF614,
-
-    .field_256e = 0x0003,
-
-    .field_2570 = 0xF616,
-
-    .field_2572 = 0x0003,
-
-    .field_2574 = 0xF618,
-
-    .field_2576 = 0x0003,
-
-    .field_2578 = 0xF61A,
-
-    .field_257a = 0x0003,
-
-    .field_257c = 0xF61C,
-
-    .field_257e = 0x0003,
+    .NakaWidget_SVARI = { 0x01620001, 0xFFFF, 0x0001, 0xFFFF, 0xFFFF, 0x000A, { 0, 0, 319, 239 }, 0x00FF, 0x0001, 0x01A00000, 0x0003F60E, 0x01200000, 0x00000000, 0x0000, 0x0003F612, 0x0003F614, 0x0003F616, 0x0003F618, 0x0003F61A, 0x0003F61C },
 
     .NakaWidget_SVARI_1_IvIntVari = {
         .class_ = 0x01600062,

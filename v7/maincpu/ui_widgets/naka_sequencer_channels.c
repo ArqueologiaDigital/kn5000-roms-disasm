@@ -259,6 +259,7 @@ extern const char NakaWidget_TrAsFileList;
 extern const char SeqStep_TimerDispatch_ProcTables_Tail;
 extern const char NakaWidget_MidiPcgOutput_3_AcIndexWideES;
 extern const char NakaWidget_NamingCursorBox;
+extern const char NakaWidget_DiskMenu_1_AcTitleMenu;
 
 #define BASE  0x00EEE078u
 
@@ -291,6 +292,361 @@ extern const char NakaWidget_NamingCursorBox;
 /* Root_NamingUpperCaseToggleView's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* Root_NamingLowerCaseToggleView's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* Root_NamingSymbolToggleView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* DrawbarBitmap_SliderBitmapPtrs's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Cheap_DiskMenuWorkCells's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Cheap_HardDiskMenuView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Cheap_SingleBankToggleView's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Dial_State's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* ModeTitle_State's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* Display_DrawState's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint16_t DirtyBlitEnabled;
+    uint32_t PaletteDataPtrCached;
+    uint32_t WallpaperBitmapPtr;
+    uint16_t WallpaperIndex;
+    uint16_t PaletteIndexCached;
+    uint16_t PaletteIndexPrevious;
+    uint16_t BackColor;
+    uint16_t ForeColor;
+    uint16_t SelectedTableIndex;
+    uint8_t ColorBlitMode;
+    uint8_t ColorBlitModePad;
+    uint8_t ColorBlitModeActive;
+    uint8_t ColorBlitModeActivePad;
+} Display_DrawState_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t ModeNow;
+    uint32_t ModeOld;
+    uint32_t TitleNow;
+    uint32_t TitleOld;
+} ModeTitle_State_t;
+
+typedef struct __attribute__((packed)) {
+    uint16_t Enable;
+    uint32_t UpCallback;
+    uint32_t DownCallback;
+    uint32_t UpEvent;
+    uint32_t DownEvent;
+    uint32_t UpParam;
+    uint32_t DownParam;
+    uint32_t Focus;
+} Dial_State_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint32_t font;
+    uint32_t stron;
+    uint32_t stroff;
+    uint32_t onoff;
+    uint16_t editsw;
+    uint16_t index;
+} Cheap_SingleBankToggleView_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint16_t index;
+    uint32_t font;
+    uint16_t fontcolor;
+    uint16_t align;
+    uint16_t editsw;
+    uint32_t selected;
+    uint32_t str;
+    uint32_t title;
+    uint32_t icon;
+} Cheap_HardDiskMenuView_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t DiskMenu_Window;
+    uint16_t StyleConvert_AcTitleMenu_Selected;
+    uint16_t HardDiskMenu_Selected;
+    uint16_t Preferences_AcTitleMenu_Selected;
+    uint16_t Save_AcTitleMenu_Selected;
+    uint16_t DiskTools_AcTtlJgBox_Selected;
+    uint16_t LOAD_AcTtlJgBox_Selected;
+    uint16_t DirectPlay_AcTtlJgBox_Selected;
+    uint16_t SongMedley_AcTtlJgBox_Selected;
+    uint32_t IntSongMedley_Window;
+    uint16_t IntSongMedley_PsFileNameBox_SelNum;
+    uint16_t IntSongMedley_PsFileNameBox_PaintOk;
+    uint16_t IntSongMedley_PsFileNameBox_AicOk;
+    uint16_t IntSongMedley_PsFileNameBox_2_SelNum;
+    uint16_t IntSongMedley_PsFileNameBox_2_PaintOk;
+    uint16_t IntSongMedley_PsFileNameBox_2_AicOk;
+    uint16_t IntSongMedley_AcMonoIndexToggle_OnOff;
+    uint32_t DiskSaveName_Window;
+    uint32_t ComposerLoad_Window;
+    uint16_t ComposerLoad_PsFileNameBox_SelNum;
+    uint16_t ComposerLoad_PsFileNameBox_PaintOk;
+    uint16_t ComposerLoad_PsFileNameBox_AicOk;
+    uint16_t ComposerLoad_AcParaStrBox_PaintOk;
+    uint16_t ComposerLoad_AcParaStrBox_2_PaintOk;
+    uint32_t DiskWaitWin_Parent;
+    uint32_t DiskWaitWin_Child;
+    uint16_t DiskWaitWin_AcRotStrBox_PaintOk;
+    uint32_t DiskSaveNameSMF_Window;
+    uint32_t WallpaperLoad_Window;
+    uint16_t WallpaperLoad_AcParaStrBox_PaintOk;
+    uint16_t WallpaperLoad_AcParaStrBox_2_PaintOk;
+    uint16_t WallpaperLoad_PsFileNameBox_SelNum;
+    uint16_t WallpaperLoad_PsFileNameBox_PaintOk;
+    uint16_t WallpaperLoad_PsFileNameBox_AicOk;
+    uint32_t DiskSaveSureWin_Parent;
+    uint32_t DiskSaveSureWin_Child;
+    uint32_t PasswordWin_Parent;
+    uint32_t PasswordWin_Child;
+    uint32_t CheckPasswordWin_Parent;
+    uint32_t CheckPasswordWin_Child;
+    uint32_t DiskLoad_Window;
+    uint16_t DiskLoadPage_Page;
+    uint32_t DiskLoadP1_Parent;
+    uint32_t DiskLoadP1_Child;
+    uint16_t DiskLoadP1_PsFileNameBox_SelNum;
+    uint16_t DiskLoadP1_PsFileNameBox_PaintOk;
+    uint16_t DiskLoadP1_PsFileNameBox_AicOk;
+    uint16_t DiskLoadP1_AcFileSfxBox_PaintOk;
+    uint16_t Smf_AcTitleMenu_Selected;
+    uint16_t DiskLoadP1_AcParaStrBox_PaintOk;
+    uint16_t DiskLoadP1_AcParaStrBox_2_PaintOk;
+    uint32_t DiskLoadP2_Parent;
+    uint32_t DiskLoadP2_Child;
+    uint16_t DiskLoadP2_AcParaStrBox_PaintOk;
+    uint16_t DiskLoadP2_PsFileNameBox_SelNum;
+    uint16_t DiskLoadP2_PsFileNameBox_PaintOk;
+    uint16_t DiskLoadP2_PsFileNameBox_AicOk;
+    uint32_t DiskLoadP3_Parent;
+    uint32_t DiskLoadP3_Child;
+    uint16_t DiskLoadP3_PsFileNameBox_SelNum;
+    uint16_t DiskLoadP3_PsFileNameBox_PaintOk;
+    uint16_t DiskLoadP3_PsFileNameBox_AicOk;
+    uint16_t DiskLoadP3_AcParaStrBox_PaintOk;
+    uint16_t DiskLoadP3_PsFileNameBox_2_SelNum;
+    uint16_t DiskLoadP3_PsFileNameBox_2_PaintOk;
+    uint16_t DiskLoadP3_PsFileNameBox_2_AicOk;
+    uint16_t DiskLoadP3_PsFileNameBox_3_SelNum;
+    uint16_t DiskLoadP3_PsFileNameBox_3_PaintOk;
+    uint16_t DiskLoadP3_PsFileNameBox_3_AicOk;
+    uint16_t DiskLoadP3_PsFileNameBox_4_SelNum;
+    uint16_t DiskLoadP3_PsFileNameBox_4_PaintOk;
+    uint16_t DiskLoadP3_PsFileNameBox_4_AicOk;
+    uint16_t DiskLoadP3_PsFileNameBox_5_SelNum;
+    uint16_t DiskLoadP3_PsFileNameBox_5_PaintOk;
+    uint16_t DiskLoadP3_PsFileNameBox_5_AicOk;
+    uint16_t DiskLoadP3_PsFileNameBox_6_SelNum;
+    uint16_t DiskLoadP3_PsFileNameBox_6_PaintOk;
+    uint16_t DiskLoadP3_PsFileNameBox_6_AicOk;
+    uint16_t DiskLoadP3_PsFileNameBox_7_SelNum;
+    uint16_t DiskLoadP3_PsFileNameBox_7_PaintOk;
+    uint16_t DiskLoadP3_PsFileNameBox_7_AicOk;
+    uint16_t SingleBankToggle_OnOff;
+    uint32_t DiskLoadSMF_Window;
+    uint16_t Tech_AcTitleMenu_Selected;
+    uint16_t DiskLoadSMF_PsFileNameBox_SelNum;
+    uint16_t DiskLoadSMF_PsFileNameBox_PaintOk;
+    uint16_t DiskLoadSMF_PsFileNameBox_AicOk;
+    uint16_t DiskLoadSMF_PsWindowToggle_OnOff;
+    uint16_t DiskLoadSMF_PsFileNameBox_2_SelNum;
+    uint16_t DiskLoadSMF_PsFileNameBox_2_PaintOk;
+    uint16_t DiskLoadSMF_PsFileNameBox_2_AicOk;
+    uint16_t DiskLoadSMF_PsFileNameBox_3_SelNum;
+    uint16_t DiskLoadSMF_PsFileNameBox_3_PaintOk;
+    uint16_t DiskLoadSMF_PsFileNameBox_3_AicOk;
+    uint16_t DiskLoadSMF_PsFileNameBox_4_SelNum;
+    uint16_t DiskLoadSMF_PsFileNameBox_4_PaintOk;
+    uint16_t DiskLoadSMF_PsFileNameBox_4_AicOk;
+    uint32_t SongNameSmfLdWin_Parent;
+    uint32_t SongNameSmfLdWin_Child;
+    uint16_t SongNameSmfLdWin_AcParaStrBox_PaintOk;
+    uint32_t DiskInfoSmfLdWin_Parent;
+    uint32_t DiskInfoSmfLdWin_Child;
+    uint16_t DiskInfoSmfLdWin_AcParaStrBox_PaintOk;
+    uint16_t DiskInfoSmfLdWin_AcParaStrBox_2_PaintOk;
+    uint32_t CmpSingleLoad_Window;
+    uint16_t CmpSingleLoad_PsFileNameBox_SelNum;
+    uint16_t CmpSingleLoad_PsFileNameBox_PaintOk;
+    uint16_t CmpSingleLoad_PsFileNameBox_AicOk;
+    uint16_t CmpSingleLoad_PsFileNameBox_2_SelNum;
+    uint16_t CmpSingleLoad_PsFileNameBox_2_PaintOk;
+    uint16_t CmpSingleLoad_PsFileNameBox_2_AicOk;
+    uint16_t CmpSingleLoad_PsFileNameBox_3_SelNum;
+    uint16_t CmpSingleLoad_PsFileNameBox_3_PaintOk;
+    uint16_t CmpSingleLoad_PsFileNameBox_3_AicOk;
+    uint16_t CmpSingleLoad_AcMonoIndexToggle_OnOff;
+    uint16_t CmpSingleLoad_PsFileNameBox_4_SelNum;
+    uint16_t CmpSingleLoad_PsFileNameBox_4_PaintOk;
+    uint16_t CmpSingleLoad_PsFileNameBox_4_AicOk;
+    uint16_t CmpSingleLoad_PsFileNameBox_5_SelNum;
+    uint16_t CmpSingleLoad_PsFileNameBox_5_PaintOk;
+    uint16_t CmpSingleLoad_PsFileNameBox_5_AicOk;
+    uint16_t CmpSingleLoad_PsFileNameBox_6_SelNum;
+    uint16_t CmpSingleLoad_PsFileNameBox_6_PaintOk;
+    uint16_t CmpSingleLoad_PsFileNameBox_6_AicOk;
+    uint16_t CmpSingleLoad_PsFileNameBox_7_SelNum;
+    uint16_t CmpSingleLoad_PsFileNameBox_7_PaintOk;
+    uint16_t CmpSingleLoad_PsFileNameBox_7_AicOk;
+    uint32_t DiskSaveMenu_Window;
+    uint16_t TechnicsFormat_AcTtlJgBox_Selected;
+    uint16_t SmfFormat_AcTtlJgBox_Selected;
+    uint32_t DiskSave_Window;
+    uint16_t DiskSavePage_Page;
+    uint32_t DiskSaveP1_Parent;
+    uint32_t DiskSaveP1_Child;
+    uint16_t DiskSaveP1_AcParaStrBox_PaintOk;
+    uint16_t DiskSaveP1_AcParaStrBox_2_PaintOk;
+    uint16_t Name_AcTitleMenu_Selected;
+    uint16_t DiskSaveP1_PsFileNameBox_SelNum;
+    uint16_t DiskSaveP1_PsFileNameBox_PaintOk;
+    uint16_t DiskSaveP1_PsFileNameBox_AicOk;
+    uint16_t DiskSaveP1_AcFileSfxBox_PaintOk;
+    uint32_t DiskSaveP2_Parent;
+    uint32_t DiskSaveP2_Child;
+    uint16_t DiskSaveP2_PsFileNameBox_SelNum;
+    uint16_t DiskSaveP2_PsFileNameBox_PaintOk;
+    uint16_t DiskSaveP2_PsFileNameBox_AicOk;
+    uint16_t DiskSaveP2_AcParaStrBox_PaintOk;
+    uint32_t DiskSaveP3_Parent;
+    uint32_t DiskSaveP3_Child;
+    uint16_t DiskSaveP3_PsFileNameBox_SelNum;
+    uint16_t DiskSaveP3_PsFileNameBox_PaintOk;
+    uint16_t DiskSaveP3_PsFileNameBox_AicOk;
+    uint16_t DiskSaveP3_AcParaStrBox_PaintOk;
+    uint32_t DiskSmfSave_Window;
+    uint16_t DiskSmfSave_PsFileNameBox_SelNum;
+    uint16_t DiskSmfSave_PsFileNameBox_PaintOk;
+    uint16_t DiskSmfSave_PsFileNameBox_AicOk;
+    uint16_t DiskSmfSave_AcMonoIndexToggle_OnOff;
+    uint16_t DiskSmfSave_AcMonoIndexToggle_2_OnOff;
+    uint16_t Name_AcTitleMenu_2_Selected;
+    uint16_t DiskSmfSave_AcParaStrBox_PaintOk;
+    uint16_t DiskSmfSave_PsFileNameBox_2_SelNum;
+    uint16_t DiskSmfSave_PsFileNameBox_2_PaintOk;
+    uint16_t DiskSmfSave_PsFileNameBox_2_AicOk;
+    uint16_t DiskSmfSave_PsFileNameBox_3_SelNum;
+    uint16_t DiskSmfSave_PsFileNameBox_3_PaintOk;
+    uint16_t DiskSmfSave_PsFileNameBox_3_AicOk;
+    uint16_t DiskSmfSave_PsFileNameBox_4_SelNum;
+    uint16_t DiskSmfSave_PsFileNameBox_4_PaintOk;
+    uint16_t DiskSmfSave_PsFileNameBox_4_AicOk;
+    uint32_t DiskSmfDirectPlay_Window;
+    uint16_t DiskSmfDirectPlay_PsFileNameBox_SelNum;
+    uint16_t DiskSmfDirectPlay_PsFileNameBox_PaintOk;
+    uint16_t DiskSmfDirectPlay_PsFileNameBox_AicOk;
+    uint16_t DiskSmfDirectPlay_PsFileNameBox_2_SelNum;
+    uint16_t DiskSmfDirectPlay_PsFileNameBox_2_PaintOk;
+    uint16_t DiskSmfDirectPlay_PsFileNameBox_2_AicOk;
+    uint16_t DiskSmfDirectPlay_PsWindowToggle_OnOff;
+    uint16_t DiskSmfDirectPlay_AcMonoIndexToggle_OnOff;
+    uint16_t DiskSmfDirectPlay_AcMonoIndexToggle_2_OnOff;
+    uint16_t SmfMidiOut_OnOff;
+    uint32_t SongNameDPSmfWin_Parent;
+    uint32_t SongNameDPSmfWin_Child;
+    uint16_t SongNameDPSmfWin_AcParaStrBox_PaintOk;
+    uint32_t DiskInfoDPSmfWin_Parent;
+    uint32_t DiskInfoDPSmfWin_Child;
+    uint16_t DiskInfoDPSmfWin_AcParaStrBox_PaintOk;
+    uint16_t DiskInfoDPSmfWin_AcParaStrBox_2_PaintOk;
+    uint32_t DiskDocDirectPlay_Window;
+    uint16_t DiskDocDirectPlay_PsFileNameBox_SelNum;
+    uint16_t DiskDocDirectPlay_PsFileNameBox_PaintOk;
+    uint16_t DiskDocDirectPlay_PsFileNameBox_AicOk;
+    uint16_t DiskDocDirectPlay_PsFileNameBox_2_SelNum;
+    uint16_t DiskDocDirectPlay_PsFileNameBox_2_PaintOk;
+    uint16_t DiskDocDirectPlay_PsFileNameBox_2_AicOk;
+    uint16_t DiskDocDirectPlay_AcMonoIndexToggle_OnOff;
+    uint16_t DiskDocDirectPlay_AcParaStrBox_PaintOk;
+    uint32_t DiskPdDirectPlay_Window;
+    uint16_t DiskPdDirectPlay_PsFileNameBox_SelNum;
+    uint16_t DiskPdDirectPlay_PsFileNameBox_PaintOk;
+    uint16_t DiskPdDirectPlay_PsFileNameBox_AicOk;
+    uint16_t DiskPdDirectPlay_PsFileNameBox_2_SelNum;
+    uint16_t DiskPdDirectPlay_PsFileNameBox_2_PaintOk;
+    uint16_t DiskPdDirectPlay_PsFileNameBox_2_AicOk;
+    uint16_t DiskPdDirectPlay_AcMonoIndexToggle_OnOff;
+    uint32_t DiskSongMedley_Window;
+    uint16_t DiskSongMedley_PsFileNameBox_SelNum;
+    uint16_t DiskSongMedley_PsFileNameBox_PaintOk;
+    uint16_t DiskSongMedley_PsFileNameBox_AicOk;
+    uint16_t DiskSongMedley_PsFileNameBox_2_SelNum;
+    uint16_t DiskSongMedley_PsFileNameBox_2_PaintOk;
+    uint16_t DiskSongMedley_PsFileNameBox_2_AicOk;
+    uint16_t DiskSongMedley_PsFileNameBox_3_SelNum;
+    uint16_t DiskSongMedley_PsFileNameBox_3_PaintOk;
+    uint16_t DiskSongMedley_PsFileNameBox_3_AicOk;
+    uint16_t SongMedleyDiskName_PaintOk;
+    uint16_t SongMedleyDiskInfo_PaintOk;
+    uint16_t DiskSongMedley_AcMonoIndexToggle_OnOff;
+    uint16_t DiskSongMedley_AcMonoIndexToggle_2_OnOff;
+    uint32_t DiskUtility_Window;
+    uint16_t Smf_AcTitleMenu_2_Selected;
+    uint16_t DiskUtility_AcTitleMenu_Selected;
+    uint16_t DiskUtility_AcScreenMenu_Selected;
+    uint16_t COPY_AcScreenMenu_Selected;
+    uint16_t DiskUtility_AcParaStrBox_PaintOk;
+    uint16_t DiskUtility_AcParaStrBox_2_PaintOk;
+    uint16_t DiskUtility_PsFileNameBox_SelNum;
+    uint16_t DiskUtility_PsFileNameBox_PaintOk;
+    uint16_t DiskUtility_PsFileNameBox_AicOk;
+    uint32_t FileRename_Window;
+    uint32_t DiskFormat_Window;
+    uint32_t DiskUtilitySMF_Window;
+    uint16_t Tech_AcTitleMenu_2_Selected;
+    uint16_t DiskUtilitySMF_PsFileNameBox_SelNum;
+    uint16_t DiskUtilitySMF_PsFileNameBox_PaintOk;
+    uint16_t DiskUtilitySMF_PsFileNameBox_AicOk;
+    uint16_t DiskUtilitySMF_PsWindowToggle_OnOff;
+    uint16_t DiskUtilitySMF_AcTitleMenu_Selected;
+    uint16_t DiskUtilitySMF_AcScreenMenu_Selected;
+    uint32_t DiskInfoWin_Parent;
+    uint32_t DiskInfoWin_Child;
+    uint16_t DiskInfoWin_AcParaStrBox_PaintOk;
+    uint16_t DiskInfoWin_AcParaStrBox_2_PaintOk;
+    uint32_t SongNameWin_Parent;
+    uint32_t SongNameWin_Child;
+    uint16_t SongNameWin_AcParaStrBox_PaintOk;
+    uint32_t DiskFormatNamingWin_Parent;
+    uint32_t DiskFormatNamingWin_Child;
+    uint32_t DiskFormatSureWin_Parent;
+    uint32_t DiskFormatSureWin_Child;
+    uint32_t DiskFormatSelectWin_Parent;
+    uint32_t DiskFormatSelectWin_Child;
+    uint16_t KByteFormatDd_VwMenuBox_Selected;
+    uint16_t MByteFormatHd_VwMenuBox_Selected;
+    uint32_t FileCopy_Window;
+    uint16_t FileCopy_AcParaStrBox_PaintOk;
+    uint16_t FileCopy_PsFileNameBox_SelNum;
+    uint16_t FileCopy_PsFileNameBox_PaintOk;
+    uint16_t FileCopy_PsFileNameBox_AicOk;
+    uint32_t FileRenameSMF_Window;
+    uint32_t DiskDeleteSureWin_Parent;
+    uint32_t DiskDeleteSureWin_Child;
+    uint32_t DiskDeleteSureScr_Window;
+    uint32_t DiskSaveSureScr_Window;
+    uint32_t DiskSetup_Window;
+    uint16_t DiskSetup_AcRamEditBox_Selected;
+    uint32_t DiskSetup_AcRamEditBox_Value;
+    uint16_t DiskSetup_AcBitEditBox_Selected;
+    uint16_t DiskSetup_AcBitEditBox_Value;
+} Cheap_DiskMenuWorkCells_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t SliderBitmap[9];
+    uint16_t Unreferenced;
+} DrawbarBitmap_SliderBitmapPtrs_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t class_;
     uint16_t super;
@@ -1700,391 +2056,43 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0f3c;
     uint16_t field_0f3e;
     uint16_t field_0f40;
-    uint32_t ptrs_4[4];  /* 4 pointers */
-    uint16_t field_0f52;
-    uint32_t ptrs_5[9];  /* 9 pointers */
-    uint16_t field_0f78;
-    uint16_t field_0f7a;
-    uint16_t DiskMenu_Window;
-    uint16_t field_0f7e;
-    uint16_t StyleConvert_AcTitleMenu_Selected;
-    uint16_t field_0f82;
-    uint16_t Preferences_AcTitleMenu_Selected;
-    uint16_t Save_AcTitleMenu_Selected;
-    uint16_t DiskTools_AcTtlJgBox_Selected;
-    uint8_t LOAD_AcTtlJgBox_Selected[2];
-    uint8_t DirectPlay_AcTtlJgBox_Selected[2];
-    uint8_t SongMedley_AcTtlJgBox_Selected[2];
-    uint16_t IntSongMedley_Window;
-    uint16_t field_0f92;
-    uint8_t IntSongMedley_PsFileNameBox_Sel_num[2];
-    uint8_t IntSongMedley_PsFileNameBox_Paintok[2];
-    uint8_t IntSongMedley_PsFileNameBox_Aicok[2];
-    uint16_t IntSongMedley_PsFileNameBox_2_Sel_num;
-    uint8_t IntSongMedley_PsFileNameBox_2_Paintok[2];
-    uint8_t IntSongMedley_PsFileNameBox_2_Aicok[2];
-    uint8_t IntSongMedley_AcMonoIndexToggle_Onoff[2];
-    uint16_t DiskSaveName_Window;
-    uint16_t field_0fa4;
-    uint16_t ComposerLoad_Window;
-    uint16_t field_0fa8;
-    uint8_t ComposerLoad_PsFileNameBox_Sel_num[2];
-    uint8_t ComposerLoad_PsFileNameBox_Paintok[2];
-    uint8_t ComposerLoad_PsFileNameBox_Aicok[2];
-    uint8_t ComposerLoad_AcParaStrBox_Paintok[2];
-    uint8_t ComposerLoad_AcParaStrBox_2_Paintok[2];
-    uint16_t DiskWaitWin_Parent;
-    uint16_t field_0fb6;
-    uint16_t DiskWaitWin_Child;
-    uint16_t field_0fba;
-    uint8_t DiskWaitWin_AcRotStrBox_Paintok[2];
-    uint16_t DiskSaveNameSMF_Window;
-    uint16_t field_0fc0;
-    uint16_t WallpaperLoad_Window;
-    uint16_t field_0fc4;
-    uint8_t WallpaperLoad_AcParaStrBox_Paintok[2];
-    uint8_t WallpaperLoad_AcParaStrBox_2_Paintok[2];
-    uint8_t WallpaperLoad_PsFileNameBox_Sel_num[2];
-    uint8_t WallpaperLoad_PsFileNameBox_Paintok[2];
-    uint8_t WallpaperLoad_PsFileNameBox_Aicok[2];
-    uint16_t DiskSaveSureWin_Parent;
-    uint16_t field_0fd2;
-    uint16_t DiskSaveSureWin_Child;
-    uint16_t field_0fd6;
-    uint16_t PasswordWin_Parent;
-    uint16_t field_0fda;
-    uint16_t PasswordWin_Child;
-    uint16_t field_0fde;
-    uint16_t CheckPasswordWin_Parent;
-    uint16_t field_0fe2;
-    uint16_t CheckPasswordWin_Child;
-    uint16_t field_0fe6;
-    uint16_t DiskLoad_Window;
-    uint16_t field_0fea;
-    uint16_t DiskLoadPage_Page;
-    uint16_t DiskLoadP1_Parent;
-    uint16_t field_0ff0;
-    uint16_t DiskLoadP1_Child;
-    uint16_t field_0ff4;
-    uint8_t DiskLoadP1_PsFileNameBox_Sel_num[2];
-    uint8_t DiskLoadP1_PsFileNameBox_Paintok[2];
-    uint16_t DiskLoadP1_PsFileNameBox_Aicok;
-    uint8_t DiskLoadP1_AcFileSfxBox_Paintok[2];
-    uint8_t Smf_AcTitleMenu_Selected[2];
-    uint8_t DiskLoadP1_AcParaStrBox_Paintok[2];
-    uint8_t DiskLoadP1_AcParaStrBox_2_Paintok[2];
-    uint16_t DiskLoadP2_Parent;
-    uint16_t field_1006;
-    uint16_t DiskLoadP2_Child;
-    uint16_t field_100a;
-    uint8_t DiskLoadP2_AcParaStrBox_Paintok[2];
-    uint16_t DiskLoadP2_PsFileNameBox_Sel_num;
-    uint8_t DiskLoadP2_PsFileNameBox_Paintok[2];
-    uint16_t DiskLoadP2_PsFileNameBox_Aicok;
-    uint16_t DiskLoadP3_Parent;
-    uint16_t field_1016;
-    uint16_t DiskLoadP3_Child;
-    uint16_t field_101a;
-    uint16_t DiskLoadP3_PsFileNameBox_Sel_num;
-    uint8_t DiskLoadP3_PsFileNameBox_Paintok[2];
-    uint16_t DiskLoadP3_PsFileNameBox_Aicok;
-    uint8_t DiskLoadP3_AcParaStrBox_Paintok[2];
-    uint16_t DiskLoadP3_PsFileNameBox_2_Sel_num;
-    uint8_t DiskLoadP3_PsFileNameBox_2_Paintok[2];
-    uint16_t DiskLoadP3_PsFileNameBox_2_Aicok;
-    uint16_t DiskLoadP3_PsFileNameBox_3_Sel_num;
-    uint8_t DiskLoadP3_PsFileNameBox_3_Paintok[2];
-    uint16_t DiskLoadP3_PsFileNameBox_3_Aicok;
-    uint16_t DiskLoadP3_PsFileNameBox_4_Sel_num;
-    uint8_t DiskLoadP3_PsFileNameBox_4_Paintok[2];
-    uint16_t DiskLoadP3_PsFileNameBox_4_Aicok;
-    uint16_t DiskLoadP3_PsFileNameBox_5_Sel_num;
-    uint8_t DiskLoadP3_PsFileNameBox_5_Paintok[2];
-    uint16_t DiskLoadP3_PsFileNameBox_5_Aicok;
-    uint16_t DiskLoadP3_PsFileNameBox_6_Sel_num;
-    uint8_t DiskLoadP3_PsFileNameBox_6_Paintok[2];
-    uint16_t DiskLoadP3_PsFileNameBox_6_Aicok;
-    uint16_t DiskLoadP3_PsFileNameBox_7_Sel_num;
-    uint8_t DiskLoadP3_PsFileNameBox_7_Paintok[2];
-    uint16_t DiskLoadP3_PsFileNameBox_7_Aicok;
-    uint8_t pad_189[2];  /* zero padding */
-    uint16_t DiskLoadSMF_Window;
-    uint16_t field_104c;
-    uint8_t Tech_AcTitleMenu_Selected[2];
-    uint8_t DiskLoadSMF_PsFileNameBox_Sel_num[2];
-    uint8_t DiskLoadSMF_PsFileNameBox_Paintok[2];
-    uint16_t DiskLoadSMF_PsFileNameBox_Aicok;
-    uint8_t DiskLoadSMF_PsWindowToggle_Onoff[2];
-    uint16_t DiskLoadSMF_PsFileNameBox_2_Sel_num;
-    uint8_t DiskLoadSMF_PsFileNameBox_2_Paintok[2];
-    uint16_t DiskLoadSMF_PsFileNameBox_2_Aicok;
-    uint16_t DiskLoadSMF_PsFileNameBox_3_Sel_num;
-    uint8_t DiskLoadSMF_PsFileNameBox_3_Paintok[2];
-    uint16_t DiskLoadSMF_PsFileNameBox_3_Aicok;
-    uint16_t DiskLoadSMF_PsFileNameBox_4_Sel_num;
-    uint8_t DiskLoadSMF_PsFileNameBox_4_Paintok[2];
-    uint16_t DiskLoadSMF_PsFileNameBox_4_Aicok;
-    uint16_t SongNameSmfLdWin_Parent;
-    uint16_t field_106c;
-    uint16_t SongNameSmfLdWin_Child;
-    uint16_t field_1070;
-    uint8_t SongNameSmfLdWin_AcParaStrBox_Paintok[2];
-    uint16_t DiskInfoSmfLdWin_Parent;
-    uint16_t field_1076;
-    uint16_t DiskInfoSmfLdWin_Child;
-    uint16_t field_107a;
-    uint8_t DiskInfoSmfLdWin_AcParaStrBox_Paintok[2];
-    uint8_t DiskInfoSmfLdWin_AcParaStrBox_2_Paintok[2];
-    uint16_t CmpSingleLoad_Window;
-    uint16_t field_1082;
-    uint16_t CmpSingleLoad_PsFileNameBox_Sel_num;
-    uint8_t CmpSingleLoad_PsFileNameBox_Paintok[2];
-    uint8_t CmpSingleLoad_PsFileNameBox_Aicok[2];
-    uint16_t CmpSingleLoad_PsFileNameBox_2_Sel_num;
-    uint8_t CmpSingleLoad_PsFileNameBox_2_Paintok[2];
-    uint8_t CmpSingleLoad_PsFileNameBox_2_Aicok[2];
-    uint16_t CmpSingleLoad_PsFileNameBox_3_Sel_num;
-    uint8_t CmpSingleLoad_PsFileNameBox_3_Paintok[2];
-    uint8_t CmpSingleLoad_PsFileNameBox_3_Aicok[2];
-    uint8_t CmpSingleLoad_AcMonoIndexToggle_Onoff[2];
-    uint16_t CmpSingleLoad_PsFileNameBox_4_Sel_num;
-    uint8_t CmpSingleLoad_PsFileNameBox_4_Paintok[2];
-    uint8_t CmpSingleLoad_PsFileNameBox_4_Aicok[2];
-    uint16_t CmpSingleLoad_PsFileNameBox_5_Sel_num;
-    uint8_t CmpSingleLoad_PsFileNameBox_5_Paintok[2];
-    uint8_t CmpSingleLoad_PsFileNameBox_5_Aicok[2];
-    uint16_t CmpSingleLoad_PsFileNameBox_6_Sel_num;
-    uint8_t CmpSingleLoad_PsFileNameBox_6_Paintok[2];
-    uint8_t CmpSingleLoad_PsFileNameBox_6_Aicok[2];
-    uint16_t CmpSingleLoad_PsFileNameBox_7_Sel_num;
-    uint8_t CmpSingleLoad_PsFileNameBox_7_Paintok[2];
-    uint8_t CmpSingleLoad_PsFileNameBox_7_Aicok[2];
-    uint16_t DiskSaveMenu_Window;
-    uint16_t field_10b2;
-    uint8_t TechnicsFormat_AcTtlJgBox_Selected[2];
-    uint8_t SmfFormat_AcTtlJgBox_Selected[2];
-    uint16_t DiskSave_Window;
-    uint16_t field_10ba;
-    uint16_t DiskSavePage_Page;
-    uint16_t DiskSaveP1_Parent;
-    uint16_t field_10c0;
-    uint16_t DiskSaveP1_Child;
-    uint16_t field_10c4;
-    uint8_t DiskSaveP1_AcParaStrBox_Paintok[2];
-    uint8_t DiskSaveP1_AcParaStrBox_2_Paintok[2];
-    uint8_t Name_AcTitleMenu_Selected[2];
-    uint8_t DiskSaveP1_PsFileNameBox_Sel_num[2];
-    uint8_t DiskSaveP1_PsFileNameBox_Paintok[2];
-    uint16_t DiskSaveP1_PsFileNameBox_Aicok;
-    uint8_t DiskSaveP1_AcFileSfxBox_Paintok[2];
-    uint16_t DiskSaveP2_Parent;
-    uint16_t field_10d6;
-    uint16_t DiskSaveP2_Child;
-    uint16_t field_10da;
-    uint16_t DiskSaveP2_PsFileNameBox_Sel_num;
-    uint8_t DiskSaveP2_PsFileNameBox_Paintok[2];
-    uint16_t DiskSaveP2_PsFileNameBox_Aicok;
-    uint8_t DiskSaveP2_AcParaStrBox_Paintok[2];
-    uint16_t DiskSaveP3_Parent;
-    uint16_t field_10e6;
-    uint16_t DiskSaveP3_Child;
-    uint16_t field_10ea;
-    uint8_t DiskSaveP3_PsFileNameBox_Sel_num[2];
-    uint8_t DiskSaveP3_PsFileNameBox_Paintok[2];
-    uint16_t DiskSaveP3_PsFileNameBox_Aicok;
-    uint8_t DiskSaveP3_AcParaStrBox_Paintok[2];
-    uint16_t DiskSmfSave_Window;
-    uint16_t field_10f6;
-    uint8_t DiskSmfSave_PsFileNameBox_Sel_num[2];
-    uint8_t DiskSmfSave_PsFileNameBox_Paintok[2];
-    uint16_t DiskSmfSave_PsFileNameBox_Aicok;
-    uint8_t DiskSmfSave_AcMonoIndexToggle_Onoff[2];
-    uint8_t DiskSmfSave_AcMonoIndexToggle_2_Onoff[2];
-    uint8_t Name_AcTitleMenu_2_Selected[2];
-    uint8_t DiskSmfSave_AcParaStrBox_Paintok[2];
-    uint16_t DiskSmfSave_PsFileNameBox_2_Sel_num;
-    uint8_t DiskSmfSave_PsFileNameBox_2_Paintok[2];
-    uint16_t DiskSmfSave_PsFileNameBox_2_Aicok;
-    uint16_t DiskSmfSave_PsFileNameBox_3_Sel_num;
-    uint8_t DiskSmfSave_PsFileNameBox_3_Paintok[2];
-    uint16_t DiskSmfSave_PsFileNameBox_3_Aicok;
-    uint16_t DiskSmfSave_PsFileNameBox_4_Sel_num;
-    uint8_t DiskSmfSave_PsFileNameBox_4_Paintok[2];
-    uint16_t DiskSmfSave_PsFileNameBox_4_Aicok;
-    uint16_t DiskSmfDirectPlay_Window;
-    uint16_t field_111a;
-    uint8_t DiskSmfDirectPlay_PsFileNameBox_Sel_num[2];
-    uint8_t DiskSmfDirectPlay_PsFileNameBox_Paintok[2];
-    uint16_t DiskSmfDirectPlay_PsFileNameBox_Aicok;
-    uint16_t DiskSmfDirectPlay_PsFileNameBox_2_Sel_num;
-    uint8_t DiskSmfDirectPlay_PsFileNameBox_2_Paintok[2];
-    uint16_t DiskSmfDirectPlay_PsFileNameBox_2_Aicok;
-    uint8_t DiskSmfDirectPlay_PsWindowToggle_Onoff[2];
-    uint8_t DiskSmfDirectPlay_AcMonoIndexToggle_Onoff[2];
-    uint16_t DiskSmfDirectPlay_AcMonoIndexToggle_2_Onoff;
-    uint8_t SmfMidiOut_Onoff[2];
-    uint16_t SongNameDPSmfWin_Parent;
-    uint16_t field_1132;
-    uint16_t SongNameDPSmfWin_Child;
-    uint16_t field_1136;
-    uint8_t SongNameDPSmfWin_AcParaStrBox_Paintok[2];
-    uint16_t DiskInfoDPSmfWin_Parent;
-    uint16_t field_113c;
-    uint16_t DiskInfoDPSmfWin_Child;
-    uint16_t field_1140;
-    uint8_t DiskInfoDPSmfWin_AcParaStrBox_Paintok[2];
-    uint8_t DiskInfoDPSmfWin_AcParaStrBox_2_Paintok[2];
-    uint16_t DiskDocDirectPlay_Window;
-    uint16_t field_1148;
-    uint8_t DiskDocDirectPlay_PsFileNameBox_Sel_num[2];
-    uint8_t DiskDocDirectPlay_PsFileNameBox_Paintok[2];
-    uint8_t DiskDocDirectPlay_PsFileNameBox_Aicok[2];
-    uint16_t DiskDocDirectPlay_PsFileNameBox_2_Sel_num;
-    uint8_t DiskDocDirectPlay_PsFileNameBox_2_Paintok[2];
-    uint8_t DiskDocDirectPlay_PsFileNameBox_2_Aicok[2];
-    uint8_t DiskDocDirectPlay_AcMonoIndexToggle_Onoff[2];
-    uint8_t DiskDocDirectPlay_AcParaStrBox_Paintok[2];
-    uint16_t DiskPdDirectPlay_Window;
-    uint16_t field_115c;
-    uint8_t DiskPdDirectPlay_PsFileNameBox_Sel_num[2];
-    uint8_t DiskPdDirectPlay_PsFileNameBox_Paintok[2];
-    uint8_t DiskPdDirectPlay_PsFileNameBox_Aicok[2];
-    uint16_t DiskPdDirectPlay_PsFileNameBox_2_Sel_num;
-    uint8_t DiskPdDirectPlay_PsFileNameBox_2_Paintok[2];
-    uint8_t DiskPdDirectPlay_PsFileNameBox_2_Aicok[2];
-    uint8_t DiskPdDirectPlay_AcMonoIndexToggle_Onoff[2];
-    uint16_t DiskSongMedley_Window;
-    uint16_t field_116e;
-    uint8_t DiskSongMedley_PsFileNameBox_Sel_num[2];
-    uint8_t DiskSongMedley_PsFileNameBox_Paintok[2];
-    uint16_t DiskSongMedley_PsFileNameBox_Aicok;
-    uint16_t DiskSongMedley_PsFileNameBox_2_Sel_num;
-    uint8_t DiskSongMedley_PsFileNameBox_2_Paintok[2];
-    uint16_t DiskSongMedley_PsFileNameBox_2_Aicok;
-    uint16_t DiskSongMedley_PsFileNameBox_3_Sel_num;
-    uint8_t DiskSongMedley_PsFileNameBox_3_Paintok[2];
-    uint16_t DiskSongMedley_PsFileNameBox_3_Aicok;
-    uint8_t SongMedleyDiskName_Paintok[2];
-    uint8_t SongMedleyDiskInfo_Paintok[2];
-    uint8_t DiskSongMedley_AcMonoIndexToggle_Onoff[2];
-    uint8_t DiskSongMedley_AcMonoIndexToggle_2_Onoff[2];
-    uint16_t DiskUtility_Window;
-    uint16_t field_118c;
-    uint8_t Smf_AcTitleMenu_2_Selected[2];
-    uint8_t DiskUtility_AcTitleMenu_Selected[2];
-    uint8_t DiskUtility_AcScreenMenu_Selected[2];
-    uint8_t COPY_AcScreenMenu_Selected[2];
-    uint8_t DiskUtility_AcParaStrBox_Paintok[2];
-    uint8_t DiskUtility_AcParaStrBox_2_Paintok[2];
-    uint8_t DiskUtility_PsFileNameBox_Sel_num[2];
-    uint8_t DiskUtility_PsFileNameBox_Paintok[2];
-    uint16_t DiskUtility_PsFileNameBox_Aicok;
-    uint16_t FileRename_Window;
-    uint16_t field_11a2;
-    uint16_t DiskFormat_Window;
-    uint16_t field_11a6;
-    uint16_t DiskUtilitySMF_Window;
-    uint16_t field_11aa;
-    uint8_t Tech_AcTitleMenu_2_Selected[2];
-    uint8_t DiskUtilitySMF_PsFileNameBox_Sel_num[2];
-    uint8_t DiskUtilitySMF_PsFileNameBox_Paintok[2];
-    uint8_t DiskUtilitySMF_PsFileNameBox_Aicok[2];
-    uint8_t DiskUtilitySMF_PsWindowToggle_Onoff[2];
-    uint8_t DiskUtilitySMF_AcTitleMenu_Selected[2];
-    uint8_t DiskUtilitySMF_AcScreenMenu_Selected[2];
-    uint16_t DiskInfoWin_Parent;
-    uint16_t field_11bc;
-    uint16_t DiskInfoWin_Child;
-    uint16_t field_11c0;
-    uint8_t DiskInfoWin_AcParaStrBox_Paintok[2];
-    uint8_t DiskInfoWin_AcParaStrBox_2_Paintok[2];
-    uint16_t SongNameWin_Parent;
-    uint16_t field_11c8;
-    uint16_t SongNameWin_Child;
-    uint16_t field_11cc;
-    uint8_t SongNameWin_AcParaStrBox_Paintok[2];
-    uint16_t DiskFormatNamingWin_Parent;
-    uint16_t field_11d2;
-    uint16_t DiskFormatNamingWin_Child;
-    uint16_t field_11d6;
-    uint16_t DiskFormatSureWin_Parent;
-    uint16_t field_11da;
-    uint16_t DiskFormatSureWin_Child;
-    uint16_t field_11de;
-    uint16_t DiskFormatSelectWin_Parent;
-    uint16_t field_11e2;
-    uint16_t DiskFormatSelectWin_Child;
-    uint16_t field_11e6;
-    uint8_t KByteFormatDd_VwMenuBox_Selected[2];
-    uint8_t MByteFormatHd_VwMenuBox_Selected[2];
-    uint16_t FileCopy_Window;
-    uint16_t field_11ee;
-    uint8_t FileCopy_AcParaStrBox_Paintok[2];
-    uint8_t FileCopy_PsFileNameBox_Sel_num[2];
-    uint8_t FileCopy_PsFileNameBox_Paintok[2];
-    uint8_t FileCopy_PsFileNameBox_Aicok[2];
-    uint16_t FileRenameSMF_Window;
-    uint16_t field_11fa;
-    uint16_t DiskDeleteSureWin_Parent;
-    uint16_t field_11fe;
-    uint16_t DiskDeleteSureWin_Child;
-    uint16_t field_1202;
-    uint16_t DiskDeleteSureScr_Window;
-    uint16_t field_1206;
-    uint16_t DiskSaveSureScr_Window;
-    uint16_t field_120a;
-    uint16_t DiskSetup_Window;
-    uint16_t field_120e;
-    uint16_t DiskSetup_AcRamEditBox_Selected;
-    uint8_t DiskSetup_DiskInsertOption_Value[4];
-    uint8_t DiskSetup_AcBitEditBox_Selected[2];
-    uint8_t DiskSetup_FileTypePriority_Value[2];
-    naka_menu_item_t w9;  /* NAKA_TYPE_MENU_ITEM */
-    uint16_t field_1250;
-    uint16_t field_1252;
-    char str_5[2];
-    uint16_t field_1256;
-    uint16_t field_1258;
-    char I_str[2];
-    uint8_t pad_237[2];  /* zero padding */
-    uint16_t field_125e;
-    char L_str[2];
-    uint16_t field_1262;
-    char str_8[2];
-    uint8_t pad_238[4];  /* zero padding */
-    uint32_t NakaStr_Bank_ptr;
-    uint32_t NakaStr_Single_ptr;
-    uint16_t field_1272;
-    uint16_t field_1274;
-    uint16_t field_1276;
-    uint16_t field_1278;
-    uint8_t pad_239[4];  /* zero padding */
-    uint16_t field_127e;
-    uint16_t field_1280;
-    uint16_t field_1282;
-    uint16_t field_1284;
-    uint8_t pad_240[2];  /* zero padding */
-    uint16_t field_1288;
-    uint8_t pad_241[2];  /* zero padding */
-    uint16_t field_128c;
-    uint8_t pad_242[8];  /* zero padding */
-    uint16_t field_1296;
-    uint16_t field_1298;
-    char WeAreTaianBoys_str[20];
-    uint8_t pad_243[2];  /* zero padding */
-    uint16_t field_12b0;
-    uint8_t pad_244[2];  /* zero padding */
-    uint16_t field_12b4;
-    uint8_t pad_245[2];  /* zero padding */
-    uint16_t field_12b8;
-    uint8_t pad_246[2];  /* zero padding */
-    uint16_t field_12bc;
-    uint16_t field_12be;
-    uint8_t pad_247[12];  /* zero padding */
-    uint32_t ptr_12cc;
-    uint32_t ptr_12d0;
-    char str_10[2];
-    char str_11[2];
+    uint8_t bytes_0f42[6];  /* 4 pointers */
+    /* 9 pointers */
+    /* zero padding */
+    /* NAKA_TYPE_MENU_ITEM */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* last 6 words (0x00FF) of the grid map TrackMixer_Init installs at RAM 0x3EBE8 */
+    uint16_t TrackMixer_GridRowMapEnd[6];
+    /* per-drawbar slider bitmap base (9 drawbars) + an unreferenced word */
+    DrawbarBitmap_SliderBitmapPtrs_t DrawbarBitmap_SliderBitmapPtrs;
+    /* current 256-byte record of the demo record chain; 0xFFFF = end */
+    uint16_t RecordChain_CurrentRecord;
+    /* InitializeCheap view work cells (disk menu, load/save, medley, disk tools, disk setup), power-on image */
+    Cheap_DiskMenuWorkCells_t Cheap_DiskMenuWorkCells;
+    /* AcTitleMenu view record "HardDiskMenu" kept in work RAM */
+    Cheap_HardDiskMenuView_t Cheap_HardDiskMenuView;
+    /* AcMonoIndexToggle view record "SingleBankToggle" kept in work RAM */
+    Cheap_SingleBankToggleView_t Cheap_SingleBankToggleView;
+    /* non-zero: the event and draw tasks yield to the key-scan task between items */
+    uint16_t KeyScan_EnabledFlag;
+    /* data-dial routing: enable, SetDialUp/Down target/event/parameter, focused view */
+    Dial_State_t Dial_State;
+    /* "We are Taian BOYS!" -- text NamingCheck returns for EVT_GET_STRING */
+    char NamingCheck_SampleText[20];
+    /* current/previous mode and title event values */
+    ModeTitle_State_t ModeTitle_State;
+    /* display state: dirty-rect enable, palette/wallpaper cache, current colours, blit mode */
+    Display_DrawState_t Display_DrawState;
     /* Naka_DrawbarDisplay_Table1: 32 pointers (cut from ptrs_6 by split_naka_pointer_arrays.py) */
     /* font names for the font-id property: CHARA1..CHARA5W, "", then NULLs */
     uint32_t FontIDProc_FontNameTable[32];
@@ -3474,815 +3482,31 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0f40 = 0x0011,
 
-    .ptrs_4 = {
-        0x00FF0010,
-        0x00FF00FF,
-        0x00FF00FF,
-        0x00FF00FF,
+    .bytes_0f42 = { 0x10, 0x00, 0xFF, 0x00, 0xFF, 0x00 },
+
+    .TrackMixer_GridRowMapEnd = {
+        0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF, 0x00FF,
     },
 
-    .field_0f52 = 0x00FF,
+    .DrawbarBitmap_SliderBitmapPtrs = { { NAKA_ADDR(Bitmap_DrawbarNumberedSlider_1), NAKA_ADDR(Bitmap_DrawbarNumberedSlider_1), NAKA_ADDR(Bitmap_DrawbarNumberedSlider_2), NAKA_ADDR(Bitmap_DrawbarNumberedSlider_2), NAKA_ADDR(Bitmap_DrawbarNumberedSlider_3), NAKA_ADDR(Bitmap_DrawbarNumberedSlider_2), NAKA_ADDR(Bitmap_DrawbarNumberedSlider_3), NAKA_ADDR(Bitmap_DrawbarNumberedSlider_3), NAKA_ADDR(Bitmap_DrawbarNumberedSlider_2) }, 0xFFFF },
 
-    .ptrs_5 = {
-        NAKA_ADDR(Bitmap_DrawbarNumberedSlider_1),
-        NAKA_ADDR(Bitmap_DrawbarNumberedSlider_1),
-        NAKA_ADDR(Bitmap_DrawbarNumberedSlider_2),
-        NAKA_ADDR(Bitmap_DrawbarNumberedSlider_2),
-        NAKA_ADDR(Bitmap_DrawbarNumberedSlider_3),
-        NAKA_ADDR(Bitmap_DrawbarNumberedSlider_2),
-        NAKA_ADDR(Bitmap_DrawbarNumberedSlider_3),
-        NAKA_ADDR(Bitmap_DrawbarNumberedSlider_3),
-        NAKA_ADDR(Bitmap_DrawbarNumberedSlider_2),
-    },
+    .RecordChain_CurrentRecord = 0xFFFF,
 
-    .field_0f78 = NAKA_NONE,
+    .Cheap_DiskMenuWorkCells = { 0xFFFFFFFF, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0xFFFF, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFF, 0x0000, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFF, 0x0000, 0x0001, 0x0000, 0xFFFF, 0x0000, 0x0001, 0xFFFF, 0x0000, 0x0001, 0xFFFF, 0x0000, 0x0001, 0xFFFF, 0x0000, 0x0001, 0xFFFF, 0x0000, 0x0001, 0xFFFF, 0x0000, 0x0001, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0001, 0x0000, 0xFFFF, 0x0000, 0x0001, 0xFFFF, 0x0000, 0x0001, 0xFFFF, 0x0000, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFF, 0x0000, 0x0000, 0xFFFF, 0x0000, 0x0000, 0xFFFF, 0x0000, 0x0000, 0x0000, 0xFFFF, 0x0000, 0x0000, 0xFFFF, 0x0000, 0x0000, 0xFFFF, 0x0000, 0x0000, 0xFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0001, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFF, 0x0000, 0x0001, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0001, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFF, 0x0000, 0x0001, 0xFFFF, 0x0000, 0x0001, 0xFFFF, 0x0000, 0x0001, 0xFFFFFFFF, 0x0000, 0x0000, 0x0001, 0xFFFF, 0x0000, 0x0001, 0x0000, 0x0000, 0x0001, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0xFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0xFFFF, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0001, 0xFFFF, 0x0000, 0x0001, 0xFFFF, 0x0000, 0x0001, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0001, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0000, 0x0000, 0xFFFFFFFF, 0x0000, 0x0000, 0x0000, 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x0001, 0x00000000, 0x0000, 0x0000 },
 
-    .field_0f7a = NAKA_NONE,
+    .Cheap_HardDiskMenuView = { 0x0160001D, 0x0000, 0xFFFF, 0x0003, 0x0001, 0x0000, { 163, 198, 311, 223 }, 0x00F5, 0x0000, 0x0000, 0x00000000, 0x00FF, 0x0000, 0x000C, 0x0003EC56, (NAKA_ADDR(NakaWidget_DiskMenu_1_AcTitleMenu) + 68), 0x01A0007F, 0x00000083 },
 
-    .DiskMenu_Window = NAKA_NONE,
+    .Cheap_SingleBankToggleView = { 0x01650005, 0x0034, 0xFFFF, 0xFFFF, 0x0049, 0x0000, { 259, 76, 311, 93 }, 0x00000000, NAKA_ADDR(NakaStr_Bank), NAKA_ADDR(NakaStr_Single), 0x0003ED1C, 0x0009, 0x0003 },
 
-    .field_0f7e = NAKA_NONE,
+    .KeyScan_EnabledFlag = 0x0000,
 
-    .StyleConvert_AcTitleMenu_Selected = 0x0001,
+    .Dial_State = { 0x0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x01C00000, 0x01C00000, 0x00000000, 0x00000000, 0xFFFFFFFF },
 
-    .field_0f82 = 0x0001,
+    .NamingCheck_SampleText = "We are Taian BOYS!\x00\xFF",
 
-    .Preferences_AcTitleMenu_Selected = 0x0001,
+    .ModeTitle_State = { 0x01800000, 0x01800000, 0x01A00000, 0x01A00000 },
 
-    .Save_AcTitleMenu_Selected = 0x0001,
-
-    .DiskTools_AcTtlJgBox_Selected = 0x0001,
-
-    .LOAD_AcTtlJgBox_Selected = { 0 },
-
-    .DirectPlay_AcTtlJgBox_Selected = { 0 },
-
-    .SongMedley_AcTtlJgBox_Selected = { 0 },
-
-    .IntSongMedley_Window = NAKA_NONE,
-
-    .field_0f92 = NAKA_NONE,
-
-    .IntSongMedley_PsFileNameBox_Sel_num = { 0 },
-
-    .IntSongMedley_PsFileNameBox_Paintok = { 0 },
-
-    .IntSongMedley_PsFileNameBox_Aicok = { 0 },
-
-    .IntSongMedley_PsFileNameBox_2_Sel_num = NAKA_NONE,
-
-    .IntSongMedley_PsFileNameBox_2_Paintok = { 0 },
-
-    .IntSongMedley_PsFileNameBox_2_Aicok = { 0 },
-
-    .IntSongMedley_AcMonoIndexToggle_Onoff = { 0 },
-
-    .DiskSaveName_Window = NAKA_NONE,
-
-    .field_0fa4 = NAKA_NONE,
-
-    .ComposerLoad_Window = NAKA_NONE,
-
-    .field_0fa8 = NAKA_NONE,
-
-    .ComposerLoad_PsFileNameBox_Sel_num = { 0 },
-
-    .ComposerLoad_PsFileNameBox_Paintok = { 0 },
-
-    .ComposerLoad_PsFileNameBox_Aicok = { 0 },
-
-    .ComposerLoad_AcParaStrBox_Paintok = { 0 },
-
-    .ComposerLoad_AcParaStrBox_2_Paintok = { 0 },
-
-    .DiskWaitWin_Parent = NAKA_NONE,
-
-    .field_0fb6 = NAKA_NONE,
-
-    .DiskWaitWin_Child = NAKA_NONE,
-
-    .field_0fba = NAKA_NONE,
-
-    .DiskWaitWin_AcRotStrBox_Paintok = { 0 },
-
-    .DiskSaveNameSMF_Window = NAKA_NONE,
-
-    .field_0fc0 = NAKA_NONE,
-
-    .WallpaperLoad_Window = NAKA_NONE,
-
-    .field_0fc4 = NAKA_NONE,
-
-    .WallpaperLoad_AcParaStrBox_Paintok = { 0 },
-
-    .WallpaperLoad_AcParaStrBox_2_Paintok = { 0 },
-
-    .WallpaperLoad_PsFileNameBox_Sel_num = { 0 },
-
-    .WallpaperLoad_PsFileNameBox_Paintok = { 0 },
-
-    .WallpaperLoad_PsFileNameBox_Aicok = { 0 },
-
-    .DiskSaveSureWin_Parent = NAKA_NONE,
-
-    .field_0fd2 = NAKA_NONE,
-
-    .DiskSaveSureWin_Child = NAKA_NONE,
-
-    .field_0fd6 = NAKA_NONE,
-
-    .PasswordWin_Parent = NAKA_NONE,
-
-    .field_0fda = NAKA_NONE,
-
-    .PasswordWin_Child = NAKA_NONE,
-
-    .field_0fde = NAKA_NONE,
-
-    .CheckPasswordWin_Parent = NAKA_NONE,
-
-    .field_0fe2 = NAKA_NONE,
-
-    .CheckPasswordWin_Child = NAKA_NONE,
-
-    .field_0fe6 = NAKA_NONE,
-
-    .DiskLoad_Window = NAKA_NONE,
-
-    .field_0fea = NAKA_NONE,
-
-    .DiskLoadPage_Page = 0x0001,
-
-    .DiskLoadP1_Parent = NAKA_NONE,
-
-    .field_0ff0 = NAKA_NONE,
-
-    .DiskLoadP1_Child = NAKA_NONE,
-
-    .field_0ff4 = NAKA_NONE,
-
-    .DiskLoadP1_PsFileNameBox_Sel_num = { 0 },
-
-    .DiskLoadP1_PsFileNameBox_Paintok = { 0 },
-
-    .DiskLoadP1_PsFileNameBox_Aicok = 0x0001,
-
-    .DiskLoadP1_AcFileSfxBox_Paintok = { 0 },
-
-    .Smf_AcTitleMenu_Selected = { 0 },
-
-    .DiskLoadP1_AcParaStrBox_Paintok = { 0 },
-
-    .DiskLoadP1_AcParaStrBox_2_Paintok = { 0 },
-
-    .DiskLoadP2_Parent = NAKA_NONE,
-
-    .field_1006 = NAKA_NONE,
-
-    .DiskLoadP2_Child = NAKA_NONE,
-
-    .field_100a = NAKA_NONE,
-
-    .DiskLoadP2_AcParaStrBox_Paintok = { 0 },
-
-    .DiskLoadP2_PsFileNameBox_Sel_num = NAKA_NONE,
-
-    .DiskLoadP2_PsFileNameBox_Paintok = { 0 },
-
-    .DiskLoadP2_PsFileNameBox_Aicok = 0x0001,
-
-    .DiskLoadP3_Parent = NAKA_NONE,
-
-    .field_1016 = NAKA_NONE,
-
-    .DiskLoadP3_Child = NAKA_NONE,
-
-    .field_101a = NAKA_NONE,
-
-    .DiskLoadP3_PsFileNameBox_Sel_num = NAKA_NONE,
-
-    .DiskLoadP3_PsFileNameBox_Paintok = { 0 },
-
-    .DiskLoadP3_PsFileNameBox_Aicok = 0x0001,
-
-    .DiskLoadP3_AcParaStrBox_Paintok = { 0 },
-
-    .DiskLoadP3_PsFileNameBox_2_Sel_num = NAKA_NONE,
-
-    .DiskLoadP3_PsFileNameBox_2_Paintok = { 0 },
-
-    .DiskLoadP3_PsFileNameBox_2_Aicok = 0x0001,
-
-    .DiskLoadP3_PsFileNameBox_3_Sel_num = NAKA_NONE,
-
-    .DiskLoadP3_PsFileNameBox_3_Paintok = { 0 },
-
-    .DiskLoadP3_PsFileNameBox_3_Aicok = 0x0001,
-
-    .DiskLoadP3_PsFileNameBox_4_Sel_num = NAKA_NONE,
-
-    .DiskLoadP3_PsFileNameBox_4_Paintok = { 0 },
-
-    .DiskLoadP3_PsFileNameBox_4_Aicok = 0x0001,
-
-    .DiskLoadP3_PsFileNameBox_5_Sel_num = NAKA_NONE,
-
-    .DiskLoadP3_PsFileNameBox_5_Paintok = { 0 },
-
-    .DiskLoadP3_PsFileNameBox_5_Aicok = 0x0001,
-
-    .DiskLoadP3_PsFileNameBox_6_Sel_num = NAKA_NONE,
-
-    .DiskLoadP3_PsFileNameBox_6_Paintok = { 0 },
-
-    .DiskLoadP3_PsFileNameBox_6_Aicok = 0x0001,
-
-    .DiskLoadP3_PsFileNameBox_7_Sel_num = NAKA_NONE,
-
-    .DiskLoadP3_PsFileNameBox_7_Paintok = { 0 },
-
-    .DiskLoadP3_PsFileNameBox_7_Aicok = 0x0001,
-
-    .pad_189 = { 0 },
-
-    .DiskLoadSMF_Window = NAKA_NONE,
-
-    .field_104c = NAKA_NONE,
-
-    .Tech_AcTitleMenu_Selected = { 0 },
-
-    .DiskLoadSMF_PsFileNameBox_Sel_num = { 0 },
-
-    .DiskLoadSMF_PsFileNameBox_Paintok = { 0 },
-
-    .DiskLoadSMF_PsFileNameBox_Aicok = 0x0001,
-
-    .DiskLoadSMF_PsWindowToggle_Onoff = { 0 },
-
-    .DiskLoadSMF_PsFileNameBox_2_Sel_num = NAKA_NONE,
-
-    .DiskLoadSMF_PsFileNameBox_2_Paintok = { 0 },
-
-    .DiskLoadSMF_PsFileNameBox_2_Aicok = 0x0001,
-
-    .DiskLoadSMF_PsFileNameBox_3_Sel_num = NAKA_NONE,
-
-    .DiskLoadSMF_PsFileNameBox_3_Paintok = { 0 },
-
-    .DiskLoadSMF_PsFileNameBox_3_Aicok = 0x0001,
-
-    .DiskLoadSMF_PsFileNameBox_4_Sel_num = NAKA_NONE,
-
-    .DiskLoadSMF_PsFileNameBox_4_Paintok = { 0 },
-
-    .DiskLoadSMF_PsFileNameBox_4_Aicok = 0x0001,
-
-    .SongNameSmfLdWin_Parent = NAKA_NONE,
-
-    .field_106c = NAKA_NONE,
-
-    .SongNameSmfLdWin_Child = NAKA_NONE,
-
-    .field_1070 = NAKA_NONE,
-
-    .SongNameSmfLdWin_AcParaStrBox_Paintok = { 0 },
-
-    .DiskInfoSmfLdWin_Parent = NAKA_NONE,
-
-    .field_1076 = NAKA_NONE,
-
-    .DiskInfoSmfLdWin_Child = NAKA_NONE,
-
-    .field_107a = NAKA_NONE,
-
-    .DiskInfoSmfLdWin_AcParaStrBox_Paintok = { 0 },
-
-    .DiskInfoSmfLdWin_AcParaStrBox_2_Paintok = { 0 },
-
-    .CmpSingleLoad_Window = NAKA_NONE,
-
-    .field_1082 = NAKA_NONE,
-
-    .CmpSingleLoad_PsFileNameBox_Sel_num = NAKA_NONE,
-
-    .CmpSingleLoad_PsFileNameBox_Paintok = { 0 },
-
-    .CmpSingleLoad_PsFileNameBox_Aicok = { 0 },
-
-    .CmpSingleLoad_PsFileNameBox_2_Sel_num = NAKA_NONE,
-
-    .CmpSingleLoad_PsFileNameBox_2_Paintok = { 0 },
-
-    .CmpSingleLoad_PsFileNameBox_2_Aicok = { 0 },
-
-    .CmpSingleLoad_PsFileNameBox_3_Sel_num = NAKA_NONE,
-
-    .CmpSingleLoad_PsFileNameBox_3_Paintok = { 0 },
-
-    .CmpSingleLoad_PsFileNameBox_3_Aicok = { 0 },
-
-    .CmpSingleLoad_AcMonoIndexToggle_Onoff = { 0 },
-
-    .CmpSingleLoad_PsFileNameBox_4_Sel_num = NAKA_NONE,
-
-    .CmpSingleLoad_PsFileNameBox_4_Paintok = { 0 },
-
-    .CmpSingleLoad_PsFileNameBox_4_Aicok = { 0 },
-
-    .CmpSingleLoad_PsFileNameBox_5_Sel_num = NAKA_NONE,
-
-    .CmpSingleLoad_PsFileNameBox_5_Paintok = { 0 },
-
-    .CmpSingleLoad_PsFileNameBox_5_Aicok = { 0 },
-
-    .CmpSingleLoad_PsFileNameBox_6_Sel_num = NAKA_NONE,
-
-    .CmpSingleLoad_PsFileNameBox_6_Paintok = { 0 },
-
-    .CmpSingleLoad_PsFileNameBox_6_Aicok = { 0 },
-
-    .CmpSingleLoad_PsFileNameBox_7_Sel_num = NAKA_NONE,
-
-    .CmpSingleLoad_PsFileNameBox_7_Paintok = { 0 },
-
-    .CmpSingleLoad_PsFileNameBox_7_Aicok = { 0 },
-
-    .DiskSaveMenu_Window = NAKA_NONE,
-
-    .field_10b2 = NAKA_NONE,
-
-    .TechnicsFormat_AcTtlJgBox_Selected = { 0 },
-
-    .SmfFormat_AcTtlJgBox_Selected = { 0 },
-
-    .DiskSave_Window = NAKA_NONE,
-
-    .field_10ba = NAKA_NONE,
-
-    .DiskSavePage_Page = 0x0001,
-
-    .DiskSaveP1_Parent = NAKA_NONE,
-
-    .field_10c0 = NAKA_NONE,
-
-    .DiskSaveP1_Child = NAKA_NONE,
-
-    .field_10c4 = NAKA_NONE,
-
-    .DiskSaveP1_AcParaStrBox_Paintok = { 0 },
-
-    .DiskSaveP1_AcParaStrBox_2_Paintok = { 0 },
-
-    .Name_AcTitleMenu_Selected = { 0 },
-
-    .DiskSaveP1_PsFileNameBox_Sel_num = { 0 },
-
-    .DiskSaveP1_PsFileNameBox_Paintok = { 0 },
-
-    .DiskSaveP1_PsFileNameBox_Aicok = 0x0001,
-
-    .DiskSaveP1_AcFileSfxBox_Paintok = { 0 },
-
-    .DiskSaveP2_Parent = NAKA_NONE,
-
-    .field_10d6 = NAKA_NONE,
-
-    .DiskSaveP2_Child = NAKA_NONE,
-
-    .field_10da = NAKA_NONE,
-
-    .DiskSaveP2_PsFileNameBox_Sel_num = NAKA_NONE,
-
-    .DiskSaveP2_PsFileNameBox_Paintok = { 0 },
-
-    .DiskSaveP2_PsFileNameBox_Aicok = 0x0001,
-
-    .DiskSaveP2_AcParaStrBox_Paintok = { 0 },
-
-    .DiskSaveP3_Parent = NAKA_NONE,
-
-    .field_10e6 = NAKA_NONE,
-
-    .DiskSaveP3_Child = NAKA_NONE,
-
-    .field_10ea = NAKA_NONE,
-
-    .DiskSaveP3_PsFileNameBox_Sel_num = { 0 },
-
-    .DiskSaveP3_PsFileNameBox_Paintok = { 0 },
-
-    .DiskSaveP3_PsFileNameBox_Aicok = 0x0001,
-
-    .DiskSaveP3_AcParaStrBox_Paintok = { 0 },
-
-    .DiskSmfSave_Window = NAKA_NONE,
-
-    .field_10f6 = NAKA_NONE,
-
-    .DiskSmfSave_PsFileNameBox_Sel_num = { 0 },
-
-    .DiskSmfSave_PsFileNameBox_Paintok = { 0 },
-
-    .DiskSmfSave_PsFileNameBox_Aicok = 0x0001,
-
-    .DiskSmfSave_AcMonoIndexToggle_Onoff = { 0 },
-
-    .DiskSmfSave_AcMonoIndexToggle_2_Onoff = { 0 },
-
-    .Name_AcTitleMenu_2_Selected = { 0 },
-
-    .DiskSmfSave_AcParaStrBox_Paintok = { 0 },
-
-    .DiskSmfSave_PsFileNameBox_2_Sel_num = NAKA_NONE,
-
-    .DiskSmfSave_PsFileNameBox_2_Paintok = { 0 },
-
-    .DiskSmfSave_PsFileNameBox_2_Aicok = 0x0001,
-
-    .DiskSmfSave_PsFileNameBox_3_Sel_num = NAKA_NONE,
-
-    .DiskSmfSave_PsFileNameBox_3_Paintok = { 0 },
-
-    .DiskSmfSave_PsFileNameBox_3_Aicok = 0x0001,
-
-    .DiskSmfSave_PsFileNameBox_4_Sel_num = NAKA_NONE,
-
-    .DiskSmfSave_PsFileNameBox_4_Paintok = { 0 },
-
-    .DiskSmfSave_PsFileNameBox_4_Aicok = 0x0001,
-
-    .DiskSmfDirectPlay_Window = NAKA_NONE,
-
-    .field_111a = NAKA_NONE,
-
-    .DiskSmfDirectPlay_PsFileNameBox_Sel_num = { 0 },
-
-    .DiskSmfDirectPlay_PsFileNameBox_Paintok = { 0 },
-
-    .DiskSmfDirectPlay_PsFileNameBox_Aicok = 0x0001,
-
-    .DiskSmfDirectPlay_PsFileNameBox_2_Sel_num = NAKA_NONE,
-
-    .DiskSmfDirectPlay_PsFileNameBox_2_Paintok = { 0 },
-
-    .DiskSmfDirectPlay_PsFileNameBox_2_Aicok = 0x0001,
-
-    .DiskSmfDirectPlay_PsWindowToggle_Onoff = { 0 },
-
-    .DiskSmfDirectPlay_AcMonoIndexToggle_Onoff = { 0 },
-
-    .DiskSmfDirectPlay_AcMonoIndexToggle_2_Onoff = 0x0001,
-
-    .SmfMidiOut_Onoff = { 0 },
-
-    .SongNameDPSmfWin_Parent = NAKA_NONE,
-
-    .field_1132 = NAKA_NONE,
-
-    .SongNameDPSmfWin_Child = NAKA_NONE,
-
-    .field_1136 = NAKA_NONE,
-
-    .SongNameDPSmfWin_AcParaStrBox_Paintok = { 0 },
-
-    .DiskInfoDPSmfWin_Parent = NAKA_NONE,
-
-    .field_113c = NAKA_NONE,
-
-    .DiskInfoDPSmfWin_Child = NAKA_NONE,
-
-    .field_1140 = NAKA_NONE,
-
-    .DiskInfoDPSmfWin_AcParaStrBox_Paintok = { 0 },
-
-    .DiskInfoDPSmfWin_AcParaStrBox_2_Paintok = { 0 },
-
-    .DiskDocDirectPlay_Window = NAKA_NONE,
-
-    .field_1148 = NAKA_NONE,
-
-    .DiskDocDirectPlay_PsFileNameBox_Sel_num = { 0 },
-
-    .DiskDocDirectPlay_PsFileNameBox_Paintok = { 0 },
-
-    .DiskDocDirectPlay_PsFileNameBox_Aicok = { 0 },
-
-    .DiskDocDirectPlay_PsFileNameBox_2_Sel_num = NAKA_NONE,
-
-    .DiskDocDirectPlay_PsFileNameBox_2_Paintok = { 0 },
-
-    .DiskDocDirectPlay_PsFileNameBox_2_Aicok = { 0 },
-
-    .DiskDocDirectPlay_AcMonoIndexToggle_Onoff = { 0 },
-
-    .DiskDocDirectPlay_AcParaStrBox_Paintok = { 0 },
-
-    .DiskPdDirectPlay_Window = NAKA_NONE,
-
-    .field_115c = NAKA_NONE,
-
-    .DiskPdDirectPlay_PsFileNameBox_Sel_num = { 0 },
-
-    .DiskPdDirectPlay_PsFileNameBox_Paintok = { 0 },
-
-    .DiskPdDirectPlay_PsFileNameBox_Aicok = { 0 },
-
-    .DiskPdDirectPlay_PsFileNameBox_2_Sel_num = NAKA_NONE,
-
-    .DiskPdDirectPlay_PsFileNameBox_2_Paintok = { 0 },
-
-    .DiskPdDirectPlay_PsFileNameBox_2_Aicok = { 0 },
-
-    .DiskPdDirectPlay_AcMonoIndexToggle_Onoff = { 0 },
-
-    .DiskSongMedley_Window = NAKA_NONE,
-
-    .field_116e = NAKA_NONE,
-
-    .DiskSongMedley_PsFileNameBox_Sel_num = { 0 },
-
-    .DiskSongMedley_PsFileNameBox_Paintok = { 0 },
-
-    .DiskSongMedley_PsFileNameBox_Aicok = 0x0001,
-
-    .DiskSongMedley_PsFileNameBox_2_Sel_num = NAKA_NONE,
-
-    .DiskSongMedley_PsFileNameBox_2_Paintok = { 0 },
-
-    .DiskSongMedley_PsFileNameBox_2_Aicok = 0x0001,
-
-    .DiskSongMedley_PsFileNameBox_3_Sel_num = NAKA_NONE,
-
-    .DiskSongMedley_PsFileNameBox_3_Paintok = { 0 },
-
-    .DiskSongMedley_PsFileNameBox_3_Aicok = 0x0001,
-
-    .SongMedleyDiskName_Paintok = { 0 },
-
-    .SongMedleyDiskInfo_Paintok = { 0 },
-
-    .DiskSongMedley_AcMonoIndexToggle_Onoff = { 0 },
-
-    .DiskSongMedley_AcMonoIndexToggle_2_Onoff = { 0 },
-
-    .DiskUtility_Window = NAKA_NONE,
-
-    .field_118c = NAKA_NONE,
-
-    .Smf_AcTitleMenu_2_Selected = { 0 },
-
-    .DiskUtility_AcTitleMenu_Selected = { 0 },
-
-    .DiskUtility_AcScreenMenu_Selected = { 0 },
-
-    .COPY_AcScreenMenu_Selected = { 0 },
-
-    .DiskUtility_AcParaStrBox_Paintok = { 0 },
-
-    .DiskUtility_AcParaStrBox_2_Paintok = { 0 },
-
-    .DiskUtility_PsFileNameBox_Sel_num = { 0 },
-
-    .DiskUtility_PsFileNameBox_Paintok = { 0 },
-
-    .DiskUtility_PsFileNameBox_Aicok = 0x0001,
-
-    .FileRename_Window = NAKA_NONE,
-
-    .field_11a2 = NAKA_NONE,
-
-    .DiskFormat_Window = NAKA_NONE,
-
-    .field_11a6 = NAKA_NONE,
-
-    .DiskUtilitySMF_Window = NAKA_NONE,
-
-    .field_11aa = NAKA_NONE,
-
-    .Tech_AcTitleMenu_2_Selected = { 0 },
-
-    .DiskUtilitySMF_PsFileNameBox_Sel_num = { 0 },
-
-    .DiskUtilitySMF_PsFileNameBox_Paintok = { 0 },
-
-    .DiskUtilitySMF_PsFileNameBox_Aicok = { 0 },
-
-    .DiskUtilitySMF_PsWindowToggle_Onoff = { 0 },
-
-    .DiskUtilitySMF_AcTitleMenu_Selected = { 0 },
-
-    .DiskUtilitySMF_AcScreenMenu_Selected = { 0 },
-
-    .DiskInfoWin_Parent = NAKA_NONE,
-
-    .field_11bc = NAKA_NONE,
-
-    .DiskInfoWin_Child = NAKA_NONE,
-
-    .field_11c0 = NAKA_NONE,
-
-    .DiskInfoWin_AcParaStrBox_Paintok = { 0 },
-
-    .DiskInfoWin_AcParaStrBox_2_Paintok = { 0 },
-
-    .SongNameWin_Parent = NAKA_NONE,
-
-    .field_11c8 = NAKA_NONE,
-
-    .SongNameWin_Child = NAKA_NONE,
-
-    .field_11cc = NAKA_NONE,
-
-    .SongNameWin_AcParaStrBox_Paintok = { 0 },
-
-    .DiskFormatNamingWin_Parent = NAKA_NONE,
-
-    .field_11d2 = NAKA_NONE,
-
-    .DiskFormatNamingWin_Child = NAKA_NONE,
-
-    .field_11d6 = NAKA_NONE,
-
-    .DiskFormatSureWin_Parent = NAKA_NONE,
-
-    .field_11da = NAKA_NONE,
-
-    .DiskFormatSureWin_Child = NAKA_NONE,
-
-    .field_11de = NAKA_NONE,
-
-    .DiskFormatSelectWin_Parent = NAKA_NONE,
-
-    .field_11e2 = NAKA_NONE,
-
-    .DiskFormatSelectWin_Child = NAKA_NONE,
-
-    .field_11e6 = NAKA_NONE,
-
-    .KByteFormatDd_VwMenuBox_Selected = { 0 },
-
-    .MByteFormatHd_VwMenuBox_Selected = { 0 },
-
-    .FileCopy_Window = NAKA_NONE,
-
-    .field_11ee = NAKA_NONE,
-
-    .FileCopy_AcParaStrBox_Paintok = { 0 },
-
-    .FileCopy_PsFileNameBox_Sel_num = { 0 },
-
-    .FileCopy_PsFileNameBox_Paintok = { 0 },
-
-    .FileCopy_PsFileNameBox_Aicok = { 0 },
-
-    .FileRenameSMF_Window = NAKA_NONE,
-
-    .field_11fa = NAKA_NONE,
-
-    .DiskDeleteSureWin_Parent = NAKA_NONE,
-
-    .field_11fe = NAKA_NONE,
-
-    .DiskDeleteSureWin_Child = NAKA_NONE,
-
-    .field_1202 = NAKA_NONE,
-
-    .DiskDeleteSureScr_Window = NAKA_NONE,
-
-    .field_1206 = NAKA_NONE,
-
-    .DiskSaveSureScr_Window = NAKA_NONE,
-
-    .field_120a = NAKA_NONE,
-
-    .DiskSetup_Window = NAKA_NONE,
-
-    .field_120e = NAKA_NONE,
-
-    .DiskSetup_AcRamEditBox_Selected = 0x0001,
-
-    .DiskSetup_DiskInsertOption_Value = { 0 },
-
-    .DiskSetup_AcBitEditBox_Selected = { 0 },
-
-    .DiskSetup_FileTypePriority_Value = { 0 },
-
-    .w9 = {
-        .header       = NAKA_HDR(NAKA_TYPE_MENU_ITEM),
-        .parent_idx     = 0x0000,
-        .prev_sibling   = NAKA_NONE,
-        .self_idx       = 0x0003,
-        .next_sibling   = 0x0001,
-        .x_margin       = 0x0000,
-        .y_pos          = 0x00A3,
-        .sel_x1         = 0x00C6,
-        .sel_y1         = 0x0137,
-        .sel_x2         = 0x00DF,
-        .sel_y2         = 0x00F5,
-        .flags          = 0x0000,
-        .link_idx       = 0x0000,
-        .field_1c       = 0x0000,
-        .field_1e       = 0x0000,
-        .bg_color       = 0x00FF,
-        .field_22       = 0x0000,
-        .handler_id     = 0x000C,
-        .handler_table  = 0x0003EC56,
-        .string_ptr     = 0x00EA152C,
-        .ui_class       = 0x007F,
-        .screen_id      = 0x01A0,
-        .string_len     = 0x0083,
-        .reserved       = 0x0000,
-    },
-
-    .field_1250 = 0x0005,
-
-    .field_1252 = 0x0165,
-
-    .str_5 = "4",
-
-    .field_1256 = NAKA_NONE,
-
-    .field_1258 = NAKA_NONE,
-
-    .I_str = "I",
-
-    .pad_237 = { 0 },
-
-    .field_125e = 0x0103,
-
-    .L_str = "L",
-
-    .field_1262 = 0x0137,
-
-    .str_8 = "]",
-
-    .pad_238 = { 0 },
-
-    .NakaStr_Bank_ptr = NAKA_ADDR(NakaStr_Bank),
-
-    .NakaStr_Single_ptr = NAKA_ADDR(NakaStr_Single),
-
-    .field_1272 = 0xED1C,
-
-    .field_1274 = 0x0003,
-
-    .field_1276 = 0x0009,
-
-    .field_1278 = 0x0003,
-
-    .pad_239 = { 0 },
-
-    .field_127e = NAKA_NONE,
-
-    .field_1280 = NAKA_NONE,
-
-    .field_1282 = NAKA_NONE,
-
-    .field_1284 = NAKA_NONE,
-
-    .pad_240 = { 0 },
-
-    .field_1288 = 0x01C0,
-
-    .pad_241 = { 0 },
-
-    .field_128c = 0x01C0,
-
-    .pad_242 = { 0 },
-
-    .field_1296 = NAKA_NONE,
-
-    .field_1298 = NAKA_NONE,
-
-    .WeAreTaianBoys_str = ALIGNED_STRING("We are Taian BOYS!"),
-
-    .pad_243 = { 0 },
-
-    .field_12b0 = 0x0180,
-
-    .pad_244 = { 0 },
-
-    .field_12b4 = 0x0180,
-
-    .pad_245 = { 0 },
-
-    .field_12b8 = 0x01A0,
-
-    .pad_246 = { 0 },
-
-    .field_12bc = 0x01A0,
-
-    .field_12be = 0x0001,
-
-    .pad_247 = { 0 },
-
-    .ptr_12cc = 0x00F5FFFF,
-
-    .ptr_12d0 = 0x00FF00FF,
-
-    .str_10 = ALIGNED_STRING(""),
-
-    .str_11 = ALIGNED_STRING(""),
+    .Display_DrawState = { 0x0001, 0x00000000, 0x00000000, 0x0000, 0x0000, 0xFFFF, 0x00F5, 0x00FF, 0x00FF, 0x00, 0xFF, 0x00, 0xFF },
 
     .FontIDProc_FontNameTable = {
         NAKA_ADDR(NakaInst_CHARA1), NAKA_ADDR(NakaInst_CHARA2), NAKA_ADDR(NakaInst_CHARA3), NAKA_ADDR(NakaInst_CHARA4),

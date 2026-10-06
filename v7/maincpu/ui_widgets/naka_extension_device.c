@@ -92,6 +92,7 @@ extern const char NakaData_WidgetInit1;
 extern const char FileIO_BytecodeData_Code_Loop3;
 extern const char FileIO_BytecodeData_Code_Join18;
 extern const char Naka_PresentationRootState;
+extern const char FileIO_BytecodeData_Code_Helper4;
 
 #define BASE  0x00ED67CCu
 
@@ -1350,220 +1351,19 @@ typedef struct __attribute__((packed)) {
     uint16_t field_35d2;
     uint16_t field_35d4;
     uint16_t field_35d6;
-    uint16_t field_35d8;
-    uint16_t field_35da;
-    uint16_t field_35dc;
-    uint16_t field_35de;
-    uint16_t field_35e0;
-    uint16_t field_35e2;
-    uint16_t field_35e4;
-    uint16_t field_35e6;
-    uint16_t field_35e8;
-    uint16_t field_35ea;
-    uint16_t field_35ec;
-    uint16_t field_35ee;
-    uint16_t field_35f0;
-    uint16_t field_35f2;
-    uint16_t field_35f4;
-    uint16_t field_35f6;
-    uint16_t field_35f8;
-    uint16_t field_35fa;
-    uint16_t field_35fc;
-    uint16_t field_35fe;
-    uint16_t field_3600;
-    uint16_t field_3602;
-    uint16_t field_3604;
-    uint16_t field_3606;
-    uint16_t field_3608;
-    uint16_t field_360a;
-    uint16_t field_360c;
-    uint16_t field_360e;
-    uint16_t field_3610;
-    uint16_t field_3612;
-    uint16_t field_3614;
-    uint16_t field_3616;
-    char str_559[2];
-    uint16_t field_361a;
-    uint16_t field_361c;
-    uint16_t field_361e;
-    uint16_t field_3620;
-    uint16_t field_3622;
-    uint16_t field_3624;
-    uint16_t field_3626;
-    uint16_t field_3628;
-    uint16_t field_362a;
-    uint16_t field_362c;
-    uint16_t field_362e;
-    uint16_t field_3630;
-    uint16_t field_3632;
-    uint16_t field_3634;
-    uint16_t field_3636;
-    uint16_t field_3638;
-    uint16_t field_363a;
-    uint16_t field_363c;
-    uint16_t field_363e;
-    uint16_t field_3640;
-    uint16_t field_3642;
-    uint16_t field_3644;
-    uint16_t field_3646;
-    uint16_t field_3648;
-    uint16_t field_364a;
-    uint16_t field_364c;
-    uint16_t field_364e;
-    uint16_t field_3650;
-    uint16_t field_3652;
-    uint16_t field_3654;
-    uint16_t field_3656;
-    uint16_t field_3658;
-    uint16_t field_365a;
-    uint16_t field_365c;
-    uint16_t field_365e;
-    uint16_t field_3660;
-    uint16_t field_3662;
-    uint16_t field_3664;
-    uint16_t field_3666;
-    uint16_t field_3668;
-    uint16_t field_366a;
-    uint16_t field_366c;
-    uint16_t field_366e;
-    uint16_t field_3670;
-    uint16_t field_3672;
-    uint16_t field_3674;
-    uint16_t field_3676;
-    uint16_t field_3678;
-    uint16_t field_367a;
-    uint16_t field_367c;
-    uint16_t field_367e;
-    uint16_t field_3680;
-    uint16_t field_3682;
-    uint16_t field_3684;
-    uint16_t field_3686;
-    uint16_t field_3688;
-    uint16_t field_368a;
-    uint16_t field_368c;
-    uint16_t field_368e;
-    uint16_t field_3690;
-    uint16_t field_3692;
-    uint16_t field_3694;
-    uint16_t field_3696;
-    uint16_t field_3698;
-    uint16_t field_369a;
-    uint16_t field_369c;
-    uint16_t field_369e;
-    uint16_t field_36a0;
-    uint16_t field_36a2;
-    uint16_t field_36a4;
-    uint16_t field_36a6;
-    uint16_t field_36a8;
-    uint16_t field_36aa;
-    uint16_t field_36ac;
-    uint16_t field_36ae;
-    uint16_t field_36b0;
-    uint16_t field_36b2;
-    uint16_t field_36b4;
-    uint16_t field_36b6;
-    uint16_t field_36b8;
-    uint16_t field_36ba;
-    uint16_t field_36bc;
-    uint16_t field_36be;
-    uint16_t field_36c0;
-    uint16_t field_36c2;
-    uint16_t field_36c4;
-    uint16_t field_36c6;
-    uint16_t field_36c8;
-    uint16_t field_36ca;
-    uint16_t field_36cc;
-    uint16_t field_36ce;
-    uint16_t field_36d0;
-    uint16_t field_36d2;
-    uint16_t field_36d4;
-    uint16_t field_36d6;
+    /* handler number (index into FileIO_BytecodeData_Code_Entry8_PtrTable_3) per foot-pedal assignment code; 0xff = no action */
+    uint8_t PanelAction_PedalAssignHandlerIndex[256];
     /* FileIO_BytecodeData_Code_Entry8_PtrTable_3: 22 pointers (cut from ptrs_29 by split_naka_pointer_arrays.py) */
-    uint32_t FileIO_BytecodeData_Code_Entry8_PtrTable_3[22];
-    uint16_t field_3730;
-    uint16_t field_3732;
-    uint16_t field_3734;
-    uint16_t field_3736;
-    uint16_t field_3738;
-    uint16_t field_373a;
-    uint16_t field_373c;
-    uint16_t field_373e;
-    uint16_t field_3740;
-    uint16_t field_3742;
-    uint16_t field_3744;
-    uint16_t field_3746;
-    uint16_t field_3748;
-    uint16_t field_374a;
-    uint16_t field_374c;
-    uint16_t field_374e;
-    uint16_t field_3750;
-    uint16_t field_3752;
-    uint16_t field_3754;
-    uint16_t field_3756;
-    uint16_t field_3758;
-    uint16_t field_375a;
-    uint16_t field_375c;
-    uint16_t field_375e;
-    uint16_t field_3760;
-    uint16_t field_3762;
-    uint16_t field_3764;
-    uint16_t field_3766;
-    uint16_t field_3768;
-    uint16_t field_376a;
-    uint16_t field_376c;
-    uint16_t field_376e;
-    uint16_t field_3770;
-    uint16_t field_3772;
-    uint16_t field_3774;
-    uint16_t field_3776;
-    uint16_t field_3778;
-    uint16_t field_377a;
-    uint16_t field_377c;
-    uint16_t field_377e;
-    uint16_t field_3780;
-    uint16_t field_3782;
-    uint16_t field_3784;
-    uint16_t field_3786;
+    /* foot switch / foot controller function handlers, indexed by FileIO_BytecodeData_Data_16[assignment]; [12] is never selected */
+    uint32_t PanelAction_PedalFunctionHandlers[22];
+    /* help-mode code per changed-bit number (0xFF = none) for panel event indexes 0-7, 10, 11, 12 */
+    uint8_t PanelButton_HelpCodeByBit[11][8];
     uint16_t field_3788;
     uint16_t field_378a;
     uint16_t field_378c;
     uint16_t field_378e;
-    uint16_t field_3790;
-    uint16_t field_3792;
-    uint16_t field_3794;
-    uint16_t field_3796;
-    uint16_t field_3798;
-    uint16_t field_379a;
-    uint16_t field_379c;
-    uint16_t field_379e;
-    uint16_t field_37a0;
-    uint16_t field_37a2;
-    uint16_t field_37a4;
-    uint16_t field_37a6;
-    uint16_t field_37a8;
-    uint16_t field_37aa;
-    uint16_t field_37ac;
-    uint16_t field_37ae;
-    uint16_t field_37b0;
-    uint16_t field_37b2;
-    uint16_t field_37b4;
-    uint16_t field_37b6;
-    uint16_t field_37b8;
-    uint16_t field_37ba;
-    uint16_t field_37bc;
-    uint16_t field_37be;
-    uint16_t field_37c0;
-    uint16_t field_37c2;
-    uint16_t field_37c4;
-    uint16_t field_37c6;
-    uint16_t field_37c8;
-    uint16_t field_37ca;
-    uint16_t field_37cc;
-    uint16_t field_37ce;
-    uint16_t field_37d0;
-    uint16_t field_37d2;
-    uint16_t field_37d4;
-    uint16_t field_37d6;
+    /* help-mode code maps (changed-bit number -> help code, 0xff none) of panel event indices 14-21 and 25, one 8-byte row each */
+    uint8_t PanelButton_HelpCodeMaps14To25[9][8];
     uint32_t PanelButton_HelpCodeMaps[31];  /* 31 pointers */
     /* zero padding */
     /* zero padding */
@@ -6293,374 +6093,47 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_35d6 = 0x3020,
 
-    .field_35d8 = NAKA_NONE,
-
-    .field_35da = NAKA_NONE,
-
-    .field_35dc = NAKA_NONE,
-
-    .field_35de = NAKA_NONE,
-
-    .field_35e0 = NAKA_NONE,
-
-    .field_35e2 = NAKA_NONE,
-
-    .field_35e4 = NAKA_NONE,
-
-    .field_35e6 = NAKA_NONE,
-
-    .field_35e8 = NAKA_NONE,
-
-    .field_35ea = NAKA_NONE,
-
-    .field_35ec = NAKA_NONE,
-
-    .field_35ee = NAKA_NONE,
-
-    .field_35f0 = NAKA_NONE,
-
-    .field_35f2 = NAKA_NONE,
-
-    .field_35f4 = NAKA_NONE,
-
-    .field_35f6 = NAKA_NONE,
-
-    .field_35f8 = NAKA_NONE,
-
-    .field_35fa = NAKA_NONE,
-
-    .field_35fc = NAKA_NONE,
-
-    .field_35fe = NAKA_NONE,
-
-    .field_3600 = NAKA_NONE,
-
-    .field_3602 = NAKA_NONE,
-
-    .field_3604 = NAKA_NONE,
-
-    .field_3606 = NAKA_NONE,
-
-    .field_3608 = NAKA_NONE,
-
-    .field_360a = NAKA_NONE,
-
-    .field_360c = NAKA_NONE,
-
-    .field_360e = NAKA_NONE,
-
-    .field_3610 = NAKA_NONE,
-
-    .field_3612 = NAKA_NONE,
-
-    .field_3614 = NAKA_NONE,
-
-    .field_3616 = NAKA_NONE,
-
-    .str_559 = ALIGNED_STRING(""),
-
-    .field_361a = NAKA_NONE,
-
-    .field_361c = NAKA_NONE,
-
-    .field_361e = NAKA_NONE,
-
-    .field_3620 = NAKA_NONE,
-
-    .field_3622 = NAKA_NONE,
-
-    .field_3624 = NAKA_NONE,
-
-    .field_3626 = NAKA_NONE,
-
-    .field_3628 = NAKA_NONE,
-
-    .field_362a = NAKA_NONE,
-
-    .field_362c = NAKA_NONE,
-
-    .field_362e = NAKA_NONE,
-
-    .field_3630 = NAKA_NONE,
-
-    .field_3632 = NAKA_NONE,
-
-    .field_3634 = NAKA_NONE,
-
-    .field_3636 = NAKA_NONE,
-
-    .field_3638 = NAKA_NONE,
-
-    .field_363a = NAKA_NONE,
-
-    .field_363c = NAKA_NONE,
-
-    .field_363e = NAKA_NONE,
-
-    .field_3640 = NAKA_NONE,
-
-    .field_3642 = NAKA_NONE,
-
-    .field_3644 = NAKA_NONE,
-
-    .field_3646 = NAKA_NONE,
-
-    .field_3648 = NAKA_NONE,
-
-    .field_364a = NAKA_NONE,
-
-    .field_364c = NAKA_NONE,
-
-    .field_364e = NAKA_NONE,
-
-    .field_3650 = NAKA_NONE,
-
-    .field_3652 = NAKA_NONE,
-
-    .field_3654 = NAKA_NONE,
-
-    .field_3656 = NAKA_NONE,
-
-    .field_3658 = NAKA_NONE,
-
-    .field_365a = NAKA_NONE,
-
-    .field_365c = NAKA_NONE,
-
-    .field_365e = NAKA_NONE,
-
-    .field_3660 = 0xFF01,
-
-    .field_3662 = NAKA_NONE,
-
-    .field_3664 = NAKA_NONE,
-
-    .field_3666 = NAKA_NONE,
-
-    .field_3668 = 0x0302,
-
-    .field_366a = 0x0504,
-
-    .field_366c = 0x0706,
-
-    .field_366e = 0x0A08,
-
-    .field_3670 = 0x0B09,
-
-    .field_3672 = NAKA_NONE,
-
-    .field_3674 = NAKA_NONE,
-
-    .field_3676 = NAKA_NONE,
-
-    .field_3678 = NAKA_NONE,
-
-    .field_367a = NAKA_NONE,
-
-    .field_367c = NAKA_NONE,
-
-    .field_367e = NAKA_NONE,
-
-    .field_3680 = NAKA_NONE,
-
-    .field_3682 = NAKA_NONE,
-
-    .field_3684 = 0x0DFF,
-
-    .field_3686 = NAKA_NONE,
-
-    .field_3688 = 0x1312,
-
-    .field_368a = 0x0E10,
-
-    .field_368c = 0xFF0F,
-
-    .field_368e = NAKA_NONE,
-
-    .field_3690 = 0x1514,
-
-    .field_3692 = NAKA_NONE,
-
-    .field_3694 = NAKA_NONE,
-
-    .field_3696 = NAKA_NONE,
-
-    .field_3698 = 0x1111,
-
-    .field_369a = 0x1111,
-
-    .field_369c = 0x1111,
-
-    .field_369e = 0x1111,
-
-    .field_36a0 = NAKA_NONE,
-
-    .field_36a2 = NAKA_NONE,
-
-    .field_36a4 = NAKA_NONE,
-
-    .field_36a6 = NAKA_NONE,
-
-    .field_36a8 = NAKA_NONE,
-
-    .field_36aa = NAKA_NONE,
-
-    .field_36ac = NAKA_NONE,
-
-    .field_36ae = NAKA_NONE,
-
-    .field_36b0 = NAKA_NONE,
-
-    .field_36b2 = NAKA_NONE,
-
-    .field_36b4 = NAKA_NONE,
-
-    .field_36b6 = NAKA_NONE,
-
-    .field_36b8 = NAKA_NONE,
-
-    .field_36ba = NAKA_NONE,
-
-    .field_36bc = NAKA_NONE,
-
-    .field_36be = NAKA_NONE,
-
-    .field_36c0 = NAKA_NONE,
-
-    .field_36c2 = NAKA_NONE,
-
-    .field_36c4 = NAKA_NONE,
-
-    .field_36c6 = NAKA_NONE,
-
-    .field_36c8 = NAKA_NONE,
-
-    .field_36ca = NAKA_NONE,
-
-    .field_36cc = NAKA_NONE,
-
-    .field_36ce = NAKA_NONE,
-
-    .field_36d0 = NAKA_NONE,
-
-    .field_36d2 = NAKA_NONE,
-
-    .field_36d4 = NAKA_NONE,
-
-    .field_36d6 = NAKA_NONE,
-
-    .FileIO_BytecodeData_Code_Entry8_PtrTable_3 = {
-        0x00FC63DE,
-        NAKA_ADDR(NakaData_WidgetInit1),
-        NAKA_ADDR(FileIO_BytecodeData_Code_Loop3),
-        NAKA_ADDR(FileIO_BytecodeData_Code_Join18),
-        NAKA_ADDR(ExtDev_SndParam_Block48_Var40),
-        NAKA_ADDR(ExtDev_SndParam_Block48_Var80),
-        NAKA_ADDR(ExtDev_SndParam_Block48_Var04),
-        NAKA_ADDR(ExtDev_SndParam_Block48_Var04_B),
-        NAKA_ADDR(ExtDev_SndParam_Write98_Block),
-        NAKA_ADDR(ExtDev_SndParam_ConfigAndWrite),
-        NAKA_ADDR(ExtDev_SndParam_Block14_Dual),
-        NAKA_ADDR(ExtDev_SndParam_Write48_Block),
-        NAKA_ADDR(ExtDev_SndParam_Block48_Var02),
-        NAKA_ADDR(ExtDev_SndParam_Block70_Var04),
-        NAKA_ADDR(ExtDev_SndParam_DispatchAndWriteA8),
-        NAKA_ADDR(ExtDev_SndParam_DispatchAndWriteA8_Alt),
-        NAKA_ADDR(ExtDev_SndParam_MultiReg_Iterate),
-        NAKA_ADDR(ExtDev_SndParam_DispatchComplex),
-        NAKA_ADDR(ExtDev_SndParam_BlockA9_Var02),
-        NAKA_ADDR(ExtDev_SndParam_Block98_Var40),
-        NAKA_ADDR(ExtDev_SndParam_Block98_Var80),
-        NAKA_ADDR(ExtDev_SndParam_Block98_Var40_B),
+    .PanelAction_PedalAssignHandlerIndex = {
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x0A, 0x09, 0x0B, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0D, 0xFF, 0xFF,
+        0x12, 0x13, 0x10, 0x0E, 0x0F, 0xFF, 0xFF, 0xFF, 0x14, 0x15, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
     },
 
-    .field_3730 = 0x0404,
+    .PanelAction_PedalFunctionHandlers = {
+        (NAKA_ADDR(FileIO_BytecodeData_Code_Helper4) + 36), NAKA_ADDR(NakaData_WidgetInit1), NAKA_ADDR(FileIO_BytecodeData_Code_Loop3), NAKA_ADDR(FileIO_BytecodeData_Code_Join18),
+        NAKA_ADDR(ExtDev_SndParam_Block48_Var40), NAKA_ADDR(ExtDev_SndParam_Block48_Var80), NAKA_ADDR(ExtDev_SndParam_Block48_Var04), NAKA_ADDR(ExtDev_SndParam_Block48_Var04_B),
+        NAKA_ADDR(ExtDev_SndParam_Write98_Block), NAKA_ADDR(ExtDev_SndParam_ConfigAndWrite), NAKA_ADDR(ExtDev_SndParam_Block14_Dual), NAKA_ADDR(ExtDev_SndParam_Write48_Block),
+        NAKA_ADDR(ExtDev_SndParam_Block48_Var02), NAKA_ADDR(ExtDev_SndParam_Block70_Var04), NAKA_ADDR(ExtDev_SndParam_DispatchAndWriteA8), NAKA_ADDR(ExtDev_SndParam_DispatchAndWriteA8_Alt),
+        NAKA_ADDR(ExtDev_SndParam_MultiReg_Iterate), NAKA_ADDR(ExtDev_SndParam_DispatchComplex), NAKA_ADDR(ExtDev_SndParam_BlockA9_Var02), NAKA_ADDR(ExtDev_SndParam_Block98_Var40),
+        NAKA_ADDR(ExtDev_SndParam_Block98_Var80), NAKA_ADDR(ExtDev_SndParam_Block98_Var40_B),
+    },
 
-    .field_3732 = 0x0404,
-
-    .field_3734 = 0x0404,
-
-    .field_3736 = 0x0404,
-
-    .field_3738 = 0x0605,
-
-    .field_373a = 0x0203,
-
-    .field_373c = 0x300E,
-
-    .field_373e = 0xFF30,
-
-    .field_3740 = 0x1111,
-
-    .field_3742 = 0x1212,
-
-    .field_3744 = NAKA_NONE,
-
-    .field_3746 = NAKA_NONE,
-
-    .field_3748 = 0x0A00,
-
-    .field_374a = 0x0B0C,
-
-    .field_374c = NAKA_NONE,
-
-    .field_374e = NAKA_NONE,
-
-    .field_3750 = 0x1010,
-
-    .field_3752 = 0x1010,
-
-    .field_3754 = 0x0D0F,
-
-    .field_3756 = 0xFF01,
-
-    .field_3758 = 0x0909,
-
-    .field_375a = 0x0909,
-
-    .field_375c = 0x0909,
-
-    .field_375e = NAKA_NONE,
-
-    .field_3760 = 0x0404,
-
-    .field_3762 = 0x0404,
-
-    .field_3764 = 0x0404,
-
-    .field_3766 = 0x0404,
-
-    .field_3768 = NAKA_NONE,
-
-    .field_376a = 0xFF29,
-
-    .field_376c = NAKA_NONE,
-
-    .field_376e = NAKA_NONE,
-
-    .field_3770 = NAKA_NONE,
-
-    .field_3772 = 0x2EFF,
-
-    .field_3774 = NAKA_NONE,
-
-    .field_3776 = NAKA_NONE,
-
-    .field_3778 = NAKA_NONE,
-
-    .field_377a = NAKA_NONE,
-
-    .field_377c = 0x07FF,
-
-    .field_377e = 0xFF07,
-
-    .field_3780 = 0x2626,
-
-    .field_3782 = 0x2626,
-
-    .field_3784 = 0x2626,
-
-    .field_3786 = 0x2626,
+    .PanelButton_HelpCodeByBit = {
+        { 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04 },
+        { 0x05, 0x06, 0x03, 0x02, 0x0E, 0x30, 0x30, 0xFF },
+        { 0x11, 0x11, 0x12, 0x12, 0xFF, 0xFF, 0xFF, 0xFF },
+        { 0x00, 0x0A, 0x0C, 0x0B, 0xFF, 0xFF, 0xFF, 0xFF },
+        { 0x10, 0x10, 0x10, 0x10, 0x0F, 0x0D, 0x01, 0xFF },
+        { 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0xFF, 0xFF },
+        { 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04 },
+        { 0xFF, 0xFF, 0x29, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
+        { 0xFF, 0xFF, 0xFF, 0x2E, 0xFF, 0xFF, 0xFF, 0xFF },
+        { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x07, 0x07, 0xFF },
+        { 0x26, 0x26, 0x26, 0x26, 0x26, 0x26, 0x26, 0x26 },
+    },
 
     .field_3788 = 0x2626,
 
@@ -6670,105 +6143,45 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_378e = 0x2626,
 
-    .field_3790 = 0x2224,
-
-    .field_3792 = 0x2523,
-
-    .field_3794 = 0xFF2F,
-
-    .field_3796 = NAKA_NONE,
-
-    .field_3798 = 0x2727,
-
-    .field_379a = 0x3127,
-
-    .field_379c = 0x2828,
-
-    .field_379e = 0x1628,
-
-    .field_37a0 = NAKA_NONE,
-
-    .field_37a2 = 0x1BFF,
-
-    .field_37a4 = 0x1D1C,
-
-    .field_37a6 = NAKA_NONE,
-
-    .field_37a8 = 0x1717,
-
-    .field_37aa = 0x1717,
-
-    .field_37ac = 0x1717,
-
-    .field_37ae = 0x1717,
-
-    .field_37b0 = 0x1918,
-
-    .field_37b2 = 0xFF1A,
-
-    .field_37b4 = NAKA_NONE,
-
-    .field_37b6 = NAKA_NONE,
-
-    .field_37b8 = NAKA_NONE,
-
-    .field_37ba = 0x2CFF,
-
-    .field_37bc = 0x142C,
-
-    .field_37be = 0x1513,
-
-    .field_37c0 = NAKA_NONE,
-
-    .field_37c2 = NAKA_NONE,
-
-    .field_37c4 = NAKA_NONE,
-
-    .field_37c6 = 0x2626,
-
-    .field_37c8 = NAKA_NONE,
-
-    .field_37ca = 0x1F20,
-
-    .field_37cc = 0x211E,
-
-    .field_37ce = NAKA_NONE,
-
-    .field_37d0 = 0x0808,
-
-    .field_37d2 = 0x0808,
-
-    .field_37d4 = 0x0808,
-
-    .field_37d6 = 0x0808,
+    .PanelButton_HelpCodeMaps14To25 = {
+        { 0x24, 0x22, 0x23, 0x25, 0x2F, 0xFF, 0xFF, 0xFF },
+        { 0x27, 0x27, 0x27, 0x31, 0x28, 0x28, 0x28, 0x16 },
+        { 0xFF, 0xFF, 0xFF, 0x1B, 0x1C, 0x1D, 0xFF, 0xFF },
+        { 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17 },
+        { 0x18, 0x19, 0x1A, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
+        { 0xFF, 0xFF, 0xFF, 0x2C, 0x2C, 0x14, 0x13, 0x15 },
+        { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x26, 0x26 },
+        { 0xFF, 0xFF, 0x20, 0x1F, 0x1E, 0x21, 0xFF, 0xFF },
+        { 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08 },
+    },
 
     .PanelButton_HelpCodeMaps = {
-        SELF(field_3730),
-        SELF(field_3738),
-        SELF(field_3740),
-        SELF(field_3748),
-        SELF(field_3750),
-        SELF(field_3758),
-        SELF(field_3760),
-        SELF(field_3768),
+        SELF(PanelButton_HelpCodeByBit),
+        SELF(PanelButton_HelpCodeByBit[1]),
+        SELF(PanelButton_HelpCodeByBit[2]),
+        SELF(PanelButton_HelpCodeByBit[3]),
+        SELF(PanelButton_HelpCodeByBit[4]),
+        SELF(PanelButton_HelpCodeByBit[5]),
+        SELF(PanelButton_HelpCodeByBit[6]),
+        SELF(PanelButton_HelpCodeByBit[7]),
         0x00000000,
         0x00000000,
-        SELF(field_3770),
-        SELF(field_3778),
-        SELF(field_3780),
+        SELF(PanelButton_HelpCodeByBit[8]),
+        SELF(PanelButton_HelpCodeByBit[9]),
+        SELF(PanelButton_HelpCodeByBit[10]),
         SELF(field_3788),
-        SELF(field_3790),
-        SELF(field_3798),
-        SELF(field_37a0),
-        SELF(field_37a8),
-        SELF(field_37b0),
-        SELF(field_37b8),
-        SELF(field_37c0),
-        SELF(field_37c8),
+        SELF(PanelButton_HelpCodeMaps14To25),
+        SELF(PanelButton_HelpCodeMaps14To25[1]),
+        SELF(PanelButton_HelpCodeMaps14To25[2]),
+        SELF(PanelButton_HelpCodeMaps14To25[3]),
+        SELF(PanelButton_HelpCodeMaps14To25[4]),
+        SELF(PanelButton_HelpCodeMaps14To25[5]),
+        SELF(PanelButton_HelpCodeMaps14To25[6]),
+        SELF(PanelButton_HelpCodeMaps14To25[7]),
         0x00000000,
         0x00000000,
         0x00000000,
-        SELF(field_37d0),
+        SELF(PanelButton_HelpCodeMaps14To25[8]),
         0x00000000,
         0x00000000,
         0x00000000,

@@ -258,3 +258,4 @@ NakaWidget_MidiPcgOutput_3_AcIndexWideES = 0x00E58DB8;
 NakaWidget_NamingCursorBox = 0x00EB2E4A;
 NakaWidget_TrAsFileList = 0x00E22C0E;
 SeqStep_TimerDispatch_ProcTables_Tail = 0x00E45014;
+NakaWidget_DiskMenu_1_AcTitleMenu = 0x00EA14E8;

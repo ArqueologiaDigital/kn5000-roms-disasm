@@ -733,7 +733,7 @@ Bitmap_SomeArrows:	.incbin "includes/generated/naka_technichord_strings.bin", 0x
 ; or 24-bit little-endian value anywhere in the v10 program, table data,
 ; custom data or HD-AE5000 images (searched 2026-09-25): what reaches
 ; them, if anything, was not found. The bitmaps themselves are also
-; pointed at by a 9-entry table inside Naka_DrawbarSlider_Resources
+; pointed at by a 9-entry table inside TrackMixer_GridRowMapEnd
 ; (naka_sequencer_channels.c member ptrs_5, 0xeeefcc) in the order
 ; 1,1,2,2,3,2,3,3,2 -- the colour sequence of the nine organ drawbars
 ; (16' and 5 1/3' brown; 8', 4' white; 2 2/3' black; 2' white; 1 3/5'
@@ -773,7 +773,7 @@ Bitmap_DrawbarNumberedSlider_1:	.incbin "includes/generated/naka_technichord_str
 ; or 24-bit little-endian value anywhere in the v10 program, table data,
 ; custom data or HD-AE5000 images (searched 2026-09-25): what reaches
 ; them, if anything, was not found. The bitmaps themselves are also
-; pointed at by a 9-entry table inside Naka_DrawbarSlider_Resources
+; pointed at by a 9-entry table inside TrackMixer_GridRowMapEnd
 ; (naka_sequencer_channels.c member ptrs_5, 0xeeefcc) in the order
 ; 1,1,2,2,3,2,3,3,2 -- the colour sequence of the nine organ drawbars
 ; (16' and 5 1/3' brown; 8', 4' white; 2 2/3' black; 2' white; 1 3/5'
@@ -813,7 +813,7 @@ Bitmap_DrawbarNumberedSlider_2:	.incbin "includes/generated/naka_technichord_str
 ; or 24-bit little-endian value anywhere in the v10 program, table data,
 ; custom data or HD-AE5000 images (searched 2026-09-25): what reaches
 ; them, if anything, was not found. The bitmaps themselves are also
-; pointed at by a 9-entry table inside Naka_DrawbarSlider_Resources
+; pointed at by a 9-entry table inside TrackMixer_GridRowMapEnd
 ; (naka_sequencer_channels.c member ptrs_5, 0xeeefcc) in the order
 ; 1,1,2,2,3,2,3,3,2 -- the colour sequence of the nine organ drawbars
 ; (16' and 5 1/3' brown; 8', 4' white; 2 2/3' black; 2' white; 1 3/5'
@@ -1639,8 +1639,10 @@ Str_DiskErr10_Italian:	.incbin "includes/generated/naka_technichord_strings.bin"
 ; [nakarest] Str_DiskErr10_Spanish  +0x10f0a..+0x10f3a (0xe96e58, 48 B)
 ; [nakarest] message text of the catalog: Spanish "Los datos ya est\xE1n protegido".
 Str_DiskErr10_Spanish:	.incbin "includes/generated/naka_technichord_strings.bin", 0x10F0A, 0x30
-; [nakarest] Str_DiskErr10_French  +0x10f3a..+0x10f66 (0xe96e88, 44 B)
-; [nakarest] message text of the catalog: French "Ces donn\xE9es sont prot\xE9g\xE9es c".
+; Str_DiskErr10_French -- 44 x char: the French text of message-catalog record 10 (code 0x0AFFFF, error 10), NUL-terminated
+; "Ces donn\xe9es sont prot\xe9g\xe9es contre la copie!"
+; Entry 2 (French) of the per-language table StrTable_DiskErr10, which MessageText returns for EVT_GET_LANGUAGE_PTR
+; and AcLanguageTextProc indexes with the help language (RAM 0x340E4).
 Str_DiskErr10_French:	.incbin "includes/generated/naka_technichord_strings.bin", 0x10F3A, 0x2C
 ; [nakarest] Str_DiskErr10_German  +0x10f66..+0x10f90 (0xe96eb4, 42 B)
 ; [nakarest] message text of the catalog: German "Diese Daten sind bereits kop".
@@ -1777,7 +1779,50 @@ Str_DiskErr20_Indonesian:	.incbin "includes/generated/naka_technichord_strings.b
 ; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog records 15,
 ; [nakarest] 24-26.
 Str_DiskErr20_Italian:		.incbin "includes/generated/naka_technichord_strings.bin", 0x11AC0, 0x1D0
-StrPtrTable_DiskErr20_End:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11C90, 0x1E4
+; StrTable_DiskErr21 -- 6 x uint32_t: the text table of message-catalog record 15 (code 0x15FFFF, "ERROR 21"):
+; one string pointer per help language -- English, German, French, Spanish, Italian, Indonesian.
+; MessageText returns it for EVT_GET_LANGUAGE_PTR; AcLanguageTextProc draws entry [RAM 0x340E4].
+StrTable_DiskErr21:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11C90, 0x18
+; Str_DiskErr21_Indonesian -- 46 x char: the Indonesian text of message-catalog record 15 ("ERROR 21"), NUL + 0xFF pad
+; "Kapasitas penyimpanan penuh. (Memory penuh)."; entry 5 of StrTable_DiskErr21.
+Str_DiskErr21_Indonesian:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11CA8, 0x2E
+; Str_DiskErr21_Italian -- 10 x char: the Italian text of message-catalog record 15 ("ERROR 21"), NUL + 0xFF pad
+; "ERROR 21"; entry 4 of StrTable_DiskErr21.
+Str_DiskErr21_Italian:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11CD6, 0xA
+; Str_DiskErr21_Spanish -- 14 x char: the Spanish text of message-catalog record 15 ("ERROR 21")
+; "Memoria llena"; entry 3 of StrTable_DiskErr21.
+Str_DiskErr21_Spanish:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11CE0, 0xE
+; Str_DiskErr21_French -- 18 x char: the French text of message-catalog record 15 ("ERROR 21"), NUL + 0xFF pad
+; "M\u00e9moire staur\u00e9e!"; entry 2 of StrTable_DiskErr21.
+Str_DiskErr21_French:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11CEE, 0x12
+; Str_DiskErr21_German -- 16 x char: the German text of message-catalog record 15 ("ERROR 21")
+; "Speicher voll !"; entry 1 of StrTable_DiskErr21.
+Str_DiskErr21_German:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11D00, 0x10
+; Str_DiskErr21_English -- 12 x char: the English text of message-catalog record 15 ("ERROR 21")
+; "Memory full"; entry 0 of StrTable_DiskErr21.
+Str_DiskErr21_English:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11D10, 0xC
+; StrTable_DiskErr22 -- 6 x uint32_t: the text table of message-catalog record 24 (code 0x16FFFF, "ERROR 22"):
+; one string pointer per help language -- English, German, French, Spanish, Italian, Indonesian.
+; MessageText returns it for EVT_GET_LANGUAGE_PTR; AcLanguageTextProc draws entry [RAM 0x340E4].
+StrTable_DiskErr22:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11D1C, 0x18
+; Str_DiskErr22_Indonesian -- 50 x char: the Indonesian text of message-catalog record 24 ("ERROR 22"), NUL + 0xFF pad
+; "Perlu tekan PUNCH OUT untuk melengkapi prosedur."; entry 5 of StrTable_DiskErr22.
+Str_DiskErr22_Indonesian:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11D34, 0x32
+; Str_DiskErr22_Italian -- 10 x char: the Italian text of message-catalog record 24 ("ERROR 22"), NUL + 0xFF pad
+; "ERROR 22"; entry 4 of StrTable_DiskErr22.
+Str_DiskErr22_Italian:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11D66, 0xA
+; Str_DiskErr22_Spanish -- 66 x char: the Spanish text of message-catalog record 24 ("ERROR 22"), NUL + 0xFF pad
+; "Es necesario pulsar PUNCH OUT para completar este procedi..."; entry 3 of StrTable_DiskErr22.
+Str_DiskErr22_Spanish:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11D70, 0x42
+; Str_DiskErr22_French -- 60 x char: the French text of message-catalog record 24 ("ERROR 22")
+; "Vous devez presser PUNCH OUT pour terminer cette proc\u00e9dure."; entry 2 of StrTable_DiskErr22.
+Str_DiskErr22_French:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11DB2, 0x3C
+; Str_DiskErr22_German -- 70 x char: the German text of message-catalog record 24 ("ERROR 22"), NUL + 0xFF pad
+; "Um diesen Vorgang abzuschli\u00dfen, m\u00fcssen Sie vorher PUNCH O..."; entry 1 of StrTable_DiskErr22.
+Str_DiskErr22_German:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11DEE, 0x46
+; Str_DiskErr22_English -- 64 x char: the English text of message-catalog record 24 ("ERROR 22"), NUL + 0xFF pad
+; "It is necessary to press PUNCH OUT to complete this proce..."; entry 0 of StrTable_DiskErr22.
+Str_DiskErr22_English:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11E34, 0x40
 StrPtrTable_DiskErr24_Start:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11E74, 0x22A
 MsgText_CheckLanguage_PtrTable:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1209E, 0x4	; 6 x 32-bit pointer
 ; [nakarest] StrTable_DiskErr24_Rhythm  +0x120a2..+0x120b6 (0xe97ff0, 20 B)
@@ -1893,7 +1938,26 @@ Str_Err24APC_Spanish:	.incbin "includes/generated/naka_technichord_strings.bin",
 ; [nakarest] posible cambiar la v"; French "Je ne peux changer la v\xE9loci"; ....
 Str_Err24APC_French:			.incbin "includes/generated/naka_technichord_strings.bin", 0x126C6, 0x106
 StrPtrTable_DiskErr24_French_End:	.incbin "includes/generated/naka_technichord_strings.bin", 0x127CC, 0x3D4
-StrPtrTable_DiskErr28_Start:		.incbin "includes/generated/naka_technichord_strings.bin", 0x12BA0, 0x26A
+; MsgText_CopyMelodyOnlyTexts -- 6 x u32: text of message 29 ("ERROR 27!": only Melody Tracks can be copied; Rhythm, Chord
+; and Control tracks cannot), per help language: 0 English, 1 German, 2 French, 3 Spanish, 4 the placeholder "ERROR 27",
+; 5 Indonesian. IvMesage_Catalog record 29 +10; MessageText returns it for EVT_GET_LANGUAGE_PTR and AcLanguageTextProc
+; draws entry [RAM 0x340e4].
+MsgText_CopyMelodyOnlyTexts:	.incbin "includes/generated/naka_technichord_strings.bin", 0x12BA0, 0x18
+; Str_Err27CopyMelody_Indonesian -- 118 x char: the Indonesian text of message 29 ("ERROR 27!"); MsgText_CopyMelodyOnlyTexts[5]
+Str_Err27CopyMelody_Indonesian:	.incbin "includes/generated/naka_technichord_strings.bin", 0x12BB8, 0x76
+; Str_Err27CopyMelody_Italian -- 10 x char: the placeholder "ERROR 27" + 0xff fill (language 4 has no text of its own); MsgText_CopyMelodyOnlyTexts[4]
+Str_Err27CopyMelody_Italian:	.incbin "includes/generated/naka_technichord_strings.bin", 0x12C2E, 0xA
+; Str_Err27CopyMelody_Spanish -- 102 x char: the Spanish text of message 29 ("ERROR 27!"); MsgText_CopyMelodyOnlyTexts[3]
+Str_Err27CopyMelody_Spanish:	.incbin "includes/generated/naka_technichord_strings.bin", 0x12C38, 0x66
+; Str_Err27CopyMelody_French -- 138 x char: the French text of message 29 ("ERROR 27!"); MsgText_CopyMelodyOnlyTexts[2]
+Str_Err27CopyMelody_French:	.incbin "includes/generated/naka_technichord_strings.bin", 0x12C9E, 0x8A
+; Str_Err27CopyMelody_German -- 120 x char: the German text of message 29 ("ERROR 27!"); MsgText_CopyMelodyOnlyTexts[1]
+Str_Err27CopyMelody_German:	.incbin "includes/generated/naka_technichord_strings.bin", 0x12D28, 0x78
+; Str_Err27CopyMelody_English -- 102 x char: the English text of message 29 ("ERROR 27!"); MsgText_CopyMelodyOnlyTexts[0]
+Str_Err27CopyMelody_English:	.incbin "includes/generated/naka_technichord_strings.bin", 0x12DA0, 0x66
+; MsgText_SongTooLongTexts -- 1 x u32: entry 0 (English, "This song is too long to be saved as a MIDI FILE.") of the
+; 6-entry text table of message 30 ("ERROR 28!"), IvMesage_Catalog record 30 +10; entries 1-5 continue at StrTable_DiskErr28.
+MsgText_SongTooLongTexts:	.incbin "includes/generated/naka_technichord_strings.bin", 0x12E06, 0x4
 ; [nakarest] StrTable_DiskErr28  +0x12e0a..+0x12e1e (0xe98d58, 20 B)
 ; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
 ; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
@@ -1947,7 +2011,38 @@ Str_DiskErr30_Indonesian:	.incbin "includes/generated/naka_technichord_strings.b
 ; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
 ; [nakarest] ... "Indonesian Header") used as the text of catalog records 22-23, 33-34.
 Str_DiskErr30_Italian:		.incbin "includes/generated/naka_technichord_strings.bin", 0x13382, 0x73E
-StrPtrTable_DiskErr30_End:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13AC0, 0x2C6
+; MsgText_Err32MemoryFullTexts -- 6 x u32: text of message 23 ("ERROR 32!", "Memory full"; set by the accompaniment-pattern
+; code in sequencer/accompaniment_engine.s), per help language: 0 English, 1 German, 2 French, 3 Spanish, 4 the placeholder
+; "ERROR 32", 5 Indonesian. IvMesage_Catalog record 23 +10; MessageText returns it, AcLanguageTextProc draws entry [0x340e4].
+MsgText_Err32MemoryFullTexts:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13AC0, 0x18
+; Str_Err32MemoryFull_Indonesian -- 14 x char: the Indonesian "memory full" text of message 23; MsgText_Err32MemoryFullTexts[5]
+Str_Err32MemoryFull_Indonesian:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13AD8, 0xE
+; Str_Err32MemoryFull_Italian -- 10 x char: the placeholder "ERROR 32" + 0xff fill; MsgText_Err32MemoryFullTexts[4]
+Str_Err32MemoryFull_Italian:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13AE6, 0xA
+; Str_Err32MemoryFull_Spanish -- 14 x char: the Spanish "memory full" text of message 23; MsgText_Err32MemoryFullTexts[3]
+Str_Err32MemoryFull_Spanish:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13AF0, 0xE
+; Str_Err32MemoryFull_French -- 18 x char: the French "memory full" text of message 23; MsgText_Err32MemoryFullTexts[2]
+Str_Err32MemoryFull_French:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13AFE, 0x12
+; Str_Err32MemoryFull_German -- 16 x char: the German "memory full" text of message 23; MsgText_Err32MemoryFullTexts[1]
+Str_Err32MemoryFull_German:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13B10, 0x10
+; Str_Err32MemoryFull_English -- 12 x char: the English "memory full" text of message 23; MsgText_Err32MemoryFullTexts[0]
+Str_Err32MemoryFull_English:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13B20, 0xC
+; MsgText_SysExIdMismatchTexts -- 6 x u32: text of message 34 ("ERROR 40!": the ID code of received System Exclusive data
+; is for a different product), per help language: 0 English, 1 German, 2 French, 3 Spanish, 4 the placeholder "ERROR 40",
+; 5 Indonesian. IvMesage_Catalog record 34 +10; MessageText returns it, AcLanguageTextProc draws entry [0x340e4].
+MsgText_SysExIdMismatchTexts:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13B2C, 0x18
+; Str_Err40SysExId_Indonesian -- 92 x char: the Indonesian text of message 34 (SysEx ID code of another product); MsgText_SysExIdMismatchTexts[5]
+Str_Err40SysExId_Indonesian:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13B44, 0x5C
+; Str_Err40SysExId_Italian -- 10 x char: the placeholder "ERROR 40" + 0xff fill; MsgText_SysExIdMismatchTexts[4]
+Str_Err40SysExId_Italian:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13BA0, 0xA
+; Str_Err40SysExId_Spanish -- 124 x char: the Spanish text of message 34 (SysEx ID code of another product); MsgText_SysExIdMismatchTexts[3]
+Str_Err40SysExId_Spanish:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13BAA, 0x7C
+; Str_Err40SysExId_French -- 136 x char: the French text of message 34 (SysEx ID code of another product); MsgText_SysExIdMismatchTexts[2]
+Str_Err40SysExId_French:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13C26, 0x88
+; Str_Err40SysExId_German -- 112 x char: the German text of message 34 (SysEx ID code of another product); MsgText_SysExIdMismatchTexts[1]
+Str_Err40SysExId_German:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13CAE, 0x70
+; Str_Err40SysExId_English -- 104 x char: the English text of message 34 (SysEx ID code of another product); MsgText_SysExIdMismatchTexts[0]
+Str_Err40SysExId_English:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13D1E, 0x68
 StrPtrTable_DiskErr41_Start:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13D86, 0x4
 ; [nakarest] StrTable_DiskErr41  +0x13d8a..+0x13d9e (0xe99cd8, 20 B)
 ; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
@@ -1992,10 +2087,12 @@ Str_DiskErr43_Spanish:	.incbin "includes/generated/naka_technichord_strings.bin"
 ; [nakarest] Str_DiskErr43_French  +0x144b0..+0x14546 (0xe9a3fe, 150 B)
 ; [nakarest] message text of the catalog: French "Le fichier que vous essayez ".
 Str_DiskErr43_French:	.incbin "includes/generated/naka_technichord_strings.bin", 0x144B0, 0x96
-; [nakarest] Str_DiskErr43_German  +0x14546..+0x1467a (0xe9a494, 308 B)
-; [nakarest] message texts of the catalog: German "Der Datensatz (File), den Si"; English "The
-; [nakarest] file that you are trying".
-Str_DiskErr43_German:	.incbin "includes/generated/naka_technichord_strings.bin", 0x14546, 0x134
+; Str_DiskErr43_German -- 174 x char: German text of message 43 ("ERROR 43!"): the file was saved on an earlier KN keyboard and
+; loads only with the "ALL" option. Entry 1 (German) of StrPtrTable_DiskErr43_Start, the help-language table MessageText returns.
+Str_DiskErr43_German:	.incbin "includes/generated/naka_technichord_strings.bin", 0x14546, 0xAE
+; Str_DiskErr43_English -- 134 x char: English text of message 43 ("ERROR 43!"): "The file that you are trying to load was saved
+; on a previous KN keyboard. ...". Entry 0 (English) of StrPtrTable_DiskErr43_Start.
+Str_DiskErr43_English:	.incbin "includes/generated/naka_technichord_strings.bin", 0x145F4, 0x86
 ; [nakarest] StrTable_DiskErr44  +0x1467a..+0x14692 (0xe9a5c8, 24 B)
 ; [nakarest] per-language string table (6 pointers each: English, German, French, Spanish,
 ; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
@@ -2073,8 +2170,10 @@ NakaInst_lo_pueden_usarse_los_disquetes_de_tipo:	.incbin "includes/generated/nak
 ; [nakarest] Str_DiskErr48_French  +0x14ee2..+0x14f4c (0xe9ae30, 106 B)
 ; [nakarest] message text of the catalog: French "La disquette ins\xE9r\xE9e est de ".
 Str_DiskErr48_French:	.incbin "includes/generated/naka_technichord_strings.bin", 0x14EE2, 0x6A
-; [nakarest] Str_DiskErr48_German  +0x14f4c..+0x14fb4 (0xe9ae9a, 104 B)
-; [nakarest] message text of the catalog: German "Die eingelegte Diskette ist ".
+; Str_DiskErr48_German -- 104 x char: the German text of message-catalog record 55 (code 0x30FFFF, error 48), NUL-terminated
+; "Die eingelegte Diskette ist ein \x842HD" Typ. ... nur \x842DD" Disketten verwendet werden." (0x84 = the low quote)
+; Entry 1 (German) of the per-language table StrTable_DiskErr48, which MessageText returns for EVT_GET_LANGUAGE_PTR
+; and AcLanguageTextProc indexes with the help language (RAM 0x340E4).
 Str_DiskErr48_German:	.incbin "includes/generated/naka_technichord_strings.bin", 0x14F4C, 0x68
 ; [nakarest] Str_DiskErr48_English  +0x14fb4..+0x15020 (0xe9af02, 108 B)
 ; [nakarest] message text of the catalog: English "The type of inserted DISK is". per-language
@@ -4309,7 +4408,16 @@ FDemo_FileOpen_DoOpen_Data:	.incbin "includes/generated/naka_technichord_strings
 ; [nakarest] Readers: source references Demo_SelectEntry_LoadPattern (demo/file_demo_proc.s:
 ; [nakarest] `lda xbc, (Demo_SelectEntry_LoadPattern_Data:24)`).
 Demo_SelectEntry_LoadPattern_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A15E, 0x1
-Demo_SelectEntry_DrawSecondary_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A15F, 0x2D
+; DemoSong_TitleCol -- 1 x uint8_t: 0xE1 (TITLE_DEMOSTYLE), the title byte of demo song 0 and the base of the
+; title column of the 23 x {u8 entry, u8 title} demo song order that starts 1 byte earlier at
+; Demo_SelectEntry_LoadPattern_Data. Demo_SelectEntry_DrawSecondary reads [2*DEMO_CURRENT_SONG] here
+; and passes it to UI_PostModeChangeEvent (EVT_CHANGE_TITLE to TITLE_PS + byte).
+DemoSong_TitleCol:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A15F, 0x1
+; DemoSong_OrderFromSong1 -- 22 x {u8 entry, u8 title}: demo songs 1-22 of the auto-demo order
+; Demo_SelectEntry_LoadPattern loads DEMO_ACTIVE_ENTRY from byte [2*song] of the order, DrawSecondary the title
+; from [2*song + 1]: 0xE1 TITLE_DEMOSTYLE, 0xE2 _DEMOSOUND, 0xE3 _DEMORHY, 0xE4 _DEMOFEATURE. Entries 18-22
+; are the five 0xE4 songs. The index wraps at 18 (songs 0-17); on title 228 it is clamped to 19.
+DemoSong_OrderFromSong1:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A160, 0x2C
 ; Demo_PartBitMask -- 16 x u16: part index -> 1 << index.
 ; Demo_ScanActivePartChannels and the record-chain scan in demo/file_demo_proc.s AND entry [part] with a 16-bit part mask
 ; (RAM 0xF19E, or the frame word at xsp+2) to test one part.

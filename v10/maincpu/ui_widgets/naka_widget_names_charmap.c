@@ -366,6 +366,18 @@ extern const char uwordProc;
 
 #define BASE  0x00EAD470u
 
+/* NakaDbg_PanelSimBitmap's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint32_t bmp;
+} NakaDbg_PanelSimBitmap_t;
+
 typedef struct __attribute__((packed)) {
     char w0_code[2];
     char VwUserBitmap_name[14];
@@ -1697,19 +1709,10 @@ typedef struct __attribute__((packed)) {
     uint16_t field_566e;
     uint16_t field_5670;
     uint16_t field_5672;
-    char str_919[2];
-    uint16_t field_5676;
-    uint8_t pad_1[2];  /* zero padding */
-    uint16_t field_567a;
-    uint16_t field_567c;
-    uint16_t field_567e;
-    uint16_t field_5680;
-    uint16_t field_5682;
-    char str_920[2];
-    uint16_t field_5686;
-    char N_str[2];
-    uint16_t field_568a;
-    uint8_t pad_2[2];  /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* Bitmap record, element 1 of Viewable slot 0x0 (PanelSimulator): draws bitmap 1 at (6, 34) */
+    NakaDbg_PanelSimBitmap_t NakaDbg_PanelSimBitmap;
 } naka_widget_names_charmap_t;
 
 #define SELF(field) \
@@ -6358,31 +6361,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .field_5672 = 0x0003,
 
-    .str_919 = ",",
-
-    .field_5676 = 0x0160,
-
-    .pad_1 = { 0 },
-
-    .field_567a = NAKA_NONE,
-
-    .field_567c = 0x0002,
-
-    .field_567e = NAKA_NONE,
-
-    .field_5680 = 0x0008,
-
-    .field_5682 = 0x0006,
-
-    .str_920 = "\"",
-
-    .field_5686 = 0x0138,
-
-    .N_str = "N",
-
-    .field_568a = 0x0001,
-
-    .pad_2 = { 0 },
+    .NakaDbg_PanelSimBitmap = { 0x0160002C, 0x0000, 0xFFFF, 0x0002, 0xFFFF, 0x0008, { 6, 34, 312, 78 }, 0x00000001 },
 
 };
 

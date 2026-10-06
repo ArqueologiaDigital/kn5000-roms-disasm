@@ -853,8 +853,8 @@ Demo_SelectEntry_DrawSecondary:
 
 	add wa, wa
 
-; lda_24 xbc, (Demo_SelectEntry_DrawSecondary_Data) (v7 patched)
-	lda	xbc, (Demo_SelectEntry_DrawSecondary_Data:24)
+; lda_24 xbc, (DemoSong_TitleCol) (v7 patched)
+	lda	xbc, (DemoSong_TitleCol:24)
 
 	ld	a, (xbc+wa)
 

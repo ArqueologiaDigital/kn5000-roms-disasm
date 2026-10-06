@@ -1309,13 +1309,13 @@ FileIO_BytecodeData_Code_Helper3:
 	ret
 FileIO_BytecodeData_Code_Helper4:
 	extz	bc
-	lda	xde, (FileIO_BytecodeData_Data_16:24)
+	lda	xde, (PanelAction_PedalAssignHandlerIndex:24)
 	ld	e, (xde+bc)
 	cp	e, 22
 	ret	ugt
 	extz	de
 	sla	de, 2
-	lda	xhl, (FileIO_BytecodeData_Code_Entry8_PtrTable_3:24)
+	lda	xhl, (PanelAction_PedalFunctionHandlers:24)
 	exts	xde
 	add	xde, xhl
 	ld	xhl, (xde)

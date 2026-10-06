@@ -26,6 +26,14 @@ extern const char WidgetCharMap_DataEntry1;
  * class chain's own propname / propdata (see THE CLASS SYSTEM in
  * scripts/analysis/nakarest_objtab_map.py). */
 /* NoteEvent_DefaultPatternSlot's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* AccPatch_SlotRecordTemplate's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint16_t entry_chain0;
+    uint16_t word2;
+    uint16_t entry_chains[4];
+    uint8_t settings[52];
+} AccPatch_SlotRecordTemplate_t;
+
 typedef struct __attribute__((packed)) {
     uint8_t flags;
     uint16_t prev_slot;
@@ -2056,24 +2064,20 @@ typedef struct __attribute__((packed)) {
     char DigitalDrawbar_str_4[16];
     char DigitalDrawbar_str_5[16];
     /* NAKA_InitDataBlock_PtrTable_12: 6 pointers (cut from ptrs_12 by split_naka_pointer_arrays.py) */
-    uint32_t NAKA_InitDataBlock_PtrTable_12[6];
-    char SuaraSuaraOrganClassic_str[58];
-    char Italian_str_11[8];
-    uint16_t field_6b38;
-    uint16_t field_6b3a;
-    uint16_t field_6b3c;
-    uint16_t field_6b3e;
-    uint16_t field_6b40;
-    uint16_t field_6b42;
-    uint16_t field_6b44;
-    uint16_t field_6b46;
-    uint16_t field_6b48;
-    uint16_t field_6b4a;
-    uint16_t field_6b4c;
-    char SicosConBarrasPara_str[36];
-    char txt_Avec_les_tirettes_harmoniques[86];
-    char txt_Erzeugen_Sie_legendare[70];
-    char ClassicOrganSoundsWith_str[50];
+    /* per-language text of feature-demo language text 11 ("Classic Organ Sounds with Jazz and Rock Drawbars!"), by help language */
+    uint32_t FtLangText11_Texts[6];
+    /* Indonesian caption of feature-demo language text 11 (classic organ sounds with jazz and rock drawbars) */
+    char Str_FtLangText11_Indonesian[58];
+    /* language-4 entry of FtLangText11_Texts: the placeholder "Italian" */
+    char Str_FtLangText11_Italian[8];
+    /* Spanish caption of feature-demo language text 11 (classic organ sounds with jazz and rock drawbars) */
+    char Str_FtLangText11_Spanish[58];
+    /* French caption of feature-demo language text 11 (classic organ sounds with jazz and rock drawbars) */
+    char Str_FtLangText11_French[86];
+    /* German caption of feature-demo language text 11 (classic organ sounds with jazz and rock drawbars) */
+    char Str_FtLangText11_German[70];
+    /* English caption of feature-demo language text 11 (classic organ sounds with jazz and rock drawbars) */
+    char Str_FtLangText11_English[50];
     /* NAKA_InitDataBlock_PtrTable_13: 6 pointers (cut from ptrs_13 by split_naka_pointer_arrays.py) */
     uint32_t NAKA_InitDataBlock_PtrTable_13[6];
     char AcousticIllusion_str[18];
@@ -2125,27 +2129,13 @@ typedef struct __attribute__((packed)) {
     /* zero padding */
     /* default image of one 256-byte pattern slot of the style buffer at *(0xC72)+0x1400: flags 0x80 (in use), prev/next slot links 0xFFFF (none), then an event stream (0x87, eight 7-byte 0x90 records each ended by 0x81, 0x83 end) */
     NoteEvent_DefaultPatternSlot_t NoteEvent_DefaultPatternSlot;
-    uint8_t field_71ac;
-    uint8_t pad_135[11];  /* zero padding */
-    uint16_t field_71b8;
-    uint16_t field_71ba;
-    char X_str[2];
-    uint8_t pad_136[16];  /* zero padding */
-    char str_978[2];
-    uint16_t field_71d0;
-    uint16_t field_71d2;
-    uint8_t pad_137[2];  /* zero padding */
-    char str_979[2];
-    uint16_t field_71d8;
-    uint16_t field_71da;
-    uint8_t pad_138[2];  /* zero padding */
-    char str_980[2];
-    uint16_t field_71e0;
-    uint16_t field_71e2;
-    uint8_t pad_139[2];  /* zero padding */
-    char str_981[2];
-    uint16_t field_71e8;
-    uint16_t field_71ea;
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* first 64 bytes of the 96-byte default accompaniment-patch slot record (copied to all 30 slots); +0 and +4..+11 = pattern-entry chain heads, +12.. = slot settings */
+    AccPatch_SlotRecordTemplate_t AccPatch_SlotRecordTemplate;
 } naka_perf_style_t;
 
 #define SELF(field) \
@@ -11285,48 +11275,22 @@ const naka_perf_style_t naka_perf_style_data
 
     .DigitalDrawbar_str_5 = "Digital Drawbar",
 
-    .NAKA_InitDataBlock_PtrTable_12 = {
-        SELF(ClassicOrganSoundsWith_str),
-        SELF(txt_Erzeugen_Sie_legendare),
-        SELF(txt_Avec_les_tirettes_harmoniques),
-        SELF(field_6b38),
-        SELF(Italian_str_11),
-        SELF(SuaraSuaraOrganClassic_str),
+    .FtLangText11_Texts = {
+        SELF(Str_FtLangText11_English), SELF(Str_FtLangText11_German), SELF(Str_FtLangText11_French), SELF(Str_FtLangText11_Spanish),
+        SELF(Str_FtLangText11_Italian), SELF(Str_FtLangText11_Indonesian),
     },
 
-    .SuaraSuaraOrganClassic_str = ALIGNED_STRING("Suara-suara Organ Classic dengan Jazz dan Rock Drawbars!"),
+    .Str_FtLangText11_Indonesian = "Suara-suara Organ Classic dengan Jazz dan Rock Drawbars!\x00\xFF",
 
-    .Italian_str_11 = "Italian",
+    .Str_FtLangText11_Italian = "Italian",
 
-    .field_6b38 = 0x53A1,
+    .Str_FtLangText11_Spanish = "\xA1Sonidos de \xF3rgano cl\xE1sicos con barras para Jazz y Rock!\x00\xFF",
 
-    .field_6b3a = 0x6E6F,
+    .Str_FtLangText11_French = "Avec les tirettes harmoniques, des sonorit\xE9s d'Orgues Classiques, de Jazz et de Rock!",
 
-    .field_6b3c = 0x6469,
+    .Str_FtLangText11_German = "Erzeugen Sie legend\xE4re Orgelsounds mit den Jazz- und Rock-Zugriegeln!",
 
-    .field_6b3e = 0x736F,
-
-    .field_6b40 = 0x6420,
-
-    .field_6b42 = 0x2065,
-
-    .field_6b44 = 0x72F3,
-
-    .field_6b46 = 0x6167,
-
-    .field_6b48 = 0x6F6E,
-
-    .field_6b4a = 0x6320,
-
-    .field_6b4c = 0xE16C,
-
-    .SicosConBarrasPara_str = ALIGNED_STRING("sicos con barras para Jazz y Rock!"),
-
-    .txt_Avec_les_tirettes_harmoniques = "Avec les tirettes harmoniques, des sonorit\351s d'Orgues Classiques, de Jazz et de Rock!\0",
-
-    .txt_Erzeugen_Sie_legendare = "Erzeugen Sie legend\344re Orgelsounds mit den Jazz- und Rock-Zugriegeln!\0",
-
-    .ClassicOrganSoundsWith_str = "Classic Organ Sounds with Jazz and Rock Drawbars!",
+    .Str_FtLangText11_English = "Classic Organ Sounds with Jazz and Rock Drawbars!",
 
     .NAKA_InitDataBlock_PtrTable_13 = {
         SELF(AcousticIllusion_str_5),
@@ -11456,47 +11420,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .NoteEvent_DefaultPatternSlot = { 0x80, 0xFFFF, 0xFFFF, { 0x87, 0x90, 0x00, 0x30, 0x50, 0x10, 0x00, 0x81, 0x90, 0x00, 0x31, 0x50, 0x10, 0x00, 0x81, 0x90, 0x00, 0x32, 0x50, 0x10, 0x00, 0x81, 0x90, 0x00, 0x33, 0x50, 0x10, 0x00, 0x81, 0x90, 0x00, 0x34, 0x50, 0x10, 0x00, 0x81, 0x90, 0x00, 0x35, 0x50, 0x10, 0x00, 0x81, 0x90, 0x00, 0x36, 0x50, 0x10, 0x00, 0x81, 0x90, 0x00, 0x37, 0x50, 0x10, 0x00, 0x81, 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x87 } },
 
-    .field_71ac = 0x00,
-
-    .pad_135 = { 0 },
-
-    .field_71b8 = 0x0107,
-
-    .field_71ba = 0x8020,
-
-    .X_str = "X",
-
-    .pad_136 = { 0 },
-
-    .str_978 = "@",
-
-    .field_71d0 = 0x0658,
-
-    .field_71d2 = 0x007F,
-
-    .pad_137 = { 0 },
-
-    .str_979 = "@",
-
-    .field_71d8 = 0x0658,
-
-    .field_71da = 0x007F,
-
-    .pad_138 = { 0 },
-
-    .str_980 = "@",
-
-    .field_71e0 = 0x0658,
-
-    .field_71e2 = 0x007F,
-
-    .pad_139 = { 0 },
-
-    .str_981 = "@",
-
-    .field_71e8 = 0x0658,
-
-    .field_71ea = 0x007F,
+    .AccPatch_SlotRecordTemplate = { 0x0000, 0x0000, { 0x0000, 0x0000, 0x0000, 0x0000 }, { 0x07, 0x01, 0x20, 0x80, 0x58, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x58, 0x06, 0x7F, 0x00, 0x00, 0x00, 0x40, 0x00, 0x58, 0x06, 0x7F, 0x00, 0x00, 0x00, 0x40, 0x00, 0x58, 0x06, 0x7F, 0x00, 0x00, 0x00, 0x40, 0x00, 0x58, 0x06, 0x7F, 0x00 } },
 
 };
 

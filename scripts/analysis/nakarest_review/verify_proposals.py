@@ -12,10 +12,10 @@ def nel(d):
     return n
 for f in sys.argv[1:]:
     P = json.load(open(f))
-    inv = {x["label"]: x for x in json.load(open(os.path.join(os.path.dirname(f), "inventory.json")))}
+    inv = {(x["label"] or (x["blob"], x["off"])): x for x in json.load(open(os.path.join(os.path.dirname(f), "inventory.json")))}
     for r in P:
         lab = r["label"]
-        x = inv.get(lab)
+        x = inv.get(lab or (r.get("blob"), r.get("off")))
         if r.get("verdict") not in ("type", "name"):
             print("REFUSE %-44s %s" % (lab, (r.get("why_refused") or "")[:110]))
             continue

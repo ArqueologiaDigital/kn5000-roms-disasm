@@ -158,5 +158,9 @@ NakaWidget_Normal_20_IvPageOverWr:		.incbin "includes/generated/naka_normal_mode
 NakaWidget_Normal_21_IvPageOverWr:		.incbin "includes/generated/naka_normal_mode.bin", 0x42C, 0x1C
 NakaWidget_Normal_22_IvPageOverWr:		.incbin "includes/generated/naka_normal_mode.bin", 0x448, 0x1C
 NakaWidget_Normal_23_IvExit:			.incbin "includes/generated/naka_normal_mode.bin", 0x464, 0x16
-NakaWidget_N1:					.incbin "includes/generated/naka_normal_mode.bin", 0x47A, 0x16
+; NakaWidget_N1 -- 1 x struct (Window view record, first 22 of 36 B): the "N1" window, entry 24 of InitializeToshi's slot 0x1
+; The Viewable part: class 0x01600035, super 0xFFFF, sub 25, rect (0,127)-(319,236). The Window fields
+; (+22 color, +24 border, +26 modal, +28 parent -> RAM 0x3F404, +32 child -> 0x3F408) continue in
+; extensions/extension_data.s ("element 24 (0x35), +0x16..+0x23 -- begun in normal_mode_layout.s").
+NakaWidget_N1:	.incbin "includes/generated/naka_normal_mode.bin", 0x47A, 0x16
 ; External label offsets within the binary blob above.

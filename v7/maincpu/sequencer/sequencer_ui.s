@@ -15767,8 +15767,8 @@ EqualizerCngFunc:
 ; EqualizerCngFunc dispatch A
 Equalizer_DispatchA:
 	ld xwa, xde
-	lda xbc, (Equalizer_DispatchA_Data_2:24)
-	lda xde, (Equalizer_DispatchA_Data:24)
+	lda xbc, (Equalizer_GainDispPos:24)
+	lda xde, (Equalizer_FreqDispPos:24)
 	dec 2, xwa
 	cp xwa, 0x0
 	jrl c, Equalizer_LookupParamByIndex

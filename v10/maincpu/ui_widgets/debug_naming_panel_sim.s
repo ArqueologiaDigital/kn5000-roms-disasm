@@ -148,6 +148,10 @@ NakaWidget_CheckNaming:			.incbin "includes/generated/naka_debug_naming.bin", 0x
 NakaWidget_CheckTitle_5_IvNaming:	.incbin "includes/generated/naka_debug_naming.bin", 0x806, 0x1A
 NakaWidget_CheckTitle_6_IvExitScreen:	.incbin "includes/generated/naka_debug_naming.bin", 0x820, 0x1A
 NakaWidget_CheckWall:			.incbin "includes/generated/naka_debug_naming.bin", 0x83A, 0x22
+; NakaWidget_CheckTitle_8_IvExitScreen -- 1 x struct (IvExitScreen view record, 26 B): the EXIT catcher of the "CheckWall" debug screen, entry 8 of InitializeRoot's Viewable table slot 0xFF
+; Child of entry 7 (CheckWall); rect (0,0)-(31,31). +22 screen = view id 0x00FF0000 (slot 0xFF entry 0, the
+; "CheckTitle" screen): IvExitScreenProc posts EVT_SHOW to it, so EXIT returns to CheckTitle. Typed as two words
+; (entry, slot) because the 32-bit value is not an address.
 NakaWidget_CheckTitle_8_IvExitScreen:	.incbin "includes/generated/naka_debug_naming.bin", 0x85C, 0x1A
 ; [nakarest] naka_debug_naming+0x876  +0x876..+0x946 (0xeb3374, 208 B)
 ; [nakarest] the table itself: Viewable slot 0x0 (table 0xeb3374, 51 entries, InitializeRoot),

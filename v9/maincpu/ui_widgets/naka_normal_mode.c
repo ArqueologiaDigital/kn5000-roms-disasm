@@ -19,6 +19,17 @@ extern const char Naka_PresentationRootState;
  * parent Screen; allsize 42.  Field names and type characters are the
  * class chain's own propname / propdata (see THE CLASS SYSTEM in
  * scripts/analysis/nakarest_objtab_map.py). */
+/* NakaWidget_N1's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+} NakaWidget_N1_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t class_;            /* +0 M */
     uint16_t super;             /* +4 [ */
@@ -343,16 +354,10 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvPageOverWr_t normal_IvPageOverWr_5;
     /* element 22 of Viewable slot 0x1: IvPageOverWr (class id 0x0162001B) */
     naka_cls_IvPageOverWr_t normal_IvPageOverWr_6;
-    naka_dispatch_t w3;  /* 0x47 */
-    uint16_t field_047c;
-    uint16_t field_047e;
-    uint16_t field_0480;
-    uint16_t field_0482;
-    uint16_t field_0484;
-    uint16_t field_0486;
-    uint8_t pad_53[2];  /* zero padding */
-    uint16_t field_048a;
-    uint32_t field_048c;
+    uint8_t bytes_0464[22];  /* 0x47 */
+    /* zero padding */
+    /* Window view record "N1", first 22 bytes (the Viewable part); color..child continue in extensions/extension_data.s */
+    NakaWidget_N1_t NakaWidget_N1;
 } naka_normal_mode_t;
 
 #define SELF(field) \
@@ -762,33 +767,9 @@ const naka_normal_mode_t naka_normal_mode_data
         .window = 0x0001003C,
     },
 
-    .w3 = {
-        .header    = NAKA_HDR(0x47),
-        .field_04   = 0x0001,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x0016FFFF,
-        .inst_ptr   = NAKA_ADDR(CRTC_LINE_COMPARE),
-        .link_ptr   = 0x001F0000,
-        .proc_addr  = 0x0035001F,
-    },
+    .bytes_0464 = { 0x47, 0x00, 0x60, 0x01, 0x01, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x16, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F, 0x00, 0x1F, 0x00 },
 
-    .field_047c = 0x0160,
-
-    .field_047e = NAKA_NONE,
-
-    .field_0480 = 0x0019,
-
-    .field_0482 = NAKA_NONE,
-
-    .field_0484 = NAKA_NONE,
-
-    .field_0486 = 0x0008,
-
-    .pad_53 = { 0 },
-
-    .field_048a = 0x007F,
-
-    .field_048c = 0x00EC013F,
+    .NakaWidget_N1 = { 0x01600035, 0xFFFF, 0x0019, 0xFFFF, 0xFFFF, 0x0008, { 0, 127, 319, 236 } },
 
 };
 

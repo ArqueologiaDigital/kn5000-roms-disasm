@@ -1345,13 +1345,608 @@ BitmapID_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x2B20, 0x13
 BitmapID_FileNamePtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x2C58, 0x400
 ; BitmapID_FileNames -- the .bmp file names BitmapID_FileNamePtrTable points at ("19mic.bmp" ...).
 BitmapID_FileNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3058, 0x190
-; [nakarest] naka_disk_warning+0x31e8  +0x31e8..+0x3d42 (0xeabe94, 2906 B)
-; [nakarest] propname blocks (the +20 field-name table) of classes 0-108 of Class slot 0x160
-; [nakarest] (table 0xeac9ee, 109 entries, InitializeRoot): Object {}; Function {func};
-; [nakarest] ApFunction {}; ....
-	.incbin "includes/generated/naka_disk_warning.bin", 0x31E8, 0x326
+; ClassProps_Object -- 1 x uint32_t: the propname block of NAKA class Object (Class table slot 0x160, entry 0, its +20)
+; One pointer per letter of its propdata "" (no own fields), then one to ""; the names follow in
+; ClassProps_Object_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_Object:	.incbin "includes/generated/naka_disk_warning.bin", 0x31E8, 0x4
+; ClassProps_Object_Names -- 2 x char: the field names of class Object, in reverse field order: ""
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_Object points at each one.
+ClassProps_Object_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x31EC, 0x2
+; ClassProps_Function -- 2 x uint32_t: the propname block of NAKA class Function (Class table slot 0x160, entry 1, its +20)
+; One pointer per letter of its propdata "I" -- "func", then one to ""; the names follow in
+; ClassProps_Function_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_Function:	.incbin "includes/generated/naka_disk_warning.bin", 0x31EE, 0x8
+; ClassProps_Function_Names -- 8 x char: the field names of class Function, in reverse field order: "", "func"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_Function points at each one.
+ClassProps_Function_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x31F6, 0x8
+; ClassProps_ApFunction -- 1 x uint32_t: the propname block of NAKA class ApFunction (Class table slot 0x160, entry 2, its +20)
+; One pointer per letter of its propdata "" (no own fields), then one to ""; the names follow in
+; ClassProps_ApFunction_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_ApFunction:	.incbin "includes/generated/naka_disk_warning.bin", 0x31FE, 0x4
+; ClassProps_ApFunction_Names -- 2 x char: the field names of class ApFunction, in reverse field order: ""
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_ApFunction points at each one.
+ClassProps_ApFunction_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x3202, 0x2
+; ClassProps_MainFunction -- 1 x uint32_t: the propname block of NAKA class MainFunction (Class table slot 0x160, entry 3, its +20)
+; One pointer per letter of its propdata "" (no own fields), then one to ""; the names follow in
+; ClassProps_MainFunction_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_MainFunction:	.incbin "includes/generated/naka_disk_warning.bin", 0x3204, 0x4
+; ClassProps_MainFunction_Names -- 2 x char: the field names of class MainFunction, in reverse field order: ""
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_MainFunction points at each one.
+ClassProps_MainFunction_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x3208, 0x2
+; ClassProps_Class -- 8 x uint32_t: the propname block of NAKA class Class (Class table slot 0x160, entry 4, its +20)
+; One pointer per letter of its propdata "JMBBXXL" -- "proc", "parent", "allsize", "selfsize", "name", "propdata", "propname", then one to ""; the names follow in
+; ClassProps_Class_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_Class:	.incbin "includes/generated/naka_disk_warning.bin", 0x320A, 0x20
+; ClassProps_Class_Names -- 60 x char: the field names of class Class, in reverse field order: "", "propname", "propdata", "name", "selfsize", "allsize", "parent", "proc"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_Class points at each one.
+ClassProps_Class_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x322A, 0x3C
+; ClassProps_SupportClass -- 5 x uint32_t: the propname block of NAKA class SupportClass (Class table slot 0x160, entry 5, its +20)
+; One pointer per letter of its propdata "JBBK" -- "proc", "count", "size", "prop", then one to ""; the names follow in
+; ClassProps_SupportClass_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_SupportClass:	.incbin "includes/generated/naka_disk_warning.bin", 0x3266, 0x14
+; ClassProps_SupportClass_Names -- 26 x char: the field names of class SupportClass, in reverse field order: "", "prop", "size", "count", "proc"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_SupportClass points at each one.
+ClassProps_SupportClass_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x327A, 0x1A
+; ClassProps_Mode -- 5 x uint32_t: the propname block of NAKA class Mode (Class table slot 0x160, entry 6, its +20)
+; One pointer per letter of its propdata "kalX" -- "proc", "title", "user", "name", then one to ""; the names follow in
+; ClassProps_Mode_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_Mode:	.incbin "includes/generated/naka_disk_warning.bin", 0x3294, 0x14
+; ClassProps_Mode_Names -- 26 x char: the field names of class Mode, in reverse field order: "", "name", "user", "title", "proc"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_Mode points at each one.
+ClassProps_Mode_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x32A8, 0x1A
+; ClassProps_Title -- 8 x uint32_t: the propname block of NAKA class Title (Class table slot 0x160, entry 7, its +20)
+; One pointer per letter of its propdata "kNlXNAA" -- "proc", "top", "user", "name", "now", "prev", "next", then one to ""; the names follow in
+; ClassProps_Title_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_Title:	.incbin "includes/generated/naka_disk_warning.bin", 0x32C2, 0x20
+; ClassProps_Title_Names -- 40 x char: the field names of class Title, in reverse field order: "", "next", "prev", "now", "name", "user", "top", "proc"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_Title points at each one.
+ClassProps_Title_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x32E2, 0x28
+; ClassProps_ResBitmap -- 2 x uint32_t: the propname block of NAKA class ResBitmap (Class table slot 0x160, entry 8, its +20)
+; One pointer per letter of its propdata "B" -- "data", then one to ""; the names follow in
+; ClassProps_ResBitmap_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_ResBitmap:	.incbin "includes/generated/naka_disk_warning.bin", 0x330A, 0x8
+; ClassProps_ResBitmap_Names -- 8 x char: the field names of class ResBitmap, in reverse field order: "", "data"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_ResBitmap points at each one.
+ClassProps_ResBitmap_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x3312, 0x8
+; ClassProps_ResFrame -- 2 x uint32_t: the propname block of NAKA class ResFrame (Class table slot 0x160, entry 9, its +20)
+; One pointer per letter of its propdata "B" -- "data", then one to ""; the names follow in
+; ClassProps_ResFrame_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_ResFrame:	.incbin "includes/generated/naka_disk_warning.bin", 0x331A, 0x8
+; ClassProps_ResFrame_Names -- 8 x char: the field names of class ResFrame, in reverse field order: "", "data"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_ResFrame points at each one.
+ClassProps_ResFrame_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x3322, 0x8
+; ClassProps_ResIcon -- 2 x uint32_t: the propname block of NAKA class ResIcon (Class table slot 0x160, entry 10, its +20)
+; One pointer per letter of its propdata "B" -- "data", then one to ""; the names follow in
+; ClassProps_ResIcon_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_ResIcon:	.incbin "includes/generated/naka_disk_warning.bin", 0x332A, 0x8
+; ClassProps_ResIcon_Names -- 8 x char: the field names of class ResIcon, in reverse field order: "", "data"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_ResIcon points at each one.
+ClassProps_ResIcon_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x3332, 0x8
+; ClassProps_ResFont -- 2 x uint32_t: the propname block of NAKA class ResFont (Class table slot 0x160, entry 11, its +20)
+; One pointer per letter of its propdata "B" -- "data", then one to ""; the names follow in
+; ClassProps_ResFont_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_ResFont:	.incbin "includes/generated/naka_disk_warning.bin", 0x333A, 0x8
+; ClassProps_ResFont_Names -- 8 x char: the field names of class ResFont, in reverse field order: "", "data"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_ResFont points at each one.
+ClassProps_ResFont_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x3342, 0x8
+; ClassProps_ResEvent -- 2 x uint32_t: the propname block of NAKA class ResEvent (Class table slot 0x160, entry 12, its +20)
+; One pointer per letter of its propdata "X" -- "name", then one to ""; the names follow in
+; ClassProps_ResEvent_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_ResEvent:	.incbin "includes/generated/naka_disk_warning.bin", 0x334A, 0x8
+; ClassProps_ResEvent_Names -- 8 x char: the field names of class ResEvent, in reverse field order: "", "name"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_ResEvent points at each one.
+ClassProps_ResEvent_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x3352, 0x8
+; ClassProps_ResMethod -- 2 x uint32_t: the propname block of NAKA class ResMethod (Class table slot 0x160, entry 13, its +20)
+; One pointer per letter of its propdata "X" -- "name", then one to ""; the names follow in
+; ClassProps_ResMethod_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_ResMethod:	.incbin "includes/generated/naka_disk_warning.bin", 0x335A, 0x8
+; ClassProps_ResMethod_Names -- 8 x char: the field names of class ResMethod, in reverse field order: "", "name"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_ResMethod points at each one.
+ClassProps_ResMethod_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x3362, 0x8
+; ClassProps_ResString -- 2 x uint32_t: the propname block of NAKA class ResString (Class table slot 0x160, entry 14, its +20)
+; One pointer per letter of its propdata "B" -- "data", then one to ""; the names follow in
+; ClassProps_ResString_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_ResString:	.incbin "includes/generated/naka_disk_warning.bin", 0x336A, 0x8
+; ClassProps_ResString_Names -- 8 x char: the field names of class ResString, in reverse field order: "", "data"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_ResString points at each one.
+ClassProps_ResString_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x3372, 0x8
+; ClassProps_ResName -- 2 x uint32_t: the propname block of NAKA class ResName (Class table slot 0x160, entry 15, its +20)
+; One pointer per letter of its propdata "X" -- "name", then one to ""; the names follow in
+; ClassProps_ResName_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_ResName:	.incbin "includes/generated/naka_disk_warning.bin", 0x337A, 0x8
+; ClassProps_ResName_Names -- 8 x char: the field names of class ResName, in reverse field order: "", "name"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_ResName points at each one.
+ClassProps_ResName_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x3382, 0x8
+; ClassProps_Viewable -- 8 x uint32_t: the propname block of NAKA class Viewable (Class table slot 0x160, entry 16, its +20)
+; One pointer per letter of its propdata "M[[[[]P" -- "class", "super", "sub", "next", "prev", "flag", "rect", then one to ""; the names follow in
+; ClassProps_Viewable_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_Viewable:	.incbin "includes/generated/naka_disk_warning.bin", 0x338A, 0x20
+; ClassProps_Viewable_Names -- 42 x char: the field names of class Viewable, in reverse field order: "", "rect", "flag", "prev", "next", "sub", "super", "class"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_Viewable points at each one.
+ClassProps_Viewable_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x33AA, 0x2A
+; ClassProps_VwBox -- 4 x uint32_t: the propname block of NAKA class VwBox (Class table slot 0x160, entry 17, its +20)
+; One pointer per letter of its propdata "^_A" -- "color", "border", "index", then one to ""; the names follow in
+; ClassProps_VwBox_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_VwBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x33D4, 0x10
+; ClassProps_VwBox_Names -- 22 x char: the field names of class VwBox, in reverse field order: "", "index", "border", "color"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_VwBox points at each one.
+ClassProps_VwBox_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x33E4, 0x16
+; ClassProps_PsParaBox -- 4 x uint32_t: the propname block of NAKA class PsParaBox (Class table slot 0x160, entry 18, its +20)
+; One pointer per letter of its propdata "c^d" -- "font", "fontcolor", "align", then one to ""; the names follow in
+; ClassProps_PsParaBox_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_PsParaBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x33FA, 0x10
+; ClassProps_PsParaBox_Names -- 24 x char: the field names of class PsParaBox, in reverse field order: "", "align", "fontcolor", "font"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_PsParaBox points at each one.
+ClassProps_PsParaBox_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x340A, 0x18
+; ClassProps_AcLswBox -- 3 x uint32_t: the propname block of NAKA class AcLswBox (Class table slot 0x160, entry 19, its +20)
+; One pointer per letter of its propdata "jn" -- "func", "data", then one to ""; the names follow in
+; ClassProps_AcLswBox_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_AcLswBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x3422, 0xC
+; ClassProps_AcLswBox_Names -- 14 x char: the field names of class AcLswBox, in reverse field order: "", "data", "func"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_AcLswBox points at each one.
+ClassProps_AcLswBox_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x342E, 0xE
+; ClassProps_AcTempoBox -- 1 x uint32_t: the propname block of NAKA class AcTempoBox (Class table slot 0x160, entry 20, its +20)
+; One pointer per letter of its propdata "" (no own fields), then one to ""; the names follow in
+; ClassProps_AcTempoBox_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_AcTempoBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x343C, 0x4
+; ClassProps_AcTempoBox_Names -- 2 x char: the field names of class AcTempoBox, in reverse field order: ""
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_AcTempoBox points at each one.
+ClassProps_AcTempoBox_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x3440, 0x2
+; ClassProps_PsEditBox -- 9 x uint32_t: the propname block of NAKA class PsEditBox (Class table slot 0x160, entry 21, its +20)
+; One pointer per letter of its propdata "Xc^dBeGm" -- "caption", "font", "fontcolor", "align", "length", "editsw", "dial", "selected", then one to ""; the names follow in
+; ClassProps_PsEditBox_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_PsEditBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x3442, 0x24
+; ClassProps_PsEditBox_Names -- 64 x char: the field names of class PsEditBox, in reverse field order: "", "selected", "dial", "editsw", "length", "align", "fontcolor", "font", "caption"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_PsEditBox points at each one.
+ClassProps_PsEditBox_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x3466, 0x40
+; ClassProps_PsNumEditBox -- 2 x uint32_t: the propname block of NAKA class PsNumEditBox (Class table slot 0x160, entry 22, its +20)
+; One pointer per letter of its propdata "A" -- "figures", then one to ""; the names follow in
+; ClassProps_PsNumEditBox_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_PsNumEditBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x34A6, 0x8
+; ClassProps_PsNumEditBox_Names -- 10 x char: the field names of class PsNumEditBox, in reverse field order: "", "figures"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_PsNumEditBox points at each one.
+ClassProps_PsNumEditBox_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x34AE, 0xA
+; ClassProps_PsTblEditBox -- 2 x uint32_t: the propname block of NAKA class PsTblEditBox (Class table slot 0x160, entry 23, its +20)
+; One pointer per letter of its propdata "j" -- "func", then one to ""; the names follow in
+; ClassProps_PsTblEditBox_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_PsTblEditBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x34B8, 0x8
+; ClassProps_PsTblEditBox_Names -- 8 x char: the field names of class PsTblEditBox, in reverse field order: "", "func"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_PsTblEditBox points at each one.
+ClassProps_PsTblEditBox_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x34C0, 0x8
+; ClassProps_AcOnOffBox -- 2 x uint32_t: the propname block of NAKA class AcOnOffBox (Class table slot 0x160, entry 24, its +20)
+; One pointer per letter of its propdata "m" -- "onoff", then one to ""; the names follow in
+; ClassProps_AcOnOffBox_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_AcOnOffBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x34C8, 0x8
+; ClassProps_AcOnOffBox_Names -- 8 x char: the field names of class AcOnOffBox, in reverse field order: "", "onoff"
+; NUL-terminated, 0xFF pads each to an even length; ClassProps_AcOnOffBox points at each one.
+ClassProps_AcOnOffBox_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x34D0, 0x8
+; ClassProps_AcNumEditBox -- 7 x uint32_t: the propname block of NAKA class AcNumEditBox (Class table slot 0x160, entry 25, its +20)
+; One pointer per letter of its propdata "nAAAAA" -- "num", "figures", "max", "min", "largestep", "smallstep", then one to ""; the names follow in
+; ClassProps_AcNumEditBox_Names. ClassProc copies entry [i] (`add xwa, (xbc + 20)`) when it lists a class's fields.
+ClassProps_AcNumEditBox:	.incbin "includes/generated/naka_disk_warning.bin", 0x34D8, 0x1C
+; ClassProps_AcNumEditBox_Names -- 26 x char: the first 4 of the 7 names of class AcNumEditBox, in reverse field order: "", "smallstep", "largestep", "min"
+; NUL-terminated, 0xFF pads to even length. The rest ("max", "figures", "num") continue at WidgetPropStr_Max
+; and NakaClass_AcNumEditBox_PropNameTextEnd; ClassProps_AcNumEditBox points at all of them.
+ClassProps_AcNumEditBox_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x34F4, 0x1A
 WidgetPropStr_Max:		.incbin "includes/generated/naka_disk_warning.bin", 0x350E, 0x4
-WidgetPropStr_RangeFigures:	.incbin "includes/generated/naka_disk_warning.bin", 0x3512, 0x830
+; NakaClass_AcNumEditBox_PropNameTextEnd -- 12 x char: "figures", "num", the last two property names of class AcNumEditBox
+; (0x1600019); entries 1 and 0 of its name list (Class descriptor +20, just before this slice) point here.
+NakaClass_AcNumEditBox_PropNameTextEnd:	.incbin "includes/generated/naka_disk_warning.bin", 0x3512, 0xC
+; NakaClass_AcLswEditBox_PropNames -- 3 x u32: name pointers of class AcLswEditBox (0x160001a)'s own properties, one per letter of its propdata "jn":
+; "func", "data", ended by "". +20 (propname) of entry 26 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcLswEditBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x351E, 0xC
+; NakaClass_AcLswEditBox_PropNameText -- 14 x char: the property-name strings NakaClass_AcLswEditBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcLswEditBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x352A, 0xE
+; NakaClass_AcRamEditBox_PropNames -- 3 x u32: name pointers of class AcRamEditBox (0x160001b)'s own properties, one per letter of its propdata "jr":
+; "func", "data", ended by "". +20 (propname) of entry 27 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcRamEditBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3538, 0xC
+; NakaClass_AcRamEditBox_PropNameText -- 14 x char: the property-name strings NakaClass_AcRamEditBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcRamEditBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3544, 0xE
+; NakaClass_PsMenuBox_PropNames -- 6 x u32: name pointers of class PsMenuBox (0x160001c)'s own properties, one per letter of its propdata "c^dem":
+; "font", "fontcolor", "align", "editsw", "selected", ended by "". +20 (propname) of entry 28 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_PsMenuBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3552, 0x18
+; NakaClass_PsMenuBox_PropNameText -- 42 x char: the property-name strings NakaClass_PsMenuBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_PsMenuBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x356A, 0x2A
+; NakaClass_AcTitleMenu_PropNames -- 4 x u32: name pointers of class AcTitleMenu (0x160001d)'s own properties, one per letter of its propdata "Xab":
+; "str", "title", "icon", ended by "". +20 (propname) of entry 29 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcTitleMenu_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3594, 0x10
+; NakaClass_AcTitleMenu_PropNameText -- 18 x char: the property-name strings NakaClass_AcTitleMenu_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcTitleMenu_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x35A4, 0x12
+; NakaClass_PsEditSwBox_PropNames -- 5 x u32: name pointers of class PsEditSwBox (0x160001e)'s own properties, one per letter of its propdata "c^de":
+; "font", "fontcolor", "align", "editsw", ended by "". +20 (propname) of entry 30 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_PsEditSwBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x35B6, 0x14
+; NakaClass_PsEditSwBox_PropNameText -- 32 x char: the property-name strings NakaClass_PsEditSwBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_PsEditSwBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x35CA, 0x20
+; NakaClass_AcIndexEditSw_PropNames -- 2 x u32: name pointers of class AcIndexEditSw (0x160001f)'s own properties, one per letter of its propdata "f":
+; "style", ended by "". +20 (propname) of entry 31 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcIndexEditSw_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x35EA, 0x8
+; NakaClass_AcIndexEditSw_PropNameText -- 8 x char: the property-name strings NakaClass_AcIndexEditSw_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcIndexEditSw_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x35F2, 0x8
+; NakaClass_AcFuncEditSw_PropNames -- 3 x u32: name pointers of class AcFuncEditSw (0x1600020)'s own properties, one per letter of its propdata "fj":
+; "style", "func", ended by "". +20 (propname) of entry 32 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcFuncEditSw_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x35FA, 0xC
+; NakaClass_AcFuncEditSw_PropNameText -- 14 x char: the property-name strings NakaClass_AcFuncEditSw_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcFuncEditSw_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3606, 0xE
+; NakaClass_PsWideESBox_PropNames -- 2 x u32: name pointers of class PsWideESBox (0x1600021)'s own properties, one per letter of its propdata "e":
+; "editsw2", ended by "". +20 (propname) of entry 33 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_PsWideESBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3614, 0x8
+; NakaClass_PsWideESBox_PropNameText -- 10 x char: the property-name strings NakaClass_PsWideESBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_PsWideESBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x361C, 0xA
+; NakaClass_AcIndexWideES_PropNames -- 2 x u32: name pointers of class AcIndexWideES (0x1600022)'s own properties, one per letter of its propdata "f":
+; "style", ended by "". +20 (propname) of entry 34 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcIndexWideES_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3626, 0x8
+; NakaClass_AcIndexWideES_PropNameText -- 8 x char: the property-name strings NakaClass_AcIndexWideES_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcIndexWideES_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x362E, 0x8
+; NakaClass_AcFuncWideES_PropNames -- 3 x u32: name pointers of class AcFuncWideES (0x1600023)'s own properties, one per letter of its propdata "fj":
+; "style", "func", ended by "". +20 (propname) of entry 35 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcFuncWideES_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3636, 0xC
+; NakaClass_AcFuncWideES_PropNameText -- 14 x char: the property-name strings NakaClass_AcFuncWideES_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcFuncWideES_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3642, 0xE
+; NakaClass_PsPageBox_PropNames -- 2 x u32: name pointers of class PsPageBox (0x1600024)'s own properties, one per letter of its propdata "n":
+; "page", ended by "". +20 (propname) of entry 36 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_PsPageBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3650, 0x8
+; NakaClass_PsPageBox_PropNameText -- 8 x char: the property-name strings NakaClass_PsPageBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_PsPageBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3658, 0x8
+; NakaClass_AcWindowPage_PropNames -- 3 x u32: name pointers of class AcWindowPage (0x1600025)'s own properties, one per letter of its propdata "AA":
+; "pagemin", "pagemax", ended by "". +20 (propname) of entry 37 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcWindowPage_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3660, 0xC
+; NakaClass_AcWindowPage_PropNameText -- 18 x char: the property-name strings NakaClass_AcWindowPage_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcWindowPage_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x366C, 0x12
+; NakaClass_PsToggleBox_PropNames -- 6 x u32: name pointers of class PsToggleBox (0x1600026)'s own properties, one per letter of its propdata "cXXme":
+; "font", "stron", "stroff", "onoff", "editsw", ended by "". +20 (propname) of entry 38 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_PsToggleBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x367E, 0x18
+; NakaClass_PsToggleBox_PropNameText -- 36 x char: the property-name strings NakaClass_PsToggleBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_PsToggleBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3696, 0x24
+; NakaClass_PsInvisibleBox_PropNames -- 1 x u32: name pointers of class PsInvisibleBox (0x1600027)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 39 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_PsInvisibleBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x36BA, 0x4
+; NakaClass_PsInvisibleBox_PropNameText -- 2 x char: the property-name strings NakaClass_PsInvisibleBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_PsInvisibleBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x36BE, 0x2
+; NakaClass_IvPageControl_PropNames -- 3 x u32: name pointers of class IvPageControl (0x1600028)'s own properties, one per letter of its propdata "At":
+; "page", "window", ended by "". +20 (propname) of entry 40 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvPageControl_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x36C0, 0xC
+; NakaClass_IvPageControl_PropNameText -- 16 x char: the property-name strings NakaClass_IvPageControl_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvPageControl_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x36CC, 0x10
+; NakaClass_IvMainEditSw_PropNames -- 2 x u32: name pointers of class IvMainEditSw (0x1600029)'s own properties, one per letter of its propdata "k":
+; "func", ended by "". +20 (propname) of entry 41 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvMainEditSw_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x36DC, 0x8
+; NakaClass_IvMainEditSw_PropNameText -- 8 x char: the property-name strings NakaClass_IvMainEditSw_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvMainEditSw_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x36E4, 0x8
+; NakaClass_AcSoundName_PropNames -- 2 x u32: name pointers of class AcSoundName (0x160002a)'s own properties, one per letter of its propdata "u":
+; "part", ended by "". +20 (propname) of entry 42 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcSoundName_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x36EC, 0x8
+; NakaClass_AcSoundName_PropNameText -- 8 x char: the property-name strings NakaClass_AcSoundName_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcSoundName_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x36F4, 0x8
+; NakaClass_Label_PropNames -- 4 x u32: name pointers of class Label (0x160002b)'s own properties, one per letter of its propdata "Xc^":
+; "str", "font", "fontcolor", ended by "". +20 (propname) of entry 43 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_Label_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x36FC, 0x10
+; NakaClass_Label_PropNameText -- 22 x char: the property-name strings NakaClass_Label_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_Label_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x370C, 0x16
+; NakaClass_Bitmap_PropNames -- 2 x u32: name pointers of class Bitmap (0x160002c)'s own properties, one per letter of its propdata "i":
+; "bmp", ended by "". +20 (propname) of entry 44 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_Bitmap_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3722, 0x8
+; NakaClass_Bitmap_PropNameText -- 6 x char: the property-name strings NakaClass_Bitmap_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_Bitmap_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x372A, 0x6
+; NakaClass_Icon_PropNames -- 2 x u32: name pointers of class Icon (0x160002d)'s own properties, one per letter of its propdata "b":
+; "icon", ended by "". +20 (propname) of entry 45 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_Icon_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3730, 0x8
+; NakaClass_Icon_PropNameText -- 8 x char: the property-name strings NakaClass_Icon_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_Icon_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3738, 0x8
+; NakaClass_Line_PropNames -- 3 x u32: name pointers of class Line (0x160002e)'s own properties, one per letter of its propdata "^g":
+; "color", "linemode", ended by "". +20 (propname) of entry 46 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_Line_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3740, 0xC
+; NakaClass_Line_PropNameText -- 18 x char: the property-name strings NakaClass_Line_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_Line_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x374C, 0x12
+; NakaClass_Frame_PropNames -- 4 x u32: name pointers of class Frame (0x160002f)'s own properties, one per letter of its propdata "hA^":
+; "frame", "width", "color", ended by "". +20 (propname) of entry 47 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_Frame_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x375E, 0x10
+; NakaClass_Frame_PropNameText -- 20 x char: the property-name strings NakaClass_Frame_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_Frame_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x376E, 0x14
+; NakaClass_EditSw_PropNames -- 4 x u32: name pointers of class EditSw (0x1600030)'s own properties, one per letter of its propdata "ejA":
+; "editsw", "func", "index", ended by "". +20 (propname) of entry 48 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_EditSw_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3782, 0x10
+; NakaClass_EditSw_PropNameText -- 22 x char: the property-name strings NakaClass_EditSw_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_EditSw_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3792, 0x16
+; NakaClass_Box_PropNames -- 3 x u32: name pointers of class Box (0x1600031)'s own properties, one per letter of its propdata "^_":
+; "color", "border", ended by "". +20 (propname) of entry 49 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_Box_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x37A8, 0xC
+; NakaClass_Box_PropNameText -- 16 x char: the property-name strings NakaClass_Box_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_Box_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x37B4, 0x10
+; NakaClass_GroupBox_PropNames -- 1 x u32: name pointers of class GroupBox (0x1600032)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 50 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_GroupBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x37C4, 0x4
+; NakaClass_GroupBox_PropNameText -- 2 x char: the property-name strings NakaClass_GroupBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_GroupBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x37C8, 0x2
+; NakaClass_Screen_PropNames -- 3 x u32: name pointers of class Screen (0x1600033)'s own properties, one per letter of its propdata "ar":
+; "exit", "window", ended by "". +20 (propname) of entry 51 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_Screen_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x37CA, 0xC
+; NakaClass_Screen_PropNameText -- 16 x char: the property-name strings NakaClass_Screen_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_Screen_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x37D6, 0x10
+; NakaClass_TtlScreen_PropNames -- 3 x u32: name pointers of class TtlScreen (0x1600034)'s own properties, one per letter of its propdata "Xb":
+; "title", "icon", ended by "". +20 (propname) of entry 52 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_TtlScreen_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x37E6, 0xC
+; NakaClass_TtlScreen_PropNameText -- 14 x char: the property-name strings NakaClass_TtlScreen_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_TtlScreen_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x37F2, 0xE
+; NakaClass_Window_PropNames -- 4 x u32: name pointers of class Window (0x1600035)'s own properties, one per letter of its propdata "Grr":
+; "modal", "parent", "child", ended by "". +20 (propname) of entry 53 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_Window_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3800, 0x10
+; NakaClass_Window_PropNameText -- 22 x char: the property-name strings NakaClass_Window_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_Window_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3810, 0x16
+; NakaClass_TextBox_PropNames -- 6 x u32: name pointers of class TextBox (0x1600036)'s own properties, one per letter of its propdata "Xc^dB":
+; "text", "font", "fontcolor", "alignment", "lines", ended by "". +20 (propname) of entry 54 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_TextBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3826, 0x18
+; NakaClass_TextBox_PropNameText -- 40 x char: the property-name strings NakaClass_TextBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_TextBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x383E, 0x28
+; NakaClass_StringBox_PropNames -- 5 x u32: name pointers of class StringBox (0x1600037)'s own properties, one per letter of its propdata "Xc^d":
+; "str", "font", "fontcolor", "alignment", ended by "". +20 (propname) of entry 55 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_StringBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3866, 0x14
+; NakaClass_StringBox_PropNameText -- 32 x char: the property-name strings NakaClass_StringBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_StringBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x387A, 0x20
+; NakaClass_ModeEdit_PropNames -- 6 x u32: name pointers of class ModeEdit (0x1600038)'s own properties, one per letter of its propdata "`kalX":
+; "mode", "proc", "title", "user", "name", ended by "". +20 (propname) of entry 56 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_ModeEdit_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x389A, 0x18
+; NakaClass_ModeEdit_PropNameText -- 32 x char: the property-name strings NakaClass_ModeEdit_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_ModeEdit_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x38B2, 0x20
+; NakaClass_TitleEdit_PropNames -- 6 x u32: name pointers of class TitleEdit (0x1600039)'s own properties, one per letter of its propdata "akNlX":
+; "title", "proc", "top", "user", "name", ended by "". +20 (propname) of entry 57 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_TitleEdit_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x38D2, 0x18
+; NakaClass_TitleEdit_PropNameText -- 30 x char: the property-name strings NakaClass_TitleEdit_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_TitleEdit_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x38EA, 0x1E
+; NakaClass_AcRhythmName_PropNames -- 1 x u32: name pointers of class AcRhythmName (0x160003a)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 58 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcRhythmName_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3908, 0x4
+; NakaClass_AcRhythmName_PropNameText -- 2 x char: the property-name strings NakaClass_AcRhythmName_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcRhythmName_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x390C, 0x2
+; NakaClass_AcPmemName_PropNames -- 1 x u32: name pointers of class AcPmemName (0x160003b)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 59 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcPmemName_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x390E, 0x4
+; NakaClass_AcPmemName_PropNameText -- 2 x char: the property-name strings NakaClass_AcPmemName_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcPmemName_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3912, 0x2
+; NakaClass_AcMixerVol_PropNames -- 3 x u32: name pointers of class AcMixerVol (0x160003c)'s own properties, one per letter of its propdata "ue":
+; "part", "editsw", ended by "". +20 (propname) of entry 60 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcMixerVol_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3914, 0xC
+; NakaClass_AcMixerVol_PropNameText -- 16 x char: the property-name strings NakaClass_AcMixerVol_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcMixerVol_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3920, 0x10
+; NakaClass_VwMenuBox_PropNames -- 3 x u32: name pointers of class VwMenuBox (0x160003d)'s own properties, one per letter of its propdata "Xb":
+; "str", "icon", ended by "". +20 (propname) of entry 61 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_VwMenuBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3930, 0xC
+; NakaClass_VwMenuBox_PropNameText -- 12 x char: the property-name strings NakaClass_VwMenuBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_VwMenuBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x393C, 0xC
+; NakaClass_VwEditSwBox_PropNames -- 3 x u32: name pointers of class VwEditSwBox (0x160003e)'s own properties, one per letter of its propdata "fX":
+; "style", "str", ended by "". +20 (propname) of entry 62 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_VwEditSwBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3948, 0xC
+; NakaClass_VwEditSwBox_PropNameText -- 12 x char: the property-name strings NakaClass_VwEditSwBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_VwEditSwBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3954, 0xC
+; NakaClass_VwWideESBox_PropNames -- 3 x u32: name pointers of class VwWideESBox (0x160003f)'s own properties, one per letter of its propdata "fX":
+; "style", "str", ended by "". +20 (propname) of entry 63 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_VwWideESBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3960, 0xC
+; NakaClass_VwWideESBox_PropNameText -- 12 x char: the property-name strings NakaClass_VwWideESBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_VwWideESBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x396C, 0xC
+; NakaClass_AcModeMenu_PropNames -- 4 x u32: name pointers of class AcModeMenu (0x1600040)'s own properties, one per letter of its propdata "X`b":
+; "str", "mode", "icon", ended by "". +20 (propname) of entry 64 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcModeMenu_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3978, 0x10
+; NakaClass_AcModeMenu_PropNameText -- 18 x char: the property-name strings NakaClass_AcModeMenu_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcModeMenu_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3988, 0x12
+; NakaClass_AcScreenMenu_PropNames -- 4 x u32: name pointers of class AcScreenMenu (0x1600041)'s own properties, one per letter of its propdata "XNb":
+; "str", "screen", "icon", ended by "". +20 (propname) of entry 65 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcScreenMenu_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x399A, 0x10
+; NakaClass_AcScreenMenu_PropNameText -- 20 x char: the property-name strings NakaClass_AcScreenMenu_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcScreenMenu_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x39AA, 0x14
+; NakaClass_AcWindowMenu_PropNames -- 4 x u32: name pointers of class AcWindowMenu (0x1600042)'s own properties, one per letter of its propdata "Xtb":
+; "str", "window", "icon", ended by "". +20 (propname) of entry 66 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcWindowMenu_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x39BE, 0x10
+; NakaClass_AcWindowMenu_PropNameText -- 20 x char: the property-name strings NakaClass_AcWindowMenu_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcWindowMenu_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x39CE, 0x14
+; NakaClass_AcBitEditBox_PropNames -- 3 x u32: name pointers of class AcBitEditBox (0x1600043)'s own properties, one per letter of its propdata "jm":
+; "func", "data", ended by "". +20 (propname) of entry 67 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcBitEditBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x39E2, 0xC
+; NakaClass_AcBitEditBox_PropNameText -- 14 x char: the property-name strings NakaClass_AcBitEditBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcBitEditBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x39EE, 0xE
+; NakaClass_AcFuncToggle_PropNames -- 2 x u32: name pointers of class AcFuncToggle (0x1600044)'s own properties, one per letter of its propdata "j":
+; "func", ended by "". +20 (propname) of entry 68 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcFuncToggle_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x39FC, 0x8
+; NakaClass_AcFuncToggle_PropNameText -- 8 x char: the property-name strings NakaClass_AcFuncToggle_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcFuncToggle_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A04, 0x8
+; NakaClass_PsWideToggle_PropNames -- 2 x u32: name pointers of class PsWideToggle (0x1600045)'s own properties, one per letter of its propdata "e":
+; "editsw2", ended by "". +20 (propname) of entry 69 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_PsWideToggle_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A0C, 0x8
+; NakaClass_PsWideToggle_PropNameText -- 10 x char: the property-name strings NakaClass_PsWideToggle_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_PsWideToggle_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A14, 0xA
+; NakaClass_DbMemo_PropNames -- 1 x u32: name pointers of class DbMemo (0x1600046)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 70 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_DbMemo_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A1E, 0x4
+; NakaClass_DbMemo_PropNameText -- 2 x char: the property-name strings NakaClass_DbMemo_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_DbMemo_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A22, 0x2
+; NakaClass_IvExit_PropNames -- 1 x u32: name pointers of class IvExit (0x1600047)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 71 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvExit_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A24, 0x4
+; NakaClass_IvExit_PropNameText -- 2 x char: the property-name strings NakaClass_IvExit_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvExit_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A28, 0x2
+; NakaClass_IvExitMode_PropNames -- 2 x u32: name pointers of class IvExitMode (0x1600048)'s own properties, one per letter of its propdata "`":
+; "mode", ended by "". +20 (propname) of entry 72 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvExitMode_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A2A, 0x8
+; NakaClass_IvExitMode_PropNameText -- 8 x char: the property-name strings NakaClass_IvExitMode_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvExitMode_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A32, 0x8
+; NakaClass_IvExitScreen_PropNames -- 2 x u32: name pointers of class IvExitScreen (0x1600049)'s own properties, one per letter of its propdata "N":
+; "screen", ended by "". +20 (propname) of entry 73 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvExitScreen_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A3A, 0x8
+; NakaClass_IvExitScreen_PropNameText -- 10 x char: the property-name strings NakaClass_IvExitScreen_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvExitScreen_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A42, 0xA
+; NakaClass_IvFixWin_PropNames -- 2 x u32: name pointers of class IvFixWin (0x160004a)'s own properties, one per letter of its propdata "t":
+; "window", ended by "". +20 (propname) of entry 74 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvFixWin_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A4C, 0x8
+; NakaClass_IvFixWin_PropNameText -- 10 x char: the property-name strings NakaClass_IvFixWin_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvFixWin_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A54, 0xA
+; NakaClass_AcNamingWindow_PropNames -- 1 x u32: name pointers of class AcNamingWindow (0x160004b)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 75 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcNamingWindow_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A5E, 0x4
+; NakaClass_AcNamingWindow_PropNameText -- 2 x char: the property-name strings NakaClass_AcNamingWindow_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcNamingWindow_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A62, 0x2
+; NakaClass_PsCursorBox_PropNames -- 2 x u32: name pointers of class PsCursorBox (0x160004c)'s own properties, one per letter of its propdata "n":
+; "cursor", ended by "". +20 (propname) of entry 76 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_PsCursorBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A64, 0x8
+; NakaClass_PsCursorBox_PropNameText -- 10 x char: the property-name strings NakaClass_PsCursorBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_PsCursorBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A6C, 0xA
+; NakaClass_IvNaming_PropNames -- 2 x u32: name pointers of class IvNaming (0x160004d)'s own properties, one per letter of its propdata "j":
+; "func", ended by "". +20 (propname) of entry 77 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvNaming_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A76, 0x8
+; NakaClass_IvNaming_PropNameText -- 8 x char: the property-name strings NakaClass_IvNaming_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvNaming_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A7E, 0x8
+; NakaClass_AcIndexToggle_PropNames -- 3 x u32: name pointers of class AcIndexToggle (0x160004e)'s own properties, one per letter of its propdata "AA":
+; "index", "tag", ended by "". +20 (propname) of entry 78 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcIndexToggle_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A86, 0xC
+; NakaClass_AcIndexToggle_PropNameText -- 12 x char: the property-name strings NakaClass_AcIndexToggle_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcIndexToggle_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A92, 0xC
+; NakaClass_AcRamBox_PropNames -- 3 x u32: name pointers of class AcRamBox (0x160004f)'s own properties, one per letter of its propdata "jr":
+; "func", "data", ended by "". +20 (propname) of entry 79 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcRamBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3A9E, 0xC
+; NakaClass_AcRamBox_PropNameText -- 14 x char: the property-name strings NakaClass_AcRamBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcRamBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3AAA, 0xE
+; NakaClass_PsRadioBox_PropNames -- 7 x u32: name pointers of class PsRadioBox (0x1600050)'s own properties, one per letter of its propdata "c^demA":
+; "font", "fontcolor", "align", "editsw", "selected", "tag", ended by "". +20 (propname) of entry 80 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_PsRadioBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3AB8, 0x1C
+; NakaClass_PsRadioBox_PropNameText -- 46 x char: the property-name strings NakaClass_PsRadioBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_PsRadioBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3AD4, 0x2E
+; NakaClass_AcStrRadioBox_PropNames -- 2 x u32: name pointers of class AcStrRadioBox (0x1600051)'s own properties, one per letter of its propdata "X":
+; "str", ended by "". +20 (propname) of entry 81 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcStrRadioBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3B02, 0x8
+; NakaClass_AcStrRadioBox_PropNameText -- 6 x char: the property-name strings NakaClass_AcStrRadioBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcStrRadioBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3B0A, 0x6
+; NakaClass_IvCatchEvent_PropNames -- 2 x u32: name pointers of class IvCatchEvent (0x1600052)'s own properties, one per letter of its propdata "j":
+; "func", ended by "". +20 (propname) of entry 82 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvCatchEvent_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3B10, 0x8
+; NakaClass_IvCatchEvent_PropNameText -- 8 x char: the property-name strings NakaClass_IvCatchEvent_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvCatchEvent_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3B18, 0x8
+; NakaClass_PsListBox_PropNames -- 6 x u32: name pointers of class PsListBox (0x1600053)'s own properties, one per letter of its propdata "c^dBn":
+; "font", "fontcolor", "align", "row", "selected", ended by "". +20 (propname) of entry 83 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_PsListBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3B20, 0x18
+; NakaClass_PsListBox_PropNameText -- 38 x char: the property-name strings NakaClass_PsListBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_PsListBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3B38, 0x26
+; NakaClass_PsGridBox_PropNames -- 12 x u32: name pointers of class PsGridBox (0x1600054)'s own properties, one per letter of its propdata "c^dBBGnnsss":
+; "font", "fontcolor", "align", "row", "col", "vertline", "selrow", "selcol", "pcol", "prow", "crow", ended by "". +20 (propname) of entry 84 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_PsGridBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3B5E, 0x30
+; NakaClass_PsGridBox_PropNameText -- 76 x char: the property-name strings NakaClass_PsGridBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_PsGridBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3B8E, 0x4C
+; NakaClass_AcListBox_PropNames -- 3 x u32: name pointers of class AcListBox (0x1600055)'s own properties, one per letter of its propdata "XG":
+; "list", "dial", ended by "". +20 (propname) of entry 85 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcListBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3BDA, 0xC
+; NakaClass_AcListBox_PropNameText -- 14 x char: the property-name strings NakaClass_AcListBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcListBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3BE6, 0xE
+; NakaClass_AcGridBox_PropNames -- 4 x u32: name pointers of class AcGridBox (0x1600056)'s own properties, one per letter of its propdata "XXj":
+; "fixedcol", "fixedrow", "func", ended by "". +20 (propname) of entry 86 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcGridBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3BF4, 0x10
+; NakaClass_AcGridBox_PropNameText -- 28 x char: the property-name strings NakaClass_AcGridBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcGridBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C04, 0x1C
+; NakaClass_DbDebugMenu_PropNames -- 2 x u32: name pointers of class DbDebugMenu (0x1600057)'s own properties, one per letter of its propdata "n":
+; "page", ended by "". +20 (propname) of entry 87 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_DbDebugMenu_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C20, 0x8
+; NakaClass_DbDebugMenu_PropNameText -- 8 x char: the property-name strings NakaClass_DbDebugMenu_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_DbDebugMenu_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C28, 0x8
+; NakaClass_PsTrackSwitch_PropNames -- 5 x u32: name pointers of class PsTrackSwitch (0x1600058)'s own properties, one per letter of its propdata "vmnn":
+; "track", "onoff", "part", "recplay", ended by "". +20 (propname) of entry 88 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_PsTrackSwitch_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C30, 0x14
+; NakaClass_PsTrackSwitch_PropNameText -- 28 x char: the property-name strings NakaClass_PsTrackSwitch_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_PsTrackSwitch_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C44, 0x1C
+; NakaClass_AcTrackSwitch_PropNames -- 1 x u32: name pointers of class AcTrackSwitch (0x1600059)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 89 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcTrackSwitch_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C60, 0x4
+; NakaClass_AcTrackSwitch_PropNameText -- 2 x char: the property-name strings NakaClass_AcTrackSwitch_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcTrackSwitch_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C64, 0x2
+; NakaClass_IvDirmdScreen_PropNames -- 1 x u32: name pointers of class IvDirmdScreen (0x160005a)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 90 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvDirmdScreen_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C66, 0x4
+; NakaClass_IvDirmdScreen_PropNameText -- 2 x char: the property-name strings NakaClass_IvDirmdScreen_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvDirmdScreen_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C6A, 0x2
+; NakaClass_IvTrackSwitch_PropNames -- 1 x u32: name pointers of class IvTrackSwitch (0x160005b)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 91 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvTrackSwitch_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C6C, 0x4
+; NakaClass_IvTrackSwitch_PropNameText -- 2 x char: the property-name strings NakaClass_IvTrackSwitch_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvTrackSwitch_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C70, 0x2
+; NakaClass_IvExitWindow_PropNames -- 1 x u32: name pointers of class IvExitWindow (0x160005c)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 92 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvExitWindow_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C72, 0x4
+; NakaClass_IvExitWindow_PropNameText -- 2 x char: the property-name strings NakaClass_IvExitWindow_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvExitWindow_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C76, 0x2
+; NakaClass_DbMemoryDump_PropNames -- 2 x u32: name pointers of class DbMemoryDump (0x160005d)'s own properties, one per letter of its propdata "s":
+; "adr", ended by "". +20 (propname) of entry 93 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_DbMemoryDump_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C78, 0x8
+; NakaClass_DbMemoryDump_PropNameText -- 6 x char: the property-name strings NakaClass_DbMemoryDump_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_DbMemoryDump_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C80, 0x6
+; NakaClass_IvInterrupt_PropNames -- 2 x u32: name pointers of class IvInterrupt (0x160005e)'s own properties, one per letter of its propdata "w":
+; "time", ended by "". +20 (propname) of entry 94 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvInterrupt_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C86, 0x8
+; NakaClass_IvInterrupt_PropNameText -- 8 x char: the property-name strings NakaClass_IvInterrupt_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvInterrupt_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C8E, 0x8
+; NakaClass_IvIntReminder_PropNames -- 1 x u32: name pointers of class IvIntReminder (0x160005f)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 95 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvIntReminder_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C96, 0x4
+; NakaClass_IvIntReminder_PropNameText -- 2 x char: the property-name strings NakaClass_IvIntReminder_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvIntReminder_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C9A, 0x2
+; NakaClass_IvIntError_PropNames -- 1 x u32: name pointers of class IvIntError (0x1600060)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 96 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvIntError_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3C9C, 0x4
+; NakaClass_IvIntError_PropNameText -- 2 x char: the property-name strings NakaClass_IvIntError_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvIntError_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3CA0, 0x2
+; NakaClass_IvIntComplete_PropNames -- 1 x u32: name pointers of class IvIntComplete (0x1600061)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 97 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvIntComplete_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3CA2, 0x4
+; NakaClass_IvIntComplete_PropNameText -- 2 x char: the property-name strings NakaClass_IvIntComplete_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvIntComplete_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3CA6, 0x2
+; NakaClass_IvIntVari_PropNames -- 1 x u32: name pointers of class IvIntVari (0x1600062)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 98 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvIntVari_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3CA8, 0x4
+; NakaClass_IvIntVari_PropNameText -- 2 x char: the property-name strings NakaClass_IvIntVari_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvIntVari_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3CAC, 0x2
+; NakaClass_IvIntEasySet_PropNames -- 1 x u32: name pointers of class IvIntEasySet (0x1600063)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 99 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvIntEasySet_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3CAE, 0x4
+; NakaClass_IvIntEasySet_PropNameText -- 2 x char: the property-name strings NakaClass_IvIntEasySet_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvIntEasySet_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3CB2, 0x2
+; NakaClass_IvShowHide_PropNames -- 2 x u32: name pointers of class IvShowHide (0x1600064)'s own properties, one per letter of its propdata "j":
+; "func", ended by "". +20 (propname) of entry 100 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvShowHide_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3CB4, 0x8
+; NakaClass_IvShowHide_PropNameText -- 8 x char: the property-name strings NakaClass_IvShowHide_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvShowHide_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3CBC, 0x8
+; NakaClass_PsTextBox_PropNames -- 5 x u32: name pointers of class PsTextBox (0x1600065)'s own properties, one per letter of its propdata "c^dB":
+; "font", "fontcolor", "alignment", "lines", ended by "". +20 (propname) of entry 101 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_PsTextBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3CC4, 0x14
+; NakaClass_PsTextBox_PropNameText -- 34 x char: the property-name strings NakaClass_PsTextBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_PsTextBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3CD8, 0x22
+; NakaClass_AcLanguageText_PropNames -- 2 x u32: name pointers of class AcLanguageText (0x1600066)'s own properties, one per letter of its propdata "j":
+; "func", ended by "". +20 (propname) of entry 102 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_AcLanguageText_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3CFA, 0x8
+; NakaClass_AcLanguageText_PropNameText -- 8 x char: the property-name strings NakaClass_AcLanguageText_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_AcLanguageText_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3D02, 0x8
+; NakaClass_TrTransposeBox_PropNames -- 1 x u32: name pointers of class TrTransposeBox (0x1600067)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 103 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_TrTransposeBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3D0A, 0x4
+; NakaClass_TrTransposeBox_PropNameText -- 2 x char: the property-name strings NakaClass_TrTransposeBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_TrTransposeBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3D0E, 0x2
+; NakaClass_TrChordBox_PropNames -- 1 x u32: name pointers of class TrChordBox (0x1600068)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 104 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_TrChordBox_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3D10, 0x4
+; NakaClass_TrChordBox_PropNameText -- 2 x char: the property-name strings NakaClass_TrChordBox_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_TrChordBox_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3D14, 0x2
+; NakaClass_VwUserBitmap_PropNames -- 2 x u32: name pointers of class VwUserBitmap (0x1600069)'s own properties, one per letter of its propdata "j":
+; "func", ended by "". +20 (propname) of entry 105 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_VwUserBitmap_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3D16, 0x8
+; NakaClass_VwUserBitmap_PropNameText -- 8 x char: the property-name strings NakaClass_VwUserBitmap_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_VwUserBitmap_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3D1E, 0x8
+; NakaClass_IvScreen_PropNames -- 1 x u32: name pointers of class IvScreen (0x160006a)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 106 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvScreen_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3D26, 0x4
+; NakaClass_IvScreen_PropNameText -- 2 x char: the property-name strings NakaClass_IvScreen_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvScreen_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3D2A, 0x2
+; NakaClass_IvIntWelcome_PropNames -- 1 x u32: name pointers of class IvIntWelcome (0x160006b)'s own properties, one per letter of its propdata "":
+; no own property, ended by "". +20 (propname) of entry 107 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_IvIntWelcome_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3D2C, 0x4
+; NakaClass_IvIntWelcome_PropNameText -- 2 x char: the property-name strings NakaClass_IvIntWelcome_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_IvIntWelcome_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3D30, 0x2
+; NakaClass_VwUserBitmapByName_PropNames -- 2 x u32: name pointers of class VwUserBitmapByName (0x160006c)'s own properties, one per letter of its propdata "X":
+; "file", ended by "". +20 (propname) of entry 108 of Root_ClassTable_160; ClassProc_OnGetPropNameSp reads entry [property].
+NakaClass_VwUserBitmapByName_PropNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3D32, 0x8
+; NakaClass_VwUserBitmapByName_PropNameText -- 8 x char: the property-name strings NakaClass_VwUserBitmapByName_PropNames points at, "" first, each NUL-terminated and 0xff-padded to even
+NakaClass_VwUserBitmapByName_PropNameText:	.incbin "includes/generated/naka_disk_warning.bin", 0x3D3A, 0x8
 ; [nakarest] naka_disk_warning+0x3d42  +0x3d42..+0x402e (0xeac9ee, 748 B)
 ; [nakarest] the table itself: Class slot 0x160 (table 0xeac9ee, 109 entries, InitializeRoot),
 ; [nakarest] 109 class definitions x 24 bytes. class definition entries 0-31 of Class slot 0x160

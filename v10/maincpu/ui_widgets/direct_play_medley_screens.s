@@ -592,12 +592,14 @@ NakaWidget_SmfMdlyMeasureBox:	.incbin "includes/generated/naka_direct_play.bin",
 ; [nakarest] widget record, element 11 of Viewable slot 0x73 (table 0xe241e0, 16 entries,
 ; [nakarest] InitializeYoko) ("DpMdlySmf"): IvExit (22 B).
 NakaWidget_SmfMdlyOffOnSel:	.incbin "includes/generated/naka_direct_play.bin", 0xD96, 0x16
-; [nakarest] NakaWidget_SmfMdlyOffOnList  +0xdac..+0xde0 (0xe21e28, 52 B)
-; [nakarest] widget record, element 12 of Viewable slot 0x73 (table 0xe241e0, 16 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmf"): AcMuteToggleBox (44 B). 2 texts the records point at
-; [nakarest] (Viewable slot 0x73 (table 0xe241e0, 16 entries, InitializeYoko)): "OFF"
-; [nakarest] (AcMuteToggleBox.stroff of element 12); "ON" (AcMuteToggleBox.stron of element 12).
-NakaWidget_SmfMdlyOffOnList:	.incbin "includes/generated/naka_direct_play.bin", 0xDAC, 0x34
+; NakaWidget_SMFMedMuteSw -- 1 x AcMuteToggleBox record (44 B, class 0x167000f): element 12 "SMFMedMuteSw" of Viewable slot 0x73
+; ("DpMdlySmf", Yoko_ViewTable_073): the SMF-medley mute toggle, texts "OFF" / "ON", onoff cell RAM 0x3dd66, edit switch 6,
+; func 0x127000d = SMFMuteOnOffFunc. Fields: u32 class, u16 super, u16 sub, u16 next, u16 prev, u16 flag, s16[4] rect, u32 font, u32 stron, u32 stroff, u32 onoff, u16 editsw, u32 func.
+NakaWidget_SMFMedMuteSw:	.incbin "includes/generated/naka_direct_play.bin", 0xDAC, 0x2C
+; NakaWidget_SMFMedMuteSw_StrOff -- 4 x char: "OFF", the off-state text (stroff, +30) of NakaWidget_SMFMedMuteSw
+NakaWidget_SMFMedMuteSw_StrOff:	.incbin "includes/generated/naka_direct_play.bin", 0xDD8, 0x4
+; NakaWidget_SMFMedMuteSw_StrOn -- 4 x char: "ON" + 0xff fill, the on-state text (stron, +26) of NakaWidget_SMFMedMuteSw
+NakaWidget_SMFMedMuteSw_StrOn:	.incbin "includes/generated/naka_direct_play.bin", 0xDDC, 0x4
 ; [nakarest] NakaWidget_SmfMdlyMixerWidget  +0xde0..+0xe18 (0xe21e5c, 56 B)
 ; [nakarest] widget record, element 13 of Viewable slot 0x73 (table 0xe241e0, 16 entries,
 ; [nakarest] InitializeYoko) ("DpMdlySmf"): VwMenuBox (50 B). 1 text the records point at
@@ -663,13 +665,16 @@ NakaWidget_DocMdlyMeasureBox:	.incbin "includes/generated/naka_direct_play.bin",
 ; [nakarest] widget record, element 9 of Viewable slot 0x74 (table 0xe24224, 15 entries,
 ; [nakarest] InitializeYoko): IvExit (22 B).
 NakaWidget_DocMdlyOffOnSel:	.incbin "includes/generated/naka_direct_play.bin", 0xFD8, 0x16
-; [nakarest] NakaWidget_DOCMedR1Sw  +0xfee..+0x1022 (0xe2206a, 52 B)
-; [nakarest] widget record, element 10 of Viewable slot 0x74 (table 0xe24224, 15 entries,
-; [nakarest] InitializeYoko): AcMuteToggleBox (44 B). 2 texts the records point at (Viewable
-; [nakarest] slot 0x74 (table 0xe24224, 15 entries, InitializeYoko)): "RT1"
-; [nakarest] (AcMuteToggleBox.stroff of element 10); "RT1" (AcMuteToggleBox.stron of element
-; [nakarest] 10).
-NakaWidget_DOCMedR1Sw:	.incbin "includes/generated/naka_direct_play.bin", 0xFEE, 0x34
+; NakaWidget_DOCMedR1Sw -- 1 x struct (AcMuteToggleBox view record, 44 B): the "DOCMedR1Sw" RT1 mute toggle of the DOC medley screen DpMdlyDoc, entry 10 of InitializeYoko's slot 0x74
+; rect (270,118)-(311,135); stron and stroff both "RT1" (the two strings after the record); onoff -> word cell
+; RAM 0x3DD74; editsw 0x0A; func = NAKA_APFUNC_Rt1MuteFunc (0x0127000E), asked for the state with EVT_GET_TOGGLE_SW.
+NakaWidget_DOCMedR1Sw:	.incbin "includes/generated/naka_direct_play.bin", 0xFEE, 0x2C
+; NakaStr_DOCMedR1SwOff -- 4 x char: "RT1", the text the stroff field (+30) of NakaWidget_DOCMedR1Sw points at
+; (AcMuteToggleBox class field "stroff").
+NakaStr_DOCMedR1SwOff:	.incbin "includes/generated/naka_direct_play.bin", 0x101A, 0x4
+; NakaStr_DOCMedR1SwOn -- 4 x char: "RT1", the text the stron field (+26) of NakaWidget_DOCMedR1Sw points at
+; (AcMuteToggleBox class field "stron"); same text as the stroff one, a separate copy.
+NakaStr_DOCMedR1SwOn:	.incbin "includes/generated/naka_direct_play.bin", 0x101E, 0x4
 ; [nakarest] NakaWidget_DOCMedR2Sw  +0x1022..+0x1056 (0xe2209e, 52 B)
 ; [nakarest] widget record, element 11 of Viewable slot 0x74 (table 0xe24224, 15 entries,
 ; [nakarest] InitializeYoko): AcMuteToggleBox (44 B). 2 texts the records point at (Viewable
@@ -737,12 +742,14 @@ NakaWidget_PdMdlyMeasureBox:	.incbin "includes/generated/naka_direct_play.bin", 
 ; [nakarest] widget record, element 8 of Viewable slot 0x75 (table 0xe24264, 13 entries,
 ; [nakarest] InitializeYoko) ("DpMdlyPd"): IvExit (22 B).
 NakaWidget_PdMdlyOffOnSel:	.incbin "includes/generated/naka_direct_play.bin", 0x1230, 0x16
-; [nakarest] NakaWidget_PDMedR1Sw  +0x1246..+0x127a (0xe222c2, 52 B)
-; [nakarest] widget record, element 9 of Viewable slot 0x75 (table 0xe24264, 13 entries,
-; [nakarest] InitializeYoko) ("DpMdlyPd"): AcMuteToggleBox (44 B). 2 texts the records point at
-; [nakarest] (Viewable slot 0x75 (table 0xe24264, 13 entries, InitializeYoko)): "RT1"
-; [nakarest] (AcMuteToggleBox.stroff of element 9); "RT1" (AcMuteToggleBox.stron of element 9).
-NakaWidget_PDMedR1Sw:	.incbin "includes/generated/naka_direct_play.bin", 0x1246, 0x34
+; NakaWidget_PDMedR1Sw -- 1 x AcMuteToggleBox record (44 B, class 0x167000f): element 9 "PDMedR1Sw" of Viewable slot 0x75
+; ("DpMdlyPd", Yoko_ViewTable_075): the RIGHT 1 mute toggle, texts "RT1" on and off, onoff cell RAM 0x3dd82, edit switch 0x0a,
+; func 0x127000e = Rt1MuteFunc. Fields: u32 class, u16 super, u16 sub, u16 next, u16 prev, u16 flag, s16[4] rect, u32 font, u32 stron, u32 stroff, u32 onoff, u16 editsw, u32 func.
+NakaWidget_PDMedR1Sw:	.incbin "includes/generated/naka_direct_play.bin", 0x1246, 0x2C
+; NakaWidget_PDMedR1Sw_StrOff -- 4 x char: "RT1", the off-state text (stroff, +30) of NakaWidget_PDMedR1Sw
+NakaWidget_PDMedR1Sw_StrOff:	.incbin "includes/generated/naka_direct_play.bin", 0x1272, 0x4
+; NakaWidget_PDMedR1Sw_StrOn -- 4 x char: "RT1", the on-state text (stron, +26) of NakaWidget_PDMedR1Sw
+NakaWidget_PDMedR1Sw_StrOn:	.incbin "includes/generated/naka_direct_play.bin", 0x1276, 0x4
 ; [nakarest] NakaWidget_PDMedOrchSw  +0x127a..+0x12b2 (0xe222f6, 56 B)
 ; [nakarest] widget record, element 10 of Viewable slot 0x75 (table 0xe24264, 13 entries,
 ; [nakarest] InitializeYoko) ("DpMdlyPd"): AcMuteToggleBox (44 B). 2 texts the records point at
@@ -793,12 +800,13 @@ NakaWidget_SmfMdly2MeasureBox:	.incbin "includes/generated/naka_direct_play.bin"
 ; [nakarest] widget record, element 5 of Viewable slot 0x76 (table 0xe2429c, 8 entries,
 ; [nakarest] InitializeYoko) ("DpMdlySmfLyr"): IvExit (22 B).
 NakaWidget_SmfMdly2OffOnSel:	.incbin "includes/generated/naka_direct_play.bin", 0x13E8, 0x16
-; [nakarest] NakaWidget_SmfMdly2MicWidget  +0x13fe..+0x1434 (0xe2247a, 54 B)
-; [nakarest] widget record, element 6 of Viewable slot 0x76 (table 0xe2429c, 8 entries,
-; [nakarest] InitializeYoko) ("DpMdlySmfLyr"): VwMenuBox (50 B). 1 text the records point at
-; [nakarest] (Viewable slot 0x76 (table 0xe2429c, 8 entries, InitializeYoko)): "MIC"
-; [nakarest] (VwMenuBox.str of element 6).
-NakaWidget_SmfMdly2MicWidget:	.incbin "includes/generated/naka_direct_play.bin", 0x13FE, 0x36
+; NakaWidget_SmfMdly2MicWidget -- 1 x struct (VwMenuBox view record, 50 B): the "MIC" menu box of the SMF-medley lyrics screen DpMdlySmfLyr, entry 6 of InitializeYoko's slot 0x76
+; Child of entry 5 (super = 5); rect (8,30)-(41,55); editsw 0x88; selected -> word cell RAM 0x3DD8E;
+; str -> NakaStr_SmfMdlyMic, the "MIC" text right after the record.
+NakaWidget_SmfMdly2MicWidget:	.incbin "includes/generated/naka_direct_play.bin", 0x13FE, 0x32
+; NakaStr_SmfMdlyMic -- 4 x char: "MIC", the str of NakaWidget_SmfMdly2MicWidget (VwMenuBox +42),
+; drawn by VwMenuBoxProc through ConvertStrings.
+NakaStr_SmfMdlyMic:	.incbin "includes/generated/naka_direct_play.bin", 0x1430, 0x4
 ; [nakarest] NakaWidget_SmfMdly2OrchSel  +0x1434..+0x144e (0xe224b0, 26 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0x76 (table 0xe2429c, 8 entries,
 ; [nakarest] InitializeYoko) ("DpMdlySmfLyr"): IvFixWin (26 B).
@@ -857,12 +865,13 @@ NakaWidget_SongMdlySkipLabel:	.incbin "includes/generated/naka_direct_play.bin",
 ; [nakarest] widget record, element 11 of Viewable slot 0x78 (table 0xe242c0, 30 entries,
 ; [nakarest] InitializeYoko) ("DkMdlyPly"): IvExit (22 B).
 NakaWidget_SongMdlyOffOnSel:	.incbin "includes/generated/naka_direct_play.bin", 0x15D8, 0x16
-; [nakarest] NakaWidget_SongMdlyMixer  +0x15ee..+0x1626 (0xe2266a, 56 B)
-; [nakarest] widget record, element 12 of Viewable slot 0x78 (table 0xe242c0, 30 entries,
-; [nakarest] InitializeYoko) ("DkMdlyPly"): VwMenuBox (50 B). 1 text the records point at
-; [nakarest] (Viewable slot 0x78 (table 0xe242c0, 30 entries, InitializeYoko)): "MIXER"
-; [nakarest] (VwMenuBox.str of element 12).
-NakaWidget_SongMdlyMixer:	.incbin "includes/generated/naka_direct_play.bin", 0x15EE, 0x38
+; NakaWidget_SongMdlyMixer -- 1 x struct (VwMenuBox view record, 50 B): the "MIXER" menu box of the disk song-medley play screen DkMdlyPly, entry 12 of InitializeYoko's slot 0x78
+; Child of entry 0 (super = 0); rect (8,114)-(57,139); editsw 0x8A; selected -> word cell RAM 0x3DD94;
+; str -> NakaStr_SongMdlyMixer, the "MIXER" text right after the record.
+NakaWidget_SongMdlyMixer:	.incbin "includes/generated/naka_direct_play.bin", 0x15EE, 0x32
+; NakaStr_SongMdlyMixer -- 6 x char: "MIXER", the str of NakaWidget_SongMdlyMixer (VwMenuBox +42),
+; drawn by VwMenuBoxProc through ConvertStrings.
+NakaStr_SongMdlyMixer:	.incbin "includes/generated/naka_direct_play.bin", 0x1620, 0x6
 ; [nakarest] NakaWidget_SongMdlyOrchSel  +0x1626..+0x164a (0xe226a2, 36 B)
 ; [nakarest] widget record, element 13 of Viewable slot 0x78 (table 0xe242c0, 30 entries,
 ; [nakarest] InitializeYoko) ("DkMdlyPly"): Window (36 B).
@@ -981,12 +990,13 @@ NakaWidget_SongMdly2MutePanel:	.incbin "includes/generated/naka_direct_play.bin"
 ; [nakarest] widget record, element 10 of Viewable slot 0x7a (table 0xe2433c, 12 entries,
 ; [nakarest] InitializeYoko) ("SqMdlyPly"): IvExit (22 B).
 NakaWidget_SongMdly2OffOnSel:	.incbin "includes/generated/naka_direct_play.bin", 0x19E8, 0x16
-; [nakarest] NakaWidget_SongMdly2Mixer  +0x19fe..+0x1a36 (0xe22a7a, 56 B)
-; [nakarest] widget record, element 11 of Viewable slot 0x7a (table 0xe2433c, 12 entries,
-; [nakarest] InitializeYoko) ("SqMdlyPly"): VwMenuBox (50 B). 1 text the records point at
-; [nakarest] (Viewable slot 0x7a (table 0xe2433c, 12 entries, InitializeYoko)): "MIXER"
-; [nakarest] (VwMenuBox.str of element 11).
-NakaWidget_SongMdly2Mixer:	.incbin "includes/generated/naka_direct_play.bin", 0x19FE, 0x38
+; NakaWidget_SongMdly2Mixer -- 1 x VwMenuBox record (50 B, class 0x160003d): element 11 of Viewable slot 0x7a ("SqMdlyPly",
+; Yoko_ViewTable_07A), the "MIXER" menu entry: rect {8, 114, 57, 139}, color 0xf5, edit switch 0x8a, selected cell RAM 0x3de02,
+; str -> NakaWidget_SongMdly2Mixer_Str. Fields: u32 class, u16 super, u16 sub, u16 next, u16 prev, u16 flag, s16[4] rect, u16 color, u16 border, u16 index, u32 font, u16 fontcolor, u16 align, u16 editsw, u32 selected, u32 str, u32 icon.
+; VwMenuBoxProc (ui/ui_widget_defs.s) reads str (+42) and icon (+46).
+NakaWidget_SongMdly2Mixer:	.incbin "includes/generated/naka_direct_play.bin", 0x19FE, 0x32
+; NakaWidget_SongMdly2Mixer_Str -- 6 x char: "MIXER", the caption NakaWidget_SongMdly2Mixer.str (+42) points at
+NakaWidget_SongMdly2Mixer_Str:	.incbin "includes/generated/naka_direct_play.bin", 0x1A30, 0x6
 ; [nakarest] NakaWidget_StepRecContainer  +0x1a36..+0x1a74 (0xe22ab2, 62 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x89 (table 0xe24370, 5 entries,
 ; [nakarest] InitializeYoko) ("SqTrSel"): TtlScreen (42 B). 1 text the records point at

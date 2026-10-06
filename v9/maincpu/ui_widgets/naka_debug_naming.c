@@ -31,7 +31,7 @@ extern const char NakaData_StyleBitmaps;
 extern const char NakaInst_Param_EndFF;
 extern const char NakaInst_Param_Val00_01;
 extern const char NakaInst_iduMurai;
-extern const char Naka_FileManagerEntry;
+extern const char NakaDbg_PanelSimBitmap;
 extern const char Naka_PresentationRootState;
 extern const char SeqByteBlock_PathNormalize;
 extern const char WidgetCharMap_DataEntry1;
@@ -88,6 +88,19 @@ extern const char NakaInst_iduRoot;
 /* NakaInst_AlignmentID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* NakaInst_MainFuncID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* NakaInst_UserID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaWidget_CheckTitle_8_IvExitScreen's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t screen_entry;
+    uint16_t screen_slot;
+} NakaWidget_CheckTitle_8_IvExitScreen_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t name_ptr;
     int32_t value;
@@ -796,17 +809,9 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvExitScreen_t CheckNaming_IvExitScreen;
     /* element 7 of Viewable slot 0xFF "CheckWall": Screen (class id 0x01600033) */
     naka_cls_Screen_t CheckWall;
-    char I_str[2];
-    uint16_t field_085e;
-    uint16_t field_0860;
-    uint16_t field_0862;
-    uint16_t field_0864;
-    uint16_t field_0866;
-    uint16_t field_0868;
-    uint8_t pad_50[4];  /* zero padding */
-    uint16_t field_086e;
-    uint16_t field_0870;
-    uint32_t ptrs_2[1];
+    /* zero padding */
+    /* IvExitScreen view record: EXIT on CheckWall returns to view 0xFF0000 (CheckTitle); screen = {entry 0, slot 0xFF} */
+    NakaWidget_CheckTitle_8_IvExitScreen_t NakaWidget_CheckTitle_8_IvExitScreen;
     /* Root_ViewableTable_000: 23 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
     uint32_t Root_ViewableTable_000[23];
     uint16_t field_08d2;
@@ -2220,33 +2225,11 @@ const naka_debug_naming_t naka_debug_naming_data
         .window = 0x0003F15C,
     },
 
-    .I_str = "I",
-
-    .field_085e = 0x0160,
-
-    .field_0860 = 0x0007,
-
-    .field_0862 = NAKA_NONE,
-
-    .field_0864 = NAKA_NONE,
-
-    .field_0866 = NAKA_NONE,
-
-    .field_0868 = 0x0018,
-
-    .pad_50 = { 0 },
-
-    .field_086e = 0x001F,
-
-    .field_0870 = 0x001F,
-
-    .ptrs_2 = {
-        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
-    },
+    .NakaWidget_CheckTitle_8_IvExitScreen = { 0x01600049, 0x0007, 0xFFFF, 0xFFFF, 0xFFFF, 0x0018, { 0, 0, 31, 31 }, 0x0000, 0x00FF },
 
     .Root_ViewableTable_000 = {
         0x00EB2AC2,
-        NAKA_ADDR(Naka_FileManagerEntry),
+        NAKA_ADDR(NakaDbg_PanelSimBitmap),
         SELF(PanelSimulatorForHk_Label),
         SELF(CheckTitle_AcTitleMenu),
         SELF(NakaWidget_PanelSimulator_4_IvExitMode),
@@ -2320,7 +2303,7 @@ const naka_debug_naming_t naka_debug_naming_data
         SELF(CheckNaming_IvNaming),
         SELF(CheckNaming_IvExitScreen),
         SELF(CheckWall),
-        SELF(I_str),
+        SELF(NakaWidget_CheckTitle_8_IvExitScreen),
         0x00000000,
     },
 

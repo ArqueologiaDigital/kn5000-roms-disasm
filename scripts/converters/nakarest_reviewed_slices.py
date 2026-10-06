@@ -75,7 +75,7 @@ def nelem(d):
 
 
 _SORTED = {}
-MAX_INTO = 64           # a ROM address this far past a label is spelled NAKA_ADDR(label) + offset
+MAX_INTO = 128          # a ROM address this far past a label is spelled NAKA_ADDR(label) + offset
 PTR = re.compile(r'@PTR\((0x[0-9A-F]{8})\)')
 SYMFILE = {"v10": "symbols/maincpu_symbols_reference.txt", "v9": "symbols/maincpu_v9_symbols_reference.txt",
            "v7": "symbols/maincpu_v7_symbols_reference.txt"}
@@ -339,9 +339,15 @@ def find_slice(tree, rel, r):
 
 
 def main():
-    recs = []
-    for f in FILES:
-        recs += [r for r in json.load(open(f)) if r.get("verdict") in ("type", "name")]
+    recs = {}
+    for f in FILES:                 # sorted by name: a later reading of the same slice replaces an earlier one
+        for r in json.load(open(f)):
+            key = r["label"] or (r["blob"], r.get("off_v10"))
+            if r.get("verdict") in ("type", "name"):
+                recs[key] = r
+            else:
+                recs.pop(key, None)
+    recs = list(recs.values())
     for r in recs:
         for p in pieces(r):
             if p.get("ctype") == "struct":
@@ -429,7 +435,8 @@ def main():
                         if x.name in fp_names and (x.offset < off < x.offset + x.size or
                                                    x.offset < off + size < x.offset + x.size):
                             cb.retype(x.offset, x.offset + x.size,
-                                      [M.bytes_member(x.name, raw[x.offset:x.offset + x.size])], raw, false_pointers=[x.name])
+                                      [M.bytes_member(x.name, raw[x.offset:x.offset + x.size], tail=x.tail)], raw,
+                                      false_pointers=[x.name])
                 inside = {x.name for x in cb.members if off <= x.offset < off + size}
                 if any(p["new_label"] in cb.by_name and p["new_label"] not in inside for p in ps):
                     raise SystemExit("C member name taken")
@@ -464,8 +471,8 @@ def main():
                         if x.offset >= off:
                             ordered += x.pre
                         t = re.search(r'/\*.*?\*/|//.*', x.tail)
-                        if t:
-                            ordered.append("    " + t.group(0))
+                        if t and x.offset >= off:       # a member starting before the slice keeps its tail on
+                            ordered.append("    " + t.group(0))     # split_word's first piece, outside the slice
                 cb.retype(off, off + size, nm, raw, false_pointers=sym)
                 if r.get("false_pointers"):     # the reading says the old pointers were not pointers (its evidence)
                     sym, old_syms = [], 0

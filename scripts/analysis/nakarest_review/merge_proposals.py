@@ -5,16 +5,18 @@ renamed, because the converter moves the old label to piece 0."""
 import json, os, struct, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 os.chdir(sys.argv[1])
-inv = {x["label"]: x for x in json.load(open("inventory.json"))}
+inv = {(x["label"] or (x["blob"], x["off"])): x for x in json.load(open("inventory.json"))}   # unlabelled: by (blob, off)
 for n in sys.argv[2:]:
     src = n if n.endswith(".json") else "proposals_batch%s.json" % n       # a batch number, or a proposals file
     n = os.path.basename(src)[len("proposals_"):-len(".json")] if n.endswith(".json") else "batch%s" % n
     P = json.load(open(src))
     out = []
     for r in P:
-        x = inv[r["label"]]
+        x = inv[r["label"] or (r["blob"], r["off"])]
         r = dict(r)
         r.update(asm=x["asm"], size=x["size"], blob=x["blob"], off_v10=x["off"])
+        if not x["label"]:
+            r["after_label"] = x["after_label"]
         sb = open(os.path.join(ROOT, "v10/maincpu/includes/generated", x["blob"] + ".bin"), "rb").read()[x["off"]:x["off"] + x["size"]]
         for p in (r.get("pieces") or []):
             if not p.get("check"):

@@ -119,6 +119,12 @@ extern const char WakeUpPassword;
 /* PsMixer_BootDefaultRows's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* TrackMixer_Rows's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* SaveAll_RegionRecsTail's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* DemoSong_OrderFromSong1's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint8_t entry;
+    uint8_t title;
+} DemoSong_OrderFromSong1_t;
+
 typedef struct __attribute__((packed)) {
     uint8_t region;
     uint8_t pad;
@@ -978,19 +984,8 @@ typedef struct __attribute__((packed)) {
     char DataSudahDiprotek_str[22];
     char Error_str_14[10];
     char txt_Los_datos_ya_estan_protegidos[48];
-    uint16_t field_10f3a;
-    uint16_t field_10f3c;
-    uint16_t field_10f3e;
-    uint16_t field_10f40;
-    uint16_t field_10f42;
-    uint16_t field_10f44;
-    uint16_t field_10f46;
-    uint16_t field_10f48;
-    uint16_t field_10f4a;
-    uint16_t field_10f4c;
-    uint16_t field_10f4e;
-    uint16_t field_10f50;
-    char EsContreLaCopie_str[20];
+    /* French text of message-catalog record 10 (code 0x0AFFFF, "ERROR 10"): "Ces donn\xe9es sont prot\xe9g\xe9es contre la copie!" */
+    char Str_DiskErr10_French[44];
     char txt_Diese_Daten_sind_bereits[42];
     char TheDataIsAlready_str[36];
     uint32_t StrTable_DiskErr11[6];  /* 6 pointers */
@@ -1064,28 +1059,35 @@ typedef struct __attribute__((packed)) {
     char txt_Die_Sequenzerdaten_sind_nicht_in[108];
     char AProblemHasOccurred_str[96];
     /* StrPtrTable_DiskErr20_End: 6 pointers (cut from ptrs_209 by split_naka_pointer_arrays.py) */
-    uint32_t StrPtrTable_DiskErr20_End[6];
-    char KapasitasPenyimpananPenuhMemory_str[46];
-    char Error_str_18[10];
-    char MemoriaLlena_str[14];
-    uint16_t field_11cee;
-    uint16_t field_11cf0;
-    uint16_t field_11cf2;
-    uint16_t field_11cf4;
-    uint16_t field_11cf6;
-    uint16_t field_11cf8;
-    uint16_t field_11cfa;
-    char str_441[4];
-    char SpeicherVoll_str[16];
-    char MemoryFull_str[12];
-    uint32_t ptrs_210[6];  /* 6 pointers */
-    char PerluTekanPunchOut_str[50];
-    char Error_str_19[10];
-    char EsNecesarioPulsarPunch_str[66];
-    char txt_Vous_devez_presser_PUNCH_OUT[60];
-    char txt_Um_diesen_Vorgang_abzuschlien[64];
-    char Ken_str[6];
-    char ItIsNecessaryTo_str[64];
+    /* 6 pointers */
+    /* message-catalog record 15 (code 0x15FFFF, error 21) text table: English, German, French, Spanish, Italian, Indonesian */
+    uint32_t StrTable_DiskErr21[6];
+    /* Indonesian text of error 21: Kapasitas penyimpanan penuh. (Memory penuh). */
+    char Str_DiskErr21_Indonesian[46];
+    /* Italian text of error 21: ERROR 21 */
+    char Str_DiskErr21_Italian[10];
+    /* Spanish text of error 21: Memoria llena */
+    char Str_DiskErr21_Spanish[14];
+    /* French text of error 21: M\u00e9moire staur\u00e9e! */
+    char Str_DiskErr21_French[18];
+    /* German text of error 21: Speicher voll ! */
+    char Str_DiskErr21_German[16];
+    /* English text of error 21: Memory full */
+    char Str_DiskErr21_English[12];
+    /* message-catalog record 24 (code 0x16FFFF, error 22) text table: English, German, French, Spanish, Italian, Indonesian */
+    uint32_t StrTable_DiskErr22[6];
+    /* Indonesian text of error 22: Perlu tekan PUNCH OUT untuk melengkapi prosedur. */
+    char Str_DiskErr22_Indonesian[50];
+    /* Italian text of error 22: ERROR 22 */
+    char Str_DiskErr22_Italian[10];
+    /* Spanish text of error 22: Es necesario pulsar PUNCH OUT para completar este procedi... */
+    char Str_DiskErr22_Spanish[66];
+    /* French text of error 22: Vous devez presser PUNCH OUT pour terminer cette proc\u00e9dure. */
+    char Str_DiskErr22_French[60];
+    /* German text of error 22: Um diesen Vorgang abzuschli\u00dfen, m\u00fcssen Sie vorher PUNCH O... */
+    char Str_DiskErr22_German[70];
+    /* English text of error 22: It is necessary to press PUNCH OUT to complete this proce... */
+    char Str_DiskErr22_English[64];
     /* StrPtrTable_DiskErr24_Start: 6 pointers (cut from ptrs_211 by split_naka_pointer_arrays.py) */
     uint32_t StrPtrTable_DiskErr24_Start[6];
     char TidakMungkinDiubahKe_str[104];
@@ -1142,60 +1144,22 @@ typedef struct __attribute__((packed)) {
     char txt_Spuren_wie_RHYTHM_CHORD_und[104];
     char ItIsOnlyPossible_str_2[104];
     /* StrPtrTable_DiskErr28_Start: 6 pointers (cut from ptrs_218 by split_naka_pointer_arrays.py) */
-    uint32_t StrPtrTable_DiskErr28_Start[6];
-    char IniHanyaMungkinUntuk_str_3[118];
-    char Error_str_27[10];
-    char txt_Solo_es_posible_copiar_pistas_de[102];
-    char txt_Je_ne_peux_copier_que_des_pistes[138];
-    uint16_t field_12d28;
-    uint16_t field_12d2a;
-    uint16_t field_12d2c;
-    uint16_t field_12d2e;
-    uint16_t field_12d30;
-    uint16_t field_12d32;
-    uint16_t field_12d34;
-    uint16_t field_12d36;
-    uint16_t field_12d38;
-    uint16_t field_12d3a;
-    uint16_t field_12d3c;
-    uint16_t field_12d3e;
-    uint16_t field_12d40;
-    uint16_t field_12d42;
-    uint16_t field_12d44;
-    uint16_t field_12d46;
-    uint16_t field_12d48;
-    uint16_t field_12d4a;
-    uint16_t field_12d4c;
-    uint16_t field_12d4e;
-    uint16_t field_12d50;
-    uint16_t field_12d52;
-    uint16_t field_12d54;
-    uint16_t field_12d56;
-    uint16_t field_12d58;
-    uint16_t field_12d5a;
-    uint16_t field_12d5c;
-    uint16_t field_12d5e;
-    uint16_t field_12d60;
-    uint16_t field_12d62;
-    uint16_t field_12d64;
-    uint16_t field_12d66;
-    uint16_t field_12d68;
-    uint16_t field_12d6a;
-    uint16_t field_12d6c;
-    uint16_t field_12d6e;
-    uint16_t field_12d70;
-    uint16_t field_12d72;
-    uint16_t field_12d74;
-    uint16_t field_12d76;
-    uint16_t field_12d78;
-    uint16_t field_12d7a;
-    uint16_t field_12d7c;
-    uint16_t field_12d7e;
-    uint16_t field_12d80;
-    uint16_t field_12d82;
-    char NnenNichtKopiertWerden_str[28];
-    char ItIsOnlyPossible_str_3[102];
-    uint32_t ptrs_219[1];
+    /* text of message 29 ("ERROR 27!": only melody tracks can be copied), per help language: English, German, French, Spanish, placeholder "ERROR 27", Indonesian */
+    uint32_t MsgText_CopyMelodyOnlyTexts[6];
+    /* Indonesian text of message 29 ("ERROR 27!", melody tracks only can be copied) */
+    char Str_Err27CopyMelody_Indonesian[118];
+    /* language-4 entry of message 29: the placeholder "ERROR 27" (no Italian text) */
+    char Str_Err27CopyMelody_Italian[10];
+    /* Spanish text of message 29 ("ERROR 27!", melody tracks only can be copied) */
+    char Str_Err27CopyMelody_Spanish[102];
+    /* French text of message 29 ("ERROR 27!", melody tracks only can be copied) */
+    char Str_Err27CopyMelody_French[138];
+    /* German text of message 29 ("ERROR 27!", melody tracks only can be copied) */
+    char Str_Err27CopyMelody_German[120];
+    /* English text of message 29 ("ERROR 27!", melody tracks only can be copied) */
+    char Str_Err27CopyMelody_English[102];
+    /* entry 0 (English) of the text table of message 30 ("ERROR 28!": song too long for a MIDI file); entries 1-5 follow under StrTable_DiskErr28 */
+    uint32_t MsgText_SongTooLongTexts[1];
     /* StrTable_DiskErr28: 5 pointers (cut from ptrs_219 by split_naka_pointer_arrays.py) */
     uint32_t StrTable_DiskErr28[5];
     char LaguIniTerlaluPanjang_str[58];
@@ -1228,28 +1192,35 @@ typedef struct __attribute__((packed)) {
     char txt_Das_gerade_kopierte_Pattern_hat[172];
     char TheTimeSignatureOf_str[234];
     /* StrPtrTable_DiskErr30_End: 6 pointers (cut from ptrs_223 by split_naka_pointer_arrays.py) */
-    uint32_t StrPtrTable_DiskErr30_End[6];
-    char MemoryPenuh_str[14];
-    char Error_str_32[10];
-    char MemoriaLlena_str_2[14];
-    uint16_t field_13afe;
-    uint16_t field_13b00;
-    uint16_t field_13b02;
-    uint16_t field_13b04;
-    uint16_t field_13b06;
-    uint16_t field_13b08;
-    uint16_t field_13b0a;
-    char str_525[4];
-    char SpeicherVoll_str_2[16];
-    char MemoryFull_str_2[12];
-    uint32_t ptrs_224[6];  /* 6 pointers */
-    char KodeIdentifikasiIdDari_str[92];
-    char Error_str_33[10];
-    char txt_El_codigo_de_identificacion_ID[124];
-    char txt_Le_code_d_identificaiton_ID_de[124];
-    char UnKn3000_str[12];
-    char txt_Der_Identifikations_ID_Code_der[112];
-    char TheIdentificationIdCode_str[104];
+    /* 6 pointers */
+    /* text of message 23 ("ERROR 32!", "Memory full"), per help language: English, German, French, Spanish, placeholder "ERROR 32", Indonesian */
+    uint32_t MsgText_Err32MemoryFullTexts[6];
+    /* Indonesian text of message 23 ("ERROR 32!", memory full) */
+    char Str_Err32MemoryFull_Indonesian[14];
+    /* language-4 entry of message 23: the placeholder "ERROR 32" */
+    char Str_Err32MemoryFull_Italian[10];
+    /* Spanish text of message 23 ("ERROR 32!", memory full) */
+    char Str_Err32MemoryFull_Spanish[14];
+    /* French text of message 23 ("ERROR 32!", memory full) */
+    char Str_Err32MemoryFull_French[18];
+    /* German text of message 23 ("ERROR 32!", memory full) */
+    char Str_Err32MemoryFull_German[16];
+    /* English text of message 23 ("ERROR 32!", memory full) */
+    char Str_Err32MemoryFull_English[12];
+    /* text of message 34 ("ERROR 40!": received System Exclusive data carry another product's ID), per help language */
+    uint32_t MsgText_SysExIdMismatchTexts[6];
+    /* Indonesian text of message 34 ("ERROR 40!", SysEx ID of another product) */
+    char Str_Err40SysExId_Indonesian[92];
+    /* language-4 entry of message 34: the placeholder "ERROR 40" */
+    char Str_Err40SysExId_Italian[10];
+    /* Spanish text of message 34 ("ERROR 40!", SysEx ID of another product) */
+    char Str_Err40SysExId_Spanish[124];
+    /* French text of message 34 ("ERROR 40!", SysEx ID of another product) */
+    char Str_Err40SysExId_French[136];
+    /* German text of message 34 ("ERROR 40!", SysEx ID of another product) */
+    char Str_Err40SysExId_German[112];
+    /* English text of message 34 ("ERROR 40!", SysEx ID of another product) */
+    char Str_Err40SysExId_English[104];
     /* StrPtrTable_DiskErr41_Start: 1 pointers (cut from ptrs_225 by split_naka_pointer_arrays.py) */
     uint32_t StrPtrTable_DiskErr41_Start[1];
     /* StrTable_DiskErr41: 5 pointers (cut from ptrs_225 by split_naka_pointer_arrays.py) */
@@ -1277,83 +1248,10 @@ typedef struct __attribute__((packed)) {
     char Str_DiskErr43_Spanish[124];
     /* Str_DiskErr43_French: text (the asm slice of the same name) */
     char Str_DiskErr43_French[150];
-    uint16_t field_14546;
-    uint16_t field_14548;
-    uint16_t field_1454a;
-    uint16_t field_1454c;
-    uint16_t field_1454e;
-    uint16_t field_14550;
-    uint16_t field_14552;
-    uint16_t field_14554;
-    uint16_t field_14556;
-    uint16_t field_14558;
-    uint16_t field_1455a;
-    uint16_t field_1455c;
-    uint16_t field_1455e;
-    uint16_t field_14560;
-    uint16_t field_14562;
-    uint16_t field_14564;
-    uint16_t field_14566;
-    uint16_t field_14568;
-    uint16_t field_1456a;
-    uint16_t field_1456c;
-    uint16_t field_1456e;
-    uint16_t field_14570;
-    uint16_t field_14572;
-    uint16_t field_14574;
-    uint16_t field_14576;
-    uint16_t field_14578;
-    uint16_t field_1457a;
-    uint16_t field_1457c;
-    uint16_t field_1457e;
-    uint16_t field_14580;
-    uint16_t field_14582;
-    uint16_t field_14584;
-    uint16_t field_14586;
-    uint16_t field_14588;
-    uint16_t field_1458a;
-    uint16_t field_1458c;
-    uint16_t field_1458e;
-    uint16_t field_14590;
-    uint16_t field_14592;
-    uint16_t field_14594;
-    uint16_t field_14596;
-    uint16_t field_14598;
-    uint16_t field_1459a;
-    uint16_t field_1459c;
-    uint16_t field_1459e;
-    uint16_t field_145a0;
-    uint16_t field_145a2;
-    uint16_t field_145a4;
-    uint16_t field_145a6;
-    uint16_t field_145a8;
-    uint16_t field_145aa;
-    uint16_t field_145ac;
-    uint16_t field_145ae;
-    uint16_t field_145b0;
-    uint16_t field_145b2;
-    uint16_t field_145b4;
-    uint16_t field_145b6;
-    uint16_t field_145b8;
-    uint16_t field_145ba;
-    uint16_t field_145bc;
-    uint16_t field_145be;
-    uint16_t field_145c0;
-    uint16_t field_145c2;
-    uint16_t field_145c4;
-    uint16_t field_145c6;
-    uint16_t field_145c8;
-    uint16_t field_145ca;
-    uint16_t field_145cc;
-    uint16_t field_145ce;
-    uint16_t field_145d0;
-    uint16_t field_145d2;
-    uint16_t field_145d4;
-    uint16_t field_145d6;
-    uint16_t field_145d8;
-    uint16_t field_145da;
-    char OptionGeladenWerden_str[24];
-    char TheFileThatYou_str_2[134];
+    /* German text of message 43 ("ERROR 43!"): a file saved on an earlier KN model; entry 1 of StrPtrTable_DiskErr43_Start (Latin-1, 0x84/0x93 quotes) */
+    char Str_DiskErr43_German[174];
+    /* English text of message 43 ("ERROR 43!"); entry 0 of StrPtrTable_DiskErr43_Start */
+    char Str_DiskErr43_English[134];
     uint32_t StrTable_DiskErr44[6];  /* 6 pointers */
     char TidakMungkinUntukMeng_str[130];
     char Error_str_37[10];
@@ -1383,43 +1281,8 @@ typedef struct __attribute__((packed)) {
     char Err0r_str[10];
     char txt_El_disquete_insertado_es_de_tipo[102];
     char txt_La_disquette_inseree_est_de_type[106];
-    uint16_t field_14f4c;
-    uint16_t field_14f4e;
-    uint16_t field_14f50;
-    uint16_t field_14f52;
-    uint16_t field_14f54;
-    uint16_t field_14f56;
-    uint16_t field_14f58;
-    uint16_t field_14f5a;
-    uint16_t field_14f5c;
-    uint16_t field_14f5e;
-    uint16_t field_14f60;
-    uint16_t field_14f62;
-    uint16_t field_14f64;
-    uint16_t field_14f66;
-    uint16_t field_14f68;
-    uint16_t field_14f6a;
-    uint16_t field_14f6c;
-    uint16_t field_14f6e;
-    uint16_t field_14f70;
-    uint16_t field_14f72;
-    uint16_t field_14f74;
-    uint16_t field_14f76;
-    uint16_t field_14f78;
-    uint16_t field_14f7a;
-    uint16_t field_14f7c;
-    uint16_t field_14f7e;
-    uint16_t field_14f80;
-    uint16_t field_14f82;
-    uint16_t field_14f84;
-    uint16_t field_14f86;
-    uint16_t field_14f88;
-    uint16_t field_14f8a;
-    uint16_t field_14f8c;
-    uint16_t field_14f8e;
-    uint16_t field_14f90;
-    uint16_t field_14f92;
-    char DdDiskettenVerwendetWerden_str[32];
+    /* German text of message-catalog record 55 (code 0x30FFFF, "ERROR 48"): "Die eingelegte Diskette ist ein \x842HD" Typ. ... nur \x842DD" Disketten verwendet werden." (0x84 = the low quote) */
+    char Str_DiskErr48_German[104];
     char TheTypeOfInserted_str[84];
     uint32_t ptrs_232[6];  /* 6 pointers */
     char JumlahLaguMelebihiKapasitas_str[120];
@@ -2305,29 +2168,11 @@ typedef struct __attribute__((packed)) {
     uint16_t ApPreControl_CaseTable[7];
     char Feature_str[10];
     char rb_str_2[4];
-    uint16_t field_1a15e;
-    uint16_t field_1a160;
-    uint16_t field_1a162;
-    uint16_t field_1a164;
-    uint16_t field_1a166;
-    uint16_t field_1a168;
-    uint16_t field_1a16a;
-    uint16_t field_1a16c;
-    uint16_t field_1a16e;
-    uint16_t field_1a170;
-    uint16_t field_1a172;
-    uint16_t field_1a174;
-    uint16_t field_1a176;
-    uint16_t field_1a178;
-    uint16_t field_1a17a;
-    uint16_t field_1a17c;
-    uint16_t field_1a17e;
-    uint16_t field_1a180;
-    uint16_t field_1a182;
-    uint16_t field_1a184;
-    uint16_t field_1a186;
-    uint16_t field_1a188;
-    uint16_t field_1a18a;
+    uint8_t field_1a15e;
+    /* title (low byte of 0x01A000xx) of demo song 0; base of the title column of the 23 x {entry, title} song order */
+    uint8_t DemoSong_TitleCol;
+    /* demo songs 1-22: {demo entry to load, title to show: 0xE1 STYLE, 0xE2 SOUND, 0xE3 RHY, 0xE4 FEATURE} */
+    DemoSong_OrderFromSong1_t DemoSong_OrderFromSong1[22];
     /* part index 0..15 -> its bit (1 << index) in a 16-bit part mask */
     uint16_t Demo_PartBitMask[16];
     /* order in which file types are tried: LSW, PMT, MSP, CMP, TM, SQT, RCM, MD, SQF, SEQ (indexes into SeqFileType_CodeTable) */
@@ -7305,7 +7150,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .StrTable_DiskErr10 = {
         SELF(TheDataIsAlready_str),
         SELF(txt_Diese_Daten_sind_bereits),
-        SELF(field_10f3a),
+        SELF(Str_DiskErr10_French),
         SELF(txt_Los_datos_ya_estan_protegidos),
         SELF(Error_str_14),
         SELF(DataSudahDiprotek_str),
@@ -7317,31 +7162,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Los_datos_ya_estan_protegidos = "Los datos ya est\341n protegidos contra la copia.\0\377",
 
-    .field_10f3a = 0x6543,
-
-    .field_10f3c = 0x2073,
-
-    .field_10f3e = 0x6F64,
-
-    .field_10f40 = 0x6E6E,
-
-    .field_10f42 = 0x65E9,
-
-    .field_10f44 = 0x2073,
-
-    .field_10f46 = 0x6F73,
-
-    .field_10f48 = 0x746E,
-
-    .field_10f4a = 0x7020,
-
-    .field_10f4c = 0x6F72,
-
-    .field_10f4e = 0xE974,
-
-    .field_10f50 = 0xE967,
-
-    .EsContreLaCopie_str = "es contre la copie!",
+    .Str_DiskErr10_French = "Ces donn\xE9" "es sont prot\xE9g\xE9" "es contre la copie!",
 
     .txt_Diese_Daten_sind_bereits = "Diese Daten sind bereits kopiergesch\374tzt.\0",
 
@@ -7536,63 +7357,39 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .AProblemHasOccurred_str = "A problem has occurred with your Sequencer Data. This might be due to a damaged or faulty Disk.",
 
-    .StrPtrTable_DiskErr20_End = {
-        SELF(MemoryFull_str),
-        SELF(SpeicherVoll_str),
-        SELF(field_11cee),
-        SELF(MemoriaLlena_str),
-        SELF(Error_str_18),
-        SELF(KapasitasPenyimpananPenuhMemory_str),
+    .StrTable_DiskErr21 = {
+        SELF(Str_DiskErr21_English), SELF(Str_DiskErr21_German), SELF(Str_DiskErr21_French), SELF(Str_DiskErr21_Spanish),
+        SELF(Str_DiskErr21_Italian), SELF(Str_DiskErr21_Indonesian),
     },
 
-    .KapasitasPenyimpananPenuhMemory_str = ALIGNED_STRING("Kapasitas penyimpanan penuh. (Memory penuh)."),
+    .Str_DiskErr21_Indonesian = "Kapasitas penyimpanan penuh. (Memory penuh).\x00\xFF",
 
-    .Error_str_18 = ALIGNED_STRING("ERROR 21"),
+    .Str_DiskErr21_Italian = "ERROR 21\x00\xFF",
 
-    .MemoriaLlena_str = "Memoria llena",
+    .Str_DiskErr21_Spanish = "Memoria llena",
 
-    .field_11cee = 0xE94D,
+    .Str_DiskErr21_French = "M\xE9moire staur\xE9" "e!\x00\xFF",
 
-    .field_11cf0 = 0x6F6D,
+    .Str_DiskErr21_German = "Speicher voll !",
 
-    .field_11cf2 = 0x7269,
+    .Str_DiskErr21_English = "Memory full",
 
-    .field_11cf4 = 0x2065,
-
-    .field_11cf6 = 0x7473,
-
-    .field_11cf8 = 0x7561,
-
-    .field_11cfa = 0xE972,
-
-    .str_441 = ALIGNED_STRING("e!"),
-
-    .SpeicherVoll_str = "Speicher voll !",
-
-    .MemoryFull_str = "Memory full",
-
-    .ptrs_210 = {
-        SELF(ItIsNecessaryTo_str),
-        SELF(txt_Um_diesen_Vorgang_abzuschlien),
-        SELF(txt_Vous_devez_presser_PUNCH_OUT),
-        SELF(EsNecesarioPulsarPunch_str),
-        SELF(Error_str_19),
-        SELF(PerluTekanPunchOut_str),
+    .StrTable_DiskErr22 = {
+        SELF(Str_DiskErr22_English), SELF(Str_DiskErr22_German), SELF(Str_DiskErr22_French), SELF(Str_DiskErr22_Spanish),
+        SELF(Str_DiskErr22_Italian), SELF(Str_DiskErr22_Indonesian),
     },
 
-    .PerluTekanPunchOut_str = ALIGNED_STRING("Perlu tekan PUNCH OUT untuk melengkapi prosedur."),
+    .Str_DiskErr22_Indonesian = "Perlu tekan PUNCH OUT untuk melengkapi prosedur.\x00\xFF",
 
-    .Error_str_19 = ALIGNED_STRING("ERROR 22"),
+    .Str_DiskErr22_Italian = "ERROR 22\x00\xFF",
 
-    .EsNecesarioPulsarPunch_str = ALIGNED_STRING("Es necesario pulsar PUNCH OUT para completar este procedimiento."),
+    .Str_DiskErr22_Spanish = "Es necesario pulsar PUNCH OUT para completar este procedimiento.\x00\xFF",
 
-    .txt_Vous_devez_presser_PUNCH_OUT = "Vous devez presser PUNCH OUT pour terminer cette proc\351dure.\0",
+    .Str_DiskErr22_French = "Vous devez presser PUNCH OUT pour terminer cette proc\xE9" "dure.",
 
-    .txt_Um_diesen_Vorgang_abzuschlien = "Um diesen Vorgang abzuschli\337en, m\374ssen Sie vorher PUNCH OUT dr\374c",
+    .Str_DiskErr22_German = "Um diesen Vorgang abzuschli\xDF" "en, m\xFCssen Sie vorher PUNCH OUT dr\xFC" "cken.\x00\xFF",
 
-    .Ken_str = ALIGNED_STRING("ken."),
-
-    .ItIsNecessaryTo_str = ALIGNED_STRING("It is necessary to press PUNCH OUT to complete this procedure."),
+    .Str_DiskErr22_English = "It is necessary to press PUNCH OUT to complete this procedure.\x00\xFF",
 
     .StrPtrTable_DiskErr24_Start = {
         SELF(ItIsImpossibleTo_str),
@@ -7746,120 +7543,24 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ItIsOnlyPossible_str_2 = ALIGNED_STRING("It is only possible to merge Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be merged."),
 
-    .StrPtrTable_DiskErr28_Start = {
-        SELF(ItIsOnlyPossible_str_3),
-        SELF(field_12d28),
-        SELF(txt_Je_ne_peux_copier_que_des_pistes),
-        SELF(txt_Solo_es_posible_copiar_pistas_de),
-        SELF(Error_str_27),
-        SELF(IniHanyaMungkinUntuk_str_3),
+    .MsgText_CopyMelodyOnlyTexts = {
+        SELF(Str_Err27CopyMelody_English), SELF(Str_Err27CopyMelody_German), SELF(Str_Err27CopyMelody_French), SELF(Str_Err27CopyMelody_Spanish),
+        SELF(Str_Err27CopyMelody_Italian), SELF(Str_Err27CopyMelody_Indonesian),
     },
 
-    .IniHanyaMungkinUntuk_str_3 = ALIGNED_STRING("Ini hanya mungkin untuk menggandakan Melody Tracks. Tracks seperti Rhythm, CHord and Control tidak dapat digandakan."),
+    .Str_Err27CopyMelody_Indonesian = "Ini hanya mungkin untuk menggandakan Melody Tracks. Tracks seperti Rhythm, CHord and Control tidak dapat digandakan.\x00\xFF",
 
-    .Error_str_27 = ALIGNED_STRING("ERROR 27"),
+    .Str_Err27CopyMelody_Italian = "ERROR 27\x00\xFF",
 
-    .txt_Solo_es_posible_copiar_pistas_de = "S\363lo es posible copiar pistas de melod\355as. Las pistas de ritmo, acorde y control no pueden mezclarse.\0",
+    .Str_Err27CopyMelody_Spanish = "S\xF3lo es posible copiar pistas de melod\xED" "as. Las pistas de ritmo, acorde y control no pueden mezclarse.",
 
-    .txt_Je_ne_peux_copier_que_des_pistes = "Je ne peux copier que des pistes contenant une m\351lodie. Les pistes assign\351es au Rhythm, \340 Chord et \340 Control ne peuvent pas \352tre copi\351es.\0",
+    .Str_Err27CopyMelody_French = "Je ne peux copier que des pistes contenant une m\xE9lodie. Les pistes assign\xE9" "es au Rhythm, \xE0 Chord et \xE0 Control ne peuvent pas \xEAtre copi\xE9" "es.",
 
-    .field_12d28 = 0x7345,
+    .Str_Err27CopyMelody_German = "Es ist nur m\xF6glich die \x84Melodie\x93-Spuren zu kopieren. Spuren wie RHYTHM, CHORD und CONTROL k\xF6nnen nicht kopiert werden.\x00\xFF",
 
-    .field_12d2a = 0x6920,
+    .Str_Err27CopyMelody_English = "It is only possible to copy Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be copied.",
 
-    .field_12d2c = 0x7473,
-
-    .field_12d2e = 0x6E20,
-
-    .field_12d30 = 0x7275,
-
-    .field_12d32 = 0x6D20,
-
-    .field_12d34 = 0x67F6,
-
-    .field_12d36 = 0x696C,
-
-    .field_12d38 = 0x6863,
-
-    .field_12d3a = 0x6420,
-
-    .field_12d3c = 0x6569,
-
-    .field_12d3e = 0x8420,
-
-    .field_12d40 = 0x654D,
-
-    .field_12d42 = 0x6F6C,
-
-    .field_12d44 = 0x6964,
-
-    .field_12d46 = 0x9365,
-
-    .field_12d48 = 0x532D,
-
-    .field_12d4a = 0x7570,
-
-    .field_12d4c = 0x6572,
-
-    .field_12d4e = 0x206E,
-
-    .field_12d50 = 0x757A,
-
-    .field_12d52 = 0x6B20,
-
-    .field_12d54 = 0x706F,
-
-    .field_12d56 = 0x6569,
-
-    .field_12d58 = 0x6572,
-
-    .field_12d5a = 0x2E6E,
-
-    .field_12d5c = 0x5320,
-
-    .field_12d5e = 0x7570,
-
-    .field_12d60 = 0x6572,
-
-    .field_12d62 = 0x206E,
-
-    .field_12d64 = 0x6977,
-
-    .field_12d66 = 0x2065,
-
-    .field_12d68 = 0x4852,
-
-    .field_12d6a = 0x5459,
-
-    .field_12d6c = 0x4D48,
-
-    .field_12d6e = 0x202C,
-
-    .field_12d70 = 0x4843,
-
-    .field_12d72 = 0x524F,
-
-    .field_12d74 = 0x2044,
-
-    .field_12d76 = 0x6E75,
-
-    .field_12d78 = 0x2064,
-
-    .field_12d7a = 0x4F43,
-
-    .field_12d7c = 0x544E,
-
-    .field_12d7e = 0x4F52,
-
-    .field_12d80 = 0x204C,
-
-    .field_12d82 = 0xF66B,
-
-    .NnenNichtKopiertWerden_str = ALIGNED_STRING("nnen nicht kopiert werden."),
-
-    .ItIsOnlyPossible_str_3 = "It is only possible to copy Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be copied.",
-
-    .ptrs_219 = {
+    .MsgText_SongTooLongTexts = {
         SELF(ThisSongIsToo_str),
     },
 
@@ -7950,63 +7651,39 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheTimeSignatureOf_str = "The Time Signature of the Pattern from which you are copying is different from the Composer Memory that you are using. Either: Change the Time Signature of the Composer Memory or: Copy from a Pattern that has the same Time Signature.",
 
-    .StrPtrTable_DiskErr30_End = {
-        SELF(MemoryFull_str_2),
-        SELF(SpeicherVoll_str_2),
-        SELF(field_13afe),
-        SELF(MemoriaLlena_str_2),
-        SELF(Error_str_32),
-        SELF(MemoryPenuh_str),
+    .MsgText_Err32MemoryFullTexts = {
+        SELF(Str_Err32MemoryFull_English), SELF(Str_Err32MemoryFull_German), SELF(Str_Err32MemoryFull_French), SELF(Str_Err32MemoryFull_Spanish),
+        SELF(Str_Err32MemoryFull_Italian), SELF(Str_Err32MemoryFull_Indonesian),
     },
 
-    .MemoryPenuh_str = "Memory penuh.",
+    .Str_Err32MemoryFull_Indonesian = "Memory penuh.",
 
-    .Error_str_32 = ALIGNED_STRING("ERROR 32"),
+    .Str_Err32MemoryFull_Italian = "ERROR 32\x00\xFF",
 
-    .MemoriaLlena_str_2 = "Memoria llena",
+    .Str_Err32MemoryFull_Spanish = "Memoria llena",
 
-    .field_13afe = 0xE94D,
+    .Str_Err32MemoryFull_French = "M\xE9moire satur\xE9" "e!\x00\xFF",
 
-    .field_13b00 = 0x6F6D,
+    .Str_Err32MemoryFull_German = "Speicher voll !",
 
-    .field_13b02 = 0x7269,
+    .Str_Err32MemoryFull_English = "Memory full",
 
-    .field_13b04 = 0x2065,
-
-    .field_13b06 = 0x6173,
-
-    .field_13b08 = 0x7574,
-
-    .field_13b0a = 0xE972,
-
-    .str_525 = ALIGNED_STRING("e!"),
-
-    .SpeicherVoll_str_2 = "Speicher voll !",
-
-    .MemoryFull_str_2 = "Memory full",
-
-    .ptrs_224 = {
-        SELF(TheIdentificationIdCode_str),
-        SELF(txt_Der_Identifikations_ID_Code_der),
-        SELF(txt_Le_code_d_identificaiton_ID_de),
-        SELF(txt_El_codigo_de_identificacion_ID),
-        SELF(Error_str_33),
-        SELF(KodeIdentifikasiIdDari_str),
+    .MsgText_SysExIdMismatchTexts = {
+        SELF(Str_Err40SysExId_English), SELF(Str_Err40SysExId_German), SELF(Str_Err40SysExId_French), SELF(Str_Err40SysExId_Spanish),
+        SELF(Str_Err40SysExId_Italian), SELF(Str_Err40SysExId_Indonesian),
     },
 
-    .KodeIdentifikasiIdDari_str = "Kode identifikasi (ID) dari data System Exclusive produk yang berbeda diterima oleh KN-5000",
+    .Str_Err40SysExId_Indonesian = "Kode identifikasi (ID) dari data System Exclusive produk yang berbeda diterima oleh KN-5000",
 
-    .Error_str_33 = ALIGNED_STRING("ERROR 40"),
+    .Str_Err40SysExId_Italian = "ERROR 40\x00\xFF",
 
-    .txt_El_codigo_de_identificacion_ID = "El c\363digo de identificaci\363n (ID) de los datos exclusivos del sistema recibidos por el KN3000 son para un aparato diferente.\0",
+    .Str_Err40SysExId_Spanish = "El c\xF3" "digo de identificaci\xF3n (ID) de los datos exclusivos del sistema recibidos por el KN3000 son para un aparato diferente.",
 
-    .txt_Le_code_d_identificaiton_ID_de = "Le code d'identificaiton (ID) de donn\351es de Syst\350me Exclusif ne correspond pas au mien. Ces donn\351es ne sont pas destin\351es \340 ",
+    .Str_Err40SysExId_French = "Le code d'identificaiton (ID) de donn\xE9" "es de Syst\xE8me Exclusif ne correspond pas au mien. Ces donn\xE9" "es ne sont pas destin\xE9" "es \xE0 un KN3000!\x00\xFF",
 
-    .UnKn3000_str = ALIGNED_STRING("un KN3000!"),
+    .Str_Err40SysExId_German = "Der Identifikations (ID) Code der zu empfangenden System Exclusive Daten ist f\xFCr ein anderes Produkt bestimmt.\x00\xFF",
 
-    .txt_Der_Identifikations_ID_Code_der = "Der Identifikations (ID) Code der zu empfangenden System Exclusive Daten ist f\374r ein anderes Produkt bestimmt.\0\377",
-
-    .TheIdentificationIdCode_str = ALIGNED_STRING("The Identification (ID) code of the System Exclusive data received by the KN5000 is different product."),
+    .Str_Err40SysExId_English = "The Identification (ID) code of the System Exclusive data received by the KN5000 is different product.\x00\xFF",
 
     .StrPtrTable_DiskErr41_Start = {
         SELF(AnErrorHasOccurred_str_4),
@@ -8054,11 +7731,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .AnErrorHasOccurred_str_5 = "An error has occurred during System Exclusive transmission. The data has not been received correctly. Please try again.",
 
     .StrPtrTable_DiskErr43_Start = {
-        SELF(TheFileThatYou_str_2),
+        SELF(Str_DiskErr43_English),
     },
 
     .StrTable_DiskErr43 = {
-        SELF(field_14546),
+        SELF(Str_DiskErr43_German),
         SELF(Str_DiskErr43_French),
         SELF(Str_DiskErr43_Spanish),
         SELF(Error_str_36),
@@ -8075,159 +7752,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .Str_DiskErr43_French = "Le fichier que vous essayez de charger a \351t\351 sauvegard\351 \340 partir d'un clavier KN ant"
         "\351rieur. Vous ne pouvez le charger qu'en utilisant l'option \223ALL\224.",
 
-    .field_14546 = 0x6544,
+    .Str_DiskErr43_German = "Der Datensatz (File), den Sie gerade laden m\xF6" "chten, wurde auf einem \xE4lteren KN-Keybord gespeichert. In diesem Fall kann nur unter Verwendung der \x84" "ALL\x93-Option geladen werden.",
 
-    .field_14548 = 0x2072,
-
-    .field_1454a = 0x6144,
-
-    .field_1454c = 0x6574,
-
-    .field_1454e = 0x736E,
-
-    .field_14550 = 0x7461,
-
-    .field_14552 = 0x207A,
-
-    .field_14554 = 0x4628,
-
-    .field_14556 = 0x6C69,
-
-    .field_14558 = 0x2965,
-
-    .field_1455a = 0x202C,
-
-    .field_1455c = 0x6564,
-
-    .field_1455e = 0x206E,
-
-    .field_14560 = 0x6953,
-
-    .field_14562 = 0x2065,
-
-    .field_14564 = 0x6567,
-
-    .field_14566 = 0x6172,
-
-    .field_14568 = 0x6564,
-
-    .field_1456a = 0x6C20,
-
-    .field_1456c = 0x6461,
-
-    .field_1456e = 0x6E65,
-
-    .field_14570 = 0x6D20,
-
-    .field_14572 = 0x63F6,
-
-    .field_14574 = 0x7468,
-
-    .field_14576 = 0x6E65,
-
-    .field_14578 = 0x202C,
-
-    .field_1457a = 0x7577,
-
-    .field_1457c = 0x6472,
-
-    .field_1457e = 0x2065,
-
-    .field_14580 = 0x7561,
-
-    .field_14582 = 0x2066,
-
-    .field_14584 = 0x6965,
-
-    .field_14586 = 0x656E,
-
-    .field_14588 = 0x206D,
-
-    .field_1458a = 0x6CE4,
-
-    .field_1458c = 0x6574,
-
-    .field_1458e = 0x6572,
-
-    .field_14590 = 0x206E,
-
-    .field_14592 = 0x4E4B,
-
-    .field_14594 = 0x4B2D,
-
-    .field_14596 = 0x7965,
-
-    .field_14598 = 0x6F62,
-
-    .field_1459a = 0x6472,
-
-    .field_1459c = 0x6720,
-
-    .field_1459e = 0x7365,
-
-    .field_145a0 = 0x6570,
-
-    .field_145a2 = 0x6369,
-
-    .field_145a4 = 0x6568,
-
-    .field_145a6 = 0x7472,
-
-    .field_145a8 = 0x202E,
-
-    .field_145aa = 0x6E49,
-
-    .field_145ac = 0x6420,
-
-    .field_145ae = 0x6569,
-
-    .field_145b0 = 0x6573,
-
-    .field_145b2 = 0x206D,
-
-    .field_145b4 = 0x6146,
-
-    .field_145b6 = 0x6C6C,
-
-    .field_145b8 = 0x6B20,
-
-    .field_145ba = 0x6E61,
-
-    .field_145bc = 0x206E,
-
-    .field_145be = 0x756E,
-
-    .field_145c0 = 0x2072,
-
-    .field_145c2 = 0x6E75,
-
-    .field_145c4 = 0x6574,
-
-    .field_145c6 = 0x2072,
-
-    .field_145c8 = 0x6556,
-
-    .field_145ca = 0x7772,
-
-    .field_145cc = 0x6E65,
-
-    .field_145ce = 0x7564,
-
-    .field_145d0 = 0x676E,
-
-    .field_145d2 = 0x6420,
-
-    .field_145d4 = 0x7265,
-
-    .field_145d6 = 0x8420,
-
-    .field_145d8 = 0x4C41,
-
-    .field_145da = 0x934C,
-
-    .OptionGeladenWerden_str = "-Option geladen werden.",
-
-    .TheFileThatYou_str_2 = "The file that you are trying to load was saved on a previous KN keyboard. It is only possible to load using the \"PERFORMANCE\" option.",
+    .Str_DiskErr43_English = "The file that you are trying to load was saved on a previous KN keyboard. It is only possible to load using the \"PERFORMANCE\" option.",
 
     .StrTable_DiskErr44 = {
         SELF(ItIsImpossibleTo_str_2),
@@ -8299,7 +7826,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .StrTable_DiskErr48 = {
         SELF(TheTypeOfInserted_str),
-        SELF(field_14f4c),
+        SELF(Str_DiskErr48_German),
         SELF(txt_La_disquette_inseree_est_de_type),
         SELF(txt_El_disquete_insertado_es_de_tipo),
         SELF(Err0r_str),
@@ -8314,79 +7841,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_La_disquette_inseree_est_de_type = "La disquette ins\351r\351e est de type\"2HD\". Dans ce mode, vous pouvez utiliser uniquement une disquette \"2DD\".\0",
 
-    .field_14f4c = 0x6944,
-
-    .field_14f4e = 0x2065,
-
-    .field_14f50 = 0x6965,
-
-    .field_14f52 = 0x676E,
-
-    .field_14f54 = 0x6C65,
-
-    .field_14f56 = 0x6765,
-
-    .field_14f58 = 0x6574,
-
-    .field_14f5a = 0x4420,
-
-    .field_14f5c = 0x7369,
-
-    .field_14f5e = 0x656B,
-
-    .field_14f60 = 0x7474,
-
-    .field_14f62 = 0x2065,
-
-    .field_14f64 = 0x7369,
-
-    .field_14f66 = 0x2074,
-
-    .field_14f68 = 0x6965,
-
-    .field_14f6a = 0x206E,
-
-    .field_14f6c = 0x3284,
-
-    .field_14f6e = 0x4448,
-
-    .field_14f70 = 0x2022,
-
-    .field_14f72 = 0x7954,
-
-    .field_14f74 = 0x2E70,
-
-    .field_14f76 = 0x4920,
-
-    .field_14f78 = 0x206E,
-
-    .field_14f7a = 0x6964,
-
-    .field_14f7c = 0x7365,
-
-    .field_14f7e = 0x6D65,
-
-    .field_14f80 = 0x4D20,
-
-    .field_14f82 = 0x646F,
-
-    .field_14f84 = 0x7375,
-
-    .field_14f86 = 0x6B20,
-
-    .field_14f88 = 0x6EF6,
-
-    .field_14f8a = 0x656E,
-
-    .field_14f8c = 0x206E,
-
-    .field_14f8e = 0x756E,
-
-    .field_14f90 = 0x2072,
-
-    .field_14f92 = 0x3284,
-
-    .DdDiskettenVerwendetWerden_str = "DD\" Disketten verwendet werden.",
+    .Str_DiskErr48_German = "Die eingelegte Diskette ist ein \x84" "2HD\" Typ. In diesem Modus k\xF6nnen nur \x84" "2DD\" Disketten verwendet werden.",
 
     .TheTypeOfInserted_str = ALIGNED_STRING("The type of inserted DISK is \"2HD\".  It can be used only \"2DD\"  type in this mode."),
 
@@ -8683,7 +8138,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
         /* 12 */ { 3, 0x000CFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_202) },
         /* 13 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
         /* 14 */ { 3, 0x0014FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_208) },
-        /* 15 */ { 3, 0x0015FFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr20_End) },
+        /* 15 */ { 3, 0x0015FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr21) },
         /* 16 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
         /* 17 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
         /* 18 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
@@ -8691,18 +8146,18 @@ const naka_technichord_strings_t naka_technichord_strings_data
         /* 20 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_CompletedLabel) },
         /* 21 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_CompletedLabel) },
         /* 22 */ { 3, 0x001FFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_222) },
-        /* 23 */ { 3, 0x0020FFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr30_End) },
-        /* 24 */ { 3, 0x0016FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_210) },
+        /* 23 */ { 3, 0x0020FFFF, SELF(StrTable_ErrorLabel), SELF(MsgText_Err32MemoryFullTexts) },
+        /* 24 */ { 3, 0x0016FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr22) },
         /* 25 */ { 3, 0x0017FFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr24_Start) },
         /* 26 */ { 3, 0x0018FFFF, SELF(StrTable_ErrorLabel), SELF(MsgText_CheckLanguage_PtrTable) },
         /* 27 */ { 3, 0x0019FFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr24_French_End) },
         /* 28 */ { 3, 0x001AFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_217) },
-        /* 29 */ { 3, 0x001BFFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr28_Start) },
-        /* 30 */ { 3, 0x001CFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_219) },
+        /* 29 */ { 3, 0x001BFFFF, SELF(StrTable_ErrorLabel), SELF(MsgText_CopyMelodyOnlyTexts) },
+        /* 30 */ { 3, 0x001CFFFF, SELF(StrTable_ErrorLabel), SELF(MsgText_SongTooLongTexts) },
         /* 31 */ { 3, 0x001DFFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr29) },
         /* 32 */ { 3, 0x002AFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_226) },
         /* 33 */ { 3, 0x0029FFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr41_Start) },
-        /* 34 */ { 3, 0x0028FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_224) },
+        /* 34 */ { 3, 0x0028FFFF, SELF(StrTable_ErrorLabel), SELF(MsgText_SysExIdMismatchTexts) },
         /* 35 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_CompletedLabel) },
         /* 36 */ { 2, 0xFFFFFFFF, SELF(ptrs_185), SELF(ptrs_188) },
         /* 37 */ { 5, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_PleaseWaitLabel) },
@@ -10459,51 +9914,34 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .rb_str_2 = ALIGNED_STRING("rb"),
 
-    .field_1a15e = 0xE100,
+    .field_1a15e = 0x00,
 
-    .field_1a160 = 0xE101,
+    .DemoSong_TitleCol = 0xE1,
 
-    .field_1a162 = 0xE30E,
-
-    .field_1a164 = 0xE208,
-
-    .field_1a166 = 0xE104,
-
-    .field_1a168 = 0xE209,
-
-    .field_1a16a = 0xE30F,
-
-    .field_1a16c = 0xE206,
-
-    .field_1a16e = 0xE20B,
-
-    .field_1a170 = 0xE207,
-
-    .field_1a172 = 0xE102,
-
-    .field_1a174 = 0xE310,
-
-    .field_1a176 = 0xE103,
-
-    .field_1a178 = 0xE105,
-
-    .field_1a17a = 0xE20A,
-
-    .field_1a17c = 0xE30D,
-
-    .field_1a17e = 0xE311,
-
-    .field_1a180 = 0xE30C,
-
-    .field_1a182 = 0xE412,
-
-    .field_1a184 = 0xE413,
-
-    .field_1a186 = 0xE414,
-
-    .field_1a188 = 0xE415,
-
-    .field_1a18a = 0xE416,
+    .DemoSong_OrderFromSong1 = {
+        { 0x01, 0xE1 },
+        { 0x0E, 0xE3 },
+        { 0x08, 0xE2 },
+        { 0x04, 0xE1 },
+        { 0x09, 0xE2 },
+        { 0x0F, 0xE3 },
+        { 0x06, 0xE2 },
+        { 0x0B, 0xE2 },
+        { 0x07, 0xE2 },
+        { 0x02, 0xE1 },
+        { 0x10, 0xE3 },
+        { 0x03, 0xE1 },
+        { 0x05, 0xE1 },
+        { 0x0A, 0xE2 },
+        { 0x0D, 0xE3 },
+        { 0x11, 0xE3 },
+        { 0x0C, 0xE3 },
+        { 0x12, 0xE4 },
+        { 0x13, 0xE4 },
+        { 0x14, 0xE4 },
+        { 0x15, 0xE4 },
+        { 0x16, 0xE4 },
+    },
 
     .Demo_PartBitMask = {
         0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080,

@@ -648,12 +648,23 @@ NAKA_InitDataBlock_PtrTable_10:	.incbin "includes/generated/naka_perf_style.bin"
 ; [nakarest] through source references InitializeNaka_Skip10 (storage/flash_floppy_handlers.s:
 ; [nakarest] `lda xhl, (NAKA_InitDataBlock_PtrTable_11:24)`).
 NAKA_InitDataBlock_PtrTable_11:	.incbin "includes/generated/naka_perf_style.bin", 0x6A6E, 0x70	; 6 x 32-bit pointer
-; [nakarest] naka_perf_style+0x6ade  +0x6ade..+0x6c40 (0xe15452, 354 B)
-; [nakarest] A table of 6 pointers into this piece (354 B at 0xe15452), then text; entry 0
-; [nakarest] points at "Classic Organ Sounds with Jazz and Rock Drawbars"; no registered NAKA
-; [nakarest] table points into it; reached through source references InitializeNaka_Skip11
-; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_InitDataBlock_PtrTable_12:24)`).
-NAKA_InitDataBlock_PtrTable_12:	.incbin "includes/generated/naka_perf_style.bin", 0x6ADE, 0x162	; 6 x 32-bit pointer
+; FtLangText11_Texts -- 6 x u32: per-language text of feature-demo language text 11, by help language (RAM 0x340e4):
+; 0 English "Classic Organ Sounds with Jazz and Rock Drawbars!", 1 German, 2 French, 3 Spanish, 4 the placeholder "Italian",
+; 5 Indonesian. The FtLangText11 handler (ApFunction slot 0x12b entry 11, storage/flash_floppy_handlers.s) returns it for
+; EVT_GET_LANGUAGE_PTR; AcLanguageTextProc draws entry [0x340e4] (ftdemo01 element 131).
+FtLangText11_Texts:	.incbin "includes/generated/naka_perf_style.bin", 0x6ADE, 0x18
+; Str_FtLangText11_Indonesian -- 58 x char: the Indonesian caption; FtLangText11_Texts[5]
+Str_FtLangText11_Indonesian:	.incbin "includes/generated/naka_perf_style.bin", 0x6AF6, 0x3A
+; Str_FtLangText11_Italian -- 8 x char: the placeholder "Italian" (no Italian text); FtLangText11_Texts[4]
+Str_FtLangText11_Italian:	.incbin "includes/generated/naka_perf_style.bin", 0x6B30, 0x8
+; Str_FtLangText11_Spanish -- 58 x char: the Spanish caption; FtLangText11_Texts[3]
+Str_FtLangText11_Spanish:	.incbin "includes/generated/naka_perf_style.bin", 0x6B38, 0x3A
+; Str_FtLangText11_French -- 86 x char: the French caption; FtLangText11_Texts[2]
+Str_FtLangText11_French:	.incbin "includes/generated/naka_perf_style.bin", 0x6B72, 0x56
+; Str_FtLangText11_German -- 70 x char: the German caption; FtLangText11_Texts[1]
+Str_FtLangText11_German:	.incbin "includes/generated/naka_perf_style.bin", 0x6BC8, 0x46
+; Str_FtLangText11_English -- 50 x char: the English caption; FtLangText11_Texts[0]
+Str_FtLangText11_English:	.incbin "includes/generated/naka_perf_style.bin", 0x6C0E, 0x32
 ; [nakarest] naka_perf_style+0x6c40  +0x6c40..+0x6cba (0xe155b4, 122 B)
 ; [nakarest] A table of 6 pointers into this piece (122 B at 0xe155b4), then text; entry 0
 ; [nakarest] points at "Acoustic Illusion"; no registered NAKA table points into it; reached
@@ -695,10 +706,12 @@ FtLangText17_Texts:	.incbin "includes/generated/naka_perf_style.bin", 0x704C, 0x
 ; slot layout as AccPatch_FindFreeSlot / AccPatch_ClearLinkedListEntries use it (sequencer/accompaniment_engine.s):
 ; bit 7 of +0 = allocated, +1 = previous slot, +3 = next slot (0xFFFF = none); events from +5
 NoteEvent_DefaultPatternSlot:	.incbin "includes/generated/naka_perf_style.bin", 0x70AC, 0x100
-; [nakarest] naka_perf_style+0x71ac  +0x71ac..+0x71ec (0xe15b20, 64 B)
-; [nakarest] purpose not established: layout of 64 B at 0xe15b20 not derived; readers below
-; [nakarest] Readers: source references NoteEvent_LoadSoundGenParams
-; [nakarest] (storage/flash_floppy_handlers.s: `ld xiy, NoteEvent_LoadSoundGenParams_Data_2`).
-NoteEvent_LoadSoundGenParams_Data_2:	.incbin "includes/generated/naka_perf_style.bin", 0x71AC, 0x40
+; AccPatch_SlotRecordTemplate -- 1 x struct (64 B): the first 64 bytes of the 96-byte default slot record that
+; NoteEvent_LoadSoundGenParams copies (ldirw 0x30 words; the last 32 bytes, "     Init       " + zeros, follow in
+; naka_property_descriptors.s) into the 30 accompaniment-patch slots at *(0xc72)+0x60+96*i, giving slot i the chain heads
+; 5i..5i+4 at +0, +4, +6, +8, +10 (AccPatch_FreeAllChains / AccPatch_FillAllVoiceData walk those five words; +2 is not one).
+; +12.. is the settings block AccPatch_CopyDefaultsToSlot resets from AccPatch_DefaultSlotData; byte +12 indexes
+; AccTone_LookupByProgram_Table, whose value times (byte +13) + 1 is the fill length AccPatch_FillEntryWithVoiceData uses.
+AccPatch_SlotRecordTemplate:	.incbin "includes/generated/naka_perf_style.bin", 0x71AC, 0x40
 ; NAKA_UIObjectTable is at offset 0x4ada within the binary blob above.
 ; Referenced from flash_floppy_handlers.s (RegisterObjectTable call).

@@ -2588,15 +2588,13 @@ NoteEdit_FormatTempoString_Data:	.incbin "includes/generated/naka_effects_seq.bi
 ; [nakarest] (sequencer/sequencer_ui.s: `.long Str_20469e32473220`).
 Str_20469e32473220:	.incbin "includes/generated/naka_effects_seq.bin", 0x8B86, 0x27
 Str_42a03242322043:	.incbin "includes/generated/naka_effects_seq.bin", 0x8BAD, 0x275
-; [nakarest] naka_effects_seq+0x8e22  +0x8e22..+0x8e5a (0xe30dc6, 56 B)
-; [nakarest] purpose not established: layout of 56 B at 0xe30dc6 not derived; readers below
-; [nakarest] Readers: source references Equalizer_DispatchA (sequencer/sequencer_ui.s: `lda xde,
-; [nakarest] (Equalizer_DispatchA_Data:24)`).
-Equalizer_DispatchA_Data:	.incbin "includes/generated/naka_effects_seq.bin", 0x8E22, 0x38
-; [nakarest] naka_effects_seq+0x8e5a  +0x8e5a..+0x8ebc (0xe30dfe, 98 B)
-; [nakarest] Text (98 B at 0xe30dfe), first string "q"; no registered NAKA table points into it;
-; [nakarest] reached through source references Equalizer_DispatchA (sequencer/sequencer_ui.s:
-; [nakarest] `lda xbc, (Equalizer_DispatchA_Data_2:24)`).
-Equalizer_DispatchA_Data_2:	.incbin "includes/generated/naka_effects_seq.bin", 0x8E5A, 0x62
+; Equalizer_FreqDispPos -- 28 x uint16_t: display position of an EQ band's frequency value, 48 + 7*value for values 0-26
+; (DspValueText_EqFreq: "40" Hz .. "16k"); entry 27 repeats 230. EqualizerCngFunc answers EVT_GET_DISP_POS (Kubo
+; MT_GetDispPos) for items 0, 1, 3, 5, 7 with entry [frequency word] (RAM 0x2978/0x297c/0x2980/0x2984), via Equalizer_DispatchA.
+Equalizer_FreqDispPos:	.incbin "includes/generated/naka_effects_seq.bin", 0x8E22, 0x38
+; Equalizer_GainDispPos -- 49 x uint16_t: display position of an EQ band's gain value 0-48 (DspValueText_EqGain: -12.0 .. +12.0 dB
+; in 0.5 dB steps): 113 falling to 41, 1.5 per step. EqualizerCngFunc answers EVT_GET_DISP_POS (Kubo MT_GetDispPos) for items
+; 2, 4, 6, 8 with entry [gain word] (RAM 0x297a/0x297e/0x2982/0x2986), via Equalizer_DispatchA / Equalizer_DispatchB.
+Equalizer_GainDispPos:	.incbin "includes/generated/naka_effects_seq.bin", 0x8E5A, 0x62
 
 ; External label offsets within the binary blob above.

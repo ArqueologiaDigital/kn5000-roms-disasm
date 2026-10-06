@@ -289,6 +289,7 @@ class CBlob:
             p.offset = a
             pieces.append((p, ex))
         pieces[0][0].pre = mb.pre
+        pieces[0][0].tail = mb.tail     # the member's trailing comment stays where it was (C comment gate)
         self.members[k:k + 1] = [p for p, _ in pieces]
         self.entries[k:k + 1] = [Entry(pieces[0][0].name, e.pre, pieces[0][1]),
                                  Entry(pieces[1][0].name, '\n\n    ', pieces[1][1])]

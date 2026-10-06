@@ -1025,10 +1025,29 @@ FileIO_BytecodeData_Data_13:			.incbin "includes/generated/naka_extension_device
 FileIO_BytecodeData_Code_Entry8_PtrTable_2:	.incbin "includes/generated/naka_extension_device.bin", 0x35B6, 0x18	; 6 x 32-bit pointer
 FileIO_BytecodeData_Data_14:			.incbin "includes/generated/naka_extension_device.bin", 0x35CE, 0x6
 FileIO_BytecodeData_Data_15:			.incbin "includes/generated/naka_extension_device.bin", 0x35D4, 0x4
-FileIO_BytecodeData_Data_16:			.incbin "includes/generated/naka_extension_device.bin", 0x35D8, 0x100
-FileIO_BytecodeData_Code_Entry8_PtrTable_3:	.incbin "includes/generated/naka_extension_device.bin", 0x36D8, 0xB0	; 22 x 32-bit pointer
+; PanelAction_PedalAssignHandlerIndex -- 256 x uint8_t: handler number per foot-pedal assignment code, 0xff = no action.
+; PanelAction_FootSwitch1/2 and PanelAction_FootController1-4 read their assignment (panel parameters 0x2886-0x2890) and
+; FileIO_BytecodeData_Code_Helper4 (audio/audio_control_engine.s) maps it here; a number <= 22 indexes
+; PanelAction_PedalFunctionHandlers (x4) and that handler is called. 28 codes are used (0x40, 0x88, 0x90-0x99, 0xad,
+; 0xb0-0xb4, 0xb8, 0xb9, 0xc0-0xc7), mapping to handlers 0-21 (12 unused); all eight of 0xc0-0xc7 share handler 17.
+PanelAction_PedalAssignHandlerIndex:	.incbin "includes/generated/naka_extension_device.bin", 0x35D8, 0x100
+; PanelAction_PedalFunctionHandlers -- 22 x uint32_t: code pointers, one per foot-pedal function
+; FileIO_BytecodeData_Code_Helper4 (audio/audio_control_engine.s) maps the pedal's assignment parameter (FS1/FS2
+; 0x2886/0x2888, FC1-4 0x288A-0x2890) through the 256-byte PanelAction_PedalAssignHandlerIndex to an index, returns if it
+; is above 22, else calls entry [index] (`sla de, 2`). [0] is the unlabelled routine right after Helper4's `ret`;
+; the map never yields 12 (ExtDev_SndParam_Block48_Var02) nor 22.
+PanelAction_PedalFunctionHandlers:	.incbin "includes/generated/naka_extension_device.bin", 0x36D8, 0x58
+; PanelButton_HelpCodeByBit -- 11 x uint8_t[8]: the 8-byte help-code maps of panel event indexes 0-7, 10, 11, 12
+; Entries 0-7, 10, 11, 12 of PanelButton_HelpCodeMaps point at these rows (8, 9 are NULL; 13 on continue at
+; ExtDevScreen_UserInitWallpaper_Flag / _Data). PanelButton_HelpMode takes the lowest set bit of the event's
+; changed-bit byte, replaces it with row[bit] and posts the event in MD_HELP unless it is 0xFF.
+PanelButton_HelpCodeByBit:	.incbin "includes/generated/naka_extension_device.bin", 0x3730, 0x58
 ExtDevScreen_UserInitWallpaper_Flag:		.incbin "includes/generated/naka_extension_device.bin", 0x3788, 0x8
-ExtDevScreen_UserInitWallpaper_Data:		.incbin "includes/generated/naka_extension_device.bin", 0x3790, 0x48
+; PanelButton_HelpCodeMaps14To25 -- 9 x uint8_t[8]: help-mode code maps of panel event indices 14, 15 ... 21 and 25, a row each:
+; row[bit] = the code PanelButton_HelpMode posts in MD_HELP for that changed bit (0xff = nothing). Entries 14-21 and 25 of
+; PanelButton_HelpCodeMaps point at rows 0-8 (22-24 are NULL); PanelButton_HelpMode (audio/audio_control_engine.s) picks
+; the map by the event index at RAM 0x8e90 and the byte by the lowest set bit of the action's change byte.
+PanelButton_HelpCodeMaps14To25:	.incbin "includes/generated/naka_extension_device.bin", 0x3790, 0x48
 ; PanelButton_HelpCodeMaps -- 31 x pointer (NULL = none): per panel event index 0-30, an 8-byte map from changed-bit number to the
 ; code PanelButton_HelpMode posts in MD_HELP (0xFF = nothing). PanelButton_HelpMode (audio/audio_control_engine.s) takes the lowest
 ; set bit of the action's masked change byte, indexes this table with the event index at RAM 0x8E90 (x4), replaces that byte with

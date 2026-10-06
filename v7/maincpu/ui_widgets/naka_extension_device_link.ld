@@ -93,3 +93,4 @@ PanelButton_StartStop = 0x00FC53A7;
 PanelButton_Sustain = 0x00FC5882;
 PanelButton_SynchroBreak = 0x00FC53C6;
 PanelButton_Variation = 0x00FC5987;
+FileIO_BytecodeData_Code_Helper4 = 0x00FC5BEF;

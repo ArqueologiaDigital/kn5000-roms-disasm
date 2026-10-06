@@ -14,6 +14,32 @@ extern const char NakaInst_Param_EndFF;
 extern const char Naka_PresentationRootState;
 extern const char SeqByteBlock_EffectsSeqData;
 extern const char SeqByteBlock_EffectsSeqDotExt;
+extern const char NakaWidget_CmpMeas;
+extern const char NakaWidget_CmpMem;
+extern const char NakaWidget_CmpQtz;
+extern const char NakaWidget_CmpRealScreen;
+extern const char NakaWidget_CmpRealScreen_10_VwEditSwBox;
+extern const char NakaWidget_CmpRealScreen_11_VwEditSwBox;
+extern const char NakaWidget_CmpRealScreen_12_VwEditSwBox;
+extern const char NakaWidget_CmpRealScreen_13_VwEditSwBox;
+extern const char NakaWidget_CmpRealScreen_14_VwEditSwBox;
+extern const char NakaWidget_CmpRealScreen_15_AcCmpTempoBox;
+extern const char NakaWidget_CmpRealScreen_16_AcTitleMenu;
+extern const char NakaWidget_CmpRealScreen_17_AcTitleMenu;
+extern const char NakaWidget_CmpRealScreen_18_AcMemNoBox;
+extern const char NakaWidget_CmpRealScreen_19_VwMenuBox;
+extern const char NakaWidget_CmpRealScreen_1_Box;
+extern const char NakaWidget_CmpRealScreen_20_VwMenuBox;
+extern const char NakaWidget_CmpRealScreen_21_VwMenuBox;
+extern const char NakaWidget_CmpRealScreen_22_VwMenuBox;
+extern const char NakaWidget_CmpRealScreen_23_VwMenuBox;
+extern const char NakaWidget_CmpRealScreen_3_Label;
+extern const char NakaWidget_CmpRealScreen_4_Label;
+extern const char NakaWidget_CmpRealScreen_5_Label;
+extern const char NakaWidget_CmpRealScreen_6_Label;
+extern const char NakaWidget_CmpRealScreen_7_Label;
+extern const char NakaWidget_CmpRealScreen_8_Label;
+extern const char NakaWidget_CmpRealScreen_9_IvMainEditSw;
 
 #define BASE  0x00E1AB58u
 
@@ -700,18 +726,8 @@ typedef struct __attribute__((packed)) {
     /* Suna_ViewableTable_0B4: 19 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
     uint32_t Suna_ViewableTable_0B4[19];
     /* Suna_ViewableTable_0B5: 24 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
-    uint32_t Suna_ViewableTable_0B5[24];
-    uint16_t field_0bea;
-    uint16_t field_0bec;
-    uint16_t field_0bee;
-    uint16_t field_0bf0;
-    uint16_t field_0bf2;
-    uint16_t field_0bf4;
-    uint16_t field_0bf6;
-    uint16_t field_0bf8;
-    uint16_t field_0bfa;
-    uint16_t field_0bfc;
-    uint32_t ptrs_2[3];
+    /* Viewable table of slot 0xB5 (screen "CmpRealScreen"): 31 view-record pointers + NULL terminator; entries 24-28 are RAM records */
+    uint32_t Suna_ViewableTable_0B5[32];
     /* Suna_ViewableTable_0B6: 2 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
     uint32_t Suna_ViewableTable_0B6[2];
     /* Suna_ViewableTable_0B7: 7 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
@@ -1780,56 +1796,14 @@ const naka_msp_recording_t naka_msp_recording_data
     },
 
     .Suna_ViewableTable_0B5 = {
-        0x00E18C64,
-        0x00E18CA2,
-        0x00E18CBC,
-        0x00E18CE0,
-        0x00E18D02,
-        0x00E18D2C,
-        0x00E18D56,
-        0x00E18D80,
-        0x00E18DAA,
-        0x00E18DD4,
-        0x00E18DEE,
-        0x00E18E1E,
-        0x00E18E4E,
-        0x00E18E7E,
-        0x00E18EAE,
-        0x00E18EDE,
-        0x00E18F02,
-        0x00E18F3C,
-        0x00E18F78,
-        0x00E18F9C,
-        0x00E18FD8,
-        0x00E19014,
-        0x00E19050,
-        0x00E1908C,
-    },
-
-    .field_0bea = 0xD7B4,
-
-    .field_0bec = 0x0003,
-
-    .field_0bee = 0xD7DA,
-
-    .field_0bf0 = 0x0003,
-
-    .field_0bf2 = 0xD800,
-
-    .field_0bf4 = 0x0003,
-
-    .field_0bf6 = 0xD826,
-
-    .field_0bf8 = 0x0003,
-
-    .field_0bfa = 0xD84C,
-
-    .field_0bfc = 0x0003,
-
-    .ptrs_2 = {
-        0x00E190C6,
-        0x00E190EA,
-        0x00000000,
+        NAKA_ADDR(NakaWidget_CmpRealScreen), NAKA_ADDR(NakaWidget_CmpRealScreen_1_Box), NAKA_ADDR(NakaWidget_CmpMem), NAKA_ADDR(NakaWidget_CmpRealScreen_3_Label),
+        NAKA_ADDR(NakaWidget_CmpRealScreen_4_Label), NAKA_ADDR(NakaWidget_CmpRealScreen_5_Label), NAKA_ADDR(NakaWidget_CmpRealScreen_6_Label), NAKA_ADDR(NakaWidget_CmpRealScreen_7_Label),
+        NAKA_ADDR(NakaWidget_CmpRealScreen_8_Label), NAKA_ADDR(NakaWidget_CmpRealScreen_9_IvMainEditSw), NAKA_ADDR(NakaWidget_CmpRealScreen_10_VwEditSwBox), NAKA_ADDR(NakaWidget_CmpRealScreen_11_VwEditSwBox),
+        NAKA_ADDR(NakaWidget_CmpRealScreen_12_VwEditSwBox), NAKA_ADDR(NakaWidget_CmpRealScreen_13_VwEditSwBox), NAKA_ADDR(NakaWidget_CmpRealScreen_14_VwEditSwBox), NAKA_ADDR(NakaWidget_CmpRealScreen_15_AcCmpTempoBox),
+        NAKA_ADDR(NakaWidget_CmpRealScreen_16_AcTitleMenu), NAKA_ADDR(NakaWidget_CmpRealScreen_17_AcTitleMenu), NAKA_ADDR(NakaWidget_CmpRealScreen_18_AcMemNoBox), NAKA_ADDR(NakaWidget_CmpRealScreen_19_VwMenuBox),
+        NAKA_ADDR(NakaWidget_CmpRealScreen_20_VwMenuBox), NAKA_ADDR(NakaWidget_CmpRealScreen_21_VwMenuBox), NAKA_ADDR(NakaWidget_CmpRealScreen_22_VwMenuBox), NAKA_ADDR(NakaWidget_CmpRealScreen_23_VwMenuBox),
+        0x0003D7B4, 0x0003D7DA, 0x0003D800, 0x0003D826,
+        0x0003D84C, NAKA_ADDR(NakaWidget_CmpQtz), NAKA_ADDR(NakaWidget_CmpMeas), 0x00000000,
     },
 
     .Suna_ViewableTable_0B6 = {

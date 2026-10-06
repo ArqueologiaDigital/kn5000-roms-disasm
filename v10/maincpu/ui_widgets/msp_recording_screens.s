@@ -462,9 +462,11 @@ Suna_ViewableTable_0B3:	.incbin "includes/generated/naka_msp_recording.bin", 0xB
 ; [nakarest] the table itself: Viewable slot 0xb4 (table 0xe1b696, 18 entries, InitializeSuna),
 ; [nakarest] 18 entry pointers x 4 bytes.
 Suna_ViewableTable_0B4:	.incbin "includes/generated/naka_msp_recording.bin", 0xB3E, 0x4C
-; [nakarest] naka_msp_recording+0xb8a  +0xb8a..+0xc0a (0xe1b6e2, 128 B)
-; [nakarest] the table itself: Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna),
-; [nakarest] 31 entry pointers x 4 bytes.
+; Suna_ViewableTable_0B5 -- 32 x uint32_t: the Viewable table of slot 0xB5 (31 views + a NULL word), screen "CmpRealScreen"
+; InitializeSuna registers it (RegObjTabl ... 0x1f, ..., 0xb5); GetViewInstance returns entry [id & 0xFFFF] for view
+; id 0xB5nnnn. Entries 0-23, 29, 30 are ROM records (NakaWidget_CmpRealScreen ... NakaWidget_CmpMeas); entries
+; 24-28 (DrmRec, Ac3Rec, Ac2Rec, Ac1Rec, BasRec) are view records in work RAM at 0x3D7B4 + 38*i.
+; Every one of the 211 ROM Viewable tables has this NULL word after its last entry.
 Suna_ViewableTable_0B5:	.incbin "includes/generated/naka_msp_recording.bin", 0xB8A, 0x80
 ; [nakarest] naka_msp_recording+0xc0a  +0xc0a..+0xc12 (0xe1b762, 8 B)
 ; [nakarest] the table itself: Viewable slot 0xb6 (table 0xe1b762, 1 entries, InitializeSuna), 1

@@ -1176,7 +1176,7 @@ InitializeNaka_Skip11:
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip12
-	lda	xhl, (NAKA_InitDataBlock_PtrTable_12:24)
+	lda	xhl, (FtLangText11_Texts:24)
 	ret
 InitializeNaka_Skip12:
 	ld	xhl, 0:i3
@@ -1251,7 +1251,7 @@ InitializeNaka_Join:
 NoteEvent_LoadSoundGenParams:
 	lda xsp, (xsp-364)
 	push xiz
-	ld xiy, NoteEvent_LoadSoundGenParams_Data_2
+	ld xiy, AccPatch_SlotRecordTemplate
 	lda xix, (xsp+272)
 	ldw bc, 0x30
 	ldirw

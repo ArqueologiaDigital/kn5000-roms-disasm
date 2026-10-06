@@ -535,24 +535,24 @@ NakaWidget_PMNAME_3_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin"
 NakaWidget_PMNAME_4_PmBkNoBox:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x23CC, 0x24
 NakaWidget_PMNAME_5_EditSw:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x23F0, 0x2C
 NakaWidget_PMNAME_6_IvExit:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x241C, 0x16
-; [nakarest] naka_ctrl_menu_body+0x2432  +0x2432..+0x253c (0xed6318, 266 B)
-; [nakarest] widget records, elements 0-6 of Viewable slot 0xd3 (table 0xed7c26, 7 entries,
-; [nakarest] InitializeToshi) ("PMBKNAME"): TtlScreen (42 B), IvNaming (26 B), AcFuncEditSw (44
-; [nakarest] B), Label (32 B), BkNoBox (36 B), EditSw (40 B), IvExit (22 B). 3 texts the records
-; [nakarest] point at (Viewable slot 0xd3 (table 0xed7c26, 7 entries, InitializeToshi)):
-; [nakarest] "NAMING" (TtlScreen.title of element 0); "P.MEM Bank" (Label.str of element 3);
-; [nakarest] "~80" (EditSw.str of element 5).
-NakaWidget_PMBKNAME:			.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x2432, 0x32
+; NakaWidget_PMBKNAME -- 1 x struct (TtlScreen view record, 42 B): the "PMBKNAME" panel-memory bank naming screen, entry 0 of InitializeToshi's Viewable table slot 0xD3
+; Full screen (0,0)-(319,239); exit title = TITLE_PS (0x01A00000); window -> 32-bit cell RAM 0x3F60A;
+; title -> NakaStr_PmBkNameTitle ("NAMING"); icon 0x99.
+NakaWidget_PMBKNAME:	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x2432, 0x2A
+; NakaStr_PmBkNameTitle -- 8 x char: "NAMING" (NUL, 0xFF pad), the title (+34) of NakaWidget_PMBKNAME,
+; drawn in the title bar by TtlScreenProc / DrawTitleBar.
+NakaStr_PmBkNameTitle:	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x245C, 0x8
 NakaWidget_PMBKNAME_1_IvNaming:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x2464, 0x1A
 NakaWidget_PMBKNAME_2_AcFuncEditSw:	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x247E, 0x2C
 NakaWidget_PMBKNAME_3_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x24AA, 0x2C
 NakaWidget_PMBKNAME_4_BkNoBox:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x24D6, 0x24
 NakaWidget_PMBKNAME_5_EditSw:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x24FA, 0x2C
 NakaWidget_PMBKNAME_6_IvExit:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x2526, 0x16
-; [nakarest] naka_ctrl_menu_body+0x253c  +0x253c..+0x2598 (0xed6422, 92 B)
-; [nakarest] widget records, elements 0-1 of Viewable slot 0xe8 (table 0xed7c46, 2 entries,
-; [nakarest] InitializeToshi) ("SVARI"): VariScreen (68 B), IvIntVari (24 B).
-NakaWidget_SVARI:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x253C, 0x44
+; NakaWidget_SVARI -- 1 x struct (VariScreen view record, 68 B): the "SVARI" variation screen, entry 0 of InitializeToshi's Viewable table slot 0xE8
+; VariScreen = Screen + func, font, fontcolor and six pointers to word cells: page, part, varisu, nowswno, nowvari,
+; oldvari (RAM 0x3F612..0x3F61C, power-on values in the Toshi work cells of the work-RAM image); window -> 0x3F60E.
+; Reached as view 0xE80000 through GetViewInstance; VariScreenProc reads the cells through +44..+64.
+NakaWidget_SVARI:	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x253C, 0x44
 NakaWidget_SVARI_1_IvIntVari:	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x2580, 0x18
 ; [nakarest] naka_ctrl_menu_body+0x2598  +0x2598..+0x2618 (0xed647e, 128 B)
 ; [nakarest] widget records, elements 0-2 of Viewable slot 0xe9 (table 0xed7c52, 3 entries,

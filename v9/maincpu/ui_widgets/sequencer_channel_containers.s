@@ -300,16 +300,49 @@ MidiPart_ConfigNameTable:
 ; [nakarest] TrackMixer_Init (ui/drawbar_panel_ui.s: `ld xwa, 0x3ebe8`),
 ; [nakarest] TrackMixer_UpdateHandler (ui/drawbar_panel_ui.s: `ld xhl, 0x3ebe8`).
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF00, 0x48
-; [nakarest] Naka_DrawbarSlider_Resources  +0xf48..+0x12d8 (0xeeefc0, 912 B)
-; [nakarest] purpose not established: layout of 912 B at 0xeeefc0 not derived; readers below
-; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
-; [nakarest] 0x3ec1c..0x3efac (its ld xde/xhl/xbc + ldir blocks), where they are read by
-; [nakarest] DrawRect (kn5000_v9_program.s: `ld a,
-; [nakarest] (257960:24)`), GroupBox_HandleCursorNav (ui/ui_control_panel.s: `cpw (0x3ef50:24),
-; [nakarest] 0`), DrawRect_Return (kn5000_v9_program.s: `ld (257962:24),
-; [nakarest] c`), DrawRect_Deferred (kn5000_v9_program.s: `ld c,
-; [nakarest] (257960:24)`), 1 more.
-Naka_DrawbarSlider_Resources:	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF48, 0x390
+; TrackMixer_GridRowMapEnd -- 6 x uint16_t (0x00FF): the end of the word map that starts 0x34 bytes
+; earlier (RAM 0x3EBE8); TrackMixer_Init installs it as the PsMixer grid array and
+; PsMixer_ReadWordArrayEntry reads word [page*8 + column] as an IvSdpart_PartNumberByRow row.
+TrackMixer_GridRowMapEnd:	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF48, 0xC
+; DrawbarBitmap_SliderBitmapPtrs -- 1 x struct (9 x uint32_t (+ 1 unreferenced word)): slider bitmap base for each of
+; the 9 drawbars; DrawbarBitmapHelper indexes it by drawbar (`sla de, 2`), adds 2*Drawbar_LevelBitmapOffsets
+; [level] and draws the result with DrawBitmapSPFast.
+DrawbarBitmap_SliderBitmapPtrs:	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF54, 0x26
+; RecordChain_CurrentRecord -- 1 x uint16_t: record number RecordChain_ReadNextByte reads from
+; (base + 256*n - 256); 0xFFFF (power-on) = no chain; after 0xFA bytes it follows the link at +3.
+RecordChain_CurrentRecord:	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF7A, 0x2
+; Cheap_DiskMenuWorkCells -- 1 x struct (269 cells): power-on values of the InitializeCheap view work cells
+; Disk menu, load/save, medley, disk tools, disk setup. Boot_InitWorkRAM copies them to RAM 0x3ec50..0x3eeee; each cell is the
+; RAM target of a pointer-typed property of a view record registered by InitializeCheap and is read through it by the record's
+; class proc (ScreenProc, WindowProc, PsTrackSwitchProc ...). Cells: window/parent/child = 32-bit view id (0xFFFFFFFF = none);
+; aicok/data/onoff/page/... (types m/n) = words; AcRamEditBox/AcRamBox data = 32-bit values.
+Cheap_DiskMenuWorkCells:	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF7C, 0x29E
+; Cheap_HardDiskMenuView -- 1 x struct (AcTitleMenu view record, 54 B): the "HardDiskMenu" title-menu item ("HARD DISK MAIN MENU"), entry 2 of InitializeCheap's slot 0x60
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3eeee),
+; so ViewableProc and the AcTitleMenu class proc use the RAM copy; first word = class id 0x160001d.
+Cheap_HardDiskMenuView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x121A, 0x36
+; Cheap_SingleBankToggleView -- 1 x struct (AcMonoIndexToggle view record, 42 B): the "SingleBankToggle" toggle ("SINGLE"/"BANK"), entry 74 of slot 0x61
+; A Viewable-table entry holds this record's RAM address (Boot_InitWorkRAM copies it to 0x3ef24),
+; so ViewableProc and the AcMonoIndexToggle class proc use the RAM copy; first word = class id 0x1650005.
+Cheap_SingleBankToggleView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1250, 0x2A
+; KeyScan_EnabledFlag -- 1 x uint16_t: 1 after KeyScan_Enable, 0 after KeyScan_Disable; while non-zero
+; the event handler yields (TaskSched_YieldToQueue) and DrawTask changes priority between work items.
+KeyScan_EnabledFlag:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x127A, 0x2
+; Dial_State -- 1 x struct: the data-dial routing (shared/ram_variables.s DIAL_*): Enable (SetDialEnable),
+; the XWA target, XBC event and XDE parameter SetDialUp / SetDialDown store for each direction, and
+; Focus, the view the dial is focused on (0xFFFFFFFF = none).
+Dial_State:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x127C, 0x1E
+; NamingCheck_SampleText -- 20 x char: "We are Taian BOYS!" (NUL, 0xFF pad), the string NamingCheck
+; copies out for EVT_GET_STRING and measures for EVT_GET_STRING_LENGTH.
+NamingCheck_SampleText:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x129A, 0x14
+; ModeTitle_State -- 1 x struct (4 x uint32_t): MODE_NOW / MODE_OLD (event values 0x0180nnnn) and TITLE_NOW / TITLE_OLD
+; (0x01A0nnnn) behind GetModeNow / GetModeOld / GetTitleNow / GetTitleOld.
+ModeTitle_State:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x12AE, 0x10
+; Display_DrawState -- 1 x struct: Gfx_BlitDirtyRegions runs only while DirtyBlitEnabled (0 on the DrawWall path,
+; 1 on UpdateScreen); the palette cache (PALETTE_*), ChangeWall_Impl's wallpaper index and bitmap,
+; BackColor (0xF5 = copy the wallpaper pixel) / ForeColor used by DrawMonoBitmap, DrawLine and DrawText,
+; and COLORBLIT_MODE / _ACTIVE.
+Display_DrawState:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x12BE, 0x1A
 ; FontIDProc_FontNameTable -- 32 x uint32_t: name pointers of the font ids (CHARA1, CHARA2, ... CHARA5W, then
 ; "" and 21 NULLs); FontIDProc maps id -> name for EVT_GET_PROP_DATA_SP / EVT_GET_PROPERTY_EX (`sll xwa, 2`)
 ; and name -> id for EVT_SET_PROPERTY_EX by Strcmp until the first NULL; FontIDProc_EntryCount = 10.

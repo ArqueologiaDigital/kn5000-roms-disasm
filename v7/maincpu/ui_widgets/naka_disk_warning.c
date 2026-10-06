@@ -1021,473 +1021,494 @@ typedef struct __attribute__((packed)) {
     char SlideBmp_str[10];
     char TechnicsBmp_str[14];
     char TrashBmp_str[10];
-    uint32_t ptr_31e8;
-    char str_586[2];
-    uint32_t func_str_ptr;
-    uint32_t ptr_31f2;
-    char str_587[2];
-    char func_str[6];
-    uint32_t ptr_31fe;
-    char str_589[2];
-    uint32_t ptr_3204;
-    char str_590[2];
-    uint32_t ptrs_27[8];  /* 8 pointers */
-    char str_591[2];
-    char propname_str[10];
-    char propdata_str[10];
-    char name_str_3[6];
-    char selfsize_str[10];
-    char allsize_str[8];
-    char parent_str[8];
-    char proc_str[6];
-    uint32_t ptrs_28[5];  /* 5 pointers */
-    char str_599[2];
-    char prop_str[6];
-    char size_str[6];
-    char count_str[6];
-    char proc_str_2[6];
-    uint32_t ptrs_29[5];  /* 5 pointers */
-    char str_604[2];
-    char name_str_4[6];
-    char user_str[6];
-    char title_str[6];
-    char proc_str_3[6];
-    uint32_t ptrs_30[8];  /* 8 pointers */
-    char str_609[2];
-    char next_str[6];
-    char prev_str[6];
-    char now_str[4];
-    char name_str_5[6];
-    char user_str_2[6];
-    char top_str[4];
-    char proc_str_4[6];
-    uint32_t ptr_330a;
-    uint32_t ptr_330e;
-    char str_617[2];
-    char data_str[6];
-    uint32_t ptr_331a;
-    uint32_t ptr_331e;
-    char str_619[2];
-    char data_str_2[6];
-    uint32_t ptr_332a;
-    uint32_t ptr_332e;
-    char str_621[2];
-    char data_str_3[6];
-    uint32_t ptr_333a;
-    uint32_t ptr_333e;
-    char str_623[2];
-    char data_str_4[6];
-    uint32_t name_str_6_ptr;
-    uint32_t ptr_334e;
-    char str_625[2];
-    char name_str_6[6];
-    uint32_t name_str_7_ptr;
-    uint32_t ptr_335e;
-    char str_627[2];
-    char name_str_7[6];
-    uint32_t ptr_336a;
-    uint32_t ptr_336e;
-    char str_629[2];
-    char data_str_5[6];
-    uint32_t name_str_8_ptr;
-    uint32_t ptr_337e;
-    char str_631[2];
-    char name_str_8[6];
-    uint32_t ptrs_31[8];  /* 8 pointers */
-    char str_633[2];
-    char rect_str[6];
-    char flag_str[6];
-    char prev_str_2[6];
-    char next_str_2[6];
-    char sub_str[4];
-    char super_str[6];
-    char class_str[6];
-    uint32_t ptrs_32[4];  /* 4 pointers */
-    char str_641[2];
-    char index_str[6];
-    char border_str[8];
-    char color_str[6];
-    uint32_t ptrs_33[4];  /* 4 pointers */
-    char str_645[2];
-    char align_str[6];
-    char fontcolor_str[10];
-    char font_str[6];
-    uint32_t ptrs_34[3];  /* 3 pointers */
-    char str_649[2];
-    char data_str_6[6];
-    char func_str_2[6];
-    uint32_t ptr_343c;
-    char str_652[2];
-    uint32_t ptrs_35[9];  /* 9 pointers */
-    char str_653[2];
-    char selected_str[10];
-    char dial_str[6];
-    char editsw_str[8];
-    char length_str[8];
-    char align_str_2[6];
-    char fontcolor_str_2[10];
-    char font_str_2[6];
-    char caption_str[8];
-    uint32_t figures_str_ptr;
-    uint32_t ptr_34aa;
-    char str_662[2];
-    char figures_str[8];
-    uint32_t func_str_3_ptr;
-    uint32_t ptr_34bc;
-    char str_664[2];
-    char func_str_3[6];
-    uint32_t onoff_str_ptr;
-    uint32_t ptr_34cc;
-    char str_666[2];
-    char onoff_str[6];
-    uint32_t ptrs_36[7];  /* 7 pointers */
-    char str_668[2];
-    char smallstep_str[10];
-    char largestep_str[10];
-    char min_str[4];
+    /* 8 pointers */
+    /* 5 pointers */
+    /* 5 pointers */
+    /* 8 pointers */
+    /* 8 pointers */
+    /* 4 pointers */
+    /* 4 pointers */
+    /* 3 pointers */
+    /* 9 pointers */
+    /* 7 pointers */
+    /* field-name pointers of NAKA class Object (Class slot 0x160 entry 0, +20 propname): no own fields, then "" */
+    uint32_t ClassProps_Object[1];
+    /* class Object field names, reverse order: "" */
+    char ClassProps_Object_Names[2];
+    /* field-name pointers of NAKA class Function (Class slot 0x160 entry 1, +20 propname): "func", then "" */
+    uint32_t ClassProps_Function[2];
+    /* class Function field names, reverse order: "", "func" */
+    char ClassProps_Function_Names[8];
+    /* field-name pointers of NAKA class ApFunction (Class slot 0x160 entry 2, +20 propname): no own fields, then "" */
+    uint32_t ClassProps_ApFunction[1];
+    /* class ApFunction field names, reverse order: "" */
+    char ClassProps_ApFunction_Names[2];
+    /* field-name pointers of NAKA class MainFunction (Class slot 0x160 entry 3, +20 propname): no own fields, then "" */
+    uint32_t ClassProps_MainFunction[1];
+    /* class MainFunction field names, reverse order: "" */
+    char ClassProps_MainFunction_Names[2];
+    /* field-name pointers of NAKA class Class (Class slot 0x160 entry 4, +20 propname): "proc", "parent", "allsize", "selfsize", "name", "propdata", "propname", then "" */
+    uint32_t ClassProps_Class[8];
+    /* class Class field names, reverse order: "", "propname", "propdata", "name", "selfsize", "allsize", "parent", "proc" */
+    char ClassProps_Class_Names[60];
+    /* field-name pointers of NAKA class SupportClass (Class slot 0x160 entry 5, +20 propname): "proc", "count", "size", "prop", then "" */
+    uint32_t ClassProps_SupportClass[5];
+    /* class SupportClass field names, reverse order: "", "prop", "size", "count", "proc" */
+    char ClassProps_SupportClass_Names[26];
+    /* field-name pointers of NAKA class Mode (Class slot 0x160 entry 6, +20 propname): "proc", "title", "user", "name", then "" */
+    uint32_t ClassProps_Mode[5];
+    /* class Mode field names, reverse order: "", "name", "user", "title", "proc" */
+    char ClassProps_Mode_Names[26];
+    /* field-name pointers of NAKA class Title (Class slot 0x160 entry 7, +20 propname): "proc", "top", "user", "name", "now", "prev", "next", then "" */
+    uint32_t ClassProps_Title[8];
+    /* class Title field names, reverse order: "", "next", "prev", "now", "name", "user", "top", "proc" */
+    char ClassProps_Title_Names[40];
+    /* field-name pointers of NAKA class ResBitmap (Class slot 0x160 entry 8, +20 propname): "data", then "" */
+    uint32_t ClassProps_ResBitmap[2];
+    /* class ResBitmap field names, reverse order: "", "data" */
+    char ClassProps_ResBitmap_Names[8];
+    /* field-name pointers of NAKA class ResFrame (Class slot 0x160 entry 9, +20 propname): "data", then "" */
+    uint32_t ClassProps_ResFrame[2];
+    /* class ResFrame field names, reverse order: "", "data" */
+    char ClassProps_ResFrame_Names[8];
+    /* field-name pointers of NAKA class ResIcon (Class slot 0x160 entry 10, +20 propname): "data", then "" */
+    uint32_t ClassProps_ResIcon[2];
+    /* class ResIcon field names, reverse order: "", "data" */
+    char ClassProps_ResIcon_Names[8];
+    /* field-name pointers of NAKA class ResFont (Class slot 0x160 entry 11, +20 propname): "data", then "" */
+    uint32_t ClassProps_ResFont[2];
+    /* class ResFont field names, reverse order: "", "data" */
+    char ClassProps_ResFont_Names[8];
+    /* field-name pointers of NAKA class ResEvent (Class slot 0x160 entry 12, +20 propname): "name", then "" */
+    uint32_t ClassProps_ResEvent[2];
+    /* class ResEvent field names, reverse order: "", "name" */
+    char ClassProps_ResEvent_Names[8];
+    /* field-name pointers of NAKA class ResMethod (Class slot 0x160 entry 13, +20 propname): "name", then "" */
+    uint32_t ClassProps_ResMethod[2];
+    /* class ResMethod field names, reverse order: "", "name" */
+    char ClassProps_ResMethod_Names[8];
+    /* field-name pointers of NAKA class ResString (Class slot 0x160 entry 14, +20 propname): "data", then "" */
+    uint32_t ClassProps_ResString[2];
+    /* class ResString field names, reverse order: "", "data" */
+    char ClassProps_ResString_Names[8];
+    /* field-name pointers of NAKA class ResName (Class slot 0x160 entry 15, +20 propname): "name", then "" */
+    uint32_t ClassProps_ResName[2];
+    /* class ResName field names, reverse order: "", "name" */
+    char ClassProps_ResName_Names[8];
+    /* field-name pointers of NAKA class Viewable (Class slot 0x160 entry 16, +20 propname): "class", "super", "sub", "next", "prev", "flag", "rect", then "" */
+    uint32_t ClassProps_Viewable[8];
+    /* class Viewable field names, reverse order: "", "rect", "flag", "prev", "next", "sub", "super", "class" */
+    char ClassProps_Viewable_Names[42];
+    /* field-name pointers of NAKA class VwBox (Class slot 0x160 entry 17, +20 propname): "color", "border", "index", then "" */
+    uint32_t ClassProps_VwBox[4];
+    /* class VwBox field names, reverse order: "", "index", "border", "color" */
+    char ClassProps_VwBox_Names[22];
+    /* field-name pointers of NAKA class PsParaBox (Class slot 0x160 entry 18, +20 propname): "font", "fontcolor", "align", then "" */
+    uint32_t ClassProps_PsParaBox[4];
+    /* class PsParaBox field names, reverse order: "", "align", "fontcolor", "font" */
+    char ClassProps_PsParaBox_Names[24];
+    /* field-name pointers of NAKA class AcLswBox (Class slot 0x160 entry 19, +20 propname): "func", "data", then "" */
+    uint32_t ClassProps_AcLswBox[3];
+    /* class AcLswBox field names, reverse order: "", "data", "func" */
+    char ClassProps_AcLswBox_Names[14];
+    /* field-name pointers of NAKA class AcTempoBox (Class slot 0x160 entry 20, +20 propname): no own fields, then "" */
+    uint32_t ClassProps_AcTempoBox[1];
+    /* class AcTempoBox field names, reverse order: "" */
+    char ClassProps_AcTempoBox_Names[2];
+    /* field-name pointers of NAKA class PsEditBox (Class slot 0x160 entry 21, +20 propname): "caption", "font", "fontcolor", "align", "length", "editsw", "dial", "selected", then "" */
+    uint32_t ClassProps_PsEditBox[9];
+    /* class PsEditBox field names, reverse order: "", "selected", "dial", "editsw", "length", "align", "fontcolor", "font", "caption" */
+    char ClassProps_PsEditBox_Names[64];
+    /* field-name pointers of NAKA class PsNumEditBox (Class slot 0x160 entry 22, +20 propname): "figures", then "" */
+    uint32_t ClassProps_PsNumEditBox[2];
+    /* class PsNumEditBox field names, reverse order: "", "figures" */
+    char ClassProps_PsNumEditBox_Names[10];
+    /* field-name pointers of NAKA class PsTblEditBox (Class slot 0x160 entry 23, +20 propname): "func", then "" */
+    uint32_t ClassProps_PsTblEditBox[2];
+    /* class PsTblEditBox field names, reverse order: "", "func" */
+    char ClassProps_PsTblEditBox_Names[8];
+    /* field-name pointers of NAKA class AcOnOffBox (Class slot 0x160 entry 24, +20 propname): "onoff", then "" */
+    uint32_t ClassProps_AcOnOffBox[2];
+    /* class AcOnOffBox field names, reverse order: "", "onoff" */
+    char ClassProps_AcOnOffBox_Names[8];
+    /* field-name pointers of NAKA class AcNumEditBox (Class slot 0x160 entry 25, +20 propname): "num", "figures", "max", "min", "largestep", "smallstep", then "" */
+    uint32_t ClassProps_AcNumEditBox[7];
+    /* class AcNumEditBox field names (reverse order), first part: "", "smallstep", "largestep", "min"; "max", "figures", "num" follow in the next slices */
+    char ClassProps_AcNumEditBox_Names[26];
     char max_str[4];
-    char figures_str_2[8];
-    char num_str[4];
-    uint32_t ptrs_37[3];  /* 3 pointers */
-    char str_675[2];
-    char data_str_7[6];
-    char func_str_4[6];
-    uint32_t ptrs_38[3];  /* 3 pointers */
-    char str_678[2];
-    char data_str_8[6];
-    char func_str_5[6];
-    uint32_t ptrs_39[6];  /* 6 pointers */
-    char str_681[2];
-    char selected_str_2[10];
-    char editsw_str_2[8];
-    char align_str_3[6];
-    char fontcolor_str_3[10];
-    char font_str_3[6];
-    uint32_t ptrs_40[4];  /* 4 pointers */
-    char str_687[2];
-    char icon_str[6];
-    char title_str_2[6];
-    char str_str[4];
-    uint32_t ptrs_41[5];  /* 5 pointers */
-    char str_691[2];
-    char editsw_str_3[8];
-    char align_str_4[6];
-    char fontcolor_str_4[10];
-    char font_str_4[6];
-    uint32_t style_str_ptr;
-    uint32_t ptr_35ee;
-    char str_696[2];
-    char style_str[6];
-    uint32_t ptrs_42[3];  /* 3 pointers */
-    char str_698[2];
-    char func_str_6[6];
-    char style_str_2[6];
-    uint32_t editsw2_str_ptr;
-    uint32_t ptr_3618;
-    char str_701[2];
-    char editsw2_str[8];
-    uint32_t style_str_3_ptr;
-    uint32_t ptr_362a;
-    char str_703[2];
-    char style_str_3[6];
-    uint32_t ptrs_43[3];  /* 3 pointers */
-    char str_705[2];
-    char func_str_7[6];
-    char style_str_4[6];
-    uint32_t page_str_ptr;
-    uint32_t ptr_3654;
-    char str_708[2];
-    char page_str[6];
-    uint32_t ptrs_44[3];  /* 3 pointers */
-    char str_710[2];
-    char pagemax_str[8];
-    char pagemin_str[8];
-    uint32_t ptrs_45[6];  /* 6 pointers */
-    char str_713[2];
-    char editsw_str_4[8];
-    char onoff_str_2[6];
-    char stroff_str[8];
-    char stron_str[6];
-    char font_str_5[6];
-    uint32_t ptr_36ba;
-    char str_719[2];
-    uint32_t ptrs_46[3];  /* 3 pointers */
-    char str_720[2];
-    char window_str[8];
-    char page_str_2[6];
-    uint32_t func_str_8_ptr;
-    uint32_t ptr_36e0;
-    char str_723[2];
-    char func_str_8[6];
-    uint32_t part_str_ptr;
-    uint32_t ptr_36f0;
-    char str_725[2];
-    char part_str[6];
-    uint32_t ptrs_47[4];  /* 4 pointers */
-    char str_727[2];
-    char fontcolor_str_5[10];
-    char font_str_6[6];
-    char str_str_2[4];
-    uint32_t bmp_str_ptr;
-    uint32_t ptr_3726;
-    char str_731[2];
-    char bmp_str[4];
-    uint32_t icon_str_2_ptr;
-    uint32_t ptr_3734;
-    char str_733[2];
-    char icon_str_2[6];
-    uint32_t ptrs_48[3];  /* 3 pointers */
-    char str_735[2];
-    char linemode_str[10];
-    char color_str_2[6];
-    uint32_t ptrs_49[4];  /* 4 pointers */
-    char str_738[2];
-    char color_str_3[6];
-    char width_str[6];
-    char frame_str[6];
-    uint32_t ptrs_50[4];  /* 4 pointers */
-    char str_742[2];
-    char index_str_2[6];
-    char func_str_9[6];
-    char editsw_str_5[8];
-    uint32_t ptrs_51[3];  /* 3 pointers */
-    char str_746[2];
-    char border_str_2[8];
-    char color_str_4[6];
-    uint32_t ptr_37c4;
-    char str_749[2];
-    uint32_t ptrs_52[3];  /* 3 pointers */
-    char str_750[2];
-    char window_str_2[8];
-    char exit_str[6];
-    uint32_t ptrs_53[3];  /* 3 pointers */
-    char str_753[2];
-    char icon_str_3[6];
-    char title_str_3[6];
-    uint32_t ptrs_54[4];  /* 4 pointers */
-    char str_756[2];
-    char child_str[6];
-    char parent_str_2[8];
-    char modal_str[6];
-    uint32_t ptrs_55[6];  /* 6 pointers */
-    char str_760[2];
-    char lines_str[6];
-    char alignment_str[10];
-    char fontcolor_str_6[10];
-    char font_str_7[6];
-    char text_str[6];
-    uint32_t ptrs_56[5];  /* 5 pointers */
-    char str_766[2];
-    char alignment_str_2[10];
-    char fontcolor_str_7[10];
-    char font_str_8[6];
-    char str_str_3[4];
-    uint32_t ptrs_57[6];  /* 6 pointers */
-    char str_771[2];
-    char name_str_9[6];
-    char user_str_3[6];
-    char title_str_4[6];
-    char proc_str_5[6];
-    char mode_str[6];
-    uint32_t ptrs_58[6];  /* 6 pointers */
-    char str_777[2];
-    char name_str_10[6];
-    char user_str_4[6];
-    char top_str_2[4];
-    char proc_str_6[6];
-    char title_str_5[6];
-    uint32_t ptr_3908;
-    char str_783[2];
-    uint32_t ptr_390e;
-    char str_784[2];
-    uint32_t ptrs_59[3];  /* 3 pointers */
-    char str_785[2];
-    char editsw_str_6[8];
-    char part_str_2[6];
-    uint32_t ptrs_60[3];  /* 3 pointers */
-    char str_788[2];
-    char icon_str_4[6];
-    char str_str_4[4];
-    uint32_t ptrs_61[3];  /* 3 pointers */
-    char str_791[2];
-    char str_str_5[4];
-    char style_str_5[6];
-    uint32_t ptrs_62[3];  /* 3 pointers */
-    char str_794[2];
-    char str_str_6[4];
-    char style_str_6[6];
-    uint32_t ptrs_63[4];  /* 4 pointers */
-    char str_797[2];
-    char icon_str_5[6];
-    char mode_str_2[6];
-    char str_str_7[4];
-    uint32_t ptrs_64[4];  /* 4 pointers */
-    char str_801[2];
-    char icon_str_6[6];
-    char screen_str[8];
-    char str_str_8[4];
-    uint32_t ptrs_65[4];  /* 4 pointers */
-    char str_805[2];
-    char icon_str_7[6];
-    char window_str_3[8];
-    char str_str_9[4];
-    uint32_t ptrs_66[3];  /* 3 pointers */
-    char str_809[2];
-    char data_str_9[6];
-    char func_str_10[6];
-    uint32_t func_str_11_ptr;
-    uint32_t ptr_3a00;
-    char str_812[2];
-    char func_str_11[6];
-    uint32_t editsw2_str_2_ptr;
-    uint32_t ptr_3a10;
-    char str_814[2];
-    char editsw2_str_2[8];
-    uint32_t ptr_3a1e;
-    char str_816[2];
-    uint32_t ptr_3a24;
-    char str_817[2];
-    uint32_t mode_str_3_ptr;
-    uint32_t ptr_3a2e;
-    char str_818[2];
-    char mode_str_3[6];
-    uint32_t screen_str_2_ptr;
-    uint32_t ptr_3a3e;
-    char str_820[2];
-    char screen_str_2[8];
-    uint32_t window_str_4_ptr;
-    uint32_t ptr_3a50;
-    char str_822[2];
-    char window_str_4[8];
-    uint32_t ptr_3a5e;
-    char str_824[2];
-    uint32_t cursor_str_ptr;
-    uint32_t ptr_3a68;
-    char str_825[2];
-    char cursor_str[8];
-    uint32_t func_str_12_ptr;
-    uint32_t ptr_3a7a;
-    char str_827[2];
-    char func_str_12[6];
-    uint32_t ptrs_67[3];  /* 3 pointers */
-    char str_829[2];
-    char tag_str[4];
-    char index_str_3[6];
-    uint32_t ptrs_68[3];  /* 3 pointers */
-    char str_832[2];
-    char data_str_10[6];
-    char func_str_13[6];
-    uint32_t ptrs_69[7];  /* 7 pointers */
-    char str_835[2];
-    char tag_str_2[4];
-    char selected_str_3[10];
-    char editsw_str_7[8];
-    char align_str_5[6];
-    char fontcolor_str_8[10];
-    char font_str_9[6];
-    uint32_t ptr_3b02;
-    uint32_t ptr_3b06;
-    char str_842[2];
-    char str_str_10[4];
-    uint32_t func_str_14_ptr;
-    uint32_t ptr_3b14;
-    char str_844[2];
-    char func_str_14[6];
-    uint32_t ptrs_70[6];  /* 6 pointers */
-    char str_846[2];
-    char selected_str_4[10];
-    char row_str[4];
-    char align_str_6[6];
-    char fontcolor_str_9[10];
-    char font_str_10[6];
-    uint32_t ptrs_71[12];  /* 12 pointers */
-    char str_852[2];
-    char crow_str[6];
-    char prow_str[6];
-    char pcol_str[6];
-    char selcol_str[8];
-    char selrow_str[8];
-    char vertline_str[10];
-    char col_str[4];
-    char row_str_2[4];
-    char align_str_7[6];
-    char fontcolor_str_10[10];
-    char font_str_11[6];
-    uint32_t ptrs_72[3];  /* 3 pointers */
-    char str_864[2];
-    char dial_str_2[6];
-    char list_str[6];
-    uint32_t ptrs_73[4];  /* 4 pointers */
-    char str_867[2];
-    char func_str_15[6];
-    char fixedrow_str[10];
-    char fixedcol_str[10];
-    uint32_t page_str_3_ptr;
-    uint32_t ptr_3c24;
-    char str_871[2];
-    char page_str_3[6];
-    uint32_t ptrs_74[5];  /* 5 pointers */
-    char str_873[2];
-    char recplay_str[8];
-    char part_str_3[6];
-    char onoff_str_3[6];
-    char track_str[6];
-    uint32_t ptr_3c60;
-    char str_878[2];
-    uint32_t ptr_3c66;
-    char str_879[2];
-    uint32_t ptr_3c6c;
-    char str_880[2];
-    uint32_t ptr_3c72;
-    char str_881[2];
-    uint32_t adr_str_ptr;
-    uint32_t ptr_3c7c;
-    char str_882[2];
-    char adr_str[4];
-    uint32_t time_str_ptr;
-    uint32_t ptr_3c8a;
-    char str_884[2];
-    char time_str[6];
-    uint32_t ptr_3c96;
-    char str_886[2];
-    uint32_t ptr_3c9c;
-    char str_887[2];
-    uint32_t ptr_3ca2;
-    char str_888[2];
-    uint32_t ptr_3ca8;
-    char str_889[2];
-    uint32_t ptr_3cae;
-    char str_890[2];
-    uint32_t func_str_16_ptr;
-    uint32_t ptr_3cb8;
-    char str_891[2];
-    char func_str_16[6];
-    uint32_t ptrs_75[5];  /* 5 pointers */
-    char str_893[2];
-    char lines_str_2[6];
-    char alignment_str_3[10];
-    char fontcolor_str_11[10];
-    char font_str_12[6];
-    uint32_t func_str_17_ptr;
-    uint32_t ptr_3cfe;
-    char str_898[2];
-    char func_str_17[6];
-    uint32_t ptr_3d0a;
-    char str_900[2];
-    uint32_t ptr_3d10;
-    char str_901[2];
-    uint32_t func_str_18_ptr;
-    uint32_t ptr_3d1a;
-    char str_902[2];
-    char func_str_18[6];
-    uint32_t ptr_3d26;
-    char str_904[2];
-    uint32_t ptr_3d2c;
-    char str_905[2];
-    uint32_t file_str_ptr;
-    uint32_t ptr_3d36;
-    char str_906[2];
-    char file_str[6];
+    /* 3 pointers */
+    /* 3 pointers */
+    /* 6 pointers */
+    /* 4 pointers */
+    /* 5 pointers */
+    /* 3 pointers */
+    /* 3 pointers */
+    /* 3 pointers */
+    /* 6 pointers */
+    /* 3 pointers */
+    /* 4 pointers */
+    /* 3 pointers */
+    /* 4 pointers */
+    /* 4 pointers */
+    /* 3 pointers */
+    /* 3 pointers */
+    /* 3 pointers */
+    /* 4 pointers */
+    /* 6 pointers */
+    /* 5 pointers */
+    /* 6 pointers */
+    /* 6 pointers */
+    /* 3 pointers */
+    /* 3 pointers */
+    /* 3 pointers */
+    /* 3 pointers */
+    /* 4 pointers */
+    /* 4 pointers */
+    /* 4 pointers */
+    /* 3 pointers */
+    /* 3 pointers */
+    /* 3 pointers */
+    /* 7 pointers */
+    /* 6 pointers */
+    /* 12 pointers */
+    /* 3 pointers */
+    /* 4 pointers */
+    /* 5 pointers */
+    /* 5 pointers */
+    /* the last two property names of class AcNumEditBox, "figures" and "num"; the rest of its name text and its name list precede this slice */
+    char NakaClass_AcNumEditBox_PropNameTextEnd[12];
+    /* property names of NAKA class AcLswEditBox (0x160001a, sig "jn"): "func", "data", then "" */
+    uint32_t NakaClass_AcLswEditBox_PropNames[3];
+    /* name text of class AcLswEditBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcLswEditBox_PropNames points into it */
+    char NakaClass_AcLswEditBox_PropNameText[14];
+    /* property names of NAKA class AcRamEditBox (0x160001b, sig "jr"): "func", "data", then "" */
+    uint32_t NakaClass_AcRamEditBox_PropNames[3];
+    /* name text of class AcRamEditBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcRamEditBox_PropNames points into it */
+    char NakaClass_AcRamEditBox_PropNameText[14];
+    /* property names of NAKA class PsMenuBox (0x160001c, sig "c^dem"): "font", "fontcolor", "align", "editsw", "selected", then "" */
+    uint32_t NakaClass_PsMenuBox_PropNames[6];
+    /* name text of class PsMenuBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_PsMenuBox_PropNames points into it */
+    char NakaClass_PsMenuBox_PropNameText[42];
+    /* property names of NAKA class AcTitleMenu (0x160001d, sig "Xab"): "str", "title", "icon", then "" */
+    uint32_t NakaClass_AcTitleMenu_PropNames[4];
+    /* name text of class AcTitleMenu's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcTitleMenu_PropNames points into it */
+    char NakaClass_AcTitleMenu_PropNameText[18];
+    /* property names of NAKA class PsEditSwBox (0x160001e, sig "c^de"): "font", "fontcolor", "align", "editsw", then "" */
+    uint32_t NakaClass_PsEditSwBox_PropNames[5];
+    /* name text of class PsEditSwBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_PsEditSwBox_PropNames points into it */
+    char NakaClass_PsEditSwBox_PropNameText[32];
+    /* property names of NAKA class AcIndexEditSw (0x160001f, sig "f"): "style", then "" */
+    uint32_t NakaClass_AcIndexEditSw_PropNames[2];
+    /* name text of class AcIndexEditSw's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcIndexEditSw_PropNames points into it */
+    char NakaClass_AcIndexEditSw_PropNameText[8];
+    /* property names of NAKA class AcFuncEditSw (0x1600020, sig "fj"): "style", "func", then "" */
+    uint32_t NakaClass_AcFuncEditSw_PropNames[3];
+    /* name text of class AcFuncEditSw's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcFuncEditSw_PropNames points into it */
+    char NakaClass_AcFuncEditSw_PropNameText[14];
+    /* property names of NAKA class PsWideESBox (0x1600021, sig "e"): "editsw2", then "" */
+    uint32_t NakaClass_PsWideESBox_PropNames[2];
+    /* name text of class PsWideESBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_PsWideESBox_PropNames points into it */
+    char NakaClass_PsWideESBox_PropNameText[10];
+    /* property names of NAKA class AcIndexWideES (0x1600022, sig "f"): "style", then "" */
+    uint32_t NakaClass_AcIndexWideES_PropNames[2];
+    /* name text of class AcIndexWideES's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcIndexWideES_PropNames points into it */
+    char NakaClass_AcIndexWideES_PropNameText[8];
+    /* property names of NAKA class AcFuncWideES (0x1600023, sig "fj"): "style", "func", then "" */
+    uint32_t NakaClass_AcFuncWideES_PropNames[3];
+    /* name text of class AcFuncWideES's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcFuncWideES_PropNames points into it */
+    char NakaClass_AcFuncWideES_PropNameText[14];
+    /* property names of NAKA class PsPageBox (0x1600024, sig "n"): "page", then "" */
+    uint32_t NakaClass_PsPageBox_PropNames[2];
+    /* name text of class PsPageBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_PsPageBox_PropNames points into it */
+    char NakaClass_PsPageBox_PropNameText[8];
+    /* property names of NAKA class AcWindowPage (0x1600025, sig "AA"): "pagemin", "pagemax", then "" */
+    uint32_t NakaClass_AcWindowPage_PropNames[3];
+    /* name text of class AcWindowPage's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcWindowPage_PropNames points into it */
+    char NakaClass_AcWindowPage_PropNameText[18];
+    /* property names of NAKA class PsToggleBox (0x1600026, sig "cXXme"): "font", "stron", "stroff", "onoff", "editsw", then "" */
+    uint32_t NakaClass_PsToggleBox_PropNames[6];
+    /* name text of class PsToggleBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_PsToggleBox_PropNames points into it */
+    char NakaClass_PsToggleBox_PropNameText[36];
+    /* property names of NAKA class PsInvisibleBox (0x1600027, sig ""): no own property, then "" */
+    uint32_t NakaClass_PsInvisibleBox_PropNames[1];
+    /* name text of class PsInvisibleBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_PsInvisibleBox_PropNames points into it */
+    char NakaClass_PsInvisibleBox_PropNameText[2];
+    /* property names of NAKA class IvPageControl (0x1600028, sig "At"): "page", "window", then "" */
+    uint32_t NakaClass_IvPageControl_PropNames[3];
+    /* name text of class IvPageControl's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvPageControl_PropNames points into it */
+    char NakaClass_IvPageControl_PropNameText[16];
+    /* property names of NAKA class IvMainEditSw (0x1600029, sig "k"): "func", then "" */
+    uint32_t NakaClass_IvMainEditSw_PropNames[2];
+    /* name text of class IvMainEditSw's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvMainEditSw_PropNames points into it */
+    char NakaClass_IvMainEditSw_PropNameText[8];
+    /* property names of NAKA class AcSoundName (0x160002a, sig "u"): "part", then "" */
+    uint32_t NakaClass_AcSoundName_PropNames[2];
+    /* name text of class AcSoundName's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcSoundName_PropNames points into it */
+    char NakaClass_AcSoundName_PropNameText[8];
+    /* property names of NAKA class Label (0x160002b, sig "Xc^"): "str", "font", "fontcolor", then "" */
+    uint32_t NakaClass_Label_PropNames[4];
+    /* name text of class Label's properties (NUL-terminated, 0xff-padded to even); NakaClass_Label_PropNames points into it */
+    char NakaClass_Label_PropNameText[22];
+    /* property names of NAKA class Bitmap (0x160002c, sig "i"): "bmp", then "" */
+    uint32_t NakaClass_Bitmap_PropNames[2];
+    /* name text of class Bitmap's properties (NUL-terminated, 0xff-padded to even); NakaClass_Bitmap_PropNames points into it */
+    char NakaClass_Bitmap_PropNameText[6];
+    /* property names of NAKA class Icon (0x160002d, sig "b"): "icon", then "" */
+    uint32_t NakaClass_Icon_PropNames[2];
+    /* name text of class Icon's properties (NUL-terminated, 0xff-padded to even); NakaClass_Icon_PropNames points into it */
+    char NakaClass_Icon_PropNameText[8];
+    /* property names of NAKA class Line (0x160002e, sig "^g"): "color", "linemode", then "" */
+    uint32_t NakaClass_Line_PropNames[3];
+    /* name text of class Line's properties (NUL-terminated, 0xff-padded to even); NakaClass_Line_PropNames points into it */
+    char NakaClass_Line_PropNameText[18];
+    /* property names of NAKA class Frame (0x160002f, sig "hA^"): "frame", "width", "color", then "" */
+    uint32_t NakaClass_Frame_PropNames[4];
+    /* name text of class Frame's properties (NUL-terminated, 0xff-padded to even); NakaClass_Frame_PropNames points into it */
+    char NakaClass_Frame_PropNameText[20];
+    /* property names of NAKA class EditSw (0x1600030, sig "ejA"): "editsw", "func", "index", then "" */
+    uint32_t NakaClass_EditSw_PropNames[4];
+    /* name text of class EditSw's properties (NUL-terminated, 0xff-padded to even); NakaClass_EditSw_PropNames points into it */
+    char NakaClass_EditSw_PropNameText[22];
+    /* property names of NAKA class Box (0x1600031, sig "^_"): "color", "border", then "" */
+    uint32_t NakaClass_Box_PropNames[3];
+    /* name text of class Box's properties (NUL-terminated, 0xff-padded to even); NakaClass_Box_PropNames points into it */
+    char NakaClass_Box_PropNameText[16];
+    /* property names of NAKA class GroupBox (0x1600032, sig ""): no own property, then "" */
+    uint32_t NakaClass_GroupBox_PropNames[1];
+    /* name text of class GroupBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_GroupBox_PropNames points into it */
+    char NakaClass_GroupBox_PropNameText[2];
+    /* property names of NAKA class Screen (0x1600033, sig "ar"): "exit", "window", then "" */
+    uint32_t NakaClass_Screen_PropNames[3];
+    /* name text of class Screen's properties (NUL-terminated, 0xff-padded to even); NakaClass_Screen_PropNames points into it */
+    char NakaClass_Screen_PropNameText[16];
+    /* property names of NAKA class TtlScreen (0x1600034, sig "Xb"): "title", "icon", then "" */
+    uint32_t NakaClass_TtlScreen_PropNames[3];
+    /* name text of class TtlScreen's properties (NUL-terminated, 0xff-padded to even); NakaClass_TtlScreen_PropNames points into it */
+    char NakaClass_TtlScreen_PropNameText[14];
+    /* property names of NAKA class Window (0x1600035, sig "Grr"): "modal", "parent", "child", then "" */
+    uint32_t NakaClass_Window_PropNames[4];
+    /* name text of class Window's properties (NUL-terminated, 0xff-padded to even); NakaClass_Window_PropNames points into it */
+    char NakaClass_Window_PropNameText[22];
+    /* property names of NAKA class TextBox (0x1600036, sig "Xc^dB"): "text", "font", "fontcolor", "alignment", "lines", then "" */
+    uint32_t NakaClass_TextBox_PropNames[6];
+    /* name text of class TextBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_TextBox_PropNames points into it */
+    char NakaClass_TextBox_PropNameText[40];
+    /* property names of NAKA class StringBox (0x1600037, sig "Xc^d"): "str", "font", "fontcolor", "alignment", then "" */
+    uint32_t NakaClass_StringBox_PropNames[5];
+    /* name text of class StringBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_StringBox_PropNames points into it */
+    char NakaClass_StringBox_PropNameText[32];
+    /* property names of NAKA class ModeEdit (0x1600038, sig "`kalX"): "mode", "proc", "title", "user", "name", then "" */
+    uint32_t NakaClass_ModeEdit_PropNames[6];
+    /* name text of class ModeEdit's properties (NUL-terminated, 0xff-padded to even); NakaClass_ModeEdit_PropNames points into it */
+    char NakaClass_ModeEdit_PropNameText[32];
+    /* property names of NAKA class TitleEdit (0x1600039, sig "akNlX"): "title", "proc", "top", "user", "name", then "" */
+    uint32_t NakaClass_TitleEdit_PropNames[6];
+    /* name text of class TitleEdit's properties (NUL-terminated, 0xff-padded to even); NakaClass_TitleEdit_PropNames points into it */
+    char NakaClass_TitleEdit_PropNameText[30];
+    /* property names of NAKA class AcRhythmName (0x160003a, sig ""): no own property, then "" */
+    uint32_t NakaClass_AcRhythmName_PropNames[1];
+    /* name text of class AcRhythmName's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcRhythmName_PropNames points into it */
+    char NakaClass_AcRhythmName_PropNameText[2];
+    /* property names of NAKA class AcPmemName (0x160003b, sig ""): no own property, then "" */
+    uint32_t NakaClass_AcPmemName_PropNames[1];
+    /* name text of class AcPmemName's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcPmemName_PropNames points into it */
+    char NakaClass_AcPmemName_PropNameText[2];
+    /* property names of NAKA class AcMixerVol (0x160003c, sig "ue"): "part", "editsw", then "" */
+    uint32_t NakaClass_AcMixerVol_PropNames[3];
+    /* name text of class AcMixerVol's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcMixerVol_PropNames points into it */
+    char NakaClass_AcMixerVol_PropNameText[16];
+    /* property names of NAKA class VwMenuBox (0x160003d, sig "Xb"): "str", "icon", then "" */
+    uint32_t NakaClass_VwMenuBox_PropNames[3];
+    /* name text of class VwMenuBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_VwMenuBox_PropNames points into it */
+    char NakaClass_VwMenuBox_PropNameText[12];
+    /* property names of NAKA class VwEditSwBox (0x160003e, sig "fX"): "style", "str", then "" */
+    uint32_t NakaClass_VwEditSwBox_PropNames[3];
+    /* name text of class VwEditSwBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_VwEditSwBox_PropNames points into it */
+    char NakaClass_VwEditSwBox_PropNameText[12];
+    /* property names of NAKA class VwWideESBox (0x160003f, sig "fX"): "style", "str", then "" */
+    uint32_t NakaClass_VwWideESBox_PropNames[3];
+    /* name text of class VwWideESBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_VwWideESBox_PropNames points into it */
+    char NakaClass_VwWideESBox_PropNameText[12];
+    /* property names of NAKA class AcModeMenu (0x1600040, sig "X`b"): "str", "mode", "icon", then "" */
+    uint32_t NakaClass_AcModeMenu_PropNames[4];
+    /* name text of class AcModeMenu's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcModeMenu_PropNames points into it */
+    char NakaClass_AcModeMenu_PropNameText[18];
+    /* property names of NAKA class AcScreenMenu (0x1600041, sig "XNb"): "str", "screen", "icon", then "" */
+    uint32_t NakaClass_AcScreenMenu_PropNames[4];
+    /* name text of class AcScreenMenu's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcScreenMenu_PropNames points into it */
+    char NakaClass_AcScreenMenu_PropNameText[20];
+    /* property names of NAKA class AcWindowMenu (0x1600042, sig "Xtb"): "str", "window", "icon", then "" */
+    uint32_t NakaClass_AcWindowMenu_PropNames[4];
+    /* name text of class AcWindowMenu's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcWindowMenu_PropNames points into it */
+    char NakaClass_AcWindowMenu_PropNameText[20];
+    /* property names of NAKA class AcBitEditBox (0x1600043, sig "jm"): "func", "data", then "" */
+    uint32_t NakaClass_AcBitEditBox_PropNames[3];
+    /* name text of class AcBitEditBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcBitEditBox_PropNames points into it */
+    char NakaClass_AcBitEditBox_PropNameText[14];
+    /* property names of NAKA class AcFuncToggle (0x1600044, sig "j"): "func", then "" */
+    uint32_t NakaClass_AcFuncToggle_PropNames[2];
+    /* name text of class AcFuncToggle's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcFuncToggle_PropNames points into it */
+    char NakaClass_AcFuncToggle_PropNameText[8];
+    /* property names of NAKA class PsWideToggle (0x1600045, sig "e"): "editsw2", then "" */
+    uint32_t NakaClass_PsWideToggle_PropNames[2];
+    /* name text of class PsWideToggle's properties (NUL-terminated, 0xff-padded to even); NakaClass_PsWideToggle_PropNames points into it */
+    char NakaClass_PsWideToggle_PropNameText[10];
+    /* property names of NAKA class DbMemo (0x1600046, sig ""): no own property, then "" */
+    uint32_t NakaClass_DbMemo_PropNames[1];
+    /* name text of class DbMemo's properties (NUL-terminated, 0xff-padded to even); NakaClass_DbMemo_PropNames points into it */
+    char NakaClass_DbMemo_PropNameText[2];
+    /* property names of NAKA class IvExit (0x1600047, sig ""): no own property, then "" */
+    uint32_t NakaClass_IvExit_PropNames[1];
+    /* name text of class IvExit's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvExit_PropNames points into it */
+    char NakaClass_IvExit_PropNameText[2];
+    /* property names of NAKA class IvExitMode (0x1600048, sig "`"): "mode", then "" */
+    uint32_t NakaClass_IvExitMode_PropNames[2];
+    /* name text of class IvExitMode's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvExitMode_PropNames points into it */
+    char NakaClass_IvExitMode_PropNameText[8];
+    /* property names of NAKA class IvExitScreen (0x1600049, sig "N"): "screen", then "" */
+    uint32_t NakaClass_IvExitScreen_PropNames[2];
+    /* name text of class IvExitScreen's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvExitScreen_PropNames points into it */
+    char NakaClass_IvExitScreen_PropNameText[10];
+    /* property names of NAKA class IvFixWin (0x160004a, sig "t"): "window", then "" */
+    uint32_t NakaClass_IvFixWin_PropNames[2];
+    /* name text of class IvFixWin's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvFixWin_PropNames points into it */
+    char NakaClass_IvFixWin_PropNameText[10];
+    /* property names of NAKA class AcNamingWindow (0x160004b, sig ""): no own property, then "" */
+    uint32_t NakaClass_AcNamingWindow_PropNames[1];
+    /* name text of class AcNamingWindow's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcNamingWindow_PropNames points into it */
+    char NakaClass_AcNamingWindow_PropNameText[2];
+    /* property names of NAKA class PsCursorBox (0x160004c, sig "n"): "cursor", then "" */
+    uint32_t NakaClass_PsCursorBox_PropNames[2];
+    /* name text of class PsCursorBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_PsCursorBox_PropNames points into it */
+    char NakaClass_PsCursorBox_PropNameText[10];
+    /* property names of NAKA class IvNaming (0x160004d, sig "j"): "func", then "" */
+    uint32_t NakaClass_IvNaming_PropNames[2];
+    /* name text of class IvNaming's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvNaming_PropNames points into it */
+    char NakaClass_IvNaming_PropNameText[8];
+    /* property names of NAKA class AcIndexToggle (0x160004e, sig "AA"): "index", "tag", then "" */
+    uint32_t NakaClass_AcIndexToggle_PropNames[3];
+    /* name text of class AcIndexToggle's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcIndexToggle_PropNames points into it */
+    char NakaClass_AcIndexToggle_PropNameText[12];
+    /* property names of NAKA class AcRamBox (0x160004f, sig "jr"): "func", "data", then "" */
+    uint32_t NakaClass_AcRamBox_PropNames[3];
+    /* name text of class AcRamBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcRamBox_PropNames points into it */
+    char NakaClass_AcRamBox_PropNameText[14];
+    /* property names of NAKA class PsRadioBox (0x1600050, sig "c^demA"): "font", "fontcolor", "align", "editsw", "selected", "tag", then "" */
+    uint32_t NakaClass_PsRadioBox_PropNames[7];
+    /* name text of class PsRadioBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_PsRadioBox_PropNames points into it */
+    char NakaClass_PsRadioBox_PropNameText[46];
+    /* property names of NAKA class AcStrRadioBox (0x1600051, sig "X"): "str", then "" */
+    uint32_t NakaClass_AcStrRadioBox_PropNames[2];
+    /* name text of class AcStrRadioBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcStrRadioBox_PropNames points into it */
+    char NakaClass_AcStrRadioBox_PropNameText[6];
+    /* property names of NAKA class IvCatchEvent (0x1600052, sig "j"): "func", then "" */
+    uint32_t NakaClass_IvCatchEvent_PropNames[2];
+    /* name text of class IvCatchEvent's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvCatchEvent_PropNames points into it */
+    char NakaClass_IvCatchEvent_PropNameText[8];
+    /* property names of NAKA class PsListBox (0x1600053, sig "c^dBn"): "font", "fontcolor", "align", "row", "selected", then "" */
+    uint32_t NakaClass_PsListBox_PropNames[6];
+    /* name text of class PsListBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_PsListBox_PropNames points into it */
+    char NakaClass_PsListBox_PropNameText[38];
+    /* property names of NAKA class PsGridBox (0x1600054, sig "c^dBBGnnsss"): "font", "fontcolor", "align", "row", "col", "vertline", "selrow", "selcol", "pcol", "prow", "crow", then "" */
+    uint32_t NakaClass_PsGridBox_PropNames[12];
+    /* name text of class PsGridBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_PsGridBox_PropNames points into it */
+    char NakaClass_PsGridBox_PropNameText[76];
+    /* property names of NAKA class AcListBox (0x1600055, sig "XG"): "list", "dial", then "" */
+    uint32_t NakaClass_AcListBox_PropNames[3];
+    /* name text of class AcListBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcListBox_PropNames points into it */
+    char NakaClass_AcListBox_PropNameText[14];
+    /* property names of NAKA class AcGridBox (0x1600056, sig "XXj"): "fixedcol", "fixedrow", "func", then "" */
+    uint32_t NakaClass_AcGridBox_PropNames[4];
+    /* name text of class AcGridBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcGridBox_PropNames points into it */
+    char NakaClass_AcGridBox_PropNameText[28];
+    /* property names of NAKA class DbDebugMenu (0x1600057, sig "n"): "page", then "" */
+    uint32_t NakaClass_DbDebugMenu_PropNames[2];
+    /* name text of class DbDebugMenu's properties (NUL-terminated, 0xff-padded to even); NakaClass_DbDebugMenu_PropNames points into it */
+    char NakaClass_DbDebugMenu_PropNameText[8];
+    /* property names of NAKA class PsTrackSwitch (0x1600058, sig "vmnn"): "track", "onoff", "part", "recplay", then "" */
+    uint32_t NakaClass_PsTrackSwitch_PropNames[5];
+    /* name text of class PsTrackSwitch's properties (NUL-terminated, 0xff-padded to even); NakaClass_PsTrackSwitch_PropNames points into it */
+    char NakaClass_PsTrackSwitch_PropNameText[28];
+    /* property names of NAKA class AcTrackSwitch (0x1600059, sig ""): no own property, then "" */
+    uint32_t NakaClass_AcTrackSwitch_PropNames[1];
+    /* name text of class AcTrackSwitch's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcTrackSwitch_PropNames points into it */
+    char NakaClass_AcTrackSwitch_PropNameText[2];
+    /* property names of NAKA class IvDirmdScreen (0x160005a, sig ""): no own property, then "" */
+    uint32_t NakaClass_IvDirmdScreen_PropNames[1];
+    /* name text of class IvDirmdScreen's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvDirmdScreen_PropNames points into it */
+    char NakaClass_IvDirmdScreen_PropNameText[2];
+    /* property names of NAKA class IvTrackSwitch (0x160005b, sig ""): no own property, then "" */
+    uint32_t NakaClass_IvTrackSwitch_PropNames[1];
+    /* name text of class IvTrackSwitch's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvTrackSwitch_PropNames points into it */
+    char NakaClass_IvTrackSwitch_PropNameText[2];
+    /* property names of NAKA class IvExitWindow (0x160005c, sig ""): no own property, then "" */
+    uint32_t NakaClass_IvExitWindow_PropNames[1];
+    /* name text of class IvExitWindow's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvExitWindow_PropNames points into it */
+    char NakaClass_IvExitWindow_PropNameText[2];
+    /* property names of NAKA class DbMemoryDump (0x160005d, sig "s"): "adr", then "" */
+    uint32_t NakaClass_DbMemoryDump_PropNames[2];
+    /* name text of class DbMemoryDump's properties (NUL-terminated, 0xff-padded to even); NakaClass_DbMemoryDump_PropNames points into it */
+    char NakaClass_DbMemoryDump_PropNameText[6];
+    /* property names of NAKA class IvInterrupt (0x160005e, sig "w"): "time", then "" */
+    uint32_t NakaClass_IvInterrupt_PropNames[2];
+    /* name text of class IvInterrupt's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvInterrupt_PropNames points into it */
+    char NakaClass_IvInterrupt_PropNameText[8];
+    /* property names of NAKA class IvIntReminder (0x160005f, sig ""): no own property, then "" */
+    uint32_t NakaClass_IvIntReminder_PropNames[1];
+    /* name text of class IvIntReminder's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvIntReminder_PropNames points into it */
+    char NakaClass_IvIntReminder_PropNameText[2];
+    /* property names of NAKA class IvIntError (0x1600060, sig ""): no own property, then "" */
+    uint32_t NakaClass_IvIntError_PropNames[1];
+    /* name text of class IvIntError's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvIntError_PropNames points into it */
+    char NakaClass_IvIntError_PropNameText[2];
+    /* property names of NAKA class IvIntComplete (0x1600061, sig ""): no own property, then "" */
+    uint32_t NakaClass_IvIntComplete_PropNames[1];
+    /* name text of class IvIntComplete's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvIntComplete_PropNames points into it */
+    char NakaClass_IvIntComplete_PropNameText[2];
+    /* property names of NAKA class IvIntVari (0x1600062, sig ""): no own property, then "" */
+    uint32_t NakaClass_IvIntVari_PropNames[1];
+    /* name text of class IvIntVari's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvIntVari_PropNames points into it */
+    char NakaClass_IvIntVari_PropNameText[2];
+    /* property names of NAKA class IvIntEasySet (0x1600063, sig ""): no own property, then "" */
+    uint32_t NakaClass_IvIntEasySet_PropNames[1];
+    /* name text of class IvIntEasySet's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvIntEasySet_PropNames points into it */
+    char NakaClass_IvIntEasySet_PropNameText[2];
+    /* property names of NAKA class IvShowHide (0x1600064, sig "j"): "func", then "" */
+    uint32_t NakaClass_IvShowHide_PropNames[2];
+    /* name text of class IvShowHide's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvShowHide_PropNames points into it */
+    char NakaClass_IvShowHide_PropNameText[8];
+    /* property names of NAKA class PsTextBox (0x1600065, sig "c^dB"): "font", "fontcolor", "alignment", "lines", then "" */
+    uint32_t NakaClass_PsTextBox_PropNames[5];
+    /* name text of class PsTextBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_PsTextBox_PropNames points into it */
+    char NakaClass_PsTextBox_PropNameText[34];
+    /* property names of NAKA class AcLanguageText (0x1600066, sig "j"): "func", then "" */
+    uint32_t NakaClass_AcLanguageText_PropNames[2];
+    /* name text of class AcLanguageText's properties (NUL-terminated, 0xff-padded to even); NakaClass_AcLanguageText_PropNames points into it */
+    char NakaClass_AcLanguageText_PropNameText[8];
+    /* property names of NAKA class TrTransposeBox (0x1600067, sig ""): no own property, then "" */
+    uint32_t NakaClass_TrTransposeBox_PropNames[1];
+    /* name text of class TrTransposeBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_TrTransposeBox_PropNames points into it */
+    char NakaClass_TrTransposeBox_PropNameText[2];
+    /* property names of NAKA class TrChordBox (0x1600068, sig ""): no own property, then "" */
+    uint32_t NakaClass_TrChordBox_PropNames[1];
+    /* name text of class TrChordBox's properties (NUL-terminated, 0xff-padded to even); NakaClass_TrChordBox_PropNames points into it */
+    char NakaClass_TrChordBox_PropNameText[2];
+    /* property names of NAKA class VwUserBitmap (0x1600069, sig "j"): "func", then "" */
+    uint32_t NakaClass_VwUserBitmap_PropNames[2];
+    /* name text of class VwUserBitmap's properties (NUL-terminated, 0xff-padded to even); NakaClass_VwUserBitmap_PropNames points into it */
+    char NakaClass_VwUserBitmap_PropNameText[8];
+    /* property names of NAKA class IvScreen (0x160006a, sig ""): no own property, then "" */
+    uint32_t NakaClass_IvScreen_PropNames[1];
+    /* name text of class IvScreen's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvScreen_PropNames points into it */
+    char NakaClass_IvScreen_PropNameText[2];
+    /* property names of NAKA class IvIntWelcome (0x160006b, sig ""): no own property, then "" */
+    uint32_t NakaClass_IvIntWelcome_PropNames[1];
+    /* name text of class IvIntWelcome's properties (NUL-terminated, 0xff-padded to even); NakaClass_IvIntWelcome_PropNames points into it */
+    char NakaClass_IvIntWelcome_PropNameText[2];
+    /* property names of NAKA class VwUserBitmapByName (0x160006c, sig "X"): "file", then "" */
+    uint32_t NakaClass_VwUserBitmapByName_PropNames[2];
+    /* name text of class VwUserBitmapByName's properties (NUL-terminated, 0xff-padded to even); NakaClass_VwUserBitmapByName_PropNames points into it */
+    char NakaClass_VwUserBitmapByName_PropNameText[8];
     /* class definition 0x160:0: Object (parent -, allsize 2, fields -) */
     naka_classdef_t classdef_160_0;
     /* class definition 0x160:1: Function (parent Object, allsize 4, fields func) */
@@ -3711,1276 +3732,746 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .TrashBmp_str = "trash.bmp",
 
-    .ptr_31e8 = SELF(str_586),
-
-    .str_586 = ALIGNED_STRING(""),
-
-    .func_str_ptr = SELF(func_str),
-
-    .ptr_31f2 = SELF(str_587),
-
-    .str_587 = ALIGNED_STRING(""),
-
-    .func_str = ALIGNED_STRING("func"),
-
-    .ptr_31fe = SELF(str_589),
-
-    .str_589 = ALIGNED_STRING(""),
-
-    .ptr_3204 = SELF(str_590),
-
-    .str_590 = ALIGNED_STRING(""),
-
-    .ptrs_27 = {
-        SELF(proc_str),
-        SELF(parent_str),
-        SELF(allsize_str),
-        SELF(selfsize_str),
-        SELF(name_str_3),
-        SELF(propdata_str),
-        SELF(propname_str),
-        SELF(str_591),
+    .ClassProps_Object = {
+        SELF(ClassProps_Object_Names),
     },
 
-    .str_591 = ALIGNED_STRING(""),
+    .ClassProps_Object_Names = "\x00\xFF",
 
-    .propname_str = ALIGNED_STRING("propname"),
-
-    .propdata_str = ALIGNED_STRING("propdata"),
-
-    .name_str_3 = ALIGNED_STRING("name"),
-
-    .selfsize_str = ALIGNED_STRING("selfsize"),
-
-    .allsize_str = "allsize",
-
-    .parent_str = ALIGNED_STRING("parent"),
-
-    .proc_str = ALIGNED_STRING("proc"),
-
-    .ptrs_28 = {
-        SELF(proc_str_2),
-        SELF(count_str),
-        SELF(size_str),
-        SELF(prop_str),
-        SELF(str_599),
+    .ClassProps_Function = {
+        SELF(ClassProps_Function_Names[2]), SELF(ClassProps_Function_Names),
     },
 
-    .str_599 = ALIGNED_STRING(""),
+    .ClassProps_Function_Names = "\x00\xFF" "func\x00\xFF",
 
-    .prop_str = ALIGNED_STRING("prop"),
-
-    .size_str = ALIGNED_STRING("size"),
-
-    .count_str = "count",
-
-    .proc_str_2 = ALIGNED_STRING("proc"),
-
-    .ptrs_29 = {
-        SELF(proc_str_3),
-        SELF(title_str),
-        SELF(user_str),
-        SELF(name_str_4),
-        SELF(str_604),
+    .ClassProps_ApFunction = {
+        SELF(ClassProps_ApFunction_Names),
     },
 
-    .str_604 = ALIGNED_STRING(""),
+    .ClassProps_ApFunction_Names = "\x00\xFF",
 
-    .name_str_4 = ALIGNED_STRING("name"),
-
-    .user_str = ALIGNED_STRING("user"),
-
-    .title_str = "title",
-
-    .proc_str_3 = ALIGNED_STRING("proc"),
-
-    .ptrs_30 = {
-        SELF(proc_str_4),
-        SELF(top_str),
-        SELF(user_str_2),
-        SELF(name_str_5),
-        SELF(now_str),
-        SELF(prev_str),
-        SELF(next_str),
-        SELF(str_609),
+    .ClassProps_MainFunction = {
+        SELF(ClassProps_MainFunction_Names),
     },
 
-    .str_609 = ALIGNED_STRING(""),
+    .ClassProps_MainFunction_Names = "\x00\xFF",
 
-    .next_str = ALIGNED_STRING("next"),
-
-    .prev_str = ALIGNED_STRING("prev"),
-
-    .now_str = "now",
-
-    .name_str_5 = ALIGNED_STRING("name"),
-
-    .user_str_2 = ALIGNED_STRING("user"),
-
-    .top_str = "top",
-
-    .proc_str_4 = ALIGNED_STRING("proc"),
-
-    .ptr_330a = SELF(data_str),
-
-    .ptr_330e = SELF(str_617),
-
-    .str_617 = ALIGNED_STRING(""),
-
-    .data_str = ALIGNED_STRING("data"),
-
-    .ptr_331a = SELF(data_str_2),
-
-    .ptr_331e = SELF(str_619),
-
-    .str_619 = ALIGNED_STRING(""),
-
-    .data_str_2 = ALIGNED_STRING("data"),
-
-    .ptr_332a = SELF(data_str_3),
-
-    .ptr_332e = SELF(str_621),
-
-    .str_621 = ALIGNED_STRING(""),
-
-    .data_str_3 = ALIGNED_STRING("data"),
-
-    .ptr_333a = SELF(data_str_4),
-
-    .ptr_333e = SELF(str_623),
-
-    .str_623 = ALIGNED_STRING(""),
-
-    .data_str_4 = ALIGNED_STRING("data"),
-
-    .name_str_6_ptr = SELF(name_str_6),
-
-    .ptr_334e = SELF(str_625),
-
-    .str_625 = ALIGNED_STRING(""),
-
-    .name_str_6 = ALIGNED_STRING("name"),
-
-    .name_str_7_ptr = SELF(name_str_7),
-
-    .ptr_335e = SELF(str_627),
-
-    .str_627 = ALIGNED_STRING(""),
-
-    .name_str_7 = ALIGNED_STRING("name"),
-
-    .ptr_336a = SELF(data_str_5),
-
-    .ptr_336e = SELF(str_629),
-
-    .str_629 = ALIGNED_STRING(""),
-
-    .data_str_5 = ALIGNED_STRING("data"),
-
-    .name_str_8_ptr = SELF(name_str_8),
-
-    .ptr_337e = SELF(str_631),
-
-    .str_631 = ALIGNED_STRING(""),
-
-    .name_str_8 = ALIGNED_STRING("name"),
-
-    .ptrs_31 = {
-        SELF(class_str),
-        SELF(super_str),
-        SELF(sub_str),
-        SELF(next_str_2),
-        SELF(prev_str_2),
-        SELF(flag_str),
-        SELF(rect_str),
-        SELF(str_633),
+    .ClassProps_Class = {
+        SELF(ClassProps_Class_Names[54]), SELF(ClassProps_Class_Names[46]), SELF(ClassProps_Class_Names[38]), SELF(ClassProps_Class_Names[28]),
+        SELF(ClassProps_Class_Names[22]), SELF(ClassProps_Class_Names[12]), SELF(ClassProps_Class_Names[2]), SELF(ClassProps_Class_Names),
     },
 
-    .str_633 = ALIGNED_STRING(""),
+    .ClassProps_Class_Names = "\x00\xFFpropname\x00\xFFpropdata\x00\xFFname\x00\xFFselfsize\x00\xFF" "allsize\x00parent\x00\xFFproc\x00\xFF",
 
-    .rect_str = ALIGNED_STRING("rect"),
-
-    .flag_str = ALIGNED_STRING("flag"),
-
-    .prev_str_2 = ALIGNED_STRING("prev"),
-
-    .next_str_2 = ALIGNED_STRING("next"),
-
-    .sub_str = "sub",
-
-    .super_str = "super",
-
-    .class_str = "class",
-
-    .ptrs_32 = {
-        SELF(color_str),
-        SELF(border_str),
-        SELF(index_str),
-        SELF(str_641),
+    .ClassProps_SupportClass = {
+        SELF(ClassProps_SupportClass_Names[20]), SELF(ClassProps_SupportClass_Names[14]), SELF(ClassProps_SupportClass_Names[8]), SELF(ClassProps_SupportClass_Names[2]),
+        SELF(ClassProps_SupportClass_Names),
     },
 
-    .str_641 = ALIGNED_STRING(""),
+    .ClassProps_SupportClass_Names = "\x00\xFFprop\x00\xFFsize\x00\xFF" "count\x00proc\x00\xFF",
 
-    .index_str = "index",
-
-    .border_str = ALIGNED_STRING("border"),
-
-    .color_str = "color",
-
-    .ptrs_33 = {
-        SELF(font_str),
-        SELF(fontcolor_str),
-        SELF(align_str),
-        SELF(str_645),
+    .ClassProps_Mode = {
+        SELF(ClassProps_Mode_Names[20]), SELF(ClassProps_Mode_Names[14]), SELF(ClassProps_Mode_Names[8]), SELF(ClassProps_Mode_Names[2]),
+        SELF(ClassProps_Mode_Names),
     },
 
-    .str_645 = ALIGNED_STRING(""),
+    .ClassProps_Mode_Names = "\x00\xFFname\x00\xFFuser\x00\xFFtitle\x00proc\x00\xFF",
 
-    .align_str = "align",
-
-    .fontcolor_str = "fontcolor",
-
-    .font_str = ALIGNED_STRING("font"),
-
-    .ptrs_34 = {
-        SELF(func_str_2),
-        SELF(data_str_6),
-        SELF(str_649),
+    .ClassProps_Title = {
+        SELF(ClassProps_Title_Names[34]), SELF(ClassProps_Title_Names[30]), SELF(ClassProps_Title_Names[24]), SELF(ClassProps_Title_Names[18]),
+        SELF(ClassProps_Title_Names[14]), SELF(ClassProps_Title_Names[8]), SELF(ClassProps_Title_Names[2]), SELF(ClassProps_Title_Names),
     },
 
-    .str_649 = ALIGNED_STRING(""),
+    .ClassProps_Title_Names = "\x00\xFFnext\x00\xFFprev\x00\xFFnow\x00name\x00\xFFuser\x00\xFFtop\x00proc\x00\xFF",
 
-    .data_str_6 = ALIGNED_STRING("data"),
-
-    .func_str_2 = ALIGNED_STRING("func"),
-
-    .ptr_343c = SELF(str_652),
-
-    .str_652 = ALIGNED_STRING(""),
-
-    .ptrs_35 = {
-        SELF(caption_str),
-        SELF(font_str_2),
-        SELF(fontcolor_str_2),
-        SELF(align_str_2),
-        SELF(length_str),
-        SELF(editsw_str),
-        SELF(dial_str),
-        SELF(selected_str),
-        SELF(str_653),
+    .ClassProps_ResBitmap = {
+        SELF(ClassProps_ResBitmap_Names[2]), SELF(ClassProps_ResBitmap_Names),
     },
 
-    .str_653 = ALIGNED_STRING(""),
+    .ClassProps_ResBitmap_Names = "\x00\xFF" "data\x00\xFF",
 
-    .selected_str = ALIGNED_STRING("selected"),
-
-    .dial_str = ALIGNED_STRING("dial"),
-
-    .editsw_str = ALIGNED_STRING("editsw"),
-
-    .length_str = ALIGNED_STRING("length"),
-
-    .align_str_2 = "align",
-
-    .fontcolor_str_2 = "fontcolor",
-
-    .font_str_2 = ALIGNED_STRING("font"),
-
-    .caption_str = "caption",
-
-    .figures_str_ptr = SELF(figures_str),
-
-    .ptr_34aa = SELF(str_662),
-
-    .str_662 = ALIGNED_STRING(""),
-
-    .figures_str = "figures",
-
-    .func_str_3_ptr = SELF(func_str_3),
-
-    .ptr_34bc = SELF(str_664),
-
-    .str_664 = ALIGNED_STRING(""),
-
-    .func_str_3 = ALIGNED_STRING("func"),
-
-    .onoff_str_ptr = SELF(onoff_str),
-
-    .ptr_34cc = SELF(str_666),
-
-    .str_666 = ALIGNED_STRING(""),
-
-    .onoff_str = "onoff",
-
-    .ptrs_36 = {
-        SELF(num_str),
-        SELF(figures_str_2),
-        SELF(max_str),
-        SELF(min_str),
-        SELF(largestep_str),
-        SELF(smallstep_str),
-        SELF(str_668),
+    .ClassProps_ResFrame = {
+        SELF(ClassProps_ResFrame_Names[2]), SELF(ClassProps_ResFrame_Names),
     },
 
-    .str_668 = ALIGNED_STRING(""),
+    .ClassProps_ResFrame_Names = "\x00\xFF" "data\x00\xFF",
 
-    .smallstep_str = "smallstep",
+    .ClassProps_ResIcon = {
+        SELF(ClassProps_ResIcon_Names[2]), SELF(ClassProps_ResIcon_Names),
+    },
 
-    .largestep_str = "largestep",
+    .ClassProps_ResIcon_Names = "\x00\xFF" "data\x00\xFF",
 
-    .min_str = "min",
+    .ClassProps_ResFont = {
+        SELF(ClassProps_ResFont_Names[2]), SELF(ClassProps_ResFont_Names),
+    },
+
+    .ClassProps_ResFont_Names = "\x00\xFF" "data\x00\xFF",
+
+    .ClassProps_ResEvent = {
+        SELF(ClassProps_ResEvent_Names[2]), SELF(ClassProps_ResEvent_Names),
+    },
+
+    .ClassProps_ResEvent_Names = "\x00\xFFname\x00\xFF",
+
+    .ClassProps_ResMethod = {
+        SELF(ClassProps_ResMethod_Names[2]), SELF(ClassProps_ResMethod_Names),
+    },
+
+    .ClassProps_ResMethod_Names = "\x00\xFFname\x00\xFF",
+
+    .ClassProps_ResString = {
+        SELF(ClassProps_ResString_Names[2]), SELF(ClassProps_ResString_Names),
+    },
+
+    .ClassProps_ResString_Names = "\x00\xFF" "data\x00\xFF",
+
+    .ClassProps_ResName = {
+        SELF(ClassProps_ResName_Names[2]), SELF(ClassProps_ResName_Names),
+    },
+
+    .ClassProps_ResName_Names = "\x00\xFFname\x00\xFF",
+
+    .ClassProps_Viewable = {
+        SELF(ClassProps_Viewable_Names[36]), SELF(ClassProps_Viewable_Names[30]), SELF(ClassProps_Viewable_Names[26]), SELF(ClassProps_Viewable_Names[20]),
+        SELF(ClassProps_Viewable_Names[14]), SELF(ClassProps_Viewable_Names[8]), SELF(ClassProps_Viewable_Names[2]), SELF(ClassProps_Viewable_Names),
+    },
+
+    .ClassProps_Viewable_Names = "\x00\xFFrect\x00\xFF" "flag\x00\xFFprev\x00\xFFnext\x00\xFFsub\x00super\x00" "class",
+
+    .ClassProps_VwBox = {
+        SELF(ClassProps_VwBox_Names[16]), SELF(ClassProps_VwBox_Names[8]), SELF(ClassProps_VwBox_Names[2]), SELF(ClassProps_VwBox_Names),
+    },
+
+    .ClassProps_VwBox_Names = "\x00\xFFindex\x00" "border\x00\xFF" "color",
+
+    .ClassProps_PsParaBox = {
+        SELF(ClassProps_PsParaBox_Names[18]), SELF(ClassProps_PsParaBox_Names[8]), SELF(ClassProps_PsParaBox_Names[2]), SELF(ClassProps_PsParaBox_Names),
+    },
+
+    .ClassProps_PsParaBox_Names = "\x00\xFF" "align\x00" "fontcolor\x00" "font\x00\xFF",
+
+    .ClassProps_AcLswBox = {
+        SELF(ClassProps_AcLswBox_Names[8]), SELF(ClassProps_AcLswBox_Names[2]), SELF(ClassProps_AcLswBox_Names),
+    },
+
+    .ClassProps_AcLswBox_Names = "\x00\xFF" "data\x00\xFF" "func\x00\xFF",
+
+    .ClassProps_AcTempoBox = {
+        SELF(ClassProps_AcTempoBox_Names),
+    },
+
+    .ClassProps_AcTempoBox_Names = "\x00\xFF",
+
+    .ClassProps_PsEditBox = {
+        SELF(ClassProps_PsEditBox_Names[56]), SELF(ClassProps_PsEditBox_Names[50]), SELF(ClassProps_PsEditBox_Names[40]), SELF(ClassProps_PsEditBox_Names[34]),
+        SELF(ClassProps_PsEditBox_Names[26]), SELF(ClassProps_PsEditBox_Names[18]), SELF(ClassProps_PsEditBox_Names[12]), SELF(ClassProps_PsEditBox_Names[2]),
+        SELF(ClassProps_PsEditBox_Names),
+    },
+
+    .ClassProps_PsEditBox_Names = "\x00\xFFselected\x00\xFF" "dial\x00\xFF" "editsw\x00\xFFlength\x00\xFF" "align\x00" "fontcolor\x00" "font\x00\xFF" "caption",
+
+    .ClassProps_PsNumEditBox = {
+        SELF(ClassProps_PsNumEditBox_Names[2]), SELF(ClassProps_PsNumEditBox_Names),
+    },
+
+    .ClassProps_PsNumEditBox_Names = "\x00\xFF" "figures",
+
+    .ClassProps_PsTblEditBox = {
+        SELF(ClassProps_PsTblEditBox_Names[2]), SELF(ClassProps_PsTblEditBox_Names),
+    },
+
+    .ClassProps_PsTblEditBox_Names = "\x00\xFF" "func\x00\xFF",
+
+    .ClassProps_AcOnOffBox = {
+        SELF(ClassProps_AcOnOffBox_Names[2]), SELF(ClassProps_AcOnOffBox_Names),
+    },
+
+    .ClassProps_AcOnOffBox_Names = "\x00\xFFonoff",
+
+    .ClassProps_AcNumEditBox = {
+        SELF(NakaClass_AcNumEditBox_PropNameTextEnd[8]), SELF(NakaClass_AcNumEditBox_PropNameTextEnd), SELF(max_str), SELF(ClassProps_AcNumEditBox_Names[22]),
+        SELF(ClassProps_AcNumEditBox_Names[12]), SELF(ClassProps_AcNumEditBox_Names[2]), SELF(ClassProps_AcNumEditBox_Names),
+    },
+
+    .ClassProps_AcNumEditBox_Names = "\x00\xFFsmallstep\x00largestep\x00min",
 
     .max_str = "max",
 
-    .figures_str_2 = "figures",
+    .NakaClass_AcNumEditBox_PropNameTextEnd = "figures\x00num",
 
-    .num_str = "num",
-
-    .ptrs_37 = {
-        SELF(func_str_4),
-        SELF(data_str_7),
-        SELF(str_675),
+    .NakaClass_AcLswEditBox_PropNames = {
+        SELF(NakaClass_AcLswEditBox_PropNameText[8]), SELF(NakaClass_AcLswEditBox_PropNameText[2]), SELF(NakaClass_AcLswEditBox_PropNameText),
     },
 
-    .str_675 = ALIGNED_STRING(""),
+    .NakaClass_AcLswEditBox_PropNameText = "\x00\xFF" "data\x00\xFF" "func\x00\xFF",
 
-    .data_str_7 = ALIGNED_STRING("data"),
-
-    .func_str_4 = ALIGNED_STRING("func"),
-
-    .ptrs_38 = {
-        SELF(func_str_5),
-        SELF(data_str_8),
-        SELF(str_678),
+    .NakaClass_AcRamEditBox_PropNames = {
+        SELF(NakaClass_AcRamEditBox_PropNameText[8]), SELF(NakaClass_AcRamEditBox_PropNameText[2]), SELF(NakaClass_AcRamEditBox_PropNameText),
     },
 
-    .str_678 = ALIGNED_STRING(""),
+    .NakaClass_AcRamEditBox_PropNameText = "\x00\xFF" "data\x00\xFF" "func\x00\xFF",
 
-    .data_str_8 = ALIGNED_STRING("data"),
-
-    .func_str_5 = ALIGNED_STRING("func"),
-
-    .ptrs_39 = {
-        SELF(font_str_3),
-        SELF(fontcolor_str_3),
-        SELF(align_str_3),
-        SELF(editsw_str_2),
-        SELF(selected_str_2),
-        SELF(str_681),
+    .NakaClass_PsMenuBox_PropNames = {
+        SELF(NakaClass_PsMenuBox_PropNameText[36]), SELF(NakaClass_PsMenuBox_PropNameText[26]), SELF(NakaClass_PsMenuBox_PropNameText[20]), SELF(NakaClass_PsMenuBox_PropNameText[12]),
+        SELF(NakaClass_PsMenuBox_PropNameText[2]), SELF(NakaClass_PsMenuBox_PropNameText),
     },
 
-    .str_681 = ALIGNED_STRING(""),
+    .NakaClass_PsMenuBox_PropNameText = "\x00\xFFselected\x00\xFF" "editsw\x00\xFF" "align\x00" "fontcolor\x00" "font\x00\xFF",
 
-    .selected_str_2 = ALIGNED_STRING("selected"),
-
-    .editsw_str_2 = ALIGNED_STRING("editsw"),
-
-    .align_str_3 = "align",
-
-    .fontcolor_str_3 = "fontcolor",
-
-    .font_str_3 = ALIGNED_STRING("font"),
-
-    .ptrs_40 = {
-        SELF(str_str),
-        SELF(title_str_2),
-        SELF(icon_str),
-        SELF(str_687),
+    .NakaClass_AcTitleMenu_PropNames = {
+        SELF(NakaClass_AcTitleMenu_PropNameText[14]), SELF(NakaClass_AcTitleMenu_PropNameText[8]), SELF(NakaClass_AcTitleMenu_PropNameText[2]), SELF(NakaClass_AcTitleMenu_PropNameText),
     },
 
-    .str_687 = ALIGNED_STRING(""),
+    .NakaClass_AcTitleMenu_PropNameText = "\x00\xFFicon\x00\xFFtitle\x00str",
 
-    .icon_str = ALIGNED_STRING("icon"),
-
-    .title_str_2 = "title",
-
-    .str_str = "str",
-
-    .ptrs_41 = {
-        SELF(font_str_4),
-        SELF(fontcolor_str_4),
-        SELF(align_str_4),
-        SELF(editsw_str_3),
-        SELF(str_691),
+    .NakaClass_PsEditSwBox_PropNames = {
+        SELF(NakaClass_PsEditSwBox_PropNameText[26]), SELF(NakaClass_PsEditSwBox_PropNameText[16]), SELF(NakaClass_PsEditSwBox_PropNameText[10]), SELF(NakaClass_PsEditSwBox_PropNameText[2]),
+        SELF(NakaClass_PsEditSwBox_PropNameText),
     },
 
-    .str_691 = ALIGNED_STRING(""),
+    .NakaClass_PsEditSwBox_PropNameText = "\x00\xFF" "editsw\x00\xFF" "align\x00" "fontcolor\x00" "font\x00\xFF",
 
-    .editsw_str_3 = ALIGNED_STRING("editsw"),
-
-    .align_str_4 = "align",
-
-    .fontcolor_str_4 = "fontcolor",
-
-    .font_str_4 = ALIGNED_STRING("font"),
-
-    .style_str_ptr = SELF(style_str),
-
-    .ptr_35ee = SELF(str_696),
-
-    .str_696 = ALIGNED_STRING(""),
-
-    .style_str = "style",
-
-    .ptrs_42 = {
-        SELF(style_str_2),
-        SELF(func_str_6),
-        SELF(str_698),
+    .NakaClass_AcIndexEditSw_PropNames = {
+        SELF(NakaClass_AcIndexEditSw_PropNameText[2]), SELF(NakaClass_AcIndexEditSw_PropNameText),
     },
 
-    .str_698 = ALIGNED_STRING(""),
+    .NakaClass_AcIndexEditSw_PropNameText = "\x00\xFFstyle",
 
-    .func_str_6 = ALIGNED_STRING("func"),
-
-    .style_str_2 = "style",
-
-    .editsw2_str_ptr = SELF(editsw2_str),
-
-    .ptr_3618 = SELF(str_701),
-
-    .str_701 = ALIGNED_STRING(""),
-
-    .editsw2_str = "editsw2",
-
-    .style_str_3_ptr = SELF(style_str_3),
-
-    .ptr_362a = SELF(str_703),
-
-    .str_703 = ALIGNED_STRING(""),
-
-    .style_str_3 = "style",
-
-    .ptrs_43 = {
-        SELF(style_str_4),
-        SELF(func_str_7),
-        SELF(str_705),
+    .NakaClass_AcFuncEditSw_PropNames = {
+        SELF(NakaClass_AcFuncEditSw_PropNameText[8]), SELF(NakaClass_AcFuncEditSw_PropNameText[2]), SELF(NakaClass_AcFuncEditSw_PropNameText),
     },
 
-    .str_705 = ALIGNED_STRING(""),
+    .NakaClass_AcFuncEditSw_PropNameText = "\x00\xFF" "func\x00\xFFstyle",
 
-    .func_str_7 = ALIGNED_STRING("func"),
-
-    .style_str_4 = "style",
-
-    .page_str_ptr = SELF(page_str),
-
-    .ptr_3654 = SELF(str_708),
-
-    .str_708 = ALIGNED_STRING(""),
-
-    .page_str = ALIGNED_STRING("page"),
-
-    .ptrs_44 = {
-        SELF(pagemin_str),
-        SELF(pagemax_str),
-        SELF(str_710),
+    .NakaClass_PsWideESBox_PropNames = {
+        SELF(NakaClass_PsWideESBox_PropNameText[2]), SELF(NakaClass_PsWideESBox_PropNameText),
     },
 
-    .str_710 = ALIGNED_STRING(""),
+    .NakaClass_PsWideESBox_PropNameText = "\x00\xFF" "editsw2",
 
-    .pagemax_str = "pagemax",
-
-    .pagemin_str = "pagemin",
-
-    .ptrs_45 = {
-        SELF(font_str_5),
-        SELF(stron_str),
-        SELF(stroff_str),
-        SELF(onoff_str_2),
-        SELF(editsw_str_4),
-        SELF(str_713),
+    .NakaClass_AcIndexWideES_PropNames = {
+        SELF(NakaClass_AcIndexWideES_PropNameText[2]), SELF(NakaClass_AcIndexWideES_PropNameText),
     },
 
-    .str_713 = ALIGNED_STRING(""),
+    .NakaClass_AcIndexWideES_PropNameText = "\x00\xFFstyle",
 
-    .editsw_str_4 = ALIGNED_STRING("editsw"),
-
-    .onoff_str_2 = "onoff",
-
-    .stroff_str = ALIGNED_STRING("stroff"),
-
-    .stron_str = "stron",
-
-    .font_str_5 = ALIGNED_STRING("font"),
-
-    .ptr_36ba = SELF(str_719),
-
-    .str_719 = ALIGNED_STRING(""),
-
-    .ptrs_46 = {
-        SELF(page_str_2),
-        SELF(window_str),
-        SELF(str_720),
+    .NakaClass_AcFuncWideES_PropNames = {
+        SELF(NakaClass_AcFuncWideES_PropNameText[8]), SELF(NakaClass_AcFuncWideES_PropNameText[2]), SELF(NakaClass_AcFuncWideES_PropNameText),
     },
 
-    .str_720 = ALIGNED_STRING(""),
+    .NakaClass_AcFuncWideES_PropNameText = "\x00\xFF" "func\x00\xFFstyle",
 
-    .window_str = ALIGNED_STRING("window"),
-
-    .page_str_2 = ALIGNED_STRING("page"),
-
-    .func_str_8_ptr = SELF(func_str_8),
-
-    .ptr_36e0 = SELF(str_723),
-
-    .str_723 = ALIGNED_STRING(""),
-
-    .func_str_8 = ALIGNED_STRING("func"),
-
-    .part_str_ptr = SELF(part_str),
-
-    .ptr_36f0 = SELF(str_725),
-
-    .str_725 = ALIGNED_STRING(""),
-
-    .part_str = ALIGNED_STRING("part"),
-
-    .ptrs_47 = {
-        SELF(str_str_2),
-        SELF(font_str_6),
-        SELF(fontcolor_str_5),
-        SELF(str_727),
+    .NakaClass_PsPageBox_PropNames = {
+        SELF(NakaClass_PsPageBox_PropNameText[2]), SELF(NakaClass_PsPageBox_PropNameText),
     },
 
-    .str_727 = ALIGNED_STRING(""),
+    .NakaClass_PsPageBox_PropNameText = "\x00\xFFpage\x00\xFF",
 
-    .fontcolor_str_5 = "fontcolor",
-
-    .font_str_6 = ALIGNED_STRING("font"),
-
-    .str_str_2 = "str",
-
-    .bmp_str_ptr = SELF(bmp_str),
-
-    .ptr_3726 = SELF(str_731),
-
-    .str_731 = ALIGNED_STRING(""),
-
-    .bmp_str = "bmp",
-
-    .icon_str_2_ptr = SELF(icon_str_2),
-
-    .ptr_3734 = SELF(str_733),
-
-    .str_733 = ALIGNED_STRING(""),
-
-    .icon_str_2 = ALIGNED_STRING("icon"),
-
-    .ptrs_48 = {
-        SELF(color_str_2),
-        SELF(linemode_str),
-        SELF(str_735),
+    .NakaClass_AcWindowPage_PropNames = {
+        SELF(NakaClass_AcWindowPage_PropNameText[10]), SELF(NakaClass_AcWindowPage_PropNameText[2]), SELF(NakaClass_AcWindowPage_PropNameText),
     },
 
-    .str_735 = ALIGNED_STRING(""),
+    .NakaClass_AcWindowPage_PropNameText = "\x00\xFFpagemax\x00pagemin",
 
-    .linemode_str = ALIGNED_STRING("linemode"),
-
-    .color_str_2 = "color",
-
-    .ptrs_49 = {
-        SELF(frame_str),
-        SELF(width_str),
-        SELF(color_str_3),
-        SELF(str_738),
+    .NakaClass_PsToggleBox_PropNames = {
+        SELF(NakaClass_PsToggleBox_PropNameText[30]), SELF(NakaClass_PsToggleBox_PropNameText[24]), SELF(NakaClass_PsToggleBox_PropNameText[16]), SELF(NakaClass_PsToggleBox_PropNameText[10]),
+        SELF(NakaClass_PsToggleBox_PropNameText[2]), SELF(NakaClass_PsToggleBox_PropNameText),
     },
 
-    .str_738 = ALIGNED_STRING(""),
+    .NakaClass_PsToggleBox_PropNameText = "\x00\xFF" "editsw\x00\xFFonoff\x00stroff\x00\xFFstron\x00" "font\x00\xFF",
 
-    .color_str_3 = "color",
-
-    .width_str = "width",
-
-    .frame_str = "frame",
-
-    .ptrs_50 = {
-        SELF(editsw_str_5),
-        SELF(func_str_9),
-        SELF(index_str_2),
-        SELF(str_742),
+    .NakaClass_PsInvisibleBox_PropNames = {
+        SELF(NakaClass_PsInvisibleBox_PropNameText),
     },
 
-    .str_742 = ALIGNED_STRING(""),
+    .NakaClass_PsInvisibleBox_PropNameText = "\x00\xFF",
 
-    .index_str_2 = "index",
-
-    .func_str_9 = ALIGNED_STRING("func"),
-
-    .editsw_str_5 = ALIGNED_STRING("editsw"),
-
-    .ptrs_51 = {
-        SELF(color_str_4),
-        SELF(border_str_2),
-        SELF(str_746),
+    .NakaClass_IvPageControl_PropNames = {
+        SELF(NakaClass_IvPageControl_PropNameText[10]), SELF(NakaClass_IvPageControl_PropNameText[2]), SELF(NakaClass_IvPageControl_PropNameText),
     },
 
-    .str_746 = ALIGNED_STRING(""),
+    .NakaClass_IvPageControl_PropNameText = "\x00\xFFwindow\x00\xFFpage\x00\xFF",
 
-    .border_str_2 = ALIGNED_STRING("border"),
-
-    .color_str_4 = "color",
-
-    .ptr_37c4 = SELF(str_749),
-
-    .str_749 = ALIGNED_STRING(""),
-
-    .ptrs_52 = {
-        SELF(exit_str),
-        SELF(window_str_2),
-        SELF(str_750),
+    .NakaClass_IvMainEditSw_PropNames = {
+        SELF(NakaClass_IvMainEditSw_PropNameText[2]), SELF(NakaClass_IvMainEditSw_PropNameText),
     },
 
-    .str_750 = ALIGNED_STRING(""),
+    .NakaClass_IvMainEditSw_PropNameText = "\x00\xFF" "func\x00\xFF",
 
-    .window_str_2 = ALIGNED_STRING("window"),
-
-    .exit_str = ALIGNED_STRING("exit"),
-
-    .ptrs_53 = {
-        SELF(title_str_3),
-        SELF(icon_str_3),
-        SELF(str_753),
+    .NakaClass_AcSoundName_PropNames = {
+        SELF(NakaClass_AcSoundName_PropNameText[2]), SELF(NakaClass_AcSoundName_PropNameText),
     },
 
-    .str_753 = ALIGNED_STRING(""),
+    .NakaClass_AcSoundName_PropNameText = "\x00\xFFpart\x00\xFF",
 
-    .icon_str_3 = ALIGNED_STRING("icon"),
-
-    .title_str_3 = "title",
-
-    .ptrs_54 = {
-        SELF(modal_str),
-        SELF(parent_str_2),
-        SELF(child_str),
-        SELF(str_756),
+    .NakaClass_Label_PropNames = {
+        SELF(NakaClass_Label_PropNameText[18]), SELF(NakaClass_Label_PropNameText[12]), SELF(NakaClass_Label_PropNameText[2]), SELF(NakaClass_Label_PropNameText),
     },
 
-    .str_756 = ALIGNED_STRING(""),
+    .NakaClass_Label_PropNameText = "\x00\xFF" "fontcolor\x00" "font\x00\xFFstr",
 
-    .child_str = "child",
-
-    .parent_str_2 = ALIGNED_STRING("parent"),
-
-    .modal_str = "modal",
-
-    .ptrs_55 = {
-        SELF(text_str),
-        SELF(font_str_7),
-        SELF(fontcolor_str_6),
-        SELF(alignment_str),
-        SELF(lines_str),
-        SELF(str_760),
+    .NakaClass_Bitmap_PropNames = {
+        SELF(NakaClass_Bitmap_PropNameText[2]), SELF(NakaClass_Bitmap_PropNameText),
     },
 
-    .str_760 = ALIGNED_STRING(""),
+    .NakaClass_Bitmap_PropNameText = "\x00\xFF" "bmp",
 
-    .lines_str = "lines",
-
-    .alignment_str = "alignment",
-
-    .fontcolor_str_6 = "fontcolor",
-
-    .font_str_7 = ALIGNED_STRING("font"),
-
-    .text_str = ALIGNED_STRING("text"),
-
-    .ptrs_56 = {
-        SELF(str_str_3),
-        SELF(font_str_8),
-        SELF(fontcolor_str_7),
-        SELF(alignment_str_2),
-        SELF(str_766),
+    .NakaClass_Icon_PropNames = {
+        SELF(NakaClass_Icon_PropNameText[2]), SELF(NakaClass_Icon_PropNameText),
     },
 
-    .str_766 = ALIGNED_STRING(""),
+    .NakaClass_Icon_PropNameText = "\x00\xFFicon\x00\xFF",
 
-    .alignment_str_2 = "alignment",
-
-    .fontcolor_str_7 = "fontcolor",
-
-    .font_str_8 = ALIGNED_STRING("font"),
-
-    .str_str_3 = "str",
-
-    .ptrs_57 = {
-        SELF(mode_str),
-        SELF(proc_str_5),
-        SELF(title_str_4),
-        SELF(user_str_3),
-        SELF(name_str_9),
-        SELF(str_771),
+    .NakaClass_Line_PropNames = {
+        SELF(NakaClass_Line_PropNameText[12]), SELF(NakaClass_Line_PropNameText[2]), SELF(NakaClass_Line_PropNameText),
     },
 
-    .str_771 = ALIGNED_STRING(""),
+    .NakaClass_Line_PropNameText = "\x00\xFFlinemode\x00\xFF" "color",
 
-    .name_str_9 = ALIGNED_STRING("name"),
-
-    .user_str_3 = ALIGNED_STRING("user"),
-
-    .title_str_4 = "title",
-
-    .proc_str_5 = ALIGNED_STRING("proc"),
-
-    .mode_str = ALIGNED_STRING("mode"),
-
-    .ptrs_58 = {
-        SELF(title_str_5),
-        SELF(proc_str_6),
-        SELF(top_str_2),
-        SELF(user_str_4),
-        SELF(name_str_10),
-        SELF(str_777),
+    .NakaClass_Frame_PropNames = {
+        SELF(NakaClass_Frame_PropNameText[14]), SELF(NakaClass_Frame_PropNameText[8]), SELF(NakaClass_Frame_PropNameText[2]), SELF(NakaClass_Frame_PropNameText),
     },
 
-    .str_777 = ALIGNED_STRING(""),
+    .NakaClass_Frame_PropNameText = "\x00\xFF" "color\x00width\x00" "frame",
 
-    .name_str_10 = ALIGNED_STRING("name"),
-
-    .user_str_4 = ALIGNED_STRING("user"),
-
-    .top_str_2 = "top",
-
-    .proc_str_6 = ALIGNED_STRING("proc"),
-
-    .title_str_5 = "title",
-
-    .ptr_3908 = SELF(str_783),
-
-    .str_783 = ALIGNED_STRING(""),
-
-    .ptr_390e = SELF(str_784),
-
-    .str_784 = ALIGNED_STRING(""),
-
-    .ptrs_59 = {
-        SELF(part_str_2),
-        SELF(editsw_str_6),
-        SELF(str_785),
+    .NakaClass_EditSw_PropNames = {
+        SELF(NakaClass_EditSw_PropNameText[14]), SELF(NakaClass_EditSw_PropNameText[8]), SELF(NakaClass_EditSw_PropNameText[2]), SELF(NakaClass_EditSw_PropNameText),
     },
 
-    .str_785 = ALIGNED_STRING(""),
+    .NakaClass_EditSw_PropNameText = "\x00\xFFindex\x00" "func\x00\xFF" "editsw\x00\xFF",
 
-    .editsw_str_6 = ALIGNED_STRING("editsw"),
-
-    .part_str_2 = ALIGNED_STRING("part"),
-
-    .ptrs_60 = {
-        SELF(str_str_4),
-        SELF(icon_str_4),
-        SELF(str_788),
+    .NakaClass_Box_PropNames = {
+        SELF(NakaClass_Box_PropNameText[10]), SELF(NakaClass_Box_PropNameText[2]), SELF(NakaClass_Box_PropNameText),
     },
 
-    .str_788 = ALIGNED_STRING(""),
+    .NakaClass_Box_PropNameText = "\x00\xFF" "border\x00\xFF" "color",
 
-    .icon_str_4 = ALIGNED_STRING("icon"),
-
-    .str_str_4 = "str",
-
-    .ptrs_61 = {
-        SELF(style_str_5),
-        SELF(str_str_5),
-        SELF(str_791),
+    .NakaClass_GroupBox_PropNames = {
+        SELF(NakaClass_GroupBox_PropNameText),
     },
 
-    .str_791 = ALIGNED_STRING(""),
+    .NakaClass_GroupBox_PropNameText = "\x00\xFF",
 
-    .str_str_5 = "str",
-
-    .style_str_5 = "style",
-
-    .ptrs_62 = {
-        SELF(style_str_6),
-        SELF(str_str_6),
-        SELF(str_794),
+    .NakaClass_Screen_PropNames = {
+        SELF(NakaClass_Screen_PropNameText[10]), SELF(NakaClass_Screen_PropNameText[2]), SELF(NakaClass_Screen_PropNameText),
     },
 
-    .str_794 = ALIGNED_STRING(""),
+    .NakaClass_Screen_PropNameText = "\x00\xFFwindow\x00\xFF" "exit\x00\xFF",
 
-    .str_str_6 = "str",
-
-    .style_str_6 = "style",
-
-    .ptrs_63 = {
-        SELF(str_str_7),
-        SELF(mode_str_2),
-        SELF(icon_str_5),
-        SELF(str_797),
+    .NakaClass_TtlScreen_PropNames = {
+        SELF(NakaClass_TtlScreen_PropNameText[8]), SELF(NakaClass_TtlScreen_PropNameText[2]), SELF(NakaClass_TtlScreen_PropNameText),
     },
 
-    .str_797 = ALIGNED_STRING(""),
+    .NakaClass_TtlScreen_PropNameText = "\x00\xFFicon\x00\xFFtitle",
 
-    .icon_str_5 = ALIGNED_STRING("icon"),
-
-    .mode_str_2 = ALIGNED_STRING("mode"),
-
-    .str_str_7 = "str",
-
-    .ptrs_64 = {
-        SELF(str_str_8),
-        SELF(screen_str),
-        SELF(icon_str_6),
-        SELF(str_801),
+    .NakaClass_Window_PropNames = {
+        SELF(NakaClass_Window_PropNameText[16]), SELF(NakaClass_Window_PropNameText[8]), SELF(NakaClass_Window_PropNameText[2]), SELF(NakaClass_Window_PropNameText),
     },
 
-    .str_801 = ALIGNED_STRING(""),
+    .NakaClass_Window_PropNameText = "\x00\xFF" "child\x00parent\x00\xFFmodal",
 
-    .icon_str_6 = ALIGNED_STRING("icon"),
-
-    .screen_str = ALIGNED_STRING("screen"),
-
-    .str_str_8 = "str",
-
-    .ptrs_65 = {
-        SELF(str_str_9),
-        SELF(window_str_3),
-        SELF(icon_str_7),
-        SELF(str_805),
+    .NakaClass_TextBox_PropNames = {
+        SELF(NakaClass_TextBox_PropNameText[34]), SELF(NakaClass_TextBox_PropNameText[28]), SELF(NakaClass_TextBox_PropNameText[18]), SELF(NakaClass_TextBox_PropNameText[8]),
+        SELF(NakaClass_TextBox_PropNameText[2]), SELF(NakaClass_TextBox_PropNameText),
     },
 
-    .str_805 = ALIGNED_STRING(""),
+    .NakaClass_TextBox_PropNameText = "\x00\xFFlines\x00" "alignment\x00" "fontcolor\x00" "font\x00\xFFtext\x00\xFF",
 
-    .icon_str_7 = ALIGNED_STRING("icon"),
-
-    .window_str_3 = ALIGNED_STRING("window"),
-
-    .str_str_9 = "str",
-
-    .ptrs_66 = {
-        SELF(func_str_10),
-        SELF(data_str_9),
-        SELF(str_809),
+    .NakaClass_StringBox_PropNames = {
+        SELF(NakaClass_StringBox_PropNameText[28]), SELF(NakaClass_StringBox_PropNameText[22]), SELF(NakaClass_StringBox_PropNameText[12]), SELF(NakaClass_StringBox_PropNameText[2]),
+        SELF(NakaClass_StringBox_PropNameText),
     },
 
-    .str_809 = ALIGNED_STRING(""),
+    .NakaClass_StringBox_PropNameText = "\x00\xFF" "alignment\x00" "fontcolor\x00" "font\x00\xFFstr",
 
-    .data_str_9 = ALIGNED_STRING("data"),
-
-    .func_str_10 = ALIGNED_STRING("func"),
-
-    .func_str_11_ptr = SELF(func_str_11),
-
-    .ptr_3a00 = SELF(str_812),
-
-    .str_812 = ALIGNED_STRING(""),
-
-    .func_str_11 = ALIGNED_STRING("func"),
-
-    .editsw2_str_2_ptr = SELF(editsw2_str_2),
-
-    .ptr_3a10 = SELF(str_814),
-
-    .str_814 = ALIGNED_STRING(""),
-
-    .editsw2_str_2 = "editsw2",
-
-    .ptr_3a1e = SELF(str_816),
-
-    .str_816 = ALIGNED_STRING(""),
-
-    .ptr_3a24 = SELF(str_817),
-
-    .str_817 = ALIGNED_STRING(""),
-
-    .mode_str_3_ptr = SELF(mode_str_3),
-
-    .ptr_3a2e = SELF(str_818),
-
-    .str_818 = ALIGNED_STRING(""),
-
-    .mode_str_3 = ALIGNED_STRING("mode"),
-
-    .screen_str_2_ptr = SELF(screen_str_2),
-
-    .ptr_3a3e = SELF(str_820),
-
-    .str_820 = ALIGNED_STRING(""),
-
-    .screen_str_2 = ALIGNED_STRING("screen"),
-
-    .window_str_4_ptr = SELF(window_str_4),
-
-    .ptr_3a50 = SELF(str_822),
-
-    .str_822 = ALIGNED_STRING(""),
-
-    .window_str_4 = ALIGNED_STRING("window"),
-
-    .ptr_3a5e = SELF(str_824),
-
-    .str_824 = ALIGNED_STRING(""),
-
-    .cursor_str_ptr = SELF(cursor_str),
-
-    .ptr_3a68 = SELF(str_825),
-
-    .str_825 = ALIGNED_STRING(""),
-
-    .cursor_str = ALIGNED_STRING("cursor"),
-
-    .func_str_12_ptr = SELF(func_str_12),
-
-    .ptr_3a7a = SELF(str_827),
-
-    .str_827 = ALIGNED_STRING(""),
-
-    .func_str_12 = ALIGNED_STRING("func"),
-
-    .ptrs_67 = {
-        SELF(index_str_3),
-        SELF(tag_str),
-        SELF(str_829),
+    .NakaClass_ModeEdit_PropNames = {
+        SELF(NakaClass_ModeEdit_PropNameText[26]), SELF(NakaClass_ModeEdit_PropNameText[20]), SELF(NakaClass_ModeEdit_PropNameText[14]), SELF(NakaClass_ModeEdit_PropNameText[8]),
+        SELF(NakaClass_ModeEdit_PropNameText[2]), SELF(NakaClass_ModeEdit_PropNameText),
     },
 
-    .str_829 = ALIGNED_STRING(""),
+    .NakaClass_ModeEdit_PropNameText = "\x00\xFFname\x00\xFFuser\x00\xFFtitle\x00proc\x00\xFFmode\x00\xFF",
 
-    .tag_str = "tag",
-
-    .index_str_3 = "index",
-
-    .ptrs_68 = {
-        SELF(func_str_13),
-        SELF(data_str_10),
-        SELF(str_832),
+    .NakaClass_TitleEdit_PropNames = {
+        SELF(NakaClass_TitleEdit_PropNameText[24]), SELF(NakaClass_TitleEdit_PropNameText[18]), SELF(NakaClass_TitleEdit_PropNameText[14]), SELF(NakaClass_TitleEdit_PropNameText[8]),
+        SELF(NakaClass_TitleEdit_PropNameText[2]), SELF(NakaClass_TitleEdit_PropNameText),
     },
 
-    .str_832 = ALIGNED_STRING(""),
+    .NakaClass_TitleEdit_PropNameText = "\x00\xFFname\x00\xFFuser\x00\xFFtop\x00proc\x00\xFFtitle",
 
-    .data_str_10 = ALIGNED_STRING("data"),
-
-    .func_str_13 = ALIGNED_STRING("func"),
-
-    .ptrs_69 = {
-        SELF(font_str_9),
-        SELF(fontcolor_str_8),
-        SELF(align_str_5),
-        SELF(editsw_str_7),
-        SELF(selected_str_3),
-        SELF(tag_str_2),
-        SELF(str_835),
+    .NakaClass_AcRhythmName_PropNames = {
+        SELF(NakaClass_AcRhythmName_PropNameText),
     },
 
-    .str_835 = ALIGNED_STRING(""),
+    .NakaClass_AcRhythmName_PropNameText = "\x00\xFF",
 
-    .tag_str_2 = "tag",
-
-    .selected_str_3 = ALIGNED_STRING("selected"),
-
-    .editsw_str_7 = ALIGNED_STRING("editsw"),
-
-    .align_str_5 = "align",
-
-    .fontcolor_str_8 = "fontcolor",
-
-    .font_str_9 = ALIGNED_STRING("font"),
-
-    .ptr_3b02 = SELF(str_str_10),
-
-    .ptr_3b06 = SELF(str_842),
-
-    .str_842 = ALIGNED_STRING(""),
-
-    .str_str_10 = "str",
-
-    .func_str_14_ptr = SELF(func_str_14),
-
-    .ptr_3b14 = SELF(str_844),
-
-    .str_844 = ALIGNED_STRING(""),
-
-    .func_str_14 = ALIGNED_STRING("func"),
-
-    .ptrs_70 = {
-        SELF(font_str_10),
-        SELF(fontcolor_str_9),
-        SELF(align_str_6),
-        SELF(row_str),
-        SELF(selected_str_4),
-        SELF(str_846),
+    .NakaClass_AcPmemName_PropNames = {
+        SELF(NakaClass_AcPmemName_PropNameText),
     },
 
-    .str_846 = ALIGNED_STRING(""),
+    .NakaClass_AcPmemName_PropNameText = "\x00\xFF",
 
-    .selected_str_4 = ALIGNED_STRING("selected"),
-
-    .row_str = "row",
-
-    .align_str_6 = "align",
-
-    .fontcolor_str_9 = "fontcolor",
-
-    .font_str_10 = ALIGNED_STRING("font"),
-
-    .ptrs_71 = {
-        SELF(font_str_11),
-        SELF(fontcolor_str_10),
-        SELF(align_str_7),
-        SELF(row_str_2),
-        SELF(col_str),
-        SELF(vertline_str),
-        SELF(selrow_str),
-        SELF(selcol_str),
-        SELF(pcol_str),
-        SELF(prow_str),
-        SELF(crow_str),
-        SELF(str_852),
+    .NakaClass_AcMixerVol_PropNames = {
+        SELF(NakaClass_AcMixerVol_PropNameText[10]), SELF(NakaClass_AcMixerVol_PropNameText[2]), SELF(NakaClass_AcMixerVol_PropNameText),
     },
 
-    .str_852 = ALIGNED_STRING(""),
+    .NakaClass_AcMixerVol_PropNameText = "\x00\xFF" "editsw\x00\xFFpart\x00\xFF",
 
-    .crow_str = ALIGNED_STRING("crow"),
-
-    .prow_str = ALIGNED_STRING("prow"),
-
-    .pcol_str = ALIGNED_STRING("pcol"),
-
-    .selcol_str = ALIGNED_STRING("selcol"),
-
-    .selrow_str = ALIGNED_STRING("selrow"),
-
-    .vertline_str = ALIGNED_STRING("vertline"),
-
-    .col_str = "col",
-
-    .row_str_2 = "row",
-
-    .align_str_7 = "align",
-
-    .fontcolor_str_10 = "fontcolor",
-
-    .font_str_11 = ALIGNED_STRING("font"),
-
-    .ptrs_72 = {
-        SELF(list_str),
-        SELF(dial_str_2),
-        SELF(str_864),
+    .NakaClass_VwMenuBox_PropNames = {
+        SELF(NakaClass_VwMenuBox_PropNameText[8]), SELF(NakaClass_VwMenuBox_PropNameText[2]), SELF(NakaClass_VwMenuBox_PropNameText),
     },
 
-    .str_864 = ALIGNED_STRING(""),
+    .NakaClass_VwMenuBox_PropNameText = "\x00\xFFicon\x00\xFFstr",
 
-    .dial_str_2 = ALIGNED_STRING("dial"),
-
-    .list_str = ALIGNED_STRING("list"),
-
-    .ptrs_73 = {
-        SELF(fixedcol_str),
-        SELF(fixedrow_str),
-        SELF(func_str_15),
-        SELF(str_867),
+    .NakaClass_VwEditSwBox_PropNames = {
+        SELF(NakaClass_VwEditSwBox_PropNameText[6]), SELF(NakaClass_VwEditSwBox_PropNameText[2]), SELF(NakaClass_VwEditSwBox_PropNameText),
     },
 
-    .str_867 = ALIGNED_STRING(""),
+    .NakaClass_VwEditSwBox_PropNameText = "\x00\xFFstr\x00style",
 
-    .func_str_15 = ALIGNED_STRING("func"),
-
-    .fixedrow_str = ALIGNED_STRING("fixedrow"),
-
-    .fixedcol_str = ALIGNED_STRING("fixedcol"),
-
-    .page_str_3_ptr = SELF(page_str_3),
-
-    .ptr_3c24 = SELF(str_871),
-
-    .str_871 = ALIGNED_STRING(""),
-
-    .page_str_3 = ALIGNED_STRING("page"),
-
-    .ptrs_74 = {
-        SELF(track_str),
-        SELF(onoff_str_3),
-        SELF(part_str_3),
-        SELF(recplay_str),
-        SELF(str_873),
+    .NakaClass_VwWideESBox_PropNames = {
+        SELF(NakaClass_VwWideESBox_PropNameText[6]), SELF(NakaClass_VwWideESBox_PropNameText[2]), SELF(NakaClass_VwWideESBox_PropNameText),
     },
 
-    .str_873 = ALIGNED_STRING(""),
+    .NakaClass_VwWideESBox_PropNameText = "\x00\xFFstr\x00style",
 
-    .recplay_str = "recplay",
-
-    .part_str_3 = ALIGNED_STRING("part"),
-
-    .onoff_str_3 = "onoff",
-
-    .track_str = "track",
-
-    .ptr_3c60 = SELF(str_878),
-
-    .str_878 = ALIGNED_STRING(""),
-
-    .ptr_3c66 = SELF(str_879),
-
-    .str_879 = ALIGNED_STRING(""),
-
-    .ptr_3c6c = SELF(str_880),
-
-    .str_880 = ALIGNED_STRING(""),
-
-    .ptr_3c72 = SELF(str_881),
-
-    .str_881 = ALIGNED_STRING(""),
-
-    .adr_str_ptr = SELF(adr_str),
-
-    .ptr_3c7c = SELF(str_882),
-
-    .str_882 = ALIGNED_STRING(""),
-
-    .adr_str = "adr",
-
-    .time_str_ptr = SELF(time_str),
-
-    .ptr_3c8a = SELF(str_884),
-
-    .str_884 = ALIGNED_STRING(""),
-
-    .time_str = ALIGNED_STRING("time"),
-
-    .ptr_3c96 = SELF(str_886),
-
-    .str_886 = ALIGNED_STRING(""),
-
-    .ptr_3c9c = SELF(str_887),
-
-    .str_887 = ALIGNED_STRING(""),
-
-    .ptr_3ca2 = SELF(str_888),
-
-    .str_888 = ALIGNED_STRING(""),
-
-    .ptr_3ca8 = SELF(str_889),
-
-    .str_889 = ALIGNED_STRING(""),
-
-    .ptr_3cae = SELF(str_890),
-
-    .str_890 = ALIGNED_STRING(""),
-
-    .func_str_16_ptr = SELF(func_str_16),
-
-    .ptr_3cb8 = SELF(str_891),
-
-    .str_891 = ALIGNED_STRING(""),
-
-    .func_str_16 = ALIGNED_STRING("func"),
-
-    .ptrs_75 = {
-        SELF(font_str_12),
-        SELF(fontcolor_str_11),
-        SELF(alignment_str_3),
-        SELF(lines_str_2),
-        SELF(str_893),
+    .NakaClass_AcModeMenu_PropNames = {
+        SELF(NakaClass_AcModeMenu_PropNameText[14]), SELF(NakaClass_AcModeMenu_PropNameText[8]), SELF(NakaClass_AcModeMenu_PropNameText[2]), SELF(NakaClass_AcModeMenu_PropNameText),
     },
 
-    .str_893 = ALIGNED_STRING(""),
+    .NakaClass_AcModeMenu_PropNameText = "\x00\xFFicon\x00\xFFmode\x00\xFFstr",
 
-    .lines_str_2 = "lines",
+    .NakaClass_AcScreenMenu_PropNames = {
+        SELF(NakaClass_AcScreenMenu_PropNameText[16]), SELF(NakaClass_AcScreenMenu_PropNameText[8]), SELF(NakaClass_AcScreenMenu_PropNameText[2]), SELF(NakaClass_AcScreenMenu_PropNameText),
+    },
 
-    .alignment_str_3 = "alignment",
+    .NakaClass_AcScreenMenu_PropNameText = "\x00\xFFicon\x00\xFFscreen\x00\xFFstr",
 
-    .fontcolor_str_11 = "fontcolor",
+    .NakaClass_AcWindowMenu_PropNames = {
+        SELF(NakaClass_AcWindowMenu_PropNameText[16]), SELF(NakaClass_AcWindowMenu_PropNameText[8]), SELF(NakaClass_AcWindowMenu_PropNameText[2]), SELF(NakaClass_AcWindowMenu_PropNameText),
+    },
 
-    .font_str_12 = ALIGNED_STRING("font"),
+    .NakaClass_AcWindowMenu_PropNameText = "\x00\xFFicon\x00\xFFwindow\x00\xFFstr",
 
-    .func_str_17_ptr = SELF(func_str_17),
+    .NakaClass_AcBitEditBox_PropNames = {
+        SELF(NakaClass_AcBitEditBox_PropNameText[8]), SELF(NakaClass_AcBitEditBox_PropNameText[2]), SELF(NakaClass_AcBitEditBox_PropNameText),
+    },
 
-    .ptr_3cfe = SELF(str_898),
+    .NakaClass_AcBitEditBox_PropNameText = "\x00\xFF" "data\x00\xFF" "func\x00\xFF",
 
-    .str_898 = ALIGNED_STRING(""),
+    .NakaClass_AcFuncToggle_PropNames = {
+        SELF(NakaClass_AcFuncToggle_PropNameText[2]), SELF(NakaClass_AcFuncToggle_PropNameText),
+    },
 
-    .func_str_17 = ALIGNED_STRING("func"),
+    .NakaClass_AcFuncToggle_PropNameText = "\x00\xFF" "func\x00\xFF",
 
-    .ptr_3d0a = SELF(str_900),
+    .NakaClass_PsWideToggle_PropNames = {
+        SELF(NakaClass_PsWideToggle_PropNameText[2]), SELF(NakaClass_PsWideToggle_PropNameText),
+    },
 
-    .str_900 = ALIGNED_STRING(""),
+    .NakaClass_PsWideToggle_PropNameText = "\x00\xFF" "editsw2",
 
-    .ptr_3d10 = SELF(str_901),
+    .NakaClass_DbMemo_PropNames = {
+        SELF(NakaClass_DbMemo_PropNameText),
+    },
 
-    .str_901 = ALIGNED_STRING(""),
+    .NakaClass_DbMemo_PropNameText = "\x00\xFF",
 
-    .func_str_18_ptr = SELF(func_str_18),
+    .NakaClass_IvExit_PropNames = {
+        SELF(NakaClass_IvExit_PropNameText),
+    },
 
-    .ptr_3d1a = SELF(str_902),
+    .NakaClass_IvExit_PropNameText = "\x00\xFF",
 
-    .str_902 = ALIGNED_STRING(""),
+    .NakaClass_IvExitMode_PropNames = {
+        SELF(NakaClass_IvExitMode_PropNameText[2]), SELF(NakaClass_IvExitMode_PropNameText),
+    },
 
-    .func_str_18 = ALIGNED_STRING("func"),
+    .NakaClass_IvExitMode_PropNameText = "\x00\xFFmode\x00\xFF",
 
-    .ptr_3d26 = SELF(str_904),
+    .NakaClass_IvExitScreen_PropNames = {
+        SELF(NakaClass_IvExitScreen_PropNameText[2]), SELF(NakaClass_IvExitScreen_PropNameText),
+    },
 
-    .str_904 = ALIGNED_STRING(""),
+    .NakaClass_IvExitScreen_PropNameText = "\x00\xFFscreen\x00\xFF",
 
-    .ptr_3d2c = SELF(str_905),
+    .NakaClass_IvFixWin_PropNames = {
+        SELF(NakaClass_IvFixWin_PropNameText[2]), SELF(NakaClass_IvFixWin_PropNameText),
+    },
 
-    .str_905 = ALIGNED_STRING(""),
+    .NakaClass_IvFixWin_PropNameText = "\x00\xFFwindow\x00\xFF",
 
-    .file_str_ptr = SELF(file_str),
+    .NakaClass_AcNamingWindow_PropNames = {
+        SELF(NakaClass_AcNamingWindow_PropNameText),
+    },
 
-    .ptr_3d36 = SELF(str_906),
+    .NakaClass_AcNamingWindow_PropNameText = "\x00\xFF",
 
-    .str_906 = ALIGNED_STRING(""),
+    .NakaClass_PsCursorBox_PropNames = {
+        SELF(NakaClass_PsCursorBox_PropNameText[2]), SELF(NakaClass_PsCursorBox_PropNameText),
+    },
 
-    .file_str = ALIGNED_STRING("file"),
+    .NakaClass_PsCursorBox_PropNameText = "\x00\xFF" "cursor\x00\xFF",
 
-    .classdef_160_0 = { .proc = NAKA_ADDR(ObjectProc), .parent = 0xFFFFFFFF, .allsize = 2, .selfsize = 0, .name = 0x00EADA8A, .propdata = 0x00EADA88, .propname = SELF(ptr_31e8) },
+    .NakaClass_IvNaming_PropNames = {
+        SELF(NakaClass_IvNaming_PropNameText[2]), SELF(NakaClass_IvNaming_PropNameText),
+    },
 
-    .classdef_160_1 = { .proc = NAKA_ADDR(FunctionProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EADA7E, .propdata = 0x00EADA7C, .propname = SELF(func_str_ptr) },
+    .NakaClass_IvNaming_PropNameText = "\x00\xFF" "func\x00\xFF",
 
-    .classdef_160_2 = { .proc = NAKA_ADDR(ApFunctionProc), .parent = 0x01600001, .allsize = 4, .selfsize = 0, .name = 0x00EADA70, .propdata = 0x00EADA6E, .propname = SELF(ptr_31fe) },
+    .NakaClass_AcIndexToggle_PropNames = {
+        SELF(NakaClass_AcIndexToggle_PropNameText[6]), SELF(NakaClass_AcIndexToggle_PropNameText[2]), SELF(NakaClass_AcIndexToggle_PropNameText),
+    },
 
-    .classdef_160_3 = { .proc = NAKA_ADDR(MainFunctionProc), .parent = 0x01600001, .allsize = 4, .selfsize = 0, .name = 0x00EADA60, .propdata = 0x00EADA5E, .propname = SELF(ptr_3204) },
+    .NakaClass_AcIndexToggle_PropNameText = "\x00\xFFtag\x00index",
 
-    .classdef_160_4 = { .proc = NAKA_ADDR(ClassProc), .parent = 0x01600000, .allsize = 24, .selfsize = 24, .name = 0x00EADA58, .propdata = 0x00EADA50, .propname = SELF(ptrs_27) },
+    .NakaClass_AcRamBox_PropNames = {
+        SELF(NakaClass_AcRamBox_PropNameText[8]), SELF(NakaClass_AcRamBox_PropNameText[2]), SELF(NakaClass_AcRamBox_PropNameText),
+    },
 
-    .classdef_160_5 = { .proc = NAKA_ADDR(SupportClassProc), .parent = 0x01600000, .allsize = 12, .selfsize = 12, .name = 0x00EADA42, .propdata = 0x00EADA3C, .propname = SELF(ptrs_28) },
+    .NakaClass_AcRamBox_PropNameText = "\x00\xFF" "data\x00\xFF" "func\x00\xFF",
 
-    .classdef_160_6 = { .proc = NAKA_ADDR(ModeProc), .parent = 0x01600000, .allsize = 14, .selfsize = 14, .name = 0x00EADA36, .propdata = 0x00EADA30, .propname = SELF(ptrs_29) },
+    .NakaClass_PsRadioBox_PropNames = {
+        SELF(NakaClass_PsRadioBox_PropNameText[40]), SELF(NakaClass_PsRadioBox_PropNameText[30]), SELF(NakaClass_PsRadioBox_PropNameText[24]), SELF(NakaClass_PsRadioBox_PropNameText[16]),
+        SELF(NakaClass_PsRadioBox_PropNameText[6]), SELF(NakaClass_PsRadioBox_PropNameText[2]), SELF(NakaClass_PsRadioBox_PropNameText),
+    },
 
-    .classdef_160_7 = { .proc = NAKA_ADDR(TitleProc), .parent = 0x01600000, .allsize = 22, .selfsize = 22, .name = 0x00EADA2A, .propdata = 0x00EADA22, .propname = SELF(ptrs_30) },
+    .NakaClass_PsRadioBox_PropNameText = "\x00\xFFtag\x00selected\x00\xFF" "editsw\x00\xFF" "align\x00" "fontcolor\x00" "font\x00\xFF",
 
-    .classdef_160_8 = { .proc = NAKA_ADDR(ResBitmapProc), .parent = 0x01600000, .allsize = 2, .selfsize = 2, .name = 0x00EADA18, .propdata = 0x00EADA16, .propname = SELF(ptr_330a) },
+    .NakaClass_AcStrRadioBox_PropNames = {
+        SELF(NakaClass_AcStrRadioBox_PropNameText[2]), SELF(NakaClass_AcStrRadioBox_PropNameText),
+    },
 
-    .classdef_160_9 = { .proc = NAKA_ADDR(ResFrameProc), .parent = 0x01600000, .allsize = 2, .selfsize = 2, .name = 0x00EADA0C, .propdata = 0x00EADA0A, .propname = SELF(ptr_331a) },
+    .NakaClass_AcStrRadioBox_PropNameText = "\x00\xFFstr",
 
-    .classdef_160_10 = { .proc = NAKA_ADDR(ResIconProc), .parent = 0x01600000, .allsize = 2, .selfsize = 2, .name = 0x00EADA02, .propdata = 0x00EADA00, .propname = SELF(ptr_332a) },
+    .NakaClass_IvCatchEvent_PropNames = {
+        SELF(NakaClass_IvCatchEvent_PropNameText[2]), SELF(NakaClass_IvCatchEvent_PropNameText),
+    },
 
-    .classdef_160_11 = { .proc = NAKA_ADDR(ResFontProc), .parent = 0x01600000, .allsize = 2, .selfsize = 2, .name = 0x00EAD9F8, .propdata = 0x00EAD9F6, .propname = SELF(ptr_333a) },
+    .NakaClass_IvCatchEvent_PropNameText = "\x00\xFF" "func\x00\xFF",
 
-    .classdef_160_12 = { .proc = NAKA_ADDR(ResEventProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EAD9EC, .propdata = 0x00EAD9EA, .propname = SELF(name_str_6_ptr) },
+    .NakaClass_PsListBox_PropNames = {
+        SELF(NakaClass_PsListBox_PropNameText[32]), SELF(NakaClass_PsListBox_PropNameText[22]), SELF(NakaClass_PsListBox_PropNameText[16]), SELF(NakaClass_PsListBox_PropNameText[12]),
+        SELF(NakaClass_PsListBox_PropNameText[2]), SELF(NakaClass_PsListBox_PropNameText),
+    },
 
-    .classdef_160_13 = { .proc = NAKA_ADDR(ResMethodProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EAD9E0, .propdata = 0x00EAD9DE, .propname = SELF(name_str_7_ptr) },
+    .NakaClass_PsListBox_PropNameText = "\x00\xFFselected\x00\xFFrow\x00" "align\x00" "fontcolor\x00" "font\x00\xFF",
 
-    .classdef_160_14 = { .proc = NAKA_ADDR(ResStringProc), .parent = 0x01600000, .allsize = 2, .selfsize = 2, .name = 0x00EAD9D4, .propdata = 0x00EAD9D2, .propname = SELF(ptr_336a) },
+    .NakaClass_PsGridBox_PropNames = {
+        SELF(NakaClass_PsGridBox_PropNameText[70]), SELF(NakaClass_PsGridBox_PropNameText[60]), SELF(NakaClass_PsGridBox_PropNameText[54]), SELF(NakaClass_PsGridBox_PropNameText[50]),
+        SELF(NakaClass_PsGridBox_PropNameText[46]), SELF(NakaClass_PsGridBox_PropNameText[36]), SELF(NakaClass_PsGridBox_PropNameText[28]), SELF(NakaClass_PsGridBox_PropNameText[20]),
+        SELF(NakaClass_PsGridBox_PropNameText[14]), SELF(NakaClass_PsGridBox_PropNameText[8]), SELF(NakaClass_PsGridBox_PropNameText[2]), SELF(NakaClass_PsGridBox_PropNameText),
+    },
 
-    .classdef_160_15 = { .proc = NAKA_ADDR(ResNameProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EAD9CA, .propdata = 0x00EAD9C8, .propname = SELF(name_str_8_ptr) },
+    .NakaClass_PsGridBox_PropNameText = "\x00\xFF" "crow\x00\xFFprow\x00\xFFpcol\x00\xFFselcol\x00\xFFselrow\x00\xFFvertline\x00\xFF" "col\x00row\x00" "align\x00" "fontcolor\x00" "font\x00\xFF",
 
-    .classdef_160_16 = { .proc = NAKA_ADDR(ViewableProc), .parent = 0x01600000, .allsize = 22, .selfsize = 22, .name = 0x00EAD9BE, .propdata = 0x00EAD9B6, .propname = SELF(ptrs_31) },
+    .NakaClass_AcListBox_PropNames = {
+        SELF(NakaClass_AcListBox_PropNameText[8]), SELF(NakaClass_AcListBox_PropNameText[2]), SELF(NakaClass_AcListBox_PropNameText),
+    },
 
-    .classdef_160_17 = { .proc = NAKA_ADDR(VwBoxProc), .parent = 0x01600010, .allsize = 28, .selfsize = 6, .name = 0x00EAD9B0, .propdata = 0x00EAD9AC, .propname = SELF(ptrs_32) },
+    .NakaClass_AcListBox_PropNameText = "\x00\xFF" "dial\x00\xFFlist\x00\xFF",
 
-    .classdef_160_18 = { .proc = NAKA_ADDR(PsParaBoxProc), .parent = 0x01600011, .allsize = 36, .selfsize = 8, .name = 0x00EAD9A2, .propdata = 0x00EAD99E, .propname = SELF(ptrs_33) },
+    .NakaClass_AcGridBox_PropNames = {
+        SELF(NakaClass_AcGridBox_PropNameText[18]), SELF(NakaClass_AcGridBox_PropNameText[8]), SELF(NakaClass_AcGridBox_PropNameText[2]), SELF(NakaClass_AcGridBox_PropNameText),
+    },
 
-    .classdef_160_19 = { .proc = NAKA_ADDR(AcLswBoxProc), .parent = 0x01600012, .allsize = 44, .selfsize = 8, .name = 0x00EAD994, .propdata = 0x00EAD990, .propname = SELF(ptrs_34) },
+    .NakaClass_AcGridBox_PropNameText = "\x00\xFF" "func\x00\xFF" "fixedrow\x00\xFF" "fixedcol\x00\xFF",
 
-    .classdef_160_20 = { .proc = NAKA_ADDR(AcTempoBoxProc), .parent = 0x01600012, .allsize = 36, .selfsize = 0, .name = 0x00EAD984, .propdata = 0x00EAD982, .propname = SELF(ptr_343c) },
+    .NakaClass_DbDebugMenu_PropNames = {
+        SELF(NakaClass_DbDebugMenu_PropNameText[2]), SELF(NakaClass_DbDebugMenu_PropNameText),
+    },
 
-    .classdef_160_21 = { .proc = NAKA_ADDR(PsEditBoxProc), .parent = 0x01600011, .allsize = 50, .selfsize = 22, .name = 0x00EAD978, .propdata = 0x00EAD96E, .propname = SELF(ptrs_35) },
+    .NakaClass_DbDebugMenu_PropNameText = "\x00\xFFpage\x00\xFF",
 
-    .classdef_160_22 = { .proc = NAKA_ADDR(PsNumEditBoxProc), .parent = 0x01600015, .allsize = 52, .selfsize = 2, .name = 0x00EAD960, .propdata = 0x00EAD95E, .propname = SELF(figures_str_ptr) },
+    .NakaClass_PsTrackSwitch_PropNames = {
+        SELF(NakaClass_PsTrackSwitch_PropNameText[22]), SELF(NakaClass_PsTrackSwitch_PropNameText[16]), SELF(NakaClass_PsTrackSwitch_PropNameText[10]), SELF(NakaClass_PsTrackSwitch_PropNameText[2]),
+        SELF(NakaClass_PsTrackSwitch_PropNameText),
+    },
 
-    .classdef_160_23 = { .proc = NAKA_ADDR(PsTblEditBoxProc), .parent = 0x01600015, .allsize = 54, .selfsize = 4, .name = 0x00EAD950, .propdata = 0x00EAD94E, .propname = SELF(func_str_3_ptr) },
+    .NakaClass_PsTrackSwitch_PropNameText = "\x00\xFFrecplay\x00part\x00\xFFonoff\x00track",
 
-    .classdef_160_24 = { .proc = NAKA_ADDR(AcOnOffBoxProc), .parent = 0x01600015, .allsize = 54, .selfsize = 4, .name = 0x00EAD942, .propdata = 0x00EAD940, .propname = SELF(onoff_str_ptr) },
+    .NakaClass_AcTrackSwitch_PropNames = {
+        SELF(NakaClass_AcTrackSwitch_PropNameText),
+    },
 
-    .classdef_160_25 = { .proc = NAKA_ADDR(AcNumEditBoxProc), .parent = 0x01600015, .allsize = 64, .selfsize = 14, .name = 0x00EAD932, .propdata = 0x00EAD92A, .propname = SELF(ptrs_36) },
+    .NakaClass_AcTrackSwitch_PropNameText = "\x00\xFF",
 
-    .classdef_160_26 = { .proc = NAKA_ADDR(AcLswEditBoxProc), .parent = 0x01600015, .allsize = 58, .selfsize = 8, .name = 0x00EAD91C, .propdata = 0x00EAD918, .propname = SELF(ptrs_37) },
+    .NakaClass_IvDirmdScreen_PropNames = {
+        SELF(NakaClass_IvDirmdScreen_PropNameText),
+    },
 
-    .classdef_160_27 = { .proc = NAKA_ADDR(AcRamEditBoxProc), .parent = 0x01600015, .allsize = 58, .selfsize = 8, .name = 0x00EAD90A, .propdata = 0x00EAD906, .propname = SELF(ptrs_38) },
+    .NakaClass_IvDirmdScreen_PropNameText = "\x00\xFF",
 
-    .classdef_160_28 = { .proc = NAKA_ADDR(PsMenuBoxProc), .parent = 0x01600011, .allsize = 42, .selfsize = 14, .name = 0x00EAD8FC, .propdata = 0x00EAD8F6, .propname = SELF(ptrs_39) },
+    .NakaClass_IvTrackSwitch_PropNames = {
+        SELF(NakaClass_IvTrackSwitch_PropNameText),
+    },
 
-    .classdef_160_29 = { .proc = NAKA_ADDR(AcTitleMenuProc), .parent = 0x0160001C, .allsize = 54, .selfsize = 12, .name = 0x00EAD8EA, .propdata = 0x00EAD8E6, .propname = SELF(ptrs_40) },
+    .NakaClass_IvTrackSwitch_PropNameText = "\x00\xFF",
 
-    .classdef_160_30 = { .proc = NAKA_ADDR(PsEditSwBoxProc), .parent = 0x01600011, .allsize = 38, .selfsize = 10, .name = 0x00EAD8DA, .propdata = 0x00EAD8D4, .propname = SELF(ptrs_41) },
+    .NakaClass_IvExitWindow_PropNames = {
+        SELF(NakaClass_IvExitWindow_PropNameText),
+    },
+
+    .NakaClass_IvExitWindow_PropNameText = "\x00\xFF",
+
+    .NakaClass_DbMemoryDump_PropNames = {
+        SELF(NakaClass_DbMemoryDump_PropNameText[2]), SELF(NakaClass_DbMemoryDump_PropNameText),
+    },
+
+    .NakaClass_DbMemoryDump_PropNameText = "\x00\xFF" "adr",
+
+    .NakaClass_IvInterrupt_PropNames = {
+        SELF(NakaClass_IvInterrupt_PropNameText[2]), SELF(NakaClass_IvInterrupt_PropNameText),
+    },
+
+    .NakaClass_IvInterrupt_PropNameText = "\x00\xFFtime\x00\xFF",
+
+    .NakaClass_IvIntReminder_PropNames = {
+        SELF(NakaClass_IvIntReminder_PropNameText),
+    },
+
+    .NakaClass_IvIntReminder_PropNameText = "\x00\xFF",
+
+    .NakaClass_IvIntError_PropNames = {
+        SELF(NakaClass_IvIntError_PropNameText),
+    },
+
+    .NakaClass_IvIntError_PropNameText = "\x00\xFF",
+
+    .NakaClass_IvIntComplete_PropNames = {
+        SELF(NakaClass_IvIntComplete_PropNameText),
+    },
+
+    .NakaClass_IvIntComplete_PropNameText = "\x00\xFF",
+
+    .NakaClass_IvIntVari_PropNames = {
+        SELF(NakaClass_IvIntVari_PropNameText),
+    },
+
+    .NakaClass_IvIntVari_PropNameText = "\x00\xFF",
+
+    .NakaClass_IvIntEasySet_PropNames = {
+        SELF(NakaClass_IvIntEasySet_PropNameText),
+    },
+
+    .NakaClass_IvIntEasySet_PropNameText = "\x00\xFF",
+
+    .NakaClass_IvShowHide_PropNames = {
+        SELF(NakaClass_IvShowHide_PropNameText[2]), SELF(NakaClass_IvShowHide_PropNameText),
+    },
+
+    .NakaClass_IvShowHide_PropNameText = "\x00\xFF" "func\x00\xFF",
+
+    .NakaClass_PsTextBox_PropNames = {
+        SELF(NakaClass_PsTextBox_PropNameText[28]), SELF(NakaClass_PsTextBox_PropNameText[18]), SELF(NakaClass_PsTextBox_PropNameText[8]), SELF(NakaClass_PsTextBox_PropNameText[2]),
+        SELF(NakaClass_PsTextBox_PropNameText),
+    },
+
+    .NakaClass_PsTextBox_PropNameText = "\x00\xFFlines\x00" "alignment\x00" "fontcolor\x00" "font\x00\xFF",
+
+    .NakaClass_AcLanguageText_PropNames = {
+        SELF(NakaClass_AcLanguageText_PropNameText[2]), SELF(NakaClass_AcLanguageText_PropNameText),
+    },
+
+    .NakaClass_AcLanguageText_PropNameText = "\x00\xFF" "func\x00\xFF",
+
+    .NakaClass_TrTransposeBox_PropNames = {
+        SELF(NakaClass_TrTransposeBox_PropNameText),
+    },
+
+    .NakaClass_TrTransposeBox_PropNameText = "\x00\xFF",
+
+    .NakaClass_TrChordBox_PropNames = {
+        SELF(NakaClass_TrChordBox_PropNameText),
+    },
+
+    .NakaClass_TrChordBox_PropNameText = "\x00\xFF",
+
+    .NakaClass_VwUserBitmap_PropNames = {
+        SELF(NakaClass_VwUserBitmap_PropNameText[2]), SELF(NakaClass_VwUserBitmap_PropNameText),
+    },
+
+    .NakaClass_VwUserBitmap_PropNameText = "\x00\xFF" "func\x00\xFF",
+
+    .NakaClass_IvScreen_PropNames = {
+        SELF(NakaClass_IvScreen_PropNameText),
+    },
+
+    .NakaClass_IvScreen_PropNameText = "\x00\xFF",
+
+    .NakaClass_IvIntWelcome_PropNames = {
+        SELF(NakaClass_IvIntWelcome_PropNameText),
+    },
+
+    .NakaClass_IvIntWelcome_PropNameText = "\x00\xFF",
+
+    .NakaClass_VwUserBitmapByName_PropNames = {
+        SELF(NakaClass_VwUserBitmapByName_PropNameText[2]), SELF(NakaClass_VwUserBitmapByName_PropNameText),
+    },
+
+    .NakaClass_VwUserBitmapByName_PropNameText = "\x00\xFF" "file\x00\xFF",
+
+    .classdef_160_0 = { .proc = NAKA_ADDR(ObjectProc), .parent = 0xFFFFFFFF, .allsize = 2, .selfsize = 0, .name = 0x00EADA8A, .propdata = 0x00EADA88, .propname = SELF(ClassProps_Object) },
+
+    .classdef_160_1 = { .proc = NAKA_ADDR(FunctionProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EADA7E, .propdata = 0x00EADA7C, .propname = SELF(ClassProps_Function) },
+
+    .classdef_160_2 = { .proc = NAKA_ADDR(ApFunctionProc), .parent = 0x01600001, .allsize = 4, .selfsize = 0, .name = 0x00EADA70, .propdata = 0x00EADA6E, .propname = SELF(ClassProps_ApFunction) },
+
+    .classdef_160_3 = { .proc = NAKA_ADDR(MainFunctionProc), .parent = 0x01600001, .allsize = 4, .selfsize = 0, .name = 0x00EADA60, .propdata = 0x00EADA5E, .propname = SELF(ClassProps_MainFunction) },
+
+    .classdef_160_4 = { .proc = NAKA_ADDR(ClassProc), .parent = 0x01600000, .allsize = 24, .selfsize = 24, .name = 0x00EADA58, .propdata = 0x00EADA50, .propname = SELF(ClassProps_Class) },
+
+    .classdef_160_5 = { .proc = NAKA_ADDR(SupportClassProc), .parent = 0x01600000, .allsize = 12, .selfsize = 12, .name = 0x00EADA42, .propdata = 0x00EADA3C, .propname = SELF(ClassProps_SupportClass) },
+
+    .classdef_160_6 = { .proc = NAKA_ADDR(ModeProc), .parent = 0x01600000, .allsize = 14, .selfsize = 14, .name = 0x00EADA36, .propdata = 0x00EADA30, .propname = SELF(ClassProps_Mode) },
+
+    .classdef_160_7 = { .proc = NAKA_ADDR(TitleProc), .parent = 0x01600000, .allsize = 22, .selfsize = 22, .name = 0x00EADA2A, .propdata = 0x00EADA22, .propname = SELF(ClassProps_Title) },
+
+    .classdef_160_8 = { .proc = NAKA_ADDR(ResBitmapProc), .parent = 0x01600000, .allsize = 2, .selfsize = 2, .name = 0x00EADA18, .propdata = 0x00EADA16, .propname = SELF(ClassProps_ResBitmap) },
+
+    .classdef_160_9 = { .proc = NAKA_ADDR(ResFrameProc), .parent = 0x01600000, .allsize = 2, .selfsize = 2, .name = 0x00EADA0C, .propdata = 0x00EADA0A, .propname = SELF(ClassProps_ResFrame) },
+
+    .classdef_160_10 = { .proc = NAKA_ADDR(ResIconProc), .parent = 0x01600000, .allsize = 2, .selfsize = 2, .name = 0x00EADA02, .propdata = 0x00EADA00, .propname = SELF(ClassProps_ResIcon) },
+
+    .classdef_160_11 = { .proc = NAKA_ADDR(ResFontProc), .parent = 0x01600000, .allsize = 2, .selfsize = 2, .name = 0x00EAD9F8, .propdata = 0x00EAD9F6, .propname = SELF(ClassProps_ResFont) },
+
+    .classdef_160_12 = { .proc = NAKA_ADDR(ResEventProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EAD9EC, .propdata = 0x00EAD9EA, .propname = SELF(ClassProps_ResEvent) },
+
+    .classdef_160_13 = { .proc = NAKA_ADDR(ResMethodProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EAD9E0, .propdata = 0x00EAD9DE, .propname = SELF(ClassProps_ResMethod) },
+
+    .classdef_160_14 = { .proc = NAKA_ADDR(ResStringProc), .parent = 0x01600000, .allsize = 2, .selfsize = 2, .name = 0x00EAD9D4, .propdata = 0x00EAD9D2, .propname = SELF(ClassProps_ResString) },
+
+    .classdef_160_15 = { .proc = NAKA_ADDR(ResNameProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EAD9CA, .propdata = 0x00EAD9C8, .propname = SELF(ClassProps_ResName) },
+
+    .classdef_160_16 = { .proc = NAKA_ADDR(ViewableProc), .parent = 0x01600000, .allsize = 22, .selfsize = 22, .name = 0x00EAD9BE, .propdata = 0x00EAD9B6, .propname = SELF(ClassProps_Viewable) },
+
+    .classdef_160_17 = { .proc = NAKA_ADDR(VwBoxProc), .parent = 0x01600010, .allsize = 28, .selfsize = 6, .name = 0x00EAD9B0, .propdata = 0x00EAD9AC, .propname = SELF(ClassProps_VwBox) },
+
+    .classdef_160_18 = { .proc = NAKA_ADDR(PsParaBoxProc), .parent = 0x01600011, .allsize = 36, .selfsize = 8, .name = 0x00EAD9A2, .propdata = 0x00EAD99E, .propname = SELF(ClassProps_PsParaBox) },
+
+    .classdef_160_19 = { .proc = NAKA_ADDR(AcLswBoxProc), .parent = 0x01600012, .allsize = 44, .selfsize = 8, .name = 0x00EAD994, .propdata = 0x00EAD990, .propname = SELF(ClassProps_AcLswBox) },
+
+    .classdef_160_20 = { .proc = NAKA_ADDR(AcTempoBoxProc), .parent = 0x01600012, .allsize = 36, .selfsize = 0, .name = 0x00EAD984, .propdata = 0x00EAD982, .propname = SELF(ClassProps_AcTempoBox) },
+
+    .classdef_160_21 = { .proc = NAKA_ADDR(PsEditBoxProc), .parent = 0x01600011, .allsize = 50, .selfsize = 22, .name = 0x00EAD978, .propdata = 0x00EAD96E, .propname = SELF(ClassProps_PsEditBox) },
+
+    .classdef_160_22 = { .proc = NAKA_ADDR(PsNumEditBoxProc), .parent = 0x01600015, .allsize = 52, .selfsize = 2, .name = 0x00EAD960, .propdata = 0x00EAD95E, .propname = SELF(ClassProps_PsNumEditBox) },
+
+    .classdef_160_23 = { .proc = NAKA_ADDR(PsTblEditBoxProc), .parent = 0x01600015, .allsize = 54, .selfsize = 4, .name = 0x00EAD950, .propdata = 0x00EAD94E, .propname = SELF(ClassProps_PsTblEditBox) },
+
+    .classdef_160_24 = { .proc = NAKA_ADDR(AcOnOffBoxProc), .parent = 0x01600015, .allsize = 54, .selfsize = 4, .name = 0x00EAD942, .propdata = 0x00EAD940, .propname = SELF(ClassProps_AcOnOffBox) },
+
+    .classdef_160_25 = { .proc = NAKA_ADDR(AcNumEditBoxProc), .parent = 0x01600015, .allsize = 64, .selfsize = 14, .name = 0x00EAD932, .propdata = 0x00EAD92A, .propname = SELF(ClassProps_AcNumEditBox) },
+
+    .classdef_160_26 = { .proc = NAKA_ADDR(AcLswEditBoxProc), .parent = 0x01600015, .allsize = 58, .selfsize = 8, .name = 0x00EAD91C, .propdata = 0x00EAD918, .propname = SELF(NakaClass_AcLswEditBox_PropNames) },
+
+    .classdef_160_27 = { .proc = NAKA_ADDR(AcRamEditBoxProc), .parent = 0x01600015, .allsize = 58, .selfsize = 8, .name = 0x00EAD90A, .propdata = 0x00EAD906, .propname = SELF(NakaClass_AcRamEditBox_PropNames) },
+
+    .classdef_160_28 = { .proc = NAKA_ADDR(PsMenuBoxProc), .parent = 0x01600011, .allsize = 42, .selfsize = 14, .name = 0x00EAD8FC, .propdata = 0x00EAD8F6, .propname = SELF(NakaClass_PsMenuBox_PropNames) },
+
+    .classdef_160_29 = { .proc = NAKA_ADDR(AcTitleMenuProc), .parent = 0x0160001C, .allsize = 54, .selfsize = 12, .name = 0x00EAD8EA, .propdata = 0x00EAD8E6, .propname = SELF(NakaClass_AcTitleMenu_PropNames) },
+
+    .classdef_160_30 = { .proc = NAKA_ADDR(PsEditSwBoxProc), .parent = 0x01600011, .allsize = 38, .selfsize = 10, .name = 0x00EAD8DA, .propdata = 0x00EAD8D4, .propname = SELF(NakaClass_PsEditSwBox_PropNames) },
 
     .classdef_160_31_proc = NAKA_ADDR(AcIndexEditSwProc),
 

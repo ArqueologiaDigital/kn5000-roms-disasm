@@ -245,7 +245,7 @@ extern const char NakaWidget_SmfMdlyMutePanel;
 extern const char NakaWidget_SmfMdlyMuteRow0;
 extern const char NakaWidget_SmfMdlyMuteRow1;
 extern const char NakaWidget_SmfMdlyMuteToggle;
-extern const char NakaWidget_SmfMdlyOffOnList;
+extern const char NakaWidget_SMFMedMuteSw;
 extern const char NakaWidget_SmfMdlyOffOnSel;
 extern const char NakaWidget_LyricsFunc;
 extern const char NakaWidget_SmfMdlyOrchSel;
@@ -1742,7 +1742,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_SmfMdlyMutePanel),
         NAKA_ADDR(NakaWidget_SmfMdlyMeasureBox),
         NAKA_ADDR(NakaWidget_SmfMdlyOffOnSel),
-        NAKA_ADDR(NakaWidget_SmfMdlyOffOnList),
+        NAKA_ADDR(NakaWidget_SMFMedMuteSw),
         NAKA_ADDR(NakaWidget_SmfMdlyMixerWidget),
         NAKA_ADDR(NakaWidget_SmfMdlyMicWidget2),
         NAKA_ADDR(NakaWidget_SmfMdlyMuteChLabel),

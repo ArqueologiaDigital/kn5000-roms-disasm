@@ -276,7 +276,7 @@ NakaInst_TR_Track2:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x3DE, 
 NakaInst_TR_Track1:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x3E8, 0xA
 ; NakaInst_IntTimeID_EnumTable -- 14 x {u32 name_ptr, s32 value}: IntTimeID value names, ended by {"", 0}
 ; IT_Off 0, IT_Default 1, IT_Hold 2, IT_1Sec 3 .. IT_10Sec 12 (the strings follow, IT_10Sec first). +8 of the IntTimeIDProc
-; SupportClass record (entry 54, in the bytes of NakaInst_WindowID_Cont, count 13); IntTimeIDProc reads the 16-bit
+; SupportClass record (entry 54, in the bytes of SupportClass_WindowIDPropTopByte, count 13); IntTimeIDProc reads the 16-bit
 ; value and CommonIDProc (ui/ui_widget_defs.s) maps value <-> name through this list.
 NakaInst_IntTimeID_EnumTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x3F2, 0x70
 ; NakaInst_IntTimeID_EmptyStr -- 2 x char: "" plus a 0xFF alignment pad, the name of the {"", 0} terminator of
@@ -339,11 +339,22 @@ NakaInst_IT_Off:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4CA, 0x8
 ; [nakarest] Readers: source references ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa,
 ; [nakarest] (ExitWindow_OK_Data_2:24)`).
 ExitWindow_OK_Data_2:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4D2, 0x26F
-; [nakarest] NakaInst_WindowID_Cont  +0x741..+0x774 (0xeb78ff, 51 B)
-; [nakarest] purpose not established: layout of 51 B at 0xeb78ff not derived; readers below
-; [nakarest] Readers: source references FileIO_ByteBlock_DemoProc1_Skip16
-; [nakarest] (demo/file_demo_proc.s: `.long NakaInst_WindowID_Cont`).
-NakaInst_WindowID_Cont:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x741, 0x33
+; SupportClass_WindowIDPropTopByte -- 1 x uint8_t: the top byte (0) of record 51's prop pointer (WindowIDProc ->
+; NakaInst_WindowID_EnumTable) in the SupportClass table ExitWindow_OK_Data_2; the record's other 11 bytes end that label.
+SupportClass_WindowIDPropTopByte:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x741, 0x1
+; SupportClass_PartTrackIntTimeRecords -- 3 x {u32 proc, u16 count, u16 size, u32 prop}: the last three records (52-54) of
+; the 55-record SupportClass table ExitWindow_OK_Data_2 (slot 0x260): PartIDProc, 29 values of 2 B, NakaInst_PartID_EnumTable;
+; TrackIDProc, 17, 2 B, NakaInst_TrackID_EnumTable; IntTimeIDProc, 13, 2 B, NakaInst_IntTimeID_EnumTable. Record k is
+; object 0x2600000 + k, the type of propdata letter 'A' + k: these serve the letters u (part), v (track), w (time);
+; ClassProc sends EVT_CHECK_PROP_STRING / EVT_GET_PROP_MEMBER to 0x2600000 + letter - 0x41 (ui/ui_widget_defs.s).
+SupportClass_PartTrackIntTimeRecords:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x742, 0x24
+; SupportClass_ZeroEndRecord -- 1 x {u32 proc, u16 count, u16 size, u32 prop}: all zero, a 56th record after the 55 that
+; InitializeObjectTable registers (`ldw (xbc + 8), 0x37`); nothing indexes it.
+SupportClass_ZeroEndRecord:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x766, 0xC
+; Softver_MainProgramVersion -- 1 x uint16_t: the main-program version number on the software-version screen: 1354 here
+; (v9 1353, v7 1344). Softver_ShowHide (ui/drawbar_panel_ui.s) pushes this word by its absolute address, formats it with "%4d"
+; and draws it into NAKA_VIEW_MainProgram (EVT_PARA_DRAW).
+Softver_MainProgramVersion:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x772, 0x2
 ; VGA_InitFuncTable -- 4 x pointer: the display (VGA) subsystem's handler for boot phases 0-3: VGA_Initialize, then VGA_Stub_1..3 (ret)
 ; Entry 8 of Subsys_HandlerTableList (SystemConfig_PointerTable): VoiceInit_Dispatch calls entry [phase] of every listed table
 ; for each ScreenGroup_Dispatch phase. Test_Video_RAM_IC207 calls entry 0 directly before its VRAM test.

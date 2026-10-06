@@ -38,6 +38,120 @@ extern const char WidgetName_PtrBlock_K;
  * parent Screen; allsize 42.  Field names and type characters are the
  * class chain's own propname / propdata (see THE CLASS SYSTEM in
  * scripts/analysis/nakarest_objtab_map.py). */
+/* NakaWidget_SmfMdly2MicWidget's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaWidget_SongMdlyMixer's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaWidget_DOCMedR1Sw's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaWidget_SongMdly2Mixer's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaWidget_PDMedR1Sw's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* NakaWidget_SMFMedMuteSw's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint32_t font;
+    uint32_t stron;
+    uint32_t stroff;
+    uint32_t onoff;
+    uint16_t editsw;
+    uint32_t func;
+} NakaWidget_SMFMedMuteSw_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint32_t font;
+    uint32_t stron;
+    uint32_t stroff;
+    uint32_t onoff;
+    uint16_t editsw;
+    uint32_t func;
+} NakaWidget_PDMedR1Sw_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint16_t index;
+    uint32_t font;
+    uint16_t fontcolor;
+    uint16_t align;
+    uint16_t editsw;
+    uint32_t selected;
+    uint32_t str;
+    uint32_t icon;
+} NakaWidget_SongMdly2Mixer_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint32_t font;
+    uint32_t stron;
+    uint32_t stroff;
+    uint32_t onoff;
+    uint16_t editsw;
+    uint32_t func;
+} NakaWidget_DOCMedR1Sw_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint16_t index;
+    uint32_t font;
+    uint16_t fontcolor;
+    uint16_t align;
+    uint16_t editsw;
+    uint32_t selected;
+    uint32_t str;
+    uint32_t icon;
+} NakaWidget_SongMdlyMixer_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t class_;
+    uint16_t super;
+    uint16_t sub;
+    uint16_t next;
+    uint16_t prev;
+    uint16_t flag;
+    int16_t rect[4];
+    uint16_t color;
+    uint16_t border;
+    uint16_t index;
+    uint32_t font;
+    uint16_t fontcolor;
+    uint16_t align;
+    uint16_t editsw;
+    uint32_t selected;
+    uint32_t str;
+    uint32_t icon;
+} NakaWidget_SmfMdly2MicWidget_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t class_;            /* +0 M */
     uint16_t super;             /* +4 [ */
@@ -1266,22 +1380,15 @@ typedef struct __attribute__((packed)) {
     char v73_e9_caption[2];
     /* element 10 of Viewable slot 0x73: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t DpMdlySmf_IvMainEditSw;
-    naka_dispatch_t w35;  /* 0x47 */
-    uint16_t field_0dae;
-    uint8_t pad_152[2];  /* zero padding */
-    uint16_t field_0db2;
-    uint16_t field_0db4;
-    uint16_t field_0db6;
-    uint32_t ptr_0db8;
-    uint16_t field_0dbc;
-    uint32_t ptrs_2[4];  /* 4 pointers */
-    uint16_t field_0dce;
-    uint16_t field_0dd0;
-    uint16_t field_0dd2;
-    uint16_t field_0dd4;
-    uint16_t field_0dd6;
-    char OFF_str[4];
-    char ON_str[4];
+    uint8_t bytes_0d96[22];  /* 0x47 */
+    /* zero padding */
+    /* 4 pointers */
+    /* AcMuteToggleBox record "SMFMedMuteSw", element 12 of Viewable slot 0x73 (DpMdlySmf): OFF/ON toggle, onoff cell RAM 0x3dd66, func SMFMuteOnOffFunc (0x127000d) */
+    NakaWidget_SMFMedMuteSw_t NakaWidget_SMFMedMuteSw;
+    /* "OFF": stroff of NakaWidget_SMFMedMuteSw */
+    char NakaWidget_SMFMedMuteSw_StrOff[4];
+    /* "ON" + 0xff fill: stron of NakaWidget_SMFMedMuteSw */
+    char NakaWidget_SMFMedMuteSw_StrOn[4];
     /* element 13 of Viewable slot 0x73: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t MIXER_VwMenuBox_4;
     char MIXER_str_4[6];
@@ -1313,27 +1420,14 @@ typedef struct __attribute__((packed)) {
     char Skip_text_3[6];
     /* element 8 of Viewable slot 0x74: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t DpMdlyDoc_IvMainEditSw;
-    naka_dispatch_t w43;  /* 0x47 */
-    uint16_t field_0ff0;
-    uint16_t field_0ff2;
-    uint16_t field_0ff4;
-    uint16_t field_0ff6;
-    uint16_t field_0ff8;
-    uint16_t field_0ffa;
-    uint16_t field_0ffc;
-    char v_str[2];
-    uint16_t field_1000;
-    uint16_t field_1002;
-    uint8_t pad_174[4];  /* zero padding */
-    uint32_t RT1_str_2_ptr;
-    uint32_t RT1_str_ptr;
-    uint16_t field_1010;
-    uint16_t field_1012;
-    uint16_t field_1014;
-    uint16_t field_1016;
-    uint16_t field_1018;
-    char RT1_str[4];
-    char RT1_str_2[4];
+    uint8_t bytes_0fd8[22];  /* 0x47 */
+    /* zero padding */
+    /* AcMuteToggleBox view record "DOCMedR1Sw": RT1 mute switch of the DOC medley screen, func Rt1MuteFunc */
+    NakaWidget_DOCMedR1Sw_t NakaWidget_DOCMedR1Sw;
+    /* "RT1": stroff text of the AcMuteToggleBox NakaWidget_DOCMedR1Sw */
+    char NakaStr_DOCMedR1SwOff[4];
+    /* "RT1": stron text of the AcMuteToggleBox NakaWidget_DOCMedR1Sw */
+    char NakaStr_DOCMedR1SwOn[4];
     /* element 11 of Viewable slot 0x74 "DOCMedR2Sw": AcMuteToggleBox (class id 0x0167000F) */
     naka_cls_AcMuteToggleBox_t DOCMedR2Sw;
     char pad_174_stroff[4];
@@ -1367,27 +1461,15 @@ typedef struct __attribute__((packed)) {
     char Skip_text_4[6];
     /* element 7 of Viewable slot 0x75: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t DpMdlyPd_IvMainEditSw;
-    naka_dispatch_t w49;  /* 0x47 */
-    uint16_t field_1248;
-    uint8_t pad_197[2];  /* zero padding */
-    uint16_t field_124c;
-    uint16_t field_124e;
-    uint16_t field_1250;
-    uint16_t field_1252;
-    uint16_t field_1254;
-    char v_str_2[2];
-    uint16_t field_1258;
-    uint16_t field_125a;
-    uint8_t pad_198[4];  /* zero padding */
-    uint32_t RT1_str_4_ptr;
-    uint32_t RT1_str_3_ptr;
-    uint16_t field_1268;
-    uint16_t field_126a;
-    uint16_t field_126c;
-    uint16_t field_126e;
-    uint16_t field_1270;
-    char RT1_str_3[4];
-    char RT1_str_4[4];
+    uint8_t bytes_1230[22];  /* 0x47 */
+    /* zero padding */
+    /* zero padding */
+    /* AcMuteToggleBox record "PDMedR1Sw", element 9 of Viewable slot 0x75 (DpMdlyPd): RT1 mute toggle, onoff cell RAM 0x3dd82, func Rt1MuteFunc (0x127000e) */
+    NakaWidget_PDMedR1Sw_t NakaWidget_PDMedR1Sw;
+    /* "RT1": stroff of NakaWidget_PDMedR1Sw */
+    char NakaWidget_PDMedR1Sw_StrOff[4];
+    /* "RT1": stron of NakaWidget_PDMedR1Sw */
+    char NakaWidget_PDMedR1Sw_StrOn[4];
     /* element 10 of Viewable slot 0x75 "PDMedOrchSw": AcMuteToggleBox (class id 0x0167000F) */
     naka_cls_AcMuteToggleBox_t PDMedOrchSw;
     char pad_197_stroff[6];
@@ -1411,29 +1493,15 @@ typedef struct __attribute__((packed)) {
     char Skip_text_5[6];
     /* element 4 of Viewable slot 0x76: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t DpMdlySmfLyr_IvMainEditSw;
-    naka_dispatch_t w54;  /* 0x47 */
-    uint16_t field_1400;
-    uint16_t field_1402;
-    uint16_t field_1404;
-    uint16_t field_1406;
-    uint16_t field_1408;
-    uint16_t field_140a;
-    uint16_t field_140c;
-    uint16_t field_140e;
-    char str_194[2];
-    char str_195[2];
-    uint16_t field_1414;
-    uint8_t pad_217[2];  /* zero padding */
-    uint16_t field_1418;
-    uint8_t pad_218[4];  /* zero padding */
-    uint16_t field_141e;
-    uint8_t pad_219[2];  /* zero padding */
-    uint16_t field_1422;
-    uint16_t field_1424;
-    uint16_t field_1426;
-    uint32_t MIC_str_8_ptr;
-    uint8_t pad_220[4];  /* zero padding */
-    char MIC_str_8[4];
+    uint8_t bytes_13e8[22];  /* 0x47 */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* VwMenuBox view record: "MIC" menu item of the SMF medley lyrics screen (DpMdlySmfLyr element 6) */
+    NakaWidget_SmfMdly2MicWidget_t NakaWidget_SmfMdly2MicWidget;
+    /* "MIC": text of the VwMenuBox NakaWidget_SmfMdly2MicWidget */
+    char NakaStr_SmfMdlyMic[4];
     /* element 7 of Viewable slot 0x76: IvFixWin (class id 0x0160004A) */
     naka_cls_IvFixWin_t NakaWidget_SmfMdly2OrchSel;
     /* element 0 of Viewable slot 0x78 "DkMdlyPly": TtlScreen (class id 0x01600034) */
@@ -1461,28 +1529,16 @@ typedef struct __attribute__((packed)) {
     /* element 10 of Viewable slot 0x78: Label (class id 0x0160002B) */
     naka_cls_Label_t Skip_Label_6;
     char Skip_text_6[6];
-    naka_dispatch_t w60;  /* 0x47 */
-    uint16_t field_15f0;
-    uint8_t pad_240[2];  /* zero padding */
-    uint16_t field_15f4;
-    uint16_t field_15f6;
-    uint16_t field_15f8;
-    uint16_t field_15fa;
-    uint16_t field_15fc;
-    char r_str[2];
-    char str_217[2];
-    uint32_t SeqByteBlock_EffectsSeqData_ptr;
-    uint8_t pad_241[2];  /* zero padding */
-    uint16_t field_1608;
-    uint8_t pad_242[4];  /* zero padding */
-    uint16_t field_160e;
-    uint8_t pad_243[2];  /* zero padding */
-    uint16_t field_1612;
-    uint16_t field_1614;
-    uint16_t field_1616;
-    uint32_t MIXER_str_7_ptr;
-    uint8_t pad_244[4];  /* zero padding */
-    char MIXER_str_7[6];
+    uint8_t bytes_15d8[22];  /* 0x47 */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* VwMenuBox view record: "MIXER" menu item of the disk song medley screen (DkMdlyPly element 12) */
+    NakaWidget_SongMdlyMixer_t NakaWidget_SongMdlyMixer;
+    /* "MIXER": text of the VwMenuBox NakaWidget_SongMdlyMixer */
+    char NakaStr_SongMdlyMixer[6];
     /* element 13 of Viewable slot 0x78: Window (class id 0x01600035) */
     naka_cls_Window_t NakaWidget_SongMdlyOrchSel;
     /* element 14 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
@@ -1540,28 +1596,16 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcCurSongNameBox_t SqMdlyPly_AcCurSongNameBox;
     /* element 9 of Viewable slot 0x7A: IvTrackSwitch (class id 0x0160005B) */
     naka_cls_IvTrackSwitch_t SqMdlyPly_IvTrackSwitch;
-    naka_dispatch_t w66;  /* 0x47 */
-    uint16_t field_1a00;
-    uint8_t pad_261[2];  /* zero padding */
-    uint16_t field_1a04;
-    uint16_t field_1a06;
-    uint16_t field_1a08;
-    uint16_t field_1a0a;
-    uint16_t field_1a0c;
-    char r_str_2[2];
-    char str_263[2];
-    uint32_t SeqByteBlock_EffectsSeqData_ptr_2;
-    uint8_t pad_262[2];  /* zero padding */
-    uint16_t field_1a18;
-    uint8_t pad_263[4];  /* zero padding */
-    uint16_t field_1a1e;
-    uint8_t pad_264[2];  /* zero padding */
-    uint16_t field_1a22;
-    uint16_t field_1a24;
-    uint16_t field_1a26;
-    uint32_t MIXER_str_8_ptr;
-    uint8_t pad_265[4];  /* zero padding */
-    char MIXER_str_8[6];
+    uint8_t bytes_19e8[22];  /* 0x47 */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* zero padding */
+    /* VwMenuBox record, element 11 of Viewable slot 0x7a (SqMdlyPly): the "MIXER" menu entry, edit switch 0x8a, selected cell RAM 0x3de02 */
+    NakaWidget_SongMdly2Mixer_t NakaWidget_SongMdly2Mixer;
+    /* "MIXER": the str of NakaWidget_SongMdly2Mixer */
+    char NakaWidget_SongMdly2Mixer_Str[6];
     /* element 0 of Viewable slot 0x89 "SqTrSel": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t SqTrSel;
     char StepRecord_text[20];
@@ -3288,50 +3332,13 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x0147000E,
     },
 
-    .w35 = {
-        .header    = NAKA_HDR(0x47),
-        .field_04   = 0x0000,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x000A000C,
-        .inst_ptr   = NAKA_ADDR(CRTC_LINE_COMPARE),
-        .link_ptr   = 0x001F0020,
-        .proc_addr  = 0x000F003F,
-    },
+    .bytes_0d96 = { 0x47, 0x00, 0x60, 0x01, 0x00, 0x00, 0xFF, 0xFF, 0x0C, 0x00, 0x0A, 0x00, 0x18, 0x00, 0x00, 0x00, 0x20, 0x00, 0x1F, 0x00, 0x3F, 0x00 },
 
-    .field_0dae = 0x0167,
+    .NakaWidget_SMFMedMuteSw = { 0x0167000F, 0x0000, 0xFFFF, 0x000D, 0x000B, 0x0008, { 244, 216, 275, 238 }, 0x00000000, SELF(NakaWidget_SMFMedMuteSw_StrOn), SELF(NakaWidget_SMFMedMuteSw_StrOff), 0x0003DD66, 0x0006, 0x0127000D },
 
-    .pad_152 = { 0 },
+    .NakaWidget_SMFMedMuteSw_StrOff = "OFF",
 
-    .field_0db2 = NAKA_NONE,
-
-    .field_0db4 = 0x000D,
-
-    .field_0db6 = 0x000B,
-
-    .ptr_0db8 = 0x00F40008,
-
-    .field_0dbc = 0x00D8,
-
-    .ptrs_2 = {
-        NAKA_ADDR(NakaInst_Param_Val00_01),
-        0x00000000,
-        SELF(ON_str),
-        SELF(OFF_str),
-    },
-
-    .field_0dce = 0xDD66,
-
-    .field_0dd0 = 0x0003,
-
-    .field_0dd2 = 0x0006,
-
-    .field_0dd4 = 0x000D,
-
-    .field_0dd6 = 0x0127,
-
-    .OFF_str = "OFF",
-
-    .ON_str = ALIGNED_STRING("ON"),
+    .NakaWidget_SMFMedMuteSw_StrOn = "ON\x00\xFF",
 
     .MIXER_VwMenuBox_4 = {
         .class_ = 0x0160003D,
@@ -3535,55 +3542,13 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x0147000C,
     },
 
-    .w43 = {
-        .header    = NAKA_HDR(0x47),
-        .field_04   = 0x0001,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x0008000A,
-        .inst_ptr   = NAKA_ADDR(CRTC_LINE_COMPARE),
-        .link_ptr   = 0x001F0020,
-        .proc_addr  = 0x000F003F,
-    },
+    .bytes_0fd8 = { 0x47, 0x00, 0x60, 0x01, 0x01, 0x00, 0xFF, 0xFF, 0x0A, 0x00, 0x08, 0x00, 0x18, 0x00, 0x00, 0x00, 0x20, 0x00, 0x1F, 0x00, 0x3F, 0x00 },
 
-    .field_0ff0 = 0x0167,
+    .NakaWidget_DOCMedR1Sw = { 0x0167000F, 0x0001, 0xFFFF, 0x000B, 0x0009, 0x0008, { 270, 118, 311, 135 }, 0x00000000, SELF(NakaStr_DOCMedR1SwOn), SELF(NakaStr_DOCMedR1SwOff), 0x0003DD74, 0x000A, 0x0127000E },
 
-    .field_0ff2 = 0x0001,
+    .NakaStr_DOCMedR1SwOff = "RT1",
 
-    .field_0ff4 = NAKA_NONE,
-
-    .field_0ff6 = 0x000B,
-
-    .field_0ff8 = 0x0009,
-
-    .field_0ffa = 0x0008,
-
-    .field_0ffc = 0x010E,
-
-    .v_str = "v",
-
-    .field_1000 = 0x0137,
-
-    .field_1002 = 0x0087,
-
-    .pad_174 = { 0 },
-
-    .RT1_str_2_ptr = SELF(RT1_str_2),
-
-    .RT1_str_ptr = SELF(RT1_str),
-
-    .field_1010 = 0xDD74,
-
-    .field_1012 = 0x0003,
-
-    .field_1014 = 0x000A,
-
-    .field_1016 = 0x000E,
-
-    .field_1018 = 0x0127,
-
-    .RT1_str = "RT1",
-
-    .RT1_str_2 = "RT1",
+    .NakaStr_DOCMedR1SwOn = "RT1",
 
     .DOCMedR2Sw = {
         .class_ = 0x0167000F,
@@ -3794,55 +3759,13 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x0147000D,
     },
 
-    .w49 = {
-        .header    = NAKA_HDR(0x47),
-        .field_04   = 0x0000,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x00070009,
-        .inst_ptr   = NAKA_ADDR(CRTC_LINE_COMPARE),
-        .link_ptr   = 0x001F0020,
-        .proc_addr  = 0x000F003F,
-    },
+    .bytes_1230 = { 0x47, 0x00, 0x60, 0x01, 0x00, 0x00, 0xFF, 0xFF, 0x09, 0x00, 0x07, 0x00, 0x18, 0x00, 0x00, 0x00, 0x20, 0x00, 0x1F, 0x00, 0x3F, 0x00 },
 
-    .field_1248 = 0x0167,
+    .NakaWidget_PDMedR1Sw = { 0x0167000F, 0x0000, 0xFFFF, 0x000A, 0x0008, 0x0008, { 270, 118, 311, 135 }, 0x00000000, SELF(NakaWidget_PDMedR1Sw_StrOn), SELF(NakaWidget_PDMedR1Sw_StrOff), 0x0003DD82, 0x000A, 0x0127000E },
 
-    .pad_197 = { 0 },
+    .NakaWidget_PDMedR1Sw_StrOff = "RT1",
 
-    .field_124c = NAKA_NONE,
-
-    .field_124e = 0x000A,
-
-    .field_1250 = 0x0008,
-
-    .field_1252 = 0x0008,
-
-    .field_1254 = 0x010E,
-
-    .v_str_2 = "v",
-
-    .field_1258 = 0x0137,
-
-    .field_125a = 0x0087,
-
-    .pad_198 = { 0 },
-
-    .RT1_str_4_ptr = SELF(RT1_str_4),
-
-    .RT1_str_3_ptr = SELF(RT1_str_3),
-
-    .field_1268 = 0xDD82,
-
-    .field_126a = 0x0003,
-
-    .field_126c = 0x000A,
-
-    .field_126e = 0x000E,
-
-    .field_1270 = 0x0127,
-
-    .RT1_str_3 = "RT1",
-
-    .RT1_str_4 = "RT1",
+    .NakaWidget_PDMedR1Sw_StrOn = "RT1",
 
     .PDMedOrchSw = {
         .class_ = 0x0167000F,
@@ -3989,59 +3912,11 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x0147000F,
     },
 
-    .w54 = {
-        .header    = NAKA_HDR(0x47),
-        .field_04   = 0x0000,
-        .field_06   = 0x0006,
-        .name_ptr   = 0x00040007,
-        .inst_ptr   = NAKA_ADDR(CRTC_LINE_COMPARE),
-        .link_ptr   = 0x001F0020,
-        .proc_addr  = 0x003D003F,
-    },
+    .bytes_13e8 = { 0x47, 0x00, 0x60, 0x01, 0x00, 0x00, 0x06, 0x00, 0x07, 0x00, 0x04, 0x00, 0x18, 0x00, 0x00, 0x00, 0x20, 0x00, 0x1F, 0x00, 0x3F, 0x00 },
 
-    .field_1400 = 0x0160,
+    .NakaWidget_SmfMdly2MicWidget = { 0x0160003D, 0x0005, 0xFFFF, 0xFFFF, 0xFFFF, 0x0008, { 8, 30, 41, 55 }, 0x00F5, 0x0000, 0xFFFF, 0x00000000, 0x00FF, 0x0000, 0x0088, 0x0003DD8E, SELF(NakaStr_SmfMdlyMic), 0x00000000 },
 
-    .field_1402 = 0x0005,
-
-    .field_1404 = NAKA_NONE,
-
-    .field_1406 = NAKA_NONE,
-
-    .field_1408 = NAKA_NONE,
-
-    .field_140a = 0x0008,
-
-    .field_140c = 0x0008,
-
-    .field_140e = 0x001E,
-
-    .str_194 = ")",
-
-    .str_195 = "7",
-
-    .field_1414 = 0x00F5,
-
-    .pad_217 = { 0 },
-
-    .field_1418 = NAKA_NONE,
-
-    .pad_218 = { 0 },
-
-    .field_141e = 0x00FF,
-
-    .pad_219 = { 0 },
-
-    .field_1422 = 0x0088,
-
-    .field_1424 = 0xDD8E,
-
-    .field_1426 = 0x0003,
-
-    .MIC_str_8_ptr = SELF(MIC_str_8),
-
-    .pad_220 = { 0 },
-
-    .MIC_str_8 = "MIC",
+    .NakaStr_SmfMdlyMic = "MIC",
 
     .NakaWidget_SmfMdly2OrchSel = {
         .class_ = 0x0160004A,
@@ -4218,57 +4093,11 @@ const naka_direct_play_t naka_direct_play_data
 
     .Skip_text_6 = ALIGNED_STRING("SKIP"),
 
-    .w60 = {
-        .header    = NAKA_HDR(0x47),
-        .field_04   = 0x0000,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x000A000C,
-        .inst_ptr   = NAKA_ADDR(CRTC_LINE_COMPARE),
-        .link_ptr   = 0x001F0040,
-        .proc_addr  = 0x003D005F,
-    },
+    .bytes_15d8 = { 0x47, 0x00, 0x60, 0x01, 0x00, 0x00, 0xFF, 0xFF, 0x0C, 0x00, 0x0A, 0x00, 0x18, 0x00, 0x00, 0x00, 0x40, 0x00, 0x1F, 0x00, 0x5F, 0x00 },
 
-    .field_15f0 = 0x0160,
+    .NakaWidget_SongMdlyMixer = { 0x0160003D, 0x0000, 0xFFFF, 0xFFFF, 0x000B, 0x0008, { 8, 114, 57, 139 }, 0x00F5, 0x0000, 0xFFFF, 0x00000000, 0x00FF, 0x0000, 0x008A, 0x0003DD94, SELF(NakaStr_SongMdlyMixer), 0x00000000 },
 
-    .pad_240 = { 0 },
-
-    .field_15f4 = NAKA_NONE,
-
-    .field_15f6 = NAKA_NONE,
-
-    .field_15f8 = 0x000B,
-
-    .field_15fa = 0x0008,
-
-    .field_15fc = 0x0008,
-
-    .r_str = "r",
-
-    .str_217 = "9",
-
-    .SeqByteBlock_EffectsSeqData_ptr = NAKA_ADDR(SeqByteBlock_EffectsSeqData),
-
-    .pad_241 = { 0 },
-
-    .field_1608 = NAKA_NONE,
-
-    .pad_242 = { 0 },
-
-    .field_160e = 0x00FF,
-
-    .pad_243 = { 0 },
-
-    .field_1612 = 0x008A,
-
-    .field_1614 = 0xDD94,
-
-    .field_1616 = 0x0003,
-
-    .MIXER_str_7_ptr = SELF(MIXER_str_7),
-
-    .pad_244 = { 0 },
-
-    .MIXER_str_7 = "MIXER",
+    .NakaStr_SongMdlyMixer = "MIXER",
 
     .NakaWidget_SongMdlyOrchSel = {
         .class_ = 0x01600035,
@@ -4657,57 +4486,11 @@ const naka_direct_play_t naka_direct_play_data
         .rect = { 0, 32, 31, 63 },
     },
 
-    .w66 = {
-        .header    = NAKA_HDR(0x47),
-        .field_04   = 0x0000,
-        .field_06   = NAKA_NONE,
-        .name_ptr   = 0x0009000B,
-        .inst_ptr   = NAKA_ADDR(CRTC_LINE_COMPARE),
-        .link_ptr   = 0x001F0040,
-        .proc_addr  = 0x003D005F,
-    },
+    .bytes_19e8 = { 0x47, 0x00, 0x60, 0x01, 0x00, 0x00, 0xFF, 0xFF, 0x0B, 0x00, 0x09, 0x00, 0x18, 0x00, 0x00, 0x00, 0x40, 0x00, 0x1F, 0x00, 0x5F, 0x00 },
 
-    .field_1a00 = 0x0160,
+    .NakaWidget_SongMdly2Mixer = { 0x0160003D, 0x0000, 0xFFFF, 0xFFFF, 0x000A, 0x0008, { 8, 114, 57, 139 }, 0x00F5, 0x0000, 0xFFFF, 0x00000000, 0x00FF, 0x0000, 0x008A, 0x0003DE02, SELF(NakaWidget_SongMdly2Mixer_Str), 0x00000000 },
 
-    .pad_261 = { 0 },
-
-    .field_1a04 = NAKA_NONE,
-
-    .field_1a06 = NAKA_NONE,
-
-    .field_1a08 = 0x000A,
-
-    .field_1a0a = 0x0008,
-
-    .field_1a0c = 0x0008,
-
-    .r_str_2 = "r",
-
-    .str_263 = "9",
-
-    .SeqByteBlock_EffectsSeqData_ptr_2 = NAKA_ADDR(SeqByteBlock_EffectsSeqData),
-
-    .pad_262 = { 0 },
-
-    .field_1a18 = NAKA_NONE,
-
-    .pad_263 = { 0 },
-
-    .field_1a1e = 0x00FF,
-
-    .pad_264 = { 0 },
-
-    .field_1a22 = 0x008A,
-
-    .field_1a24 = 0xDE02,
-
-    .field_1a26 = 0x0003,
-
-    .MIXER_str_8_ptr = SELF(MIXER_str_8),
-
-    .pad_265 = { 0 },
-
-    .MIXER_str_8 = "MIXER",
+    .NakaWidget_SongMdly2Mixer_Str = "MIXER",
 
     .SqTrSel = {
         .class_ = 0x01600034,

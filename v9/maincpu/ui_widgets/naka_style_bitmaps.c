@@ -130,6 +130,22 @@ extern const char uwordProc;
 /* NakaInst_PartID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* NakaInst_TrackID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
 /* NakaInst_IntTimeID_EnumTable's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_PartTrackIntTimeRecords's element (scripts/converters/nakarest_reviewed_slices.py). */
+/* SupportClass_ZeroEndRecord's element (scripts/converters/nakarest_reviewed_slices.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t proc;
+    uint16_t count;
+    uint16_t size;
+    uint32_t prop;
+} SupportClass_ZeroEndRecord_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t proc;
+    uint16_t count;
+    uint16_t size;
+    uint32_t prop;
+} SupportClass_PartTrackIntTimeRecords_t;
+
 typedef struct __attribute__((packed)) {
     uint32_t name_ptr;
     int32_t value;
@@ -687,20 +703,16 @@ typedef struct __attribute__((packed)) {
     uint32_t WindowIDProc_ptr;
     uint8_t pad_107[2];  /* zero padding */
     uint16_t field_073c;
-    uint32_t ptr_073e;
-    uint32_t PartIDProc_ptr;
-    uint16_t field_0746;
-    uint16_t field_0748;
-    uint32_t ptr_074a;
-    uint32_t TrackIDProc_ptr;
-    uint16_t field_0752;
-    uint16_t field_0754;
-    uint32_t ptr_0756;
-    uint32_t IntTimeIDProc_ptr;
-    uint16_t field_075e;
-    uint16_t field_0760;
-    uint32_t ptrs_3[4];  /* 4 pointers */
-    uint16_t field_0772;
+    uint8_t bytes_073e[3];
+    /* 4 pointers */
+    /* top byte (0x00) of the prop pointer of SupportClass record 51 (WindowIDProc -> NakaInst_WindowID_EnumTable); its other three bytes end ExitWindow_OK_Data_2 */
+    uint8_t SupportClass_WindowIDPropTopByte[1];
+    /* SupportClass records 52-54 {proc, count, size, prop}: PartIDProc 29 x 2 B, TrackIDProc 17 x 2 B, IntTimeIDProc 13 x 2 B, each with its value-name table */
+    SupportClass_PartTrackIntTimeRecords_t SupportClass_PartTrackIntTimeRecords[3];
+    /* an all-zero 56th SupportClass record after the 55 the registry counts (never read through it) */
+    SupportClass_ZeroEndRecord_t SupportClass_ZeroEndRecord;
+    /* main-program version number shown on the software-version screen (1354 in v10; 1353 in v9, 1344 in v7) */
+    uint16_t Softver_MainProgramVersion;
     uint32_t VGA_InitFuncTable[4];  /* 4 pointers */
     /* PanelMemory_SlotAddresses: the RAM address of each panel-memory slot, 0x1ED400 + 960*n for n < 80; [80] = the Music Stylist record's mirror (read by PanelMemory_Recall and the other panel-memory routines in ui/bitmap_out_routines.s) */
     uint32_t PanelMemory_SlotAddresses[81];
@@ -3516,38 +3528,21 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_073c = 0x0004,
 
-    .ptr_073e = 0x00eb723c,
+    .bytes_073e = { 0x3C, 0x72, 0xEB },
 
-    .PartIDProc_ptr = NAKA_ADDR(PartIDProc),
-
-    .field_0746 = 0x001d,
-
-    .field_0748 = 0x0002,
-
-    .ptr_074a = 0x00eb7246,
-
-    .TrackIDProc_ptr = NAKA_ADDR(TrackIDProc),
-
-    .field_0752 = 0x0011,
-
-    .field_0754 = 0x0002,
-
-    .ptr_0756 = SELF(NakaInst_TrackID_EnumTable),
-
-    .IntTimeIDProc_ptr = NAKA_ADDR(IntTimeIDProc),
-
-    .field_075e = 0x000d,
-
-    .field_0760 = 0x0002,
-
-    .ptrs_3 = {
-        SELF(NakaInst_IntTimeID_EnumTable),
-        0x00000000,
-        0x00000000,
-        0x00000000,
+    .SupportClass_WindowIDPropTopByte = {
+        0x00,
     },
 
-    .field_0772 = 0x0549,
+    .SupportClass_PartTrackIntTimeRecords = {
+        { NAKA_ADDR(PartIDProc), 0x001D, 0x0002, SELF(NakaInst_PartID_EnumTable) },
+        { NAKA_ADDR(TrackIDProc), 0x0011, 0x0002, SELF(NakaInst_TrackID_EnumTable) },
+        { NAKA_ADDR(IntTimeIDProc), 0x000D, 0x0002, SELF(NakaInst_IntTimeID_EnumTable) },
+    },
+
+    .SupportClass_ZeroEndRecord = { 0x00000000, 0x0000, 0x0000, 0x00000000 },
+
+    .Softver_MainProgramVersion = 1353,
 
     .VGA_InitFuncTable = {
         NAKA_ADDR(VGA_Initialize),

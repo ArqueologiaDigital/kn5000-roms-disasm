@@ -5071,9 +5071,9 @@ NakaInst_trash_bmp:	.incbin "includes/generated/naka_widget_names_charmap.bin", 
 ; [nakarest] widget record, element 0 of Viewable slot 0x0 (table 0xeb3374, 51 entries,
 ; [nakarest] InitializeRoot) ("PanelSimulator"): Screen (34 B).
 NakaWidget_PanelSimulator:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5652, 0x22
-; [nakarest] Naka_FileManagerEntry  +0x5674..+0x568e (0xeb2ae4, 26 B)
-; [nakarest] widget record, element 1 of Viewable slot 0x0 (table 0xeb3374, 51 entries,
-; [nakarest] InitializeRoot) ("PanelSimulator"): Bitmap (26 B).
-Naka_FileManagerEntry:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5674, 0x1A
+; NakaDbg_PanelSimBitmap -- 1 x Bitmap record (26 B, class 0x160002c): element 1 of Viewable slot 0x0 ("PanelSimulator",
+; Root_ViewableTable_000), rect {6, 34, 312, 78}; BitmapProc (ui/ui_window_procs.s) draws bmp 1 at the rect's top-left corner.
+; Fields: u32 class, u16 super, u16 sub, u16 next, u16 prev, u16 flag, s16[4] rect, u32 bmp.
+NakaDbg_PanelSimBitmap:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5674, 0x1A
 
 ; External label offsets within the binary blob above.

@@ -846,7 +846,7 @@ Demo_SelectEntry_DrawSecondary:
 	ld a, (DEMO_CURRENT_SONG:16)
 	extz wa
 	add wa, wa
-	lda xbc, (Demo_SelectEntry_DrawSecondary_Data:24)
+	lda xbc, (DemoSong_TitleCol:24)
 	ld	a, (xbc+wa)
 	call UI_PostModeChangeEvent
 	ret
