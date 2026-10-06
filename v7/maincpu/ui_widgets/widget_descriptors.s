@@ -39,22 +39,66 @@
 ; v142/subcpu/subcpu_data_tables.s (DSP_EffNN_* / DSP2_EffNN_* blocks) and
 ; technics-docs/dsp-effect-data-zone.md.
 ; =============================================================================
-NakaData_WidgetDescriptors:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x0, 0x1F4
-EqFormat_PositiveValue_Data:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F4, 0x7E
-Equalizer_FormatDefault_Data:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x272, 0x1F4
-Equalizer_FormatDefault_Data_2:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x466, 0x1F4
-Equalizer_FormatDefault_Data_3:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x65A, 0x1F4
-Equalizer_FormatDefault_Data_4:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x84E, 0x1F4
-Equalizer_FormatDefault_Data_5:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xA42, 0x16E
-Equalizer_FormatDefault_Data_6:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xBB0, 0xA
-Equalizer_FormatDefault_Data_7:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xBBA, 0x1F4
-Equalizer_FormatDefault_Data_8:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xDAE, 0x1F4
-FormatParamString_Data:			.incbin "includes/generated/naka_widget_descriptors.bin", 0xFA2, 0x1F4
-FormatParamString_Data_2:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1196, 0x10
-FormatParamString_Data_3:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x11A6, 0x1F4
-EntertainerGridCheck_Data_2:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x139A, 0xF6
-Equalizer_FormatCases_Data:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1490, 0xA0
-EntertainerGridCheck_Data_3:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1530, 0x88
+; DspValueText_ReverbTime -- 100 cells x 5 characters (no terminator): "0.10" .. "30.00", then two "  .  "
+; cells (unit "s"). Value text of DSP parameter id 0x22 (REVERB TIME), read by DspParamFmt_ReverbTime: cell
+; [value] is copied. EntertainerGridCheck also loads its address.
+DspValueText_ReverbTime:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x0, 0x1F4
+; DspValueText_HighDampGain -- 25 cells x 5 characters (no terminator): "-24.0" .. "0.0", then one 0xFF
+; alignment byte. Value text of DSP parameter id 0x24 (HIGH DAMP GAIN), read by DspParamFmt_HighDampGain: cell
+; [value] is copied.
+DspValueText_HighDampGain:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F4, 0x7E
+; DspValueText_GateTime -- 100 cells x 5 characters (no terminator): "10" .. "2900" (unit "ms"). Value text of
+; DSP parameter ids 0x2E 0x2F (GATE TIME, MASK TIME), read by DspParamFmt_GateTime: cell [value] is copied.
+DspValueText_GateTime:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x272, 0x1F4
+; DspValueText_ReleaseRate -- 100 cells x 5 characters (no terminator): "0.01" .. "1.00" (unit "s"). Value
+; text of DSP parameter id 0x2D (RELEASE RATE), read by DspParamFmt_ReleaseRate: cell [value] is copied.
+DspValueText_ReleaseRate:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x466, 0x1F4
+; DspValueText_AttackRate -- 100 cells x 5 characters (no terminator): "0.2" .. "20.0" (unit "s"). Value text
+; of DSP parameter id 0x2C (ATTACK RATE), read by DspParamFmt_AttackRate: cell [value] is copied.
+DspValueText_AttackRate:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x65A, 0x1F4
+; DspValueText_SensTime -- 100 cells x 5 characters (no terminator): "0.001" .. "0.100" (unit "s"). Value text
+; of DSP parameter ids 0x2A 0x2B (ATTACK SENS., RELEASE SENS.), read by DspParamFmt_SensTime: cell [value] is
+; copied.
+DspValueText_SensTime:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x84E, 0x1F4
+; DspValueText_Pitch -- 73 cells x 5 characters (no terminator): "-1200" .. "+1200", then one 0xFF alignment
+; byte. Value text of DSP parameter ids 0x26 0x27 (PITCH L, PITCH R), read by DspParamFmt_Pitch: cell [value]
+; is copied.
+DspValueText_Pitch:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xA42, 0x16E
+; DspValueText_SlowFast -- 2 cells x 5 characters (no terminator): "SLOW" .. "FAST". Value text of DSP
+; parameter id 0x0D (SLOW/FAST), read by DspParamFmt_SlowFast: cell [value] is copied.
+DspValueText_SlowFast:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xBB0, 0xA
+; DspValueText_WindTime -- 100 cells x 5 characters (no terminator): "1.0" .. "61.00" (unit "s"). Value text
+; of DSP parameter ids 0x10 0x11 (rotor WIND UP, WIND DOWN), read by DspParamFmt_WindTime: cell [value] is
+; copied.
+DspValueText_WindTime:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xBBA, 0x1F4
+; DspValueText_RotorSpeed -- 100 cells x 5 characters (no terminator): "0.0" .. "34.95" (unit "Hz"). Value
+; text of DSP parameter ids 0x0E 0x0F 0x12 0x13 0x49 (TREBLE FAST, (treble) SLOW, BASS FAST, BASS SLOW,
+; (treble) FAST), read by DspParamFmt_RotorSpeed: cell [value] is copied.
+DspValueText_RotorSpeed:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xDAE, 0x1F4
+; DspValueText_OscSpeed -- 100 cells x 5 characters (no terminator): "0" .. "19.6k" (unit "Hz"). Value text of
+; DSP parameter id 0x15 (OSC SPEED), read by DspParamFmt_OscSpeed: cell [value] is copied.
+DspValueText_OscSpeed:			.incbin "includes/generated/naka_widget_descriptors.bin", 0xFA2, 0x1F4
+; DspValueText_Waveform -- 3 cells x 5 characters (no terminator): "SIN" .. "SQU", then one 0xFF alignment
+; byte. Value text of DSP parameter ids 0x31 0x32 (LFO WAVEFORM, OSC WAVEFORM), read by DspParamFmt_Waveform:
+; cell [value] is copied.
+DspValueText_Waveform:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1196, 0x10
+; DspValueText_LfoSpeed -- 100 cells x 5 characters (no terminator): "0.0" .. "40.2" (unit "Hz"). Value text
+; of DSP parameter ids 0x08 0x09 0x40 0x41 0x47 (LFO SPEED, SLOW LFO SPEED, FAST LFO SPEED L, FAST LFO SPEED
+; R, FAST LFO SPEED), read by DspParamFmt_LfoSpeed: cell [value] is copied.
+DspValueText_LfoSpeed:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x11A6, 0x1F4
+; DspValueText_EqGain -- 49 cells x 5 characters (no terminator): "-12.0" .. "+12.0", then one 0xFF alignment
+; byte. Value text of DSP parameter id 0x35 (BAND EMPHASIS G), read by DspParamFmt_EqGain: cell [value] is
+; copied. The master equalizer screen (EqualizerCngFunc) reads it for its band gains too. EntertainerGridCheck
+; also loads its address.
+DspValueText_EqGain:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x139A, 0xF6
+; DspValueText_EqQ -- 32 cells x 5 characters (no terminator): "0.1" .. "20.0". Value text of DSP parameter id
+; 0x34 (BAND EMPHASIS Q), read by DspParamFmt_EqQ: cell [value] is copied.
+DspValueText_EqQ:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1490, 0xA0
+; DspValueText_EqFreq -- 27 cells x 5 characters (no terminator): "40" .. "16k" (unit "Hz"), then one 0xFF
+; alignment byte. Value text of DSP parameter ids 0x20 0x33 (HIGH EMPHASIS FC, BAND EMPHASIS FC), read by
+; DspParamFmt_EqFreq: cell [value] is copied. The master equalizer screen (EqualizerCngFunc) reads it for its
+; band frequencies too. EntertainerGridCheck also loads its address.
+DspValueText_EqFreq:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1530, 0x88
 DspParamUnit_Table:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x15B8, 0xAC	; 86 x 2
 DspParamName_Table:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1664, 0x11	; 86 x 17
 DspParamName_01_VOLUME:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1675, 0x11	; slot  1 "VOLUME"
@@ -3596,89 +3640,61 @@ Equalizer_CmdDispatch_CaseTable:
 	.short	ParamCmd_ReturnZero - Equalizer_CmdCase0
 	.short	Equalizer_CmdCase1 - Equalizer_CmdCase0
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] Equalizer_FormatDefault_Str
-; Equalizer_FormatDefault_Str -- NUL-terminated string(s), 6 bytes, used
-; by Equalizer_FormatDefault (v10/v9 0xf35bc7, v7 0xf35b9d) (`ld xwa,
-; Equalizer_FormatDefault_Str`).
-;
-; Typed in naka_widget_descriptors.c as char
-; Equalizer_FormatDefault_Str[6].
+; DspParamFmt_NegativeFmt -- " -%3d": DspParamFmt_Signed prints a negative value's
+; magnitude with it (ids 0x0B RESONANCE, 0x18/0x19 FEEDBACK L/R, 0x39 FEEDBACK).
 ; -----------------------------------------------------------------------------
-Equalizer_FormatDefault_Str:
+DspParamFmt_NegativeFmt:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FAC, 0x6
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] EqFormat_NegativeValue_Str
-; EqFormat_NegativeValue_Str -- NUL-terminated string(s), 6 bytes, used
-; by EqFormat_NegativeValue (v10/v9 0xf35c2d, v7 0xf35c03) (`ld xwa,
-; EqFormat_NegativeValue_Str`).
-;
-; Typed in naka_widget_descriptors.c as char
-; EqFormat_NegativeValue_Str[6].
+; DspParamFmt_PositiveFmt -- " +%3d": DspParamFmt_SignedNonNegative prints a
+; positive value with it.
 ; -----------------------------------------------------------------------------
-EqFormat_NegativeValue_Str:
+DspParamFmt_PositiveFmt:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FB2, 0x6
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] EqFormat_PositiveValue_Str
-; EqFormat_PositiveValue_Str -- NUL-terminated string(s), 12 bytes, used
-; by EqFormat_PositiveValue (v10/v9 0xf35c39, v7 0xf35c0f) (`ld xwa,
-; EqFormat_PositiveValue_Str`).
-;
-; Typed in naka_widget_descriptors.c as char
-; EqFormat_PositiveValue_Str[12].
+; DspParamFmt_ZeroFmt -- "  %3d" (the value 0, from DspParamFmt_SignedZero), then
+; DspParamFmt_BlankText, the 5 spaces DspParamFmt_Blank copies for ids 0x00 and 0x55.
 ; -----------------------------------------------------------------------------
-EqFormat_PositiveValue_Str:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FB8, 0x6
-Equalizer_CopyFixedString_Str_Blank5:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FBE, 0x6	; "     "
+DspParamFmt_ZeroFmt:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FB8, 0x6
+DspParamFmt_BlankText:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FBE, 0x6	; "     "
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] PrepareAudioParam_Str
-; PrepareAudioParam_Str -- NUL-terminated string(s), 4 bytes, used by
-; PrepareAudioParam (v10/v9 0xf35c7e, v7 0xf35c54) (`ld xwa,
-; PrepareAudioParam_Str`).
-;
-; Typed in naka_widget_descriptors.c as char PrepareAudioParam_Str[4].
+; DspParamFmt_DecimalFmt -- "%5d": DspParamFmt_Decimal prints the raw value with
+; it, for every parameter id that has no value-text table and is not signed.
 ; -----------------------------------------------------------------------------
-PrepareAudioParam_Str:
+DspParamFmt_DecimalFmt:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FC4, 0x4
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] Equalizer_FormatDispatch_Table
-; Equalizer_FormatDispatch_Table -- read by Equalizer_FormatDispatch
-; (v10/v9 0xf35b62, v7 0xf35b38) (`lda xix, (Equalizer_FormatDispatch_Table:24)`). 44
-; bytes to the next object; the layout beyond that access is not
-; established.
-;
-; Typed in naka_widget_descriptors.c as uint8_t
-; Equalizer_FormatDispatch_Table[44].
+; DspParamFmt_CaseByParamId -- 44 x u8, read by DspParamFmt_BySwitch: the case of DspParamFmt_CaseTable
+; for DSP parameter id 0x08-0x19 (index id - 8) and 0x20-0x39 (index id - 14).  Case 1 is "%5d",
+; case 12 the signed format, every other case one DspValueText_* table (FormatParamValueStr's header
+; lists them).
 ; -----------------------------------------------------------------------------
-Equalizer_FormatDispatch_Table:
+DspParamFmt_CaseByParamId:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FC8, 0x2C
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] Equalizer_FormatDispatch_CaseTable
-; Equalizer_FormatDispatch_CaseTable -- jump table of a compiled
-; `switch` in Equalizer_FormatDispatch (v10/v9 0xf35b62, v7 0xf35b38)
-; (`ld xix, Equalizer_FormatDispatch_CaseTable`): 18 u16 case offsets from
-; Equalizer_FormatCases.
-;
-; Typed in naka_widget_descriptors.c as uint16_t
-; Equalizer_FormatDispatch_CaseTable[18].
+; DspParamFmt_CaseTable -- jump table of the compiled `switch` in DspParamFmt_BySwitch
+; (`ld xix, DspParamFmt_CaseTable`): 18 u16 case offsets from DspParamFmt_EqFreq, indexed by
+; DspParamFmt_CaseByParamId[].
 ; -----------------------------------------------------------------------------
-Equalizer_FormatDispatch_CaseTable:
-	.short	Equalizer_FormatCases - Equalizer_FormatCases
-	.short	PrepareAudioParam - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case2 - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case3 - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case4 - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case5 - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case6 - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case7 - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case8 - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case9 - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case10 - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case11 - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case12 - Equalizer_FormatCases
-	.short	FormatParamString - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case14 - Equalizer_FormatCases
-	.short	Equalizer_FormatDefault - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case16 - Equalizer_FormatCases
-	.short	Equalizer_FormatDispatch_Case17 - Equalizer_FormatCases
+DspParamFmt_CaseTable:
+	.short	DspParamFmt_EqFreq - DspParamFmt_EqFreq
+	.short	DspParamFmt_Decimal - DspParamFmt_EqFreq
+	.short	DspParamFmt_ReverbTime - DspParamFmt_EqFreq
+	.short	DspParamFmt_HighDampGain - DspParamFmt_EqFreq
+	.short	DspParamFmt_Pitch - DspParamFmt_EqFreq
+	.short	DspParamFmt_SensTime - DspParamFmt_EqFreq
+	.short	DspParamFmt_AttackRate - DspParamFmt_EqFreq
+	.short	DspParamFmt_ReleaseRate - DspParamFmt_EqFreq
+	.short	DspParamFmt_GateTime - DspParamFmt_EqFreq
+	.short	DspParamFmt_Waveform - DspParamFmt_EqFreq
+	.short	DspParamFmt_EqQ - DspParamFmt_EqFreq
+	.short	DspParamFmt_EqGain - DspParamFmt_EqFreq
+	.short	DspParamFmt_Signed - DspParamFmt_EqFreq
+	.short	DspParamFmt_LfoSpeed - DspParamFmt_EqFreq
+	.short	DspParamFmt_SlowFast - DspParamFmt_EqFreq
+	.short	DspParamFmt_RotorSpeed - DspParamFmt_EqFreq
+	.short	DspParamFmt_WindTime - DspParamFmt_EqFreq
+	.short	DspParamFmt_OscSpeed - DspParamFmt_EqFreq
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Bitmap_Ntedt0k
 ; Bitmap_Ntedt0k  --  16 x 127 bitmap, 8 bpp, row stride 16, 2032 bytes
@@ -8223,4 +8239,4 @@ East_ClassDesc12_Sig:		.incbin "includes/generated/naka_widget_descriptors.bin",
 ; DspParamName_NN_<NAME> (slot NN: name at DspParamName_Table + 0x11*NN, unit at
 ; DspParamUnit_Table + 2*NN) and DspEffectName_PtrTable (128 x u32) are labels at the
 ; top of the blob (split there on 2026-10-02 by split_blobs_at_far_pointers.py).
-	.equ DspEffectName_Strings, NakaData_WidgetDescriptors + 0x01e1a	; 0xE32C7A, 128 x 18
+	.equ DspEffectName_Strings, NakaInst_FxReservedSlot_00	; 0xE32C7A, 128 x 18

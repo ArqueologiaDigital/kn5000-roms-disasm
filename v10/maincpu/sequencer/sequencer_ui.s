@@ -7568,11 +7568,11 @@ EntertainerGridCheck:
 	ldirw
 	ld xde, (xsp + 62)
 	ld (xsp + 20), xde
-	lda xwa, (EntertainerGridCheck_Data_3:24)
+	lda xwa, (DspValueText_EqFreq:24)
 	ld (xsp + 12), xwa
-	lda xwa, (EntertainerGridCheck_Data_2:24)
+	lda xwa, (DspValueText_EqGain:24)
 	ld (xsp + 8), xwa
-	lda xwa, (NakaData_WidgetDescriptors:24)
+	lda xwa, (DspValueText_ReverbTime:24)
 	ld (xsp + 4), xwa
 	lda xwa, (xsp + 48)
 	ld (xsp + 28), xwa
@@ -15491,7 +15491,7 @@ EqualizerCngFunc:
 	jrl z, Equalizer_ParamByIndex
 	cp xbc, EVT_GET_DISP_POS
 	jr z, Equalizer_DispatchA
-	lda xbc, (EntertainerGridCheck_Data_2:24)
+	lda xbc, (DspValueText_EqGain:24)
 	lda xhl, (0x2978:16)
 	sub xwa, EVT_GET_EQ0_STR
 	cp xwa, 0x0
@@ -15649,7 +15649,7 @@ Equalizer_LookupParamString:
 	ld xbc, xwa
 	sll xbc, 2
 	add xbc, xwa
-	ld xwa, EntertainerGridCheck_Data_3
+	ld xwa, DspValueText_EqFreq
 	add xwa, xbc
 	push xwa
 	jr FormatEqParam_CopyAndReturn
@@ -15804,6 +15804,36 @@ ParamCmd_ReturnZero:
 	ld xhl, 0:i3
 	ret
 
+; -----------------------------------------------------------------------------
+; FormatParamValueStr -- the value cell of one DSP effect editor row.  A = row, XBC = cell buffer:
+; writes " ", 5 value characters, " " (buf[0] and buf[6]).  The row's DSP parameter id is the byte at
+; RAM 0x29AC + row (the id that indexes DspParamName_Table / DspParamUnit_Table), its value the word
+; at RAM 0x2978 + 2*row.  The id alone picks the format:
+;   0x00, 0x55                   5 spaces (DspParamFmt_Blank)
+;   0x40 0x41 0x47, 0x49         tested here: DspParamFmt_LfoSpeed, DspParamFmt_RotorSpeed
+;   0x08-0x19, 0x20-0x39         DspParamFmt_BySwitch: DspParamFmt_CaseByParamId[id - 8 / id - 14]
+;   any other id                 "%5d" (DspParamFmt_Decimal)
+; Cell [value] of a DspValueText_* table (Strncpy 5, DspParamFmt_CopyValueText), by id:
+;   0x08 0x09 0x40 0x41 0x47     DspValueText_LfoSpeed
+;   0x0D                         DspValueText_SlowFast
+;   0x0E 0x0F 0x12 0x13 0x49     DspValueText_RotorSpeed
+;   0x10 0x11                    DspValueText_WindTime
+;   0x15                         DspValueText_OscSpeed
+;   0x20 0x33                    DspValueText_EqFreq
+;   0x22                         DspValueText_ReverbTime
+;   0x24                         DspValueText_HighDampGain
+;   0x26 0x27                    DspValueText_Pitch
+;   0x2A 0x2B                    DspValueText_SensTime
+;   0x2C                         DspValueText_AttackRate
+;   0x2D                         DspValueText_ReleaseRate
+;   0x2E 0x2F                    DspValueText_GateTime
+;   0x31 0x32                    DspValueText_Waveform
+;   0x34                         DspValueText_EqQ
+;   0x35                         DspValueText_EqGain
+;   0x0B 0x18 0x19 0x39          " -%3d" / " +%3d" / "  %3d" (DspParamFmt_Signed)
+; Names and units of the ids: technics-docs dsp-name-tables.md (Value formats).  Derived and asserted
+; by scripts/tools/name_dsp_param_value_formats.py.
+; -----------------------------------------------------------------------------
 FormatParamValueStr:
 	push xiz
 	ld xiz, xbc
@@ -15816,135 +15846,135 @@ FormatParamValueStr:
 	ld w, (xbc)
 	lda xhl, (xiz + 1)
 	cp w, 0x55
-	jrl z, Equalizer_CopyFixedString
+	jrl z, DspParamFmt_Blank
 	cp w, 0:i3
-	jrl z, Equalizer_CopyFixedString
+	jrl z, DspParamFmt_Blank
 	ld c, a
 	extz bc
 	lda xde, (0x2978:16)
 	cp w, 0x49
-	jrl z, Equalizer_FormatDefault
+	jrl z, DspParamFmt_RotorSpeed
 	cp w, 0x47
-	jr z, FormatParamString
+	jr z, DspParamFmt_LfoSpeed
 	cp w, 0x41
-	jr z, FormatParamString
+	jr z, DspParamFmt_LfoSpeed
 	cp w, 0x40
-	jr z, FormatParamString
+	jr z, DspParamFmt_LfoSpeed
 	ld a, w
 	extz wa
 	dec 8, wa
 	cp wa, 0:i3
-	jrl lt, PrepareAudioParam
+	jrl lt, DspParamFmt_Decimal
 	cp wa, 0x11
-	jr le, Equalizer_FormatDispatch
+	jr le, DspParamFmt_BySwitch
 	dec 6, wa
 	cp wa, 0x12
-	jrl lt, PrepareAudioParam
+	jrl lt, DspParamFmt_Decimal
 	cp wa, 0x2b
-	jrl gt, PrepareAudioParam
+	jrl gt, DspParamFmt_Decimal
 
-; Equalizer format dispatch
-Equalizer_FormatDispatch:
-	lda xix, (Equalizer_FormatDispatch_Table:24)
+; the 18-case switch on DspParamFmt_CaseByParamId[]
+DspParamFmt_BySwitch:
+	lda xix, (DspParamFmt_CaseByParamId:24)
 	ld	wa, (xix+wa)
 	extz wa
 	sll wa, 1
-	ld xix, Equalizer_FormatDispatch_CaseTable
+	ld xix, DspParamFmt_CaseTable
 	ld	wa, (xix+wa)
-	lda xix, (Equalizer_FormatCases:24)
+	lda xix, (DspParamFmt_EqFreq:24)
 	jp	t, (xix+wa)
 
-; Case bodies of the `jp t, (xrr+rr)` switch in Equalizer_FormatDispatch (word offsets at Equalizer_FormatDispatch_CaseTable): jp (xix + r) with xix = this
+; Case bodies of the `jp t, (xrr+rr)` switch in DspParamFmt_BySwitch (word offsets at DspParamFmt_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
 ; code.
-Equalizer_FormatCases:
+DspParamFmt_EqFreq:
 	pushw 0x0005
-	ld xwa, EntertainerGridCheck_Data_3
-	jrl FormatParamStr_CopyEnumName
-Equalizer_FormatDispatch_Case10:
+	ld xwa, DspValueText_EqFreq
+	jrl DspParamFmt_CopyValueText
+DspParamFmt_EqQ:
 	pushw 0x0005
-	ld xwa, Equalizer_FormatCases_Data
-	jrl FormatParamStr_CopyEnumName
-Equalizer_FormatDispatch_Case11:
+	ld xwa, DspValueText_EqQ
+	jrl DspParamFmt_CopyValueText
+DspParamFmt_EqGain:
 	pushw 0x0005
-	ld xwa, EntertainerGridCheck_Data_2
-	jrl FormatParamStr_CopyEnumName
+	ld xwa, DspValueText_EqGain
+	jrl DspParamFmt_CopyValueText
 
-FormatParamString:
+DspParamFmt_LfoSpeed:
 	pushw 0x5
-	ld xwa, FormatParamString_Data_3
-	jrl FormatParamStr_CopyEnumName
-Equalizer_FormatDispatch_Case9:
+	ld xwa, DspValueText_LfoSpeed
+	jrl DspParamFmt_CopyValueText
+DspParamFmt_Waveform:
 	pushw 0x5
-	ld xwa, FormatParamString_Data_2
-	jrl FormatParamStr_CopyEnumName
-Equalizer_FormatDispatch_Case17:
+	ld xwa, DspValueText_Waveform
+	jrl DspParamFmt_CopyValueText
+DspParamFmt_OscSpeed:
 	pushw 0x5
-	ld xwa, FormatParamString_Data
-	jrl FormatParamStr_CopyEnumName
+	ld xwa, DspValueText_OscSpeed
+	jrl DspParamFmt_CopyValueText
 
-; Equalizer format default
-Equalizer_FormatDefault:
+; id 0x49 ("FAST" of the treble rotor) joins case 15 here
+DspParamFmt_RotorSpeed:
 	pushw 0x5
-	ld xwa, Equalizer_FormatDefault_Data_8
-	jrl FormatParamStr_CopyEnumName
-Equalizer_FormatDispatch_Case16:
+	ld xwa, DspValueText_RotorSpeed
+	jrl DspParamFmt_CopyValueText
+DspParamFmt_WindTime:
 	pushw 0x5
-	ld xwa, Equalizer_FormatDefault_Data_7
-	jr FormatParamStr_CopyEnumName
-Equalizer_FormatDispatch_Case14:
+	ld xwa, DspValueText_WindTime
+	jr DspParamFmt_CopyValueText
+DspParamFmt_SlowFast:
 	pushw 0x5
-	ld xwa, Equalizer_FormatDefault_Data_6
-	jr FormatParamStr_CopyEnumName
-Equalizer_FormatDispatch_Case4:
+	ld xwa, DspValueText_SlowFast
+	jr DspParamFmt_CopyValueText
+DspParamFmt_Pitch:
 	pushw 0x5
-	ld xwa, Equalizer_FormatDefault_Data_5
-	jr FormatParamStr_CopyEnumName
-Equalizer_FormatDispatch_Case5:
+	ld xwa, DspValueText_Pitch
+	jr DspParamFmt_CopyValueText
+DspParamFmt_SensTime:
 	pushw 0x5
-	ld xwa, Equalizer_FormatDefault_Data_4
-	jr FormatParamStr_CopyEnumName
-Equalizer_FormatDispatch_Case6:
+	ld xwa, DspValueText_SensTime
+	jr DspParamFmt_CopyValueText
+DspParamFmt_AttackRate:
 	pushw 0x5
-	ld xwa, Equalizer_FormatDefault_Data_3
-	jr FormatParamStr_CopyEnumName
-Equalizer_FormatDispatch_Case7:
+	ld xwa, DspValueText_AttackRate
+	jr DspParamFmt_CopyValueText
+DspParamFmt_ReleaseRate:
 	pushw 0x5
-	ld xwa, Equalizer_FormatDefault_Data_2
-	jr FormatParamStr_CopyEnumName
-Equalizer_FormatDispatch_Case8:
+	ld xwa, DspValueText_ReleaseRate
+	jr DspParamFmt_CopyValueText
+DspParamFmt_GateTime:
 	pushw 0x5
-	ld xwa, Equalizer_FormatDefault_Data
-	jr FormatParamStr_CopyEnumName
-Equalizer_FormatDispatch_Case12:
+	ld xwa, DspValueText_GateTime
+	jr DspParamFmt_CopyValueText
+DspParamFmt_Signed:
 	add bc, bc
 	ld	wa, (xde+bc)
 	cp wa, 0:i3
-	jr ge, EqFormat_NegativeValue
+	jr ge, DspParamFmt_SignedNonNegative
 	neg wa
 	pushw wa
-	ld xwa, Equalizer_FormatDefault_Str
-	jr SendAudioCommand
+	ld xwa, DspParamFmt_NegativeFmt
+	jr DspParamFmt_Sprintf
 
-EqFormat_NegativeValue:
+DspParamFmt_SignedNonNegative:
 	pushw wa
 	cp wa, 0:i3
-	jr le, EqFormat_PositiveValue
-	ld xwa, EqFormat_NegativeValue_Str
-	jr SendAudioCommand
+	jr le, DspParamFmt_SignedZero
+	ld xwa, DspParamFmt_PositiveFmt
+	jr DspParamFmt_Sprintf
 
-EqFormat_PositiveValue:
-	ld xwa, EqFormat_PositiveValue_Str
-	jr SendAudioCommand
-Equalizer_FormatDispatch_Case3:
+DspParamFmt_SignedZero:
+	ld xwa, DspParamFmt_ZeroFmt
+	jr DspParamFmt_Sprintf
+DspParamFmt_HighDampGain:
 	pushw 0x5
-	ld xwa, EqFormat_PositiveValue_Data
-	jr FormatParamStr_CopyEnumName
-Equalizer_FormatDispatch_Case2:
+	ld xwa, DspValueText_HighDampGain
+	jr DspParamFmt_CopyValueText
+DspParamFmt_ReverbTime:
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors
+	ld xwa, DspValueText_ReverbTime
 
-FormatParamStr_CopyEnumName:
+DspParamFmt_CopyValueText:
 	add bc, bc
 	ld	bc, (xde+bc)
 	extz xbc
@@ -15956,28 +15986,28 @@ FormatParamStr_CopyEnumName:
 	push xhl
 	call Strncpy
 	lda xsp, (xsp + 10)
-	jr Equalizer_PadSpaceAndReturn
+	jr DspParamFmt_PadAndReturn
 
-Equalizer_CopyFixedString:
-	pushw Equalizer_CopyFixedString_Str_Blank5@hi16
-	pushw Equalizer_CopyFixedString_Str_Blank5@lo16
+DspParamFmt_Blank:
+	pushw DspParamFmt_BlankText@hi16
+	pushw DspParamFmt_BlankText@lo16
 	push xhl
 	call Strcpy
 	inc 8, xsp
-	jr Equalizer_PadSpaceAndReturn
+	jr DspParamFmt_PadAndReturn
 
-PrepareAudioParam:
+DspParamFmt_Decimal:
 	add bc, bc
 	pushw	(xde+bc)
-	ld xwa, PrepareAudioParam_Str
+	ld xwa, DspParamFmt_DecimalFmt
 
-SendAudioCommand:
+DspParamFmt_Sprintf:
 	push xwa
 	push xhl
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 
-Equalizer_PadSpaceAndReturn:
+DspParamFmt_PadAndReturn:
 	ld (xiz + 6), 0x20
 	pop xiz
 	ret

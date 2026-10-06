@@ -136,142 +136,97 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * [typed] by build_value_text
      * Parameter-value display texts, blob +0x0..+0x15B8: one table per
-     * parameter scale, cells of exactly 5 characters.
+     * DSP parameter scale, cells of exactly 5 characters, space-padded,
+     * no terminator.  FormatParamValueStr (sequencer/sequencer_ui.s) picks
+     * the table from the row's DSP parameter id and copies cell [value]
+     * with Strncpy(dst, table + 5*value, 5) (DspParamFmt_CopyValueText).
      *
-     * DspValueText_0000 -- 100 value texts of 5 characters (0.10 .. .,
-     * space-padded), no terminator. Read by EntertainerGridCheck (v10/v9
-     * 0xF30326, v7 0xF302FC), EqFormat_PositiveValue (v10/v9 0xF35C39, v7
-     * 0xF35C0F): the table address goes to FormatParamStr_CopyEnumName,
-     * which copies cell [value] with Strncpy(dst, table + 5*value, 5).
+     * DspValueText_ReverbTime -- 100 cells: "0.10" .. "30.00", then two "  .  " cells (unit "s").
+     * DSP parameter id 0x22 (REVERB TIME), read by DspParamFmt_ReverbTime.
      * --------------------------------------------------------------------- */
-    char DspValueText_0000[100][5];
+    char DspValueText_ReverbTime[100][5];
     /* ---------------------------------------------------------------------
-     * DspValueText_01F4 -- 25 value texts of 5 characters (-24.0 .. 0.0,
-     * space-padded), no terminator, then one 0xFF alignment byte. Read by
-     * EqFormat_PositiveValue (v10/v9 0xF35C39, v7 0xF35C0F): the table
-     * address goes to FormatParamStr_CopyEnumName, which copies cell [value]
-     * with Strncpy(dst, table + 5*value, 5).
+     * DspValueText_HighDampGain -- 25 cells: "-24.0" .. "0.0".
+     * DSP parameter id 0x24 (HIGH DAMP GAIN), read by DspParamFmt_HighDampGain.
      * --------------------------------------------------------------------- */
-    char DspValueText_01F4[25][5];
-    uint8_t DspValueText_01F4_Pad[1];
+    char DspValueText_HighDampGain[25][5];
+    uint8_t DspValueText_HighDampGain_Pad[1];
     /* ---------------------------------------------------------------------
-     * DspValueText_0272 -- 100 value texts of 5 characters (10 .. 2900,
-     * space-padded), no terminator. Read by Equalizer_FormatDefault (v10/v9
-     * 0xF35BC7, v7 0xF35B9D): the table address goes to
-     * FormatParamStr_CopyEnumName, which copies cell [value] with
-     * Strncpy(dst, table + 5*value, 5).
+     * DspValueText_GateTime -- 100 cells: "10" .. "2900" (unit "ms").
+     * DSP parameter ids 0x2E 0x2F (GATE TIME, MASK TIME), read by DspParamFmt_GateTime.
      * --------------------------------------------------------------------- */
-    char DspValueText_0272[100][5];
+    char DspValueText_GateTime[100][5];
     /* ---------------------------------------------------------------------
-     * DspValueText_0466 -- 100 value texts of 5 characters (0.01 .. 1.00,
-     * space-padded), no terminator. Read by Equalizer_FormatDefault (v10/v9
-     * 0xF35BC7, v7 0xF35B9D): the table address goes to
-     * FormatParamStr_CopyEnumName, which copies cell [value] with
-     * Strncpy(dst, table + 5*value, 5).
+     * DspValueText_ReleaseRate -- 100 cells: "0.01" .. "1.00" (unit "s").
+     * DSP parameter id 0x2D (RELEASE RATE), read by DspParamFmt_ReleaseRate.
      * --------------------------------------------------------------------- */
-    char DspValueText_0466[100][5];
+    char DspValueText_ReleaseRate[100][5];
     /* ---------------------------------------------------------------------
-     * DspValueText_065A -- 100 value texts of 5 characters (0.2 .. 20.0,
-     * space-padded), no terminator. Read by Equalizer_FormatDefault (v10/v9
-     * 0xF35BC7, v7 0xF35B9D): the table address goes to
-     * FormatParamStr_CopyEnumName, which copies cell [value] with
-     * Strncpy(dst, table + 5*value, 5).
+     * DspValueText_AttackRate -- 100 cells: "0.2" .. "20.0" (unit "s").
+     * DSP parameter id 0x2C (ATTACK RATE), read by DspParamFmt_AttackRate.
      * --------------------------------------------------------------------- */
-    char DspValueText_065A[100][5];
+    char DspValueText_AttackRate[100][5];
     /* ---------------------------------------------------------------------
-     * DspValueText_084E -- 100 value texts of 5 characters (0.001 .. 0.100,
-     * space-padded), no terminator. Read by Equalizer_FormatDefault (v10/v9
-     * 0xF35BC7, v7 0xF35B9D): the table address goes to
-     * FormatParamStr_CopyEnumName, which copies cell [value] with
-     * Strncpy(dst, table + 5*value, 5).
+     * DspValueText_SensTime -- 100 cells: "0.001" .. "0.100" (unit "s").
+     * DSP parameter ids 0x2A 0x2B (ATTACK SENS., RELEASE SENS.), read by DspParamFmt_SensTime.
      * --------------------------------------------------------------------- */
-    char DspValueText_084E[100][5];
+    char DspValueText_SensTime[100][5];
     /* ---------------------------------------------------------------------
-     * DspValueText_0A42 -- 73 value texts of 5 characters (-1200 .. +1200,
-     * space-padded), no terminator, then one 0xFF alignment byte. Read by
-     * Equalizer_FormatDefault (v10/v9 0xF35BC7, v7 0xF35B9D): the table
-     * address goes to FormatParamStr_CopyEnumName, which copies cell [value]
-     * with Strncpy(dst, table + 5*value, 5).
+     * DspValueText_Pitch -- 73 cells: "-1200" .. "+1200".
+     * DSP parameter ids 0x26 0x27 (PITCH L, PITCH R), read by DspParamFmt_Pitch.
      * --------------------------------------------------------------------- */
-    char DspValueText_0A42[73][5];
-    uint8_t DspValueText_0A42_Pad[1];
+    char DspValueText_Pitch[73][5];
+    uint8_t DspValueText_Pitch_Pad[1];
     /* ---------------------------------------------------------------------
-     * DspValueText_0BB0 -- 2 value texts of 5 characters (SLOW .. FAST,
-     * space-padded), no terminator. Read by Equalizer_FormatDefault (v10/v9
-     * 0xF35BC7, v7 0xF35B9D): the table address goes to
-     * FormatParamStr_CopyEnumName, which copies cell [value] with
-     * Strncpy(dst, table + 5*value, 5).
+     * DspValueText_SlowFast -- 2 cells: "SLOW" .. "FAST".
+     * DSP parameter id 0x0D (SLOW/FAST), read by DspParamFmt_SlowFast.
      * --------------------------------------------------------------------- */
-    char DspValueText_0BB0[2][5];
+    char DspValueText_SlowFast[2][5];
     /* ---------------------------------------------------------------------
-     * DspValueText_0BBA -- 100 value texts of 5 characters (1.0 .. 61.00,
-     * space-padded), no terminator. Read by Equalizer_FormatDefault (v10/v9
-     * 0xF35BC7, v7 0xF35B9D): the table address goes to
-     * FormatParamStr_CopyEnumName, which copies cell [value] with
-     * Strncpy(dst, table + 5*value, 5).
+     * DspValueText_WindTime -- 100 cells: "1.0" .. "61.00" (unit "s").
+     * DSP parameter ids 0x10 0x11 (rotor WIND UP, WIND DOWN), read by DspParamFmt_WindTime.
      * --------------------------------------------------------------------- */
-    char DspValueText_0BBA[100][5];
+    char DspValueText_WindTime[100][5];
     /* ---------------------------------------------------------------------
-     * DspValueText_0DAE -- 100 value texts of 5 characters (0.0 .. 34.95,
-     * space-padded), no terminator. Read by Equalizer_FormatDefault (v10/v9
-     * 0xF35BC7, v7 0xF35B9D): the table address goes to
-     * FormatParamStr_CopyEnumName, which copies cell [value] with
-     * Strncpy(dst, table + 5*value, 5).
+     * DspValueText_RotorSpeed -- 100 cells: "0.0" .. "34.95" (unit "Hz").
+     * DSP parameter ids 0x0E 0x0F 0x12 0x13 0x49 (TREBLE FAST, (treble) SLOW, BASS FAST, BASS SLOW, (treble) FAST), read by DspParamFmt_RotorSpeed.
      * --------------------------------------------------------------------- */
-    char DspValueText_0DAE[100][5];
+    char DspValueText_RotorSpeed[100][5];
     /* ---------------------------------------------------------------------
-     * DspValueText_0FA2 -- 100 value texts of 5 characters (0 .. 19.6k,
-     * space-padded), no terminator. Read by FormatParamString (v10/v9
-     * 0xF35BA6, v7 0xF35B7C): the table address goes to
-     * FormatParamStr_CopyEnumName, which copies cell [value] with
-     * Strncpy(dst, table + 5*value, 5).
+     * DspValueText_OscSpeed -- 100 cells: "0" .. "19.6k" (unit "Hz").
+     * DSP parameter id 0x15 (OSC SPEED), read by DspParamFmt_OscSpeed.
      * --------------------------------------------------------------------- */
-    char DspValueText_0FA2[100][5];
+    char DspValueText_OscSpeed[100][5];
     /* ---------------------------------------------------------------------
-     * DspValueText_1196 -- 3 value texts of 5 characters (SIN .. SQU,
-     * space-padded), no terminator, then one 0xFF alignment byte. Read by
-     * FormatParamString (v10/v9 0xF35BA6, v7 0xF35B7C): the table address
-     * goes to FormatParamStr_CopyEnumName, which copies cell [value] with
-     * Strncpy(dst, table + 5*value, 5).
+     * DspValueText_Waveform -- 3 cells: "SIN" .. "SQU".
+     * DSP parameter ids 0x31 0x32 (LFO WAVEFORM, OSC WAVEFORM), read by DspParamFmt_Waveform.
      * --------------------------------------------------------------------- */
-    char DspValueText_1196[3][5];
-    uint8_t DspValueText_1196_Pad[1];
+    char DspValueText_Waveform[3][5];
+    uint8_t DspValueText_Waveform_Pad[1];
     /* ---------------------------------------------------------------------
-     * DspValueText_11A6 -- 100 value texts of 5 characters (0.0 .. 40.2,
-     * space-padded), no terminator. Read by FormatParamString (v10/v9
-     * 0xF35BA6, v7 0xF35B7C): the table address goes to
-     * FormatParamStr_CopyEnumName, which copies cell [value] with
-     * Strncpy(dst, table + 5*value, 5).
+     * DspValueText_LfoSpeed -- 100 cells: "0.0" .. "40.2" (unit "Hz").
+     * DSP parameter ids 0x08 0x09 0x40 0x41 0x47 (LFO SPEED, SLOW LFO SPEED, FAST LFO SPEED L, FAST LFO SPEED R, FAST LFO SPEED), read by DspParamFmt_LfoSpeed.
      * --------------------------------------------------------------------- */
-    char DspValueText_11A6[100][5];
+    char DspValueText_LfoSpeed[100][5];
     /* ---------------------------------------------------------------------
-     * DspValueText_139A -- 49 value texts of 5 characters (-12.0 .. +12.0,
-     * space-padded), no terminator, then one 0xFF alignment byte. Read by
-     * EntertainerGridCheck (v10/v9 0xF30326, v7 0xF302FC), EqualizerCngFunc
-     * (v10/v9 0xF3580D, v7 0xF357E3): the table address goes to
-     * FormatParamStr_CopyEnumName, which copies cell [value] with
-     * Strncpy(dst, table + 5*value, 5).
+     * DspValueText_EqGain -- 49 cells: "-12.0" .. "+12.0".
+     * DSP parameter id 0x35 (BAND EMPHASIS G), read by DspParamFmt_EqGain.
+     * Also the band gains of the master equalizer screen (EqualizerCngFunc).
      * --------------------------------------------------------------------- */
-    char DspValueText_139A[49][5];
-    uint8_t DspValueText_139A_Pad[1];
+    char DspValueText_EqGain[49][5];
+    uint8_t DspValueText_EqGain_Pad[1];
     /* ---------------------------------------------------------------------
-     * DspValueText_1490 -- 32 value texts of 5 characters (0.1 .. 20.0,
-     * space-padded), no terminator. No reference to this table was found
-     * (searched: NakaData_WidgetDescriptors and its positional labels in all
-     * v10 .s files); it sits between two referenced tables in the same
-     * 5-character format. Its reader is not established.
+     * DspValueText_EqQ -- 32 cells: "0.1" .. "20.0".
+     * DSP parameter id 0x34 (BAND EMPHASIS Q), read by DspParamFmt_EqQ.
      * --------------------------------------------------------------------- */
-    char DspValueText_1490[32][5];
+    char DspValueText_EqQ[32][5];
     /* ---------------------------------------------------------------------
-     * DspValueText_1530 -- 27 value texts of 5 characters (40 .. 16k,
-     * space-padded), no terminator, then one 0xFF alignment byte. Read by
-     * EntertainerGridCheck (v10/v9 0xF30326, v7 0xF302FC),
-     * Equalizer_LookupParamString (v10/v9 0xF35980, v7 0xF35956): the table
-     * address goes to FormatParamStr_CopyEnumName, which copies cell [value]
-     * with Strncpy(dst, table + 5*value, 5).
+     * DspValueText_EqFreq -- 27 cells: "40" .. "16k" (unit "Hz").
+     * DSP parameter ids 0x20 0x33 (HIGH EMPHASIS FC, BAND EMPHASIS FC), read by DspParamFmt_EqFreq.
+     * Also the band frequencies of the master equalizer screen (EqualizerCngFunc).
      * --------------------------------------------------------------------- */
-    char DspValueText_1530[27][5];
-    uint8_t DspValueText_1530_Pad[1];
+    char DspValueText_EqFreq[27][5];
+    uint8_t DspValueText_EqFreq_Pad[1];
     /* ------------------------------------------------------------------
      * DSP EFFECT PARAMETER UNIT TABLE      blob +0x15B8, ROM 0xE32418
      * ------------------------------------------------------------------
@@ -1699,43 +1654,39 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     uint16_t Equalizer_CmdDispatch_CaseTable[15];
     /* ---------------------------------------------------------------------
-     * Equalizer_FormatDefault_Str -- NUL-terminated string(s), 6 bytes, used
-     * by Equalizer_FormatDefault (v10/v9 0xF35BC7, v7 0xF35B9D) (`ld xwa,
-     * Equalizer_FormatDefault_Str`).
+     * DspParamFmt_NegativeFmt -- " -%3d": DspParamFmt_Signed prints a
+     * negative value's magnitude with it.
      * --------------------------------------------------------------------- */
-    char Equalizer_FormatDefault_Str[6];
+    char DspParamFmt_NegativeFmt[6];
     /* ---------------------------------------------------------------------
-     * EqFormat_NegativeValue_Str -- NUL-terminated string(s), 6 bytes, used
-     * by EqFormat_NegativeValue (v10/v9 0xF35C2D, v7 0xF35C03) (`ld xwa,
-     * EqFormat_NegativeValue_Str`).
+     * DspParamFmt_PositiveFmt -- " +%3d": DspParamFmt_SignedNonNegative
+     * prints a positive value with it.
      * --------------------------------------------------------------------- */
-    char EqFormat_NegativeValue_Str[6];
+    char DspParamFmt_PositiveFmt[6];
     /* ---------------------------------------------------------------------
-     * EqFormat_PositiveValue_Str -- NUL-terminated string(s), 12 bytes, used
-     * by EqFormat_PositiveValue (v10/v9 0xF35C39, v7 0xF35C0F) (`ld xwa,
-     * EqFormat_PositiveValue_Str`).
+     * DspParamFmt_ZeroFmt -- "  %3d": DspParamFmt_SignedZero prints the
+     * value 0 with it.
      * --------------------------------------------------------------------- */
-    char EqFormat_PositiveValue_Str[12];
+    char DspParamFmt_ZeroFmt[6];
+    /* DspParamFmt_BlankText -- 5 spaces: DspParamFmt_Blank copies them (Strcpy) for ids 0x00 and 0x55 */
+    char DspParamFmt_BlankText[6];
     /* ---------------------------------------------------------------------
-     * PrepareAudioParam_Str -- NUL-terminated string(s), 4 bytes, used by
-     * PrepareAudioParam (v10/v9 0xF35C7E, v7 0xF35C54) (`ld xwa,
-     * PrepareAudioParam_Str`).
+     * DspParamFmt_DecimalFmt -- "%5d": DspParamFmt_Decimal prints the raw
+     * value of an id with no value-text table.
      * --------------------------------------------------------------------- */
-    char PrepareAudioParam_Str[4];
+    char DspParamFmt_DecimalFmt[4];
     /* ---------------------------------------------------------------------
-     * Equalizer_FormatDispatch_Table -- read by Equalizer_FormatDispatch
-     * (v10/v9 0xF35B62, v7 0xF35B38) (`lda xix, (Equalizer_FormatDispatch_Table:24)`). 44
-     * bytes to the next object; the layout beyond that access is not
-     * established.
+     * DspParamFmt_CaseByParamId -- case of DspParamFmt_CaseTable for DSP
+     * parameter id 0x08-0x19 ([id - 8]) and 0x20-0x39 ([id - 14]); read by
+     * DspParamFmt_BySwitch.
      * --------------------------------------------------------------------- */
-    uint8_t Equalizer_FormatDispatch_Table[44];
+    uint8_t DspParamFmt_CaseByParamId[44];
     /* ---------------------------------------------------------------------
-     * Equalizer_FormatDispatch_CaseTable -- jump table of a compiled
-     * `switch` in Equalizer_FormatDispatch (v10/v9 0xF35B62, v7 0xF35B38)
-     * (`ld xix, Equalizer_FormatDispatch_CaseTable`): 18 u16 case offsets from
-     * Equalizer_FormatCases.
+     * DspParamFmt_CaseTable -- jump table of the compiled `switch` in
+     * DspParamFmt_BySwitch: 18 u16 case offsets from DspParamFmt_EqFreq,
+     * indexed by DspParamFmt_CaseByParamId[].
      * --------------------------------------------------------------------- */
-    uint16_t Equalizer_FormatDispatch_CaseTable[18];
+    uint16_t DspParamFmt_CaseTable[18];
     /* ---------------------------------------------------------------------
      * Bitmap_Ntedt0k  --  16 x 127 bitmap, 8 bpp, row stride 16, 2032 bytes
      *
@@ -4159,7 +4110,7 @@ _Static_assert(sizeof(naka_widget_descriptors_t) == 150888,
 const naka_widget_descriptors_t naka_widget_descriptors_data
     __attribute__((section(".text"), used)) = {
 
-    .DspValueText_0000 = {
+    .DspValueText_ReverbTime = {
         " 0.10", " 0.12", " 0.14", " 0.16", " 0.18", " 0.20", " 0.22", " 0.24",
         " 0.26", " 0.28", " 0.30", " 0.32", " 0.34", " 0.36", " 0.38", " 0.40",
         " 0.45", " 0.50", " 0.55", " 0.60", " 0.65", " 0.70", " 0.75", " 0.80",
@@ -4175,16 +4126,16 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         "29.00", "30.00", "  .  ", "  .  ",
     },
 
-    .DspValueText_01F4 = {
+    .DspValueText_HighDampGain = {
         "-24.0", "-23.0", "-22.0", "-21.0", "-20.0", "-19.0", "-18.0", "-17.0",
         "-16.0", "-15.0", "-14.0", "-13.0", "-12.0", "-11.0", "-10.0", "- 9.0",
         "- 8.0", "- 7.0", "- 6.0", "- 5.0", "- 4.0", "- 3.0", "- 2.0", "- 1.0",
         "  0.0",
     },
 
-    .DspValueText_01F4_Pad = { 0xFF },
+    .DspValueText_HighDampGain_Pad = { 0xFF },
 
-    .DspValueText_0272 = {
+    .DspValueText_GateTime = {
         "   10", "   12", "   14", "   16", "   18", "   20", "   22", "   24",
         "   26", "   28", "   30", "   32", "   34", "   36", "   38", "   40",
         "   42", "   44", "   46", "   48", "   50", "   55", "   60", "   65",
@@ -4200,7 +4151,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         " 2600", " 2700", " 2800", " 2900",
     },
 
-    .DspValueText_0466 = {
+    .DspValueText_ReleaseRate = {
         " 0.01", " 0.02", " 0.03", " 0.04", " 0.05", " 0.06", " 0.07", " 0.08",
         " 0.09", " 0.10", " 0.11", " 0.12", " 0.13", " 0.14", " 0.15", " 0.16",
         " 0.17", " 0.18", " 0.19", " 0.20", " 0.21", " 0.22", " 0.23", " 0.24",
@@ -4216,7 +4167,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         " 0.97", " 0.98", " 0.99", " 1.00",
     },
 
-    .DspValueText_065A = {
+    .DspValueText_AttackRate = {
         "  0.2", "  0.4", "  0.6", "  0.8", "  1.0", "  1.2", "  1.4", "  1.6",
         "  1.8", "  2.0", "  2.2", "  2.4", "  2.6", "  2.8", "  3.0", "  3.2",
         "  3.4", "  3.6", "  3.8", "  4.0", "  4.2", "  4.4", "  4.6", "  4.8",
@@ -4232,7 +4183,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         " 19.4", " 19.6", " 19.8", " 20.0",
     },
 
-    .DspValueText_084E = {
+    .DspValueText_SensTime = {
         "0.001", "0.002", "0.003", "0.004", "0.005", "0.006", "0.007", "0.008",
         "0.009", "0.010", "0.011", "0.012", "0.013", "0.014", "0.015", "0.016",
         "0.017", "0.018", "0.019", "0.020", "0.021", "0.022", "0.023", "0.024",
@@ -4248,7 +4199,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         "0.097", "0.098", "0.099", "0.100",
     },
 
-    .DspValueText_0A42 = {
+    .DspValueText_Pitch = {
         "-1200", "-1100", "-1000", "- 900", "- 800", "- 700", "- 650", "- 600",
         "- 550", "- 500", "- 450", "- 400", "- 350", "- 300", "- 250", "- 200",
         "- 150", "- 100", "-  90", "-  80", "-  70", "-  60", "-  50", "-  40",
@@ -4261,13 +4212,13 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         "+1200",
     },
 
-    .DspValueText_0A42_Pad = { 0xFF },
+    .DspValueText_Pitch_Pad = { 0xFF },
 
-    .DspValueText_0BB0 = {
+    .DspValueText_SlowFast = {
         " SLOW", " FAST",
     },
 
-    .DspValueText_0BBA = {
+    .DspValueText_WindTime = {
         "  1.0", "  1.4", "  1.8", "  2.2", "  2.6", "  3.0", "  3.4", "  3.8",
         "  4.2", "  4.6", "  5.0", "  5.4", "  5.8", "  6.2", "  6.6", "  7.0",
         "  7.4", "  7.8", "  8.2", "  8.6", "  9.0", "  9.4", "  9.8", " 10.2",
@@ -4283,7 +4234,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         "57.25", "58.50", "59.75", "61.00",
     },
 
-    .DspValueText_0DAE = {
+    .DspValueText_RotorSpeed = {
         "  0.0", "  0.1", "  0.2", "  0.3", "  0.4", "  0.5", "  0.6", "  0.7",
         "  0.8", "  0.9", "  1.0", "  1.1", "  1.2", "  1.3", "  1.4", "  1.5",
         "  1.6", "  1.7", "  1.8", "  1.9", "  2.0", "  2.2", "  2.4", "  2.6",
@@ -4299,7 +4250,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         "33.30", "33.85", "34.40", "34.95",
     },
 
-    .DspValueText_0FA2 = {
+    .DspValueText_OscSpeed = {
         "    0", "    1", "    2", "    3", "    4", "    5", "    6", "    7",
         "    8", "    9", "   10", "   20", "   30", "   40", "   50", "   60",
         "   70", "   80", "   90", "  100", "  120", "  140", "  160", "  180",
@@ -4315,13 +4266,13 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         "17.2k", "18.0k", "18.8k", "19.6k",
     },
 
-    .DspValueText_1196 = {
+    .DspValueText_Waveform = {
         "  SIN", "  TRI", "  SQU",
     },
 
-    .DspValueText_1196_Pad = { 0xFF },
+    .DspValueText_Waveform_Pad = { 0xFF },
 
-    .DspValueText_11A6 = {
+    .DspValueText_LfoSpeed = {
         "  0.0", "  0.1", "  0.2", "  0.3", "  0.4", "  0.5", "  0.6", "  0.7",
         "  0.8", "  0.9", "  1.0", "  1.1", "  1.2", "  1.3", "  1.4", "  1.5",
         "  1.6", "  1.7", "  1.8", "  1.9", "  2.0", "  2.1", "  2.2", "  2.3",
@@ -4337,7 +4288,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         " 34.8", " 36.6", " 38.4", " 40.2",
     },
 
-    .DspValueText_139A = {
+    .DspValueText_EqGain = {
         "-12.0", "-11.5", "-11.0", "-10.5", "-10.0", "- 9.5", "- 9.0", "- 8.5",
         "- 8.0", "- 7.5", "- 7.0", "- 6.5", "- 6.0", "- 5.5", "- 5.0", "- 4.5",
         "- 4.0", "- 3.5", "- 3.0", "- 2.5", "- 2.0", "- 1.5", "- 1.0", "- 0.5",
@@ -4347,23 +4298,23 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         "+12.0",
     },
 
-    .DspValueText_139A_Pad = { 0xFF },
+    .DspValueText_EqGain_Pad = { 0xFF },
 
-    .DspValueText_1490 = {
+    .DspValueText_EqQ = {
         "  0.1", "  0.2", "  0.3", "  0.4", "  0.5", "  0.6", "  0.7", "  0.8",
         "  0.9", "  1.0", "  1.5", "  2.0", "  2.5", "  3.0", "  3.5", "  4.0",
         "  5.0", "  6.0", "  7.0", "  8.0", "  9.0", " 10.0", " 11.0", " 12.0",
         " 13.0", " 14.0", " 15.0", " 16.0", " 17.0", " 18.0", " 19.0", " 20.0",
     },
 
-    .DspValueText_1530 = {
+    .DspValueText_EqFreq = {
         "   40", "   50", "   63", "   80", "  100", "  125", "  160", "  200",
         "  250", "  315", "  400", "  500", "  630", "  800", "   1k", "1.25k",
         " 1.6k", "   2k", " 2.5k", "3.15k", "   4k", "   5k", " 6.3k", "   8k",
         "  10k", "12.5k", "  16k",
     },
 
-    .DspValueText_1530_Pad = { 0xFF },
+    .DspValueText_EqFreq_Pad = { 0xFF },
 
     .DspParamUnit = {
         /*  0 */ "  ",   /* (spare slot) */
@@ -5857,22 +5808,23 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         0x0081, 0x008F, 0x009D, 0x00BB, 0x00BB, 0x00BB, 0x000F,
     },
 
-    .Equalizer_FormatDefault_Str = " -%3d",
+    .DspParamFmt_NegativeFmt = " -%3d",
 
-    .EqFormat_NegativeValue_Str = " +%3d",
+    .DspParamFmt_PositiveFmt = " +%3d",
 
-    .EqFormat_PositiveValue_Str = "  %3d\0"
-        "     ",
+    .DspParamFmt_ZeroFmt = "  %3d",
 
-    .PrepareAudioParam_Str = "%5d",
+    .DspParamFmt_BlankText = "     ",
 
-    .Equalizer_FormatDispatch_Table = {
+    .DspParamFmt_DecimalFmt = "%5d",
+
+    .DspParamFmt_CaseByParamId = {
         0x0D, 0x0D, 0x01, 0x0C, 0x01, 0x0E, 0x0F, 0x0F, 0x10, 0x10, 0x0F, 0x0F, 0x01, 0x11, 0x01, 0x01,
         0x0C, 0x0C, 0x00, 0x01, 0x02, 0x01, 0x03, 0x01, 0x04, 0x04, 0x01, 0x01, 0x05, 0x05, 0x06, 0x07,
         0x08, 0x08, 0x01, 0x09, 0x09, 0x00, 0x0A, 0x0B, 0x01, 0x01, 0x01, 0x0C,
     },
 
-    .Equalizer_FormatDispatch_CaseTable = {
+    .DspParamFmt_CaseTable = {
         0x0000, 0x00F9, 0x00C5, 0x00BB, 0x0061, 0x006B, 0x0075, 0x007F,
         0x0089, 0x002C, 0x000B, 0x0016, 0x0093, 0x0021, 0x0057, 0x0042,
         0x004D, 0x0037,
