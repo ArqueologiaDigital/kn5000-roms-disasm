@@ -1,26 +1,26 @@
 {
  "date": "2026-10-06",
- "head": "6d2395ef",
+ "head": "2f2f7f08",
  "dirty": false,
  "rules": 2,
  "entry_snapshot": "docs/coverage/dispatch-census-2026-10-06-20.json",
  "entry_snapshot_head": "c6f87a4e",
  "score": {
-  "kn5000": 86.13,
+  "kn5000": 86.21,
   "wsa1": 89.54,
-  "all": 85.85
+  "all": 85.93
  },
  "components": {
   "kn5000": {
    "bytes": {
-    "num": 9254044,
+    "num": 9255580,
     "den": 10289152,
-    "pct": 89.94
+    "pct": 89.95
    },
    "names": {
-    "num": 130858,
+    "num": 130864,
     "den": 145881,
-    "pct": 89.7
+    "pct": 89.71
    },
    "entry": {
     "num": 2222,
@@ -28,9 +28,9 @@
     "pct": 99.6
    },
    "fields": {
-    "num": 58114,
-    "den": 89038,
-    "pct": 65.27
+    "num": 58132,
+    "den": 88651,
+    "pct": 65.57
    }
   },
   "wsa1": {
@@ -57,12 +57,12 @@
   },
   "all": {
    "bytes": {
-    "num": 11240344,
+    "num": 11241880,
     "den": 12386304,
-    "pct": 90.75
+    "pct": 90.76
    },
    "names": {
-    "num": 145169,
+    "num": 145175,
     "den": 164872,
     "pct": 88.05
    },
@@ -72,22 +72,22 @@
     "pct": 99.33
    },
    "fields": {
-    "num": 58114,
-    "den": 89038,
-    "pct": 65.27
+    "num": 58132,
+    "den": 88651,
+    "pct": 65.57
    }
   }
  },
  "images": {
   "v10": {
    "names": {
-    "semantic": 39614,
+    "semantic": 39616,
     "continuation": 8743,
-    "generic": 4146,
+    "generic": 4144,
     "positional": 751
    },
    "bytes": [
-    1790009,
+    1790521,
     2097152
    ],
    "entry": [
@@ -97,13 +97,13 @@
   },
   "v9": {
    "names": {
-    "semantic": 39614,
+    "semantic": 39616,
     "continuation": 8739,
-    "generic": 4139,
+    "generic": 4137,
     "positional": 752
    },
    "bytes": [
-    1789403,
+    1789915,
     2097152
    ],
    "entry": [
@@ -113,13 +113,13 @@
   },
   "v7": {
    "names": {
-    "semantic": 39526,
+    "semantic": 39528,
     "continuation": 8417,
-    "generic": 4171,
+    "generic": 4169,
     "positional": 839
    },
    "bytes": [
-    1783605,
+    1784117,
     2097152
    ],
    "entry": [
