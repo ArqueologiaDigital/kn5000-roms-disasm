@@ -1,0 +1,6 @@
+# HD-AE5000 data labels named from their content / readers (2026-10-06)
+s/\bHDAE5000_PPORT_Cmd20_SendXapFileFlash_Data_2\b/HDAE5000_PPORT_Cmd20_Str_EndFlashFalse/g
+s/\bHDAE5000_PPORT_Cmd20_SendXapFileFlash_Data\b/HDAE5000_PPORT_Cmd20_Str_EndFlashRight/g
+s/\bHDAE5000_SeparateOutput_SendPartMsg_Data_2\b/HDAE5000_SeparateOutput_MsgTemplateB/g
+s/\bHDAE5000_SeparateOutput_SendPartMsg_Data\b/HDAE5000_SeparateOutput_MsgTemplateA/g
+s/\bHDAE5000_Init_Data\b/HDAE5000_DataSegmentImage/g

@@ -3002,11 +3002,11 @@ HDAE5000_SeparateOutput_SendPartMsg:	; 0x284F4C (138 bytes)
 	; What the main CPU does with them is not established here.)
 	dec 8, xsp			; allocate 8 bytes on stack
 	ld l, c				; save C in L
-	ld xiy, HDAE5000_SeparateOutput_SendPartMsg_Data		; source template address (first block)
+	ld xiy, HDAE5000_SeparateOutput_MsgTemplateA		; source template address (first block)
 	lda xix, (xsp + 4)		; XIX = destination: stack+4
 	ldiw				; copy word (XIY→XIX, both advance)
 	ldiw				; copy second word
-	ld xiy, HDAE5000_SeparateOutput_SendPartMsg_Data_2		; source template address (second block)
+	ld xiy, HDAE5000_SeparateOutput_MsgTemplateB		; source template address (second block)
 	ld xix, xsp			; XIX = destination: stack base
 	ldiw				; copy word
 	ldiw				; copy second word

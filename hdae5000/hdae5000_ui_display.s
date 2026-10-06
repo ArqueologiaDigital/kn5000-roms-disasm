@@ -16755,10 +16755,10 @@ HDAE5000_PPORT_Cmd19_Nothing_Str_N19_nothing:	.asciz "19>nothing            "
 	.byte 0x00                            ; record terminator (24B stride; see header above)
 HDAE5000_PPORT_Cmd20_SendXapFileFlash_Str_N20_Send_XapFile_flash:	.asciz "20>Send XapFile flash "
 	.byte 0x00                            ; record terminator (24B stride; see header above)
-HDAE5000_PPORT_Cmd20_SendXapFileFlash_Data:
+HDAE5000_PPORT_Cmd20_Str_EndFlashRight:
 	.ascii "20>End flash right"
 	.byte 0x09, 0x20, 0x20, 0x00          ; 22B record filler: TAB + 2 spaces + NUL (record start 0x2955FE is a direct call-site literal, see header above)
-HDAE5000_PPORT_Cmd20_SendXapFileFlash_Data_2:
+HDAE5000_PPORT_Cmd20_Str_EndFlashFalse:
 	.ascii "20>End flash false"
 	.byte 0x09, 0x20, 0x20, 0x00          ; 22B record filler: TAB + 2 spaces + NUL (record start 0x295614 is a direct call-site literal, see header above)
 HDAE5000_PPORT_Cmd01_SendInfosAboutHd_Str_Error_Wrong_Dll_Ver:	.asciz "Error : Wrong Dll Ver "
@@ -18470,7 +18470,7 @@ HDAE5000_PPORT_Cmd20_SendXapFileFlash:	; 0x29670C (164 bytes)
 	; Error path
 	ldw wa, 0x001A				; display command
 	nop
-	lda xbc, (HDAE5000_PPORT_Cmd20_SendXapFileFlash_Data_2:24); lda XBC, 0x295614 — error string
+	lda xbc, (HDAE5000_PPORT_Cmd20_Str_EndFlashFalse:24); lda XBC, 0x295614 — error string
 	nop
 	call HDAE5000_PPORT_CallService
 	jp HDAE5000_PPORT_CommandDone
@@ -18478,7 +18478,7 @@ HDAE5000_PPORT_Cmd20_SendXapFileFlash:	; 0x29670C (164 bytes)
 	; Success path
 	ldw wa, 0x001A				; display command
 	nop
-	lda xbc, (HDAE5000_PPORT_Cmd20_SendXapFileFlash_Data:24); lda XBC, 0x2955FE — success string
+	lda xbc, (HDAE5000_PPORT_Cmd20_Str_EndFlashRight:24); lda XBC, 0x2955FE — success string
 	nop
 	call HDAE5000_PPORT_CallService
 	jp HDAE5000_PPORT_CommandDone

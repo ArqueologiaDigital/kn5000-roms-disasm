@@ -225,7 +225,7 @@
 ;   0x65DCE-0x661CD  HDAE5000_Palette_Data - 256 RGBX VGA entries (1,024 bytes)
 ;   0x661CE-0x78DCD  HDAE5000_Bitmap_BootSplash - boot splash bitmap
 ;                    (0x2E61CE, 320x240 8bpp indexed, 76,800 bytes)
-;   0x78DCE-0x7A134  HDAE5000_Display_Params + HDAE5000_Init_Data
+;   0x78DCE-0x7A134  HDAE5000_Display_Params + HDAE5000_DataSegmentImage
 ;   0x7A135-0x7FFFF  Padding zeros (24,267 bytes; the ROM's last non-zero
 ;                    byte is at file offset 0x7A134 = 0x2FA134)
 ;
@@ -305,7 +305,7 @@
 ;   0x2E5B80  the lyrics module's .rodata, 0x2E5B80-0x2E5DCD (gen_hdae5000_rodata.py
 ;                --block2): lyric messages, TLhd/TLtr tags, .TLX/.TTX/.MID
 ;   0x2F8DCE  HDAE5000_Display_Params - File extensions, device names, config
-;   0x2F94B2  HDAE5000_Init_Data - Data copied to 0x23952A (0xC82 bytes)
+;   0x2F94B2  HDAE5000_DataSegmentImage - Data copied to 0x23952A (0xC82 bytes)
 ;
 ; RAM Workspace (0x23xxxx):
 ;   0x23A19E  HDAE5000_RAM_LyricBoxObj - the open lyric box's object id

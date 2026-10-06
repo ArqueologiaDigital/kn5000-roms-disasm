@@ -28,7 +28,7 @@
 ; 0x2f96e2).
 ; ============================================================================
 
-HDAE5000_Init_Data:
+HDAE5000_DataSegmentImage:
 
 ; --- names that live in already-carved blocks; anchored to their block label
 ; --- so no byte of those blocks has to move.  (Promote to real labels when

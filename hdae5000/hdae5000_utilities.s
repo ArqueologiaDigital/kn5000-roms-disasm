@@ -1574,7 +1574,7 @@ HDAE5000_Unpacked_Div:
 ;
 ; NUL-terminated ASCII names published to the main-CPU UI framework.  Every
 ; string here is the target of a pointer in HDAE5000_ObjName_Table (the .data
-; image at HDAE5000_Init_Data), so the framework can resolve a handler, a
+; image at HDAE5000_DataSegmentImage), so the framework can resolve a handler, a
 ; bitmap or a screen by name.  The pool is laid out in reverse table order.
 ;
 ; This region used to be decoded as TLCS-900 instructions (.LDIV_* labels);

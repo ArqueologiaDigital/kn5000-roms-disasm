@@ -12290,7 +12290,7 @@ HDAE5000_GFX_INIT_PARAMS:	; 0x2A849A
 	; the HD-AE5000 screens and switch-catch handlers.  "TT_HDDEXT" is
 	; passed by the lda at 0x2802E4; the other fourteen names are reached
 	; through the descending 32-bit pointer table at 0x2F9F96..0x2F9FD1,
-	; inside HDAE5000_Init_Data.  Pointer -> string:
+	; inside HDAE5000_DataSegmentImage.  Pointer -> string:
 	;   0x2F9F96 -> 0x2A8580   0x2F9F9A -> 0x2A8570   0x2F9F9E -> 0x2A855E
 	;   0x2F9FA2 -> 0x2A854A   0x2F9FA6 -> 0x2A853A   0x2F9FAA -> 0x2A852A
 	;   0x2F9FAE -> 0x2A851C   0x2F9FB2 -> 0x2A850E   0x2F9FB6 -> 0x2A84FE
@@ -13322,13 +13322,13 @@ HDAE5000_Str_Blank14:	; 0x2E271E
 	; read by PC_DATA_LINK_PAGE at 0x284F0A (lda operand)
 	.asciz "              "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-HDAE5000_SeparateOutput_SendPartMsg_Data:	; 0x2E272E
+HDAE5000_SeparateOutput_MsgTemplateA:	; 0x2E272E
 	; read by SeparateOutput_SendPartMsg at 0x284F50 (ld # operand)
 	.byte 0xb0
 	.zero 1
 	.byte 0x9b
 	.zero 1
-HDAE5000_SeparateOutput_SendPartMsg_Data_2:	; 0x2E2732
+HDAE5000_SeparateOutput_MsgTemplateB:	; 0x2E2732
 	; read by SeparateOutput_SendPartMsg at 0x284F5C (ld # operand)
 	.byte 0xb0
 	.zero 1
