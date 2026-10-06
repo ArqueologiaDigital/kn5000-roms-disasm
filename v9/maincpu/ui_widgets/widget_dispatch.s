@@ -1281,6 +1281,10 @@ DSPCfg_ConfigureVoiceSlotA_Data:	.incbin "includes/generated/sound_config_lookup
 DSPCfg_ConfigureVoiceSlotB_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x38, 0x10
 DSPCfg_VoiceSlotB_MapAndWrite_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x48, 0x10
 DSPCfg_VoiceSlotB_ExtractData_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x58, 0x32
+; SndParam_PresetBanks -- 25 sound-parameter banks of 234 bytes, blocks 0..24 of SndParam_GetBlockPointer:
+; 39 x {u32 live-panel RAM address, u8 b4, u8 b5}, address 0 = unused; entries 0..22 are applied by
+; SndParam_ApplyBaseBlock, 23..38 by SndParam_ApplyMaskBlock.  Typed in sound_config_lookup.c
+; (scripts/converters/sndparam_bank_retype.py).
 SndParam_PresetBanks:			.incbin "includes/generated/sound_config_lookup.bin", 0x8A, 0x16DA	; 25 x 234-byte sound-parameter banks (blocks 0..24 of SndParam_GetBlockPointer), typed in sound_config_lookup.c
 MidiSysEx_SendAllParams_Data:		.incbin "includes/generated/sound_config_lookup.bin", 0x1764, 0xE
 MidiSysEx_SendControlChange1_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1772, 0x4
