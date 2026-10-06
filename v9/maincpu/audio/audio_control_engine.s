@@ -9984,12 +9984,12 @@ VoiceParam_DispatchDone:
 	ret
 
 VoiceParam_ModeDispatch_Table:
-	.long	VoiceParam_StoreExpression
-	.long	VoiceParam_StoreVolume
-	.long	VoiceParam_StorePan
+	.long	VoiceParam_StorePendingB4
+	.long	VoiceParam_StorePendingModulation
+	.long	VoiceParam_StorePendingPitchBend
 	.long	VoiceNote_StoreBankSelect
 
-VoiceParam_StoreExpression:
+VoiceParam_StorePendingB4:
 	extz hl
 	ld l, (0x91c8:16)
 	ld xix, 0x94d2
@@ -9998,7 +9998,7 @@ VoiceParam_StoreExpression:
 	ld	(xix+hl), a
 	ret
 
-VoiceParam_WriteExpression:
+VoiceParam_SendPendingB4:
 	ld c, 0xb4:opc
 	ld xix, 0xf1a0
 	ld l, (0x91c8:16)
@@ -10009,32 +10009,32 @@ VoiceParam_WriteExpression:
 	ld d, 0x7f:opc
 	ld (0x915d:16), de
 	call PartCtrl_CheckBitmaskBit
-	jr nc, VoiceParam_ExprCheckGuard
+	jr nc, VoiceParam_SendPendingB4_Guard
 	ld wa, (0x915b:16)
 	ld (MIDI_MSG_STATUS:16), wa
 	ld wa, (0x915d:16)
 	ld (MIDI_MSG_DATA2:16), wa
 	call SwbtWr_WriteVoiceParam_PreserveRegs
 
-VoiceParam_ExprCheckGuard:
+VoiceParam_SendPendingB4_Guard:
 	ld l, (0x91c8:16)
 	ld xix, 0xf1a0
 	cpib_sri 0x03, 0xf0, 0xec, 0x0f
-	jr z, VoiceParam_ExprDone
+	jr z, VoiceParam_SendPendingB4_Done
 	ld xix, 0x90ce
 	ld	a, (xix+l)
 	cp a, 0x10
-	jr z, VoiceParam_ExprDone
+	jr z, VoiceParam_SendPendingB4_Done
 	set 7, a
 	ld (0x90e5:16), a
 	ld bc, (0x915b:16)
 	ld de, (0x915d:16)
 	call MIDI_DispatchCC_Guarded
 
-VoiceParam_ExprDone:
+VoiceParam_SendPendingB4_Done:
 	ret
 
-VoiceParam_StoreVolume:
+VoiceParam_StorePendingModulation:
 	extz hl
 	ld l, (0x91c8:16)
 	ld xix, 0x9452
@@ -10043,7 +10043,7 @@ VoiceParam_StoreVolume:
 	ld	(xix+hl), a
 	ret
 
-VoiceParam_WriteVolume:
+VoiceParam_SendPendingModulation:
 	ld c, 0xb2:opc
 	ld xix, 0xf1a0
 	ld l, (0x91c8:16)
@@ -10054,32 +10054,32 @@ VoiceParam_WriteVolume:
 	ld d, 0x7f:opc
 	ld (0x915d:16), de
 	call PartCtrl_CheckBitmaskBit
-	jr nc, VoiceParam_VolCheckGuard
+	jr nc, VoiceParam_SendPendingModulation_Guard
 	ld wa, (0x915b:16)
 	ld (MIDI_MSG_STATUS:16), wa
 	ld wa, (0x915d:16)
 	ld (MIDI_MSG_DATA2:16), wa
 	call SwbtWr_WriteVoiceParam_PreserveRegs
 
-VoiceParam_VolCheckGuard:
+VoiceParam_SendPendingModulation_Guard:
 	ld l, (0x91c8:16)
 	ld xix, 0xf1a0
 	cpib_sri 0x03, 0xf0, 0xec, 0x0f
-	jr z, VoiceParam_VolDone
+	jr z, VoiceParam_SendPendingModulation_Done
 	ld xix, 0x90ce
 	ld	a, (xix+l)
 	cp a, 0x10
-	jr z, VoiceParam_VolDone
+	jr z, VoiceParam_SendPendingModulation_Done
 	set 7, a
 	ld (0x90e5:16), a
 	ld bc, (0x915b:16)
 	ld de, (0x915d:16)
 	call MIDI_DispatchCC_Guarded
 
-VoiceParam_VolDone:
+VoiceParam_SendPendingModulation_Done:
 	ret
 
-VoiceParam_StorePan:
+VoiceParam_StorePendingPitchBend:
 	extz hl
 	ld l, (0x91c8:16)
 	sll l, 1
@@ -10090,7 +10090,7 @@ VoiceParam_StorePan:
 	ld	(xix+hl), wa
 	ret
 
-VoiceParam_WritePan:
+VoiceParam_SendPendingPitchBend:
 	ld c, 0xb1:opc
 	ld xix, 0xf1a0
 	ld l, (0x91c8:16)
@@ -10101,29 +10101,29 @@ VoiceParam_WritePan:
 	and de, 0x7f7f
 	ld (0x915d:16), de
 	call PartCtrl_CheckBitmaskBit
-	jr nc, VoiceParam_PanCheckGuard
+	jr nc, VoiceParam_SendPendingPitchBend_Guard
 	ld wa, (0x915b:16)
 	ld (MIDI_MSG_STATUS:16), wa
 	ld wa, (0x915d:16)
 	ld (MIDI_MSG_DATA2:16), wa
 	call SwbtWr_WriteParamBlockSafe
 
-VoiceParam_PanCheckGuard:
+VoiceParam_SendPendingPitchBend_Guard:
 	ld l, (0x91c8:16)
 	ld xix, 0xf1a0
 	cpib_sri 0x03, 0xf0, 0xec, 0x0f
-	jr z, VoiceParam_PanDone
+	jr z, VoiceParam_SendPendingPitchBend_Done
 	ld xix, 0x90ce
 	ld	a, (xix+l)
 	cp a, 0x10
-	jr z, VoiceParam_PanDone
+	jr z, VoiceParam_SendPendingPitchBend_Done
 	set 7, a
 	ld (0x90e5:16), a
 	ld bc, (0x915b:16)
 	ld de, (0x915d:16)
 	call MIDI_DispatchCC_Guarded
 
-VoiceParam_PanDone:
+VoiceParam_SendPendingPitchBend_Done:
 	ret
 
 VoiceNote_StoreBankSelect:
@@ -10377,13 +10377,20 @@ SeqVoice_UpdateTempoParam:
 SeqVoice_TempoDone:
 	ret
 
+; PendingParam_ScanAllTables: sends every part's deferred controller value whose bit 7 (pending) is set, and clears
+;   the flag.  Five 16-part arrays, named by what fills them (helper-naming batch h evidence): B4 (record 0xB4,
+;   filled only through VoiceParam_ModeDispatch_Table; meaning not established), modulation (MidiCC_SetPending-
+;   PartModulation, record 0xB2), pitch bend (MidiRx_SetPendingPartPitchBend, 2 bytes per part, record 0xB1),
+;   expression (MidiCC_SetPendingPartExpression, record 0xB3; sent by VoiceNote_WriteBankAndCC) and volume
+;   (MidiCC_SetPendingPartVolume, CC7).  These scanners were labelled PendingExpr / Vol / Pan / Bank / PartCC
+;   until 2026-10-06 (scripts/renaming/rename_kn5000_pending_param_arrays.sed).
 PendingParam_ScanAllTables:
 	ld xiy, 0x94d2
 	ldw bc, 0x10
 
-PendingExpr_ScanEntry:
+PendingB4_ScanEntry:
 	bitm 7, (xiy)
-	jr z, PendingExpr_NextEntry
+	jr z, PendingB4_NextEntry
 	resm 7, (xiy)
 	ld e, (xiy)
 	ld xhl, xiy
@@ -10391,19 +10398,19 @@ PendingExpr_ScanEntry:
 	ld (0x91c8:16), l
 	pushw bc
 	push xiy
-	calr VoiceParam_WriteExpression
+	calr VoiceParam_SendPendingB4
 	pop xiy
 	popw bc
 
-PendingExpr_NextEntry:
+PendingB4_NextEntry:
 	inc 1, xiy
-	djnz16 bc, PendingExpr_ScanEntry
+	djnz16 bc, PendingB4_ScanEntry
 	ld xiy, 0x9452
 	ldw bc, 0x10
 
-PendingVol_ScanEntry:
+PendingModulation_ScanEntry:
 	bitm 7, (xiy)
-	jr z, PendingVol_NextEntry
+	jr z, PendingModulation_NextEntry
 	resm 7, (xiy)
 	ld e, (xiy)
 	ld xhl, xiy
@@ -10411,19 +10418,19 @@ PendingVol_ScanEntry:
 	ld (0x91c8:16), l
 	pushw bc
 	push xiy
-	calr VoiceParam_WriteVolume
+	calr VoiceParam_SendPendingModulation
 	pop xiy
 	popw bc
 
-PendingVol_NextEntry:
+PendingModulation_NextEntry:
 	inc 1, xiy
-	djnz16 bc, PendingVol_ScanEntry
+	djnz16 bc, PendingModulation_ScanEntry
 	ld xiy, 0x9472
 	ldw bc, 0x10
 
-PendingPan_ScanEntry:
+PendingPitchBend_ScanEntry:
 	bitm 7, (xiy)
-	jr z, PendingPan_NextEntry
+	jr z, PendingPitchBend_NextEntry
 	resm 7, (xiy)
 	ld de, (xiy)
 	ld xhl, xiy
@@ -10432,19 +10439,19 @@ PendingPan_ScanEntry:
 	ld (0x91c8:16), l
 	pushw bc
 	push xiy
-	calr VoiceParam_WritePan
+	calr VoiceParam_SendPendingPitchBend
 	pop xiy
 	popw bc
 
-PendingPan_NextEntry:
+PendingPitchBend_NextEntry:
 	inc 2, xiy
-	djnz16 bc, PendingPan_ScanEntry
+	djnz16 bc, PendingPitchBend_ScanEntry
 	ld xiy, 0x9432
 	ldw bc, 0x10
 
-PendingBank_ScanEntry:
+PendingExpression_ScanEntry:
 	bitm 7, (xiy)
-	jr z, PendingBank_NextEntry
+	jr z, PendingExpression_NextEntry
 	resm 7, (xiy)
 	ld e, (xiy)
 	ld xhl, xiy
@@ -10456,15 +10463,15 @@ PendingBank_ScanEntry:
 	pop xiy
 	popw bc
 
-PendingBank_NextEntry:
+PendingExpression_NextEntry:
 	inc 1, xiy
-	djnz16 bc, PendingBank_ScanEntry
+	djnz16 bc, PendingExpression_ScanEntry
 	ld xiy, 0x94b2
 	ldw bc, 0x10
 
-PendingPartCC_ScanEntry:
+PendingVolume_ScanEntry:
 	bitm 7, (xiy)
-	jr z, PendingPartCC_NextEntry
+	jr z, PendingVolume_NextEntry
 	resm 7, (xiy)
 	ld e, (xiy)
 	ld hl, iy
@@ -10476,9 +10483,9 @@ PendingPartCC_ScanEntry:
 	pop xiy
 	popw bc
 
-PendingPartCC_NextEntry:
+PendingVolume_NextEntry:
 	inc 1, xiy
-	djnz16 bc, PendingPartCC_ScanEntry
+	djnz16 bc, PendingVolume_ScanEntry
 	ret
 
 PartCtrl_CheckBitmaskBit:
