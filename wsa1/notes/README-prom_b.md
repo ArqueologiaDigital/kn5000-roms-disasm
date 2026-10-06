@@ -1292,7 +1292,7 @@ not a display-list run (no walk lands on the neighbouring already-converted
 "PART 1".."PART 32" (32×7 B) then "1- 1CH".."2-16CH" (32×6 B) — an 8-word
 header (purpose not established) and a 21-byte tail, 20+224+192+21 = 457
 with zero remainder. Three of the header's 8 words also appear verbatim in
-the immediately preceding record `DL_F3B7C3`'s own 4 words: recorded as
+the immediately preceding record `TrackAssign_DrawTrackGroupHighlight_DL`'s own 4 words: recorded as
 corroboration, not as a claimed indexing scheme.
 
 **`gen_prom_b_f05621_fix_module.py`** finds a 29th instance of the

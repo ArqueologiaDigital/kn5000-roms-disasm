@@ -1,0 +1,433 @@
+[
+ {
+  "old": "sub_F734E8",
+  "verdict": "name",
+  "new": "SmfSplit_ClearEventBuffer",
+  "header": "Zeroes the 7-byte event buffer at Smf_VlqValue (0x1198..0x119E: three words and a byte). SmfSplit_FetchSourceEvent calls it first, before copying track 1's next item into that buffer. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:179202 `calr sub_F734E8` -- first call of SmfSplit_FetchSourceEvent, whose header says it 'Clears the buffer at Smf_VlqValue (0x1198..0x119E)'",
+   "prom_b/wsa1_prom_b.s:179207 `ld xix, Smf_VlqValue` -- the caller then stores the item bytes at (0x1198+HL)",
+   "prom_b/wsa1_prom_b.s:179416 `xor wa, wa`",
+   "prom_b/wsa1_prom_b.s:179417 `ld (Smf_VlqValue:16), wa` -- 0x1198/0x1199",
+   "prom_b/wsa1_prom_b.s:179418 `ld (4506:16), wa` -- 0x119A/0x119B",
+   "prom_b/wsa1_prom_b.s:179419 `ld (4508:16), wa` -- 0x119C/0x119D",
+   "prom_b/wsa1_prom_b.s:179420 `ld (4510:16), a` -- 0x119E, the 7th byte"
+  ]
+ },
+ {
+  "old": "sub_F7AFD8",
+  "verdict": "name",
+  "new": "TrackMerge_LoadSavedFields",
+  "header": "TRACK MERGE: copies the three saved track fields 0x603459..0x60345B (battery RAM) into the working cells (0x0C13)/(0x0C14)/(0x0C15) and DisplayListB_Stage+0..+2. TrackMerge_InitFields calls it before setting the field cursor (0x0DBA) := 1, as MeasureDelete_InitFields calls MeasureDelete_LoadSavedFields. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:190554 `calr sub_F7AFD8` -- TrackMerge_InitFields (Paint_TrackMerge's stage-0 init), then `ld (3514:16), 1`",
+   "prom_b/wsa1_prom_b.s:191047 `ld a, (6304857:24)` -- 0x603459, saved field 1",
+   "prom_b/wsa1_prom_b.s:191048 `ld (3091:16), a` -- working cell (0x0C13), TRACK MERGE's first source track (TrackMerge_StepSourceTrack1)",
+   "prom_b/wsa1_prom_b.s:191049 `ld (DisplayListB_Stage:16), a`",
+   "prom_b/wsa1_prom_b.s:191053 `ld a, (6304859:24)` -- 0x60345B, saved field 3 (destination track)",
+   "prom_b/wsa1_prom_b.s:191055 `ld (DisplayListB_Stage+2:16), a`",
+   "prom_b/wsa1_prom_b.s:191402 `MeasureDelete_LoadSavedFields:` -- the sibling shape: `ld a,(0x60345c)` -> (0x0C13) + DisplayListB_Stage"
+  ]
+ },
+ {
+  "old": "sub_F7C62D",
+  "verdict": "name",
+  "new": "Transp0se_StageDisplayFields",
+  "header": "TRANSP0SE: its working cells into DisplayListB_Stage -- track (0x0DF7) -> +0, the 1..999 pair (0x0DF8)/(0x0DFA) (first <= last, as Transp0se_KeypadCommit keeps them) -> +1/+3, the signed value (0x0DFC) -> +5 -- field cursor (0x0DF6) := 1 (+6), and (0x0E00) := (0x0DFA) - (0x0DF8) + 1. Transp0se_InitFields calls it unless the previous screen was TRANSP0SE; cf. N0teChange_StageDisplayFields. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:194639 `calr sub_F7C62D` -- Transp0se_InitFields, skipped when UI_ScreenLatch_Previous = 0x2B",
+   "prom_b/wsa1_prom_b.s:194663 `ld a, (3575:16)` / prom_b/wsa1_prom_b.s:194664 `ld (DisplayListB_Stage:16), a` -- track cell",
+   "prom_b/wsa1_prom_b.s:194665 `ld wa, (3576:16)` and prom_b/wsa1_prom_b.s:194667 `ld wa, (3578:16)` -- the two 1..999 fields to Stage+1/+3",
+   "prom_b/wsa1_prom_b.s:194669 `ld a, (3580:16)` -- the signed value (0x0DFC) to Stage+5",
+   "prom_b/wsa1_prom_b.s:194672 `ld (3574:16), a` -- field cursor := 1",
+   "prom_b/wsa1_prom_b.s:194677 `ld (3584:16), wa` -- (0x0E00) := last - first + 1",
+   "prom_b/wsa1_prom_b.s:207000 `ld (3576:16), wa` / prom_b/wsa1_prom_b.s:207013 `ld (3578:16), wa` -- the keypad commit stores fields 2/3 (1..999) here, keeping first <= last",
+   "prom_b/wsa1_prom_b.s:195158 `N0teChange_StageDisplayFields:` -- the twin: fields into DisplayListB_Stage plus To - From + 1"
+  ]
+ },
+ {
+  "old": "sub_F7E81F",
+  "verdict": "name",
+  "new": "TrackAssign_DrawOutChannelColumn",
+  "header": "TRACK ASSIGN, MIDI OUT CH column: for the eight tracks of the shown group (A = first track, XHL = their bytes: 0x603433.. for 1-8, 0x60343B.. for 9-16) stages each byte in DisplayListB_Stage and draws the matching DL_F3B74B record through DLB_Handler_StringTable, whose table is Table_F3B7D4+0xF4 ('1- 1CH'..'2-16CH', index 0x20 = ' OFF  '). Basis: caller + body + display list.",
+  "basis": "caller + body + display-list table",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:200854 `ld xhl, 6304819` / prom_b/wsa1_prom_b.s:200856 `calr sub_F7E81F` -- TrackAssign_PaintTrackGroup, tracks 1-8 (0x603433)",
+   "prom_b/wsa1_prom_b.s:200864 `ld xhl, 6304827` / prom_b/wsa1_prom_b.s:200866 `calr sub_F7E81F` -- tracks 9-16 (0x60343B)",
+   "prom_b/wsa1_prom_b.s:93870 `BStore_TrackOutChannel_LoadDefaults:` -- 0x603433.. is each track's MIDI OUT channel (0x20 = none)",
+   "prom_b/wsa1_prom_b.s:200887 `ld xiy, DL_F3B74B`",
+   "prom_b/wsa1_prom_b.s:200896 `ld b, (xhl)` / prom_b/wsa1_prom_b.s:200897 `ld (DisplayListB_Stage:16), b`",
+   "prom_b/wsa1_prom_b.s:200901 `call T_DLB_Handler_StringTable`",
+   "prom_b/wsa1_prom_b.s:83242 `.short 0xC806` / prom_b/wsa1_prom_b.s:83243 `.short 0xF3B8` -- svc 6, table 0xF3B8C8 = Table_F3B7D4+0xF4; +0x0B width 6, +0x0D position col 28 (under 'MIDI OUT CH')",
+   "prom_b/wsa1_prom_b.s:82775 `.ascii \"TRACK   L0CAL   MIDI\"` / prom_b/wsa1_prom_b.s:82784 `.ascii \"ASSIGN  CONTROL OUT CH\"` -- the column headings"
+  ]
+ },
+ {
+  "old": "sub_F7E852",
+  "verdict": "name",
+  "new": "TrackAssign_DrawLocalControlColumn",
+  "header": "TRACK ASSIGN, LOCAL CONTROL column: for bits 0..7 of L (the per-track bits of the word 0x603454 -- low byte for tracks 1-8, high byte for 9-16) draws DL_F3B6D3's eight records with DisplayListB_Stage = 0 ('OFF') or 1 ('ON '); 2 ('-- ') only if T_F42B9C returned 0x55, which it never does (it always returns 0xAA). TrackAssign_StageZero_SoftKeyCol5 toggles the same bits. Basis: caller + body + display list.",
+  "basis": "caller + body + display-list table",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:200851 `ld l, (6304852:24)` / prom_b/wsa1_prom_b.s:200853 `calr sub_F7E852` -- TrackAssign_PaintTrackGroup, tracks 1-8",
+   "prom_b/wsa1_prom_b.s:200861 `ld l, (6304853:24)` / prom_b/wsa1_prom_b.s:200863 `calr sub_F7E852` -- tracks 9-16",
+   "prom_b/wsa1_prom_b.s:200917 `ld xiy, DL_F3B6D3`",
+   "prom_b/wsa1_prom_b.s:200933 `and l, c` / prom_b/wsa1_prom_b.s:200936 `ld (DisplayListB_Stage:16), 0` / prom_b/wsa1_prom_b.s:200939 `ld (DisplayListB_Stage:16), 1` -- bit clear/set",
+   "prom_b/wsa1_prom_b.s:200923 `call T_F42B9C` / prom_b/wsa1_prom_b.s:200924 `cp a, 85` -- the '--' arm; sub_F65DD3 always ends `ld a, 0xaa` (prom_b/wsa1_prom_b.s:147933)",
+   "prom_b/wsa1_prom_b.s:83186 `.short 0x9406` / prom_b/wsa1_prom_b.s:83187 `.short 0xF3B9` -- svc 6, table 0xF3B994 = 'OFF','ON ','-- ' at width 3 (prom_b/wsa1_prom_b.s:83416 tail), position col 22 (under 'L0CAL CONTROL')",
+   "prom_b/wsa1_prom_b.s:148165 `ld de, (6304852:24)` -- TrackAssign_StageZero_SoftKeyCol5 toggles bit (0x0C03) of this word"
+  ]
+ },
+ {
+  "old": "sub_F7E8CD",
+  "verdict": "name",
+  "new": "TrackAssign_DrawParts1To8",
+  "header": "TRACK ASSIGN, TRACK ASSIGN column for tracks 1-8: copies BStore_TrackToPart[0..7] to UI_DrawScratch+1..+8 and runs DL_F3B65B through interpreter B on layer 0 -- eight string-table readouts of 'PART n' (Table_F3B7D4+0x14). Paired with Paint_TrackLabels1To8 in TrackAssign_PaintTrackGroup. Basis: caller + body + display list.",
+  "basis": "caller + body + display-list table",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:200850 `calr sub_F7E8CD` -- TrackAssign_PaintTrackGroup, (0x0C07) bit 0 = 0 arm, right after Paint_TrackLabels1To8",
+   "prom_b/wsa1_prom_b.s:200999 `ld xiy, BStore_TrackToPart` / prom_b/wsa1_prom_b.s:201000 `ld xix, UI_DrawScratch+1` -- 8 bytes, ldir",
+   "prom_b/wsa1_prom_b.s:201003 `ld xiy, DL_F3B65B`",
+   "prom_b/wsa1_prom_b.s:83128 `.short 0x2641` / prom_b/wsa1_prom_b.s:83130 `.short 0xE806` / prom_b/wsa1_prom_b.s:83131 `.short 0xF3B7` -- source UI_DrawScratch+1, svc 6, table 0xF3B7E8 = Table_F3B7D4+0x14, width 7",
+   "prom_b/wsa1_prom_b.s:83351 `.ascii \"PART 1 \"` -- the first entry of that table"
+  ]
+ },
+ {
+  "old": "sub_F7E8F3",
+  "verdict": "name",
+  "new": "TrackAssign_DrawParts9To16",
+  "header": "TRACK ASSIGN, TRACK ASSIGN column for tracks 9-16: as TrackAssign_DrawParts1To8 with BStore_TrackToPart[8..15] (0x60342A) -- copies them to UI_DrawScratch+1..+8 and runs DL_F3B65B ('PART n' readouts). Paired with Paint_TrackLabels9To16. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:200860 `calr sub_F7E8F3` -- TrackAssign_PaintTrackGroup, (0x0C07) bit 0 = 1 arm, after Paint_TrackLabels9To16",
+   "prom_b/wsa1_prom_b.s:201013 `ld xiy, 6304810` -- 0x60342A = BStore_TrackToPart + 8",
+   "prom_b/wsa1_prom_b.s:201017 `ld xiy, DL_F3B65B` -- the same 'PART n' list as the 1-8 routine"
+  ]
+ },
+ {
+  "old": "sub_F7E919",
+  "verdict": "name",
+  "new": "TrackAssign_DrawTrackGroupHighlight",
+  "header": "TRACK ASSIGN: on layer 1 erases (op 0x1B) the box (12,111)-(49,165) of DL_F3B7C3 and fills (svc 0x05) one of two boxes indexed by (0x0C07) & 1 -- (12,111)-(43,126) around the '1_8' legend or (12,150)-(49,165) around '9_16' -- marking the shown track group. Basis: caller + body + display list.",
+  "basis": "caller + body + display-list record",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:200845 `calr sub_F7E919` -- TrackAssign_PaintTrackGroup ('group indicator' in its header)",
+   "prom_b/wsa1_prom_b.s:201027 `ld xiy, DL_F3B7C3` -- op 1B box (12,111)-(49,165) (prom_b/wsa1_prom_b.s:83295)",
+   "prom_b/wsa1_prom_b.s:201030 `ld a, (3079:16)` / prom_b/wsa1_prom_b.s:201031 `ld (DisplayListB_Stage+4:16), a` -- (0x0C07), whose bit 0 TrackAssign_SelectTrackGroup sets for tracks 9-16",
+   "prom_b/wsa1_prom_b.s:201032 `ld xiy, Data_F3B7CD` -- op-03 record: source 0x12FA, mask 0x01, svc 5; its +0x07 XIX operand is the `.long Table_F3B7D4 + 0x4` at prom_b/wsa1_prom_b.s:83341",
+   "prom_b/wsa1_prom_b.s:83342..83349 -- the two 8-byte boxes (12,111,43,126) and (12,150,49,165); the '1'/'8' and '9'/'16' legend text sits at (16,114) and (16,153) (prom_b/wsa1_prom_b.s:82802, 82814)"
+  ]
+ },
+ {
+  "old": "sub_F7E941",
+  "verdict": "name",
+  "new": "TrackAssign_DrawTrackRowHighlight",
+  "header": "TRACK ASSIGN: on layer 1 erases (op 0x1B) the eight-row table area DL_F3972D (56,62)-(279,181) and fills (svc 0x05) row box DLTable_F396ED[(0x0C03) mod 8] -- the row of the selected track (0x0C03), 0..15. Basis: caller + body + display list.",
+  "basis": "caller + body + display-list table",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:200844 `calr sub_F7E941` -- TrackAssign_PaintTrackGroup ('cursor row' in its header)",
+   "prom_b/wsa1_prom_b.s:201041 `ld xiy, DL_F3972D` -- op 1B over the bounding box of the 8 row boxes",
+   "prom_b/wsa1_prom_b.s:201044 `ld a, (3075:16)` / prom_b/wsa1_prom_b.s:201045 `cp a, 8` / prom_b/wsa1_prom_b.s:201047 `sub a, 8` -- selected track mod 8",
+   "prom_b/wsa1_prom_b.s:201049 `ld (UI_DrawScratch:16), a` / prom_b/wsa1_prom_b.s:201050 `ld xiy, Data_F396E2` -- op-03 svc 5, indexes DLTable_F396ED (prom_b/wsa1_prom_b.s:78886), eight 15-pixel row bands",
+   "prom_b/wsa1_prom_b.s:148202 `TrackAssign_StageZero_SoftKeyCol7:` -- uses (0x0C03) as the track index into 0x603433"
+  ]
+ },
+ {
+  "old": "sub_F7E971",
+  "verdict": "name",
+  "new": "ModeEnterBody_Edit",
+  "header": "The whole body of ModeEnter_Edit (+0 ENTER of panel mode 7, EDIT): `or (0x2134),2` (the mode-change bit ModeEnter_Sound/_Combination set), then via its veneer Seq_SaveTrackMaskAndStopAll, UI_ScreenStage := 0, (0x215E) := 0, (0x212E) |= 0x100, (0x34BB) |= 4. Its LEAVE twin (0xF7E97C, behind sub_F7D01C) restores the mask and clears (0x34BB) bit 2. Basis: caller + body.",
+  "basis": "caller (vtable method) + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:196473 `calr sub_F7E971` -- ModeEnter_Edit is `calr / ret`, the +0 ENTER of panel mode 7 (T_ModeEnter_Edit, prom_b/wsa1_prom_b.s:92785)",
+   "prom_b/wsa1_prom_b.s:201057 `m_or_mi16 MW16, 0x2134, 0x0002`",
+   "prom_b/wsa1_prom_b.s:201058 `call T_BStore_AppendBytes_Join3_Veneer` -> prom_b/wsa1_prom_b.s:190101 `jr BStore_AppendBytes_Join3`",
+   "prom_b/wsa1_prom_b.s:190118 `call T_Seq_SaveTrackMaskAndStopAll` / prom_b/wsa1_prom_b.s:190119 `ld (UI_ScreenStage:16), 0` / prom_b/wsa1_prom_b.s:190122 `m_or_mi8 MB16, 0x34bb, 0x04`",
+   "prom_b/wsa1_prom_b.s:201064 `m_or_mi16 MW16, 0x2134, 0x0002` / prom_b/wsa1_prom_b.s:201065 `call T_BStore_AppendBytes_Join4_Veneer` -- the LEAVE twin -> prom_b/wsa1_prom_b.s:190125 `call T_Seq_RestoreTrackMaskAndRewind`, prom_b/wsa1_prom_b.s:190126 `and (0x34bb),0xfb`",
+   "prom_a/wsa1_prom_a.s:4515 `ScreenEnterBody_StepRecord:` -- the tree's <Method>Body_<Name> convention for a method's whole body"
+  ]
+ },
+ {
+  "old": "sub_F7F144",
+  "verdict": "name",
+  "new": "MeasureDelete_KeypadCommit",
+  "header": "MEASURE DELETE, keypad code 0x0F (ENTER): converts the typed digits (T_AsciiDigits3_ToValue) and, if 1..999, stores them in the field (0x0DD4) selects -- 2: first measure (0x0DD6), also (0x0C18) and saved 0x60345D; 3: last measure (0x0DD8) -- keeping first <= last; saved count 0x60345F := last - first + 1; then T_Blink_Stop and Draw_LastMeasure. Twin of prom_a AdvanceDelay_KeypadCommit. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:203698 `cp a, 15` / prom_b/wsa1_prom_b.s:203709 `calr sub_F7F144` -- MeasureDelete_StageZero_NumberPadKey's (0x2267) = 0x0F arm",
+   "prom_b/wsa1_prom_b.s:203729 `call T_AsciiDigits3_ToValue` / prom_b/wsa1_prom_b.s:203732 `cp wa, 999`",
+   "prom_b/wsa1_prom_b.s:203734 `m_cp_mi8 MB16, 0x0dd4, 0x02` -- the field cursor MeasureDelete_InitFields sets (prom_b/wsa1_prom_b.s:191071)",
+   "prom_b/wsa1_prom_b.s:203741 `ld (6304861:24), wa` / prom_b/wsa1_prom_b.s:203747 `ld (3542:16), wa` -- field 2",
+   "prom_b/wsa1_prom_b.s:203751 `ld (3544:16), wa` -- field 3",
+   "prom_b/wsa1_prom_b.s:203765 `ld (6304863:24), wa` / prom_b/wsa1_prom_b.s:203766 `call T_Blink_Stop`",
+   "prom_a/wsa1_prom_a.s:2486 `AdvanceDelay_KeypadCommit:` -- the named twin (0x0F -> convert, store into the selected field, keep first <= last, Blink_Stop, redraw)"
+  ]
+ },
+ {
+  "old": "sub_F7F1C8",
+  "verdict": "name",
+  "new": "MeasureDelete_BlinkSelectedField",
+  "header": "MEASURE DELETE: unless blinking is off ((0x2075) bit 1 clear) or the key was ENTER ((0x2267) = 0x0F), starts the field blink on layer 0 with template BlinkArgPtrs_F7F1F5[(0x0DD4)] (T_Blink_Command). Run after every number-pad key by MeasureDelete_StageZero_NumberPadKey. Twin of prom_a AdvanceDelay_BlinkSelectedField. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:203714 `calr sub_F7F1C8` -- MeasureDelete_StageZero_NumberPadKey's common tail",
+   "prom_b/wsa1_prom_b.s:203781 `m_bit 1, MD16, UI_RequestBits` / prom_b/wsa1_prom_b.s:203783 `m_cp_mi8 MB16, 0x2267, 0x0f`",
+   "prom_b/wsa1_prom_b.s:203786 `ld a, (3540:16)` -- the field cursor (0x0DD4) indexes BlinkArgPtrs_F7F1F5",
+   "prom_b/wsa1_prom_b.s:203792 `call T_Blink_Command`",
+   "prom_a/wsa1_prom_a.s:2563 `AdvanceDelay_BlinkSelectedField:` -- identical shape"
+  ]
+ },
+ {
+  "old": "sub_F7F470",
+  "verdict": "name",
+  "new": "MeasureErase_KeypadCommit",
+  "header": "MEASURE ERASE, keypad code 0x0F: converts the typed digits and, if 1..999, stores them in the field (0x0DBB) selects -- 2: first measure (0x0C2A), also (0x0C18) and saved 0x603462; 3: last measure (0x0C2C) -- keeping first <= last; saved count 0x603464 := last - first + 1; then T_Blink_Stop and MeasureErase_DrawValues. Twin of AdvanceDelay_KeypadCommit. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:204597 `cp a, 15` / prom_b/wsa1_prom_b.s:204606 `calr sub_F7F470` -- MeasureErase_StageZero_NumberPadKey's 0x0F arm",
+   "prom_b/wsa1_prom_b.s:204631 `m_cp_mi8 MB16, 0x0dbb, 0x02` -- MeasureErase's field cursor (MeasureErase_InitFields sets (0x0DBB) = 1)",
+   "prom_b/wsa1_prom_b.s:204638 `ld (6304866:24), wa` / prom_b/wsa1_prom_b.s:204644 `ld (3114:16), wa` -- field 2",
+   "prom_b/wsa1_prom_b.s:204648 `ld (3116:16), wa` -- field 3",
+   "prom_b/wsa1_prom_b.s:204662 `ld (6304868:24), wa` / prom_b/wsa1_prom_b.s:204664 `calr MeasureErase_DrawValues`",
+   "prom_a/wsa1_prom_a.s:2486 `AdvanceDelay_KeypadCommit:` -- the named twin"
+  ]
+ },
+ {
+  "old": "sub_F7F4F4",
+  "verdict": "name",
+  "new": "MeasureErase_BlinkSelectedField",
+  "header": "MEASURE ERASE: unless (0x2075) bit 1 is clear or (0x2267) = 0x0F, starts the field blink on layer 0 with template BlinkArgPtrs_F7F521[(0x0DBB)]. MeasureErase_StageZero_NumberPadKey's common tail. Twin of AdvanceDelay_BlinkSelectedField. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:204611 `calr sub_F7F4F4` -- MeasureErase_StageZero_NumberPadKey",
+   "prom_b/wsa1_prom_b.s:204678 `m_bit 1, MD16, UI_RequestBits` / prom_b/wsa1_prom_b.s:204680 `m_cp_mi8 MB16, 0x2267, 0x0f`",
+   "prom_b/wsa1_prom_b.s:204683 `ld a, (3515:16)` -- field cursor (0x0DBB)",
+   "prom_b/wsa1_prom_b.s:204689 `call T_Blink_Command`",
+   "prom_a/wsa1_prom_a.s:2563 `AdvanceDelay_BlinkSelectedField:`"
+  ]
+ },
+ {
+  "old": "sub_F7F574",
+  "verdict": "name",
+  "new": "ExitKey_PanelWrite",
+  "header": "PANEL WRITE's EXIT key (button code 0x0F): at pair position 1 (W bit 7 clear) UI_Request := 0x801A, back to the EDIT screen (0x1A); otherwise nothing. ScreenButtonBody_PanelWrite calls it for HL = 15. Basis: caller + body + siblings (ExitKey_TrackAssignPresets).",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:204765 `cp hl, 15` / prom_b/wsa1_prom_b.s:204767 `call sub_F7F574` -- ScreenButtonBody_PanelWrite, the whole +8 Button method of PANEL WRITE",
+   "prom_b/wsa1_prom_b.s:204774 `bit 7, w`",
+   "prom_b/wsa1_prom_b.s:204778 `ldw (UI_Request:16), 32794` -- 0x801A, the request Transp0se_InitFields' header calls 'back to EDIT'",
+   "prom_b/wsa1_prom_b.s:200802 `ExitKey_TrackAssignPresets:` -- same shape (`bit 7,W`, then UI_Request)",
+   "notes/FINDINGS-prom_a-panel-control-map.md:66 `| 0x0F | EXIT |` -- code 0x0F is the EXIT key"
+  ]
+ },
+ {
+  "old": "sub_F7F7DC",
+  "verdict": "name",
+  "new": "Quantize_KeypadCommit",
+  "header": "QUANTIZE, keypad code 0x0F: converts the typed digits and, if 1..999, stores them in the field (0x0DB9) selects -- 2: first measure (0x0C26), also (0x0C4A) and saved 0x603478; 3: last measure (0x0C28) -- keeping first <= last; saved count 0x60347A := last - first + 1; then T_Blink_Stop and Draw_TrackValueFirstMeasureLastMeasureStrengthWindow. Twin of AdvanceDelay_KeypadCommit. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:205419 `cp a, 15` / prom_b/wsa1_prom_b.s:205428 `calr sub_F7F7DC` -- Quantize_StageZero_NumberPadKey's 0x0F arm",
+   "prom_b/wsa1_prom_b.s:205453 `m_cp_mi8 MB16, 0x0db9, 0x02` -- Quantize's field cursor (Quantize_InitFields sets (0x0DB9) = 1)",
+   "prom_b/wsa1_prom_b.s:205459 `ld (6304888:24), wa` / prom_b/wsa1_prom_b.s:205466 `ld (3110:16), wa` -- field 2; Quantize_InitFields loads (0x0C26) from 0x603478",
+   "prom_b/wsa1_prom_b.s:205470 `ld (3112:16), wa` -- field 3",
+   "prom_b/wsa1_prom_b.s:205484 `ld (6304890:24), wa` / prom_b/wsa1_prom_b.s:205486 `calr Draw_TrackValueFirstMeasureLastMeasureStrengthWindow`",
+   "prom_a/wsa1_prom_a.s:2486 `AdvanceDelay_KeypadCommit:`"
+  ]
+ },
+ {
+  "old": "sub_F7F860",
+  "verdict": "name",
+  "new": "Quantize_BlinkSelectedField",
+  "header": "QUANTIZE: unless (0x2075) bit 1 is clear or (0x2267) = 0x0F, starts the field blink on layer 0 with template BlinkArgPtrs_F7F88D[(0x0DB9)]. Quantize_StageZero_NumberPadKey's common tail. Twin of AdvanceDelay_BlinkSelectedField. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:205433 `calr sub_F7F860` -- Quantize_StageZero_NumberPadKey",
+   "prom_b/wsa1_prom_b.s:205500 `m_bit 1, MD16, UI_RequestBits`",
+   "prom_b/wsa1_prom_b.s:205505 `ld a, (3513:16)` -- field cursor (0x0DB9)",
+   "prom_b/wsa1_prom_b.s:205511 `call T_Blink_Command`",
+   "prom_a/wsa1_prom_a.s:2563 `AdvanceDelay_BlinkSelectedField:`"
+  ]
+ },
+ {
+  "old": "sub_F7FAD2",
+  "verdict": "name",
+  "new": "Vel0cityChange_KeypadCommit",
+  "header": "VEL0CITY CHANGE, keypad code 0x0F: field 4 converts signed (T_AsciiField_ToSignedValue, -127..+127 by the sign cell (0x2820)) into (0x0C1E), saved 0x6034BC, (0x0C24) and Stage+5; fields 2/3 convert 1..999 into first (0x0C20, also (0x0C18), saved 0x6034B2) / last (0x0C22) measure, keeping first <= last, saved count 0x6034B4; then T_Blink_Stop and Vel0cityChange_DrawValues. Twin of AdvanceDelay_KeypadCommit. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:206173 `cp a, 15` / prom_b/wsa1_prom_b.s:206182 `calr sub_F7FAD2` -- Vel0cityChange_StageZero_NumberPadKey's 0x0F arm",
+   "prom_b/wsa1_prom_b.s:206201 `m_cp_mi8 MB16, 0x0db8, 0x04` / prom_b/wsa1_prom_b.s:206205 `call T_AsciiField_ToSignedValue` -- field 4 signed",
+   "prom_b/wsa1_prom_b.s:206209 `call T_AsciiDigits3_ToValue` -- fields 2/3",
+   "prom_b/wsa1_prom_b.s:206224 `ld (6304946:24), wa` / prom_b/wsa1_prom_b.s:206238 `ld (3106:16), wa` / prom_b/wsa1_prom_b.s:206252 `ld (6304948:24), wa`",
+   "prom_b/wsa1_prom_b.s:206261 `cp wa, 127` / prom_b/wsa1_prom_b.s:206265 `ld (6304956:24), a`",
+   "prom_b/wsa1_prom_b.s:206270 `calr Vel0cityChange_DrawValues`",
+   "prom_a/wsa1_prom_a.s:2486 `AdvanceDelay_KeypadCommit:` -- same field-4-signed / fields-2-3 shape"
+  ]
+ },
+ {
+  "old": "sub_F7FBA4",
+  "verdict": "name",
+  "new": "Vel0cityChange_KeypadSign",
+  "header": "VEL0CITY CHANGE, keypad code 0x80: while blinking ((0x2075) bit 1) and unless field 4 (the signed value) is selected, puts '+' back in the sign cell (0x2820). Twin of prom_a AdvanceDelay_KeypadSign. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:206185 `calr sub_F7FBA4` -- Vel0cityChange_StageZero_NumberPadKey's (0x2267) = 0x80 arm",
+   "prom_b/wsa1_prom_b.s:206277 `m_bit 1, MD16, UI_RequestBits`",
+   "prom_b/wsa1_prom_b.s:206279 `m_cp_mi8 MB16, 0x0db8, 0x04`",
+   "prom_b/wsa1_prom_b.s:206281 `ld (10272:16), 43` -- (0x2820) := '+'",
+   "prom_a/wsa1_prom_a.s:2553 `AdvanceDelay_KeypadSign:` -- identical gates and store"
+  ]
+ },
+ {
+  "old": "sub_F7FBB7",
+  "verdict": "name",
+  "new": "Vel0cityChange_BlinkSelectedField",
+  "header": "VEL0CITY CHANGE: unless (0x2075) bit 1 is clear or (0x2267) = 0x0F, starts the field blink on layer 0 with template BlinkArgPtrs_F7FBE4[(0x0DB8)]. Vel0cityChange_StageZero_NumberPadKey's common tail. Twin of AdvanceDelay_BlinkSelectedField. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:206187 `calr sub_F7FBB7` -- Vel0cityChange_StageZero_NumberPadKey",
+   "prom_b/wsa1_prom_b.s:206288 `m_bit 1, MD16, UI_RequestBits`",
+   "prom_b/wsa1_prom_b.s:206293 `ld a, (3512:16)` -- field cursor (0x0DB8)",
+   "prom_b/wsa1_prom_b.s:206299 `call T_Blink_Command`",
+   "prom_a/wsa1_prom_a.s:2563 `AdvanceDelay_BlinkSelectedField:`"
+  ]
+ },
+ {
+  "old": "sub_F7FE19",
+  "verdict": "name",
+  "new": "Transp0se_KeypadCommit",
+  "header": "TRANSP0SE, keypad code 0x0F: field 4 converts signed (-127..+127 by the sign cell (0x2820)) into (0x0DFC), Stage+5 and (0x129C); fields 2/3 convert 1..999 into (0x0DF8) / (0x0DFA), keeping (0x0DF8) <= (0x0DFA), with (0x0E08) = (0x0E00) := (0x0DFA) - (0x0DF8) + 1; then T_Blink_Stop and Transp0se_DrawValues. Twin of AdvanceDelay_KeypadCommit. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:206950 `cp a, 15` / prom_b/wsa1_prom_b.s:206959 `calr sub_F7FE19` -- Transp0se_StageZero_NumberPadKey's 0x0F arm",
+   "prom_b/wsa1_prom_b.s:206978 `m_cp_mi8 MB16, 0x0df6, 0x04` / prom_b/wsa1_prom_b.s:206982 `call T_AsciiField_ToSignedValue`",
+   "prom_b/wsa1_prom_b.s:207000 `ld (3576:16), wa` / prom_b/wsa1_prom_b.s:207013 `ld (3578:16), wa` -- fields 2/3",
+   "prom_b/wsa1_prom_b.s:207024 `ld (3584:16), wa` -- the count",
+   "prom_b/wsa1_prom_b.s:207033 `cp wa, 127` / prom_b/wsa1_prom_b.s:207036 `ld (3580:16), a` -- field 4",
+   "prom_b/wsa1_prom_b.s:207042 `calr Transp0se_DrawValues`",
+   "prom_a/wsa1_prom_a.s:2486 `AdvanceDelay_KeypadCommit:`"
+  ]
+ },
+ {
+  "old": "sub_F7FED3",
+  "verdict": "name",
+  "new": "Transp0se_KeypadSign",
+  "header": "TRANSP0SE, keypad code 0x80: while blinking ((0x2075) bit 1) and unless field 4 (the signed value) is selected, puts '+' back in the sign cell (0x2820). Twin of AdvanceDelay_KeypadSign. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:206962 `calr sub_F7FED3` -- Transp0se_StageZero_NumberPadKey's 0x80 arm",
+   "prom_b/wsa1_prom_b.s:207049 `m_bit 1, MD16, UI_RequestBits` / prom_b/wsa1_prom_b.s:207051 `m_cp_mi8 MB16, 0x0df6, 0x04`",
+   "prom_b/wsa1_prom_b.s:207053 `ld (10272:16), 43`",
+   "prom_a/wsa1_prom_a.s:2553 `AdvanceDelay_KeypadSign:`"
+  ]
+ },
+ {
+  "old": "sub_F7FEE6",
+  "verdict": "name",
+  "new": "Transp0se_BlinkSelectedField",
+  "header": "TRANSP0SE: unless (0x2075) bit 1 is clear or (0x2267) = 0x0F, starts the field blink on layer 0 with template BlinkArgPtrs_F7FF13[(0x0DF6)]. Transp0se_StageZero_NumberPadKey's common tail. Twin of AdvanceDelay_BlinkSelectedField. Basis: caller + body + siblings.",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:206964 `calr sub_F7FEE6` -- Transp0se_StageZero_NumberPadKey",
+   "prom_b/wsa1_prom_b.s:207060 `m_bit 1, MD16, UI_RequestBits`",
+   "prom_b/wsa1_prom_b.s:207065 `ld a, (3574:16)` -- field cursor (0x0DF6)",
+   "prom_b/wsa1_prom_b.s:207071 `call T_Blink_Command`",
+   "prom_a/wsa1_prom_a.s:2563 `AdvanceDelay_BlinkSelectedField:`"
+  ]
+ },
+ {
+  "old": "sub_F80F3A",
+  "verdict": "name",
+  "new": "ModeEnterBody_StepRecord",
+  "header": "The whole body of ModeEnter_StepRecord (+0 ENTER of panel mode 6): (0x0C02) := 2 and (0x0C00) := 0 (prom_b sub_F65C51), `or (0x2134),2` (the mode-change bit every mode ENTER sets), (0x2130) |= 0x100 and (0x215E) := 0 (sub_F65C00), (0x12A0) := 0. Its LEAVE twin 0xF80F4F (behind sub_F7D025) also saves the 0xC00-byte workspace 0x603400 back to the current bank (sub_F65C27). Basis: caller + body.",
+  "basis": "caller (vtable method) + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:196484 `call sub_F80F3A` -- ModeEnter_StepRecord is `call / ret`, the +0 ENTER of panel mode 6 (prom_b/wsa1_prom_b.s:196483 header)",
+   "prom_a/wsa1_prom_a.s:4362 `call T_F42B70` -> prom_b/wsa1_prom_b.s:147686 `ld (3074:16), 2` / prom_b/wsa1_prom_b.s:147687 `ldw (3072:16), 0`",
+   "prom_a/wsa1_prom_a.s:4363 `orw (0x2134:16), 0x0002` -- as ModeEnter_Sound / ModeEnter_Combination",
+   "prom_a/wsa1_prom_a.s:4364 `call T_F42BB4` -> prom_b/wsa1_prom_b.s:147618 `or (0x2130),0x0100` / prom_b/wsa1_prom_b.s:147619 `ldw (8542:16), 0`",
+   "prom_a/wsa1_prom_a.s:4365 `ldw (0x12a0:16), 0x00`",
+   "prom_a/wsa1_prom_a.s:4368 `orw (0x2134:16), 0x0002` / prom_a/wsa1_prom_a.s:4369 `call T_F42BB8` -- the LEAVE twin -> prom_b/wsa1_prom_b.s:147639 `call sub_F65C27` (workspace 0x603400 -> bank copy, prom_b/wsa1_prom_b.s:147665)",
+   "prom_a/wsa1_prom_a.s:4515 `ScreenEnterBody_StepRecord:` -- the <Method>Body_<Name> convention"
+  ]
+ },
+ {
+  "old": "sub_F81948",
+  "verdict": "name",
+  "new": "Str_SongNameBlank",
+  "header": "DATA, not code: six bytes 0x5F = '______', the blank song name. SongName_ResetToUnderscores copies them (ldir, BC = 6) into all three copies of the name (BStore_SongName, the bank copy +0xCA, DisplayListB_Stage); today they are decoded as six `pop XSP`, and the code from 0xF8194E on is a separate, unlabelled routine. Basis: the three `ld XIY` operand references + ROM bytes.",
+  "basis": "callers (operand references) + ROM bytes",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:5449 `ld XIY,sub_F81948` / prom_a/wsa1_prom_a.s:5462 / prom_a/wsa1_prom_a.s:5466 -- the three source operands in SongName_ResetToUnderscores, each followed by `ldw bc, 0x06 / ldir85`",
+   "prom_a/wsa1_prom_a.s:5477..5482 `pop XSP` x6 -- bytes 5F 5F 5F 5F 5F 5F at 0xF81948 (xxd of original_ROMs/wsa1_prom_a.ic12 at 0x1948 reads '______')",
+   "prom_a/wsa1_prom_a.s:5483 `ld a, (0x0c03:16)` -- 0xF8194E, where real code resumes; no reference to 0xF8194E was found",
+   "prom_a/wsa1_prom_a.s:6012 `Str_End: .ascii \"END\"` -- the tree's Str_ precedent for text in prom_a"
+  ]
+ },
+ {
+  "old": "sub_F82CE8",
+  "verdict": "name",
+  "new": "Variant_SendPortBToCpu2",
+  "header": "Sends CPU 1's port B byte to CPU 2: Link_SendCommandE1 with source 0x00001F (PB, whose bit 0 Variant_SetFromPB0 reads), count 1, CPU-2 destination 0x0000FFF8 -- the byte prom_c sub_F9915C samples once after power-on (bit 0 -> 0x00F35F = 1 / 2, the same encoding Variant_SetFromPB0 gives Variant_Flag). MainTask_Entry calls it after ModuleInit_RunPhase0. Basis: caller + body + CPU-2 reader.",
+  "basis": "caller + body + CPU-2 reader",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:7304 `calr sub_F82CE8` -- MainTask_Entry, after Variant_SetFromPB0 (prom_a/wsa1_prom_a.s:7301) and ModuleInit_RunPhase0",
+   "prom_a/wsa1_prom_a.s:7911 `ldw wa, 0xfff8` (pushed first -> (XIZ+0x0E) = destination) / prom_a/wsa1_prom_a.s:7914 `pushw 0x01` (count) / prom_a/wsa1_prom_a.s:7915 `ldw wa, 0x1f` (pushed last -> (XIZ+0x08) = source)",
+   "prom_a/wsa1_prom_a.s:7918 `call T_Link_SendCommandE1`",
+   "prom_a/wsa1_prom_a.s:24898 `ld XBC,(XIZ+0x08)` / prom_a/wsa1_prom_a.s:24901 `ld (Link_TxDest:24), xbc` / prom_a/wsa1_prom_a.s:24902 `ld BC,(XIZ+0x0c)` -- Link_SendCommandE1's argument layout",
+   "include/tmp95c061_sfr.inc:41 `.equ PB, 0x1F`",
+   "prom_a/wsa1_prom_a.s:7432 `bit 0, (PB:8)` / prom_a/wsa1_prom_a.s:7436 `ld (Variant_Flag:8), a` -- CPU 1's own use of PB bit 0 (1 when set, 2 when clear)",
+   "prom_c/midi/midi_serial_port.s:161 `ldw bc, 0xFFF8` / :166 `ld (0x00F35F:24), 1` -- CPU 2 reads bit 0 of 0xFFF8, 1 when set, 2 when clear; notes/FINDINGS-prom_c-scheduler.md:82 says its writer had not been found",
+   "notes/FINDINGS-prom_c-link-receive.md:94 -- 0xE1 = descriptor {u32 dest, u16 count}, then the payload"
+  ]
+ },
+ {
+  "old": "sub_F831B3",
+  "verdict": "refuse",
+  "why_refused": "It writes eight bytes per slot to all four slots of device 0x7F (whose role is open) from stack windows that overlap and reach into its own return address, then four 32-bit words built from QW/QA, and its only caller Ring_InitAllFourteen gives no context beyond boot -- the source header keeps sub_F831B3 on purpose and nothing here changes that.",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:6871 `call sub_F831B3` -- Ring_InitAllFourteen, whose header says it does not know what sub_F831B3 does",
+   "prom_a/wsa1_prom_a.s:8954 `ld XHL,XSP` / prom_a/wsa1_prom_a.s:8955 `add XHL,0x00000008` -- slot 0's 8 bytes start above the four pushed words",
+   "prom_a/wsa1_prom_a.s:8948 `ldw wa, 0x05` -- the unexplained 0x0005 pattern"
+  ]
+ },
+ {
+  "old": "sub_F8A49D",
+  "verdict": "refuse",
+  "why_refused": "The dead twin of sub_F8A89D (`nop / nop / nop / ret`) inside the never-reached PanelGroupQueue_ExpandToEvents_DeadCopy; its live twin has no supported name, so neither has this one.",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:19450 `calr sub_F8A49D` -- in PanelGroupQueue_ExpandToEvents_DeadCopy, after the mid-instruction `jr -90` at prom_a/wsa1_prom_a.s:19449",
+   "prom_a/wsa1_prom_a.s:19460 `nop` -- body nop x3 / ret"
+  ]
+ },
+ {
+  "old": "sub_F8A89D",
+  "verdict": "refuse",
+  "why_refused": "Its body is `nop / nop / nop / ret`, run by PanelGroupQueue_ExpandToEvents only when the group queue at 0x2000 holds 0xFE, and no producer or meaning of that 0xFE marker is established, so a name would only restate a no-op.",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:19965 `jr z, .LF8A888` -- the (0x2000)-queue byte 0xFE arm",
+   "prom_a/wsa1_prom_a.s:19998 `calr sub_F8A89D` -- then the same exit as the 0xFF end marker",
+   "prom_a/wsa1_prom_a.s:20008 `nop` .. prom_a/wsa1_prom_a.s:20011 `ret`"
+  ]
+ },
+ {
+  "old": "sub_F90B8E",
+  "verdict": "name",
+  "new": "ModeScreen_PaintDirtyFields2_DeadCopy",
+  "header": "Never-run older copy of ModeScreen_PaintDirtyFields2: on ModeScreen_DirtyFields2 bit 0 / bit 1 redraws the part record's +0x18 / +0x19 fields with layer-1 lists by Variant_Flag; the first 38 bytes match the live routine, and unlike it this copy still has a variant-2 arm (lists 0xF28724-0xF28750) where the live one keeps a `jr +0`. Paint_SoundModeFields_DeadCopy calls it at the point where Paint_SoundModeFields calls ModeScreen_PaintDirtyFields2; truncated at 0xF90C00 by the module there. Basis: caller + body + live twin.",
+  "basis": "caller + body + live twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:32351 `calr sub_F90B8E` -- Paint_SoundModeFields_DeadCopy, right before both masks are cleared",
+   "prom_a/wsa1_prom_a.s:32779 `calr ModeScreen_PaintDirtyFields2` -- the live routine's call at the same point",
+   "prom_a/wsa1_prom_a.s:32377 `m_bit 0, MD16, ModeScreen_DirtyFields2` / prom_a/wsa1_prom_a.s:32819 -- same opening",
+   "prom_a/wsa1_prom_a.s:32380 `call PartRecord_GetSecondHalfPtr - 0x859` / prom_a/wsa1_prom_a.s:32381 `ld A,(XIY+0x18)` -- vs live prom_a/wsa1_prom_a.s:32822",
+   "prom_a/wsa1_prom_a.s:32383 `m_cp_mi8 MB8, Variant_Flag, 0x02` / prom_a/wsa1_prom_a.s:32388 `call T_DisplayListB_Run`",
+   "prom_a/wsa1_prom_a.s:32396 `m_bit 1, MD16, ModeScreen_DirtyFields2`",
+   "prom_a/wsa1_prom_a.s:32830 `jr .LF90FCB` (68 00) -- the live twin's vestige of the variant-2 arm this copy still has"
+  ]
+ }
+]

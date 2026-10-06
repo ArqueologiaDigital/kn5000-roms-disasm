@@ -26,9 +26,9 @@ it calls `Initial_ExecuteSelected`.
 
 | item | text | `Initial_ItemTable` arm | what the arm calls |
 |---|---|---|---|
-| 0 | TOTAL | `Initial_Total` | `T_ModuleInit_Phase2Veneer`, `T_F40A00`, `T_Mode_InitSavedPartBlocks`, then `sub_FA0DCC` |
+| 0 | TOTAL | `Initial_Total` | `T_ModuleInit_Phase2Veneer`, `T_F40A00`, `T_Mode_InitSavedPartBlocks`, then `SystemTest_ResetToDefaults` |
 | 1 | PART SETTING | `Initial_PartSetting` | `T_PartSettings_ResetToDefault` |
-| 2 | SYSTEM | `Initial_System` | `T_Mode_SwitchToSound`, `T_SystemSettings_ResetToDefault`, `sub_FA0DCC` |
+| 2 | SYSTEM | `Initial_System` | `T_Mode_SwitchToSound`, `T_SystemSettings_ResetToDefault`, `SystemTest_ResetToDefaults` |
 | 3 | MIDI SETTING | `Initial_MidiSetting` | `T_MidiSettings_ResetToDefault` |
 | 4 | RE-MAP | `Initial_ReMap` | `T_SoundRemap_ResetToDefault`, `T_CombiRemap_ResetToDefault` |
 | 5 | DRUMS MAP | `Initial_DrumsMap` | `T_DrumMap_ResetToDefault` |
@@ -49,7 +49,7 @@ Items 4 and 5 call routines that already carried their names, `*Remap_ResetToDef
   parameter 0x7A, the default the SysEx tempo receiver and the sequencer clock also use
   (sysex-probes `25` = TEMPO).
 
-⚠ Not established: what `T_Mode_InitSavedPartBlocks` (prom_a 0xFAABB3) and `sub_FA0DCC` add for TOTAL and SYSTEM.
+⚠ Not established: what `T_Mode_InitSavedPartBlocks` (prom_a 0xFAABB3) and `SystemTest_ResetToDefaults` add for TOTAL and SYSTEM.
 
 ## 3. The SysEx twin: parameter 08 00, INITIAL
 
@@ -75,7 +75,7 @@ So the wire value is the screen's item number.
 
 The SysEx arms differ from the screen's in three ways:
 
-- TOTAL skips `T_Mode_InitSavedPartBlocks` and `sub_FA0DCC`.
+- TOTAL skips `T_Mode_InitSavedPartBlocks` and `SystemTest_ResetToDefaults`.
 - SYSTEM skips `T_Mode_SwitchToSound`.
 - Each arm except 0 and 1 ends in a busy countdown.
 

@@ -5,11 +5,11 @@ all six found inside ONE COVER-R1 block: 0xF3B3B2-0xF3B7C3.
 QUESTION IT ANSWERS
     That block already held Paint_TrackAssign_DL1 (closed by gen_prom_b_f3b3da_module.py,
     landing on Data_F3B5A9) and, past this fix's far end, an already-real
-    DL_F3B7C3. Between those two lie SEVEN round-1 Data_Fxxxxxx objects, each
+    TrackAssign_DrawTrackGroupHighlight_DL. Between those two lie SEVEN round-1 Data_Fxxxxxx objects, each
     immediately followed by its own tiny `.incbin`. Six of the seven are the
     same shape round 2 closed: the object's own declared bytes are the
     LEADING BYTES of a display list that reaches the NEXT Data_Fxxxxxx
-    object's start (or, for the last one, DL_F3B7C3) with ZERO DRIFT:
+    object's start (or, for the last one, TrackAssign_DrawTrackGroupHighlight_DL) with ZERO DRIFT:
 
         object       span               records  landing (already real)
         Data_F3B5A9  0xF3B5A9-0xF3B5D1  5        Data_F3B5D1
@@ -17,7 +17,7 @@ QUESTION IT ANSWERS
         Data_F3B611  0xF3B611-0xF3B651  8        Data_F3B651 (itself untouched, see below)
         Data_F3B65B  0xF3B65B-0xF3B6D3  8        Data_F3B6D3
         Data_F3B6D3  0xF3B6D3-0xF3B74B  8        Data_F3B74B
-        Data_F3B74B  0xF3B74B-0xF3B7C3  8        DL_F3B7C3, already real
+        Data_F3B74B  0xF3B74B-0xF3B7C3  8        TrackAssign_DrawTrackGroupHighlight_DL, already real
 
     The SEVENTH, Data_F3B651 (0xF3B651-0xF3B65B, 10 B total), does NOT frame:
     its first declared byte pair is `op 0x00, len 0x0B` and 0x0B (11) exceeds

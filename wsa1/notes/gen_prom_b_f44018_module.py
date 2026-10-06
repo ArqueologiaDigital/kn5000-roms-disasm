@@ -21,7 +21,7 @@ WHERE THE EXTENT COMES FROM
       START 0xF44018 is the first byte AFTER the 0xF40000 thunk table, whose
             extent (0x40000-0x44018, file offsets) is fixed by
             scripts/analysis/prom_b_thunk_table.py and already converted here.
-      END   0xF47800 is a thunk target (T_F40B40), i.e. an address the linker
+      END   0xF47800 is a thunk target (T_BStore_StepCursorToNextLeadByte), i.e. an address the linker
             chose, and the 5,867 bytes in front of it are pure 0x0E.
     Between them the two code segments decode with ZERO undecodable bytes and
     each ends exactly on its segment boundary.
@@ -545,7 +545,7 @@ BANNER = """
 ;   START 0xF44018 is the first byte AFTER the 0xF40000 thunk table, whose extent
 ;         is fixed by scripts/analysis/prom_b_thunk_table.py and which this file
 ;         already converts.
-;   END   0xF47800 is itself a thunk target (T_F40B40) -- an address the linker
+;   END   0xF47800 is itself a thunk target (T_BStore_StepCursorToNextLeadByte) -- an address the linker
 ;         chose -- and the 5,867 bytes in front of it are pure 0x0E.
 ; Between them the two code segments decode with ZERO undecodable bytes and each
 ; ends exactly on its segment boundary.

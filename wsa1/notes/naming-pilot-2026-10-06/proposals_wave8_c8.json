@@ -1,0 +1,503 @@
+[
+ {
+  "old": "sub_F93BDA",
+  "verdict": "name",
+  "new": "GroupCombiDisplayHold_ShowFirstOfTwoPages",
+  "header": "Clears rows 29-235 of layer 0 and shows page 1 (members 0-7) of a two-page group on GROUP: COMBI. DISPLAY HOLD: LCD_ClearLayer0_Rows29To235, CombiGroup_MaxMemberIndexOfCurrent, L = 0, GroupCombiDisplayHold_ShowMemberPage_TwoPages -- the COMBI twin of GroupMembers_ShowFirstOfTwoPages. UNREACHABLE: only the post block at 0xF93B76 names it, and nothing names that block. Basis: twin + referrer + body.",
+  "basis": "SOUND twin + referrer (dead post block) + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:38222 `ld XWA,sub_F93BDA` -- the only reference: a CallbackQueue_Post block after the `ret` at 0xF93B75",
+   "prom_a/wsa1_prom_a.s:38221 `ret` -- .LF93B75: the post blocks after it (0xF93B76-0xF93BD8) are named by no branch, table entry or 24-bit pointer in any of the four dumps (3-byte LE search of 0xF93B76/8A/9E/B2/C6), so the LcdKeyRow4_GroupCombiDisplayHold 'caller' is only extent; the SOUND twin's identical block at 0xF92FC6 is recorded UNREACHABLE the same way",
+   "prom_a/wsa1_prom_a.s:36647 `ld XWA,GroupMembers_ShowFirstOfTwoPages` -- the SOUND screen's identical post block, slot 1",
+   "prom_a/wsa1_prom_a.s:36686 `calr LCD_ClearLayer0_Rows29To235` -- the SOUND twin's body: clear, max index, L = 0, page-of-two",
+   "prom_a/wsa1_prom_a.s:38258 `calr LCD_ClearLayer0_Rows29To235` -- body: clear layer 0 rows 29-235",
+   "prom_a/wsa1_prom_a.s:38259 `calr CombiGroup_MaxMemberIndexOfCurrent` -- A = max member index of the current combination group",
+   "prom_a/wsa1_prom_a.s:38260 `ld l, 0x00:opc` -- member 0, i.e. page 1",
+   "prom_a/wsa1_prom_a.s:38261 `calr GroupCombiDisplayHold_ShowMemberPage_TwoPages` -- the COMBI two-page painter"
+  ]
+ },
+ {
+  "old": "sub_F93BE6",
+  "verdict": "name",
+  "new": "GroupCombiDisplayHold_ShowSecondOfTwoPages",
+  "header": "Clears rows 29-235 of layer 0 and shows page 2 (members 8..max) of a two-page group on GROUP: COMBI. DISPLAY HOLD: CombiGroup_MaxMemberIndexOfCurrent, L = 8, GroupCombiDisplayHold_ShowMemberPage_TwoPages -- the COMBI twin of GroupMembers_ShowSecondOfTwoPages. UNREACHABLE: only the dead post block at 0xF93B8A names it. Basis: twin + referrer + body.",
+  "basis": "SOUND twin + referrer (dead post block) + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:38229 `ld XWA,sub_F93BE6` -- the only reference, post block 2 after the `ret` at 0xF93B75",
+   "prom_a/wsa1_prom_a.s:38221 `ret` -- .LF93B75: the post blocks after it (0xF93B76-0xF93BD8) are named by no branch, table entry or 24-bit pointer in any of the four dumps (3-byte LE search of 0xF93B76/8A/9E/B2/C6), so the LcdKeyRow4_GroupCombiDisplayHold 'caller' is only extent; the SOUND twin's identical block at 0xF92FC6 is recorded UNREACHABLE the same way",
+   "prom_a/wsa1_prom_a.s:36654 `ld XWA,GroupMembers_ShowSecondOfTwoPages` -- the SOUND twin's slot 2",
+   "prom_a/wsa1_prom_a.s:36697 `ld l, 0x08:opc` -- the SOUND twin's L = 8",
+   "prom_a/wsa1_prom_a.s:38264 `calr LCD_ClearLayer0_Rows29To235` -- body",
+   "prom_a/wsa1_prom_a.s:38266 `ld l, 0x08:opc` -- member 8, i.e. page 2",
+   "prom_a/wsa1_prom_a.s:38267 `calr GroupCombiDisplayHold_ShowMemberPage_TwoPages` -- the COMBI two-page painter"
+  ]
+ },
+ {
+  "old": "sub_F93BF2",
+  "verdict": "name",
+  "new": "GroupCombiDisplayHold_ShowFirstOfManyPages",
+  "header": "Clears rows 29-235 of layer 0 and shows the first page of a many-page group on GROUP: COMBI. DISPLAY HOLD: CombiGroup_MaxMemberIndexOfCurrent, L = 0, GroupCombiDisplayHold_ShowMemberPage_ManyPages -- the COMBI twin of GroupMembers_ShowFirstOfManyPages. UNREACHABLE: only the dead post block at 0xF93B9E names it. Basis: twin + referrer + body.",
+  "basis": "SOUND twin + referrer (dead post block) + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:38236 `ld XWA,sub_F93BF2` -- the only reference, post block 3 after the `ret` at 0xF93B75",
+   "prom_a/wsa1_prom_a.s:38221 `ret` -- .LF93B75: the post blocks after it (0xF93B76-0xF93BD8) are named by no branch, table entry or 24-bit pointer in any of the four dumps (3-byte LE search of 0xF93B76/8A/9E/B2/C6), so the LcdKeyRow4_GroupCombiDisplayHold 'caller' is only extent; the SOUND twin's identical block at 0xF92FC6 is recorded UNREACHABLE the same way",
+   "prom_a/wsa1_prom_a.s:36661 `ld XWA,GroupMembers_ShowFirstOfManyPages` -- the SOUND twin's slot 3",
+   "prom_a/wsa1_prom_a.s:36707 `calr GroupMembers_ShowPageOfMany` -- the SOUND twin's body ends in the many-page painter with L = 0",
+   "prom_a/wsa1_prom_a.s:38270 `calr LCD_ClearLayer0_Rows29To235` -- body",
+   "prom_a/wsa1_prom_a.s:38272 `ld l, 0x00:opc` -- member 0",
+   "prom_a/wsa1_prom_a.s:38273 `calr GroupCombiDisplayHold_ShowMemberPage_ManyPages` -- the COMBI many-page painter"
+  ]
+ },
+ {
+  "old": "sub_F93BFE",
+  "verdict": "name",
+  "new": "GroupCombiDisplayHold_ShowNextOfManyPages",
+  "header": "Clears rows 29-235 of layer 0 and shows the page after GroupMembers_Page of a many-page group: L = (GroupMembers_Page+1)*8, A = CombiGroup_MaxMemberIndexOfCurrent -- the COMBI twin of GroupMembers_ShowNextOfManyPages, but it calls the SOUND painter GroupMembers_ShowPageOfMany (sound names), recorded as the ROM has it. UNREACHABLE: only the dead post blocks at 0xF93BB2/0xF93BC6 name it. Basis: twin + referrer + body.",
+  "basis": "SOUND twin + referrer (dead post blocks) + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:38243 `ld XWA,sub_F93BFE` -- post block 4 after the `ret` at 0xF93B75",
+   "prom_a/wsa1_prom_a.s:38250 `ld XWA,sub_F93BFE` -- post block 5, the same target (the SOUND block also names its NextOfManyPages twice: 36668/36675)",
+   "prom_a/wsa1_prom_a.s:38221 `ret` -- .LF93B75: the post blocks after it (0xF93B76-0xF93BD8) are named by no branch, table entry or 24-bit pointer in any of the four dumps (3-byte LE search of 0xF93B76/8A/9E/B2/C6), so the LcdKeyRow4_GroupCombiDisplayHold 'caller' is only extent; the SOUND twin's identical block at 0xF92FC6 is recorded UNREACHABLE the same way",
+   "prom_a/wsa1_prom_a.s:38276 `calr LCD_ClearLayer0_Rows29To235` -- body",
+   "prom_a/wsa1_prom_a.s:38277 `calr CombiGroup_MaxMemberIndexOfCurrent` -- A = max member index of the COMBI group",
+   "prom_a/wsa1_prom_a.s:38279 `ld a, (GroupMembers_Page:16)` -- the current page ...",
+   "prom_a/wsa1_prom_a.s:38283 `mul wa, l` -- ... (page+1) * 8 -> L, the first member of the next page",
+   "prom_a/wsa1_prom_a.s:38286 `calr GroupMembers_ShowPageOfMany` -- the SOUND many-page painter; GroupMembers_ShowPageOfMany's own header (36460) already lists this routine as 'the COMBI. screen's twin'"
+  ]
+ },
+ {
+  "old": "sub_F9C058",
+  "verdict": "name",
+  "new": "SystemMenu_InitRam",
+  "header": "The SYSTEM-menu module's RAM init, shaped like NoteRouting_InitRam: zeroes 0x2900-0x2914 (the screens' cursor-redraw flags 0x2900, the TEST note lists 0x2902-0x2914) and copies the 6 initial bytes ByteTable6_FA15E8 to 0x2915 (SoundCopy's request record). Only slot 0 of the phase vector at 0xF9C03C reaches it, and no pointer to that vector exists in any dump, so it does not run at boot. Basis: phase-vector shape + body + RAM users.",
+  "basis": "phase-vector slot 0 + twin shape (NoteRouting_InitRam) + body + RAM users",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:51271 `jp LCD_ShowLayers1And2_SaveRegs_Join` -- slot 0 of a 6-slot phase vector at 0xF9C03C (jp + five ret/nop slots), the shape of NoteRouting_PhaseVector (118858); 3-byte LE search finds 0xF9C03C named nowhere",
+   "prom_a/wsa1_prom_a.s:51293 `calr sub_F9C058` -- the vector's join: the only call",
+   "prom_a/wsa1_prom_a.s:118880 `calr NoteRouting_InitRam` -- the twin: NoteRouting_PhaseVector_Join -> NoteRouting_InitRam, the same copy-then-zero-fill shape",
+   "prom_a/wsa1_prom_a.s:51299 `lda xiy, (ByteTable6_FA15E8:24)` -- initial-data source, 6 bytes (BC = 6 at 51296)",
+   "prom_a/wsa1_prom_a.s:51300 `lda xix, (0x2915:24)` -- copied to 0x2915..0x291A",
+   "prom_a/wsa1_prom_a.s:51303 `ld XBC,0x00000015` -- then 0x15 = 21 bytes ...",
+   "prom_a/wsa1_prom_a.s:51306 `lda xix, (0x2900:24)` -- ... from 0x2900 zero-filled",
+   "prom_a/wsa1_prom_a.s:51348 `m_or_mi8 MB16, 0x2900, 0x03` -- user: Screen_ReMapEdit_Enter's cursor-redraw bits",
+   "prom_a/wsa1_prom_a.s:58860 `lda xix, (0x2915:16)` -- user: SoundCopy_InitRequestHeader's 6-byte request record",
+   "prom_a/wsa1_prom_a.s:60631 `lda xix, (0x2902:24)` -- user: the TEST screen's play state (sub_FA0D10 in this batch); 0x2903-0x2914 are its note lists"
+  ]
+ },
+ {
+  "old": "sub_FA0BA4",
+  "verdict": "name",
+  "new": "SystemTest_SplitNotesForDisplay",
+  "header": "TEST screen (variant 2): for each of the four test notes at 0x26A8+2k (MIDI note + 1, 0 = empty) writes the note-name index (n-1) % 12 to 0x2940+k and the octave index (n-1) / 12 to 0x2950+k, or 0x18 / 0x10 for an empty slot, the indices DisplayList_FA4D9A prints through OperandTable_FA4B4B (names) and OperandTable_FA4B7D ('-2'..' 8'). Basis: callers + body + display list.",
+  "basis": "callers + body + display list",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:59921 `m_cp_mi8 MB8, Variant_Flag, 0x01` -- Screen_TouchSensitivityOrTest_Enter: variant 2 takes the TEST path",
+   "prom_a/wsa1_prom_a.s:59991 `calr sub_FA0BA4` -- that Enter path, just before posting the note/velocity painter .LFA0AEC",
+   "prom_a/wsa1_prom_a.s:60240 `calr sub_FA0BA4` -- the TEST note editors (sub_FA0925/40/5B step 0x26AA/AC/AE) after a change, before posting .LFA0C14",
+   "prom_a/wsa1_prom_a.s:60483 `lda xbc, (0x26a8:16)` -- body: walks the 4 pairs (stride 2, H = 4)",
+   "prom_a/wsa1_prom_a.s:60495 `ld (XWA),0x18` -- empty note: name index 0x18 ...",
+   "prom_a/wsa1_prom_a.s:60496 `ld (XIX),0x10` -- ... and octave index 0x10 (OperandTable_FA4B4B[24] 'OF' + OperandTable_FA4B7D[16] 'F ' = 'OFF')",
+   "prom_a/wsa1_prom_a.s:60503 `div BC,0x000c` -- (n-1) / 12; `ex BC,QBC` (60504) takes the remainder",
+   "prom_a/wsa1_prom_a.s:60507 `ld (XBC),L` -- remainder -> 0x2940+k",
+   "prom_a/wsa1_prom_a.s:60514 `ld (XIX),A` -- quotient -> 0x2950+k",
+   "prom_a/wsa1_prom_a.s:60534 `lda xwa, (DisplayList_FA4D9A:24)` -- .LFA0C14 runs DisplayList_FA4D9A",
+   "prom_a/wsa1_prom_a.s:67840 `.byte 0x40, 0x29, 0x1f, ... 0x4b, 0x4b, 0xfa ...` -- DisplayList_FA4D9A: op-02 on var 0x2940 through 0xFA4B4B, then var 0x2950 through 0xFA4B7D"
+  ]
+ },
+ {
+  "old": "sub_FA0C64",
+  "verdict": "name",
+  "new": "SystemTest_BuildNoteLists",
+  "header": "TEST screen: with TEST MODE ON ((0x26A7) bit 3) packs the non-empty test notes into note-on pairs {note, velocity} at 0x2905 and note-off pairs {note, 0} at 0x290D, byte count in (0x2904), and copies MONO/POLY ((0x26A7) bit 4) to (0x2902) bit 3; OFF -> (0x2904) = 0. Run after the TEST page is entered or edited and by the INITIAL SYSTEM reset. Basis: callers + body + display list.",
+  "basis": "callers + body + display list",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:59981 `calr sub_FA0C64` -- Screen_TouchSensitivityOrTest_Enter, TEST (variant-2) path, after the 0x26A7 defaults",
+   "prom_a/wsa1_prom_a.s:60361 `calr sub_FA0C64` -- SoftKeyCols7_8_SystemTest after a mode/velocity change",
+   "prom_a/wsa1_prom_a.s:60714 `calr sub_FA0C64` -- the INITIAL SYSTEM reset (sub_FA0DCC) after reloading the defaults",
+   "prom_a/wsa1_prom_a.s:60565 `and C,0x08` -- gate: (0x26A7) bit 3; DisplayList_FA4D9A prints that bit as OFF/ON (OperandTable_FA44E2) and bit 4 as MONO/POLY (OperandTable_FA4E58)",
+   "prom_a/wsa1_prom_a.s:60583 `add XWA,0x00002905` -- note-on list: 0x2905 + 2*count = note - 1 ...",
+   "prom_a/wsa1_prom_a.s:60590 `ld (XWA),L` -- ... and +1 = the pair's velocity byte",
+   "prom_a/wsa1_prom_a.s:60595 `lda xwa, (0x290d:24)` -- note-off list 0x290D: note - 1 ...",
+   "prom_a/wsa1_prom_a.s:60600 `ld (XBC),0x00` -- ... velocity 0",
+   "prom_a/wsa1_prom_a.s:60611 `ld (0x2904:24), d` -- byte count",
+   "prom_a/wsa1_prom_a.s:60615 `m_set 3, MD24, 0x002902` -- POLY flag copied from (0x26A7) bit 4",
+   "prom_a/wsa1_prom_a.s:60621 `ld (0x2904:24), 0x00` -- TEST MODE OFF: empty lists"
+  ]
+ },
+ {
+  "old": "sub_FA0D10",
+  "verdict": "name",
+  "new": "SystemTest_PlayNotesOnPanelKey",
+  "header": "Plays the TEST notes on a panel event: PanelGroupQueue_Append calls it (T_F434D4) on variant 2 for group 2 when W bit 3 is set, passing WA. Arg bit 3 set: unless Blink_GetState = 2 or the list is empty, (0x2902) bit 2 = sounding and the note-on pairs at 0x2905 go into Ring601850 (all in POLY, else the one at (0x2903)); clear: the matching note-off pairs from 0x290D (MONO steps (0x2903) by 2, wrapping at (0x2904)), bit 2 cleared. Basis: caller + body.",
+  "basis": "caller + body + the lists SystemTest_BuildNoteLists builds",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:19316 `m_cp_mi8 MB8, Variant_Flag, 0x01` -- PanelGroupQueue_Append: only on variant 2 (the SX-WSA1R, the variant with the TEST page) ...",
+   "prom_a/wsa1_prom_a.s:19318 `cp e, 0x02:i3` -- ... group 2 ...",
+   "prom_a/wsa1_prom_a.s:19320 `bit 0x03,W` -- ... with W bit 3 set",
+   "prom_a/wsa1_prom_a.s:19330 `call T_F434D4` -- the call, WA pushed at 19329",
+   "prom_b/wsa1_prom_b.s:93167 `T_F434D4: jp sub_FA0D10` -- the thunk",
+   "prom_a/wsa1_prom_a.s:60632 `ld C,(XIZ+0x08)` -- the pushed low byte; `and C,0x08` (60633) picks the on or off arm",
+   "prom_a/wsa1_prom_a.s:60635 `call T_Blink_GetState` -- no notes while the blink state is 2",
+   "prom_a/wsa1_prom_a.s:60640 `m_or_mi8 MBI+r4, 0, 0x04` -- (0x2902) bit 2 = notes sounding",
+   "prom_a/wsa1_prom_a.s:60644 `lda xbc, (0x2905:24)` -- POLY: the whole note-on list ((0x2904) bytes)",
+   "prom_a/wsa1_prom_a.s:60658 `call T_Ring601850_PutBlock` -- into ring 0x601850, whose consumer Ring601850_ProcessNoteEvents takes (note, velocity) pairs",
+   "prom_a/wsa1_prom_a.s:60670 `lda xbc, (0x290d:24)` -- release: the note-off list",
+   "prom_a/wsa1_prom_a.s:60686 `inc 0x02, (0x2903:24)` -- MONO: next pair, wrapping to 0 at 60691",
+   "prom_a/wsa1_prom_a.s:60693 `and (XIX),0xfb` -- sounding bit cleared"
+  ]
+ },
+ {
+  "old": "sub_FA0DCC",
+  "verdict": "name",
+  "new": "SystemTest_ResetToDefaults",
+  "header": "Copies the 9 default bytes ByteTable9_FA1D07 over the TEST state 0x26A7-0x26AF -- mode 0 (OFF, MONO) and notes 0x3D/0x41/0x44/0x49 (stored +1: C3 E3 G3 C4) at velocity 0x50 -- then SystemTest_BuildNoteLists. Called by the INITIAL items SYSTEM and TOTAL. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:61518 `calr sub_FA0DCC` -- Initial_System, right after T_SystemSettings_ResetToDefault (61516)",
+   "prom_a/wsa1_prom_a.s:61506 `jr .LFA14A7` -- Initial_Total joins the same call",
+   "prom_a/wsa1_prom_a.s:60701 `lda xix, (0x26a7:16)` -- destination 0x26A7..",
+   "prom_a/wsa1_prom_a.s:60707 `add XBC,ByteTable9_FA1D07` -- source table, 9 bytes (cp H,9)",
+   "prom_a/wsa1_prom_a.s:63112 `.byte 0x00, 0x3d, 0x50, 0x41, 0x50, 0x44, 0x50, 0x49, 0x50` -- the defaults",
+   "prom_a/wsa1_prom_a.s:59961 `add XBC,ByteTable9_FA1D07` -- the TEST Enter path copies the same table on first entry",
+   "prom_a/wsa1_prom_a.s:60714 `calr sub_FA0C64` -- then rebuilds the note lists"
+  ]
+ },
+ {
+  "old": "sub_FA102D",
+  "verdict": "name",
+  "new": "ControllerAssign_StoreCursorRowChoice",
+  "header": "CONTROLLER ASSIGN: for the cursor row H = (0x26F1) & 0x0F maps the edited choice index UI_DrawScratch[H] back through ByteTable11_FA1DD1 (rows 0-6) or ByteTable5_FA1DDC (rows 7-8) and, when it differs, writes it to the controller's setting at 0x7F12 + ByteTable9_FA1DC8[H] and queues a class-0x99 record (T_Queue2C00_Append4). Basis: caller + body + twin (ControllerAssign_LoadChoiceIndices).",
+  "basis": "caller + body + inverse twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60912 `call T_EditValue_StepBitField` -- SoftKeyCols5to8_ControllerAssign steps UI_DrawScratch[row] ...",
+   "prom_a/wsa1_prom_a.s:60917 `calr sub_FA102D` -- ... and calls this when it changed",
+   "prom_a/wsa1_prom_a.s:60974 `ld h, (0x26f1:16)` -- the cursor row (low nibble)",
+   "prom_a/wsa1_prom_a.s:60983 `ldw bc, 0x7f12` -- setting address 0x7F12 + ByteTable9_FA1DC8[row] (60979)",
+   "prom_a/wsa1_prom_a.s:60999 `add XWA,ByteTable11_FA1DD1` -- rows 0-6: 11 choices {0x00,0x01,0x02,0x04,0x0B,0x40,0x10-0x13,0x81}",
+   "prom_a/wsa1_prom_a.s:61011 `add XBC,ByteTable5_FA1DDC` -- rows 7-8: 5 choices",
+   "prom_a/wsa1_prom_a.s:61005 `ld (XBC),H` -- store only when different (cp W,H at 61003)",
+   "prom_a/wsa1_prom_a.s:61031 `pushw 0x99` -- class 0x99 ...",
+   "prom_a/wsa1_prom_a.s:61032 `call T_Queue2C00_Append4` -- ... queued with field ByteTable9_FA1DC8[row] and the value"
+  ]
+ },
+ {
+  "old": "sub_FA10CD",
+  "verdict": "name",
+  "new": "ControllerAssign_LoadChoiceIndices",
+  "header": "CONTROLLER ASSIGN, page 0 only: for each of the 9 controller rows finds the setting byte at 0x7F12 + ByteTable9_FA1DC8[row] in its choice table (ByteTable11_FA1DD1 for rows 0-6, ByteTable5_FA1DDC for rows 7-8) and stores the index in UI_DrawScratch[row], the buffer the row editors step. Called by Screen_ControllerAssign_Enter before it posts the field painter. Basis: caller + body + inverse twin.",
+  "basis": "caller + body + inverse twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60743 `calr sub_FA10CD` -- Screen_ControllerAssign_Enter, before posting .LFA11B9",
+   "prom_a/wsa1_prom_a.s:61043 `m_cp_mi8 MB16, 0x26f0, 0x00` -- page 0 only (PageKey_ControllerAssign steps 0x26F0)",
+   "prom_a/wsa1_prom_a.s:61056 `ld D,(XWA+0x7f12)` -- current setting of row L",
+   "prom_a/wsa1_prom_a.s:61060 `add XBC,ByteTable11_FA1DD1` -- searched in the 11-choice table for rows 0..6",
+   "prom_a/wsa1_prom_a.s:61067 `ld (XBC+UI_DrawScratch),H` -- match index -> UI_DrawScratch[row]",
+   "prom_a/wsa1_prom_a.s:61092 `add XBC,ByteTable5_FA1DDC` -- rows 7..8 in the 5-choice table",
+   "prom_a/wsa1_prom_a.s:61099 `ld (XBC+UI_DrawScratch),H` -- same store",
+   "prom_a/wsa1_prom_a.s:60897 `call T_EditValue_StepBitField` -- SoftKeyCols5to8_ControllerAssign then steps exactly those UI_DrawScratch bytes"
+  ]
+ },
+ {
+  "old": "sub_FA5926",
+  "verdict": "name",
+  "new": "MIDI_SetRealtimeIgnoreFromVariant",
+  "header": "(0x0925) bit 0 := (Variant_Flag == 2), the bit MIDI_RT_Received tests to drop every System Real Time byte except Active Sensing -- so variant 2 (the SX-WSA1R, FINDINGS-prom_a-panel-control-map.md 2) ignores incoming clock / start / continue / stop. Last step of MIDI_Reset. Basis: caller + body + the bit's only reader.",
+  "basis": "caller + body + reader",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:69431 `calr sub_FA5926` -- MIDI_Reset's fourth and last call",
+   "prom_a/wsa1_prom_a.s:69534 `m_res 0, MD16, 0x0925` -- clear ...",
+   "prom_a/wsa1_prom_a.s:69535 `m_cp_mi8 MB8, Variant_Flag, 0x02` -- ... and set again only on variant 2",
+   "prom_a/wsa1_prom_a.s:69537 `m_set 0, MD16, 0x0925` -- the set",
+   "prom_a/wsa1_prom_a.s:68707 `m_bit 0, MD16, 0x0925` -- MIDI_RT_Received, after the 0xFE Active Sensing arm ...",
+   "prom_a/wsa1_prom_a.s:68708 `jr nz, MIDI_RT_Ignore` -- ... ignores 0xF8-0xFC when the bit is set; no other access to (0x0925) in prom_a/prom_b"
+  ]
+ },
+ {
+  "old": "sub_FA64E5",
+  "verdict": "refuse",
+  "why_refused": "No controller number maps to MidiIn_ControllerHandlerTable index 8 and its parameter 0xB7 is ignored by MIDI OUT and not reset by CONTROLLER ASSIGN's Leave, so which controller it handles is not established (the earlier deliberate refusal stands).",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:70734 `.long sub_FA64E5` -- MidiIn_ControllerHandlerTable[8], its only reference",
+   "prom_a/wsa1_prom_a.s:75892 `.byte 0x18, 0x01, 0x0a, ...` -- MidiIn_ControllerNumberToIndex produces no 0x08 anywhere",
+   "prom_a/wsa1_prom_a.s:71012 `ld XIX,sub_FA64E5_ParamTable` -- body: publishes {0xB7, part, value, 0x7F}",
+   "prom_a/wsa1_prom_a.s:75946 `; ... MidiOut_ParamNumberTable[0xB7] is MidiOut_Param_Ignore` -- no MIDI-out identity either"
+  ]
+ },
+ {
+  "old": "sub_FA6526",
+  "verdict": "refuse",
+  "why_refused": "Index 9 of MidiIn_ControllerHandlerTable is reached by no controller number and its parameter 0xB6 has no MIDI-out handler, so the controller is unknown; the body alone (publish {0xB6, part, value}) does not name it.",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:70735 `.long sub_FA6526` -- MidiIn_ControllerHandlerTable[9], its only reference",
+   "prom_a/wsa1_prom_a.s:75892 `.byte 0x18, 0x01, 0x0a, ...` -- MidiIn_ControllerNumberToIndex produces no 0x09",
+   "prom_a/wsa1_prom_a.s:71045 `ld XIX,sub_FA6526_ParamTable` -- body: publishes {0xB6, part, value, 0x7F}",
+   "prom_a/wsa1_prom_a.s:75971 `; ... MidiOut_ParamNumberTable[0xB6] is MidiOut_Param_Ignore` -- no MIDI-out identity"
+  ]
+ },
+ {
+  "old": "sub_FA7DA3",
+  "verdict": "name",
+  "new": "MidiOut_RunPeriodicTimeouts",
+  "header": "MIDI-out housekeeping MainTask_Loop runs beside T_Blink_Tick: every 150 Tick_Count ticks (~0.31 s at 488 Hz) drops both ports' running-status mailboxes (0x9B port A, 0x091F port B) so the next message resends its status; every 1500 ticks (~3.1 s) re-reads P8 bit 2 into (0x0922) bit 0 (inverted) and queues {0x10A8, value} via Queue2E00_AppendRegs when it changed. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:6276 `call T_F4075C` -- MainTask_Loop, under the (0x88) bit-7 tick flag, next to T_Blink_Tick (6277)",
+   "prom_b/wsa1_prom_b.s:89679 `T_F4075C: jp sub_FA7DA3` -- the thunk",
+   "prom_a/wsa1_prom_a.s:74919 `m_sub_rm MW16, 0x091c, r0` -- Tick_Count - (0x091C) ...",
+   "prom_a/wsa1_prom_a.s:74920 `cp WA,0x0096` -- ... >= 150",
+   "prom_a/wsa1_prom_a.s:74923 `ld (0x9b:8), 0x00:io` -- port A running-status mailbox cleared (MidiOut_PostStagedMessage drops a status equal to the mailbox)",
+   "prom_a/wsa1_prom_a.s:74924 `ld (0x091f:16), 0x00` -- port B mailbox cleared",
+   "prom_a/wsa1_prom_a.s:74936 `cp WA,0x05dc` -- second timeout, 1500 ticks on (0x0920)",
+   "prom_a/wsa1_prom_a.s:74942 `ld a, (P8:8)` -- P8 bit 2 sampled (after `res 2,(P8)` at 74939) ...",
+   "prom_a/wsa1_prom_a.s:74945 `m_set 0, MD16, 0x0922` -- ... bit 0 set when it reads low; the bit gates MidiOut_ParamChanged / ParamChange_Notify",
+   "prom_a/wsa1_prom_a.s:74952 `call T_Queue2E00_AppendRegs` -- change posted with DE = 0x10A8 (74949)"
+  ]
+ },
+ {
+  "old": "sub_FA7E0C",
+  "verdict": "name",
+  "new": "MidiOut_ResyncChangedParts",
+  "header": "Snapshots NoteRouting_ActivePartMask into (0x19E0) (previous in (0x19E4), changed bits in (0x19E8)); when any part changed it re-sends pitch bend, channel pressure and the nine assigned controllers -- centre/zero to parts that left, current values to parts that joined -- then MidiIn_RebuildPartLists. Called through T_F40760 by ParamMsg_RefreshPartMasks. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:81969 `call T_F40760` -- ParamMsg_RefreshPartMasks, after recomputing the part masks",
+   "prom_b/wsa1_prom_b.s:89680 `T_F40760: jp sub_FA7E0C` -- the thunk",
+   "prom_a/wsa1_prom_a.s:74978 `ld (0x19e4:16), xwa` -- previous mask saved ...",
+   "prom_a/wsa1_prom_a.s:74979 `ld xwa, (NoteRouting_ActivePartMask:16)` -- ... new one read ...",
+   "prom_a/wsa1_prom_a.s:74982 `ld (0x19e8:16), xwa` -- ... old XOR new = changed parts",
+   "prom_a/wsa1_prom_a.s:74990 `m_and_rm ML16, 0x19e8, r0` -- old & changed: parts that left get pitch bend 0x4000 (BC = 0xB1, 74993)",
+   "prom_a/wsa1_prom_a.s:74999 `m_and_rm ML16, 0x19e8, r0` -- new & changed: parts that joined get the current values",
+   "prom_a/wsa1_prom_a.s:75016 `ldw bc, 0xb4` -- channel pressure, the same two ways",
+   "prom_a/wsa1_prom_a.s:75030 `ld a, (0x7f23:16)` -- then the controller-assign settings 0x7F23.. (= 0x7F12 + ByteTable9_FA1DC8) through MidiOut_RunChangeRecord (75035)",
+   "prom_a/wsa1_prom_a.s:74972 `calr MidiIn_RebuildPartLists` -- last, only when something changed"
+  ]
+ },
+ {
+  "old": "sub_FAA03A",
+  "verdict": "name",
+  "new": "SoundSel_FromProgramAndBankRegs_StaleCopy",
+  "header": "The stale copy of SoundSel_FromProgramAndBankRegs in the dead block 0xFAA018-0xFAA3FF: byte-identical to the live routine at +0x400 except the call displacement, which lands at sub_FAB6D7 - 0x896, not a routine start. Nothing reaches the copy. Basis: twin.",
+  "basis": "stale-copy twin (+0x400)",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:78347 `calr sub_FAA03A` -- its only caller, inside ParamRecord_WriteFieldAndStage_StaleCopy's dead tail",
+   "prom_a/wsa1_prom_a.s:78974 `calr SoundSel_FromProgramAndBankRegs` -- the live twin site, exactly +0x400",
+   "prom_a/wsa1_prom_a.s:78003 `ld (0x60f168:24), hl` -- body = the live twin's 78517 ...",
+   "prom_a/wsa1_prom_a.s:78012 `call sub_FAB6D7 - 0x896` -- the one differing field (bytes 13-14 of 34, ROM compare); the live twin calls sub_FAB6D7 (78525) ...",
+   "prom_a/wsa1_prom_a.s:78020 `ld hl, (0x60f16c:24)` -- ... and the same result reads as the live twin's 78533-78534 (`ld hl,(0x60f16c)` / `ld w,(0x60f16e)`)",
+   "prom_a/wsa1_prom_a.s:78298 `ParamRecord_WriteFieldAndStage_StaleCopy:` -- the established _StaleCopy naming for this block"
+  ]
+ },
+ {
+  "old": "sub_FAA45C",
+  "verdict": "name",
+  "new": "CombiSel_ClampToNumberAndBankRegs",
+  "header": "Register form of CombiSel_ClampToNumberAndBank: L = group, H = member, W = bank in (stored at 0x60F181..0x60F183; the caller sets (0x60F17F) = 0x98), returns HL = (0x60F185) -- L = combination number, H = bank; all other registers kept. COMBI twin of SoundSel_ClampToProgramAndBankRegs. Caller: GroupCombiDisplayHold_DrawMemberNames (then CombiName_Lookup). Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:38639 `call T_F407FC` -- GroupCombiDisplayHold_DrawMemberNames, after `ld (0x60f17f),0x98` and W = SoundSel_Bank ...",
+   "prom_a/wsa1_prom_a.s:38640 `ld W,H` -- ... then `ld A,L / ld b,0x98 / call T_CombiName_Lookup` (38641-38643)",
+   "prom_b/wsa1_prom_b.s:89750 `T_F407FC: jp sub_FAA45C` -- the thunk",
+   "prom_a/wsa1_prom_a.s:78537 `ld (0x60f181:24), hl` -- group/member in",
+   "prom_a/wsa1_prom_a.s:78538 `ld (0x60f183:24), w` -- bank in",
+   "prom_a/wsa1_prom_a.s:78546 `call CombiSel_ClampToNumberAndBank` -- memory form, registers saved around it",
+   "prom_a/wsa1_prom_a.s:78554 `ld hl, (0x60f185:24)` -- number/bank out",
+   "prom_a/wsa1_prom_a.s:78502 `call SoundSel_ClampToProgramAndBank` -- the SOUND twin SoundSel_ClampToProgramAndBankRegs, same shape"
+  ]
+ },
+ {
+  "old": "sub_FAA7C4",
+  "verdict": "name",
+  "new": "ParamChange_NotifyStagedClearSource",
+  "header": "Memory-argument face of ParamChange_NotifyClearSource: (0x60F007) = 0, then ParamChange_Notify with BC/DE read from the staged record at 0x60F177..0x60F17A, all registers preserved. Caller: List2030_ParamB0_Apply, which stages {0xB0, 0, value, mask} there first. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:81547 `ld (0x60f177:24), 0xb0` -- List2030_ParamB0_Apply stages the record ...",
+   "prom_a/wsa1_prom_a.s:81553 `call sub_FAA7C4` -- ... and calls this",
+   "prom_a/wsa1_prom_a.s:79084 `ld (0x60f007:24), 0x00` -- source byte cleared, as ParamChange_NotifyClearSource does (78821)",
+   "prom_a/wsa1_prom_a.s:79092 `ld bc, (0x60f177:24)` -- BC = number/field",
+   "prom_a/wsa1_prom_a.s:79093 `ld de, (0x60f179:24)` -- DE = value/mask",
+   "prom_a/wsa1_prom_a.s:79094 `call ParamChange_Notify` -- the notifier, inside a full register save"
+  ]
+ },
+ {
+  "old": "sub_FAA7E7",
+  "verdict": "name",
+  "new": "SoundSel_StoreRequestGroupMaxMember",
+  "header": "(0x60F176) := T_SoundGroup_MaxMemberIndex_Get for the clamp request's group (0x60F160), bank (0x60F162) and part (0x60F01C), registers kept; SoundSel_ClampToProgramAndBank then clamps the member against it. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:80771 `call sub_FAA7E7` -- SoundSel_ClampToProgramAndBank, after clamping the group",
+   "prom_a/wsa1_prom_a.s:80773 `m_cp_rm MB24, 0x60f176, r3` -- the caller's member clamp against the result",
+   "prom_a/wsa1_prom_a.s:79108 `ld a, (0x60f160:24)` -- A = requested group",
+   "prom_a/wsa1_prom_a.s:79109 `ld w, (0x60f162:24)` -- W = bank",
+   "prom_a/wsa1_prom_a.s:79110 `ld b, (0x60f01c:24)` -- B = part",
+   "prom_a/wsa1_prom_a.s:79111 `call T_SoundGroup_MaxMemberIndex_Get` -- the group's max member index",
+   "prom_a/wsa1_prom_a.s:79112 `ld (0x60f176:24), a` -- stored"
+  ]
+ },
+ {
+  "old": "sub_FAA808",
+  "verdict": "name",
+  "new": "CombiSel_StoreRequestGroupMaxMember",
+  "header": "COMBI twin of SoundSel_StoreRequestGroupMaxMember: (0x60F176) := T_SoundGroup_MaxMemberIndex_GetToneCopy for group (0x60F181), bank (0x60F183) and selector (0x60F17F) (0x98 = combinations), registers kept; CombiSel_ClampToNumberAndBank clamps the member with it. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:80880 `call sub_FAA808` -- CombiSel_ClampToNumberAndBank (entered only when (0x60F17F) = 0x98, 80873)",
+   "prom_a/wsa1_prom_a.s:79123 `ld a, (0x60f181:24)` -- A = requested group",
+   "prom_a/wsa1_prom_a.s:79124 `ld w, (0x60f183:24)` -- W = bank",
+   "prom_a/wsa1_prom_a.s:79125 `ld b, (0x60f17f:24)` -- B = 0x98, as CombiGroup_MaxMemberIndexOfCurrent passes",
+   "prom_a/wsa1_prom_a.s:79126 `call T_SoundGroup_MaxMemberIndex_GetToneCopy` -- max member index",
+   "prom_a/wsa1_prom_a.s:79127 `ld (0x60f176:24), a` -- stored where the SOUND twin stores it"
+  ]
+ },
+ {
+  "old": "sub_FAB233",
+  "verdict": "name",
+  "new": "Queue2C00_AppendStagedDrainPassB",
+  "header": "Appends the staged record (0x60F080..0x60F083) to the 0x2C00 queue unconditionally; when the cursor (0x60F000) has reached 0x1FC it first drains with T_Queue2C00_DrainPassB (no pass A) and restarts the cursor. Local twin of Queue2C00_PublishStagedDrainPassB, as Queue2C00_AppendStagedIfPending is of the IfPending one. Caller: PartControllers_ResetAllParts x11. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:79763 `calr sub_FAB233` -- PartControllers_ResetAllParts, once per staged default (11 sites, 79763-79814)",
+   "prom_a/wsa1_prom_a.s:80306 `m_cp_mi16 MW24, 0x60f000, 0x01fc` -- queue full?",
+   "prom_a/wsa1_prom_a.s:80312 `call T_Queue2C00_DrainPassB` -- drain without pass A",
+   "prom_a/wsa1_prom_a.s:80317 `ldw (0x60f000:24), 0x00` -- cursor restarted",
+   "prom_a/wsa1_prom_a.s:80319 `calr Queue2C00_AppendStaged` -- append, no (0x60F083) pending test",
+   "prom_a/wsa1_prom_a.s:80295 `call T_Queue2C00_DrainPassAB` -- the IfPending neighbour drains pass A+B instead",
+   "prom_a/wsa1_prom_a.s:78725 `call T_Queue2C00_DrainPassB` -- Queue2C00_PublishStagedDrainPassB, the published twin"
+  ]
+ },
+ {
+  "old": "sub_FAB6D7",
+  "verdict": "name",
+  "new": "SoundSel_GroupMemberFromProgramAndBank",
+  "header": "When the part (0x60F01D) <= 0x1F: converts program (0x60F168) and bank (0x60F169) with T_SoundSel_FromProgramAndBank into group / member / bank code at (0x60F16C..0x60F16E). Memory form called by SoundSel_FromProgramAndBankRegs; the SOUND twin of CombiSel_GroupMemberFromNumberAndBank. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:78525 `call sub_FAB6D7` -- SoundSel_FromProgramAndBankRegs, between storing HL at 0x60F168 and reading 0x60F16C..E",
+   "prom_b/wsa1_prom_b.s:89749 `T_F407F8: jp sub_FAB6D7` -- also published in the directory",
+   "prom_a/wsa1_prom_a.s:80805 `m_cp_mi8 MB24, 0x60f01d, 0x1f` -- part bound",
+   "prom_a/wsa1_prom_a.s:80807 `ld c, (0x60f168:24)` -- program -> SoundConv_Arg0",
+   "prom_a/wsa1_prom_a.s:80809 `ld c, (0x60f169:24)` -- bank -> SoundConv_Arg1",
+   "prom_a/wsa1_prom_a.s:80817 `call T_SoundSel_FromProgramAndBank` -- the converter",
+   "prom_a/wsa1_prom_a.s:80822 `ld c, (SoundConv_Result0:24)` -- results -> (0x60F16C..0x60F16E) via XIX (80827)",
+   "prom_a/wsa1_prom_a.s:80852 `call T_CombiSel_FromNumberAndBank` -- CombiSel_GroupMemberFromNumberAndBank, the same shape for combinations"
+  ]
+ },
+ {
+  "old": "sub_FAB7E6",
+  "verdict": "name",
+  "new": "List2030_ProcessEvents",
+  "header": "When the 0x2030 event list is not empty: clears (0x60F0C6) bit 0, points IndexedTable_Base at ParamNumber_RecordPtrs, List2030_TranslateToQueue2C00, then hands the new queue records to sub_FAE872 (T_F41F30), SeqBuf_EncodeQueue2C00, Evt2030_RunList and SysExTx_EmitStagedParams, and clears (0x60F020) bit 1. Called (T_F40780) by MainTask_RunUiPassC just before it empties the list. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:6313 `call T_F40780` -- MainTask_RunUiPassC ...",
+   "prom_a/wsa1_prom_a.s:6314 `ld (0x2030:16), 0xff` -- ... which then empties the list",
+   "prom_b/wsa1_prom_b.s:89688 `T_F40780: jp sub_FAB7E6` -- the thunk",
+   "prom_a/wsa1_prom_a.s:80911 `ld c, (0x2030:16)` -- empty list (0xFF) -> return",
+   "prom_a/wsa1_prom_a.s:80915 `lda xbc, (ParamNumber_RecordPtrs:24)` -- table base for the translation",
+   "prom_a/wsa1_prom_a.s:80919 `calr List2030_TranslateToQueue2C00` -- list -> 0x2C00 queue",
+   "prom_a/wsa1_prom_a.s:80925 `call T_F41F34` -- SeqBuf_EncodeQueue2C00 (sequencer recording)",
+   "prom_a/wsa1_prom_a.s:80926 `call T_Evt2030_RunList` -- the per-class event handlers",
+   "prom_a/wsa1_prom_a.s:80927 `call T_SysExTx_EmitStagedParams` -- SysEx echo of the staged records"
+  ]
+ },
+ {
+  "old": "sub_FAED76",
+  "verdict": "name",
+  "new": "SeqEvt_PlayRun",
+  "header": "Plays a due class-0 run of the timed-event ring: (0x60F002) = queue cursor, TimedEventRing_ScanRewind, then each event's bytes up to the next status byte into 0x60F308, dispatched on (status & 0x70) >> 4 through SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0 (SeqEvt_ApplyTempo / ApplyParamEvent / ApplyProgramEvent / ApplyCtrlEvent); ends the 0x2C00 queue with 0xFF and runs SeqEvt_FlushShadows. Called via T_F41F10 by TimedEvents_DispatchDueRun. Basis: caller + body + table.",
+  "basis": "caller + body + table",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:6708 `call T_F41F10` -- TimedEvents_DispatchDueRun's class-0 arm, followed by Queue2C00_DrainPassAB",
+   "prom_b/wsa1_prom_b.s:91539 `T_F41F10: jp sub_FAED76` -- the thunk",
+   "prom_a/wsa1_prom_a.s:86770 `calr .LFAED8E` -- body part 1 ...",
+   "prom_a/wsa1_prom_a.s:86771 `calr SeqEvt_FlushShadows` -- ... then the deferred-value flush (whose header already calls this 'the playback entry')",
+   "prom_a/wsa1_prom_a.s:86781 `call T_TimedEventRing_ScanRewind` -- restart the scan at the run start",
+   "prom_a/wsa1_prom_a.s:86789 `call T_TimedEventRing_Scan` -- copy event bytes into 0x60F308 (XIY, 86787) until bit 7 or the run end (ring-6)",
+   "prom_a/wsa1_prom_a.s:86805 `ld XIY,SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0` -- dispatch on (status & 0x70) >> 2 byte offset",
+   "prom_a/wsa1_prom_a.s:86813 `.long SeqEvt_ApplyTempo` -- 0x80 tempo; 0xB0/0xC0/0xD0 -> ApplyParamEvent/ApplyProgramEvent/ApplyCtrlEvent (86816-86818)",
+   "prom_a/wsa1_prom_a.s:86838 `mx_ld_mi8 MXD, ra_IX, ra_HL, 0xff` -- end of run: 0xFF terminator at 0x2C00 + (0x60F000)"
+  ]
+ },
+ {
+  "old": "sub_FAF772",
+  "verdict": "name",
+  "new": "DspEffect_RepostRotarySpeakerAlgorithm",
+  "header": "For each DSP effect block 0x61/0x62/0x63 whose algorithm byte ((0x7642)/(0x7662)/(0x7682)) is 0x35 = ROTARY SPEAKER (EffectNames entry 53), queues {0x61+n, 0, 0x35, 0xFF} through Queue2E00_AppendRegs, re-posting that algorithm. Called by SeqEvt_ResetPlayingSlotControllers after it reset the playing slots' controllers. Basis: caller + body + effect table.",
+  "basis": "caller + body + effect-name table",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:86713 `calr sub_FAF772` -- SeqEvt_ResetPlayingSlotControllers, after SeqEvt_FlushShadows and before T_Queue2C00_DrainPassB",
+   "prom_a/wsa1_prom_a.s:87769 `m_cp_mi8 MB16, 0x7642, 0x35` -- block 0x61's algorithm == 0x35 ...",
+   "prom_a/wsa1_prom_a.s:87771 `ldw de, 0x61` -- ... parameter 0x61, field 0 ...",
+   "prom_a/wsa1_prom_a.s:87772 `ldw wa, 0xff35` -- ... value 0x35, mask 0xFF ...",
+   "prom_a/wsa1_prom_a.s:87773 `call T_Queue2E00_AppendRegs` -- ... queued; the same for 0x62/(0x7662) at 87775 and 0x63/(0x7682) at 87781",
+   "prom_a/wsa1_prom_a.s:114608 `ld d, 0x00:opc` -- the same {0x6n, 0, (0x76n2), 0xFF} posts at 0xFC1306-0xFC132C show (0x7642)/(0x7662)/(0x7682) are blocks 0x61-0x63's algorithm bytes, as ParamImage_LoadFactoryDefaults' header says",
+   "prom_b/wsa1_prom_b.s:38595 `.long EffectDesc_RotarySpeaker` -- algorithm [53] = 0x35 is ROTARY SPEAKER (FINDINGS-prom_b-dsp-effect-parameters.md: entry k is algorithm k)"
+  ]
+ },
+ {
+  "old": "sub_FB317E",
+  "verdict": "name",
+  "new": "SysExSession_OnEnd_SystemPartMidi",
+  "header": "Dump-end work for the SYSTEM/PART/MIDI category, only when it was received ((0x60FD41) bit 7): rewrites the record headers and sanitizes the parameter image (Disk_Flags |= 0x18), queues the diff of the whole image, drains pass B and publishes, then clears bit 7; between steps it sets (0x124C) bit 0 if the SEQUENCER category also arrived. Basis: caller + body + the CategoryEnd bit map.",
+  "basis": "caller + body + CategoryEnd bit map",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:91274 `calr sub_FB317E` -- SysExSession_DumpEnd (command 0x04), first of its per-category calls",
+   "prom_a/wsa1_prom_a.s:91223 `m_set 7, MD24, 0x60fd41` -- SysExSession_CategoryEnd_SystemPartMidi sets bit 7",
+   "prom_a/wsa1_prom_a.s:91337 `m_bit 7, MD24, 0x60fd41` -- gate",
+   "prom_a/wsa1_prom_a.s:91286 `call T_ParamImage_WriteRecordHeaders_Entry` -- via sub_FB311E: headers, T_ParamImage_SanitizeAllAndHook_Entry (91287), Disk_Flags |= 0x18 (91290)",
+   "prom_a/wsa1_prom_a.s:91344 `calr ParamImage_QueueDiffAll_SaveRegs` -- whole-image diff queued",
+   "prom_a/wsa1_prom_a.s:91313 `call T_UiEventList_Publish` -- via sub_FB3149, after T_Queue2C00_DrainPassB",
+   "prom_a/wsa1_prom_a.s:91359 `m_bit 4, MD24, 0x60fd41` -- the step callback: SEQUENCER received -> (0x124C) bit 0 (91361)",
+   "prom_a/wsa1_prom_a.s:91354 `m_res 7, MD24, 0x60fd41` -- category handled"
+  ]
+ },
+ {
+  "old": "sub_FB31CC",
+  "verdict": "name",
+  "new": "SysExSession_OnEnd_Sound",
+  "header": "Dump-end work for the SOUND category, only when it was received ((0x60FD41) bit 6): sends the 6-byte CPU-2 link request 88 00 18 00 00 00 (prom_b 0xF4F910) with T_Link_SendBlockIn32ByteChunks, calls T_F40FEC (sub_FC0206, also SysExSession_OnAbort_Sound's last call) and clears bit 6. Basis: caller + body + the CategoryEnd bit map.",
+  "basis": "caller + body + CategoryEnd bit map",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:91275 `calr sub_FB31CC` -- SysExSession_DumpEnd, second per-category call",
+   "prom_a/wsa1_prom_a.s:91233 `m_set 6, MD24, 0x60fd41` -- SysExSession_CategoryEnd_Sound sets bit 6",
+   "prom_a/wsa1_prom_a.s:91379 `lda xiy, (0xf4f910:24)` -- the request template, copied to a 6-byte local",
+   "prom_b/wsa1_prom_b.s:111504 `.byte 0x88, 0x00, 0x18, 0x00, 0x00, 0x00` -- request 0x88: the QUERY half of CPU 2's ToneMsg_Dispatch",
+   "prom_a/wsa1_prom_a.s:91382 `m_bit 6, MD24, 0x60fd41` -- gate",
+   "prom_a/wsa1_prom_a.s:91388 `call T_Link_SendBlockIn32ByteChunks` -- 6 bytes to CPU 2",
+   "prom_a/wsa1_prom_a.s:91369 `call T_F40FEC` -- via sub_FB31BF; SysExSession_OnAbort_Sound makes the same call (100251)",
+   "prom_a/wsa1_prom_a.s:91390 `m_res 6, MD24, 0x60fd41` -- category handled"
+  ]
+ },
+ {
+  "old": "sub_FB3202",
+  "verdict": "name",
+  "new": "SysExSession_OnEnd_Sequencer",
+  "header": "Dump-end work for the SEQUENCER category, only when it was received ((0x60FD41) bit 4): ParamImageAlt_SanitizeCombination, T_F401D4 (a nop) and T_F414B8 -- prom_b sub_F4CA64, which takes the received bank number into BStore_CurrentBank and runs BStore_RebuildFreeListAfterLoad -- then clears bit 4. Basis: caller + body + the CategoryEnd bit map.",
+  "basis": "caller + body + CategoryEnd bit map",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:91277 `calr sub_FB3202` -- SysExSession_DumpEnd, after the SOUND one",
+   "prom_a/wsa1_prom_a.s:91253 `m_set 4, MD24, 0x60fd41` -- SysExSession_CategoryEnd_Sequencer sets bit 4",
+   "prom_a/wsa1_prom_a.s:91399 `m_bit 4, MD24, 0x60fd41` -- gate",
+   "prom_a/wsa1_prom_a.s:91405 `call T_ParamImageAlt_SanitizeCombination_Entry` -- sanitize",
+   "prom_a/wsa1_prom_a.s:91407 `call T_F414B8` -- prom_b sub_F4CA64: (0x6034D0) -> BStore_CurrentBank, then BStore_RebuildFreeListAfterLoad",
+   "prom_a/wsa1_prom_a.s:91412 `m_res 4, MD24, 0x60fd41` -- category handled",
+   "prom_a/wsa1_prom_a.s:91278 `calr SysExSession_ClearCombinationReceived` -- the COMBINATION category's (bit 3) counterpart, already named"
+  ]
+ },
+ {
+  "old": "sub_FB3234",
+  "verdict": "name",
+  "new": "SysExSession_AbortIfFailed",
+  "header": "After the bulk-dump session loop ends: when the session record's status field ((0x60FCD8)+4) is non-zero, runs SysExSession_AbortByStep to undo the step in progress; status 0 (a clean SysExSession_DumpEnd) does nothing. Called by SysExSession_Run before SysExDump_ShowResult. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:90323 `calr sub_FB3234` -- SysExSession_Run, once the loop exits ...",
+   "prom_a/wsa1_prom_a.s:90324 `call SysExDump_ShowResult` -- ... before the result screen",
+   "prom_a/wsa1_prom_a.s:91433 `ld A,(XBC+0x04)` -- status field of the record at (0x60FCD8)",
+   "prom_a/wsa1_prom_a.s:91434 `cp a, 0x00:i3` -- zero = success",
+   "prom_a/wsa1_prom_a.s:91436 `calr SysExSession_AbortByStep` -- otherwise undo the current step",
+   "prom_a/wsa1_prom_a.s:91442 `ld (XBC+0x04),0x17` -- SysExSession_Abort sets a status and makes the same call (91443)"
+  ]
+ }
+]

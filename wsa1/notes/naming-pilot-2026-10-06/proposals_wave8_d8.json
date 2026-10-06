@@ -1,0 +1,396 @@
+[
+ {
+  "old": "sub_FB346B",
+  "verdict": "name",
+  "new": "Queue2C00_RecordAndDrainPassB",
+  "header": "(0x60F000) := 0, then SeqBuf_RecordQueuedEvents (T_F41F14) and Queue2C00_DrainPassB: the change SysExRx_ApplyTempo just queued at 0x2C00 is encoded into the sequencer ring and run through pass B. SysExCmd_TempoReceive's last step; SysExCmd_ParamWrite does the same inline with DrainPassAB. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:91665 `calr sub_FB346B` -- SysExCmd_TempoReceive, right after the tempo store call at 91664",
+   "prom_a/wsa1_prom_a.s:91672 `ldw (0x60f000:24), 0x00` -- the Queue2C00 cursor zeroed",
+   "prom_a/wsa1_prom_a.s:91677 `call T_F41F14` -- prom_b slot -> SeqBuf_RecordQueuedEvents (prom_b 91540), which encodes from queue index 0 to the 0xFF end mark",
+   "prom_a/wsa1_prom_a.s:91678 `call T_Queue2C00_DrainPassB` -- pass B, then the queue is emptied",
+   "prom_a/wsa1_prom_a.s:91722 `ld bc, (0x60f000:24)` -- SysExCmd_ParamWrite's inline twin: same register saves, T_F41F14, then T_Queue2C00_DrainPassAB (91725)"
+  ]
+ },
+ {
+  "old": "sub_FB3542",
+  "verdict": "name",
+  "new": "SysExParam_Set_Group4",
+  "header": "Arm [3] of SysExParam_Set_GroupTable (parameter WRITE, F0 50 2C, group 4): calls an empty `ret` (sub_FB3542_Nop) and returns -- group 4 owns no address area (the dispatcher header: '4 = none'). Basis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:91769 `.long sub_FB3542` -- SysExParam_Set_GroupTable entry [3], between SysExParam_Set_Group3 and _Group5",
+   "prom_a/wsa1_prom_a.s:91783 `calr sub_FB3542_Nop` -- the whole body besides the jr to the shared ret",
+   "prom_a/wsa1_prom_a.s:91913 `ret` -- sub_FB3542_Nop is a bare ret"
+  ]
+ },
+ {
+  "old": "sub_FB42FC",
+  "verdict": "name",
+  "new": "SysExParam_Request_Group4",
+  "header": "Arm [3] of SysExParam_Request_GroupTable (parameter REQUEST, F0 50 2B, group 4): calls an empty `ret` (sub_FB42FC_Nop) and returns; the request twin of SysExParam_Set_Group4. Basis: table index + body + twin.",
+  "basis": "table index + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:93384 `.long sub_FB42FC` -- SysExParam_Request_GroupTable entry [3], between SysExParam_Request_Group3 and _Group5",
+   "prom_a/wsa1_prom_a.s:93398 `calr sub_FB42FC_Nop` -- the whole body; sub_FB42FC_Nop (93530) is a bare ret",
+   "prom_a/wsa1_prom_a.s:91769 `.long sub_FB3542` -- the Set-table's slot [3] has the same shape"
+  ]
+ },
+ {
+  "old": "sub_FB4E20",
+  "verdict": "name",
+  "new": "SysExTx_SendWordFieldParamValue",
+  "header": "16-bit-field twin of SysExTx_SendParamValue: after SysExParam_CheckConditions and the placeholder test, sends F0 50 2C 04 00 11 + the descriptor's 6 address/count bytes + ((value16 & mask16) >> desc+0x0B) as two nibbles + flag 0, checksum, F7, both ports. Called by SysExParam_GetMainOutEqualizerFreq, whose 5-bit fields (mask 0x1F, shift 6) straddle two bytes. Basis: caller + body + twin + descriptor.",
+  "basis": "caller + body + twin + descriptor",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:93776 `calr sub_FB4E20` -- SysExParam_GetMainOutEqualizerFreq, the +0x18 reader of MAIN OUT EQUALIZER LOW-/HIGH-FREQ",
+   "prom_a/wsa1_prom_a.s:93769 `call Shl16ByCount` -- the caller builds a 16-bit mask from desc+8 << desc+0x0B and a 16-bit value from two IndexedTable_GetByteOr0 reads",
+   "prom_b/wsa1_prom_b.s:113251 `rec 79 off 01 mask 1F` -- SysExParamDesc_MainOutEqualizerLowFreq: shift byte 0x06, so the field crosses into the next byte",
+   "prom_a/wsa1_prom_a.s:94689 `lda xiy, (0xf4fa87:24)` -- 3-byte zero prefill (two nibbles + flag), as SysExTx_SendParamValue's 0xF4FA84",
+   "prom_a/wsa1_prom_a.s:94726 `call Lsr16ByCount` -- value16 & mask16 shifted down -- the 16-bit form of SysExTx_SendParamValue's Lsr8ByCount",
+   "prom_a/wsa1_prom_a.s:94738 `call SysExTx_Append` -- 3 bytes appended, then AppendChecksumF7 / SendFrameBothPorts / SwapBuffers"
+  ]
+ },
+ {
+  "old": "sub_FB4ED4",
+  "verdict": "refuse",
+  "why_refused": "Its only call (0xFB468F) is in the unlabelled routine at 0xFB4655 that follows SysExParam_GetCombinationNumberAndBank's ret, and no pointer, call or descriptor in prom_a/prom_b reaches 0xFB4655 (byte search of both ROMs), so there is no named caller; the body alone is the 0x00/0x7F flag twin of SysExTx_SendParamValue (a reviewer accepting a twin basis could use SysExTx_SendFlagParamValue).",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:93833 `calr sub_FB4ED4` -- the call site, inside the routine opened by `link XIZ,0xfff4` at 93811 (0xFB4655), after GetCombinationNumberAndBank's ret at 0xFB4654",
+   "prom_a/wsa1_prom_a.s:94758 `lda xiy, (0xf4fa8a:24)` -- 3-byte prefill, SysExTx_SendParamValue's shape",
+   "prom_a/wsa1_prom_a.s:94801 `ld (XIX),0x7f` -- value is 0x7F when the record byte & mask is non-zero, else 0"
+  ]
+ },
+ {
+  "old": "sub_FB536D",
+  "verdict": "name",
+  "new": "SysExTx_CombinationNumberAndBank",
+  "header": "Transmits the F0 50 2C reply for COMBINATION NUMBER and BANK: SysExParam_CheckConditions, placeholder and mask tests, header F0 50 2C 04 00 11, the descriptor's 6 address/count bytes, then (0x7F03) & 0x7F as two nibbles and (0x7F04) bit 3 as 0/1, flag 0, checksum, F7, both ports. Called by SysExParam_GetCombinationNumberAndBank, the descriptor's +0x18 reader; twin of SysExTx_ProgramChangeAndBank. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:93806 `calr sub_FB536D` -- SysExParam_GetCombinationNumberAndBank (the reader of COMBINATION NUMBER and BANK)",
+   "prom_a/wsa1_prom_a.s:95285 `ld h, (0x7f03:16)` -- the combination number (Combination_Recall loads combination (0x7F03), 43630)",
+   "prom_a/wsa1_prom_a.s:95293 `ld h, (0x7f04:16)` -- its source/bank byte; `and C,0x08` / `srl c,3` (95296) gives 0/1",
+   "prom_a/wsa1_prom_a.s:95301 `call SysExTx_Append` -- 5 bytes (4 nibbles + flag) -- the 2-byte builder sysex_param_wire_format.py lists at 0xFB536D"
+  ]
+ },
+ {
+  "old": "sub_FB556D",
+  "verdict": "name",
+  "new": "GmReset_SwitchToSoundMode",
+  "header": "First step of GmMode_ResetToDefaults: in COMBINATION mode ((0x7F02) & 0xF0 == 0x10) calls Mode_SwitchToSound, and if PanelMode is 2 also requests screen 1 (UI_Request_Hi |= 0x12, UI_Request := 1); otherwise nothing. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:95802 `calr sub_FB556D` -- GmMode_ResetToDefaults' first call; its header already reads 'SOUND mode when (0x7F02) & 0xF0 is 0x10'",
+   "prom_a/wsa1_prom_a.s:95446 `cp C,0x10` -- combination mode: Mode_SwitchToCombination sets that nibble to 0x10 (header at 32441)",
+   "prom_a/wsa1_prom_a.s:95448 `call Mode_SwitchToSound_SaveRegs` -- the switch",
+   "prom_a/wsa1_prom_a.s:95451 `m_or_mi8 MB16, UI_Request_Hi, 0x12` -- with UI_Request := 1 at 95452, when PanelMode == 2"
+  ]
+ },
+ {
+  "old": "sub_FB558F",
+  "verdict": "name",
+  "new": "GmReset_FieldTablesAndEffectAlgorithms",
+  "header": "Last step of GmMode_ResetToDefaults: ParamFieldInit_x32_F4FE38's 6 rows each merged into 32 consecutive records (KEY SCALING off; MAIN OUT 1, SUB OUT 0, VELOCITY OFFSET 0x18, ASSIGN MODE 0, MIDI OUT KEY TRANSPOSE 0x40), ParamFieldInit_F4FE50's 6 rows once each (EFFECT COMMON ALGORITHM, DATA LOAD FILTER EFFECT&OUTPUT, EFFECT1/2 OUTPUT SELECT, DRUMS MAP SELECT, record 0x98 +9 bit 0), then DspEffect_ApplyAlgorithmDefaults for blocks 0x61/0x62/0x63 with 1/0x23/0x14. Basis: caller + body + tables + SysEx descriptors.",
+  "basis": "caller + body + tables + descriptors",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:95819 `calr sub_FB558F` -- GmMode_ResetToDefaults' last call",
+   "prom_a/wsa1_prom_a.s:95463 `lda xbc, (0xf4fe38:24)` -- ParamFieldInit_x32_F4FE38 rows; `ld h,0x20` (95482) merges each into 32 records",
+   "prom_a/wsa1_prom_a.s:95502 `add XBC,0x00f4fe50` -- ParamFieldInit_F4FE50, six single merges",
+   "prom_b/wsa1_prom_b.s:113378 `rec 00 off 0C mask 08` -- row [0] = KEY SCALING; rows 1-5 hit MAIN OUT (113420), SUB OUT (113427), VELOCITY OFFSET (113385), ASSIGN MODE (113371), MIDI OUT KEY TRANSPOSE (113636)",
+   "prom_a/wsa1_prom_a.s:95531 `call T_DspEffect_ApplyAlgorithmDefaults` -- blocks 0x61 / 0x62 / 0x63 (95534, 95537) with 1 / 0x23 / 0x14, the DspEffect_SanitizeBlock fallbacks (prom_b 35333-35335)"
+  ]
+ },
+ {
+  "old": "sub_FB567E",
+  "verdict": "name",
+  "new": "GmMode_SaveEffectOutputLoadFilter",
+  "header": "On entering GM: (0x7FD7) := ((0x7EE4) & 0x0F) | 0x80 -- saves the DATA LOAD FILTER 'EFFECT & OUTPUT' setting (record 0x7A byte 2, low nibble) with bit 7 as 'saved', before the GM reset zeroes it (ParamFieldInit_F4FE50 row 1). GmMode_RestoreEffectOutputLoadFilter puts it back on leaving GM. Basis: caller + body + descriptor.",
+  "basis": "caller + body + descriptor + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:95892 `calr sub_FB567E` -- GmMode_ApplyChange, entering GM (UiEvent_Byte2 bit 2), just before GmMode_ResetToDefaults",
+   "prom_a/wsa1_prom_a.s:95545 `ld c, (0x7ee4:16)` -- EFFECT & OUTPUT load filter: DataLoadFilter_AdjustEffectOutput, 'var 0x7EE4 & 0x0F' (56696); SysExParamDesc_DataLoadFilterEffectAndOutput rec 7A off 02 mask 0F (prom_b 113010)",
+   "prom_a/wsa1_prom_a.s:95547 `set 0x07,C` -- the saved flag",
+   "prom_a/wsa1_prom_a.s:95548 `ld (0x7fd7:16), c` -- the save cell its restore twin reads"
+  ]
+ },
+ {
+  "old": "sub_FB568D",
+  "verdict": "name",
+  "new": "GmMode_RestoreEffectOutputLoadFilter",
+  "header": "On leaving GM: if (0x7FD7) bit 7 (saved), clears it and, when the saved value is 0..2 (OFF / COMBI / SOUND&COMBI), merges it back into record 0x7A byte 2 under mask 0x0F (IndexedTable_MergeMaskedByte) -- the DATA LOAD FILTER 'EFFECT & OUTPUT' setting GmMode_SaveEffectOutputLoadFilter saved. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:95901 `calr sub_FB568D` -- GmMode_ApplyChange, leaving GM, after GmMode_ResetForGmOff",
+   "prom_a/wsa1_prom_a.s:95554 `ld c, (0x7fd7:16)` -- bit 7 tested, then cleared",
+   "prom_a/wsa1_prom_a.s:95562 `cp bc, 0x00:i3` -- accepts 0, 1, 2 only -- the filter's three values",
+   "prom_a/wsa1_prom_a.s:95570 `ld (XIX),0x7a` -- record 0x7A, byte 2, mask 0x0F (95572) -> IndexedTable_MergeMaskedByte (95574)"
+  ]
+ },
+ {
+  "old": "sub_FB57ED",
+  "verdict": "name",
+  "new": "SysExRx_ApplyTempo",
+  "header": "(BPM word): unless MidiCfg_ModeBits bit 4, Tempo (0x7EE2) := its low 9 bits (byte 0 and bit 0 of byte 1), stages the change {0x7A, 0, low byte, 0xFF} and publishes it (Queue2C00_PublishStagedDrainPassB), then Tempo_ApplyBpm with (0x60F020) bit 4 set so the received tempo is not sent back (SysExTx_Tempo). Called by SysExCmd_TempoReceive after its 40..300 check. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:91664 `call sub_FB57ED` -- SysExCmd_TempoReceive (F0 50 25), with the BPM it checked to 40..300",
+   "prom_a/wsa1_prom_a.s:95703 `lda xix, (0x7ee2:16)` -- the tempo cell (Seq_ApplyStoredSongTempo, SmfPlay_ApplyTempoAsBpm write the same 9 bits)",
+   "prom_a/wsa1_prom_a.s:95718 `ld (0x60f080:24), 0x7a` -- record 0x7A byte 0 staged; T_Queue2C00_PublishStagedDrainPassB at 95726",
+   "prom_a/wsa1_prom_a.s:95731 `m_set 4, MD24, 0x60f020` -- Tempo_ApplyBpm's header: no SysExTx_Tempo while (0x60F020) bit 4; call at 95736"
+  ]
+ },
+ {
+  "old": "sub_FB585E",
+  "verdict": "name",
+  "new": "BStore_Workspace_StoreGmModeDefaults",
+  "header": "(gm): with GmMode_HandleChange's guard (0x60F01F) bit 0 set, snapshots the parameter image (ParamImage_SnapshotAll), applies GmMode_ResetToDefaults (gm != 0) or GmMode_ResetForGmOff (gm == 0), stores the image into the song workspace (BStore_Workspace_StoreParamImage), then copies the 0x960-byte snapshot back over 0x7620.. so the live image is unchanged. Reached through T_F40908 from SmfPart_ResetAllRecords (1 in GM mode, else 0). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:174718 `call T_F40908` -- SmfPart_ResetAllRecords; T_F40908 is `jp sub_FB585E` (prom_b 89800)",
+   "prom_a/wsa1_prom_a.s:95756 `call T_ParamImage_SnapshotAll` -- 0x7620..0x7F7F -> 0x608000",
+   "prom_a/wsa1_prom_a.s:95761 `cp (XIZ+0x08),0x00` -- argument: GmMode_ResetToDefaults (95763) or sub_FB5903 (95766)",
+   "prom_a/wsa1_prom_a.s:95768 `call T_BStore_Workspace_StoreParamImage` -- image -> song workspace 0x603600",
+   "prom_a/wsa1_prom_a.s:95786 `ld IY,(XWA)` -- the loop copying words from 0x608000 (95769) back to Combination_Current (95771), (0x7F7E-0x7620+2)/2 = 0x4B0 words"
+  ]
+ },
+ {
+  "old": "sub_FB5903",
+  "verdict": "name",
+  "new": "GmMode_ResetForGmOff",
+  "header": "The non-GM counterpart of GmMode_ResetToDefaults: sub_FB5774 (zeroes ParamApply's pair tables 0x60F530 / 0x60F570, the twin of ParamApply_ResetPairTablesForGm's {0, 0x1A}, and sets MidiFilter_BankSelect bit 7), then Tempo_RestoreFromSmfPlay (via sub_FB5D34). Run by GmMode_ApplyChange when GM goes off and by BStore_Workspace_StoreGmModeDefaults with gm = 0. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:95900 `calr sub_FB5903` -- GmMode_ApplyChange's leaving-GM branch (UiEvent_Byte2 bit 2 clear)",
+   "prom_a/wsa1_prom_a.s:95766 `calr sub_FB5903` -- the gm == 0 branch where the other branch calls GmMode_ResetToDefaults",
+   "prom_a/wsa1_prom_a.s:95822 `calr sub_FB5774` -- body: 0x60F530 pairs := 0 (95665/95669), 0x60F570 := 0, then `m_set 7, MidiFilter_BankSelect` (95692)",
+   "prom_a/wsa1_prom_a.s:95823 `calr sub_FB5D34` -- which only calls sub_FB5D02 (96299)"
+  ]
+ },
+ {
+  "old": "sub_FB5A01",
+  "verdict": "name",
+  "new": "ParamImage_SnapshotMarkPart0ProgramChanged",
+  "header": "Writes 0xFF over the snapshot copy (0x608000 + 0x82) of record 0's PROGRAM CHANGE byte (0x76A2), a value no program has, so an image-vs-snapshot compare sees it as changed -- the trick Combination_Recall plays with `cpl` on the same byte. Called by GmMode_ApplyChange after either GM branch, before the image is re-sanitised and posted. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:95903 `calr sub_FB5A01` -- GmMode_ApplyChange, after the GM-on / GM-off branches",
+   "prom_a/wsa1_prom_a.s:95937 `ldw bc, 0x76a2` -- record 0 (ParamNumber_RecordPtrs[0]) minus Combination_Current = offset 0x82",
+   "prom_a/wsa1_prom_a.s:95940 `add XBC,0x00608000` -- the ParamImage_SnapshotAll copy",
+   "prom_a/wsa1_prom_a.s:95941 `ld (XBC),0xff` -- the mark",
+   "prom_a/wsa1_prom_a.s:43660 `cpl C` -- Combination_Recall's .LF975C8 complements the snapshot's PROGRAM CHANGE byte of the same 0x76A2 'so QueueDiffCombination always queues them' (43633)"
+  ]
+ },
+ {
+  "old": "sub_FB5A17",
+  "verdict": "name",
+  "new": "GmReset_PartProgramAndBank",
+  "header": "Step 2 of GmMode_ResetToDefaults: for records 0..31, PROGRAM CHANGE & BANK bytes +0 := 0 and +1 := 0, except the drum records 9 and 0x19 (+1 := 0x20); then records 0x20..0x3E bytes 0x1B/0x1C/0x1D := 0/0/0x1A, records 0x29/0x39 := 0/3/0x20 -- the same 0x1A / 0x20 split ParamApply_ResetPairTablesForGm writes. Basis: caller + body + descriptor + twin.",
+  "basis": "caller + body + descriptor + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:95803 `calr sub_FB5A17` -- GmMode_ResetToDefaults, second step",
+   "prom_a/wsa1_prom_a.s:95954 `ld (XIX+0x01),0x00` -- byte 0 := 0 mask 0xFF; byte 1 := 0 mask 0x7F at 95959",
+   "prom_b/wsa1_prom_b.s:113307 `rec 00 off 00 mask FF` -- SysExParamDesc_ProgramChangeAndBank: part record bytes 0..2",
+   "prom_a/wsa1_prom_a.s:95976 `ld (XIX+0x02),0x20` -- records 9 / 0x19 byte 1 := 0x20 (95988), PartSound_FromProgramChange's drum bank",
+   "prom_a/wsa1_prom_a.s:96010 `ld (XIX+0x02),0x1a` -- records 0x20.. byte 0x1D := 0x1A; 0x29/0x39 get 3 / 0x20 (96028)"
+  ]
+ },
+ {
+  "old": "sub_FB5BC3",
+  "verdict": "name",
+  "new": "GmReset_PartByte4Bit6",
+  "header": "One step of GmMode_ResetToDefaults: for records 0..31, IndexedTable_MergeMaskedByte {record, byte 4, 0, mask 0x40} -- clears bit 6 of every part record's byte 4 (a field no SysEx descriptor names; meaning not established). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:95808 `calr sub_FB5BC3` -- GmMode_ResetToDefaults, between GmReset_PartEffect3Depth and GmReset_PartEffect4Depth",
+   "prom_a/wsa1_prom_a.s:96113 `ld (XIX+0x01),0x04` -- byte 4",
+   "prom_a/wsa1_prom_a.s:96115 `ld (XIX+0x03),0x40` -- mask 0x40, value 0, records 0..0x1F like the GmReset_Part* siblings"
+  ]
+ },
+ {
+  "old": "sub_FB5CF7",
+  "verdict": "name",
+  "new": "GmReset_ApplyPatchLists",
+  "header": "One step of GmMode_ResetToDefaults: (0x2744) := 0 (patch-list index 0, which also skips the snapshot) and PatchLists_ApplyAll through T_F40840 -- PatchList_RecordField0C, _RecordBytes2B and _Globals7F32. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:95815 `calr sub_FB5CF7` -- GmMode_ResetToDefaults",
+   "prom_a/wsa1_prom_a.s:96269 `ld (0x2744:16), 0x00` -- the index PatchLists_ApplyAll reads (88664-88668)",
+   "prom_a/wsa1_prom_a.s:96270 `call T_F40840` -- prom_b 89761: `jp PatchLists_ApplyAll`"
+  ]
+ },
+ {
+  "old": "sub_FB5D02",
+  "verdict": "name",
+  "new": "Tempo_RestoreFromSmfPlay",
+  "header": "If the MIDI file player has set a tempo ((0x605068) bit 15, written by SmfPlay_ApplyTempoAsBpm as BPM | 0x8000), Tempo (0x7EE2) := its 9-bit BPM (byte 0, and bit 0 of byte 1); otherwise nothing. Does not apply it. Called by GmMode_ResetToDefaults and, through sub_FB5D34, by GmMode_ResetForGmOff, so a GM change keeps the file's tempo. Basis: callers + body + writer.",
+  "basis": "callers + body + writer",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:95817 `calr sub_FB5D02` -- GmMode_ResetToDefaults",
+   "prom_a/wsa1_prom_a.s:96299 `calr sub_FB5D02` -- sub_FB5D34, called by GmMode_ResetForGmOff (95823)",
+   "prom_a/wsa1_prom_a.s:96281 `and BC,0x8000` -- the 'set' bit of (0x605068) (96279)",
+   "prom_a/wsa1_prom_a.s:101097 `orw (0x605068:24), 0x8000` -- SmfPlay_ApplyTempoAsBpm stores the clamped BPM with bit 15 (101096-101097)",
+   "prom_a/wsa1_prom_a.s:96284 `ld (XIX),C` -- XIX = 0x7EE2 (96278); bit 8 merged into byte 1 at 96292"
+  ]
+ },
+ {
+  "old": "sub_FB5D38",
+  "verdict": "name",
+  "new": "GmReset_PartByte12Bit4",
+  "header": "One step of GmMode_ResetToDefaults: for records 0..31, IndexedTable_MergeMaskedByte {record, byte 0x0C, 0, mask 0x10} -- clears bit 4 of every part record's byte 0x0C (bit 3 of the same byte is KEY SCALING; bit 4 has no SysEx descriptor, meaning not established). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:95818 `calr sub_FB5D38` -- GmMode_ResetToDefaults",
+   "prom_a/wsa1_prom_a.s:96310 `ld (XIX+0x01),0x0c` -- byte 0x0C",
+   "prom_a/wsa1_prom_a.s:96312 `ld (XIX+0x03),0x10` -- mask 0x10, value 0",
+   "prom_b/wsa1_prom_b.s:113378 `rec 00 off 0C mask 08` -- KEY SCALING is the neighbouring bit 3"
+  ]
+ },
+ {
+  "old": "sub_FB5EC3",
+  "verdict": "name",
+  "new": "GmReset_AllPartsRpnNull",
+  "header": "Fills 0x1980..0x19BF with 0x7F: all 32 parts' selected-RPN words := 0x7F7F, RPN null. The last step of GmMode_ApplyChange, after the GmReset_AllParts* controller resets; ParamApply_PublishStagedAndPostSeven (Reset All Controllers) does the same for one part. Basis: caller + body + the MIDI-in RPN handlers.",
+  "basis": "caller + body + readers",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:95932 `calr sub_FB5EC3` -- GmMode_ApplyChange's last call",
+   "prom_a/wsa1_prom_a.s:96502 `lda xix, (0x1980:16)` -- to 0x19BF (96504), 0x7F each (96513)",
+   "prom_a/wsa1_prom_a.s:72022 `mx_st_mr8 MXD, ra_IX, ra_HL, r1` -- MidiIn_CC64_RpnLSB stores LSB|0x80 at 0x1980 + 2*part (MidiIn_CC65_RpnMSB the MSB at +1) and rewrites 0xFFFF as 0x7F7F (72028)",
+   "prom_a/wsa1_prom_a.s:71898 `mx_ld_rm MXW, ra_IX, ra_HL, r0` -- MidiIn_CC06_DataEntMSB dispatches on that word: 0x8080 / 0x8081 / 0x8082 = RPN 0 / 1 / 2",
+   "prom_a/wsa1_prom_a.s:84263 `ld XIX,0x00001980` -- ParamApply_PublishStagedAndPostSeven writes 0x7F7F for one part"
+  ]
+ },
+ {
+  "old": "sub_FB7B79",
+  "verdict": "name",
+  "new": "SysExSession_SelectProgressScreen",
+  "header": "(0x60F810) := 1 (Sending, (0x60FD40) bit 6) or 2 (SYSTEM EXCLUSIVE PLEASE WAIT); when that differs from (0x60F811), sets the changed flag (0x60FD42) bit 6 and copies it there. Paint_Sending tests (0x60F810) bit 0 to draw its whole screen. Called by SysExSession_StartProgressScreen. Basis: caller + body + reader.",
+  "basis": "caller + body + reader",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:99880 `calr sub_FB7B79` -- SysExSession_StartProgressScreen, after zeroing 0x60F804..0x60F811",
+   "prom_a/wsa1_prom_a.s:99887 `ld (XIX),0x02` -- XIX = 0x60F810; 1 when (0x60FD40) bit 6 (99888-99890)",
+   "prom_a/wsa1_prom_a.s:99895 `m_set 6, MD24, 0x60fd42` -- the bit SysExSession_RepaintProgressIfChanged acts on",
+   "prom_a/wsa1_prom_a.s:47403 `m_bit 0, MD24, 0x60f810` -- Paint_Sending's full-screen test"
+  ]
+ },
+ {
+  "old": "sub_FB7BA3",
+  "verdict": "name",
+  "new": "SysExSession_RequestLabelBlockPaint",
+  "header": "Sets the section-status field to 0x80 -- (0x60F804) when sending ((0x60FD40) bit 6), else (0x60F80A) -- value 0 with the repaint bit, so the next paint runs Paint_SysPartMidiSoundCombination's value-0 case: the SYS,PART&MIDI / SOUND / COMBINATION label block. Called by SysExSession_StartProgressScreen. Basis: caller + body + reader.",
+  "basis": "caller + body + reader",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:99881 `calr sub_FB7BA3` -- SysExSession_StartProgressScreen",
+   "prom_a/wsa1_prom_a.s:99904 `ld (0x60f804:24), 0x80` -- sending; 0x60F80A when receiving (99907)",
+   "prom_a/wsa1_prom_a.s:47427 `ld l, (0x60f804:24)` -- Paint_Sending passes it to Paint_SysPartMidiSoundCombination when bit 7 is set",
+   "prom_a/wsa1_prom_a.s:47518 `jr nz, .LF99C7C` -- value 0 draws the label-block list, non-zero a row from DLPtrTable_F0D942"
+  ]
+ },
+ {
+  "old": "sub_FB7BDF",
+  "verdict": "name",
+  "new": "SysExSession_SaveProgressFields",
+  "header": "Clears bit 7 (repaint) of the three progress fields and copies each into its 'previous' byte: (0x60F804/806/808) -> 805/807/809 when sending ((0x60FD40) bit 6), else (0x60F80A/80C/80E) -> 80B/80D/80F. First step of SysExSession_RefreshProgressScreen, before the recomputers compare against the previous values. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:99922 `calr sub_FB7BDF` -- SysExSession_RefreshProgressScreen, first of five steps",
+   "prom_a/wsa1_prom_a.s:99935 `res 0x07,H` -- then stored to 0x60F804 and 0x60F805 (99937)",
+   "prom_a/wsa1_prom_a.s:99949 `res 0x07,H` -- receiving side: 0x60F80A -> 0x60F80B (99951)"
+  ]
+ },
+ {
+  "old": "sub_FB7C57",
+  "verdict": "name",
+  "new": "SysExSession_UpdateSectionStatus",
+  "header": "Section-status field (0x60F804 sending / 0x60F80A receiving) := ByteMap 0xF511B5[field 3 of the tx (0x60FCE0) / rx (0x60FCD8) record], bit 7 set when it differs from the previous byte. Its values 1..10 pick the '<section> : SENDING' / 'COMPLETED' rows of DLPtrTable_F0D942. Step 2 of SysExSession_RefreshProgressScreen. Basis: caller + body + painter.",
+  "basis": "caller + body + painter",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:99923 `calr sub_FB7C57` -- SysExSession_RefreshProgressScreen",
+   "prom_a/wsa1_prom_a.s:99970 `ld xbc, (0x60fce0:24)` -- sending: tx record, field 3 (U8Rec16_GetField); receiving uses (0x60FCD8) (99985)",
+   "prom_a/wsa1_prom_a.s:99975 `add XWA,0x00f511b5` -- the 18-byte map at prom_b 112896 (0,1,1,2,3,3,...,10)",
+   "prom_a/wsa1_prom_a.s:99981 `m_set 7, MD24, 0x60f804` -- marked for repaint when != (0x60F805) (99979)",
+   "prom_b/wsa1_prom_b.s:26965 `DLPtrTable_F0D942:` -- entries 1..10: DL_F0D82E 'SYS,PART&MIDI : SENDING', DL_F0D866 'COMPLETED', DL_F0D873 'SOUND : SENDING', ..."
+  ]
+ },
+ {
+  "old": "sub_FB7CBD",
+  "verdict": "name",
+  "new": "SysExSession_InitProgressBarScale",
+  "header": "Once per session (until (0x60FD42) bit 7): bytes per bar cell := job byte count / 32 -- (0x60FCF4) := (0x60FCF0) >> 5 sending, (0x60FD14) := (0x60FD10) >> 5 receiving -- and the bar-length field (0x60F806 / 0x60F80C) := 0xA0 (32 cells + repaint); sets (0x60FD42) bit 7 when the quotient is non-zero. Step 3 of SysExSession_RefreshProgressScreen. Basis: caller + body + painter.",
+  "basis": "caller + body + painter",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:99924 `calr sub_FB7CBD` -- SysExSession_RefreshProgressScreen",
+   "prom_a/wsa1_prom_a.s:100003 `m_bit 7, MD24, 0x60fd42` -- done-once flag, set at 100025",
+   "prom_a/wsa1_prom_a.s:100009 `srl xbc, 0x05` -- (0x60FCF0) / 32 -> (0x60FCF4) (100011); (0x60FCF0) is the job count SysExXfer_SetJobTotal_* put at desc+8 and 0xFB7083 decrements (98635)",
+   "prom_a/wsa1_prom_a.s:100012 `ld (0x60f806:24), 0xa0` -- SysexProgressBar_DrawDots header: 'prom_a 0xFB7CDD/0xFB7CF6 store 0xA0 there (32 cells | 0x80)'"
+  ]
+ },
+ {
+  "old": "sub_FB7D09",
+  "verdict": "name",
+  "new": "SysExSession_UpdateProgressBarFill",
+  "header": "Filled cells := 32 - remaining bytes / bytes per cell ((0x60FCF0) / (0x60FCF4) sending, (0x60FD10) / (0x60FD14) receiving, Divide32_Unsigned_Quotient_Copy) into the bar-fill field (0x60F808 / 0x60F80E), bit 7 set when it changed; skipped while either is 0. Step 4 of SysExSession_RefreshProgressScreen. Basis: caller + body + painter.",
+  "basis": "caller + body + painter",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:99925 `calr sub_FB7D09` -- SysExSession_RefreshProgressScreen",
+   "prom_a/wsa1_prom_a.s:100045 `call Divide32_Unsigned_Quotient_Copy` -- remaining / per-cell",
+   "prom_a/wsa1_prom_a.s:100047 `sub C,0x20` -- then cpl / inc: 32 - quotient",
+   "prom_a/wsa1_prom_a.s:100051 `ld (0x60f808:24), h` -- repaint bit at 100054; receiving side 0x60F80E (100073)",
+   "prom_a/wsa1_prom_a.s:47420 `ld l, (0x60f808:24)` -- Paint_Sending passes it to SysexProgressBar_FillCells"
+  ]
+ },
+ {
+  "old": "sub_FB7D91",
+  "verdict": "name",
+  "new": "SysExSession_DetectProgressChange",
+  "header": "Compares the three progress fields with their previous bytes (0x60F804/806/808 vs 805/807/809 sending, 0x60F80A/80C/80E vs 80B/80D/80F receiving) and sets (0x60FD42) bit 6 if any differs -- the flag SysExSession_RepaintProgressIfChanged then acts on. Step 5 of SysExSession_RefreshProgressScreen. Basis: caller + body + consumer.",
+  "basis": "caller + body + consumer",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:99926 `calr sub_FB7D91` -- SysExSession_RefreshProgressScreen, just before SysExSession_RepaintProgressIfChanged",
+   "prom_a/wsa1_prom_a.s:100088 `m_cp_rm MB24, 0x60f805, r3` -- current vs previous; `set 6,(XIX)` with XIX = 0x60FD42 (100090)",
+   "prom_a/wsa1_prom_a.s:100106 `m_cp_rm MB24, 0x60f80b, r3` -- the receiving set"
+  ]
+ },
+ {
+  "old": "sub_FB8117",
+  "verdict": "name",
+  "new": "SysExXfer_ClearJobRecords",
+  "header": "Zeroes the four 16-byte transfer records from ZeroBlock16_F4FEA4: 0x60FCE8 (send job: start, end, byte count, bytes per cell), 0x60FCF8 (send cursor: source, remaining), 0x60FD08 and 0x60FD18 (the receive pair). Called by SysEx_ResetSession. Basis: caller + body + users.",
+  "basis": "caller + body + users",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:100535 `calr sub_FB8117` -- SysEx_ResetSession, between SysEx_ClearRemoteId and the 0x60FD40.. clears",
+   "prom_a/wsa1_prom_a.s:100514 `lda xiy, (0xf4fea4:24)` -- 16 zero bytes -> 0x60FCE8 (100515), copied on to 0x60FCF8, 0x60FD08, 0x60FD18 (100519-100527)",
+   "prom_a/wsa1_prom_a.s:98617 `ld xbc, (0x60fcf8:24)` -- SysExTx_AppendNibbles' source cursor; remaining at +8 (0x60FD00)",
+   "prom_a/wsa1_prom_a.s:98635 `sub (0x60fcf0:24), xbc` -- the send job's +8 count decremented as bytes go"
+  ]
+ },
+ {
+  "old": "sub_FB9BA4",
+  "verdict": "name",
+  "new": "MidiFilePlay_ApplyGmOnPartSetup",
+  "header": "BStore_TrackToPart[0..16] := 0..15, 0x20; part records 0..15 +0x0D (MIDI channel) := 0..8, 10..15, 9, each posted as {part, 0x0D, ch, 0x0F}; GM bit (0x7F4D) bit 2 set, (0x124C) := 1 and {0x91, 3, 4, 0xFF} posted -- all from MidiFile_Tables_FBA169's first half. MidiFileDirectPlay_RestoreOnLeave runs it when the GM byte it saved on entry ((0x605144)) had bit 2 set; GM-off twin MidiFilePlay_ApplyGmOffPartSetup. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:102303 `calr sub_FB9BA4` -- MidiFileDirectPlay_RestoreOnLeave when (0x605144) bit 2 (102297); (0x605144) := (0x7F4D) on entry (102284)",
+   "prom_a/wsa1_prom_a.s:102312 `lda xiy, (MidiFile_Tables_FBA169+0xB:24)` -- 17-byte track map -> BStore_TrackToPart (102332)",
+   "prom_a/wsa1_prom_a.s:102316 `lda xiy, (MidiFile_Tables_FBA169+0x1C:24)` -- channel ramp 0..8, 0x0A..0x0F, 0x09",
+   "prom_a/wsa1_prom_a.s:102320 `lda xiy, (MidiFile_Tables_FBA169+0x2C:24)` -- 16 addresses 0x76AF.. = part record +0x0D, the MIDI channel byte (ParamNumber_RecordPtrs header)",
+   "prom_a/wsa1_prom_a.s:102364 `m_or_mi8 MBD+r1, 0x03, 0x04` -- (0x7F4A+3) bit 2 = GM on; posted at 102370"
+  ]
+ },
+ {
+  "old": "sub_FB9C52",
+  "verdict": "name",
+  "new": "MidiFilePlay_ApplyGmOffPartSetup",
+  "header": "GM-off twin of MidiFilePlay_ApplyGmOnPartSetup: BStore_TrackToPart[0..16] := 0..15, 0x20; part records 0..15 +0x0D (MIDI channel) := 0..15 in order, each posted as {part, 0x0D, ch, 0x0F}; GM bit (0x7F4D) bit 2 cleared, (0x124C) := 1 and {0x91, 3, new value, 0xFF} posted -- MidiFile_Tables_FBA169's second half. MidiFileDirectPlay_RestoreOnLeave runs it when the saved GM byte had bit 2 clear. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:102300 `calr sub_FB9C52` -- MidiFileDirectPlay_RestoreOnLeave, (0x605144) bit 2 clear",
+   "prom_a/wsa1_prom_a.s:102383 `lda xiy, (MidiFile_Tables_FBA169+0x6C:24)` -- the second 17-byte track map",
+   "prom_a/wsa1_prom_a.s:102387 `lda xiy, (MidiFile_Tables_FBA169+0x7D:24)` -- channels 0x00..0x0F in order",
+   "prom_a/wsa1_prom_a.s:102391 `lda xiy, (MidiFile_Tables_FBA169+0x8D:24)` -- the same 16 part-record +0x0D addresses",
+   "prom_a/wsa1_prom_a.s:102437 `and (XHL),0xfb` -- GM bit cleared; posted as record 0x91 byte 3 at 102446"
+  ]
+ }
+]

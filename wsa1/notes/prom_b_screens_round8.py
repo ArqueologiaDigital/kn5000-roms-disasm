@@ -88,7 +88,7 @@ WHAT IS IN THE SPAN
     0xF43040  Enter -> 0xF7E971, IN THIS SPAN and now converted.  Three
               instructions: `or (0x2134),0x0002 / call T_BStore_AppendBytes_Join3_Veneer / ret`.  ZERO
               display-list calls, so there is no title to read.
-    0xF43048  Enter -> prom_a 0xF80F3A (`sub_F80F3A`).  Zero display-list calls
+    0xF43048  Enter -> prom_a 0xF80F3A (`ModeEnterBody_StepRecord`).  Zero display-list calls
               in its extent.
     0xF43160  Enter -> prom_a 0xF8101E (`ScreenEnterBody_StepRecord`).  Zero display-list calls.
     0xF431D0  Enter -> prom_a 0xF8101E -- ★ THE SAME ROUTINE AS 0xF43160.

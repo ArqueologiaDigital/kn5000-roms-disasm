@@ -32,7 +32,7 @@ WHAT IS ESTABLISHED AND WHAT IS NOT
       * the header ends exactly where the first "PART" string starts, and
         the last channel entry ends exactly where the 21-byte tail starts,
         with no slack on either boundary;
-      * this span is immediately preceded by DL_F3B7C3 (op 0x1B, handler
+      * this span is immediately preceded by TrackAssign_DrawTrackGroupHighlight_DL (op 0x1B, handler
         0xF31A75 -- 4 raw words, already committed) whose four words are
         0x000C, 0x006F, 0x0031, 0x00A5.  0x000C, 0x006F and 0x00A5 ALSO
         appear, verbatim, among this table's own 8 header words (at header
@@ -127,7 +127,7 @@ def render(chunk):
                "; The header's 8 words are NOT a display-list record (no handler's\n"
                "; implied length matches) and their indexing scheme is not established;\n"
                "; three of the eight (0x000C, 0x006F, 0x00A5) also appear verbatim in\n"
-               "; the immediately preceding record, DL_F3B7C3's own 4 words -- recorded\n"
+               "; the immediately preceding record, TrackAssign_DrawTrackGroupHighlight_DL's own 4 words -- recorded\n"
                "; as corroboration this is a deliberate field, not padding, without\n"
                "; claiming what it selects.  Regenerate: python3\n"
                "; notes/gen_prom_b_f3b7d4_module.py --splice\n" % (SPAN_S, SPAN_E - 1))
@@ -174,9 +174,9 @@ def main():
         check("round-trip: rebuilt bytes match ROM exactly", roundtrip(chunk), True)
         # the cross-table corroboration this docstring claims
         _l, shorts, _p, _c, _t = decode(chunk)
-        check("header word 0 matches DL_F3B7C3's first word (0x000C)", shorts[0], 0x000C)
-        check("header word 1 matches DL_F3B7C3's second word (0x006F)", shorts[1], 0x006F)
-        check("header word 7 matches DL_F3B7C3's fourth word (0x00A5)", shorts[7], 0x00A5)
+        check("header word 0 matches TrackAssign_DrawTrackGroupHighlight_DL's first word (0x000C)", shorts[0], 0x000C)
+        check("header word 1 matches TrackAssign_DrawTrackGroupHighlight_DL's second word (0x006F)", shorts[1], 0x006F)
+        check("header word 7 matches TrackAssign_DrawTrackGroupHighlight_DL's fourth word (0x00A5)", shorts[7], 0x00A5)
         text = open(os.path.join(ROOT, S_FILE), encoding="utf-8").read()
         target = '\t.incbin "%s", 0x%06X, 0x%06X' % (ROM, SPAN_FILE_OFF, SPAN_SIZE)
         check("exactly one matching .incbin directive in the tree", text.count(target), 1)

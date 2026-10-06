@@ -51,3 +51,10 @@ reviewer's: batch z had named the empty button-table slots sub_F7E750 / sub_F7E7
 says "NO NAME". Batch x reports two leads for later. `Data_F6D002` is code: the tail of sub_F6CFCB, the HOLD-latch
 append. The local labels `sub_F64A34_Join*` and `sub_F6B2EE_Entry*` sit after their routine's `ret` and belong to
 other, unlabelled routines.
+
+**Wave 8** (`proposals_wave8_{a8,b8,c8,d8}.json`): 113 named, 7 refused. Leads reported for later:
+- `Str_SongNameBlank` (was sub_F81948) is the six bytes "______" (the blank song name), still decoded as six
+  `pop XSP`. They should be respelled as text.
+- `sub_F82CE8` (now `Variant_SendPortBToCpu2`) is the missing writer of CPU 2's 0xFFF8. This answers the open
+  question in FINDINGS-prom_c-scheduler.md:82.
+- `sub_F49861`'s tail labels `_Join`/`_Join2` are the entry points of SeqRecord_DrainEventRing*.

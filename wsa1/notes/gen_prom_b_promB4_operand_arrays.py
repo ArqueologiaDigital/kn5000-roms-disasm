@@ -111,7 +111,7 @@ SPANS = [
     dict(name="span1", incbin=(0x0396E7, 0x46), first=0xF396E2,
          objs=[("rec", 0xF396E2), ("tab", 0xF396ED, 8, 8)],
          end=0xF3972D,
-         anchor="DL_F3972D, a converted interpreter-A op-1B record whose four "
+         anchor="TrackAssign_DrawTrackRowHighlight_DL, a converted interpreter-A op-1B record whose four "
                 "words (0x0038, 0x003E, 0x0117, 0x00B5) are the bounding box "
                 "of the 8 entries below"),
     dict(name="span2", incbin=(0x03A0E9, 0xE6), first=0xF3A0E4,

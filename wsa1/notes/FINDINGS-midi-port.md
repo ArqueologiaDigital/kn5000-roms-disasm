@@ -363,7 +363,7 @@ absolute reference", never "nothing calls it".**
   of the input and output queues. Another lane's territory, and the reason the
   queue's own structure at `0x00600C1E` is still only "a 16-bit free count at
   `+0xFE`".
-* `sub_FA5926` and `PanelLed_ToggleActivityLed_SaveRegs` are deliberately **not** named: `(0xC4)`,
+* `MIDI_SetRealtimeIgnoreFromVariant` and `PanelLed_ToggleActivityLed_SaveRegs` are deliberately **not** named: `(0xC4)`,
   `(0x0925)` and `0xF406A0` are unidentified, so any name would be a guess.
 * `(0xA9)` bit 5 is tested by `MIDI_RX_SysExData` and **set nowhere** in the
   converted code.

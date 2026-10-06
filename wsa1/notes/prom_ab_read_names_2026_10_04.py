@@ -763,9 +763,9 @@ ROWS = [
      "for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 11, 2, mask 0x7F} -- every part's BendRange set to the\n"
      "GM default.  One step of GmMode_ResetToDefaults."),
     ("FB58CC", "GmMode_ResetToDefaults",
-     "the GM reset sequence: sub_FB556D (SOUND mode when (0x7F02) & 0xF0 is 0x10), sub_FB5A17, ParamApply_ResetPairTablesForGm, the\n"
+     "the GM reset sequence: GmReset_SwitchToSoundMode (SOUND mode when (0x7F02) & 0xF0 is 0x10), GmReset_PartProgramAndBank, ParamApply_ResetPairTablesForGm, the\n"
      "GmReset_Part* steps (volume 100, effect depths 0 / 0 / 90, pan and tuning centred, bend range 2) and further\n"
-     "resets.  Called by GmMode_ApplyChange (GmMode_HandleChange's) and sub_FB585E."),
+     "resets.  Called by GmMode_ApplyChange (GmMode_HandleChange's) and BStore_Workspace_StoreGmModeDefaults."),
     # prom_a 0xFB5D64-0xFB5E2C: per-controller resets.  Each stores a parameter number to (0x60F080), loops (0x60F081) over the
     # parts 0..31 with (0x60F082) / (0x60F083) fixed, and publishes each through T_Queue2C00_PublishStagedDrainPassB.  The
     # numbers are Dispatch_By_60F080's ParamMsg_Bx controllers.
@@ -1880,8 +1880,8 @@ ROWS = [
     ("FB9E69", "SmfPlay_ClearEventTimes", "(0x605044) = 0, (0x605048) = 0."),
     # GM mode (prom_a 0xFB5000)
     ("FB5972", "GmMode_ApplyChange",
-     "GmMode_HandleChange's body: the parameter image snapshot; entering GM (UiEvent_Byte2 bit 2): sub_FB567E,\n"
-     "GmMode_ResetToDefaults and, unless (0x124C) bit 0, T_BStore_Workspace_StoreParamImage; leaving: sub_FB5903, sub_FB568D; then the image\n"
+     "GmMode_HandleChange's body: the parameter image snapshot; entering GM (UiEvent_Byte2 bit 2): GmMode_SaveEffectOutputLoadFilter,\n"
+     "GmMode_ResetToDefaults and, unless (0x124C) bit 0, T_BStore_Workspace_StoreParamImage; leaving: GmMode_ResetForGmOff, GmMode_RestoreEffectOutputLoadFilter; then the image\n"
      "re-sanitised and published, the tempo re-applied, and every part's pitch bend, channel pressure,\n"
      "modulation, expression and hold reset (GmReset_AllParts*), with GmReset_AllPartsParamB7 / _ParamB6."),
     ("FB5E5E", "GmReset_AllPartsParamB7",
@@ -2440,7 +2440,7 @@ ROWS = [
      "T_F41F18: for each of the 17 sequencer slots whose bit is set in the playing mask (0x60341E), with its part from\n"
      "BStore_TrackToPart: channel pressure 0 (D0), modulation 0 (D1), pitch bend centre (D2 0x00 0x40) through\n"
      "SeqEvt_ApplyCtrlEvent, and a B0 / 0xB5 0x7F event through SeqEvt_ApplyParamEvent; then SeqEvt_FlushShadows,\n"
-     "sub_FAF772, T_Queue2C00_DrainPassB.  SeqEvt_FlushShadows' header calls it the slot-reset routine.  Basis: body."),
+     "DspEffect_RepostRotarySpeakerAlgorithm, T_Queue2C00_DrainPassB.  SeqEvt_FlushShadows' header calls it the slot-reset routine.  Basis: body."),
     ("FE144E", "MidiFilePlay_OnSongSelect",
      "T_MidiFilePlay_OnSongSelect: when MidiIn_SongSelectValue bit 7 is set (MidiIn_SongSelect stored a received 0xF3) and transport C is stopped:\n"
      "the disk is mounted if needed (Disk_MountAndScanDirectory), Disk_SelectedEntry = the song number (at most 0x13),\n"
@@ -2686,7 +2686,7 @@ RELABEL = [
      ""),
     ("FC2422", "SoundSel_FromPresetProgramAndBank",
      "CORRECTED 2026-10-05 (was SoundCode_FromGroupMember_ByteGroup): it reads (program, bank), not (group, member).\n"
-     "SoundConv_Arg0 is the program and _Arg1 the bank (SysExParam_SetProgramChangeAndBank, sub_FAB6D7 fill them so).\n"
+     "SoundConv_Arg0 is the program and _Arg1 the bank (SysExParam_SetProgramChangeAndBank, SoundSel_GroupMemberFromProgramAndBank fill them so).\n"
      "The table row is the program (| 0x80 when bank bit 5 is set), the column bank & 7; the word's low byte is the\n"
      "group across R1 / R2 (+0x10) / RD (+0x20) -- classified into bank code 0x00 / 0x01 / 0x20 -- and its high byte\n"
      "the member.  In GM mode (0x7F4D bit 2) a pair found in SoundRemap3_Map at index i gives group i >> 3, member\n"

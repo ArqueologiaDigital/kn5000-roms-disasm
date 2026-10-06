@@ -28,7 +28,7 @@ share a target. Both numbers are derived by `--checks`; see the unit note below.
 * **start** `0xF44018` is the first byte *after* the `0xF40000` thunk table,
   whose extent is fixed by `scripts/analysis/prom_b_thunk_table.py` and which the
   `.s` already converts;
-* **end** `0xF47800` is itself a thunk target (`T_F40B40`) — an address the
+* **end** `0xF47800` is itself a thunk target (`T_BStore_StepCursorToNextLeadByte`) — an address the
   linker chose — and the 5,867 bytes in front of it are pure `0x0E`.
 
 Between them the two code segments decode with **zero** undecodable bytes and

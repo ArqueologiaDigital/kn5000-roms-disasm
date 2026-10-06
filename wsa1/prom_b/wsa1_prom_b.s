@@ -374,7 +374,7 @@
 	.set	Paint_S0ngSelectName, 0xF80E2E
 	.set	ScreenLeaveBody_S0ngSelectName, 0xF80EAF
 	.set	ScreenButtonBody_S0ngSelectName, 0xF80EB4
-	.set	sub_F80F3A, 0xF80F3A
+	.set	ModeEnterBody_StepRecord, 0xF80F3A
 	.set	sub_F80F4F, 0xF80F4F
 	.set	Paint_StepRecordPartSelect, 0xF80F5A
 	.set	ScreenLeaveBody_StepRecordPartSelect, 0xF80FC0
@@ -906,7 +906,7 @@
 	.set	T_F4193C_Nop, 0xFA07A1
 	.set	Screen_TouchSensitivityOrTest_Button, 0xFA07A2
 	.set	T_F41944_Nop, 0xFA07EA
-	.set	sub_FA0D10, 0xFA0D10
+	.set	SystemTest_PlayNotesOnPanelKey, 0xFA0D10
 	.set	Screen_ControllerAssign_Enter, 0xFA0DF3
 	.set	Screen_ControllerAssign_Leave, 0xFA0E4D
 	.set	Screen_ControllerAssign_Button, 0xFA0EEA
@@ -933,14 +933,14 @@
 	.set	MidiOut_ParamChanged, 0xFA70F5
 	.set	MidiOut_PutByteA_SetStatus, 0xFA7D92
 	.set	MidiOut_PutByteA, 0xFA7D95
-	.set	sub_FA7DA3, 0xFA7DA3
-	.set	sub_FA7E0C, 0xFA7E0C
+	.set	MidiOut_RunPeriodicTimeouts, 0xFA7DA3
+	.set	MidiOut_ResyncChangedParts, 0xFA7E0C
 	.set	MidiIn_ReqListRebuild_Msg13_16, 0xFA835E
 	.set	MidiIn_ReqRebuild_Msg03_0A, 0xFA8378
 	.set	ParamModule_PhaseVector, 0xFAA400
 	.set	SoundSel_ClampToProgramAndBankRegs, 0xFAA418
 	.set	SoundSel_FromProgramAndBankRegs, 0xFAA43A
-	.set	sub_FAA45C, 0xFAA45C
+	.set	CombiSel_ClampToNumberAndBankRegs, 0xFAA45C
 	.set	sub_FAA47E, 0xFAA47E
 	.set	Queue2C00_PublishStagedIfPending, 0xFAA4A0
 	.set	Queue2C00_PublishStagedDrainPassB, 0xFAA550
@@ -971,10 +971,10 @@
 	.set	ProgramChangeMode_OnEvent, 0xFAB643
 	.set	T_F407C4_Nop, 0xFAB657
 	.set	SoundSel_ClampToProgramAndBank, 0xFAB658
-	.set	sub_FAB6D7, 0xFAB6D7
+	.set	SoundSel_GroupMemberFromProgramAndBank, 0xFAB6D7
 	.set	CombiSel_GroupMemberFromNumberAndBank, 0xFAB728
 	.set	CombiSel_ClampToNumberAndBank, 0xFAB779
-	.set	sub_FAB7E6, 0xFAB7E6
+	.set	List2030_ProcessEvents, 0xFAB7E6
 	.set	T_F407F0_Nop, 0xFABBD6
 	.set	Seq_PublishPendingParamB0, 0xFABD33
 	.set	MidiIn_ControlRecord_Dispatch, 0xFABEFB
@@ -1012,7 +1012,7 @@
 	.set	T_F41F24_Nop, 0xFAEBAA
 	.set	T_F41F1C_Nop, 0xFAEC78
 	.set	SeqEvt_ResetPlayingSlotControllers, 0xFAEC8A
-	.set	sub_FAED76, 0xFAED76
+	.set	SeqEvt_PlayRun, 0xFAED76
 	.set	T_F41F20_Nop, 0xFAF48F
 	.set	T_F41F28_Nop, 0xFAF490
 	.set	PatchLists_ApplyAll, 0xFB1800
@@ -1126,15 +1126,15 @@
 	.set	SysExCmd_GmSystemOn, 0xFB51E7
 	.set	SysExCmd_GmSystemOff, 0xFB520C
 	.set	SysExParam_SetCombinationWriteRequest, 0xFB5241
-	.set	sub_FB585E, 0xFB585E
+	.set	BStore_Workspace_StoreGmModeDefaults, 0xFB585E
 	.set	GmMode_HandleChange, 0xFB590A
 	.set	GmMode_OnEventPassB, 0xFB5EE9
 	.set	SysEx_Checksum, 0xFB7A90
 	.set	SysExTx_SendBytes, 0xFB7AC2
 	.set	MidiFileDirectPlay_InitOnEntry, 0xFB9B41
 	.set	MidiFileDirectPlay_RestoreOnLeave, 0xFB9B73
-	.set	sub_FB9BA4, 0xFB9BA4
-	.set	sub_FB9C52, 0xFB9C52
+	.set	MidiFilePlay_ApplyGmOnPartSetup, 0xFB9BA4
+	.set	MidiFilePlay_ApplyGmOffPartSetup, 0xFB9C52
 	.set	sub_FB9D2C, 0xFB9D2C
 	.set	sub_FB9D43, 0xFB9D43
 	.set	Medley_ToggleMidiFileStream, 0xFB9DA0
@@ -1915,7 +1915,7 @@
 	.set	DiskSaveScreen_MountAndScanDirectory, 0xFE1C67
 	.set	Notes_ReleaseAllSources_Call_Call, 0xFE1C71
 	.set	sub_FE1C75, 0xFE1C75
-	.set	sub_FE1C79, 0xFE1C79
+	.set	DiskLoadFile_Execute, 0xFE1C79
 	.set	DiskSaveFile_Execute_Entry, 0xFE1C80
 	.set	MidiFileSave_Page5_LcdKeyRow3, 0xFE1C98
 	.set	NameEdit_MoveCursor_Call, 0xFE1C9F
@@ -56121,7 +56121,7 @@ DLTable_F28755:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long DLTable_F287C1	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long ModeScreen_PaintDirtyFields2_DeadCopy_DL	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; ------------------------------------------------------------------
 ; DLTable_F28791 -- 2 entries of 8 bytes (16 bytes).
@@ -56157,13 +56157,14 @@ DLTable_F287B1:
 	.short 0x0036, 0x008D, 0x00A2, 0x009A	; [1]
 
 ; ------------------------------------------------------------------
-; DLTable_F287C1 -- 2 entries of 8 bytes (16 bytes).
+; ModeScreen_PaintDirtyFields2_DeadCopy_DL -- 2 entries of 8 bytes (16 bytes).
 ; Referenced by interpreter-B display-list record 0xF28786, whose +7
 ; pointer lands here and whose handler fixes the entry size.  2
 ; entries is the EXTENT (16 / 8); the record's (mask >> shift) + 1
 ; would allow up to 2.
 ; ------------------------------------------------------------------
-DLTable_F287C1:
+ModeScreen_PaintDirtyFields2_DeadCopy_DL:
+; drawn (start operand) by ModeScreen_PaintDirtyFields2_DeadCopy -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.short 0x002F, 0x0084, 0x0099, 0x008F	; [0]
 	.short 0x0036, 0x00A1, 0x00A2, 0x00AE	; [1]
 
@@ -78854,7 +78855,7 @@ Data_F39559:
 ;                    lane promB4, notes/gen_prom_b_promB4_operand_arrays.py
 ; ==================================================================
 ;
-; Right edge anchored on DL_F3972D, a converted interpreter-A op-1B record
+; Right edge anchored on TrackAssign_DrawTrackRowHighlight_DL, a converted interpreter-A op-1B record
 ; whose four words (0x0038, 0x003E, 0x0117, 0x00B5) are the bounding box of
 ; the 8 entries below.
 ;
@@ -78900,7 +78901,8 @@ DLTable_F396ED:
 ;   entered at: 0xF3972D
 ;   ends used:  0xF39737
 ; ------------------------------------------------------------------
-DL_F3972D:
+TrackAssign_DrawTrackRowHighlight_DL:
+; drawn (start operand) by TrackAssign_DrawTrackRowHighlight -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0038
 	.short 0x003E
@@ -83179,7 +83181,8 @@ DL_F3B65B:
 ; Formerly Data_F3B6D3 -- that was the LEADING BYTES of this list, not a
 ; separate object.  Zero-drift walk, notes/gen_prom_b_oversized_round3_module.py
 ; ------------------------------------------------------------------
-DL_F3B6D3:
+TrackAssign_DrawLocalControlColumn_DL:
+; drawn (start operand) by TrackAssign_DrawLocalControlColumn -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
 	.short 0x12F6
 	.short 0x00FF
@@ -83235,7 +83238,8 @@ DL_F3B6D3:
 ; Formerly Data_F3B74B -- that was the LEADING BYTES of this list, not a
 ; separate object.  Zero-drift walk, notes/gen_prom_b_oversized_round3_module.py
 ; ------------------------------------------------------------------
-DL_F3B74B:
+TrackAssign_DrawOutChannelColumn_DL:
+; drawn (start operand) by TrackAssign_DrawOutChannelColumn -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
 	.short 0x12F6
 	.short 0x00FF
@@ -83292,7 +83296,8 @@ DL_F3B74B:
 ;   entered at: 0xF3B7C3
 ;   ends used:  0xF3B7CD
 ; ------------------------------------------------------------------
-DL_F3B7C3:
+TrackAssign_DrawTrackGroupHighlight_DL:
+; drawn (start operand) by TrackAssign_DrawTrackGroupHighlight -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x000C
 	.short 0x006F
@@ -83332,7 +83337,7 @@ Data_F3B7CD:
 ; The header's 8 words are NOT a display-list record (no handler's
 ; implied length matches) and their indexing scheme is not established;
 ; three of the eight (0x000C, 0x006F, 0x00A5) also appear verbatim in
-; the immediately preceding record, DL_F3B7C3's own 4 words -- recorded
+; the immediately preceding record, TrackAssign_DrawTrackGroupHighlight_DL's own 4 words -- recorded
 ; as corroboration this is a deliberate field, not padding, without
 ; claiming what it selects.  Regenerate: python3
 ; notes/gen_prom_b_f3b7d4_module.py --splice
@@ -89676,8 +89681,12 @@ T_MidiIn_ReqRouteRebuild_Msg0D:	jp MidiIn_ReqRouteRebuild_Msg0D  ; F40754 (was T
 ; Evidence: slot 0xF40758 is `jp 0xFA6F04`; prom_a 0xFA6F04 carries the label
 ;           MidiIn_ServiceDeferred, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_MidiIn_ServiceDeferred:	jp MidiIn_ServiceDeferred  ; F40758 (was T_F40758) -> prom_a 0x26F04   x1
-T_F4075C:	jp sub_FA7DA3  ; -> prom_a 0x27DA3   x1
-T_F40760:	jp sub_FA7E0C  ; -> prom_a 0x27E0C   x1
+; Evidence: slot 0xF4075C is `jp 0xFA7DA3`; prom_a 0xFA7DA3 carries the label
+;           MidiOut_RunPeriodicTimeouts (graded CONTENT).  DERIVATIVE name.
+T_MidiOut_RunPeriodicTimeouts:	jp MidiOut_RunPeriodicTimeouts  ; F4075C (was T_F4075C) -> prom_a 0x27DA3   x1
+; Evidence: slot 0xF40760 is `jp 0xFA7E0C`; prom_a 0xFA7E0C carries the label
+;           MidiOut_ResyncChangedParts (graded CONTENT).  DERIVATIVE name.
+T_MidiOut_ResyncChangedParts:	jp MidiOut_ResyncChangedParts  ; F40760 (was T_F40760) -> prom_a 0x27E0C   x1
 	.fill 0xC, 1, 0x0E  ; 0xF40764: 12 x ret
 T_ParamModule_PhaseVector:	.long ParamModule_PhaseVector	; ptr -> 0xFAA400 (prom_a 0x2A400)
 ; Evidence: slot 0xF40774 is `jp 0xFAAAB1`; prom_a 0xFAAAB1 carries the label
@@ -89685,7 +89694,9 @@ T_ParamModule_PhaseVector:	.long ParamModule_PhaseVector	; ptr -> 0xFAA400 (prom
 T_ParamImage_PostAllAsChangeEvents_Call:	jp ParamImage_PostAllAsChangeEvents_Call  ; F40774 (was T_F40774) -> prom_a 0x2AAB1   x2
 T_F40778:	jp sub_FAAA8F  ; -> prom_a 0x2AA8F
 T_MidiSettings_ResetToDefault:	jp MidiSettings_ResetToDefault  ; -> prom_a 0x2A967   x2
-T_F40780:	jp sub_FAB7E6  ; -> prom_a 0x2B7E6   x1
+; Evidence: slot 0xF40780 is `jp 0xFAB7E6`; prom_a 0xFAB7E6 carries the label
+;           List2030_ProcessEvents (graded CONTENT).  DERIVATIVE name.
+T_List2030_ProcessEvents:	jp List2030_ProcessEvents  ; F40780 (was T_F40780) -> prom_a 0x2B7E6   x1
 ; Evidence: slot 0xF40784 is `jp 0xFABD33`; prom_a 0xFABD33 carries the label
 ;           Seq_PublishPendingParamB0 (graded CONTENT).  DERIVATIVE name.
 T_Seq_PublishPendingParamB0:	jp Seq_PublishPendingParamB0  ; F40784 (was T_F40784) -> prom_a 0x2BD33   x2
@@ -89746,8 +89757,12 @@ T_F407F0:	jp T_F407F0_Nop  ; -> prom_a 0x2BBD6
 ; Evidence: slot 0xF407F4 is `jp 0xFAB658`; prom_a 0xFAB658 carries the label
 ;           SoundSel_ClampToProgramAndBank (graded CONTENT).  DERIVATIVE name.
 T_SoundSel_ClampToProgramAndBank:	jp SoundSel_ClampToProgramAndBank  ; F407F4 (was T_F407F4) -> prom_a 0x2B658   x6
-T_F407F8:	jp sub_FAB6D7  ; -> prom_a 0x2B6D7
-T_F407FC:	jp sub_FAA45C  ; -> prom_a 0x2A45C   x1
+; Evidence: slot 0xF407F8 is `jp 0xFAB6D7`; prom_a 0xFAB6D7 carries the label
+;           SoundSel_GroupMemberFromProgramAndBank (graded CONTENT).  DERIVATIVE name.
+T_SoundSel_GroupMemberFromProgramAndBank:	jp SoundSel_GroupMemberFromProgramAndBank  ; F407F8 (was T_F407F8) -> prom_a 0x2B6D7
+; Evidence: slot 0xF407FC is `jp 0xFAA45C`; prom_a 0xFAA45C carries the label
+;           CombiSel_ClampToNumberAndBankRegs (graded CONTENT).  DERIVATIVE name.
+T_CombiSel_ClampToNumberAndBankRegs:	jp CombiSel_ClampToNumberAndBankRegs  ; F407FC (was T_F407FC) -> prom_a 0x2A45C   x1
 T_F40800:	jp sub_FAA47E  ; -> prom_a 0x2A47E
 ; Evidence: slot 0xF40804 is `jp 0xFAB779`; prom_a 0xFAB779 carries the label
 ;           CombiSel_ClampToNumberAndBank (graded CONTENT).  DERIVATIVE name.
@@ -89797,7 +89812,9 @@ T_F408F8:	jp T_F408F8_Nop  ; -> prom_a 0x32022
 T_F408FC:	jp sub_FB50EE  ; -> prom_a 0x350EE
 T_SysExTx_EmitStagedParams:	jp SysExTx_EmitStagedParams  ; -> prom_a 0x34B7D   x1
 T_SysExRx_PollRing601C6E:	jp SysExRx_PollRing601C6E  ; -> prom_a 0x321CB   x1
-T_F40908:	jp sub_FB585E  ; -> prom_a 0x3585E   x1
+; Evidence: slot 0xF40908 is `jp 0xFB585E`; prom_a 0xFB585E carries the label
+;           BStore_Workspace_StoreGmModeDefaults (graded CONTENT).  DERIVATIVE name.
+T_BStore_Workspace_StoreGmModeDefaults:	jp BStore_Workspace_StoreGmModeDefaults  ; F40908 (was T_F40908) -> prom_a 0x3585E   x1
 T_SysEx_Checksum:	jp SysEx_Checksum  ; -> prom_a 0x37A90   x2
 T_SysExTx_SendBytes:	jp SysExTx_SendBytes  ; -> prom_a 0x37AC2   x1
 	.fill 0x3C, 1, 0x0E  ; 0xF40914: 60 x ret
@@ -89805,8 +89822,12 @@ T_MidiFilePlay_Tick:	jp MidiFilePlay_Tick  ; -> prom_a 0x39E79   x1
 T_MidiFileDirectPlay_LcdKeyRow1:	jp MidiFileDirectPlay_LcdKeyRow1  ; -> prom_a 0x39DFE   x1
 T_MidiFileDirectPlay_InitOnEntry:	jp MidiFileDirectPlay_InitOnEntry  ; -> prom_a 0x39B41   x1
 T_MidiFileDirectPlay_RestoreOnLeave:	jp MidiFileDirectPlay_RestoreOnLeave  ; -> prom_a 0x39B73   x1
-T_F40960:	jp sub_FB9BA4  ; -> prom_a 0x39BA4
-T_F40964:	jp sub_FB9C52  ; -> prom_a 0x39C52
+; Evidence: slot 0xF40960 is `jp 0xFB9BA4`; prom_a 0xFB9BA4 carries the label
+;           MidiFilePlay_ApplyGmOnPartSetup (graded CONTENT).  DERIVATIVE name.
+T_MidiFilePlay_ApplyGmOnPartSetup:	jp MidiFilePlay_ApplyGmOnPartSetup  ; F40960 (was T_F40960) -> prom_a 0x39BA4
+; Evidence: slot 0xF40964 is `jp 0xFB9C52`; prom_a 0xFB9C52 carries the label
+;           MidiFilePlay_ApplyGmOffPartSetup (graded CONTENT).  DERIVATIVE name.
+T_MidiFilePlay_ApplyGmOffPartSetup:	jp MidiFilePlay_ApplyGmOffPartSetup  ; F40964 (was T_F40964) -> prom_a 0x39C52
 	.fill 0x8, 1, 0x0E  ; 0xF40968: 8 x ret
 T_F40970:	jp sub_F00800  ; -> prom_b 0x00800
 T_F40974:	jp sub_F00800  ; -> prom_b 0x00800
@@ -89988,7 +90009,9 @@ T_Seq_SetTrackBeatsFromTransportB:	jp Seq_SetTrackBeatsFromTransportB  ; F40AC4 
 ;           Seq_ApplySongBeatsPerBar (graded CONTENT).  DERIVATIVE name.
 T_Seq_ApplySongBeatsPerBar:	jp Seq_ApplySongBeatsPerBar  ; F40AC8 (was T_F40AC8) -> prom_b 0x44131   x6
 	.fill 0x74, 1, 0x0E  ; 0xF40ACC: 116 x ret
-T_F40B40:	jp sub_F48107  ; -> prom_b 0x48107   x1
+; Evidence: slot 0xF40B40 is `jp 0xF48107`; prom_b 0xF48107 carries the label
+;           BStore_StepCursorToNextLeadByte (graded CONTENT).  DERIVATIVE name.
+T_BStore_StepCursorToNextLeadByte:	jp BStore_StepCursorToNextLeadByte  ; F40B40 (was T_F40B40) -> prom_b 0x48107   x1
 T_F40B44:	jp sub_F47800  ; -> prom_b 0x47800   x1
 T_F40B48:	jp sub_F47802  ; -> prom_b 0x47802   x1
 ; Evidence: slot 0xF40B4C is `jp 0xF47804`; prom_b 0xF47804 carries the label
@@ -91536,7 +91559,7 @@ T_BStore_GetDiskBankPassword:	jp BStore_GetDiskBankPassword  ; F41F00 (was T_F41
 ;           BStore_GetAnyBankPassword (graded CONTENT).  DERIVATIVE name.
 T_BStore_GetAnyBankPassword:	jp BStore_GetAnyBankPassword  ; F41F04 (was T_F41F04) -> prom_a 0x3B3DC   x1
 	.fill 0x8, 1, 0x0E  ; 0xF41F08: 8 x ret
-T_F41F10:	jp sub_FAED76  ; -> prom_a 0x2ED76   x1
+T_F41F10:	jp SeqEvt_PlayRun  ; -> prom_a 0x2ED76   x1
 T_F41F14:	jp SeqBuf_RecordQueuedEvents  ; -> prom_a 0x2E84D   x5
 T_F41F18:	jp SeqEvt_ResetPlayingSlotControllers  ; -> prom_a 0x2EC8A   x9
 T_F41F1C:	jp T_F41F1C_Nop  ; -> prom_a 0x2EC78
@@ -91920,7 +91943,9 @@ T_SysPartMidi_ResetBlock1Default_Call:	jp SysPartMidi_ResetBlock1Default_Call  ;
 ;           Notes_ReleaseAllSources_Call_Call (graded CONTENT).  DERIVATIVE name.
 T_Notes_ReleaseAllSources_Call_Call:	jp Notes_ReleaseAllSources_Call_Call  ; F425C0 (was T_F425C0) -> prom_a 0x61C71
 T_F425C4:	jp sub_FE1C75  ; -> prom_a 0x61C75   x1
-T_F425C8:	jp sub_FE1C79  ; -> prom_a 0x61C79   x3
+; Evidence: slot 0xF425C8 is `jp 0xFE1C79`; prom_a 0xFE1C79 carries the label
+;           DiskLoadFile_Execute (graded CONTENT).  DERIVATIVE name.
+T_DiskLoadFile_Execute:	jp DiskLoadFile_Execute  ; F425C8 (was T_F425C8) -> prom_a 0x61C79   x3
 ; Evidence: slot 0xF425CC is `jp 0xFE1C80`; prom_a 0xFE1C80 carries the label
 ;           DiskSaveFile_Execute_Entry (graded CONTENT).  DERIVATIVE name.
 T_DiskSaveFile_Execute_Entry:	jp DiskSaveFile_Execute_Entry  ; F425CC (was T_F425CC) -> prom_a 0x61C80   x3
@@ -93164,7 +93189,9 @@ T_F434C4:	jp T_F434C4_Nop  ; -> prom_a 0x1EEDF
 T_Screen_SoundMute_Button:	jp Screen_SoundMute_Button  ; -> prom_a 0x1EEE0
 T_F434CC:	jp T_F434CC_Nop  ; -> prom_a 0x1EF07
 T_SoundCopy_ReadExtGroupDrumFlag:	jp SoundCopy_ReadExtGroupDrumFlag  ; -> prom_a 0x1FDC8
-T_F434D4:	jp sub_FA0D10  ; -> prom_a 0x20D10   x1
+; Evidence: slot 0xF434D4 is `jp 0xFA0D10`; prom_a 0xFA0D10 carries the label
+;           SystemTest_PlayNotesOnPanelKey (graded CONTENT).  DERIVATIVE name.
+T_SystemTest_PlayNotesOnPanelKey:	jp SystemTest_PlayNotesOnPanelKey  ; F434D4 (was T_F434D4) -> prom_a 0x20D10   x1
 	.fill 0x8, 1, 0x0E  ; 0xF434D8: 8 x ret
 ; Evidence: slot 0xF434E0 is `jp 0xF4C46A`; prom_b 0xF4C46A carries the label
 ;           ScreenEnter_CreatorSelectController (graded CONTENT).  DERIVATIVE name.
@@ -93213,7 +93240,7 @@ T_F44010:	jp BStore_BootPhase2And4  ; -> prom_b 0x44095
 ;   START 0xF44018 is the first byte AFTER the 0xF40000 thunk table, whose extent
 ;         is fixed by scripts/analysis/prom_b_thunk_table.py and which this file
 ;         already converts.
-;   END   0xF47800 is itself a thunk target (T_F40B40) -- an address the linker
+;   END   0xF47800 is itself a thunk target (T_BStore_StepCursorToNextLeadByte) -- an address the linker
 ;         chose -- and the 5,867 bytes in front of it are pure 0x0E.
 ; Between them the two code segments decode with ZERO undecodable bytes and each
 ; ends exactly on its segment boundary.
@@ -99145,7 +99172,7 @@ sub_F47C25_Return:
 ;          (0x3498) (0x349E) (0x349F) +12 more  |  0x0034A4 0x00365E
 ;          0x003680 0x0036E9 0xFFFFF8
 ; Calls:   sub_F4802B sub_F4840E sub_F4842F sub_F48056 CycleRecord_CheckIsRecordTrack_Copy T_F40BE8
-;          T_SeqCycle_CheckOn T_F40ABC sub_F47F3E sub_F48107 sub_F4812F T_Seq_StopAll_Veneer +12
+;          T_SeqCycle_CheckOn T_F40ABC sub_F47F3E BStore_StepCursorToNextLeadByte sub_F4812F T_Seq_StopAll_Veneer +12
 ;          more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF47C7C is an instruction boundary.
@@ -99227,7 +99254,7 @@ sub_F47C7C_Join3:
 	ld	(13460:16), wa	; F47D47  ld (0x3494),WA
 	ld	wa, (BStore_CursorOffset:16)	; F47D4B  ld WA,(0x345e)
 	ld	(13462:16), wa	; F47D4F  ld (0x3496),WA
-	calr	sub_F48107	; F47D53  calr 0xf48107
+	calr	BStore_StepCursorToNextLeadByte	; F47D53  calr 0xf48107
 	pushw	wa	; F47D56  push WA
 	ld	a, e	; F47D57  ld A,E
 	inc	1, a	; F47D59  inc 1,A
@@ -99669,18 +99696,23 @@ sub_F48056_Return:
 	ret	; F48106  ret
 
 ; --------------------------------------------------------------------------
-; sub_F48107
-; Called from: T_F40B40 (x1); in-module: 0xF47D53
+; BStore_StepCursorToNextLeadByte
+; Called from: T_BStore_StepCursorToNextLeadByte (x1); in-module: 0xF47D53
 ; Touches:   |  0x0034A4
 ; Calls:   sub_F4842F sub_F4840E
-; Evidence: thunk slot T_F40B40 holds `jp 0x00F48107`, and 0xF48107 is an
+; Evidence: thunk slot T_BStore_StepCursorToNextLeadByte holds `jp 0x00F48107`, and 0xF48107 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F48107:		; <- T_F40B40
+; BStore_StepCursorToNextLeadByte: From the event at the BStore cursor, steps a byte at a time
+;   (T_BStore_StepCursorOneByte, T_BStore_ReadCursorByte) to the next byte with bit 7 set (lead byte or 0x81 / 0x82
+;   tag), copying the first 5 bytes passed to 0x34A4[]; DE = bytes passed (gives up at 18). Slot T_BStore_StepCursorToNextLeadByte:
+;   CycleRecord_StepCursorOneEvent's step; the playback reader sub_F47C7C stores DE + 1 in (0x36F0). Basis: callers +
+;   caller header + body. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+BStore_StepCursorToNextLeadByte:		; <- T_BStore_StepCursorToNextLeadByte
 	xor	de, de	; F48107  xor DE,DE
 sub_F48107_Loop:
 	calr	sub_F4842F	; F48109  calr 0xf4842f
@@ -101773,13 +101805,13 @@ SeqRecord_SaveTakeCursor_Veneer:		; <- T_SeqRecord_SaveTakeCursor_Veneer
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SeqRecord_SoundAlert_Veneer: Veneer (slot T_SeqRecord_SoundAlert_Veneer): `jr` to sub_F49861, which posts the CPU-2 message F0 50 87 08
+; SeqRecord_SoundAlert_Veneer: Veneer (slot T_SeqRecord_SoundAlert_Veneer): `jr` to SeqRecord_SoundAlert, which posts the CPU-2 message F0 50 87 08
 ;   (A = 8, T_F41020 = Msg0716_PostSysEx50_87) -- the same message DiskError_SoundAlertAndWait sends on disk failures.
 ;   Called only on sequencer failure paths: SeqRecord_AllocTakeChains out of blocks, and two Seq_StopAll /
 ;   UiStatus_ShowMessage0E paths. Basis: callers + body + same-message twin. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave7_w.json)
 SeqRecord_SoundAlert_Veneer:		; <- T_SeqRecord_SoundAlert_Veneer
-	jr	sub_F49861	; F49804  jr T,0xf49861
+	jr	SeqRecord_SoundAlert	; F49804  jr T,0xf49861
 
 ; --------------------------------------------------------------------------
 ; SeqRecord_DrainEventRingAtTakeEnd
@@ -101891,7 +101923,7 @@ SeqRecord_SaveTakeCursor:
 	ret	; F49860  ret
 
 ; --------------------------------------------------------------------------
-; sub_F49861
+; SeqRecord_SoundAlert
 ; Called from: in-module: 0xF49B3F 0xF4A501
 ; Touches: (0x3004) (0x34D0) (0x34D4) (0x34DD)  |  0x000000
 ; Calls:   T_F41020 sub_F498A0
@@ -101901,7 +101933,12 @@ SeqRecord_SaveTakeCursor:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F49861:
+; SeqRecord_SoundAlert: Posts the CPU-2 message F0 50 87 08 (A = 8, T_F41020 = Msg0716_PostSysEx50_87), the alert
+;   DiskError_SoundAlertAndWait also sends. The target of SeqRecord_SoundAlert_Veneer; also called directly after a
+;   take track is terminated (sub_F4A4F6), and from sub_F49AFD only when the ROM byte at 0xFFFFF8 is >= 0x10 (it is
+;   0x02). Its tail labels (0xF49868, 0xF4987B) are the drain entries of SeqRecord_DrainEventRing*. Basis: caller
+;   header + body. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+SeqRecord_SoundAlert:
 	ld	a, 8:opc	; F49861  ld A,0x08
 	call	T_F41020	; F49863  call 0xf41020
 	ret	; F49867  ret
@@ -102192,7 +102229,7 @@ sub_F49A3D_Return:
 ; sub_F49AFD
 ; Called from: in-module: 0xF498AB
 ; Touches: (0x34AA) (0x34AB) (0x34B8) (0x34B9)  |  0xFFFFF8
-; Calls:   sub_F49B43 sub_F49B5C sub_F49BFA sub_F49861
+; Calls:   sub_F49B43 sub_F49B5C sub_F49BFA SeqRecord_SoundAlert
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49AFD is an instruction boundary.
 ;           The name IS the address.
@@ -102224,7 +102261,7 @@ sub_F49A3D_Skip10:
 	ld	xiy, MIDI_UART_Configure_Data	; F49B35  ld XIY,0x00fffff8
 	m_cp_mi8 MBI+r5, 0, 0x10	; F49B3A  cp (XIY),0x10
 	jr	c, sub_F49A3D_Return2	; F49B3D  jr C,0xf49b42
-	calr	sub_F49861	; F49B3F  calr 0xf49861
+	calr	SeqRecord_SoundAlert	; F49B3F  calr 0xf49861
 sub_F49A3D_Return2:
 	ret	; F49B42  ret
 
@@ -103446,7 +103483,7 @@ sub_F4A4E3:
 ; sub_F4A4F6
 ; Called from: in-module: 0xF49D7D 0xF49FEE 0xF4A338 0xF4A449
 ; Touches: (0x349F) (0x34D1)
-; Calls:   T_SeqRecord_TerminateTrackAtCursor_Veneer sub_F4A50E sub_F49861 T_Var34D1_SetBits20_Veneer
+; Calls:   T_SeqRecord_TerminateTrackAtCursor_Veneer sub_F4A50E SeqRecord_SoundAlert T_Var34D1_SetBits20_Veneer
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A4F6 is an instruction boundary.
 ;           The name IS the address.
@@ -103457,7 +103494,7 @@ sub_F4A4F6:
 	ld	(13471:16), c	; F4A4F6  ld (0x349f),C
 	call	T_SeqRecord_TerminateTrackAtCursor_Veneer	; F4A4FA  call 0xf40a98
 	calr	sub_F4A50E	; F4A4FE  calr 0xf4a50e
-	calr	sub_F49861	; F4A501  calr 0xf49861
+	calr	SeqRecord_SoundAlert	; F4A501  calr 0xf49861
 	call	T_Var34D1_SetBits20_Veneer	; F4A504  call 0xf40a80
 	m_or_mi8 MB16, 0x34d1, 0x10	; F4A508  or (0x34d1),0x10
 	ret	; F4A50D  ret
@@ -104050,7 +104087,7 @@ sub_F4A82C_Return:
 ; CycleRecord_CountCycleRangeBeats
 ; Called from: in-module: 0xF4A821 0xF4A9AD
 ; Touches: (0x0C8A) (0x0D1D)
-; Calls:   T_SeqMasterTrack_UpdateActive sub_F4A8F0 sub_F4A8A1
+; Calls:   T_SeqMasterTrack_UpdateActive CycleRecord_CountCycleRangeBeatsFromBeatsPerBar CycleRecord_CountCycleRangeBeatsFromTimeSigs
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A88A is an instruction boundary.
 ;           The name IS the address.
@@ -104059,23 +104096,23 @@ sub_F4A82C_Return:
 ; --------------------------------------------------------------------------
 ; CycleRecord_CountCycleRangeBeats: (0x36F2) := the beats in measures (0x3622)..(0x3624): after
 ;   SeqMasterTrack_UpdateActive, with MASTER off ((0x0C8A) bit 2 clear) ((0x3624) + 1 - (0x3622)) x
-;   TransportA_BeatsPerBar (sub_F4A8F0); with MASTER on, (0x0D1D) := W and sub_F4A8A1 takes the time-signature beat
+;   TransportA_BeatsPerBar (CycleRecord_CountCycleRangeBeatsFromBeatsPerBar); with MASTER on, (0x0D1D) := W and CycleRecord_CountCycleRangeBeatsFromTimeSigs takes the time-signature beat
 ;   count before measure (0x3624)+1 minus that before (0x3622) (sub_F4B771). Basis: callers + caller header + body.
 ;   (notes/naming-pilot-2026-10-06/proposals_wave7_w.json)
 CycleRecord_CountCycleRangeBeats:
 	call	T_SeqMasterTrack_UpdateActive	; F4A88A  call 0xf40aa8
 	m_bit 2, MD16, 0x0c8a	; F4A88E  bit 2,(0x0c8a)
 	jr	nz, sub_F4A88A_Skip	; F4A892  jr NZ,0xf4a899
-	calr	sub_F4A8F0	; F4A894  calr 0xf4a8f0
+	calr	CycleRecord_CountCycleRangeBeatsFromBeatsPerBar	; F4A894  calr 0xf4a8f0
 	jr	sub_F4A88A_Return	; F4A897  jr T,0xf4a8a0
 sub_F4A88A_Skip:
 	ld	(3357:16), w	; F4A899  ld (0x0d1d),W
-	calr	sub_F4A8A1	; F4A89D  calr 0xf4a8a1
+	calr	CycleRecord_CountCycleRangeBeatsFromTimeSigs	; F4A89D  calr 0xf4a8a1
 sub_F4A88A_Return:
 	ret	; F4A8A0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4A8A1
+; CycleRecord_CountCycleRangeBeatsFromTimeSigs
 ; Called from: in-module: 0xF4A89D
 ; Touches: (0x0C90) (0x345C) (0x345E) (0x3622) (0x3624) (0x36F2)
 ; Calls:   sub_F4B771
@@ -104085,7 +104122,11 @@ sub_F4A88A_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4A8A1:
+; CycleRecord_CountCycleRangeBeatsFromTimeSigs: (0x36F2) := beats before measure (0x3624)+1 minus beats before measure
+;   (0x3622), each summed from the master track's time-signature records by sub_F4B771 (chain (0x0D1D)); BStore cursor
+;   kept. The MASTER-on arm of CycleRecord_CountCycleRangeBeats. Basis: caller + caller header + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_a8.json)
+CycleRecord_CountCycleRangeBeatsFromTimeSigs:
 	m_push MW16, BStore_CursorBlock	; F4A8A1  pushw (0x345c)
 	m_push MW16, BStore_CursorOffset	; F4A8A5  pushw (0x345e)
 	ld	bc, (13860:16)	; F4A8A9  ld BC,(0x3624)
@@ -104114,7 +104155,7 @@ sub_F4A8A1:
 	ret	; F4A8EF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4A8F0
+; CycleRecord_CountCycleRangeBeatsFromBeatsPerBar
 ; Called from: in-module: 0xF4A894
 ; Touches: (0x3622) (0x3624) (0x36F2)
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -104123,7 +104164,10 @@ sub_F4A8A1:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4A8F0:
+; CycleRecord_CountCycleRangeBeatsFromBeatsPerBar: (0x36F2) := ((0x3624) + 1 - (0x3622)) x TransportA_BeatsPerBar, the
+;   cycle range's beats at one fixed meter. The MASTER-off arm of CycleRecord_CountCycleRangeBeats. Basis: caller +
+;   caller header + body. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+CycleRecord_CountCycleRangeBeatsFromBeatsPerBar:
 	xor	xwa, xwa	; F4A8F0  xor XWA,XWA
 	ld	wa, (13860:16)	; F4A8F2  ld WA,(0x3624)
 	inc	1, wa	; F4A8F6  inc 1,WA
@@ -104164,20 +104208,20 @@ sub_F4A90A_Return:
 ; CycleRecord_AppendBeatMark
 ; Called from: in-module: 0xF4A914 0xF4B1E0
 ; Touches: (0x0D4A) (0x36D6)  |  0x0036E0
-; Calls:   sub_F4A93C T_BStore_AppendBytes_Veneer
+; Calls:   CycleRecord_MoveSongPositionToTrackEnd T_BStore_AppendBytes_Veneer
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A91E is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; CycleRecord_AppendBeatMark: Inserts one 0x81 beat mark at record track (0x36D6)'s end cursor: sub_F4A93C copies the
+; CycleRecord_AppendBeatMark: Inserts one 0x81 beat mark at record track (0x36D6)'s end cursor: CycleRecord_MoveSongPositionToTrackEnd copies the
 ;   end cursor (0x60347E/0x6034A0[t]) into the live cursor (0x3460/0x3482[t]), then T_BStore_AppendBytes_Veneer with A
 ;   = track + 1, W = 1, XIY = 0x36E0 holding 0x81. The per-beat body of CycleRecord_AppendBeatMarks; CycleRecord_PadTrackPastCycleEnd
 ;   also writes the first mark of a new track with it. Basis: callers + body. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave7_w.json)
 CycleRecord_AppendBeatMark:
-	calr	sub_F4A93C	; F4A91E  calr 0xf4a93c
+	calr	CycleRecord_MoveSongPositionToTrackEnd	; F4A91E  calr 0xf4a93c
 	ld	xiy, 14048	; F4A921  ld XIY,0x000036e0
 	ld	(xiy), 129	; F4A926  ld (XIY),0x81
 	ld	a, (14038:16)	; F4A929  ld A,(0x36d6)
@@ -104188,7 +104232,7 @@ CycleRecord_AppendBeatMark:
 	ret	; F4A93B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4A93C
+; CycleRecord_MoveSongPositionToTrackEnd
 ; Called from: in-module: 0xF4A91E 0xF4AF28
 ; Touches: (0x345E) (0x36D6)  |  0x003460 0x003482 0x60347E 0x6034A0
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -104197,7 +104241,11 @@ CycleRecord_AppendBeatMark:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4A93C:
+; CycleRecord_MoveSongPositionToTrackEnd: Record track (0x36D6)'s song position := its end cursor: 0x3460[t] :=
+;   0x60347E[t] (block), 0x3482[t] := 0x6034A0[t] (offset). CycleRecord_AppendBeatMark runs it before inserting at the
+;   position; the T_F40BE8 append (sub_F4AF08) likewise before sub_F4AEEE appends. Basis: caller + caller header +
+;   body. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+CycleRecord_MoveSongPositionToTrackEnd:
 	xor	hl, hl	; F4A93C  xor HL,HL
 	ld	l, (14038:16)	; F4A93E  ld L,(0x36d6)
 	sll	l, 1	; F4A942  sll 0x01,L
@@ -104266,7 +104314,7 @@ sub_F4A976_Skip:
 ; Called from: in-module: 0xF4A9B0
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C90) (0x0D4A)
 ;          (0x345C) (0x345E) (0x3622) +4 more  |  0x60347E 0x6034A0
-; Calls:   T_SeqMasterTrack_UpdateActive T_BStore_SeekChainToMeasure CycleRecord_CopyRangeIntoGrowingChain sub_F4ADCC sub_F4AB42
+; Calls:   T_SeqMasterTrack_UpdateActive T_BStore_SeekChainToMeasure CycleRecord_CopyRangeIntoGrowingChain CycleRecord_SetEndCursorAtTakeChain2EndTag sub_F4AB42
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A9D3 is an instruction boundary.
 ;           The name IS the address.
@@ -104275,7 +104323,7 @@ sub_F4A976_Skip:
 ; --------------------------------------------------------------------------
 ; CycleRecord_CopyFromCycleStartToTakeChain2: Seeks record track (0x36D6) to the cycle start measure (0x3622) and
 ;   copies from there up to its saved end cursor ((0x3732) block / (0x3734) offset) into take chain 2 from offset 5
-;   (CycleRecord_CopyRangeIntoGrowingChain; failure -> BStore_ErrorCode 0xFF), then sub_F4ADCC puts the track's end cursor on take chain 2's
+;   (CycleRecord_CopyRangeIntoGrowingChain; failure -> BStore_ErrorCode 0xFF), then CycleRecord_SetEndCursorAtTakeChain2EndTag puts the track's end cursor on take chain 2's
 ;   0x82. The copy step of CycleRecord_CopyPaddedRangeToTakeChain2. Basis: caller + caller header + body.
 ;   (notes/naming-pilot-2026-10-06/proposals_wave7_w.json)
 CycleRecord_CopyFromCycleStartToTakeChain2:
@@ -104301,7 +104349,7 @@ CycleRecord_CopyFromCycleStartToTakeChain2:
 	jr	z, sub_F4A9D3_Skip	; F4AA1F  jr Z,0xf4aa26
 	ld	(BStore_ErrorCode:16), 255	; F4AA21  ld (0x0d4a),0xff
 sub_F4A9D3_Skip:
-	calr	sub_F4ADCC	; F4AA26  calr 0xf4adcc
+	calr	CycleRecord_SetEndCursorAtTakeChain2EndTag	; F4AA26  calr 0xf4adcc
 	ret	; F4AA29  ret
 	ld	xix, 6304894	; F4AA2A  ld XIX,0x0060347e
 	xor	xwa, xwa	; F4AA2F  xor XWA,XWA
@@ -104579,7 +104627,7 @@ sub_F4ABE8_Skip:
 ; Called from: in-module: 0xF4ABF4
 ; Touches: (0x0D4A) (0x345C) (0x345E) (0x36D6) (0x3732) (0x3734)  |
 ;          0x60347E 0x6034A0
-; Calls:   T_SeqTrackCursors_Save sub_F4ADCC sub_F4AE15 sub_F4ACB1 sub_F4AEEE CycleRecord_AbortMemoryFull
+; Calls:   T_SeqTrackCursors_Save CycleRecord_SetEndCursorAtTakeChain2EndTag sub_F4AE15 sub_F4ACB1 sub_F4AEEE CycleRecord_AbortMemoryFull
 ;          T_SeqTrackCursors_RestoreSaved
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4ABFC is an instruction boundary.
@@ -104603,7 +104651,7 @@ sub_F4ABFC:
 	ld	xix, 6304928	; F4AC25  ld XIX,0x006034a0
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F4AC2A  ld A,(XIX+HL)
 	ld	(14132:16), a	; F4AC2F  ld (0x3734),A
-	calr	sub_F4ADCC	; F4AC33  calr 0xf4adcc
+	calr	CycleRecord_SetEndCursorAtTakeChain2EndTag	; F4AC33  calr 0xf4adcc
 	calr	sub_F4AE15	; F4AC36  calr 0xf4ae15
 	calr	sub_F4ACB1	; F4AC39  calr 0xf4acb1
 	calr	sub_F4AEEE	; F4AC3C  calr 0xf4aeee
@@ -104763,7 +104811,7 @@ sub_F4ACB1_Return:
 	jr	sub_F4ADCC_Join	; F4ADCA  jr T,0xf4add4
 
 ; --------------------------------------------------------------------------
-; sub_F4ADCC
+; CycleRecord_SetEndCursorAtTakeChain2EndTag
 ; Called from: in-module: 0xF4AA26 0xF4AC33
 ; Touches: (0x345C) (0x345E) (0x36D6) (0x36FC)  |  0x60347E 0x6034A0
 ; Calls:   T_BStore_ReadCursorByte CycleRecord_StepCursorOneEvent
@@ -104773,7 +104821,12 @@ sub_F4ACB1_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4ADCC:
+; CycleRecord_SetEndCursorAtTakeChain2EndTag: From take chain 2's head block (0x36FC), offset 5, walks event by event
+;   (CycleRecord_StepCursorOneEvent) to the 0x82 end tag and makes that position record track (0x36D6)'s end cursor
+;   (0x60347E[t], 0x6034A0[t]). CycleRecord_CopyFromCycleStartToTakeChain2's last step; sub_F4ABFC uses it too, and an
+;   unlabelled entry at 0xF4ADC2 does the same from the record chain (0x36FA). Basis: caller + caller header + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+CycleRecord_SetEndCursorAtTakeChain2EndTag:
 	ld	wa, (14076:16)	; F4ADCC  ld WA,(0x36fc)
 	ld	(BStore_CursorBlock:16), wa	; F4ADD0  ld (0x345c),WA
 sub_F4ADCC_Join:
@@ -104892,21 +104945,21 @@ sub_F4AE15_Join:
 ; Called from: in-module: 0xF4AA7B 0xF4ADE3 0xF4AE75 0xF4AE83 0xF4AED5
 ;              0xF4B0AB 0xF4B24B 0xF4B35B +2 more
 ; Touches: (0x36F0)
-; Calls:   T_F40B40
+; Calls:   T_BStore_StepCursorToNextLeadByte
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4AEDD is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; CycleRecord_StepCursorOneEvent: Steps the block-store cursor past the current event to the next lead byte: T_F40B40
-;   -> sub_F48107 steps a byte at a time (BStore_StepCursorOneByte, BStore_ReadCursorByte) until a byte with bit 7
+; CycleRecord_StepCursorOneEvent: Steps the block-store cursor past the current event to the next lead byte: T_BStore_StepCursorToNextLeadByte
+;   -> BStore_StepCursorToNextLeadByte steps a byte at a time (BStore_StepCursorOneByte, BStore_ReadCursorByte) until a byte with bit 7
 ;   set, copying up to 5 data bytes to 0x34A4[]; (0x36F0) is kept across the call. The cycle-record walks' event step.
 ;   Basis: callers + body (target read). (notes/naming-pilot-2026-10-06/proposals_wave7_w.json)
 CycleRecord_StepCursorOneEvent:
 	ld	w, (14064:16)	; F4AEDD  ld W,(0x36f0)
 	push	w	; F4AEE1  push W
-	call	T_F40B40	; F4AEE3  call 0xf40b40
+	call	T_BStore_StepCursorToNextLeadByte	; F4AEE3  call 0xf40b40
 	pop	w	; F4AEE7  pop W
 	ld	(14064:16), w	; F4AEE9  ld (0x36f0),W
 	ret	; F4AEED  ret
@@ -104935,7 +104988,7 @@ sub_F4AEEE:
 ; sub_F4AF08
 ; Called from: T_F40BE8 (x2)
 ; Touches: (0x0D4A) (0x345C) (0x345E) (0x349F) (0x36FA) (0x3751)
-; Calls:   T_SeqTrackCursors_Save sub_F4A93C sub_F4AEEE CycleRecord_AbortMemoryFull T_SeqTrackCursors_RestoreSaved
+; Calls:   T_SeqTrackCursors_Save CycleRecord_MoveSongPositionToTrackEnd sub_F4AEEE CycleRecord_AbortMemoryFull T_SeqTrackCursors_RestoreSaved
 ; Evidence: thunk slot T_F40BE8 holds `jp 0x00F4AF08`, and 0xF4AF08 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -104955,7 +105008,7 @@ sub_F4AF08:		; <- T_F40BE8
 	pushw	wa	; F4AF25  push WA
 	pushw	bc	; F4AF26  push BC
 	pushw	de	; F4AF27  push DE
-	calr	sub_F4A93C	; F4AF28  calr 0xf4a93c
+	calr	CycleRecord_MoveSongPositionToTrackEnd	; F4AF28  calr 0xf4a93c
 	ld	(BStore_ErrorCode:16), 0	; F4AF2B  ld (0x0d4a),0x00
 	calr	sub_F4AEEE	; F4AF30  calr 0xf4aeee
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4AF33  cp (0x0d4a),0x00
@@ -105354,7 +105407,7 @@ sub_F4B20D_Return:
 ; CycleRecord_CountBeatsToCycleEnd
 ; Called from: in-module: 0xF4B1E6
 ; Touches: (0x0C8A) (0x0D1D)
-; Calls:   T_SeqMasterTrack_UpdateActive sub_F4B295 sub_F4B26F
+; Calls:   T_SeqMasterTrack_UpdateActive CycleRecord_CountBeatsToCycleEndFromBeatsPerBar CycleRecord_CountBeatsToCycleEndFromTimeSigs
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4B258 is an instruction boundary.
 ;           The name IS the address.
@@ -105362,24 +105415,24 @@ sub_F4B20D_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; CycleRecord_CountBeatsToCycleEnd: (0x36F4) := the beats up to the cycle end: after SeqMasterTrack_UpdateActive, with
-;   MASTER off ((0x0C8A) bit 2 clear) ((0x3624) + 1) x TransportA_BeatsPerBar (sub_F4B295); with MASTER on, (0x0D1D)
-;   := W and sub_F4B26F takes the time-signature beat count before measure (0x3624) + 1 (sub_F4B771). Same shape as
+;   MASTER off ((0x0C8A) bit 2 clear) ((0x3624) + 1) x TransportA_BeatsPerBar (CycleRecord_CountBeatsToCycleEndFromBeatsPerBar); with MASTER on, (0x0D1D)
+;   := W and CycleRecord_CountBeatsToCycleEndFromTimeSigs takes the time-signature beat count before measure (0x3624) + 1 (sub_F4B771). Same shape as
 ;   CycleRecord_CountCycleRangeBeats, measured from the song start. Basis: caller + caller header + body + twin. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave7_w.json)
 CycleRecord_CountBeatsToCycleEnd:
 	call	T_SeqMasterTrack_UpdateActive	; F4B258  call 0xf40aa8
 	m_bit 2, MD16, 0x0c8a	; F4B25C  bit 2,(0x0c8a)
 	jr	nz, sub_F4B258_Skip	; F4B260  jr NZ,0xf4b267
-	calr	sub_F4B295	; F4B262  calr 0xf4b295
+	calr	CycleRecord_CountBeatsToCycleEndFromBeatsPerBar	; F4B262  calr 0xf4b295
 	jr	sub_F4B258_Return	; F4B265  jr T,0xf4b26e
 sub_F4B258_Skip:
 	ld	(3357:16), w	; F4B267  ld (0x0d1d),W
-	calr	sub_F4B26F	; F4B26B  calr 0xf4b26f
+	calr	CycleRecord_CountBeatsToCycleEndFromTimeSigs	; F4B26B  calr 0xf4b26f
 sub_F4B258_Return:
 	ret	; F4B26E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4B26F
+; CycleRecord_CountBeatsToCycleEndFromTimeSigs
 ; Called from: in-module: 0xF4B26B
 ; Touches: (0x0C90) (0x345C) (0x345E) (0x3624) (0x36F4)
 ; Calls:   sub_F4B771
@@ -105389,7 +105442,11 @@ sub_F4B258_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4B26F:
+; CycleRecord_CountBeatsToCycleEndFromTimeSigs: (0x36F4) := beats before measure (0x3624)+1, summed from the master
+;   track's time-signature records by sub_F4B771 (chain (0x0D1D)); BStore cursor kept. The MASTER-on arm of
+;   CycleRecord_CountBeatsToCycleEnd. Basis: caller + caller header + body + twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_a8.json)
+CycleRecord_CountBeatsToCycleEndFromTimeSigs:
 	m_push MW16, BStore_CursorBlock	; F4B26F  pushw (0x345c)
 	m_push MW16, BStore_CursorOffset	; F4B273  pushw (0x345e)
 	ld	bc, (13860:16)	; F4B277  ld BC,(0x3624)
@@ -105405,7 +105462,7 @@ sub_F4B26F:
 	ret	; F4B294  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4B295
+; CycleRecord_CountBeatsToCycleEndFromBeatsPerBar
 ; Called from: in-module: 0xF4B262
 ; Touches: (0x3624) (0x36F4)
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -105414,7 +105471,10 @@ sub_F4B26F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4B295:
+; CycleRecord_CountBeatsToCycleEndFromBeatsPerBar: (0x36F4) := ((0x3624) + 1) x TransportA_BeatsPerBar, the beats from
+;   the song start to the cycle end at one fixed meter. The MASTER-off arm of CycleRecord_CountBeatsToCycleEnd. Basis:
+;   caller + caller header + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+CycleRecord_CountBeatsToCycleEndFromBeatsPerBar:
 	xor	xwa, xwa	; F4B295  xor XWA,XWA
 	ld	wa, (13860:16)	; F4B297  ld WA,(0x3624)
 	inc	1, wa	; F4B29B  inc 1,WA
@@ -105677,7 +105737,7 @@ sub_F4B433_Return:
 ; Called from: in-module: 0xF4AA16 0xF4AAC0 0xF4B32E
 ; Touches: (0x0C57) (0x0C59) (0x0C5D) (0x0C61) (0x0C63) (0x0C67) (0x0C6B)
 ;          (0x0C96) (0x0C98) (0x0C9A) +4 more
-; Calls:   BStore_SetCursorBlockAddr T_BStore_CopyAcrossBlocks sub_F4B726 sub_F4B69F
+; Calls:   BStore_SetCursorBlockAddr T_BStore_CopyAcrossBlocks CycleRecord_StepCopySrcToNextBlock CycleRecord_StepCopyDestToNextBlockOrAlloc
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4B462 is an instruction boundary.
 ;           The name IS the address.
@@ -105686,8 +105746,8 @@ sub_F4B433_Return:
 ; --------------------------------------------------------------------------
 ; CycleRecord_CopyRangeIntoGrowingChain: Forward copy of chain bytes from block (0x0C61) / offset (0x0C67) through
 ;   block DE / offset (0x0C6B) to block (0x0C57) / offset (0x0C5D) (T_BStore_CopyAcrossBlocks); the source follows its
-;   +3 links (sub_F4B726, error 11 on a free block), the destination too but at a chain end allocates and links a new
-;   block (sub_F4B69F). sub_F62DC9 (BStore_CopyRangeForward_Call) is the same copy without the allocation. Basis:
+;   +3 links (CycleRecord_StepCopySrcToNextBlock, error 11 on a free block), the destination too but at a chain end allocates and links a new
+;   block (CycleRecord_StepCopyDestToNextBlockOrAlloc). sub_F62DC9 (BStore_CopyRangeForward_Call) is the same copy without the allocation. Basis:
 ;   callers + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave7_w.json)
 CycleRecord_CopyRangeIntoGrowingChain:
 	ld	(BStore_ErrorCode:16), 0	; F4B462  ld (0x0d4a),0x00
@@ -105740,7 +105800,7 @@ sub_F4B462_Join:
 	ldw	bc, 256	; F4B4ED  ld BC,0x0100
 	m_sub_rm MW16, 0x0c67, 1	; F4B4F0  sub BC,(0x0c67)
 	call	T_BStore_CopyAcrossBlocks	; F4B4F4  call 0xf427c0
-	call	sub_F4B726	; F4B4F8  call 0xf4b726
+	call	CycleRecord_StepCopySrcToNextBlock	; F4B4F8  call 0xf4b726
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B4FC  cp (0x0d4a),0x00
 	jr	z, sub_F4B462_Loop	; F4B501  jr Z,0xf4b506
 	jrl	sub_F4B462_Return	; F4B503  jrl T,0xf4b69e
@@ -105751,14 +105811,14 @@ sub_F4B462_Loop:
 sub_F4B462_Skip5:
 	ld	bc, (3222:16)	; F4B50E  ld BC,(0x0c96)
 	call	T_BStore_CopyAcrossBlocks	; F4B512  call 0xf427c0
-	call	sub_F4B69F	; F4B516  call 0xf4b69f
+	call	CycleRecord_StepCopyDestToNextBlockOrAlloc	; F4B516  call 0xf4b69f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B51A  cp (0x0d4a),0x00
 	jr	z, sub_F4B462_Skip6	; F4B51F  jr Z,0xf4b524
 	jrl	sub_F4B462_Return	; F4B521  jrl T,0xf4b69e
 sub_F4B462_Skip6:
 	ld	bc, (3224:16)	; F4B524  ld BC,(0x0c98)
 	call	T_BStore_CopyAcrossBlocks	; F4B528  call 0xf427c0
-	call	sub_F4B726	; F4B52C  call 0xf4b726
+	call	CycleRecord_StepCopySrcToNextBlock	; F4B52C  call 0xf4b726
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B530  cp (0x0d4a),0x00
 	jr	z, sub_F4B462_Loop	; F4B535  jr Z,0xf4b506
 	jrl	sub_F4B462_Return	; F4B537  jrl T,0xf4b69e
@@ -105775,12 +105835,12 @@ sub_F4B462_Join3:
 	ld	iy, (3175:16)	; F4B557  ld IY,(0x0c67)
 	ld	ix, (3165:16)	; F4B55B  ld IX,(0x0c5d)
 	call	T_BStore_CopyAcrossBlocks	; F4B55F  call 0xf427c0
-	call	sub_F4B726	; F4B563  call 0xf4b726
+	call	CycleRecord_StepCopySrcToNextBlock	; F4B563  call 0xf4b726
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B567  cp (0x0d4a),0x00
 	jr	z, sub_F4B462_Skip7	; F4B56C  jr Z,0xf4b571
 	jrl	sub_F4B462_Return	; F4B56E  jrl T,0xf4b69e
 sub_F4B462_Skip7:
-	call	sub_F4B69F	; F4B571  call 0xf4b69f
+	call	CycleRecord_StepCopyDestToNextBlockOrAlloc	; F4B571  call 0xf4b69f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B575  cp (0x0d4a),0x00
 	jr	z, sub_F4B462_Loop2	; F4B57A  jr Z,0xf4b57f
 	jrl	sub_F4B462_Return	; F4B57C  jrl T,0xf4b69e
@@ -105792,12 +105852,12 @@ sub_F4B462_Skip8:
 	ldw	bc, 256	; F4B587  ld BC,0x0100
 	sub	bc, 5	; F4B58A  sub BC,0x0005
 	call	T_BStore_CopyAcrossBlocks	; F4B58E  call 0xf427c0
-	call	sub_F4B726	; F4B592  call 0xf4b726
+	call	CycleRecord_StepCopySrcToNextBlock	; F4B592  call 0xf4b726
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B596  cp (0x0d4a),0x00
 	jr	z, sub_F4B462_Skip9	; F4B59B  jr Z,0xf4b5a0
 	jrl	sub_F4B462_Return	; F4B59D  jrl T,0xf4b69e
 sub_F4B462_Skip9:
-	call	sub_F4B69F	; F4B5A0  call 0xf4b69f
+	call	CycleRecord_StepCopyDestToNextBlockOrAlloc	; F4B5A0  call 0xf4b69f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B5A4  cp (0x0d4a),0x00
 	jr	z, sub_F4B462_Loop2	; F4B5A9  jr Z,0xf4b57f
 	jrl	sub_F4B462_Return	; F4B5AB  jrl T,0xf4b69e
@@ -105823,14 +105883,14 @@ sub_F4B462_Join5:
 	ldw	bc, 256	; F4B5E9  ld BC,0x0100
 	m_sub_rm MW16, 0x0c5d, 1	; F4B5EC  sub BC,(0x0c5d)
 	call	T_BStore_CopyAcrossBlocks	; F4B5F0  call 0xf427c0
-	call	sub_F4B69F	; F4B5F4  call 0xf4b69f
+	call	CycleRecord_StepCopyDestToNextBlockOrAlloc	; F4B5F4  call 0xf4b69f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B5F8  cp (0x0d4a),0x00
 	jr	z, sub_F4B462_Skip10	; F4B5FD  jr Z,0xf4b602
 	jrl	sub_F4B462_Return	; F4B5FF  jrl T,0xf4b69e
 sub_F4B462_Skip10:
 	ld	bc, (3222:16)	; F4B602  ld BC,(0x0c96)
 	call	T_BStore_CopyAcrossBlocks	; F4B606  call 0xf427c0
-	call	sub_F4B726	; F4B60A  call 0xf4b726
+	call	CycleRecord_StepCopySrcToNextBlock	; F4B60A  call 0xf4b726
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B60E  cp (0x0d4a),0x00
 	jr	z, sub_F4B462_Loop3	; F4B613  jr Z,0xf4b618
 	jrl	sub_F4B462_Return	; F4B615  jrl T,0xf4b69e
@@ -105841,14 +105901,14 @@ sub_F4B462_Loop3:
 sub_F4B462_Skip11:
 	ld	bc, (3224:16)	; F4B620  ld BC,(0x0c98)
 	call	T_BStore_CopyAcrossBlocks	; F4B624  call 0xf427c0
-	call	sub_F4B69F	; F4B628  call 0xf4b69f
+	call	CycleRecord_StepCopyDestToNextBlockOrAlloc	; F4B628  call 0xf4b69f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B62C  cp (0x0d4a),0x00
 	jr	z, sub_F4B462_Skip12	; F4B631  jr Z,0xf4b636
 	jrl	sub_F4B462_Return	; F4B633  jrl T,0xf4b69e
 sub_F4B462_Skip12:
 	ld	bc, (3222:16)	; F4B636  ld BC,(0x0c96)
 	call	T_BStore_CopyAcrossBlocks	; F4B63A  call 0xf427c0
-	call	sub_F4B726	; F4B63E  call 0xf4b726
+	call	CycleRecord_StepCopySrcToNextBlock	; F4B63E  call 0xf4b726
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B642  cp (0x0d4a),0x00
 	jr	z, sub_F4B462_Loop3	; F4B647  jr Z,0xf4b618
 	jr	sub_F4B462_Return	; F4B649  jr T,0xf4b69e
@@ -105873,7 +105933,7 @@ sub_F4B462_Skip13:
 sub_F4B462_Join8:
 	ld	bc, (3228:16)	; F4B67D  ld BC,(0x0c9c)
 	call	T_BStore_CopyAcrossBlocks	; F4B681  call 0xf427c0
-	call	sub_F4B69F	; F4B685  call 0xf4b69f
+	call	CycleRecord_StepCopyDestToNextBlockOrAlloc	; F4B685  call 0xf4b69f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4B689  cp (0x0d4a),0x00
 	jr	z, sub_F4B462_Skip14	; F4B68E  jr Z,0xf4b692
 	jr	sub_F4B462_Return	; F4B690  jr T,0xf4b69e
@@ -105885,7 +105945,7 @@ sub_F4B462_Return:
 	ret	; F4B69E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4B69F
+; CycleRecord_StepCopyDestToNextBlockOrAlloc
 ; Called from: in-module: 0xF4B516 0xF4B571 0xF4B5A0 0xF4B5F4 0xF4B628
 ;              0xF4B685
 ; Touches: (0x0C57) (0x0C59) (0x0D4A) (0x126E) (0x3604) (0x373E)
@@ -105896,7 +105956,11 @@ sub_F4B462_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4B69F:
+; CycleRecord_StepCopyDestToNextBlockOrAlloc: Moves the copy destination (BStore_CopyDestAddr, block (0x0C57)) to its
+;   +3 next block; at the chain end (0xFFFF) allocates one (none free / not in use -> error 11), marks it in use,
+;   links it (+1 = old block, old +3 = new, +3 = 0xFFFF); IX = 5. CycleRecord_CopyRangeIntoGrowingChain's destination
+;   step. Basis: caller + caller header + body. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+CycleRecord_StepCopyDestToNextBlockOrAlloc:
 	xor	xix, xix	; F4B69F  xor XIX,XIX
 	ld	wa, (3159:16)	; F4B6A1  ld WA,(0x0c57)
 	ld	(14142:16), wa	; F4B6A5  ld (0x373e),WA
@@ -105947,7 +106011,7 @@ sub_F4B69F_Return:
 	ret	; F4B725  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4B726
+; CycleRecord_StepCopySrcToNextBlock
 ; Called from: in-module: 0xF4B4F8 0xF4B52C 0xF4B563 0xF4B592 0xF4B60A
 ;              0xF4B63E
 ; Touches: (0x0C61) (0x0C63) (0x0CA6) (0x0D4A) (0x126E) (0x3604)
@@ -105957,7 +106021,11 @@ sub_F4B69F_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4B726:
+; CycleRecord_StepCopySrcToNextBlock: Moves the copy source (BStore_CopySrcAddr) to its +3 next block ((0x0C61) := its
+;   number, (0x126E) := its address; not in use -> error 11), IY = 5. CycleRecord_CopyRangeIntoGrowingChain's source
+;   step; an exact copy of the BStore copy's source step CycleRecord_StepCopySrcToNextBlock_Copy. Basis: caller + caller header + body + twin.
+;   (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+CycleRecord_StepCopySrcToNextBlock:
 	xor	iy, iy	; F4B726  xor IY,IY
 	ld	xiy, (BStore_CopySrcAddr:16)	; F4B728  ld XIY,(0x0c63)
 	ld	(BStore_GeomBase:16), xiy	; F4B72C  ld (0x0ca6),XIY
@@ -111938,7 +112006,7 @@ SysExTx_StagedParamHandlers:
 
 ; --------------------------------------------------------------------------
 ; ParamFieldInit_x32_F4FE38 -- 6 records of 4 bytes {parameter number, field
-;   offset, value, mask}.  Read by prom_a sub_FB558F (0xFB558F, called from
+;   offset, value, mask}.  Read by prom_a GmReset_FieldTablesAndEffectAlgorithms (0xFB558F, called from
 ;   0xFB58FF): each record is copied to a local and handed to prom_a
 ;   IndexedTable_MergeMaskedByte THIRTY-TWO times, the parameter number incremented each time
 ;   (`ld H,0x20` / `incm8 1,(XIZ-4)`).  IndexedTable_MergeMaskedByte looks the parameter number up
@@ -111959,7 +112027,7 @@ ParamFieldInit_x32_F4FE38:
 
 ; --------------------------------------------------------------------------
 ; ParamFieldInit_F4FE50 -- 6 records of the same shape, applied ONCE each by
-;   the second loop of prom_a sub_FB558F (`ld H,0x06`, one IndexedTable_MergeMaskedByte call per
+;   the second loop of prom_a GmReset_FieldTablesAndEffectAlgorithms (`ld H,0x06`, one IndexedTable_MergeMaskedByte call per
 ;   record).  Two rows write the same field of parameter 0x79 through the two
 ;   nibble masks 0x0F and 0xF0.
 ; --------------------------------------------------------------------------
@@ -112004,7 +112072,7 @@ SysExRxClass_ByResult:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x03, 0x03, 0x02, 0x02, 0x00	; F4FE82  [0..15]
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F4FE92  [16..31]
 	.byte	0x00, 0x00	; F4FEA2  [32..33]
-; ZeroBlock16_F4FEA4 -- 16 zero bytes, an initializer: prom_a sub_FB8117
+; ZeroBlock16_F4FEA4 -- 16 zero bytes, an initializer: prom_a SysExXfer_ClearJobRecords
 ;   copies them (`ldirw`, 8 words) to 0x60FCE8 and then copies that on to
 ;   0x60FCF8 and 0x60FD08.
 ZeroBlock16_F4FEA4:
@@ -135969,7 +136037,7 @@ sub_F5E01D_Skip4:
 ; Called from: in-module: 0xF5DD61 0xF62003 0xF620AA
 ; Touches: (0x0D0A) (0x0D14) (0x0D20) (0x0D21) (0x0D22) (0x0D24) (0x0D28)
 ;          (0x0D2A) (0x0D4A) (0x126E)
-; Calls:   T_BStore_CursorAdvance sub_F5E370 sub_F5E1A1 sub_F5E306
+; Calls:   T_BStore_CursorAdvance SongEdit_SortBeatAdvanceScan SongEdit_SortBeatMoveEventToAnchor SongEdit_SortBeatAdvanceAnchor
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5E0BD is an instruction boundary.
 ;           The name IS the address.
@@ -135977,8 +136045,8 @@ sub_F5E01D_Skip4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SongEdit_SortBeatEventsByTiming: Sorts the events of one beat, from (0x0D14)/(0x0D0A) to the next 0x81 / 0x82, into
-;   ascending timing-byte order: for each anchor event (0x0D22)/(0x0D24) it scans the later ones (sub_F5E370) and
-;   moves any with a smaller timing in front of the anchor (sub_F5E1A1: data bytes buffered at 0x0D36,
+;   ascending timing-byte order: for each anchor event (0x0D22)/(0x0D24) it scans the later ones (SongEdit_SortBeatAdvanceScan) and
+;   moves any with a smaller timing in front of the anchor (SongEdit_SortBeatMoveEventToAnchor: data bytes buffered at 0x0D36,
 ;   T_BStore_CopyRangeBackward opens the gap). Run after QUANTIZE and ADVANCE/DELAY rewrite timings. Basis: callers +
 ;   body. (notes/naming-pilot-2026-10-06/proposals_wave7_w.json)
 SongEdit_SortBeatEventsByTiming:
@@ -136004,7 +136072,7 @@ sub_F5E0BD_Skip2:
 	ld	xwa, (BStore_CursorBlockAddr:16)	; F5E0FE  ld XWA,(0x126e)
 	ld	(3370:16), xwa	; F5E102  ld (0x0d2a),XWA
 	pop	xwa	; F5E106  pop XWA
-	calr	sub_F5E370	; F5E107  calr 0xf5e370
+	calr	SongEdit_SortBeatAdvanceScan	; F5E107  calr 0xf5e370
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E10A  cp (0x0d4a),0x00
 	jr	z, sub_F5E0BD_Skip3	; F5E10F  jr Z,0xf5e114
 	jrl	sub_F5E0BD_Return	; F5E111  jrl T,0xf5e1a0
@@ -136017,13 +136085,13 @@ sub_F5E0BD_Loop:
 	ld	a, (3361:16)	; F5E126  ld A,(0x0d21)
 	cp	(3360:16), a	; F5E12A  cp (0x0d20),A
 	jr	ule, sub_F5E0BD_Skip4	; F5E12E  jr ULE,0xf5e142
-	calr	sub_F5E1A1	; F5E130  calr 0xf5e1a1
+	calr	SongEdit_SortBeatMoveEventToAnchor	; F5E130  calr 0xf5e1a1
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E133  cp (0x0d4a),0x00
 	jr	nz, sub_F5E0BD_Return	; F5E138  jr NZ,0xf5e1a0
 	ld	a, (3361:16)	; F5E13A  ld A,(0x0d21)
 	ld	(3360:16), a	; F5E13E  ld (0x0d20),A
 sub_F5E0BD_Skip4:
-	calr	sub_F5E370	; F5E142  calr 0xf5e370
+	calr	SongEdit_SortBeatAdvanceScan	; F5E142  calr 0xf5e370
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E145  cp (0x0d4a),0x00
 	jr	nz, sub_F5E0BD_Return	; F5E14A  jr NZ,0xf5e1a0
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82	; F5E14C  cp (XHL+IY),0x82
@@ -136032,7 +136100,7 @@ sub_F5E0BD_Skip4:
 	jr	z, sub_F5E0BD_Skip5	; F5E15A  jr Z,0xf5e15e
 	jr	sub_F5E0BD_Loop	; F5E15C  jr T,0xf5e126
 sub_F5E0BD_Skip5:
-	calr	sub_F5E306	; F5E15E  calr 0xf5e306
+	calr	SongEdit_SortBeatAdvanceAnchor	; F5E15E  calr 0xf5e306
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E161  cp (0x0d4a),0x00
 	jr	nz, sub_F5E0BD_Return	; F5E166  jr NZ,0xf5e1a0
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82	; F5E168  cp (XHL+IY),0x82
@@ -136044,7 +136112,7 @@ sub_F5E0BD_Skip5:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E17D  ld XHL,(0x126e)
 	ld	(3370:16), xhl	; F5E181  ld (0x0d2a),XHL
 	pop	xhl	; F5E185  pop XHL
-	calr	sub_F5E370	; F5E186  calr 0xf5e370
+	calr	SongEdit_SortBeatAdvanceScan	; F5E186  calr 0xf5e370
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E189  cp (0x0d4a),0x00
 	jr	nz, sub_F5E0BD_Return	; F5E18E  jr NZ,0xf5e1a0
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82	; F5E190  cp (XHL+IY),0x82
@@ -136055,7 +136123,7 @@ sub_F5E0BD_Return:
 	ret	; F5E1A0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5E1A1
+; SongEdit_SortBeatMoveEventToAnchor
 ; Called from: in-module: 0xF5E130
 ; Touches: (0x0C57) (0x0C59) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0D21)
 ;          (0x0D22) (0x0D24) (0x0D28) +6 more  |  0x000D36
@@ -136066,7 +136134,12 @@ sub_F5E0BD_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5E1A1:
+; SongEdit_SortBeatMoveEventToAnchor: Moves the scanned event ((0x0D28)/(0x0D2A): status (0x0D34), timing (0x0D21),
+;   data bytes buffered at 0x0D36) in front of the anchor event ((0x0D22)/(0x0D24)): T_BStore_CopyRangeBackward shifts
+;   anchor..scan up by the event's length, then the event is written at the anchor. SongEdit_SortBeatEventsByTiming's
+;   move step when the scanned timing is smaller. Basis: caller + caller header + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_a8.json)
+SongEdit_SortBeatMoveEventToAnchor:
 	ld	xix, 3382	; F5E1A1  ld XIX,0x00000d36
 	call	T_BStore_CursorAdvance	; F5E1A6  call 0xf4279c
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E1AA  cp (0x0d4a),0x00
@@ -136213,7 +136286,7 @@ BStore_CursorBlockAddrToNumber:
 	ret	; F5E305  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5E306
+; SongEdit_SortBeatAdvanceAnchor
 ; Called from: in-module: 0xF5E15E
 ; Touches: (0x0D20) (0x0D22) (0x0D24) (0x0D4A) (0x126E)
 ; Calls:   T_BStore_CursorAdvance
@@ -136223,7 +136296,11 @@ BStore_CursorBlockAddrToNumber:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5E306:
+; SongEdit_SortBeatAdvanceAnchor: Moves the sort anchor ((0x0D22) offset / (0x0D24) block) past its event to the next
+;   lead byte; on an event (not 0x81 / 0x82) stores the new anchor and (0x0D20) := its timing byte, at a mark leaves
+;   the anchor. SongEdit_SortBeatEventsByTiming's step once a scan pass reaches the beat's end. Basis: caller + caller
+;   header + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+SongEdit_SortBeatAdvanceAnchor:
 	ld	iy, (3362:16)	; F5E306  ld IY,(0x0d22)
 	push	xhl	; F5E30A  push XHL
 	ld	xhl, (3364:16)	; F5E30B  ld XHL,(0x0d24)
@@ -136261,7 +136338,7 @@ sub_F5E306_Return:
 	ret	; F5E36F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5E370
+; SongEdit_SortBeatAdvanceScan
 ; Called from: in-module: 0xF5E107 0xF5E142 0xF5E186
 ; Touches: (0x0D21) (0x0D28) (0x0D2A) (0x0D4A) (0x126E)
 ; Calls:   T_BStore_CursorAdvance
@@ -136271,7 +136348,11 @@ sub_F5E306_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5E370:
+; SongEdit_SortBeatAdvanceScan: Moves the sort scan position ((0x0D28) offset / (0x0D2A) block) past its event to the
+;   next lead byte; on an event (not 0x81 / 0x82) stores the new position and (0x0D21) := its timing byte, at a mark
+;   leaves it. SongEdit_SortBeatEventsByTiming's scan over the later events of the beat. Basis: caller + caller header
+;   + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+SongEdit_SortBeatAdvanceScan:
 	ld	iy, (3368:16)	; F5E370  ld IY,(0x0d28)
 	push	xhl	; F5E374  push XHL
 	ld	xhl, (3370:16)	; F5E375  ld XHL,(0x0d2a)
@@ -142726,7 +142807,7 @@ sub_F62089_Return:
 ; Called from: in-module: 0xF61B54
 ; Touches: (0x0C8A) (0x0D0A) (0x0D14) (0x0D4A) (0x0DEC) (0x0E1A) (0x0E1B)
 ;          (0x0E1F) (0x126E)
-; Calls:   T_BStore_CursorAdvance sub_F62201
+; Calls:   T_BStore_CursorAdvance AdvanceDelay_EnsureBeatMarkBeforeEndTag
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF620AF is an instruction boundary.
 ;           The name IS the address.
@@ -142736,7 +142817,7 @@ sub_F62089_Return:
 ; AdvanceDelay_ClampTimingsAtTrackEnd: AdvanceDelay_ApplyToTrack's step at the 0x82 track end: nothing for an advance
 ;   (offset (0x0DEC) negative); for a delay that pushed a timing out of 0..0x5F ((0x0C8A) bit 0) walks the last beat's
 ;   events from (0x0D14)/(0x0D0A) and clamps each timing above 0x5F to 0x5F (first clamped position kept in
-;   (0x0E1A)/(0x0E1F), (0x0E1B) bit 0); then sub_F62201 writes 0x81 before the 0x82 when the byte before is not 0x81.
+;   (0x0E1A)/(0x0E1F), (0x0E1B) bit 0); then AdvanceDelay_EnsureBeatMarkBeforeEndTag writes 0x81 before the 0x82 when the byte before is not 0x81.
 ;   Basis: caller + caller header + body. (notes/naming-pilot-2026-10-06/proposals_wave7_w.json)
 AdvanceDelay_ClampTimingsAtTrackEnd:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F620AF  ld XHL,(0x126e)
@@ -142848,7 +142929,7 @@ sub_F620AF_Skip5:
 sub_F620AF_Skip6:
 	jr	sub_F620AF_Join3	; F621AC  jr T,0xf621b1
 sub_F620AF_Skip7:
-	calr	sub_F62201	; F621AE  calr 0xf62201
+	calr	AdvanceDelay_EnsureBeatMarkBeforeEndTag	; F621AE  calr 0xf62201
 sub_F620AF_Join3:
 	popw	de	; F621B1  pop DE
 	popw	bc	; F621B2  pop BC
@@ -142935,7 +143016,7 @@ RoundMap_Bounds_B:
 
 
 ; --------------------------------------------------------------------------
-; sub_F62201
+; AdvanceDelay_EnsureBeatMarkBeforeEndTag
 ; Called from: in-module: 0xF621AE
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F622AA sub_F6220D
@@ -142946,7 +143027,12 @@ RoundMap_Bounds_B:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F62201:
+; AdvanceDelay_EnsureBeatMarkBeforeEndTag: At the track's 0x82 end tag: unless the byte before it is already a 0x81
+;   (sub_F622AA reads it, following the +1 link at offset 5), sub_F6220D writes 0x81 over the 0x82 and a new 0x82
+;   after it (allocating and linking a block at offset 0xFF) and moves track (0x0C8E)'s end cursor onto it.
+;   AdvanceDelay_ClampTimingsAtTrackEnd's last step. Basis: caller + caller header + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_a8.json)
+AdvanceDelay_EnsureBeatMarkBeforeEndTag:
 	calr	sub_F622AA	; F62201  calr 0xf622aa
 	cp	a, 129	; F62204  cp A,0x81
 	jr	z, sub_F62201_Return	; F62207  jr Z,0xf6220c
@@ -143550,7 +143636,7 @@ sub_F62DC9_Join:
 	ldw	bc, 256	; F62E54  ld BC,0x0100
 	m_sub_rm MW16, 0x0c67, 1	; F62E57  sub BC,(0x0c67)
 	calr	BStore_CopyAcrossBlocks	; F62E5B  calr 0xf63bc0
-	call	sub_F63031	; F62E5E  call 0xf63031
+	call	CycleRecord_StepCopySrcToNextBlock_Copy	; F62E5E  call 0xf63031
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F62E62  cp (0x0d4a),0x00
 	jr	z, sub_F62DC9_Loop	; F62E67  jr Z,0xf62e6c
 	jrl	sub_F62DC9_Return	; F62E69  jrl T,0xf62ff9
@@ -143568,7 +143654,7 @@ sub_F62DC9_Skip5:
 sub_F62DC9_Skip6:
 	ld	bc, (3224:16)	; F62E89  ld BC,(0x0c98)
 	calr	BStore_CopyAcrossBlocks	; F62E8D  calr 0xf63bc0
-	call	sub_F63031	; F62E90  call 0xf63031
+	call	CycleRecord_StepCopySrcToNextBlock_Copy	; F62E90  call 0xf63031
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F62E94  cp (0x0d4a),0x00
 	jr	z, sub_F62DC9_Loop	; F62E99  jr Z,0xf62e6c
 	jrl	sub_F62DC9_Return	; F62E9B  jrl T,0xf62ff9
@@ -143585,7 +143671,7 @@ sub_F62DC9_Join3:
 	ld	iy, (3175:16)	; F62EBB  ld IY,(0x0c67)
 	ld	ix, (3165:16)	; F62EBF  ld IX,(0x0c5d)
 	calr	BStore_CopyAcrossBlocks	; F62EC3  calr 0xf63bc0
-	call	sub_F63031	; F62EC6  call 0xf63031
+	call	CycleRecord_StepCopySrcToNextBlock_Copy	; F62EC6  call 0xf63031
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F62ECA  cp (0x0d4a),0x00
 	jr	z, sub_F62DC9_Skip7	; F62ECF  jr Z,0xf62ed4
 	jrl	sub_F62DC9_Return	; F62ED1  jrl T,0xf62ff9
@@ -143602,7 +143688,7 @@ sub_F62DC9_Skip8:
 	ldw	bc, 256	; F62EEA  ld BC,0x0100
 	sub	bc, 5	; F62EED  sub BC,0x0005
 	calr	BStore_CopyAcrossBlocks	; F62EF1  calr 0xf63bc0
-	call	sub_F63031	; F62EF4  call 0xf63031
+	call	CycleRecord_StepCopySrcToNextBlock_Copy	; F62EF4  call 0xf63031
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F62EF8  cp (0x0d4a),0x00
 	jr	z, sub_F62DC9_Skip9	; F62EFD  jr Z,0xf62f02
 	jrl	sub_F62DC9_Return	; F62EFF  jrl T,0xf62ff9
@@ -143640,7 +143726,7 @@ sub_F62DC9_Join5:
 sub_F62DC9_Skip10:
 	ld	bc, (3222:16)	; F62F63  ld BC,(0x0c96)
 	calr	BStore_CopyAcrossBlocks	; F62F67  calr 0xf63bc0
-	call	sub_F63031	; F62F6A  call 0xf63031
+	call	CycleRecord_StepCopySrcToNextBlock_Copy	; F62F6A  call 0xf63031
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F62F6E  cp (0x0d4a),0x00
 	jr	z, sub_F62DC9_Loop3	; F62F73  jr Z,0xf62f78
 	jrl	sub_F62DC9_Return	; F62F75  jrl T,0xf62ff9
@@ -143658,7 +143744,7 @@ sub_F62DC9_Skip11:
 sub_F62DC9_Skip12:
 	ld	bc, (3222:16)	; F62F95  ld BC,(0x0c96)
 	calr	BStore_CopyAcrossBlocks	; F62F99  calr 0xf63bc0
-	call	sub_F63031	; F62F9C  call 0xf63031
+	call	CycleRecord_StepCopySrcToNextBlock_Copy	; F62F9C  call 0xf63031
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F62FA0  cp (0x0d4a),0x00
 	jr	z, sub_F62DC9_Loop3	; F62FA5  jr Z,0xf62f78
 	jr	sub_F62DC9_Return	; F62FA7  jr T,0xf62ff9
@@ -143714,7 +143800,9 @@ sub_F62FFA_Skip:
 	ldw	ix, 5	; F6302D  ld IX,0x0005
 sub_F62FFA_Return:
 	ret	; F63030  ret
-sub_F63031:
+; CycleRecord_StepCopySrcToNextBlock_Copy: an exact copy of CycleRecord_StepCopySrcToNextBlock (prom_b 0xF4B726) -- all 20 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+CycleRecord_StepCopySrcToNextBlock_Copy:
 	xor	iy, iy	; F63031  xor IY,IY
 	ld	xiy, (BStore_CopySrcAddr:16)	; F63033  ld XIY,(0x0c63)
 	ld	(BStore_GeomBase:16), xiy	; F63037  ld (0x0ca6),XIY
@@ -149887,13 +149975,13 @@ StepRecord_CursorForward_Veneer:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; StepRecord_ShortenMeasures_Veneer: `jp sub_F6929C`, the re-bar used when a meter change SHORTENS measures (new beats
+; StepRecord_ShortenMeasures_Veneer: `jp StepRecord_ShortenMeasures`, the re-bar used when a meter change SHORTENS measures (new beats
 ;   (0x0F52) < old (0x0F53)): from the cursor, per old measure deletes (0x0F53)-(0x0F52) 0x81 beat marks (sub_F68E48:
 ;   delete 1 byte) then skips (0x0F52), until a 0x87 record, 0x84 or the end (cursor restored, slot 1). StepRecord_LengthenMeasures is
-;   the lengthening twin; sub_F6929C can take the name without the suffix. Basis: callers + body (target read).
+;   the lengthening twin; StepRecord_ShortenMeasures can take the name without the suffix. Basis: callers + body (target read).
 ;   (notes/naming-pilot-2026-10-06/proposals_wave7_x.json)
 StepRecord_ShortenMeasures_Veneer:
-	jp	sub_F6929C	; F67414  jp 0xf6929c
+	jp	StepRecord_ShortenMeasures	; F67414  jp 0xf6929c
 
 ; --------------------------------------------------------------------------
 ; sub_F67418
@@ -153623,8 +153711,8 @@ sub_F68B70_Skip:
 ; Called from: in-module: 0xF68B56 0xF68B67 0xF68B77 0xF68B88
 ; Touches: (0x0E44) (0x0E4E) (0x0E53) (0x0E56) (0x0E58) (0x0EC0) (0x0EC2)
 ;          (0x0ECD) (0x12B2)
-; Calls:   StepRecord_AppendLatchedParamEvents StepRecord_SaveCursorToSlot sub_F68DBE sub_F6B770 StepRecord_PostSysEx50_87FromW BStore_ReadByteAtSongPosition
-;          sub_F68D9D StepRecord_LoadMeasureBeat BStore_ReadByteAtSongPositionPlus1 StepRecord_RestoreCursorFromSlot StepRecord_ReturnToTrackKindPage sub_F68D8A
+; Calls:   StepRecord_AppendLatchedParamEvents StepRecord_SaveCursorToSlot StepRecord_ReadEventTickAtCursor TrackCursor_StepBackKeepBeatPosition StepRecord_PostSysEx50_87FromW BStore_ReadByteAtSongPosition
+;          StepRecord_PrevGridTick StepRecord_LoadMeasureBeat BStore_ReadByteAtSongPositionPlus1 StepRecord_RestoreCursorFromSlot StepRecord_ReturnToTrackKindPage StepRecord_NextGridTick
 ;          +3 more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68B91 is an instruction
@@ -153633,9 +153721,9 @@ sub_F68B70_Skip:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; StepRecord_CursorStep: One CURSOR step of STEP RECORD, W = 0 forward / W = 1 back: first appends latched parameter
-;   events, then moves the tick (0x0E53) to the next/previous 12-tick grid point (sub_F68D8A / sub_F68D9D; 96 ticks
+;   events, then moves the tick (0x0E53) to the next/previous 12-tick grid point (StepRecord_NextGridTick / StepRecord_PrevGridTick; 96 ticks
 ;   per beat) or to the nearer event's tick, crossing a 0x81 beat mark with (0x0E56) +1/-1 and
-;   StepRecord_LoadMeasureBeat (forward past the track end it appends a beat mark, sub_F6B243); back at the chain
+;   StepRecord_LoadMeasureBeat (forward past the track end it appends a beat mark, StepRecord_AppendBeatMarkAtTrackEnd); back at the chain
 ;   start with tick 0 it posts message 0x68. StepRecord_CursorForward ('>') passes W = 0, StepRecord_CursorBack ('<') W = 1.
 ;   Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave7_x.json)
 StepRecord_CursorStep:
@@ -153645,7 +153733,7 @@ StepRecord_CursorStep:
 	m_push MW16, 0x12b2	; F68B99  pushw (0x12b2)
 	m_push MW16, 0x0e58	; F68B9D  pushw (0x0e58)
 	ld	(3778:16), 0	; F68BA1  ld (0x0ec2),0x00
-	calr	sub_F68DBE	; F68BA6  calr 0xf68dbe
+	calr	StepRecord_ReadEventTickAtCursor	; F68BA6  calr 0xf68dbe
 	ld	(3789:16), a	; F68BA9  ld (0x0ecd),A
 	ld	a, (3667:16)	; F68BAD  ld A,(0x0e53)
 	ld	(3776:16), a	; F68BB1  ld (0x0ec0),A
@@ -153655,7 +153743,7 @@ StepRecord_CursorStep:
 sub_F68B91_Skip:
 	m_cp_mi8 MB16, 0x0ec2, 0x00	; F68BBC  cp (0x0ec2),0x00
 	jr	nz, sub_F68B91_Join	; F68BC1  jr NZ,0xf68bf0
-	calr	sub_F6B770	; F68BC3  calr 0xf6b770
+	calr	TrackCursor_StepBackKeepBeatPosition	; F68BC3  calr 0xf6b770
 	cp	w, 255	; F68BC6  cp W,0xff
 	jr	nz, sub_F68B91_Skip3	; F68BC9  jr NZ,0xf68be4
 	m_cp_mi8 MB16, 0x0e53, 0x00	; F68BCB  cp (0x0e53),0x00
@@ -153673,7 +153761,7 @@ sub_F68B91_Skip3:
 	jr	nz, sub_F68B91_Join	; F68BEA  jr NZ,0xf68bf0
 	inc	1, (3778:16)	; F68BEC  inc 1,(0x0ec2)
 sub_F68B91_Join:
-	calr	sub_F68D9D	; F68BF0  calr 0xf68d9d
+	calr	StepRecord_PrevGridTick	; F68BF0  calr 0xf68d9d
 	m_cp_mi8 MB16, 0x0ec2, 0x00	; F68BF3  cp (0x0ec2),0x00
 	jr	z, sub_F68B91_Skip4	; F68BF8  jr Z,0xf68c04
 	m_cp_mi8 MB16, 0x0ec0, 0x00	; F68BFA  cp (0x0ec0),0x00
@@ -153684,7 +153772,7 @@ sub_F68B91_Skip4:
 	jr	nz, sub_F68B91_Skip5	; F68C09  jr NZ,0xf68c0e
 	jrl	sub_F68B91_Join6	; F68C0B  jrl T,0xf68d6d
 sub_F68B91_Skip5:
-	calr	sub_F68DBE	; F68C0E  calr 0xf68dbe
+	calr	StepRecord_ReadEventTickAtCursor	; F68C0E  calr 0xf68dbe
 	cp	e, a	; F68C11  cp E,A
 	jr	le, sub_F68B91_Skip6	; F68C13  jr LE,0xf68c18
 	jrl	sub_F68B91_Join4	; F68C15  jrl T,0xf68d4a
@@ -153700,7 +153788,7 @@ sub_F68B91_Skip7:
 	calr	StepRecord_SaveCursorToSlot	; F68C2C  calr 0xf6c292
 	m_push MW16, 0x12b2	; F68C2F  pushw (0x12b2)
 	m_push MW16, 0x0e58	; F68C33  pushw (0x0e58)
-	calr	sub_F6B770	; F68C37  calr 0xf6b770
+	calr	TrackCursor_StepBackKeepBeatPosition	; F68C37  calr 0xf6b770
 	calr	BStore_ReadByteAtSongPosition	; F68C3A  calr 0xf6b8bd
 	cp	a, 129	; F68C3D  cp A,0x81
 	jr	z, sub_F68B91_Skip8	; F68C40  jr Z,0xf68c56
@@ -153733,7 +153821,7 @@ sub_F68B91_Skip9:
 	ret	; F68C7B  ret
 sub_F68B91_Join2:
 	m_and_mi8 MB16, 0x0e4e, 0xfb	; F68C7C  and (0x0e4e),0xfb
-	calr	sub_F68D8A	; F68C81  calr 0xf68d8a
+	calr	StepRecord_NextGridTick	; F68C81  calr 0xf68d8a
 	m_cp_mi8 MB16, 0x0ecd, 0xff	; F68C84  cp (0x0ecd),0xff
 	jr	nz, sub_F68B91_Skip13	; F68C89  jr NZ,0xf68d01
 sub_F68B91_Join3:
@@ -153747,7 +153835,7 @@ sub_F68B91_Join3:
 	push	xix	; F68C9A  push XIX
 	push	xiy	; F68C9B  push XIY
 	push	xiz	; F68C9C  push XIZ
-	calr	sub_F6B75E	; F68C9D  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F68C9D  calr 0xf6b75e
 	ld	(3652:16), w	; F68CA0  ld (0x0e44),W
 	pop	xiz	; F68CA4  pop XIZ
 	pop	xiy	; F68CA5  pop XIY
@@ -153761,7 +153849,7 @@ sub_F68B91_Join3:
 	m_or_mi8 MB16, 0x0e4e, 0x04	; F68CB2  or (0x0e4e),0x04
 	m_cp_mi8 MB16, 0x0e44, 0xff	; F68CB7  cp (0x0e44),0xff
 	jr	nz, sub_F68B91_Skip10	; F68CBC  jr NZ,0xf68cc1
-	calr	sub_F6B243	; F68CBE  calr 0xf6b243
+	calr	StepRecord_AppendBeatMarkAtTrackEnd	; F68CBE  calr 0xf6b243
 sub_F68B91_Skip10:
 	ld	(3667:16), 0	; F68CC1  ld (0x0e53),0x00
 	incw	1, (3670:16)	; F68CC6  incw 1,(0x0e56)
@@ -153780,7 +153868,7 @@ sub_F68B91_Skip10:
 	pop	xbc	; F68CD8  pop XBC
 	pop	xhl	; F68CD9  pop XHL
 	pop	xwa	; F68CDA  pop XWA
-	calr	sub_F68DBE	; F68CDB  calr 0xf68dbe
+	calr	StepRecord_ReadEventTickAtCursor	; F68CDB  calr 0xf68dbe
 	cp	a, 0:i3	; F68CDE  cp A,0
 	jr	nz, sub_F68B91_Skip11	; F68CE0  jr NZ,0xf68cea
 	ld	(3667:16), a	; F68CE2  ld (0x0e53),A
@@ -153806,7 +153894,7 @@ sub_F68B91_Skip13:
 	push	xix	; F68D0F  push XIX
 	push	xiy	; F68D10  push XIY
 	push	xiz	; F68D11  push XIZ
-	calr	sub_F6B75E	; F68D12  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F68D12  calr 0xf6b75e
 	pop	xiz	; F68D15  pop XIZ
 	pop	xiy	; F68D16  pop XIY
 	pop	xix	; F68D17  pop XIX
@@ -153817,7 +153905,7 @@ sub_F68B91_Skip13:
 	calr	BStore_ReadByteAtSongPosition	; F68D1C  calr 0xf6b8bd
 	cp	a, 129	; F68D1F  cp A,0x81
 	jr	z, sub_F68B91_Skip16	; F68D22  jr Z,0xf68d47
-	calr	sub_F68DBE	; F68D24  calr 0xf68dbe
+	calr	StepRecord_ReadEventTickAtCursor	; F68D24  calr 0xf68dbe
 sub_F68B91_Skip14:
 	cp	e, a	; F68D27  cp E,A
 	jr	ge, sub_F68B91_Skip15	; F68D29  jr GE,0xf68d39
@@ -153856,7 +153944,7 @@ sub_F68B91_Join6:
 	ret	; F68D89  ret
 
 ; --------------------------------------------------------------------------
-; sub_F68D8A
+; StepRecord_NextGridTick
 ; Called from: in-module: 0xF68C81
 ; Touches: (0x0EC0)
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -153865,7 +153953,10 @@ sub_F68B91_Join6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F68D8A:
+; StepRecord_NextGridTick: E := the next 12-tick grid point above the tick saved in (0x0EC0): ((0x0EC0) / 12 + 1) x
+;   12, so 96 = the next beat. StepRecord_CursorStep's forward step. Basis: caller header + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_a8.json)
+StepRecord_NextGridTick:
 	pushw	wa	; F68D8A  push WA
 	ld	a, (3776:16)	; F68D8B  ld A,(0x0ec0)
 	xor	w, w	; F68D8F  xor W,W
@@ -153878,7 +153969,7 @@ sub_F68D8A:
 	ret	; F68D9C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F68D9D
+; StepRecord_PrevGridTick
 ; Called from: in-module: 0xF68BF0
 ; Touches: (0x0EC0)
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -153887,7 +153978,10 @@ sub_F68D8A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F68D9D:
+; StepRecord_PrevGridTick: E := the previous 12-tick grid point below the tick saved in (0x0EC0); from tick 0 it wraps
+;   to 84, the last grid point of the previous beat. StepRecord_CursorStep's backward step. Basis: caller header +
+;   body. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+StepRecord_PrevGridTick:
 	pushw	wa	; F68D9D  push WA
 	ld	a, (3776:16)	; F68D9E  ld A,(0x0ec0)
 	xor	w, w	; F68DA2  xor W,W
@@ -153909,7 +154003,7 @@ sub_F68D9D_Join:
 	ret	; F68DBD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F68DBE
+; StepRecord_ReadEventTickAtCursor
 ; Called from: in-module: 0xF68BA6 0xF68C0E 0xF68CDB 0xF68D24
 ; Touches: (0x0E4F) (0x0E63) (0x0ED5) (0x106D)
 ; Calls:   BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 StepRecord_CalcStepAndNoteLength sub_F6C43C StepLength_AddTo0E53 StepRecord_AppendBeatMarks
@@ -153921,7 +154015,11 @@ sub_F68D9D_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F68DBE:
+; StepRecord_ReadEventTickAtCursor: A := the tick (timing) byte of the event at the song position
+;   (BStore_ReadByteAtSongPositionPlus1), or 0xFF when the position holds a 0x81 beat mark; registers but A kept.
+;   StepRecord_CursorStep compares it with the 12-tick grid point to stop on the nearer of the two. Basis: caller +
+;   caller header + body. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+StepRecord_ReadEventTickAtCursor:
 	push	xwa	; F68DBE  push XWA
 	push	xhl	; F68DBF  push XHL
 	push	xbc	; F68DC0  push XBC
@@ -154125,7 +154223,7 @@ sub_F68EB5_Skip4:
 ; sub_F68F0A
 ; Called from: in-module: 0xF68E9D
 ; Touches: (0x0F02)
-; Calls:   BStore_ReadByteAtSongPositionPlus1 sub_F6B740 sub_F68F52 sub_F6B257
+; Calls:   BStore_ReadByteAtSongPositionPlus1 sub_F6B740 sub_F68F52 StepRecord_AppendBeatMark
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68F0A is an instruction
 ;           boundary.  The name IS the address.
@@ -154163,7 +154261,7 @@ sub_F68F0A_Skip3:
 	jr	sub_F68F0A_Join	; F68F41  jr T,0xf68f2a
 sub_F68F0A_Skip4:
 	ld	(3842:16), 1	; F68F43  ld (0x0f02),0x01
-	calr	sub_F6B257	; F68F48  calr 0xf6b257
+	calr	StepRecord_AppendBeatMark	; F68F48  calr 0xf6b257
 	xor	w, w	; F68F4B  xor W,W
 	calr	sub_F68F52	; F68F4D  calr 0xf68f52
 	jr	sub_F68F0A_Join	; F68F50  jr T,0xf68f2a
@@ -154297,7 +154395,7 @@ DispatchTable_F68FB4_Code_Loop:
 	pushw	bc	; F68FE8  push BC
 	xor	a, a	; F68FE9  xor A,A
 	calr	StepRecord_SaveCursorToSlot	; F68FEB  calr 0xf6c292
-	calr	sub_F6B75E	; F68FEE  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F68FEE  calr 0xf6b75e
 	cp	w, 255	; F68FF1  cp W,0xff
 	jr	z, DispatchTable_F68FB4_Code_Skip2	; F68FF4  jr Z,0xf69011
 	popw	bc	; F68FF6  pop BC
@@ -154526,7 +154624,7 @@ sub_F69116_Return:
 ; StepRecord_FindPrevTimeSigBeats
 ; Called from: in-module: 0xF69043 0xF69116
 ; Touches: (0x0F51)
-; Calls:   StepRecord_SaveCursorToSlot sub_F6B770 StepRecord_ReadTimeSigBeatsAtCursor StepRecord_RestoreCursorFromSlot
+; Calls:   StepRecord_SaveCursorToSlot TrackCursor_StepBackKeepBeatPosition StepRecord_ReadTimeSigBeatsAtCursor StepRecord_RestoreCursorFromSlot
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69162 is an instruction
 ;           boundary.  The name IS the address.
@@ -154534,14 +154632,14 @@ sub_F69116_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; StepRecord_FindPrevTimeSigBeats: (0x0F51) := the beats of the nearest 0x87 time-signature record BEFORE the step
-;   cursor -- steps back event by event (sub_F6B770) testing each with StepRecord_ReadTimeSigBeatsAtCursor -- or 4 when the chain start comes
+;   cursor -- steps back event by event (TrackCursor_StepBackKeepBeatPosition) testing each with StepRecord_ReadTimeSigBeatsAtCursor -- or 4 when the chain start comes
 ;   first; the cursor is restored (slot 3). StepRecord_EraseTimeSig uses it for the meter the erase falls back to.
 ;   Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave7_x.json)
 StepRecord_FindPrevTimeSigBeats:
 	ld	a, 3:opc	; F69162  ld A,0x03
 	calr	StepRecord_SaveCursorToSlot	; F69164  calr 0xf6c292
 sub_F69162_Loop:
-	calr	sub_F6B770	; F69167  calr 0xf6b770
+	calr	TrackCursor_StepBackKeepBeatPosition	; F69167  calr 0xf6b770
 	cp	w, 255	; F6916A  cp W,0xff
 	jr	z, sub_F69162_Skip	; F6916D  jr Z,0xf69178
 	calr	StepRecord_ReadTimeSigBeatsAtCursor	; F6916F  calr 0xf69203
@@ -154559,7 +154657,7 @@ sub_F69162_Join:
 ; StepRecord_FindTimeSigInCursorBeat
 ; Called from: in-module: 0xF690A4
 ; Touches: (0x0F51) (0x0F54)
-; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPosition sub_F6B75E sub_F6B770 StepRecord_ReadTimeSigBeatsAtCursor sub_F693F6
+; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPosition TrackCursor_StepForwardKeepBeatPosition TrackCursor_StepBackKeepBeatPosition StepRecord_ReadTimeSigBeatsAtCursor sub_F693F6
 ;          StepRecord_RestoreCursorFromSlot
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69183 is an instruction
@@ -154579,11 +154677,11 @@ sub_F69183_Loop:
 	calr	BStore_ReadByteAtSongPosition	; F69188  calr 0xf6b8bd
 	cp	a, 129	; F6918B  cp A,0x81
 	jr	z, sub_F69183_Loop2	; F6918E  jr Z,0xf69198
-	calr	sub_F6B75E	; F69190  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F69190  calr 0xf6b75e
 	cp	w, 255	; F69193  cp W,0xff
 	jr	nz, sub_F69183_Loop	; F69196  jr NZ,0xf69188
 sub_F69183_Loop2:
-	calr	sub_F6B770	; F69198  calr 0xf6b770
+	calr	TrackCursor_StepBackKeepBeatPosition	; F69198  calr 0xf6b770
 	cp	w, 255	; F6919B  cp W,0xff
 	jr	z, sub_F69183_Skip3	; F6919E  jr Z,0xf691fb
 	calr	BStore_ReadByteAtSongPosition	; F691A0  calr 0xf6b8bd
@@ -154597,7 +154695,7 @@ sub_F69183_Loop2:
 	ld	a, (3921:16)	; F691B4  ld A,(0x0f51)
 	ld	(3924:16), a	; F691B8  ld (0x0f54),A
 sub_F69183_Loop3:
-	calr	sub_F6B770	; F691BC  calr 0xf6b770
+	calr	TrackCursor_StepBackKeepBeatPosition	; F691BC  calr 0xf6b770
 	cp	w, 255	; F691BF  cp W,0xff
 	jr	z, sub_F69183_Skip	; F691C2  jr Z,0xf691e8
 	calr	BStore_ReadByteAtSongPosition	; F691C4  calr 0xf6b8bd
@@ -154609,7 +154707,7 @@ sub_F69183_Loop3:
 	calr	sub_F693F6	; F691D3  calr 0xf693f6
 	jr	sub_F69183_Loop3	; F691D6  jr T,0xf691bc
 sub_F69183_Loop4:
-	calr	sub_F6B75E	; F691D8  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F691D8  calr 0xf6b75e
 	cp	w, 255	; F691DB  cp W,0xff
 	jr	z, sub_F69183_Skip2	; F691DE  jr Z,0xf691ef
 	calr	BStore_ReadByteAtSongPosition	; F691E0  calr 0xf6b8bd
@@ -154635,7 +154733,7 @@ sub_F69183_Return:
 ; StepRecord_ReadTimeSigBeatsAtCursor
 ; Called from: in-module: 0xF69023 0xF6916F 0xF691A8 0xF691CC 0xF691E8
 ; Touches: (0x0ECA) (0x0F51)
-; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPositionAndAdvance sub_F6C230 StepRecord_RestoreCursorFromSlot
+; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPositionAndAdvance BStore_SkipTickReadFirstDataByte StepRecord_RestoreCursorFromSlot
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69203 is an instruction
 ;           boundary.  The name IS the address.
@@ -154653,7 +154751,7 @@ StepRecord_ReadTimeSigBeatsAtCursor:
 	ld	(3786:16), a	; F6920C  ld (0x0eca),A
 	cp	a, 135	; F69210  cp A,0x87
 	jr	nz, sub_F69203_Skip	; F69213  jr NZ,0xf69222
-	calr	sub_F6C230	; F69215  calr 0xf6c230
+	calr	BStore_SkipTickReadFirstDataByte	; F69215  calr 0xf6c230
 	inc	1, a	; F69218  inc 1,A
 	ld	(3921:16), a	; F6921A  ld (0x0f51),A
 	ld	w, 0:opc	; F6921E  ld W,0x00
@@ -154696,7 +154794,7 @@ sub_F6922B_Epilogue:
 ; StepRecord_LengthenMeasures
 ; Called from: in-module: 0xF6906D 0xF690ED 0xF69143
 ; Touches: (0x0F52) (0x0F53) (0x0F55)
-; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPosition sub_F6B75E sub_F6B257 StepRecord_RestoreCursorFromSlot
+; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPosition TrackCursor_StepForwardKeepBeatPosition StepRecord_AppendBeatMark StepRecord_RestoreCursorFromSlot
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69240 is an instruction
 ;           boundary.  The name IS the address.
@@ -154704,7 +154802,7 @@ sub_F6922B_Epilogue:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; StepRecord_LengthenMeasures: Re-bar when a meter change LENGTHENS measures (new beats (0x0F52) > old (0x0F53)): from
-;   the cursor, after every (0x0F53) 0x81 beat marks appends (0x0F52)-(0x0F53) more (sub_F6B257, one 0x81 each), until
+;   the cursor, after every (0x0F53) 0x81 beat marks appends (0x0F52)-(0x0F53) more (StepRecord_AppendBeatMark, one 0x81 each), until
 ;   a 0x87 record or the chain end; cursor and registers restored (slot 1). StepRecord_ShortenMeasures_Veneer is the
 ;   shortening twin. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave7_x.json)
 StepRecord_LengthenMeasures:
@@ -154725,7 +154823,7 @@ sub_F69240_Loop:
 	cp	a, 129	; F69255  cp A,0x81
 	jr	nz, sub_F69240_Skip	; F69258  jr NZ,0xf69282
 	inc	1, (3925:16)	; F6925A  inc 1,(0x0f55)
-	calr	sub_F6B75E	; F6925E  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F6925E  calr 0xf6b75e
 	cp	w, 255	; F69261  cp W,0xff
 	jr	z, sub_F69240_Skip2	; F69264  jr Z,0xf6928f
 	ld	a, (3925:16)	; F69266  ld A,(0x0f55)
@@ -154734,13 +154832,13 @@ sub_F69240_Loop:
 	xor	b, b	; F69270  xor B,B
 	ld	c, (3922:16)	; F69272  ld C,(0x0f52)
 	sub	c, (3923:16)	; F69276  sub C,(0x0f53)
-	calr	sub_F6B257	; F6927A  calr 0xf6b257
+	calr	StepRecord_AppendBeatMark	; F6927A  calr 0xf6b257
 	djnz16	bc, -6	; F6927D  djnz BC,0xf6927a
 	jr	sub_F69240_Join	; F69280  jr T,0xf6924c
 sub_F69240_Skip:
 	cp	a, 135	; F69282  cp A,0x87
 	jr	z, sub_F69240_Skip2	; F69285  jr Z,0xf6928f
-	calr	sub_F6B75E	; F69287  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F69287  calr 0xf6b75e
 	cp	w, 255	; F6928A  cp W,0xff
 	jr	nz, sub_F69240_Loop	; F6928D  jr NZ,0xf69252
 sub_F69240_Skip2:
@@ -154756,17 +154854,22 @@ sub_F69240_Skip2:
 	ret	; F6929B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6929C
+; StepRecord_ShortenMeasures
 ; Called from: in-module: 0xF67414
 ; Touches: (0x0F52) (0x0F53) (0x0F55)
-; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPositionPlus1 BStore_ReadByteAtSongPosition sub_F6B75E sub_F68E48 StepRecord_RestoreCursorFromSlot
+; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPositionPlus1 BStore_ReadByteAtSongPosition TrackCursor_StepForwardKeepBeatPosition sub_F68E48 StepRecord_RestoreCursorFromSlot
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6929C is an instruction
 ;           boundary.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6929C:
+; StepRecord_ShortenMeasures: Re-bar when a meter change SHORTENS measures (new beats (0x0F52) < old (0x0F53)): from
+;   the cursor, deletes (0x0F53)-(0x0F52) 0x81 beat marks (sub_F68E48) then skips (0x0F52), repeating until a 0x87
+;   record, a 0x84, the 0x82 end or no next event; cursor (slot 1) and registers restored. The body behind
+;   StepRecord_ShortenMeasures_Veneer; twin of StepRecord_LengthenMeasures. Basis: callers + veneer header + body +
+;   twin. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+StepRecord_ShortenMeasures:
 	push	xwa	; F6929C  push XWA
 	push	xhl	; F6929D  push XHL
 	push	xbc	; F6929E  push XBC
@@ -154790,7 +154893,7 @@ sub_F69240_Loop2:
 	jr	z, sub_F69240_Skip3	; F692C1  jr Z,0xf692d2
 	cp	a, 135	; F692C3  cp A,0x87
 	jr	z, sub_F69240_Skip5	; F692C6  jr Z,0xf6931a
-	calr	sub_F6B75E	; F692C8  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F692C8  calr 0xf6b75e
 	cp	w, 255	; F692CB  cp W,0xff
 	jr	z, sub_F69240_Skip5	; F692CE  jr Z,0xf6931a
 	jr	sub_F69240_Loop2	; F692D0  jr T,0xf692ae
@@ -154812,7 +154915,7 @@ sub_F69240_Join3:
 	cp	a, 129	; F692FA  cp A,0x81
 	jr	nz, sub_F69240_Skip4	; F692FD  jr NZ,0xf6930e
 	pushw	bc	; F692FF  push BC
-	calr	sub_F6B75E	; F69300  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F69300  calr 0xf6b75e
 	popw	bc	; F69303  pop BC
 	cp	w, 255	; F69304  cp W,0xff
 	jr	z, sub_F69240_Skip5	; F69307  jr Z,0xf6931a
@@ -154822,7 +154925,7 @@ sub_F69240_Skip4:
 	cp	a, 135	; F6930E  cp A,0x87
 	jr	z, sub_F69240_Skip5	; F69311  jr Z,0xf6931a
 	pushw	bc	; F69313  push BC
-	calr	sub_F6B75E	; F69314  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F69314  calr 0xf6b75e
 	popw	bc	; F69317  pop BC
 	jr	sub_F69240_Join3	; F69318  jr T,0xf692ed
 sub_F69240_Skip5:
@@ -154842,7 +154945,7 @@ sub_F69240_Skip5:
 ; Called from: in-module: 0xF6AB74
 ; Touches: (0x0E63) (0x0E6A) (0x0F56) (0x0F58) (0x1008)  |  0x603422
 ;          0x603500
-; Calls:   BStore_DirEntryOffsetX2 BStore_IsDirEntryUnused BStore_ReadByteAtSongPosition sub_F6B75E BStore_ReadByteAtSongPositionPlus1
+; Calls:   BStore_DirEntryOffsetX2 BStore_IsDirEntryUnused BStore_ReadByteAtSongPosition TrackCursor_StepForwardKeepBeatPosition BStore_ReadByteAtSongPositionPlus1
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69327 is an instruction
 ;           boundary.  The name IS the address.
@@ -154904,7 +155007,7 @@ sub_F69240_Loop4:
 	jr	nz, sub_F69240_Skip6	; F693BD  jr NZ,0xf693c3
 	incw	1, (3926:16)	; F693BF  incw 1,(0x0f56)
 sub_F69240_Skip6:
-	calr	sub_F6B75E	; F693C3  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F693C3  calr 0xf6b75e
 	cp	w, 255	; F693C6  cp W,0xff
 	jr	nz, sub_F69240_Loop4	; F693C9  jr NZ,0xf693b7
 	calr	BStore_ReadByteAtSongPositionPlus1	; F693CB  calr 0xf6b8f1
@@ -154928,7 +155031,7 @@ sub_F69240_Skip8:
 ; Called from: T_F42F04 (x1); in-module: 0xF68F86 0xF68FE2 0xF69060 0xF690C7
 ;              0xF690E0 0xF691D3 0xF694FB 0xF6C58F +1 more
 ; Touches: (0x0ECE)
-; Calls:   StepRecord_SaveCursorToSlot sub_F6B75E StepRecord_RestoreCursorFromSlot sub_F6B657
+; Calls:   StepRecord_SaveCursorToSlot TrackCursor_StepForwardKeepBeatPosition StepRecord_RestoreCursorFromSlot sub_F6B657
 ; Evidence: thunk slot T_F42F04 holds `jp 0x00F693F6`, and 0xF693F6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -154939,7 +155042,7 @@ sub_F69240_Skip8:
 sub_F693F6:		; <- T_F42F04
 	xor	a, a	; F693F6  xor A,A
 	calr	StepRecord_SaveCursorToSlot	; F693F8  calr 0xf6c292
-	calr	sub_F6B75E	; F693FB  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F693FB  calr 0xf6b75e
 	xor	a, a	; F693FE  xor A,A
 	calr	StepRecord_RestoreCursorFromSlot	; F69400  calr 0xf6c2e5
 	ld	w, (3790:16)	; F69403  ld W,(0x0ece)
@@ -155041,7 +155144,7 @@ sub_F69476:
 ; sub_F6948B
 ; Called from: in-module: 0xF69CD5 0xF69D3A
 ; Touches: (0x0ED1)
-; Calls:   BStore_ReadByteAtSongPosition sub_F6B770 sub_F6B75E LcdKeyRow4_StepRecordSub02 Text_PutTRACK
+; Calls:   BStore_ReadByteAtSongPosition TrackCursor_StepBackKeepBeatPosition TrackCursor_StepForwardKeepBeatPosition LcdKeyRow4_StepRecordSub02 Text_PutTRACK
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6948B is an instruction
 ;           boundary.  The name IS the address.
@@ -155060,10 +155163,10 @@ sub_F6948B_Loop:
 	jr	z, sub_F6948B_Skip3	; F6949B  jr Z,0xf694c0
 	m_cp_mi8 MB16, 0x0ed1, 0x00	; F6949D  cp (0x0ed1),0x00
 	jr	z, sub_F6948B_Skip	; F694A2  jr Z,0xf694a9
-	calr	sub_F6B770	; F694A4  calr 0xf6b770
+	calr	TrackCursor_StepBackKeepBeatPosition	; F694A4  calr 0xf6b770
 	jr	sub_F6948B_Join	; F694A7  jr T,0xf694ac
 sub_F6948B_Skip:
-	calr	sub_F6B75E	; F694A9  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F694A9  calr 0xf6b75e
 sub_F6948B_Join:
 	cp	w, 255	; F694AC  cp W,0xff
 	jr	z, sub_F6948B_Epilogue	; F694AF  jr Z,0xf694c2
@@ -155560,7 +155663,7 @@ StepRecord_CursorForwardByStepLength:
 ; StepRecord_CursorForwardBeatsToTick
 ; Called from: in-module: 0xF69462
 ; Touches: (0x0E4E) (0x0E53) (0x0E56) (0x0ECF) (0x0ED0)
-; Calls:   StepRecord_CursorForward_Veneer sub_F6B770 StepRecord_LoadMeasureBeat StepRecordSub00_SoftKeyCol2 StepRecord_NoteNumberDown
+; Calls:   StepRecord_CursorForward_Veneer TrackCursor_StepBackKeepBeatPosition StepRecord_LoadMeasureBeat StepRecordSub00_SoftKeyCol2 StepRecord_NoteNumberDown
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69814 is an instruction
 ;           boundary.  The name IS the address.
@@ -155606,7 +155709,7 @@ sub_F69814_Skip3:
 	jr	nz, sub_F69814_Skip4	; F69854  jr NZ,0xf69862
 	decw	1, (3670:16)	; F69856  decw 1,(0x0e56)
 	push	xhl	; F6985A  push XHL
-	calr	sub_F6B770	; F6985B  calr 0xf6b770
+	calr	TrackCursor_StepBackKeepBeatPosition	; F6985B  calr 0xf6b770
 	calr	StepRecord_LoadMeasureBeat	; F6985E  calr 0xf6a20f
 	pop	xhl	; F69861  pop XHL
 sub_F69814_Skip4:
@@ -156322,7 +156425,7 @@ sub_F69C8F_Skip:
 ; Touches: (0x0ED1) (0x0ED5) (0x0EE9) (0x0EEA) (0x0EEC) (0x0EEE) (0x0EEF)
 ;          (0x0F60) (0x1008) (0x1071) +1 more
 ; Calls:   StepRecord_LoadMeasureBeat sub_F6C736 StepRecord_SaveCursorToSlot sub_F69D9E sub_F6948B sub_F6C3E5
-;          BStore_ReadByteAtSongPosition sub_F6B75E sub_F69DBD 0xF6D6D6 0xF6D6DC StepRecord_RestoreCursorFromSlot +4
+;          BStore_ReadByteAtSongPosition TrackCursor_StepForwardKeepBeatPosition sub_F69DBD 0xF6D6D6 0xF6D6DC StepRecord_RestoreCursorFromSlot +4
 ;          more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69CB4 is an instruction
@@ -156357,7 +156460,7 @@ sub_F69CB4_Skip:
 	calr	BStore_ReadByteAtSongPosition	; F69CED  calr 0xf6b8bd
 	cp	a, 129	; F69CF0  cp A,0x81
 	jr	nz, sub_F69CB4_Join2	; F69CF3  jr NZ,0xf69d04
-	calr	sub_F6B75E	; F69CF5  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F69CF5  calr 0xf6b75e
 	calr	BStore_ReadByteAtSongPosition	; F69CF8  calr 0xf6b8bd
 	cp	a, 129	; F69CFB  cp A,0x81
 	jr	nz, sub_F69CB4_Join2	; F69CFE  jr NZ,0xf69d04
@@ -156445,7 +156548,7 @@ sub_F69D9E_Skip2:
 ; sub_F69DBD
 ; Called from: in-module: 0xF69D68
 ; Touches: (0x0EEA) (0x0EEC) (0x0EEE) (0x0EEF) (0x1008) (0x1075) (0x1076)
-; Calls:   BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 BStore_DirEntryOffsetX2 sub_F6B75E sub_F6C43C TrackCursor_IsEventLeadByte
+; Calls:   BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 BStore_DirEntryOffsetX2 TrackCursor_StepForwardKeepBeatPosition sub_F6C43C TrackCursor_IsEventLeadByte
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69DBD is an instruction
 ;           boundary.  The name IS the address.
@@ -156524,7 +156627,7 @@ sub_F69DBD_Loop:
 	mx_ld_rm MXB, ra_DE, ra_IZ, 1	; F69E8B  ld A,(XDE+IZ)
 	pop	xde	; F69E90  pop XDE
 	push	xix	; F69E91  push XIX
-	calr	sub_F6B75E	; F69E92  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F69E92  calr 0xf6b75e
 	pop	xix	; F69E95  pop XIX
 	cp	w, 0:i3	; F69E96  cp W,0
 	jrl	nz, sub_F69DBD_Epilogue	; F69E98  jrl NZ,0xf69f59
@@ -156972,7 +157075,7 @@ StepRecord_LoadMeasureBeat_Skip4:
 ; sub_F6A26C
 ; Called from: T_F42ED4 (x0)
 ; Touches: (0x0E4E) (0x0F11) (0x0F13) (0x126E)
-; Calls:   StepRecord_SaveCursorToSlot sub_F6B039 BStore_ReadByteAtSongPosition sub_F6B75E BStore_DirEntryOffsetX2 StepRecord_RestoreCursorFromSlot
+; Calls:   StepRecord_SaveCursorToSlot sub_F6B039 BStore_ReadByteAtSongPosition TrackCursor_StepForwardKeepBeatPosition BStore_DirEntryOffsetX2 StepRecord_RestoreCursorFromSlot
 ; Evidence: thunk slot T_F42ED4 holds `jp 0x00F6A26C`, and 0xF6A26C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -157002,7 +157105,7 @@ sub_F6A26C:		; <- T_F42ED4
 	jr	nz, sub_F6A20F_Skip6	; F6A292  jr NZ,0xf6a2c9
 	jr	sub_F6A20F_Join4	; F6A294  jr T,0xf6a2dc
 sub_F6A20F_Join3:
-	calr	sub_F6B75E	; F6A296  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F6A296  calr 0xf6b75e
 	cp	w, 255	; F6A299  cp W,0xff
 	jr	z, sub_F6A20F_Skip8	; F6A29C  jr Z,0xf6a2e3
 	calr	BStore_DirEntryOffsetX2	; F6A29E  calr 0xf6bbd4
@@ -159438,16 +159541,16 @@ Data_F6B1FE:
 ; StepRecord_AppendBeatMarkKeepCursor
 ; Called from: in-module: 0xF68B51
 ; Touches: (0x0E4F)
-; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPositionPlus1 sub_F6B257 StepRecord_RestoreCursorFromSlot
+; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPositionPlus1 StepRecord_AppendBeatMark StepRecord_RestoreCursorFromSlot
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B229 is an instruction
 ;           boundary.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; StepRecord_AppendBeatMarkKeepCursor: Appends one 0x81 beat mark to the current entry (sub_F6B257) with the step
+; StepRecord_AppendBeatMarkKeepCursor: Appends one 0x81 beat mark to the current entry (StepRecord_AppendBeatMark) with the step
 ;   cursor saved and restored (slot 0); sets (0x0E4F) bit 7 when the byte after the cursor is 0x84.
-;   StepRecord_CursorForward runs it near the track end before stepping; sub_F6B243 is the same without the cursor
+;   StepRecord_CursorForward runs it near the track end before stepping; StepRecord_AppendBeatMarkAtTrackEnd is the same without the cursor
 ;   save. Basis: caller + body. (notes/naming-pilot-2026-10-06/proposals_wave7_x.json)
 StepRecord_AppendBeatMarkKeepCursor:
 	xor	a, a	; F6B229  xor A,A
@@ -159457,29 +159560,34 @@ StepRecord_AppendBeatMarkKeepCursor:
 	jr	nz, sub_F6B229_Skip	; F6B234  jr NZ,0xf6b23a
 	m_set 7, MD16, 0x0e4f	; F6B236  set 7,(0x0e4f)
 sub_F6B229_Skip:
-	calr	sub_F6B257	; F6B23A  calr 0xf6b257
+	calr	StepRecord_AppendBeatMark	; F6B23A  calr 0xf6b257
 	xor	a, a	; F6B23D  xor A,A
 	calr	StepRecord_RestoreCursorFromSlot	; F6B23F  calr 0xf6c2e5
 	ret	; F6B242  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B243
+; StepRecord_AppendBeatMarkAtTrackEnd
 ; Called from: in-module: 0xF68CBE
 ; Touches: (0x0E4F)
-; Calls:   BStore_ReadByteAtSongPositionPlus1 sub_F6B257
+; Calls:   BStore_ReadByteAtSongPositionPlus1 StepRecord_AppendBeatMark
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B243 is an instruction
 ;           boundary.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6B243:
+; StepRecord_AppendBeatMarkAtTrackEnd: Sets (0x0E4F) bit 7 when the byte after the song position is 0x84, then appends
+;   one 0x81 beat mark (StepRecord_AppendBeatMark); StepRecord_AppendBeatMarkKeepCursor without the cursor save.
+;   StepRecord_CursorStep runs it when a forward step reaches the next beat and
+;   TrackCursor_StepForwardKeepBeatPosition finds no further event. Basis: caller + caller header + body + twin.
+;   (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+StepRecord_AppendBeatMarkAtTrackEnd:
 	calr	BStore_ReadByteAtSongPositionPlus1	; F6B243  calr 0xf6b8f1
 	cp	a, 132	; F6B246  cp A,0x84
 	jr	nz, sub_F6B243_Skip	; F6B249  jr NZ,0xf6b24f
 	m_set 7, MD16, 0x0e4f	; F6B24B  set 7,(0x0e4f)
 sub_F6B243_Skip:
-	calr	sub_F6B257	; F6B24F  calr 0xf6b257
+	calr	StepRecord_AppendBeatMark	; F6B24F  calr 0xf6b257
 	ret	; F6B252  ret
 
 ; --------------------------------------------------------------------------
@@ -159492,7 +159600,7 @@ sub_F6B243_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; StepRecord_AppendCountedBeatMark: (0x0E54) += 1, then falls into sub_F6B257: one 0x81 beat mark appended to the
+; StepRecord_AppendCountedBeatMark: (0x0E54) += 1, then falls into StepRecord_AppendBeatMark: one 0x81 beat mark appended to the
 ;   current entry through StepRecord_AppendBytesToCurrentEntry (W = 1, byte at 0x0F5A), registers saved.
 ;   StepRecord_AppendBeatMarks runs it (0x0ECF) times; the step-record start runs it once for an unused directory
 ;   entry. Basis: callers + caller header + body. (notes/naming-pilot-2026-10-06/proposals_wave7_w.json)
@@ -159500,7 +159608,7 @@ StepRecord_AppendCountedBeatMark:
 	incw	1, (3668:16)	; F6B253  incw 1,(0x0e54)
 
 ; --------------------------------------------------------------------------
-; sub_F6B257
+; StepRecord_AppendBeatMark
 ; Called from: in-module: 0xF68F48 0xF6927A 0xF6B23A 0xF6B24F
 ; Touches: nothing with an absolute address
 ; Calls:   StepRecord_AppendBytesToCurrentEntry
@@ -159510,7 +159618,11 @@ StepRecord_AppendCountedBeatMark:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6B257:
+; StepRecord_AppendBeatMark: Appends one 0x81 beat mark to the current entry: W = 1, byte at 0x0F5A = 0x81,
+;   StepRecord_AppendBytesToCurrentEntry; all registers saved. StepRecord_AppendCountedBeatMark falls into it after
+;   (0x0E54) += 1; StepRecord_AppendBeatMarkKeepCursor, StepRecord_LengthenMeasures and the cursor step's track-end
+;   case call it. Basis: callers + caller headers + body. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+StepRecord_AppendBeatMark:
 	push	xwa	; F6B257  push XWA
 	push	xhl	; F6B258  push XHL
 	push	xbc	; F6B259  push XBC
@@ -159538,7 +159650,7 @@ sub_F6B257:
 ; sub_F6B276
 ; Called from: in-module: 0xF6AF4A
 ; Touches:   |  0x60347E 0x6034A0
-; Calls:   BStore_IsDirEntryUnused BStore_DirEntryOffsetX2 BStore_ReadByteAtSongPosition sub_F6B770 StepRecord_SaveCursorToSlot BStore_WriteByteAtSongPosition
+; Calls:   BStore_IsDirEntryUnused BStore_DirEntryOffsetX2 BStore_ReadByteAtSongPosition TrackCursor_StepBackKeepBeatPosition StepRecord_SaveCursorToSlot BStore_WriteByteAtSongPosition
 ;          TrackCursor_AdvanceBytes StepRecord_RestoreCursorFromSlot BStore_TruncateAfterSongPosition
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B276 is an instruction
@@ -159570,7 +159682,7 @@ sub_F6B276_Join:
 	calr	BStore_ReadByteAtSongPosition	; F6B2B8  calr 0xf6b8bd
 	cp	a, 132	; F6B2BB  cp A,0x84
 	jr	nz, sub_F6B276_Skip	; F6B2BE  jr NZ,0xf6b2ca
-	calr	sub_F6B770	; F6B2C0  calr 0xf6b770
+	calr	TrackCursor_StepBackKeepBeatPosition	; F6B2C0  calr 0xf6b770
 	cp	w, 255	; F6B2C3  cp W,0xff
 	jr	z, sub_F6B276_Return	; F6B2C6  jr Z,0xf6b2ec
 	jr	sub_F6B276_Join	; F6B2C8  jr T,0xf6b2b8
@@ -160136,7 +160248,7 @@ sub_F6B740_Skip:
 	ret	; F6B75D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B75E
+; TrackCursor_StepForwardKeepBeatPosition
 ; Called from: in-module: 0xF68C9D 0xF68D12 0xF68FEE 0xF69190 0xF691D8
 ;              0xF6925E 0xF69287 0xF692C8 +12 more
 ; Touches: (0x0E54)
@@ -160147,7 +160259,12 @@ sub_F6B740_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6B75E:
+; TrackCursor_StepForwardKeepBeatPosition: sub_F6B740 with the beat position (0x0E54) saved and restored: steps the
+;   current track's song position forward one event (TrackCursor_StepOneEvent, W = 0) unless the next byte is the 0x82
+;   end, unreadable, or the current byte is 0x84 (then W = 0xFF, no step). The forward twin of
+;   TrackCursor_StepBackKeepBeatPosition; the re-bar, time-signature and cursor-step walks use it. Basis: callers +
+;   body + twin. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+TrackCursor_StepForwardKeepBeatPosition:
 	m_push MW16, 0x0e54	; F6B75E  pushw (0x0e54)
 	calr	sub_F6B740	; F6B762  calr 0xf6b740
 	m_popw MD16, 0x0e54	; F6B765  popw (0x0e54)
@@ -160175,7 +160292,7 @@ TrackCursor_StepBack:
 	ret	; F6B76F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B770
+; TrackCursor_StepBackKeepBeatPosition
 ; Called from: in-module: 0xF68BC3 0xF68C37 0xF69167 0xF69198 0xF691BC
 ;              0xF694A4 0xF6985B 0xF6B2C0 +3 more
 ; Touches: (0x0E54)
@@ -160186,7 +160303,11 @@ TrackCursor_StepBack:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6B770:
+; TrackCursor_StepBackKeepBeatPosition: TrackCursor_StepBack with the beat position (0x0E54) saved and restored: the
+;   current track's song position steps back one event (W = 0xFF at the chain start) without counting the beat marks
+;   it crosses. The step-record time-signature searches and StepRecord_CursorStep walk back with it. Basis: callers +
+;   caller header + body. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+TrackCursor_StepBackKeepBeatPosition:
 	m_push MW16, 0x0e54	; F6B770  pushw (0x0e54)
 	calr	TrackCursor_StepBack	; F6B774  calr 0xf6b76a
 	m_popw MD16, 0x0e54	; F6B777  popw (0x0e54)
@@ -161018,7 +161139,7 @@ sub_F6BC89_Skip2:
 ; Touches: (0x0E53) (0x0E63) (0x0ECA) (0x0EF5) (0x100E) (0x100F) (0x1258)
 ;          (0x1259) (0x125A) (0x1264) +11 more  |  0x603422
 ; Calls:   BStore_ReadByteAtSongPosition BStore_ReadByteAtSongPositionPlus1 sub_F6BBFC 0xF6D410 StepRecord_RepaintThenMsgLineControl_Veneer BStore_ReadByteAtSongPositionAndAdvance
-;          sub_F6C230 BStore_DirEntryOffsetX2 T_F413E4 0xF6D710 0xF6D70C T_SoundSel_FromProgramAndBankRegs +15
+;          BStore_SkipTickReadFirstDataByte BStore_DirEntryOffsetX2 T_F413E4 0xF6D710 0xF6D70C T_SoundSel_FromProgramAndBankRegs +15
 ;          more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6BCB2 is an instruction
@@ -161072,7 +161193,7 @@ sub_F6BC89_Skip6:
 	m_cp_mi8 MB16, 0x0e63, 0x00	; F6BD21  cp (0x0e63),0x00
 	jr	z, sub_F6BC89_Return2	; F6BD26  jr Z,0xf6bd77
 	calr	BStore_ReadByteAtSongPositionAndAdvance	; F6BD28  calr 0xf6b95f
-	calr	sub_F6C230	; F6BD2B  calr 0xf6c230
+	calr	BStore_SkipTickReadFirstDataByte	; F6BD2B  calr 0xf6c230
 	pushw	wa	; F6BD2E  push WA
 	calr	BStore_DirEntryOffsetX2	; F6BD2F  calr 0xf6bbd4
 	srl	iz, 1	; F6BD32  srl 0x01,IZ
@@ -161105,7 +161226,7 @@ sub_F6BC89_Return2:
 	ret	; F6BD77  ret
 sub_F6BC89_Skip9:
 	calr	BStore_ReadByteAtSongPositionAndAdvance	; F6BD78  calr 0xf6b95f
-	calr	sub_F6C230	; F6BD7B  calr 0xf6c230
+	calr	BStore_SkipTickReadFirstDataByte	; F6BD7B  calr 0xf6c230
 	cp	a, 72	; F6BD7E  cp A,0x48
 	jr	z, sub_F6BC89_Skip11	; F6BD81  jr Z,0xf6bdc1
 	ld	(4789:16), a	; F6BD83  ld (0x12b5),A
@@ -161159,7 +161280,7 @@ sub_F6BC89_Loop2:
 	jrl	sub_F6BC89_Loop	; F6BE09  jrl T,0xf6bd06
 sub_F6BC89_Skip15:
 	calr	BStore_ReadByteAtSongPositionAndAdvance	; F6BE0C  calr 0xf6b95f
-	calr	sub_F6C230	; F6BE0F  calr 0xf6c230
+	calr	BStore_SkipTickReadFirstDataByte	; F6BE0F  calr 0xf6c230
 	and	a, 127	; F6BE12  and A,0x7f
 	ld	h, (3786:16)	; F6BE15  ld H,(0x0eca)
 	and	h, 4	; F6BE19  and H,0x04
@@ -161481,7 +161602,7 @@ sub_F6BFF2_Skip18:
 	jr	z, sub_F6BFF2_Skip19	; F6C107  jr Z,0xf6c10c
 	jrl	sub_F6BC89_Loop	; F6C109  jrl T,0xf6bd06
 sub_F6BFF2_Skip19:
-	calr	sub_F6C230	; F6C10C  calr 0xf6c230
+	calr	BStore_SkipTickReadFirstDataByte	; F6C10C  calr 0xf6c230
 	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x08	; F6C10F  cp (0x0ef5),0x08
 	jr	z, sub_F6BFF2_Skip20	; F6C114  jr Z,0xf6c121
 	ld	(UI_StepRecord_SubScreen:16), 8	; F6C116  ld (0x0ef5),0x08
@@ -161496,7 +161617,7 @@ sub_F6BFF2_Skip21:
 	call	MsgLine_TransportState_Plus10	; F6C129  call 0xf6d642
 	ret	; F6C12D  ret
 sub_F6BFF2_Skip22:
-	calr	sub_F6C230	; F6C12E  calr 0xf6c230
+	calr	BStore_SkipTickReadFirstDataByte	; F6C12E  calr 0xf6c230
 	ld	c, a	; F6C131  ld C,A
 	pushw	bc	; F6C133  push BC
 	calr	BStore_ReadByteAtSongPosition	; F6C134  calr 0xf6b8bd
@@ -161545,7 +161666,7 @@ sub_F6BFF2_Join:
 	jr	z, sub_F6BFF2_Skip33	; F6C19B  jr Z,0xf6c20e
 	jrl	sub_F6BC89_Loop	; F6C19D  jrl T,0xf6bd06
 sub_F6BFF2_Skip27:
-	calr	sub_F6C230	; F6C1A0  calr 0xf6c230
+	calr	BStore_SkipTickReadFirstDataByte	; F6C1A0  calr 0xf6c230
 	ld	(4793:16), a	; F6C1A3  ld (0x12b9),A
 	ld	(4792:16), 5	; F6C1A7  ld (0x12b8),0x05
 	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x03	; F6C1AC  cp (0x0ef5),0x03
@@ -161557,7 +161678,7 @@ sub_F6BFF2_Skip28:
 	call	StepRecord_RepaintThenMsgLineControl_Veneer	; F6C1BD  call 0xf67448
 	ret	; F6C1C1  ret
 sub_F6BFF2_Skip29:
-	calr	sub_F6C230	; F6C1C2  calr 0xf6c230
+	calr	BStore_SkipTickReadFirstDataByte	; F6C1C2  calr 0xf6c230
 	ld	(4793:16), a	; F6C1C5  ld (0x12b9),A
 	ld	(4792:16), 2	; F6C1C9  ld (0x12b8),0x02
 	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x03	; F6C1CE  cp (0x0ef5),0x03
@@ -161569,7 +161690,7 @@ sub_F6BFF2_Skip30:
 	call	StepRecord_RepaintThenMsgLineControl_Veneer	; F6C1DF  call 0xf67448
 	ret	; F6C1E3  ret
 sub_F6BFF2_Skip31:
-	calr	sub_F6C230	; F6C1E4  calr 0xf6c230
+	calr	BStore_SkipTickReadFirstDataByte	; F6C1E4  calr 0xf6c230
 	ld	(4793:16), a	; F6C1E7  ld (0x12b9),A
 	ld	(4792:16), 1	; F6C1EB  ld (0x12b8),0x01
 	call	BStore_ReadByteAtSongPositionAndAdvance	; F6C1F0  call 0xf6b95f
@@ -161583,7 +161704,7 @@ sub_F6BFF2_Skip32:
 	call	StepRecord_RepaintThenMsgLineControl_Veneer	; F6C209  call 0xf67448
 	ret	; F6C20D  ret
 sub_F6BFF2_Skip33:
-	calr	sub_F6C230	; F6C20E  calr 0xf6c230
+	calr	BStore_SkipTickReadFirstDataByte	; F6C20E  calr 0xf6c230
 	ld	(4793:16), a	; F6C211  ld (0x12b9),A
 	ld	(4792:16), 3	; F6C215  ld (0x12b8),0x03
 	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x03	; F6C21A  cp (0x0ef5),0x03
@@ -161596,7 +161717,7 @@ sub_F6BFF2_Skip34:
 	ret	; F6C22F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6C230
+; BStore_SkipTickReadFirstDataByte
 ; Called from: in-module: 0xF69215 0xF6BD2B 0xF6BD7B 0xF6BE0F 0xF6C10C
 ;              0xF6C12E 0xF6C1A0 0xF6C1C2 +2 more
 ; Touches: nothing with an absolute address
@@ -161607,7 +161728,12 @@ sub_F6BFF2_Skip34:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6C230:
+; BStore_SkipTickReadFirstDataByte: Two BStore_ReadByteAtSongPositionAndAdvance: with the song position just past an
+;   event's lead byte, skips its tick byte and returns A = the first data byte, the position moved past both.
+;   StepRecord_ReadTimeSigBeatsAtCursor reads a 0x87 record's beats-1 with it; the step-record event display reads
+;   note / control / program data bytes the same way. Basis: callers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_a8.json)
+BStore_SkipTickReadFirstDataByte:
 	calr	BStore_ReadByteAtSongPositionAndAdvance	; F6C230  calr 0xf6b95f
 	calr	BStore_ReadByteAtSongPositionAndAdvance	; F6C233  calr 0xf6b95f
 	ret	; F6C236  ret
@@ -162176,8 +162302,8 @@ sub_F67440_Nop:
 ; sub_F6C52A
 ; Called from: in-module: 0xF68F6E
 ; Touches: (0x0E63)
-; Calls:   sub_F6C5BA StepRecord_CheckCursorAtSongStart StepRecord_PostSysEx50_87FromW StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPosition sub_F6B75E
-;          sub_F6B770 sub_F693F6 StepRecord_RestoreCursorFromSlot
+; Calls:   sub_F6C5BA StepRecord_CheckCursorAtSongStart StepRecord_PostSysEx50_87FromW StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPosition TrackCursor_StepForwardKeepBeatPosition
+;          TrackCursor_StepBackKeepBeatPosition sub_F693F6 StepRecord_RestoreCursorFromSlot
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C52A is an instruction
 ;           boundary.  The name IS the address.
@@ -162208,11 +162334,11 @@ sub_F6C52A_Loop2:
 	calr	BStore_ReadByteAtSongPosition	; F6C551  calr 0xf6b8bd
 	cp	a, 129	; F6C554  cp A,0x81
 	jr	z, sub_F6C52A_Loop3	; F6C557  jr Z,0xf6c561
-	calr	sub_F6B75E	; F6C559  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F6C559  calr 0xf6b75e
 	cp	w, 255	; F6C55C  cp W,0xff
 	jr	nz, sub_F6C52A_Loop2	; F6C55F  jr NZ,0xf6c551
 sub_F6C52A_Loop3:
-	calr	sub_F6B770	; F6C561  calr 0xf6b770
+	calr	TrackCursor_StepBackKeepBeatPosition	; F6C561  calr 0xf6b770
 	cp	w, 255	; F6C564  cp W,0xff
 	jr	z, sub_F6C52A_Skip4	; F6C567  jr Z,0xf6c5b2
 	calr	BStore_ReadByteAtSongPosition	; F6C569  calr 0xf6b8bd
@@ -162222,7 +162348,7 @@ sub_F6C52A_Loop3:
 	cp	w, 0:i3	; F6C574  cp W,0
 	jr	nz, sub_F6C52A_Loop3	; F6C576  jr NZ,0xf6c561
 sub_F6C52A_Loop4:
-	calr	sub_F6B770	; F6C578  calr 0xf6b770
+	calr	TrackCursor_StepBackKeepBeatPosition	; F6C578  calr 0xf6b770
 	cp	w, 255	; F6C57B  cp W,0xff
 	jr	z, sub_F6C52A_Skip2	; F6C57E  jr Z,0xf6c5a4
 	calr	BStore_ReadByteAtSongPosition	; F6C580  calr 0xf6b8bd
@@ -162234,7 +162360,7 @@ sub_F6C52A_Loop4:
 	calr	sub_F693F6	; F6C58F  calr 0xf693f6
 	jr	sub_F6C52A_Loop4	; F6C592  jr T,0xf6c578
 sub_F6C52A_Loop5:
-	calr	sub_F6B75E	; F6C594  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F6C594  calr 0xf6b75e
 	cp	w, 255	; F6C597  cp W,0xff
 	jr	z, sub_F6C52A_Skip3	; F6C59A  jr Z,0xf6c5ae
 	calr	BStore_ReadByteAtSongPosition	; F6C59C  calr 0xf6b8bd
@@ -162314,7 +162440,7 @@ sub_F6C5BA_Join:
 ; sub_F6C625
 ; Called from: T_F42EF4 (x0)
 ; Touches: (0x0F11) (0x0F13) (0x1070) (0x126E)
-; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPosition sub_F6B770 sub_F6B75E sub_F6B039 BStore_DirEntryOffsetX2
+; Calls:   StepRecord_SaveCursorToSlot BStore_ReadByteAtSongPosition TrackCursor_StepBackKeepBeatPosition TrackCursor_StepForwardKeepBeatPosition sub_F6B039 BStore_DirEntryOffsetX2
 ;          sub_F6C6DE StepRecord_RestoreCursorFromSlot
 ; Evidence: thunk slot T_F42EF4 holds `jp 0x00F6C625`, and 0xF6C625 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -162343,13 +162469,13 @@ sub_F6C625:		; <- T_F42EF4
 	cp	a, 129	; F6C645  cp A,0x81
 	jr	z, sub_F6C5BA_Skip2	; F6C648  jr Z,0xf6c65d
 sub_F6C5BA_Loop:
-	calr	sub_F6B770	; F6C64A  calr 0xf6b770
+	calr	TrackCursor_StepBackKeepBeatPosition	; F6C64A  calr 0xf6b770
 	cp	w, 255	; F6C64D  cp W,0xff
 	jr	z, sub_F6C5BA_Skip2	; F6C650  jr Z,0xf6c65d
 	calr	BStore_ReadByteAtSongPosition	; F6C652  calr 0xf6b8bd
 	cp	a, 129	; F6C655  cp A,0x81
 	jr	nz, sub_F6C5BA_Loop	; F6C658  jr NZ,0xf6c64a
-	calr	sub_F6B75E	; F6C65A  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F6C65A  calr 0xf6b75e
 sub_F6C5BA_Skip2:
 	xor	a, a	; F6C65D  xor A,A
 	calr	StepRecord_SaveCursorToSlot	; F6C65F  calr 0xf6c292
@@ -162359,7 +162485,7 @@ sub_F6C5BA_Skip2:
 	jr	nz, sub_F6C5BA_Skip4	; F6C66B  jr NZ,0xf6c6a2
 	jr	sub_F6C5BA_Join2	; F6C66D  jr T,0xf6c6be
 sub_F6C5BA_Loop2:
-	calr	sub_F6B75E	; F6C66F  calr 0xf6b75e
+	calr	TrackCursor_StepForwardKeepBeatPosition	; F6C66F  calr 0xf6b75e
 	cp	w, 255	; F6C672  cp W,0xff
 	jr	z, sub_F6C5BA_Skip6	; F6C675  jr Z,0xf6c6c5
 	calr	BStore_DirEntryOffsetX2	; F6C677  calr 0xf6bbd4
@@ -169648,7 +169774,7 @@ OldCopy_F7AC5D:
 OldCopy_F7AC9C:
 	ret	; F6F29C  ret
 OldCopy_sub_F7AC9D:
-	calr	sub_F7AFD8 - 0xBA00	; F6F29D  calr 0xf6f5d8
+	calr	TrackMerge_LoadSavedFields - 0xBA00	; F6F29D  calr 0xf6f5d8
 	ld	(3514:16), 1	; F6F2A0  ld (0x0dba),0x01
 	ret	; F6F2A5  ret
 OldCopy_TrackMerge_OnLeave:
@@ -174685,7 +174811,7 @@ BStore_ExtendChainAtCursor:
 ; Called from: in-module: 0xF70024 0xF703B6 0xF70658 0xF706A6 0xF70802
 ;              0xF7097C 0xF70A09 0xF70F19 +6 more
 ; Touches: (0x1239)  |  0x6036A0
-; Calls:   T_F40908
+; Calls:   T_BStore_Workspace_StoreGmModeDefaults
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -174695,7 +174821,7 @@ BStore_ExtendChainAtCursor:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SmfPart_ResetAllRecords: Calls T_F40908 with 1 when (0x1239)=0xFF (GM mode; prom_a then runs GmMode_ResetToDefaults)
+; SmfPart_ResetAllRecords: Calls T_BStore_Workspace_StoreGmModeDefaults with 1 when (0x1239)=0xFF (GM mode; prom_a then runs GmMode_ResetToDefaults)
 ;   else 0, then writes defaults into the 16 channels' 64-byte part records at 0x6036A0: +2/+3 sound = 0 (the drum
 ;   channel, ch 10 in GM / ch 16 otherwise, gets +3 = 0x20), +6 = 0x15, +7 = 0, +9 = 0x40, +10 = Data_F71512[ch], +11
 ;   = 0x40. Run by GM System On/Off SysEx and before an import's first channel event. Basis: callers + body.
@@ -174715,7 +174841,7 @@ SmfPart_ResetAllRecords:
 SmfPart_ResetAllRecords_Skip:
 	pushw	1	; F7142A  push 0x0001
 SmfPart_ResetAllRecords_Join:
-	call	T_F40908	; F7142D  call 0xf40908
+	call	T_BStore_Workspace_StoreGmModeDefaults	; F7142D  call 0xf40908
 	inc	2, xsp	; F71431  inc 2,XSP
 	pop	xiz	; F71433  pop XIZ
 	pop	xiy	; F71434  pop XIY
@@ -177959,7 +178085,7 @@ SmfMerge_CopySource2ToMark:
 ; Called from: in-module: 0xF72B7C
 ; Touches: (0x0C57) (0x0C72) (0x0C8B) (0x0CFA) (0x0D00) (0x0D04) (0x0D1A)
 ;          (0x126E)  |  0x60A000 0x60A100
-; Calls:   sub_F72C36 sub_F72DC8 sub_F72E27 SmfMerge_FetchSource1Event SmfMerge_FetchSource2Event
+; Calls:   SmfMerge_SaveDestEndCursor SmfMerge_AdvanceWriteCursor SmfMerge_AdvanceReadCursor SmfMerge_FetchSource1Event SmfMerge_FetchSource2Event
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72BC7 is an instruction boundary of this
@@ -177971,7 +178097,7 @@ SmfMerge_CopySource2ToMark:
 ; SmfMerge_EmitCommonMark: Both sources stand on the same mark (C == B): for 0x82 writes the end mark, (0x0C8B) :=
 ;   0xFF and saves the destination (0x0C72)'s end cursor (block (0x0D04), offset IX); for 0x81 writes one beat mark,
 ;   advances the write cursor and both read cursors and fetches both next events. Smf_MergeTracks' copy of
-;   TrackMerge_EmitCommonMark (the end cursor is stored inline by sub_F72C36 instead of T_BStore_SaveCursor). Basis:
+;   TrackMerge_EmitCommonMark (the end cursor is stored inline by SmfMerge_SaveDestEndCursor instead of T_BStore_SaveCursor). Basis:
 ;   caller + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave7_y.json)
 SmfMerge_EmitCommonMark:
 	cp	c, 130	; F72BC7  cp C,0x82
@@ -177984,25 +178110,25 @@ SmfMerge_EmitCommonMark:
 	xor	wa, wa	; F72BE3  xor WA,WA
 	ld	a, (3186:16)	; F72BE5  ld A,(0x0c72)
 	ld	(3354:16), wa	; F72BE9  ld (0x0d1a),WA
-	calr	sub_F72C36	; F72BED  calr 0xf72c36
+	calr	SmfMerge_SaveDestEndCursor	; F72BED  calr 0xf72c36
 	jr	sub_F72BC7_Return	; F72BF0  jr T,0xf72c35
 sub_F72BC7_Skip:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72BF2  ld XHL,(0x126e)
 	mx_ld_mi8 MXD, ra_HL, ra_IX, 0x81	; F72BF6  ld (XHL+IX),0x81
-	calr	sub_F72DC8	; F72BFC  calr 0xf72dc8
+	calr	SmfMerge_AdvanceWriteCursor	; F72BFC  calr 0xf72dc8
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72BFF  ld XHL,(0x126e)
 	push	xix	; F72C03  push XIX
 	ld	xix, 6332416	; F72C04  ld XIX,0x0060a000
 	nop	; F72C09  nop
 	ld	iy, (3322:16)	; F72C0A  ld IY,(0x0cfa)
-	calr	sub_F72E27	; F72C0E  calr 0xf72e27
+	calr	SmfMerge_AdvanceReadCursor	; F72C0E  calr 0xf72e27
 	ld	(3322:16), iy	; F72C11  ld (0x0cfa),IY
 	calr	SmfMerge_FetchSource1Event	; F72C15  calr 0xf72cbc
 	ld	(3322:16), iy	; F72C18  ld (0x0cfa),IY
 	ld	xix, 6332672	; F72C1C  ld XIX,0x0060a100
 	nop	; F72C21  nop
 	ld	iy, (3328:16)	; F72C22  ld IY,(0x0d00)
-	calr	sub_F72E27	; F72C26  calr 0xf72e27
+	calr	SmfMerge_AdvanceReadCursor	; F72C26  calr 0xf72e27
 	ld	(3328:16), iy	; F72C29  ld (0x0d00),IY
 	calr	SmfMerge_FetchSource2Event	; F72C2D  calr 0xf72c74
 	ld	(3328:16), iy	; F72C30  ld (0x0d00),IY
@@ -178011,7 +178137,7 @@ sub_F72BC7_Return:
 	ret	; F72C35  ret
 
 ; --------------------------------------------------------------------------
-; sub_F72C36
+; SmfMerge_SaveDestEndCursor
 ; Called from: in-module: 0xF72BED
 ; Touches: (0x0C57) (0x0D1A) (0x126E)  |  0x60347E 0x6034A0
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -178022,7 +178148,12 @@ sub_F72BC7_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F72C36:
+; SmfMerge_SaveDestEndCursor: Entry (0x0D1A)'s end cursor := offset IX / block (0x0C57): 0x6034A0[n-1] := IX,
+;   0x60347E[n-1] := (0x0C57) -- BStore_SaveCursor's first half without the bank copy at 0x610000; (0x126E) kept.
+;   SmfMerge_EmitCommonMark runs it on the merged destination track (0x0C72) after writing the 0x82 end tag, where
+;   TrackMerge_EmitCommonMark calls T_BStore_SaveCursor. Basis: caller + caller header + body + twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_a8.json)
+SmfMerge_SaveDestEndCursor:
 	push	xiy	; F72C36  push XIY
 	push	xiz	; F72C37  push XIZ
 	ld	xiz, (BStore_CursorBlockAddr:16)	; F72C38  ld XIZ,(0x126e)
@@ -178050,7 +178181,7 @@ sub_F72C36:
 ; SmfMerge_FetchSource2Event
 ; Called from: in-module: 0xF72B5A 0xF72C2D 0xF72D62
 ; Touches: (0x0C8B) (0x0D00) (0x0D1F)  |  0x60A100
-; Calls:   sub_F72E27
+; Calls:   SmfMerge_AdvanceReadCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72C74 is an instruction boundary of this
@@ -178082,7 +178213,7 @@ sub_F72C74_Skip2:
 	push	xix	; F72C9B  push XIX
 	ld	xix, 6332672	; F72C9C  ld XIX,0x0060a100
 	nop	; F72CA1  nop
-	calr	sub_F72E27	; F72CA2  calr 0xf72e27
+	calr	SmfMerge_AdvanceReadCursor	; F72CA2  calr 0xf72e27
 	pop	xix	; F72CA5  pop XIX
 	popw	bc	; F72CA6  pop BC
 	push	xix	; F72CA7  push XIX
@@ -178098,7 +178229,7 @@ sub_F72C74_Return:
 ; SmfMerge_FetchSource1Event
 ; Called from: in-module: 0xF72B57 0xF72C15 0xF72DC4
 ; Touches: (0x0C8B) (0x0CFA) (0x0D1E)  |  0x60A000
-; Calls:   sub_F72E27
+; Calls:   SmfMerge_AdvanceReadCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72CBC is an instruction boundary of this
@@ -178130,7 +178261,7 @@ sub_F72CBC_Skip2:
 	push	xix	; F72CE3  push XIX
 	ld	xix, 6332416	; F72CE4  ld XIX,0x0060a000
 	nop	; F72CE9  nop
-	calr	sub_F72E27	; F72CEA  calr 0xf72e27
+	calr	SmfMerge_AdvanceReadCursor	; F72CEA  calr 0xf72e27
 	pop	xix	; F72CED  pop XIX
 	popw	bc	; F72CEE  pop BC
 	push	xix	; F72CEF  push XIX
@@ -178146,7 +178277,7 @@ sub_F72CBC_Return:
 ; SmfMerge_CopySource2Event
 ; Called from: in-module: 0xF72BA8 0xF72BBD
 ; Touches: (0x0C8B) (0x0D00) (0x0D1F) (0x126E)  |  0x60A100
-; Calls:   sub_F72DC8 sub_F72E27 SmfMerge_FetchSource2Event
+; Calls:   SmfMerge_AdvanceWriteCursor SmfMerge_AdvanceReadCursor SmfMerge_FetchSource2Event
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72D04 is an instruction boundary of this
@@ -178165,7 +178296,7 @@ SmfMerge_CopySource2Event:
 	mx_st_mr8 MXD, ra_HL, ra_IX, 2	; F72D08  ld (XHL+IX),B
 	m_bit 1, MD16, 0x0c8b	; F72D0D  bit 1,(0x0c8b)
 	jr	nz, sub_F72D04_Join	; F72D11  jr NZ,0xf72d23
-	calr	sub_F72DC8	; F72D13  calr 0xf72dc8
+	calr	SmfMerge_AdvanceWriteCursor	; F72D13  calr 0xf72dc8
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72D16  ld XHL,(0x126e)
 	ld	a, (3359:16)	; F72D1A  ld A,(0x0d1f)
 	mx_st_mr8 MXD, ra_HL, ra_IX, 1	; F72D1E  ld (XHL+IX),A
@@ -178174,10 +178305,10 @@ sub_F72D04_Join:
 	ld	xix, 6332672	; F72D24  ld XIX,0x0060a100
 	nop	; F72D29  nop
 	ld	iy, (3328:16)	; F72D2A  ld IY,(0x0d00)
-	calr	sub_F72E27	; F72D2E  calr 0xf72e27
+	calr	SmfMerge_AdvanceReadCursor	; F72D2E  calr 0xf72e27
 	ld	(3328:16), iy	; F72D31  ld (0x0d00),IY
 	pop	xix	; F72D35  pop XIX
-	calr	sub_F72DC8	; F72D36  calr 0xf72dc8
+	calr	SmfMerge_AdvanceWriteCursor	; F72D36  calr 0xf72dc8
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72D39  ld XHL,(0x126e)
 	push	xix	; F72D3D  push XIX
 	ld	xix, 6332672	; F72D3E  ld XIX,0x0060a100
@@ -178199,7 +178330,7 @@ sub_F72D04_Skip:
 ; SmfMerge_CopySource1Event
 ; Called from: in-module: 0xF72BAD 0xF72BB3
 ; Touches: (0x0C8B) (0x0CFA) (0x0D1E) (0x126E)  |  0x60A000
-; Calls:   sub_F72DC8 sub_F72E27 SmfMerge_FetchSource1Event
+; Calls:   SmfMerge_AdvanceWriteCursor SmfMerge_AdvanceReadCursor SmfMerge_FetchSource1Event
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72D66 is an instruction boundary of this
@@ -178218,7 +178349,7 @@ SmfMerge_CopySource1Event:
 	mx_st_mr8 MXD, ra_HL, ra_IX, 3	; F72D6A  ld (XHL+IX),C
 	m_bit 0, MD16, 0x0c8b	; F72D6F  bit 0,(0x0c8b)
 	jr	nz, sub_F72D66_Join	; F72D73  jr NZ,0xf72d85
-	calr	sub_F72DC8	; F72D75  calr 0xf72dc8
+	calr	SmfMerge_AdvanceWriteCursor	; F72D75  calr 0xf72dc8
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72D78  ld XHL,(0x126e)
 	ld	a, (3358:16)	; F72D7C  ld A,(0x0d1e)
 	mx_st_mr8 MXD, ra_HL, ra_IX, 1	; F72D80  ld (XHL+IX),A
@@ -178227,10 +178358,10 @@ sub_F72D66_Join:
 	ld	xix, 6332416	; F72D86  ld XIX,0x0060a000
 	nop	; F72D8B  nop
 	ld	iy, (3322:16)	; F72D8C  ld IY,(0x0cfa)
-	calr	sub_F72E27	; F72D90  calr 0xf72e27
+	calr	SmfMerge_AdvanceReadCursor	; F72D90  calr 0xf72e27
 	ld	(3322:16), iy	; F72D93  ld (0x0cfa),IY
 	pop	xix	; F72D97  pop XIX
-	calr	sub_F72DC8	; F72D98  calr 0xf72dc8
+	calr	SmfMerge_AdvanceWriteCursor	; F72D98  calr 0xf72dc8
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72D9B  ld XHL,(0x126e)
 	push	xde	; F72D9F  push XDE
 	ld	xde, 6332416	; F72DA0  ld XDE,0x0060a000
@@ -178249,7 +178380,7 @@ sub_F72D66_Skip:
 	ret	; F72DC7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F72DC8
+; SmfMerge_AdvanceWriteCursor
 ; Called from: in-module: 0xF72BFC 0xF72D13 0xF72D36 0xF72D75 0xF72D98
 ; Touches: (0x0D04) (0x0D4A) (0x126E) (0x3608)
 ; Calls:   T_BStore_AllocBlock_Veneer SongStore_SeekBlock_Copy
@@ -178261,7 +178392,12 @@ sub_F72D66_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F72DC8:
+; SmfMerge_AdvanceWriteCursor: Steps the SMF-merge write cursor IX one byte; past offset 0xFF allocates a block
+;   (T_BStore_AllocBlock_Veneer; above BStore_BlockCount -> error 5), links it after the current write block (+3),
+;   gives it +1 = (0x0D04) and +3 = 0xFFFF, makes it (0x0D04) and IX = 5. Smf_MergeTracks' copy of
+;   TrackMerge_AdvanceWriteCursor. Basis: callers + body + twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_a8.json)
+SmfMerge_AdvanceWriteCursor:
 	and	ix, 255	; F72DC8  and IX,0x00ff
 	inc	1, ix	; F72DCC  inc 1,IX
 	cp	ix, 255	; F72DCE  cp IX,0x00ff
@@ -178302,7 +178438,7 @@ sub_F72DC8_Return:
 	ret	; F72E26  ret
 
 ; --------------------------------------------------------------------------
-; sub_F72E27
+; SmfMerge_AdvanceReadCursor
 ; Called from: in-module: 0xF72C0E 0xF72C26 0xF72CA2 0xF72CEA 0xF72D2E
 ;              0xF72D90
 ; Touches: (0x0D4A) (0x126E) (0x345C) (0x3608)
@@ -178315,7 +178451,12 @@ sub_F72DC8_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F72E27:
+; SmfMerge_AdvanceReadCursor: Steps a SMF-merge source read cursor IY one byte in its staging buffer XIX (0x60A000 /
+;   0x60A100); past offset 0xFF follows the staged block's +3 link (0xFFFF -> error 2, above BStore_BlockCount -> 10,
+;   block not in use -> 11) and reloads the buffer (TrackMerge_LoadAndFreeBlock_Copy, IY = 5); (0x126E) kept.
+;   Smf_MergeTracks' copy of TrackMerge_AdvanceReadCursor (adds `and IY,0xFF`, bounds on 0x3608 not 0x0CA4). Basis:
+;   callers + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
+SmfMerge_AdvanceReadCursor:
 	push	xiz	; F72E27  push XIZ
 	ld	xiz, (BStore_CursorBlockAddr:16)	; F72E28  ld XIZ,(0x126e)
 	m_rd_ld_rr2x RLX, 0x38, r6	; F72E2C  ld XDE3,XIZ
@@ -178941,7 +179082,7 @@ sub_F73236_Return:
 ; Called from: in-module: 0xF7301E 0xF73046 0xF73067 0xF730FA 0xF73132
 ;              0xF73153 0xF73174 0xF73195
 ; Touches: (0x1238) (0x345C)
-; Calls:   SongStore_SeekBlock_Copy BStore_PutByteAtCursorNoSave sub_F732DF
+; Calls:   SongStore_SeekBlock_Copy BStore_PutByteAtCursorNoSave SmfSplit_AdvanceWriteCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF73261 is an instruction boundary of this
@@ -178968,7 +179109,7 @@ SmfSplit_PutEventBytes:
 	pushw	bc	; F73278  push BC
 	push	xix	; F73279  push XIX
 	calr	BStore_PutByteAtCursorNoSave	; F7327A  calr 0xf732c7
-	calr	sub_F732DF	; F7327D  calr 0xf732df
+	calr	SmfSplit_AdvanceWriteCursor	; F7327D  calr 0xf732df
 	pop	xix	; F73280  pop XIX
 	popw	bc	; F73281  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F73282  cp (0x1238),0x00
@@ -178982,7 +179123,7 @@ sub_F73261_Return:
 ; SmfSplit_PutMarkOnAllTracks
 ; Called from: in-module: 0xF72FE2 0xF72FE9
 ; Touches: (0x1238)
-; Calls:   SmfSplit_LoadTrackCursor BStore_PutByteAtCursorNoSave sub_F732DF SmfSplit_SaveTrackCursor
+; Calls:   SmfSplit_LoadTrackCursor BStore_PutByteAtCursorNoSave SmfSplit_AdvanceWriteCursor SmfSplit_SaveTrackCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7328F is an instruction boundary of this
@@ -179013,7 +179154,7 @@ sub_F7328F_Loop:
 	jr	nz, sub_F7328F_Skip	; F732A3  jr NZ,0xf732b6
 	pushw	wa	; F732A5  push WA
 	pushw	iy	; F732A6  push IY
-	calr	sub_F732DF	; F732A7  calr 0xf732df
+	calr	SmfSplit_AdvanceWriteCursor	; F732A7  calr 0xf732df
 	popw	iy	; F732AA  pop IY
 	popw	wa	; F732AB  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x00	; F732AC  cp (0x1238),0x00
@@ -179060,7 +179201,7 @@ BStore_PutByteAtCursorNoSave:
 	ret	; F732DE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F732DF
+; SmfSplit_AdvanceWriteCursor
 ; Called from: in-module: 0xF7327D 0xF732A7
 ; Touches: (0x1238) (0x345E)
 ; Calls:   sub_F7348E
@@ -179072,7 +179213,12 @@ BStore_PutByteAtCursorNoSave:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F732DF:
+; SmfSplit_AdvanceWriteCursor: Steps the BStore cursor one byte: BStore_CursorOffset + 1, or at offset 0xFF with
+;   blocks free allocates and links a new block (sub_F7348E: +3 of the old, +1 back link, +3 = 0xFFFF; cursor = new
+;   block, offset 5); (0x1238) := 0 on success, 0xFF when BStore_FreeCount is 0. SmfSplit_PutEventBytes and
+;   SmfSplit_PutMarkOnAllTracks step after each byte they write. Basis: callers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_a8.json)
+SmfSplit_AdvanceWriteCursor:
 	ld	wa, (BStore_CursorOffset:16)	; F732DF  ld WA,(0x345e)
 	cp	wa, 255	; F732E3  cp WA,0x00ff
 	jr	nz, sub_F732DF_Skip2	; F732E7  jr NZ,0xf732fe
@@ -179183,7 +179329,7 @@ SmfSplit_LoadAndFreeSourceBlock:
 ; SmfSplit_FetchSourceEvent
 ; Called from: in-module: 0xF72FA2
 ; Touches: (0x0CFA)  |  0x60A000
-; Calls:   sub_F734E8 sub_F733EB
+; Calls:   SmfSplit_ClearEventBuffer SmfSplit_AdvanceReadCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7339C is an instruction boundary of this
@@ -179199,7 +179345,7 @@ SmfSplit_LoadAndFreeSourceBlock:
 ;   (notes/naming-pilot-2026-10-06/proposals_wave7_y.json)
 SmfSplit_FetchSourceEvent:
 	xor	hl, hl	; F7339C  xor HL,HL
-	calr	sub_F734E8	; F7339E  calr 0xf734e8
+	calr	SmfSplit_ClearEventBuffer	; F7339E  calr 0xf734e8
 	ld	iy, (3322:16)	; F733A1  ld IY,(0x0cfa)
 	push	xix	; F733A5  push XIX
 	ld	xix, 6332416	; F733A6  ld XIX,0x0060a000
@@ -179212,7 +179358,7 @@ SmfSplit_FetchSourceEvent:
 sub_F7339C_Join:
 	inc	1, hl	; F733C0  inc 1,HL
 	pushw	hl	; F733C2  push HL
-	calr	sub_F733EB	; F733C3  calr 0xf733eb
+	calr	SmfSplit_AdvanceReadCursor	; F733C3  calr 0xf733eb
 	popw	hl	; F733C6  pop HL
 	ld	iy, (3322:16)	; F733C7  ld IY,(0x0cfa)
 	push	xix	; F733CB  push XIX
@@ -179230,7 +179376,7 @@ sub_F7339C_Return:
 	ret	; F733EA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F733EB
+; SmfSplit_AdvanceReadCursor
 ; Called from: in-module: 0xF733C3
 ; Touches: (0x0CFA) (0x0D4A) (0x126E) (0x345C) (0x3608)  |  0x60A000
 ; Calls:   SongStore_SeekBlock_Copy SmfSplit_LoadAndFreeSourceBlock
@@ -179242,7 +179388,12 @@ sub_F7339C_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F733EB:
+; SmfSplit_AdvanceReadCursor: Steps track 1's read cursor (0x0CFA) one byte in the staging buffer 0x60A000; past
+;   offset 0xFF follows the staged block's +3 link (0xFFFF -> error 2, above BStore_BlockCount -> 10, not in use ->
+;   11) and loads + frees that block (SmfSplit_LoadAndFreeSourceBlock, IY = 5). SmfSplit_FetchSourceEvent steps with
+;   it after each byte it buffers; cf. SmfMerge_AdvanceReadCursor. Basis: caller + body + twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_a8.json)
+SmfSplit_AdvanceReadCursor:
 	ld	iy, (3322:16)	; F733EB  ld IY,(0x0cfa)
 	ld	xix, 6332416	; F733EF  ld XIX,0x0060a000
 	inc	1, iy	; F733F4  inc 1,IY
@@ -179401,7 +179552,7 @@ SmfSplit_SaveTrackEndCursor:
 	ret	; F734E7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F734E8
+; SmfSplit_ClearEventBuffer
 ; Called from: in-module: 0xF7339E
 ; Touches: (0x1198) (0x119A) (0x119C) (0x119E)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -179412,7 +179563,10 @@ SmfSplit_SaveTrackEndCursor:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F734E8:
+; SmfSplit_ClearEventBuffer: Zeroes the 7-byte event buffer at Smf_VlqValue (0x1198..0x119E: three words and a byte).
+;   SmfSplit_FetchSourceEvent calls it first, before copying track 1's next item into that buffer. Basis: caller +
+;   body. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
+SmfSplit_ClearEventBuffer:
 	xor	wa, wa	; F734E8  xor WA,WA
 	ld	(Smf_VlqValue:16), wa	; F734EA  ld (0x1198),WA
 	ld	(4506:16), wa	; F734EE  ld (0x119a),WA
@@ -181570,7 +181724,7 @@ sub_F748AD_Epilogue:
 ; SmfWrite_RestoreSongFromTempFile
 ; Called from: in-module: 0xF74775 0xF747CD 0xF747EB
 ; Touches: (0x21D0) (0x21D1) (0x21D2) (0x2725)
-; Calls:   T_F425C8 T_DiskApi_DeleteFile_Call SmfWrite_RestoreFileName
+; Calls:   T_DiskLoadFile_Execute T_DiskApi_DeleteFile_Call SmfWrite_RestoreFileName
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF748F0 is an instruction boundary of this
@@ -181580,7 +181734,7 @@ sub_F748AD_Epilogue:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SmfWrite_RestoreSongFromTempFile: Disk_FileName := "_ZZZZZZZ" + "SEQ" (Data_F73844+0x10), Disk_ContentType := 1
-;   (sequencer), T_F425C8 (prom_a sub_FE1C79 -> sub_FE0599 -> DiskLoad_ByContentType) reloads the song Smf_WriteFile
+;   (sequencer), T_DiskLoadFile_Execute (prom_a DiskLoadFile_Execute -> sub_FE0599 -> DiskLoad_ByContentType) reloads the song Smf_WriteFile
 ;   saved there before its destructive track merge; then extension '???', T_DiskApi_DeleteFile_Call deletes the temp
 ;   file and SmfWrite_RestoreFileName restores the user's name. Smf_WriteFile runs it on success and on both error
 ;   exits. Basis: caller + body. (notes/naming-pilot-2026-10-06/proposals_wave7_z.json)
@@ -181590,7 +181744,7 @@ SmfWrite_RestoreSongFromTempFile:
 	ldw	bc, 11	; F748FA  ld BC,0x000b
 	ldir85	; F748FD  ldir
 	ld	(Disk_ContentType:16), 1	; F748FF  ld (0x2725),0x01
-	call	T_F425C8	; F74904  call 0xf425c8
+	call	T_DiskLoadFile_Execute	; F74904  call 0xf425c8
 	ld	(Disk_FileName+8:16), 63	; F74908  ld (0x21d0),0x3f
 	ld	(Disk_FileName+9:16), 63	; F7490D  ld (0x21d1),0x3f
 	ld	(Disk_FileName+10:16), 63	; F74912  ld (0x21d2),0x3f
@@ -185173,7 +185327,7 @@ sub_F768A1:
 	ldw	bc, 11	; F768AB  ld BC,0x000b
 	.byte 0x85, 0x11	; F768AE  ldir   [llvm-mc cannot encode this]
 	ld	(Disk_ContentType:16), 1	; F768B0  ld (0x2725),0x01
-	call	T_F425C8	; F768B5  call 0xf425c8
+	call	T_DiskLoadFile_Execute	; F768B5  call 0xf425c8
 	ld	(Disk_FileName+8:16), 63	; F768B9  ld (0x21d0),0x3f
 	ld	(Disk_FileName+9:16), 63	; F768BE  ld (0x21d1),0x3f
 	ld	(Disk_FileName+10:16), 63	; F768C3  ld (0x21d2),0x3f
@@ -190538,7 +190692,7 @@ sub_F7AB3F_Return5:
 ; TrackMerge_InitFields
 ; Called from: T_TrackMerge_InitFields (x1)
 ; Touches: (0x0DBA)
-; Calls:   sub_F7AFD8
+; Calls:   TrackMerge_LoadSavedFields
 ; Evidence: thunk slot T_TrackMerge_InitFields holds `jp 0x00F7AC9D`, and 0xF7AC9D is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -190546,12 +190700,12 @@ sub_F7AB3F_Return5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; TrackMerge_InitFields: Paint_TrackMerge's stage-0 init (slot T_TrackMerge_InitFields): sub_F7AFD8 reloads the three fields
+; TrackMerge_InitFields: Paint_TrackMerge's stage-0 init (slot T_TrackMerge_InitFields): TrackMerge_LoadSavedFields reloads the three fields
 ;   (0x0C13)/(0x0C14)/(0x0C15) and their display cells from the saved copies 0x603459..0x60345B, then the field cursor
 ;   (0x0DBA) := 1. Basis: caller + body + siblings (MeasureDelete_InitFields). (notes/naming-
 ;   pilot-2026-10-06/proposals_wave7_z.json)
 TrackMerge_InitFields:		; <- T_TrackMerge_InitFields
-	calr	sub_F7AFD8	; F7AC9D  calr 0xf7afd8
+	calr	TrackMerge_LoadSavedFields	; F7AC9D  calr 0xf7afd8
 	ld	(3514:16), 1	; F7ACA0  ld (0x0dba),0x01
 	ret	; F7ACA5  ret
 
@@ -191033,7 +191187,7 @@ SongStore_BitMask32:
 
 
 ; --------------------------------------------------------------------------
-; sub_F7AFD8
+; TrackMerge_LoadSavedFields
 ; Called from: in-module: 0xF7AC9D
 ; Touches: (0x0C13) (0x0C14) (0x0C15) (0x12F6) (0x12F7) (0x12F8)
 ; Evidence: the label is here because it is the target of `calr 0xf7afd8` at
@@ -191043,7 +191197,11 @@ SongStore_BitMask32:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7AFD8:
+; TrackMerge_LoadSavedFields: TRACK MERGE: copies the three saved track fields 0x603459..0x60345B (battery RAM) into
+;   the working cells (0x0C13)/(0x0C14)/(0x0C15) and DisplayListB_Stage+0..+2. TrackMerge_InitFields calls it before
+;   setting the field cursor (0x0DBA) := 1, as MeasureDelete_InitFields calls MeasureDelete_LoadSavedFields. Basis:
+;   caller + body + siblings. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
+TrackMerge_LoadSavedFields:
 	ld	a, (6304857:24)	; F7AFD8  ld A,(0x603459)
 	ld	(3091:16), a	; F7AFDD  ld (0x0c13),A
 	ld	(DisplayListB_Stage:16), a	; F7AFE1  ld (0x12f6),A
@@ -194621,7 +194779,7 @@ PanelWrite_Execute:		; <- T_PanelWrite_Execute
 ; Transp0se_InitFields
 ; Called from: T_Transp0se_InitFields (x1)
 ; Touches: (0x0DF6) (0x12FC) (0x2070) (0x207B) (0x2880)
-; Calls:   sub_F7C62D
+; Calls:   Transp0se_StageDisplayFields
 ; Evidence: thunk slot T_Transp0se_InitFields holds `jp 0x00F7C606`, and 0xF7C606 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -194630,13 +194788,13 @@ PanelWrite_Execute:		; <- T_PanelWrite_Execute
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Transp0se_InitFields: Paint_Transp0se's stage-0 init (slot T_Transp0se_InitFields): unless the previous screen was TRANSP0SE
-;   (0x2B), sub_F7C62D stages the saved cells (0x0DF7)..(0x0DFC) into DisplayListB_Stage, the field cursor (0x0DF6) :=
+;   (0x2B), Transp0se_StageDisplayFields stages the saved cells (0x0DF7)..(0x0DFC) into DisplayListB_Stage, the field cursor (0x0DF6) :=
 ;   1 and UI_StatusCode := 0xFF; then, when UI_StatusCode is 0x23 (job done), UI_Request := 0x801A, back to EDIT.
 ;   Basis: caller + body + siblings (AdvanceDelay_InitFields). (notes/naming-pilot-2026-10-06/proposals_wave7_z.json)
 Transp0se_InitFields:		; <- T_Transp0se_InitFields
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x2b	; F7C606  cp (0x207b),0x2b
 	jr	z, sub_F7C440_Skip4	; F7C60B  jr Z,0xf7c61f
-	calr	sub_F7C62D	; F7C60D  calr 0xf7c62d
+	calr	Transp0se_StageDisplayFields	; F7C60D  calr 0xf7c62d
 	ld	a, 1:opc	; F7C610  ld A,0x01
 	ld	(3574:16), a	; F7C612  ld (0x0df6),A
 	ld	(DisplayListB_Stage+6:16), a	; F7C616  ld (0x12fc),A
@@ -194649,7 +194807,7 @@ sub_F7C440_Return10:
 	ret	; F7C62C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C62D
+; Transp0se_StageDisplayFields
 ; Called from: in-module: 0xF7C60D
 ; Touches: (0x0DF6) (0x0DF7) (0x0DF8) (0x0DFA) (0x0DFC) (0x0E00) (0x12F6)
 ;          (0x12F7) (0x12F9) (0x12FB) +1 more
@@ -194659,7 +194817,12 @@ sub_F7C440_Return10:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C62D:
+; Transp0se_StageDisplayFields: TRANSP0SE: its working cells into DisplayListB_Stage -- track (0x0DF7) -> +0, the
+;   1..999 pair (0x0DF8)/(0x0DFA) (first <= last, as Transp0se_KeypadCommit keeps them) -> +1/+3, the signed value
+;   (0x0DFC) -> +5 -- field cursor (0x0DF6) := 1 (+6), and (0x0E00) := (0x0DFA) - (0x0DF8) + 1. Transp0se_InitFields
+;   calls it unless the previous screen was TRANSP0SE; cf. N0teChange_StageDisplayFields. Basis: caller + body + twin.
+;   (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
+Transp0se_StageDisplayFields:
 	ld	a, (3575:16)	; F7C62D  ld A,(0x0df7)
 	ld	(DisplayListB_Stage:16), a	; F7C631  ld (0x12f6),A
 	ld	wa, (3576:16)	; F7C635  ld WA,(0x0df8)
@@ -196470,7 +196633,7 @@ Veneer_F81E7E:
 ;           names at 0xF86EDD.  ⚠ NO NAME: its body reaches no display list, so nothing says which screen this is.  [round7-entrypoints]
 ; ModeEnter_Edit: the +0 ENTER of panel mode 7 (T_ModeEnter_Edit); PanelMode_ToScreenIdMap[7] = 0x1A, ScreenEnter_Edit's screen.
 ModeEnter_Edit:
-	calr	sub_F7E971	; F7D018  calr 0xf7e971
+	calr	ModeEnterBody_Edit	; F7D018  calr 0xf7e971
 	ret	; F7D01B  ret
 ; Evidence: the +4 word of screen object F43040 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF7E97C` then `ret`.  [round7-entrypoints]
@@ -196481,7 +196644,7 @@ sub_F7D01C:
 ;           names at 0xF86ED9.  ⚠ NO NAME: its body reaches no display list, so nothing says which screen this is.  [round7-entrypoints]
 ; ModeEnter_StepRecord: the +0 ENTER of panel mode 6 (T_ModeEnter_StepRecord); PanelMode_ToScreenIdMap[6] = 0x0F, StepRecordPartSelect.
 ModeEnter_StepRecord:
-	call	sub_F80F3A	; F7D020  call 0xf80f3a
+	call	ModeEnterBody_StepRecord	; F7D020  call 0xf80f3a
 	ret	; F7D024  ret
 ; Evidence: the +4 word of screen object F43048 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF80F4F` then `ret`.  [round7-entrypoints]
@@ -199166,7 +199329,7 @@ ButtonTable_SequencerMedley:
 ;
 ; ★ THE FOUR SCREENS ROUND 7 LEFT UNNAMED STAY UNNAMED, and now the reason is
 ; exact: 0xF43040's Enter (0xF7E971, three instructions, here) draws no display
-; list at all; 0xF43048's is prom_a sub_F80F3A and draws none; and 0xF43160
+; list at all; 0xF43048's is prom_a ModeEnterBody_StepRecord and draws none; and 0xF43160
 ; and 0xF431D0 SHARE ONE ENTER METHOD, prom_a ScreenEnterBody_StepRecord -- so a rule that
 ; names a screen after what its Enter draws cannot separate those two even in
 ; principle.  `--screens4` prints it from the ROM.
@@ -200841,29 +201004,29 @@ TrackAssign_PaintTrackGroup:
 	ld	xiy, TrackAssign_PaintTrackGroup_DL	; F7E799  ld XIY,0x00f3b651
 	ld	xix, DL_F3B65B	; F7E79E  ld XIX,0x00f3b65b
 	call	T_DisplayListB_Run	; F7E7A3  call 0xf417f4
-	calr	sub_F7E941	; F7E7A7  calr 0xf7e941
-	calr	sub_F7E919	; F7E7AA  calr 0xf7e919
+	calr	TrackAssign_DrawTrackRowHighlight	; F7E7A7  calr 0xf7e941
+	calr	TrackAssign_DrawTrackGroupHighlight	; F7E7AA  calr 0xf7e919
 	ld	(LCD_CurrentLayer:16), 0	; F7E7AD  ld (0x2540),0x00
 	m_bit 0, MD16, 0x0c07	; F7E7B2  bit 0,(0x0c07)
 	jr	nz, TrackAssign_PaintTrackGroup_Skip	; F7E7B6  jr NZ,0xf7e7d4
 	calr	Paint_TrackLabels1To8	; F7E7B8  calr 0xf7e89f
-	calr	sub_F7E8CD	; F7E7BB  calr 0xf7e8cd
+	calr	TrackAssign_DrawParts1To8	; F7E7BB  calr 0xf7e8cd
 	ld	l, (6304852:24)	; F7E7BE  ld L,(0x603454)
 	xor	a, a	; F7E7C3  xor A,A
-	calr	sub_F7E852	; F7E7C5  calr 0xf7e852
+	calr	TrackAssign_DrawLocalControlColumn	; F7E7C5  calr 0xf7e852
 	ld	xhl, 6304819	; F7E7C8  ld XHL,0x00603433
 	xor	a, a	; F7E7CD  xor A,A
-	calr	sub_F7E81F	; F7E7CF  calr 0xf7e81f
+	calr	TrackAssign_DrawOutChannelColumn	; F7E7CF  calr 0xf7e81f
 	jr	TrackAssign_PaintTrackGroup_Join	; F7E7D2  jr T,0xf7e7ee
 TrackAssign_PaintTrackGroup_Skip:
 	calr	Paint_TrackLabels9To16	; F7E7D4  calr 0xf7e8b6
-	calr	sub_F7E8F3	; F7E7D7  calr 0xf7e8f3
+	calr	TrackAssign_DrawParts9To16	; F7E7D7  calr 0xf7e8f3
 	ld	l, (6304853:24)	; F7E7DA  ld L,(0x603455)
 	ld	a, 8:opc	; F7E7DF  ld A,0x08
-	calr	sub_F7E852	; F7E7E1  calr 0xf7e852
+	calr	TrackAssign_DrawLocalControlColumn	; F7E7E1  calr 0xf7e852
 	ld	xhl, 6304827	; F7E7E4  ld XHL,0x0060343b
 	ld	a, 8:opc	; F7E7E9  ld A,0x08
-	calr	sub_F7E81F	; F7E7EB  calr 0xf7e81f
+	calr	TrackAssign_DrawOutChannelColumn	; F7E7EB  calr 0xf7e81f
 TrackAssign_PaintTrackGroup_Join:
 	ld	(LCD_CurrentLayer:16), 2	; F7E7EE  ld (0x2540),0x02
 	ld	a, (3520:16)	; F7E7F3  ld A,(0x0dc0)
@@ -200883,8 +201046,13 @@ TrackAssign_PaintTrackGroup_Join2:
 
 ; Evidence: reached from calr from prom_b 0xF7E7CF; calr from prom_b
 ;           0xF7E7EB, and from nothing else the scans see.
-sub_F7E81F:
-	ld	xiy, DL_F3B74B	; F7E81F  ld XIY,0x00f3b74b
+; TrackAssign_DrawOutChannelColumn: TRACK ASSIGN, MIDI OUT CH column: for the eight tracks of the shown group (A =
+;   first track, XHL = their bytes: 0x603433.. for 1-8, 0x60343B.. for 9-16) stages each byte in DisplayListB_Stage
+;   and draws the matching TrackAssign_DrawOutChannelColumn_DL record through DLB_Handler_StringTable, whose table is Table_F3B7D4+0xF4 ('1-
+;   1CH'..'2-16CH', index 0x20 = ' OFF '). Basis: caller + body + display list. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_b8.json)
+TrackAssign_DrawOutChannelColumn:
+	ld	xiy, TrackAssign_DrawOutChannelColumn_DL	; F7E81F  ld XIY,0x00f3b74b
 	xor	bc, bc	; F7E824  xor BC,BC
 sub_F7E81F_Loop:
 	pushw	wa	; F7E826  push WA
@@ -200913,8 +201081,13 @@ sub_F7E81F_Loop:
 
 ; Evidence: reached from calr from prom_b 0xF7E7C5; calr from prom_b
 ;           0xF7E7E1, and from nothing else the scans see.
-sub_F7E852:
-	ld	xiy, DL_F3B6D3	; F7E852  ld XIY,0x00f3b6d3
+; TrackAssign_DrawLocalControlColumn: TRACK ASSIGN, LOCAL CONTROL column: for bits 0..7 of L (the per-track bits of
+;   the word 0x603454 -- low byte for tracks 1-8, high byte for 9-16) draws TrackAssign_DrawLocalControlColumn_DL's eight records with
+;   DisplayListB_Stage = 0 ('OFF') or 1 ('ON '); 2 ('-- ') only if T_F42B9C returned 0x55, which it never does (it
+;   always returns 0xAA). TrackAssign_StageZero_SoftKeyCol5 toggles the same bits. Basis: caller + body + display
+;   list. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
+TrackAssign_DrawLocalControlColumn:
+	ld	xiy, TrackAssign_DrawLocalControlColumn_DL	; F7E852  ld XIY,0x00f3b6d3
 	ld	c, 1:opc	; F7E857  ld C,0x01
 sub_F7E852_Loop:
 	pushw	wa	; F7E859  push WA
@@ -200993,7 +201166,11 @@ Paint_TrackLabels9To16:
 
 ; Evidence: reached from calr from prom_b 0xF7E7BB, and from nothing else
 ;           the scans see.
-sub_F7E8CD:
+; TrackAssign_DrawParts1To8: TRACK ASSIGN, TRACK ASSIGN column for tracks 1-8: copies BStore_TrackToPart[0..7] to
+;   UI_DrawScratch+1..+8 and runs DL_F3B65B through interpreter B on layer 0 -- eight string-table readouts of 'PART
+;   n' (Table_F3B7D4+0x14). Paired with Paint_TrackLabels1To8 in TrackAssign_PaintTrackGroup. Basis: caller + body +
+;   display list. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
+TrackAssign_DrawParts1To8:
 	ld	(LCD_CurrentLayer:16), 0	; F7E8CD  ld (0x2540),0x00
 	calr	sub_F7E39F_Nop	; F7E8D2  calr 0xf7e2d8
 	ld	xiy, BStore_TrackToPart	; F7E8D5  ld XIY,0x00603422
@@ -201001,13 +201178,17 @@ sub_F7E8CD:
 	ldw	bc, 8	; F7E8DF  ld BC,0x0008
 	ldir85	; F7E8E2  ldir
 	ld	xiy, DL_F3B65B	; F7E8E4  ld XIY,0x00f3b65b
-	ld	xix, DL_F3B6D3	; F7E8E9  ld XIX,0x00f3b6d3
+	ld	xix, TrackAssign_DrawLocalControlColumn_DL	; F7E8E9  ld XIX,0x00f3b6d3
 	call	T_DisplayListB_Run	; F7E8EE  call 0xf417f4
 	ret	; F7E8F2  ret
 
 ; Evidence: reached from calr from prom_b 0xF7E7D7, and from nothing else
 ;           the scans see.
-sub_F7E8F3:
+; TrackAssign_DrawParts9To16: TRACK ASSIGN, TRACK ASSIGN column for tracks 9-16: as TrackAssign_DrawParts1To8 with
+;   BStore_TrackToPart[8..15] (0x60342A) -- copies them to UI_DrawScratch+1..+8 and runs DL_F3B65B ('PART n'
+;   readouts). Paired with Paint_TrackLabels9To16. Basis: caller + body + twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_b8.json)
+TrackAssign_DrawParts9To16:
 	ld	(LCD_CurrentLayer:16), 0	; F7E8F3  ld (0x2540),0x00
 	calr	sub_F7E39F_Nop	; F7E8F8  calr 0xf7e2d8
 	ld	xiy, 6304810	; F7E8FB  ld XIY,0x0060342a
@@ -201015,16 +201196,20 @@ sub_F7E8F3:
 	ldw	bc, 8	; F7E905  ld BC,0x0008
 	ldir85	; F7E908  ldir
 	ld	xiy, DL_F3B65B	; F7E90A  ld XIY,0x00f3b65b
-	ld	xix, DL_F3B6D3	; F7E90F  ld XIX,0x00f3b6d3
+	ld	xix, TrackAssign_DrawLocalControlColumn_DL	; F7E90F  ld XIX,0x00f3b6d3
 	call	T_DisplayListB_Run	; F7E914  call 0xf417f4
 	ret	; F7E918  ret
 
 ; Evidence: reached from calr from prom_b 0xF7E7AA, and from nothing else
 ;           the scans see.
-sub_F7E919:
+; TrackAssign_DrawTrackGroupHighlight: TRACK ASSIGN: on layer 1 erases (op 0x1B) the box (12,111)-(49,165) of
+;   TrackAssign_DrawTrackGroupHighlight_DL and fills (svc 0x05) one of two boxes indexed by (0x0C07) & 1 -- (12,111)-(43,126) around the '1_8'
+;   legend or (12,150)-(49,165) around '9_16' -- marking the shown track group. Basis: caller + body + display list.
+;   (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
+TrackAssign_DrawTrackGroupHighlight:
 	ld	(LCD_CurrentLayer:16), 1	; F7E919  ld (0x2540),0x01
 	calr	sub_F7E39F_Nop	; F7E91E  calr 0xf7e2d8
-	ld	xiy, DL_F3B7C3	; F7E921  ld XIY,0x00f3b7c3
+	ld	xiy, TrackAssign_DrawTrackGroupHighlight_DL	; F7E921  ld XIY,0x00f3b7c3
 	ld	xix, Data_F3B7CD	; F7E926  ld XIX,0x00f3b7cd
 	call	T_DisplayList_Run	; F7E92B  call 0xf417f0
 	ld	a, (3079:16)	; F7E92F  ld A,(0x0c07)
@@ -201035,10 +201220,13 @@ sub_F7E919:
 
 ; Evidence: reached from calr from prom_b 0xF7E7A7, and from nothing else
 ;           the scans see.
-sub_F7E941:
+; TrackAssign_DrawTrackRowHighlight: TRACK ASSIGN: on layer 1 erases (op 0x1B) the eight-row table area TrackAssign_DrawTrackRowHighlight_DL
+;   (56,62)-(279,181) and fills (svc 0x05) row box DLTable_F396ED[(0x0C03) mod 8] -- the row of the selected track
+;   (0x0C03), 0..15. Basis: caller + body + display list. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
+TrackAssign_DrawTrackRowHighlight:
 	ld	(LCD_CurrentLayer:16), 1	; F7E941  ld (0x2540),0x01
 	calr	sub_F7E39F_Nop	; F7E946  calr 0xf7e2d8
-	ld	xiy, DL_F3972D	; F7E949  ld XIY,0x00f3972d
+	ld	xiy, TrackAssign_DrawTrackRowHighlight_DL	; F7E949  ld XIY,0x00f3972d
 	ld	xix, TrackAssign_DrawSelectedPart_DL	; F7E94E  ld XIX,0x00f39737
 	call	T_DisplayList_Run	; F7E953  call 0xf417f0
 	ld	a, (3075:16)	; F7E957  ld A,(0x0c03)
@@ -201053,7 +201241,11 @@ sub_F7E941_Skip:
 
 ; Evidence: screen 0xF43040's Enter method body; that screen's Enter draws
 ;           no titled list, so it has no name.
-sub_F7E971:
+; ModeEnterBody_Edit: The whole body of ModeEnter_Edit (+0 ENTER of panel mode 7, EDIT): `or (0x2134),2` (the mode-
+;   change bit ModeEnter_Sound/_Combination set), then via its veneer Seq_SaveTrackMaskAndStopAll, UI_ScreenStage :=
+;   0, (0x215E) := 0, (0x212E) |= 0x100, (0x34BB) |= 4. Its LEAVE twin (0xF7E97C, behind sub_F7D01C) restores the mask
+;   and clears (0x34BB) bit 2. Basis: caller + body. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
+ModeEnterBody_Edit:
 	m_or_mi16 MW16, 0x2134, 0x0002	; F7E971  or (0x2134),0x0002
 	call	T_BStore_AppendBytes_Join3_Veneer	; F7E977  call 0xf428b0
 	ret	; F7E97B  ret
@@ -203706,12 +203898,12 @@ MeasureDelete_StageZero_NumberPadKey_Skip:
 	calr	Blink_SetEnable_1_6	; F7F129  calr 0xf7f13a
 	jr	MeasureDelete_StageZero_NumberPadKey_Join	; F7F12C  jr T,0xf7f136
 MeasureDelete_StageZero_NumberPadKey_Skip2:
-	calr	sub_F7F144	; F7F12E  calr 0xf7f144
+	calr	MeasureDelete_KeypadCommit	; F7F12E  calr 0xf7f144
 	jr	MeasureDelete_StageZero_NumberPadKey_Join	; F7F131  jr T,0xf7f136
 MeasureDelete_StageZero_NumberPadKey_Skip3:
 	calr	Var2820_Set2B	; F7F133  calr 0xf7f1c2
 MeasureDelete_StageZero_NumberPadKey_Join:
-	calr	sub_F7F1C8	; F7F136  calr 0xf7f1c8
+	calr	MeasureDelete_BlinkSelectedField	; F7F136  calr 0xf7f1c8
 	ret	; F7F139  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F129, and from nothing else
@@ -203724,7 +203916,12 @@ Blink_SetEnable_1_6:
 
 ; Evidence: reached from calr from prom_b 0xF7F12E, and from nothing else
 ;           the scans see.
-sub_F7F144:
+; MeasureDelete_KeypadCommit: MEASURE DELETE, keypad code 0x0F (ENTER): converts the typed digits
+;   (T_AsciiDigits3_ToValue) and, if 1..999, stores them in the field (0x0DD4) selects -- 2: first measure (0x0DD6),
+;   also (0x0C18) and saved 0x60345D; 3: last measure (0x0DD8) -- keeping first <= last; saved count 0x60345F := last
+;   - first + 1; then T_Blink_Stop and Draw_LastMeasure. Twin of prom_a AdvanceDelay_KeypadCommit. Basis: caller +
+;   body + siblings. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
+MeasureDelete_KeypadCommit:
 	ld	(10278:16), 3	; F7F144  ld (0x2826),0x03
 	call	T_AsciiDigits3_ToValue	; F7F149  call 0xf432f0
 	cp	wa, 1:i3	; F7F14D  cp WA,1
@@ -203777,7 +203974,12 @@ Var2820_Set2B:
 
 ; Evidence: reached from calr from prom_b 0xF7F136, and from nothing else
 ;           the scans see.
-sub_F7F1C8:
+; MeasureDelete_BlinkSelectedField: MEASURE DELETE: unless blinking is off ((0x2075) bit 1 clear) or the key was ENTER
+;   ((0x2267) = 0x0F), starts the field blink on layer 0 with template BlinkArgPtrs_F7F1F5[(0x0DD4)]
+;   (T_Blink_Command). Run after every number-pad key by MeasureDelete_StageZero_NumberPadKey. Twin of prom_a
+;   AdvanceDelay_BlinkSelectedField. Basis: caller + body + siblings. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_b8.json)
+MeasureDelete_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits	; F7F1C8  bit 1,(0x2075)
 	jr	z, sub_F7F1C8_Return	; F7F1CC  jr Z,0xf7f1f4
 	m_cp_mi8 MB16, 0x2267, 0x0f	; F7F1CE  cp (0x2267),0x0f
@@ -204603,12 +204805,12 @@ MeasureErase_StageZero_NumberPadKey_Skip:
 	calr	Blink_SetEnable_1_7	; F7F455  calr 0xf7f466
 	jr	MeasureErase_StageZero_NumberPadKey_Join	; F7F458  jr T,0xf7f462
 MeasureErase_StageZero_NumberPadKey_Skip2:
-	calr	sub_F7F470	; F7F45A  calr 0xf7f470
+	calr	MeasureErase_KeypadCommit	; F7F45A  calr 0xf7f470
 	jr	MeasureErase_StageZero_NumberPadKey_Join	; F7F45D  jr T,0xf7f462
 MeasureErase_StageZero_NumberPadKey_Skip3:
 	calr	Var2820_Set2B_2	; F7F45F  calr 0xf7f4ee
 MeasureErase_StageZero_NumberPadKey_Join:
-	calr	sub_F7F4F4	; F7F462  calr 0xf7f4f4
+	calr	MeasureErase_BlinkSelectedField	; F7F462  calr 0xf7f4f4
 	ret	; F7F465  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F455, and from nothing else
@@ -204621,7 +204823,12 @@ Blink_SetEnable_1_7:
 
 ; Evidence: reached from calr from prom_b 0xF7F45A, and from nothing else
 ;           the scans see.
-sub_F7F470:
+; MeasureErase_KeypadCommit: MEASURE ERASE, keypad code 0x0F: converts the typed digits and, if 1..999, stores them in
+;   the field (0x0DBB) selects -- 2: first measure (0x0C2A), also (0x0C18) and saved 0x603462; 3: last measure
+;   (0x0C2C) -- keeping first <= last; saved count 0x603464 := last - first + 1; then T_Blink_Stop and
+;   MeasureErase_DrawValues. Twin of AdvanceDelay_KeypadCommit. Basis: caller + body + siblings. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_b8.json)
+MeasureErase_KeypadCommit:
 	ld	(10278:16), 3	; F7F470  ld (0x2826),0x03
 	call	T_AsciiDigits3_ToValue	; F7F475  call 0xf432f0
 	cp	wa, 1:i3	; F7F479  cp WA,1
@@ -204674,7 +204881,11 @@ Var2820_Set2B_2:
 
 ; Evidence: reached from calr from prom_b 0xF7F462, and from nothing else
 ;           the scans see.
-sub_F7F4F4:
+; MeasureErase_BlinkSelectedField: MEASURE ERASE: unless (0x2075) bit 1 is clear or (0x2267) = 0x0F, starts the field
+;   blink on layer 0 with template BlinkArgPtrs_F7F521[(0x0DBB)]. MeasureErase_StageZero_NumberPadKey's common tail.
+;   Twin of AdvanceDelay_BlinkSelectedField. Basis: caller + body + siblings. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_b8.json)
+MeasureErase_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits	; F7F4F4  bit 1,(0x2075)
 	jr	z, sub_F7F4F4_Return	; F7F4F8  jr Z,0xf7f520
 	m_cp_mi8 MB16, 0x2267, 0x0f	; F7F4FA  cp (0x2267),0x0f
@@ -204764,13 +204975,17 @@ ScreenButtonBody_PanelWrite_Skip:
 ScreenButtonBody_PanelWrite_Skip2:
 	cp	hl, 15	; F7F569  cp HL,0x000f
 	jr	nz, ScreenButtonBody_PanelWrite_Return	; F7F56D  jr NZ,0xf7f573
-	call	sub_F7F574	; F7F56F  call 0xf7f574
+	call	ExitKey_PanelWrite	; F7F56F  call 0xf7f574
 ScreenButtonBody_PanelWrite_Return:
 	ret	; F7F573  ret
 
 ; Evidence: reached from call from prom_b 0xF7F56F, and from nothing else
 ;           the scans see.
-sub_F7F574:
+; ExitKey_PanelWrite: PANEL WRITE's EXIT key (button code 0x0F): at pair position 1 (W bit 7 clear) UI_Request :=
+;   0x801A, back to the EDIT screen (0x1A); otherwise nothing. ScreenButtonBody_PanelWrite calls it for HL = 15.
+;   Basis: caller + body + siblings (ExitKey_TrackAssignPresets). (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_b8.json)
+ExitKey_PanelWrite:
 	bit	7, w	; F7F574  bit 0x07,W
 	jr	z, sub_F7F574_Skip	; F7F577  jr Z,0xf7f57b
 	jr	sub_F7F574_Return	; F7F579  jr T,0xf7f581
@@ -205425,12 +205640,12 @@ Quantize_StageZero_NumberPadKey_Skip:
 	calr	Blink_SetEnable_1_8	; F7F7C1  calr 0xf7f7d2
 	jr	Quantize_StageZero_NumberPadKey_Join	; F7F7C4  jr T,0xf7f7ce
 Quantize_StageZero_NumberPadKey_Skip2:
-	calr	sub_F7F7DC	; F7F7C6  calr 0xf7f7dc
+	calr	Quantize_KeypadCommit	; F7F7C6  calr 0xf7f7dc
 	jr	Quantize_StageZero_NumberPadKey_Join	; F7F7C9  jr T,0xf7f7ce
 Quantize_StageZero_NumberPadKey_Skip3:
 	calr	Var2820_Set2B_3	; F7F7CB  calr 0xf7f85a
 Quantize_StageZero_NumberPadKey_Join:
-	calr	sub_F7F860	; F7F7CE  calr 0xf7f860
+	calr	Quantize_BlinkSelectedField	; F7F7CE  calr 0xf7f860
 	ret	; F7F7D1  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F7C1, and from nothing else
@@ -205443,7 +205658,12 @@ Blink_SetEnable_1_8:
 
 ; Evidence: reached from calr from prom_b 0xF7F7C6, and from nothing else
 ;           the scans see.
-sub_F7F7DC:
+; Quantize_KeypadCommit: QUANTIZE, keypad code 0x0F: converts the typed digits and, if 1..999, stores them in the
+;   field (0x0DB9) selects -- 2: first measure (0x0C26), also (0x0C4A) and saved 0x603478; 3: last measure (0x0C28) --
+;   keeping first <= last; saved count 0x60347A := last - first + 1; then T_Blink_Stop and
+;   Draw_TrackValueFirstMeasureLastMeasureStrengthWindow. Twin of AdvanceDelay_KeypadCommit. Basis: caller + body +
+;   siblings. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
+Quantize_KeypadCommit:
 	ld	(10278:16), 3	; F7F7DC  ld (0x2826),0x03
 	call	T_AsciiDigits3_ToValue	; F7F7E1  call 0xf432f0
 	cp	wa, 1:i3	; F7F7E5  cp WA,1
@@ -205496,7 +205716,11 @@ Var2820_Set2B_3:
 
 ; Evidence: reached from calr from prom_b 0xF7F7CE, and from nothing else
 ;           the scans see.
-sub_F7F860:
+; Quantize_BlinkSelectedField: QUANTIZE: unless (0x2075) bit 1 is clear or (0x2267) = 0x0F, starts the field blink on
+;   layer 0 with template BlinkArgPtrs_F7F88D[(0x0DB9)]. Quantize_StageZero_NumberPadKey's common tail. Twin of
+;   AdvanceDelay_BlinkSelectedField. Basis: caller + body + siblings. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_b8.json)
+Quantize_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits	; F7F860  bit 1,(0x2075)
 	jr	z, sub_F7F860_Return	; F7F864  jr Z,0xf7f88c
 	m_cp_mi8 MB16, 0x2267, 0x0f	; F7F866  cp (0x2267),0x0f
@@ -206179,12 +206403,12 @@ Vel0cityChange_StageZero_NumberPadKey_Skip:
 	calr	Blink_SetEnable_1_9	; F7FAB7  calr 0xf7fac8
 	jr	Vel0cityChange_StageZero_NumberPadKey_Join	; F7FABA  jr T,0xf7fac4
 Vel0cityChange_StageZero_NumberPadKey_Skip2:
-	calr	sub_F7FAD2	; F7FABC  calr 0xf7fad2
+	calr	Vel0cityChange_KeypadCommit	; F7FABC  calr 0xf7fad2
 	jr	Vel0cityChange_StageZero_NumberPadKey_Join	; F7FABF  jr T,0xf7fac4
 Vel0cityChange_StageZero_NumberPadKey_Skip3:
-	calr	sub_F7FBA4	; F7FAC1  calr 0xf7fba4
+	calr	Vel0cityChange_KeypadSign	; F7FAC1  calr 0xf7fba4
 Vel0cityChange_StageZero_NumberPadKey_Join:
-	calr	sub_F7FBB7	; F7FAC4  calr 0xf7fbb7
+	calr	Vel0cityChange_BlinkSelectedField	; F7FAC4  calr 0xf7fbb7
 	ret	; F7FAC7  ret
 
 ; Evidence: reached from calr from prom_b 0xF7FAB7, and from nothing else
@@ -206197,7 +206421,12 @@ Blink_SetEnable_1_9:
 
 ; Evidence: reached from calr from prom_b 0xF7FABC, and from nothing else
 ;           the scans see.
-sub_F7FAD2:
+; Vel0cityChange_KeypadCommit: VEL0CITY CHANGE, keypad code 0x0F: field 4 converts signed (T_AsciiField_ToSignedValue,
+;   -127..+127 by the sign cell (0x2820)) into (0x0C1E), saved 0x6034BC, (0x0C24) and Stage+5; fields 2/3 convert
+;   1..999 into first (0x0C20, also (0x0C18), saved 0x6034B2) / last (0x0C22) measure, keeping first <= last, saved
+;   count 0x6034B4; then T_Blink_Stop and Vel0cityChange_DrawValues. Twin of AdvanceDelay_KeypadCommit. Basis: caller
+;   + body + siblings. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
+Vel0cityChange_KeypadCommit:
 	m_cp_mi8 MB16, 0x0db8, 0x04	; F7FAD2  cp (0x0db8),0x04
 	jr	nz, sub_F7FAD2_Skip	; F7FAD7  jr NZ,0xf7fae9
 	ld	(10278:16), 3	; F7FAD9  ld (0x2826),0x03
@@ -206273,7 +206502,10 @@ sub_F7FAD2_Return:
 
 ; Evidence: reached from calr from prom_b 0xF7FAC1, and from nothing else
 ;           the scans see.
-sub_F7FBA4:
+; Vel0cityChange_KeypadSign: VEL0CITY CHANGE, keypad code 0x80: while blinking ((0x2075) bit 1) and unless field 4
+;   (the signed value) is selected, puts '+' back in the sign cell (0x2820). Twin of prom_a AdvanceDelay_KeypadSign.
+;   Basis: caller + body + siblings. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
+Vel0cityChange_KeypadSign:
 	m_bit 1, MD16, UI_RequestBits	; F7FBA4  bit 1,(0x2075)
 	jr	z, sub_F7FBA4_Return	; F7FBA8  jr Z,0xf7fbb6
 	m_cp_mi8 MB16, 0x0db8, 0x04	; F7FBAA  cp (0x0db8),0x04
@@ -206284,7 +206516,11 @@ sub_F7FBA4_Return:
 
 ; Evidence: reached from calr from prom_b 0xF7FAC4, and from nothing else
 ;           the scans see.
-sub_F7FBB7:
+; Vel0cityChange_BlinkSelectedField: VEL0CITY CHANGE: unless (0x2075) bit 1 is clear or (0x2267) = 0x0F, starts the
+;   field blink on layer 0 with template BlinkArgPtrs_F7FBE4[(0x0DB8)]. Vel0cityChange_StageZero_NumberPadKey's common
+;   tail. Twin of AdvanceDelay_BlinkSelectedField. Basis: caller + body + siblings. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_b8.json)
+Vel0cityChange_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits	; F7FBB7  bit 1,(0x2075)
 	jr	z, sub_F7FBB7_Return	; F7FBBB  jr Z,0xf7fbe3
 	m_cp_mi8 MB16, 0x2267, 0x0f	; F7FBBD  cp (0x2267),0x0f
@@ -206956,12 +207192,12 @@ Transp0se_StageZero_NumberPadKey_Skip:
 	calr	Blink_SetEnable_1_10	; F7FDFE  calr 0xf7fe0f
 	jr	Transp0se_StageZero_NumberPadKey_Join	; F7FE01  jr T,0xf7fe0b
 Transp0se_StageZero_NumberPadKey_Skip2:
-	calr	sub_F7FE19	; F7FE03  calr 0xf7fe19
+	calr	Transp0se_KeypadCommit	; F7FE03  calr 0xf7fe19
 	jr	Transp0se_StageZero_NumberPadKey_Join	; F7FE06  jr T,0xf7fe0b
 Transp0se_StageZero_NumberPadKey_Skip3:
-	calr	sub_F7FED3	; F7FE08  calr 0xf7fed3
+	calr	Transp0se_KeypadSign	; F7FE08  calr 0xf7fed3
 Transp0se_StageZero_NumberPadKey_Join:
-	calr	sub_F7FEE6	; F7FE0B  calr 0xf7fee6
+	calr	Transp0se_BlinkSelectedField	; F7FE0B  calr 0xf7fee6
 	ret	; F7FE0E  ret
 
 ; Evidence: reached from calr from prom_b 0xF7FDFE, and from nothing else
@@ -206974,7 +207210,12 @@ Blink_SetEnable_1_10:
 
 ; Evidence: reached from calr from prom_b 0xF7FE03, and from nothing else
 ;           the scans see.
-sub_F7FE19:
+; Transp0se_KeypadCommit: TRANSP0SE, keypad code 0x0F: field 4 converts signed (-127..+127 by the sign cell (0x2820))
+;   into (0x0DFC), Stage+5 and (0x129C); fields 2/3 convert 1..999 into (0x0DF8) / (0x0DFA), keeping (0x0DF8) <=
+;   (0x0DFA), with (0x0E08) = (0x0E00) := (0x0DFA) - (0x0DF8) + 1; then T_Blink_Stop and Transp0se_DrawValues. Twin of
+;   AdvanceDelay_KeypadCommit. Basis: caller + body + siblings. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_b8.json)
+Transp0se_KeypadCommit:
 	m_cp_mi8 MB16, 0x0df6, 0x04	; F7FE19  cp (0x0df6),0x04
 	jr	nz, sub_F7FE19_Skip	; F7FE1E  jr NZ,0xf7fe30
 	ld	(10278:16), 3	; F7FE20  ld (0x2826),0x03
@@ -207045,7 +207286,10 @@ sub_F7FE19_Return:
 
 ; Evidence: reached from calr from prom_b 0xF7FE08, and from nothing else
 ;           the scans see.
-sub_F7FED3:
+; Transp0se_KeypadSign: TRANSP0SE, keypad code 0x80: while blinking ((0x2075) bit 1) and unless field 4 (the signed
+;   value) is selected, puts '+' back in the sign cell (0x2820). Twin of AdvanceDelay_KeypadSign. Basis: caller + body
+;   + siblings. (notes/naming-pilot-2026-10-06/proposals_wave8_b8.json)
+Transp0se_KeypadSign:
 	m_bit 1, MD16, UI_RequestBits	; F7FED3  bit 1,(0x2075)
 	jr	z, sub_F7FED3_Return	; F7FED7  jr Z,0xf7fee5
 	m_cp_mi8 MB16, 0x0df6, 0x04	; F7FED9  cp (0x0df6),0x04
@@ -207056,7 +207300,11 @@ sub_F7FED3_Return:
 
 ; Evidence: reached from calr from prom_b 0xF7FE0B, and from nothing else
 ;           the scans see.
-sub_F7FEE6:
+; Transp0se_BlinkSelectedField: TRANSP0SE: unless (0x2075) bit 1 is clear or (0x2267) = 0x0F, starts the field blink
+;   on layer 0 with template BlinkArgPtrs_F7FF13[(0x0DF6)]. Transp0se_StageZero_NumberPadKey's common tail. Twin of
+;   AdvanceDelay_BlinkSelectedField. Basis: caller + body + siblings. (notes/naming-
+;   pilot-2026-10-06/proposals_wave8_b8.json)
+Transp0se_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits	; F7FEE6  bit 1,(0x2075)
 	jr	z, sub_F7FEE6_Return	; F7FEEA  jr Z,0xf7ff12
 	m_cp_mi8 MB16, 0x2267, 0x0f	; F7FEEC  cp (0x2267),0x0f

@@ -21,7 +21,7 @@ number, `BStore_CurrentBank` + 1 (FINDINGS-prom_b-song-store.md). On the cycle-p
 | DL records reading 0x12F6 / 0x12F7 / 0x12F9 / 0x12FB / 0x12FC (the busiest) | 25 / 14 / 12 / 11 / 12 |
 | code stores `ld (0x12F6+n),...` | 363 |
 | pointer loads `ld XIX,0x12F6+n` (stores then go through XIX) | 17 |
-| code reads | 1: `sub A,(0x12F6)` in `sub_F81948`, which opens with six `pop XSP`; whether that entry is real was not checked |
+| code reads | 1: `sub A,(0x12F6)` in `Str_SongNameBlank`, which opens with six `pop XSP`; whether that entry is real was not checked |
 
 The 25 for 0x12F6 counts `.short` source words in the transcriptions.
 `notes/prom_b_var_screens.py --var 0x12F6` (wsa1/) decodes the records from the ROM bytes and

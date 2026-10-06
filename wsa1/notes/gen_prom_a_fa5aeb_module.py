@@ -1050,11 +1050,11 @@ def structure():
       "Called from: prom_b directory slot T_F40750 (`jp 0xFA7D95`), and by",
       "         fall-through from sub_FA7D92.")
 
-    LABELS[0xFA7DA3] = "sub_FA7DA3"
+    LABELS[0xFA7DA3] = "MidiOut_RunPeriodicTimeouts"
     H(0xFA7DA3,
-      "sub_FA7DA3 -- two timeouts on the millisecond counter at (0x80)",
+      "MidiOut_RunPeriodicTimeouts -- two timeouts on the millisecond counter at (0x80)",
       "",
-      "Called from: prom_b directory slot T_F4075C (`jp 0xFA7DA3`).",
+      "Called from: prom_b directory slot T_MidiOut_RunPeriodicTimeouts (`jp 0xFA7DA3`).",
       "Evidence: sub_FA7DAA compares (0x80) - (0x091C) against 0x0096 = 150 and",
       "         clears both transmitter mailboxes when it expires; sub_FA7DCA",
       "         compares (0x80) - (0x0920) against 0x05DC = 1500 and republishes",
@@ -1063,11 +1063,11 @@ def structure():
 
     LABELS[0xFA7DAA] = "sub_FA7DAA"
     LABELS[0xFA7DCA] = "sub_FA7DCA"
-    LABELS[0xFA7E0C] = "sub_FA7E0C"
+    LABELS[0xFA7E0C] = "MidiOut_ResyncChangedParts"
     H(0xFA7E0C,
-      "sub_FA7E0C -- the module's bulk `send everything again` entry",
+      "MidiOut_ResyncChangedParts -- the module's bulk `send everything again` entry",
       "",
-      "Called from: prom_b directory slot T_F40760 (`jp 0xFA7E0C`).",
+      "Called from: prom_b directory slot T_MidiOut_ResyncChangedParts (`jp 0xFA7E0C`).",
       "Evidence: it calls sub_FA7E1E, then sub_FA7E37 (344 bytes that walk every",
       "         part and re-emit its parameters through MidiOut_ChangeRecords),",
       "         then MidiIn_RebuildPartLists.")
