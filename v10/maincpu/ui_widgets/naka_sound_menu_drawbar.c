@@ -185,7 +185,10 @@ typedef struct __attribute__((packed)) {
     char w41_code[2];
     char IvSdpart_name[10];
     char str_1[2];
-    uint32_t ptrs_0[11];  /* 11 pointers */
+    /* Murai_ResEventTable_1C1: 1 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ResEventTable_1C1[1];
+    /* Naka_EventDispatch_Table: 10 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t Naka_EventDispatch_Table[10];
     char EV_MPVERSION_str[14];
     char EV_TONEMODE_str[12];
     char EV_EXECPRESENTATION_str[20];
@@ -214,7 +217,12 @@ typedef struct __attribute__((packed)) {
     char MT_GetLswDataNo_str[16];
     char MT_GetPart_str[12];
     uint16_t Murai_ResMethodCount_1E1;
-    uint32_t ptrs_2[76];  /* 76 pointers */
+    /* Murai_FunctionTable_101: 38 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_FunctionTable_101[38];
+    /* Murai_FunctionTable_401: 1 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_FunctionTable_401[1];
+    /* Naka_Event_Table2: 37 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
+    uint32_t Naka_Event_Table2[37];
     char w42_code[2];
     char IvMPverProc_name[12];
     char AcDrawbarNameProc_str[18];
@@ -446,8 +454,11 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
 
     .str_1 = "%",
 
-    .ptrs_0 = {
+    .Murai_ResEventTable_1C1 = {
         SELF(EV_ACCORDIONTAB_str),
+    },
+
+    .Naka_EventDispatch_Table = {
         SELF(EV_READPRESENTATION_str),
         SELF(EV_READACTION_str),
         SELF(EV_READSONG_str),
@@ -533,7 +544,7 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
 
     .Murai_ResMethodCount_1E1 = 0x000F,
 
-    .ptrs_2 = {
+    .Murai_FunctionTable_101 = {
         NAKA_ADDR(IvSdpartProc),
         NAKA_ADDR(AcLswPartEditBoxProc),
         NAKA_ADDR(AcVolPartEditBoxProc),
@@ -572,7 +583,13 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
         NAKA_ADDR(AcDrawbarNameProc),
         NAKA_ADDR(IvMPverProc),
         0x00000000,
+    },
+
+    .Murai_FunctionTable_401 = {
         SELF(IvSdpartProc_str),
+    },
+
+    .Naka_Event_Table2 = {
         SELF(AcLswPartEditBoxProc_str),
         SELF(AcVolPartEditBoxProc_str),
         SELF(IvMesageProc_str),

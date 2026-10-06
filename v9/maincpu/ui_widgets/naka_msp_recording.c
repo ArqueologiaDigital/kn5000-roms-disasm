@@ -675,7 +675,32 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcApcToggle_t ApcOnBass;
     char ApcOnBass_stroff[14];
     char ApcOnBass_stron[14];
-    uint32_t ptrs_1[152];  /* 152 pointers */
+    /* Suna_ViewableTable_010: 4 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_010[4];
+    /* Suna_ViewableTable_011: 9 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_011[9];
+    /* Suna_ViewableTable_012: 8 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_012[8];
+    /* Suna_ViewableTable_013: 5 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_013[5];
+    /* Suna_ViewableTable_014: 5 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_014[5];
+    /* Suna_ViewableTable_015: 9 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_015[9];
+    /* Suna_ViewableTable_016: 8 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_016[8];
+    /* Suna_ViewableTable_0B0: 19 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_0B0[19];
+    /* Suna_ViewableTable_0B1: 13 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_0B1[13];
+    /* Suna_ViewableTable_0B2: 23 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_0B2[23];
+    /* Suna_ViewableTable_0B3: 6 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_0B3[6];
+    /* Suna_ViewableTable_0B4: 19 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_0B4[19];
+    /* Suna_ViewableTable_0B5: 24 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_0B5[24];
     uint16_t field_0bea;
     uint16_t field_0bec;
     uint16_t field_0bee;
@@ -686,7 +711,13 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0bf8;
     uint16_t field_0bfa;
     uint16_t field_0bfc;
-    uint32_t ptrs_2[30];  /* 30 pointers */
+    uint32_t ptrs_2[3];
+    /* Suna_ViewableTable_0B6: 2 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_0B6[2];
+    /* Suna_ViewableTable_0B7: 7 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_0B7[7];
+    /* Suna_ViewableTable_0B8: 18 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
+    uint32_t Suna_ViewableTable_0B8[18];
     uint16_t field_0c76;
     uint16_t field_0c78;
     uint32_t ptrs_3[7];  /* 7 pointers */
@@ -1584,11 +1615,14 @@ const naka_msp_recording_t naka_msp_recording_data
 
     .ApcOnBass_stron = ALIGNED_STRING("ON BASS : ON"),
 
-    .ptrs_1 = {
+    .Suna_ViewableTable_010 = {
         0x00E176F6,
         0x00E1772E,
         0x00E1774A,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_011 = {
         0x00E17774,
         0x00E177B0,
         0x00E177CA,
@@ -1598,6 +1632,9 @@ const naka_msp_recording_t naka_msp_recording_data
         0x00E17888,
         0x00E178B6,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_012 = {
         0x00E178DA,
         0x00E17912,
         0x00E1792C,
@@ -1606,16 +1643,25 @@ const naka_msp_recording_t naka_msp_recording_data
         0x00E179B8,
         0x00E179EA,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_013 = {
         0x00E17A18,
         0x00E17A50,
         0x00E17A9E,
         0x00E17AC8,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_014 = {
         0x00E17AF4,
         0x00E17B2C,
         0x00E17B48,
         0x00E17B6E,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_015 = {
         0x00E17B88,
         0x00E17BC0,
         0x00E17BDA,
@@ -1625,6 +1671,9 @@ const naka_msp_recording_t naka_msp_recording_data
         0x00E17C98,
         0x00E17CC6,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_016 = {
         0x00E17CEA,
         0x00E17D22,
         0x00E17D3C,
@@ -1633,6 +1682,9 @@ const naka_msp_recording_t naka_msp_recording_data
         0x00E17DAA,
         0x00E17DD8,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_0B0 = {
         0x00E17E06,
         0x00E17E3E,
         0x00E17E84,
@@ -1652,6 +1704,9 @@ const naka_msp_recording_t naka_msp_recording_data
         0x00E18122,
         0x00E18156,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_0B1 = {
         0x00E18170,
         0x00E181A8,
         0x00E181C2,
@@ -1665,6 +1720,9 @@ const naka_msp_recording_t naka_msp_recording_data
         0x00E183B2,
         0x00E183EE,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_0B2 = {
         0x00E1842A,
         0x00E1845E,
         0x00E18478,
@@ -1688,12 +1746,18 @@ const naka_msp_recording_t naka_msp_recording_data
         0x00E18788,
         0x00E187B4,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_0B3 = {
         0x00E187DE,
         0x00E1881A,
         0x00E18834,
         0x00E18860,
         0x00E1888A,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_0B4 = {
         0x00E188AE,
         0x00E188E8,
         0x00E18902,
@@ -1713,6 +1777,9 @@ const naka_msp_recording_t naka_msp_recording_data
         0x00E18C10,
         0x00E18C3A,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_0B5 = {
         0x00E18C64,
         0x00E18CA2,
         0x00E18CBC,
@@ -1763,8 +1830,14 @@ const naka_msp_recording_t naka_msp_recording_data
         0x00E190C6,
         0x00E190EA,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_0B6 = {
         0x00E1910E,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_0B7 = {
         0x00E19130,
         0x00E19168,
         0x00E19188,
@@ -1772,6 +1845,9 @@ const naka_msp_recording_t naka_msp_recording_data
         0x00E191C8,
         0x00E191E8,
         0x00000000,
+    },
+
+    .Suna_ViewableTable_0B8 = {
         0x00E19208,
         0x00E19240,
         0x00E1925A,

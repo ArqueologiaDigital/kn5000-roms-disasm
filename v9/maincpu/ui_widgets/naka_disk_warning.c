@@ -121,21 +121,24 @@ typedef struct __attribute__((packed)) {
     char str_0[4];
     char SindSieSicher_str[18];
     char AreYouSure_str[14];
-    uint32_t ptrs_0[6];  /* 6 pointers */
+    /* FormatText_PtrTable: 6 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t FormatText_PtrTable[6];
     char GunakanDiskFormatUntuk_str[80];
     char UsingDiskFormatWill_str[60];
     char AlFormatearElDisco_str[54];
     char txt_L_utilisation_deDISK_FORMAT[78];
     char txt_DISK_FORMAT_loscht_alle_Daten[48];
     char UsingDiskFormatWill_str_2[60];
-    uint32_t ptrs_1[6];  /* 6 pointers */
+    /* DeleteText_PtrTable: 6 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t DeleteText_PtrTable[6];
     char txt_Usando_FILE_DELETE_si[118];
     char UsingFileDeleteWill_str[116];
     char txt_El_uso_del_FILE_DELETE_borrara[124];
     char txt_La_fonction_FILE_DELETE_va[148];
     char txt_Die_gewahlte_Disketten_Bank_wird[52];
     char UsingFileDeleteWill_str_2[116];
-    uint32_t ptrs_2[6];  /* 6 pointers */
+    /* SaveText_PtrTable: 6 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
+    uint32_t SaveText_PtrTable[6];
     char txt_Esiste_gia_un_file_nella[120];
     char AFileAlreadyExists_str[114];
     char txt_Ya_existe_un_archivo_en_el_lugar[122];
@@ -143,21 +146,24 @@ typedef struct __attribute__((packed)) {
     char txt_Die_soeben_gewahlte_Disketten[128];
     char Cht_str[6];
     char AFileAlreadyExists_str_2[114];
-    uint32_t ptrs_3[6];  /* 6 pointers */
+    /* InsertOptionText_PtrTable: 6 pointers (cut from ptrs_3 by split_naka_pointer_arrays.py) */
+    uint32_t InsertOptionText_PtrTable[6];
     char WhenDiskIsInserted_str[40];
     char WhenDiskIsInserted_str_2[40];
     char WhenDiskIsInserted_str_3[40];
     char WhenDiskIsInserted_str_4[40];
     char txt_Diese_Seite_wird_geoffnet_wenn[60];
     char WhenDiskIsInserted_str_5[40];
-    uint32_t ptrs_4[6];  /* 6 pointers */
+    /* TypePriorityText_PtrTable: 6 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t TypePriorityText_PtrTable[6];
     char WhenDiskContainsTechnics_str[44];
     char WhenDiskContainsTechnics_str_2[44];
     char WhenDiskContainsTechnics_str_3[44];
     char WhenDiskContainsTechnics_str_4[44];
     char txt_Prioritat_wenn_eine_Diskette[62];
     char WhenDiskContainsTechnics_str_5[44];
-    uint32_t ptrs_5[5];  /* 5 pointers */
+    /* JumpInsert_DispatchBody_PtrTable: 5 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t JumpInsert_DispatchBody_PtrTable[5];
     char SongMedley_str[14];
     char DirectPlay_str[14];
     char Load_str[14];
@@ -169,7 +175,8 @@ typedef struct __attribute__((packed)) {
     uint32_t Smf_str_ptr;
     char Smf_str[12];
     char Technics_str[12];
-    uint32_t ptrs_6[6];  /* 6 pointers */
+    /* WaitingFunc_DrawMessage_PtrTable: 6 pointers (cut from ptrs_6 by split_naka_pointer_arrays.py) */
+    uint32_t WaitingFunc_DrawMessage_PtrTable[6];
     char SilahkanTunggu_str[34];
     char PleaseWait_str[26];
     uint16_t field_0ac0;
@@ -177,7 +184,8 @@ typedef struct __attribute__((packed)) {
     char VeuillezPatienter_str[40];
     char BitteWarten_str[28];
     char PleaseWait_str_2[26];
-    uint32_t ptrs_7[9];  /* 9 pointers */
+    /* AcFileSfx_DrawLoop_PtrTable: 9 pointers (cut from ptrs_7 by split_naka_pointer_arrays.py) */
+    uint32_t AcFileSfx_DrawLoop_PtrTable[9];
     char UserMidi_str[14];
     char RhythmCustom_str[14];
     char Msp_str[14];
@@ -450,7 +458,8 @@ typedef struct __attribute__((packed)) {
     uint16_t DirmdEmulator_CaseTable[16];
     /* WindowProc_CaseTable: 10 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t WindowProc_CaseTable[10];
-    uint32_t ptrs_10[3];  /* 3 pointers */
+    /* WndScroll_SendSelectionEvents_PtrTable: 3 pointers (cut from ptrs_10 by split_naka_pointer_arrays.py) */
+    uint32_t WndScroll_SendSelectionEvents_PtrTable[3];
     char str_113[14];
     char Abc_str[14];
     char Abc_str_2[14];
@@ -534,7 +543,8 @@ typedef struct __attribute__((packed)) {
     char c_str[2];
     char b_str[2];
     char a_str[2];
-    uint32_t ptrs_13[33];  /* 33 pointers */
+    /* WndScroll_SearchCharTable_PtrTable: 33 pointers (cut from ptrs_13 by split_naka_pointer_arrays.py) */
+    uint32_t WndScroll_SearchCharTable_PtrTable[33];
     char str_194[2];
     char str_195[2];
     char str_196[2];
@@ -1003,7 +1013,8 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_182[3];  /* zero padding */
     uint16_t field_1a62;
     uint8_t pad_183[2];  /* zero padding */
-    uint32_t ptrs_16[4];  /* 4 pointers */
+    /* DbDebugMenu_Confirm_PtrTable: 4 pointers (cut from ptrs_16 by split_naka_pointer_arrays.py) */
+    uint32_t DbDebugMenu_Confirm_PtrTable[4];
     char str_359[2];
     char Debug3_str[10];
     char Memo_str[8];
@@ -1014,7 +1025,8 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_185[2];  /* zero padding */
     uint16_t field_1aa0;
     uint16_t field_1aa2;
-    uint32_t ptrs_17[20];  /* 20 pointers */
+    /* PsTrackSwitchProc_PtrTable: 20 pointers (cut from ptrs_17 by split_naka_pointer_arrays.py) */
+    uint32_t PsTrackSwitchProc_PtrTable[20];
     char P15_str[4];
     char P14_str[4];
     char P13_str[4];
@@ -1035,7 +1047,8 @@ typedef struct __attribute__((packed)) {
     char RT2_str_2[4];
     char LFT_str[4];
     char RT1_str_2[4];
-    uint32_t ptrs_18[5];  /* 5 pointers */
+    /* PsTrackSwitchProc_PtrTable_2: 5 pointers (cut from ptrs_18 by split_naka_pointer_arrays.py) */
+    uint32_t PsTrackSwitchProc_PtrTable_2[5];
     char CLR_str[4];
     char MUTE_str_2[6];
     char PLAY_str[6];
@@ -1049,7 +1062,8 @@ typedef struct __attribute__((packed)) {
     uint16_t AcTrkSw_Select_Data;
     char PsTextBox_code[10];
     char AcLanguageText_name[16];
-    uint32_t ptrs_19[6];  /* 6 pointers */
+    /* LanguageCheck_PtrTable: 6 pointers (cut from ptrs_19 by split_naka_pointer_arrays.py) */
+    uint32_t LanguageCheck_PtrTable[6];
     char Indonesian_code[12];
     char Italian_name[8];
     char Spanish_code[8];
@@ -1364,7 +1378,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2464;
     uint16_t field_2466;
     uint8_t pad_216[4];  /* zero padding */
-    uint32_t ptrs_23[5];  /* 5 pointers */
+    uint32_t ptrs_23[1];
+    /* DrawText_ExtLayout_Variant1_Data: 2 pointers (cut from ptrs_23 by split_naka_pointer_arrays.py) */
+    uint32_t DrawText_ExtLayout_Variant1_Data[2];
+    /* DrawFunc_Init_Data: 2 pointers (cut from ptrs_23 by split_naka_pointer_arrays.py) */
+    uint32_t DrawFunc_Init_Data[2];
     char DrawFunc_Init_SkipShift_Str_Fmt1d[4];
     char DrawFunc_Init_FontTable2_Str_Fmt2d[4];
     char DrawFunc_Init_FontTable0_Str_Fmt3d[4];
@@ -1402,7 +1420,10 @@ typedef struct __attribute__((packed)) {
     char DrawFunc_Init_Entry5_Str_Fmt3d_2[4];
     /* Text_CharGlyphMap: character code -> font glyph code (FontGlyph_ByteData, display/graphics_text_vga.s) */
     uint8_t Text_CharGlyphMap[256];
-    uint32_t ptrs_24[26];  /* 26 pointers */
+    /* Root_ApFunctionTable_120: 13 pointers (cut from ptrs_24 by split_naka_pointer_arrays.py) */
+    uint32_t Root_ApFunctionTable_120[13];
+    /* Root_ApFunctionTable_420: 13 pointers (cut from ptrs_24 by split_naka_pointer_arrays.py) */
+    uint32_t Root_ApFunctionTable_420[13];
     char w11_code[2];
     char ApTaskControl_name[14];
     char CaptureLcdCheck_str[16];
@@ -1417,7 +1438,8 @@ typedef struct __attribute__((packed)) {
     char LswEditCheck_str[14];
     char DefaultFunction_str[16];
     char DrawHelper_A_Setup_Str_DQuote[2];
-    uint32_t ptrs_25[256];  /* 256 pointers */
+    /* BitmapIDProc_PtrTable: 256 pointers (cut from ptrs_25 by split_naka_pointer_arrays.py) */
+    uint32_t BitmapIDProc_PtrTable[256];
     char w13_code[2];
     char LiMIC_name[6];
     char LiMetronome_str[12];
@@ -2039,7 +2061,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .AreYouSure_str = "Are You Sure?",
 
-    .ptrs_0 = {
+    .FormatText_PtrTable = {
         SELF(UsingDiskFormatWill_str_2),
         SELF(txt_DISK_FORMAT_loscht_alle_Daten),
         SELF(txt_L_utilisation_deDISK_FORMAT),
@@ -2060,7 +2082,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .UsingDiskFormatWill_str_2 = ALIGNED_STRING("Using DISK FORMAT will erase any current data on the disk."),
 
-    .ptrs_1 = {
+    .DeleteText_PtrTable = {
         SELF(UsingFileDeleteWill_str_2),
         SELF(txt_Die_gewahlte_Disketten_Bank_wird),
         SELF(txt_La_fonction_FILE_DELETE_va),
@@ -2081,7 +2103,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .UsingFileDeleteWill_str_2 = "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection.",
 
-    .ptrs_2 = {
+    .SaveText_PtrTable = {
         SELF(AFileAlreadyExists_str_2),
         SELF(txt_Die_soeben_gewahlte_Disketten),
         SELF(txt_Un_fichier_existe_deja_sous_le),
@@ -2104,7 +2126,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .AFileAlreadyExists_str_2 = "A file already exists at the chosen location. If you proceed it will be replaced by the file that you are saving.",
 
-    .ptrs_3 = {
+    .InsertOptionText_PtrTable = {
         SELF(WhenDiskIsInserted_str_5),
         SELF(txt_Diese_Seite_wird_geoffnet_wenn),
         SELF(WhenDiskIsInserted_str_4),
@@ -2125,7 +2147,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .WhenDiskIsInserted_str_5 = "When a disk is inserted open this page.",
 
-    .ptrs_4 = {
+    .TypePriorityText_PtrTable = {
         SELF(WhenDiskContainsTechnics_str_5),
         SELF(txt_Prioritat_wenn_eine_Diskette),
         SELF(WhenDiskContainsTechnics_str_4),
@@ -2146,7 +2168,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .WhenDiskContainsTechnics_str_5 = ALIGNED_STRING("When a disk contains Technics & SMF files."),
 
-    .ptrs_5 = {
+    .JumpInsert_DispatchBody_PtrTable = {
         SELF(Off_str),
         SELF(DiskMenu_str),
         SELF(Load_str),
@@ -2177,7 +2199,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .Technics_str = ALIGNED_STRING(" TECHNICS "),
 
-    .ptrs_6 = {
+    .WaitingFunc_DrawMessage_PtrTable = {
         SELF(PleaseWait_str_2),
         SELF(BitteWarten_str),
         SELF(VeuillezPatienter_str),
@@ -2200,7 +2222,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .PleaseWait_str_2 = ALIGNED_STRING("PLEASE WAIT!............"),
 
-    .ptrs_7 = {
+    .AcFileSfx_DrawLoop_PtrTable = {
         SELF(str_60),
         SELF(CurrentPanel_str),
         SELF(PanelMemory_str),
@@ -2778,7 +2800,7 @@ const naka_disk_warning_t naka_disk_warning_data
         0x024F, 0x01E8,
     },
 
-    .ptrs_10 = {
+    .WndScroll_SendSelectionEvents_PtrTable = {
         SELF(Abc_str_2),
         SELF(Abc_str),
         SELF(str_113),
@@ -3030,7 +3052,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .a_str = "a",
 
-    .ptrs_13 = {
+    .WndScroll_SearchCharTable_PtrTable = {
         SELF(str_226),
         SELF(str_225),
         SELF(str_224),
@@ -3135,7 +3157,7 @@ const naka_disk_warning_t naka_disk_warning_data
     .Data_SoundEditorCharsLayout = {
         SELF(ptrs_11),
         SELF(ptrs_12),
-        SELF(ptrs_13),
+        SELF(WndScroll_SearchCharTable_PtrTable),
     },
 
     .WndScroll_ItemCountCheck_Str_Chr25 = "%",
@@ -4062,7 +4084,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_183 = { 0 },
 
-    .ptrs_16 = {
+    .DbDebugMenu_Confirm_PtrTable = {
         SELF(MemoryDump_str),
         SELF(Memo_str),
         SELF(Debug3_str),
@@ -4089,7 +4111,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_1aa2 = NAKA_NONE,
 
-    .ptrs_17 = {
+    .PsTrackSwitchProc_PtrTable = {
         SELF(RT1_str_2),
         SELF(LFT_str),
         SELF(RT2_str_2),
@@ -4152,7 +4174,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .RT1_str_2 = "RT1",
 
-    .ptrs_18 = {
+    .PsTrackSwitchProc_PtrTable_2 = {
         SELF(str_388),
         SELF(REC_str),
         SELF(PLAY_str),
@@ -4186,7 +4208,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .AcLanguageText_name = ALIGNED_STRING("AcLanguageText"),
 
-    .ptrs_19 = {
+    .LanguageCheck_PtrTable = {
         SELF(English_name),
         SELF(German_code),
         SELF(French_name),
@@ -4862,8 +4884,14 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .ptrs_23 = {
         NAKA_ADDR(Naka_PresentationRootState),
+    },
+
+    .DrawText_ExtLayout_Variant1_Data = {
         0x00000000,
         NAKA_ADDR(Naka_PresentationRootState),
+    },
+
+    .DrawFunc_Init_Data = {
         0x00000000,
         NAKA_ADDR(Naka_PresentationRootState),
     },
@@ -4955,7 +4983,7 @@ const naka_disk_warning_t naka_disk_warning_data
         0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3F, 0x3F, 0x3F,  /* 0xF0.. */
     },
 
-    .ptrs_24 = {
+    .Root_ApFunctionTable_120 = {
         NAKA_ADDR(DefaultFunction),
         NAKA_ADDR(LswEditCheck),
         NAKA_ADDR(RamEditCheck),
@@ -4969,6 +4997,9 @@ const naka_disk_warning_t naka_disk_warning_data
         NAKA_ADDR(CaptureLcdCheck),
         NAKA_ADDR(ApTaskControl),
         0x00000000,
+    },
+
+    .Root_ApFunctionTable_420 = {
         SELF(DefaultFunction_str),
         SELF(LswEditCheck_str),
         SELF(RamEditCheck_str),
@@ -5012,7 +5043,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DrawHelper_A_Setup_Str_DQuote = "\"",
 
-    .ptrs_25 = {
+    .BitmapIDProc_PtrTable = {
         SELF(TrashIcon_str),
         SELF(GoldTechnics_str),
         SELF(SlideBase_name),

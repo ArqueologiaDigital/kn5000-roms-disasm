@@ -524,14 +524,20 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_50[4];  /* zero padding */
     uint16_t field_086e;
     uint16_t field_0870;
-    uint32_t ptrs_2[24];  /* 24 pointers */
+    uint32_t ptrs_2[1];
+    /* Root_ViewableTable_000: 23 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
+    uint32_t Root_ViewableTable_000[23];
     uint16_t field_08d2;
     uint16_t field_08d4;
     uint16_t field_08d6;
     uint16_t field_08d8;
     uint16_t field_08da;
     uint16_t field_08dc;
-    uint32_t ptrs_3[88];  /* 88 pointers */
+    uint32_t ptrs_3[26];
+    /* Root_ViewableTable_0FF: 10 pointers (cut from ptrs_3 by split_naka_pointer_arrays.py) */
+    uint32_t Root_ViewableTable_0FF[10];
+    /* Root_ResNameTable_300: 52 pointers (cut from ptrs_3 by split_naka_pointer_arrays.py) */
+    uint32_t Root_ResNameTable_300[52];
     char str_135[2];
     char w14_code[2];
     char MemDumpWindow_name[14];
@@ -584,7 +590,8 @@ typedef struct __attribute__((packed)) {
     char ResName_NakaDbg_PanelSimTitle[2];
     char w21_code[2];
     char PanelSimulator_name[16];
-    uint32_t ptrs_4[10];  /* 10 pointers */
+    /* Root_ResNameTable_3FF: 10 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Root_ResNameTable_3FF[10];
     char str_171[2];
     char w22_code[2];
     char CheckWall_name[10];
@@ -598,7 +605,10 @@ typedef struct __attribute__((packed)) {
     char MD_PS_str[6];
     char TT_PS_str[6];
     char TT_CHECK_str[10];
-    uint32_t ptrs_5[28];  /* 28 pointers */
+    /* Root_MainFunctionTable_140: 14 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Root_MainFunctionTable_140[14];
+    /* Root_MainFunctionTable_440: 14 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Root_MainFunctionTable_440[14];
     char w25_code[2];
     char MainTaskControl_name[16];
     char DirmdTitleFunc_str[16];
@@ -872,7 +882,8 @@ typedef struct __attribute__((packed)) {
     char CL_Green_str[10];
     char CL_Maroon_str[10];
     char CL_Black_str[10];
-    uint32_t ptrs_8[3];  /* 3 pointers */
+    /* NakaProp_BorderDefs: 3 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t NakaProp_BorderDefs[3];
     uint16_t field_40de;
     uint8_t pad_140[2];  /* zero padding */
     uint32_t BD_Single2_str_ptr;
@@ -980,7 +991,8 @@ typedef struct __attribute__((packed)) {
     char L_RightJustify_str[15];
     char AL_LeftJustify_str[16];
     char AL_Center_str[10];
-    uint32_t ptrs_9[3];  /* 3 pointers */
+    /* NakaProp_EditSwitch_Chain: 3 pointers (cut from ptrs_9 by split_naka_pointer_arrays.py) */
+    uint32_t NakaProp_EditSwitch_Chain[3];
     uint16_t field_42e4;
     uint8_t pad_168[2];  /* zero padding */
     uint32_t ES_Bottom3_str_ptr;
@@ -1128,7 +1140,8 @@ typedef struct __attribute__((packed)) {
     char SS_Down_str[8];
     char SS_Up_str[6];
     char SS_Special_str[12];
-    uint32_t ptrs_11[3];  /* 3 pointers */
+    /* NakaInst_LM_RightDown: 3 pointers (cut from ptrs_11 by split_naka_pointer_arrays.py) */
+    uint32_t NakaInst_LM_RightDown[3];
     uint16_t field_4588;
     uint8_t pad_205[2];  /* zero padding */
     uint32_t ptr_458c;
@@ -2092,6 +2105,9 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .ptrs_2 = {
         0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
+    },
+
+    .Root_ViewableTable_000 = {
         0x00EB2AC2,
         NAKA_ADDR(Naka_FileManagerEntry),
         SELF(PanelSimulatorForHk_Label),
@@ -2156,6 +2172,9 @@ const naka_debug_naming_t naka_debug_naming_data
         SELF(MemDumpWindow),
         SELF(MemDumpWindow_DbMemoryDump),
         0x00000000,
+    },
+
+    .Root_ViewableTable_0FF = {
         SELF(CheckTitle),
         SELF(CheckTitle_IvExitScreen),
         SELF(Naming_AcScreenMenu),
@@ -2166,6 +2185,9 @@ const naka_debug_naming_t naka_debug_naming_data
         SELF(CheckWall),
         SELF(I_str),
         0x00000000,
+    },
+
+    .Root_ResNameTable_300 = {
         SELF(PanelSimulator_name),
         SELF(w21_code),
         SELF(ResName_NakaDbg_PanelSimTitle),
@@ -2324,7 +2346,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .PanelSimulator_name = ALIGNED_STRING("PanelSimulator"),
 
-    .ptrs_4 = {
+    .Root_ResNameTable_3FF = {
         SELF(CheckTitle_name),
         SELF(w24_code),
         SELF(ResName_CheckTitle_2_AcScreenMenu),
@@ -2363,7 +2385,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .TT_CHECK_str = ALIGNED_STRING("TT_CHECK"),
 
-    .ptrs_5 = {
+    .Root_MainFunctionTable_140 = {
         NAKA_ADDR(DefMainFunction),
         NAKA_ADDR(MainTitleControl),
         NAKA_ADDR(MainPmanControl),
@@ -2378,6 +2400,9 @@ const naka_debug_naming_t naka_debug_naming_data
         NAKA_ADDR(DirmdTitleFunc),
         NAKA_ADDR(MainTaskControl),
         0x00000000,
+    },
+
+    .Root_MainFunctionTable_440 = {
         SELF(DefMainFunction_str),
         SELF(MainTitleControl_str),
         SELF(MainPmanControl_str),
@@ -6009,7 +6034,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .CL_Black_str = ALIGNED_STRING("CL_Black"),
 
-    .ptrs_8 = {
+    .NakaProp_BorderDefs = {
         SELF(BD_None_str),
         0x00000000,
         SELF(BD_Single1_str),
@@ -6229,7 +6254,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .AL_Center_str = "AL_Center",
 
-    .ptrs_9 = {
+    .NakaProp_EditSwitch_Chain = {
         SELF(ES_Bottom1_str),
         0x00000000,
         SELF(ES_Bottom2_str),
@@ -6533,7 +6558,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .SS_Special_str = ALIGNED_STRING("SS_Special"),
 
-    .ptrs_11 = {
+    .NakaInst_LM_RightDown = {
         0x00EB70A2,
         0x00000000,
         0x00EB7094,

@@ -965,7 +965,16 @@ typedef struct __attribute__((packed)) {
     char MT_GetParentClassSp_str[20];
     char MT_GetClassSp_str[14];
     uint16_t Root_ResMethodCount_1E0;
-    uint32_t ptrs_4[706];  /* 706 pointers */
+    /* Root_FunctionTable_100: 353 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Root_FunctionTable_100[353];
+    /* WidgetName_InitPtrTable: 14 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t WidgetName_InitPtrTable[14];
+    /* WidgetName_PtrBlock_C: 39 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t WidgetName_PtrBlock_C[39];
+    /* WidgetName_PtrBlock_I2: 64 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t WidgetName_PtrBlock_I2[64];
+    /* WidgetName_PtrBlock_O: 236 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t WidgetName_PtrBlock_O[236];
     char w132_code[2];
     char DrawBitmapSP2_name[14];
     char MainDeleteEvent_str[16];
@@ -1320,7 +1329,8 @@ typedef struct __attribute__((packed)) {
     char InitializeMurai_str[16];
     char InitializeRoot_str[16];
     uint16_t SliderV_Setup_Data;
-    uint32_t ptrs_5[256];  /* 256 pointers */
+    /* IconIDProc_PtrTable: 256 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t IconIDProc_PtrTable[256];
     char str_567[2];
     char i173_str[6];
     char i172_str[6];
@@ -1498,7 +1508,8 @@ typedef struct __attribute__((packed)) {
     char I0_code[4];
     char Default_name[8];
     char None_str[6];
-    uint32_t ptrs_6[256];  /* 256 pointers */
+    /* IconBitmapNamePtrTable: 256 pointers (cut from ptrs_6 by split_naka_pointer_arrays.py) */
+    uint32_t IconBitmapNamePtrTable[256];
     char str_742[2];
     char I173Bmp_str[10];
     char I172Bmp_str[10];
@@ -3668,7 +3679,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .Root_ResMethodCount_1E0 = 0x00BC,
 
-    .ptrs_4 = {
+    .Root_FunctionTable_100 = {
         NAKA_ADDR(InitializeRoot),
         NAKA_ADDR(InitializeMurai),
         NAKA_ADDR(InitializeToshi),
@@ -4022,6 +4033,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         NAKA_ADDR(MainDeleteEvent),
         NAKA_ADDR(DrawBitmapSP2),
         0x00000000,
+    },
+
+    .WidgetName_InitPtrTable = {
         SELF(InitializeRoot_str),
         SELF(InitializeMurai_str),
         SELF(InitializeToshi_str),
@@ -4036,6 +4050,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(InitializeNaka_str),
         SELF(InitializeUser12_str),
         SELF(InitializeUser13_str),
+    },
+
+    .WidgetName_PtrBlock_C = {
         SELF(InitializeUser14_str),
         SELF(InitializeUser15_str),
         SELF(InitializeUser16_str),
@@ -4075,6 +4092,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(DrawStringCentered_str),
         SELF(DrawStringLeftJustify_str),
         SELF(DrawStringRightJustify_str),
+    },
+
+    .WidgetName_PtrBlock_I2 = {
         SELF(DrawStringAlignment_name),
         SELF(ObjectProc_code),
         SELF(InheritedProc_str),
@@ -4139,6 +4159,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(EventIDProc_name),
         SELF(RECTWProc_code),
         SELF(RectX1Proc_str),
+    },
+
+    .WidgetName_PtrBlock_O = {
         SELF(RectY1Proc_name),
         SELF(RectX2Proc_code),
         SELF(RectY2Proc_name),
@@ -5085,7 +5108,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .SliderV_Setup_Data = 0x00B0,
 
-    .ptrs_5 = {
+    .IconIDProc_PtrTable = {
         SELF(None_str),
         SELF(Default_name),
         SELF(I0_code),
@@ -5698,7 +5721,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .None_str = ALIGNED_STRING("None"),
 
-    .ptrs_6 = {
+    .IconBitmapNamePtrTable = {
         SELF(TrashBmp_str_2),
         SELF(TrashBmp_str),
         SELF(I0Bmp_str),

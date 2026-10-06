@@ -1453,7 +1453,10 @@ typedef struct __attribute__((packed)) {
     /* element 477 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t ftdemo43_Label_5;
     char w342_text[4];
-    uint32_t ptrs_0[958];  /* 958 pointers */
+    /* NAKA_UIObjectTable: 479 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_UIObjectTable[479];
+    /* Naka_ResNameTable_3FD: 479 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t Naka_ResNameTable_3FD[479];
     char str_388[2];
     char ResName_ftdemo01_477_Label[2];
     char ResName_ftdemo01_476_Label[2];
@@ -1937,21 +1940,24 @@ typedef struct __attribute__((packed)) {
     uint8_t Naka_MainFunctionTable_14B[4];  /* zero padding */
     uint32_t ptr_5eb4;
     char str_868[2];
-    uint32_t ptrs_1[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable: 6 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable[6];
     char BassPortSpeaker_str[18];
     char Italian_str[8];
     char str_871[2];
     char AmplificationDesGraves_str[26];
     char BassPortSpeaker_str_2[18];
     char BassPortSpeaker_str_3[18];
-    uint32_t ptrs_2[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_2: 6 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_2[6];
     char str_875[2];
     char str_876[2];
     char txt_Altavoz_con_porton_para_bajos[30];
     char str_878[2];
     char str_879[2];
     char str_880[2];
-    uint32_t ptrs_3[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_3: 6 pointers (cut from ptrs_3 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_3[6];
     char SpecialWooferDanBass_str[96];
     char Italian_str_2[8];
     char txt_El_porton_para_bajos_y_graves[84];
@@ -1966,14 +1972,16 @@ typedef struct __attribute__((packed)) {
     char CialAmplificationDesGraves_str[98];
     char DerSpezielleWooferBass_str[92];
     char TheKn5000SpecialWoofer_str[74];
-    uint32_t ptrs_4[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_4: 6 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_4[6];
     char HugeStyles_str[12];
     char Italian_str_3[8];
     char EstilosEnormes_str[16];
     char txt_Diversite_des_styles[22];
     char RiesigeAuswahlAnStyles_str[26];
     char HugeStyles_str_2[12];
-    uint32_t ptrs_5[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_5: 6 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_5[6];
     char MenghasilkanGayaPermainanDengan_str[56];
     char Italian_str_4[8];
     char ExploreLosEstilosMusicales_str[58];
@@ -1981,14 +1989,16 @@ typedef struct __attribute__((packed)) {
     uint16_t field_62be;
     char HlenSieAusStilistisch_str[82];
     char ExploreMusicalStylesWith_str[52];
-    uint32_t ptrs_6[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_6: 6 pointers (cut from ptrs_6 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_6[6];
     char TambahkanKesenanganAndaDengan_str[78];
     char Italian_str_5[8];
     char txt_Disfrute_mas_con_la_gran[72];
     char txt_Encore_plus_de_possibilites[70];
     char txt_Nutzen_Sie_das_groe_Technics[88];
     char AddToYourEnjoyment_str[62];
-    uint32_t ptrs_7[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_7: 6 pointers (cut from ptrs_7 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_7[6];
     char DanDapatMengubahHampir_str[78];
     char Italian_str_6[8];
     uint16_t field_6546;
@@ -1996,7 +2006,8 @@ typedef struct __attribute__((packed)) {
     char EtVousPouvezConvertir_str[88];
     char KonvertierenSieSoftwareVieler_str[84];
     char AndConvertSoftwareFrom_str[58];
-    uint32_t ptrs_8[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_8: 6 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_8[6];
     char SimpanPolaPolaSoftware_str[90];
     char Italian_str_7[8];
     uint16_t field_66de;
@@ -2004,14 +2015,16 @@ typedef struct __attribute__((packed)) {
     char txt_Enregistrez_vos_motifs_preferes[96];
     char SpeichernSieIhreLieblings_str[88];
     char StoreYourFavoriteSoftware_str[84];
-    uint32_t ptrs_9[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_9: 6 pointers (cut from ptrs_9 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_9[6];
     char AccordionRegister_str[20];
     char Italian_str_8[8];
     char AccordionRegister_str_2[20];
     char AccordionRegister_str_3[20];
     char AccordionRegister_str_4[20];
     char AccordionRegister_str_5[20];
-    uint32_t ptrs_10[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_10: 6 pointers (cut from ptrs_10 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_10[6];
     char SuaraSuaraAkordionPada_str[72];
     char Italian_str_9[8];
     char txt_Un_mundo_de_sonidos_de_acordeon[86];
@@ -2019,14 +2032,16 @@ typedef struct __attribute__((packed)) {
     char txt_ACCORDION_REGISTER_eroffnet[60];
     char Nge_str[6];
     char AWorldOfAccordion_str[76];
-    uint32_t ptrs_11[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_11: 6 pointers (cut from ptrs_11 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_11[6];
     char DigitalDrawbar_str[16];
     char Italian_str_10[8];
     char DigitalDrawbar_str_2[16];
     char DigitalDrawbar_str_3[16];
     char DigitalDrawbar_str_4[16];
     char DigitalDrawbar_str_5[16];
-    uint32_t ptrs_12[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_12: 6 pointers (cut from ptrs_12 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_12[6];
     char SuaraSuaraOrganClassic_str[58];
     char Italian_str_11[8];
     uint16_t field_6b38;
@@ -2044,42 +2059,48 @@ typedef struct __attribute__((packed)) {
     char txt_Avec_les_tirettes_harmoniques[86];
     char txt_Erzeugen_Sie_legendare[70];
     char ClassicOrganSoundsWith_str[50];
-    uint32_t ptrs_13[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_13: 6 pointers (cut from ptrs_13 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_13[6];
     char AcousticIllusion_str[18];
     char Italian_str_12[8];
     char AcousticIllusion_str_2[18];
     char AcousticIllusion_str_3[18];
     char AcousticIllusion_str_4[18];
     char AcousticIllusion_str_5[18];
-    uint32_t ptrs_14[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_14: 6 pointers (cut from ptrs_14 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_14[6];
     char AcousticIllusionMemperluasMusik_str[60];
     char Italian_str_13[8];
     char txt_El_Acoustic_Illusion_amplia_su[56];
     char txt_La_fonction_Acoustic_Illusion[80];
     char txt_ACCOUSTIC_ILLUSION_verleiht_dem[70];
     char AcousticIllusionBroadensYour_str[56];
-    uint32_t ptrs_15[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_15: 6 pointers (cut from ptrs_15 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_15[6];
     char SatuPilihanDaripadaGambar_str[74];
     char Italian_str_14[8];
     char txt_Una_serie_de_funciones[70];
     char txt_Une_grande_diversite_de[52];
     char txt_Viele_weitere_leistungsfahige[86];
     char AHostOfFeatures_str[54];
-    uint32_t ptrs_16[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_16: 6 pointers (cut from ptrs_16 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_16[6];
     char HugeStyles_str_3[12];
     char Italian_str_15[8];
     char HugeStyles_str_4[12];
     char HugeStyles_str_5[12];
     char HugeStylesG_str[16];
     char HugeStyles_str_6[12];
-    uint32_t ptrs_17[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_17: 6 pointers (cut from ptrs_17 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_17[6];
     char HugeStyles_str_7[12];
     char Italian_str_16[8];
     char HugeStyles_str_8[12];
     char HugeStyles_str_9[12];
     char HugeStylesG_str_2[16];
     char HugeStyles_str_10[12];
-    uint32_t ptrs_18[6];  /* 6 pointers */
+    /* NAKA_InitDataBlock_PtrTable_18: 6 pointers (cut from ptrs_18 by split_naka_pointer_arrays.py) */
+    uint32_t NAKA_InitDataBlock_PtrTable_18[6];
     char HugeStyles_str_11[12];
     char Italian_str_17[8];
     char HugeStyles_str_12[12];
@@ -9098,7 +9119,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w342_text = "2/4",
 
-    .ptrs_0 = {
+    .NAKA_UIObjectTable = {
         SELF(ftdemo01),
         SELF(ftdemobmptop),
         SELF(ftdemo02),
@@ -9578,6 +9599,9 @@ const naka_perf_style_t naka_perf_style_data
         SELF(SubCategory_Label_3),
         SELF(ftdemo43_Label_5),
         0x00000000,
+    },
+
+    .Naka_ResNameTable_3FD = {
         SELF(ftdemo01_str),
         SELF(ftdemobmptop_str),
         SELF(ftdemo02_str),
@@ -11025,7 +11049,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_868 = ALIGNED_STRING(""),
 
-    .ptrs_1 = {
+    .NAKA_InitDataBlock_PtrTable = {
         SELF(BassPortSpeaker_str_3),
         SELF(BassPortSpeaker_str_2),
         SELF(AmplificationDesGraves_str),
@@ -11046,7 +11070,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .BassPortSpeaker_str_3 = "Bass Port Speaker",
 
-    .ptrs_2 = {
+    .NAKA_InitDataBlock_PtrTable_2 = {
         SELF(str_880),
         SELF(str_879),
         SELF(str_878),
@@ -11067,7 +11091,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_880 = ALIGNED_STRING(""),
 
-    .ptrs_3 = {
+    .NAKA_InitDataBlock_PtrTable_3 = {
         SELF(TheKn5000SpecialWoofer_str),
         SELF(DerSpezielleWooferBass_str),
         SELF(field_6048),
@@ -11104,7 +11128,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .TheKn5000SpecialWoofer_str = ALIGNED_STRING("The KN5000's Special Woofer & Bass Port produce a Rich & Powerful sound!"),
 
-    .ptrs_4 = {
+    .NAKA_InitDataBlock_PtrTable_4 = {
         SELF(HugeStyles_str_2),
         SELF(RiesigeAuswahlAnStyles_str),
         SELF(txt_Diversite_des_styles),
@@ -11125,7 +11149,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .HugeStyles_str_2 = "Huge Styles",
 
-    .ptrs_5 = {
+    .NAKA_InitDataBlock_PtrTable_5 = {
         SELF(ExploreMusicalStylesWith_str),
         SELF(field_62be),
         SELF(txt_Grace_au_Music_Stylist_explorez),
@@ -11148,7 +11172,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .ExploreMusicalStylesWith_str = "Explore 1000 Musical Styles with the Music Stylist.",
 
-    .ptrs_6 = {
+    .NAKA_InitDataBlock_PtrTable_6 = {
         SELF(AddToYourEnjoyment_str),
         SELF(txt_Nutzen_Sie_das_groe_Technics),
         SELF(txt_Encore_plus_de_possibilites),
@@ -11169,7 +11193,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .AddToYourEnjoyment_str = ALIGNED_STRING("Add to your enjoyment with a wide range of Technics Software"),
 
-    .ptrs_7 = {
+    .NAKA_InitDataBlock_PtrTable_7 = {
         SELF(AndConvertSoftwareFrom_str),
         SELF(KonvertierenSieSoftwareVieler_str),
         SELF(EtVousPouvezConvertir_str),
@@ -11192,7 +11216,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .AndConvertSoftwareFrom_str = ALIGNED_STRING("And convert software from almost any other manufacturer!"),
 
-    .ptrs_8 = {
+    .NAKA_InitDataBlock_PtrTable_8 = {
         SELF(StoreYourFavoriteSoftware_str),
         SELF(SpeichernSieIhreLieblings_str),
         SELF(txt_Enregistrez_vos_motifs_preferes),
@@ -11215,7 +11239,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .StoreYourFavoriteSoftware_str = ALIGNED_STRING("Store your favorite software patterns in the Custom Rhythm Group .....permanently!"),
 
-    .ptrs_9 = {
+    .NAKA_InitDataBlock_PtrTable_9 = {
         SELF(AccordionRegister_str_5),
         SELF(AccordionRegister_str_4),
         SELF(AccordionRegister_str_3),
@@ -11236,7 +11260,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .AccordionRegister_str_5 = ALIGNED_STRING("Accordion Register"),
 
-    .ptrs_10 = {
+    .NAKA_InitDataBlock_PtrTable_10 = {
         SELF(AWorldOfAccordion_str),
         SELF(txt_ACCORDION_REGISTER_eroffnet),
         SELF(txt_Avec_la_fonction_Accordion),
@@ -11259,7 +11283,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .AWorldOfAccordion_str = "A World of Accordion Sounds at your fingertips with the Accordion Register!",
 
-    .ptrs_11 = {
+    .NAKA_InitDataBlock_PtrTable_11 = {
         SELF(DigitalDrawbar_str_5),
         SELF(DigitalDrawbar_str_4),
         SELF(DigitalDrawbar_str_3),
@@ -11280,7 +11304,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .DigitalDrawbar_str_5 = "Digital Drawbar",
 
-    .ptrs_12 = {
+    .NAKA_InitDataBlock_PtrTable_12 = {
         SELF(ClassicOrganSoundsWith_str),
         SELF(txt_Erzeugen_Sie_legendare),
         SELF(txt_Avec_les_tirettes_harmoniques),
@@ -11323,7 +11347,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .ClassicOrganSoundsWith_str = "Classic Organ Sounds with Jazz and Rock Drawbars!",
 
-    .ptrs_13 = {
+    .NAKA_InitDataBlock_PtrTable_13 = {
         SELF(AcousticIllusion_str_5),
         SELF(AcousticIllusion_str_4),
         SELF(AcousticIllusion_str_3),
@@ -11344,7 +11368,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .AcousticIllusion_str_5 = "Acoustic Illusion",
 
-    .ptrs_14 = {
+    .NAKA_InitDataBlock_PtrTable_14 = {
         SELF(AcousticIllusionBroadensYour_str),
         SELF(txt_ACCOUSTIC_ILLUSION_verleiht_dem),
         SELF(txt_La_fonction_Acoustic_Illusion),
@@ -11365,7 +11389,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .AcousticIllusionBroadensYour_str = ALIGNED_STRING("Acoustic Illusion broadens your music to 3-Dimensions!"),
 
-    .ptrs_15 = {
+    .NAKA_InitDataBlock_PtrTable_15 = {
         SELF(AHostOfFeatures_str),
         SELF(txt_Viele_weitere_leistungsfahige),
         SELF(txt_Une_grande_diversite_de),
@@ -11386,7 +11410,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .AHostOfFeatures_str = ALIGNED_STRING("A host of features to suit any style of performance!"),
 
-    .ptrs_16 = {
+    .NAKA_InitDataBlock_PtrTable_16 = {
         SELF(HugeStyles_str_6),
         SELF(HugeStylesG_str),
         SELF(HugeStyles_str_5),
@@ -11407,7 +11431,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .HugeStyles_str_6 = "Huge Styles",
 
-    .ptrs_17 = {
+    .NAKA_InitDataBlock_PtrTable_17 = {
         SELF(HugeStyles_str_10),
         SELF(HugeStylesG_str_2),
         SELF(HugeStyles_str_9),
@@ -11428,7 +11452,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .HugeStyles_str_10 = "Huge Styles",
 
-    .ptrs_18 = {
+    .NAKA_InitDataBlock_PtrTable_18 = {
         SELF(HugeStyles_str_14),
         SELF(HugeStylesG_str_3),
         SELF(HugeStyles_str_13),

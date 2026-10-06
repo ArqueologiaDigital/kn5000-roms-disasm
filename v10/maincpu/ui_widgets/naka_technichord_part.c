@@ -2099,7 +2099,36 @@ typedef struct __attribute__((packed)) {
     char SoundTable_caption[16];
     /* element 5 of Viewable slot 0xF0: IvSoftver (class id 0x0161000F) */
     naka_cls_IvSoftver_t Softver_IvSoftver;
-    uint32_t ptrs_8[374];  /* 374 pointers */
+    /* Murai_ViewableTable_002: 21 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_002[21];
+    /* Murai_ViewableTable_003: 85 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_003[85];
+    /* Murai_ViewableTable_004: 5 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_004[5];
+    /* Murai_ViewableTable_005: 55 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_005[55];
+    /* Murai_ViewableTable_007: 4 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_007[4];
+    /* Murai_ViewableTable_008: 5 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_008[5];
+    /* Murai_ViewableTable_00D: 30 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_00D[30];
+    /* Murai_ViewableTable_0A5: 5 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_0A5[5];
+    /* Murai_ViewableTable_0E4: 16 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_0E4[16];
+    /* Murai_ViewableTable_0EA: 45 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_0EA[45];
+    /* Murai_ViewableTable_0EB: 38 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_0EB[38];
+    /* Murai_ViewableTable_0EE: 25 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_0EE[25];
+    /* Murai_ViewableTable_0EF: 12 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_0EF[12];
+    /* Murai_ViewableTable_0F0: 7 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ViewableTable_0F0[7];
+    /* Murai_ResNameTable_302: 21 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ResNameTable_302[21];
     char str_682[2];
     char ResName_NakaMenuItem_TechniChord[2];
     char w102_code[2];
@@ -2121,7 +2150,8 @@ typedef struct __attribute__((packed)) {
     char w104_code[2];
     char SdmenuPage_name[12];
     char Sdmenu_str[8];
-    uint32_t ptrs_9[85];  /* 85 pointers */
+    /* Murai_ResNameTable_303: 85 pointers (cut from ptrs_9 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ResNameTable_303[85];
     char str_697[2];
     char ResName_Sdpart_83_AcLswPartEditBox[2];
     char ResName_Sdpart_82_AcLswPartEditBox[2];
@@ -2207,13 +2237,15 @@ typedef struct __attribute__((packed)) {
     char ResName_Sdpart_2_AcIndexEditSw[2];
     char w115_code[2];
     char Sdpart_name[8];
-    uint32_t ptrs_10[5];  /* 5 pointers */
+    /* Murai_ResNameTable_304: 5 pointers (cut from ptrs_10 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ResNameTable_304[5];
     char str_760[2];
     char ResName_Sdmtune_3_AcIndexWideES[2];
     char ResName_Sdmtune_2_Label[2];
     char w116_code[2];
     char Sdmtune_name[8];
-    uint32_t ptrs_11[55];  /* 55 pointers */
+    /* Murai_ResNameTable_305: 55 pointers (cut from ptrs_11 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ResNameTable_305[55];
     char str_763[2];
     char ResName_Sdscltyp_53_IvSdscltyp2[2];
     char ResName_Sdscltyp_52_Line[2];
@@ -2269,12 +2301,14 @@ typedef struct __attribute__((packed)) {
     char w121_code[2];
     char SdscltypPage_name[14];
     char Sdscltyp_str[10];
-    uint32_t ptrs_12[4];  /* 4 pointers */
+    /* Murai_ResNameTable_307: 4 pointers (cut from ptrs_12 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ResNameTable_307[4];
     char str_808[2];
     char ResName_Sdlfthld_2_AcLswEditBox[2];
     char w122_code[2];
     char Sdlfthld_name[10];
-    uint32_t ptrs_13[5];  /* 5 pointers */
+    /* Murai_ResNameTable_308: 5 pointers (cut from ptrs_13 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ResNameTable_308[5];
     char str_810[2];
     char ResName_Sdmixer_3_IvExit[2];
     char ResName_Sdmixer_2_AcPartMixer[2];
@@ -7973,7 +8007,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .ptrs_8 = {
+    .Murai_ViewableTable_002 = {
         NAKA_ADDR(NakaContainer_SoundMenu_Root),
         NAKA_ADDR(NakaWidget_SdmenuPage),
         NAKA_ADDR(NakaWidget_SoundMenu_ScrollBar1),
@@ -7995,6 +8029,9 @@ const naka_technichord_part_t naka_technichord_part_data
         NAKA_ADDR(NakaMenuItem_LeftHold),
         NAKA_ADDR(NakaMenuItem_TechniChord),
         0x00000000,
+    },
+
+    .Murai_ViewableTable_003 = {
         SELF(Sdpart),
         SELF(Sdpart_AcIndexEditSw),
         SELF(Sdpart_AcIndexEditSw_2),
@@ -8080,11 +8117,17 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(SdpartOth_AcLswPartEditBox_4),
         SELF(SdpartOth_AcLswPartEditBox_5),
         0x00000000,
+    },
+
+    .Murai_ViewableTable_004 = {
         SELF(Sdmtune),
         SELF(Sdmtune_AcLswEditBox),
         SELF(Hz_Label),
         SELF(Sdmtune_AcIndexWideES),
         0x00000000,
+    },
+
+    .Murai_ViewableTable_005 = {
         SELF(Sdscltyp),
         SELF(SdscltypPage),
         SELF(Sdscltyp_IvPageControl),
@@ -8140,15 +8183,24 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(Sdscltyp2_Line_12),
         SELF(Sdscltyp2_IvSdscltyp2),
         0x00000000,
+    },
+
+    .Murai_ViewableTable_007 = {
         SELF(Sdlfthld),
         SELF(Sdlfthld_AcIndexWideES),
         SELF(Sdlfthld_AcLswEditBox),
         0x00000000,
+    },
+
+    .Murai_ViewableTable_008 = {
         SELF(Sdmixer),
         SELF(Sdmixer_AcResetPage),
         SELF(Sdmixer_AcPartMixer),
         SELF(w47),
         0x00000000,
+    },
+
+    .Murai_ViewableTable_00D = {
         0x00E837A4,
         SELF(SdtecdPage),
         SELF(NakaWidget_Sdtecd_2_IvPageControl),
@@ -8179,11 +8231,17 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(Sdtecd2_AcLswEditBox),
         SELF(Value_Label),
         0x00000000,
+    },
+
+    .Murai_ViewableTable_0A5 = {
         SELF(Sqmixer),
         SELF(Sqmixer_AcResetPage),
         SELF(Sqmixer_AcTrackMixer),
         SELF(w53),
         0x00000000,
+    },
+
+    .Murai_ViewableTable_0E4 = {
         0x00E83D88,
         SELF(StartTheInternalDemo_AcPresentationBox),
         SELF(Demofeature1),
@@ -8200,6 +8258,9 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(LoadingNow_Label),
         SELF(PresentationTitle),
         0x00000000,
+    },
+
+    .Murai_ViewableTable_0EA = {
         SELF(Drawbar),
         SELF(Drawbar_IvIntVari),
         SELF(DrawPerc4),
@@ -8245,6 +8306,9 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(DrawbarSndE_Icon),
         SELF(DrawbarEdit_Label),
         0x00000000,
+    },
+
+    .Murai_ViewableTable_0EB = {
         SELF(Accordion),
         SELF(Accordion_Icon),
         SELF(Accordion_IvIntVari),
@@ -8283,6 +8347,9 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(Accordion2_AcAccordionTab_8),
         SELF(Accordion2_IvAccordionX),
         0x00000000,
+    },
+
+    .Murai_ViewableTable_0EE = {
         SELF(Mesage),
         SELF(Mesage_IvMesage),
         SELF(Completed),
@@ -8308,6 +8375,9 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(PleaseWait),
         SELF(PleaseWait_AcPleaseWait),
         0x00000000,
+    },
+
+    .Murai_ViewableTable_0EF = {
         SELF(Welcom),
         SELF(Welcom_IvIntWelcome),
         SELF(Welcom_VwUserBitmapSp),
@@ -8320,6 +8390,9 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(MPVersion_IvIntWelcome),
         SELF(MPver),
         0x00000000,
+    },
+
+    .Murai_ViewableTable_0F0 = {
         SELF(Softver),
         SELF(MainProgram),
         SELF(MainTable),
@@ -8327,6 +8400,9 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(SoundTable),
         SELF(Softver_IvSoftver),
         0x00000000,
+    },
+
+    .Murai_ResNameTable_302 = {
         SELF(Sdmenu_str),
         SELF(SdmenuPage_name),
         SELF(w104_code),
@@ -8392,7 +8468,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .Sdmenu_str = ALIGNED_STRING("Sdmenu"),
 
-    .ptrs_9 = {
+    .Murai_ResNameTable_303 = {
         SELF(Sdpart_name),
         SELF(w115_code),
         SELF(ResName_Sdpart_2_AcIndexEditSw),
@@ -8650,7 +8726,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .Sdpart_name = ALIGNED_STRING("Sdpart"),
 
-    .ptrs_10 = {
+    .Murai_ResNameTable_304 = {
         SELF(Sdmtune_name),
         SELF(w116_code),
         SELF(ResName_Sdmtune_2_Label),
@@ -8668,7 +8744,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .Sdmtune_name = "Sdmtune",
 
-    .ptrs_11 = {
+    .Murai_ResNameTable_305 = {
         SELF(Sdscltyp_str),
         SELF(SdscltypPage_name),
         SELF(w121_code),
@@ -8836,7 +8912,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .Sdscltyp_str = ALIGNED_STRING("Sdscltyp"),
 
-    .ptrs_12 = {
+    .Murai_ResNameTable_307 = {
         SELF(Sdlfthld_name),
         SELF(w122_code),
         SELF(ResName_Sdlfthld_2_AcLswEditBox),
@@ -8851,7 +8927,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .Sdlfthld_name = ALIGNED_STRING("Sdlfthld"),
 
-    .ptrs_13 = {
+    .Murai_ResNameTable_308 = {
         SELF(Sdmixer_name),
         SELF(w123_code),
         SELF(ResName_Sdmixer_2_AcPartMixer),

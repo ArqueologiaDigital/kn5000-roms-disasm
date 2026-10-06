@@ -1728,21 +1728,66 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvIntEasySet_t SplitSetting_IvIntEasySet;
     /* element 5 of Viewable slot 0xEC: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t SplitSetting_AcLanguageText;
-    uint32_t ptrs_0[228];  /* 228 pointers */
+    /* East_ViewableTable_009: 5 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_009[5];
+    /* East_ViewableTable_00F: 4 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_00F[4];
+    /* East_ViewableTable_018: 13 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_018[13];
+    /* East_ViewableTable_019: 13 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_019[13];
+    /* East_ViewableTable_01A: 13 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_01A[13];
+    /* East_ViewableTable_050: 21 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_050[21];
+    /* East_ViewableTable_051: 8 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_051[8];
+    /* East_ViewableTable_052: 9 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_052[9];
+    /* East_ViewableTable_053: 7 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_053[7];
+    /* East_ViewableTable_054: 6 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_054[6];
+    /* East_ViewableTable_055: 6 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_055[6];
+    /* East_ViewableTable_056: 68 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_056[68];
+    /* East_ViewableTable_057: 29 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_057[29];
+    /* East_ViewableTable_058: 22 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_058[22];
+    /* East_ViewableTable_059: 4 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_059[4];
     uint16_t field_41b2;
     uint16_t field_41b4;
-    uint32_t ptrs_1[82];  /* 82 pointers */
+    uint32_t ptrs_1[2];
+    /* East_ViewableTable_05A: 7 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_05A[7];
+    /* East_ViewableTable_05B: 18 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_05B[18];
+    /* East_ViewableTable_05C: 9 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_05C[9];
+    /* East_ViewableTable_0D7: 25 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_0D7[25];
+    /* East_ViewableTable_0D8: 9 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_0D8[9];
+    /* East_ViewableTable_0EC: 7 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t East_ViewableTable_0EC[7];
+    /* East_ResNameTable_309: 5 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t East_ResNameTable_309[5];
     char str_392[2];
     char ResName_ReverbEqualizerMenu_3_AcTitleMenu[2];
     char ResName_ReverbEqualizerMenu_2_AcTitleMenu[2];
     char w149_code[2];
     char ReverbEqualizerMenu_name[20];
-    uint32_t ptrs_2[4];  /* 4 pointers */
+    /* East_ResNameTable_30F: 4 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
+    uint32_t East_ResNameTable_30F[4];
     char str_395[2];
     char ResName_R12OctaveSetting_2_AcIndexWideES[2];
     char ResName_R12OctaveSetting_1_AcLswEditBox[2];
     char R12OctaveSetting_str[18];
-    uint32_t ptrs_3[13];  /* 13 pointers */
+    /* East_ResNameTable_318: 13 pointers (cut from ptrs_3 by split_naka_pointer_arrays.py) */
+    uint32_t East_ResNameTable_318[13];
     char str_399[2];
     char ResName_ReverbPreset_11_AcStrRadioBox[2];
     char ResName_ReverbPreset_10_AcStrRadioBox[2];
@@ -1756,7 +1801,8 @@ typedef struct __attribute__((packed)) {
     char ResName_ReverbPreset_2_AcStrRadioBox[2];
     char w150_code[2];
     char ReverbPreset_name[14];
-    uint32_t ptrs_4[13];  /* 13 pointers */
+    /* East_ResNameTable_319: 13 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t East_ResNameTable_319[13];
     char w151_code[2];
     char EqOnOffBox_name[12];
     char ResName_EqualizerPreset_10_IvCatchEvent[2];
@@ -1770,7 +1816,8 @@ typedef struct __attribute__((packed)) {
     char ResName_EqualizerPreset_2_AcStrRadioBox[2];
     char w152_code[2];
     char EqualizerPreset_name[16];
-    uint32_t ptrs_5[13];  /* 13 pointers */
+    /* East_ResNameTable_31A: 13 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t East_ResNameTable_31A[13];
     char str_419[2];
     char w153_code[2];
     char RevEqOnOffBox_name[14];
@@ -1784,7 +1831,8 @@ typedef struct __attribute__((packed)) {
     char ResName_ReverbEqualizerPreset_2_AcStrRadioBox[2];
     char w154_code[2];
     char ReverbEqualizerPreset_name[22];
-    uint32_t ptrs_6[21];  /* 21 pointers */
+    /* East_ResNameTable_350: 21 pointers (cut from ptrs_6 by split_naka_pointer_arrays.py) */
+    uint32_t East_ResNameTable_350[21];
     char str_428[2];
     char ResName_MidiMenu_19_AcTitleMenu[2];
     char w155_code[2];
@@ -1806,7 +1854,8 @@ typedef struct __attribute__((packed)) {
     char w157_code[2];
     char MdmenuPage_name[12];
     char MidiMenu_str[10];
-    uint32_t ptrs_7[8];  /* 8 pointers */
+    /* East_ResNameTable_351: 8 pointers (cut from ptrs_7 by split_naka_pointer_arrays.py) */
+    uint32_t East_ResNameTable_351[8];
     char str_443[2];
     char ResName_MidiPartSetting_6_IvShowHide[2];
     char ResName_MidiPartSetting_5_AcIndexWideES[2];
@@ -7018,16 +7067,22 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230035,
     },
 
-    .ptrs_0 = {
+    .East_ViewableTable_009 = {
         SELF(ReverbEqualizerMenu),
         SELF(ReverbPresets_AcTitleMenu),
         SELF(EqualizerPresets_AcTitleMenu),
         SELF(ReverbEqualizerPresets_AcTitleMenu),
         0x00000000,
+    },
+
+    .East_ViewableTable_00F = {
         SELF(R12OctaveSetting),
         SELF(R12OctaveSetting_AcLswEditBox),
         SELF(R12OctaveSetting_AcIndexWideES),
         0x00000000,
+    },
+
+    .East_ViewableTable_018 = {
         SELF(ReverbPreset),
         SELF(HugeRoom_AcStrRadioBox),
         SELF(BoxRoom_AcStrRadioBox),
@@ -7041,6 +7096,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(LeftToRight_AcStrRadioBox),
         SELF(Cavernous_AcStrRadioBox),
         0x00000000,
+    },
+
+    .East_ViewableTable_019 = {
         SELF(EqualizerPreset),
         SELF(MakeUp_AcStrRadioBox),
         SELF(MiddleCut_AcStrRadioBox),
@@ -7054,6 +7112,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(EqualizerPreset_IvCatchEvent),
         SELF(EqOnOffBox),
         0x00000000,
+    },
+
+    .East_ViewableTable_01A = {
         SELF(ReverbEqualizerPreset),
         SELF(WarmWide_AcStrRadioBox),
         SELF(InYourFace_AcStrRadioBox),
@@ -7067,6 +7128,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(RevEqOnOffBox),
         SELF(ReverbEqualizerPreset_IvCatchEvent),
         0x00000000,
+    },
+
+    .East_ViewableTable_050 = {
         SELF(MidiMenu),
         SELF(MdmenuPage),
         SELF(MidiMenu_IvPageControl),
@@ -7088,6 +7152,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(ComputerConnection_AcTitleMenu),
         SELF(MidiSettingsLoadOption_AcTitleMenu),
         0x00000000,
+    },
+
+    .East_ViewableTable_051 = {
         SELF(MidiPartSetting),
         SELF(MdPartSetGridBox),
         SELF(MdPartSetGridBox_AcIndexWideES),
@@ -7096,6 +7163,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(MdPartSetGridBox_AcIndexWideES_4),
         SELF(MidiPartSetting_IvShowHide),
         0x00000000,
+    },
+
+    .East_ViewableTable_052 = {
         SELF(MidiControlMessage),
         SELF(MidiControlMessage_PsPageBox),
         SELF(CtlMsgGridBox),
@@ -7105,6 +7175,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(MidiControlMessage_AcIndexWideES),
         SELF(MidiControlMessage_IvShowHide),
         0x00000000,
+    },
+
+    .East_ViewableTable_053 = {
         SELF(MidiRealtimeMessage),
         SELF(MidiRealtimeMessage_AcIndexWideES),
         SELF(RealtimeCommandBox),
@@ -7112,18 +7185,27 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(Value_Label),
         SELF(MidiRealtimeMessage_IvShowHide),
         0x00000000,
+    },
+
+    .East_ViewableTable_054 = {
         SELF(MidiCommonSetting),
         SELF(ComSetGridBox),
         SELF(MidiCommonSetting_AcIndexWideES),
         SELF(MidiCommonSetting_AcIndexWideES_2),
         SELF(MidiCommonSetting_IvShowHide),
         0x00000000,
+    },
+
+    .East_ViewableTable_055 = {
         SELF(MidiInOutSetting),
         SELF(InOutGridBox),
         SELF(InOutGridBox_AcIndexWideES),
         SELF(InOutGridBox_AcIndexWideES_2),
         SELF(MidiInOutSetting_IvShowHide),
         0x00000000,
+    },
+
+    .East_ViewableTable_056 = {
         SELF(MidiPresets),
         SELF(MdPresetPageBox),
         SELF(MidiPresets_IvPageControl),
@@ -7192,6 +7274,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(MidiPresetMasterWith_VwUserBitmap),
         SELF(Kn5000_Label_4),
         0x00000000,
+    },
+
+    .East_ViewableTable_057 = {
         SELF(MidiExclusive),
         SELF(MidiExclusive_AcFuncEditSw),
         SELF(Send_Label),
@@ -7221,6 +7306,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(ExcRcvMspBox),
         SELF(ExcRcvDotBox),
         0x00000000,
+    },
+
+    .East_ViewableTable_058 = {
         SELF(MidiGmMode),
         SELF(GMOnOffBox),
         SELF(MidiGmMode_AcIndexWideES),
@@ -7243,6 +7331,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(GMOFFSure_AcLanguageText_2),
         SELF(GMOFFSure_AcLanguageText_3),
         0x00000000,
+    },
+
+    .East_ViewableTable_059 = {
         SELF(MidiPcgOutput),
         SELF(PcgOutGridBox),
         SELF(MidiPcgOutput_AcIndexWideES),
@@ -7256,6 +7347,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
     .ptrs_1 = {
         SELF(MidiPcgOutput_IvShowHide),
         0x00000000,
+    },
+
+    .East_ViewableTable_05A = {
         SELF(MidiComputerConnection),
         SELF(MidiComputerConnection_AcLswEditBox),
         SELF(MidiComputerConnection_AcIndexWideES),
@@ -7263,6 +7357,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(Value_Label_8),
         SELF(MidiComputerConnection_IvShowHide),
         0x00000000,
+    },
+
+    .East_ViewableTable_05B = {
         SELF(MidiPanelMemoryOutput),
         SELF(PMem_Label),
         SELF(OnOff_Label_2),
@@ -7281,6 +7378,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(MidiPanelMemoryOutput_AcIndexEditSw_6),
         SELF(MidiPanelMemoryOutput_IvShowHide),
         0x00000000,
+    },
+
+    .East_ViewableTable_05C = {
         SELF(MidiSetup),
         SELF(MdSetOptGridBox),
         SELF(LoadMidiParameters_Label),
@@ -7290,6 +7390,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(MidiSetup_AcFuncEditSw),
         SELF(MidiSetup_IvShowHide),
         0x00000000,
+    },
+
+    .East_ViewableTable_0D7 = {
         SELF(EntertainerVocal),
         SELF(EntertainerVocal_IvPageControl),
         SELF(EntertainerVocal_IvPageControl_2),
@@ -7315,6 +7418,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(VocalistPage2_AcFuncEditSw),
         SELF(VocalistPage2_AcIndexWideES),
         0x00000000,
+    },
+
+    .East_ViewableTable_0D8 = {
         SELF(EntertainerFade),
         SELF(FadeInOutGridBox),
         SELF(FadeIn_Label),
@@ -7324,6 +7430,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(EntertainerFade_IvIntEasySet),
         SELF(EntertainerFade_IvShowHide),
         0x00000000,
+    },
+
+    .East_ViewableTable_0EC = {
         SELF(SplitSetting),
         SELF(SplitSetting_VwBox),
         SELF(SplitSetting_VwBox_2),
@@ -7331,6 +7440,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(SplitSetting_IvIntEasySet),
         SELF(SplitSetting_AcLanguageText),
         0x00000000,
+    },
+
+    .East_ResNameTable_309 = {
         SELF(ReverbEqualizerMenu_name),
         SELF(w149_code),
         SELF(ResName_ReverbEqualizerMenu_2_AcTitleMenu),
@@ -7348,7 +7460,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .ReverbEqualizerMenu_name = "ReverbEqualizerMenu",
 
-    .ptrs_2 = {
+    .East_ResNameTable_30F = {
         SELF(R12OctaveSetting_str),
         SELF(ResName_R12OctaveSetting_1_AcLswEditBox),
         SELF(ResName_R12OctaveSetting_2_AcIndexWideES),
@@ -7363,7 +7475,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .R12OctaveSetting_str = ALIGNED_STRING("R12OctaveSetting"),
 
-    .ptrs_3 = {
+    .East_ResNameTable_318 = {
         SELF(ReverbPreset_name),
         SELF(w150_code),
         SELF(ResName_ReverbPreset_2_AcStrRadioBox),
@@ -7405,7 +7517,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .ReverbPreset_name = ALIGNED_STRING("ReverbPreset"),
 
-    .ptrs_4 = {
+    .East_ResNameTable_319 = {
         SELF(EqualizerPreset_name),
         SELF(w152_code),
         SELF(ResName_EqualizerPreset_2_AcStrRadioBox),
@@ -7447,7 +7559,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .EqualizerPreset_name = "EqualizerPreset",
 
-    .ptrs_5 = {
+    .East_ResNameTable_31A = {
         SELF(ReverbEqualizerPreset_name),
         SELF(w154_code),
         SELF(ResName_ReverbEqualizerPreset_2_AcStrRadioBox),
@@ -7489,7 +7601,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .ReverbEqualizerPreset_name = "ReverbEqualizerPreset",
 
-    .ptrs_6 = {
+    .East_ResNameTable_350 = {
         SELF(MidiMenu_str),
         SELF(MdmenuPage_name),
         SELF(w157_code),
@@ -7555,7 +7667,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .MidiMenu_str = ALIGNED_STRING("MidiMenu"),
 
-    .ptrs_7 = {
+    .East_ResNameTable_351 = {
         SELF(MidiPartSetting_str),
         SELF(MdPartSetGridBox_name),
         SELF(w158_code),

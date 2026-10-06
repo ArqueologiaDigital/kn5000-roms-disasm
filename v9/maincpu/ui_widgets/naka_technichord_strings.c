@@ -152,7 +152,10 @@ typedef struct __attribute__((packed)) {
 } msg_record_t;
 
 typedef struct __attribute__((packed)) {
-    uint32_t ptrs_0[30];  /* 30 pointers */
+    /* NakaData_TechniChordStrings: 10 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t NakaData_TechniChordStrings[10];
+    /* TechniChord_StyleDispatch_Table: 20 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t TechniChord_StyleDispatch_Table[20];
     char str_0[2];
     char ResName_Sdtecd_28_Label[2];
     char ResName_Sdtecd_27_AcLswEditBox[2];
@@ -206,7 +209,10 @@ typedef struct __attribute__((packed)) {
     char Demofeature1_name[14];
     char w16_code[2];
     char Demofeature_name[12];
-    uint32_t ptrs_3[45];  /* 45 pointers */
+    /* Murai_ResNameTable_3EA: 2 pointers (cut from ptrs_3 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ResNameTable_3EA[2];
+    /* NakaInst_DrawbarPtrTable: 43 pointers (cut from ptrs_3 by split_naka_pointer_arrays.py) */
+    uint32_t NakaInst_DrawbarPtrTable[43];
     char str_17[2];
     char ResName_Drawbar_43_Label[2];
     char ResName_Drawbar_42_Icon[2];
@@ -291,7 +297,8 @@ typedef struct __attribute__((packed)) {
     char ResName_Accordion_2_IvIntVari[2];
     char w27_code[2];
     char Accordion_name[10];
-    uint32_t ptrs_5[25];  /* 25 pointers */
+    /* Murai_ResNameTable_3EE: 25 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ResNameTable_3EE[25];
     char str_78[2];
     char w28_code[2];
     char PleaseWait_name[12];
@@ -330,7 +337,10 @@ typedef struct __attribute__((packed)) {
     char Str_Version_Empty7[2];
     char w37_code[2];
     char Welcom_name[8];
-    uint32_t ptrs_7[7];  /* 7 pointers */
+    /* Murai_ResNameTable_3F0: 1 pointers (cut from ptrs_7 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_ResNameTable_3F0[1];
+    /* StrTable_SoftwareVersionComps: 6 pointers (cut from ptrs_7 by split_naka_pointer_arrays.py) */
+    uint32_t StrTable_SoftwareVersionComps[6];
     char Str_SoftVer_Empty1[2];
     char w38_code[2];
     char SoundTable_name[12];
@@ -353,7 +363,10 @@ typedef struct __attribute__((packed)) {
     char TT_MESAGE_str[10];
     char TT_WELCOM_str[10];
     char TT_SOFTVER_str[12];
-    uint32_t ptrs_8[6];  /* 6 pointers */
+    /* Murai_MainFunctionTable_141: 3 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_MainFunctionTable_141[3];
+    /* Murai_MainFunctionTable_441: 3 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Murai_MainFunctionTable_441[3];
     char w40_code[2];
     char MainMemDrawControl_name[20];
     char MainPreControl_str[16];
@@ -906,7 +919,9 @@ typedef struct __attribute__((packed)) {
     char ERREUR_str[8];
     char ERROR_str_4[6];
     char ERROR_str_5[6];
-    uint32_t ptrs_185[6];  /* 6 pointers */
+    uint32_t ptrs_185[1];
+    /* StrTable_ReminderLabel: 5 pointers (cut from ptrs_185 by split_naka_pointer_arrays.py) */
+    uint32_t StrTable_ReminderLabel[5];
     char Reminder_str[12];
     char Reminder_str_2[12];
     uint16_t field_f86e;
@@ -973,7 +988,10 @@ typedef struct __attribute__((packed)) {
     char IlPasDeDisquette_str[44];
     char KeineDisketteImLaufwerk_str[28];
     char ThereIsNoDisk_str[36];
-    uint32_t ptrs_194[6];  /* 6 pointers */
+    /* StrPtrTable_DiskErr03: 1 pointers (cut from ptrs_194 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtrTable_DiskErr03[1];
+    /* StrTable_DiskErr03: 5 pointers (cut from ptrs_194 by split_naka_pointer_arrays.py) */
+    uint32_t StrTable_DiskErr03[5];
     char FileYangDicobaUntuk_str[86];
     char Error_str_9[10];
     char txt_El_disco_que_trato_de_cargar[40];
@@ -1043,14 +1061,17 @@ typedef struct __attribute__((packed)) {
     char VotreMotDePasse_str[34];
     char DasEingegebenePasswordIst_str[38];
     char ThePasswordThatYou_str[44];
-    uint32_t ptrs_202[6];  /* 6 pointers */
+    uint32_t ptrs_202[1];
+    /* StrTable_DiskErr12: 5 pointers (cut from ptrs_202 by split_naka_pointer_arrays.py) */
+    uint32_t StrTable_DiskErr12[5];
     char BatuBatereiSudahLemah_str[76];
     char Error_str_16[10];
     char txt_La_carga_de_las_baterias_es_muy[104];
     char txt_La_batterie_interne_est[90];
     char txt_Die_verbleibende_Kapazitat_der[108];
     char TheRemainingBatteryPower_str[94];
-    uint32_t ptrs_203[6];  /* 6 pointers */
+    /* StrPtrTable_DiskErr16: 6 pointers (cut from ptrs_203 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtrTable_DiskErr16[6];
     char LaguYangAndaSedang_str[60];
     char ErrorErrSeq_str[18];
     char txt_La_cancion_que_intenta_grabar[40];
@@ -1061,7 +1082,9 @@ typedef struct __attribute__((packed)) {
     char UenceQueVousEssayez_str[48];
     char txt_Der_Song_den_Sie_speichern[46];
     char TheSongYouAre_str[42];
-    uint32_t ptrs_204[6];  /* 6 pointers */
+    uint32_t ptrs_204[1];
+    /* StrTable_DiskErr16: 5 pointers (cut from ptrs_204 by split_naka_pointer_arrays.py) */
+    uint32_t StrTable_DiskErr16[5];
     char StandardMidiFileTidak_str[80];
     char ErrorErrCnv_str[18];
     char txt_Este_archivo_MIDI_estandar_es[82];
@@ -1069,7 +1092,10 @@ typedef struct __attribute__((packed)) {
     char str_411[4];
     char DiesesStandardMidiFile_str[98];
     char ThisStandardMidiFile_str[78];
-    uint32_t ptrs_205[6];  /* 6 pointers */
+    /* StrPtr_DiskErr17Table: 1 pointers (cut from ptrs_205 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtr_DiskErr17Table[1];
+    /* StrTable_DiskErr17: 5 pointers (cut from ptrs_205 by split_naka_pointer_arrays.py) */
+    uint32_t StrTable_DiskErr17[5];
     char IniTidakStandardMidi_str[30];
     char ErrorErrNoMidi_str[22];
     char txt_Este_no_es_un_archivo_MIDI_estan[32];
@@ -1098,7 +1124,8 @@ typedef struct __attribute__((packed)) {
     char txt_Je_ne_peux_pas_charger_le[146];
     char txt_Die_Sequenzerdaten_sind_nicht_in[108];
     char AProblemHasOccurred_str[96];
-    uint32_t ptrs_209[6];  /* 6 pointers */
+    /* StrPtrTable_DiskErr20_End: 6 pointers (cut from ptrs_209 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtrTable_DiskErr20_End[6];
     char KapasitasPenyimpananPenuhMemory_str[46];
     char Error_str_18[10];
     char MemoriaLlena_str[14];
@@ -1120,14 +1147,18 @@ typedef struct __attribute__((packed)) {
     char txt_Um_diesen_Vorgang_abzuschlien[64];
     char Ken_str[6];
     char ItIsNecessaryTo_str[64];
-    uint32_t ptrs_211[6];  /* 6 pointers */
+    /* StrPtrTable_DiskErr24_Start: 6 pointers (cut from ptrs_211 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtrTable_DiskErr24_Start[6];
     char TidakMungkinDiubahKe_str[104];
     char Error_str_20[10];
     char txt_No_es_posible_cambiar_la[104];
     char txt_Je_ne_peux_pas_changer_de_mesure[112];
     char txt_Es_ist_jetzt_nicht_mehr_moglich[98];
     char ItIsImpossibleTo_str[102];
-    uint32_t ptrs_212[6];  /* 6 pointers */
+    /* MsgText_CheckLanguage_PtrTable: 1 pointers (cut from ptrs_212 by split_naka_pointer_arrays.py) */
+    uint32_t MsgText_CheckLanguage_PtrTable[1];
+    /* StrTable_DiskErr24_Rhythm: 5 pointers (cut from ptrs_212 by split_naka_pointer_arrays.py) */
+    uint32_t StrTable_DiskErr24_Rhythm[5];
     char SatuRhythmTrackSudah_str[80];
     char Error_str_21[10];
     char YaExisteUnaPista_str[74];
@@ -1156,7 +1187,8 @@ typedef struct __attribute__((packed)) {
     char txt_Vous_avez_deja_choisi_une_piste_4[98];
     char txt_Es_ist_nicht_moglich_zwei_APC[90];
     char AApcTrackAlready_str[74];
-    uint32_t ptrs_216[6];  /* 6 pointers */
+    /* StrPtrTable_DiskErr24_French_End: 6 pointers (cut from ptrs_216 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtrTable_DiskErr24_French_End[6];
     char IniHanyaMungkinUntuk_str[62];
     char Error_str_25[10];
     char txt_Solo_es_posible_cambiar_la[62];
@@ -1170,7 +1202,8 @@ typedef struct __attribute__((packed)) {
     char txt_Je_ne_peux_fusionner_que_des[140];
     char txt_Spuren_wie_RHYTHM_CHORD_und[104];
     char ItIsOnlyPossible_str_2[104];
-    uint32_t ptrs_218[6];  /* 6 pointers */
+    /* StrPtrTable_DiskErr28_Start: 6 pointers (cut from ptrs_218 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtrTable_DiskErr28_Start[6];
     char IniHanyaMungkinUntuk_str_3[118];
     char Error_str_27[10];
     char txt_Solo_es_posible_copiar_pistas_de[102];
@@ -1223,7 +1256,9 @@ typedef struct __attribute__((packed)) {
     uint16_t field_12d82;
     char NnenNichtKopiertWerden_str[28];
     char ItIsOnlyPossible_str_3[102];
-    uint32_t ptrs_219[6];  /* 6 pointers */
+    uint32_t ptrs_219[1];
+    /* StrTable_DiskErr28: 5 pointers (cut from ptrs_219 by split_naka_pointer_arrays.py) */
+    uint32_t StrTable_DiskErr28[5];
     char LaguIniTerlaluPanjang_str[58];
     char Error_str_28[10];
     char txt_Esta_cancion_dura_demasiado_para[74];
@@ -1253,7 +1288,8 @@ typedef struct __attribute__((packed)) {
     char Emesure_str[10];
     char txt_Das_gerade_kopierte_Pattern_hat[172];
     char TheTimeSignatureOf_str[234];
-    uint32_t ptrs_223[6];  /* 6 pointers */
+    /* StrPtrTable_DiskErr30_End: 6 pointers (cut from ptrs_223 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtrTable_DiskErr30_End[6];
     char MemoryPenuh_str[14];
     char Error_str_32[10];
     char MemoriaLlena_str_2[14];
@@ -1275,7 +1311,10 @@ typedef struct __attribute__((packed)) {
     char UnKn3000_str[12];
     char txt_Der_Identifikations_ID_Code_der[112];
     char TheIdentificationIdCode_str[104];
-    uint32_t ptrs_225[6];  /* 6 pointers */
+    /* StrPtrTable_DiskErr41_Start: 1 pointers (cut from ptrs_225 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtrTable_DiskErr41_Start[1];
+    /* StrTable_DiskErr41: 5 pointers (cut from ptrs_225 by split_naka_pointer_arrays.py) */
+    uint32_t StrTable_DiskErr41[5];
     char SatuKesalahanSudahTerjadi_str[154];
     char Error_str_34[10];
     char txt_Se_ha_producido_un_error_durante[164];
@@ -1289,7 +1328,10 @@ typedef struct __attribute__((packed)) {
     char txt_Une_erreur_s_est_produite_lors[160];
     char txt_Bei_der_Ubertragung_der_System[142];
     char AnErrorHasOccurred_str_5[120];
-    uint32_t ptrs_227[6];  /* 6 pointers */
+    /* StrPtrTable_DiskErr43_Start: 1 pointers (cut from ptrs_227 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtrTable_DiskErr43_Start[1];
+    /* StrTable_DiskErr43: 5 pointers (cut from ptrs_227 by split_naka_pointer_arrays.py) */
+    uint32_t StrTable_DiskErr43[5];
     char FileYangSedangAnda_str[156];
     char Error_str_36[10];
     /* Str_DiskErr43_Spanish: text (the asm slice of the same name) */
@@ -1388,7 +1430,9 @@ typedef struct __attribute__((packed)) {
     char Es_str[4];
     char txt_Es_konnen_nur_Melodie_Spuren[116];
     char ItIsOnlyPossible_str_4[106];
-    uint32_t ptrs_230[6];  /* 6 pointers */
+    uint32_t ptrs_230[1];
+    /* StrTable_DiskErr47: 5 pointers (cut from ptrs_230 by split_naka_pointer_arrays.py) */
+    uint32_t StrTable_DiskErr47[5];
     char TidakMungkinUntukMenggunakan_str[124];
     char Error_str_39[10];
     char NoEsPosibleUtilizar_str[126];
@@ -1445,7 +1489,10 @@ typedef struct __attribute__((packed)) {
     char txt_La_taille_de_cette_sequence[172];
     char txt_Die_Groe_dieses_Songs_ubersteigt[180];
     char TheQuantityOfThis_str[146];
-    uint32_t ptrs_233[6];  /* 6 pointers */
+    /* StrTable_DiskErr49_PtrEnd: 1 pointers (cut from ptrs_233 by split_naka_pointer_arrays.py) */
+    uint32_t StrTable_DiskErr49_PtrEnd[1];
+    /* Str_SongCapacityExceeded_Multilingual: 5 pointers (cut from ptrs_233 by split_naka_pointer_arrays.py) */
+    uint32_t Str_SongCapacityExceeded_Multilingual[5];
     char TidakMungkinMerekamDengan_str[136];
     char Error_str_41[10];
     char NoEsPosibleGrabar_str[158];
@@ -1459,7 +1506,8 @@ typedef struct __attribute__((packed)) {
     char txt_Des_pistes_assignees_a_Chord_APC[168];
     char txt_In_dem_Song_den_Sie_kopieren[186];
     char SpecialTracksSuchAs_str[172];
-    uint32_t ptrs_235[6];  /* 6 pointers */
+    /* StrPtrTable_Error55_End: 6 pointers (cut from ptrs_235 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtrTable_Error55_End[6];
     char RekamanAutoPunchBelum_str[114];
     char Error_str_43[10];
     char txt_No_ha_tenido_exito_la_grabacion[138];
@@ -1474,7 +1522,8 @@ typedef struct __attribute__((packed)) {
     char txt_Le_motif_COMPOSER_que_vous_avez[142];
     char txt_Das_gewahlte_COMPOSER_Muster[174];
     char TheComposerPatternYou_str[142];
-    uint32_t ptrs_237[6];  /* 6 pointers */
+    /* StrPtrTable_Error55_Block2: 6 pointers (cut from ptrs_237 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtrTable_Error55_Block2[6];
     char LaguYangAndaCoba_str[132];
     char Error_str_45[10];
     char txt_La_cancion_que_ha_tratado_de[150];
@@ -1492,7 +1541,10 @@ typedef struct __attribute__((packed)) {
     char str_615[4];
     char txt_RKB_und_LKB_sind_spezielle[172];
     char RkbAndLkbAre_str[134];
-    uint32_t ptrs_239[6];  /* 6 pointers */
+    /* StrPtrTable_SpecialTracks_Start: 1 pointers (cut from ptrs_239 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtrTable_SpecialTracks_Start[1];
+    /* Str_RKBLKBSpecialTracks_Multilingual: 5 pointers (cut from ptrs_239 by split_naka_pointer_arrays.py) */
+    uint32_t Str_RKBLKBSpecialTracks_Multilingual[5];
     /* NakaInst_s_v: text (the asm slice of the same name) */
     char NakaInst_s_v[6];
     char Error_str_47[10];
@@ -1516,7 +1568,10 @@ typedef struct __attribute__((packed)) {
     char txt_La_connexion_micro_ordinateur_n[208];
     char DieComputerverbindungIstNicht_str[200];
     char TheComputerConnectionIs_str[180];
-    uint32_t ptrs_242[6];  /* 6 pointers */
+    /* StrPtrTable_InitSettingWarning_Start: 1 pointers (cut from ptrs_242 by split_naka_pointer_arrays.py) */
+    uint32_t StrPtrTable_InitSettingWarning_Start[1];
+    /* Str_InitSettingWarning_Multilingual: 5 pointers (cut from ptrs_242 by split_naka_pointer_arrays.py) */
+    uint32_t Str_InitSettingWarning_Multilingual[5];
     char BitmapAdalahSalahFormat_str[130];
     char Error_str_49[10];
     char txt_Este_mapa_de_bits_tiene_en_un[146];
@@ -2568,7 +2623,12 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19d84;
     /* FDemoText_ByteData_VoiceProbeC_CaseTable: 7 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t FDemoText_ByteData_VoiceProbeC_CaseTable[7];
-    uint32_t ptrs_256[34];  /* 34 pointers */
+    /* FDemoText_InitFuncTable: 4 pointers (cut from ptrs_256 by split_naka_pointer_arrays.py) */
+    uint32_t FDemoText_InitFuncTable[4];
+    /* FDemoText_ProcessMarkup_LookupTag_PtrTable: 1 pointers (cut from ptrs_256 by split_naka_pointer_arrays.py) */
+    uint32_t FDemoText_ProcessMarkup_LookupTag_PtrTable[1];
+    /* FDemoText_ProcessMarkup_LookupTag_PtrTable_2: 29 pointers (cut from ptrs_256 by split_naka_pointer_arrays.py) */
+    uint32_t FDemoText_ProcessMarkup_LookupTag_PtrTable_2[29];
     char Action_str[8];
     char ACTION_str[8];
     char Presentation_str[14];
@@ -3001,7 +3061,8 @@ typedef struct __attribute__((packed)) {
     char MemoryC_str[16];
     char MemoryB_str[16];
     char MemoryA_str[16];
-    uint32_t ptrs_269[10];  /* 10 pointers */
+    /* PtrTbl_VariationNames: 10 pointers (cut from ptrs_269 by split_naka_pointer_arrays.py) */
+    uint32_t PtrTbl_VariationNames[10];
     char str_1550[2];
     char str_1551[2];
     char str_1552[2];
@@ -3023,7 +3084,8 @@ typedef struct __attribute__((packed)) {
     char str_1567[2];
     char str_1568[2];
     char str_1569[2];
-    uint32_t ptrs_271[10];  /* 10 pointers */
+    /* WP_GetPresetName3_PtrTable: 10 pointers (cut from ptrs_271 by split_naka_pointer_arrays.py) */
+    uint32_t WP_GetPresetName3_PtrTable[10];
     char UserKit_str[18];
     char MemoryB_str_2[18];
     char MemoryA_str_2[18];
@@ -3065,10 +3127,20 @@ typedef struct __attribute__((packed)) {
     char str_1595[4];
     uint16_t SLDstBankList_FuncBody_Data_4;
     uint16_t SLDstBankList_FuncBody_Data_8;
-    uint32_t ptrs_273[15];  /* 15 pointers */
+    /* SLDst_HandleShow_PtrTable: 5 pointers (cut from ptrs_273 by split_naka_pointer_arrays.py) */
+    uint32_t SLDst_HandleShow_PtrTable[5];
+    /* CmpSrc_HandleShow_PtrTable: 5 pointers (cut from ptrs_273 by split_naka_pointer_arrays.py) */
+    uint32_t CmpSrc_HandleShow_PtrTable[5];
+    /* CmpDst_HandleShow_PtrTable: 5 pointers (cut from ptrs_273 by split_naka_pointer_arrays.py) */
+    uint32_t CmpDst_HandleShow_PtrTable[5];
     char str_1596[2];
     char str_1597[2];
-    uint32_t ptrs_274[60];  /* 60 pointers */
+    /* Cheap_ApFuncTable_125: 30 pointers (cut from ptrs_274 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ApFuncTable_125[30];
+    /* PtrTbl_DiskFuncNames: 17 pointers (cut from ptrs_274 by split_naka_pointer_arrays.py) */
+    uint32_t PtrTbl_DiskFuncNames[17];
+    /* Data_DiskFuncPtrTbl_EA0B12: 13 pointers (cut from ptrs_274 by split_naka_pointer_arrays.py) */
+    uint32_t Data_DiskFuncPtrTbl_EA0B12[13];
     char w50_code[2];
     char CheckPasswordNo_name[16];
     char CheckPasswordOk_str[16];
@@ -3234,7 +3306,10 @@ typedef struct __attribute__((packed)) {
     char EV_NOTPOSTAIC_str[14];
     char EV_NOTPARADRAW_str[16];
     uint16_t Cheap_ResEventCount_1C5;
-    uint32_t ptrs_285[18];  /* 18 pointers */
+    /* Cheap_ResMethodTable_1E5: 1 pointers (cut from ptrs_285 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ResMethodTable_1E5[1];
+    /* PtrTbl_MsgTypeNames_EA11F8: 17 pointers (cut from ptrs_285 by split_naka_pointer_arrays.py) */
+    uint32_t PtrTbl_MsgTypeNames_EA11F8[17];
     char MT_CheckPassword3_str[18];
     char MT_CheckPassword2_str[18];
     char MT_CheckPassword_str[18];
@@ -3253,7 +3328,10 @@ typedef struct __attribute__((packed)) {
     char MT_SetFileSfx_str[14];
     char MT_GetFileSfx_str[14];
     uint16_t Cheap_ResMethodCount_1E5;
-    uint32_t ptrs_286[28];  /* 28 pointers */
+    /* Cheap_FunctionTable_105: 14 pointers (cut from ptrs_286 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_FunctionTable_105[14];
+    /* PtrTbl_NakaModuleHandlers: 14 pointers (cut from ptrs_286 by split_naka_pointer_arrays.py) */
+    uint32_t PtrTbl_NakaModuleHandlers[14];
     char str_1700[2];
 } naka_technichord_strings_t;
 
@@ -3266,7 +3344,7 @@ _Static_assert(sizeof(naka_technichord_strings_t) == 111742,
 const naka_technichord_strings_t naka_technichord_strings_data
     __attribute__((section(".text"), used)) = {
 
-    .ptrs_0 = {
+    .NakaData_TechniChordStrings = {
         SELF(Sdtecd_str),
         SELF(SdtecdPage_name),
         SELF(w9_code),
@@ -3277,6 +3355,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(w8_code),
         SELF(ResName_Sdtecd_8_AcIndexEditSw),
         SELF(ResName_Sdtecd_9_AcIndexEditSw),
+    },
+
+    .TechniChord_StyleDispatch_Table = {
         SELF(TcClose_name),
         SELF(TcOpen1_code),
         SELF(TcOpen2_name),
@@ -3428,9 +3509,12 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Demofeature_name = "Demofeature",
 
-    .ptrs_3 = {
+    .Murai_ResNameTable_3EA = {
         SELF(Drawbar_name),
         SELF(w23_code),
+    },
+
+    .NakaInst_DrawbarPtrTable = {
         SELF(DrawPerc4_str),
         SELF(DrawPerc223_name),
         SELF(White23_code),
@@ -3683,7 +3767,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Accordion_name = "Accordion",
 
-    .ptrs_5 = {
+    .Murai_ResNameTable_3EE = {
         SELF(Mesage_name),
         SELF(w35_code),
         SELF(Completed_name),
@@ -3800,8 +3884,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Welcom_name = ALIGNED_STRING("Welcom"),
 
-    .ptrs_7 = {
+    .Murai_ResNameTable_3F0 = {
         SELF(Softver_str),
+    },
+
+    .StrTable_SoftwareVersionComps = {
         SELF(MainProgram_str),
         SELF(MainTable_name),
         SELF(SubProgram_code),
@@ -3854,10 +3941,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TT_SOFTVER_str = ALIGNED_STRING("TT_SOFTVER"),
 
-    .ptrs_8 = {
+    .Murai_MainFunctionTable_141 = {
         NAKA_ADDR(MainPreControl),
         NAKA_ADDR(MainMemDrawControl),
         0x00000000,
+    },
+
+    .Murai_MainFunctionTable_441 = {
         SELF(MainPreControl_str),
         SELF(MainMemDrawControl_name),
         SELF(w40_code),
@@ -7626,6 +7716,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ptrs_185 = {
         SELF(Reminder_str_3),
+    },
+
+    .StrTable_ReminderLabel = {
         SELF(Hinweis_str),
         SELF(Rappel_str),
         SELF(field_f86e),
@@ -7821,8 +7914,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ThereIsNoDisk_str = "There is no disk in the disk drive.",
 
-    .ptrs_194 = {
+    .StrPtrTable_DiskErr03 = {
         SELF(TheFileThatYou_str),
+    },
+
+    .StrTable_DiskErr03 = {
         SELF(DieDiskettenbankDieSie_str),
         SELF(txt_Le_fichier_que_vous_avez_essaye),
         SELF(txt_El_disco_que_trato_de_cargar),
@@ -8019,6 +8115,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ptrs_202 = {
         SELF(TheRemainingBatteryPower_str),
+    },
+
+    .StrTable_DiskErr12 = {
         SELF(txt_Die_verbleibende_Kapazitat_der),
         SELF(txt_La_batterie_interne_est),
         SELF(txt_La_carga_de_las_baterias_es_muy),
@@ -8038,7 +8137,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheRemainingBatteryPower_str = "The remaining battery power is very low. Replace all the batteries with new ones immediately.",
 
-    .ptrs_203 = {
+    .StrPtrTable_DiskErr16 = {
         SELF(TheSongYouAre_str),
         SELF(txt_Der_Song_den_Sie_speichern),
         SELF(field_11320),
@@ -8069,6 +8168,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ptrs_204 = {
         SELF(ThisStandardMidiFile_str),
+    },
+
+    .StrTable_DiskErr16 = {
         SELF(DiesesStandardMidiFile_str),
         SELF(txt_Cette_sequence_STANDARD_MIDI),
         SELF(txt_Este_archivo_MIDI_estandar_es),
@@ -8090,8 +8192,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ThisStandardMidiFile_str = "This Standard MIDI File is incompatible with the KN5000 and cannot be loaded.",
 
-    .ptrs_205 = {
+    .StrPtr_DiskErr17Table = {
         SELF(ThisIsNotStandard_str),
+    },
+
+    .StrTable_DiskErr17 = {
         SELF(DiesIstKeinStandard_str),
         SELF(txt_Ceci_n_est_pas_une_sequence),
         SELF(txt_Este_no_es_un_archivo_MIDI_estan),
@@ -8176,7 +8281,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .AProblemHasOccurred_str = "A problem has occurred with your Sequencer Data. This might be due to a damaged or faulty Disk.",
 
-    .ptrs_209 = {
+    .StrPtrTable_DiskErr20_End = {
         SELF(MemoryFull_str),
         SELF(SpeicherVoll_str),
         SELF(field_11cee),
@@ -8234,7 +8339,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ItIsNecessaryTo_str = ALIGNED_STRING("It is necessary to press PUNCH OUT to complete this procedure."),
 
-    .ptrs_211 = {
+    .StrPtrTable_DiskErr24_Start = {
         SELF(ItIsImpossibleTo_str),
         SELF(txt_Es_ist_jetzt_nicht_mehr_moglich),
         SELF(txt_Je_ne_peux_pas_changer_de_mesure),
@@ -8255,8 +8360,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ItIsImpossibleTo_str = "It is impossible to change the Time Signature because it has already been set in the existing Tracks.",
 
-    .ptrs_212 = {
+    .MsgText_CheckLanguage_PtrTable = {
         SELF(ARhythmTrackAlready_str),
+    },
+
+    .StrTable_DiskErr24_Rhythm = {
         SELF(txt_Es_ist_nicht_moglich_zwei_RHYTHM),
         SELF(txt_Vous_avez_deja_choisi_une_piste),
         SELF(YaExisteUnaPista_str),
@@ -8341,7 +8449,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .AApcTrackAlready_str = "A APC Track already exists. It is impossible to assign two Tracks to APC.",
 
-    .ptrs_216 = {
+    .StrPtrTable_DiskErr24_French_End = {
         SELF(ItIsOnlyPossible_str),
         SELF(txt_Es_ist_nicht_moglich_die),
         SELF(txt_Je_ne_peux_changer_la_velocite),
@@ -8383,7 +8491,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ItIsOnlyPossible_str_2 = ALIGNED_STRING("It is only possible to merge Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be merged."),
 
-    .ptrs_218 = {
+    .StrPtrTable_DiskErr28_Start = {
         SELF(ItIsOnlyPossible_str_3),
         SELF(field_12d28),
         SELF(txt_Je_ne_peux_copier_que_des_pistes),
@@ -8498,6 +8606,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ptrs_219 = {
         SELF(ThisSongIsToo_str),
+    },
+
+    .StrTable_DiskErr28 = {
         SELF(DieserTitelIstZu_str),
         SELF(txt_Cette_sequence_est_trop_longue),
         SELF(txt_Esta_cancion_dura_demasiado_para),
@@ -8584,7 +8695,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheTimeSignatureOf_str = "The Time Signature of the Pattern from which you are copying is different from the Composer Memory that you are using. Either: Change the Time Signature of the Composer Memory or: Copy from a Pattern that has the same Time Signature.",
 
-    .ptrs_223 = {
+    .StrPtrTable_DiskErr30_End = {
         SELF(MemoryFull_str_2),
         SELF(SpeicherVoll_str_2),
         SELF(field_13afe),
@@ -8642,8 +8753,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheIdentificationIdCode_str = ALIGNED_STRING("The Identification (ID) code of the System Exclusive data received by the KN5000 is different product."),
 
-    .ptrs_225 = {
+    .StrPtrTable_DiskErr41_Start = {
         SELF(AnErrorHasOccurred_str_4),
+    },
+
+    .StrTable_DiskErr41 = {
         SELF(txt_Beim_Empfang_der_System),
         SELF(txt_Une_erreur_s_est_produite_4),
         SELF(txt_Se_ha_producido_un_error_durante),
@@ -8684,8 +8798,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .AnErrorHasOccurred_str_5 = "An error has occurred during System Exclusive transmission. The data has not been received correctly. Please try again.",
 
-    .ptrs_227 = {
+    .StrPtrTable_DiskErr43_Start = {
         SELF(TheFileThatYou_str_2),
+    },
+
+    .StrTable_DiskErr43 = {
         SELF(field_14546),
         SELF(Str_DiskErr43_French),
         SELF(Str_DiskErr43_Spanish),
@@ -8903,6 +9020,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ptrs_230 = {
         SELF(ItIsNotPossible_str_2),
+    },
+
+    .StrTable_DiskErr47 = {
         SELF(txt_Der_Sound_Arranger_kann_nicht),
         SELF(txt_L_utilisation_du_Sound_Arranger),
         SELF(NoEsPosibleUtilizar_str),
@@ -9036,8 +9156,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheQuantityOfThis_str = ALIGNED_STRING("The quantity of  this song is over the capacity of GN7/GN9/FN3. Please try again after reducing the quantity like omitting the TRACK or MEASURE."),
 
-    .ptrs_233 = {
+    .StrTable_DiskErr49_PtrEnd = {
         SELF(ItIsNotPossible_str_3),
+    },
+
+    .Str_SongCapacityExceeded_Multilingual = {
         SELF(txt_Es_ist_nicht_moglich_auf_Preset),
         SELF(txt_Il_n_est_pas_possible_d),
         SELF(NoEsPosibleGrabar_str),
@@ -9078,7 +9201,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .SpecialTracksSuchAs_str = "Special Tracks such as Chord/APC, Rhythm and Control exist in the song from which you are copying and are  incompatible with the destination song because it is in GM mode.",
 
-    .ptrs_235 = {
+    .StrPtrTable_Error55_End = {
         SELF(AutoPunchRecordingHas_str),
         SELF(txt_Der_AUTO_PUNCH_Aufnahmevorgang),
         SELF(txt_L_enregistrement_AUTO_PUNCH_a),
@@ -9122,7 +9245,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheComposerPatternYou_str = "The COMPOSER pattern you have chosen has a different time signature or number of measures from the other patterns in this COMPOSER CHORD MAP.",
 
-    .ptrs_237 = {
+    .StrPtrTable_Error55_Block2 = {
         SELF(TheSongThatYou_str),
         SELF(txt_Die_Melodie_die_Sie_zu_laden),
         SELF(txt_Le_morceau_que_vous_avez_essaye),
@@ -9172,8 +9295,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .RkbAndLkbAre_str = "RKB and LKB are special tracks for compatibility with sequencer data from previous PR products. They cannot be edited or recorded on.",
 
-    .ptrs_239 = {
+    .StrPtrTable_SpecialTracks_Start = {
         SELF(RkbAndLkbAre_str_2),
+    },
+
+    .Str_RKBLKBSpecialTracks_Multilingual = {
         SELF(txt_RKB_und_LKB_sind_spezielle_2),
         SELF(txt_RKB_et_LKB_sont_des_pistes_2),
         SELF(txt_RKB_y_LKB_son_pistas_especiales),
@@ -9239,8 +9365,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TheComputerConnectionIs_str = "The computer connection is not active because the computer port switch is set to MIDI. Please turn the power off, set the switch to the desired setting and turn the power back on.",
 
-    .ptrs_242 = {
+    .StrPtrTable_InitSettingWarning_Start = {
         SELF(ThisBitmapIsIn_str),
+    },
+
+    .Str_InitSettingWarning_Multilingual = {
         SELF(txt_Das_Format_dieses_Bitmaps_kann),
         SELF(txt_Cette_configuration_Bitmap_n_est),
         SELF(txt_Este_mapa_de_bits_tiene_en_un),
@@ -9287,7 +9416,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
         /*  0 */ { 3, 0x0000FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_191) },
         /*  1 */ { 3, 0x0001FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr01) },
         /*  2 */ { 3, 0x0002FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_193) },
-        /*  3 */ { 3, 0x0003FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_194) },
+        /*  3 */ { 3, 0x0003FFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr03) },
         /*  4 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
         /*  5 */ { 3, 0x0005FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr05) },
         /*  6 */ { 3, 0x0006FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr06) },
@@ -9299,7 +9428,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
         /* 12 */ { 3, 0x000CFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_202) },
         /* 13 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
         /* 14 */ { 3, 0x0014FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_208) },
-        /* 15 */ { 3, 0x0015FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_209) },
+        /* 15 */ { 3, 0x0015FFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr20_End) },
         /* 16 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
         /* 17 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
         /* 18 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
@@ -9307,17 +9436,17 @@ const naka_technichord_strings_t naka_technichord_strings_data
         /* 20 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_CompletedLabel) },
         /* 21 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_CompletedLabel) },
         /* 22 */ { 3, 0x001FFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_222) },
-        /* 23 */ { 3, 0x0020FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_223) },
+        /* 23 */ { 3, 0x0020FFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr30_End) },
         /* 24 */ { 3, 0x0016FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_210) },
-        /* 25 */ { 3, 0x0017FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_211) },
-        /* 26 */ { 3, 0x0018FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_212) },
-        /* 27 */ { 3, 0x0019FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_216) },
+        /* 25 */ { 3, 0x0017FFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr24_Start) },
+        /* 26 */ { 3, 0x0018FFFF, SELF(StrTable_ErrorLabel), SELF(MsgText_CheckLanguage_PtrTable) },
+        /* 27 */ { 3, 0x0019FFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr24_French_End) },
         /* 28 */ { 3, 0x001AFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_217) },
-        /* 29 */ { 3, 0x001BFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_218) },
+        /* 29 */ { 3, 0x001BFFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr28_Start) },
         /* 30 */ { 3, 0x001CFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_219) },
         /* 31 */ { 3, 0x001DFFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr29) },
         /* 32 */ { 3, 0x002AFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_226) },
-        /* 33 */ { 3, 0x0029FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_225) },
+        /* 33 */ { 3, 0x0029FFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr41_Start) },
         /* 34 */ { 3, 0x0028FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_224) },
         /* 35 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_CompletedLabel) },
         /* 36 */ { 2, 0xFFFFFFFF, SELF(ptrs_185), SELF(ptrs_188) },
@@ -9327,13 +9456,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
         /* 40 */ { 5, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_PleaseWaitLabel) },
         /* 41 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_CompletedLabel) },
         /* 42 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
-        /* 43 */ { 3, 0x002BFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_227) },
+        /* 43 */ { 3, 0x002BFFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr43_Start) },
         /* 44 */ { 1, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_CompletedLabel) },
         /* 45 */ { 3, 0x002CFFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr44) },
         /* 46 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
-        /* 47 */ { 3, 0x000FFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_203) },
+        /* 47 */ { 3, 0x000FFFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_DiskErr16) },
         /* 48 */ { 3, 0x0010FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_204) },
-        /* 49 */ { 3, 0x0011FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_205) },
+        /* 49 */ { 3, 0x0011FFFF, SELF(StrTable_ErrorLabel), SELF(StrPtr_DiskErr17Table) },
         /* 50 */ { 3, 0x0012FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_206) },
         /* 51 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
         /* 52 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
@@ -9341,11 +9470,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
         /* 54 */ { 3, 0x002FFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_230) },
         /* 55 */ { 3, 0x0030FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr48) },
         /* 56 */ { 3, 0x0031FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_232) },
-        /* 57 */ { 3, 0x0036FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_233) },
+        /* 57 */ { 3, 0x0036FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr49_PtrEnd) },
         /* 58 */ { 3, 0x0037FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_234) },
-        /* 59 */ { 3, 0x0038FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_235) },
+        /* 59 */ { 3, 0x0038FFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_Error55_End) },
         /* 60 */ { 3, 0x0039FFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_236) },
-        /* 61 */ { 3, 0x003AFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_237) },
+        /* 61 */ { 3, 0x003AFFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_Error55_Block2) },
         /* 62 */ { 3, 0x003DFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_240) },
         /* 63 */ { 3, 0x0013FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr19) },
         /* 64 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
@@ -9353,9 +9482,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
         /* 66 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
         /* 67 */ { 0, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_LangTexts) },
         /* 68 */ { 3, 0x003BFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_238) },
-        /* 69 */ { 3, 0x003CFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_239) },
+        /* 69 */ { 3, 0x003CFFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_SpecialTracks_Start) },
         /* 70 */ { 3, 0x003EFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_241) },
-        /* 71 */ { 3, 0x003FFFFF, SELF(StrTable_ErrorLabel), SELF(ptrs_242) },
+        /* 71 */ { 3, 0x003FFFFF, SELF(StrTable_ErrorLabel), SELF(StrPtrTable_InitSettingWarning_Start) },
         /* 72 */ { 2, 0xFFFFFFFF, SELF(ptrs_185), SELF(StrTable_SettingsNotSaved) },
         /* 73 */ { 3, 0x0040FFFF, SELF(StrTable_ErrorLabel), SELF(StrTable_DiskErr64_PtrEnd) },
         /* 74 */ { 4, 0xFFFFFFFF, SELF(StrTable_LangHeaders), SELF(StrTable_GenericError) },
@@ -11651,12 +11780,18 @@ const naka_technichord_strings_t naka_technichord_strings_data
         0x0000, 0x0000, 0x0006, 0x0006, 0x0006, 0x0006, 0x000D,
     },
 
-    .ptrs_256 = {
+    .FDemoText_InitFuncTable = {
         NAKA_ADDR(FDemoText_StubReturn_A),
         NAKA_ADDR(FDemoText_StubReturn_B),
         NAKA_ADDR(FDemoText_StubReturn_C),
         NAKA_ADDR(FDemoText_RescanAllVoices),
+    },
+
+    .FDemoText_ProcessMarkup_LookupTag_PtrTable = {
         SELF(BR_str),
+    },
+
+    .FDemoText_ProcessMarkup_LookupTag_PtrTable_2 = {
         0x00F85A28,
         SELF(CENTER_str),
         0x00F85A36,
@@ -12626,7 +12761,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .MemoryA_str = "   MEMORY-A    ",
 
-    .ptrs_269 = {
+    .PtrTbl_VariationNames = {
         SELF(Vari_str_4),
         SELF(Vari_str_3),
         SELF(Vari_str_2),
@@ -12692,7 +12827,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1569 = ALIGNED_STRING(""),
 
-    .ptrs_271 = {
+    .WP_GetPresetName3_PtrTable = {
         SELF(MemoryA_str_2),
         SELF(MemoryB_str_2),
         SELF(UserKit_str),
@@ -12793,17 +12928,23 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .SLDstBankList_FuncBody_Data_8 = 0xFFA8,
 
-    .ptrs_273 = {
+    .SLDst_HandleShow_PtrTable = {
         0x00F901E5,
         0x00F9047F,
         0x00F906AD,
         0x00F90A91,
         0x00F90D63,
+    },
+
+    .CmpSrc_HandleShow_PtrTable = {
         0x00F8F264,
         0x00F8F4A1,
         0x00F8F726,
         0x00F8FB5B,
         0x00F8FE47,
+    },
+
+    .CmpDst_HandleShow_PtrTable = {
         0x00F901E5,
         0x00F9047F,
         0x00F906AD,
@@ -12815,7 +12956,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1597 = ALIGNED_STRING(""),
 
-    .ptrs_274 = {
+    .Cheap_ApFuncTable_125 = {
         NAKA_ADDR(InsertOptionText),
         NAKA_ADDR(TypePriorityText),
         NAKA_ADDR(JumpInsertFunc),
@@ -12846,6 +12987,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
         NAKA_ADDR(CheckPasswordOk),
         NAKA_ADDR(CheckPasswordNo),
         0x00000000,
+    },
+
+    .PtrTbl_DiskFuncNames = {
         SELF(InsertOptionText_str),
         SELF(TypePriorityText_str),
         SELF(JumpInsertFunc_str),
@@ -12863,6 +13007,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(DiskSure_name),
         SELF(FormatText_code),
         SELF(DeleteText_name),
+    },
+
+    .Data_DiskFuncPtrTbl_EA0B12 = {
         SELF(SaveText_code),
         SELF(DeleteYes_name),
         SELF(DeleteNo_code),
@@ -13246,8 +13393,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Cheap_ResEventCount_1C5 = 0x0005,
 
-    .ptrs_285 = {
+    .Cheap_ResMethodTable_1E5 = {
         SELF(MT_GetFileSfx_str),
+    },
+
+    .PtrTbl_MsgTypeNames_EA11F8 = {
         SELF(MT_SetFileSfx_str),
         SELF(MT_SetSelectedFileNumber_str),
         SELF(MT_GetSelectedFileNumber_str),
@@ -13303,7 +13453,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Cheap_ResMethodCount_1E5 = 0x0011,
 
-    .ptrs_286 = {
+    .Cheap_FunctionTable_105 = {
         NAKA_ADDR(PsFileNameBoxProc),
         NAKA_ADDR(PsWindowToggleProc),
         NAKA_ADDR(AcTtlJgBoxProc),
@@ -13318,6 +13468,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
         NAKA_ADDR(IvIndexSwDelayProc),
         NAKA_ADDR(IvWaitWinCtlProc),
         0x00000000,
+    },
+
+    .PtrTbl_NakaModuleHandlers = {
         NAKA_ADDR(NakaInst_PsFileNameBoxProc),
         NAKA_ADDR(NakaInst_PsWindowToggleProc),
         NAKA_ADDR(NakaInst_AcTtlJgBoxProc),

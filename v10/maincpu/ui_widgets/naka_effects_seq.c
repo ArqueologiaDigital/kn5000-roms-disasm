@@ -2637,12 +2637,87 @@ typedef struct __attribute__((packed)) {
     naka_cls_Window_t HelpLang4P4;
     /* element 60 of Viewable slot 0xE7: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t HelpLang4P4_AcLanguageText;
-    uint32_t ptrs_4[175];  /* 175 pointers */
+    /* Kubo_ViewableTable_00A: 13 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_00A[13];
+    /* Kubo_ViewableTable_00B: 13 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_00B[13];
+    /* Kubo_ViewableTable_00C: 38 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_00C[38];
+    /* Kubo_ViewableTable_00E: 13 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_00E[13];
+    /* Kubo_ViewableTable_080: 13 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_080[13];
+    /* Kubo_ViewableTable_081: 29 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_081[29];
+    /* Kubo_ViewableTable_082: 9 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_082[9];
+    /* Kubo_ViewableTable_083: 17 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_083[17];
+    /* Kubo_ViewableTable_084: 11 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_084[11];
+    /* Kubo_ViewableTable_085: 19 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_085[19];
     uint16_t field_693c;
     uint16_t field_693e;
     uint16_t field_6940;
     uint16_t field_6942;
-    uint32_t ptrs_5[422];  /* 422 pointers */
+    uint32_t ptrs_5[5];
+    /* Kubo_ViewableTable_086: 12 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_086[12];
+    /* Kubo_ViewableTable_087: 25 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_087[25];
+    /* Kubo_ViewableTable_088: 13 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_088[13];
+    /* Kubo_ViewableTable_08D: 5 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_08D[5];
+    /* Kubo_ViewableTable_090: 18 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_090[18];
+    /* Kubo_ViewableTable_091: 20 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_091[20];
+    /* Kubo_ViewableTable_093: 27 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_093[27];
+    /* Kubo_ViewableTable_094: 5 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_094[5];
+    /* Kubo_ViewableTable_095: 28 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_095[28];
+    /* Kubo_ViewableTable_096: 9 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_096[9];
+    /* Kubo_ViewableTable_097: 5 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_097[5];
+    /* Kubo_ViewableTable_098: 27 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_098[27];
+    /* Kubo_ViewableTable_099: 9 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_099[9];
+    /* Kubo_ViewableTable_09A: 15 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_09A[15];
+    /* Kubo_ViewableTable_09B: 23 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_09B[23];
+    /* Kubo_ViewableTable_09C: 22 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_09C[22];
+    /* Kubo_ViewableTable_09D: 17 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_09D[17];
+    /* Kubo_ViewableTable_09E: 17 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_09E[17];
+    /* Kubo_ViewableTable_09F: 26 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_09F[26];
+    /* Kubo_ViewableTable_0A0: 17 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_0A0[17];
+    /* Kubo_ViewableTable_0A1: 17 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_0A1[17];
+    /* Kubo_ViewableTable_0A2: 18 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_0A2[18];
+    /* Kubo_ViewableTable_0A3: 16 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_0A3[16];
+    /* Kubo_ViewableTable_0A4: 18 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_0A4[18];
+    /* Kubo_ViewableTable_0A8: 1 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_0A8[1];
+    /* Kubo_ViewableTable_0AA: 1 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_0AA[1];
+    /* Kubo_ViewableTable_0AB: 3 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_0AB[3];
+    /* Kubo_ViewableTable_0D6: 3 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_0D6[3];
     uint16_t field_6fdc;
     uint16_t field_6fde;
     uint16_t field_6fe0;
@@ -2651,7 +2726,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_6fe6;
     uint16_t field_6fe8;
     uint16_t field_6fea;
-    uint32_t ptrs_6[84];  /* 84 pointers */
+    uint32_t ptrs_6[9];
+    /* Kubo_ViewableTable_0E7: 62 pointers (cut from ptrs_6 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ViewableTable_0E7[62];
+    /* Kubo_ResNameTable_30A: 13 pointers (cut from ptrs_6 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_30A[13];
     char str_749[2];
     char ResName_KuboView00A_11_IvSdrev[2];
     char ResName_KuboView00A_10_IvIntEasySet[2];
@@ -2665,7 +2744,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView00A_2_AcIndexWideES[2];
     char ResName_KuboView00A_1_AcIndexWideES[2];
     char ResName_KuboView00A_0_TtlScreen[2];
-    uint32_t ptrs_7[13];  /* 13 pointers */
+    /* Kubo_ResNameTable_30B: 13 pointers (cut from ptrs_7 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_30B[13];
     char str_762[2];
     char ResName_KuboView00B_11_IvSddsp[2];
     char ResName_KuboView00B_10_IvIntEasySet[2];
@@ -2679,7 +2759,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView00B_2_AcIndexWideES[2];
     char ResName_KuboView00B_1_Label[2];
     char ResName_KuboView00B_0_TtlScreen[2];
-    uint32_t ptrs_8[38];  /* 38 pointers */
+    /* Kubo_ResNameTable_30C: 38 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_30C[38];
     char w353_code[2];
     char EqOnOff_name[8];
     char ResName_KuboView00C_35_Label[2];
@@ -2718,7 +2799,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView00C_2_AcIndexEditSw[2];
     char ResName_KuboView00C_1_AcIndexEditSw[2];
     char ResName_KuboView00C_0_TtlScreen[2];
-    uint32_t ptrs_9[13];  /* 13 pointers */
+    /* Kubo_ResNameTable_30E: 13 pointers (cut from ptrs_9 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_30E[13];
     char str_811[2];
     char ResName_KuboView00E_11_IvIntEasySet[2];
     char ResName_KuboView00E_10_IvSdacc[2];
@@ -2732,7 +2814,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView00E_2_AcIndexWideES[2];
     char ResName_KuboView00E_1_AcIndexWideES[2];
     char ResName_KuboView00E_0_TtlScreen[2];
-    uint32_t ptrs_10[13];  /* 13 pointers */
+    /* Kubo_ResNameTable_380: 13 pointers (cut from ptrs_10 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_380[13];
     char str_824[2];
     char ResName_KuboView080_11_AcTitleMenu[2];
     char ResName_KuboView080_10_AcLanguageText[2];
@@ -2746,7 +2829,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView080_2_Label[2];
     char ResName_KuboView080_1_AcTitleMenu[2];
     char ResName_KuboView080_0_TtlScreen[2];
-    uint32_t ptrs_11[29];  /* 29 pointers */
+    /* Kubo_ResNameTable_381: 29 pointers (cut from ptrs_11 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_381[29];
     char str_837[2];
     char ResName_KuboView081_27_SngSel2[2];
     char ResName_KuboView081_26_IvShowHide[2];
@@ -2776,7 +2860,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView081_2_IvTrackSwitch[2];
     char ResName_KuboView081_1_Label[2];
     char ResName_KuboView081_0_TtlScreen[2];
-    uint32_t ptrs_12[9];  /* 9 pointers */
+    /* Kubo_ResNameTable_382: 9 pointers (cut from ptrs_12 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_382[9];
     char str_858[2];
     char ResName_KuboView082_7_Label[2];
     char ResName_KuboView082_6_AcIndexWideES[2];
@@ -2786,7 +2871,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView082_2_PsEditBox[2];
     char ResName_KuboView082_1_SqplyVal[2];
     char ResName_KuboView082_0_TtlScreen[2];
-    uint32_t ptrs_13[17];  /* 17 pointers */
+    /* Kubo_ResNameTable_383: 17 pointers (cut from ptrs_13 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_383[17];
     char str_867[2];
     char ResName_KuboView083_15_AcLanguageText[2];
     char ResName_KuboView083_14_AcLanguageText[2];
@@ -2804,7 +2890,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView083_2_IvExitMode[2];
     char ResName_KuboView083_1_Label[2];
     char ResName_KuboView083_0_TtlScreen[2];
-    uint32_t ptrs_14[11];  /* 11 pointers */
+    /* Kubo_ResNameTable_384: 11 pointers (cut from ptrs_14 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_384[11];
     char str_884[2];
     char ResName_KuboView084_9_AcTitleMenu[2];
     char ResName_KuboView084_8_AcModeMenu[2];
@@ -2816,7 +2903,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView084_2_AcTitleMenu[2];
     char ResName_KuboView084_1_AcTitleMenu[2];
     char ResName_KuboView084_0_TtlScreen[2];
-    uint32_t ptrs_15[26];  /* 26 pointers */
+    /* Kubo_ResNameTable_385: 26 pointers (cut from ptrs_15 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_385[26];
     char str_895[2];
     char ResName_KuboView085_24_Label[2];
     char w358_code[2];
@@ -2843,7 +2931,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView085_2_AcFuncEditSw[2];
     char ResName_KuboView085_1_IvTrackSwitch[2];
     char ResName_KuboView085_0_TtlScreen[2];
-    uint32_t ptrs_16[12];  /* 12 pointers */
+    /* Kubo_ResNameTable_386: 12 pointers (cut from ptrs_16 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_386[12];
     char str_913[2];
     char ResName_KuboView086_10_PsEditBox[2];
     char ResName_KuboView086_9_Label[2];
@@ -2856,7 +2945,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView086_2_PsEditBox[2];
     char ResName_KuboView086_1_SqplyVal[2];
     char ResName_KuboView086_0_TtlScreen[2];
-    uint32_t ptrs_17[25];  /* 25 pointers */
+    /* Kubo_ResNameTable_387: 25 pointers (cut from ptrs_17 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_387[25];
     char str_923[2];
     char ResName_KuboView087_23_Label[2];
     char ResName_KuboView087_22_Label[2];
@@ -2882,7 +2972,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView087_2_Box[2];
     char ResName_KuboView087_1_IvTrackSwitch[2];
     char ResName_KuboView087_0_TtlScreen[2];
-    uint32_t ptrs_18[13];  /* 13 pointers */
+    /* Kubo_ResNameTable_388: 13 pointers (cut from ptrs_18 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_388[13];
     char str_944[2];
     char ResName_KuboView088_11_TtlScreen[2];
     char ResName_KuboView088_10_IvAutoPunchExit[2];
@@ -2896,13 +2987,15 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView088_2_Label[2];
     char ResName_KuboView088_1_AcIndexWideES[2];
     char ResName_KuboView088_0_TtlScreen[2];
-    uint32_t ptrs_19[5];  /* 5 pointers */
+    /* Kubo_ResNameTable_38D: 5 pointers (cut from ptrs_19 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_38D[5];
     char str_955[2];
     char ResName_KuboView08D_3_IvPnlWrExit[2];
     char ResName_KuboView08D_2_AcLanguageText[2];
     char ResName_KuboView08D_1_AcFuncEditSw[2];
     char ResName_KuboView08D_0_TtlScreen[2];
-    uint32_t ptrs_20[18];  /* 18 pointers */
+    /* Kubo_ResNameTable_390: 18 pointers (cut from ptrs_20 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_390[18];
     char str_960[2];
     char ResName_KuboView090_16_AcLanguageText[2];
     char ResName_KuboView090_15_AcLanguageText[2];
@@ -2921,7 +3014,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView090_2_Label[2];
     char ResName_KuboView090_1_AcIndexWideES[2];
     char ResName_KuboView090_0_TtlScreen[2];
-    uint32_t ptrs_21[20];  /* 20 pointers */
+    /* Kubo_ResNameTable_391: 20 pointers (cut from ptrs_21 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_391[20];
     char str_976[2];
     char ResName_KuboView091_18_AcLanguageText[2];
     char ResName_KuboView091_17_AcFuncEditSw[2];
@@ -2942,7 +3036,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView091_2_SqedtFix[2];
     char ResName_KuboView091_1_SqedtVal2[2];
     char ResName_KuboView091_0_TtlScreen[2];
-    uint32_t ptrs_22[27];  /* 27 pointers */
+    /* Kubo_ResNameTable_393: 27 pointers (cut from ptrs_22 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_393[27];
     char str_994[2];
     char ResName_KuboView093_25_Line[2];
     char ResName_KuboView093_24_Line[2];
@@ -2970,13 +3065,15 @@ typedef struct __attribute__((packed)) {
     char EdMenuPage_name[12];
     char ResName_KuboView093_1_IvPageControl[2];
     char ResName_KuboView093_0_TtlScreen[2];
-    uint32_t ptrs_23[5];  /* 5 pointers */
+    /* Kubo_ResNameTable_394: 5 pointers (cut from ptrs_23 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_394[5];
     char str_1019[2];
     char ResName_KuboView094_3_AcLanguageText[2];
     char ResName_KuboView094_2_IvTrackSwitch[2];
     char ResName_KuboView094_1_Label[2];
     char ResName_KuboView094_0_TtlScreen[2];
-    uint32_t ptrs_24[28];  /* 28 pointers */
+    /* Kubo_ResNameTable_395: 28 pointers (cut from ptrs_24 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_395[28];
     char str_1024[2];
     char ResName_KuboView095_26_AcIndexEditSw[2];
     char ResName_KuboView095_25_AcIndexEditSw[2];
@@ -3005,7 +3102,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView095_2_AcIndexEditSw[2];
     char ResName_KuboView095_1_AcIndexEditSw[2];
     char ResName_KuboView095_0_TtlScreen[2];
-    uint32_t ptrs_25[9];  /* 9 pointers */
+    /* Kubo_ResNameTable_396: 9 pointers (cut from ptrs_25 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_396[9];
     char str_1052[2];
     char ResName_KuboView096_7_PsEditBox[2];
     char ResName_KuboView096_6_PsEditBox[2];
@@ -3015,13 +3113,15 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView096_2_AcIndexWideES[2];
     char ResName_KuboView096_1_Label[2];
     char ResName_KuboView096_0_TtlScreen[2];
-    uint32_t ptrs_26[5];  /* 5 pointers */
+    /* Kubo_ResNameTable_397: 5 pointers (cut from ptrs_26 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_397[5];
     char str_1061[2];
     char ResName_KuboView097_3_AcLanguageText[2];
     char ResName_KuboView097_2_IvTrackSwitch[2];
     char ResName_KuboView097_1_Label[2];
     char ResName_KuboView097_0_TtlScreen[2];
-    uint32_t ptrs_27[27];  /* 27 pointers */
+    /* Kubo_ResNameTable_398: 27 pointers (cut from ptrs_27 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_398[27];
     char str_1066[2];
     char ResName_KuboView098_25_AcIndexEditSw[2];
     char ResName_KuboView098_24_AcIndexEditSw[2];
@@ -3049,7 +3149,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView098_2_AcIndexEditSw[2];
     char ResName_KuboView098_1_AcIndexEditSw[2];
     char ResName_KuboView098_0_TtlScreen[2];
-    uint32_t ptrs_28[9];  /* 9 pointers */
+    /* Kubo_ResNameTable_399: 9 pointers (cut from ptrs_28 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_399[9];
     char str_1093[2];
     char ResName_KuboView099_7_PsEditBox[2];
     char ResName_KuboView099_6_PsEditBox[2];
@@ -3059,7 +3160,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView099_2_AcIndexWideES[2];
     char ResName_KuboView099_1_Label[2];
     char ResName_KuboView099_0_TtlScreen[2];
-    uint32_t ptrs_29[15];  /* 15 pointers */
+    /* Kubo_ResNameTable_39A: 15 pointers (cut from ptrs_29 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_39A[15];
     char str_1102[2];
     char ResName_KuboView09A_13_AcLanguageText[2];
     char ResName_KuboView09A_12_AcLanguageText[2];
@@ -3075,7 +3177,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView09A_2_MsgToTtl[2];
     char ResName_KuboView09A_1_IvTrackSwitch[2];
     char ResName_KuboView09A_0_TtlScreen[2];
-    uint32_t ptrs_30[23];  /* 23 pointers */
+    /* Kubo_ResNameTable_39B: 23 pointers (cut from ptrs_30 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_39B[23];
     char str_1115[2];
     char ResName_KuboView09B_21_AcLanguageText[2];
     char ResName_KuboView09B_20_Box[2];
@@ -3099,7 +3202,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView09B_2_Line[2];
     char ResName_KuboView09B_1_Line[2];
     char ResName_KuboView09B_0_TtlScreen[2];
-    uint32_t ptrs_31[22];  /* 22 pointers */
+    /* Kubo_ResNameTable_39C: 22 pointers (cut from ptrs_31 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_39C[22];
     char str_1136[2];
     char ResName_KuboView09C_20_AcLanguageText[2];
     char ResName_KuboView09C_19_Box[2];
@@ -3122,7 +3226,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView09C_2_AcIndexWideES[2];
     char ResName_KuboView09C_1_Label[2];
     char ResName_KuboView09C_0_TtlScreen[2];
-    uint32_t ptrs_32[17];  /* 17 pointers */
+    /* Kubo_ResNameTable_39D: 17 pointers (cut from ptrs_32 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_39D[17];
     char str_1156[2];
     char ResName_KuboView09D_15_AcLanguageText[2];
     char ResName_KuboView09D_14_Box[2];
@@ -3140,7 +3245,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView09D_2_AcIndexWideES[2];
     char ResName_KuboView09D_1_Label[2];
     char ResName_KuboView09D_0_TtlScreen[2];
-    uint32_t ptrs_33[17];  /* 17 pointers */
+    /* Kubo_ResNameTable_39E: 17 pointers (cut from ptrs_33 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_39E[17];
     char str_1171[2];
     char ResName_KuboView09E_15_AcLanguageText[2];
     char ResName_KuboView09E_14_Box[2];
@@ -3158,7 +3264,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView09E_2_AcIndexWideES[2];
     char ResName_KuboView09E_1_Label[2];
     char ResName_KuboView09E_0_TtlScreen[2];
-    uint32_t ptrs_34[26];  /* 26 pointers */
+    /* Kubo_ResNameTable_39F: 26 pointers (cut from ptrs_34 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_39F[26];
     char str_1186[2];
     char ResName_KuboView09F_24_AcLanguageText[2];
     char ResName_KuboView09F_23_Box[2];
@@ -3185,7 +3292,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView09F_2_PsEditBox[2];
     char ResName_KuboView09F_1_SqedtVal[2];
     char ResName_KuboView09F_0_TtlScreen[2];
-    uint32_t ptrs_35[17];  /* 17 pointers */
+    /* Kubo_ResNameTable_3A0: 17 pointers (cut from ptrs_35 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_3A0[17];
     char str_1210[2];
     char ResName_KuboView0A0_15_AcLanguageText[2];
     char ResName_KuboView0A0_14_Box[2];
@@ -3203,7 +3311,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView0A0_2_Label[2];
     char ResName_KuboView0A0_1_AcIndexWideES[2];
     char ResName_KuboView0A0_0_TtlScreen[2];
-    uint32_t ptrs_36[17];  /* 17 pointers */
+    /* Kubo_ResNameTable_3A1: 17 pointers (cut from ptrs_36 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_3A1[17];
     char str_1225[2];
     char ResName_KuboView0A1_15_AcLanguageText[2];
     char ResName_KuboView0A1_14_Box[2];
@@ -3221,7 +3330,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView0A1_2_Label[2];
     char ResName_KuboView0A1_1_AcIndexWideES[2];
     char ResName_KuboView0A1_0_TtlScreen[2];
-    uint32_t ptrs_37[18];  /* 18 pointers */
+    /* Kubo_ResNameTable_3A2: 18 pointers (cut from ptrs_37 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_3A2[18];
     char str_1240[2];
     char ResName_KuboView0A2_16_AcScreenMenu[2];
     char ResName_KuboView0A2_15_AcLanguageText[2];
@@ -3240,7 +3350,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView0A2_2_AcIndexWideES[2];
     char ResName_KuboView0A2_1_AcIndexWideES[2];
     char ResName_KuboView0A2_0_TtlScreen[2];
-    uint32_t ptrs_38[16];  /* 16 pointers */
+    /* Kubo_ResNameTable_3A3: 16 pointers (cut from ptrs_38 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_3A3[16];
     char str_1256[2];
     char ResName_KuboView0A3_14_AcLanguageText[2];
     char ResName_KuboView0A3_13_Box[2];
@@ -3257,7 +3368,8 @@ typedef struct __attribute__((packed)) {
     char ResName_KuboView0A3_2_AcIndexWideES[2];
     char ResName_KuboView0A3_1_Label[2];
     char ResName_KuboView0A3_0_TtlScreen[2];
-    uint32_t ptrs_39[18];  /* 18 pointers */
+    /* Kubo_ResNameTable_3A4: 18 pointers (cut from ptrs_39 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_3A4[18];
     char str_1270[2];
     char ResName_KuboView0A4_16_AcScreenMenu[2];
     char ResName_KuboView0A4_15_AcLanguageText[2];
@@ -3280,11 +3392,13 @@ typedef struct __attribute__((packed)) {
     char str_1286[2];
     uint32_t ptr_8052;
     char str_1287[2];
-    uint32_t ptrs_40[3];  /* 3 pointers */
+    /* Kubo_ResNameTable_3AB: 3 pointers (cut from ptrs_40 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_3AB[3];
     char str_1288[2];
     char ResName_KuboView0AB_1_AcMixerVol[2];
     char ResName_KuboView0AB_0_TtlScreen[2];
-    uint32_t ptrs_41[16];  /* 16 pointers */
+    /* Kubo_ResNameTable_3D6: 16 pointers (cut from ptrs_41 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_3D6[16];
     char str_1291[2];
     char ResName_EnterTainerScr_14_Label[2];
     char ResName_EnterTainerScr_13_AcPanicEditSw[2];
@@ -3301,7 +3415,8 @@ typedef struct __attribute__((packed)) {
     char ResName_EnterTainerScr_2_Label[2];
     char w382_code[2];
     char EnterTainerScr_name[16];
-    uint32_t ptrs_42[62];  /* 62 pointers */
+    /* Kubo_ResNameTable_3E7: 62 pointers (cut from ptrs_42 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_ResNameTable_3E7[62];
     char str_1301[2];
     char w383_code[2];
     char HelpLang4P4_name[12];
@@ -3410,7 +3525,10 @@ typedef struct __attribute__((packed)) {
     char TT_SQMETBAL_str[12];
     char TT_ETMENU_str[10];
     char TT_SWHELP_str[10];
-    uint32_t ptrs_43[90];  /* 90 pointers */
+    /* Kubo_MainFunctionTable_148: 45 pointers (cut from ptrs_43 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_MainFunctionTable_148[45];
+    /* Kubo_MainFunctionTable_448: 45 pointers (cut from ptrs_43 by split_naka_pointer_arrays.py) */
+    uint32_t Kubo_MainFunctionTable_448[45];
     char w402_code[2];
     char MainPanic_name[10];
     char EtmenuTitleFunc_str[16];
@@ -13978,7 +14096,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .func = 0x01280040,
     },
 
-    .ptrs_4 = {
+    .Kubo_ViewableTable_00A = {
         SELF(Reverb_TtlScreen),
         SELF(Reverb_AcIndexWideES),
         SELF(Reverb_AcIndexWideES_2),
@@ -13992,6 +14110,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(Reverb_IvIntEasySet),
         SELF(Reverb_IvSdrev),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_00B = {
         SELF(DspEffect_TtlScreen),
         SELF(Type_Label_3),
         SELF(DspEffect_AcIndexWideES),
@@ -14005,6 +14126,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(DspEffect_IvIntEasySet),
         SELF(DspEffect_IvSddsp),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_00C = {
         SELF(Equalizer_TtlScreen),
         SELF(Equalizer_AcIndexEditSw),
         SELF(Equalizer_AcIndexEditSw_2),
@@ -14043,6 +14167,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(Freq_Label_5),
         SELF(EqOnOff),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_00E = {
         SELF(AcousticIllusion_TtlScreen),
         SELF(AcousticIllusion_AcIndexWideES),
         SELF(AcousticIllusion_AcIndexWideES_2),
@@ -14056,6 +14183,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(AcousticIllusion_IvSdacc),
         SELF(AcousticIllusion_IvIntEasySet),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_080 = {
         SELF(SequencerMenu_TtlScreen),
         SELF(Create_AcTitleMenu),
         SELF(Song_Label),
@@ -14069,6 +14199,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(SequencerMenu_AcLanguageText_2),
         SELF(PanelWrite_AcTitleMenu),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_081 = {
         SELF(SequencerPlay_TtlScreen),
         SELF(Meas_Label),
         SELF(SequencerPlay_IvTrackSwitch),
@@ -14098,6 +14231,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(SngSelWin2_IvShowHide),
         SELF(SngSelWin2_SngSel2),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_082 = {
         SELF(CyclePlay_TtlScreen),
         SELF(CyclePlay_SqplyVal),
         SELF(CyclePlay_PsEditBox),
@@ -14107,6 +14243,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(CyclePlay_AcIndexWideES),
         SELF(Value_Label_3),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_083 = {
         SELF(EasyRecord_TtlScreen),
         SELF(Song_Label_4),
         SELF(EasyRecord_IvExitMode),
@@ -14124,6 +14263,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(EasyRecord_AcLanguageText),
         SELF(EasyRecord_AcLanguageText_2),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_084 = {
         SELF(Create_TtlScreen),
         SELF(TrackAssign_AcTitleMenu),
         SELF(PanelWrite_AcTitleMenu_2),
@@ -14135,6 +14277,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(StepRecord_AcModeMenu),
         SELF(PunchRecord_AcTitleMenu),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_085 = {
         SELF(RealtimeRecord_TtlScreen),
         SELF(RealtimeRecord_IvTrackSwitch),
         SELF(RealtimeRecord_AcFuncEditSw),
@@ -14170,6 +14315,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(CycClrSw_AcFuncEditSw),
         SELF(Clear_Label),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_086 = {
         SELF(RealtimeRecord_TtlScreen_2),
         SELF(RealtimeRecord_SqplyVal),
         SELF(RealtimeRecord_PsEditBox),
@@ -14182,6 +14330,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(Clear_Label_2),
         SELF(RealtimeRecord_PsEditBox_3),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_087 = {
         SELF(PunchRecord_TtlScreen),
         SELF(PunchRecord_IvTrackSwitch),
         SELF(PunchRecord_Box),
@@ -14207,6 +14358,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(Auto_Label),
         SELF(Punch_Label),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_088 = {
         SELF(AutoPunchRecord_TtlScreen),
         SELF(AutoPunchRecord_AcIndexWideES),
         SELF(Meas_Label_3),
@@ -14220,11 +14374,17 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(AutoPunchRecord_IvAutoPunchExit),
         SELF(AutoPunchRecord_TtlScreen_2),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_08D = {
         SELF(PanelWrite_TtlScreen),
         SELF(PanelWrite_AcFuncEditSw),
         SELF(PanelWrite_AcLanguageText),
         SELF(PanelWrite_IvPnlWrExit),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_090 = {
         SELF(SongClear_TtlScreen),
         SELF(SongClear_AcIndexWideES),
         SELF(SongNoAll_Label),
@@ -14243,6 +14403,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(SoclSureDisp_AcLanguageText_2),
         SELF(SoclSureDisp_AcLanguageText_3),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_091 = {
         SELF(SongTrackCopy_TtlScreen),
         SELF(SongTrackCopy_SqedtVal2),
         SELF(SongTrackCopy_SqedtFix),
@@ -14263,6 +14426,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(SngCpSureDisp_AcFuncEditSw),
         SELF(SngCpSureDisp_AcLanguageText),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_093 = {
         SELF(Edit_TtlScreen),
         SELF(Edit_IvPageControl),
         SELF(EdMenuPage),
@@ -14290,11 +14456,17 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(SQEMENU_2_Line),
         SELF(SQEMENU_2_Line_2),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_094 = {
         SELF(NoteEdit_TtlScreen),
         SELF(PartSelect_Label),
         SELF(NoteEdit_IvTrackSwitch),
         SELF(NoteEdit_AcLanguageText),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_095 = {
         SELF(NoteEdit_TtlScreen_2),
         SELF(NoteEdit_AcIndexEditSw),
         SELF(NoteEdit_AcIndexEditSw_2),
@@ -14323,6 +14495,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(NoteEdit_AcIndexEditSw_11),
         SELF(NoteEdit_AcIndexEditSw_12),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_096 = {
         SELF(CyclePlay_TtlScreen_2),
         SELF(CurrentMeasure_Label_4),
         SELF(CyclePlay_AcIndexWideES_2),
@@ -14332,11 +14507,17 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(CyclePlay_PsEditBox_5),
         SELF(CyclePlay_PsEditBox_6),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_097 = {
         SELF(DrumEdit_TtlScreen),
         SELF(PartSelect_Label_2),
         SELF(DrumEdit_IvTrackSwitch),
         SELF(DrumEdit_AcLanguageText),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_098 = {
         SELF(DrumEdit_TtlScreen_2),
         SELF(DrumEdit_AcIndexEditSw),
         SELF(DrumEdit_AcIndexEditSw_2),
@@ -14364,6 +14545,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(DrumEdit_AcIndexEditSw_10),
         SELF(DrumEdit_AcIndexEditSw_11),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_099 = {
         SELF(CyclePlay_TtlScreen_3),
         SELF(CurrentMeasure_Label_5),
         SELF(CyclePlay_AcIndexWideES_3),
@@ -14373,6 +14557,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(CyclePlay_PsEditBox_8),
         SELF(CyclePlay_PsEditBox_9),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_09A = {
         SELF(TrackClear_TtlScreen),
         SELF(TrackClear_IvTrackSwitch),
         SELF(TrackClear_MsgToTtl),
@@ -14388,6 +14575,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(TrkClrSureDisp_AcLanguageText_2),
         SELF(TrkClrSureDisp_AcLanguageText_3),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_09B = {
         SELF(TrackMerge_TtlScreen),
         SELF(TrackMerge_Line),
         SELF(TrackMerge_Line_2),
@@ -14411,6 +14601,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(TrkMrgSureDisp_Box_2),
         SELF(TrkMrgSureDisp_AcLanguageText),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_09C = {
         SELF(Quantize_TtlScreen),
         SELF(Value_Label_8),
         SELF(Quantize_AcIndexWideES),
@@ -14433,6 +14626,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(QtzSureDisp_Box_2),
         SELF(QtzSureDisp_AcLanguageText),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_09D = {
         SELF(Transpose_TtlScreen),
         SELF(Value_Label_9),
         SELF(Transpose_AcIndexWideES),
@@ -14450,6 +14646,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(TrnsSureDisp_Box),
         SELF(TrnsSureDisp_AcLanguageText),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_09E = {
         SELF(VelocityChange_TtlScreen),
         SELF(Value_Label_10),
         SELF(VelocityChange_AcIndexWideES),
@@ -14467,6 +14666,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(VeloSureDisp_Box),
         SELF(VeloSureDisp_AcLanguageText),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_09F = {
         SELF(NoteChange_TtlScreen),
         SELF(NoteChange_SqedtVal),
         SELF(NoteChange_PsEditBox),
@@ -14493,6 +14695,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(NoteSureDisp_Box_2),
         SELF(NoteSureDisp_AcLanguageText),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_0A0 = {
         SELF(AdvanceDelay_TtlScreen),
         SELF(AdvanceDelay_AcIndexWideES),
         SELF(Value_Label_12),
@@ -14510,6 +14715,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(AdvSureDisp_Box),
         SELF(AdvSureDisp_AcLanguageText),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_0A1 = {
         SELF(MeasureErase_TtlScreen),
         SELF(MeasureErase_AcIndexWideES),
         SELF(Value_Label_13),
@@ -14527,6 +14735,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(MersSureDisp_Box),
         SELF(MersSureDisp_AcLanguageText),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_0A2 = {
         SELF(MeasureCopy_TtlScreen),
         SELF(MeasureCopy_AcIndexWideES),
         SELF(MeasureCopy_AcIndexWideES_2),
@@ -14545,6 +14756,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(McpSureDisp_AcLanguageText),
         SELF(NO_AcScreenMenu_11),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_0A3 = {
         SELF(MeasureDelete_TtlScreen),
         SELF(Value_Label_14),
         SELF(MeasureDelete_AcIndexWideES),
@@ -14561,6 +14775,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(MdelSureDisp_Box),
         SELF(MdelSureDisp_AcLanguageText),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_0A4 = {
         SELF(MeasureInsert_TtlScreen),
         SELF(MeasureInsert_AcIndexWideES),
         SELF(MeasureInsert_AcIndexWideES_2),
@@ -14579,11 +14796,23 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(MinsSureDisp_AcLanguageText),
         SELF(NO_AcScreenMenu_13),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_0A8 = {
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_0AA = {
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_0AB = {
         SELF(MetronomeBalance_TtlScreen),
         SELF(MetronomeBalance_AcMixerVol),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_0D6 = {
         SELF(EnterTainerScr),
         SELF(EnterTainerScr_AcEntertainerGridBox),
         SELF(VocalReverb_Label),
@@ -14615,6 +14844,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(EnterTainerScr_AcPanicEditSw),
         SELF(Panic_Label),
         0x00000000,
+    },
+
+    .Kubo_ViewableTable_0E7 = {
         SELF(HelpFunction_TtlScreen),
         SELF(HelpFunction_IvExitMode),
         SELF(HelpMenu),
@@ -14677,6 +14909,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(HelpLang4P4),
         SELF(HelpLang4P4_AcLanguageText),
         0x00000000,
+    },
+
+    .Kubo_ResNameTable_30A = {
         SELF(ResName_KuboView00A_0_TtlScreen),
         SELF(ResName_KuboView00A_1_AcIndexWideES),
         SELF(ResName_KuboView00A_2_AcIndexWideES),
@@ -14718,7 +14953,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView00A_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_7 = {
+    .Kubo_ResNameTable_30B = {
         SELF(ResName_KuboView00B_0_TtlScreen),
         SELF(ResName_KuboView00B_1_Label),
         SELF(ResName_KuboView00B_2_AcIndexWideES),
@@ -14760,7 +14995,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView00B_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_8 = {
+    .Kubo_ResNameTable_30C = {
         SELF(ResName_KuboView00C_0_TtlScreen),
         SELF(ResName_KuboView00C_1_AcIndexEditSw),
         SELF(ResName_KuboView00C_2_AcIndexEditSw),
@@ -14877,7 +15112,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView00C_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_9 = {
+    .Kubo_ResNameTable_30E = {
         SELF(ResName_KuboView00E_0_TtlScreen),
         SELF(ResName_KuboView00E_1_AcIndexWideES),
         SELF(ResName_KuboView00E_2_AcIndexWideES),
@@ -14919,7 +15154,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView00E_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_10 = {
+    .Kubo_ResNameTable_380 = {
         SELF(ResName_KuboView080_0_TtlScreen),
         SELF(ResName_KuboView080_1_AcTitleMenu),
         SELF(ResName_KuboView080_2_Label),
@@ -14961,7 +15196,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView080_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_11 = {
+    .Kubo_ResNameTable_381 = {
         SELF(ResName_KuboView081_0_TtlScreen),
         SELF(ResName_KuboView081_1_Label),
         SELF(ResName_KuboView081_2_IvTrackSwitch),
@@ -15051,7 +15286,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView081_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_12 = {
+    .Kubo_ResNameTable_382 = {
         SELF(ResName_KuboView082_0_TtlScreen),
         SELF(ResName_KuboView082_1_SqplyVal),
         SELF(ResName_KuboView082_2_PsEditBox),
@@ -15081,7 +15316,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView082_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_13 = {
+    .Kubo_ResNameTable_383 = {
         SELF(ResName_KuboView083_0_TtlScreen),
         SELF(ResName_KuboView083_1_Label),
         SELF(ResName_KuboView083_2_IvExitMode),
@@ -15135,7 +15370,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView083_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_14 = {
+    .Kubo_ResNameTable_384 = {
         SELF(ResName_KuboView084_0_TtlScreen),
         SELF(ResName_KuboView084_1_AcTitleMenu),
         SELF(ResName_KuboView084_2_AcTitleMenu),
@@ -15171,7 +15406,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView084_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_15 = {
+    .Kubo_ResNameTable_385 = {
         SELF(ResName_KuboView085_0_TtlScreen),
         SELF(ResName_KuboView085_1_IvTrackSwitch),
         SELF(ResName_KuboView085_2_AcFuncEditSw),
@@ -15252,7 +15487,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView085_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_16 = {
+    .Kubo_ResNameTable_386 = {
         SELF(ResName_KuboView086_0_TtlScreen),
         SELF(ResName_KuboView086_1_SqplyVal),
         SELF(ResName_KuboView086_2_PsEditBox),
@@ -15291,7 +15526,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView086_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_17 = {
+    .Kubo_ResNameTable_387 = {
         SELF(ResName_KuboView087_0_TtlScreen),
         SELF(ResName_KuboView087_1_IvTrackSwitch),
         SELF(ResName_KuboView087_2_Box),
@@ -15369,7 +15604,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView087_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_18 = {
+    .Kubo_ResNameTable_388 = {
         SELF(ResName_KuboView088_0_TtlScreen),
         SELF(ResName_KuboView088_1_AcIndexWideES),
         SELF(ResName_KuboView088_2_Label),
@@ -15411,7 +15646,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView088_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_19 = {
+    .Kubo_ResNameTable_38D = {
         SELF(ResName_KuboView08D_0_TtlScreen),
         SELF(ResName_KuboView08D_1_AcFuncEditSw),
         SELF(ResName_KuboView08D_2_AcLanguageText),
@@ -15429,7 +15664,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView08D_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_20 = {
+    .Kubo_ResNameTable_390 = {
         SELF(ResName_KuboView090_0_TtlScreen),
         SELF(ResName_KuboView090_1_AcIndexWideES),
         SELF(ResName_KuboView090_2_Label),
@@ -15486,7 +15721,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView090_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_21 = {
+    .Kubo_ResNameTable_391 = {
         SELF(ResName_KuboView091_0_TtlScreen),
         SELF(ResName_KuboView091_1_SqedtVal2),
         SELF(ResName_KuboView091_2_SqedtFix),
@@ -15549,7 +15784,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView091_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_22 = {
+    .Kubo_ResNameTable_393 = {
         SELF(ResName_KuboView093_0_TtlScreen),
         SELF(ResName_KuboView093_1_IvPageControl),
         SELF(EdMenuPage_name),
@@ -15633,7 +15868,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView093_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_23 = {
+    .Kubo_ResNameTable_394 = {
         SELF(ResName_KuboView094_0_TtlScreen),
         SELF(ResName_KuboView094_1_Label),
         SELF(ResName_KuboView094_2_IvTrackSwitch),
@@ -15651,7 +15886,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView094_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_24 = {
+    .Kubo_ResNameTable_395 = {
         SELF(ResName_KuboView095_0_TtlScreen),
         SELF(ResName_KuboView095_1_AcIndexEditSw),
         SELF(ResName_KuboView095_2_AcIndexEditSw),
@@ -15738,7 +15973,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView095_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_25 = {
+    .Kubo_ResNameTable_396 = {
         SELF(ResName_KuboView096_0_TtlScreen),
         SELF(ResName_KuboView096_1_Label),
         SELF(ResName_KuboView096_2_AcIndexWideES),
@@ -15768,7 +16003,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView096_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_26 = {
+    .Kubo_ResNameTable_397 = {
         SELF(ResName_KuboView097_0_TtlScreen),
         SELF(ResName_KuboView097_1_Label),
         SELF(ResName_KuboView097_2_IvTrackSwitch),
@@ -15786,7 +16021,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView097_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_27 = {
+    .Kubo_ResNameTable_398 = {
         SELF(ResName_KuboView098_0_TtlScreen),
         SELF(ResName_KuboView098_1_AcIndexEditSw),
         SELF(ResName_KuboView098_2_AcIndexEditSw),
@@ -15870,7 +16105,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView098_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_28 = {
+    .Kubo_ResNameTable_399 = {
         SELF(ResName_KuboView099_0_TtlScreen),
         SELF(ResName_KuboView099_1_Label),
         SELF(ResName_KuboView099_2_AcIndexWideES),
@@ -15900,7 +16135,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView099_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_29 = {
+    .Kubo_ResNameTable_39A = {
         SELF(ResName_KuboView09A_0_TtlScreen),
         SELF(ResName_KuboView09A_1_IvTrackSwitch),
         SELF(ResName_KuboView09A_2_MsgToTtl),
@@ -15948,7 +16183,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView09A_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_30 = {
+    .Kubo_ResNameTable_39B = {
         SELF(ResName_KuboView09B_0_TtlScreen),
         SELF(ResName_KuboView09B_1_Line),
         SELF(ResName_KuboView09B_2_Line),
@@ -16020,7 +16255,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView09B_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_31 = {
+    .Kubo_ResNameTable_39C = {
         SELF(ResName_KuboView09C_0_TtlScreen),
         SELF(ResName_KuboView09C_1_Label),
         SELF(ResName_KuboView09C_2_AcIndexWideES),
@@ -16089,7 +16324,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView09C_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_32 = {
+    .Kubo_ResNameTable_39D = {
         SELF(ResName_KuboView09D_0_TtlScreen),
         SELF(ResName_KuboView09D_1_Label),
         SELF(ResName_KuboView09D_2_AcIndexWideES),
@@ -16143,7 +16378,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView09D_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_33 = {
+    .Kubo_ResNameTable_39E = {
         SELF(ResName_KuboView09E_0_TtlScreen),
         SELF(ResName_KuboView09E_1_Label),
         SELF(ResName_KuboView09E_2_AcIndexWideES),
@@ -16197,7 +16432,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView09E_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_34 = {
+    .Kubo_ResNameTable_39F = {
         SELF(ResName_KuboView09F_0_TtlScreen),
         SELF(ResName_KuboView09F_1_SqedtVal),
         SELF(ResName_KuboView09F_2_PsEditBox),
@@ -16278,7 +16513,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView09F_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_35 = {
+    .Kubo_ResNameTable_3A0 = {
         SELF(ResName_KuboView0A0_0_TtlScreen),
         SELF(ResName_KuboView0A0_1_AcIndexWideES),
         SELF(ResName_KuboView0A0_2_Label),
@@ -16332,7 +16567,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView0A0_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_36 = {
+    .Kubo_ResNameTable_3A1 = {
         SELF(ResName_KuboView0A1_0_TtlScreen),
         SELF(ResName_KuboView0A1_1_AcIndexWideES),
         SELF(ResName_KuboView0A1_2_Label),
@@ -16386,7 +16621,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView0A1_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_37 = {
+    .Kubo_ResNameTable_3A2 = {
         SELF(ResName_KuboView0A2_0_TtlScreen),
         SELF(ResName_KuboView0A2_1_AcIndexWideES),
         SELF(ResName_KuboView0A2_2_AcIndexWideES),
@@ -16443,7 +16678,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView0A2_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_38 = {
+    .Kubo_ResNameTable_3A3 = {
         SELF(ResName_KuboView0A3_0_TtlScreen),
         SELF(ResName_KuboView0A3_1_Label),
         SELF(ResName_KuboView0A3_2_AcIndexWideES),
@@ -16494,7 +16729,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView0A3_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_39 = {
+    .Kubo_ResNameTable_3A4 = {
         SELF(ResName_KuboView0A4_0_TtlScreen),
         SELF(ResName_KuboView0A4_1_AcIndexWideES),
         SELF(ResName_KuboView0A4_2_AcIndexWideES),
@@ -16559,7 +16794,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .str_1287 = ALIGNED_STRING(""),
 
-    .ptrs_40 = {
+    .Kubo_ResNameTable_3AB = {
         SELF(ResName_KuboView0AB_0_TtlScreen),
         SELF(ResName_KuboView0AB_1_AcMixerVol),
         SELF(str_1288),
@@ -16571,7 +16806,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .ResName_KuboView0AB_0_TtlScreen = ALIGNED_STRING(""),
 
-    .ptrs_41 = {
+    .Kubo_ResNameTable_3D6 = {
         SELF(EnterTainerScr_name),
         SELF(w382_code),
         SELF(ResName_EnterTainerScr_2_Label),
@@ -16622,7 +16857,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .EnterTainerScr_name = ALIGNED_STRING("EnterTainerScr"),
 
-    .ptrs_42 = {
+    .Kubo_ResNameTable_3E7 = {
         SELF(ResName_KuboView0E7_0_TtlScreen),
         SELF(ResName_KuboView0E7_1_IvExitMode),
         SELF(HelpMenu_name),
@@ -16903,7 +17138,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .TT_SWHELP_str = "TT_SWHELP",
 
-    .ptrs_43 = {
+    .Kubo_MainFunctionTable_148 = {
         NAKA_ADDR(ApEditSyori),
         NAKA_ADDR(MainExeCall),
         NAKA_ADDR(EffEditMain),
@@ -16949,6 +17184,9 @@ const naka_effects_seq_t naka_effects_seq_data
         NAKA_ADDR(EtmenuTitleFunc),
         NAKA_ADDR(MainPanic),
         0x00000000,
+    },
+
+    .Kubo_MainFunctionTable_448 = {
         SELF(ApEditSyori_str),
         SELF(MainExeCall_str),
         SELF(EffEditMain_str),

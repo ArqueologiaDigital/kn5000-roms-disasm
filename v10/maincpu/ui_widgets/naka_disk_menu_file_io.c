@@ -2073,10 +2073,50 @@ typedef struct __attribute__((packed)) {
     uint32_t StyleConvert_AcTitleMenu_ptr;
     uint16_t field_53f2;
     uint16_t field_53f4;
-    uint32_t ptrs_3[146];  /* 146 pointers */
+    uint32_t ptrs_3[72];
+    /* Cheap_ViewableTable_061: 74 pointers (cut from ptrs_3 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_061[74];
     uint16_t field_563e;
     uint16_t field_5640;
-    uint32_t ptrs_4[448];  /* 448 pointers */
+    uint32_t ptrs_4[54];
+    /* Cheap_ViewableTable_062: 1 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_062[1];
+    /* Cheap_ViewableTable_063: 1 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_063[1];
+    /* Cheap_ViewableTable_064: 1 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_064[1];
+    /* Cheap_ViewableTable_065: 4 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_065[4];
+    /* Cheap_ViewableTable_066: 1 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_066[1];
+    /* Cheap_ViewableTable_067: 72 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_067[72];
+    /* Cheap_ViewableTable_06A: 1 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_06A[1];
+    /* Cheap_ViewableTable_06B: 22 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_06B[22];
+    /* Cheap_ViewableTable_06C: 84 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_06C[84];
+    /* Cheap_ViewableTable_06D: 1 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_06D[1];
+    /* Cheap_ViewableTable_06E: 1 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_06E[1];
+    /* Cheap_ViewableTable_077: 22 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_077[22];
+    /* Cheap_ViewableTable_079: 1 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_079[1];
+    /* Cheap_ViewableTable_07B: 95 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_07B[95];
+    /* Cheap_ViewableTable_07C: 1 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_07C[1];
+    /* Cheap_ViewableTable_07D: 1 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_07D[1];
+    /* Cheap_ViewableTable_07E: 9 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_07E[9];
+    /* Cheap_ViewableTable_0BC: 1 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ViewableTable_0BC[1];
+    /* Cheap_ResNameTable_360: 75 pointers (cut from ptrs_4 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ResNameTable_360[75];
     char str_947[2];
     char ResName_DiskMenu_73_AcLanguageText[2];
     char ResName_DiskMenu_72_AcFuncEditSw[2];
@@ -2152,7 +2192,8 @@ typedef struct __attribute__((packed)) {
     char HardDiskMenu_name[14];
     char w229_code[2];
     char DiskMenu_name[10];
-    uint32_t ptrs_5[129];  /* 129 pointers */
+    /* Cheap_ResNameTable_361: 129 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ResNameTable_361[129];
     char str_1000[2];
     char w230_code[2];
     char CmpSingleLoadSwCtl_name[20];
@@ -2288,14 +2329,16 @@ typedef struct __attribute__((packed)) {
     char str_1110[2];
     uint32_t ptr_6206;
     char str_1111[2];
-    uint32_t ptrs_6[4];  /* 4 pointers */
+    /* Cheap_ResNameTable_365: 4 pointers (cut from ptrs_6 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ResNameTable_365[4];
     char str_1112[2];
     char ResName_DiskSaveMenu_2_AcTtlJgBox[2];
     char w240_code[2];
     char DiskSaveMenu_name[14];
     uint32_t ptr_6230;
     char str_1114[2];
-    uint32_t ptrs_7[72];  /* 72 pointers */
+    /* Cheap_ResNameTable_367: 72 pointers (cut from ptrs_7 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ResNameTable_367[72];
     char str_1115[2];
     char ResName_DiskSave_70_IvCatchEvent[2];
     char ResName_DiskSave_69_VwScreenTitle[2];
@@ -2370,7 +2413,8 @@ typedef struct __attribute__((packed)) {
     char DiskSave_str[10];
     uint32_t ptr_6418;
     char str_1179[2];
-    uint32_t ptrs_8[22];  /* 22 pointers */
+    /* Cheap_ResNameTable_36B: 22 pointers (cut from ptrs_8 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ResNameTable_36B[22];
     char str_1180[2];
     char ResName_DiskSmfSave_20_Label[2];
     char ResName_DiskSmfSave_19_Label[2];
@@ -2393,7 +2437,8 @@ typedef struct __attribute__((packed)) {
     char ResName_DiskSmfSave_2_AcIndexWideES[2];
     char w245_code[2];
     char DiskSmfSave_name[12];
-    uint32_t ptrs_9[84];  /* 84 pointers */
+    /* Cheap_ResNameTable_36C: 84 pointers (cut from ptrs_9 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ResNameTable_36C[84];
     char str_1200[2];
     char ResName_DiskSmfDirectPlay_82_Label[2];
     char ResName_DiskSmfDirectPlay_81_Label[2];
@@ -2482,7 +2527,8 @@ typedef struct __attribute__((packed)) {
     char str_1272[2];
     uint32_t ptr_6704;
     char str_1273[2];
-    uint32_t ptrs_10[22];  /* 22 pointers */
+    /* Cheap_ResNameTable_377: 22 pointers (cut from ptrs_10 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ResNameTable_377[22];
     char str_1274[2];
     char ResName_DiskSongMedley_20_Label[2];
     char ResName_DiskSongMedley_19_IvShowHide[2];
@@ -2507,7 +2553,8 @@ typedef struct __attribute__((packed)) {
     char DiskSongMedley_name[16];
     uint32_t ptr_67c0;
     char str_1292[2];
-    uint32_t ptrs_11[95];  /* 95 pointers */
+    /* Cheap_ResNameTable_37B: 95 pointers (cut from ptrs_11 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ResNameTable_37B[95];
     char str_1293[2];
     char w254_code[2];
     char DiskSaveSureScr_name[16];
@@ -2607,7 +2654,8 @@ typedef struct __attribute__((packed)) {
     char str_1362[2];
     uint32_t ptr_6ad2;
     char str_1363[2];
-    uint32_t ptrs_12[9];  /* 9 pointers */
+    /* Cheap_ResNameTable_37E: 9 pointers (cut from ptrs_12 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_ResNameTable_37E[9];
     char str_1364[2];
     char ResName_DiskSetup_7_AcLanguageText[2];
     char ResName_DiskSetup_6_AcLanguageText[2];
@@ -2640,7 +2688,10 @@ typedef struct __attribute__((packed)) {
     char TT_DKUTFRMT_str[12];
     char TT_DKSETUP_str[12];
     char TT_CMPLD_str[10];
-    uint32_t ptrs_13[116];  /* 116 pointers */
+    /* Cheap_MainFunctionTable_145: 58 pointers (cut from ptrs_13 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_MainFunctionTable_145[58];
+    /* Cheap_MainFunctionTable_445: 58 pointers (cut from ptrs_13 by split_naka_pointer_arrays.py) */
+    uint32_t Cheap_MainFunctionTable_445[58];
     char w268_code[2];
     char FmmPasswordFunc_name[16];
     char FmmWallpaperLoadFunc_str[22];
@@ -2699,28 +2750,32 @@ typedef struct __attribute__((packed)) {
     char FmmPdFileNameFunc_str[18];
     char FmmSmfFileNameFunc_str[20];
     char FmmFileNameFunc_str[16];
-    uint32_t ptrs_14[6];  /* 6 pointers */
+    /* PasswordText_PtrTable: 6 pointers (cut from ptrs_14 by split_naka_pointer_arrays.py) */
+    uint32_t PasswordText_PtrTable[6];
     char PleaseEnterThePassword_str[28];
     char PleaseEnterThePassword_str_2[28];
     char PleaseEnterThePassword_str_3[28];
     char PleaseEnterThePassword_str_4[28];
     char BitteGebenSieDas_str[34];
     char PleaseEnterThePassword_str_5[28];
-    uint32_t ptrs_15[6];  /* 6 pointers */
+    /* CheckPwd_Type0_PtrTable: 6 pointers (cut from ptrs_15 by split_naka_pointer_arrays.py) */
+    uint32_t CheckPwd_Type0_PtrTable[6];
     char TheDataIsAlready_str[64];
     char TheDataIsAlready_str_2[64];
     char TheDataIsAlready_str_3[64];
     char TheDataIsAlready_str_4[64];
     char txt_Diese_Daten_sind_bereits[76];
     char TheDataIsAlready_str_5[64];
-    uint32_t ptrs_16[6];  /* 6 pointers */
+    /* CheckPasswordText_PtrTable: 6 pointers (cut from ptrs_16 by split_naka_pointer_arrays.py) */
+    uint32_t CheckPasswordText_PtrTable[6];
     char TheSongsInThe_str[74];
     char TheSongsInThe_str_2[74];
     char TheSongsInThe_str_3[74];
     char TheSongsInThe_str_4[74];
     char txt_Die_Songs_im_Sequenzer_sind[80];
     char TheSongsInThe_str_5[74];
-    uint32_t ptrs_17[6];  /* 6 pointers */
+    /* CheckPwd_Type2_PtrTable: 6 pointers (cut from ptrs_17 by split_naka_pointer_arrays.py) */
+    uint32_t CheckPwd_Type2_PtrTable[6];
     char ThePatternsInThe_str[76];
     char ThePatternsInThe_str_2[76];
     char ThePatternsInThe_str_3[76];
@@ -2730,7 +2785,8 @@ typedef struct __attribute__((packed)) {
     char CcEv_str[6];
     char PasswordOk_Str_Query_Query[4];
     char CheckPasswordOk_Str_Query_Query[4];
-    uint32_t ptrs_18[6];  /* 6 pointers */
+    /* DiskAttention_PtrTable: 6 pointers (cut from ptrs_18 by split_naka_pointer_arrays.py) */
+    uint32_t DiskAttention_PtrTable[6];
     char Perhatian_str[12];
     char Attention_str[12];
     uint16_t field_7862;
@@ -2741,7 +2797,8 @@ typedef struct __attribute__((packed)) {
     char Attention_str_2[12];
     char Achtung_str[10];
     char Attention_str_3[12];
-    uint32_t ptrs_19[6];  /* 6 pointers */
+    /* DiskSure_PtrTable: 6 pointers (cut from ptrs_19 by split_naka_pointer_arrays.py) */
+    uint32_t DiskSure_PtrTable[6];
     char ApakahYakinAkanDihapus_str[28];
     char AreYouSure_str[14];
     uint16_t field_78d2;
@@ -11471,6 +11528,9 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(CheckPasswordWin_AcFuncEditSw_2),
         SELF(CheckPasswordWin_AcLanguageText),
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_061 = {
         SELF(DiskLoad),
         SELF(DiskLoadPage),
         SELF(DiskLoad_IvPageControl),
@@ -11606,14 +11666,32 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(CmpSingleLoadSwCtl),
         SELF(CmpSingleLoad_IvIndexSwDelay),
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_062 = {
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_063 = {
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_064 = {
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_065 = {
         SELF(DiskSaveMenu),
         SELF(TechnicsFormat_AcTtlJgBox),
         SELF(SmfFormat_AcTtlJgBox),
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_066 = {
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_067 = {
         SELF(DiskSave),
         SELF(DiskSavePage),
         SELF(DiskSave_IvPageControl),
@@ -11686,7 +11764,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskSaveP3_VwScreenTitle),
         SELF(DiskSaveP3_IvCatchEvent),
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_06A = {
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_06B = {
         SELF(DiskSmfSave),
         SELF(DiskSmfSave_PsFileNameBox),
         SELF(DiskSmfSave_AcIndexWideES),
@@ -11709,6 +11793,9 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(Save_Label_6),
         SELF(As_Label_2),
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_06C = {
         SELF(DiskSmfDirectPlay),
         SELF(DiskSmfDirectPlay_PsFileNameBox),
         SELF(DiskSmfDirectPlay_PsFileNameBox_2),
@@ -11793,8 +11880,17 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(All_Label_4),
         SELF(Add_Label_4),
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_06D = {
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_06E = {
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_077 = {
         SELF(DiskSongMedley),
         SELF(DiskSongMedley_AcIndexEditSw),
         SELF(DiskSongMedley_AcIndexWideES),
@@ -11817,7 +11913,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskSongMedley_IvShowHide),
         SELF(Loop_Label_5),
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_079 = {
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_07B = {
         SELF(DiskUtility),
         SELF(DiskUtility_AcIndexWideES),
         SELF(DiskUtility_AcIndexEditSw),
@@ -11913,8 +12015,17 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskSaveSureScr),
         SELF(OverwriteSure_Label),
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_07C = {
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_07D = {
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_07E = {
         SELF(DiskSetup),
         SELF(DiskSetup_AcIndexWideES),
         SELF(DiskSetup_AcRamEditBox),
@@ -11924,7 +12035,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskSetup_AcLanguageText),
         SELF(DiskSetup_AcLanguageText_2),
         0x00000000,
+    },
+
+    .Cheap_ViewableTable_0BC = {
         0x00000000,
+    },
+
+    .Cheap_ResNameTable_360 = {
         SELF(DiskMenu_name),
         SELF(w229_code),
         SELF(HardDiskMenu_name),
@@ -12152,7 +12269,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .DiskMenu_name = ALIGNED_STRING("DiskMenu"),
 
-    .ptrs_5 = {
+    .Cheap_ResNameTable_361 = {
         SELF(DiskLoad_str),
         SELF(DiskLoadPage_name),
         SELF(w239_code),
@@ -12554,7 +12671,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .str_1111 = ALIGNED_STRING(""),
 
-    .ptrs_6 = {
+    .Cheap_ResNameTable_365 = {
         SELF(DiskSaveMenu_name),
         SELF(w240_code),
         SELF(ResName_DiskSaveMenu_2_AcTtlJgBox),
@@ -12573,7 +12690,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .str_1114 = ALIGNED_STRING(""),
 
-    .ptrs_7 = {
+    .Cheap_ResNameTable_367 = {
         SELF(DiskSave_str),
         SELF(DiskSavePage_name),
         SELF(w244_code),
@@ -12796,7 +12913,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .str_1179 = ALIGNED_STRING(""),
 
-    .ptrs_8 = {
+    .Cheap_ResNameTable_36B = {
         SELF(DiskSmfSave_name),
         SELF(w245_code),
         SELF(ResName_DiskSmfSave_2_AcIndexWideES),
@@ -12865,7 +12982,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .DiskSmfSave_name = "DiskSmfSave",
 
-    .ptrs_9 = {
+    .Cheap_ResNameTable_36C = {
         SELF(DiskSmfDirectPlay_name),
         SELF(w251_code),
         SELF(ResName_DiskSmfDirectPlay_2_PsFileNameBox),
@@ -13128,7 +13245,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .str_1273 = ALIGNED_STRING(""),
 
-    .ptrs_10 = {
+    .Cheap_ResNameTable_377 = {
         SELF(DiskSongMedley_name),
         SELF(w253_code),
         SELF(ResName_DiskSongMedley_2_AcIndexWideES),
@@ -13201,7 +13318,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .str_1292 = ALIGNED_STRING(""),
 
-    .ptrs_11 = {
+    .Cheap_ResNameTable_37B = {
         SELF(DiskUtility_name),
         SELF(w266_code),
         SELF(ResName_DiskUtility_2_AcIndexEditSw),
@@ -13497,7 +13614,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .str_1363 = ALIGNED_STRING(""),
 
-    .ptrs_12 = {
+    .Cheap_ResNameTable_37E = {
         SELF(DiskSetup_name),
         SELF(w267_code),
         SELF(ResName_DiskSetup_2_AcRamEditBox),
@@ -13573,7 +13690,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .TT_CMPLD_str = ALIGNED_STRING("TT_CMPLD"),
 
-    .ptrs_13 = {
+    .Cheap_MainFunctionTable_145 = {
         NAKA_ADDR(FmmFileNameFunc),
         NAKA_ADDR(FmmSmfFileNameFunc),
         NAKA_ADDR(FmmPdFileNameFunc),
@@ -13632,6 +13749,9 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         NAKA_ADDR(FmmWallpaperLoadFunc),
         NAKA_ADDR(FmmPasswordFunc),
         0x00000000,
+    },
+
+    .Cheap_MainFunctionTable_445 = {
         SELF(FmmFileNameFunc_str),
         SELF(FmmSmfFileNameFunc_str),
         SELF(FmmPdFileNameFunc_str),
@@ -13808,7 +13928,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .FmmFileNameFunc_str = "FmmFileNameFunc",
 
-    .ptrs_14 = {
+    .PasswordText_PtrTable = {
         SELF(PleaseEnterThePassword_str_5),
         SELF(BitteGebenSieDas_str),
         SELF(PleaseEnterThePassword_str_4),
@@ -13829,7 +13949,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .PleaseEnterThePassword_str_5 = ALIGNED_STRING("Please enter the password."),
 
-    .ptrs_15 = {
+    .CheckPwd_Type0_PtrTable = {
         SELF(TheDataIsAlready_str_5),
         SELF(txt_Diese_Daten_sind_bereits),
         SELF(TheDataIsAlready_str_4),
@@ -13850,7 +13970,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .TheDataIsAlready_str_5 = ALIGNED_STRING("The data is already copy protected. Please enter the password."),
 
-    .ptrs_16 = {
+    .CheckPasswordText_PtrTable = {
         SELF(TheSongsInThe_str_5),
         SELF(txt_Die_Songs_im_Sequenzer_sind),
         SELF(TheSongsInThe_str_4),
@@ -13871,7 +13991,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .TheSongsInThe_str_5 = "The songs in the Sequencer are copy protected. Please enter the password.",
 
-    .ptrs_17 = {
+    .CheckPwd_Type2_PtrTable = {
         SELF(ThePatternsInThe_str_5),
         SELF(txt_Die_Pattern_im_Composer_sind),
         SELF(ThePatternsInThe_str_4),
@@ -13898,7 +14018,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .CheckPasswordOk_Str_Query_Query = ALIGNED_STRING("??"),
 
-    .ptrs_18 = {
+    .DiskAttention_PtrTable = {
         SELF(Attention_str_3),
         SELF(Achtung_str),
         SELF(Attention_str_2),
@@ -13927,7 +14047,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .Attention_str_3 = ALIGNED_STRING("ATTENTION!"),
 
-    .ptrs_19 = {
+    .DiskSure_PtrTable = {
         0x00EA8CCE,
         NAKA_ADDR(DiskWarning_GermanConfirm),
         NAKA_ADDR(DiskWarning_ConfirmStrings),

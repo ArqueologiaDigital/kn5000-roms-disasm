@@ -1468,7 +1468,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_36d2;
     uint16_t field_36d4;
     uint16_t field_36d6;
-    uint32_t ptrs_29[22];  /* 22 pointers */
+    /* FileIO_BytecodeData_Code_Entry8_PtrTable_3: 22 pointers (cut from ptrs_29 by split_naka_pointer_arrays.py) */
+    uint32_t FileIO_BytecodeData_Code_Entry8_PtrTable_3[22];
     uint16_t field_3730;
     uint16_t field_3732;
     uint16_t field_3734;
@@ -6557,7 +6558,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_36d6 = NAKA_NONE,
 
-    .ptrs_29 = {
+    .FileIO_BytecodeData_Code_Entry8_PtrTable_3 = {
         0x00FC63DE,
         NAKA_ADDR(NakaData_WidgetInit1),
         NAKA_ADDR(FileIO_BytecodeData_Code_Loop3),

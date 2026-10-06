@@ -748,7 +748,8 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_98[70];  /* zero padding */
     uint16_t field_0658;
     uint8_t pad_99[70];  /* zero padding */
-    uint32_t ptrs_0[18];  /* 18 pointers */
+    /* Naka_DrawbarOrgan_Screens: 18 pointers (cut from ptrs_0 by split_naka_pointer_arrays.py) */
+    uint32_t Naka_DrawbarOrgan_Screens[18];
     uint16_t field_06e8;
     uint8_t pad_100[12];  /* zero padding */
     uint16_t field_06f6;
@@ -1218,10 +1219,12 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0c3c;
     uint16_t field_0c3e;
     uint8_t pad_167[8];  /* zero padding */
-    uint32_t ptrs_1[32];  /* 32 pointers */
+    /* MixerPart_NamePtrTable: 32 pointers (cut from ptrs_1 by split_naka_pointer_arrays.py) */
+    uint32_t MixerPart_NamePtrTable[32];
     uint16_t field_0cc8;
     uint8_t pad_168[2];  /* zero padding */
-    uint32_t ptrs_2[28];  /* 28 pointers */
+    /* Naka_DrawbarControl_Table: 28 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
+    uint32_t Naka_DrawbarControl_Table[28];
     uint16_t field_0d3c;
     uint16_t field_0d3e;
     uint16_t field_0d40;
@@ -1236,7 +1239,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0d56;
     uint16_t field_0d58;
     uint16_t field_0d5a;
-    uint32_t ptrs_3[110];  /* 110 pointers */
+    /* MidiPart_ConfigNameTable: 110 pointers (cut from ptrs_3 by split_naka_pointer_arrays.py) */
+    uint32_t MidiPart_ConfigNameTable[110];
     uint16_t field_0f14;
     uint16_t field_0f16;
     uint16_t field_0f18;
@@ -1570,7 +1574,10 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_12d0;
     char str_10[2];
     char str_11[2];
-    uint32_t ptrs_6[64];  /* 64 pointers */
+    /* Naka_DrawbarDisplay_Table1: 32 pointers (cut from ptrs_6 by split_naka_pointer_arrays.py) */
+    uint32_t Naka_DrawbarDisplay_Table1[32];
+    /* Naka_DrawbarDisplay_Table2: 32 pointers (cut from ptrs_6 by split_naka_pointer_arrays.py) */
+    uint32_t Naka_DrawbarDisplay_Table2[32];
     uint16_t field_13d8;
     uint16_t field_13da;
     uint8_t pad_248[4];  /* zero padding */
@@ -1675,7 +1682,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_150a;
     uint8_t pad_275[2];  /* zero padding */
     uint16_t field_150e;
-    uint32_t ptrs_7[69];  /* 69 pointers */
+    /* Naka_DrawbarReg_Table: 69 pointers (cut from ptrs_7 by split_naka_pointer_arrays.py) */
+    uint32_t Naka_DrawbarReg_Table[69];
     uint16_t field_1624;
     uint16_t field_1626;
     uint16_t field_1628;
@@ -3839,7 +3847,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_99 = { 0 },
 
-    .ptrs_0 = {
+    .Naka_DrawbarOrgan_Screens = {
         NAKA_ADDR(SeqByteBlock_ChannelContainer),
         NAKA_ADDR(SeqChan_SetupAndCallHelper),
         NAKA_ADDR(SeqChan_InitChannelState),
@@ -4798,7 +4806,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_167 = { 0 },
 
-    .ptrs_1 = {
+    .MixerPart_NamePtrTable = {
         NAKA_ADDR(MixerPartTable_Start),
         NAKA_ADDR(Str_Mixer_ON),
         NAKA_ADDR(Str_PartName_Right1),
@@ -4837,7 +4845,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_168 = { 0 },
 
-    .ptrs_2 = {
+    .Naka_DrawbarControl_Table = {
         NAKA_ADDR(NakaInst_RIGHT_1_E9D9B0),
         NAKA_ADDR(NakaInst_RIGHT_2_E9D9A6),
         NAKA_ADDR(NakaInst_LEFT_E9D99C),
@@ -4896,7 +4904,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0d5a = NAKA_NONE,
 
-    .ptrs_3 = {
+    .MidiPart_ConfigNameTable = {
         NAKA_ADDR(MidiParam_PanelCfgTable),
         NAKA_ADDR(Midi_PartToChMappingTable),
         NAKA_ADDR(PartName6_Right1),
@@ -5715,7 +5723,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .str_11 = ALIGNED_STRING(""),
 
-    .ptrs_6 = {
+    .Naka_DrawbarDisplay_Table1 = {
         NAKA_ADDR(NakaInst_CHARA1),
         NAKA_ADDR(NakaInst_CHARA2),
         NAKA_ADDR(NakaInst_CHARA3),
@@ -5748,6 +5756,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
         0x00000000,
         0x00000000,
         0x00000000,
+    },
+
+    .Naka_DrawbarDisplay_Table2 = {
         NAKA_ADDR(NakaStr_Chara1Fnt),
         NAKA_ADDR(NakaStr_Chara2Fnt),
         NAKA_ADDR(NakaStr_Chara3Fnt),
@@ -6014,7 +6025,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_150e = 0x0002,
 
-    .ptrs_7 = {
+    .Naka_DrawbarReg_Table = {
         NAKA_ADDR(NakaColor_Palette2),
         NAKA_ADDR(NakaColor_Palette1),
         NAKA_ADDR(NakaColor_Palette6),

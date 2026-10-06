@@ -360,7 +360,8 @@ typedef struct __attribute__((packed)) {
     char TR_Track3_str[10];
     char TR_Track2_str[10];
     char TR_Track1_str[10];
-    uint32_t ptrs_2[3];  /* 3 pointers */
+    /* NakaInst_IntTimeID_EnumTable: 3 pointers (cut from ptrs_2 by split_naka_pointer_arrays.py) */
+    uint32_t NakaInst_IntTimeID_EnumTable[3];
     uint16_t field_03fe;
     uint8_t pad_55[2];  /* zero padding */
     uint32_t IT_Hold_str_ptr;
@@ -3169,7 +3170,8 @@ typedef struct __attribute__((packed)) {
     char NakaInst_D_a0_ECFF5C[6];
     char MemScreen_NoteC[4];
     char str_2542[4];
-    uint32_t ptrs_35[39];  /* 39 pointers */
+    /* MainChordPre_PtrTable: 39 pointers (cut from ptrs_35 by split_naka_pointer_arrays.py) */
+    uint32_t MainChordPre_PtrTable[39];
     uint16_t field_18e48;
 } naka_style_bitmaps_t;
 
@@ -3641,7 +3643,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .TR_Track1_str = "TR_Track1",
 
-    .ptrs_2 = {
+    .NakaInst_IntTimeID_EnumTable = {
         SELF(IT_Off_str),
         0x00000000,
         SELF(IT_Default_str),
@@ -4190,7 +4192,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
     .field_0760 = 0x0002,
 
     .ptrs_3 = {
-        SELF(ptrs_2),
+        SELF(NakaInst_IntTimeID_EnumTable),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -12956,7 +12958,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .str_2542 = ALIGNED_STRING("  "),
 
-    .ptrs_35 = {
+    .MainChordPre_PtrTable = {
         0x00ed020c,
         0x00ed0206,
         0x00ed0200,
