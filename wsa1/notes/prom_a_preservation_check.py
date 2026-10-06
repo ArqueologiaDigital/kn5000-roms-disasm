@@ -4931,6 +4931,22 @@ RENAMES = {
     "ScreenFieldList_F2D590": "ScreenFieldList_SineWaveCheckMode",
     "ScreenFieldList_F2D59A": "ScreenFieldList_PanelSwLedCheck",
     "ScreenFieldList_F2D59E": "ScreenFieldList_DebugMonitor",
+    "HandlerTable23_FA1690": "HandlerTable23_ReMapEdit",
+    "HandlerTable23_FA1712": "HandlerTable23_SoundCombinationManager",
+    "HandlerTable23_FA176E": "HandlerTable23_SoundGroupNaming",
+    "HandlerTable23_FA17CF": "HandlerTable23_CombinationGroupNaming",
+    "HandlerTable23_FA182F": "HandlerTable23_SoundCopy",
+    "HandlerTable23_FA1892": "HandlerTable23_CombinationCopy",
+    "HandlerTable23_FA18EE": "HandlerTable23_DataLoadFilter",
+    "HandlerTable23_FA194A": "HandlerTable23_MemoryProtect",
+    "HandlerTable23_FA19A6": "HandlerTable23_SoundMute",
+    "HandlerTable23_FA1A02": "HandlerTable23_DrumsMapNaming",
+    "HandlerTable23_FA1B94": "HandlerTable23_System",
+    "HandlerTable23_FA1BF0": "HandlerTable23_TuneScale",
+    "HandlerTable23_FA1CAB": "HandlerTable23_OverallTouchSensitivity",
+    "HandlerTable23_FA1D10": "HandlerTable23_SystemTest",
+    "HandlerTable23_FA1D6C": "HandlerTable23_ControllerAssign",
+    "HandlerTable23_FA1DED": "HandlerTable23_Initial",
 }
 
 

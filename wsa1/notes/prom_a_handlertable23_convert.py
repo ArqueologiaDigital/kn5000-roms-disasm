@@ -90,10 +90,10 @@ def tables(L):
     return out
 
 
-# Screen 0x64's BUTTON method reads one of TWO tables: `cp (Variant_Flag),1 / jr nz` picks HandlerTable23_FA1CAB for
-# variant 1 and HandlerTable23_FA1D10 otherwise.  Its header (notes/prom_a_system_menu_screens.py) gives the menu text:
+# Screen 0x64's BUTTON method reads one of TWO tables: `cp (Variant_Flag),1 / jr nz` picks HandlerTable23_OverallTouchSensitivity for
+# variant 1 and HandlerTable23_SystemTest otherwise.  Its header (notes/prom_a_system_menu_screens.py) gives the menu text:
 # OVERALL TOUCH SENSITIVITY on variant 1 (SX-WSA1), TEST on variant 2 (SX-WSA1R).  So the two tables are two screens.
-TABLE_SCREEN = {"HandlerTable23_FA1CAB": "OverallTouchSensitivity", "HandlerTable23_FA1D10": "SystemTest"}
+TABLE_SCREEN = {"HandlerTable23_OverallTouchSensitivity": "OverallTouchSensitivity", "HandlerTable23_SystemTest": "SystemTest"}
 
 
 def screen_of(r, t=None):
