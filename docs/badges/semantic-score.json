@@ -1,26 +1,26 @@
 {
  "date": "2026-10-06",
- "head": "a0310f5e",
+ "head": "ac9159da",
  "dirty": false,
  "rules": 2,
  "entry_snapshot": "docs/coverage/dispatch-census-2026-10-06-21.json",
  "entry_snapshot_head": "a00e3f9f",
  "score": {
-  "kn5000": 89.73,
+  "kn5000": 90.24,
   "wsa1": 89.54,
-  "all": 89.18
+  "all": 89.68
  },
  "components": {
   "kn5000": {
    "bytes": {
-    "num": 9866077,
+    "num": 9867691,
     "den": 10289152,
-    "pct": 95.89
+    "pct": 95.9
    },
    "names": {
-    "num": 131113,
+    "num": 131194,
     "den": 145538,
-    "pct": 90.09
+    "pct": 90.14
    },
    "entry": {
     "num": 2226,
@@ -28,9 +28,9 @@
     "pct": 99.73
    },
    "fields": {
-    "num": 64086,
-    "den": 87544,
-    "pct": 73.2
+    "num": 65055,
+    "den": 86548,
+    "pct": 75.17
    }
   },
   "wsa1": {
@@ -57,14 +57,14 @@
   },
   "all": {
    "bytes": {
-    "num": 11852377,
+    "num": 11853991,
     "den": 12386304,
-    "pct": 95.69
+    "pct": 95.7
    },
    "names": {
-    "num": 145424,
+    "num": 145505,
     "den": 164529,
-    "pct": 88.39
+    "pct": 88.44
    },
    "entry": {
     "num": 2977,
@@ -72,22 +72,22 @@
     "pct": 99.43
    },
    "fields": {
-    "num": 64086,
-    "den": 87544,
-    "pct": 73.2
+    "num": 65055,
+    "den": 86548,
+    "pct": 75.17
    }
   }
  },
  "images": {
   "v10": {
    "names": {
-    "semantic": 39706,
+    "semantic": 39733,
     "continuation": 8705,
-    "generic": 3939,
+    "generic": 3912,
     "positional": 751
    },
    "bytes": [
-    1969740,
+    1970278,
     2097152
    ],
    "entry": [
@@ -97,13 +97,13 @@
   },
   "v9": {
    "names": {
-    "semantic": 39706,
+    "semantic": 39733,
     "continuation": 8701,
-    "generic": 3932,
+    "generic": 3905,
     "positional": 752
    },
    "bytes": [
-    1969134,
+    1969672,
     2097152
    ],
    "entry": [
@@ -113,13 +113,13 @@
   },
   "v7": {
    "names": {
-    "semantic": 39597,
+    "semantic": 39624,
     "continuation": 8377,
-    "generic": 3987,
+    "generic": 3960,
     "positional": 839
    },
    "bytes": [
-    1963536,
+    1964074,
     2097152
    ],
    "entry": [
