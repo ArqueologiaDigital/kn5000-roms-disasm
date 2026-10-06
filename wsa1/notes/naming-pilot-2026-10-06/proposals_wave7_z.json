@@ -1,0 +1,434 @@
+[
+ {
+  "old": "sub_F73566",
+  "verdict": "name",
+  "new": "Smf_AllocFirstBlockForAllTracks_B",
+  "header": "For directory entries 0..16 ((0x349F) counting), while at least 17 blocks are free: allocates a block (T_BStore_AllocBlock_Veneer), marks it used with no links (+1 := 0, +3 := 0xFFFF), sets the entry's in-use bit and head, and points its song position (0x3460 / 0x3482) at offset 5.\nSecond copy of Smf_AllocFirstBlockForAllTracks (only push widths and the head store differ); Smf_SplitTrack1ByChannel runs it after resetting the 17 entries. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:178205 `calr sub_F73566` -- Smf_SplitTrack1ByChannel, after its 17-entry reset loop; its header says 'gives each a fresh block'",
+   "prom_b/wsa1_prom_b.s:179087 `m_cp_mi16 MW24, BStore_FreeCount, 0x0011` -- body: stop when fewer than 17 blocks are free",
+   "prom_b/wsa1_prom_b.s:179091 `call T_BStore_AllocBlock_Veneer` -- allocate",
+   "prom_b/wsa1_prom_b.s:179104 `m_or_mi8 MBI+r3, 0, 0x80` -- block header bit 7 = used; +1 := 0 (179105), +3 := 0xFFFF (179106)",
+   "prom_b/wsa1_prom_b.s:179109 `mx_or_mi8 MXB, ra_HL, ra_IY, 0x80` -- directory entry 0x603500+IY in use; head word stored at 179112",
+   "prom_b/wsa1_prom_b.s:179115 `mx_st_mr16 MXD, ra_HL, ra_IX, 0` -- song position block word 0x3460[n]; offset 5 into 0x3482[n] at 179121",
+   "prom_b/wsa1_prom_b.s:179126 `m_cp_mi8 MB16, 0x349f, 0x11` -- 17 entries",
+   "prom_b/wsa1_prom_b.s:170354 `Smf_AllocFirstBlockForAllTracks:` -- the twin: same instruction sequence 170359..170386, its header already calls sub_F73566 a copy"
+  ]
+ },
+ {
+  "old": "sub_F748F0",
+  "verdict": "name",
+  "new": "SmfWrite_RestoreSongFromTempFile",
+  "header": "Disk_FileName := \"_ZZZZZZZ\" + \"SEQ\" (Data_F73844+0x10), Disk_ContentType := 1 (sequencer), T_F425C8 (prom_a sub_FE1C79 -> sub_FE0599 -> DiskLoad_ByContentType) reloads the song Smf_WriteFile saved there before its destructive track merge;\nthen extension '???', T_DiskApi_DeleteFile_Call deletes the temp file and SmfWrite_RestoreFileName restores the user's name. Smf_WriteFile runs it on success and on both error exits. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:180911 `calr sub_F748F0` -- Smf_WriteFile success path, after sub_F7666F closes the .MID file; also 180939 (result 7) and 180949 (other errors)",
+   "prom_b/wsa1_prom_b.s:179592 `ld xiy, Data_F73844 + 0x10` -- Smf_WriteFile first sets Disk_FileName to the same 11 bytes ...",
+   "prom_b/wsa1_prom_b.s:179596 `ld (Disk_ContentType:16), 1` -- ... content type 1 ...",
+   "prom_b/wsa1_prom_b.s:179599 `call T_DiskSaveFile_Execute_Entry` -- ... and SAVES the song to it before SmfExport_MergeUsedTracksIntoFirst",
+   "prom_b/wsa1_prom_b.s:179482 `Data_F73844:` -- bytes +0x10..+0x1A are '_ZZZZZZZSEQ'",
+   "prom_b/wsa1_prom_b.s:181167 `ld xiy, Data_F73844 + 0x10` -- body: the same temp name",
+   "prom_b/wsa1_prom_b.s:181171 `ld (Disk_ContentType:16), 1` -- body: content type 1",
+   "prom_b/wsa1_prom_b.s:181172 `call T_F425C8` -- body: load (prom_a prom_a/wsa1_prom_a.s:164717 sub_FE1C79 -> 162113 sub_FE0599 -> 162129 `calr DiskLoad_ByContentType`; 164904 header: 1 = DiskLoad_Sequencer)",
+   "prom_b/wsa1_prom_b.s:181173 `ld (Disk_FileName+8:16), 63` -- body: extension '???' then delete (181176) and restore the name (181177)"
+  ]
+ },
+ {
+  "old": "sub_F749C5",
+  "verdict": "name",
+  "new": "SmfWrite_WriteTempoEvent",
+  "header": "Writes an SMF Set Tempo event through SmfWrite_CommitOutputByte: the delta-time bytes in Smf_VlqBytes (up to the first byte with bit 7 clear), then FF 51 03 and SmfOut_Tempo+2, +1, +0 (most significant first); stops when (0x1238) is no longer 3.\nCopy A of SmfSize_WriteTempoEvent; Smf_WriteFile calls it after SmfWrite_StageTempoFromBpm. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:179720 `calr sub_F749C5` -- Smf_WriteFile, right after `calr SmfWrite_StageTempoFromBpm`; again at 180204",
+   "prom_b/wsa1_prom_b.s:181319 `ld xiy, Smf_VlqBytes` -- body: the delta-time bytes",
+   "prom_b/wsa1_prom_b.s:181326 `calr SmfWrite_CommitOutputByte` -- body: each byte committed, (0x1238) == 3 checked at 181329",
+   "prom_b/wsa1_prom_b.s:181334 `ld a, 255:opc` -- body: 0xFF, then 0x51 (181340) and 0x03 (181346)",
+   "prom_b/wsa1_prom_b.s:181352 `ld a, (SmfOut_Tempo+2:16)` -- body: tempo bytes MSB first (181358 +1, 181364 +0)",
+   "prom_b/wsa1_prom_b.s:183651 `ld xiy, Smf_VlqBytes` -- SmfSize_WriteTempoEvent, the copy-B twin with the same byte sequence"
+  ]
+ },
+ {
+  "old": "sub_F74E71",
+  "verdict": "name",
+  "new": "SmfWrite_ReadSongByte",
+  "header": "A := the song byte at the block-store cursor: block BStore_CursorBlock (sought with SongStore_SeekBlock_Copy), offset BStore_CursorOffset. Copy A of SmfSize_ReadSongByte;\nSmf_WriteFile reads each event byte with it before SmfWrite_AdvanceSongCursor steps the cursor. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:180103 `calr sub_F74E71` -- Smf_WriteFile (also 180111, 180123, 180134, 180164), alternating with SmfWrite_AdvanceSongCursor",
+   "prom_b/wsa1_prom_b.s:181956 `ld hl, (BStore_CursorBlock:16)` -- body: cursor block, sought at 181957",
+   "prom_b/wsa1_prom_b.s:181959 `ld iy, (BStore_CursorOffset:16)` -- body: cursor offset",
+   "prom_b/wsa1_prom_b.s:181960 `mx_ld_rm MXB, ra_HL, ra_IY, 1` -- body: A := (XHL+IY)",
+   "prom_b/wsa1_prom_b.s:184175 `ld hl, (BStore_CursorBlock:16)` -- SmfSize_ReadSongByte, the copy-B twin"
+  ]
+ },
+ {
+  "old": "sub_F7664E",
+  "verdict": "name",
+  "new": "SmfWrite_WriteFirstWindow",
+  "header": "Disk_Flags |= 0x20, T_DiskApi_WriteFileFromWindow_Entry, A := Disk_LastError, the flag cleared again -- the first 1,024-byte window of the .MID file.\nSmfWrite_CreateFileWithFirstWindow runs it last, after the free-space check, the delete and SmfWrite_SetOutputWindow; copy A of SmfOut_WriteFirstWindow. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:184361 `call sub_F7664E` -- SmfWrite_CreateFileWithFirstWindow, its last step",
+   "prom_b/wsa1_prom_b.s:184380 `m_or_mi8 MB16, Disk_Flags, 0x20` -- body",
+   "prom_b/wsa1_prom_b.s:184381 `call T_DiskApi_WriteFileFromWindow_Entry` -- body: write the window",
+   "prom_b/wsa1_prom_b.s:184383 `m_and_mi8 MB16, Disk_Flags, 0xdf` -- body: flag cleared",
+   "prom_b/wsa1_prom_b.s:187444 `m_or_mi8 MB16, Disk_Flags, 0x20` -- SmfOut_WriteFirstWindow, the identical copy-D routine"
+  ]
+ },
+ {
+  "old": "sub_F76661",
+  "verdict": "name",
+  "new": "SmfWrite_WriteNextWindow",
+  "header": "Disk_Flags |= 0x02, T_DiskApi_WriteFileFromWindow_Entry, A := Disk_LastError -- writes a further 1,024-byte window of the .MID file (bit 1 left set).\nSmfWrite_CommitOutputByte calls it when the cursor passes 0x60AAFF and a window was already written, then counts the window and rewinds the cursor to 0x60A700. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:181572 `calr sub_F76661` -- SmfWrite_CommitOutputByte, the full-window arm with SmfOut_WindowsFlushed != 0",
+   "prom_b/wsa1_prom_b.s:181579 `incw 1, (SmfOut_WindowsFlushed:16)` -- caller: then counts the window and resets the cursor",
+   "prom_b/wsa1_prom_b.s:184400 `m_or_mi8 MB16, Disk_Flags, 0x02` -- body: continuation bit",
+   "prom_b/wsa1_prom_b.s:184401 `call T_DiskApi_WriteFileFromWindow_Entry` -- body"
+  ]
+ },
+ {
+  "old": "sub_F7666F",
+  "verdict": "name",
+  "new": "SmfWrite_WriteLastWindowAndClose",
+  "header": "When SmfOut_WindowsFlushed is non-zero writes the partly filled window (Disk_Flags bit 1, T_DiskApi_WriteFileFromWindow_Entry); then clears bit 1 and closes the file (T_DiskApi_CloseFile_Call).\nSmf_WriteFile's success path after the end-of-track event; copy A of SmfOut_WriteLastWindowAndClose. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:180910 `calr sub_F7666F` -- Smf_WriteFile, after writing FF 2F 00 and (if nothing was flushed yet) SmfWrite_CreateFileWithFirstWindow",
+   "prom_b/wsa1_prom_b.s:184419 `m_cp_mi16 MW16, SmfOut_WindowsFlushed, 0x0000` -- body",
+   "prom_b/wsa1_prom_b.s:184422 `call T_DiskApi_WriteFileFromWindow_Entry` -- body: last window with bit 1 (184421)",
+   "prom_b/wsa1_prom_b.s:184425 `call T_DiskApi_CloseFile_Call` -- body: close",
+   "prom_b/wsa1_prom_b.s:187210 `SmfOut_WriteLastWindowAndClose:` -- the identical copy-C routine, already named"
+  ]
+ },
+ {
+  "old": "sub_F7668A",
+  "verdict": "name",
+  "new": "SmfWrite_SetOutputWindow",
+  "header": "Disk_WindowStart := 0x60A700, Disk_WindowEnd := 0x60AB00 -- the 1,024-byte output window the SMF writer fills.\nSmfWrite_CreateFileWithFirstWindow sets it just before SmfWrite_WriteFirstWindow. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:184360 `call sub_F7668A` -- SmfWrite_CreateFileWithFirstWindow, after setting 'MID' and before the first write",
+   "prom_b/wsa1_prom_b.s:184443 `ld (Disk_WindowStart:16), xwa` -- body: 0x60A700",
+   "prom_b/wsa1_prom_b.s:184445 `ld (Disk_WindowEnd:16), xwa` -- body: 0x60AB00",
+   "prom_b/wsa1_prom_b.s:181579 `incw 1, (SmfOut_WindowsFlushed:16)` -- SmfWrite_CommitOutputByte rewinds its cursor to the same 0x60A700 after each window"
+  ]
+ },
+ {
+  "old": "sub_F77D39",
+  "verdict": "name",
+  "new": "InputStream_Refill_Copy",
+  "header": "Disk_Flags |= 0x02 then T_DiskApi_ReadFileToWindow_Entry -- an exact copy of InputStream_Refill in the unreferenced SMF writer copy D, reached only through the veneer `calr / ret` at 0xF77CF8\nthat sits where copy B's veneer to InputStream_Refill sits. Basis: veneer position + body (exact copy).",
+  "basis": "veneer + body (exact copy)",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:187072 `calr sub_F77D39` -- copy-D veneer after SmfSizeCopy_AdvanceSongCursor ...",
+   "prom_b/wsa1_prom_b.s:184214 `calr InputStream_Refill` -- ... mirroring copy B's veneer after SmfSize_AdvanceSongCursor",
+   "prom_b/wsa1_prom_b.s:187124 `m_or_mi8 MB16, Disk_Flags, 0x02` -- body; `call T_DiskApi_ReadFileToWindow_Entry` at 187125",
+   "prom_b/wsa1_prom_b.s:184276 `m_or_mi8 MB16, Disk_Flags, 0x02` -- InputStream_Refill: the same two instructions"
+  ]
+ },
+ {
+  "old": "sub_F77D43",
+  "verdict": "name",
+  "new": "InputStream_RefillDone_Copy",
+  "header": "Clears Disk_Flags bit 1 and returns W = 1 -- an exact copy of InputStream_RefillDone in the unreferenced SMF writer copy D, reached only through the veneer `calr / ret` at 0xF77CFC\nthat sits where copy B's veneer to InputStream_RefillDone sits. Basis: veneer position + body (exact copy).",
+  "basis": "veneer + body (exact copy)",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:187074 `calr sub_F77D43` -- copy-D veneer ...",
+   "prom_b/wsa1_prom_b.s:184216 `calr InputStream_RefillDone` -- ... mirroring copy B's",
+   "prom_b/wsa1_prom_b.s:187141 `m_and_mi8 MB16, Disk_Flags, 0xfd` -- body; `ld w, 1:opc` at 187142",
+   "prom_b/wsa1_prom_b.s:184304 `m_and_mi8 MB16, Disk_Flags, 0xfd` -- InputStream_RefillDone: the same instructions"
+  ]
+ },
+ {
+  "old": "sub_F7AA29",
+  "verdict": "name",
+  "new": "SongClear_InitFields",
+  "header": "Paint_SongClear's first step (slot T_F428B8): unless the previous screen was SONG CLEAR (0x1B), UI_StatusCode := 0xFF, the song field (0x0E02) := BStore_CurrentBank, DisplayListB_Stage := song + 1 and SongStore_LoadSongHeaderToDisplay;\nwhen it was and UI_StatusCode is 0x23 (job done), UI_Request := 0x0201 and (0x20A9) bit 0 cleared. Basis: caller + body + siblings (AdvanceDelay_InitFields).",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:201202 `call T_F428B8` -- Paint_SongClear, its first call after the callback reset",
+   "prom_b/wsa1_prom_b.s:92206 `T_F428B8:\tjp sub_F7AA29` -- the slot",
+   "prom_b/wsa1_prom_b.s:189686 `m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x1b` -- body: 0x1B is SONG CLEAR's screen id (prom_b/wsa1_prom_b.s:62821)",
+   "prom_b/wsa1_prom_b.s:189689 `ld a, (BStore_CurrentBank:16)` -- body: current song -> (0x0E02) at 189690, +1 -> DisplayListB_Stage at 189692",
+   "prom_b/wsa1_prom_b.s:189693 `call SongStore_LoadSongHeaderToDisplay` -- body",
+   "prom_b/wsa1_prom_b.s:189698 `ldw (UI_Request:16), 513` -- body: the status-0x23 arm"
+  ]
+ },
+ {
+  "old": "sub_F7AB3F",
+  "verdict": "name",
+  "new": "SongClear_ClearBankTrackMask",
+  "header": "Zeroes the +0x1E long -- the song's track mask, (0x360C) as BStore_Workspace_SaveToBank stores it -- in bank copy (0x0E02) at 0x610000 + n*0xC00; with (0x0E02) = 10 (ALL) in all ten bank copies, and (0x360C) itself.\nSongClear_LcdKeyRow4 runs it right after T_SongClear_ClearBank. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:189861 `call sub_F7AB3F` -- SongClear_LcdKeyRow4, after `call T_SongClear_ClearBank` (189860)",
+   "prom_b/wsa1_prom_b.s:189886 `m_cp_mi8 MB16, 0x0e02, 0x0a` -- body: 10 = all songs",
+   "prom_b/wsa1_prom_b.s:189889 `ld (13836:16), xwa` -- body: (0x360C) := 0 in the ALL arm",
+   "prom_b/wsa1_prom_b.s:189900 `add xhl, 30` -- body: bank base + n*0xC00 + 0x1E; zeroed at 189903, loop to 10 at 189906",
+   "prom_b/wsa1_prom_b.s:189920 `add xde, 30` -- body: single-song arm, zeroed at 189923",
+   "prom_b/wsa1_prom_b.s:146542 `ld xwa, (13836:16)` -- BStore_Workspace_SaveToBank: (0x360C) -> workspace +0x1E (0x60341E) before the bank copy"
+  ]
+ },
+ {
+  "old": "sub_F7AB9C",
+  "verdict": "name",
+  "new": "TrackClear_ResetSelectionOnEntry",
+  "header": "On a newly entered screen (UI_ScreenLatch != UI_ScreenLatch_Previous): the TRACK CLEAR selection mask (0x0DBE) := 0, (0x215E) := 0, (0x212E) |= 0x100 (the pair TrackClear_ReturnToStageZero also resets).\nPaint_TrackClear calls it (slot T_F428D0) at stage 0 before drawing. Basis: caller + body + RAM use.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:201562 `call T_F428D0` -- Paint_TrackClear, stage 0 only",
+   "prom_b/wsa1_prom_b.s:92212 `T_F428D0:\tjp sub_F7AB9C` -- the slot",
+   "prom_b/wsa1_prom_b.s:189941 `m_cp_rm MB16, UI_ScreenLatch_Previous, 1` -- body: latch changed?",
+   "prom_b/wsa1_prom_b.s:189943 `ldw (3518:16), 0` -- body: (0x0DBE) := 0",
+   "prom_b/wsa1_prom_b.s:109973 `m_xor_mr MW16, 0x0dbe, 3` -- TrackClear_ToggleTrackSelection: (0x0DBE) is the selection mask",
+   "prom_b/wsa1_prom_b.s:189997 `ldw (3518:16), 0` -- TrackClear_ReturnToStageZero does the same three stores (to 189999)"
+  ]
+ },
+ {
+  "old": "sub_F7AC9D",
+  "verdict": "name",
+  "new": "TrackMerge_InitFields",
+  "header": "Paint_TrackMerge's stage-0 init (slot T_F42938): sub_F7AFD8 reloads the three fields (0x0C13)/(0x0C14)/(0x0C15) and their display cells from the saved copies 0x603459..0x60345B, then the field cursor (0x0DBA) := 1.\nBasis: caller + body + siblings (MeasureDelete_InitFields).",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:202289 `call T_F42938` -- Paint_TrackMerge, stage 0 only",
+   "prom_b/wsa1_prom_b.s:92240 `T_F42938:\tjp sub_F7AC9D` -- the slot",
+   "prom_b/wsa1_prom_b.s:190081 `calr sub_F7AFD8` -- body: 190555..190560 load 0x603459.. into (0x0C13).. and DisplayListB_Stage",
+   "prom_b/wsa1_prom_b.s:190082 `ld (3514:16), 1` -- body: (0x0DBA) := 1, the field cell TrackMerge_SelectField1..3 set",
+   "prom_b/wsa1_prom_b.s:190580 `calr MeasureDelete_LoadSavedFields` -- MeasureDelete_InitFields, the same shape"
+  ]
+ },
+ {
+  "old": "sub_F7ACE6",
+  "verdict": "name",
+  "new": "TrackMerge_StepSelectedFieldUp",
+  "header": "(0x0C4E) := key code W, (0x0C4F) := W & 0x80, then the stepper for TRACK MERGE field (0x0DBA): 1 TrackMerge_StepSourceTrack1, 2 TrackMerge_StepSourceTrack2, 3 TrackMerge_StepDestTrack.\nSoftKeyCol5_TrackMerge_StageZero calls it for the UPPER switch (W bit 7 clear, so the steppers add); the lower one calls the identical TrackMerge_StageZero_SoftKeyCol5. Basis: caller + body + sibling (N0teChange_StepSelectedFieldUp).",
+  "basis": "caller + body + sibling",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:202391 `call T_F4294C` -- SoftKeyCol5_TrackMerge_StageZero, W bit 7 clear; bit 7 set calls T_TrackMerge_StageZero_SoftKeyCol5 (202388)",
+   "prom_b/wsa1_prom_b.s:92245 `T_F4294C:\tjp sub_F7ACE6` -- the slot",
+   "prom_b/wsa1_prom_b.s:190186 `ld (3151:16), w` -- body: (0x0C4F) := W & 0x80, the direction",
+   "prom_b/wsa1_prom_b.s:190187 `m_cp_mi8 MB16, 0x0dba, 0x01` -- body: field 1 -> 190189, field 2 -> 190194, field 3 -> 190199",
+   "prom_b/wsa1_prom_b.s:194807 `N0teChange_StepSelectedFieldUp:` -- the sibling of the same shape and naming"
+  ]
+ },
+ {
+  "old": "sub_F7AD42",
+  "verdict": "name",
+  "new": "TrackMerge_StepSourceTrack1",
+  "header": "Steps TRACK MERGE's first source track (0x0C13) by 1 in direction (0x0C4F) (0x80 = down) over 1..16 with wrap-around, skipping the second source (0x0C14); stores it to (0x0C13), the saved copy 0x603459 and DisplayListB_Stage.\nField 1 of TrackMerge_StepSelectedFieldUp / TrackMerge_StageZero_SoftKeyCol5; TrackMerge_LcdKeyRow2 passes (0x0C13) to TrackMerge_Execute as source (0x0C70). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:190189 `calr sub_F7AD42` -- TrackMerge_StepSelectedFieldUp, field 1 (also TrackMerge_StageZero_SoftKeyCol5)",
+   "prom_b/wsa1_prom_b.s:190249 `m_cp_mi8 MB16, 0x0c4f, 0x80` -- body: direction",
+   "prom_b/wsa1_prom_b.s:190255 `ld a, 1:opc` -- body: wrap 16 -> 1 (and 0 -> 16 at 190264..)",
+   "prom_b/wsa1_prom_b.s:190260 `m_cp_rm MB16, 0x0c14, 1` -- body: skip the other source track",
+   "prom_b/wsa1_prom_b.s:190275 `ld (3091:16), a` -- body: (0x0C13), 0x603459 (190276), DisplayListB_Stage (190277)",
+   "prom_b/wsa1_prom_b.s:190390 `ld (3184:16), a` -- TrackMerge_LcdKeyRow2: (0x0C13) -> (0x0C70), the first source of TrackMerge_Execute"
+  ]
+ },
+ {
+  "old": "sub_F7AD8F",
+  "verdict": "name",
+  "new": "TrackMerge_StepSourceTrack2",
+  "header": "Steps TRACK MERGE's second source track (0x0C14) by 1 in direction (0x0C4F) over 1..16 with wrap-around, skipping the first source (0x0C13); stores it to (0x0C14), the saved copy 0x60345A and DisplayListB_Stage+1.\nField 2 of TrackMerge_StepSelectedFieldUp / TrackMerge_StageZero_SoftKeyCol5; TrackMerge_LcdKeyRow2 passes it as source (0x0C71). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:190194 `calr sub_F7AD8F` -- TrackMerge_StepSelectedFieldUp, field 2",
+   "prom_b/wsa1_prom_b.s:190292 `ld a, (3092:16)` -- body: (0x0C14)",
+   "prom_b/wsa1_prom_b.s:190300 `m_cp_rm MB16, 0x0c13, 1` -- body: skip the first source",
+   "prom_b/wsa1_prom_b.s:190319 `ld (3092:16), a` -- body: store, 0x60345A (190320), DisplayListB_Stage+1 (190321)",
+   "prom_b/wsa1_prom_b.s:190392 `ld (3185:16), a` -- TrackMerge_LcdKeyRow2: (0x0C14) -> (0x0C71)"
+  ]
+ },
+ {
+  "old": "sub_F7ADDC",
+  "verdict": "name",
+  "new": "TrackMerge_StepDestTrack",
+  "header": "Steps TRACK MERGE's destination track (0x0C15) with SeqJob_StepValueInRange over 1..16 (clamped, no wrap); stores it to (0x0C15), the saved copy 0x60345B and DisplayListB_Stage+2.\nField 3 of TrackMerge_StepSelectedFieldUp / TrackMerge_StageZero_SoftKeyCol5; TrackMerge_LcdKeyRow2 passes it as the destination (0x0C72). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:190199 `calr sub_F7ADDC` -- TrackMerge_StepSelectedFieldUp, field 3",
+   "prom_b/wsa1_prom_b.s:190337 `ld l, 1:opc` -- body: range 1..16 (H = 16 at 190338)",
+   "prom_b/wsa1_prom_b.s:190339 `calr SeqJob_StepValueInRange` -- body",
+   "prom_b/wsa1_prom_b.s:190340 `ld (3093:16), a` -- body: (0x0C15), 0x60345B (190341)",
+   "prom_b/wsa1_prom_b.s:190394 `ld (3186:16), a` -- TrackMerge_LcdKeyRow2: (0x0C15) -> (0x0C72), TrackMerge_Execute's destination"
+  ]
+ },
+ {
+  "old": "sub_F7C30B",
+  "verdict": "name",
+  "new": "Quantize_StepWindow_StoreDisplayValue",
+  "header": "The tail of Quantize_StepWindow, split off by the 17-byte SongStore_Island_F7C2FA: DisplayListB_Stage+7 := A, the WINDOW value just stored in (0x0E05) -- the signed readout its header names (stage +7).\nReached only by Quantize_StepWindow's `jr` over the island. Basis: caller + body.",
+  "basis": "caller (branch) + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:193543 `ld (3589:16), a` -- Quantize_StepWindow: the stepped WINDOW value",
+   "prom_b/wsa1_prom_b.s:193544 `jr sub_F7C30B` -- Quantize_StepWindow: the only reference, stepping over the island",
+   "prom_b/wsa1_prom_b.s:193578 `ld (DisplayListB_Stage+7:16), a` -- body, then `ret`"
+  ]
+ },
+ {
+  "old": "sub_F7C3B2",
+  "verdict": "name",
+  "new": "S0ngC0py_InitFields",
+  "header": "Paint_S0ngC0py's init (slot T_F42A08): unless the previous screen was S0NG C0PY (0x2A), S0ngC0py_FromSong = S0ngC0py_ToSong = 1 with both 6-character names staged (SongStore_CopyBankSongName to 0x12F8 / 0x12FE),\nand S0ngC0py_FromTrack = S0ngC0py_ToTrack = 1, each with its DisplayListB_Stage cell. Basis: caller + body + siblings (AdvanceDelay_InitFields).",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:2632 `call T_F42A08` -- Paint_S0ngC0py, before its first display list",
+   "prom_b/wsa1_prom_b.s:92298 `T_F42A08:\tjp sub_F7C3B2` -- the slot",
+   "prom_b/wsa1_prom_b.s:193692 `m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x2a` -- body: 0x2A is S0NG C0PY (prom_b/wsa1_prom_b.s:62865)",
+   "prom_b/wsa1_prom_b.s:193695 `ld (S0ngC0py_FromSong:16), a` -- body: A = 1 (193694)",
+   "prom_b/wsa1_prom_b.s:193698 `call SongStore_CopyBankSongName` -- body: FROM name; A unchanged, so ToSong (193699), FromTrack (193703), ToTrack (193705) = 1"
+  ]
+ },
+ {
+  "old": "sub_F7C5CB",
+  "verdict": "name",
+  "new": "PanelWrite_OnEnter",
+  "header": "Paint_PanelWrite's first step (slot T_F42AB4): on a newly entered screen (latch changed) UI_StatusCode := 0xFF; otherwise, when UI_StatusCode is 0x23 (PanelWrite_Execute finished), UI_Request := 0x801A, back to screen 0x1A (EDIT).\nBasis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:204199 `call T_F42AB4` -- Paint_PanelWrite, before drawing",
+   "prom_b/wsa1_prom_b.s:92357 `T_F42AB4:\tjp sub_F7C5CB` -- the slot",
+   "prom_b/wsa1_prom_b.s:194065 `m_cp_rm MB16, UI_ScreenLatch_Previous, 1` -- body: latch changed?",
+   "prom_b/wsa1_prom_b.s:194067 `ld (UI_StatusCode:16), 255` -- body: fresh entry",
+   "prom_b/wsa1_prom_b.s:194072 `ldw (UI_Request:16), 32794` -- body: 0x801A = go to screen 0x1A, T_ScreenEnter_Edit (prom_b/wsa1_prom_b.s:62818)",
+   "prom_b/wsa1_prom_b.s:194109 `ld (UI_StatusCode:16), 35` -- PanelWrite_Execute leaves 0x23"
+  ]
+ },
+ {
+  "old": "sub_F7C5F6",
+  "verdict": "name",
+  "new": "PanelWrite_Execute",
+  "header": "The PANEL WRITE job: T_BStore_Workspace_StoreParamImage copies the parameter image 0x7600-0x7FFF into the song workspace, then UI_StatusCode := 0x23 and UI_Request := 0x40AB, the completion message the other song-edit jobs post.\nScreenButtonBody_PanelWrite runs it for key codes 6 and 23 (the latter the variant-1 +0x11 rewrite of 6). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:204229 `call T_F42ABC` -- ScreenButtonBody_PanelWrite, codes 6 / 23 (204224, 204226)",
+   "prom_b/wsa1_prom_b.s:92359 `T_F42ABC:\tjp sub_F7C5F6` -- the slot",
+   "prom_b/wsa1_prom_b.s:194108 `call T_BStore_Workspace_StoreParamImage` -- body (prom_a header: copies 0x7600-0x7FFF to 0x603600-0x603FFF)",
+   "prom_b/wsa1_prom_b.s:194109 `ld (UI_StatusCode:16), 35` -- body: done",
+   "prom_b/wsa1_prom_b.s:194110 `ldw (UI_Request:16), 16555` -- body: 0x40AB, as Quantize_LcdKeyRow3 / MeasureInsert_LcdKeyRow1 post after their jobs"
+  ]
+ },
+ {
+  "old": "sub_F7C606",
+  "verdict": "name",
+  "new": "Transp0se_InitFields",
+  "header": "Paint_Transp0se's stage-0 init (slot T_F42A38): unless the previous screen was TRANSP0SE (0x2B), sub_F7C62D stages the saved cells (0x0DF7)..(0x0DFC) into DisplayListB_Stage, the field cursor (0x0DF6) := 1 and UI_StatusCode := 0xFF;\nthen, when UI_StatusCode is 0x23 (job done), UI_Request := 0x801A, back to EDIT. Basis: caller + body + siblings (AdvanceDelay_InitFields).",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:205809 `call T_F42A38` -- Paint_Transp0se, stage 0 only",
+   "prom_b/wsa1_prom_b.s:92312 `T_F42A38:\tjp sub_F7C606` -- the slot",
+   "prom_b/wsa1_prom_b.s:194126 `m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x2b` -- body: 0x2B is TRANSP0SE (prom_b/wsa1_prom_b.s:62868)",
+   "prom_b/wsa1_prom_b.s:194128 `calr sub_F7C62D` -- body: cells to the display stage (194152..)",
+   "prom_b/wsa1_prom_b.s:194130 `ld (3574:16), a` -- body: (0x0DF6) := 1, the field Transp0se_StepSelectedFieldDown dispatches on",
+   "prom_b/wsa1_prom_b.s:194136 `ldw (UI_Request:16), 32794` -- body: back to screen 0x1A after status 0x23"
+  ]
+ },
+ {
+  "old": "sub_F7C853",
+  "verdict": "name",
+  "new": "N0teChange_InitFields",
+  "header": "Paint_N0teChange's stage-0 init (slot T_F42A88): unless the previous screen was N0TE CHANGE (0x2D), N0teChange_StageDisplayFields and the field cursor N0teChange_Field := 1 (DisplayListB_Stage+11).\nBasis: caller + body + siblings (AdvanceDelay_InitFields).",
+  "basis": "caller + body + siblings",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:2888 `call T_F42A88` -- Paint_N0teChange, stage 0 only",
+   "prom_b/wsa1_prom_b.s:92340 `T_F42A88:\tjp sub_F7C853` -- the slot",
+   "prom_b/wsa1_prom_b.s:194621 `m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x2d` -- body: 0x2D is N0TE CHANGE (prom_b/wsa1_prom_b.s:62874)",
+   "prom_b/wsa1_prom_b.s:194623 `call N0teChange_StageDisplayFields` -- body",
+   "prom_b/wsa1_prom_b.s:194625 `ld (N0teChange_Field:16), a` -- body: field cursor := 1"
+  ]
+ },
+ {
+  "old": "sub_F7CDA0",
+  "verdict": "name",
+  "new": "MeasureInsert_RepeatInsert",
+  "header": "MEASURE INSERT's repeat: when the repeat count (0x0E17) is non-zero and (0x0C8A) bit 3 clear, runs T_MeasureInsert_Execute (0x0E17) more times from the destination track (0x0C14) (0x7F = all with (0x0C35) bit 2),\nsource measure = the saved insert measure 0x60346D, destination (0x0C75) = it + count (0x0C77), advanced by the count after each status 0x23. MeasureInsert_LcdKeyRow1 calls it after a successful first insert. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:191892 `call sub_F7CDA0` -- MeasureInsert_LcdKeyRow1, only after T_MeasureInsert_Execute (191887) returned status 0x23 (191890)",
+   "prom_b/wsa1_prom_b.s:195759 `ld c, (3607:16)` -- body: loop count (0x0E17), the repeat field SeqJob_StepValueInRange steps",
+   "prom_b/wsa1_prom_b.s:195760 `ld a, (3092:16)` -- body: source track := destination track (0x0C14), or 0x7F (195761..)",
+   "prom_b/wsa1_prom_b.s:195766 `ld wa, (6304877:24)` -- body: 0x60346D, which MeasureInsert_StepStartMeasure stores (191802)",
+   "prom_b/wsa1_prom_b.s:195774 `call T_MeasureInsert_Execute` -- body",
+   "prom_b/wsa1_prom_b.s:195781 `m_add_rm MW16, 0x0c77, 0` -- body: destination += count; djnz at 195783"
+  ]
+ },
+ {
+  "old": "sub_F7CE04",
+  "verdict": "name",
+  "new": "MeasureC0py_RepeatCopy",
+  "header": "MEASURE COPY's repeat: when the repeat count (0x0E16) is non-zero and (0x0C8A) bit 3 clear, runs T_SongEdit_CopyMeasures (0x0E16) more times from the destination track (0x0C14) (0x7F = all with (0x0C35) bit 3),\nsource measure = the saved destination measure 0x603475, destination (0x0C75) = it + count (0x0C77), advanced by the count after each status 0x23. MeasureC0py_LcdKeyRow1 calls it after a successful first copy. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:192504 `call sub_F7CE04` -- MeasureC0py_LcdKeyRow1, only after T_SongEdit_CopyMeasures (192499) returned status 0x23",
+   "prom_b/wsa1_prom_b.s:195804 `ld c, (3606:16)` -- body: loop count (0x0E16)",
+   "prom_b/wsa1_prom_b.s:195805 `ld a, (3092:16)` -- body: source track := (0x0C14), or 0x7F with (0x0C35) bit 3 (195806)",
+   "prom_b/wsa1_prom_b.s:195811 `ld wa, (6304885:24)` -- body: 0x603475, which MeasureC0py_StepStartMeasure stores (192414)",
+   "prom_b/wsa1_prom_b.s:195819 `call T_SongEdit_CopyMeasures` -- body",
+   "prom_b/wsa1_prom_b.s:195828 `djnz8 c, -44` -- body: repeat; MeasureInsert_RepeatInsert is the same loop"
+  ]
+ },
+ {
+  "old": "sub_F7E39F",
+  "verdict": "name",
+  "new": "TrackClear_DrawTrackSelection",
+  "header": "HL = the TRACK CLEAR selection mask (0x0DBE): on layer 1 runs DL_F3A0D1 (an op-0E clear), then for tracks 0..15 sets DisplayListB_Stage = the track and draws record Data_F3A0D9 (T_DLB_Handler_Array8) when its bit is set,\nData_F3A0E4 (T_DLB_Handler_Array6) when clear; nothing per track when HL = 0. Paint_TrackClear calls it on both of its paths. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:201574 `ld hl, (3518:16)` -- Paint_TrackClear passes (0x0DBE) ...",
+   "prom_b/wsa1_prom_b.s:201575 `calr sub_F7E39F` -- ... and calls it (also 201590 on the stage-non-zero path)",
+   "prom_b/wsa1_prom_b.s:198759 `ld (LCD_CurrentLayer:16), 1` -- body: layer 1, DL_F3A0D1 at 198760",
+   "prom_b/wsa1_prom_b.s:198775 `ld (DisplayListB_Stage:16), c` -- body: track index",
+   "prom_b/wsa1_prom_b.s:198780 `and hl, wa` -- body: track's bit",
+   "prom_b/wsa1_prom_b.s:198784 `call T_DLB_Handler_Array8` -- body: set -> Data_F3A0D9; clear -> Data_F3A0E4 / Array6 (198787-198788)",
+   "prom_b/wsa1_prom_b.s:109973 `m_xor_mr MW16, 0x0dbe, 3` -- TrackClear_ToggleTrackSelection toggles the same mask"
+  ]
+ },
+ {
+  "old": "sub_F7E430",
+  "verdict": "name",
+  "new": "AfterT0uchSetting_EraseRecordValue",
+  "header": "Runs DL_F3BB8D, one op-0x1B record = SWI7 LCD_Svc_1B_EraseRect over (184,130)-(248,138): erases the AFTER TOUCH RECORD value cell.\nScreenButton_AfterT0uchSetting calls it for codes 10/11 after T_AfterT0uchSetting_SetRecordEnable and before Draw_AfterTouchRecord redraws DISABLE / ENABLE. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:196582 `call sub_F7E430` -- ScreenButton_AfterT0uchSetting, between T_AfterT0uchSetting_SetRecordEnable (196581) and Draw_AfterTouchRecord (196585)",
+   "prom_b/wsa1_prom_b.s:198839 `ld xiy, DL_F3BB8D` -- body: the list, ending at DLTable_DisableEnable (198840)",
+   "prom_b/wsa1_prom_b.s:83626 `.byte 0x1B, 0x0A` -- DL_F3BB8D: op 1B, words 0xB8, 0x82, 0xF8, 0x8A",
+   "prom_a/wsa1_prom_a.s:29088 `LCD_Svc_1B_EraseRect:` -- SWI7 service 0x1B clears the box"
+  ]
+ },
+ {
+  "old": "sub_F7E750",
+  "verdict": "refuse",
+  "new": "ButtonTable_TrackAssignPresets_Nop13",
+  "header": "Entry [13] (slot 0x0D) of ButtonTable_TrackAssignPresets: `bit 7,W` and both branches reach the same `ret`, so it does nothing -- the shape of this screen's other empty key handlers (SoftKeyCol1/4/5/7/8, LcdKeyRow4/5).\nWhich key, if any, reaches slot 0x0D is still not established (round 12's reasoning above); the name claims the slot and the empty body only. Basis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:197420 `.long sub_F7E750\t; [13]` -- ButtonTable_TrackAssignPresets entry 13",
+   "prom_b/wsa1_prom_b.s:200221 `bit 7, w` -- body; jr nz / jr to the same `ret`",
+   "prom_b/wsa1_prom_b.s:200191 `bit 7, w` -- LcdKeyRow5_TrackAssignPresets, the same empty body",
+   "prom_b/wsa1_prom_b.s:200276 `ButtonTable_TrackAssignPresets_Nop16:` -- the table's naming of its empty entries"
+  ],
+  "why_refused": "reviewer: the source header deliberately leaves these empty button-table slots unnamed ('NO NAME'); the proposal claimed only the slot and the empty body",
+  "review": "refused by the reviewer (proposed ButtonTable_TrackAssignPresets_Nop13)"
+ },
+ {
+  "old": "sub_F7E758",
+  "verdict": "refuse",
+  "new": "ButtonTable_TrackAssignPresets_Nop14",
+  "header": "Entry [14] (slot 0x0E) of ButtonTable_TrackAssignPresets: `bit 7,W` and both branches reach the same `ret`, so it does nothing.\nNo producer of code 0x0E is known (round 12's reasoning above); the name claims the slot and the empty body only. Basis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:197421 `.long sub_F7E758\t; [14]` -- ButtonTable_TrackAssignPresets entry 14",
+   "prom_b/wsa1_prom_b.s:200244 `bit 7, w` -- body; jr nz / jr to the same `ret`",
+   "prom_b/wsa1_prom_b.s:200276 `ButtonTable_TrackAssignPresets_Nop16:` -- the table's naming of its empty entries"
+  ],
+  "why_refused": "reviewer: the source header deliberately leaves these empty button-table slots unnamed ('NO NAME'); the proposal claimed only the slot and the empty body",
+  "review": "refused by the reviewer (proposed ButtonTable_TrackAssignPresets_Nop14)"
+ }
+]

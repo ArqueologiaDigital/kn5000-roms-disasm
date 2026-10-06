@@ -2521,7 +2521,7 @@ ROWS = [
      "bit 1 cleared and T_DiskApi_CloseFile_Call; called from sub_F7669D.  Basis: body."),
     ("F732C7", "BStore_PutByteAtCursorNoSave",
      "BStore_PutByteAtCursor's work without saving XHL: SongStore_SeekBlock_Copy for BStore_CursorBlock, then A to\n"
-     "BStore_CursorBlockAddr + the low byte of BStore_CursorOffset; called from sub_F73261 and sub_F7328F.\n"
+     "BStore_CursorBlockAddr + the low byte of BStore_CursorOffset; called from SmfSplit_PutEventBytes and SmfSplit_PutMarkOnAllTracks.\n"
      "Basis: body, compared with BStore_PutByteAtCursor."),
     ("F73827", "BStore_WriteCursorByteNoSave",
      "BStore_WriteCursorByte's work without saving XIX/WA: A to BStore_HeapBase + (BStore_CursorBlock - 1) * 0x100 +\n"

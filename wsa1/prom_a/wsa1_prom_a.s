@@ -1837,7 +1837,7 @@
 	.set T_MeasureC0py_StepFieldDown,                                                                      0x00F429FC
 	.set T_MeasureC0py_ReturnToStageZero,                                                                      0x00F42A00
 	.set T_MeasureC0py_LcdKeyRow1,                                                                      0x00F42A04
-	.set T_F42A08,                                                                      0x00F42A08
+	.set T_S0ngC0py_InitFields,                                                                      0x00F42A08
 	.set T_S0ngC0py_StageZero_SoftKeyCol2,                                                                      0x00F42A10
 	.set T_S0ngC0py_StageZero_SoftKeyCol1,                                                                      0x00F42A14
 	.set T_S0ngC0py_StageZero_SoftKeyCol4,                                                                      0x00F42A18
@@ -1856,7 +1856,7 @@
 	.set T_AdvanceDelay_StepFieldDown,                                                                      0x00F42A7C
 	.set T_AdvanceDelay_LcdKeyRow3,                                                                      0x00F42A80
 	.set T_AdvanceDelay_ReturnToStageZero,                                                                      0x00F42A84
-	.set T_F42A88,                                                                      0x00F42A88
+	.set T_N0teChange_InitFields,                                                                      0x00F42A88
 	.set T_N0teChange_OnLeave,                                                                      0x00F42A8C
 	.set T_N0teChange_SelectField1,                                                                      0x00F42A90
 	.set T_N0teChange_SelectField2,                                                                      0x00F42A94
@@ -2629,7 +2629,7 @@ BlinkArgPtrs_F8024D:
 Paint_S0ngC0py:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F80261  1d 80 2e f4
 	call PromB_LCD_ScreenRedraw_Begin                                        ; F80265  1d d9 e2 f7
-	call T_F42A08                                        ; F80269  1d 08 2a f4
+	call T_S0ngC0py_InitFields                                        ; F80269  1d 08 2a f4
 	ld XIY,DL_S0ngC0pyFromToSongSongOk                   ; F8026D  45 80 bf f3 00
 	ld XIX,DL_FromToSongNoTrAllSongNoTrAll               ; F80272  44 f8 bf f3 00
 	call T_DisplayList_Run                               ; F80277  1d f0 17 f4
@@ -2885,7 +2885,7 @@ Paint_N0teChange:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F80439  1d 80 2e f4
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00                          ; F8043D  c1 7e 20 3f 00
 	jr nz, .LF8047B                                      ; F80442  6e 37
-	call T_F42A88                                        ; F80444  1d 88 2a f4
+	call T_N0teChange_InitFields                                        ; F80444  1d 88 2a f4
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80448  c1 75 20 3e 01
 	ldw (PanelDial_DownButton:16), 0x0484                              ; F8044D  f1 9b 20 02 84 04
 	ldw (0x2666:16), 0xffff                              ; F80453  f1 66 26 02 ff ff
@@ -2999,7 +2999,7 @@ LcdKeyRow2_N0teChange_StageZero:
 .LF80548:
 	ret                                                  ; F80548  0e
 ; N0teChange_DrawFieldCursor -- clear LCD layer 1, then fill the box of the NOTE CHANGE field (0x1301) selects
-; Evidence: (0x2540)=1; site 0xF8055B runs DL_F39551-0xF39559 (op 0E ClearColumns, whole layer); then DLB_Handler_Array8 (T_F4181C) on op-03 record 0xF3B05A: (0x1301)&7 indexes the boxes at 0xF3B065, swi 5 FillRect.  (0x1301) is written with (0x0DED) (T_F42A88 = prom_b 0xF7C853).
+; Evidence: (0x2540)=1; site 0xF8055B runs DL_F39551-0xF39559 (op 0E ClearColumns, whole layer); then DLB_Handler_Array8 (T_F4181C) on op-03 record 0xF3B05A: (0x1301)&7 indexes the boxes at 0xF3B065, swi 5 FillRect.  (0x1301) is written with (0x0DED) (T_N0teChange_InitFields = prom_b 0xF7C853).
 ; Callers: the row-key handlers of ButtonTable_N0teChange_StageZero at 0xF8051F-0xF805AB.
 N0teChange_DrawFieldCursor:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F80549  f1 40 25 00 01

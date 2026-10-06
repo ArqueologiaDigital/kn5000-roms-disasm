@@ -144,7 +144,7 @@ produces a confident wrong name the byte gate cannot see:
 `DL-RUN` is the trap: the routine's shape is `ld XIY,<start> / ld XIX,<end> /
 call <a display-list runner>`, and the "string" is where the LIST ENDS, not
 anything the routine says. `DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit`, `Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack`, `LCD_ClearCurrentLayer` and
-`sub_F7E430` are all in that column and were all deliberately left unnamed.
+`AfterT0uchSetting_EraseRecordValue` are all in that column and were all deliberately left unnamed.
 
 ### `prom_b_effect_param_map.py` — ★ EffectNames entry k IS algorithm k
 **"Is entry k of EffectNames_F147AC the name of DSP effect algorithm k?"** Yes.
@@ -814,7 +814,7 @@ one-span-extent/span-count/summed reference bound per run.
 `--selftest` asserts on the LAST slot of the top run (raw `jp` opcode, target and
 `.incbin` membership, all re-derived from the ROM), two ordering invariants, that
 the three runs this tree has already converted (`T_F42770` block store,
-`T_F42880`/`T_BStore_AppendBytes_Join3_Veneer` allocator and song-store commands) are ABSENT, and that a
+`T_BStore_FreeList_Init_Veneer`/`T_BStore_AppendBytes_Join3_Veneer` allocator and song-store commands) are ABSENT, and that a
 known-unconverted run (`T_BStore_StepCursorOneByte`) is PRESENT.
 ⚠ Its first draft hard-coded the then-top run and would have begun FAILING the
 moment that run was converted — a self-test that breaks on success is the

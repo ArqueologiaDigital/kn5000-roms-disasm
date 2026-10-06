@@ -413,7 +413,7 @@ def selftest():
     v, d = judge(0xF7C6E6, 0xF7C6DA)
     check("0xF7C6DA (operand, the F2 defect) verdicts OFF-BY-1", v, "OFF-BY-1")
     check("  ...and it names the correct address", "0xF7C6D9" in d, True)
-    # 5. a transfer control: T_F42880's slot jp is a real call target
+    # 5. a transfer control: T_BStore_FreeList_Init_Veneer's slot jp is a real call target
     tt = thunk_target(0xF42880)
     check("thunk slot 0xF42880 is a jp", tt is not None, True)
     # 6. a slot that is not a jp must not be followed
