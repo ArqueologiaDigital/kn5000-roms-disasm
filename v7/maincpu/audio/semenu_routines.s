@@ -2321,7 +2321,7 @@ SeMenu_GetWriteMemSlot:
 SeMenu_SetWriteMemSlot:
 	stb_d8	(0x6ad), a
 	ret
-SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5:
+SeMenu_SetNameBufferChar:
 	cp	a, 15
 	ret	ugt
 	extz	wa
@@ -2393,7 +2393,7 @@ SeMenu_CopyWriteUpdate_Step3_Code_3_Helper7_Skip:
 	ld	a, (xde+wa)
 	ld	(xbc), a
 	ret
-SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8:
+SeMenu_CharToNameCharIndex:
 	cp	a, 130
 	jr	c, SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8_Skip2
 	ld	(xbc), 0

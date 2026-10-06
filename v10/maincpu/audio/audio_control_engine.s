@@ -3940,7 +3940,9 @@ UIState_ProcessExtendedMode:
 UIState_ProcessExtendedMode_Cases:	; the switch's base: case k is at +UIState_ProcessExtendedMode_CaseTable[k]
 	orw	(36670:16), 515
 	ret
-UIState_ProcessExtendedMode_Case5:	; cases 5, 6
+; UIState_ProcessExtendedMode_OnStartFillIntroBytes: Style record bytes 5/6 (START/STOP, SYNCHRO & BREAK, FILL IN,
+;   INTRO & ENDING bits) changed: request update bits 2-7 of 0x8F3E.
+UIState_ProcessExtendedMode_OnStartFillIntroBytes:	; cases 5, 6
 	orw	(36670:16), 252
 	ret
 UIState_ProcessExtendedMode_Case3:
@@ -3952,12 +3954,18 @@ UIState_ProcessExtendedMode_Case3:
 UIState_ProcessExtendedMode_Skip:
 	orw	(36670:16), 256
 	ret
-UIState_ProcessExtendedMode_Case4:
+; UIState_ProcessExtendedMode_OnTechniChordByte: Style record byte 4 (TECHNI CHORD, bit 6, plus a 3-bit field)
+;   changed: request update bit 4 of 0x8F42.
+UIState_ProcessExtendedMode_OnTechniChordByte:
 	orw	(36674:16), 16
 	ret
-UIState_ProcessExtendedMode_Case7:
+; UIState_ProcessExtendedMode_OnVariationByte: Style record byte 7 (VARIATION, bits 4-5) changed: request update bit 9
+;   of 0x8F3E.
+UIState_ProcessExtendedMode_OnVariationByte:
 	orw	(36670:16), 512
-UIState_ProcessExtendedMode_Case1:	; cases 1, 2
+; UIState_ProcessExtendedMode_IgnoreBytes1And2: Style record bytes 1 and 2 changed: nothing to update (bare ret, also
+;   the tail of the byte-7 case).
+UIState_ProcessExtendedMode_IgnoreBytes1And2:	; cases 1, 2
 	ret
 UIStateEvt_NullHandler:
 	ret
@@ -5269,7 +5277,7 @@ ExtData_ToneParam_AltBody_Case7:
 ; ExtData_ToneParam_AltBody_OnTempo: Offset 8 of style/tempo record 0x48 (0xFC5A): stores a changed tempo into
 ;   0xFC62/0xFC63, posts it and calls SeqTimer_UpdateTempoReg.
 ExtData_ToneParam_AltBody_OnTempo:
-	calr	ExtData_ToneParam_AltBody_Helper2
+	calr	ExtData_SetTempoIfChanged
 ExtData_ToneParam_AltBody_Case1:	; cases 1, 2
 	ret
 ExtData_ToneParam_AltBody_Join:
@@ -5326,7 +5334,13 @@ ExtData_ToneParam_AltBody_Join4:
 	ldw	wa, 48
 	calr	ExtData_SetTlvField
 	jrl	SwbtWr_FlushAndAppendParams
-ExtData_ToneParam_AltBody_Helper2:
+; ExtData_SetTempoIfChanged: Stores the received two-byte value (0x9130, 0x9131) as the tempo word at 0xFC62/0xFC63 of
+;   the style/tempo record 0xFC5A when it differs from what is there, posts both bytes (the current param with DATA3 =
+;   255, then param 9 with DATA3 = 1, via SwbtWr_FlushAndAppendParams) and recomputes the tempo timer
+;   (SeqTimer_UpdateTempoReg); XIZ preserved. Basis: callers + body -- ExtData_ToneParam_AltBody_OnTempo (offset 8 of
+;   record 0x48, header: 'stores a changed tempo into 0xFC62/0xFC63, posts it and calls SeqTimer_UpdateTempoReg') is
+;   only this call.
+ExtData_SetTempoIfChanged:
 	push	xiz
 	lda	xiz, (0xfc5a:16)
 	lda	xbc, (xiz+8)

@@ -6783,7 +6783,7 @@ SeMenu_CopyWriteUpdate_Data_Skip2:
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp)
 	extz	bc
 	ld	wa, 1:i3
@@ -6825,7 +6825,7 @@ SeMenu_CopyWriteUpdate_Data_Join3:
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp)
 	extz	bc
 	ld	wa, 1:i3
@@ -6864,7 +6864,7 @@ SeMenu_CopyWriteUpdate_Data_Join4:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp+2)
 	extz	bc
 	ld	wa, 1:i3
@@ -6944,7 +6944,7 @@ SeMenu_CopyWriteUpdate_Data_Skip3:
 	ld	a, (xwa+bc)
 	extz wa
 	lda	xbc, (xsp+4)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 1:i3
@@ -7016,7 +7016,7 @@ SeMenu_CopyWriteUpdate_Data_Skip3_Skip:
 	ld	a, (xwa+bc)
 	extz wa
 	lda	xbc, (xsp+4)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 1:i3
@@ -7052,11 +7052,11 @@ SeMenu_CopyWriteUpdate_Data_Skip3_Join:
 	extz	wa
 	ld	c, (xde)
 	extz	bc
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5
+	call	SeMenu_SetNameBufferChar
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp)
 	extz	bc
 	ld	wa, 1:i3
@@ -7100,7 +7100,7 @@ SeMenu_CopyWriteUpdate_Data_Epilogue4_Join3:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5
+	call	SeMenu_SetNameBufferChar
 	pushw	1
 	pushw	63
 	call	SeMenu_ShowConfirmDialog
@@ -7146,7 +7146,7 @@ SeMenu_CopyWriteUpdate_Data_Join6:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5
+	call	SeMenu_SetNameBufferChar
 	pushw	1
 	pushw	63
 	call	SeMenu_ShowConfirmDialog
@@ -7178,7 +7178,7 @@ SeMenu_CopyWriteUpdate_Data_Epilogue4_Join5:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5
+	call	SeMenu_SetNameBufferChar
 	pushw	1
 	pushw	63
 	call	SeMenu_ShowConfirmDialog
@@ -7187,7 +7187,7 @@ SeMenu_CopyWriteUpdate_Data_Epilogue9_Epilogue:
 	inc	6, xsp
 	ret
 ; SeWrtSnd_ClearName: Name-entry screen (0x3F) of the WRITE SOUND title: fills the 16-character name buffer at 0x20BF3
-;   with spaces (SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5, C = 32, positions 0..15), sets page params 0 (cursor
+;   with spaces (SeMenu_SetNameBufferChar, C = 32, positions 0..15), sets page params 0 (cursor
 ;   position) and 1 (character) to 0 and redraws fields 0 and 1 of screen 0x3F (SeMenu_ShowConfirmDialog). Basis:
 ;   callers + body -- its only caller is the A = 0 branch of entry 8 (side row 1) of SeWrtSndTitleFunc_SwitchHandlers, the
 ;   switch-handler table SeWrtSndTitleFunc_DispatchSwitch indexes; that handler has no label and follows
@@ -7200,7 +7200,7 @@ SeMenu_CopyWriteUpdate_Data_Epilogue9_Loop:
 	ldto_berp	a, 251
 	extz	wa
 	ldw	bc, 32
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5
+	call	SeMenu_SetNameBufferChar
 	inc1b_erp 251
 	cp_erpb 251, 15
 	jr ule, SeMenu_CopyWriteUpdate_Data_Epilogue9_Loop
@@ -7293,7 +7293,7 @@ SeMenu_CopyWriteUpdate_Helper_Skip4:
 	lda	xwa, (xsp+10)
 	lda	xbc, (xsp+28)
 	ldw	de, 16
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper2
+	call	SeMenu_CopyNameChars
 	ldib_erp 250, 0
 	cpib_erp 249, 0
 	jr ule, SeMenu_CopyWriteUpdate_Helper_Skip5
@@ -7320,7 +7320,7 @@ SeMenu_CopyWriteUpdate_Helper_Skip5:
 	add	xbc, xde
 	ldto_berp e, 248
 	extz	de
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper2
+	call	SeMenu_CopyNameChars
 	ldto_berp a, 249
 	addb_erp a, 248
 	ldfr_berp a, 250
@@ -7352,7 +7352,7 @@ SeMenu_CopyWriteUpdate_Helper_Skip6:
 	ld	a, (xbc+wa)
 	extz wa
 	lda	xbc, (xsp+8)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp+8)
 	extz	bc
 	ld	wa, 1:i3

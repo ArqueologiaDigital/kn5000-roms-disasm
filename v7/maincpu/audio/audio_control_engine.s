@@ -5048,7 +5048,7 @@ ExtData_ToneParam_AltBody_Case5:	; cases 5, 6
 ExtData_ToneParam_AltBody_Case7:
 	jrl	ExtData_ToneParam_AltBody_Join4
 ExtData_ToneParam_AltBody_Case8:
-	calr	ExtData_ToneParam_AltBody_Helper2
+	calr	ExtData_SetTempoIfChanged
 ExtData_ToneParam_AltBody_Case1:	; cases 1, 2
 	ret
 ExtData_ToneParam_AltBody_Join:
@@ -5105,7 +5105,7 @@ ExtData_ToneParam_AltBody_Join4:
 	ldw	wa, 48
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	jrl	SwbtWr_FlushAndAppendParams
-ExtData_ToneParam_AltBody_Helper2:
+ExtData_SetTempoIfChanged:
 	push	xiz
 	lda	xiz, (0xfc5a:16)
 	lda	xbc, (xiz+8)

@@ -1037,13 +1037,19 @@ UIState_DisplayUpdate_BitmapHandler:
 	jr	z, UIState_DisplayUpdate_BitmapHandler_Return
 	res	0, (0x966c:16)
 	ld	(0x966d:16), 128
-	calr	UIState_DisplayUpdate_BitmapHandler_Helper
+	calr	MidiRx_BuildChannelPartLists
 	ld	(0x966d:16), 64
-	calr	UIState_DisplayUpdate_BitmapHandler_Helper
+	calr	MidiRx_BuildChannelPartLists
 	call	VoiceChannels_InitPanFromPreset
 UIState_DisplayUpdate_BitmapHandler_Return:
 	ret
-UIState_DisplayUpdate_BitmapHandler_Helper:
+; MidiRx_BuildChannelPartLists: Builds the receive-channel -> part lists for selector (0x966D): 0x80 -> offset table
+;   0x94F4 and lists 0x9514, 0x40 -> 0x9594 / 0x95B4. Fills the 32 offsets with 0xFF and clears the lists, then for
+;   each channel 0-31 collects the parts 0-31 (records (0x90F2)[p], 0xFFFFFFFF = absent) whose byte +13 has that
+;   channel in bits 0-4 and the selector bit clear, stores {count, part...} and its offset. Basis: callers + body --
+;   UIState_DisplayUpdate_BitmapHandler runs it for 0x80 and 0x40; MidiRx_ChannelMsgDispatch reads the 0x80 pair this
+;   way.
+MidiRx_BuildChannelPartLists:
 	ld	xix, 0x94f4
 	cp	(0x966d:16), 128
 	jr	z, UIState_DisplayUpdate_BitmapHandler_Skip
@@ -10084,7 +10090,13 @@ MidiPkt_SetXferLengthFromMsg:
 	ld	(xwa+8), xiz
 	pop	xiz
 	ret
-MidiSeq_ClearSyncFlag_Helper:
+; MidiPkt_SetXferTotal_All: Fills the transfer descriptor at XWA for the send-everything dump: start 0xF980 (+0), and
+;   adds to the length (+8, not cleared first) the panel ((0xFFBE - 0xF980) + 0x12CB2, as MidiPkt_SetXferTotal_Panel),
+;   the used accompaniment-block size, the used sequencer-event size + 0x5800, then 0x72AA and the used style-image
+;   size, each of those two only when AccWrap_ReturnZero(1 / 3) != 0xFFFF (that stub always returns 0, so both are
+;   always added); +4 = +0 + length. Basis: callers + body -- SysEx_SendAllData (case 0, ALL, of SysEx_InitiateSend)
+;   points the send-side total 0xBCBC with it; its header lists exactly these groups.
+MidiPkt_SetXferTotal_All:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
@@ -10420,7 +10432,7 @@ MidiPkt_GetUsedSize_StyleImage:
 	push	xhl
 	push	xix
 	push	xiz
-	call	SeqVoice_StoreEntryDone_Helper
+	call	AccPatch_ClearModeAndInitSlotChain_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -10458,7 +10470,7 @@ MidiPkt_GetUsedSize_AccompBlocks:
 	push	xhl
 	push	xix
 	push	xiz
-	call	SeqVoice_StoreEntryDone_Helper2
+	call	Voice_RefreshBankData_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -11062,7 +11074,7 @@ MidiSeq_PartConfigure_Data:
 	ldw	wa, 238
 	jp	SoundCtrl_SendCommand
 ; SysEx_SendAllData: Case 0 (ALL) of SysEx_InitiateSend: with bit 3 of 0xBD18 set, points the send-side total
-;   descriptor 0xBCBC at the size of everything (MidiSeq_ClearSyncFlag_Helper: panel + 0x1E0000 area + accompaniment
+;   descriptor 0xBCBC at the size of everything (MidiPkt_SetXferTotal_All: panel + 0x1E0000 area + accompaniment
 ;   block area + style image + sequencer, the gated groups only when present) and sends every group in turn
 ;   (MidiPkt_ArpConfigChain_Data: panel, 0x1E0000 area, 0x1E8800 area, style image, sequencer, each closed by F0 50 27
 ;   7E F7), then clears bit 3. Basis: callers + body -- SysEx_InitiateSend jumps through SysExSend_SwitchOffsets;
@@ -11071,7 +11083,7 @@ MidiSeq_PartConfigure_Data:
 SysEx_SendAllData:
 	set	3, (0xbd18:16)
 	ld	xwa, 0xbcbc
-	call	MidiSeq_ClearSyncFlag_Helper
+	call	MidiPkt_SetXferTotal_All
 	calr	MidiPkt_ArpConfigChain_Data
 	res	3, (0xbd18:16)
 	ret
@@ -13613,19 +13625,23 @@ SysEx_ResetAndReturn:
 SysEx_DispatchCalls_Data:
 	call	SysEx_ResetAndReturn_Helper
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case2:
+; SysEx_InitiateSend_SendSequencer: Code 2 = SEQUENCER: size the whole sequencer transfer
+;   (MidiPkt_SetXferTotal_SeqData) and send it.
+SysEx_InitiateSend_SendSequencer:
 	call	SysEx_ResetAndReturn_Helper2
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case3:
+SysEx_InitiateSend_SendSoundMemory:
 	call	SysEx_ResetAndReturn_Helper3
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case4:
+SysEx_InitiateSend_SendPanelMemory:
 	call	SysEx_ResetAndReturn_Helper4
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case5:
+; SysEx_InitiateSend_SendNoData: Code 5: no EXCLUSIVE list row maps to it; its helper is a bare ret, so only the
+;   closing SysEx_FinishBulkSend runs.
+SysEx_InitiateSend_SendNoData:
 	call	SysEx_ResetAndReturn_Helper5
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case6:
+SysEx_InitiateSend_SendMspUser:
 	call	SysEx_ResetAndReturn_Helper6
 	jr	SysEx_InitiateSend_Join
 	ret

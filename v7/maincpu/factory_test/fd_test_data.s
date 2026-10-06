@@ -381,11 +381,11 @@ TitleFunc_LifecycleDispatch_CaseTable:
 	.short	TitleFunc_Return - TitleFunc_LifecycleTable
 TestTitleFunc_CaseTable:
 	.short	TitleFunc_ActionDispatch - TitleFunc_ActionDispatch
-	.short	TestTitleFunc_Case3 - TitleFunc_ActionDispatch
-	.short	TestTitleFunc_Case4 - TitleFunc_ActionDispatch
-	.short	TestTitleFunc_Case5 - TitleFunc_ActionDispatch
-	.short	TestTitleFunc_Case6 - TitleFunc_ActionDispatch
-	.short	TestTitleFunc_Case7 - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_OnTitleOld - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_OnTitleInactivate - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_OnTitleActivate - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_OnTitleInterrupt - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_OnTitleInterruptReturn - TitleFunc_ActionDispatch
 ListDir2_Entry_Str_A_HAMA_LSW:	.byte	0x41, 0x3a, 0x5c, 0x48
 	.byte	0x41, 0x4d, 0x41, 0x5c, 0x2a, 0x2e, 0x4c, 0x53
 	.byte	0x57, 0x00

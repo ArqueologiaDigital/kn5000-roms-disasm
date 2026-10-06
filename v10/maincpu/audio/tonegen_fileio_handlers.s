@@ -1129,35 +1129,37 @@ CtrlPanel_IndicatorJumpTable:
 ; DSP config parameter handler C
 DSPCfg_Param_CaseC:
 	ret
-CtrlPanel_IndicatorJumpTable_Case4:
+; CtrlPanel_IndicatorJumpTable_SaveLanguage: Section 4: FlashWrite the 2-byte language setting (RAM 0x340E4) to Custom
+;   Data Flash 0x3D3400 (HelpFlashFunc, EVT_KUBO_FLASH_WRITE).
+CtrlPanel_IndicatorJumpTable_SaveLanguage:
 	ld	xwa, 0x3d3400
 	push	xwa
 	ld	wa, 1:i3
 	ld	xbc, 0x0340e4
 	ld	de, 2:i3
 	jr	CtrlPanel_IndicatorJumpTable_Join
-CtrlPanel_IndicatorJumpTable_Case5:
+CtrlPanel_IndicatorJumpTable_SaveDisplayTime:
 	ld	xwa, 0x3d3410
 	push	xwa
 	ld	wa, 1:i3
 	ld	xbc, 0x0340e6
 	ldw	de, 12
 	jr	CtrlPanel_IndicatorJumpTable_Join
-CtrlPanel_IndicatorJumpTable_Case6:
+CtrlPanel_IndicatorJumpTable_SaveDiskSetup:
 	ld	xwa, 0x3d3420
 	push	xwa
 	ld	wa, 1:i3
 	ld	xbc, 0x0340f2
 	ld	de, 4:i3
 	jr	CtrlPanel_IndicatorJumpTable_Join
-CtrlPanel_IndicatorJumpTable_Case7:
+CtrlPanel_IndicatorJumpTable_SaveParamLoadOptions:
 	ld	xwa, 0x3d3430
 	push	xwa
 	ld	wa, 1:i3
 	ld	xbc, 0x0340f6
 	ld	de, 4:i3
 	jr	CtrlPanel_IndicatorJumpTable_Join
-CtrlPanel_IndicatorJumpTable_Case8:
+CtrlPanel_IndicatorJumpTable_SaveWallpaper:
 	ld	xwa, 0x3d3440
 	push	xwa
 	ld	wa, 1:i3
@@ -1182,19 +1184,21 @@ Audio_DispatchCommand:
 ; DSP config parameter handler D
 DSPCfg_Param_CaseD:
 	ret
-Audio_DispatchCommand_Case4:
+Audio_DispatchCommand_LoadHelpLanguage:
 	pushw	2
 	ld	xwa, 0x3d3400
 	push	xwa
 	ld	xwa, 0x0340e4
 	jr	Audio_DispatchCommand_Join
-Audio_DispatchCommand_Case5:
+Audio_DispatchCommand_LoadDispTimeSet:
 	pushw	12
 	ld	xwa, 0x3d3410
 	push	xwa
 	ld	xwa, 0x0340e6
 	jr	Audio_DispatchCommand_Join
-Audio_DispatchCommand_Case6:
+; Audio_DispatchCommand_LoadSetupOptions: Option block +0x20 (4 bytes) -> 0x340F2; the `.asciz "@ 4="` before `push
+;   xwa` is the instruction ld xwa, 0x3d3420 spelled as text.
+Audio_DispatchCommand_LoadSetupOptions:
 	pushw	4
 	.asciz "@ 4="
 	push	xwa
@@ -1202,14 +1206,14 @@ Audio_DispatchCommand_Case6:
 Audio_DispatchCommand_Join:
 	push	xwa
 	jr	Audio_DispatchCommand_Join2
-Audio_DispatchCommand_Case7:
+Audio_DispatchCommand_LoadParaLoadOptions:
 	pushw	4
 	ld	xwa, 0x3d3430
 	push	xwa
 	pushw	3
 	pushw	0x40f6
 	jr	Audio_DispatchCommand_Join2
-Audio_DispatchCommand_Case8:
+Audio_DispatchCommand_LoadWallSetOptions:
 	pushw	6
 	ld	xwa, 0x3d3440
 	push	xwa

@@ -6773,7 +6773,7 @@ Scoop_SoundEditorData_Helper_Skip28:
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp)
 	extz	bc
 	ld	wa, 1:i3
@@ -6815,7 +6815,7 @@ Scoop_SoundEditorData_Helper_Join18:
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp)
 	extz	bc
 	ld	wa, 1:i3
@@ -6854,7 +6854,7 @@ Scoop_SoundEditorData_Helper_Join19:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp+2)
 	extz	bc
 	ld	wa, 1:i3
@@ -6934,7 +6934,7 @@ Scoop_SoundEditorData_Helper_Skip29:
 	ld	a, (xwa+bc)
 	extz	wa
 	lda	xbc, (xsp+4)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 1:i3
@@ -7006,7 +7006,7 @@ Scoop_SoundEditorData_Helper_Skip30:
 	ld	a, (xwa+bc)
 	extz	wa
 	lda	xbc, (xsp+4)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 1:i3
@@ -7042,11 +7042,11 @@ Scoop_SoundEditorData_Helper_Join23:
 	extz	wa
 	ld	c, (xde)
 	extz	bc
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5
+	call	SeMenu_SetNameBufferChar
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp)
 	extz	bc
 	ld	wa, 1:i3
@@ -7090,7 +7090,7 @@ Scoop_SoundEditorData_Helper_Join24:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5
+	call	SeMenu_SetNameBufferChar
 	pushw	1
 	pushw	63
 	call	SeMenu_ShowConfirmDialog
@@ -7136,7 +7136,7 @@ Scoop_SoundEditorData_Helper_Join26:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5
+	call	SeMenu_SetNameBufferChar
 	pushw	1
 	pushw	63
 	call	SeMenu_ShowConfirmDialog
@@ -7168,7 +7168,7 @@ Scoop_SoundEditorData_Helper_Join27:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5
+	call	SeMenu_SetNameBufferChar
 	pushw	1
 	pushw	63
 	call	SeMenu_ShowConfirmDialog
@@ -7183,7 +7183,7 @@ Scoop_SoundEditorData_Helper_Loop9:
 	ldto_berp	a, 251
 	extz	wa
 	ldw	bc, 32
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5
+	call	SeMenu_SetNameBufferChar
 	inc1b_erp	251
 	cp_erpb	251, 15
 	jr	ule, Scoop_SoundEditorData_Helper_Loop9
@@ -7335,7 +7335,7 @@ Scoop_SoundEditorData_Helper_Skip38:
 	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (xsp+8)
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8
+	call	SeMenu_CharToNameCharIndex
 	ld	c, (xsp+8)
 	extz	bc
 	ld	wa, 1:i3

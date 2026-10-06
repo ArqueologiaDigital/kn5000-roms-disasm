@@ -2214,7 +2214,7 @@ SeMenu_SetupPartDisplay_End_Skip7:
 	ldw	hl, 0xffff
 SeMenu_SetupPartDisplay_End_Return:
 	retd	4
-SeMenu_CopyWriteUpdate_Step3_Code_3_Helper2:
+SeMenu_CopyNameChars:
 	ld	xhl, xbc
 	ld	b, 0:opc
 	cp	e, 0:i3
@@ -2309,7 +2309,7 @@ SeMenu_GetWriteMemSlot:
 SeMenu_SetWriteMemSlot:
 	ld	(1709:16), a
 	ret
-SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5:
+SeMenu_SetNameBufferChar:
 	cp	a, 15
 	ret	ugt
 	extz	wa
@@ -2381,7 +2381,7 @@ SeMenu_SetupPartDisplay_End_Skip9:
 	ld	a, (xde+wa)
 	ld (xbc), a
 	ret
-SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8:
+SeMenu_CharToNameCharIndex:
 	cp a, 130
 	jr	c, SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8_Skip
 	ld	(xbc), 0
@@ -3952,7 +3952,7 @@ SeMenu_ApplyPartEdit_Join11:
 	ld	iz, iy
 SeMenu_ApplyPartEdit_Skip16:
 	pushw	iy
-	calr	SeMenu_ApplyPartEdit_Helper9
+	calr	SeMenu_DrawEnvGraphLine
 	ld	hl, iz
 	popw	iz
 	retd	2
@@ -4423,7 +4423,7 @@ SeMenu_ApplyPartEdit_Helper8_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
-SeMenu_ApplyPartEdit_Helper9:
+SeMenu_DrawEnvGraphLine:
 	lda	xsp, (xsp-10)
 	pushw	iz
 	ld	(xsp+6), de

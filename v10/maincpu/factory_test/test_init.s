@@ -152,23 +152,25 @@ TitleFunc_ActionDispatch:
 	lda xwa, (TitleFunc_ActionDispatch_Data:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-TestTitleFunc_Case3:
+; TestTitleFunc_OnTitleOld: EVT_ACTIVATE_STATE phases 2..7 print "Title new/old/Inactivate/Activate/INTERUPT/INTERUPT
+;   RETURN"; the comments in test_init.s / fd_test_code.s that give these strings to EVT_SW_IN 0..6 are stale.
+TestTitleFunc_OnTitleOld:
 	lda xwa, (TitleFunc_ActionDispatch_Data_2:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-TestTitleFunc_Case5:
+TestTitleFunc_OnTitleActivate:
 	lda xwa, (TitleFunc_ActionDispatch_Data_3:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-TestTitleFunc_Case4:
+TestTitleFunc_OnTitleInactivate:
 	lda xwa, (TitleFunc_ActionDispatch_Data_4:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-TestTitleFunc_Case6:
+TestTitleFunc_OnTitleInterrupt:
 	lda xwa, (TitleFunc_ActionDispatch_Data_5:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-TestTitleFunc_Case7:
+TestTitleFunc_OnTitleInterruptReturn:
 	lda xwa, (TitleFunc_ActionDispatch_Data_6:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
@@ -191,7 +193,7 @@ TitleFunc_LifecycleDispatch:
 TitleFunc_LifecycleTable:
 	lda xwa, (TitleFunc_LifecycleTable_Data:24)
 	calr FDTest_PrintDiag
-	call TitleFunc_LifecycleTable_Helper
+	call FDTest_ProbeDiskFormat
 	jr TitleFunc_Return
 ; TitleFunc_LifecycleDispatch_OnStopFddTest: Switch 1 on the FDD test title: stops the switch-2 test loop timer and
 ;   prints STOP FDD TEST.

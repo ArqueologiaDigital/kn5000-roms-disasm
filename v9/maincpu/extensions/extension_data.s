@@ -1072,11 +1072,11 @@ ToneGen_ParamWriteDispatch_Str_N6_SINE_WAVE_ROM_check_16dB_DOWN:
 	aligned_string "(6)SINE WAVE & ROM check 16dB DOWN"
 ToneGen_WriteParamByIndex_CaseTable:
 	.short	ToneGen_ParamWriteDispatch - ToneGen_ParamWriteDispatch
-	.short	ToneGen_WriteParamByIndex_Case1 - ToneGen_ParamWriteDispatch
-	.short	ToneGen_WriteParamByIndex_Case2 - ToneGen_ParamWriteDispatch
-	.short	ToneGen_WriteParamByIndex_Case3 - ToneGen_ParamWriteDispatch
-	.short	ToneGen_WriteParamByIndex_Case4 - ToneGen_ParamWriteDispatch
-	.short	ToneGen_WriteParamByIndex_Case5 - ToneGen_ParamWriteDispatch
+	.short	ToneGen_WriteParamByIndex_DrawOutselCheckItem - ToneGen_ParamWriteDispatch
+	.short	ToneGen_WriteParamByIndex_DrawHighSoundCheckItem - ToneGen_ParamWriteDispatch
+	.short	ToneGen_WriteParamByIndex_DrawLowSoundCheckItem - ToneGen_ParamWriteDispatch
+	.short	ToneGen_WriteParamByIndex_DrawNormalSoundCheckItem - ToneGen_ParamWriteDispatch
+	.short	ToneGen_WriteParamByIndex_DrawSineWaveMinus16dBItem - ToneGen_ParamWriteDispatch
 WallHomeEdit_Text:
 	aligned_string "DEFAULT"
 WallHomeEdit_PushSndAddr_Str_USER:	aligned_string " USER  "
@@ -2792,13 +2792,13 @@ MidiChOut_OtherMode_Mask3_Data:
 	.byte 1, 2, 4, 8, 1, 2, 4, 8
 UIState_ProcessExtendedMode_CaseTable:
 	.short	UIState_ProcessExtendedMode_Cases - UIState_ProcessExtendedMode_Cases
-	.short	UIState_ProcessExtendedMode_Case1 - UIState_ProcessExtendedMode_Cases
-	.short	UIState_ProcessExtendedMode_Case1 - UIState_ProcessExtendedMode_Cases
+	.short	UIState_ProcessExtendedMode_IgnoreBytes1And2 - UIState_ProcessExtendedMode_Cases
+	.short	UIState_ProcessExtendedMode_IgnoreBytes1And2 - UIState_ProcessExtendedMode_Cases
 	.short	UIState_ProcessExtendedMode_Case3 - UIState_ProcessExtendedMode_Cases
-	.short	UIState_ProcessExtendedMode_Case4 - UIState_ProcessExtendedMode_Cases
-	.short	UIState_ProcessExtendedMode_Case5 - UIState_ProcessExtendedMode_Cases
-	.short	UIState_ProcessExtendedMode_Case5 - UIState_ProcessExtendedMode_Cases
-	.short	UIState_ProcessExtendedMode_Case7 - UIState_ProcessExtendedMode_Cases
+	.short	UIState_ProcessExtendedMode_OnTechniChordByte - UIState_ProcessExtendedMode_Cases
+	.short	UIState_ProcessExtendedMode_OnStartFillIntroBytes - UIState_ProcessExtendedMode_Cases
+	.short	UIState_ProcessExtendedMode_OnStartFillIntroBytes - UIState_ProcessExtendedMode_Cases
+	.short	UIState_ProcessExtendedMode_OnVariationByte - UIState_ProcessExtendedMode_Cases
 CtrlPanel_LookupIndicatorEntry_Data:
 	.long 0x00000001, 0x00000002, 0x00000004, 0x00000008
 	.long 0x00000010, 0x00000020, 0x00000040, 0x00000080

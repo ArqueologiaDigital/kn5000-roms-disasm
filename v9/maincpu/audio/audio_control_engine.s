@@ -3912,7 +3912,7 @@ UIState_ProcessExtendedMode:
 UIState_ProcessExtendedMode_Cases:	; the switch's base: case k is at +UIState_ProcessExtendedMode_CaseTable[k]
 	orw	(36670:16), 515
 	ret
-UIState_ProcessExtendedMode_Case5:	; cases 5, 6
+UIState_ProcessExtendedMode_OnStartFillIntroBytes:	; cases 5, 6
 	orw	(36670:16), 252
 	ret
 UIState_ProcessExtendedMode_Case3:
@@ -3924,12 +3924,12 @@ UIState_ProcessExtendedMode_Case3:
 UIState_ProcessExtendedMode_Skip:
 	orw	(36670:16), 256
 	ret
-UIState_ProcessExtendedMode_Case4:
+UIState_ProcessExtendedMode_OnTechniChordByte:
 	orw	(36674:16), 16
 	ret
-UIState_ProcessExtendedMode_Case7:
+UIState_ProcessExtendedMode_OnVariationByte:
 	orw	(36670:16), 512
-UIState_ProcessExtendedMode_Case1:	; cases 1, 2
+UIState_ProcessExtendedMode_IgnoreBytes1And2:	; cases 1, 2
 	ret
 UIStateEvt_NullHandler:
 	ret
@@ -5234,7 +5234,7 @@ ExtData_ToneParam_AltBody_Case5:	; cases 5, 6
 ExtData_ToneParam_AltBody_Case7:
 	jrl	ExtData_ToneParam_AltBody_Join4
 ExtData_ToneParam_AltBody_OnTempo:
-	calr	ExtData_ToneParam_AltBody_Helper2
+	calr	ExtData_SetTempoIfChanged
 ExtData_ToneParam_AltBody_Case1:	; cases 1, 2
 	ret
 ExtData_ToneParam_AltBody_Join:
@@ -5291,7 +5291,7 @@ ExtData_ToneParam_AltBody_Join4:
 	ldw	wa, 48
 	calr	ExtData_SetTlvField
 	jrl	SwbtWr_FlushAndAppendParams
-ExtData_ToneParam_AltBody_Helper2:
+ExtData_SetTempoIfChanged:
 	push	xiz
 	lda	xiz, (0xfc5a:16)
 	lda	xbc, (xiz+8)

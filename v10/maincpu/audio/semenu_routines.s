@@ -2270,7 +2270,11 @@ SeMenu_SetupPartDisplay_End_Skip7:
 	ldw	hl, 0xffff
 SeMenu_SetupPartDisplay_End_Return:
 	retd	4
-SeMenu_CopyWriteUpdate_Step3_Code_3_Helper2:
+; SeMenu_CopyNameChars: Copies E bytes (E = 0: none) from (XBC) to (XWA), one byte at a time. Basis: callers + body --
+;   its only callers are in the WRITE SOUND name-centring handler (side row 2, SeWrtSnd_OnSideRow2 ->
+;   SeMenu_CopyWriteUpdate_Data_Loop_Join), which copies the 16-character name to a scratch buffer and then the non-
+;   blank run into place.
+SeMenu_CopyNameChars:
 	ld	xhl, xbc
 	ld	b, 0:opc
 	cp	e, 0:i3
@@ -2371,7 +2375,11 @@ SeMenu_GetWriteMemSlot:
 SeMenu_SetWriteMemSlot:
 	ld	(1709:16), a
 	ret
-SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5:
+; SeMenu_SetNameBufferChar: Writes character C at position A (0..15) of the 16-byte name buffer at 0x20BF3; A > 15
+;   does nothing. Setter twin of SeMenu_GetNameBufferChar. Basis: callers + body -- SeWrtSnd_ClearName fills positions
+;   0..15 with C = 32 through it (its header says so), and the WRITE SOUND character-edit handlers store the edited
+;   character with it.
+SeMenu_SetNameBufferChar:
 	cp	a, 15
 	ret	ugt
 	extz	wa
@@ -2381,7 +2389,7 @@ SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5:
 ; SeMenu_GetNameBufferChar: Copies character A (0..15) of the 16-byte name buffer at 0x20BF3 to (XBC); A > 15 does
 ;   nothing. Basis: callers + body -- only the WRITE SOUND name-entry handlers call it: the side-row-1 handler reads
 ;   all 16 characters to send them, the cursor-left/right handlers read the character at the new cursor (page param 0)
-;   into param 1. Its twin SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5 writes the buffer, and
+;   into param 1. Its twin SeMenu_SetNameBufferChar writes the buffer, and
 ;   SeMenu_CopyWriteUpdate_Data fills it with an entry's name (SeMenu_SetupPartDisplay mode 1).
 SeMenu_GetNameBufferChar:
 	cp a, 15
@@ -2458,7 +2466,13 @@ SeMenu_SetupPartDisplay_End_Skip9:
 	ld	a, (xde+wa)
 	ld (xbc), a
 	ret
-SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8:
+; SeMenu_CharToNameCharIndex: Converts character code A to its index in the name-entry character set and stores it at
+;   (XBC): GUI_DisplayStructData_0x118A[A] for A < 130, 0 (the space) for A >= 130 or a result above 95. The table
+;   inverts GUI_DisplayStructData_0x1129 (index -> character: ' ', A-Z, a-z, 0-9, punctuation; 96 entries, all
+;   invert), which SeMenu_CopyWriteUpdate_Step3_Code_3_Helper7 reads the other way. Basis: callers + body -- the WRITE
+;   SOUND name-entry handlers read the character at the cursor (SeMenu_GetNameBufferChar), convert it with this and
+;   store it as page param 1, the character the dial edits.
+SeMenu_CharToNameCharIndex:
 	cp a, 130
 	jr	c, SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8_Skip
 	ld	(xbc), 0
@@ -3994,7 +4008,7 @@ SeMenu_ApplyPartEdit_Join10:
 	lda	xsp, (xsp+22)
 	ret
 ; SeMenu_DrawClippedEnvSegment: Draws one envelope-graph segment from (WA, BC) to (DE, y2 = the word pushed before the
-;   call, removed by retd 2) through SeMenu_ApplyPartEdit_Helper9 (a line clamped to y 59..146). A segment starting
+;   call, removed by retd 2) through SeMenu_DrawEnvGraphLine (a line clamped to y 59..146). A segment starting
 ;   left of x = 213 is cut at x = 213, one starting at or right of 213 is cut at x = 258; HL returns the interpolated
 ;   y at the cut, or 0 if the segment fits. Basis: callers + body -- SeMenu_DrawAmpEnvGraph (and the second envelope
 ;   graph in SeMenu_ApplyPartEdit_Helper7) draw their key-on segments from x = 51 with it, stop at the first non-zero
@@ -4047,7 +4061,7 @@ SeMenu_ApplyPartEdit_Join11:
 	ld	iz, iy
 SeMenu_ApplyPartEdit_Skip16:
 	pushw	iy
-	calr	SeMenu_ApplyPartEdit_Helper9
+	calr	SeMenu_DrawEnvGraphLine
 	ld	hl, iz
 	popw	iz
 	retd	2
@@ -4518,7 +4532,12 @@ SeMenu_ApplyPartEdit_Helper8_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
-SeMenu_ApplyPartEdit_Helper9:
+; SeMenu_DrawEnvGraphLine: Draws one envelope-graph line from (WA, BC) to (DE, y2 = the word pushed before the call,
+;   removed by retd 2) with SeGfx_DrawLine. Only when ACTIVE_TITLE is 0x37 (TT_SEFILENV1) are both y first lowered by
+;   sound-editor part param 1 * 43 / 50 and clipped to y 59..146 (a vertical line is clamped, a sloped one cut at the
+;   band edge with interpolated x, one wholly outside not drawn); on every other title the line is drawn as given.
+;   Basis: callers + body -- SeMenu_DrawClippedEnvSegment draws every envelope segment through it.
+SeMenu_DrawEnvGraphLine:
 	lda	xsp, (xsp-10)
 	pushw	iz
 	ld	(xsp+6), de

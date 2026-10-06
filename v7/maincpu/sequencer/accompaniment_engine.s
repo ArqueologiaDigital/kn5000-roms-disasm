@@ -20778,7 +20778,7 @@ ToneGen_StepFwd_Alternate:
 	ld C, 0x00:opc
 	jr t, ToneGen_StepAlt_Return
 ToneGen_StepAlt_CheckBeat:
-	calr ToneGen_StepAlt_CheckBeat_Helper
+	calr AccTiming_ScrollFourBarViewForward
 	calr ChordDetect_CheckDescending
 	calr ChordDetect_CheckRoot1
 	calr ChordDetect_CheckInversion1
@@ -20808,7 +20808,7 @@ ToneGen_StepAlt_Done:
 	nop
 	nop
 
-ToneGen_StepAlt_CheckBeat_Helper:
+AccTiming_ScrollFourBarViewForward:
 	ld a, c
 	add a, 0x3
 	cp b, a
@@ -25717,10 +25717,10 @@ TimeSig_DisplayStrings_Code_Return9:
 	ret
 CmpSetTtl_StepEntryByte2:
 	push	xiz
-	call	TimeSig_DisplayStrings_Helper5
+	call	CmpSetTtl_StepEntryByte2_Impl
 	pop	xiz
 	ret
-TimeSig_DisplayStrings_Helper5:
+CmpSetTtl_StepEntryByte2_Impl:
 	pushw	wa
 	call	AccPatch_GetCurrentSlotAddr
 	popw	wa
@@ -25745,14 +25745,14 @@ TimeSig_DisplayStrings_Code_Return10:
 TimeSig_SlotEntryByte2Offsets:
 	; Offsets in the current slot record (AccPatch_GetCurrentSlotAddr) of byte +2 of its four 8-byte
 	; entries, indexed by (0x390E); TimeSig_SlotFieldOffsets are the same entries' byte +5.
-	; TimeSig_DisplayStrings_Helper5 steps the byte within 0..127.
+	; CmpSetTtl_StepEntryByte2_Impl steps the byte within 0..127.
 	.byte	34, 42, 50, 58
 CmpSetTtl_StepEntryByte5:
 	push	xiz
-	call	TimeSig_DisplayStrings_Helper6
+	call	CmpSetTtl_StepEntryByte5_Impl
 	pop	xiz
 	ret
-TimeSig_DisplayStrings_Helper6:
+CmpSetTtl_StepEntryByte5_Impl:
 	pushw	wa
 	call	AccPatch_GetCurrentSlotAddr
 	popw	wa
@@ -31053,7 +31053,7 @@ CmpEsy_E_Var2_StoreMeasure:
 	ld XBC,EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jrl t, TtlFunc_SendEventAndReturn
-CmpEsyTtl_E_Var1_Case1:
+CmpEsyTtl_E_Var1_OnLastMeasureInc:
 	ld wa, 1:i3
 	call UI_PostEvent_0x6E
 	ld wa, 1:i3
@@ -31132,7 +31132,7 @@ CmpEsy_Main_EndMeasure_Store:
 	ld XBC,EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jrl t, TtlFunc_SendEventAndReturn
-CmpEsyTtl_E_Var1_Case2:
+CmpEsyTtl_E_Var1_OnTransposeInc:
 	ld wa, 1:i3
 	call UI_PostEvent_0x6E
 	ld wa, 1:i3
@@ -31202,7 +31202,7 @@ CmpEsy_SecQuantize_Store:
 	ld	xbc, EVT_CLR_GRID_HANTEN
 	ld	xde, 0:i3
 	jr	TtlFunc_SendEventAndReturn
-CmpEsyTtl_E_Var1_Case8:
+CmpEsyTtl_E_Var1_OnMemoryNumberInc:
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	ld	wa, 0:i3
@@ -31211,7 +31211,7 @@ CmpEsyTtl_E_Var1_Case8:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jr	TtlFunc_SendEventAndReturn
-CmpEsyTtl_E_Var1_Case9:
+CmpEsyTtl_E_Var1_OnMemoryNumberDec:
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	ld	wa, 0:i3
@@ -31222,7 +31222,7 @@ CmpEsyTtl_E_Var1_Case9:
 TtlFunc_SendEventAndReturn:
 	call ApDeliveryEvent
 	jr CstmCp_ReturnZero
-CmpEsyTtl_E_Var1_Case11:
+CmpEsyTtl_E_Var1_OnOk:
 	ld wa, 0:i3
 	call Tempo_EditBPM
 

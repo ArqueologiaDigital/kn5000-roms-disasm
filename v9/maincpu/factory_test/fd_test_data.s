@@ -381,11 +381,11 @@ TitleFunc_LifecycleDispatch_CaseTable:
 	.short	TitleFunc_Return - TitleFunc_LifecycleTable
 TestTitleFunc_CaseTable:
 	.short	TitleFunc_ActionDispatch - TitleFunc_ActionDispatch
-	.short	TestTitleFunc_Case3 - TitleFunc_ActionDispatch
-	.short	TestTitleFunc_Case4 - TitleFunc_ActionDispatch
-	.short	TestTitleFunc_Case5 - TitleFunc_ActionDispatch
-	.short	TestTitleFunc_Case6 - TitleFunc_ActionDispatch
-	.short	TestTitleFunc_Case7 - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_OnTitleOld - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_OnTitleInactivate - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_OnTitleActivate - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_OnTitleInterrupt - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_OnTitleInterruptReturn - TitleFunc_ActionDispatch
 ListDir2_Entry_Str_A_HAMA_LSW:
 	aligned_string "A:\\HAMA\\*.LSW"
 RunTestCounters_Display_Data:

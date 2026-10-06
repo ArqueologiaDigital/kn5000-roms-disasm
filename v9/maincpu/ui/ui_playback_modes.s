@@ -50,7 +50,7 @@ UIStateEvt_VoiceParamHandler_Skip6:
 	call	Part_WriteAllVoiceSubBlocks_B
 	popw	wa
 	call	SeqPlay_RestoreVoiceState_Return
-	call	UIStateEvt_VoiceParamHandler_Helper
+	call	Seq_FindRhythmTrack
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
@@ -66,7 +66,7 @@ UIStateEvt_VoiceParamHandler_Skip7:
 	call	Part_WriteAllVoiceSubBlocks_A
 	popw	wa
 	call	SeqPlay_RestoreVoiceState_Return
-	call	UIStateEvt_VoiceParamHandler_Helper
+	call	Seq_FindRhythmTrack
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
@@ -76,7 +76,7 @@ UIStateEvt_VoiceParamHandler_Skip7:
 	call	SeqPlay_CheckStartConditions
 UIStateEvt_VoiceParamHandler_Return:
 	ret
-UIStateEvt_VoiceParamHandler_Helper:
+Seq_FindRhythmTrack:
 	ld	xix, 0xf1a0
 	xor	bc, bc
 	ld	c, 16:opc

@@ -4330,7 +4330,9 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xde, ToneGen_ParamWriteDispatch_Str_C_key_IC304_305_C_7eB_key_IC306
 	jrl	ToneGen_WriteParamByIndex_Join
-ToneGen_WriteParamByIndex_Case1:
+; ToneGen_WriteParamByIndex_DrawOutselCheckItem: CHECK MODE item 1: draws "(2)GENERATOR LSI OUTSEL check" and
+;   "C-key=DIRECT+REV/DSP,C#~7eB-key=REV/DSP" in SelectRect slot 1.
+ToneGen_WriteParamByIndex_DrawOutselCheckItem:
 	inc	8, xiy
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4365,7 +4367,7 @@ ToneGen_WriteParamByIndex_Case1:
 	pushw	247
 	ld	xde, ToneGen_ParamWriteDispatch_Str_C_key_DIRECT_REV_DSP_C_7eB_key
 	jrl	ToneGen_WriteParamByIndex_Join
-ToneGen_WriteParamByIndex_Case2:
+ToneGen_WriteParamByIndex_DrawHighSoundCheckItem:
 	lda	xiy, (xiy+16)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4385,7 +4387,7 @@ ToneGen_WriteParamByIndex_Case2:
 	ld	xwa, xde
 	ld	xde, ToneGen_ParamWriteDispatch_Str_N3_HIGH_SOUND_check_2octave
 	jrl	ToneGen_WriteParamByIndex_Join
-ToneGen_WriteParamByIndex_Case3:
+ToneGen_WriteParamByIndex_DrawLowSoundCheckItem:
 	lda	xiy, (xiy+24)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4405,7 +4407,7 @@ ToneGen_WriteParamByIndex_Case3:
 	ld	xwa, xde
 	ld	xde, ToneGen_ParamWriteDispatch_Str_N4_LOW_SOUND_check_2octave
 	jr	ToneGen_WriteParamByIndex_Join
-ToneGen_WriteParamByIndex_Case4:
+ToneGen_WriteParamByIndex_DrawNormalSoundCheckItem:
 	lda	xiy, (xiy+32)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4425,7 +4427,7 @@ ToneGen_WriteParamByIndex_Case4:
 	ld	xwa, xde
 	ld	xde, ToneGen_ParamWriteDispatch_Str_N5_NORMAL_SOUND_check_with_TOUCH
 	jr	ToneGen_WriteParamByIndex_Join
-ToneGen_WriteParamByIndex_Case5:
+ToneGen_WriteParamByIndex_DrawSineWaveMinus16dBItem:
 	lda	xiy, (xiy+40)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3

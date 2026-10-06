@@ -1562,22 +1562,22 @@ PartGrid_ColumnDispatch:
 PartGrid_ColumnJumpTable:
 	ld	xhl, (FLASH_SECTION_PTR_0:16)
 	jr	PartGrid_ColumnDispatch_Return
-PartGrid_ColumnDispatch_Case1:
+PartGrid_ColumnDispatch_FlashSection1:
 	ld	xhl, (FLASH_SECTION_PTR_1:16)
 	jr	PartGrid_ColumnDispatch_Return
-PartGrid_ColumnDispatch_Case2:
+PartGrid_ColumnDispatch_FlashSection2:
 	ld	xhl, (FLASH_SECTION_PTR_2:16)
 	jr	PartGrid_ColumnDispatch_Return
-PartGrid_ColumnDispatch_Case3:
+PartGrid_ColumnDispatch_FlashSection3:
 	ld	xhl, (FLASH_SECTION_PTR_3:16)
 	jr	PartGrid_ColumnDispatch_Return
-PartGrid_ColumnDispatch_Case4:
+PartGrid_ColumnDispatch_FlashSection4:
 	ld	xhl, (FLASH_SECTION_PTR_4:16)
 	jr	PartGrid_ColumnDispatch_Return
-PartGrid_ColumnDispatch_Case5:
+PartGrid_ColumnDispatch_FlashSection5:
 	ld	xhl, (FLASH_SECTION_PTR_5:16)
 	jr	PartGrid_ColumnDispatch_Return
-PartGrid_ColumnDispatch_Case6:
+PartGrid_ColumnDispatch_FlashSection6:
 	ld	xhl, (FLASH_SECTION_PTR_6:16)
 	jr	t, PartGrid_ColumnDispatch_Return
 
@@ -1908,22 +1908,22 @@ NoteEventBuffer_CopyToSlot:
 NOTE_EVENT_DISPATCH_1:
 	ld xbc, (FLASH_SECTION_PTR_0:16); Case 0: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-NoteEventBuffer_CopyToSlot_Case2:
+NoteEventBuffer_CopyToSlot_LoadSection1:
 	ld xbc, (FLASH_SECTION_PTR_1:16); Case 1: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-NoteEventBuffer_CopyToSlot_Case3:
+NoteEventBuffer_CopyToSlot_LoadSection2:
 	ld xbc, (FLASH_SECTION_PTR_2:16); Case 2: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-NoteEventBuffer_CopyToSlot_Case4:
+NoteEventBuffer_CopyToSlot_LoadSection3:
 	ld xbc, (FLASH_SECTION_PTR_3:16); Case 3: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-NoteEventBuffer_CopyToSlot_Case5:
+NoteEventBuffer_CopyToSlot_LoadSection4:
 	ld xbc, (FLASH_SECTION_PTR_4:16); Case 4: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-NoteEventBuffer_CopyToSlot_Case6:
+NoteEventBuffer_CopyToSlot_LoadSection5:
 	ld xbc, (FLASH_SECTION_PTR_5:16); Case 5: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-NoteEventBuffer_CopyToSlot_Case7:
+NoteEventBuffer_CopyToSlot_LoadSection6:
 	ld xbc, (FLASH_SECTION_PTR_6:16); Case 6: Load dest pointer (falls through)
 NOTE_EVENT_COPY_COMMON:	; F1717D - Common handler
 	ld	xiy, xbc	; XIY = destination pointer
@@ -4862,7 +4862,7 @@ ToneParam_ExtendedOpsBlock:
 	ld	iz, hl
 	cp	iz, 0:i3
 	jr	nz, ToneParam_ExtendedOpsBlock_Skip
-	calr	ToneParam_ExtendedOpsBlock_Helper
+	calr	AccPatch_ConvertLegacyStyleImage
 	ld	iz, hl
 ToneParam_ExtendedOpsBlock_Skip:
 	ld	wa, iz
@@ -4874,7 +4874,7 @@ ToneParam_ExtendedOpsBlock_Skip2:
 	ld	hl, iz
 	popw	iz
 	ret
-ToneParam_ExtendedOpsBlock_Helper:
+AccPatch_ConvertLegacyStyleImage:
 	pushw	iz
 	ld	iz, 0:i3
 	calr	Flash_InitExtMemAddrs

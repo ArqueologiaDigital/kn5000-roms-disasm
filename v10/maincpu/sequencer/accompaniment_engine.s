@@ -13891,7 +13891,11 @@ AccPatch_MultiCallWrapper:
 	calr	AccPatch_ClearModeFlag
 	pop	xiz
 	ret
-SeqVoice_StoreEntryDone_Helper:
+; AccPatch_ClearModeAndInitSlotChain_Wrap: XIZ-preserving: clears the mode flag 0x35D5 (AccPatch_ClearModeFlag) and
+;   re-packs the style image's slot chain at RHYTHM_PATTERN_BUF_A (AccPatch_InitSlotChain_WithAddr, which also stores
+;   the used size). Basis: callers + body -- MidiPkt_GetUsedSize_StyleImage calls it before reading the used size
+;   (0x9482E) * 16; its header names these two calls.
+AccPatch_ClearModeAndInitSlotChain_Wrap:
 	push	xiz
 	calr	AccPatch_ClearModeFlag
 	call	AccPatch_InitSlotChain_WithAddr
@@ -21297,9 +21301,9 @@ ToneGen_MultiChan_WriteFinalNote:
 	nop
 
 ToneGen_CompareVoiceBlocks:
-	calr ToneGen_CompareVoiceBlocks_Helper
-	calr ToneGen_CompareVoiceBlocks_Helper2
-	calr ToneGen_CompareVoiceBlocks_Helper3
+	calr ToneGen_SaveCursorEventBytes
+	calr ToneGen_DeleteEventAtCursor
+	calr ToneGen_BuildConvertedNoteEvent
 	calr ToneGen_StepWithBoundsCheck
 	ret
 
@@ -21307,7 +21311,12 @@ ToneGen_MultiChan_Return:
 	nop
 	nop
 
-ToneGen_CompareVoiceBlocks_Helper:
+; ToneGen_SaveCursorEventBytes: Copies the six bytes of the note event at the pattern cursor (block 0x3514, offset
+;   0x3512; ToneGen_CalcBufferAddr, ToneGen_StepToNextVoiceSlot between bytes) into 0x3436..0x343B, leaving the
+;   working cursor 0x3449/0x346B on its last byte (0x3435 = 0). Basis: callers + body -- first step of
+;   ToneGen_CompareVoiceBlocks, which ToneGen_WriteMultiChanParam calls when the event's status (0x90) differs from
+;   the one it computes (0x90 / 0x91); ToneGen_BuildConvertedNoteEvent then builds the new event from these bytes.
+ToneGen_SaveCursorEventBytes:
 	ld wa, (0x3512:16)
 	ld (0x3449:16), wa
 	ld wa, (0x3514:16)
@@ -21354,7 +21363,13 @@ ToneGen_VoiceParamDisp_Return:
 	nop
 	nop
 
-ToneGen_CompareVoiceBlocks_Helper2:
+; ToneGen_DeleteEventAtCursor: Removes the note event at the pattern cursor (0x3512 / 0x3514): length 6 for a 0x90
+;   event, else 8 (0x344D), steps that far to set the copy source (0x3658/0x365E) after it with the destination
+;   (0x365A/0x3660) at the cursor, then closes the gap with AccPatch_CopySequenceEntry (block copy; frees a block into
+;   0x34D4 when the chain shrinks). Basis: callers + body -- second step of ToneGen_CompareVoiceBlocks, between saving
+;   the event (ToneGen_SaveCursorEventBytes) and re-inserting the converted one (ToneGen_StepWithBoundsCheck: length
+;   6/8, needs 0x34D4 != 0); AccVoice_InitPlaybackState (20596-20634) deletes 0x90/0x91/0xD1-0xD6 events the same way.
+ToneGen_DeleteEventAtCursor:
 	ld wa, (0x3514:16)
 	ld (0x346b:16), wa
 	ld (0x365a:16), wa
@@ -21397,7 +21412,14 @@ ToneGen_CalcBeat_Return:
 	nop
 	nop
 
-ToneGen_CompareVoiceBlocks_Helper3:
+; ToneGen_BuildConvertedNoteEvent: Builds the replacement note event at 0x366A from the six bytes
+;   ToneGen_SaveCursorEventBytes saved: status 0x90 (6-byte form) or 0x91 (8-byte form) with bytes +6/+7, chosen from
+;   class AccPatch_Transpose_LookupTable_Data[byte 2]: under the 0x34EA bit 6 / bit 5 + 0x379B bit 3 test class 7
+;   gives 0x91, 3, 0; otherwise ToneGen_LoadRhythmPatternParams_Data[class] gives 0x90 (first byte 0) or 0x91 with its
+;   other two bytes. Basis: callers + body -- third step of ToneGen_CompareVoiceBlocks; ToneGen_WriteMultiChanParam
+;   picks 0x90 / 0x91 with the same table test, and ToneGen_StepWithBoundsCheck inserts 0x366A with length 6 for 0x90,
+;   else 8.
+ToneGen_BuildConvertedNoteEvent:
 	ld xiy, 0x366a
 	ld a, (0x3436:16)
 	ld (xiy), a
@@ -21710,7 +21732,7 @@ ToneGen_StepFwd_Alternate:
 	jr ToneGen_StepAlt_Return
 
 ToneGen_StepAlt_CheckBeat:
-	calr ToneGen_StepAlt_CheckBeat_Helper
+	calr AccTiming_ScrollFourBarViewForward
 	calr ChordDetect_CheckDescending
 	calr ChordDetect_CheckRoot1
 	calr ChordDetect_CheckInversion1
@@ -21741,7 +21763,13 @@ ToneGen_StepAlt_Done:
 	nop
 	nop
 
-ToneGen_StepAlt_CheckBeat_Helper:
+; AccTiming_ScrollFourBarViewForward: Scrolls the four-measure view one measure forward: when more measures follow (B
+;   = (0x34D7) > C + 3), the previous measure D (0x3747) was the view's last (C + 4) and the current one E (0x371A) is
+;   D + 1, increments the view's first measure C (0x3746). Basis: callers + body -- ToneGen_StepAlt_CheckBeat runs it
+;   first among the four view checks used when (0x34D9) <= 4 (the 0x20-pixel-per-measure layout of
+;   AccTiming_ComputeOffset, x = (measure - (0x3746)) * width); ChordDetect_CheckAscending is the same test for the
+;   two-measure (0x40) layout (D == C + 2).
+AccTiming_ScrollFourBarViewForward:
 	ld a, c
 	add a, 0x3
 	cp b, a
@@ -25041,7 +25069,7 @@ RhythmVariation_Return:
 RhythmVariation_InlineCode:
 	calr	DrumKit_UpdateStatusFlags
 	ret
-; CmpStep_SetStepModeAndBlockSustain: XIZ-preserving call of RhythmVariation_Select_Helper4: when the TT_CMSTEP screen
+; CmpStep_SetStepModeAndBlockSustain: XIZ-preserving call of CmpStep_SetStepModeAndBlockSustain_Impl: when the TT_CMSTEP screen
 ;   is entered from another title (PREVIOUS_TITLE != 0xB6) it sets the step mode (0x3712) = 4 and bit 0 of 0x8D88; it
 ;   always clears bit 0 of 0xE3E2 and sets 0x34CD bit 3, the flag that makes PanelButton_Sustain and
 ;   PanelAction_PedalFn_Code40 ignore the sustain input. Basis: callers + body -- CmpStep_SetupAndQueueDraw (the
@@ -25049,10 +25077,14 @@ RhythmVariation_InlineCode:
 ;   (CmpStep_UnblockSustainInput -> CmpStep_ClearSustainBlockFlag).
 CmpStep_SetStepModeAndBlockSustain:
 	push	xiz
-	calr	RhythmVariation_Select_Helper4
+	calr	CmpStep_SetStepModeAndBlockSustain_Impl
 	pop	xiz
 	ret
-RhythmVariation_Select_Helper4:
+; CmpStep_SetStepModeAndBlockSustain_Impl: Body of CmpStep_SetStepModeAndBlockSustain: unless PREVIOUS_TITLE is 0xB6
+;   (re-entry), sets the step mode (0x3712) = 4 and 0x8D88 bit 0; always clears 0xE3E2 bit 0 and sets 0x34CD bit 3
+;   (sustain input ignored). Basis: callers + body -- its only caller is the XIZ wrapper
+;   CmpStep_SetStepModeAndBlockSustain, whose header describes exactly these stores.
+CmpStep_SetStepModeAndBlockSustain_Impl:
 	cp	(PREVIOUS_TITLE:16), 182
 	jr	z, RhythmVariation_Select_Skip4
 	ld	(0x3712:16), 4
@@ -25061,16 +25093,19 @@ RhythmVariation_Select_Skip4:
 	and	(0xe3e2:16), 254
 	or	(0x34cd:16), 8
 	ret
-; CmpStep_ClearSustainBlockFlag: XIZ-preserving call of RhythmVariation_Select_Helper5, which clears 0x34CD bit 3 --
+; CmpStep_ClearSustainBlockFlag: XIZ-preserving call of CmpStep_ClearSustainBlockFlag_Impl, which clears 0x34CD bit 3 --
 ;   the flag that makes PanelButton_Sustain and PanelAction_PedalFn_Code40 ignore the sustain input. Basis: callers +
 ;   body -- CmpStep_UnblockSustainInput, the TT_CMSTEP hide-method body, is its only caller and its header describes
 ;   exactly this; CmpStep_SetStepModeAndBlockSustain sets the bit on draw.
 CmpStep_ClearSustainBlockFlag:
 	push	xiz
-	calr	RhythmVariation_Select_Helper5
+	calr	CmpStep_ClearSustainBlockFlag_Impl
 	pop	xiz
 	ret
-RhythmVariation_Select_Helper5:
+; CmpStep_ClearSustainBlockFlag_Impl: Body of CmpStep_ClearSustainBlockFlag: clears 0x34CD bit 3, re-enabling the
+;   sustain input that CmpStep_SetStepModeAndBlockSustain blocked. Basis: callers + body -- its only caller is the XIZ
+;   wrapper CmpStep_ClearSustainBlockFlag, whose header says it clears 0x34CD bit 3.
+CmpStep_ClearSustainBlockFlag_Impl:
 	and	(0x34cd:16), 247
 	ret
 AccScreen_DataBlock_Helper3:
@@ -25685,7 +25720,11 @@ DrumVoice_Handler7_Code_Join:
 	ld	(0x39a7:16), a
 DrumVoice_Handler7_Code_Return4:
 	ret
-CmpNcpTtl_Dispatch2_Helper2:
+; CmpNcp_StepItemAValue_Wrap: XIZ-preserving wrapper: steps the value of the selected FROM item (selector 0x39A7,
+;   0..2) in direction W (bit 7 set = down) by calling CmpNcp_ItemHandlerTable[CmpNcp_ItemA_HandlerIndex[(0x39A7)]]
+;   through CmpNcp_CallItemHandler. Basis: callers + body -- CmpNcpTtl_TableDispatch_OnFromValueUp (W = 0) and
+;   _OnFromValueDown (W = 128) call it; twin of CmpNcp_StepItemA_Wrap, which steps the selector itself.
+CmpNcp_StepItemAValue_Wrap:
 	push	xiz
 	call	DrumVoice_Handler7_Data_3_Helper2
 	pop	xiz
@@ -25723,7 +25762,11 @@ DrumVoice_Handler7_Code_Join2:
 	ld	(0x39a8:16), a
 DrumVoice_Handler7_Code_Return5:
 	ret
-CmpNcpTtl_Dispatch2_Helper3:
+; CmpNcp_StepItemBValue_Wrap: XIZ-preserving wrapper: steps the value of the selected TO item (selector 0x39A8, 0..1)
+;   in direction W (bit 7 set = down) by calling CmpNcp_ItemHandlerTable[CmpNcp_ItemB_HandlerIndex[(0x39A8)]]
+;   (handlers 3, 4) through CmpNcp_CallItemHandler. Basis: callers + body -- CmpNcpTtl_TableDispatch_OnToValueUp (W =
+;   0) and _OnToValueDown (W = 128) call it; TO counterpart of CmpNcp_StepItemAValue_Wrap.
+CmpNcp_StepItemBValue_Wrap:
 	push	xiz
 	call	DrumVoice_Handler7_Data_3_Helper4
 	pop	xiz
@@ -25738,7 +25781,7 @@ DrumVoice_Handler7_Data_3_Helper4:
 CmpNcp_ItemB_HandlerIndex:
 	; (0x39A8), stepped between 0 and 1 by DrumVoice_Handler7_Data_3_Helper3 -> the
 	; CmpNcp_ItemHandlerTable index that DrumVoice_Handler7_Data_3_Helper4 dispatches.
-	; Reached through CmpNcpTtl_Dispatch2_Helper3.
+	; Reached through CmpNcp_StepItemBValue_Wrap.
 	.short	3, 4
 	push	xiz
 	call	CmpNcp_CallItemHandler
@@ -26879,15 +26922,18 @@ TimeSig_DisplayStrings_Code_Helper4_Return:
 	ld	(0x37c9:16), 1
 TimeSig_DisplayStrings_Code_Return8:
 	ret
-; CmpSetTtl_StepEntryIndex: XIZ-preserving wrapper of TimeSig_DisplayStrings_Helper4: steps the CmpSet title's
+; CmpSetTtl_StepEntryIndex: XIZ-preserving wrapper of CmpSetTtl_StepEntryIndex_Impl: steps the CmpSet title's
 ;   selected entry index (RAM 0x39AA, 0..3) up, or down when W bit 7 is set. Basis: callers + body -- called only by
 ;   CmpSetTtl_Dispatch2's first case (W = 0, index up) and CmpSetTtl_Case_EntryIndexDown (W = 0x80).
 CmpSetTtl_StepEntryIndex:
 	push	xiz
-	call	TimeSig_DisplayStrings_Helper4
+	call	CmpSetTtl_StepEntryIndex_Impl
 	pop	xiz
 	ret
-TimeSig_DisplayStrings_Helper4:
+; CmpSetTtl_StepEntryIndex_Impl: Body of CmpSetTtl_StepEntryIndex: steps the CmpSet title's selected entry index
+;   (0x39AA) within 0..3, up when W bit 7 is clear, down when set, without wrapping. Basis: callers + body -- its only
+;   caller is the XIZ wrapper CmpSetTtl_StepEntryIndex, whose header describes exactly this.
+CmpSetTtl_StepEntryIndex_Impl:
 	ld	a, (0x39aa:16)
 	bit	7, w
 	jr	nz, TimeSig_DisplayStrings_Code_Skip35
@@ -26904,14 +26950,18 @@ TimeSig_DisplayStrings_Code_Join7:
 TimeSig_DisplayStrings_Code_Return9:
 	ret
 ; CmpSetTtl_StepEntryByte2: Steps byte +2 of the current slot entry (index (0x39AA)) up or down within 0..127 (W bit 7
-;   = down), preserving XIZ around TimeSig_DisplayStrings_Helper5. Basis: callers + body -- the only callers are the
+;   = down), preserving XIZ around CmpSetTtl_StepEntryByte2_Impl. Basis: callers + body -- the only callers are the
 ;   CmpSetTtl_Case_EntryByte2Up/Down switch cases.
 CmpSetTtl_StepEntryByte2:
 	push	xiz
-	call	TimeSig_DisplayStrings_Helper5
+	call	CmpSetTtl_StepEntryByte2_Impl
 	pop	xiz
 	ret
-TimeSig_DisplayStrings_Helper5:
+; CmpSetTtl_StepEntryByte2_Impl: Body of CmpSetTtl_StepEntryByte2: steps byte +2 of entry (0x39AA) of the current slot
+;   record (AccPatch_GetCurrentSlotAddr; offset from TimeSig_SlotEntryByte2Offsets) within 0..127, up when W bit 7 is
+;   clear, down when set. Basis: callers + body -- its only caller is the XIZ wrapper CmpSetTtl_StepEntryByte2, whose
+;   header describes exactly this.
+CmpSetTtl_StepEntryByte2_Impl:
 	pushw	wa
 	call	AccPatch_GetCurrentSlotAddr
 	popw	wa
@@ -26936,18 +26986,22 @@ TimeSig_DisplayStrings_Code_Return10:
 TimeSig_SlotEntryByte2Offsets:
 	; Offsets in the current slot record (AccPatch_GetCurrentSlotAddr) of byte +2 of its four 8-byte
 	; entries, indexed by (0x39AA); TimeSig_SlotFieldOffsets are the same entries' byte +5.
-	; TimeSig_DisplayStrings_Helper5 steps the byte within 0..127.  Was `ld b, 42 / ldw de, 15930`.
+	; CmpSetTtl_StepEntryByte2_Impl steps the byte within 0..127.  Was `ld b, 42 / ldw de, 15930`.
 	.byte	34, 42, 50, 58
-; CmpSetTtl_StepEntryByte5: XIZ-preserving wrapper of TimeSig_DisplayStrings_Helper6: steps byte +5 of the selected
+; CmpSetTtl_StepEntryByte5: XIZ-preserving wrapper of CmpSetTtl_StepEntryByte5_Impl: steps byte +5 of the selected
 ;   entry (0x39AA) of the current slot record within 0..11, up, or down when W bit 7 is set. Basis: callers + body --
 ;   called only by CmpSetTtl_Case_EntryByte5Up (W = 0) and CmpSetTtl_Case_EntryByte5Down (W = 0x80); the field's
 ;   meaning is not established, so the name keeps the callers' 'EntryByte5'.
 CmpSetTtl_StepEntryByte5:
 	push	xiz
-	call	TimeSig_DisplayStrings_Helper6
+	call	CmpSetTtl_StepEntryByte5_Impl
 	pop	xiz
 	ret
-TimeSig_DisplayStrings_Helper6:
+; CmpSetTtl_StepEntryByte5_Impl: Body of CmpSetTtl_StepEntryByte5: steps byte +5 of entry (0x39AA) of the current slot
+;   record (AccPatch_GetCurrentSlotAddr; offset from TimeSig_SlotFieldOffsets) within 0..11, up when W bit 7 is clear,
+;   down when set. Basis: callers + body -- its only caller is the XIZ wrapper CmpSetTtl_StepEntryByte5, whose header
+;   describes exactly this (and keeps 'EntryByte5' because the field's meaning is not established).
+CmpSetTtl_StepEntryByte5_Impl:
 	pushw	wa
 	call	AccPatch_GetCurrentSlotAddr
 	popw	wa
@@ -28621,10 +28675,16 @@ VoiceSlot_Dispatch_D0Type:
 
 VoiceSlot_Dispatch_Return:
 	push	xiz
-	call	VoiceSlot_Dispatch_D0Type_Helper
+	call	CmpEsy_StepVariPattern
 	pop	xiz
 	ret
-VoiceSlot_Dispatch_D0Type_Helper:
+; CmpEsy_StepVariPattern: Easy Composer: steps the composer pattern index (0x34D6) up by one (A bit 7 clear, max 11)
+;   or down (A bit 7 set, min 0) -- 0-11 are the A/B/C-vari1..4 patterns -- then (VoiceSlot_Dispatch_Return_Helper)
+;   sets (0xFC5A) = index | 0x80, keeps only bit 7 of (0xFC5B), posts a SwbtWr event (E = 0x48, D = 0, W = 0, A =
+;   (0xFC5A)) and rebuilds the channel-difference mask 0x37C8 (DrumParam_BuildActiveMask). Basis: callers + body --
+;   the XIZ-preserving VoiceSlot_Dispatch_Return is called by the Easy Composer title's switch cases 3 (A = 0) and 4
+;   (A = 0x80).
+CmpEsy_StepVariPattern:
 	bit	7, a
 	jr	nz, VoiceSlot_Dispatch_Return_Entry
 	cp	(0x34d6:16), 11
@@ -31493,7 +31553,7 @@ CmpNcpTtl_TableDispatch_OnFromValueUp:	; cases 118, 119
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	CmpNcpTtl_Dispatch2_Helper2
+	call	CmpNcp_StepItemAValue_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -31561,7 +31621,7 @@ CmpNcpTtl_TableDispatch_OnFromValueDown:	; cases 130, 131
 	push	xix
 	push	xiz
 	ld	w, 128:opc
-	call	CmpNcpTtl_Dispatch2_Helper2
+	call	CmpNcp_StepItemAValue_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -31711,7 +31771,7 @@ CmpNcpTtl_TableDispatch_OnToValueUp:	; cases 122, 123
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	CmpNcpTtl_Dispatch2_Helper3
+	call	CmpNcp_StepItemBValue_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -31772,7 +31832,7 @@ CmpNcpTtl_TableDispatch_OnToValueDown:	; cases 134, 135
 	push	xix
 	push	xiz
 	ld	w, 128:opc
-	call	CmpNcpTtl_Dispatch2_Helper3
+	call	CmpNcp_StepItemBValue_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -32188,7 +32248,7 @@ CmpEsy_E_Var2_StoreMeasure:
 	ld xbc, EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jrl TtlFunc_SendEventAndReturn
-CmpEsyTtl_E_Var1_Case1:
+CmpEsyTtl_E_Var1_OnLastMeasureInc:
 	ld wa, 1:i3
 	call UI_PostEvent_0x6E
 	ld wa, 1:i3
@@ -32270,7 +32330,7 @@ CmpEsy_Main_EndMeasure_Store:
 	ld xbc, EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jrl TtlFunc_SendEventAndReturn
-CmpEsyTtl_E_Var1_Case2:
+CmpEsyTtl_E_Var1_OnTransposeInc:
 	ld wa, 1:i3
 	call UI_PostEvent_0x6E
 	ld wa, 1:i3
@@ -32344,7 +32404,7 @@ CmpEsy_SecQuantize_Store:
 	ld xbc, EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jr TtlFunc_SendEventAndReturn
-CmpEsyTtl_E_Var1_Case8:
+CmpEsyTtl_E_Var1_OnMemoryNumberInc:
 	ld wa, 1:i3
 	call UI_PostEvent_0x6E
 	ld wa, 0:i3
@@ -32353,7 +32413,7 @@ CmpEsyTtl_E_Var1_Case8:
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jr TtlFunc_SendEventAndReturn
-CmpEsyTtl_E_Var1_Case9:
+CmpEsyTtl_E_Var1_OnMemoryNumberDec:
 	ld wa, 1:i3
 	call UI_PostEvent_0x6E
 	ld wa, 0:i3
@@ -32365,7 +32425,9 @@ CmpEsyTtl_E_Var1_Case9:
 TtlFunc_SendEventAndReturn:
 	call ApDeliveryEvent
 	jr CstmCp_ReturnZero
-CmpEsyTtl_E_Var1_Case11:
+; CmpEsyTtl_E_Var1_OnOk: Switch 11 is the OK box (ES_Right4, SS_OK) of SEQ TO COMPOSER COPY; it calls
+;   Tempo_EditBPM(0), a misnomer.
+CmpEsyTtl_E_Var1_OnOk:
 	ld wa, 0:i3
 	call Tempo_EditBPM
 
@@ -32475,7 +32537,9 @@ CstmCpTtlFunc_Skip6:
 	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jrl	CstmCpTtlFunc_Join
-CstmCpTtl_RecMode2_Case128:	; cases 128, 129
+; CstmCpTtl_RecMode2_OnFromSlotDec: Switches 0x80/0x81 (FROM selector, bit-7 half): FROM rhythm slot 0x39b6 down by
+;   one (MEMORY 0..2, CUSTOM 10..29), repaint CstmCpFrmVal/CstmCpFName; only while no window is open (0x3a7e = 0).
+CstmCpTtl_RecMode2_OnFromSlotDec:	; cases 128, 129
 	cp	(0x3a7e:16), 0
 	jrl	nz, CstmCp_ReturnZero2
 	ld	wa, 1:i3
@@ -32498,7 +32562,9 @@ CstmCpTtlFunc_Skip7:
 	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jrl	CstmCpTtlFunc_Join
-CstmCpTtl_RecMode2_Case119:	; cases 119, 120, 131, 132
+; CstmCpTtl_RecMode2_OnDirectionSwap: DIRECTION switches (3/4, 0x83/0x84): exchange the FROM (0x39b6) and TO (0x39b7)
+;   rhythm slots and repaint both sides.
+CstmCpTtl_RecMode2_OnDirectionSwap:	; cases 119, 120, 131, 132
 	cp	(0x3a7e:16), 0
 	jrl	nz, CstmCp_ReturnZero2
 	ld	a, (0x39b6:16)
@@ -32529,7 +32595,7 @@ CstmCpTtl_RecMode2_Case119:	; cases 119, 120, 131, 132
 	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jrl	CstmCpTtlFunc_Join
-CstmCpTtl_RecMode2_Case122:	; cases 122, 123
+CstmCpTtl_RecMode2_OnToSlotInc:	; cases 122, 123
 	cp	(0x3a7e:16), 0
 	jrl	nz, CstmCp_ReturnZero2
 	ld	wa, 1:i3
@@ -32552,7 +32618,7 @@ CstmCpTtlFunc_Skip8:
 	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jr	CstmCpTtlFunc_Join
-CstmCpTtl_RecMode2_Case134:	; cases 134, 135
+CstmCpTtl_RecMode2_OnToSlotDec:	; cases 134, 135
 	cp	(0x3a7e:16), 0
 	jrl	nz, CstmCp_ReturnZero2
 	ld	wa, 1:i3
@@ -32577,7 +32643,10 @@ CstmCpTtlFunc_Skip9:
 CstmCpTtlFunc_Join:
 	call	ApDeliveryEvent
 	jrl	CstmCp_ReturnZero2
-CstmCpTtl_RecMode2_Case125:
+; CstmCpTtl_RecMode2_OnWindowExecute: Switch 9 = EXECUTE of the memory-full / function-select window (0x3a7e = 1 or
+;   2): CstmCpTtl_Dispatch2_Helper(0) carries out the pending copy, then hides the window, message 35 and sound
+;   command 0xEE.
+CstmCpTtl_RecMode2_OnWindowExecute:
 	ld	a, (0x3a7e:16)
 	cp	a, 2:i3
 	jr	z, CstmCpTtlFunc_Skip10
@@ -32598,7 +32667,10 @@ CstmCpTtlFunc_Skip10:
 	ld	(GLOBAL_ERROR_CODE:16), 35
 	ldw	wa, 238
 	jrl	CstmCpTtlFunc_Join3
-CstmCpTtl_RecMode2_Case127:
+; CstmCpTtl_RecMode2_OnCopyOrWindowAbort: Switch 11: on the main page copies rhythm slot FROM (0x39b6) to TO (0x39b7)
+;   with Flash_InitBytecodeBlock (result 2 opens CstmMemFulWin / CstmFuncSelWin); with a window open it is that
+;   window's ABORT.
+CstmCpTtl_RecMode2_OnCopyOrWindowAbort:
 	ld	a, (0x3a7e:16)
 	cp	a, 2:i3
 	jrl	z, CstmCpTtlFunc_Skip15
@@ -34216,7 +34288,7 @@ CmpStep_OnHide:
 ; CmpStep_UnblockSustainInput: Body of the TT_CMSTEP hide method: through the XIZ wrapper CmpStep_ClearSustainBlockFlag
 ;   it clears 0x34CD bit 3, the bit the draw method sets and that makes PanelButton_Sustain and the bit-3 test of the
 ;   pedal-function handler ignore the sustain input. Basis: callers + body -- its only caller is CmpStep_OnHide
-;   (method 1, EVT_HIDE), whose header says this is all it does; RhythmVariation_Select_Helper4 sets the bit on draw.
+;   (method 1, EVT_HIDE), whose header says this is all it does; CmpStep_SetStepModeAndBlockSustain_Impl sets the bit on draw.
 CmpStep_UnblockSustainInput:
 	call	CmpStep_ClearSustainBlockFlag
 	ret

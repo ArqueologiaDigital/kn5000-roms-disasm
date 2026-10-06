@@ -750,7 +750,7 @@ GUI_DisplayStructData_0x111D:	.incbin "includes/generated/gui_display_struct_dat
 ; data read by SeMenu_SetupPartDisplay_End_Skip9+0x2 (0xF074E3)
 ; evidence: `lda xde, (this)` then `ld A,(XDE+WA) / ld (XBC),A`
 GUI_DisplayStructData_0x1129:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1129, 0x61
-; data read by SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8+0xC (0xF074FC)
+; data read by SeMenu_CharToNameCharIndex+0xC (0xF074FC)
 ; evidence: `lda xde, (this)` then `ld A,(XDE+WA) / ld (XBC),A`
 GUI_DisplayStructData_0x118A:	.incbin "includes/generated/gui_display_struct_data.bin", 0x118A, 0x82
 ; object named by 1 line(s) of code outside this file; what that code does with it:
@@ -2154,7 +2154,11 @@ Voice_InitBankDataSafe_Alt1:
 	call	Voice_BankLookupCode
 	pop	xiz
 	ret
-SeqVoice_StoreEntryDone_Helper2:
+; Voice_RefreshBankData_Wrap: XIZ-preserving wrapper of Voice_RefreshBankData (Voice_ComputeAllocSize: recomputes the
+;   used size of the accompaniment block area 0x1E8800 into 0x1E881C). Basis: callers + body --
+;   MidiPkt_GetUsedSize_AccompBlocks calls it before reading (0x1E881C) * 16; its header names Voice_RefreshBankData
+;   -> Voice_ComputeAllocSize. Siblings Voice_InitBankDataSafe / _Alt1 are the same wrapper shape.
+Voice_RefreshBankData_Wrap:
 	push	xiz
 	call	Voice_RefreshBankData
 	pop	xiz

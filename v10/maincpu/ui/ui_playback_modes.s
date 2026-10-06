@@ -50,7 +50,7 @@ UIStateEvt_VoiceParamHandler_Skip6:
 	call	Part_WriteAllVoiceSubBlocks_B
 	popw	wa
 	call	SeqPlay_RestoreVoiceState_Return
-	call	UIStateEvt_VoiceParamHandler_Helper
+	call	Seq_FindRhythmTrack
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
@@ -66,7 +66,7 @@ UIStateEvt_VoiceParamHandler_Skip7:
 	call	Part_WriteAllVoiceSubBlocks_A
 	popw	wa
 	call	SeqPlay_RestoreVoiceState_Return
-	call	UIStateEvt_VoiceParamHandler_Helper
+	call	Seq_FindRhythmTrack
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
@@ -76,7 +76,13 @@ UIStateEvt_VoiceParamHandler_Skip7:
 	call	SeqPlay_CheckStartConditions
 UIStateEvt_VoiceParamHandler_Return:
 	ret
-UIStateEvt_VoiceParamHandler_Helper:
+; Seq_FindRhythmTrack: Finds the RHYTHM track: the first of the 16 tracks whose TRACK ASSIGN value (0xF1A0[t]) is 16;
+;   when its bit is set in the track mask 0xF19E and bit 7 of 0xF250[3*t] is set, returns W = t + 1, stores it in
+;   0x0D56 and sets 0x0D54 bit 0 and 0x287B bit 2, which make AccPedal_CheckBitAndUpdate /
+;   Scoop_EventHandler_MenuSwitch take the measure lengths from that track; otherwise clears both flags and returns W
+;   = 0. Basis: callers + body -- UIStateEvt_VoiceParamHandler runs it before AccWrap_PlayModeDispatch / SeqBuf_Init
+;   when the sequencer starts; value 16 is RHYTHM in both track-assign name tables.
+Seq_FindRhythmTrack:
 	ld	xix, 0xf1a0
 	xor	bc, bc
 	ld	c, 16:opc

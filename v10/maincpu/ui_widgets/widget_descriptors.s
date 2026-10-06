@@ -1928,13 +1928,13 @@ IvPnlWrExit_CopyString_Str_ExMD:	.incbin "includes/generated/naka_widget_descrip
 ; -----------------------------------------------------------------------------
 SqplyVal_HandleExtraParams_CaseTable:
 	.short	SqplyVal_ParamCases - SqplyVal_ParamCases
-	.short	SqplyVal_HandleExtraParams_Case5 - SqplyVal_ParamCases
-	.short	SqplyVal_HandleExtraParams_Case6 - SqplyVal_ParamCases
+	.short	SqplyVal_HandleExtraParams_DrawCycleStartMeasure - SqplyVal_ParamCases
+	.short	SqplyVal_HandleExtraParams_DrawCycleEndMeasure - SqplyVal_ParamCases
 	.short	SqplyVal_ReturnZero - SqplyVal_ParamCases
-	.short	SqplyVal_HandleExtraParams_Case8 - SqplyVal_ParamCases
-	.short	SqplyVal_HandleExtraParams_Case9 - SqplyVal_ParamCases
-	.short	SqplyVal_HandleExtraParams_Case10 - SqplyVal_ParamCases
-	.short	SqplyVal_HandleExtraParams_Case11 - SqplyVal_ParamCases
+	.short	SqplyVal_HandleExtraParams_DrawPInMeasure - SqplyVal_ParamCases
+	.short	SqplyVal_HandleExtraParams_DrawPOutMeasure - SqplyVal_ParamCases
+	.short	SqplyVal_HandleExtraParams_DrawPCountIn - SqplyVal_ParamCases
+	.short	SqplyVal_HandleExtraParams_DrawSoloEnable - SqplyVal_ParamCases
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqedtVal_ClearDrawBuffer_CaseTable
 ; SqedtVal_ClearDrawBuffer_CaseTable -- jump table of a compiled
@@ -2252,12 +2252,12 @@ EffectBoxProc_LocalInit_2:	.incbin "includes/generated/naka_widget_descriptors.b
 ; -----------------------------------------------------------------------------
 EffectBox_NameSetup_CaseTable:
 	.short	EffectBox_Dispatch - EffectBox_Dispatch
-	.short	EffectBox_NameSetup_Case2 - EffectBox_Dispatch
-	.short	EffectBox_NameSetup_Case3 - EffectBox_Dispatch
-	.short	EffectBox_NameSetup_Case4 - EffectBox_Dispatch
-	.short	EffectBox_NameSetup_Case5 - EffectBox_Dispatch
-	.short	EffectBox_NameSetup_Case6 - EffectBox_Dispatch
-	.short	EffectBox_NameSetup_Case7 - EffectBox_Dispatch
+	.short	EffectBox_NameSetup_GetEffDlt2Str - EffectBox_Dispatch
+	.short	EffectBox_NameSetup_GetEffDlt3Str - EffectBox_Dispatch
+	.short	EffectBox_NameSetup_GetEffDlt4Str - EffectBox_Dispatch
+	.short	EffectBox_NameSetup_GetEffDlt5Str - EffectBox_Dispatch
+	.short	EffectBox_NameSetup_GetEffDlt6Str - EffectBox_Dispatch
+	.short	EffectBox_NameSetup_GetEffDlt7Str - EffectBox_Dispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Equalizer_HandleSelectEvent_Table
 ; Equalizer_HandleSelectEvent_Table -- read by
@@ -2292,12 +2292,12 @@ Equalizer_HandleSelectEvent_Table_2:	.incbin "includes/generated/naka_widget_des
 ; -----------------------------------------------------------------------------
 EffectBox_StateDispatch_CaseTable:
 	.short	SeqAccomp_Dispatch - SeqAccomp_Dispatch
-	.short	EffectBox_StateDispatch_Case2 - SeqAccomp_Dispatch
-	.short	EffectBox_StateDispatch_Case3 - SeqAccomp_Dispatch
-	.short	EffectBox_StateDispatch_Case4 - SeqAccomp_Dispatch
-	.short	EffectBox_StateDispatch_Case5 - SeqAccomp_Dispatch
-	.short	EffectBox_StateDispatch_Case6 - SeqAccomp_Dispatch
-	.short	EffectBox_StateDispatch_Case7 - SeqAccomp_Dispatch
+	.short	EffectBox_StateDispatch_DrawEqBand2 - SeqAccomp_Dispatch
+	.short	EffectBox_StateDispatch_DrawEqBand3 - SeqAccomp_Dispatch
+	.short	EffectBox_StateDispatch_DrawEqBand4 - SeqAccomp_Dispatch
+	.short	EffectBox_StateDispatch_DrawEqBand5 - SeqAccomp_Dispatch
+	.short	EffectBox_StateDispatch_DrawEqBand6 - SeqAccomp_Dispatch
+	.short	EffectBox_StateDispatch_DrawEqBand7 - SeqAccomp_Dispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] LongStr_1_2_3
 ; LongStr_1_2_3 -- 90 bytes after
@@ -3320,12 +3320,12 @@ Equalizer_ParamByIndex_Table:	.incbin "includes/generated/naka_widget_descriptor
 ; -----------------------------------------------------------------------------
 Equalizer_DispatchA_CaseTable:
 	.short	Equalizer_DispatchB - Equalizer_DispatchB
-	.short	Equalizer_DispatchA_Case3 - Equalizer_DispatchB
-	.short	Equalizer_DispatchA_Case4 - Equalizer_DispatchB
-	.short	Equalizer_DispatchA_Case5 - Equalizer_DispatchB
-	.short	Equalizer_DispatchA_Case6 - Equalizer_DispatchB
-	.short	Equalizer_DispatchA_Case7 - Equalizer_DispatchB
-	.short	Equalizer_DispatchA_Case8 - Equalizer_DispatchB
+	.short	Equalizer_DispatchA_Band2FreqPos - Equalizer_DispatchB
+	.short	Equalizer_DispatchA_Band2GainPos - Equalizer_DispatchB
+	.short	Equalizer_DispatchA_Band3FreqPos - Equalizer_DispatchB
+	.short	Equalizer_DispatchA_Band3GainPos - Equalizer_DispatchB
+	.short	Equalizer_DispatchA_Band4FreqPos - Equalizer_DispatchB
+	.short	Equalizer_DispatchA_Band4GainPos - Equalizer_DispatchB
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] EqualizerCngFunc_CaseTable
 ; EqualizerCngFunc_CaseTable -- jump table of a compiled `switch` in
@@ -4041,11 +4041,11 @@ SeqEvent_MainHandler_CaseTable:
 ; -----------------------------------------------------------------------------
 AppEvtHandler_Branch_024_CaseTable:
 	.short	AppEvtHandler_Branch_024_Code - AppEvtHandler_Branch_024_Code
-	.short	AppEvtHandler_Branch_024_Case22 - AppEvtHandler_Branch_024_Code
-	.short	AppEvtHandler_Branch_024_Case23 - AppEvtHandler_Branch_024_Code
-	.short	AppEvtHandler_Branch_024_Case24 - AppEvtHandler_Branch_024_Code
-	.short	AppEvtHandler_Branch_024_Case25 - AppEvtHandler_Branch_024_Code
-	.short	AppEvtHandler_Branch_024_Case26 - AppEvtHandler_Branch_024_Code
+	.short	AppEvtHandler_Branch_024_IncMinsFromMeasure - AppEvtHandler_Branch_024_Code
+	.short	AppEvtHandler_Branch_024_IncMinsLastMeasure - AppEvtHandler_Branch_024_Code
+	.short	AppEvtHandler_Branch_024_IncMinsTrackB - AppEvtHandler_Branch_024_Code
+	.short	AppEvtHandler_Branch_024_IncMinsStartMeasure - AppEvtHandler_Branch_024_Code
+	.short	AppEvtHandler_Branch_024_IncMinsRepeat - AppEvtHandler_Branch_024_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvtHandler_Branch_021_CaseTable
 ; AppEvtHandler_Branch_021_CaseTable -- jump table of a compiled
@@ -4060,11 +4060,11 @@ AppEvtHandler_Branch_024_CaseTable:
 ; -----------------------------------------------------------------------------
 AppEvtHandler_Branch_021_CaseTable:
 	.short	AppEvtHandler_Branch_021_Code - AppEvtHandler_Branch_021_Code
-	.short	AppEvtHandler_Branch_021_Case16 - AppEvtHandler_Branch_021_Code
-	.short	AppEvtHandler_Branch_021_Case17 - AppEvtHandler_Branch_021_Code
-	.short	AppEvtHandler_Branch_021_Case18 - AppEvtHandler_Branch_021_Code
-	.short	AppEvtHandler_Branch_021_Case19 - AppEvtHandler_Branch_021_Code
-	.short	AppEvtHandler_Branch_021_Case20 - AppEvtHandler_Branch_021_Code
+	.short	AppEvtHandler_Branch_021_IncMcpFromMeasure - AppEvtHandler_Branch_021_Code
+	.short	AppEvtHandler_Branch_021_IncMcpLastMeasure - AppEvtHandler_Branch_021_Code
+	.short	AppEvtHandler_Branch_021_IncMcpTrackB - AppEvtHandler_Branch_021_Code
+	.short	AppEvtHandler_Branch_021_IncMcpStartMeasure - AppEvtHandler_Branch_021_Code
+	.short	AppEvtHandler_Branch_021_IncMcpRepeat - AppEvtHandler_Branch_021_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvtHandler_Branch_006_CaseTable
 ; AppEvtHandler_Branch_006_CaseTable -- jump table of a compiled
@@ -4178,11 +4178,11 @@ AppEvent_ChainDispatch1_CaseTable:
 ; -----------------------------------------------------------------------------
 AppEvent_SubDispatch_CaseTable:
 	.short	AppEvent_SubDispatch_Code_2_Code2 - AppEvent_SubDispatch_Code_2_Code2
-	.short	AppEvent_SubDispatch_Case22 - AppEvent_SubDispatch_Code_2_Code2
-	.short	AppEvent_SubDispatch_Case23 - AppEvent_SubDispatch_Code_2_Code2
-	.short	AppEvent_SubDispatch_Case24 - AppEvent_SubDispatch_Code_2_Code2
-	.short	AppEvent_SubDispatch_Case25 - AppEvent_SubDispatch_Code_2_Code2
-	.short	AppEvent_SubDispatch_Case26 - AppEvent_SubDispatch_Code_2_Code2
+	.short	AppEvent_SubDispatch_DecMinsFromMeasure - AppEvent_SubDispatch_Code_2_Code2
+	.short	AppEvent_SubDispatch_DecMinsLastMeasure - AppEvent_SubDispatch_Code_2_Code2
+	.short	AppEvent_SubDispatch_DecMinsTrackB - AppEvent_SubDispatch_Code_2_Code2
+	.short	AppEvent_SubDispatch_DecMinsStartMeasure - AppEvent_SubDispatch_Code_2_Code2
+	.short	AppEvent_SubDispatch_DecMinsRepeat - AppEvent_SubDispatch_Code_2_Code2
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvent_SubDispatch_CaseTable_2
 ; AppEvent_SubDispatch_CaseTable_2 -- jump table of a compiled `switch`
@@ -4354,14 +4354,14 @@ SeqAccomp_SubChain_CaseTable:
 	.short	AppEvent_ReturnZero - SeqAccomp_SubHandlerB
 	.short	AppEvent_ReturnZero - SeqAccomp_SubHandlerB
 	.short	AppEvent_ReturnZero - SeqAccomp_SubHandlerB
-	.short	SeqAccomp_SubChain_Case4 - SeqAccomp_SubHandlerB
-	.short	SeqAccomp_SubChain_Case5 - SeqAccomp_SubHandlerB
-	.short	SeqAccomp_SubChain_Case6 - SeqAccomp_SubHandlerB
+	.short	SeqAccomp_SubChain_DecCycleEnable - SeqAccomp_SubHandlerB
+	.short	SeqAccomp_SubChain_DecCycleStartMeasure - SeqAccomp_SubHandlerB
+	.short	SeqAccomp_SubChain_DecCycleEndMeasure - SeqAccomp_SubHandlerB
 	.short	AppEvent_ReturnZero - SeqAccomp_SubHandlerB
-	.short	SeqAccomp_SubChain_Case8 - SeqAccomp_SubHandlerB
-	.short	SeqAccomp_SubChain_Case8 - SeqAccomp_SubHandlerB
-	.short	SeqAccomp_SubChain_Case8 - SeqAccomp_SubHandlerB
-	.short	SeqAccomp_SubChain_Case11 - SeqAccomp_SubHandlerB
+	.short	SeqAccomp_SubChain_DecPunchParam - SeqAccomp_SubHandlerB
+	.short	SeqAccomp_SubChain_DecPunchParam - SeqAccomp_SubHandlerB
+	.short	SeqAccomp_SubChain_DecPunchParam - SeqAccomp_SubHandlerB
+	.short	SeqAccomp_SubChain_DecSoloEnable - SeqAccomp_SubHandlerB
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqAccomp_ParamDelivery_CaseTable
 ; SeqAccomp_ParamDelivery_CaseTable -- jump table of a compiled `switch`
@@ -4379,14 +4379,14 @@ SeqAccomp_ParamDelivery_CaseTable:
 	.short	AppEvent_ReturnZero - SeqAccomp_SubHandlerA
 	.short	AppEvent_ReturnZero - SeqAccomp_SubHandlerA
 	.short	AppEvent_ReturnZero - SeqAccomp_SubHandlerA
-	.short	SeqAccomp_ParamDelivery_Case4 - SeqAccomp_SubHandlerA
-	.short	SeqAccomp_ParamDelivery_Case5 - SeqAccomp_SubHandlerA
-	.short	SeqAccomp_ParamDelivery_Case6 - SeqAccomp_SubHandlerA
+	.short	SeqAccomp_ParamDelivery_IncCycleEnable - SeqAccomp_SubHandlerA
+	.short	SeqAccomp_ParamDelivery_IncCycleStartMeasure - SeqAccomp_SubHandlerA
+	.short	SeqAccomp_ParamDelivery_IncCycleEndMeasure - SeqAccomp_SubHandlerA
 	.short	AppEvent_ReturnZero - SeqAccomp_SubHandlerA
-	.short	SeqAccomp_ParamDelivery_Case8 - SeqAccomp_SubHandlerA
-	.short	SeqAccomp_ParamDelivery_Case8 - SeqAccomp_SubHandlerA
-	.short	SeqAccomp_ParamDelivery_Case8 - SeqAccomp_SubHandlerA
-	.short	SeqAccomp_ParamDelivery_Case11 - SeqAccomp_SubHandlerA
+	.short	SeqAccomp_ParamDelivery_IncPInPOutPCntIn - SeqAccomp_SubHandlerA
+	.short	SeqAccomp_ParamDelivery_IncPInPOutPCntIn - SeqAccomp_SubHandlerA
+	.short	SeqAccomp_ParamDelivery_IncPInPOutPCntIn - SeqAccomp_SubHandlerA
+	.short	SeqAccomp_ParamDelivery_IncSoloEnable - SeqAccomp_SubHandlerA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ApPlaySyori_CaseTable
 ; ApPlaySyori_CaseTable -- jump table of a compiled `switch` in
@@ -4401,13 +4401,13 @@ SeqAccomp_ParamDelivery_CaseTable:
 ; -----------------------------------------------------------------------------
 ApPlaySyori_CaseTable:
 	.short	SeqAccomp_EventDispatch - SeqAccomp_EventDispatch
-	.short	ApPlaySyori_Case130 - SeqAccomp_EventDispatch
+	.short	ApPlaySyori_OnPaintSqCycPly - SeqAccomp_EventDispatch
 	.short	AppEvent_ReturnZero - SeqAccomp_EventDispatch
 	.short	AppEvent_ReturnZero - SeqAccomp_EventDispatch
-	.short	ApPlaySyori_Case133 - SeqAccomp_EventDispatch
-	.short	ApPlaySyori_Case134 - SeqAccomp_EventDispatch
-	.short	ApPlaySyori_Case135 - SeqAccomp_EventDispatch
-	.short	ApPlaySyori_Case136 - SeqAccomp_EventDispatch
+	.short	ApPlaySyori_OnPaintSqRealRec - SeqAccomp_EventDispatch
+	.short	ApPlaySyori_OnPaintSqCycRec - SeqAccomp_EventDispatch
+	.short	ApPlaySyori_OnPaintSqPunch - SeqAccomp_EventDispatch
+	.short	ApPlaySyori_OnPaintSqPunchM - SeqAccomp_EventDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEditSy_SendModeScrollReset_CaseTable
 ; NoteEditSy_SendModeScrollReset_CaseTable -- jump table of a compiled
@@ -4804,15 +4804,15 @@ SeqPart_VelZoneLookup_Table_2:	.incbin "includes/generated/naka_widget_descripto
 SeqPart_VelocityCurveCalc_CaseTable:
 	.short	SeqPart_VelCurveData - SeqPart_VelCurveData
 	.short	SeqPart_VelRangeToZone - SeqPart_VelCurveData
-	.short	SeqPart_VelocityCurveCalc_Case2 - SeqPart_VelCurveData
+	.short	SeqPart_VelocityCurveCalc_QtzGrid48 - SeqPart_VelCurveData
 	.short	SeqPart_VelRangeToZone - SeqPart_VelCurveData
-	.short	SeqPart_VelocityCurveCalc_Case4 - SeqPart_VelCurveData
+	.short	SeqPart_VelocityCurveCalc_QtzGrid24 - SeqPart_VelCurveData
 	.short	SeqPart_VelRangeToZone - SeqPart_VelCurveData
-	.short	SeqPart_VelocityCurveCalc_Case6 - SeqPart_VelCurveData
+	.short	SeqPart_VelocityCurveCalc_QtzGrid12 - SeqPart_VelCurveData
 	.short	SeqPart_VelRangeToZone - SeqPart_VelCurveData
-	.short	SeqPart_VelocityCurveCalc_Case8 - SeqPart_VelCurveData
+	.short	SeqPart_VelocityCurveCalc_QtzGrid32 - SeqPart_VelCurveData
 	.short	SeqPart_VelRangeToZone - SeqPart_VelCurveData
-	.short	SeqPart_VelocityCurveCalc_Case10 - SeqPart_VelCurveData
+	.short	SeqPart_VelocityCurveCalc_QtzGrid16 - SeqPart_VelCurveData
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqStep_NoteReadEvent_CaseTable
 ; SeqStep_NoteReadEvent_CaseTable -- jump table of a compiled `switch`
@@ -5140,7 +5140,7 @@ RhythmROM_BankProgramLocators:	.incbin "includes/generated/naka_widget_descripto
 ; (v10/v9 0xf61f6e, v7 0xf61b6a) (`ld xix,
 ; AccPatch_Transpose_LookupTable_Data`), ToneGen_WriteMultiChanParam
 ; (v10/v9 0xf62986, v7 0xf62582) (`ld xix,
-; AccPatch_Transpose_LookupTable_Data`), ToneGen_CompareVoiceBlocks_Helper3 (v10/v9 0xf62b29, v7
+; AccPatch_Transpose_LookupTable_Data`), ToneGen_BuildConvertedNoteEvent (v10/v9 0xf62b29, v7
 ; 0xf62725) (`ld xix, AccPatch_Transpose_LookupTable_Data`),
 ; Rhythm_CrossVoice_Apply (v10/v9 0xf54ffe, v7 0xf54bfa) (`ld xiy,
 ; AccPatch_Transpose_LookupTable_Data`), Rhythm_NoteRangeCheck (v10/v9
@@ -5931,17 +5931,17 @@ CmEsyTtlFunc_CaseTable:
 ; -----------------------------------------------------------------------------
 CmpEsyTtl_E_Var1_CaseTable:
 	.short	CmpEsy_E_DispatchDataBlock - CmpEsy_E_DispatchDataBlock
-	.short	CmpEsyTtl_E_Var1_Case1 - CmpEsy_E_DispatchDataBlock
-	.short	CmpEsyTtl_E_Var1_Case2 - CmpEsy_E_DispatchDataBlock
+	.short	CmpEsyTtl_E_Var1_OnLastMeasureInc - CmpEsy_E_DispatchDataBlock
+	.short	CmpEsyTtl_E_Var1_OnTransposeInc - CmpEsy_E_DispatchDataBlock
 	.short	CstmCp_ReturnZero - CmpEsy_E_DispatchDataBlock
 	.short	CstmCp_ReturnZero - CmpEsy_E_DispatchDataBlock
 	.short	CstmCp_ReturnZero - CmpEsy_E_DispatchDataBlock
 	.short	CstmCp_ReturnZero - CmpEsy_E_DispatchDataBlock
 	.short	CstmCp_ReturnZero - CmpEsy_E_DispatchDataBlock
-	.short	CmpEsyTtl_E_Var1_Case8 - CmpEsy_E_DispatchDataBlock
-	.short	CmpEsyTtl_E_Var1_Case9 - CmpEsy_E_DispatchDataBlock
+	.short	CmpEsyTtl_E_Var1_OnMemoryNumberInc - CmpEsy_E_DispatchDataBlock
+	.short	CmpEsyTtl_E_Var1_OnMemoryNumberDec - CmpEsy_E_DispatchDataBlock
 	.short	CstmCp_ReturnZero - CmpEsy_E_DispatchDataBlock
-	.short	CmpEsyTtl_E_Var1_Case11 - CmpEsy_E_DispatchDataBlock
+	.short	CmpEsyTtl_E_Var1_OnOk - CmpEsy_E_DispatchDataBlock
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] S2cTtlFunc_CaseTable
 ; S2cTtlFunc_CaseTable -- jump table of a compiled `switch` in
@@ -5977,23 +5977,23 @@ CstmCpTtl_RecMode2_CaseTable:
 	.short	CstmCpTtl_Dispatch2 - CstmCpTtl_Dispatch2
 	.short	CstmCpTtl_Dispatch2 - CstmCpTtl_Dispatch2
 	.short	CstmCp_ReturnZero2 - CstmCpTtl_Dispatch2
-	.short	CstmCpTtl_RecMode2_Case119 - CstmCpTtl_Dispatch2
-	.short	CstmCpTtl_RecMode2_Case119 - CstmCpTtl_Dispatch2
+	.short	CstmCpTtl_RecMode2_OnDirectionSwap - CstmCpTtl_Dispatch2
+	.short	CstmCpTtl_RecMode2_OnDirectionSwap - CstmCpTtl_Dispatch2
 	.short	CstmCp_ReturnZero2 - CstmCpTtl_Dispatch2
-	.short	CstmCpTtl_RecMode2_Case122 - CstmCpTtl_Dispatch2
-	.short	CstmCpTtl_RecMode2_Case122 - CstmCpTtl_Dispatch2
+	.short	CstmCpTtl_RecMode2_OnToSlotInc - CstmCpTtl_Dispatch2
+	.short	CstmCpTtl_RecMode2_OnToSlotInc - CstmCpTtl_Dispatch2
 	.short	CstmCp_ReturnZero2 - CstmCpTtl_Dispatch2
-	.short	CstmCpTtl_RecMode2_Case125 - CstmCpTtl_Dispatch2
+	.short	CstmCpTtl_RecMode2_OnWindowExecute - CstmCpTtl_Dispatch2
 	.short	CstmCp_ReturnZero2 - CstmCpTtl_Dispatch2
-	.short	CstmCpTtl_RecMode2_Case127 - CstmCpTtl_Dispatch2
-	.short	CstmCpTtl_RecMode2_Case128 - CstmCpTtl_Dispatch2
-	.short	CstmCpTtl_RecMode2_Case128 - CstmCpTtl_Dispatch2
+	.short	CstmCpTtl_RecMode2_OnCopyOrWindowAbort - CstmCpTtl_Dispatch2
+	.short	CstmCpTtl_RecMode2_OnFromSlotDec - CstmCpTtl_Dispatch2
+	.short	CstmCpTtl_RecMode2_OnFromSlotDec - CstmCpTtl_Dispatch2
 	.short	CstmCp_ReturnZero2 - CstmCpTtl_Dispatch2
-	.short	CstmCpTtl_RecMode2_Case119 - CstmCpTtl_Dispatch2
-	.short	CstmCpTtl_RecMode2_Case119 - CstmCpTtl_Dispatch2
+	.short	CstmCpTtl_RecMode2_OnDirectionSwap - CstmCpTtl_Dispatch2
+	.short	CstmCpTtl_RecMode2_OnDirectionSwap - CstmCpTtl_Dispatch2
 	.short	CstmCp_ReturnZero2 - CstmCpTtl_Dispatch2
-	.short	CstmCpTtl_RecMode2_Case134 - CstmCpTtl_Dispatch2
-	.short	CstmCpTtl_RecMode2_Case134 - CstmCpTtl_Dispatch2
+	.short	CstmCpTtl_RecMode2_OnToSlotDec - CstmCpTtl_Dispatch2
+	.short	CstmCpTtl_RecMode2_OnToSlotDec - CstmCpTtl_Dispatch2
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] CstmCpTtlFunc_CaseTable
 ; CstmCpTtlFunc_CaseTable -- jump table of a compiled `switch` in

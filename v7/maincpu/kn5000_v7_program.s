@@ -750,7 +750,7 @@ GUI_DisplayStructData_0x111D:	.incbin "includes/generated/gui_display_struct_dat
 ; data read by SeMenu_CopyWriteUpdate_Step3_Code_3_Helper7+0xB (0xF074B9)
 ; evidence: `lda xde, (this)` then `ld A,(XDE+WA) / ld (XBC),A`
 GUI_DisplayStructData_0x1129:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1129, 0x61
-; data read by SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8+0xC (0xF074D2)
+; data read by SeMenu_CharToNameCharIndex+0xC (0xF074D2)
 ; evidence: `lda xde, (this)` then `ld A,(XDE+WA) / ld (XBC),A`
 GUI_DisplayStructData_0x118A:	.incbin "includes/generated/gui_display_struct_data.bin", 0x118A, 0x82
 ; object named by 1 line(s) of code outside this file; what that code does with it:
@@ -2132,7 +2132,7 @@ Voice_InitBankDataSafe_Alt1:
 	call	Voice_BankLookupCode
 	pop	xiz
 	ret
-SeqVoice_StoreEntryDone_Helper:
+Voice_RefreshBankData_Wrap:
 	push	xiz
 	call	Voice_RefreshBankData
 	pop	xiz

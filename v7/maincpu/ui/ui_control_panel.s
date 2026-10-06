@@ -2671,7 +2671,7 @@ MainPmanCtrl_Case1:
 	ld de, (xiz+6)
 	call SndParam_LookupByKey
 	jrl MainTitle_SendEventDone
-MainPmanCtrl_Case2:
+MainPmanCtrl_OnLswGet:
 	ld xiz, xde
 	ld xwa, (xiz)
 	call SndParam_LookupReadOnly
@@ -2693,7 +2693,7 @@ MainPmanCtrl_Case2:
 	ld xbc, EVT_AUTO_FREE
 	ld xde, (xsp+4)
 	jr MainBitControl_Code_Join
-MainPmanCtrl_Case3:
+MainPmanCtrl_OnLswPartPut:
 	ld xiz, xde
 	ld xwa, (xiz)
 	srl xwa, 16
@@ -2703,7 +2703,7 @@ MainPmanCtrl_Case3:
 	ld de, (xiz+4)
 	call SndParam_NotifyAndReturn
 	jrl MainTitle_SendEventDone
-MainPmanCtrl_Case4:
+MainPmanCtrl_OnLswPartAdd:
 	ld xiz, xde
 	ld xwa, (xiz)
 	srl xwa, 16
@@ -2713,7 +2713,7 @@ MainPmanCtrl_Case4:
 	ld de, (xiz+4)
 	call SndParam_WrapNotify2
 	jrl MainTitle_SendEventDone
-MainPmanCtrl_Case5:
+MainPmanCtrl_OnLswPartGet:
 	ld xiz, xde
 	ld xwa, (xiz)
 	srl xwa, 16

@@ -2602,21 +2602,23 @@ MainPmanControl:
 ; scripts/converters/convert_mainpman_switch.py; each case offset is an
 ; instruction boundary and every instruction re-encodes to the ROM bytes.
 MainPmanCtrl_DispatchTable:
-MainPmanCtrl_Case0:
+MainPmanCtrl_OnLswPut:
 	ld xiz, xde
 	ld xwa, (xiz)
 	ld bc, (xiz+4)
 	ld de, (xiz+6)
 	call SoundParam_NotifyChange
 	jrl MainTitle_SendEventDone
-MainPmanCtrl_Case1:
+MainPmanCtrl_OnLswAdd:
 	ld xiz, xde
 	ld xwa, (xiz)
 	ld bc, (xiz+4)
 	ld de, (xiz+6)
 	call SndParam_LookupByKey
 	jrl MainTitle_SendEventDone
-MainPmanCtrl_Case2:
+; MainPmanCtrl_OnLswGet: Reads the parameter into block +4, then posts a 12-byte Malloc copy as EVT_LSW_DATA (and
+;   EVT_AUTO_FREE).
+MainPmanCtrl_OnLswGet:
 	ld xiz, xde
 	ld xwa, (xiz)
 	call SndParam_LookupReadOnly
@@ -2638,7 +2640,7 @@ MainPmanCtrl_Case2:
 	ld xbc, EVT_AUTO_FREE
 	ld xde, (xsp+4)
 	jr KeyScan_Disable_Join
-MainPmanCtrl_Case3:
+MainPmanCtrl_OnLswPartPut:
 	ld xiz, xde
 	ld xwa, (xiz)
 	srl xwa, 16
@@ -2648,7 +2650,7 @@ MainPmanCtrl_Case3:
 	ld de, (xiz+4)
 	call SndParam_NotifyAndReturn
 	jrl MainTitle_SendEventDone
-MainPmanCtrl_Case4:
+MainPmanCtrl_OnLswPartAdd:
 	ld xiz, xde
 	ld xwa, (xiz)
 	srl xwa, 16
@@ -2658,7 +2660,9 @@ MainPmanCtrl_Case4:
 	ld de, (xiz+4)
 	call SndParam_WrapNotify2
 	jrl MainTitle_SendEventDone
-MainPmanCtrl_Case5:
+; MainPmanCtrl_OnLswPartGet: Per-part read into block +4, replied as a 12-byte Malloc copy in EVT_LSW_DATA (and
+;   EVT_AUTO_FREE).
+MainPmanCtrl_OnLswPartGet:
 	ld xiz, xde
 	ld xwa, (xiz)
 	srl xwa, 16

@@ -280,7 +280,7 @@ SLSrcBankList_FuncBody_Helper10:
 	push	xiz
 	ld	(xsp+4), xwa
 	cp	(35166:16), 0
-	jr	nz, SLSrcBankList_FuncBody_Epilogue2
+	jr	nz, SLSrcBankList_FuncBody_Helper3_Epilogue
 	lda	xwa, (34994:16)
 	ld	(xwa+63), 3
 	lda	xiz, (xwa+64)
@@ -297,7 +297,7 @@ SLSrcBankList_FuncBody_Helper10:
 	ld	xwa, (xsp+4)
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
-SLSrcBankList_FuncBody_Epilogue2:
+SLSrcBankList_FuncBody_Helper3_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret

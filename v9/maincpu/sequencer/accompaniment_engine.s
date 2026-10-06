@@ -13874,7 +13874,7 @@ AccPatch_MultiCallWrapper:
 	calr	AccPatch_ClearModeFlag
 	pop	xiz
 	ret
-SeqVoice_StoreEntryDone_Helper:
+AccPatch_ClearModeAndInitSlotChain_Wrap:
 	push	xiz
 	calr	AccPatch_ClearModeFlag
 	call	AccPatch_InitSlotChain_WithAddr
@@ -21266,9 +21266,9 @@ ToneGen_MultiChan_WriteFinalNote:
 	nop
 
 ToneGen_CompareVoiceBlocks:
-	calr ToneGen_CompareVoiceBlocks_Helper
-	calr ToneGen_CompareVoiceBlocks_Helper2
-	calr ToneGen_CompareVoiceBlocks_Helper3
+	calr ToneGen_SaveCursorEventBytes
+	calr ToneGen_DeleteEventAtCursor
+	calr ToneGen_BuildConvertedNoteEvent
 	calr ToneGen_StepWithBoundsCheck
 	ret
 
@@ -21276,7 +21276,7 @@ ToneGen_MultiChan_Return:
 	nop
 	nop
 
-ToneGen_CompareVoiceBlocks_Helper:
+ToneGen_SaveCursorEventBytes:
 	ld wa, (0x3512:16)
 	ld (0x3449:16), wa
 	ld wa, (0x3514:16)
@@ -21323,7 +21323,7 @@ ToneGen_VoiceParamDisp_Return:
 	nop
 	nop
 
-ToneGen_CompareVoiceBlocks_Helper2:
+ToneGen_DeleteEventAtCursor:
 	ld wa, (0x3514:16)
 	ld (0x346b:16), wa
 	ld (0x365a:16), wa
@@ -21366,7 +21366,7 @@ ToneGen_CalcBeat_Return:
 	nop
 	nop
 
-ToneGen_CompareVoiceBlocks_Helper3:
+ToneGen_BuildConvertedNoteEvent:
 	ld xiy, 0x366a
 	ld a, (0x3436:16)
 	ld (xiy), a
@@ -21679,7 +21679,7 @@ ToneGen_StepFwd_Alternate:
 	jr ToneGen_StepAlt_Return
 
 ToneGen_StepAlt_CheckBeat:
-	calr ToneGen_StepAlt_CheckBeat_Helper
+	calr AccTiming_ScrollFourBarViewForward
 	calr ChordDetect_CheckDescending
 	calr ChordDetect_CheckRoot1
 	calr ChordDetect_CheckInversion1
@@ -21710,7 +21710,7 @@ ToneGen_StepAlt_Done:
 	nop
 	nop
 
-ToneGen_StepAlt_CheckBeat_Helper:
+AccTiming_ScrollFourBarViewForward:
 	ld a, c
 	add a, 0x3
 	cp b, a
@@ -25005,10 +25005,10 @@ RhythmVariation_InlineCode:
 	ret
 CmpStep_SetStepModeAndBlockSustain:
 	push	xiz
-	calr	RhythmVariation_Select_Helper4
+	calr	CmpStep_SetStepModeAndBlockSustain_Impl
 	pop	xiz
 	ret
-RhythmVariation_Select_Helper4:
+CmpStep_SetStepModeAndBlockSustain_Impl:
 	cp	(PREVIOUS_TITLE:16), 182
 	jr	z, RhythmVariation_Select_Skip4
 	ld	(0x3712:16), 4
@@ -25019,10 +25019,10 @@ RhythmVariation_Select_Skip4:
 	ret
 CmpStep_ClearSustainBlockFlag:
 	push	xiz
-	calr	RhythmVariation_Select_Helper5
+	calr	CmpStep_ClearSustainBlockFlag_Impl
 	pop	xiz
 	ret
-RhythmVariation_Select_Helper5:
+CmpStep_ClearSustainBlockFlag_Impl:
 	and	(0x34cd:16), 247
 	ret
 AccScreen_DataBlock_Helper3:
@@ -25604,7 +25604,7 @@ DrumVoice_Handler7_Code_Join:
 	ld	(0x39a7:16), a
 DrumVoice_Handler7_Code_Return4:
 	ret
-CmpNcpTtl_Dispatch2_Helper2:
+CmpNcp_StepItemAValue_Wrap:
 	push	xiz
 	call	DrumVoice_Handler7_Data_3_Helper2
 	pop	xiz
@@ -25642,7 +25642,7 @@ DrumVoice_Handler7_Code_Join2:
 	ld	(0x39a8:16), a
 DrumVoice_Handler7_Code_Return5:
 	ret
-CmpNcpTtl_Dispatch2_Helper3:
+CmpNcp_StepItemBValue_Wrap:
 	push	xiz
 	call	DrumVoice_Handler7_Data_3_Helper4
 	pop	xiz
@@ -25657,7 +25657,7 @@ DrumVoice_Handler7_Data_3_Helper4:
 CmpNcp_ItemB_HandlerIndex:
 	; (0x39A8), stepped between 0 and 1 by DrumVoice_Handler7_Data_3_Helper3 -> the
 	; CmpNcp_ItemHandlerTable index that DrumVoice_Handler7_Data_3_Helper4 dispatches.
-	; Reached through CmpNcpTtl_Dispatch2_Helper3.
+	; Reached through CmpNcp_StepItemBValue_Wrap.
 	.short	3, 4
 	push	xiz
 	call	CmpNcp_CallItemHandler
@@ -26760,10 +26760,10 @@ TimeSig_DisplayStrings_Code_Return8:
 	ret
 CmpSetTtl_StepEntryIndex:
 	push	xiz
-	call	TimeSig_DisplayStrings_Helper4
+	call	CmpSetTtl_StepEntryIndex_Impl
 	pop	xiz
 	ret
-TimeSig_DisplayStrings_Helper4:
+CmpSetTtl_StepEntryIndex_Impl:
 	ld	a, (0x39aa:16)
 	bit	7, w
 	jr	nz, TimeSig_DisplayStrings_Code_Skip35
@@ -26781,10 +26781,10 @@ TimeSig_DisplayStrings_Code_Return9:
 	ret
 CmpSetTtl_StepEntryByte2:
 	push	xiz
-	call	TimeSig_DisplayStrings_Helper5
+	call	CmpSetTtl_StepEntryByte2_Impl
 	pop	xiz
 	ret
-TimeSig_DisplayStrings_Helper5:
+CmpSetTtl_StepEntryByte2_Impl:
 	pushw	wa
 	call	AccPatch_GetCurrentSlotAddr
 	popw	wa
@@ -26809,14 +26809,14 @@ TimeSig_DisplayStrings_Code_Return10:
 TimeSig_SlotEntryByte2Offsets:
 	; Offsets in the current slot record (AccPatch_GetCurrentSlotAddr) of byte +2 of its four 8-byte
 	; entries, indexed by (0x39AA); TimeSig_SlotFieldOffsets are the same entries' byte +5.
-	; TimeSig_DisplayStrings_Helper5 steps the byte within 0..127.  Was `ld b, 42 / ldw de, 15930`.
+	; CmpSetTtl_StepEntryByte2_Impl steps the byte within 0..127.  Was `ld b, 42 / ldw de, 15930`.
 	.byte	34, 42, 50, 58
 CmpSetTtl_StepEntryByte5:
 	push	xiz
-	call	TimeSig_DisplayStrings_Helper6
+	call	CmpSetTtl_StepEntryByte5_Impl
 	pop	xiz
 	ret
-TimeSig_DisplayStrings_Helper6:
+CmpSetTtl_StepEntryByte5_Impl:
 	pushw	wa
 	call	AccPatch_GetCurrentSlotAddr
 	popw	wa
@@ -28490,10 +28490,10 @@ VoiceSlot_Dispatch_D0Type:
 
 VoiceSlot_Dispatch_Return:
 	push	xiz
-	call	VoiceSlot_Dispatch_D0Type_Helper
+	call	CmpEsy_StepVariPattern
 	pop	xiz
 	ret
-VoiceSlot_Dispatch_D0Type_Helper:
+CmpEsy_StepVariPattern:
 	bit	7, a
 	jr	nz, VoiceSlot_Dispatch_Return_Entry
 	cp	(0x34d6:16), 11
@@ -31304,7 +31304,7 @@ CmpNcpTtl_TableDispatch_OnFromValueUp:	; cases 118, 119
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	CmpNcpTtl_Dispatch2_Helper2
+	call	CmpNcp_StepItemAValue_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -31372,7 +31372,7 @@ CmpNcpTtl_TableDispatch_OnFromValueDown:	; cases 130, 131
 	push	xix
 	push	xiz
 	ld	w, 128:opc
-	call	CmpNcpTtl_Dispatch2_Helper2
+	call	CmpNcp_StepItemAValue_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -31522,7 +31522,7 @@ CmpNcpTtl_TableDispatch_OnToValueUp:	; cases 122, 123
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	CmpNcpTtl_Dispatch2_Helper3
+	call	CmpNcp_StepItemBValue_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -31583,7 +31583,7 @@ CmpNcpTtl_TableDispatch_OnToValueDown:	; cases 134, 135
 	push	xix
 	push	xiz
 	ld	w, 128:opc
-	call	CmpNcpTtl_Dispatch2_Helper3
+	call	CmpNcp_StepItemBValue_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -31997,7 +31997,7 @@ CmpEsy_E_Var2_StoreMeasure:
 	ld xbc, EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jrl TtlFunc_SendEventAndReturn
-CmpEsyTtl_E_Var1_Case1:
+CmpEsyTtl_E_Var1_OnLastMeasureInc:
 	ld wa, 1:i3
 	call UI_PostEvent_0x6E
 	ld wa, 1:i3
@@ -32079,7 +32079,7 @@ CmpEsy_Main_EndMeasure_Store:
 	ld xbc, EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jrl TtlFunc_SendEventAndReturn
-CmpEsyTtl_E_Var1_Case2:
+CmpEsyTtl_E_Var1_OnTransposeInc:
 	ld wa, 1:i3
 	call UI_PostEvent_0x6E
 	ld wa, 1:i3
@@ -32153,7 +32153,7 @@ CmpEsy_SecQuantize_Store:
 	ld xbc, EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jr TtlFunc_SendEventAndReturn
-CmpEsyTtl_E_Var1_Case8:
+CmpEsyTtl_E_Var1_OnMemoryNumberInc:
 	ld wa, 1:i3
 	call UI_PostEvent_0x6E
 	ld wa, 0:i3
@@ -32162,7 +32162,7 @@ CmpEsyTtl_E_Var1_Case8:
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jr TtlFunc_SendEventAndReturn
-CmpEsyTtl_E_Var1_Case9:
+CmpEsyTtl_E_Var1_OnMemoryNumberDec:
 	ld wa, 1:i3
 	call UI_PostEvent_0x6E
 	ld wa, 0:i3
@@ -32174,7 +32174,7 @@ CmpEsyTtl_E_Var1_Case9:
 TtlFunc_SendEventAndReturn:
 	call ApDeliveryEvent
 	jr CstmCp_ReturnZero
-CmpEsyTtl_E_Var1_Case11:
+CmpEsyTtl_E_Var1_OnOk:
 	ld wa, 0:i3
 	call Tempo_EditBPM
 
@@ -32284,7 +32284,7 @@ CstmCpTtlFunc_Skip6:
 	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jrl	CstmCpTtlFunc_Join
-CstmCpTtl_RecMode2_Case128:	; cases 128, 129
+CstmCpTtl_RecMode2_OnFromSlotDec:	; cases 128, 129
 	cp	(0x3a7e:16), 0
 	jrl	nz, CstmCp_ReturnZero2
 	ld	wa, 1:i3
@@ -32307,7 +32307,7 @@ CstmCpTtlFunc_Skip7:
 	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jrl	CstmCpTtlFunc_Join
-CstmCpTtl_RecMode2_Case119:	; cases 119, 120, 131, 132
+CstmCpTtl_RecMode2_OnDirectionSwap:	; cases 119, 120, 131, 132
 	cp	(0x3a7e:16), 0
 	jrl	nz, CstmCp_ReturnZero2
 	ld	a, (0x39b6:16)
@@ -32338,7 +32338,7 @@ CstmCpTtl_RecMode2_Case119:	; cases 119, 120, 131, 132
 	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jrl	CstmCpTtlFunc_Join
-CstmCpTtl_RecMode2_Case122:	; cases 122, 123
+CstmCpTtl_RecMode2_OnToSlotInc:	; cases 122, 123
 	cp	(0x3a7e:16), 0
 	jrl	nz, CstmCp_ReturnZero2
 	ld	wa, 1:i3
@@ -32361,7 +32361,7 @@ CstmCpTtlFunc_Skip8:
 	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jr	CstmCpTtlFunc_Join
-CstmCpTtl_RecMode2_Case134:	; cases 134, 135
+CstmCpTtl_RecMode2_OnToSlotDec:	; cases 134, 135
 	cp	(0x3a7e:16), 0
 	jrl	nz, CstmCp_ReturnZero2
 	ld	wa, 1:i3
@@ -32386,7 +32386,7 @@ CstmCpTtlFunc_Skip9:
 CstmCpTtlFunc_Join:
 	call	ApDeliveryEvent
 	jrl	CstmCp_ReturnZero2
-CstmCpTtl_RecMode2_Case125:
+CstmCpTtl_RecMode2_OnWindowExecute:
 	ld	a, (0x3a7e:16)
 	cp	a, 2:i3
 	jr	z, CstmCpTtlFunc_Skip10
@@ -32407,7 +32407,7 @@ CstmCpTtlFunc_Skip10:
 	ld	(GLOBAL_ERROR_CODE:16), 35
 	ldw	wa, 238
 	jrl	CstmCpTtlFunc_Join3
-CstmCpTtl_RecMode2_Case127:
+CstmCpTtl_RecMode2_OnCopyOrWindowAbort:
 	ld	a, (0x3a7e:16)
 	cp	a, 2:i3
 	jrl	z, CstmCpTtlFunc_Skip15

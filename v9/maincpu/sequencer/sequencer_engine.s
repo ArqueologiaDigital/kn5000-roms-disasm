@@ -20694,7 +20694,7 @@ AppEvtHandler_Branch_021_Code:
 	jrl nz, AppEvtHandler_Branch_024
 	ld (0xf1ee:16), 17
 	jr AppEvtHandler_Branch_024
-AppEvtHandler_Branch_021_Case16:
+AppEvtHandler_Branch_021_IncMcpFromMeasure:
 	ld wa, (0xf1ea:16)
 	cp wa, 0x3e7
 	jr nc, AppEvtHandler_Branch_022
@@ -20706,7 +20706,7 @@ AppEvtHandler_Branch_022:
 	jr ule, AppEvtHandler_Branch_023
 	ld (9768:16), wa
 	jr AppEvtHandler_Branch_023
-AppEvtHandler_Branch_021_Case17:
+AppEvtHandler_Branch_021_IncMcpLastMeasure:
 	ld wa, (9768:16)
 	cp wa, 0x3e7
 	jr nc, AppEvtHandler_Branch_023
@@ -20718,7 +20718,7 @@ AppEvtHandler_Branch_023:
 	inc 1, wa
 	ld (0xf1ec:16), wa
 	jr AppEvtHandler_Branch_024
-AppEvtHandler_Branch_021_Case18:
+AppEvtHandler_Branch_021_IncMcpTrackB:
 	ld a, (0xf1ee:16)
 	cp a, 0x11
 	jr nc, AppEvtHandler_Branch_024
@@ -20728,14 +20728,14 @@ AppEvtHandler_Branch_021_Case18:
 	jr nz, AppEvtHandler_Branch_024
 	ld (0xf1e9:16), 17
 	jr AppEvtHandler_Branch_024
-AppEvtHandler_Branch_021_Case19:
+AppEvtHandler_Branch_021_IncMcpStartMeasure:
 	ld wa, (0xf1ef:16)
 	cp wa, 0x3e7
 	jr nc, AppEvtHandler_Branch_024
 	inc 1, wa
 	ld (0xf1ef:16), wa
 	jr AppEvtHandler_Branch_024
-AppEvtHandler_Branch_021_Case20:
+AppEvtHandler_Branch_021_IncMcpRepeat:
 	ld a, (9770:16)
 	cp a, 0x7f
 	jr nc, AppEvtHandler_Branch_024
@@ -20787,7 +20787,7 @@ AppEvtHandler_Branch_024_Code:
 	jrl nz, AppEvtHandler_Branch_027
 	ld (0xf1e6:16), 17
 	jr AppEvtHandler_Branch_027
-AppEvtHandler_Branch_024_Case22:
+AppEvtHandler_Branch_024_IncMinsFromMeasure:
 	ld wa, (0xf1e2:16)
 	cp wa, 0x3e7
 	jr nc, AppEvtHandler_Branch_025
@@ -20799,7 +20799,7 @@ AppEvtHandler_Branch_025:
 	jr ule, AppEvtHandler_Branch_026
 	ld (9774:16), wa
 	jr AppEvtHandler_Branch_026
-AppEvtHandler_Branch_024_Case23:
+AppEvtHandler_Branch_024_IncMinsLastMeasure:
 	ld wa, (9774:16)
 	cp wa, 0x3e7
 	jr nc, AppEvtHandler_Branch_026
@@ -20811,7 +20811,7 @@ AppEvtHandler_Branch_026:
 	inc 1, wa
 	ld (0xf1e4:16), wa
 	jr AppEvtHandler_Branch_027
-AppEvtHandler_Branch_024_Case24:
+AppEvtHandler_Branch_024_IncMinsTrackB:
 	ld a, (0xf1e6:16)
 	cp a, 0x11
 	jr nc, AppEvtHandler_Branch_027
@@ -20821,14 +20821,14 @@ AppEvtHandler_Branch_024_Case24:
 	jr nz, AppEvtHandler_Branch_027
 	ld (0xf1e1:16), 17
 	jr AppEvtHandler_Branch_027
-AppEvtHandler_Branch_024_Case25:
+AppEvtHandler_Branch_024_IncMinsStartMeasure:
 	ld wa, (0xf1e7:16)
 	cp wa, 0x3e7
 	jr nc, AppEvtHandler_Branch_027
 	inc 1, wa
 	ld (0xf1e7:16), wa
 	jr AppEvtHandler_Branch_027
-AppEvtHandler_Branch_024_Case26:
+AppEvtHandler_Branch_024_IncMinsRepeat:
 	ld a, (9776:16)
 	cp a, 0x7f
 	jr nc, AppEvtHandler_Branch_027
@@ -21400,14 +21400,14 @@ AppEvent_SubDispatch_Code_2_Code2:
 	jr	nz, AppEvent_InlineHandler_Entry3
 	ld	(0xf1e6:16), 16
 	jr	AppEvent_InlineHandler_Entry3
-AppEvent_SubDispatch_Case22:
+AppEvent_SubDispatch_DecMinsFromMeasure:
 	ld	wa, (0xf1e2:16)
 	cp	wa, 1:i3
 	jr	ule, AppEvent_InlineHandler_Join6
 	dec	1, wa
 	ld	(0xf1e2:16), wa
 	jr	AppEvent_InlineHandler_Join6
-AppEvent_SubDispatch_Case23:
+AppEvent_SubDispatch_DecMinsLastMeasure:
 	ld	wa, (9774:16)
 	cp	wa, 1:i3
 	jr	ule, AppEvent_InlineHandler_Skip11
@@ -21424,7 +21424,7 @@ AppEvent_InlineHandler_Join6:
 	inc 1, wa
 	ld	(0xf1e4:16), wa
 	jr	AppEvent_InlineHandler_Entry3
-AppEvent_SubDispatch_Case24:
+AppEvent_SubDispatch_DecMinsTrackB:
 	ld	a, (0xf1e6:16)
 	cp	a, 1:i3
 	jr	ule, AppEvent_InlineHandler_Entry3
@@ -21434,14 +21434,14 @@ AppEvent_SubDispatch_Case24:
 	jr	nz, AppEvent_InlineHandler_Entry3
 	ld	(0xf1e1:16), 16
 	jr	AppEvent_InlineHandler_Entry3
-AppEvent_SubDispatch_Case25:
+AppEvent_SubDispatch_DecMinsStartMeasure:
 	ld	wa, (0xf1e7:16)
 	cp	wa, 1:i3
 	jr	ule, AppEvent_InlineHandler_Entry3
 	dec	1, wa
 	ld	(0xf1e7:16), wa
 	jr	AppEvent_InlineHandler_Entry3
-AppEvent_SubDispatch_Case26:
+AppEvent_SubDispatch_DecMinsRepeat:
 	ld	a, (9776:16)
 	cp	a, 0:i3
 	jr	z, AppEvent_InlineHandler_Entry3
@@ -22790,7 +22790,7 @@ SeqAccomp_StartAndPostEvents:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl SeqAccomp_StartHandler
-ApPlaySyori_Case133:
+ApPlaySyori_OnPaintSqRealRec:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call ApDeliveryEvent
@@ -22837,7 +22837,7 @@ SeqPlay_AllocPostEvent:
 	ld wa, iz
 	exts xwa
 	jrl NoteEdit_ScrollCallReset
-ApPlaySyori_Case135:
+ApPlaySyori_OnPaintSqPunch:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call ApDeliveryEvent
@@ -22863,7 +22863,7 @@ ApPlaySyori_Case135:
 	call ApDeliveryEvent
 	ld wa, 0:i3
 	jrl NoteEdit_ReturnSendToggle
-ApPlaySyori_Case136:
+ApPlaySyori_OnPaintSqPunchM:
 	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr nz, SeqAcc_SendParamsAndStart
 	ld bc, (9832:16)
@@ -22916,7 +22916,7 @@ SeqAcc_SendParamsAndStart:
 	ld xwa, 0x880004
 	ld xbc, EVT_SET_PARAM
 	jrl SeqAccomp_StartHandler
-ApPlaySyori_Case134:
+ApPlaySyori_OnPaintSqCycRec:
 	ld a, (0x28b2:16)
 	and a, 0x1
 	cp a, 0:i3
@@ -22924,7 +22924,7 @@ ApPlaySyori_Case134:
 	ld wa, iz
 	exts xwa
 	calr AppEvent_SendAccompStatus
-ApPlaySyori_Case130:
+ApPlaySyori_OnPaintSqCycPly:
 	ld xwa, (0x2972:16)
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 3:i3
@@ -22985,7 +22985,7 @@ SeqAccomp_SubHandlerA:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	jrl	SeqAccomp_SubHandlerB_Code_Join
-SeqAccomp_ParamDelivery_Case4:
+SeqAccomp_ParamDelivery_IncCycleEnable:
 	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jrl	nz, AppEvent_ReturnZero
 	ldto_berp	a, 239
@@ -23016,7 +23016,7 @@ ApPlaySyori_Join9:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 4:i3
 	jrl	SeqAccomp_SubHandlerB_Code_Join
-SeqAccomp_ParamDelivery_Case5:
+SeqAccomp_ParamDelivery_IncCycleStartMeasure:
 	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jrl	nz, AppEvent_ReturnZero
 	cp	(CURRENT_TITLE:16), 134
@@ -23055,7 +23055,7 @@ ApPlaySyori_Skip:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 5:i3
 	jrl	SeqAccomp_SubHandlerB_Code_Join
-SeqAccomp_ParamDelivery_Case6:
+SeqAccomp_ParamDelivery_IncCycleEndMeasure:
 	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jrl	nz, AppEvent_ReturnZero
 	cp	(CURRENT_TITLE:16), 134
@@ -23080,7 +23080,7 @@ ApPlaySyori_Join2:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 6:i3
 	jrl	SeqAccomp_SubHandlerB_Code_Join
-SeqAccomp_ParamDelivery_Case8:	; cases 8, 9, 10
+SeqAccomp_ParamDelivery_IncPInPOutPCntIn:	; cases 8, 9, 10
 	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jrl	nz, AppEvent_ReturnZero
 	ld	xwa, (xsp+2)
@@ -23114,7 +23114,7 @@ ApPlaySyori_Join3:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 10
 	jrl	SeqAccomp_StartHandler
-SeqAccomp_ParamDelivery_Case11:
+SeqAccomp_ParamDelivery_IncSoloEnable:
 	cpib_erp 238, 1
 	jrl	z, AppEvent_ReturnZero
 	ld	(0x283a:16), 1
@@ -23153,7 +23153,7 @@ SeqAccomp_SubHandlerB:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	jrl	SeqAccomp_SubHandlerB_Code_Join
-SeqAccomp_SubChain_Case4:
+SeqAccomp_SubChain_DecCycleEnable:
 	ldto_berp c, 239
 	ld	a, (0x28b1:16)
 	cp_erpb 239, 130
@@ -23196,7 +23196,7 @@ ApPlaySyori_Join5:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 4:i3
 	jrl	SeqAccomp_StartHandler
-SeqAccomp_SubChain_Case5:
+SeqAccomp_SubChain_DecCycleStartMeasure:
 	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jrl	nz, AppEvent_ReturnZero
 	cp	(CURRENT_TITLE:16), 134
@@ -23221,7 +23221,7 @@ ApPlaySyori_Join6:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 5:i3
 	jr	SeqAccomp_SubHandlerB_Code_Join
-SeqAccomp_SubChain_Case6:
+SeqAccomp_SubChain_DecCycleEndMeasure:
 	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jrl	nz, AppEvent_ReturnZero
 	cp	(CURRENT_TITLE:16), 134
@@ -23264,7 +23264,7 @@ ApPlaySyori_Join7:
 SeqAccomp_SubHandlerB_Code_Join:
 	call	ApDeliveryEvent
 	jrl	SeqAccomp_InitAndReturn
-SeqAccomp_SubChain_Case8:	; cases 8, 9, 10
+SeqAccomp_SubChain_DecPunchParam:	; cases 8, 9, 10
 	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jrl	nz, AppEvent_ReturnZero
 	ld	xwa, (xsp+2)
@@ -23301,7 +23301,7 @@ ApPlaySyori_Join8:
 SeqAccomp_StartHandler:
 	call ApDeliveryEvent
 	jrl AppEvent_ReturnZero
-SeqAccomp_SubChain_Case11:
+SeqAccomp_SubChain_DecSoloEnable:
 	cpib_erp 0xee, 0
 	jrl z, AppEvent_ReturnZero
 	ld (0x283a:16), 0
@@ -33206,7 +33206,7 @@ SeqPart_VelCurveData:
 	ld	(9792:16), 48
 	ld	(9794:16), 48
 	jrl	SeqPart_VelocityCurveCalc_Join5
-SeqPart_VelocityCurveCalc_Case2:
+SeqPart_VelocityCurveCalc_QtzGrid48:
 	ld	a, c
 	ld	e, 0:opc
 	cp	c, 24
@@ -33221,7 +33221,7 @@ SeqPart_VelocityCurveCalc_Skip6:
 	ld	xbc, SeqPart_VelCurveData_Table_6
 	ld	(9794), (xbc+de)
 	jrl	SeqPart_VelocityCurveCalc_Join5
-SeqPart_VelocityCurveCalc_Case4:
+SeqPart_VelocityCurveCalc_QtzGrid24:
 	ld	a, c
 	cp	c, 12
 	jr	nc, SeqPart_VelocityCurveCalc_Skip7
@@ -33249,7 +33249,7 @@ SeqPart_VelocityCurveCalc_Join3:
 	ld	xbc, SeqPart_VelCurveData_Table_7
 	ld	(9794), (xbc+de)
 	jrl	SeqPart_VelocityCurveCalc_Join5
-SeqPart_VelocityCurveCalc_Case6:
+SeqPart_VelocityCurveCalc_QtzGrid12:
 	ld	a, c
 	cp	c, 6:i3
 	jr	nc, SeqPart_VelocityCurveCalc_Skip10
@@ -33297,7 +33297,7 @@ SeqPart_VelocityCurveCalc_Join:
 	ld	xbc, SeqPart_VelCurveData_Data
 	ld	(9794), (xbc+de)
 	jrl	SeqPart_VelocityCurveCalc_Join5
-SeqPart_VelocityCurveCalc_Case8:
+SeqPart_VelocityCurveCalc_QtzGrid32:
 	ld	a, c
 	cp	c, 16
 	jr	nc, SeqPart_VelocityCurveCalc_Skip14
@@ -33320,7 +33320,7 @@ SeqPart_VelocityCurveCalc_Join4:
 	ld	xbc, SeqPart_VelCurveData_Data_2
 	ld	(9794), (xbc+de)
 	jrl	SeqPart_VelocityCurveCalc_Join5
-SeqPart_VelocityCurveCalc_Case10:
+SeqPart_VelocityCurveCalc_QtzGrid16:
 	ld	a, c
 	cp	c, 8
 	jr	nc, SeqPart_VelocityCurveCalc_Skip16

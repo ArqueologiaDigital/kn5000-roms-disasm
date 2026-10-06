@@ -1078,11 +1078,11 @@ ToneGen_ParamWriteDispatch_Str_N6_SINE_WAVE_ROM_check_16dB_DOWN:
 	aligned_string "(6)SINE WAVE & ROM check 16dB DOWN"
 ToneGen_WriteParamByIndex_CaseTable:
 	.short	ToneGen_ParamWriteDispatch - ToneGen_ParamWriteDispatch
-	.short	ToneGen_WriteParamByIndex_Case1 - ToneGen_ParamWriteDispatch
-	.short	ToneGen_WriteParamByIndex_Case2 - ToneGen_ParamWriteDispatch
-	.short	ToneGen_WriteParamByIndex_Case3 - ToneGen_ParamWriteDispatch
-	.short	ToneGen_WriteParamByIndex_Case4 - ToneGen_ParamWriteDispatch
-	.short	ToneGen_WriteParamByIndex_Case5 - ToneGen_ParamWriteDispatch
+	.short	ToneGen_WriteParamByIndex_DrawOutselCheckItem - ToneGen_ParamWriteDispatch
+	.short	ToneGen_WriteParamByIndex_DrawHighSoundCheckItem - ToneGen_ParamWriteDispatch
+	.short	ToneGen_WriteParamByIndex_DrawLowSoundCheckItem - ToneGen_ParamWriteDispatch
+	.short	ToneGen_WriteParamByIndex_DrawNormalSoundCheckItem - ToneGen_ParamWriteDispatch
+	.short	ToneGen_WriteParamByIndex_DrawSineWaveMinus16dBItem - ToneGen_ParamWriteDispatch
 WallHomeEdit_Text:
 	aligned_string "DEFAULT"
 WallHomeEdit_PushSndAddr_Str_USER:	aligned_string " USER  "

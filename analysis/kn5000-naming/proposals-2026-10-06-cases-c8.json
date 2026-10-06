@@ -1,0 +1,806 @@
+[
+ {
+  "old": "SqplyVal_HandleExtraParams_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_HandleExtraParams_DrawCycleStartMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-play value-list parameter number, the XDE of EVT_PARA_DRAW) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8271 `cp xwa, EVT_PARA_DRAW` -- SqplyValProc sends EVT_PARA_DRAW to the handler that ends in this switch; XDE (saved at xsp+60) is the parameter to draw",
+   "sequencer/sequencer_ui.s:8393 `ld xbc, EVT_GET_RAM_ADDRESS` -- the same XDE asks SqplyFunc for the parameter's RAM address",
+   "sequencer/sequencer_ui.s:8412 `cp xwa, 0x7` -- parameters 0-3 and 7 are drawn before the switch (0/3/7 measure, 1 beat, 2 memory)",
+   "sequencer/sequencer_ui.s:8471 `dec 4, xhl` -- the switch value is parameter - 4, 0..7 (cp xhl, 0x7), so labels Case4..Case11 are the real parameter numbers",
+   "sequencer/sequencer_ui.s:8486 `ld xbc, EVT_GET_CYC_EN_STRING` -- parameter 4 (offset-0 case): cycle on/off string",
+   "shared/event_codes.s:678 `.equ EVT_GET_CYC_SRT_M_STRING, 0x1e80042` -- MT_GetCycSrtMString: the cycle start-measure field of the sequencer play screen",
+   "sequencer/sequencer_ui.s:8506 `ld xbc, EVT_GET_CYC_SRT_M_STRING` -- the case's string request, then the shared EVT_CHK_CUR / DrawStringLeftJustify join"
+  ]
+ },
+ {
+  "old": "SqplyVal_HandleExtraParams_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_HandleExtraParams_DrawCycleEndMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-play value-list parameter number, the XDE of EVT_PARA_DRAW) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8510 `ld xbc, EVT_GET_CYC_END_M_STRING` -- the case's string request (MT_GetCycEndMString: cycle end measure)",
+   "shared/event_codes.s:679 `.equ EVT_GET_CYC_END_M_STRING, 0x1e80043` -- MT_GetCycEndMString: cycle end measure"
+  ]
+ },
+ {
+  "old": "SqplyVal_HandleExtraParams_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_HandleExtraParams_DrawPInMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-play value-list parameter number, the XDE of EVT_PARA_DRAW) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8514 `ld xbc, EVT_GET_P_IN_MEAS_STRING` -- the case's string request (MT_GetPInMeasString: the \"P\" in-measure (RAM word 0xf238))",
+   "shared/event_codes.s:690 `.equ EVT_GET_P_IN_MEAS_STRING, 0x1e8004e` -- MT_GetPInMeasString: the \"P\" in-measure (RAM word 0xf238)"
+  ]
+ },
+ {
+  "old": "SqplyVal_HandleExtraParams_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_HandleExtraParams_DrawPOutMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-play value-list parameter number, the XDE of EVT_PARA_DRAW) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8518 `ld xbc, EVT_GET_P_OUT_MEAS_STRING` -- the case's string request (MT_GetPOutMeasString: the \"P\" out-measure (RAM word 0xf23a))",
+   "shared/event_codes.s:691 `.equ EVT_GET_P_OUT_MEAS_STRING, 0x1e8004f` -- MT_GetPOutMeasString: the \"P\" out-measure (RAM word 0xf23a)"
+  ]
+ },
+ {
+  "old": "SqplyVal_HandleExtraParams_Case10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_HandleExtraParams_DrawPCountIn",
+  "header": "",
+  "basis": "switch value meaning (sequencer-play value-list parameter number, the XDE of EVT_PARA_DRAW) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8522 `ld xbc, EVT_GET_P_CNT_IN_STRING` -- the case's string request (MT_GetPCntInString: the \"P\" count-in (RAM word 0xf23f))",
+   "shared/event_codes.s:692 `.equ EVT_GET_P_CNT_IN_STRING, 0x1e80050` -- MT_GetPCntInString: the \"P\" count-in (RAM word 0xf23f)"
+  ]
+ },
+ {
+  "old": "SqplyVal_HandleExtraParams_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_HandleExtraParams_DrawSoloEnable",
+  "header": "",
+  "basis": "switch value meaning (sequencer-play value-list parameter number, the XDE of EVT_PARA_DRAW) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8526 `ld xbc, EVT_GET_SOLO_EN_STRING` -- the case's string request (MT_GetSoloEnString: solo on/off)",
+   "shared/event_codes.s:683 `.equ EVT_GET_SOLO_EN_STRING, 0x1e80047` -- MT_GetSoloEnString: solo on/off"
+  ]
+ },
+ {
+  "old": "EffectBox_StateDispatch_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EffectBox_StateDispatch_DrawEqBand2",
+  "header": "",
+  "basis": "switch value meaning (EQ band number, the parameter of EVT_EQ_STR_DRAW) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:12944 `cp xiz, EVT_EQ_STR_DRAW` -- EqualizerBoxProc: EVT_EQ_STR_DRAW enters the handler that ends in this switch",
+   "sequencer/sequencer_ui.s:12935 `ld (xsp + 88), xde` -- the event parameter is kept at xsp+88",
+   "shared/event_codes.s:143 `.equ EVT_EQ_STR_DRAW, 0x1c80003` -- EV_EQSTRDRAW: draw the value string of EQ band N, parameter = band 0-7",
+   "sequencer/sequencer_ui.s:13058 `ld xbc, (xsp + 88)` -- switch on the band ...",
+   "sequencer/sequencer_ui.s:13062 `dec 1, xbc` -- ... minus 1, index 0..6 (band 0 and out-of-range take EffectBox_State1 = EVT_GET_EQ0_STR), so Case2..7 are bands 2..7",
+   "sequencer/sequencer_ui.s:13077 `ld xbc, EVT_GET_EQ2_STR` -- the case asks for MT_GetEq2Str, then the shared DrawStringLeftJustify join"
+  ]
+ },
+ {
+  "old": "EffectBox_StateDispatch_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EffectBox_StateDispatch_DrawEqBand3",
+  "header": "",
+  "basis": "switch value meaning (EQ band number, the parameter of EVT_EQ_STR_DRAW) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13080 `ld xbc, EVT_GET_EQ3_STR` -- the case asks for MT_GetEq3Str, then the shared DrawStringLeftJustify join"
+  ]
+ },
+ {
+  "old": "EffectBox_StateDispatch_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EffectBox_StateDispatch_DrawEqBand4",
+  "header": "",
+  "basis": "switch value meaning (EQ band number, the parameter of EVT_EQ_STR_DRAW) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13083 `ld xbc, EVT_GET_EQ4_STR` -- the case asks for MT_GetEq4Str, then the shared DrawStringLeftJustify join"
+  ]
+ },
+ {
+  "old": "EffectBox_StateDispatch_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EffectBox_StateDispatch_DrawEqBand5",
+  "header": "",
+  "basis": "switch value meaning (EQ band number, the parameter of EVT_EQ_STR_DRAW) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13086 `ld xbc, EVT_GET_EQ5_STR` -- the case asks for MT_GetEq5Str, then the shared DrawStringLeftJustify join"
+  ]
+ },
+ {
+  "old": "EffectBox_StateDispatch_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EffectBox_StateDispatch_DrawEqBand6",
+  "header": "",
+  "basis": "switch value meaning (EQ band number, the parameter of EVT_EQ_STR_DRAW) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13089 `ld xbc, EVT_GET_EQ6_STR` -- the case asks for MT_GetEq6Str, then the shared DrawStringLeftJustify join"
+  ]
+ },
+ {
+  "old": "EffectBox_StateDispatch_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EffectBox_StateDispatch_DrawEqBand7",
+  "header": "",
+  "basis": "switch value meaning (EQ band number, the parameter of EVT_EQ_STR_DRAW) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13092 `ld xbc, EVT_GET_EQ7_STR` -- the case asks for MT_GetEq7Str, then the shared DrawStringLeftJustify join"
+  ]
+ },
+ {
+  "old": "PartGrid_ColumnDispatch_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PartGrid_ColumnDispatch_FlashSection1",
+  "header": "A = 10..29 selects section (A - 10) / 3 (three per section); A < 10 returns RHYTHM_PATTERN_BUF_PTR, A >= 30 the buffer pointer at RAM 3186; what A numbers is not established.",
+  "basis": "switch value meaning (Custom Data Flash section index (A - 10) / 3) + body (the case returns FLASH_SECTION_PTR_N)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1600 `cp a, 0x1e` -- A >= 30: return the pointer at 3186 (0x69800, Flash_InitExtMemAddrs)",
+   "storage/flash_floppy_handlers.s:1603 `ret c` -- A < 10: return RHYTHM_PATTERN_BUF_PTR (loaded into XHL first)",
+   "storage/flash_floppy_handlers.s:1606 `div a, 0x3` -- switch value = (A - 10) / 3, 0..6",
+   "storage/flash_floppy_handlers.s:1619 `ld xhl, (FLASH_SECTION_PTR_0:16)` -- value 0 (the offset-0 case) returns section 0",
+   "shared/ram_variables.s:67 `.equ FLASH_SECTION_PTR_1, 0x0c7a` -- the Custom Data Flash section pointers set by Flash_InitExtMemAddrs (0x300000 + 0x19800 ...)",
+   "storage/flash_floppy_handlers.s:1289 `add xbc, 0x19800` -- section 1 = 0x319800",
+   "storage/flash_floppy_handlers.s:1622 `ld xhl, (FLASH_SECTION_PTR_1:16)` -- the case returns Custom Data Flash section 1's pointer"
+  ]
+ },
+ {
+  "old": "PartGrid_ColumnDispatch_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PartGrid_ColumnDispatch_FlashSection2",
+  "header": "",
+  "basis": "switch value meaning (Custom Data Flash section index (A - 10) / 3) + body (the case returns FLASH_SECTION_PTR_N)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1625 `ld xhl, (FLASH_SECTION_PTR_2:16)` -- the case returns Custom Data Flash section 2's pointer"
+  ]
+ },
+ {
+  "old": "PartGrid_ColumnDispatch_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PartGrid_ColumnDispatch_FlashSection3",
+  "header": "",
+  "basis": "switch value meaning (Custom Data Flash section index (A - 10) / 3) + body (the case returns FLASH_SECTION_PTR_N)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1628 `ld xhl, (FLASH_SECTION_PTR_3:16)` -- the case returns Custom Data Flash section 3's pointer"
+  ]
+ },
+ {
+  "old": "PartGrid_ColumnDispatch_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PartGrid_ColumnDispatch_FlashSection4",
+  "header": "",
+  "basis": "switch value meaning (Custom Data Flash section index (A - 10) / 3) + body (the case returns FLASH_SECTION_PTR_N)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1631 `ld xhl, (FLASH_SECTION_PTR_4:16)` -- the case returns Custom Data Flash section 4's pointer"
+  ]
+ },
+ {
+  "old": "PartGrid_ColumnDispatch_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PartGrid_ColumnDispatch_FlashSection5",
+  "header": "",
+  "basis": "switch value meaning (Custom Data Flash section index (A - 10) / 3) + body (the case returns FLASH_SECTION_PTR_N)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1634 `ld xhl, (FLASH_SECTION_PTR_5:16)` -- the case returns Custom Data Flash section 5's pointer"
+  ]
+ },
+ {
+  "old": "PartGrid_ColumnDispatch_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PartGrid_ColumnDispatch_FlashSection6",
+  "header": "",
+  "basis": "switch value meaning (Custom Data Flash section index (A - 10) / 3) + body (the case returns FLASH_SECTION_PTR_N)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1637 `ld xhl, (FLASH_SECTION_PTR_6:16)` -- the case returns Custom Data Flash section 6's pointer"
+  ]
+ },
+ {
+  "old": "MainPmanCtrl_Case0",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainPmanCtrl_OnLswPut",
+  "header": "",
+  "basis": "event code (MainPmanControl switches on event - EVT_LSW_PUT) + body",
+  "evidence": [
+   "ui/ui_control_panel.s:2587 `sub xwa, EVT_LSW_PUT` -- MainPmanControl (MainFunction 0x01400002) switches on the event code minus EVT_LSW_PUT",
+   "ui/ui_control_panel.s:2590 `cp xwa, 0x5` -- six cases, EVT_LSW_PUT .. EVT_LSW_PART_GET",
+   "shared/event_codes.s:278 `.equ EVT_LSW_PUT, 0x1e00057` -- the firmware method of value 0",
+   "ui/ui_control_panel.s:2610 `call SoundParam_NotifyChange` -- the case's work on the Lsw block in XDE",
+   "ui/ui_control_panel.s:2605 `MainPmanCtrl_Case0:` -- Case0 shares its address with MainPmanCtrl_DispatchTable (the switch base the offset table and `lda xix` use): one of the two should go"
+  ]
+ },
+ {
+  "old": "MainPmanCtrl_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainPmanCtrl_OnLswAdd",
+  "header": "",
+  "basis": "event code (MainPmanControl switches on event - EVT_LSW_PUT) + body",
+  "evidence": [
+   "shared/event_codes.s:279 `.equ EVT_LSW_ADD, 0x1e00058` -- the firmware method of value 1",
+   "ui/ui_control_panel.s:2617 `call SndParam_LookupByKey` -- the case's work on the Lsw block in XDE"
+  ]
+ },
+ {
+  "old": "MainPmanCtrl_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainPmanCtrl_OnLswGet",
+  "header": "Reads the parameter into block +4, then posts a 12-byte Malloc copy as EVT_LSW_DATA (and EVT_AUTO_FREE).",
+  "basis": "event code (MainPmanControl switches on event - EVT_LSW_PUT) + body",
+  "evidence": [
+   "shared/event_codes.s:280 `.equ EVT_LSW_GET, 0x1e00059` -- the firmware method of value 2",
+   "ui/ui_control_panel.s:2622 `call SndParam_LookupReadOnly` -- the case's work on the Lsw block in XDE"
+  ]
+ },
+ {
+  "old": "MainPmanCtrl_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainPmanCtrl_OnLswPartPut",
+  "header": "",
+  "basis": "event code (MainPmanControl switches on event - EVT_LSW_PUT) + body",
+  "evidence": [
+   "shared/event_codes.s:281 `.equ EVT_LSW_PART_PUT, 0x1e0005a` -- the firmware method of value 3",
+   "ui/ui_control_panel.s:2649 `call SndParam_NotifyAndReturn` -- the case's work on the Lsw block in XDE"
+  ]
+ },
+ {
+  "old": "MainPmanCtrl_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainPmanCtrl_OnLswPartAdd",
+  "header": "",
+  "basis": "event code (MainPmanControl switches on event - EVT_LSW_PUT) + body",
+  "evidence": [
+   "shared/event_codes.s:282 `.equ EVT_LSW_PART_ADD, 0x1e0005b` -- the firmware method of value 4",
+   "ui/ui_control_panel.s:2659 `call SndParam_WrapNotify2` -- the case's work on the Lsw block in XDE"
+  ]
+ },
+ {
+  "old": "MainPmanCtrl_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainPmanCtrl_OnLswPartGet",
+  "header": "Per-part read into block +4, replied as a 12-byte Malloc copy in EVT_LSW_DATA (and EVT_AUTO_FREE).",
+  "basis": "event code (MainPmanControl switches on event - EVT_LSW_PUT) + body",
+  "evidence": [
+   "shared/event_codes.s:283 `.equ EVT_LSW_PART_GET, 0x1e0005c` -- the firmware method of value 5",
+   "ui/ui_control_panel.s:2667 `call SndParam_LookupViaEncode` -- the case's work on the Lsw block in XDE"
+  ]
+ },
+ {
+  "old": "SeqEvtBuf_NoteDispatch_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqEvtBuf_NoteDispatch_PitchBend",
+  "header": "7-bit value widened to 14 bits ((v << 7) | (v >= 64 ? 2v - 128 : 0), 64 -> 0x2000), sent as SndPart_SetParam code 0x1B0 (pitch bend).",
+  "basis": "switch value meaning (controller-type word of a 0xD1/0xD2 sequencer-buffer record, mapped by the case to a SndPart_SetParam code) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:13715 `cp wa, 0xd2` -- a buffer word 0xD1/0xD2 enters this record: low nibble = part (Rhythm_EventMapB), then two more words",
+   "audio/note_voice_mapping.s:13843 `ldfr_werp HL, 0xfa` -- the second word (controller type) is kept in bank-0xFA WA, the third (value) in IZ",
+   "audio/note_voice_mapping.s:13859 `dec 1, wa` -- switch on type - 1, 0..6: types 1..7, so Case2..Case7 are the real type values",
+   "audio/note_voice_mapping.s:13874 `ld bc, 1:i3` -- type 1 (offset-0 case): SndPart_SetParam code 1 = SndPart_SetModWheel",
+   "audio/note_voice_mapping.s:18112 `cp bc, 0x1b0` -- SndPart_SetParam's code dispatch (0x1B0, 0x40, 0x0A, 0x0B, 0x5E ...)",
+   "audio/note_voice_mapping.s:13896 `ldw bc, 432` -- SndPart_SetParam code 0x1B0 = SndPart_SetRPN, which calls MIDI_SendPitchBend"
+  ]
+ },
+ {
+  "old": "SeqEvtBuf_NoteDispatch_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqEvtBuf_NoteDispatch_DamperPedal",
+  "header": "",
+  "basis": "switch value meaning (controller-type word of a 0xD1/0xD2 sequencer-buffer record, mapped by the case to a SndPart_SetParam code) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:13908 `ldw bc, 64` -- code 0x40 = SndPart_SetDamperPedal (CC 64)"
+  ]
+ },
+ {
+  "old": "SeqEvtBuf_NoteDispatch_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqEvtBuf_NoteDispatch_Pan",
+  "header": "",
+  "basis": "switch value meaning (controller-type word of a 0xD1/0xD2 sequencer-buffer record, mapped by the case to a SndPart_SetParam code) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:13919 `ldw bc, 10` -- code 0x0A = SndPart_SetPan (CC 10)"
+  ]
+ },
+ {
+  "old": "SeqEvtBuf_NoteDispatch_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqEvtBuf_NoteDispatch_Expression",
+  "header": "",
+  "basis": "switch value meaning (controller-type word of a 0xD1/0xD2 sequencer-buffer record, mapped by the case to a SndPart_SetParam code) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:13930 `ldw bc, 11` -- code 0x0B = SndPart_SetExpression (CC 11)"
+  ]
+ },
+ {
+  "old": "SeqEvtBuf_NoteDispatch_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqEvtBuf_NoteDispatch_DelaySend",
+  "header": "Value 6 is ignored (SeqPerformance_Event_Block); value 7 is the CC 94 send, which SndPart_SetParam keeps per part at 0xD050.",
+  "basis": "switch value meaning (controller-type word of a 0xD1/0xD2 sequencer-buffer record, mapped by the case to a SndPart_SetParam code) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:13941 `ldw bc, 94` -- code 0x5E = SndPart_SetDelaySend (CC 94, kept per part in the 0xD050 table), beside 0x5B reverb / 0x5D chorus"
+  ]
+ },
+ {
+  "old": "Audio_DispatchCommand_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Audio_DispatchCommand_LoadHelpLanguage",
+  "header": "",
+  "basis": "switch value meaning (field index 4..8 of the 0x50-byte option block at Custom Data Flash 0x3D3400, one per *FlashFunc caller) + body",
+  "evidence": [
+   "audio/tonegen_fileio_handlers.s:1174 `cp wa, 0x8` -- switch on WA 0..8; 0..3 return at once (DSPCfg_Param_CaseD), so Case4..8 are the real values",
+   "audio/tonegen_fileio_handlers.s:1083 `pushw 0x2` -- the boot loader copies all five option-block fields (2, 12, 4, 4, 6 bytes) to 0x340E4/E6/F2/F6/FA; each case copies one of them",
+   "ui_widgets/extension_device_screens.s:933 `; SndParamBank_OptionDefault_NN -- the defaults of the five fields of the 0x50-byte block at Custom Data Flash` -- the 0x50-byte block at 0x3D3400 and its five fields",
+   "audio/tonegen_fileio_handlers.s:1167 `call FlashWrite` -- the sibling switch writes the same fields back to flash (RAM -> flash) for the same values",
+   "sequencer/sequencer_engine.s:25624 `call Audio_DispatchCommand` -- HelpFlashFunc (EVT_KUBO_FLASH_LOAD) passes 4",
+   "../../../technics-docs/lzss-compression.md:177 -- the help code reads the help language number from RAM 0x0340E4",
+   "audio/tonegen_fileio_handlers.s:1187 `ld xwa, 0x3d3400` -- copies 2 bytes 0x3D3400 -> RAM 0x340E4"
+  ]
+ },
+ {
+  "old": "Audio_DispatchCommand_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Audio_DispatchCommand_LoadDispTimeSet",
+  "header": "",
+  "basis": "switch value meaning (field index 4..8 of the 0x50-byte option block at Custom Data Flash 0x3D3400, one per *FlashFunc caller) + body",
+  "evidence": [
+   "ui/ui_mode_handlers.s:10011 `call Audio_DispatchCommand` -- MainTimeFlashFunc (EVT_TOSHI_FLASH_LOAD) passes 5; the DispTimeSet screen reads 0x340E6",
+   "audio/tonegen_fileio_handlers.s:1193 `ld xwa, 0x3d3410` -- copies 12 bytes 0x3D3410 -> RAM 0x340E6"
+  ]
+ },
+ {
+  "old": "Audio_DispatchCommand_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Audio_DispatchCommand_LoadSetupOptions",
+  "header": "Option block +0x20 (4 bytes) -> 0x340F2; the `.asciz \"@ 4=\"` before `push xwa` is the instruction ld xwa, 0x3d3420 spelled as text.",
+  "basis": "switch value meaning (field index 4..8 of the 0x50-byte option block at Custom Data Flash 0x3D3400, one per *FlashFunc caller) + body",
+  "evidence": [
+   "file_io/title_handlers.s:80 `call Audio_DispatchCommand` -- SetupFlashFunc (EVT_CHEAP_FLASH_LOAD) passes 6; 0x340F2 is the Jump-Insert setting (JumpInsertFunc)",
+   "audio/tonegen_fileio_handlers.s:1199 `.asciz \"@ 4=\"` -- ROM bytes at 0xFC5668: 0b 04 00 | 40 20 34 3d 00 | 38 ...; unidasm: push 0x0004 / ld XWA,0x003d3420 / push XWA",
+   "ui_widgets/disk_warning_strings.s:91 `; byte is RAM 0x340f2 (EVT_GET_RAM_ADDRESS), range 0..4 (EVT_GET_MAX = 4). 0 = do nothing when a disk is in...` -- 0x340F2 = the Jump-Insert setting of the disk setup page"
+  ]
+ },
+ {
+  "old": "Audio_DispatchCommand_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Audio_DispatchCommand_LoadParaLoadOptions",
+  "header": "",
+  "basis": "switch value meaning (field index 4..8 of the 0x50-byte option block at Custom Data Flash 0x3D3400, one per *FlashFunc caller) + body",
+  "evidence": [
+   "ui/ui_control_panel.s:108 `call Audio_DispatchCommand` -- MainFlashFunc (EVT_EAST_FLASH_LOAD) passes 7; ParaLoadOpt posts EVT_EAST_FLASH_WRITE and its grid reads 0x340F6",
+   "audio/tonegen_fileio_handlers.s:1207 `ld xwa, 0x3d3430` -- copies 4 bytes 0x3D3430 -> RAM 0x340F6"
+  ]
+ },
+ {
+  "old": "Audio_DispatchCommand_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Audio_DispatchCommand_LoadWallSetOptions",
+  "header": "",
+  "basis": "switch value meaning (field index 4..8 of the 0x50-byte option block at Custom Data Flash 0x3D3400, one per *FlashFunc caller) + body",
+  "evidence": [
+   "display/graphics_text_vga.s:4695 `call Audio_DispatchCommand` -- MainWallSetFlashFunc (EVT_TOSHI_FLASH_LOAD) passes 8; WallHomeEditCheck's RAM address is 0x340FA",
+   "audio/tonegen_fileio_handlers.s:1214 `ld xwa, 0x3d3440` -- copies 6 bytes 0x3D3440 -> RAM 0x340FA",
+   "ui/drawbar_panel_ui.s:18692 `call Audio_DispatchCommand` -- AcPresentationControlProc also reloads field 8 after clearing 0x340FA..0x340FF"
+  ]
+ },
+ {
+  "old": "TestTitleFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TestTitleFunc_OnTitleOld",
+  "header": "EVT_ACTIVATE_STATE phases 2..7 print \"Title new/old/Inactivate/Activate/INTERUPT/INTERUPT RETURN\"; the comments in test_init.s / fd_test_code.s that give these strings to EVT_SW_IN 0..6 are stale.",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase) + the firmware's own debug string per case",
+  "evidence": [
+   "factory_test/test_init.s:135 `cp xbc, EVT_ACTIVATE_STATE` -- this switch serves EVT_ACTIVATE_STATE (EVT_SW_IN goes to TitleFunc_LifecycleDispatch)",
+   "factory_test/test_init.s:138 `dec 2, xwa` -- switch on phase - 2, 0..5: phases 2..7, so Case3..Case7 are the real phases",
+   "factory_test/fd_test_data.s:339 `TitleFunc_ActionDispatch_Data:` -- phase 2 (offset-0 case) prints \"Title new\"",
+   "ui/ui_control_panel.s:3535 `ld xde, 3:i3` -- the title manager: GetTitleOld gets phase 3, GetModeOld 1, GetModeNow 0, GetTitleNow 2 (normal title change)",
+   "ui/ui_control_panel.s:3762 `ld xde, 6:i3` -- interrupt: old title gets 4, the interrupting title 2 and then 6",
+   "ui/ui_control_panel.s:3856 `ld xde, 7:i3` -- interrupt return: the interrupting title gets 7 and 3, the resumed title 5",
+   "factory_test/fd_test_code.s:17 `; 0 = Title new 3 = Title activate` -- STALE: credits these strings to event 0x1c00007 values 0..6",
+   "factory_test/test_init.s:156 `lda xwa, (TitleFunc_ActionDispatch_Data_2:24)` -- the case prints \"Title old\" (FDTest_PrintDiag)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- \"Title old\""
+  ]
+ },
+ {
+  "old": "TestTitleFunc_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TestTitleFunc_OnTitleInactivate",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase) + the firmware's own debug string per case",
+  "evidence": [
+   "factory_test/test_init.s:164 `lda xwa, (TitleFunc_ActionDispatch_Data_4:24)` -- the case prints \"Title Inactivate\" (FDTest_PrintDiag)",
+   "factory_test/fd_test_data.s:350 `aligned_string \"Title Inactivate\"` -- \"Title Inactivate\""
+  ]
+ },
+ {
+  "old": "TestTitleFunc_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TestTitleFunc_OnTitleActivate",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase) + the firmware's own debug string per case",
+  "evidence": [
+   "factory_test/test_init.s:160 `lda xwa, (TitleFunc_ActionDispatch_Data_3:24)` -- the case prints \"Title Activate\" (FDTest_PrintDiag)",
+   "factory_test/fd_test_data.s:347 `aligned_string \"Title Activate\"` -- \"Title Activate\""
+  ]
+ },
+ {
+  "old": "TestTitleFunc_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TestTitleFunc_OnTitleInterrupt",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase) + the firmware's own debug string per case",
+  "evidence": [
+   "factory_test/test_init.s:168 `lda xwa, (TitleFunc_ActionDispatch_Data_5:24)` -- the case prints \"Title INTERUPT\" (FDTest_PrintDiag)",
+   "factory_test/fd_test_data.s:353 `aligned_string \"Title INTERUPT\"` -- \"Title INTERUPT\""
+  ]
+ },
+ {
+  "old": "TestTitleFunc_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TestTitleFunc_OnTitleInterruptReturn",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase) + the firmware's own debug string per case",
+  "evidence": [
+   "factory_test/test_init.s:172 `lda xwa, (TitleFunc_ActionDispatch_Data_6:24)` -- the case prints \"Title INTERUPT RETURN\" (FDTest_PrintDiag)",
+   "factory_test/fd_test_data.s:356 `aligned_string \"Title INTERUPT RETURN\"` -- \"Title INTERUPT RETURN\""
+  ]
+ },
+ {
+  "old": "CmpEsyTtl_E_Var1_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpEsyTtl_E_Var1_OnLastMeasureInc",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the SEQ TO COMPOSER COPY title, S2CScreen) + on-screen control + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:32033 `cp xbc, EVT_SW_IN` -- S2cTtlFunc: EVT_SW_IN goes to this switch with XDE = switch number",
+   "sequencer/accompaniment_engine.s:32100 `cp xde, 0x80` -- switches 0x80/0x81/0x82 (the pair's other button) decrement the same fields; 0x84/0x86 are ignored",
+   "sequencer/accompaniment_engine.s:32102 `cp xwa, 0xb` -- switches 0..11 index the table directly, so N is the switch number",
+   "sequencer/accompaniment_engine.s:32120 `call Tempo_AdjustStartMeasure` -- switch 0 (offset-0 case, ES_Bottom1): first measure 0x398A + 1",
+   "ui_widgets/composer_style_convert_screens.s:494 `; [nakarest] (Viewable slot 0xb9 (table 0xe1b80e, 37 entries, InitializeSuna)): \"SEQ TO COMPOSER` -- Viewable slot 0xB9 \"S2CScreen\": the 0xB900xx objects the cases repaint",
+   "ui_widgets/debug_naming_panel_sim.s:631 `; NakaInst_ES_Right4_Str -- 10 x char: \"ES_Right4\", name of EditSwID value 0x0B` -- firmware EditSwID names: 0-7 ES_Bottom1-8, 8-12 ES_Right1-5",
+   "ui_widgets/debug_naming_panel_sim.s:721 `; NakaInst_SS_OK_Str -- 6 x char: \"SS_OK\", name of EditSwStyleID value 6` -- firmware EditSwStyleID names: 1 SS_Up, 2 SS_Down, 3 SS_UpDown, 6 SS_OK",
+   "ui_widgets/naka_composer_style.c:4866 `.editsw = 0x0001` -- switch 1 = ES_Bottom2, x 44-75, style 3 (SS_UpDown), under the \"FIRST LAST\" / \"MEASURE\" labels",
+   "sequencer/accompaniment_engine.s:32201 `call Tempo_AdjustEndMeasure` -- Tempo_AdjustEndMeasure(0): +1 on the last measure 0x398C (max 999); the first measure 0x398A is kept within 7 below it"
+  ]
+ },
+ {
+  "old": "CmpEsyTtl_E_Var1_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpEsyTtl_E_Var1_OnTransposeInc",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the SEQ TO COMPOSER COPY title, S2CScreen) + on-screen control + body",
+  "evidence": [
+   "ui_widgets/naka_composer_style.c:4887 `.editsw = 0x0002` -- switch 2 = ES_Bottom3, x 84-115, style 3, under the \"TRANS\" \"-POSE\" labels (x 86-129)",
+   "sequencer/accompaniment_engine.s:32283 `call Tempo_AdjustQuantize` -- Tempo_AdjustQuantize(0) (misnamed): +1 on 0x398E, 1..49"
+  ]
+ },
+ {
+  "old": "CmpEsyTtl_E_Var1_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpEsyTtl_E_Var1_OnMemoryNumberInc",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the SEQ TO COMPOSER COPY title, S2CScreen) + on-screen control + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:6801 `ld a, (0x398f:16)` -- S2cMemNoBox draws byte 0x398F: the S2C memory number",
+   "ui_widgets/naka_composer_style.c:4919 `.editsw = 0x0008` -- switch 8 = ES_Right1, (281,34)-(311,51), style 1 = SS_Up, above the \"MEM\" label (282,56)",
+   "sequencer/accompaniment_engine.s:32351 `call Tempo_IncrementTimeSigNum` -- Tempo_IncrementTimeSigNum(0) (misnamed): +1 on 0x398F, max 29; repaints element 30 (0xB9001E)"
+  ]
+ },
+ {
+  "old": "CmpEsyTtl_E_Var1_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpEsyTtl_E_Var1_OnMemoryNumberDec",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the SEQ TO COMPOSER COPY title, S2CScreen) + on-screen control + body",
+  "evidence": [
+   "ui_widgets/naka_composer_style.c:4940 `.editsw = 0x0009` -- switch 9 = ES_Right2, (281,76)-(311,93), style 2 = SS_Down",
+   "sequencer/accompaniment_engine.s:32360 `call Tempo_DecrementTimeSigNum` -- Tempo_DecrementTimeSigNum(0) (misnamed): -1 on 0x398F, min 0"
+  ]
+ },
+ {
+  "old": "CmpEsyTtl_E_Var1_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpEsyTtl_E_Var1_OnOk",
+  "header": "Switch 11 is the OK box (ES_Right4, SS_OK) of SEQ TO COMPOSER COPY; it calls Tempo_EditBPM(0), a misnomer.",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the SEQ TO COMPOSER COPY title, S2CScreen) + on-screen control + body",
+  "evidence": [
+   "ui_widgets/naka_composer_style.c:4961 `.editsw = 0x000B` -- switch 11 = ES_Right4, (281,160)-(311,177), style 6 = SS_OK",
+   "sequencer/accompaniment_engine.s:32370 `call Tempo_EditBPM` -- Tempo_EditBPM(0) (misnamed): sets 0x8D88 bit 0 and runs Tempo_DisplayParamReturn over the part tracks 0x3991.."
+  ]
+ },
+ {
+  "old": "AppEvtHandler_Branch_024_Case22",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvtHandler_Branch_024_IncMinsFromMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index, EVT_INC_VAL on TT_SQMINS fields 21..26) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:20044 `cp xbc, EVT_INC_VAL` -- ApEditSyori: EVT_INC_VAL with XDE = parameter goes to AppEvent_ChainDispatch1",
+   "sequencer/sequencer_engine.s:20782 `sub xwa, 0x15` -- outer case 21 (TT_SQMINS fields 21..26) switches on parameter - 21; labels carry the real parameter number",
+   "sequencer/sequencer_engine.s:20793 `ld a, (0xf1e1:16)` -- parameter 21 (offset-0 case): track A 0xF1E1",
+   "shared/event_codes.s:655 `.equ EVT_GET_MINS_TR_A_STRING, 0x1e8002b` -- MT_GetMinsTrAString = 0x1E80016 + 21; FM/LM/TR_B/SM/REP follow as 22..26",
+   "shared/event_codes.s:656 `.equ EVT_GET_MINS_FM_STRING, 0x1e8002c` -- parameter 22",
+   "sequencer/sequencer_engine.s:20803 `ld wa, (0xf1e2:16)` -- from-measure 0xF1E2 + 1 (max 999); the last measure 9774 follows; length 0xF1E4 recomputed"
+  ]
+ },
+ {
+  "old": "AppEvtHandler_Branch_024_Case23",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvtHandler_Branch_024_IncMinsLastMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index, EVT_INC_VAL on TT_SQMINS fields 21..26) + body",
+  "evidence": [
+   "shared/event_codes.s:657 `.equ EVT_GET_MINS_LM_STRING, 0x1e8002d` -- parameter 23",
+   "sequencer/sequencer_engine.s:20815 `ld wa, (9774:16)` -- last measure 9774 (0x262E) + 1 (max 999); length 0xF1E4 = last - from + 1"
+  ]
+ },
+ {
+  "old": "AppEvtHandler_Branch_024_Case24",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvtHandler_Branch_024_IncMinsTrackB",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index, EVT_INC_VAL on TT_SQMINS fields 21..26) + body",
+  "evidence": [
+   "shared/event_codes.s:658 `.equ EVT_GET_MINS_TR_B_STRING, 0x1e8002e` -- parameter 24",
+   "sequencer/sequencer_engine.s:20827 `ld a, (0xf1e6:16)` -- track B 0xF1E6 + 1 (max 17); at 17 track A 0xF1E1 is set to 17 too"
+  ]
+ },
+ {
+  "old": "AppEvtHandler_Branch_024_Case25",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvtHandler_Branch_024_IncMinsStartMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index, EVT_INC_VAL on TT_SQMINS fields 21..26) + body",
+  "evidence": [
+   "shared/event_codes.s:659 `.equ EVT_GET_MINS_SM_STRING, 0x1e8002f` -- parameter 25",
+   "sequencer/sequencer_engine.s:20837 `ld wa, (0xf1e7:16)` -- start measure 0xF1E7 + 1 (max 999)"
+  ]
+ },
+ {
+  "old": "AppEvtHandler_Branch_024_Case26",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvtHandler_Branch_024_IncMinsRepeat",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index, EVT_INC_VAL on TT_SQMINS fields 21..26) + body",
+  "evidence": [
+   "shared/event_codes.s:660 `.equ EVT_GET_MINS_REP_STRING, 0x1e80030` -- parameter 26",
+   "sequencer/sequencer_engine.s:20844 `ld a, (9776:16)` -- repeat count 9776 + 1 (max 127)"
+  ]
+ },
+ {
+  "old": "SeqState_Case0",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: SeqState_Case0..4 are fall-through branch labels of AppEvent_HandleChannelEvent's track-switch status path (pre-existing 'Sequencer state case N' names, already in the tree at 3d87c95, not placed by frame_switch_cases.py). No offset table and no `jp t, (xR+rr)` reaches them, so there is no switched value to name them after. Their bodies: Case0 builds DE = 1 << (track & 15); Case1 tests it in RAM 0x28A8 (status 1); Case2 tests it in 0xF19E (status 2, else 0); Case3 posts EVT_TRSW_COMMAND (track << 16 | status); Case4 calls SeqVoice_DispatchEventToHandler(track). The meaning of 0x28A8 / 0xF19E (status 1 vs 2) is not established, so body names would be guesses for 0-2; they belong in a helper/branch-label batch, not this one.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (branch labels)",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21735 `ld e, (CURRENT_TITLE:16)` -- the owner dispatches on CURRENT_TITLE with A = track, not through a table",
+   "sequencer/sequencer_engine.s:21800 `jr nz, SeqState_Case0` -- reached by a plain conditional branch",
+   "sequencer/sequencer_engine.s:21810 `slaa de` -- the label's first lines"
+  ]
+ },
+ {
+  "old": "SeqState_Case1",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: SeqState_Case0..4 are fall-through branch labels of AppEvent_HandleChannelEvent's track-switch status path (pre-existing 'Sequencer state case N' names, already in the tree at 3d87c95, not placed by frame_switch_cases.py). No offset table and no `jp t, (xR+rr)` reaches them, so there is no switched value to name them after. Their bodies: Case0 builds DE = 1 << (track & 15); Case1 tests it in RAM 0x28A8 (status 1); Case2 tests it in 0xF19E (status 2, else 0); Case3 posts EVT_TRSW_COMMAND (track << 16 | status); Case4 calls SeqVoice_DispatchEventToHandler(track). The meaning of 0x28A8 / 0xF19E (status 1 vs 2) is not established, so body names would be guesses for 0-2; they belong in a helper/branch-label batch, not this one.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (branch labels)",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21815 `and de, (0x28a8:16)` -- the label's first lines"
+  ]
+ },
+ {
+  "old": "SeqState_Case2",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: SeqState_Case0..4 are fall-through branch labels of AppEvent_HandleChannelEvent's track-switch status path (pre-existing 'Sequencer state case N' names, already in the tree at 3d87c95, not placed by frame_switch_cases.py). No offset table and no `jp t, (xR+rr)` reaches them, so there is no switched value to name them after. Their bodies: Case0 builds DE = 1 << (track & 15); Case1 tests it in RAM 0x28A8 (status 1); Case2 tests it in 0xF19E (status 2, else 0); Case3 posts EVT_TRSW_COMMAND (track << 16 | status); Case4 calls SeqVoice_DispatchEventToHandler(track). The meaning of 0x28A8 / 0xF19E (status 1 vs 2) is not established, so body names would be guesses for 0-2; they belong in a helper/branch-label batch, not this one.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (branch labels)",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21822 `and wa, bc` -- the label's first lines"
+  ]
+ },
+ {
+  "old": "SeqState_Case3",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: SeqState_Case0..4 are fall-through branch labels of AppEvent_HandleChannelEvent's track-switch status path (pre-existing 'Sequencer state case N' names, already in the tree at 3d87c95, not placed by frame_switch_cases.py). No offset table and no `jp t, (xR+rr)` reaches them, so there is no switched value to name them after. Their bodies: Case0 builds DE = 1 << (track & 15); Case1 tests it in RAM 0x28A8 (status 1); Case2 tests it in 0xF19E (status 2, else 0); Case3 posts EVT_TRSW_COMMAND (track << 16 | status); Case4 calls SeqVoice_DispatchEventToHandler(track). The meaning of 0x28A8 / 0xF19E (status 1 vs 2) is not established, so body names would be guesses for 0-2; they belong in a helper/branch-label batch, not this one.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (branch labels)",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21838 `ld xbc, EVT_TRSW_COMMAND` -- the label's first lines"
+  ]
+ },
+ {
+  "old": "SeqState_Case4",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: SeqState_Case0..4 are fall-through branch labels of AppEvent_HandleChannelEvent's track-switch status path (pre-existing 'Sequencer state case N' names, already in the tree at 3d87c95, not placed by frame_switch_cases.py). No offset table and no `jp t, (xR+rr)` reaches them, so there is no switched value to name them after. Their bodies: Case0 builds DE = 1 << (track & 15); Case1 tests it in RAM 0x28A8 (status 1); Case2 tests it in 0xF19E (status 2, else 0); Case3 posts EVT_TRSW_COMMAND (track << 16 | status); Case4 calls SeqVoice_DispatchEventToHandler(track). The meaning of 0x28A8 / 0xF19E (status 1 vs 2) is not established, so body names would be guesses for 0-2; they belong in a helper/branch-label batch, not this one.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (branch labels)",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21845 `calr SeqVoice_DispatchEventToHandler` -- the label's first lines"
+  ]
+ },
+ {
+  "old": "SeqAccomp_ParamDelivery_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqAccomp_ParamDelivery_IncCycleEnable",
+  "header": "Cycle on: TT_SQCYCPLY sets 0x28B1 bit 0; TT_SQCYCREC assigns the parts, sets bit 1 and moves the measure to the cycle start.",
+  "basis": "switch value meaning (sequencer-play value-list parameter number, the XDE of EVT_INC_VAL to ApPlaySyori) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:22777 `cp xbc, EVT_INC_VAL` -- ApPlaySyori: EVT_INC_VAL goes to this switch, XDE (xsp+2) = parameter",
+   "sequencer/sequencer_ui.s:8569 `ld xbc, EVT_CUR_TO_PARAM` -- SqplyVal's up-scroll converts the cursor to the parameter number ...",
+   "sequencer/sequencer_ui.s:8576 `ld xbc, EVT_INC_VAL` -- ... and posts it as XDE of EVT_INC_VAL to ApPlaySyori (the same numbers SqplyVal draws with EVT_PARA_DRAW)",
+   "sequencer/sequencer_engine.s:23000 `cp xwa, 0xb` -- switch on the parameter 0..11 directly",
+   "sequencer/sequencer_ui.s:13637 `bit 0, (0x28b1:16)` -- the cycle on/off string tests 0x28B1 bit 0 on title 130",
+   "shared/event_codes.s:677 `.equ EVT_GET_CYC_EN_STRING, 0x1e80041` -- parameter 4's display string",
+   "sequencer/sequencer_engine.s:23025 `cp_erpb 239, 130` -- TT_SQCYCPLY (0x82): set 0x28B1 bit 0; TT_SQCYCREC (0x86): assign parts, set 0x28B1 bit 1, measure 9832 = cycle start 9504"
+  ]
+ },
+ {
+  "old": "SeqAccomp_ParamDelivery_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqAccomp_ParamDelivery_IncCycleStartMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-play value-list parameter number, the XDE of EVT_INC_VAL to ApPlaySyori) + body",
+  "evidence": [
+   "shared/event_codes.s:678 `.equ EVT_GET_CYC_SRT_M_STRING, 0x1e80042` -- parameter 5's display string",
+   "sequencer/sequencer_engine.s:23055 `cp (CURRENT_TITLE:16), 134` -- TT_SQCYCREC: start 9504 + 1, else start 9500 + 1 (max 999); the current measure 9832 follows and the end is pushed up"
+  ]
+ },
+ {
+  "old": "SeqAccomp_ParamDelivery_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqAccomp_ParamDelivery_IncCycleEndMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-play value-list parameter number, the XDE of EVT_INC_VAL to ApPlaySyori) + body",
+  "evidence": [
+   "shared/event_codes.s:679 `.equ EVT_GET_CYC_END_M_STRING, 0x1e80043` -- parameter 6's display string",
+   "sequencer/sequencer_engine.s:23094 `cp (CURRENT_TITLE:16), 134` -- TT_SQCYCREC: end 9506 + 1, else end 9502 + 1 (max 999)"
+  ]
+ },
+ {
+  "old": "SeqAccomp_ParamDelivery_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqAccomp_ParamDelivery_IncPInPOutPCntIn",
+  "header": "Parameters 8, 9 and 10 (P in-measure 0xF238, P out-measure 0xF23A, P count-in 0xF23F) share this body; an inner compare picks the field.",
+  "basis": "switch value meaning (sequencer-play value-list parameter number, the XDE of EVT_INC_VAL to ApPlaySyori) + body",
+  "evidence": [
+   "shared/event_codes.s:690 `.equ EVT_GET_P_IN_MEAS_STRING, 0x1e8004e` -- parameter 8's display string",
+   "sequencer/sequencer_engine.s:23120 `cp xwa, 10` -- values 8, 9, 10 share this body: 8 -> SeqPlay_DataBlock_BBE (+1 on 0xF238), 9 -> SeqAccomp_SubHandlerA_Helper (+1 on 0xF23A), 10 -> SeqAccomp_SubHandlerA_Helper2 (+1 on 0xF23F); redraws 7..10"
+  ]
+ },
+ {
+  "old": "SeqAccomp_ParamDelivery_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqAccomp_ParamDelivery_IncSoloEnable",
+  "header": "",
+  "basis": "switch value meaning (sequencer-play value-list parameter number, the XDE of EVT_INC_VAL to ApPlaySyori) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13664 `cp (0x283a:16), 0` -- the solo on/off string reads 0x283A",
+   "shared/event_codes.s:683 `.equ EVT_GET_SOLO_EN_STRING, 0x1e80047` -- parameter 11's display string",
+   "sequencer/sequencer_engine.s:23153 `ld (0x283a:16), 1` -- sets the solo flag 0x283A to 1 unless already 1"
+  ]
+ },
+ {
+  "old": "SeqPart_VelocityCurveCalc_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPart_VelocityCurveCalc_QtzGrid48",
+  "header": "Quantize value 1 (9726 = 2 x 0xF1F6): splits position 9784 at 24/72 and stores the zone's edge pair in 9792/9794; value 0 uses 48/48, odd values and 12 the 8-step SeqPart_VelRangeToZone path.",
+  "basis": "switch value meaning (9726 = 2 x the TT_SQQTZ quantize value 0xF1F6) + body (zone width of the case)",
+  "evidence": [
+   "sequencer/sequencer_engine.s:25188 `ld a, (0xf1f6:16)` -- EXECUTE on TT_SQQTZ: the quantize value 0xF1F6 ...",
+   "sequencer/sequencer_engine.s:25189 `sll a, 1` -- ... doubled into 9726 (its only writer), then SeqPart_VelocityEditSetup",
+   "sequencer/sequencer_ui.s:14223 `ld a, (0xf1f6:16)` -- 0xF1F6 is the field EVT_GET_QTZ_VAL_STRING formats (7 values, Sqedt_ParamDispatch_Table_4)",
+   "sequencer/sequencer_engine.s:33244 `ld a, (9726:16)` -- switch on 9726, 0..10 (even values only reach here from 0xF1F6 0..5)",
+   "sequencer/sequencer_engine.s:33628 `ld (9784:16), l` -- 9784 = the byte read after a 0x9n (note-on) status in the event data; the same loop bounds positions with 0x60 = 96 (SeqPart_VelCalcClamp, SeqPart_VelExprContinue)",
+   "sequencer/sequencer_engine.s:33264 `cp c, 24` -- edges 24 / 72: two zones, a 48-step grid (tables [24,72] / [72,24])"
+  ]
+ },
+ {
+  "old": "SeqPart_VelocityCurveCalc_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPart_VelocityCurveCalc_QtzGrid24",
+  "header": "",
+  "basis": "switch value meaning (9726 = 2 x the TT_SQQTZ quantize value 0xF1F6) + body (zone width of the case)",
+  "evidence": [
+   "sequencer/sequencer_engine.s:33278 `cp c, 12` -- edges 12, 36, 60, 84: a 24-step grid"
+  ]
+ },
+ {
+  "old": "SeqPart_VelocityCurveCalc_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPart_VelocityCurveCalc_QtzGrid12",
+  "header": "",
+  "basis": "switch value meaning (9726 = 2 x the TT_SQQTZ quantize value 0xF1F6) + body (zone width of the case)",
+  "evidence": [
+   "sequencer/sequencer_engine.s:33306 `cp c, 6:i3` -- edges 6, 18 ... 90: a 12-step grid"
+  ]
+ },
+ {
+  "old": "SeqPart_VelocityCurveCalc_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPart_VelocityCurveCalc_QtzGrid32",
+  "header": "",
+  "basis": "switch value meaning (9726 = 2 x the TT_SQQTZ quantize value 0xF1F6) + body (zone width of the case)",
+  "evidence": [
+   "sequencer/sequencer_engine.s:33354 `cp c, 16` -- edges 16, 48, 80: a 32-step grid (thirds of 96)"
+  ]
+ },
+ {
+  "old": "SeqPart_VelocityCurveCalc_Case10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPart_VelocityCurveCalc_QtzGrid16",
+  "header": "",
+  "basis": "switch value meaning (9726 = 2 x the TT_SQQTZ quantize value 0xF1F6) + body (zone width of the case)",
+  "evidence": [
+   "sequencer/sequencer_engine.s:33377 `cp c, 8` -- edges 8, 24 ... 88: a 16-step grid (sixths of 96)"
+  ]
+ }
+]

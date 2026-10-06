@@ -9264,7 +9264,7 @@ MidiPkt_SetXferLengthFromMsg:
 	ld	(xwa+8), xiz
 	pop	xiz
 	ret
-MidiSeq_ClearSyncFlag_Helper:
+MidiPkt_SetXferTotal_All:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
@@ -9582,7 +9582,7 @@ MidiPkt_GetUsedSize_AccompBlocks:
 	push	xhl
 	push	xix
 	push	xiz
-	call	SeqVoice_StoreEntryDone_Helper
+	call	Voice_RefreshBankData_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -10146,7 +10146,7 @@ SysEx_SendDispatch_Helper:
 	; v7 bytes do not decode as v10's `push_f`
 	ld	xwa, 0xbc20
 	; v7 bytes do not decode as v10's `ld	(xix-68), 0`
-	call	MidiSeq_ClearSyncFlag_Helper
+	call	MidiPkt_SetXferTotal_All
 	calr	MidiPkt_ArpConfigChain_Data
 	res	3, (0xbc7c:16)
 	; v7 bytes do not decode as v10's `push_f`
@@ -12488,16 +12488,16 @@ SysEx_ResetAndReturn:
 SysEx_DispatchCalls_Data:
 	call	SysEx_ResetAndReturn_Helper
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case2:
+SysEx_InitiateSend_SendSequencer:
 	call	SysEx_ResetAndReturn_Helper2
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case3:
+SysEx_InitiateSend_SendSoundMemory:
 	call	SysEx_ResetAndReturn_Helper3
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case4:
+SysEx_InitiateSend_SendPanelMemory:
 	call	SysEx_ResetAndReturn_Helper4
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case5:
+SysEx_InitiateSend_SendNoData:
 	call	SysEx_ResetAndReturn_Helper5
 	jr	SysEx_InitiateSend_Join
 SysEx_InitiateSend_Case6:

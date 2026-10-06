@@ -152,23 +152,23 @@ TitleFunc_ActionDispatch:
 	lda xwa, (TitleFunc_ActionDispatch_Data:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-TestTitleFunc_Case3:
+TestTitleFunc_OnTitleOld:
 	lda xwa, (TitleFunc_ActionDispatch_Data_2:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-TestTitleFunc_Case5:
+TestTitleFunc_OnTitleActivate:
 	lda xwa, (TitleFunc_ActionDispatch_Data_3:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-TestTitleFunc_Case4:
+TestTitleFunc_OnTitleInactivate:
 	lda xwa, (TitleFunc_ActionDispatch_Data_4:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-TestTitleFunc_Case6:
+TestTitleFunc_OnTitleInterrupt:
 	lda xwa, (TitleFunc_ActionDispatch_Data_5:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-TestTitleFunc_Case7:
+TestTitleFunc_OnTitleInterruptReturn:
 	lda xwa, (TitleFunc_ActionDispatch_Data_6:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
@@ -191,7 +191,7 @@ TitleFunc_LifecycleDispatch:
 TitleFunc_LifecycleTable:
 	lda xwa, (TitleFunc_LifecycleTable_Data:24)
 	calr FDTest_PrintDiag
-	call TitleFunc_LifecycleTable_Helper
+	call FDTest_ProbeDiskFormat
 	jr TitleFunc_Return
 TitleFunc_LifecycleDispatch_OnStopFddTest:
 	ld xwa, EVT_SW_IN

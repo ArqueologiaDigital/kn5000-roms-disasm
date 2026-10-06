@@ -1,0 +1,490 @@
+[
+ {
+  "old": "CmpNcpTtl_Dispatch2_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcp_StepItemAValue_Wrap",
+  "header": "XIZ-preserving wrapper: steps the value of the selected FROM item (selector 0x39A7, 0..2) in direction W (bit 7 set = down) by calling CmpNcp_ItemHandlerTable[CmpNcp_ItemA_HandlerIndex[(0x39A7)]] through CmpNcp_CallItemHandler. Basis: callers + body -- CmpNcpTtl_TableDispatch_OnFromValueUp (W = 0) and _OnFromValueDown (W = 128) call it; twin of CmpNcp_StepItemA_Wrap, which steps the selector itself.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31495 `ld w, 0:opc` / 31496 `call CmpNcpTtl_Dispatch2_Helper2` -- caller CmpNcpTtl_TableDispatch_OnFromValueUp (cases 118, 119)",
+   "sequencer/accompaniment_engine.s:31563 `ld w, 128:opc` / 31564 `call CmpNcpTtl_Dispatch2_Helper2` -- caller CmpNcpTtl_TableDispatch_OnFromValueDown (cases 130, 131)",
+   "sequencer/accompaniment_engine.s:31443 `; CmpNcpTtl_TableDispatch_OnFromItemNext: ... (FROM ITEM box ...): next FROM item (0x39A7 + 1, up to 2)` -- 0x39A7 is the FROM item selector",
+   "sequencer/accompaniment_engine.s:25689-25691 `push xiz` / `call DrumVoice_Handler7_Data_3_Helper2` / `pop xiz` -- the wrapper body",
+   "sequencer/accompaniment_engine.s:25694 `ld a, (0x39a7:16)` / 25696 `ld xix, CmpNcp_ItemA_HandlerIndex` / 25698 `call CmpNcp_CallItemHandler` -- dispatch on the selected item",
+   "sequencer/accompaniment_engine.s:26115 `; Called by CmpNcp_ItemHandler0.  Bit 7 of W set = step down, clear = step up.` -- the item handlers step the item's value with W"
+  ]
+ },
+ {
+  "old": "CmpNcpTtl_Dispatch2_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcp_StepItemBValue_Wrap",
+  "header": "XIZ-preserving wrapper: steps the value of the selected TO item (selector 0x39A8, 0..1) in direction W (bit 7 set = down) by calling CmpNcp_ItemHandlerTable[CmpNcp_ItemB_HandlerIndex[(0x39A8)]] (handlers 3, 4) through CmpNcp_CallItemHandler. Basis: callers + body -- CmpNcpTtl_TableDispatch_OnToValueUp (W = 0) and _OnToValueDown (W = 128) call it; TO counterpart of CmpNcp_StepItemAValue_Wrap.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31713 `ld w, 0:opc` / 31714 `call CmpNcpTtl_Dispatch2_Helper3` -- caller CmpNcpTtl_TableDispatch_OnToValueUp (cases 122, 123)",
+   "sequencer/accompaniment_engine.s:31774 `ld w, 128:opc` / 31775 `call CmpNcpTtl_Dispatch2_Helper3` -- caller CmpNcpTtl_TableDispatch_OnToValueDown (cases 134, 135)",
+   "sequencer/accompaniment_engine.s:31741 `ld a, (0x39a8:16)` -- the caller then repaints by the TO item selector",
+   "sequencer/accompaniment_engine.s:25727-25729 `push xiz` / `call DrumVoice_Handler7_Data_3_Helper4` / `pop xiz` -- the wrapper body",
+   "sequencer/accompaniment_engine.s:25732 `ld a, (0x39a8:16)` / 25734 `ld xix, CmpNcp_ItemB_HandlerIndex` / 25736 `call CmpNcp_CallItemHandler`",
+   "sequencer/accompaniment_engine.s:25742 `.short 3, 4` -- CmpNcp_ItemB_HandlerIndex: handlers 3 and 4"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_AltBody_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_SetTempoIfChanged",
+  "header": "Stores the received two-byte value (0x9130, 0x9131) as the tempo word at 0xFC62/0xFC63 of the style/tempo record 0xFC5A when it differs from what is there, posts both bytes (the current param with DATA3 = 255, then param 9 with DATA3 = 1, via SwbtWr_FlushAndAppendParams) and recomputes the tempo timer (SeqTimer_UpdateTempoReg); XIZ preserved. Basis: callers + body -- ExtData_ToneParam_AltBody_OnTempo (offset 8 of record 0x48, header: 'stores a changed tempo into 0xFC62/0xFC63, posts it and calls SeqTimer_UpdateTempoReg') is only this call.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/audio_control_engine.s:5269 `; ExtData_ToneParam_AltBody_OnTempo: Offset 8 of style/tempo record 0x48 (0xFC5A): stores a changed tempo into`",
+   "audio/audio_control_engine.s:5272 `calr ExtData_ToneParam_AltBody_Helper2` -- the caller's whole body",
+   "audio/audio_control_engine.s:5331 `lda xiz, (0xfc5a:16)` / 5332 `lda xbc, (xiz+8)` / 5333 `lda xhl, (xiz+9)` -- 0xFC62 / 0xFC63",
+   "audio/audio_control_engine.s:5335 `cp (xbc), e` / 5338 `cp a, (37169:16)` / 5339 `jr z, ..._Epilogue` -- unchanged: nothing done",
+   "audio/audio_control_engine.s:5341 `ld (xbc), e` / 5342 `ld (xhl), (0x9131)` -- store the new value",
+   "audio/audio_control_engine.s:5346 `ld (MIDI_MSG_DATA1:16), 9` / 5349 `calr SwbtWr_FlushAndAppendParams` / 5350 `call SeqTimer_UpdateTempoReg`",
+   "audio/audio_control_engine.s:8261 `ld xde, 0xfc5a` / 8262 `ld wa, (xde + 8)` / 8263 `and wa, 0x1ff` -- SeqTimer_UpdateTempoReg reads (0xFC62) & 0x1FF as the tempo (40..300, else 120)"
+  ]
+ },
+ {
+  "old": "MidiSeq_ClearSyncFlag_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_SetXferTotal_All",
+  "header": "Fills the transfer descriptor at XWA for the send-everything dump: start 0xF980 (+0), and adds to the length (+8, not cleared first) the panel ((0xFFBE - 0xF980) + 0x12CB2, as MidiPkt_SetXferTotal_Panel), the used accompaniment-block size, the used sequencer-event size + 0x5800, then 0x72AA and the used style-image size, each of those two only when AccWrap_ReturnZero(1 / 3) != 0xFFFF (that stub always returns 0, so both are always added); +4 = +0 + length. Basis: callers + body -- SysEx_SendAllData (case 0, ALL, of SysEx_InitiateSend) points the send-side total 0xBCBC with it; its header lists exactly these groups.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:11064 `; SysEx_SendAllData: Case 0 (ALL) of SysEx_InitiateSend: ... points the send-side total`",
+   "midi/midi_dispatch_handlers.s:11073 `ld xwa, 0xbcbc` / 11074 `call MidiSeq_ClearSyncFlag_Helper` -- caller SysEx_SendAllData",
+   "midi/midi_dispatch_handlers.s:11090-11092 `ld xwa, 0xbcbc` / `call MidiPkt_SetXferTotal_Panel` -- the per-group siblings fill the same descriptor",
+   "midi/midi_dispatch_handlers.s:10091 `lda xwa, (0xf980:16)` / 10092 `ld (xiz), xwa` -- start",
+   "midi/midi_dispatch_handlers.s:10093 `calr MidiPkt_GetUsedSize_SeqEvents` / 10095 `calr MidiPkt_GetUsedSize_AccompBlocks`",
+   "midi/midi_dispatch_handlers.s:10096-10102 `sub xwa, 0xf980` / `add xwa, 0x12cb2` / `add xwa, xhl` / `add xwa, (xsp+4)` / `add xwa, 0x5800` / `add (xiz+8), xwa`",
+   "midi/midi_dispatch_handlers.s:10107 `ld xwa, 0x72aa` / 10114 `calr MidiPkt_GetUsedSize_StyleImage` -- the gated groups",
+   "midi/midi_dispatch_handlers.s:8230-8231 `AccWrap_ReturnZero:` `ld hl, 0:i3` -- the gate never returns 0xFFFF",
+   "midi/midi_dispatch_handlers.s:10117-10119 `ld xwa, (xiz+8)` / `add xwa, (xiz)` / `ld (xiz+4), xwa` -- end"
+  ]
+ },
+ {
+  "old": "MidiSysMsg_Handler_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiSysMsg_SetScaledTempo",
+  "header": "Applies a song-stream tempo event: from the two 7-bit bytes at XWA (LSB, MSB) forms the 14-bit value, scales it by (0xE9EB) / 1000 (Math_MultiplyAccumulate, Math_DivideU32; nothing when (0xE9EB) = 0), clamps to 40..300, puts bit 8 in 0xFC63 bit 0, passes the tempo to SoundParam_NotifyChange (XWA = 4, DE = 3), recomputes the timer (SeqTimer_UpdateTempoReg) and stores tempo | 0x8000 in 0x11F5; XIZ preserved. Basis: callers + body -- MidiSysMsg_Handler_OnFBTempo (status 0xFB, header: 'tempo (14-bit value * (0xE9EB) / 1000, clamped to 40..300), then SeqTimer_UpdateTempoReg') reads the two bytes and calls it.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:22452 `; MidiSysMsg_Handler_OnFBTempo: Song-stream status 0xFB: tempo (14-bit value * (0xE9EB) / 1000, clamped to 40..300),`",
+   "audio/note_voice_mapping.s:22472 `lda xwa, (xsp+4)` / 22473 `calr MidiSysMsg_Handler_Helper` -- caller, after reading two bytes with FileIO_ReadNextRecord",
+   "audio/note_voice_mapping.s:22584-22586 `ld xbc, (0xe9eb:16)` / `or xbc, xbc` / `jrl z, Dispatch_Data_Epilogue` -- no scale, nothing",
+   "audio/note_voice_mapping.s:22587-22593 `ld e, (xwa)` / `ld c, (xwa+1)` ... `sll a, 7` / `or e, a` -- 14-bit value",
+   "audio/note_voice_mapping.s:22604 `call Math_MultiplyAccumulate` / 22607 `ld xbc, 1000` / 22608 `call Math_DivideU32`",
+   "audio/note_voice_mapping.s:22610-22617 `ld xwa, 40` ... `ld xwa, 300` -- clamp",
+   "audio/note_voice_mapping.s:22624 `res 0, (0xfc63:16)` / 22627 `set 0, (0xfc63:16)` -- bit 8 of the tempo word",
+   "audio/note_voice_mapping.s:22633 `call SoundParam_NotifyChange` / 22634 `call SeqTimer_UpdateTempoReg` / 22636 `set 15, wa` / 22637 `ld (4597:16), wa`"
+  ]
+ },
+ {
+  "old": "PerfMode_EventTable_0_Target1_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PerfMode_MapEventNoteToDisplay",
+  "header": "Maps note A of the event at the song-data cursor to the note the step editor shows: on a track whose TRACK ASSIGN code (0xF1A0[track]) is 12, and unless 0xFDAD bit 2 is set, through value-map column 4 (selector 1, SndParam_OffsetHandler) of the SndParam_ValueMapGrid row that (0xFB3C) selects (no row = unchanged); other tracks pass A through. Inverse: PerfMode_MapDisplayNoteToEvent. Basis: callers + body -- PerfMode_StepNoteNumber reads the note, maps it with this, adds the step and keeps the result in 0x3718 (the note Disp_ShowNoteNameAndVelocity shows), then maps it back with the twin before writing.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:4869 `call VoiceSlot_ReadCurrentParams` / 4870 `call PerfMode_EventTable_0_Target1_Helper5` / 4873 `add a, (3570:16)` / 4878 `ld (0x3718:16), a` -- caller PerfMode_StepNoteNumber",
+   "display/scoop_display.s:15221 `; Tbl_NoteNamesSharp[((0x3718) mod 12)*2]` -- 0x3718 is the note on screen",
+   "display/scoop_display.s:4912 `ld xix, 0xf1a0` / 4913 `cp (xix+iz), 0x0c` / 4916 `bit 2, (0xfdad:16)` -- only track code 12, only with bit 2 clear",
+   "display/scoop_display.s:4920 `ld w, (0xfb3c:16)` / 4921 `call DisplayMode_Handler_3_Helper2`",
+   "display/scoop_display.s:563-574 DisplayMode_Handler_3_Helper2 `ld c, a` / `ld a, w` / `call ScoopDisp_BytecodeBlock1_Helper` -- note in C, row selector in A",
+   "display/scoop_display.s:18224 `ld wa, 1:i3` / 18225 `jp Param_SignExtendReturn` -- selector 1 -> SndParam_OffsetHandler",
+   "ui/charmap_dispatch_table.s:16-18 `SndParamOffs_SwitchOffsets (+16,+20,...)` / `In every row the maps in columns 0/1, 2/3 and 4/5 are mutual inverses`",
+   "display/scoop_display.s:4653 / 10844 `call DisplayMode_Handler_3_Helper2` then `ld (0x3718:16), a` -- the same mapping inlined where the note is first shown"
+  ]
+ },
+ {
+  "old": "PerfMode_EventTable_0_Target1_Helper6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PerfMode_MapDisplayNoteToEvent",
+  "header": "Inverse of PerfMode_MapEventNoteToDisplay: on a track whose TRACK ASSIGN code (0xF1A0[track]) is 12, and unless 0xFDAD bit 2 is set, maps the shown note A back through value-map column 5 (selector 2) of the SndParam_ValueMapGrid row that (0xFB3C) selects; other tracks pass A through. Basis: callers + body -- PerfMode_StepNoteNumber calls it on the stepped note (already stored in 0x3718) just before writing it back into the event (VoiceSlot_WriteCurrentParam).",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:4878 `ld (0x3718:16), a` / 4880 `call PerfMode_EventTable_0_Target1_Helper6` / 4896 `ld w, a` / 4897 `call VoiceSlot_WriteCurrentParam` -- caller PerfMode_StepNoteNumber",
+   "display/scoop_display.s:4930 `ld xix, 0xf1a0` / 4931 `cp (xix+iz), 0x0c` / 4934 `bit 2, (0xfdad:16)` -- same gate as the forward map",
+   "display/scoop_display.s:4938 `ld w, (0xfb3c:16)` / 4939 `call PerfMode_EventTable_0_Target1_Helper`",
+   "display/scoop_display.s:583-594 PerfMode_EventTable_0_Target1_Helper `call Scoop_CurveUpdate_NextSegment` / 18233 `ld wa, 2:i3` -- selector 2",
+   "audio/note_voice_mapping.s:24976-24980 `ldw bc, 0x10` (selector 1) / `ldw bc, 0x14` (selector 2) -- the two grid columns",
+   "ui/charmap_dispatch_table.s:18 `In every row the maps in columns 0/1, 2/3 and 4/5 are mutual inverses`",
+   "sequencer/accompaniment_engine.s:21017 / 21056 `call Param_SignExtendReturn` with WA = 1 before and WA = 2 after a +-1 step -- the same read-map / write-unmap pairing in ToneGen"
+  ]
+ },
+ {
+  "old": "RhythmVariation_Select_Helper4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpStep_SetStepModeAndBlockSustain_Impl",
+  "header": "Body of CmpStep_SetStepModeAndBlockSustain: unless PREVIOUS_TITLE is 0xB6 (re-entry), sets the step mode (0x3712) = 4 and 0x8D88 bit 0; always clears 0xE3E2 bit 0 and sets 0x34CD bit 3 (sustain input ignored). Basis: callers + body -- its only caller is the XIZ wrapper CmpStep_SetStepModeAndBlockSustain, whose header describes exactly these stores.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:25044 `; CmpStep_SetStepModeAndBlockSustain: XIZ-preserving call of RhythmVariation_Select_Helper4: when the TT_CMSTEP screen`",
+   "sequencer/accompaniment_engine.s:25052 `calr RhythmVariation_Select_Helper4` -- the wrapper",
+   "sequencer/accompaniment_engine.s:25056 `cp (PREVIOUS_TITLE:16), 182` / 25058 `ld (0x3712:16), 4` / 25059 `or (0x8d88:16), 1`",
+   "sequencer/accompaniment_engine.s:25061 `and (0xe3e2:16), 254` / 25062 `or (0x34cd:16), 8`"
+  ]
+ },
+ {
+  "old": "RhythmVariation_Select_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpStep_ClearSustainBlockFlag_Impl",
+  "header": "Body of CmpStep_ClearSustainBlockFlag: clears 0x34CD bit 3, re-enabling the sustain input that CmpStep_SetStepModeAndBlockSustain blocked. Basis: callers + body -- its only caller is the XIZ wrapper CmpStep_ClearSustainBlockFlag, whose header says it clears 0x34CD bit 3.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:25064 `; CmpStep_ClearSustainBlockFlag: XIZ-preserving call of RhythmVariation_Select_Helper5, which clears 0x34CD bit 3 --`",
+   "sequencer/accompaniment_engine.s:25070 `calr RhythmVariation_Select_Helper5` -- the wrapper",
+   "sequencer/accompaniment_engine.s:25074 `and (0x34cd:16), 247` -- the whole body",
+   "sequencer/accompaniment_engine.s:25062 `or (0x34cd:16), 8` -- the bit it undoes (set by CmpStep_SetStepModeAndBlockSustain_Impl)"
+  ]
+ },
+ {
+  "old": "SeMenu_ApplyPartEdit_Helper9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_DrawEnvGraphLine",
+  "header": "Draws one envelope-graph line from (WA, BC) to (DE, y2 = the word pushed before the call, removed by retd 2) with SeGfx_DrawLine. Only when ACTIVE_TITLE is 0x37 (TT_SEFILENV1) are both y first lowered by sound-editor part param 1 * 43 / 50 and clipped to y 59..146 (a vertical line is clamped, a sloped one cut at the band edge with interpolated x, one wholly outside not drawn); on every other title the line is drawn as given. Basis: callers + body -- SeMenu_DrawClippedEnvSegment draws every envelope segment through it.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/semenu_routines.s:3996 `; SeMenu_DrawClippedEnvSegment: Draws one envelope-graph segment from (WA, BC) to (DE, y2 = the word pushed before the`",
+   "audio/semenu_routines.s:4049 `pushw iy` / 4050 `calr SeMenu_ApplyPartEdit_Helper9` -- caller SeMenu_DrawClippedEnvSegment",
+   "audio/semenu_routines.s:4527-4529 `lda xbc, (xsp+2)` / `ld wa, 1:i3` / `calr SeMenu_LoadPartParam` -- part param 1",
+   "audio/semenu_routines.s:4530 `lda xwa, (xsp+4)` / 4531 `calr SeMenu_LoadRawAddr` / 4533 `cp (xsp+4), 55` / 4534 `jrl nz, SeMenu_ApplyPartEdit_Join16`",
+   "audio/semenu_routines.s:30 `ldmi16 (xwa), 0x8d38` -- copies from ACTIVE_TITLE (shared/ram_variables.s:44 `.equ ACTIVE_TITLE, 0x8d38`); llvm-mc encodes it b0 14 38 8d, a load from the 16-bit address",
+   "display/scoop_display.s:19999 `RegTitle 0x6, InitializeScoop_Str_TT_SEFILENV1, 0x37, ...` -- title 55 is the filter-envelope page",
+   "audio/semenu_routines.s:4537 `muls wa, 43` / 4539 `divs wa, 50` / 4540 `sub (xsp+8), wa` / 4541 `sub iz, wa`",
+   "audio/semenu_routines.s:4545 `cpw (xsp+8), 59` / 4550 `cpw (xsp+8), 146` / 4593 `calr SeMenu_ApplyPartEdit_Helper9_Helper` -- clip with x interpolation",
+   "audio/semenu_routines.s:4640 `call SeGfx_DrawLine` / 4645 `retd 2`"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Step3_Code_3_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_CopyNameChars",
+  "header": "Copies E bytes (E = 0: none) from (XBC) to (XWA), one byte at a time. Basis: callers + body -- its only callers are in the WRITE SOUND name-centring handler (side row 2, SeWrtSnd_OnSideRow2 -> SeMenu_CopyWriteUpdate_Data_Loop_Join), which copies the 16-character name to a scratch buffer and then the non-blank run into place.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:6707-6710 `SeWrtSnd_OnSideRow2:` ... `jrl SeMenu_CopyWriteUpdate_Data_Loop_Join` -- the handler",
+   "audio/sound_editor_ui.s:7238 `call SeMenu_GetNameBufferChar` -- it reads the 16 name characters",
+   "audio/sound_editor_ui.s:7292 `srl_erpb 249, 1` -- halves the blank count (centring)",
+   "audio/sound_editor_ui.s:7293-7296 `lda xwa, (xsp+10)` / `lda xbc, (xsp+28)` / `ldw de, 16` / `call SeMenu_CopyWriteUpdate_Step3_Code_3_Helper2` -- copy the name",
+   "audio/sound_editor_ui.s:7321-7323 `ldto_berp e, 248` / `extz de` / `call SeMenu_CopyWriteUpdate_Step3_Code_3_Helper2` -- copy the text run",
+   "audio/semenu_routines.s:2274-2283 `ld xhl, xbc` / `cp e, 0:i3` / `ret ule` / `ld c, (xhl+)` / `ld (xwa+), c` / `inc 1, b` / `cp b, e` -- the byte loop"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_SetNameBufferChar",
+  "header": "Writes character C at position A (0..15) of the 16-byte name buffer at 0x20BF3; A > 15 does nothing. Setter twin of SeMenu_GetNameBufferChar. Basis: callers + body -- SeWrtSnd_ClearName fills positions 0..15 with C = 32 through it (its header says so), and the WRITE SOUND character-edit handlers store the edited character with it.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:7189 `; SeWrtSnd_ClearName: ... fills the 16-character name buffer at 0x20BF3`",
+   "audio/sound_editor_ui.s:7202 `ldw bc, 32` / 7203 `call SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5` -- caller SeWrtSnd_ClearName, loop over 0..15",
+   "audio/sound_editor_ui.s:7053-7055 `ld c, (xde)` / `extz bc` / `call SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5` -- a character-edit handler stores the changed character",
+   "audio/semenu_routines.s:2375-2379 `cp a, 15` / `ret ugt` / `lda xde, (0x020bf3:24)` / `ld (xde+wa), c`",
+   "audio/semenu_routines.s:2381 `; SeMenu_GetNameBufferChar: Copies character A (0..15) of the 16-byte name buffer at 0x20BF3 to (XBC)` -- the getter"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_CharToNameCharIndex",
+  "header": "Converts character code A to its index in the name-entry character set and stores it at (XBC): GUI_DisplayStructData_0x118A[A] for A < 130, 0 (the space) for A >= 130 or a result above 95. The table inverts GUI_DisplayStructData_0x1129 (index -> character: ' ', A-Z, a-z, 0-9, punctuation; 96 entries, all invert), which SeMenu_CopyWriteUpdate_Step3_Code_3_Helper7 reads the other way. Basis: callers + body -- the WRITE SOUND name-entry handlers read the character at the cursor (SeMenu_GetNameBufferChar), convert it with this and store it as page param 1, the character the dial edits.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:7189-7190 `; SeWrtSnd_ClearName: ... sets page params 0 (cursor position) and 1 (character)` -- param 1 is the character",
+   "audio/sound_editor_ui.s:6782 `call SeMenu_GetNameBufferChar` / 6786 `call SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8` / 6789 `ld wa, 1:i3` / 6790 `call SeMenu_StorePartParam`",
+   "audio/sound_editor_ui.s:7352 `ld a, (xbc+wa)` / 7355 `call SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8` / 7359 `call SeMenu_StorePartParam` -- the centring handler does the same",
+   "audio/semenu_routines.s:2462 `cp a, 130` / 2464 `ld (xbc), 0` / 2468 `lda xde, (GUI_DisplayStructData_0x118A:24)` / 2472 `cp (xbc), 95` / 2474 `ld (xbc), 0`",
+   "audio/semenu_routines.s:2451 `cp a, 97` / 2453 `ld (xbc), 32` / 2457 `lda xde, (GUI_DisplayStructData_0x1129:24)` -- the opposite direction",
+   "kn5000_v10_program.s:749 / 752 GUI_DisplayStructData_0x1129 (0x61 bytes) / _0x118A (0x82 bytes); decoded from includes/generated/gui_display_struct_data.bin: 0x1129 = ' ABC...XYZabc...xyz0123456789!\"#$%&'()+-*/=,.@:;?\\^_`|~\\x7f<>[]{}' and 0x118A[0x1129[i]] == i for i = 0..95"
+  ]
+ },
+ {
+  "old": "SeqVoice_StoreEntryDone_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccPatch_ClearModeAndInitSlotChain_Wrap",
+  "header": "XIZ-preserving: clears the mode flag 0x35D5 (AccPatch_ClearModeFlag) and re-packs the style image's slot chain at RHYTHM_PATTERN_BUF_A (AccPatch_InitSlotChain_WithAddr, which also stores the used size). Basis: callers + body -- MidiPkt_GetUsedSize_StyleImage calls it before reading the used size (0x9482E) * 16; its header names these two calls.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:10412-10414 `; MidiPkt_GetUsedSize_StyleImage: Re-packs the style image's pattern blocks (AccPatch_ClearModeFlag + AccPatch_InitSlotChain_WithAddr, ...`",
+   "midi/midi_dispatch_handlers.s:10423 `call SeqVoice_StoreEntryDone_Helper` / 10428 `ld hl, (0x9482e:24)` -- caller",
+   "sequencer/accompaniment_engine.s:13895-13898 `push xiz` / `calr AccPatch_ClearModeFlag` / `call AccPatch_InitSlotChain_WithAddr` / `pop xiz`",
+   "sequencer/accompaniment_engine.s:13906-13907 `AccPatch_ClearModeFlag:` `ld (0x35d5:16), 0`",
+   "sequencer/accompaniment_engine.s:35012-35014 `ld xiz, RHYTHM_PATTERN_BUF_A` / `ld (0x39ae:16), xiz` / `calr AccPatch_InitSlotChain`",
+   "sequencer/accompaniment_engine.s:13888-13891 AccPatch_MultiCallWrapper: the same XIZ-wrapper shape around two AccPatch calls"
+  ]
+ },
+ {
+  "old": "SeqVoice_StoreEntryDone_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_RefreshBankData_Wrap",
+  "header": "XIZ-preserving wrapper of Voice_RefreshBankData (Voice_ComputeAllocSize: recomputes the used size of the accompaniment block area 0x1E8800 into 0x1E881C). Basis: callers + body -- MidiPkt_GetUsedSize_AccompBlocks calls it before reading (0x1E881C) * 16; its header names Voice_RefreshBankData -> Voice_ComputeAllocSize. Siblings Voice_InitBankDataSafe / _Alt1 are the same wrapper shape.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:10451-10452 `; MidiPkt_GetUsedSize_AccompBlocks: Recomputes the used size of the accompaniment block area at 0x1E8800 (Voice_RefreshBankData -> Voice_ComputeAllocSize ...`",
+   "midi/midi_dispatch_handlers.s:10461 `call SeqVoice_StoreEntryDone_Helper2` / 10466 `ld hl, (0x1e881c:24)` -- caller",
+   "kn5000_v10_program.s:2137-2139 `push xiz` / `call Voice_RefreshBankData` / `pop xiz`",
+   "kn5000_v10_program.s:2209-2210 `Voice_RefreshBankData:` `calr Voice_ComputeAllocSize`",
+   "kn5000_v10_program.s:2125-2128 Voice_InitBankDataSafe: `push xiz` / `call Voice_InitBankData` / `pop xiz` -- sibling wrapper"
+  ]
+ },
+ {
+  "old": "SetWall_InlineCodeBlock3_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqSngSel_CalcSongUsagePercent",
+  "header": "Computes the memory use of song (0x286B) in percent into 0x286C: walks its 16 three-byte track entries (the current song from 0xF250, another from SEQ_SONG_SLOTS + 0x800 * n + 0xD0), sums the blocks of every used track (bit 7 set), then blocks * 100 / (0x286D) + 1, capped at 99; 0 for an empty song. Saves and restores the block pointer 0x10FD. Basis: callers + body -- SqSngSel_CalcSongUsageOnEnter calls it for songs 0..9 and copies 0x286C to the table 0x1145; its header describes this computation.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui/setwall_routines.s:1924-1927 `; SqSngSel_CalcSongUsageOnEnter: ... fills the 10-byte table 0x1145 with each song's memory use in percent (SetWall_InlineCodeBlock3_Helper: ...`",
+   "ui/setwall_routines.s:1941 `ld (0x286b:16), c` / 1943 `call SetWall_InlineCodeBlock3_Helper` / 1947 `ld a, (0x286c:16)` / 1948 `ld (xix+bc), a` -- caller",
+   "ui/setwall_routines.s:2017-2020 `ld a, (0x286b:16)` / `cp a, (65507:24)` / `ld xix, 62032` -- current song from 0xF250",
+   "ui/setwall_routines.s:2023-2026 `ld xix, SEQ_SONG_SLOTS` / `sla xwa, 11` / `add xix, 208`",
+   "ui/setwall_routines.s:2031-2033 `ld a, (xix+de)` / `bit 7, a` / 2043-2044 `add de, 3` / `cp de, 48` -- 16 track entries",
+   "ui/setwall_routines.s:2050-2056 `mul bc, 100` / `ld hl, (0x286d:16)` / `div xbc, hl` / `inc 1, bc` / `ldw bc, 99`",
+   "ui/setwall_routines.s:2058 `stb_d8 (10348), c` -- 10348 = 0x286C"
+  ]
+ },
+ {
+  "old": "TimeSig_DisplayStrings_Helper2",
+  "verdict": "refuse",
+  "why_refused": "Its body is a lone `ret`. The 'named caller' TimeSig_SlotBitMask is a data table; the real caller is the unlabelled XIZ wrapper right after that table (accompaniment_engine.s:26784), and nothing references the wrapper, so neither has a known role. A name would come from the body alone (an empty stub).",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "sequencer/accompaniment_engine.s:26780-26783 `TimeSig_SlotBitMask:` / `.byte 0x01, 0x02, 0x04, 0x08, ...` -- data, not a caller",
+   "sequencer/accompaniment_engine.s:26784-26787 `push xiz` / `call TimeSig_DisplayStrings_Helper2` / `pop xiz` / `ret` -- unlabelled wrapper, no references",
+   "sequencer/accompaniment_engine.s:26788-26789 `TimeSig_DisplayStrings_Helper2:` `ret`"
+  ]
+ },
+ {
+  "old": "TimeSig_DisplayStrings_Helper4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpSetTtl_StepEntryIndex_Impl",
+  "header": "Body of CmpSetTtl_StepEntryIndex: steps the CmpSet title's selected entry index (0x39AA) within 0..3, up when W bit 7 is clear, down when set, without wrapping. Basis: callers + body -- its only caller is the XIZ wrapper CmpSetTtl_StepEntryIndex, whose header describes exactly this.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:26882 `; CmpSetTtl_StepEntryIndex: XIZ-preserving wrapper of TimeSig_DisplayStrings_Helper4: steps the CmpSet title's`",
+   "sequencer/accompaniment_engine.s:26887 `call TimeSig_DisplayStrings_Helper4` -- the wrapper",
+   "sequencer/accompaniment_engine.s:26891 `ld a, (0x39aa:16)` / 26892 `bit 7, w` / 26894 `cp a, 3:i3` / 26896 `inc 1, a` / 26899 `cp a, 0:i3` / 26901 `dec 1, a` / 26903 `ld (0x39aa:16), a`"
+  ]
+ },
+ {
+  "old": "TimeSig_DisplayStrings_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpSetTtl_StepEntryByte2_Impl",
+  "header": "Body of CmpSetTtl_StepEntryByte2: steps byte +2 of entry (0x39AA) of the current slot record (AccPatch_GetCurrentSlotAddr; offset from TimeSig_SlotEntryByte2Offsets) within 0..127, up when W bit 7 is clear, down when set. Basis: callers + body -- its only caller is the XIZ wrapper CmpSetTtl_StepEntryByte2, whose header describes exactly this.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:26906 `; CmpSetTtl_StepEntryByte2: Steps byte +2 of the current slot entry (index (0x39AA)) up or down within 0..127 (W bit 7`",
+   "sequencer/accompaniment_engine.s:26911 `call TimeSig_DisplayStrings_Helper5` -- the wrapper",
+   "sequencer/accompaniment_engine.s:26916 `call AccPatch_GetCurrentSlotAddr` / 26918 `ld xix, TimeSig_SlotEntryByte2Offsets` / 26921 `ld l, (xiy+a)`",
+   "sequencer/accompaniment_engine.s:26924 `cp l, 127` / 26929 `cp l, 0:i3` / 26933 `ld (xiy+a), l`"
+  ]
+ },
+ {
+  "old": "TimeSig_DisplayStrings_Helper6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpSetTtl_StepEntryByte5_Impl",
+  "header": "Body of CmpSetTtl_StepEntryByte5: steps byte +5 of entry (0x39AA) of the current slot record (AccPatch_GetCurrentSlotAddr; offset from TimeSig_SlotFieldOffsets) within 0..11, up when W bit 7 is clear, down when set. Basis: callers + body -- its only caller is the XIZ wrapper CmpSetTtl_StepEntryByte5, whose header describes exactly this (and keeps 'EntryByte5' because the field's meaning is not established).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:26941 `; CmpSetTtl_StepEntryByte5: XIZ-preserving wrapper of TimeSig_DisplayStrings_Helper6: steps byte +5 of the selected`",
+   "sequencer/accompaniment_engine.s:26947 `call TimeSig_DisplayStrings_Helper6` -- the wrapper",
+   "sequencer/accompaniment_engine.s:26952 `call AccPatch_GetCurrentSlotAddr` / 26954 `ld xix, TimeSig_SlotFieldOffsets` / 26957 `ld l, (xiy+a)`",
+   "sequencer/accompaniment_engine.s:26960 `cp l, 11` / 26965 `cp l, 0:i3` / 26969 `ld (xiy+a), l`"
+  ]
+ },
+ {
+  "old": "Timer_ParamCompareAlt_Helper7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VoiceSlot_StepCursorBack",
+  "header": "Steps the song-data cursor back one event (VoiceSlot_CompareAndBranch: VoiceSlot_CompareRet with W = 1) while keeping the 0x81-marker counter 0x0D58 unchanged (pushed and popped around the step); W = 255 at the start of the track. Backward twin of VoiceSlot_DispatchRet. Basis: callers + body -- ScoopDisp_SeekBackWrapMarkers walks back to the preceding 0x81 with it and stops on W = 255 ('it stops at the start of the track'); 12 other scoop-display sites use it the same way.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:8461-8463 `; ScoopDisp_SeekBackWrapMarkers: Steps the song-data cursor back ... then on back to the preceding 0x81 without counting`",
+   "display/scoop_display.s:8482 `call Timer_ParamCompareAlt_Helper7` / 8483 `cp w, 255` / 8485 `call VoiceSlot_ReadCurrentParams` / 8486 `cp a, 129` -- caller",
+   "display/scoop_display.s:10187 `pushdi_w (0x0d58)` / 10188 `call VoiceSlot_CompareAndBranch` / 10189 `popw_dd16 0x58, 0x0d`",
+   "display/scoop_display.s:10183 `ld w, 1:opc` / 10184 `call VoiceSlot_CompareRet` -- direction 1",
+   "display/scoop_display.s:10211-10212 `cp b, 0:i3` / `jrl nz, VoiceSlot_DecCountLoop` / 10280 `dec 1, ix` -- W != 0 walks the record backwards",
+   "display/scoop_display.s:10177-10179 VoiceSlot_DispatchRet: `push_sd16w 0x58, 0x0d` / `call VoiceSlot_LoadAndDispatch` (W = 0) / `popw_dd16 0x58, 0x0d` -- the forward twin"
+  ]
+ },
+ {
+  "old": "Timer_ParamLoadAndCompare_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_WriteWrapMarkerAtCursor",
+  "header": "Writes one 0x81 unit marker into the track at the song-data cursor without counting it (falls to SysEx_BytecodeDispatcher_Tbl2_Sub3: record {0x81}, W = 1, SystemInit_StepHandler_0_Helper2), with the cursor saved and restored in snapshot slot 0; when the event at the cursor is 0x84 it first sets 0x0D54 bit 7. Basis: callers + body -- the forward cursor step Timer_ParamLoadAndCompare (named so in SqStep_SeekForwardByStep's header) calls it before stepping; SqStep_WriteClockWrapMarker is the counting variant of the same write.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:4769 `;   0x0DCD); it calls the forward cursor step Timer_ParamLoadAndCompare until the unit counter 0x0D5A reaches 0x0D5A +`",
+   "display/scoop_display.s:3125-3130 `call VoiceSlot_ReadParamsWithSaveRestore_Helper3` / `cp w, 255` / `cp c, 2:i3` / `call Timer_ParamLoadAndCompare_Helper2` -- caller",
+   "display/scoop_display.s:3131 `cp (GLOBAL_ERROR_CODE:16), 15` -- the caller stops when the write ran out of memory",
+   "display/scoop_display.s:9403-9404 `xor a, a` / `call VoiceSlot_SaveState` / 9411-9412 `xor a, a` / `call VoiceSlot_RestoreState`",
+   "display/scoop_display.s:9405-9408 `call VoiceSlot_FlagCheck` / `cp a, 132` / `set 7, (0x0d54:16)`",
+   "display/scoop_display.s:9410 `call SysEx_BytecodeDispatcher_Tbl2_Sub3`",
+   "display/scoop_display.s:9422-9428 `; SqStep_WriteClockWrapMarker: Counts one clock wrap (word 0x0D58 += 1) and writes one 0x81 event: falls into SysEx_BytecodeDispatcher_Tbl2_Sub3`",
+   "display/scoop_display.s:9437-9440 `ld w, 1:opc` / `ld xiy, 3656` / `ld (xiy), 129` / `call SystemInit_StepHandler_0_Helper2`"
+  ]
+ },
+ {
+  "old": "TitleFunc_LifecycleTable_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDTest_ProbeDiskFormat",
+  "header": "Main-CPU twin of the bootloader's FDC_ProbeDiskFormat (table_data/boot_disk_probe.s): sets PHFC = 0x1E, returns when Port D bit 6 is set (no disk), else submits through FDC_CommandEntry the request block at 0x8B24 (command, drive, head, track, sector, count, buffer 0x8B34): command 0 (initialize, track field 224; the 211 arm is dead, A = 0) and four single-sector reads (command 3, sector 1) at tracks 0, 78, 10 and 40, then waits 200 (SOME_DELAY) and counts the pass in 0xE3DA. Basis: callers + body -- the FDD test title's entry 0 (TitleFunc_LifecycleTable) prints 'TBIOS Test' and calls it; same request sequence as the documented boot twin.",
+  "basis": "callers + body",
+  "evidence": [
+   "factory_test/test_init.s:191-194 `TitleFunc_LifecycleTable:` `lda xwa, (TitleFunc_LifecycleTable_Data:24)` / `calr FDTest_PrintDiag` / `call TitleFunc_LifecycleTable_Helper` -- caller",
+   "factory_test/fd_test_data.s:357-359 `TitleFunc_LifecycleTable_Data:` `aligned_string \"TBIOS Test\"`",
+   "storage/fdc_routines.s:2362-2364 `ld (PHFC:8), 0x1e:io` / `bit 6, (PD:8)` / `ret nz`",
+   "storage/fdc_routines.s:2365-2371 `ld a, 0x0:opc` ... `cp a, 0:i3` / `ldw (0x8b2a:16), 224` -- command 0, field 224",
+   "storage/fdc_routines.s:2385-2395 `ldw (0x8b24:16), 3` ... `ldw (0x8b2c:16), 1` / `ldw (0x8b2e:16), 1` / `lda xwa, (0x8b34:16)` / `calr FDC_CommandEntry` -- read track 0",
+   "storage/fdc_routines.s:2399 `ldw (0x8b2a:16), 78` / 2410 `ldw (0x8b2a:16), 10` / 2421 `ldw (0x8b2a:16), 40` -- the other reads",
+   "storage/fdc_routines.s:2430-2432 `ldw wa, 0xc8` / `calr SOME_DELAY` / `incw 1, (0xe3da:16)`",
+   "../technics-docs/fdc-subsystem.md: FDC_ProbeDiskFormat table -- 0 (initialize, 0x00E0), reads at tracks 0, 78, 10, 40 sector 1 count 1, wait 200, pass counter; request block +0 cmd, +2 drive, +4 head, +6 track, +8 sector, +10 count, +12 buffer"
+  ]
+ },
+ {
+  "old": "ToneEvt_Handler_Mode9_Helper",
+  "verdict": "refuse",
+  "why_refused": "The body only writes the five ASCII bytes \"TRACK\" to (XIY) (its unlabelled twin right after writes five spaces). Its only caller, ToneEvt_Handler_Mode9 (entry 9 of PerfMode_DispatchTable_A, no header), does not set XIY (Display_ModeHandler runs first), so which field receives the text, and why, is not established; a name would be body-only.",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "display/scoop_display.s:4390-4394 `ToneEvt_Handler_Mode9:` `bit 7, w` / `call ToneEvt_Handler_ModeSingle` / `call ToneEvt_Handler_Mode9_Helper` -- caller",
+   "display/scoop_display.s:4493-4495 `ld (xiy), 84` / `ldw (xiy+1), 16722` / `ldw (xiy+3), 19267` -- 'T', 'RA'... = \"TRACK\"",
+   "display/scoop_display.s:4499-4501 `ld (xiy), 32` / `ldw (xiy+1), 8224` / `ldw (xiy+3), 8224` -- unlabelled twin: five spaces",
+   "display/scoop_display.s:2543 `.long ToneEvt_Handler_Mode9` -- entry 9 of PerfMode_DispatchTable_A"
+  ]
+ },
+ {
+  "old": "ToneGen_CompareVoiceBlocks_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ToneGen_SaveCursorEventBytes",
+  "header": "Copies the six bytes of the note event at the pattern cursor (block 0x3514, offset 0x3512; ToneGen_CalcBufferAddr, ToneGen_StepToNextVoiceSlot between bytes) into 0x3436..0x343B, leaving the working cursor 0x3449/0x346B on its last byte (0x3435 = 0). Basis: callers + body -- first step of ToneGen_CompareVoiceBlocks, which ToneGen_WriteMultiChanParam calls when the event's status (0x90) differs from the one it computes (0x90 / 0x91); ToneGen_BuildConvertedNoteEvent then builds the new event from these bytes.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:21280-21290 `cp d, 0x90` / `cp e, 0x90` / `calr ToneGen_CompareVoiceBlocks` -- ToneGen_WriteMultiChanParam calls the parent only when the types differ",
+   "sequencer/accompaniment_engine.s:21300-21303 `calr ToneGen_CompareVoiceBlocks_Helper` / `_Helper2` / `_Helper3` / `calr ToneGen_StepWithBoundsCheck` -- the parent's sequence",
+   "sequencer/accompaniment_engine.s:21311-21314 `ld wa, (0x3512:16)` / `ld (0x3449:16), wa` / `ld wa, (0x3514:16)` / `ld (0x346b:16), wa`",
+   "sequencer/accompaniment_engine.s:21318-21320 `calr ToneGen_CalcBufferAddr` / `ld a, (xhl+iy)` / `ld (0x3436:16), a` ... 21350 `ld (0x343b:16), a` -- six bytes",
+   "sequencer/accompaniment_engine.s:21402-21413 `ld a, (0x3436:16)` / `ld (xiy), a` ... `ld (xiy + 5), a` -- Helper3 rebuilds from them"
+  ]
+ },
+ {
+  "old": "ToneGen_CompareVoiceBlocks_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ToneGen_DeleteEventAtCursor",
+  "header": "Removes the note event at the pattern cursor (0x3512 / 0x3514): length 6 for a 0x90 event, else 8 (0x344D), steps that far to set the copy source (0x3658/0x365E) after it with the destination (0x365A/0x3660) at the cursor, then closes the gap with AccPatch_CopySequenceEntry (block copy; frees a block into 0x34D4 when the chain shrinks). Basis: callers + body -- second step of ToneGen_CompareVoiceBlocks, between saving the event (ToneGen_SaveCursorEventBytes) and re-inserting the converted one (ToneGen_StepWithBoundsCheck: length 6/8, needs 0x34D4 != 0); AccVoice_InitPlaybackState (20596-20634) deletes 0x90/0x91/0xD1-0xD6 events the same way.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:21301 `calr ToneGen_CompareVoiceBlocks_Helper2` -- caller ToneGen_CompareVoiceBlocks",
+   "sequencer/accompaniment_engine.s:21358-21365 `ld wa, (0x3514:16)` / `ld (0x365a:16), wa` ... `ld (0x3660:16), iy` -- destination = cursor",
+   "sequencer/accompaniment_engine.s:21368 `ld (0x344d:16), 6` / 21373 `cp a, 0x90` / 21375 `ld (0x344d:16), 8` -- event length",
+   "sequencer/accompaniment_engine.s:21376-21388 `calr ToneGen_StepToNextVoiceSlot` (x6 or x8) / `ld (0x3658:16), wa` -- source = after the event",
+   "sequencer/accompaniment_engine.s:21392 `calr ToneGen_ScanVoicePosition` / 21393 `call AccPatch_CopySequenceEntry`",
+   "sequencer/accompaniment_engine.s:16930 `calr AccPatch_SetupBlockCopyDispatch` / 16936 `incw 1, (0x34d4:16)`",
+   "sequencer/accompaniment_engine.s:18458-18473 `ld hl, (0x3658:16)` ... `ld ix, (0x3660:16)` / `calr AccPatch_ForwardBlockCopy`",
+   "sequencer/accompaniment_engine.s:20596-20634 `ld (0x344d:16), 6` / `cp a, 0x90` / `ld (0x344d:16), 8` / `cp a, 0x91` / `ld (0x344d:16), 3` ... `call AccPatch_CopySequenceEntry` -- same deletion pattern",
+   "sequencer/accompaniment_engine.s:21470-21477 ToneGen_StepWithBoundsCheck `cpw (0x34d4:16), 0` / `ldw (0x360a:16), 6` / `ldw (0x360a:16), 8` -- the re-insert"
+  ]
+ },
+ {
+  "old": "ToneGen_CompareVoiceBlocks_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ToneGen_BuildConvertedNoteEvent",
+  "header": "Builds the replacement note event at 0x366A from the six bytes ToneGen_SaveCursorEventBytes saved: status 0x90 (6-byte form) or 0x91 (8-byte form) with bytes +6/+7, chosen from class AccPatch_Transpose_LookupTable_Data[byte 2]: under the 0x34EA bit 6 / bit 5 + 0x379B bit 3 test class 7 gives 0x91, 3, 0; otherwise ToneGen_LoadRhythmPatternParams_Data[class] gives 0x90 (first byte 0) or 0x91 with its other two bytes. Basis: callers + body -- third step of ToneGen_CompareVoiceBlocks; ToneGen_WriteMultiChanParam picks 0x90 / 0x91 with the same table test, and ToneGen_StepWithBoundsCheck inserts 0x366A with length 6 for 0x90, else 8.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:21302 `calr ToneGen_CompareVoiceBlocks_Helper3` -- caller ToneGen_CompareVoiceBlocks",
+   "sequencer/accompaniment_engine.s:21401-21413 `ld xiy, 0x366a` / `ld a, (0x3436:16)` / `ld (xiy), a` ... `ld (xiy + 5), a`",
+   "sequencer/accompaniment_engine.s:21414-21419 `ld a, (0x3438:16)` / `ld xix, AccPatch_Transpose_LookupTable_Data` / `ld a, (xix+hl)`",
+   "sequencer/accompaniment_engine.s:21421-21438 `bit 6, (0x34ea:16)` / `bit 3, (0x379b:16)` ... `cp a, 7:i3` / `ld (xiy), 0x91` / `ld (xiy + 6), 0x3` / `ld (xiy + 7), 0x0`",
+   "sequencer/accompaniment_engine.s:21447-21457 `ld xix, ToneGen_LoadRhythmPatternParams_Data` / `ld (xiy), 0x90` / `ld (xiy), 0x91` / `ld (xiy + 6), a` / `ld (xiy + 7), a`",
+   "sequencer/accompaniment_engine.s:21243-21277 ToneGen_WriteMultiChanParam: same AccPatch_Transpose_LookupTable_Data / flag / class-7 / ToneGen_LoadRhythmPatternParams_Data test choosing E = 0x90 or 0x91",
+   "sequencer/accompaniment_engine.s:21472-21477 `ld xiy, 0x366a` / `ldw (0x360a:16), 6` / `cp a, 0x90` / `ldw (0x360a:16), 8` -- the insert reads it"
+  ]
+ },
+ {
+  "old": "ToneGen_StepAlt_CheckBeat_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccTiming_ScrollFourBarViewForward",
+  "header": "Scrolls the four-measure view one measure forward: when more measures follow (B = (0x34D7) > C + 3), the previous measure D (0x3747) was the view's last (C + 4) and the current one E (0x371A) is D + 1, increments the view's first measure C (0x3746). Basis: callers + body -- ToneGen_StepAlt_CheckBeat runs it first among the four view checks used when (0x34D9) <= 4 (the 0x20-pixel-per-measure layout of AccTiming_ComputeOffset, x = (measure - (0x3746)) * width); ChordDetect_CheckAscending is the same test for the two-measure (0x40) layout (D == C + 2).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:21701-21708 `ld e, (0x371a:16)` / `ld d, (0x3747:16)` / `ld c, (0x3746:16)` / `ld b, (0x34d7:16)` / `cp (0x34d9:16), 4` / `jr ugt, ...Overflow` / `cp b, 3:i3`",
+   "sequencer/accompaniment_engine.s:21713 `calr ToneGen_StepAlt_CheckBeat_Helper` -- caller ToneGen_StepAlt_CheckBeat, then ChordDetect_CheckDescending/Root1/Inversion1",
+   "sequencer/accompaniment_engine.s:21734-21736 `ld (0x3746:16), c` / `xor d, d` / `ld (0x3747:16), de` -- C stored, E becomes the previous measure",
+   "sequencer/accompaniment_engine.s:21745-21756 `ld a, c` / `add a, 0x3` / `cp b, a` / `inc 1, a` / `cp a, d` / `ld a, d` / `inc 1, a` / `cp a, e` / `inc 1, c`",
+   "sequencer/accompaniment_engine.s:21829-21841 ChordDetect_CheckAscending: `add a, 0x1` ... `inc 1, c` -- two-measure twin",
+   "sequencer/accompaniment_engine.s:18892-18895 `ld a, (0x34fa:16)` / `inc 1, a` / `ld (0x371a:16), wa` -- E is the 1-based measure",
+   "sequencer/accompaniment_engine.s:18916-18921 `ld a, (0x34fa:16)` / `sub a, (0x3746:16)` / `ld w, 0x20:opc` / `cp (0x34d9:16), 5` / `ld w, 0x40:opc` -- x offset from the view start"
+  ]
+ },
+ {
+  "old": "ToneParam_Evt09_BytecodeHandler_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_DeleteEventAtCursor",
+  "header": "Removes the event at the song-data cursor: measures it by stepping over it (VoiceSlot_DispatchRet; the step leaves its byte count in 0x0DCC) with the cursor saved and restored in snapshot slot 0, then deletes that many bytes there (VoiceSlot_RetZ(W): copies the rest of the track down by W, Scoop_EventHandler_SpecialMode -> SeqData_ChainCopyBytes). Basis: callers + body -- PeriphReg_StoreAndUpdate calls it when the event at the cursor has the status being entered (0x0D8F == 0x0DD1) and then writes the new record from 0x0D8F (SystemInit_StepHandler_0_Helper2), i.e. replace; ten other step-edit sites call it before re-writing.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:4419-4423 `ld a, (3471:16)` / `ld (3536:16), a` / `cp a, (3537:16)` / `call ToneParam_Evt09_BytecodeHandler_Helper2` -- caller PeriphReg_StoreAndUpdate",
+   "display/scoop_display.s:4425-4427 `ld w, (3538:16)` / `ld xiy, 0x00000d8f` / `call SystemInit_StepHandler_0_Helper2` -- then the new record is written",
+   "display/scoop_display.s:9437-9440 SqStep_WriteClockWrapMarker path: `ld w, 1:opc` / `call SystemInit_StepHandler_0_Helper2` -- the record-write routine",
+   "display/scoop_display.s:4300-4304 `xor a, a` / `call VoiceSlot_SaveState` / `call VoiceSlot_DispatchRet` / `call VoiceSlot_RestoreState`",
+   "display/scoop_display.s:4305-4306 `ld w, (3532:16)` / `call VoiceSlot_RetZ`",
+   "display/scoop_display.s:10237 `ld (3532:16), c` -- VoiceSlot_CompareRet stores the bytes stepped over",
+   "display/scoop_display.s:10078-10085 `ld (0x28b6:16), wa` / `add wa, bc` / `ld (0x28ba:16), iy` / `ld (0x28bc:16), wa` -- dest = cursor, source = cursor + W",
+   "display/scoop_display.s:17789-17793 `ld iy, (0x28bc:16)` / `ld ix, (0x28b6:16)` / `call SeqData_ChainCopyBytes` -- the tail moves down"
+  ]
+ },
+ {
+  "old": "ToneParam_ExtendedOpsBlock_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccPatch_ConvertLegacyStyleImage",
+  "header": "Checks the 3-byte header of the style image just read to (RHYTHM_PATTERN_BUF_PTR) and brings older formats up to date: 'G',0,'K' or 'L','K','E' is relabelled 'H',0,'K' (the current header, cf. AccPatch_EnsureStyleImageHeader) and kept; 'F',0,'K', 'F',' ','K', 'L','K','A' or 'L','K','B' is converted into the current layout (ToneParam_ExtendedOpsBlock_Helper2); anything else rebuilds the default image (AccDemo_InitDone) and returns 0xFF9A; finally fixes up the 30 records (ToneParam_ExtendedOpsBlock_Helper_Helper). Basis: callers + body -- ToneParam_ExtendedOpsBlock is the composer-data load path FileIO_LoadRegion3_ExtMem takes when the file's region signature does not match (FileIO_CheckRegionSignature = 0): it reads the block between cmp_ld_mae and cmp_ld_ato and calls this.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:2151-2153 `calr FileIO_CheckRegionSignature` / `cp hl, 0:i3` / `jr z, LoadRegion3_AltPath` -- signature mismatch",
+   "demo/file_demo_proc.s:1437-1438 `FileIO_CheckSig_Fail:` `ldiw_erp 0xfa, 0` -- 0 = mismatch",
+   "demo/file_demo_proc.s:2166 `call ToneParam_ExtendedOpsBlock ; alternate path`",
+   "storage/flash_floppy_handlers.s:4939-4949 `call cmp_ld_mae` / `lda xwa, (RHYTHM_PATTERN_BUF_A:24)` / `call FileIO_ReadBlock` / `calr ToneParam_ExtendedOpsBlock_Helper` -- caller",
+   "storage/flash_floppy_handlers.s:4965-4977 `ld xde, (RHYTHM_PATTERN_BUF_PTR:16)` / `cp_erpb 238, 71` / `cp h, 0:i3` / `cp l, 75` -- 'G',0,'K'",
+   "storage/flash_floppy_handlers.s:4986-4988 `ld (xde), 72` / `ld (xwa), 0` / `ld (xbc), 75` -- relabelled 'H',0,'K'",
+   "storage/flash_floppy_handlers.s:4994-5020 `cp_erpb 238, 70` ... `cp l, 66` / 5022 `calr ToneParam_ExtendedOpsBlock_Helper2` -- older formats converted",
+   "storage/flash_floppy_handlers.s:5033-5034 `call AccDemo_InitDone` / `ldw iz, 0xff9a` -- unknown header",
+   "sequencer/accompaniment_engine.s:15885-15886 `; AccPatch_EnsureStyleImageHeader: Checks that the style image ... starts with the header bytes 'H', 0, 'K'`"
+  ]
+ }
+]

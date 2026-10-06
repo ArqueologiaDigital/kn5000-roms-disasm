@@ -1037,13 +1037,13 @@ UIState_DisplayUpdate_BitmapHandler:
 	jr	z, UIState_DisplayUpdate_BitmapHandler_Return
 	res	0, (0x966c:16)
 	ld	(0x966d:16), 128
-	calr	UIState_DisplayUpdate_BitmapHandler_Helper
+	calr	MidiRx_BuildChannelPartLists
 	ld	(0x966d:16), 64
-	calr	UIState_DisplayUpdate_BitmapHandler_Helper
+	calr	MidiRx_BuildChannelPartLists
 	call	VoiceChannels_InitPanFromPreset
 UIState_DisplayUpdate_BitmapHandler_Return:
 	ret
-UIState_DisplayUpdate_BitmapHandler_Helper:
+MidiRx_BuildChannelPartLists:
 	ld	xix, 0x94f4
 	cp	(0x966d:16), 128
 	jr	z, UIState_DisplayUpdate_BitmapHandler_Skip
@@ -10049,7 +10049,7 @@ MidiPkt_SetXferLengthFromMsg:
 	ld	(xwa+8), xiz
 	pop	xiz
 	ret
-MidiSeq_ClearSyncFlag_Helper:
+MidiPkt_SetXferTotal_All:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
@@ -10339,7 +10339,7 @@ MidiPkt_GetUsedSize_StyleImage:
 	push	xhl
 	push	xix
 	push	xiz
-	call	SeqVoice_StoreEntryDone_Helper
+	call	AccPatch_ClearModeAndInitSlotChain_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -10367,7 +10367,7 @@ MidiPkt_GetUsedSize_AccompBlocks:
 	push	xhl
 	push	xix
 	push	xiz
-	call	SeqVoice_StoreEntryDone_Helper2
+	call	Voice_RefreshBankData_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -10966,7 +10966,7 @@ MidiSeq_PartConfigure_Data:
 SysEx_SendAllData:
 	set	3, (0xbd18:16)
 	ld	xwa, 0xbcbc
-	call	MidiSeq_ClearSyncFlag_Helper
+	call	MidiPkt_SetXferTotal_All
 	calr	MidiPkt_ArpConfigChain_Data
 	res	3, (0xbd18:16)
 	ret
@@ -13442,19 +13442,19 @@ SysEx_ResetAndReturn:
 SysEx_DispatchCalls_Data:
 	call	SysEx_ResetAndReturn_Helper
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case2:
+SysEx_InitiateSend_SendSequencer:
 	call	SysEx_ResetAndReturn_Helper2
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case3:
+SysEx_InitiateSend_SendSoundMemory:
 	call	SysEx_ResetAndReturn_Helper3
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case4:
+SysEx_InitiateSend_SendPanelMemory:
 	call	SysEx_ResetAndReturn_Helper4
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case5:
+SysEx_InitiateSend_SendNoData:
 	call	SysEx_ResetAndReturn_Helper5
 	jr	SysEx_InitiateSend_Join
-SysEx_InitiateSend_Case6:
+SysEx_InitiateSend_SendMspUser:
 	call	SysEx_ResetAndReturn_Helper6
 	jr	SysEx_InitiateSend_Join
 	ret

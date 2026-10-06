@@ -2358,7 +2358,13 @@ Reset_Floppy_Disk_Controller:
 
 	; then do a lot of other stuff I still don't undertsand:
 
-TitleFunc_LifecycleTable_Helper:
+; FDTest_ProbeDiskFormat: Main-CPU twin of the bootloader's FDC_ProbeDiskFormat (table_data/boot_disk_probe.s): sets
+;   PHFC = 0x1E, returns when Port D bit 6 is set (no disk), else submits through FDC_CommandEntry the request block
+;   at 0x8B24 (command, drive, head, track, sector, count, buffer 0x8B34): command 0 (initialize, track field 224; the
+;   211 arm is dead, A = 0) and four single-sector reads (command 3, sector 1) at tracks 0, 78, 10 and 40, then waits
+;   200 (SOME_DELAY) and counts the pass in 0xE3DA. Basis: callers + body -- the FDD test title's entry 0
+;   (TitleFunc_LifecycleTable) prints 'TBIOS Test' and calls it; same request sequence as the documented boot twin.
+FDTest_ProbeDiskFormat:
 	ld (PHFC:8), 0x1e:io
 	bit	6, (PD:8)	; Port D bit 6: "FD.I/O signal"
 	ret nz

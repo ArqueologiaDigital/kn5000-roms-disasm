@@ -1481,11 +1481,11 @@ VoiceData_SyncCodeList:
 SysExSend_SwitchOffsets:
 	.short	SysEx_SendDispatch - SysEx_SendDispatch
 	.short	SysEx_DispatchCalls_Data - SysEx_SendDispatch
-	.short	SysEx_InitiateSend_Case2 - SysEx_SendDispatch
-	.short	SysEx_InitiateSend_Case3 - SysEx_SendDispatch
-	.short	SysEx_InitiateSend_Case4 - SysEx_SendDispatch
-	.short	SysEx_InitiateSend_Case5 - SysEx_SendDispatch
-	.short	SysEx_InitiateSend_Case6 - SysEx_SendDispatch
+	.short	SysEx_InitiateSend_SendSequencer - SysEx_SendDispatch
+	.short	SysEx_InitiateSend_SendSoundMemory - SysEx_SendDispatch
+	.short	SysEx_InitiateSend_SendPanelMemory - SysEx_SendDispatch
+	.short	SysEx_InitiateSend_SendNoData - SysEx_SendDispatch
+	.short	SysEx_InitiateSend_SendMspUser - SysEx_SendDispatch
 ; 39 x u32 routine pointers; SeqData_DispatchHandler (0xFD8DB4): `lda xbc,(<this>); ld xhl, (xbc+hl); call (xhl)`.
 ; Extent: to the next object's base (loaded by its own reader).
 SeqData_Handlers:
@@ -7444,12 +7444,12 @@ RhythmBuf_SwitchOffsets:
 ; lda xix,(0xFE8BA8); jp_rr` -- targets 0xFE8BA8 + offset (no labels yet).
 SeqEvtBuf_SwitchOffsets:
 	.short	SeqPerformance_EventDispatch - SeqPerformance_EventDispatch
-	.short	SeqEvtBuf_NoteDispatch_Case2 - SeqPerformance_EventDispatch
-	.short	SeqEvtBuf_NoteDispatch_Case3 - SeqPerformance_EventDispatch
-	.short	SeqEvtBuf_NoteDispatch_Case4 - SeqPerformance_EventDispatch
-	.short	SeqEvtBuf_NoteDispatch_Case5 - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_PitchBend - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_DamperPedal - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_Pan - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_Expression - SeqPerformance_EventDispatch
 	.short	SeqPerformance_Event_Block - SeqPerformance_EventDispatch
-	.short	SeqEvtBuf_NoteDispatch_Case7 - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_DelaySend - SeqPerformance_EventDispatch
 ; 28 rows x 12 columns x 1 byte = 336 bytes.  SoundFX_Handler_2 (0xFE8E38): row = RAM byte
 ; 0xCEDF - 1 (`muls wa,0xc`), column = (0xCEAA - 0xCEE0 + VoiceBank_MapNoteToOffset
 ; + 1) mod 12 (`div a,0xc`); each byte is subtracted from RAM 0xCEAA and the

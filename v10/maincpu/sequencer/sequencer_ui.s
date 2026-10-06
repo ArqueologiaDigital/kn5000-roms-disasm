@@ -8501,27 +8501,27 @@ SqplyVal_ParamCases_Join:
 	pushw	0
 	pushw	255
 	jr	SqplyVal_ParamCases_Join2
-SqplyVal_HandleExtraParams_Case5:
+SqplyVal_HandleExtraParams_DrawCycleStartMeasure:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_CYC_SRT_M_STRING
 	jr	SqplyVal_ParamCases_Join
-SqplyVal_HandleExtraParams_Case6:
+SqplyVal_HandleExtraParams_DrawCycleEndMeasure:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_CYC_END_M_STRING
 	jr	SqplyVal_ParamCases_Join
-SqplyVal_HandleExtraParams_Case8:
+SqplyVal_HandleExtraParams_DrawPInMeasure:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_P_IN_MEAS_STRING
 	jr	SqplyVal_ParamCases_Join
-SqplyVal_HandleExtraParams_Case9:
+SqplyVal_HandleExtraParams_DrawPOutMeasure:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_P_OUT_MEAS_STRING
 	jr	SqplyVal_ParamCases_Join
-SqplyVal_HandleExtraParams_Case10:
+SqplyVal_HandleExtraParams_DrawPCountIn:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_P_CNT_IN_STRING
 	jr	SqplyVal_ParamCases_Join
-SqplyVal_HandleExtraParams_Case11:
+SqplyVal_HandleExtraParams_DrawSoloEnable:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_SOLO_EN_STRING
 	jr	SqplyVal_ParamCases_Join
@@ -12518,27 +12518,29 @@ EffectBox_Dispatch:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT1_STR
 	jr	EffectBox_Dispatch_Join
-EffectBox_NameSetup_Case2:
+; EffectBox_NameSetup_GetEffDlt2Str: Row 2 of the effect editor box: the value string of effect parameter 2
+;   (MT_GetEffDlt2Str); rows 0 and 1 use Dlt0 / Dlt1 the same way.
+EffectBox_NameSetup_GetEffDlt2Str:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT2_STR
 	jr	EffectBox_Dispatch_Join
-EffectBox_NameSetup_Case3:
+EffectBox_NameSetup_GetEffDlt3Str:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT3_STR
 	jr	EffectBox_Dispatch_Join
-EffectBox_NameSetup_Case4:
+EffectBox_NameSetup_GetEffDlt4Str:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT4_STR
 	jr	EffectBox_Dispatch_Join
-EffectBox_NameSetup_Case5:
+EffectBox_NameSetup_GetEffDlt5Str:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT5_STR
 	jr	EffectBox_Dispatch_Join
-EffectBox_NameSetup_Case6:
+EffectBox_NameSetup_GetEffDlt6Str:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT6_STR
 	jr	EffectBox_Dispatch_Join
-EffectBox_NameSetup_Case7:
+EffectBox_NameSetup_GetEffDlt7Str:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT7_STR
 	jr	EffectBox_Dispatch_Join
@@ -13073,22 +13075,22 @@ EffectBox_StateDispatch:
 SeqAccomp_Dispatch:
 	ld	xbc, EVT_GET_EQ1_STR
 	jr	SeqAccomp_Dispatch_Join
-EffectBox_StateDispatch_Case2:
+EffectBox_StateDispatch_DrawEqBand2:
 	ld	xbc, EVT_GET_EQ2_STR
 	jr SeqAccomp_Dispatch_Join
-EffectBox_StateDispatch_Case3:
+EffectBox_StateDispatch_DrawEqBand3:
 	ld xbc, EVT_GET_EQ3_STR
 	jr SeqAccomp_Dispatch_Join
-EffectBox_StateDispatch_Case4:
+EffectBox_StateDispatch_DrawEqBand4:
 	ld xbc, EVT_GET_EQ4_STR
 	jr	SeqAccomp_Dispatch_Join
-EffectBox_StateDispatch_Case5:
+EffectBox_StateDispatch_DrawEqBand5:
 	ld	xbc, EVT_GET_EQ5_STR
 	jr	SeqAccomp_Dispatch_Join
-EffectBox_StateDispatch_Case6:
+EffectBox_StateDispatch_DrawEqBand6:
 	ld	xbc, EVT_GET_EQ6_STR
 	jr	SeqAccomp_Dispatch_Join
-EffectBox_StateDispatch_Case7:
+EffectBox_StateDispatch_DrawEqBand7:
 	ld	xbc, EVT_GET_EQ7_STR
 	jr	SeqAccomp_Dispatch_Join
 
@@ -15576,7 +15578,10 @@ Equalizer_DispatchB:
 	ld	hl, (xbc)
 	extz	xhl
 	jrl	Equalizer_PopIzRet
-Equalizer_DispatchA_Case3:
+; Equalizer_DispatchA_Band2FreqPos: EQ item 3 = band 2 frequency: display x of RAM word 0x297c through
+;   Equalizer_FreqDispPos (items 1/2 = band 1, 3/4 = band 2, 5/6 = band 3, 7/8 = band 4; odd = frequency, even =
+;   gain).
+Equalizer_DispatchA_Band2FreqPos:
 	ld	wa, (0x297c:16)
 	extz	xwa
 	add	xwa, xwa
@@ -15584,7 +15589,7 @@ Equalizer_DispatchA_Case3:
 	ld	hl, (xde)
 	extz	xhl
 	jrl	Equalizer_PopIzRet
-Equalizer_DispatchA_Case4:
+Equalizer_DispatchA_Band2GainPos:
 	ld	wa, (0x297e:16)
 	extz	xwa
 	add	xwa, xwa
@@ -15592,7 +15597,7 @@ Equalizer_DispatchA_Case4:
 	ld	hl, (xbc)
 	extz	xhl
 	jrl	Equalizer_PopIzRet
-Equalizer_DispatchA_Case5:
+Equalizer_DispatchA_Band3FreqPos:
 	ld	wa, (0x2980:16)
 	extz	xwa
 	add	xwa, xwa
@@ -15600,7 +15605,7 @@ Equalizer_DispatchA_Case5:
 	ld	hl, (xde)
 	extz	xhl
 	jrl	Equalizer_PopIzRet
-Equalizer_DispatchA_Case6:
+Equalizer_DispatchA_Band3GainPos:
 	ld	wa, (0x2982:16)
 	extz	xwa
 	add	xwa, xwa
@@ -15608,7 +15613,7 @@ Equalizer_DispatchA_Case6:
 	ld	hl, (xbc)
 	extz	xhl
 	jrl	Equalizer_PopIzRet
-Equalizer_DispatchA_Case7:
+Equalizer_DispatchA_Band4FreqPos:
 	ld	wa, (0x2984:16)
 	extz	xwa
 	add	xwa, xwa
@@ -15616,7 +15621,7 @@ Equalizer_DispatchA_Case7:
 	ld	hl, (xde)
 	extz	xhl
 	jrl	Equalizer_PopIzRet
-Equalizer_DispatchA_Case8:
+Equalizer_DispatchA_Band4GainPos:
 	ld	wa, (0x2986:16)
 	extz	xwa
 	add	xwa, xwa

@@ -13055,7 +13055,7 @@ SeqPerformance_EventDispatch:
 	ld	bc, 1:i3
 	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
-SeqEvtBuf_NoteDispatch_Case2:
+SeqEvtBuf_NoteDispatch_PitchBend:
 	ld	wa, 0:i3
 	cp	iz, 64
 	jr	lt, ProcessEventDispatch_Prologue_Skip
@@ -13078,7 +13078,7 @@ ProcessEventDispatch_Prologue_Skip:
 	ldw	bc, 432
 	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
-SeqEvtBuf_NoteDispatch_Case3:
+SeqEvtBuf_NoteDispatch_DamperPedal:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 64
@@ -13089,7 +13089,7 @@ SeqEvtBuf_NoteDispatch_Case3:
 	ldw	bc, 64
 	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
-SeqEvtBuf_NoteDispatch_Case4:
+SeqEvtBuf_NoteDispatch_Pan:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 10
@@ -13100,7 +13100,7 @@ SeqEvtBuf_NoteDispatch_Case4:
 	ldw	bc, 10
 	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
-SeqEvtBuf_NoteDispatch_Case5:
+SeqEvtBuf_NoteDispatch_Expression:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 11
@@ -13111,7 +13111,7 @@ SeqEvtBuf_NoteDispatch_Case5:
 	ldw	bc, 11
 	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
-SeqEvtBuf_NoteDispatch_Case7:
+SeqEvtBuf_NoteDispatch_DelaySend:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 94
@@ -20950,7 +20950,7 @@ MidiSysMsg_Handler_Skip8:
 	jr	lt, MidiSysMsg_Handler_Loop5
 MidiSysMsg_Handler_Skip9:
 	lda	xwa, (xsp+4)
-	calr	MidiSysMsg_Handler_Helper
+	calr	MidiSysMsg_SetScaledTempo
 	jr	Dispatch_InitVal2
 MidiSysMsg_Handler_SkipFEEvent:
 	ld	iz, 0:i3
@@ -21048,7 +21048,7 @@ Dispatch_Data_Skip2:
 	ld	xhl, 0:i3
 Dispatch_Data_Return:
 	ret
-MidiSysMsg_Handler_Helper:
+MidiSysMsg_SetScaledTempo:
 	push	xiz
 	ld	xbc, (0xe925:16)
 	or	xbc, xbc

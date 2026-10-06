@@ -2308,7 +2308,7 @@ Reset_Floppy_Disk_Controller:
 
 	; then do a lot of other stuff I still don't undertsand:
 
-TitleFunc_LifecycleTable_Helper:
+FDTest_ProbeDiskFormat:
 	ld (PHFC:8), 0x1e:io
 	bit	6, (PD:8)	; Port D bit 6: "FD.I/O signal"
 	ret nz

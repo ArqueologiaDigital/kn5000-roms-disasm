@@ -99,7 +99,7 @@ WorkRam2_SendEpilogueByte:
 ;        Acc_StopPlayMode, Acc_StartFillIn, DecodeMidiEvent_LoadParam3)
 ;  +0x23 u32 running total (SeqFile_AccumulateLength, ConfigureBanks_Block,
 ;        ToneGen_AccumulateDelta `add (0xE9E7),...`)
-;  +0x27 u32 (ConfigureBanks_LoadReg4, RecordReadOK_Block, MidiSysMsg_Handler_Helper)
+;  +0x27 u32 (ConfigureBanks_LoadReg4, RecordReadOK_Block, MidiSysMsg_SetScaledTempo)
 ;  +0x2B u16 set to 384 or 480 (RecordReadOK_Block7, ToneGen_ReadFileRecord) or read
 ;        from the file (SeqFile_ReadDivisionByte1); [INFERENCE] the SMF time
 ;        division (384 and 480 are usual ticks-per-quarter values)

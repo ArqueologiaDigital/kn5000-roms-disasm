@@ -176,11 +176,11 @@ GetSoundName_DefaultString_Data:	.incbin "includes/generated/naka_disk_warning.b
 ; MainPmanControl_CaseTable -- 6 x int16: the case offsets of MainPmanControl's compiled switch, relative to MainPmanCtrl_DispatchTable
 MainPmanControl_CaseTable:
 	.short	MainPmanCtrl_Case0 - MainPmanCtrl_DispatchTable
-	.short	MainPmanCtrl_Case1 - MainPmanCtrl_DispatchTable
-	.short	MainPmanCtrl_Case2 - MainPmanCtrl_DispatchTable
-	.short	MainPmanCtrl_Case3 - MainPmanCtrl_DispatchTable
-	.short	MainPmanCtrl_Case4 - MainPmanCtrl_DispatchTable
-	.short	MainPmanCtrl_Case5 - MainPmanCtrl_DispatchTable
+	.short	MainPmanCtrl_OnLswAdd - MainPmanCtrl_DispatchTable
+	.short	MainPmanCtrl_OnLswGet - MainPmanCtrl_DispatchTable
+	.short	MainPmanCtrl_OnLswPartPut - MainPmanCtrl_DispatchTable
+	.short	MainPmanCtrl_OnLswPartAdd - MainPmanCtrl_DispatchTable
+	.short	MainPmanCtrl_OnLswPartGet - MainPmanCtrl_DispatchTable
 ; CtrlPanel_DispatchByIndex_CaseTable -- 43 x int16: the case offsets of CtrlPanel_DispatchByIndex's compiled switch, relative to CtrlPanel_FrameDispatchTable
 CtrlPanel_DispatchByIndex_CaseTable:
 	.short	CtrlPanel_FrameReturn - CtrlPanel_FrameDispatchTable

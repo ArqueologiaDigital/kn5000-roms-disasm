@@ -1,0 +1,469 @@
+[
+ {
+  "old": "ToneParam_HandlerTable_BC_Helper9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VoiceSlot_SkipByteAndRead",
+  "header": "Reads two bytes at the song-data cursor with VoiceSlot_FinalRetZ (read the cursor byte, advance one) and returns the second in A (W = the advance status), so it skips one byte. Basis: callers + body -- VoiceSlot_StatusRet calls it right after consuming a stored event's status byte, skipping the clock byte +1 to fetch data byte +2 (the 0xDn value that goes to 0x3721, the 0xBn tag compared with 72, the 0xCn part), and twice in a row to reach byte +4.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:11530 `ToneParam_HandlerTable_BC_Helper9:` / 11531-11532 `call VoiceSlot_FinalRetZ` (twice) -- body",
+   "display/scoop_display.s:10410-10418 `VoiceSlot_FinalRetZ:` -- VoiceSlot_ReadCurrentParams, then advance by DE = 1 (VoiceSlot_ReadParamsWithSaveRestore_Helper2), W = its status",
+   "display/scoop_display.s:11469 `call VoiceSlot_FinalRetZ` (status 0xD0-0xD3) / 11504-11505 `call ToneParam_HandlerTable_BC_Helper9` / `ld (0x3721:16), a` -- caller VoiceSlot_StatusRet: value byte +2 of a 0xDn event",
+   "display/scoop_display.s:10930 `call VoiceSlot_FinalRetZ` / 10931 `call ToneParam_HandlerTable_BC_Helper9` / 10938 `cp a, 72` -- 0xBn event: byte +2 is the tag",
+   "display/scoop_display.s:10860-10862 `call VoiceSlot_FinalRetZ` / `call ToneParam_HandlerTable_BC_Helper9` x2 -- two calls in a row reach byte +4",
+   "display/scoop_display.s:4055 `call VoiceSlot_FinalRetZ` / 4060 `call ToneParam_HandlerTable_BC_Helper9` / 4061 `cp a, 72` -- same use in ToneParam_HandlerTable_BC_Helper5"
+  ]
+ },
+ {
+  "old": "UIDisp_DefaultInputHandler_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "UIDisp_StepMeasure",
+  "header": "Moves the song position one measure in the note-track display modes (1 and 2): sets 0x0F57 bit 0 and (0x0F53) = 1, keeps W in 0x0D39, then goes forward to the next measure start (UIDisp_DefaultInputHandler_Helper3) when W bit 7 is set or back (UIDisp_DefaultInputHandler_Helper2) when it is clear. Basis: callers + body -- UIDisp_DefaultInputHandler (entries 0 and 17 of PerfMode_EventTable_0/_1, where mode 0 has ScoopDisp_FlagSetAndDispatch -> ScoopDisp_StepMeasureForward/Back) calls it; the go-to-measure routine uses the same two targets for modes 1 and 2.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:1275 `call UIDisp_DefaultInputHandler_Helper` -- caller UIDisp_DefaultInputHandler (then regions 5 and 3)",
+   "display/scoop_display.s:1172-1173 `PerfMode_EventTable_0:` / `.long UIDisp_DefaultInputHandler` -- entry 0 (and 17); mode 0's ScoopDisp_DispatchTable_Small (994-1001) has ScoopDisp_FlagSetAndDispatch there",
+   "display/scoop_display.s:984-991 `ScoopDisp_FlagSetAndDispatch` -- W bit 7 set -> ScoopDisp_StepMeasureForward, clear -> ScoopDisp_StepMeasureBack (the mode-0 twin)",
+   "display/scoop_display.s:1288-1290 `or (0x0f57:16), 1` / `ld (3923:16), 1` / `ld (3385:16), w`",
+   "display/scoop_display.s:1291-1296 `bit 7, w` / `call UIDisp_DefaultInputHandler_Helper3` / `call UIDisp_DefaultInputHandler_Helper2`",
+   "display/scoop_display.s:4335-4341 `ld l, (3421:16)` / `sub l, (3420:16)` / `ld (3533:16), hl` / `ld (3534:16), 0` / `call DisplayMode_Handler_3_Sub` -- Helper3 seeks forward (beats per measure - beat) units to clock 0 (SqStep_SeekForwardByStep body)",
+   "display/scoop_display.s:4315-4325 `call Timer_ParamCompareAlt` until (3415) = 0 and (3420) = 0 -- Helper2 steps back to a measure start",
+   "display/scoop_display.s:12395-12400 / 12423 `call UIDisp_DefaultInputHandler_Helper3` / 12444 `call UIDisp_DefaultInputHandler_Helper2` -- go-to-measure, display modes 1/2: forward while below the target (0x1105), back while above"
+  ]
+ },
+ {
+  "old": "UIStateEvt_VoiceParamHandler_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Seq_FindRhythmTrack",
+  "header": "Finds the RHYTHM track: the first of the 16 tracks whose TRACK ASSIGN value (0xF1A0[t]) is 16; when its bit is set in the track mask 0xF19E and bit 7 of 0xF250[3*t] is set, returns W = t + 1, stores it in 0x0D56 and sets 0x0D54 bit 0 and 0x287B bit 2, which make AccPedal_CheckBitAndUpdate / Scoop_EventHandler_MenuSwitch take the measure lengths from that track; otherwise clears both flags and returns W = 0. Basis: callers + body -- UIStateEvt_VoiceParamHandler runs it before AccWrap_PlayModeDispatch / SeqBuf_Init when the sequencer starts; value 16 is RHYTHM in both track-assign name tables.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:53 `call UIStateEvt_VoiceParamHandler_Helper` / 54 `call AccWrap_PlayModeDispatch` / 55 `call SeqBuf_Init` -- caller (twin at 69-71)",
+   "ui/ui_playback_modes.s:80-86 `ld xix, 0xf1a0` / `ld a, 16:opc` / `cp a, (xix+)` / `djnz16 bc` -- search the 16 assignments for value 16",
+   "ui/ui_playback_modes.s:94-100 `ld iz, (0xf19e:16)` / `scf` / `.byte 0xde` + `pushw de` (= xorcf A, IZ) / `jr c` -- the track's bit in the mask 0xF19E",
+   "ui/ui_playback_modes.s:102-107 `ld xhl, 62032` / `mul wa, c` (3) / `bit 7, (xhl+iy)` -- 0xF250[3*t] bit 7",
+   "ui/ui_playback_modes.s:114-118 `inc 1, a` / `ld (3414:16), w` / `or (3412:16), 1` / `or (10363:16), 4`; 121-123 clear both, W = 0",
+   "display/scoop_display.s:5786-5791 `bit 0, (3412:16)` / `or (0x287b:16), 4` / `ld w, (3414:16)` -- AccPedal_CheckBitAndUpdate passes the track to Scoop_EventHandler_MenuSwitch",
+   "display/scoop_display.s:17515 `bit 2, (0x287b:16)` / 17530 `Scoop_EventHandler_MenuSwitch_Mode1:` -- with the flag, measure/beat come from scanning that track instead of the fixed (0x433) beats per measure",
+   "audio/sound_data.s:285 `Scoop_SetPartIndexAndDisplay_Data` -- ROM 0xE0B460: 'MELODY' x12, 'DRUM', 'CHORD', 'CHORD', 'CONTROL', 'RHYTHM' (index 16), 'MELODY' x3",
+   "ui_widgets/naka_widget_tables_1.s:990 `TrAsSureLangCheck_PtrTable_2` -- 20 pointers: 0 RIGHT1 .. 12 DRUMS, 13 CHORD, 14 APC, 15 CONTROL, 16 RHYTHM, 17-19 PART13-15",
+   "ui_widgets/technichord_string_data.s:1847-1849 `Str_Err24Rhythm_German` -- 'A Rhythm Track already exist' (only one track can be RHYTHM)",
+   "display/scoop_display.s:7149 `call VoiceState_DataBlock2_Helper2` / 7154 `call AccPedal_CheckBitAndUpdate` -- the same search (mask 0xFFEC) in SqStep_InitOnEnter, followed by the measure refresh"
+  ]
+ },
+ {
+  "old": "UIState_CallDecHandler_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "UIState_StepMeasureBack",
+  "header": "RHYTHM-track display (mode 3): moves the song position back to a measure start -- refreshes the measure/beat (AccPedal_CheckBitAndUpdate) and steps back (Timer_ParamCompareAlt) at least once until clock (0x0D57) and beat (0x0D5C) are both 0, then shows the measure number. Basis: callers + body -- UIState_DispatchHandler (entry 0 of the mode-3 UIState_EventTable) calls it when W bit 7 is clear, and the go-to-measure routine calls it in mode 3 while the measure is above the target.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:2077-2082 `bit 0x07, w` / `jrl z, UIState_CallDecHandler` / `call UIState_CallDecHandler_Helper` -- caller UIState_DispatchHandler",
+   "display/scoop_display.s:2037-2038 `UIState_EventTable:` / `.long UIState_DispatchHandler` -- entry 0, read by UIState_PerfModeEntry (display mode 3)",
+   "display/scoop_display.s:5774 `call AccPedal_CheckBitAndUpdate` / 5776 `call Timer_ParamCompareAlt` / 5778-5781 `cp (3415:16), a` / `cp (3420:16), a` -- step back until clock 0 and beat 0",
+   "display/scoop_display.s:5782 `call DisplayStr_ShowMeasureNumber`",
+   "display/scoop_display.s:12398-12399 `cp a, 3:i3` / `jrl z, VoiceState_DataBlock2_Code_Skip30` -- mode 3 -> VoiceState_DataBlock2_Tbl_Helper5",
+   "display/scoop_display.s:12475-12481 `call UIState_CallDecHandler_Helper` while (0x371A) != (0x1105) -- go-to-measure, moving down",
+   "display/scoop_display.s:7572-7574 `PortConfig_DataTable_A` -- assignment 16 (RHYTHM) -> display mode 3"
+  ]
+ },
+ {
+  "old": "UIState_DispatchHandler_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "UIState_StepMeasureForward",
+  "header": "RHYTHM-track display (mode 3): moves the song position forward to the next measure start -- refreshes the measure/beat (AccPedal_CheckBitAndUpdate), steps forward (Timer_ParamLoadAndCompare) until clock (0x0D57) and beat (0x0D5C) are both 0 and shows the measure number; if the following byte is the 0x84 marker it shows section 9 (\"REPEAT\") with DisplayStr_StyleSectionInit. Basis: callers + body -- UIState_DispatchHandler calls it when W bit 7 is set (UIState_StepMeasureBack when clear), and the go-to-measure routine calls it in mode 3 while the measure is below the target.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:2077-2079 `bit 0x07, w` / `call UIState_DispatchHandler_Helper` -- caller UIState_DispatchHandler (entry 0 of UIState_EventTable)",
+   "display/scoop_display.s:5756 `call AccPedal_CheckBitAndUpdate` / 5758 `call Timer_ParamLoadAndCompare` / 5760-5763 `cp (3415:16), a` / `cp (3420:16), a`",
+   "display/scoop_display.s:5764 `call DisplayStr_ShowMeasureNumber`",
+   "display/scoop_display.s:5765-5769 `call VoiceSlot_FlagCheck` / `cp a, 132` / `ld (0x3728:16), 9` / `call DisplayStr_StyleSectionInit` -- 0x84 -> index 9",
+   "display/scoop_display.s:14626 `.ascii \"        START   STOP    FILL IN1FILL IN2INTRO1  COUNT INENDING1 END     REPEAT ...\"` -- index 9 = REPEAT",
+   "display/scoop_display.s:12461-12469 `call UIState_DispatchHandler_Helper` while (0x371A) != (0x1105) -- go-to-measure, moving up"
+  ]
+ },
+ {
+  "old": "UIState_DisplayUpdate_BitmapHandler_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiRx_BuildChannelPartLists",
+  "header": "Builds the receive-channel -> part lists for selector (0x966D): 0x80 -> offset table 0x94F4 and lists 0x9514, 0x40 -> 0x9594 / 0x95B4. Fills the 32 offsets with 0xFF and clears the lists, then for each channel 0-31 collects the parts 0-31 (records (0x90F2)[p], 0xFFFFFFFF = absent) whose byte +13 has that channel in bits 0-4 and the selector bit clear, stores {count, part...} and its offset. Basis: callers + body -- UIState_DisplayUpdate_BitmapHandler runs it for 0x80 and 0x40; MidiRx_ChannelMsgDispatch reads the 0x80 pair this way.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1039-1042 `ld (0x966d:16), 128` / `calr ..._Helper` / `ld (0x966d:16), 64` / `calr ..._Helper` -- caller UIState_DisplayUpdate_BitmapHandler",
+   "ui_widgets/widget_dispatch.s:6614-6618 `SwbtBank2_PostCallbacks:` / `.long UIState_DisplayUpdate_BitmapHandler` -- a bank-2 post callback, run when 0x966C bit 0 was set (1032)",
+   "midi/midi_dispatch_handlers.s:1047-1054 `ld xix, 0x94f4` (0x9594 for 0x40) / `ldw wa, 0xffff` / `ldw bc, 16` -- 32 offsets := 0xFF",
+   "midi/midi_dispatch_handlers.s:1056-1062 `ld xix, 0x9514` (0x95B4) / `ldw bc, 64` -- lists cleared",
+   "midi/midi_dispatch_handlers.s:1080-1093 `ld xiz, (0x90f2:16)` / `ld a, (xiz+13)` / `and a, (0x966d:16)` / `and a, 31` / `cp a, w` -- part p belongs to channel w",
+   "midi/midi_dispatch_handlers.s:1096 `ld (xiy+hl), d` / 1106 `ld (xiy), e` (count) / 1109 `ld (xix), e` (offset) / 1115 `cp (0x966e:16), 32`",
+   "midi/midi_dispatch_handlers.s:151-170 `MidiRx_ChannelMsgDispatch` -- `ld xhl, 0x94f4` / `ld a, (xhl+a)` / `cp a, 255` / `ld xhl, 0x9514` count / parts loop: the reader of the 0x80 lists"
+  ]
+ },
+ {
+  "old": "UIState_EventTable_Target11_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_SetupScreenForDisplayMode",
+  "header": "Sets up the step-record screen for the current display mode: calls PortConfig_Select_Table[(0x0D65) & 3] -- PortConfig_Handler_0 for mode 0 (CHORD/APC tracks), PortConfig_Handler_1 for modes 1-2 (note and CONTROL tracks), PortConfig_Handler_3 for mode 3 (RHYTHM track). Basis: callers + body -- SqStep_InitOnEnter calls it when the TT_SQSTEP title is entered and on a redraw with 0x0D53 bit 3; MemConfig_Handler_0 calls it when 0x0D54 bit 3 asks.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:7391-7399 `ld a, (3429:16)` / `and wa, 3` / `ld xix, PortConfig_Select_Table` / `call (xhl)` -- body",
+   "display/scoop_display.s:7404-7408 `PortConfig_Select_Table:` -- Handler_0, Handler_1, Handler_1, Handler_3",
+   "display/scoop_display.s:7159 `call UIState_EventTable_Target11_Helper` -- in SqStep_InitOnEnter (7028) after VoiceState_DataBlock2_Helper2 / AccPedal_CheckBitAndUpdate",
+   "display/scoop_display.s:7166-7168 `bit 3, (0x0d53:16)` / `call UIState_EventTable_Target11_Helper` -- the redraw path of SqStep_InitOnEnter",
+   "display/scoop_display.s:8180-8183 `bitm 3, (xhl)` (0x0D54) / `resm 3, (xhl)` / `call UIState_EventTable_Target11_Helper` -- MemConfig_Handler_0",
+   "display/scoop_display.s:7572-7574 `PortConfig_DataTable_A` -- assignment -> display mode: 13-14 -> 0, 15 -> 2, 16 -> 3, others 1",
+   "display/scoop_display.s:7417-7440 PortConfig_Handler_3 / PortConfig_Handler_0 -- `call Display_DeferOrDrawWall`, cached values := 255, region redraws"
+  ]
+ },
+ {
+  "old": "UIState_EventTable_Target11_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Display_UpdateRegion0_Wrap",
+  "header": "Call-through to Display_UpdateRegion0, the status-bar region that shows the pop-up id (0x0DEF): `call Display_UpdateRegion0 / ret`. Basis: callers + body -- UIState_EventTable_Target11 saves (0x0DEF) in 0x0DF0, sets it to 18 and calls it to redraw the status bar; the name follows the X_Wrap convention of Display_UpdateRegion2_Wrap. (DisplayMode_Handler_3_Helper13 is a second copy of the same two instructions.)",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:14919-14921 `UIState_EventTable_Target11_Helper2:` / `call Display_UpdateRegion0` / `ret`",
+   "display/scoop_display.s:2857-2862 `ld xiy, 3567` / `ld (3568:16), a` / `ld (xiy), 18` / `call UIState_EventTable_Target11_Helper2` -- caller UIState_EventTable_Target11 (entry 11 of UIState_EventTable)",
+   "display/scoop_display.s:14628-14633 `Display_UpdateRegion2_Wrap` -- naming precedent",
+   "display/scoop_display.s:14307-14309 DisplayStr_RedrawStatusAndControlLine header -- region 0 is the status bar that shows pop-up mode 0x0DEF"
+  ]
+ },
+ {
+  "old": "VoiceAssign_ProcessRequest_Helper",
+  "verdict": "refuse",
+  "why_refused": "Mechanics are clear, meaning is not. Its caller is the tail of RhythmDrum_LoadVoiceParams (labelled VoiceAssign_ProcessRequest), which picks a RhythmDrum_Entries entry for the easy-composer channel and passes byte +2 in HL. Body: k = VoiceAssign_PresetSelToCase[HL] & 7, then word k of three tables goes in DE to RegPreset_Load_Loop (four 0x380A slot pointers), MIDIChan_DispatchDone (copies 7 bytes from the Rhythm ROM header at +0x248 + 7*index to 0x37D1 + 8*channel) and VoiceResolve_CheckAndStore (a flag at 0x387A + channel). Finally VoiceAssign_StoreFinal_Helper maps header byte +0x3D0 through AccTone_LookupByProgram_Table into 0x37CA + channel. What the case k selects and what the per-channel RAM blocks hold are not established, so 'load the channel's pattern parameters' would be a guess.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:28882 `calr VoiceAssign_ProcessRequest_Helper` -- caller, after splitting the RhythmDrum_Entries entry",
+   "ui_widgets/widget_descriptors.s:5622-5631 RhythmDrum_Entries header -- '+2 is the index VoiceAssign_ProcessRequest_Helper reads the byte table VoiceAssign_PresetSelToCase with'",
+   "sequencer/accompaniment_engine.s:28921-28955 `ld xwa, VoiceAssign_PresetSelToCase` / `calr RegPreset_Load_Loop` / `calr MIDIChan_DispatchDone` / `calr VoiceResolve_CheckAndStore` / `calr VoiceAssign_StoreFinal_Helper`",
+   "sequencer/accompaniment_engine.s:28963-28966 VoiceAssign_PresetSelToCase / _LoadLoopArgs / _DispatchArgs / _ResolveArgs -- unexplained parameter words"
+  ]
+ },
+ {
+  "old": "VoiceCtrl_ParamSetupBytecode_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_ParkParamEvent",
+  "header": "Parks a panel-parameter event instead of recording it: from the record at XIY (0x0D8F) it forms tag = byte +2 with status bit 2 as bit 7 and offset = byte +3, picks the slot -- tags 0x00-0x0F offset 3 -> slot = tag, 0x10-0x16 offset 3 -> 16-22, 0x98 offset 4 -> 24, 0x48 offset 8 with status & 3 = 0 -> 27, 0x98 offset 1 with value & 0x7F != 0 -> 28 (without clearing 0x0D5E) -- stores the value byte +4 in 0x0D6F[slot], sets 0x0D53 bit 0 and returns A = 1; any other event returns A = 0. Basis: callers + body -- VoiceCtrl_ParamSetupBytecode writes the 6-byte record only when A = 0, and SqStep_FlushPendingParamEvents rebuilds exactly these (tag, offset) pairs per slot.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:6053-6055 `call VoiceCtrl_ParamSetupBytecode_Helper` / `cp a, 0:i3` / `jrl nz, VoiceCtrl_ParamSetupBytecode_Skip5` -- caller skips SystemInit_StepHandler_0_Helper2 (6090-6093) when parked",
+   "display/scoop_display.s:6103-6110 `ld a, (xiy+2)` / `ld h, (xiy)` / `and h, 4` / `sla h, 5` / `or a, h` / `ld w, (xiy+3)` -- tag and offset",
+   "display/scoop_display.s:6111-6141 tag 72 offset 8 -> 27 (6181), tag <= 15 offset 3 -> VoiceCtrl_ParamSetupBytecode_Tbl[tag], tag 152 offset 1 -> 28 (6184), offset 4 -> 24 (6140)",
+   "display/scoop_display.s:6143-6166 tags 16-22: VoiceCtrl_ParamSetupBytecode_Tbl2 (0x10-0x16) / _Tbl3 (offset 3)",
+   "display/scoop_display.s:6186-6195 `ld (3422:16), 0` / `or (3411:16), 1` / `ld xhl, 3439` / `add hl, wa` / `ld a, (xiy+4)` / `ld (xhl), a` / `ld a, 1:opc` -- park",
+   "display/scoop_display.s:6919-6940 / 6950-6990 SqStep_FlushPendingParamEvents -- slots 0-28 of 0x0D6F back to {0xB0, clock, tag, offset, value, 0x7F}: slot <= 15 offset 3, 27 -> 72/8, 28 -> 0x98/1, 16-26 from SerialPort_ModeHandler_0_Data/_Data2 (7014-7020: 0x10-0x16, 0x70, 0x98 offsets 3.., 4)"
+  ]
+ },
+ {
+  "old": "VoiceCtrl_ParamSetupBytecode_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_ShowRhythmVariationEvent",
+  "header": "If the event record at 0x0D8F is the rhythm part's (tag 0x48) offset-7 parameter, shows its variation (value byte +4, bits 4-5): with DisplayStr_ShowRhythmVariationLine on the CONTROL track (display mode 2) or DisplayStr_ShowMeasureAndVariation on the RHYTHM track (mode 3); all registers kept. Basis: callers + body -- VoiceCtrl_ParamSetupBytecode (the 0xBn handler of TempoRingBuf_DispatchEvents) calls it last; VoiceSlot_StatusRet shows a stored tag-72 offset-7 event with the same two routines per mode.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:6099 `call VoiceCtrl_ParamSetupBytecode_Helper2` -- caller VoiceCtrl_ParamSetupBytecode",
+   "display/scoop_display.s:6221-6226 `ld xiy, 0x0d8f` / `cp (xiy+2), 72` / `cp (xiy+3), 7` / `ld bc, (xiy+4)`",
+   "display/scoop_display.s:6227-6235 mode 2 -> `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper8`, mode 3 -> `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper9`",
+   "display/scoop_display.s:10938-10946 / 10952-10976 VoiceSlot_StatusRet: tag 72, offset 7 -> value in C, mode 3 -> Tbl3_Helper9 (pop-up 15), mode 2 -> Tbl3_Helper8 (pop-up 4)",
+   "display/scoop_display.s:14393-14406 `Str_Rhythm_Helper` -- `and a, 48` / `sra a, 4` / `inc 1, a` then \"VARI\" + digit"
+  ]
+ },
+ {
+  "old": "VoiceCtrl_ParamSetupBytecode_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_ProcessRhythmSectionEvent",
+  "header": "Follows up a rhythm section-switch event: when the record at 0x0D8F is tag 0x48 offset 5 or 6, keeps the value (byte +4, status bit 0 as bit 7) in 0x0DF1; if any of bits 4-7 is set (ENDING1, ENDING2, FILL IN1, FILL IN2 in VoiceCtrl_ParamSetupBytecode_Tbl4) it records a copy with value 0 half a beat (48 clocks) later (VoiceCtrl_ParamSetupBytecode_Tbl3_Helper3); then VoiceCtrl_ParamSetupBytecode_Tbl3_Helper2 shows the section of the lowest set bit (Tbl4[bit], +8 for offset 6 -> 0x3728) with DisplayStr_ShowStyleSectionName. Basis: callers + body -- VoiceCtrl_ParamSetupBytecode calls it after recording a 0xBn event; such events are recorded only on CONTROL/RHYTHM tracks.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:6098 `call VoiceCtrl_ParamSetupBytecode_Helper3` -- caller VoiceCtrl_ParamSetupBytecode",
+   "display/scoop_display.s:6070-6088 tag 72 offset 5/6: `ld xix, 0xf1a0` / `cp a, 15` / `cp a, 16` -- recorded only on CONTROL (15) or RHYTHM (16) tracks",
+   "display/scoop_display.s:6249-6261 `cp (xiy+2), 72` / `cp (xiy+3), 5` / `cp (xiy+3), 6` / `ld a, (xiy+4)` / `bit 0, (0x0dc9:16)` / `or a, 128` / `ld (3569:16), a`",
+   "display/scoop_display.s:6263-6268 `and a, 240` / `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper3` / `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper2`",
+   "display/scoop_display.s:6324-6355 Tbl3_Helper3: `add a, 48` (clock + 48, wrap at 96) / `call DisplayMode_Handler_3_Sub` / `ld (xiy+4), 0` / `call SystemInit_StepHandler_0_Helper2` -- the value-0 record half a beat later",
+   "display/scoop_display.s:6290-6306 Tbl3_Helper2: lowest set bit of (0x0DF1), `cp (0x0d92:16), 6` / `add a, 8` / `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl4` / `stb_d8 (0x3728), a` / `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper6`",
+   "display/scoop_display.s:9257-9258 `VoiceCtrl_ParamSetupBytecode_Tbl4:` 0,0,5,6,7,11,3,4, 0,0,12 and display/scoop_display.s:14626 names -- INTRO1, COUNT IN, ENDING1, ENDING2, FILL IN1, FILL IN2, INTRO2"
+  ]
+ },
+ {
+  "old": "VoiceCtrl_ParamSetupBytecode_Helper4",
+  "verdict": "refuse",
+  "why_refused": "The trigger is clear, the action is not. VoiceCtrl_ParamSetupBytecode calls it on the RHYTHM track (display mode 3) for a recorded tag-0x48 offset-7 event (the rhythm variation) whose byte +5 has bit 4 set. The body saves cursor slot 3 and steps forward to the next 0x81 marker. It then steps back until VoiceState_DataBlock2_Helper3 finds an event of the same kind (0xBn, tag 72, offset 7, byte +5 bit 4), and goes on stepping back over the following ones, calling ToneParam_Evt09_BytecodeHandler_Helper2 on each. Restore and W = 255 when none is found. What bit 4 of byte +5 marks and what ToneParam_Evt09_BytecodeHandler_Helper2 does to those events (it is in the parallel batch, unnamed) are not established.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:6056-6065 `cp (3429:16), 3` / `cp (xiy+2), 72` / `cp (xiy+3), 7` / `bitm 4, (xiy+5)` / `call VoiceCtrl_ParamSetupBytecode_Helper4` -- caller",
+   "display/scoop_display.s:11939-11990 body -- `call VoiceSlot_SaveState` (3), loops of Timer_ParamCompareAlt_Helper7 / VoiceState_DataBlock2_Helper3 / ToneParam_Evt09_BytecodeHandler_Helper2",
+   "display/scoop_display.s:12016-12025 VoiceState_DataBlock2_Helper3: `cp a, 176` / `cp (xix+2), 72` / `cp (xix+3), 7` / `bit 4, a` (byte +5) -> W = 0"
+  ]
+ },
+ {
+  "old": "VoiceCtrl_ParamSetupBytecode_Tbl3_Helper",
+  "verdict": "refuse",
+  "why_refused": "Its use is clear: TempoRingBuf_OnProgramChangeEvent records the program-change record unless it returns W = 1, and it acts only on the RHYTHM track (display mode 3). The decision is not. It feeds the program (0x3722) and bank (0x0E47) to Rhythm_DispatchNote_Tramp and keeps the result in 0x0E40. It compares that with 0x0E3F (set by ToneParam_HandlerTable_BC_Helper4's search back over the track) and, depending on the comparison and the unit counters 0x0D5A / 0x0E6B, records the event itself, runs ToneParam_HandlerTable_BC_Helper7/8, or rejects with GLOBAL_ERROR_CODE 25 (SoundCtrl_SendCommand 0xEE). What 0x0E3F/0x0E40 hold is not established (a time signature would fit but is not shown), and neither is what error 25 is.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:6431-6436 `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper` / `cp w, 1:i3` / `call SystemInit_StepHandler_0_Helper2` -- caller TempoRingBuf_OnProgramChangeEvent",
+   "display/scoop_display.s:3887-3890 `ld a, (3429:16)` / `cp a, 3:i3` / `ld w, 0:opc` -- only display mode 3",
+   "display/scoop_display.s:3892-3896 `ld a, (0x3722:16)` / `ld d, (3655:16)` / `call Rhythm_DispatchNote_Tramp` / `ld (3648:16), a` / `call ToneParam_HandlerTable_BC_Helper4`",
+   "display/scoop_display.s:3907-3939 ToneParam_HandlerTable_BC_Helper: `cp a, (3649:16)` ... `ld (GLOBAL_ERROR_CODE:16), 25` -- unexplained comparison and error"
+  ]
+ },
+ {
+  "old": "VoiceCtrl_ParamSetupBytecode_Tbl3_Helper10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DisplayStr_ShowTempoLine",
+  "header": "Builds the TEMPO pop-up line: blanks the text line, copies the 25-character \"  TEMPO  <glyph>=\" template to 0x0ECF (Str_TempoEq with glyph 0x15, or the 0x93 variant when (0xFC5A) = 7 and (0xFC5B) = 2), marks region 5, appends the tempo value (PerfMode_EventTable_0_Target1_Helper11) and marks region 3. Basis: callers + body -- TempoRingBuf_OnTempoEvent calls it after storing the tempo in 0x0EF2 and setting pop-up 16 or 6.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:6545-6551 `cp (xhl), 6` / `ld (xhl), 6` / `call Display_UpdateRegion0` / `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper10` -- caller TempoRingBuf_OnTempoEvent (6510)",
+   "display/scoop_display.s:14441-14452 `call DisplayStr_BlankLineBuffer` / `ld xiy, Str_TempoEq` / `cp (0xfc5a:16), 7` / `cp (0xfc5b:16), 2` / `ld xix, 3791` / `ldw bc, 25` / `ldir85`",
+   "display/scoop_display.s:14453-14455 `call Display_UpdateRegion5` / `call PerfMode_EventTable_0_Target1_Helper11` / `call Display_UpdateRegion3`",
+   "display/scoop_display.s:14459-14461 `Str_TempoEq:` `\"  TEMPO  \"`, 0x15, `\"=...\"`",
+   "display/scoop_display.s:6504-6509 TempoRingBuf_OnTempoEvent header -- 'shows \"TEMPO =\" with the value (VoiceCtrl_ParamSetupBytecode_Tbl3_Helper10)'"
+  ]
+ },
+ {
+  "old": "VoiceCtrl_ParamSetupBytecode_Tbl3_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_CheckRhythmOrControlTrack",
+  "header": "Returns C = 0 when the cursor track (0x0EEE) is assigned RHYTHM (TRACK ASSIGN value 16 in 0xF1A0) or CONTROL (15), else C = 255; XHL kept. Basis: callers + body -- TempoRingBuf_OnStyleSectionEvent records and shows style START/STOP only when it gives C = 0; values 15/16 are CONTROL/RHYTHM in the track-assign name tables.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:6582-6584 `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper5` / `cp c, 0:i3` / `jrl z, VoiceCtrl_ParamSetupBytecode_Skip16` -- caller TempoRingBuf_OnStyleSectionEvent (6581)",
+   "display/scoop_display.s:6609-6622 `ld l, (3822:16)` / `dec 1, l` / `ld c, 255:opc` / `ld xix, 0xf1a0` / `cp l, 16` / `cp l, 15` / `xor c, c`",
+   "audio/sound_data.s:285 `Scoop_SetPartIndexAndDisplay_Data` -- type names, index 15 'CONTROL', 16 'RHYTHM'",
+   "ui_widgets/naka_widget_tables_1.s:990 `TrAsSureLangCheck_PtrTable_2` -- entries 15 CONTROL, 16 RHYTHM"
+  ]
+ },
+ {
+  "old": "VoiceCtrl_ParamSetupBytecode_Tbl3_Helper6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DisplayStr_ShowStyleSectionName",
+  "header": "Shows the style-section name DisplayStr_StyleSectionNames[(0x3728)] in the form of the current display mode, through SerialPort_ModeSelect_Table[(0x0D65) & 3]: mode 0 copies it to 0x0ED4 (DisplayStr_CopyStyleSectionName), modes 1-2 set pop-up 5 and draw the RHYTHM label plus the name (DisplayStr_BytecodeBlock_C), mode 3 sets pop-up 15 (DisplayStr_StyleSectionInit); XHL kept. Basis: callers + body -- TempoRingBuf_OnStyleSectionEvent, the section path of SqStep_ProcessRhythmSectionEvent and SysEx_BytecodeDispatcher_Helper2 each set 0x3728 and then call it.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:6590 `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper6` -- caller TempoRingBuf_OnStyleSectionEvent (0x3728 = 1/2 set by the START/STOP handlers)",
+   "display/scoop_display.s:6304-6306 `stb_d8 (0x3728), a` ... `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper6` -- VoiceCtrl_ParamSetupBytecode_Tbl3_Helper2",
+   "display/scoop_display.s:9194-9200 `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl4` / `ld (0x3728:16), a` / `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper6` -- SysEx_BytecodeDispatcher_Helper2",
+   "display/scoop_display.s:6628-6637 `ld a, (3429:16)` / `and a, 3` / `ld xde, SerialPort_ModeSelect_Table` / `call (xiy)`",
+   "display/scoop_display.s:6645-6660 SerialPort_ModeSelect_Table -> SerialPort_ModeHandler_0 (DisplayStr_CopyStyleSectionName), _1 (`ld (3567:16), 5` / DisplayStr_BytecodeBlock_C), _3 (`ld (3567:16), 15` / DisplayStr_StyleSectionInit)",
+   "display/scoop_display.s:14607-14626 DisplayStr_CopyStyleSectionName / DisplayStr_StyleSectionNames"
+  ]
+ },
+ {
+  "old": "VoiceCtrl_ParamSetupBytecode_Tbl3_Helper7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DisplayStr_ShowRhythmLine",
+  "header": "Builds the RHYTHM pop-up line: marks the status bar (region 0), blanks the text line, writes \"RHYTHM\" at 0x0ECF, marks region 5, then Str_Control_Helper applies the program change to part 72 (program (0x3722), bank (0x0EF5); PartCtrl_WriteProgramChange, AccVoice_DispatchEntry) and copies the 13-character rhythm name that leaves at 0x34AB to 0x0ED6; marks region 3. Basis: callers + body -- TempoRingBuf_OnProgramChangeEvent and VoiceSlot_StatusRet both set pop-up 4 ((0x0DEF) := 4) and call it for a program change on part 72 (the rhythm part).",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:6484-6493 `ld (3567:16), 4` / `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper7` -- caller TempoRingBuf_OnProgramChangeEvent, part 72 branch",
+   "display/scoop_display.s:10918-10921 `cp (0x0d65:16), 3` / `ld (3567:16), 4` / `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper7` -- VoiceSlot_StatusRet, stored 0xCn event with part 72 (10878-10879)",
+   "display/scoop_display.s:14342-14350 `call Display_UpdateRegion0` / `call DisplayStr_BlankLineBuffer` / `ld xiy, Str_Rhythm` / `ld xix, 3791` / `ld bc, 6:i3` / `call Str_Control_Helper`",
+   "display/scoop_display.s:14330-14339 `ld l, (0x3722:16)` / `ld h, (3829:16)` / `ld (0x90f7:16), 72` / `call PartCtrl_WriteProgramChange` / `call AccVoice_DispatchEntry` / `ld xiy, 0x34ab` / `ld xix, 3798` / `ldw bc, 13`",
+   "ui_widgets/widget_descriptors.s:5325-5334 AccVoice_RomRecords13 -- 280 x 13-byte records copied to RAM 0x34AB; the records read '8Bt Standard ', 'Simple 8 Beat', '8 Beat Rock 1' ... (rhythm names)"
+  ]
+ },
+ {
+  "old": "VoiceCtrl_ParamSetupBytecode_Tbl3_Helper8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DisplayStr_ShowRhythmVariationLine",
+  "header": "Builds the rhythm-variation line of the CONTROL-track display: blanks the text line, looks up the M.S.A. state at the cursor (Str_Rhythm_Helper2 -> 0x10F6 bit 0) and writes \" RHYTHM   \" or \"M.S.A.    \" at 0x0ECF, then \"VARI\" and the variation number ((C & 0x30) >> 4) + 1 at 0x0ED9 (Str_Rhythm_Helper); marks regions 5 and 3. Basis: callers + body -- VoiceSlot_StatusRet (pop-up 4) and SqStep_ShowRhythmVariationEvent call it in display mode 2 with C = the value byte of a tag-0x48 offset-7 event.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:10971-10976 `ld (3567:16), 4` / `call Display_UpdateRegion0` / `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper8` -- caller VoiceSlot_StatusRet, mode 2, tag 72 offset 7 (10938-10958)",
+   "display/scoop_display.s:6234-6235 `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper8` -- caller VoiceCtrl_ParamSetupBytecode_Helper2, mode 2",
+   "display/scoop_display.s:14362-14373 `call DisplayStr_BlankLineBuffer` / `ld xiy, DisplayStr_RhythmLabel` / `call Str_Rhythm_Helper2` / `bit 0, (0x10f6:16)` / `ld xiy, Str_MSA` / `ld xix, 3791` / `ldirw` (10 bytes)",
+   "display/scoop_display.s:14375-14378 `ld xix, 3801` / `call Str_Rhythm_Helper` / regions 5 and 3",
+   "display/scoop_display.s:14393-14406 Str_Rhythm_Helper -- `and a, 48` / `sra a, 4` / `inc 1, a` / ParamDigit_ExtractAndFormat / \"VARI\" from Str_VarivariOff / digit (4483)"
+  ]
+ },
+ {
+  "old": "VoiceCtrl_ParamSetupBytecode_Tbl3_Helper9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DisplayStr_ShowMeasureAndVariation",
+  "header": "RHYTHM-track display: writes the measure number (DisplayStr_ShowMeasureNumber), clears the rest of the line (DisplayStr_ClearRegion) and writes \"VARI\" and the variation number ((C & 0x30) >> 4) + 1 at 0x0ED4 (Str_Rhythm_Helper); marks region 3. Basis: callers + body -- VoiceSlot_StatusRet (pop-up 15) and SqStep_ShowRhythmVariationEvent call it in display mode 3 with C = the value byte of a tag-0x48 offset-7 event; DisplayStr_ShowRhythmVariationLine is the mode-2 form.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:10964-10969 `ld (3567:16), 15` / `call Display_UpdateRegion0` / `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper9` -- caller VoiceSlot_StatusRet, mode 3",
+   "display/scoop_display.s:6230-6232 `cp a, 3:i3` / `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper9` -- caller VoiceCtrl_ParamSetupBytecode_Helper2, mode 3",
+   "display/scoop_display.s:14385-14391 `call DisplayStr_ShowMeasureNumber` / `call DisplayStr_ClearRegion` / `ld xix, 3796` / `call Str_Rhythm_Helper` / `call Display_UpdateRegion3`"
+  ]
+ },
+ {
+  "old": "VoiceMode_ParamHandler_4_Helper",
+  "verdict": "refuse",
+  "why_refused": "Mechanics are clear, the meaning of the result is not. It is a register-preserving call of RegBitManip_Handler_4_Helper, which copies the three bytes at 0x90EA into +3..+5 of a 6-byte stack record, runs SndParam_ComputeVoiceIndex on it and leaves +0..+2 at 0x90EE. Both callers load 0x90EA with a part's word (MidiStream_HandleNoteCC_Body: word 0 of the part record (0x90F2)[part]) and 0x90EC with the part. They then pass (0x90EE) as DE with dispatch code 0x81 and (0x90F0) as E to MIDI_DispatchCC_Guarded / MIDI_ClearGuardAndDispatchCC. That looks like an outgoing bank/program translation, the reverse of MidiStream_ResolveVoiceIndex. But what the part word is, what SndParam_ComputeVoiceIndex produces and what dispatch code 0x81 sends (MidiCC_ChannelDispatch_TableA) are not established.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "audio/audio_control_engine.s:9609-9614 `MidiCtrl_Mode3_Handler:` / `ld (37098:16), wa` / `ld (37100:16), a` / `call VoiceMode_ParamHandler_4_Helper` -- caller (MidiCtrl_ModeDispatch_Table entry 3, (0xFD50) & 3)",
+   "audio/audio_control_engine.s:11436-11451 `ld (0x90ea:16), wa` / `ld (0x90ec:16), c` / `call VoiceMode_ParamHandler_4_Helper` / `ld c, 0x81:opc` / `ld de, (0x90ee:16)` -- MidiStream_HandleNoteCC_Body",
+   "audio/audio_control_engine.s:8365-8381 body -- seven pushes, `call RegBitManip_Handler_4_Helper`, seven pops",
+   "audio/audio_control_engine.s:7305-7325 RegBitManip_Handler_4_Helper -- `lda xde, (0x90ea:16)` -> record +3..+5, `call SndParam_ComputeVoiceIndex`, record +0..+2 -> (0x90EE)"
+  ]
+ },
+ {
+  "old": "VoiceSlot_Dispatch_D0Type_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpEsy_StepVariPattern",
+  "header": "Easy Composer: steps the composer pattern index (0x34D6) up by one (A bit 7 clear, max 11) or down (A bit 7 set, min 0) -- 0-11 are the A/B/C-vari1..4 patterns -- then (VoiceSlot_Dispatch_Return_Helper) sets (0xFC5A) = index | 0x80, keeps only bit 7 of (0xFC5B), posts a SwbtWr event (E = 0x48, D = 0, W = 0, A = (0xFC5A)) and rebuilds the channel-difference mask 0x37C8 (DrumParam_BuildActiveMask). Basis: callers + body -- the XIZ-preserving VoiceSlot_Dispatch_Return is called by the Easy Composer title's switch cases 3 (A = 0) and 4 (A = 0x80).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:28622-28626 `VoiceSlot_Dispatch_Return:` / `push xiz` / `call VoiceSlot_Dispatch_D0Type_Helper` -- the actual caller (wrapper)",
+   "sequencer/accompaniment_engine.s:31942-31950 `CmpEsyTtl_Mode2_Case3:` / `ld a, 0x00:opc` / `call VoiceSlot_Dispatch_Return`; 31959-31967 `CmpEsyTtl_Mode2_Case4:` / `ld a, 0x80:opc`",
+   "ui_widgets/widget_descriptors.s:5880 `CmpEsyTtl_Mode2_Table` -- bytes 0,0,1,0,0,1,0,1,2,3,4,5,...: EVT_SW_IN switches 9 and 10 -> cases 3 and 4 (CmEsyTtlFunc / CmpEsyTtl_Mode1)",
+   "sequencer/accompaniment_engine.s:28628-28644 `bit 7, a` / `cp (0x34d6:16), 11` / `inc 1, (0x34d6:16)` / `cp (0x34d6:16), 0` / `dec 1, (0x34d6:16)`",
+   "sequencer/accompaniment_engine.s:28651-28665 `and l, 31` / `add l, 128` / `ld xbc, 0xfc5a` / `and h, 128` / `ld e, 72:opc` / `call SwbtWr_QueuePostEvent`; 28647 `calr DrumParam_BuildActiveMask`",
+   "audio/sound_editor_ui.s:16035-16038 `ld a, (0x34d6:16)` / `sla wa, 2` / `lda xbc, (AcMemNoBox_HandleEvtBC_Data:24)` -- the name table for 0x34D6: entry 0 -> 0xE1DD00 'A-vari1', then ui_widgets/naka_screen_dispatch.s:1948-1959 A_Vari2..C_Vari4, then INT/FILL/END"
+  ]
+ },
+ {
+  "old": "VoiceSlot_IndexDone_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DisplayStr_ShowBeatCount",
+  "header": "Writes at 0x0ED4 (7 words blanked first) the beat count (word 0x0D62): when non-zero the glyph pair 0x1B 0x8B, up to three digits (UIRender_DescriptorTable2 -> 0x1181..) and a '+' when 0x0D64 bit 7 (a half beat) is set; a zero count shows only glyph 28 when the bit is set. Basis: callers + body -- VoiceSlot_IndexDone (the chord-track display of a position without an event) counts the 0x81 beat markers at the song-data cursor into 0x0D62 and sets 0x0D64 bit 7 for an off-beat next event, then calls it.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:10736 `call VoiceSlot_IndexDone_Helper` -- caller VoiceSlot_IndexDone",
+   "display/scoop_display.s:10697-10707 `ld (3428:16), a` / `ld (3426:16), wa` / `cp a, 129` / `incw 1, (3426:16)` -- counts consecutive 0x81 markers (0x0D62)",
+   "display/scoop_display.s:10715-10734 `call VoiceSlot_FlagCheck` (event clock) / `ld (xiy), 128` (0x0D64) / `cp (0x0d57:16), 48` -- half-beat adjustment",
+   "display/scoop_display.s:10783-10792 VoiceSlot_StatusRet: display mode 0 and a 0x81 byte or an event not at clock (0x0D57) -> VoiceSlot_IndexDone",
+   "display/scoop_display.s:14923-14928 `ld bc, 7:i3` / `ld xix, 3796` / `ldw wa, 8224` -- blank 0x0ED4",
+   "display/scoop_display.s:14930-14946 `cpw (0x0d62:16), 0` / `ld (xix+), 27` / `ld (xix+), 139` / `call UIRender_DescriptorTable2` / `ld xiy, 4481` -- digits",
+   "display/scoop_display.s:14948-14950 `bit 7, (0x0d64:16)` / `ld (xix+), 43` -- '+'"
+  ]
+ },
+ {
+  "old": "VoiceSlot_StatusRet_Helper",
+  "verdict": "refuse",
+  "why_refused": "Mechanics are clear, meaning is not, as for its sibling SoundEvt_LongPacketHandler_DispatchTbl_Target1_Helper (refused in batch l). VoiceSlot_StatusRet calls it on the chord track (display mode 0) for a 0x9n event. When the cursor byte is exactly 0x90 it does this: sets 0x28B3 bit 6 and saves cursor slot 1; drains SeqBuf (SeqBuf_ReadByte until 0xFFFF); sends note-offs (VoiceCtrl_SendNoteOffSequence); for each following 0x90 event at the same clock (0x0DC2) appends five bytes to SeqBuf {status, 0, note, 64, (0x0EEE) - 1}; then runs VoiceAlloc_ScoopDisplayProcess and restores slot 1. 'Sound the chord at the cursor' fits, but what VoiceAlloc_ScoopDisplayProcess does with the SeqBuf records is not established.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:10858-10859 `VoiceSlot_StatusRet_Skip8:` / `call VoiceSlot_StatusRet_Helper` -- caller, display mode 0, status 0x9n (10826-10827)",
+   "display/scoop_display.s:2995-3000 `call VoiceSlot_ReadCurrentParams` / `cp a, 144` / `or (0x28b3:16), 64` / `call VoiceSlot_SaveState` (1)",
+   "display/scoop_display.s:3002-3006 `call SeqBuf_ReadByte` until 0xFFFF / `call VoiceCtrl_SendNoteOffSequence`",
+   "display/scoop_display.s:3011-3044 `cp a, (0x0dc2:16)` / five `call SeqBuf_WriteByte` (status, 0, note, 64, track - 1)",
+   "display/scoop_display.s:3061-3066 `cp a, 144` / `call VoiceAlloc_ScoopDisplayProcess`"
+  ]
+ },
+ {
+  "old": "VoiceSlot_StatusRet_Helper5",
+  "verdict": "refuse",
+  "why_refused": "There is nothing to name. The body is a lone `ret`, one of four such stubs (VoiceSlot_StatusRet_Helper5..8) in the pop-up area. Its only call (VoiceSlot_StatusRet, 11186) follows an unconditional `jp VoiceSlot_StatusRet_Code_Loop` with no label, so it is unreachable. Which pop-up the slot was meant for (case L = 3 of the 0x10F1 = 112 path would be the guess) is not shown.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:11185-11187 `jp VoiceSlot_StatusRet_Code_Loop` / `call VoiceSlot_StatusRet_Helper5` / `jp VoiceSlot_StatusRet_Return` -- unreachable call site",
+   "display/scoop_display.s:16103-16109 `VoiceSlot_StatusRet_Helper5:` `ret` / `_Helper6:` `ret` / `_Helper7:` `ret` / `ret`"
+  ]
+ },
+ {
+  "old": "VoiceSlot_TableSetup_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VoiceSlot_SkipWrapMarkers",
+  "header": "Moves the song-data cursor over C 0x81 beat (wrap) markers, one event at a time: backward (Timer_ParamCompareAlt_Helper7) when 0x0DCF is non-zero, forward (VoiceSlot_DispatchRet) when it is 0; stops early with W = 0 on an end marker (0x82/0x84) and returns W = 255 when a step fails at the track boundary, else W = 0 after C markers. Basis: callers + body -- VoiceSlot_TableSetup calls it with 0x0DCF = 1 and C from SqStep_GetBeatInGridRow to back up to the start of the displayed grid row, then with 0x0DCF = 0 and C = the row's beat count (0x0DE7) to find the row's end.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:5316-5318 `call VoiceSlot_TableSetup_Helper2` / `ld (3535:16), 1` / `call VoiceSlot_TableSetup_Helper` -- caller VoiceSlot_TableSetup, backward",
+   "display/scoop_display.s:5350-5353 `ld c, (3559:16)` / `ld (3535:16), 0` / `call VoiceSlot_TableSetup_Helper` -- forward over the row's beats; ends stored at 5361/5365 (0x0DED / 0x0DEA)",
+   "display/scoop_display.s:4362-4366 `call VoiceSlot_ReadCurrentParams` / `cp a, 130` / `cp a, 132` -- stop at end markers (W = 0, 4384-4386)",
+   "display/scoop_display.s:4367-4372 `cp (0x0dcf:16), 0` / `call Timer_ParamCompareAlt_Helper7` / `call VoiceSlot_DispatchRet` -- direction",
+   "display/scoop_display.s:4374-4380 `cp w, 255` / `cp a, 129` / `djnz16 bc` -- count 0x81 markers",
+   "display/scoop_display.s:10176-10190 VoiceSlot_DispatchRet (forward step) / Timer_ParamCompareAlt_Helper7 (VoiceSlot_CompareAndBranch, W = 1: backward step), both keeping 0x0D58",
+   "display/scoop_display.s:12164-12167 `ld (3667:16), w` / `ld (3559:16), w` -- 0x0DE7 = beats in the current row"
+  ]
+ },
+ {
+  "old": "VoiceSlot_TableSetup_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_GetBeatInGridRow",
+  "header": "Returns BC = the current beat's position within its grid row plus 1: the step grid shows a measure in rows of at most 4 beats, so for a measure longer than 4 beats ((0x0D5D) > 4) beats 4 and up start a second row and lose 4; B = 0, C = beat (0x0D5C) [- 4] + 1. Basis: callers + body -- VoiceSlot_TableSetup passes it as the number of 0x81 markers VoiceSlot_SkipWrapMarkers walks back to reach the row start; the same 4-beat split sets the row beat count and the 1..32 step index.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:5316 `call VoiceSlot_TableSetup_Helper2` / 5318 `call VoiceSlot_TableSetup_Helper` -- caller VoiceSlot_TableSetup",
+   "display/scoop_display.s:5387-5401 `ld c, (3420:16)` / `ld a, (3421:16)` / `cp a, 4:i3` / `sub a, 4` / `cp c, 3:i3` / `sub c, 4` / `inc 1, c` / `xor b, b`",
+   "display/scoop_display.s:12153-12167 SoundEvt_LongPacketHandler_DispatchTbl_Target1_Helper2 -- row beats = beats - 4 on the second row, else min(beats, 4) -> 0x3711/0x0E53/0x0DE7",
+   "display/scoop_display.s:12168-12178 `sla a, 3` (beat * 8) + clock / 12 + 1, minus 32 above 32 -> 0x370F: a 32-step row of 4 beats",
+   "display/scoop_display.s:7450-7460 PortConfig_Handler_0 -- `ld a, (1075:16)` / `cp a, 4` / `ld (3667:16), a` / `ld (3668:16), l` (first row <= 4 beats, rest on the next)"
+  ]
+ },
+ {
+  "old": "VoiceSlot_TableSetup_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_BuildCurrentRowBitmap",
+  "header": "Builds the event bitmap of the displayed grid row: puts the cursor back at the row start ((0x0DE8)/(0x0DEC)), clears 0x372E-0x3739 and walks the events to the row end ((0x0DEA)/(0x0DED)); each event sets bit clock/12 in the byte of its beat (0x3732 + beat, advanced at each 0x81 marker), an END marker 0x82 records its column in 0x0F5B with 0x0F5A = 2, and 0x84 stops the walk. Basis: callers + body -- VoiceSlot_TableSetup calls it once it has found the row's start and end; 0x3732 is the 32-bit step bitmap whose bit (0x370F) - 1 marks the cursor step.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:5367 `call VoiceSlot_TableSetup_Helper3` -- caller VoiceSlot_TableSetup, after 5344-5348 (row start) and 5361-5365 (row end)",
+   "display/scoop_display.s:5404-5416 `ld wa, (3560:16)` / `ld (xde+hl), wa` (0x0C9E[track]) / `ld a, (3564:16)` / `ld (xde+hl), a` (0x0CBE[track]) -- cursor to the row start",
+   "display/scoop_display.s:5417-5429 `ld xix, 14130` (0x3732) / `ld xix, 0x372e` / six word stores of 0 / `ld (3930:16), a` / `ld (3931:16), a`",
+   "display/scoop_display.s:5441-5448 `cp wa, (3562:16)` / `cp a, (0x0ded:16)` -- end of row",
+   "display/scoop_display.s:5526-5536 `cp a, 130` -> `ld (3931:16), a` / `ld (3930:16), 2`; `cp a, 132`; `cp a, 129`",
+   "display/scoop_display.s:5538-5547 `call VoiceSlot_FlagCheck` / `ld l, 12:opc` / `div wa, l` / `scf` / `stcf a, (xix)` -- set bit clock/12; 5553 `inc 1, xix` on 0x81",
+   "display/scoop_display.s:12168-12178 0x370F = beat * 8 + clock / 12 + 1 (1..32) -- the same step numbering"
+  ]
+ },
+ {
+  "old": "VoiceSlot_TableSetup_Helper4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_SetupPrevGridRow",
+  "header": "Sets up the grid row above the current one: its measure number (0x0E4C, capped at 1000) and beat count (0x0E52), then its bitmap at 0x372E (VoiceSlot_TableSetup_Helper7 with 0x0EC1 = the beat count). The row above is row 1 of the same measure when the cursor is on a second row (beat >= 4), else the last row of the previous measure; it is empty in measure 1 row 1 or when the selected track's flag 0xF250[3*(0x0D60 - 1)] bit 7 is clear. Basis: callers + body -- VoiceSlot_TableSetup calls it right after storing the current row's measure in 0x0E4E.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:5378 `call VoiceSlot_TableSetup_Helper4` -- caller VoiceSlot_TableSetup, after 5370-5375 `ld wa, (0x371a:16)` / `ld (3662:16), wa`",
+   "display/scoop_display.s:5567-5573 `ld xde, 0xf250` / `bit 7, (xde+hl)` / `ld (3660:16), wa` / `ld (3666:16), a` -- empty row",
+   "display/scoop_display.s:5576-5596 `cpw (0x371a:16), 1` / `cp (0x0d5c:16), 4` / `ld (3666:16), 4` / `ld (3660:16), iy` -- second row: row 1 of the same measure",
+   "display/scoop_display.s:5599-5619 `dec 1, wa` (measure - 1) / `ld (3666:16), a` / `sub a, 4` / `call VoiceSlot_TableSetup_Helper9` -- last row of the previous measure",
+   "display/scoop_display.s:5645-5648 `ld xix, 0x372e` / `ld a, (3666:16)` / `ld (3777:16), a` / `call VoiceSlot_TableSetup_Helper7`",
+   "display/scoop_display.s:7443-7445 PortConfig_Handler_0 -- `ldw (3660:16), 0` / `ldw (3662:16), 1` / `ldw (3664:16), 0`: the three row measure numbers"
+  ]
+ },
+ {
+  "old": "VoiceSlot_TableSetup_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_SetupNextGridRow",
+  "header": "Sets up the grid row below the current one: its measure number (0x0E50, capped at 1000) and beat count (0x0E54), then its bitmap at 0x3736 (VoiceSlot_TableSetup_Helper7 with 0x0EC1 = the beat count). The row below is row 2 of the same measure (beats - 4) when the cursor is on row 1 of a measure longer than 4 beats, else row 1 of the next measure (at most 4 beats); it is empty when the selected track's flag 0xF250[3*(0x0D60 - 1)] bit 7 is clear. Basis: callers + body -- VoiceSlot_TableSetup calls it after SqStep_SetupPrevGridRow; it is the mirror image.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:5379 `call VoiceSlot_TableSetup_Helper5` -- caller VoiceSlot_TableSetup",
+   "display/scoop_display.s:5659-5665 `ld xde, 0xf250` / `bit 7, (xde+hl)` / `ld (3664:16), wa` / `ld (3668:16), a` -- empty row",
+   "display/scoop_display.s:5668-5670 `cp (0x0d5c:16), 3` / `cp (0x0d5d:16), 4` / `jrl ugt, VoiceSlot_TableSetup_Skip20` -- row 2 of the same measure (5715-5725 `sub a, 4` -> 0x0E54, measure -> 0x0E50)",
+   "display/scoop_display.s:5673-5680 `inc 1, wa` / `ld (3664:16), wa` -- next measure; 5698-5713 beat count capped at 4",
+   "display/scoop_display.s:5737-5741 `ld a, (3668:16)` / `stb_d8 (0x0ec1), a` / `ld xix, 0x3736` / `call VoiceSlot_TableSetup_Helper7`"
+  ]
+ }
+]

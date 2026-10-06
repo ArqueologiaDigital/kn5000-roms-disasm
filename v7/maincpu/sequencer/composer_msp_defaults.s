@@ -151,22 +151,22 @@ MSP_Default_VarIndex:		.byte 0, 1, 2		; group 1
 ; Group offset table A (byte offsets for 7 groups)
 MSP_Default_GroupOffsetA:
 	.short	PartGrid_ColumnJumpTable - PartGrid_ColumnJumpTable
-	.short	PartGrid_ColumnDispatch_Case1 - PartGrid_ColumnJumpTable
-	.short	PartGrid_ColumnDispatch_Case2 - PartGrid_ColumnJumpTable
-	.short	PartGrid_ColumnDispatch_Case3 - PartGrid_ColumnJumpTable
-	.short	PartGrid_ColumnDispatch_Case4 - PartGrid_ColumnJumpTable
-	.short	PartGrid_ColumnDispatch_Case5 - PartGrid_ColumnJumpTable
-	.short	PartGrid_ColumnDispatch_Case6 - PartGrid_ColumnJumpTable
+	.short	PartGrid_ColumnDispatch_FlashSection1 - PartGrid_ColumnJumpTable
+	.short	PartGrid_ColumnDispatch_FlashSection2 - PartGrid_ColumnJumpTable
+	.short	PartGrid_ColumnDispatch_FlashSection3 - PartGrid_ColumnJumpTable
+	.short	PartGrid_ColumnDispatch_FlashSection4 - PartGrid_ColumnJumpTable
+	.short	PartGrid_ColumnDispatch_FlashSection5 - PartGrid_ColumnJumpTable
+	.short	PartGrid_ColumnDispatch_FlashSection6 - PartGrid_ColumnJumpTable
 
 ; Group offset table B (duplicate)
 MSP_Default_GroupOffsetB:
 	.short	NOTE_EVENT_DISPATCH_1 - NOTE_EVENT_DISPATCH_1
-	.short	NoteEventBuffer_CopyToSlot_Case2 - NOTE_EVENT_DISPATCH_1
-	.short	NoteEventBuffer_CopyToSlot_Case3 - NOTE_EVENT_DISPATCH_1
-	.short	NoteEventBuffer_CopyToSlot_Case4 - NOTE_EVENT_DISPATCH_1
-	.short	NoteEventBuffer_CopyToSlot_Case5 - NOTE_EVENT_DISPATCH_1
-	.short	NoteEventBuffer_CopyToSlot_Case6 - NOTE_EVENT_DISPATCH_1
-	.short	NoteEventBuffer_CopyToSlot_Case7 - NOTE_EVENT_DISPATCH_1
+	.short	NoteEventBuffer_CopyToSlot_LoadSection1 - NOTE_EVENT_DISPATCH_1
+	.short	NoteEventBuffer_CopyToSlot_LoadSection2 - NOTE_EVENT_DISPATCH_1
+	.short	NoteEventBuffer_CopyToSlot_LoadSection3 - NOTE_EVENT_DISPATCH_1
+	.short	NoteEventBuffer_CopyToSlot_LoadSection4 - NOTE_EVENT_DISPATCH_1
+	.short	NoteEventBuffer_CopyToSlot_LoadSection5 - NOTE_EVENT_DISPATCH_1
+	.short	NoteEventBuffer_CopyToSlot_LoadSection6 - NOTE_EVENT_DISPATCH_1
 
 ; Variation size table (cumulative)
 MSP_Default_VarSize:

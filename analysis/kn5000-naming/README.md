@@ -45,3 +45,12 @@ in the source state the right values; the remaining `_CaseN` labels of such swit
   (maps SEQ_ERROR_CODE to GLOBAL_ERROR_CODE), `DrawProgressRectH/V` (ArrowProc copies), `RegHamaTitle1/2_Entry`
   (format 2DD/2HD floppies), `Bitmap_DigitD` (holds "U"), `SqplyFunc_FormatIntro/Ending/FillIn` (the punch-in,
   punch-out and count-in fields), `NakaInst_OK` (holds "ON"), `ENCODER_STATE_BASE` (the panel LED row image).
+
+**Batches m-n and case batches c7-c8** (`proposals-2026-10-06-helpers-{m,n}.json`, `-cases-{c7,c8}.json`):
+52 helpers and 122 cases named. Leads reported for later:
+- a stray `.byte 0xde` in `ui/ui_playback_modes.s` is half of `xorcf A, IZ`;
+- `Audio_DispatchCommand_Case6` in v10/v9 has `ld xwa, 0x3d3420` spelled as `.asciz "@ 4="`;
+- `NoteEventBuffer_CopyToSlot` copies flash to RAM, the other way round from its comments;
+- `SeqState_Case0..4` are ordinary branch labels, not switch cases;
+- TRACK ASSIGN values 12-16 are DRUMS / CHORD / APC / CONTROL / RHYTHM. This may reopen refusals that hinged on
+  "track type 15/16".

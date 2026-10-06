@@ -217,9 +217,21 @@ def main():
     if a.apply and renames:
         # the link scripts too: a NAKA_ADDR(name) in a C blob is defined by its <stem>_link.ld (2026-10-06: the C was
         # renamed and the .ld kept the old name, so v9/v7's naka_extension_device failed to link)
-        targets = [f for f in files] + glob.glob(os.path.join(REPO, a.to, "maincpu", "**", "*.c"), recursive=True) \
-            + glob.glob(os.path.join(REPO, a.to, "maincpu", "**", "*.ld"), recursive=True)
+        targets = [f for f in files] + glob.glob(os.path.join(REPO, a.to, "maincpu", "**", "*.ld"), recursive=True)
         subprocess.run(["sed", "-i", "-f", sed] + targets, check=True)
+        # C: code segments only -- a name quoted in a C comment stays, as the C comment gate requires
+        # (2026-10-06: a whole-text sed renamed one inside a v9 comment)
+        sys.path.insert(0, os.path.join(REPO, "scripts", "converters"))
+        from name_resname_strings import segments
+        rx = re.compile(r'\b(%s)\b' % "|".join(sorted(map(re.escape, renames), key=len, reverse=True)))
+        for f in glob.glob(os.path.join(REPO, a.to, "maincpu", "**", "*.c"), recursive=True):
+            txt = open(f, "rb").read().decode("latin-1")
+            new_txt = "".join(rx.sub(lambda mm: renames[mm.group(1)], s) if k == "code" else s for k, s in segments(txt))
+            if new_txt != txt:
+                data = new_txt.encode("latin-1")
+                with open(f + ".tmp", "wb") as fh:
+                    fh.write(data)
+                os.replace(f + ".tmp", f)
     print("%s <- %s: %s%s" % (a.to, a.frm, dict(stats), "" if a.apply else " (dry run)"))
     if a.report:
         json.dump(rows, open(a.report, "w"), indent=1)

@@ -1923,7 +1923,7 @@ SetWall_InlineCodeBlock3:
 	ret
 ; SqSngSel_CalcSongUsageOnEnter: Song-select title, activation phase 2 (the title becomes current): runs
 ;   AccWrap_PlayModeDispatch, sets bit 2 of 0x28A7, copies word 0xFFEC to 0xF19E and fills the 10-byte table 0x1145
-;   with each song's memory use in percent (SetWall_InlineCodeBlock3_Helper: sum over the song's used tracks * 100 /
+;   with each song's memory use in percent (SqSngSel_CalcSongUsagePercent: sum over the song's used tracks * 100 /
 ;   (0x286D) + 1, capped at 99, 0 for an empty song; the current song is read from 0xF250, others from SEQ_SONG_SLOTS
 ;   + 2048*n + 208). Basis: callers + body -- SqSngSelTtlFunc dispatches EVT_ACTIVATE_STATE phase 2 to
 ;   SqTrAs_CondCheck, which calls it (phase 3 goes to SqTrAs_CondCheck_Helper2, which clears 0x28A7 bit 2 again);
@@ -1940,7 +1940,7 @@ SqSngSel_CalcSongUsageOnEnter:
 SetWall_ForwardSkip_Loop2:
 	ld	(0x286b:16), c
 	push	xix
-	call	SetWall_InlineCodeBlock3_Helper
+	call	SqSngSel_CalcSongUsagePercent
 	pop	xix
 	xor	bc, bc
 	ld	c, (0x286b:16)
@@ -2010,7 +2010,12 @@ SetWall_MiscDataAndCode_Skip2:
 	call	UI_PostModeChangeEvent
 SetWall_MiscDataAndCode_Return:
 	ret
-SetWall_InlineCodeBlock3_Helper:
+; SqSngSel_CalcSongUsagePercent: Computes the memory use of song (0x286B) in percent into 0x286C: walks its 16 three-
+;   byte track entries (the current song from 0xF250, another from SEQ_SONG_SLOTS + 0x800 * n + 0xD0), sums the blocks
+;   of every used track (bit 7 set), then blocks * 100 / (0x286D) + 1, capped at 99; 0 for an empty song. Saves and
+;   restores the block pointer 0x10FD. Basis: callers + body -- SqSngSel_CalcSongUsageOnEnter calls it for songs 0..9
+;   and copies 0x286C to the table 0x1145; its header describes this computation.
+SqSngSel_CalcSongUsagePercent:
 	ld	xwa, (4349:16)
 	push	xwa
 	xor	xwa, xwa

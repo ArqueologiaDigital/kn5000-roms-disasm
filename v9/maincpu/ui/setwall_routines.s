@@ -1915,7 +1915,7 @@ SqSngSel_CalcSongUsageOnEnter:
 SetWall_ForwardSkip_Loop2:
 	ld	(0x286b:16), c
 	push	xix
-	call	SetWall_InlineCodeBlock3_Helper
+	call	SqSngSel_CalcSongUsagePercent
 	pop	xix
 	xor	bc, bc
 	ld	c, (0x286b:16)
@@ -1980,7 +1980,7 @@ SetWall_MiscDataAndCode_Skip2:
 	call	UI_PostModeChangeEvent
 SetWall_MiscDataAndCode_Return:
 	ret
-SetWall_InlineCodeBlock3_Helper:
+SqSngSel_CalcSongUsagePercent:
 	ld	xwa, (4349:16)
 	push	xwa
 	xor	xwa, xwa

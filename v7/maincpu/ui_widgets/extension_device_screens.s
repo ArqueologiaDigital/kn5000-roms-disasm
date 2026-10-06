@@ -957,22 +957,22 @@ CtrlPanel_IndicatorJumpTable_CaseTable:
 	.short	DSPCfg_Param_CaseC - DSPCfg_Param_CaseC
 	.short	DSPCfg_Param_CaseC - DSPCfg_Param_CaseC
 	.short	DSPCfg_Param_CaseC - DSPCfg_Param_CaseC
-	.short	CtrlPanel_IndicatorJumpTable_Case4 - DSPCfg_Param_CaseC
-	.short	CtrlPanel_IndicatorJumpTable_Case5 - DSPCfg_Param_CaseC
-	.short	CtrlPanel_IndicatorJumpTable_Case6 - DSPCfg_Param_CaseC
-	.short	CtrlPanel_IndicatorJumpTable_Case7 - DSPCfg_Param_CaseC
-	.short	CtrlPanel_IndicatorJumpTable_Case8 - DSPCfg_Param_CaseC
+	.short	CtrlPanel_IndicatorJumpTable_SaveLanguage - DSPCfg_Param_CaseC
+	.short	CtrlPanel_IndicatorJumpTable_SaveDisplayTime - DSPCfg_Param_CaseC
+	.short	CtrlPanel_IndicatorJumpTable_SaveDiskSetup - DSPCfg_Param_CaseC
+	.short	CtrlPanel_IndicatorJumpTable_SaveParamLoadOptions - DSPCfg_Param_CaseC
+	.short	CtrlPanel_IndicatorJumpTable_SaveWallpaper - DSPCfg_Param_CaseC
 ; Audio_DispatchCommand_CaseTable -- 9 x int16: the case offsets of Audio_DispatchCommand's compiled switch, relative to DSPCfg_Param_CaseD
 Audio_DispatchCommand_CaseTable:
 	.short	DSPCfg_Param_CaseD - DSPCfg_Param_CaseD
 	.short	DSPCfg_Param_CaseD - DSPCfg_Param_CaseD
 	.short	DSPCfg_Param_CaseD - DSPCfg_Param_CaseD
 	.short	DSPCfg_Param_CaseD - DSPCfg_Param_CaseD
-	.short	Audio_DispatchCommand_Case4 - DSPCfg_Param_CaseD
-	.short	Audio_DispatchCommand_Case5 - DSPCfg_Param_CaseD
-	.short	Audio_DispatchCommand_Case6 - DSPCfg_Param_CaseD
-	.short	Audio_DispatchCommand_Case7 - DSPCfg_Param_CaseD
-	.short	Audio_DispatchCommand_Case8 - DSPCfg_Param_CaseD
+	.short	Audio_DispatchCommand_LoadHelpLanguage - DSPCfg_Param_CaseD
+	.short	Audio_DispatchCommand_LoadDispTimeSet - DSPCfg_Param_CaseD
+	.short	Audio_DispatchCommand_LoadSetupOptions - DSPCfg_Param_CaseD
+	.short	Audio_DispatchCommand_LoadParaLoadOptions - DSPCfg_Param_CaseD
+	.short	Audio_DispatchCommand_LoadWallSetOptions - DSPCfg_Param_CaseD
 ; PanelDisplay_DispatchByMode_CaseTable -- 9 x int16: the case offsets of PanelDisplay_DispatchByMode's compiled switch, relative to PanelDisplay_DispatchData
 PanelDisplay_DispatchByMode_CaseTable:
 	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData
