@@ -164,8 +164,7 @@ Task1_AudioMain_Entry:
 	calr Audio_InitRingBuffers
 	ei 0
 	ldw (4156:16), 0
-	jr __jrt_nop_01FACB
-__jrt_nop_01FACB:
+	jr Audio_System_Init
 
 ; ============================================================================
 ; AUDIO SYSTEM INITIALIZATION
@@ -5095,8 +5094,7 @@ Voice_Reset_Engine_PhaseA_Body:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xa200
-	jr __jrt_nop_021F26
-__jrt_nop_021F26:
+	jr Voice_Reset_Engine_PhaseA_Nop
 
 Voice_Reset_Engine_PhaseA_Nop:
 	nop
@@ -5110,8 +5108,7 @@ Voice_Reset_Engine_PhaseA_Nop:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xa280
-	jr __jrt_nop_021F47
-__jrt_nop_021F47:
+	jr Voice_Reset_Engine_PhaseA_Nop2
 
 Voice_Reset_Engine_PhaseA_Nop2:
 	nop
@@ -5137,8 +5134,7 @@ Voice_Reset_Engine_PhaseB_Body:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0x0000
-	jr __jrt_nop_021F80
-__jrt_nop_021F80:
+	jr Voice_Reset_Engine_PhaseB_Nop
 
 Voice_Reset_Engine_PhaseB_Nop:
 	nop
@@ -5151,8 +5147,7 @@ Voice_Reset_Engine_PhaseB_Nop:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0x7e00
-	jr __jrt_nop_021F9D
-__jrt_nop_021F9D:
+	jr Voice_Reset_Engine_PhaseB_Nop2
 
 Voice_Reset_Engine_PhaseB_Nop2:
 	nop
@@ -15790,8 +15785,7 @@ Voice_Step_ExprRamp_Ascend_Tick:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff00
-	jr __jrt_nop_026FFD
-__jrt_nop_026FFD:
+	jr Voice_Step_ExprRamp_Ascend_Tick2
 
 ; Second half of the same write burst: TG bank 0x800 = 0xFF80.
 Voice_Step_ExprRamp_Ascend_Tick2:
@@ -15807,8 +15801,7 @@ Voice_Step_ExprRamp_Ascend_Tick2:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff80
-	jr __jrt_nop_027020
-__jrt_nop_027020:
+	jr Voice_Step_ExprRamp_Ascend_ClampFloor
 
 ; Clamp the ramp accumulator at the per-slot floor slot+58; on clamping, clear state bit
 ; 14 and set bit 13 (mode 0x4000 -> 0x2000, ascend hands over to descend).
@@ -15850,8 +15843,7 @@ Voice_Step_ExprRamp_Descend_Tick:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff00
-	jr __jrt_nop_027079
-__jrt_nop_027079:
+	jr Voice_Step_ExprRamp_Descend_Tick2
 
 ; Descend arm: TG bank 0x800 = 0xFF80.
 Voice_Step_ExprRamp_Descend_Tick2:
@@ -15867,8 +15859,7 @@ Voice_Step_ExprRamp_Descend_Tick2:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff80
-	jr __jrt_nop_02709C
-__jrt_nop_02709C:
+	jr Voice_Step_ExprRamp_Descend_WritePitch
 
 ; Push the shadow block with ToneGen_WriteVoiceParams_Ext2 (no pitch recompute on this
 ; arm).
@@ -15916,8 +15907,7 @@ Voice_Step_ExprRamp_Release_Tick:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff00
-	jr __jrt_nop_027108
-__jrt_nop_027108:
+	jr Voice_Step_ExprRamp_Release_Tick2
 
 ; Release arm: TG bank 0x800 = 0xFF80.
 Voice_Step_ExprRamp_Release_Tick2:
@@ -15933,8 +15923,7 @@ Voice_Step_ExprRamp_Release_Tick2:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff80
-	jr __jrt_nop_02712B
-__jrt_nop_02712B:
+	jr Voice_Step_ExprRamp_Release_WritePitch
 
 ; Store to slot+51, Voice_ApplyPortamento, ToneGen_WriteVoiceParams_Ext.
 Voice_Step_ExprRamp_Release_WritePitch:
@@ -15975,8 +15964,7 @@ Voice_Step_ExprRamp_ActiveCount:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xa200
-	jr __jrt_nop_027181
-__jrt_nop_027181:
+	jr Voice_Step_ExprRamp_CountTick
 
 ; Second half of the pre-roll burst: TG bank 0x800 = 0xA280.
 Voice_Step_ExprRamp_CountTick:
@@ -15992,8 +15980,7 @@ Voice_Step_ExprRamp_CountTick:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xa280
-	jr __jrt_nop_0271A4
-__jrt_nop_0271A4:
+	jr Voice_Step_ExprRamp_CountTick2
 
 ; Decrement the delay counter and fall through to the store.
 Voice_Step_ExprRamp_CountTick2:
@@ -17618,8 +17605,7 @@ ToneGen_WriteVoice_Long:
 	set	7, (P6:8)
 	ld wa, (xiz + 14)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_027F91
-__jrt_nop_027F91:
+	jr ToneGen_WriteVoice_Long_NopGap
 
 ; The mandatory 3-nop settling gap after the data write, entered by a `jr` to the next
 ; instruction.  Present after every single TG write in this region -- it is timing, not filler.
@@ -17644,8 +17630,7 @@ ToneGen_WriteVoice_Short:
 	ld wa, (xiz + 4)
 	res 15, wa
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_027FB6
-__jrt_nop_027FB6:
+	jr ToneGen_WriteVoice_Short_NopGap
 
 ; NopGap of ToneGen_WriteVoice_Short.
 ToneGen_WriteVoice_Short_NopGap:
@@ -17676,8 +17661,7 @@ ToneGen_WriteVoice_Direct:
 	nop
 	set	7, (P6:8)
 	ld (ToneGen_RegDataPort:24), iz
-	jr __jrt_nop_027FD1
-__jrt_nop_027FD1:
+	jr ToneGen_WriteVoice_Direct_NopGap
 
 ; NopGap of ToneGen_WriteVoice_Direct.
 ToneGen_WriteVoice_Direct_NopGap:
@@ -17707,8 +17691,7 @@ ToneGen_WriteVoice_6Words:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_027FFD
-__jrt_nop_027FFD:
+	jr ToneGen_WriteVoice_6Words_Word2
 
 ; Word2 of ToneGen_WriteVoice_6Words.
 ToneGen_WriteVoice_6Words_Word2:
@@ -17724,8 +17707,7 @@ ToneGen_WriteVoice_6Words_Word2:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 50)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02801F
-__jrt_nop_02801F:
+	jr ToneGen_WriteNote6ch_NopCont1
 
 ; NopCont1: settling gap plus the next address/data pair of ToneGen_WriteNote6ch.
 ToneGen_WriteNote6ch_NopCont1:
@@ -17741,8 +17723,7 @@ ToneGen_WriteNote6ch_NopCont1:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 54)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_028041
-__jrt_nop_028041:
+	jr ToneGen_WriteNote6ch_NopCont2
 
 ; NopCont2: settling gap plus the next address/data pair of ToneGen_WriteNote6ch.
 ToneGen_WriteNote6ch_NopCont2:
@@ -17758,8 +17739,7 @@ ToneGen_WriteNote6ch_NopCont2:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_028063
-__jrt_nop_028063:
+	jr ToneGen_WriteNote6ch_NopCont3
 
 ; NopCont3: settling gap plus the next address/data pair of ToneGen_WriteNote6ch.
 ToneGen_WriteNote6ch_NopCont3:
@@ -17775,8 +17755,7 @@ ToneGen_WriteNote6ch_NopCont3:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 48)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_028085
-__jrt_nop_028085:
+	jr ToneGen_WriteNote6ch_NopCont4
 
 ; NopCont4: settling gap plus the next address/data pair of ToneGen_WriteNote6ch.
 ToneGen_WriteNote6ch_NopCont4:
@@ -17792,8 +17771,7 @@ ToneGen_WriteNote6ch_NopCont4:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 52)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_0280A7
-__jrt_nop_0280A7:
+	jr ToneGen_WriteNote6ch_NopCont5
 
 ; The five continuation points of the six-word burst; each is the settling gap plus the next
 ; address/data pair.  Note the existing names call this "6ch" while the code is 6 REGISTERS
@@ -17823,8 +17801,7 @@ ToneGen_WriteNote2ch:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_0280D5
-__jrt_nop_0280D5:
+	jr ToneGen_WriteNote2ch_NopCont1
 
 ; NopCont1: settling gap plus the next address/data pair of ToneGen_WriteNote2ch.
 ToneGen_WriteNote2ch_NopCont1:
@@ -17840,8 +17817,7 @@ ToneGen_WriteNote2ch_NopCont1:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_0280F7
-__jrt_nop_0280F7:
+	jr ToneGen_WriteNote2ch_NopCont2
 
 ; NopCont2: settling gap plus the next address/data pair of ToneGen_WriteNote2ch.
 ToneGen_WriteNote2ch_NopCont2:
@@ -17875,8 +17851,8 @@ VoiceCC_DataTable_0280FE:
 	set	7, (P6:8)
 	ld	wa, (xiz+46)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02811B
-__jrt_nop_02811B:
+	jr	VoiceCC_DataTable_0280FE_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+VoiceCC_DataTable_0280FE_Next:
 	nop
 	nop
 	nop
@@ -17901,8 +17877,8 @@ ToneGen_WriteVoice_Pan_Pair:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+8)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_028147
-__jrt_nop_028147:
+	jr	ToneGen_WriteVoice_Pan_Pair_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Pan_Pair_Next:
 	nop
 	nop
 	nop
@@ -17915,8 +17891,8 @@ __jrt_nop_028147:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+10)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_028169
-__jrt_nop_028169:
+	jr	ToneGen_WriteVoice_Pan_Pair_Next2	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Pan_Pair_Next2:
 	nop
 	nop
 	nop
@@ -17941,8 +17917,8 @@ ToneGen_WriteVoice_Reg21_Reg22:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+26)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_028197
-__jrt_nop_028197:
+	jr	ToneGen_WriteVoice_Reg21_Reg22_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Reg21_Reg22_Next:
 	nop
 	nop
 	nop
@@ -17955,8 +17931,8 @@ __jrt_nop_028197:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+28)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_0281B9
-__jrt_nop_0281B9:
+	jr	ToneGen_WriteVoice_Reg21_Reg22_Next2	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Reg21_Reg22_Next2:
 	nop
 	nop
 	nop
@@ -17977,8 +17953,8 @@ ToneGen_WriteVoice_EnvLevel:
 	set	7, (P6:8)
 	ld	wa, (xiz+12)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_0281DD
-__jrt_nop_0281DD:
+	jr	ToneGen_WriteVoice_EnvLevel_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_EnvLevel_Next:
 	nop
 	nop
 	nop
@@ -17995,8 +17971,8 @@ ToneGen_WriteVoice_Reg11:
 	set	7, (P6:8)
 	ld	wa, (xiz+16)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_0281FF
-__jrt_nop_0281FF:
+	jr	ToneGen_WriteVoice_Reg11_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Reg11_Next:
 	nop
 	nop
 	nop
@@ -18013,8 +17989,8 @@ ToneGen_WriteVoice_Reg13:
 	set	7, (P6:8)
 	ld	wa, (xiz+20)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_028221
-__jrt_nop_028221:
+	jr	ToneGen_WriteVoice_Reg13_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Reg13_Next:
 	nop
 	nop
 	nop
@@ -18031,8 +18007,8 @@ ToneGen_WriteVoice_Reg18:
 	set	7, (P6:8)
 	ld	wa, (xiz+64)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_028243
-__jrt_nop_028243:
+	jr	ToneGen_WriteVoice_Reg18_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Reg18_Next:
 	nop
 	nop
 	nop
@@ -18049,8 +18025,8 @@ ToneGen_WriteVoice_Reg16:
 	set	7, (P6:8)
 	ld	wa, (xiz+60)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_028265
-__jrt_nop_028265:
+	jr	ToneGen_WriteVoice_Reg16_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Reg16_Next:
 	nop
 	nop
 	nop
@@ -18067,8 +18043,8 @@ ToneGen_WriteVoice_Reg07:
 	set	7, (P6:8)
 	ld	wa, (xiz+56)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_028287
-__jrt_nop_028287:
+	jr	ToneGen_WriteVoice_Reg07_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Reg07_Next:
 	nop
 	nop
 	nop
@@ -18085,8 +18061,8 @@ ToneGen_WriteVoice_Reg15:
 	set	7, (P6:8)
 	ld	wa, (xiz+58)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_0282A9
-__jrt_nop_0282A9:
+	jr	ToneGen_WriteVoice_Reg15_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Reg15_Next:
 	nop
 	nop
 	nop
@@ -18108,8 +18084,8 @@ ToneGen_WriteVoice_Reg07_Or_Reg18:
 	set	7, (P6:8)
 	ld	wa, (xiz+56)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_0282D1
-__jrt_nop_0282D1:
+	jr	ToneGen_WriteVoice_Reg07_Or_Reg18_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Reg07_Or_Reg18_Next:
 	nop
 	nop
 	nop
@@ -18122,8 +18098,8 @@ ToneGen_WriteVoice_Reg07_Or_Reg18_Skip:
 	set	7, (P6:8)
 	ld	wa, (xiz+66)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_0282F0
-__jrt_nop_0282F0:
+	jr	ToneGen_WriteVoice_Reg07_Or_Reg18_Next2	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Reg07_Or_Reg18_Next2:
 	nop
 	nop
 	nop
@@ -18143,8 +18119,8 @@ ToneGen_WriteVoice_Reg15_Or_Reg16:
 	set	7, (P6:8)
 	ld	wa, (xiz+58)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_028318
-__jrt_nop_028318:
+	jr	ToneGen_WriteVoice_Reg15_Or_Reg16_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Reg15_Or_Reg16_Next:
 	nop
 	nop
 	nop
@@ -18157,8 +18133,8 @@ ToneGen_WriteVoice_Reg15_Or_Reg16_Skip:
 	set	7, (P6:8)
 	ld	wa, (xiz+62)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_028337
-__jrt_nop_028337:
+	jr	ToneGen_WriteVoice_Reg15_Or_Reg16_Next2	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteVoice_Reg15_Or_Reg16_Next2:
 	nop
 	nop
 	nop
@@ -21680,8 +21656,7 @@ Voice_PortamentoSlots_WriteHW_NopCont1:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xa200
-	jr __jrt_nop_02A208
-__jrt_nop_02A208:
+	jr Voice_PortamentoSlots_WriteHW_NopCont2
 
 ; NopCont2: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_NopCont2:
@@ -21697,8 +21672,7 @@ Voice_PortamentoSlots_WriteHW_NopCont2:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xa280
-	jr __jrt_nop_02A22A
-__jrt_nop_02A22A:
+	jr Voice_PortamentoSlots_WriteHW_NopCont3
 
 ; NopCont3: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_NopCont3:
@@ -21718,8 +21692,7 @@ Voice_PortamentoSlots_WriteHW_BranchSkip:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xa200
-	jr __jrt_nop_02A24E
-__jrt_nop_02A24E:
+	jr Voice_PortamentoSlots_WriteHW_NopCont4
 
 ; NopCont4: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_NopCont4:
@@ -21735,8 +21708,7 @@ Voice_PortamentoSlots_WriteHW_NopCont4:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xa280
-	jr __jrt_nop_02A270
-__jrt_nop_02A270:
+	jr Voice_PortamentoSlots_WriteHW_NopCont5
 
 ; NopCont5: settling gap plus the next address/data pair of Voice_PortamentoSlots_WriteHW.
 Voice_PortamentoSlots_WriteHW_NopCont5:
@@ -22273,8 +22245,7 @@ Voice_AllVoices_PortamentoReset_NopCont2:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xa200
-	jr __jrt_nop_02A6AF
-__jrt_nop_02A6AF:
+	jr Voice_AllVoices_PortamentoReset_NopCont3
 
 ; NopCont3: settling gap plus the next address/data pair of Voice_AllVoices_PortamentoReset.
 Voice_AllVoices_PortamentoReset_NopCont3:
@@ -22289,8 +22260,7 @@ Voice_AllVoices_PortamentoReset_NopCont3:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xa280
-	jr __jrt_nop_02A6CF
-__jrt_nop_02A6CF:
+	jr Voice_AllVoices_PortamentoReset_LoopStep
 
 ; loop step of Voice_AllVoices_PortamentoReset.
 Voice_AllVoices_PortamentoReset_LoopStep:
@@ -24087,8 +24057,7 @@ ToneGen_SilenceChannel:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0x0000
-	jr __jrt_nop_02B4C1
-__jrt_nop_02B4C1:
+	jr ToneGen_SilenceChannel_NopCont1
 
 ; Landing pad of the `jr T` bus-settling delay after the first data write (3 nops).
 ToneGen_SilenceChannel_NopCont1:
@@ -24102,8 +24071,7 @@ ToneGen_SilenceChannel_NopCont1:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0x7e00
-	jr __jrt_nop_02B4DD
-__jrt_nop_02B4DD:
+	jr ToneGen_SilenceChannel_NopCont2
 
 ; Landing pad of the `jr T` bus-settling delay after the 0x7E00 free write (3 nops).
 ToneGen_SilenceChannel_NopCont2:
@@ -26099,8 +26067,7 @@ Voice_SetPitch:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff00
-	jr __jrt_nop_02C780
-__jrt_nop_02C780:
+	jr Voice_SetPitch_NopCont1
 
 ; Bus-settling pad (3 nops) after writing 0xFF00 to TG register 0x0840 + slot.
 Voice_SetPitch_NopCont1:
@@ -26115,8 +26082,7 @@ Voice_SetPitch_NopCont1:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff80
-	jr __jrt_nop_02C7A1
-__jrt_nop_02C7A1:
+	jr Voice_SetPitch_NopCont2
 
 ; Bus-settling pad (3 nops) after writing 0xFF80 to TG register 0x0800 + slot.
 Voice_SetPitch_NopCont2:
@@ -26216,8 +26182,7 @@ Voice_NoteOff:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff00
-	jr __jrt_nop_02C884
-__jrt_nop_02C884:
+	jr Voice_NoteOff_NopCont1
 
 ; Bus-settling pad (3 nops) after writing 0xFF00 to TG register 0x0840 + slot.
 Voice_NoteOff_NopCont1:
@@ -26232,8 +26197,7 @@ Voice_NoteOff_NopCont1:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff80
-	jr __jrt_nop_02C8A5
-__jrt_nop_02C8A5:
+	jr Voice_NoteOff_NopCont2
 
 ; Bus-settling pad (3 nops) after writing 0xFF80 to TG register 0x0800 + slot.
 Voice_NoteOff_NopCont2:
@@ -26355,8 +26319,7 @@ Voice_SetVelocity_Type0_SlotLoop:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff00
-	jr __jrt_nop_02C9A3
-__jrt_nop_02C9A3:
+	jr Voice_SetVelocity_Type0_NopCont1
 
 Voice_SetVelocity_Type0_NopCont1:
 	nop
@@ -26370,8 +26333,7 @@ Voice_SetVelocity_Type0_NopCont1:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff80
-	jr __jrt_nop_02C9C4
-__jrt_nop_02C9C4:
+	jr Voice_SetVelocity_Type0_NopCont2
 
 Voice_SetVelocity_Type0_NopCont2:
 	nop
@@ -26508,8 +26470,7 @@ Voice_SetVelocity_Type40_SlotLoop:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff00
-	jr __jrt_nop_02CB07
-__jrt_nop_02CB07:
+	jr Voice_SetVelocity_Type40_NopCont1
 
 Voice_SetVelocity_Type40_NopCont1:
 	nop
@@ -26523,8 +26484,7 @@ Voice_SetVelocity_Type40_NopCont1:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff80
-	jr __jrt_nop_02CB28
-__jrt_nop_02CB28:
+	jr Voice_SetVelocity_Type40_NopCont2
 
 Voice_SetVelocity_Type40_NopCont2:
 	nop
@@ -26622,8 +26582,7 @@ Voice_SetVelocity_Type80_SlotLoop:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff00
-	jr __jrt_nop_02CC06
-__jrt_nop_02CC06:
+	jr Voice_SetVelocity_Type80_NopCont1
 
 Voice_SetVelocity_Type80_NopCont1:
 	nop
@@ -26637,8 +26596,7 @@ Voice_SetVelocity_Type80_NopCont1:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff80
-	jr __jrt_nop_02CC27
-__jrt_nop_02CC27:
+	jr Voice_SetVelocity_Type80_NopCont2
 
 Voice_SetVelocity_Type80_NopCont2:
 	nop
@@ -27251,8 +27209,7 @@ ToneGen_WriteVoicePitch:
 	set	7, (P6:8)
 	ld wa, (xiz + 14)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D0D7
-__jrt_nop_02D0D7:
+	jr ToneGen_WriteVoicePitch_NopCont
 
 ToneGen_WriteVoicePitch_NopCont:
 	nop
@@ -27283,8 +27240,8 @@ ToneGen_WriteReg0080_StrobeClear:
 	ld	wa, (xiz+4)
 	res	15, wa
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02D0FC
-__jrt_nop_02D0FC:
+	jr	ToneGen_WriteReg0080_StrobeClear_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteReg0080_StrobeClear_Next:
 	nop
 	nop
 	nop
@@ -27504,8 +27461,7 @@ ToneGen_WriteVoiceParams:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 2)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D12A
-__jrt_nop_02D12A:
+	jr ToneGen_WriteVoiceParams_NopCont01
 
 ToneGen_WriteVoiceParams_NopCont01:
 	nop
@@ -27521,8 +27477,7 @@ ToneGen_WriteVoiceParams_NopCont01:
 	ld wa, (xwa + 4)
 	set 15, wa
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D14F
-__jrt_nop_02D14F:
+	jr ToneGen_WriteVoiceParams_NopCont02
 
 ToneGen_WriteVoiceParams_NopCont02:
 	nop
@@ -27537,8 +27492,7 @@ ToneGen_WriteVoiceParams_NopCont02:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 6)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D171
-__jrt_nop_02D171:
+	jr ToneGen_WriteVoiceParams_NopCont03
 
 ToneGen_WriteVoiceParams_NopCont03:
 	nop
@@ -27553,8 +27507,7 @@ ToneGen_WriteVoiceParams_NopCont03:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 8)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D193
-__jrt_nop_02D193:
+	jr ToneGen_WriteVoiceParams_NopCont04
 
 ToneGen_WriteVoiceParams_NopCont04:
 	nop
@@ -27569,8 +27522,7 @@ ToneGen_WriteVoiceParams_NopCont04:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 10)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D1B5
-__jrt_nop_02D1B5:
+	jr ToneGen_WriteVoiceParams_NopCont05
 
 ToneGen_WriteVoiceParams_NopCont05:
 	nop
@@ -27585,8 +27537,7 @@ ToneGen_WriteVoiceParams_NopCont05:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 12)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D1D7
-__jrt_nop_02D1D7:
+	jr ToneGen_WriteVoiceParams_NopCont06
 
 ToneGen_WriteVoiceParams_NopCont06:
 	nop
@@ -27601,8 +27552,7 @@ ToneGen_WriteVoiceParams_NopCont06:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 14)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D1F9
-__jrt_nop_02D1F9:
+	jr ToneGen_WriteVoiceParams_NopCont07
 
 ToneGen_WriteVoiceParams_NopCont07:
 	nop
@@ -27617,8 +27567,7 @@ ToneGen_WriteVoiceParams_NopCont07:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 16)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D21B
-__jrt_nop_02D21B:
+	jr ToneGen_WriteVoiceParams_NopCont08
 
 ToneGen_WriteVoiceParams_NopCont08:
 	nop
@@ -27633,8 +27582,7 @@ ToneGen_WriteVoiceParams_NopCont08:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 18)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D23D
-__jrt_nop_02D23D:
+	jr ToneGen_WriteVoiceParams_NopCont09
 
 ToneGen_WriteVoiceParams_NopCont09:
 	nop
@@ -27649,8 +27597,7 @@ ToneGen_WriteVoiceParams_NopCont09:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 20)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D25F
-__jrt_nop_02D25F:
+	jr ToneGen_WriteVoiceParams_NopCont10
 
 ToneGen_WriteVoiceParams_NopCont10:
 	nop
@@ -27665,8 +27612,7 @@ ToneGen_WriteVoiceParams_NopCont10:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 22)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D281
-__jrt_nop_02D281:
+	jr ToneGen_WriteVoiceParams_NopCont11
 
 ToneGen_WriteVoiceParams_NopCont11:
 	nop
@@ -27681,8 +27627,7 @@ ToneGen_WriteVoiceParams_NopCont11:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 24)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D2A3
-__jrt_nop_02D2A3:
+	jr ToneGen_WriteVoiceParams_NopCont12
 
 ToneGen_WriteVoiceParams_NopCont12:
 	nop
@@ -27694,8 +27639,7 @@ ToneGen_WriteVoiceParams_NopCont12:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0x8100
-	jr __jrt_nop_02D2BD
-__jrt_nop_02D2BD:
+	jr ToneGen_WriteVoiceParams_NopCont13
 
 ToneGen_WriteVoiceParams_NopCont13:
 	nop
@@ -27710,8 +27654,7 @@ ToneGen_WriteVoiceParams_NopCont13:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 26)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D2DF
-__jrt_nop_02D2DF:
+	jr ToneGen_WriteVoiceParams_NopCont14
 
 ToneGen_WriteVoiceParams_NopCont14:
 	nop
@@ -27726,8 +27669,7 @@ ToneGen_WriteVoiceParams_NopCont14:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 28)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D301
-__jrt_nop_02D301:
+	jr ToneGen_WriteVoiceParams_NopCont15
 
 ToneGen_WriteVoiceParams_NopCont15:
 	nop
@@ -27742,8 +27684,7 @@ ToneGen_WriteVoiceParams_NopCont15:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 30)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D323
-__jrt_nop_02D323:
+	jr ToneGen_WriteVoiceParams_NopCont16
 
 ToneGen_WriteVoiceParams_NopCont16:
 	nop
@@ -27758,8 +27699,7 @@ ToneGen_WriteVoiceParams_NopCont16:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 32)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D345
-__jrt_nop_02D345:
+	jr ToneGen_WriteVoiceParams_NopCont17
 
 ToneGen_WriteVoiceParams_NopCont17:
 	nop
@@ -27774,8 +27714,7 @@ ToneGen_WriteVoiceParams_NopCont17:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 34)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D367
-__jrt_nop_02D367:
+	jr ToneGen_WriteVoiceParams_NopCont18
 
 ToneGen_WriteVoiceParams_NopCont18:
 	nop
@@ -27790,8 +27729,7 @@ ToneGen_WriteVoiceParams_NopCont18:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 36)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D389
-__jrt_nop_02D389:
+	jr ToneGen_WriteVoiceParams_NopCont19
 
 ToneGen_WriteVoiceParams_NopCont19:
 	nop
@@ -27806,8 +27744,7 @@ ToneGen_WriteVoiceParams_NopCont19:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 38)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D3AB
-__jrt_nop_02D3AB:
+	jr ToneGen_WriteVoiceParams_NopCont20
 
 ToneGen_WriteVoiceParams_NopCont20:
 	nop
@@ -27822,8 +27759,7 @@ ToneGen_WriteVoiceParams_NopCont20:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 40)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D3CD
-__jrt_nop_02D3CD:
+	jr ToneGen_WriteVoiceParams_NopCont21
 
 ToneGen_WriteVoiceParams_NopCont21:
 	nop
@@ -27838,8 +27774,7 @@ ToneGen_WriteVoiceParams_NopCont21:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 42)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D3EF
-__jrt_nop_02D3EF:
+	jr ToneGen_WriteVoiceParams_NopCont22
 
 ToneGen_WriteVoiceParams_NopCont22:
 	nop
@@ -27855,8 +27790,7 @@ ToneGen_WriteVoiceParams_NopCont22:
 	ld wa, (xwa + 4)
 	res 15, wa
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D414
-__jrt_nop_02D414:
+	jr ToneGen_WriteVoiceParams_Exit
 
 ToneGen_WriteVoiceParams_Exit:
 	nop
@@ -27900,8 +27834,7 @@ ToneGen_WriteSingleReg:
 	nop
 	set	7, (P6:8)
 	ld (ToneGen_RegDataPort:24), iz
-	jr __jrt_nop_02D431
-__jrt_nop_02D431:
+	jr ToneGen_WriteSingleReg_NopCont
 
 ToneGen_WriteSingleReg_NopCont:
 	nop
@@ -27928,8 +27861,7 @@ ToneGen_WriteLevelBurst:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D45D
-__jrt_nop_02D45D:
+	jr ToneGen_WriteLevelBurst_NopCont1
 
 ToneGen_WriteLevelBurst_NopCont1:
 	nop
@@ -27944,8 +27876,7 @@ ToneGen_WriteLevelBurst_NopCont1:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 50)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D47F
-__jrt_nop_02D47F:
+	jr ToneGen_WriteLevelBurst_NopCont2
 
 ToneGen_WriteLevelBurst_NopCont2:
 	nop
@@ -27960,8 +27891,7 @@ ToneGen_WriteLevelBurst_NopCont2:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 54)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D4A1
-__jrt_nop_02D4A1:
+	jr ToneGen_WriteLevelBurst_NopCont3
 
 ToneGen_WriteLevelBurst_NopCont3:
 	nop
@@ -27976,8 +27906,7 @@ ToneGen_WriteLevelBurst_NopCont3:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D4C3
-__jrt_nop_02D4C3:
+	jr ToneGen_WriteLevelBurst_NopCont4
 
 ToneGen_WriteLevelBurst_NopCont4:
 	nop
@@ -27992,8 +27921,7 @@ ToneGen_WriteLevelBurst_NopCont4:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 48)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D4E5
-__jrt_nop_02D4E5:
+	jr ToneGen_WriteLevelBurst_NopCont5
 
 ToneGen_WriteLevelBurst_NopCont5:
 	nop
@@ -28008,8 +27936,7 @@ ToneGen_WriteLevelBurst_NopCont5:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 52)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D507
-__jrt_nop_02D507:
+	jr ToneGen_WriteLevelBurst_NopCont6
 
 ToneGen_WriteLevelBurst_NopCont6:
 	nop
@@ -28035,8 +27962,7 @@ ToneGen_WriteLevelPair:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D535
-__jrt_nop_02D535:
+	jr ToneGen_WriteLevelPair_NopCont1
 
 ToneGen_WriteLevelPair_NopCont1:
 	nop
@@ -28051,8 +27977,7 @@ ToneGen_WriteLevelPair_NopCont1:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D557
-__jrt_nop_02D557:
+	jr ToneGen_WriteLevelPair_NopCont2
 
 ToneGen_WriteLevelPair_NopCont2:
 	nop
@@ -28075,8 +28000,8 @@ ToneGen_WriteReg0840_Shadow2E:
 	set	7, (P6:8)
 	ld	wa, (xiz+46)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D57B
-__jrt_nop_02D57B:
+	jr ToneGen_WriteReg0840_Shadow2E_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteReg0840_Shadow2E_Next:
 	nop
 	nop
 	nop
@@ -28099,8 +28024,8 @@ ToneGen_Write_Regs0100_0140:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+8)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D5A7
-__jrt_nop_02D5A7:
+	jr ToneGen_Write_Regs0100_0140_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_Write_Regs0100_0140_Next:
 	nop
 	nop
 	nop
@@ -28113,8 +28038,8 @@ __jrt_nop_02D5A7:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+10)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D5C9
-__jrt_nop_02D5C9:
+	jr ToneGen_Write_Regs0100_0140_Next2	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_Write_Regs0100_0140_Next2:
 	nop
 	nop
 	nop
@@ -28137,8 +28062,7 @@ ToneGen_WriteEnvSegments:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 26)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D5F7
-__jrt_nop_02D5F7:
+	jr ToneGen_WriteEnvSegments_NopCont1
 
 ToneGen_WriteEnvSegments_NopCont1:
 	nop
@@ -28153,8 +28077,7 @@ ToneGen_WriteEnvSegments_NopCont1:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 28)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D619
-__jrt_nop_02D619:
+	jr ToneGen_WriteEnvSegments_NopCont2
 
 ToneGen_WriteEnvSegments_NopCont2:
 	nop
@@ -28180,8 +28103,7 @@ ToneGen_WriteSegRegs_SameLevel:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D647
-__jrt_nop_02D647:
+	jr ToneGen_WriteSegRegs_SameLevel_NopCont1
 
 ToneGen_WriteSegRegs_SameLevel_NopCont1:
 	nop
@@ -28196,8 +28118,7 @@ ToneGen_WriteSegRegs_SameLevel_NopCont1:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D669
-__jrt_nop_02D669:
+	jr ToneGen_WriteSegRegs_SameLevel_NopCont2
 
 ToneGen_WriteSegRegs_SameLevel_NopCont2:
 	nop
@@ -28219,8 +28140,7 @@ ToneGen_WriteExprReg:
 	nop
 	set	7, (P6:8)
 	ld (ToneGen_RegDataPort:24), iz
-	jr __jrt_nop_02D68A
-__jrt_nop_02D68A:
+	jr ToneGen_WriteExprReg_NopCont
 
 ToneGen_WriteExprReg_NopCont:
 	nop
@@ -28248,8 +28168,7 @@ ToneGen_WriteVoiceParams_Ext:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D6B9
-__jrt_nop_02D6B9:
+	jr ToneGen_WriteVoiceParams_Ext_NopCont1
 
 ToneGen_WriteVoiceParams_Ext_NopCont1:
 	nop
@@ -28261,8 +28180,7 @@ ToneGen_WriteVoiceParams_Ext_NopCont1:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0x8100
-	jr __jrt_nop_02D6D3
-__jrt_nop_02D6D3:
+	jr ToneGen_WriteVoiceParams_Ext_NopCont2
 
 ToneGen_WriteVoiceParams_Ext_NopCont2:
 	nop
@@ -28277,8 +28195,7 @@ ToneGen_WriteVoiceParams_Ext_NopCont2:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D6F5
-__jrt_nop_02D6F5:
+	jr ToneGen_WriteVoiceParams_Ext_NopCont3
 
 ToneGen_WriteVoiceParams_Ext_NopCont3:
 	nop
@@ -28294,8 +28211,7 @@ ToneGen_WriteVoiceParams_Ext_NopCont3:
 	ld wa, (xwa + 4)
 	res 15, wa
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D71A
-__jrt_nop_02D71A:
+	jr ToneGen_WriteVoiceParams_Ext_NopCont4
 
 ToneGen_WriteVoiceParams_Ext_NopCont4:
 	nop
@@ -28309,8 +28225,7 @@ ToneGen_WriteVoiceParams_Ext_NopCont4:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 45)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D738
-__jrt_nop_02D738:
+	jr ToneGen_WriteVoiceParams_Ext_NopCont5
 
 ToneGen_WriteVoiceParams_Ext_NopCont5:
 	nop
@@ -28336,8 +28251,7 @@ ToneGen_WriteVoiceParams_Ext2:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D766
-__jrt_nop_02D766:
+	jr ToneGen_WriteVoiceParams_Ext2_NopCont1
 
 ToneGen_WriteVoiceParams_Ext2_NopCont1:
 	nop
@@ -28349,8 +28263,7 @@ ToneGen_WriteVoiceParams_Ext2_NopCont1:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0x8100
-	jr __jrt_nop_02D780
-__jrt_nop_02D780:
+	jr ToneGen_WriteVoiceParams_Ext2_NopCont2
 
 ToneGen_WriteVoiceParams_Ext2_NopCont2:
 	nop
@@ -28365,8 +28278,7 @@ ToneGen_WriteVoiceParams_Ext2_NopCont2:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D7A2
-__jrt_nop_02D7A2:
+	jr ToneGen_WriteVoiceParams_Ext2_NopCont3
 
 ToneGen_WriteVoiceParams_Ext2_NopCont3:
 	nop
@@ -28380,8 +28292,7 @@ ToneGen_WriteVoiceParams_Ext2_NopCont3:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 45)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D7C0
-__jrt_nop_02D7C0:
+	jr ToneGen_WriteVoiceParams_Ext2_NopCont4
 
 ToneGen_WriteVoiceParams_Ext2_NopCont4:
 	nop
@@ -28417,8 +28328,7 @@ ToneGen_WriteGlobalConfig_BranchB:
 	set	7, (P6:8)
 	ld wa, (xiz)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D7F5
-__jrt_nop_02D7F5:
+	jr ToneGen_WriteGlobalConfig_NopCont01
 
 ToneGen_WriteGlobalConfig_NopCont01:
 	nop
@@ -28430,8 +28340,7 @@ ToneGen_WriteGlobalConfig_NopCont01:
 	set	7, (P6:8)
 	ld wa, (xiz + 2)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D810
-__jrt_nop_02D810:
+	jr ToneGen_WriteGlobalConfig_NopCont02
 
 ToneGen_WriteGlobalConfig_NopCont02:
 	nop
@@ -28443,8 +28352,7 @@ ToneGen_WriteGlobalConfig_NopCont02:
 	set	7, (P6:8)
 	ld wa, (xiz + 4)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D82B
-__jrt_nop_02D82B:
+	jr ToneGen_WriteGlobalConfig_NopCont03
 
 ToneGen_WriteGlobalConfig_NopCont03:
 	nop
@@ -28456,8 +28364,7 @@ ToneGen_WriteGlobalConfig_NopCont03:
 	set	7, (P6:8)
 	ld wa, (xiz + 6)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D846
-__jrt_nop_02D846:
+	jr ToneGen_WriteGlobalConfig_NopCont04
 
 ToneGen_WriteGlobalConfig_NopCont04:
 	nop
@@ -28469,8 +28376,7 @@ ToneGen_WriteGlobalConfig_NopCont04:
 	set	7, (P6:8)
 	ld wa, (xiz + 8)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D861
-__jrt_nop_02D861:
+	jr ToneGen_WriteGlobalConfig_NopCont05
 
 ToneGen_WriteGlobalConfig_NopCont05:
 	nop
@@ -28482,8 +28388,7 @@ ToneGen_WriteGlobalConfig_NopCont05:
 	set	7, (P6:8)
 	ld wa, (xiz + 10)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D87C
-__jrt_nop_02D87C:
+	jr ToneGen_WriteGlobalConfig_NopCont06
 
 ToneGen_WriteGlobalConfig_NopCont06:
 	nop
@@ -28495,8 +28400,7 @@ ToneGen_WriteGlobalConfig_NopCont06:
 	set	7, (P6:8)
 	ld wa, (xiz + 12)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D897
-__jrt_nop_02D897:
+	jr ToneGen_WriteGlobalConfig_NopCont07
 
 ToneGen_WriteGlobalConfig_NopCont07:
 	nop
@@ -28508,8 +28412,7 @@ ToneGen_WriteGlobalConfig_NopCont07:
 	set	7, (P6:8)
 	ld wa, (xiz + 14)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D8B2
-__jrt_nop_02D8B2:
+	jr ToneGen_WriteGlobalConfig_NopCont08
 
 ToneGen_WriteGlobalConfig_NopCont08:
 	nop
@@ -28521,8 +28424,7 @@ ToneGen_WriteGlobalConfig_NopCont08:
 	set	7, (P6:8)
 	ld wa, (xiz + 16)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D8CD
-__jrt_nop_02D8CD:
+	jr ToneGen_WriteGlobalConfig_NopCont09
 
 ToneGen_WriteGlobalConfig_NopCont09:
 	nop
@@ -28534,8 +28436,7 @@ ToneGen_WriteGlobalConfig_NopCont09:
 	set	7, (P6:8)
 	ld wa, (xiz + 18)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D8E8
-__jrt_nop_02D8E8:
+	jr ToneGen_WriteGlobalConfig_NopCont10
 
 ToneGen_WriteGlobalConfig_NopCont10:
 	nop
@@ -28547,8 +28448,7 @@ ToneGen_WriteGlobalConfig_NopCont10:
 	set	7, (P6:8)
 	ld wa, (xiz + 20)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D903
-__jrt_nop_02D903:
+	jr ToneGen_WriteGlobalConfig_NopCont11
 
 ToneGen_WriteGlobalConfig_NopCont11:
 	nop
@@ -28560,8 +28460,7 @@ ToneGen_WriteGlobalConfig_NopCont11:
 	set	7, (P6:8)
 	ld wa, (xiz + 22)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D91E
-__jrt_nop_02D91E:
+	jr ToneGen_WriteGlobalConfig_NopCont12
 
 ToneGen_WriteGlobalConfig_NopCont12:
 	nop
@@ -28573,8 +28472,7 @@ ToneGen_WriteGlobalConfig_NopCont12:
 	set	7, (P6:8)
 	ld wa, (xiz + 24)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02D939
-__jrt_nop_02D939:
+	jr ToneGen_WriteGlobalConfig_NopCont13
 
 ToneGen_WriteGlobalConfig_NopCont13:
 	nop
@@ -28601,8 +28499,8 @@ ToneGen_WriteReg0440_0480:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+16)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02D965
-__jrt_nop_02D965:
+	jr	ToneGen_WriteReg0440_0480_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteReg0440_0480_Next:
 	nop
 	nop
 	nop
@@ -28615,8 +28513,8 @@ __jrt_nop_02D965:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+18)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02D987
-__jrt_nop_02D987:
+	jr	ToneGen_WriteReg0440_0480_Next2	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteReg0440_0480_Next2:
 	nop
 	nop
 	nop
@@ -28635,8 +28533,8 @@ ToneGen_Write_Reg0180:
 	set	7, (P6:8)
 	ld	wa, (xiz+12)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02D9AB
-__jrt_nop_02D9AB:
+	jr	ToneGen_Write_Reg0180_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_Write_Reg0180_Next:
 	nop
 	nop
 	nop
@@ -28653,8 +28551,8 @@ ToneGen_Write_Reg0440:
 	set	7, (P6:8)
 	ld	wa, (xiz+16)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02D9CD
-__jrt_nop_02D9CD:
+	jr	ToneGen_Write_Reg0440_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_Write_Reg0440_Next:
 	nop
 	nop
 	nop
@@ -28671,8 +28569,8 @@ ToneGen_Write_Reg0480:
 	set	7, (P6:8)
 	ld	wa, (xiz+18)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02D9EF
-__jrt_nop_02D9EF:
+	jr	ToneGen_Write_Reg0480_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_Write_Reg0480_Next:
 	nop
 	nop
 	nop
@@ -28689,8 +28587,8 @@ ToneGen_Write_Reg04C0:
 	set	7, (P6:8)
 	ld	wa, (xiz+20)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02DA11
-__jrt_nop_02DA11:
+	jr	ToneGen_Write_Reg04C0_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_Write_Reg04C0_Next:
 	nop
 	nop
 	nop
@@ -28722,8 +28620,7 @@ ToneGen_WriteExtParams_56:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DA48
-__jrt_nop_02DA48:
+	jr ToneGen_WriteExtParams_56_NopCont1
 
 ToneGen_WriteExtParams_56_NopCont1:
 	nop
@@ -28740,8 +28637,7 @@ ToneGen_WriteExtParams_56_BranchSkip:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 64)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DA6A
-__jrt_nop_02DA6A:
+	jr ToneGen_WriteExtParams_56_NopCont2
 
 ToneGen_WriteExtParams_56_NopCont2:
 	nop
@@ -28757,8 +28653,7 @@ ToneGen_WriteExtParams_56_NopCont2:
 	ld wa, (xwa + 60)
 	res 15, wa
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DA8F
-__jrt_nop_02DA8F:
+	jr ToneGen_WriteExtParams_56_NopCont3
 
 ToneGen_WriteExtParams_56_NopCont3:
 	nop
@@ -28779,8 +28674,7 @@ ToneGen_WriteExtParam_600:
 	set	7, (P6:8)
 	ld wa, (xiz + 64)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DAB3
-__jrt_nop_02DAB3:
+	jr ToneGen_WriteExtParam_600_NopCont
 
 ToneGen_WriteExtParam_600_NopCont:
 	nop
@@ -28809,8 +28703,7 @@ ToneGen_WriteExtParams_56_Alt:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DAEA
-__jrt_nop_02DAEA:
+	jr ToneGen_WriteExtParams_56_Alt_NopCont1
 
 ToneGen_WriteExtParams_56_Alt_NopCont1:
 	nop
@@ -28828,8 +28721,7 @@ ToneGen_WriteExtParams_56_Alt_ClearPath:
 	ld wa, (xwa + 60)
 	res 15, wa
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DB0F
-__jrt_nop_02DB0F:
+	jr ToneGen_WriteExtParams_56_Alt_NopCont2
 
 ToneGen_WriteExtParams_56_Alt_NopCont2:
 	nop
@@ -28849,8 +28741,7 @@ ToneGen_WriteExtParam_600_Mute:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0x8100
-	jr __jrt_nop_02DB2F
-__jrt_nop_02DB2F:
+	jr ToneGen_WriteExtParam_600_Mute_NopCont
 
 ToneGen_WriteExtParam_600_Mute_NopCont:
 	nop
@@ -28878,8 +28769,7 @@ ToneGen_WriteExtParams_56b:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DB65
-__jrt_nop_02DB65:
+	jr ToneGen_WriteExtParams_56b_NopCont1
 
 ToneGen_WriteExtParams_56b_NopCont1:
 	nop
@@ -28896,8 +28786,7 @@ ToneGen_WriteExtParams_56b_ClearPath:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 66)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DB87
-__jrt_nop_02DB87:
+	jr ToneGen_WriteExtParams_56b_NopCont2
 
 ToneGen_WriteExtParams_56b_NopCont2:
 	nop
@@ -28913,8 +28802,7 @@ ToneGen_WriteExtParams_56b_NopCont2:
 	ld wa, (xwa + 62)
 	res 15, wa
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DBAC
-__jrt_nop_02DBAC:
+	jr ToneGen_WriteExtParams_56b_NopCont3
 
 ToneGen_WriteExtParams_56b_NopCont3:
 	nop
@@ -28938,8 +28826,8 @@ ToneGen_WriteReg0640:
 	set	7, (P6:8)
 	ld	wa, (xiz+66)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02DBD0
-__jrt_nop_02DBD0:
+	jr	ToneGen_WriteReg0640_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteReg0640_Next:
 	nop
 	nop
 	nop
@@ -28967,8 +28855,8 @@ ToneGen_Write_ExtParam_05C0_Strobe:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+62)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02DC07
-__jrt_nop_02DC07:
+	jr	ToneGen_Write_ExtParam_05C0_Strobe_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_Write_ExtParam_05C0_Strobe_Next:
 	nop
 	nop
 	nop
@@ -28983,8 +28871,8 @@ ToneGen_Write_ExtParam_05C0_Strobe_Skip:
 	ld	wa, (xwa+62)
 	res	15, wa
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02DC2C
-__jrt_nop_02DC2C:
+	jr	ToneGen_Write_ExtParam_05C0_Strobe_Next2	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_Write_ExtParam_05C0_Strobe_Next2:
 	nop
 	nop
 	nop
@@ -28999,8 +28887,8 @@ ToneGen_Mute_Reg05C0:
 	nop
 	set	7, (P6:8)
 	ldw	(ToneGen_RegDataPort:24), 33024
-	jr	__jrt_nop_02DC4C
-__jrt_nop_02DC4C:
+	jr	ToneGen_Mute_Reg05C0_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_Mute_Reg05C0_Next:
 	nop
 	nop
 	nop
@@ -29026,8 +28914,7 @@ ToneGen_WriteExtParams_15:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DC82
-__jrt_nop_02DC82:
+	jr ToneGen_WriteExtParams_15_NopCont1
 
 ToneGen_WriteExtParams_15_NopCont1:
 	nop
@@ -29044,8 +28931,7 @@ ToneGen_WriteExtParams_15_ClearPath:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 56)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DCA4
-__jrt_nop_02DCA4:
+	jr ToneGen_WriteExtParams_15_NopCont2
 
 ToneGen_WriteExtParams_15_NopCont2:
 	nop
@@ -29061,8 +28947,7 @@ ToneGen_WriteExtParams_15_NopCont2:
 	ld wa, (xwa + 58)
 	res 15, wa
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DCC9
-__jrt_nop_02DCC9:
+	jr ToneGen_WriteExtParams_15_NopCont3
 
 ToneGen_WriteExtParams_15_NopCont3:
 	nop
@@ -29083,8 +28968,7 @@ ToneGen_WriteExtParam_1C0_Single:
 	set	7, (P6:8)
 	ld wa, (xiz + 56)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DCED
-__jrt_nop_02DCED:
+	jr ToneGen_WriteExtParam_1C0_Single_NopCont
 
 ToneGen_WriteExtParam_1C0_Single_NopCont:
 	nop
@@ -29112,8 +28996,7 @@ ToneGen_WriteExtParams_15_Alt:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DD24
-__jrt_nop_02DD24:
+	jr ToneGen_WriteExtParams_15_Alt_NopCont1
 
 ToneGen_WriteExtParams_15_Alt_NopCont1:
 	nop
@@ -29131,8 +29014,7 @@ ToneGen_WriteExtParams_15_Alt_ClearPath:
 	ld wa, (xwa + 58)
 	res 15, wa
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DD49
-__jrt_nop_02DD49:
+	jr ToneGen_WriteExtParams_15_Alt_NopCont2
 
 ToneGen_WriteExtParams_15_Alt_NopCont2:
 	nop
@@ -29150,8 +29032,7 @@ ToneGen_WriteExtParam_540_Mute:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0x8100
-	jr __jrt_nop_02DD69
-__jrt_nop_02DD69:
+	jr ToneGen_WriteExtParam_540_Mute_NopCont
 
 ToneGen_WriteExtParam_540_Mute_NopCont:
 	nop
@@ -29187,8 +29068,8 @@ ToneGen_WriteExtParams_15_Banked:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+58)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02DDA5
-__jrt_nop_02DDA5:
+	jr	ToneGen_WriteExtParams_15_Banked_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteExtParams_15_Banked_Next:
 	nop
 	nop
 	nop
@@ -29202,8 +29083,8 @@ ToneGen_WriteExtParams_15_Banked_Skip:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+56)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02DDC7
-__jrt_nop_02DDC7:
+	jr	ToneGen_WriteExtParams_15_Banked_Next2	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteExtParams_15_Banked_Next2:
 	nop
 	nop
 	nop
@@ -29217,8 +29098,8 @@ __jrt_nop_02DDC7:
 	ld	wa, (xwa+58)
 	res	15, wa
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02DDEC
-__jrt_nop_02DDEC:
+	jr	ToneGen_WriteExtParams_15_Banked_Next3	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteExtParams_15_Banked_Next3:
 	nop
 	nop
 	nop
@@ -29237,8 +29118,8 @@ ToneGen_WriteExtParams_15_Banked_Skip2:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+62)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02DE1B
-__jrt_nop_02DE1B:
+	jr	ToneGen_WriteExtParams_15_Banked_Next4	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteExtParams_15_Banked_Next4:
 	nop
 	nop
 	nop
@@ -29252,8 +29133,8 @@ ToneGen_WriteExtParams_15_Banked_Skip3:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+66)
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02DE3D
-__jrt_nop_02DE3D:
+	jr	ToneGen_WriteExtParams_15_Banked_Next5	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteExtParams_15_Banked_Next5:
 	nop
 	nop
 	nop
@@ -29267,8 +29148,8 @@ __jrt_nop_02DE3D:
 	ld	wa, (xwa+62)
 	res	15, wa
 	ld	(ToneGen_RegDataPort:24), wa
-	jr	__jrt_nop_02DE62
-__jrt_nop_02DE62:
+	jr	ToneGen_WriteExtParams_15_Banked_Next6	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_WriteExtParams_15_Banked_Next6:
 	nop
 	nop
 	nop
@@ -29290,8 +29171,7 @@ ToneGen_WriteExtParam_TypeDispatch_Single:
 	set	7, (P6:8)
 	ld wa, (xiz + 56)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DE8C
-__jrt_nop_02DE8C:
+	jr ToneGen_WriteExtParam_TypeDispatch_Single_NopCont1
 
 ToneGen_WriteExtParam_TypeDispatch_Single_NopCont1:
 	nop
@@ -29307,8 +29187,7 @@ ToneGen_WriteExtParam_TypeDispatch_Single_HiPath:
 	set	7, (P6:8)
 	ld wa, (xiz + 66)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DEAB
-__jrt_nop_02DEAB:
+	jr ToneGen_WriteExtParam_TypeDispatch_Single_NopCont2
 
 ToneGen_WriteExtParam_TypeDispatch_Single_NopCont2:
 	nop
@@ -29341,8 +29220,7 @@ ToneGen_WriteExtParams_TypeDispatch:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DEE8
-__jrt_nop_02DEE8:
+	jr ToneGen_WriteExtParams_TypeDispatch_NopCont1
 
 ToneGen_WriteExtParams_TypeDispatch_NopCont1:
 	nop
@@ -29360,8 +29238,7 @@ ToneGen_WriteExtParams_TypeDispatch_LoClearPath:
 	ld wa, (xwa + 58)
 	res 15, wa
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DF0D
-__jrt_nop_02DF0D:
+	jr ToneGen_WriteExtParams_TypeDispatch_NopCont2
 
 ToneGen_WriteExtParams_TypeDispatch_NopCont2:
 	nop
@@ -29383,8 +29260,7 @@ ToneGen_WriteExtParams_TypeDispatch_HiPath:
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DF3C
-__jrt_nop_02DF3C:
+	jr ToneGen_WriteExtParams_TypeDispatch_NopCont3
 
 ToneGen_WriteExtParams_TypeDispatch_NopCont3:
 	nop
@@ -29402,8 +29278,7 @@ ToneGen_WriteExtParams_TypeDispatch_HiClearPath:
 	ld wa, (xwa + 62)
 	res 15, wa
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02DF61
-__jrt_nop_02DF61:
+	jr ToneGen_WriteExtParams_TypeDispatch_NopCont4
 
 ToneGen_WriteExtParams_TypeDispatch_NopCont4:
 	nop
@@ -29425,8 +29300,7 @@ ToneGen_WriteExtParam_Mute_TypeDispatch:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0x8100
-	jr __jrt_nop_02DF87
-__jrt_nop_02DF87:
+	jr ToneGen_WriteExtParam_Mute_TypeDispatch_NopCont1
 
 ToneGen_WriteExtParam_Mute_TypeDispatch_NopCont1:
 	nop
@@ -29441,8 +29315,7 @@ ToneGen_WriteExtParam_Mute_TypeDispatch_HiPath:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0x8100
-	jr __jrt_nop_02DFA4
-__jrt_nop_02DFA4:
+	jr ToneGen_WriteExtParam_Mute_TypeDispatch_NopCont2
 
 ToneGen_WriteExtParam_Mute_TypeDispatch_NopCont2:
 	nop
@@ -29487,8 +29360,7 @@ ToneGen_Config_Init:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff00
-	jr __jrt_nop_02DFEA
-__jrt_nop_02DFEA:
+	jr ToneGen_Config_Init_NopCont1
 
 ToneGen_Config_Init_NopCont1:
 	nop
@@ -29501,8 +29373,7 @@ ToneGen_Config_Init_NopCont1:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff80
-	jr __jrt_nop_02E008
-__jrt_nop_02E008:
+	jr ToneGen_ConfigInit_WriteVoiceRegs
 
 ToneGen_ConfigInit_WriteVoiceRegs:
 	nop
@@ -29522,8 +29393,7 @@ ToneGen_ConfigInit_WriteVoiceRegs:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff00
-	jr __jrt_nop_02E038
-__jrt_nop_02E038:
+	jr ToneGen_ConfigInit_WriteAddr800
 
 ToneGen_ConfigInit_WriteAddr800:
 	nop
@@ -29536,8 +29406,7 @@ ToneGen_ConfigInit_WriteAddr800:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff80
-	jr __jrt_nop_02E056
-__jrt_nop_02E056:
+	jr ToneGen_ConfigInit_WriteAddrC0
 
 ToneGen_ConfigInit_WriteAddrC0:
 	nop
@@ -29550,8 +29419,7 @@ ToneGen_ConfigInit_WriteAddrC0:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0x0000
-	jr __jrt_nop_02E074
-__jrt_nop_02E074:
+	jr ToneGen_ConfigInit_WriteAddr00
 
 ToneGen_ConfigInit_WriteAddr00:
 	nop
@@ -29563,8 +29431,7 @@ ToneGen_ConfigInit_WriteAddr00:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0x7e00
-	jr __jrt_nop_02E08E
-__jrt_nop_02E08E:
+	jr ToneGen_ConfigInit_WriteExtParams
 
 ToneGen_ConfigInit_WriteExtParams:
 	nop
@@ -29611,8 +29478,8 @@ ToneGen_SelfTest_ProbeVoice0:
 	nop
 	set	7, (P6:8)
 	ldw	(ToneGen_RegDataPort:24), 65280
-	jr	__jrt_nop_02E0D1
-__jrt_nop_02E0D1:
+	jr	ToneGen_SelfTest_ProbeVoice0_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_SelfTest_ProbeVoice0_Next:
 	nop
 	nop
 	nop
@@ -29621,8 +29488,8 @@ __jrt_nop_02E0D1:
 	nop
 	set	7, (P6:8)
 	ldw	(ToneGen_RegDataPort:24), 65408
-	jr	__jrt_nop_02E0EB
-__jrt_nop_02E0EB:
+	jr	ToneGen_SelfTest_ProbeVoice0_Next2	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_SelfTest_ProbeVoice0_Next2:
 	nop
 	nop
 	nop
@@ -29646,8 +29513,8 @@ ToneGen_SelfTest_ProbeVoice0_Loop:
 	nop
 	set	7, (P6:8)
 	ldw	(ToneGen_RegDataPort:24), 65280
-	jr	__jrt_nop_02E12C
-__jrt_nop_02E12C:
+	jr	ToneGen_SelfTest_ProbeVoice0_Next3	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_SelfTest_ProbeVoice0_Next3:
 	nop
 	nop
 	nop
@@ -29656,8 +29523,8 @@ __jrt_nop_02E12C:
 	nop
 	set	7, (P6:8)
 	ldw	(ToneGen_RegDataPort:24), 65408
-	jr	__jrt_nop_02E146
-__jrt_nop_02E146:
+	jr	ToneGen_SelfTest_ProbeVoice0_Next4	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_SelfTest_ProbeVoice0_Next4:
 	nop
 	nop
 	nop
@@ -29672,8 +29539,8 @@ ToneGen_SelfTest_ProbeVoice0_Join:
 	nop
 	set	7, (P6:8)
 	ldw	(ToneGen_RegDataPort:24), 0
-	jr	__jrt_nop_02E16C
-__jrt_nop_02E16C:
+	jr	ToneGen_SelfTest_ProbeVoice0_Next5	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_SelfTest_ProbeVoice0_Next5:
 	nop
 	nop
 	nop
@@ -29682,8 +29549,8 @@ __jrt_nop_02E16C:
 	nop
 	set	7, (P6:8)
 	ldw	(ToneGen_RegDataPort:24), 32256
-	jr	__jrt_nop_02E186
-__jrt_nop_02E186:
+	jr	ToneGen_SelfTest_ProbeVoice0_Next6	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+ToneGen_SelfTest_ProbeVoice0_Next6:
 	nop
 	nop
 	nop
@@ -29713,8 +29580,7 @@ ToneGen_ReadPitch_AndScale:
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 6)
 	ld (ToneGen_RegDataPort:24), wa
-	jr __jrt_nop_02E1B4
-__jrt_nop_02E1B4:
+	jr ToneGen_ReadPitch_Compute
 
 ToneGen_ReadPitch_Compute:
 	nop
@@ -29737,8 +29603,7 @@ ToneGen_ReadPitch_Compute:
 	res 15, bc
 	ld xwa, (xsp + 2)
 	ld (xwa), bc
-	jr __jrt_nop_02E1ED
-__jrt_nop_02E1ED:
+	jr ToneGen_ReadPitch_Return
 
 ToneGen_ReadPitch_Return:
 	nop
@@ -43343,8 +43208,7 @@ Voice_Poly_NoteOn_RoundRobin:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff00
-	jr __jrt_nop_035727
-__jrt_nop_035727:
+	jr Voice_Poly_NoteOn_SlotSearch
 
 ; Second half of the note-on register pair: settling nops, then TG reg 0x20 voice slot
 ; <= 0xFF80. Despite the existing name it does not search anything.
@@ -43360,8 +43224,7 @@ Voice_Poly_NoteOn_SlotSearch:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xff80
-	jr __jrt_nop_035749
-__jrt_nop_035749:
+	jr Voice_Poly_NoteOn_SlotFound
 
 ; Calls the per-channel setup routine through the table at ROM 0x012159 (index = channel * 4)
 ; with WA = slot, BC = channel, DE = note and velocity pushed, then records the owner byte
@@ -43428,8 +43291,7 @@ Voice_Poly_NoteOn_ReleaseCheck:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xa200
-	jr __jrt_nop_0357D8
-__jrt_nop_0357D8:
+	jr Voice_Poly_NoteOn_ReleaseNext
 
 ; Second half of the release register pair: TG reg 0x20 voice slot <= 0xA280.
 Voice_Poly_NoteOn_ReleaseNext:
@@ -43444,8 +43306,7 @@ Voice_Poly_NoteOn_ReleaseNext:
 	nop
 	set	7, (P6:8)
 	ldw (ToneGen_RegDataPort:24), 0xa280
-	jr __jrt_nop_0357F9
-__jrt_nop_0357F9:
+	jr Voice_Poly_NoteOn_ReleaseDone
 
 ; Clears bit 7 of the owner byte (slot now free) and returns. Only ONE slot is ever released
 ; per note-off -- the loop exits here, it does not continue scanning for duplicates.
@@ -45264,281 +45125,226 @@ DSP_Send_Cmd_Cleanup:
 ; The trace string "<sta>" is the firmware author's own confirmation that this is "start".
 DSP2_SPI_ClockPulseHigh:
 	set	2, (PF:8)
-	jr __jrt_nop_03640F
-__jrt_nop_03640F:
+	jr DSP2_ClkHigh_Nop01
 
 DSP2_ClkHigh_Nop01:
 	nop
-	jr __jrt_nop_036412
-__jrt_nop_036412:
+	jr DSP2_ClkHigh_Nop02
 
 DSP2_ClkHigh_Nop02:
 	nop
-	jr __jrt_nop_036415
-__jrt_nop_036415:
+	jr DSP2_ClkHigh_Nop03
 
 DSP2_ClkHigh_Nop03:
 	nop
-	jr __jrt_nop_036418
-__jrt_nop_036418:
+	jr DSP2_ClkHigh_Nop04
 
 DSP2_ClkHigh_Nop04:
 	nop
-	jr __jrt_nop_03641B
-__jrt_nop_03641B:
+	jr DSP2_ClkHigh_Nop05
 
 DSP2_ClkHigh_Nop05:
 	nop
-	jr __jrt_nop_03641E
-__jrt_nop_03641E:
+	jr DSP2_ClkHigh_Nop06
 
 DSP2_ClkHigh_Nop06:
 	nop
-	jr __jrt_nop_036421
-__jrt_nop_036421:
+	jr DSP2_ClkHigh_Nop07
 
 DSP2_ClkHigh_Nop07:
 	nop
-	jr __jrt_nop_036424
-__jrt_nop_036424:
+	jr DSP2_ClkHigh_Nop08
 
 DSP2_ClkHigh_Nop08:
 	nop
-	jr __jrt_nop_036427
-__jrt_nop_036427:
+	jr DSP2_ClkHigh_Nop09
 
 DSP2_ClkHigh_Nop09:
 	nop
-	jr __jrt_nop_03642A
-__jrt_nop_03642A:
+	jr DSP2_ClkHigh_Nop10
 
 DSP2_ClkHigh_Nop10:
 	nop
-	jr __jrt_nop_03642D
-__jrt_nop_03642D:
+	jr DSP2_ClkHigh_Nop11
 
 DSP2_ClkHigh_Nop11:
 	nop
-	jr __jrt_nop_036430
-__jrt_nop_036430:
+	jr DSP2_ClkHigh_Nop12
 
 DSP2_ClkHigh_Nop12:
 	nop
-	jr __jrt_nop_036433
-__jrt_nop_036433:
+	jr DSP2_ClkHigh_Nop13
 
 DSP2_ClkHigh_Nop13:
 	nop
-	jr __jrt_nop_036436
-__jrt_nop_036436:
+	jr DSP2_ClkHigh_Nop14
 
 DSP2_ClkHigh_Nop14:
 	nop
-	jr __jrt_nop_036439
-__jrt_nop_036439:
+	jr DSP2_ClkHigh_Nop15
 
 DSP2_ClkHigh_Nop15:
 	nop
-	jr __jrt_nop_03643C
-__jrt_nop_03643C:
+	jr DSP2_ClkHigh_Nop16
 
 DSP2_ClkHigh_Nop16:
 	nop
-	jr __jrt_nop_03643F
-__jrt_nop_03643F:
+	jr DSP2_ClkHigh_Nop17
 
 DSP2_ClkHigh_Nop17:
 	nop
-	jr __jrt_nop_036442
-__jrt_nop_036442:
+	jr DSP2_ClkHigh_Nop18
 
 DSP2_ClkHigh_Nop18:
 	nop
-	jr __jrt_nop_036445
-__jrt_nop_036445:
+	jr DSP2_ClkHigh_Nop19
 
 DSP2_ClkHigh_Nop19:
 	nop
 	set	0, (PF:8)
-	jr __jrt_nop_03644B
-__jrt_nop_03644B:
+	jr DSP2_ClkHigh_Nop20
 
 DSP2_ClkHigh_Nop20:
 	nop
 	res	0, (PF:8)
-	jr __jrt_nop_036451
-__jrt_nop_036451:
+	jr DSP2_ClkHigh_Nop21
 
 DSP2_ClkHigh_Nop21:
 	nop
-	jr __jrt_nop_036454
-__jrt_nop_036454:
+	jr DSP2_ClkHigh_Nop22
 
 DSP2_ClkHigh_Nop22:
 	nop
-	jr __jrt_nop_036457
-__jrt_nop_036457:
+	jr DSP2_ClkHigh_Nop23
 
 DSP2_ClkHigh_Nop23:
 	nop
-	jr __jrt_nop_03645A
-__jrt_nop_03645A:
+	jr DSP2_ClkHigh_Nop24
 
 DSP2_ClkHigh_Nop24:
 	nop
-	jr __jrt_nop_03645D
-__jrt_nop_03645D:
+	jr DSP2_ClkHigh_Nop25
 
 DSP2_ClkHigh_Nop25:
 	nop
-	jr __jrt_nop_036460
-__jrt_nop_036460:
+	jr DSP2_ClkHigh_Nop26
 
 DSP2_ClkHigh_Nop26:
 	nop
-	jr __jrt_nop_036463
-__jrt_nop_036463:
+	jr DSP2_ClkHigh_Nop27
 
 DSP2_ClkHigh_Nop27:
 	nop
-	jr __jrt_nop_036466
-__jrt_nop_036466:
+	jr DSP2_ClkHigh_Nop28
 
 DSP2_ClkHigh_Nop28:
 	nop
-	jr __jrt_nop_036469
-__jrt_nop_036469:
+	jr DSP2_ClkHigh_Nop29
 
 DSP2_ClkHigh_Nop29:
 	nop
-	jr __jrt_nop_03646C
-__jrt_nop_03646C:
+	jr DSP2_ClkHigh_Nop30
 
 DSP2_ClkHigh_Nop30:
 	nop
-	jr __jrt_nop_03646F
-__jrt_nop_03646F:
+	jr DSP2_ClkHigh_Nop31
 
 DSP2_ClkHigh_Nop31:
 	nop
-	jr __jrt_nop_036472
-__jrt_nop_036472:
+	jr DSP2_ClkHigh_Nop32
 
 DSP2_ClkHigh_Nop32:
 	nop
-	jr __jrt_nop_036475
-__jrt_nop_036475:
+	jr DSP2_ClkHigh_Nop33
 
 DSP2_ClkHigh_Nop33:
 	nop
-	jr __jrt_nop_036478
-__jrt_nop_036478:
+	jr DSP2_ClkHigh_Nop34
 
 DSP2_ClkHigh_Nop34:
 	nop
-	jr __jrt_nop_03647B
-__jrt_nop_03647B:
+	jr DSP2_ClkHigh_Nop35
 
 DSP2_ClkHigh_Nop35:
 	nop
-	jr __jrt_nop_03647E
-__jrt_nop_03647E:
+	jr DSP2_ClkHigh_Nop36
 
 DSP2_ClkHigh_Nop36:
 	nop
 	res	2, (PF:8)
-	jr __jrt_nop_036484
-__jrt_nop_036484:
+	jr DSP2_ClkHigh_Nop37
 
 DSP2_ClkHigh_Nop37:
 	nop
-	jr __jrt_nop_036487
-__jrt_nop_036487:
+	jr DSP2_ClkHigh_Nop38
 
 DSP2_ClkHigh_Nop38:
 	nop
-	jr __jrt_nop_03648A
-__jrt_nop_03648A:
+	jr DSP2_ClkHigh_Nop39
 
 DSP2_ClkHigh_Nop39:
 	nop
-	jr __jrt_nop_03648D
-__jrt_nop_03648D:
+	jr DSP2_ClkHigh_Nop40
 
 DSP2_ClkHigh_Nop40:
 	nop
-	jr __jrt_nop_036490
-__jrt_nop_036490:
+	jr DSP2_ClkHigh_Nop41
 
 DSP2_ClkHigh_Nop41:
 	nop
-	jr __jrt_nop_036493
-__jrt_nop_036493:
+	jr DSP2_ClkHigh_Nop42
 
 DSP2_ClkHigh_Nop42:
 	nop
-	jr __jrt_nop_036496
-__jrt_nop_036496:
+	jr DSP2_ClkHigh_Nop43
 
 DSP2_ClkHigh_Nop43:
 	nop
-	jr __jrt_nop_036499
-__jrt_nop_036499:
+	jr DSP2_ClkHigh_Nop44
 
 DSP2_ClkHigh_Nop44:
 	nop
-	jr __jrt_nop_03649C
-__jrt_nop_03649C:
+	jr DSP2_ClkHigh_Nop45
 
 DSP2_ClkHigh_Nop45:
 	nop
-	jr __jrt_nop_03649F
-__jrt_nop_03649F:
+	jr DSP2_ClkHigh_Nop46
 
 DSP2_ClkHigh_Nop46:
 	nop
-	jr __jrt_nop_0364A2
-__jrt_nop_0364A2:
+	jr DSP2_ClkHigh_Nop47
 
 DSP2_ClkHigh_Nop47:
 	nop
-	jr __jrt_nop_0364A5
-__jrt_nop_0364A5:
+	jr DSP2_ClkHigh_Nop48
 
 DSP2_ClkHigh_Nop48:
 	nop
-	jr __jrt_nop_0364A8
-__jrt_nop_0364A8:
+	jr DSP2_ClkHigh_Nop49
 
 DSP2_ClkHigh_Nop49:
 	nop
-	jr __jrt_nop_0364AB
-__jrt_nop_0364AB:
+	jr DSP2_ClkHigh_Nop50
 
 DSP2_ClkHigh_Nop50:
 	nop
-	jr __jrt_nop_0364AE
-__jrt_nop_0364AE:
+	jr DSP2_ClkHigh_Nop51
 
 DSP2_ClkHigh_Nop51:
 	nop
-	jr __jrt_nop_0364B1
-__jrt_nop_0364B1:
+	jr DSP2_ClkHigh_Nop52
 
 DSP2_ClkHigh_Nop52:
 	nop
-	jr __jrt_nop_0364B4
-__jrt_nop_0364B4:
+	jr DSP2_ClkHigh_Nop53
 
 DSP2_ClkHigh_Nop53:
 	nop
-	jr __jrt_nop_0364B7
-__jrt_nop_0364B7:
+	jr DSP2_ClkHigh_Nop54
 
 DSP2_ClkHigh_Nop54:
 	nop
-	jr __jrt_nop_0364BA
-__jrt_nop_0364BA:
+	jr DSP2_ClkHigh_Nop55
 
 DSP2_ClkHigh_Nop55:
 	nop
@@ -45552,675 +45358,541 @@ DSP2_ClkHigh_Nop55:
 DSP2_SPI_BusIdle:
 	res	2, (PF:8)
 	res	0, (PF:8)
-	jr __jrt_nop_0364CC
-__jrt_nop_0364CC:
+	jr DSP2_BusIdle_Nop01
 
 DSP2_BusIdle_Nop01:
 	nop
-	jr __jrt_nop_0364CF
-__jrt_nop_0364CF:
+	jr DSP2_BusIdle_Nop02
 
 DSP2_BusIdle_Nop02:
 	nop
-	jr __jrt_nop_0364D2
-__jrt_nop_0364D2:
+	jr DSP2_BusIdle_Nop03
 
 DSP2_BusIdle_Nop03:
 	nop
-	jr __jrt_nop_0364D5
-__jrt_nop_0364D5:
+	jr DSP2_BusIdle_Nop04
 
 DSP2_BusIdle_Nop04:
 	nop
-	jr __jrt_nop_0364D8
-__jrt_nop_0364D8:
+	jr DSP2_BusIdle_Nop05
 
 DSP2_BusIdle_Nop05:
 	nop
-	jr __jrt_nop_0364DB
-__jrt_nop_0364DB:
+	jr DSP2_BusIdle_Nop06
 
 DSP2_BusIdle_Nop06:
 	nop
-	jr __jrt_nop_0364DE
-__jrt_nop_0364DE:
+	jr DSP2_BusIdle_Nop07
 
 DSP2_BusIdle_Nop07:
 	nop
-	jr __jrt_nop_0364E1
-__jrt_nop_0364E1:
+	jr DSP2_BusIdle_Nop08
 
 DSP2_BusIdle_Nop08:
 	nop
-	jr __jrt_nop_0364E4
-__jrt_nop_0364E4:
+	jr DSP2_BusIdle_Nop09
 
 DSP2_BusIdle_Nop09:
 	nop
-	jr __jrt_nop_0364E7
-__jrt_nop_0364E7:
+	jr DSP2_BusIdle_Nop10
 
 DSP2_BusIdle_Nop10:
 	nop
-	jr __jrt_nop_0364EA
-__jrt_nop_0364EA:
+	jr DSP2_BusIdle_Nop11
 
 DSP2_BusIdle_Nop11:
 	nop
-	jr __jrt_nop_0364ED
-__jrt_nop_0364ED:
+	jr DSP2_BusIdle_Nop12
 
 DSP2_BusIdle_Nop12:
 	nop
-	jr __jrt_nop_0364F0
-__jrt_nop_0364F0:
+	jr DSP2_BusIdle_Nop13
 
 DSP2_BusIdle_Nop13:
 	nop
-	jr __jrt_nop_0364F3
-__jrt_nop_0364F3:
+	jr DSP2_BusIdle_Nop14
 
 DSP2_BusIdle_Nop14:
 	nop
-	jr __jrt_nop_0364F6
-__jrt_nop_0364F6:
+	jr DSP2_BusIdle_Nop15
 
 DSP2_BusIdle_Nop15:
 	nop
-	jr __jrt_nop_0364F9
-__jrt_nop_0364F9:
+	jr DSP2_BusIdle_Nop16
 
 DSP2_BusIdle_Nop16:
 	nop
-	jr __jrt_nop_0364FC
-__jrt_nop_0364FC:
+	jr DSP2_BusIdle_Nop17
 
 DSP2_BusIdle_Nop17:
 	nop
-	jr __jrt_nop_0364FF
-__jrt_nop_0364FF:
+	jr DSP2_BusIdle_Nop18
 
 DSP2_BusIdle_Nop18:
 	nop
-	jr __jrt_nop_036502
-__jrt_nop_036502:
+	jr DSP2_BusIdle_Nop19
 
 DSP2_BusIdle_Nop19:
 	nop
 	set	2, (PF:8)
-	jr __jrt_nop_036508
-__jrt_nop_036508:
+	jr DSP2_BusIdle_Nop20
 
 DSP2_BusIdle_Nop20:
 	nop
-	jr __jrt_nop_03650B
-__jrt_nop_03650B:
+	jr DSP2_BusIdle_Nop21
 
 DSP2_BusIdle_Nop21:
 	nop
-	jr __jrt_nop_03650E
-__jrt_nop_03650E:
+	jr DSP2_BusIdle_Nop22
 
 DSP2_BusIdle_Nop22:
 	nop
-	jr __jrt_nop_036511
-__jrt_nop_036511:
+	jr DSP2_BusIdle_Nop23
 
 DSP2_BusIdle_Nop23:
 	nop
-	jr __jrt_nop_036514
-__jrt_nop_036514:
+	jr DSP2_BusIdle_Nop24
 
 DSP2_BusIdle_Nop24:
 	nop
-	jr __jrt_nop_036517
-__jrt_nop_036517:
+	jr DSP2_BusIdle_Nop25
 
 DSP2_BusIdle_Nop25:
 	nop
-	jr __jrt_nop_03651A
-__jrt_nop_03651A:
+	jr DSP2_BusIdle_Nop26
 
 DSP2_BusIdle_Nop26:
 	nop
-	jr __jrt_nop_03651D
-__jrt_nop_03651D:
+	jr DSP2_BusIdle_Nop27
 
 DSP2_BusIdle_Nop27:
 	nop
-	jr __jrt_nop_036520
-__jrt_nop_036520:
+	jr DSP2_BusIdle_Nop28
 
 DSP2_BusIdle_Nop28:
 	nop
-	jr __jrt_nop_036523
-__jrt_nop_036523:
+	jr DSP2_BusIdle_Nop29
 
 DSP2_BusIdle_Nop29:
 	nop
-	jr __jrt_nop_036526
-__jrt_nop_036526:
+	jr DSP2_BusIdle_Nop30
 
 DSP2_BusIdle_Nop30:
 	nop
-	jr __jrt_nop_036529
-__jrt_nop_036529:
+	jr DSP2_BusIdle_Nop31
 
 DSP2_BusIdle_Nop31:
 	nop
-	jr __jrt_nop_03652C
-__jrt_nop_03652C:
+	jr DSP2_BusIdle_Nop32
 
 DSP2_BusIdle_Nop32:
 	nop
-	jr __jrt_nop_03652F
-__jrt_nop_03652F:
+	jr DSP2_BusIdle_Nop33
 
 DSP2_BusIdle_Nop33:
 	nop
-	jr __jrt_nop_036532
-__jrt_nop_036532:
+	jr DSP2_BusIdle_Nop34
 
 DSP2_BusIdle_Nop34:
 	nop
-	jr __jrt_nop_036535
-__jrt_nop_036535:
+	jr DSP2_BusIdle_Nop35
 
 DSP2_BusIdle_Nop35:
 	nop
-	jr __jrt_nop_036538
-__jrt_nop_036538:
+	jr DSP2_BusIdle_Nop36
 
 DSP2_BusIdle_Nop36:
 	nop
-	jr __jrt_nop_03653B
-__jrt_nop_03653B:
+	jr DSP2_BusIdle_Nop37
 
 DSP2_BusIdle_Nop37:
 	nop
-	jr __jrt_nop_03653E
-__jrt_nop_03653E:
+	jr DSP2_BusIdle_Nop38
 
 DSP2_BusIdle_Nop38:
 	nop
 	set	0, (PF:8)
-	jr __jrt_nop_036544
-__jrt_nop_036544:
+	jr DSP2_BusIdle_Nop39
 
 DSP2_BusIdle_Nop39:
 	nop
-	jr __jrt_nop_036547
-__jrt_nop_036547:
+	jr DSP2_BusIdle_Nop40
 
 DSP2_BusIdle_Nop40:
 	nop
-	jr __jrt_nop_03654A
-__jrt_nop_03654A:
+	jr DSP2_BusIdle_Nop41
 
 DSP2_BusIdle_Nop41:
 	nop
-	jr __jrt_nop_03654D
-__jrt_nop_03654D:
+	jr DSP2_BusIdle_Nop42
 
 DSP2_BusIdle_Nop42:
 	nop
-	jr __jrt_nop_036550
-__jrt_nop_036550:
+	jr DSP2_BusIdle_Nop43
 
 DSP2_BusIdle_Nop43:
 	nop
-	jr __jrt_nop_036553
-__jrt_nop_036553:
+	jr DSP2_BusIdle_Nop44
 
 DSP2_BusIdle_Nop44:
 	nop
-	jr __jrt_nop_036556
-__jrt_nop_036556:
+	jr DSP2_BusIdle_Nop45
 
 DSP2_BusIdle_Nop45:
 	nop
-	jr __jrt_nop_036559
-__jrt_nop_036559:
+	jr DSP2_BusIdle_Nop46
 
 DSP2_BusIdle_Nop46:
 	nop
-	jr __jrt_nop_03655C
-__jrt_nop_03655C:
+	jr DSP2_BusIdle_Nop47
 
 DSP2_BusIdle_Nop47:
 	nop
-	jr __jrt_nop_03655F
-__jrt_nop_03655F:
+	jr DSP2_BusIdle_Nop48
 
 DSP2_BusIdle_Nop48:
 	nop
-	jr __jrt_nop_036562
-__jrt_nop_036562:
+	jr DSP2_BusIdle_Nop49
 
 DSP2_BusIdle_Nop49:
 	nop
-	jr __jrt_nop_036565
-__jrt_nop_036565:
+	jr DSP2_BusIdle_Nop50
 
 DSP2_BusIdle_Nop50:
 	nop
-	jr __jrt_nop_036568
-__jrt_nop_036568:
+	jr DSP2_BusIdle_Nop51
 
 DSP2_BusIdle_Nop51:
 	nop
-	jr __jrt_nop_03656B
-__jrt_nop_03656B:
+	jr DSP2_BusIdle_Nop52
 
 DSP2_BusIdle_Nop52:
 	nop
-	jr __jrt_nop_03656E
-__jrt_nop_03656E:
+	jr DSP2_BusIdle_Nop53
 
 DSP2_BusIdle_Nop53:
 	nop
-	jr __jrt_nop_036571
-__jrt_nop_036571:
+	jr DSP2_BusIdle_Nop54
 
 DSP2_BusIdle_Nop54:
 	nop
-	jr __jrt_nop_036574
-__jrt_nop_036574:
+	jr DSP2_BusIdle_Nop55
 
 DSP2_BusIdle_Nop55:
 	nop
-	jr __jrt_nop_036577
-__jrt_nop_036577:
+	jr DSP2_BusIdle_Nop56
 
 DSP2_BusIdle_Nop56:
 	nop
-	jr __jrt_nop_03657A
-__jrt_nop_03657A:
+	jr DSP2_BusIdle_Nop57
 
 DSP2_BusIdle_Nop57:
 	nop
-	jr __jrt_nop_03657D
-__jrt_nop_03657D:
+	jr DSP2_BusIdle_Nop58
 
 DSP2_BusIdle_Nop58:
 	nop
-	jr __jrt_nop_036580
-__jrt_nop_036580:
+	jr DSP2_BusIdle_Nop59
 
 DSP2_BusIdle_Nop59:
 	nop
-	jr __jrt_nop_036583
-__jrt_nop_036583:
+	jr DSP2_BusIdle_Nop60
 
 DSP2_BusIdle_Nop60:
 	nop
-	jr __jrt_nop_036586
-__jrt_nop_036586:
+	jr DSP2_BusIdle_Nop61
 
 DSP2_BusIdle_Nop61:
 	nop
-	jr __jrt_nop_036589
-__jrt_nop_036589:
+	jr DSP2_BusIdle_Nop62
 
 DSP2_BusIdle_Nop62:
 	nop
-	jr __jrt_nop_03658C
-__jrt_nop_03658C:
+	jr DSP2_BusIdle_Nop63
 
 DSP2_BusIdle_Nop63:
 	nop
-	jr __jrt_nop_03658F
-__jrt_nop_03658F:
+	jr DSP2_BusIdle_Nop64
 
 DSP2_BusIdle_Nop64:
 	nop
-	jr __jrt_nop_036592
-__jrt_nop_036592:
+	jr DSP2_BusIdle_Nop65
 
 DSP2_BusIdle_Nop65:
 	nop
-	jr __jrt_nop_036595
-__jrt_nop_036595:
+	jr DSP2_BusIdle_Nop66
 
 DSP2_BusIdle_Nop66:
 	nop
-	jr __jrt_nop_036598
-__jrt_nop_036598:
+	jr DSP2_BusIdle_Nop67
 
 DSP2_BusIdle_Nop67:
 	nop
-	jr __jrt_nop_03659B
-__jrt_nop_03659B:
+	jr DSP2_BusIdle_Nop68
 
 DSP2_BusIdle_Nop68:
 	nop
-	jr __jrt_nop_03659E
-__jrt_nop_03659E:
+	jr DSP2_BusIdle_Nop69
 
 DSP2_BusIdle_Nop69:
 	nop
-	jr __jrt_nop_0365A1
-__jrt_nop_0365A1:
+	jr DSP2_BusIdle_Nop70
 
 DSP2_BusIdle_Nop70:
 	nop
-	jr __jrt_nop_0365A4
-__jrt_nop_0365A4:
+	jr DSP2_BusIdle_Nop71
 
 DSP2_BusIdle_Nop71:
 	nop
-	jr __jrt_nop_0365A7
-__jrt_nop_0365A7:
+	jr DSP2_BusIdle_Nop72
 
 DSP2_BusIdle_Nop72:
 	nop
-	jr __jrt_nop_0365AA
-__jrt_nop_0365AA:
+	jr DSP2_BusIdle_Nop73
 
 DSP2_BusIdle_Nop73:
 	nop
-	jr __jrt_nop_0365AD
-__jrt_nop_0365AD:
+	jr DSP2_BusIdle_Nop74
 
 DSP2_BusIdle_Nop74:
 	nop
-	jr __jrt_nop_0365B0
-__jrt_nop_0365B0:
+	jr DSP2_BusIdle_Nop75
 
 DSP2_BusIdle_Nop75:
 	nop
-	jr __jrt_nop_0365B3
-__jrt_nop_0365B3:
+	jr DSP2_BusIdle_Nop76
 
 DSP2_BusIdle_Nop76:
 	nop
-	jr __jrt_nop_0365B6
-__jrt_nop_0365B6:
+	jr DSP2_BusIdle_Nop77
 
 DSP2_BusIdle_Nop77:
 	nop
-	jr __jrt_nop_0365B9
-__jrt_nop_0365B9:
+	jr DSP2_BusIdle_Nop78
 
 DSP2_BusIdle_Nop78:
 	nop
-	jr __jrt_nop_0365BC
-__jrt_nop_0365BC:
+	jr DSP2_BusIdle_Nop79
 
 DSP2_BusIdle_Nop79:
 	nop
-	jr __jrt_nop_0365BF
-__jrt_nop_0365BF:
+	jr DSP2_BusIdle_Nop80
 
 DSP2_BusIdle_Nop80:
 	nop
-	jr __jrt_nop_0365C2
-__jrt_nop_0365C2:
+	jr DSP2_BusIdle_Nop81
 
 DSP2_BusIdle_Nop81:
 	nop
-	jr __jrt_nop_0365C5
-__jrt_nop_0365C5:
+	jr DSP2_BusIdle_Nop82
 
 DSP2_BusIdle_Nop82:
 	nop
-	jr __jrt_nop_0365C8
-__jrt_nop_0365C8:
+	jr DSP2_BusIdle_Nop83
 
 DSP2_BusIdle_Nop83:
 	nop
-	jr __jrt_nop_0365CB
-__jrt_nop_0365CB:
+	jr DSP2_BusIdle_Nop84
 
 DSP2_BusIdle_Nop84:
 	nop
-	jr __jrt_nop_0365CE
-__jrt_nop_0365CE:
+	jr DSP2_BusIdle_Nop85
 
 DSP2_BusIdle_Nop85:
 	nop
-	jr __jrt_nop_0365D1
-__jrt_nop_0365D1:
+	jr DSP2_BusIdle_Nop86
 
 DSP2_BusIdle_Nop86:
 	nop
-	jr __jrt_nop_0365D4
-__jrt_nop_0365D4:
+	jr DSP2_BusIdle_Nop87
 
 DSP2_BusIdle_Nop87:
 	nop
-	jr __jrt_nop_0365D7
-__jrt_nop_0365D7:
+	jr DSP2_BusIdle_Nop88
 
 DSP2_BusIdle_Nop88:
 	nop
-	jr __jrt_nop_0365DA
-__jrt_nop_0365DA:
+	jr DSP2_BusIdle_Nop89
 
 DSP2_BusIdle_Nop89:
 	nop
-	jr __jrt_nop_0365DD
-__jrt_nop_0365DD:
+	jr DSP2_BusIdle_Nop90
 
 DSP2_BusIdle_Nop90:
 	nop
-	jr __jrt_nop_0365E0
-__jrt_nop_0365E0:
+	jr DSP2_BusIdle_Nop91
 
 DSP2_BusIdle_Nop91:
 	nop
-	jr __jrt_nop_0365E3
-__jrt_nop_0365E3:
+	jr DSP2_BusIdle_Nop92
 
 DSP2_BusIdle_Nop92:
 	nop
-	jr __jrt_nop_0365E6
-__jrt_nop_0365E6:
+	jr DSP2_BusIdle_Nop93
 
 DSP2_BusIdle_Nop93:
 	nop
-	jr __jrt_nop_0365E9
-__jrt_nop_0365E9:
+	jr DSP2_BusIdle_Nop94
 
 DSP2_BusIdle_Nop94:
 	nop
-	jr __jrt_nop_0365EC
-__jrt_nop_0365EC:
+	jr DSP2_BusIdle_Nop95
 
 DSP2_BusIdle_Nop95:
 	nop
-	jr __jrt_nop_0365EF
-__jrt_nop_0365EF:
+	jr DSP2_BusIdle_Nop96
 
 DSP2_BusIdle_Nop96:
 	nop
-	jr __jrt_nop_0365F2
-__jrt_nop_0365F2:
+	jr DSP2_BusIdle_Nop97
 
 DSP2_BusIdle_Nop97:
 	nop
-	jr __jrt_nop_0365F5
-__jrt_nop_0365F5:
+	jr DSP2_BusIdle_Nop98
 
 DSP2_BusIdle_Nop98:
 	nop
-	jr __jrt_nop_0365F8
-__jrt_nop_0365F8:
+	jr DSP2_BusIdle_Nop99
 
 DSP2_BusIdle_Nop99:
 	nop
-	jr __jrt_nop_0365FB
-__jrt_nop_0365FB:
+	jr DSP2_BusIdle_Nop100
 
 DSP2_BusIdle_Nop100:
 	nop
-	jr __jrt_nop_0365FE
-__jrt_nop_0365FE:
+	jr DSP2_BusIdle_Nop101
 
 DSP2_BusIdle_Nop101:
 	nop
-	jr __jrt_nop_036601
-__jrt_nop_036601:
+	jr DSP2_BusIdle_Nop102
 
 DSP2_BusIdle_Nop102:
 	nop
-	jr __jrt_nop_036604
-__jrt_nop_036604:
+	jr DSP2_BusIdle_Nop103
 
 DSP2_BusIdle_Nop103:
 	nop
-	jr __jrt_nop_036607
-__jrt_nop_036607:
+	jr DSP2_BusIdle_Nop104
 
 DSP2_BusIdle_Nop104:
 	nop
-	jr __jrt_nop_03660A
-__jrt_nop_03660A:
+	jr DSP2_BusIdle_Nop105
 
 DSP2_BusIdle_Nop105:
 	nop
-	jr __jrt_nop_03660D
-__jrt_nop_03660D:
+	jr DSP2_BusIdle_Nop106
 
 DSP2_BusIdle_Nop106:
 	nop
-	jr __jrt_nop_036610
-__jrt_nop_036610:
+	jr DSP2_BusIdle_Nop107
 
 DSP2_BusIdle_Nop107:
 	nop
-	jr __jrt_nop_036613
-__jrt_nop_036613:
+	jr DSP2_BusIdle_Nop108
 
 DSP2_BusIdle_Nop108:
 	nop
-	jr __jrt_nop_036616
-__jrt_nop_036616:
+	jr DSP2_BusIdle_Nop109
 
 DSP2_BusIdle_Nop109:
 	nop
-	jr __jrt_nop_036619
-__jrt_nop_036619:
+	jr DSP2_BusIdle_Nop110
 
 DSP2_BusIdle_Nop110:
 	nop
-	jr __jrt_nop_03661C
-__jrt_nop_03661C:
+	jr DSP2_BusIdle_Nop111
 
 DSP2_BusIdle_Nop111:
 	nop
-	jr __jrt_nop_03661F
-__jrt_nop_03661F:
+	jr DSP2_BusIdle_Nop112
 
 DSP2_BusIdle_Nop112:
 	nop
-	jr __jrt_nop_036622
-__jrt_nop_036622:
+	jr DSP2_BusIdle_Nop113
 
 DSP2_BusIdle_Nop113:
 	nop
-	jr __jrt_nop_036625
-__jrt_nop_036625:
+	jr DSP2_BusIdle_Nop114
 
 DSP2_BusIdle_Nop114:
 	nop
-	jr __jrt_nop_036628
-__jrt_nop_036628:
+	jr DSP2_BusIdle_Nop115
 
 DSP2_BusIdle_Nop115:
 	nop
-	jr __jrt_nop_03662B
-__jrt_nop_03662B:
+	jr DSP2_BusIdle_Nop116
 
 DSP2_BusIdle_Nop116:
 	nop
-	jr __jrt_nop_03662E
-__jrt_nop_03662E:
+	jr DSP2_BusIdle_Nop117
 
 DSP2_BusIdle_Nop117:
 	nop
-	jr __jrt_nop_036631
-__jrt_nop_036631:
+	jr DSP2_BusIdle_Nop118
 
 DSP2_BusIdle_Nop118:
 	nop
-	jr __jrt_nop_036634
-__jrt_nop_036634:
+	jr DSP2_BusIdle_Nop119
 
 DSP2_BusIdle_Nop119:
 	nop
-	jr __jrt_nop_036637
-__jrt_nop_036637:
+	jr DSP2_BusIdle_Nop120
 
 DSP2_BusIdle_Nop120:
 	nop
-	jr __jrt_nop_03663A
-__jrt_nop_03663A:
+	jr DSP2_BusIdle_Nop121
 
 DSP2_BusIdle_Nop121:
 	nop
-	jr __jrt_nop_03663D
-__jrt_nop_03663D:
+	jr DSP2_BusIdle_Nop122
 
 DSP2_BusIdle_Nop122:
 	nop
-	jr __jrt_nop_036640
-__jrt_nop_036640:
+	jr DSP2_BusIdle_Nop123
 
 DSP2_BusIdle_Nop123:
 	nop
-	jr __jrt_nop_036643
-__jrt_nop_036643:
+	jr DSP2_BusIdle_Nop124
 
 DSP2_BusIdle_Nop124:
 	nop
-	jr __jrt_nop_036646
-__jrt_nop_036646:
+	jr DSP2_BusIdle_Nop125
 
 DSP2_BusIdle_Nop125:
 	nop
-	jr __jrt_nop_036649
-__jrt_nop_036649:
+	jr DSP2_BusIdle_Nop126
 
 DSP2_BusIdle_Nop126:
 	nop
-	jr __jrt_nop_03664C
-__jrt_nop_03664C:
+	jr DSP2_BusIdle_Nop127
 
 DSP2_BusIdle_Nop127:
 	nop
-	jr __jrt_nop_03664F
-__jrt_nop_03664F:
+	jr DSP2_BusIdle_Nop128
 
 DSP2_BusIdle_Nop128:
 	nop
-	jr __jrt_nop_036652
-__jrt_nop_036652:
+	jr DSP2_BusIdle_Nop129
 
 DSP2_BusIdle_Nop129:
 	nop
-	jr __jrt_nop_036655
-__jrt_nop_036655:
+	jr DSP2_BusIdle_Nop130
 
 DSP2_BusIdle_Nop130:
 	nop
-	jr __jrt_nop_036658
-__jrt_nop_036658:
+	jr DSP2_BusIdle_Nop131
 
 DSP2_BusIdle_Nop131:
 	nop
-	jr __jrt_nop_03665B
-__jrt_nop_03665B:
+	jr DSP2_BusIdle_Nop132
 
 DSP2_BusIdle_Nop132:
 	nop
-	jr __jrt_nop_03665E
-__jrt_nop_03665E:
+	jr DSP2_BusIdle_Nop133
 
 DSP2_BusIdle_Nop133:
 	nop
-	jr __jrt_nop_036661
-__jrt_nop_036661:
+	jr DSP2_BusIdle_Nop134
 
 DSP2_BusIdle_Nop134:
 	nop
@@ -46270,186 +45942,150 @@ DSP2_SendCmd_BitClear:
 
 ; Join point; the shift and the clock-high edge follow one nop later.
 DSP2_SendCmd_BitSet_Done:
-	jr __jrt_nop_0366A6
-__jrt_nop_0366A6:
+	jr DSP2_SendCmd_ClkHigh_Nop01
 
 DSP2_SendCmd_ClkHigh_Nop01:
 	nop
 	sll_erpb 0xFB, 0x01
 	set	2, (PF:8)
-	jr __jrt_nop_0366B0
-__jrt_nop_0366B0:
+	jr DSP2_SendCmd_ClkHigh_Nop02
 
 DSP2_SendCmd_ClkHigh_Nop02:
 	nop
-	jr __jrt_nop_0366B3
-__jrt_nop_0366B3:
+	jr DSP2_SendCmd_ClkHigh_Nop03
 
 DSP2_SendCmd_ClkHigh_Nop03:
 	nop
-	jr __jrt_nop_0366B6
-__jrt_nop_0366B6:
+	jr DSP2_SendCmd_ClkHigh_Nop04
 
 DSP2_SendCmd_ClkHigh_Nop04:
 	nop
-	jr __jrt_nop_0366B9
-__jrt_nop_0366B9:
+	jr DSP2_SendCmd_ClkHigh_Nop05
 
 DSP2_SendCmd_ClkHigh_Nop05:
 	nop
-	jr __jrt_nop_0366BC
-__jrt_nop_0366BC:
+	jr DSP2_SendCmd_ClkHigh_Nop06
 
 DSP2_SendCmd_ClkHigh_Nop06:
 	nop
-	jr __jrt_nop_0366BF
-__jrt_nop_0366BF:
+	jr DSP2_SendCmd_ClkHigh_Nop07
 
 DSP2_SendCmd_ClkHigh_Nop07:
 	nop
-	jr __jrt_nop_0366C2
-__jrt_nop_0366C2:
+	jr DSP2_SendCmd_ClkHigh_Nop08
 
 DSP2_SendCmd_ClkHigh_Nop08:
 	nop
-	jr __jrt_nop_0366C5
-__jrt_nop_0366C5:
+	jr DSP2_SendCmd_ClkHigh_Nop09
 
 DSP2_SendCmd_ClkHigh_Nop09:
 	nop
-	jr __jrt_nop_0366C8
-__jrt_nop_0366C8:
+	jr DSP2_SendCmd_ClkHigh_Nop10
 
 DSP2_SendCmd_ClkHigh_Nop10:
 	nop
-	jr __jrt_nop_0366CB
-__jrt_nop_0366CB:
+	jr DSP2_SendCmd_ClkHigh_Nop11
 
 DSP2_SendCmd_ClkHigh_Nop11:
 	nop
-	jr __jrt_nop_0366CE
-__jrt_nop_0366CE:
+	jr DSP2_SendCmd_ClkHigh_Nop12
 
 DSP2_SendCmd_ClkHigh_Nop12:
 	nop
-	jr __jrt_nop_0366D1
-__jrt_nop_0366D1:
+	jr DSP2_SendCmd_ClkHigh_Nop13
 
 DSP2_SendCmd_ClkHigh_Nop13:
 	nop
-	jr __jrt_nop_0366D4
-__jrt_nop_0366D4:
+	jr DSP2_SendCmd_ClkHigh_Nop14
 
 DSP2_SendCmd_ClkHigh_Nop14:
 	nop
-	jr __jrt_nop_0366D7
-__jrt_nop_0366D7:
+	jr DSP2_SendCmd_ClkHigh_Nop15
 
 DSP2_SendCmd_ClkHigh_Nop15:
 	nop
-	jr __jrt_nop_0366DA
-__jrt_nop_0366DA:
+	jr DSP2_SendCmd_ClkHigh_Nop16
 
 DSP2_SendCmd_ClkHigh_Nop16:
 	nop
-	jr __jrt_nop_0366DD
-__jrt_nop_0366DD:
+	jr DSP2_SendCmd_ClkLow_Nop01
 
 DSP2_SendCmd_ClkLow_Nop01:
 	nop
 	res	2, (PF:8)
-	jr __jrt_nop_0366E3
-__jrt_nop_0366E3:
+	jr DSP2_SendCmd_ClkLow_Nop02
 
 DSP2_SendCmd_ClkLow_Nop02:
 	nop
-	jr __jrt_nop_0366E6
-__jrt_nop_0366E6:
+	jr DSP2_SendCmd_ClkLow_Nop03
 
 DSP2_SendCmd_ClkLow_Nop03:
 	nop
-	jr __jrt_nop_0366E9
-__jrt_nop_0366E9:
+	jr DSP2_SendCmd_ClkLow_Nop04
 
 DSP2_SendCmd_ClkLow_Nop04:
 	nop
-	jr __jrt_nop_0366EC
-__jrt_nop_0366EC:
+	jr DSP2_SendCmd_ClkLow_Nop05
 
 DSP2_SendCmd_ClkLow_Nop05:
 	nop
-	jr __jrt_nop_0366EF
-__jrt_nop_0366EF:
+	jr DSP2_SendCmd_ClkLow_Nop06
 
 DSP2_SendCmd_ClkLow_Nop06:
 	nop
-	jr __jrt_nop_0366F2
-__jrt_nop_0366F2:
+	jr DSP2_SendCmd_ClkLow_Nop07
 
 DSP2_SendCmd_ClkLow_Nop07:
 	nop
-	jr __jrt_nop_0366F5
-__jrt_nop_0366F5:
+	jr DSP2_SendCmd_ClkLow_Nop08
 
 DSP2_SendCmd_ClkLow_Nop08:
 	nop
-	jr __jrt_nop_0366F8
-__jrt_nop_0366F8:
+	jr DSP2_SendCmd_ClkLow_Nop09
 
 DSP2_SendCmd_ClkLow_Nop09:
 	nop
-	jr __jrt_nop_0366FB
-__jrt_nop_0366FB:
+	jr DSP2_SendCmd_ClkLow_Nop10
 
 DSP2_SendCmd_ClkLow_Nop10:
 	nop
-	jr __jrt_nop_0366FE
-__jrt_nop_0366FE:
+	jr DSP2_SendCmd_ClkLow_Nop11
 
 DSP2_SendCmd_ClkLow_Nop11:
 	nop
-	jr __jrt_nop_036701
-__jrt_nop_036701:
+	jr DSP2_SendCmd_ClkLow_Nop12
 
 DSP2_SendCmd_ClkLow_Nop12:
 	nop
-	jr __jrt_nop_036704
-__jrt_nop_036704:
+	jr DSP2_SendCmd_ClkLow_Nop13
 
 DSP2_SendCmd_ClkLow_Nop13:
 	nop
-	jr __jrt_nop_036707
-__jrt_nop_036707:
+	jr DSP2_SendCmd_ClkLow_Nop14
 
 DSP2_SendCmd_ClkLow_Nop14:
 	nop
-	jr __jrt_nop_03670A
-__jrt_nop_03670A:
+	jr DSP2_SendCmd_ClkLow_Nop15
 
 DSP2_SendCmd_ClkLow_Nop15:
 	nop
-	jr __jrt_nop_03670D
-__jrt_nop_03670D:
+	jr DSP2_SendCmd_ClkLow_Nop16
 
 DSP2_SendCmd_ClkLow_Nop16:
 	nop
-	jr __jrt_nop_036710
-__jrt_nop_036710:
+	jr DSP2_SendCmd_ClkLow_Nop17
 
 DSP2_SendCmd_ClkLow_Nop17:
 	nop
-	jr __jrt_nop_036713
-__jrt_nop_036713:
+	jr DSP2_SendCmd_ClkLow_Nop18
 
 DSP2_SendCmd_ClkLow_Nop18:
 	nop
-	jr __jrt_nop_036716
-__jrt_nop_036716:
+	jr DSP2_SendCmd_ClkLow_Nop19
 
 DSP2_SendCmd_ClkLow_Nop19:
 	nop
-	jr __jrt_nop_036719
-__jrt_nop_036719:
+	jr DSP2_SendCmd_ClkLow_Nop20
 
 DSP2_SendCmd_ClkLow_Nop20:
 	nop
@@ -46458,267 +46094,215 @@ DSP2_SendCmd_ClkLow_Nop20:
 
 ; The 9th (acknowledge) clock pulse after the 8 data bits.
 DSP2_SendCmd_PostLoop_Entry:
-	jr __jrt_nop_036723
-__jrt_nop_036723:
+	jr DSP2_SendCmd_PostLoop_Nop01
 
 DSP2_SendCmd_PostLoop_Nop01:
 	nop
 	set	2, (PF:8)
-	jr __jrt_nop_036729
-__jrt_nop_036729:
+	jr DSP2_SendCmd_PostLoop_Nop02
 
 DSP2_SendCmd_PostLoop_Nop02:
 	nop
-	jr __jrt_nop_03672C
-__jrt_nop_03672C:
+	jr DSP2_SendCmd_PostLoop_Nop03
 
 DSP2_SendCmd_PostLoop_Nop03:
 	nop
-	jr __jrt_nop_03672F
-__jrt_nop_03672F:
+	jr DSP2_SendCmd_PostLoop_Nop04
 
 DSP2_SendCmd_PostLoop_Nop04:
 	nop
-	jr __jrt_nop_036732
-__jrt_nop_036732:
+	jr DSP2_SendCmd_PostLoop_Nop05
 
 DSP2_SendCmd_PostLoop_Nop05:
 	nop
-	jr __jrt_nop_036735
-__jrt_nop_036735:
+	jr DSP2_SendCmd_PostLoop_Nop06
 
 DSP2_SendCmd_PostLoop_Nop06:
 	nop
-	jr __jrt_nop_036738
-__jrt_nop_036738:
+	jr DSP2_SendCmd_PostLoop_Nop07
 
 DSP2_SendCmd_PostLoop_Nop07:
 	nop
-	jr __jrt_nop_03673B
-__jrt_nop_03673B:
+	jr DSP2_SendCmd_PostLoop_Nop08
 
 DSP2_SendCmd_PostLoop_Nop08:
 	nop
-	jr __jrt_nop_03673E
-__jrt_nop_03673E:
+	jr DSP2_SendCmd_PostLoop_Nop09
 
 DSP2_SendCmd_PostLoop_Nop09:
 	nop
-	jr __jrt_nop_036741
-__jrt_nop_036741:
+	jr DSP2_SendCmd_PostLoop_Nop10
 
 DSP2_SendCmd_PostLoop_Nop10:
 	nop
-	jr __jrt_nop_036744
-__jrt_nop_036744:
+	jr DSP2_SendCmd_PostLoop_Nop11
 
 DSP2_SendCmd_PostLoop_Nop11:
 	nop
-	jr __jrt_nop_036747
-__jrt_nop_036747:
+	jr DSP2_SendCmd_PostLoop_Nop12
 
 DSP2_SendCmd_PostLoop_Nop12:
 	nop
-	jr __jrt_nop_03674A
-__jrt_nop_03674A:
+	jr DSP2_SendCmd_PostLoop_Nop13
 
 DSP2_SendCmd_PostLoop_Nop13:
 	nop
-	jr __jrt_nop_03674D
-__jrt_nop_03674D:
+	jr DSP2_SendCmd_PostLoop_Nop14
 
 DSP2_SendCmd_PostLoop_Nop14:
 	nop
-	jr __jrt_nop_036750
-__jrt_nop_036750:
+	jr DSP2_SendCmd_PostLoop_Nop15
 
 DSP2_SendCmd_PostLoop_Nop15:
 	nop
-	jr __jrt_nop_036753
-__jrt_nop_036753:
+	jr DSP2_SendCmd_PostLoop_Nop16
 
 DSP2_SendCmd_PostLoop_Nop16:
 	nop
-	jr __jrt_nop_036756
-__jrt_nop_036756:
+	jr DSP2_SendCmd_PostLoop_Nop17
 
 DSP2_SendCmd_PostLoop_Nop17:
 	nop
 	res	2, (PF:8)
-	jr __jrt_nop_03675C
-__jrt_nop_03675C:
+	jr DSP2_SendCmd_PostClkLow_Nop01
 
 DSP2_SendCmd_PostClkLow_Nop01:
 	nop
-	jr __jrt_nop_03675F
-__jrt_nop_03675F:
+	jr DSP2_SendCmd_PostClkLow_Nop02
 
 DSP2_SendCmd_PostClkLow_Nop02:
 	nop
-	jr __jrt_nop_036762
-__jrt_nop_036762:
+	jr DSP2_SendCmd_PostClkLow_Nop03
 
 DSP2_SendCmd_PostClkLow_Nop03:
 	nop
-	jr __jrt_nop_036765
-__jrt_nop_036765:
+	jr DSP2_SendCmd_PostClkLow_Nop04
 
 DSP2_SendCmd_PostClkLow_Nop04:
 	nop
-	jr __jrt_nop_036768
-__jrt_nop_036768:
+	jr DSP2_SendCmd_PostClkLow_Nop05
 
 DSP2_SendCmd_PostClkLow_Nop05:
 	nop
-	jr __jrt_nop_03676B
-__jrt_nop_03676B:
+	jr DSP2_SendCmd_PostClkLow_Nop06
 
 DSP2_SendCmd_PostClkLow_Nop06:
 	nop
-	jr __jrt_nop_03676E
-__jrt_nop_03676E:
+	jr DSP2_SendCmd_PostClkLow_Nop07
 
 DSP2_SendCmd_PostClkLow_Nop07:
 	nop
-	jr __jrt_nop_036771
-__jrt_nop_036771:
+	jr DSP2_SendCmd_PostClkLow_Nop08
 
 DSP2_SendCmd_PostClkLow_Nop08:
 	nop
-	jr __jrt_nop_036774
-__jrt_nop_036774:
+	jr DSP2_SendCmd_PostClkLow_Nop09
 
 DSP2_SendCmd_PostClkLow_Nop09:
 	nop
-	jr __jrt_nop_036777
-__jrt_nop_036777:
+	jr DSP2_SendCmd_PostClkLow_Nop10
 
 DSP2_SendCmd_PostClkLow_Nop10:
 	nop
-	jr __jrt_nop_03677A
-__jrt_nop_03677A:
+	jr DSP2_SendCmd_PostClkLow_Nop11
 
 DSP2_SendCmd_PostClkLow_Nop11:
 	nop
-	jr __jrt_nop_03677D
-__jrt_nop_03677D:
+	jr DSP2_SendCmd_PostClkLow_Nop12
 
 DSP2_SendCmd_PostClkLow_Nop12:
 	nop
-	jr __jrt_nop_036780
-__jrt_nop_036780:
+	jr DSP2_SendCmd_PostClkLow_Nop13
 
 DSP2_SendCmd_PostClkLow_Nop13:
 	nop
-	jr __jrt_nop_036783
-__jrt_nop_036783:
+	jr DSP2_SendCmd_PostClkLow_Nop14
 
 DSP2_SendCmd_PostClkLow_Nop14:
 	nop
-	jr __jrt_nop_036786
-__jrt_nop_036786:
+	jr DSP2_SendCmd_PostClkLow_Nop15
 
 DSP2_SendCmd_PostClkLow_Nop15:
 	nop
-	jr __jrt_nop_036789
-__jrt_nop_036789:
+	jr DSP2_SendCmd_PostClkLow_Nop16
 
 DSP2_SendCmd_PostClkLow_Nop16:
 	nop
-	jr __jrt_nop_03678C
-__jrt_nop_03678C:
+	jr DSP2_SendCmd_PostClkLow_Nop17
 
 DSP2_SendCmd_PostClkLow_Nop17:
 	nop
-	jr __jrt_nop_03678F
-__jrt_nop_03678F:
+	jr DSP2_SendCmd_PostClkLow_Nop18
 
 DSP2_SendCmd_PostClkLow_Nop18:
 	nop
-	jr __jrt_nop_036792
-__jrt_nop_036792:
+	jr DSP2_SendCmd_PostClkLow_Nop19
 
 DSP2_SendCmd_PostClkLow_Nop19:
 	nop
 	ld wa, (xsp + 6)
 	call DSP_Deselect_Chip
-	jr __jrt_nop_03679C
-__jrt_nop_03679C:
+	jr DSP2_SendCmd_Epilogue_Nop01
 
 DSP2_SendCmd_Epilogue_Nop01:
 	nop
-	jr __jrt_nop_03679F
-__jrt_nop_03679F:
+	jr DSP2_SendCmd_Epilogue_Nop02
 
 DSP2_SendCmd_Epilogue_Nop02:
 	nop
-	jr __jrt_nop_0367A2
-__jrt_nop_0367A2:
+	jr DSP2_SendCmd_Epilogue_Nop03
 
 DSP2_SendCmd_Epilogue_Nop03:
 	nop
-	jr __jrt_nop_0367A5
-__jrt_nop_0367A5:
+	jr DSP2_SendCmd_Epilogue_Nop04
 
 DSP2_SendCmd_Epilogue_Nop04:
 	nop
-	jr __jrt_nop_0367A8
-__jrt_nop_0367A8:
+	jr DSP2_SendCmd_Epilogue_Nop05
 
 DSP2_SendCmd_Epilogue_Nop05:
 	nop
-	jr __jrt_nop_0367AB
-__jrt_nop_0367AB:
+	jr DSP2_SendCmd_Epilogue_Nop06
 
 DSP2_SendCmd_Epilogue_Nop06:
 	nop
-	jr __jrt_nop_0367AE
-__jrt_nop_0367AE:
+	jr DSP2_SendCmd_Epilogue_Nop07
 
 DSP2_SendCmd_Epilogue_Nop07:
 	nop
-	jr __jrt_nop_0367B1
-__jrt_nop_0367B1:
+	jr DSP2_SendCmd_Epilogue_Nop08
 
 DSP2_SendCmd_Epilogue_Nop08:
 	nop
-	jr __jrt_nop_0367B4
-__jrt_nop_0367B4:
+	jr DSP2_SendCmd_Epilogue_Nop09
 
 DSP2_SendCmd_Epilogue_Nop09:
 	nop
-	jr __jrt_nop_0367B7
-__jrt_nop_0367B7:
+	jr DSP2_SendCmd_Epilogue_Nop10
 
 DSP2_SendCmd_Epilogue_Nop10:
 	nop
-	jr __jrt_nop_0367BA
-__jrt_nop_0367BA:
+	jr DSP2_SendCmd_Epilogue_Nop11
 
 DSP2_SendCmd_Epilogue_Nop11:
 	nop
-	jr __jrt_nop_0367BD
-__jrt_nop_0367BD:
+	jr DSP2_SendCmd_Epilogue_Nop12
 
 DSP2_SendCmd_Epilogue_Nop12:
 	nop
-	jr __jrt_nop_0367C0
-__jrt_nop_0367C0:
+	jr DSP2_SendCmd_Epilogue_Nop13
 
 DSP2_SendCmd_Epilogue_Nop13:
 	nop
-	jr __jrt_nop_0367C3
-__jrt_nop_0367C3:
+	jr DSP2_SendCmd_Epilogue_Nop14
 
 DSP2_SendCmd_Epilogue_Nop14:
 	nop
-	jr __jrt_nop_0367C6
-__jrt_nop_0367C6:
+	jr DSP2_SendCmd_Epilogue_Nop15
 
 DSP2_SendCmd_Epilogue_Nop15:
 	nop
-	jr __jrt_nop_0367C9
-__jrt_nop_0367C9:
+	jr DSP2_SendCmd_Epilogue_Nop16
 
 DSP2_SendCmd_Epilogue_Nop16:
 	nop
@@ -46864,186 +46448,150 @@ DSP2_SendData_BitClear:
 
 ; Join point.
 DSP2_SendData_BitSet_Done:
-	jr __jrt_nop_0368EF
-__jrt_nop_0368EF:
+	jr DSP2_SendData_ClkHigh_Nop01
 
 DSP2_SendData_ClkHigh_Nop01:
 	nop
 	sll_erpb 0xFB, 0x01
 	set	2, (PF:8)
-	jr __jrt_nop_0368F9
-__jrt_nop_0368F9:
+	jr DSP2_SendData_ClkHigh_Nop02
 
 DSP2_SendData_ClkHigh_Nop02:
 	nop
-	jr __jrt_nop_0368FC
-__jrt_nop_0368FC:
+	jr DSP2_SendData_ClkHigh_Nop03
 
 DSP2_SendData_ClkHigh_Nop03:
 	nop
-	jr __jrt_nop_0368FF
-__jrt_nop_0368FF:
+	jr DSP2_SendData_ClkHigh_Nop04
 
 DSP2_SendData_ClkHigh_Nop04:
 	nop
-	jr __jrt_nop_036902
-__jrt_nop_036902:
+	jr DSP2_SendData_ClkHigh_Nop05
 
 DSP2_SendData_ClkHigh_Nop05:
 	nop
-	jr __jrt_nop_036905
-__jrt_nop_036905:
+	jr DSP2_SendData_ClkHigh_Nop06
 
 DSP2_SendData_ClkHigh_Nop06:
 	nop
-	jr __jrt_nop_036908
-__jrt_nop_036908:
+	jr DSP2_SendData_ClkHigh_Nop07
 
 DSP2_SendData_ClkHigh_Nop07:
 	nop
-	jr __jrt_nop_03690B
-__jrt_nop_03690B:
+	jr DSP2_SendData_ClkHigh_Nop08
 
 DSP2_SendData_ClkHigh_Nop08:
 	nop
-	jr __jrt_nop_03690E
-__jrt_nop_03690E:
+	jr DSP2_SendData_ClkHigh_Nop09
 
 DSP2_SendData_ClkHigh_Nop09:
 	nop
-	jr __jrt_nop_036911
-__jrt_nop_036911:
+	jr DSP2_SendData_ClkHigh_Nop10
 
 DSP2_SendData_ClkHigh_Nop10:
 	nop
-	jr __jrt_nop_036914
-__jrt_nop_036914:
+	jr DSP2_SendData_ClkHigh_Nop11
 
 DSP2_SendData_ClkHigh_Nop11:
 	nop
-	jr __jrt_nop_036917
-__jrt_nop_036917:
+	jr DSP2_SendData_ClkHigh_Nop12
 
 DSP2_SendData_ClkHigh_Nop12:
 	nop
-	jr __jrt_nop_03691A
-__jrt_nop_03691A:
+	jr DSP2_SendData_ClkHigh_Nop13
 
 DSP2_SendData_ClkHigh_Nop13:
 	nop
-	jr __jrt_nop_03691D
-__jrt_nop_03691D:
+	jr DSP2_SendData_ClkHigh_Nop14
 
 DSP2_SendData_ClkHigh_Nop14:
 	nop
-	jr __jrt_nop_036920
-__jrt_nop_036920:
+	jr DSP2_SendData_ClkHigh_Nop15
 
 DSP2_SendData_ClkHigh_Nop15:
 	nop
-	jr __jrt_nop_036923
-__jrt_nop_036923:
+	jr DSP2_SendData_ClkHigh_Nop16
 
 DSP2_SendData_ClkHigh_Nop16:
 	nop
-	jr __jrt_nop_036926
-__jrt_nop_036926:
+	jr DSP2_SendData_ClkHigh_Nop17
 
 DSP2_SendData_ClkHigh_Nop17:
 	nop
 	res	2, (PF:8)
-	jr __jrt_nop_03692C
-__jrt_nop_03692C:
+	jr DSP2_SendData_ClkLow_Nop01
 
 DSP2_SendData_ClkLow_Nop01:
 	nop
-	jr __jrt_nop_03692F
-__jrt_nop_03692F:
+	jr DSP2_SendData_ClkLow_Nop02
 
 DSP2_SendData_ClkLow_Nop02:
 	nop
-	jr __jrt_nop_036932
-__jrt_nop_036932:
+	jr DSP2_SendData_ClkLow_Nop03
 
 DSP2_SendData_ClkLow_Nop03:
 	nop
-	jr __jrt_nop_036935
-__jrt_nop_036935:
+	jr DSP2_SendData_ClkLow_Nop04
 
 DSP2_SendData_ClkLow_Nop04:
 	nop
-	jr __jrt_nop_036938
-__jrt_nop_036938:
+	jr DSP2_SendData_ClkLow_Nop05
 
 DSP2_SendData_ClkLow_Nop05:
 	nop
-	jr __jrt_nop_03693B
-__jrt_nop_03693B:
+	jr DSP2_SendData_ClkLow_Nop06
 
 DSP2_SendData_ClkLow_Nop06:
 	nop
-	jr __jrt_nop_03693E
-__jrt_nop_03693E:
+	jr DSP2_SendData_ClkLow_Nop07
 
 DSP2_SendData_ClkLow_Nop07:
 	nop
-	jr __jrt_nop_036941
-__jrt_nop_036941:
+	jr DSP2_SendData_ClkLow_Nop08
 
 DSP2_SendData_ClkLow_Nop08:
 	nop
-	jr __jrt_nop_036944
-__jrt_nop_036944:
+	jr DSP2_SendData_ClkLow_Nop09
 
 DSP2_SendData_ClkLow_Nop09:
 	nop
-	jr __jrt_nop_036947
-__jrt_nop_036947:
+	jr DSP2_SendData_ClkLow_Nop10
 
 DSP2_SendData_ClkLow_Nop10:
 	nop
-	jr __jrt_nop_03694A
-__jrt_nop_03694A:
+	jr DSP2_SendData_ClkLow_Nop11
 
 DSP2_SendData_ClkLow_Nop11:
 	nop
-	jr __jrt_nop_03694D
-__jrt_nop_03694D:
+	jr DSP2_SendData_ClkLow_Nop12
 
 DSP2_SendData_ClkLow_Nop12:
 	nop
-	jr __jrt_nop_036950
-__jrt_nop_036950:
+	jr DSP2_SendData_ClkLow_Nop13
 
 DSP2_SendData_ClkLow_Nop13:
 	nop
-	jr __jrt_nop_036953
-__jrt_nop_036953:
+	jr DSP2_SendData_ClkLow_Nop14
 
 DSP2_SendData_ClkLow_Nop14:
 	nop
-	jr __jrt_nop_036956
-__jrt_nop_036956:
+	jr DSP2_SendData_ClkLow_Nop15
 
 DSP2_SendData_ClkLow_Nop15:
 	nop
-	jr __jrt_nop_036959
-__jrt_nop_036959:
+	jr DSP2_SendData_ClkLow_Nop16
 
 DSP2_SendData_ClkLow_Nop16:
 	nop
-	jr __jrt_nop_03695C
-__jrt_nop_03695C:
+	jr DSP2_SendData_ClkLow_Nop17
 
 DSP2_SendData_ClkLow_Nop17:
 	nop
-	jr __jrt_nop_03695F
-__jrt_nop_03695F:
+	jr DSP2_SendData_ClkLow_Nop18
 
 DSP2_SendData_ClkLow_Nop18:
 	nop
-	jr __jrt_nop_036962
-__jrt_nop_036962:
+	jr DSP2_SendData_ClkLow_Nop19
 
 DSP2_SendData_ClkLow_Nop19:
 	nop
@@ -47052,267 +46600,215 @@ DSP2_SendData_ClkLow_Nop19:
 
 ; The 9th (acknowledge) clock pulse.
 DSP2_SendData_PostLoop_Entry:
-	jr __jrt_nop_03696C
-__jrt_nop_03696C:
+	jr DSP2_SendData_PostLoop_Nop01
 
 DSP2_SendData_PostLoop_Nop01:
 	nop
 	set	2, (PF:8)
-	jr __jrt_nop_036972
-__jrt_nop_036972:
+	jr DSP2_SendData_PostLoop_Nop02
 
 DSP2_SendData_PostLoop_Nop02:
 	nop
-	jr __jrt_nop_036975
-__jrt_nop_036975:
+	jr DSP2_SendData_PostLoop_Nop03
 
 DSP2_SendData_PostLoop_Nop03:
 	nop
-	jr __jrt_nop_036978
-__jrt_nop_036978:
+	jr DSP2_SendData_PostLoop_Nop04
 
 DSP2_SendData_PostLoop_Nop04:
 	nop
-	jr __jrt_nop_03697B
-__jrt_nop_03697B:
+	jr DSP2_SendData_PostLoop_Nop05
 
 DSP2_SendData_PostLoop_Nop05:
 	nop
-	jr __jrt_nop_03697E
-__jrt_nop_03697E:
+	jr DSP2_SendData_PostLoop_Nop06
 
 DSP2_SendData_PostLoop_Nop06:
 	nop
-	jr __jrt_nop_036981
-__jrt_nop_036981:
+	jr DSP2_SendData_PostLoop_Nop07
 
 DSP2_SendData_PostLoop_Nop07:
 	nop
-	jr __jrt_nop_036984
-__jrt_nop_036984:
+	jr DSP2_SendData_PostLoop_Nop08
 
 DSP2_SendData_PostLoop_Nop08:
 	nop
-	jr __jrt_nop_036987
-__jrt_nop_036987:
+	jr DSP2_SendData_PostLoop_Nop09
 
 DSP2_SendData_PostLoop_Nop09:
 	nop
-	jr __jrt_nop_03698A
-__jrt_nop_03698A:
+	jr DSP2_SendData_PostLoop_Nop10
 
 DSP2_SendData_PostLoop_Nop10:
 	nop
-	jr __jrt_nop_03698D
-__jrt_nop_03698D:
+	jr DSP2_SendData_PostLoop_Nop11
 
 DSP2_SendData_PostLoop_Nop11:
 	nop
-	jr __jrt_nop_036990
-__jrt_nop_036990:
+	jr DSP2_SendData_PostLoop_Nop12
 
 DSP2_SendData_PostLoop_Nop12:
 	nop
-	jr __jrt_nop_036993
-__jrt_nop_036993:
+	jr DSP2_SendData_PostLoop_Nop13
 
 DSP2_SendData_PostLoop_Nop13:
 	nop
-	jr __jrt_nop_036996
-__jrt_nop_036996:
+	jr DSP2_SendData_PostLoop_Nop14
 
 DSP2_SendData_PostLoop_Nop14:
 	nop
-	jr __jrt_nop_036999
-__jrt_nop_036999:
+	jr DSP2_SendData_PostLoop_Nop15
 
 DSP2_SendData_PostLoop_Nop15:
 	nop
-	jr __jrt_nop_03699C
-__jrt_nop_03699C:
+	jr DSP2_SendData_PostLoop_Nop16
 
 DSP2_SendData_PostLoop_Nop16:
 	nop
-	jr __jrt_nop_03699F
-__jrt_nop_03699F:
+	jr DSP2_SendData_PostLoop_Nop17
 
 DSP2_SendData_PostLoop_Nop17:
 	nop
 	res	2, (PF:8)
-	jr __jrt_nop_0369A5
-__jrt_nop_0369A5:
+	jr DSP2_SendData_PostClkLow_Nop01
 
 DSP2_SendData_PostClkLow_Nop01:
 	nop
-	jr __jrt_nop_0369A8
-__jrt_nop_0369A8:
+	jr DSP2_SendData_PostClkLow_Nop02
 
 DSP2_SendData_PostClkLow_Nop02:
 	nop
-	jr __jrt_nop_0369AB
-__jrt_nop_0369AB:
+	jr DSP2_SendData_PostClkLow_Nop03
 
 DSP2_SendData_PostClkLow_Nop03:
 	nop
-	jr __jrt_nop_0369AE
-__jrt_nop_0369AE:
+	jr DSP2_SendData_PostClkLow_Nop04
 
 DSP2_SendData_PostClkLow_Nop04:
 	nop
-	jr __jrt_nop_0369B1
-__jrt_nop_0369B1:
+	jr DSP2_SendData_PostClkLow_Nop05
 
 DSP2_SendData_PostClkLow_Nop05:
 	nop
-	jr __jrt_nop_0369B4
-__jrt_nop_0369B4:
+	jr DSP2_SendData_PostClkLow_Nop06
 
 DSP2_SendData_PostClkLow_Nop06:
 	nop
-	jr __jrt_nop_0369B7
-__jrt_nop_0369B7:
+	jr DSP2_SendData_PostClkLow_Nop07
 
 DSP2_SendData_PostClkLow_Nop07:
 	nop
-	jr __jrt_nop_0369BA
-__jrt_nop_0369BA:
+	jr DSP2_SendData_PostClkLow_Nop08
 
 DSP2_SendData_PostClkLow_Nop08:
 	nop
-	jr __jrt_nop_0369BD
-__jrt_nop_0369BD:
+	jr DSP2_SendData_PostClkLow_Nop09
 
 DSP2_SendData_PostClkLow_Nop09:
 	nop
-	jr __jrt_nop_0369C0
-__jrt_nop_0369C0:
+	jr DSP2_SendData_PostClkLow_Nop10
 
 DSP2_SendData_PostClkLow_Nop10:
 	nop
-	jr __jrt_nop_0369C3
-__jrt_nop_0369C3:
+	jr DSP2_SendData_PostClkLow_Nop11
 
 DSP2_SendData_PostClkLow_Nop11:
 	nop
-	jr __jrt_nop_0369C6
-__jrt_nop_0369C6:
+	jr DSP2_SendData_PostClkLow_Nop12
 
 DSP2_SendData_PostClkLow_Nop12:
 	nop
-	jr __jrt_nop_0369C9
-__jrt_nop_0369C9:
+	jr DSP2_SendData_PostClkLow_Nop13
 
 DSP2_SendData_PostClkLow_Nop13:
 	nop
-	jr __jrt_nop_0369CC
-__jrt_nop_0369CC:
+	jr DSP2_SendData_PostClkLow_Nop14
 
 DSP2_SendData_PostClkLow_Nop14:
 	nop
-	jr __jrt_nop_0369CF
-__jrt_nop_0369CF:
+	jr DSP2_SendData_PostClkLow_Nop15
 
 DSP2_SendData_PostClkLow_Nop15:
 	nop
-	jr __jrt_nop_0369D2
-__jrt_nop_0369D2:
+	jr DSP2_SendData_PostClkLow_Nop16
 
 DSP2_SendData_PostClkLow_Nop16:
 	nop
-	jr __jrt_nop_0369D5
-__jrt_nop_0369D5:
+	jr DSP2_SendData_PostClkLow_Nop17
 
 DSP2_SendData_PostClkLow_Nop17:
 	nop
-	jr __jrt_nop_0369D8
-__jrt_nop_0369D8:
+	jr DSP2_SendData_PostClkLow_Nop18
 
 DSP2_SendData_PostClkLow_Nop18:
 	nop
-	jr __jrt_nop_0369DB
-__jrt_nop_0369DB:
+	jr DSP2_SendData_PostClkLow_Nop19
 
 DSP2_SendData_PostClkLow_Nop19:
 	nop
 	ld wa, (xsp + 6)
 	call DSP_Deselect_Chip
-	jr __jrt_nop_0369E5
-__jrt_nop_0369E5:
+	jr DSP2_SendData_Epilogue_Nop01
 
 DSP2_SendData_Epilogue_Nop01:
 	nop
-	jr __jrt_nop_0369E8
-__jrt_nop_0369E8:
+	jr DSP2_SendData_Epilogue_Nop02
 
 DSP2_SendData_Epilogue_Nop02:
 	nop
-	jr __jrt_nop_0369EB
-__jrt_nop_0369EB:
+	jr DSP2_SendData_Epilogue_Nop03
 
 DSP2_SendData_Epilogue_Nop03:
 	nop
-	jr __jrt_nop_0369EE
-__jrt_nop_0369EE:
+	jr DSP2_SendData_Epilogue_Nop04
 
 DSP2_SendData_Epilogue_Nop04:
 	nop
-	jr __jrt_nop_0369F1
-__jrt_nop_0369F1:
+	jr DSP2_SendData_Epilogue_Nop05
 
 DSP2_SendData_Epilogue_Nop05:
 	nop
-	jr __jrt_nop_0369F4
-__jrt_nop_0369F4:
+	jr DSP2_SendData_Epilogue_Nop06
 
 DSP2_SendData_Epilogue_Nop06:
 	nop
-	jr __jrt_nop_0369F7
-__jrt_nop_0369F7:
+	jr DSP2_SendData_Epilogue_Nop07
 
 DSP2_SendData_Epilogue_Nop07:
 	nop
-	jr __jrt_nop_0369FA
-__jrt_nop_0369FA:
+	jr DSP2_SendData_Epilogue_Nop08
 
 DSP2_SendData_Epilogue_Nop08:
 	nop
-	jr __jrt_nop_0369FD
-__jrt_nop_0369FD:
+	jr DSP2_SendData_Epilogue_Nop09
 
 DSP2_SendData_Epilogue_Nop09:
 	nop
-	jr __jrt_nop_036A00
-__jrt_nop_036A00:
+	jr DSP2_SendData_Epilogue_Nop10
 
 DSP2_SendData_Epilogue_Nop10:
 	nop
-	jr __jrt_nop_036A03
-__jrt_nop_036A03:
+	jr DSP2_SendData_Epilogue_Nop11
 
 DSP2_SendData_Epilogue_Nop11:
 	nop
-	jr __jrt_nop_036A06
-__jrt_nop_036A06:
+	jr DSP2_SendData_Epilogue_Nop12
 
 DSP2_SendData_Epilogue_Nop12:
 	nop
-	jr __jrt_nop_036A09
-__jrt_nop_036A09:
+	jr DSP2_SendData_Epilogue_Nop13
 
 DSP2_SendData_Epilogue_Nop13:
 	nop
-	jr __jrt_nop_036A0C
-__jrt_nop_036A0C:
+	jr DSP2_SendData_Epilogue_Nop14
 
 DSP2_SendData_Epilogue_Nop14:
 	nop
-	jr __jrt_nop_036A0F
-__jrt_nop_036A0F:
+	jr DSP2_SendData_Epilogue_Nop15
 
 DSP2_SendData_Epilogue_Nop15:
 	nop
-	jr __jrt_nop_036A12
-__jrt_nop_036A12:
+	jr DSP2_SendData_Epilogue_Nop16
 
 DSP2_SendData_Epilogue_Nop16:
 	nop

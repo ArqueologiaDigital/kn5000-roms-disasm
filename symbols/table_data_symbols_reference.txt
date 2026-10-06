@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 4,759
-#   semantic names ........... 4,755 (99.9%)
-#   positional names ......... 4
+#   semantic names ........... 4,756 (99.9%)
+#   positional names ......... 3
 #
 SectionDirectory_Table 00800000
 SectionBank00_AccordionGer16 00800088
@@ -4016,7 +4016,7 @@ BOOT_ENTRY_POINT 009FB4E8
 Boot_Init 009FB4E8
 Boot_Init__pause1 009FB5C3
 Boot_Init__pause2 009FB5CE
-__jrt_nop_9FB652 009FB652
+Boot_Init_Next 009FB652
 Boot_SkipFDCCheck 009FB661
 Boot_HaltLoop 009FB6AB
 Boot_PrepareJump 009FB6AD

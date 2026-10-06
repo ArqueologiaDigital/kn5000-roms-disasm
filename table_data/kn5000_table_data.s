@@ -1526,8 +1526,8 @@ Boot_Init:
 	ld (xbc), a
 
 	; === Check Boot Source ===
-	jr __jrt_nop_9FB652	; nop-like branch
-__jrt_nop_9FB652:
+	jr Boot_Init_Next	; nop-like branch
+Boot_Init_Next:
 	bit	0, (PE:8)	; Check Port E bit 0
 	jr nz, Boot_SkipFDCCheck
 

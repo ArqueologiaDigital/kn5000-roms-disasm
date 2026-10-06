@@ -1845,15 +1845,13 @@ FP_DP_Encode_Overflow:
 	orb_erp C, 0xEB
 	ldfr_berp C, 0xEB
 	ld (xwa + 4), xde
-	jr __jrt_nop_03E0A5
-__jrt_nop_03E0A5:
+	jr FP_DP_Encode_NormCheck
 
 ; The FP exception hook. Loads the 32-bit word at 0x00F428 and, if it is non-zero,
 ; performs an INDIRECT CALL through it (`call NZ,XBC`). In the shipped image that word
 ; is 0x00000000, so the hook is disabled. See [UNCERTAIN] - the existing symbol
 ; FPConst_Zero at 0x00F428 is a function pointer, not a constant, and it lives in the
 ; program's writable DRAM image. The identical hook appears at 0x03E0FB for singles.
-; (The alias symbol __jrt_nop_03E0A5 refers to the same address.)
 FP_DP_Encode_NormCheck:
 	ld xbc, (FPConst_Zero:24)
 	or xbc, xbc
@@ -3202,11 +3200,10 @@ FP_DP_CopyWithSign:
 ; The third entry (D = 2) the header above says is unreferenced; labelled 2026-09-25.
 FP_CopyWithSign_D2:
 	ld d, 0x2:opc
-	jr __jrt_nop_03EA0E
-__jrt_nop_03EA0E:
+	jr FP_DP_CopyDispatch
 
 ; Shared body: bail out if the source's zero flag is set, else copy 8 or 12 bytes
-; according to D. (Alias symbol __jrt_nop_03EA0E is the same address.)
+; according to D.
 FP_DP_CopyDispatch:
 	bitm 0, (xbc + 2)
 	ret nz
@@ -3805,11 +3802,10 @@ FP_DP_NegWithSign:
 ; The third entry (D = 2) the header above says is unreferenced; labelled 2026-09-25.
 FP_NegWithSign_D2:
 	ld d, 0x2:opc
-	jr __jrt_nop_03EE42
-__jrt_nop_03EE42:
+	jr FP_DP_NegDispatch
 
 ; Shared body: bail out on the zero flag, else copy 8 or 12 bytes per D and XOR 0x80
-; into the sign byte. (Alias symbol __jrt_nop_03EE42 is the same address.)
+; into the sign byte.
 FP_DP_NegDispatch:
 	bitm 0, (xbc + 2)
 	ret nz
