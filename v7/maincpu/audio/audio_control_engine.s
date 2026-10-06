@@ -6821,7 +6821,7 @@ UIWidget_MidiStreamControl:
 	ret	nz
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 3
-	call	nz, (0xfc92a1:24)
+	call	nz, (MidiCC_ClearReceivedBankSelects:24)
 	bit	2, (SWBTWR_PAYLOAD_3:16)
 	ret	z
 	bit	2, (SWBTWR_PAYLOAD_2:16)
@@ -6830,21 +6830,25 @@ UIWidget_MidiStreamControl:
 	call	SeqTimer_UpdateTempoReg
 	res	4, (0x905d:16)
 	ret
+; MidiCC_ClearReceivedBankSelects: Clears the received bank selects: the 32 two-byte CC32/CC0 cells and the 32
+;   part banks that MidiCC_ApplyBankSelect fills (v10/v9 0x93D2 and 0x9412, v7 0x9336 and 0x9376). Basis: caller +
+;   body -- UIWidget_MidiStreamControl calls it when bits 0-1 of SWBTWR_PAYLOAD_3 are non-zero.
+MidiCC_ClearReceivedBankSelects:
 	ld	wa, 0:i3
 	lda_d16	xbc, (0x9336)
-UIWidget_MidiStreamControl_Loop2:
+MidiCC_ClearReceivedBankSelects_Loop:
 	ld	(xbc+), 0
 	ld	(xbc+), 0
 	inc	1, wa
 	cp	wa, 32
-	jr	c, UIWidget_MidiStreamControl_Loop2
+	jr	c, MidiCC_ClearReceivedBankSelects_Loop
 	ld	wa, 0:i3
 	lda_d16	xbc, (0x9376)
-UIWidget_MidiStreamControl_Loop:
+MidiCC_ClearReceivedBankSelects_Loop2:
 	ld	(xbc+), 0
 	inc	1, wa
 	cp	wa, 32
-	jr	c, UIWidget_MidiStreamControl_Loop
+	jr	c, MidiCC_ClearReceivedBankSelects_Loop2
 	ret
 SndParam_ApplyAndFetch:
 	dec	6, xsp
@@ -11267,7 +11271,11 @@ MidiStream_ExtendedDispatch_Helper_Helper2:
 MidiStream_ExtendedDispatch_Helper_Skip4:
 	rcf
 	ret
-MidiCC_Handler_PairedParamA_Helper:
+; MidiCC_ApplyBankSelect: Records a received bank select for part (0x95A8): E (CC32) into 0x9336[2p] or, when E =
+;   0xFF, D (CC0) into 0x9337[2p]; then derives the part's bank at 0x9376[p] by the MIDI mode in 0xFD50 bits 0-1.
+;   Part 72 is mapped to 20. v10's routine of that name with v7's RAM addresses; v7's mode-1 path lacks v10's
+;   part-20 test. Basis: callers + body -- MidiCC_Handler_PairedParamA/B are the CC32/CC0 (bank select) handlers.
+MidiCC_ApplyBankSelect:
 	cp	(0x95a8:16), 72
 	jr	nz, MidiStream_ExtendedDispatch_Helper_Skip5
 	ld	(0x95a8:16), 20

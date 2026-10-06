@@ -7983,17 +7983,21 @@ PortWrite_BusyWait:
 	ld xwa, 0x186a0
 	jr BusyWait_XWA_Cycles
 
-LED_Toggle_Bit2_Loop:
+; LED_BlinkBit2Forever: Error halt: toggles bit 2 of the LED port 0x160004 every 0x249F0 busy-wait cycles and never
+;   returns.  Basis: body + callers -- HDAE5000_TableData_Write and HDAE5000_Init_TransferData call it when
+;   HDAE5000_ROM_Transfer reports a failure.
+LED_BlinkBit2Forever:
 	chg 2, (0x160004:24)
 	ld xwa, 0x249f0
 	calr BusyWait_XWA_Cycles
-	jr LED_Toggle_Bit2_Loop
+	jr LED_BlinkBit2Forever
 
-LED_Toggle_Bit3_Loop:
+; LED_BlinkBit3Forever: The same error halt on bit 3.
+LED_BlinkBit3Forever:
 	chg 3, (0x160004:24)
 	ld xwa, 0x249f0
 	calr BusyWait_XWA_Cycles
-	jr LED_Toggle_Bit3_Loop
+	jr LED_BlinkBit3Forever
 
 ; ===========================================================================
 ; TableData_ROM_Verify - Verify Table Data ROM integrity via checksum
@@ -8205,7 +8209,7 @@ HDAE5000_TableData_Write_Skip3:
 	ld	xbc, 0xa00000
 	calr	TableData_ROM_Verify
 	or	xhl, xhl
-	call	nz, (0xef3d91:24)
+	call	nz, (TableDataFlash_ChipErase:24)
 	lda	xwa, (0x300000:24)
 	ld	xbc, xwa
 	add	xbc, 0x100000
@@ -8240,14 +8244,14 @@ HDAE5000_TableData_Write_Skip5:
 	ld	de, 0:i3
 	calr	HDAE5000_ROM_Transfer
 	or	xhl, xhl
-	call	nz, (0xef4866:24)
+	call	nz, (LED_BlinkBit2Forever:24)
 	pushw	1
 	ld	xwa, 0x300000
 	ld	xbc, 0x200000
 	ld	de, 0:i3
 	calr	HDAE5000_ROM_Transfer
 	or	xhl, xhl
-	call	nz, (0xef4875:24)
+	call	nz, (LED_BlinkBit3Forever:24)
 	ld	(0x160000:24), 7
 	ld	xwa, (0x2fffc0:24)
 	cp	xwa, 0x5f746b68
@@ -8305,7 +8309,7 @@ HDAE5000_Init_TransferData:
 	ld de, 4:i3
 	calr HDAE5000_ROM_Transfer
 	or xhl, xhl
-	call nz, (LED_Toggle_Bit2_Loop:24)
+	call nz, (LED_BlinkBit2Forever:24)
 
 HDAE5000_Init_HaltLoop:
 	jr HDAE5000_Init_HaltLoop

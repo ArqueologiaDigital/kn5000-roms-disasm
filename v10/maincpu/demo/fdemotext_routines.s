@@ -2061,7 +2061,7 @@ FDemoText_TextDispatch_Skip15:
 	cp	de, 1:i3
 	jr	z, FDemoText_TextDispatch_Skip16
 	cp	de, 0:i3
-	call	z, (0xf85eca:24)
+	call	z, (FDemoText_UpdateCursorPosition:24)
 FDemoText_TextDispatch_Skip16:
 	ld	hl, 0:i3
 	ret
@@ -2310,7 +2310,7 @@ FDemoText_TextDispatch_Skip25:
 FDemoText_TextDispatch_Skip28:
 	ld	xwa, xbc
 	cp	(xbc), 0
-	call	nz, (0xf868fd:24)
+	call	nz, (FDemo_FileOpenAndProcess:24)
 FDemoText_TextDispatch_Join10:
 	ld	hl, 0:i3
 	pop	xiz

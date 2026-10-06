@@ -5950,7 +5950,7 @@ UIStateEvt_ParamEdit_Data_Skip15:
 	jr	z, UIStateEvt_ParamEdit_Data_Skip16
 	ldw_d16	wa, (0xc596)
 	bit	9, wa
-	call	z, (0xfdf5f5:24)
+	call	z, (AudioInit_RefreshToneBank:24)
 UIStateEvt_ParamEdit_Data_Skip16:
 	orw	(0xc594:16), 4
 	jr	UIStateEvt_ParamEdit_Data_Epilogue
@@ -6011,7 +6011,7 @@ UIStateEvt_VolumeMixer_Data_Skip2:
 	andw	(0xc596:16), 0xffdf
 	ldw_d16	wa, (0xc596)
 	and	wa, 7
-	call	z, (0xfdf5f5:24)
+	call	z, (AudioInit_RefreshToneBank:24)
 UIStateEvt_VolumeMixer_Data_Join2:
 	res	2, (0xc1fe:16)
 	ldb_d8	a, (SWBTWR_PAYLOAD_2)
@@ -6221,7 +6221,7 @@ UIStateEvt_PlayModeGuard_ClearBit:
 	andw	(0xc596:16), 0xdfff
 	call	Voice_UpdatePlayModeState
 	cp	hl, 255
-	call	nz, (0xfe12b8:24)
+	call	nz, (VoiceEvent_AllocAllLayers:24)
 	call	NoteMap_FindBestMatch
 	cp	hl, 255
 	ret	z

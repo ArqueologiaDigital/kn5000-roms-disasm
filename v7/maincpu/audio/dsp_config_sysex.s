@@ -4571,7 +4571,7 @@ ScreenGroup_WidgetLoop:
 	or	xwa, xwa
 	jr	nz, VoiceInit_Dispatch
 	cp	iz, 0:i3
-	call	z, (0xfdd35d:24)
+	call	z, (ScreenGroup_ReInit:24)
 	pop	xiz
 	ret
 ScreenGroup_InitState:
@@ -5108,7 +5108,7 @@ UIStateEvt_ParamEdit_Data_Skip15:
 	jr	z, UIStateEvt_ParamEdit_Data_Skip16
 	ldw_d16	wa, (0xc4fa)
 	bit	9, wa
-	call	z, (0xfdee26:24)
+	call	z, (AudioInit_RefreshToneBank:24)
 UIStateEvt_ParamEdit_Data_Skip16:
 	orw	(0xc4f8:16), 4
 	jr	UIStateEvt_ParamEdit_Data_Epilogue
@@ -5169,7 +5169,7 @@ UIStateEvt_VolumeMixer_Data_Skip2:
 	andw	(0xc4fa:16), 0xffdf
 	ldw_d16	wa, (0xc4fa)
 	and	wa, 7
-	call	z, (0xfdee26:24)
+	call	z, (AudioInit_RefreshToneBank:24)
 UIStateEvt_VolumeMixer_Data_Join2:
 	res	2, (0xc162:16)
 	ldb_d8	a, (SWBTWR_PAYLOAD_2)
@@ -5379,7 +5379,7 @@ UIStateEvt_PlayModeGuard_ClearBit:
 	andw	(0xc4fa:16), 0xdfff
 	call	Voice_UpdatePlayModeState
 	cp	hl, 255
-	call	nz, (0xfe0ae9:24)
+	call	nz, (VoiceEvent_AllocAllLayers:24)
 	call	NoteMap_FindBestMatch
 	cp	hl, 255
 	ret	z

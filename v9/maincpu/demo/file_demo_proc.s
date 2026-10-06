@@ -684,13 +684,13 @@ Demo_SelectEntry_ByteTable:
 Demo_SelectEntry_ByteTable_Skip:
 	res	3, (DEMO_CONTROL_FLAGS:16)
 	cp	(ACTIVE_TITLE:16), 228
-	call	nz, (0xf229f1:24)
+	call	nz, (SeqInit_PostEventSequence:24)
 	calr	Demo_PreSetupAndScan
 	calr	Demo_WaitForDisplayBit
 	ldw	(0x25b84:24), 1
 	ld	(0x8f4e:16), 4
 	cp	(ACTIVE_TITLE:16), 228
-	call	nz, (0xf22a4d:24)
+	call	nz, (SeqInit_FinalEvent:24)
 	ld	a, (DEMO_ACTIVE_ENTRY:16)
 	extz	wa
 	jp	Seq_DispatchEventType6

@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,678
-#   semantic names ........... 52,933 (98.6%)
+#   symbols .................. 53,680
+#   semantic names ........... 52,935 (98.6%)
 #   positional names ......... 745
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -16576,8 +16576,8 @@ LED_CyclePattern_Phase1 00EF4873
 LED_CyclePattern_Phase2 00EF487B
 LED_CyclePattern_Phase3 00EF4883
 PortWrite_BusyWait 00EF4889
-LED_Toggle_Bit2_Loop 00EF4890
-LED_Toggle_Bit3_Loop 00EF489F
+LED_BlinkBit2Forever 00EF4890
+LED_BlinkBit3Forever 00EF489F
 TableData_ROM_Verify 00EF48AE
 TableData_ROM_Verify_NextBlock 00EF48BA
 TableData_ROM_Verify_CheckBlock 00EF48C4
@@ -33165,6 +33165,7 @@ AccVoice_LoadTuningBlock_Wrap 00F5E732
 AccVoice_ComputeParamAddr_Wrap 00F5E743
 AccPart_InitPositionsAndBase_Wrap 00F5E756
 AccInit_AllPartPositions_Wrap 00F5E75F
+AccPedal_ProcessAllChanges_Wrap 00F5E768
 AccStyle_SetupPartAddressesByHL_Wrap 00F5E76F
 AccVoice_LoadAllParts_Wrap 00F5E780
 Rhythm_SendChanPressure_Wrap 00F5E7AD
@@ -47820,8 +47821,9 @@ SwbtWr_NullRet 00FC99F2
 Audio_FlushPendingBankSelects 00FC99F3
 BankFlush_CheckChannel1 00FC9A19
 UIWidget_MidiStreamControl 00FC9A40
-UIWidget_MidiStreamControl_Loop 00FC9A72
-UIWidget_MidiStreamControl_Code_Loop 00FC9A88
+MidiCC_ClearReceivedBankSelects 00FC9A6C
+MidiCC_ClearReceivedBankSelects_Loop 00FC9A72
+MidiCC_ClearReceivedBankSelects_Loop2 00FC9A88
 SndParam_ApplyAndFetch 00FC9A95
 SndParam_CheckRhythm 00FC9AC9
 SndParam_ApplyDone 00FC9AD1
@@ -49402,11 +49404,11 @@ SeqOut_TimedChunkRemainder 00FD6C37
 SeqVoice_ReadEntryFields_Data 00FD6C49
 SeqVoice_StoreEntry 00FD6C66
 SeqVoice_StoreEntryDone 00FD6C88
-SeqVoice_DispatchProcess_Data 00FD6C8D
-SeqVoice_DispatchProcess_Data_Loop 00FD6CBA
-SeqVoice_DispatchProcess_Data_Skip 00FD6CFD
-SeqVoice_DispatchProcess_Data_Skip2 00FD6D0D
-SeqVoice_DispatchProcess_Data_Epilogue 00FD6D10
+MidiPkt_UnpackNibblesToXfer 00FD6C8D
+MidiPkt_UnpackNibblesToXfer_Loop 00FD6CBA
+MidiPkt_UnpackNibblesToXfer_Skip 00FD6CFD
+MidiPkt_UnpackNibblesToXfer_Skip2 00FD6D0D
+MidiPkt_UnpackNibblesToXfer_Epilogue 00FD6D10
 MidiPkt_SetXferLengthFromMsg 00FD6D15
 MidiSeq_ClearSyncFlag_Helper 00FD6D69
 SeqVoice_DispatchProcess_Data_Skip3 00FD6DAE

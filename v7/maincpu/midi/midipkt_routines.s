@@ -883,7 +883,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper:
 	push	xhl
 	push	xix
 	push	xiz
-	call	MidiCC_Handler_PairedParamA_Helper
+	call	MidiCC_ApplyBankSelect
 	pop	xiz
 	pop	xix
 	pop	xhl

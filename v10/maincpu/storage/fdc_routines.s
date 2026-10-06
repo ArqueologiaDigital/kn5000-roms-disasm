@@ -1727,7 +1727,7 @@ FDC_MODE_CONFIG_Join2:
 ; Uses (R+d16) addressing for buffer and state access. 536 bytes.
 FDC_MC_EXIT:
 	cp	(FDC_ERROR_CODE:16), 0
-	call	nz, (0xf96bd0:24)
+	call	nz, (FDC_CONFIG_VERIFY:24)
 	calr	FDC_CmdRecalibrate
 	ld	(0x8b04:16), 255
 	ret

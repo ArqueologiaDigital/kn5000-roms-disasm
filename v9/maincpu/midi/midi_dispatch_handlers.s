@@ -9951,12 +9951,17 @@ SeqVoice_StoreEntryDone:
 	inc 4, xsp
 	ret
 
-SeqVoice_DispatchProcess_Data:
+; MidiPkt_UnpackNibblesToXfer: Unpacks nibble pairs (high nibble first) from the active MIDI block's data cursor (+6,
+;   up to its end pointer +10 less 3) into the second transfer descriptor's buffer, and counts down the remaining-byte
+;   field (+8) of both descriptors that MidiPkt_SetXferLengthFromMsg sets up.  HL = 0 when the message runs out first;
+;   HL = 0xFFFF when the count reaches 0 (after MIDI_ReadChannelParam field 22) or no block is active.  Basis: body +
+;   MidiPkt_SetXferLengthFromMsg; the SeqChan_StepCmd_* handlers call it.
+MidiPkt_UnpackNibblesToXfer:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, (MIDISEQ_ACTIVE_BLOCK_PTR:16)
 	cpw	(xiz), 0
-	jr	z, SeqVoice_DispatchProcess_Data_Skip2
+	jr	z, MidiPkt_UnpackNibblesToXfer_Skip2
 	lda	xbc, (xiz+6)
 	ld	xix, xbc
 	ld	xhl, xbc
@@ -9968,7 +9973,7 @@ SeqVoice_DispatchProcess_Data:
 	ld	(xsp+8), xbc
 	lda	xwa, (xiz+10)
 	ld	(xsp+12), xwa
-SeqVoice_DispatchProcess_Data_Loop:
+MidiPkt_UnpackNibblesToXfer_Loop:
 	ld	xwa, (xix)
 	lda xbc, (xwa+:1)
 	ld (xix), xwa
@@ -9995,19 +10000,19 @@ SeqVoice_DispatchProcess_Data_Loop:
 	lda	xiz, (xwa-3)
 	ld	xwa, (xsp+8)
 	cp	(xwa), xiz
-	jr	c, SeqVoice_DispatchProcess_Data_Skip
+	jr	c, MidiPkt_UnpackNibblesToXfer_Skip
 	ld	hl, 0:i3
-	jr	SeqVoice_DispatchProcess_Data_Epilogue
-SeqVoice_DispatchProcess_Data_Skip:
+	jr	MidiPkt_UnpackNibblesToXfer_Epilogue
+MidiPkt_UnpackNibblesToXfer_Skip:
 	or	xbc, xbc
-	jr	nz, SeqVoice_DispatchProcess_Data_Loop
+	jr	nz, MidiPkt_UnpackNibblesToXfer_Loop
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	ldw	de, 22
 	calr	MIDI_ReadChannelParam
-SeqVoice_DispatchProcess_Data_Skip2:
+MidiPkt_UnpackNibblesToXfer_Skip2:
 	ldw	hl, 0xffff
-SeqVoice_DispatchProcess_Data_Epilogue:
+MidiPkt_UnpackNibblesToXfer_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
@@ -11705,7 +11710,7 @@ SeqChan_StepCmd_Field1to2:
 	ld	bc, 3:i3
 	ld	de, 1:i3
 	call	MIDI_ReadChannelParam
-	call	SeqVoice_DispatchProcess_Data
+	call	MidiPkt_UnpackNibblesToXfer
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11721,7 +11726,7 @@ SeqChan_StepCmd_Field2to3:
 	ld	bc, 3:i3
 	ld	de, 2:i3
 	call	MIDI_ReadChannelParam
-	call	SeqVoice_DispatchProcess_Data
+	call	MidiPkt_UnpackNibblesToXfer
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11737,7 +11742,7 @@ SeqChan_StepCmd_Field4to5:
 	ld	bc, 3:i3
 	ld	de, 4:i3
 	call	MIDI_ReadChannelParam
-	call	SeqVoice_DispatchProcess_Data
+	call	MidiPkt_UnpackNibblesToXfer
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11753,7 +11758,7 @@ SeqChan_StepCmd_Field5to6:
 	ld	bc, 3:i3
 	ld	de, 5:i3
 	call	MIDI_ReadChannelParam
-	call	SeqVoice_DispatchProcess_Data
+	call	MidiPkt_UnpackNibblesToXfer
 	call	TmFlash_BulkTransferToSubCPU
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
@@ -11770,7 +11775,7 @@ SeqChan_StepCmd_Field6_Data:
 	ld	bc, 3:i3
 	ld	de, 7:i3
 	call	MIDI_ReadChannelParam
-	call	SeqVoice_DispatchProcess_Data
+	call	MidiPkt_UnpackNibblesToXfer
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11786,7 +11791,7 @@ SeqChan_StepCmd_Field8to9:
 	ld	bc, 3:i3
 	ldw	de, 8
 	call	MIDI_ReadChannelParam
-	call	SeqVoice_DispatchProcess_Data
+	call	MidiPkt_UnpackNibblesToXfer
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11802,7 +11807,7 @@ SeqChan_StepCmd_Field9to10:
 	ld	bc, 3:i3
 	ldw	de, 9
 	call	MIDI_ReadChannelParam
-	call	SeqVoice_DispatchProcess_Data
+	call	MidiPkt_UnpackNibblesToXfer
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11818,7 +11823,7 @@ SeqChan_StepCmd_Field10_Data:
 	ld	bc, 3:i3
 	ldw	de, 18
 	call	MIDI_ReadChannelParam
-	call	SeqVoice_DispatchProcess_Data
+	call	MidiPkt_UnpackNibblesToXfer
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11834,7 +11839,7 @@ SeqChan_StepCmd_Field13_Data:
 	ld	bc, 3:i3
 	ldw	de, 19
 	call	MIDI_ReadChannelParam
-	call	SeqVoice_DispatchProcess_Data
+	call	MidiPkt_UnpackNibblesToXfer
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11850,7 +11855,7 @@ SeqChan_StepCmd_Field20to21:
 	ld	bc, 3:i3
 	ldw	de, 20
 	call	MIDI_ReadChannelParam
-	call	SeqVoice_DispatchProcess_Data
+	call	MidiPkt_UnpackNibblesToXfer
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11869,7 +11874,7 @@ SeqChan_StepCmd_Field11_Data:
 	ld	wa, 4:i3
 	call	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	call	nz, (0xfd6c8d:24)
+	call	nz, (MidiPkt_UnpackNibblesToXfer:24)
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11888,7 +11893,7 @@ SeqChan_StepCmd_Field12_Data:
 	ld	wa, 4:i3
 	call	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	call	nz, (0xfd6c8d:24)
+	call	nz, (MidiPkt_UnpackNibblesToXfer:24)
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11908,7 +11913,7 @@ SeqChan_StepCmd_Field13Write:
 	ld	wa, 4:i3
 	call AccWrap_ReturnZero
 	cp hl, 0xffff
-	call	nz, (0xfd6c8d:24)
+	call	nz, (MidiPkt_UnpackNibblesToXfer:24)
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	; --- Section 2: reload XWA, setup BC, call, check L ---
 	ldw bc, 0x000f

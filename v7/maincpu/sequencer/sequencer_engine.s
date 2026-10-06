@@ -11083,7 +11083,7 @@ SeqNotify_CheckAndClearStart:
 	cp A,0x87
 	jr z, SeqNotify_ClearStartFlag
 	cp A,0x88
-	call nz, (0xfdad86:24)
+	call nz, (BitMapOut_ComputeRegionDelta:24)
 SeqNotify_ClearStartFlag:
 	res 0, (0x28b3:16)
 	ret

@@ -12355,7 +12355,7 @@ AccTone_JumpTableData_Helper:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	call	nz, (0xf5e6eb:24)
+	call	nz, (AccTone_ValidateAndClamp:24)
 AccTone_InlineBytecodeData_Code_Skip:
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
@@ -12444,7 +12444,7 @@ AccTone_JumpTableData_Helper3:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	call	nz, (0xf5e6eb:24)
+	call	nz, (AccTone_ValidateAndClamp:24)
 AccTone_InlineBytecodeData_Code_Skip2:
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
@@ -12472,7 +12472,7 @@ AccTone_InlineBytecodeData_Code_Skip2:
 	ldmm8	13345, 13354
 	ldmm8	13344, 13355
 	bit	0, (0x3363:16)
-	call	z, (0xf5e768:24)
+	call	z, (AccPedal_ProcessAllChanges_Wrap:24)
 	ld	c, (13345:16)
 	extz	bc
 	sla	bc, 2
@@ -12566,7 +12566,7 @@ AccTone_InlineBytecodeData_Code_Helper3_Join3:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	call	nz, (0xf5e6eb:24)
+	call	nz, (AccTone_ValidateAndClamp:24)
 AccTone_InlineBytecodeData_Code_Helper3_Skip7:
 	lda	xbc, (xsp+2)
 	ld	a, (xbc)
@@ -12893,7 +12893,7 @@ AccVoice_BarCounterBytecodeData_Skip9:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	call	nz, (0xf5e6eb:24)
+	call	nz, (AccTone_ValidateAndClamp:24)
 AccVoice_BarCounterBytecodeData_Skip10:
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
@@ -12987,7 +12987,7 @@ AccVoice_BarCounterBytecodeData_Skip15:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	call	nz, (0xf5e6eb:24)
+	call	nz, (AccTone_ValidateAndClamp:24)
 AccVoice_BarCounterBytecodeData_Skip16:
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
@@ -13073,7 +13073,7 @@ AccVoice_BarCounterBytecodeData_Skip19:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	call	nz, (0xf5e6eb:24)
+	call	nz, (AccTone_ValidateAndClamp:24)
 AccVoice_BarCounterBytecodeData_Skip20:
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
@@ -13125,7 +13125,7 @@ AccVoice_BarCounterBytecodeData_Skip23:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	call	nz, (0xf5e6eb:24)
+	call	nz, (AccTone_ValidateAndClamp:24)
 AccVoice_BarCounterBytecodeData_Skip24:
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
@@ -13253,7 +13253,7 @@ AccTuning_ComplexBytecodeData_Skip5:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	call	nz, (0xf5e6eb:24)
+	call	nz, (AccTone_ValidateAndClamp:24)
 AccTuning_ComplexBytecodeData_Code_Skip:
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
@@ -13514,6 +13514,7 @@ AccInit_AllPartPositions_Wrap:
 	call	AccInit_AllPartPositions
 	pop	xiz
 	ret
+AccPedal_ProcessAllChanges_Wrap:
 	push	xiz
 	call	AccPedal_ProcessAllChanges
 	pop	xiz

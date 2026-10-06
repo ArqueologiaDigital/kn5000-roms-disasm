@@ -12254,7 +12254,7 @@ AccVoice_BarCounterBytecodeData_Skip9:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	call	nz, (0xf5e2e7:24)
+	call	nz, (AccTone_ValidateAndClamp:24)
 AccVoice_BarCounterBytecodeData_Skip10:
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
@@ -12348,7 +12348,7 @@ AccVoice_BarCounterBytecodeData_Skip15:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	call	nz, (0xf5e2e7:24)
+	call	nz, (AccTone_ValidateAndClamp:24)
 AccVoice_BarCounterBytecodeData_Skip16:
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
@@ -12434,7 +12434,7 @@ AccVoice_BarCounterBytecodeData_Skip19:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	call	nz, (0xf5e2e7:24)
+	call	nz, (AccTone_ValidateAndClamp:24)
 AccVoice_BarCounterBytecodeData_Skip20:
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
@@ -12486,7 +12486,7 @@ AccVoice_BarCounterBytecodeData_Skip23:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	call	nz, (0xf5e2e7:24)
+	call	nz, (AccTone_ValidateAndClamp:24)
 AccVoice_BarCounterBytecodeData_Skip24:
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
@@ -12612,7 +12612,7 @@ AccTuning_ComplexBytecodeData_Skip5:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	call	nz, (0xf5e2e7:24)
+	call	nz, (AccTone_ValidateAndClamp:24)
 AccTuning_ComplexBytecodeData_Code_Skip:
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
@@ -12871,6 +12871,7 @@ AccInit_AllPartPositions_Wrap:
 	call	AccInit_AllPartPositions
 	pop	xiz
 	ret
+AccPedal_ProcessAllChanges_Wrap:
 	push	xiz
 	call	AccPedal_ProcessAllChanges
 	pop	xiz
@@ -35599,7 +35600,7 @@ StylCnvTxtTtlFunc:
 
 StylCnvTxt_HandleClose:
 	cp	(CURRENT_MODE:16), 6
-	call	nz, (0xf6b8d2:24)
+	call	nz, (Display_RestoreEntry:24)
 StylCnvTxt_ReturnZero:
 	ld xhl, 0:i3
 	ret
@@ -36304,7 +36305,7 @@ StylCnvSel_HandleScroll:
 
 StylCnvSel_HandleRedraw:
 	cp	(CURRENT_MODE:16), 6
-	call	nz, (0xf6b8d2:24)
+	call	nz, (Display_RestoreEntry:24)
 	ld	wa, 0:i3
 	jr	StylCnvSel_CallReturnAction
 StylCnvSel_HandleClose:
@@ -36521,7 +36522,7 @@ StylCnvStorTtlFunc:
 
 StylCnvStor_HandleClose:
 	cp	(CURRENT_MODE:16), 6
-	call	nz, (0xf6b8d2:24)
+	call	nz, (Display_RestoreEntry:24)
 StylCnvStor_ReturnZero:
 	ld xhl, 0:i3
 	ret

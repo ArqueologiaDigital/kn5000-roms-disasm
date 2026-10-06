@@ -1728,7 +1728,7 @@ FDC_MC_EXIT:
 ; [v10] Tail: DMA transfer initiation and multi-sector retry logic.
 ; [v10] Uses (R+d16) addressing for buffer and state access. 536 bytes.
 	cp	(FDC_ERROR_CODE:16), 0
-	call	nz, (0xf967c3:24)
+	call	nz, (FDC_CONFIG_VERIFY:24)
 	calr	FDC_CmdRecalibrate
 	ld	(0x8a68:16), 255
 	ret

@@ -1257,7 +1257,7 @@ MidiCC_Handler_PairedParamA:
 	ld	(0x95ac:16), a
 	ld	(0x95a8:16), bc
 	ld	(0x95aa:16), de
-	call	MidiCC_Handler_PairedParamA_Helper
+	call	MidiCC_ApplyBankSelect
 MidiCC_Handler_PairedParamA_Return:
 	ret
 MidiCC_Handler_PairedParamB:
@@ -1278,7 +1278,7 @@ MidiCC_Handler_PairedParamB:
 	ld	(0x95ac:16), a
 	ld	(0x95a8:16), bc
 	ld	(0x95aa:16), de
-	call	MidiCC_Handler_PairedParamA_Helper
+	call	MidiCC_ApplyBankSelect
 MidiCC_Handler_PairedParamB_Return:
 	ret
 MidiCC_Handler_RangeCheck:

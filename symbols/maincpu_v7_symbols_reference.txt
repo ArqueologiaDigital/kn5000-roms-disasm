@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,365
-#   semantic names ........... 52,534 (98.4%)
+#   symbols .................. 53,367
+#   semantic names ........... 52,536 (98.4%)
 #   positional names ......... 831
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -16559,8 +16559,8 @@ LED_CyclePattern_Phase1 00EF4849
 LED_CyclePattern_Phase2 00EF4851
 LED_CyclePattern_Phase3 00EF4859
 PortWrite_BusyWait 00EF485F
-LED_Toggle_Bit2_Loop 00EF4866
-LED_Toggle_Bit3_Loop 00EF4875
+LED_BlinkBit2Forever 00EF4866
+LED_BlinkBit3Forever 00EF4875
 TableData_ROM_Verify 00EF4884
 TableData_ROM_Verify_NextBlock 00EF4890
 TableData_ROM_Verify_CheckBlock 00EF489A
@@ -32872,6 +32872,7 @@ AccVoice_LoadTuningBlock_Wrap 00F5E32E
 AccVoice_ComputeParamAddr_Wrap 00F5E33F
 AccPart_InitPositionsAndBase_Wrap 00F5E352
 AccInit_AllPartPositions_Wrap 00F5E35B
+AccPedal_ProcessAllChanges_Wrap 00F5E364
 AccStyle_SetupPartAddressesByHL_Wrap 00F5E36B
 AccVoice_LoadAllParts_Wrap 00F5E37C
 Rhythm_SendChanPressure_Wrap 00F5E3A9
@@ -47452,8 +47453,9 @@ SwbtWr_NullRet 00FC9227
 Audio_FlushPendingBankSelects 00FC9228
 BankFlush_CheckChannel1 00FC924E
 UIWidget_MidiStreamControl 00FC9275
-UIWidget_MidiStreamControl_Loop2 00FC92A7
-UIWidget_MidiStreamControl_Loop 00FC92BD
+MidiCC_ClearReceivedBankSelects 00FC92A1
+MidiCC_ClearReceivedBankSelects_Loop 00FC92A7
+MidiCC_ClearReceivedBankSelects_Loop2 00FC92BD
 SndParam_ApplyAndFetch 00FC92CA
 SndParam_CheckRhythm 00FC92FE
 SndParam_ApplyDone 00FC9306
@@ -47905,7 +47907,7 @@ MidiStream_ExtendedDispatch_Helper_Skip3 00FCC5D7
 MidiStream_ExtendedDispatch_Epilogue2 00FCC5DB
 MidiStream_ExtendedDispatch_Helper_Helper2 00FCC5E0
 MidiStream_ExtendedDispatch_Helper_Skip4 00FCC5E7
-MidiCC_Handler_PairedParamA_Helper 00FCC5E9
+MidiCC_ApplyBankSelect 00FCC5E9
 MidiStream_ExtendedDispatch_Helper_Skip5 00FCC5FD
 MidiStream_ExtendedDispatch_Helper_Skip6 00FCC625
 MidiStream_ExtendedDispatch_Join2 00FCC631
@@ -49085,12 +49087,12 @@ SeqOut_TimedChunkRemainder 00FD6466
 SeqVoice_ReadEntryFields_Data 00FD6478
 SeqVoice_StoreEntry 00FD6495
 SeqVoice_StoreEntryDone 00FD64B7
-SeqVoice_DispatchProcess_Data 00FD64BC
-SeqVoice_DispatchProcess_Data_Loop 00FD64E9
-SeqVoice_DispatchProcess_Data_Skip 00FD652C
-SeqVoice_DispatchProcess_Data_Skip2 00FD653C
-SeqVoice_DispatchProcess_Data_Epilogue 00FD653F
-MidiPkt_ArpExtHandler_G_Helper 00FD6544
+MidiPkt_UnpackNibblesToXfer 00FD64BC
+MidiPkt_UnpackNibblesToXfer_Loop 00FD64E9
+MidiPkt_UnpackNibblesToXfer_Skip 00FD652C
+MidiPkt_UnpackNibblesToXfer_Skip2 00FD653C
+MidiPkt_UnpackNibblesToXfer_Epilogue 00FD653F
+MidiPkt_SetXferLengthFromMsg 00FD6544
 MidiSeq_ClearSyncFlag_Helper 00FD6598
 SeqVoice_DispatchProcess_Data_Skip3 00FD65DD
 SeqVoice_DispatchProcess_Data_Skip4 00FD65EE
