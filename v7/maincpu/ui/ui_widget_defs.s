@@ -13952,37 +13952,37 @@ RectY2Proc:
 	ld xiz, xbc
 	ld (xsp + 12), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jrl z, EdgeVariant_A_Return
+	jrl z, RectY2Proc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, EdgeVariant_A_Execute
+	jr z, RectY2Proc_OnGetPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr z, EdgeVariant_A_CalcHeight
+	jr z, RectY2Proc_OnDumpPropertyEx
 	cp xiz, EVT_MAKE_DUMP
-	jr z, EdgeVariant_A_CalcWidth
+	jr z, RectY2Proc_OnMakeDump
 	cp xiz, EVT_GET_PROP_MEMBER
-	jr z, EdgeVariant_A_Setup
+	jr z, RectY2Proc_OnGetPropMember
 	cp xiz, EVT_CHECK_PROP_STRING
-	jr nz, EdgeVariant_A_CalcHeight2
-	jr EdgeVariant_A_Done
+	jr nz, RectY2Proc_ForwardToCommon
+	jr RectY2Proc_ReturnZero
 
-EdgeVariant_A_Setup:
-	pushw	EdgeVariant_A_Setup_Str_height@hi16
-	pushw	EdgeVariant_A_Setup_Str_height@lo16
+RectY2Proc_OnGetPropMember:
+	pushw	RectY2Proc_MemberName@hi16
+	pushw	RectY2Proc_MemberName@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
 	call	Strcat
 	inc	8, xsp
 	ld	xhl, 1:i3
-	jr	POINTWProc_Return
-EdgeVariant_A_CalcWidth:
-	pushw	EdgeVariant_A_CalcWidth_Str_RBrace@hi16
-	pushw	EdgeVariant_A_CalcWidth_Str_RBrace@lo16
+	jr	RectY2Proc_Epilogue
+RectY2Proc_OnMakeDump:
+	pushw	RectY2Proc_DumpClose@hi16
+	pushw	RectY2Proc_DumpClose@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
 	call	Strcat
 	inc	8, xsp
-	jr	EdgeVariant_A_Done
-EdgeVariant_A_CalcHeight:
+	jr	RectY2Proc_ReturnZero
+RectY2Proc_OnDumpPropertyEx:
 	ld xwa, (xsp + 8)
 	calr IDCursorAdvance
 	ld bc, (xhl)
@@ -13990,14 +13990,14 @@ EdgeVariant_A_CalcHeight:
 	ld xwa, (xsp + 8)
 	ld (xwa), xbc
 
-EdgeVariant_A_CalcHeight2:
+RectY2Proc_ForwardToCommon:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
 	calr CommonIDProc
-	jr POINTWProc_Return
+	jr RectY2Proc_Epilogue
 
-EdgeVariant_A_Execute:
+RectY2Proc_OnGetPropertyEx:
 	ld xwa, (xsp + 8)
 
 	calr	IDCursorAdvance
@@ -14026,11 +14026,11 @@ EdgeVariant_A_Execute:
 
 
 
-EdgeVariant_A_Done:
+RectY2Proc_ReturnZero:
 	ld xhl, 0:i3
-	jr POINTWProc_Return
+	jr RectY2Proc_Epilogue
 
-EdgeVariant_A_Return:
+RectY2Proc_OnSetPropertyEx:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
@@ -14038,7 +14038,7 @@ EdgeVariant_A_Return:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	or xwa, xwa
-	jr nz, EdgeVariant_B_Setup
+	jr nz, RectY2Proc_ReturnResult
 	ld xwa, (xsp + 8)
 	calr IDCursorAdvance
 	lda xbc, (xhl - 4)
@@ -14048,10 +14048,10 @@ EdgeVariant_A_Return:
 	dec 1, wa
 	ld (xhl), wa
 
-EdgeVariant_B_Setup:
+RectY2Proc_ReturnResult:
 	ld xhl, (xsp + 4)
 
-POINTWProc_Return:
+RectY2Proc_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -14061,12 +14061,12 @@ POINTWProc:
 	pushw iz
 	ld	(xsp+130), xde
 	cp xbc, EVT_CHECK_PROP_STRING
-	jr z, EdgeVariant_B_CalcWidth
+	jr z, POINTWProc_OnCheckPropString
 	ld	xde, (xsp+130)
 	calr CommonIDProc
-	jr EdgeVariant_C_Setup
+	jr POINTWProc_Epilogue
 
-EdgeVariant_B_CalcWidth:
+POINTWProc_OnCheckPropString:
 	ld	xwa, (xsp+130)
 	push	xwa
 	lda	xwa, (xsp+6)
@@ -14077,27 +14077,27 @@ EdgeVariant_B_CalcWidth:
 	ld	iz, 0:i3
 	lda	xix, (xsp+2)
 	ld	xbc, 0:i3
-	jr	EdgeVariant_B_Return
-EdgeVariant_B_CalcHeight:
+	jr	POINTWProc_CheckProp_LoopHead
+POINTWProc_CheckProp_MapChar:
 	cp a, 0x55
-	jr nz, EdgeVariant_B_Done
+	jr nz, POINTWProc_CheckProp_CopyChar
 	ld (xde), 0x56
 	inc 1, iy
 	ld wa, iy
 	extz xwa
 	add	xwa, (xsp+130)
 	ld (xwa), 0x57
-	jr EdgeVariant_B_DoneAlt
+	jr POINTWProc_CheckProp_NextChar
 
-EdgeVariant_B_Done:
+POINTWProc_CheckProp_CopyChar:
 	ld (xde), a
 
-EdgeVariant_B_DoneAlt:
+POINTWProc_CheckProp_NextChar:
 	inc 1, iz
 	inc 1, xbc
 	inc 1, iy
 
-EdgeVariant_B_Return:
+POINTWProc_CheckProp_LoopHead:
 	ld xwa, xbc
 	ld xhl, xix
 	add xhl, xwa
@@ -14106,11 +14106,11 @@ EdgeVariant_B_Return:
 	add	xde, (xsp+130)
 	ld a, (xhl)
 	cp a, 0:i3
-	jr nz, EdgeVariant_B_CalcHeight
+	jr nz, POINTWProc_CheckProp_MapChar
 	ld (xde), 0x0
 	ld xhl, 0:i3
 
-EdgeVariant_C_Setup:
+POINTWProc_Epilogue:
 	popw iz
 	lda xsp, (xsp+132:16)
 	ret
@@ -14122,30 +14122,30 @@ PointXProc:
 	ld xiz, xbc
 	ld	(xsp+264), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jrl z, EdgeVariant_C_Execute
+	jrl z, PointXProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, EdgeVariant_C_InnerFill
+	jr z, PointXProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr z, EdgeVariant_C_InnerFill
+	jr z, PointXProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_MAKE_DUMP
-	jr z, EdgeVariant_C_CalcHeight
+	jr z, PointXProc_OnMakeDump
 	cp xiz, EVT_GET_PROP_MEMBER
-	jr z, EdgeVariant_C_CalcWidth
+	jr z, PointXProc_OnGetPropMember
 	cp xiz, EVT_CHECK_PROP_STRING
-	jr z, EdgeVariant_C_CheckInner
-	jr EdgeVariant_C_CalcHeight2
+	jr z, PointXProc_OnCheckPropString
+	jr PointXProc_ForwardToCommon
 
-EdgeVariant_C_CalcWidth:
-	pushw	EdgeVariant_C_CalcWidth_Str_x@hi16
-	pushw	EdgeVariant_C_CalcWidth_Str_x@lo16
+PointXProc_OnGetPropMember:
+	pushw	PointXProc_MemberName@hi16
+	pushw	PointXProc_MemberName@lo16
 	ld	xwa, (xsp+264)
 	push	xwa
 	call	Strcat
 	inc	8, xsp
-	jr	EdgeVariant_C_CheckInner
-EdgeVariant_C_CalcHeight:
-	pushw	EdgeVariant_C_CalcHeight_Str_LBrace@hi16
-	pushw	EdgeVariant_C_CalcHeight_Str_LBrace@lo16
+	jr	PointXProc_OnCheckPropString
+PointXProc_OnMakeDump:
+	pushw	PointXProc_DumpOpen@hi16
+	pushw	PointXProc_DumpOpen@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
 	call	Strcpy
@@ -14160,11 +14160,11 @@ EdgeVariant_C_CalcHeight:
 	push	xwa
 	call	Strcpy
 	lda	xsp, (xsp+24)
-EdgeVariant_C_CheckInner:
+PointXProc_OnCheckPropString:
 	ld xhl, 0:i3
-	jr EdgeVariant_C_Return
+	jr PointXProc_Epilogue
 
-EdgeVariant_C_InnerFill:
+PointXProc_OnGetOrDumpPropertyEx:
 	ld XWA, (xsp + 0x0104)
 	calr IDCursorAdvance
 	ld bc, (xhl)
@@ -14172,31 +14172,31 @@ EdgeVariant_C_InnerFill:
 	ld XWA, (xsp + 0x0104)
 	ld (xwa), xbc
 
-EdgeVariant_C_CalcHeight2:
+PointXProc_ForwardToCommon:
 	ld XWA, (xsp + 0x0108)
 	ld xbc, xiz
 	ld XDE, (xsp + 0x0104)
 	calr CommonIDProc
-	jr EdgeVariant_C_Return
+	jr PointXProc_Epilogue
 
-EdgeVariant_C_Execute:
+PointXProc_OnSetPropertyEx:
 	ld XWA, (xsp + 0x0108)
 	ld xbc, xiz
 	ld XDE, (xsp + 0x0104)
 	calr CommonIDProc
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, EdgeVariant_C_Done
+	jr nz, PointXProc_ReturnResult
 	ld XWA, (xsp + 0x0104)
 	calr IDCursorAdvance
 	ld XWA, (xsp + 0x0104)
 	ld xwa, (xwa + 4)
 	ld (xhl), wa
 
-EdgeVariant_C_Done:
+PointXProc_ReturnResult:
 	ld xhl, xiz
 
-EdgeVariant_C_Return:
+PointXProc_Epilogue:
 	pop xiz
 	lda xsp, (xsp+264)
 	ret
@@ -14208,40 +14208,40 @@ PointYProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, ShadowBox_A_Execute
+	jr z, PointYProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, ShadowBox_A_InnerFill
+	jr z, PointYProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr z, ShadowBox_A_InnerFill
+	jr z, PointYProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_MAKE_DUMP
-	jr z, ShadowBox_A_CalcWidth
+	jr z, PointYProc_OnMakeDump
 	cp xiz, EVT_GET_PROP_MEMBER
-	jr z, ShadowBox_A_Setup
+	jr z, PointYProc_OnGetPropMember
 	cp xiz, EVT_CHECK_PROP_STRING
-	jr z, ShadowBox_A_CheckInner
-	jr ShadowBox_A_CalcHeight
+	jr z, PointYProc_OnCheckPropString
+	jr PointYProc_ForwardToCommon
 
-ShadowBox_A_Setup:
-	pushw	ShadowBox_A_Setup_Str_y@hi16
-	pushw	ShadowBox_A_Setup_Str_y@lo16
+PointYProc_OnGetPropMember:
+	pushw	PointYProc_MemberName@hi16
+	pushw	PointYProc_MemberName@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Strcat
 	inc	8, xsp
 	ld	xhl, 1:i3
-	jr	IDCursorProc_Return
-ShadowBox_A_CalcWidth:
-	pushw	ShadowBox_A_CalcWidth_Str_RBrace@hi16
-	pushw	ShadowBox_A_CalcWidth_Str_RBrace@lo16
+	jr	PointYProc_Epilogue
+PointYProc_OnMakeDump:
+	pushw	PointYProc_DumpClose@hi16
+	pushw	PointYProc_DumpClose@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Strcat
 	inc	8, xsp
-ShadowBox_A_CheckInner:
+PointYProc_OnCheckPropString:
 	ld xhl, 0:i3
-	jr IDCursorProc_Return
+	jr PointYProc_Epilogue
 
-ShadowBox_A_InnerFill:
+PointYProc_OnGetOrDumpPropertyEx:
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld bc, (xhl)
@@ -14249,31 +14249,31 @@ ShadowBox_A_InnerFill:
 	ld xwa, (xsp + 4)
 	ld (xwa), xbc
 
-ShadowBox_A_CalcHeight:
+PointYProc_ForwardToCommon:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
-	jr IDCursorProc_Return
+	jr PointYProc_Epilogue
 
-ShadowBox_A_Execute:
+PointYProc_OnSetPropertyEx:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, ShadowBox_A_Done
+	jr nz, PointYProc_ReturnResult
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 4)
 	ld (xhl), wa
 
-ShadowBox_A_Done:
+PointYProc_ReturnResult:
 	ld xhl, xiz
 
-IDCursorProc_Return:
+PointYProc_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -14285,28 +14285,28 @@ ClassIDProc:
 	ld xiz, xbc
 	ld	(xsp+4372), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, ShadowBox_A_Return
+	jr z, ClassIDProc_BuildIdList
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
-	jr z, ShadowBox_A_Return
+	jr z, ClassIDProc_BuildIdList
 	cp xiz, EVT_GET_PROP_DATA_SP
-	jr nz, ShadowBox_A_DrawEdge
+	jr nz, ClassIDProc_Dispatch
 
-ShadowBox_A_Return:
+ClassIDProc_BuildIdList:
 	ld xwa, 0:i3
 	ld (xsp + 12), xwa
 	ld xwa, 0x160
 	ld (xsp + 8), xwa
 
-ShadowBox_A_CheckAlt:
+ClassIDProc_BuildIdList_SlotLoop:
 	ld xbc, (xsp + 8)
 	ld wa, bc
 	call CountObject
 	extz xhl
 	ld xde, 0:i3
 	cp xhl, 0x0
-	jr ule, ShadowBox_A_DrawInner
+	jr ule, ClassIDProc_BuildIdList_NextSlot
 
-ShadowBox_A_DrawAlt:
+ClassIDProc_BuildIdList_ObjLoop:
 	ld xwa, (xsp + 12)
 	sll xwa, 2
 	lda xbc, (xsp+272)
@@ -14319,28 +14319,28 @@ ShadowBox_A_DrawAlt:
 	add (xsp + 12), xwa
 	inc 1, xde
 	cp xde, xhl
-	jr c, ShadowBox_A_DrawAlt
+	jr c, ClassIDProc_BuildIdList_ObjLoop
 
-ShadowBox_A_DrawInner:
+ClassIDProc_BuildIdList_NextSlot:
 	ld xwa, 1:i3
 	add (xsp + 8), xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x17f
-	jr ule, ShadowBox_A_CheckAlt
+	jr ule, ClassIDProc_BuildIdList_SlotLoop
 
-ShadowBox_A_DrawEdge:
+ClassIDProc_Dispatch:
 	cp xiz, EVT_SET_PROPERTY_EX
-	jrl z, ShadowBox_B_CalcHeight
+	jrl z, ClassIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, ShadowBox_B_CalcWidth
+	jr z, ClassIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr z, ShadowBox_B_CalcWidth
+	jr z, ClassIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_MAKE_DUMP
-	jr z, ShadowBox_B_Prologue
+	jr z, ClassIDProc_OnMakeDump
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
-	jr z, ShadowBox_B_Setup
+	jr z, ClassIDProc_OnGetPropDataCountSp
 	cp xiz, EVT_GET_PROP_DATA_SP
-	jrl nz, ShadowBox_C_Return
+	jrl nz, ClassIDProc_ForwardToCommon
 	ld XIZ, (xsp + 0x1110)
 	ld xwa, (xiz + 8)
 	sll xwa, 2
@@ -14349,15 +14349,15 @@ ShadowBox_A_DrawEdge:
 	ld xwa, (xbc)
 	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
-	jr ShadowBox_B_CheckInner
+	jr ClassIDProc_GetNameAndCopy
 
-ShadowBox_B_Setup:
+ClassIDProc_OnGetPropDataCountSp:
 	ld xhl, (xsp + 12)
-	jrl ViewFlagProc_Return
+	jrl ClassIDProc_Epilogue
 
-ShadowBox_B_Prologue:
-	pushw	ShadowBox_B_Prologue_Str_idc@hi16
-	pushw	ShadowBox_B_Prologue_Str_idc@lo16
+ClassIDProc_OnMakeDump:
+	pushw	ClassIDProc_DumpPrefix@hi16
+	pushw	ClassIDProc_DumpPrefix@lo16
 	lda	xwa, (xsp+20)
 	push	xwa
 	call	Strcpy
@@ -14371,8 +14371,8 @@ ShadowBox_B_Prologue:
 	push	xwa
 	ld	xwa, (xsp+4372)
 	push	xwa
-	jr	ShadowBox_B_InnerFill
-ShadowBox_B_CalcWidth:
+	jr	ClassIDProc_StrcpyReturnZero
+ClassIDProc_OnGetOrDumpPropertyEx:
 	ld XIZ, (xsp + 0x1110)
 	ld XWA, (xsp + 0x1110)
 	calr IDCursorAdvance
@@ -14382,27 +14382,27 @@ ShadowBox_B_CalcWidth:
 	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
 
-ShadowBox_B_CheckInner:
+ClassIDProc_GetNameAndCopy:
 	call ClassProc
 	push xhl
 	ld xwa, (xiz + 4)
 	push xwa
 
-ShadowBox_B_InnerFill:
+ClassIDProc_StrcpyReturnZero:
 	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
-	jrl	ViewFlagProc_Return
-ShadowBox_B_CalcHeight:
+	jrl	ClassIDProc_Epilogue
+ClassIDProc_OnSetPropertyEx:
 	ld xwa, 0xffffffff
 	ld (xsp + 4), xwa
 	ld xwa, 0:i3
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 12)
 	cp xwa, 0x0
-	jr ule, ShadowBox_C_CalcWidth
+	jr ule, ClassIDProc_SetProp_CheckFound
 
-ShadowBox_B_Execute:
+ClassIDProc_SetProp_CompareName:
 	ld	xwa, (xiz+4)
 	push	xwa
 	ld	xwa, (xsp+12)
@@ -14417,7 +14417,7 @@ ShadowBox_B_Execute:
 	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, ShadowBox_C_Setup
+	jr	nz, ClassIDProc_SetProp_NextIndex
 	ld	xwa, (xsp+8)
 	sll	xwa, 2
 	lda	xbc, (xsp+272)
@@ -14426,37 +14426,37 @@ ShadowBox_B_Execute:
 	ld	(xiz+4), xwa
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
-	jr	ShadowBox_C_CalcHeight
-ShadowBox_C_Setup:
+	jr	ClassIDProc_SetProp_StoreId
+ClassIDProc_SetProp_NextIndex:
 	ld xwa, 1:i3
 	add (xsp + 8), xwa
 	ld xwa, (xsp + 8)
 	cp xwa, (xsp + 12)
-	jr c, ShadowBox_B_Execute
+	jr c, ClassIDProc_SetProp_CompareName
 
-ShadowBox_C_CalcWidth:
+ClassIDProc_SetProp_CheckFound:
 	ld xwa, (xsp + 4)
 	or xwa, xwa
-	jr nz, ShadowBox_C_Execute
+	jr nz, ClassIDProc_SetProp_ReturnResult
 
-ShadowBox_C_CalcHeight:
+ClassIDProc_SetProp_StoreId:
 	ld XIZ, (xsp + 0x1110)
 	ld XWA, (xsp + 0x1110)
 	calr IDCursorAdvance
 	ld xwa, (xiz + 4)
 	ld (xhl), xwa
 
-ShadowBox_C_Execute:
+ClassIDProc_SetProp_ReturnResult:
 	ld xhl, (xsp + 4)
-	jr ViewFlagProc_Return
+	jr ClassIDProc_Epilogue
 
-ShadowBox_C_Return:
+ClassIDProc_ForwardToCommon:
 	ld XWA, (xsp + 0x1114)
 	ld xbc, xiz
 	ld XDE, (xsp + 0x1110)
 	calr CommonIDProc
 
-ViewFlagProc_Return:
+ClassIDProc_Epilogue:
 	pop xiz
 	lda xsp, (xsp+4372)
 	ret
@@ -14468,13 +14468,13 @@ ViewFlagProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, FrameVariant_A_CalcHeight
+	jr z, ViewFlagProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, FrameVariant_A_Setup
+	jr z, ViewFlagProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr nz, FrameVariant_A_CalcWidth
+	jr nz, ViewFlagProc_ForwardToCommon
 
-FrameVariant_A_Setup:
+ViewFlagProc_OnGetOrDumpPropertyEx:
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld bc, (xhl)
@@ -14482,31 +14482,31 @@ FrameVariant_A_Setup:
 	ld xwa, (xsp + 4)
 	ld (xwa), xbc
 
-FrameVariant_A_CalcWidth:
+ViewFlagProc_ForwardToCommon:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
-	jr FrameVariant_A_Done
+	jr ViewFlagProc_Epilogue
 
-FrameVariant_A_CalcHeight:
+ViewFlagProc_OnSetPropertyEx:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr CommonIDProc
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, FrameVariant_A_Execute
+	jr nz, ViewFlagProc_ReturnResult
 	ld xwa, (xsp + 4)
 	calr IDCursorAdvance
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 4)
 	ld (xhl), wa
 
-FrameVariant_A_Execute:
+ViewFlagProc_ReturnResult:
 	ld xhl, xiz
 
-FrameVariant_A_Done:
+ViewFlagProc_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret

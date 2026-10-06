@@ -1212,11 +1212,11 @@ typedef struct __attribute__((packed)) {
     char Top_str[6];
     char Width_str[8];
     char Height_str[8];
-    char EdgeVariant_A_CalcWidth_Str_RBrace[2];
-    char EdgeVariant_C_CalcWidth_Str_x[4];
-    char EdgeVariant_C_CalcHeight_Str_LBrace[2];
-    char ShadowBox_A_Setup_Str_y[4];
-    char ShadowBox_A_CalcWidth_Str_RBrace[2];
+    char RectY2Proc_DumpClose[2];
+    char PointXProc_MemberName[4];
+    char PointXProc_DumpOpen[2];
+    char PointYProc_MemberName[4];
+    char PointYProc_DumpClose[2];
     char idc_str[4];
     char ScrollBar_CalcRange_Str_DQuote[2];
     char ScrollBar_CalcRange_Str_DQuote_2[2];
@@ -4505,15 +4505,15 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .Height_str = ".height",
 
-    .EdgeVariant_A_CalcWidth_Str_RBrace = "}",
+    .RectY2Proc_DumpClose = "}",
 
-    .EdgeVariant_C_CalcWidth_Str_x = ALIGNED_STRING(".x"),
+    .PointXProc_MemberName = ALIGNED_STRING(".x"),
 
-    .EdgeVariant_C_CalcHeight_Str_LBrace = "{",
+    .PointXProc_DumpOpen = "{",
 
-    .ShadowBox_A_Setup_Str_y = ALIGNED_STRING(".y"),
+    .PointYProc_MemberName = ALIGNED_STRING(".y"),
 
-    .ShadowBox_A_CalcWidth_Str_RBrace = "}",
+    .PointYProc_DumpClose = "}",
 
     .idc_str = "idc",
 
