@@ -1076,10 +1076,7 @@ Str_PartName_Right2:	.incbin "includes/generated/naka_technichord_strings.bin", 
 ; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecc8).
 Str_PartName_Right1:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5F2, 0xA
 IvSdpart_GetText_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5FC, 0x6
-; [nakarest] naka_technichord_strings+0xf602  +0xf602..+0xf616 (0xe95550, 20 B)
-; [nakarest] purpose not established: layout of 20 B at 0xe95550 not derived; readers below
-; [nakarest] Readers: source references IvSdpartProc (ui/drawbar_panel_ui.s: `add xwa,
-; [nakarest] IvSdpartProc_CaseTable`).
+; IvSdpartProc_CaseTable -- 10 x int16: the case offsets of IvSdpartProc's compiled switch, relative to IvSdpart_Init
 IvSdpartProc_CaseTable:
 	.short	IvSdpartProc_OnIndexswUp - IvSdpart_Init
 	.short	IvSdpartProc_OnIndexswUp - IvSdpart_Init
@@ -3765,10 +3762,7 @@ TrackName4_Tr2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x196
 TrackName4_Tr1:						.incbin "includes/generated/naka_technichord_strings.bin", 0x1962C, 0x6
 PsMixerControlProc_OnSoundName_Str_Fmts_SOUND_Fmts:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19632, 0xE	; "%s SOUND : %s"
 PsMixer_ControlCommon_Str_RIGHT_1_Sound_Name_xxxxx:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19640, 0x1A	; "RIGHT 1: Sound Name xxxxx"
-; [nakarest] naka_technichord_strings+0x1965a  +0x1965a..+0x1966e (0xe9f5a8, 20 B)
-; [nakarest] purpose not established: layout of 20 B at 0xe9f5a8 not derived; readers below
-; [nakarest] Readers: source references PsMixerControlProc (ui/drawbar_panel_ui.s: `add xbc,
-; [nakarest] PsMixerControlProc_CaseTable`).
+; PsMixerControlProc_CaseTable -- 10 x int16: the case offsets of PsMixerControlProc's compiled switch, relative to PsMixer_ControlHandler
 PsMixerControlProc_CaseTable:
 	.short	PsMixer_ControlCase8 - PsMixer_ControlHandler
 	.short	PsMixer_ControlCase8 - PsMixer_ControlHandler
@@ -3993,10 +3987,7 @@ DrawbarBitmap_SliderX:	.incbin "includes/generated/naka_technichord_strings.bin"
 ; DrawbarBitmapHelper(wa = drawbar, bc = level): source = (RAM 0x3EC28)[drawbar] + 2*entry[level], drawn with
 ; DrawBitmapSPFast(22, 117) at x = DrawbarBitmap_SliderX[drawbar], y = 0x72.  Levels are clamped to 0..8 by IvDrawbar1.
 Drawbar_LevelBitmapOffsets:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19A12, 0x24
-; [nakarest] naka_technichord_strings+0x19a36  +0x19a36..+0x19a42 (0xe9f984, 12 B)
-; [nakarest] purpose not established: layout of 12 B at 0xe9f984 not derived; readers below
-; [nakarest] Readers: source references DemoMenu_WorkspaceFunc (ui/drawbar_panel_ui.s: `lda xix,
-; [nakarest] (DemoMenu_WorkspaceFunc_CaseTable:24)`).
+; DemoMenu_WorkspaceFunc_CaseTable -- 6 x int16: the case offsets of DemoMenu_WorkspaceFunc's compiled switch, relative to DemoMenu_WorkspaceDispatch
 DemoMenu_WorkspaceFunc_CaseTable:
 	.short	DemoMenu_WorkspaceDispatch - DemoMenu_WorkspaceDispatch
 	.short	DemoMenu_BuildItemWorkspace_Case10 - DemoMenu_WorkspaceDispatch
@@ -4004,10 +3995,7 @@ DemoMenu_WorkspaceFunc_CaseTable:
 	.short	DemoMenu_BuildItemWorkspace_Case12 - DemoMenu_WorkspaceDispatch
 	.short	DemoMenu_BuildItemWorkspace_Case13 - DemoMenu_WorkspaceDispatch
 	.short	DemoMenu_BuildItemWorkspace_Case14 - DemoMenu_WorkspaceDispatch
-; [nakarest] naka_technichord_strings+0x19a42  +0x19a42..+0x19a64 (0xe9f990, 34 B)
-; [nakarest] purpose not established: layout of 34 B at 0xe9f990 not derived; readers below
-; [nakarest] Readers: source references DemoMenu_DescriptorFunc (ui/drawbar_panel_ui.s: `lda
-; [nakarest] xix, (DemoMenu_DescriptorFunc_CaseTable:24)`).
+; DemoMenu_DescriptorFunc_CaseTable -- 6 x int16: the case offsets of DemoMenu_DescriptorFunc's compiled switch, relative to DemoDesc_DispatchTable
 DemoMenu_DescriptorFunc_CaseTable:
 	.short	DemoDesc_DispatchTable - DemoDesc_DispatchTable
 	.short	DemoMenu_DescriptorFunc_Case10 - DemoDesc_DispatchTable
@@ -4018,10 +4006,7 @@ DemoMenu_DescriptorFunc_CaseTable:
 PsVari_GetText_Str_EditSw_Fmtd:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19A4E, 0xA	; "EditSw%d"
 Demofeat1_GetText_Str_Fdm1:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19A58, 0x6	; "Fdm1"
 Demofeat2_GetText_Str_Fdm2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19A5E, 0x6	; "Fdm2"
-; [nakarest] naka_technichord_strings+0x19a64  +0x19a64..+0x19a7a (0xe9f9b2, 22 B)
-; [nakarest] purpose not established: layout of 22 B at 0xe9f9b2 not derived; readers below
-; [nakarest] Readers: source references AcPresentationControlProc (ui/drawbar_panel_ui.s: `add
-; [nakarest] xbc, AcPresentationControlProc_CaseTable`).
+; AcPresentationControlProc_CaseTable -- 11 x int16: the case offsets of AcPresentationControlProc's compiled switch, relative to AcPresCtrl_EventDispatch
 AcPresentationControlProc_CaseTable:
 	.short	AcPresCtrl_EventDispatch - AcPresCtrl_EventDispatch
 	.short	AcPresCtrl_DefaultCase - AcPresCtrl_EventDispatch
@@ -4094,13 +4079,7 @@ FDemoText_FullSendBitByPart:	.incbin "includes/generated/naka_technichord_string
 ; FDemoText_ProcessOutputChannels (n = 0..2) calls FDemoText_UpdatePartialVoice when this bit is set and the even bit
 ; (FDemoText_FullSendBitByPart: 0x01, 0x04, 0x10) is not.  Both in demo/fdemotext_routines.s.
 FDemoText_PartialResendBit:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19D82, 0x4
-; [nakarest] naka_technichord_strings+0x19d86  +0x19d86..+0x19da4 (0xe9fcd4, 30 B)
-; [nakarest] purpose not established: layout of 30 B at 0xe9fcd4 not derived; readers below
-; [nakarest] Readers: source references FDemoText_ByteData_VoiceProbeC
-; [nakarest] (demo/fdemotext_routines.s: `lda xix, (FDemoText_ByteData_VoiceProbeC_CaseTable:24)`),
-; [nakarest] SystemConfig_PointerTable (ui_widgets/widget_dispatch.s: `.long
-; [nakarest] FDemoText_ByteData_VoiceProbeC_CaseTable + 14`); 1 data word in SystemConfig_PointerTable (at
-; [nakarest] 0xee8cc2).
+; FDemoText_ByteData_VoiceProbeC_CaseTable -- 7 x int16: the case offsets of FDemoText_ByteData_VoiceProbeC's compiled switch, relative to FDemoText_ByteData_VoiceProbeC_Code
 FDemoText_ByteData_VoiceProbeC_CaseTable:
 	.short	FDemoText_ByteData_VoiceProbeC_Code - FDemoText_ByteData_VoiceProbeC_Code
 	.short	FDemoText_ByteData_VoiceProbeC_Code - FDemoText_ByteData_VoiceProbeC_Code
@@ -4293,10 +4272,7 @@ Seq_FillBufferLoop_Str_ACT:	.incbin "includes/generated/naka_technichord_strings
 Seq_FillBufferLoop_Str_rt:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A11E, 0x4	; "rt"
 FDemo_DisplayResourceData_Str_SQT:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A122, 0x6	; ".SQT"
 FDemo_DisplayResourceData_Str_rb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A128, 0x4	; "rb"
-; [nakarest] naka_technichord_strings+0x1a12c  +0x1a12c..+0x1a142 (0xea007a, 22 B)
-; [nakarest] purpose not established: layout of 22 B at 0xea007a not derived; readers below
-; [nakarest] Readers: source references MainPreControl (demo/file_demo_proc.s: `add xbc,
-; [nakarest] MainPreControl_CaseTable`).
+; MainPreControl_CaseTable -- 11 x int16: the case offsets of MainPreControl's compiled switch, relative to MainPreControl_Dispatch
 MainPreControl_CaseTable:
 	.short	FDemo_DisplayCtrlJumpHandler - MainPreControl_Dispatch
 	.short	MainPreControl_OnReadActionReq - MainPreControl_Dispatch
@@ -4309,10 +4285,7 @@ MainPreControl_CaseTable:
 	.short	MainPreControl_OnExistPresentation - MainPreControl_Dispatch
 	.short	MainPreControl_Dispatch - MainPreControl_Dispatch
 	.short	MainPreControl_OnExitPresentation - MainPreControl_Dispatch
-; [nakarest] naka_technichord_strings+0x1a142  +0x1a142..+0x1a150 (0xea0090, 14 B)
-; [nakarest] purpose not established: layout of 14 B at 0xea0090 not derived; readers below
-; [nakarest] Readers: source references ApPreControl (demo/file_demo_proc.s: `add xwa,
-; [nakarest] ApPreControl_CaseTable`).
+; ApPreControl_CaseTable -- 7 x int16: the case offsets of ApPreControl's compiled switch, relative to Seq_PostMelodyEvent
 ApPreControl_CaseTable:
 	.short	ApPreControl_OnReadPresentation - Seq_PostMelodyEvent
 	.short	ApPreControl_OnReadAction - Seq_PostMelodyEvent

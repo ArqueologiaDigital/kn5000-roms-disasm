@@ -919,11 +919,7 @@ PanelTlv_ResetMasks:	.incbin "includes/generated/naka_extension_device.bin", 0x2
 ; PanelTlv_ResolvePartCompanions (audio/tonegen_fileio_handlers.s), which refreshes each record's
 ; companion from its sound; typed in ui_widgets/naka_extension_device.c.
 PanelTlv_CompanionPartTags:	.incbin "includes/generated/naka_extension_device.bin", 0x2B26, 0x18
-; [nakarest] naka_extension_device+0x2b3e  +0x2b3e..+0x2b6e (0xed930a, 48 B)
-; [nakarest] purpose not established: layout of 48 B at 0xed930a not derived; readers below
-; [nakarest] Readers: source references PanelTlv_ApplyFieldRule
-; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
-; [nakarest] (PanelTlv_ApplyFieldRule_CaseOffsets:24)`).
+; PanelTlv_ApplyFieldRule_CaseOffsets -- 9 x int16: the case offsets of PanelTlv_ApplyFieldRule's compiled switch, relative to PanelTlv_ApplyFieldRule_Case0
 PanelTlv_ApplyFieldRule_CaseOffsets:
 	.short	PanelTlv_ApplyFieldRule_Case0 - PanelTlv_ApplyFieldRule_Case0
 	.short	PanelTlv_ApplyFieldRule_Case1 - PanelTlv_ApplyFieldRule_Case0
@@ -955,11 +951,7 @@ SndParamBank_DefaultHeader:	.incbin "includes/generated/naka_extension_device.bi
 SndParamBank_Default0:		.incbin "includes/generated/naka_extension_device.bin", 0x2B7E, 0xEA
 SndParamBank_Default1:		.incbin "includes/generated/naka_extension_device.bin", 0x2C68, 0xEA
 SndParamBank_Default2:		.incbin "includes/generated/naka_extension_device.bin", 0x2D52, 0xEA
-; [nakarest] naka_extension_device+0x2e3c  +0x2e3c..+0x2e4e (0xed9608, 18 B)
-; [nakarest] purpose not established: layout of 18 B at 0xed9608 not derived; readers below
-; [nakarest] Readers: source references CtrlPanel_IndicatorJumpTable
-; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
-; [nakarest] (CtrlPanel_IndicatorJumpTable_CaseTable:24)`).
+; CtrlPanel_IndicatorJumpTable_CaseTable -- 9 x int16: the case offsets of CtrlPanel_IndicatorJumpTable's compiled switch, relative to DSPCfg_Param_CaseC
 CtrlPanel_IndicatorJumpTable_CaseTable:
 	.short	DSPCfg_Param_CaseC - DSPCfg_Param_CaseC
 	.short	DSPCfg_Param_CaseC - DSPCfg_Param_CaseC
@@ -970,10 +962,7 @@ CtrlPanel_IndicatorJumpTable_CaseTable:
 	.short	CtrlPanel_IndicatorJumpTable_Case6 - DSPCfg_Param_CaseC
 	.short	CtrlPanel_IndicatorJumpTable_Case7 - DSPCfg_Param_CaseC
 	.short	CtrlPanel_IndicatorJumpTable_Case8 - DSPCfg_Param_CaseC
-; [nakarest] naka_extension_device+0x2e4e  +0x2e4e..+0x2e60 (0xed961a, 18 B)
-; [nakarest] purpose not established: layout of 18 B at 0xed961a not derived; readers below
-; [nakarest] Readers: source references Audio_DispatchCommand (audio/tonegen_fileio_handlers.s:
-; [nakarest] `lda xix, (Audio_DispatchCommand_CaseTable:24)`).
+; Audio_DispatchCommand_CaseTable -- 9 x int16: the case offsets of Audio_DispatchCommand's compiled switch, relative to DSPCfg_Param_CaseD
 Audio_DispatchCommand_CaseTable:
 	.short	DSPCfg_Param_CaseD - DSPCfg_Param_CaseD
 	.short	DSPCfg_Param_CaseD - DSPCfg_Param_CaseD
@@ -984,17 +973,7 @@ Audio_DispatchCommand_CaseTable:
 	.short	Audio_DispatchCommand_Case6 - DSPCfg_Param_CaseD
 	.short	Audio_DispatchCommand_Case7 - DSPCfg_Param_CaseD
 	.short	Audio_DispatchCommand_Case8 - DSPCfg_Param_CaseD
-; [nakarest] naka_extension_device+0x2e60  +0x2e60..+0x3452 (0xed962c, 1522 B)
-; [nakarest] purpose not established: layout of 1522 B at 0xed962c not derived; readers below
-; [nakarest] Readers: source references PanelDisplay_DispatchByMode
-; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
-; [nakarest] (PanelDisplay_DispatchByMode_CaseTable:24)`); 32 data words in
-; [nakarest] PanelButton_ActionLists (at 0xed9c1e, 0xed9c22, 0xed9c26), which is read
-; [nakarest] by PanelButton_DispatchChange (audio/tonegen_fileio_handlers.s: `ld xwa,
-; [nakarest] PanelButton_ActionLists`); 32 data words in
-; [nakarest] PanelButton_HelpModeActionLists (at 0xed9c9e, 0xed9ca2, 0xed9ca6), which is read
-; [nakarest] by PanelButton_DispatchChange (audio/tonegen_fileio_handlers.s: `ld xwa,
-; [nakarest] PanelButton_HelpModeActionLists`).
+; PanelDisplay_DispatchByMode_CaseTable -- 9 x int16: the case offsets of PanelDisplay_DispatchByMode's compiled switch, relative to PanelDisplay_DispatchData
 PanelDisplay_DispatchByMode_CaseTable:
 	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData
 	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData

@@ -282,10 +282,7 @@ BitMapOut_UpdateDisplayWidget_Str_Non_Panel_Memory:	.incbin "includes/generated/
 ; 0x3C2C4 + block_offset + byte_offset -- 0x3C2C4 is the backup of the panel block 0xF9A0..0xFD5F
 ; (EffectMode_BackupParamBlock), so block_offset is relative to 0xF9A0
 EffectMode_PresetFieldMap:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA1C, 0xBA
-; [nakarest] naka_style_bitmaps+0xad6  +0xad6..+0xae2 (0xeb7c94, 12 B)
-; [nakarest] purpose not established: layout of 12 B at 0xeb7c94 not derived; readers below
-; [nakarest] Readers: source references OneTchFUNC (ui/bitmap_out_routines.s: `add xde,
-; [nakarest] OneTchFUNC_CaseTable`).
+; OneTchFUNC_CaseTable -- 6 x int16: the case offsets of OneTchFUNC's compiled switch, relative to BitMapOut_ByteData_WidgetTable
 OneTchFUNC_CaseTable:
 	.short	BitMapOut_ByteData_WidgetTable - BitMapOut_ByteData_WidgetTable
 	.short	BitMapOut_ApplyWidgetPatch - BitMapOut_ByteData_WidgetTable
@@ -338,10 +335,7 @@ DramTest_IC10IC9_Regions:	.incbin "includes/generated/naka_style_bitmaps.bin", 0
 ; Per byte pair: 0x5A into the first byte, 0xA5 into the second, each compared and restored; a miscompare ORs fail_mask[0] (0x04) into
 ; the result passed on from Test_DRAM_IC10_and_IC9, whose own table has the same 10-byte shape (bits 0x01/0x02).
 SramTest_IC21Regions:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE7A, 0xA
-; [nakarest] naka_style_bitmaps+0xe84  +0xe84..+0xe90 (0xeb8042, 12 B)
-; [nakarest] purpose not established: layout of 12 B at 0xeb8042 not derived; readers below
-; [nakarest] Readers: source references TEST2FUNC (ui/ui_mode_handlers.s: `add xde,
-; [nakarest] TEST2FUNC_CaseTable`).
+; TEST2FUNC_CaseTable -- 6 x int16: the case offsets of TEST2FUNC's compiled switch, relative to TEST2FUNC_DispatchReturn
 TEST2FUNC_CaseTable:
 	.short	TEST2FUNC_DispatchReturn - TEST2FUNC_DispatchReturn
 	.short	TableDispatch_Return3 - TEST2FUNC_DispatchReturn
@@ -349,10 +343,7 @@ TEST2FUNC_CaseTable:
 	.short	TableDispatch_Return3 - TEST2FUNC_DispatchReturn
 	.short	TableDispatch_Return3 - TEST2FUNC_DispatchReturn
 	.short	TableDispatch_Return3 - TEST2FUNC_DispatchReturn
-; [nakarest] naka_style_bitmaps+0xe90  +0xe90..+0xe9c (0xeb804e, 12 B)
-; [nakarest] purpose not established: layout of 12 B at 0xeb804e not derived; readers below
-; [nakarest] Readers: source references TEST3FUNC (ui/ui_mode_handlers.s: `add xde,
-; [nakarest] TEST3FUNC_CaseTable`).
+; TEST3FUNC_CaseTable -- 6 x int16: the case offsets of TEST3FUNC's compiled switch, relative to TEST3FUNC_DispatchReturn
 TEST3FUNC_CaseTable:
 	.short	TEST3FUNC_DispatchReturn - TEST3FUNC_DispatchReturn
 	.short	TableDispatch_Return4 - TEST3FUNC_DispatchReturn
@@ -360,10 +351,7 @@ TEST3FUNC_CaseTable:
 	.short	TableDispatch_Return4 - TEST3FUNC_DispatchReturn
 	.short	TableDispatch_Return4 - TEST3FUNC_DispatchReturn
 	.short	TableDispatch_Return4 - TEST3FUNC_DispatchReturn
-; [nakarest] naka_style_bitmaps+0xe9c  +0xe9c..+0xea8 (0xeb805a, 12 B)
-; [nakarest] purpose not established: layout of 12 B at 0xeb805a not derived; readers below
-; [nakarest] Readers: source references TEST4FUNC (ui/ui_mode_handlers.s: `add xde,
-; [nakarest] TEST4FUNC_CaseTable`).
+; TEST4FUNC_CaseTable -- 6 x int16: the case offsets of TEST4FUNC's compiled switch, relative to TEST4FUNC_DispatchReturn
 TEST4FUNC_CaseTable:
 	.short	TEST4FUNC_DispatchReturn - TEST4FUNC_DispatchReturn
 	.short	TableDispatch_Return5 - TEST4FUNC_DispatchReturn
@@ -371,10 +359,7 @@ TEST4FUNC_CaseTable:
 	.short	TableDispatch_Return5 - TEST4FUNC_DispatchReturn
 	.short	TableDispatch_Return5 - TEST4FUNC_DispatchReturn
 	.short	TableDispatch_Return5 - TEST4FUNC_DispatchReturn
-; [nakarest] naka_style_bitmaps+0xea8  +0xea8..+0xeb4 (0xeb8066, 12 B)
-; [nakarest] purpose not established: layout of 12 B at 0xeb8066 not derived; readers below
-; [nakarest] Readers: source references TEST6FUNC (ui/ui_mode_handlers.s: `add xde,
-; [nakarest] TEST6FUNC_CaseTable`).
+; TEST6FUNC_CaseTable -- 6 x int16: the case offsets of TEST6FUNC's compiled switch, relative to TEST6FUNC_DispatchReturn
 TEST6FUNC_CaseTable:
 	.short	TEST6FUNC_DispatchReturn - TEST6FUNC_DispatchReturn
 	.short	TableDispatch_Return - TEST6FUNC_DispatchReturn
