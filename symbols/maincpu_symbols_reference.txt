@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 53,221
-#   semantic names ........... 52,470 (98.6%)
+#   symbols .................. 53,224
+#   semantic names ........... 52,473 (98.6%)
 #   positional names ......... 751
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -28175,6 +28175,9 @@ SeqPlay_StopAndClearSequence_Skip5 00F438AA
 SeqPlay_StopAndClearSequence_Skip6 00F438B0
 SeqPlay_StopAndClearSequence_Skip7 00F438B4
 SeqPlay_StopAndClearSequence_Join2 00F438B8
+SeqPlay_CountInToLastBar 00F438D2
+SeqPlay_AdvanceMeasure 00F438F5
+SeqPlay_CountInEnd 00F43931
 SeqPlay_StopAndClearSequence_Skip 00F43980
 SeqPlay_StopAndClearSequence_Skip2 00F43984
 SeqPlay_StopAndClearSequence_Skip3 00F43988
@@ -30009,7 +30012,7 @@ SeqStep_PlaybackResult2 00F4E769
 SeqStep_PlaybackResult3 00F4E76F
 SeqStep_PlaybackReturn 00F4E773
 SeqStep_PlaybackNop 00F4E777
-SeqStep_PlaybackMaxPart 00F4E778
+SeqStep_TimerNop 00F4E778
 SeqStep_FindLastUsedPart 00F4E779
 SeqStep_FindLastLoop 00F4E798
 SeqStep_FindLastReturn 00F4E7A7

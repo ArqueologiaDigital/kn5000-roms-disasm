@@ -19589,6 +19589,8 @@ SeqPlay_StopAndClearSequence_Join:
 	ld	e, (1075:16)
 	ld	(9010:16), e
 	jp	SeqMode_SendStatusUpdate
+; SeqStep_TimerDispatch_ProcTables target: count-in measure -2 -> -1 (RAM 0x2668, sign-magnitude)
+SeqPlay_CountInToLastBar:
 	bit	2, (10418:16)
 	ret	z
 	ld	wa, (9832:16)
@@ -19600,6 +19602,8 @@ SeqPlay_StopAndClearSequence_Join:
 	ldw	(9832:16), 32769
 	call	NoteEditSy_SendModeScrollReset
 	ret
+; SeqStep_TimerDispatch_ProcTables target: measure counter + 1 per bar of beats, at most 999
+SeqPlay_AdvanceMeasure:
 	ld	wa, (9008:16)
 	ld	bc, (SEQ_BEAT_COUNT:16)
 	cp	bc, wa
@@ -19618,6 +19622,8 @@ SeqPlay_StopAndClearSequence_Join:
 	ld	e, (1075:16)
 	ld	(9010:16), e
 	jp	SeqMode_SendStatusUpdate
+; SeqStep_TimerDispatch_ProcTables target: the count-in ends -- sequencer state 8/12/16/20 -> + 1
+SeqPlay_CountInEnd:
 	bit	1, (10418:16)
 	ret	z
 	ld	wa, (9832:16)

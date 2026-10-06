@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 52,984
-#   semantic names ........... 52,149 (98.4%)
+#   symbols .................. 52,987
+#   semantic names ........... 52,152 (98.4%)
 #   positional names ......... 835
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -27964,6 +27964,9 @@ SeqPlay_StopAndClearSequence_Skip2 00F4389C
 SeqPlay_StopAndClearSequence_Skip3 00F438A2
 SeqPlay_StopAndClearSequence_Skip4 00F438A6
 SeqPlay_StopAndClearSequence_Join 00F438AA
+SeqPlay_CountInToLastBar 00F438C4
+SeqPlay_AdvanceMeasure 00F438E7
+SeqPlay_CountInEnd 00F43923
 SeqPlay_StopAndClearSequence_Skip5 00F43972
 SeqPlay_StopAndClearSequence_Skip6 00F43976
 SeqPlay_StopAndClearSequence_Skip7 00F4397A
@@ -29744,7 +29747,7 @@ SeqStep_PlaybackResult2 00F4E365
 SeqStep_PlaybackResult3 00F4E36B
 SeqStep_PlaybackReturn 00F4E36F
 SeqStep_PlaybackNop 00F4E373
-SeqStep_PlaybackMaxPart 00F4E374
+SeqStep_TimerNop 00F4E374
 SeqStep_FindLastUsedPart 00F4E375
 SeqStep_FindLastLoop 00F4E394
 SeqStep_FindLastReturn 00F4E3A3

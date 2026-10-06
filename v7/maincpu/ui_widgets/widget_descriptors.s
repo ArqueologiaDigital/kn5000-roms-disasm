@@ -5224,9 +5224,10 @@ SeqStep_DeleteDone_CaseTable:
 ; 0xf4e65a, v7 0xf4e256) uses +0x00, SeqStep_TimerDispatchB (v10/v9
 ; 0xf4e66f, v7 0xf4e26b) +0x5c, SeqStep_TimerDispatchC (v10/v9 0xf4e684,
 ; v7 0xf4e280) +0xb8 -- each `lda xbc,<table>; ld xhl,(xbc+4*i); jp
-; (xhl)`. The targets (SeqStep_PlaybackMaxPart,
-; SeqPlay_BufferUpdateBlock, SeqNotify_DataBlock and three unlabelled
-; addresses) are the handlers; 23 = (0x104-0xa8)/4, and all 69 values
+; (xhl)`. The targets (SeqStep_TimerNop,
+; SeqPlay_BufferUpdateBlock, SeqNotify_DataBlock, SeqPlay_CountInToLastBar,
+; SeqPlay_AdvanceMeasure and SeqPlay_CountInEnd -- the last three labelled
+; 2026-10-06, scripts/tools/label_seq_timer_handlers.py) are the handlers; 23 = (0x104-0xa8)/4, and all 69 values
 ; are code addresses (v7 relocates them through v7_c_divergence.json).
 ; The code also points into it at +0x5c, +0xb8.
 ;

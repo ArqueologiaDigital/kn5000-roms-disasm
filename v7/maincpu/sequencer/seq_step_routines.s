@@ -2678,7 +2678,7 @@ SeqStep_PlaybackReturn:
 SeqStep_PlaybackNop:
 	ret
 
-SeqStep_PlaybackMaxPart:
+SeqStep_TimerNop:
 	ret
 
 SeqStep_FindLastUsedPart:

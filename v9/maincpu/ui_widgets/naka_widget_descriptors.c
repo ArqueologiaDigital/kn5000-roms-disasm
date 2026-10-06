@@ -20,6 +20,9 @@
 
 /* ── External symbols (resolved by linker script) ── */
 
+extern const char SeqPlay_AdvanceMeasure;
+extern const char SeqPlay_CountInEnd;
+extern const char SeqPlay_CountInToLastBar;
 extern const char AcCtlMsgGridBoxProc;
 extern const char AcFadeSetGridBoxProc;
 extern const char AcGMOnOffBoxProc;
@@ -78,7 +81,7 @@ extern const char SeqInit_ReturnStub;
 extern const char SeqInit_SetBaseAddress;
 extern const char SeqNotify_DataBlock;
 extern const char SeqPlay_BufferUpdateBlock;
-extern const char SeqStep_PlaybackMaxPart;
+extern const char SeqStep_TimerNop;
 extern const char SplitPointFunc;
 extern const char StsAreYouSureCheck;
 extern const char StsAttentionCheck;
@@ -2556,9 +2559,10 @@ typedef struct __attribute__((packed)) {
      * 0xF4E65A, v7 0xF4E256) uses +0x00, SeqStep_TimerDispatchB (v10/v9
      * 0xF4E66F, v7 0xF4E26B) +0x5C, SeqStep_TimerDispatchC (v10/v9 0xF4E684,
      * v7 0xF4E280) +0xB8 -- each `lda xbc,<table>; ld xhl,(xbc+4*i); jp
-     * (xhl)`. The targets (SeqStep_PlaybackMaxPart,
-     * SeqPlay_BufferUpdateBlock, SeqNotify_DataBlock and three unlabelled
-     * addresses) are the handlers; 23 = (0x104-0xA8)/4, and all 69 values
+     * (xhl)`. The targets (SeqStep_TimerNop,
+     * SeqPlay_BufferUpdateBlock, SeqNotify_DataBlock, SeqPlay_CountInToLastBar,
+     * SeqPlay_AdvanceMeasure and SeqPlay_CountInEnd -- the last three labelled
+     * 2026-10-06, scripts/tools/label_seq_timer_handlers.py) are the handlers; 23 = (0x104-0xA8)/4, and all 69 values
      * are code addresses (v7 relocates them through v7_c_divergence.json).
      * The code also points into it at +0x5C, +0xB8.
      * --------------------------------------------------------------------- */
@@ -9691,79 +9695,79 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .SeqStep_TimerDispatch_ProcTables = {
         /* 0 */ {
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            0x00F438F5,
-            0x00F438F5,
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqPlay_AdvanceMeasure),
+            NAKA_ADDR(SeqPlay_AdvanceMeasure),
+            NAKA_ADDR(SeqStep_TimerNop),
             NAKA_ADDR(SeqPlay_BufferUpdateBlock),
             NAKA_ADDR(SeqPlay_BufferUpdateBlock),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            0x00F438D2,
-            0x00F438D2,
-            0x00F438F5,
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            0x00F438D2,
-            0x00F438D2,
-            0x00F438F5,
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            0x00F438D2,
-            0x00F438D2,
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqPlay_CountInToLastBar),
+            NAKA_ADDR(SeqPlay_CountInToLastBar),
+            NAKA_ADDR(SeqPlay_AdvanceMeasure),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqPlay_CountInToLastBar),
+            NAKA_ADDR(SeqPlay_CountInToLastBar),
+            NAKA_ADDR(SeqPlay_AdvanceMeasure),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqPlay_CountInToLastBar),
+            NAKA_ADDR(SeqPlay_CountInToLastBar),
             NAKA_ADDR(SeqPlay_BufferUpdateBlock),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            0x00F438D2,
-            0x00F438D2,
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqPlay_CountInToLastBar),
+            NAKA_ADDR(SeqPlay_CountInToLastBar),
             NAKA_ADDR(SeqPlay_BufferUpdateBlock),
         },
         /* 1 */ {
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            0x00F43931,
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            0x00F43931,
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            0x00F43931,
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            0x00F43931,
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqPlay_CountInEnd),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqPlay_CountInEnd),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqPlay_CountInEnd),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqPlay_CountInEnd),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
         },
         /* 2 */ {
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
             NAKA_ADDR(SeqNotify_DataBlock),
             NAKA_ADDR(SeqNotify_DataBlock),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
             NAKA_ADDR(SeqNotify_DataBlock),
             NAKA_ADDR(SeqNotify_DataBlock),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
             NAKA_ADDR(SeqNotify_DataBlock),
             NAKA_ADDR(SeqNotify_DataBlock),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
             NAKA_ADDR(SeqNotify_DataBlock),
             NAKA_ADDR(SeqNotify_DataBlock),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
-            NAKA_ADDR(SeqStep_PlaybackMaxPart),
+            NAKA_ADDR(SeqStep_TimerNop),
+            NAKA_ADDR(SeqStep_TimerNop),
         },
     },
 
