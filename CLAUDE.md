@@ -879,6 +879,15 @@ that we can have strong evidence whenever we reach true full code-coverage"*.
    distinct ones in v10, and respelling their offset tables as `.short Case - Base`. Re-read this
    paragraph against each new snapshot and update it when it stops being true.
 
+### Semantic Score Badges
+
+The README's badges come from `make semantic-score` (`scripts/analysis/semantic_score.py`, which defines each
+component). It writes `docs/badges/*.svg`, `semantic-score.json` and appends a row to
+`semantic-score-history.csv`. Re-run it after a change that moves the semantics noticeably, and always after
+committing a new dispatch-census snapshot. Commit `docs/badges/` in the same commit as the change, and quote the
+figures from the script's output, never by hand. The score is a summary for the badge; claims about coverage
+still go through the ledger above.
+
 ### Binary Include Splitting (MANDATORY)
 
 **When disassembled code references an address inside a binary include, the binary must be split.**

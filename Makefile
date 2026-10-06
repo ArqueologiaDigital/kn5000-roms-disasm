@@ -32,7 +32,7 @@ CLANG=$(LLVM_BIN)/clang
 
 .PHONY: all llvm-all paramblocks screendata naka clean clean-asl clean-all
 .PHONY: wsa1 wsa1-clean everything gate gate-wsa1 gate-all
-.PHONY: llvm-convert llvm-convert-all asl-all gallery issues rom-status website dispatch-census
+.PHONY: llvm-convert llvm-convert-all asl-all gallery issues rom-status website dispatch-census semantic-score
 .SECONDARY:
 
 .PHONY: decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi demo-sidecars
@@ -1135,6 +1135,11 @@ dispatch-census:
 	python3 scripts/analysis/dispatch_table_census/build_maps.py
 	python3 scripts/analysis/dispatch_table_census/census.py --compare $$(git ls-files 'docs/coverage/dispatch-census-*.json' | sort | tail -1)
 	python3 scripts/analysis/dispatch_table_census/census.py --snapshot docs/coverage
+
+# The semantic score and the README badges in docs/badges/ (scripts/analysis/semantic_score.py: what each
+# component measures). Needs a built tree; runs the data census (~2 min). Commit docs/badges/ afterwards.
+semantic-score:
+	python3 scripts/analysis/semantic_score.py
 
 website: gallery issues rom-status
 	@echo "Website content updated. Don't forget to commit technics-docs."

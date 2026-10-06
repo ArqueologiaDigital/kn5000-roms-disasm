@@ -1,3 +1,11 @@
+[![semantic disasm](docs/badges/semantic-score.svg)](#how-semantic-is-it)
+[![KN5000 semantic](docs/badges/semantic-score-kn5000.svg)](#how-semantic-is-it)
+[![SX-WSA1R semantic](docs/badges/semantic-score-wsa1.svg)](#how-semantic-is-it)
+[![bytes understood](docs/badges/semantic-bytes.svg)](#how-semantic-is-it)
+[![semantic names](docs/badges/semantic-names.svg)](#how-semantic-is-it)
+[![jump tables resolved](docs/badges/semantic-entry.svg)](#how-semantic-is-it)
+[![C fields named](docs/badges/semantic-fields.svg)](#how-semantic-is-it)
+
 It's been many many years that I've been studying the ROM code of the Technics KN5000 music keyboard with two major goals:
 
 - [To emulate it on MAME](https://github.com/mamedev/mame/pull/14558)
@@ -12,6 +20,24 @@ I hope nobody gets mad at me for doing so. As this device was discontinued decad
 Cheers,
 Felipe Sanches
 
+
+## How semantic is it?
+
+Every image already rebuilds byte-identical to its dump, so byte-match says nothing about progress. The
+badges above measure understanding instead, over every ROM of both models. They are produced by
+`make semantic-score`, i.e. `scripts/analysis/semantic_score.py`, whose docstring defines each part:
+
+- **bytes understood**: bytes whose purpose the source states with evidence: code, documented data and
+  verified filler (`scripts/analysis/data_range_census.py`).
+- **semantic names**: linked symbols whose name says what the thing is. Names that only restate an
+  address (`sub_F4A2B0`) or a position (`Foo_Helper7`, `Foo_Case5`) do not count.
+- **jump tables resolved**: jump/call tables whose every entry lands on a labelled instruction, spelled
+  symbolically (the committed dispatch census, `docs/coverage/`).
+- **C fields named**: C struct members with a meaningful name rather than an index (`str_3`,
+  `field_0a38`).
+
+The score is the mean of these components, per model and overall. Every number behind it, with its
+commit, is in `docs/badges/semantic-score.json`; the trend is in `docs/badges/semantic-score-history.csv`.
 
 ## This repository now holds two disassemblies
 
