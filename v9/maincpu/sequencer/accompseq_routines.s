@@ -2123,6 +2123,7 @@ TempoScale_2Beats:
 TempoScale_1Beat:
 	; data, not code: TempoScale_1Beat is reached only as data (2 data), and its instruction decode held swi (scripts/converters/data_as_code_to_bytes.py).
 	.byte	0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x84
+AccompSeq_InitFuncTable:
 	.long	AccompSeq_ResetToFactoryBanks
 	.long	AccompSeq_VoiceResetStub
 	.long	AccompSeq_InitBankIfNoError

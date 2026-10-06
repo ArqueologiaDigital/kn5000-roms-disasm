@@ -4929,6 +4929,7 @@ FDemoText_ByteData_VoiceProbeC_Data_3:
 	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_Code
 	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_Code
 	.short	FDemoText_ByteData_VoiceProbeC_Case7 - FDemoText_ByteData_VoiceProbeC_Code
+FDemoText_InitFuncTable:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x19d94, 0x10
 ; [nakarest] naka_technichord_strings+0x19da4  +0x19da4..+0x19da8 (0xe9fcf2, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xe9fcf2 not derived; readers below

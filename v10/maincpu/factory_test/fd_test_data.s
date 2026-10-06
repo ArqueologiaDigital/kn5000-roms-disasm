@@ -477,9 +477,10 @@ LoadExtROM_Entry_Str_Different_ID:
 	aligned_string "Different ID"
 LoadXaprInit_Entry_Str_XAPR:	aligned_string "XAPR"
 WidgetDispatch_FDTestPtrTable:
-	.byte 0xa9, 0xe9
-	.byte 0xf1, 0x00, 0xcd, 0xe9, 0xf1, 0x00, 0xce, 0xe9
-	.byte	0xf1, 0x00, 0xcf, 0xe9, 0xf1, 0x00
+	.long	LoadXaprInit_Entry
+	.long	HamaStub1_Entry
+	.long	HamaStub2_Entry
+	.long	HamaStub3_Entry
 LoadExtROM_JumpEntry_Data:	.byte	0x58, 0x41
 	.byte 0x50, 0x52, 0x00, 0xff
 ResInfo_GetResourceListPtr_Str_TEST:

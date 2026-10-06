@@ -8422,11 +8422,19 @@ AccPlayMode_Dispatch_Execute:
 
 AccPlayMode_Dispatch_Table:
 	.byte	0x00, 0x00
-AccPlayMode_Dispatch_Execute_Data:	.byte	0x19, 0xae, 0xf5, 0x00, 0x4d, 0xaf
-	.byte 0xf5, 0x00, 0xd0, 0xaf, 0xf5, 0x00, 0x04, 0xb0
-	.byte 0xf5, 0x00, 0xb7, 0xaf, 0xf5, 0x00, 0x3c, 0xaf
-	.byte 0xf5, 0x00, 0xb2, 0xaf, 0xf5, 0x00, 0x9d, 0xaf
-	.byte 0xf5, 0x00, 0x0e, 0x00, 0x00
+AccPlayMode_Dispatch_Execute_Data:
+	.long	AccPlayMode_OnMask0_Nop
+	.long	AccPlayMode_StartPlay2
+	.long	AccPlayMode_StopExprD
+	.long	AccPlayMode_OnMask3
+	.long	AccPlayMode_OnMask4
+	.long	AccPlayMode_StopToSync2
+	.long	AccPlayMode_StopExprC
+	.long	AccPlayMode_StopExprFull
+AccPlayMode_OnMask0_Nop:
+	ret
+	nop
+	nop
 
 AccPlayMode_TransitionRouter:
 	cpw (0x28a8:16), 0
@@ -8676,6 +8684,7 @@ AccPlayMode_StopExprFull_Process:
 
 AccPlayMode_StopExprC:
 	ld (SEQ_TRANSPORT_STATE:16), 12
+AccPlayMode_OnMask4:
 	bit 3, (1056:16)
 	jr nz, AccPlayMode_StopExprC_Process
 	bit 2, (1056:16)
@@ -8718,6 +8727,7 @@ AccPlayMode_StartAccPlayFull_Return:
 AccPlayMode_StartAccPlayFull_Padding:
 	nop
 	nop
+AccPlayMode_OnMask3:
 	ld	(SEQ_TRANSPORT_STATE:16), 12
 	ld	(1054:16), 12
 	and	(0x3470:16), 15
@@ -13795,16 +13805,11 @@ AccTone_LookupByProgramWrapped_Join:
 	call	AccStyle_UseSecondarySource
 	pop	xiz
 	ret
-	push_f
-	cp	xiy, xbc
-	nop
-	ldf 233
-	lda xbc, (xwa0+:1)
-	cp xiy, xbc
-	nop
-	ld	a, 233:opc
-	.byte 0xf5
-	nop
+AccPatch_InitFuncTable:
+	.long	AccTone_StubReturn_B
+	.long	AccTone_StubReturn_A
+	.long	AccDemo_InitDone
+	.long	AccPatch_InitAndCountSlots
 
 AccTone_StubReturn_A:
 	ret

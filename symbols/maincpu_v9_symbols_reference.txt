@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,238
-#   semantic names ........... 52,486 (98.6%)
+#   symbols .................. 53,244
+#   semantic names ........... 52,492 (98.6%)
 #   positional names ......... 752
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -8158,6 +8158,7 @@ FDemoText_ProcessVoiceFlags_CheckBits_Data 00E9FCC8
 FDemoText_ByteData_VoiceProbeC_Data 00E9FCCC
 FDemoText_ByteData_VoiceProbeC_Data_2 00E9FCD0
 FDemoText_ByteData_VoiceProbeC_Data_3 00E9FCD4
+FDemoText_InitFuncTable 00E9FCE2
 FDemoText_ProcessMarkup_LookupTag_PtrTable 00E9FCF2
 FDemoText_ProcessMarkup_LookupTag_PtrTable_2 00E9FCF6
 FDemoText_ByteData_DisplayRefresh_Str_NONE 00E9FDD0
@@ -32216,6 +32217,7 @@ AccPlayMode_Dispatch_Select 00F5ADE0
 AccPlayMode_Dispatch_Execute 00F5ADE9
 AccPlayMode_Dispatch_Table 00F5ADF7
 AccPlayMode_Dispatch_Execute_Data 00F5ADF9
+AccPlayMode_OnMask0_Nop 00F5AE19
 AccPlayMode_TransitionRouter 00F5AE1C
 AccPlayMode_Router_Check 00F5AE31
 AccPlayMode_Router_Process 00F5AE36
@@ -32263,6 +32265,7 @@ AccPlayMode_StartPlayFull_Padding 00F5AF9B
 AccPlayMode_StopExprFull 00F5AF9D
 AccPlayMode_StopExprFull_Process 00F5AFAD
 AccPlayMode_StopExprC 00F5AFB2
+AccPlayMode_OnMask4 00F5AFB7
 AccPlayMode_StopExprC_Process 00F5AFC8
 AccPlayMode_StopExprC_Return 00F5AFCE
 AccPlayMode_StopExprD 00F5AFD0
@@ -32270,6 +32273,7 @@ AccPlayMode_StopExprD_Return 00F5AFD6
 AccPlayMode_StartAccPlayFull 00F5AFD8
 AccPlayMode_StartAccPlayFull_Return 00F5B001
 AccPlayMode_StartAccPlayFull_Padding 00F5B002
+AccPlayMode_OnMask3 00F5B004
 AccTempo_ClearCounters 00F5B01B
 AccTempo_ClearPositions 00F5B02A
 AccTempo_ClearPositions_Loop 00F5B03C
@@ -32762,6 +32766,7 @@ AccTuning_DispatchDataBlock_B 00F5E8BD
 AccTone_LookupByProgramWrapped 00F5E8CC
 AccTone_JumpTableData 00F5E8E7
 AccTone_LookupByProgramWrapped_Join 00F5E900
+AccPatch_InitFuncTable 00F5E907
 AccTone_StubReturn_A 00F5E917
 AccTone_StubReturn_B 00F5E918
 AccPatch_CountSlots_Wrapper 00F5E919
@@ -35798,6 +35803,7 @@ TempoScale_4Beats 00F6F042
 TempoScale_3Beats 00F6F04D
 TempoScale_2Beats 00F6F057
 TempoScale_1Beat 00F6F060
+AccompSeq_InitFuncTable 00F6F068
 AccompSeq_VoiceResetStub 00F6F078
 AccompSeq_ResetToFactoryBanks 00F6F079
 AccompSeq_InitBankIfNoError 00F6F07E

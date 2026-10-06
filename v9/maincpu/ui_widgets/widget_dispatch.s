@@ -7231,6 +7231,10 @@ UIState_DefaultConfig_C:	.long 0xffffffff	; codes 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 
 SwbtBank3_PostCallbacks:	.long 0xffffffff	; bank 3 post list: SwbtWr_PostCallback_Loop calls each entry once the queue drains
 	.byte 0xff				; pad (read by nothing)
 
+; The four slots are init phases (scripts/tools/label_subsys_init_tables.py): the boot code calls
+; ScreenGroup_Dispatch with WA = 0 after the Sub-CPU payload transfer, then 1 if SubCPU_Payload_GetErrorFlag
+; is 0 or 2 if not, then 3 -- the audio table reads Audio_InitAllDefaults | Audio_ReinitToneGenAndOutput |
+; Audio_ResetAfterPayloadError | Audio_FullReinitWithPreset.
 ; NULL-terminated list of 19 handler tables (19 x u32 + 0).  VoiceInit_Dispatch
 ; (0xFDDB5A) and ScreenGroup_WidgetLoop (0xFDDB7D) walk it: `ld xbc,<this>;
 ; add xbc,xwa; ld xwa,(xbc); add xwa,xde; ld xhl,(xwa); call (xhl)` -- entry i
@@ -7254,10 +7258,10 @@ Subsys_HandlerTableList:
 	.long Subsys_HandlerTable11
 	.long WidgetData_CharsetMappingTable
 	.long SeqByteBlock_DispatchJumpTable
-	.long TempoScale_1Beat + 8	; no label at this target yet
-	.long AccTone_JumpTableData + 32	; no label at this target yet
-	.long Subsys_HandlerTable01 + 82	; no label at this target yet
-	.long DemoDiskPrompt_English1 + 164	; no label at this target yet
+	.long	AccompSeq_InitFuncTable
+	.long	AccPatch_InitFuncTable
+	.long	SoundRam_HandlerTable
+	.long	FDemoText_InitFuncTable
 	.long CharMap_Preamble_Table
 	.long 0x00000000
 ; 6 bytes 0,1,2,3,4,0xFF after the list's 0 terminator.  No reader: neither an
