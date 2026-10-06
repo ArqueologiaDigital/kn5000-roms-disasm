@@ -5201,8 +5201,8 @@ UpdSeSel_DetailedUpdate_Helper6:
 	ld	iz, (xsp+6)
 SeMenu_ApplyPartEdit_Skip60:
 	pushw 171
-	pushw SeMenu_ApplyPartEdit_AltStore_Data_2@hi16
-	pushw SeMenu_ApplyPartEdit_AltStore_Data_2@lo16
+	pushw	232	; four word arguments, not a far pointer
+	pushw	118
 	pushw 67
 	call	SeMenu_ClearRect
 	inc	8, xsp
@@ -5328,8 +5328,8 @@ Scoop_SoundEditorData_Helper7:
 	scc	c, a
 	ld	(xsp+4), a
 	pushw 130
-	pushw SeMenu_ApplyPartEdit_AltStore_Data@hi16
-	pushw SeMenu_ApplyPartEdit_AltStore_Data@lo16
+	pushw	232	; four word arguments, not a far pointer
+	pushw	77
 	pushw 67
 	call	SeMenu_ClearRect
 	inc	8, xsp

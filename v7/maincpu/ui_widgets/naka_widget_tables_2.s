@@ -2790,8 +2790,7 @@ NakaInst_OFF_E80048:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25
 ; Typed in naka_widget_tables_2.c as char
 ; ComSetGridCheck_JumpTable_Str[6].
 ; -----------------------------------------------------------------------------
-ComSetGridCheck_JumpTable_Str:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25CAC, 0x3
-SeMenu_ApplyPartEdit_AltStore_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25CAF, 0x3
+ComSetGridCheck_JumpTable_Str:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25CAC, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Str_2
 ; ComSetGridCheck_JumpTable_Str_2 -- NUL-terminated string(s), 10 bytes,
@@ -2840,8 +2839,7 @@ ComSetGridCheck_JumpTable_Table_3:	.incbin "includes/generated/naka_widget_table
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t NakaInst_GM[8].
 ; -----------------------------------------------------------------------------
-NakaInst_GM:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x25CD2, 0x6
-SeMenu_ApplyPartEdit_AltStore_Data_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25CD8, 0x2
+NakaInst_GM:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x25CD2, 0x8
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Str_4
 ; ComSetGridCheck_JumpTable_Str_4 -- NUL-terminated string(s), 10 bytes,

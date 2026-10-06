@@ -89,13 +89,22 @@ PUSHW = re.compile(rb'^\s*(?:[A-Za-z_.$][\w.$]*:)?\s*pushw\s+(0x[0-9a-fA-F]+|\d+
 #   stacked words = one 0x2C00/0x2E00 queue record); T_Gfx_EraseRect (four coordinates, prom_b's header);
 #   TuneScale_AdjustUserKey (a key pair, 0xFF = no key); sub_FC5CDA ((0xFF, 0/1, 7/8) -- 0x00FF000x would
 #   land inside sub_FEFFF3); ByteField_AddOrSub_Clamped (mask, high bound, low bound, its prom_c header).
-#   KN5000: SeMenu_ApplyPartEdit_AltStore_Helper/_Helper3 store their four words at 1740-1746 (a rectangle)
-#   for SeGfx_StaticOp00/1B_FromBuf.
+#   KN5000: SeGfx_DrawLine / SeMenu_ClearRect (were SeMenu_ApplyPartEdit_AltStore_Helper/_Helper3) store their
+#   four words at 1740-1746 (a rectangle) for SeGfx_StaticOp00/1B_FromBuf.
+# Each callee is listed under every name it has had, newest first, so that a run at an older rev still matches.
+# A rename that is not added here silently turns the callee's value pairs back into numfar debt (it happened with
+# the 2026-10-06 naming waves); main() therefore warns when no name of a callee is defined in its measured tree.
 #   The window also follows one unconditional `jr` (sub_FC5CDA's calls are jumped to); so does the
 #   DrawString colour check (drawbar_panel_ui's PsMixer_CtlTypeProc5/6 jump to their DrawStringReverse).
-VALUE_ARG_CALL = re.compile(rb'\b(?:call|calr)\s+(Dev7E_WriteByte|T_PendingEventQueue_AppendStackArgs|'
-                            rb'T_EventQueue_AppendStackArgs|T_Gfx_EraseRect|TuneScale_AdjustUserKey|sub_FC5CDA|'
-                            rb'ByteField_AddOrSub_Clamped|SeMenu_ApplyPartEdit_AltStore_Helper3?)\b')
+VALUE_ARG_CALLEES = {   # tree -> callees, each a tuple of the names it has had
+    "prom_a": [("Dev7E_WriteByte",), ("TuneScale_AdjustUserKey",), ("NoteRouting_QueueChange", "sub_FC5CDA")],
+    "prom_b": [("T_PendingEventQueue_AppendStackArgs",), ("T_EventQueue_AppendStackArgs",), ("T_Gfx_EraseRect",)],
+    "prom_c": [("ByteField_AddOrSub_Clamped",)],
+    "v10": [("SeGfx_DrawLine", "SeMenu_ApplyPartEdit_AltStore_Helper"),
+            ("SeMenu_ClearRect", "SeMenu_ApplyPartEdit_AltStore_Helper3")],
+}
+VALUE_ARG_CALL = re.compile(rb'\b(?:call|calr)\s+(%s)\b' % "|".join(
+    n for cs in VALUE_ARG_CALLEES.values() for c in cs for n in c).encode())
 JR_ALWAYS = re.compile(rb'^\s*jr\s+([A-Za-z_.$][\w.$]*)\s*(?:;.*)?$')
 LABEL_DEF = re.compile(rb'^([A-Za-z_.$][\w.$]*):')
 REGMAC = re.compile(rb'^\s+(RegObjTable|RegObjTabl|RegModeHiLo|RegTitleHiLo|RegMode|RegTitle|'
@@ -188,8 +197,10 @@ def numfar(data, rng):
 def measure(rev, path):
     c = dict(numbr=0, numaddr=0, numdata=0, numevt=0, numfar=0, posalias=0, addrlbl=0, bytecmt=0, field=0,
              todo=0, files=0)
+    c["labels"] = set()
     for name, data in blobs(rev, path):
         c["files"] += 1
+        c["labels"].update(re.findall(rb'^([A-Za-z_.$][\w.$]*):', data, re.M))
         if name.endswith(C_EXT):
             c["field"] += len(set(FIELD.findall(data))) if False else len(FIELD.findall(data))
             c["todo"] += len(TODO.findall(data))
@@ -232,6 +243,11 @@ def main():
         rows.append((t, c))
         for k in cols:
             tot[k] += c[k]
+    for t, c in rows:
+        for names in VALUE_ARG_CALLEES.get(t, []):
+            if not any(n.encode() in c["labels"] for n in names):
+                print("WARNING: %s defines none of %s -- a rename not added to VALUE_ARG_CALLEES (numfar is "
+                      "overcounted)" % (t, "/".join(names)), file=sys.stderr)
     if a.csv:
         print("rev,tree," + ",".join(cols))
         for t, c in rows + [("TOTAL", tot)]:

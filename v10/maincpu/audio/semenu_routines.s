@@ -5261,8 +5261,8 @@ Scoop_SoundEditorData_Helper10:
 	ld	iz, (xsp+6)
 SeMenu_ApplyPartEdit_Entry5_Code_Skip12:
 	pushw	171
-	pushw	SeMenu_ApplyPartEdit_AltStore_Data_2@hi16
-	pushw	SeMenu_ApplyPartEdit_AltStore_Data_2@lo16
+	pushw	232	; four word arguments, not a far pointer
+	pushw	118
 	pushw	67
 	call	SeMenu_ClearRect
 	inc	8, xsp
@@ -5391,8 +5391,8 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip16:
 	scc8	c, a
 	ld	(xsp+4), a
 	pushw	130
-	pushw	SeMenu_ApplyPartEdit_AltStore_Data@hi16
-	pushw	SeMenu_ApplyPartEdit_AltStore_Data@lo16
+	pushw	232	; four word arguments, not a far pointer
+	pushw	77
 	pushw	67
 	call	SeMenu_ClearRect
 	inc	8, xsp

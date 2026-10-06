@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,690
-#   semantic names ........... 52,946 (98.6%)
+#   symbols .................. 53,688
+#   semantic names ........... 52,944 (98.6%)
 #   positional names ......... 744
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -6732,14 +6732,12 @@ NakaToggle_OnOff_Data 00E80040
 ComSetGridCheck_JumpTable_Table_2 00E80044
 NakaInst_OFF_E80048 00E80048
 ComSetGridCheck_JumpTable_Str 00E8004A
-SeMenu_ApplyPartEdit_AltStore_Data 00E8004D
 ComSetGridCheck_JumpTable_Str_2 00E80050
 NakaInst_NORMAL 00E8005A
 Str_AL 00E8005F
 ComSetGridCheck_JumpTable_Str_3 00E80064
 ComSetGridCheck_JumpTable_Table_3 00E8006E
 NakaInst_GM 00E80070
-SeMenu_ApplyPartEdit_AltStore_Data_2 00E80076
 ComSetGridCheck_JumpTable_Str_4 00E80078
 ComSetGridCheck_ParamDisplay_Str 00E80082
 ComSetGridCheck_ParamDisplay_Str_2 00E80088

@@ -125,3 +125,21 @@ is a pair `pushw 0xff / pushw n` (n = 1, 3, 4, 0x0b) before a call such as `calr
 word arguments whose concatenation 0xFF000n lands MID-INSTRUCTION in the code at 0xFF0000
 (Dev7E_IdentifyDevice_Code+1/+2/+6, sub_FC5D87_Code+1).  Nothing is labelled; the dashboard's
 numfar column, which reads text only, cannot tell and still counts them.
+
+## Correction, 2026-10-06: two SeMenu_ClearRect pairs were rectangle words
+
+`scripts/tools/unsymbolize_semenu_clearrect_pairs.py` undoes two pushes this work had symbolized
+in SeMenu_ApplyPartEdit (`audio/semenu_routines.s`, v10/v9/v7):
+`pushw 171 / 232 / 118 / 67` and `pushw 130 / 232 / 77 / 67` before `call SeMenu_ClearRect`.  The
+middle pairs were read as 0xE80076 and 0xE8004D and labelled SeMenu_ApplyPartEdit_AltStore_Data_2 /
+_Data.  The targets were +6 of NakaInst_GM[8] and +3 of ComSetGridCheck_JumpTable_Str[6], the middle
+of C-typed objects, so the code-line guard above could not catch them.  The labels are gone and
+their bytes are back in the slices they were cut from.  A check of the other far-pointer targets
+whose names end in `_Data` found strings or Mem_Copy sources at every one.
+
+The same day, `scripts/analysis/semantic_debt_dashboard.py`'s VALUE_ARG_CALL list was found stale.
+The naming waves had renamed two of its callees: sub_FC5CDA is now NoteRouting_QueueChange, and
+SeMenu_ApplyPartEdit_AltStore_Helper/_Helper3 are now SeGfx_DrawLine / SeMenu_ClearRect.  So the
+value pairs before those calls counted as numfar again: 15 at dc61d174d (v10/v9/v7 2 each, prom_a 9),
+against 0 with the list updated.  The list now keeps every name a callee has had, and the dashboard
+warns when no name of a callee is defined in its tree.
