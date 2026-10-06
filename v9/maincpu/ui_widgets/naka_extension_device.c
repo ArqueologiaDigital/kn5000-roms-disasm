@@ -1583,70 +1583,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_385c;
     uint8_t pad_235[2];  /* zero padding */
     uint32_t EffectMode_DispatchTable[4];  /* 4 pointers */
-    uint16_t field_3870;
-    uint16_t field_3872;
-    uint16_t field_3874;
-    uint16_t field_3876;
-    uint16_t field_3878;
-    uint16_t field_387a;
-    uint16_t field_387c;
-    uint16_t field_387e;
-    uint16_t field_3880;
-    uint16_t field_3882;
-    uint16_t field_3884;
-    uint16_t field_3886;
-    uint16_t field_3888;
-    uint16_t field_388a;
-    uint16_t field_388c;
-    uint16_t field_388e;
-    uint16_t field_3890;
-    uint16_t field_3892;
-    uint16_t field_3894;
-    uint16_t field_3896;
-    uint16_t field_3898;
-    uint16_t field_389a;
-    uint16_t field_389c;
-    uint16_t field_389e;
-    uint16_t field_38a0;
-    uint16_t field_38a2;
-    uint16_t field_38a4;
-    uint16_t field_38a6;
-    uint16_t field_38a8;
-    uint16_t field_38aa;
-    uint16_t field_38ac;
-    uint16_t field_38ae;
-    uint16_t field_38b0;
-    uint16_t field_38b2;
-    uint16_t field_38b4;
-    uint16_t field_38b6;
-    uint16_t field_38b8;
-    uint16_t field_38ba;
-    uint16_t field_38bc;
-    uint16_t field_38be;
-    uint16_t field_38c0;
-    uint16_t field_38c2;
-    uint16_t field_38c4;
-    uint16_t field_38c6;
-    uint16_t field_38c8;
-    uint16_t field_38ca;
-    uint16_t field_38cc;
-    uint16_t field_38ce;
-    uint16_t field_38d0;
-    uint16_t field_38d2;
-    uint16_t field_38d4;
-    uint16_t field_38d6;
-    uint16_t field_38d8;
-    uint16_t field_38da;
-    uint16_t field_38dc;
-    uint16_t field_38de;
-    uint16_t field_38e0;
-    uint16_t field_38e2;
-    uint16_t field_38e4;
-    uint16_t field_38e6;
-    uint16_t field_38e8;
-    uint16_t field_38ea;
-    uint16_t field_38ec;
-    uint16_t field_38ee;
+    /* PanelInput_EventIndexByHeader: [(h & 0xC0) >> 1 | (h & 0x1F)] of a control-panel packet header h -> panel event index (0-10 left segments, 11-21 right, 22-24 headers D1-D3, 25 the data wheel D7, 0x1F none); read by PanelInput_EventIndexOfHeader */
+    uint8_t PanelInput_EventIndexByHeader[128];
     uint32_t ENCODER_HANDLER_TABLE[32];  /* 32 pointers */
     uint16_t field_3970;
     uint16_t field_3972;
@@ -6927,133 +6865,16 @@ const naka_extension_device_t naka_extension_device_data
         NAKA_ADDR(Audio_NullHandler_C),
     },
 
-    .field_3870 = 0x0C0B,
-
-    .field_3872 = 0x0E0D,
-
-    .field_3874 = 0x100F,
-
-    .field_3876 = 0x1211,
-
-    .field_3878 = 0x1413,
-
-    .field_387a = 0x1F15,
-
-    .field_387c = 0x1F1F,
-
-    .field_387e = 0x1F1F,
-
-    .field_3880 = 0x1F1F,
-
-    .field_3882 = 0x1F1F,
-
-    .field_3884 = 0x1F1F,
-
-    .field_3886 = 0x1F1F,
-
-    .field_3888 = 0x1F1F,
-
-    .field_388a = 0x1F1F,
-
-    .field_388c = 0x1F1F,
-
-    .field_388e = 0x1F1F,
-
-    .field_3890 = 0x1F1F,
-
-    .field_3892 = 0x1F1F,
-
-    .field_3894 = 0x1F1F,
-
-    .field_3896 = 0x1F1F,
-
-    .field_3898 = 0x1F1F,
-
-    .field_389a = 0x1F1F,
-
-    .field_389c = 0x1F1F,
-
-    .field_389e = 0x1F1F,
-
-    .field_38a0 = 0x1F1F,
-
-    .field_38a2 = 0x1F1F,
-
-    .field_38a4 = 0x1F1F,
-
-    .field_38a6 = 0x1F1F,
-
-    .field_38a8 = 0x1F1F,
-
-    .field_38aa = 0x1F1F,
-
-    .field_38ac = 0x1F1F,
-
-    .field_38ae = 0x1F1F,
-
-    .field_38b0 = 0x1F1F,
-
-    .field_38b2 = 0x1F1F,
-
-    .field_38b4 = 0x1F1F,
-
-    .field_38b6 = 0x1F1F,
-
-    .field_38b8 = 0x1F1F,
-
-    .field_38ba = 0x1F1F,
-
-    .field_38bc = 0x1F1F,
-
-    .field_38be = 0x1F1F,
-
-    .field_38c0 = 0x1F1F,
-
-    .field_38c2 = 0x1F1F,
-
-    .field_38c4 = 0x1F1F,
-
-    .field_38c6 = 0x1F1F,
-
-    .field_38c8 = 0x1F1F,
-
-    .field_38ca = 0x1F1F,
-
-    .field_38cc = 0x1F1F,
-
-    .field_38ce = 0x1F1F,
-
-    .field_38d0 = 0x0100,
-
-    .field_38d2 = 0x0302,
-
-    .field_38d4 = 0x0504,
-
-    .field_38d6 = 0x0706,
-
-    .field_38d8 = 0x0908,
-
-    .field_38da = 0x1F0A,
-
-    .field_38dc = 0x1F1F,
-
-    .field_38de = 0x1F1F,
-
-    .field_38e0 = 0x161F,
-
-    .field_38e2 = 0x1817,
-
-    .field_38e4 = 0x1F1F,
-
-    .field_38e6 = 0x191F,
-
-    .field_38e8 = 0x1F1F,
-
-    .field_38ea = 0x1F1F,
-
-    .field_38ec = 0x1F1F,
-
-    .field_38ee = 0x1F1F,
+    .PanelInput_EventIndexByHeader = {
+        0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,  /* [0x00..] */
+        0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,  /* [0x10..] */
+        0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,  /* [0x20..] */
+        0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,  /* [0x30..] */
+        0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,  /* [0x40..] */
+        0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,  /* [0x50..] */
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,  /* [0x60..] */
+        0x1F, 0x16, 0x17, 0x18, 0x1F, 0x1F, 0x1F, 0x19, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,  /* [0x70..] */
+    },
 
     .ENCODER_HANDLER_TABLE = {
         NAKA_ADDR(Encoder_ReturnDefaultConstant),

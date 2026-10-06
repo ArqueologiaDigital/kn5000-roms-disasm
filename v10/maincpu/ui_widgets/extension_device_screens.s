@@ -1074,10 +1074,11 @@ PanelInput_PedalRecordDefaults:
 ; [nakarest] (boot/screen_group_dispatch.s: `ld xbc, SystemConfig_PointerTable`).
 EffectMode_DispatchTable:
 	.incbin "includes/generated/naka_extension_device.bin", 0x3860, 0x10
-; [nakarest] naka_extension_device+0x3870  +0x3870..+0x38f0 (0xeda03c, 128 B)
-; [nakarest] purpose not established: layout of 128 B at 0xeda03c not derived; readers below
-; [nakarest] Readers: source references PanelInput_EventIndexOfHeader (audio/audio_control_engine.s: `lda
-; [nakarest] xbc, (PanelInput_EventIndexByHeader:24)`).
+; PanelInput_EventIndexByHeader -- 128 x u8: [(h & 0xC0) >> 1 | (h & 0x1F)] of a control-panel packet
+; header h -> the panel event index (0-10 left segments for headers 0xC0-0xCA, 11-21 right for
+; 0x00-0x0A, 22-24 headers 0xD1-0xD3, 25 the data wheel 0xD7; 0x1F = none).  Read by
+; PanelInput_EventIndexOfHeader (audio/audio_control_engine.s).  Typed in
+; ui_widgets/naka_extension_device.c (scripts/converters/naka_byte_tables_retype.py).
 PanelInput_EventIndexByHeader:
 	.incbin "includes/generated/naka_extension_device.bin", 0x3870, 0x80
 ; [nakarest] ENCODER_HANDLER_TABLE  +0x38f0..+0x3970 (0xeda0bc, 128 B)
