@@ -1,0 +1,34 @@
+# Tentative names reached in analysis but NOT written up with evidence (stopped early). Scratch only.
+FileIO_BytecodeData_Data..._5 -> PanelButton_ModeKeyCodes_LeftSeg3/LeftSeg10/RightSeg4/RightSeg5/RightSeg10 (bit->mode maps: 19,15 / 20 / 7 / 9,8 / 2,4,5,6)
+FileIO_BytecodeData_Data_6/_7/_8 -> PanelButton_SoundGroupCodes_RightSeg1/RightSeg2/RightSeg9 (8..15 / 0..7 / 16,17)
+FileIO_BytecodeData_Data_9/_10/_11 -> PanelButton_RhythmGroupCodes_LeftSeg0/LeftSeg1/LeftSeg6 (0..6 / 15 / 7..14)
+FileIO_BytecodeData_Data_13/_14 -> PanelButton_MspBank17FuncCodes/MspBank18FuncCodes (pedal-assignment codes per MSP 1-6 when param 0x28800 = 17/18)
+FileIO_BytecodeData_Data_15 -> PanelButton_VariationCodes (0x00,0x10,0x20,0x30)
+CmpSetP1_DialGrid_Data / CmpSetP1_SendAndApplyFunc_Data -> AcCmpSetGridBox_RowUpSteps / RowDownSteps
+S2cMemNoBox_HandleScroll_Data -> S2cMemNoBox_SectionNameTable (entry 0 spelled .byte; PtrTbl_StyleSectShortNames = entry 1, unreferenced)
+S2c_GridCheck_Dispatch_Data -> S2cGridCheck_RowSettingAddrs (RAM 0x3991..0x3995)
+PsCmpCpFPtnBox_HandleEvtBC_Data -> PsCmpCpFPtnBox_PatternNameTable (entry 0 spelled .byte)
+AcMemNoBox_HandleEvtBC_Data -> AcMemNoBox_SectionNameTable (entry 0 spelled .byte, mis-commented "padding")
+AcCmpRecBox_HandleEvtBC_Data -> AcCmpRecBox_TrackStateNames
+MspNameBnkFunc_Data -> MspNameBnkFunc_BankNamesInit (entry 0 spelled .byte)
+RgpSetBnkBox_HandleEvtBC_Data -> PsRgpSetBnkBox_CompileBankNames
+MspPlayModeFunc_Data -> MspPlayModeFunc_ModeNamesInit
+AcSndArgGridBoxProc_Data -> AcSndArgGridBox_RowPartBitsInit
+Att/Sure/SndMem/SndMem1/Memful/Memful2/StylCnv LangCheck_Data -> <same>LangCheck_PtrTable
+AcCurSongName_HandleFocusGained_Data -> AcCurSong_Str_SONG_Fmt2d
+MidiPart_PageDisplay_Data -> MidiSetup_PageIndicatorRect (rect 245,6-314,23)
+NakaToggle_OnOff_Data -> REFUSE: tail of ComSetGridCheck_LocalInit_2 (ComSetGridCheck copies 5 words); FDTest `.long` is a coordinate pair (64,232)
+PmemOutLGridCheck_LocalInit_Strings_Tail -> PmemOutLGridCheck_Row0_Str_OFF
+TtMdCtlMsg_EventDispatch_Data -> PmemOutRGridCheck_RamRequestInit (alias PmemOutLGridCheck_CaseTable_Tail at same address)
+MidiPartGridCheck_OnIndexswUp/Down_Data -> MidiPartGrid_Signed3NextUp/Down
+ExitWindow_OK_Data_2 -> SupportClass_PropTypeRecords
+MasterSetup_EventDispatch_Data -> StyleSong_MasterTableIds (field base +4)
+MasterSetup_DialTurn_Underflow_Data -> StyleSong_LastMasterRecord
+MstStyle1Grid_CellSelect_Data -> MstStyle_GenreGroupTable
+VariScreen_HandlePaint_Data -> VariScreen_PartNameTable
+Scoop_SelectModeTable_2Part_Data / Scoop_InitPartDisplay_Data / _2Part_Data_2 -> StyleUI_ParamBlockEndPtrTable / StyleUI_Mode2ParamBlockPtrTable / StyleUI_Mode2ParamBlockEndPtrTable (xiy/xix = [start,end) of the ScreenData interpreter)
+style_ui_params.s main-screen slices -> StyleUI_Main_* (RowSegmentLines, Row1..3Dash, TrackNumberField, TextLineWidget, RowLineWidgets, Row3LineWidgets, EndRepMarkWidgets, ChordWidgetsRow1..3, CellCursorBlock, CharCursorBlock, RowCountCtrlBlocks, RowCountBoxTables, NibbleMarkPatterns, CellFlagWidgets, CellFlagGlyphs, BottomBarRects); refuse Scoop_Selection_RedrawActive_Data, _Data_2, Scoop_Selection_DrawMode1_Data
+Scoop_CurveUpdate_Finalize_Data -> Scoop_TextGlyphMap
+Scoop_EnvCalc_Handler1_Data / Scoop_GlideCalc_Handler0_Data / Scoop_EventLoop_12Entry_Alt_Data_Target5_Data / Scoop_EventLoop_36Entry_Data_2 -> <routine>_ScreenClipRect (0,0)-(319,239)
+Scoop_EventLoop_12Entry_Data -> Scoop_ScreenDataOpHandlersInit (36 opcode handlers)
+LswLeftHold_DefaultStr_Data -> LswLeftHold_Str_ERR; IvSdpart_GetText_Data -> IvSdpart_Str_SdPT; IvMesageProc_Data -> IvMessage_Catalog

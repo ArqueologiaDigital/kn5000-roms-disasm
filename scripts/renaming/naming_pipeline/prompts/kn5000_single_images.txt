@@ -1,0 +1,20 @@
+You are naming generically or positionally named labels of the Technics KN5000 firmware disassembly (TLCS-900 assembly, LLVM syntax; repo /home/fsanches/compartilhado/kn5000-roms-disasm). Batch s1 covers images other than the main CPU: v142/subcpu = the Sub-CPU payload v1.42 (TMP94C241, the tone generator / DSP CPU; main file v142/subcpu/kn5000_subprogram_v142.s plus includes), hdae5000 = the HD-AE5000 hard-disk expansion ROM, table_data = the table data ROM, subcpu/boot = the Sub-CPU boot ROM. READ-ONLY task: do NOT modify anything in the repository. Scratch only under /home/fsanches/compartilhado/tmp/kn5000-naming/agent_s1/ (never /tmp; TMPDIR=/home/fsanches/compartilhado/tmp). NEVER run a command that can write into the repository: give `xxd` exactly one input file and no output file (two file arguments make xxd OVERWRITE the second), never use a glob in a command that can write, and redirect only into your scratch directory.
+
+INPUT: /home/fsanches/compartilhado/tmp/kn5000-naming/sbatch_s1.json -- labels with tree (image directory), file (relative to the tree), line (label line), kind ("generic": X_Data / X_Entry / X_Body / X_Tail / X_Helper ...; "positional": the name ends in an address or number, e.g. DSP_Set_CfgWord_4504, HDAE5000_Str_050354) and referenced_by (routines whose code names the label).
+
+TASK: for each label decide what it is -- a routine (read its callers/referrers and its body) or data (read who loads it and how the bytes are used) -- and propose a name only when the referrers' context plus the body/bytes make the meaning clear. Body-only naming is NOT acceptable for routines: the name needs a caller, table or descriptor basis. Refuse when the evidence does not pin the meaning down.
+- A generic X_Entry / X_Tail / X_Body that is just a branch target inside X: if it is really an internal continuation, say so and propose X_<what the code at that point does> only when clear; otherwise refuse.
+- A positional name whose suffix is a RAM or DSP register address (DSP_Set_CfgWord_4504 stores to 0x4504): rename only when you can say what that address/word controls (read the readers of the address, the DSP docs in ../technics-docs/ e.g. audio-subsystem.md, dsp-*.md, and the v142 headers). A suffix that is a numeric VALUE (FPConst_..._4194304) may be replaced by what the value means (e.g. Q22 one) only when the use proves it.
+- Strings (HDAE5000_Str_050354): name after the text and its use.
+
+PROJECT RULES:
+- ALWAYS `command grep` for recursive searches (plain grep skips files with non-ASCII bytes); .s files are latin-1.
+- Naming conventions (the project's CLAUDE.md "Subsystem prefix conventions"; Sub CPU: Voice_, DSP_/DSP2_, EFF_, FP_, InterCPU_, MIDI_, RingBuf_, Serial1_, ToneGen_, VoiceSlot_/VoiceParam_): Subsystem prefix + VerbNoun, CamelCase words joined by _. NO generic suffixes (_Helper, _Sub, _Data, _Code, _Block, _Part, _Stub, _Entry, _Case, _Body, _Tail), no address digits.
+- Check that no proposed name already exists as a label anywhere in the repo's KN5000 trees (`command grep -rn '^NAME:' v142 hdae5000 table_data subcpu v10/maincpu --include='*.s'`) and that names are unique within your output.
+- Don't invent semantics beyond the evidence.
+
+OUTPUT: a JSON list in /home/fsanches/compartilhado/tmp/kn5000-naming/proposals_sbatch_s1.json, one object per label:
+  old (current label), tree (as in the input), verdict ("name" | "refuse"), why_refused (refuse), new (proposed label),
+  header (ONE or TWO lines of text, no leading "; ", what it is/does + "Basis: ..."; "" if the label is a plain internal branch target),
+  basis ("callers + body", "readers + bytes", ...), evidence (["<file>:<line> `<instruction or data>` -- what it shows", ...], paths relative to the label's tree, including at least one referrer site and the lines that decide the name).
+Refuse rather than guess. Reply when done with a short summary (named/refused counts, 3 most interesting findings), under 300 words.

@@ -1,0 +1,20 @@
+You are naming generically-named routines (labels ending in _Helper / _HelperN) of the Technics KN5000 main-CPU firmware disassembly (TMP94C241F / TLCS-900 assembly, LLVM syntax) in the repo /home/fsanches/compartilhado/kn5000-roms-disasm, tree v10/maincpu/ (v9 and v7 share the names). READ-ONLY task: do NOT modify anything in the repository. Scratch only under /home/fsanches/compartilhado/tmp/kn5000-naming/agent_p/ (never /tmp). NEVER run a command that can write into the repository: give `xxd` exactly one input file and no output file (two file arguments make xxd OVERWRITE the second), never use a glob in a command that can write, and redirect only into your scratch directory.
+
+INPUT: /home/fsanches/compartilhado/tmp/kn5000-naming/kbatch_p.json -- routines with file (relative to v10/maincpu), line (label line) and named_callers (non-generic routines that call/jump to them).
+
+TASK: for each routine, decide what it does from (1) its CALLERS -- what they are (names, headers) and what they pass/expect -- and (2) its body, read to confirm. Propose a name only when the callers' context plus the body make the meaning clear; body-only naming is NOT acceptable. Refuse when callers disagree or the body cannot be pinned down. The current names are generated from a parent routine plus a counter (X_Helper7 is just "some piece of X"); the parent prefix is a hint, not evidence.
+
+PROJECT RULES:
+- ALWAYS `command grep` for recursive searches (plain grep skips files with non-ASCII bytes); .s files are latin-1.
+- Event codes are EVT_* (v10/maincpu/shared/event_codes.s); RAM addresses are often numeric -- read what the code stores/loads.
+- Naming conventions (see the project's CLAUDE.md "Subsystem prefix conventions"): Subsystem prefix + VerbNoun, CamelCase words joined by _, e.g. CPanel_ReadButtons, Seq_WriteMidi90, SndParam_SetVolume, UI_..., Widget_..., FDC_..., FileIO_..., MIDI_..., Acc_..., Display_... Keep the parent's subsystem prefix when the routine belongs to it. NO generic suffixes (_Helper, _Sub, _Data, _Code, _Block, _Part, _Stub, _Entry, _Case), no address digits. If the routine is a tail/epilogue of its parent reached only by jumps, a name like <Parent>_Epilogue / <Parent>_ReturnZero is acceptable when that is literally what it is.
+- Don't invent semantics beyond the evidence.
+
+OUTPUT: a JSON list in /home/fsanches/compartilhado/tmp/kn5000-naming/proposals_kbatch_p.json, one object per routine:
+  old (current label), verdict ("name" | "refuse"), why_refused (refuse), new (proposed label),
+  header (ONE or TWO lines of text, no leading "; ", what it does + "Basis: ..."),
+  basis ("callers + body", ...), evidence (["<file>:<line> `<instruction>` -- what it shows", ...], paths relative to v10/maincpu, including at least one CALLER site and the body lines that decide the name).
+Check that no proposed name already exists as a label in v10/maincpu (`command grep -rn '^NAME:' v10/maincpu --include='*.s'`). Refuse rather than guess. Reply when done with a short summary (named/refused counts, 3 most interesting findings), under 300 words.
+
+
+WAVE NOTE (batches o-p): most routines here have ONE named caller. One caller is enough only if its name and header make the routine's role clear AND the body confirms it; otherwise refuse. Earlier batches' accepted names are in analysis/kn5000-naming/proposals-*.json -- reuse their vocabulary for siblings, and never cite a routine by an old _Helper name that has since been renamed (use its current label).

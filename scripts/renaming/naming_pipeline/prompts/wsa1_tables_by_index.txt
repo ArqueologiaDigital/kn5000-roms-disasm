@@ -1,0 +1,21 @@
+You are doing TABLE-DRIVEN naming in the Technics SX-WSA1R firmware disassembly (TMP95C061 / TLCS-900, LLVM syntax), repo /home/fsanches/compartilhado/kn5000-roms-disasm, directory wsa1/ (prom_a = wsa1/prom_a/wsa1_prom_a.s, prom_b = wsa1/prom_b/wsa1_prom_b.s; CPU 1). READ-ONLY task: do NOT modify anything in the repository. Scratch only under /home/fsanches/compartilhado/tmp/wsa1-triage/agent_t11/ (never /tmp). NEVER run a command that can write into the repository: give `xxd` exactly one input file and no output file (two file arguments make xxd OVERWRITE the second), never use a glob in a command that can write, and redirect only into your scratch directory.
+
+BACKGROUND: caller-based naming waves 1-11 have named every sub_ routine with a named caller. About 90 of the remaining ones are reached only through dispatch tables whose names are still address-based because nobody established what their selector enumerates:
+  prom_a JumpTable_FA08BF (6 entries, selector (0x26A7) & 7, read at 0xFA08A2)
+  prom_b DispatchTable_F0F0CE (6 entries, read by `add XBC,DispatchTable_F0F0CE` at 0xF0F0C4)
+  prom_b StateDispatchTable_F5693F, _F56A79 (selector (0x36CE)), _F5706A, _F571A6 (selector (0x3627))
+  prom_a SeqEvt_SelectCtrlEventSlot_JumpTable_FAF410
+  prom_a/prom_b any other address-named table (JumpTable_*, DispatchTable_*, StateDispatchTable_*, Dispatch_*) whose entries are sub_ routines -- list them with `command grep -n` on `^(JumpTable|DispatchTable|StateDispatchTable|Dispatch)_F[0-9A-F]{5}:`.
+
+TASK, per table: (1) find what the selector is: the RAM byte/word it is read from, every WRITER of that RAM cell (`command grep` the address and its equate name in wsa1/include/wsa1_ram.inc), and the values they store and when (screen enter, button, mode change, MIDI event...). (2) If that pins down what each index means (a mode, a sub-screen, a state of a protocol), name the TABLE (e.g. StepRecord_SubScreenHandlers) and each sub_ ENTRY after its index meaning, confirmed by the entry's body (e.g. StepRecord_OnSubScreen3_Tick). The basis is "table index + body" -- the memory note on table-driven naming: name table entries only from an understood index. (3) If the index cannot be established, refuse the whole table and say what is missing.
+Use the existing names of neighbouring, already-named routines and the FINDINGS-*.md notes in wsa1/notes/ for vocabulary.
+
+PROJECT RULES:
+- ALWAYS `command grep` (plain grep skips files with non-ASCII bytes); the .s files are latin-1.
+- RAM names: wsa1/include/wsa1_ram.inc.  Callers named OldCopy_* belong to an older build -- ignore them.  prom_c is CPU 2 (different address space).
+- Naming style: Subsystem_VerbNoun, CamelCase words joined by _, no generic suffixes (_Helper, _Sub, _Data, _Code, _Block, _Part, _Stub, _Entry, _Case), no address digits.  A table: <Subsystem>_<Index>Handlers / _<Index>Table.
+- Check that no proposed name already exists in prom_a/prom_b/prom_c and that names are unique in your output.
+
+OUTPUT: a JSON list in /home/fsanches/compartilhado/tmp/wsa1-triage/proposals_wbatch_t11.json, one object per label (tables AND entries):
+  old, verdict ("name" | "refuse"), why_refused, new, header (ONE or TWO lines, no leading "; ", what it is/does + "Basis: ..."), basis, evidence (["<file>:<line> `<instruction>` -- what it shows", ...], paths relative to wsa1/, including the selector writers that establish the index meaning).
+Refuse rather than guess. Reply when done with a short summary (tables named/refused, entries named, 3 most interesting findings), under 300 words.

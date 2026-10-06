@@ -1,0 +1,27 @@
+You are naming unnamed routines of the Technics SX-WSA1R synthesizer firmware disassembly (TMP95C061 / TLCS-900 assembly, LLVM syntax) in the repo /home/fsanches/compartilhado/kn5000-roms-disasm, directory wsa1/ (images prom_a = wsa1/prom_a/wsa1_prom_a.s, prom_b = wsa1/prom_b/wsa1_prom_b.s; CPU 1). READ-ONLY task: do NOT modify anything in the repository. Scratch only under /home/fsanches/compartilhado/tmp/wsa1-triage/agent_a11/ (never /tmp). NEVER run a command that can write into the repository: give `xxd` exactly one input file and no output file (two file arguments make xxd OVERWRITE the second), never use a glob in a command that can write, and redirect only into your scratch directory.
+
+INPUT: /home/fsanches/compartilhado/tmp/wsa1-triage/wbatch_a11.json -- routines currently labelled sub_FXXXXX, each with img, line (its label line), and named_callers (named routines that call/jump to it, directly or through a prom_b routine-directory thunk T_*).
+
+TASK: for each routine, decide what it does from (1) its CALLERS -- what they are (their names and headers are established) and what they pass/expect -- and (2) its body, read to confirm. Propose a name only when the callers' context plus the body make the meaning clear. Body-only naming is NOT acceptable: the name needs a caller, table or descriptor basis. If the callers disagree or the body does something you cannot pin down, refuse.
+
+PROJECT RULES you must follow:
+- ALWAYS `command grep` for searches (plain grep skips files with non-ASCII bytes); the .s files are latin-1.
+- RAM variables have names in wsa1/include/wsa1_ram.inc (.equ NAME, addr ; description) -- use them to understand what the code touches.
+- Callers named OldCopy_* belong to an older build's orphaned module (notes/FINDINGS-prom_b-f00c4d-orphan-cluster.md) and tell nothing about this build -- ignore them.
+- prom_c is a different CPU (CPU 2); its addresses look like prom_a's. Link-request bytes (0x80..0x8F requests) are CPU-2 protocol: see wsa1/prom_c/tone_db/tone_db_module.s ToneMsg_Dispatch / ToneQuery_Dispatch headers if a routine builds a link packet.
+- Naming style used in this tree: Subsystem_VerbNoun / Screen-specific handlers like LcdKeyRow1_<Screen>, SoftKeyCol3_<Screen>, ScreenEnter_<Screen>, Paint_<Screen>, <Module>_<Action>. CamelCase words joined by _. No generic suffixes (_Helper, _Sub, _Data, _Code, _Block, _Part, _Stub, _Entry, _Case), no address digits. A routine shared by several screens of one family gets the family name (e.g. SoundEditEnvelope_...), not one screen's.
+- Don't invent semantics: say what it does at the level the evidence supports ("DiskFile_ReadHeader" only if it reads a file header; otherwise a more literal name like "Disk_ReadSectorToBuffer").
+
+OUTPUT: a JSON list in /home/fsanches/compartilhado/tmp/wsa1-triage/proposals_wbatch_a11.json, one object per routine:
+  old         current label (sub_FXXXXX)
+  verdict     "name" or "refuse"
+  why_refused (refuse) one sentence
+  new         proposed label
+  header      ONE or TWO lines of text (no leading "; ") stating what it does and the evidence, e.g. "Disk_SelectedEntry := 0x14; called by the five disk-screen ScreenEnter handlers before they repaint. Basis: callers + body."
+  basis       "callers + body", "table index + body", ...
+  evidence    ["<file>:<line> `<instruction>` -- what it shows", ...] (paths relative to wsa1/), including at least one CALLER site and the body lines that decide the name
+Refuse rather than guess. Reply when done with a short summary (named/refused counts, 3 most interesting findings), under 300 words.
+
+
+WAVE 11 NOTE: most routines here have ONE named caller. One caller is enough only if its name and header (or the screen/table it belongs to) make the routine's role clear AND the body confirms it; otherwise refuse. Earlier waves named twins and neighbours -- check wsa1/notes/naming-pilot-2026-10-06/*.json and reuse their vocabulary for siblings. Never cite an old sub_ name of another routine in your header if that routine has since been named: use its current label.
+WAVE 11 ADDITION: names given in waves 1-4 are now in the source; a caller like sub_F6A9E3_Entry4 or sub_F6CB52_Arm is a local label of a still-unnamed routine and is NOT a named caller -- do not lean on it. Many routines here sit in the step-record / song-store (BStore_*) / sequencer modules of prom_b: read FINDINGS-prom_b-*.md notes in wsa1/notes/ for those modules before naming.

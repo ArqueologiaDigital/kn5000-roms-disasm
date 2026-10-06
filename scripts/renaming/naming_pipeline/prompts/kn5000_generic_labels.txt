@@ -1,0 +1,21 @@
+You are naming generically named labels of the Technics KN5000 main-CPU firmware disassembly (TMP94C241F / TLCS-900 assembly, LLVM syntax) in the repo /home/fsanches/compartilhado/kn5000-roms-disasm, tree v10/maincpu/ (v9 and v7 take the names later by address correspondence). READ-ONLY task: do NOT modify anything in the repository. Scratch only under /home/fsanches/compartilhado/tmp/kn5000-naming/agent_g1/ (never /tmp; TMPDIR=/home/fsanches/compartilhado/tmp). NEVER run a command that can write into the repository: give `xxd` exactly one input file and no output file (two file arguments make xxd OVERWRITE the second), never use a glob in a command that can write, and redirect only into your scratch directory.
+
+INPUT: /home/fsanches/compartilhado/tmp/kn5000-naming/gbatch_g1.json -- labels whose names say only "a piece of X" (X_Data, X_Data_3, X_Block2, X_Code, X_Entry, X_Part, X_Body, X_Sub, X_Branch, X_Wrapper, X_Stub, X_Tail, X_Thunk), with file (relative to v10/maincpu), line (label line), kind, named_referrers (non-generic routines whose code or data names the label), n_code / n_data (how many code / data lines name it). The X prefix comes from an old conversion and is a hint, not evidence: it is often a neighbour, not the owner.
+
+TASK: for each label decide what it is and name it from the evidence:
+- DATA (a table, record list, string, constant block, `.incbin` of compiled C data): name it from how its readers use the bytes (what the reader indexes it by, what fields it takes, what the values mean) and from the bytes themselves (strings, counts). E.g. a 12-entry table of note names read by the key display -> Display_NoteNameTable. Basis "readers + bytes".
+- CODE (a routine entry, a second entry point, a branch target reached from other routines): name it from its callers / jumpers and its body. Basis "callers + body". If it is merely an internal continuation of its parent reached only by the parent's own branches, refuse (it should become a local label, say so in why_refused).
+- If the label is DATA SPELLED AS CODE or CODE SPELLED AS DATA, still name it if you can, and say so in a "spelling" field.
+Propose a name only when the evidence pins the meaning down; refuse otherwise. Body-only naming of routines is NOT acceptable.
+
+PROJECT RULES:
+- ALWAYS `command grep` for recursive searches (plain grep skips files with non-ASCII bytes); .s files are latin-1.
+- Event codes are EVT_* (v10/maincpu/shared/event_codes.s); RAM addresses are often numeric -- read what the code stores/loads.
+- Naming conventions (the project's CLAUDE.md "Subsystem prefix conventions" and "Label naming conventions": data tables NOUN_TABLE or Subsystem_NounTable, strings Str_..., routines Subsystem_VerbNoun). CamelCase words joined by _. NO generic suffixes (_Helper, _Sub, _Data, _Code, _Block, _Part, _Stub, _Entry, _Case, _Body, _Tail, _Branch, _Wrapper, _Thunk), no address digits.
+- Earlier batches' accepted names are in analysis/kn5000-naming/proposals-*.json -- reuse their vocabulary for siblings; never cite a routine by an old generic name that has since been renamed.
+- Check that no proposed name already exists as a label in v10/v9/v7 (`command grep -rn '^NAME:' v10/maincpu v9/maincpu v7/maincpu --include='*.s'`) and that names are unique within your output.
+- Don't invent semantics beyond the evidence.
+
+OUTPUT: a JSON list in /home/fsanches/compartilhado/tmp/kn5000-naming/proposals_gbatch_g1.json, one object per label:
+  old, verdict ("name" | "refuse"), why_refused (refuse), new, header (ONE or TWO lines, no leading "; ", what it is/does + "Basis: ..."), basis, spelling (optional), evidence (["<file>:<line> `<instruction or data>` -- what it shows", ...], paths relative to v10/maincpu, including at least one referrer site and the lines/bytes that decide the name).
+Refuse rather than guess. Reply when done with a short summary (named/refused counts, 3 most interesting findings, any spelling problems), under 300 words.
