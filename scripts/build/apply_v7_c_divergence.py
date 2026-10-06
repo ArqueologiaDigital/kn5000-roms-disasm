@@ -38,6 +38,19 @@ is gone; verify with `python3 scripts/analysis/rom_provenance_poison.py v7`, whi
 
 THE REMAINING WORK is to make the C v7-aware so this file empties: the relocations say exactly
 which pointers need it. Do NOT grow the raw section to paper over new divergence.
+
+UPDATE 2026-10-06. The figures above are the file as first written. v7's naka_*_link.ld files were
+copies of v10's; scripts/generators/generate_v7_naka_link_scripts.py gave 1,105 of their symbols the
+v7 address, in each case where every v7 site using the symbol holds exactly that address. Then
+scripts/build/regenerate_v7_c_divergence.py recomputed the json from the build's certified bins,
+without reading the ROM. Now:
+- 1,162 relocations and 1,180 raw bytes remain;
+- 8 of the 23 bins need nothing;
+- the naka bins still patched are: naka_disk_warning 25, naka_extension_device 150, naka_master_style 27, naka_sequencer_channels 1179 raw,
+  naka_sequencer_exit 13, naka_style_bitmaps 1 raw, naka_technichord_strings 40, naka_widget_descriptors 50, naka_widget_names_charmap 1.
+The C files without a link script (gui_display_struct_data, tonegen_param_table, sepaout_config,
+style_ui_screendata_ctlonly, se_name_editor, sound_config_lookup) still spell their pointers as v10
+numbers. Run regenerate_v7_c_divergence.py after any change to v7's C or link scripts.
 """
 import json
 import pathlib
