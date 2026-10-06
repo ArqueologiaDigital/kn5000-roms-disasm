@@ -924,14 +924,12 @@ Str_Mixer_ON:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF350,
 ; [nakarest] it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecc0).
 MixerPartTable_Start:		.incbin "includes/generated/naka_technichord_strings.bin", 0xF354, 0x4
 LswLeftHold_DefaultStr_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF358, 0x4
-; [nakarest] naka_technichord_strings+0xf35c  +0xf35c..+0xf3d4 (0xe952aa, 120 B)
-; [nakarest] purpose not established: layout of 120 B at 0xe952aa not derived; readers below
-; [nakarest] Readers: source references LswAfterTouch (ui/drawbar_panel_ui.s: `lda xhl,
-; [nakarest] (SdpartUpdatePartUI_Data:24)`), LswBendRange (ui/drawbar_panel_ui.s: `lda xhl,
-; [nakarest] (SdpartUpdatePartUI_Data:24)`), LswDSPEffect (ui/drawbar_panel_ui.s: `lda xhl,
-; [nakarest] (SdpartUpdatePartUI_Data:24)`), LswDigitalEffect (ui/drawbar_panel_ui.s: `lda xhl,
-; [nakarest] (SdpartUpdatePartUI_Data:24)`), 16 more.
-SdpartUpdatePartUI_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF35C, 0x78
+; PartParam_EnableMask -- 30 x u32, one mask per part index: which part parameters may be edited.  Every Lsw*
+; part-parameter function loads it, adds 4 * part and tests one bit (`bit N, wa` in <Lsw>_CheckEnabled): 15
+; Volume / Mute, 14 Pan, 13 Reverb, 12 DSPEffect, 11 Sustain, 10 SustainLength, 9 KeyShift, 8 Tuning,
+; 7 BendRange, 6 GlidePedal, 5 SustainPedal, 4 KeyScaling, 3 DigitalEffect, 2 AfterTouch, 1 MidiChannel,
+; 0 LocalControl.  Typed in ui_widgets/naka_technichord_strings.c (scripts/converters/part_param_enable_mask_retype.py).
+PartParam_EnableMask:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF35C, 0x78
 ; [nakarest] naka_technichord_strings+0xf3d4  +0xf3d4..+0xf458 (0xe95322, 132 B)
 ; [nakarest] purpose not established: layout of 132 B at 0xe95322 not derived; readers below
 ; [nakarest] Readers: source references PsMixer_CtlTypeProc3_OnIndexswAny (ui/drawbar_panel_ui.s: `lda

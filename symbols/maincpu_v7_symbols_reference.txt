@@ -7476,7 +7476,7 @@ Bitmap_KN5000_Logo 00E9367E
 Str_Mixer_ON 00E9529E
 MixerPartTable_Start 00E952A2
 LswLeftHold_DefaultStr_Data 00E952A6
-SdpartUpdatePartUI_Data 00E952AA
+PartParam_EnableMask 00E952AA
 PsMixer_MidiScanOuterLoop_Data 00E95322
 PsMixer_CtlTypeProc2_Data 00E953A6
 IvSdpart_Init_LoadDescriptor_Data 00E953AA

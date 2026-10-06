@@ -646,56 +646,8 @@ typedef struct __attribute__((packed)) {
     uint8_t Str_Mixer_ON[4];
     char MixerPartTable_Start[4];
     char ERR_str[4];
-    uint16_t field_f35c;
-    uint16_t field_f35e;
-    uint16_t field_f360;
-    uint16_t field_f362;
-    uint16_t field_f364;
-    uint16_t field_f366;
-    uint16_t field_f368;
-    uint16_t field_f36a;
-    uint16_t field_f36c;
-    uint16_t field_f36e;
-    uint16_t field_f370;
-    uint16_t field_f372;
-    uint16_t field_f374;
-    uint16_t field_f376;
-    uint16_t field_f378;
-    uint16_t field_f37a;
-    uint16_t field_f37c;
-    uint16_t field_f37e;
-    uint16_t field_f380;
-    uint16_t field_f382;
-    uint16_t field_f384;
-    uint16_t field_f386;
-    uint16_t field_f388;
-    uint16_t field_f38a;
-    uint16_t field_f38c;
-    uint16_t field_f38e;
-    uint16_t field_f390;
-    uint16_t field_f392;
-    uint16_t field_f394;
-    uint16_t field_f396;
-    uint16_t field_f398;
-    uint16_t field_f39a;
-    uint16_t field_f39c;
-    uint16_t field_f39e;
-    uint16_t field_f3a0;
-    uint16_t field_f3a2;
-    uint16_t field_f3a4;
-    uint8_t pad_1526[2];  /* zero padding */
-    uint16_t field_f3a8;
-    uint8_t pad_1527[2];  /* zero padding */
-    uint16_t field_f3ac;
-    uint8_t pad_1528[2];  /* zero padding */
-    uint16_t field_f3b0;
-    uint8_t pad_1529[2];  /* zero padding */
-    uint16_t field_f3b4;
-    uint8_t pad_1530[3];  /* zero padding */
-    uint16_t field_f3b9;
-    char str_179[2];
-    uint16_t field_f3bd;
-    uint8_t pad_1531[21];  /* zero padding */
+    /* PartParam_EnableMask: [part index] = bit set of the part parameters that may be edited (bit numbers: the asm header) */
+    uint32_t PartParam_EnableMask[30];
     uint16_t field_f3d4;
     uint16_t field_f3d6;
     uint16_t field_f3d8;
@@ -7146,105 +7098,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ERR_str = "ERR",
 
-    .field_f35c = NAKA_NONE,
-
-    .field_f35e = 0x8001,
-
-    .field_f360 = NAKA_NONE,
-
-    .field_f362 = 0x8001,
-
-    .field_f364 = NAKA_NONE,
-
-    .field_f366 = 0x8001,
-
-    .field_f368 = NAKA_NONE,
-
-    .field_f36a = 0x8001,
-
-    .field_f36c = NAKA_NONE,
-
-    .field_f36e = 0x8001,
-
-    .field_f370 = NAKA_NONE,
-
-    .field_f372 = 0x8001,
-
-    .field_f374 = NAKA_NONE,
-
-    .field_f376 = 0x8001,
-
-    .field_f378 = NAKA_NONE,
-
-    .field_f37a = 0x8001,
-
-    .field_f37c = NAKA_NONE,
-
-    .field_f37e = 0x8001,
-
-    .field_f380 = NAKA_NONE,
-
-    .field_f382 = 0x8001,
-
-    .field_f384 = NAKA_NONE,
-
-    .field_f386 = 0x8001,
-
-    .field_f388 = NAKA_NONE,
-
-    .field_f38a = 0x8001,
-
-    .field_f38c = NAKA_NONE,
-
-    .field_f38e = 0x8001,
-
-    .field_f390 = NAKA_NONE,
-
-    .field_f392 = 0x8001,
-
-    .field_f394 = NAKA_NONE,
-
-    .field_f396 = 0x8001,
-
-    .field_f398 = 0xB003,
-
-    .field_f39a = 0x8001,
-
-    .field_f39c = 0xAC1B,
-
-    .field_f39e = 0x8000,
-
-    .field_f3a0 = 0xAC18,
-
-    .field_f3a2 = 0x8000,
-
-    .field_f3a4 = 0xA013,
-
-    .pad_1526 = { 0 },
-
-    .field_f3a8 = 0xA013,
-
-    .pad_1527 = { 0 },
-
-    .field_f3ac = 0xA013,
-
-    .pad_1528 = { 0 },
-
-    .field_f3b0 = 0xA013,
-
-    .pad_1529 = { 0 },
-
-    .field_f3b4 = 0xA003,
-
-    .pad_1530 = { 0 },
-
-    .field_f3b9 = 0x00A0,
-
-    .str_179 = "@",
-
-    .field_f3bd = 0x0080,
-
-    .pad_1531 = { 0 },
+    .PartParam_EnableMask = {
+        0x8001FFFF, 0x8001FFFF, 0x8001FFFF, 0x8001FFFF, 0x8001FFFF, 0x8001FFFF,  /* parts 0-5 */
+        0x8001FFFF, 0x8001FFFF, 0x8001FFFF, 0x8001FFFF, 0x8001FFFF, 0x8001FFFF,  /* parts 6-11 */
+        0x8001FFFF, 0x8001FFFF, 0x8001FFFF, 0x8001B003, 0x8000AC1B, 0x8000AC18,  /* parts 12-17 */
+        0x0000A013, 0x0000A013, 0x0000A013, 0x0000A013, 0x0000A003, 0x4000A000,  /* parts 18-23 */
+        0x00008000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,  /* parts 24-29 */
+    },
 
     .field_f3d4 = 0x001E,
 

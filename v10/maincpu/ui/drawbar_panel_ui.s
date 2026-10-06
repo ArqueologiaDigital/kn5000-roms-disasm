@@ -6685,7 +6685,7 @@ SdpartUpdatePartUI:
 	ld bc, (0x03e99e:24)
 	ld wa, bc
 	sla wa, 2
-	lda xde, (SdpartUpdatePartUI_Data:24)
+	lda xde, (PartParam_EnableMask:24)
 	ld	xwa, (xde+wa)
 	bit_erpw 0xe2, 0x0f
 	jr z, SdpartUpdatePartUI_Confirm
@@ -6706,7 +6706,7 @@ SdpartUpdatePartUI_Confirm:
 LswSound:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswSound_ReturnZero
 	ld xix, xde
@@ -6797,7 +6797,7 @@ LswSound_PopIzRet:
 LswVolume:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, AudioCtrlMuteZeroReturn
 	ld xix, xde
@@ -6922,7 +6922,7 @@ AudioCtrl_PopIzRet3:
 LswMute:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, AudioCtrlMutePitchReturn
 	ld xix, xde
@@ -7043,7 +7043,7 @@ AudioCtrl_PopIzRet2:
 LswPan:
 	push xiz
 	ld xiz, xwa
-	lda xix, (SdpartUpdatePartUI_Data:24)
+	lda xix, (PartParam_EnableMask:24)
 	cp xbc, EVT_GET_INIT_DATA
 	jrl z, LswPan_ReturnCenter
 	cp xbc, EVT_CHECK_INIT_DATA
@@ -7171,7 +7171,7 @@ AudioCtrl_PopIzRet6:
 LswReverb:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, AudioCtrlVibratoZeroReturn
 	ld xix, xde
@@ -7287,7 +7287,7 @@ AudioCtrl_PopIzRet1:
 LswDSPEffect:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswDSPEffZeroReturn
 	ld xix, xde
@@ -7384,7 +7384,7 @@ LswDSPEffect_PopIzRet:
 LswDigitalEffect:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswDigitalEffZeroReturn
 	ld xix, xde
@@ -7482,7 +7482,7 @@ LswDigitalEffect_PopIzRet:
 LswSustain:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswSustainZeroReturn2
 	ld xix, xde
@@ -7580,7 +7580,7 @@ LswSustain_PopIzRet2:
 LswSustainLength:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswSustainLenZeroReturn
 	ld xix, xde
@@ -7679,7 +7679,7 @@ LswSustainLength_PopIzRet:
 LswKeyShift:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_GET_INIT_DATA
 	jrl z, LswKeyShift_ReturnCenter
 	cp xbc, EVT_CHECK_INIT_DATA
@@ -7797,7 +7797,7 @@ AudioCtrl_PopIzRet5:
 LswTuning:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_GET_INIT_DATA
 	jrl z, LswTuning_ReturnCenter
 	cp xbc, EVT_CHECK_INIT_DATA
@@ -7915,7 +7915,7 @@ AudioCtrl_PopIzRet4:
 LswBendRange:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswBendRangeZeroReturn
 	ld xix, xde
@@ -8012,7 +8012,7 @@ LswBendRange_PopIzRet:
 LswGlidePedal:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswGlideZeroReturn
 	ld xix, xde
@@ -8112,7 +8112,7 @@ LswGlide_PopIzRet:
 LswSustainPedal:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswSustainZeroReturn
 	ld xix, xde
@@ -8212,7 +8212,7 @@ LswSustain_PopIzRet:
 LswKeyScaling:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswKeyScaleZeroReturn
 	ld xix, xde
@@ -8312,7 +8312,7 @@ LswKeyScale_PopIzRet:
 LswAfterTouch:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswAfterTouchZeroReturn
 	ld xix, xde
@@ -8412,7 +8412,7 @@ LswAfterTouch_PopIzRet:
 LswPartExp:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswPartExpZeroReturn
 	ld xix, xde
@@ -8512,7 +8512,7 @@ LswPartExp_PopIzRet:
 LswLocalControl:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswLocalControlZeroReturn
 	ld xix, xde
@@ -8614,7 +8614,7 @@ LswMidiChannel:
 	ld xiz, xde
 	ld (xsp + 4), xwa
 	lda xde, (IvSdpart_ShowHide_Data:24)
-	lda xhl, (SdpartUpdatePartUI_Data:24)
+	lda xhl, (PartParam_EnableMask:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswLocalZeroReturn
 	ld xix, xiz
