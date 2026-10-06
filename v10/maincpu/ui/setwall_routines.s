@@ -1,10 +1,15 @@
 ; =============================================================================
-; Wallpaper & Wall Display
+; Sequencer track-assign page and the routines after it (historical prefix SetWall_)
 ; =============================================================================
 ;
-; Wallpaper image loading and wall display update routines.
-; Manages the panel slot selection/matching system for the
-; background display.
+; Corrected 2026-10-06 (was: "Wallpaper & Wall Display -- Wallpaper image loading and wall display update
+; routines.  Manages the panel slot selection/matching system for the background display.").  Nothing here
+; loads a wallpaper; that is SetWallPaper -> ChangeWall elsewhere.  The routines at the top serve the
+; sequencer's TRACK ASSIGN page (SqTrAs): 16 track assignments in the table at 0xF1A0, the cursor at 0xCDF,
+; 2 pages of 8 tracks, the edited value at 0x2873 (SqTrAs_CursorNextTrack / _CursorPrevTrack /
+; _CursorToFirstPage; analysis/kn5000-naming/proposals-2026-10-06-helpers-h.json).  The rest of the file (a
+; pattern-stream parser, bank initialisation, tone-generator sync) has not been re-read since; its SetWall_
+; names are the conversion's, not evidence.
 ; =============================================================================
 
 SetWall_X:

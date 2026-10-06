@@ -28,8 +28,8 @@
 ;   0x377000-0x378FFF    8KB  [erased sector gap]
 ;   0x379000-0x3A6FFF  184KB  Sections 5-6: Custom Style Data
 ;   0x3A7000-0x3AFFFF   36KB  [unused erased area]
-;   0x3B0000-0x3B0FFF    4KB  Section 7: SubCPU Performance Data
-;   0x3B1000-0x3BFFFF   60KB  [erased]
+;   0x3B0000-0x3B0FFF    4KB  Section 7: block slot store -- header and owner maps (see below)
+;   0x3B1000-0x3BFFFF   60KB  [erased: the rest of section 7's slots]
 ;   0x3C0000-0x3D2FFF   78KB  LCD Wallpaper/Screenshot Storage
 ;   0x3D3000-0x3D3FFF    4KB  Sound-parameter user banks (SndParam_*)
 ;   0x3D4000-0x3DFFFF   48KB  [erased]
@@ -1606,8 +1606,14 @@ CustomData_Sections_5_6:
 	.space 0x9000, 0xFF	; 0x3A7000-0x3AFFFF
 
 ; ============================================================
-; Section 7: SubCPU Performance Data
+; Section 7: block slot store (FLASH_SECTION_PTR_7, RAM 0C92h = 0x3B0000), the whole 64KB sector
 ; Pointer: RAM (0C92h) = 0x3B0000
+; Corrected 2026-10-06 (was: "SubCPU Performance Data"): the main CPU keeps blocks from its RAM work
+; area at 0x1E0000 here in slots: owner bytes at +0x10 (40 small slots) and +0x50 (4 large slots); the 40
+; small slots of 470 bytes start at +0x410, the 4 large slots of 10,535 bytes at +0x4D80 (to +0xF21C).
+; Header words +0x08 = 40 and +0x0A = 4 are those counts.  v10 code: Flash_CountFreeOrOwnedSlots,
+; Flash_AssignSlotsToBlocks, Flash_WriteSlotOwnerMap, Flash_CopyBlocksToSlots (storage/flash_floppy_handlers.s;
+; analysis/kn5000-naming/proposals-2026-10-06-helpers-g.json).  Factory image: header only, slots erased.
 ; Starts with "HK" header but mostly empty (minimal data)
 ; ============================================================
 CustomData_Section_7:
