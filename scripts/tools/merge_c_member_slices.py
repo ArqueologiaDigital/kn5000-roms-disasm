@@ -6,8 +6,10 @@ QUESTION IT ANSWERS / WHAT IT DOES
   passes split some typed C objects into pieces, often to give a false pointer a label:
   Bitmap_MIDIConnections_2 (one 296 x 108 bitmap in naka_widget_tables_2.c) was 21 slices with names like
   NakaData_Tables2Pad3 and Bitmap_MIDIConnections_Header; Bitmap_Dredt0d was 18 with NakaData_UserMemoryConfig,
-  NakaData_StyleBitmapPad ... inside a bitmap.  For every Bitmap_* C member of a NAKA blob (a bitmap has no
-  sub-objects; the labelled pieces of a string table do, so those stay) this script looks for a run of consecutive
+  NakaData_StyleBitmapPad ... inside a bitmap; StyleSong_Titles[1000][34] was 133 slices named after the first title
+  of each (StyleBmp_LastStarparade = 4 titles, NakaStr_SoundPresetBone = 481).  For every C member of a NAKA blob
+  that is a 2-D (or deeper) array -- a [rows][cols] bitmap or a [n][size] record array; the labelled pieces of a 1-D
+  string table are its strings, so those stay -- this script looks for a run of consecutive
   .incbin lines of that blob, with no other line between them, that covers the member exactly
   and starts at it.  It merges them into the run's first line (label and trailing comment kept) when no label
   of a later piece is referenced anywhere in the tree (asm, C, link scripts).  The bytes cannot change.
@@ -67,8 +69,8 @@ def main():
             except BaseException:
                 continue
             for mb in cb.members:
-                if mb.size < 64 or not mb.name.startswith("Bitmap_") or mb.offset not in pieces[blob]:
-                    continue                      # a bitmap has no sub-objects; a string table's pieces do
+                if mb.size < 64 or mb.dims.count("[") < 2 or mb.offset not in pieces[blob]:
+                    continue                      # a [rows][cols] bitmap or a [n][size] record array; a 1-D string table's pieces are its strings
                 p, i = pieces[blob][mb.offset]
                 L = files[p]
                 end, j, labels = mb.offset, i, []
@@ -88,6 +90,10 @@ def main():
                         break
                 if not ok or j - i < 2:
                     continue
+                n0 = int(re.match(r'\[(\d+)\]', mb.dims).group(1)) if re.match(r'\[(\d+)\]', mb.dims) else 0
+                sizes = [int(INC.match(L[k]).group(5), 16) for k in range(i, j)]
+                if n0 and len(sizes) == n0 and all(z == mb.size // n0 for z in sizes):
+                    continue                      # one piece per record: per-record labels (DspParamName_01_VOLUME) stay
                 if any(refcount[x] for x in labels):
                     print("  %s %s %s: kept (a piece's label is referenced)" % (tree, blob, mb.name))
                     continue

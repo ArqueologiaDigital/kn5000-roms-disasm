@@ -13,7 +13,6 @@ CRTC_LINE_COMPARE = 0x00000018;
 FDC_CMD_READ_ID = 0x0000000A;
 NakaData_DescriptorPad1 = 0x00E60008;
 NakaData_TechnichordBitmap2 = 0x00E9013D;
-NakaStr_SoundPreset176 = 0x00EC00C7;
 NakaData_PerfStyleCode = 0x00F5001F;
 LED_patterns_firmware_v8_plus = 0x00E00008;
 NAKA_TYPE_0x5D = 0x0000005D;
