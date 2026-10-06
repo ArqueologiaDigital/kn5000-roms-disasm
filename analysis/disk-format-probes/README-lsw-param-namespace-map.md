@@ -225,6 +225,11 @@ they are now `SndParam_Part<TT>_DspEffect`. `0x80`-`0x82` become `_BendRange`, `
 ranges fit the byte ranges section 5 measured. Part `0x17` (the MSP) uses keys of its own in namespace `0x288xx`.
 `gen_sndparam_desc_names.py` applies this, asserting each field's (record, byte, mask) on all 25 parts.
 
+Which of these a part may edit is a per-part bit mask, `PartParam_EnableMask[30]` (naka_technichord_strings
+`+0xF35C`, typed by `scripts/converters/part_param_enable_mask_retype.py`). Each Lsw function tests one bit of it:
+15 Volume/Mute, 14 Pan, 13 Reverb, 12 DSPEffect, 11 Sustain, 10 SustainLength, 9 KeyShift, 8 Tuning, 7 BendRange,
+6 GlidePedal, 5 SustainPedal, 4 KeyScaling, 3 DigitalEffect, 2 AfterTouch, 1 MidiChannel, 0 LocalControl.
+
 
 ## PROVEN vs INFERRED
 
