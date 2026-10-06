@@ -1185,7 +1185,7 @@
 	.set T_EditScreen_EnterNoteEdit,                                                                      0x00F402CC
 	.set T_ShowScreen_DrumEditPartSelect,                                               0x00F402DC
 	.set T_EditScreen_EnterDrumEdit,                                                                      0x00F402EC
-	.set T_F40304,                                                                      0x00F40304
+	.set T_Transport_ResetAndStartBC,                                                                      0x00F40304
 	.set T_EditScreen_Tick_Call,                                                                      0x00F40308
 	.set T_F4030C,                                                                      0x00F4030C
 	.set T_Ctrl_Normalise,                                                              0x00F405F0
@@ -61316,7 +61316,7 @@ LcdKeyRow4_Initial:
 	calr Initial_SelectPreviousItem                                          ; FA132E  1e b2 01
 	jr .LFA1336                                          ; FA1331  68 03
 .LFA1333:
-	calr sub_FA1533                                          ; FA1333  1e fd 01
+	calr Initial_CancelConfirm_LcdKeyRow4                                          ; FA1333  1e fd 01
 .LFA1336:
 	ret                                                  ; FA1336  0e
 ; LcdKeyRow5_Initial: HandlerTable23_FA1DED slot 12, the 23-slot button table Screen_Initial_Button indexes through T_PanelCode_ToSlotAndFlags
@@ -61342,10 +61342,10 @@ ExitKey_Initial:
 	jr z, .LFA135C                                       ; FA1353  66 07
 	jr .LFA135F                                          ; FA1355  68 08
 .LFA1357:
-	calr sub_FA1596                                          ; FA1357  1e 3c 02
+	calr Initial_ExitKey_Leave                                          ; FA1357  1e 3c 02
 	jr .LFA135F                                          ; FA135A  68 03
 .LFA135C:
-	calr sub_FA15B9                                          ; FA135C  1e 5a 02
+	calr Initial_CancelConfirm_ExitKey                                          ; FA135C  1e 5a 02
 .LFA135F:
 	ret                                                  ; FA135F  0e
 	call T_CallbackQueue_ResetAndRestartTask2            ; FA1360  1d 80 2e f4
@@ -61573,7 +61573,9 @@ Initial_SelectPreviousItem:
 	pop XIX                                              ; FA152F  5c
 	unlk XIZ                                             ; FA1530  ee 0d
 	ret                                                  ; FA1532  0e
-sub_FA1533:
+; Initial_CancelConfirm_LcdKeyRow4: LcdKeyRow4_Initial at UI_ScreenStage 1 ("Are You Sure ?"): when PanelEvent_Flags bit 0 is clear, UI_ScreenStage = 0
+;   (back to the parameters) and UI_Request_Hi bit 4.  Basis: caller (stage dispatch) + body.
+Initial_CancelConfirm_LcdKeyRow4:
 	ld c, (PanelEvent_Flags:16)                                   ; FA1533  c1 b0 28 23
 	and C,0x01                                           ; FA1537  cb cc 01
 	jr nz, .LFA1545                                      ; FA153A  6e 09
@@ -61616,7 +61618,10 @@ Initial_SelectNextItem:
 	pop XIX                                              ; FA1592  5c
 	unlk XIZ                                             ; FA1593  ee 0d
 	ret                                                  ; FA1595  0e
-sub_FA1596:
+; Initial_ExitKey_Leave: ExitKey_Initial at UI_ScreenStage 0: when PanelEvent_Flags bit 0 is clear, either UI_ScreenHoldPending = 1 (while
+;   UI_ScreenHoldState bit 0) or UI_Request = 0x60 with UI_Request_Hi bit 7 -- the request ExitKey_ReMapEdit,
+;   ExitKey_TuneScale and others make.  Basis: caller + body.
+Initial_ExitKey_Leave:
 	ld c, (PanelEvent_Flags:16)                                   ; FA1596  c1 b0 28 23
 	and C,0x01                                           ; FA159A  cb cc 01
 	jr nz, .LFA15B8                                      ; FA159D  6e 19
@@ -61630,7 +61635,8 @@ sub_FA1596:
 	ld (UI_Request:16), 0x60                                 ; FA15B3  f1 70 20 00 60
 .LFA15B8:
 	ret                                                  ; FA15B8  0e
-sub_FA15B9:
+; Initial_CancelConfirm_ExitKey: ExitKey_Initial at UI_ScreenStage 1: the same body as Initial_CancelConfirm_LcdKeyRow4.  Basis: caller + body.
+Initial_CancelConfirm_ExitKey:
 	ld c, (PanelEvent_Flags:16)                                   ; FA15B9  c1 b0 28 23
 	and C,0x01                                           ; FA15BD  cb cc 01
 	jr nz, .LFA15CB                                      ; FA15C0  6e 09
@@ -90291,7 +90297,7 @@ SysExSession_RecvSystemPart1:
 	inc 6,XSP                                            ; FB2985  ef 66
 	cp a, 0x00:i3                                          ; FB2987  c9 d8
 	jr nz, .LFB29A8                                      ; FB2989  6e 1d
-	call sub_FB77B6                                      ; FB298B  1d b6 77 fb
+	call ParamImage_WriteHeadersAndSnapshot                                      ; FB298B  1d b6 77 fb
 	lda xbc, (0x60fd08:24)                               ; FB298F  f2 08 fd 60 31
 	push XBC                                             ; FB2994  39
 	call SysExXfer_SetJobTotal_SystemPartMidi                                      ; FB2995  1d d7 74 fb
@@ -99245,7 +99251,9 @@ SysExRx_CheckReplyTimeout:
 	popw hl                                              ; FB77B2  4b
 	unlk XIZ                                             ; FB77B3  ee 0d
 	ret                                                  ; FB77B5  0e
-sub_FB77B6:
+; ParamImage_WriteHeadersAndSnapshot: T_ParamImage_WriteRecordHeaders_Entry then T_ParamImage_SnapshotAll, preserving XDE/XHL/XIX/XIZ; called from
+;   SysExSession_RecvSystemPart1.  Basis: body.
+ParamImage_WriteHeadersAndSnapshot:
 	push XDE                                             ; FB77B6  3a
 	push XHL                                             ; FB77B7  3b
 	push XIX                                             ; FB77B8  3c
@@ -102316,7 +102324,10 @@ sub_FB9D5A:
 .LFB9D86:
 	popw hl                                              ; FB9D86  4b
 	ret                                                  ; FB9D87  0e
-sub_FB9D88:
+; MidiCfg_ClearInputMode: MidiCfg_InOutMode bits 0-3 (INPUT MODE) = 0, then the parameter event (record 0x80, byte 3, value 0, changed bits
+;   0x0F) through T_EventQueue_AppendStackArgs -- the same byte and nibble MidiTotalMode_EditInputMode edits.  Called
+;   from MidiFileDirectPlay_LcdKeyRow1 and after a successful T_MidiFileStream_Open in sub_FB9DA0.  Basis: body.
+MidiCfg_ClearInputMode:
 	m_and_mi8 MB16, MidiCfg_InOutMode, 0xf0                         ; FB9D88  c1 35 7f 3c f0
 	pushw 0x0f                                           ; FB9D8D  0b 0f 00
 	pushw 0x00                                           ; FB9D90  0b 00 00
@@ -102347,7 +102358,7 @@ sub_FB9DA0:
 .LFB9DDE:
 	m_or_mi8 MBI+r4, 0, 0x02                             ; FB9DDE  84 3e 02
 	calr sub_FB9D07                                      ; FB9DE1  1e 23 ff
-	calr sub_FB9D88                                      ; FB9DE4  1e a1 ff
+	calr MidiCfg_ClearInputMode                                      ; FB9DE4  1e a1 ff
 	jr .LFB9DFC                                          ; FB9DE7  68 13
 .LFB9DE9:
 	calr MidiFilePlay_Stop                                      ; FB9DE9  1e dd f3
@@ -102377,7 +102388,7 @@ MidiFileDirectPlay_LcdKeyRow1:
 	ld (SmfPlay_Playing:24), 0x00                             ; FB9E25  f2 48 51 60 00 00
 	calr MidiInQueue_InjectController0_AllChannels                                      ; FB9E2B  1e 2e f4
 	calr sub_FB9D5A                                      ; FB9E2E  1e 29 ff
-	calr sub_FB9D88                                      ; FB9E31  1e 54 ff
+	calr MidiCfg_ClearInputMode                                      ; FB9E31  1e 54 ff
 	jr .LFB9E3D                                          ; FB9E34  68 07
 .LFB9E36:
 	calr MidiFilePlay_Stop                                      ; FB9E36  1e 90 f3
@@ -144577,7 +144588,9 @@ sub_FD7B00:
 	popw hl                                              ; FD7B1D  4b
 	unlk XIZ                                             ; FD7B1E  ee 0d
 	ret                                                  ; FD7B20  0e
-sub_FD7B21:
+; SoundConv_SetArgs: SoundConv_Arg0[0] = stack argument 1, [1] = argument 2, [2] = 0 -- the sound-selection converters' argument block;
+;   called from ScreenEnter_SoundEditCopy.  Basis: body.
+SoundConv_SetArgs:
 	link XIZ,0x0000                                      ; FD7B21  ee 0c 00 00
 	push XIX                                             ; FD7B25  3c
 	lda xix, (SoundConv_Arg0:24)                               ; FD7B26  f2 10 f0 60 34
@@ -154711,7 +154724,7 @@ ScreenEnter_SoundEditCopy:
 	ld bc, (xiz-8)                                       ; FDD17C  9e f8 21
 	extz BC                                              ; FDD17F  d9 12
 	pushw bc                                             ; FDD181  29
-	call sub_FD7B21                                      ; FDD182  1d 21 7b fd
+	call SoundConv_SetArgs                                      ; FDD182  1d 21 7b fd
 	call T_SoundSel_FromProgramAndBank                                        ; FDD186  1d 00 10 f4
 	lda xbc, (xiz-10)                                    ; FDD18A  be f6 31
 	push XBC                                             ; FDD18D  39
@@ -161338,12 +161351,13 @@ Notes_ReleaseAllSources:
 	pop XHL                                              ; FE0240  5b
 	pop XDE                                              ; FE0241  5a
 	ret                                                  ; FE0242  0e
-sub_FE0243:
+; Transport_ResetAndStartBC_SaveRegs: saves XDE / XHL / XIX / XIZ around a call of T_Transport_ResetAndStartBC and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+Transport_ResetAndStartBC_SaveRegs:
 	push XDE                                             ; FE0243  3a
 	push XHL                                             ; FE0244  3b
 	push XIX                                             ; FE0245  3c
 	push XIZ                                             ; FE0246  3e
-	call T_F40304                                        ; FE0247  1d 04 03 f4
+	call T_Transport_ResetAndStartBC                                        ; FE0247  1d 04 03 f4
 	pop XIZ                                              ; FE024B  5e
 	pop XIX                                              ; FE024C  5c
 	pop XHL                                              ; FE024D  5b
@@ -166480,7 +166494,7 @@ sub_FE2EF9:
 	ld C,(XIX)                                           ; FE2F2D  84 23
 	cp c, 0x00:i3                                          ; FE2F2F  cb d8
 	jr nz, .LFE2F36                                          ; FE2F31  6e 03
-	calr sub_FE0243                                          ; FE2F33  1e 0d d3
+	calr Transport_ResetAndStartBC_SaveRegs                                          ; FE2F33  1e 0d d3
 .LFE2F36:
 	pop XIX                                              ; FE2F36  5c
 	ret                                                  ; FE2F37  0e
@@ -175937,7 +175951,7 @@ Medley_AdvanceInternalSong:
 	calr Medley_LoadInternalSong                                      ; FE794C  1e 15 ff
 .LFE794F:
 	ret                                                  ; FE794F  0e
-; Medley_Tick: T_Medley_Tick: counts (0x22D0) down; at 5 for INT: playback flags cleared and T_F409CC; at 0: INT -> T_F40304 (the
+; Medley_Tick: T_Medley_Tick: counts (0x22D0) down; at 5 for INT: playback flags cleared and T_F409CC; at 0: INT -> T_Transport_ResetAndStartBC (the
 ;   transports from zero), FD + MIDI FILE -> the next song (wrapping) and Medley_StartMidiFile.
 Medley_Tick:
 	ld w, (Medley_Countdown:16)                                   ; FE7950  c1 d0 22 20
@@ -175978,7 +175992,7 @@ Medley_Tick:
 	jr .LFE79B2                                          ; FE79AA  68 06
 .LFE79AC:
 	pushw wa                                             ; FE79AC  28
-	call T_F40304                                        ; FE79AD  1d 04 03 f4
+	call T_Transport_ResetAndStartBC                                        ; FE79AD  1d 04 03 f4
 	popw wa                                              ; FE79B1  48
 .LFE79B2:
 	ld (Medley_Countdown:16), w                                   ; FE79B2  f1 d0 22 40
@@ -176134,7 +176148,10 @@ sub_FE8005:
 	ld a, (BStore_CurrentBank:16)                                   ; FE801C  c1 0a 36 21
 	ld (0x6034d5:24), a                                 ; FE8020  f2 d5 34 60 41
 	ret                                                  ; FE8025  0e
-sub_FE8026:
+; Transport_ResetAndStartBC: with interrupts masked: TransportB_Beat, Seq_BeatTick (B's tick), TransportC_Beat and TransportC_Tick = 0, then
+;   TransportB_State and TransportC_State = 0x01 (the documented start value).  Reached through prom_b slot T_Transport_ResetAndStartBC.
+;   Basis: body (named RAM, wsa1_ram.inc).
+Transport_ResetAndStartBC:
 	ei 0x06                                              ; FE8026  06 06
 	xor WA,WA                                            ; FE8028  d8 d0
 	ld	(TransportB_Beat:8), wa                                     ; FE802A  f0 91 50
@@ -177581,7 +177598,7 @@ EditScreen_EnterNoteEdit:
 	call T_SeqBufRing_Discard                                        ; FE8A2B  1d 10 0a f4
 	call T_TimedEventRing_Discard                                        ; FE8A2F  1d 14 0a f4
 	calr NoteEdit_ClearHeldKeyNotes                                          ; FE8A33  1e 12 07
-	calr sub_FE8BE3                                      ; FE8A36  1e aa 01
+	calr NoteEdit_ClearHeldKeys                                      ; FE8A36  1e aa 01
 	calr EditScreen_OpenCursorMeasure                                          ; FE8A39  1e 6d 04
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE8A3C  c1 4a 0d 3f 00
 	jr z, .LFE8A58                                       ; FE8A41  66 15
@@ -177756,7 +177773,9 @@ sub_FE8BD4:
 	call T_Var34D1_SetBits20                                        ; FE8BD9  1d 08 0a f4
 	m_or_mi8 MB16, 0x34d1, 0x10                          ; FE8BDD  c1 d1 34 3e 10
 	ret                                                  ; FE8BE2  0e
-sub_FE8BE3:
+; NoteEdit_ClearHeldKeys: clears the flag byte of all 8 three-byte NoteEdit_HeldKeys slots; called once, from EditScreen_EnterNoteEdit.
+;   Basis: body + caller.
+NoteEdit_ClearHeldKeys:
 	ld c, 0x08:opc                                          ; FE8BE3  23 08
 	ld XIX,NoteEdit_HeldKeys                                    ; FE8BE5  44 1c 1f 60 00
 	xor A,A                                              ; FE8BEA  c9 d1

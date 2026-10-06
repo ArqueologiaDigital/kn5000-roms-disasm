@@ -1907,7 +1907,7 @@ ROWS = [
      "T_Medley_AdvanceInternalSong, called by the sequencer at a song's end: when an INT medley plays ((0x34D0) bit 2), the next song as\n"
      "in Medley_SkipToNextInternalSong, without stopping first."),
     ("FE7950", "Medley_Tick",
-     "T_Medley_Tick: counts (0x22D0) down; at 5 for INT: playback flags cleared and T_F409CC; at 0: INT -> T_F40304 (the\n"
+     "T_Medley_Tick: counts (0x22D0) down; at 5 for INT: playback flags cleared and T_F409CC; at 0: INT -> T_Transport_ResetAndStartBC (the\n"
      "transports from zero), FD + MIDI FILE -> the next song (wrapping) and Medley_StartMidiFile."),
     ("FE79B7", "Medley_StartMidiFile",
      "(0x34D0) |= 4, T_F42614 (mount and list the MIDI files); from Medley_PlayingSong, the first listing entry\n"
@@ -2482,6 +2482,50 @@ ROWS = [
      "A = the INTERNAL SOUND page painter's index for the screen and CombiEdit_Page: screens 0x37 / 0xB4 pages 0 / 1 / 2\n"
      "-> 0 / 1 / 2, screen 0xB5 pages 0 / 1 -> 3 / 4, screen 0x38 pages 0 / 1 / 2 -> 5 / 3 / 4, else 0xFF.  Callers include\n"
      "CombiEditPage_OnPartParamEvent and the INTERNAL SOUND soft keys.  Basis: body."),
+    # operand-complete short routines: every memory operand and callee already named (2026-10-06, candidates.py)
+    ("FE8BE3", "NoteEdit_ClearHeldKeys",
+     "clears the flag byte of all 8 three-byte NoteEdit_HeldKeys slots; called once, from EditScreen_EnterNoteEdit.\n"
+     "Basis: body + caller."),
+    ("FE8026", "Transport_ResetAndStartBC",
+     "with interrupts masked: TransportB_Beat, Seq_BeatTick (B's tick), TransportC_Beat and TransportC_Tick = 0, then\n"
+     "TransportB_State and TransportC_State = 0x01 (the documented start value).  Reached through prom_b slot T_Transport_ResetAndStartBC.\n"
+     "Basis: body (named RAM, wsa1_ram.inc)."),
+    ("FD7B21", "SoundConv_SetArgs",
+     "SoundConv_Arg0[0] = stack argument 1, [1] = argument 2, [2] = 0 -- the sound-selection converters' argument block;\n"
+     "called from ScreenEnter_SoundEditCopy.  Basis: body."),
+    ("FB77B6", "ParamImage_WriteHeadersAndSnapshot",
+     "T_ParamImage_WriteRecordHeaders_Entry then T_ParamImage_SnapshotAll, preserving XDE/XHL/XIX/XIZ; called from\n"
+     "SysExSession_RecvSystemPart1.  Basis: body."),
+    ("FB9D88", "MidiCfg_ClearInputMode",
+     "MidiCfg_InOutMode bits 0-3 (INPUT MODE) = 0, then the parameter event (record 0x80, byte 3, value 0, changed bits\n"
+     "0x0F) through T_EventQueue_AppendStackArgs -- the same byte and nibble MidiTotalMode_EditInputMode edits.  Called\n"
+     "from MidiFileDirectPlay_LcdKeyRow1 and after a successful T_MidiFileStream_Open in sub_FB9DA0.  Basis: body."),
+    ("FA1533", "Initial_CancelConfirm_LcdKeyRow4",
+     "LcdKeyRow4_Initial at UI_ScreenStage 1 (\"Are You Sure ?\"): when PanelEvent_Flags bit 0 is clear, UI_ScreenStage = 0\n"
+     "(back to the parameters) and UI_Request_Hi bit 4.  Basis: caller (stage dispatch) + body."),
+    ("FA15B9", "Initial_CancelConfirm_ExitKey",
+     "ExitKey_Initial at UI_ScreenStage 1: the same body as Initial_CancelConfirm_LcdKeyRow4.  Basis: caller + body."),
+    ("FA1596", "Initial_ExitKey_Leave",
+     "ExitKey_Initial at UI_ScreenStage 0: when PanelEvent_Flags bit 0 is clear, either UI_ScreenHoldPending = 1 (while\n"
+     "UI_ScreenHoldState bit 0) or UI_Request = 0x60 with UI_Request_Hi bit 7 -- the request ExitKey_ReMapEdit,\n"
+     "ExitKey_TuneScale and others make.  Basis: caller + body."),
+    # prom_b operand-complete routines: song-store copies, cursor writers, SMF output close (2026-10-06)
+    ("F444E4", "BStore_TrackToPart_LoadDefaults",
+     "copies 17 bytes from WorkspaceDefaults + 0x1C to BStore_TrackToPart (index 0..16; the RAM note documents 16);\n"
+     "called from sub_F45D80.  Basis: body (named RAM)."),
+    ("F442C4", "BStore_SongName_LoadDefault",
+     "ldirw of 3 words from WorkspaceDefaults + 0x71 to BStore_SongName, the 6-character song name, preserving\n"
+     "XIX/XIY/BC; called from sub_F44260.  Basis: body (named RAM)."),
+    ("F77DD4", "SmfOut_WriteLastWindowAndClose",
+     "when SmfOut_WindowsFlushed is non-zero: Disk_Flags bit 1 set, T_DiskApi_WriteFileFromWindow_Entry; then Disk_Flags\n"
+     "bit 1 cleared and T_DiskApi_CloseFile_Call; called from sub_F7669D.  Basis: body."),
+    ("F732C7", "BStore_PutByteAtCursorNoSave",
+     "BStore_PutByteAtCursor's work without saving XHL: SongStore_SeekBlock_Copy for BStore_CursorBlock, then A to\n"
+     "BStore_CursorBlockAddr + the low byte of BStore_CursorOffset; called from sub_F73261 and sub_F7328F.\n"
+     "Basis: body, compared with BStore_PutByteAtCursor."),
+    ("F73827", "BStore_WriteCursorByteNoSave",
+     "BStore_WriteCursorByte's work without saving XIX/WA: A to BStore_HeapBase + (BStore_CursorBlock - 1) * 0x100 +\n"
+     "BStore_CursorOffset; called from sub_F73664.  Basis: body, compared with BStore_WriteCursorByte."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
