@@ -2216,7 +2216,7 @@ EffectMode_MidiSetLEDs:
 	sll wa, 4
 	add wa, bc
 	extz xwa
-	lda xde, (EffectMode_MidiSetLEDs_Data:24)
+	lda xde, (PanelButton_LedMap:24)
 	ld xhl, xde
 	add xhl, xwa
 	ld l, (xhl)

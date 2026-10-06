@@ -325,11 +325,12 @@ EffectMode_SearchPresetTableC2C5_Data:
 EffectMode_SearchPresetTableC0_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC6E, 0x5A
 EffectMode_DiagSeq_AnimFrame_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCC8, 0x6
-; [nakarest] naka_style_bitmaps+0xcce  +0xcce..+0xe2e (0xeb7e8c, 352 B)
-; [nakarest] purpose not established: layout of 352 B at 0xeb7e8c not derived; readers below
-; [nakarest] Readers: source references EffectMode_MidiSetLEDs (ui/ui_mode_handlers.s: `lda xde,
-; [nakarest] (EffectMode_MidiSetLEDs_Data:24)`).
-EffectMode_MidiSetLEDs_Data:
+; PanelButton_LedMap -- [22 panel segments][8 button bits] x {LED row, LED pattern}.  EffectMode_MidiSetLEDs
+; reads entry [segment][lowest set bit of the change mask] and calls Set_LEDs(row, pattern or 0); the row
+; indexes Protocol_values_for_LED_rows.  {0x0E, 0x0F} (row 14, the four START/STOP beat LEDs) fills the
+; buttons that have no LED of their own.  Typed in ui_widgets/naka_style_bitmaps.c
+; (scripts/converters/panel_led_map_retype.py).
+PanelButton_LedMap:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCCE, 0x160
 ; [nakarest] naka_style_bitmaps+0xe2e  +0xe2e..+0xe4e (0xeb7fec, 32 B)
 ; [nakarest] purpose not established: layout of 32 B at 0xeb7fec not derived; readers below

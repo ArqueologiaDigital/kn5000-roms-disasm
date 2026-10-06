@@ -10547,7 +10547,7 @@ OneTchFUNC_Data 00EB7C94
 EffectMode_SearchPresetTableC2C5_Data 00EB7CA0
 EffectMode_SearchPresetTableC0_Data 00EB7E2C
 EffectMode_DiagSeq_AnimFrame_Data 00EB7E86
-EffectMode_MidiSetLEDs_Data 00EB7E8C
+PanelButton_LedMap 00EB7E8C
 EffectMode_SetAllLEDs_SetOne_Data 00EB7FEC
 RhythmRomTest_Compare_Data 00EB800C
 DramTest_IC10IC9_NextChip_Data 00EB802E
