@@ -46,7 +46,7 @@ WHERE THE SIGNAL IS  (prom_b at 0xF00000, prom_a at 0xF80000, prom_c at 0xF80000
     jr Z` and sends the five bytes at prom_b 0xF4FEC8 when the routine refused;
     0xFB3483 does `pop XBC / ret` and never looks.  So a refused READ is
     answered and a refused WRITE is silent.
-  * THE REPLY is built by sub_F37DB4 (0xF37DB4) and sent by sub_F37E1C
+  * THE REPLY is built by sub_F37DB4 (0xF37DB4) and sent by SysExThirdRegion_SendReplyChunk
     (0xF37E1C).  The header splits the CURRENT address back into septets with
     `and XBC,0x001fc000 / sra 14`, `and XBC,0x00003f80 / sra 7` and `res 7,C`
     -- the same 21-bit encoding, read off the transmit side.

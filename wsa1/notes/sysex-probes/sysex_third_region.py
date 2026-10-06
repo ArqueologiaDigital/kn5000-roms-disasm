@@ -36,7 +36,7 @@ WHERE THE SIGNAL IS
     into (block, index) and hands it to prom_a 0xFD616A (melodic) or 0xFD6704
     (drum), the SAME two routines the panel's own tone editor commits through
     (notes/FINDINGS-l7a1429-field-editors.md section 1c).
-  * THE REPLY, prom_b `sub_F37DB4` / `sub_F37E1C` (0xF37DB4, 0xF37E1C): header
+  * THE REPLY, prom_b `sub_F37DB4` / `SysExThirdRegion_SendReplyChunk` (0xF37DB4, 0xF37E1C): header
     `F0 50 2C 04 nn 11` (the literal is `00`, and SysExTx_PatchModelByteVariant2 rewrites it to
     `01` on the rack), the chunk's own address septets, count `00 00 n`, then
     2n nibble bytes, a `00`, the checksum and `F7`.  `cp WA,0x0078` caps n.
@@ -230,7 +230,7 @@ assert b(0xF43478, 4) == bytes([0x1B, 0x04, 0x67, 0xFD]), "T_ToneMsg8D_SendParam
 
 # Each record access is preceded by a `select this record` message to CPU 2.
 assert le(b(0xF37C05 + 1, 3)) == 0xF43488
-assert b(0xF43488, 4) == bytes([0x1B, 0x5C, 0x66, 0xFD]), "T_F43488 -> prom_a 0xFD665C"
+assert b(0xF43488, 4) == bytes([0x1B, 0x5C, 0x66, 0xFD]), "T_ToneMsg88_Id13 -> prom_a 0xFD665C"
 assert a(0xFD6689, 4) == bytes([0xBC, 0x02, 0x00, 0x13]), "record selector is not parameter 0x13"
 # prom_a 0xFDA160 defaults that record number when the panel has never set it.
 assert a(0xFDA175, 3) == bytes([0xB1, 0x00, 0x24]), "the default record is not 36"

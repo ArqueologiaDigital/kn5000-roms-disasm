@@ -1055,7 +1055,7 @@ def checks(verbose=True, layout=True):
       verbose)
     c("ENTRY six thunk slots and two more land in the span",
       sorted("T_%06X" % s for v in th.values() for s in v),
-      ["T_SysExThirdRegion_FetchNextChunk", "T_SysExThirdRegion_AcceptRequest", "T_SysExToneImage_WriteByte", "T_SysExParam_ExecSoundWriteRequest", "T_F41260", "T_F41264",
+      ["T_SysExThirdRegion_FetchNextChunk", "T_SysExThirdRegion_AcceptRequest", "T_SysExToneImage_WriteByte", "T_SysExParam_ExecSoundWriteRequest", "T_F41260", "T_SysExThirdRegion_SendReplyChunk",
        "T_ParamImage_CopyToSongWorkspace", "T_F42664"], verbose)
     lab = labels()
     b_ = boundaries()

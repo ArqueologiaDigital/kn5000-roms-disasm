@@ -24,3 +24,6 @@ unnamed.
 **Wave 3** (`proposals_wave3_{g,h,i,j}.json`) took the next 120. Many of these have only one named caller. A single
 caller was accepted only when its name or header made the role clear and the body confirmed it. Result: 108 named,
 12 refused.
+
+**Wave 4** (`proposals_wave4_{k,l,m,n}.json`): 111 named and 9 refused, plus one reviewer-authored record,
+`sub_F4D861` -> `BStore_AllocBlock_B`. Batch m had named its veneer assuming that name.

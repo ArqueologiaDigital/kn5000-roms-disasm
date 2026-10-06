@@ -815,11 +815,11 @@ one-span-extent/span-count/summed reference bound per run.
 `.incbin` membership, all re-derived from the ROM), two ordering invariants, that
 the three runs this tree has already converted (`T_F42770` block store,
 `T_F42880`/`T_BStore_AppendBytes_Join3_Veneer` allocator and song-store commands) are ABSENT, and that a
-known-unconverted run (`T_F40C50`) is PRESENT.
+known-unconverted run (`T_BStore_StepCursorOneByte`) is PRESENT.
 ⚠ Its first draft hard-coded the then-top run and would have begun FAILING the
 moment that run was converted — a self-test that breaks on success is the
 opposite of one. **It then did it again, and round 3 caught it:** the
-"unconverted run T_F40C50 is present" row named a run round 3 converted, and the
+"unconverted run T_BStore_StepCursorOneByte is present" row named a run round 3 converted, and the
 selftest failed on its own success. Fixed 2026-08-25 — the presence check now
 takes the LAST `jp` slot in table order whose target is still inside an
 `.incbin` and asserts survey() reports the run owning it, so nothing in it names
@@ -1016,8 +1016,8 @@ that the header cites the instruction, not *ref−1*. A third flagged row
 narrow operand rule could not see the disclosure; the phrasing was fixed rather
 than the rule widened.
 
-⚠ It also typed one thunk-slot number, `T_F40B54`, for the slot that targets
-0xF48C1A. The real slot is **T_DiskFile_CheckSignature**; T_F40B54 targets 0xF483B2. The header
+⚠ It also typed one thunk-slot number, `T_SeqTrackCursors_SaveTrack`, for the slot that targets
+0xF48C1A. The real slot is **T_DiskFile_CheckSignature**; T_SeqTrackCursors_SaveTrack targets 0xF483B2. The header
 now reads the slot out of `thunks()`, and a `checks()` row asserts the slot set
 of 0xF48C1A is exactly {T_DiskFile_CheckSignature}. The lesson is the same one this tree keeps
 relearning: **a name typed next to an address is not evidence, even when the

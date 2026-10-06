@@ -37,7 +37,7 @@ HOW THE CODE/DATA SPLIT WAS MADE
       `ret` padding.  FOUR are data, and each one's END is pinned by a real
       transfer decoded in this transcription, never by where the decode happens
       to resynchronise:
-        0xF5D802 RoundMap_96..RoundMap_8   ends at 0xF5DAA2 = thunk target T_F42700
+        0xF5D802 RoundMap_96..RoundMap_8   ends at 0xF5DAA2 = thunk target T_Quantize_Execute
         0xF5DBB4 RoundMap_Table            ends at 0xF5DBD0 = `jr T` at 0xF5DBB2
         0xF5EE75 IdentityMap_0_31          ends at 0xF5EE95 = `calr` x2 (0xF5ED63, 0xF5F373)
         0xF621B9 RoundMap_Bounds_A/_B      ends at 0xF62201 = `calr` at 0xF621AE
@@ -417,7 +417,7 @@ def map_block(a, lab):
                 "96, and it is not the byte extent divided by anything -- the "
                 "seven maps TILE 0x%06X-0x%06X (%d bytes) at 96 bytes each, the "
                 "first address is RoundMap_Table[0] and the last map's last byte "
-                "abuts 0x%06X, which is thunk target T_F42700.  96 x 7 = %d = the "
+                "abuts 0x%06X, which is thunk target T_Quantize_Execute.  96 x 7 = %d = the "
                 "extent, and 95 or 97 does not tile it."
                 % (MAPS_AT, MAPS_END - 1, MAPS_END - MAPS_AT, MAPS_END,
                    MAPS_END - MAPS_AT))
@@ -643,7 +643,7 @@ def checks(verbose=True):
     ps = map_ptrs()
     c("the seven maps tile 0x%06X-0x%06X at 96 bytes each" % (MAPS_AT, MAPS_END - 1),
       ps, [MAPS_AT + 96 * i for i in range(7)])
-    c("and the last one abuts thunk target T_F42700", ps[-1] + 96, MAPS_END)
+    c("and the last one abuts thunk target T_Quantize_Execute", ps[-1] + 96, MAPS_END)
     gs = [g for _, g, _ in grids()]
     c("the seven grids, read off each map's own values", gs, [96, 48, 24, 12, 32, 16, 8])
     for p, g, t in grids():

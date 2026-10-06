@@ -340,7 +340,7 @@ by four routines, each of which positions its whole picture relative to them.
 The other writers set constants before `call KeyboardIcon_Draw`:
 
 - (56, 139) in the two KEY FOLLOW painters (`Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk`,
-  `..._TouchAttack`) and in `sub_F5C772`;
+  `..._TouchAttack`) and in `SoundEditFilterKeyFollow_PaintKeyboardAndValues`;
 - (47, 51) in `SoundEditToneLayerKeyLayer_Paint`, the KEY LAYER page, whose subject is a key range.
 
 The two words are named `IconOrigin_X` / `IconOrigin_Y` for that role.

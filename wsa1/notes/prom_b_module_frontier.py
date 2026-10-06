@@ -169,7 +169,7 @@ def selftest():
         check("converted run T_%06X (%s) is absent" % (run, what),
               [r["first"] for r in rows if r["first"] == run], [])
     # ...and a run that IS unconverted must be PRESENT.
-    # ⚠ DERIVED, never typed.  The previous draft named T_F40C50 here and started
+    # ⚠ DERIVED, never typed.  The previous draft named T_BStore_StepCursorOneByte here and started
     # FAILING the moment round 3 converted it -- the same defect the docstring
     # above says an earlier draft already had with T_BStore_AppendBytes_Join3_Veneer.  A self-test that
     # breaks on success is the opposite of one, so this now takes the LAST `jp`

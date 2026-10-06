@@ -1525,7 +1525,7 @@ ROWS = [
      "is set when an append fails; the block-store cursor is restored."),
     ("FE82D7", "EditScreen_Tick",
      "T_EditScreen_Tick: NoteEdit_TakeKeyboardInput, then the two countdown timers (EditScreen_CountDownAction,\n"
-     "_RunDueAction, _CountDownAction2, _RunDueAction2), then T_F40A3C."),
+     "_RunDueAction, _CountDownAction2, _RunDueAction2), then T_SeqCycle_TickDeferredAction."),
     ("FE92C1", "EditScreen_CountDownAction",
      "(0x601F58) - 1 while bit 7 is set and it is above 0x80."),
     ("FE92ED", "EditScreen_RunDueAction",
@@ -1598,7 +1598,7 @@ ROWS = [
      "measure's start -- the callers subtract them to get the tick within the measure."),
     # NOTE / DRUM EDIT: opening the cursor's measure
     ("FE8EF3", "EditScreen_SeekCursorMeasure",
-     "(0x0C90) = EditCursor_Measure, EditScreen_FindMasterTrack (T_F40A70), then T_BStore_SeekChainToMeasure on chain EditScreen_Part + 1: prom_b's\n"
+     "(0x0C90) = EditCursor_Measure, EditScreen_FindMasterTrack (T_SeqMasterTrack_UpdateActiveFromSavedMask), then T_BStore_SeekChainToMeasure on chain EditScreen_Part + 1: prom_b's\n"
      "seek to that measure, which returns IX = its first beat and IY = the offset."),
     ("FE8EA9", "EditScreen_OpenCursorMeasure",
      "EditScreen_SeekCursorMeasure; when it found the measure: EditMeasure_StartBeat = IX, EditMeasure_StartTick = 0,\n"
@@ -2427,7 +2427,7 @@ ROWS = [
      "received 0xF2 -- while (0x60341E) has tracks and transport B is stopped: TransportB_Beat = the 14-bit position\n"
      ">> 2 (sixteenths to beats) and Seq_BeatTick = WorkspaceDefaults+0x77[position & 3] -- the bytes 0 / 24 / 48 / 72,\n"
      "a sixteenth at 96 ticks a beat.  Position 0 goes to Seq_RewindToStart_Veneer; any other locates each of the 17 tracks\n"
-     "(T_F40C90 per track, Seq_SeekTrackToBeatTick) and collects the located ones in (0x349A) / (0x349C).  The pending bit is cleared\n"
+     "(T_BStore_SeekChainToBeat per track, Seq_SeekTrackToBeatTick) and collects the located ones in (0x349A) / (0x349C).  The pending bit is cleared\n"
      "at the end.  Basis: body + the writer's header (MidiIn_SongPosition)."),
     ("F44E6B", "Seq_StopPlaybackOnRequest",
      "(0x34D2) bit 1 taken and cleared: T_PartNotes_ReleaseAllTrackNotes, T_F41F18 (SeqEvt_ResetPlayingSlotControllers),\n"
@@ -2512,7 +2512,7 @@ ROWS = [
     # prom_b operand-complete routines: song-store copies, cursor writers, SMF output close (2026-10-06)
     ("F444E4", "BStore_TrackToPart_LoadDefaults",
      "copies 17 bytes from WorkspaceDefaults + 0x1C to BStore_TrackToPart (index 0..16; the RAM note documents 16);\n"
-     "called from sub_F45D80.  Basis: body (named RAM)."),
+     "called from BStore_LoadNonGmTrackDefaults.  Basis: body (named RAM)."),
     ("F442C4", "BStore_SongName_LoadDefault",
      "ldirw of 3 words from WorkspaceDefaults + 0x71 to BStore_SongName, the 6-character song name, preserving\n"
      "XIX/XIY/BC; called from BStore_ResetWorkspaceToDefault.  Basis: body (named RAM)."),

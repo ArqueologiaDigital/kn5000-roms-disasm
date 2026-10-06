@@ -41,7 +41,7 @@ Handlers named this way on 2026-10-04 (notes/prom_ab_read_names_2026_10_04.py):
 
 Not established:
 - records 0xA8 and 0xA9 and byte 9 of record 0x80 have no descriptor;
-- the handlers of 0xA8 byte 17 (`sub_F4E525` -> T_Seq_RequestRewind, 24 callers, unnamed) and of 0x9A;
+- the handlers of 0xA8 byte 17 (`Seq_RequestRewindOnEvent` -> T_Seq_RequestRewind, 24 callers, unnamed) and of 0x9A;
 - the Msg0716 entry stubs `sub_FC0430` / `sub_FC0450` / `sub_FC0460`.
 
 ## COMBINATION EDIT MIXER cells (2026-10-05)

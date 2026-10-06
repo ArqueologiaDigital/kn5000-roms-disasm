@@ -91,7 +91,7 @@ out of the name.
 
 ⚠ The island's END is 0xF48C1A, which is the target of thunk slot **T_DiskFile_CheckSignature** —
 an entry point the hardware uses, not a reading. *The first draft of the
-generator typed `T_F40B54` here; T_F40B54's target is 0xF483B2. The header now
+generator typed `T_SeqTrackCursors_SaveTrack` here; T_SeqTrackCursors_SaveTrack's target is 0xF483B2. The header now
 reads the slot out of the thunk table, and a `checks()` row asserts the slot set
 of 0xF48C1A is exactly {T_DiskFile_CheckSignature}.*
 
@@ -228,9 +228,9 @@ The one thunk run left inside that range is **T_F42E40-T_F42E6C**, 12 slots at
 `notes/prom_b_module_frontier.py --selftest` went **FAIL** the moment this block
 landed. Its last row was
 
-    check("unconverted run T_F40C50 is present", ...)
+    check("unconverted run T_BStore_StepCursorOneByte is present", ...)
 
-and T_F40C50 is one of the eight runs round 3 converted. The script's own
+and T_BStore_StepCursorOneByte is one of the eight runs round 3 converted. The script's own
 docstring already warned about this shape — *"an earlier draft hard-coded the
 then-top run (T_BStore_AppendBytes_Join3_Veneer) and would have started FAILING the moment that run was
 converted"* — and it had the defect again in a different row.

@@ -35,7 +35,7 @@ to resynchronise:
 
 | island | ends at | what fixes the end |
 |---|---|---|
-| `0xF5D802` seven round-maps | `0xF5DAA2` | thunk target `T_F42700` |
+| `0xF5D802` seven round-maps | `0xF5DAA2` | thunk target `T_Quantize_Execute` |
 | `0xF5DBB4` `RoundMap_Table` | `0xF5DBD0` | `jr T,0xF5DBD0` at `0xF5DBB2` — the jump OVER the table |
 | `0xF5EE75` `IdentityMap_0_31` | `0xF5EE95` | `calr 0xF5EE95` at `0xF5ED63` **and** `0xF5F373` |
 | `0xF621B9` `RoundMap_Bounds_A`/`_B` | `0xF62201` | `calr 0xF62201` at `0xF621AE` |
