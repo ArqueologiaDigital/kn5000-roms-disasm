@@ -2101,144 +2101,144 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvSoftver_t Softver_IvSoftver;
     uint32_t ptrs_8[374];  /* 374 pointers */
     char str_682[2];
-    char str_683[2];
+    char ResName_NakaMenuItem_TechniChord[2];
     char w102_code[2];
     char Sdmenu2_name[8];
-    char str_684[2];
-    char str_685[2];
-    char str_686[2];
-    char str_687[2];
-    char str_688[2];
-    char str_689[2];
-    char str_690[2];
-    char str_691[2];
-    char str_692[2];
+    char ResName_SoundEdit[2];
+    char ResName_NakaMenuItem_AcousticIllusion[2];
+    char ResName_NakaMenuItem_DspEffect[2];
+    char ResName_NakaMenuItem_Equalizer[2];
+    char ResName_NakaMenuItem_Reverb[2];
+    char ResName_NakaMenuItem_ReverbEqPresets[2];
+    char ResName_NakaMenuItem_KeyScaling[2];
+    char ResName_NakaMenuItem_MasterTuning[2];
+    char ResName_NakaMenuItem_Mixer[2];
     char w103_code[2];
     char Sdmenu1_name[8];
-    char str_693[2];
-    char str_694[2];
-    char str_695[2];
+    char ResName_SoundMenu_ValueEdit[2];
+    char ResName_SoundMenu_ListBox[2];
+    char ResName_SoundMenu_ScrollBar2[2];
     char w104_code[2];
     char SdmenuPage_name[12];
     char Sdmenu_str[8];
     uint32_t ptrs_9[85];  /* 85 pointers */
     char str_697[2];
-    char str_698[2];
-    char str_699[2];
-    char str_700[2];
-    char str_701[2];
-    char str_702[2];
+    char ResName_Sdpart_83_AcLswPartEditBox[2];
+    char ResName_Sdpart_82_AcLswPartEditBox[2];
+    char ResName_Sdpart_81_AcIndexEditSw[2];
+    char ResName_Sdpart_80_AcLswPartEditBox[2];
+    char ResName_Sdpart_79_AcLswPartEditBox[2];
     char w105_code[2];
     char SdpartOth_name[10];
-    char str_703[2];
-    char str_704[2];
+    char ResName_Sdpart_76_VwBox[2];
+    char ResName_Sdpart_75_AcIndexEditSw[2];
     char w106_code[2];
     char SdpartBnd_name[10];
-    char str_705[2];
-    char str_706[2];
+    char ResName_Sdpart_72_VwBox[2];
+    char ResName_Sdpart_71_AcIndexEditSw[2];
     char w107_code[2];
     char SdpartTun_name[10];
-    char str_707[2];
-    char str_708[2];
+    char ResName_Sdpart_68_VwBox[2];
+    char ResName_Sdpart_67_AcIndexEditSw[2];
     char w108_code[2];
     char SdpartKey_name[10];
-    char str_709[2];
-    char str_710[2];
-    char str_711[2];
+    char ResName_Sdpart_64_VwBox[2];
+    char ResName_Sdpart_63_AcLswPartEditBox[2];
+    char ResName_Sdpart_62_AcLswPartEditBox[2];
     char w109_code[2];
     char SdpartSus_name[10];
-    char str_712[2];
-    char str_713[2];
-    char str_714[2];
-    char str_715[2];
+    char ResName_Sdpart_59_VwBox[2];
+    char ResName_Sdpart_58_AcIndexEditSw[2];
+    char ResName_Sdpart_57_AcLswPartEditBox[2];
+    char ResName_Sdpart_56_AcLswPartEditBox[2];
     char w110_code[2];
     char SdpartEff_name[10];
-    char str_716[2];
-    char str_717[2];
-    char str_718[2];
-    char str_719[2];
-    char str_720[2];
+    char ResName_Sdpart_53_VwBox[2];
+    char ResName_Sdpart_52_AcIndexEditSw[2];
+    char ResName_Sdpart_51_AcLswPartPan[2];
+    char ResName_Sdpart_50_Label[2];
+    char ResName_Sdpart_49_AcLswPartEditBox[2];
     char w111_code[2];
     char SdpartPan_name[10];
-    char str_721[2];
-    char str_722[2];
+    char ResName_Sdpart_46_AcVolPartEditBox[2];
+    char ResName_Sdpart_45_VwBox[2];
     char w112_code[2];
     char SdpartVol_name[10];
-    char str_723[2];
-    char str_724[2];
-    char str_725[2];
-    char str_726[2];
-    char str_727[2];
-    char str_728[2];
-    char str_729[2];
-    char str_730[2];
-    char str_731[2];
-    char str_732[2];
-    char str_733[2];
-    char str_734[2];
+    char ResName_Sdpart_42_AcVolPartEditBox[2];
+    char ResName_Sdpart_41_AcLswPartEditBox[2];
+    char ResName_Sdpart_40_AcLswPartEditBox[2];
+    char ResName_Sdpart_39_AcLswPartEditBox[2];
+    char ResName_Sdpart_38_AcLswPartEditBox[2];
+    char ResName_Sdpart_37_AcLswPartEditBox[2];
+    char ResName_Sdpart_36_AcLswPartEditBox[2];
+    char ResName_Sdpart_35_VwBox[2];
+    char ResName_Sdpart_34_AcLswPartEditBox[2];
+    char ResName_Sdpart_33_AcLswPartEditBox[2];
+    char ResName_Sdpart_32_AcLswPartEditBox[2];
+    char ResName_Sdpart_31_AcLswPartEditBox[2];
     char w113_code[2];
     char SdpartMain_name[12];
-    char str_735[2];
-    char str_736[2];
-    char str_737[2];
-    char str_738[2];
-    char str_739[2];
-    char str_740[2];
-    char str_741[2];
-    char str_742[2];
-    char str_743[2];
-    char str_744[2];
-    char str_745[2];
-    char str_746[2];
-    char str_747[2];
-    char str_748[2];
-    char str_749[2];
-    char str_750[2];
+    char ResName_Sdpart_28_IvSdpart[2];
+    char ResName_Sdpart_27_VwEditSwBox[2];
+    char ResName_Sdpart_26_VwEditSwBox[2];
+    char ResName_Sdpart_25_VwEditSwBox[2];
+    char ResName_Sdpart_24_VwEditSwBox[2];
+    char ResName_Sdpart_23_VwEditSwBox[2];
+    char ResName_Sdpart_22_VwEditSwBox[2];
+    char ResName_Sdpart_21_VwEditSwBox[2];
+    char ResName_Sdpart_20_VwEditSwBox[2];
+    char ResName_Sdpart_19_AcStrRadioBox[2];
+    char ResName_Sdpart_18_AcStrRadioBox[2];
+    char ResName_Sdpart_17_AcStrRadioBox[2];
+    char ResName_Sdpart_16_AcStrRadioBox[2];
+    char ResName_Sdpart_15_AcStrRadioBox[2];
+    char ResName_Sdpart_14_AcStrRadioBox[2];
+    char ResName_Sdpart_13_AcStrRadioBox[2];
     char w114_code[2];
     char SdpartPart_name[12];
     char SdpartSound_str[12];
-    char str_752[2];
-    char str_753[2];
-    char str_754[2];
-    char str_755[2];
-    char str_756[2];
-    char str_757[2];
-    char str_758[2];
-    char str_759[2];
+    char ResName_Sdpart_9_Label[2];
+    char ResName_Sdpart_8_Line[2];
+    char ResName_Sdpart_7_Line[2];
+    char ResName_Sdpart_6_Line[2];
+    char ResName_Sdpart_5_Line[2];
+    char ResName_Sdpart_4_Line[2];
+    char ResName_Sdpart_3_Line[2];
+    char ResName_Sdpart_2_AcIndexEditSw[2];
     char w115_code[2];
     char Sdpart_name[8];
     uint32_t ptrs_10[5];  /* 5 pointers */
     char str_760[2];
-    char str_761[2];
-    char str_762[2];
+    char ResName_Sdmtune_3_AcIndexWideES[2];
+    char ResName_Sdmtune_2_Label[2];
     char w116_code[2];
     char Sdmtune_name[8];
     uint32_t ptrs_11[55];  /* 55 pointers */
     char str_763[2];
-    char str_764[2];
-    char str_765[2];
-    char str_766[2];
-    char str_767[2];
-    char str_768[2];
-    char str_769[2];
-    char str_770[2];
-    char str_771[2];
-    char str_772[2];
-    char str_773[2];
-    char str_774[2];
-    char str_775[2];
-    char str_776[2];
-    char str_777[2];
-    char str_778[2];
-    char str_779[2];
-    char str_780[2];
-    char str_781[2];
-    char str_782[2];
-    char str_783[2];
-    char str_784[2];
-    char str_785[2];
-    char str_786[2];
-    char str_787[2];
+    char ResName_Sdscltyp_53_IvSdscltyp2[2];
+    char ResName_Sdscltyp_52_Line[2];
+    char ResName_Sdscltyp_51_Line[2];
+    char ResName_Sdscltyp_50_Line[2];
+    char ResName_Sdscltyp_49_Line[2];
+    char ResName_Sdscltyp_48_Line[2];
+    char ResName_Sdscltyp_47_Line[2];
+    char ResName_Sdscltyp_46_Line[2];
+    char ResName_Sdscltyp_45_Line[2];
+    char ResName_Sdscltyp_44_Line[2];
+    char ResName_Sdscltyp_43_Line[2];
+    char ResName_Sdscltyp_42_Line[2];
+    char ResName_Sdscltyp_41_Line[2];
+    char ResName_Sdscltyp_40_VwBox[2];
+    char ResName_Sdscltyp_39_VwBox[2];
+    char ResName_Sdscltyp_38_VwBox[2];
+    char ResName_Sdscltyp_37_VwBox[2];
+    char ResName_Sdscltyp_36_VwBox[2];
+    char ResName_Sdscltyp_35_VwBox[2];
+    char ResName_Sdscltyp_34_VwBox[2];
+    char ResName_Sdscltyp_33_VwBox[2];
+    char ResName_Sdscltyp_32_VwBox[2];
+    char ResName_Sdscltyp_31_VwBox[2];
+    char ResName_Sdscltyp_30_VwBox[2];
     char w117_code[2];
     char ScalingKey12_name[14];
     char ScalingKey11_str[14];
@@ -2252,32 +2252,32 @@ typedef struct __attribute__((packed)) {
     char ScalingKey3_str[12];
     char ScalingKey2_str[12];
     char ScalingKey1_str[12];
-    char str_799[2];
-    char str_800[2];
-    char str_801[2];
-    char str_802[2];
+    char ResName_Sdscltyp_16_AcIndexWideES[2];
+    char ResName_Sdscltyp_15_AcIndexWideES[2];
+    char ResName_Sdscltyp_14_AcIndexWideES[2];
+    char ResName_Sdscltyp_13_Icon[2];
     char w118_code[2];
     char Sdscltyp2_name[10];
-    char str_803[2];
-    char str_804[2];
+    char ResName_Sdscltyp_10_AcLswEditBox[2];
+    char ResName_Sdscltyp_9_AcLswBox[2];
     char w119_code[2];
     char ScalingType_name[12];
     char w120_code[2];
     char Sdscltyp1_name[10];
-    char str_805[2];
-    char str_806[2];
+    char ResName_Sdscltyp_4_IvShowHide[2];
+    char ResName_Sdscltyp_3_IvPageControl[2];
     char w121_code[2];
     char SdscltypPage_name[14];
     char Sdscltyp_str[10];
     uint32_t ptrs_12[4];  /* 4 pointers */
     char str_808[2];
-    char str_809[2];
+    char ResName_Sdlfthld_2_AcLswEditBox[2];
     char w122_code[2];
     char Sdlfthld_name[10];
     uint32_t ptrs_13[5];  /* 5 pointers */
     char str_810[2];
-    char str_811[2];
-    char str_812[2];
+    char ResName_Sdmixer_3_IvExit[2];
+    char ResName_Sdmixer_2_AcPartMixer[2];
     char w123_code[2];
     char Sdmixer_name[8];
 } naka_technichord_part_t;
@@ -8330,61 +8330,61 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(Sdmenu_str),
         SELF(SdmenuPage_name),
         SELF(w104_code),
-        SELF(str_695),
-        SELF(str_694),
-        SELF(str_693),
+        SELF(ResName_SoundMenu_ScrollBar2),
+        SELF(ResName_SoundMenu_ListBox),
+        SELF(ResName_SoundMenu_ValueEdit),
         SELF(Sdmenu1_name),
         SELF(w103_code),
-        SELF(str_692),
-        SELF(str_691),
-        SELF(str_690),
-        SELF(str_689),
-        SELF(str_688),
-        SELF(str_687),
-        SELF(str_686),
-        SELF(str_685),
-        SELF(str_684),
+        SELF(ResName_NakaMenuItem_Mixer),
+        SELF(ResName_NakaMenuItem_MasterTuning),
+        SELF(ResName_NakaMenuItem_KeyScaling),
+        SELF(ResName_NakaMenuItem_ReverbEqPresets),
+        SELF(ResName_NakaMenuItem_Reverb),
+        SELF(ResName_NakaMenuItem_Equalizer),
+        SELF(ResName_NakaMenuItem_DspEffect),
+        SELF(ResName_NakaMenuItem_AcousticIllusion),
+        SELF(ResName_SoundEdit),
         SELF(Sdmenu2_name),
         SELF(w102_code),
-        SELF(str_683),
+        SELF(ResName_NakaMenuItem_TechniChord),
         SELF(str_682),
     },
 
     .str_682 = ALIGNED_STRING(""),
 
-    .str_683 = ALIGNED_STRING(""),
+    .ResName_NakaMenuItem_TechniChord = ALIGNED_STRING(""),
 
     .w102_code = ALIGNED_STRING(""),
 
     .Sdmenu2_name = "Sdmenu2",
 
-    .str_684 = ALIGNED_STRING(""),
+    .ResName_SoundEdit = ALIGNED_STRING(""),
 
-    .str_685 = ALIGNED_STRING(""),
+    .ResName_NakaMenuItem_AcousticIllusion = ALIGNED_STRING(""),
 
-    .str_686 = ALIGNED_STRING(""),
+    .ResName_NakaMenuItem_DspEffect = ALIGNED_STRING(""),
 
-    .str_687 = ALIGNED_STRING(""),
+    .ResName_NakaMenuItem_Equalizer = ALIGNED_STRING(""),
 
-    .str_688 = ALIGNED_STRING(""),
+    .ResName_NakaMenuItem_Reverb = ALIGNED_STRING(""),
 
-    .str_689 = ALIGNED_STRING(""),
+    .ResName_NakaMenuItem_ReverbEqPresets = ALIGNED_STRING(""),
 
-    .str_690 = ALIGNED_STRING(""),
+    .ResName_NakaMenuItem_KeyScaling = ALIGNED_STRING(""),
 
-    .str_691 = ALIGNED_STRING(""),
+    .ResName_NakaMenuItem_MasterTuning = ALIGNED_STRING(""),
 
-    .str_692 = ALIGNED_STRING(""),
+    .ResName_NakaMenuItem_Mixer = ALIGNED_STRING(""),
 
     .w103_code = ALIGNED_STRING(""),
 
     .Sdmenu1_name = "Sdmenu1",
 
-    .str_693 = ALIGNED_STRING(""),
+    .ResName_SoundMenu_ValueEdit = ALIGNED_STRING(""),
 
-    .str_694 = ALIGNED_STRING(""),
+    .ResName_SoundMenu_ListBox = ALIGNED_STRING(""),
 
-    .str_695 = ALIGNED_STRING(""),
+    .ResName_SoundMenu_ScrollBar2 = ALIGNED_STRING(""),
 
     .w104_code = ALIGNED_STRING(""),
 
@@ -8395,234 +8395,234 @@ const naka_technichord_part_t naka_technichord_part_data
     .ptrs_9 = {
         SELF(Sdpart_name),
         SELF(w115_code),
-        SELF(str_759),
-        SELF(str_758),
-        SELF(str_757),
-        SELF(str_756),
-        SELF(str_755),
-        SELF(str_754),
-        SELF(str_753),
-        SELF(str_752),
+        SELF(ResName_Sdpart_2_AcIndexEditSw),
+        SELF(ResName_Sdpart_3_Line),
+        SELF(ResName_Sdpart_4_Line),
+        SELF(ResName_Sdpart_5_Line),
+        SELF(ResName_Sdpart_6_Line),
+        SELF(ResName_Sdpart_7_Line),
+        SELF(ResName_Sdpart_8_Line),
+        SELF(ResName_Sdpart_9_Label),
         SELF(SdpartSound_str),
         SELF(SdpartPart_name),
         SELF(w114_code),
-        SELF(str_750),
-        SELF(str_749),
-        SELF(str_748),
-        SELF(str_747),
-        SELF(str_746),
-        SELF(str_745),
-        SELF(str_744),
-        SELF(str_743),
-        SELF(str_742),
-        SELF(str_741),
-        SELF(str_740),
-        SELF(str_739),
-        SELF(str_738),
-        SELF(str_737),
-        SELF(str_736),
-        SELF(str_735),
+        SELF(ResName_Sdpart_13_AcStrRadioBox),
+        SELF(ResName_Sdpart_14_AcStrRadioBox),
+        SELF(ResName_Sdpart_15_AcStrRadioBox),
+        SELF(ResName_Sdpart_16_AcStrRadioBox),
+        SELF(ResName_Sdpart_17_AcStrRadioBox),
+        SELF(ResName_Sdpart_18_AcStrRadioBox),
+        SELF(ResName_Sdpart_19_AcStrRadioBox),
+        SELF(ResName_Sdpart_20_VwEditSwBox),
+        SELF(ResName_Sdpart_21_VwEditSwBox),
+        SELF(ResName_Sdpart_22_VwEditSwBox),
+        SELF(ResName_Sdpart_23_VwEditSwBox),
+        SELF(ResName_Sdpart_24_VwEditSwBox),
+        SELF(ResName_Sdpart_25_VwEditSwBox),
+        SELF(ResName_Sdpart_26_VwEditSwBox),
+        SELF(ResName_Sdpart_27_VwEditSwBox),
+        SELF(ResName_Sdpart_28_IvSdpart),
         SELF(SdpartMain_name),
         SELF(w113_code),
-        SELF(str_734),
-        SELF(str_733),
-        SELF(str_732),
-        SELF(str_731),
-        SELF(str_730),
-        SELF(str_729),
-        SELF(str_728),
-        SELF(str_727),
-        SELF(str_726),
-        SELF(str_725),
-        SELF(str_724),
-        SELF(str_723),
+        SELF(ResName_Sdpart_31_AcLswPartEditBox),
+        SELF(ResName_Sdpart_32_AcLswPartEditBox),
+        SELF(ResName_Sdpart_33_AcLswPartEditBox),
+        SELF(ResName_Sdpart_34_AcLswPartEditBox),
+        SELF(ResName_Sdpart_35_VwBox),
+        SELF(ResName_Sdpart_36_AcLswPartEditBox),
+        SELF(ResName_Sdpart_37_AcLswPartEditBox),
+        SELF(ResName_Sdpart_38_AcLswPartEditBox),
+        SELF(ResName_Sdpart_39_AcLswPartEditBox),
+        SELF(ResName_Sdpart_40_AcLswPartEditBox),
+        SELF(ResName_Sdpart_41_AcLswPartEditBox),
+        SELF(ResName_Sdpart_42_AcVolPartEditBox),
         SELF(SdpartVol_name),
         SELF(w112_code),
-        SELF(str_722),
-        SELF(str_721),
+        SELF(ResName_Sdpart_45_VwBox),
+        SELF(ResName_Sdpart_46_AcVolPartEditBox),
         SELF(SdpartPan_name),
         SELF(w111_code),
-        SELF(str_720),
-        SELF(str_719),
-        SELF(str_718),
-        SELF(str_717),
-        SELF(str_716),
+        SELF(ResName_Sdpart_49_AcLswPartEditBox),
+        SELF(ResName_Sdpart_50_Label),
+        SELF(ResName_Sdpart_51_AcLswPartPan),
+        SELF(ResName_Sdpart_52_AcIndexEditSw),
+        SELF(ResName_Sdpart_53_VwBox),
         SELF(SdpartEff_name),
         SELF(w110_code),
-        SELF(str_715),
-        SELF(str_714),
-        SELF(str_713),
-        SELF(str_712),
+        SELF(ResName_Sdpart_56_AcLswPartEditBox),
+        SELF(ResName_Sdpart_57_AcLswPartEditBox),
+        SELF(ResName_Sdpart_58_AcIndexEditSw),
+        SELF(ResName_Sdpart_59_VwBox),
         SELF(SdpartSus_name),
         SELF(w109_code),
-        SELF(str_711),
-        SELF(str_710),
-        SELF(str_709),
+        SELF(ResName_Sdpart_62_AcLswPartEditBox),
+        SELF(ResName_Sdpart_63_AcLswPartEditBox),
+        SELF(ResName_Sdpart_64_VwBox),
         SELF(SdpartKey_name),
         SELF(w108_code),
-        SELF(str_708),
-        SELF(str_707),
+        SELF(ResName_Sdpart_67_AcIndexEditSw),
+        SELF(ResName_Sdpart_68_VwBox),
         SELF(SdpartTun_name),
         SELF(w107_code),
-        SELF(str_706),
-        SELF(str_705),
+        SELF(ResName_Sdpart_71_AcIndexEditSw),
+        SELF(ResName_Sdpart_72_VwBox),
         SELF(SdpartBnd_name),
         SELF(w106_code),
-        SELF(str_704),
-        SELF(str_703),
+        SELF(ResName_Sdpart_75_AcIndexEditSw),
+        SELF(ResName_Sdpart_76_VwBox),
         SELF(SdpartOth_name),
         SELF(w105_code),
-        SELF(str_702),
-        SELF(str_701),
-        SELF(str_700),
-        SELF(str_699),
-        SELF(str_698),
+        SELF(ResName_Sdpart_79_AcLswPartEditBox),
+        SELF(ResName_Sdpart_80_AcLswPartEditBox),
+        SELF(ResName_Sdpart_81_AcIndexEditSw),
+        SELF(ResName_Sdpart_82_AcLswPartEditBox),
+        SELF(ResName_Sdpart_83_AcLswPartEditBox),
         SELF(str_697),
     },
 
     .str_697 = ALIGNED_STRING(""),
 
-    .str_698 = ALIGNED_STRING(""),
+    .ResName_Sdpart_83_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_699 = ALIGNED_STRING(""),
+    .ResName_Sdpart_82_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_700 = ALIGNED_STRING(""),
+    .ResName_Sdpart_81_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_701 = ALIGNED_STRING(""),
+    .ResName_Sdpart_80_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_702 = ALIGNED_STRING(""),
+    .ResName_Sdpart_79_AcLswPartEditBox = ALIGNED_STRING(""),
 
     .w105_code = ALIGNED_STRING(""),
 
     .SdpartOth_name = "SdpartOth",
 
-    .str_703 = ALIGNED_STRING(""),
+    .ResName_Sdpart_76_VwBox = ALIGNED_STRING(""),
 
-    .str_704 = ALIGNED_STRING(""),
+    .ResName_Sdpart_75_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w106_code = ALIGNED_STRING(""),
 
     .SdpartBnd_name = "SdpartBnd",
 
-    .str_705 = ALIGNED_STRING(""),
+    .ResName_Sdpart_72_VwBox = ALIGNED_STRING(""),
 
-    .str_706 = ALIGNED_STRING(""),
+    .ResName_Sdpart_71_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w107_code = ALIGNED_STRING(""),
 
     .SdpartTun_name = "SdpartTun",
 
-    .str_707 = ALIGNED_STRING(""),
+    .ResName_Sdpart_68_VwBox = ALIGNED_STRING(""),
 
-    .str_708 = ALIGNED_STRING(""),
+    .ResName_Sdpart_67_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w108_code = ALIGNED_STRING(""),
 
     .SdpartKey_name = "SdpartKey",
 
-    .str_709 = ALIGNED_STRING(""),
+    .ResName_Sdpart_64_VwBox = ALIGNED_STRING(""),
 
-    .str_710 = ALIGNED_STRING(""),
+    .ResName_Sdpart_63_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_711 = ALIGNED_STRING(""),
+    .ResName_Sdpart_62_AcLswPartEditBox = ALIGNED_STRING(""),
 
     .w109_code = ALIGNED_STRING(""),
 
     .SdpartSus_name = "SdpartSus",
 
-    .str_712 = ALIGNED_STRING(""),
+    .ResName_Sdpart_59_VwBox = ALIGNED_STRING(""),
 
-    .str_713 = ALIGNED_STRING(""),
+    .ResName_Sdpart_58_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_714 = ALIGNED_STRING(""),
+    .ResName_Sdpart_57_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_715 = ALIGNED_STRING(""),
+    .ResName_Sdpart_56_AcLswPartEditBox = ALIGNED_STRING(""),
 
     .w110_code = ALIGNED_STRING(""),
 
     .SdpartEff_name = "SdpartEff",
 
-    .str_716 = ALIGNED_STRING(""),
+    .ResName_Sdpart_53_VwBox = ALIGNED_STRING(""),
 
-    .str_717 = ALIGNED_STRING(""),
+    .ResName_Sdpart_52_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_718 = ALIGNED_STRING(""),
+    .ResName_Sdpart_51_AcLswPartPan = ALIGNED_STRING(""),
 
-    .str_719 = ALIGNED_STRING(""),
+    .ResName_Sdpart_50_Label = ALIGNED_STRING(""),
 
-    .str_720 = ALIGNED_STRING(""),
+    .ResName_Sdpart_49_AcLswPartEditBox = ALIGNED_STRING(""),
 
     .w111_code = ALIGNED_STRING(""),
 
     .SdpartPan_name = "SdpartPan",
 
-    .str_721 = ALIGNED_STRING(""),
+    .ResName_Sdpart_46_AcVolPartEditBox = ALIGNED_STRING(""),
 
-    .str_722 = ALIGNED_STRING(""),
+    .ResName_Sdpart_45_VwBox = ALIGNED_STRING(""),
 
     .w112_code = ALIGNED_STRING(""),
 
     .SdpartVol_name = "SdpartVol",
 
-    .str_723 = ALIGNED_STRING(""),
+    .ResName_Sdpart_42_AcVolPartEditBox = ALIGNED_STRING(""),
 
-    .str_724 = ALIGNED_STRING(""),
+    .ResName_Sdpart_41_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_725 = ALIGNED_STRING(""),
+    .ResName_Sdpart_40_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_726 = ALIGNED_STRING(""),
+    .ResName_Sdpart_39_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_727 = ALIGNED_STRING(""),
+    .ResName_Sdpart_38_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_728 = ALIGNED_STRING(""),
+    .ResName_Sdpart_37_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_729 = ALIGNED_STRING(""),
+    .ResName_Sdpart_36_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_730 = ALIGNED_STRING(""),
+    .ResName_Sdpart_35_VwBox = ALIGNED_STRING(""),
 
-    .str_731 = ALIGNED_STRING(""),
+    .ResName_Sdpart_34_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_732 = ALIGNED_STRING(""),
+    .ResName_Sdpart_33_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_733 = ALIGNED_STRING(""),
+    .ResName_Sdpart_32_AcLswPartEditBox = ALIGNED_STRING(""),
 
-    .str_734 = ALIGNED_STRING(""),
+    .ResName_Sdpart_31_AcLswPartEditBox = ALIGNED_STRING(""),
 
     .w113_code = ALIGNED_STRING(""),
 
     .SdpartMain_name = ALIGNED_STRING("SdpartMain"),
 
-    .str_735 = ALIGNED_STRING(""),
+    .ResName_Sdpart_28_IvSdpart = ALIGNED_STRING(""),
 
-    .str_736 = ALIGNED_STRING(""),
+    .ResName_Sdpart_27_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_737 = ALIGNED_STRING(""),
+    .ResName_Sdpart_26_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_738 = ALIGNED_STRING(""),
+    .ResName_Sdpart_25_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_739 = ALIGNED_STRING(""),
+    .ResName_Sdpart_24_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_740 = ALIGNED_STRING(""),
+    .ResName_Sdpart_23_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_741 = ALIGNED_STRING(""),
+    .ResName_Sdpart_22_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_742 = ALIGNED_STRING(""),
+    .ResName_Sdpart_21_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_743 = ALIGNED_STRING(""),
+    .ResName_Sdpart_20_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_744 = ALIGNED_STRING(""),
+    .ResName_Sdpart_19_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_745 = ALIGNED_STRING(""),
+    .ResName_Sdpart_18_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_746 = ALIGNED_STRING(""),
+    .ResName_Sdpart_17_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_747 = ALIGNED_STRING(""),
+    .ResName_Sdpart_16_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_748 = ALIGNED_STRING(""),
+    .ResName_Sdpart_15_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_749 = ALIGNED_STRING(""),
+    .ResName_Sdpart_14_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_750 = ALIGNED_STRING(""),
+    .ResName_Sdpart_13_AcStrRadioBox = ALIGNED_STRING(""),
 
     .w114_code = ALIGNED_STRING(""),
 
@@ -8630,21 +8630,21 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .SdpartSound_str = "SdpartSound",
 
-    .str_752 = ALIGNED_STRING(""),
+    .ResName_Sdpart_9_Label = ALIGNED_STRING(""),
 
-    .str_753 = ALIGNED_STRING(""),
+    .ResName_Sdpart_8_Line = ALIGNED_STRING(""),
 
-    .str_754 = ALIGNED_STRING(""),
+    .ResName_Sdpart_7_Line = ALIGNED_STRING(""),
 
-    .str_755 = ALIGNED_STRING(""),
+    .ResName_Sdpart_6_Line = ALIGNED_STRING(""),
 
-    .str_756 = ALIGNED_STRING(""),
+    .ResName_Sdpart_5_Line = ALIGNED_STRING(""),
 
-    .str_757 = ALIGNED_STRING(""),
+    .ResName_Sdpart_4_Line = ALIGNED_STRING(""),
 
-    .str_758 = ALIGNED_STRING(""),
+    .ResName_Sdpart_3_Line = ALIGNED_STRING(""),
 
-    .str_759 = ALIGNED_STRING(""),
+    .ResName_Sdpart_2_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w115_code = ALIGNED_STRING(""),
 
@@ -8653,16 +8653,16 @@ const naka_technichord_part_t naka_technichord_part_data
     .ptrs_10 = {
         SELF(Sdmtune_name),
         SELF(w116_code),
-        SELF(str_762),
-        SELF(str_761),
+        SELF(ResName_Sdmtune_2_Label),
+        SELF(ResName_Sdmtune_3_AcIndexWideES),
         SELF(str_760),
     },
 
     .str_760 = ALIGNED_STRING(""),
 
-    .str_761 = ALIGNED_STRING(""),
+    .ResName_Sdmtune_3_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_762 = ALIGNED_STRING(""),
+    .ResName_Sdmtune_2_Label = ALIGNED_STRING(""),
 
     .w116_code = ALIGNED_STRING(""),
 
@@ -8672,20 +8672,20 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(Sdscltyp_str),
         SELF(SdscltypPage_name),
         SELF(w121_code),
-        SELF(str_806),
-        SELF(str_805),
+        SELF(ResName_Sdscltyp_3_IvPageControl),
+        SELF(ResName_Sdscltyp_4_IvShowHide),
         SELF(Sdscltyp1_name),
         SELF(w120_code),
         SELF(ScalingType_name),
         SELF(w119_code),
-        SELF(str_804),
-        SELF(str_803),
+        SELF(ResName_Sdscltyp_9_AcLswBox),
+        SELF(ResName_Sdscltyp_10_AcLswEditBox),
         SELF(Sdscltyp2_name),
         SELF(w118_code),
-        SELF(str_802),
-        SELF(str_801),
-        SELF(str_800),
-        SELF(str_799),
+        SELF(ResName_Sdscltyp_13_Icon),
+        SELF(ResName_Sdscltyp_14_AcIndexWideES),
+        SELF(ResName_Sdscltyp_15_AcIndexWideES),
+        SELF(ResName_Sdscltyp_16_AcIndexWideES),
         SELF(ScalingKey1_str),
         SELF(ScalingKey2_str),
         SELF(ScalingKey3_str),
@@ -8699,82 +8699,82 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(ScalingKey11_str),
         SELF(ScalingKey12_name),
         SELF(w117_code),
-        SELF(str_787),
-        SELF(str_786),
-        SELF(str_785),
-        SELF(str_784),
-        SELF(str_783),
-        SELF(str_782),
-        SELF(str_781),
-        SELF(str_780),
-        SELF(str_779),
-        SELF(str_778),
-        SELF(str_777),
-        SELF(str_776),
-        SELF(str_775),
-        SELF(str_774),
-        SELF(str_773),
-        SELF(str_772),
-        SELF(str_771),
-        SELF(str_770),
-        SELF(str_769),
-        SELF(str_768),
-        SELF(str_767),
-        SELF(str_766),
-        SELF(str_765),
-        SELF(str_764),
+        SELF(ResName_Sdscltyp_30_VwBox),
+        SELF(ResName_Sdscltyp_31_VwBox),
+        SELF(ResName_Sdscltyp_32_VwBox),
+        SELF(ResName_Sdscltyp_33_VwBox),
+        SELF(ResName_Sdscltyp_34_VwBox),
+        SELF(ResName_Sdscltyp_35_VwBox),
+        SELF(ResName_Sdscltyp_36_VwBox),
+        SELF(ResName_Sdscltyp_37_VwBox),
+        SELF(ResName_Sdscltyp_38_VwBox),
+        SELF(ResName_Sdscltyp_39_VwBox),
+        SELF(ResName_Sdscltyp_40_VwBox),
+        SELF(ResName_Sdscltyp_41_Line),
+        SELF(ResName_Sdscltyp_42_Line),
+        SELF(ResName_Sdscltyp_43_Line),
+        SELF(ResName_Sdscltyp_44_Line),
+        SELF(ResName_Sdscltyp_45_Line),
+        SELF(ResName_Sdscltyp_46_Line),
+        SELF(ResName_Sdscltyp_47_Line),
+        SELF(ResName_Sdscltyp_48_Line),
+        SELF(ResName_Sdscltyp_49_Line),
+        SELF(ResName_Sdscltyp_50_Line),
+        SELF(ResName_Sdscltyp_51_Line),
+        SELF(ResName_Sdscltyp_52_Line),
+        SELF(ResName_Sdscltyp_53_IvSdscltyp2),
         SELF(str_763),
     },
 
     .str_763 = ALIGNED_STRING(""),
 
-    .str_764 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_53_IvSdscltyp2 = ALIGNED_STRING(""),
 
-    .str_765 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_52_Line = ALIGNED_STRING(""),
 
-    .str_766 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_51_Line = ALIGNED_STRING(""),
 
-    .str_767 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_50_Line = ALIGNED_STRING(""),
 
-    .str_768 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_49_Line = ALIGNED_STRING(""),
 
-    .str_769 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_48_Line = ALIGNED_STRING(""),
 
-    .str_770 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_47_Line = ALIGNED_STRING(""),
 
-    .str_771 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_46_Line = ALIGNED_STRING(""),
 
-    .str_772 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_45_Line = ALIGNED_STRING(""),
 
-    .str_773 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_44_Line = ALIGNED_STRING(""),
 
-    .str_774 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_43_Line = ALIGNED_STRING(""),
 
-    .str_775 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_42_Line = ALIGNED_STRING(""),
 
-    .str_776 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_41_Line = ALIGNED_STRING(""),
 
-    .str_777 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_40_VwBox = ALIGNED_STRING(""),
 
-    .str_778 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_39_VwBox = ALIGNED_STRING(""),
 
-    .str_779 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_38_VwBox = ALIGNED_STRING(""),
 
-    .str_780 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_37_VwBox = ALIGNED_STRING(""),
 
-    .str_781 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_36_VwBox = ALIGNED_STRING(""),
 
-    .str_782 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_35_VwBox = ALIGNED_STRING(""),
 
-    .str_783 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_34_VwBox = ALIGNED_STRING(""),
 
-    .str_784 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_33_VwBox = ALIGNED_STRING(""),
 
-    .str_785 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_32_VwBox = ALIGNED_STRING(""),
 
-    .str_786 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_31_VwBox = ALIGNED_STRING(""),
 
-    .str_787 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_30_VwBox = ALIGNED_STRING(""),
 
     .w117_code = ALIGNED_STRING(""),
 
@@ -8802,21 +8802,21 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .ScalingKey1_str = "ScalingKey1",
 
-    .str_799 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_16_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_800 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_15_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_801 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_14_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_802 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_13_Icon = ALIGNED_STRING(""),
 
     .w118_code = ALIGNED_STRING(""),
 
     .Sdscltyp2_name = "Sdscltyp2",
 
-    .str_803 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_10_AcLswEditBox = ALIGNED_STRING(""),
 
-    .str_804 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_9_AcLswBox = ALIGNED_STRING(""),
 
     .w119_code = ALIGNED_STRING(""),
 
@@ -8826,9 +8826,9 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .Sdscltyp1_name = "Sdscltyp1",
 
-    .str_805 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_4_IvShowHide = ALIGNED_STRING(""),
 
-    .str_806 = ALIGNED_STRING(""),
+    .ResName_Sdscltyp_3_IvPageControl = ALIGNED_STRING(""),
 
     .w121_code = ALIGNED_STRING(""),
 
@@ -8839,13 +8839,13 @@ const naka_technichord_part_t naka_technichord_part_data
     .ptrs_12 = {
         SELF(Sdlfthld_name),
         SELF(w122_code),
-        SELF(str_809),
+        SELF(ResName_Sdlfthld_2_AcLswEditBox),
         SELF(str_808),
     },
 
     .str_808 = ALIGNED_STRING(""),
 
-    .str_809 = ALIGNED_STRING(""),
+    .ResName_Sdlfthld_2_AcLswEditBox = ALIGNED_STRING(""),
 
     .w122_code = ALIGNED_STRING(""),
 
@@ -8854,16 +8854,16 @@ const naka_technichord_part_t naka_technichord_part_data
     .ptrs_13 = {
         SELF(Sdmixer_name),
         SELF(w123_code),
-        SELF(str_812),
-        SELF(str_811),
+        SELF(ResName_Sdmixer_2_AcPartMixer),
+        SELF(ResName_Sdmixer_3_IvExit),
         SELF(str_810),
     },
 
     .str_810 = ALIGNED_STRING(""),
 
-    .str_811 = ALIGNED_STRING(""),
+    .ResName_Sdmixer_3_IvExit = ALIGNED_STRING(""),
 
-    .str_812 = ALIGNED_STRING(""),
+    .ResName_Sdmixer_2_AcPartMixer = ALIGNED_STRING(""),
 
     .w123_code = ALIGNED_STRING(""),
 

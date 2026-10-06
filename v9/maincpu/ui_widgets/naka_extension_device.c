@@ -597,359 +597,359 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvScreen_t EXT;
     uint32_t ptrs_0[482];  /* 482 pointers */
     char str_53[2];
-    char str_54[2];
-    char str_55[2];
+    char ResName_Toshi_NORMAL_Elem62[2];
+    char ResName_Toshi_NORMAL_Elem61[2];
     char FADEOUT_str[8];
-    char str_57[2];
-    char str_58[2];
+    char ResName_Toshi_NORMAL_Elem59[2];
+    char ResName_Toshi_NORMAL_Elem58[2];
     char FADEIN_str[8];
-    char str_60[2];
-    char str_61[2];
-    char str_62[2];
-    char str_63[2];
-    char str_64[2];
-    char str_65[2];
-    char str_66[2];
-    char str_67[2];
+    char ResName_Toshi_NORMAL_Elem56[2];
+    char ResName_Toshi_NORMAL_Elem55[2];
+    char ResName_Toshi_NORMAL_Elem54[2];
+    char ResName_Toshi_NORMAL_Elem53[2];
+    char ResName_Toshi_NORMAL_Elem52[2];
+    char ResName_Toshi_NORMAL_Elem51[2];
+    char ResName_Toshi_NORMAL_Elem50[2];
+    char ResName_Toshi_NORMAL_Elem49[2];
     char N4_str[4];
-    char str_69[2];
-    char str_70[2];
-    char str_71[2];
-    char str_72[2];
-    char str_73[2];
-    char str_74[2];
-    char str_75[2];
-    char str_76[2];
+    char ResName_Toshi_NORMAL_Elem47[2];
+    char ResName_Toshi_NORMAL_Elem46[2];
+    char ResName_Toshi_NORMAL_Elem45[2];
+    char ResName_Toshi_NORMAL_Elem44[2];
+    char ResName_Toshi_NORMAL_Elem43[2];
+    char ResName_Toshi_NORMAL_Elem42[2];
+    char ResName_Toshi_NORMAL_Elem41[2];
+    char ResName_Toshi_NORMAL_Elem40[2];
     char N3_str[4];
-    char str_78[2];
-    char str_79[2];
-    char str_80[2];
-    char str_81[2];
-    char str_82[2];
+    char ResName_Toshi_NORMAL_Elem38[2];
+    char ResName_Toshi_NORMAL_Elem37[2];
+    char ResName_Toshi_NORMAL_Elem36[2];
+    char ResName_Toshi_NORMAL_Elem35[2];
+    char ResName_Toshi_NORMAL_Elem34[2];
     char N2_str[4];
-    char str_84[2];
-    char str_85[2];
-    char str_86[2];
-    char str_87[2];
-    char str_88[2];
-    char str_89[2];
-    char str_90[2];
-    char str_91[2];
+    char ResName_Toshi_NORMAL_Elem32[2];
+    char ResName_Toshi_NORMAL_Elem31[2];
+    char ResName_Toshi_NORMAL_Elem30[2];
+    char ResName_Toshi_NORMAL_Elem29[2];
+    char ResName_Toshi_NORMAL_Elem28[2];
+    char ResName_Toshi_NORMAL_Elem27[2];
+    char ResName_Toshi_NORMAL_Elem26[2];
+    char ResName_Toshi_NORMAL_Elem25[2];
     char N1_str[4];
-    char str_93[2];
-    char str_94[2];
-    char str_95[2];
-    char str_96[2];
-    char str_97[2];
-    char str_98[2];
-    char str_99[2];
-    char str_100[2];
-    char str_101[2];
-    char str_102[2];
-    char str_103[2];
-    char str_104[2];
-    char str_105[2];
-    char str_106[2];
-    char str_107[2];
-    char str_108[2];
-    char str_109[2];
-    char str_110[2];
-    char str_111[2];
-    char str_112[2];
-    char str_113[2];
-    char str_114[2];
+    char ResName_Normal_23_IvExit[2];
+    char ResName_Normal_22_IvPageOverWr[2];
+    char ResName_Normal_21_IvPageOverWr[2];
+    char ResName_Normal_20_IvPageOverWr[2];
+    char ResName_Normal_19_IvPageOverWr[2];
+    char ResName_Normal_18_IvPageOverWr[2];
+    char ResName_Normal_17_IvPageOverWr[2];
+    char ResName_Normal_16_FreeSplitBox[2];
+    char ResName_Normal_15_IvWindowPageControl[2];
+    char ResName_Normal_14_AcLswBox[2];
+    char ResName_Normal_13_ChordBox[2];
+    char ResName_Normal_12_TransposeBox[2];
+    char ResName_Normal_11_StringBox[2];
+    char ResName_Normal_10_StringBox[2];
+    char ResName_Normal_9_StringBox[2];
+    char ResName_Normal_8_AcSoundName[2];
+    char ResName_Normal_7_StringBox[2];
+    char ResName_Normal_6_AcSoundName[2];
+    char ResName_Normal_5_AcSoundName[2];
+    char ResName_Normal_4_AcRhythmName[2];
+    char ResName_Normal_3_AcPmemName[2];
+    char ResName_Normal_2_AcTempoBox[2];
     char Normal_code[8];
     char Normal_name[8];
     uint32_t ptrs_1[10];  /* 10 pointers */
     char str_115[2];
-    char str_116[2];
-    char str_117[2];
-    char str_118[2];
-    char str_119[2];
-    char str_120[2];
-    char str_121[2];
-    char str_122[2];
+    char ResName_ControlMenu_8_AcTitleMenu[2];
+    char ResName_ControlMenu_7_AcTitleMenu[2];
+    char ResName_ControlMenu_6_IvExitMode[2];
+    char ResName_ControlMenu_5_AcTitleMenu[2];
+    char ResName_ControlMenu_4_AcTitleMenu[2];
+    char ResName_ControlMenu_3_AcTitleMenu[2];
+    char ResName_ControlMenu_2_AcTitleMenu[2];
     char w74_code[2];
     char ControlMenu_name[12];
     uint32_t ptrs_2[18];  /* 18 pointers */
     char str_123[2];
-    char str_124[2];
-    char str_125[2];
-    char str_126[2];
-    char str_127[2];
-    char str_128[2];
-    char str_129[2];
-    char str_130[2];
-    char str_131[2];
-    char str_132[2];
+    char ResName_ControlIni_16_IvShowHide[2];
+    char ResName_ControlIni_15_AcFuncEditSw[2];
+    char ResName_ControlIni_14_AcFuncEditSw[2];
+    char ResName_ControlIni_13_AcLanguageText[2];
+    char ResName_ControlIni_12_AcLanguageText[2];
+    char ResName_ControlIni_11_AcLanguageText[2];
+    char ResName_ControlIni_10_Box[2];
+    char ResName_ControlIni_9_Icon[2];
+    char ResName_ControlIni_8_Label[2];
     char SYSINISURE_str[12];
-    char str_134[2];
-    char str_135[2];
-    char str_136[2];
-    char str_137[2];
+    char ResName_ControlIni_6_TtlScreen[2];
+    char ResName_ControlIni_5_AcLanguageText[2];
+    char ResName_ControlIni_4_IvShowHide[2];
+    char ResName_ControlIni_3_AcFuncEditSw[2];
     char SYSINI_str[8];
     char w75_code[2];
     char ControlIni_name[12];
     uint32_t ptrs_3[7];  /* 7 pointers */
     char str_139[2];
-    char str_140[2];
-    char str_141[2];
-    char str_142[2];
-    char str_143[2];
+    char ResName_ControlFsw_5_AcIndexWideES[2];
+    char ResName_ControlFsw_4_AcIndexWideES[2];
+    char ResName_ControlFsw_3_Label[2];
+    char ResName_ControlFsw_2_Label[2];
     char w76_code[2];
     char ControlFsw_name[12];
     uint32_t ptrs_4[9];  /* 9 pointers */
     char str_144[2];
-    char str_145[2];
-    char str_146[2];
-    char str_147[2];
-    char str_148[2];
-    char str_149[2];
-    char str_150[2];
+    char ResName_ControlSns_7_Label[2];
+    char ResName_ControlSns_6_Label[2];
+    char ResName_ControlSns_5_AcIndexWideES[2];
+    char ResName_ControlSns_4_AcIndexWideES[2];
+    char ResName_ControlSns_3_Label[2];
+    char ResName_ControlSns_2_Label[2];
     char w77_code[2];
     char ControlSns_name[12];
     uint32_t ptrs_5[20];  /* 20 pointers */
     char str_151[2];
-    char str_152[2];
-    char str_153[2];
-    char str_154[2];
-    char str_155[2];
-    char str_156[2];
-    char str_157[2];
-    char str_158[2];
-    char str_159[2];
-    char str_160[2];
-    char str_161[2];
-    char str_162[2];
-    char str_163[2];
-    char str_164[2];
-    char str_165[2];
-    char str_166[2];
-    char str_167[2];
-    char str_168[2];
-    char str_169[2];
-    char str_170[2];
+    char ResName_ToshiView044_18_Label[2];
+    char ResName_ToshiView044_17_Label[2];
+    char ResName_ToshiView044_16_Label[2];
+    char ResName_ToshiView044_15_EditSw[2];
+    char ResName_ToshiView044_14_EditSw[2];
+    char ResName_ToshiView044_13_EditSw[2];
+    char ResName_ToshiView044_12_Icon[2];
+    char ResName_ToshiView044_11_Label[2];
+    char ResName_ToshiView044_10_MsaModeScreen[2];
+    char ResName_ToshiView044_9_IvIntEasySet[2];
+    char ResName_ToshiView044_8_Label[2];
+    char ResName_ToshiView044_7_Label[2];
+    char ResName_ToshiView044_6_Label[2];
+    char ResName_ToshiView044_5_EditSw[2];
+    char ResName_ToshiView044_4_EditSw[2];
+    char ResName_ToshiView044_3_EditSw[2];
+    char ResName_ToshiView044_2_Icon[2];
+    char ResName_ToshiView044_1_Label[2];
+    char ResName_ToshiView044_0_MsaModeScreen[2];
     uint32_t ptrs_6[20];  /* 20 pointers */
     char str_171[2];
-    char str_172[2];
-    char str_173[2];
-    char str_174[2];
-    char str_175[2];
-    char str_176[2];
+    char ResName_ToshiView045_18_Window[2];
+    char ResName_ToshiView045_17_StringBox[2];
+    char ResName_ToshiView045_16_AcIndexWideES[2];
+    char ResName_ToshiView045_15_AcIndexWideES[2];
+    char ResName_ToshiView045_14_AcPmExpFilterGridBox[2];
     char PMEM2_str[6];
-    char str_178[2];
-    char str_179[2];
-    char str_180[2];
-    char str_181[2];
-    char str_182[2];
-    char str_183[2];
-    char str_184[2];
+    char ResName_ToshiView045_12_AcLanguageText[2];
+    char ResName_ToshiView045_11_AcLanguageText[2];
+    char ResName_ToshiView045_10_Label[2];
+    char ResName_ToshiView045_9_Label[2];
+    char ResName_ToshiView045_8_EditSw[2];
+    char ResName_ToshiView045_7_EditSw[2];
+    char ResName_ToshiView045_6_PmemModeBox[2];
     char PMEM1_str[6];
-    char str_186[2];
-    char str_187[2];
-    char str_188[2];
-    char str_189[2];
-    char str_190[2];
+    char ResName_ToshiView045_4_IvIntEasySet[2];
+    char ResName_ToshiView045_3_IvPageControl[2];
+    char ResName_ToshiView045_2_IvPageControl[2];
+    char ResName_ToshiView045_1_IvPmemWindowPageCtl[2];
+    char ResName_ToshiView045_0_TtlScreen[2];
     uint32_t ptr_1a62;
     char str_191[2];
     uint32_t ptrs_7[8];  /* 8 pointers */
     char str_192[2];
-    char str_193[2];
-    char str_194[2];
-    char str_195[2];
-    char str_196[2];
-    char str_197[2];
+    char ResName_ControlSys_6_AcFuncEditSw[2];
+    char ResName_ControlSys_5_AcIndexWideES[2];
+    char ResName_ControlSys_4_AcIndexWideES[2];
+    char ResName_ControlSys_3_Label[2];
+    char ResName_ControlSys_2_Label[2];
     char w78_code[2];
     char ControlSys_name[12];
     uint32_t ptrs_8[26];  /* 26 pointers */
     char str_198[2];
-    char str_199[2];
-    char str_200[2];
-    char str_201[2];
-    char str_202[2];
-    char str_203[2];
-    char str_204[2];
-    char str_205[2];
-    char str_206[2];
-    char str_207[2];
+    char ResName_ToshiView048_24_Label[2];
+    char ResName_ToshiView048_23_Icon[2];
+    char ResName_ToshiView048_22_IvShowHide[2];
+    char ResName_ToshiView048_21_AcFuncEditSw[2];
+    char ResName_ToshiView048_20_AcFuncEditSw[2];
+    char ResName_ToshiView048_19_AcLanguageText[2];
+    char ResName_ToshiView048_18_AcLanguageText[2];
+    char ResName_ToshiView048_17_AcLanguageText[2];
+    char ResName_ToshiView048_16_Box[2];
     char WALLSETSURE_str[12];
-    char str_209[2];
-    char str_210[2];
-    char str_211[2];
-    char str_212[2];
-    char str_213[2];
-    char str_214[2];
-    char str_215[2];
-    char str_216[2];
-    char str_217[2];
-    char str_218[2];
-    char str_219[2];
+    char ResName_ToshiView048_14_IvShowHide[2];
+    char ResName_ToshiView048_13_AcFuncEditSw[2];
+    char ResName_ToshiView048_12_Label[2];
+    char ResName_ToshiView048_11_AcIndexWideES[2];
+    char ResName_ToshiView048_10_Label[2];
+    char ResName_ToshiView048_9_AcFuncEditSw[2];
+    char ResName_ToshiView048_8_AcRamEditBox[2];
+    char ResName_ToshiView048_7_AcRamEditBox[2];
+    char ResName_ToshiView048_6_Label[2];
+    char ResName_ToshiView048_5_Label[2];
+    char ResName_ToshiView048_4_AcRamEditBox[2];
     char w79_code[2];
     char ControlWallSet_name[16];
-    char str_220[2];
-    char str_221[2];
+    char ResName_ToshiView048_1_AcTitleMenu[2];
+    char ResName_ToshiView048_0_TtlScreen[2];
     uint32_t ptrs_9[5];  /* 5 pointers */
     char str_222[2];
-    char str_223[2];
-    char str_224[2];
-    char str_225[2];
+    char ResName_ONETCH_3_IvExitMode[2];
+    char ResName_ONETCH_2_AcRamBox[2];
+    char ResName_ONETCH_1_Label[2];
     char ONETCH_str[8];
     uint32_t ptrs_10[5];  /* 5 pointers */
     char str_227[2];
-    char str_228[2];
-    char str_229[2];
-    char str_230[2];
+    char ResName_MUSICSTYL_3_AcTitleMenu[2];
+    char ResName_MUSICSTYL_2_IvExitMode[2];
+    char ResName_MUSICSTYL_1_AcTitleMenu[2];
     char MUSICSTYL_str[10];
     uint32_t ptrs_11[21];  /* 21 pointers */
     char str_232[2];
-    char str_233[2];
-    char str_234[2];
-    char str_235[2];
-    char str_236[2];
-    char str_237[2];
-    char str_238[2];
-    char str_239[2];
+    char ResName_MSCTSEL_19_Label[2];
+    char ResName_MSCTSEL_18_VwEditSwBox[2];
+    char ResName_MSCTSEL_17_Label[2];
+    char ResName_MSCTSEL_16_AcIndexWideES[2];
+    char ResName_MSCTSEL_15_Label[2];
+    char ResName_MSCTSEL_14_Box[2];
+    char ResName_MSCTSEL_13_AcMstStyle2GridBox[2];
     char STYLE2_str[8];
-    char str_241[2];
-    char str_242[2];
-    char str_243[2];
-    char str_244[2];
-    char str_245[2];
-    char str_246[2];
-    char str_247[2];
+    char ResName_MSCTSEL_11_Label[2];
+    char ResName_MSCTSEL_10_AcIndexWideES[2];
+    char ResName_MSCTSEL_9_AcMstStyle1SubGridBox[2];
+    char ResName_MSCTSEL_8_Label[2];
+    char ResName_MSCTSEL_7_VwEditSwBox[2];
+    char ResName_MSCTSEL_6_AcIndexWideES[2];
+    char ResName_MSCTSEL_5_AcMstStyle1GridBox[2];
     char STYLE1_str[8];
-    char str_249[2];
-    char str_250[2];
-    char str_251[2];
+    char ResName_MSCTSEL_3_IvPageControl[2];
+    char ResName_MSCTSEL_2_IvPageControl[2];
+    char ResName_MSCTSEL_1_IvMstStyleWindowPgCtl[2];
     char MSCTSEL_str[8];
     uint32_t ptrs_12[18];  /* 18 pointers */
     char str_253[2];
-    char str_254[2];
-    char str_255[2];
-    char str_256[2];
-    char str_257[2];
-    char str_258[2];
-    char str_259[2];
-    char str_260[2];
+    char ResName_MSSCTSEL_16_Label[2];
+    char ResName_MSSCTSEL_15_VwEditSwBox[2];
+    char ResName_MSSCTSEL_14_Label[2];
+    char ResName_MSSCTSEL_13_Label[2];
+    char ResName_MSSCTSEL_12_Box[2];
+    char ResName_MSSCTSEL_11_AcIndexWideES[2];
+    char ResName_MSSCTSEL_10_AcMstSong2GridBox[2];
     char SONG2_str[6];
-    char str_262[2];
-    char str_263[2];
-    char str_264[2];
-    char str_265[2];
+    char ResName_MSSCTSEL_8_Label[2];
+    char ResName_MSSCTSEL_7_VwEditSwBox[2];
+    char ResName_MSSCTSEL_6_AcIndexWideES[2];
+    char ResName_MSSCTSEL_5_AcMstSong1GridBox[2];
     char SONG1_str[6];
-    char str_267[2];
-    char str_268[2];
-    char str_269[2];
+    char ResName_MSSCTSEL_3_IvPageControl[2];
+    char ResName_MSSCTSEL_2_IvPageControl[2];
+    char ResName_MSSCTSEL_1_IvMstStyleWindowPgCtl[2];
     char MSSCTSEL_str[10];
     uint32_t ptrs_13[9];  /* 9 pointers */
     char str_271[2];
-    char str_272[2];
-    char str_273[2];
-    char str_274[2];
-    char str_275[2];
-    char str_276[2];
-    char str_277[2];
-    char str_278[2];
+    char ResName_MSSONGLIST_7_Label[2];
+    char ResName_MSSONGLIST_6_VwEditSwBox[2];
+    char ResName_MSSONGLIST_5_Label[2];
+    char ResName_MSSONGLIST_4_Box[2];
+    char ResName_MSSONGLIST_3_AcIndexWideES[2];
+    char ResName_MSSONGLIST_2_Label[2];
+    char ResName_MSSONGLIST_1_AcMstSugAlpGridBox[2];
     char MSSONGLIST_str[12];
     uint32_t ptrs_14[8];  /* 8 pointers */
     char str_280[2];
-    char str_281[2];
-    char str_282[2];
-    char str_283[2];
-    char str_284[2];
-    char str_285[2];
-    char str_286[2];
+    char ResName_MSSTLSEL_6_Label[2];
+    char ResName_MSSTLSEL_5_VwEditSwBox[2];
+    char ResName_MSSTLSEL_4_AcIndexWideES[2];
+    char ResName_MSSTLSEL_3_Label[2];
+    char ResName_MSSTLSEL_2_Box[2];
+    char ResName_MSSTLSEL_1_AcMstStyleAlpGridBox[2];
     char MSSTLSEL_str[10];
     uint32_t ptrs_15[7];  /* 7 pointers */
     char str_288[2];
-    char str_289[2];
-    char str_290[2];
-    char str_291[2];
-    char str_292[2];
-    char str_293[2];
+    char ResName_PMBANK_5_IvIntEasySet[2];
+    char ResName_PMBANK_4_Label[2];
+    char ResName_PMBANK_3_PsPageBox[2];
+    char ResName_PMBANK_2_StringBox[2];
+    char ResName_PMBANK_1_Icon[2];
     char PMBANK_str[8];
     uint32_t ptrs_16[14];  /* 14 pointers */
     char str_295[2];
-    char str_296[2];
-    char str_297[2];
-    char str_298[2];
-    char str_299[2];
-    char str_300[2];
-    char str_301[2];
-    char str_302[2];
-    char str_303[2];
-    char str_304[2];
-    char str_305[2];
-    char str_306[2];
-    char str_307[2];
+    char ResName_PMVIEW_12_IvIntEasySet[2];
+    char ResName_PMVIEW_11_EditSw[2];
+    char ResName_PMVIEW_10_EditSw[2];
+    char ResName_PMVIEW_9_Label[2];
+    char ResName_PMVIEW_8_Label[2];
+    char ResName_PMVIEW_7_Label[2];
+    char ResName_PMVIEW_6_Label[2];
+    char ResName_PMVIEW_5_Label[2];
+    char ResName_PMVIEW_4_Label[2];
+    char ResName_PMVIEW_3_PsPageBox[2];
+    char ResName_PMVIEW_2_AcIndexWideES[2];
+    char ResName_PMVIEW_1_AcPmBkEditBox[2];
     char PMVIEW_str[8];
     uint32_t ptrs_17[8];  /* 8 pointers */
     char str_309[2];
-    char str_310[2];
-    char str_311[2];
-    char str_312[2];
-    char str_313[2];
-    char str_314[2];
-    char str_315[2];
+    char ResName_PMNAME_6_IvExit[2];
+    char ResName_PMNAME_5_EditSw[2];
+    char ResName_PMNAME_4_PmBkNoBox[2];
+    char ResName_PMNAME_3_Label[2];
+    char ResName_PMNAME_2_AcFuncEditSw[2];
+    char ResName_PMNAME_1_IvNaming[2];
     char PMNAME_str[8];
     uint32_t ptrs_18[8];  /* 8 pointers */
     char str_317[2];
-    char str_318[2];
-    char str_319[2];
-    char str_320[2];
-    char str_321[2];
-    char str_322[2];
-    char str_323[2];
+    char ResName_PMBKNAME_6_IvExit[2];
+    char ResName_PMBKNAME_5_EditSw[2];
+    char ResName_PMBKNAME_4_BkNoBox[2];
+    char ResName_PMBKNAME_3_Label[2];
+    char ResName_PMBKNAME_2_AcFuncEditSw[2];
+    char ResName_PMBKNAME_1_IvNaming[2];
     char PMBKNAME_str[10];
     uint32_t ptrs_19[3];  /* 3 pointers */
     char str_325[2];
-    char str_326[2];
+    char ResName_SVARI_1_IvIntVari[2];
     char SVARI_str[6];
     uint32_t ptrs_20[4];  /* 4 pointers */
     char str_328[2];
-    char str_329[2];
-    char str_330[2];
+    char ResName_RVARI_2_IvIntVari[2];
+    char ResName_RVARI_1_AcTempoBox[2];
     char RVARI_str[6];
     uint32_t ptrs_21[15];  /* 15 pointers */
     char str_332[2];
-    char str_333[2];
-    char str_334[2];
-    char str_335[2];
-    char str_336[2];
-    char str_337[2];
-    char str_338[2];
+    char ResName_NakaInst_ExtDevice_Screens[2];
+    char ResName_ErrorDialog_RecoveryLine3[2];
+    char ResName_ErrorDialog_RecoveryLine2[2];
+    char ResName_ErrorDialog_RecoveryLine1[2];
+    char ResName_ErrorDialog_CPUTransmissionError[2];
+    char ResName_ErrorDialog_CautionHeader[2];
     char TEST1CP_str[8];
-    char str_340[2];
-    char str_341[2];
-    char str_342[2];
-    char str_343[2];
-    char str_344[2];
+    char ResName_ToshiView0F4_6_Label[2];
+    char ResName_ToshiView0F4_5_Label[2];
+    char ResName_ToshiView0F4_4_Label[2];
+    char ResName_ToshiView0F4_3_Label[2];
+    char ResName_ToshiView0F4_2_Label[2];
     char TEST1RAM_str[10];
-    char str_346[2];
+    char ResName_ToshiView0F4_0_TtlScreen[2];
     uint32_t ptrs_22[24];  /* 24 pointers */
     char str_347[2];
-    char str_348[2];
-    char str_349[2];
+    char ResName_TEST2_22_Label[2];
+    char ResName_TEST2_21_Label[2];
     char TEST2OKNG_str[10];
-    char str_351[2];
-    char str_352[2];
+    char ResName_TEST2_19_Label[2];
+    char ResName_TEST2_18_Label[2];
     char TEST2NGOK_str[10];
-    char str_354[2];
-    char str_355[2];
+    char ResName_TEST2_16_Label[2];
+    char ResName_TEST2_15_Label[2];
     char TEST2NGNG_str[10];
-    char str_357[2];
-    char str_358[2];
+    char ResName_TEST2_13_Label[2];
+    char ResName_TEST2_12_Label[2];
     char TEST2OKOK_str[10];
-    char str_360[2];
-    char str_361[2];
-    char str_362[2];
-    char str_363[2];
-    char str_364[2];
-    char str_365[2];
-    char str_366[2];
-    char str_367[2];
-    char str_368[2];
-    char str_369[2];
+    char ResName_TEST2_10_IvPageControl[2];
+    char ResName_TEST2_9_IvPageControl[2];
+    char ResName_TEST2_8_IvPageControl[2];
+    char ResName_TEST2_7_IvPageControl[2];
+    char ResName_TEST2_6_Label[2];
+    char ResName_TEST2_5_Label[2];
+    char ResName_TEST2_4_Label[2];
+    char ResName_TEST2_3_Label[2];
+    char ResName_TEST2_2_Label[2];
+    char ResName_TEST2_1_TextBox[2];
     char TEST2_str[6];
     uint32_t TEST3_str_ptr;
     uint32_t ptr_1f6e;
@@ -957,88 +957,88 @@ typedef struct __attribute__((packed)) {
     char TEST3_str[6];
     uint32_t ptrs_23[4];  /* 4 pointers */
     char str_373[2];
-    char str_374[2];
-    char str_375[2];
+    char ResName_TEST4_2_Label[2];
+    char ResName_TEST4_1_TextBox[2];
     char TEST4_str[6];
     uint32_t ptrs_24[68];  /* 68 pointers */
     char str_377[2];
-    char str_378[2];
-    char str_379[2];
-    char str_380[2];
-    char str_381[2];
-    char str_382[2];
-    char str_383[2];
-    char str_384[2];
-    char str_385[2];
-    char str_386[2];
-    char str_387[2];
-    char str_388[2];
-    char str_389[2];
-    char str_390[2];
-    char str_391[2];
-    char str_392[2];
-    char str_393[2];
-    char str_394[2];
-    char str_395[2];
-    char str_396[2];
-    char str_397[2];
-    char str_398[2];
-    char str_399[2];
-    char str_400[2];
-    char str_401[2];
-    char str_402[2];
-    char str_403[2];
-    char str_404[2];
-    char str_405[2];
-    char str_406[2];
-    char str_407[2];
-    char str_408[2];
-    char str_409[2];
-    char str_410[2];
-    char str_411[2];
-    char str_412[2];
-    char str_413[2];
-    char str_414[2];
-    char str_415[2];
-    char str_416[2];
-    char str_417[2];
-    char str_418[2];
-    char str_419[2];
-    char str_420[2];
-    char str_421[2];
-    char str_422[2];
-    char str_423[2];
-    char str_424[2];
-    char str_425[2];
-    char str_426[2];
-    char str_427[2];
+    char ResName_TEST5_66_Label[2];
+    char ResName_TEST5_65_Label[2];
+    char ResName_TEST5_64_Label[2];
+    char ResName_TEST5_63_Label[2];
+    char ResName_TEST5_62_Label[2];
+    char ResName_TEST5_61_Label[2];
+    char ResName_TEST5_60_Label[2];
+    char ResName_TEST5_59_Label[2];
+    char ResName_TEST5_58_Label[2];
+    char ResName_TEST5_57_Frame[2];
+    char ResName_TEST5_56_Label[2];
+    char ResName_TEST5_55_Label[2];
+    char ResName_TEST5_54_Label[2];
+    char ResName_TEST5_53_Label[2];
+    char ResName_TEST5_52_Label[2];
+    char ResName_TEST5_51_Label[2];
+    char ResName_TEST5_50_Label[2];
+    char ResName_TEST5_49_Label[2];
+    char ResName_TEST5_48_Label[2];
+    char ResName_TEST5_47_Frame[2];
+    char ResName_TEST5_46_Label[2];
+    char ResName_TEST5_45_Label[2];
+    char ResName_TEST5_44_Label[2];
+    char ResName_TEST5_43_Label[2];
+    char ResName_TEST5_42_Label[2];
+    char ResName_TEST5_41_Label[2];
+    char ResName_TEST5_40_Label[2];
+    char ResName_TEST5_39_Label[2];
+    char ResName_TEST5_38_Label[2];
+    char ResName_TEST5_37_Frame[2];
+    char ResName_TEST5_36_Label[2];
+    char ResName_TEST5_35_Label[2];
+    char ResName_TEST5_34_Label[2];
+    char ResName_TEST5_33_Label[2];
+    char ResName_TEST5_32_Label[2];
+    char ResName_TEST5_31_Label[2];
+    char ResName_TEST5_30_Label[2];
+    char ResName_TEST5_29_Label[2];
+    char ResName_TEST5_28_Label[2];
+    char ResName_TEST5_27_Frame[2];
+    char ResName_TEST5_26_Label[2];
+    char ResName_TEST5_25_Label[2];
+    char ResName_TEST5_24_Label[2];
+    char ResName_TEST5_23_Label[2];
+    char ResName_TEST5_22_Label[2];
+    char ResName_TEST5_21_Label[2];
+    char ResName_TEST5_20_Label[2];
+    char ResName_TEST5_19_Label[2];
+    char ResName_TEST5_18_Label[2];
+    char ResName_TEST5_17_Frame[2];
     char TEST56_str[8];
-    char str_429[2];
+    char ResName_TEST5_15_Label[2];
     char TEST55_str[8];
-    char str_431[2];
+    char ResName_TEST5_13_Label[2];
     char TEST54_str[8];
-    char str_433[2];
+    char ResName_TEST5_11_Label[2];
     char TEST53_str[8];
-    char str_435[2];
+    char ResName_TEST5_9_Label[2];
     char TEST52_str[8];
-    char str_437[2];
+    char ResName_TEST5_7_Label[2];
     char TEST51_str[8];
-    char str_439[2];
-    char str_440[2];
-    char str_441[2];
-    char str_442[2];
-    char str_443[2];
+    char ResName_TEST5_5_IvPageControl[2];
+    char ResName_TEST5_4_IvPageControl[2];
+    char ResName_TEST5_3_IvPageControl[2];
+    char ResName_TEST5_2_IvPageControl[2];
+    char ResName_TEST5_1_IvPageControl[2];
     char TEST5_str[6];
     uint32_t ptrs_25[10];  /* 10 pointers */
     char str_445[2];
-    char str_446[2];
+    char ResName_TEST6_8_Label[2];
     char TEST6NG_str[8];
-    char str_448[2];
+    char ResName_TEST6_6_Label[2];
     char TEST6OK_str[8];
-    char str_450[2];
-    char str_451[2];
-    char str_452[2];
-    char str_453[2];
+    char ResName_TEST6_4_IvPageControl[2];
+    char ResName_TEST6_3_IvPageControl[2];
+    char ResName_TEST6_2_Label[2];
+    char ResName_TEST6_1_Label[2];
     char TEST6_str[6];
     uint32_t EXT_str_ptr;
     uint32_t ptr_21a6;
@@ -3594,193 +3594,193 @@ const naka_extension_device_t naka_extension_device_data
         0x00000000,
         SELF(Normal_name),
         SELF(Normal_code),
-        SELF(str_114),
-        SELF(str_113),
-        SELF(str_112),
-        SELF(str_111),
-        SELF(str_110),
-        SELF(str_109),
-        SELF(str_108),
-        SELF(str_107),
-        SELF(str_106),
-        SELF(str_105),
-        SELF(str_104),
-        SELF(str_103),
-        SELF(str_102),
-        SELF(str_101),
-        SELF(str_100),
-        SELF(str_99),
-        SELF(str_98),
-        SELF(str_97),
-        SELF(str_96),
-        SELF(str_95),
-        SELF(str_94),
-        SELF(str_93),
+        SELF(ResName_Normal_2_AcTempoBox),
+        SELF(ResName_Normal_3_AcPmemName),
+        SELF(ResName_Normal_4_AcRhythmName),
+        SELF(ResName_Normal_5_AcSoundName),
+        SELF(ResName_Normal_6_AcSoundName),
+        SELF(ResName_Normal_7_StringBox),
+        SELF(ResName_Normal_8_AcSoundName),
+        SELF(ResName_Normal_9_StringBox),
+        SELF(ResName_Normal_10_StringBox),
+        SELF(ResName_Normal_11_StringBox),
+        SELF(ResName_Normal_12_TransposeBox),
+        SELF(ResName_Normal_13_ChordBox),
+        SELF(ResName_Normal_14_AcLswBox),
+        SELF(ResName_Normal_15_IvWindowPageControl),
+        SELF(ResName_Normal_16_FreeSplitBox),
+        SELF(ResName_Normal_17_IvPageOverWr),
+        SELF(ResName_Normal_18_IvPageOverWr),
+        SELF(ResName_Normal_19_IvPageOverWr),
+        SELF(ResName_Normal_20_IvPageOverWr),
+        SELF(ResName_Normal_21_IvPageOverWr),
+        SELF(ResName_Normal_22_IvPageOverWr),
+        SELF(ResName_Normal_23_IvExit),
         SELF(N1_str),
-        SELF(str_91),
-        SELF(str_90),
-        SELF(str_89),
-        SELF(str_88),
-        SELF(str_87),
-        SELF(str_86),
-        SELF(str_85),
-        SELF(str_84),
+        SELF(ResName_Toshi_NORMAL_Elem25),
+        SELF(ResName_Toshi_NORMAL_Elem26),
+        SELF(ResName_Toshi_NORMAL_Elem27),
+        SELF(ResName_Toshi_NORMAL_Elem28),
+        SELF(ResName_Toshi_NORMAL_Elem29),
+        SELF(ResName_Toshi_NORMAL_Elem30),
+        SELF(ResName_Toshi_NORMAL_Elem31),
+        SELF(ResName_Toshi_NORMAL_Elem32),
         SELF(N2_str),
-        SELF(str_82),
-        SELF(str_81),
-        SELF(str_80),
-        SELF(str_79),
-        SELF(str_78),
+        SELF(ResName_Toshi_NORMAL_Elem34),
+        SELF(ResName_Toshi_NORMAL_Elem35),
+        SELF(ResName_Toshi_NORMAL_Elem36),
+        SELF(ResName_Toshi_NORMAL_Elem37),
+        SELF(ResName_Toshi_NORMAL_Elem38),
         SELF(N3_str),
-        SELF(str_76),
-        SELF(str_75),
-        SELF(str_74),
-        SELF(str_73),
-        SELF(str_72),
-        SELF(str_71),
-        SELF(str_70),
-        SELF(str_69),
+        SELF(ResName_Toshi_NORMAL_Elem40),
+        SELF(ResName_Toshi_NORMAL_Elem41),
+        SELF(ResName_Toshi_NORMAL_Elem42),
+        SELF(ResName_Toshi_NORMAL_Elem43),
+        SELF(ResName_Toshi_NORMAL_Elem44),
+        SELF(ResName_Toshi_NORMAL_Elem45),
+        SELF(ResName_Toshi_NORMAL_Elem46),
+        SELF(ResName_Toshi_NORMAL_Elem47),
         SELF(N4_str),
-        SELF(str_67),
-        SELF(str_66),
-        SELF(str_65),
-        SELF(str_64),
-        SELF(str_63),
-        SELF(str_62),
-        SELF(str_61),
-        SELF(str_60),
+        SELF(ResName_Toshi_NORMAL_Elem49),
+        SELF(ResName_Toshi_NORMAL_Elem50),
+        SELF(ResName_Toshi_NORMAL_Elem51),
+        SELF(ResName_Toshi_NORMAL_Elem52),
+        SELF(ResName_Toshi_NORMAL_Elem53),
+        SELF(ResName_Toshi_NORMAL_Elem54),
+        SELF(ResName_Toshi_NORMAL_Elem55),
+        SELF(ResName_Toshi_NORMAL_Elem56),
         SELF(FADEIN_str),
-        SELF(str_58),
-        SELF(str_57),
+        SELF(ResName_Toshi_NORMAL_Elem58),
+        SELF(ResName_Toshi_NORMAL_Elem59),
         SELF(FADEOUT_str),
-        SELF(str_55),
-        SELF(str_54),
+        SELF(ResName_Toshi_NORMAL_Elem61),
+        SELF(ResName_Toshi_NORMAL_Elem62),
         SELF(str_53),
     },
 
     .str_53 = ALIGNED_STRING(""),
 
-    .str_54 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem62 = ALIGNED_STRING(""),
 
-    .str_55 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem61 = ALIGNED_STRING(""),
 
     .FADEOUT_str = "FADEOUT",
 
-    .str_57 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem59 = ALIGNED_STRING(""),
 
-    .str_58 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem58 = ALIGNED_STRING(""),
 
     .FADEIN_str = ALIGNED_STRING("FADEIN"),
 
-    .str_60 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem56 = ALIGNED_STRING(""),
 
-    .str_61 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem55 = ALIGNED_STRING(""),
 
-    .str_62 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem54 = ALIGNED_STRING(""),
 
-    .str_63 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem53 = ALIGNED_STRING(""),
 
-    .str_64 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem52 = ALIGNED_STRING(""),
 
-    .str_65 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem51 = ALIGNED_STRING(""),
 
-    .str_66 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem50 = ALIGNED_STRING(""),
 
-    .str_67 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem49 = ALIGNED_STRING(""),
 
     .N4_str = ALIGNED_STRING("N4"),
 
-    .str_69 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem47 = ALIGNED_STRING(""),
 
-    .str_70 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem46 = ALIGNED_STRING(""),
 
-    .str_71 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem45 = ALIGNED_STRING(""),
 
-    .str_72 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem44 = ALIGNED_STRING(""),
 
-    .str_73 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem43 = ALIGNED_STRING(""),
 
-    .str_74 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem42 = ALIGNED_STRING(""),
 
-    .str_75 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem41 = ALIGNED_STRING(""),
 
-    .str_76 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem40 = ALIGNED_STRING(""),
 
     .N3_str = ALIGNED_STRING("N3"),
 
-    .str_78 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem38 = ALIGNED_STRING(""),
 
-    .str_79 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem37 = ALIGNED_STRING(""),
 
-    .str_80 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem36 = ALIGNED_STRING(""),
 
-    .str_81 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem35 = ALIGNED_STRING(""),
 
-    .str_82 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem34 = ALIGNED_STRING(""),
 
     .N2_str = ALIGNED_STRING("N2"),
 
-    .str_84 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem32 = ALIGNED_STRING(""),
 
-    .str_85 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem31 = ALIGNED_STRING(""),
 
-    .str_86 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem30 = ALIGNED_STRING(""),
 
-    .str_87 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem29 = ALIGNED_STRING(""),
 
-    .str_88 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem28 = ALIGNED_STRING(""),
 
-    .str_89 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem27 = ALIGNED_STRING(""),
 
-    .str_90 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem26 = ALIGNED_STRING(""),
 
-    .str_91 = ALIGNED_STRING(""),
+    .ResName_Toshi_NORMAL_Elem25 = ALIGNED_STRING(""),
 
     .N1_str = ALIGNED_STRING("N1"),
 
-    .str_93 = ALIGNED_STRING(""),
+    .ResName_Normal_23_IvExit = ALIGNED_STRING(""),
 
-    .str_94 = ALIGNED_STRING(""),
+    .ResName_Normal_22_IvPageOverWr = ALIGNED_STRING(""),
 
-    .str_95 = ALIGNED_STRING(""),
+    .ResName_Normal_21_IvPageOverWr = ALIGNED_STRING(""),
 
-    .str_96 = ALIGNED_STRING(""),
+    .ResName_Normal_20_IvPageOverWr = ALIGNED_STRING(""),
 
-    .str_97 = ALIGNED_STRING(""),
+    .ResName_Normal_19_IvPageOverWr = ALIGNED_STRING(""),
 
-    .str_98 = ALIGNED_STRING(""),
+    .ResName_Normal_18_IvPageOverWr = ALIGNED_STRING(""),
 
-    .str_99 = ALIGNED_STRING(""),
+    .ResName_Normal_17_IvPageOverWr = ALIGNED_STRING(""),
 
-    .str_100 = ALIGNED_STRING(""),
+    .ResName_Normal_16_FreeSplitBox = ALIGNED_STRING(""),
 
-    .str_101 = ALIGNED_STRING(""),
+    .ResName_Normal_15_IvWindowPageControl = ALIGNED_STRING(""),
 
-    .str_102 = ALIGNED_STRING(""),
+    .ResName_Normal_14_AcLswBox = ALIGNED_STRING(""),
 
-    .str_103 = ALIGNED_STRING(""),
+    .ResName_Normal_13_ChordBox = ALIGNED_STRING(""),
 
-    .str_104 = ALIGNED_STRING(""),
+    .ResName_Normal_12_TransposeBox = ALIGNED_STRING(""),
 
-    .str_105 = ALIGNED_STRING(""),
+    .ResName_Normal_11_StringBox = ALIGNED_STRING(""),
 
-    .str_106 = ALIGNED_STRING(""),
+    .ResName_Normal_10_StringBox = ALIGNED_STRING(""),
 
-    .str_107 = ALIGNED_STRING(""),
+    .ResName_Normal_9_StringBox = ALIGNED_STRING(""),
 
-    .str_108 = ALIGNED_STRING(""),
+    .ResName_Normal_8_AcSoundName = ALIGNED_STRING(""),
 
-    .str_109 = ALIGNED_STRING(""),
+    .ResName_Normal_7_StringBox = ALIGNED_STRING(""),
 
-    .str_110 = ALIGNED_STRING(""),
+    .ResName_Normal_6_AcSoundName = ALIGNED_STRING(""),
 
-    .str_111 = ALIGNED_STRING(""),
+    .ResName_Normal_5_AcSoundName = ALIGNED_STRING(""),
 
-    .str_112 = ALIGNED_STRING(""),
+    .ResName_Normal_4_AcRhythmName = ALIGNED_STRING(""),
 
-    .str_113 = ALIGNED_STRING(""),
+    .ResName_Normal_3_AcPmemName = ALIGNED_STRING(""),
 
-    .str_114 = ALIGNED_STRING(""),
+    .ResName_Normal_2_AcTempoBox = ALIGNED_STRING(""),
 
     .Normal_code = ALIGNED_STRING("normal"),
 
@@ -3789,31 +3789,31 @@ const naka_extension_device_t naka_extension_device_data
     .ptrs_1 = {
         SELF(ControlMenu_name),
         SELF(w74_code),
-        SELF(str_122),
-        SELF(str_121),
-        SELF(str_120),
-        SELF(str_119),
-        SELF(str_118),
-        SELF(str_117),
-        SELF(str_116),
+        SELF(ResName_ControlMenu_2_AcTitleMenu),
+        SELF(ResName_ControlMenu_3_AcTitleMenu),
+        SELF(ResName_ControlMenu_4_AcTitleMenu),
+        SELF(ResName_ControlMenu_5_AcTitleMenu),
+        SELF(ResName_ControlMenu_6_IvExitMode),
+        SELF(ResName_ControlMenu_7_AcTitleMenu),
+        SELF(ResName_ControlMenu_8_AcTitleMenu),
         SELF(str_115),
     },
 
     .str_115 = ALIGNED_STRING(""),
 
-    .str_116 = ALIGNED_STRING(""),
+    .ResName_ControlMenu_8_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_117 = ALIGNED_STRING(""),
+    .ResName_ControlMenu_7_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_118 = ALIGNED_STRING(""),
+    .ResName_ControlMenu_6_IvExitMode = ALIGNED_STRING(""),
 
-    .str_119 = ALIGNED_STRING(""),
+    .ResName_ControlMenu_5_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_120 = ALIGNED_STRING(""),
+    .ResName_ControlMenu_4_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_121 = ALIGNED_STRING(""),
+    .ResName_ControlMenu_3_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_122 = ALIGNED_STRING(""),
+    .ResName_ControlMenu_2_AcTitleMenu = ALIGNED_STRING(""),
 
     .w74_code = ALIGNED_STRING(""),
 
@@ -3823,52 +3823,52 @@ const naka_extension_device_t naka_extension_device_data
         SELF(ControlIni_name),
         SELF(w75_code),
         SELF(SYSINI_str),
-        SELF(str_137),
-        SELF(str_136),
-        SELF(str_135),
-        SELF(str_134),
+        SELF(ResName_ControlIni_3_AcFuncEditSw),
+        SELF(ResName_ControlIni_4_IvShowHide),
+        SELF(ResName_ControlIni_5_AcLanguageText),
+        SELF(ResName_ControlIni_6_TtlScreen),
         SELF(SYSINISURE_str),
-        SELF(str_132),
-        SELF(str_131),
-        SELF(str_130),
-        SELF(str_129),
-        SELF(str_128),
-        SELF(str_127),
-        SELF(str_126),
-        SELF(str_125),
-        SELF(str_124),
+        SELF(ResName_ControlIni_8_Label),
+        SELF(ResName_ControlIni_9_Icon),
+        SELF(ResName_ControlIni_10_Box),
+        SELF(ResName_ControlIni_11_AcLanguageText),
+        SELF(ResName_ControlIni_12_AcLanguageText),
+        SELF(ResName_ControlIni_13_AcLanguageText),
+        SELF(ResName_ControlIni_14_AcFuncEditSw),
+        SELF(ResName_ControlIni_15_AcFuncEditSw),
+        SELF(ResName_ControlIni_16_IvShowHide),
         SELF(str_123),
     },
 
     .str_123 = ALIGNED_STRING(""),
 
-    .str_124 = ALIGNED_STRING(""),
+    .ResName_ControlIni_16_IvShowHide = ALIGNED_STRING(""),
 
-    .str_125 = ALIGNED_STRING(""),
+    .ResName_ControlIni_15_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_126 = ALIGNED_STRING(""),
+    .ResName_ControlIni_14_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_127 = ALIGNED_STRING(""),
+    .ResName_ControlIni_13_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_128 = ALIGNED_STRING(""),
+    .ResName_ControlIni_12_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_129 = ALIGNED_STRING(""),
+    .ResName_ControlIni_11_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_130 = ALIGNED_STRING(""),
+    .ResName_ControlIni_10_Box = ALIGNED_STRING(""),
 
-    .str_131 = ALIGNED_STRING(""),
+    .ResName_ControlIni_9_Icon = ALIGNED_STRING(""),
 
-    .str_132 = ALIGNED_STRING(""),
+    .ResName_ControlIni_8_Label = ALIGNED_STRING(""),
 
     .SYSINISURE_str = ALIGNED_STRING("SYSINISURE"),
 
-    .str_134 = ALIGNED_STRING(""),
+    .ResName_ControlIni_6_TtlScreen = ALIGNED_STRING(""),
 
-    .str_135 = ALIGNED_STRING(""),
+    .ResName_ControlIni_5_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_136 = ALIGNED_STRING(""),
+    .ResName_ControlIni_4_IvShowHide = ALIGNED_STRING(""),
 
-    .str_137 = ALIGNED_STRING(""),
+    .ResName_ControlIni_3_AcFuncEditSw = ALIGNED_STRING(""),
 
     .SYSINI_str = ALIGNED_STRING("SYSINI"),
 
@@ -3879,22 +3879,22 @@ const naka_extension_device_t naka_extension_device_data
     .ptrs_3 = {
         SELF(ControlFsw_name),
         SELF(w76_code),
-        SELF(str_143),
-        SELF(str_142),
-        SELF(str_141),
-        SELF(str_140),
+        SELF(ResName_ControlFsw_2_Label),
+        SELF(ResName_ControlFsw_3_Label),
+        SELF(ResName_ControlFsw_4_AcIndexWideES),
+        SELF(ResName_ControlFsw_5_AcIndexWideES),
         SELF(str_139),
     },
 
     .str_139 = ALIGNED_STRING(""),
 
-    .str_140 = ALIGNED_STRING(""),
+    .ResName_ControlFsw_5_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_141 = ALIGNED_STRING(""),
+    .ResName_ControlFsw_4_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_142 = ALIGNED_STRING(""),
+    .ResName_ControlFsw_3_Label = ALIGNED_STRING(""),
 
-    .str_143 = ALIGNED_STRING(""),
+    .ResName_ControlFsw_2_Label = ALIGNED_STRING(""),
 
     .w76_code = ALIGNED_STRING(""),
 
@@ -3903,158 +3903,158 @@ const naka_extension_device_t naka_extension_device_data
     .ptrs_4 = {
         SELF(ControlSns_name),
         SELF(w77_code),
-        SELF(str_150),
-        SELF(str_149),
-        SELF(str_148),
-        SELF(str_147),
-        SELF(str_146),
-        SELF(str_145),
+        SELF(ResName_ControlSns_2_Label),
+        SELF(ResName_ControlSns_3_Label),
+        SELF(ResName_ControlSns_4_AcIndexWideES),
+        SELF(ResName_ControlSns_5_AcIndexWideES),
+        SELF(ResName_ControlSns_6_Label),
+        SELF(ResName_ControlSns_7_Label),
         SELF(str_144),
     },
 
     .str_144 = ALIGNED_STRING(""),
 
-    .str_145 = ALIGNED_STRING(""),
+    .ResName_ControlSns_7_Label = ALIGNED_STRING(""),
 
-    .str_146 = ALIGNED_STRING(""),
+    .ResName_ControlSns_6_Label = ALIGNED_STRING(""),
 
-    .str_147 = ALIGNED_STRING(""),
+    .ResName_ControlSns_5_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_148 = ALIGNED_STRING(""),
+    .ResName_ControlSns_4_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_149 = ALIGNED_STRING(""),
+    .ResName_ControlSns_3_Label = ALIGNED_STRING(""),
 
-    .str_150 = ALIGNED_STRING(""),
+    .ResName_ControlSns_2_Label = ALIGNED_STRING(""),
 
     .w77_code = ALIGNED_STRING(""),
 
     .ControlSns_name = ALIGNED_STRING("ControlSns"),
 
     .ptrs_5 = {
-        SELF(str_170),
-        SELF(str_169),
-        SELF(str_168),
-        SELF(str_167),
-        SELF(str_166),
-        SELF(str_165),
-        SELF(str_164),
-        SELF(str_163),
-        SELF(str_162),
-        SELF(str_161),
-        SELF(str_160),
-        SELF(str_159),
-        SELF(str_158),
-        SELF(str_157),
-        SELF(str_156),
-        SELF(str_155),
-        SELF(str_154),
-        SELF(str_153),
-        SELF(str_152),
+        SELF(ResName_ToshiView044_0_MsaModeScreen),
+        SELF(ResName_ToshiView044_1_Label),
+        SELF(ResName_ToshiView044_2_Icon),
+        SELF(ResName_ToshiView044_3_EditSw),
+        SELF(ResName_ToshiView044_4_EditSw),
+        SELF(ResName_ToshiView044_5_EditSw),
+        SELF(ResName_ToshiView044_6_Label),
+        SELF(ResName_ToshiView044_7_Label),
+        SELF(ResName_ToshiView044_8_Label),
+        SELF(ResName_ToshiView044_9_IvIntEasySet),
+        SELF(ResName_ToshiView044_10_MsaModeScreen),
+        SELF(ResName_ToshiView044_11_Label),
+        SELF(ResName_ToshiView044_12_Icon),
+        SELF(ResName_ToshiView044_13_EditSw),
+        SELF(ResName_ToshiView044_14_EditSw),
+        SELF(ResName_ToshiView044_15_EditSw),
+        SELF(ResName_ToshiView044_16_Label),
+        SELF(ResName_ToshiView044_17_Label),
+        SELF(ResName_ToshiView044_18_Label),
         SELF(str_151),
     },
 
     .str_151 = ALIGNED_STRING(""),
 
-    .str_152 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_18_Label = ALIGNED_STRING(""),
 
-    .str_153 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_17_Label = ALIGNED_STRING(""),
 
-    .str_154 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_16_Label = ALIGNED_STRING(""),
 
-    .str_155 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_15_EditSw = ALIGNED_STRING(""),
 
-    .str_156 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_14_EditSw = ALIGNED_STRING(""),
 
-    .str_157 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_13_EditSw = ALIGNED_STRING(""),
 
-    .str_158 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_12_Icon = ALIGNED_STRING(""),
 
-    .str_159 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_11_Label = ALIGNED_STRING(""),
 
-    .str_160 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_10_MsaModeScreen = ALIGNED_STRING(""),
 
-    .str_161 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_9_IvIntEasySet = ALIGNED_STRING(""),
 
-    .str_162 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_8_Label = ALIGNED_STRING(""),
 
-    .str_163 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_7_Label = ALIGNED_STRING(""),
 
-    .str_164 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_6_Label = ALIGNED_STRING(""),
 
-    .str_165 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_5_EditSw = ALIGNED_STRING(""),
 
-    .str_166 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_4_EditSw = ALIGNED_STRING(""),
 
-    .str_167 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_3_EditSw = ALIGNED_STRING(""),
 
-    .str_168 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_2_Icon = ALIGNED_STRING(""),
 
-    .str_169 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_1_Label = ALIGNED_STRING(""),
 
-    .str_170 = ALIGNED_STRING(""),
+    .ResName_ToshiView044_0_MsaModeScreen = ALIGNED_STRING(""),
 
     .ptrs_6 = {
-        SELF(str_190),
-        SELF(str_189),
-        SELF(str_188),
-        SELF(str_187),
-        SELF(str_186),
+        SELF(ResName_ToshiView045_0_TtlScreen),
+        SELF(ResName_ToshiView045_1_IvPmemWindowPageCtl),
+        SELF(ResName_ToshiView045_2_IvPageControl),
+        SELF(ResName_ToshiView045_3_IvPageControl),
+        SELF(ResName_ToshiView045_4_IvIntEasySet),
         SELF(PMEM1_str),
-        SELF(str_184),
-        SELF(str_183),
-        SELF(str_182),
-        SELF(str_181),
-        SELF(str_180),
-        SELF(str_179),
-        SELF(str_178),
+        SELF(ResName_ToshiView045_6_PmemModeBox),
+        SELF(ResName_ToshiView045_7_EditSw),
+        SELF(ResName_ToshiView045_8_EditSw),
+        SELF(ResName_ToshiView045_9_Label),
+        SELF(ResName_ToshiView045_10_Label),
+        SELF(ResName_ToshiView045_11_AcLanguageText),
+        SELF(ResName_ToshiView045_12_AcLanguageText),
         SELF(PMEM2_str),
-        SELF(str_176),
-        SELF(str_175),
-        SELF(str_174),
-        SELF(str_173),
-        SELF(str_172),
+        SELF(ResName_ToshiView045_14_AcPmExpFilterGridBox),
+        SELF(ResName_ToshiView045_15_AcIndexWideES),
+        SELF(ResName_ToshiView045_16_AcIndexWideES),
+        SELF(ResName_ToshiView045_17_StringBox),
+        SELF(ResName_ToshiView045_18_Window),
         SELF(str_171),
     },
 
     .str_171 = ALIGNED_STRING(""),
 
-    .str_172 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_18_Window = ALIGNED_STRING(""),
 
-    .str_173 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_17_StringBox = ALIGNED_STRING(""),
 
-    .str_174 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_16_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_175 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_15_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_176 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_14_AcPmExpFilterGridBox = ALIGNED_STRING(""),
 
     .PMEM2_str = "PMEM2",
 
-    .str_178 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_12_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_179 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_11_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_180 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_10_Label = ALIGNED_STRING(""),
 
-    .str_181 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_9_Label = ALIGNED_STRING(""),
 
-    .str_182 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_8_EditSw = ALIGNED_STRING(""),
 
-    .str_183 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_7_EditSw = ALIGNED_STRING(""),
 
-    .str_184 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_6_PmemModeBox = ALIGNED_STRING(""),
 
     .PMEM1_str = "PMEM1",
 
-    .str_186 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_4_IvIntEasySet = ALIGNED_STRING(""),
 
-    .str_187 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_3_IvPageControl = ALIGNED_STRING(""),
 
-    .str_188 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_2_IvPageControl = ALIGNED_STRING(""),
 
-    .str_189 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_1_IvPmemWindowPageCtl = ALIGNED_STRING(""),
 
-    .str_190 = ALIGNED_STRING(""),
+    .ResName_ToshiView045_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptr_1a62 = SELF(str_191),
 
@@ -4063,597 +4063,597 @@ const naka_extension_device_t naka_extension_device_data
     .ptrs_7 = {
         SELF(ControlSys_name),
         SELF(w78_code),
-        SELF(str_197),
-        SELF(str_196),
-        SELF(str_195),
-        SELF(str_194),
-        SELF(str_193),
+        SELF(ResName_ControlSys_2_Label),
+        SELF(ResName_ControlSys_3_Label),
+        SELF(ResName_ControlSys_4_AcIndexWideES),
+        SELF(ResName_ControlSys_5_AcIndexWideES),
+        SELF(ResName_ControlSys_6_AcFuncEditSw),
         SELF(str_192),
     },
 
     .str_192 = ALIGNED_STRING(""),
 
-    .str_193 = ALIGNED_STRING(""),
+    .ResName_ControlSys_6_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_194 = ALIGNED_STRING(""),
+    .ResName_ControlSys_5_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_195 = ALIGNED_STRING(""),
+    .ResName_ControlSys_4_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_196 = ALIGNED_STRING(""),
+    .ResName_ControlSys_3_Label = ALIGNED_STRING(""),
 
-    .str_197 = ALIGNED_STRING(""),
+    .ResName_ControlSys_2_Label = ALIGNED_STRING(""),
 
     .w78_code = ALIGNED_STRING(""),
 
     .ControlSys_name = ALIGNED_STRING("ControlSys"),
 
     .ptrs_8 = {
-        SELF(str_221),
-        SELF(str_220),
+        SELF(ResName_ToshiView048_0_TtlScreen),
+        SELF(ResName_ToshiView048_1_AcTitleMenu),
         SELF(ControlWallSet_name),
         SELF(w79_code),
-        SELF(str_219),
-        SELF(str_218),
-        SELF(str_217),
-        SELF(str_216),
-        SELF(str_215),
-        SELF(str_214),
-        SELF(str_213),
-        SELF(str_212),
-        SELF(str_211),
-        SELF(str_210),
-        SELF(str_209),
+        SELF(ResName_ToshiView048_4_AcRamEditBox),
+        SELF(ResName_ToshiView048_5_Label),
+        SELF(ResName_ToshiView048_6_Label),
+        SELF(ResName_ToshiView048_7_AcRamEditBox),
+        SELF(ResName_ToshiView048_8_AcRamEditBox),
+        SELF(ResName_ToshiView048_9_AcFuncEditSw),
+        SELF(ResName_ToshiView048_10_Label),
+        SELF(ResName_ToshiView048_11_AcIndexWideES),
+        SELF(ResName_ToshiView048_12_Label),
+        SELF(ResName_ToshiView048_13_AcFuncEditSw),
+        SELF(ResName_ToshiView048_14_IvShowHide),
         SELF(WALLSETSURE_str),
-        SELF(str_207),
-        SELF(str_206),
-        SELF(str_205),
-        SELF(str_204),
-        SELF(str_203),
-        SELF(str_202),
-        SELF(str_201),
-        SELF(str_200),
-        SELF(str_199),
+        SELF(ResName_ToshiView048_16_Box),
+        SELF(ResName_ToshiView048_17_AcLanguageText),
+        SELF(ResName_ToshiView048_18_AcLanguageText),
+        SELF(ResName_ToshiView048_19_AcLanguageText),
+        SELF(ResName_ToshiView048_20_AcFuncEditSw),
+        SELF(ResName_ToshiView048_21_AcFuncEditSw),
+        SELF(ResName_ToshiView048_22_IvShowHide),
+        SELF(ResName_ToshiView048_23_Icon),
+        SELF(ResName_ToshiView048_24_Label),
         SELF(str_198),
     },
 
     .str_198 = ALIGNED_STRING(""),
 
-    .str_199 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_24_Label = ALIGNED_STRING(""),
 
-    .str_200 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_23_Icon = ALIGNED_STRING(""),
 
-    .str_201 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_22_IvShowHide = ALIGNED_STRING(""),
 
-    .str_202 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_21_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_203 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_20_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_204 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_19_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_205 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_18_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_206 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_17_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_207 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_16_Box = ALIGNED_STRING(""),
 
     .WALLSETSURE_str = "WALLSETSURE",
 
-    .str_209 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_14_IvShowHide = ALIGNED_STRING(""),
 
-    .str_210 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_13_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_211 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_12_Label = ALIGNED_STRING(""),
 
-    .str_212 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_11_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_213 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_10_Label = ALIGNED_STRING(""),
 
-    .str_214 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_9_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_215 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_8_AcRamEditBox = ALIGNED_STRING(""),
 
-    .str_216 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_7_AcRamEditBox = ALIGNED_STRING(""),
 
-    .str_217 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_6_Label = ALIGNED_STRING(""),
 
-    .str_218 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_5_Label = ALIGNED_STRING(""),
 
-    .str_219 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_4_AcRamEditBox = ALIGNED_STRING(""),
 
     .w79_code = ALIGNED_STRING(""),
 
     .ControlWallSet_name = ALIGNED_STRING("ControlWallSet"),
 
-    .str_220 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_1_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_221 = ALIGNED_STRING(""),
+    .ResName_ToshiView048_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_9 = {
         SELF(ONETCH_str),
-        SELF(str_225),
-        SELF(str_224),
-        SELF(str_223),
+        SELF(ResName_ONETCH_1_Label),
+        SELF(ResName_ONETCH_2_AcRamBox),
+        SELF(ResName_ONETCH_3_IvExitMode),
         SELF(str_222),
     },
 
     .str_222 = ALIGNED_STRING(""),
 
-    .str_223 = ALIGNED_STRING(""),
+    .ResName_ONETCH_3_IvExitMode = ALIGNED_STRING(""),
 
-    .str_224 = ALIGNED_STRING(""),
+    .ResName_ONETCH_2_AcRamBox = ALIGNED_STRING(""),
 
-    .str_225 = ALIGNED_STRING(""),
+    .ResName_ONETCH_1_Label = ALIGNED_STRING(""),
 
     .ONETCH_str = ALIGNED_STRING("ONETCH"),
 
     .ptrs_10 = {
         SELF(MUSICSTYL_str),
-        SELF(str_230),
-        SELF(str_229),
-        SELF(str_228),
+        SELF(ResName_MUSICSTYL_1_AcTitleMenu),
+        SELF(ResName_MUSICSTYL_2_IvExitMode),
+        SELF(ResName_MUSICSTYL_3_AcTitleMenu),
         SELF(str_227),
     },
 
     .str_227 = ALIGNED_STRING(""),
 
-    .str_228 = ALIGNED_STRING(""),
+    .ResName_MUSICSTYL_3_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_229 = ALIGNED_STRING(""),
+    .ResName_MUSICSTYL_2_IvExitMode = ALIGNED_STRING(""),
 
-    .str_230 = ALIGNED_STRING(""),
+    .ResName_MUSICSTYL_1_AcTitleMenu = ALIGNED_STRING(""),
 
     .MUSICSTYL_str = "MUSICSTYL",
 
     .ptrs_11 = {
         SELF(MSCTSEL_str),
-        SELF(str_251),
-        SELF(str_250),
-        SELF(str_249),
+        SELF(ResName_MSCTSEL_1_IvMstStyleWindowPgCtl),
+        SELF(ResName_MSCTSEL_2_IvPageControl),
+        SELF(ResName_MSCTSEL_3_IvPageControl),
         SELF(STYLE1_str),
-        SELF(str_247),
-        SELF(str_246),
-        SELF(str_245),
-        SELF(str_244),
-        SELF(str_243),
-        SELF(str_242),
-        SELF(str_241),
+        SELF(ResName_MSCTSEL_5_AcMstStyle1GridBox),
+        SELF(ResName_MSCTSEL_6_AcIndexWideES),
+        SELF(ResName_MSCTSEL_7_VwEditSwBox),
+        SELF(ResName_MSCTSEL_8_Label),
+        SELF(ResName_MSCTSEL_9_AcMstStyle1SubGridBox),
+        SELF(ResName_MSCTSEL_10_AcIndexWideES),
+        SELF(ResName_MSCTSEL_11_Label),
         SELF(STYLE2_str),
-        SELF(str_239),
-        SELF(str_238),
-        SELF(str_237),
-        SELF(str_236),
-        SELF(str_235),
-        SELF(str_234),
-        SELF(str_233),
+        SELF(ResName_MSCTSEL_13_AcMstStyle2GridBox),
+        SELF(ResName_MSCTSEL_14_Box),
+        SELF(ResName_MSCTSEL_15_Label),
+        SELF(ResName_MSCTSEL_16_AcIndexWideES),
+        SELF(ResName_MSCTSEL_17_Label),
+        SELF(ResName_MSCTSEL_18_VwEditSwBox),
+        SELF(ResName_MSCTSEL_19_Label),
         SELF(str_232),
     },
 
     .str_232 = ALIGNED_STRING(""),
 
-    .str_233 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_19_Label = ALIGNED_STRING(""),
 
-    .str_234 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_18_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_235 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_17_Label = ALIGNED_STRING(""),
 
-    .str_236 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_16_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_237 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_15_Label = ALIGNED_STRING(""),
 
-    .str_238 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_14_Box = ALIGNED_STRING(""),
 
-    .str_239 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_13_AcMstStyle2GridBox = ALIGNED_STRING(""),
 
     .STYLE2_str = ALIGNED_STRING("STYLE2"),
 
-    .str_241 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_11_Label = ALIGNED_STRING(""),
 
-    .str_242 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_10_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_243 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_9_AcMstStyle1SubGridBox = ALIGNED_STRING(""),
 
-    .str_244 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_8_Label = ALIGNED_STRING(""),
 
-    .str_245 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_7_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_246 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_6_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_247 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_5_AcMstStyle1GridBox = ALIGNED_STRING(""),
 
     .STYLE1_str = ALIGNED_STRING("STYLE1"),
 
-    .str_249 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_3_IvPageControl = ALIGNED_STRING(""),
 
-    .str_250 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_2_IvPageControl = ALIGNED_STRING(""),
 
-    .str_251 = ALIGNED_STRING(""),
+    .ResName_MSCTSEL_1_IvMstStyleWindowPgCtl = ALIGNED_STRING(""),
 
     .MSCTSEL_str = "MSCTSEL",
 
     .ptrs_12 = {
         SELF(MSSCTSEL_str),
-        SELF(str_269),
-        SELF(str_268),
-        SELF(str_267),
+        SELF(ResName_MSSCTSEL_1_IvMstStyleWindowPgCtl),
+        SELF(ResName_MSSCTSEL_2_IvPageControl),
+        SELF(ResName_MSSCTSEL_3_IvPageControl),
         SELF(SONG1_str),
-        SELF(str_265),
-        SELF(str_264),
-        SELF(str_263),
-        SELF(str_262),
+        SELF(ResName_MSSCTSEL_5_AcMstSong1GridBox),
+        SELF(ResName_MSSCTSEL_6_AcIndexWideES),
+        SELF(ResName_MSSCTSEL_7_VwEditSwBox),
+        SELF(ResName_MSSCTSEL_8_Label),
         SELF(SONG2_str),
-        SELF(str_260),
-        SELF(str_259),
-        SELF(str_258),
-        SELF(str_257),
-        SELF(str_256),
-        SELF(str_255),
-        SELF(str_254),
+        SELF(ResName_MSSCTSEL_10_AcMstSong2GridBox),
+        SELF(ResName_MSSCTSEL_11_AcIndexWideES),
+        SELF(ResName_MSSCTSEL_12_Box),
+        SELF(ResName_MSSCTSEL_13_Label),
+        SELF(ResName_MSSCTSEL_14_Label),
+        SELF(ResName_MSSCTSEL_15_VwEditSwBox),
+        SELF(ResName_MSSCTSEL_16_Label),
         SELF(str_253),
     },
 
     .str_253 = ALIGNED_STRING(""),
 
-    .str_254 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_16_Label = ALIGNED_STRING(""),
 
-    .str_255 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_15_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_256 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_14_Label = ALIGNED_STRING(""),
 
-    .str_257 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_13_Label = ALIGNED_STRING(""),
 
-    .str_258 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_12_Box = ALIGNED_STRING(""),
 
-    .str_259 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_11_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_260 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_10_AcMstSong2GridBox = ALIGNED_STRING(""),
 
     .SONG2_str = "SONG2",
 
-    .str_262 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_8_Label = ALIGNED_STRING(""),
 
-    .str_263 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_7_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_264 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_6_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_265 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_5_AcMstSong1GridBox = ALIGNED_STRING(""),
 
     .SONG1_str = "SONG1",
 
-    .str_267 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_3_IvPageControl = ALIGNED_STRING(""),
 
-    .str_268 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_2_IvPageControl = ALIGNED_STRING(""),
 
-    .str_269 = ALIGNED_STRING(""),
+    .ResName_MSSCTSEL_1_IvMstStyleWindowPgCtl = ALIGNED_STRING(""),
 
     .MSSCTSEL_str = ALIGNED_STRING("MSSCTSEL"),
 
     .ptrs_13 = {
         SELF(MSSONGLIST_str),
-        SELF(str_278),
-        SELF(str_277),
-        SELF(str_276),
-        SELF(str_275),
-        SELF(str_274),
-        SELF(str_273),
-        SELF(str_272),
+        SELF(ResName_MSSONGLIST_1_AcMstSugAlpGridBox),
+        SELF(ResName_MSSONGLIST_2_Label),
+        SELF(ResName_MSSONGLIST_3_AcIndexWideES),
+        SELF(ResName_MSSONGLIST_4_Box),
+        SELF(ResName_MSSONGLIST_5_Label),
+        SELF(ResName_MSSONGLIST_6_VwEditSwBox),
+        SELF(ResName_MSSONGLIST_7_Label),
         SELF(str_271),
     },
 
     .str_271 = ALIGNED_STRING(""),
 
-    .str_272 = ALIGNED_STRING(""),
+    .ResName_MSSONGLIST_7_Label = ALIGNED_STRING(""),
 
-    .str_273 = ALIGNED_STRING(""),
+    .ResName_MSSONGLIST_6_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_274 = ALIGNED_STRING(""),
+    .ResName_MSSONGLIST_5_Label = ALIGNED_STRING(""),
 
-    .str_275 = ALIGNED_STRING(""),
+    .ResName_MSSONGLIST_4_Box = ALIGNED_STRING(""),
 
-    .str_276 = ALIGNED_STRING(""),
+    .ResName_MSSONGLIST_3_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_277 = ALIGNED_STRING(""),
+    .ResName_MSSONGLIST_2_Label = ALIGNED_STRING(""),
 
-    .str_278 = ALIGNED_STRING(""),
+    .ResName_MSSONGLIST_1_AcMstSugAlpGridBox = ALIGNED_STRING(""),
 
     .MSSONGLIST_str = ALIGNED_STRING("MSSONGLIST"),
 
     .ptrs_14 = {
         SELF(MSSTLSEL_str),
-        SELF(str_286),
-        SELF(str_285),
-        SELF(str_284),
-        SELF(str_283),
-        SELF(str_282),
-        SELF(str_281),
+        SELF(ResName_MSSTLSEL_1_AcMstStyleAlpGridBox),
+        SELF(ResName_MSSTLSEL_2_Box),
+        SELF(ResName_MSSTLSEL_3_Label),
+        SELF(ResName_MSSTLSEL_4_AcIndexWideES),
+        SELF(ResName_MSSTLSEL_5_VwEditSwBox),
+        SELF(ResName_MSSTLSEL_6_Label),
         SELF(str_280),
     },
 
     .str_280 = ALIGNED_STRING(""),
 
-    .str_281 = ALIGNED_STRING(""),
+    .ResName_MSSTLSEL_6_Label = ALIGNED_STRING(""),
 
-    .str_282 = ALIGNED_STRING(""),
+    .ResName_MSSTLSEL_5_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_283 = ALIGNED_STRING(""),
+    .ResName_MSSTLSEL_4_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_284 = ALIGNED_STRING(""),
+    .ResName_MSSTLSEL_3_Label = ALIGNED_STRING(""),
 
-    .str_285 = ALIGNED_STRING(""),
+    .ResName_MSSTLSEL_2_Box = ALIGNED_STRING(""),
 
-    .str_286 = ALIGNED_STRING(""),
+    .ResName_MSSTLSEL_1_AcMstStyleAlpGridBox = ALIGNED_STRING(""),
 
     .MSSTLSEL_str = ALIGNED_STRING("MSSTLSEL"),
 
     .ptrs_15 = {
         SELF(PMBANK_str),
-        SELF(str_293),
-        SELF(str_292),
-        SELF(str_291),
-        SELF(str_290),
-        SELF(str_289),
+        SELF(ResName_PMBANK_1_Icon),
+        SELF(ResName_PMBANK_2_StringBox),
+        SELF(ResName_PMBANK_3_PsPageBox),
+        SELF(ResName_PMBANK_4_Label),
+        SELF(ResName_PMBANK_5_IvIntEasySet),
         SELF(str_288),
     },
 
     .str_288 = ALIGNED_STRING(""),
 
-    .str_289 = ALIGNED_STRING(""),
+    .ResName_PMBANK_5_IvIntEasySet = ALIGNED_STRING(""),
 
-    .str_290 = ALIGNED_STRING(""),
+    .ResName_PMBANK_4_Label = ALIGNED_STRING(""),
 
-    .str_291 = ALIGNED_STRING(""),
+    .ResName_PMBANK_3_PsPageBox = ALIGNED_STRING(""),
 
-    .str_292 = ALIGNED_STRING(""),
+    .ResName_PMBANK_2_StringBox = ALIGNED_STRING(""),
 
-    .str_293 = ALIGNED_STRING(""),
+    .ResName_PMBANK_1_Icon = ALIGNED_STRING(""),
 
     .PMBANK_str = ALIGNED_STRING("PMBANK"),
 
     .ptrs_16 = {
         SELF(PMVIEW_str),
-        SELF(str_307),
-        SELF(str_306),
-        SELF(str_305),
-        SELF(str_304),
-        SELF(str_303),
-        SELF(str_302),
-        SELF(str_301),
-        SELF(str_300),
-        SELF(str_299),
-        SELF(str_298),
-        SELF(str_297),
-        SELF(str_296),
+        SELF(ResName_PMVIEW_1_AcPmBkEditBox),
+        SELF(ResName_PMVIEW_2_AcIndexWideES),
+        SELF(ResName_PMVIEW_3_PsPageBox),
+        SELF(ResName_PMVIEW_4_Label),
+        SELF(ResName_PMVIEW_5_Label),
+        SELF(ResName_PMVIEW_6_Label),
+        SELF(ResName_PMVIEW_7_Label),
+        SELF(ResName_PMVIEW_8_Label),
+        SELF(ResName_PMVIEW_9_Label),
+        SELF(ResName_PMVIEW_10_EditSw),
+        SELF(ResName_PMVIEW_11_EditSw),
+        SELF(ResName_PMVIEW_12_IvIntEasySet),
         SELF(str_295),
     },
 
     .str_295 = ALIGNED_STRING(""),
 
-    .str_296 = ALIGNED_STRING(""),
+    .ResName_PMVIEW_12_IvIntEasySet = ALIGNED_STRING(""),
 
-    .str_297 = ALIGNED_STRING(""),
+    .ResName_PMVIEW_11_EditSw = ALIGNED_STRING(""),
 
-    .str_298 = ALIGNED_STRING(""),
+    .ResName_PMVIEW_10_EditSw = ALIGNED_STRING(""),
 
-    .str_299 = ALIGNED_STRING(""),
+    .ResName_PMVIEW_9_Label = ALIGNED_STRING(""),
 
-    .str_300 = ALIGNED_STRING(""),
+    .ResName_PMVIEW_8_Label = ALIGNED_STRING(""),
 
-    .str_301 = ALIGNED_STRING(""),
+    .ResName_PMVIEW_7_Label = ALIGNED_STRING(""),
 
-    .str_302 = ALIGNED_STRING(""),
+    .ResName_PMVIEW_6_Label = ALIGNED_STRING(""),
 
-    .str_303 = ALIGNED_STRING(""),
+    .ResName_PMVIEW_5_Label = ALIGNED_STRING(""),
 
-    .str_304 = ALIGNED_STRING(""),
+    .ResName_PMVIEW_4_Label = ALIGNED_STRING(""),
 
-    .str_305 = ALIGNED_STRING(""),
+    .ResName_PMVIEW_3_PsPageBox = ALIGNED_STRING(""),
 
-    .str_306 = ALIGNED_STRING(""),
+    .ResName_PMVIEW_2_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_307 = ALIGNED_STRING(""),
+    .ResName_PMVIEW_1_AcPmBkEditBox = ALIGNED_STRING(""),
 
     .PMVIEW_str = ALIGNED_STRING("PMVIEW"),
 
     .ptrs_17 = {
         SELF(PMNAME_str),
-        SELF(str_315),
-        SELF(str_314),
-        SELF(str_313),
-        SELF(str_312),
-        SELF(str_311),
-        SELF(str_310),
+        SELF(ResName_PMNAME_1_IvNaming),
+        SELF(ResName_PMNAME_2_AcFuncEditSw),
+        SELF(ResName_PMNAME_3_Label),
+        SELF(ResName_PMNAME_4_PmBkNoBox),
+        SELF(ResName_PMNAME_5_EditSw),
+        SELF(ResName_PMNAME_6_IvExit),
         SELF(str_309),
     },
 
     .str_309 = ALIGNED_STRING(""),
 
-    .str_310 = ALIGNED_STRING(""),
+    .ResName_PMNAME_6_IvExit = ALIGNED_STRING(""),
 
-    .str_311 = ALIGNED_STRING(""),
+    .ResName_PMNAME_5_EditSw = ALIGNED_STRING(""),
 
-    .str_312 = ALIGNED_STRING(""),
+    .ResName_PMNAME_4_PmBkNoBox = ALIGNED_STRING(""),
 
-    .str_313 = ALIGNED_STRING(""),
+    .ResName_PMNAME_3_Label = ALIGNED_STRING(""),
 
-    .str_314 = ALIGNED_STRING(""),
+    .ResName_PMNAME_2_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_315 = ALIGNED_STRING(""),
+    .ResName_PMNAME_1_IvNaming = ALIGNED_STRING(""),
 
     .PMNAME_str = ALIGNED_STRING("PMNAME"),
 
     .ptrs_18 = {
         SELF(PMBKNAME_str),
-        SELF(str_323),
-        SELF(str_322),
-        SELF(str_321),
-        SELF(str_320),
-        SELF(str_319),
-        SELF(str_318),
+        SELF(ResName_PMBKNAME_1_IvNaming),
+        SELF(ResName_PMBKNAME_2_AcFuncEditSw),
+        SELF(ResName_PMBKNAME_3_Label),
+        SELF(ResName_PMBKNAME_4_BkNoBox),
+        SELF(ResName_PMBKNAME_5_EditSw),
+        SELF(ResName_PMBKNAME_6_IvExit),
         SELF(str_317),
     },
 
     .str_317 = ALIGNED_STRING(""),
 
-    .str_318 = ALIGNED_STRING(""),
+    .ResName_PMBKNAME_6_IvExit = ALIGNED_STRING(""),
 
-    .str_319 = ALIGNED_STRING(""),
+    .ResName_PMBKNAME_5_EditSw = ALIGNED_STRING(""),
 
-    .str_320 = ALIGNED_STRING(""),
+    .ResName_PMBKNAME_4_BkNoBox = ALIGNED_STRING(""),
 
-    .str_321 = ALIGNED_STRING(""),
+    .ResName_PMBKNAME_3_Label = ALIGNED_STRING(""),
 
-    .str_322 = ALIGNED_STRING(""),
+    .ResName_PMBKNAME_2_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_323 = ALIGNED_STRING(""),
+    .ResName_PMBKNAME_1_IvNaming = ALIGNED_STRING(""),
 
     .PMBKNAME_str = ALIGNED_STRING("PMBKNAME"),
 
     .ptrs_19 = {
         SELF(SVARI_str),
-        SELF(str_326),
+        SELF(ResName_SVARI_1_IvIntVari),
         SELF(str_325),
     },
 
     .str_325 = ALIGNED_STRING(""),
 
-    .str_326 = ALIGNED_STRING(""),
+    .ResName_SVARI_1_IvIntVari = ALIGNED_STRING(""),
 
     .SVARI_str = "SVARI",
 
     .ptrs_20 = {
         SELF(RVARI_str),
-        SELF(str_330),
-        SELF(str_329),
+        SELF(ResName_RVARI_1_AcTempoBox),
+        SELF(ResName_RVARI_2_IvIntVari),
         SELF(str_328),
     },
 
     .str_328 = ALIGNED_STRING(""),
 
-    .str_329 = ALIGNED_STRING(""),
+    .ResName_RVARI_2_IvIntVari = ALIGNED_STRING(""),
 
-    .str_330 = ALIGNED_STRING(""),
+    .ResName_RVARI_1_AcTempoBox = ALIGNED_STRING(""),
 
     .RVARI_str = "RVARI",
 
     .ptrs_21 = {
-        SELF(str_346),
+        SELF(ResName_ToshiView0F4_0_TtlScreen),
         SELF(TEST1RAM_str),
-        SELF(str_344),
-        SELF(str_343),
-        SELF(str_342),
-        SELF(str_341),
-        SELF(str_340),
+        SELF(ResName_ToshiView0F4_2_Label),
+        SELF(ResName_ToshiView0F4_3_Label),
+        SELF(ResName_ToshiView0F4_4_Label),
+        SELF(ResName_ToshiView0F4_5_Label),
+        SELF(ResName_ToshiView0F4_6_Label),
         SELF(TEST1CP_str),
-        SELF(str_338),
-        SELF(str_337),
-        SELF(str_336),
-        SELF(str_335),
-        SELF(str_334),
-        SELF(str_333),
+        SELF(ResName_ErrorDialog_CautionHeader),
+        SELF(ResName_ErrorDialog_CPUTransmissionError),
+        SELF(ResName_ErrorDialog_RecoveryLine1),
+        SELF(ResName_ErrorDialog_RecoveryLine2),
+        SELF(ResName_ErrorDialog_RecoveryLine3),
+        SELF(ResName_NakaInst_ExtDevice_Screens),
         SELF(str_332),
     },
 
     .str_332 = ALIGNED_STRING(""),
 
-    .str_333 = ALIGNED_STRING(""),
+    .ResName_NakaInst_ExtDevice_Screens = ALIGNED_STRING(""),
 
-    .str_334 = ALIGNED_STRING(""),
+    .ResName_ErrorDialog_RecoveryLine3 = ALIGNED_STRING(""),
 
-    .str_335 = ALIGNED_STRING(""),
+    .ResName_ErrorDialog_RecoveryLine2 = ALIGNED_STRING(""),
 
-    .str_336 = ALIGNED_STRING(""),
+    .ResName_ErrorDialog_RecoveryLine1 = ALIGNED_STRING(""),
 
-    .str_337 = ALIGNED_STRING(""),
+    .ResName_ErrorDialog_CPUTransmissionError = ALIGNED_STRING(""),
 
-    .str_338 = ALIGNED_STRING(""),
+    .ResName_ErrorDialog_CautionHeader = ALIGNED_STRING(""),
 
     .TEST1CP_str = "TEST1CP",
 
-    .str_340 = ALIGNED_STRING(""),
+    .ResName_ToshiView0F4_6_Label = ALIGNED_STRING(""),
 
-    .str_341 = ALIGNED_STRING(""),
+    .ResName_ToshiView0F4_5_Label = ALIGNED_STRING(""),
 
-    .str_342 = ALIGNED_STRING(""),
+    .ResName_ToshiView0F4_4_Label = ALIGNED_STRING(""),
 
-    .str_343 = ALIGNED_STRING(""),
+    .ResName_ToshiView0F4_3_Label = ALIGNED_STRING(""),
 
-    .str_344 = ALIGNED_STRING(""),
+    .ResName_ToshiView0F4_2_Label = ALIGNED_STRING(""),
 
     .TEST1RAM_str = ALIGNED_STRING("TEST1RAM"),
 
-    .str_346 = ALIGNED_STRING(""),
+    .ResName_ToshiView0F4_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_22 = {
         SELF(TEST2_str),
-        SELF(str_369),
-        SELF(str_368),
-        SELF(str_367),
-        SELF(str_366),
-        SELF(str_365),
-        SELF(str_364),
-        SELF(str_363),
-        SELF(str_362),
-        SELF(str_361),
-        SELF(str_360),
+        SELF(ResName_TEST2_1_TextBox),
+        SELF(ResName_TEST2_2_Label),
+        SELF(ResName_TEST2_3_Label),
+        SELF(ResName_TEST2_4_Label),
+        SELF(ResName_TEST2_5_Label),
+        SELF(ResName_TEST2_6_Label),
+        SELF(ResName_TEST2_7_IvPageControl),
+        SELF(ResName_TEST2_8_IvPageControl),
+        SELF(ResName_TEST2_9_IvPageControl),
+        SELF(ResName_TEST2_10_IvPageControl),
         SELF(TEST2OKOK_str),
-        SELF(str_358),
-        SELF(str_357),
+        SELF(ResName_TEST2_12_Label),
+        SELF(ResName_TEST2_13_Label),
         SELF(TEST2NGNG_str),
-        SELF(str_355),
-        SELF(str_354),
+        SELF(ResName_TEST2_15_Label),
+        SELF(ResName_TEST2_16_Label),
         SELF(TEST2NGOK_str),
-        SELF(str_352),
-        SELF(str_351),
+        SELF(ResName_TEST2_18_Label),
+        SELF(ResName_TEST2_19_Label),
         SELF(TEST2OKNG_str),
-        SELF(str_349),
-        SELF(str_348),
+        SELF(ResName_TEST2_21_Label),
+        SELF(ResName_TEST2_22_Label),
         SELF(str_347),
     },
 
     .str_347 = ALIGNED_STRING(""),
 
-    .str_348 = ALIGNED_STRING(""),
+    .ResName_TEST2_22_Label = ALIGNED_STRING(""),
 
-    .str_349 = ALIGNED_STRING(""),
+    .ResName_TEST2_21_Label = ALIGNED_STRING(""),
 
     .TEST2OKNG_str = "TEST2OKNG",
 
-    .str_351 = ALIGNED_STRING(""),
+    .ResName_TEST2_19_Label = ALIGNED_STRING(""),
 
-    .str_352 = ALIGNED_STRING(""),
+    .ResName_TEST2_18_Label = ALIGNED_STRING(""),
 
     .TEST2NGOK_str = "TEST2NGOK",
 
-    .str_354 = ALIGNED_STRING(""),
+    .ResName_TEST2_16_Label = ALIGNED_STRING(""),
 
-    .str_355 = ALIGNED_STRING(""),
+    .ResName_TEST2_15_Label = ALIGNED_STRING(""),
 
     .TEST2NGNG_str = "TEST2NGNG",
 
-    .str_357 = ALIGNED_STRING(""),
+    .ResName_TEST2_13_Label = ALIGNED_STRING(""),
 
-    .str_358 = ALIGNED_STRING(""),
+    .ResName_TEST2_12_Label = ALIGNED_STRING(""),
 
     .TEST2OKOK_str = "TEST2OKOK",
 
-    .str_360 = ALIGNED_STRING(""),
+    .ResName_TEST2_10_IvPageControl = ALIGNED_STRING(""),
 
-    .str_361 = ALIGNED_STRING(""),
+    .ResName_TEST2_9_IvPageControl = ALIGNED_STRING(""),
 
-    .str_362 = ALIGNED_STRING(""),
+    .ResName_TEST2_8_IvPageControl = ALIGNED_STRING(""),
 
-    .str_363 = ALIGNED_STRING(""),
+    .ResName_TEST2_7_IvPageControl = ALIGNED_STRING(""),
 
-    .str_364 = ALIGNED_STRING(""),
+    .ResName_TEST2_6_Label = ALIGNED_STRING(""),
 
-    .str_365 = ALIGNED_STRING(""),
+    .ResName_TEST2_5_Label = ALIGNED_STRING(""),
 
-    .str_366 = ALIGNED_STRING(""),
+    .ResName_TEST2_4_Label = ALIGNED_STRING(""),
 
-    .str_367 = ALIGNED_STRING(""),
+    .ResName_TEST2_3_Label = ALIGNED_STRING(""),
 
-    .str_368 = ALIGNED_STRING(""),
+    .ResName_TEST2_2_Label = ALIGNED_STRING(""),
 
-    .str_369 = ALIGNED_STRING(""),
+    .ResName_TEST2_1_TextBox = ALIGNED_STRING(""),
 
     .TEST2_str = "TEST2",
 
@@ -4667,256 +4667,256 @@ const naka_extension_device_t naka_extension_device_data
 
     .ptrs_23 = {
         SELF(TEST4_str),
-        SELF(str_375),
-        SELF(str_374),
+        SELF(ResName_TEST4_1_TextBox),
+        SELF(ResName_TEST4_2_Label),
         SELF(str_373),
     },
 
     .str_373 = ALIGNED_STRING(""),
 
-    .str_374 = ALIGNED_STRING(""),
+    .ResName_TEST4_2_Label = ALIGNED_STRING(""),
 
-    .str_375 = ALIGNED_STRING(""),
+    .ResName_TEST4_1_TextBox = ALIGNED_STRING(""),
 
     .TEST4_str = "TEST4",
 
     .ptrs_24 = {
         SELF(TEST5_str),
-        SELF(str_443),
-        SELF(str_442),
-        SELF(str_441),
-        SELF(str_440),
-        SELF(str_439),
+        SELF(ResName_TEST5_1_IvPageControl),
+        SELF(ResName_TEST5_2_IvPageControl),
+        SELF(ResName_TEST5_3_IvPageControl),
+        SELF(ResName_TEST5_4_IvPageControl),
+        SELF(ResName_TEST5_5_IvPageControl),
         SELF(TEST51_str),
-        SELF(str_437),
+        SELF(ResName_TEST5_7_Label),
         SELF(TEST52_str),
-        SELF(str_435),
+        SELF(ResName_TEST5_9_Label),
         SELF(TEST53_str),
-        SELF(str_433),
+        SELF(ResName_TEST5_11_Label),
         SELF(TEST54_str),
-        SELF(str_431),
+        SELF(ResName_TEST5_13_Label),
         SELF(TEST55_str),
-        SELF(str_429),
+        SELF(ResName_TEST5_15_Label),
         SELF(TEST56_str),
-        SELF(str_427),
-        SELF(str_426),
-        SELF(str_425),
-        SELF(str_424),
-        SELF(str_423),
-        SELF(str_422),
-        SELF(str_421),
-        SELF(str_420),
-        SELF(str_419),
-        SELF(str_418),
-        SELF(str_417),
-        SELF(str_416),
-        SELF(str_415),
-        SELF(str_414),
-        SELF(str_413),
-        SELF(str_412),
-        SELF(str_411),
-        SELF(str_410),
-        SELF(str_409),
-        SELF(str_408),
-        SELF(str_407),
-        SELF(str_406),
-        SELF(str_405),
-        SELF(str_404),
-        SELF(str_403),
-        SELF(str_402),
-        SELF(str_401),
-        SELF(str_400),
-        SELF(str_399),
-        SELF(str_398),
-        SELF(str_397),
-        SELF(str_396),
-        SELF(str_395),
-        SELF(str_394),
-        SELF(str_393),
-        SELF(str_392),
-        SELF(str_391),
-        SELF(str_390),
-        SELF(str_389),
-        SELF(str_388),
-        SELF(str_387),
-        SELF(str_386),
-        SELF(str_385),
-        SELF(str_384),
-        SELF(str_383),
-        SELF(str_382),
-        SELF(str_381),
-        SELF(str_380),
-        SELF(str_379),
-        SELF(str_378),
+        SELF(ResName_TEST5_17_Frame),
+        SELF(ResName_TEST5_18_Label),
+        SELF(ResName_TEST5_19_Label),
+        SELF(ResName_TEST5_20_Label),
+        SELF(ResName_TEST5_21_Label),
+        SELF(ResName_TEST5_22_Label),
+        SELF(ResName_TEST5_23_Label),
+        SELF(ResName_TEST5_24_Label),
+        SELF(ResName_TEST5_25_Label),
+        SELF(ResName_TEST5_26_Label),
+        SELF(ResName_TEST5_27_Frame),
+        SELF(ResName_TEST5_28_Label),
+        SELF(ResName_TEST5_29_Label),
+        SELF(ResName_TEST5_30_Label),
+        SELF(ResName_TEST5_31_Label),
+        SELF(ResName_TEST5_32_Label),
+        SELF(ResName_TEST5_33_Label),
+        SELF(ResName_TEST5_34_Label),
+        SELF(ResName_TEST5_35_Label),
+        SELF(ResName_TEST5_36_Label),
+        SELF(ResName_TEST5_37_Frame),
+        SELF(ResName_TEST5_38_Label),
+        SELF(ResName_TEST5_39_Label),
+        SELF(ResName_TEST5_40_Label),
+        SELF(ResName_TEST5_41_Label),
+        SELF(ResName_TEST5_42_Label),
+        SELF(ResName_TEST5_43_Label),
+        SELF(ResName_TEST5_44_Label),
+        SELF(ResName_TEST5_45_Label),
+        SELF(ResName_TEST5_46_Label),
+        SELF(ResName_TEST5_47_Frame),
+        SELF(ResName_TEST5_48_Label),
+        SELF(ResName_TEST5_49_Label),
+        SELF(ResName_TEST5_50_Label),
+        SELF(ResName_TEST5_51_Label),
+        SELF(ResName_TEST5_52_Label),
+        SELF(ResName_TEST5_53_Label),
+        SELF(ResName_TEST5_54_Label),
+        SELF(ResName_TEST5_55_Label),
+        SELF(ResName_TEST5_56_Label),
+        SELF(ResName_TEST5_57_Frame),
+        SELF(ResName_TEST5_58_Label),
+        SELF(ResName_TEST5_59_Label),
+        SELF(ResName_TEST5_60_Label),
+        SELF(ResName_TEST5_61_Label),
+        SELF(ResName_TEST5_62_Label),
+        SELF(ResName_TEST5_63_Label),
+        SELF(ResName_TEST5_64_Label),
+        SELF(ResName_TEST5_65_Label),
+        SELF(ResName_TEST5_66_Label),
         SELF(str_377),
     },
 
     .str_377 = ALIGNED_STRING(""),
 
-    .str_378 = ALIGNED_STRING(""),
+    .ResName_TEST5_66_Label = ALIGNED_STRING(""),
 
-    .str_379 = ALIGNED_STRING(""),
+    .ResName_TEST5_65_Label = ALIGNED_STRING(""),
 
-    .str_380 = ALIGNED_STRING(""),
+    .ResName_TEST5_64_Label = ALIGNED_STRING(""),
 
-    .str_381 = ALIGNED_STRING(""),
+    .ResName_TEST5_63_Label = ALIGNED_STRING(""),
 
-    .str_382 = ALIGNED_STRING(""),
+    .ResName_TEST5_62_Label = ALIGNED_STRING(""),
 
-    .str_383 = ALIGNED_STRING(""),
+    .ResName_TEST5_61_Label = ALIGNED_STRING(""),
 
-    .str_384 = ALIGNED_STRING(""),
+    .ResName_TEST5_60_Label = ALIGNED_STRING(""),
 
-    .str_385 = ALIGNED_STRING(""),
+    .ResName_TEST5_59_Label = ALIGNED_STRING(""),
 
-    .str_386 = ALIGNED_STRING(""),
+    .ResName_TEST5_58_Label = ALIGNED_STRING(""),
 
-    .str_387 = ALIGNED_STRING(""),
+    .ResName_TEST5_57_Frame = ALIGNED_STRING(""),
 
-    .str_388 = ALIGNED_STRING(""),
+    .ResName_TEST5_56_Label = ALIGNED_STRING(""),
 
-    .str_389 = ALIGNED_STRING(""),
+    .ResName_TEST5_55_Label = ALIGNED_STRING(""),
 
-    .str_390 = ALIGNED_STRING(""),
+    .ResName_TEST5_54_Label = ALIGNED_STRING(""),
 
-    .str_391 = ALIGNED_STRING(""),
+    .ResName_TEST5_53_Label = ALIGNED_STRING(""),
 
-    .str_392 = ALIGNED_STRING(""),
+    .ResName_TEST5_52_Label = ALIGNED_STRING(""),
 
-    .str_393 = ALIGNED_STRING(""),
+    .ResName_TEST5_51_Label = ALIGNED_STRING(""),
 
-    .str_394 = ALIGNED_STRING(""),
+    .ResName_TEST5_50_Label = ALIGNED_STRING(""),
 
-    .str_395 = ALIGNED_STRING(""),
+    .ResName_TEST5_49_Label = ALIGNED_STRING(""),
 
-    .str_396 = ALIGNED_STRING(""),
+    .ResName_TEST5_48_Label = ALIGNED_STRING(""),
 
-    .str_397 = ALIGNED_STRING(""),
+    .ResName_TEST5_47_Frame = ALIGNED_STRING(""),
 
-    .str_398 = ALIGNED_STRING(""),
+    .ResName_TEST5_46_Label = ALIGNED_STRING(""),
 
-    .str_399 = ALIGNED_STRING(""),
+    .ResName_TEST5_45_Label = ALIGNED_STRING(""),
 
-    .str_400 = ALIGNED_STRING(""),
+    .ResName_TEST5_44_Label = ALIGNED_STRING(""),
 
-    .str_401 = ALIGNED_STRING(""),
+    .ResName_TEST5_43_Label = ALIGNED_STRING(""),
 
-    .str_402 = ALIGNED_STRING(""),
+    .ResName_TEST5_42_Label = ALIGNED_STRING(""),
 
-    .str_403 = ALIGNED_STRING(""),
+    .ResName_TEST5_41_Label = ALIGNED_STRING(""),
 
-    .str_404 = ALIGNED_STRING(""),
+    .ResName_TEST5_40_Label = ALIGNED_STRING(""),
 
-    .str_405 = ALIGNED_STRING(""),
+    .ResName_TEST5_39_Label = ALIGNED_STRING(""),
 
-    .str_406 = ALIGNED_STRING(""),
+    .ResName_TEST5_38_Label = ALIGNED_STRING(""),
 
-    .str_407 = ALIGNED_STRING(""),
+    .ResName_TEST5_37_Frame = ALIGNED_STRING(""),
 
-    .str_408 = ALIGNED_STRING(""),
+    .ResName_TEST5_36_Label = ALIGNED_STRING(""),
 
-    .str_409 = ALIGNED_STRING(""),
+    .ResName_TEST5_35_Label = ALIGNED_STRING(""),
 
-    .str_410 = ALIGNED_STRING(""),
+    .ResName_TEST5_34_Label = ALIGNED_STRING(""),
 
-    .str_411 = ALIGNED_STRING(""),
+    .ResName_TEST5_33_Label = ALIGNED_STRING(""),
 
-    .str_412 = ALIGNED_STRING(""),
+    .ResName_TEST5_32_Label = ALIGNED_STRING(""),
 
-    .str_413 = ALIGNED_STRING(""),
+    .ResName_TEST5_31_Label = ALIGNED_STRING(""),
 
-    .str_414 = ALIGNED_STRING(""),
+    .ResName_TEST5_30_Label = ALIGNED_STRING(""),
 
-    .str_415 = ALIGNED_STRING(""),
+    .ResName_TEST5_29_Label = ALIGNED_STRING(""),
 
-    .str_416 = ALIGNED_STRING(""),
+    .ResName_TEST5_28_Label = ALIGNED_STRING(""),
 
-    .str_417 = ALIGNED_STRING(""),
+    .ResName_TEST5_27_Frame = ALIGNED_STRING(""),
 
-    .str_418 = ALIGNED_STRING(""),
+    .ResName_TEST5_26_Label = ALIGNED_STRING(""),
 
-    .str_419 = ALIGNED_STRING(""),
+    .ResName_TEST5_25_Label = ALIGNED_STRING(""),
 
-    .str_420 = ALIGNED_STRING(""),
+    .ResName_TEST5_24_Label = ALIGNED_STRING(""),
 
-    .str_421 = ALIGNED_STRING(""),
+    .ResName_TEST5_23_Label = ALIGNED_STRING(""),
 
-    .str_422 = ALIGNED_STRING(""),
+    .ResName_TEST5_22_Label = ALIGNED_STRING(""),
 
-    .str_423 = ALIGNED_STRING(""),
+    .ResName_TEST5_21_Label = ALIGNED_STRING(""),
 
-    .str_424 = ALIGNED_STRING(""),
+    .ResName_TEST5_20_Label = ALIGNED_STRING(""),
 
-    .str_425 = ALIGNED_STRING(""),
+    .ResName_TEST5_19_Label = ALIGNED_STRING(""),
 
-    .str_426 = ALIGNED_STRING(""),
+    .ResName_TEST5_18_Label = ALIGNED_STRING(""),
 
-    .str_427 = ALIGNED_STRING(""),
+    .ResName_TEST5_17_Frame = ALIGNED_STRING(""),
 
     .TEST56_str = ALIGNED_STRING("TEST56"),
 
-    .str_429 = ALIGNED_STRING(""),
+    .ResName_TEST5_15_Label = ALIGNED_STRING(""),
 
     .TEST55_str = ALIGNED_STRING("TEST55"),
 
-    .str_431 = ALIGNED_STRING(""),
+    .ResName_TEST5_13_Label = ALIGNED_STRING(""),
 
     .TEST54_str = ALIGNED_STRING("TEST54"),
 
-    .str_433 = ALIGNED_STRING(""),
+    .ResName_TEST5_11_Label = ALIGNED_STRING(""),
 
     .TEST53_str = ALIGNED_STRING("TEST53"),
 
-    .str_435 = ALIGNED_STRING(""),
+    .ResName_TEST5_9_Label = ALIGNED_STRING(""),
 
     .TEST52_str = ALIGNED_STRING("TEST52"),
 
-    .str_437 = ALIGNED_STRING(""),
+    .ResName_TEST5_7_Label = ALIGNED_STRING(""),
 
     .TEST51_str = ALIGNED_STRING("TEST51"),
 
-    .str_439 = ALIGNED_STRING(""),
+    .ResName_TEST5_5_IvPageControl = ALIGNED_STRING(""),
 
-    .str_440 = ALIGNED_STRING(""),
+    .ResName_TEST5_4_IvPageControl = ALIGNED_STRING(""),
 
-    .str_441 = ALIGNED_STRING(""),
+    .ResName_TEST5_3_IvPageControl = ALIGNED_STRING(""),
 
-    .str_442 = ALIGNED_STRING(""),
+    .ResName_TEST5_2_IvPageControl = ALIGNED_STRING(""),
 
-    .str_443 = ALIGNED_STRING(""),
+    .ResName_TEST5_1_IvPageControl = ALIGNED_STRING(""),
 
     .TEST5_str = "TEST5",
 
     .ptrs_25 = {
         SELF(TEST6_str),
-        SELF(str_453),
-        SELF(str_452),
-        SELF(str_451),
-        SELF(str_450),
+        SELF(ResName_TEST6_1_Label),
+        SELF(ResName_TEST6_2_Label),
+        SELF(ResName_TEST6_3_IvPageControl),
+        SELF(ResName_TEST6_4_IvPageControl),
         SELF(TEST6OK_str),
-        SELF(str_448),
+        SELF(ResName_TEST6_6_Label),
         SELF(TEST6NG_str),
-        SELF(str_446),
+        SELF(ResName_TEST6_8_Label),
         SELF(str_445),
     },
 
     .str_445 = ALIGNED_STRING(""),
 
-    .str_446 = ALIGNED_STRING(""),
+    .ResName_TEST6_8_Label = ALIGNED_STRING(""),
 
     .TEST6NG_str = "TEST6NG",
 
-    .str_448 = ALIGNED_STRING(""),
+    .ResName_TEST6_6_Label = ALIGNED_STRING(""),
 
     .TEST6OK_str = "TEST6OK",
 
-    .str_450 = ALIGNED_STRING(""),
+    .ResName_TEST6_4_IvPageControl = ALIGNED_STRING(""),
 
-    .str_451 = ALIGNED_STRING(""),
+    .ResName_TEST6_3_IvPageControl = ALIGNED_STRING(""),
 
-    .str_452 = ALIGNED_STRING(""),
+    .ResName_TEST6_2_Label = ALIGNED_STRING(""),
 
-    .str_453 = ALIGNED_STRING(""),
+    .ResName_TEST6_1_Label = ALIGNED_STRING(""),
 
     .TEST6_str = "TEST6",
 

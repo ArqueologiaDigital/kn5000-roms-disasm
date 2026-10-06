@@ -2078,76 +2078,76 @@ typedef struct __attribute__((packed)) {
     uint16_t field_5640;
     uint32_t ptrs_4[448];  /* 448 pointers */
     char str_947[2];
-    char str_948[2];
-    char str_949[2];
-    char str_950[2];
+    char ResName_DiskMenu_73_AcLanguageText[2];
+    char ResName_DiskMenu_72_AcFuncEditSw[2];
+    char ResName_DiskMenu_71_AcFuncEditSw[2];
     char w219_code[2];
     char CheckPasswordWin_name[18];
-    char str_951[2];
-    char str_952[2];
-    char str_953[2];
+    char ResName_DiskMenu_68_AcLanguageText[2];
+    char ResName_DiskMenu_67_AcFuncEditSw[2];
+    char ResName_DiskMenu_66_AcFuncEditSw[2];
     char w220_code[2];
     char PasswordWin_name[12];
-    char str_954[2];
-    char str_955[2];
-    char str_956[2];
-    char str_957[2];
-    char str_958[2];
-    char str_959[2];
-    char str_960[2];
+    char ResName_DiskMenu_63_AcFuncEditSw[2];
+    char ResName_DiskMenu_62_AcFuncEditSw[2];
+    char ResName_DiskMenu_61_AcFuncEditSw[2];
+    char ResName_DiskMenu_60_AcLanguageText[2];
+    char ResName_DiskMenu_59_AcLanguageText[2];
+    char ResName_DiskMenu_58_Line[2];
+    char ResName_DiskMenu_57_AcLanguageText[2];
     char w221_code[2];
     char DiskSaveSureWin_name[16];
-    char str_961[2];
-    char str_962[2];
-    char str_963[2];
-    char str_964[2];
-    char str_965[2];
-    char str_966[2];
-    char str_967[2];
-    char str_968[2];
-    char str_969[2];
-    char str_970[2];
+    char ResName_DiskMenu_54_PsFileNameBox[2];
+    char ResName_DiskMenu_53_Label[2];
+    char ResName_DiskMenu_52_AcIndexEditSw[2];
+    char ResName_DiskMenu_51_AcParaStrBox[2];
+    char ResName_DiskMenu_50_AcParaStrBox[2];
+    char ResName_DiskMenu_49_Label[2];
+    char ResName_DiskMenu_48_Label[2];
+    char ResName_DiskMenu_47_AcIndexEditSw[2];
+    char ResName_DiskMenu_46_AcIndexWideES[2];
+    char ResName_DiskMenu_45_Label[2];
     char w222_code[2];
     char WallpaperLoad_name[14];
-    char str_971[2];
+    char ResName_DiskMenu_42_IvNaming[2];
     char w223_code[2];
     char DiskSaveNameSMF_name[16];
     char w224_code[2];
     char DiskWaitWin_name[12];
-    char str_972[2];
-    char str_973[2];
-    char str_974[2];
-    char str_975[2];
-    char str_976[2];
-    char str_977[2];
-    char str_978[2];
-    char str_979[2];
-    char str_980[2];
+    char ResName_DiskMenu_37_IvExitMode[2];
+    char ResName_DiskMenu_36_Label[2];
+    char ResName_DiskMenu_35_AcIndexEditSw[2];
+    char ResName_DiskMenu_34_AcParaStrBox[2];
+    char ResName_DiskMenu_33_AcParaStrBox[2];
+    char ResName_DiskMenu_32_Label[2];
+    char ResName_DiskMenu_31_PsFileNameBox[2];
+    char ResName_DiskMenu_30_AcIndexEditSw[2];
+    char ResName_DiskMenu_29_AcIndexWideES[2];
     char w225_code[2];
     char ComposerLoad_name[14];
-    char str_981[2];
+    char ResName_DiskMenu_26_IvNaming[2];
     char w226_code[2];
     char DiskSaveName_name[14];
-    char str_982[2];
-    char str_983[2];
-    char str_984[2];
-    char str_985[2];
-    char str_986[2];
-    char str_987[2];
-    char str_988[2];
-    char str_989[2];
-    char str_990[2];
-    char str_991[2];
-    char str_992[2];
-    char str_993[2];
+    char ResName_DiskMenu_23_Label[2];
+    char ResName_DiskMenu_22_Label[2];
+    char ResName_DiskMenu_21_Label[2];
+    char ResName_DiskMenu_20_IvOneShotTimer[2];
+    char ResName_DiskMenu_19_Label[2];
+    char ResName_DiskMenu_18_AcIndexEditSw[2];
+    char ResName_DiskMenu_17_AcMonoIndexToggle[2];
+    char ResName_DiskMenu_16_Line[2];
+    char ResName_DiskMenu_15_PsFileNameBox[2];
+    char ResName_DiskMenu_14_PsFileNameBox[2];
+    char ResName_DiskMenu_13_AcIndexEditSw[2];
+    char ResName_DiskMenu_12_AcIndexEditSw[2];
     char w227_code[2];
     char IntSongMedley_name[14];
-    char str_994[2];
-    char str_995[2];
-    char str_996[2];
-    char str_997[2];
-    char str_998[2];
-    char str_999[2];
+    char ResName_DiskMenu_9_AcTtlJgBox[2];
+    char ResName_DiskMenu_8_AcTtlJgBox[2];
+    char ResName_DiskMenu_7_IvExitMode[2];
+    char ResName_DiskMenu_6_AcTtlJgBox[2];
+    char ResName_DiskMenu_5_AcTtlJgBox[2];
+    char ResName_DiskMenu_4_AcTitleMenu[2];
     char w228_code[2];
     char HardDiskMenu_name[14];
     char w229_code[2];
@@ -2156,129 +2156,129 @@ typedef struct __attribute__((packed)) {
     char str_1000[2];
     char w230_code[2];
     char CmpSingleLoadSwCtl_name[20];
-    char str_1001[2];
-    char str_1002[2];
-    char str_1003[2];
-    char str_1004[2];
-    char str_1005[2];
-    char str_1006[2];
-    char str_1007[2];
-    char str_1008[2];
-    char str_1009[2];
-    char str_1010[2];
-    char str_1011[2];
-    char str_1012[2];
-    char str_1013[2];
-    char str_1014[2];
-    char str_1015[2];
-    char str_1016[2];
-    char str_1017[2];
-    char str_1018[2];
-    char str_1019[2];
+    char ResName_DiskLoad_125_PsFileNameBox[2];
+    char ResName_DiskLoad_124_PsFileNameBox[2];
+    char ResName_DiskLoad_123_PsFileNameBox[2];
+    char ResName_DiskLoad_122_PsFileNameBox[2];
+    char ResName_DiskLoad_121_AcMonoIndexToggle[2];
+    char ResName_DiskLoad_120_PsFileNameBox[2];
+    char ResName_DiskLoad_119_Label[2];
+    char ResName_DiskLoad_118_AcIndexEditSw[2];
+    char ResName_DiskLoad_117_AcIndexEditSw[2];
+    char ResName_DiskLoad_116_Label[2];
+    char ResName_DiskLoad_115_Label[2];
+    char ResName_DiskLoad_114_Arrow[2];
+    char ResName_DiskLoad_113_Label[2];
+    char ResName_DiskLoad_112_AcIndexEditSw[2];
+    char ResName_DiskLoad_111_PsFileNameBox[2];
+    char ResName_DiskLoad_110_PsFileNameBox[2];
+    char ResName_DiskLoad_109_AcIndexWideES[2];
+    char ResName_DiskLoad_108_AcIndexWideES[2];
+    char ResName_DiskLoad_107_AcIndexWideES[2];
     char w231_code[2];
     char CmpSingleLoad_name[14];
-    char str_1020[2];
-    char str_1021[2];
-    char str_1022[2];
-    char str_1023[2];
+    char ResName_DiskLoad_104_Label[2];
+    char ResName_DiskLoad_103_AcIndexEditSw[2];
+    char ResName_DiskLoad_102_AcParaStrBox[2];
+    char ResName_DiskLoad_101_AcParaStrBox[2];
     char w232_code[2];
     char DiskInfoSmfLdWin_name[18];
-    char str_1024[2];
-    char str_1025[2];
+    char ResName_DiskLoad_98_Label[2];
+    char ResName_DiskLoad_97_AcIndexEditSw[2];
     char w233_code[2];
     char SongNameSmfLdWin_name[18];
-    char str_1026[2];
-    char str_1027[2];
-    char str_1028[2];
-    char str_1029[2];
-    char str_1030[2];
-    char str_1031[2];
-    char str_1032[2];
-    char str_1033[2];
-    char str_1034[2];
-    char str_1035[2];
-    char str_1036[2];
-    char str_1037[2];
-    char str_1038[2];
-    char str_1039[2];
-    char str_1040[2];
-    char str_1041[2];
-    char str_1042[2];
-    char str_1043[2];
+    char ResName_DiskLoad_94_AcIndexEditSw[2];
+    char ResName_DiskLoad_93_IvIndexSwDelay[2];
+    char ResName_DiskLoad_92_IvExit[2];
+    char ResName_DiskLoad_91_IvMainEditSw[2];
+    char ResName_DiskLoad_90_PsFileNameBox[2];
+    char ResName_DiskLoad_89_AcIndexEditSw[2];
+    char ResName_DiskLoad_88_PsFileNameBox[2];
+    char ResName_DiskLoad_87_PsFileNameBox[2];
+    char ResName_DiskLoad_86_AcIndexEditSw[2];
+    char ResName_DiskLoad_85_Label[2];
+    char ResName_DiskLoad_84_PsWindowToggle[2];
+    char ResName_DiskLoad_83_Label[2];
+    char ResName_DiskLoad_82_PsFileNameBox[2];
+    char ResName_DiskLoad_81_Label[2];
+    char ResName_DiskLoad_80_AcIndexEditSw[2];
+    char ResName_DiskLoad_79_Label[2];
+    char ResName_DiskLoad_78_AcIndexEditSw[2];
+    char ResName_DiskLoad_77_AcIndexWideES[2];
     char w234_code[2];
     char DiskLoadSMF_name[12];
     char SingleBankToggle_str[18];
-    char str_1045[2];
-    char str_1046[2];
-    char str_1047[2];
-    char str_1048[2];
-    char str_1049[2];
-    char str_1050[2];
-    char str_1051[2];
-    char str_1052[2];
-    char str_1053[2];
-    char str_1054[2];
-    char str_1055[2];
-    char str_1056[2];
-    char str_1057[2];
-    char str_1058[2];
-    char str_1059[2];
-    char str_1060[2];
-    char str_1061[2];
-    char str_1062[2];
+    char ResName_DiskLoad_73_PsFileNameBox[2];
+    char ResName_DiskLoad_72_PsFileNameBox[2];
+    char ResName_DiskLoad_71_PsFileNameBox[2];
+    char ResName_DiskLoad_70_PsFileNameBox[2];
+    char ResName_DiskLoad_69_PsFileNameBox[2];
+    char ResName_DiskLoad_68_Label[2];
+    char ResName_DiskLoad_67_PsFileNameBox[2];
+    char ResName_DiskLoad_66_Label[2];
+    char ResName_DiskLoad_65_AcParaStrBox[2];
+    char ResName_DiskLoad_64_AcIndexWideES[2];
+    char ResName_DiskLoad_63_AcIndexWideES[2];
+    char ResName_DiskLoad_62_PsFileNameBox[2];
+    char ResName_DiskLoad_61_AcIndexEditSw[2];
+    char ResName_DiskLoad_60_AcIndexWideES[2];
+    char ResName_DiskLoad_59_AcIndexWideES[2];
+    char ResName_DiskLoad_58_Arrow[2];
+    char ResName_DiskLoad_57_Label[2];
+    char ResName_DiskLoad_56_AcIndexEditSw[2];
     char w235_code[2];
     char SingleLoadSwCtl_name[16];
     char w236_code[2];
     char DiskLoadP3_name[12];
-    char str_1063[2];
-    char str_1064[2];
-    char str_1065[2];
-    char str_1066[2];
-    char str_1067[2];
-    char str_1068[2];
-    char str_1069[2];
-    char str_1070[2];
-    char str_1071[2];
-    char str_1072[2];
-    char str_1073[2];
-    char str_1074[2];
-    char str_1075[2];
-    char str_1076[2];
-    char str_1077[2];
-    char str_1078[2];
-    char str_1079[2];
-    char str_1080[2];
-    char str_1081[2];
-    char str_1082[2];
-    char str_1083[2];
-    char str_1084[2];
-    char str_1085[2];
-    char str_1086[2];
-    char str_1087[2];
-    char str_1088[2];
-    char str_1089[2];
-    char str_1090[2];
-    char str_1091[2];
-    char str_1092[2];
+    char ResName_DiskLoad_51_Label[2];
+    char ResName_DiskLoad_50_VwScreenTitle[2];
+    char ResName_DiskLoad_49_AcIndexEditSw[2];
+    char ResName_DiskLoad_48_Line[2];
+    char ResName_DiskLoad_47_PsFileNameBox[2];
+    char ResName_DiskLoad_46_Label[2];
+    char ResName_DiskLoad_45_Label[2];
+    char ResName_DiskLoad_44_Label[2];
+    char ResName_DiskLoad_43_Label[2];
+    char ResName_DiskLoad_42_Label[2];
+    char ResName_DiskLoad_41_Label[2];
+    char ResName_DiskLoad_40_Label[2];
+    char ResName_DiskLoad_39_Label[2];
+    char ResName_DiskLoad_38_VwBox[2];
+    char ResName_DiskLoad_37_AcParaStrBox[2];
+    char ResName_DiskLoad_36_Label[2];
+    char ResName_DiskLoad_35_Label[2];
+    char ResName_DiskLoad_34_Label[2];
+    char ResName_DiskLoad_33_Label[2];
+    char ResName_DiskLoad_32_Label[2];
+    char ResName_DiskLoad_31_Label[2];
+    char ResName_DiskLoad_30_Label[2];
+    char ResName_DiskLoad_29_Label[2];
+    char ResName_DiskLoad_28_AcIndexEditSw[2];
+    char ResName_DiskLoad_27_AcIndexEditSw[2];
+    char ResName_DiskLoad_26_AcIndexEditSw[2];
+    char ResName_DiskLoad_25_AcIndexEditSw[2];
+    char ResName_DiskLoad_24_AcIndexEditSw[2];
+    char ResName_DiskLoad_23_AcIndexEditSw[2];
+    char ResName_DiskLoad_22_AcIndexEditSw[2];
     char w237_code[2];
     char DiskLoadP2_name[12];
-    char str_1093[2];
-    char str_1094[2];
-    char str_1095[2];
-    char str_1096[2];
-    char str_1097[2];
-    char str_1098[2];
-    char str_1099[2];
-    char str_1100[2];
-    char str_1101[2];
-    char str_1102[2];
-    char str_1103[2];
+    char ResName_DiskLoad_19_VwScreenTitle[2];
+    char ResName_DiskLoad_18_AcParaStrBox[2];
+    char ResName_DiskLoad_17_AcParaStrBox[2];
+    char ResName_DiskLoad_16_AcIndexWideES[2];
+    char ResName_DiskLoad_15_AcIndexEditSw[2];
+    char ResName_DiskLoad_14_AcIndexEditSw[2];
+    char ResName_DiskLoad_13_AcTitleMenu[2];
+    char ResName_DiskLoad_12_Label[2];
+    char ResName_DiskLoad_11_AcFileSfxBox[2];
+    char ResName_DiskLoad_10_Label[2];
+    char ResName_DiskLoad_9_AcIndexEditSw[2];
     char w238_code[2];
     char DiskLoadP1_name[12];
-    char str_1104[2];
-    char str_1105[2];
-    char str_1106[2];
-    char str_1107[2];
+    char ResName_DiskLoad_6_IvMainEditSw[2];
+    char ResName_DiskLoad_5_IvExit[2];
+    char ResName_DiskLoad_4_IvPageControl[2];
+    char ResName_DiskLoad_3_IvPageControl[2];
     char w239_code[2];
     char DiskLoadPage_name[14];
     char DiskLoad_str[10];
@@ -2290,81 +2290,81 @@ typedef struct __attribute__((packed)) {
     char str_1111[2];
     uint32_t ptrs_6[4];  /* 4 pointers */
     char str_1112[2];
-    char str_1113[2];
+    char ResName_DiskSaveMenu_2_AcTtlJgBox[2];
     char w240_code[2];
     char DiskSaveMenu_name[14];
     uint32_t ptr_6230;
     char str_1114[2];
     uint32_t ptrs_7[72];  /* 72 pointers */
     char str_1115[2];
-    char str_1116[2];
-    char str_1117[2];
-    char str_1118[2];
-    char str_1119[2];
-    char str_1120[2];
-    char str_1121[2];
-    char str_1122[2];
-    char str_1123[2];
+    char ResName_DiskSave_70_IvCatchEvent[2];
+    char ResName_DiskSave_69_VwScreenTitle[2];
+    char ResName_DiskSave_68_Label[2];
+    char ResName_DiskSave_67_Label[2];
+    char ResName_DiskSave_66_Label[2];
+    char ResName_DiskSave_65_AcParaStrBox[2];
+    char ResName_DiskSave_64_AcIndexEditSw[2];
+    char ResName_DiskSave_63_AcIndexWideES[2];
     char w241_code[2];
     char DiskSaveP3_name[12];
-    char str_1124[2];
-    char str_1125[2];
-    char str_1126[2];
-    char str_1127[2];
-    char str_1128[2];
-    char str_1129[2];
-    char str_1130[2];
-    char str_1131[2];
-    char str_1132[2];
-    char str_1133[2];
-    char str_1134[2];
-    char str_1135[2];
-    char str_1136[2];
-    char str_1137[2];
-    char str_1138[2];
-    char str_1139[2];
-    char str_1140[2];
-    char str_1141[2];
-    char str_1142[2];
-    char str_1143[2];
-    char str_1144[2];
-    char str_1145[2];
-    char str_1146[2];
-    char str_1147[2];
-    char str_1148[2];
-    char str_1149[2];
-    char str_1150[2];
-    char str_1151[2];
-    char str_1152[2];
-    char str_1153[2];
-    char str_1154[2];
-    char str_1155[2];
-    char str_1156[2];
-    char str_1157[2];
-    char str_1158[2];
-    char str_1159[2];
-    char str_1160[2];
-    char str_1161[2];
+    char ResName_DiskSave_60_Label[2];
+    char ResName_DiskSave_59_AcIndexEditSw[2];
+    char ResName_DiskSave_58_VwScreenTitle[2];
+    char ResName_DiskSave_57_Label[2];
+    char ResName_DiskSave_56_Label[2];
+    char ResName_DiskSave_55_Label[2];
+    char ResName_DiskSave_54_Label[2];
+    char ResName_DiskSave_53_Label[2];
+    char ResName_DiskSave_52_Label[2];
+    char ResName_DiskSave_51_AcIndexEditSw[2];
+    char ResName_DiskSave_50_AcIndexEditSw[2];
+    char ResName_DiskSave_49_AcIndexEditSw[2];
+    char ResName_DiskSave_48_AcIndexEditSw[2];
+    char ResName_DiskSave_47_AcIndexEditSw[2];
+    char ResName_DiskSave_46_AcIndexEditSw[2];
+    char ResName_DiskSave_45_Label[2];
+    char ResName_DiskSave_44_AcIndexEditSw[2];
+    char ResName_DiskSave_43_IvCatchEvent[2];
+    char ResName_DiskSave_42_Label[2];
+    char ResName_DiskSave_41_AcIndexEditSw[2];
+    char ResName_DiskSave_40_Label[2];
+    char ResName_DiskSave_39_AcIndexEditSw[2];
+    char ResName_DiskSave_38_Label[2];
+    char ResName_DiskSave_37_AcIndexEditSw[2];
+    char ResName_DiskSave_36_Label[2];
+    char ResName_DiskSave_35_AcParaStrBox[2];
+    char ResName_DiskSave_34_Label[2];
+    char ResName_DiskSave_33_AcIndexEditSw[2];
+    char ResName_DiskSave_32_Line[2];
+    char ResName_DiskSave_31_PsFileNameBox[2];
+    char ResName_DiskSave_30_Label[2];
+    char ResName_DiskSave_29_Label[2];
+    char ResName_DiskSave_28_Label[2];
+    char ResName_DiskSave_27_Label[2];
+    char ResName_DiskSave_26_Label[2];
+    char ResName_DiskSave_25_Label[2];
+    char ResName_DiskSave_24_Label[2];
+    char ResName_DiskSave_23_Label[2];
     char w242_code[2];
     char DiskSaveP2_name[12];
-    char str_1162[2];
-    char str_1163[2];
-    char str_1164[2];
-    char str_1165[2];
-    char str_1166[2];
-    char str_1167[2];
-    char str_1168[2];
-    char str_1169[2];
-    char str_1170[2];
-    char str_1171[2];
-    char str_1172[2];
-    char str_1173[2];
+    char ResName_DiskSave_20_VwScreenTitle[2];
+    char ResName_DiskSave_19_IvCatchEvent[2];
+    char ResName_DiskSave_18_AcFileSfxBox[2];
+    char ResName_DiskSave_17_Label[2];
+    char ResName_DiskSave_16_AcIndexEditSw[2];
+    char ResName_DiskSave_15_PsFileNameBox[2];
+    char ResName_DiskSave_14_AcTitleMenu[2];
+    char ResName_DiskSave_13_AcParaStrBox[2];
+    char ResName_DiskSave_12_Label[2];
+    char ResName_DiskSave_11_AcParaStrBox[2];
+    char ResName_DiskSave_10_AcIndexEditSw[2];
+    char ResName_DiskSave_9_AcIndexEditSw[2];
     char w243_code[2];
     char DiskSaveP1_name[12];
-    char str_1174[2];
-    char str_1175[2];
-    char str_1176[2];
-    char str_1177[2];
+    char ResName_DiskSave_6_IvMainEditSw[2];
+    char ResName_DiskSave_5_IvExit[2];
+    char ResName_DiskSave_4_IvPageControl[2];
+    char ResName_DiskSave_3_IvPageControl[2];
     char w244_code[2];
     char DiskSavePage_name[14];
     char DiskSave_str[10];
@@ -2372,110 +2372,110 @@ typedef struct __attribute__((packed)) {
     char str_1179[2];
     uint32_t ptrs_8[22];  /* 22 pointers */
     char str_1180[2];
-    char str_1181[2];
-    char str_1182[2];
-    char str_1183[2];
-    char str_1184[2];
-    char str_1185[2];
-    char str_1186[2];
-    char str_1187[2];
-    char str_1188[2];
-    char str_1189[2];
-    char str_1190[2];
-    char str_1191[2];
-    char str_1192[2];
-    char str_1193[2];
-    char str_1194[2];
-    char str_1195[2];
-    char str_1196[2];
-    char str_1197[2];
-    char str_1198[2];
-    char str_1199[2];
+    char ResName_DiskSmfSave_20_Label[2];
+    char ResName_DiskSmfSave_19_Label[2];
+    char ResName_DiskSmfSave_18_PsFileNameBox[2];
+    char ResName_DiskSmfSave_17_PsFileNameBox[2];
+    char ResName_DiskSmfSave_16_AcIndexEditSw[2];
+    char ResName_DiskSmfSave_15_PsFileNameBox[2];
+    char ResName_DiskSmfSave_14_Label[2];
+    char ResName_DiskSmfSave_13_Label[2];
+    char ResName_DiskSmfSave_12_AcIndexEditSw[2];
+    char ResName_DiskSmfSave_11_AcParaStrBox[2];
+    char ResName_DiskSmfSave_10_AcTitleMenu[2];
+    char ResName_DiskSmfSave_9_Label[2];
+    char ResName_DiskSmfSave_8_AcMonoIndexToggle[2];
+    char ResName_DiskSmfSave_7_AcMonoIndexToggle[2];
+    char ResName_DiskSmfSave_6_Label[2];
+    char ResName_DiskSmfSave_5_AcIndexEditSw[2];
+    char ResName_DiskSmfSave_4_Label[2];
+    char ResName_DiskSmfSave_3_AcIndexEditSw[2];
+    char ResName_DiskSmfSave_2_AcIndexWideES[2];
     char w245_code[2];
     char DiskSmfSave_name[12];
     uint32_t ptrs_9[84];  /* 84 pointers */
     char str_1200[2];
-    char str_1201[2];
-    char str_1202[2];
-    char str_1203[2];
-    char str_1204[2];
-    char str_1205[2];
-    char str_1206[2];
-    char str_1207[2];
-    char str_1208[2];
-    char str_1209[2];
-    char str_1210[2];
-    char str_1211[2];
-    char str_1212[2];
-    char str_1213[2];
-    char str_1214[2];
-    char str_1215[2];
-    char str_1216[2];
-    char str_1217[2];
-    char str_1218[2];
-    char str_1219[2];
-    char str_1220[2];
+    char ResName_DiskSmfDirectPlay_82_Label[2];
+    char ResName_DiskSmfDirectPlay_81_Label[2];
+    char ResName_DiskSmfDirectPlay_80_Line[2];
+    char ResName_DiskSmfDirectPlay_79_Line[2];
+    char ResName_DiskSmfDirectPlay_78_Line[2];
+    char ResName_DiskSmfDirectPlay_77_Line[2];
+    char ResName_DiskSmfDirectPlay_76_Label[2];
+    char ResName_DiskSmfDirectPlay_75_Label[2];
+    char ResName_DiskSmfDirectPlay_74_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_73_Label[2];
+    char ResName_DiskSmfDirectPlay_72_AcMonoIndexToggle[2];
+    char ResName_DiskSmfDirectPlay_71_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_70_IvOneShotTimer[2];
+    char ResName_DiskSmfDirectPlay_69_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_68_Label[2];
+    char ResName_DiskSmfDirectPlay_67_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_66_Label[2];
+    char ResName_DiskSmfDirectPlay_65_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_64_AcIndexWideES[2];
+    char ResName_DiskSmfDirectPlay_63_PsFileNameBox[2];
     char w246_code[2];
     char DiskPdDirectPlay_name[18];
-    char str_1221[2];
-    char str_1222[2];
-    char str_1223[2];
-    char str_1224[2];
-    char str_1225[2];
-    char str_1226[2];
-    char str_1227[2];
-    char str_1228[2];
-    char str_1229[2];
-    char str_1230[2];
-    char str_1231[2];
-    char str_1232[2];
-    char str_1233[2];
-    char str_1234[2];
-    char str_1235[2];
-    char str_1236[2];
-    char str_1237[2];
-    char str_1238[2];
-    char str_1239[2];
-    char str_1240[2];
-    char str_1241[2];
+    char ResName_DiskSmfDirectPlay_60_Label[2];
+    char ResName_DiskSmfDirectPlay_59_Label[2];
+    char ResName_DiskSmfDirectPlay_58_Label[2];
+    char ResName_DiskSmfDirectPlay_57_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_56_AcParaStrBox[2];
+    char ResName_DiskSmfDirectPlay_55_AcMonoIndexToggle[2];
+    char ResName_DiskSmfDirectPlay_54_Label[2];
+    char ResName_DiskSmfDirectPlay_53_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_52_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_51_Line[2];
+    char ResName_DiskSmfDirectPlay_50_Line[2];
+    char ResName_DiskSmfDirectPlay_49_Line[2];
+    char ResName_DiskSmfDirectPlay_48_Line[2];
+    char ResName_DiskSmfDirectPlay_47_IvOneShotTimer[2];
+    char ResName_DiskSmfDirectPlay_46_Label[2];
+    char ResName_DiskSmfDirectPlay_45_Label[2];
+    char ResName_DiskSmfDirectPlay_44_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_43_AcIndexWideES[2];
+    char ResName_DiskSmfDirectPlay_42_Label[2];
+    char ResName_DiskSmfDirectPlay_41_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_40_PsFileNameBox[2];
     char w247_code[2];
     char DiskDocDirectPlay_name[18];
-    char str_1242[2];
-    char str_1243[2];
-    char str_1244[2];
-    char str_1245[2];
+    char ResName_DiskSmfDirectPlay_37_Label[2];
+    char ResName_DiskSmfDirectPlay_36_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_35_AcParaStrBox[2];
+    char ResName_DiskSmfDirectPlay_34_AcParaStrBox[2];
     char w248_code[2];
     char DiskInfoDPSmfWin_name[18];
-    char str_1246[2];
-    char str_1247[2];
+    char ResName_DiskSmfDirectPlay_31_Label[2];
+    char ResName_DiskSmfDirectPlay_30_AcIndexEditSw[2];
     char w249_code[2];
     char SongNameDPSmfWin_name[18];
-    char str_1248[2];
-    char str_1249[2];
+    char ResName_DiskSmfDirectPlay_27_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_26_IvIndexSwDelay[2];
     char w250_code[2];
     char SmfMidiOut_name[12];
-    char str_1250[2];
-    char str_1251[2];
-    char str_1252[2];
-    char str_1253[2];
-    char str_1254[2];
-    char str_1255[2];
-    char str_1256[2];
-    char str_1257[2];
-    char str_1258[2];
-    char str_1259[2];
-    char str_1260[2];
-    char str_1261[2];
-    char str_1262[2];
-    char str_1263[2];
-    char str_1264[2];
-    char str_1265[2];
-    char str_1266[2];
-    char str_1267[2];
-    char str_1268[2];
-    char str_1269[2];
-    char str_1270[2];
-    char str_1271[2];
+    char ResName_DiskSmfDirectPlay_23_Label[2];
+    char ResName_DiskSmfDirectPlay_22_Label[2];
+    char ResName_DiskSmfDirectPlay_21_IvOneShotTimer[2];
+    char ResName_DiskSmfDirectPlay_20_Label[2];
+    char ResName_DiskSmfDirectPlay_19_Label[2];
+    char ResName_DiskSmfDirectPlay_18_Line[2];
+    char ResName_DiskSmfDirectPlay_17_Line[2];
+    char ResName_DiskSmfDirectPlay_16_Line[2];
+    char ResName_DiskSmfDirectPlay_15_Line[2];
+    char ResName_DiskSmfDirectPlay_14_Label[2];
+    char ResName_DiskSmfDirectPlay_13_AcMonoIndexToggle[2];
+    char ResName_DiskSmfDirectPlay_12_AcMonoIndexToggle[2];
+    char ResName_DiskSmfDirectPlay_11_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_10_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_9_PsWindowToggle[2];
+    char ResName_DiskSmfDirectPlay_8_Label[2];
+    char ResName_DiskSmfDirectPlay_7_Label[2];
+    char ResName_DiskSmfDirectPlay_6_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_5_Label[2];
+    char ResName_DiskSmfDirectPlay_4_AcIndexEditSw[2];
+    char ResName_DiskSmfDirectPlay_3_AcIndexWideES[2];
+    char ResName_DiskSmfDirectPlay_2_PsFileNameBox[2];
     char w251_code[2];
     char DiskSmfDirectPlay_name[18];
     uint32_t ptr_66fe;
@@ -2484,25 +2484,25 @@ typedef struct __attribute__((packed)) {
     char str_1273[2];
     uint32_t ptrs_10[22];  /* 22 pointers */
     char str_1274[2];
-    char str_1275[2];
-    char str_1276[2];
-    char str_1277[2];
-    char str_1278[2];
-    char str_1279[2];
-    char str_1280[2];
-    char str_1281[2];
-    char str_1282[2];
-    char str_1283[2];
-    char str_1284[2];
+    char ResName_DiskSongMedley_20_Label[2];
+    char ResName_DiskSongMedley_19_IvShowHide[2];
+    char ResName_DiskSongMedley_18_Label[2];
+    char ResName_DiskSongMedley_17_AcMonoIndexToggle[2];
+    char ResName_DiskSongMedley_16_AcMonoIndexToggle[2];
+    char ResName_DiskSongMedley_15_Label[2];
+    char ResName_DiskSongMedley_14_AcIndexEditSw[2];
+    char ResName_DiskSongMedley_13_Label[2];
+    char ResName_DiskSongMedley_12_AcIndexEditSw[2];
+    char ResName_DiskSongMedley_11_Label[2];
     char w252_code[2];
     char SongMedleyDiskInfo_name[20];
     char SongMedleyDiskName_str[20];
-    char str_1286[2];
-    char str_1287[2];
-    char str_1288[2];
-    char str_1289[2];
-    char str_1290[2];
-    char str_1291[2];
+    char ResName_DiskSongMedley_7_Label[2];
+    char ResName_DiskSongMedley_6_PsFileNameBox[2];
+    char ResName_DiskSongMedley_5_PsFileNameBox[2];
+    char ResName_DiskSongMedley_4_PsFileNameBox[2];
+    char ResName_DiskSongMedley_3_AcIndexEditSw[2];
+    char ResName_DiskSongMedley_2_AcIndexWideES[2];
     char w253_code[2];
     char DiskSongMedley_name[16];
     uint32_t ptr_67c0;
@@ -2513,94 +2513,94 @@ typedef struct __attribute__((packed)) {
     char DiskSaveSureScr_name[16];
     char w255_code[2];
     char DiskDeleteSureScr_name[18];
-    char str_1294[2];
-    char str_1295[2];
-    char str_1296[2];
-    char str_1297[2];
-    char str_1298[2];
-    char str_1299[2];
-    char str_1300[2];
+    char ResName_DiskUtility_89_AcFuncEditSw[2];
+    char ResName_DiskUtility_88_AcFuncEditSw[2];
+    char ResName_DiskUtility_87_AcFuncEditSw[2];
+    char ResName_DiskUtility_86_AcLanguageText[2];
+    char ResName_DiskUtility_85_AcLanguageText[2];
+    char ResName_DiskUtility_84_Line[2];
+    char ResName_DiskUtility_83_AcLanguageText[2];
     char w256_code[2];
     char DiskDeleteSureWin_name[18];
-    char str_1301[2];
-    char str_1302[2];
+    char ResName_DiskUtility_80_AcFuncEditSw[2];
+    char ResName_DiskUtility_79_IvNaming[2];
     char w257_code[2];
     char FileRenameSMF_name[14];
-    char str_1303[2];
-    char str_1304[2];
-    char str_1305[2];
-    char str_1306[2];
-    char str_1307[2];
-    char str_1308[2];
-    char str_1309[2];
+    char ResName_DiskUtility_76_PsFileNameBox[2];
+    char ResName_DiskUtility_75_AcIndexEditSw[2];
+    char ResName_DiskUtility_74_AcIndexWideES[2];
+    char ResName_DiskUtility_73_Label[2];
+    char ResName_DiskUtility_72_AcParaStrBox[2];
+    char ResName_DiskUtility_71_Label[2];
+    char ResName_DiskUtility_70_Arrow[2];
     char w258_code[2];
     char FileCopy_name[10];
-    char str_1310[2];
-    char str_1311[2];
-    char str_1312[2];
+    char ResName_DiskUtility_67_VwMenuBox[2];
+    char ResName_DiskUtility_66_VwMenuBox[2];
+    char ResName_DiskUtility_65_Label[2];
     char w259_code[2];
     char DiskFormatSelectWin_name[20];
-    char str_1313[2];
-    char str_1314[2];
-    char str_1315[2];
-    char str_1316[2];
-    char str_1317[2];
-    char str_1318[2];
-    char str_1319[2];
+    char ResName_DiskUtility_62_IvMainEditSw[2];
+    char ResName_DiskUtility_61_VwEditSwBox[2];
+    char ResName_DiskUtility_60_VwEditSwBox[2];
+    char ResName_DiskUtility_59_AcLanguageText[2];
+    char ResName_DiskUtility_58_AcLanguageText[2];
+    char ResName_DiskUtility_57_Line[2];
+    char ResName_DiskUtility_56_AcLanguageText[2];
     char w260_code[2];
     char DiskFormatSureWin_name[18];
-    char str_1320[2];
-    char str_1321[2];
-    char str_1322[2];
+    char ResName_DiskUtility_53_Label[2];
+    char ResName_DiskUtility_52_IvMainEditSw[2];
+    char ResName_DiskUtility_51_AcFuncEditSw[2];
     char w261_code[2];
     char DiskFormatNamingWin_name[20];
     char w262_code[2];
     char SongNameWin_name[12];
-    char str_1323[2];
-    char str_1324[2];
+    char ResName_DiskUtility_46_AcParaStrBox[2];
+    char ResName_DiskUtility_45_AcParaStrBox[2];
     char w263_code[2];
     char DiskInfoWin_name[12];
     char WaitWinCtlSmf_str[14];
-    char str_1326[2];
-    char str_1327[2];
-    char str_1328[2];
-    char str_1329[2];
-    char str_1330[2];
-    char str_1331[2];
-    char str_1332[2];
-    char str_1333[2];
-    char str_1334[2];
-    char str_1335[2];
-    char str_1336[2];
-    char str_1337[2];
-    char str_1338[2];
-    char str_1339[2];
-    char str_1340[2];
+    char ResName_DiskUtility_41_IvIndexSwDelay[2];
+    char ResName_DiskUtility_40_Label[2];
+    char ResName_DiskUtility_39_AcScreenMenu[2];
+    char ResName_DiskUtility_38_Label[2];
+    char ResName_DiskUtility_37_AcIndexEditSw[2];
+    char ResName_DiskUtility_36_Label[2];
+    char ResName_DiskUtility_35_AcTitleMenu[2];
+    char ResName_DiskUtility_34_PsWindowToggle[2];
+    char ResName_DiskUtility_33_PsFileNameBox[2];
+    char ResName_DiskUtility_32_Label[2];
+    char ResName_DiskUtility_31_Label[2];
+    char ResName_DiskUtility_30_AcIndexEditSw[2];
+    char ResName_DiskUtility_29_AcIndexWideES[2];
+    char ResName_DiskUtility_28_Label[2];
+    char ResName_DiskUtility_27_AcIndexEditSw[2];
     char w264_code[2];
     char DiskUtilitySMF_name[16];
     char DiskFormat_str[12];
-    char str_1342[2];
-    char str_1343[2];
+    char ResName_DiskUtility_23_AcFuncEditSw[2];
+    char ResName_DiskUtility_22_IvNaming[2];
     char w265_code[2];
     char FileRename_name[12];
     char WaitWinCtl_str[12];
-    char str_1345[2];
-    char str_1346[2];
-    char str_1347[2];
-    char str_1348[2];
-    char str_1349[2];
-    char str_1350[2];
-    char str_1351[2];
-    char str_1352[2];
-    char str_1353[2];
-    char str_1354[2];
-    char str_1355[2];
-    char str_1356[2];
-    char str_1357[2];
-    char str_1358[2];
-    char str_1359[2];
-    char str_1360[2];
-    char str_1361[2];
+    char ResName_DiskUtility_18_PsFileNameBox[2];
+    char ResName_DiskUtility_17_AcParaStrBox[2];
+    char ResName_DiskUtility_16_AcParaStrBox[2];
+    char ResName_DiskUtility_15_AcScreenMenu[2];
+    char ResName_DiskUtility_14_AcIndexEditSw[2];
+    char ResName_DiskUtility_13_Label[2];
+    char ResName_DiskUtility_12_AcScreenMenu[2];
+    char ResName_DiskUtility_11_Label[2];
+    char ResName_DiskUtility_10_AcTitleMenu[2];
+    char ResName_DiskUtility_9_Label[2];
+    char ResName_DiskUtility_8_Label[2];
+    char ResName_DiskUtility_7_AcIndexEditSw[2];
+    char ResName_DiskUtility_6_AcIndexEditSw[2];
+    char ResName_DiskUtility_5_Label[2];
+    char ResName_DiskUtility_4_AcTitleMenu[2];
+    char ResName_DiskUtility_3_AcIndexEditSw[2];
+    char ResName_DiskUtility_2_AcIndexEditSw[2];
     char w266_code[2];
     char DiskUtility_name[12];
     uint32_t ptr_6acc;
@@ -2609,12 +2609,12 @@ typedef struct __attribute__((packed)) {
     char str_1363[2];
     uint32_t ptrs_12[9];  /* 9 pointers */
     char str_1364[2];
-    char str_1365[2];
-    char str_1366[2];
-    char str_1367[2];
-    char str_1368[2];
-    char str_1369[2];
-    char str_1370[2];
+    char ResName_DiskSetup_7_AcLanguageText[2];
+    char ResName_DiskSetup_6_AcLanguageText[2];
+    char ResName_DiskSetup_5_IvCatchEvent[2];
+    char ResName_DiskSetup_4_AcFuncEditSw[2];
+    char ResName_DiskSetup_3_AcBitEditBox[2];
+    char ResName_DiskSetup_2_AcRamEditBox[2];
     char w267_code[2];
     char DiskSetup_name[10];
     uint32_t ptr_6b16;
@@ -11929,144 +11929,144 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(w229_code),
         SELF(HardDiskMenu_name),
         SELF(w228_code),
-        SELF(str_999),
-        SELF(str_998),
-        SELF(str_997),
-        SELF(str_996),
-        SELF(str_995),
-        SELF(str_994),
+        SELF(ResName_DiskMenu_4_AcTitleMenu),
+        SELF(ResName_DiskMenu_5_AcTtlJgBox),
+        SELF(ResName_DiskMenu_6_AcTtlJgBox),
+        SELF(ResName_DiskMenu_7_IvExitMode),
+        SELF(ResName_DiskMenu_8_AcTtlJgBox),
+        SELF(ResName_DiskMenu_9_AcTtlJgBox),
         SELF(IntSongMedley_name),
         SELF(w227_code),
-        SELF(str_993),
-        SELF(str_992),
-        SELF(str_991),
-        SELF(str_990),
-        SELF(str_989),
-        SELF(str_988),
-        SELF(str_987),
-        SELF(str_986),
-        SELF(str_985),
-        SELF(str_984),
-        SELF(str_983),
-        SELF(str_982),
+        SELF(ResName_DiskMenu_12_AcIndexEditSw),
+        SELF(ResName_DiskMenu_13_AcIndexEditSw),
+        SELF(ResName_DiskMenu_14_PsFileNameBox),
+        SELF(ResName_DiskMenu_15_PsFileNameBox),
+        SELF(ResName_DiskMenu_16_Line),
+        SELF(ResName_DiskMenu_17_AcMonoIndexToggle),
+        SELF(ResName_DiskMenu_18_AcIndexEditSw),
+        SELF(ResName_DiskMenu_19_Label),
+        SELF(ResName_DiskMenu_20_IvOneShotTimer),
+        SELF(ResName_DiskMenu_21_Label),
+        SELF(ResName_DiskMenu_22_Label),
+        SELF(ResName_DiskMenu_23_Label),
         SELF(DiskSaveName_name),
         SELF(w226_code),
-        SELF(str_981),
+        SELF(ResName_DiskMenu_26_IvNaming),
         SELF(ComposerLoad_name),
         SELF(w225_code),
-        SELF(str_980),
-        SELF(str_979),
-        SELF(str_978),
-        SELF(str_977),
-        SELF(str_976),
-        SELF(str_975),
-        SELF(str_974),
-        SELF(str_973),
-        SELF(str_972),
+        SELF(ResName_DiskMenu_29_AcIndexWideES),
+        SELF(ResName_DiskMenu_30_AcIndexEditSw),
+        SELF(ResName_DiskMenu_31_PsFileNameBox),
+        SELF(ResName_DiskMenu_32_Label),
+        SELF(ResName_DiskMenu_33_AcParaStrBox),
+        SELF(ResName_DiskMenu_34_AcParaStrBox),
+        SELF(ResName_DiskMenu_35_AcIndexEditSw),
+        SELF(ResName_DiskMenu_36_Label),
+        SELF(ResName_DiskMenu_37_IvExitMode),
         SELF(DiskWaitWin_name),
         SELF(w224_code),
         SELF(DiskSaveNameSMF_name),
         SELF(w223_code),
-        SELF(str_971),
+        SELF(ResName_DiskMenu_42_IvNaming),
         SELF(WallpaperLoad_name),
         SELF(w222_code),
-        SELF(str_970),
-        SELF(str_969),
-        SELF(str_968),
-        SELF(str_967),
-        SELF(str_966),
-        SELF(str_965),
-        SELF(str_964),
-        SELF(str_963),
-        SELF(str_962),
-        SELF(str_961),
+        SELF(ResName_DiskMenu_45_Label),
+        SELF(ResName_DiskMenu_46_AcIndexWideES),
+        SELF(ResName_DiskMenu_47_AcIndexEditSw),
+        SELF(ResName_DiskMenu_48_Label),
+        SELF(ResName_DiskMenu_49_Label),
+        SELF(ResName_DiskMenu_50_AcParaStrBox),
+        SELF(ResName_DiskMenu_51_AcParaStrBox),
+        SELF(ResName_DiskMenu_52_AcIndexEditSw),
+        SELF(ResName_DiskMenu_53_Label),
+        SELF(ResName_DiskMenu_54_PsFileNameBox),
         SELF(DiskSaveSureWin_name),
         SELF(w221_code),
-        SELF(str_960),
-        SELF(str_959),
-        SELF(str_958),
-        SELF(str_957),
-        SELF(str_956),
-        SELF(str_955),
-        SELF(str_954),
+        SELF(ResName_DiskMenu_57_AcLanguageText),
+        SELF(ResName_DiskMenu_58_Line),
+        SELF(ResName_DiskMenu_59_AcLanguageText),
+        SELF(ResName_DiskMenu_60_AcLanguageText),
+        SELF(ResName_DiskMenu_61_AcFuncEditSw),
+        SELF(ResName_DiskMenu_62_AcFuncEditSw),
+        SELF(ResName_DiskMenu_63_AcFuncEditSw),
         SELF(PasswordWin_name),
         SELF(w220_code),
-        SELF(str_953),
-        SELF(str_952),
-        SELF(str_951),
+        SELF(ResName_DiskMenu_66_AcFuncEditSw),
+        SELF(ResName_DiskMenu_67_AcFuncEditSw),
+        SELF(ResName_DiskMenu_68_AcLanguageText),
         SELF(CheckPasswordWin_name),
         SELF(w219_code),
-        SELF(str_950),
-        SELF(str_949),
-        SELF(str_948),
+        SELF(ResName_DiskMenu_71_AcFuncEditSw),
+        SELF(ResName_DiskMenu_72_AcFuncEditSw),
+        SELF(ResName_DiskMenu_73_AcLanguageText),
         SELF(str_947),
     },
 
     .str_947 = ALIGNED_STRING(""),
 
-    .str_948 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_73_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_949 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_72_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_950 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_71_AcFuncEditSw = ALIGNED_STRING(""),
 
     .w219_code = ALIGNED_STRING(""),
 
     .CheckPasswordWin_name = ALIGNED_STRING("CheckPasswordWin"),
 
-    .str_951 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_68_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_952 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_67_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_953 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_66_AcFuncEditSw = ALIGNED_STRING(""),
 
     .w220_code = ALIGNED_STRING(""),
 
     .PasswordWin_name = "PasswordWin",
 
-    .str_954 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_63_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_955 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_62_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_956 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_61_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_957 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_60_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_958 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_59_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_959 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_58_Line = ALIGNED_STRING(""),
 
-    .str_960 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_57_AcLanguageText = ALIGNED_STRING(""),
 
     .w221_code = ALIGNED_STRING(""),
 
     .DiskSaveSureWin_name = "DiskSaveSureWin",
 
-    .str_961 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_54_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_962 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_53_Label = ALIGNED_STRING(""),
 
-    .str_963 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_52_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_964 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_51_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_965 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_50_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_966 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_49_Label = ALIGNED_STRING(""),
 
-    .str_967 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_48_Label = ALIGNED_STRING(""),
 
-    .str_968 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_47_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_969 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_46_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_970 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_45_Label = ALIGNED_STRING(""),
 
     .w222_code = ALIGNED_STRING(""),
 
     .WallpaperLoad_name = "WallpaperLoad",
 
-    .str_971 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_42_IvNaming = ALIGNED_STRING(""),
 
     .w223_code = ALIGNED_STRING(""),
 
@@ -12076,73 +12076,73 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .DiskWaitWin_name = "DiskWaitWin",
 
-    .str_972 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_37_IvExitMode = ALIGNED_STRING(""),
 
-    .str_973 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_36_Label = ALIGNED_STRING(""),
 
-    .str_974 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_35_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_975 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_34_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_976 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_33_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_977 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_32_Label = ALIGNED_STRING(""),
 
-    .str_978 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_31_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_979 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_30_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_980 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_29_AcIndexWideES = ALIGNED_STRING(""),
 
     .w225_code = ALIGNED_STRING(""),
 
     .ComposerLoad_name = ALIGNED_STRING("ComposerLoad"),
 
-    .str_981 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_26_IvNaming = ALIGNED_STRING(""),
 
     .w226_code = ALIGNED_STRING(""),
 
     .DiskSaveName_name = ALIGNED_STRING("DiskSaveName"),
 
-    .str_982 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_23_Label = ALIGNED_STRING(""),
 
-    .str_983 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_22_Label = ALIGNED_STRING(""),
 
-    .str_984 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_21_Label = ALIGNED_STRING(""),
 
-    .str_985 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_20_IvOneShotTimer = ALIGNED_STRING(""),
 
-    .str_986 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_19_Label = ALIGNED_STRING(""),
 
-    .str_987 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_18_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_988 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_17_AcMonoIndexToggle = ALIGNED_STRING(""),
 
-    .str_989 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_16_Line = ALIGNED_STRING(""),
 
-    .str_990 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_15_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_991 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_14_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_992 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_13_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_993 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_12_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w227_code = ALIGNED_STRING(""),
 
     .IntSongMedley_name = "IntSongMedley",
 
-    .str_994 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_9_AcTtlJgBox = ALIGNED_STRING(""),
 
-    .str_995 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_8_AcTtlJgBox = ALIGNED_STRING(""),
 
-    .str_996 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_7_IvExitMode = ALIGNED_STRING(""),
 
-    .str_997 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_6_AcTtlJgBox = ALIGNED_STRING(""),
 
-    .str_998 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_5_AcTtlJgBox = ALIGNED_STRING(""),
 
-    .str_999 = ALIGNED_STRING(""),
+    .ResName_DiskMenu_4_AcTitleMenu = ALIGNED_STRING(""),
 
     .w228_code = ALIGNED_STRING(""),
 
@@ -12156,129 +12156,129 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskLoad_str),
         SELF(DiskLoadPage_name),
         SELF(w239_code),
-        SELF(str_1107),
-        SELF(str_1106),
-        SELF(str_1105),
-        SELF(str_1104),
+        SELF(ResName_DiskLoad_3_IvPageControl),
+        SELF(ResName_DiskLoad_4_IvPageControl),
+        SELF(ResName_DiskLoad_5_IvExit),
+        SELF(ResName_DiskLoad_6_IvMainEditSw),
         SELF(DiskLoadP1_name),
         SELF(w238_code),
-        SELF(str_1103),
-        SELF(str_1102),
-        SELF(str_1101),
-        SELF(str_1100),
-        SELF(str_1099),
-        SELF(str_1098),
-        SELF(str_1097),
-        SELF(str_1096),
-        SELF(str_1095),
-        SELF(str_1094),
-        SELF(str_1093),
+        SELF(ResName_DiskLoad_9_AcIndexEditSw),
+        SELF(ResName_DiskLoad_10_Label),
+        SELF(ResName_DiskLoad_11_AcFileSfxBox),
+        SELF(ResName_DiskLoad_12_Label),
+        SELF(ResName_DiskLoad_13_AcTitleMenu),
+        SELF(ResName_DiskLoad_14_AcIndexEditSw),
+        SELF(ResName_DiskLoad_15_AcIndexEditSw),
+        SELF(ResName_DiskLoad_16_AcIndexWideES),
+        SELF(ResName_DiskLoad_17_AcParaStrBox),
+        SELF(ResName_DiskLoad_18_AcParaStrBox),
+        SELF(ResName_DiskLoad_19_VwScreenTitle),
         SELF(DiskLoadP2_name),
         SELF(w237_code),
-        SELF(str_1092),
-        SELF(str_1091),
-        SELF(str_1090),
-        SELF(str_1089),
-        SELF(str_1088),
-        SELF(str_1087),
-        SELF(str_1086),
-        SELF(str_1085),
-        SELF(str_1084),
-        SELF(str_1083),
-        SELF(str_1082),
-        SELF(str_1081),
-        SELF(str_1080),
-        SELF(str_1079),
-        SELF(str_1078),
-        SELF(str_1077),
-        SELF(str_1076),
-        SELF(str_1075),
-        SELF(str_1074),
-        SELF(str_1073),
-        SELF(str_1072),
-        SELF(str_1071),
-        SELF(str_1070),
-        SELF(str_1069),
-        SELF(str_1068),
-        SELF(str_1067),
-        SELF(str_1066),
-        SELF(str_1065),
-        SELF(str_1064),
-        SELF(str_1063),
+        SELF(ResName_DiskLoad_22_AcIndexEditSw),
+        SELF(ResName_DiskLoad_23_AcIndexEditSw),
+        SELF(ResName_DiskLoad_24_AcIndexEditSw),
+        SELF(ResName_DiskLoad_25_AcIndexEditSw),
+        SELF(ResName_DiskLoad_26_AcIndexEditSw),
+        SELF(ResName_DiskLoad_27_AcIndexEditSw),
+        SELF(ResName_DiskLoad_28_AcIndexEditSw),
+        SELF(ResName_DiskLoad_29_Label),
+        SELF(ResName_DiskLoad_30_Label),
+        SELF(ResName_DiskLoad_31_Label),
+        SELF(ResName_DiskLoad_32_Label),
+        SELF(ResName_DiskLoad_33_Label),
+        SELF(ResName_DiskLoad_34_Label),
+        SELF(ResName_DiskLoad_35_Label),
+        SELF(ResName_DiskLoad_36_Label),
+        SELF(ResName_DiskLoad_37_AcParaStrBox),
+        SELF(ResName_DiskLoad_38_VwBox),
+        SELF(ResName_DiskLoad_39_Label),
+        SELF(ResName_DiskLoad_40_Label),
+        SELF(ResName_DiskLoad_41_Label),
+        SELF(ResName_DiskLoad_42_Label),
+        SELF(ResName_DiskLoad_43_Label),
+        SELF(ResName_DiskLoad_44_Label),
+        SELF(ResName_DiskLoad_45_Label),
+        SELF(ResName_DiskLoad_46_Label),
+        SELF(ResName_DiskLoad_47_PsFileNameBox),
+        SELF(ResName_DiskLoad_48_Line),
+        SELF(ResName_DiskLoad_49_AcIndexEditSw),
+        SELF(ResName_DiskLoad_50_VwScreenTitle),
+        SELF(ResName_DiskLoad_51_Label),
         SELF(DiskLoadP3_name),
         SELF(w236_code),
         SELF(SingleLoadSwCtl_name),
         SELF(w235_code),
-        SELF(str_1062),
-        SELF(str_1061),
-        SELF(str_1060),
-        SELF(str_1059),
-        SELF(str_1058),
-        SELF(str_1057),
-        SELF(str_1056),
-        SELF(str_1055),
-        SELF(str_1054),
-        SELF(str_1053),
-        SELF(str_1052),
-        SELF(str_1051),
-        SELF(str_1050),
-        SELF(str_1049),
-        SELF(str_1048),
-        SELF(str_1047),
-        SELF(str_1046),
-        SELF(str_1045),
+        SELF(ResName_DiskLoad_56_AcIndexEditSw),
+        SELF(ResName_DiskLoad_57_Label),
+        SELF(ResName_DiskLoad_58_Arrow),
+        SELF(ResName_DiskLoad_59_AcIndexWideES),
+        SELF(ResName_DiskLoad_60_AcIndexWideES),
+        SELF(ResName_DiskLoad_61_AcIndexEditSw),
+        SELF(ResName_DiskLoad_62_PsFileNameBox),
+        SELF(ResName_DiskLoad_63_AcIndexWideES),
+        SELF(ResName_DiskLoad_64_AcIndexWideES),
+        SELF(ResName_DiskLoad_65_AcParaStrBox),
+        SELF(ResName_DiskLoad_66_Label),
+        SELF(ResName_DiskLoad_67_PsFileNameBox),
+        SELF(ResName_DiskLoad_68_Label),
+        SELF(ResName_DiskLoad_69_PsFileNameBox),
+        SELF(ResName_DiskLoad_70_PsFileNameBox),
+        SELF(ResName_DiskLoad_71_PsFileNameBox),
+        SELF(ResName_DiskLoad_72_PsFileNameBox),
+        SELF(ResName_DiskLoad_73_PsFileNameBox),
         SELF(SingleBankToggle_str),
         SELF(DiskLoadSMF_name),
         SELF(w234_code),
-        SELF(str_1043),
-        SELF(str_1042),
-        SELF(str_1041),
-        SELF(str_1040),
-        SELF(str_1039),
-        SELF(str_1038),
-        SELF(str_1037),
-        SELF(str_1036),
-        SELF(str_1035),
-        SELF(str_1034),
-        SELF(str_1033),
-        SELF(str_1032),
-        SELF(str_1031),
-        SELF(str_1030),
-        SELF(str_1029),
-        SELF(str_1028),
-        SELF(str_1027),
-        SELF(str_1026),
+        SELF(ResName_DiskLoad_77_AcIndexWideES),
+        SELF(ResName_DiskLoad_78_AcIndexEditSw),
+        SELF(ResName_DiskLoad_79_Label),
+        SELF(ResName_DiskLoad_80_AcIndexEditSw),
+        SELF(ResName_DiskLoad_81_Label),
+        SELF(ResName_DiskLoad_82_PsFileNameBox),
+        SELF(ResName_DiskLoad_83_Label),
+        SELF(ResName_DiskLoad_84_PsWindowToggle),
+        SELF(ResName_DiskLoad_85_Label),
+        SELF(ResName_DiskLoad_86_AcIndexEditSw),
+        SELF(ResName_DiskLoad_87_PsFileNameBox),
+        SELF(ResName_DiskLoad_88_PsFileNameBox),
+        SELF(ResName_DiskLoad_89_AcIndexEditSw),
+        SELF(ResName_DiskLoad_90_PsFileNameBox),
+        SELF(ResName_DiskLoad_91_IvMainEditSw),
+        SELF(ResName_DiskLoad_92_IvExit),
+        SELF(ResName_DiskLoad_93_IvIndexSwDelay),
+        SELF(ResName_DiskLoad_94_AcIndexEditSw),
         SELF(SongNameSmfLdWin_name),
         SELF(w233_code),
-        SELF(str_1025),
-        SELF(str_1024),
+        SELF(ResName_DiskLoad_97_AcIndexEditSw),
+        SELF(ResName_DiskLoad_98_Label),
         SELF(DiskInfoSmfLdWin_name),
         SELF(w232_code),
-        SELF(str_1023),
-        SELF(str_1022),
-        SELF(str_1021),
-        SELF(str_1020),
+        SELF(ResName_DiskLoad_101_AcParaStrBox),
+        SELF(ResName_DiskLoad_102_AcParaStrBox),
+        SELF(ResName_DiskLoad_103_AcIndexEditSw),
+        SELF(ResName_DiskLoad_104_Label),
         SELF(CmpSingleLoad_name),
         SELF(w231_code),
-        SELF(str_1019),
-        SELF(str_1018),
-        SELF(str_1017),
-        SELF(str_1016),
-        SELF(str_1015),
-        SELF(str_1014),
-        SELF(str_1013),
-        SELF(str_1012),
-        SELF(str_1011),
-        SELF(str_1010),
-        SELF(str_1009),
-        SELF(str_1008),
-        SELF(str_1007),
-        SELF(str_1006),
-        SELF(str_1005),
-        SELF(str_1004),
-        SELF(str_1003),
-        SELF(str_1002),
-        SELF(str_1001),
+        SELF(ResName_DiskLoad_107_AcIndexWideES),
+        SELF(ResName_DiskLoad_108_AcIndexWideES),
+        SELF(ResName_DiskLoad_109_AcIndexWideES),
+        SELF(ResName_DiskLoad_110_PsFileNameBox),
+        SELF(ResName_DiskLoad_111_PsFileNameBox),
+        SELF(ResName_DiskLoad_112_AcIndexEditSw),
+        SELF(ResName_DiskLoad_113_Label),
+        SELF(ResName_DiskLoad_114_Arrow),
+        SELF(ResName_DiskLoad_115_Label),
+        SELF(ResName_DiskLoad_116_Label),
+        SELF(ResName_DiskLoad_117_AcIndexEditSw),
+        SELF(ResName_DiskLoad_118_AcIndexEditSw),
+        SELF(ResName_DiskLoad_119_Label),
+        SELF(ResName_DiskLoad_120_PsFileNameBox),
+        SELF(ResName_DiskLoad_121_AcMonoIndexToggle),
+        SELF(ResName_DiskLoad_122_PsFileNameBox),
+        SELF(ResName_DiskLoad_123_PsFileNameBox),
+        SELF(ResName_DiskLoad_124_PsFileNameBox),
+        SELF(ResName_DiskLoad_125_PsFileNameBox),
         SELF(CmpSingleLoadSwCtl_name),
         SELF(w230_code),
         SELF(str_1000),
@@ -12290,103 +12290,103 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .CmpSingleLoadSwCtl_name = ALIGNED_STRING("CmpSingleLoadSwCtl"),
 
-    .str_1001 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_125_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1002 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_124_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1003 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_123_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1004 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_122_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1005 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_121_AcMonoIndexToggle = ALIGNED_STRING(""),
 
-    .str_1006 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_120_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1007 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_119_Label = ALIGNED_STRING(""),
 
-    .str_1008 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_118_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1009 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_117_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1010 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_116_Label = ALIGNED_STRING(""),
 
-    .str_1011 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_115_Label = ALIGNED_STRING(""),
 
-    .str_1012 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_114_Arrow = ALIGNED_STRING(""),
 
-    .str_1013 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_113_Label = ALIGNED_STRING(""),
 
-    .str_1014 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_112_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1015 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_111_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1016 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_110_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1017 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_109_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1018 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_108_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1019 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_107_AcIndexWideES = ALIGNED_STRING(""),
 
     .w231_code = ALIGNED_STRING(""),
 
     .CmpSingleLoad_name = "CmpSingleLoad",
 
-    .str_1020 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_104_Label = ALIGNED_STRING(""),
 
-    .str_1021 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_103_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1022 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_102_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1023 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_101_AcParaStrBox = ALIGNED_STRING(""),
 
     .w232_code = ALIGNED_STRING(""),
 
     .DiskInfoSmfLdWin_name = ALIGNED_STRING("DiskInfoSmfLdWin"),
 
-    .str_1024 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_98_Label = ALIGNED_STRING(""),
 
-    .str_1025 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_97_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w233_code = ALIGNED_STRING(""),
 
     .SongNameSmfLdWin_name = ALIGNED_STRING("SongNameSmfLdWin"),
 
-    .str_1026 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_94_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1027 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_93_IvIndexSwDelay = ALIGNED_STRING(""),
 
-    .str_1028 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_92_IvExit = ALIGNED_STRING(""),
 
-    .str_1029 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_91_IvMainEditSw = ALIGNED_STRING(""),
 
-    .str_1030 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_90_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1031 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_89_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1032 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_88_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1033 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_87_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1034 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_86_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1035 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_85_Label = ALIGNED_STRING(""),
 
-    .str_1036 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_84_PsWindowToggle = ALIGNED_STRING(""),
 
-    .str_1037 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_83_Label = ALIGNED_STRING(""),
 
-    .str_1038 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_82_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1039 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_81_Label = ALIGNED_STRING(""),
 
-    .str_1040 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_80_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1041 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_79_Label = ALIGNED_STRING(""),
 
-    .str_1042 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_78_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1043 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_77_AcIndexWideES = ALIGNED_STRING(""),
 
     .w234_code = ALIGNED_STRING(""),
 
@@ -12394,41 +12394,41 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .SingleBankToggle_str = ALIGNED_STRING("SingleBankToggle"),
 
-    .str_1045 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_73_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1046 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_72_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1047 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_71_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1048 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_70_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1049 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_69_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1050 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_68_Label = ALIGNED_STRING(""),
 
-    .str_1051 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_67_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1052 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_66_Label = ALIGNED_STRING(""),
 
-    .str_1053 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_65_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1054 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_64_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1055 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_63_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1056 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_62_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1057 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_61_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1058 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_60_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1059 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_59_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1060 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_58_Arrow = ALIGNED_STRING(""),
 
-    .str_1061 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_57_Label = ALIGNED_STRING(""),
 
-    .str_1062 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_56_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w235_code = ALIGNED_STRING(""),
 
@@ -12438,103 +12438,103 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .DiskLoadP3_name = ALIGNED_STRING("DiskLoadP3"),
 
-    .str_1063 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_51_Label = ALIGNED_STRING(""),
 
-    .str_1064 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_50_VwScreenTitle = ALIGNED_STRING(""),
 
-    .str_1065 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_49_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1066 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_48_Line = ALIGNED_STRING(""),
 
-    .str_1067 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_47_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1068 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_46_Label = ALIGNED_STRING(""),
 
-    .str_1069 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_45_Label = ALIGNED_STRING(""),
 
-    .str_1070 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_44_Label = ALIGNED_STRING(""),
 
-    .str_1071 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_43_Label = ALIGNED_STRING(""),
 
-    .str_1072 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_42_Label = ALIGNED_STRING(""),
 
-    .str_1073 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_41_Label = ALIGNED_STRING(""),
 
-    .str_1074 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_40_Label = ALIGNED_STRING(""),
 
-    .str_1075 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_39_Label = ALIGNED_STRING(""),
 
-    .str_1076 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_38_VwBox = ALIGNED_STRING(""),
 
-    .str_1077 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_37_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1078 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_36_Label = ALIGNED_STRING(""),
 
-    .str_1079 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_35_Label = ALIGNED_STRING(""),
 
-    .str_1080 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_34_Label = ALIGNED_STRING(""),
 
-    .str_1081 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_33_Label = ALIGNED_STRING(""),
 
-    .str_1082 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_32_Label = ALIGNED_STRING(""),
 
-    .str_1083 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_31_Label = ALIGNED_STRING(""),
 
-    .str_1084 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_30_Label = ALIGNED_STRING(""),
 
-    .str_1085 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_29_Label = ALIGNED_STRING(""),
 
-    .str_1086 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_28_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1087 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_27_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1088 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_26_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1089 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_25_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1090 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_24_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1091 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_23_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1092 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_22_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w237_code = ALIGNED_STRING(""),
 
     .DiskLoadP2_name = ALIGNED_STRING("DiskLoadP2"),
 
-    .str_1093 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_19_VwScreenTitle = ALIGNED_STRING(""),
 
-    .str_1094 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_18_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1095 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_17_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1096 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_16_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1097 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_15_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1098 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_14_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1099 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_13_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1100 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_12_Label = ALIGNED_STRING(""),
 
-    .str_1101 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_11_AcFileSfxBox = ALIGNED_STRING(""),
 
-    .str_1102 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_10_Label = ALIGNED_STRING(""),
 
-    .str_1103 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_9_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w238_code = ALIGNED_STRING(""),
 
     .DiskLoadP1_name = ALIGNED_STRING("DiskLoadP1"),
 
-    .str_1104 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_6_IvMainEditSw = ALIGNED_STRING(""),
 
-    .str_1105 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_5_IvExit = ALIGNED_STRING(""),
 
-    .str_1106 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_4_IvPageControl = ALIGNED_STRING(""),
 
-    .str_1107 = ALIGNED_STRING(""),
+    .ResName_DiskLoad_3_IvPageControl = ALIGNED_STRING(""),
 
     .w239_code = ALIGNED_STRING(""),
 
@@ -12557,13 +12557,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
     .ptrs_6 = {
         SELF(DiskSaveMenu_name),
         SELF(w240_code),
-        SELF(str_1113),
+        SELF(ResName_DiskSaveMenu_2_AcTtlJgBox),
         SELF(str_1112),
     },
 
     .str_1112 = ALIGNED_STRING(""),
 
-    .str_1113 = ALIGNED_STRING(""),
+    .ResName_DiskSaveMenu_2_AcTtlJgBox = ALIGNED_STRING(""),
 
     .w240_code = ALIGNED_STRING(""),
 
@@ -12577,214 +12577,214 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskSave_str),
         SELF(DiskSavePage_name),
         SELF(w244_code),
-        SELF(str_1177),
-        SELF(str_1176),
-        SELF(str_1175),
-        SELF(str_1174),
+        SELF(ResName_DiskSave_3_IvPageControl),
+        SELF(ResName_DiskSave_4_IvPageControl),
+        SELF(ResName_DiskSave_5_IvExit),
+        SELF(ResName_DiskSave_6_IvMainEditSw),
         SELF(DiskSaveP1_name),
         SELF(w243_code),
-        SELF(str_1173),
-        SELF(str_1172),
-        SELF(str_1171),
-        SELF(str_1170),
-        SELF(str_1169),
-        SELF(str_1168),
-        SELF(str_1167),
-        SELF(str_1166),
-        SELF(str_1165),
-        SELF(str_1164),
-        SELF(str_1163),
-        SELF(str_1162),
+        SELF(ResName_DiskSave_9_AcIndexEditSw),
+        SELF(ResName_DiskSave_10_AcIndexEditSw),
+        SELF(ResName_DiskSave_11_AcParaStrBox),
+        SELF(ResName_DiskSave_12_Label),
+        SELF(ResName_DiskSave_13_AcParaStrBox),
+        SELF(ResName_DiskSave_14_AcTitleMenu),
+        SELF(ResName_DiskSave_15_PsFileNameBox),
+        SELF(ResName_DiskSave_16_AcIndexEditSw),
+        SELF(ResName_DiskSave_17_Label),
+        SELF(ResName_DiskSave_18_AcFileSfxBox),
+        SELF(ResName_DiskSave_19_IvCatchEvent),
+        SELF(ResName_DiskSave_20_VwScreenTitle),
         SELF(DiskSaveP2_name),
         SELF(w242_code),
-        SELF(str_1161),
-        SELF(str_1160),
-        SELF(str_1159),
-        SELF(str_1158),
-        SELF(str_1157),
-        SELF(str_1156),
-        SELF(str_1155),
-        SELF(str_1154),
-        SELF(str_1153),
-        SELF(str_1152),
-        SELF(str_1151),
-        SELF(str_1150),
-        SELF(str_1149),
-        SELF(str_1148),
-        SELF(str_1147),
-        SELF(str_1146),
-        SELF(str_1145),
-        SELF(str_1144),
-        SELF(str_1143),
-        SELF(str_1142),
-        SELF(str_1141),
-        SELF(str_1140),
-        SELF(str_1139),
-        SELF(str_1138),
-        SELF(str_1137),
-        SELF(str_1136),
-        SELF(str_1135),
-        SELF(str_1134),
-        SELF(str_1133),
-        SELF(str_1132),
-        SELF(str_1131),
-        SELF(str_1130),
-        SELF(str_1129),
-        SELF(str_1128),
-        SELF(str_1127),
-        SELF(str_1126),
-        SELF(str_1125),
-        SELF(str_1124),
+        SELF(ResName_DiskSave_23_Label),
+        SELF(ResName_DiskSave_24_Label),
+        SELF(ResName_DiskSave_25_Label),
+        SELF(ResName_DiskSave_26_Label),
+        SELF(ResName_DiskSave_27_Label),
+        SELF(ResName_DiskSave_28_Label),
+        SELF(ResName_DiskSave_29_Label),
+        SELF(ResName_DiskSave_30_Label),
+        SELF(ResName_DiskSave_31_PsFileNameBox),
+        SELF(ResName_DiskSave_32_Line),
+        SELF(ResName_DiskSave_33_AcIndexEditSw),
+        SELF(ResName_DiskSave_34_Label),
+        SELF(ResName_DiskSave_35_AcParaStrBox),
+        SELF(ResName_DiskSave_36_Label),
+        SELF(ResName_DiskSave_37_AcIndexEditSw),
+        SELF(ResName_DiskSave_38_Label),
+        SELF(ResName_DiskSave_39_AcIndexEditSw),
+        SELF(ResName_DiskSave_40_Label),
+        SELF(ResName_DiskSave_41_AcIndexEditSw),
+        SELF(ResName_DiskSave_42_Label),
+        SELF(ResName_DiskSave_43_IvCatchEvent),
+        SELF(ResName_DiskSave_44_AcIndexEditSw),
+        SELF(ResName_DiskSave_45_Label),
+        SELF(ResName_DiskSave_46_AcIndexEditSw),
+        SELF(ResName_DiskSave_47_AcIndexEditSw),
+        SELF(ResName_DiskSave_48_AcIndexEditSw),
+        SELF(ResName_DiskSave_49_AcIndexEditSw),
+        SELF(ResName_DiskSave_50_AcIndexEditSw),
+        SELF(ResName_DiskSave_51_AcIndexEditSw),
+        SELF(ResName_DiskSave_52_Label),
+        SELF(ResName_DiskSave_53_Label),
+        SELF(ResName_DiskSave_54_Label),
+        SELF(ResName_DiskSave_55_Label),
+        SELF(ResName_DiskSave_56_Label),
+        SELF(ResName_DiskSave_57_Label),
+        SELF(ResName_DiskSave_58_VwScreenTitle),
+        SELF(ResName_DiskSave_59_AcIndexEditSw),
+        SELF(ResName_DiskSave_60_Label),
         SELF(DiskSaveP3_name),
         SELF(w241_code),
-        SELF(str_1123),
-        SELF(str_1122),
-        SELF(str_1121),
-        SELF(str_1120),
-        SELF(str_1119),
-        SELF(str_1118),
-        SELF(str_1117),
-        SELF(str_1116),
+        SELF(ResName_DiskSave_63_AcIndexWideES),
+        SELF(ResName_DiskSave_64_AcIndexEditSw),
+        SELF(ResName_DiskSave_65_AcParaStrBox),
+        SELF(ResName_DiskSave_66_Label),
+        SELF(ResName_DiskSave_67_Label),
+        SELF(ResName_DiskSave_68_Label),
+        SELF(ResName_DiskSave_69_VwScreenTitle),
+        SELF(ResName_DiskSave_70_IvCatchEvent),
         SELF(str_1115),
     },
 
     .str_1115 = ALIGNED_STRING(""),
 
-    .str_1116 = ALIGNED_STRING(""),
+    .ResName_DiskSave_70_IvCatchEvent = ALIGNED_STRING(""),
 
-    .str_1117 = ALIGNED_STRING(""),
+    .ResName_DiskSave_69_VwScreenTitle = ALIGNED_STRING(""),
 
-    .str_1118 = ALIGNED_STRING(""),
+    .ResName_DiskSave_68_Label = ALIGNED_STRING(""),
 
-    .str_1119 = ALIGNED_STRING(""),
+    .ResName_DiskSave_67_Label = ALIGNED_STRING(""),
 
-    .str_1120 = ALIGNED_STRING(""),
+    .ResName_DiskSave_66_Label = ALIGNED_STRING(""),
 
-    .str_1121 = ALIGNED_STRING(""),
+    .ResName_DiskSave_65_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1122 = ALIGNED_STRING(""),
+    .ResName_DiskSave_64_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1123 = ALIGNED_STRING(""),
+    .ResName_DiskSave_63_AcIndexWideES = ALIGNED_STRING(""),
 
     .w241_code = ALIGNED_STRING(""),
 
     .DiskSaveP3_name = ALIGNED_STRING("DiskSaveP3"),
 
-    .str_1124 = ALIGNED_STRING(""),
+    .ResName_DiskSave_60_Label = ALIGNED_STRING(""),
 
-    .str_1125 = ALIGNED_STRING(""),
+    .ResName_DiskSave_59_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1126 = ALIGNED_STRING(""),
+    .ResName_DiskSave_58_VwScreenTitle = ALIGNED_STRING(""),
 
-    .str_1127 = ALIGNED_STRING(""),
+    .ResName_DiskSave_57_Label = ALIGNED_STRING(""),
 
-    .str_1128 = ALIGNED_STRING(""),
+    .ResName_DiskSave_56_Label = ALIGNED_STRING(""),
 
-    .str_1129 = ALIGNED_STRING(""),
+    .ResName_DiskSave_55_Label = ALIGNED_STRING(""),
 
-    .str_1130 = ALIGNED_STRING(""),
+    .ResName_DiskSave_54_Label = ALIGNED_STRING(""),
 
-    .str_1131 = ALIGNED_STRING(""),
+    .ResName_DiskSave_53_Label = ALIGNED_STRING(""),
 
-    .str_1132 = ALIGNED_STRING(""),
+    .ResName_DiskSave_52_Label = ALIGNED_STRING(""),
 
-    .str_1133 = ALIGNED_STRING(""),
+    .ResName_DiskSave_51_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1134 = ALIGNED_STRING(""),
+    .ResName_DiskSave_50_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1135 = ALIGNED_STRING(""),
+    .ResName_DiskSave_49_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1136 = ALIGNED_STRING(""),
+    .ResName_DiskSave_48_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1137 = ALIGNED_STRING(""),
+    .ResName_DiskSave_47_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1138 = ALIGNED_STRING(""),
+    .ResName_DiskSave_46_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1139 = ALIGNED_STRING(""),
+    .ResName_DiskSave_45_Label = ALIGNED_STRING(""),
 
-    .str_1140 = ALIGNED_STRING(""),
+    .ResName_DiskSave_44_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1141 = ALIGNED_STRING(""),
+    .ResName_DiskSave_43_IvCatchEvent = ALIGNED_STRING(""),
 
-    .str_1142 = ALIGNED_STRING(""),
+    .ResName_DiskSave_42_Label = ALIGNED_STRING(""),
 
-    .str_1143 = ALIGNED_STRING(""),
+    .ResName_DiskSave_41_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1144 = ALIGNED_STRING(""),
+    .ResName_DiskSave_40_Label = ALIGNED_STRING(""),
 
-    .str_1145 = ALIGNED_STRING(""),
+    .ResName_DiskSave_39_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1146 = ALIGNED_STRING(""),
+    .ResName_DiskSave_38_Label = ALIGNED_STRING(""),
 
-    .str_1147 = ALIGNED_STRING(""),
+    .ResName_DiskSave_37_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1148 = ALIGNED_STRING(""),
+    .ResName_DiskSave_36_Label = ALIGNED_STRING(""),
 
-    .str_1149 = ALIGNED_STRING(""),
+    .ResName_DiskSave_35_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1150 = ALIGNED_STRING(""),
+    .ResName_DiskSave_34_Label = ALIGNED_STRING(""),
 
-    .str_1151 = ALIGNED_STRING(""),
+    .ResName_DiskSave_33_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1152 = ALIGNED_STRING(""),
+    .ResName_DiskSave_32_Line = ALIGNED_STRING(""),
 
-    .str_1153 = ALIGNED_STRING(""),
+    .ResName_DiskSave_31_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1154 = ALIGNED_STRING(""),
+    .ResName_DiskSave_30_Label = ALIGNED_STRING(""),
 
-    .str_1155 = ALIGNED_STRING(""),
+    .ResName_DiskSave_29_Label = ALIGNED_STRING(""),
 
-    .str_1156 = ALIGNED_STRING(""),
+    .ResName_DiskSave_28_Label = ALIGNED_STRING(""),
 
-    .str_1157 = ALIGNED_STRING(""),
+    .ResName_DiskSave_27_Label = ALIGNED_STRING(""),
 
-    .str_1158 = ALIGNED_STRING(""),
+    .ResName_DiskSave_26_Label = ALIGNED_STRING(""),
 
-    .str_1159 = ALIGNED_STRING(""),
+    .ResName_DiskSave_25_Label = ALIGNED_STRING(""),
 
-    .str_1160 = ALIGNED_STRING(""),
+    .ResName_DiskSave_24_Label = ALIGNED_STRING(""),
 
-    .str_1161 = ALIGNED_STRING(""),
+    .ResName_DiskSave_23_Label = ALIGNED_STRING(""),
 
     .w242_code = ALIGNED_STRING(""),
 
     .DiskSaveP2_name = ALIGNED_STRING("DiskSaveP2"),
 
-    .str_1162 = ALIGNED_STRING(""),
+    .ResName_DiskSave_20_VwScreenTitle = ALIGNED_STRING(""),
 
-    .str_1163 = ALIGNED_STRING(""),
+    .ResName_DiskSave_19_IvCatchEvent = ALIGNED_STRING(""),
 
-    .str_1164 = ALIGNED_STRING(""),
+    .ResName_DiskSave_18_AcFileSfxBox = ALIGNED_STRING(""),
 
-    .str_1165 = ALIGNED_STRING(""),
+    .ResName_DiskSave_17_Label = ALIGNED_STRING(""),
 
-    .str_1166 = ALIGNED_STRING(""),
+    .ResName_DiskSave_16_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1167 = ALIGNED_STRING(""),
+    .ResName_DiskSave_15_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1168 = ALIGNED_STRING(""),
+    .ResName_DiskSave_14_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1169 = ALIGNED_STRING(""),
+    .ResName_DiskSave_13_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1170 = ALIGNED_STRING(""),
+    .ResName_DiskSave_12_Label = ALIGNED_STRING(""),
 
-    .str_1171 = ALIGNED_STRING(""),
+    .ResName_DiskSave_11_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1172 = ALIGNED_STRING(""),
+    .ResName_DiskSave_10_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1173 = ALIGNED_STRING(""),
+    .ResName_DiskSave_9_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w243_code = ALIGNED_STRING(""),
 
     .DiskSaveP1_name = ALIGNED_STRING("DiskSaveP1"),
 
-    .str_1174 = ALIGNED_STRING(""),
+    .ResName_DiskSave_6_IvMainEditSw = ALIGNED_STRING(""),
 
-    .str_1175 = ALIGNED_STRING(""),
+    .ResName_DiskSave_5_IvExit = ALIGNED_STRING(""),
 
-    .str_1176 = ALIGNED_STRING(""),
+    .ResName_DiskSave_4_IvPageControl = ALIGNED_STRING(""),
 
-    .str_1177 = ALIGNED_STRING(""),
+    .ResName_DiskSave_3_IvPageControl = ALIGNED_STRING(""),
 
     .w244_code = ALIGNED_STRING(""),
 
@@ -12799,67 +12799,67 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
     .ptrs_8 = {
         SELF(DiskSmfSave_name),
         SELF(w245_code),
-        SELF(str_1199),
-        SELF(str_1198),
-        SELF(str_1197),
-        SELF(str_1196),
-        SELF(str_1195),
-        SELF(str_1194),
-        SELF(str_1193),
-        SELF(str_1192),
-        SELF(str_1191),
-        SELF(str_1190),
-        SELF(str_1189),
-        SELF(str_1188),
-        SELF(str_1187),
-        SELF(str_1186),
-        SELF(str_1185),
-        SELF(str_1184),
-        SELF(str_1183),
-        SELF(str_1182),
-        SELF(str_1181),
+        SELF(ResName_DiskSmfSave_2_AcIndexWideES),
+        SELF(ResName_DiskSmfSave_3_AcIndexEditSw),
+        SELF(ResName_DiskSmfSave_4_Label),
+        SELF(ResName_DiskSmfSave_5_AcIndexEditSw),
+        SELF(ResName_DiskSmfSave_6_Label),
+        SELF(ResName_DiskSmfSave_7_AcMonoIndexToggle),
+        SELF(ResName_DiskSmfSave_8_AcMonoIndexToggle),
+        SELF(ResName_DiskSmfSave_9_Label),
+        SELF(ResName_DiskSmfSave_10_AcTitleMenu),
+        SELF(ResName_DiskSmfSave_11_AcParaStrBox),
+        SELF(ResName_DiskSmfSave_12_AcIndexEditSw),
+        SELF(ResName_DiskSmfSave_13_Label),
+        SELF(ResName_DiskSmfSave_14_Label),
+        SELF(ResName_DiskSmfSave_15_PsFileNameBox),
+        SELF(ResName_DiskSmfSave_16_AcIndexEditSw),
+        SELF(ResName_DiskSmfSave_17_PsFileNameBox),
+        SELF(ResName_DiskSmfSave_18_PsFileNameBox),
+        SELF(ResName_DiskSmfSave_19_Label),
+        SELF(ResName_DiskSmfSave_20_Label),
         SELF(str_1180),
     },
 
     .str_1180 = ALIGNED_STRING(""),
 
-    .str_1181 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_20_Label = ALIGNED_STRING(""),
 
-    .str_1182 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_19_Label = ALIGNED_STRING(""),
 
-    .str_1183 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_18_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1184 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_17_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1185 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_16_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1186 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_15_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1187 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_14_Label = ALIGNED_STRING(""),
 
-    .str_1188 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_13_Label = ALIGNED_STRING(""),
 
-    .str_1189 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_12_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1190 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_11_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1191 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_10_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1192 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_9_Label = ALIGNED_STRING(""),
 
-    .str_1193 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_8_AcMonoIndexToggle = ALIGNED_STRING(""),
 
-    .str_1194 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_7_AcMonoIndexToggle = ALIGNED_STRING(""),
 
-    .str_1195 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_6_Label = ALIGNED_STRING(""),
 
-    .str_1196 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_5_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1197 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_4_Label = ALIGNED_STRING(""),
 
-    .str_1198 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_3_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1199 = ALIGNED_STRING(""),
+    .ResName_DiskSmfSave_2_AcIndexWideES = ALIGNED_STRING(""),
 
     .w245_code = ALIGNED_STRING(""),
 
@@ -12868,253 +12868,253 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
     .ptrs_9 = {
         SELF(DiskSmfDirectPlay_name),
         SELF(w251_code),
-        SELF(str_1271),
-        SELF(str_1270),
-        SELF(str_1269),
-        SELF(str_1268),
-        SELF(str_1267),
-        SELF(str_1266),
-        SELF(str_1265),
-        SELF(str_1264),
-        SELF(str_1263),
-        SELF(str_1262),
-        SELF(str_1261),
-        SELF(str_1260),
-        SELF(str_1259),
-        SELF(str_1258),
-        SELF(str_1257),
-        SELF(str_1256),
-        SELF(str_1255),
-        SELF(str_1254),
-        SELF(str_1253),
-        SELF(str_1252),
-        SELF(str_1251),
-        SELF(str_1250),
+        SELF(ResName_DiskSmfDirectPlay_2_PsFileNameBox),
+        SELF(ResName_DiskSmfDirectPlay_3_AcIndexWideES),
+        SELF(ResName_DiskSmfDirectPlay_4_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_5_Label),
+        SELF(ResName_DiskSmfDirectPlay_6_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_7_Label),
+        SELF(ResName_DiskSmfDirectPlay_8_Label),
+        SELF(ResName_DiskSmfDirectPlay_9_PsWindowToggle),
+        SELF(ResName_DiskSmfDirectPlay_10_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_11_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_12_AcMonoIndexToggle),
+        SELF(ResName_DiskSmfDirectPlay_13_AcMonoIndexToggle),
+        SELF(ResName_DiskSmfDirectPlay_14_Label),
+        SELF(ResName_DiskSmfDirectPlay_15_Line),
+        SELF(ResName_DiskSmfDirectPlay_16_Line),
+        SELF(ResName_DiskSmfDirectPlay_17_Line),
+        SELF(ResName_DiskSmfDirectPlay_18_Line),
+        SELF(ResName_DiskSmfDirectPlay_19_Label),
+        SELF(ResName_DiskSmfDirectPlay_20_Label),
+        SELF(ResName_DiskSmfDirectPlay_21_IvOneShotTimer),
+        SELF(ResName_DiskSmfDirectPlay_22_Label),
+        SELF(ResName_DiskSmfDirectPlay_23_Label),
         SELF(SmfMidiOut_name),
         SELF(w250_code),
-        SELF(str_1249),
-        SELF(str_1248),
+        SELF(ResName_DiskSmfDirectPlay_26_IvIndexSwDelay),
+        SELF(ResName_DiskSmfDirectPlay_27_AcIndexEditSw),
         SELF(SongNameDPSmfWin_name),
         SELF(w249_code),
-        SELF(str_1247),
-        SELF(str_1246),
+        SELF(ResName_DiskSmfDirectPlay_30_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_31_Label),
         SELF(DiskInfoDPSmfWin_name),
         SELF(w248_code),
-        SELF(str_1245),
-        SELF(str_1244),
-        SELF(str_1243),
-        SELF(str_1242),
+        SELF(ResName_DiskSmfDirectPlay_34_AcParaStrBox),
+        SELF(ResName_DiskSmfDirectPlay_35_AcParaStrBox),
+        SELF(ResName_DiskSmfDirectPlay_36_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_37_Label),
         SELF(DiskDocDirectPlay_name),
         SELF(w247_code),
-        SELF(str_1241),
-        SELF(str_1240),
-        SELF(str_1239),
-        SELF(str_1238),
-        SELF(str_1237),
-        SELF(str_1236),
-        SELF(str_1235),
-        SELF(str_1234),
-        SELF(str_1233),
-        SELF(str_1232),
-        SELF(str_1231),
-        SELF(str_1230),
-        SELF(str_1229),
-        SELF(str_1228),
-        SELF(str_1227),
-        SELF(str_1226),
-        SELF(str_1225),
-        SELF(str_1224),
-        SELF(str_1223),
-        SELF(str_1222),
-        SELF(str_1221),
+        SELF(ResName_DiskSmfDirectPlay_40_PsFileNameBox),
+        SELF(ResName_DiskSmfDirectPlay_41_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_42_Label),
+        SELF(ResName_DiskSmfDirectPlay_43_AcIndexWideES),
+        SELF(ResName_DiskSmfDirectPlay_44_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_45_Label),
+        SELF(ResName_DiskSmfDirectPlay_46_Label),
+        SELF(ResName_DiskSmfDirectPlay_47_IvOneShotTimer),
+        SELF(ResName_DiskSmfDirectPlay_48_Line),
+        SELF(ResName_DiskSmfDirectPlay_49_Line),
+        SELF(ResName_DiskSmfDirectPlay_50_Line),
+        SELF(ResName_DiskSmfDirectPlay_51_Line),
+        SELF(ResName_DiskSmfDirectPlay_52_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_53_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_54_Label),
+        SELF(ResName_DiskSmfDirectPlay_55_AcMonoIndexToggle),
+        SELF(ResName_DiskSmfDirectPlay_56_AcParaStrBox),
+        SELF(ResName_DiskSmfDirectPlay_57_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_58_Label),
+        SELF(ResName_DiskSmfDirectPlay_59_Label),
+        SELF(ResName_DiskSmfDirectPlay_60_Label),
         SELF(DiskPdDirectPlay_name),
         SELF(w246_code),
-        SELF(str_1220),
-        SELF(str_1219),
-        SELF(str_1218),
-        SELF(str_1217),
-        SELF(str_1216),
-        SELF(str_1215),
-        SELF(str_1214),
-        SELF(str_1213),
-        SELF(str_1212),
-        SELF(str_1211),
-        SELF(str_1210),
-        SELF(str_1209),
-        SELF(str_1208),
-        SELF(str_1207),
-        SELF(str_1206),
-        SELF(str_1205),
-        SELF(str_1204),
-        SELF(str_1203),
-        SELF(str_1202),
-        SELF(str_1201),
+        SELF(ResName_DiskSmfDirectPlay_63_PsFileNameBox),
+        SELF(ResName_DiskSmfDirectPlay_64_AcIndexWideES),
+        SELF(ResName_DiskSmfDirectPlay_65_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_66_Label),
+        SELF(ResName_DiskSmfDirectPlay_67_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_68_Label),
+        SELF(ResName_DiskSmfDirectPlay_69_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_70_IvOneShotTimer),
+        SELF(ResName_DiskSmfDirectPlay_71_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_72_AcMonoIndexToggle),
+        SELF(ResName_DiskSmfDirectPlay_73_Label),
+        SELF(ResName_DiskSmfDirectPlay_74_AcIndexEditSw),
+        SELF(ResName_DiskSmfDirectPlay_75_Label),
+        SELF(ResName_DiskSmfDirectPlay_76_Label),
+        SELF(ResName_DiskSmfDirectPlay_77_Line),
+        SELF(ResName_DiskSmfDirectPlay_78_Line),
+        SELF(ResName_DiskSmfDirectPlay_79_Line),
+        SELF(ResName_DiskSmfDirectPlay_80_Line),
+        SELF(ResName_DiskSmfDirectPlay_81_Label),
+        SELF(ResName_DiskSmfDirectPlay_82_Label),
         SELF(str_1200),
     },
 
     .str_1200 = ALIGNED_STRING(""),
 
-    .str_1201 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_82_Label = ALIGNED_STRING(""),
 
-    .str_1202 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_81_Label = ALIGNED_STRING(""),
 
-    .str_1203 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_80_Line = ALIGNED_STRING(""),
 
-    .str_1204 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_79_Line = ALIGNED_STRING(""),
 
-    .str_1205 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_78_Line = ALIGNED_STRING(""),
 
-    .str_1206 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_77_Line = ALIGNED_STRING(""),
 
-    .str_1207 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_76_Label = ALIGNED_STRING(""),
 
-    .str_1208 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_75_Label = ALIGNED_STRING(""),
 
-    .str_1209 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_74_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1210 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_73_Label = ALIGNED_STRING(""),
 
-    .str_1211 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_72_AcMonoIndexToggle = ALIGNED_STRING(""),
 
-    .str_1212 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_71_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1213 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_70_IvOneShotTimer = ALIGNED_STRING(""),
 
-    .str_1214 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_69_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1215 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_68_Label = ALIGNED_STRING(""),
 
-    .str_1216 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_67_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1217 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_66_Label = ALIGNED_STRING(""),
 
-    .str_1218 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_65_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1219 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_64_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1220 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_63_PsFileNameBox = ALIGNED_STRING(""),
 
     .w246_code = ALIGNED_STRING(""),
 
     .DiskPdDirectPlay_name = ALIGNED_STRING("DiskPdDirectPlay"),
 
-    .str_1221 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_60_Label = ALIGNED_STRING(""),
 
-    .str_1222 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_59_Label = ALIGNED_STRING(""),
 
-    .str_1223 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_58_Label = ALIGNED_STRING(""),
 
-    .str_1224 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_57_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1225 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_56_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1226 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_55_AcMonoIndexToggle = ALIGNED_STRING(""),
 
-    .str_1227 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_54_Label = ALIGNED_STRING(""),
 
-    .str_1228 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_53_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1229 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_52_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1230 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_51_Line = ALIGNED_STRING(""),
 
-    .str_1231 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_50_Line = ALIGNED_STRING(""),
 
-    .str_1232 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_49_Line = ALIGNED_STRING(""),
 
-    .str_1233 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_48_Line = ALIGNED_STRING(""),
 
-    .str_1234 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_47_IvOneShotTimer = ALIGNED_STRING(""),
 
-    .str_1235 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_46_Label = ALIGNED_STRING(""),
 
-    .str_1236 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_45_Label = ALIGNED_STRING(""),
 
-    .str_1237 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_44_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1238 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_43_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1239 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_42_Label = ALIGNED_STRING(""),
 
-    .str_1240 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_41_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1241 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_40_PsFileNameBox = ALIGNED_STRING(""),
 
     .w247_code = ALIGNED_STRING(""),
 
     .DiskDocDirectPlay_name = "DiskDocDirectPlay",
 
-    .str_1242 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_37_Label = ALIGNED_STRING(""),
 
-    .str_1243 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_36_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1244 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_35_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1245 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_34_AcParaStrBox = ALIGNED_STRING(""),
 
     .w248_code = ALIGNED_STRING(""),
 
     .DiskInfoDPSmfWin_name = ALIGNED_STRING("DiskInfoDPSmfWin"),
 
-    .str_1246 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_31_Label = ALIGNED_STRING(""),
 
-    .str_1247 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_30_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w249_code = ALIGNED_STRING(""),
 
     .SongNameDPSmfWin_name = ALIGNED_STRING("SongNameDPSmfWin"),
 
-    .str_1248 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_27_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1249 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_26_IvIndexSwDelay = ALIGNED_STRING(""),
 
     .w250_code = ALIGNED_STRING(""),
 
     .SmfMidiOut_name = ALIGNED_STRING("SmfMidiOut"),
 
-    .str_1250 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_23_Label = ALIGNED_STRING(""),
 
-    .str_1251 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_22_Label = ALIGNED_STRING(""),
 
-    .str_1252 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_21_IvOneShotTimer = ALIGNED_STRING(""),
 
-    .str_1253 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_20_Label = ALIGNED_STRING(""),
 
-    .str_1254 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_19_Label = ALIGNED_STRING(""),
 
-    .str_1255 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_18_Line = ALIGNED_STRING(""),
 
-    .str_1256 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_17_Line = ALIGNED_STRING(""),
 
-    .str_1257 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_16_Line = ALIGNED_STRING(""),
 
-    .str_1258 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_15_Line = ALIGNED_STRING(""),
 
-    .str_1259 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_14_Label = ALIGNED_STRING(""),
 
-    .str_1260 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_13_AcMonoIndexToggle = ALIGNED_STRING(""),
 
-    .str_1261 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_12_AcMonoIndexToggle = ALIGNED_STRING(""),
 
-    .str_1262 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_11_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1263 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_10_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1264 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_9_PsWindowToggle = ALIGNED_STRING(""),
 
-    .str_1265 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_8_Label = ALIGNED_STRING(""),
 
-    .str_1266 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_7_Label = ALIGNED_STRING(""),
 
-    .str_1267 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_6_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1268 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_5_Label = ALIGNED_STRING(""),
 
-    .str_1269 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_4_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1270 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_3_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1271 = ALIGNED_STRING(""),
+    .ResName_DiskSmfDirectPlay_2_PsFileNameBox = ALIGNED_STRING(""),
 
     .w251_code = ALIGNED_STRING(""),
 
@@ -13131,49 +13131,49 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
     .ptrs_10 = {
         SELF(DiskSongMedley_name),
         SELF(w253_code),
-        SELF(str_1291),
-        SELF(str_1290),
-        SELF(str_1289),
-        SELF(str_1288),
-        SELF(str_1287),
-        SELF(str_1286),
+        SELF(ResName_DiskSongMedley_2_AcIndexWideES),
+        SELF(ResName_DiskSongMedley_3_AcIndexEditSw),
+        SELF(ResName_DiskSongMedley_4_PsFileNameBox),
+        SELF(ResName_DiskSongMedley_5_PsFileNameBox),
+        SELF(ResName_DiskSongMedley_6_PsFileNameBox),
+        SELF(ResName_DiskSongMedley_7_Label),
         SELF(SongMedleyDiskName_str),
         SELF(SongMedleyDiskInfo_name),
         SELF(w252_code),
-        SELF(str_1284),
-        SELF(str_1283),
-        SELF(str_1282),
-        SELF(str_1281),
-        SELF(str_1280),
-        SELF(str_1279),
-        SELF(str_1278),
-        SELF(str_1277),
-        SELF(str_1276),
-        SELF(str_1275),
+        SELF(ResName_DiskSongMedley_11_Label),
+        SELF(ResName_DiskSongMedley_12_AcIndexEditSw),
+        SELF(ResName_DiskSongMedley_13_Label),
+        SELF(ResName_DiskSongMedley_14_AcIndexEditSw),
+        SELF(ResName_DiskSongMedley_15_Label),
+        SELF(ResName_DiskSongMedley_16_AcMonoIndexToggle),
+        SELF(ResName_DiskSongMedley_17_AcMonoIndexToggle),
+        SELF(ResName_DiskSongMedley_18_Label),
+        SELF(ResName_DiskSongMedley_19_IvShowHide),
+        SELF(ResName_DiskSongMedley_20_Label),
         SELF(str_1274),
     },
 
     .str_1274 = ALIGNED_STRING(""),
 
-    .str_1275 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_20_Label = ALIGNED_STRING(""),
 
-    .str_1276 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_19_IvShowHide = ALIGNED_STRING(""),
 
-    .str_1277 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_18_Label = ALIGNED_STRING(""),
 
-    .str_1278 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_17_AcMonoIndexToggle = ALIGNED_STRING(""),
 
-    .str_1279 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_16_AcMonoIndexToggle = ALIGNED_STRING(""),
 
-    .str_1280 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_15_Label = ALIGNED_STRING(""),
 
-    .str_1281 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_14_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1282 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_13_Label = ALIGNED_STRING(""),
 
-    .str_1283 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_12_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1284 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_11_Label = ALIGNED_STRING(""),
 
     .w252_code = ALIGNED_STRING(""),
 
@@ -13181,17 +13181,17 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .SongMedleyDiskName_str = ALIGNED_STRING("SongMedleyDiskName"),
 
-    .str_1286 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_7_Label = ALIGNED_STRING(""),
 
-    .str_1287 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_6_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1288 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_5_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1289 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_4_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1290 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_3_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1291 = ALIGNED_STRING(""),
+    .ResName_DiskSongMedley_2_AcIndexWideES = ALIGNED_STRING(""),
 
     .w253_code = ALIGNED_STRING(""),
 
@@ -13204,94 +13204,94 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
     .ptrs_11 = {
         SELF(DiskUtility_name),
         SELF(w266_code),
-        SELF(str_1361),
-        SELF(str_1360),
-        SELF(str_1359),
-        SELF(str_1358),
-        SELF(str_1357),
-        SELF(str_1356),
-        SELF(str_1355),
-        SELF(str_1354),
-        SELF(str_1353),
-        SELF(str_1352),
-        SELF(str_1351),
-        SELF(str_1350),
-        SELF(str_1349),
-        SELF(str_1348),
-        SELF(str_1347),
-        SELF(str_1346),
-        SELF(str_1345),
+        SELF(ResName_DiskUtility_2_AcIndexEditSw),
+        SELF(ResName_DiskUtility_3_AcIndexEditSw),
+        SELF(ResName_DiskUtility_4_AcTitleMenu),
+        SELF(ResName_DiskUtility_5_Label),
+        SELF(ResName_DiskUtility_6_AcIndexEditSw),
+        SELF(ResName_DiskUtility_7_AcIndexEditSw),
+        SELF(ResName_DiskUtility_8_Label),
+        SELF(ResName_DiskUtility_9_Label),
+        SELF(ResName_DiskUtility_10_AcTitleMenu),
+        SELF(ResName_DiskUtility_11_Label),
+        SELF(ResName_DiskUtility_12_AcScreenMenu),
+        SELF(ResName_DiskUtility_13_Label),
+        SELF(ResName_DiskUtility_14_AcIndexEditSw),
+        SELF(ResName_DiskUtility_15_AcScreenMenu),
+        SELF(ResName_DiskUtility_16_AcParaStrBox),
+        SELF(ResName_DiskUtility_17_AcParaStrBox),
+        SELF(ResName_DiskUtility_18_PsFileNameBox),
         SELF(WaitWinCtl_str),
         SELF(FileRename_name),
         SELF(w265_code),
-        SELF(str_1343),
-        SELF(str_1342),
+        SELF(ResName_DiskUtility_22_IvNaming),
+        SELF(ResName_DiskUtility_23_AcFuncEditSw),
         SELF(DiskFormat_str),
         SELF(DiskUtilitySMF_name),
         SELF(w264_code),
-        SELF(str_1340),
-        SELF(str_1339),
-        SELF(str_1338),
-        SELF(str_1337),
-        SELF(str_1336),
-        SELF(str_1335),
-        SELF(str_1334),
-        SELF(str_1333),
-        SELF(str_1332),
-        SELF(str_1331),
-        SELF(str_1330),
-        SELF(str_1329),
-        SELF(str_1328),
-        SELF(str_1327),
-        SELF(str_1326),
+        SELF(ResName_DiskUtility_27_AcIndexEditSw),
+        SELF(ResName_DiskUtility_28_Label),
+        SELF(ResName_DiskUtility_29_AcIndexWideES),
+        SELF(ResName_DiskUtility_30_AcIndexEditSw),
+        SELF(ResName_DiskUtility_31_Label),
+        SELF(ResName_DiskUtility_32_Label),
+        SELF(ResName_DiskUtility_33_PsFileNameBox),
+        SELF(ResName_DiskUtility_34_PsWindowToggle),
+        SELF(ResName_DiskUtility_35_AcTitleMenu),
+        SELF(ResName_DiskUtility_36_Label),
+        SELF(ResName_DiskUtility_37_AcIndexEditSw),
+        SELF(ResName_DiskUtility_38_Label),
+        SELF(ResName_DiskUtility_39_AcScreenMenu),
+        SELF(ResName_DiskUtility_40_Label),
+        SELF(ResName_DiskUtility_41_IvIndexSwDelay),
         SELF(WaitWinCtlSmf_str),
         SELF(DiskInfoWin_name),
         SELF(w263_code),
-        SELF(str_1324),
-        SELF(str_1323),
+        SELF(ResName_DiskUtility_45_AcParaStrBox),
+        SELF(ResName_DiskUtility_46_AcParaStrBox),
         SELF(SongNameWin_name),
         SELF(w262_code),
         SELF(DiskFormatNamingWin_name),
         SELF(w261_code),
-        SELF(str_1322),
-        SELF(str_1321),
-        SELF(str_1320),
+        SELF(ResName_DiskUtility_51_AcFuncEditSw),
+        SELF(ResName_DiskUtility_52_IvMainEditSw),
+        SELF(ResName_DiskUtility_53_Label),
         SELF(DiskFormatSureWin_name),
         SELF(w260_code),
-        SELF(str_1319),
-        SELF(str_1318),
-        SELF(str_1317),
-        SELF(str_1316),
-        SELF(str_1315),
-        SELF(str_1314),
-        SELF(str_1313),
+        SELF(ResName_DiskUtility_56_AcLanguageText),
+        SELF(ResName_DiskUtility_57_Line),
+        SELF(ResName_DiskUtility_58_AcLanguageText),
+        SELF(ResName_DiskUtility_59_AcLanguageText),
+        SELF(ResName_DiskUtility_60_VwEditSwBox),
+        SELF(ResName_DiskUtility_61_VwEditSwBox),
+        SELF(ResName_DiskUtility_62_IvMainEditSw),
         SELF(DiskFormatSelectWin_name),
         SELF(w259_code),
-        SELF(str_1312),
-        SELF(str_1311),
-        SELF(str_1310),
+        SELF(ResName_DiskUtility_65_Label),
+        SELF(ResName_DiskUtility_66_VwMenuBox),
+        SELF(ResName_DiskUtility_67_VwMenuBox),
         SELF(FileCopy_name),
         SELF(w258_code),
-        SELF(str_1309),
-        SELF(str_1308),
-        SELF(str_1307),
-        SELF(str_1306),
-        SELF(str_1305),
-        SELF(str_1304),
-        SELF(str_1303),
+        SELF(ResName_DiskUtility_70_Arrow),
+        SELF(ResName_DiskUtility_71_Label),
+        SELF(ResName_DiskUtility_72_AcParaStrBox),
+        SELF(ResName_DiskUtility_73_Label),
+        SELF(ResName_DiskUtility_74_AcIndexWideES),
+        SELF(ResName_DiskUtility_75_AcIndexEditSw),
+        SELF(ResName_DiskUtility_76_PsFileNameBox),
         SELF(FileRenameSMF_name),
         SELF(w257_code),
-        SELF(str_1302),
-        SELF(str_1301),
+        SELF(ResName_DiskUtility_79_IvNaming),
+        SELF(ResName_DiskUtility_80_AcFuncEditSw),
         SELF(DiskDeleteSureWin_name),
         SELF(w256_code),
-        SELF(str_1300),
-        SELF(str_1299),
-        SELF(str_1298),
-        SELF(str_1297),
-        SELF(str_1296),
-        SELF(str_1295),
-        SELF(str_1294),
+        SELF(ResName_DiskUtility_83_AcLanguageText),
+        SELF(ResName_DiskUtility_84_Line),
+        SELF(ResName_DiskUtility_85_AcLanguageText),
+        SELF(ResName_DiskUtility_86_AcLanguageText),
+        SELF(ResName_DiskUtility_87_AcFuncEditSw),
+        SELF(ResName_DiskUtility_88_AcFuncEditSw),
+        SELF(ResName_DiskUtility_89_AcFuncEditSw),
         SELF(DiskDeleteSureScr_name),
         SELF(w255_code),
         SELF(DiskSaveSureScr_name),
@@ -13309,83 +13309,83 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .DiskDeleteSureScr_name = "DiskDeleteSureScr",
 
-    .str_1294 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_89_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1295 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_88_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1296 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_87_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1297 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_86_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1298 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_85_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1299 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_84_Line = ALIGNED_STRING(""),
 
-    .str_1300 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_83_AcLanguageText = ALIGNED_STRING(""),
 
     .w256_code = ALIGNED_STRING(""),
 
     .DiskDeleteSureWin_name = "DiskDeleteSureWin",
 
-    .str_1301 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_80_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1302 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_79_IvNaming = ALIGNED_STRING(""),
 
     .w257_code = ALIGNED_STRING(""),
 
     .FileRenameSMF_name = "FileRenameSMF",
 
-    .str_1303 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_76_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1304 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_75_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1305 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_74_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1306 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_73_Label = ALIGNED_STRING(""),
 
-    .str_1307 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_72_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1308 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_71_Label = ALIGNED_STRING(""),
 
-    .str_1309 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_70_Arrow = ALIGNED_STRING(""),
 
     .w258_code = ALIGNED_STRING(""),
 
     .FileCopy_name = ALIGNED_STRING("FileCopy"),
 
-    .str_1310 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_67_VwMenuBox = ALIGNED_STRING(""),
 
-    .str_1311 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_66_VwMenuBox = ALIGNED_STRING(""),
 
-    .str_1312 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_65_Label = ALIGNED_STRING(""),
 
     .w259_code = ALIGNED_STRING(""),
 
     .DiskFormatSelectWin_name = "DiskFormatSelectWin",
 
-    .str_1313 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_62_IvMainEditSw = ALIGNED_STRING(""),
 
-    .str_1314 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_61_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_1315 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_60_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_1316 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_59_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1317 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_58_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1318 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_57_Line = ALIGNED_STRING(""),
 
-    .str_1319 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_56_AcLanguageText = ALIGNED_STRING(""),
 
     .w260_code = ALIGNED_STRING(""),
 
     .DiskFormatSureWin_name = "DiskFormatSureWin",
 
-    .str_1320 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_53_Label = ALIGNED_STRING(""),
 
-    .str_1321 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_52_IvMainEditSw = ALIGNED_STRING(""),
 
-    .str_1322 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_51_AcFuncEditSw = ALIGNED_STRING(""),
 
     .w261_code = ALIGNED_STRING(""),
 
@@ -13395,9 +13395,9 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .SongNameWin_name = "SongNameWin",
 
-    .str_1323 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_46_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1324 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_45_AcParaStrBox = ALIGNED_STRING(""),
 
     .w263_code = ALIGNED_STRING(""),
 
@@ -13405,35 +13405,35 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .WaitWinCtlSmf_str = "WaitWinCtlSmf",
 
-    .str_1326 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_41_IvIndexSwDelay = ALIGNED_STRING(""),
 
-    .str_1327 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_40_Label = ALIGNED_STRING(""),
 
-    .str_1328 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_39_AcScreenMenu = ALIGNED_STRING(""),
 
-    .str_1329 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_38_Label = ALIGNED_STRING(""),
 
-    .str_1330 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_37_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1331 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_36_Label = ALIGNED_STRING(""),
 
-    .str_1332 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_35_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1333 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_34_PsWindowToggle = ALIGNED_STRING(""),
 
-    .str_1334 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_33_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1335 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_32_Label = ALIGNED_STRING(""),
 
-    .str_1336 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_31_Label = ALIGNED_STRING(""),
 
-    .str_1337 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_30_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1338 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_29_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1339 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_28_Label = ALIGNED_STRING(""),
 
-    .str_1340 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_27_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w264_code = ALIGNED_STRING(""),
 
@@ -13441,9 +13441,9 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .DiskFormat_str = ALIGNED_STRING("DiskFormat"),
 
-    .str_1342 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_23_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1343 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_22_IvNaming = ALIGNED_STRING(""),
 
     .w265_code = ALIGNED_STRING(""),
 
@@ -13451,39 +13451,39 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .WaitWinCtl_str = ALIGNED_STRING("WaitWinCtl"),
 
-    .str_1345 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_18_PsFileNameBox = ALIGNED_STRING(""),
 
-    .str_1346 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_17_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1347 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_16_AcParaStrBox = ALIGNED_STRING(""),
 
-    .str_1348 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_15_AcScreenMenu = ALIGNED_STRING(""),
 
-    .str_1349 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_14_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1350 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_13_Label = ALIGNED_STRING(""),
 
-    .str_1351 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_12_AcScreenMenu = ALIGNED_STRING(""),
 
-    .str_1352 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_11_Label = ALIGNED_STRING(""),
 
-    .str_1353 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_10_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1354 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_9_Label = ALIGNED_STRING(""),
 
-    .str_1355 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_8_Label = ALIGNED_STRING(""),
 
-    .str_1356 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_7_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1357 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_6_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1358 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_5_Label = ALIGNED_STRING(""),
 
-    .str_1359 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_4_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1360 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_3_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1361 = ALIGNED_STRING(""),
+    .ResName_DiskUtility_2_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w266_code = ALIGNED_STRING(""),
 
@@ -13500,28 +13500,28 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
     .ptrs_12 = {
         SELF(DiskSetup_name),
         SELF(w267_code),
-        SELF(str_1370),
-        SELF(str_1369),
-        SELF(str_1368),
-        SELF(str_1367),
-        SELF(str_1366),
-        SELF(str_1365),
+        SELF(ResName_DiskSetup_2_AcRamEditBox),
+        SELF(ResName_DiskSetup_3_AcBitEditBox),
+        SELF(ResName_DiskSetup_4_AcFuncEditSw),
+        SELF(ResName_DiskSetup_5_IvCatchEvent),
+        SELF(ResName_DiskSetup_6_AcLanguageText),
+        SELF(ResName_DiskSetup_7_AcLanguageText),
         SELF(str_1364),
     },
 
     .str_1364 = ALIGNED_STRING(""),
 
-    .str_1365 = ALIGNED_STRING(""),
+    .ResName_DiskSetup_7_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1366 = ALIGNED_STRING(""),
+    .ResName_DiskSetup_6_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1367 = ALIGNED_STRING(""),
+    .ResName_DiskSetup_5_IvCatchEvent = ALIGNED_STRING(""),
 
-    .str_1368 = ALIGNED_STRING(""),
+    .ResName_DiskSetup_4_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1369 = ALIGNED_STRING(""),
+    .ResName_DiskSetup_3_AcBitEditBox = ALIGNED_STRING(""),
 
-    .str_1370 = ALIGNED_STRING(""),
+    .ResName_DiskSetup_2_AcRamEditBox = ALIGNED_STRING(""),
 
     .w267_code = ALIGNED_STRING(""),
 

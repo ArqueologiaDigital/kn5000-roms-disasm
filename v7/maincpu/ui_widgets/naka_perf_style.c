@@ -1455,481 +1455,481 @@ typedef struct __attribute__((packed)) {
     char w342_text[4];
     uint32_t ptrs_0[958];  /* 958 pointers */
     char str_388[2];
-    char str_389[2];
-    char str_390[2];
-    char str_391[2];
-    char str_392[2];
-    char str_393[2];
-    char str_394[2];
-    char str_395[2];
-    char str_396[2];
-    char str_397[2];
-    char str_398[2];
-    char str_399[2];
-    char str_400[2];
-    char str_401[2];
-    char str_402[2];
-    char str_403[2];
-    char str_404[2];
-    char str_405[2];
-    char str_406[2];
-    char str_407[2];
-    char str_408[2];
-    char str_409[2];
-    char str_410[2];
-    char str_411[2];
-    char str_412[2];
-    char str_413[2];
-    char str_414[2];
-    char str_415[2];
-    char str_416[2];
-    char str_417[2];
-    char str_418[2];
-    char str_419[2];
-    char str_420[2];
-    char str_421[2];
-    char str_422[2];
-    char str_423[2];
-    char str_424[2];
-    char str_425[2];
+    char ResName_ftdemo01_477_Label[2];
+    char ResName_ftdemo01_476_Label[2];
+    char ResName_ftdemo01_475_Frame[2];
+    char ResName_ftdemo01_474_Label[2];
+    char ResName_ftdemo01_473_Label[2];
+    char ResName_ftdemo01_472_Label[2];
+    char ResName_ftdemo01_471_Label[2];
+    char ResName_ftdemo01_470_Label[2];
+    char ResName_ftdemo01_469_Label[2];
+    char ResName_ftdemo01_468_Label[2];
+    char ResName_ftdemo01_467_Label[2];
+    char ResName_ftdemo01_466_Label[2];
+    char ResName_ftdemo01_465_Label[2];
+    char ResName_ftdemo01_464_Box[2];
+    char ResName_ftdemo01_463_Label[2];
+    char ResName_ftdemo01_462_Line[2];
+    char ResName_ftdemo01_461_Label[2];
+    char ResName_ftdemo01_460_Label[2];
+    char ResName_ftdemo01_459_PsEditSwBox[2];
+    char ResName_ftdemo01_458_Line[2];
+    char ResName_ftdemo01_457_Label[2];
+    char ResName_ftdemo01_456_Label[2];
+    char ResName_ftdemo01_455_PsEditSwBox[2];
+    char ResName_ftdemo01_454_Label[2];
+    char ResName_ftdemo01_453_PsEditSwBox[2];
+    char ResName_ftdemo01_452_Frame[2];
+    char ResName_ftdemo01_451_Label[2];
+    char ResName_ftdemo01_450_Label[2];
+    char ResName_ftdemo01_449_Label[2];
+    char ResName_ftdemo01_448_Label[2];
+    char ResName_ftdemo01_447_Label[2];
+    char ResName_ftdemo01_446_Label[2];
+    char ResName_ftdemo01_445_Label[2];
+    char ResName_ftdemo01_444_Label[2];
+    char ResName_ftdemo01_443_Label[2];
+    char ResName_ftdemo01_442_Label[2];
+    char ResName_ftdemo01_441_Box[2];
     char ftdemo43_str[10];
-    char str_427[2];
-    char str_428[2];
-    char str_429[2];
-    char str_430[2];
-    char str_431[2];
-    char str_432[2];
-    char str_433[2];
-    char str_434[2];
-    char str_435[2];
-    char str_436[2];
-    char str_437[2];
-    char str_438[2];
-    char str_439[2];
-    char str_440[2];
-    char str_441[2];
-    char str_442[2];
-    char str_443[2];
-    char str_444[2];
-    char str_445[2];
-    char str_446[2];
+    char ResName_ftdemo01_439_Line[2];
+    char ResName_ftdemo01_438_Label[2];
+    char ResName_ftdemo01_437_Label[2];
+    char ResName_ftdemo01_436_Label[2];
+    char ResName_ftdemo01_435_PsEditSwBox[2];
+    char ResName_ftdemo01_434_Line[2];
+    char ResName_ftdemo01_433_Label[2];
+    char ResName_ftdemo01_432_Label[2];
+    char ResName_ftdemo01_431_Label[2];
+    char ResName_ftdemo01_430_PsEditSwBox[2];
+    char ResName_ftdemo01_429_Frame[2];
+    char ResName_ftdemo01_428_Label[2];
+    char ResName_ftdemo01_427_Label[2];
+    char ResName_ftdemo01_426_Label[2];
+    char ResName_ftdemo01_425_Label[2];
+    char ResName_ftdemo01_424_Label[2];
+    char ResName_ftdemo01_423_Label[2];
+    char ResName_ftdemo01_422_Label[2];
+    char ResName_ftdemo01_421_Label[2];
+    char ResName_ftdemo01_420_Box[2];
     char ftdemo48_str[10];
-    char str_448[2];
-    char str_449[2];
-    char str_450[2];
-    char str_451[2];
-    char str_452[2];
-    char str_453[2];
-    char str_454[2];
-    char str_455[2];
-    char str_456[2];
-    char str_457[2];
-    char str_458[2];
-    char str_459[2];
-    char str_460[2];
-    char str_461[2];
-    char str_462[2];
-    char str_463[2];
-    char str_464[2];
-    char str_465[2];
-    char str_466[2];
-    char str_467[2];
+    char ResName_ftdemo01_418_Line[2];
+    char ResName_ftdemo01_417_Label[2];
+    char ResName_ftdemo01_416_Label[2];
+    char ResName_ftdemo01_415_Label[2];
+    char ResName_ftdemo01_414_PsEditSwBox[2];
+    char ResName_ftdemo01_413_Line[2];
+    char ResName_ftdemo01_412_Label[2];
+    char ResName_ftdemo01_411_Label[2];
+    char ResName_ftdemo01_410_Label[2];
+    char ResName_ftdemo01_409_PsEditSwBox[2];
+    char ResName_ftdemo01_408_Frame[2];
+    char ResName_ftdemo01_407_Label[2];
+    char ResName_ftdemo01_406_Label[2];
+    char ResName_ftdemo01_405_Label[2];
+    char ResName_ftdemo01_404_Label[2];
+    char ResName_ftdemo01_403_Label[2];
+    char ResName_ftdemo01_402_Label[2];
+    char ResName_ftdemo01_401_Label[2];
+    char ResName_ftdemo01_400_Label[2];
+    char ResName_ftdemo01_399_Box[2];
     char ftdemo47_str[10];
-    char str_469[2];
-    char str_470[2];
-    char str_471[2];
-    char str_472[2];
-    char str_473[2];
-    char str_474[2];
-    char str_475[2];
-    char str_476[2];
-    char str_477[2];
-    char str_478[2];
-    char str_479[2];
-    char str_480[2];
-    char str_481[2];
-    char str_482[2];
-    char str_483[2];
-    char str_484[2];
-    char str_485[2];
-    char str_486[2];
-    char str_487[2];
-    char str_488[2];
-    char str_489[2];
-    char str_490[2];
+    char ResName_ftdemo01_397_Line[2];
+    char ResName_ftdemo01_396_Label[2];
+    char ResName_ftdemo01_395_Label[2];
+    char ResName_ftdemo01_394_Label[2];
+    char ResName_ftdemo01_393_PsEditSwBox[2];
+    char ResName_ftdemo01_392_Line[2];
+    char ResName_ftdemo01_391_Label[2];
+    char ResName_ftdemo01_390_Label[2];
+    char ResName_ftdemo01_389_Label[2];
+    char ResName_ftdemo01_388_PsEditSwBox[2];
+    char ResName_ftdemo01_387_Label[2];
+    char ResName_ftdemo01_386_Label[2];
+    char ResName_ftdemo01_385_Label[2];
+    char ResName_ftdemo01_384_Label[2];
+    char ResName_ftdemo01_383_Label[2];
+    char ResName_ftdemo01_382_Label[2];
+    char ResName_ftdemo01_381_Label[2];
+    char ResName_ftdemo01_380_Label[2];
+    char ResName_ftdemo01_379_Label[2];
+    char ResName_ftdemo01_378_Frame[2];
+    char ResName_ftdemo01_377_Label[2];
+    char ResName_ftdemo01_376_Box[2];
     char ftdemo46_str[10];
-    char str_492[2];
-    char str_493[2];
-    char str_494[2];
-    char str_495[2];
-    char str_496[2];
-    char str_497[2];
-    char str_498[2];
-    char str_499[2];
-    char str_500[2];
-    char str_501[2];
-    char str_502[2];
-    char str_503[2];
-    char str_504[2];
-    char str_505[2];
-    char str_506[2];
-    char str_507[2];
-    char str_508[2];
-    char str_509[2];
-    char str_510[2];
-    char str_511[2];
-    char str_512[2];
-    char str_513[2];
+    char ResName_ftdemo01_374_Label[2];
+    char ResName_ftdemo01_373_Line[2];
+    char ResName_ftdemo01_372_Label[2];
+    char ResName_ftdemo01_371_Label[2];
+    char ResName_ftdemo01_370_PsEditSwBox[2];
+    char ResName_ftdemo01_369_Line[2];
+    char ResName_ftdemo01_368_Label[2];
+    char ResName_ftdemo01_367_Label[2];
+    char ResName_ftdemo01_366_Label[2];
+    char ResName_ftdemo01_365_PsEditSwBox[2];
+    char ResName_ftdemo01_364_Frame[2];
+    char ResName_ftdemo01_363_Label[2];
+    char ResName_ftdemo01_362_Label[2];
+    char ResName_ftdemo01_361_Label[2];
+    char ResName_ftdemo01_360_Label[2];
+    char ResName_ftdemo01_359_Label[2];
+    char ResName_ftdemo01_358_Label[2];
+    char ResName_ftdemo01_357_Label[2];
+    char ResName_ftdemo01_356_Label[2];
+    char ResName_ftdemo01_355_Label[2];
+    char ResName_ftdemo01_354_Label[2];
+    char ResName_ftdemo01_353_Box[2];
     char ftdemo45_str[10];
-    char str_515[2];
-    char str_516[2];
-    char str_517[2];
-    char str_518[2];
-    char str_519[2];
-    char str_520[2];
-    char str_521[2];
-    char str_522[2];
-    char str_523[2];
-    char str_524[2];
-    char str_525[2];
-    char str_526[2];
-    char str_527[2];
-    char str_528[2];
-    char str_529[2];
-    char str_530[2];
-    char str_531[2];
-    char str_532[2];
-    char str_533[2];
-    char str_534[2];
-    char str_535[2];
-    char str_536[2];
+    char ResName_ftdemo01_351_Label[2];
+    char ResName_ftdemo01_350_Line[2];
+    char ResName_ftdemo01_349_Label[2];
+    char ResName_ftdemo01_348_Label[2];
+    char ResName_ftdemo01_347_PsEditSwBox[2];
+    char ResName_ftdemo01_346_Line[2];
+    char ResName_ftdemo01_345_Label[2];
+    char ResName_ftdemo01_344_Label[2];
+    char ResName_ftdemo01_343_Label[2];
+    char ResName_ftdemo01_342_PsEditSwBox[2];
+    char ResName_ftdemo01_341_Frame[2];
+    char ResName_ftdemo01_340_Label[2];
+    char ResName_ftdemo01_339_Label[2];
+    char ResName_ftdemo01_338_Label[2];
+    char ResName_ftdemo01_337_Label[2];
+    char ResName_ftdemo01_336_Label[2];
+    char ResName_ftdemo01_335_Label[2];
+    char ResName_ftdemo01_334_Label[2];
+    char ResName_ftdemo01_333_Label[2];
+    char ResName_ftdemo01_332_Label[2];
+    char ResName_ftdemo01_331_Label[2];
+    char ResName_ftdemo01_330_Box[2];
     char ftdemo44_str[10];
-    char str_538[2];
-    char str_539[2];
-    char str_540[2];
-    char str_541[2];
-    char str_542[2];
-    char str_543[2];
-    char str_544[2];
-    char str_545[2];
-    char str_546[2];
-    char str_547[2];
-    char str_548[2];
-    char str_549[2];
-    char str_550[2];
-    char str_551[2];
-    char str_552[2];
-    char str_553[2];
-    char str_554[2];
-    char str_555[2];
-    char str_556[2];
-    char str_557[2];
-    char str_558[2];
-    char str_559[2];
-    char str_560[2];
-    char str_561[2];
-    char str_562[2];
-    char str_563[2];
-    char str_564[2];
-    char str_565[2];
-    char str_566[2];
-    char str_567[2];
-    char str_568[2];
-    char str_569[2];
-    char str_570[2];
-    char str_571[2];
-    char str_572[2];
-    char str_573[2];
-    char str_574[2];
+    char ResName_ftdemo01_328_Label[2];
+    char ResName_ftdemo01_327_Label[2];
+    char ResName_ftdemo01_326_Frame[2];
+    char ResName_ftdemo01_325_Label[2];
+    char ResName_ftdemo01_324_Label[2];
+    char ResName_ftdemo01_323_Label[2];
+    char ResName_ftdemo01_322_Label[2];
+    char ResName_ftdemo01_321_Label[2];
+    char ResName_ftdemo01_320_Label[2];
+    char ResName_ftdemo01_319_Label[2];
+    char ResName_ftdemo01_318_Label[2];
+    char ResName_ftdemo01_317_Label[2];
+    char ResName_ftdemo01_316_Label[2];
+    char ResName_ftdemo01_315_Box[2];
+    char ResName_ftdemo01_314_Label[2];
+    char ResName_ftdemo01_313_Line[2];
+    char ResName_ftdemo01_312_Label[2];
+    char ResName_ftdemo01_311_Label[2];
+    char ResName_ftdemo01_310_PsEditSwBox[2];
+    char ResName_ftdemo01_309_Line[2];
+    char ResName_ftdemo01_308_Label[2];
+    char ResName_ftdemo01_307_Label[2];
+    char ResName_ftdemo01_306_PsEditSwBox[2];
+    char ResName_ftdemo01_305_Label[2];
+    char ResName_ftdemo01_304_PsEditSwBox[2];
+    char ResName_ftdemo01_303_Frame[2];
+    char ResName_ftdemo01_302_Label[2];
+    char ResName_ftdemo01_301_Label[2];
+    char ResName_ftdemo01_300_Label[2];
+    char ResName_ftdemo01_299_Label[2];
+    char ResName_ftdemo01_298_Label[2];
+    char ResName_ftdemo01_297_Label[2];
+    char ResName_ftdemo01_296_Label[2];
+    char ResName_ftdemo01_295_Label[2];
+    char ResName_ftdemo01_294_Label[2];
+    char ResName_ftdemo01_293_Label[2];
+    char ResName_ftdemo01_292_Box[2];
     char ftdemo42_str[10];
-    char str_576[2];
-    char str_577[2];
-    char str_578[2];
-    char str_579[2];
-    char str_580[2];
-    char str_581[2];
-    char str_582[2];
-    char str_583[2];
-    char str_584[2];
-    char str_585[2];
-    char str_586[2];
-    char str_587[2];
-    char str_588[2];
-    char str_589[2];
-    char str_590[2];
-    char str_591[2];
-    char str_592[2];
-    char str_593[2];
-    char str_594[2];
-    char str_595[2];
-    char str_596[2];
-    char str_597[2];
-    char str_598[2];
-    char str_599[2];
-    char str_600[2];
-    char str_601[2];
-    char str_602[2];
-    char str_603[2];
-    char str_604[2];
-    char str_605[2];
-    char str_606[2];
-    char str_607[2];
-    char str_608[2];
-    char str_609[2];
-    char str_610[2];
-    char str_611[2];
-    char str_612[2];
+    char ResName_ftdemo01_290_Label[2];
+    char ResName_ftdemo01_289_Label[2];
+    char ResName_ftdemo01_288_Frame[2];
+    char ResName_ftdemo01_287_Label[2];
+    char ResName_ftdemo01_286_Label[2];
+    char ResName_ftdemo01_285_Label[2];
+    char ResName_ftdemo01_284_Label[2];
+    char ResName_ftdemo01_283_Label[2];
+    char ResName_ftdemo01_282_Label[2];
+    char ResName_ftdemo01_281_Label[2];
+    char ResName_ftdemo01_280_Label[2];
+    char ResName_ftdemo01_279_Label[2];
+    char ResName_ftdemo01_278_Label[2];
+    char ResName_ftdemo01_277_Box[2];
+    char ResName_ftdemo01_276_Label[2];
+    char ResName_ftdemo01_275_Line[2];
+    char ResName_ftdemo01_274_Label[2];
+    char ResName_ftdemo01_273_Label[2];
+    char ResName_ftdemo01_272_PsEditSwBox[2];
+    char ResName_ftdemo01_271_Line[2];
+    char ResName_ftdemo01_270_Label[2];
+    char ResName_ftdemo01_269_Label[2];
+    char ResName_ftdemo01_268_PsEditSwBox[2];
+    char ResName_ftdemo01_267_Label[2];
+    char ResName_ftdemo01_266_PsEditSwBox[2];
+    char ResName_ftdemo01_265_Frame[2];
+    char ResName_ftdemo01_264_Label[2];
+    char ResName_ftdemo01_263_Label[2];
+    char ResName_ftdemo01_262_Label[2];
+    char ResName_ftdemo01_261_Label[2];
+    char ResName_ftdemo01_260_Label[2];
+    char ResName_ftdemo01_259_Label[2];
+    char ResName_ftdemo01_258_Label[2];
+    char ResName_ftdemo01_257_Label[2];
+    char ResName_ftdemo01_256_Label[2];
+    char ResName_ftdemo01_255_Label[2];
+    char ResName_ftdemo01_254_Box[2];
     char ftdemo41_str[10];
-    char str_614[2];
-    char str_615[2];
-    char str_616[2];
-    char str_617[2];
-    char str_618[2];
-    char str_619[2];
+    char ResName_ftdemo01_252_Label[2];
+    char ResName_ftdemo01_251_Label[2];
+    char ResName_ftdemo01_250_Label[2];
+    char ResName_ftdemo01_249_Label[2];
+    char ResName_ftdemo01_248_Box[2];
+    char ResName_ftdemo01_247_Box[2];
     char ftdemo40_str[10];
-    char str_621[2];
-    char str_622[2];
-    char str_623[2];
-    char str_624[2];
-    char str_625[2];
-    char str_626[2];
-    char str_627[2];
-    char str_628[2];
-    char str_629[2];
-    char str_630[2];
-    char str_631[2];
-    char str_632[2];
-    char str_633[2];
-    char str_634[2];
-    char str_635[2];
-    char str_636[2];
-    char str_637[2];
-    char str_638[2];
-    char str_639[2];
+    char ResName_ftdemo01_245_Line[2];
+    char ResName_ftdemo01_244_Label[2];
+    char ResName_ftdemo01_243_Label[2];
+    char ResName_ftdemo01_242_PsEditSwBox[2];
+    char ResName_ftdemo01_241_Line[2];
+    char ResName_ftdemo01_240_Label[2];
+    char ResName_ftdemo01_239_Label[2];
+    char ResName_ftdemo01_238_PsEditSwBox[2];
+    char ResName_ftdemo01_237_Label[2];
+    char ResName_ftdemo01_236_Box[2];
+    char ResName_ftdemo01_235_Frame[2];
+    char ResName_ftdemo01_234_Label[2];
+    char ResName_ftdemo01_233_Label[2];
+    char ResName_ftdemo01_232_Label[2];
+    char ResName_ftdemo01_231_Label[2];
+    char ResName_ftdemo01_230_Label[2];
+    char ResName_ftdemo01_229_Label[2];
+    char ResName_ftdemo01_228_Label[2];
+    char ResName_ftdemo01_227_Box[2];
     char ftdemo26_str[10];
     char ftdemobmpend_str[14];
     char ftdemo25_str[10];
-    char str_643[2];
-    char str_644[2];
-    char str_645[2];
-    char str_646[2];
-    char str_647[2];
-    char str_648[2];
-    char str_649[2];
-    char str_650[2];
-    char str_651[2];
-    char str_652[2];
-    char str_653[2];
-    char str_654[2];
-    char str_655[2];
-    char str_656[2];
-    char str_657[2];
-    char str_658[2];
-    char str_659[2];
-    char str_660[2];
-    char str_661[2];
-    char str_662[2];
-    char str_663[2];
-    char str_664[2];
-    char str_665[2];
-    char str_666[2];
-    char str_667[2];
-    char str_668[2];
-    char str_669[2];
-    char str_670[2];
-    char str_671[2];
-    char str_672[2];
-    char str_673[2];
-    char str_674[2];
-    char str_675[2];
-    char str_676[2];
-    char str_677[2];
-    char str_678[2];
-    char str_679[2];
-    char str_680[2];
+    char ResName_ftdemo01_223_Frame[2];
+    char ResName_ftdemo01_222_Label[2];
+    char ResName_ftdemo01_221_Label[2];
+    char ResName_ftdemo01_220_Label[2];
+    char ResName_ftdemo01_219_Line[2];
+    char ResName_ftdemo01_218_Label[2];
+    char ResName_ftdemo01_217_Box[2];
+    char ResName_ftdemo01_216_Label[2];
+    char ResName_ftdemo01_215_Line[2];
+    char ResName_ftdemo01_214_Label[2];
+    char ResName_ftdemo01_213_Box[2];
+    char ResName_ftdemo01_212_Label[2];
+    char ResName_ftdemo01_211_Box[2];
+    char ResName_ftdemo01_210_Label[2];
+    char ResName_ftdemo01_209_Box[2];
+    char ResName_ftdemo01_208_Label[2];
+    char ResName_ftdemo01_207_Label[2];
+    char ResName_ftdemo01_206_Label[2];
+    char ResName_ftdemo01_205_Label[2];
+    char ResName_ftdemo01_204_Label[2];
+    char ResName_ftdemo01_203_Label[2];
+    char ResName_ftdemo01_202_Label[2];
+    char ResName_ftdemo01_201_Label[2];
+    char ResName_ftdemo01_200_Label[2];
+    char ResName_ftdemo01_199_Label[2];
+    char ResName_ftdemo01_198_Label[2];
+    char ResName_ftdemo01_197_Label[2];
+    char ResName_ftdemo01_196_Box[2];
+    char ResName_ftdemo01_195_Label[2];
+    char ResName_ftdemo01_194_Label[2];
+    char ResName_ftdemo01_193_Label[2];
+    char ResName_ftdemo01_192_Label[2];
+    char ResName_ftdemo01_191_Label[2];
+    char ResName_ftdemo01_190_Label[2];
+    char ResName_ftdemo01_189_Label[2];
+    char ResName_ftdemo01_188_Label[2];
+    char ResName_ftdemo01_187_Line[2];
+    char ResName_ftdemo01_186_Box[2];
     char ftdemo24_str[10];
-    char str_682[2];
-    char str_683[2];
-    char str_684[2];
-    char str_685[2];
-    char str_686[2];
-    char str_687[2];
-    char str_688[2];
-    char str_689[2];
-    char str_690[2];
-    char str_691[2];
-    char str_692[2];
-    char str_693[2];
-    char str_694[2];
-    char str_695[2];
-    char str_696[2];
-    char str_697[2];
-    char str_698[2];
-    char str_699[2];
-    char str_700[2];
-    char str_701[2];
-    char str_702[2];
-    char str_703[2];
+    char ResName_ftdemo01_184_Bitmap[2];
+    char ResName_ftdemo01_183_VwEditSwBox[2];
+    char ResName_ftdemo01_182_Bitmap[2];
+    char ResName_ftdemo01_181_VwEditSwBox[2];
+    char ResName_ftdemo01_180_Bitmap[2];
+    char ResName_ftdemo01_179_PsEditSwBox[2];
+    char ResName_ftdemo01_178_Bitmap[2];
+    char ResName_ftdemo01_177_PsEditSwBox[2];
+    char ResName_ftdemo01_176_Bitmap[2];
+    char ResName_ftdemo01_175_VwEditSwBox[2];
+    char ResName_ftdemo01_174_Label[2];
+    char ResName_ftdemo01_173_Label[2];
+    char ResName_ftdemo01_172_Label[2];
+    char ResName_ftdemo01_171_Label[2];
+    char ResName_ftdemo01_170_Label[2];
+    char ResName_ftdemo01_169_Label[2];
+    char ResName_ftdemo01_168_Label[2];
+    char ResName_ftdemo01_167_Label[2];
+    char ResName_ftdemo01_166_Box[2];
+    char ResName_ftdemo01_165_Label[2];
+    char ResName_ftdemo01_164_Label[2];
+    char ResName_ftdemo01_163_Label[2];
     char ftdemo23_str[10];
-    char str_705[2];
-    char str_706[2];
-    char str_707[2];
-    char str_708[2];
-    char str_709[2];
-    char str_710[2];
-    char str_711[2];
-    char str_712[2];
-    char str_713[2];
-    char str_714[2];
-    char str_715[2];
-    char str_716[2];
-    char str_717[2];
-    char str_718[2];
-    char str_719[2];
-    char str_720[2];
-    char str_721[2];
-    char str_722[2];
-    char str_723[2];
-    char str_724[2];
-    char str_725[2];
-    char str_726[2];
-    char str_727[2];
+    char ResName_ftdemo01_161_Label[2];
+    char ResName_ftdemo01_160_Box[2];
+    char ResName_ftdemo01_159_Label[2];
+    char ResName_ftdemo01_158_Label[2];
+    char ResName_ftdemo01_157_Label[2];
+    char ResName_ftdemo01_156_Label[2];
+    char ResName_ftdemo01_155_Label[2];
+    char ResName_ftdemo01_154_Label[2];
+    char ResName_ftdemo01_153_Label[2];
+    char ResName_ftdemo01_152_Label[2];
+    char ResName_ftdemo01_151_Label[2];
+    char ResName_ftdemo01_150_Line[2];
+    char ResName_ftdemo01_149_Label[2];
+    char ResName_ftdemo01_148_Label[2];
+    char ResName_ftdemo01_147_Label[2];
+    char ResName_ftdemo01_146_Label[2];
+    char ResName_ftdemo01_145_EditSw[2];
+    char ResName_ftdemo01_144_EditSw[2];
+    char ResName_ftdemo01_143_Label[2];
+    char ResName_ftdemo01_142_Label[2];
+    char ResName_ftdemo01_141_PsEditSwBox[2];
+    char ResName_ftdemo01_140_Label[2];
+    char ResName_ftdemo01_139_Box[2];
     char ftdemo22_str[10];
-    char str_729[2];
+    char ResName_ftdemo01_137_AcLanguageText[2];
     char ftdemo21_str[10];
     char ftdemobmpill_str[14];
-    char str_732[2];
-    char str_733[2];
+    char ResName_ftdemo01_134_AcLanguageText[2];
+    char ResName_ftdemo01_133_AcLanguageText[2];
     char ftdemo20_str[10];
-    char str_735[2];
-    char str_736[2];
+    char ResName_ftdemo01_131_AcLanguageText[2];
+    char ResName_ftdemo01_130_AcLanguageText[2];
     char ftdemo10_str[10];
-    char str_738[2];
-    char str_739[2];
+    char ResName_ftdemo01_128_AcLanguageText[2];
+    char ResName_ftdemo01_127_AcLanguageText[2];
     char ftdemo09_str[10];
-    char str_741[2];
+    char ResName_ftdemo01_125_AcLanguageText[2];
     char ftdemo08_str[10];
-    char str_743[2];
+    char ResName_ftdemo01_123_AcLanguageText[2];
     char ftdemobmpcnv_str[14];
     char ftdemo07_str[10];
     char ftdemobmpsoft_str[14];
-    char str_747[2];
+    char ResName_ftdemo01_119_AcLanguageText[2];
     char ftdemo06_str[10];
-    char str_749[2];
-    char str_750[2];
+    char ResName_ftdemo01_117_AcLanguageText[2];
+    char ResName_ftdemo01_116_AcLanguageText[2];
     char ftdemo05_str[10];
-    char str_752[2];
-    char str_753[2];
-    char str_754[2];
-    char str_755[2];
+    char ResName_ftdemo01_114_AcLanguageText[2];
+    char ResName_ftdemo01_113_AcLanguageText[2];
+    char ResName_ftdemo01_112_Box[2];
+    char ResName_ftdemo01_111_AcLanguageText[2];
     char ftdemobmp3D_str[12];
     char ftdemo04_str[10];
-    char str_758[2];
-    char str_759[2];
-    char str_760[2];
-    char str_761[2];
-    char str_762[2];
-    char str_763[2];
-    char str_764[2];
-    char str_765[2];
-    char str_766[2];
-    char str_767[2];
-    char str_768[2];
-    char str_769[2];
-    char str_770[2];
-    char str_771[2];
-    char str_772[2];
-    char str_773[2];
-    char str_774[2];
-    char str_775[2];
-    char str_776[2];
-    char str_777[2];
-    char str_778[2];
-    char str_779[2];
-    char str_780[2];
-    char str_781[2];
-    char str_782[2];
-    char str_783[2];
-    char str_784[2];
-    char str_785[2];
-    char str_786[2];
-    char str_787[2];
-    char str_788[2];
-    char str_789[2];
-    char str_790[2];
-    char str_791[2];
-    char str_792[2];
-    char str_793[2];
-    char str_794[2];
-    char str_795[2];
-    char str_796[2];
-    char str_797[2];
-    char str_798[2];
-    char str_799[2];
-    char str_800[2];
+    char ResName_ftdemo01_108_Label[2];
+    char ResName_ftdemo01_107_Label[2];
+    char ResName_ftdemo01_106_Label[2];
+    char ResName_ftdemo01_105_Label[2];
+    char ResName_ftdemo01_104_Box[2];
+    char ResName_ftdemo01_103_Box[2];
+    char ResName_ftdemo01_102_Label[2];
+    char ResName_ftdemo01_101_Box[2];
+    char ResName_ftdemo01_100_Box[2];
+    char ResName_ftdemo01_99_Label[2];
+    char ResName_ftdemo01_98_Box[2];
+    char ResName_ftdemo01_97_Box[2];
+    char ResName_ftdemo01_96_Box[2];
+    char ResName_ftdemo01_95_Box[2];
+    char ResName_ftdemo01_94_Label[2];
+    char ResName_ftdemo01_93_Box[2];
+    char ResName_ftdemo01_92_Box[2];
+    char ResName_ftdemo01_91_Box[2];
+    char ResName_ftdemo01_90_Box[2];
+    char ResName_ftdemo01_89_Label[2];
+    char ResName_ftdemo01_88_Box[2];
+    char ResName_ftdemo01_87_Box[2];
+    char ResName_ftdemo01_86_Box[2];
+    char ResName_ftdemo01_85_Box[2];
+    char ResName_ftdemo01_84_Line[2];
+    char ResName_ftdemo01_83_Line[2];
+    char ResName_ftdemo01_82_Label[2];
+    char ResName_ftdemo01_81_Line[2];
+    char ResName_ftdemo01_80_Line[2];
+    char ResName_ftdemo01_79_Line[2];
+    char ResName_ftdemo01_78_Line[2];
+    char ResName_ftdemo01_77_Line[2];
+    char ResName_ftdemo01_76_Line[2];
+    char ResName_ftdemo01_75_Line[2];
+    char ResName_ftdemo01_74_Line[2];
+    char ResName_ftdemo01_73_Line[2];
+    char ResName_ftdemo01_72_Label[2];
+    char ResName_ftdemo01_71_Label[2];
+    char ResName_ftdemo01_70_Box[2];
+    char ResName_ftdemo01_69_Label[2];
+    char ResName_ftdemo01_68_Box[2];
+    char ResName_ftdemo01_67_Label[2];
+    char ResName_ftdemo01_66_Box[2];
     char ftdemo03_str[10];
-    char str_802[2];
-    char str_803[2];
-    char str_804[2];
-    char str_805[2];
-    char str_806[2];
-    char str_807[2];
-    char str_808[2];
-    char str_809[2];
-    char str_810[2];
-    char str_811[2];
-    char str_812[2];
-    char str_813[2];
-    char str_814[2];
-    char str_815[2];
-    char str_816[2];
-    char str_817[2];
-    char str_818[2];
-    char str_819[2];
-    char str_820[2];
-    char str_821[2];
-    char str_822[2];
-    char str_823[2];
-    char str_824[2];
-    char str_825[2];
-    char str_826[2];
-    char str_827[2];
-    char str_828[2];
-    char str_829[2];
-    char str_830[2];
-    char str_831[2];
-    char str_832[2];
-    char str_833[2];
-    char str_834[2];
-    char str_835[2];
-    char str_836[2];
-    char str_837[2];
-    char str_838[2];
-    char str_839[2];
-    char str_840[2];
-    char str_841[2];
-    char str_842[2];
-    char str_843[2];
-    char str_844[2];
-    char str_845[2];
-    char str_846[2];
-    char str_847[2];
-    char str_848[2];
-    char str_849[2];
-    char str_850[2];
-    char str_851[2];
-    char str_852[2];
-    char str_853[2];
-    char str_854[2];
-    char str_855[2];
-    char str_856[2];
-    char str_857[2];
-    char str_858[2];
-    char str_859[2];
-    char str_860[2];
-    char str_861[2];
-    char str_862[2];
-    char str_863[2];
+    char ResName_ftdemo01_64_Line[2];
+    char ResName_ftdemo01_63_Line[2];
+    char ResName_ftdemo01_62_Line[2];
+    char ResName_ftdemo01_61_Line[2];
+    char ResName_ftdemo01_60_Line[2];
+    char ResName_ftdemo01_59_Line[2];
+    char ResName_ftdemo01_58_Line[2];
+    char ResName_ftdemo01_57_Line[2];
+    char ResName_ftdemo01_56_Line[2];
+    char ResName_ftdemo01_55_Line[2];
+    char ResName_ftdemo01_54_Line[2];
+    char ResName_ftdemo01_53_Line[2];
+    char ResName_ftdemo01_52_Line[2];
+    char ResName_ftdemo01_51_Line[2];
+    char ResName_ftdemo01_50_Line[2];
+    char ResName_ftdemo01_49_Line[2];
+    char ResName_ftdemo01_48_Line[2];
+    char ResName_ftdemo01_47_Line[2];
+    char ResName_ftdemo01_46_Line[2];
+    char ResName_ftdemo01_45_Line[2];
+    char ResName_ftdemo01_44_Line[2];
+    char ResName_ftdemo01_43_Line[2];
+    char ResName_ftdemo01_42_Line[2];
+    char ResName_ftdemo01_41_Line[2];
+    char ResName_ftdemo01_40_Line[2];
+    char ResName_ftdemo01_39_Line[2];
+    char ResName_ftdemo01_38_Line[2];
+    char ResName_ftdemo01_37_Label[2];
+    char ResName_ftdemo01_36_Label[2];
+    char ResName_ftdemo01_35_Label[2];
+    char ResName_ftdemo01_34_Label[2];
+    char ResName_ftdemo01_33_Label[2];
+    char ResName_ftdemo01_32_Box[2];
+    char ResName_ftdemo01_31_Box[2];
+    char ResName_ftdemo01_30_Label[2];
+    char ResName_ftdemo01_29_Label[2];
+    char ResName_ftdemo01_28_Box[2];
+    char ResName_ftdemo01_27_Box[2];
+    char ResName_ftdemo01_26_Label[2];
+    char ResName_ftdemo01_25_Line[2];
+    char ResName_ftdemo01_24_Line[2];
+    char ResName_ftdemo01_23_Line[2];
+    char ResName_ftdemo01_22_Line[2];
+    char ResName_ftdemo01_21_Line[2];
+    char ResName_ftdemo01_20_Line[2];
+    char ResName_ftdemo01_19_Line[2];
+    char ResName_ftdemo01_18_Label[2];
+    char ResName_ftdemo01_17_Line[2];
+    char ResName_ftdemo01_16_Line[2];
+    char ResName_ftdemo01_15_Label[2];
+    char ResName_ftdemo01_14_Line[2];
+    char ResName_ftdemo01_13_Line[2];
+    char ResName_ftdemo01_12_Line[2];
+    char ResName_ftdemo01_11_Label[2];
+    char ResName_ftdemo01_10_Label[2];
+    char ResName_ftdemo01_9_Box[2];
+    char ResName_ftdemo01_8_Label[2];
+    char ResName_ftdemo01_7_Box[2];
+    char ResName_ftdemo01_6_Label[2];
+    char ResName_ftdemo01_5_Label[2];
+    char ResName_ftdemo01_4_Box[2];
+    char ResName_ftdemo01_3_Box[2];
     char ftdemo02_str[10];
     char ftdemobmptop_str[14];
     char ftdemo01_str[10];
@@ -9581,987 +9581,987 @@ const naka_perf_style_t naka_perf_style_data
         SELF(ftdemo01_str),
         SELF(ftdemobmptop_str),
         SELF(ftdemo02_str),
-        SELF(str_863),
-        SELF(str_862),
-        SELF(str_861),
-        SELF(str_860),
-        SELF(str_859),
-        SELF(str_858),
-        SELF(str_857),
-        SELF(str_856),
-        SELF(str_855),
-        SELF(str_854),
-        SELF(str_853),
-        SELF(str_852),
-        SELF(str_851),
-        SELF(str_850),
-        SELF(str_849),
-        SELF(str_848),
-        SELF(str_847),
-        SELF(str_846),
-        SELF(str_845),
-        SELF(str_844),
-        SELF(str_843),
-        SELF(str_842),
-        SELF(str_841),
-        SELF(str_840),
-        SELF(str_839),
-        SELF(str_838),
-        SELF(str_837),
-        SELF(str_836),
-        SELF(str_835),
-        SELF(str_834),
-        SELF(str_833),
-        SELF(str_832),
-        SELF(str_831),
-        SELF(str_830),
-        SELF(str_829),
-        SELF(str_828),
-        SELF(str_827),
-        SELF(str_826),
-        SELF(str_825),
-        SELF(str_824),
-        SELF(str_823),
-        SELF(str_822),
-        SELF(str_821),
-        SELF(str_820),
-        SELF(str_819),
-        SELF(str_818),
-        SELF(str_817),
-        SELF(str_816),
-        SELF(str_815),
-        SELF(str_814),
-        SELF(str_813),
-        SELF(str_812),
-        SELF(str_811),
-        SELF(str_810),
-        SELF(str_809),
-        SELF(str_808),
-        SELF(str_807),
-        SELF(str_806),
-        SELF(str_805),
-        SELF(str_804),
-        SELF(str_803),
-        SELF(str_802),
+        SELF(ResName_ftdemo01_3_Box),
+        SELF(ResName_ftdemo01_4_Box),
+        SELF(ResName_ftdemo01_5_Label),
+        SELF(ResName_ftdemo01_6_Label),
+        SELF(ResName_ftdemo01_7_Box),
+        SELF(ResName_ftdemo01_8_Label),
+        SELF(ResName_ftdemo01_9_Box),
+        SELF(ResName_ftdemo01_10_Label),
+        SELF(ResName_ftdemo01_11_Label),
+        SELF(ResName_ftdemo01_12_Line),
+        SELF(ResName_ftdemo01_13_Line),
+        SELF(ResName_ftdemo01_14_Line),
+        SELF(ResName_ftdemo01_15_Label),
+        SELF(ResName_ftdemo01_16_Line),
+        SELF(ResName_ftdemo01_17_Line),
+        SELF(ResName_ftdemo01_18_Label),
+        SELF(ResName_ftdemo01_19_Line),
+        SELF(ResName_ftdemo01_20_Line),
+        SELF(ResName_ftdemo01_21_Line),
+        SELF(ResName_ftdemo01_22_Line),
+        SELF(ResName_ftdemo01_23_Line),
+        SELF(ResName_ftdemo01_24_Line),
+        SELF(ResName_ftdemo01_25_Line),
+        SELF(ResName_ftdemo01_26_Label),
+        SELF(ResName_ftdemo01_27_Box),
+        SELF(ResName_ftdemo01_28_Box),
+        SELF(ResName_ftdemo01_29_Label),
+        SELF(ResName_ftdemo01_30_Label),
+        SELF(ResName_ftdemo01_31_Box),
+        SELF(ResName_ftdemo01_32_Box),
+        SELF(ResName_ftdemo01_33_Label),
+        SELF(ResName_ftdemo01_34_Label),
+        SELF(ResName_ftdemo01_35_Label),
+        SELF(ResName_ftdemo01_36_Label),
+        SELF(ResName_ftdemo01_37_Label),
+        SELF(ResName_ftdemo01_38_Line),
+        SELF(ResName_ftdemo01_39_Line),
+        SELF(ResName_ftdemo01_40_Line),
+        SELF(ResName_ftdemo01_41_Line),
+        SELF(ResName_ftdemo01_42_Line),
+        SELF(ResName_ftdemo01_43_Line),
+        SELF(ResName_ftdemo01_44_Line),
+        SELF(ResName_ftdemo01_45_Line),
+        SELF(ResName_ftdemo01_46_Line),
+        SELF(ResName_ftdemo01_47_Line),
+        SELF(ResName_ftdemo01_48_Line),
+        SELF(ResName_ftdemo01_49_Line),
+        SELF(ResName_ftdemo01_50_Line),
+        SELF(ResName_ftdemo01_51_Line),
+        SELF(ResName_ftdemo01_52_Line),
+        SELF(ResName_ftdemo01_53_Line),
+        SELF(ResName_ftdemo01_54_Line),
+        SELF(ResName_ftdemo01_55_Line),
+        SELF(ResName_ftdemo01_56_Line),
+        SELF(ResName_ftdemo01_57_Line),
+        SELF(ResName_ftdemo01_58_Line),
+        SELF(ResName_ftdemo01_59_Line),
+        SELF(ResName_ftdemo01_60_Line),
+        SELF(ResName_ftdemo01_61_Line),
+        SELF(ResName_ftdemo01_62_Line),
+        SELF(ResName_ftdemo01_63_Line),
+        SELF(ResName_ftdemo01_64_Line),
         SELF(ftdemo03_str),
-        SELF(str_800),
-        SELF(str_799),
-        SELF(str_798),
-        SELF(str_797),
-        SELF(str_796),
-        SELF(str_795),
-        SELF(str_794),
-        SELF(str_793),
-        SELF(str_792),
-        SELF(str_791),
-        SELF(str_790),
-        SELF(str_789),
-        SELF(str_788),
-        SELF(str_787),
-        SELF(str_786),
-        SELF(str_785),
-        SELF(str_784),
-        SELF(str_783),
-        SELF(str_782),
-        SELF(str_781),
-        SELF(str_780),
-        SELF(str_779),
-        SELF(str_778),
-        SELF(str_777),
-        SELF(str_776),
-        SELF(str_775),
-        SELF(str_774),
-        SELF(str_773),
-        SELF(str_772),
-        SELF(str_771),
-        SELF(str_770),
-        SELF(str_769),
-        SELF(str_768),
-        SELF(str_767),
-        SELF(str_766),
-        SELF(str_765),
-        SELF(str_764),
-        SELF(str_763),
-        SELF(str_762),
-        SELF(str_761),
-        SELF(str_760),
-        SELF(str_759),
-        SELF(str_758),
+        SELF(ResName_ftdemo01_66_Box),
+        SELF(ResName_ftdemo01_67_Label),
+        SELF(ResName_ftdemo01_68_Box),
+        SELF(ResName_ftdemo01_69_Label),
+        SELF(ResName_ftdemo01_70_Box),
+        SELF(ResName_ftdemo01_71_Label),
+        SELF(ResName_ftdemo01_72_Label),
+        SELF(ResName_ftdemo01_73_Line),
+        SELF(ResName_ftdemo01_74_Line),
+        SELF(ResName_ftdemo01_75_Line),
+        SELF(ResName_ftdemo01_76_Line),
+        SELF(ResName_ftdemo01_77_Line),
+        SELF(ResName_ftdemo01_78_Line),
+        SELF(ResName_ftdemo01_79_Line),
+        SELF(ResName_ftdemo01_80_Line),
+        SELF(ResName_ftdemo01_81_Line),
+        SELF(ResName_ftdemo01_82_Label),
+        SELF(ResName_ftdemo01_83_Line),
+        SELF(ResName_ftdemo01_84_Line),
+        SELF(ResName_ftdemo01_85_Box),
+        SELF(ResName_ftdemo01_86_Box),
+        SELF(ResName_ftdemo01_87_Box),
+        SELF(ResName_ftdemo01_88_Box),
+        SELF(ResName_ftdemo01_89_Label),
+        SELF(ResName_ftdemo01_90_Box),
+        SELF(ResName_ftdemo01_91_Box),
+        SELF(ResName_ftdemo01_92_Box),
+        SELF(ResName_ftdemo01_93_Box),
+        SELF(ResName_ftdemo01_94_Label),
+        SELF(ResName_ftdemo01_95_Box),
+        SELF(ResName_ftdemo01_96_Box),
+        SELF(ResName_ftdemo01_97_Box),
+        SELF(ResName_ftdemo01_98_Box),
+        SELF(ResName_ftdemo01_99_Label),
+        SELF(ResName_ftdemo01_100_Box),
+        SELF(ResName_ftdemo01_101_Box),
+        SELF(ResName_ftdemo01_102_Label),
+        SELF(ResName_ftdemo01_103_Box),
+        SELF(ResName_ftdemo01_104_Box),
+        SELF(ResName_ftdemo01_105_Label),
+        SELF(ResName_ftdemo01_106_Label),
+        SELF(ResName_ftdemo01_107_Label),
+        SELF(ResName_ftdemo01_108_Label),
         SELF(ftdemo04_str),
         SELF(ftdemobmp3D_str),
-        SELF(str_755),
-        SELF(str_754),
-        SELF(str_753),
-        SELF(str_752),
+        SELF(ResName_ftdemo01_111_AcLanguageText),
+        SELF(ResName_ftdemo01_112_Box),
+        SELF(ResName_ftdemo01_113_AcLanguageText),
+        SELF(ResName_ftdemo01_114_AcLanguageText),
         SELF(ftdemo05_str),
-        SELF(str_750),
-        SELF(str_749),
+        SELF(ResName_ftdemo01_116_AcLanguageText),
+        SELF(ResName_ftdemo01_117_AcLanguageText),
         SELF(ftdemo06_str),
-        SELF(str_747),
+        SELF(ResName_ftdemo01_119_AcLanguageText),
         SELF(ftdemobmpsoft_str),
         SELF(ftdemo07_str),
         SELF(ftdemobmpcnv_str),
-        SELF(str_743),
+        SELF(ResName_ftdemo01_123_AcLanguageText),
         SELF(ftdemo08_str),
-        SELF(str_741),
+        SELF(ResName_ftdemo01_125_AcLanguageText),
         SELF(ftdemo09_str),
-        SELF(str_739),
-        SELF(str_738),
+        SELF(ResName_ftdemo01_127_AcLanguageText),
+        SELF(ResName_ftdemo01_128_AcLanguageText),
         SELF(ftdemo10_str),
-        SELF(str_736),
-        SELF(str_735),
+        SELF(ResName_ftdemo01_130_AcLanguageText),
+        SELF(ResName_ftdemo01_131_AcLanguageText),
         SELF(ftdemo20_str),
-        SELF(str_733),
-        SELF(str_732),
+        SELF(ResName_ftdemo01_133_AcLanguageText),
+        SELF(ResName_ftdemo01_134_AcLanguageText),
         SELF(ftdemobmpill_str),
         SELF(ftdemo21_str),
-        SELF(str_729),
+        SELF(ResName_ftdemo01_137_AcLanguageText),
         SELF(ftdemo22_str),
-        SELF(str_727),
-        SELF(str_726),
-        SELF(str_725),
-        SELF(str_724),
-        SELF(str_723),
-        SELF(str_722),
-        SELF(str_721),
-        SELF(str_720),
-        SELF(str_719),
-        SELF(str_718),
-        SELF(str_717),
-        SELF(str_716),
-        SELF(str_715),
-        SELF(str_714),
-        SELF(str_713),
-        SELF(str_712),
-        SELF(str_711),
-        SELF(str_710),
-        SELF(str_709),
-        SELF(str_708),
-        SELF(str_707),
-        SELF(str_706),
-        SELF(str_705),
+        SELF(ResName_ftdemo01_139_Box),
+        SELF(ResName_ftdemo01_140_Label),
+        SELF(ResName_ftdemo01_141_PsEditSwBox),
+        SELF(ResName_ftdemo01_142_Label),
+        SELF(ResName_ftdemo01_143_Label),
+        SELF(ResName_ftdemo01_144_EditSw),
+        SELF(ResName_ftdemo01_145_EditSw),
+        SELF(ResName_ftdemo01_146_Label),
+        SELF(ResName_ftdemo01_147_Label),
+        SELF(ResName_ftdemo01_148_Label),
+        SELF(ResName_ftdemo01_149_Label),
+        SELF(ResName_ftdemo01_150_Line),
+        SELF(ResName_ftdemo01_151_Label),
+        SELF(ResName_ftdemo01_152_Label),
+        SELF(ResName_ftdemo01_153_Label),
+        SELF(ResName_ftdemo01_154_Label),
+        SELF(ResName_ftdemo01_155_Label),
+        SELF(ResName_ftdemo01_156_Label),
+        SELF(ResName_ftdemo01_157_Label),
+        SELF(ResName_ftdemo01_158_Label),
+        SELF(ResName_ftdemo01_159_Label),
+        SELF(ResName_ftdemo01_160_Box),
+        SELF(ResName_ftdemo01_161_Label),
         SELF(ftdemo23_str),
-        SELF(str_703),
-        SELF(str_702),
-        SELF(str_701),
-        SELF(str_700),
-        SELF(str_699),
-        SELF(str_698),
-        SELF(str_697),
-        SELF(str_696),
-        SELF(str_695),
-        SELF(str_694),
-        SELF(str_693),
-        SELF(str_692),
-        SELF(str_691),
-        SELF(str_690),
-        SELF(str_689),
-        SELF(str_688),
-        SELF(str_687),
-        SELF(str_686),
-        SELF(str_685),
-        SELF(str_684),
-        SELF(str_683),
-        SELF(str_682),
+        SELF(ResName_ftdemo01_163_Label),
+        SELF(ResName_ftdemo01_164_Label),
+        SELF(ResName_ftdemo01_165_Label),
+        SELF(ResName_ftdemo01_166_Box),
+        SELF(ResName_ftdemo01_167_Label),
+        SELF(ResName_ftdemo01_168_Label),
+        SELF(ResName_ftdemo01_169_Label),
+        SELF(ResName_ftdemo01_170_Label),
+        SELF(ResName_ftdemo01_171_Label),
+        SELF(ResName_ftdemo01_172_Label),
+        SELF(ResName_ftdemo01_173_Label),
+        SELF(ResName_ftdemo01_174_Label),
+        SELF(ResName_ftdemo01_175_VwEditSwBox),
+        SELF(ResName_ftdemo01_176_Bitmap),
+        SELF(ResName_ftdemo01_177_PsEditSwBox),
+        SELF(ResName_ftdemo01_178_Bitmap),
+        SELF(ResName_ftdemo01_179_PsEditSwBox),
+        SELF(ResName_ftdemo01_180_Bitmap),
+        SELF(ResName_ftdemo01_181_VwEditSwBox),
+        SELF(ResName_ftdemo01_182_Bitmap),
+        SELF(ResName_ftdemo01_183_VwEditSwBox),
+        SELF(ResName_ftdemo01_184_Bitmap),
         SELF(ftdemo24_str),
-        SELF(str_680),
-        SELF(str_679),
-        SELF(str_678),
-        SELF(str_677),
-        SELF(str_676),
-        SELF(str_675),
-        SELF(str_674),
-        SELF(str_673),
-        SELF(str_672),
-        SELF(str_671),
-        SELF(str_670),
-        SELF(str_669),
-        SELF(str_668),
-        SELF(str_667),
-        SELF(str_666),
-        SELF(str_665),
-        SELF(str_664),
-        SELF(str_663),
-        SELF(str_662),
-        SELF(str_661),
-        SELF(str_660),
-        SELF(str_659),
-        SELF(str_658),
-        SELF(str_657),
-        SELF(str_656),
-        SELF(str_655),
-        SELF(str_654),
-        SELF(str_653),
-        SELF(str_652),
-        SELF(str_651),
-        SELF(str_650),
-        SELF(str_649),
-        SELF(str_648),
-        SELF(str_647),
-        SELF(str_646),
-        SELF(str_645),
-        SELF(str_644),
-        SELF(str_643),
+        SELF(ResName_ftdemo01_186_Box),
+        SELF(ResName_ftdemo01_187_Line),
+        SELF(ResName_ftdemo01_188_Label),
+        SELF(ResName_ftdemo01_189_Label),
+        SELF(ResName_ftdemo01_190_Label),
+        SELF(ResName_ftdemo01_191_Label),
+        SELF(ResName_ftdemo01_192_Label),
+        SELF(ResName_ftdemo01_193_Label),
+        SELF(ResName_ftdemo01_194_Label),
+        SELF(ResName_ftdemo01_195_Label),
+        SELF(ResName_ftdemo01_196_Box),
+        SELF(ResName_ftdemo01_197_Label),
+        SELF(ResName_ftdemo01_198_Label),
+        SELF(ResName_ftdemo01_199_Label),
+        SELF(ResName_ftdemo01_200_Label),
+        SELF(ResName_ftdemo01_201_Label),
+        SELF(ResName_ftdemo01_202_Label),
+        SELF(ResName_ftdemo01_203_Label),
+        SELF(ResName_ftdemo01_204_Label),
+        SELF(ResName_ftdemo01_205_Label),
+        SELF(ResName_ftdemo01_206_Label),
+        SELF(ResName_ftdemo01_207_Label),
+        SELF(ResName_ftdemo01_208_Label),
+        SELF(ResName_ftdemo01_209_Box),
+        SELF(ResName_ftdemo01_210_Label),
+        SELF(ResName_ftdemo01_211_Box),
+        SELF(ResName_ftdemo01_212_Label),
+        SELF(ResName_ftdemo01_213_Box),
+        SELF(ResName_ftdemo01_214_Label),
+        SELF(ResName_ftdemo01_215_Line),
+        SELF(ResName_ftdemo01_216_Label),
+        SELF(ResName_ftdemo01_217_Box),
+        SELF(ResName_ftdemo01_218_Label),
+        SELF(ResName_ftdemo01_219_Line),
+        SELF(ResName_ftdemo01_220_Label),
+        SELF(ResName_ftdemo01_221_Label),
+        SELF(ResName_ftdemo01_222_Label),
+        SELF(ResName_ftdemo01_223_Frame),
         SELF(ftdemo25_str),
         SELF(ftdemobmpend_str),
         SELF(ftdemo26_str),
-        SELF(str_639),
-        SELF(str_638),
-        SELF(str_637),
-        SELF(str_636),
-        SELF(str_635),
-        SELF(str_634),
-        SELF(str_633),
-        SELF(str_632),
-        SELF(str_631),
-        SELF(str_630),
-        SELF(str_629),
-        SELF(str_628),
-        SELF(str_627),
-        SELF(str_626),
-        SELF(str_625),
-        SELF(str_624),
-        SELF(str_623),
-        SELF(str_622),
-        SELF(str_621),
+        SELF(ResName_ftdemo01_227_Box),
+        SELF(ResName_ftdemo01_228_Label),
+        SELF(ResName_ftdemo01_229_Label),
+        SELF(ResName_ftdemo01_230_Label),
+        SELF(ResName_ftdemo01_231_Label),
+        SELF(ResName_ftdemo01_232_Label),
+        SELF(ResName_ftdemo01_233_Label),
+        SELF(ResName_ftdemo01_234_Label),
+        SELF(ResName_ftdemo01_235_Frame),
+        SELF(ResName_ftdemo01_236_Box),
+        SELF(ResName_ftdemo01_237_Label),
+        SELF(ResName_ftdemo01_238_PsEditSwBox),
+        SELF(ResName_ftdemo01_239_Label),
+        SELF(ResName_ftdemo01_240_Label),
+        SELF(ResName_ftdemo01_241_Line),
+        SELF(ResName_ftdemo01_242_PsEditSwBox),
+        SELF(ResName_ftdemo01_243_Label),
+        SELF(ResName_ftdemo01_244_Label),
+        SELF(ResName_ftdemo01_245_Line),
         SELF(ftdemo40_str),
-        SELF(str_619),
-        SELF(str_618),
-        SELF(str_617),
-        SELF(str_616),
-        SELF(str_615),
-        SELF(str_614),
+        SELF(ResName_ftdemo01_247_Box),
+        SELF(ResName_ftdemo01_248_Box),
+        SELF(ResName_ftdemo01_249_Label),
+        SELF(ResName_ftdemo01_250_Label),
+        SELF(ResName_ftdemo01_251_Label),
+        SELF(ResName_ftdemo01_252_Label),
         SELF(ftdemo41_str),
-        SELF(str_612),
-        SELF(str_611),
-        SELF(str_610),
-        SELF(str_609),
-        SELF(str_608),
-        SELF(str_607),
-        SELF(str_606),
-        SELF(str_605),
-        SELF(str_604),
-        SELF(str_603),
-        SELF(str_602),
-        SELF(str_601),
-        SELF(str_600),
-        SELF(str_599),
-        SELF(str_598),
-        SELF(str_597),
-        SELF(str_596),
-        SELF(str_595),
-        SELF(str_594),
-        SELF(str_593),
-        SELF(str_592),
-        SELF(str_591),
-        SELF(str_590),
-        SELF(str_589),
-        SELF(str_588),
-        SELF(str_587),
-        SELF(str_586),
-        SELF(str_585),
-        SELF(str_584),
-        SELF(str_583),
-        SELF(str_582),
-        SELF(str_581),
-        SELF(str_580),
-        SELF(str_579),
-        SELF(str_578),
-        SELF(str_577),
-        SELF(str_576),
+        SELF(ResName_ftdemo01_254_Box),
+        SELF(ResName_ftdemo01_255_Label),
+        SELF(ResName_ftdemo01_256_Label),
+        SELF(ResName_ftdemo01_257_Label),
+        SELF(ResName_ftdemo01_258_Label),
+        SELF(ResName_ftdemo01_259_Label),
+        SELF(ResName_ftdemo01_260_Label),
+        SELF(ResName_ftdemo01_261_Label),
+        SELF(ResName_ftdemo01_262_Label),
+        SELF(ResName_ftdemo01_263_Label),
+        SELF(ResName_ftdemo01_264_Label),
+        SELF(ResName_ftdemo01_265_Frame),
+        SELF(ResName_ftdemo01_266_PsEditSwBox),
+        SELF(ResName_ftdemo01_267_Label),
+        SELF(ResName_ftdemo01_268_PsEditSwBox),
+        SELF(ResName_ftdemo01_269_Label),
+        SELF(ResName_ftdemo01_270_Label),
+        SELF(ResName_ftdemo01_271_Line),
+        SELF(ResName_ftdemo01_272_PsEditSwBox),
+        SELF(ResName_ftdemo01_273_Label),
+        SELF(ResName_ftdemo01_274_Label),
+        SELF(ResName_ftdemo01_275_Line),
+        SELF(ResName_ftdemo01_276_Label),
+        SELF(ResName_ftdemo01_277_Box),
+        SELF(ResName_ftdemo01_278_Label),
+        SELF(ResName_ftdemo01_279_Label),
+        SELF(ResName_ftdemo01_280_Label),
+        SELF(ResName_ftdemo01_281_Label),
+        SELF(ResName_ftdemo01_282_Label),
+        SELF(ResName_ftdemo01_283_Label),
+        SELF(ResName_ftdemo01_284_Label),
+        SELF(ResName_ftdemo01_285_Label),
+        SELF(ResName_ftdemo01_286_Label),
+        SELF(ResName_ftdemo01_287_Label),
+        SELF(ResName_ftdemo01_288_Frame),
+        SELF(ResName_ftdemo01_289_Label),
+        SELF(ResName_ftdemo01_290_Label),
         SELF(ftdemo42_str),
-        SELF(str_574),
-        SELF(str_573),
-        SELF(str_572),
-        SELF(str_571),
-        SELF(str_570),
-        SELF(str_569),
-        SELF(str_568),
-        SELF(str_567),
-        SELF(str_566),
-        SELF(str_565),
-        SELF(str_564),
-        SELF(str_563),
-        SELF(str_562),
-        SELF(str_561),
-        SELF(str_560),
-        SELF(str_559),
-        SELF(str_558),
-        SELF(str_557),
-        SELF(str_556),
-        SELF(str_555),
-        SELF(str_554),
-        SELF(str_553),
-        SELF(str_552),
-        SELF(str_551),
-        SELF(str_550),
-        SELF(str_549),
-        SELF(str_548),
-        SELF(str_547),
-        SELF(str_546),
-        SELF(str_545),
-        SELF(str_544),
-        SELF(str_543),
-        SELF(str_542),
-        SELF(str_541),
-        SELF(str_540),
-        SELF(str_539),
-        SELF(str_538),
+        SELF(ResName_ftdemo01_292_Box),
+        SELF(ResName_ftdemo01_293_Label),
+        SELF(ResName_ftdemo01_294_Label),
+        SELF(ResName_ftdemo01_295_Label),
+        SELF(ResName_ftdemo01_296_Label),
+        SELF(ResName_ftdemo01_297_Label),
+        SELF(ResName_ftdemo01_298_Label),
+        SELF(ResName_ftdemo01_299_Label),
+        SELF(ResName_ftdemo01_300_Label),
+        SELF(ResName_ftdemo01_301_Label),
+        SELF(ResName_ftdemo01_302_Label),
+        SELF(ResName_ftdemo01_303_Frame),
+        SELF(ResName_ftdemo01_304_PsEditSwBox),
+        SELF(ResName_ftdemo01_305_Label),
+        SELF(ResName_ftdemo01_306_PsEditSwBox),
+        SELF(ResName_ftdemo01_307_Label),
+        SELF(ResName_ftdemo01_308_Label),
+        SELF(ResName_ftdemo01_309_Line),
+        SELF(ResName_ftdemo01_310_PsEditSwBox),
+        SELF(ResName_ftdemo01_311_Label),
+        SELF(ResName_ftdemo01_312_Label),
+        SELF(ResName_ftdemo01_313_Line),
+        SELF(ResName_ftdemo01_314_Label),
+        SELF(ResName_ftdemo01_315_Box),
+        SELF(ResName_ftdemo01_316_Label),
+        SELF(ResName_ftdemo01_317_Label),
+        SELF(ResName_ftdemo01_318_Label),
+        SELF(ResName_ftdemo01_319_Label),
+        SELF(ResName_ftdemo01_320_Label),
+        SELF(ResName_ftdemo01_321_Label),
+        SELF(ResName_ftdemo01_322_Label),
+        SELF(ResName_ftdemo01_323_Label),
+        SELF(ResName_ftdemo01_324_Label),
+        SELF(ResName_ftdemo01_325_Label),
+        SELF(ResName_ftdemo01_326_Frame),
+        SELF(ResName_ftdemo01_327_Label),
+        SELF(ResName_ftdemo01_328_Label),
         SELF(ftdemo44_str),
-        SELF(str_536),
-        SELF(str_535),
-        SELF(str_534),
-        SELF(str_533),
-        SELF(str_532),
-        SELF(str_531),
-        SELF(str_530),
-        SELF(str_529),
-        SELF(str_528),
-        SELF(str_527),
-        SELF(str_526),
-        SELF(str_525),
-        SELF(str_524),
-        SELF(str_523),
-        SELF(str_522),
-        SELF(str_521),
-        SELF(str_520),
-        SELF(str_519),
-        SELF(str_518),
-        SELF(str_517),
-        SELF(str_516),
-        SELF(str_515),
+        SELF(ResName_ftdemo01_330_Box),
+        SELF(ResName_ftdemo01_331_Label),
+        SELF(ResName_ftdemo01_332_Label),
+        SELF(ResName_ftdemo01_333_Label),
+        SELF(ResName_ftdemo01_334_Label),
+        SELF(ResName_ftdemo01_335_Label),
+        SELF(ResName_ftdemo01_336_Label),
+        SELF(ResName_ftdemo01_337_Label),
+        SELF(ResName_ftdemo01_338_Label),
+        SELF(ResName_ftdemo01_339_Label),
+        SELF(ResName_ftdemo01_340_Label),
+        SELF(ResName_ftdemo01_341_Frame),
+        SELF(ResName_ftdemo01_342_PsEditSwBox),
+        SELF(ResName_ftdemo01_343_Label),
+        SELF(ResName_ftdemo01_344_Label),
+        SELF(ResName_ftdemo01_345_Label),
+        SELF(ResName_ftdemo01_346_Line),
+        SELF(ResName_ftdemo01_347_PsEditSwBox),
+        SELF(ResName_ftdemo01_348_Label),
+        SELF(ResName_ftdemo01_349_Label),
+        SELF(ResName_ftdemo01_350_Line),
+        SELF(ResName_ftdemo01_351_Label),
         SELF(ftdemo45_str),
-        SELF(str_513),
-        SELF(str_512),
-        SELF(str_511),
-        SELF(str_510),
-        SELF(str_509),
-        SELF(str_508),
-        SELF(str_507),
-        SELF(str_506),
-        SELF(str_505),
-        SELF(str_504),
-        SELF(str_503),
-        SELF(str_502),
-        SELF(str_501),
-        SELF(str_500),
-        SELF(str_499),
-        SELF(str_498),
-        SELF(str_497),
-        SELF(str_496),
-        SELF(str_495),
-        SELF(str_494),
-        SELF(str_493),
-        SELF(str_492),
+        SELF(ResName_ftdemo01_353_Box),
+        SELF(ResName_ftdemo01_354_Label),
+        SELF(ResName_ftdemo01_355_Label),
+        SELF(ResName_ftdemo01_356_Label),
+        SELF(ResName_ftdemo01_357_Label),
+        SELF(ResName_ftdemo01_358_Label),
+        SELF(ResName_ftdemo01_359_Label),
+        SELF(ResName_ftdemo01_360_Label),
+        SELF(ResName_ftdemo01_361_Label),
+        SELF(ResName_ftdemo01_362_Label),
+        SELF(ResName_ftdemo01_363_Label),
+        SELF(ResName_ftdemo01_364_Frame),
+        SELF(ResName_ftdemo01_365_PsEditSwBox),
+        SELF(ResName_ftdemo01_366_Label),
+        SELF(ResName_ftdemo01_367_Label),
+        SELF(ResName_ftdemo01_368_Label),
+        SELF(ResName_ftdemo01_369_Line),
+        SELF(ResName_ftdemo01_370_PsEditSwBox),
+        SELF(ResName_ftdemo01_371_Label),
+        SELF(ResName_ftdemo01_372_Label),
+        SELF(ResName_ftdemo01_373_Line),
+        SELF(ResName_ftdemo01_374_Label),
         SELF(ftdemo46_str),
-        SELF(str_490),
-        SELF(str_489),
-        SELF(str_488),
-        SELF(str_487),
-        SELF(str_486),
-        SELF(str_485),
-        SELF(str_484),
-        SELF(str_483),
-        SELF(str_482),
-        SELF(str_481),
-        SELF(str_480),
-        SELF(str_479),
-        SELF(str_478),
-        SELF(str_477),
-        SELF(str_476),
-        SELF(str_475),
-        SELF(str_474),
-        SELF(str_473),
-        SELF(str_472),
-        SELF(str_471),
-        SELF(str_470),
-        SELF(str_469),
+        SELF(ResName_ftdemo01_376_Box),
+        SELF(ResName_ftdemo01_377_Label),
+        SELF(ResName_ftdemo01_378_Frame),
+        SELF(ResName_ftdemo01_379_Label),
+        SELF(ResName_ftdemo01_380_Label),
+        SELF(ResName_ftdemo01_381_Label),
+        SELF(ResName_ftdemo01_382_Label),
+        SELF(ResName_ftdemo01_383_Label),
+        SELF(ResName_ftdemo01_384_Label),
+        SELF(ResName_ftdemo01_385_Label),
+        SELF(ResName_ftdemo01_386_Label),
+        SELF(ResName_ftdemo01_387_Label),
+        SELF(ResName_ftdemo01_388_PsEditSwBox),
+        SELF(ResName_ftdemo01_389_Label),
+        SELF(ResName_ftdemo01_390_Label),
+        SELF(ResName_ftdemo01_391_Label),
+        SELF(ResName_ftdemo01_392_Line),
+        SELF(ResName_ftdemo01_393_PsEditSwBox),
+        SELF(ResName_ftdemo01_394_Label),
+        SELF(ResName_ftdemo01_395_Label),
+        SELF(ResName_ftdemo01_396_Label),
+        SELF(ResName_ftdemo01_397_Line),
         SELF(ftdemo47_str),
-        SELF(str_467),
-        SELF(str_466),
-        SELF(str_465),
-        SELF(str_464),
-        SELF(str_463),
-        SELF(str_462),
-        SELF(str_461),
-        SELF(str_460),
-        SELF(str_459),
-        SELF(str_458),
-        SELF(str_457),
-        SELF(str_456),
-        SELF(str_455),
-        SELF(str_454),
-        SELF(str_453),
-        SELF(str_452),
-        SELF(str_451),
-        SELF(str_450),
-        SELF(str_449),
-        SELF(str_448),
+        SELF(ResName_ftdemo01_399_Box),
+        SELF(ResName_ftdemo01_400_Label),
+        SELF(ResName_ftdemo01_401_Label),
+        SELF(ResName_ftdemo01_402_Label),
+        SELF(ResName_ftdemo01_403_Label),
+        SELF(ResName_ftdemo01_404_Label),
+        SELF(ResName_ftdemo01_405_Label),
+        SELF(ResName_ftdemo01_406_Label),
+        SELF(ResName_ftdemo01_407_Label),
+        SELF(ResName_ftdemo01_408_Frame),
+        SELF(ResName_ftdemo01_409_PsEditSwBox),
+        SELF(ResName_ftdemo01_410_Label),
+        SELF(ResName_ftdemo01_411_Label),
+        SELF(ResName_ftdemo01_412_Label),
+        SELF(ResName_ftdemo01_413_Line),
+        SELF(ResName_ftdemo01_414_PsEditSwBox),
+        SELF(ResName_ftdemo01_415_Label),
+        SELF(ResName_ftdemo01_416_Label),
+        SELF(ResName_ftdemo01_417_Label),
+        SELF(ResName_ftdemo01_418_Line),
         SELF(ftdemo48_str),
-        SELF(str_446),
-        SELF(str_445),
-        SELF(str_444),
-        SELF(str_443),
-        SELF(str_442),
-        SELF(str_441),
-        SELF(str_440),
-        SELF(str_439),
-        SELF(str_438),
-        SELF(str_437),
-        SELF(str_436),
-        SELF(str_435),
-        SELF(str_434),
-        SELF(str_433),
-        SELF(str_432),
-        SELF(str_431),
-        SELF(str_430),
-        SELF(str_429),
-        SELF(str_428),
-        SELF(str_427),
+        SELF(ResName_ftdemo01_420_Box),
+        SELF(ResName_ftdemo01_421_Label),
+        SELF(ResName_ftdemo01_422_Label),
+        SELF(ResName_ftdemo01_423_Label),
+        SELF(ResName_ftdemo01_424_Label),
+        SELF(ResName_ftdemo01_425_Label),
+        SELF(ResName_ftdemo01_426_Label),
+        SELF(ResName_ftdemo01_427_Label),
+        SELF(ResName_ftdemo01_428_Label),
+        SELF(ResName_ftdemo01_429_Frame),
+        SELF(ResName_ftdemo01_430_PsEditSwBox),
+        SELF(ResName_ftdemo01_431_Label),
+        SELF(ResName_ftdemo01_432_Label),
+        SELF(ResName_ftdemo01_433_Label),
+        SELF(ResName_ftdemo01_434_Line),
+        SELF(ResName_ftdemo01_435_PsEditSwBox),
+        SELF(ResName_ftdemo01_436_Label),
+        SELF(ResName_ftdemo01_437_Label),
+        SELF(ResName_ftdemo01_438_Label),
+        SELF(ResName_ftdemo01_439_Line),
         SELF(ftdemo43_str),
-        SELF(str_425),
-        SELF(str_424),
-        SELF(str_423),
-        SELF(str_422),
-        SELF(str_421),
-        SELF(str_420),
-        SELF(str_419),
-        SELF(str_418),
-        SELF(str_417),
-        SELF(str_416),
-        SELF(str_415),
-        SELF(str_414),
-        SELF(str_413),
-        SELF(str_412),
-        SELF(str_411),
-        SELF(str_410),
-        SELF(str_409),
-        SELF(str_408),
-        SELF(str_407),
-        SELF(str_406),
-        SELF(str_405),
-        SELF(str_404),
-        SELF(str_403),
-        SELF(str_402),
-        SELF(str_401),
-        SELF(str_400),
-        SELF(str_399),
-        SELF(str_398),
-        SELF(str_397),
-        SELF(str_396),
-        SELF(str_395),
-        SELF(str_394),
-        SELF(str_393),
-        SELF(str_392),
-        SELF(str_391),
-        SELF(str_390),
-        SELF(str_389),
+        SELF(ResName_ftdemo01_441_Box),
+        SELF(ResName_ftdemo01_442_Label),
+        SELF(ResName_ftdemo01_443_Label),
+        SELF(ResName_ftdemo01_444_Label),
+        SELF(ResName_ftdemo01_445_Label),
+        SELF(ResName_ftdemo01_446_Label),
+        SELF(ResName_ftdemo01_447_Label),
+        SELF(ResName_ftdemo01_448_Label),
+        SELF(ResName_ftdemo01_449_Label),
+        SELF(ResName_ftdemo01_450_Label),
+        SELF(ResName_ftdemo01_451_Label),
+        SELF(ResName_ftdemo01_452_Frame),
+        SELF(ResName_ftdemo01_453_PsEditSwBox),
+        SELF(ResName_ftdemo01_454_Label),
+        SELF(ResName_ftdemo01_455_PsEditSwBox),
+        SELF(ResName_ftdemo01_456_Label),
+        SELF(ResName_ftdemo01_457_Label),
+        SELF(ResName_ftdemo01_458_Line),
+        SELF(ResName_ftdemo01_459_PsEditSwBox),
+        SELF(ResName_ftdemo01_460_Label),
+        SELF(ResName_ftdemo01_461_Label),
+        SELF(ResName_ftdemo01_462_Line),
+        SELF(ResName_ftdemo01_463_Label),
+        SELF(ResName_ftdemo01_464_Box),
+        SELF(ResName_ftdemo01_465_Label),
+        SELF(ResName_ftdemo01_466_Label),
+        SELF(ResName_ftdemo01_467_Label),
+        SELF(ResName_ftdemo01_468_Label),
+        SELF(ResName_ftdemo01_469_Label),
+        SELF(ResName_ftdemo01_470_Label),
+        SELF(ResName_ftdemo01_471_Label),
+        SELF(ResName_ftdemo01_472_Label),
+        SELF(ResName_ftdemo01_473_Label),
+        SELF(ResName_ftdemo01_474_Label),
+        SELF(ResName_ftdemo01_475_Frame),
+        SELF(ResName_ftdemo01_476_Label),
+        SELF(ResName_ftdemo01_477_Label),
         SELF(str_388),
     },
 
     .str_388 = ALIGNED_STRING(""),
 
-    .str_389 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_477_Label = ALIGNED_STRING(""),
 
-    .str_390 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_476_Label = ALIGNED_STRING(""),
 
-    .str_391 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_475_Frame = ALIGNED_STRING(""),
 
-    .str_392 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_474_Label = ALIGNED_STRING(""),
 
-    .str_393 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_473_Label = ALIGNED_STRING(""),
 
-    .str_394 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_472_Label = ALIGNED_STRING(""),
 
-    .str_395 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_471_Label = ALIGNED_STRING(""),
 
-    .str_396 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_470_Label = ALIGNED_STRING(""),
 
-    .str_397 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_469_Label = ALIGNED_STRING(""),
 
-    .str_398 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_468_Label = ALIGNED_STRING(""),
 
-    .str_399 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_467_Label = ALIGNED_STRING(""),
 
-    .str_400 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_466_Label = ALIGNED_STRING(""),
 
-    .str_401 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_465_Label = ALIGNED_STRING(""),
 
-    .str_402 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_464_Box = ALIGNED_STRING(""),
 
-    .str_403 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_463_Label = ALIGNED_STRING(""),
 
-    .str_404 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_462_Line = ALIGNED_STRING(""),
 
-    .str_405 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_461_Label = ALIGNED_STRING(""),
 
-    .str_406 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_460_Label = ALIGNED_STRING(""),
 
-    .str_407 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_459_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_408 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_458_Line = ALIGNED_STRING(""),
 
-    .str_409 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_457_Label = ALIGNED_STRING(""),
 
-    .str_410 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_456_Label = ALIGNED_STRING(""),
 
-    .str_411 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_455_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_412 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_454_Label = ALIGNED_STRING(""),
 
-    .str_413 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_453_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_414 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_452_Frame = ALIGNED_STRING(""),
 
-    .str_415 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_451_Label = ALIGNED_STRING(""),
 
-    .str_416 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_450_Label = ALIGNED_STRING(""),
 
-    .str_417 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_449_Label = ALIGNED_STRING(""),
 
-    .str_418 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_448_Label = ALIGNED_STRING(""),
 
-    .str_419 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_447_Label = ALIGNED_STRING(""),
 
-    .str_420 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_446_Label = ALIGNED_STRING(""),
 
-    .str_421 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_445_Label = ALIGNED_STRING(""),
 
-    .str_422 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_444_Label = ALIGNED_STRING(""),
 
-    .str_423 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_443_Label = ALIGNED_STRING(""),
 
-    .str_424 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_442_Label = ALIGNED_STRING(""),
 
-    .str_425 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_441_Box = ALIGNED_STRING(""),
 
     .ftdemo43_str = ALIGNED_STRING("ftdemo43"),
 
-    .str_427 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_439_Line = ALIGNED_STRING(""),
 
-    .str_428 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_438_Label = ALIGNED_STRING(""),
 
-    .str_429 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_437_Label = ALIGNED_STRING(""),
 
-    .str_430 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_436_Label = ALIGNED_STRING(""),
 
-    .str_431 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_435_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_432 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_434_Line = ALIGNED_STRING(""),
 
-    .str_433 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_433_Label = ALIGNED_STRING(""),
 
-    .str_434 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_432_Label = ALIGNED_STRING(""),
 
-    .str_435 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_431_Label = ALIGNED_STRING(""),
 
-    .str_436 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_430_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_437 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_429_Frame = ALIGNED_STRING(""),
 
-    .str_438 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_428_Label = ALIGNED_STRING(""),
 
-    .str_439 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_427_Label = ALIGNED_STRING(""),
 
-    .str_440 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_426_Label = ALIGNED_STRING(""),
 
-    .str_441 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_425_Label = ALIGNED_STRING(""),
 
-    .str_442 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_424_Label = ALIGNED_STRING(""),
 
-    .str_443 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_423_Label = ALIGNED_STRING(""),
 
-    .str_444 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_422_Label = ALIGNED_STRING(""),
 
-    .str_445 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_421_Label = ALIGNED_STRING(""),
 
-    .str_446 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_420_Box = ALIGNED_STRING(""),
 
     .ftdemo48_str = ALIGNED_STRING("ftdemo48"),
 
-    .str_448 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_418_Line = ALIGNED_STRING(""),
 
-    .str_449 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_417_Label = ALIGNED_STRING(""),
 
-    .str_450 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_416_Label = ALIGNED_STRING(""),
 
-    .str_451 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_415_Label = ALIGNED_STRING(""),
 
-    .str_452 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_414_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_453 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_413_Line = ALIGNED_STRING(""),
 
-    .str_454 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_412_Label = ALIGNED_STRING(""),
 
-    .str_455 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_411_Label = ALIGNED_STRING(""),
 
-    .str_456 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_410_Label = ALIGNED_STRING(""),
 
-    .str_457 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_409_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_458 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_408_Frame = ALIGNED_STRING(""),
 
-    .str_459 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_407_Label = ALIGNED_STRING(""),
 
-    .str_460 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_406_Label = ALIGNED_STRING(""),
 
-    .str_461 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_405_Label = ALIGNED_STRING(""),
 
-    .str_462 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_404_Label = ALIGNED_STRING(""),
 
-    .str_463 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_403_Label = ALIGNED_STRING(""),
 
-    .str_464 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_402_Label = ALIGNED_STRING(""),
 
-    .str_465 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_401_Label = ALIGNED_STRING(""),
 
-    .str_466 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_400_Label = ALIGNED_STRING(""),
 
-    .str_467 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_399_Box = ALIGNED_STRING(""),
 
     .ftdemo47_str = ALIGNED_STRING("ftdemo47"),
 
-    .str_469 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_397_Line = ALIGNED_STRING(""),
 
-    .str_470 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_396_Label = ALIGNED_STRING(""),
 
-    .str_471 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_395_Label = ALIGNED_STRING(""),
 
-    .str_472 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_394_Label = ALIGNED_STRING(""),
 
-    .str_473 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_393_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_474 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_392_Line = ALIGNED_STRING(""),
 
-    .str_475 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_391_Label = ALIGNED_STRING(""),
 
-    .str_476 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_390_Label = ALIGNED_STRING(""),
 
-    .str_477 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_389_Label = ALIGNED_STRING(""),
 
-    .str_478 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_388_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_479 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_387_Label = ALIGNED_STRING(""),
 
-    .str_480 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_386_Label = ALIGNED_STRING(""),
 
-    .str_481 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_385_Label = ALIGNED_STRING(""),
 
-    .str_482 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_384_Label = ALIGNED_STRING(""),
 
-    .str_483 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_383_Label = ALIGNED_STRING(""),
 
-    .str_484 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_382_Label = ALIGNED_STRING(""),
 
-    .str_485 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_381_Label = ALIGNED_STRING(""),
 
-    .str_486 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_380_Label = ALIGNED_STRING(""),
 
-    .str_487 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_379_Label = ALIGNED_STRING(""),
 
-    .str_488 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_378_Frame = ALIGNED_STRING(""),
 
-    .str_489 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_377_Label = ALIGNED_STRING(""),
 
-    .str_490 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_376_Box = ALIGNED_STRING(""),
 
     .ftdemo46_str = ALIGNED_STRING("ftdemo46"),
 
-    .str_492 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_374_Label = ALIGNED_STRING(""),
 
-    .str_493 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_373_Line = ALIGNED_STRING(""),
 
-    .str_494 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_372_Label = ALIGNED_STRING(""),
 
-    .str_495 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_371_Label = ALIGNED_STRING(""),
 
-    .str_496 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_370_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_497 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_369_Line = ALIGNED_STRING(""),
 
-    .str_498 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_368_Label = ALIGNED_STRING(""),
 
-    .str_499 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_367_Label = ALIGNED_STRING(""),
 
-    .str_500 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_366_Label = ALIGNED_STRING(""),
 
-    .str_501 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_365_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_502 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_364_Frame = ALIGNED_STRING(""),
 
-    .str_503 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_363_Label = ALIGNED_STRING(""),
 
-    .str_504 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_362_Label = ALIGNED_STRING(""),
 
-    .str_505 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_361_Label = ALIGNED_STRING(""),
 
-    .str_506 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_360_Label = ALIGNED_STRING(""),
 
-    .str_507 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_359_Label = ALIGNED_STRING(""),
 
-    .str_508 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_358_Label = ALIGNED_STRING(""),
 
-    .str_509 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_357_Label = ALIGNED_STRING(""),
 
-    .str_510 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_356_Label = ALIGNED_STRING(""),
 
-    .str_511 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_355_Label = ALIGNED_STRING(""),
 
-    .str_512 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_354_Label = ALIGNED_STRING(""),
 
-    .str_513 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_353_Box = ALIGNED_STRING(""),
 
     .ftdemo45_str = ALIGNED_STRING("ftdemo45"),
 
-    .str_515 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_351_Label = ALIGNED_STRING(""),
 
-    .str_516 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_350_Line = ALIGNED_STRING(""),
 
-    .str_517 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_349_Label = ALIGNED_STRING(""),
 
-    .str_518 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_348_Label = ALIGNED_STRING(""),
 
-    .str_519 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_347_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_520 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_346_Line = ALIGNED_STRING(""),
 
-    .str_521 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_345_Label = ALIGNED_STRING(""),
 
-    .str_522 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_344_Label = ALIGNED_STRING(""),
 
-    .str_523 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_343_Label = ALIGNED_STRING(""),
 
-    .str_524 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_342_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_525 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_341_Frame = ALIGNED_STRING(""),
 
-    .str_526 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_340_Label = ALIGNED_STRING(""),
 
-    .str_527 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_339_Label = ALIGNED_STRING(""),
 
-    .str_528 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_338_Label = ALIGNED_STRING(""),
 
-    .str_529 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_337_Label = ALIGNED_STRING(""),
 
-    .str_530 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_336_Label = ALIGNED_STRING(""),
 
-    .str_531 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_335_Label = ALIGNED_STRING(""),
 
-    .str_532 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_334_Label = ALIGNED_STRING(""),
 
-    .str_533 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_333_Label = ALIGNED_STRING(""),
 
-    .str_534 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_332_Label = ALIGNED_STRING(""),
 
-    .str_535 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_331_Label = ALIGNED_STRING(""),
 
-    .str_536 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_330_Box = ALIGNED_STRING(""),
 
     .ftdemo44_str = ALIGNED_STRING("ftdemo44"),
 
-    .str_538 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_328_Label = ALIGNED_STRING(""),
 
-    .str_539 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_327_Label = ALIGNED_STRING(""),
 
-    .str_540 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_326_Frame = ALIGNED_STRING(""),
 
-    .str_541 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_325_Label = ALIGNED_STRING(""),
 
-    .str_542 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_324_Label = ALIGNED_STRING(""),
 
-    .str_543 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_323_Label = ALIGNED_STRING(""),
 
-    .str_544 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_322_Label = ALIGNED_STRING(""),
 
-    .str_545 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_321_Label = ALIGNED_STRING(""),
 
-    .str_546 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_320_Label = ALIGNED_STRING(""),
 
-    .str_547 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_319_Label = ALIGNED_STRING(""),
 
-    .str_548 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_318_Label = ALIGNED_STRING(""),
 
-    .str_549 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_317_Label = ALIGNED_STRING(""),
 
-    .str_550 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_316_Label = ALIGNED_STRING(""),
 
-    .str_551 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_315_Box = ALIGNED_STRING(""),
 
-    .str_552 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_314_Label = ALIGNED_STRING(""),
 
-    .str_553 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_313_Line = ALIGNED_STRING(""),
 
-    .str_554 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_312_Label = ALIGNED_STRING(""),
 
-    .str_555 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_311_Label = ALIGNED_STRING(""),
 
-    .str_556 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_310_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_557 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_309_Line = ALIGNED_STRING(""),
 
-    .str_558 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_308_Label = ALIGNED_STRING(""),
 
-    .str_559 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_307_Label = ALIGNED_STRING(""),
 
-    .str_560 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_306_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_561 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_305_Label = ALIGNED_STRING(""),
 
-    .str_562 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_304_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_563 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_303_Frame = ALIGNED_STRING(""),
 
-    .str_564 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_302_Label = ALIGNED_STRING(""),
 
-    .str_565 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_301_Label = ALIGNED_STRING(""),
 
-    .str_566 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_300_Label = ALIGNED_STRING(""),
 
-    .str_567 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_299_Label = ALIGNED_STRING(""),
 
-    .str_568 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_298_Label = ALIGNED_STRING(""),
 
-    .str_569 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_297_Label = ALIGNED_STRING(""),
 
-    .str_570 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_296_Label = ALIGNED_STRING(""),
 
-    .str_571 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_295_Label = ALIGNED_STRING(""),
 
-    .str_572 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_294_Label = ALIGNED_STRING(""),
 
-    .str_573 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_293_Label = ALIGNED_STRING(""),
 
-    .str_574 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_292_Box = ALIGNED_STRING(""),
 
     .ftdemo42_str = ALIGNED_STRING("ftdemo42"),
 
-    .str_576 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_290_Label = ALIGNED_STRING(""),
 
-    .str_577 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_289_Label = ALIGNED_STRING(""),
 
-    .str_578 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_288_Frame = ALIGNED_STRING(""),
 
-    .str_579 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_287_Label = ALIGNED_STRING(""),
 
-    .str_580 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_286_Label = ALIGNED_STRING(""),
 
-    .str_581 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_285_Label = ALIGNED_STRING(""),
 
-    .str_582 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_284_Label = ALIGNED_STRING(""),
 
-    .str_583 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_283_Label = ALIGNED_STRING(""),
 
-    .str_584 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_282_Label = ALIGNED_STRING(""),
 
-    .str_585 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_281_Label = ALIGNED_STRING(""),
 
-    .str_586 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_280_Label = ALIGNED_STRING(""),
 
-    .str_587 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_279_Label = ALIGNED_STRING(""),
 
-    .str_588 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_278_Label = ALIGNED_STRING(""),
 
-    .str_589 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_277_Box = ALIGNED_STRING(""),
 
-    .str_590 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_276_Label = ALIGNED_STRING(""),
 
-    .str_591 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_275_Line = ALIGNED_STRING(""),
 
-    .str_592 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_274_Label = ALIGNED_STRING(""),
 
-    .str_593 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_273_Label = ALIGNED_STRING(""),
 
-    .str_594 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_272_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_595 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_271_Line = ALIGNED_STRING(""),
 
-    .str_596 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_270_Label = ALIGNED_STRING(""),
 
-    .str_597 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_269_Label = ALIGNED_STRING(""),
 
-    .str_598 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_268_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_599 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_267_Label = ALIGNED_STRING(""),
 
-    .str_600 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_266_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_601 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_265_Frame = ALIGNED_STRING(""),
 
-    .str_602 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_264_Label = ALIGNED_STRING(""),
 
-    .str_603 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_263_Label = ALIGNED_STRING(""),
 
-    .str_604 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_262_Label = ALIGNED_STRING(""),
 
-    .str_605 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_261_Label = ALIGNED_STRING(""),
 
-    .str_606 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_260_Label = ALIGNED_STRING(""),
 
-    .str_607 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_259_Label = ALIGNED_STRING(""),
 
-    .str_608 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_258_Label = ALIGNED_STRING(""),
 
-    .str_609 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_257_Label = ALIGNED_STRING(""),
 
-    .str_610 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_256_Label = ALIGNED_STRING(""),
 
-    .str_611 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_255_Label = ALIGNED_STRING(""),
 
-    .str_612 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_254_Box = ALIGNED_STRING(""),
 
     .ftdemo41_str = ALIGNED_STRING("ftdemo41"),
 
-    .str_614 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_252_Label = ALIGNED_STRING(""),
 
-    .str_615 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_251_Label = ALIGNED_STRING(""),
 
-    .str_616 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_250_Label = ALIGNED_STRING(""),
 
-    .str_617 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_249_Label = ALIGNED_STRING(""),
 
-    .str_618 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_248_Box = ALIGNED_STRING(""),
 
-    .str_619 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_247_Box = ALIGNED_STRING(""),
 
     .ftdemo40_str = ALIGNED_STRING("ftdemo40"),
 
-    .str_621 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_245_Line = ALIGNED_STRING(""),
 
-    .str_622 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_244_Label = ALIGNED_STRING(""),
 
-    .str_623 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_243_Label = ALIGNED_STRING(""),
 
-    .str_624 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_242_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_625 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_241_Line = ALIGNED_STRING(""),
 
-    .str_626 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_240_Label = ALIGNED_STRING(""),
 
-    .str_627 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_239_Label = ALIGNED_STRING(""),
 
-    .str_628 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_238_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_629 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_237_Label = ALIGNED_STRING(""),
 
-    .str_630 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_236_Box = ALIGNED_STRING(""),
 
-    .str_631 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_235_Frame = ALIGNED_STRING(""),
 
-    .str_632 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_234_Label = ALIGNED_STRING(""),
 
-    .str_633 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_233_Label = ALIGNED_STRING(""),
 
-    .str_634 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_232_Label = ALIGNED_STRING(""),
 
-    .str_635 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_231_Label = ALIGNED_STRING(""),
 
-    .str_636 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_230_Label = ALIGNED_STRING(""),
 
-    .str_637 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_229_Label = ALIGNED_STRING(""),
 
-    .str_638 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_228_Label = ALIGNED_STRING(""),
 
-    .str_639 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_227_Box = ALIGNED_STRING(""),
 
     .ftdemo26_str = ALIGNED_STRING("ftdemo26"),
 
@@ -10569,207 +10569,207 @@ const naka_perf_style_t naka_perf_style_data
 
     .ftdemo25_str = ALIGNED_STRING("ftdemo25"),
 
-    .str_643 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_223_Frame = ALIGNED_STRING(""),
 
-    .str_644 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_222_Label = ALIGNED_STRING(""),
 
-    .str_645 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_221_Label = ALIGNED_STRING(""),
 
-    .str_646 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_220_Label = ALIGNED_STRING(""),
 
-    .str_647 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_219_Line = ALIGNED_STRING(""),
 
-    .str_648 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_218_Label = ALIGNED_STRING(""),
 
-    .str_649 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_217_Box = ALIGNED_STRING(""),
 
-    .str_650 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_216_Label = ALIGNED_STRING(""),
 
-    .str_651 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_215_Line = ALIGNED_STRING(""),
 
-    .str_652 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_214_Label = ALIGNED_STRING(""),
 
-    .str_653 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_213_Box = ALIGNED_STRING(""),
 
-    .str_654 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_212_Label = ALIGNED_STRING(""),
 
-    .str_655 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_211_Box = ALIGNED_STRING(""),
 
-    .str_656 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_210_Label = ALIGNED_STRING(""),
 
-    .str_657 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_209_Box = ALIGNED_STRING(""),
 
-    .str_658 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_208_Label = ALIGNED_STRING(""),
 
-    .str_659 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_207_Label = ALIGNED_STRING(""),
 
-    .str_660 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_206_Label = ALIGNED_STRING(""),
 
-    .str_661 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_205_Label = ALIGNED_STRING(""),
 
-    .str_662 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_204_Label = ALIGNED_STRING(""),
 
-    .str_663 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_203_Label = ALIGNED_STRING(""),
 
-    .str_664 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_202_Label = ALIGNED_STRING(""),
 
-    .str_665 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_201_Label = ALIGNED_STRING(""),
 
-    .str_666 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_200_Label = ALIGNED_STRING(""),
 
-    .str_667 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_199_Label = ALIGNED_STRING(""),
 
-    .str_668 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_198_Label = ALIGNED_STRING(""),
 
-    .str_669 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_197_Label = ALIGNED_STRING(""),
 
-    .str_670 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_196_Box = ALIGNED_STRING(""),
 
-    .str_671 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_195_Label = ALIGNED_STRING(""),
 
-    .str_672 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_194_Label = ALIGNED_STRING(""),
 
-    .str_673 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_193_Label = ALIGNED_STRING(""),
 
-    .str_674 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_192_Label = ALIGNED_STRING(""),
 
-    .str_675 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_191_Label = ALIGNED_STRING(""),
 
-    .str_676 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_190_Label = ALIGNED_STRING(""),
 
-    .str_677 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_189_Label = ALIGNED_STRING(""),
 
-    .str_678 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_188_Label = ALIGNED_STRING(""),
 
-    .str_679 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_187_Line = ALIGNED_STRING(""),
 
-    .str_680 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_186_Box = ALIGNED_STRING(""),
 
     .ftdemo24_str = ALIGNED_STRING("ftdemo24"),
 
-    .str_682 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_184_Bitmap = ALIGNED_STRING(""),
 
-    .str_683 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_183_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_684 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_182_Bitmap = ALIGNED_STRING(""),
 
-    .str_685 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_181_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_686 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_180_Bitmap = ALIGNED_STRING(""),
 
-    .str_687 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_179_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_688 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_178_Bitmap = ALIGNED_STRING(""),
 
-    .str_689 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_177_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_690 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_176_Bitmap = ALIGNED_STRING(""),
 
-    .str_691 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_175_VwEditSwBox = ALIGNED_STRING(""),
 
-    .str_692 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_174_Label = ALIGNED_STRING(""),
 
-    .str_693 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_173_Label = ALIGNED_STRING(""),
 
-    .str_694 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_172_Label = ALIGNED_STRING(""),
 
-    .str_695 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_171_Label = ALIGNED_STRING(""),
 
-    .str_696 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_170_Label = ALIGNED_STRING(""),
 
-    .str_697 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_169_Label = ALIGNED_STRING(""),
 
-    .str_698 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_168_Label = ALIGNED_STRING(""),
 
-    .str_699 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_167_Label = ALIGNED_STRING(""),
 
-    .str_700 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_166_Box = ALIGNED_STRING(""),
 
-    .str_701 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_165_Label = ALIGNED_STRING(""),
 
-    .str_702 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_164_Label = ALIGNED_STRING(""),
 
-    .str_703 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_163_Label = ALIGNED_STRING(""),
 
     .ftdemo23_str = ALIGNED_STRING("ftdemo23"),
 
-    .str_705 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_161_Label = ALIGNED_STRING(""),
 
-    .str_706 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_160_Box = ALIGNED_STRING(""),
 
-    .str_707 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_159_Label = ALIGNED_STRING(""),
 
-    .str_708 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_158_Label = ALIGNED_STRING(""),
 
-    .str_709 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_157_Label = ALIGNED_STRING(""),
 
-    .str_710 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_156_Label = ALIGNED_STRING(""),
 
-    .str_711 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_155_Label = ALIGNED_STRING(""),
 
-    .str_712 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_154_Label = ALIGNED_STRING(""),
 
-    .str_713 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_153_Label = ALIGNED_STRING(""),
 
-    .str_714 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_152_Label = ALIGNED_STRING(""),
 
-    .str_715 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_151_Label = ALIGNED_STRING(""),
 
-    .str_716 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_150_Line = ALIGNED_STRING(""),
 
-    .str_717 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_149_Label = ALIGNED_STRING(""),
 
-    .str_718 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_148_Label = ALIGNED_STRING(""),
 
-    .str_719 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_147_Label = ALIGNED_STRING(""),
 
-    .str_720 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_146_Label = ALIGNED_STRING(""),
 
-    .str_721 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_145_EditSw = ALIGNED_STRING(""),
 
-    .str_722 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_144_EditSw = ALIGNED_STRING(""),
 
-    .str_723 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_143_Label = ALIGNED_STRING(""),
 
-    .str_724 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_142_Label = ALIGNED_STRING(""),
 
-    .str_725 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_141_PsEditSwBox = ALIGNED_STRING(""),
 
-    .str_726 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_140_Label = ALIGNED_STRING(""),
 
-    .str_727 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_139_Box = ALIGNED_STRING(""),
 
     .ftdemo22_str = ALIGNED_STRING("ftdemo22"),
 
-    .str_729 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_137_AcLanguageText = ALIGNED_STRING(""),
 
     .ftdemo21_str = ALIGNED_STRING("ftdemo21"),
 
     .ftdemobmpill_str = ALIGNED_STRING("ftdemobmpill"),
 
-    .str_732 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_134_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_733 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_133_AcLanguageText = ALIGNED_STRING(""),
 
     .ftdemo20_str = ALIGNED_STRING("ftdemo20"),
 
-    .str_735 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_131_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_736 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_130_AcLanguageText = ALIGNED_STRING(""),
 
     .ftdemo10_str = ALIGNED_STRING("ftdemo10"),
 
-    .str_738 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_128_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_739 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_127_AcLanguageText = ALIGNED_STRING(""),
 
     .ftdemo09_str = ALIGNED_STRING("ftdemo09"),
 
-    .str_741 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_125_AcLanguageText = ALIGNED_STRING(""),
 
     .ftdemo08_str = ALIGNED_STRING("ftdemo08"),
 
-    .str_743 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_123_AcLanguageText = ALIGNED_STRING(""),
 
     .ftdemobmpcnv_str = ALIGNED_STRING("ftdemobmpcnv"),
 
@@ -10777,239 +10777,239 @@ const naka_perf_style_t naka_perf_style_data
 
     .ftdemobmpsoft_str = "ftdemobmpsoft",
 
-    .str_747 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_119_AcLanguageText = ALIGNED_STRING(""),
 
     .ftdemo06_str = ALIGNED_STRING("ftdemo06"),
 
-    .str_749 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_117_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_750 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_116_AcLanguageText = ALIGNED_STRING(""),
 
     .ftdemo05_str = ALIGNED_STRING("ftdemo05"),
 
-    .str_752 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_114_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_753 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_113_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_754 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_112_Box = ALIGNED_STRING(""),
 
-    .str_755 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_111_AcLanguageText = ALIGNED_STRING(""),
 
     .ftdemobmp3D_str = "ftdemobmp3D",
 
     .ftdemo04_str = ALIGNED_STRING("ftdemo04"),
 
-    .str_758 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_108_Label = ALIGNED_STRING(""),
 
-    .str_759 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_107_Label = ALIGNED_STRING(""),
 
-    .str_760 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_106_Label = ALIGNED_STRING(""),
 
-    .str_761 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_105_Label = ALIGNED_STRING(""),
 
-    .str_762 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_104_Box = ALIGNED_STRING(""),
 
-    .str_763 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_103_Box = ALIGNED_STRING(""),
 
-    .str_764 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_102_Label = ALIGNED_STRING(""),
 
-    .str_765 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_101_Box = ALIGNED_STRING(""),
 
-    .str_766 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_100_Box = ALIGNED_STRING(""),
 
-    .str_767 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_99_Label = ALIGNED_STRING(""),
 
-    .str_768 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_98_Box = ALIGNED_STRING(""),
 
-    .str_769 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_97_Box = ALIGNED_STRING(""),
 
-    .str_770 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_96_Box = ALIGNED_STRING(""),
 
-    .str_771 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_95_Box = ALIGNED_STRING(""),
 
-    .str_772 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_94_Label = ALIGNED_STRING(""),
 
-    .str_773 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_93_Box = ALIGNED_STRING(""),
 
-    .str_774 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_92_Box = ALIGNED_STRING(""),
 
-    .str_775 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_91_Box = ALIGNED_STRING(""),
 
-    .str_776 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_90_Box = ALIGNED_STRING(""),
 
-    .str_777 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_89_Label = ALIGNED_STRING(""),
 
-    .str_778 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_88_Box = ALIGNED_STRING(""),
 
-    .str_779 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_87_Box = ALIGNED_STRING(""),
 
-    .str_780 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_86_Box = ALIGNED_STRING(""),
 
-    .str_781 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_85_Box = ALIGNED_STRING(""),
 
-    .str_782 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_84_Line = ALIGNED_STRING(""),
 
-    .str_783 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_83_Line = ALIGNED_STRING(""),
 
-    .str_784 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_82_Label = ALIGNED_STRING(""),
 
-    .str_785 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_81_Line = ALIGNED_STRING(""),
 
-    .str_786 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_80_Line = ALIGNED_STRING(""),
 
-    .str_787 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_79_Line = ALIGNED_STRING(""),
 
-    .str_788 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_78_Line = ALIGNED_STRING(""),
 
-    .str_789 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_77_Line = ALIGNED_STRING(""),
 
-    .str_790 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_76_Line = ALIGNED_STRING(""),
 
-    .str_791 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_75_Line = ALIGNED_STRING(""),
 
-    .str_792 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_74_Line = ALIGNED_STRING(""),
 
-    .str_793 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_73_Line = ALIGNED_STRING(""),
 
-    .str_794 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_72_Label = ALIGNED_STRING(""),
 
-    .str_795 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_71_Label = ALIGNED_STRING(""),
 
-    .str_796 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_70_Box = ALIGNED_STRING(""),
 
-    .str_797 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_69_Label = ALIGNED_STRING(""),
 
-    .str_798 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_68_Box = ALIGNED_STRING(""),
 
-    .str_799 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_67_Label = ALIGNED_STRING(""),
 
-    .str_800 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_66_Box = ALIGNED_STRING(""),
 
     .ftdemo03_str = ALIGNED_STRING("ftdemo03"),
 
-    .str_802 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_64_Line = ALIGNED_STRING(""),
 
-    .str_803 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_63_Line = ALIGNED_STRING(""),
 
-    .str_804 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_62_Line = ALIGNED_STRING(""),
 
-    .str_805 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_61_Line = ALIGNED_STRING(""),
 
-    .str_806 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_60_Line = ALIGNED_STRING(""),
 
-    .str_807 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_59_Line = ALIGNED_STRING(""),
 
-    .str_808 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_58_Line = ALIGNED_STRING(""),
 
-    .str_809 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_57_Line = ALIGNED_STRING(""),
 
-    .str_810 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_56_Line = ALIGNED_STRING(""),
 
-    .str_811 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_55_Line = ALIGNED_STRING(""),
 
-    .str_812 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_54_Line = ALIGNED_STRING(""),
 
-    .str_813 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_53_Line = ALIGNED_STRING(""),
 
-    .str_814 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_52_Line = ALIGNED_STRING(""),
 
-    .str_815 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_51_Line = ALIGNED_STRING(""),
 
-    .str_816 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_50_Line = ALIGNED_STRING(""),
 
-    .str_817 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_49_Line = ALIGNED_STRING(""),
 
-    .str_818 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_48_Line = ALIGNED_STRING(""),
 
-    .str_819 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_47_Line = ALIGNED_STRING(""),
 
-    .str_820 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_46_Line = ALIGNED_STRING(""),
 
-    .str_821 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_45_Line = ALIGNED_STRING(""),
 
-    .str_822 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_44_Line = ALIGNED_STRING(""),
 
-    .str_823 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_43_Line = ALIGNED_STRING(""),
 
-    .str_824 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_42_Line = ALIGNED_STRING(""),
 
-    .str_825 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_41_Line = ALIGNED_STRING(""),
 
-    .str_826 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_40_Line = ALIGNED_STRING(""),
 
-    .str_827 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_39_Line = ALIGNED_STRING(""),
 
-    .str_828 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_38_Line = ALIGNED_STRING(""),
 
-    .str_829 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_37_Label = ALIGNED_STRING(""),
 
-    .str_830 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_36_Label = ALIGNED_STRING(""),
 
-    .str_831 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_35_Label = ALIGNED_STRING(""),
 
-    .str_832 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_34_Label = ALIGNED_STRING(""),
 
-    .str_833 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_33_Label = ALIGNED_STRING(""),
 
-    .str_834 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_32_Box = ALIGNED_STRING(""),
 
-    .str_835 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_31_Box = ALIGNED_STRING(""),
 
-    .str_836 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_30_Label = ALIGNED_STRING(""),
 
-    .str_837 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_29_Label = ALIGNED_STRING(""),
 
-    .str_838 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_28_Box = ALIGNED_STRING(""),
 
-    .str_839 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_27_Box = ALIGNED_STRING(""),
 
-    .str_840 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_26_Label = ALIGNED_STRING(""),
 
-    .str_841 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_25_Line = ALIGNED_STRING(""),
 
-    .str_842 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_24_Line = ALIGNED_STRING(""),
 
-    .str_843 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_23_Line = ALIGNED_STRING(""),
 
-    .str_844 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_22_Line = ALIGNED_STRING(""),
 
-    .str_845 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_21_Line = ALIGNED_STRING(""),
 
-    .str_846 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_20_Line = ALIGNED_STRING(""),
 
-    .str_847 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_19_Line = ALIGNED_STRING(""),
 
-    .str_848 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_18_Label = ALIGNED_STRING(""),
 
-    .str_849 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_17_Line = ALIGNED_STRING(""),
 
-    .str_850 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_16_Line = ALIGNED_STRING(""),
 
-    .str_851 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_15_Label = ALIGNED_STRING(""),
 
-    .str_852 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_14_Line = ALIGNED_STRING(""),
 
-    .str_853 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_13_Line = ALIGNED_STRING(""),
 
-    .str_854 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_12_Line = ALIGNED_STRING(""),
 
-    .str_855 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_11_Label = ALIGNED_STRING(""),
 
-    .str_856 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_10_Label = ALIGNED_STRING(""),
 
-    .str_857 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_9_Box = ALIGNED_STRING(""),
 
-    .str_858 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_8_Label = ALIGNED_STRING(""),
 
-    .str_859 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_7_Box = ALIGNED_STRING(""),
 
-    .str_860 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_6_Label = ALIGNED_STRING(""),
 
-    .str_861 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_5_Label = ALIGNED_STRING(""),
 
-    .str_862 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_4_Box = ALIGNED_STRING(""),
 
-    .str_863 = ALIGNED_STRING(""),
+    .ResName_ftdemo01_3_Box = ALIGNED_STRING(""),
 
     .ftdemo02_str = ALIGNED_STRING("ftdemo02"),
 

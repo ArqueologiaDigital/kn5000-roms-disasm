@@ -1733,85 +1733,85 @@ typedef struct __attribute__((packed)) {
     uint16_t field_41b4;
     uint32_t ptrs_1[82];  /* 82 pointers */
     char str_392[2];
-    char str_393[2];
-    char str_394[2];
+    char ResName_ReverbEqualizerMenu_3_AcTitleMenu[2];
+    char ResName_ReverbEqualizerMenu_2_AcTitleMenu[2];
     char w149_code[2];
     char ReverbEqualizerMenu_name[20];
     uint32_t ptrs_2[4];  /* 4 pointers */
     char str_395[2];
-    char str_396[2];
-    char str_397[2];
+    char ResName_R12OctaveSetting_2_AcIndexWideES[2];
+    char ResName_R12OctaveSetting_1_AcLswEditBox[2];
     char R12OctaveSetting_str[18];
     uint32_t ptrs_3[13];  /* 13 pointers */
     char str_399[2];
-    char str_400[2];
-    char str_401[2];
-    char str_402[2];
-    char str_403[2];
-    char str_404[2];
-    char str_405[2];
-    char str_406[2];
-    char str_407[2];
-    char str_408[2];
-    char str_409[2];
+    char ResName_ReverbPreset_11_AcStrRadioBox[2];
+    char ResName_ReverbPreset_10_AcStrRadioBox[2];
+    char ResName_ReverbPreset_9_AcStrRadioBox[2];
+    char ResName_ReverbPreset_8_AcStrRadioBox[2];
+    char ResName_ReverbPreset_7_AcStrRadioBox[2];
+    char ResName_ReverbPreset_6_AcStrRadioBox[2];
+    char ResName_ReverbPreset_5_AcStrRadioBox[2];
+    char ResName_ReverbPreset_4_AcStrRadioBox[2];
+    char ResName_ReverbPreset_3_IvCatchEvent[2];
+    char ResName_ReverbPreset_2_AcStrRadioBox[2];
     char w150_code[2];
     char ReverbPreset_name[14];
     uint32_t ptrs_4[13];  /* 13 pointers */
     char w151_code[2];
     char EqOnOffBox_name[12];
-    char str_410[2];
-    char str_411[2];
-    char str_412[2];
-    char str_413[2];
-    char str_414[2];
-    char str_415[2];
-    char str_416[2];
-    char str_417[2];
-    char str_418[2];
+    char ResName_EqualizerPreset_10_IvCatchEvent[2];
+    char ResName_EqualizerPreset_9_AcStrRadioBox[2];
+    char ResName_EqualizerPreset_8_AcStrRadioBox[2];
+    char ResName_EqualizerPreset_7_AcStrRadioBox[2];
+    char ResName_EqualizerPreset_6_AcStrRadioBox[2];
+    char ResName_EqualizerPreset_5_AcStrRadioBox[2];
+    char ResName_EqualizerPreset_4_AcStrRadioBox[2];
+    char ResName_EqualizerPreset_3_AcStrRadioBox[2];
+    char ResName_EqualizerPreset_2_AcStrRadioBox[2];
     char w152_code[2];
     char EqualizerPreset_name[16];
     uint32_t ptrs_5[13];  /* 13 pointers */
     char str_419[2];
     char w153_code[2];
     char RevEqOnOffBox_name[14];
-    char str_420[2];
-    char str_421[2];
-    char str_422[2];
-    char str_423[2];
-    char str_424[2];
-    char str_425[2];
-    char str_426[2];
-    char str_427[2];
+    char ResName_ReverbEqualizerPreset_9_AcStrRadioBox[2];
+    char ResName_ReverbEqualizerPreset_8_AcStrRadioBox[2];
+    char ResName_ReverbEqualizerPreset_7_AcStrRadioBox[2];
+    char ResName_ReverbEqualizerPreset_6_AcStrRadioBox[2];
+    char ResName_ReverbEqualizerPreset_5_AcStrRadioBox[2];
+    char ResName_ReverbEqualizerPreset_4_AcStrRadioBox[2];
+    char ResName_ReverbEqualizerPreset_3_AcStrRadioBox[2];
+    char ResName_ReverbEqualizerPreset_2_AcStrRadioBox[2];
     char w154_code[2];
     char ReverbEqualizerPreset_name[22];
     uint32_t ptrs_6[21];  /* 21 pointers */
     char str_428[2];
-    char str_429[2];
+    char ResName_MidiMenu_19_AcTitleMenu[2];
     char w155_code[2];
     char MidiMenuPage2_name[14];
-    char str_430[2];
-    char str_431[2];
-    char str_432[2];
-    char str_433[2];
-    char str_434[2];
-    char str_435[2];
-    char str_436[2];
-    char str_437[2];
-    char str_438[2];
+    char ResName_MidiMenu_16_AcTitleMenu[2];
+    char ResName_MidiMenu_15_AcTitleMenu[2];
+    char ResName_MidiMenu_14_AcTitleMenu[2];
+    char ResName_MidiMenu_13_AcTitleMenu[2];
+    char ResName_MidiMenu_12_AcTitleMenu[2];
+    char ResName_MidiMenu_11_AcTitleMenu[2];
+    char ResName_MidiMenu_10_AcTitleMenu[2];
+    char ResName_MidiMenu_9_AcTitleMenu[2];
+    char ResName_MidiMenu_8_AcTitleMenu[2];
     char w156_code[2];
     char MidiMenuPage1_name[14];
-    char str_439[2];
-    char str_440[2];
-    char str_441[2];
+    char ResName_MidiMenu_5_IvShowHide[2];
+    char ResName_MidiMenu_4_IvExitMode[2];
+    char ResName_MidiMenu_3_IvPageControl[2];
     char w157_code[2];
     char MdmenuPage_name[12];
     char MidiMenu_str[10];
     uint32_t ptrs_7[8];  /* 8 pointers */
     char str_443[2];
-    char str_444[2];
-    char str_445[2];
-    char str_446[2];
-    char str_447[2];
+    char ResName_MidiPartSetting_6_IvShowHide[2];
+    char ResName_MidiPartSetting_5_AcIndexWideES[2];
+    char ResName_MidiPartSetting_4_AcIndexWideES[2];
+    char ResName_MidiPartSetting_3_AcIndexWideES[2];
     char w158_code[2];
     char MdPartSetGridBox_name[18];
     char MidiPartSetting_str[16];
@@ -7333,16 +7333,16 @@ const naka_midi_reverb_t naka_midi_reverb_data
         0x00000000,
         SELF(ReverbEqualizerMenu_name),
         SELF(w149_code),
-        SELF(str_394),
-        SELF(str_393),
+        SELF(ResName_ReverbEqualizerMenu_2_AcTitleMenu),
+        SELF(ResName_ReverbEqualizerMenu_3_AcTitleMenu),
         SELF(str_392),
     },
 
     .str_392 = ALIGNED_STRING(""),
 
-    .str_393 = ALIGNED_STRING(""),
+    .ResName_ReverbEqualizerMenu_3_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_394 = ALIGNED_STRING(""),
+    .ResName_ReverbEqualizerMenu_2_AcTitleMenu = ALIGNED_STRING(""),
 
     .w149_code = ALIGNED_STRING(""),
 
@@ -7350,56 +7350,56 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .ptrs_2 = {
         SELF(R12OctaveSetting_str),
-        SELF(str_397),
-        SELF(str_396),
+        SELF(ResName_R12OctaveSetting_1_AcLswEditBox),
+        SELF(ResName_R12OctaveSetting_2_AcIndexWideES),
         SELF(str_395),
     },
 
     .str_395 = ALIGNED_STRING(""),
 
-    .str_396 = ALIGNED_STRING(""),
+    .ResName_R12OctaveSetting_2_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_397 = ALIGNED_STRING(""),
+    .ResName_R12OctaveSetting_1_AcLswEditBox = ALIGNED_STRING(""),
 
     .R12OctaveSetting_str = ALIGNED_STRING("R12OctaveSetting"),
 
     .ptrs_3 = {
         SELF(ReverbPreset_name),
         SELF(w150_code),
-        SELF(str_409),
-        SELF(str_408),
-        SELF(str_407),
-        SELF(str_406),
-        SELF(str_405),
-        SELF(str_404),
-        SELF(str_403),
-        SELF(str_402),
-        SELF(str_401),
-        SELF(str_400),
+        SELF(ResName_ReverbPreset_2_AcStrRadioBox),
+        SELF(ResName_ReverbPreset_3_IvCatchEvent),
+        SELF(ResName_ReverbPreset_4_AcStrRadioBox),
+        SELF(ResName_ReverbPreset_5_AcStrRadioBox),
+        SELF(ResName_ReverbPreset_6_AcStrRadioBox),
+        SELF(ResName_ReverbPreset_7_AcStrRadioBox),
+        SELF(ResName_ReverbPreset_8_AcStrRadioBox),
+        SELF(ResName_ReverbPreset_9_AcStrRadioBox),
+        SELF(ResName_ReverbPreset_10_AcStrRadioBox),
+        SELF(ResName_ReverbPreset_11_AcStrRadioBox),
         SELF(str_399),
     },
 
     .str_399 = ALIGNED_STRING(""),
 
-    .str_400 = ALIGNED_STRING(""),
+    .ResName_ReverbPreset_11_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_401 = ALIGNED_STRING(""),
+    .ResName_ReverbPreset_10_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_402 = ALIGNED_STRING(""),
+    .ResName_ReverbPreset_9_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_403 = ALIGNED_STRING(""),
+    .ResName_ReverbPreset_8_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_404 = ALIGNED_STRING(""),
+    .ResName_ReverbPreset_7_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_405 = ALIGNED_STRING(""),
+    .ResName_ReverbPreset_6_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_406 = ALIGNED_STRING(""),
+    .ResName_ReverbPreset_5_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_407 = ALIGNED_STRING(""),
+    .ResName_ReverbPreset_4_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_408 = ALIGNED_STRING(""),
+    .ResName_ReverbPreset_3_IvCatchEvent = ALIGNED_STRING(""),
 
-    .str_409 = ALIGNED_STRING(""),
+    .ResName_ReverbPreset_2_AcStrRadioBox = ALIGNED_STRING(""),
 
     .w150_code = ALIGNED_STRING(""),
 
@@ -7408,15 +7408,15 @@ const naka_midi_reverb_t naka_midi_reverb_data
     .ptrs_4 = {
         SELF(EqualizerPreset_name),
         SELF(w152_code),
-        SELF(str_418),
-        SELF(str_417),
-        SELF(str_416),
-        SELF(str_415),
-        SELF(str_414),
-        SELF(str_413),
-        SELF(str_412),
-        SELF(str_411),
-        SELF(str_410),
+        SELF(ResName_EqualizerPreset_2_AcStrRadioBox),
+        SELF(ResName_EqualizerPreset_3_AcStrRadioBox),
+        SELF(ResName_EqualizerPreset_4_AcStrRadioBox),
+        SELF(ResName_EqualizerPreset_5_AcStrRadioBox),
+        SELF(ResName_EqualizerPreset_6_AcStrRadioBox),
+        SELF(ResName_EqualizerPreset_7_AcStrRadioBox),
+        SELF(ResName_EqualizerPreset_8_AcStrRadioBox),
+        SELF(ResName_EqualizerPreset_9_AcStrRadioBox),
+        SELF(ResName_EqualizerPreset_10_IvCatchEvent),
         SELF(EqOnOffBox_name),
         SELF(w151_code),
     },
@@ -7425,23 +7425,23 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .EqOnOffBox_name = ALIGNED_STRING("EqOnOffBox"),
 
-    .str_410 = ALIGNED_STRING(""),
+    .ResName_EqualizerPreset_10_IvCatchEvent = ALIGNED_STRING(""),
 
-    .str_411 = ALIGNED_STRING(""),
+    .ResName_EqualizerPreset_9_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_412 = ALIGNED_STRING(""),
+    .ResName_EqualizerPreset_8_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_413 = ALIGNED_STRING(""),
+    .ResName_EqualizerPreset_7_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_414 = ALIGNED_STRING(""),
+    .ResName_EqualizerPreset_6_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_415 = ALIGNED_STRING(""),
+    .ResName_EqualizerPreset_5_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_416 = ALIGNED_STRING(""),
+    .ResName_EqualizerPreset_4_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_417 = ALIGNED_STRING(""),
+    .ResName_EqualizerPreset_3_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_418 = ALIGNED_STRING(""),
+    .ResName_EqualizerPreset_2_AcStrRadioBox = ALIGNED_STRING(""),
 
     .w152_code = ALIGNED_STRING(""),
 
@@ -7450,14 +7450,14 @@ const naka_midi_reverb_t naka_midi_reverb_data
     .ptrs_5 = {
         SELF(ReverbEqualizerPreset_name),
         SELF(w154_code),
-        SELF(str_427),
-        SELF(str_426),
-        SELF(str_425),
-        SELF(str_424),
-        SELF(str_423),
-        SELF(str_422),
-        SELF(str_421),
-        SELF(str_420),
+        SELF(ResName_ReverbEqualizerPreset_2_AcStrRadioBox),
+        SELF(ResName_ReverbEqualizerPreset_3_AcStrRadioBox),
+        SELF(ResName_ReverbEqualizerPreset_4_AcStrRadioBox),
+        SELF(ResName_ReverbEqualizerPreset_5_AcStrRadioBox),
+        SELF(ResName_ReverbEqualizerPreset_6_AcStrRadioBox),
+        SELF(ResName_ReverbEqualizerPreset_7_AcStrRadioBox),
+        SELF(ResName_ReverbEqualizerPreset_8_AcStrRadioBox),
+        SELF(ResName_ReverbEqualizerPreset_9_AcStrRadioBox),
         SELF(RevEqOnOffBox_name),
         SELF(w153_code),
         SELF(str_419),
@@ -7469,21 +7469,21 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .RevEqOnOffBox_name = "RevEqOnOffBox",
 
-    .str_420 = ALIGNED_STRING(""),
+    .ResName_ReverbEqualizerPreset_9_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_421 = ALIGNED_STRING(""),
+    .ResName_ReverbEqualizerPreset_8_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_422 = ALIGNED_STRING(""),
+    .ResName_ReverbEqualizerPreset_7_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_423 = ALIGNED_STRING(""),
+    .ResName_ReverbEqualizerPreset_6_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_424 = ALIGNED_STRING(""),
+    .ResName_ReverbEqualizerPreset_5_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_425 = ALIGNED_STRING(""),
+    .ResName_ReverbEqualizerPreset_4_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_426 = ALIGNED_STRING(""),
+    .ResName_ReverbEqualizerPreset_3_AcStrRadioBox = ALIGNED_STRING(""),
 
-    .str_427 = ALIGNED_STRING(""),
+    .ResName_ReverbEqualizerPreset_2_AcStrRadioBox = ALIGNED_STRING(""),
 
     .w154_code = ALIGNED_STRING(""),
 
@@ -7493,61 +7493,61 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(MidiMenu_str),
         SELF(MdmenuPage_name),
         SELF(w157_code),
-        SELF(str_441),
-        SELF(str_440),
-        SELF(str_439),
+        SELF(ResName_MidiMenu_3_IvPageControl),
+        SELF(ResName_MidiMenu_4_IvExitMode),
+        SELF(ResName_MidiMenu_5_IvShowHide),
         SELF(MidiMenuPage1_name),
         SELF(w156_code),
-        SELF(str_438),
-        SELF(str_437),
-        SELF(str_436),
-        SELF(str_435),
-        SELF(str_434),
-        SELF(str_433),
-        SELF(str_432),
-        SELF(str_431),
-        SELF(str_430),
+        SELF(ResName_MidiMenu_8_AcTitleMenu),
+        SELF(ResName_MidiMenu_9_AcTitleMenu),
+        SELF(ResName_MidiMenu_10_AcTitleMenu),
+        SELF(ResName_MidiMenu_11_AcTitleMenu),
+        SELF(ResName_MidiMenu_12_AcTitleMenu),
+        SELF(ResName_MidiMenu_13_AcTitleMenu),
+        SELF(ResName_MidiMenu_14_AcTitleMenu),
+        SELF(ResName_MidiMenu_15_AcTitleMenu),
+        SELF(ResName_MidiMenu_16_AcTitleMenu),
         SELF(MidiMenuPage2_name),
         SELF(w155_code),
-        SELF(str_429),
+        SELF(ResName_MidiMenu_19_AcTitleMenu),
         SELF(str_428),
     },
 
     .str_428 = ALIGNED_STRING(""),
 
-    .str_429 = ALIGNED_STRING(""),
+    .ResName_MidiMenu_19_AcTitleMenu = ALIGNED_STRING(""),
 
     .w155_code = ALIGNED_STRING(""),
 
     .MidiMenuPage2_name = "MidiMenuPage2",
 
-    .str_430 = ALIGNED_STRING(""),
+    .ResName_MidiMenu_16_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_431 = ALIGNED_STRING(""),
+    .ResName_MidiMenu_15_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_432 = ALIGNED_STRING(""),
+    .ResName_MidiMenu_14_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_433 = ALIGNED_STRING(""),
+    .ResName_MidiMenu_13_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_434 = ALIGNED_STRING(""),
+    .ResName_MidiMenu_12_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_435 = ALIGNED_STRING(""),
+    .ResName_MidiMenu_11_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_436 = ALIGNED_STRING(""),
+    .ResName_MidiMenu_10_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_437 = ALIGNED_STRING(""),
+    .ResName_MidiMenu_9_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_438 = ALIGNED_STRING(""),
+    .ResName_MidiMenu_8_AcTitleMenu = ALIGNED_STRING(""),
 
     .w156_code = ALIGNED_STRING(""),
 
     .MidiMenuPage1_name = "MidiMenuPage1",
 
-    .str_439 = ALIGNED_STRING(""),
+    .ResName_MidiMenu_5_IvShowHide = ALIGNED_STRING(""),
 
-    .str_440 = ALIGNED_STRING(""),
+    .ResName_MidiMenu_4_IvExitMode = ALIGNED_STRING(""),
 
-    .str_441 = ALIGNED_STRING(""),
+    .ResName_MidiMenu_3_IvPageControl = ALIGNED_STRING(""),
 
     .w157_code = ALIGNED_STRING(""),
 
@@ -7559,22 +7559,22 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(MidiPartSetting_str),
         SELF(MdPartSetGridBox_name),
         SELF(w158_code),
-        SELF(str_447),
-        SELF(str_446),
-        SELF(str_445),
-        SELF(str_444),
+        SELF(ResName_MidiPartSetting_3_AcIndexWideES),
+        SELF(ResName_MidiPartSetting_4_AcIndexWideES),
+        SELF(ResName_MidiPartSetting_5_AcIndexWideES),
+        SELF(ResName_MidiPartSetting_6_IvShowHide),
         SELF(str_443),
     },
 
     .str_443 = ALIGNED_STRING(""),
 
-    .str_444 = ALIGNED_STRING(""),
+    .ResName_MidiPartSetting_6_IvShowHide = ALIGNED_STRING(""),
 
-    .str_445 = ALIGNED_STRING(""),
+    .ResName_MidiPartSetting_5_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_446 = ALIGNED_STRING(""),
+    .ResName_MidiPartSetting_4_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_447 = ALIGNED_STRING(""),
+    .ResName_MidiPartSetting_3_AcIndexWideES = ALIGNED_STRING(""),
 
     .w158_code = ALIGNED_STRING(""),
 

@@ -154,8 +154,8 @@ typedef struct __attribute__((packed)) {
 typedef struct __attribute__((packed)) {
     uint32_t ptrs_0[30];  /* 30 pointers */
     char str_0[2];
-    char str_1[2];
-    char str_2[2];
+    char ResName_Sdtecd_28_Label[2];
+    char ResName_Sdtecd_27_AcLswEditBox[2];
     char w0_code[2];
     char Sdtecd2_name[8];
     char w1_code[2];
@@ -173,20 +173,20 @@ typedef struct __attribute__((packed)) {
     char TcOpen2_name[8];
     char TcOpen1_code[8];
     char TcClose_name[8];
-    char str_4[2];
-    char str_5[2];
+    char ResName_Sdtecd_9_AcIndexEditSw[2];
+    char ResName_Sdtecd_8_AcIndexEditSw[2];
     char w8_code[2];
     char Sdtecd1_name[8];
-    char str_6[2];
-    char str_7[2];
-    char str_8[2];
+    char ResName_Sdtecd_5_IvIntEasySet[2];
+    char ResName_Sdtecd_4_IvSdtecd[2];
+    char ResName_Sdtecd_3_IvPageControl[2];
     char w9_code[2];
     char SdtecdPage_name[12];
     char Sdtecd_str[8];
     uint32_t Murai_ResNameTable_3A5[5];  /* 5 pointers */
     char str_10[2];
-    char str_11[2];
-    char str_12[2];
+    char ResName_Sqmixer_3_IvExit[2];
+    char ResName_Sqmixer_2_AcTrackMixer[2];
     char w10_code[2];
     char Sqmixer_name[8];
     uint32_t Murai_ResNameTable_3E4[16];  /* 16 pointers */
@@ -198,53 +198,53 @@ typedef struct __attribute__((packed)) {
     char PresentationControl_name[20];
     char PlainScreen_str[12];
     char FDemoTitleBox_str[14];
-    char str_15[2];
+    char ResName_Demofeature_7_AcPresentationBox[2];
     char w14_code[2];
     char Demofeature2_name[14];
-    char str_16[2];
+    char ResName_Demofeature_4_AcLanguageText[2];
     char w15_code[2];
     char Demofeature1_name[14];
     char w16_code[2];
     char Demofeature_name[12];
     uint32_t ptrs_3[45];  /* 45 pointers */
     char str_17[2];
-    char str_18[2];
-    char str_19[2];
-    char str_20[2];
-    char str_21[2];
+    char ResName_Drawbar_43_Label[2];
+    char ResName_Drawbar_42_Icon[2];
+    char ResName_Drawbar_41_VwBox[2];
+    char ResName_Drawbar_40_AcTitleMenu[2];
     char w17_code[2];
     char DrawbarSndE_name[12];
-    char str_22[2];
-    char str_23[2];
-    char str_24[2];
-    char str_25[2];
+    char ResName_Drawbar_37_Label[2];
+    char ResName_Drawbar_36_Icon[2];
+    char ResName_Drawbar_35_VwBox[2];
+    char ResName_Drawbar_34_IvDrawbarNorm[2];
     char w18_code[2];
     char DrawTremolo_name[12];
     char DrawbarPart_str[12];
     char DrawbarNorm_str[12];
-    char str_28[2];
-    char str_29[2];
-    char str_30[2];
-    char str_31[2];
-    char str_32[2];
-    char str_33[2];
+    char ResName_Drawbar_29_AcDrawbarName[2];
+    char ResName_Drawbar_28_IvDrawbar2[2];
+    char ResName_Drawbar_27_AcIndexWideES[2];
+    char ResName_Drawbar_26_AcDrawEditBox[2];
+    char ResName_Drawbar_25_AcDrawEditBox[2];
+    char ResName_Drawbar_24_AcDrawEditBox[2];
     char w19_code[2];
     char Drawbar2_name[10];
-    char str_34[2];
-    char str_35[2];
-    char str_36[2];
-    char str_37[2];
-    char str_38[2];
-    char str_39[2];
-    char str_40[2];
+    char ResName_Drawbar_21_VwUserBitmapSp[2];
+    char ResName_Drawbar_20_IvDrawbar1[2];
+    char ResName_Drawbar_19_Label[2];
+    char ResName_Drawbar_18_Label[2];
+    char ResName_Drawbar_17_Label[2];
+    char ResName_Drawbar_16_Label[2];
+    char ResName_Drawbar_15_StringBox[2];
     char w20_code[2];
     char Drawbar1_name[10];
     char DrawSetting_str[12];
-    char str_42[2];
-    char str_43[2];
-    char str_44[2];
-    char str_45[2];
-    char str_46[2];
+    char ResName_Drawbar_11_IvDrawbar[2];
+    char ResName_Drawbar_10_IvPageOverWrite[2];
+    char ResName_Drawbar_9_IvPageOverWrite[2];
+    char ResName_Drawbar_8_Label[2];
+    char ResName_Drawbar_7_IvExit[2];
     char w21_code[2];
     char Black23_name[8];
     char White23_code[8];
@@ -254,41 +254,41 @@ typedef struct __attribute__((packed)) {
     char Drawbar_name[8];
     uint32_t Murai_ResNameTable_3EB[38];  /* 38 pointers */
     char str_48[2];
-    char str_49[2];
-    char str_50[2];
-    char str_51[2];
-    char str_52[2];
-    char str_53[2];
-    char str_54[2];
-    char str_55[2];
-    char str_56[2];
-    char str_57[2];
-    char str_58[2];
-    char str_59[2];
-    char str_60[2];
+    char ResName_Accordion_36_IvAccordionX[2];
+    char ResName_Accordion_35_AcAccordionTab[2];
+    char ResName_Accordion_34_AcAccordionTab[2];
+    char ResName_Accordion_33_AcAccordionTab[2];
+    char ResName_Accordion_32_AcAccordionTab[2];
+    char ResName_Accordion_31_AcAccordionTab[2];
+    char ResName_Accordion_30_AcAccordionTab[2];
+    char ResName_Accordion_29_AcAccordionTab[2];
+    char ResName_Accordion_28_AcAccordionTab[2];
+    char ResName_Accordion_27_AcIndexToggle[2];
+    char ResName_Accordion_26_AcIndexToggle[2];
+    char ResName_Accordion_25_VwUserBitmapSp[2];
     char w24_code[2];
     char Accordion2_name[12];
-    char str_61[2];
-    char str_62[2];
-    char str_63[2];
-    char str_64[2];
-    char str_65[2];
-    char str_66[2];
-    char str_67[2];
-    char str_68[2];
-    char str_69[2];
-    char str_70[2];
-    char str_71[2];
-    char str_72[2];
+    char ResName_Accordion_22_IvAccordionX[2];
+    char ResName_Accordion_21_AcAccordionTab[2];
+    char ResName_Accordion_20_AcAccordionTab[2];
+    char ResName_Accordion_19_AcAccordionTab[2];
+    char ResName_Accordion_18_AcAccordionTab[2];
+    char ResName_Accordion_17_AcAccordionTab[2];
+    char ResName_Accordion_16_AcAccordionTab[2];
+    char ResName_Accordion_15_AcAccordionTab[2];
+    char ResName_Accordion_14_AcAccordionTab[2];
+    char ResName_Accordion_13_AcIndexToggle[2];
+    char ResName_Accordion_12_AcIndexToggle[2];
+    char ResName_Accordion_11_VwUserBitmapSp[2];
     char w25_code[2];
     char Accordion1_name[12];
     char w26_code[2];
     char AccordionPart_name[14];
-    char str_73[2];
-    char str_74[2];
-    char str_75[2];
-    char str_76[2];
-    char str_77[2];
+    char ResName_Accordion_6_Label[2];
+    char ResName_Accordion_5_AcIndexEditSw[2];
+    char ResName_Accordion_4_AcIndexEditSw[2];
+    char ResName_Accordion_3_Label[2];
+    char ResName_Accordion_2_IvIntVari[2];
     char w27_code[2];
     char Accordion_name[10];
     uint32_t ptrs_5[25];  /* 25 pointers */
@@ -297,22 +297,22 @@ typedef struct __attribute__((packed)) {
     char PleaseWait_name[12];
     char w29_code[2];
     char NoMessage_name[10];
-    char str_79[2];
-    char str_80[2];
-    char str_81[2];
+    char ResName_Mesage_19_EditSw[2];
+    char ResName_Mesage_18_AcRamBox[2];
+    char ResName_Mesage_17_AcRamBox[2];
     char w30_code[2];
     char CheckMessage_name[14];
     char w31_code[2];
     char Other_name[6];
-    char str_82[2];
-    char str_83[2];
+    char ResName_Mesage_12_AcLanguageText[2];
+    char ResName_Mesage_11_AcLanguageText[2];
     char w32_code[2];
     char Error_name[6];
-    char str_84[2];
-    char str_85[2];
+    char ResName_Mesage_8_IvIntReminder[2];
+    char ResName_Mesage_7_AcLanguageText[2];
     char w33_code[2];
     char Reminder_name[10];
-    char str_86[2];
+    char ResName_Mesage_4_IvIntComplete[2];
     char w34_code[2];
     char Completed_name[10];
     char w35_code[2];
@@ -3315,13 +3315,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(Sdtecd_str),
         SELF(SdtecdPage_name),
         SELF(w9_code),
-        SELF(str_8),
-        SELF(str_7),
-        SELF(str_6),
+        SELF(ResName_Sdtecd_3_IvPageControl),
+        SELF(ResName_Sdtecd_4_IvSdtecd),
+        SELF(ResName_Sdtecd_5_IvIntEasySet),
         SELF(Sdtecd1_name),
         SELF(w8_code),
-        SELF(str_5),
-        SELF(str_4),
+        SELF(ResName_Sdtecd_8_AcIndexEditSw),
+        SELF(ResName_Sdtecd_9_AcIndexEditSw),
         SELF(TcClose_name),
         SELF(TcOpen1_code),
         SELF(TcOpen2_name),
@@ -3339,16 +3339,16 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(w1_code),
         SELF(Sdtecd2_name),
         SELF(w0_code),
-        SELF(str_2),
-        SELF(str_1),
+        SELF(ResName_Sdtecd_27_AcLswEditBox),
+        SELF(ResName_Sdtecd_28_Label),
         SELF(str_0),
     },
 
     .str_0 = ALIGNED_STRING(""),
 
-    .str_1 = ALIGNED_STRING(""),
+    .ResName_Sdtecd_28_Label = ALIGNED_STRING(""),
 
-    .str_2 = ALIGNED_STRING(""),
+    .ResName_Sdtecd_27_AcLswEditBox = ALIGNED_STRING(""),
 
     .w0_code = ALIGNED_STRING(""),
 
@@ -3384,19 +3384,19 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TcClose_name = "TcClose",
 
-    .str_4 = ALIGNED_STRING(""),
+    .ResName_Sdtecd_9_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_5 = ALIGNED_STRING(""),
+    .ResName_Sdtecd_8_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w8_code = ALIGNED_STRING(""),
 
     .Sdtecd1_name = "Sdtecd1",
 
-    .str_6 = ALIGNED_STRING(""),
+    .ResName_Sdtecd_5_IvIntEasySet = ALIGNED_STRING(""),
 
-    .str_7 = ALIGNED_STRING(""),
+    .ResName_Sdtecd_4_IvSdtecd = ALIGNED_STRING(""),
 
-    .str_8 = ALIGNED_STRING(""),
+    .ResName_Sdtecd_3_IvPageControl = ALIGNED_STRING(""),
 
     .w9_code = ALIGNED_STRING(""),
 
@@ -3407,16 +3407,16 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .Murai_ResNameTable_3A5 = {
         SELF(Sqmixer_name),
         SELF(w10_code),
-        SELF(str_12),
-        SELF(str_11),
+        SELF(ResName_Sqmixer_2_AcTrackMixer),
+        SELF(ResName_Sqmixer_3_IvExit),
         SELF(str_10),
     },
 
     .str_10 = ALIGNED_STRING(""),
 
-    .str_11 = ALIGNED_STRING(""),
+    .ResName_Sqmixer_3_IvExit = ALIGNED_STRING(""),
 
-    .str_12 = ALIGNED_STRING(""),
+    .ResName_Sqmixer_2_AcTrackMixer = ALIGNED_STRING(""),
 
     .w10_code = ALIGNED_STRING(""),
 
@@ -3427,10 +3427,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(w16_code),
         SELF(Demofeature1_name),
         SELF(w15_code),
-        SELF(str_16),
+        SELF(ResName_Demofeature_4_AcLanguageText),
         SELF(Demofeature2_name),
         SELF(w14_code),
-        SELF(str_15),
+        SELF(ResName_Demofeature_7_AcPresentationBox),
         SELF(FDemoTitleBox_str),
         SELF(PlainScreen_str),
         SELF(PresentationControl_name),
@@ -3457,13 +3457,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .FDemoTitleBox_str = "FDemoTitleBox",
 
-    .str_15 = ALIGNED_STRING(""),
+    .ResName_Demofeature_7_AcPresentationBox = ALIGNED_STRING(""),
 
     .w14_code = ALIGNED_STRING(""),
 
     .Demofeature2_name = ALIGNED_STRING("Demofeature2"),
 
-    .str_16 = ALIGNED_STRING(""),
+    .ResName_Demofeature_4_AcLanguageText = ALIGNED_STRING(""),
 
     .w15_code = ALIGNED_STRING(""),
 
@@ -3481,67 +3481,67 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(White23_code),
         SELF(Black23_name),
         SELF(w21_code),
-        SELF(str_46),
-        SELF(str_45),
-        SELF(str_44),
-        SELF(str_43),
-        SELF(str_42),
+        SELF(ResName_Drawbar_7_IvExit),
+        SELF(ResName_Drawbar_8_Label),
+        SELF(ResName_Drawbar_9_IvPageOverWrite),
+        SELF(ResName_Drawbar_10_IvPageOverWrite),
+        SELF(ResName_Drawbar_11_IvDrawbar),
         SELF(DrawSetting_str),
         SELF(Drawbar1_name),
         SELF(w20_code),
-        SELF(str_40),
-        SELF(str_39),
-        SELF(str_38),
-        SELF(str_37),
-        SELF(str_36),
-        SELF(str_35),
-        SELF(str_34),
+        SELF(ResName_Drawbar_15_StringBox),
+        SELF(ResName_Drawbar_16_Label),
+        SELF(ResName_Drawbar_17_Label),
+        SELF(ResName_Drawbar_18_Label),
+        SELF(ResName_Drawbar_19_Label),
+        SELF(ResName_Drawbar_20_IvDrawbar1),
+        SELF(ResName_Drawbar_21_VwUserBitmapSp),
         SELF(Drawbar2_name),
         SELF(w19_code),
-        SELF(str_33),
-        SELF(str_32),
-        SELF(str_31),
-        SELF(str_30),
-        SELF(str_29),
-        SELF(str_28),
+        SELF(ResName_Drawbar_24_AcDrawEditBox),
+        SELF(ResName_Drawbar_25_AcDrawEditBox),
+        SELF(ResName_Drawbar_26_AcDrawEditBox),
+        SELF(ResName_Drawbar_27_AcIndexWideES),
+        SELF(ResName_Drawbar_28_IvDrawbar2),
+        SELF(ResName_Drawbar_29_AcDrawbarName),
         SELF(DrawbarNorm_str),
         SELF(DrawbarPart_str),
         SELF(DrawTremolo_name),
         SELF(w18_code),
-        SELF(str_25),
-        SELF(str_24),
-        SELF(str_23),
-        SELF(str_22),
+        SELF(ResName_Drawbar_34_IvDrawbarNorm),
+        SELF(ResName_Drawbar_35_VwBox),
+        SELF(ResName_Drawbar_36_Icon),
+        SELF(ResName_Drawbar_37_Label),
         SELF(DrawbarSndE_name),
         SELF(w17_code),
-        SELF(str_21),
-        SELF(str_20),
-        SELF(str_19),
-        SELF(str_18),
+        SELF(ResName_Drawbar_40_AcTitleMenu),
+        SELF(ResName_Drawbar_41_VwBox),
+        SELF(ResName_Drawbar_42_Icon),
+        SELF(ResName_Drawbar_43_Label),
         SELF(str_17),
     },
 
     .str_17 = ALIGNED_STRING(""),
 
-    .str_18 = ALIGNED_STRING(""),
+    .ResName_Drawbar_43_Label = ALIGNED_STRING(""),
 
-    .str_19 = ALIGNED_STRING(""),
+    .ResName_Drawbar_42_Icon = ALIGNED_STRING(""),
 
-    .str_20 = ALIGNED_STRING(""),
+    .ResName_Drawbar_41_VwBox = ALIGNED_STRING(""),
 
-    .str_21 = ALIGNED_STRING(""),
+    .ResName_Drawbar_40_AcTitleMenu = ALIGNED_STRING(""),
 
     .w17_code = ALIGNED_STRING(""),
 
     .DrawbarSndE_name = "DrawbarSndE",
 
-    .str_22 = ALIGNED_STRING(""),
+    .ResName_Drawbar_37_Label = ALIGNED_STRING(""),
 
-    .str_23 = ALIGNED_STRING(""),
+    .ResName_Drawbar_36_Icon = ALIGNED_STRING(""),
 
-    .str_24 = ALIGNED_STRING(""),
+    .ResName_Drawbar_35_VwBox = ALIGNED_STRING(""),
 
-    .str_25 = ALIGNED_STRING(""),
+    .ResName_Drawbar_34_IvDrawbarNorm = ALIGNED_STRING(""),
 
     .w18_code = ALIGNED_STRING(""),
 
@@ -3551,35 +3551,35 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .DrawbarNorm_str = "DrawbarNorm",
 
-    .str_28 = ALIGNED_STRING(""),
+    .ResName_Drawbar_29_AcDrawbarName = ALIGNED_STRING(""),
 
-    .str_29 = ALIGNED_STRING(""),
+    .ResName_Drawbar_28_IvDrawbar2 = ALIGNED_STRING(""),
 
-    .str_30 = ALIGNED_STRING(""),
+    .ResName_Drawbar_27_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_31 = ALIGNED_STRING(""),
+    .ResName_Drawbar_26_AcDrawEditBox = ALIGNED_STRING(""),
 
-    .str_32 = ALIGNED_STRING(""),
+    .ResName_Drawbar_25_AcDrawEditBox = ALIGNED_STRING(""),
 
-    .str_33 = ALIGNED_STRING(""),
+    .ResName_Drawbar_24_AcDrawEditBox = ALIGNED_STRING(""),
 
     .w19_code = ALIGNED_STRING(""),
 
     .Drawbar2_name = ALIGNED_STRING("Drawbar2"),
 
-    .str_34 = ALIGNED_STRING(""),
+    .ResName_Drawbar_21_VwUserBitmapSp = ALIGNED_STRING(""),
 
-    .str_35 = ALIGNED_STRING(""),
+    .ResName_Drawbar_20_IvDrawbar1 = ALIGNED_STRING(""),
 
-    .str_36 = ALIGNED_STRING(""),
+    .ResName_Drawbar_19_Label = ALIGNED_STRING(""),
 
-    .str_37 = ALIGNED_STRING(""),
+    .ResName_Drawbar_18_Label = ALIGNED_STRING(""),
 
-    .str_38 = ALIGNED_STRING(""),
+    .ResName_Drawbar_17_Label = ALIGNED_STRING(""),
 
-    .str_39 = ALIGNED_STRING(""),
+    .ResName_Drawbar_16_Label = ALIGNED_STRING(""),
 
-    .str_40 = ALIGNED_STRING(""),
+    .ResName_Drawbar_15_StringBox = ALIGNED_STRING(""),
 
     .w20_code = ALIGNED_STRING(""),
 
@@ -3587,15 +3587,15 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .DrawSetting_str = "DrawSetting",
 
-    .str_42 = ALIGNED_STRING(""),
+    .ResName_Drawbar_11_IvDrawbar = ALIGNED_STRING(""),
 
-    .str_43 = ALIGNED_STRING(""),
+    .ResName_Drawbar_10_IvPageOverWrite = ALIGNED_STRING(""),
 
-    .str_44 = ALIGNED_STRING(""),
+    .ResName_Drawbar_9_IvPageOverWrite = ALIGNED_STRING(""),
 
-    .str_45 = ALIGNED_STRING(""),
+    .ResName_Drawbar_8_Label = ALIGNED_STRING(""),
 
-    .str_46 = ALIGNED_STRING(""),
+    .ResName_Drawbar_7_IvExit = ALIGNED_STRING(""),
 
     .w21_code = ALIGNED_STRING(""),
 
@@ -3614,97 +3614,97 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .Murai_ResNameTable_3EB = {
         SELF(Accordion_name),
         SELF(w27_code),
-        SELF(str_77),
-        SELF(str_76),
-        SELF(str_75),
-        SELF(str_74),
-        SELF(str_73),
+        SELF(ResName_Accordion_2_IvIntVari),
+        SELF(ResName_Accordion_3_Label),
+        SELF(ResName_Accordion_4_AcIndexEditSw),
+        SELF(ResName_Accordion_5_AcIndexEditSw),
+        SELF(ResName_Accordion_6_Label),
         SELF(AccordionPart_name),
         SELF(w26_code),
         SELF(Accordion1_name),
         SELF(w25_code),
-        SELF(str_72),
-        SELF(str_71),
-        SELF(str_70),
-        SELF(str_69),
-        SELF(str_68),
-        SELF(str_67),
-        SELF(str_66),
-        SELF(str_65),
-        SELF(str_64),
-        SELF(str_63),
-        SELF(str_62),
-        SELF(str_61),
+        SELF(ResName_Accordion_11_VwUserBitmapSp),
+        SELF(ResName_Accordion_12_AcIndexToggle),
+        SELF(ResName_Accordion_13_AcIndexToggle),
+        SELF(ResName_Accordion_14_AcAccordionTab),
+        SELF(ResName_Accordion_15_AcAccordionTab),
+        SELF(ResName_Accordion_16_AcAccordionTab),
+        SELF(ResName_Accordion_17_AcAccordionTab),
+        SELF(ResName_Accordion_18_AcAccordionTab),
+        SELF(ResName_Accordion_19_AcAccordionTab),
+        SELF(ResName_Accordion_20_AcAccordionTab),
+        SELF(ResName_Accordion_21_AcAccordionTab),
+        SELF(ResName_Accordion_22_IvAccordionX),
         SELF(Accordion2_name),
         SELF(w24_code),
-        SELF(str_60),
-        SELF(str_59),
-        SELF(str_58),
-        SELF(str_57),
-        SELF(str_56),
-        SELF(str_55),
-        SELF(str_54),
-        SELF(str_53),
-        SELF(str_52),
-        SELF(str_51),
-        SELF(str_50),
-        SELF(str_49),
+        SELF(ResName_Accordion_25_VwUserBitmapSp),
+        SELF(ResName_Accordion_26_AcIndexToggle),
+        SELF(ResName_Accordion_27_AcIndexToggle),
+        SELF(ResName_Accordion_28_AcAccordionTab),
+        SELF(ResName_Accordion_29_AcAccordionTab),
+        SELF(ResName_Accordion_30_AcAccordionTab),
+        SELF(ResName_Accordion_31_AcAccordionTab),
+        SELF(ResName_Accordion_32_AcAccordionTab),
+        SELF(ResName_Accordion_33_AcAccordionTab),
+        SELF(ResName_Accordion_34_AcAccordionTab),
+        SELF(ResName_Accordion_35_AcAccordionTab),
+        SELF(ResName_Accordion_36_IvAccordionX),
         SELF(str_48),
     },
 
     .str_48 = ALIGNED_STRING(""),
 
-    .str_49 = ALIGNED_STRING(""),
+    .ResName_Accordion_36_IvAccordionX = ALIGNED_STRING(""),
 
-    .str_50 = ALIGNED_STRING(""),
+    .ResName_Accordion_35_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_51 = ALIGNED_STRING(""),
+    .ResName_Accordion_34_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_52 = ALIGNED_STRING(""),
+    .ResName_Accordion_33_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_53 = ALIGNED_STRING(""),
+    .ResName_Accordion_32_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_54 = ALIGNED_STRING(""),
+    .ResName_Accordion_31_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_55 = ALIGNED_STRING(""),
+    .ResName_Accordion_30_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_56 = ALIGNED_STRING(""),
+    .ResName_Accordion_29_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_57 = ALIGNED_STRING(""),
+    .ResName_Accordion_28_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_58 = ALIGNED_STRING(""),
+    .ResName_Accordion_27_AcIndexToggle = ALIGNED_STRING(""),
 
-    .str_59 = ALIGNED_STRING(""),
+    .ResName_Accordion_26_AcIndexToggle = ALIGNED_STRING(""),
 
-    .str_60 = ALIGNED_STRING(""),
+    .ResName_Accordion_25_VwUserBitmapSp = ALIGNED_STRING(""),
 
     .w24_code = ALIGNED_STRING(""),
 
     .Accordion2_name = ALIGNED_STRING("Accordion2"),
 
-    .str_61 = ALIGNED_STRING(""),
+    .ResName_Accordion_22_IvAccordionX = ALIGNED_STRING(""),
 
-    .str_62 = ALIGNED_STRING(""),
+    .ResName_Accordion_21_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_63 = ALIGNED_STRING(""),
+    .ResName_Accordion_20_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_64 = ALIGNED_STRING(""),
+    .ResName_Accordion_19_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_65 = ALIGNED_STRING(""),
+    .ResName_Accordion_18_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_66 = ALIGNED_STRING(""),
+    .ResName_Accordion_17_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_67 = ALIGNED_STRING(""),
+    .ResName_Accordion_16_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_68 = ALIGNED_STRING(""),
+    .ResName_Accordion_15_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_69 = ALIGNED_STRING(""),
+    .ResName_Accordion_14_AcAccordionTab = ALIGNED_STRING(""),
 
-    .str_70 = ALIGNED_STRING(""),
+    .ResName_Accordion_13_AcIndexToggle = ALIGNED_STRING(""),
 
-    .str_71 = ALIGNED_STRING(""),
+    .ResName_Accordion_12_AcIndexToggle = ALIGNED_STRING(""),
 
-    .str_72 = ALIGNED_STRING(""),
+    .ResName_Accordion_11_VwUserBitmapSp = ALIGNED_STRING(""),
 
     .w25_code = ALIGNED_STRING(""),
 
@@ -3714,15 +3714,15 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .AccordionPart_name = "AccordionPart",
 
-    .str_73 = ALIGNED_STRING(""),
+    .ResName_Accordion_6_Label = ALIGNED_STRING(""),
 
-    .str_74 = ALIGNED_STRING(""),
+    .ResName_Accordion_5_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_75 = ALIGNED_STRING(""),
+    .ResName_Accordion_4_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_76 = ALIGNED_STRING(""),
+    .ResName_Accordion_3_Label = ALIGNED_STRING(""),
 
-    .str_77 = ALIGNED_STRING(""),
+    .ResName_Accordion_2_IvIntVari = ALIGNED_STRING(""),
 
     .w27_code = ALIGNED_STRING(""),
 
@@ -3733,22 +3733,22 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(w35_code),
         SELF(Completed_name),
         SELF(w34_code),
-        SELF(str_86),
+        SELF(ResName_Mesage_4_IvIntComplete),
         SELF(Reminder_name),
         SELF(w33_code),
-        SELF(str_85),
-        SELF(str_84),
+        SELF(ResName_Mesage_7_AcLanguageText),
+        SELF(ResName_Mesage_8_IvIntReminder),
         SELF(Error_name),
         SELF(w32_code),
-        SELF(str_83),
-        SELF(str_82),
+        SELF(ResName_Mesage_11_AcLanguageText),
+        SELF(ResName_Mesage_12_AcLanguageText),
         SELF(Other_name),
         SELF(w31_code),
         SELF(CheckMessage_name),
         SELF(w30_code),
-        SELF(str_81),
-        SELF(str_80),
-        SELF(str_79),
+        SELF(ResName_Mesage_17_AcRamBox),
+        SELF(ResName_Mesage_18_AcRamBox),
+        SELF(ResName_Mesage_19_EditSw),
         SELF(NoMessage_name),
         SELF(w29_code),
         SELF(PleaseWait_name),
@@ -3766,11 +3766,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .NoMessage_name = "NoMessage",
 
-    .str_79 = ALIGNED_STRING(""),
+    .ResName_Mesage_19_EditSw = ALIGNED_STRING(""),
 
-    .str_80 = ALIGNED_STRING(""),
+    .ResName_Mesage_18_AcRamBox = ALIGNED_STRING(""),
 
-    .str_81 = ALIGNED_STRING(""),
+    .ResName_Mesage_17_AcRamBox = ALIGNED_STRING(""),
 
     .w30_code = ALIGNED_STRING(""),
 
@@ -3780,23 +3780,23 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .Other_name = "Other",
 
-    .str_82 = ALIGNED_STRING(""),
+    .ResName_Mesage_12_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_83 = ALIGNED_STRING(""),
+    .ResName_Mesage_11_AcLanguageText = ALIGNED_STRING(""),
 
     .w32_code = ALIGNED_STRING(""),
 
     .Error_name = "Error",
 
-    .str_84 = ALIGNED_STRING(""),
+    .ResName_Mesage_8_IvIntReminder = ALIGNED_STRING(""),
 
-    .str_85 = ALIGNED_STRING(""),
+    .ResName_Mesage_7_AcLanguageText = ALIGNED_STRING(""),
 
     .w33_code = ALIGNED_STRING(""),
 
     .Reminder_name = ALIGNED_STRING("Reminder"),
 
-    .str_86 = ALIGNED_STRING(""),
+    .ResName_Mesage_4_IvIntComplete = ALIGNED_STRING(""),
 
     .w34_code = ALIGNED_STRING(""),
 

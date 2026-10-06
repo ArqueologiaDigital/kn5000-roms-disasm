@@ -535,64 +535,64 @@ typedef struct __attribute__((packed)) {
     char str_135[2];
     char w14_code[2];
     char MemDumpWindow_name[14];
-    char str_136[2];
-    char str_137[2];
-    char str_138[2];
-    char str_139[2];
-    char str_140[2];
-    char str_141[2];
-    char str_142[2];
-    char str_143[2];
-    char str_144[2];
-    char str_145[2];
-    char str_146[2];
-    char str_147[2];
-    char str_148[2];
-    char str_149[2];
-    char str_150[2];
+    char ResName_PanelSimulator_48_AcTrackSwitch[2];
+    char ResName_PanelSimulator_47_AcTrackSwitch[2];
+    char ResName_PanelSimulator_46_AcTrackSwitch[2];
+    char ResName_PanelSimulator_45_AcTrackSwitch[2];
+    char ResName_PanelSimulator_44_AcTrackSwitch[2];
+    char ResName_PanelSimulator_43_AcTrackSwitch[2];
+    char ResName_PanelSimulator_42_AcTrackSwitch[2];
+    char ResName_PanelSimulator_41_AcTrackSwitch[2];
+    char ResName_PanelSimulator_40_AcTrackSwitch[2];
+    char ResName_PanelSimulator_39_AcTrackSwitch[2];
+    char ResName_PanelSimulator_38_AcTrackSwitch[2];
+    char ResName_PanelSimulator_37_AcTrackSwitch[2];
+    char ResName_PanelSimulator_36_AcTrackSwitch[2];
+    char ResName_PanelSimulator_35_AcTrackSwitch[2];
+    char ResName_PanelSimulator_34_AcTrackSwitch[2];
     char w15_code[2];
     char TrackSwitchWindow_name[18];
     char w16_code[2];
     char MemoWindow_name[12];
     char NamingLabel_str[12];
-    char str_152[2];
-    char str_153[2];
+    char ResName_PanelSimulator_28_AcIndexEditSw[2];
+    char ResName_PanelSimulator_27_AcIndexEditSw[2];
     char w17_code[2];
     char NamingSymbol_name[14];
     char Namingabc_code[10];
     char NamingABC_name[10];
     char NamingCursorBox_str[16];
-    char str_155[2];
-    char str_156[2];
-    char str_157[2];
-    char str_158[2];
-    char str_159[2];
-    char str_160[2];
-    char str_161[2];
-    char str_162[2];
-    char str_163[2];
-    char str_164[2];
+    char ResName_PanelSimulator_21_Label[2];
+    char ResName_PanelSimulator_20_AcIndexEditSw[2];
+    char ResName_PanelSimulator_19_AcIndexEditSw[2];
+    char ResName_PanelSimulator_18_Label[2];
+    char ResName_PanelSimulator_17_AcIndexEditSw[2];
+    char ResName_PanelSimulator_16_Label[2];
+    char ResName_PanelSimulator_15_AcIndexEditSw[2];
+    char ResName_PanelSimulator_14_Label[2];
+    char ResName_PanelSimulator_13_AcIndexEditSw[2];
+    char ResName_PanelSimulator_12_Label[2];
     char w19_code[2];
     char NamingWindow_name[14];
-    char str_165[2];
+    char ResName_PanelSimulator_9_DbDebugMenu[2];
     char w20_code[2];
     char DebugWindow_name[12];
     char ClipBoard_str[10];
-    char str_167[2];
-    char str_168[2];
-    char str_169[2];
-    char str_170[2];
+    char ResName_PanelSimulator_5_AcWindowMenu[2];
+    char ResName_PanelSimulator_4_IvExitMode[2];
+    char ResName_PanelSimulator_3_AcTitleMenu[2];
+    char ResName_NakaDbg_PanelSimTitle[2];
     char w21_code[2];
     char PanelSimulator_name[16];
     uint32_t ptrs_4[10];  /* 10 pointers */
     char str_171[2];
     char w22_code[2];
     char CheckWall_name[10];
-    char str_172[2];
+    char ResName_CheckTitle_6_IvExitScreen[2];
     char w23_code[2];
     char CheckNaming_name[12];
-    char str_173[2];
-    char str_174[2];
+    char ResName_CheckTitle_3_AcScreenMenu[2];
+    char ResName_CheckTitle_2_AcScreenMenu[2];
     char w24_code[2];
     char CheckTitle_name[12];
     char MD_PS_str[6];
@@ -2168,53 +2168,53 @@ const naka_debug_naming_t naka_debug_naming_data
         0x00000000,
         SELF(PanelSimulator_name),
         SELF(w21_code),
-        SELF(str_170),
-        SELF(str_169),
-        SELF(str_168),
-        SELF(str_167),
+        SELF(ResName_NakaDbg_PanelSimTitle),
+        SELF(ResName_PanelSimulator_3_AcTitleMenu),
+        SELF(ResName_PanelSimulator_4_IvExitMode),
+        SELF(ResName_PanelSimulator_5_AcWindowMenu),
         SELF(ClipBoard_str),
         SELF(DebugWindow_name),
         SELF(w20_code),
-        SELF(str_165),
+        SELF(ResName_PanelSimulator_9_DbDebugMenu),
         SELF(NamingWindow_name),
         SELF(w19_code),
-        SELF(str_164),
-        SELF(str_163),
-        SELF(str_162),
-        SELF(str_161),
-        SELF(str_160),
-        SELF(str_159),
-        SELF(str_158),
-        SELF(str_157),
-        SELF(str_156),
-        SELF(str_155),
+        SELF(ResName_PanelSimulator_12_Label),
+        SELF(ResName_PanelSimulator_13_AcIndexEditSw),
+        SELF(ResName_PanelSimulator_14_Label),
+        SELF(ResName_PanelSimulator_15_AcIndexEditSw),
+        SELF(ResName_PanelSimulator_16_Label),
+        SELF(ResName_PanelSimulator_17_AcIndexEditSw),
+        SELF(ResName_PanelSimulator_18_Label),
+        SELF(ResName_PanelSimulator_19_AcIndexEditSw),
+        SELF(ResName_PanelSimulator_20_AcIndexEditSw),
+        SELF(ResName_PanelSimulator_21_Label),
         SELF(NamingCursorBox_str),
         SELF(NamingABC_name),
         SELF(Namingabc_code),
         SELF(NamingSymbol_name),
         SELF(w17_code),
-        SELF(str_153),
-        SELF(str_152),
+        SELF(ResName_PanelSimulator_27_AcIndexEditSw),
+        SELF(ResName_PanelSimulator_28_AcIndexEditSw),
         SELF(NamingLabel_str),
         SELF(MemoWindow_name),
         SELF(w16_code),
         SELF(TrackSwitchWindow_name),
         SELF(w15_code),
-        SELF(str_150),
-        SELF(str_149),
-        SELF(str_148),
-        SELF(str_147),
-        SELF(str_146),
-        SELF(str_145),
-        SELF(str_144),
-        SELF(str_143),
-        SELF(str_142),
-        SELF(str_141),
-        SELF(str_140),
-        SELF(str_139),
-        SELF(str_138),
-        SELF(str_137),
-        SELF(str_136),
+        SELF(ResName_PanelSimulator_34_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_35_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_36_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_37_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_38_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_39_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_40_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_41_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_42_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_43_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_44_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_45_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_46_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_47_AcTrackSwitch),
+        SELF(ResName_PanelSimulator_48_AcTrackSwitch),
         SELF(MemDumpWindow_name),
         SELF(w14_code),
         SELF(str_135),
@@ -2226,35 +2226,35 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .MemDumpWindow_name = "MemDumpWindow",
 
-    .str_136 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_48_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_137 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_47_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_138 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_46_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_139 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_45_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_140 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_44_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_141 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_43_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_142 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_42_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_143 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_41_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_144 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_40_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_145 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_39_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_146 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_38_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_147 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_37_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_148 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_36_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_149 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_35_AcTrackSwitch = ALIGNED_STRING(""),
 
-    .str_150 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_34_AcTrackSwitch = ALIGNED_STRING(""),
 
     .w15_code = ALIGNED_STRING(""),
 
@@ -2266,9 +2266,9 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .NamingLabel_str = "NamingLabel",
 
-    .str_152 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_28_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_153 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_27_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w17_code = ALIGNED_STRING(""),
 
@@ -2280,31 +2280,31 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .NamingCursorBox_str = "NamingCursorBox",
 
-    .str_155 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_21_Label = ALIGNED_STRING(""),
 
-    .str_156 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_20_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_157 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_19_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_158 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_18_Label = ALIGNED_STRING(""),
 
-    .str_159 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_17_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_160 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_16_Label = ALIGNED_STRING(""),
 
-    .str_161 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_15_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_162 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_14_Label = ALIGNED_STRING(""),
 
-    .str_163 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_13_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_164 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_12_Label = ALIGNED_STRING(""),
 
     .w19_code = ALIGNED_STRING(""),
 
     .NamingWindow_name = ALIGNED_STRING("NamingWindow"),
 
-    .str_165 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_9_DbDebugMenu = ALIGNED_STRING(""),
 
     .w20_code = ALIGNED_STRING(""),
 
@@ -2312,13 +2312,13 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .ClipBoard_str = "ClipBoard",
 
-    .str_167 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_5_AcWindowMenu = ALIGNED_STRING(""),
 
-    .str_168 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_4_IvExitMode = ALIGNED_STRING(""),
 
-    .str_169 = ALIGNED_STRING(""),
+    .ResName_PanelSimulator_3_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_170 = ALIGNED_STRING(""),
+    .ResName_NakaDbg_PanelSimTitle = ALIGNED_STRING(""),
 
     .w21_code = ALIGNED_STRING(""),
 
@@ -2327,11 +2327,11 @@ const naka_debug_naming_t naka_debug_naming_data
     .ptrs_4 = {
         SELF(CheckTitle_name),
         SELF(w24_code),
-        SELF(str_174),
-        SELF(str_173),
+        SELF(ResName_CheckTitle_2_AcScreenMenu),
+        SELF(ResName_CheckTitle_3_AcScreenMenu),
         SELF(CheckNaming_name),
         SELF(w23_code),
-        SELF(str_172),
+        SELF(ResName_CheckTitle_6_IvExitScreen),
         SELF(CheckWall_name),
         SELF(w22_code),
         SELF(str_171),
@@ -2343,15 +2343,15 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .CheckWall_name = "CheckWall",
 
-    .str_172 = ALIGNED_STRING(""),
+    .ResName_CheckTitle_6_IvExitScreen = ALIGNED_STRING(""),
 
     .w23_code = ALIGNED_STRING(""),
 
     .CheckNaming_name = "CheckNaming",
 
-    .str_173 = ALIGNED_STRING(""),
+    .ResName_CheckTitle_3_AcScreenMenu = ALIGNED_STRING(""),
 
-    .str_174 = ALIGNED_STRING(""),
+    .ResName_CheckTitle_2_AcScreenMenu = ALIGNED_STRING(""),
 
     .w24_code = ALIGNED_STRING(""),
 

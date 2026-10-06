@@ -2653,652 +2653,652 @@ typedef struct __attribute__((packed)) {
     uint16_t field_6fea;
     uint32_t ptrs_6[84];  /* 84 pointers */
     char str_749[2];
-    char str_750[2];
-    char str_751[2];
-    char str_752[2];
-    char str_753[2];
-    char str_754[2];
-    char str_755[2];
-    char str_756[2];
-    char str_757[2];
-    char str_758[2];
-    char str_759[2];
-    char str_760[2];
-    char str_761[2];
+    char ResName_KuboView00A_11_IvSdrev[2];
+    char ResName_KuboView00A_10_IvIntEasySet[2];
+    char ResName_KuboView00A_9_Label[2];
+    char ResName_KuboView00A_8_Box[2];
+    char ResName_KuboView00A_7_EffectBox[2];
+    char ResName_KuboView00A_6_Label[2];
+    char ResName_KuboView00A_5_Label[2];
+    char ResName_KuboView00A_4_Label[2];
+    char ResName_KuboView00A_3_AcIndexWideES[2];
+    char ResName_KuboView00A_2_AcIndexWideES[2];
+    char ResName_KuboView00A_1_AcIndexWideES[2];
+    char ResName_KuboView00A_0_TtlScreen[2];
     uint32_t ptrs_7[13];  /* 13 pointers */
     char str_762[2];
-    char str_763[2];
-    char str_764[2];
-    char str_765[2];
-    char str_766[2];
-    char str_767[2];
-    char str_768[2];
-    char str_769[2];
-    char str_770[2];
-    char str_771[2];
-    char str_772[2];
-    char str_773[2];
-    char str_774[2];
+    char ResName_KuboView00B_11_IvSddsp[2];
+    char ResName_KuboView00B_10_IvIntEasySet[2];
+    char ResName_KuboView00B_9_Box[2];
+    char ResName_KuboView00B_8_EffectBox[2];
+    char ResName_KuboView00B_7_Label[2];
+    char ResName_KuboView00B_6_Label[2];
+    char ResName_KuboView00B_5_AcIndexWideES[2];
+    char ResName_KuboView00B_4_AcIndexWideES[2];
+    char ResName_KuboView00B_3_Label[2];
+    char ResName_KuboView00B_2_AcIndexWideES[2];
+    char ResName_KuboView00B_1_Label[2];
+    char ResName_KuboView00B_0_TtlScreen[2];
     uint32_t ptrs_8[38];  /* 38 pointers */
     char w353_code[2];
     char EqOnOff_name[8];
-    char str_775[2];
-    char str_776[2];
-    char str_777[2];
-    char str_778[2];
-    char str_779[2];
-    char str_780[2];
-    char str_781[2];
-    char str_782[2];
-    char str_783[2];
-    char str_784[2];
-    char str_785[2];
-    char str_786[2];
-    char str_787[2];
-    char str_788[2];
-    char str_789[2];
-    char str_790[2];
-    char str_791[2];
-    char str_792[2];
-    char str_793[2];
-    char str_794[2];
-    char str_795[2];
-    char str_796[2];
-    char str_797[2];
-    char str_798[2];
-    char str_799[2];
-    char str_800[2];
-    char str_801[2];
-    char str_802[2];
-    char str_803[2];
-    char str_804[2];
-    char str_805[2];
-    char str_806[2];
-    char str_807[2];
-    char str_808[2];
-    char str_809[2];
-    char str_810[2];
+    char ResName_KuboView00C_35_Label[2];
+    char ResName_KuboView00C_34_Line[2];
+    char ResName_KuboView00C_33_Line[2];
+    char ResName_KuboView00C_32_Label[2];
+    char ResName_KuboView00C_31_Label[2];
+    char ResName_KuboView00C_30_Label[2];
+    char ResName_KuboView00C_29_Label[2];
+    char ResName_KuboView00C_28_Label[2];
+    char ResName_KuboView00C_27_Label[2];
+    char ResName_KuboView00C_26_Box[2];
+    char ResName_KuboView00C_25_EqualizerBox[2];
+    char ResName_KuboView00C_24_Line[2];
+    char ResName_KuboView00C_23_Line[2];
+    char ResName_KuboView00C_22_Line[2];
+    char ResName_KuboView00C_21_Line[2];
+    char ResName_KuboView00C_20_Label[2];
+    char ResName_KuboView00C_19_Label[2];
+    char ResName_KuboView00C_18_Label[2];
+    char ResName_KuboView00C_17_Label[2];
+    char ResName_KuboView00C_16_Label[2];
+    char ResName_KuboView00C_15_Label[2];
+    char ResName_KuboView00C_14_Label[2];
+    char ResName_KuboView00C_13_Label[2];
+    char ResName_KuboView00C_12_Label[2];
+    char ResName_KuboView00C_11_Label[2];
+    char ResName_KuboView00C_10_Label[2];
+    char ResName_KuboView00C_9_Label[2];
+    char ResName_KuboView00C_8_AcIndexEditSw[2];
+    char ResName_KuboView00C_7_AcIndexEditSw[2];
+    char ResName_KuboView00C_6_AcIndexEditSw[2];
+    char ResName_KuboView00C_5_AcIndexEditSw[2];
+    char ResName_KuboView00C_4_AcIndexEditSw[2];
+    char ResName_KuboView00C_3_AcIndexEditSw[2];
+    char ResName_KuboView00C_2_AcIndexEditSw[2];
+    char ResName_KuboView00C_1_AcIndexEditSw[2];
+    char ResName_KuboView00C_0_TtlScreen[2];
     uint32_t ptrs_9[13];  /* 13 pointers */
     char str_811[2];
-    char str_812[2];
-    char str_813[2];
-    char str_814[2];
-    char str_815[2];
-    char str_816[2];
-    char str_817[2];
-    char str_818[2];
-    char str_819[2];
-    char str_820[2];
-    char str_821[2];
-    char str_822[2];
-    char str_823[2];
+    char ResName_KuboView00E_11_IvIntEasySet[2];
+    char ResName_KuboView00E_10_IvSdacc[2];
+    char ResName_KuboView00E_9_Label[2];
+    char ResName_KuboView00E_8_Label[2];
+    char ResName_KuboView00E_7_Box[2];
+    char ResName_KuboView00E_6_Box[2];
+    char ResName_KuboView00E_5_AccIll[2];
+    char ResName_KuboView00E_4_Label[2];
+    char ResName_KuboView00E_3_Label[2];
+    char ResName_KuboView00E_2_AcIndexWideES[2];
+    char ResName_KuboView00E_1_AcIndexWideES[2];
+    char ResName_KuboView00E_0_TtlScreen[2];
     uint32_t ptrs_10[13];  /* 13 pointers */
     char str_824[2];
-    char str_825[2];
-    char str_826[2];
-    char str_827[2];
-    char str_828[2];
-    char str_829[2];
-    char str_830[2];
-    char str_831[2];
-    char str_832[2];
-    char str_833[2];
-    char str_834[2];
-    char str_835[2];
-    char str_836[2];
+    char ResName_KuboView080_11_AcTitleMenu[2];
+    char ResName_KuboView080_10_AcLanguageText[2];
+    char ResName_KuboView080_9_AcLanguageText[2];
+    char ResName_KuboView080_8_SngSel[2];
+    char ResName_KuboView080_7_Box[2];
+    char ResName_KuboView080_6_AcIndexEditSw[2];
+    char ResName_KuboView080_5_AcIndexEditSw[2];
+    char ResName_KuboView080_4_IvExitMode[2];
+    char ResName_KuboView080_3_AcModeMenu[2];
+    char ResName_KuboView080_2_Label[2];
+    char ResName_KuboView080_1_AcTitleMenu[2];
+    char ResName_KuboView080_0_TtlScreen[2];
     uint32_t ptrs_11[29];  /* 29 pointers */
     char str_837[2];
-    char str_838[2];
-    char str_839[2];
-    char str_840[2];
-    char str_841[2];
+    char ResName_KuboView081_27_SngSel2[2];
+    char ResName_KuboView081_26_IvShowHide[2];
+    char ResName_KuboView081_25_Label[2];
+    char ResName_KuboView081_24_AcIndexEditSw[2];
     char w354_code[2];
     char SngSelWin2_name[12];
-    char str_842[2];
-    char str_843[2];
+    char ResName_KuboView081_21_Label[2];
+    char ResName_KuboView081_20_AcFuncEditSw[2];
     char w355_code[2];
     char SngSelWin1_name[12];
     char PlySngSel_str[10];
-    char str_845[2];
-    char str_846[2];
-    char str_847[2];
-    char str_848[2];
-    char str_849[2];
-    char str_850[2];
-    char str_851[2];
-    char str_852[2];
-    char str_853[2];
-    char str_854[2];
+    char ResName_KuboView081_16_IvPlayExit[2];
+    char ResName_KuboView081_15_Label[2];
+    char ResName_KuboView081_14_AcFuncEditSw[2];
+    char ResName_KuboView081_13_AcIndexEditSw[2];
+    char ResName_KuboView081_12_AcIndexEditSw[2];
+    char ResName_KuboView081_11_AcTempoBox[2];
+    char ResName_KuboView081_10_Label[2];
+    char ResName_KuboView081_9_Label[2];
+    char ResName_KuboView081_8_TrChordBox[2];
+    char ResName_KuboView081_7_TrTransposeBox[2];
     char w356_code[2];
     char SqPlayGamen_name[12];
     char w357_code[2];
     char CycPlySw_name[10];
-    char str_855[2];
-    char str_856[2];
-    char str_857[2];
+    char ResName_KuboView081_2_IvTrackSwitch[2];
+    char ResName_KuboView081_1_Label[2];
+    char ResName_KuboView081_0_TtlScreen[2];
     uint32_t ptrs_12[9];  /* 9 pointers */
     char str_858[2];
-    char str_859[2];
-    char str_860[2];
-    char str_861[2];
-    char str_862[2];
-    char str_863[2];
-    char str_864[2];
-    char str_865[2];
-    char str_866[2];
+    char ResName_KuboView082_7_Label[2];
+    char ResName_KuboView082_6_AcIndexWideES[2];
+    char ResName_KuboView082_5_PsEditBox[2];
+    char ResName_KuboView082_4_PsEditBox[2];
+    char ResName_KuboView082_3_Label[2];
+    char ResName_KuboView082_2_PsEditBox[2];
+    char ResName_KuboView082_1_SqplyVal[2];
+    char ResName_KuboView082_0_TtlScreen[2];
     uint32_t ptrs_13[17];  /* 17 pointers */
     char str_867[2];
-    char str_868[2];
-    char str_869[2];
-    char str_870[2];
-    char str_871[2];
-    char str_872[2];
-    char str_873[2];
-    char str_874[2];
-    char str_875[2];
-    char str_876[2];
-    char str_877[2];
-    char str_878[2];
-    char str_879[2];
-    char str_880[2];
-    char str_881[2];
-    char str_882[2];
-    char str_883[2];
+    char ResName_KuboView083_15_AcLanguageText[2];
+    char ResName_KuboView083_14_AcLanguageText[2];
+    char ResName_KuboView083_13_PsTrackSwitch[2];
+    char ResName_KuboView083_12_PsTrackSwitch[2];
+    char ResName_KuboView083_11_PsTrackSwitch[2];
+    char ResName_KuboView083_10_PsTrackSwitch[2];
+    char ResName_KuboView083_9_PsTrackSwitch[2];
+    char ResName_KuboView083_8_AcFuncEditSw[2];
+    char ResName_KuboView083_7_SngSel[2];
+    char ResName_KuboView083_6_AcIndexEditSw[2];
+    char ResName_KuboView083_5_AcIndexEditSw[2];
+    char ResName_KuboView083_4_Box[2];
+    char ResName_KuboView083_3_AcTitleMenu[2];
+    char ResName_KuboView083_2_IvExitMode[2];
+    char ResName_KuboView083_1_Label[2];
+    char ResName_KuboView083_0_TtlScreen[2];
     uint32_t ptrs_14[11];  /* 11 pointers */
     char str_884[2];
-    char str_885[2];
-    char str_886[2];
-    char str_887[2];
-    char str_888[2];
-    char str_889[2];
-    char str_890[2];
-    char str_891[2];
-    char str_892[2];
-    char str_893[2];
-    char str_894[2];
+    char ResName_KuboView084_9_AcTitleMenu[2];
+    char ResName_KuboView084_8_AcModeMenu[2];
+    char ResName_KuboView084_7_AcModeMenu[2];
+    char ResName_KuboView084_6_AcTitleMenu[2];
+    char ResName_KuboView084_5_AcTitleMenu[2];
+    char ResName_KuboView084_4_AcTitleMenu[2];
+    char ResName_KuboView084_3_AcTitleMenu[2];
+    char ResName_KuboView084_2_AcTitleMenu[2];
+    char ResName_KuboView084_1_AcTitleMenu[2];
+    char ResName_KuboView084_0_TtlScreen[2];
     uint32_t ptrs_15[26];  /* 26 pointers */
     char str_895[2];
-    char str_896[2];
+    char ResName_KuboView085_24_Label[2];
     char w358_code[2];
     char CycClrSw_name[10];
     char w359_code[2];
     char CycRecClrStr_name[14];
     char CycRecClrSw_str[12];
-    char str_898[2];
-    char str_899[2];
-    char str_900[2];
-    char str_901[2];
-    char str_902[2];
-    char str_903[2];
-    char str_904[2];
-    char str_905[2];
-    char str_906[2];
-    char str_907[2];
+    char ResName_KuboView085_18_Label[2];
+    char ResName_KuboView085_17_AcFuncEditSw[2];
+    char ResName_KuboView085_16_SngSel[2];
+    char ResName_KuboView085_15_Label[2];
+    char ResName_KuboView085_14_TrChordBox[2];
+    char ResName_KuboView085_13_TrTransposeBox[2];
+    char ResName_KuboView085_12_AcTempoBox[2];
+    char ResName_KuboView085_11_Label[2];
+    char ResName_KuboView085_10_Label[2];
+    char ResName_KuboView085_9_Label[2];
     char w360_code[2];
     char SqRealRecGamen_name[16];
     char MetRecSw_str[10];
     char w361_code[2];
     char CycRecSw_name[10];
-    char str_909[2];
-    char str_910[2];
-    char str_911[2];
-    char str_912[2];
+    char ResName_KuboView085_3_Label[2];
+    char ResName_KuboView085_2_AcFuncEditSw[2];
+    char ResName_KuboView085_1_IvTrackSwitch[2];
+    char ResName_KuboView085_0_TtlScreen[2];
     uint32_t ptrs_16[12];  /* 12 pointers */
     char str_913[2];
-    char str_914[2];
-    char str_915[2];
+    char ResName_KuboView086_10_PsEditBox[2];
+    char ResName_KuboView086_9_Label[2];
     char w362_code[2];
     char MetCycRecSw_name[12];
-    char str_916[2];
-    char str_917[2];
-    char str_918[2];
-    char str_919[2];
-    char str_920[2];
-    char str_921[2];
-    char str_922[2];
+    char ResName_KuboView086_6_Label[2];
+    char ResName_KuboView086_5_AcIndexWideES[2];
+    char ResName_KuboView086_4_PsEditBox[2];
+    char ResName_KuboView086_3_Label[2];
+    char ResName_KuboView086_2_PsEditBox[2];
+    char ResName_KuboView086_1_SqplyVal[2];
+    char ResName_KuboView086_0_TtlScreen[2];
     uint32_t ptrs_17[25];  /* 25 pointers */
     char str_923[2];
-    char str_924[2];
-    char str_925[2];
-    char str_926[2];
-    char str_927[2];
-    char str_928[2];
-    char str_929[2];
-    char str_930[2];
-    char str_931[2];
+    char ResName_KuboView087_23_Label[2];
+    char ResName_KuboView087_22_Label[2];
+    char ResName_KuboView087_21_AcFuncEditSw[2];
+    char ResName_KuboView087_20_IvPunchExit[2];
+    char ResName_KuboView087_19_Label[2];
+    char ResName_KuboView087_18_AcFuncEditSw[2];
+    char ResName_KuboView087_17_AcIndexEditSw[2];
+    char ResName_KuboView087_16_AcIndexEditSw[2];
     char w363_code[2];
     char PunchInOutSw_name[14];
     char MetPunchSw_str[12];
-    char str_933[2];
-    char str_934[2];
-    char str_935[2];
-    char str_936[2];
-    char str_937[2];
-    char str_938[2];
-    char str_939[2];
-    char str_940[2];
+    char ResName_KuboView087_12_SngSel[2];
+    char ResName_KuboView087_11_Label[2];
+    char ResName_KuboView087_10_TrChordBox[2];
+    char ResName_KuboView087_9_TrTransposeBox[2];
+    char ResName_KuboView087_8_AcTempoBox[2];
+    char ResName_KuboView087_7_Label[2];
+    char ResName_KuboView087_6_Label[2];
+    char ResName_KuboView087_5_Label[2];
     char w364_code[2];
     char SqPunchGamen_name[14];
-    char str_941[2];
-    char str_942[2];
-    char str_943[2];
+    char ResName_KuboView087_2_Box[2];
+    char ResName_KuboView087_1_IvTrackSwitch[2];
+    char ResName_KuboView087_0_TtlScreen[2];
     uint32_t ptrs_18[13];  /* 13 pointers */
     char str_944[2];
-    char str_945[2];
-    char str_946[2];
-    char str_947[2];
-    char str_948[2];
-    char str_949[2];
-    char str_950[2];
+    char ResName_KuboView088_11_TtlScreen[2];
+    char ResName_KuboView088_10_IvAutoPunchExit[2];
+    char ResName_KuboView088_9_AcLanguageText[2];
+    char ResName_KuboView088_8_PsEditBox[2];
+    char ResName_KuboView088_7_PsEditBox[2];
+    char ResName_KuboView088_6_PsEditBox[2];
     char w365_code[2];
     char MetPunchmSw_name[12];
-    char str_951[2];
-    char str_952[2];
-    char str_953[2];
-    char str_954[2];
+    char ResName_KuboView088_3_Label[2];
+    char ResName_KuboView088_2_Label[2];
+    char ResName_KuboView088_1_AcIndexWideES[2];
+    char ResName_KuboView088_0_TtlScreen[2];
     uint32_t ptrs_19[5];  /* 5 pointers */
     char str_955[2];
-    char str_956[2];
-    char str_957[2];
-    char str_958[2];
-    char str_959[2];
+    char ResName_KuboView08D_3_IvPnlWrExit[2];
+    char ResName_KuboView08D_2_AcLanguageText[2];
+    char ResName_KuboView08D_1_AcFuncEditSw[2];
+    char ResName_KuboView08D_0_TtlScreen[2];
     uint32_t ptrs_20[18];  /* 18 pointers */
     char str_960[2];
-    char str_961[2];
-    char str_962[2];
-    char str_963[2];
-    char str_964[2];
-    char str_965[2];
-    char str_966[2];
+    char ResName_KuboView090_16_AcLanguageText[2];
+    char ResName_KuboView090_15_AcLanguageText[2];
+    char ResName_KuboView090_14_AcLanguageText[2];
+    char ResName_KuboView090_13_IvExitScreen[2];
+    char ResName_KuboView090_12_AcFuncEditSw[2];
+    char ResName_KuboView090_11_AcScreenMenu[2];
     char w366_code[2];
     char SoclSureDisp_name[14];
-    char str_967[2];
-    char str_968[2];
-    char str_969[2];
-    char str_970[2];
-    char str_971[2];
-    char str_972[2];
-    char str_973[2];
-    char str_974[2];
-    char str_975[2];
+    char ResName_KuboView090_8_AcFuncEditSw[2];
+    char ResName_KuboView090_7_MsgToTtl[2];
+    char ResName_KuboView090_6_Label[2];
+    char ResName_KuboView090_5_Label[2];
+    char ResName_KuboView090_4_Box[2];
+    char ResName_KuboView090_3_SqedtVal3[2];
+    char ResName_KuboView090_2_Label[2];
+    char ResName_KuboView090_1_AcIndexWideES[2];
+    char ResName_KuboView090_0_TtlScreen[2];
     uint32_t ptrs_21[20];  /* 20 pointers */
     char str_976[2];
-    char str_977[2];
-    char str_978[2];
-    char str_979[2];
-    char str_980[2];
-    char str_981[2];
-    char str_982[2];
+    char ResName_KuboView091_18_AcLanguageText[2];
+    char ResName_KuboView091_17_AcFuncEditSw[2];
+    char ResName_KuboView091_16_IvExitScreen[2];
+    char ResName_KuboView091_15_AcScreenMenu[2];
+    char ResName_KuboView091_14_Box[2];
+    char ResName_KuboView091_13_Box[2];
     char w367_code[2];
     char SngCpSureDisp_name[14];
-    char str_983[2];
-    char str_984[2];
-    char str_985[2];
-    char str_986[2];
-    char str_987[2];
-    char str_988[2];
-    char str_989[2];
-    char str_990[2];
-    char str_991[2];
-    char str_992[2];
-    char str_993[2];
+    char ResName_KuboView091_10_AcFuncEditSw[2];
+    char ResName_KuboView091_9_MsgToTtl[2];
+    char ResName_KuboView091_8_IvSongCopyExit[2];
+    char ResName_KuboView091_7_IvSongCopyExit[2];
+    char ResName_KuboView091_6_AcIndexWideES[2];
+    char ResName_KuboView091_5_AcIndexWideES[2];
+    char ResName_KuboView091_4_AcIndexWideES[2];
+    char ResName_KuboView091_3_AcIndexWideES[2];
+    char ResName_KuboView091_2_SqedtFix[2];
+    char ResName_KuboView091_1_SqedtVal2[2];
+    char ResName_KuboView091_0_TtlScreen[2];
     uint32_t ptrs_22[27];  /* 27 pointers */
     char str_994[2];
-    char str_995[2];
-    char str_996[2];
-    char str_997[2];
-    char str_998[2];
-    char str_999[2];
-    char str_1000[2];
-    char str_1001[2];
-    char str_1002[2];
+    char ResName_KuboView093_25_Line[2];
+    char ResName_KuboView093_24_Line[2];
+    char ResName_KuboView093_23_Label[2];
+    char ResName_KuboView093_22_AcTitleMenu[2];
+    char ResName_KuboView093_21_AcTitleMenu[2];
+    char ResName_KuboView093_20_AcTitleMenu[2];
+    char ResName_KuboView093_19_Line[2];
+    char ResName_KuboView093_18_AcTitleMenu[2];
     char SQEMENU_2_str[10];
-    char str_1004[2];
-    char str_1005[2];
-    char str_1006[2];
-    char str_1007[2];
-    char str_1008[2];
-    char str_1009[2];
-    char str_1010[2];
-    char str_1011[2];
-    char str_1012[2];
-    char str_1013[2];
+    char ResName_KuboView093_16_AcTitleMenu[2];
+    char ResName_KuboView093_15_AcTitleMenu[2];
+    char ResName_KuboView093_14_AcTitleMenu[2];
+    char ResName_KuboView093_13_AcTitleMenu[2];
+    char ResName_KuboView093_12_AcTitleMenu[2];
+    char ResName_KuboView093_11_AcTitleMenu[2];
+    char ResName_KuboView093_10_AcTitleMenu[2];
+    char ResName_KuboView093_9_AcTitleMenu[2];
+    char ResName_KuboView093_8_AcTitleMenu[2];
+    char ResName_KuboView093_7_AcTitleMenu[2];
     char SQEMENU_1_str[10];
-    char str_1015[2];
-    char str_1016[2];
+    char ResName_KuboView093_5_IvShowHide[2];
+    char ResName_KuboView093_4_IvExitMode[2];
     char w368_code[2];
     char EdMenuPage_name[12];
-    char str_1017[2];
-    char str_1018[2];
+    char ResName_KuboView093_1_IvPageControl[2];
+    char ResName_KuboView093_0_TtlScreen[2];
     uint32_t ptrs_23[5];  /* 5 pointers */
     char str_1019[2];
-    char str_1020[2];
-    char str_1021[2];
-    char str_1022[2];
-    char str_1023[2];
+    char ResName_KuboView094_3_AcLanguageText[2];
+    char ResName_KuboView094_2_IvTrackSwitch[2];
+    char ResName_KuboView094_1_Label[2];
+    char ResName_KuboView094_0_TtlScreen[2];
     uint32_t ptrs_24[28];  /* 28 pointers */
     char str_1024[2];
-    char str_1025[2];
-    char str_1026[2];
-    char str_1027[2];
-    char str_1028[2];
-    char str_1029[2];
-    char str_1030[2];
+    char ResName_KuboView095_26_AcIndexEditSw[2];
+    char ResName_KuboView095_25_AcIndexEditSw[2];
+    char ResName_KuboView095_24_Label[2];
+    char ResName_KuboView095_23_AcIndexEditSw[2];
+    char ResName_KuboView095_22_Label[2];
+    char ResName_KuboView095_21_AcIndexEditSw[2];
     char NTBitmap_str[10];
-    char str_1032[2];
-    char str_1033[2];
-    char str_1034[2];
-    char str_1035[2];
-    char str_1036[2];
-    char str_1037[2];
-    char str_1038[2];
-    char str_1039[2];
-    char str_1040[2];
-    char str_1041[2];
-    char str_1042[2];
-    char str_1043[2];
-    char str_1044[2];
-    char str_1045[2];
-    char str_1046[2];
-    char str_1047[2];
-    char str_1048[2];
-    char str_1049[2];
-    char str_1050[2];
-    char str_1051[2];
+    char ResName_KuboView095_19_VwUserBitmap[2];
+    char ResName_KuboView095_18_Box[2];
+    char ResName_KuboView095_17_NoteEditBox[2];
+    char ResName_KuboView095_16_Label[2];
+    char ResName_KuboView095_15_AcIndexEditSw[2];
+    char ResName_KuboView095_14_AcIndexEditSw[2];
+    char ResName_KuboView095_13_Label[2];
+    char ResName_KuboView095_12_Label[2];
+    char ResName_KuboView095_11_Label[2];
+    char ResName_KuboView095_10_Label[2];
+    char ResName_KuboView095_9_Label[2];
+    char ResName_KuboView095_8_Label[2];
+    char ResName_KuboView095_7_Label[2];
+    char ResName_KuboView095_6_AcIndexEditSw[2];
+    char ResName_KuboView095_5_AcIndexEditSw[2];
+    char ResName_KuboView095_4_AcIndexEditSw[2];
+    char ResName_KuboView095_3_AcIndexEditSw[2];
+    char ResName_KuboView095_2_AcIndexEditSw[2];
+    char ResName_KuboView095_1_AcIndexEditSw[2];
+    char ResName_KuboView095_0_TtlScreen[2];
     uint32_t ptrs_25[9];  /* 9 pointers */
     char str_1052[2];
-    char str_1053[2];
-    char str_1054[2];
-    char str_1055[2];
-    char str_1056[2];
-    char str_1057[2];
-    char str_1058[2];
-    char str_1059[2];
-    char str_1060[2];
+    char ResName_KuboView096_7_PsEditBox[2];
+    char ResName_KuboView096_6_PsEditBox[2];
+    char ResName_KuboView096_5_PsEditBox[2];
+    char ResName_KuboView096_4_SqplyVal[2];
+    char ResName_KuboView096_3_Label[2];
+    char ResName_KuboView096_2_AcIndexWideES[2];
+    char ResName_KuboView096_1_Label[2];
+    char ResName_KuboView096_0_TtlScreen[2];
     uint32_t ptrs_26[5];  /* 5 pointers */
     char str_1061[2];
-    char str_1062[2];
-    char str_1063[2];
-    char str_1064[2];
-    char str_1065[2];
+    char ResName_KuboView097_3_AcLanguageText[2];
+    char ResName_KuboView097_2_IvTrackSwitch[2];
+    char ResName_KuboView097_1_Label[2];
+    char ResName_KuboView097_0_TtlScreen[2];
     uint32_t ptrs_27[27];  /* 27 pointers */
     char str_1066[2];
-    char str_1067[2];
-    char str_1068[2];
-    char str_1069[2];
-    char str_1070[2];
-    char str_1071[2];
-    char str_1072[2];
-    char str_1073[2];
-    char str_1074[2];
+    char ResName_KuboView098_25_AcIndexEditSw[2];
+    char ResName_KuboView098_24_AcIndexEditSw[2];
+    char ResName_KuboView098_23_Label[2];
+    char ResName_KuboView098_22_AcIndexEditSw[2];
+    char ResName_KuboView098_21_Label[2];
+    char ResName_KuboView098_20_AcIndexEditSw[2];
+    char ResName_KuboView098_19_Label[2];
+    char ResName_KuboView098_18_AcIndexEditSw[2];
     char DRBitmap_str[10];
-    char str_1076[2];
-    char str_1077[2];
-    char str_1078[2];
-    char str_1079[2];
-    char str_1080[2];
-    char str_1081[2];
-    char str_1082[2];
-    char str_1083[2];
-    char str_1084[2];
-    char str_1085[2];
-    char str_1086[2];
-    char str_1087[2];
-    char str_1088[2];
-    char str_1089[2];
-    char str_1090[2];
-    char str_1091[2];
-    char str_1092[2];
+    char ResName_KuboView098_16_VwUserBitmap[2];
+    char ResName_KuboView098_15_NoteEditBox[2];
+    char ResName_KuboView098_14_Box[2];
+    char ResName_KuboView098_13_Label[2];
+    char ResName_KuboView098_12_Label[2];
+    char ResName_KuboView098_11_Label[2];
+    char ResName_KuboView098_10_Label[2];
+    char ResName_KuboView098_9_Label[2];
+    char ResName_KuboView098_8_Label[2];
+    char ResName_KuboView098_7_Label[2];
+    char ResName_KuboView098_6_AcIndexEditSw[2];
+    char ResName_KuboView098_5_AcIndexEditSw[2];
+    char ResName_KuboView098_4_AcIndexEditSw[2];
+    char ResName_KuboView098_3_AcIndexEditSw[2];
+    char ResName_KuboView098_2_AcIndexEditSw[2];
+    char ResName_KuboView098_1_AcIndexEditSw[2];
+    char ResName_KuboView098_0_TtlScreen[2];
     uint32_t ptrs_28[9];  /* 9 pointers */
     char str_1093[2];
-    char str_1094[2];
-    char str_1095[2];
-    char str_1096[2];
-    char str_1097[2];
-    char str_1098[2];
-    char str_1099[2];
-    char str_1100[2];
-    char str_1101[2];
+    char ResName_KuboView099_7_PsEditBox[2];
+    char ResName_KuboView099_6_PsEditBox[2];
+    char ResName_KuboView099_5_PsEditBox[2];
+    char ResName_KuboView099_4_SqplyVal[2];
+    char ResName_KuboView099_3_Label[2];
+    char ResName_KuboView099_2_AcIndexWideES[2];
+    char ResName_KuboView099_1_Label[2];
+    char ResName_KuboView099_0_TtlScreen[2];
     uint32_t ptrs_29[15];  /* 15 pointers */
     char str_1102[2];
-    char str_1103[2];
-    char str_1104[2];
-    char str_1105[2];
-    char str_1106[2];
-    char str_1107[2];
-    char str_1108[2];
+    char ResName_KuboView09A_13_AcLanguageText[2];
+    char ResName_KuboView09A_12_AcLanguageText[2];
+    char ResName_KuboView09A_11_AcLanguageText[2];
+    char ResName_KuboView09A_10_IvExitScreen[2];
+    char ResName_KuboView09A_9_VwBox[2];
+    char ResName_KuboView09A_8_AcScreenMenu[2];
     char w369_code[2];
     char TrkClrSureDisp_name[16];
-    char str_1109[2];
-    char str_1110[2];
-    char str_1111[2];
-    char str_1112[2];
-    char str_1113[2];
-    char str_1114[2];
+    char ResName_KuboView09A_5_AcFuncEditSw[2];
+    char ResName_KuboView09A_4_AcLanguageText[2];
+    char ResName_KuboView09A_3_AcLanguageText[2];
+    char ResName_KuboView09A_2_MsgToTtl[2];
+    char ResName_KuboView09A_1_IvTrackSwitch[2];
+    char ResName_KuboView09A_0_TtlScreen[2];
     uint32_t ptrs_30[23];  /* 23 pointers */
     char str_1115[2];
-    char str_1116[2];
-    char str_1117[2];
-    char str_1118[2];
-    char str_1119[2];
-    char str_1120[2];
+    char ResName_KuboView09B_21_AcLanguageText[2];
+    char ResName_KuboView09B_20_Box[2];
+    char ResName_KuboView09B_19_Box[2];
+    char ResName_KuboView09B_18_IvExitScreen[2];
+    char ResName_KuboView09B_17_AcScreenMenu[2];
     char w370_code[2];
     char TrkMrgSureDisp_name[16];
-    char str_1121[2];
-    char str_1122[2];
-    char str_1123[2];
-    char str_1124[2];
-    char str_1125[2];
-    char str_1126[2];
-    char str_1127[2];
-    char str_1128[2];
-    char str_1129[2];
-    char str_1130[2];
-    char str_1131[2];
-    char str_1132[2];
-    char str_1133[2];
-    char str_1134[2];
-    char str_1135[2];
+    char ResName_KuboView09B_14_AcFuncEditSw[2];
+    char ResName_KuboView09B_13_MsgToTtl[2];
+    char ResName_KuboView09B_12_PsEditBox[2];
+    char ResName_KuboView09B_11_PsEditBox[2];
+    char ResName_KuboView09B_10_PsEditBox[2];
+    char ResName_KuboView09B_9_SqedtVal[2];
+    char ResName_KuboView09B_8_Label[2];
+    char ResName_KuboView09B_7_AcIndexWideES[2];
+    char ResName_KuboView09B_6_Line[2];
+    char ResName_KuboView09B_5_Line[2];
+    char ResName_KuboView09B_4_Line[2];
+    char ResName_KuboView09B_3_Line[2];
+    char ResName_KuboView09B_2_Line[2];
+    char ResName_KuboView09B_1_Line[2];
+    char ResName_KuboView09B_0_TtlScreen[2];
     uint32_t ptrs_31[22];  /* 22 pointers */
     char str_1136[2];
-    char str_1137[2];
-    char str_1138[2];
-    char str_1139[2];
-    char str_1140[2];
-    char str_1141[2];
+    char ResName_KuboView09C_20_AcLanguageText[2];
+    char ResName_KuboView09C_19_Box[2];
+    char ResName_KuboView09C_18_Box[2];
+    char ResName_KuboView09C_17_IvExitScreen[2];
+    char ResName_KuboView09C_16_AcFuncEditSw[2];
     char w371_code[2];
     char QtzSureDisp_name[12];
-    char str_1142[2];
-    char str_1143[2];
-    char str_1144[2];
-    char str_1145[2];
-    char str_1146[2];
-    char str_1147[2];
-    char str_1148[2];
-    char str_1149[2];
-    char str_1150[2];
-    char str_1151[2];
-    char str_1152[2];
-    char str_1153[2];
-    char str_1154[2];
-    char str_1155[2];
+    char ResName_KuboView09C_13_AcFuncEditSw[2];
+    char ResName_KuboView09C_12_MsgToTtl[2];
+    char ResName_KuboView09C_11_Label[2];
+    char ResName_KuboView09C_10_PsEditBox[2];
+    char ResName_KuboView09C_9_PsEditBox[2];
+    char ResName_KuboView09C_8_PsEditBox[2];
+    char ResName_KuboView09C_7_PsEditBox[2];
+    char ResName_KuboView09C_6_Label[2];
+    char ResName_KuboView09C_5_PsEditBox[2];
+    char ResName_KuboView09C_4_PsEditBox[2];
+    char ResName_KuboView09C_3_SqedtVal[2];
+    char ResName_KuboView09C_2_AcIndexWideES[2];
+    char ResName_KuboView09C_1_Label[2];
+    char ResName_KuboView09C_0_TtlScreen[2];
     uint32_t ptrs_32[17];  /* 17 pointers */
     char str_1156[2];
-    char str_1157[2];
-    char str_1158[2];
-    char str_1159[2];
-    char str_1160[2];
+    char ResName_KuboView09D_15_AcLanguageText[2];
+    char ResName_KuboView09D_14_Box[2];
+    char ResName_KuboView09D_13_IvExitScreen[2];
+    char ResName_KuboView09D_12_AcFuncEditSw[2];
     char w372_code[2];
     char TrnsSureDisp_name[14];
-    char str_1161[2];
-    char str_1162[2];
-    char str_1163[2];
-    char str_1164[2];
-    char str_1165[2];
-    char str_1166[2];
-    char str_1167[2];
-    char str_1168[2];
-    char str_1169[2];
-    char str_1170[2];
+    char ResName_KuboView09D_9_AcFuncEditSw[2];
+    char ResName_KuboView09D_8_MsgToTtl[2];
+    char ResName_KuboView09D_7_PsEditBox[2];
+    char ResName_KuboView09D_6_PsEditBox[2];
+    char ResName_KuboView09D_5_PsEditBox[2];
+    char ResName_KuboView09D_4_PsEditBox[2];
+    char ResName_KuboView09D_3_SqedtVal[2];
+    char ResName_KuboView09D_2_AcIndexWideES[2];
+    char ResName_KuboView09D_1_Label[2];
+    char ResName_KuboView09D_0_TtlScreen[2];
     uint32_t ptrs_33[17];  /* 17 pointers */
     char str_1171[2];
-    char str_1172[2];
-    char str_1173[2];
-    char str_1174[2];
-    char str_1175[2];
+    char ResName_KuboView09E_15_AcLanguageText[2];
+    char ResName_KuboView09E_14_Box[2];
+    char ResName_KuboView09E_13_IvExitScreen[2];
+    char ResName_KuboView09E_12_AcFuncEditSw[2];
     char w373_code[2];
     char VeloSureDisp_name[14];
-    char str_1176[2];
-    char str_1177[2];
-    char str_1178[2];
-    char str_1179[2];
-    char str_1180[2];
-    char str_1181[2];
-    char str_1182[2];
-    char str_1183[2];
-    char str_1184[2];
-    char str_1185[2];
+    char ResName_KuboView09E_9_AcFuncEditSw[2];
+    char ResName_KuboView09E_8_MsgToTtl[2];
+    char ResName_KuboView09E_7_PsEditBox[2];
+    char ResName_KuboView09E_6_PsEditBox[2];
+    char ResName_KuboView09E_5_PsEditBox[2];
+    char ResName_KuboView09E_4_PsEditBox[2];
+    char ResName_KuboView09E_3_SqedtVal[2];
+    char ResName_KuboView09E_2_AcIndexWideES[2];
+    char ResName_KuboView09E_1_Label[2];
+    char ResName_KuboView09E_0_TtlScreen[2];
     uint32_t ptrs_34[26];  /* 26 pointers */
     char str_1186[2];
-    char str_1187[2];
-    char str_1188[2];
-    char str_1189[2];
-    char str_1190[2];
-    char str_1191[2];
+    char ResName_KuboView09F_24_AcLanguageText[2];
+    char ResName_KuboView09F_23_Box[2];
+    char ResName_KuboView09F_22_Box[2];
+    char ResName_KuboView09F_21_IvExitScreen[2];
+    char ResName_KuboView09F_20_AcFuncEditSw[2];
     char w374_code[2];
     char NoteSureDisp_name[14];
-    char str_1192[2];
-    char str_1193[2];
-    char str_1194[2];
-    char str_1195[2];
-    char str_1196[2];
-    char str_1197[2];
-    char str_1198[2];
-    char str_1199[2];
-    char str_1200[2];
-    char str_1201[2];
-    char str_1202[2];
-    char str_1203[2];
-    char str_1204[2];
-    char str_1205[2];
-    char str_1206[2];
-    char str_1207[2];
-    char str_1208[2];
-    char str_1209[2];
+    char ResName_KuboView09F_17_AcFuncEditSw[2];
+    char ResName_KuboView09F_16_MsgToTtl[2];
+    char ResName_KuboView09F_15_PsEditBox[2];
+    char ResName_KuboView09F_14_PsEditBox[2];
+    char ResName_KuboView09F_13_Line[2];
+    char ResName_KuboView09F_12_Line[2];
+    char ResName_KuboView09F_11_Line[2];
+    char ResName_KuboView09F_10_Line[2];
+    char ResName_KuboView09F_9_Line[2];
+    char ResName_KuboView09F_8_Label[2];
+    char ResName_KuboView09F_7_PsEditBox[2];
+    char ResName_KuboView09F_6_PsEditBox[2];
+    char ResName_KuboView09F_5_Label[2];
+    char ResName_KuboView09F_4_AcIndexWideES[2];
+    char ResName_KuboView09F_3_Label[2];
+    char ResName_KuboView09F_2_PsEditBox[2];
+    char ResName_KuboView09F_1_SqedtVal[2];
+    char ResName_KuboView09F_0_TtlScreen[2];
     uint32_t ptrs_35[17];  /* 17 pointers */
     char str_1210[2];
-    char str_1211[2];
-    char str_1212[2];
-    char str_1213[2];
-    char str_1214[2];
+    char ResName_KuboView0A0_15_AcLanguageText[2];
+    char ResName_KuboView0A0_14_Box[2];
+    char ResName_KuboView0A0_13_IvExitScreen[2];
+    char ResName_KuboView0A0_12_AcScreenMenu[2];
     char w375_code[2];
     char AdvSureDisp_name[12];
-    char str_1215[2];
-    char str_1216[2];
-    char str_1217[2];
-    char str_1218[2];
-    char str_1219[2];
-    char str_1220[2];
-    char str_1221[2];
-    char str_1222[2];
-    char str_1223[2];
-    char str_1224[2];
+    char ResName_KuboView0A0_9_AcFuncEditSw[2];
+    char ResName_KuboView0A0_8_MsgToTtl[2];
+    char ResName_KuboView0A0_7_PsEditBox[2];
+    char ResName_KuboView0A0_6_PsEditBox[2];
+    char ResName_KuboView0A0_5_PsEditBox[2];
+    char ResName_KuboView0A0_4_PsEditBox[2];
+    char ResName_KuboView0A0_3_SqedtVal[2];
+    char ResName_KuboView0A0_2_Label[2];
+    char ResName_KuboView0A0_1_AcIndexWideES[2];
+    char ResName_KuboView0A0_0_TtlScreen[2];
     uint32_t ptrs_36[17];  /* 17 pointers */
     char str_1225[2];
-    char str_1226[2];
-    char str_1227[2];
-    char str_1228[2];
-    char str_1229[2];
+    char ResName_KuboView0A1_15_AcLanguageText[2];
+    char ResName_KuboView0A1_14_Box[2];
+    char ResName_KuboView0A1_13_IvExitScreen[2];
+    char ResName_KuboView0A1_12_AcFuncEditSw[2];
     char w376_code[2];
     char MersSureDisp_name[14];
-    char str_1230[2];
-    char str_1231[2];
-    char str_1232[2];
-    char str_1233[2];
-    char str_1234[2];
-    char str_1235[2];
-    char str_1236[2];
-    char str_1237[2];
-    char str_1238[2];
-    char str_1239[2];
+    char ResName_KuboView0A1_9_AcFuncEditSw[2];
+    char ResName_KuboView0A1_8_MsgToTtl[2];
+    char ResName_KuboView0A1_7_PsEditBox[2];
+    char ResName_KuboView0A1_6_PsEditBox[2];
+    char ResName_KuboView0A1_5_PsEditBox[2];
+    char ResName_KuboView0A1_4_PsEditBox[2];
+    char ResName_KuboView0A1_3_SqedtVal[2];
+    char ResName_KuboView0A1_2_Label[2];
+    char ResName_KuboView0A1_1_AcIndexWideES[2];
+    char ResName_KuboView0A1_0_TtlScreen[2];
     uint32_t ptrs_37[18];  /* 18 pointers */
     char str_1240[2];
-    char str_1241[2];
-    char str_1242[2];
-    char str_1243[2];
-    char str_1244[2];
-    char str_1245[2];
-    char str_1246[2];
+    char ResName_KuboView0A2_16_AcScreenMenu[2];
+    char ResName_KuboView0A2_15_AcLanguageText[2];
+    char ResName_KuboView0A2_14_AcFuncEditSw[2];
+    char ResName_KuboView0A2_13_IvExitScreen[2];
+    char ResName_KuboView0A2_12_Box[2];
+    char ResName_KuboView0A2_11_Box[2];
     char w377_code[2];
     char McpSureDisp_name[12];
-    char str_1247[2];
-    char str_1248[2];
-    char str_1249[2];
-    char str_1250[2];
-    char str_1251[2];
-    char str_1252[2];
-    char str_1253[2];
-    char str_1254[2];
-    char str_1255[2];
+    char ResName_KuboView0A2_8_AcFuncEditSw[2];
+    char ResName_KuboView0A2_7_MsgToTtl[2];
+    char ResName_KuboView0A2_6_SqedtFix[2];
+    char ResName_KuboView0A2_5_SqedtVal2[2];
+    char ResName_KuboView0A2_4_AcIndexWideES[2];
+    char ResName_KuboView0A2_3_AcIndexWideES[2];
+    char ResName_KuboView0A2_2_AcIndexWideES[2];
+    char ResName_KuboView0A2_1_AcIndexWideES[2];
+    char ResName_KuboView0A2_0_TtlScreen[2];
     uint32_t ptrs_38[16];  /* 16 pointers */
     char str_1256[2];
-    char str_1257[2];
-    char str_1258[2];
-    char str_1259[2];
-    char str_1260[2];
+    char ResName_KuboView0A3_14_AcLanguageText[2];
+    char ResName_KuboView0A3_13_Box[2];
+    char ResName_KuboView0A3_12_IvExitScreen[2];
+    char ResName_KuboView0A3_11_AcFuncEditSw[2];
     char w378_code[2];
     char MdelSureDisp_name[14];
-    char str_1261[2];
-    char str_1262[2];
-    char str_1263[2];
-    char str_1264[2];
-    char str_1265[2];
-    char str_1266[2];
-    char str_1267[2];
-    char str_1268[2];
-    char str_1269[2];
+    char ResName_KuboView0A3_8_AcFuncEditSw[2];
+    char ResName_KuboView0A3_7_MsgToTtl[2];
+    char ResName_KuboView0A3_6_PsEditBox[2];
+    char ResName_KuboView0A3_5_PsEditBox[2];
+    char ResName_KuboView0A3_4_PsEditBox[2];
+    char ResName_KuboView0A3_3_SqedtVal[2];
+    char ResName_KuboView0A3_2_AcIndexWideES[2];
+    char ResName_KuboView0A3_1_Label[2];
+    char ResName_KuboView0A3_0_TtlScreen[2];
     uint32_t ptrs_39[18];  /* 18 pointers */
     char str_1270[2];
-    char str_1271[2];
-    char str_1272[2];
-    char str_1273[2];
-    char str_1274[2];
-    char str_1275[2];
-    char str_1276[2];
+    char ResName_KuboView0A4_16_AcScreenMenu[2];
+    char ResName_KuboView0A4_15_AcLanguageText[2];
+    char ResName_KuboView0A4_14_AcFuncEditSw[2];
+    char ResName_KuboView0A4_13_IvExitScreen[2];
+    char ResName_KuboView0A4_12_Box[2];
+    char ResName_KuboView0A4_11_Box[2];
     char w379_code[2];
     char MinsSureDisp_name[14];
-    char str_1277[2];
-    char str_1278[2];
-    char str_1279[2];
-    char str_1280[2];
-    char str_1281[2];
-    char str_1282[2];
-    char str_1283[2];
-    char str_1284[2];
-    char str_1285[2];
+    char ResName_KuboView0A4_8_AcFuncEditSw[2];
+    char ResName_KuboView0A4_7_MsgToTtl[2];
+    char ResName_KuboView0A4_6_SqedtFix[2];
+    char ResName_KuboView0A4_5_SqedtVal2[2];
+    char ResName_KuboView0A4_4_AcIndexWideES[2];
+    char ResName_KuboView0A4_3_AcIndexWideES[2];
+    char ResName_KuboView0A4_2_AcIndexWideES[2];
+    char ResName_KuboView0A4_1_AcIndexWideES[2];
+    char ResName_KuboView0A4_0_TtlScreen[2];
     uint32_t ptr_804c;
     char str_1286[2];
     uint32_t ptr_8052;
     char str_1287[2];
     uint32_t ptrs_40[3];  /* 3 pointers */
     char str_1288[2];
-    char str_1289[2];
-    char str_1290[2];
+    char ResName_KuboView0AB_1_AcMixerVol[2];
+    char ResName_KuboView0AB_0_TtlScreen[2];
     uint32_t ptrs_41[16];  /* 16 pointers */
     char str_1291[2];
-    char str_1292[2];
-    char str_1293[2];
-    char str_1294[2];
-    char str_1295[2];
-    char str_1296[2];
-    char str_1297[2];
-    char str_1298[2];
+    char ResName_EnterTainerScr_14_Label[2];
+    char ResName_EnterTainerScr_13_AcPanicEditSw[2];
+    char ResName_EnterTainerScr_12_AcFuncToggle[2];
+    char ResName_EnterTainerScr_11_IvExitMode[2];
+    char ResName_EnterTainerScr_10_Label[2];
+    char ResName_EnterTainerScr_9_Label[2];
+    char ResName_EnterTainerScr_8_AcIndexWideES[2];
     char w380_code[2];
     char DiskLoadSw_name[12];
     char MixerSw_code[8];
     char FadeInOutSw_name[12];
     char VocWorkSw_str[10];
-    char str_1300[2];
+    char ResName_EnterTainerScr_2_Label[2];
     char w382_code[2];
     char EnterTainerScr_name[16];
     uint32_t ptrs_42[62];  /* 62 pointers */
@@ -3311,19 +3311,19 @@ typedef struct __attribute__((packed)) {
     char HelpLang4P2_name[12];
     char w386_code[2];
     char HelpLang4P1_name[12];
-    char str_1302[2];
-    char str_1303[2];
-    char str_1304[2];
-    char str_1305[2];
+    char ResName_KuboView0E7_52_IvShowHide[2];
+    char ResName_KuboView0E7_51_IvPageControl[2];
+    char ResName_KuboView0E7_50_IvPageControl[2];
+    char ResName_KuboView0E7_49_IvPageControl[2];
     char w387_code[2];
     char HelpTtlStr4_name[12];
     char Help_P4_str[8];
     char w388_code[2];
     char HelpSwTtl4Scr_name[14];
-    char str_1307[2];
-    char str_1308[2];
-    char str_1309[2];
-    char str_1310[2];
+    char ResName_KuboView0E7_43_IvShowHide[2];
+    char ResName_KuboView0E7_42_IvPageControl[2];
+    char ResName_KuboView0E7_41_IvPageControl[2];
+    char ResName_KuboView0E7_40_IvPageControl[2];
     char Help_P3_str[8];
     char HelpTtlStr3_str[12];
     char w389_code[2];
@@ -3334,9 +3334,9 @@ typedef struct __attribute__((packed)) {
     char HelpLang3P2_name[12];
     char w392_code[2];
     char HelpLang3P1_name[12];
-    char str_1313[2];
+    char ResName_KuboView0E7_29_IvShowHide[2];
     char Help_P2_str[8];
-    char str_1315[2];
+    char ResName_KuboView0E7_27_IvPageControl[2];
     char w393_code[2];
     char HelpTtlStr2_name[12];
     char w394_code[2];
@@ -3350,20 +3350,20 @@ typedef struct __attribute__((packed)) {
     char HelpTtlStr1_str[12];
     char w398_code[2];
     char HelpSwTtl1Scr_name[14];
-    char str_1317[2];
-    char str_1318[2];
+    char ResName_KuboView0E7_13_AcIndexWideToggle[2];
+    char ResName_KuboView0E7_12_AcIndexWideToggle[2];
     char w399_code[2];
     char HelpXWin_name[10];
-    char str_1319[2];
-    char str_1320[2];
-    char str_1321[2];
+    char ResName_KuboView0E7_9_AcIndexWideToggle[2];
+    char ResName_KuboView0E7_8_AcIndexWideToggle[2];
+    char ResName_KuboView0E7_7_AcIndexWideToggle[2];
     char w400_code[2];
     char HelpNotXWin_name[12];
-    char str_1322[2];
+    char ResName_KuboView0E7_4_AcFuncEditSw[2];
     char w401_code[2];
     char HelpMenu_name[10];
-    char str_1323[2];
-    char str_1324[2];
+    char ResName_KuboView0E7_1_IvExitMode[2];
+    char ResName_KuboView0E7_0_TtlScreen[2];
     char MD_ENTERTAINER_str[16];
     char MD_SEQ_str[8];
     char MD_SEQ_EREC_str[12];
@@ -14677,126 +14677,126 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(HelpLang4P4),
         SELF(HelpLang4P4_AcLanguageText),
         0x00000000,
-        SELF(str_761),
-        SELF(str_760),
-        SELF(str_759),
-        SELF(str_758),
-        SELF(str_757),
-        SELF(str_756),
-        SELF(str_755),
-        SELF(str_754),
-        SELF(str_753),
-        SELF(str_752),
-        SELF(str_751),
-        SELF(str_750),
+        SELF(ResName_KuboView00A_0_TtlScreen),
+        SELF(ResName_KuboView00A_1_AcIndexWideES),
+        SELF(ResName_KuboView00A_2_AcIndexWideES),
+        SELF(ResName_KuboView00A_3_AcIndexWideES),
+        SELF(ResName_KuboView00A_4_Label),
+        SELF(ResName_KuboView00A_5_Label),
+        SELF(ResName_KuboView00A_6_Label),
+        SELF(ResName_KuboView00A_7_EffectBox),
+        SELF(ResName_KuboView00A_8_Box),
+        SELF(ResName_KuboView00A_9_Label),
+        SELF(ResName_KuboView00A_10_IvIntEasySet),
+        SELF(ResName_KuboView00A_11_IvSdrev),
         SELF(str_749),
     },
 
     .str_749 = ALIGNED_STRING(""),
 
-    .str_750 = ALIGNED_STRING(""),
+    .ResName_KuboView00A_11_IvSdrev = ALIGNED_STRING(""),
 
-    .str_751 = ALIGNED_STRING(""),
+    .ResName_KuboView00A_10_IvIntEasySet = ALIGNED_STRING(""),
 
-    .str_752 = ALIGNED_STRING(""),
+    .ResName_KuboView00A_9_Label = ALIGNED_STRING(""),
 
-    .str_753 = ALIGNED_STRING(""),
+    .ResName_KuboView00A_8_Box = ALIGNED_STRING(""),
 
-    .str_754 = ALIGNED_STRING(""),
+    .ResName_KuboView00A_7_EffectBox = ALIGNED_STRING(""),
 
-    .str_755 = ALIGNED_STRING(""),
+    .ResName_KuboView00A_6_Label = ALIGNED_STRING(""),
 
-    .str_756 = ALIGNED_STRING(""),
+    .ResName_KuboView00A_5_Label = ALIGNED_STRING(""),
 
-    .str_757 = ALIGNED_STRING(""),
+    .ResName_KuboView00A_4_Label = ALIGNED_STRING(""),
 
-    .str_758 = ALIGNED_STRING(""),
+    .ResName_KuboView00A_3_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_759 = ALIGNED_STRING(""),
+    .ResName_KuboView00A_2_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_760 = ALIGNED_STRING(""),
+    .ResName_KuboView00A_1_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_761 = ALIGNED_STRING(""),
+    .ResName_KuboView00A_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_7 = {
-        SELF(str_774),
-        SELF(str_773),
-        SELF(str_772),
-        SELF(str_771),
-        SELF(str_770),
-        SELF(str_769),
-        SELF(str_768),
-        SELF(str_767),
-        SELF(str_766),
-        SELF(str_765),
-        SELF(str_764),
-        SELF(str_763),
+        SELF(ResName_KuboView00B_0_TtlScreen),
+        SELF(ResName_KuboView00B_1_Label),
+        SELF(ResName_KuboView00B_2_AcIndexWideES),
+        SELF(ResName_KuboView00B_3_Label),
+        SELF(ResName_KuboView00B_4_AcIndexWideES),
+        SELF(ResName_KuboView00B_5_AcIndexWideES),
+        SELF(ResName_KuboView00B_6_Label),
+        SELF(ResName_KuboView00B_7_Label),
+        SELF(ResName_KuboView00B_8_EffectBox),
+        SELF(ResName_KuboView00B_9_Box),
+        SELF(ResName_KuboView00B_10_IvIntEasySet),
+        SELF(ResName_KuboView00B_11_IvSddsp),
         SELF(str_762),
     },
 
     .str_762 = ALIGNED_STRING(""),
 
-    .str_763 = ALIGNED_STRING(""),
+    .ResName_KuboView00B_11_IvSddsp = ALIGNED_STRING(""),
 
-    .str_764 = ALIGNED_STRING(""),
+    .ResName_KuboView00B_10_IvIntEasySet = ALIGNED_STRING(""),
 
-    .str_765 = ALIGNED_STRING(""),
+    .ResName_KuboView00B_9_Box = ALIGNED_STRING(""),
 
-    .str_766 = ALIGNED_STRING(""),
+    .ResName_KuboView00B_8_EffectBox = ALIGNED_STRING(""),
 
-    .str_767 = ALIGNED_STRING(""),
+    .ResName_KuboView00B_7_Label = ALIGNED_STRING(""),
 
-    .str_768 = ALIGNED_STRING(""),
+    .ResName_KuboView00B_6_Label = ALIGNED_STRING(""),
 
-    .str_769 = ALIGNED_STRING(""),
+    .ResName_KuboView00B_5_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_770 = ALIGNED_STRING(""),
+    .ResName_KuboView00B_4_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_771 = ALIGNED_STRING(""),
+    .ResName_KuboView00B_3_Label = ALIGNED_STRING(""),
 
-    .str_772 = ALIGNED_STRING(""),
+    .ResName_KuboView00B_2_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_773 = ALIGNED_STRING(""),
+    .ResName_KuboView00B_1_Label = ALIGNED_STRING(""),
 
-    .str_774 = ALIGNED_STRING(""),
+    .ResName_KuboView00B_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_8 = {
-        SELF(str_810),
-        SELF(str_809),
-        SELF(str_808),
-        SELF(str_807),
-        SELF(str_806),
-        SELF(str_805),
-        SELF(str_804),
-        SELF(str_803),
-        SELF(str_802),
-        SELF(str_801),
-        SELF(str_800),
-        SELF(str_799),
-        SELF(str_798),
-        SELF(str_797),
-        SELF(str_796),
-        SELF(str_795),
-        SELF(str_794),
-        SELF(str_793),
-        SELF(str_792),
-        SELF(str_791),
-        SELF(str_790),
-        SELF(str_789),
-        SELF(str_788),
-        SELF(str_787),
-        SELF(str_786),
-        SELF(str_785),
-        SELF(str_784),
-        SELF(str_783),
-        SELF(str_782),
-        SELF(str_781),
-        SELF(str_780),
-        SELF(str_779),
-        SELF(str_778),
-        SELF(str_777),
-        SELF(str_776),
-        SELF(str_775),
+        SELF(ResName_KuboView00C_0_TtlScreen),
+        SELF(ResName_KuboView00C_1_AcIndexEditSw),
+        SELF(ResName_KuboView00C_2_AcIndexEditSw),
+        SELF(ResName_KuboView00C_3_AcIndexEditSw),
+        SELF(ResName_KuboView00C_4_AcIndexEditSw),
+        SELF(ResName_KuboView00C_5_AcIndexEditSw),
+        SELF(ResName_KuboView00C_6_AcIndexEditSw),
+        SELF(ResName_KuboView00C_7_AcIndexEditSw),
+        SELF(ResName_KuboView00C_8_AcIndexEditSw),
+        SELF(ResName_KuboView00C_9_Label),
+        SELF(ResName_KuboView00C_10_Label),
+        SELF(ResName_KuboView00C_11_Label),
+        SELF(ResName_KuboView00C_12_Label),
+        SELF(ResName_KuboView00C_13_Label),
+        SELF(ResName_KuboView00C_14_Label),
+        SELF(ResName_KuboView00C_15_Label),
+        SELF(ResName_KuboView00C_16_Label),
+        SELF(ResName_KuboView00C_17_Label),
+        SELF(ResName_KuboView00C_18_Label),
+        SELF(ResName_KuboView00C_19_Label),
+        SELF(ResName_KuboView00C_20_Label),
+        SELF(ResName_KuboView00C_21_Line),
+        SELF(ResName_KuboView00C_22_Line),
+        SELF(ResName_KuboView00C_23_Line),
+        SELF(ResName_KuboView00C_24_Line),
+        SELF(ResName_KuboView00C_25_EqualizerBox),
+        SELF(ResName_KuboView00C_26_Box),
+        SELF(ResName_KuboView00C_27_Label),
+        SELF(ResName_KuboView00C_28_Label),
+        SELF(ResName_KuboView00C_29_Label),
+        SELF(ResName_KuboView00C_30_Label),
+        SELF(ResName_KuboView00C_31_Label),
+        SELF(ResName_KuboView00C_32_Label),
+        SELF(ResName_KuboView00C_33_Line),
+        SELF(ResName_KuboView00C_34_Line),
+        SELF(ResName_KuboView00C_35_Label),
         SELF(EqOnOff_name),
         SELF(w353_code),
     },
@@ -14805,211 +14805,211 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .EqOnOff_name = "EqOnOff",
 
-    .str_775 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_35_Label = ALIGNED_STRING(""),
 
-    .str_776 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_34_Line = ALIGNED_STRING(""),
 
-    .str_777 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_33_Line = ALIGNED_STRING(""),
 
-    .str_778 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_32_Label = ALIGNED_STRING(""),
 
-    .str_779 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_31_Label = ALIGNED_STRING(""),
 
-    .str_780 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_30_Label = ALIGNED_STRING(""),
 
-    .str_781 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_29_Label = ALIGNED_STRING(""),
 
-    .str_782 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_28_Label = ALIGNED_STRING(""),
 
-    .str_783 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_27_Label = ALIGNED_STRING(""),
 
-    .str_784 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_26_Box = ALIGNED_STRING(""),
 
-    .str_785 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_25_EqualizerBox = ALIGNED_STRING(""),
 
-    .str_786 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_24_Line = ALIGNED_STRING(""),
 
-    .str_787 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_23_Line = ALIGNED_STRING(""),
 
-    .str_788 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_22_Line = ALIGNED_STRING(""),
 
-    .str_789 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_21_Line = ALIGNED_STRING(""),
 
-    .str_790 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_20_Label = ALIGNED_STRING(""),
 
-    .str_791 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_19_Label = ALIGNED_STRING(""),
 
-    .str_792 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_18_Label = ALIGNED_STRING(""),
 
-    .str_793 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_17_Label = ALIGNED_STRING(""),
 
-    .str_794 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_16_Label = ALIGNED_STRING(""),
 
-    .str_795 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_15_Label = ALIGNED_STRING(""),
 
-    .str_796 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_14_Label = ALIGNED_STRING(""),
 
-    .str_797 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_13_Label = ALIGNED_STRING(""),
 
-    .str_798 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_12_Label = ALIGNED_STRING(""),
 
-    .str_799 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_11_Label = ALIGNED_STRING(""),
 
-    .str_800 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_10_Label = ALIGNED_STRING(""),
 
-    .str_801 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_9_Label = ALIGNED_STRING(""),
 
-    .str_802 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_8_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_803 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_7_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_804 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_6_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_805 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_5_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_806 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_4_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_807 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_3_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_808 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_2_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_809 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_1_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_810 = ALIGNED_STRING(""),
+    .ResName_KuboView00C_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_9 = {
-        SELF(str_823),
-        SELF(str_822),
-        SELF(str_821),
-        SELF(str_820),
-        SELF(str_819),
-        SELF(str_818),
-        SELF(str_817),
-        SELF(str_816),
-        SELF(str_815),
-        SELF(str_814),
-        SELF(str_813),
-        SELF(str_812),
+        SELF(ResName_KuboView00E_0_TtlScreen),
+        SELF(ResName_KuboView00E_1_AcIndexWideES),
+        SELF(ResName_KuboView00E_2_AcIndexWideES),
+        SELF(ResName_KuboView00E_3_Label),
+        SELF(ResName_KuboView00E_4_Label),
+        SELF(ResName_KuboView00E_5_AccIll),
+        SELF(ResName_KuboView00E_6_Box),
+        SELF(ResName_KuboView00E_7_Box),
+        SELF(ResName_KuboView00E_8_Label),
+        SELF(ResName_KuboView00E_9_Label),
+        SELF(ResName_KuboView00E_10_IvSdacc),
+        SELF(ResName_KuboView00E_11_IvIntEasySet),
         SELF(str_811),
     },
 
     .str_811 = ALIGNED_STRING(""),
 
-    .str_812 = ALIGNED_STRING(""),
+    .ResName_KuboView00E_11_IvIntEasySet = ALIGNED_STRING(""),
 
-    .str_813 = ALIGNED_STRING(""),
+    .ResName_KuboView00E_10_IvSdacc = ALIGNED_STRING(""),
 
-    .str_814 = ALIGNED_STRING(""),
+    .ResName_KuboView00E_9_Label = ALIGNED_STRING(""),
 
-    .str_815 = ALIGNED_STRING(""),
+    .ResName_KuboView00E_8_Label = ALIGNED_STRING(""),
 
-    .str_816 = ALIGNED_STRING(""),
+    .ResName_KuboView00E_7_Box = ALIGNED_STRING(""),
 
-    .str_817 = ALIGNED_STRING(""),
+    .ResName_KuboView00E_6_Box = ALIGNED_STRING(""),
 
-    .str_818 = ALIGNED_STRING(""),
+    .ResName_KuboView00E_5_AccIll = ALIGNED_STRING(""),
 
-    .str_819 = ALIGNED_STRING(""),
+    .ResName_KuboView00E_4_Label = ALIGNED_STRING(""),
 
-    .str_820 = ALIGNED_STRING(""),
+    .ResName_KuboView00E_3_Label = ALIGNED_STRING(""),
 
-    .str_821 = ALIGNED_STRING(""),
+    .ResName_KuboView00E_2_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_822 = ALIGNED_STRING(""),
+    .ResName_KuboView00E_1_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_823 = ALIGNED_STRING(""),
+    .ResName_KuboView00E_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_10 = {
-        SELF(str_836),
-        SELF(str_835),
-        SELF(str_834),
-        SELF(str_833),
-        SELF(str_832),
-        SELF(str_831),
-        SELF(str_830),
-        SELF(str_829),
-        SELF(str_828),
-        SELF(str_827),
-        SELF(str_826),
-        SELF(str_825),
+        SELF(ResName_KuboView080_0_TtlScreen),
+        SELF(ResName_KuboView080_1_AcTitleMenu),
+        SELF(ResName_KuboView080_2_Label),
+        SELF(ResName_KuboView080_3_AcModeMenu),
+        SELF(ResName_KuboView080_4_IvExitMode),
+        SELF(ResName_KuboView080_5_AcIndexEditSw),
+        SELF(ResName_KuboView080_6_AcIndexEditSw),
+        SELF(ResName_KuboView080_7_Box),
+        SELF(ResName_KuboView080_8_SngSel),
+        SELF(ResName_KuboView080_9_AcLanguageText),
+        SELF(ResName_KuboView080_10_AcLanguageText),
+        SELF(ResName_KuboView080_11_AcTitleMenu),
         SELF(str_824),
     },
 
     .str_824 = ALIGNED_STRING(""),
 
-    .str_825 = ALIGNED_STRING(""),
+    .ResName_KuboView080_11_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_826 = ALIGNED_STRING(""),
+    .ResName_KuboView080_10_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_827 = ALIGNED_STRING(""),
+    .ResName_KuboView080_9_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_828 = ALIGNED_STRING(""),
+    .ResName_KuboView080_8_SngSel = ALIGNED_STRING(""),
 
-    .str_829 = ALIGNED_STRING(""),
+    .ResName_KuboView080_7_Box = ALIGNED_STRING(""),
 
-    .str_830 = ALIGNED_STRING(""),
+    .ResName_KuboView080_6_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_831 = ALIGNED_STRING(""),
+    .ResName_KuboView080_5_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_832 = ALIGNED_STRING(""),
+    .ResName_KuboView080_4_IvExitMode = ALIGNED_STRING(""),
 
-    .str_833 = ALIGNED_STRING(""),
+    .ResName_KuboView080_3_AcModeMenu = ALIGNED_STRING(""),
 
-    .str_834 = ALIGNED_STRING(""),
+    .ResName_KuboView080_2_Label = ALIGNED_STRING(""),
 
-    .str_835 = ALIGNED_STRING(""),
+    .ResName_KuboView080_1_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_836 = ALIGNED_STRING(""),
+    .ResName_KuboView080_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_11 = {
-        SELF(str_857),
-        SELF(str_856),
-        SELF(str_855),
+        SELF(ResName_KuboView081_0_TtlScreen),
+        SELF(ResName_KuboView081_1_Label),
+        SELF(ResName_KuboView081_2_IvTrackSwitch),
         SELF(CycPlySw_name),
         SELF(w357_code),
         SELF(SqPlayGamen_name),
         SELF(w356_code),
-        SELF(str_854),
-        SELF(str_853),
-        SELF(str_852),
-        SELF(str_851),
-        SELF(str_850),
-        SELF(str_849),
-        SELF(str_848),
-        SELF(str_847),
-        SELF(str_846),
-        SELF(str_845),
+        SELF(ResName_KuboView081_7_TrTransposeBox),
+        SELF(ResName_KuboView081_8_TrChordBox),
+        SELF(ResName_KuboView081_9_Label),
+        SELF(ResName_KuboView081_10_Label),
+        SELF(ResName_KuboView081_11_AcTempoBox),
+        SELF(ResName_KuboView081_12_AcIndexEditSw),
+        SELF(ResName_KuboView081_13_AcIndexEditSw),
+        SELF(ResName_KuboView081_14_AcFuncEditSw),
+        SELF(ResName_KuboView081_15_Label),
+        SELF(ResName_KuboView081_16_IvPlayExit),
         SELF(PlySngSel_str),
         SELF(SngSelWin1_name),
         SELF(w355_code),
-        SELF(str_843),
-        SELF(str_842),
+        SELF(ResName_KuboView081_20_AcFuncEditSw),
+        SELF(ResName_KuboView081_21_Label),
         SELF(SngSelWin2_name),
         SELF(w354_code),
-        SELF(str_841),
-        SELF(str_840),
-        SELF(str_839),
-        SELF(str_838),
+        SELF(ResName_KuboView081_24_AcIndexEditSw),
+        SELF(ResName_KuboView081_25_Label),
+        SELF(ResName_KuboView081_26_IvShowHide),
+        SELF(ResName_KuboView081_27_SngSel2),
         SELF(str_837),
     },
 
     .str_837 = ALIGNED_STRING(""),
 
-    .str_838 = ALIGNED_STRING(""),
+    .ResName_KuboView081_27_SngSel2 = ALIGNED_STRING(""),
 
-    .str_839 = ALIGNED_STRING(""),
+    .ResName_KuboView081_26_IvShowHide = ALIGNED_STRING(""),
 
-    .str_840 = ALIGNED_STRING(""),
+    .ResName_KuboView081_25_Label = ALIGNED_STRING(""),
 
-    .str_841 = ALIGNED_STRING(""),
+    .ResName_KuboView081_24_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w354_code = ALIGNED_STRING(""),
 
     .SngSelWin2_name = ALIGNED_STRING("SngSelWin2"),
 
-    .str_842 = ALIGNED_STRING(""),
+    .ResName_KuboView081_21_Label = ALIGNED_STRING(""),
 
-    .str_843 = ALIGNED_STRING(""),
+    .ResName_KuboView081_20_AcFuncEditSw = ALIGNED_STRING(""),
 
     .w355_code = ALIGNED_STRING(""),
 
@@ -15017,25 +15017,25 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .PlySngSel_str = "PlySngSel",
 
-    .str_845 = ALIGNED_STRING(""),
+    .ResName_KuboView081_16_IvPlayExit = ALIGNED_STRING(""),
 
-    .str_846 = ALIGNED_STRING(""),
+    .ResName_KuboView081_15_Label = ALIGNED_STRING(""),
 
-    .str_847 = ALIGNED_STRING(""),
+    .ResName_KuboView081_14_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_848 = ALIGNED_STRING(""),
+    .ResName_KuboView081_13_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_849 = ALIGNED_STRING(""),
+    .ResName_KuboView081_12_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_850 = ALIGNED_STRING(""),
+    .ResName_KuboView081_11_AcTempoBox = ALIGNED_STRING(""),
 
-    .str_851 = ALIGNED_STRING(""),
+    .ResName_KuboView081_10_Label = ALIGNED_STRING(""),
 
-    .str_852 = ALIGNED_STRING(""),
+    .ResName_KuboView081_9_Label = ALIGNED_STRING(""),
 
-    .str_853 = ALIGNED_STRING(""),
+    .ResName_KuboView081_8_TrChordBox = ALIGNED_STRING(""),
 
-    .str_854 = ALIGNED_STRING(""),
+    .ResName_KuboView081_7_TrTransposeBox = ALIGNED_STRING(""),
 
     .w356_code = ALIGNED_STRING(""),
 
@@ -15045,164 +15045,164 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .CycPlySw_name = ALIGNED_STRING("CycPlySw"),
 
-    .str_855 = ALIGNED_STRING(""),
+    .ResName_KuboView081_2_IvTrackSwitch = ALIGNED_STRING(""),
 
-    .str_856 = ALIGNED_STRING(""),
+    .ResName_KuboView081_1_Label = ALIGNED_STRING(""),
 
-    .str_857 = ALIGNED_STRING(""),
+    .ResName_KuboView081_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_12 = {
-        SELF(str_866),
-        SELF(str_865),
-        SELF(str_864),
-        SELF(str_863),
-        SELF(str_862),
-        SELF(str_861),
-        SELF(str_860),
-        SELF(str_859),
+        SELF(ResName_KuboView082_0_TtlScreen),
+        SELF(ResName_KuboView082_1_SqplyVal),
+        SELF(ResName_KuboView082_2_PsEditBox),
+        SELF(ResName_KuboView082_3_Label),
+        SELF(ResName_KuboView082_4_PsEditBox),
+        SELF(ResName_KuboView082_5_PsEditBox),
+        SELF(ResName_KuboView082_6_AcIndexWideES),
+        SELF(ResName_KuboView082_7_Label),
         SELF(str_858),
     },
 
     .str_858 = ALIGNED_STRING(""),
 
-    .str_859 = ALIGNED_STRING(""),
+    .ResName_KuboView082_7_Label = ALIGNED_STRING(""),
 
-    .str_860 = ALIGNED_STRING(""),
+    .ResName_KuboView082_6_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_861 = ALIGNED_STRING(""),
+    .ResName_KuboView082_5_PsEditBox = ALIGNED_STRING(""),
 
-    .str_862 = ALIGNED_STRING(""),
+    .ResName_KuboView082_4_PsEditBox = ALIGNED_STRING(""),
 
-    .str_863 = ALIGNED_STRING(""),
+    .ResName_KuboView082_3_Label = ALIGNED_STRING(""),
 
-    .str_864 = ALIGNED_STRING(""),
+    .ResName_KuboView082_2_PsEditBox = ALIGNED_STRING(""),
 
-    .str_865 = ALIGNED_STRING(""),
+    .ResName_KuboView082_1_SqplyVal = ALIGNED_STRING(""),
 
-    .str_866 = ALIGNED_STRING(""),
+    .ResName_KuboView082_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_13 = {
-        SELF(str_883),
-        SELF(str_882),
-        SELF(str_881),
-        SELF(str_880),
-        SELF(str_879),
-        SELF(str_878),
-        SELF(str_877),
-        SELF(str_876),
-        SELF(str_875),
-        SELF(str_874),
-        SELF(str_873),
-        SELF(str_872),
-        SELF(str_871),
-        SELF(str_870),
-        SELF(str_869),
-        SELF(str_868),
+        SELF(ResName_KuboView083_0_TtlScreen),
+        SELF(ResName_KuboView083_1_Label),
+        SELF(ResName_KuboView083_2_IvExitMode),
+        SELF(ResName_KuboView083_3_AcTitleMenu),
+        SELF(ResName_KuboView083_4_Box),
+        SELF(ResName_KuboView083_5_AcIndexEditSw),
+        SELF(ResName_KuboView083_6_AcIndexEditSw),
+        SELF(ResName_KuboView083_7_SngSel),
+        SELF(ResName_KuboView083_8_AcFuncEditSw),
+        SELF(ResName_KuboView083_9_PsTrackSwitch),
+        SELF(ResName_KuboView083_10_PsTrackSwitch),
+        SELF(ResName_KuboView083_11_PsTrackSwitch),
+        SELF(ResName_KuboView083_12_PsTrackSwitch),
+        SELF(ResName_KuboView083_13_PsTrackSwitch),
+        SELF(ResName_KuboView083_14_AcLanguageText),
+        SELF(ResName_KuboView083_15_AcLanguageText),
         SELF(str_867),
     },
 
     .str_867 = ALIGNED_STRING(""),
 
-    .str_868 = ALIGNED_STRING(""),
+    .ResName_KuboView083_15_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_869 = ALIGNED_STRING(""),
+    .ResName_KuboView083_14_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_870 = ALIGNED_STRING(""),
+    .ResName_KuboView083_13_PsTrackSwitch = ALIGNED_STRING(""),
 
-    .str_871 = ALIGNED_STRING(""),
+    .ResName_KuboView083_12_PsTrackSwitch = ALIGNED_STRING(""),
 
-    .str_872 = ALIGNED_STRING(""),
+    .ResName_KuboView083_11_PsTrackSwitch = ALIGNED_STRING(""),
 
-    .str_873 = ALIGNED_STRING(""),
+    .ResName_KuboView083_10_PsTrackSwitch = ALIGNED_STRING(""),
 
-    .str_874 = ALIGNED_STRING(""),
+    .ResName_KuboView083_9_PsTrackSwitch = ALIGNED_STRING(""),
 
-    .str_875 = ALIGNED_STRING(""),
+    .ResName_KuboView083_8_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_876 = ALIGNED_STRING(""),
+    .ResName_KuboView083_7_SngSel = ALIGNED_STRING(""),
 
-    .str_877 = ALIGNED_STRING(""),
+    .ResName_KuboView083_6_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_878 = ALIGNED_STRING(""),
+    .ResName_KuboView083_5_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_879 = ALIGNED_STRING(""),
+    .ResName_KuboView083_4_Box = ALIGNED_STRING(""),
 
-    .str_880 = ALIGNED_STRING(""),
+    .ResName_KuboView083_3_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_881 = ALIGNED_STRING(""),
+    .ResName_KuboView083_2_IvExitMode = ALIGNED_STRING(""),
 
-    .str_882 = ALIGNED_STRING(""),
+    .ResName_KuboView083_1_Label = ALIGNED_STRING(""),
 
-    .str_883 = ALIGNED_STRING(""),
+    .ResName_KuboView083_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_14 = {
-        SELF(str_894),
-        SELF(str_893),
-        SELF(str_892),
-        SELF(str_891),
-        SELF(str_890),
-        SELF(str_889),
-        SELF(str_888),
-        SELF(str_887),
-        SELF(str_886),
-        SELF(str_885),
+        SELF(ResName_KuboView084_0_TtlScreen),
+        SELF(ResName_KuboView084_1_AcTitleMenu),
+        SELF(ResName_KuboView084_2_AcTitleMenu),
+        SELF(ResName_KuboView084_3_AcTitleMenu),
+        SELF(ResName_KuboView084_4_AcTitleMenu),
+        SELF(ResName_KuboView084_5_AcTitleMenu),
+        SELF(ResName_KuboView084_6_AcTitleMenu),
+        SELF(ResName_KuboView084_7_AcModeMenu),
+        SELF(ResName_KuboView084_8_AcModeMenu),
+        SELF(ResName_KuboView084_9_AcTitleMenu),
         SELF(str_884),
     },
 
     .str_884 = ALIGNED_STRING(""),
 
-    .str_885 = ALIGNED_STRING(""),
+    .ResName_KuboView084_9_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_886 = ALIGNED_STRING(""),
+    .ResName_KuboView084_8_AcModeMenu = ALIGNED_STRING(""),
 
-    .str_887 = ALIGNED_STRING(""),
+    .ResName_KuboView084_7_AcModeMenu = ALIGNED_STRING(""),
 
-    .str_888 = ALIGNED_STRING(""),
+    .ResName_KuboView084_6_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_889 = ALIGNED_STRING(""),
+    .ResName_KuboView084_5_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_890 = ALIGNED_STRING(""),
+    .ResName_KuboView084_4_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_891 = ALIGNED_STRING(""),
+    .ResName_KuboView084_3_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_892 = ALIGNED_STRING(""),
+    .ResName_KuboView084_2_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_893 = ALIGNED_STRING(""),
+    .ResName_KuboView084_1_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_894 = ALIGNED_STRING(""),
+    .ResName_KuboView084_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_15 = {
-        SELF(str_912),
-        SELF(str_911),
-        SELF(str_910),
-        SELF(str_909),
+        SELF(ResName_KuboView085_0_TtlScreen),
+        SELF(ResName_KuboView085_1_IvTrackSwitch),
+        SELF(ResName_KuboView085_2_AcFuncEditSw),
+        SELF(ResName_KuboView085_3_Label),
         SELF(CycRecSw_name),
         SELF(w361_code),
         SELF(MetRecSw_str),
         SELF(SqRealRecGamen_name),
         SELF(w360_code),
-        SELF(str_907),
-        SELF(str_906),
-        SELF(str_905),
-        SELF(str_904),
-        SELF(str_903),
-        SELF(str_902),
-        SELF(str_901),
-        SELF(str_900),
-        SELF(str_899),
-        SELF(str_898),
+        SELF(ResName_KuboView085_9_Label),
+        SELF(ResName_KuboView085_10_Label),
+        SELF(ResName_KuboView085_11_Label),
+        SELF(ResName_KuboView085_12_AcTempoBox),
+        SELF(ResName_KuboView085_13_TrTransposeBox),
+        SELF(ResName_KuboView085_14_TrChordBox),
+        SELF(ResName_KuboView085_15_Label),
+        SELF(ResName_KuboView085_16_SngSel),
+        SELF(ResName_KuboView085_17_AcFuncEditSw),
+        SELF(ResName_KuboView085_18_Label),
         SELF(CycRecClrSw_str),
         SELF(CycRecClrStr_name),
         SELF(w359_code),
         SELF(CycClrSw_name),
         SELF(w358_code),
-        SELF(str_896),
+        SELF(ResName_KuboView085_24_Label),
         SELF(str_895),
     },
 
     .str_895 = ALIGNED_STRING(""),
 
-    .str_896 = ALIGNED_STRING(""),
+    .ResName_KuboView085_24_Label = ALIGNED_STRING(""),
 
     .w358_code = ALIGNED_STRING(""),
 
@@ -15214,25 +15214,25 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .CycRecClrSw_str = "CycRecClrSw",
 
-    .str_898 = ALIGNED_STRING(""),
+    .ResName_KuboView085_18_Label = ALIGNED_STRING(""),
 
-    .str_899 = ALIGNED_STRING(""),
+    .ResName_KuboView085_17_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_900 = ALIGNED_STRING(""),
+    .ResName_KuboView085_16_SngSel = ALIGNED_STRING(""),
 
-    .str_901 = ALIGNED_STRING(""),
+    .ResName_KuboView085_15_Label = ALIGNED_STRING(""),
 
-    .str_902 = ALIGNED_STRING(""),
+    .ResName_KuboView085_14_TrChordBox = ALIGNED_STRING(""),
 
-    .str_903 = ALIGNED_STRING(""),
+    .ResName_KuboView085_13_TrTransposeBox = ALIGNED_STRING(""),
 
-    .str_904 = ALIGNED_STRING(""),
+    .ResName_KuboView085_12_AcTempoBox = ALIGNED_STRING(""),
 
-    .str_905 = ALIGNED_STRING(""),
+    .ResName_KuboView085_11_Label = ALIGNED_STRING(""),
 
-    .str_906 = ALIGNED_STRING(""),
+    .ResName_KuboView085_10_Label = ALIGNED_STRING(""),
 
-    .str_907 = ALIGNED_STRING(""),
+    .ResName_KuboView085_9_Label = ALIGNED_STRING(""),
 
     .w360_code = ALIGNED_STRING(""),
 
@@ -15244,98 +15244,98 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .CycRecSw_name = ALIGNED_STRING("CycRecSw"),
 
-    .str_909 = ALIGNED_STRING(""),
+    .ResName_KuboView085_3_Label = ALIGNED_STRING(""),
 
-    .str_910 = ALIGNED_STRING(""),
+    .ResName_KuboView085_2_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_911 = ALIGNED_STRING(""),
+    .ResName_KuboView085_1_IvTrackSwitch = ALIGNED_STRING(""),
 
-    .str_912 = ALIGNED_STRING(""),
+    .ResName_KuboView085_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_16 = {
-        SELF(str_922),
-        SELF(str_921),
-        SELF(str_920),
-        SELF(str_919),
-        SELF(str_918),
-        SELF(str_917),
-        SELF(str_916),
+        SELF(ResName_KuboView086_0_TtlScreen),
+        SELF(ResName_KuboView086_1_SqplyVal),
+        SELF(ResName_KuboView086_2_PsEditBox),
+        SELF(ResName_KuboView086_3_Label),
+        SELF(ResName_KuboView086_4_PsEditBox),
+        SELF(ResName_KuboView086_5_AcIndexWideES),
+        SELF(ResName_KuboView086_6_Label),
         SELF(MetCycRecSw_name),
         SELF(w362_code),
-        SELF(str_915),
-        SELF(str_914),
+        SELF(ResName_KuboView086_9_Label),
+        SELF(ResName_KuboView086_10_PsEditBox),
         SELF(str_913),
     },
 
     .str_913 = ALIGNED_STRING(""),
 
-    .str_914 = ALIGNED_STRING(""),
+    .ResName_KuboView086_10_PsEditBox = ALIGNED_STRING(""),
 
-    .str_915 = ALIGNED_STRING(""),
+    .ResName_KuboView086_9_Label = ALIGNED_STRING(""),
 
     .w362_code = ALIGNED_STRING(""),
 
     .MetCycRecSw_name = "MetCycRecSw",
 
-    .str_916 = ALIGNED_STRING(""),
+    .ResName_KuboView086_6_Label = ALIGNED_STRING(""),
 
-    .str_917 = ALIGNED_STRING(""),
+    .ResName_KuboView086_5_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_918 = ALIGNED_STRING(""),
+    .ResName_KuboView086_4_PsEditBox = ALIGNED_STRING(""),
 
-    .str_919 = ALIGNED_STRING(""),
+    .ResName_KuboView086_3_Label = ALIGNED_STRING(""),
 
-    .str_920 = ALIGNED_STRING(""),
+    .ResName_KuboView086_2_PsEditBox = ALIGNED_STRING(""),
 
-    .str_921 = ALIGNED_STRING(""),
+    .ResName_KuboView086_1_SqplyVal = ALIGNED_STRING(""),
 
-    .str_922 = ALIGNED_STRING(""),
+    .ResName_KuboView086_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_17 = {
-        SELF(str_943),
-        SELF(str_942),
-        SELF(str_941),
+        SELF(ResName_KuboView087_0_TtlScreen),
+        SELF(ResName_KuboView087_1_IvTrackSwitch),
+        SELF(ResName_KuboView087_2_Box),
         SELF(SqPunchGamen_name),
         SELF(w364_code),
-        SELF(str_940),
-        SELF(str_939),
-        SELF(str_938),
-        SELF(str_937),
-        SELF(str_936),
-        SELF(str_935),
-        SELF(str_934),
-        SELF(str_933),
+        SELF(ResName_KuboView087_5_Label),
+        SELF(ResName_KuboView087_6_Label),
+        SELF(ResName_KuboView087_7_Label),
+        SELF(ResName_KuboView087_8_AcTempoBox),
+        SELF(ResName_KuboView087_9_TrTransposeBox),
+        SELF(ResName_KuboView087_10_TrChordBox),
+        SELF(ResName_KuboView087_11_Label),
+        SELF(ResName_KuboView087_12_SngSel),
         SELF(MetPunchSw_str),
         SELF(PunchInOutSw_name),
         SELF(w363_code),
-        SELF(str_931),
-        SELF(str_930),
-        SELF(str_929),
-        SELF(str_928),
-        SELF(str_927),
-        SELF(str_926),
-        SELF(str_925),
-        SELF(str_924),
+        SELF(ResName_KuboView087_16_AcIndexEditSw),
+        SELF(ResName_KuboView087_17_AcIndexEditSw),
+        SELF(ResName_KuboView087_18_AcFuncEditSw),
+        SELF(ResName_KuboView087_19_Label),
+        SELF(ResName_KuboView087_20_IvPunchExit),
+        SELF(ResName_KuboView087_21_AcFuncEditSw),
+        SELF(ResName_KuboView087_22_Label),
+        SELF(ResName_KuboView087_23_Label),
         SELF(str_923),
     },
 
     .str_923 = ALIGNED_STRING(""),
 
-    .str_924 = ALIGNED_STRING(""),
+    .ResName_KuboView087_23_Label = ALIGNED_STRING(""),
 
-    .str_925 = ALIGNED_STRING(""),
+    .ResName_KuboView087_22_Label = ALIGNED_STRING(""),
 
-    .str_926 = ALIGNED_STRING(""),
+    .ResName_KuboView087_21_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_927 = ALIGNED_STRING(""),
+    .ResName_KuboView087_20_IvPunchExit = ALIGNED_STRING(""),
 
-    .str_928 = ALIGNED_STRING(""),
+    .ResName_KuboView087_19_Label = ALIGNED_STRING(""),
 
-    .str_929 = ALIGNED_STRING(""),
+    .ResName_KuboView087_18_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_930 = ALIGNED_STRING(""),
+    .ResName_KuboView087_17_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_931 = ALIGNED_STRING(""),
+    .ResName_KuboView087_16_AcIndexEditSw = ALIGNED_STRING(""),
 
     .w363_code = ALIGNED_STRING(""),
 
@@ -15343,1213 +15343,1213 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .MetPunchSw_str = ALIGNED_STRING("MetPunchSw"),
 
-    .str_933 = ALIGNED_STRING(""),
+    .ResName_KuboView087_12_SngSel = ALIGNED_STRING(""),
 
-    .str_934 = ALIGNED_STRING(""),
+    .ResName_KuboView087_11_Label = ALIGNED_STRING(""),
 
-    .str_935 = ALIGNED_STRING(""),
+    .ResName_KuboView087_10_TrChordBox = ALIGNED_STRING(""),
 
-    .str_936 = ALIGNED_STRING(""),
+    .ResName_KuboView087_9_TrTransposeBox = ALIGNED_STRING(""),
 
-    .str_937 = ALIGNED_STRING(""),
+    .ResName_KuboView087_8_AcTempoBox = ALIGNED_STRING(""),
 
-    .str_938 = ALIGNED_STRING(""),
+    .ResName_KuboView087_7_Label = ALIGNED_STRING(""),
 
-    .str_939 = ALIGNED_STRING(""),
+    .ResName_KuboView087_6_Label = ALIGNED_STRING(""),
 
-    .str_940 = ALIGNED_STRING(""),
+    .ResName_KuboView087_5_Label = ALIGNED_STRING(""),
 
     .w364_code = ALIGNED_STRING(""),
 
     .SqPunchGamen_name = ALIGNED_STRING("SqPunchGamen"),
 
-    .str_941 = ALIGNED_STRING(""),
+    .ResName_KuboView087_2_Box = ALIGNED_STRING(""),
 
-    .str_942 = ALIGNED_STRING(""),
+    .ResName_KuboView087_1_IvTrackSwitch = ALIGNED_STRING(""),
 
-    .str_943 = ALIGNED_STRING(""),
+    .ResName_KuboView087_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_18 = {
-        SELF(str_954),
-        SELF(str_953),
-        SELF(str_952),
-        SELF(str_951),
+        SELF(ResName_KuboView088_0_TtlScreen),
+        SELF(ResName_KuboView088_1_AcIndexWideES),
+        SELF(ResName_KuboView088_2_Label),
+        SELF(ResName_KuboView088_3_Label),
         SELF(MetPunchmSw_name),
         SELF(w365_code),
-        SELF(str_950),
-        SELF(str_949),
-        SELF(str_948),
-        SELF(str_947),
-        SELF(str_946),
-        SELF(str_945),
+        SELF(ResName_KuboView088_6_PsEditBox),
+        SELF(ResName_KuboView088_7_PsEditBox),
+        SELF(ResName_KuboView088_8_PsEditBox),
+        SELF(ResName_KuboView088_9_AcLanguageText),
+        SELF(ResName_KuboView088_10_IvAutoPunchExit),
+        SELF(ResName_KuboView088_11_TtlScreen),
         SELF(str_944),
     },
 
     .str_944 = ALIGNED_STRING(""),
 
-    .str_945 = ALIGNED_STRING(""),
+    .ResName_KuboView088_11_TtlScreen = ALIGNED_STRING(""),
 
-    .str_946 = ALIGNED_STRING(""),
+    .ResName_KuboView088_10_IvAutoPunchExit = ALIGNED_STRING(""),
 
-    .str_947 = ALIGNED_STRING(""),
+    .ResName_KuboView088_9_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_948 = ALIGNED_STRING(""),
+    .ResName_KuboView088_8_PsEditBox = ALIGNED_STRING(""),
 
-    .str_949 = ALIGNED_STRING(""),
+    .ResName_KuboView088_7_PsEditBox = ALIGNED_STRING(""),
 
-    .str_950 = ALIGNED_STRING(""),
+    .ResName_KuboView088_6_PsEditBox = ALIGNED_STRING(""),
 
     .w365_code = ALIGNED_STRING(""),
 
     .MetPunchmSw_name = "MetPunchmSw",
 
-    .str_951 = ALIGNED_STRING(""),
+    .ResName_KuboView088_3_Label = ALIGNED_STRING(""),
 
-    .str_952 = ALIGNED_STRING(""),
+    .ResName_KuboView088_2_Label = ALIGNED_STRING(""),
 
-    .str_953 = ALIGNED_STRING(""),
+    .ResName_KuboView088_1_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_954 = ALIGNED_STRING(""),
+    .ResName_KuboView088_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_19 = {
-        SELF(str_959),
-        SELF(str_958),
-        SELF(str_957),
-        SELF(str_956),
+        SELF(ResName_KuboView08D_0_TtlScreen),
+        SELF(ResName_KuboView08D_1_AcFuncEditSw),
+        SELF(ResName_KuboView08D_2_AcLanguageText),
+        SELF(ResName_KuboView08D_3_IvPnlWrExit),
         SELF(str_955),
     },
 
     .str_955 = ALIGNED_STRING(""),
 
-    .str_956 = ALIGNED_STRING(""),
+    .ResName_KuboView08D_3_IvPnlWrExit = ALIGNED_STRING(""),
 
-    .str_957 = ALIGNED_STRING(""),
+    .ResName_KuboView08D_2_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_958 = ALIGNED_STRING(""),
+    .ResName_KuboView08D_1_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_959 = ALIGNED_STRING(""),
+    .ResName_KuboView08D_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_20 = {
-        SELF(str_975),
-        SELF(str_974),
-        SELF(str_973),
-        SELF(str_972),
-        SELF(str_971),
-        SELF(str_970),
-        SELF(str_969),
-        SELF(str_968),
-        SELF(str_967),
+        SELF(ResName_KuboView090_0_TtlScreen),
+        SELF(ResName_KuboView090_1_AcIndexWideES),
+        SELF(ResName_KuboView090_2_Label),
+        SELF(ResName_KuboView090_3_SqedtVal3),
+        SELF(ResName_KuboView090_4_Box),
+        SELF(ResName_KuboView090_5_Label),
+        SELF(ResName_KuboView090_6_Label),
+        SELF(ResName_KuboView090_7_MsgToTtl),
+        SELF(ResName_KuboView090_8_AcFuncEditSw),
         SELF(SoclSureDisp_name),
         SELF(w366_code),
-        SELF(str_966),
-        SELF(str_965),
-        SELF(str_964),
-        SELF(str_963),
-        SELF(str_962),
-        SELF(str_961),
+        SELF(ResName_KuboView090_11_AcScreenMenu),
+        SELF(ResName_KuboView090_12_AcFuncEditSw),
+        SELF(ResName_KuboView090_13_IvExitScreen),
+        SELF(ResName_KuboView090_14_AcLanguageText),
+        SELF(ResName_KuboView090_15_AcLanguageText),
+        SELF(ResName_KuboView090_16_AcLanguageText),
         SELF(str_960),
     },
 
     .str_960 = ALIGNED_STRING(""),
 
-    .str_961 = ALIGNED_STRING(""),
+    .ResName_KuboView090_16_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_962 = ALIGNED_STRING(""),
+    .ResName_KuboView090_15_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_963 = ALIGNED_STRING(""),
+    .ResName_KuboView090_14_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_964 = ALIGNED_STRING(""),
+    .ResName_KuboView090_13_IvExitScreen = ALIGNED_STRING(""),
 
-    .str_965 = ALIGNED_STRING(""),
+    .ResName_KuboView090_12_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_966 = ALIGNED_STRING(""),
+    .ResName_KuboView090_11_AcScreenMenu = ALIGNED_STRING(""),
 
     .w366_code = ALIGNED_STRING(""),
 
     .SoclSureDisp_name = ALIGNED_STRING("SoclSureDisp"),
 
-    .str_967 = ALIGNED_STRING(""),
+    .ResName_KuboView090_8_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_968 = ALIGNED_STRING(""),
+    .ResName_KuboView090_7_MsgToTtl = ALIGNED_STRING(""),
 
-    .str_969 = ALIGNED_STRING(""),
+    .ResName_KuboView090_6_Label = ALIGNED_STRING(""),
 
-    .str_970 = ALIGNED_STRING(""),
+    .ResName_KuboView090_5_Label = ALIGNED_STRING(""),
 
-    .str_971 = ALIGNED_STRING(""),
+    .ResName_KuboView090_4_Box = ALIGNED_STRING(""),
 
-    .str_972 = ALIGNED_STRING(""),
+    .ResName_KuboView090_3_SqedtVal3 = ALIGNED_STRING(""),
 
-    .str_973 = ALIGNED_STRING(""),
+    .ResName_KuboView090_2_Label = ALIGNED_STRING(""),
 
-    .str_974 = ALIGNED_STRING(""),
+    .ResName_KuboView090_1_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_975 = ALIGNED_STRING(""),
+    .ResName_KuboView090_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_21 = {
-        SELF(str_993),
-        SELF(str_992),
-        SELF(str_991),
-        SELF(str_990),
-        SELF(str_989),
-        SELF(str_988),
-        SELF(str_987),
-        SELF(str_986),
-        SELF(str_985),
-        SELF(str_984),
-        SELF(str_983),
+        SELF(ResName_KuboView091_0_TtlScreen),
+        SELF(ResName_KuboView091_1_SqedtVal2),
+        SELF(ResName_KuboView091_2_SqedtFix),
+        SELF(ResName_KuboView091_3_AcIndexWideES),
+        SELF(ResName_KuboView091_4_AcIndexWideES),
+        SELF(ResName_KuboView091_5_AcIndexWideES),
+        SELF(ResName_KuboView091_6_AcIndexWideES),
+        SELF(ResName_KuboView091_7_IvSongCopyExit),
+        SELF(ResName_KuboView091_8_IvSongCopyExit),
+        SELF(ResName_KuboView091_9_MsgToTtl),
+        SELF(ResName_KuboView091_10_AcFuncEditSw),
         SELF(SngCpSureDisp_name),
         SELF(w367_code),
-        SELF(str_982),
-        SELF(str_981),
-        SELF(str_980),
-        SELF(str_979),
-        SELF(str_978),
-        SELF(str_977),
+        SELF(ResName_KuboView091_13_Box),
+        SELF(ResName_KuboView091_14_Box),
+        SELF(ResName_KuboView091_15_AcScreenMenu),
+        SELF(ResName_KuboView091_16_IvExitScreen),
+        SELF(ResName_KuboView091_17_AcFuncEditSw),
+        SELF(ResName_KuboView091_18_AcLanguageText),
         SELF(str_976),
     },
 
     .str_976 = ALIGNED_STRING(""),
 
-    .str_977 = ALIGNED_STRING(""),
+    .ResName_KuboView091_18_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_978 = ALIGNED_STRING(""),
+    .ResName_KuboView091_17_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_979 = ALIGNED_STRING(""),
+    .ResName_KuboView091_16_IvExitScreen = ALIGNED_STRING(""),
 
-    .str_980 = ALIGNED_STRING(""),
+    .ResName_KuboView091_15_AcScreenMenu = ALIGNED_STRING(""),
 
-    .str_981 = ALIGNED_STRING(""),
+    .ResName_KuboView091_14_Box = ALIGNED_STRING(""),
 
-    .str_982 = ALIGNED_STRING(""),
+    .ResName_KuboView091_13_Box = ALIGNED_STRING(""),
 
     .w367_code = ALIGNED_STRING(""),
 
     .SngCpSureDisp_name = "SngCpSureDisp",
 
-    .str_983 = ALIGNED_STRING(""),
+    .ResName_KuboView091_10_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_984 = ALIGNED_STRING(""),
+    .ResName_KuboView091_9_MsgToTtl = ALIGNED_STRING(""),
 
-    .str_985 = ALIGNED_STRING(""),
+    .ResName_KuboView091_8_IvSongCopyExit = ALIGNED_STRING(""),
 
-    .str_986 = ALIGNED_STRING(""),
+    .ResName_KuboView091_7_IvSongCopyExit = ALIGNED_STRING(""),
 
-    .str_987 = ALIGNED_STRING(""),
+    .ResName_KuboView091_6_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_988 = ALIGNED_STRING(""),
+    .ResName_KuboView091_5_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_989 = ALIGNED_STRING(""),
+    .ResName_KuboView091_4_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_990 = ALIGNED_STRING(""),
+    .ResName_KuboView091_3_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_991 = ALIGNED_STRING(""),
+    .ResName_KuboView091_2_SqedtFix = ALIGNED_STRING(""),
 
-    .str_992 = ALIGNED_STRING(""),
+    .ResName_KuboView091_1_SqedtVal2 = ALIGNED_STRING(""),
 
-    .str_993 = ALIGNED_STRING(""),
+    .ResName_KuboView091_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_22 = {
-        SELF(str_1018),
-        SELF(str_1017),
+        SELF(ResName_KuboView093_0_TtlScreen),
+        SELF(ResName_KuboView093_1_IvPageControl),
         SELF(EdMenuPage_name),
         SELF(w368_code),
-        SELF(str_1016),
-        SELF(str_1015),
+        SELF(ResName_KuboView093_4_IvExitMode),
+        SELF(ResName_KuboView093_5_IvShowHide),
         SELF(SQEMENU_1_str),
-        SELF(str_1013),
-        SELF(str_1012),
-        SELF(str_1011),
-        SELF(str_1010),
-        SELF(str_1009),
-        SELF(str_1008),
-        SELF(str_1007),
-        SELF(str_1006),
-        SELF(str_1005),
-        SELF(str_1004),
+        SELF(ResName_KuboView093_7_AcTitleMenu),
+        SELF(ResName_KuboView093_8_AcTitleMenu),
+        SELF(ResName_KuboView093_9_AcTitleMenu),
+        SELF(ResName_KuboView093_10_AcTitleMenu),
+        SELF(ResName_KuboView093_11_AcTitleMenu),
+        SELF(ResName_KuboView093_12_AcTitleMenu),
+        SELF(ResName_KuboView093_13_AcTitleMenu),
+        SELF(ResName_KuboView093_14_AcTitleMenu),
+        SELF(ResName_KuboView093_15_AcTitleMenu),
+        SELF(ResName_KuboView093_16_AcTitleMenu),
         SELF(SQEMENU_2_str),
-        SELF(str_1002),
-        SELF(str_1001),
-        SELF(str_1000),
-        SELF(str_999),
-        SELF(str_998),
-        SELF(str_997),
-        SELF(str_996),
-        SELF(str_995),
+        SELF(ResName_KuboView093_18_AcTitleMenu),
+        SELF(ResName_KuboView093_19_Line),
+        SELF(ResName_KuboView093_20_AcTitleMenu),
+        SELF(ResName_KuboView093_21_AcTitleMenu),
+        SELF(ResName_KuboView093_22_AcTitleMenu),
+        SELF(ResName_KuboView093_23_Label),
+        SELF(ResName_KuboView093_24_Line),
+        SELF(ResName_KuboView093_25_Line),
         SELF(str_994),
     },
 
     .str_994 = ALIGNED_STRING(""),
 
-    .str_995 = ALIGNED_STRING(""),
+    .ResName_KuboView093_25_Line = ALIGNED_STRING(""),
 
-    .str_996 = ALIGNED_STRING(""),
+    .ResName_KuboView093_24_Line = ALIGNED_STRING(""),
 
-    .str_997 = ALIGNED_STRING(""),
+    .ResName_KuboView093_23_Label = ALIGNED_STRING(""),
 
-    .str_998 = ALIGNED_STRING(""),
+    .ResName_KuboView093_22_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_999 = ALIGNED_STRING(""),
+    .ResName_KuboView093_21_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1000 = ALIGNED_STRING(""),
+    .ResName_KuboView093_20_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1001 = ALIGNED_STRING(""),
+    .ResName_KuboView093_19_Line = ALIGNED_STRING(""),
 
-    .str_1002 = ALIGNED_STRING(""),
+    .ResName_KuboView093_18_AcTitleMenu = ALIGNED_STRING(""),
 
     .SQEMENU_2_str = "SQEMENU_2",
 
-    .str_1004 = ALIGNED_STRING(""),
+    .ResName_KuboView093_16_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1005 = ALIGNED_STRING(""),
+    .ResName_KuboView093_15_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1006 = ALIGNED_STRING(""),
+    .ResName_KuboView093_14_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1007 = ALIGNED_STRING(""),
+    .ResName_KuboView093_13_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1008 = ALIGNED_STRING(""),
+    .ResName_KuboView093_12_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1009 = ALIGNED_STRING(""),
+    .ResName_KuboView093_11_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1010 = ALIGNED_STRING(""),
+    .ResName_KuboView093_10_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1011 = ALIGNED_STRING(""),
+    .ResName_KuboView093_9_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1012 = ALIGNED_STRING(""),
+    .ResName_KuboView093_8_AcTitleMenu = ALIGNED_STRING(""),
 
-    .str_1013 = ALIGNED_STRING(""),
+    .ResName_KuboView093_7_AcTitleMenu = ALIGNED_STRING(""),
 
     .SQEMENU_1_str = "SQEMENU_1",
 
-    .str_1015 = ALIGNED_STRING(""),
+    .ResName_KuboView093_5_IvShowHide = ALIGNED_STRING(""),
 
-    .str_1016 = ALIGNED_STRING(""),
+    .ResName_KuboView093_4_IvExitMode = ALIGNED_STRING(""),
 
     .w368_code = ALIGNED_STRING(""),
 
     .EdMenuPage_name = ALIGNED_STRING("EdMenuPage"),
 
-    .str_1017 = ALIGNED_STRING(""),
+    .ResName_KuboView093_1_IvPageControl = ALIGNED_STRING(""),
 
-    .str_1018 = ALIGNED_STRING(""),
+    .ResName_KuboView093_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_23 = {
-        SELF(str_1023),
-        SELF(str_1022),
-        SELF(str_1021),
-        SELF(str_1020),
+        SELF(ResName_KuboView094_0_TtlScreen),
+        SELF(ResName_KuboView094_1_Label),
+        SELF(ResName_KuboView094_2_IvTrackSwitch),
+        SELF(ResName_KuboView094_3_AcLanguageText),
         SELF(str_1019),
     },
 
     .str_1019 = ALIGNED_STRING(""),
 
-    .str_1020 = ALIGNED_STRING(""),
+    .ResName_KuboView094_3_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1021 = ALIGNED_STRING(""),
+    .ResName_KuboView094_2_IvTrackSwitch = ALIGNED_STRING(""),
 
-    .str_1022 = ALIGNED_STRING(""),
+    .ResName_KuboView094_1_Label = ALIGNED_STRING(""),
 
-    .str_1023 = ALIGNED_STRING(""),
+    .ResName_KuboView094_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_24 = {
-        SELF(str_1051),
-        SELF(str_1050),
-        SELF(str_1049),
-        SELF(str_1048),
-        SELF(str_1047),
-        SELF(str_1046),
-        SELF(str_1045),
-        SELF(str_1044),
-        SELF(str_1043),
-        SELF(str_1042),
-        SELF(str_1041),
-        SELF(str_1040),
-        SELF(str_1039),
-        SELF(str_1038),
-        SELF(str_1037),
-        SELF(str_1036),
-        SELF(str_1035),
-        SELF(str_1034),
-        SELF(str_1033),
-        SELF(str_1032),
+        SELF(ResName_KuboView095_0_TtlScreen),
+        SELF(ResName_KuboView095_1_AcIndexEditSw),
+        SELF(ResName_KuboView095_2_AcIndexEditSw),
+        SELF(ResName_KuboView095_3_AcIndexEditSw),
+        SELF(ResName_KuboView095_4_AcIndexEditSw),
+        SELF(ResName_KuboView095_5_AcIndexEditSw),
+        SELF(ResName_KuboView095_6_AcIndexEditSw),
+        SELF(ResName_KuboView095_7_Label),
+        SELF(ResName_KuboView095_8_Label),
+        SELF(ResName_KuboView095_9_Label),
+        SELF(ResName_KuboView095_10_Label),
+        SELF(ResName_KuboView095_11_Label),
+        SELF(ResName_KuboView095_12_Label),
+        SELF(ResName_KuboView095_13_Label),
+        SELF(ResName_KuboView095_14_AcIndexEditSw),
+        SELF(ResName_KuboView095_15_AcIndexEditSw),
+        SELF(ResName_KuboView095_16_Label),
+        SELF(ResName_KuboView095_17_NoteEditBox),
+        SELF(ResName_KuboView095_18_Box),
+        SELF(ResName_KuboView095_19_VwUserBitmap),
         SELF(NTBitmap_str),
-        SELF(str_1030),
-        SELF(str_1029),
-        SELF(str_1028),
-        SELF(str_1027),
-        SELF(str_1026),
-        SELF(str_1025),
+        SELF(ResName_KuboView095_21_AcIndexEditSw),
+        SELF(ResName_KuboView095_22_Label),
+        SELF(ResName_KuboView095_23_AcIndexEditSw),
+        SELF(ResName_KuboView095_24_Label),
+        SELF(ResName_KuboView095_25_AcIndexEditSw),
+        SELF(ResName_KuboView095_26_AcIndexEditSw),
         SELF(str_1024),
     },
 
     .str_1024 = ALIGNED_STRING(""),
 
-    .str_1025 = ALIGNED_STRING(""),
+    .ResName_KuboView095_26_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1026 = ALIGNED_STRING(""),
+    .ResName_KuboView095_25_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1027 = ALIGNED_STRING(""),
+    .ResName_KuboView095_24_Label = ALIGNED_STRING(""),
 
-    .str_1028 = ALIGNED_STRING(""),
+    .ResName_KuboView095_23_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1029 = ALIGNED_STRING(""),
+    .ResName_KuboView095_22_Label = ALIGNED_STRING(""),
 
-    .str_1030 = ALIGNED_STRING(""),
+    .ResName_KuboView095_21_AcIndexEditSw = ALIGNED_STRING(""),
 
     .NTBitmap_str = ALIGNED_STRING("NTBitmap"),
 
-    .str_1032 = ALIGNED_STRING(""),
+    .ResName_KuboView095_19_VwUserBitmap = ALIGNED_STRING(""),
 
-    .str_1033 = ALIGNED_STRING(""),
+    .ResName_KuboView095_18_Box = ALIGNED_STRING(""),
 
-    .str_1034 = ALIGNED_STRING(""),
+    .ResName_KuboView095_17_NoteEditBox = ALIGNED_STRING(""),
 
-    .str_1035 = ALIGNED_STRING(""),
+    .ResName_KuboView095_16_Label = ALIGNED_STRING(""),
 
-    .str_1036 = ALIGNED_STRING(""),
+    .ResName_KuboView095_15_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1037 = ALIGNED_STRING(""),
+    .ResName_KuboView095_14_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1038 = ALIGNED_STRING(""),
+    .ResName_KuboView095_13_Label = ALIGNED_STRING(""),
 
-    .str_1039 = ALIGNED_STRING(""),
+    .ResName_KuboView095_12_Label = ALIGNED_STRING(""),
 
-    .str_1040 = ALIGNED_STRING(""),
+    .ResName_KuboView095_11_Label = ALIGNED_STRING(""),
 
-    .str_1041 = ALIGNED_STRING(""),
+    .ResName_KuboView095_10_Label = ALIGNED_STRING(""),
 
-    .str_1042 = ALIGNED_STRING(""),
+    .ResName_KuboView095_9_Label = ALIGNED_STRING(""),
 
-    .str_1043 = ALIGNED_STRING(""),
+    .ResName_KuboView095_8_Label = ALIGNED_STRING(""),
 
-    .str_1044 = ALIGNED_STRING(""),
+    .ResName_KuboView095_7_Label = ALIGNED_STRING(""),
 
-    .str_1045 = ALIGNED_STRING(""),
+    .ResName_KuboView095_6_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1046 = ALIGNED_STRING(""),
+    .ResName_KuboView095_5_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1047 = ALIGNED_STRING(""),
+    .ResName_KuboView095_4_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1048 = ALIGNED_STRING(""),
+    .ResName_KuboView095_3_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1049 = ALIGNED_STRING(""),
+    .ResName_KuboView095_2_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1050 = ALIGNED_STRING(""),
+    .ResName_KuboView095_1_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1051 = ALIGNED_STRING(""),
+    .ResName_KuboView095_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_25 = {
-        SELF(str_1060),
-        SELF(str_1059),
-        SELF(str_1058),
-        SELF(str_1057),
-        SELF(str_1056),
-        SELF(str_1055),
-        SELF(str_1054),
-        SELF(str_1053),
+        SELF(ResName_KuboView096_0_TtlScreen),
+        SELF(ResName_KuboView096_1_Label),
+        SELF(ResName_KuboView096_2_AcIndexWideES),
+        SELF(ResName_KuboView096_3_Label),
+        SELF(ResName_KuboView096_4_SqplyVal),
+        SELF(ResName_KuboView096_5_PsEditBox),
+        SELF(ResName_KuboView096_6_PsEditBox),
+        SELF(ResName_KuboView096_7_PsEditBox),
         SELF(str_1052),
     },
 
     .str_1052 = ALIGNED_STRING(""),
 
-    .str_1053 = ALIGNED_STRING(""),
+    .ResName_KuboView096_7_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1054 = ALIGNED_STRING(""),
+    .ResName_KuboView096_6_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1055 = ALIGNED_STRING(""),
+    .ResName_KuboView096_5_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1056 = ALIGNED_STRING(""),
+    .ResName_KuboView096_4_SqplyVal = ALIGNED_STRING(""),
 
-    .str_1057 = ALIGNED_STRING(""),
+    .ResName_KuboView096_3_Label = ALIGNED_STRING(""),
 
-    .str_1058 = ALIGNED_STRING(""),
+    .ResName_KuboView096_2_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1059 = ALIGNED_STRING(""),
+    .ResName_KuboView096_1_Label = ALIGNED_STRING(""),
 
-    .str_1060 = ALIGNED_STRING(""),
+    .ResName_KuboView096_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_26 = {
-        SELF(str_1065),
-        SELF(str_1064),
-        SELF(str_1063),
-        SELF(str_1062),
+        SELF(ResName_KuboView097_0_TtlScreen),
+        SELF(ResName_KuboView097_1_Label),
+        SELF(ResName_KuboView097_2_IvTrackSwitch),
+        SELF(ResName_KuboView097_3_AcLanguageText),
         SELF(str_1061),
     },
 
     .str_1061 = ALIGNED_STRING(""),
 
-    .str_1062 = ALIGNED_STRING(""),
+    .ResName_KuboView097_3_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1063 = ALIGNED_STRING(""),
+    .ResName_KuboView097_2_IvTrackSwitch = ALIGNED_STRING(""),
 
-    .str_1064 = ALIGNED_STRING(""),
+    .ResName_KuboView097_1_Label = ALIGNED_STRING(""),
 
-    .str_1065 = ALIGNED_STRING(""),
+    .ResName_KuboView097_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_27 = {
-        SELF(str_1092),
-        SELF(str_1091),
-        SELF(str_1090),
-        SELF(str_1089),
-        SELF(str_1088),
-        SELF(str_1087),
-        SELF(str_1086),
-        SELF(str_1085),
-        SELF(str_1084),
-        SELF(str_1083),
-        SELF(str_1082),
-        SELF(str_1081),
-        SELF(str_1080),
-        SELF(str_1079),
-        SELF(str_1078),
-        SELF(str_1077),
-        SELF(str_1076),
+        SELF(ResName_KuboView098_0_TtlScreen),
+        SELF(ResName_KuboView098_1_AcIndexEditSw),
+        SELF(ResName_KuboView098_2_AcIndexEditSw),
+        SELF(ResName_KuboView098_3_AcIndexEditSw),
+        SELF(ResName_KuboView098_4_AcIndexEditSw),
+        SELF(ResName_KuboView098_5_AcIndexEditSw),
+        SELF(ResName_KuboView098_6_AcIndexEditSw),
+        SELF(ResName_KuboView098_7_Label),
+        SELF(ResName_KuboView098_8_Label),
+        SELF(ResName_KuboView098_9_Label),
+        SELF(ResName_KuboView098_10_Label),
+        SELF(ResName_KuboView098_11_Label),
+        SELF(ResName_KuboView098_12_Label),
+        SELF(ResName_KuboView098_13_Label),
+        SELF(ResName_KuboView098_14_Box),
+        SELF(ResName_KuboView098_15_NoteEditBox),
+        SELF(ResName_KuboView098_16_VwUserBitmap),
         SELF(DRBitmap_str),
-        SELF(str_1074),
-        SELF(str_1073),
-        SELF(str_1072),
-        SELF(str_1071),
-        SELF(str_1070),
-        SELF(str_1069),
-        SELF(str_1068),
-        SELF(str_1067),
+        SELF(ResName_KuboView098_18_AcIndexEditSw),
+        SELF(ResName_KuboView098_19_Label),
+        SELF(ResName_KuboView098_20_AcIndexEditSw),
+        SELF(ResName_KuboView098_21_Label),
+        SELF(ResName_KuboView098_22_AcIndexEditSw),
+        SELF(ResName_KuboView098_23_Label),
+        SELF(ResName_KuboView098_24_AcIndexEditSw),
+        SELF(ResName_KuboView098_25_AcIndexEditSw),
         SELF(str_1066),
     },
 
     .str_1066 = ALIGNED_STRING(""),
 
-    .str_1067 = ALIGNED_STRING(""),
+    .ResName_KuboView098_25_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1068 = ALIGNED_STRING(""),
+    .ResName_KuboView098_24_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1069 = ALIGNED_STRING(""),
+    .ResName_KuboView098_23_Label = ALIGNED_STRING(""),
 
-    .str_1070 = ALIGNED_STRING(""),
+    .ResName_KuboView098_22_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1071 = ALIGNED_STRING(""),
+    .ResName_KuboView098_21_Label = ALIGNED_STRING(""),
 
-    .str_1072 = ALIGNED_STRING(""),
+    .ResName_KuboView098_20_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1073 = ALIGNED_STRING(""),
+    .ResName_KuboView098_19_Label = ALIGNED_STRING(""),
 
-    .str_1074 = ALIGNED_STRING(""),
+    .ResName_KuboView098_18_AcIndexEditSw = ALIGNED_STRING(""),
 
     .DRBitmap_str = ALIGNED_STRING("DRBitmap"),
 
-    .str_1076 = ALIGNED_STRING(""),
+    .ResName_KuboView098_16_VwUserBitmap = ALIGNED_STRING(""),
 
-    .str_1077 = ALIGNED_STRING(""),
+    .ResName_KuboView098_15_NoteEditBox = ALIGNED_STRING(""),
 
-    .str_1078 = ALIGNED_STRING(""),
+    .ResName_KuboView098_14_Box = ALIGNED_STRING(""),
 
-    .str_1079 = ALIGNED_STRING(""),
+    .ResName_KuboView098_13_Label = ALIGNED_STRING(""),
 
-    .str_1080 = ALIGNED_STRING(""),
+    .ResName_KuboView098_12_Label = ALIGNED_STRING(""),
 
-    .str_1081 = ALIGNED_STRING(""),
+    .ResName_KuboView098_11_Label = ALIGNED_STRING(""),
 
-    .str_1082 = ALIGNED_STRING(""),
+    .ResName_KuboView098_10_Label = ALIGNED_STRING(""),
 
-    .str_1083 = ALIGNED_STRING(""),
+    .ResName_KuboView098_9_Label = ALIGNED_STRING(""),
 
-    .str_1084 = ALIGNED_STRING(""),
+    .ResName_KuboView098_8_Label = ALIGNED_STRING(""),
 
-    .str_1085 = ALIGNED_STRING(""),
+    .ResName_KuboView098_7_Label = ALIGNED_STRING(""),
 
-    .str_1086 = ALIGNED_STRING(""),
+    .ResName_KuboView098_6_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1087 = ALIGNED_STRING(""),
+    .ResName_KuboView098_5_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1088 = ALIGNED_STRING(""),
+    .ResName_KuboView098_4_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1089 = ALIGNED_STRING(""),
+    .ResName_KuboView098_3_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1090 = ALIGNED_STRING(""),
+    .ResName_KuboView098_2_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1091 = ALIGNED_STRING(""),
+    .ResName_KuboView098_1_AcIndexEditSw = ALIGNED_STRING(""),
 
-    .str_1092 = ALIGNED_STRING(""),
+    .ResName_KuboView098_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_28 = {
-        SELF(str_1101),
-        SELF(str_1100),
-        SELF(str_1099),
-        SELF(str_1098),
-        SELF(str_1097),
-        SELF(str_1096),
-        SELF(str_1095),
-        SELF(str_1094),
+        SELF(ResName_KuboView099_0_TtlScreen),
+        SELF(ResName_KuboView099_1_Label),
+        SELF(ResName_KuboView099_2_AcIndexWideES),
+        SELF(ResName_KuboView099_3_Label),
+        SELF(ResName_KuboView099_4_SqplyVal),
+        SELF(ResName_KuboView099_5_PsEditBox),
+        SELF(ResName_KuboView099_6_PsEditBox),
+        SELF(ResName_KuboView099_7_PsEditBox),
         SELF(str_1093),
     },
 
     .str_1093 = ALIGNED_STRING(""),
 
-    .str_1094 = ALIGNED_STRING(""),
+    .ResName_KuboView099_7_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1095 = ALIGNED_STRING(""),
+    .ResName_KuboView099_6_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1096 = ALIGNED_STRING(""),
+    .ResName_KuboView099_5_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1097 = ALIGNED_STRING(""),
+    .ResName_KuboView099_4_SqplyVal = ALIGNED_STRING(""),
 
-    .str_1098 = ALIGNED_STRING(""),
+    .ResName_KuboView099_3_Label = ALIGNED_STRING(""),
 
-    .str_1099 = ALIGNED_STRING(""),
+    .ResName_KuboView099_2_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1100 = ALIGNED_STRING(""),
+    .ResName_KuboView099_1_Label = ALIGNED_STRING(""),
 
-    .str_1101 = ALIGNED_STRING(""),
+    .ResName_KuboView099_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_29 = {
-        SELF(str_1114),
-        SELF(str_1113),
-        SELF(str_1112),
-        SELF(str_1111),
-        SELF(str_1110),
-        SELF(str_1109),
+        SELF(ResName_KuboView09A_0_TtlScreen),
+        SELF(ResName_KuboView09A_1_IvTrackSwitch),
+        SELF(ResName_KuboView09A_2_MsgToTtl),
+        SELF(ResName_KuboView09A_3_AcLanguageText),
+        SELF(ResName_KuboView09A_4_AcLanguageText),
+        SELF(ResName_KuboView09A_5_AcFuncEditSw),
         SELF(TrkClrSureDisp_name),
         SELF(w369_code),
-        SELF(str_1108),
-        SELF(str_1107),
-        SELF(str_1106),
-        SELF(str_1105),
-        SELF(str_1104),
-        SELF(str_1103),
+        SELF(ResName_KuboView09A_8_AcScreenMenu),
+        SELF(ResName_KuboView09A_9_VwBox),
+        SELF(ResName_KuboView09A_10_IvExitScreen),
+        SELF(ResName_KuboView09A_11_AcLanguageText),
+        SELF(ResName_KuboView09A_12_AcLanguageText),
+        SELF(ResName_KuboView09A_13_AcLanguageText),
         SELF(str_1102),
     },
 
     .str_1102 = ALIGNED_STRING(""),
 
-    .str_1103 = ALIGNED_STRING(""),
+    .ResName_KuboView09A_13_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1104 = ALIGNED_STRING(""),
+    .ResName_KuboView09A_12_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1105 = ALIGNED_STRING(""),
+    .ResName_KuboView09A_11_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1106 = ALIGNED_STRING(""),
+    .ResName_KuboView09A_10_IvExitScreen = ALIGNED_STRING(""),
 
-    .str_1107 = ALIGNED_STRING(""),
+    .ResName_KuboView09A_9_VwBox = ALIGNED_STRING(""),
 
-    .str_1108 = ALIGNED_STRING(""),
+    .ResName_KuboView09A_8_AcScreenMenu = ALIGNED_STRING(""),
 
     .w369_code = ALIGNED_STRING(""),
 
     .TrkClrSureDisp_name = ALIGNED_STRING("TrkClrSureDisp"),
 
-    .str_1109 = ALIGNED_STRING(""),
+    .ResName_KuboView09A_5_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1110 = ALIGNED_STRING(""),
+    .ResName_KuboView09A_4_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1111 = ALIGNED_STRING(""),
+    .ResName_KuboView09A_3_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1112 = ALIGNED_STRING(""),
+    .ResName_KuboView09A_2_MsgToTtl = ALIGNED_STRING(""),
 
-    .str_1113 = ALIGNED_STRING(""),
+    .ResName_KuboView09A_1_IvTrackSwitch = ALIGNED_STRING(""),
 
-    .str_1114 = ALIGNED_STRING(""),
+    .ResName_KuboView09A_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_30 = {
-        SELF(str_1135),
-        SELF(str_1134),
-        SELF(str_1133),
-        SELF(str_1132),
-        SELF(str_1131),
-        SELF(str_1130),
-        SELF(str_1129),
-        SELF(str_1128),
-        SELF(str_1127),
-        SELF(str_1126),
-        SELF(str_1125),
-        SELF(str_1124),
-        SELF(str_1123),
-        SELF(str_1122),
-        SELF(str_1121),
+        SELF(ResName_KuboView09B_0_TtlScreen),
+        SELF(ResName_KuboView09B_1_Line),
+        SELF(ResName_KuboView09B_2_Line),
+        SELF(ResName_KuboView09B_3_Line),
+        SELF(ResName_KuboView09B_4_Line),
+        SELF(ResName_KuboView09B_5_Line),
+        SELF(ResName_KuboView09B_6_Line),
+        SELF(ResName_KuboView09B_7_AcIndexWideES),
+        SELF(ResName_KuboView09B_8_Label),
+        SELF(ResName_KuboView09B_9_SqedtVal),
+        SELF(ResName_KuboView09B_10_PsEditBox),
+        SELF(ResName_KuboView09B_11_PsEditBox),
+        SELF(ResName_KuboView09B_12_PsEditBox),
+        SELF(ResName_KuboView09B_13_MsgToTtl),
+        SELF(ResName_KuboView09B_14_AcFuncEditSw),
         SELF(TrkMrgSureDisp_name),
         SELF(w370_code),
-        SELF(str_1120),
-        SELF(str_1119),
-        SELF(str_1118),
-        SELF(str_1117),
-        SELF(str_1116),
+        SELF(ResName_KuboView09B_17_AcScreenMenu),
+        SELF(ResName_KuboView09B_18_IvExitScreen),
+        SELF(ResName_KuboView09B_19_Box),
+        SELF(ResName_KuboView09B_20_Box),
+        SELF(ResName_KuboView09B_21_AcLanguageText),
         SELF(str_1115),
     },
 
     .str_1115 = ALIGNED_STRING(""),
 
-    .str_1116 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_21_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1117 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_20_Box = ALIGNED_STRING(""),
 
-    .str_1118 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_19_Box = ALIGNED_STRING(""),
 
-    .str_1119 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_18_IvExitScreen = ALIGNED_STRING(""),
 
-    .str_1120 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_17_AcScreenMenu = ALIGNED_STRING(""),
 
     .w370_code = ALIGNED_STRING(""),
 
     .TrkMrgSureDisp_name = ALIGNED_STRING("TrkMrgSureDisp"),
 
-    .str_1121 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_14_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1122 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_13_MsgToTtl = ALIGNED_STRING(""),
 
-    .str_1123 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_12_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1124 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_11_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1125 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_10_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1126 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_9_SqedtVal = ALIGNED_STRING(""),
 
-    .str_1127 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_8_Label = ALIGNED_STRING(""),
 
-    .str_1128 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_7_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1129 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_6_Line = ALIGNED_STRING(""),
 
-    .str_1130 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_5_Line = ALIGNED_STRING(""),
 
-    .str_1131 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_4_Line = ALIGNED_STRING(""),
 
-    .str_1132 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_3_Line = ALIGNED_STRING(""),
 
-    .str_1133 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_2_Line = ALIGNED_STRING(""),
 
-    .str_1134 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_1_Line = ALIGNED_STRING(""),
 
-    .str_1135 = ALIGNED_STRING(""),
+    .ResName_KuboView09B_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_31 = {
-        SELF(str_1155),
-        SELF(str_1154),
-        SELF(str_1153),
-        SELF(str_1152),
-        SELF(str_1151),
-        SELF(str_1150),
-        SELF(str_1149),
-        SELF(str_1148),
-        SELF(str_1147),
-        SELF(str_1146),
-        SELF(str_1145),
-        SELF(str_1144),
-        SELF(str_1143),
-        SELF(str_1142),
+        SELF(ResName_KuboView09C_0_TtlScreen),
+        SELF(ResName_KuboView09C_1_Label),
+        SELF(ResName_KuboView09C_2_AcIndexWideES),
+        SELF(ResName_KuboView09C_3_SqedtVal),
+        SELF(ResName_KuboView09C_4_PsEditBox),
+        SELF(ResName_KuboView09C_5_PsEditBox),
+        SELF(ResName_KuboView09C_6_Label),
+        SELF(ResName_KuboView09C_7_PsEditBox),
+        SELF(ResName_KuboView09C_8_PsEditBox),
+        SELF(ResName_KuboView09C_9_PsEditBox),
+        SELF(ResName_KuboView09C_10_PsEditBox),
+        SELF(ResName_KuboView09C_11_Label),
+        SELF(ResName_KuboView09C_12_MsgToTtl),
+        SELF(ResName_KuboView09C_13_AcFuncEditSw),
         SELF(QtzSureDisp_name),
         SELF(w371_code),
-        SELF(str_1141),
-        SELF(str_1140),
-        SELF(str_1139),
-        SELF(str_1138),
-        SELF(str_1137),
+        SELF(ResName_KuboView09C_16_AcFuncEditSw),
+        SELF(ResName_KuboView09C_17_IvExitScreen),
+        SELF(ResName_KuboView09C_18_Box),
+        SELF(ResName_KuboView09C_19_Box),
+        SELF(ResName_KuboView09C_20_AcLanguageText),
         SELF(str_1136),
     },
 
     .str_1136 = ALIGNED_STRING(""),
 
-    .str_1137 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_20_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1138 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_19_Box = ALIGNED_STRING(""),
 
-    .str_1139 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_18_Box = ALIGNED_STRING(""),
 
-    .str_1140 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_17_IvExitScreen = ALIGNED_STRING(""),
 
-    .str_1141 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_16_AcFuncEditSw = ALIGNED_STRING(""),
 
     .w371_code = ALIGNED_STRING(""),
 
     .QtzSureDisp_name = "QtzSureDisp",
 
-    .str_1142 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_13_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1143 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_12_MsgToTtl = ALIGNED_STRING(""),
 
-    .str_1144 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_11_Label = ALIGNED_STRING(""),
 
-    .str_1145 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_10_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1146 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_9_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1147 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_8_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1148 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_7_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1149 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_6_Label = ALIGNED_STRING(""),
 
-    .str_1150 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_5_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1151 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_4_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1152 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_3_SqedtVal = ALIGNED_STRING(""),
 
-    .str_1153 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_2_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1154 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_1_Label = ALIGNED_STRING(""),
 
-    .str_1155 = ALIGNED_STRING(""),
+    .ResName_KuboView09C_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_32 = {
-        SELF(str_1170),
-        SELF(str_1169),
-        SELF(str_1168),
-        SELF(str_1167),
-        SELF(str_1166),
-        SELF(str_1165),
-        SELF(str_1164),
-        SELF(str_1163),
-        SELF(str_1162),
-        SELF(str_1161),
+        SELF(ResName_KuboView09D_0_TtlScreen),
+        SELF(ResName_KuboView09D_1_Label),
+        SELF(ResName_KuboView09D_2_AcIndexWideES),
+        SELF(ResName_KuboView09D_3_SqedtVal),
+        SELF(ResName_KuboView09D_4_PsEditBox),
+        SELF(ResName_KuboView09D_5_PsEditBox),
+        SELF(ResName_KuboView09D_6_PsEditBox),
+        SELF(ResName_KuboView09D_7_PsEditBox),
+        SELF(ResName_KuboView09D_8_MsgToTtl),
+        SELF(ResName_KuboView09D_9_AcFuncEditSw),
         SELF(TrnsSureDisp_name),
         SELF(w372_code),
-        SELF(str_1160),
-        SELF(str_1159),
-        SELF(str_1158),
-        SELF(str_1157),
+        SELF(ResName_KuboView09D_12_AcFuncEditSw),
+        SELF(ResName_KuboView09D_13_IvExitScreen),
+        SELF(ResName_KuboView09D_14_Box),
+        SELF(ResName_KuboView09D_15_AcLanguageText),
         SELF(str_1156),
     },
 
     .str_1156 = ALIGNED_STRING(""),
 
-    .str_1157 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_15_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1158 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_14_Box = ALIGNED_STRING(""),
 
-    .str_1159 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_13_IvExitScreen = ALIGNED_STRING(""),
 
-    .str_1160 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_12_AcFuncEditSw = ALIGNED_STRING(""),
 
     .w372_code = ALIGNED_STRING(""),
 
     .TrnsSureDisp_name = ALIGNED_STRING("TrnsSureDisp"),
 
-    .str_1161 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_9_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1162 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_8_MsgToTtl = ALIGNED_STRING(""),
 
-    .str_1163 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_7_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1164 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_6_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1165 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_5_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1166 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_4_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1167 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_3_SqedtVal = ALIGNED_STRING(""),
 
-    .str_1168 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_2_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1169 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_1_Label = ALIGNED_STRING(""),
 
-    .str_1170 = ALIGNED_STRING(""),
+    .ResName_KuboView09D_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_33 = {
-        SELF(str_1185),
-        SELF(str_1184),
-        SELF(str_1183),
-        SELF(str_1182),
-        SELF(str_1181),
-        SELF(str_1180),
-        SELF(str_1179),
-        SELF(str_1178),
-        SELF(str_1177),
-        SELF(str_1176),
+        SELF(ResName_KuboView09E_0_TtlScreen),
+        SELF(ResName_KuboView09E_1_Label),
+        SELF(ResName_KuboView09E_2_AcIndexWideES),
+        SELF(ResName_KuboView09E_3_SqedtVal),
+        SELF(ResName_KuboView09E_4_PsEditBox),
+        SELF(ResName_KuboView09E_5_PsEditBox),
+        SELF(ResName_KuboView09E_6_PsEditBox),
+        SELF(ResName_KuboView09E_7_PsEditBox),
+        SELF(ResName_KuboView09E_8_MsgToTtl),
+        SELF(ResName_KuboView09E_9_AcFuncEditSw),
         SELF(VeloSureDisp_name),
         SELF(w373_code),
-        SELF(str_1175),
-        SELF(str_1174),
-        SELF(str_1173),
-        SELF(str_1172),
+        SELF(ResName_KuboView09E_12_AcFuncEditSw),
+        SELF(ResName_KuboView09E_13_IvExitScreen),
+        SELF(ResName_KuboView09E_14_Box),
+        SELF(ResName_KuboView09E_15_AcLanguageText),
         SELF(str_1171),
     },
 
     .str_1171 = ALIGNED_STRING(""),
 
-    .str_1172 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_15_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1173 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_14_Box = ALIGNED_STRING(""),
 
-    .str_1174 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_13_IvExitScreen = ALIGNED_STRING(""),
 
-    .str_1175 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_12_AcFuncEditSw = ALIGNED_STRING(""),
 
     .w373_code = ALIGNED_STRING(""),
 
     .VeloSureDisp_name = ALIGNED_STRING("VeloSureDisp"),
 
-    .str_1176 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_9_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1177 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_8_MsgToTtl = ALIGNED_STRING(""),
 
-    .str_1178 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_7_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1179 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_6_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1180 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_5_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1181 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_4_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1182 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_3_SqedtVal = ALIGNED_STRING(""),
 
-    .str_1183 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_2_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1184 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_1_Label = ALIGNED_STRING(""),
 
-    .str_1185 = ALIGNED_STRING(""),
+    .ResName_KuboView09E_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_34 = {
-        SELF(str_1209),
-        SELF(str_1208),
-        SELF(str_1207),
-        SELF(str_1206),
-        SELF(str_1205),
-        SELF(str_1204),
-        SELF(str_1203),
-        SELF(str_1202),
-        SELF(str_1201),
-        SELF(str_1200),
-        SELF(str_1199),
-        SELF(str_1198),
-        SELF(str_1197),
-        SELF(str_1196),
-        SELF(str_1195),
-        SELF(str_1194),
-        SELF(str_1193),
-        SELF(str_1192),
+        SELF(ResName_KuboView09F_0_TtlScreen),
+        SELF(ResName_KuboView09F_1_SqedtVal),
+        SELF(ResName_KuboView09F_2_PsEditBox),
+        SELF(ResName_KuboView09F_3_Label),
+        SELF(ResName_KuboView09F_4_AcIndexWideES),
+        SELF(ResName_KuboView09F_5_Label),
+        SELF(ResName_KuboView09F_6_PsEditBox),
+        SELF(ResName_KuboView09F_7_PsEditBox),
+        SELF(ResName_KuboView09F_8_Label),
+        SELF(ResName_KuboView09F_9_Line),
+        SELF(ResName_KuboView09F_10_Line),
+        SELF(ResName_KuboView09F_11_Line),
+        SELF(ResName_KuboView09F_12_Line),
+        SELF(ResName_KuboView09F_13_Line),
+        SELF(ResName_KuboView09F_14_PsEditBox),
+        SELF(ResName_KuboView09F_15_PsEditBox),
+        SELF(ResName_KuboView09F_16_MsgToTtl),
+        SELF(ResName_KuboView09F_17_AcFuncEditSw),
         SELF(NoteSureDisp_name),
         SELF(w374_code),
-        SELF(str_1191),
-        SELF(str_1190),
-        SELF(str_1189),
-        SELF(str_1188),
-        SELF(str_1187),
+        SELF(ResName_KuboView09F_20_AcFuncEditSw),
+        SELF(ResName_KuboView09F_21_IvExitScreen),
+        SELF(ResName_KuboView09F_22_Box),
+        SELF(ResName_KuboView09F_23_Box),
+        SELF(ResName_KuboView09F_24_AcLanguageText),
         SELF(str_1186),
     },
 
     .str_1186 = ALIGNED_STRING(""),
 
-    .str_1187 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_24_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1188 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_23_Box = ALIGNED_STRING(""),
 
-    .str_1189 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_22_Box = ALIGNED_STRING(""),
 
-    .str_1190 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_21_IvExitScreen = ALIGNED_STRING(""),
 
-    .str_1191 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_20_AcFuncEditSw = ALIGNED_STRING(""),
 
     .w374_code = ALIGNED_STRING(""),
 
     .NoteSureDisp_name = ALIGNED_STRING("NoteSureDisp"),
 
-    .str_1192 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_17_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1193 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_16_MsgToTtl = ALIGNED_STRING(""),
 
-    .str_1194 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_15_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1195 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_14_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1196 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_13_Line = ALIGNED_STRING(""),
 
-    .str_1197 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_12_Line = ALIGNED_STRING(""),
 
-    .str_1198 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_11_Line = ALIGNED_STRING(""),
 
-    .str_1199 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_10_Line = ALIGNED_STRING(""),
 
-    .str_1200 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_9_Line = ALIGNED_STRING(""),
 
-    .str_1201 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_8_Label = ALIGNED_STRING(""),
 
-    .str_1202 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_7_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1203 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_6_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1204 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_5_Label = ALIGNED_STRING(""),
 
-    .str_1205 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_4_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1206 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_3_Label = ALIGNED_STRING(""),
 
-    .str_1207 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_2_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1208 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_1_SqedtVal = ALIGNED_STRING(""),
 
-    .str_1209 = ALIGNED_STRING(""),
+    .ResName_KuboView09F_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_35 = {
-        SELF(str_1224),
-        SELF(str_1223),
-        SELF(str_1222),
-        SELF(str_1221),
-        SELF(str_1220),
-        SELF(str_1219),
-        SELF(str_1218),
-        SELF(str_1217),
-        SELF(str_1216),
-        SELF(str_1215),
+        SELF(ResName_KuboView0A0_0_TtlScreen),
+        SELF(ResName_KuboView0A0_1_AcIndexWideES),
+        SELF(ResName_KuboView0A0_2_Label),
+        SELF(ResName_KuboView0A0_3_SqedtVal),
+        SELF(ResName_KuboView0A0_4_PsEditBox),
+        SELF(ResName_KuboView0A0_5_PsEditBox),
+        SELF(ResName_KuboView0A0_6_PsEditBox),
+        SELF(ResName_KuboView0A0_7_PsEditBox),
+        SELF(ResName_KuboView0A0_8_MsgToTtl),
+        SELF(ResName_KuboView0A0_9_AcFuncEditSw),
         SELF(AdvSureDisp_name),
         SELF(w375_code),
-        SELF(str_1214),
-        SELF(str_1213),
-        SELF(str_1212),
-        SELF(str_1211),
+        SELF(ResName_KuboView0A0_12_AcScreenMenu),
+        SELF(ResName_KuboView0A0_13_IvExitScreen),
+        SELF(ResName_KuboView0A0_14_Box),
+        SELF(ResName_KuboView0A0_15_AcLanguageText),
         SELF(str_1210),
     },
 
     .str_1210 = ALIGNED_STRING(""),
 
-    .str_1211 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_15_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1212 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_14_Box = ALIGNED_STRING(""),
 
-    .str_1213 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_13_IvExitScreen = ALIGNED_STRING(""),
 
-    .str_1214 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_12_AcScreenMenu = ALIGNED_STRING(""),
 
     .w375_code = ALIGNED_STRING(""),
 
     .AdvSureDisp_name = "AdvSureDisp",
 
-    .str_1215 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_9_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1216 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_8_MsgToTtl = ALIGNED_STRING(""),
 
-    .str_1217 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_7_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1218 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_6_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1219 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_5_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1220 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_4_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1221 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_3_SqedtVal = ALIGNED_STRING(""),
 
-    .str_1222 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_2_Label = ALIGNED_STRING(""),
 
-    .str_1223 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_1_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1224 = ALIGNED_STRING(""),
+    .ResName_KuboView0A0_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_36 = {
-        SELF(str_1239),
-        SELF(str_1238),
-        SELF(str_1237),
-        SELF(str_1236),
-        SELF(str_1235),
-        SELF(str_1234),
-        SELF(str_1233),
-        SELF(str_1232),
-        SELF(str_1231),
-        SELF(str_1230),
+        SELF(ResName_KuboView0A1_0_TtlScreen),
+        SELF(ResName_KuboView0A1_1_AcIndexWideES),
+        SELF(ResName_KuboView0A1_2_Label),
+        SELF(ResName_KuboView0A1_3_SqedtVal),
+        SELF(ResName_KuboView0A1_4_PsEditBox),
+        SELF(ResName_KuboView0A1_5_PsEditBox),
+        SELF(ResName_KuboView0A1_6_PsEditBox),
+        SELF(ResName_KuboView0A1_7_PsEditBox),
+        SELF(ResName_KuboView0A1_8_MsgToTtl),
+        SELF(ResName_KuboView0A1_9_AcFuncEditSw),
         SELF(MersSureDisp_name),
         SELF(w376_code),
-        SELF(str_1229),
-        SELF(str_1228),
-        SELF(str_1227),
-        SELF(str_1226),
+        SELF(ResName_KuboView0A1_12_AcFuncEditSw),
+        SELF(ResName_KuboView0A1_13_IvExitScreen),
+        SELF(ResName_KuboView0A1_14_Box),
+        SELF(ResName_KuboView0A1_15_AcLanguageText),
         SELF(str_1225),
     },
 
     .str_1225 = ALIGNED_STRING(""),
 
-    .str_1226 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_15_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1227 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_14_Box = ALIGNED_STRING(""),
 
-    .str_1228 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_13_IvExitScreen = ALIGNED_STRING(""),
 
-    .str_1229 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_12_AcFuncEditSw = ALIGNED_STRING(""),
 
     .w376_code = ALIGNED_STRING(""),
 
     .MersSureDisp_name = ALIGNED_STRING("MersSureDisp"),
 
-    .str_1230 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_9_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1231 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_8_MsgToTtl = ALIGNED_STRING(""),
 
-    .str_1232 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_7_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1233 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_6_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1234 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_5_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1235 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_4_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1236 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_3_SqedtVal = ALIGNED_STRING(""),
 
-    .str_1237 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_2_Label = ALIGNED_STRING(""),
 
-    .str_1238 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_1_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1239 = ALIGNED_STRING(""),
+    .ResName_KuboView0A1_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_37 = {
-        SELF(str_1255),
-        SELF(str_1254),
-        SELF(str_1253),
-        SELF(str_1252),
-        SELF(str_1251),
-        SELF(str_1250),
-        SELF(str_1249),
-        SELF(str_1248),
-        SELF(str_1247),
+        SELF(ResName_KuboView0A2_0_TtlScreen),
+        SELF(ResName_KuboView0A2_1_AcIndexWideES),
+        SELF(ResName_KuboView0A2_2_AcIndexWideES),
+        SELF(ResName_KuboView0A2_3_AcIndexWideES),
+        SELF(ResName_KuboView0A2_4_AcIndexWideES),
+        SELF(ResName_KuboView0A2_5_SqedtVal2),
+        SELF(ResName_KuboView0A2_6_SqedtFix),
+        SELF(ResName_KuboView0A2_7_MsgToTtl),
+        SELF(ResName_KuboView0A2_8_AcFuncEditSw),
         SELF(McpSureDisp_name),
         SELF(w377_code),
-        SELF(str_1246),
-        SELF(str_1245),
-        SELF(str_1244),
-        SELF(str_1243),
-        SELF(str_1242),
-        SELF(str_1241),
+        SELF(ResName_KuboView0A2_11_Box),
+        SELF(ResName_KuboView0A2_12_Box),
+        SELF(ResName_KuboView0A2_13_IvExitScreen),
+        SELF(ResName_KuboView0A2_14_AcFuncEditSw),
+        SELF(ResName_KuboView0A2_15_AcLanguageText),
+        SELF(ResName_KuboView0A2_16_AcScreenMenu),
         SELF(str_1240),
     },
 
     .str_1240 = ALIGNED_STRING(""),
 
-    .str_1241 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_16_AcScreenMenu = ALIGNED_STRING(""),
 
-    .str_1242 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_15_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1243 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_14_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1244 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_13_IvExitScreen = ALIGNED_STRING(""),
 
-    .str_1245 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_12_Box = ALIGNED_STRING(""),
 
-    .str_1246 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_11_Box = ALIGNED_STRING(""),
 
     .w377_code = ALIGNED_STRING(""),
 
     .McpSureDisp_name = "McpSureDisp",
 
-    .str_1247 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_8_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1248 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_7_MsgToTtl = ALIGNED_STRING(""),
 
-    .str_1249 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_6_SqedtFix = ALIGNED_STRING(""),
 
-    .str_1250 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_5_SqedtVal2 = ALIGNED_STRING(""),
 
-    .str_1251 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_4_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1252 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_3_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1253 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_2_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1254 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_1_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1255 = ALIGNED_STRING(""),
+    .ResName_KuboView0A2_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_38 = {
-        SELF(str_1269),
-        SELF(str_1268),
-        SELF(str_1267),
-        SELF(str_1266),
-        SELF(str_1265),
-        SELF(str_1264),
-        SELF(str_1263),
-        SELF(str_1262),
-        SELF(str_1261),
+        SELF(ResName_KuboView0A3_0_TtlScreen),
+        SELF(ResName_KuboView0A3_1_Label),
+        SELF(ResName_KuboView0A3_2_AcIndexWideES),
+        SELF(ResName_KuboView0A3_3_SqedtVal),
+        SELF(ResName_KuboView0A3_4_PsEditBox),
+        SELF(ResName_KuboView0A3_5_PsEditBox),
+        SELF(ResName_KuboView0A3_6_PsEditBox),
+        SELF(ResName_KuboView0A3_7_MsgToTtl),
+        SELF(ResName_KuboView0A3_8_AcFuncEditSw),
         SELF(MdelSureDisp_name),
         SELF(w378_code),
-        SELF(str_1260),
-        SELF(str_1259),
-        SELF(str_1258),
-        SELF(str_1257),
+        SELF(ResName_KuboView0A3_11_AcFuncEditSw),
+        SELF(ResName_KuboView0A3_12_IvExitScreen),
+        SELF(ResName_KuboView0A3_13_Box),
+        SELF(ResName_KuboView0A3_14_AcLanguageText),
         SELF(str_1256),
     },
 
     .str_1256 = ALIGNED_STRING(""),
 
-    .str_1257 = ALIGNED_STRING(""),
+    .ResName_KuboView0A3_14_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1258 = ALIGNED_STRING(""),
+    .ResName_KuboView0A3_13_Box = ALIGNED_STRING(""),
 
-    .str_1259 = ALIGNED_STRING(""),
+    .ResName_KuboView0A3_12_IvExitScreen = ALIGNED_STRING(""),
 
-    .str_1260 = ALIGNED_STRING(""),
+    .ResName_KuboView0A3_11_AcFuncEditSw = ALIGNED_STRING(""),
 
     .w378_code = ALIGNED_STRING(""),
 
     .MdelSureDisp_name = ALIGNED_STRING("MdelSureDisp"),
 
-    .str_1261 = ALIGNED_STRING(""),
+    .ResName_KuboView0A3_8_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1262 = ALIGNED_STRING(""),
+    .ResName_KuboView0A3_7_MsgToTtl = ALIGNED_STRING(""),
 
-    .str_1263 = ALIGNED_STRING(""),
+    .ResName_KuboView0A3_6_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1264 = ALIGNED_STRING(""),
+    .ResName_KuboView0A3_5_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1265 = ALIGNED_STRING(""),
+    .ResName_KuboView0A3_4_PsEditBox = ALIGNED_STRING(""),
 
-    .str_1266 = ALIGNED_STRING(""),
+    .ResName_KuboView0A3_3_SqedtVal = ALIGNED_STRING(""),
 
-    .str_1267 = ALIGNED_STRING(""),
+    .ResName_KuboView0A3_2_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1268 = ALIGNED_STRING(""),
+    .ResName_KuboView0A3_1_Label = ALIGNED_STRING(""),
 
-    .str_1269 = ALIGNED_STRING(""),
+    .ResName_KuboView0A3_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_39 = {
-        SELF(str_1285),
-        SELF(str_1284),
-        SELF(str_1283),
-        SELF(str_1282),
-        SELF(str_1281),
-        SELF(str_1280),
-        SELF(str_1279),
-        SELF(str_1278),
-        SELF(str_1277),
+        SELF(ResName_KuboView0A4_0_TtlScreen),
+        SELF(ResName_KuboView0A4_1_AcIndexWideES),
+        SELF(ResName_KuboView0A4_2_AcIndexWideES),
+        SELF(ResName_KuboView0A4_3_AcIndexWideES),
+        SELF(ResName_KuboView0A4_4_AcIndexWideES),
+        SELF(ResName_KuboView0A4_5_SqedtVal2),
+        SELF(ResName_KuboView0A4_6_SqedtFix),
+        SELF(ResName_KuboView0A4_7_MsgToTtl),
+        SELF(ResName_KuboView0A4_8_AcFuncEditSw),
         SELF(MinsSureDisp_name),
         SELF(w379_code),
-        SELF(str_1276),
-        SELF(str_1275),
-        SELF(str_1274),
-        SELF(str_1273),
-        SELF(str_1272),
-        SELF(str_1271),
+        SELF(ResName_KuboView0A4_11_Box),
+        SELF(ResName_KuboView0A4_12_Box),
+        SELF(ResName_KuboView0A4_13_IvExitScreen),
+        SELF(ResName_KuboView0A4_14_AcFuncEditSw),
+        SELF(ResName_KuboView0A4_15_AcLanguageText),
+        SELF(ResName_KuboView0A4_16_AcScreenMenu),
         SELF(str_1270),
     },
 
     .str_1270 = ALIGNED_STRING(""),
 
-    .str_1271 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_16_AcScreenMenu = ALIGNED_STRING(""),
 
-    .str_1272 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_15_AcLanguageText = ALIGNED_STRING(""),
 
-    .str_1273 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_14_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1274 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_13_IvExitScreen = ALIGNED_STRING(""),
 
-    .str_1275 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_12_Box = ALIGNED_STRING(""),
 
-    .str_1276 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_11_Box = ALIGNED_STRING(""),
 
     .w379_code = ALIGNED_STRING(""),
 
     .MinsSureDisp_name = ALIGNED_STRING("MinsSureDisp"),
 
-    .str_1277 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_8_AcFuncEditSw = ALIGNED_STRING(""),
 
-    .str_1278 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_7_MsgToTtl = ALIGNED_STRING(""),
 
-    .str_1279 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_6_SqedtFix = ALIGNED_STRING(""),
 
-    .str_1280 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_5_SqedtVal2 = ALIGNED_STRING(""),
 
-    .str_1281 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_4_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1282 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_3_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1283 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_2_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1284 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_1_AcIndexWideES = ALIGNED_STRING(""),
 
-    .str_1285 = ALIGNED_STRING(""),
+    .ResName_KuboView0A4_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptr_804c = SELF(str_1286),
 
@@ -16560,51 +16560,51 @@ const naka_effects_seq_t naka_effects_seq_data
     .str_1287 = ALIGNED_STRING(""),
 
     .ptrs_40 = {
-        SELF(str_1290),
-        SELF(str_1289),
+        SELF(ResName_KuboView0AB_0_TtlScreen),
+        SELF(ResName_KuboView0AB_1_AcMixerVol),
         SELF(str_1288),
     },
 
     .str_1288 = ALIGNED_STRING(""),
 
-    .str_1289 = ALIGNED_STRING(""),
+    .ResName_KuboView0AB_1_AcMixerVol = ALIGNED_STRING(""),
 
-    .str_1290 = ALIGNED_STRING(""),
+    .ResName_KuboView0AB_0_TtlScreen = ALIGNED_STRING(""),
 
     .ptrs_41 = {
         SELF(EnterTainerScr_name),
         SELF(w382_code),
-        SELF(str_1300),
+        SELF(ResName_EnterTainerScr_2_Label),
         SELF(VocWorkSw_str),
         SELF(FadeInOutSw_name),
         SELF(MixerSw_code),
         SELF(DiskLoadSw_name),
         SELF(w380_code),
-        SELF(str_1298),
-        SELF(str_1297),
-        SELF(str_1296),
-        SELF(str_1295),
-        SELF(str_1294),
-        SELF(str_1293),
-        SELF(str_1292),
+        SELF(ResName_EnterTainerScr_8_AcIndexWideES),
+        SELF(ResName_EnterTainerScr_9_Label),
+        SELF(ResName_EnterTainerScr_10_Label),
+        SELF(ResName_EnterTainerScr_11_IvExitMode),
+        SELF(ResName_EnterTainerScr_12_AcFuncToggle),
+        SELF(ResName_EnterTainerScr_13_AcPanicEditSw),
+        SELF(ResName_EnterTainerScr_14_Label),
         SELF(str_1291),
     },
 
     .str_1291 = ALIGNED_STRING(""),
 
-    .str_1292 = ALIGNED_STRING(""),
+    .ResName_EnterTainerScr_14_Label = ALIGNED_STRING(""),
 
-    .str_1293 = ALIGNED_STRING(""),
+    .ResName_EnterTainerScr_13_AcPanicEditSw = ALIGNED_STRING(""),
 
-    .str_1294 = ALIGNED_STRING(""),
+    .ResName_EnterTainerScr_12_AcFuncToggle = ALIGNED_STRING(""),
 
-    .str_1295 = ALIGNED_STRING(""),
+    .ResName_EnterTainerScr_11_IvExitMode = ALIGNED_STRING(""),
 
-    .str_1296 = ALIGNED_STRING(""),
+    .ResName_EnterTainerScr_10_Label = ALIGNED_STRING(""),
 
-    .str_1297 = ALIGNED_STRING(""),
+    .ResName_EnterTainerScr_9_Label = ALIGNED_STRING(""),
 
-    .str_1298 = ALIGNED_STRING(""),
+    .ResName_EnterTainerScr_8_AcIndexWideES = ALIGNED_STRING(""),
 
     .w380_code = ALIGNED_STRING(""),
 
@@ -16616,27 +16616,27 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .VocWorkSw_str = "VocWorkSw",
 
-    .str_1300 = ALIGNED_STRING(""),
+    .ResName_EnterTainerScr_2_Label = ALIGNED_STRING(""),
 
     .w382_code = ALIGNED_STRING(""),
 
     .EnterTainerScr_name = ALIGNED_STRING("EnterTainerScr"),
 
     .ptrs_42 = {
-        SELF(str_1324),
-        SELF(str_1323),
+        SELF(ResName_KuboView0E7_0_TtlScreen),
+        SELF(ResName_KuboView0E7_1_IvExitMode),
         SELF(HelpMenu_name),
         SELF(w401_code),
-        SELF(str_1322),
+        SELF(ResName_KuboView0E7_4_AcFuncEditSw),
         SELF(HelpNotXWin_name),
         SELF(w400_code),
-        SELF(str_1321),
-        SELF(str_1320),
-        SELF(str_1319),
+        SELF(ResName_KuboView0E7_7_AcIndexWideToggle),
+        SELF(ResName_KuboView0E7_8_AcIndexWideToggle),
+        SELF(ResName_KuboView0E7_9_AcIndexWideToggle),
         SELF(HelpXWin_name),
         SELF(w399_code),
-        SELF(str_1318),
-        SELF(str_1317),
+        SELF(ResName_KuboView0E7_12_AcIndexWideToggle),
+        SELF(ResName_KuboView0E7_13_AcIndexWideToggle),
         SELF(HelpSwTtl1Scr_name),
         SELF(w398_code),
         SELF(HelpTtlStr1_str),
@@ -16650,9 +16650,9 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(w394_code),
         SELF(HelpTtlStr2_name),
         SELF(w393_code),
-        SELF(str_1315),
+        SELF(ResName_KuboView0E7_27_IvPageControl),
         SELF(Help_P2_str),
-        SELF(str_1313),
+        SELF(ResName_KuboView0E7_29_IvShowHide),
         SELF(HelpLang3P1_name),
         SELF(w392_code),
         SELF(HelpLang3P2_name),
@@ -16663,19 +16663,19 @@ const naka_effects_seq_t naka_effects_seq_data
         SELF(w389_code),
         SELF(HelpTtlStr3_str),
         SELF(Help_P3_str),
-        SELF(str_1310),
-        SELF(str_1309),
-        SELF(str_1308),
-        SELF(str_1307),
+        SELF(ResName_KuboView0E7_40_IvPageControl),
+        SELF(ResName_KuboView0E7_41_IvPageControl),
+        SELF(ResName_KuboView0E7_42_IvPageControl),
+        SELF(ResName_KuboView0E7_43_IvShowHide),
         SELF(HelpSwTtl4Scr_name),
         SELF(w388_code),
         SELF(Help_P4_str),
         SELF(HelpTtlStr4_name),
         SELF(w387_code),
-        SELF(str_1305),
-        SELF(str_1304),
-        SELF(str_1303),
-        SELF(str_1302),
+        SELF(ResName_KuboView0E7_49_IvPageControl),
+        SELF(ResName_KuboView0E7_50_IvPageControl),
+        SELF(ResName_KuboView0E7_51_IvPageControl),
+        SELF(ResName_KuboView0E7_52_IvShowHide),
         SELF(HelpLang4P1_name),
         SELF(w386_code),
         SELF(HelpLang4P2_name),
@@ -16705,13 +16705,13 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .HelpLang4P1_name = "HelpLang4P1",
 
-    .str_1302 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_52_IvShowHide = ALIGNED_STRING(""),
 
-    .str_1303 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_51_IvPageControl = ALIGNED_STRING(""),
 
-    .str_1304 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_50_IvPageControl = ALIGNED_STRING(""),
 
-    .str_1305 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_49_IvPageControl = ALIGNED_STRING(""),
 
     .w387_code = ALIGNED_STRING(""),
 
@@ -16723,13 +16723,13 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .HelpSwTtl4Scr_name = "HelpSwTtl4Scr",
 
-    .str_1307 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_43_IvShowHide = ALIGNED_STRING(""),
 
-    .str_1308 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_42_IvPageControl = ALIGNED_STRING(""),
 
-    .str_1309 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_41_IvPageControl = ALIGNED_STRING(""),
 
-    .str_1310 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_40_IvPageControl = ALIGNED_STRING(""),
 
     .Help_P3_str = "Help_P3",
 
@@ -16751,11 +16751,11 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .HelpLang3P1_name = "HelpLang3P1",
 
-    .str_1313 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_29_IvShowHide = ALIGNED_STRING(""),
 
     .Help_P2_str = "Help_P2",
 
-    .str_1315 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_27_IvPageControl = ALIGNED_STRING(""),
 
     .w393_code = ALIGNED_STRING(""),
 
@@ -16783,33 +16783,33 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .HelpSwTtl1Scr_name = "HelpSwTtl1Scr",
 
-    .str_1317 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_13_AcIndexWideToggle = ALIGNED_STRING(""),
 
-    .str_1318 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_12_AcIndexWideToggle = ALIGNED_STRING(""),
 
     .w399_code = ALIGNED_STRING(""),
 
     .HelpXWin_name = ALIGNED_STRING("HelpXWin"),
 
-    .str_1319 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_9_AcIndexWideToggle = ALIGNED_STRING(""),
 
-    .str_1320 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_8_AcIndexWideToggle = ALIGNED_STRING(""),
 
-    .str_1321 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_7_AcIndexWideToggle = ALIGNED_STRING(""),
 
     .w400_code = ALIGNED_STRING(""),
 
     .HelpNotXWin_name = "HelpNotXWin",
 
-    .str_1322 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_4_AcFuncEditSw = ALIGNED_STRING(""),
 
     .w401_code = ALIGNED_STRING(""),
 
     .HelpMenu_name = ALIGNED_STRING("HelpMenu"),
 
-    .str_1323 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_1_IvExitMode = ALIGNED_STRING(""),
 
-    .str_1324 = ALIGNED_STRING(""),
+    .ResName_KuboView0E7_0_TtlScreen = ALIGNED_STRING(""),
 
     .MD_ENTERTAINER_str = ALIGNED_STRING("MD_ENTERTAINER"),
 
