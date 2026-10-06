@@ -15,6 +15,10 @@ QUESTION IT ANSWERS / WHAT IT DOES
       two rows is skipped.  (The first version replaced the whole span and moved an interior label by 0x30:
       `make all` caught it.)
   The census map must be built from this exact tree first.
+  ⚠ data_range_census.py credits a header only within ANCHOR_SLACK = 6 lines of a label, so adding lines
+  can drop the labels below out of their header's reach.  It happened once: NakaInst_SoundConfig_LookupTable's
+  four `.long` lines cost three following .incbin slices 82 bytes of KNOWN-A per tree, and joining the four into
+  one `.long a, b, c, d` line restored them.  Re-run the data census on the tree before and after.
 
 RUN (repository root)
   python3 scripts/analysis/dispatch_table_census/build_maps.py
