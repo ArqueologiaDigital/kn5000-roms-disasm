@@ -375,8 +375,8 @@ DrawText_NullTerminate:
 	lda xwa, (xsp+270)
 	ld xbc, 0:i3
 	push xbc
-	pushw_da 0xa4, 0xef, 0x03
-	pushw_da 0xa2, 0xef, 0x03
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	ld xbc, (xsp + 14)
 	calr DrawText_QueueOrDirect
 	pop xiz
@@ -1212,8 +1212,8 @@ DrawText_ExtLayout_NullAndDraw:
 	ld	xbc, (xbc+wa)
 	lda xwa, (xsp+276)
 	push xbc
-	pushw_da 0xa4, 0xef, 0x03
-	pushw_da 0xa2, 0xef, 0x03
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 16)
 	calr DrawText_QueueOrDirect

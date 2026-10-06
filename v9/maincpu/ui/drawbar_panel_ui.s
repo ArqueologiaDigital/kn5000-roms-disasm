@@ -9103,7 +9103,7 @@ LanguageCheckReturn:
 	jr CheckMsg_ReturnZero
 
 CheckMsg_AudioCommand:
-	pushw_da 0x8c, 0x47, 0x02
+	pushw	(0x2478c:24)
 	pushw CheckMsg_AudioCommand_Str_MessageID_Fmt3d@hi16
 	pushw CheckMsg_AudioCommand_Str_MessageID_Fmt3d@lo16
 	ld xwa, (xiz + 18)
@@ -10871,7 +10871,7 @@ IvSoftverProc:
 Softver_ShowHide:
 	ld xwa, xiz
 	call InheritedProc
-	pushw_da 0x30, 0x79, 0xeb
+	pushw	(Softver_MainProgramVersion:24)
 	pushw Softver_ShowHide_Str_Fmt4d@hi16
 	pushw Softver_ShowHide_Str_Fmt4d@lo16
 	lda xwa, (xsp + 10)

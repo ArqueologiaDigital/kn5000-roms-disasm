@@ -9471,7 +9471,7 @@ LanguageCheckReturn:
 	jr CheckMsg_ReturnZero
 
 CheckMsg_AudioCommand:
-	pushw_da 0x8c, 0x47, 0x02
+	pushw	(0x2478c:24)
 
 	pushw 0xe9
 

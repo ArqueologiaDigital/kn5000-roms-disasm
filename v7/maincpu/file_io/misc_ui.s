@@ -477,7 +477,7 @@ WaitingFunc_DrawMessage:
 	call	Strlen
 	inc	4, xsp
 	srl	hl, 1
-	pushw_da	0x8c, 0x74, 0x02
+	pushw	(0x2748c:24)
 	lda	xwa, (xsp + 6)
 	ld	xbc, xiz
 	ld	de, hl

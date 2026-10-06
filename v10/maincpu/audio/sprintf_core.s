@@ -218,7 +218,7 @@ Sprintf_Format_Percent:
 
 Sprintf_Percent_PadLeft:
 	incw 1, (xsp + 4)
-	pushw_da 0x20, 0xc2, 0x03
+	pushw	(0x3c220:24)
 	ld xwa, (xsp + 92)
 	call (xwa)
 	inc 2, xsp
@@ -305,7 +305,7 @@ Sprintf_String_CheckLeftAlign:
 	jr Sprintf_String_OutputLoop
 
 Sprintf_String_PadLeftSpace:
-	pushw_da 0x20, 0xc2, 0x03
+	pushw	(0x3c220:24)
 	ld xwa, (xsp + 92)
 	call (xwa)
 	inc 2, xsp
@@ -624,7 +624,7 @@ Sprintf_Unsigned_FinalWidth:
 	jr Sprintf_Unsigned_PrecZeroLoop
 
 Sprintf_Unsigned_PadLeftSpace:
-	pushw_da 0x20, 0xc2, 0x03
+	pushw	(0x3c220:24)
 	ld xwa, (xsp + 92)
 	call (xwa)
 	inc 2, xsp
