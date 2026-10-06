@@ -1638,7 +1638,7 @@ UserBitmapCheck:
 	ret
 
 UserBitmapCheck_ReturnTablePtr:
-	lda xhl, (UserBitmapCheck_ReturnTablePtr_Data:24)
+	lda xhl, (UserBitmapCheck_Bitmap24x24:24)
 	ret
 
 UserBitmapCheck_ReturnSize:

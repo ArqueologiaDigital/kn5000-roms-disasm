@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 53,101
-#   semantic names ........... 52,348 (98.6%)
+#   symbols .................. 53,104
+#   semantic names ........... 52,351 (98.6%)
 #   positional names ......... 753
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -9363,7 +9363,7 @@ AcNaming_QueryCharSet_PtrTable 00EA9EEA
 WndEvt_DispatchByEventCode_CaseTable 00EA9EF6
 ModeEdit_HandlePaint_Data 00EA9F08
 TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts 00EA9F14
-UserBitmapCheck_ReturnTablePtr_Data 00EA9F20
+UserBitmapCheck_Bitmap24x24 00EA9F20
 VwUserBitmapByName_HandlePaint_Data 00EAA160
 EditSw_ByteData_Str_N7f 00EAA166
 EditSw_ByteData_Str_N80 00EAA16A
@@ -9607,6 +9607,9 @@ Root_ApFunctionTable_120 00EAB2B4
 Root_ApFunctionTable_420 00EAB2E8
 BitmapIDProc_EntryCount 00EAB3CA
 BitmapIDProc_PtrTable 00EAB3CC
+BitmapID_Names 00EAB7CC
+BitmapID_FileNamePtrTable 00EAB904
+BitmapID_FileNames 00EABD04
 WidgetPropStr_Max 00EAC1BA
 WidgetPropStr_RangeFigures 00EAC1BE
 Root_ClassTable_160 00EAC9EE

@@ -436,11 +436,10 @@ WndEvt_DispatchByEventCode_CaseTable:
 	.short	WndEvt_DispatchByEventCode_Case8 - WndEvt_EventCodeDispatch
 ModeEdit_HandlePaint_Data:			.incbin "includes/generated/naka_disk_warning.bin", 0x125C, 0xC
 TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts:	.incbin "includes/generated/naka_disk_warning.bin", 0x1268, 0xC	; "0x%02X : %s"
-; [nakarest] naka_disk_warning+0x1274  +0x1274..+0x14ba (0xea9f20, 582 B)
-; [nakarest] purpose not established: layout of 582 B at 0xea9f20 not derived; readers below
-; [nakarest] Readers: source references UserBitmapCheck_ReturnTablePtr (ui/ui_window_procs.s:
-; [nakarest] `lda xhl, (UserBitmapCheck_ReturnTablePtr_Data:24)`).
-UserBitmapCheck_ReturnTablePtr_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1274, 0x240
+; UserBitmapCheck_Bitmap24x24 -- a 24 x 24 bitmap, one byte per pixel.  UserBitmapCheck answers
+; EVT_GET_BITMAP_WIDTH / _HEIGHT with 0x18 and EVT_GET_BITMAP_DATA with this address; VwUserBitmap_HandlePaint
+; draws it with DrawBitmapSPFast.  Typed in ui_widgets/naka_disk_warning.c (scripts/converters/bitmap_id_tables_retype.py).
+UserBitmapCheck_Bitmap24x24:	.incbin "includes/generated/naka_disk_warning.bin", 0x1274, 0x240
 VwUserBitmapByName_HandlePaint_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x14B4, 0x6
 ; [nakarest] naka_disk_warning+0x14ba  +0x14ba..+0x14be (0xeaa166, 4 B)
 ; [nakarest] Text (4 B at 0xeaa166), first string "~7f"; no registered NAKA table points into
@@ -1456,13 +1455,17 @@ Root_ApFunctionTable_420:	.incbin "includes/generated/naka_disk_warning.bin", 0x
 ; [nakarest] reached through source references BitmapIDProc_OnGetPropDataCountSp (ui/ui_widget_defs.s: `ld hl,
 ; [nakarest] (BitmapIDProc_EntryCount:24)`).
 BitmapIDProc_EntryCount:	.incbin "includes/generated/naka_disk_warning.bin", 0x271E, 0x2	; """
-; [nakarest] naka_disk_warning+0x2720  +0x2720..+0x31e8 (0xeab3cc, 2760 B)
-; [nakarest] purpose not established: layout of 2760 B at 0xeab3cc not derived; readers below
-; [nakarest] Readers: source references BitmapIDProc (ui/ui_widget_defs.s: `ld xbc,
-; [nakarest] BitmapIDProc_PtrTable`), BitmapIDProc_OnGetOrDumpPropertyEx (ui/ui_widget_defs.s: `ld
-; [nakarest] xbc, BitmapIDProc_PtrTable`), BitmapIDProc_SetProp_LoopHead (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, BitmapIDProc_PtrTable`).
-BitmapIDProc_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x2720, 0xAC8	; 35 x 32-bit pointer
+; BitmapIDProc_PtrTable -- 256 x u32: bitmap id -> resource name.  BitmapIDProc reads table[id] for
+; GET/DUMP_PROPERTY_EX and searches it by name for SET_PROPERTY_EX.  35 entries are non-zero, while
+; BitmapIDProc_EntryCount (the GET_PROP_DATA_COUNT_SP answer) is 34.
+BitmapIDProc_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x2720, 0x400
+; BitmapID_Names -- the resource names BitmapIDProc_PtrTable points at ("TrashIcon", "GoldTechnics" ...).
+BitmapID_Names:	.incbin "includes/generated/naka_disk_warning.bin", 0x2B20, 0x138
+; BitmapID_FileNamePtrTable -- 256 x u32: bitmap id -> its .bmp file name, parallel to BitmapIDProc_PtrTable
+; (like IconBitmapNamePtrTable for icons).  No reader in the ROM: a development-time table.
+BitmapID_FileNamePtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x2C58, 0x400
+; BitmapID_FileNames -- the .bmp file names BitmapID_FileNamePtrTable points at ("19mic.bmp" ...).
+BitmapID_FileNames:	.incbin "includes/generated/naka_disk_warning.bin", 0x3058, 0x190
 ; [nakarest] naka_disk_warning+0x31e8  +0x31e8..+0x3d42 (0xeabe94, 2906 B)
 ; [nakarest] propname blocks (the +20 field-name table) of classes 0-108 of Class slot 0x160
 ; [nakarest] (table 0xeac9ee, 109 entries, InitializeRoot): Object {}; Function {func};
