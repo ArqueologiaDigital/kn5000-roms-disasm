@@ -1142,7 +1142,7 @@ Audio_DispatchCommand_LoadDispTimeSet:
 	jr	Audio_DispatchCommand_Join
 Audio_DispatchCommand_LoadSetupOptions:
 	pushw	4
-	.asciz	"@ 4="
+	ld	xwa, 0x3d3420
 	push	xwa
 	ld	xwa, 0x0340f2
 Audio_DispatchCommand_Join:

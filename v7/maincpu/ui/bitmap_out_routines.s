@@ -372,10 +372,10 @@ BitMapOut_ByteData_PresetCopy:
 	ldto_berp a, 251
 	extz wa
 	cp hl, 0:i3
-	jr nz, BitMapOut_ByteData_PresetCopy_Skip
+	jr nz, BitMapOut_ByteData_PresetCopy_Code_Skip2
 	calr PanelMemory_Recall
 	jr BitMapOut_ByteData_PresetCopy_Join
-BitMapOut_ByteData_PresetCopy_Skip:
+BitMapOut_ByteData_PresetCopy_Code_Skip2:
 	ld xbc, 63904
 	calr BitMapOut_CopyVoicePreset9
 BitMapOut_ByteData_PresetCopy_Join:

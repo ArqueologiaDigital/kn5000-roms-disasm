@@ -23372,7 +23372,7 @@ ApPlaySyori_Join10:
 SeqAccomp_StartHandler:
 	call ApDeliveryEvent
 	jrl t, AppEvent_ReturnZero
-SeqAccomp_SubChain_Case11:
+SeqAccomp_SubChain_DecSoloEnable:
 	cps_erpb 0xee, 0
 	jrl z, AppEvent_ReturnZero
 	ld (0x283a:16), 0x00
@@ -25461,7 +25461,7 @@ HelpLang_DispatchDataBlock:
 	ld	c, (10606:16)
 	extz	bc
 	cp	e, 5:i3
-	jr	z, HelpLang_DispatchDataBlock_Skip3
+	jr	z, HelpLang_DispatchDataBlock_Entry
 	cp	e, 3:i3
 	jr	z, HelpLang_DispatchDataBlock_Skip2
 	cp	e, 2:i3
@@ -25476,7 +25476,7 @@ HelpLang_DispatchDataBlock_Skip:
 HelpLang_DispatchDataBlock_Skip2:
 	ld	xwa, HelpLang_ByteTable3
 	jr	HelpLang_DispatchDataBlock_Join
-HelpLang_DispatchDataBlock_Skip3:
+HelpLang_DispatchDataBlock_Entry:
 	ld	xwa, FontPalette_Gradient7
 	jr	HelpLang_DispatchDataBlock_Join
 HelpLang_DispatchDataBlock_Skip4:
@@ -29718,7 +29718,7 @@ SeqPart_ByteBlockA207_Skip:
 	ld	(0x287b:16), c
 	ldb_d8	a, (10359)
 	cp	a, 127
-	jr	z, SeqPart_ByteBlockA207_Skip6
+	jr	z, SeqPart_ByteBlockA207_Code_Skip3
 	dec	1, a
 	extz	wa
 	lda_d16	xde, (61856)
@@ -29727,30 +29727,30 @@ SeqPart_ByteBlockA207_Skip:
 	ld	a, (xwa)
 	ldfr_berp	a, 251	; ld qizh,a
 	cp_erpb	251, 13	; cp qizh,0x0d
-	jr	z, SeqPart_ByteBlockA207_Skip2
+	jr	z, SeqPart_ByteBlockA207_Code_Skip
 	cp_erpb	251, 16	; cp qizh,0x10
-	jr	nz, SeqPart_ByteBlockA207_Skip4
-SeqPart_ByteBlockA207_Skip2:
+	jr	nz, SeqPart_ByteBlockA207_Code_Entry
+SeqPart_ByteBlockA207_Code_Skip:
 	cp_erpb	251, 16	; cp qizh,0x10
-	jr	nz, SeqPart_ByteBlockA207_Skip3
+	jr	nz, SeqPart_ByteBlockA207_Code_Skip2
 	set	6, c
 	ld	(0x287b:16), c
-SeqPart_ByteBlockA207_Skip3:
+SeqPart_ByteBlockA207_Code_Skip2:
 	ldb_d8	a, (10359)
 	extz	wa
 	call	Part_ValidateAndSetupVoiceChannel
 	cp	(SEQ_ERROR_CODE:16), 0
 	jrl	nz, SeqPart_ByteBlockA207_Join2
-SeqPart_ByteBlockA207_Skip4:
+SeqPart_ByteBlockA207_Code_Entry:
 	ldmm8	9780, 10359
 	bit	6, (10363:16)
 	jr	z, SeqPart_ByteBlockA207_Skip5
 	cp_erpb	251, 16	; cp qizh,0x10
 	call	z, (15993411:24)
 SeqPart_ByteBlockA207_Skip5:
-	calr	SeqPart_ByteBlockA207_Helper
+	calr	SeqPart_ByteBlockA207_Code_Helper
 	jrl	SeqPart_ByteBlockA207_Join
-SeqPart_ByteBlockA207_Skip6:
+SeqPart_ByteBlockA207_Code_Skip3:
 	ldib_erp	250, 1	; ld qizl,1
 SeqPart_ByteBlockA207_Loop:
 	ldto_berp	a, 250	; ld a,qizl
@@ -29790,7 +29790,7 @@ SeqPart_ByteBlockA207_Loop2:
 	ldto_berp	a, 250	; ld a,qizl
 	ld	(0x2634:16), a
 	bit	6, (10363:16)
-	jr	z, SeqPart_ByteBlockA207_Skip10
+	jr	z, SeqPart_ByteBlockA207_Code_Skip7
 	ldto_berp	a, 250	; ld a,qizl
 	dec	1, a
 	extz	wa
@@ -29798,30 +29798,30 @@ SeqPart_ByteBlockA207_Loop2:
 	extz	xwa
 	add	xwa, xbc
 	cp	(xwa), 16
-	jr	nz, SeqPart_ByteBlockA207_Skip10
+	jr	nz, SeqPart_ByteBlockA207_Code_Skip7
 	ld	(SEQ_ERROR_CODE:16), 0
 	call	SeqData_VoiceSetupBlock
-SeqPart_ByteBlockA207_Skip10:
-	calr	SeqPart_ByteBlockA207_Helper
+SeqPart_ByteBlockA207_Code_Skip7:
+	calr	SeqPart_ByteBlockA207_Code_Helper
 	ldb_d8	c, (SEQ_ERROR_CODE)
 	cp	c, 0:i3
-	jr	nz, SeqPart_ByteBlockA207_Skip11
+	jr	nz, SeqPart_ByteBlockA207_Code_Skip8
 	bit	6, (10363:16)
-	jr	z, SeqPart_ByteBlockA207_Skip12
+	jr	z, SeqPart_ByteBlockA207_Code_Skip9
 	ldto_berp	a, 250	; ld a,qizl
 	cp	a, (0x288d:16)
-	jr	nz, SeqPart_ByteBlockA207_Skip12
+	jr	nz, SeqPart_ByteBlockA207_Code_Skip9
 	cp	c, 0:i3
-	jr	z, SeqPart_ByteBlockA207_Skip12
-SeqPart_ByteBlockA207_Skip11:
+	jr	z, SeqPart_ByteBlockA207_Code_Skip9
+SeqPart_ByteBlockA207_Code_Skip8:
 	cp	c, 1:i3
-	jr	z, SeqPart_ByteBlockA207_Skip12
+	jr	z, SeqPart_ByteBlockA207_Code_Skip9
 	cp	c, 8
-	jr	z, SeqPart_ByteBlockA207_Skip12
+	jr	z, SeqPart_ByteBlockA207_Code_Skip9
 	cp	(9782:16), 0
-	jr	nz, SeqPart_ByteBlockA207_Skip12
+	jr	nz, SeqPart_ByteBlockA207_Code_Skip9
 	ld	(0x2636:16), c
-SeqPart_ByteBlockA207_Skip12:
+SeqPart_ByteBlockA207_Code_Skip9:
 	inc1b_erp	250	; inc 1,qizl
 	ldto_berp	a, 250	; ld a,qizl
 	cp	a, (0x28a1:16)
@@ -29833,7 +29833,7 @@ SeqPart_ByteBlockA207_Join2:
 	call	SeqVoice_InitReturnZero
 	pop	qiz
 	ret
-SeqPart_ByteBlockA207_Helper:
+SeqPart_ByteBlockA207_Code_Helper:
 	ld	(SEQ_ERROR_CODE:16), 0
 	ldb_d8	a, (9780)
 	extz	wa
@@ -29858,7 +29858,7 @@ SeqPart_ByteBlockA207_Helper:
 	ldmm16	10375, 10415
 	ldw_d16	wa, (9778)
 	cp	wa, 1:i3
-	jr	nz, SeqPart_ByteBlockA207_Skip15
+	jr	nz, SeqPart_ByteBlockA207_Code_Skip11
 	add	wa, (0x25de:16)
 	ld	(10367:16), wa
 	ldb_d8	a, (9780)
@@ -29869,29 +29869,29 @@ SeqPart_ByteBlockA207_Helper:
 	call	SeqVoice_SeekToBar
 	ldb_d8	a, (SEQ_ERROR_CODE)
 	cp	a, 0:i3
-	jr	z, SeqPart_ByteBlockA207_Skip13
+	jr	z, SeqPart_ByteBlockA207_Code_Skip10
 	cp	a, 8
 	ret	nz
 	ld	(SEQ_ERROR_CODE:16), 0
-	jr	SeqPart_ByteBlockA207_Join3
-SeqPart_ByteBlockA207_Skip13:
+	jr	SeqPart_ByteBlockA207_Code_Entry3
+SeqPart_ByteBlockA207_Code_Skip10:
 	call	SeqData_ReadNextByte
 	cp	l, 130
-	jr	nz, SeqPart_ByteBlockA207_Skip15
-SeqPart_ByteBlockA207_Join3:
+	jr	nz, SeqPart_ByteBlockA207_Code_Skip11
+SeqPart_ByteBlockA207_Code_Entry3:
 	ldmm8	10359, 9780
 	calr	SeqPart_InitClear
 	ldb_d8	a, (10359)
 	dec	1, a
 	ld	bc, 1:i3
 	and	a, 15
-	jr	z, SeqPart_ByteBlockA207_Skip14
+	jr	z, SeqPart_ByteBlockA207_Code_Helper_Skip
 	.byte 0xd9, 0xfc	; sla a,bc
-SeqPart_ByteBlockA207_Skip14:
+SeqPart_ByteBlockA207_Code_Helper_Skip:
 	cpl	bc
 	and	(0xffec:24), bc
 	ret
-SeqPart_ByteBlockA207_Skip15:
+SeqPart_ByteBlockA207_Code_Skip11:
 	ldb_d8	l, (10381)
 	ldb_d8	a, (9780)
 	ldmm16	10367, 9778
@@ -29906,15 +29906,15 @@ SeqPart_ByteBlockA207_Skip15:
 	call	SeqData_ScanAllTracks
 	ldb_d8	a, (SEQ_ERROR_CODE)
 	cp	a, 0:i3
-	jr	z, SeqPart_ByteBlockA207_Skip16
+	jr	z, SeqPart_ByteBlockA207_Code_Skip12
 	cp	a, 7:i3
-	jr	z, SeqPart_ByteBlockA207_Skip17
+	jr	z, SeqPart_ByteBlockA207_Code_Skip13
 	ret
-SeqPart_ByteBlockA207_Skip16:
+SeqPart_ByteBlockA207_Code_Skip12:
 	call	SeqData_AdvancePosition
 	cp	(SEQ_ERROR_CODE:16), 0
 	ret	nz
-SeqPart_ByteBlockA207_Skip17:
+SeqPart_ByteBlockA207_Code_Skip13:
 	ld	(SEQ_ERROR_CODE:16), 0
 	ldmm16	10377, 9830
 	ldmm16	10379, 10415
@@ -29934,7 +29934,7 @@ SeqPart_ByteBlockA207_Skip17:
 	lda	xbc, (xde+2)
 	ld	wa, (xbc)
 	cp	wa, 5:i3
-	jr	nz, SeqPart_ByteBlockA207_Skip18
+	jr	nz, SeqPart_ByteBlockA207_Code_Skip14
 	ld	wa, (xde)
 	call	PartCtrl_ReadWord_Off1
 	cp	hl, 0:i3
@@ -29942,11 +29942,11 @@ SeqPart_ByteBlockA207_Skip17:
 	lda_d16	xwa, (10292)
 	ld	(xwa), hl
 	ldw	(xwa+2), 255
-	jr	SeqPart_ByteBlockA207_Join4
-SeqPart_ByteBlockA207_Skip18:
+	jr	SeqPart_ByteBlockA207_Code_Join
+SeqPart_ByteBlockA207_Code_Skip14:
 	dec	1, wa
 	ld	(xbc), wa
-SeqPart_ByteBlockA207_Join4:
+SeqPart_ByteBlockA207_Code_Join:
 	lda_d16	xde, (10292)
 	ld	wa, (xde+2)
 	ld	c, a

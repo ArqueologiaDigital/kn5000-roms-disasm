@@ -1518,7 +1518,7 @@ Flash_InitBytecodeBlock_Skip3:
 	cp	wa, 0:i3
 	jr	nz, Flash_InitBytecodeBlock_Skip4
 	ld	wa, bc
-	calr	Flash_InitBytecodeBlock_Helper
+	calr	Flash_AssignSlotsToBlocks
 	ld	a, (xsp+6)
 	extz	wa
 	calr	Flash_InitBytecodeBlock_Helper3
@@ -2287,7 +2287,7 @@ Flash_StoreBaseAndInitAccPatch_Skip2:
 	ld	a, (xbc)
 	ld	(xhl), a
 	ret
-Flash_InitBytecodeBlock_Helper:
+Flash_AssignSlotsToBlocks:
 	dec 2,XSP
 	pushw iz
 	ld (XSP+0x02),A
@@ -4004,18 +4004,19 @@ Flash_SlotUpdateOpsBlock_Skip4:
 	ld	(xsp), 32
 Flash_SlotUpdateOpsBlock_Skip5:
 	extz	wa
-	calr	Flash_InitBytecodeBlock_Helper_Helper_Helper2
+	calr	Flash_SlotUpdateOpsBlock_Helper3
 	ld	a, (xsp)
 	extz	wa
-	calr	Flash_InitBytecodeBlock_Helper_Helper_Helper2
+	calr	Flash_SlotUpdateOpsBlock_Helper3
 	inc	4, xsp
 	ret
-Flash_InitBytecodeBlock_Helper_Helper_Helper2:
+Flash_SlotUpdateOpsBlock_Helper3:
 	dec 2,XSP
 	push QIZ
 	ld (XSP+0x02),A
 	lds_erpb 0xfb, 0
 .Lc_f183ef:
+Flash_SlotUpdateOpsBlock_Loop2:
 	ld A,(XSP+0x02)
 	extz WA
 	ld_erpb_rr c, 0xfb
@@ -4024,6 +4025,7 @@ Flash_InitBytecodeBlock_Helper_Helper_Helper2:
 	calr Util_FrameSetup10
 	lds_erpb 0xfa, 1
 .Lc_f18401:
+Flash_SlotUpdateOpsBlock_Loop3:
 	ld A,(XSP+0x02)
 	extz WA
 	ld_erpb_rr c, 0xfb
@@ -4042,6 +4044,7 @@ Flash_InitBytecodeBlock_Helper_Helper_Helper2:
 	lda xbc, (0x0c02:16)
 	ldw	(xbc+wa), 0x0001
 .Lc_f18430:
+Flash_SlotUpdateOpsBlock_Skip6:
 	incb_erp 0xfa, 1
 	cps_erpb 0xfa, 4
 	jr ule, .Lc_f18401

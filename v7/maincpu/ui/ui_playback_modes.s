@@ -41,7 +41,7 @@ UIStateEvt_VoiceParamHandler_Skip3:
 	call	Part_WriteAllVoiceSubBlocks_B
 	popw	wa
 	call	SeqPlay_RestoreVoiceState_Return
-	call	UIStateEvt_VoiceParamHandler_Helper
+	call	Seq_FindRhythmTrack
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
@@ -57,7 +57,7 @@ UIStateEvt_VoiceParamHandler_Skip4:
 	call	Part_WriteAllVoiceSubBlocks_A
 	popw	wa
 	call	SeqPlay_RestoreVoiceState_Return
-	call	UIStateEvt_VoiceParamHandler_Helper
+	call	Seq_FindRhythmTrack
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
@@ -67,8 +67,8 @@ UIStateEvt_VoiceParamHandler_Skip4:
 	call	SeqPlay_CheckStartConditions
 UIStateEvt_VoiceParamHandler_Return:
 	ret
-UIStateEvt_VoiceParamHandler_Helper:
-	ld	xix, 61856
+Seq_FindRhythmTrack:
+	ld	xix, 0xf1a0
 	xor	bc, bc
 	ld	c, 16:opc
 	ld	a, 16:opc
@@ -82,34 +82,34 @@ UIStateEvt_VoiceParamHandler_Skip5:
 	sub	wa, bc
 	ld	c, a
 	ld	b, a
-	ld	iz, (61854:16)
+	ld	iz, (0xf19e:16)
 	ld	a, c
 	scf
-	.byte 0xde, 0x2a
+	xorcf_a_16	iz	; after scf: C = NOT bit A (the track) of the mask
 	ld	a, b
 	jr	c, UIStateEvt_VoiceParamHandler_Entry2
 	pushw	wa
-	ld	xhl, 62032
+	ld	xhl, 0xf250
 	ld	c, 3:opc
 	mul	wa, c
 	ld	iy, wa
-	.byte 0xf3, 0x07, 0xec, 0xf4, 0xcf
-	jr	z, UIStateEvt_VoiceParamHandler_Skip6
+	bit	7, (xhl+iy)
+	jr	z, UIStateEvt_VoiceParamHandler_Skip8
 	popw	wa
 	jr	UIStateEvt_VoiceParamHandler_Join2
-UIStateEvt_VoiceParamHandler_Skip6:
+UIStateEvt_VoiceParamHandler_Skip8:
 	popw	wa
 	jr	UIStateEvt_VoiceParamHandler_Entry2
 UIStateEvt_VoiceParamHandler_Join2:
 	inc	1, a
 	ld	w, a
-	ld	(3414:16), w
-	or (3412:16), 1
-	or (10363:16), 4
+	ld	(0x0d56:16), w
+	or	(0x0d54:16), 0x01
+	or	(0x287b:16), 0x04
 	jr	UIStateEvt_VoiceParamHandler_Return2
 UIStateEvt_VoiceParamHandler_Entry2:
-	and	(3412:16), 254
-	and	(10363:16), 251
+	and	(0x0d54:16), 0xfe
+	and	(0x287b:16), 0xfb
 	xor	w, w
 UIStateEvt_VoiceParamHandler_Return2:
 	ret

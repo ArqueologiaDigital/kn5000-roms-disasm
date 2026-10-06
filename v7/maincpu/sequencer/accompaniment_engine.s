@@ -13222,7 +13222,7 @@ AccPatch_MultiCallWrapper:
 	calr	AccPatch_ClearModeFlag
 	pop	xiz
 	ret
-AccPatch_MultiCallWrapper_0x9:
+AccPatch_ClearModeAndInitSlotChain_Wrap:
 	push	xiz
 	calr	AccPatch_ClearModeFlag
 	call	AccPatch_InitSlotChain_WithAddr
@@ -30627,7 +30627,7 @@ CmpNcpTtl_Dispatch_Code_Skip11:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-CmpNcpTtl_TableDispatch_Case134:	; cases 134, 135
+CmpNcpTtl_TableDispatch_OnToValueDown:	; cases 134, 135
 	ld	wa, 1:i3
 	; v10 does not spell this byte either
 	call	UI_PostEvent_0x6E

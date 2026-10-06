@@ -3585,7 +3585,7 @@ FileIO_ByteBlock_DemoProc1_Skip21:
 	jrl	FileIO_ByteBlock_DemoProc1_Epilogue6
 FileIO_ByteBlock_DemoProc1_Entry:
 	cpw	(xsp+38), 2
-	jr	nc, FileIO_ByteBlock_DemoProc1_Skip22
+	jr	nc, FileIO_ByteBlock_DemoProc1_Skip23
 	ldw	(xsp+8), 9400
 	ld	wa, (xsp+38)
 	extz	xwa
@@ -3603,7 +3603,7 @@ FileIO_ByteBlock_DemoProc1_Entry:
 	ld	wa, (xsp+36)
 	ld	(xsp+10), a
 	jr	FileIO_ByteBlock_DemoProc1_Join6
-FileIO_ByteBlock_DemoProc1_Skip22:
+FileIO_ByteBlock_DemoProc1_Skip23:
 	ldw	(xsp+8), 10535
 	ld	xiz, 18816
 	ld	xwa, 18816

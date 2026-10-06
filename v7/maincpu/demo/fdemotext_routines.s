@@ -1335,7 +1335,7 @@ FDemoText_ByteData_DisplayRefresh_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+136)
 	ret
-Seq_LoadDisplayResource_Helper:
+FDemoText_ReadTaggedBlock:
 	lda xsp, (xsp - 0x16)
 	pushw iz
 	ld (XSP+0x0c),XDE
@@ -1763,13 +1763,13 @@ FDemoText_ByteData_TextRenderer:
 	ld	(xwa), 0
 	ld	xwa, (xsp+2)
 	cp	(xwa), 0
-	jr	z, FDemoText_ProcessTextMarkup_Skip2
+	jr	z, FDemoText_ByteData_TextRenderer_Skip2
 FDemoText_ByteData_TextRenderer_Loop:
 	ld	xde, (xsp+2)
 	lda	xwa, (xde+iz)
 	ld	xbc, xwa
 	cp	(xwa), 61
-	jr	nz, FDemoText_ByteData_TextRenderer_Skip
+	jr	nz, FDemoText_ByteData_TextRenderer_Skip3
 	ld	(xbc), 0
 	push	xde
 	ld	xwa, (xsp+10)
@@ -1797,21 +1797,21 @@ FDemoText_ByteData_TextRenderer_Loop:
 	extz	xhl
 	add	xhl, (xsp+18)
 	ld	(xhl), 0
-	jr	FDemoText_ProcessTextMarkup_Skip2
+	jr	FDemoText_ByteData_TextRenderer_Skip2
 FDemoText_ProcessTextMarkup_Skip:
 	push	xbc
 	ld	xwa, (xsp+22)
 	push	xwa
 	call	Strcpy
 	inc	8, xsp
-	jr	FDemoText_ProcessTextMarkup_Skip2
-FDemoText_ByteData_TextRenderer_Skip:
+	jr	FDemoText_ByteData_TextRenderer_Skip2
+FDemoText_ByteData_TextRenderer_Skip3:
 	inc	1, iz
 	ld	xwa, (xsp+2)
 ; v10 does not spell this byte either
 	cp	(xwa+iz), 0x00
 	jr	nz, FDemoText_ByteData_TextRenderer_Loop
-FDemoText_ProcessTextMarkup_Skip2:
+FDemoText_ByteData_TextRenderer_Skip2:
 	ld	xwa, (xsp+2)
 	push	xwa
 	call	Free
@@ -2780,7 +2780,7 @@ FDemoText_ByteData_LayoutB:
 	ld	bc, (xde)
 	ld	wa, bc
 	sub	wa, iz
-	jr	ge, FDemoText_RenderTextLine_Skip
+	jr	ge, FDemoText_ByteData_LayoutB_Skip
 	neg	wa
 	inc	3, wa
 	exts	xwa
@@ -2788,7 +2788,7 @@ FDemoText_ByteData_LayoutB:
 	sla	wa, 2
 	add	bc, wa
 	ld	(xde), bc
-FDemoText_RenderTextLine_Skip:
+FDemoText_ByteData_LayoutB_Skip:
 	ld	xwa, (xsp+12)
 	calr	FDemo_LinkedListSearchInsert
 	ld	(xsp+4), xhl
@@ -3004,7 +3004,7 @@ Seq_LoadResource_Proceed:
 	ld	xwa, 149704
 	ld	xbc, 256
 	ld	xde, Presentation_TagStrTable
-	calr	Seq_LoadDisplayResource_Helper
+	calr	FDemoText_ReadTaggedBlock
 	call	FileIO_CloseHandle
 Seq_Epilogue32:
 	pop xiz
@@ -3056,7 +3056,7 @@ Seq_FillBufferLoop:
 	pushw	Seq_FillBufferLoop_Str_ACTION@lo16
 	ld	xbc, xiz
 	ld	xde, Seq_FillBufferLoop_Str_ACTION_2
-	calr	Seq_LoadDisplayResource_Helper
+	calr	FDemoText_ReadTaggedBlock
 	call	FileIO_CloseHandle
 	cp	hl, 0:i3
 	jr	nz, Seq_NamedResource_Epilogue

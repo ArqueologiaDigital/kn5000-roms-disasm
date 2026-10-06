@@ -6658,7 +6658,7 @@ SeWrtSnd_OnSideRow1:
 	push	qiz
 	cp	a, 0:i3
 	jr	nz, Scoop_SoundEditorData_Helper_Skip26
-	calr	Scoop_SoundEditorData_Helper_Helper
+	calr	SeWrtSnd_ClearName
 	jr	Scoop_SoundEditorData_Helper_Epilogue20
 Scoop_SoundEditorData_Helper_Skip26:
 	lda	xwa, (xsp+2)
@@ -7176,7 +7176,7 @@ Scoop_SoundEditorData_Helper_Join27:
 Scoop_SoundEditorData_Helper_Epilogue28:
 	inc	6, xsp
 	ret
-Scoop_SoundEditorData_Helper_Helper:
+SeWrtSnd_ClearName:
 	push	qiz
 	ldib_erp	251, 0
 Scoop_SoundEditorData_Helper_Loop9:
@@ -8696,7 +8696,7 @@ SeMenu_WaveformSelect_Data_Skip:
 	ld	xiy, SeScreenData_0x0562
 	ld	xix, SeScreenData_0x0685
 	call	SeGfx_DrawStaticList
-	call	SeMenu_WaveformSelect_Apply_Helper
+	call	SeMenu_DrawOriginalEditedBadge
 	jr	SeMenu_WaveformSelect_Data_Return
 SeMenu_WaveformSelect_Data_Skip2:
 	ld	xiy, SeScreenData_0x5120
@@ -8714,7 +8714,7 @@ SeMenu_WaveformSelect_Data_Skip2:
 	ld	(COLORBLIT_MODE:24), 0
 SeMenu_WaveformSelect_Data_Return:
 	ret
-SeMenu_WaveformSelect_Apply_Helper:
+SeMenu_DrawOriginalEditedBadge:
 	ld (COLORBLIT_MODE:24), 0x00
 	cp (0x0661:16), 0x01
 	jr z, .Lc_f0f596
@@ -8756,7 +8756,7 @@ SeMenu_WaveformSelect_Data_Return2:
 SeMenu_PresetManager_Init:
 	cp	(0x6ae:16), 1
 	jr	z, SeMenu_PresetManager_Init_Skip
-	call	SeMenu_WaveformSelect_Apply_Helper
+	call	SeMenu_DrawOriginalEditedBadge
 	jrl	SeMenu_PresetManager_Init_Code_Return
 SeMenu_PresetManager_Init_Skip:
 	cp	a, 0:i3
@@ -9336,7 +9336,7 @@ SeMenu_Utility_FillBlock:
 	ret
 SeMenu_Utility_CompareBlock:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeScreenData_0x178B
+	ld	xiy, SeMenu_Utility_CompareBlock_Data_2
 	ld	xix, SeScreenData_0x18D8
 	call	SeGfx_DrawStaticList
 	ld	xiy, SeScreenData_0x18ED
@@ -9357,7 +9357,7 @@ SeMenu_Utility_CompareBlock_Loop:
 	ret
 SeMenu_Utility_CompareBlock_End:
 	ld	xiy, SeScreenData_0x1780
-	ld	xix, SeScreenData_0x178B
+	ld	xix, SeMenu_Utility_CompareBlock_Data_2
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Save
 	ret
@@ -9398,7 +9398,7 @@ SeMenu_Utility_FormatSigned:
 	ret
 SeMenu_Utility_FormatSigned_Data:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeScreenData_0x178B
+	ld	xiy, SeMenu_Utility_CompareBlock_Data_2
 	ld	xix, SeScreenData_0x18D8
 	call	SeGfx_DrawStaticList
 	ld	xiy, SeScreenData_0x18D8
@@ -13058,13 +13058,13 @@ SeScreenData_0x175E:
 	sd_quad	0x05, 252, 149, 308, 166
 SeMenu_Utility_FormatNumber_Data_2:
 	sd_quad	0x05, 270, 67, 306, 92
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x178B
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_Utility_CompareBlock_Data_2
 ; evidence: SeMenu_Utility_CompareBlock_End
 SeScreenData_0x1780:
 	sd_ctext	0x06, 11, 6*40+32, "PAGE1/2"
 ; static record list (38 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x18D8
 ; evidence: SeMenu_Utility_CompareBlock, SeMenu_Utility_FormatSigned_Data
-SeScreenData_0x178B:
+SeMenu_Utility_CompareBlock_Data_2:
 	sd_ptext	0x17, 13, 67, 30, "FILTER:"
 	sd_ptext	0x17, 12, 213, 98, "CUTOFF"
 	sd_ptext	0x17, 15, 67, 108, "EQUALIZER"

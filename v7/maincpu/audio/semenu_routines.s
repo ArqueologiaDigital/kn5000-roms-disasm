@@ -1563,7 +1563,7 @@ SeMenu_ApplyPartEdit_Helper:
 	cp	a, 0:i3
 	jr	nz, SeMenu_TransferPartValues_EndData_Skip10
 	lda	xwa, (1677:16)
-SeMenu_ApplyPartEdit_Helper_Join:
+SeMenu_TransferPartValues_EndData_Join9:
 	cp	c, 0:i3
 	jr	z, SeMenu_TransferPartValues_EndData_Skip12
 	decm8	1, (xwa)
@@ -1572,12 +1572,12 @@ SeMenu_TransferPartValues_EndData_Skip10:
 	cp	a, 1:i3
 	jr	nz, SeMenu_TransferPartValues_EndData_Skip11
 	lda	xwa, (1678:16)
-	jr	SeMenu_ApplyPartEdit_Helper_Join
+	jr	SeMenu_TransferPartValues_EndData_Join9
 SeMenu_TransferPartValues_EndData_Skip11:
 	cp	a, 2:i3
 	ret	nz
 	lda	xwa, (1679:16)
-	jr	SeMenu_ApplyPartEdit_Helper_Join
+	jr	SeMenu_TransferPartValues_EndData_Join9
 SeMenu_TransferPartValues_EndData_Skip12:
 	incm8	1, (xwa)
 SeMenu_TransferPartValues_EndData_Entry:

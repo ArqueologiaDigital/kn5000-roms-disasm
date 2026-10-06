@@ -100,12 +100,11 @@ UIStateEvt_VoiceParamHandler_Skip3:
 	ld	iz, (0xf19e:16)
 	ld	a, c
 	scf
-	.byte 0xde
-	pushw	de
+	xorcf_a_16	iz	; after scf: C = NOT bit A (the track) of the mask
 	ld	a, b
-	jr c, UIStateEvt_VoiceParamHandler_Join
-	pushw wa
-	ld xhl, 62032
+	jr	c, UIStateEvt_VoiceParamHandler_Join
+	pushw	wa
+	ld	xhl, 0xf250
 	ld	c, 3:opc
 	mul	wa, c
 	ld	iy, wa
@@ -119,13 +118,13 @@ UIStateEvt_VoiceParamHandler_Skip8:
 UIStateEvt_VoiceParamHandler_Join2:
 	inc	1, a
 	ld	w, a
-	ld	(3414:16), w
-	or (3412:16), 1
-	or (10363:16), 4
+	ld	(0x0d56:16), w
+	or	(0x0d54:16), 0x01
+	or	(0x287b:16), 0x04
 	jr	UIStateEvt_VoiceParamHandler_Return2
 UIStateEvt_VoiceParamHandler_Join:
-	and (3412:16), 254
-	and (10363:16), 251
+	and	(0x0d54:16), 0xfe
+	and	(0x287b:16), 0xfb
 	xor	w, w
 UIStateEvt_VoiceParamHandler_Return2:
 	ret

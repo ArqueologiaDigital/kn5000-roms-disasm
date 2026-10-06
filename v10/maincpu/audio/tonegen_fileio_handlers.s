@@ -1196,11 +1196,10 @@ Audio_DispatchCommand_LoadDispTimeSet:
 	push	xwa
 	ld	xwa, 0x0340e6
 	jr	Audio_DispatchCommand_Join
-; Audio_DispatchCommand_LoadSetupOptions: Option block +0x20 (4 bytes) -> 0x340F2; the `.asciz "@ 4="` before `push
-;   xwa` is the instruction ld xwa, 0x3d3420 spelled as text.
+; Audio_DispatchCommand_LoadSetupOptions: Option block +0x20 (4 bytes, flash 0x3D3420) -> 0x340F2.
 Audio_DispatchCommand_LoadSetupOptions:
 	pushw	4
-	.asciz "@ 4="
+	ld	xwa, 0x3d3420
 	push	xwa
 	ld	xwa, 0x0340f2
 Audio_DispatchCommand_Join:

@@ -4359,7 +4359,7 @@ SeqAccomp_SubChain_CaseTable:
 	.short	SeqAccomp_SubChain_Case8 - SeqAccomp_SubHandlerB
 	.short	SeqAccomp_SubChain_Case8 - SeqAccomp_SubHandlerB
 	.short	SeqAccomp_SubChain_Case8 - SeqAccomp_SubHandlerB
-	.short	SeqAccomp_SubChain_Case11 - SeqAccomp_SubHandlerB
+	.short	SeqAccomp_SubChain_DecSoloEnable - SeqAccomp_SubHandlerB
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqAccomp_ParamDelivery_CaseTable
 ; SeqAccomp_ParamDelivery_CaseTable -- jump table of a compiled `switch`
@@ -5827,8 +5827,8 @@ CmpNcpTtl_TableDispatch_CaseTable:
 	.short	CmpNcpTtl_TableDispatch_Case130 - CmpNcpTtl_Dispatch2
 	.short	CmpNcpTtl_TableDispatch_OnToItemNext - CmpNcpTtl_Dispatch2
 	.short	CmpNcpTtl_TableDispatch_OnToItemNext - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case134 - CmpNcpTtl_Dispatch2
-	.short	CmpNcpTtl_TableDispatch_Case134 - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnToValueDown - CmpNcpTtl_Dispatch2
+	.short	CmpNcpTtl_TableDispatch_OnToValueDown - CmpNcpTtl_Dispatch2
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] CmpNcpTtlFunc_CaseTable
 ; CmpNcpTtlFunc_CaseTable -- jump table of a compiled `switch` in

@@ -9554,7 +9554,7 @@ MidiPkt_GetUsedSize_StyleImage:
 	push	xhl
 	push	xix
 	push	xiz
-	call	AccPatch_MultiCallWrapper_0x9
+	call	AccPatch_ClearModeAndInitSlotChain_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl

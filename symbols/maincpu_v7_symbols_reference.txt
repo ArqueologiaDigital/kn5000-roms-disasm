@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,445
-#   semantic names ........... 52,709 (98.6%)
-#   positional names ......... 736
+#   symbols .................. 53,448
+#   semantic names ........... 52,716 (98.6%)
+#   positional names ......... 732
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -17012,7 +17012,7 @@ Timer_ParamCompareAlt_Helper2 00EF7CC1
 Timer_ParamCompareAlt_Skip17 00EF7CDC
 Timer_ParamCompareAlt_Join6 00EF7CDE
 Timer_ParamCompareAlt_Helper3 00EF7CE6
-Timer_ParamCompareAlt_Skip18 00EF7D0C
+Timer_ParamCompareAlt_Skip21 00EF7D0C
 Timer_ParamCompareAlt_Return3 00EF7D0E
 ToneParam_ModeGuardEntry 00EF7D0F
 ToneParam_ModeGuardEntry_Skip 00EF7D3B
@@ -17150,7 +17150,7 @@ DisplayMode_Handler_3 00EF87D1
 DisplayMode_Handler_3_Skip 00EF87E4
 DisplayMode_Handler_3_Join 00EF880B
 ToneEvt_Handler_Mode9_Helper 00EF8810
-Timer_ModeHandler_1_Helper 00EF8830
+TempoRingBuf_DispatchEvents 00EF8830
 DisplayMode_Handler_3_Skip2 00EF8846
 DisplayMode_Handler_3_Loop4 00EF884A
 DisplayMode_Handler_3_Loop5 00EF886A
@@ -17183,7 +17183,7 @@ DisplayMode_Handler_3_Entry 00EF8A71
 DisplayMode_Handler_3_Skip12 00EF8AB4
 DisplayMode_Handler_3_Join3 00EF8ABA
 DisplayMode_Handler_3_Return2 00EF8AD8
-ToneParam_ModeGuardEntry_Helper 00EF8AD9
+SqStep_SeekForwardByStep 00EF8AD9
 DisplayMode_Handler_3_Sub 00EF8ADD
 DisplayMode_Handler_3_Join4 00EF8AE7
 DisplayMode_Handler_3_Skip23 00EF8B00
@@ -17273,14 +17273,14 @@ VoiceSlot_TableSetup_Skip11 00EF93B0
 VoiceSlot_TableSetup_Skip12 00EF93C2
 VoiceSlot_TableSetup_Skip13 00EF93FD
 VoiceSlot_TableSetup_Join4 00EF9401
-VoiceSlot_TableSetup_Return2 00EF9412
-VoiceSlot_TableSetup_Helper5 00EF9413
+VoiceSlot_TableSetup_Code_Return 00EF9412
+SqStep_SetupNextGridRow 00EF9413
 VoiceSlot_TableSetup_Skip14 00EF943F
 VoiceSlot_TableSetup_Skip15 00EF944F
 VoiceSlot_TableSetup_Skip16 00EF9463
 VoiceSlot_TableSetup_Skip17 00EF949D
 VoiceSlot_TableSetup_Join5 00EF94AB
-VoiceSlot_TableSetup_Skip18 00EF94B3
+VoiceSlot_TableSetup_Code_Skip7 00EF94B3
 VoiceSlot_TableSetup_Skip19 00EF94C6
 VoiceSlot_TableSetup_Skip20 00EF94CE
 VoiceSlot_TableSetup_Code_Skip8 00EF94EB
@@ -17403,8 +17403,8 @@ SerialPort_ModeHandler_0_Skip7 00EF9F63
 SerialPort_ModeHandler_0_Skip8 00EF9F71
 SerialPort_ModeHandler_0_Join3 00EF9F76
 ScoopParam_ValueTable 00EF9F83
-ScoopParam_ValueTable_0x1C 00EF9F9F
-ScoopParam_ValueTable_0x29 00EF9FAC
+SqStep_AdvanceClockByStep 00EF9F9F
+SqStep_ComputeStepTargetClock 00EF9FAC
 SerialPort_ModeHandler_0_Helper2 00EF9FB9
 SerialPort_ModeHandler_0_Return4 00EF9FD0
 SysEx_BytecodeDispatcher_Helper5 00EF9FD1
@@ -17468,13 +17468,13 @@ PortConfig_Handler_0 00EFA53B
 PortConfig_Handler_0_Skip 00EFA59E
 PortConfig_Handler_0_Skip2 00EFA5EA
 PortConfig_Handler_0_Join 00EFA5F6
-PortConfig_Handler_0_Helper 00EFA5FB
+PortConfig_Handler_0_Helper6 00EFA5FB
 PortConfig_Handler_0_Helper2 00EFA612
 PortConfig_Handler_0_Return2 00EFA645
 PerfMode_Handler_EvtB_Helper2_Helper2 00EFA646
-PortConfig_Handler_0_Skip3 00EFA67D
+PortConfig_Handler_0_Helper_Skip 00EFA67D
 PortConfig_Handler_0_Return 00EFA6A9
-PortConfig_Handler_0_Helper4 00EFA6AA
+SqStep_SetDisplayModeFromTrack 00EFA6AA
 PortConfig_DataTable_A 00EFA6D4
 PerfMode_Handler_EvtB_Helper2_Helper3 00EFA6EC
 PortConfig_DataTable_A_Sub 00EFA725
@@ -17553,7 +17553,7 @@ MemConfig_Handler_1_Join2 00EFAE25
 MemConfig_Handler_1_Skip2 00EFAE3F
 MemConfig_Handler_1_Skip3 00EFAE4A
 MemConfig_Handler_1_Skip4 00EFAE50
-MemConfig_Handler_1_Return 00EFAE58
+MemConfig_Handler_1_Return3 00EFAE58
 MemConfig_Handler_0_Helper 00EFAE59
 MemConfig_Handler_1_Code_Skip3 00EFAE74
 MemConfig_Handler_1_Join3 00EFAEC6
@@ -17630,7 +17630,7 @@ SndDispatch_ProcessCommand_Skip12 00EFB3BC
 SndDispatch_ProcessCommand_Skip13 00EFB3E0
 SndDispatch_ProcessCommand_Skip14 00EFB3E6
 SndDispatch_ProcessCommand_Skip15 00EFB3F1
-SndDispatch_ProcessCommand_Return2 00EFB3F3
+SndDispatch_ProcessCommand_Return5 00EFB3F3
 SndDispatch_Handler_1_Helper2 00EFB3F4
 SndDispatch_ProcessCommand_Loop 00EFB428
 SndDispatch_ProcessCommand_Skip16 00EFB43A
@@ -17812,7 +17812,7 @@ VoiceSlot_FinalRetZ 00EFC3EF
 VoiceSlot_FinalRetZ_0x11 00EFC400
 VoiceSlot_FinalRetZ_0x1E 00EFC40D
 Timer_ModeHandler_0_Helper5 00EFC44C
-MemConfig_Handler_5_Code_Helper13 00EFC473
+VoiceSlot_WriteCurrentParam 00EFC473
 Timer_ModeHandler_0_Helper6 00EFC4A7
 VoiceSlot_FinalRetZ_Loop 00EFC4ED
 VoiceSlot_FinalRetZ_Skip 00EFC4FC
@@ -19521,7 +19521,7 @@ SeMenu_TransferPartValues_EndData_Skip8 00F06DEF
 SeMenu_TransferPartValues_EndData_Skip9 00F06DF5
 SeMenu_TransferPartValues_EndData_Join 00F06DF7
 SeMenu_ApplyPartEdit_Helper 00F06DFA
-SeMenu_ApplyPartEdit_Helper_Join 00F06E02
+SeMenu_TransferPartValues_EndData_Join9 00F06E02
 SeMenu_TransferPartValues_EndData_Skip10 00F06E0A
 SeMenu_TransferPartValues_EndData_Skip11 00F06E14
 SeMenu_TransferPartValues_EndData_Skip12 00F06E1E
@@ -20547,7 +20547,7 @@ Scoop_SoundEditorData_Helper_Join26 00F0E67A
 Scoop_SoundEditorData_Helper_Epilogue27 00F0E6B4
 Scoop_SoundEditorData_Helper_Join27 00F0E6BA
 Scoop_SoundEditorData_Helper_Epilogue28 00F0E703
-Scoop_SoundEditorData_Helper_Helper 00F0E706
+SeWrtSnd_ClearName 00F0E706
 Scoop_SoundEditorData_Helper_Loop9 00F0E70C
 Scoop_SoundEditorData_Helper_Join28 00F0E74B
 Scoop_SoundEditorData_Helper_Loop10 00F0E767
@@ -20681,7 +20681,7 @@ SeMenu_WaveformSelect_Data 00F0F50C
 SeMenu_WaveformSelect_Data_Skip 00F0F519
 SeMenu_WaveformSelect_Data_Skip2 00F0F53A
 SeMenu_WaveformSelect_Data_Return 00F0F578
-SeMenu_WaveformSelect_Apply_Helper 00F0F579
+SeMenu_DrawOriginalEditedBadge 00F0F579
 SeMenu_WaveformSelect_Apply_Helper2 00F0F5A5
 SeMenu_WaveformSelect_Data_Loop 00F0F5AD
 SeMenu_WaveformSelect_Apply_Helper3 00F0F5BB
@@ -21014,7 +21014,7 @@ SeScreenData_0x1740 00F1231C
 SeScreenData_0x175E 00F1233A
 SeMenu_Utility_FormatNumber_Data_2 00F12352
 SeScreenData_0x1780 00F1235C
-SeScreenData_0x178B 00F12367
+SeMenu_Utility_CompareBlock_Data_2 00F12367
 SeScreenData_0x18D8 00F124B4
 SeScreenData_0x18ED 00F124C9
 SeMenu_Utility_CompareBlock_Data_3 00F124DD
@@ -21593,7 +21593,7 @@ Flash_StoreBaseAndInitAccPatch_Skip 00F172EC
 Flash_StoreBaseAndInitAccPatch_Loop2 00F172F7
 Flash_StoreBaseAndInitAccPatch_Epilogue 00F17334
 Flash_StoreBaseAndInitAccPatch_Skip2 00F17359
-Flash_InitBytecodeBlock_Helper 00F1735E
+Flash_AssignSlotsToBlocks 00F1735E
 Flash_InitBytecodeBlock_Helper2 00F17422
 Flash_InitBytecodeBlock_Helper_Skip5 00F17441
 Flash_InitBytecodeBlock_Helper_Loop4 00F17450
@@ -21724,7 +21724,10 @@ Flash_SlotUpdateOpsBlock_Skip3 00F183AC
 Flash_InitBytecodeBlock_Helper_Helper 00F183B7
 Flash_SlotUpdateOpsBlock_Skip4 00F183CC
 Flash_SlotUpdateOpsBlock_Skip5 00F183D5
-Flash_InitBytecodeBlock_Helper_Helper_Helper2 00F183E4
+Flash_SlotUpdateOpsBlock_Helper3 00F183E4
+Flash_SlotUpdateOpsBlock_Loop2 00F183EF
+Flash_SlotUpdateOpsBlock_Loop3 00F18401
+Flash_SlotUpdateOpsBlock_Skip6 00F18430
 Flash_InitBytecodeBlock_Helper6 00F18447
 Flash_InitBytecodeBlock_Helper8_Skip 00F184C6
 Flash_InitBytecodeBlock_Helper8_Loop 00F184D3
@@ -22810,9 +22813,9 @@ UIStateEvt_VoiceParamHandler_Entry 00F2030D
 UIStateEvt_VoiceParamHandler_Skip3 00F2031A
 UIStateEvt_VoiceParamHandler_Skip4 00F20359
 UIStateEvt_VoiceParamHandler_Return 00F2038A
-UIStateEvt_VoiceParamHandler_Helper 00F2038B
+Seq_FindRhythmTrack 00F2038B
 UIStateEvt_VoiceParamHandler_Skip5 00F203A0
-UIStateEvt_VoiceParamHandler_Skip6 00F203CD
+UIStateEvt_VoiceParamHandler_Skip8 00F203CD
 UIStateEvt_VoiceParamHandler_Join2 00F203D0
 UIStateEvt_VoiceParamHandler_Entry2 00F203E4
 UIStateEvt_VoiceParamHandler_Return2 00F203F0
@@ -28811,7 +28814,7 @@ ApPlaySyori_Skip13 00F46174
 ApPlaySyori_Skip14 00F4617A
 ApPlaySyori_Join10 00F4617E
 SeqAccomp_StartHandler 00F461BF
-SeqAccomp_SubChain_Case11 00F461C6
+SeqAccomp_SubChain_DecSoloEnable 00F461C6
 ApPlaySyori_Skip15 00F461FB
 SeqAccomp_StartHelper 00F46202
 SeqAccomp_TogglePlayback 00F46216
@@ -29100,7 +29103,7 @@ MainPanic_ReturnZero 00F47656
 HelpLang_DispatchDataBlock 00F47659
 HelpLang_DispatchDataBlock_Skip 00F476A2
 HelpLang_DispatchDataBlock_Skip2 00F476A9
-HelpLang_DispatchDataBlock_Skip3 00F476B0
+HelpLang_DispatchDataBlock_Entry 00F476B0
 HelpLang_DispatchDataBlock_Skip4 00F476B7
 HelpLang_DispatchDataBlock_Join 00F476BC
 HelpLang_DispatchDataBlock_Skip5 00F476E3
@@ -29513,30 +29516,30 @@ SeqPart_AllocDone 00F49DC9
 SeqPart_AllocReturn 00F49E19
 SeqPart_ByteBlockA207 00F49E1D
 SeqPart_ByteBlockA207_Skip 00F49E34
-SeqPart_ByteBlockA207_Skip2 00F49E6A
-SeqPart_ByteBlockA207_Skip3 00F49E77
-SeqPart_ByteBlockA207_Skip4 00F49E89
+SeqPart_ByteBlockA207_Code_Skip 00F49E6A
+SeqPart_ByteBlockA207_Code_Skip2 00F49E77
+SeqPart_ByteBlockA207_Code_Entry 00F49E89
 SeqPart_ByteBlockA207_Skip5 00F49E9E
-SeqPart_ByteBlockA207_Skip6 00F49EA4
+SeqPart_ByteBlockA207_Code_Skip3 00F49EA4
 SeqPart_ByteBlockA207_Loop 00F49EA7
 SeqPart_ByteBlockA207_Code_Skip4 00F49EC7
 SeqPart_ByteBlockA207_Code_Skip5 00F49ED1
 SeqPart_ByteBlockA207_Skip9 00F49EE2
 SeqPart_ByteBlockA207_Loop2 00F49F05
-SeqPart_ByteBlockA207_Skip10 00F49F2F
-SeqPart_ByteBlockA207_Skip11 00F49F4D
-SeqPart_ByteBlockA207_Skip12 00F49F61
+SeqPart_ByteBlockA207_Code_Skip7 00F49F2F
+SeqPart_ByteBlockA207_Code_Skip8 00F49F4D
+SeqPart_ByteBlockA207_Code_Skip9 00F49F61
 SeqPart_ByteBlockA207_Join 00F49F6D
 SeqPart_ByteBlockA207_Join2 00F49F73
-SeqPart_ByteBlockA207_Helper 00F49F7F
-SeqPart_ByteBlockA207_Skip13 00F4A00C
-SeqPart_ByteBlockA207_Join3 00F4A015
-SeqPart_ByteBlockA207_Skip14 00F4A02D
-SeqPart_ByteBlockA207_Skip15 00F4A035
-SeqPart_ByteBlockA207_Skip16 00F4A071
-SeqPart_ByteBlockA207_Skip17 00F4A07C
-SeqPart_ByteBlockA207_Skip18 00F4A0E3
-SeqPart_ByteBlockA207_Join4 00F4A0E7
+SeqPart_ByteBlockA207_Code_Helper 00F49F7F
+SeqPart_ByteBlockA207_Code_Skip10 00F4A00C
+SeqPart_ByteBlockA207_Code_Entry3 00F4A015
+SeqPart_ByteBlockA207_Code_Helper_Skip 00F4A02D
+SeqPart_ByteBlockA207_Code_Skip11 00F4A035
+SeqPart_ByteBlockA207_Code_Skip12 00F4A071
+SeqPart_ByteBlockA207_Code_Skip13 00F4A07C
+SeqPart_ByteBlockA207_Code_Skip14 00F4A0E3
+SeqPart_ByteBlockA207_Code_Join 00F4A0E7
 SeqPart_SinglePartLoad 00F4A100
 SeqPart_SingleLoadCheckType 00F4A117
 SeqPart_SingleLoadSetup 00F4A148
@@ -32962,7 +32965,7 @@ AccDemo_InitDone 00F5E52D
 AccPatch_InitByteData 00F5E537
 AccDemo_InitWithFlag 00F5E556
 AccPatch_MultiCallWrapper 00F5E562
-AccPatch_MultiCallWrapper_0x9 00F5E56B
+AccPatch_ClearModeAndInitSlotChain_Wrap 00F5E56B
 AccStyle_TableDataEntry_Helper 00F5E575
 AccPatch_ClearModeFlag 00F5E57B
 Not_sure_maybe_SOFT_VERSION_related 00F5E581
@@ -34943,7 +34946,7 @@ CmpNcpTtl_Dispatch_Code_Skip14 00F68672
 CmpNcpTtl_TableDispatch_OnToValueUp 00F68691
 CmpNcpTtl_Dispatch_Code_Skip15 00F686F4
 CmpNcpTtl_Dispatch_Code_Skip11 00F68730
-CmpNcpTtl_TableDispatch_Case134 00F6874F
+CmpNcpTtl_TableDispatch_OnToValueDown 00F6874F
 CmpNcpTtl_Dispatch_Code_Skip16 00F687B2
 CmpNcpTtl_Dispatch_Code_Skip12 00F687EC
 CmpNcpTtl_Dispatch_Code_Join2 00F68808
@@ -38425,7 +38428,7 @@ FDemoText_ByteData_DisplayRefresh_Loop2 00F84EA2
 FDemoText_ByteData_DisplayRefresh_Skip3 00F84EDE
 FDemoText_ByteData_DisplayRefresh_Skip4 00F84EE7
 FDemoText_ByteData_DisplayRefresh_Epilogue2 00F84F05
-Seq_LoadDisplayResource_Helper 00F84F0C
+FDemoText_ReadTaggedBlock 00F84F0C
 FDemoText_ProcessTextMarkup 00F85019
 FDemoText_ProcessMarkup_CheckTagOpen 00F85036
 FDemoText_ProcessMarkup_LookupTag 00F85047
@@ -38453,8 +38456,8 @@ FDemoText_ProcessMarkup_Return 00F8522B
 FDemoText_ByteData_TextRenderer 00F85230
 FDemoText_ByteData_TextRenderer_Loop 00F85295
 FDemoText_ProcessTextMarkup_Skip 00F852EC
-FDemoText_ByteData_TextRenderer_Skip 00F852F9
-FDemoText_ProcessTextMarkup_Skip2 00F85306
+FDemoText_ByteData_TextRenderer_Skip3 00F852F9
+FDemoText_ByteData_TextRenderer_Skip2 00F85306
 FDemoText_TextDispatch 00F85317
 FDemoText_TextDispatch_Return 00F85322
 FDemoText_ByteData_LayoutEngine 00F85325
@@ -38533,7 +38536,7 @@ FDemoText_Layout_DrawText 00F85CD9
 FDemoText_Layout_UpdatePosition 00F85D0E
 FDemoText_Layout_FreeBuffer 00F85D2F
 FDemoText_ByteData_LayoutB 00F85D3E
-FDemoText_RenderTextLine_Skip 00F85D93
+FDemoText_ByteData_LayoutB_Skip 00F85D93
 FDemoText_RenderTextLine_Skip2 00F85DB1
 FDemoText_RenderTextLine_Join 00F85DB6
 FDemoText_RenderTextLine_Skip3 00F85E00
@@ -38915,7 +38918,7 @@ FileIO_ByteBlock_DemoProc1_0x4AC 00F8821D
 FileIO_ByteBlock_DemoProc1_Skip20 00F88235
 FileIO_ByteBlock_DemoProc1_Skip21 00F88270
 FileIO_ByteBlock_DemoProc1_Entry 00F88283
-FileIO_ByteBlock_DemoProc1_Skip22 00F882C6
+FileIO_ByteBlock_DemoProc1_Skip23 00F882C6
 FileIO_ByteBlock_DemoProc1_Join6 00F882DC
 FileIO_ByteBlock_DemoProc1_Skip24 00F88315
 FileIO_ByteBlock_DemoProc1_Epilogue6 00F8831B
@@ -44974,7 +44977,7 @@ BitMapOut_ByteData_TransitionSeq_Skip2 00FB3F28
 BitMapOut_ByteData_TransitionSeq_Skip3 00FB3F4E
 BitMapOut_ByteData_TransitionSeq_Join 00FB3F5A
 BitMapOut_ByteData_PresetCopy 00FB3F5F
-BitMapOut_ByteData_PresetCopy_Skip 00FB3FB2
+BitMapOut_ByteData_PresetCopy_Code_Skip2 00FB3FB2
 BitMapOut_ByteData_PresetCopy_Join 00FB3FBA
 BitMapOut_ByteData_PresetCopy_Skip2 00FB3FC0
 BitMapOut_CopyVoicePreset9 00FB3FC8

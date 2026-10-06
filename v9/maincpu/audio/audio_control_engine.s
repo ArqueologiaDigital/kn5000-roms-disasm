@@ -9777,16 +9777,16 @@ MidiPartCC_WriteAndDispatch_Skip2:
 	ld	xix, 0x90ce
 	ld	a, (xix+hl)
 	cp	a, 16
-	jr	z, MidiVoice_DataBlockHandler_Skip
+	jr	z, MidiVoice_DataBlockHandler_Skip4
 	bit	4, (0xfd50:16)
-	jr	nz, MidiVoice_DataBlockHandler_Skip
+	jr	nz, MidiVoice_DataBlockHandler_Skip4
 	or	(0x90e4:16), a
 	or	(0x90e4:16), 192
 	ld	wa, (xiy)
 	ld	(MIDI_MSG_STATUS:16), wa
 	ld	wa, (xiy+0x2)
 	ld	(MIDI_MSG_DATA2:16), wa
-MidiVoice_DataBlockHandler_Skip:
+MidiVoice_DataBlockHandler_Skip4:
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 	ret
 VoiceMode3_EvType2:
@@ -11834,7 +11834,7 @@ MidiStream_ExtDispatch_ModeJump02:
 	jr	MidiStream_ExtDispatch_ModeJump3_Join2
 MidiStream_ExtDispatch_ModeJump1:
 	bit	0, w
-	jr	z, MidiStream_ExtDispatch_ModeJump1_Skip7
+	jr	z, MidiStream_ExtDispatch_ModeJump1_Skip8
 	srl	a, 4
 	and	a, 15
 	cp	c, 20
@@ -11847,7 +11847,7 @@ MidiStream_ExtDispatch_ModeJump1:
 MidiStream_ExtDispatch_ModeJump1_Skip6:
 	set	7, a
 	jr	MidiStream_ExtDispatch_ModeJump3_Join2
-MidiStream_ExtDispatch_ModeJump1_Skip7:
+MidiStream_ExtDispatch_ModeJump1_Skip8:
 	srl	a, 4
 	and	a, 15
 	jr	MidiStream_ExtDispatch_ModeJump3_Join2
