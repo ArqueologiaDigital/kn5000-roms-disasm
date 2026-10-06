@@ -1,26 +1,26 @@
 {
  "date": "2026-10-06",
- "head": "fa0b8987",
+ "head": "e4675cc6",
  "dirty": false,
  "rules": 2,
  "entry_snapshot": "docs/coverage/dispatch-census-2026-10-06-21.json",
  "entry_snapshot_head": "a00e3f9f",
  "score": {
-  "kn5000": 87.17,
+  "kn5000": 87.21,
   "wsa1": 89.54,
-  "all": 86.76
+  "all": 86.8
  },
  "components": {
   "kn5000": {
    "bytes": {
-    "num": 9539496,
+    "num": 9547941,
     "den": 10289152,
-    "pct": 92.71
+    "pct": 92.8
    },
    "names": {
-    "num": 130539,
+    "num": 130626,
     "den": 145422,
-    "pct": 89.77
+    "pct": 89.83
    },
    "entry": {
     "num": 2226,
@@ -28,8 +28,8 @@
     "pct": 99.73
    },
    "fields": {
-    "num": 58191,
-    "den": 87541,
+    "num": 58194,
+    "den": 87544,
     "pct": 66.47
    }
   },
@@ -57,14 +57,14 @@
   },
   "all": {
    "bytes": {
-    "num": 11525796,
+    "num": 11534241,
     "den": 12386304,
-    "pct": 93.05
+    "pct": 93.12
    },
    "names": {
-    "num": 144850,
+    "num": 144937,
     "den": 164413,
-    "pct": 88.1
+    "pct": 88.15
    },
    "entry": {
     "num": 2977,
@@ -72,8 +72,8 @@
     "pct": 99.43
    },
    "fields": {
-    "num": 58191,
-    "den": 87541,
+    "num": 58194,
+    "den": 87544,
     "pct": 66.47
    }
   }
@@ -81,13 +81,13 @@
  "images": {
   "v10": {
    "names": {
-    "semantic": 39515,
+    "semantic": 39544,
     "continuation": 8743,
-    "generic": 4092,
+    "generic": 4063,
     "positional": 751
    },
    "bytes": [
-    1885159,
+    1887974,
     2097152
    ],
    "entry": [
@@ -97,13 +97,13 @@
   },
   "v9": {
    "names": {
-    "semantic": 39515,
+    "semantic": 39544,
     "continuation": 8739,
-    "generic": 4085,
+    "generic": 4056,
     "positional": 752
    },
    "bytes": [
-    1884553,
+    1887368,
     2097152
    ],
    "entry": [
@@ -113,13 +113,13 @@
   },
   "v7": {
    "names": {
-    "semantic": 39405,
+    "semantic": 39434,
     "continuation": 8417,
-    "generic": 4139,
+    "generic": 4110,
     "positional": 839
    },
    "bytes": [
-    1878757,
+    1881572,
     2097152
    ],
    "entry": [
