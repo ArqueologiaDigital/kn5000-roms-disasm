@@ -492,7 +492,7 @@ def entry_points():
             ev[v].append("DispatchTable_F54248[%d]" % i)
     for i, v in enumerate(dispatch(0xF542D1, 4)):
         if LO <= v < HI:
-            ev[v].append("DispatchTable_F542D1[%d]" % i)
+            ev[v].append("DrawbarSettingPage_RowStepHandlers[%d]" % i)
     for t, ss in internal_calls().items():
         ev[t].append("call from " + ", ".join("0x%06X" % x for x in ss[:6])
                      + ("" if len(ss) <= 6 else ", +%d more" % (len(ss) - 6)))
@@ -962,7 +962,7 @@ def structure():
                     off[1] - off[2]))
           + wrap("Entry count: ",
                  "NINE, and nine is measured twice: 0x%06X + 9 = 0x%06X, which "
-                 "is exactly where DispatchTable_F542D1 starts; and the screen "
+                 "is exactly where DrawbarSettingPage_RowStepHandlers starts; and the screen "
                  "shows nine drawbars.  ⚠ This is CORRECTION C3: the layout's "
                  "HOLES table describes 44 of this segment's 45 bytes and never "
                  "mentions the trailing 0x00, which is entry 8."
@@ -1014,8 +1014,8 @@ def structure():
                  "(--selftest check B), which a mis-framed table would not do."
                  % sum(1 for v in dispatch(0xF54248, 23) if LO <= v < HI))))
 
-    objc(0xF542D1, "DispatchTable_F542D1",
-        "DispatchTable_F542D1 -- 4 pointers into this module's code",
+    objc(0xF542D1, "DrawbarSettingPage_RowStepHandlers",
+        "DrawbarSettingPage_RowStepHandlers -- 4 pointers into this module's code",
         *(wrap("Read by: ", namer_text(0xF542D1))
           + wrap("Evidence: ",
                  "four 32-bit words, all four landing on instruction "
@@ -1576,7 +1576,7 @@ def selftest():
           sorted("0x%06X" % v for v in dsp if v not in b), [])
     check("  and so is the LAST of them (0x%06X)" % max(dsp), max(dsp) in b, True)
     d2 = [v for v in dispatch(0xF542D1, 4) if LO <= v < HI]
-    check("every DispatchTable_F542D1 entry is on a boundary",
+    check("every DrawbarSettingPage_RowStepHandlers entry is on a boundary",
           sorted("0x%06X" % v for v in d2 if v not in b), [])
 
     print("C. the entry-point citations are at INSTRUCTION addresses")
@@ -1642,7 +1642,7 @@ def selftest():
     check("nine entries", off, [0x6E, 0x62, 0x54, 0x46, 0x38, 0x2A, 0x1C, 0x0E, 0])
     check("one step of 12 then eight of 14",
           [off[i] - off[i + 1] for i in range(8)], [12] + [14] * 7)
-    check("the table ends exactly where DispatchTable_F542D1 begins",
+    check("the table ends exactly where DrawbarSettingPage_RowStepHandlers begins",
           ROWOFF + 9, 0xF542D1)
     check("the LAST entry is the byte the layout's HOLES table never mentions",
           (ROWOFF + 8, off[8]), (0xF542D0, 0x00))

@@ -100,7 +100,7 @@ WHERE THE NAMES COME FROM -- AND WHERE THEY DELIBERATELY DO NOT
     Names: SoundCodeByGroupMember_{ModeOffsetGroup,ByteGroup,SevenBitGroup}.
   * THE SCREEN MODULES.  Nine of the span's entry points are entries [26], [27],
     [29], [45] and [0] of the two PARALLEL 48-entry selector tables
-    DispatchTable_F5B8F8 (bracketed) and DispatchTable_F5B9F8.  The routines in
+    Dispatch_Code80_PaintTable (bracketed) and Dispatch_Code80_RepaintFieldTable.  The routines in
     the first table run a page's WHOLE display-list set unconditionally; the
     routines at the SAME INDEX in the second start `cp A,<n>` and repaint one
     field.  The lists they run carry their own text: 'C0NTR0LLER'/'SOUND EDIT'
@@ -571,39 +571,39 @@ def calls_out(lo, hi, lab):
 
 
 NAMED_WHY = {
-    0xF09800: ("entry [45] of DispatchTable_F5B8F8, the BRACKETED selector table. "
+    0xF09800: ("entry [45] of Dispatch_Code80_PaintTable, the BRACKETED selector table. "
                "It calls SoundEditController_PaintHeader (which draws the list at "
                "0xF32C2A, text 'C0NTR0LLER' and 'SOUND EDIT') and then runs the "
                "list at 0xF32D2C, whose own text is 'PAGE1/2'."),
-    0xF0985C: ("entry [27] of DispatchTable_F5B8F8.  Same header call, then the "
+    0xF0985C: ("entry [27] of Dispatch_Code80_PaintTable.  Same header call, then the "
                "list at 0xF32E71, text 'PAGE2/2', 'AFTER TOUCH', 'CTRL PEDAL'."),
     0xF098B8: ("called by both CONTROLLER page painters and by nothing else in "
                "the transcription.  It runs the list at 0xF32C2A, whose text is "
                "'C0NTR0LLER' and 'SOUND EDIT' -- the page header -- choosing "
                "between two end bounds on (0x27F5)."),
-    0xF098FB: ("entry [45] of DispatchTable_F5B9F8, the table PARALLEL to "
+    0xF098FB: ("entry [45] of Dispatch_Code80_RepaintFieldTable, the table PARALLEL to "
                "0xF5B8F8: same index, same screen.  It starts `cp A,0 / cp A,0x0E "
                "/ cp A,0x0C` and repaints a SUBSET of the page's lists, where the "
                "[45] routine of the first table repaints all of them."),
-    0xF09961: ("entry [27] of DispatchTable_F5B9F8 -- the parallel of the PAGE2/2 "
+    0xF09961: ("entry [27] of Dispatch_Code80_RepaintFieldTable -- the parallel of the PAGE2/2 "
                "painter -- and it likewise starts `cp A,0 / cp A,0x32 / cp A,0x0C`."),
-    0xF099F5: ("entry [26] of DispatchTable_F5B8F8.  It runs the prom_a list at "
+    0xF099F5: ("entry [26] of Dispatch_Code80_PaintTable.  It runs the prom_a list at "
                "0xFC40F0 (or 0xFC410F when (0x27B6) == 0x0A), whose text is "
                "'DIGITAL EFFECT', 'SOUND EDIT', 'INTENSITY', 'TYPE', "
                "'REVERB DEPTH  :', and then indexes two arrays of list bounds at "
                "prom_a 0xFC4532 and 0xFC47FF by the same (0x27B6)."),
-    0xF09AA5: ("entry [26] of DispatchTable_F5B9F8 -- the parallel slot of the "
+    0xF09AA5: ("entry [26] of Dispatch_Code80_RepaintFieldTable -- the parallel slot of the "
                "DIGITAL EFFECT painter -- and it starts `cp A,0 / cp A,7`, the "
                "per-field shape."),
     0xF09AE1: ("`extz XWA / xor W,W / sla 2,WA / add XIY,XWA / ld XIY,(XIY) / "
                "call 0xF41830`: XIY is an array of 32-bit display-list pointers, "
                "A is the index, and 0xF41830 is thunk slot T_F41830, which holds "
                "`jp DisplayListB_RunOne`.  The name states exactly that."),
-    0xF09B9B: ("entry [29] of DispatchTable_F5B8F8.  It runs the prom_a lists at "
+    0xF09B9B: ("entry [29] of Dispatch_Code80_PaintTable.  It runs the prom_a lists at "
                "0xFC4BA7, 0xFC4D77, 0xFC4DEB and 0xFC4E54, whose text is 'COPY', "
                "'SOUND EDIT', 'FROM', 'TO  ', 'TONE:  ', 'BANK:  ', "
                "'DRUM KIT:  ' and '1st TONE  '.."),
-    0xF09C08: ("entry [29] of DispatchTable_F5B9F8, the parallel slot of the COPY "
+    0xF09C08: ("entry [29] of Dispatch_Code80_RepaintFieldTable, the parallel slot of the COPY "
                "painter."),
 }
 
@@ -1067,7 +1067,7 @@ def banner():
 ;   and the group/member pair at 0x60F010/0x60F011.
 ;
 ;   0xF09800-0xF0C734 is CODE: handlers of the two PARALLEL 48-entry selector
-;   tables DispatchTable_F5B8F8 / DispatchTable_F5B9F8, of prom_a's two
+;   tables Dispatch_Code80_PaintTable / Dispatch_Code80_RepaintFieldTable, of prom_a's two
 ;   computed-call tables at 0xFCF21B (377 entries, 50 in this span) and
 ;   0xFCF80C (305 entries, 43 in this span), and of eight small `jp (XBC)`
 ;   tables inside the block itself.

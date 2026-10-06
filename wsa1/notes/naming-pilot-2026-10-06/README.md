@@ -81,3 +81,16 @@ Leads: the 64 slots at 0x305A are held notes, with notes held 127 beats split in
 an event-ring overflow writes the track number over the centre value 0x40 and reads its target track from a stale
 byte (a likely firmware bug, recorded, not changed); the MIXER page-frame painter at 0xFBE135 (after `ret; ret`)
 needs its own label; `SmfOut_WriteFirstWindow` at 0xF77F9A sits on an unreachable copy.
+
+**Wave 11** (`proposals_wave11_{a11,t11}.json`): a11 named the last 18 routines with a named caller. t11 was
+TABLE-DRIVEN: it decoded the selectors of the address-named dispatch tables and named 26 tables plus their
+entries from the index meaning (98 named, 29 refused). The CYCLE RECORD / CYCLE PLAY screens' four
+StateDispatchTable_* are the right-column up/down keys by field cursor (0x36CE) / (0x3627): CYCLE on/off, START
+MEASURE, END MEASURE, SOLO; the SX-WSA1R TEST page's ITEM cursor is (0x26A7) bits 0-2 (bit 3 TEST, bit 4
+MONO/POLY); the DRAWBAR SETTING rows are PERCUSSIVE TONE DECAY / LEVEL, ATTACK and RELEASE TIME. Entry records cite
+their body line and name their table index; the selector evidence is in the table's own record. Derivative
+passes: 6 display lists, 65 locals (sub_F45478_* and sub_F77F2A_* were left out: a11 found they belong to other
+code). Leads: the pitch-bend reset after a ring overflow writes {0xD2, tick, 0, track} to the track held in
+(0x34AE), not {.., 0x40} (a firmware bug, unchanged); 0x216E is the COMPARE LED flag; the historical generator
+gen_prom_b_f5553f_module.py spells Select36CE_%06X with a format string, so regenerating it would bring the old
+names back.

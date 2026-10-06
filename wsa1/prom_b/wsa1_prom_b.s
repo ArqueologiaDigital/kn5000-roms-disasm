@@ -16360,7 +16360,7 @@ DL_Lf01Lf02Lf03Lf04Lf0WaveDelay:
 ;   and the group/member pair at 0x60F010/0x60F011.
 ;
 ;   0xF09800-0xF0C734 is CODE: handlers of the two PARALLEL 48-entry selector
-;   tables DispatchTable_F5B8F8 / DispatchTable_F5B9F8, of prom_a's two
+;   tables Dispatch_Code80_PaintTable / Dispatch_Code80_RepaintFieldTable, of prom_a's two
 ;   computed-call tables at 0xFCF21B (377 entries, 50 in this span) and
 ;   0xFCF80C (305 entries, 43 in this span), and of eight small `jp (XBC)`
 ;   tables inside the block itself.
@@ -17616,7 +17616,7 @@ ProgramChangeOut_ByProgramAndBank:
 ; Draws:   4 display-list call sites naming 4 distinct lists; their printable
 ;          runs: 0xF32D2C-0xF32E71 "PAGE1/2"; 0xF32F43-0xF32FA0;
 ;          0xF32FC8-0xF32FE6; 0xF32FA0-0xF32FC8
-; Evidence: entry [45] of DispatchTable_F5B8F8, the BRACKETED selector table.
+; Evidence: entry [45] of Dispatch_Code80_PaintTable, the BRACKETED selector table.
 ;           It calls SoundEditController_PaintHeader (which draws the list at
 ;           0xF32C2A, text 'C0NTR0LLER' and 'SOUND EDIT') and then runs the
 ;           list at 0xF32D2C, whose own text is 'PAGE1/2'.
@@ -17654,7 +17654,7 @@ SoundEditController_PaintPage1_Skip:
 ; Draws:   4 display-list call sites naming 4 distinct lists; their printable
 ;          runs: 0xF32E71-0xF32F43 "PAGE2/2 / AFTER TOUCH / CTRL PEDAL";
 ;          0xF3341C-0xF334AE; 0xF32FC8-0xF32FE6; 0xF32FA0-0xF32FC8
-; Evidence: entry [27] of DispatchTable_F5B8F8.  Same header call, then the
+; Evidence: entry [27] of Dispatch_Code80_PaintTable.  Same header call, then the
 ;           list at 0xF32E71, text 'PAGE2/2', 'AFTER TOUCH', 'CTRL PEDAL'.
 ; --------------------------------------------------------------------------
 SoundEditController_PaintPage2:
@@ -17722,7 +17722,7 @@ SoundEditController_PaintHeader_Return:
 ; Calls:   SoundEditController_PaintDepthAndSwitches T_DisplayList_Run T_DisplayListB_Run RunDisplayListBFromPointerArray
 ; Draws:   3 display-list call sites naming 3 distinct lists; their printable
 ;          runs: 0xF33362-0xF3338A; 0xF3338A-0xF33394; 0xF32F43-0xF32FA0
-; Evidence: entry [45] of DispatchTable_F5B9F8, the table PARALLEL to
+; Evidence: entry [45] of Dispatch_Code80_RepaintFieldTable, the table PARALLEL to
 ;           0xF5B8F8: same index, same screen.  It starts `cp A,0 / cp A,0x0E
 ;           / cp A,0x0C` and repaints a SUBSET of the page's lists, where the
 ;           [45] routine of the first table repaints all of them.
@@ -17768,7 +17768,7 @@ SoundEditController_PaintHeader_Return2:
 ; Calls:   SoundEditController_PaintDepthAndSwitches T_DisplayList_Run T_DisplayListB_Run RunDisplayListBFromPointerArray
 ; Draws:   3 display-list call sites naming 2 distinct lists; their printable
 ;          runs: 0xF334FE-0xF33508; 0xF3341C-0xF334AE
-; Evidence: entry [27] of DispatchTable_F5B9F8 -- the parallel of the PAGE2/2
+; Evidence: entry [27] of Dispatch_Code80_RepaintFieldTable -- the parallel of the PAGE2/2
 ;           painter -- and it likewise starts `cp A,0 / cp A,0x32 / cp
 ;           A,0x0C`.
 ; --------------------------------------------------------------------------
@@ -17845,7 +17845,7 @@ SoundEditController_PaintDepthAndSwitches_Skip:
 ; Draws:   2 display-list call sites naming 2 distinct lists; their printable
 ;          runs: 0xFC40F0-0xFC420F "INTENSITY / INTENS.# / DIGITAL EFFECT /
 ;          SOUND EDIT / TYPE / "; 0xFC40B4-0xFC40F0
-; Evidence: entry [26] of DispatchTable_F5B8F8.  It runs the prom_a list at
+; Evidence: entry [26] of Dispatch_Code80_PaintTable.  It runs the prom_a list at
 ;           0xFC40F0 (or 0xFC410F when (0x27B6) == 0x0A), whose text is
 ;           'DIGITAL EFFECT', 'SOUND EDIT', 'INTENSITY', 'TYPE', 'REVERB DEPTH
 ;           :', and then indexes two arrays of list bounds at prom_a 0xFC4532
@@ -17916,7 +17916,7 @@ SoundEditDigitalEffect_Paint_Join3:
 ; Calls:   T_DisplayListB_Run RunDisplayListBFromPointerArray
 ; Draws:   1 display-list call site naming 1 distinct list; their printable
 ;          runs: 0xFC45A1-0xFC45BF
-; Evidence: entry [26] of DispatchTable_F5B9F8 -- the parallel slot of the
+; Evidence: entry [26] of Dispatch_Code80_RepaintFieldTable -- the parallel slot of the
 ;           DIGITAL EFFECT painter -- and it starts `cp A,0 / cp A,7`, the
 ;           per-field shape.
 ; --------------------------------------------------------------------------
@@ -18065,7 +18065,7 @@ PtrTable_F09B7B:
 ;          TONE  / SOUND:  / 3rd TONE  / 4th T"; 0xFC4E54-0xFC4E8C " rO";
 ;          0xFC4DEB-0xFC4E54 "DRUM KIT:  / 1st TONE  / 2nd TONE  / DRUM SOUND:
 ;          / DRUM SOU"; 0xFC4E8C-0xFC4EC4
-; Evidence: entry [29] of DispatchTable_F5B8F8.  It runs the prom_a lists at
+; Evidence: entry [29] of Dispatch_Code80_PaintTable.  It runs the prom_a lists at
 ;           0xFC4BA7, 0xFC4D77, 0xFC4DEB and 0xFC4E54, whose text is 'COPY',
 ;           'SOUND EDIT', 'FROM', 'TO  ', 'TONE:  ', 'BANK:  ', 'DRUM KIT:  '
 ;           and '1st TONE  '..
@@ -18106,7 +18106,7 @@ SoundEditCopy_Paint_Join:
 ; Calls:   T_DisplayList_Run SoundEditCopy_DrawSoundName T_DisplayListB_Run RunDisplayListBFromPointerArray
 ; Draws:   2 display-list call sites naming 2 distinct lists; their printable
 ;          runs: 0xFC4EE2-0xFC4EEC; 0xFC4EC4-0xFC4EE2
-; Evidence: entry [29] of DispatchTable_F5B9F8, the parallel slot of the COPY
+; Evidence: entry [29] of Dispatch_Code80_RepaintFieldTable, the parallel slot of the COPY
 ;           painter.
 ; --------------------------------------------------------------------------
 SoundEditCopy_RepaintField:
@@ -18205,7 +18205,7 @@ SoundEditCopy_DrawSoundName_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoundEditMenu_RepaintField: DispatchTable_F5B9F8[code 0x80] -- Dispatch_Code80, the partial repaint.
+; SoundEditMenu_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x80] -- Dispatch_Code80, the partial repaint.
 SoundEditMenu_RepaintField:
 	cp	a, 0:i3	; F09CA9  cp A,0
 	jr	z, SoundEditMenu_RepaintField_Skip3	; F09CAB  jr Z,0xf09ce6
@@ -20455,7 +20455,7 @@ ScreenButton_SoundEditNaming_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_SoundEditDigitalEffect: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9A: that entry points at the thunk triple T_ScreenEnter_SoundEditDigitalEffect (Enter) / T_ScreenLeave_SoundEditDigitalEffect (Leave) / T_ScreenButton_SoundEditDigitalEffect (Button). Screen 0x9A is SOUND EDIT DIGITAL EFFECT (DispatchTable_F5B8F8[0x9A]).
+; ScreenButton_SoundEditDigitalEffect: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9A: that entry points at the thunk triple T_ScreenEnter_SoundEditDigitalEffect (Enter) / T_ScreenLeave_SoundEditDigitalEffect (Leave) / T_ScreenButton_SoundEditDigitalEffect (Button). Screen 0x9A is SOUND EDIT DIGITAL EFFECT (Dispatch_Code80_PaintTable[0x9A]).
 ScreenButton_SoundEditDigitalEffect:		; <- T_ScreenButton_SoundEditDigitalEffect
 	link XIZ,0xfffc	; F0AA10  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AA14  lda XBC,XIZ+0xfe
@@ -28937,7 +28937,7 @@ DspEffect_SelectSectionBlock_Return:
 ; --------------------------------------------------------------------------
 ; DspEffect_OnParamEvent: T_DspEffect_OnParamEvent, UiListB_Class00 / 20 / 60..63 / 79.  On the DSP EFFECT screens (0x39 COMBINATION EDIT, 0x66, 0xCA SOUND
 ;   EDIT): part 0's records (class 0x00 / 0x20) repaint while DspEffect_Section is 0; the effect records go through
-;   DispatchTable_F0F0CE by DspEffect_Section (0..5).  On MAIN OUT EQUALIZER (0x6B) the effect records repaint.
+;   DspEffect_OnParamEvent_BySection by DspEffect_Section (0..5).  On MAIN OUT EQUALIZER (0x6B) the effect records repaint.
 DspEffect_OnParamEvent:		; <- T_DspEffect_OnParamEvent
 	pushw	hl	; F0F061  push HL
 	ld	h, (UiEvent_Class:16)	; F0F062  ld H,(0x20bb)
@@ -28978,12 +28978,12 @@ DspEffect_OnParamEvent_Skip4:
 	cp	bc, 5:i3	; F0F0BD  cp BC,5
 	jr	ugt, DspEffectEvent_RepaintAndReturn_Epilogue	; F0F0BF  jr UGT,0xf0f103
 	sll	bc, 2	; F0F0C1  sll 0x02,BC
-	add	xbc, DispatchTable_F0F0CE	; F0F0C4  add XBC,0x00f0f0ce
+	add	xbc, DspEffect_OnParamEvent_BySection	; F0F0C4  add XBC,0x00f0f0ce
 	ld	xbc, (xbc)	; F0F0CA  ld XBC,(XBC)
 	jp	(xbc)	; F0F0CC  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F0CE -- 6 32-bit words, every one an address in
+; DspEffect_OnParamEvent_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  2
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -29004,17 +29004,22 @@ DspEffect_OnParamEvent_Skip4:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F0CE:
+; DspEffect_OnParamEvent_BySection: DspEffect_OnParamEvent's switch on DspEffect_Section (0..5) for effect-record
+;   events on the DSP EFFECT screens: sections 1..3 (a block's parameters) take DspEffect_OnParamEvent_ParamSections,
+;   0/4/5 just repaint. Basis: table index + body; same naming as its siblings
+;   ScreenEnterBody_/ExitKey_/SoftKeyColN_DspEffect_BySection. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+DspEffect_OnParamEvent_BySection:
 	.long	DspEffectEvent_RepaintAndReturn	; F0F0CE  [0] -> DspEffectEvent_RepaintAndReturn
-	.long	sub_F0F0E6	; F0F0D2  [1] -> sub_F0F0E6
-	.long	sub_F0F0E6	; F0F0D6  [2] -> sub_F0F0E6
-	.long	sub_F0F0E6	; F0F0DA  [3] -> sub_F0F0E6
+	.long	DspEffect_OnParamEvent_ParamSections	; F0F0D2  [1] -> DspEffect_OnParamEvent_ParamSections
+	.long	DspEffect_OnParamEvent_ParamSections	; F0F0D6  [2] -> DspEffect_OnParamEvent_ParamSections
+	.long	DspEffect_OnParamEvent_ParamSections	; F0F0DA  [3] -> DspEffect_OnParamEvent_ParamSections
 	.long	DspEffectEvent_RepaintAndReturn	; F0F0DE  [4] -> DspEffectEvent_RepaintAndReturn
 	.long	DspEffectEvent_RepaintAndReturn	; F0F0E2  [5] -> DspEffectEvent_RepaintAndReturn
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F0E6
+; DspEffect_OnParamEvent_ParamSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x20B8) (0x2793) (0x2795)
@@ -29028,7 +29033,11 @@ DispatchTable_F0F0CE:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F0E6:
+; DspEffect_OnParamEvent_ParamSections: DspEffect_OnParamEvent_BySection[1..3] (a block's parameter page is open): for
+;   an event on effect record 0x61..0x63 byte 0x17 bumps (0x2793) (the shown parameter page DspEffect_RepaintParamPage
+;   compares) and (0x2795), then falls into DspEffectEvent_RepaintAndReturn. Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+DspEffect_OnParamEvent_ParamSections:
 	cp	h, 97	; F0F0E6  cp H,0x61
 	jr	c, DspEffectEvent_RepaintAndReturn	; F0F0E9  jr C,0xf0f0ff
 	cp	h, 99	; F0F0EB  cp H,0x63
@@ -48376,13 +48385,14 @@ StringTable_F193BE:
 	.byte 0x20, 0x20, 0x20   ; F1947E  [64]  '   '
 
 ; --------------------------------------------------------------------------
-; DL_F19481 -- display list, 0xF19481-0xF19496 (22 bytes)
+; CombiEditSound_MoveLevelsPageRowCursor_DL -- display list, 0xF19481-0xF19496 (22 bytes)
 ; Interpreter: B.  2 records, framed by their own length bytes; the walk
 ;              consumes 0xF19481-0xF19496 exactly.
 ; Evidence: 2 records, interpreter B, named by a push pair whose framing
 ;           walk lands on the end address
 ; --------------------------------------------------------------------------
-DL_F19481:
+CombiEditSound_MoveLevelsPageRowCursor_DL:
+; ; drawn (start operand) by CombiEditSound_MoveLevelsPageRowCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x08, 0x0b	; F19481  op 08, 11 bytes -> handler 0xF31B57
 	.short 0x276A		; +2  RAM variable
 	.byte 0x0f, 0x00, 0x1b	; +4  mask, shift, swi 7 function
@@ -48417,13 +48427,14 @@ IndexMap_F19497:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F1950F  [15]
 
 ; --------------------------------------------------------------------------
-; DL_F19517 -- display list, 0xF19517-0xF1952C (22 bytes)
+; CombiEditSound_MoveControllerFilterPageRowCursor_DL -- display list, 0xF19517-0xF1952C (22 bytes)
 ; Interpreter: B.  2 records, framed by their own length bytes; the walk
 ;              consumes 0xF19517-0xF1952C exactly.
 ; Evidence: 2 records, interpreter B, named by a push pair whose framing
 ;           walk lands on the end address
 ; --------------------------------------------------------------------------
-DL_F19517:
+CombiEditSound_MoveControllerFilterPageRowCursor_DL:
+; ; drawn (start operand) by CombiEditSound_MoveControllerFilterPageRowCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x08, 0x0b	; F19517  op 08, 11 bytes -> handler 0xF31B57
 	.short 0x276A		; +2  RAM variable
 	.byte 0x0f, 0x00, 0x1b	; +4  mask, shift, swi 7 function
@@ -48458,13 +48469,14 @@ IndexMap_F1952D:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F195A5  [15]
 
 ; --------------------------------------------------------------------------
-; DL_F195AD -- display list, 0xF195AD-0xF195C2 (22 bytes)
+; CombiEditSound_MoveAssignAndInputFilterPageRowCursor_DL -- display list, 0xF195AD-0xF195C2 (22 bytes)
 ; Interpreter: B.  2 records, framed by their own length bytes; the walk
 ;              consumes 0xF195AD-0xF195C2 exactly.
 ; Evidence: 2 records, interpreter B, named by a push pair whose framing
 ;           walk lands on the end address
 ; --------------------------------------------------------------------------
-DL_F195AD:
+CombiEditSound_MoveAssignAndInputFilterPageRowCursor_DL:
+; ; drawn (start operand) by CombiEditSound_MoveAssignAndInputFilterPageRowCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x08, 0x0b	; F195AD  op 08, 11 bytes -> handler 0xF31B57
 	.short 0x276A		; +2  RAM variable
 	.byte 0x07, 0x00, 0x1b	; +4  mask, shift, swi 7 function
@@ -48491,12 +48503,13 @@ IndexMap_F195C3:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F195FB  [7]
 
 ; --------------------------------------------------------------------------
-; DL_F19603 -- display list, 0xF19603-0xF19618 (22 bytes)
+; CombiEditSound_MoveMidiOutPageRowCursor_DL -- display list, 0xF19603-0xF19618 (22 bytes)
 ; Interpreter: B.  2 records, framed by their own length bytes; the walk
 ;              consumes 0xF19603-0xF19618 exactly.
 ; Evidence: 2 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19603:
+CombiEditSound_MoveMidiOutPageRowCursor_DL:
+; ; drawn (start operand) by CombiEditSound_MoveMidiOutPageRowCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x08, 0x0b	; F19603  op 08, 11 bytes -> handler 0xF31B57
 	.short 0x276A		; +2  RAM variable
 	.byte 0x07, 0x00, 0x1b	; +4  mask, shift, swi 7 function
@@ -48523,12 +48536,13 @@ IndexMap_F19619:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F19651  [7]
 
 ; --------------------------------------------------------------------------
-; DL_F19659 -- display list, 0xF19659-0xF1966E (22 bytes)
+; CombiEditSound_MoveMidiOutFilterPageRowCursor_DL -- display list, 0xF19659-0xF1966E (22 bytes)
 ; Interpreter: B.  2 records, framed by their own length bytes; the walk
 ;              consumes 0xF19659-0xF1966E exactly.
 ; Evidence: 2 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19659:
+CombiEditSound_MoveMidiOutFilterPageRowCursor_DL:
+; ; drawn (start operand) by CombiEditSound_MoveMidiOutFilterPageRowCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x08, 0x0b	; F19659  op 08, 11 bytes -> handler 0xF31B57
 	.short 0x276A		; +2  RAM variable
 	.byte 0x0f, 0x00, 0x1b	; +4  mask, shift, swi 7 function
@@ -48563,12 +48577,13 @@ IndexMap_F1966F:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F196E7  [15]
 
 ; --------------------------------------------------------------------------
-; DL_F196EF -- display list, 0xF196EF-0xF19704 (22 bytes)
+; CombiEditSound_MoveMultipleMessagesPageRowCursor_DL -- display list, 0xF196EF-0xF19704 (22 bytes)
 ; Interpreter: B.  2 records, framed by their own length bytes; the walk
 ;              consumes 0xF196EF-0xF19704 exactly.
 ; Evidence: 2 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F196EF:
+CombiEditSound_MoveMultipleMessagesPageRowCursor_DL:
+; ; drawn (start operand) by CombiEditSound_MoveMultipleMessagesPageRowCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x08, 0x0b	; F196EF  op 08, 11 bytes -> handler 0xF31B57
 	.short 0x276A		; +2  RAM variable
 	.byte 0x07, 0x00, 0x1b	; +4  mask, shift, swi 7 function
@@ -96262,7 +96277,7 @@ Seq_StopAll_Call:		; <- T_Seq_StopAll_Call
 ; BStore_TrackToPart_SaveBackup
 ; Called from: T_BStore_TrackToPart_SaveBackup (x1)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F45463
+; Calls:   BStore_TrackToPart_CopyToBackup
 ; Evidence: thunk slot T_BStore_TrackToPart_SaveBackup holds `jp 0x00F4545F`, and 0xF4545F is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -96270,16 +96285,16 @@ Seq_StopAll_Call:		; <- T_Seq_StopAll_Call
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; BStore_TrackToPart_SaveBackup: `calr` to sub_F45463 (+ `ret`), which copies the 17-byte BStore_TrackToPart map
+; BStore_TrackToPart_SaveBackup: `calr` to BStore_TrackToPart_CopyToBackup (+ `ret`), which copies the 17-byte BStore_TrackToPart map
 ;   (0x603422) to its backup at 0x34BC (`ldir`, XIX = 0x34BC destination, XIY = 0x603422 source). Slot T_BStore_TrackToPart_SaveBackup;
 ;   MidiFileDirectPlay_SaveTrackToPartMap calls it with registers saved. Basis: caller + body. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave10_b10.json)
 BStore_TrackToPart_SaveBackup:		; <- T_BStore_TrackToPart_SaveBackup
-	calr	sub_F45463	; F4545F  calr 0xf45463
+	calr	BStore_TrackToPart_CopyToBackup	; F4545F  calr 0xf45463
 	ret	; F45462  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45463
+; BStore_TrackToPart_CopyToBackup
 ; Called from: in-module: 0xF4545F
 ; Touches:   |  0x0034BC 0x603422
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -96288,7 +96303,10 @@ BStore_TrackToPart_SaveBackup:		; <- T_BStore_TrackToPart_SaveBackup
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45463:
+; BStore_TrackToPart_CopyToBackup: Copies the 17-byte BStore_TrackToPart map (0x603422) to its backup at 0x34BC (ldir,
+;   C = 17). The whole body of BStore_TrackToPart_SaveBackup (calr + ret). Basis: caller + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_a11.json)
+BStore_TrackToPart_CopyToBackup:
 	ld	xix, 13500	; F45463  ld XIX,0x000034bc
 	ld	xiy, BStore_TrackToPart	; F45468  ld XIY,0x00603422
 	xor	bc, bc	; F4546D  xor BC,BC
@@ -96300,7 +96318,7 @@ sub_F45463:
 ; BStore_TrackToPart_RestoreBackup
 ; Called from: T_BStore_TrackToPart_RestoreBackup (x1)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F45478
+; Calls:   BStore_TrackToPart_CopyFromBackup
 ; Evidence: thunk slot T_BStore_TrackToPart_RestoreBackup holds `jp 0x00F45474`, and 0xF45474 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -96308,16 +96326,16 @@ sub_F45463:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; BStore_TrackToPart_RestoreBackup: `calr` to sub_F45478 (+ `ret`), which copies the 17-byte backup at 0x34BC back
+; BStore_TrackToPart_RestoreBackup: `calr` to BStore_TrackToPart_CopyFromBackup (+ `ret`), which copies the 17-byte backup at 0x34BC back
 ;   into BStore_TrackToPart (0x603422) (`ldir`, XIX = 0x603422 destination). Slot T_BStore_TrackToPart_RestoreBackup;
 ;   MidiFileDirectPlay_RestoreTrackToPartMap calls it; inverse of BStore_TrackToPart_SaveBackup. Basis: caller + body
 ;   + inverse. (notes/naming-pilot-2026-10-06/proposals_wave10_b10.json)
 BStore_TrackToPart_RestoreBackup:		; <- T_BStore_TrackToPart_RestoreBackup
-	calr	sub_F45478	; F45474  calr 0xf45478
+	calr	BStore_TrackToPart_CopyFromBackup	; F45474  calr 0xf45478
 	ret	; F45477  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45478
+; BStore_TrackToPart_CopyFromBackup
 ; Called from: in-module: 0xF45474
 ; Touches:   |  0x0034BC 0x603422
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -96326,7 +96344,10 @@ BStore_TrackToPart_RestoreBackup:		; <- T_BStore_TrackToPart_RestoreBackup
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45478:
+; BStore_TrackToPart_CopyFromBackup: Copies the 17-byte backup at 0x34BC back into BStore_TrackToPart (0x603422)
+;   (ldir, C = 17); inverse of BStore_TrackToPart_CopyToBackup and the whole body of BStore_TrackToPart_RestoreBackup.
+;   Basis: caller + body + inverse. (notes/naming-pilot-2026-10-06/proposals_wave11_a11.json)
+BStore_TrackToPart_CopyFromBackup:
 	ld	xiy, 13500	; F45478  ld XIY,0x000034bc
 	ld	xix, BStore_TrackToPart	; F4547D  ld XIX,0x00603422
 	xor	bc, bc	; F45482  xor BC,BC
@@ -102000,7 +102021,7 @@ SeqRecord_SaveTakeCursor:
 ; --------------------------------------------------------------------------
 ; SeqRecord_SoundAlert: Posts the CPU-2 message F0 50 87 08 (A = 8, T_F41020 = Msg0716_PostSysEx50_87), the alert
 ;   DiskError_SoundAlertAndWait also sends. The target of SeqRecord_SoundAlert_Veneer; also called directly after a
-;   take track is terminated (sub_F4A4F6), and from SeqRecord_ResetControllersAfterRingOverflow only when the ROM byte at 0xFFFFF8 is >= 0x10 (it is
+;   take track is terminated (SeqRecord_TerminateTrackOnMemoryFull), and from SeqRecord_ResetControllersAfterRingOverflow only when the ROM byte at 0xFFFFF8 is >= 0x10 (it is
 ;   0x02). Its tail labels (0xF49868, 0xF4987B) are the drain entries of SeqRecord_DrainEventRing*. Basis: caller
 ;   header + body. (notes/naming-pilot-2026-10-06/proposals_wave8_a8.json)
 SeqRecord_SoundAlert:
@@ -102274,7 +102295,7 @@ CycleRecord_CheckIsRecordTrack_Skip5:
 ; SeqRecord_CloseHeldNotesAtCycleWrap
 ; Called from: in-module: 0xF498A8
 ; Touches: (0x34AA) (0x34AB) (0x34B8) (0x34B9)
-; Calls:   sub_F49BFA
+; Calls:   SeqRecord_CloseAllHeldNotes
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49ADE is an instruction boundary.
 ;           The name IS the address.
@@ -102283,7 +102304,7 @@ CycleRecord_CheckIsRecordTrack_Skip5:
 ; --------------------------------------------------------------------------
 ; SeqRecord_CloseHeldNotesAtCycleWrap: When (0x34B8) bit 4 is set -- only 0xF45F95 sets it, when the cycle-record
 ;   measure (0x3552) reaches the cycle end (0x3624) and is put back to the start (0x3622) -- (0x34B9) := the last
-;   event's tick ((0x34AB), 0 after a 0x81 beat mark) and sub_F49BFA closes every held note of every take track at
+;   event's tick ((0x34AB), 0 after a 0x81 beat mark) and SeqRecord_CloseAllHeldNotes closes every held note of every take track at
 ;   that tick (SeqRecord_CloseHeldNote per slot); bit 4 cleared. SeqRecord_WriteRingEventsToTracks runs it once
 ;   SeqBuf_Ring is empty. Basis: caller + body + flag writer. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave10_b10.json)
@@ -102296,7 +102317,7 @@ SeqRecord_CloseHeldNotesAtCycleWrap:
 	xor	a, a	; F49AEF  xor A,A
 SeqRecord_CloseHeldNotesAtCycleWrap_Skip6:
 	ld	(13497:16), a	; F49AF1  ld (0x34b9),A
-	calr	sub_F49BFA	; F49AF5  calr 0xf49bfa
+	calr	SeqRecord_CloseAllHeldNotes	; F49AF5  calr 0xf49bfa
 	m_res 4, MD16, 0x34b8	; F49AF8  res 4,(0x34b8)
 SeqRecord_CloseHeldNotesAtCycleWrap_Return:
 	ret	; F49AFC  ret
@@ -102305,7 +102326,7 @@ SeqRecord_CloseHeldNotesAtCycleWrap_Return:
 ; SeqRecord_ResetControllersAfterRingOverflow
 ; Called from: in-module: 0xF498AB
 ; Touches: (0x34AA) (0x34AB) (0x34B8) (0x34B9)  |  0xFFFFF8
-; Calls:   sub_F49B43 sub_F49B5C sub_F49BFA SeqRecord_SoundAlert
+; Calls:   SeqRecord_WriteModulationResetToTakeTracks SeqRecord_WritePitchBendResetToTakeTracks SeqRecord_CloseAllHeldNotes SeqRecord_SoundAlert
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49AFD is an instruction boundary.
 ;           The name IS the address.
@@ -102314,8 +102335,8 @@ SeqRecord_CloseHeldNotesAtCycleWrap_Return:
 ; --------------------------------------------------------------------------
 ; SeqRecord_ResetControllersAfterRingOverflow: Handles the (0x34B8) flags prom_a's SeqBuf tail ORs in when SeqBuf_Ring
 ;   has no room for an event ((0x60F31F) & 0xB0 >> 4: modulation 0x10 -> bit 0, pitch bend 0x20 -> bit 1): bit 0 ->
-;   sub_F49B43 writes {0xD1, tick, 0} to every take track, bit 1 -> sub_F49B5C {0xD2, tick, 0, 0x40}, bit 2 ->
-;   sub_F49BFA closes all held notes; (0x34B8) := 0; SeqRecord_SoundAlert only if ROM byte 0xFFFFF8 >= 0x10 (it is
+;   SeqRecord_WriteModulationResetToTakeTracks writes {0xD1, tick, 0} to every take track, bit 1 -> SeqRecord_WritePitchBendResetToTakeTracks {0xD2, tick, 0, 0x40}, bit 2 ->
+;   SeqRecord_CloseAllHeldNotes closes all held notes; (0x34B8) := 0; SeqRecord_SoundAlert only if ROM byte 0xFFFFF8 >= 0x10 (it is
 ;   0x02). Run by SeqRecord_WriteRingEventsToTracks on an empty ring. Basis: caller + body + flag writer.
 ;   (notes/naming-pilot-2026-10-06/proposals_wave10_b10.json)
 SeqRecord_ResetControllersAfterRingOverflow:
@@ -102329,15 +102350,15 @@ SeqRecord_ResetControllersAfterRingOverflow_Skip7:
 	ld	(13497:16), a	; F49B11  ld (0x34b9),A
 	m_bit 0, MD16, 0x34b8	; F49B15  bit 0,(0x34b8)
 	jr	z, SeqRecord_ResetControllersAfterRingOverflow_Skip8	; F49B19  jr Z,0xf49b1e
-	calr	sub_F49B43	; F49B1B  calr 0xf49b43
+	calr	SeqRecord_WriteModulationResetToTakeTracks	; F49B1B  calr 0xf49b43
 SeqRecord_ResetControllersAfterRingOverflow_Skip8:
 	m_bit 1, MD16, 0x34b8	; F49B1E  bit 1,(0x34b8)
 	jr	z, SeqRecord_ResetControllersAfterRingOverflow_Skip9	; F49B22  jr Z,0xf49b27
-	calr	sub_F49B5C	; F49B24  calr 0xf49b5c
+	calr	SeqRecord_WritePitchBendResetToTakeTracks	; F49B24  calr 0xf49b5c
 SeqRecord_ResetControllersAfterRingOverflow_Skip9:
 	m_bit 2, MD16, 0x34b8	; F49B27  bit 2,(0x34b8)
 	jr	z, SeqRecord_ResetControllersAfterRingOverflow_Skip10	; F49B2B  jr Z,0xf49b30
-	calr	sub_F49BFA	; F49B2D  calr 0xf49bfa
+	calr	SeqRecord_CloseAllHeldNotes	; F49B2D  calr 0xf49bfa
 SeqRecord_ResetControllersAfterRingOverflow_Skip10:
 	ld	(13496:16), 0	; F49B30  ld (0x34b8),0x00
 	ld	xiy, MIDI_UART_Configure_Data	; F49B35  ld XIY,0x00fffff8
@@ -102348,7 +102369,7 @@ SeqRecord_ResetControllersAfterRingOverflow_Return2:
 	ret	; F49B42  ret
 
 ; --------------------------------------------------------------------------
-; sub_F49B43
+; SeqRecord_WriteModulationResetToTakeTracks
 ; Called from: in-module: 0xF49B1B
 ; Touches: (0x34AA) (0x34AB) (0x34AC) (0x34B9)
 ; Calls:   sub_F49B7A
@@ -102358,7 +102379,12 @@ SeqRecord_ResetControllersAfterRingOverflow_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F49B43:
+; SeqRecord_WriteModulationResetToTakeTracks: Builds the modulation event {0xD1, tick (0x34B9), 0} (DE = 3) and
+;   sub_F49B7A writes it, slot byte := each track, to every track 0..16 still in the take via
+;   SeqRecord_WriteCtrlEventToTakeTrack. SeqRecord_ResetControllersAfterRingOverflow runs it for (0x34B8) bit 0, a
+;   modulation event lost to a full SeqBuf_Ring. Basis: caller + body + SeqBuf_PutModulationEvent's layout.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_a11.json)
+SeqRecord_WriteModulationResetToTakeTracks:
 	ldw	de, 3	; F49B43  ld DE,0x0003
 	ld	(13482:16), 209	; F49B46  ld (0x34aa),0xd1
 	ld	a, (13497:16)	; F49B4B  ld A,(0x34b9)
@@ -102368,7 +102394,7 @@ sub_F49B43:
 	ret	; F49B5B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F49B5C
+; SeqRecord_WritePitchBendResetToTakeTracks
 ; Called from: in-module: 0xF49B24
 ; Touches: (0x34AA) (0x34AB) (0x34AC) (0x34AD) (0x34B9)
 ; Calls:   sub_F49BBA
@@ -102378,7 +102404,13 @@ sub_F49B43:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F49B5C:
+; SeqRecord_WritePitchBendResetToTakeTracks: Builds the pitch-bend centre event {0xD2, tick (0x34B9), 0x00, 0x40} (DE
+;   = 4) for every take track (sub_F49BBA -> SeqRecord_WritePitchBendToTakeTrack); run by
+;   SeqRecord_ResetControllersAfterRingOverflow for (0x34B8) bit 1. As built the loop stores the track at +3 (over the
+;   0x40) while the writer takes the track from +4 (0x34AE), so each pass writes {0xD2, tick, 0, t} to track (0x34AE).
+;   Basis: caller + body + SeqBuf_PutPitchBendEvent's layout. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_a11.json)
+SeqRecord_WritePitchBendResetToTakeTracks:
 	ldw	de, 4	; F49B5C  ld DE,0x0004
 	ld	(13482:16), 210	; F49B5F  ld (0x34aa),0xd2
 	ld	a, (13497:16)	; F49B64  ld A,(0x34b9)
@@ -102473,45 +102505,50 @@ sub_F49BBA_Skip2:
 	ret	; F49BF9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F49BFA
+; SeqRecord_CloseAllHeldNotes
 ; Called from: in-module: 0xF49AF5 0xF49B2D
 ; Touches: (0x3004) (0x3006) (0x33DA) (0x33DE) (0x349F) (0x34AB) (0x34AC)
 ;          (0x34AE) (0x34B9)
-; Calls:   sub_F4A53E sub_F4A56C SeqRecord_CloseHeldNote
+; Calls:   SeqRecord_LoadHeldNoteListHeadTail SeqRecord_HeldNoteSlotAddress SeqRecord_CloseHeldNote
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49BFA is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F49BFA:
+; SeqRecord_CloseAllHeldNotes: For every track 0..16 still in the take, walks its held-note list (head 0x3016[2t],
+;   slots linked by +7) and closes each note at tick (0x34B9) through SeqRecord_CloseHeldNote ((0x34AC) := note,
+;   (0x34AE) := track). Run by SeqRecord_CloseHeldNotesAtCycleWrap and, for (0x34B8) bit 2, by
+;   SeqRecord_ResetControllersAfterRingOverflow. Basis: callers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_a11.json)
+SeqRecord_CloseAllHeldNotes:
 	ld	(13471:16), 0	; F49BFA  ld (0x349f),0x00
-sub_F49BFA_Loop:
+SeqRecord_CloseAllHeldNotes_Loop:
 	xor	bc, bc	; F49BFF  xor BC,BC
 	ld	c, (13471:16)	; F49C01  ld C,(0x349f)
 	cp	c, 16	; F49C05  cp C,0x10
-	jr	nc, sub_F49BFA_Skip	; F49C08  jr NC,0xf49c17
+	jr	nc, SeqRecord_CloseAllHeldNotes_Skip	; F49C08  jr NC,0xf49c17
 	ld	iz, (12292:16)	; F49C0A  ld IZ,(0x3004)
 	ld	a, c	; F49C0E  ld A,C
 	scf	; F49C10  scf
 	m_rd_xorcf_a RW+r6	; F49C11  xorcf A,IZ
-	jr	c, sub_F49BFA_Skip2	; F49C13  jr C,0xf49c71
-	jr	sub_F49BFA_Join	; F49C15  jr T,0xf49c25
-sub_F49BFA_Skip:
+	jr	c, SeqRecord_CloseAllHeldNotes_Skip2	; F49C13  jr C,0xf49c71
+	jr	SeqRecord_CloseAllHeldNotes_Join	; F49C15  jr T,0xf49c25
+SeqRecord_CloseAllHeldNotes_Skip:
 	ld	iz, (12294:16)	; F49C17  ld IZ,(0x3006)
 	ld	a, c	; F49C1B  ld A,C
 	sub	a, 16	; F49C1D  sub A,0x10
 	scf	; F49C20  scf
 	m_rd_xorcf_a RW+r6	; F49C21  xorcf A,IZ
-	jr	c, sub_F49BFA_Skip2	; F49C23  jr C,0xf49c71
-sub_F49BFA_Join:
-	calr	sub_F4A53E	; F49C25  calr 0xf4a53e
+	jr	c, SeqRecord_CloseAllHeldNotes_Skip2	; F49C23  jr C,0xf49c71
+SeqRecord_CloseAllHeldNotes_Join:
+	calr	SeqRecord_LoadHeldNoteListHeadTail	; F49C25  calr 0xf4a53e
 	m_cp_mi8 MB16, 0x33da, 0x00	; F49C28  cp (0x33da),0x00
-	jr	z, sub_F49BFA_Skip2	; F49C2D  jr Z,0xf49c71
+	jr	z, SeqRecord_CloseAllHeldNotes_Skip2	; F49C2D  jr Z,0xf49c71
 	xor	hl, hl	; F49C2F  xor HL,HL
 	ld	l, (13274:16)	; F49C31  ld L,(0x33da)
-sub_F49BFA_Join2:
-	calr	sub_F4A56C	; F49C35  calr 0xf4a56c
+SeqRecord_CloseAllHeldNotes_Join2:
+	calr	SeqRecord_HeldNoteSlotAddress	; F49C35  calr 0xf4a56c
 	ld	a, (xhl+7)	; F49C38  ld A,(XHL+0x07)
 	ld	(13278:16), a	; F49C3B  ld (0x33de),A
 	ld	a, (13497:16)	; F49C3F  ld A,(0x34b9)
@@ -102526,14 +102563,14 @@ sub_F49BFA_Join2:
 	popw	wa	; F49C5D  pop WA
 	ld	(13278:16), a	; F49C5E  ld (0x33de),A
 	m_cp_mi8 MB16, 0x33de, 0xff	; F49C62  cp (0x33de),0xff
-	jr	z, sub_F49BFA_Skip2	; F49C67  jr Z,0xf49c71
+	jr	z, SeqRecord_CloseAllHeldNotes_Skip2	; F49C67  jr Z,0xf49c71
 	xor	xhl, xhl	; F49C69  xor XHL,XHL
 	ld	l, (13278:16)	; F49C6B  ld L,(0x33de)
-	jr	sub_F49BFA_Join2	; F49C6F  jr T,0xf49c35
-sub_F49BFA_Skip2:
+	jr	SeqRecord_CloseAllHeldNotes_Join2	; F49C6F  jr T,0xf49c35
+SeqRecord_CloseAllHeldNotes_Skip2:
 	inc	1, (13471:16)	; F49C71  inc 1,(0x349f)
 	m_cp_mi8 MB16, 0x349f, 0x11	; F49C75  cp (0x349f),0x11
-	jr	c, sub_F49BFA_Loop	; F49C7A  jr C,0xf49bff
+	jr	c, SeqRecord_CloseAllHeldNotes_Loop	; F49C7A  jr C,0xf49bff
 	ret	; F49C7C  ret
 
 ; --------------------------------------------------------------------------
@@ -102600,7 +102637,7 @@ SeqRecord_ReadRingEvent_Loop:
 ; CycleRecord_WriteNoteOnToRecordTrack
 ; Called from: in-module: 0xF49977
 ; Touches: (0x34AE) (0x34AF)  |  0x0034AA 0x0036E8
-; Calls:   CycleRecord_CheckIsRecordTrack sub_F4ABE8
+; Calls:   CycleRecord_CheckIsRecordTrack CycleRecord_WriteStagedEventToRecordTrack
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49CC2 is an instruction boundary.
 ;           The name IS the address.
@@ -102609,7 +102646,7 @@ SeqRecord_ReadRingEvent_Loop:
 ; --------------------------------------------------------------------------
 ; CycleRecord_WriteNoteOnToRecordTrack: For the cycle record track (CycleRecord_CheckIsRecordTrack A = 0): (0x34AE) :=
 ;   0x10, (0x34AF) := 0, making the note event [0x9n, tick, note, velocity, 0x10, 0x00] with the duration placeholder
-;   SeqRecord_WriteNoteOn writes; copies 8 bytes of 0x34AA to 0x36E8 and sub_F4ABE8 writes (0x36F0) = 6 of them into
+;   SeqRecord_WriteNoteOn writes; copies 8 bytes of 0x34AA to 0x36E8 and CycleRecord_WriteStagedEventToRecordTrack writes (0x36F0) = 6 of them into
 ;   track (0x36D6) (sub_F4AEEE: BStore_AppendBytes, entry + 1). The drain's note-on arm for that track. Basis: caller
 ;   + body. (notes/naming-pilot-2026-10-06/proposals_wave10_b10.json)
 CycleRecord_WriteNoteOnToRecordTrack:
@@ -102622,7 +102659,7 @@ CycleRecord_WriteNoteOnToRecordTrack:
 	ld	xde, 14056	; F49CD6  ld XDE,0x000036e8
 	ld	xhl, 13482	; F49CDB  ld XHL,0x000034aa
 	ldir83	; F49CE0  ldir
-	calr	sub_F4ABE8	; F49CE2  calr 0xf4abe8
+	calr	CycleRecord_WriteStagedEventToRecordTrack	; F49CE2  calr 0xf4abe8
 CycleRecord_WriteNoteOnToRecordTrack_Return:
 	ret	; F49CE5  ret
 
@@ -102630,7 +102667,7 @@ CycleRecord_WriteNoteOnToRecordTrack_Return:
 ; CycleRecord_WriteEventToRecordTrack
 ; Called from: in-module: 0xF49919 0xF499B6 0xF49A05 0xF49A36 0xF4A29E
 ; Touches:   |  0x0034AA 0x0036E8
-; Calls:   CycleRecord_CheckIsRecordTrack sub_F4ABE8
+; Calls:   CycleRecord_CheckIsRecordTrack CycleRecord_WriteStagedEventToRecordTrack
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49CE6 is an instruction boundary.
 ;           The name IS the address.
@@ -102638,7 +102675,7 @@ CycleRecord_WriteNoteOnToRecordTrack_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; CycleRecord_WriteEventToRecordTrack: For the cycle record track (CycleRecord_CheckIsRecordTrack A = 0): copies 8
-;   bytes of the event record 0x34AA to 0x36E8 and sub_F4ABE8 writes (0x36F0) of them into track (0x36D6)'s chain
+;   bytes of the event record 0x34AA to 0x36E8 and CycleRecord_WriteStagedEventToRecordTrack writes (0x36F0) of them into track (0x36D6)'s chain
 ;   (sub_F4AEEE: BStore_AppendBytes on entry (0x36D6) + 1). The drain's 0xD0-0xD3 and 0xCn arms and
 ;   SeqRecord_WriteParamEvent set (0x36F0) := 3 / 4 / 6 first. Basis: callers + body. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave10_b10.json)
@@ -102650,7 +102687,7 @@ CycleRecord_WriteEventToRecordTrack:
 	ld	xde, 14056	; F49CF0  ld XDE,0x000036e8
 	ld	xhl, 13482	; F49CF5  ld XHL,0x000034aa
 	ldir83	; F49CFA  ldir
-	calr	sub_F4ABE8	; F49CFC  calr 0xf4abe8
+	calr	CycleRecord_WriteStagedEventToRecordTrack	; F49CFC  calr 0xf4abe8
 CycleRecord_WriteEventToRecordTrack_Return:
 	ret	; F49CFF  ret
 
@@ -102658,8 +102695,8 @@ CycleRecord_WriteEventToRecordTrack_Return:
 ; SeqRecord_WriteBeatMarkAndAgeHeldNotes
 ; Called from: in-module: 0xF499C5
 ; Touches: (0x3004) (0x3006) (0x33DA) (0x33DE) (0x345E) (0x349F) (0x374C)
-; Calls:   CycleRecord_CheckIsRecordTrack SeqRecord_LoadTakeCursor T_BStore_WriteCursorByte T_BStore_AdvanceCursorForWrite_B sub_F4A4F6 SeqRecord_SaveTakeCursor
-;          sub_F4A53E sub_F4A56C sub_F49DE6
+; Calls:   CycleRecord_CheckIsRecordTrack SeqRecord_LoadTakeCursor T_BStore_WriteCursorByte T_BStore_AdvanceCursorForWrite_B SeqRecord_TerminateTrackOnMemoryFull SeqRecord_SaveTakeCursor
+;          SeqRecord_LoadHeldNoteListHeadTail SeqRecord_HeldNoteSlotAddress SeqRecord_SplitHeldNoteAtBeatLimit
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49D00 is an instruction boundary.
 ;           The name IS the address.
@@ -102668,8 +102705,8 @@ CycleRecord_WriteEventToRecordTrack_Return:
 ; --------------------------------------------------------------------------
 ; SeqRecord_WriteBeatMarkAndAgeHeldNotes: On a 0x81 beat mark from SeqBuf_Ring: each track 0..16 of the take
 ;   ((0x3004)/(0x3006)) other than the cycle record track gets 0x81 at its take cursor (out of free blocks with < 9
-;   bytes left it is dropped from the take and terminated, sub_F4A4F6); then every take track's held-note slots get +1
-;   on their beat count (byte +1), a note reaching 127 beats being split (sub_F49DE6). The drain's 0x81 arm. Basis:
+;   bytes left it is dropped from the take and terminated, SeqRecord_TerminateTrackOnMemoryFull); then every take track's held-note slots get +1
+;   on their beat count (byte +1), a note reaching 127 beats being split (SeqRecord_SplitHeldNoteAtBeatLimit). The drain's 0x81 arm. Basis:
 ;   caller + body. (notes/naming-pilot-2026-10-06/proposals_wave10_b10.json)
 SeqRecord_WriteBeatMarkAndAgeHeldNotes:
 	ld	(13471:16), 0	; F49D00  ld (0x349f),0x00
@@ -102724,19 +102761,19 @@ SeqRecord_WriteBeatMarkAndAgeHeldNotes_Skip4:
 	m_rd_stcf_a RW+r6	; F49D77  stcf A,IZ
 	ld	(12294:16), iz	; F49D79  ld (0x3006),IZ
 SeqRecord_WriteBeatMarkAndAgeHeldNotes_Join2:
-	calr	sub_F4A4F6	; F49D7D  calr 0xf4a4f6
+	calr	SeqRecord_TerminateTrackOnMemoryFull	; F49D7D  calr 0xf4a4f6
 SeqRecord_WriteBeatMarkAndAgeHeldNotes_Join3:
 	ld	c, (13471:16)	; F49D80  ld C,(0x349f)
 	calr	SeqRecord_SaveTakeCursor	; F49D84  calr 0xf49838
 SeqRecord_WriteBeatMarkAndAgeHeldNotes_Skip5:
-	calr	sub_F4A53E	; F49D87  calr 0xf4a53e
+	calr	SeqRecord_LoadHeldNoteListHeadTail	; F49D87  calr 0xf4a53e
 	m_cp_mi8 MB16, 0x33da, 0x00	; F49D8A  cp (0x33da),0x00
 	jr	z, SeqRecord_WriteBeatMarkAndAgeHeldNotes_Skip7	; F49D8F  jr Z,0xf49dd9
 	xor	hl, hl	; F49D91  xor HL,HL
 	ld	l, (13274:16)	; F49D93  ld L,(0x33da)
 SeqRecord_WriteBeatMarkAndAgeHeldNotes_Join4:
 	ld	(14156:16), l	; F49D97  ld (0x374c),L
-	calr	sub_F4A56C	; F49D9B  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F49D9B  calr 0xf4a56c
 	xor	wa, wa	; F49D9E  xor WA,WA
 	ld	a, (xhl+1)	; F49DA0  ld A,(XHL+0x01)
 	cp	a, 127	; F49DA3  cp A,0x7f
@@ -102751,7 +102788,7 @@ SeqRecord_WriteBeatMarkAndAgeHeldNotes_Join4:
 	jr	SeqRecord_WriteBeatMarkAndAgeHeldNotes_Join4	; F49DBA  jr T,0xf49d97
 SeqRecord_WriteBeatMarkAndAgeHeldNotes_Skip6:
 	m_push MB16, 0x349f	; F49DBC  push (0x349f)
-	call	sub_F49DE6	; F49DC0  call 0xf49de6
+	call	SeqRecord_SplitHeldNoteAtBeatLimit	; F49DC0  call 0xf49de6
 	m_pop MD16, 0x349f	; F49DC4  pop (0x349f)
 	m_cp_mi8 MB16, 0x33de, 0xff	; F49DC8  cp (0x33de),0xff
 	jr	z, SeqRecord_WriteBeatMarkAndAgeHeldNotes_Skip7	; F49DCD  jr Z,0xf49dd9
@@ -102766,7 +102803,7 @@ SeqRecord_WriteBeatMarkAndAgeHeldNotes_Skip7:
 	ret	; F49DE5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F49DE6
+; SeqRecord_SplitHeldNoteAtBeatLimit
 ; Called from: in-module: 0xF49DC0
 ; Touches: (0x33DE)
 ; Calls:   sub_F49DF8 sub_F49F46 SeqRecord_WriteNoteOn
@@ -102776,7 +102813,11 @@ SeqRecord_WriteBeatMarkAndAgeHeldNotes_Skip7:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F49DE6:
+; SeqRecord_SplitHeldNoteAtBeatLimit: For the held note in slot (0x374C) that SeqRecord_WriteBeatMarkAndAgeHeldNotes
+;   found at 127 beats: sub_F49DF8 closes its event with duration 95 - start tick and 0x7F beats and frees the slot,
+;   sub_F49F46 rebuilds {status, tick 0, note, velocity, track} at 0x34AA, and SeqRecord_WriteNoteOn re-opens it.
+;   Basis: caller + body + SeqRecord_WriteNoteOn header. (notes/naming-pilot-2026-10-06/proposals_wave11_a11.json)
+SeqRecord_SplitHeldNoteAtBeatLimit:
 	calr	sub_F49DF8	; F49DE6  calr 0xf49df8
 	calr	sub_F49F46	; F49DE9  calr 0xf49f46
 	m_push MB16, 0x33de	; F49DEC  push (0x33de)
@@ -102789,7 +102830,7 @@ sub_F49DE6:
 ; Called from: in-module: 0xF49DE6
 ; Touches: (0x33DD) (0x33DE) (0x33DF) (0x345C) (0x345E) (0x34AE) (0x374C)
 ;          (0x374D) (0x374E) (0x374F)  |  0x003014 0x003016
-; Calls:   sub_F4A56C sub_F49F15 T_BStore_ReadCursorByte T_BStore_StepCursorOneByte T_BStore_WriteCursorByte
+; Calls:   SeqRecord_HeldNoteSlotAddress sub_F49F15 T_BStore_ReadCursorByte T_BStore_StepCursorOneByte T_BStore_WriteCursorByte
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49DF8 is an instruction boundary.
 ;           The name IS the address.
@@ -102800,7 +102841,7 @@ sub_F49DF8:
 	xor	hl, hl	; F49DF8  xor HL,HL
 	ld	l, (14156:16)	; F49DFA  ld L,(0x374c)
 	ld	(13279:16), l	; F49DFE  ld (0x33df),L
-	calr	sub_F4A56C	; F49E02  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F49E02  calr 0xf4a56c
 	ld	a, (xhl+6)	; F49E05  ld A,(XHL+0x06)
 	ld	(13277:16), a	; F49E08  ld (0x33dd),A
 	ld	a, (xhl+7)	; F49E0C  ld A,(XHL+0x07)
@@ -102840,7 +102881,7 @@ sub_F49DF8:
 	push	xhl	; F49E76  push XHL
 	xor	hl, hl	; F49E77  xor HL,HL
 	ld	l, (13277:16)	; F49E79  ld L,(0x33dd)
-	calr	sub_F4A56C	; F49E7D  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F49E7D  calr 0xf4a56c
 	ld	a, (13278:16)	; F49E80  ld A,(0x33de)
 	ld	(xhl+7), a	; F49E84  ld (XHL+0x07),A
 	pop	xhl	; F49E87  pop XHL
@@ -102866,7 +102907,7 @@ sub_F49DF8_Join:
 	push	xhl	; F49EB5  push XHL
 	xor	hl, hl	; F49EB6  xor HL,HL
 	ld	l, (13278:16)	; F49EB8  ld L,(0x33de)
-	calr	sub_F4A56C	; F49EBC  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F49EBC  calr 0xf4a56c
 	ld	a, (13277:16)	; F49EBF  ld A,(0x33dd)
 	ld	(xhl+6), a	; F49EC3  ld (XHL+0x06),A
 	pop	xhl	; F49EC6  pop XHL
@@ -102895,7 +102936,7 @@ sub_F49DF8_Join2:
 	jr	z, sub_F49DF8_Return	; F49F02  jr Z,0xf49f14
 	xor	xhl, xhl	; F49F04  xor XHL,XHL
 	ld	l, c	; F49F06  ld L,C
-	calr	sub_F4A56C	; F49F08  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F49F08  calr 0xf4a56c
 	ld	a, (13279:16)	; F49F0B  ld A,(0x33df)
 	ld	(xhl+6), a	; F49F0F  ld (XHL+0x06),A
 	jr	sub_F49DF8_Return	; F49F12  jr T,0xf49f14
@@ -102964,7 +103005,7 @@ sub_F49F46:
 ; Called from: in-module: 0xF49964 0xF49DF0
 ; Touches: (0x3004) (0x3006) (0x33DA) (0x33DB) (0x33DE) (0x33DF) (0x345C)
 ;          (0x345E) (0x349F) (0x34AA) +4 more  |  0x003014 0x003016
-; Calls:   SeqRecord_LoadTakeCursor sub_F4A56C sub_F4A4F6 T_BStore_WriteCursorByte T_BStore_AdvanceCursorForWrite_B sub_F4A53E
+; Calls:   SeqRecord_LoadTakeCursor SeqRecord_HeldNoteSlotAddress SeqRecord_TerminateTrackOnMemoryFull T_BStore_WriteCursorByte T_BStore_AdvanceCursorForWrite_B SeqRecord_LoadHeldNoteListHeadTail
 ;          SeqRecord_SaveTakeCursor
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49F6D is an instruction boundary.
@@ -102975,7 +103016,7 @@ sub_F49F46:
 ; SeqRecord_WriteNoteOn: Track (0x34AE), if in the take: writes [0x9n & 0xFA, tick, note, velocity, 0x10, 0x00] at its
 ;   take cursor and takes a held-note slot off the free list (0x3014) -- note, beats 0, start tick, the note byte's
 ;   cursor -- appending it to the track's list (0x3016); writes nothing when no slot is free, and out of blocks (< 14
-;   bytes) drops the track (sub_F4A4F6). The drain's velocity > 0 note arm; also re-opens a note split at 127 beats.
+;   bytes) drops the track (SeqRecord_TerminateTrackOnMemoryFull). The drain's velocity > 0 note arm; also re-opens a note split at 127 beats.
 ;   Basis: caller + body + slot users. (notes/naming-pilot-2026-10-06/proposals_wave10_b10.json)
 SeqRecord_WriteNoteOn:
 	xor	bc, bc	; F49F6D  xor BC,BC
@@ -103004,7 +103045,7 @@ SeqRecord_WriteNoteOn_Join:
 	xor	hl, hl	; F49FA5  xor HL,HL
 	ld	l, (xix)	; F49FA7  ld L,(XIX)
 	ld	(13279:16), l	; F49FA9  ld (0x33df),L
-	calr	sub_F4A56C	; F49FAD  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F49FAD  calr 0xf4a56c
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000	; F49FB0  cp (0x6034ba),0x0000
 	jr	nz, SeqRecord_WriteNoteOn_Skip3	; F49FB7  jr NZ,0xf49ff4
 	ldw	wa, 255	; F49FB9  ld WA,0x00ff
@@ -103028,7 +103069,7 @@ SeqRecord_WriteNoteOn_Skip2:
 	m_rd_stcf_a RW+r6	; F49FE8  stcf A,IZ
 	ld	(12294:16), iz	; F49FEA  ld (0x3006),IZ
 SeqRecord_WriteNoteOn_Join2:
-	calr	sub_F4A4F6	; F49FEE  calr 0xf4a4f6
+	calr	SeqRecord_TerminateTrackOnMemoryFull	; F49FEE  calr 0xf4a4f6
 	jrl	SeqRecord_WriteNoteOn_Join3	; F49FF1  jrl T,0xf4a0f7
 SeqRecord_WriteNoteOn_Skip3:
 	push	xhl	; F49FF4  push XHL
@@ -103053,7 +103094,7 @@ SeqRecord_WriteNoteOn_Skip3:
 	ld	c, (13486:16)	; F4A034  ld C,(0x34ae)
 	ld	a, (13471:16)	; F4A038  ld A,(0x349f)
 	ld	(13471:16), c	; F4A03C  ld (0x349f),C
-	calr	sub_F4A53E	; F4A040  calr 0xf4a53e
+	calr	SeqRecord_LoadHeldNoteListHeadTail	; F4A040  calr 0xf4a53e
 	ld	(13471:16), a	; F4A043  ld (0x349f),A
 	ld	a, (13275:16)	; F4A047  ld A,(0x33db)
 	ld	(xhl+6), a	; F4A04B  ld (XHL+0x06),A
@@ -103075,7 +103116,7 @@ SeqRecord_WriteNoteOn_Skip4:
 	jr	z, SeqRecord_WriteNoteOn_Skip5	; F4A080  jr Z,0xf4a092
 	xor	hl, hl	; F4A082  xor HL,HL
 	ld	l, (13275:16)	; F4A084  ld L,(0x33db)
-	calr	sub_F4A56C	; F4A088  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F4A088  calr 0xf4a56c
 	ld	a, (13279:16)	; F4A08B  ld A,(0x33df)
 	ld	(xhl+7), a	; F4A08F  ld (XHL+0x07),A
 SeqRecord_WriteNoteOn_Skip5:
@@ -103097,7 +103138,7 @@ SeqRecord_WriteNoteOn_Skip5:
 	jr	z, SeqRecord_WriteNoteOn_Skip6	; F4A0C4  jr Z,0xf4a0d3
 	xor	hl, hl	; F4A0C6  xor HL,HL
 	ld	l, (13278:16)	; F4A0C8  ld L,(0x33de)
-	calr	sub_F4A56C	; F4A0CC  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F4A0CC  calr 0xf4a56c
 	ld	(xhl+6), 0	; F4A0CF  ld (XHL+0x06),0x00
 SeqRecord_WriteNoteOn_Skip6:
 	call	T_BStore_AdvanceCursorForWrite_B	; F4A0D3  call 0xf40c64
@@ -103121,7 +103162,7 @@ SeqRecord_WriteNoteOn_Return:
 ; Called from: in-module: 0xF4994F 0xF49C5A
 ; Touches: (0x3004) (0x3006) (0x33DA) (0x33DD) (0x33DE) (0x33DF) (0x345C)
 ;          (0x345E) (0x349F) (0x34AB) +2 more  |  0x003014 0x003016
-; Calls:   sub_F4A53E sub_F4A56C T_BStore_StepCursorOneByte T_BStore_WriteCursorByte
+; Calls:   SeqRecord_LoadHeldNoteListHeadTail SeqRecord_HeldNoteSlotAddress T_BStore_StepCursorOneByte T_BStore_WriteCursorByte
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A0FF is an instruction boundary.
 ;           The name IS the address.
@@ -103131,7 +103172,7 @@ SeqRecord_WriteNoteOn_Return:
 ; SeqRecord_CloseHeldNote: Track (0x34AE), if in the take: finds its held-note slot for note (0x34AC), writes the
 ;   duration -- ticks ((0x34AB) - start tick, borrowing 96 per beat; at least 2) and the slot's beat count -- over the
 ;   0x10 0x00 placeholder of the note event, unlinks the slot and returns it to the free list (0x3014). The drain's
-;   velocity-0 0x9n arm and sub_F49BFA's close-all. Basis: callers + body + SeqRecord_WriteNoteOn. (notes/naming-
+;   velocity-0 0x9n arm and SeqRecord_CloseAllHeldNotes's close-all. Basis: callers + body + SeqRecord_WriteNoteOn. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave10_b10.json)
 SeqRecord_CloseHeldNote:
 	ld	c, (13486:16)	; F4A0FF  ld C,(0x34ae)
@@ -103153,7 +103194,7 @@ SeqRecord_CloseHeldNote_Skip:
 SeqRecord_CloseHeldNote_Join:
 	ld	a, (13471:16)	; F4A125  ld A,(0x349f)
 	ld	(13471:16), c	; F4A129  ld (0x349f),C
-	calr	sub_F4A53E	; F4A12D  calr 0xf4a53e
+	calr	SeqRecord_LoadHeldNoteListHeadTail	; F4A12D  calr 0xf4a53e
 	ld	(13471:16), a	; F4A130  ld (0x349f),A
 	m_cp_mi8 MB16, 0x33da, 0x00	; F4A134  cp (0x33da),0x00
 	jrl	z, SeqRecord_CloseHeldNote_Return	; F4A139  jrl Z,0xf4a26c
@@ -103161,7 +103202,7 @@ SeqRecord_CloseHeldNote_Join:
 	ld	l, (13274:16)	; F4A13E  ld L,(0x33da)
 SeqRecord_CloseHeldNote_Join2:
 	ld	(13279:16), l	; F4A142  ld (0x33df),L
-	calr	sub_F4A56C	; F4A146  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F4A146  calr 0xf4a56c
 	ld	a, (xhl+6)	; F4A149  ld A,(XHL+0x06)
 	ld	(13277:16), a	; F4A14C  ld (0x33dd),A
 	ld	a, (xhl+7)	; F4A150  ld A,(XHL+0x07)
@@ -103211,7 +103252,7 @@ SeqRecord_CloseHeldNote_Skip3:
 	push	xhl	; F4A1BE  push XHL
 	xor	hl, hl	; F4A1BF  xor HL,HL
 	ld	l, (13277:16)	; F4A1C1  ld L,(0x33dd)
-	calr	sub_F4A56C	; F4A1C5  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F4A1C5  calr 0xf4a56c
 	ld	a, (13278:16)	; F4A1C8  ld A,(0x33de)
 	ld	(xhl+7), a	; F4A1CC  ld (XHL+0x07),A
 	pop	xhl	; F4A1CF  pop XHL
@@ -103237,7 +103278,7 @@ SeqRecord_CloseHeldNote_Join3:
 	push	xhl	; F4A1FD  push XHL
 	xor	hl, hl	; F4A1FE  xor HL,HL
 	ld	l, (13278:16)	; F4A200  ld L,(0x33de)
-	calr	sub_F4A56C	; F4A204  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F4A204  calr 0xf4a56c
 	ld	a, (13277:16)	; F4A207  ld A,(0x33dd)
 	ld	(xhl+6), a	; F4A20B  ld (XHL+0x06),A
 	pop	xhl	; F4A20E  pop XHL
@@ -103266,7 +103307,7 @@ SeqRecord_CloseHeldNote_Join4:
 	jr	z, SeqRecord_CloseHeldNote_Return	; F4A24A  jr Z,0xf4a26c
 	xor	xhl, xhl	; F4A24C  xor XHL,XHL
 	ld	l, c	; F4A24E  ld L,C
-	calr	sub_F4A56C	; F4A250  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F4A250  calr 0xf4a56c
 	ld	a, (13279:16)	; F4A253  ld A,(0x33df)
 	ld	(xhl+6), a	; F4A257  ld (XHL+0x06),A
 	jr	SeqRecord_CloseHeldNote_Return	; F4A25A  jr T,0xf4a26c
@@ -103370,7 +103411,7 @@ SeqRecord_WriteCtrlEventToTakeTrack:
 ; Called from: in-module: 0xF499A3 0xF4A28C 0xF4A2B2 0xF4A2C4
 ; Touches: (0x3004) (0x3006) (0x345C) (0x345E) (0x349F)  |  0x0000FF
 ;          0x0034AA
-; Calls:   SeqRecord_LoadTakeCursor sub_F4A4F6 T_BStore_BlockAddrFromHL sub_F4A4E3 SeqRecord_SaveTakeCursor
+; Calls:   SeqRecord_LoadTakeCursor SeqRecord_TerminateTrackOnMemoryFull T_BStore_BlockAddrFromHL BStore_ExtendChainAtCursor_B_SaveRegs SeqRecord_SaveTakeCursor
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A2C8 is an instruction boundary.
 ;           The name IS the address.
@@ -103378,9 +103419,9 @@ SeqRecord_WriteCtrlEventToTakeTrack:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SeqRecord_WriteEventToTakeTrack: Track C, if in the take: copies DE bytes of the event record 0x34AA to its take
-;   cursor (SeqRecord_LoadTakeCursor / SaveTakeCursor), continuing in a new block through sub_F4A4E3
+;   cursor (SeqRecord_LoadTakeCursor / SaveTakeCursor), continuing in a new block through BStore_ExtendChainAtCursor_B_SaveRegs
 ;   (T_BStore_ExtendChainAtCursor_B) past offset 0xFF; with no free block and fewer than DE + 8 bytes left it drops
-;   the track from the take ((0x3004)/(0x3006) bit cleared) and terminates it (sub_F4A4F6). The drain's 0xCn arm and
+;   the track from the take ((0x3004)/(0x3006) bit cleared) and terminates it (SeqRecord_TerminateTrackOnMemoryFull). The drain's 0xCn arm and
 ;   the three writers above call it. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave10_b10.json)
 SeqRecord_WriteEventToTakeTrack:
 	cp	c, 16	; F4A2C8  cp C,0x10
@@ -103428,7 +103469,7 @@ SeqRecord_WriteEventToTakeTrack_Skip2:
 	m_rd_stcf_a RW+r6	; F4A332  stcf A,IZ
 	ld	(12294:16), iz	; F4A334  ld (0x3006),IZ
 SeqRecord_WriteEventToTakeTrack_Join2:
-	calr	sub_F4A4F6	; F4A338  calr 0xf4a4f6
+	calr	SeqRecord_TerminateTrackOnMemoryFull	; F4A338  calr 0xf4a4f6
 	popw	de	; F4A33B  pop DE
 	jrl	SeqRecord_WriteEventToTakeTrack_Join4	; F4A33C  jrl T,0xf4a3d2
 SeqRecord_WriteEventToTakeTrack_Skip3:
@@ -103460,7 +103501,7 @@ SeqRecord_WriteEventToTakeTrack_Skip4:
 	mx_lda32 MXD, ra_HL, ra_IX, 3	; F4A38F  lda XHL,XHL+IX
 	ld	xix, xhl	; F4A394  ld XIX,XHL
 	ldir85	; F4A396  ldir
-	calr	sub_F4A4E3	; F4A398  calr 0xf4a4e3
+	calr	BStore_ExtendChainAtCursor_B_SaveRegs	; F4A398  calr 0xf4a4e3
 	ldw	ix, 5	; F4A39B  ld IX,0x0005
 	ld	hl, (BStore_CursorBlock:16)	; F4A39E  ld HL,(0x345c)
 	call	T_BStore_BlockAddrFromHL	; F4A3A2  call 0xf40c84
@@ -103479,7 +103520,7 @@ SeqRecord_WriteEventToTakeTrack_Join3:
 	ld	(BStore_CursorOffset:16), ix	; F4A3C9  ld (0x345e),IX
 	jr	SeqRecord_WriteEventToTakeTrack_Join4	; F4A3CD  jr T,0xf4a3d2
 SeqRecord_WriteEventToTakeTrack_Skip5:
-	calr	sub_F4A4E3	; F4A3CF  calr 0xf4a4e3
+	calr	BStore_ExtendChainAtCursor_B_SaveRegs	; F4A3CF  calr 0xf4a4e3
 SeqRecord_WriteEventToTakeTrack_Join4:
 	ld	hl, de	; F4A3D2  ld HL,DE
 	ld	xix, 13482	; F4A3D4  ld XIX,0x000034aa
@@ -103529,7 +103570,7 @@ SeqRecord_WriteEventToTakeTrack_Skip7:
 	m_rd_stcf_a RW+r6	; F4A443  stcf A,IZ
 	ld	(12294:16), iz	; F4A445  ld (0x3006),IZ
 SeqRecord_WriteEventToTakeTrack_Join6:
-	calr	sub_F4A4F6	; F4A449  calr 0xf4a4f6
+	calr	SeqRecord_TerminateTrackOnMemoryFull	; F4A449  calr 0xf4a4f6
 	jrl	SeqRecord_WriteEventToTakeTrack_Join8	; F4A44C  jrl T,0xf4a4db
 SeqRecord_WriteEventToTakeTrack_Skip8:
 	ld	xiy, 13482	; F4A44F  ld XIY,0x000034aa
@@ -103558,7 +103599,7 @@ SeqRecord_WriteEventToTakeTrack_Skip9:
 	mx_lda32 MXD, ra_HL, ra_IX, 3	; F4A498  lda XHL,XHL+IX
 	ld	xix, xhl	; F4A49D  ld XIX,XHL
 	ldir85	; F4A49F  ldir
-	calr	sub_F4A4E3	; F4A4A1  calr 0xf4a4e3
+	calr	BStore_ExtendChainAtCursor_B_SaveRegs	; F4A4A1  calr 0xf4a4e3
 	ldw	ix, 5	; F4A4A4  ld IX,0x0005
 	ld	hl, (BStore_CursorBlock:16)	; F4A4A7  ld HL,(0x345c)
 	call	T_BStore_BlockAddrFromHL	; F4A4AB  call 0xf40c84
@@ -103577,7 +103618,7 @@ SeqRecord_WriteEventToTakeTrack_Join7:
 	ld	(BStore_CursorOffset:16), ix	; F4A4D2  ld (0x345e),IX
 	jr	SeqRecord_WriteEventToTakeTrack_Join8	; F4A4D6  jr T,0xf4a4db
 SeqRecord_WriteEventToTakeTrack_Skip10:
-	calr	sub_F4A4E3	; F4A4D8  calr 0xf4a4e3
+	calr	BStore_ExtendChainAtCursor_B_SaveRegs	; F4A4D8  calr 0xf4a4e3
 SeqRecord_WriteEventToTakeTrack_Join8:
 	ld	c, (13471:16)	; F4A4DB  ld C,(0x349f)
 	calr	SeqRecord_SaveTakeCursor	; F4A4DF  calr 0xf49838
@@ -103585,7 +103626,7 @@ SeqRecord_WriteEventToTakeTrack_Return2:
 	ret	; F4A4E2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4A4E3
+; BStore_ExtendChainAtCursor_B_SaveRegs
 ; Called from: in-module: 0xF4A398 0xF4A3CF 0xF4A4A1 0xF4A4D8
 ; Touches: nothing with an absolute address
 ; Calls:   T_BStore_ExtendChainAtCursor_B
@@ -103595,7 +103636,11 @@ SeqRecord_WriteEventToTakeTrack_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4A4E3:
+; BStore_ExtendChainAtCursor_B_SaveRegs: Calls T_BStore_ExtendChainAtCursor_B (a new block linked after the cursor
+;   block, cursor to its offset 5) with XWA, XBC, XDE, XHL, XIX, XIY and XIZ saved around it.
+;   SeqRecord_WriteEventToTakeTrack calls it when an event's bytes run past offset 0xFF. Basis: caller + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_a11.json)
+BStore_ExtendChainAtCursor_B_SaveRegs:
 	push	xwa	; F4A4E3  push XWA
 	push	xbc	; F4A4E4  push XBC
 	push	xde	; F4A4E5  push XDE
@@ -103614,7 +103659,7 @@ sub_F4A4E3:
 	ret	; F4A4F5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4A4F6
+; SeqRecord_TerminateTrackOnMemoryFull
 ; Called from: in-module: 0xF49D7D 0xF49FEE 0xF4A338 0xF4A449
 ; Touches: (0x349F) (0x34D1)
 ; Calls:   T_SeqRecord_TerminateTrackAtCursor_Veneer sub_F4A50E SeqRecord_SoundAlert T_Var34D1_SetBits20_Veneer
@@ -103624,7 +103669,12 @@ sub_F4A4E3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4A4F6:
+; SeqRecord_TerminateTrackOnMemoryFull: (C = a track its caller has just cleared from the take mask) (0x349F) := C,
+;   SeqRecord_TerminateTrackAtCursor (0x81 and the 0x82 end tag at the take cursor),
+;   SeqRecord_SetRecordedTracksPlaying when no track is left in the take ((0x3004) long = 0), SeqRecord_SoundAlert,
+;   (0x34D1) |= 0x30. All four callers reach it only with BStore_FreeCount = 0 and too few bytes left in the block.
+;   Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave11_a11.json)
+SeqRecord_TerminateTrackOnMemoryFull:
 	ld	(13471:16), c	; F4A4F6  ld (0x349f),C
 	call	T_SeqRecord_TerminateTrackAtCursor_Veneer	; F4A4FA  call 0xf40a98
 	calr	sub_F4A50E	; F4A4FE  calr 0xf4a50e
@@ -103663,7 +103713,7 @@ sub_F4A50E_Join:
 	ret	; F4A53D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4A53E
+; SeqRecord_LoadHeldNoteListHeadTail
 ; Called from: in-module: 0xF49C25 0xF49D87 0xF4A040 0xF4A12D 0xF4AD32
 ; Touches: (0x33DA) (0x33DB) (0x349F)  |  0x003016
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -103672,7 +103722,11 @@ sub_F4A50E_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4A53E:
+; SeqRecord_LoadHeldNoteListHeadTail: (0x33DA) := 0x3016[2t], (0x33DB) := 0x3016[2t+1] for track t = (0x349F): the
+;   first and last held-note slots of the track's list (0 = empty), as SeqRecord_WriteNoteOn appends a slot -- head
+;   written when (0x33DA) = 0, old tail's +7 linked, new slot made the tail. Preserves BC, IY, XHL. Basis: callers +
+;   body + the list writer. (notes/naming-pilot-2026-10-06/proposals_wave11_a11.json)
+SeqRecord_LoadHeldNoteListHeadTail:
 	pushw	bc	; F4A53E  push BC
 	pushw	iy	; F4A53F  push IY
 	push	xhl	; F4A540  push XHL
@@ -103693,7 +103747,7 @@ sub_F4A53E:
 	ret	; F4A56B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4A56C
+; SeqRecord_HeldNoteSlotAddress
 ; Called from: in-module: 0xF49C35 0xF49D9B 0xF49E02 0xF49E7D 0xF49EBC
 ;              0xF49F08 0xF49FAD 0xF4A088 +8 more
 ; Touches:   |  0x00305A
@@ -103703,7 +103757,11 @@ sub_F4A53E:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4A56C:
+; SeqRecord_HeldNoteSlotAddress: XHL := 0x305A + (HL - 1) * 8: the address of 1-based held-note slot HL (8 bytes: +0
+;   note, +1 beats, +2 start tick, +3/+5 the note byte's cursor, +6 previous, +7 next; free list head at 0x3014). Used
+;   by SeqRecord_WriteNoteOn, SeqRecord_CloseHeldNote, SeqRecord_WriteBeatMarkAndAgeHeldNotes and the cycle-record
+;   slot opener. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave11_a11.json)
+SeqRecord_HeldNoteSlotAddress:
 	push	xwa	; F4A56C  push XWA
 	ld	qhl, 0	; F4A56D  ld QHL,0
 	ld	xwa, 12378	; F4A570  ld XWA,0x0000305a
@@ -104735,7 +104793,7 @@ CycleRecord_AllocRecordChain_Return:
 	ret	; F4ABE7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4ABE8
+; CycleRecord_WriteStagedEventToRecordTrack
 ; Called from: in-module: 0xF49CE2 0xF49CFC
 ; Touches: (0x3731)
 ; Calls:   sub_F4ABFC sub_F4AC81
@@ -104745,14 +104803,20 @@ CycleRecord_AllocRecordChain_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4ABE8:
+; CycleRecord_WriteStagedEventToRecordTrack: Writes the event staged at 0x36E8 ((0x36F0) bytes) into cycle record
+;   track (0x36D6): sub_F4AE15 steps back from the track's end cursor by beat marks and ticks against (0x3452) /
+;   (0x36E9), sub_F4ACB1 opens a held-note slot for a 0x9n event, sub_F4AEEE runs BStore_AppendBytes, an error ->
+;   CycleRecord_AbortMemoryFull. With (0x3731) bit 0 set and Seq_BeatTick > 0x14 (sub_F4ABFC) the walk starts at take
+;   chain 2's 0x82 tag instead, and the track's end cursor is restored after. Basis: callers + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_a11.json)
+CycleRecord_WriteStagedEventToRecordTrack:
 	m_bit 0, MD16, 0x3731	; F4ABE8  bit 0,(0x3731)
-	jr	z, sub_F4ABE8_Skip	; F4ABEC  jr Z,0xf4abf8
+	jr	z, CycleRecord_WriteStagedEventToRecordTrack_Skip	; F4ABEC  jr Z,0xf4abf8
 	m_cp_mi8 MB8, Seq_BeatTick, 0x14	; F4ABEE  cp (0x93),0x14
-	jr	ule, sub_F4ABE8_Skip	; F4ABF2  jr ULE,0xf4abf8
+	jr	ule, CycleRecord_WriteStagedEventToRecordTrack_Skip	; F4ABF2  jr ULE,0xf4abf8
 	calr	sub_F4ABFC	; F4ABF4  calr 0xf4abfc
 	ret	; F4ABF7  ret
-sub_F4ABE8_Skip:
+CycleRecord_WriteStagedEventToRecordTrack_Skip:
 	calr	sub_F4AC81	; F4ABF8  calr 0xf4ac81
 	ret	; F4ABFB  ret
 
@@ -104847,7 +104911,7 @@ sub_F4AC81_Skip:
 ; Touches: (0x33DA) (0x33DB) (0x33DE) (0x33DF) (0x345C) (0x345E) (0x349F)
 ;          (0x36D6) (0x36E8) (0x36E9) +2 more  |  0x003014 0x003016 0x003460
 ;          0x003482
-; Calls:   sub_F4A56C T_BStore_StepCursorOneByte sub_F4A53E
+; Calls:   SeqRecord_HeldNoteSlotAddress T_BStore_StepCursorOneByte SeqRecord_LoadHeldNoteListHeadTail
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4ACB1 is an instruction boundary.
 ;           The name IS the address.
@@ -104866,7 +104930,7 @@ sub_F4ACB1:
 	xor	hl, hl	; F4ACCB  xor HL,HL
 	ld	l, (xix)	; F4ACCD  ld L,(XIX)
 	ld	(13279:16), l	; F4ACCF  ld (0x33df),L
-	calr	sub_F4A56C	; F4ACD3  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F4ACD3  calr 0xf4a56c
 	ld	a, (14058:16)	; F4ACD6  ld A,(0x36ea)
 	ld	(xhl), a	; F4ACDA  ld (XHL),A
 	ld	(xhl+1), 0	; F4ACDC  ld (XHL+0x01),0x00
@@ -104893,7 +104957,7 @@ sub_F4ACB1:
 	ld	(xhl+5), a	; F4AD27  ld (XHL+0x05),A
 	ld	c, (14038:16)	; F4AD2A  ld C,(0x36d6)
 	ld	(13471:16), c	; F4AD2E  ld (0x349f),C
-	calr	sub_F4A53E	; F4AD32  calr 0xf4a53e
+	calr	SeqRecord_LoadHeldNoteListHeadTail	; F4AD32  calr 0xf4a53e
 	ld	a, (13275:16)	; F4AD35  ld A,(0x33db)
 	ld	(xhl+6), a	; F4AD39  ld (XHL+0x06),A
 	ld	a, (xhl+7)	; F4AD3C  ld A,(XHL+0x07)
@@ -104914,7 +104978,7 @@ sub_F4ACB1_Skip:
 	jr	z, sub_F4ACB1_Skip2	; F4AD6E  jr Z,0xf4ad80
 	xor	hl, hl	; F4AD70  xor HL,HL
 	ld	l, (13275:16)	; F4AD72  ld L,(0x33db)
-	calr	sub_F4A56C	; F4AD76  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F4AD76  calr 0xf4a56c
 	ld	a, (13279:16)	; F4AD79  ld A,(0x33df)
 	ld	(xhl+7), a	; F4AD7D  ld (XHL+0x07),A
 sub_F4ACB1_Skip2:
@@ -104936,7 +105000,7 @@ sub_F4ACB1_Skip2:
 	jr	z, sub_F4ACB1_Return	; F4ADB2  jr Z,0xf4adc1
 	xor	hl, hl	; F4ADB4  xor HL,HL
 	ld	l, (13278:16)	; F4ADB6  ld L,(0x33de)
-	calr	sub_F4A56C	; F4ADBA  calr 0xf4a56c
+	calr	SeqRecord_HeldNoteSlotAddress	; F4ADBA  calr 0xf4a56c
 	ld	(xhl+6), 0	; F4ADBD  ld (XHL+0x06),0x00
 sub_F4ACB1_Return:
 	ret	; F4ADC1  ret
@@ -114931,7 +114995,7 @@ LcdKeyRow5_DrawbarScreen_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; DrawbarScreen_StepParamAtCursor: Runs DispatchTable_F542D1[(0x28A1)], the drawbar parameter page's cursor (0..3,
+; DrawbarScreen_StepParamAtCursor: Runs DrawbarSettingPage_RowStepHandlers[(0x28A1)], the drawbar parameter page's cursor (0..3,
 ;   moved by DrawbarSettingPage_StepCursorRow, drawn by DL_ParamCursorBar): each entry steps one signed nibble of (0x2890)/(0x2891) by +-1
 ;   within -5..+5 per PanelEvent_Flags bit 0 and repaints. LcdKeyRow4/5_DrawbarScreen call it on that page ((0x289E) =
 ;   1). Basis: callers + body + table. (notes/naming-pilot-2026-10-06/proposals_wave2_f.json)
@@ -114939,7 +115003,7 @@ DrawbarScreen_StepParamAtCursor:
 	ld	c, 4:opc	; F531DC  ld C,0x04
 	m_mul MB16, 0x28a1, 3	; F531DE  mul BC,(0x28a1)
 	extz	xbc	; F531E2  extz XBC
-	add	xbc, DispatchTable_F542D1	; F531E4  add XBC,0x00f542d1
+	add	xbc, DrawbarSettingPage_RowStepHandlers	; F531E4  add XBC,0x00f542d1
 	ld	xbc, (xbc)	; F531EA  ld XBC,(XBC)
 	lda	xiy, (DrawbarScreen_StepParamAtCursor_Resume:24)	; F531EC  lda XIY,0xf531f4
 	push	xiy	; F531F1  push XIY
@@ -115044,24 +115108,28 @@ DrawbarScreen_ToggleRowFlag_Join:
 	ret	; F53263  ret
 
 ; --------------------------------------------------------------------------
-; sub_F53264
-; Called from: DispatchTable_F542D1[2]
+; DrawbarSettingPage_StepAttackTime
+; Called from: DrawbarSettingPage_RowStepHandlers[2]
 ; Evidence: 0xF53264 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F53264:
+; DrawbarSettingPage_StepAttackTime: DrawbarSettingPage_RowStepHandlers[2] (DRAWBAR ATTACK TIME): steps (0x2891) high
+;   nibble by -1/+1 per PanelEvent_Flags bit 0 within -5..+5, then Drawbar_SendSettingBytes and a repaint. Basis:
+;   table index + body + the value DL_DrawbarParamValues prints on that row. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+DrawbarSettingPage_StepAttackTime:
 	push	xix	; F53264  push XIX
 	lda	xix, (10385:16)	; F53265  lda XIX,0x2891
 	ld	c, (PanelEvent_Flags:16)	; F53269  ld C,(0x28b0)
 	and	c, 1	; F5326D  and C,0x01
-	jr	z, sub_F5323E_Skip2	; F53270  jr Z,0xf53290
+	jr	z, DrawbarSettingPage_StepAttackTime_Skip2	; F53270  jr Z,0xf53290
 	ld	c, (xix)	; F53272  ld C,(XIX)
 	sra	c, 4	; F53274  sra 0x04,C
 	cp	c, 251	; F53277  cp C,0xfb
-	jr	le, sub_F5323E_Epilogue	; F5327A  jr LE,0xf532bd
+	jr	le, DrawbarSettingPage_StepAttackTime_Epilogue	; F5327A  jr LE,0xf532bd
 	ld	c, (xix)	; F5327C  ld C,(XIX)
 	sra	c, 4	; F5327E  sra 0x04,C
 	dec	1, c	; F53281  dec 1,C
@@ -115069,12 +115137,12 @@ sub_F53264:
 	and	c, 240	; F53286  and C,0xf0
 	m_and_mi8 MBI+r4, 0, 0x0f	; F53289  and (XIX),0x0f
 	or	(xix), c	; F5328C  or (XIX),C
-	jr	sub_F5323E_Join2	; F5328E  jr T,0xf532ab
-sub_F5323E_Skip2:
+	jr	DrawbarSettingPage_StepAttackTime_Join2	; F5328E  jr T,0xf532ab
+DrawbarSettingPage_StepAttackTime_Skip2:
 	ld	c, (xix)	; F53290  ld C,(XIX)
 	sra	c, 4	; F53292  sra 0x04,C
 	cp	c, 5:i3	; F53295  cp C,5
-	jr	ge, sub_F5323E_Epilogue	; F53297  jr GE,0xf532bd
+	jr	ge, DrawbarSettingPage_StepAttackTime_Epilogue	; F53297  jr GE,0xf532bd
 	ld	c, (xix)	; F53299  ld C,(XIX)
 	sra	c, 4	; F5329B  sra 0x04,C
 	inc	1, c	; F5329E  inc 1,C
@@ -115082,37 +115150,41 @@ sub_F5323E_Skip2:
 	and	c, 240	; F532A3  and C,0xf0
 	m_and_mi8 MBI+r4, 0, 0x0f	; F532A6  and (XIX),0x0f
 	or	(xix), c	; F532A9  or (XIX),C
-sub_F5323E_Join2:
+DrawbarSettingPage_StepAttackTime_Join2:
 	m_set 3, MD16, UI_RequestBits	; F532AB  set 3,(0x2075)
 	push	0	; F532AF  push 0x00
 	m_push MB16, 0x289c	; F532B1  push (0x289c)
 	calr	Drawbar_SendSettingBytes	; F532B5  calr 0xf5418e
 	m_set 4, MD16, UI_ScreenFlags	; F532B8  set 4,(0x2095)
 	popw	bc	; F532BC  pop BC
-sub_F5323E_Epilogue:
+DrawbarSettingPage_StepAttackTime_Epilogue:
 	pop	xix	; F532BD  pop XIX
 	ret	; F532BE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F532BF
-; Called from: DispatchTable_F542D1[3]
+; DrawbarSettingPage_StepReleaseTime
+; Called from: DrawbarSettingPage_RowStepHandlers[3]
 ; Evidence: 0xF532BF is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F532BF:
+; DrawbarSettingPage_StepReleaseTime: DrawbarSettingPage_RowStepHandlers[3] (DRAWBAR RELEASE TIME): steps (0x2891) low
+;   nibble by -1/+1 per PanelEvent_Flags bit 0 within -5..+5, then Drawbar_SendSettingBytes and a repaint. Basis:
+;   table index + body + the value DL_DrawbarParamValues prints on that row. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+DrawbarSettingPage_StepReleaseTime:
 	push	xix	; F532BF  push XIX
 	lda	xix, (10385:16)	; F532C0  lda XIX,0x2891
 	ld	c, (PanelEvent_Flags:16)	; F532C4  ld C,(0x28b0)
 	and	c, 1	; F532C8  and C,0x01
-	jr	z, sub_F5323E_Skip3	; F532CB  jr Z,0xf532ee
+	jr	z, DrawbarSettingPage_StepReleaseTime_Skip3	; F532CB  jr Z,0xf532ee
 	ld	c, (xix)	; F532CD  ld C,(XIX)
 	sll	c, 4	; F532CF  sll 0x04,C
 	sra	c, 4	; F532D2  sra 0x04,C
 	cp	c, 251	; F532D5  cp C,0xfb
-	jr	le, sub_F5323E_Epilogue2	; F532D8  jr LE,0xf5331e
+	jr	le, DrawbarSettingPage_StepReleaseTime_Epilogue2	; F532D8  jr LE,0xf5331e
 	ld	c, (xix)	; F532DA  ld C,(XIX)
 	sll	c, 4	; F532DC  sll 0x04,C
 	sra	c, 4	; F532DF  sra 0x04,C
@@ -115120,13 +115192,13 @@ sub_F532BF:
 	and	c, 15	; F532E4  and C,0x0f
 	m_and_mi8 MBI+r4, 0, 0xf0	; F532E7  and (XIX),0xf0
 	or	(xix), c	; F532EA  or (XIX),C
-	jr	sub_F5323E_Join3	; F532EC  jr T,0xf5330c
-sub_F5323E_Skip3:
+	jr	DrawbarSettingPage_StepReleaseTime_Join3	; F532EC  jr T,0xf5330c
+DrawbarSettingPage_StepReleaseTime_Skip3:
 	ld	c, (xix)	; F532EE  ld C,(XIX)
 	sll	c, 4	; F532F0  sll 0x04,C
 	sra	c, 4	; F532F3  sra 0x04,C
 	cp	c, 5:i3	; F532F6  cp C,5
-	jr	ge, sub_F5323E_Epilogue2	; F532F8  jr GE,0xf5331e
+	jr	ge, DrawbarSettingPage_StepReleaseTime_Epilogue2	; F532F8  jr GE,0xf5331e
 	ld	c, (xix)	; F532FA  ld C,(XIX)
 	sll	c, 4	; F532FC  sll 0x04,C
 	sra	c, 4	; F532FF  sra 0x04,C
@@ -115134,37 +115206,41 @@ sub_F5323E_Skip3:
 	and	c, 15	; F53304  and C,0x0f
 	m_and_mi8 MBI+r4, 0, 0xf0	; F53307  and (XIX),0xf0
 	or	(xix), c	; F5330A  or (XIX),C
-sub_F5323E_Join3:
+DrawbarSettingPage_StepReleaseTime_Join3:
 	m_set 3, MD16, UI_RequestBits	; F5330C  set 3,(0x2075)
 	push	0	; F53310  push 0x00
 	m_push MB16, 0x289c	; F53312  push (0x289c)
 	calr	Drawbar_SendSettingBytes	; F53316  calr 0xf5418e
 	m_set 4, MD16, UI_ScreenFlags	; F53319  set 4,(0x2095)
 	popw	bc	; F5331D  pop BC
-sub_F5323E_Epilogue2:
+DrawbarSettingPage_StepReleaseTime_Epilogue2:
 	pop	xix	; F5331E  pop XIX
 	ret	; F5331F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F53320
-; Called from: DispatchTable_F542D1[0]
+; DrawbarSettingPage_StepPercussiveToneDecay
+; Called from: DrawbarSettingPage_RowStepHandlers[0]
 ; Evidence: 0xF53320 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F53320:
+; DrawbarSettingPage_StepPercussiveToneDecay: DrawbarSettingPage_RowStepHandlers[0] (PERCUSSIVE TONE DECAY): steps
+;   (0x2890) low nibble by -1/+1 per PanelEvent_Flags bit 0 within -5..+5, then Drawbar_SendSettingBytes and a
+;   repaint. Basis: table index + body + the value DL_DrawbarParamValues prints on that row. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+DrawbarSettingPage_StepPercussiveToneDecay:
 	push	xix	; F53320  push XIX
 	lda	xix, (10384:16)	; F53321  lda XIX,0x2890
 	ld	c, (PanelEvent_Flags:16)	; F53325  ld C,(0x28b0)
 	and	c, 1	; F53329  and C,0x01
-	jr	z, sub_F5323E_Skip4	; F5332C  jr Z,0xf5334f
+	jr	z, DrawbarSettingPage_StepPercussiveToneDecay_Skip4	; F5332C  jr Z,0xf5334f
 	ld	c, (xix)	; F5332E  ld C,(XIX)
 	sll	c, 4	; F53330  sll 0x04,C
 	sra	c, 4	; F53333  sra 0x04,C
 	cp	c, 251	; F53336  cp C,0xfb
-	jr	le, sub_F5323E_Epilogue3	; F53339  jr LE,0xf5337f
+	jr	le, DrawbarSettingPage_StepPercussiveToneDecay_Epilogue3	; F53339  jr LE,0xf5337f
 	ld	c, (xix)	; F5333B  ld C,(XIX)
 	sll	c, 4	; F5333D  sll 0x04,C
 	sra	c, 4	; F53340  sra 0x04,C
@@ -115172,13 +115248,13 @@ sub_F53320:
 	and	c, 15	; F53345  and C,0x0f
 	m_and_mi8 MBI+r4, 0, 0xf0	; F53348  and (XIX),0xf0
 	or	(xix), c	; F5334B  or (XIX),C
-	jr	sub_F5323E_Join4	; F5334D  jr T,0xf5336d
-sub_F5323E_Skip4:
+	jr	DrawbarSettingPage_StepPercussiveToneDecay_Join4	; F5334D  jr T,0xf5336d
+DrawbarSettingPage_StepPercussiveToneDecay_Skip4:
 	ld	c, (xix)	; F5334F  ld C,(XIX)
 	sll	c, 4	; F53351  sll 0x04,C
 	sra	c, 4	; F53354  sra 0x04,C
 	cp	c, 5:i3	; F53357  cp C,5
-	jr	ge, sub_F5323E_Epilogue3	; F53359  jr GE,0xf5337f
+	jr	ge, DrawbarSettingPage_StepPercussiveToneDecay_Epilogue3	; F53359  jr GE,0xf5337f
 	ld	c, (xix)	; F5335B  ld C,(XIX)
 	sll	c, 4	; F5335D  sll 0x04,C
 	sra	c, 4	; F53360  sra 0x04,C
@@ -115186,36 +115262,40 @@ sub_F5323E_Skip4:
 	and	c, 15	; F53365  and C,0x0f
 	m_and_mi8 MBI+r4, 0, 0xf0	; F53368  and (XIX),0xf0
 	or	(xix), c	; F5336B  or (XIX),C
-sub_F5323E_Join4:
+DrawbarSettingPage_StepPercussiveToneDecay_Join4:
 	m_set 3, MD16, UI_RequestBits	; F5336D  set 3,(0x2075)
 	push	0	; F53371  push 0x00
 	m_push MB16, 0x289c	; F53373  push (0x289c)
 	calr	Drawbar_SendSettingBytes	; F53377  calr 0xf5418e
 	m_set 4, MD16, UI_ScreenFlags	; F5337A  set 4,(0x2095)
 	popw	bc	; F5337E  pop BC
-sub_F5323E_Epilogue3:
+DrawbarSettingPage_StepPercussiveToneDecay_Epilogue3:
 	pop	xix	; F5337F  pop XIX
 	ret	; F53380  ret
 
 ; --------------------------------------------------------------------------
-; sub_F53381
-; Called from: DispatchTable_F542D1[1]
+; DrawbarSettingPage_StepPercussiveToneLevel
+; Called from: DrawbarSettingPage_RowStepHandlers[1]
 ; Evidence: 0xF53381 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F53381:
+; DrawbarSettingPage_StepPercussiveToneLevel: DrawbarSettingPage_RowStepHandlers[1] (PERCUSSIVE TONE LEVEL): steps
+;   (0x2890) high nibble by -1/+1 per PanelEvent_Flags bit 0 within -5..+5, then Drawbar_SendSettingBytes and a
+;   repaint. Basis: table index + body + the value DL_DrawbarParamValues prints on that row. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+DrawbarSettingPage_StepPercussiveToneLevel:
 	push	xix	; F53381  push XIX
 	lda	xix, (10384:16)	; F53382  lda XIX,0x2890
 	ld	c, (PanelEvent_Flags:16)	; F53386  ld C,(0x28b0)
 	and	c, 1	; F5338A  and C,0x01
-	jr	z, sub_F5323E_Skip5	; F5338D  jr Z,0xf533ad
+	jr	z, DrawbarSettingPage_StepPercussiveToneLevel_Skip5	; F5338D  jr Z,0xf533ad
 	ld	c, (xix)	; F5338F  ld C,(XIX)
 	sra	c, 4	; F53391  sra 0x04,C
 	cp	c, 251	; F53394  cp C,0xfb
-	jr	le, sub_F5323E_Epilogue4	; F53397  jr LE,0xf533da
+	jr	le, DrawbarSettingPage_StepPercussiveToneLevel_Epilogue4	; F53397  jr LE,0xf533da
 	ld	c, (xix)	; F53399  ld C,(XIX)
 	sra	c, 4	; F5339B  sra 0x04,C
 	dec	1, c	; F5339E  dec 1,C
@@ -115223,12 +115303,12 @@ sub_F53381:
 	and	c, 240	; F533A3  and C,0xf0
 	m_and_mi8 MBI+r4, 0, 0x0f	; F533A6  and (XIX),0x0f
 	or	(xix), c	; F533A9  or (XIX),C
-	jr	sub_F5323E_Join5	; F533AB  jr T,0xf533c8
-sub_F5323E_Skip5:
+	jr	DrawbarSettingPage_StepPercussiveToneLevel_Join5	; F533AB  jr T,0xf533c8
+DrawbarSettingPage_StepPercussiveToneLevel_Skip5:
 	ld	c, (xix)	; F533AD  ld C,(XIX)
 	sra	c, 4	; F533AF  sra 0x04,C
 	cp	c, 5:i3	; F533B2  cp C,5
-	jr	ge, sub_F5323E_Epilogue4	; F533B4  jr GE,0xf533da
+	jr	ge, DrawbarSettingPage_StepPercussiveToneLevel_Epilogue4	; F533B4  jr GE,0xf533da
 	ld	c, (xix)	; F533B6  ld C,(XIX)
 	sra	c, 4	; F533B8  sra 0x04,C
 	inc	1, c	; F533BB  inc 1,C
@@ -115236,14 +115316,14 @@ sub_F5323E_Skip5:
 	and	c, 240	; F533C0  and C,0xf0
 	m_and_mi8 MBI+r4, 0, 0x0f	; F533C3  and (XIX),0x0f
 	or	(xix), c	; F533C6  or (XIX),C
-sub_F5323E_Join5:
+DrawbarSettingPage_StepPercussiveToneLevel_Join5:
 	m_set 3, MD16, UI_RequestBits	; F533C8  set 3,(0x2075)
 	push	0	; F533CC  push 0x00
 	m_push MB16, 0x289c	; F533CE  push (0x289c)
 	calr	Drawbar_SendSettingBytes	; F533D2  calr 0xf5418e
 	m_set 4, MD16, UI_ScreenFlags	; F533D5  set 4,(0x2095)
 	popw	bc	; F533D9  pop BC
-sub_F5323E_Epilogue4:
+DrawbarSettingPage_StepPercussiveToneLevel_Epilogue4:
 	pop	xix	; F533DA  pop XIX
 	ret	; F533DB  ret
 
@@ -117509,7 +117589,7 @@ Drawbar_SendPartParams_Loop2:
 ; Drawbar_SendSettingBytes: Sends three ToneEdit writes to CPU 2 for part arg (0x289C): [0x88, part, 11, 0, (0x2890),
 ;   0], [.., 12, .., (0x2891), ..] and [.., 8, .., (0x2896), ..] -- the setting-page nibbles and the row-flag byte; a
 ;   subset of Drawbar_SendPartParams (opcodes 11, 12, 4..8). Called after DrawbarScreen_ToggleRowFlag and the four
-;   DispatchTable_F542D1 nibble steppers change them. Basis: callers + body + full-send twin. (notes/naming-
+;   DrawbarSettingPage_RowStepHandlers nibble steppers change them. Basis: callers + body + full-send twin. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave4_l.json)
 Drawbar_SendSettingBytes:
 	link XIZ,0xfff2	; F5418E  link XIZ,0xfff2
@@ -117722,7 +117802,7 @@ Table_F542A4:
 ; Entries: 0x6E 0x62 0x54 0x46 0x38 0x2A 0x1C 0x0E 0x00 -- one step of 12
 ;          and then eight of 14.
 ; Entry count: NINE, and nine is measured twice: 0xF542C8 + 9 = 0xF542D1,
-;              which is exactly where DispatchTable_F542D1 starts; and the
+;              which is exactly where DrawbarSettingPage_RowStepHandlers starts; and the
 ;              screen shows nine drawbars.  ⚠ This is CORRECTION C3: the
 ;              layout's HOLES table describes 44 of this segment's 45 bytes
 ;              and never mentions the trailing 0x00, which is entry 8.
@@ -117737,7 +117817,7 @@ DrawbarRowOffsets:
 ; --- 0xF542D1-0xF542E0  ptrtab (16 bytes) ---
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F542D1 -- 4 pointers into this module's code
+; DrawbarSettingPage_RowStepHandlers -- 4 pointers into this module's code
 ; Read by: prom_b 0xF531E4 `add XBC,0x00f542d1`
 ; Evidence: four 32-bit words, all four landing on instruction boundaries of
 ;           this transcription; it starts exactly where DrawbarRowOffsets
@@ -117745,11 +117825,15 @@ DrawbarRowOffsets:
 ; Unknown: what bounds the index at 4.  The reader above does `ld XBC,(XBC)`
 ;          and jumps; nothing in the span compares the index with a literal.
 ; --------------------------------------------------------------------------
-DispatchTable_F542D1:
-	.long sub_F53320                       ; F542D1  [0]   -> sub_F53320
-	.long sub_F53381                       ; F542D5  [1]   -> sub_F53381
-	.long sub_F53264                       ; F542D9  [2]   -> sub_F53264
-	.long sub_F532BF                       ; F542DD  [3]   -> sub_F532BF
+; DrawbarSettingPage_RowStepHandlers: DRAWBAR SETTING page: steps the signed nibble of the row under the cursor
+;   (0x28A1) by +-1 within -5..+5 -- 0 PERCUSSIVE TONE DECAY, 1 PERCUSSIVE TONE LEVEL, 2 DRAWBAR ATTACK TIME, 3
+;   DRAWBAR RELEASE TIME -- then Drawbar_SendSettingBytes. Basis: table index (row cursor) + the page's row text + the
+;   nibble each arm edits. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+DrawbarSettingPage_RowStepHandlers:
+	.long DrawbarSettingPage_StepPercussiveToneDecay                       ; F542D1  [0]   -> DrawbarSettingPage_StepPercussiveToneDecay
+	.long DrawbarSettingPage_StepPercussiveToneLevel                       ; F542D5  [1]   -> DrawbarSettingPage_StepPercussiveToneLevel
+	.long DrawbarSettingPage_StepAttackTime                       ; F542D9  [2]   -> DrawbarSettingPage_StepAttackTime
+	.long DrawbarSettingPage_StepReleaseTime                       ; F542DD  [3]   -> DrawbarSettingPage_StepReleaseTime
 
 ; --- 0xF542E1-0xF542EC  data (12 bytes) ---
 
@@ -122837,7 +122921,7 @@ LcdKeyRow1_CycleRecordScreen_Return2:
 ; LcdKeyRow2_CycleRecordScreen
 ; Called from: table 0xF559AE[9]
 ; Touches: (0x34D9)
-; Calls:   DispatchState36CE_F56925 Select36CE_F568AB
+; Calls:   CycleRecordScreen_IncField CycleRecordScreen_SelectCycleField
 ; Evidence: entry [9] of the table at 0xF559AE reads 0x00F56752, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF56752
 ;           is an instruction boundary of this transcription.
@@ -122852,10 +122936,10 @@ LcdKeyRow2_CycleRecordScreen:
 	jr	nz, LcdKeyRow2_CycleRecordScreen_Return3	; F5675A  jr NZ,0xf5676a
 	m_bit 2, MD16, 0x34d9	; F5675C  bit 2,(0x34d9)
 	jr	nz, LcdKeyRow2_CycleRecordScreen_Return3	; F56760  jr NZ,0xf5676a
-	calr	DispatchState36CE_F56925	; F56762  calr 0xf56925
+	calr	CycleRecordScreen_IncField	; F56762  calr 0xf56925
 	jr	LcdKeyRow2_CycleRecordScreen_Return3	; F56765  jr T,0xf5676a
 LcdKeyRow2_CycleRecordScreen_Skip3:
-	calr	Select36CE_F568AB	; F56767  calr 0xf568ab
+	calr	CycleRecordScreen_SelectCycleField	; F56767  calr 0xf568ab
 LcdKeyRow2_CycleRecordScreen_Return3:
 	ret	; F5676A  ret
 
@@ -122863,7 +122947,7 @@ LcdKeyRow2_CycleRecordScreen_Return3:
 ; LcdKeyRow3_CycleRecordScreen
 ; Called from: table 0xF559AE[10]
 ; Touches: (0x34D9) (0x36CE)
-; Calls:   DispatchState36CE_F56A5F T_F40BE0 Select36CE_F568E9
+; Calls:   CycleRecordScreen_DecField T_F40BE0 CycleRecordScreen_SelectStartMeasureField
 ; Evidence: entry [10] of the table at 0xF559AE reads 0x00F5676B, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF5676B is an instruction boundary of this transcription.
@@ -122878,7 +122962,7 @@ LcdKeyRow3_CycleRecordScreen:
 	jr	nz, LcdKeyRow3_CycleRecordScreen_Return4	; F56773  jr NZ,0xf56790
 	m_bit 2, MD16, 0x34d9	; F56775  bit 2,(0x34d9)
 	jr	nz, LcdKeyRow3_CycleRecordScreen_Return4	; F56779  jr NZ,0xf56790
-	calr	DispatchState36CE_F56A5F	; F5677B  calr 0xf56a5f
+	calr	CycleRecordScreen_DecField	; F5677B  calr 0xf56a5f
 	m_cp_mi8 MB16, 0x36ce, 0x00	; F5677E  cp (0x36ce),0x00
 	jr	z, LcdKeyRow3_CycleRecordScreen_Skip4	; F56783  jr Z,0xf56787
 	jr	LcdKeyRow3_CycleRecordScreen_Return4	; F56785  jr T,0xf56790
@@ -122886,7 +122970,7 @@ LcdKeyRow3_CycleRecordScreen_Skip4:
 	call	T_F40BE0	; F56787  call 0xf40be0
 	jr	LcdKeyRow3_CycleRecordScreen_Return4	; F5678B  jr T,0xf56790
 LcdKeyRow3_CycleRecordScreen_Skip5:
-	calr	Select36CE_F568E9	; F5678D  calr 0xf568e9
+	calr	CycleRecordScreen_SelectStartMeasureField	; F5678D  calr 0xf568e9
 LcdKeyRow3_CycleRecordScreen_Return4:
 	ret	; F56790  ret
 
@@ -122894,7 +122978,7 @@ LcdKeyRow3_CycleRecordScreen_Return4:
 ; LcdKeyRow4_CycleRecordScreen
 ; Called from: table 0xF559AE[11]
 ; Touches: nothing with an absolute address
-; Calls:   Select36CE_F56907
+; Calls:   CycleRecordScreen_SelectEndMeasureField
 ; Evidence: entry [11] of the table at 0xF559AE reads 0x00F56791, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF56791 is an instruction boundary of this transcription.
@@ -122907,7 +122991,7 @@ LcdKeyRow4_CycleRecordScreen:
 	jr	nz, LcdKeyRow4_CycleRecordScreen_Skip6	; F56794  jr NZ,0xf56797
 	ret	; F56796  ret
 LcdKeyRow4_CycleRecordScreen_Skip6:
-	calr	Select36CE_F56907	; F56797  calr 0xf56907
+	calr	CycleRecordScreen_SelectEndMeasureField	; F56797  calr 0xf56907
 	ret	; F5679A  ret
 
 ; --------------------------------------------------------------------------
@@ -123133,7 +123217,7 @@ Nop_Ret_F568AA:
 	ret	; F568AA  ret
 
 ; --------------------------------------------------------------------------
-; Select36CE_F568AB
+; CycleRecordScreen_SelectCycleField
 ; Called from: in-module: 0xF56767
 ; Touches: (0x12F6) (0x2095) (0x2540) (0x3628) (0x36CE) (0x3755)  |  0xF3501F
 ;          0xF3502A
@@ -123148,15 +123232,18 @@ Nop_Ret_F568AA:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Select36CE_F568AB:
+; CycleRecordScreen_SelectCycleField: CYCLE RECORD LCD row 2 LEFT key: unless (0x3628) is set, field cursor (0x36CE)
+;   := 0 (CYCLE), old one to (0x3755), stops the blink and repaints. Basis: body + the page's row text + rectangle 0
+;   of Data_F35035+6. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CycleRecordScreen_SelectCycleField:
 	m_cp_mi8 MB16, 0x3628, 0x00	; F568AB  cp (0x3628),0x00
-	jr	nz, Select36CE_F568AB_Return	; F568B0  jr NZ,0xf568c8
+	jr	nz, CycleRecordScreen_SelectCycleField_Return	; F568B0  jr NZ,0xf568c8
 	ld	a, (14030:16)	; F568B2  ld A,(0x36ce)
 	ld	(14165:16), a	; F568B6  ld (0x3755),A
 	ld	(14030:16), 0	; F568BA  ld (0x36ce),0x00
 	call	T_Blink_Stop	; F568BF  call 0xf42e24
 	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F568C3  or (0x2095),0x10
-Select36CE_F568AB_Return:
+CycleRecordScreen_SelectCycleField_Return:
 	ret	; F568C8  ret
 	ld	(LCD_CurrentLayer:16), 1	; F568C9  ld (0x2540),0x01
 	ld	xiy, DL_F34FF2 + 0x38	; F568CE  ld XIY,0x00f3502a
@@ -123168,7 +123255,7 @@ Select36CE_F568AB_Return:
 	ret	; F568E8  ret
 
 ; --------------------------------------------------------------------------
-; Select36CE_F568E9
+; CycleRecordScreen_SelectStartMeasureField
 ; Called from: in-module: 0xF5678D
 ; Touches: (0x2095) (0x3628) (0x36CE) (0x3755)
 ; Calls:   T_Blink_Stop
@@ -123182,19 +123269,22 @@ Select36CE_F568AB_Return:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Select36CE_F568E9:
+; CycleRecordScreen_SelectStartMeasureField: CYCLE RECORD LCD row 3 LEFT key: unless (0x3628) is set, field cursor
+;   (0x36CE) := 1 (CYCLE START MEASURE), old one to (0x3755), stops the blink and repaints. Basis: body + the page's
+;   row text + rectangle 1 of Data_F35035+6. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CycleRecordScreen_SelectStartMeasureField:
 	m_cp_mi8 MB16, 0x3628, 0x00	; F568E9  cp (0x3628),0x00
-	jr	nz, Select36CE_F568E9_Return	; F568EE  jr NZ,0xf56906
+	jr	nz, CycleRecordScreen_SelectStartMeasureField_Return	; F568EE  jr NZ,0xf56906
 	ld	a, (14030:16)	; F568F0  ld A,(0x36ce)
 	ld	(14165:16), a	; F568F4  ld (0x3755),A
 	ld	(14030:16), 1	; F568F8  ld (0x36ce),0x01
 	call	T_Blink_Stop	; F568FD  call 0xf42e24
 	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F56901  or (0x2095),0x10
-Select36CE_F568E9_Return:
+CycleRecordScreen_SelectStartMeasureField_Return:
 	ret	; F56906  ret
 
 ; --------------------------------------------------------------------------
-; Select36CE_F56907
+; CycleRecordScreen_SelectEndMeasureField
 ; Called from: in-module: 0xF56797
 ; Touches: (0x2095) (0x3628) (0x36CE) (0x3755)
 ; Calls:   T_Blink_Stop
@@ -123208,19 +123298,22 @@ Select36CE_F568E9_Return:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Select36CE_F56907:
+; CycleRecordScreen_SelectEndMeasureField: CYCLE RECORD LCD row 4 LEFT key: unless (0x3628) is set, field cursor
+;   (0x36CE) := 2 (CYCLE END MEASURE), old one to (0x3755), stops the blink and repaints. Basis: body + the page's row
+;   text + rectangle 2 of Data_F35035+6. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CycleRecordScreen_SelectEndMeasureField:
 	m_cp_mi8 MB16, 0x3628, 0x00	; F56907  cp (0x3628),0x00
-	jr	nz, Select36CE_F56907_Return	; F5690C  jr NZ,0xf56924
+	jr	nz, CycleRecordScreen_SelectEndMeasureField_Return	; F5690C  jr NZ,0xf56924
 	ld	a, (14030:16)	; F5690E  ld A,(0x36ce)
 	ld	(14165:16), a	; F56912  ld (0x3755),A
 	ld	(14030:16), 2	; F56916  ld (0x36ce),0x02
 	call	T_Blink_Stop	; F5691B  call 0xf42e24
 	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F5691F  or (0x2095),0x10
-Select36CE_F56907_Return:
+CycleRecordScreen_SelectEndMeasureField_Return:
 	ret	; F56924  ret
 
 ; --------------------------------------------------------------------------
-; DispatchState36CE_F56925
+; CycleRecordScreen_IncField
 ; Called from: in-module: 0xF56762
 ; Touches: (0x2075) (0x36CE)
 ; Evidence: reached by a branch decoded in this transcription (the sites are
@@ -123233,10 +123326,13 @@ Select36CE_F56907_Return:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-DispatchState36CE_F56925:
+; CycleRecordScreen_IncField: CYCLE RECORD LCD row 2 RIGHT key (up arrow): sets UI_RequestBits bit 3 and calls
+;   CycleRecordScreen_FieldIncHandlers[field cursor (0x36CE)]. Basis: the table it reads + caller. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+CycleRecordScreen_IncField:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F56925  or (0x2075),0x08
 	xor	xwa, xwa	; F5692A  xor XWA,XWA
-	ld	xix, StateDispatchTable_F5693F	; F5692C  ld XIX,0x00f5693f
+	ld	xix, CycleRecordScreen_FieldIncHandlers	; F5692C  ld XIX,0x00f5693f
 	ld	a, (14030:16)	; F56931  ld A,(0x36ce)
 	sll	xwa, 2	; F56935  sll 0x02,XWA
 	add	xix, xwa	; F56938  add XIX,XWA
@@ -123245,7 +123341,7 @@ DispatchState36CE_F56925:
 	ret	; F5693E  ret
 
 ; --------------------------------------------------------------------------
-; StateDispatchTable_F5693F -- five 32-bit routine pointers, entered with
+; CycleRecordScreen_FieldIncHandlers -- five 32-bit routine pointers, entered with
 ;                              `call (XIX)`.
 ; Read by: 0xF5692C: `xor XWA,XWA / ld XIX,0x00F5693F / ld A,(0x36CE) / sll
 ;          0x02,XWA / add XIX,XWA / ld XIX,(XIX) / call T,XIX` -- entry
@@ -123266,16 +123362,20 @@ DispatchState36CE_F56925:
 ;          the table.  That is what the bytes say; whether the callers
 ;          guarantee the range is not established here.
 ; --------------------------------------------------------------------------
-StateDispatchTable_F5693F:
-	.long	sub_F56953	; F5693F  [0] -> sub_F56953
-	.long	sub_F5698E	; F56943  [1] -> sub_F5698E
-	.long	sub_F56A1D	; F56947  [2] -> sub_F56A1D
-	.long	sub_F56953	; F5694B  [3] -> sub_F56953
-	.long	sub_F56953	; F5694F  [4] -> sub_F56953
+; CycleRecordScreen_FieldIncHandlers: CYCLE RECORD (screen 0x08), LCD row 2 RIGHT key (up arrow): steps the field
+;   under the cursor (0x36CE) up -- 0 CYCLE := ON, 1 START MEASURE + 1, 2 END MEASURE + 1; [3], [4] repeat [0] (no
+;   writer stores 3 or 4). Basis: table index (field cursor; its writers and the page's rows) + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+CycleRecordScreen_FieldIncHandlers:
+	.long	CycleRecordScreen_SwitchCycleOn	; F5693F  [0] -> CycleRecordScreen_SwitchCycleOn
+	.long	CycleRecordScreen_IncStartMeasure	; F56943  [1] -> CycleRecordScreen_IncStartMeasure
+	.long	CycleRecordScreen_IncEndMeasure	; F56947  [2] -> CycleRecordScreen_IncEndMeasure
+	.long	CycleRecordScreen_SwitchCycleOn	; F5694B  [3] -> CycleRecordScreen_SwitchCycleOn
+	.long	CycleRecordScreen_SwitchCycleOn	; F5694F  [4] -> CycleRecordScreen_SwitchCycleOn
 
 
 ; --------------------------------------------------------------------------
-; sub_F56953
+; CycleRecordScreen_SwitchCycleOn
 ; Called from: table 0xF5693F[0], 0xF5693F[3], 0xF5693F[4]
 ; Touches: (0x360B)
 ; Calls:   sub_F5696D T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart T_Seq_SetTrackBeatsFromTransportB
@@ -123285,15 +123385,19 @@ StateDispatchTable_F5693F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56953:
+; CycleRecordScreen_SwitchCycleOn: CycleRecordScreen_FieldIncHandlers[0] (field CYCLE): unless already on, sets the
+;   CYCLE RECORD switch (0x360B) bit 1, repaints its OFF/ON, then SeqCycle_CaptureEndCursors / SeqCycle_LocateToStart
+;   / Seq_SetTrackBeatsFromTransportB. Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+CycleRecordScreen_SwitchCycleOn:
 	m_bit 1, MD16, 0x360b	; F56953  bit 1,(0x360b)
-	jr	nz, sub_F56953_Return	; F56957  jr NZ,0xf5696c
+	jr	nz, CycleRecordScreen_SwitchCycleOn_Return	; F56957  jr NZ,0xf5696c
 	m_set 1, MD16, 0x360b	; F56959  set 1,(0x360b)
 	calr	sub_F5696D	; F5695D  calr 0xf5696d
 	call	T_SeqCycle_CaptureEndCursors	; F56960  call 0xf40b60
 	call	T_SeqCycle_LocateToStart	; F56964  call 0xf40b5c
 	call	T_Seq_SetTrackBeatsFromTransportB	; F56968  call 0xf40ac4
-sub_F56953_Return:
+CycleRecordScreen_SwitchCycleOn_Return:
 	ret	; F5696C  ret
 
 ; --------------------------------------------------------------------------
@@ -123320,7 +123424,7 @@ sub_F5696D:
 	ret	; F5698D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5698E
+; CycleRecordScreen_IncStartMeasure
 ; Called from: table 0xF5693F[1]
 ; Touches: (0x3622)
 ; Calls:   T_Blink_Stop CycleRecordScreen_BlinkStartAndEndMeasures CycleRecordScreen_OnStartMeasureChanged
@@ -123330,7 +123434,10 @@ sub_F5696D:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5698E:
+; CycleRecordScreen_IncStartMeasure: CycleRecordScreen_FieldIncHandlers[1] (field START MEASURE): while stopped,
+;   (0x3622) + 1 up to 999, then blinks both readouts and CycleRecordScreen_OnStartMeasureChanged. Basis: table index
+;   + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CycleRecordScreen_IncStartMeasure:
 	bit	2, (TransportB_State:8)	; F5698E  bit 2,(0x96)
 	jr	nz, sub_F5696D_Return	; F56991  jr NZ,0xf569ae
 	call	T_Blink_Stop	; F56993  call 0xf42e24
@@ -123416,7 +123523,7 @@ CycleRecordScreen_BlinkStartAndEndMeasures:
 	ret	; F56A1C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56A1D
+; CycleRecordScreen_IncEndMeasure
 ; Called from: table 0xF5693F[2]
 ; Touches: (0x34BB) (0x3624) (0x3628) (0x3629)
 ; Calls:   T_Blink_Stop CycleRecordScreen_BlinkStartAndEndMeasures
@@ -123426,32 +123533,35 @@ CycleRecordScreen_BlinkStartAndEndMeasures:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56A1D:
+; CycleRecordScreen_IncEndMeasure: CycleRecordScreen_FieldIncHandlers[2] (field END MEASURE): while stopped, (0x3624)
+;   + 1 up to 999, blinks both readouts and sets (0x3628) := 0x83 / (0x3629) as CyclePlayScreen_QueueEndMeasureChange
+;   does. Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CycleRecordScreen_IncEndMeasure:
 	bit	2, (TransportB_State:8)	; F56A1D  bit 2,(0x96)
-	jr	nz, sub_F569FA_Return	; F56A20  jr NZ,0xf56a5e
+	jr	nz, CycleRecordScreen_IncEndMeasure_Return	; F56A20  jr NZ,0xf56a5e
 	call	T_Blink_Stop	; F56A22  call 0xf42e24
 	m_cp_mi16 MW16, 0x3624, 0x03e7	; F56A26  cp (0x3624),0x03e7
-	jr	c, sub_F569FA_Skip	; F56A2C  jr C,0xf56a33
+	jr	c, CycleRecordScreen_IncEndMeasure_Skip	; F56A2C  jr C,0xf56a33
 	calr	CycleRecordScreen_BlinkStartAndEndMeasures	; F56A2E  calr 0xf569fa
-	jr	sub_F569FA_Return	; F56A31  jr T,0xf56a5e
-sub_F569FA_Skip:
+	jr	CycleRecordScreen_IncEndMeasure_Return	; F56A31  jr T,0xf56a5e
+CycleRecordScreen_IncEndMeasure_Skip:
 	incw	1, (13860:16)	; F56A33  incw 1,(0x3624)
 	calr	CycleRecordScreen_BlinkStartAndEndMeasures	; F56A37  calr 0xf569fa
 	m_or_mi8 MB16, 0x34bb, 0x04	; F56A3A  or (0x34bb),0x04
 	m_cp_mi8 MB16, 0x3628, 0x00	; F56A3F  cp (0x3628),0x00
-	jr	z, sub_F569FA_Skip2	; F56A44  jr Z,0xf56a54
+	jr	z, CycleRecordScreen_IncEndMeasure_Skip2	; F56A44  jr Z,0xf56a54
 	m_cp_mi8 MB16, 0x3629, 0x02	; F56A46  cp (0x3629),0x02
-	jr	nz, sub_F569FA_Skip2	; F56A4B  jr NZ,0xf56a54
+	jr	nz, CycleRecordScreen_IncEndMeasure_Skip2	; F56A4B  jr NZ,0xf56a54
 	ld	(13864:16), 131	; F56A4D  ld (0x3628),0x83
-	jr	sub_F569FA_Return	; F56A52  jr T,0xf56a5e
-sub_F569FA_Skip2:
+	jr	CycleRecordScreen_IncEndMeasure_Return	; F56A52  jr T,0xf56a5e
+CycleRecordScreen_IncEndMeasure_Skip2:
 	ld	(13864:16), 131	; F56A54  ld (0x3628),0x83
 	ld	(13865:16), 1	; F56A59  ld (0x3629),0x01
-sub_F569FA_Return:
+CycleRecordScreen_IncEndMeasure_Return:
 	ret	; F56A5E  ret
 
 ; --------------------------------------------------------------------------
-; DispatchState36CE_F56A5F
+; CycleRecordScreen_DecField
 ; Called from: in-module: 0xF5677B
 ; Touches: (0x2075) (0x36CE)
 ; Evidence: reached by a branch decoded in this transcription (the sites are
@@ -123464,10 +123574,13 @@ sub_F569FA_Return:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-DispatchState36CE_F56A5F:
+; CycleRecordScreen_DecField: CYCLE RECORD LCD row 3 RIGHT key (down arrow): sets UI_RequestBits bit 3 and calls
+;   CycleRecordScreen_FieldDecHandlers[field cursor (0x36CE)]. Basis: the table it reads + caller. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+CycleRecordScreen_DecField:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F56A5F  or (0x2075),0x08
 	xor	xwa, xwa	; F56A64  xor XWA,XWA
-	ld	xix, StateDispatchTable_F56A79	; F56A66  ld XIX,0x00f56a79
+	ld	xix, CycleRecordScreen_FieldDecHandlers	; F56A66  ld XIX,0x00f56a79
 	ld	a, (14030:16)	; F56A6B  ld A,(0x36ce)
 	sll	xwa, 2	; F56A6F  sll 0x02,XWA
 	add	xix, xwa	; F56A72  add XIX,XWA
@@ -123476,7 +123589,7 @@ DispatchState36CE_F56A5F:
 	ret	; F56A78  ret
 
 ; --------------------------------------------------------------------------
-; StateDispatchTable_F56A79 -- five 32-bit routine pointers, entered with
+; CycleRecordScreen_FieldDecHandlers -- five 32-bit routine pointers, entered with
 ;                              `call (XIX)`.
 ; Read by: 0xF56A66: `xor XWA,XWA / ld XIX,0x00F56A79 / ld A,(0x36CE) / sll
 ;          0x02,XWA / add XIX,XWA / ld XIX,(XIX) / call T,XIX` -- entry
@@ -123497,16 +123610,19 @@ DispatchState36CE_F56A5F:
 ;          the table.  That is what the bytes say; whether the callers
 ;          guarantee the range is not established here.
 ; --------------------------------------------------------------------------
-StateDispatchTable_F56A79:
-	.long	sub_F56A8D	; F56A79  [0] -> sub_F56A8D
-	.long	sub_F56AB1	; F56A7D  [1] -> sub_F56AB1
-	.long	sub_F56AF3	; F56A81  [2] -> sub_F56AF3
-	.long	sub_F56A8D	; F56A85  [3] -> sub_F56A8D
-	.long	sub_F56A8D	; F56A89  [4] -> sub_F56A8D
+; CycleRecordScreen_FieldDecHandlers: CYCLE RECORD (screen 0x08), LCD row 3 RIGHT key (down arrow): steps the field
+;   under the cursor (0x36CE) down -- 0 CYCLE := OFF, 1 START MEASURE - 1, 2 END MEASURE - 1; [3], [4] repeat [0].
+;   Basis: table index (field cursor) + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CycleRecordScreen_FieldDecHandlers:
+	.long	CycleRecordScreen_SwitchCycleOff	; F56A79  [0] -> CycleRecordScreen_SwitchCycleOff
+	.long	CycleRecordScreen_DecStartMeasure	; F56A7D  [1] -> CycleRecordScreen_DecStartMeasure
+	.long	CycleRecordScreen_DecEndMeasure	; F56A81  [2] -> CycleRecordScreen_DecEndMeasure
+	.long	CycleRecordScreen_SwitchCycleOff	; F56A85  [3] -> CycleRecordScreen_SwitchCycleOff
+	.long	CycleRecordScreen_SwitchCycleOff	; F56A89  [4] -> CycleRecordScreen_SwitchCycleOff
 
 
 ; --------------------------------------------------------------------------
-; sub_F56A8D
+; CycleRecordScreen_SwitchCycleOff
 ; Called from: table 0xF56A79[0], 0xF56A79[3], 0xF56A79[4]
 ; Touches: (0x360B) (0x36C6) (0x36CA)
 ; Calls:   T_SeqRecord_RestoreCursorBaseline T_CycleRecord_FreeRecordChain T_SeqRecord_FreeTakeChain2 sub_F5696D
@@ -123516,9 +123632,13 @@ StateDispatchTable_F56A79:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56A8D:
+; CycleRecordScreen_SwitchCycleOff: CycleRecordScreen_FieldDecHandlers[0] (field CYCLE): if on, clears the CYCLE
+;   RECORD switch (0x360B) bit 1, zeroes (0x36CA)/(0x36C6), SeqRecord_RestoreCursorBaseline, frees the record and take
+;   chains, repaints OFF/ON. Basis: table index + body; the same steps LcdKeyRow2_RealtimeRecordScreen takes to switch
+;   CYCLE RECORD off. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CycleRecordScreen_SwitchCycleOff:
 	m_bit 1, MD16, 0x360b	; F56A8D  bit 1,(0x360b)
-	jr	z, sub_F56A8D_Return	; F56A91  jr Z,0xf56ab0
+	jr	z, CycleRecordScreen_SwitchCycleOff_Return	; F56A91  jr Z,0xf56ab0
 	m_res 1, MD16, 0x360b	; F56A93  res 1,(0x360b)
 	xor	xwa, xwa	; F56A97  xor XWA,XWA
 	ld	(14026:16), xwa	; F56A99  ld (0x36ca),XWA
@@ -123527,11 +123647,11 @@ sub_F56A8D:
 	call	T_CycleRecord_FreeRecordChain	; F56AA5  call 0xf40bf4
 	call	T_SeqRecord_FreeTakeChain2	; F56AA9  call 0xf40bf8
 	calr	sub_F5696D	; F56AAD  calr 0xf5696d
-sub_F56A8D_Return:
+CycleRecordScreen_SwitchCycleOff_Return:
 	ret	; F56AB0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56AB1
+; CycleRecordScreen_DecStartMeasure
 ; Called from: table 0xF56A79[1]
 ; Touches: (0x34BB) (0x3622) (0x3628) (0x3629)
 ; Calls:   T_Blink_Stop CycleRecordScreen_BlinkStartAndEndMeasures
@@ -123541,32 +123661,35 @@ sub_F56A8D_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56AB1:
+; CycleRecordScreen_DecStartMeasure: CycleRecordScreen_FieldDecHandlers[1] (field START MEASURE): while stopped,
+;   (0x3622) - 1 down to 1, blinks both readouts and sets (0x3628) := 0x83 / (0x3629). Basis: table index + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CycleRecordScreen_DecStartMeasure:
 	bit	2, (TransportB_State:8)	; F56AB1  bit 2,(0x96)
-	jr	nz, sub_F56AB1_Return	; F56AB4  jr NZ,0xf56af2
+	jr	nz, CycleRecordScreen_DecStartMeasure_Return	; F56AB4  jr NZ,0xf56af2
 	call	T_Blink_Stop	; F56AB6  call 0xf42e24
 	m_cp_mi16 MW16, 0x3622, 0x0001	; F56ABA  cp (0x3622),0x0001
-	jr	ugt, sub_F56AB1_Skip	; F56AC0  jr UGT,0xf56ac7
+	jr	ugt, CycleRecordScreen_DecStartMeasure_Skip	; F56AC0  jr UGT,0xf56ac7
 	calr	CycleRecordScreen_BlinkStartAndEndMeasures	; F56AC2  calr 0xf569fa
-	jr	sub_F56AB1_Return	; F56AC5  jr T,0xf56af2
-sub_F56AB1_Skip:
+	jr	CycleRecordScreen_DecStartMeasure_Return	; F56AC5  jr T,0xf56af2
+CycleRecordScreen_DecStartMeasure_Skip:
 	decw	1, (13858:16)	; F56AC7  decw 1,(0x3622)
 	calr	CycleRecordScreen_BlinkStartAndEndMeasures	; F56ACB  calr 0xf569fa
 	m_or_mi8 MB16, 0x34bb, 0x04	; F56ACE  or (0x34bb),0x04
 	m_cp_mi8 MB16, 0x3628, 0x00	; F56AD3  cp (0x3628),0x00
-	jr	z, sub_F56AB1_Skip2	; F56AD8  jr Z,0xf56ae8
+	jr	z, CycleRecordScreen_DecStartMeasure_Skip2	; F56AD8  jr Z,0xf56ae8
 	m_cp_mi8 MB16, 0x3629, 0x02	; F56ADA  cp (0x3629),0x02
-	jr	nz, sub_F56AB1_Skip2	; F56ADF  jr NZ,0xf56ae8
+	jr	nz, CycleRecordScreen_DecStartMeasure_Skip2	; F56ADF  jr NZ,0xf56ae8
 	ld	(13864:16), 131	; F56AE1  ld (0x3628),0x83
-	jr	sub_F56AB1_Return	; F56AE6  jr T,0xf56af2
-sub_F56AB1_Skip2:
+	jr	CycleRecordScreen_DecStartMeasure_Return	; F56AE6  jr T,0xf56af2
+CycleRecordScreen_DecStartMeasure_Skip2:
 	ld	(13864:16), 131	; F56AE8  ld (0x3628),0x83
 	ld	(13865:16), 0	; F56AED  ld (0x3629),0x00
-sub_F56AB1_Return:
+CycleRecordScreen_DecStartMeasure_Return:
 	ret	; F56AF2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56AF3
+; CycleRecordScreen_DecEndMeasure
 ; Called from: table 0xF56A79[2]
 ; Touches: (0x3624)
 ; Calls:   T_Blink_Stop CycleRecordScreen_BlinkStartAndEndMeasures CycleRecordScreen_ApplyEndMeasure
@@ -123576,19 +123699,22 @@ sub_F56AB1_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56AF3:
+; CycleRecordScreen_DecEndMeasure: CycleRecordScreen_FieldDecHandlers[2] (field END MEASURE): while stopped, (0x3624)
+;   - 1 down to 1, blinks both readouts and CycleRecordScreen_ApplyEndMeasure. Basis: table index + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CycleRecordScreen_DecEndMeasure:
 	bit	2, (TransportB_State:8)	; F56AF3  bit 2,(0x96)
-	jr	nz, sub_F56AF3_Return	; F56AF6  jr NZ,0xf56b13
+	jr	nz, CycleRecordScreen_DecEndMeasure_Return	; F56AF6  jr NZ,0xf56b13
 	call	T_Blink_Stop	; F56AF8  call 0xf42e24
 	m_cp_mi16 MW16, 0x3624, 0x0001	; F56AFC  cp (0x3624),0x0001
-	jr	ugt, sub_F56AF3_Skip	; F56B02  jr UGT,0xf56b09
+	jr	ugt, CycleRecordScreen_DecEndMeasure_Skip	; F56B02  jr UGT,0xf56b09
 	calr	CycleRecordScreen_BlinkStartAndEndMeasures	; F56B04  calr 0xf569fa
-	jr	sub_F56AF3_Return	; F56B07  jr T,0xf56b13
-sub_F56AF3_Skip:
+	jr	CycleRecordScreen_DecEndMeasure_Return	; F56B07  jr T,0xf56b13
+CycleRecordScreen_DecEndMeasure_Skip:
 	decw	1, (13860:16)	; F56B09  decw 1,(0x3624)
 	calr	CycleRecordScreen_BlinkStartAndEndMeasures	; F56B0D  calr 0xf569fa
 	calr	CycleRecordScreen_ApplyEndMeasure	; F56B10  calr 0xf56b14
-sub_F56AF3_Return:
+CycleRecordScreen_DecEndMeasure_Return:
 	ret	; F56B13  ret
 
 ; --------------------------------------------------------------------------
@@ -123605,7 +123731,7 @@ sub_F56AF3_Return:
 ;   past it, start := end, (0x34BB) bit 2, the deferred action 2 (relocate start and end) armed and the fields
 ;   repainted (CycleRecordScreen_BlinkStartAndEndMeasures); otherwise (0x34BB) bit 2 and action 1 (capture the end cursors) armed 3 ticks ahead,
 ;   unless an action 2 is already pending. Callers: NumberPadKey_CycleRecordScreen (end typed) and the decrement key
-;   sub_F56AF3. Basis: callers + body + Dispatch_3629. (notes/naming-pilot-2026-10-06/proposals_wave4_m.json)
+;   CycleRecordScreen_DecEndMeasure. Basis: callers + body + Dispatch_3629. (notes/naming-pilot-2026-10-06/proposals_wave4_m.json)
 CycleRecordScreen_ApplyEndMeasure:
 	ld	wa, (13858:16)	; F56B14  ld WA,(0x3622)
 	m_cp_rm MW16, 0x3624, 0	; F56B18  cp WA,(0x3624)
@@ -124191,7 +124317,7 @@ Nop_Ret_F56EB7:
 ; LcdKeyRow2_CyclePlayScreen
 ; Called from: table 0xF55AAE[9]
 ; Touches: nothing with an absolute address
-; Calls:   DispatchState3627_F57050 CyclePlayScreen_LcdKeyRow2
+; Calls:   CyclePlayScreen_IncField CyclePlayScreen_LcdKeyRow2
 ; Evidence: entry [9] of the table at 0xF55AAE reads 0x00F56EB8, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF56EB8
 ;           is an instruction boundary of this transcription.
@@ -124202,7 +124328,7 @@ Nop_Ret_F56EB7:
 LcdKeyRow2_CyclePlayScreen:
 	bit	7, w	; F56EB8  bit 0x07,W
 	jr	nz, LcdKeyRow2_CyclePlayScreen_Skip2	; F56EBB  jr NZ,0xf56ec2
-	calr	DispatchState3627_F57050	; F56EBD  calr 0xf57050
+	calr	CyclePlayScreen_IncField	; F56EBD  calr 0xf57050
 	jr	LcdKeyRow2_CyclePlayScreen_Return2	; F56EC0  jr T,0xf56ec5
 LcdKeyRow2_CyclePlayScreen_Skip2:
 	calr	CyclePlayScreen_LcdKeyRow2	; F56EC2  calr 0xf56fd6
@@ -124213,7 +124339,7 @@ LcdKeyRow2_CyclePlayScreen_Return2:
 ; LcdKeyRow3_CyclePlayScreen
 ; Called from: table 0xF55AAE[10]
 ; Touches: nothing with an absolute address
-; Calls:   DispatchState3627_F5718C CyclePlayScreen_LcdKeyRow3
+; Calls:   CyclePlayScreen_DecField CyclePlayScreen_LcdKeyRow3
 ; Evidence: entry [10] of the table at 0xF55AAE reads 0x00F56EC6, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF56EC6 is an instruction boundary of this transcription.
@@ -124224,7 +124350,7 @@ LcdKeyRow2_CyclePlayScreen_Return2:
 LcdKeyRow3_CyclePlayScreen:
 	bit	7, w	; F56EC6  bit 0x07,W
 	jr	nz, LcdKeyRow3_CyclePlayScreen_Skip3	; F56EC9  jr NZ,0xf56ed0
-	calr	DispatchState3627_F5718C	; F56ECB  calr 0xf5718c
+	calr	CyclePlayScreen_DecField	; F56ECB  calr 0xf5718c
 	jr	LcdKeyRow3_CyclePlayScreen_Return3	; F56ECE  jr T,0xf56ed3
 LcdKeyRow3_CyclePlayScreen_Skip3:
 	calr	CyclePlayScreen_LcdKeyRow3	; F56ED0  calr 0xf57014
@@ -124539,7 +124665,7 @@ CyclePlayScreen_LcdKeyRow4_Return:
 	ret	; F5704F  ret
 
 ; --------------------------------------------------------------------------
-; DispatchState3627_F57050
+; CyclePlayScreen_IncField
 ; Called from: in-module: 0xF56EBD 0xF5734F
 ; Touches: (0x2075) (0x3627)
 ; Evidence: reached by a branch decoded in this transcription (the sites are
@@ -124552,10 +124678,13 @@ CyclePlayScreen_LcdKeyRow4_Return:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-DispatchState3627_F57050:
+; CyclePlayScreen_IncField: CYCLE PLAY / CYCLE PLAY EDIT LCD row 2 RIGHT key (up arrow): sets UI_RequestBits bit 3 and
+;   calls CyclePlayScreen_FieldIncHandlers[field cursor (0x3627)]. Basis: the table it reads + callers. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+CyclePlayScreen_IncField:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F57050  or (0x2075),0x08
 	xor	xwa, xwa	; F57055  xor XWA,XWA
-	ld	xix, StateDispatchTable_F5706A	; F57057  ld XIX,0x00f5706a
+	ld	xix, CyclePlayScreen_FieldIncHandlers	; F57057  ld XIX,0x00f5706a
 	ld	a, (13863:16)	; F5705C  ld A,(0x3627)
 	sll	xwa, 2	; F57060  sll 0x02,XWA
 	add	xix, xwa	; F57063  add XIX,XWA
@@ -124564,7 +124693,7 @@ DispatchState3627_F57050:
 	ret	; F57069  ret
 
 ; --------------------------------------------------------------------------
-; StateDispatchTable_F5706A -- five 32-bit routine pointers, entered with
+; CyclePlayScreen_FieldIncHandlers -- five 32-bit routine pointers, entered with
 ;                              `call (XIX)`.
 ; Read by: 0xF57057: `xor XWA,XWA / ld XIX,0x00F5706A / ld A,(0x3627) / sll
 ;          0x02,XWA / add XIX,XWA / ld XIX,(XIX) / call T,XIX` -- entry
@@ -124585,16 +124714,20 @@ DispatchState3627_F57050:
 ;          the table.  That is what the bytes say; whether the callers
 ;          guarantee the range is not established here.
 ; --------------------------------------------------------------------------
-StateDispatchTable_F5706A:
-	.long	sub_F5707E	; F5706A  [0] -> sub_F5707E
-	.long	sub_F570BB	; F5706E  [1] -> sub_F570BB
-	.long	sub_F5714A	; F57072  [2] -> sub_F5714A
-	.long	sub_F573BA	; F57076  [3] -> sub_F573BA
-	.long	sub_F5707E	; F5707A  [4] -> sub_F5707E
+; CyclePlayScreen_FieldIncHandlers: CYCLE PLAY (0x14) / CYCLE PLAY EDIT (0x26, 0x29), LCD row 2 RIGHT key (up arrow):
+;   steps the field under the cursor (0x3627) up -- 0 CYCLE := ON, 1 START + 1, 2 END + 1, 3 SOLO := ON (EDIT page);
+;   [4] repeats [0]. Basis: table index (field cursor; its writers and the pages' rows) + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+CyclePlayScreen_FieldIncHandlers:
+	.long	CyclePlayScreen_SwitchCycleOn	; F5706A  [0] -> CyclePlayScreen_SwitchCycleOn
+	.long	CyclePlayScreen_IncStartMeasure	; F5706E  [1] -> CyclePlayScreen_IncStartMeasure
+	.long	CyclePlayScreen_IncEndMeasure	; F57072  [2] -> CyclePlayScreen_IncEndMeasure
+	.long	CyclePlayEditScreen_SwitchSoloOn	; F57076  [3] -> CyclePlayEditScreen_SwitchSoloOn
+	.long	CyclePlayScreen_SwitchCycleOn	; F5707A  [4] -> CyclePlayScreen_SwitchCycleOn
 
 
 ; --------------------------------------------------------------------------
-; sub_F5707E
+; CyclePlayScreen_SwitchCycleOn
 ; Called from: table 0xF5706A[0], 0xF5706A[4]
 ; Touches: (0x360B)
 ; Calls:   sub_F5709D T_SeqCycle_CaptureEndCursors T_SeqCycle_LocateToStart T_Seq_SetTrackBeatsFromTransportB
@@ -124604,17 +124737,21 @@ StateDispatchTable_F5706A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5707E:
+; CyclePlayScreen_SwitchCycleOn: CyclePlayScreen_FieldIncHandlers[0] (field CYCLE): unless on or the transport runs,
+;   sets the CYCLE PLAY switch (0x360B) bit 0, repaints OFF/ON, then SeqCycle_CaptureEndCursors /
+;   SeqCycle_LocateToStart / Seq_SetTrackBeatsFromTransportB. Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+CyclePlayScreen_SwitchCycleOn:
 	m_bit 0, MD16, 0x360b	; F5707E  bit 0,(0x360b)
-	jr	nz, sub_F5707E_Return	; F57082  jr NZ,0xf5709c
+	jr	nz, CyclePlayScreen_SwitchCycleOn_Return	; F57082  jr NZ,0xf5709c
 	bit	2, (TransportB_State:8)	; F57084  bit 2,(0x96)
-	jr	nz, sub_F5707E_Return	; F57087  jr NZ,0xf5709c
+	jr	nz, CyclePlayScreen_SwitchCycleOn_Return	; F57087  jr NZ,0xf5709c
 	m_set 0, MD16, 0x360b	; F57089  set 0,(0x360b)
 	calr	sub_F5709D	; F5708D  calr 0xf5709d
 	call	T_SeqCycle_CaptureEndCursors	; F57090  call 0xf40b60
 	call	T_SeqCycle_LocateToStart	; F57094  call 0xf40b5c
 	call	T_Seq_SetTrackBeatsFromTransportB	; F57098  call 0xf40ac4
-sub_F5707E_Return:
+CyclePlayScreen_SwitchCycleOn_Return:
 	ret	; F5709C  ret
 
 ; --------------------------------------------------------------------------
@@ -124640,7 +124777,7 @@ sub_F5709D:
 	ret	; F570BA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F570BB
+; CyclePlayScreen_IncStartMeasure
 ; Called from: table 0xF5706A[1]
 ; Touches: (0x361E)
 ; Calls:   T_Blink_Stop CyclePlayScreen_BlinkStartAndEndMeasures CyclePlayScreen_ApplyStartMeasure
@@ -124650,7 +124787,10 @@ sub_F5709D:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F570BB:
+; CyclePlayScreen_IncStartMeasure: CyclePlayScreen_FieldIncHandlers[1] (field START MEASURE): while stopped, (0x361E)
+;   + 1 up to 999, blinks both readouts, CyclePlayScreen_ApplyStartMeasure. Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+CyclePlayScreen_IncStartMeasure:
 	bit	2, (TransportB_State:8)	; F570BB  bit 2,(0x96)
 	jr	nz, sub_F5709D_Return	; F570BE  jr NZ,0xf570db
 	call	T_Blink_Stop	; F570C0  call 0xf42e24
@@ -124679,7 +124819,7 @@ sub_F5709D_Return:
 ;   (0x3620), end := start, (0x34BB) bit 2, the deferred action 2 (relocate start and end) armed and the fields
 ;   repainted (CyclePlayScreen_BlinkStartAndEndMeasures); otherwise (0x34BB) bit 2 and action 0 (relocate to the start) armed 3 ticks ahead, unless
 ;   an action 2 is already pending. Callers: NumberPadKey_CyclePlayScreen (start typed) and the increment key
-;   sub_F570BB. Basis: callers + body + Dispatch_3629. (notes/naming-pilot-2026-10-06/proposals_wave4_m.json)
+;   CyclePlayScreen_IncStartMeasure. Basis: callers + body + Dispatch_3629. (notes/naming-pilot-2026-10-06/proposals_wave4_m.json)
 CyclePlayScreen_ApplyStartMeasure:
 	ld	wa, (13854:16)	; F570DC  ld WA,(0x361e)
 	m_cp_rm MW16, 0x3620, 0	; F570E0  cp WA,(0x3620)
@@ -124735,7 +124875,7 @@ CyclePlayScreen_BlinkStartAndEndMeasures:
 	ret	; F57149  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5714A
+; CyclePlayScreen_IncEndMeasure
 ; Called from: table 0xF5706A[2]
 ; Touches: (0x34BB) (0x3620) (0x3628) (0x3629)
 ; Calls:   T_Blink_Stop CyclePlayScreen_BlinkStartAndEndMeasures
@@ -124745,32 +124885,35 @@ CyclePlayScreen_BlinkStartAndEndMeasures:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5714A:
+; CyclePlayScreen_IncEndMeasure: CyclePlayScreen_FieldIncHandlers[2] (field END MEASURE): while stopped, (0x3620) + 1
+;   up to 999, blinks both readouts and sets (0x3628) := 0x83 / (0x3629) as CyclePlayScreen_QueueEndMeasureChange
+;   does. Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CyclePlayScreen_IncEndMeasure:
 	bit	2, (TransportB_State:8)	; F5714A  bit 2,(0x96)
-	jr	nz, sub_F57127_Return	; F5714D  jr NZ,0xf5718b
+	jr	nz, CyclePlayScreen_IncEndMeasure_Return	; F5714D  jr NZ,0xf5718b
 	call	T_Blink_Stop	; F5714F  call 0xf42e24
 	m_cp_mi16 MW16, 0x3620, 0x03e7	; F57153  cp (0x3620),0x03e7
-	jr	c, sub_F57127_Skip	; F57159  jr C,0xf57160
+	jr	c, CyclePlayScreen_IncEndMeasure_Skip	; F57159  jr C,0xf57160
 	calr	CyclePlayScreen_BlinkStartAndEndMeasures	; F5715B  calr 0xf57127
-	jr	sub_F57127_Return	; F5715E  jr T,0xf5718b
-sub_F57127_Skip:
+	jr	CyclePlayScreen_IncEndMeasure_Return	; F5715E  jr T,0xf5718b
+CyclePlayScreen_IncEndMeasure_Skip:
 	incw	1, (13856:16)	; F57160  incw 1,(0x3620)
 	calr	CyclePlayScreen_BlinkStartAndEndMeasures	; F57164  calr 0xf57127
 	m_or_mi8 MB16, 0x34bb, 0x04	; F57167  or (0x34bb),0x04
 	m_cp_mi8 MB16, 0x3628, 0x00	; F5716C  cp (0x3628),0x00
-	jr	z, sub_F57127_Skip2	; F57171  jr Z,0xf57181
+	jr	z, CyclePlayScreen_IncEndMeasure_Skip2	; F57171  jr Z,0xf57181
 	m_cp_mi8 MB16, 0x3629, 0x02	; F57173  cp (0x3629),0x02
-	jr	nz, sub_F57127_Skip2	; F57178  jr NZ,0xf57181
+	jr	nz, CyclePlayScreen_IncEndMeasure_Skip2	; F57178  jr NZ,0xf57181
 	ld	(13864:16), 131	; F5717A  ld (0x3628),0x83
-	jr	sub_F57127_Return	; F5717F  jr T,0xf5718b
-sub_F57127_Skip2:
+	jr	CyclePlayScreen_IncEndMeasure_Return	; F5717F  jr T,0xf5718b
+CyclePlayScreen_IncEndMeasure_Skip2:
 	ld	(13864:16), 131	; F57181  ld (0x3628),0x83
 	ld	(13865:16), 1	; F57186  ld (0x3629),0x01
-sub_F57127_Return:
+CyclePlayScreen_IncEndMeasure_Return:
 	ret	; F5718B  ret
 
 ; --------------------------------------------------------------------------
-; DispatchState3627_F5718C
+; CyclePlayScreen_DecField
 ; Called from: in-module: 0xF56ECB 0xF5735D
 ; Touches: (0x2075) (0x3627)
 ; Evidence: reached by a branch decoded in this transcription (the sites are
@@ -124783,10 +124926,13 @@ sub_F57127_Return:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-DispatchState3627_F5718C:
+; CyclePlayScreen_DecField: CYCLE PLAY / CYCLE PLAY EDIT LCD row 3 RIGHT key (down arrow): sets UI_RequestBits bit 3
+;   and calls CyclePlayScreen_FieldDecHandlers[field cursor (0x3627)]. Basis: the table it reads + callers.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CyclePlayScreen_DecField:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F5718C  or (0x2075),0x08
 	xor	xwa, xwa	; F57191  xor XWA,XWA
-	ld	xix, StateDispatchTable_F571A6	; F57193  ld XIX,0x00f571a6
+	ld	xix, CyclePlayScreen_FieldDecHandlers	; F57193  ld XIX,0x00f571a6
 	ld	a, (13863:16)	; F57198  ld A,(0x3627)
 	sll	xwa, 2	; F5719C  sll 0x02,XWA
 	add	xix, xwa	; F5719F  add XIX,XWA
@@ -124795,7 +124941,7 @@ DispatchState3627_F5718C:
 	ret	; F571A5  ret
 
 ; --------------------------------------------------------------------------
-; StateDispatchTable_F571A6 -- five 32-bit routine pointers, entered with
+; CyclePlayScreen_FieldDecHandlers -- five 32-bit routine pointers, entered with
 ;                              `call (XIX)`.
 ; Read by: 0xF57193: `xor XWA,XWA / ld XIX,0x00F571A6 / ld A,(0x3627) / sll
 ;          0x02,XWA / add XIX,XWA / ld XIX,(XIX) / call T,XIX` -- entry
@@ -124816,16 +124962,19 @@ DispatchState3627_F5718C:
 ;          the table.  That is what the bytes say; whether the callers
 ;          guarantee the range is not established here.
 ; --------------------------------------------------------------------------
-StateDispatchTable_F571A6:
-	.long	sub_F571BA	; F571A6  [0] -> sub_F571BA
-	.long	sub_F571D8	; F571AA  [1] -> sub_F571D8
-	.long	sub_F5721A	; F571AE  [2] -> sub_F5721A
-	.long	sub_F573F3	; F571B2  [3] -> sub_F573F3
-	.long	sub_F571BA	; F571B6  [4] -> sub_F571BA
+; CyclePlayScreen_FieldDecHandlers: CYCLE PLAY (0x14) / CYCLE PLAY EDIT (0x26, 0x29), LCD row 3 RIGHT key (down
+;   arrow): steps the field under (0x3627) down -- 0 CYCLE := OFF, 1 START - 1, 2 END - 1, 3 SOLO := OFF; [4] repeats
+;   [0]. Basis: table index (field cursor) + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CyclePlayScreen_FieldDecHandlers:
+	.long	CyclePlayScreen_SwitchCycleOff	; F571A6  [0] -> CyclePlayScreen_SwitchCycleOff
+	.long	CyclePlayScreen_DecStartMeasure	; F571AA  [1] -> CyclePlayScreen_DecStartMeasure
+	.long	CyclePlayScreen_DecEndMeasure	; F571AE  [2] -> CyclePlayScreen_DecEndMeasure
+	.long	CyclePlayEditScreen_SwitchSoloOff	; F571B2  [3] -> CyclePlayEditScreen_SwitchSoloOff
+	.long	CyclePlayScreen_SwitchCycleOff	; F571B6  [4] -> CyclePlayScreen_SwitchCycleOff
 
 
 ; --------------------------------------------------------------------------
-; sub_F571BA
+; CyclePlayScreen_SwitchCycleOff
 ; Called from: table 0xF571A6[0], 0xF571A6[4]
 ; Touches: (0x360B) (0x36C6) (0x36CA) (0x3731)
 ; Calls:   sub_F5709D
@@ -124835,21 +124984,25 @@ StateDispatchTable_F571A6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F571BA:
+; CyclePlayScreen_SwitchCycleOff: CyclePlayScreen_FieldDecHandlers[0] (field CYCLE): if on and (0x3731) bit 2 clear,
+;   clears the CYCLE PLAY switch (0x360B) bit 0, zeroes (0x36CA)/(0x36C6), repaints OFF/ON -- the steps
+;   LcdKeyRow1_SeqPlayScreen uses to switch it off. Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+CyclePlayScreen_SwitchCycleOff:
 	m_bit 0, MD16, 0x360b	; F571BA  bit 0,(0x360b)
-	jr	z, sub_F571BA_Return	; F571BE  jr Z,0xf571d7
+	jr	z, CyclePlayScreen_SwitchCycleOff_Return	; F571BE  jr Z,0xf571d7
 	m_bit 2, MD16, 0x3731	; F571C0  bit 2,(0x3731)
-	jr	nz, sub_F571BA_Return	; F571C4  jr NZ,0xf571d7
+	jr	nz, CyclePlayScreen_SwitchCycleOff_Return	; F571C4  jr NZ,0xf571d7
 	m_res 0, MD16, 0x360b	; F571C6  res 0,(0x360b)
 	xor	xwa, xwa	; F571CA  xor XWA,XWA
 	ld	(14026:16), xwa	; F571CC  ld (0x36ca),XWA
 	ld	(14022:16), xwa	; F571D0  ld (0x36c6),XWA
 	calr	sub_F5709D	; F571D4  calr 0xf5709d
-sub_F571BA_Return:
+CyclePlayScreen_SwitchCycleOff_Return:
 	ret	; F571D7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F571D8
+; CyclePlayScreen_DecStartMeasure
 ; Called from: table 0xF571A6[1]
 ; Touches: (0x34BB) (0x361E) (0x3628) (0x3629)
 ; Calls:   T_Blink_Stop CyclePlayScreen_BlinkStartAndEndMeasures
@@ -124859,32 +125012,35 @@ sub_F571BA_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F571D8:
+; CyclePlayScreen_DecStartMeasure: CyclePlayScreen_FieldDecHandlers[1] (field START MEASURE): while stopped, (0x361E)
+;   - 1 down to 1, blinks both readouts and sets (0x3628) := 0x83 / (0x3629). Basis: table index + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CyclePlayScreen_DecStartMeasure:
 	bit	2, (TransportB_State:8)	; F571D8  bit 2,(0x96)
-	jr	nz, sub_F571D8_Return	; F571DB  jr NZ,0xf57219
+	jr	nz, CyclePlayScreen_DecStartMeasure_Return	; F571DB  jr NZ,0xf57219
 	call	T_Blink_Stop	; F571DD  call 0xf42e24
 	m_cp_mi16 MW16, 0x361e, 0x0001	; F571E1  cp (0x361e),0x0001
-	jr	ugt, sub_F571D8_Skip	; F571E7  jr UGT,0xf571ee
+	jr	ugt, CyclePlayScreen_DecStartMeasure_Skip	; F571E7  jr UGT,0xf571ee
 	calr	CyclePlayScreen_BlinkStartAndEndMeasures	; F571E9  calr 0xf57127
-	jr	sub_F571D8_Return	; F571EC  jr T,0xf57219
-sub_F571D8_Skip:
+	jr	CyclePlayScreen_DecStartMeasure_Return	; F571EC  jr T,0xf57219
+CyclePlayScreen_DecStartMeasure_Skip:
 	decw	1, (13854:16)	; F571EE  decw 1,(0x361e)
 	calr	CyclePlayScreen_BlinkStartAndEndMeasures	; F571F2  calr 0xf57127
 	m_or_mi8 MB16, 0x34bb, 0x04	; F571F5  or (0x34bb),0x04
 	m_cp_mi8 MB16, 0x3628, 0x00	; F571FA  cp (0x3628),0x00
-	jr	z, sub_F571D8_Skip2	; F571FF  jr Z,0xf5720f
+	jr	z, CyclePlayScreen_DecStartMeasure_Skip2	; F571FF  jr Z,0xf5720f
 	m_cp_mi8 MB16, 0x3629, 0x02	; F57201  cp (0x3629),0x02
-	jr	nz, sub_F571D8_Skip2	; F57206  jr NZ,0xf5720f
+	jr	nz, CyclePlayScreen_DecStartMeasure_Skip2	; F57206  jr NZ,0xf5720f
 	ld	(13864:16), 131	; F57208  ld (0x3628),0x83
-	jr	sub_F571D8_Return	; F5720D  jr T,0xf57219
-sub_F571D8_Skip2:
+	jr	CyclePlayScreen_DecStartMeasure_Return	; F5720D  jr T,0xf57219
+CyclePlayScreen_DecStartMeasure_Skip2:
 	ld	(13864:16), 131	; F5720F  ld (0x3628),0x83
 	ld	(13865:16), 0	; F57214  ld (0x3629),0x00
-sub_F571D8_Return:
+CyclePlayScreen_DecStartMeasure_Return:
 	ret	; F57219  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5721A
+; CyclePlayScreen_DecEndMeasure
 ; Called from: table 0xF571A6[2]
 ; Touches: (0x3620)
 ; Calls:   T_Blink_Stop CyclePlayScreen_BlinkStartAndEndMeasures CyclePlayScreen_QueueEndMeasureChange
@@ -124894,19 +125050,22 @@ sub_F571D8_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5721A:
+; CyclePlayScreen_DecEndMeasure: CyclePlayScreen_FieldDecHandlers[2] (field END MEASURE): while stopped, (0x3620) - 1
+;   down to 1, blinks both readouts, CyclePlayScreen_QueueEndMeasureChange. Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+CyclePlayScreen_DecEndMeasure:
 	bit	2, (TransportB_State:8)	; F5721A  bit 2,(0x96)
-	jr	nz, sub_F5721A_Return	; F5721D  jr NZ,0xf5723a
+	jr	nz, CyclePlayScreen_DecEndMeasure_Return	; F5721D  jr NZ,0xf5723a
 	call	T_Blink_Stop	; F5721F  call 0xf42e24
 	m_cp_mi16 MW16, 0x3620, 0x0001	; F57223  cp (0x3620),0x0001
-	jr	ugt, sub_F5721A_Skip	; F57229  jr UGT,0xf57230
+	jr	ugt, CyclePlayScreen_DecEndMeasure_Skip	; F57229  jr UGT,0xf57230
 	calr	CyclePlayScreen_BlinkStartAndEndMeasures	; F5722B  calr 0xf57127
-	jr	sub_F5721A_Return	; F5722E  jr T,0xf5723a
-sub_F5721A_Skip:
+	jr	CyclePlayScreen_DecEndMeasure_Return	; F5722E  jr T,0xf5723a
+CyclePlayScreen_DecEndMeasure_Skip:
 	decw	1, (13856:16)	; F57230  decw 1,(0x3620)
 	calr	CyclePlayScreen_BlinkStartAndEndMeasures	; F57234  calr 0xf57127
 	calr	CyclePlayScreen_QueueEndMeasureChange	; F57237  calr 0xf5723b
-sub_F5721A_Return:
+CyclePlayScreen_DecEndMeasure_Return:
 	ret	; F5723A  ret
 
 ; --------------------------------------------------------------------------
@@ -124922,7 +125081,7 @@ sub_F5721A_Return:
 ; CyclePlayScreen_QueueEndMeasureChange: After the CYCLE PLAY end measure (0x3620) changed: if the start (0x361E) is
 ;   now later, start := end, (0x3629) := 2 and CyclePlayScreen_BlinkStartAndEndMeasures repaints; else (0x3629) := 1 unless 2 is already pending;
 ;   (0x3628) := 0x83 arms the deferred Dispatch_3629 step, and (0x34BB) |= 4. Run by NumberPadKey_CyclePlayScreen on
-;   field 2 and by the end-measure step-down sub_F5721A. Basis: callers + body + dispatcher. (notes/naming-
+;   field 2 and by the end-measure step-down CyclePlayScreen_DecEndMeasure. Basis: callers + body + dispatcher. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave4_n.json)
 CyclePlayScreen_QueueEndMeasureChange:
 	ld	wa, (13854:16)	; F5723B  ld WA,(0x361e)
@@ -125085,7 +125244,7 @@ LcdKeyRow1_CyclePlayEditScreen_Return:
 ; LcdKeyRow2_CyclePlayEditScreen
 ; Called from: table 0xF55B2E[9]; in-module: 0xF5741D
 ; Touches: nothing with an absolute address
-; Calls:   DispatchState3627_F57050 CyclePlayEditScreen_LcdKeyRow2
+; Calls:   CyclePlayScreen_IncField CyclePlayEditScreen_LcdKeyRow2
 ; Evidence: entry [9] of the table at 0xF55B2E reads 0x00F5734A, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF5734A
 ;           is an instruction boundary of this transcription.
@@ -125096,7 +125255,7 @@ LcdKeyRow1_CyclePlayEditScreen_Return:
 LcdKeyRow2_CyclePlayEditScreen:
 	bit	7, w	; F5734A  bit 0x07,W
 	jr	nz, LcdKeyRow2_CyclePlayEditScreen_Skip	; F5734D  jr NZ,0xf57354
-	calr	DispatchState3627_F57050	; F5734F  calr 0xf57050
+	calr	CyclePlayScreen_IncField	; F5734F  calr 0xf57050
 	jr	LcdKeyRow2_CyclePlayEditScreen_Return	; F57352  jr T,0xf57357
 LcdKeyRow2_CyclePlayEditScreen_Skip:
 	calr	CyclePlayEditScreen_LcdKeyRow2	; F57354  calr 0xf5739c
@@ -125107,7 +125266,7 @@ LcdKeyRow2_CyclePlayEditScreen_Return:
 ; LcdKeyRow3_CyclePlayEditScreen
 ; Called from: table 0xF55B2E[10]; in-module: 0xF57421
 ; Touches: nothing with an absolute address
-; Calls:   DispatchState3627_F5718C CyclePlayScreen_LcdKeyRow3
+; Calls:   CyclePlayScreen_DecField CyclePlayScreen_LcdKeyRow3
 ; Evidence: entry [10] of the table at 0xF55B2E reads 0x00F57358, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF57358 is an instruction boundary of this transcription.
@@ -125118,7 +125277,7 @@ LcdKeyRow2_CyclePlayEditScreen_Return:
 LcdKeyRow3_CyclePlayEditScreen:
 	bit	7, w	; F57358  bit 0x07,W
 	jr	nz, LcdKeyRow3_CyclePlayEditScreen_Skip	; F5735B  jr NZ,0xf57362
-	calr	DispatchState3627_F5718C	; F5735D  calr 0xf5718c
+	calr	CyclePlayScreen_DecField	; F5735D  calr 0xf5718c
 	jr	LcdKeyRow3_CyclePlayEditScreen_Return	; F57360  jr T,0xf57365
 LcdKeyRow3_CyclePlayEditScreen_Skip:
 	calr	CyclePlayScreen_LcdKeyRow3	; F57362  calr 0xf57014
@@ -125269,7 +125428,7 @@ CyclePlayEditScreen_LcdKeyRow2_Return:
 	ret	; F573B9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F573BA
+; CyclePlayEditScreen_SwitchSoloOn
 ; Called from: table 0xF5706A[3]
 ; Touches: (0x3626)
 ; Calls:   T_NoteRouting_RebuildForSong sub_F573D8
@@ -125279,15 +125438,18 @@ CyclePlayEditScreen_LcdKeyRow2_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F573BA:
+; CyclePlayEditScreen_SwitchSoloOn: CyclePlayScreen_FieldIncHandlers[3] (CYCLE PLAY EDIT field SOLO): if off, (0x3626)
+;   := 1, routes notes by EditScreen_PartMask ((0x60341E)), NoteRouting_RebuildForSong, repaints the SOLO OFF/ON
+;   readout. Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CyclePlayEditScreen_SwitchSoloOn:
 	m_cp_mi8 MB16, 0x3626, 0x01	; F573BA  cp (0x3626),0x01
-	jr	z, sub_F5739C_Return2	; F573BF  jr Z,0xf573d7
+	jr	z, CyclePlayEditScreen_SwitchSoloOn_Return2	; F573BF  jr Z,0xf573d7
 	ld	(13862:16), 1	; F573C1  ld (0x3626),0x01
 	ld	xwa, (EditScreen_PartMask:24)	; F573C6  ld XWA,(0x601f01)
 	ld	(6304798:24), xwa	; F573CB  ld (0x60341e),XWA
 	call	T_NoteRouting_RebuildForSong	; F573D0  call 0xf411b8
 	calr	sub_F573D8	; F573D4  calr 0xf573d8
-sub_F5739C_Return2:
+CyclePlayEditScreen_SwitchSoloOn_Return2:
 	ret	; F573D7  ret
 
 ; --------------------------------------------------------------------------
@@ -125312,7 +125474,7 @@ sub_F573D8:
 	ret	; F573F2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F573F3
+; CyclePlayEditScreen_SwitchSoloOff
 ; Called from: table 0xF571A6[3]
 ; Touches: (0x360C) (0x3626)
 ; Calls:   T_NoteRouting_RebuildForSong sub_F573D8
@@ -125322,7 +125484,10 @@ sub_F573D8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F573F3:
+; CyclePlayEditScreen_SwitchSoloOff: CyclePlayScreen_FieldDecHandlers[3] (CYCLE PLAY EDIT field SOLO): if on, (0x3626)
+;   := 0, routes notes by the saved track mask (0x360C), NoteRouting_RebuildForSong, repaints the SOLO OFF/ON readout.
+;   Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CyclePlayEditScreen_SwitchSoloOff:
 	m_cp_mi8 MB16, 0x3626, 0x00	; F573F3  cp (0x3626),0x00
 	jr	z, sub_F573D8_Return	; F573F8  jr Z,0xf5740f
 	ld	(13862:16), 0	; F573FA  ld (0x3626),0x00
@@ -131744,11 +131909,11 @@ Dispatch_Code80_Bracketed:
 	cp	hl, 192	; F5B8C2  cp HL,0x00c0
 	jr	c, SC1_Entry_F40F24_Body_Ret_Skip	; F5B8C6  jr C,0xf5b8d3
 	sub	hl, 192	; F5B8C8  sub HL,0x00c0
-	ld	xiy, DispatchTable_F5B8F8 + 0x80	; F5B8CC  ld XIY,0x00f5b978
+	ld	xiy, Dispatch_Code80_PaintTable + 0x80	; F5B8CC  ld XIY,0x00f5b978
 	jr	SC1_Entry_F40F24_Body_Ret_Join	; F5B8D1  jr T,0xf5b8dc
 SC1_Entry_F40F24_Body_Ret_Skip:
 	sub	hl, 128	; F5B8D3  sub HL,0x0080
-	ld	xiy, DispatchTable_F5B8F8	; F5B8D7  ld XIY,0x00f5b8f8
+	ld	xiy, Dispatch_Code80_PaintTable	; F5B8D7  ld XIY,0x00f5b8f8
 SC1_Entry_F40F24_Body_Ret_Join:
 	sla	hl, 2	; F5B8DC  sla 0x02,HL
 	mx_ld_rm MXL, ra_IY, ra_HL, 5	; F5B8DF  ld XIY,(XIY+HL)
@@ -131768,7 +131933,10 @@ SC1_Entry_F40F24_Body_Ret_Join:
 
 ; --- 0xF5B8F8: 48 entries, one per selector 0x80..0xAF.  Ends exactly on the
 ;     next routine's first byte.  Entries for 0xC0.. re-use 0xA0.. ------------
-DispatchTable_F5B8F8:
+; Dispatch_Code80_PaintTable: Dispatch_Code80_Bracketed's table: the FULL paint of each screen code 0x80..0xAF (codes
+;   0xC0.. read entry code - 0x40), run between LCD blank and show. Basis: table index (screen code) + its named
+;   entries (notes/prom_b_repaint_table_names.py). (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+Dispatch_Code80_PaintTable:
 	.long SoundEditMenu_Paint	; [0x80]
 	.long TouchCurve_DrawThumbnail + 0xBD	; [0x81]   (default `ret`)
 	.long Draw_ToneTemplateLevelKeyTune	; [0x82]
@@ -131811,7 +131979,7 @@ DispatchTable_F5B8F8:
 	.long ToneEditPage_A7_Paint	; [0xA7]  <- also selector 0xC7
 	.long Draw_Serial	; [0xA8]  <- also selector 0xC8
 	.long TouchCurve_DrawThumbnail + 0xBD	; [0xA9]   (default `ret`)  <- also selector 0xC9
-	.long DispatchTable_F5B8F8_Nop42	; [0xAA]  <- also selector 0xCA
+	.long Dispatch_Code80_PaintNoAction	; [0xAA]  <- also selector 0xCA
 	.long SoundEditDrumMenu_Paint	; [0xAB]  <- also selector 0xCB
 	.long TouchCurve_DrawThumbnail + 0xBD	; [0xAC]   (default `ret`)  <- also selector 0xCC
 	.long SoundEditController_PaintPage1	; [0xAD]  <- also selector 0xCD
@@ -131845,11 +132013,11 @@ Dispatch_Code80:
 	cp	hl, 192	; F5B9C7  cp HL,0x00c0
 	jr	c, Dispatch_Code80_Skip	; F5B9CB  jr C,0xf5b9d8
 	sub	hl, 192	; F5B9CD  sub HL,0x00c0
-	ld	xiy, DispatchTable_F5B9F8 + 0x80	; F5B9D1  ld XIY,0x00f5ba78
+	ld	xiy, Dispatch_Code80_RepaintFieldTable + 0x80	; F5B9D1  ld XIY,0x00f5ba78
 	jr	Dispatch_Code80_Join	; F5B9D6  jr T,0xf5b9e1
 Dispatch_Code80_Skip:
 	sub	hl, 128	; F5B9D8  sub HL,0x0080
-	ld	xiy, DispatchTable_F5B9F8	; F5B9DC  ld XIY,0x00f5b9f8
+	ld	xiy, Dispatch_Code80_RepaintFieldTable	; F5B9DC  ld XIY,0x00f5b9f8
 Dispatch_Code80_Join:
 	sla	hl, 2	; F5B9E1  sla 0x02,HL
 	mx_ld_rm MXL, ra_IY, ra_HL, 5	; F5B9E4  ld XIY,(XIY+HL)
@@ -131865,7 +132033,10 @@ Dispatch_Code80_Join:
 	ret	; F5B9F7  ret
 
 ; --- 0xF5B9F8: 48 entries, one per selector 0x80..0xAF ---------------------
-DispatchTable_F5B9F8:
+; Dispatch_Code80_RepaintFieldTable: Dispatch_Code80's table: the PARTIAL (field) repaint of each screen code
+;   0x80..0xAF (0xC0.. read entry code - 0x40). Basis: table index (screen code) + its named entries
+;   (notes/prom_b_repaint_table_names.py). (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+Dispatch_Code80_RepaintFieldTable:
 	.long SoundEditMenu_RepaintField	; [0x80]
 	.long TouchCurve_DrawThumbnail + 0xBD	; [0x81]   (default `ret`)
 	.long SoundEditModelingToneTemplate_RepaintField	; [0x82]
@@ -131908,7 +132079,7 @@ DispatchTable_F5B9F8:
 	.long ToneEditPage_A7_RepaintField	; [0xA7]  <- also selector 0xC7
 	.long ToneEditPage_A8_RepaintField	; [0xA8]  <- also selector 0xC8
 	.long TouchCurve_DrawThumbnail + 0xBD	; [0xA9]   (default `ret`)  <- also selector 0xC9
-	.long DispatchTable_F5B9F8_Nop42	; [0xAA]  <- also selector 0xCA
+	.long Dispatch_Code80_RepaintFieldNoAction	; [0xAA]  <- also selector 0xCA
 	.long SoundEditDrumMenu_RepaintField	; [0xAB]  <- also selector 0xCB
 	.long TouchCurve_DrawThumbnail + 0xBD	; [0xAC]   (default `ret`)  <- also selector 0xCC
 	.long SoundEditController_RepaintFieldPage1	; [0xAD]  <- also selector 0xCD
@@ -132537,7 +132708,7 @@ TouchCurve_DrawCurrentSlot_Join4:
 ; --------------------------------------------------------------------------
 ; TouchCurve_DrawThumbnail: curve = (XIZ) >> 5: 3 erases the box at IconOrigin + 1 (service 0x1B) and draws the diagonal (service 0x00,
 ;   DrawLine); otherwise blits CurveBitmapSelector[curve], 40 x 40, at IconOrigin (service 0x03).  Also the filler
-;   entry of DispatchTable_F5B8F8 / F5B9F8 at the selectors with no page.
+;   entry of Dispatch_Code80_PaintTable / F5B9F8 at the selectors with no page.
 TouchCurve_DrawThumbnail:
 	ld	a, (xiz)	; F5BE5A  ld A,(XIZ)
 	and	a, 224	; F5BE5C  and A,0xe0
@@ -132626,7 +132797,7 @@ LCD_ShowAllLayers_Copy2:
 	ld	a, 12:opc	; F5BF23  ld A,0x0c
 	swi	7	; F5BF25  swi 7
 	ret	; F5BF26  ret
-; SoundEditMenu_Paint: DispatchTable_F5B8F8[code 0x80] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditMenu_Paint: Dispatch_Code80_PaintTable[code 0x80] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditMenu_Paint:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BF27  cp (0x27f5),0x01
 	jr	z, SoundEditMenu_Paint_Skip2	; F5BF2C  jr Z,0xf5bf51
@@ -132727,13 +132898,13 @@ ModelingPage_PaintFieldReadout_Return:
 ; --------------------------------------------------------------------------
 ; SoundEdit_PaintPageLabelBackdrop: LCD_CurrentLayer := 0, then T_UiPaint_PageLabelBackdrop (UiPaint_PageLabelBackdrop, the rounded backdrop behind the
 ;   'PAGEn/m' legend), which restores the layer it saved -- so the caller carries on drawing in layer 0. Basis:
-;   callers + body -- called only by the sound-edit / modeling tone-edit page painters of DispatchTable_F5B8F8 next to
+;   callers + body -- called only by the sound-edit / modeling tone-edit page painters of Dispatch_Code80_PaintTable next to
 ;   the list that prints their 'PAGEn/m'. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
 SoundEdit_PaintPageLabelBackdrop:
 	ld	(LCD_CurrentLayer:16), 0	; F5BFBD  ld (0x2540),0x00
 	call	T_UiPaint_PageLabelBackdrop	; F5BFC2  call 0xf42e18
 	ret	; F5BFC6  ret
-; ToneEditPage_A0_Paint: DispatchTable_F5B8F8[code 0xA0] -- Dispatch_Code80_Bracketed, the full paint.
+; ToneEditPage_A0_Paint: Dispatch_Code80_PaintTable[code 0xA0] -- Dispatch_Code80_Bracketed, the full paint.
 ToneEditPage_A0_Paint:
 	call	Draw_M0delingSoundEditToneDriver	; F5BFC7  call 0xf5c338
 	call	Draw_ToneDriverResonator	; F5BFCB  call 0xf5c360
@@ -132796,7 +132967,7 @@ Draw_DriverDriverWaveformReso:
 	call	T_DisplayListB_Run	; F5C095  call 0xf417f4
 	call	SoundEditModelingDriverWaveform_PaintRows	; F5C099  call 0xf5cc64
 	ret	; F5C09D  ret
-; ToneEditPage_A3_Paint: DispatchTable_F5B8F8[code 0xA3] -- Dispatch_Code80_Bracketed, the full paint.
+; ToneEditPage_A3_Paint: Dispatch_Code80_PaintTable[code 0xA3] -- Dispatch_Code80_Bracketed, the full paint.
 ToneEditPage_A3_Paint:
 	call	Draw_M0delingSoundEditToneDriver	; F5C09E  call 0xf5c338
 	call	DisplayList_Run_ResoDriverNatorPositionMovement_Page22P0siti0nM0vementWidth	; F5C0A2  call 0xf5c374
@@ -132811,7 +132982,7 @@ ToneEditPage_A3_Paint:
 	ld	xix, DLText_FixMove	; F5C0CA  ld XIX,0x00f03478
 	call	T_DisplayListB_Run	; F5C0CF  call 0xf417f4
 	ret	; F5C0D3  ret
-; ToneEditPage_A4_Paint: DispatchTable_F5B8F8[code 0xA4] -- Dispatch_Code80_Bracketed, the full paint.
+; ToneEditPage_A4_Paint: Dispatch_Code80_PaintTable[code 0xA4] -- Dispatch_Code80_Bracketed, the full paint.
 ToneEditPage_A4_Paint:
 	call	Draw_M0delingSoundEditToneDriver	; F5C0D4  call 0xf5c338
 	call	DisplayList_Run_ResoDriverNatorPositionMovement_Page22P0siti0nM0vementWidth	; F5C0D8  call 0xf5c374
@@ -132826,7 +132997,7 @@ ToneEditPage_A4_Paint:
 	ld	xix, DLBRecordPtrs_F034C6	; F5C100  ld XIX,0x00f034c6
 	call	T_DisplayListB_Run	; F5C105  call 0xf417f4
 	ret	; F5C109  ret
-; ToneEditPage_A5_Paint: DispatchTable_F5B8F8[code 0xA5] -- Dispatch_Code80_Bracketed, the full paint.
+; ToneEditPage_A5_Paint: Dispatch_Code80_PaintTable[code 0xA5] -- Dispatch_Code80_Bracketed, the full paint.
 ToneEditPage_A5_Paint:
 	call	DisplayList_Run_M0delingSoundEditToneDriver	; F5C10A  call 0xf5c34c
 	call	DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain	; F5C10E  call 0xf5c388
@@ -132875,7 +133046,7 @@ ToneEditPage_PaintMainAndSubFocus:
 	call	T_DisplayListB_Run	; F5C16D  call 0xf417f4
 ToneEditPage_PaintMainAndSubFocus_Return:
 	ret	; F5C171  ret
-; ToneEditPage_A6_Paint: DispatchTable_F5B8F8[code 0xA6] -- Dispatch_Code80_Bracketed, the full paint.
+; ToneEditPage_A6_Paint: Dispatch_Code80_PaintTable[code 0xA6] -- Dispatch_Code80_Bracketed, the full paint.
 ToneEditPage_A6_Paint:
 	call	DisplayList_Run_M0delingSoundEditToneDriver	; F5C172  call 0xf5c34c
 	call	DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain	; F5C176  call 0xf5c388
@@ -132891,7 +133062,7 @@ ToneEditPage_A6_Paint:
 	call	T_DisplayListB_Run	; F5C1A3  call 0xf417f4
 	call	ToneEditPage_PaintMainAndSubFocus	; F5C1A7  call 0xf5c144
 	ret	; F5C1AB  ret
-; ToneEditPage_A7_Paint: DispatchTable_F5B8F8[code 0xA7] -- Dispatch_Code80_Bracketed, the full paint.
+; ToneEditPage_A7_Paint: Dispatch_Code80_PaintTable[code 0xA7] -- Dispatch_Code80_Bracketed, the full paint.
 ToneEditPage_A7_Paint:
 	call	DisplayList_Run_M0delingSoundEditToneDriver	; F5C1AC  call 0xf5c34c
 	call	DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain	; F5C1B0  call 0xf5c388
@@ -133302,7 +133473,7 @@ Draw_PitchSoundEditEnvPitchLf0:
 	ld	xix, DL_F03D4A	; F5C509  ld XIX,0x00f03d4a
 	call	T_DisplayList_Run	; F5C50E  call 0xf417f0
 	ret	; F5C512  ret
-; SoundEditPitchLfo_Paint: DispatchTable_F5B8F8[code 0x8A] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditPitchLfo_Paint: Dispatch_Code80_PaintTable[code 0x8A] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditPitchLfo_Paint:
 	call	Draw_PitchSoundEditEnvPitchLf0	; F5C513  call 0xf5c4ff
 
@@ -133537,7 +133708,7 @@ Draw_Page12LevelTouchCurveLevel_Return:
 ; --------------------------------------------------------------------------
 ; SoundEditAmp_PaintHeader: Layer 0: runs SoundEditAmp_PaintHeader_DL ('AMPLITUDE' title, 'SOUND EDIT' box, 'ENV' and 'AMP' side tabs)
 ;   and, unless (0x27F5) == 1, on through DL_F03FF3 (the 'LFO' tab, its box and arrow). Basis: callers + body --
-;   called first by all five AMP page painters (DispatchTable_F5B8F8 codes 0x8B-0x8F); same shape as
+;   called first by all five AMP page painters (Dispatch_Code80_PaintTable codes 0x8B-0x8F); same shape as
 ;   SoundEditController_PaintHeader. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
 SoundEditAmp_PaintHeader:
 	ld	(LCD_CurrentLayer:16), 0	; F5C727  ld (0x2540),0x00
@@ -133590,7 +133761,7 @@ SoundEditFilterKeyFollow_PaintKeyboardAndValues:
 	ld	xix, DLRecordPtrs_F0509B	; F5C794  ld XIX,0x00f0509b
 	call	T_DisplayListB_Run	; F5C799  call 0xf417f4
 	ret	; F5C79D  ret
-; SoundEditAmpEnvelope1_Paint: DispatchTable_F5B8F8[code 0x8D] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditAmpEnvelope1_Paint: Dispatch_Code80_PaintTable[code 0x8D] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditAmpEnvelope1_Paint:
 	call	SoundEditAmp_PaintHeader	; F5C79E  call 0xf5c727
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C7A2  cp (0x27f5),0x01
@@ -133686,7 +133857,7 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk:
 	ld	xix, DLText_AttackDecayRelease	; F5C8C1  ld XIX,0x00f05182
 	call	T_DisplayListB_Run	; F5C8C6  call 0xf417f4
 	ret	; F5C8CA  ret
-; SoundEditFilterLpf12_Paint: DispatchTable_F5B8F8[code 0x90] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditFilterLpf12_Paint: Dispatch_Code80_PaintTable[code 0x90] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterLpf12_Paint:
 	call	SoundEditFilter_PaintHeader	; F5C8CB  call 0xf5c929
 	ld	xiy, DL_FilterCutoffEqualizerFreq	; F5C8CF  ld XIY,0x00f0467d
@@ -133744,7 +133915,7 @@ SoundEdit_PaintPage12Label:
 ; --------------------------------------------------------------------------
 ; SoundEditFilter_PaintHeader: Layer 0: runs SoundEditFilter_PaintHeader_DL ('FILTER' title, 'SOUND EDIT' box) and, unless (0x27F5) == 1,
 ;   on through DL_F0459F (the 'ENV', 'FILTER', 'LFO' side tabs with their boxes and arrows). Basis: callers + body --
-;   called first by all ten FILTER page painters (DispatchTable_F5B8F8 codes 0x90-0x99); same shape as
+;   called first by all ten FILTER page painters (Dispatch_Code80_PaintTable codes 0x90-0x99); same shape as
 ;   SoundEditController_PaintHeader. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_b.json)
 SoundEditFilter_PaintHeader:
 	ld	(LCD_CurrentLayer:16), 0	; F5C929  ld (0x2540),0x00
@@ -133795,7 +133966,7 @@ SoundEditFilter_PaintModeField_Join:
 	ld	xiy, SoundEditFilter_PaintModeField_DL2	; F5C979  ld XIY,0x00f04d10
 	call	T_DisplayListB_RunOne	; F5C97E  call 0xf41830
 	ret	; F5C982  ret
-; SoundEditFilterHpf12_Paint: DispatchTable_F5B8F8[code 0x91] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditFilterHpf12_Paint: Dispatch_Code80_PaintTable[code 0x91] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterHpf12_Paint:
 	call	SoundEditFilter_PaintHeader	; F5C983  call 0xf5c929
 	ld	xiy, DL_FilterCutoffEqualizerFreq	; F5C987  ld XIY,0x00f0467d
@@ -133816,7 +133987,7 @@ SoundEditFilterHpf12_Paint_Skip2:
 	ld	xix, DLBRecordPtrs_F04DA3	; F5C9C4  ld XIX,0x00f04da3
 	call	T_DisplayListB_Run	; F5C9C9  call 0xf417f4
 	ret	; F5C9CD  ret
-; SoundEditFilterLpf24_Paint: DispatchTable_F5B8F8[code 0x92] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditFilterLpf24_Paint: Dispatch_Code80_PaintTable[code 0x92] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterLpf24_Paint:
 	call	SoundEditFilter_PaintHeader	; F5C9CE  call 0xf5c929
 	ld	xiy, DL_FilterCutoffFilterCutoff	; F5C9D2  ld XIY,0x00f047f3
@@ -133837,7 +134008,7 @@ SoundEditFilterLpf24_Paint_Skip3:
 	ld	xix, Data_F04E32	; F5CA0F  ld XIX,0x00f04e32
 	call	T_DisplayListB_Run	; F5CA14  call 0xf417f4
 	ret	; F5CA18  ret
-; SoundEditFilterHpf24_Paint: DispatchTable_F5B8F8[code 0x93] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditFilterHpf24_Paint: Dispatch_Code80_PaintTable[code 0x93] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterHpf24_Paint:
 	call	SoundEditFilter_PaintHeader	; F5CA19  call 0xf5c929
 	ld	xiy, DL_FilterCutoffFilterCutoff	; F5CA1D  ld XIY,0x00f047f3
@@ -133924,7 +134095,7 @@ Draw_Page12EnvelopeKeyoffCurSor:
 	ld	xix, Data_F04F20	; F5CB14  ld XIX,0x00f04f20
 	call	T_DisplayListB_Run	; F5CB19  call 0xf417f4
 	ret	; F5CB1D  ret
-; ToneEditPage_A0_RepaintField: DispatchTable_F5B9F8[code 0xA0] -- Dispatch_Code80, the partial repaint.
+; ToneEditPage_A0_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0xA0] -- Dispatch_Code80, the partial repaint.
 ToneEditPage_A0_RepaintField:
 	cp	a, 0:i3	; F5CB1E  cp A,0
 	jr	z, Draw_Page12EnvelopeKeyoffCurSor_Skip2	; F5CB20  jr Z,0xf5cb63
@@ -134042,7 +134213,7 @@ ToneEditPage_A0_PaintGroupBrackets_Join:
 	ld	(LCD_CurrentLayer:16), 0	; F5CC37  ld (0x2540),0x00
 ToneEditPage_A0_PaintGroupBrackets_Return:
 	ret	; F5CC3C  ret
-; SoundEditModelingDriverWaveform_RepaintField: DispatchTable_F5B9F8[code 0x86] (also codes 0xA2) -- Dispatch_Code80, the partial repaint.
+; SoundEditModelingDriverWaveform_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x86] (also codes 0xA2) -- Dispatch_Code80, the partial repaint.
 SoundEditModelingDriverWaveform_RepaintField:
 	cp	a, 0:i3	; F5CC3D  cp A,0
 	jr	z, SoundEditModelingDriverWaveform_RepaintField_Skip4	; F5CC3F  jr Z,0xf5cc47
@@ -134127,7 +134298,7 @@ SoundEditModelingDriverWaveform_PaintRows_Join:
 	cp	c, 3:i3	; F5CCF1  cp C,3
 	jr	nz, SoundEditModelingDriverWaveform_PaintRows_Loop	; F5CCF3  jr NZ,0xf5cc8c
 	ret	; F5CCF5  ret
-; ToneEditPage_A3_RepaintField: DispatchTable_F5B9F8[code 0xA3] -- Dispatch_Code80, the partial repaint.
+; ToneEditPage_A3_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0xA3] -- Dispatch_Code80, the partial repaint.
 ToneEditPage_A3_RepaintField:
 	cp	a, 1:i3	; F5CCF6  cp A,1
 	jr	nz, ToneEditPage_A3_RepaintField_Skip2	; F5CCF8  jr NZ,0xf5cd0f
@@ -134142,7 +134313,7 @@ ToneEditPage_A3_RepaintField_Skip2:
 	call	RunDisplayListBFromPointerArray	; F5CD19  call 0xf09ae1
 ToneEditPage_A3_RepaintField_Return:
 	ret	; F5CD1D  ret
-; ToneEditPage_A4_RepaintField: DispatchTable_F5B9F8[code 0xA4] -- Dispatch_Code80, the partial repaint.
+; ToneEditPage_A4_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0xA4] -- Dispatch_Code80, the partial repaint.
 ToneEditPage_A4_RepaintField:
 	cp	a, 2:i3	; F5CD1E  cp A,2
 	jr	nz, ToneEditPage_A4_RepaintField_Skip3	; F5CD20  jr NZ,0xf5cd37
@@ -134157,7 +134328,7 @@ ToneEditPage_A4_RepaintField_Skip3:
 	call	RunDisplayListBFromPointerArray	; F5CD41  call 0xf09ae1
 ToneEditPage_A4_RepaintField_Return2:
 	ret	; F5CD45  ret
-; ToneEditPage_A5_RepaintField: DispatchTable_F5B9F8[code 0xA5] -- Dispatch_Code80, the partial repaint.
+; ToneEditPage_A5_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0xA5] -- Dispatch_Code80, the partial repaint.
 ToneEditPage_A5_RepaintField:
 	cp	a, 0:i3	; F5CD46  cp A,0
 	jr	z, ToneEditPage_A5_RepaintField_Skip4	; F5CD48  jr Z,0xf5cd54
@@ -134192,7 +134363,7 @@ ToneEditPage_A5_RepaintField_Join2:
 	call	RunDisplayListBFromPointerArray	; F5CDA3  call 0xf09ae1
 ToneEditPage_A5_RepaintField_Return3:
 	ret	; F5CDA7  ret
-; ToneEditPage_A6_RepaintField: DispatchTable_F5B9F8[code 0xA6] -- Dispatch_Code80, the partial repaint.
+; ToneEditPage_A6_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0xA6] -- Dispatch_Code80, the partial repaint.
 ToneEditPage_A6_RepaintField:
 	cp	a, 0:i3	; F5CDA8  cp A,0
 	jr	nz, ToneEditPage_A6_RepaintField_Skip7	; F5CDAA  jr NZ,0xf5cdc5
@@ -134207,7 +134378,7 @@ ToneEditPage_A6_RepaintField_Skip7:
 	ld	xiy, Data_F03617	; F5CDCA  ld XIY,0x00f03617
 	call	RunDisplayListBFromPointerArray	; F5CDCF  call 0xf09ae1
 	ret	; F5CDD3  ret
-; ToneEditPage_A7_RepaintField: DispatchTable_F5B9F8[code 0xA7] -- Dispatch_Code80, the partial repaint.
+; ToneEditPage_A7_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0xA7] -- Dispatch_Code80, the partial repaint.
 ToneEditPage_A7_RepaintField:
 	cp	a, 0:i3	; F5CDD4  cp A,0
 	jr	nz, ToneEditPage_A7_RepaintField_Skip8	; F5CDD6  jr NZ,0xf5cdf1
@@ -134222,7 +134393,7 @@ ToneEditPage_A7_RepaintField_Skip8:
 	ld	xiy, DLRecordPtrs_F036C2	; F5CDF6  ld XIY,0x00f036c2
 	call	RunDisplayListBFromPointerArray	; F5CDFB  call 0xf09ae1
 	ret	; F5CDFF  ret
-; ToneEditPage_A8_RepaintField: DispatchTable_F5B9F8[code 0xA8] -- Dispatch_Code80, the partial repaint.
+; ToneEditPage_A8_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0xA8] -- Dispatch_Code80, the partial repaint.
 ToneEditPage_A8_RepaintField:
 	cp	a, 3:i3	; F5CE00  cp A,3
 	jr	z, ToneEditPage_A8_RepaintField_Skip10	; F5CE02  jr Z,0xf5ce24
@@ -134257,7 +134428,7 @@ ToneEditPage_A8_RepaintField_Skip11:
 	call	ToneEditPage_A8_PaintField5Switch	; F5CE60  call 0xf5c27d
 ToneEditPage_A8_RepaintField_Return4:
 	ret	; F5CE64  ret
-; SoundEditModelingToneTemplate_RepaintField: DispatchTable_F5B9F8[code 0x82] (also codes 0xA1) -- Dispatch_Code80, the partial repaint.
+; SoundEditModelingToneTemplate_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x82] (also codes 0xA1) -- Dispatch_Code80, the partial repaint.
 SoundEditModelingToneTemplate_RepaintField:
 	cp	a, 0:i3	; F5CE65  cp A,0
 	jr	z, SoundEditModelingToneTemplate_RepaintField_Skip12	; F5CE67  jr Z,0xf5ce8e
@@ -134286,7 +134457,7 @@ SoundEditModelingToneTemplate_RepaintField_Skip13:
 	call	RunDisplayListBFromPointerArray	; F5CEAD  call 0xf09ae1
 SoundEditModelingToneTemplate_RepaintField_Return5:
 	ret	; F5CEB1  ret
-; SoundEditPitchTune_RepaintField: DispatchTable_F5B9F8[code 0x87] -- Dispatch_Code80, the partial repaint.
+; SoundEditPitchTune_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x87] -- Dispatch_Code80, the partial repaint.
 SoundEditPitchTune_RepaintField:
 	cp	a, 13	; F5CEB2  cp A,0x0d
 	jr	z, SoundEditPitchTune_RepaintField_Skip14	; F5CEB5  jr Z,0xf5ced2
@@ -134309,7 +134480,7 @@ SoundEditPitchTune_RepaintField_Join4:
 	ld	xiy, Data_F05372	; F5CEEC  ld XIY,0x00f05372
 	call	RunDisplayListBFromPointerArray	; F5CEF1  call 0xf09ae1
 	ret	; F5CEF5  ret
-; SoundEditLfo_RepaintField: DispatchTable_F5B9F8[code 0x8A] (also codes 0x8F, 0x99) -- Dispatch_Code80, the partial repaint.
+; SoundEditLfo_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x8A] (also codes 0x8F, 0x99) -- Dispatch_Code80, the partial repaint.
 SoundEditLfo_RepaintField:
 	cp	a, 0:i3	; F5CEF6  cp A,0
 	jr	z, SoundEditLfo_RepaintField_Skip15	; F5CEF8  jr Z,0xf5cf0e
@@ -134396,7 +134567,7 @@ SoundEditLfo_DrawField0RowLine:
 	add	xix, 20	; F5CFCC  add XIX,0x00000014
 	call	T_DisplayList_Run	; F5CFD2  call 0xf417f0
 	ret	; F5CFD6  ret
-; SoundEditAmpLevel1_RepaintField: DispatchTable_F5B9F8[code 0x8B] -- Dispatch_Code80, the partial repaint.
+; SoundEditAmpLevel1_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x8B] -- Dispatch_Code80, the partial repaint.
 SoundEditAmpLevel1_RepaintField:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5CFD7  cp (0x27f5),0x01
 	jr	nz, SoundEditAmpLevel1_RepaintField_Skip	; F5CFDC  jr NZ,0xf5cfe8
@@ -134449,13 +134620,13 @@ SoundEditAmpLevel1_RepaintField_Join4:
 	call	RunDisplayListBFromPointerArray	; F5D056  call 0xf09ae1
 SoundEditAmpLevel1_RepaintField_Return:
 	ret	; F5D05A  ret
-; SoundEditKeyFollow_RepaintField: DispatchTable_F5B9F8[code 0x8C] (also codes 0x96) -- Dispatch_Code80, the partial repaint.
+; SoundEditKeyFollow_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x8C] (also codes 0x96) -- Dispatch_Code80, the partial repaint.
 SoundEditKeyFollow_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D05B  ld (0x2540),0x00
 	ld	xiy, DLRecordPtrs_F0509B	; F5D060  ld XIY,0x00f0509b
 	call	RunDisplayListBFromPointerArray	; F5D065  call 0xf09ae1
 	ret	; F5D069  ret
-; SoundEditAmpEnvelope1_RepaintField: DispatchTable_F5B9F8[code 0x8D] -- Dispatch_Code80, the partial repaint.
+; SoundEditAmpEnvelope1_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x8D] -- Dispatch_Code80, the partial repaint.
 SoundEditAmpEnvelope1_RepaintField:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5D06A  cp (0x27f5),0x01
 	jr	z, SoundEditAmpEnvelope1_RepaintField_Skip6	; F5D06F  jr Z,0xf5d078
@@ -134476,7 +134647,7 @@ SoundEditAmpEnvelope1_RepaintField_Join5:
 	call	RunDisplayListBFromPointerArray	; F5D09A  call 0xf09ae1
 SoundEditAmpEnvelope1_RepaintField_Return2:
 	ret	; F5D09E  ret
-; SoundEditAmpEnvelope2_RepaintField: DispatchTable_F5B9F8[code 0x8E] -- Dispatch_Code80, the partial repaint.
+; SoundEditAmpEnvelope2_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x8E] -- Dispatch_Code80, the partial repaint.
 SoundEditAmpEnvelope2_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D09F  ld (0x2540),0x00
 	ld	xiy, DLBRecordPtrs_F0519A	; F5D0A4  ld XIY,0x00f0519a
@@ -134509,25 +134680,25 @@ Draw_LowHigh_2_Skip9:
 	call	RunDisplayListBFromPointerArray	; F5D0F4  call 0xf09ae1
 Draw_LowHigh_2_Return4:
 	ret	; F5D0F8  ret
-; SoundEditFilterLpf24_RepaintField: DispatchTable_F5B9F8[code 0x92] -- Dispatch_Code80, the partial repaint.
+; SoundEditFilterLpf24_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x92] -- Dispatch_Code80, the partial repaint.
 SoundEditFilterLpf24_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D0F9  ld (0x2540),0x00
 	ld	xiy, Data_F04E32	; F5D0FE  ld XIY,0x00f04e32
 	call	RunDisplayListBFromPointerArray	; F5D103  call 0xf09ae1
 	ret	; F5D107  ret
-; SoundEditFilterHpf24_RepaintField: DispatchTable_F5B9F8[code 0x93] -- Dispatch_Code80, the partial repaint.
+; SoundEditFilterHpf24_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x93] -- Dispatch_Code80, the partial repaint.
 SoundEditFilterHpf24_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D108  ld (0x2540),0x00
 	ld	xiy, Data_F04E32	; F5D10D  ld XIY,0x00f04e32
 	call	RunDisplayListBFromPointerArray	; F5D112  call 0xf09ae1
 	ret	; F5D116  ret
-; SoundEditFilterBpf_RepaintField: DispatchTable_F5B9F8[code 0x94] -- Dispatch_Code80, the partial repaint.
+; SoundEditFilterBpf_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x94] -- Dispatch_Code80, the partial repaint.
 SoundEditFilterBpf_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D117  ld (0x2540),0x00
 	ld	xiy, DLRecordPtrs_F04E93	; F5D11C  ld XIY,0x00f04e93
 	call	RunDisplayListBFromPointerArray	; F5D121  call 0xf09ae1
 	ret	; F5D125  ret
-; SoundEditEnvelope1_RepaintField: DispatchTable_F5B9F8[code 0x88] (also codes 0x97) -- Dispatch_Code80, the partial repaint.
+; SoundEditEnvelope1_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x88] (also codes 0x97) -- Dispatch_Code80, the partial repaint.
 SoundEditEnvelope1_RepaintField:
 	cp	a, 0:i3	; F5D126  cp A,0
 	jr	nz, SoundEditEnvelope1_RepaintField_Skip10	; F5D128  jr NZ,0xf5d13f
@@ -134664,9 +134835,12 @@ Draw_Write_Skip6:
 	call	SoundEditNaming_HighlightPaletteChar	; F5D295  call 0xf5d3c6
 Draw_Write_Return:
 	ret	; F5D299  ret
-DispatchTable_F5B8F8_Nop42:
+; Dispatch_Code80_PaintNoAction: Dispatch_Code80_PaintTable[0x2A]: a lone `ret` for screen codes 0xAA (power-on
+;   splash) and 0xCA (SOUND EDIT DSP EFFECT, which paints from its ENTER). Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+Dispatch_Code80_PaintNoAction:
 	ret	; F5D29A  ret
-; SoundEditDrumMenu_Paint: DispatchTable_F5B8F8[code 0xAB] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditDrumMenu_Paint: Dispatch_Code80_PaintTable[code 0xAB] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditDrumMenu_Paint:
 	ld	(LCD_CurrentLayer:16), 0	; F5D29B  ld (0x2540),0x00
 	ld	xiy, DL_SoundEditWriteCopy	; F5D2A0  ld XIY,0x00f01800
@@ -134681,14 +134855,14 @@ SoundEditDrumMenu_Paint:
 	ld	xix, Data_F3356B	; F5D2CB  ld XIX,0x00f3356b
 	call	T_DisplayListB_Run	; F5D2D0  call 0xf417f4
 	ret	; F5D2D4  ret
-; SoundEditDrumMenu_RepaintField: DispatchTable_F5B9F8[code 0xAB] -- Dispatch_Code80, the partial repaint.
+; SoundEditDrumMenu_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0xAB] -- Dispatch_Code80, the partial repaint.
 SoundEditDrumMenu_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D2D5  ld (0x2540),0x00
 	ld	xiy, DL_F33538	; F5D2DA  ld XIY,0x00f33538
 	ld	xix, Data_F3356B	; F5D2DF  ld XIX,0x00f3356b
 	call	T_DisplayListB_Run	; F5D2E4  call 0xf417f4
 	ret	; F5D2E8  ret
-; SoundEditMemoryWrite_RepaintField: DispatchTable_F5B9F8[code 0x9E] -- Dispatch_Code80, the partial repaint.
+; SoundEditMemoryWrite_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x9E] -- Dispatch_Code80, the partial repaint.
 SoundEditMemoryWrite_RepaintField:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5D2E9  cp (0x27f5),0x01
 	jr	z, SoundEditMemoryWrite_RepaintField_Skip7	; F5D2EE  jr Z,0xf5d300
@@ -134703,7 +134877,7 @@ SoundEditMemoryWrite_RepaintField_Skip7:
 SoundEditMemoryWrite_RepaintField_Join3:
 	call	SoundEditMemoryWrite_DrawSlotSoundName	; F5D30E  call 0xf5d199
 	ret	; F5D312  ret
-; SoundEditNaming_RepaintField: DispatchTable_F5B9F8[code 0x9F] -- Dispatch_Code80, the partial repaint.
+; SoundEditNaming_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x9F] -- Dispatch_Code80, the partial repaint.
 SoundEditNaming_RepaintField:
 	cp	a, 0:i3	; F5D313  cp A,0
 	jr	z, SoundEditNaming_RepaintField_Skip11	; F5D315  jr Z,0xf5d362
@@ -134773,7 +134947,7 @@ SoundEditNaming_RepaintField_Return2:
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5D3C6 is an instruction boundary.
 ;           The name IS the address.
-; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F5B9F8_Nop42 after what reaches it
+; Purpose: none -- the entry is a lone `ret`.  Named Dispatch_Code80_RepaintFieldNoAction after what reaches it
 ;          (was sub_F5D40D; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_HighlightPaletteChar: ModelingPage_Fields+1 = v: fills (SWI7 service 5) the 8x14 cell at column v %
@@ -134803,9 +134977,12 @@ SoundEditNaming_HighlightPaletteChar:
 	ld	a, 5:opc	; F5D409  ld A,0x05
 	swi	7	; F5D40B  swi 7
 	ret	; F5D40C  ret
-DispatchTable_F5B9F8_Nop42:
+; Dispatch_Code80_RepaintFieldNoAction: Dispatch_Code80_RepaintFieldTable[0x2A]: a lone `ret` for screen codes 0xAA
+;   (power-on splash) and 0xCA (SOUND EDIT DSP EFFECT). Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+Dispatch_Code80_RepaintFieldNoAction:
 	ret	; F5D40D  ret
-; SoundEditToneLayerPanning_Paint: DispatchTable_F5B8F8[code 0x83] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditToneLayerPanning_Paint: Dispatch_Code80_PaintTable[code 0x83] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditToneLayerPanning_Paint:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer	; F5D40E  call 0xf5c49f
 	ldw	bc, ModelingPage_Fields+16	; F5D412  ld BC,0x27b6
@@ -134944,7 +135121,7 @@ SoundEditToneLayerPanning_PaintPanAmountField:
 	call	RunDisplayListBFromPointerArray	; F5D4BE  call 0xf09ae1
 SoundEditToneLayerPanning_PaintPanAmountField_Return:
 	ret	; F5D4C2  ret
-; SoundEditToneLayerKeyLayer_Paint: DispatchTable_F5B8F8[code 0x84] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditToneLayerKeyLayer_Paint: Dispatch_Code80_PaintTable[code 0x84] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditToneLayerKeyLayer_Paint:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit	; F5D4C3  call 0xf5c4b8
 	ld	(LCD_CurrentLayer:16), 0	; F5D4C7  ld (0x2540),0x00
@@ -134965,7 +135142,7 @@ SoundEditToneLayerKeyLayer_Paint:
 	ld	xix, Data_F32B1E	; F5D50F  ld XIX,0x00f32b1e
 	call	T_DisplayListB_Run	; F5D514  call 0xf417f4
 	ret	; F5D518  ret
-; SoundEditToneLayerVelocityLayer_Paint: DispatchTable_F5B8F8[code 0x85] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditToneLayerVelocityLayer_Paint: Dispatch_Code80_PaintTable[code 0x85] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditToneLayerVelocityLayer_Paint:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit	; F5D519  call 0xf5c4b8
 	ld	(LCD_CurrentLayer:16), 0	; F5D51D  ld (0x2540),0x00
@@ -134991,12 +135168,12 @@ Draw_StartPitchStopPitchTotal:
 	call	SoundEdit_PaintPageLabelBackdrop	; F5D571  call 0xf5bfbd
 	call	Draw_Page12EnvelopeKeyoffCurSor	; F5D575  call 0xf5cadd
 	ret	; F5D579  ret
-; SoundEditPitchEnvelope2_Paint: DispatchTable_F5B8F8[code 0x89] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditPitchEnvelope2_Paint: Dispatch_Code80_PaintTable[code 0x89] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditPitchEnvelope2_Paint:
 	call	Draw_PitchSoundEditEnvPitchLf0	; F5D57A  call 0xf5c4ff
 	call	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack	; F5D57E  call 0xf5d5c8
 	ret	; F5D582  ret
-; SoundEditFilterKeyFollow_Paint: DispatchTable_F5B8F8[code 0x96] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditFilterKeyFollow_Paint: Dispatch_Code80_PaintTable[code 0x96] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterKeyFollow_Paint:
 	call	SoundEditFilter_PaintHeader	; F5D583  call 0xf5c929
 	ld	xiy, DL_Page22KeyFollowSlopeRange	; F5D587  ld XIY,0x00f0426b
@@ -135013,7 +135190,7 @@ SoundEditFilterKeyFollow_Paint:
 	call	SoundEdit_PaintPageLabelBackdrop	; F5D5BB  call 0xf5bfbd
 	call	SoundEditFilterKeyFollow_PaintKeyboardAndValues	; F5D5BF  call 0xf5c772
 	ret	; F5D5C3  ret
-; SoundEditFilterEnvelope2_Paint: DispatchTable_F5B8F8[code 0x98] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditFilterEnvelope2_Paint: Dispatch_Code80_PaintTable[code 0x98] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterEnvelope2_Paint:
 	call	SoundEditFilter_PaintHeader	; F5D5C4  call 0xf5c929
 
@@ -135051,17 +135228,17 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack:
 	ld	xix, Data_F32C02	; F5D60F  ld XIX,0x00f32c02
 	call	T_DisplayListB_Run	; F5D614  call 0xf417f4
 	ret	; F5D618  ret
-; SoundEditFilterLfo_Paint: DispatchTable_F5B8F8[code 0x99] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditFilterLfo_Paint: Dispatch_Code80_PaintTable[code 0x99] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditFilterLfo_Paint:
 	call	SoundEditFilter_PaintHeader	; F5D619  call 0xf5c929
 	call	Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay	; F5D61D  call 0xf5c517
 	ret	; F5D621  ret
-; SoundEditAmpLfo_Paint: DispatchTable_F5B8F8[code 0x8F] -- Dispatch_Code80_Bracketed, the full paint.
+; SoundEditAmpLfo_Paint: Dispatch_Code80_PaintTable[code 0x8F] -- Dispatch_Code80_Bracketed, the full paint.
 SoundEditAmpLfo_Paint:
 	call	SoundEditAmp_PaintHeader	; F5D622  call 0xf5c727
 	call	Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay	; F5D626  call 0xf5c517
 	ret	; F5D62A  ret
-; SoundEditToneLayerPanning_RepaintField: DispatchTable_F5B9F8[code 0x83] -- Dispatch_Code80, the partial repaint.
+; SoundEditToneLayerPanning_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x83] -- Dispatch_Code80, the partial repaint.
 SoundEditToneLayerPanning_RepaintField:
 	cp	a, 0:i3	; F5D62B  cp A,0
 	jr	z, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip2	; F5D62D  jr Z,0xf5d66a
@@ -135103,7 +135280,7 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip3:
 	call	RunDisplayListBFromPointerArray	; F5D6A7  call 0xf09ae1
 Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Return:
 	ret	; F5D6AB  ret
-; SoundEditToneLayerKeyLayer_RepaintField: DispatchTable_F5B9F8[code 0x84] -- Dispatch_Code80, the partial repaint.
+; SoundEditToneLayerKeyLayer_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x84] -- Dispatch_Code80, the partial repaint.
 SoundEditToneLayerKeyLayer_RepaintField:
 	cp	a, 0:i3	; F5D6AC  cp A,0
 	jr	nz, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip4	; F5D6AE  jr NZ,0xf5d6c5
@@ -135117,7 +135294,7 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip4:
 	ld	xiy, Data_F32B1E	; F5D6CA  ld XIY,0x00f32b1e
 	call	RunDisplayListBFromPointerArray	; F5D6CF  call 0xf09ae1
 	ret	; F5D6D3  ret
-; SoundEditToneLayerVelocityLayer_RepaintField: DispatchTable_F5B9F8[code 0x85] -- Dispatch_Code80, the partial repaint.
+; SoundEditToneLayerVelocityLayer_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x85] -- Dispatch_Code80, the partial repaint.
 SoundEditToneLayerVelocityLayer_RepaintField:
 	cp	a, 0:i3	; F5D6D4  cp A,0
 	jr	nz, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip5	; F5D6D6  jr NZ,0xf5d6ed
@@ -135131,7 +135308,7 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip5:
 	ld	xiy, DLRecordPtrs_F32B97	; F5D6F2  ld XIY,0x00f32b97
 	call	RunDisplayListBFromPointerArray	; F5D6F7  call 0xf09ae1
 	ret	; F5D6FB  ret
-; SoundEditEnvelope2_RepaintField: DispatchTable_F5B9F8[code 0x89] (also codes 0x98) -- Dispatch_Code80, the partial repaint.
+; SoundEditEnvelope2_RepaintField: Dispatch_Code80_RepaintFieldTable[code 0x89] (also codes 0x98) -- Dispatch_Code80, the partial repaint.
 SoundEditEnvelope2_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D6FC  ld (0x2540),0x00
 	ld	xiy, Data_F32C02	; F5D701  ld XIY,0x00f32c02
@@ -150099,7 +150276,7 @@ StepRecordSub00_StepValueClamped_Veneer:
 	jp	StepRecordSub00_StepValueClamped	; F67400  jp 0xf678c6
 ; StepRecordKind3Sub12_ButtonDispatch_Veneer: `jp StepRecordKind3Sub12_ButtonDispatch`, the button dispatcher of track-kind-3 STEP RECORD sub-
 ;   screens 12 and 15 (StepRecord_SubScreenButtonTable_Kind3 entries 12 and 15): codes 0..31 index
-;   DispatchTable_F6828B -- SoftKeyCol1_StepRecordSub16, SoftKeyCol6/7_StepRecordSub17, LcdKeyRow2_StepRecordSub17,
+;   StepRecordKind3Sub12_ButtonTable -- SoftKeyCol1_StepRecordSub16, SoftKeyCol6/7_StepRecordSub17, LcdKeyRow2_StepRecordSub17,
 ;   LcdKeyRow4_StepRecord, ExitKey_StepRecord. Unreached in this build: track kind 3 is never written
 ;   (StepRecord_ButtonBySubScreen_Kind3's header). Basis: table index + body (target read). (notes/naming-
 ;   pilot-2026-10-06/proposals_wave5_r.json)
@@ -150123,7 +150300,7 @@ StepRecordKind3Sub13_ButtonDispatch_Veneer:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; StepRecord_CursorForward_Veneer: `jp StepRecord_CursorForward`: the CURSOR '>' step of STEP RECORD -- entry 2 (W = 2, soft key 8)
-;   of the song-track and master-track cursor tables DispatchTable_F67548 / DispatchTable_F675BB, whose entry 1 ('<')
+;   of the song-track and master-track cursor tables StepRecord_SongTrackCursorKeyHandlers / StepRecord_MasterTrackCursorKeyHandlers, whose entry 1 ('<')
 ;   is StepRecord_CursorBack; StepRecord_CursorForward runs the step StepRecord_CursorStep with W = 0 where StepRecord_CursorBack passes 1.
 ;   StepRecordSub16_SoftKeyCol1 repeats it until (0x0E53) and (0x0E58) are 0. An unreferenced second `jp sub_F68E4F`
 ;   follows at 0xF67410. Basis: table index + callers + body (target read). (notes/naming-
@@ -150563,7 +150740,7 @@ SoftKeyCol8_StepRecord:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; StepRecord_CursorKeyByTrackKind: Unless UI_ScreenHoldState bit 0: dispatches W (1 = '<', 2 = '>') by the track kind
-;   (0x0E63) & 3 through DispatchTable_F674CE -- song track sub_F674DE, master sub_F67558, kinds 0 / 3 nothing. Soft
+;   (0x0E63) & 3 through StepRecord_CursorKeyTrackKindHandlers -- song track StepRecord_SongTrackCursorKey, master StepRecord_MasterTrackCursorKey, kinds 0 / 3 nothing. Soft
 ;   keys 7 and 8, captioned CURSOR '<' '>' on STEP RECORD, call it; the shape of StepRecord_ButtonByTrackKind. Basis:
 ;   callers + captions + table. (notes/naming-pilot-2026-10-06/proposals_wave2_c.json)
 StepRecord_CursorKeyByTrackKind:
@@ -150574,7 +150751,7 @@ StepRecord_CursorKeyByTrackKind:
 	xor	h, h	; F674BA  xor H,H
 	sla	hl, 2	; F674BC  sla 0x02,HL
 	push	xix	; F674BF  push XIX
-	ld	xix, DispatchTable_F674CE	; F674C0  ld XIX,0x00f674ce
+	ld	xix, StepRecord_CursorKeyTrackKindHandlers	; F674C0  ld XIX,0x00f674ce
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F674C5  ld XHL,(XIX+HL)
 	pop	xix	; F674CA  pop XIX
 	call	(xhl)	; F674CB  call T,XHL
@@ -150582,7 +150759,7 @@ StepRecord_CursorKeyByTrackKind_Return:
 	ret	; F674CD  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F674CE -- 4 32-bit pointers, every one of them an address in
+; StepRecord_CursorKeyTrackKindHandlers -- 4 32-bit pointers, every one of them an address in
 ;                         0x00F60000-0x00F6FFFF.  2 of the 4 entries are the
 ;                         module's own do-nothing stub 0xF675CB (a single
 ;                         0x0E byte, `ret`), leaving 2 distinct other
@@ -150601,13 +150778,19 @@ StepRecord_CursorKeyByTrackKind_Return:
 ;           --null`).
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
-DispatchTable_F674CE:
-	.long	DispatchTable_F674CE_Nop0	; F674CE  [0] -> ret stub
-	.long	sub_F674DE	; F674D2  [1] -> 0xF674DE
-	.long	sub_F67558	; F674D6  [2] -> 0xF67558
-	.long	DispatchTable_F674CE_Nop0	; F674DA  [3] -> ret stub
+; StepRecord_CursorKeyTrackKindHandlers: STEP RECORD soft keys 7/8 (CURSOR '<' '>'): by track kind (0x0E63)&3 -- 1
+;   song track StepRecord_SongTrackCursorKey, 2 master track StepRecord_MasterTrackCursorKey, 0/3 nothing. Basis:
+;   table index (track kind) + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_CursorKeyTrackKindHandlers:
+	.long	StepRecord_NoAction	; F674CE  [0] -> ret stub
+	.long	StepRecord_SongTrackCursorKey	; F674D2  [1] -> 0xF674DE
+	.long	StepRecord_MasterTrackCursorKey	; F674D6  [2] -> 0xF67558
+	.long	StepRecord_NoAction	; F674DA  [3] -> ret stub
 
-sub_F674DE:
+; StepRecord_SongTrackCursorKey: StepRecord_CursorKeyTrackKindHandlers[1] (song track): saves the song position, runs
+;   StepRecord_SongTrackCursorKeyHandlers[W] (1 back, 2 forward), then redraws by what moved. Basis: table index +
+;   body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_SongTrackCursorKey:
 	and	w, 3	; F674DE  and W,0x03
 	ld	(4207:16), w	; F674E1  ld (0x106f),W
 	ex8	a, w	; F674E5  ex A,W
@@ -150619,39 +150802,39 @@ sub_F674DE:
 	ld	a, (3672:16)	; F674F6  ld A,(0x0e58)
 	ld	(4103:16), a	; F674FA  ld (0x1007),A
 	push	xhl	; F674FE  push XHL
-	ld	xhl, DispatchTable_F67548	; F674FF  ld XHL,0x00f67548
+	ld	xhl, StepRecord_SongTrackCursorKeyHandlers	; F674FF  ld XHL,0x00f67548
 	mx_ld_rm MXL, ra_HL, ra_IY, 5	; F67504  ld XIY,(XHL+IY)
 	pop	xhl	; F67509  pop XHL
 	call	(xiy)	; F6750A  call T,XIY
 	ld	wa, (4786:16)	; F6750C  ld WA,(0x12b2)
 	m_cp_rm MW16, 0x1002, 0	; F67510  cp WA,(0x1002)
-	jr	nz, sub_F674DE_Loop	; F67514  jr NZ,0xf6753c
+	jr	nz, StepRecord_SongTrackCursorKey_Loop	; F67514  jr NZ,0xf6753c
 	ld	a, (3672:16)	; F67516  ld A,(0x0e58)
 	ld	w, (4103:16)	; F6751A  ld W,(0x1007)
 	cp	a, w	; F6751E  cp A,W
-	jr	z, sub_F674DE_Join	; F67520  jr Z,0xf67537
+	jr	z, StepRecord_SongTrackCursorKey_Join	; F67520  jr Z,0xf67537
 	m_cp_mi8 MB16, 0x0e59, 0x04	; F67522  cp (0x0e59),0x04
-	jr	ule, sub_F674DE_Join	; F67527  jr ULE,0xf67537
+	jr	ule, StepRecord_SongTrackCursorKey_Join	; F67527  jr ULE,0xf67537
 	cp	w, 3:i3	; F67529  cp W,3
-	jr	ugt, sub_F674DE_Skip	; F6752B  jr UGT,0xf67533
+	jr	ugt, StepRecord_SongTrackCursorKey_Skip	; F6752B  jr UGT,0xf67533
 	cp	a, 3:i3	; F6752D  cp A,3
-	jr	ugt, sub_F674DE_Loop	; F6752F  jr UGT,0xf6753c
-	jr	sub_F674DE_Join	; F67531  jr T,0xf67537
-sub_F674DE_Skip:
+	jr	ugt, StepRecord_SongTrackCursorKey_Loop	; F6752F  jr UGT,0xf6753c
+	jr	StepRecord_SongTrackCursorKey_Join	; F67531  jr T,0xf67537
+StepRecord_SongTrackCursorKey_Skip:
 	cp	a, 3:i3	; F67533  cp A,3
-	jr	ule, sub_F674DE_Loop	; F67535  jr ULE,0xf6753c
-sub_F674DE_Join:
+	jr	ule, StepRecord_SongTrackCursorKey_Loop	; F67535  jr ULE,0xf6753c
+StepRecord_SongTrackCursorKey_Join:
 	calr	sub_F6C736	; F67537  calr 0xf6c736
-	jr	sub_F674DE_Join2	; F6753A  jr T,0xf67544
-sub_F674DE_Loop:
+	jr	StepRecord_SongTrackCursorKey_Join2	; F6753A  jr T,0xf67544
+StepRecord_SongTrackCursorKey_Loop:
 	m_or_mi8 MB16, 0x0ed5, 0x01	; F6753C  or (0x0ed5),0x01
 	calr	sub_F69CB4	; F67541  calr 0xf69cb4
-sub_F674DE_Join2:
+StepRecord_SongTrackCursorKey_Join2:
 	calr	sub_F68AD0	; F67544  calr 0xf68ad0
 	ret	; F67547  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F67548 -- 4 32-bit pointers, every one of them an address in
+; StepRecord_SongTrackCursorKeyHandlers -- 4 32-bit pointers, every one of them an address in
 ;                         0x00F60000-0x00F6FFFF.  1 of the 4 entries are the
 ;                         module's own do-nothing stub 0xF675CB (a single
 ;                         0x0E byte, `ret`), leaving 3 distinct other
@@ -150670,13 +150853,20 @@ sub_F674DE_Join2:
 ;           --null`).
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
-DispatchTable_F67548:
+; StepRecord_SongTrackCursorKeyHandlers: Song-track STEP RECORD cursor key by W & 3 (soft key 7 passes 1, key 8 passes
+;   2): 1 StepRecord_CursorBack, 2 StepRecord_CursorForward_Veneer, 3 nothing; [0] (sub_F6A304) is reached by no
+;   caller of this path. Basis: table index (W from SoftKeyCol7/8_StepRecord) + its named entries. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_SongTrackCursorKeyHandlers:
 	.long	sub_F6A304	; F67548  [0] -> sub_F6A304
 	.long	StepRecord_CursorBack	; F6754C  [1] -> StepRecord_CursorBack
 	.long	StepRecord_CursorForward_Veneer	; F67550  [2] -> StepRecord_CursorForward_Veneer
-	.long	DispatchTable_F674CE_Nop0	; F67554  [3] -> ret stub
+	.long	StepRecord_NoAction	; F67554  [3] -> ret stub
 
-sub_F67558:
+; StepRecord_MasterTrackCursorKey: StepRecord_CursorKeyTrackKindHandlers[2] (master track): as
+;   StepRecord_SongTrackCursorKey through StepRecord_MasterTrackCursorKeyHandlers. Basis: table index + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_MasterTrackCursorKey:
 	and	w, 3	; F67558  and W,0x03
 	ex8	a, w	; F6755B  ex A,W
 	exts	wa	; F6755D  exts WA
@@ -150687,38 +150877,38 @@ sub_F67558:
 	ld	a, (3672:16)	; F6756C  ld A,(0x0e58)
 	ld	(4103:16), a	; F67570  ld (0x1007),A
 	push	xhl	; F67574  push XHL
-	ld	xhl, DispatchTable_F675BB	; F67575  ld XHL,0x00f675bb
+	ld	xhl, StepRecord_MasterTrackCursorKeyHandlers	; F67575  ld XHL,0x00f675bb
 	mx_ld_rm MXL, ra_HL, ra_IY, 5	; F6757A  ld XIY,(XHL+IY)
 	pop	xhl	; F6757F  pop XHL
 	call	(xiy)	; F67580  call T,XIY
 	ld	wa, (4786:16)	; F67582  ld WA,(0x12b2)
 	m_cp_rm MW16, 0x1002, 0	; F67586  cp WA,(0x1002)
-	jr	nz, sub_F67558_Skip2	; F6758A  jr NZ,0xf675b2
+	jr	nz, StepRecord_MasterTrackCursorKey_Skip2	; F6758A  jr NZ,0xf675b2
 	ld	a, (3672:16)	; F6758C  ld A,(0x0e58)
 	ld	w, (4103:16)	; F67590  ld W,(0x1007)
 	cp	a, w	; F67594  cp A,W
-	jr	z, sub_F67558_Join	; F67596  jr Z,0xf675ad
+	jr	z, StepRecord_MasterTrackCursorKey_Join	; F67596  jr Z,0xf675ad
 	m_cp_mi8 MB16, 0x0e59, 0x04	; F67598  cp (0x0e59),0x04
-	jr	ule, sub_F67558_Join	; F6759D  jr ULE,0xf675ad
+	jr	ule, StepRecord_MasterTrackCursorKey_Join	; F6759D  jr ULE,0xf675ad
 	cp	w, 3:i3	; F6759F  cp W,3
-	jr	ugt, sub_F67558_Skip	; F675A1  jr UGT,0xf675a9
+	jr	ugt, StepRecord_MasterTrackCursorKey_Skip	; F675A1  jr UGT,0xf675a9
 	cp	a, 3:i3	; F675A3  cp A,3
-	jr	ugt, sub_F674DE_Loop	; F675A5  jr UGT,0xf6753c
-	jr	sub_F67558_Join	; F675A7  jr T,0xf675ad
-sub_F67558_Skip:
+	jr	ugt, StepRecord_SongTrackCursorKey_Loop	; F675A5  jr UGT,0xf6753c
+	jr	StepRecord_MasterTrackCursorKey_Join	; F675A7  jr T,0xf675ad
+StepRecord_MasterTrackCursorKey_Skip:
 	cp	a, 3:i3	; F675A9  cp A,3
-	jr	ule, sub_F67558_Skip2	; F675AB  jr ULE,0xf675b2
-sub_F67558_Join:
+	jr	ule, StepRecord_MasterTrackCursorKey_Skip2	; F675AB  jr ULE,0xf675b2
+StepRecord_MasterTrackCursorKey_Join:
 	calr	sub_F6C736	; F675AD  calr 0xf6c736
-	jr	sub_F67558_Return	; F675B0  jr T,0xf675ba
-sub_F67558_Skip2:
+	jr	StepRecord_MasterTrackCursorKey_Return	; F675B0  jr T,0xf675ba
+StepRecord_MasterTrackCursorKey_Skip2:
 	m_or_mi8 MB16, 0x0ed5, 0x01	; F675B2  or (0x0ed5),0x01
 	calr	sub_F69CB4	; F675B7  calr 0xf69cb4
-sub_F67558_Return:
+StepRecord_MasterTrackCursorKey_Return:
 	ret	; F675BA  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F675BB -- 4 32-bit pointers, every one of them an address in
+; StepRecord_MasterTrackCursorKeyHandlers -- 4 32-bit pointers, every one of them an address in
 ;                         0x00F60000-0x00F6FFFF.  2 of the 4 entries are the
 ;                         module's own do-nothing stub 0xF675CB (a single
 ;                         0x0E byte, `ret`), leaving 2 distinct other
@@ -150737,13 +150927,19 @@ sub_F67558_Return:
 ;           --null`).
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
-DispatchTable_F675BB:
-	.long	DispatchTable_F674CE_Nop0	; F675BB  [0] -> ret stub
+; StepRecord_MasterTrackCursorKeyHandlers: Master-track STEP RECORD cursor key by W & 3: 1 StepRecord_CursorBack, 2
+;   StepRecord_CursorForward_Veneer, 0/3 nothing. Basis: table index (W) + its named entries. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_MasterTrackCursorKeyHandlers:
+	.long	StepRecord_NoAction	; F675BB  [0] -> ret stub
 	.long	StepRecord_CursorBack	; F675BF  [1] -> StepRecord_CursorBack
 	.long	StepRecord_CursorForward_Veneer	; F675C3  [2] -> StepRecord_CursorForward_Veneer
-	.long	DispatchTable_F674CE_Nop0	; F675C7  [3] -> ret stub
+	.long	StepRecord_NoAction	; F675C7  [3] -> ret stub
 
-DispatchTable_F674CE_Nop0:
+; StepRecord_NoAction: The STEP RECORD module's shared do-nothing `ret`: the entry of every unused panel code, track
+;   kind and sub-screen in its 24 dispatch tables. Basis: table entries (the unused indices of every step-record
+;   table). (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_NoAction:
 	ret	; F675CB  ret
 
 ; --------------------------------------------------------------------------
@@ -150852,37 +151048,37 @@ SoftKeyCol1_StepRecord_Skip:
 ; --------------------------------------------------------------------------
 DispatchTable_F67616:
 	.long	SoftKeyCol1_StepRecord	; F67616  [0] -> 0xF67604
-	.long	DispatchTable_F674CE_Nop0	; F6761A  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6761E  [2] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67622  [3] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67626  [4] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6762A  [5] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6762E  [6] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67632  [7] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67636  [8] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6763A  [9] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6763E  [10] -> ret stub
+	.long	StepRecord_NoAction	; F6761A  [1] -> ret stub
+	.long	StepRecord_NoAction	; F6761E  [2] -> ret stub
+	.long	StepRecord_NoAction	; F67622  [3] -> ret stub
+	.long	StepRecord_NoAction	; F67626  [4] -> ret stub
+	.long	StepRecord_NoAction	; F6762A  [5] -> ret stub
+	.long	StepRecord_NoAction	; F6762E  [6] -> ret stub
+	.long	StepRecord_NoAction	; F67632  [7] -> ret stub
+	.long	StepRecord_NoAction	; F67636  [8] -> ret stub
+	.long	StepRecord_NoAction	; F6763A  [9] -> ret stub
+	.long	StepRecord_NoAction	; F6763E  [10] -> ret stub
 	.long	LcdKeyRow4_StepRecord	; F67642  [11] -> 0xF688F0
-	.long	DispatchTable_F674CE_Nop0	; F67646  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6764A  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6764E  [14] -> ret stub
+	.long	StepRecord_NoAction	; F67646  [12] -> ret stub
+	.long	StepRecord_NoAction	; F6764A  [13] -> ret stub
+	.long	StepRecord_NoAction	; F6764E  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F67652  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F67656  [16] -> ret stub
+	.long	StepRecord_NoAction	; F67656  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecord	; F6765A  [17] -> 0xF67604
-	.long	DispatchTable_F674CE_Nop0	; F6765E  [18] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67662  [19] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67666  [20] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6766A  [21] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6766E  [22] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67672  [23] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67676  [24] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6767A  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6767E  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67682  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67686  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6768A  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6768E  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67692  [31] -> ret stub
+	.long	StepRecord_NoAction	; F6765E  [18] -> ret stub
+	.long	StepRecord_NoAction	; F67662  [19] -> ret stub
+	.long	StepRecord_NoAction	; F67666  [20] -> ret stub
+	.long	StepRecord_NoAction	; F6766A  [21] -> ret stub
+	.long	StepRecord_NoAction	; F6766E  [22] -> ret stub
+	.long	StepRecord_NoAction	; F67672  [23] -> ret stub
+	.long	StepRecord_NoAction	; F67676  [24] -> ret stub
+	.long	StepRecord_NoAction	; F6767A  [25] -> ret stub
+	.long	StepRecord_NoAction	; F6767E  [26] -> ret stub
+	.long	StepRecord_NoAction	; F67682  [27] -> ret stub
+	.long	StepRecord_NoAction	; F67686  [28] -> ret stub
+	.long	StepRecord_NoAction	; F6768A  [29] -> ret stub
+	.long	StepRecord_NoAction	; F6768E  [30] -> ret stub
+	.long	StepRecord_NoAction	; F67692  [31] -> ret stub
 
 ; ExitKey_StepRecord: the EXIT key; StepRecordSub00_ButtonTable slot 0x0F; StepRecordSub01_ButtonTable slot 0x0F; StepRecordSub02_ButtonTable slot 0x0F; StepRecordSub03_ButtonTable slot 0x0F; StepRecordSub04_ButtonTable slot 0x0F; StepRecordSub05_ButtonTable slot 0x0F; StepRecordSub07_ButtonTable slot 0x0F; StepRecordSub08_ButtonTable slot 0x0F; StepRecordSub09_ButtonTable slot 0x0F; StepRecordSub10_ButtonTable slot 0x0F; StepRecordSub11_ButtonTable slot 0x0F; StepRecordSub16_ButtonTable slot 0x0F; StepRecordSub17_ButtonTable slot 0x0F.  Slot -> control: wave7_panel_names_round11.CONTROL.
 ExitKey_StepRecord:
@@ -150979,12 +151175,12 @@ StepRecord_SubScreenButtonTable:
 	.long	StepRecordSub09_ButtonDispatch	; F67747  [9] -> 0xF67DCF
 	.long	StepRecordSub10_ButtonDispatch	; F6774B  [10] -> 0xF67F7C
 	.long	StepRecordSub11_ButtonDispatch	; F6774F  [11] -> 0xF6CBD4
-	.long	DispatchTable_F674CE_Nop0	; F67753  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67757  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6775B  [14] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6775F  [15] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67763  [16] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67767  [17] -> ret stub
+	.long	StepRecord_NoAction	; F67753  [12] -> ret stub
+	.long	StepRecord_NoAction	; F67757  [13] -> ret stub
+	.long	StepRecord_NoAction	; F6775B  [14] -> ret stub
+	.long	StepRecord_NoAction	; F6775F  [15] -> ret stub
+	.long	StepRecord_NoAction	; F67763  [16] -> ret stub
+	.long	StepRecord_NoAction	; F67767  [17] -> ret stub
 	.long	StepRecordSub18_ButtonDispatch	; F6776B  [18] -> 0xF686DB
 
 ; StepRecord_ButtonBySubScreen_Kind3: track kind 3 -- StepRecord_SubScreenButtonTable_Kind3[UI_StepRecord_SubScreen].
@@ -151022,18 +151218,18 @@ StepRecord_ButtonBySubScreen_Kind3:
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 StepRecord_SubScreenButtonTable_Kind3:
-	.long	DispatchTable_F674CE_Nop0	; F67789  [0] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6778D  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67791  [2] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67795  [3] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67799  [4] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6779D  [5] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F677A1  [6] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F677A5  [7] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F677A9  [8] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F677AD  [9] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F677B1  [10] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F677B5  [11] -> ret stub
+	.long	StepRecord_NoAction	; F67789  [0] -> ret stub
+	.long	StepRecord_NoAction	; F6778D  [1] -> ret stub
+	.long	StepRecord_NoAction	; F67791  [2] -> ret stub
+	.long	StepRecord_NoAction	; F67795  [3] -> ret stub
+	.long	StepRecord_NoAction	; F67799  [4] -> ret stub
+	.long	StepRecord_NoAction	; F6779D  [5] -> ret stub
+	.long	StepRecord_NoAction	; F677A1  [6] -> ret stub
+	.long	StepRecord_NoAction	; F677A5  [7] -> ret stub
+	.long	StepRecord_NoAction	; F677A9  [8] -> ret stub
+	.long	StepRecord_NoAction	; F677AD  [9] -> ret stub
+	.long	StepRecord_NoAction	; F677B1  [10] -> ret stub
+	.long	StepRecord_NoAction	; F677B5  [11] -> ret stub
 	.long	StepRecordKind3Sub12_ButtonDispatch_Veneer	; F677B9  [12] -> 0xF67404
 	.long	StepRecordKind3Sub13_ButtonDispatch_Veneer	; F677BD  [13] -> 0xF67408
 	.long	StepRecordKind3Sub13_ButtonDispatch_Veneer	; F677C1  [14] -> 0xF67408
@@ -151102,11 +151298,11 @@ StepRecordSub00_ButtonTable:
 	.long	LcdKeyErs_StepRecord	; F67813  [9] -> LcdKeyErs_StepRecord
 	.long	LcdKeyRow3_StepRecord	; F67817  [10] -> 0xF6C8F8
 	.long	LcdKeyRow4_StepRecordSub00	; F6781B  [11] -> 0xF68DE1
-	.long	DispatchTable_F674CE_Nop0	; F6781F  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67823  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67827  [14] -> ret stub
+	.long	StepRecord_NoAction	; F6781F  [12] -> ret stub
+	.long	StepRecord_NoAction	; F67823  [13] -> ret stub
+	.long	StepRecord_NoAction	; F67827  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F6782B  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F6782F  [16] -> ret stub
+	.long	StepRecord_NoAction	; F6782F  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub00	; F67833  [17] -> 0xF678F8
 	.long	SoftKeyCol2_StepRecordSub00	; F67837  [18] -> 0xF69867
 	.long	SoftKeyCol3_StepRecordSub00	; F6783B  [19] -> 0xF69AB0
@@ -151115,13 +151311,13 @@ StepRecordSub00_ButtonTable:
 	.long	SoftKeyCol6_StepRecordSub00	; F67847  [22] -> 0xF678A9
 	.long	SoftKeyCol7_StepRecord	; F6784B  [23] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F6784F  [24] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67853  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67857  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6785B  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6785F  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67863  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67867  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6786B  [31] -> ret stub
+	.long	StepRecord_NoAction	; F67853  [25] -> ret stub
+	.long	StepRecord_NoAction	; F67857  [26] -> ret stub
+	.long	StepRecord_NoAction	; F6785B  [27] -> ret stub
+	.long	StepRecord_NoAction	; F6785F  [28] -> ret stub
+	.long	StepRecord_NoAction	; F67863  [29] -> ret stub
+	.long	StepRecord_NoAction	; F67867  [30] -> ret stub
+	.long	StepRecord_NoAction	; F6786B  [31] -> ret stub
 
 ; SoftKeyCol4_StepRecordSub00: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub00_ButtonTable slot 0x03; StepRecordSub00_ButtonTable slot 0x14.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol4_StepRecordSub00:
@@ -151285,37 +151481,37 @@ StepRecordSub00_SoftKeyCol1_Skip:
 ; --------------------------------------------------------------------------
 StepRecordSub01_ButtonTable:
 	.long	SoftKeyCol1_StepRecordSub00	; F67939  [0] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F6793D  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67941  [2] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67945  [3] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67949  [4] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6794D  [5] -> ret stub
+	.long	StepRecord_NoAction	; F6793D  [1] -> ret stub
+	.long	StepRecord_NoAction	; F67941  [2] -> ret stub
+	.long	StepRecord_NoAction	; F67945  [3] -> ret stub
+	.long	StepRecord_NoAction	; F67949  [4] -> ret stub
+	.long	StepRecord_NoAction	; F6794D  [5] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67951  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67955  [7] -> 0xF6749D
 	.long	LcdKeyRow1_StepRecord	; F67959  [8] -> 0xF67D6F
 	.long	LcdKeyErs_StepRecord	; F6795D  [9] -> LcdKeyErs_StepRecord
 	.long	LcdKeyRow3_StepRecord	; F67961  [10] -> 0xF6C8F8
-	.long	DispatchTable_F674CE_Nop0	; F67965  [11] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67969  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6796D  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67971  [14] -> ret stub
+	.long	StepRecord_NoAction	; F67965  [11] -> ret stub
+	.long	StepRecord_NoAction	; F67969  [12] -> ret stub
+	.long	StepRecord_NoAction	; F6796D  [13] -> ret stub
+	.long	StepRecord_NoAction	; F67971  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F67975  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F67979  [16] -> ret stub
+	.long	StepRecord_NoAction	; F67979  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub00	; F6797D  [17] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67981  [18] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67985  [19] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67989  [20] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6798D  [21] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67991  [22] -> ret stub
+	.long	StepRecord_NoAction	; F67981  [18] -> ret stub
+	.long	StepRecord_NoAction	; F67985  [19] -> ret stub
+	.long	StepRecord_NoAction	; F67989  [20] -> ret stub
+	.long	StepRecord_NoAction	; F6798D  [21] -> ret stub
+	.long	StepRecord_NoAction	; F67991  [22] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67995  [23] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67999  [24] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F6799D  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F679A1  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F679A5  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F679A9  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F679AD  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F679B1  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F679B5  [31] -> ret stub
+	.long	StepRecord_NoAction	; F6799D  [25] -> ret stub
+	.long	StepRecord_NoAction	; F679A1  [26] -> ret stub
+	.long	StepRecord_NoAction	; F679A5  [27] -> ret stub
+	.long	StepRecord_NoAction	; F679A9  [28] -> ret stub
+	.long	StepRecord_NoAction	; F679AD  [29] -> ret stub
+	.long	StepRecord_NoAction	; F679B1  [30] -> ret stub
+	.long	StepRecord_NoAction	; F679B5  [31] -> ret stub
 
 ; StepRecordSub02_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 2 (also sub-screen 6) -- StepRecord_SubScreenButtonTable/F67789
 ;   entry 2 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub02_ButtonTable[code & 0x1F].
@@ -151366,37 +151562,37 @@ StepRecordSub02_ButtonDispatch_Return:
 ; --------------------------------------------------------------------------
 StepRecordSub02_ButtonTable:
 	.long	SoftKeyCol1_StepRecordSub00	; F679D3  [0] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F679D7  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F679DB  [2] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F679DF  [3] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F679E3  [4] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F679E7  [5] -> ret stub
+	.long	StepRecord_NoAction	; F679D7  [1] -> ret stub
+	.long	StepRecord_NoAction	; F679DB  [2] -> ret stub
+	.long	StepRecord_NoAction	; F679DF  [3] -> ret stub
+	.long	StepRecord_NoAction	; F679E3  [4] -> ret stub
+	.long	StepRecord_NoAction	; F679E7  [5] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F679EB  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F679EF  [7] -> 0xF6749D
 	.long	LcdKeyRow1_StepRecord	; F679F3  [8] -> 0xF67D6F
-	.long	DispatchTable_F674CE_Nop0	; F679F7  [9] -> ret stub
+	.long	StepRecord_NoAction	; F679F7  [9] -> ret stub
 	.long	LcdKeyRow3_StepRecordSub02	; F679FB  [10] -> LcdKeyRow3_StepRecordSub02
 	.long	LcdKeyRow4_StepRecordSub02	; F679FF  [11] -> LcdKeyRow4_StepRecordSub02
-	.long	DispatchTable_F674CE_Nop0	; F67A03  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A07  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A0B  [14] -> ret stub
+	.long	StepRecord_NoAction	; F67A03  [12] -> ret stub
+	.long	StepRecord_NoAction	; F67A07  [13] -> ret stub
+	.long	StepRecord_NoAction	; F67A0B  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F67A0F  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F67A13  [16] -> ret stub
+	.long	StepRecord_NoAction	; F67A13  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub00	; F67A17  [17] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67A1B  [18] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A1F  [19] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A23  [20] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A27  [21] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A2B  [22] -> ret stub
+	.long	StepRecord_NoAction	; F67A1B  [18] -> ret stub
+	.long	StepRecord_NoAction	; F67A1F  [19] -> ret stub
+	.long	StepRecord_NoAction	; F67A23  [20] -> ret stub
+	.long	StepRecord_NoAction	; F67A27  [21] -> ret stub
+	.long	StepRecord_NoAction	; F67A2B  [22] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67A2F  [23] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67A33  [24] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67A37  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A3B  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A3F  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A43  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A47  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A4B  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A4F  [31] -> ret stub
+	.long	StepRecord_NoAction	; F67A37  [25] -> ret stub
+	.long	StepRecord_NoAction	; F67A3B  [26] -> ret stub
+	.long	StepRecord_NoAction	; F67A3F  [27] -> ret stub
+	.long	StepRecord_NoAction	; F67A43  [28] -> ret stub
+	.long	StepRecord_NoAction	; F67A47  [29] -> ret stub
+	.long	StepRecord_NoAction	; F67A4B  [30] -> ret stub
+	.long	StepRecord_NoAction	; F67A4F  [31] -> ret stub
 
 ; StepRecordSub03_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 3 -- StepRecord_SubScreenButtonTable/F67789
 ;   entry 3 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub03_ButtonTable[code & 0x1F].
@@ -151456,37 +151652,37 @@ SoftKeyCol5_StepRecordSub03_Skip:
 ; --------------------------------------------------------------------------
 StepRecordSub03_ButtonTable:
 	.long	SoftKeyCol1_StepRecordSub00	; F67A7A  [0] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67A7E  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A82  [2] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67A86  [3] -> ret stub
+	.long	StepRecord_NoAction	; F67A7E  [1] -> ret stub
+	.long	StepRecord_NoAction	; F67A82  [2] -> ret stub
+	.long	StepRecord_NoAction	; F67A86  [3] -> ret stub
 	.long	SoftKeyCol5_StepRecordSub03	; F67A8A  [4] -> 0xF67A6D
-	.long	DispatchTable_F674CE_Nop0	; F67A8E  [5] -> ret stub
+	.long	StepRecord_NoAction	; F67A8E  [5] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67A92  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67A96  [7] -> 0xF6749D
 	.long	LcdKeyRow1_StepRecord	; F67A9A  [8] -> 0xF67D6F
 	.long	LcdKeyErs_StepRecord	; F67A9E  [9] -> LcdKeyErs_StepRecord
-	.long	DispatchTable_F674CE_Nop0	; F67AA2  [10] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67AA6  [11] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67AAA  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67AAE  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67AB2  [14] -> ret stub
+	.long	StepRecord_NoAction	; F67AA2  [10] -> ret stub
+	.long	StepRecord_NoAction	; F67AA6  [11] -> ret stub
+	.long	StepRecord_NoAction	; F67AAA  [12] -> ret stub
+	.long	StepRecord_NoAction	; F67AAE  [13] -> ret stub
+	.long	StepRecord_NoAction	; F67AB2  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F67AB6  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F67ABA  [16] -> ret stub
+	.long	StepRecord_NoAction	; F67ABA  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub00	; F67ABE  [17] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67AC2  [18] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67AC6  [19] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67ACA  [20] -> ret stub
+	.long	StepRecord_NoAction	; F67AC2  [18] -> ret stub
+	.long	StepRecord_NoAction	; F67AC6  [19] -> ret stub
+	.long	StepRecord_NoAction	; F67ACA  [20] -> ret stub
 	.long	SoftKeyCol5_StepRecordSub03	; F67ACE  [21] -> 0xF67A6D
-	.long	DispatchTable_F674CE_Nop0	; F67AD2  [22] -> ret stub
+	.long	StepRecord_NoAction	; F67AD2  [22] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67AD6  [23] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67ADA  [24] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67ADE  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67AE2  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67AE6  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67AEA  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67AEE  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67AF2  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67AF6  [31] -> ret stub
+	.long	StepRecord_NoAction	; F67ADE  [25] -> ret stub
+	.long	StepRecord_NoAction	; F67AE2  [26] -> ret stub
+	.long	StepRecord_NoAction	; F67AE6  [27] -> ret stub
+	.long	StepRecord_NoAction	; F67AEA  [28] -> ret stub
+	.long	StepRecord_NoAction	; F67AEE  [29] -> ret stub
+	.long	StepRecord_NoAction	; F67AF2  [30] -> ret stub
+	.long	StepRecord_NoAction	; F67AF6  [31] -> ret stub
 
 ; StepRecordSub04_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 4 -- StepRecord_SubScreenButtonTable/F67789
 ;   entry 4 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub04_ButtonTable[code & 0x1F].
@@ -151537,37 +151733,37 @@ StepRecordSub04_ButtonDispatch_Return:
 ; --------------------------------------------------------------------------
 StepRecordSub04_ButtonTable:
 	.long	SoftKeyCol1_StepRecordSub00	; F67B14  [0] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67B18  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B1C  [2] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B20  [3] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B24  [4] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B28  [5] -> ret stub
+	.long	StepRecord_NoAction	; F67B18  [1] -> ret stub
+	.long	StepRecord_NoAction	; F67B1C  [2] -> ret stub
+	.long	StepRecord_NoAction	; F67B20  [3] -> ret stub
+	.long	StepRecord_NoAction	; F67B24  [4] -> ret stub
+	.long	StepRecord_NoAction	; F67B28  [5] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67B2C  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67B30  [7] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67B34  [8] -> ret stub
+	.long	StepRecord_NoAction	; F67B34  [8] -> ret stub
 	.long	LcdKeyErs_StepRecord	; F67B38  [9] -> LcdKeyErs_StepRecord
-	.long	DispatchTable_F674CE_Nop0	; F67B3C  [10] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B40  [11] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B44  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B48  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B4C  [14] -> ret stub
+	.long	StepRecord_NoAction	; F67B3C  [10] -> ret stub
+	.long	StepRecord_NoAction	; F67B40  [11] -> ret stub
+	.long	StepRecord_NoAction	; F67B44  [12] -> ret stub
+	.long	StepRecord_NoAction	; F67B48  [13] -> ret stub
+	.long	StepRecord_NoAction	; F67B4C  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F67B50  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F67B54  [16] -> ret stub
+	.long	StepRecord_NoAction	; F67B54  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub00	; F67B58  [17] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67B5C  [18] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B60  [19] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B64  [20] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B68  [21] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B6C  [22] -> ret stub
+	.long	StepRecord_NoAction	; F67B5C  [18] -> ret stub
+	.long	StepRecord_NoAction	; F67B60  [19] -> ret stub
+	.long	StepRecord_NoAction	; F67B64  [20] -> ret stub
+	.long	StepRecord_NoAction	; F67B68  [21] -> ret stub
+	.long	StepRecord_NoAction	; F67B6C  [22] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67B70  [23] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67B74  [24] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67B78  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B7C  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B80  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B84  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B88  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B8C  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67B90  [31] -> ret stub
+	.long	StepRecord_NoAction	; F67B78  [25] -> ret stub
+	.long	StepRecord_NoAction	; F67B7C  [26] -> ret stub
+	.long	StepRecord_NoAction	; F67B80  [27] -> ret stub
+	.long	StepRecord_NoAction	; F67B84  [28] -> ret stub
+	.long	StepRecord_NoAction	; F67B88  [29] -> ret stub
+	.long	StepRecord_NoAction	; F67B8C  [30] -> ret stub
+	.long	StepRecord_NoAction	; F67B90  [31] -> ret stub
 
 ; StepRecordSub05_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 5 -- StepRecord_SubScreenButtonTable/F67789
 ;   entry 5 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub05_ButtonTable[code & 0x1F].
@@ -151618,37 +151814,37 @@ StepRecordSub05_ButtonDispatch_Return:
 ; --------------------------------------------------------------------------
 StepRecordSub05_ButtonTable:
 	.long	SoftKeyCol1_StepRecordSub00	; F67BAE  [0] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67BB2  [1] -> ret stub
+	.long	StepRecord_NoAction	; F67BB2  [1] -> ret stub
 	.long	SoftKeyCol3_StepRecordSub05	; F67BB6  [2] -> 0xF6CD8C
-	.long	DispatchTable_F674CE_Nop0	; F67BBA  [3] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67BBE  [4] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67BC2  [5] -> ret stub
+	.long	StepRecord_NoAction	; F67BBA  [3] -> ret stub
+	.long	StepRecord_NoAction	; F67BBE  [4] -> ret stub
+	.long	StepRecord_NoAction	; F67BC2  [5] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67BC6  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67BCA  [7] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67BCE  [8] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67BD2  [9] -> ret stub
+	.long	StepRecord_NoAction	; F67BCE  [8] -> ret stub
+	.long	StepRecord_NoAction	; F67BD2  [9] -> ret stub
 	.long	LcdKeyRow3_StepRecordSub05	; F67BD6  [10] -> 0xF6CDAD
 	.long	LcdKeyRow3_StepRecordSub05_Skip2	; F67BDA  [11] -> 0xF6CDD0
-	.long	DispatchTable_F674CE_Nop0	; F67BDE  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67BE2  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67BE6  [14] -> ret stub
+	.long	StepRecord_NoAction	; F67BDE  [12] -> ret stub
+	.long	StepRecord_NoAction	; F67BE2  [13] -> ret stub
+	.long	StepRecord_NoAction	; F67BE6  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F67BEA  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F67BEE  [16] -> ret stub
+	.long	StepRecord_NoAction	; F67BEE  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub00	; F67BF2  [17] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67BF6  [18] -> ret stub
+	.long	StepRecord_NoAction	; F67BF6  [18] -> ret stub
 	.long	SoftKeyCol3_StepRecordSub05	; F67BFA  [19] -> 0xF6CD8C
-	.long	DispatchTable_F674CE_Nop0	; F67BFE  [20] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67C02  [21] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67C06  [22] -> ret stub
+	.long	StepRecord_NoAction	; F67BFE  [20] -> ret stub
+	.long	StepRecord_NoAction	; F67C02  [21] -> ret stub
+	.long	StepRecord_NoAction	; F67C06  [22] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67C0A  [23] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67C0E  [24] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67C12  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67C16  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67C1A  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67C1E  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67C22  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67C26  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67C2A  [31] -> ret stub
+	.long	StepRecord_NoAction	; F67C12  [25] -> ret stub
+	.long	StepRecord_NoAction	; F67C16  [26] -> ret stub
+	.long	StepRecord_NoAction	; F67C1A  [27] -> ret stub
+	.long	StepRecord_NoAction	; F67C1E  [28] -> ret stub
+	.long	StepRecord_NoAction	; F67C22  [29] -> ret stub
+	.long	StepRecord_NoAction	; F67C26  [30] -> ret stub
+	.long	StepRecord_NoAction	; F67C2A  [31] -> ret stub
 
 ; StepRecordSub07_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 7 -- StepRecord_SubScreenButtonTable/F67789
 ;   entry 7 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub07_ButtonTable[code & 0x1F].
@@ -151708,37 +151904,37 @@ SoftKeyCol4_StepRecord_Skip:
 ; --------------------------------------------------------------------------
 StepRecordSub07_ButtonTable:
 	.long	SoftKeyCol1_StepRecordSub00	; F67C55  [0] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67C59  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67C5D  [2] -> ret stub
+	.long	StepRecord_NoAction	; F67C59  [1] -> ret stub
+	.long	StepRecord_NoAction	; F67C5D  [2] -> ret stub
 	.long	SoftKeyCol4_StepRecord	; F67C61  [3] -> 0xF67C48
-	.long	DispatchTable_F674CE_Nop0	; F67C65  [4] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67C69  [5] -> ret stub
+	.long	StepRecord_NoAction	; F67C65  [4] -> ret stub
+	.long	StepRecord_NoAction	; F67C69  [5] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67C6D  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67C71  [7] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67C75  [8] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67C79  [9] -> ret stub
+	.long	StepRecord_NoAction	; F67C75  [8] -> ret stub
+	.long	StepRecord_NoAction	; F67C79  [9] -> ret stub
 	.long	LcdKeyErs_StepRecord	; F67C7D  [10] -> LcdKeyErs_StepRecord
 	.long	LcdKeyRow4_StepRecord	; F67C81  [11] -> 0xF688F0
-	.long	DispatchTable_F674CE_Nop0	; F67C85  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67C89  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67C8D  [14] -> ret stub
+	.long	StepRecord_NoAction	; F67C85  [12] -> ret stub
+	.long	StepRecord_NoAction	; F67C89  [13] -> ret stub
+	.long	StepRecord_NoAction	; F67C8D  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F67C91  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F67C95  [16] -> ret stub
+	.long	StepRecord_NoAction	; F67C95  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub00	; F67C99  [17] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67C9D  [18] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67CA1  [19] -> ret stub
+	.long	StepRecord_NoAction	; F67C9D  [18] -> ret stub
+	.long	StepRecord_NoAction	; F67CA1  [19] -> ret stub
 	.long	SoftKeyCol4_StepRecord	; F67CA5  [20] -> 0xF67C48
-	.long	DispatchTable_F674CE_Nop0	; F67CA9  [21] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67CAD  [22] -> ret stub
+	.long	StepRecord_NoAction	; F67CA9  [21] -> ret stub
+	.long	StepRecord_NoAction	; F67CAD  [22] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67CB1  [23] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67CB5  [24] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67CB9  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67CBD  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67CC1  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67CC5  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67CC9  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67CCD  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67CD1  [31] -> ret stub
+	.long	StepRecord_NoAction	; F67CB9  [25] -> ret stub
+	.long	StepRecord_NoAction	; F67CBD  [26] -> ret stub
+	.long	StepRecord_NoAction	; F67CC1  [27] -> ret stub
+	.long	StepRecord_NoAction	; F67CC5  [28] -> ret stub
+	.long	StepRecord_NoAction	; F67CC9  [29] -> ret stub
+	.long	StepRecord_NoAction	; F67CCD  [30] -> ret stub
+	.long	StepRecord_NoAction	; F67CD1  [31] -> ret stub
 
 ; StepRecordSub08_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 8 -- StepRecord_SubScreenButtonTable/F67789
 ;   entry 8 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub08_ButtonTable[code & 0x1F].
@@ -151789,37 +151985,37 @@ StepRecordSub08_ButtonDispatch_Return:
 ; --------------------------------------------------------------------------
 StepRecordSub08_ButtonTable:
 	.long	SoftKeyCol1_StepRecordSub00	; F67CEF  [0] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67CF3  [1] -> ret stub
+	.long	StepRecord_NoAction	; F67CF3  [1] -> ret stub
 	.long	SoftKeyCol3_StepRecordSub08	; F67CF7  [2] -> 0xF6CD3D
-	.long	DispatchTable_F674CE_Nop0	; F67CFB  [3] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67CFF  [4] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67D03  [5] -> ret stub
+	.long	StepRecord_NoAction	; F67CFB  [3] -> ret stub
+	.long	StepRecord_NoAction	; F67CFF  [4] -> ret stub
+	.long	StepRecord_NoAction	; F67D03  [5] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67D07  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67D0B  [7] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67D0F  [8] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67D13  [9] -> ret stub
+	.long	StepRecord_NoAction	; F67D0F  [8] -> ret stub
+	.long	StepRecord_NoAction	; F67D13  [9] -> ret stub
 	.long	LcdKeyErs_StepRecord	; F67D17  [10] -> LcdKeyErs_StepRecord
 	.long	LcdKeyRow4_StepRecord	; F67D1B  [11] -> 0xF688F0
-	.long	DispatchTable_F674CE_Nop0	; F67D1F  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67D23  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67D27  [14] -> ret stub
+	.long	StepRecord_NoAction	; F67D1F  [12] -> ret stub
+	.long	StepRecord_NoAction	; F67D23  [13] -> ret stub
+	.long	StepRecord_NoAction	; F67D27  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F67D2B  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F67D2F  [16] -> ret stub
+	.long	StepRecord_NoAction	; F67D2F  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub00	; F67D33  [17] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67D37  [18] -> ret stub
+	.long	StepRecord_NoAction	; F67D37  [18] -> ret stub
 	.long	SoftKeyCol3_StepRecordSub08	; F67D3B  [19] -> 0xF6CD3D
-	.long	DispatchTable_F674CE_Nop0	; F67D3F  [20] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67D43  [21] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67D47  [22] -> ret stub
+	.long	StepRecord_NoAction	; F67D3F  [20] -> ret stub
+	.long	StepRecord_NoAction	; F67D43  [21] -> ret stub
+	.long	StepRecord_NoAction	; F67D47  [22] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67D4B  [23] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67D4F  [24] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67D53  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67D57  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67D5B  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67D5F  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67D63  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67D67  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67D6B  [31] -> ret stub
+	.long	StepRecord_NoAction	; F67D53  [25] -> ret stub
+	.long	StepRecord_NoAction	; F67D57  [26] -> ret stub
+	.long	StepRecord_NoAction	; F67D5B  [27] -> ret stub
+	.long	StepRecord_NoAction	; F67D5F  [28] -> ret stub
+	.long	StepRecord_NoAction	; F67D63  [29] -> ret stub
+	.long	StepRecord_NoAction	; F67D67  [30] -> ret stub
+	.long	StepRecord_NoAction	; F67D6B  [31] -> ret stub
 
 ; LcdKeyRow1_StepRecord: row 1 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub00_ButtonTable slot 0x08; StepRecordSub01_ButtonTable slot 0x08; StepRecordSub02_ButtonTable slot 0x08; StepRecordSub03_ButtonTable slot 0x08; StepRecordSub10_ButtonTable slot 0x08.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow1_StepRecord:
@@ -151935,37 +152131,37 @@ StepRecordSub09_ButtonDispatch_Return:
 ; --------------------------------------------------------------------------
 StepRecordSub09_ButtonTable:
 	.long	SoftKeyCol1_StepRecordSub00	; F67DE9  [0] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67DED  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67DF1  [2] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67DF5  [3] -> ret stub
+	.long	StepRecord_NoAction	; F67DED  [1] -> ret stub
+	.long	StepRecord_NoAction	; F67DF1  [2] -> ret stub
+	.long	StepRecord_NoAction	; F67DF5  [3] -> ret stub
 	.long	SoftKeyCol5_StepRecordSub09	; F67DF9  [4] -> 0xF67E69
-	.long	DispatchTable_F674CE_Nop0	; F67DFD  [5] -> ret stub
+	.long	StepRecord_NoAction	; F67DFD  [5] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67E01  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67E05  [7] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67E09  [8] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E0D  [9] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E11  [10] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E15  [11] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E19  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E1D  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E21  [14] -> ret stub
+	.long	StepRecord_NoAction	; F67E09  [8] -> ret stub
+	.long	StepRecord_NoAction	; F67E0D  [9] -> ret stub
+	.long	StepRecord_NoAction	; F67E11  [10] -> ret stub
+	.long	StepRecord_NoAction	; F67E15  [11] -> ret stub
+	.long	StepRecord_NoAction	; F67E19  [12] -> ret stub
+	.long	StepRecord_NoAction	; F67E1D  [13] -> ret stub
+	.long	StepRecord_NoAction	; F67E21  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F67E25  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F67E29  [16] -> ret stub
+	.long	StepRecord_NoAction	; F67E29  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub00	; F67E2D  [17] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67E31  [18] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E35  [19] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E39  [20] -> ret stub
+	.long	StepRecord_NoAction	; F67E31  [18] -> ret stub
+	.long	StepRecord_NoAction	; F67E35  [19] -> ret stub
+	.long	StepRecord_NoAction	; F67E39  [20] -> ret stub
 	.long	SoftKeyCol5_StepRecordSub09	; F67E3D  [21] -> 0xF67E69
-	.long	DispatchTable_F674CE_Nop0	; F67E41  [22] -> ret stub
+	.long	StepRecord_NoAction	; F67E41  [22] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67E45  [23] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67E49  [24] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67E4D  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E51  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E55  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E59  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E5D  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E61  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67E65  [31] -> ret stub
+	.long	StepRecord_NoAction	; F67E4D  [25] -> ret stub
+	.long	StepRecord_NoAction	; F67E51  [26] -> ret stub
+	.long	StepRecord_NoAction	; F67E55  [27] -> ret stub
+	.long	StepRecord_NoAction	; F67E59  [28] -> ret stub
+	.long	StepRecord_NoAction	; F67E5D  [29] -> ret stub
+	.long	StepRecord_NoAction	; F67E61  [30] -> ret stub
+	.long	StepRecord_NoAction	; F67E65  [31] -> ret stub
 
 ; SoftKeyCol5_StepRecordSub09: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub09_ButtonTable slot 0x04; StepRecordSub09_ButtonTable slot 0x15.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol5_StepRecordSub09:
@@ -152150,37 +152346,37 @@ StepRecordSub10_ButtonDispatch_Return2:
 ; --------------------------------------------------------------------------
 StepRecordSub10_ButtonTable:
 	.long	SoftKeyCol1_StepRecordSub00	; F67F96  [0] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67F9A  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67F9E  [2] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67FA2  [3] -> ret stub
+	.long	StepRecord_NoAction	; F67F9A  [1] -> ret stub
+	.long	StepRecord_NoAction	; F67F9E  [2] -> ret stub
+	.long	StepRecord_NoAction	; F67FA2  [3] -> ret stub
 	.long	SoftKeyCol5_StepRecordSub10	; F67FA6  [4] -> 0xF68016
-	.long	DispatchTable_F674CE_Nop0	; F67FAA  [5] -> ret stub
+	.long	StepRecord_NoAction	; F67FAA  [5] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67FAE  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67FB2  [7] -> 0xF6749D
 	.long	LcdKeyRow1_StepRecord	; F67FB6  [8] -> 0xF67D6F
 	.long	LcdKeyErs_StepRecord	; F67FBA  [9] -> LcdKeyErs_StepRecord
-	.long	DispatchTable_F674CE_Nop0	; F67FBE  [10] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67FC2  [11] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67FC6  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67FCA  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67FCE  [14] -> ret stub
+	.long	StepRecord_NoAction	; F67FBE  [10] -> ret stub
+	.long	StepRecord_NoAction	; F67FC2  [11] -> ret stub
+	.long	StepRecord_NoAction	; F67FC6  [12] -> ret stub
+	.long	StepRecord_NoAction	; F67FCA  [13] -> ret stub
+	.long	StepRecord_NoAction	; F67FCE  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F67FD2  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F67FD6  [16] -> ret stub
+	.long	StepRecord_NoAction	; F67FD6  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub00	; F67FDA  [17] -> 0xF678F8
-	.long	DispatchTable_F674CE_Nop0	; F67FDE  [18] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67FE2  [19] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67FE6  [20] -> ret stub
+	.long	StepRecord_NoAction	; F67FDE  [18] -> ret stub
+	.long	StepRecord_NoAction	; F67FE2  [19] -> ret stub
+	.long	StepRecord_NoAction	; F67FE6  [20] -> ret stub
 	.long	SoftKeyCol5_StepRecordSub10	; F67FEA  [21] -> 0xF68016
-	.long	DispatchTable_F674CE_Nop0	; F67FEE  [22] -> ret stub
+	.long	StepRecord_NoAction	; F67FEE  [22] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F67FF2  [23] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F67FF6  [24] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F67FFA  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F67FFE  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68002  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68006  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6800A  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6800E  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68012  [31] -> ret stub
+	.long	StepRecord_NoAction	; F67FFA  [25] -> ret stub
+	.long	StepRecord_NoAction	; F67FFE  [26] -> ret stub
+	.long	StepRecord_NoAction	; F68002  [27] -> ret stub
+	.long	StepRecord_NoAction	; F68006  [28] -> ret stub
+	.long	StepRecord_NoAction	; F6800A  [29] -> ret stub
+	.long	StepRecord_NoAction	; F6800E  [30] -> ret stub
+	.long	StepRecord_NoAction	; F68012  [31] -> ret stub
 
 ; SoftKeyCol5_StepRecordSub10: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub10_ButtonTable slot 0x04; StepRecordSub10_ButtonTable slot 0x15.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol5_StepRecordSub10:
@@ -152443,7 +152639,7 @@ StepRecord_WriteEventByteSplitBit7_Return:
 ; --------------------------------------------------------------------------
 ; StepRecordKind3Sub12_ButtonDispatch: Button dispatcher of track-kind-3 STEP RECORD sub-screens 12 and 15
 ;   (StepRecord_SubScreenButtonTable_Kind3 entries 12/15, through StepRecordKind3Sub12_ButtonDispatch_Veneer): panel
-;   code BC 0..31 indexes DispatchTable_F6828B and the handler is called -- StepRecordSub00_ButtonDispatch's shape.
+;   code BC 0..31 indexes StepRecordKind3Sub12_ButtonTable and the handler is called -- StepRecordSub00_ButtonDispatch's shape.
 ;   Unreached in this build (track kind 3 is never written). Basis: table index + body. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave6_u.json)
 StepRecordKind3Sub12_ButtonDispatch:
@@ -152452,7 +152648,7 @@ StepRecordKind3Sub12_ButtonDispatch:
 	jr	ugt, StepRecordKind3Sub12_ButtonDispatch_Return2	; F68277  jr UGT,0xf6828a
 	sla	hl, 2	; F68279  sla 0x02,HL
 	push	xix	; F6827C  push XIX
-	ld	xix, DispatchTable_F6828B	; F6827D  ld XIX,0x00f6828b
+	ld	xix, StepRecordKind3Sub12_ButtonTable	; F6827D  ld XIX,0x00f6828b
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F68282  ld XHL,(XIX+HL)
 	pop	xix	; F68287  pop XIX
 	call	(xhl)	; F68288  call T,XHL
@@ -152460,7 +152656,7 @@ StepRecordKind3Sub12_ButtonDispatch_Return2:
 	ret	; F6828A  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F6828B -- 32 32-bit pointers, every one of them an address
+; StepRecordKind3Sub12_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  23 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 6 distinct other
@@ -152491,39 +152687,43 @@ StepRecordKind3Sub12_ButtonDispatch_Return2:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-DispatchTable_F6828B:
+; StepRecordKind3Sub12_ButtonTable: Panel-button table (slot = code & 0x1F) of the track-kind-3 STEP RECORD sub-
+;   screens 12 and 15, read by StepRecordKind3Sub12_ButtonDispatch -- the StepRecordSubNN_ButtonTable shape; unreached
+;   in this build. Basis: table index (panel code, round 11) + its reader. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecordKind3Sub12_ButtonTable:
 	.long	SoftKeyCol1_StepRecordSub16	; F6828B  [0] -> SoftKeyCol1_StepRecordSub16
-	.long	DispatchTable_F674CE_Nop0	; F6828F  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68293  [2] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68297  [3] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6829B  [4] -> ret stub
+	.long	StepRecord_NoAction	; F6828F  [1] -> ret stub
+	.long	StepRecord_NoAction	; F68293  [2] -> ret stub
+	.long	StepRecord_NoAction	; F68297  [3] -> ret stub
+	.long	StepRecord_NoAction	; F6829B  [4] -> ret stub
 	.long	SoftKeyCol6_StepRecordSub17	; F6829F  [5] -> 0xF6A1BB
 	.long	SoftKeyCol7_StepRecordSub17	; F682A3  [6] -> 0xF6A1B4
-	.long	DispatchTable_F674CE_Nop0	; F682A7  [7] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F682AB  [8] -> ret stub
+	.long	StepRecord_NoAction	; F682A7  [7] -> ret stub
+	.long	StepRecord_NoAction	; F682AB  [8] -> ret stub
 	.long	LcdKeyRow2_StepRecordSub17	; F682AF  [9] -> 0xF68F5B
-	.long	DispatchTable_F674CE_Nop0	; F682B3  [10] -> ret stub
+	.long	StepRecord_NoAction	; F682B3  [10] -> ret stub
 	.long	LcdKeyRow4_StepRecord	; F682B7  [11] -> 0xF688F0
-	.long	DispatchTable_F674CE_Nop0	; F682BB  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F682BF  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F682C3  [14] -> ret stub
+	.long	StepRecord_NoAction	; F682BB  [12] -> ret stub
+	.long	StepRecord_NoAction	; F682BF  [13] -> ret stub
+	.long	StepRecord_NoAction	; F682C3  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F682C7  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F682CB  [16] -> ret stub
+	.long	StepRecord_NoAction	; F682CB  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub16	; F682CF  [17] -> SoftKeyCol1_StepRecordSub16
-	.long	DispatchTable_F674CE_Nop0	; F682D3  [18] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F682D7  [19] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F682DB  [20] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F682DF  [21] -> ret stub
+	.long	StepRecord_NoAction	; F682D3  [18] -> ret stub
+	.long	StepRecord_NoAction	; F682D7  [19] -> ret stub
+	.long	StepRecord_NoAction	; F682DB  [20] -> ret stub
+	.long	StepRecord_NoAction	; F682DF  [21] -> ret stub
 	.long	SoftKeyCol6_StepRecordSub17	; F682E3  [22] -> 0xF6A1BB
 	.long	SoftKeyCol7_StepRecordSub17	; F682E7  [23] -> 0xF6A1B4
-	.long	DispatchTable_F674CE_Nop0	; F682EB  [24] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F682EF  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F682F3  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F682F7  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F682FB  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F682FF  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68303  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68307  [31] -> ret stub
+	.long	StepRecord_NoAction	; F682EB  [24] -> ret stub
+	.long	StepRecord_NoAction	; F682EF  [25] -> ret stub
+	.long	StepRecord_NoAction	; F682F3  [26] -> ret stub
+	.long	StepRecord_NoAction	; F682F7  [27] -> ret stub
+	.long	StepRecord_NoAction	; F682FB  [28] -> ret stub
+	.long	StepRecord_NoAction	; F682FF  [29] -> ret stub
+	.long	StepRecord_NoAction	; F68303  [30] -> ret stub
+	.long	StepRecord_NoAction	; F68307  [31] -> ret stub
 
 
 ; --------------------------------------------------------------------------
@@ -153035,37 +153235,37 @@ StepRecordSub16_ButtonDispatch_Return2:
 ; --------------------------------------------------------------------------
 StepRecordSub16_ButtonTable:
 	.long	SoftKeyCol1_StepRecordSub16	; F685C1  [0] -> SoftKeyCol1_StepRecordSub16
-	.long	DispatchTable_F674CE_Nop0	; F685C5  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F685C9  [2] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F685CD  [3] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F685D1  [4] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F685D5  [5] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F685D9  [6] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F685DD  [7] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F685E1  [8] -> ret stub
+	.long	StepRecord_NoAction	; F685C5  [1] -> ret stub
+	.long	StepRecord_NoAction	; F685C9  [2] -> ret stub
+	.long	StepRecord_NoAction	; F685CD  [3] -> ret stub
+	.long	StepRecord_NoAction	; F685D1  [4] -> ret stub
+	.long	StepRecord_NoAction	; F685D5  [5] -> ret stub
+	.long	StepRecord_NoAction	; F685D9  [6] -> ret stub
+	.long	StepRecord_NoAction	; F685DD  [7] -> ret stub
+	.long	StepRecord_NoAction	; F685E1  [8] -> ret stub
 	.long	LcdKeyRow2_StepRecordSub16	; F685E5  [9] -> 0xF694D6
 	.long	LcdKeyRow3_StepRecordSub16	; F685E9  [10] -> 0xF694C4
-	.long	DispatchTable_F674CE_Nop0	; F685ED  [11] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F685F1  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F685F5  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F685F9  [14] -> ret stub
+	.long	StepRecord_NoAction	; F685ED  [11] -> ret stub
+	.long	StepRecord_NoAction	; F685F1  [12] -> ret stub
+	.long	StepRecord_NoAction	; F685F5  [13] -> ret stub
+	.long	StepRecord_NoAction	; F685F9  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F685FD  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F68601  [16] -> ret stub
+	.long	StepRecord_NoAction	; F68601  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub16	; F68605  [17] -> SoftKeyCol1_StepRecordSub16
-	.long	DispatchTable_F674CE_Nop0	; F68609  [18] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6860D  [19] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68611  [20] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68615  [21] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68619  [22] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6861D  [23] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68621  [24] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68625  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68629  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6862D  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68631  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68635  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68639  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6863D  [31] -> ret stub
+	.long	StepRecord_NoAction	; F68609  [18] -> ret stub
+	.long	StepRecord_NoAction	; F6860D  [19] -> ret stub
+	.long	StepRecord_NoAction	; F68611  [20] -> ret stub
+	.long	StepRecord_NoAction	; F68615  [21] -> ret stub
+	.long	StepRecord_NoAction	; F68619  [22] -> ret stub
+	.long	StepRecord_NoAction	; F6861D  [23] -> ret stub
+	.long	StepRecord_NoAction	; F68621  [24] -> ret stub
+	.long	StepRecord_NoAction	; F68625  [25] -> ret stub
+	.long	StepRecord_NoAction	; F68629  [26] -> ret stub
+	.long	StepRecord_NoAction	; F6862D  [27] -> ret stub
+	.long	StepRecord_NoAction	; F68631  [28] -> ret stub
+	.long	StepRecord_NoAction	; F68635  [29] -> ret stub
+	.long	StepRecord_NoAction	; F68639  [30] -> ret stub
+	.long	StepRecord_NoAction	; F6863D  [31] -> ret stub
 
 ; StepRecordSub17_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 17 -- StepRecord_SubScreenButtonTable/F67789
 ;   entry 17 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub17_ButtonTable[code & 0x1F].
@@ -153116,37 +153316,37 @@ StepRecordSub17_ButtonDispatch_Return:
 ; --------------------------------------------------------------------------
 StepRecordSub17_ButtonTable:
 	.long	SoftKeyCol1_StepRecordSub16	; F6865B  [0] -> SoftKeyCol1_StepRecordSub16
-	.long	DispatchTable_F674CE_Nop0	; F6865F  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68663  [2] -> ret stub
+	.long	StepRecord_NoAction	; F6865F  [1] -> ret stub
+	.long	StepRecord_NoAction	; F68663  [2] -> ret stub
 	.long	SoftKeyCol4_StepRecord	; F68667  [3] -> 0xF67C48
-	.long	DispatchTable_F674CE_Nop0	; F6866B  [4] -> ret stub
+	.long	StepRecord_NoAction	; F6866B  [4] -> ret stub
 	.long	SoftKeyCol6_StepRecordSub17	; F6866F  [5] -> 0xF6A1BB
 	.long	SoftKeyCol7_StepRecordSub17	; F68673  [6] -> 0xF6A1B4
-	.long	DispatchTable_F674CE_Nop0	; F68677  [7] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6867B  [8] -> ret stub
+	.long	StepRecord_NoAction	; F68677  [7] -> ret stub
+	.long	StepRecord_NoAction	; F6867B  [8] -> ret stub
 	.long	LcdKeyRow2_StepRecordSub17	; F6867F  [9] -> 0xF68F5B
-	.long	DispatchTable_F674CE_Nop0	; F68683  [10] -> ret stub
+	.long	StepRecord_NoAction	; F68683  [10] -> ret stub
 	.long	LcdKeyRow4_StepRecord	; F68687  [11] -> 0xF688F0
-	.long	DispatchTable_F674CE_Nop0	; F6868B  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6868F  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68693  [14] -> ret stub
+	.long	StepRecord_NoAction	; F6868B  [12] -> ret stub
+	.long	StepRecord_NoAction	; F6868F  [13] -> ret stub
+	.long	StepRecord_NoAction	; F68693  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F68697  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F6869B  [16] -> ret stub
+	.long	StepRecord_NoAction	; F6869B  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub16	; F6869F  [17] -> SoftKeyCol1_StepRecordSub16
-	.long	DispatchTable_F674CE_Nop0	; F686A3  [18] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F686A7  [19] -> ret stub
+	.long	StepRecord_NoAction	; F686A3  [18] -> ret stub
+	.long	StepRecord_NoAction	; F686A7  [19] -> ret stub
 	.long	SoftKeyCol4_StepRecord	; F686AB  [20] -> 0xF67C48
-	.long	DispatchTable_F674CE_Nop0	; F686AF  [21] -> ret stub
+	.long	StepRecord_NoAction	; F686AF  [21] -> ret stub
 	.long	SoftKeyCol6_StepRecordSub17	; F686B3  [22] -> 0xF6A1BB
 	.long	SoftKeyCol7_StepRecordSub17	; F686B7  [23] -> 0xF6A1B4
-	.long	DispatchTable_F674CE_Nop0	; F686BB  [24] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F686BF  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F686C3  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F686C7  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F686CB  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F686CF  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F686D3  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F686D7  [31] -> ret stub
+	.long	StepRecord_NoAction	; F686BB  [24] -> ret stub
+	.long	StepRecord_NoAction	; F686BF  [25] -> ret stub
+	.long	StepRecord_NoAction	; F686C3  [26] -> ret stub
+	.long	StepRecord_NoAction	; F686C7  [27] -> ret stub
+	.long	StepRecord_NoAction	; F686CB  [28] -> ret stub
+	.long	StepRecord_NoAction	; F686CF  [29] -> ret stub
+	.long	StepRecord_NoAction	; F686D3  [30] -> ret stub
+	.long	StepRecord_NoAction	; F686D7  [31] -> ret stub
 
 ; StepRecordSub18_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 18 -- StepRecord_SubScreenButtonTable/F67789
 ;   entry 18 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub18_ButtonTable[code & 0x1F].
@@ -153196,38 +153396,38 @@ StepRecordSub18_ButtonDispatch_Return:
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 StepRecordSub18_ButtonTable:
-	.long	DispatchTable_F674CE_Nop0	; F686F5  [0] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F686F9  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F686FD  [2] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68701  [3] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68705  [4] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68709  [5] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6870D  [6] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68711  [7] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68715  [8] -> ret stub
+	.long	StepRecord_NoAction	; F686F5  [0] -> ret stub
+	.long	StepRecord_NoAction	; F686F9  [1] -> ret stub
+	.long	StepRecord_NoAction	; F686FD  [2] -> ret stub
+	.long	StepRecord_NoAction	; F68701  [3] -> ret stub
+	.long	StepRecord_NoAction	; F68705  [4] -> ret stub
+	.long	StepRecord_NoAction	; F68709  [5] -> ret stub
+	.long	StepRecord_NoAction	; F6870D  [6] -> ret stub
+	.long	StepRecord_NoAction	; F68711  [7] -> ret stub
+	.long	StepRecord_NoAction	; F68715  [8] -> ret stub
 	.long	LcdKeyRow2_StepRecordSub18	; F68719  [9] -> 0xF68775
 	.long	LcdKeyRow3_StepRecordSub18	; F6871D  [10] -> 0xF6877E
-	.long	DispatchTable_F674CE_Nop0	; F68721  [11] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68725  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68729  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6872D  [14] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68731  [15] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68735  [16] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68739  [17] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6873D  [18] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68741  [19] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68745  [20] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68749  [21] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6874D  [22] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68751  [23] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68755  [24] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68759  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6875D  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68761  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68765  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68769  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6876D  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F68771  [31] -> ret stub
+	.long	StepRecord_NoAction	; F68721  [11] -> ret stub
+	.long	StepRecord_NoAction	; F68725  [12] -> ret stub
+	.long	StepRecord_NoAction	; F68729  [13] -> ret stub
+	.long	StepRecord_NoAction	; F6872D  [14] -> ret stub
+	.long	StepRecord_NoAction	; F68731  [15] -> ret stub
+	.long	StepRecord_NoAction	; F68735  [16] -> ret stub
+	.long	StepRecord_NoAction	; F68739  [17] -> ret stub
+	.long	StepRecord_NoAction	; F6873D  [18] -> ret stub
+	.long	StepRecord_NoAction	; F68741  [19] -> ret stub
+	.long	StepRecord_NoAction	; F68745  [20] -> ret stub
+	.long	StepRecord_NoAction	; F68749  [21] -> ret stub
+	.long	StepRecord_NoAction	; F6874D  [22] -> ret stub
+	.long	StepRecord_NoAction	; F68751  [23] -> ret stub
+	.long	StepRecord_NoAction	; F68755  [24] -> ret stub
+	.long	StepRecord_NoAction	; F68759  [25] -> ret stub
+	.long	StepRecord_NoAction	; F6875D  [26] -> ret stub
+	.long	StepRecord_NoAction	; F68761  [27] -> ret stub
+	.long	StepRecord_NoAction	; F68765  [28] -> ret stub
+	.long	StepRecord_NoAction	; F68769  [29] -> ret stub
+	.long	StepRecord_NoAction	; F6876D  [30] -> ret stub
+	.long	StepRecord_NoAction	; F68771  [31] -> ret stub
 
 ; LcdKeyRow2_StepRecordSub18: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub18_ButtonTable slot 0x09.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow2_StepRecordSub18:
@@ -153433,9 +153633,9 @@ sub_F687ED_Return:
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F688D0:
-	.long	DispatchTable_F674CE_Nop0	; F688D0  [0] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F688D4  [1] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F688D8  [2] -> ret stub
+	.long	StepRecord_NoAction	; F688D0  [0] -> ret stub
+	.long	StepRecord_NoAction	; F688D4  [1] -> ret stub
+	.long	StepRecord_NoAction	; F688D8  [2] -> ret stub
 	.long	sub_F6A2FF	; F688DC  [3] -> sub_F6A2FF
 
 ; --------------------------------------------------------------------------
@@ -153533,7 +153733,7 @@ StepRecordSub18_LcdKeyRow3:
 ; --------------------------------------------------------------------------
 ; StepRecord_MainLoopService: Run by MainTask_Loop every pass (T_StepRecord_MainLoopService, right after T_Seq_MainLoopService): while
 ;   STEP RECORD runs ((0x0E4E) bit 3, set by StepRecord_BeginSession, cleared by StepRecord_OnLeave) dispatches by track kind
-;   (0x0E63) & 3 through DispatchTable_F68972 -- kinds 1/2 sub_F68982, 3 sub_F689AD, 0 sub_F689E0 -- each acting only
+;   (0x0E63) & 3 through StepRecord_MainLoopService_TrackKindHandlers -- kinds 1/2 StepRecord_MainLoopService_SongOrMasterTrack, 3 StepRecord_MainLoopService_Kind3, 0 StepRecord_MainLoopService_Kind0 -- each acting only
 ;   when SeqBuf_Ring holds input (sub_F6C507 W = 0): kinds 1/2 consume it into the step entry (sub_F67418 ->
 ;   sub_F695B7) and refresh. Basis: caller + body. (notes/naming-pilot-2026-10-06/proposals_wave6_u.json)
 StepRecord_MainLoopService:		; <- T_StepRecord_MainLoopService
@@ -153544,7 +153744,7 @@ StepRecord_MainLoopService:		; <- T_StepRecord_MainLoopService
 	xor	h, h	; F6895E  xor H,H
 	sla	hl, 2	; F68960  sla 0x02,HL
 	push	xix	; F68963  push XIX
-	ld	xix, DispatchTable_F68972	; F68964  ld XIX,0x00f68972
+	ld	xix, StepRecord_MainLoopService_TrackKindHandlers	; F68964  ld XIX,0x00f68972
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F68969  ld XHL,(XIX+HL)
 	pop	xix	; F6896E  pop XIX
 	call	(xhl)	; F6896F  call T,XHL
@@ -153552,7 +153752,7 @@ StepRecord_MainLoopService_Return:
 	ret	; F68971  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F68972 -- 4 32-bit pointers, every one of them an address in
+; StepRecord_MainLoopService_TrackKindHandlers -- 4 32-bit pointers, every one of them an address in
 ;                         0x00F60000-0x00F6FFFF.  0 of the 4 entries are the
 ;                         module's own do-nothing stub 0xF675CB (a single
 ;                         0x0E byte, `ret`), leaving 3 distinct other
@@ -153571,61 +153771,74 @@ StepRecord_MainLoopService_Return:
 ;           --null`).
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
-DispatchTable_F68972:
-	.long	sub_F689E0	; F68972  [0] -> 0xF689E0
-	.long	sub_F68982	; F68976  [1] -> 0xF68982
-	.long	sub_F68982	; F6897A  [2] -> 0xF68982
-	.long	sub_F689AD	; F6897E  [3] -> 0xF689AD
+; StepRecord_MainLoopService_TrackKindHandlers: StepRecord_MainLoopService's switch on track kind (0x0E63)&3 while a
+;   session runs ((0x0E4E) bit 3): 1/2 (song or master track) the normal service, 0 and 3 their own arms. Basis: table
+;   index (track kind) + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_MainLoopService_TrackKindHandlers:
+	.long	StepRecord_MainLoopService_Kind0	; F68972  [0] -> 0xF689E0
+	.long	StepRecord_MainLoopService_SongOrMasterTrack	; F68976  [1] -> 0xF68982
+	.long	StepRecord_MainLoopService_SongOrMasterTrack	; F6897A  [2] -> 0xF68982
+	.long	StepRecord_MainLoopService_Kind3	; F6897E  [3] -> 0xF689AD
 
-sub_F68982:
+; StepRecord_MainLoopService_SongOrMasterTrack: StepRecord_MainLoopService_TrackKindHandlers[1, 2]: sub_F6C507 on
+;   SeqBuf_Ring; when it returns W = 0: sub_F67418 and, unless the screen is held, sub_F69CB4 / sub_F689F5. Basis:
+;   table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_MainLoopService_SongOrMasterTrack:
 	ld	xhl, SeqBuf_Ring	; F68982  ld XHL,0x00600a14
 	calr	sub_F6C507	; F68987  calr 0xf6c507
 	cp	w, 0:i3	; F6898A  cp W,0
-	jr	nz, sub_F68982_Return	; F6898C  jr NZ,0xf689ab
+	jr	nz, StepRecord_MainLoopService_SongOrMasterTrack_Return	; F6898C  jr NZ,0xf689ab
 	calr	sub_F67418	; F6898E  calr 0xf67418
 	calr	sub_F68982_Nop	; F68991  calr 0xf6b1e8
 	m_bit 0, MD16, UI_ScreenHoldState	; F68994  bit 0,(0x2092)
-	jr	nz, sub_F68982_Return2	; F68998  jr NZ,0xf689ac
+	jr	nz, StepRecord_MainLoopService_SongOrMasterTrack_Return2	; F68998  jr NZ,0xf689ac
 	m_bit 0, MD16, 0x1071	; F6899A  bit 0,(0x1071)
-	jr	z, sub_F68982_Skip	; F6899E  jr Z,0xf689a5
+	jr	z, StepRecord_MainLoopService_SongOrMasterTrack_Skip	; F6899E  jr Z,0xf689a5
 	m_and_mi8 MB16, 0x1071, 0xfe	; F689A0  and (0x1071),0xfe
-sub_F68982_Skip:
+StepRecord_MainLoopService_SongOrMasterTrack_Skip:
 	calr	sub_F69CB4	; F689A5  calr 0xf69cb4
 	calr	sub_F689F5	; F689A8  calr 0xf689f5
-sub_F68982_Return:
+StepRecord_MainLoopService_SongOrMasterTrack_Return:
 	ret	; F689AB  ret
-sub_F68982_Return2:
+StepRecord_MainLoopService_SongOrMasterTrack_Return2:
 	ret	; F689AC  ret
-sub_F689AD:
+; StepRecord_MainLoopService_Kind3: StepRecord_MainLoopService_TrackKindHandlers[3] (track kind 3, which no writer
+;   stores): when sub_F6C507 on SeqBuf_Ring returns W = 0: StepRecord_FlushSeqBufRing on sub-screen 0x12, else
+;   StepRecord_RedrawMeasureRows and the position marker. Basis: table index + body; cf.
+;   StepRecord_ButtonBySubScreen_Kind3. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_MainLoopService_Kind3:
 	ld	xhl, SeqBuf_Ring	; F689AD  ld XHL,0x00600a14
 	calr	sub_F6C507	; F689B2  calr 0xf6c507
 	cp	w, 0:i3	; F689B5  cp W,0
-	jr	nz, sub_F689AD_Return	; F689B7  jr NZ,0xf689de
+	jr	nz, StepRecord_MainLoopService_Kind3_Return	; F689B7  jr NZ,0xf689de
 	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x12	; F689B9  cp (0x0ef5),0x12
-	jr	nz, sub_F689AD_Skip	; F689BE  jr NZ,0xf689c5
+	jr	nz, StepRecord_MainLoopService_Kind3_Skip	; F689BE  jr NZ,0xf689c5
 	calr	StepRecord_FlushSeqBufRing	; F689C0  calr 0xf6ad30
-	jr	sub_F689AD_Return	; F689C3  jr T,0xf689de
-sub_F689AD_Skip:
+	jr	StepRecord_MainLoopService_Kind3_Return	; F689C3  jr T,0xf689de
+StepRecord_MainLoopService_Kind3_Skip:
 	calr	sub_F67418	; F689C5  calr 0xf67418
 	m_bit 0, MD16, UI_ScreenHoldState	; F689C8  bit 0,(0x2092)
-	jr	nz, sub_F689AD_Return2	; F689CC  jr NZ,0xf689df
+	jr	nz, StepRecord_MainLoopService_Kind3_Return2	; F689CC  jr NZ,0xf689df
 	calr	StepRecord_RedrawMeasureRows	; F689CE  calr 0xf6833e
 	calr	sub_F68982_Nop	; F689D1  calr 0xf6b1e8
 	m_bit 0, MD16, UI_ScreenHoldState	; F689D4  bit 0,(0x2092)
-	jr	nz, sub_F689AD_Return2	; F689D8  jr NZ,0xf689df
+	jr	nz, StepRecord_MainLoopService_Kind3_Return2	; F689D8  jr NZ,0xf689df
 	call	StepRecord_PaintPositionMarker_Call	; F689DA  call 0xf6d6d6
-sub_F689AD_Return:
+StepRecord_MainLoopService_Kind3_Return:
 	ret	; F689DE  ret
-sub_F689AD_Return2:
+StepRecord_MainLoopService_Kind3_Return2:
 	ret	; F689DF  ret
-sub_F689E0:
+; StepRecord_MainLoopService_Kind0: StepRecord_MainLoopService_TrackKindHandlers[0] (track kind 0, never stored by
+;   StepRecord_SetEntryAndTrackKind): when sub_F6C507 on SeqBuf_Ring returns W = 0, only clears (0x12C0). Basis: table
+;   index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_MainLoopService_Kind0:
 	ld	xhl, SeqBuf_Ring	; F689E0  ld XHL,0x00600a14
 	calr	sub_F6C507	; F689E5  calr 0xf6c507
 	cp	w, 0:i3	; F689E8  cp W,0
-	jr	nz, sub_F689E0_Return	; F689EA  jr NZ,0xf689f4
+	jr	nz, StepRecord_MainLoopService_Kind0_Return	; F689EA  jr NZ,0xf689f4
 	calr	sub_F68982_Nop	; F689EC  calr 0xf6b1e8
 	ld	(4800:16), 0	; F689EF  ld (0x12c0),0x00
-sub_F689E0_Return:
+StepRecord_MainLoopService_Kind0_Return:
 	ret	; F689F4  ret
 
 ; --------------------------------------------------------------------------
@@ -154512,7 +154725,7 @@ StepRecordSub00_LcdKeyRow4_Join:
 	and	hl, 3	; F68F92  and HL,0x0003
 	sla	hl, 2	; F68F96  sla 0x02,HL
 	push	xix	; F68F99  push XIX
-	ld	xix, DispatchTable_F68FB4	; F68F9A  ld XIX,0x00f68fb4
+	ld	xix, StepRecordSub00_LcdKeyRow4_TrackKindHandlers	; F68F9A  ld XIX,0x00f68fb4
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F68F9F  ld XHL,(XIX+HL)
 	pop	xix	; F68FA4  pop XIX
 	call	(xhl)	; F68FA5  call T,XHL
@@ -154523,7 +154736,7 @@ StepRecordSub00_LcdKeyRow4_Return:
 	ret	; F68FB3  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F68FB4 -- 4 32-bit pointers, every one of them an address in
+; StepRecordSub00_LcdKeyRow4_TrackKindHandlers -- 4 32-bit pointers, every one of them an address in
 ;                         0x00F60000-0x00F6FFFF.  2 of the 4 entries are the
 ;                         module's own do-nothing stub 0xF675CB (a single
 ;                         0x0E byte, `ret`), leaving 1 distinct other
@@ -154542,11 +154755,14 @@ StepRecordSub00_LcdKeyRow4_Return:
 ;           --null`).
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
-DispatchTable_F68FB4:
-	.long	DispatchTable_F674CE_Nop0	; F68FB4  [0] -> ret stub
+; StepRecordSub00_LcdKeyRow4_TrackKindHandlers: STEP RECORD ERS (StepRecordSub00_LcdKeyRow4)'s switch on track kind
+;   (0x0E63)&3 after an erase: 1/2 (song or master track) call sub_F69CB4, 0/3 nothing. Basis: table index (track
+;   kind) + entries. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecordSub00_LcdKeyRow4_TrackKindHandlers:
+	.long	StepRecord_NoAction	; F68FB4  [0] -> ret stub
 	.long	sub_F69CB4	; F68FB8  [1] -> sub_F69CB4
 	.long	sub_F69CB4	; F68FBC  [2] -> sub_F69CB4
-	.long	DispatchTable_F674CE_Nop0	; F68FC0  [3] -> ret stub
+	.long	StepRecord_NoAction	; F68FC0  [3] -> ret stub
 
 DispatchTable_F68FB4_Code_Skip:
 	calr	BStore_ReadByteAtSongPositionPlus1	; F68FC4  calr 0xf6b8f1
@@ -155429,20 +155645,20 @@ LcdKeyRow3_StepRecordSub02_Skip4:
 	ld	(3664:16), 255	; F69515  ld (0x0e50),0xff
 	calr	sub_F6C43C	; F6951A  calr 0xf6c43c
 	cp	w, 0:i3	; F6951D  cp W,0
-	jr	nz, sub_F69560_Skip	; F6951F  jr NZ,0xf69573
+	jr	nz, StepRecord_ShowKind3Page_Skip	; F6951F  jr NZ,0xf69573
 	ld	l, (3683:16)	; F69521  ld L,(0x0e63)
 	and	l, 3	; F69525  and L,0x03
 	xor	h, h	; F69528  xor H,H
 	sla	hl, 2	; F6952A  sla 0x02,HL
 	push	xix	; F6952D  push XIX
-	ld	xix, DispatchTable_F6953C	; F6952E  ld XIX,0x00f6953c
+	ld	xix, StepRecord_TrackKindPageEnterHandlers	; F6952E  ld XIX,0x00f6953c
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F69533  ld XHL,(XIX+HL)
 	pop	xix	; F69538  pop XIX
 	call	(xhl)	; F69539  call T,XHL
 	ret	; F6953B  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F6953C -- 4 32-bit pointers, every one of them an address in
+; StepRecord_TrackKindPageEnterHandlers -- 4 32-bit pointers, every one of them an address in
 ;                         0x00F60000-0x00F6FFFF.  1 of the 4 entries are the
 ;                         module's own do-nothing stub 0xF675CB (a single
 ;                         0x0E byte, `ret`), leaving 3 distinct other
@@ -155463,40 +155679,53 @@ LcdKeyRow3_StepRecordSub02_Skip4:
 ;           --null`).
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
-DispatchTable_F6953C:
-	.long	DispatchTable_F674CE_Nop0	; F6953C  [0] -> ret stub
-	.long	sub_F6954C	; F69540  [1] -> 0xF6954C
-	.long	sub_F69556	; F69544  [2] -> 0xF69556
-	.long	sub_F69560	; F69548  [3] -> 0xF69560
+; StepRecord_TrackKindPageEnterHandlers: STEP RECORD, after an entry is done (LcdKeyRow3_StepRecordSub02/Sub05 and
+;   sub_F6CB52_Arm): opens the track kind's page -- 1 song track sub-screen 0, 2 master track sub-screen 8, 3 sub-
+;   screen 15, 0 nothing. Basis: table index (track kind) + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_TrackKindPageEnterHandlers:
+	.long	StepRecord_NoAction	; F6953C  [0] -> ret stub
+	.long	StepRecord_ShowSongTrackPage	; F69540  [1] -> 0xF6954C
+	.long	StepRecord_ShowMasterTrackPage	; F69544  [2] -> 0xF69556
+	.long	StepRecord_ShowKind3Page	; F69548  [3] -> 0xF69560
 
-sub_F6954C:
+; StepRecord_ShowSongTrackPage: StepRecord_TrackKindPageEnterHandlers[1] (song track): UI_StepRecord_SubScreen := 0
+;   and its message line (sub_F6D70C). Basis: table index + body; cf. StepRecord_ReturnToSongTrackPage. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_ShowSongTrackPage:
 	ld	(UI_StepRecord_SubScreen:16), 0	; F6954C  ld (0x0ef5),0x00
 	call	sub_F6D70C	; F69551  call 0xf6d70c
 	ret	; F69555  ret
-sub_F69556:
+; StepRecord_ShowMasterTrackPage: StepRecord_TrackKindPageEnterHandlers[2] (master track): UI_StepRecord_SubScreen :=
+;   8 and its message line (sub_F6D57A). Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_ShowMasterTrackPage:
 	ld	(UI_StepRecord_SubScreen:16), 8	; F69556  ld (0x0ef5),0x08
 	call	sub_F6D57A	; F6955B  call 0xf6d57a
 	ret	; F6955F  ret
-sub_F69560:
+; StepRecord_ShowKind3Page: StepRecord_TrackKindPageEnterHandlers[3] (track kind 3, never stored):
+;   UI_StepRecord_SubScreen := 15, sub_F6D5B5, (0x12C0) := 0, MsgLine_TransportState_Plus4. Basis: table index + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_ShowKind3Page:
 	ld	(UI_StepRecord_SubScreen:16), 15	; F69560  ld (0x0ef5),0x0f
 	call	sub_F6D5B5	; F69565  call 0xf6d5b5
 	ld	(4800:16), 0	; F69569  ld (0x12c0),0x00
 	call	MsgLine_TransportState_Plus4	; F6956E  call 0xf6d608
 	ret	; F69572  ret
-sub_F69560_Skip:
+StepRecord_ShowKind3Page_Skip:
 	calr	BStore_ReadByteAtSongPosition	; F69573  calr 0xf6b8bd
 	cp	a, 129	; F69576  cp A,0x81
-	jr	z, sub_F69560_Skip2	; F69579  jr Z,0xf6958f
+	jr	z, StepRecord_ShowKind3Page_Skip2	; F69579  jr Z,0xf6958f
 	cp	a, 130	; F6957B  cp A,0x82
-	jr	z, sub_F69560_Skip2	; F6957E  jr Z,0xf6958f
+	jr	z, StepRecord_ShowKind3Page_Skip2	; F6957E  jr Z,0xf6958f
 	calr	BStore_ReadByteAtSongPositionPlus1	; F69580  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F69583  cp A,(0x0e53)
-	jr	ugt, sub_F69560_Skip2	; F69587  jr UGT,0xf6958f
+	jr	ugt, StepRecord_ShowKind3Page_Skip2	; F69587  jr UGT,0xf6958f
 	call	sub_F6741C	; F69589  call 0xf6741c
-	jr	sub_F69560_Join	; F6958D  jr T,0xf69592
-sub_F69560_Skip2:
+	jr	StepRecord_ShowKind3Page_Join	; F6958D  jr T,0xf69592
+StepRecord_ShowKind3Page_Skip2:
 	calr	StepRecord_ReturnToTrackKindPage	; F6958F  calr 0xf69c03
-sub_F69560_Join:
+StepRecord_ShowKind3Page_Join:
 	m_res 2, MD16, 0x0e4f	; F69592  res 2,(0x0e4f)
 	ret	; F69596  ret
 
@@ -156498,7 +156727,7 @@ StepRecord_ReturnToTrackKindPage:
 	xor	h, h	; F69C10  xor H,H
 	sla	hl, 2	; F69C12  sla 0x02,HL
 	push	xix	; F69C15  push XIX
-	ld	xix, DispatchTable_F69C24	; F69C16  ld XIX,0x00f69c24
+	ld	xix, StepRecord_TrackKindPageReturnHandlers	; F69C16  ld XIX,0x00f69c24
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F69C1B  ld XHL,(XIX+HL)
 	pop	xix	; F69C20  pop XIX
 	call	(xhl)	; F69C21  call T,XHL
@@ -156506,7 +156735,7 @@ StepRecord_ReturnToTrackKindPage_Return:
 	ret	; F69C23  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F69C24 -- 4 32-bit pointers, every one of them an address in
+; StepRecord_TrackKindPageReturnHandlers -- 4 32-bit pointers, every one of them an address in
 ;                         0x00F60000-0x00F6FFFF.  0 of the 4 entries are the
 ;                         module's own do-nothing stub 0xF675CB (a single
 ;                         0x0E byte, `ret`), leaving 4 distinct other
@@ -156525,43 +156754,56 @@ StepRecord_ReturnToTrackKindPage_Return:
 ;           --null`).
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
-DispatchTable_F69C24:
+; StepRecord_TrackKindPageReturnHandlers: StepRecord_ReturnToTrackKindPage's switch on track kind (0x0E63)&3: 0 the
+;   transport line, 1 song track (sub-screen 0), 2 master track (sub-screen 8), 3 sub-screen 15 -- each repaints only
+;   if the sub-screen changed. Basis: table index + body (its reader's header already reads the arms). (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_TrackKindPageReturnHandlers:
 	.long	MsgLine_TransportState_Plus10_Call	; F69C24  [0] -> 0xF69C67
-	.long	sub_F69C34	; F69C28  [1] -> 0xF69C34
-	.long	sub_F69C50	; F69C2C  [2] -> 0xF69C50
-	.long	sub_F69C71	; F69C30  [3] -> 0xF69C71
+	.long	StepRecord_ReturnToSongTrackPage	; F69C28  [1] -> 0xF69C34
+	.long	StepRecord_ReturnToMasterTrackPage	; F69C2C  [2] -> 0xF69C50
+	.long	StepRecord_ReturnToKind3Page	; F69C30  [3] -> 0xF69C71
 
-sub_F69C34:
+; StepRecord_ReturnToSongTrackPage: StepRecord_TrackKindPageReturnHandlers[1] (song track): (0x12AF) := 0xFF; on sub-
+;   screen 0 only rewrites its message line (sub_F6D710: measure, note/velocity, length), else sub-screen := 0 and
+;   sub_F6D70C. Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_ReturnToSongTrackPage:
 	ld	(4783:16), 255	; F69C34  ld (0x12af),0xff
 	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x00	; F69C39  cp (0x0ef5),0x00
-	jr	nz, sub_F69C34_Skip	; F69C3E  jr NZ,0xf69c46
+	jr	nz, StepRecord_ReturnToSongTrackPage_Skip	; F69C3E  jr NZ,0xf69c46
 	call	sub_F6D710	; F69C40  call 0xf6d710
-	jr	sub_F69C34_Return	; F69C44  jr T,0xf69c4f
-sub_F69C34_Skip:
+	jr	StepRecord_ReturnToSongTrackPage_Return	; F69C44  jr T,0xf69c4f
+StepRecord_ReturnToSongTrackPage_Skip:
 	ld	(UI_StepRecord_SubScreen:16), 0	; F69C46  ld (0x0ef5),0x00
 	call	sub_F6D70C	; F69C4B  call 0xf6d70c
-sub_F69C34_Return:
+StepRecord_ReturnToSongTrackPage_Return:
 	ret	; F69C4F  ret
-sub_F69C50:
+; StepRecord_ReturnToMasterTrackPage: StepRecord_TrackKindPageReturnHandlers[2] (master track): on sub-screen 8 blanks
+;   the message line, else sub-screen := 8 and sub_F6D57A. Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_ReturnToMasterTrackPage:
 	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x08	; F69C50  cp (0x0ef5),0x08
-	jr	nz, sub_F69C50_Skip	; F69C55  jr NZ,0xf69c5d
+	jr	nz, StepRecord_ReturnToMasterTrackPage_Skip	; F69C55  jr NZ,0xf69c5d
 	call	MsgLine_Blank	; F69C57  call 0xf6d57e
-	jr	sub_F69C50_Return	; F69C5B  jr T,0xf69c66
-sub_F69C50_Skip:
+	jr	StepRecord_ReturnToMasterTrackPage_Return	; F69C5B  jr T,0xf69c66
+StepRecord_ReturnToMasterTrackPage_Skip:
 	ld	(UI_StepRecord_SubScreen:16), 8	; F69C5D  ld (0x0ef5),0x08
 	call	sub_F6D57A	; F69C62  call 0xf6d57a
-sub_F69C50_Return:
+StepRecord_ReturnToMasterTrackPage_Return:
 	ret	; F69C66  ret
 MsgLine_TransportState_Plus10_Call:
 	ld	(4800:16), 0	; F69C67  ld (0x12c0),0x00
 	call	MsgLine_TransportState_Plus10	; F69C6C  call 0xf6d642
 	ret	; F69C70  ret
-sub_F69C71:
+; StepRecord_ReturnToKind3Page: StepRecord_TrackKindPageReturnHandlers[3] (track kind 3, never stored): sub-screen :=
+;   15 (sub_F6D5B5) if not already, MsgLine_PutMeasureDigits, MsgLine_TransportState_Plus4. Basis: table index + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_ReturnToKind3Page:
 	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0f	; F69C71  cp (0x0ef5),0x0f
-	jr	z, sub_F69C71_Skip	; F69C76  jr Z,0xf69c81
+	jr	z, StepRecord_ReturnToKind3Page_Skip	; F69C76  jr Z,0xf69c81
 	ld	(UI_StepRecord_SubScreen:16), 15	; F69C78  ld (0x0ef5),0x0f
 	call	sub_F6D5B5	; F69C7D  call 0xf6d5b5
-sub_F69C71_Skip:
+StepRecord_ReturnToKind3Page_Skip:
 	call	MsgLine_PutMeasureDigits	; F69C81  call 0xf6d5ba
 	ld	(4800:16), 0	; F69C85  ld (0x12c0),0x00
 	call	MsgLine_TransportState_Plus4	; F69C8A  call 0xf6d608
@@ -158961,7 +159203,7 @@ BStore_ResetAllocHeapBase:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; StepRecord_FlushSeqBufRing: Empties SeqBuf_Ring: T_SeqBufRing_Get (a consuming read) until it returns 0xFFFF.
-;   StepRecord_BeginSession runs it ('empties SeqBuf_Ring'); the kind-3 main-loop arm sub_F689AD runs it on sub-screen
+;   StepRecord_BeginSession runs it ('empties SeqBuf_Ring'); the kind-3 main-loop arm StepRecord_MainLoopService_Kind3 runs it on sub-screen
 ;   0x12 to discard queued input. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave7_x.json)
 StepRecord_FlushSeqBufRing:
 	ld	xhl, SeqBuf_Ring	; F6AD30  ld XHL,0x00600a14
@@ -159004,7 +159246,7 @@ Map_0EF5_F6AD56:
 	.byte	0x00, 0x00, 0x08, 0x0C	; F6AD56  [0..3]
 ; Nop_Ret_F6AD5A -- a lone `ret`: `calr 0xF6AD5A` at 0xF6AA06 and 0xF6AB78
 ;   land here.  The byte sits between two tables, the same one-byte do-nothing
-;   routine this module uses elsewhere (DispatchTable_F674CE_Nop0).
+;   routine this module uses elsewhere (StepRecord_NoAction).
 Nop_Ret_F6AD5A:
 	ret	; F6AD5A  ret
 ; Data_F6AD5B -- 4 bytes, 0x04 0x02 0x02 0x04.  No reader found: no 32-bit
@@ -161972,18 +162214,21 @@ sub_F6C237:
 	sla	hl, 2	; F6C255  sla 0x02,HL
 	extz	xhl	; F6C258  extz XHL
 	push	xix	; F6C25A  push XIX
-	ld	xix, DispatchTable_F6C272	; F6C25B  ld XIX,0x00f6c272
+	ld	xix, StepRecord_TrackKindMsgLineHandlers	; F6C25B  ld XIX,0x00f6c272
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F6C260  ld XHL,(XIX+HL)
 	pop	xix	; F6C265  pop XIX
 	call	(xhl)	; F6C266  call T,XHL
 	ret	; F6C268  ret
-sub_F6C269:
+; StepRecord_PutKind3MsgLine: StepRecord_TrackKindMsgLineHandlers[3] (track kind 3, never stored):
+;   MsgLine_PutMeasureDigits then MsgLine_TransportState_Plus4 -- the line StepRecord_ReturnToKind3Page also writes.
+;   Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_PutKind3MsgLine:
 	call	MsgLine_PutMeasureDigits	; F6C269  call 0xf6d5ba
 	call	MsgLine_TransportState_Plus4	; F6C26D  call 0xf6d608
 	ret	; F6C271  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F6C272 -- 4 32-bit pointers, every one of them an address in
+; StepRecord_TrackKindMsgLineHandlers -- 4 32-bit pointers, every one of them an address in
 ;                         0x00F60000-0x00F6FFFF.  0 of the 4 entries are the
 ;                         module's own do-nothing stub 0xF675CB (a single
 ;                         0x0E byte, `ret`), leaving 3 distinct other
@@ -162002,11 +162247,15 @@ sub_F6C269:
 ;           --null`).
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
-DispatchTable_F6C272:
+; StepRecord_TrackKindMsgLineHandlers: The STEP RECORD message line by track kind (0x0E63)&3, after sub_F6C237 sets
+;   the kind's sub-screen (Map_0EF5_F6C282): 0 MsgLine_TransportState_Plus10, 1/2 MsgLine_Rhythm, 3 the measure digits
+;   + transport state. Basis: table index (track kind) + entries. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+StepRecord_TrackKindMsgLineHandlers:
 	.long	MsgLine_TransportState_Plus10	; F6C272  [0] -> 0xF6D642
 	.long	MsgLine_Rhythm	; F6C276  [1] -> 0xF6D4E4
 	.long	MsgLine_Rhythm	; F6C27A  [2] -> 0xF6D4E4
-	.long	sub_F6C269	; F6C27E  [3] -> 0xF6C269
+	.long	StepRecord_PutKind3MsgLine	; F6C27E  [3] -> 0xF6C269
 
 ; --------------------------------------------------------------------------
 ; Map_0EF5_F6C282 -- 0xF6C282-0xF6C291, 16 bytes.  Converted 2026-09-25 (lane
@@ -162014,7 +162263,7 @@ DispatchTable_F6C272:
 ;   ... under the label sub_F6C282.
 ; Read by: sub_F6C237 -- A = (0x0E63), `ld XHL,0x00F6C282 / ld A,(XHL+A)`,
 ;   `ld (0x0EF5),A`, then it calls slot T_F431B0 and dispatches on
-;   (0x0E63) AND 3 through DispatchTable_F6C272.
+;   (0x0E63) AND 3 through StepRecord_TrackKindMsgLineHandlers.
 ; Entry count: 16 at most -- StepRecord_SaveCursorToSlot, called from 33 sites, begins at the
 ;   next byte.  Which (0x0E63) values reach this reader is not bounded here
 ;   (Map_0E63_F6ACA7 produces 1 and 2).
@@ -163404,7 +163653,7 @@ sub_F6CB52_Arm:
 	xor	h, h	; F6CB9C  xor H,H
 	sla	hl, 2	; F6CB9E  sla 0x02,HL
 	push	xix	; F6CBA1  push XIX
-	ld	xix, DispatchTable_F6953C	; F6CBA2  ld XIX,0x00f6953c
+	ld	xix, StepRecord_TrackKindPageEnterHandlers	; F6CBA2  ld XIX,0x00f6953c
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F6CBA7  ld XHL,(XIX+HL)
 	pop	xix	; F6CBAC  pop XIX
 	call	(xhl)	; F6CBAD  call T,XHL
@@ -163475,36 +163724,36 @@ StepRecordSub11_ButtonDispatch_Return2:
 StepRecordSub11_ButtonTable:
 	.long	SoftKeyCol1_StepRecordSub00	; F6CBEE  [0] -> 0xF678F8
 	.long	SoftKeyCol2_StepRecordSub11	; F6CBF2  [1] -> 0xF6CAE7
-	.long	DispatchTable_F674CE_Nop0	; F6CBF6  [2] -> ret stub
+	.long	StepRecord_NoAction	; F6CBF6  [2] -> ret stub
 	.long	SoftKeyCol4_StepRecordSub11	; F6CBFA  [3] -> 0xF6CB13
-	.long	DispatchTable_F674CE_Nop0	; F6CBFE  [4] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6CC02  [5] -> ret stub
+	.long	StepRecord_NoAction	; F6CBFE  [4] -> ret stub
+	.long	StepRecord_NoAction	; F6CC02  [5] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F6CC06  [6] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F6CC0A  [7] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F6CC0E  [8] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6CC12  [9] -> ret stub
+	.long	StepRecord_NoAction	; F6CC0E  [8] -> ret stub
+	.long	StepRecord_NoAction	; F6CC12  [9] -> ret stub
 	.long	LcdKeyRow3_StepRecordSub11	; F6CC16  [10] -> 0xF6CB6E
 	.long	sub_F6CB52_Arm	; F6CC1A  [11] -> 0xF6CB7E
-	.long	DispatchTable_F674CE_Nop0	; F6CC1E  [12] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6CC22  [13] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6CC26  [14] -> ret stub
+	.long	StepRecord_NoAction	; F6CC1E  [12] -> ret stub
+	.long	StepRecord_NoAction	; F6CC22  [13] -> ret stub
+	.long	StepRecord_NoAction	; F6CC26  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F6CC2A  [15] -> 0xF67696
-	.long	DispatchTable_F674CE_Nop0	; F6CC2E  [16] -> ret stub
+	.long	StepRecord_NoAction	; F6CC2E  [16] -> ret stub
 	.long	SoftKeyCol1_StepRecordSub00	; F6CC32  [17] -> 0xF678F8
 	.long	SoftKeyCol2_StepRecordSub11	; F6CC36  [18] -> 0xF6CAE7
-	.long	DispatchTable_F674CE_Nop0	; F6CC3A  [19] -> ret stub
+	.long	StepRecord_NoAction	; F6CC3A  [19] -> ret stub
 	.long	SoftKeyCol4_StepRecordSub11	; F6CC3E  [20] -> 0xF6CB13
-	.long	DispatchTable_F674CE_Nop0	; F6CC42  [21] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6CC46  [22] -> ret stub
+	.long	StepRecord_NoAction	; F6CC42  [21] -> ret stub
+	.long	StepRecord_NoAction	; F6CC46  [22] -> ret stub
 	.long	SoftKeyCol7_StepRecord	; F6CC4A  [23] -> 0xF6748D
 	.long	SoftKeyCol8_StepRecord	; F6CC4E  [24] -> 0xF6749D
-	.long	DispatchTable_F674CE_Nop0	; F6CC52  [25] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6CC56  [26] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6CC5A  [27] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6CC5E  [28] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6CC62  [29] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6CC66  [30] -> ret stub
-	.long	DispatchTable_F674CE_Nop0	; F6CC6A  [31] -> ret stub
+	.long	StepRecord_NoAction	; F6CC52  [25] -> ret stub
+	.long	StepRecord_NoAction	; F6CC56  [26] -> ret stub
+	.long	StepRecord_NoAction	; F6CC5A  [27] -> ret stub
+	.long	StepRecord_NoAction	; F6CC5E  [28] -> ret stub
+	.long	StepRecord_NoAction	; F6CC62  [29] -> ret stub
+	.long	StepRecord_NoAction	; F6CC66  [30] -> ret stub
+	.long	StepRecord_NoAction	; F6CC6A  [31] -> ret stub
 
 
 ; --------------------------------------------------------------------------
@@ -163683,7 +163932,7 @@ LcdKeyRow3_StepRecordSub05_Skip2:
 	xor	h, h	; F6CDEE  xor H,H
 	sla	hl, 2	; F6CDF0  sla 0x02,HL
 	push	xix	; F6CDF3  push XIX
-	ld	xix, DispatchTable_F6953C	; F6CDF4  ld XIX,0x00f6953c
+	ld	xix, StepRecord_TrackKindPageEnterHandlers	; F6CDF4  ld XIX,0x00f6953c
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F6CDF9  ld XHL,(XIX+HL)
 	pop	xix	; F6CDFE  pop XIX
 	call	(xhl)	; F6CDFF  call T,XHL
@@ -188081,7 +188330,7 @@ SmfOut_WriteLastWindowAndClose_Skip:
 ; Called from: in-module: 0xF77DAA
 ; Touches: (0x1193) (0x1194) (0x1195) (0x11AA) (0x11AB) (0x11AC) (0x126E)
 ;          (0x21D3) (0x21D7) (0x345C) +1 more  |  0x60A700 0x60AB00
-; Calls:   0xF752DF InputStream_OpenAndReadFirstBlock_Copy2 sub_F77F20 sub_F77F2A
+; Calls:   0xF752DF InputStream_OpenAndReadFirstBlock_Copy2 InputStream_Refill_Copy2 InputStream_RefillDone_Copy2
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -188181,9 +188430,9 @@ SmfWriteCopy_SetOutputWindow_Join:
 	ret	; F77EDA  ret
 	calr	InputStream_OpenAndReadFirstBlock_Copy2	; F77EDB  calr 0xf77ee7
 	ret	; F77EDE  ret
-	calr	sub_F77F20	; F77EDF  calr 0xf77f20
+	calr	InputStream_Refill_Copy2	; F77EDF  calr 0xf77f20
 	ret	; F77EE2  ret
-	calr	sub_F77F2A	; F77EE3  calr 0xf77f2a
+	calr	InputStream_RefillDone_Copy2	; F77EE3  calr 0xf77f2a
 	ret	; F77EE6  ret
 
 ; --------------------------------------------------------------------------
@@ -188220,7 +188469,7 @@ InputStream_OpenAndReadFirstBlock_Copy2_Skip:
 	ret	; F77F1F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F77F20
+; InputStream_Refill_Copy2
 ; Called from: in-module: 0xF77EDF
 ; Touches: (0x21E7)
 ; Calls:   T_DiskApi_ReadFileToWindow_Entry
@@ -188232,13 +188481,17 @@ InputStream_OpenAndReadFirstBlock_Copy2_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F77F20:
+; InputStream_Refill_Copy2: Disk_Flags |= 0x02 then T_DiskApi_ReadFileToWindow_Entry -- an exact copy of
+;   InputStream_Refill in the unreferenced SMF writer copy after SmfWriteCopy_SetOutputWindow, reached only through
+;   the veneer `calr / ret` at 0xF77EDF, which sits where copy D's veneer to InputStream_Refill_Copy sits (0xF77CF8).
+;   Basis: veneer position + body (exact copy) + twin. (notes/naming-pilot-2026-10-06/proposals_wave11_a11.json)
+InputStream_Refill_Copy2:
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F77F20  or (0x21e7),0x02
 	call	T_DiskApi_ReadFileToWindow_Entry	; F77F25  call 0xf425a8
 	ret	; F77F29  ret
 
 ; --------------------------------------------------------------------------
-; sub_F77F2A
+; InputStream_RefillDone_Copy2
 ; Called from: in-module: 0xF77EE3
 ; Touches: (0x10C5) (0x10C6) (0x10C7) (0x21D0) (0x21D1) (0x21D2) (0x21E7)
 ;          (0x2243) (0x2245)
@@ -188251,7 +188504,12 @@ sub_F77F20:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F77F2A:
+; InputStream_RefillDone_Copy2: Clears Disk_Flags bit 1 and returns W = 1 -- an exact copy of InputStream_RefillDone,
+;   reached only through the veneer at 0xF77EE3 (copy D's twin veneer at 0xF77CFC calls InputStream_RefillDone_Copy).
+;   The bytes after its ret (0xF77F32-0xF77F99, holding the labels sub_F77F2A_Skip / _Return) are a separate unreached
+;   copy of SmfOut_CreateFileWithFirstWindow. Basis: veneer position + body (exact copy) + twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_a11.json)
+InputStream_RefillDone_Copy2:
 	m_and_mi8 MB16, Disk_Flags, 0xfd	; F77F2A  and (0x21e7),0xfd
 	ld	w, 1:opc	; F77F2F  ld W,0x01
 	ret	; F77F31  ret

@@ -1,0 +1,1584 @@
+[
+ {
+  "old": "JumpTable_FA08BF",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_NoteKeyItemHandlers",
+  "header": "TEST page (screen 0x64, SX-WSA1R): soft keys 5-6 (the NOTE column) by ITEM cursor (0x26A7)&7: 0 TEST on/off, 1 MODE mono/poly, 2..5 the 1st..4th test note.\nBasis: table index (ITEM cursor, Descriptor9_FA1EBE 0..5) + the page's row text + each arm's operand.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60192 `add XBC,JumpTable_FA08BF` -- the reader in SoftKeyCols5_6_SystemTest",
+   "prom_a/wsa1_prom_a.s:60185 `ld c, (0x26a7:16)` -- reader of the NOTE-column table: selector = (0x26A7) & 7",
+   "prom_a/wsa1_prom_a.s:60189 `cp bc, 0x05:i3` -- bound 0..5 = the six TEST items",
+   "prom_a/wsa1_prom_a.s:59995 `m_and_mi8 MB16, 0x26a7, 0xf8` -- writer: Screen_TouchSensitivityOrTest_Enter clears the item cursor (bits 0-2) when the TEST screen is newly entered",
+   "prom_a/wsa1_prom_a.s:60119 `lda xbc, (Descriptor9_FA1EBE:24)` -- writer: SoftKeyCols1to4_SystemTest (soft keys 1-4, captioned ITEM up/down) steps the bit field described by Descriptor9_FA1EBE",
+   "prom_a/wsa1_prom_a.s:60123 `call T_EditValue_StepBitField` -- ... through EditValue_StepBitField on (0x26A7)",
+   "prom_a/wsa1_prom_a.s:63527 `.byte 0x00, 0x07, 0x00, 0x05, 0x00, 0x01, 0x01, 0x01, 0x00` -- Descriptor9_FA1EBE: mask 0x07, min 0, max 5 -- the ITEM cursor is (0x26A7) bits 0-2, 0..5",
+   "prom_a/wsa1_prom_a.s:67760 `.ascii \"ITEM\"` -- the TEST page's soft keys 1-4 caption: ITEM (with up/down glyphs 0x8D/0x8E)",
+   "prom_a/wsa1_prom_a.s:67718 `.ascii \"TEST\"` -- item 0 row: 'TEST :' (row 35)",
+   "prom_a/wsa1_prom_a.s:67724 `.ascii \"MODE\"` -- item 1 row: 'MODE :' (row 61)",
+   "prom_a/wsa1_prom_a.s:67736 `.ascii \"1st\"` -- items 2..5: rows '1st'..'4th' under the NOTE / VELOCITY heading",
+   "prom_a/wsa1_prom_a.s:67921 `.byte 0x02, 0x0f, 0xa7, 0x26, 0x08, 0x03, 0x20, 0xe2, 0x44, 0xfa, 0x00, 0x03, 0x00, 0x90, 0x05, 0x02` -- SystemTest_SplitNotesForDisplay_DL1 prints (0x26A7) bit 3 through OperandTable_FA44E2 (OFF/ON) and bit 4 through OperandTable_FA4E58 (MONO/POLY)",
+   "prom_a/wsa1_prom_a.s:63540 `.byte 0x00, 0x08, 0x00` -- Descriptor3_FA1EC7: bit mask 0x08 = TEST on/off",
+   "prom_a/wsa1_prom_a.s:63553 `.byte 0x00, 0x10, 0x00` -- Descriptor3_FA1ECA: bit mask 0x10 = MODE mono/poly",
+   "prom_a/wsa1_prom_a.s:63207 `.long SoftKeyCols5_6_SystemTest` -- HandlerTable23_SystemTest slots 4/5 = SoftKeyCol5/6 run the NOTE-column handler",
+   "prom_a/wsa1_prom_a.s:63209 `.long SoftKeyCols7_8_SystemTest` -- HandlerTable23_SystemTest slots 6/7 = SoftKeyCol7/8 run the VELOCITY-column handler",
+   "prom_a/wsa1_prom_a.s:67859 `.ascii \"NOTE\"` -- DL_NoteVelocity: 'NOTE' at col 23 (over soft keys 5-6) and 'VELOCITY' at col 32 (over keys 7-8)",
+   "prom_a/wsa1_prom_a.s:67827 `.ascii \"VALUE\"` -- DL_Value: 'VALUE' at col 28, spanning keys 5-8, shown for items 0/1"
+  ]
+ },
+ {
+  "old": "sub_FA08D7",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_NoteKeys_SetTestOnOff",
+  "header": "JumpTable_FA08BF[0] (ITEM 0, TEST): soft keys 5-6 set/clear (0x26A7) bit 3 (TEST OFF/ON) via EditValue_SetBit, then rebuild the note lists and repaint.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60215 `lda xbc, (Descriptor3_FA1EC7:24)` -- Descriptor3_FA1EC7 = mask 0x08",
+   "prom_a/wsa1_prom_a.s:60219 `call T_EditValue_SetBit` -- EditValue_SetBit on (0x26A7)"
+  ]
+ },
+ {
+  "old": "sub_FA08F0",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_NoteKeys_SetMonoPoly",
+  "header": "JumpTable_FA08BF[1] (ITEM 1, MODE): soft keys 5-6 set/clear (0x26A7) bit 4 (MONO/POLY) via EditValue_SetBit, then rebuild the note lists and repaint.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60225 `lda xbc, (Descriptor3_FA1ECA:24)` -- Descriptor3_FA1ECA = mask 0x10",
+   "prom_a/wsa1_prom_a.s:60229 `call T_EditValue_SetBit` -- EditValue_SetBit on (0x26A7)"
+  ]
+ },
+ {
+  "old": "sub_FA0909",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_StepFirstNote",
+  "header": "JumpTable_FA08BF[2] (ITEM 2, the first test note): steps the note byte (0x26A8, MIDI note + 1, 0 = empty) via EditValue_StepBitField (ByteTable9_FA1ECD, 0..0x80), then re-splits the notes, rebuilds the note lists and repaints.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60237 `lda xwa, (0x26a8:16)` -- the byte it steps: test note 1 of SystemTest_SplitNotesForDisplay's 0x26A8+2k array"
+  ]
+ },
+ {
+  "old": "sub_FA0925",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_StepSecondNote",
+  "header": "JumpTable_FA08BF[3] (ITEM 3, the second test note): steps the note byte (0x26AA, MIDI note + 1, 0 = empty) via EditValue_StepBitField (ByteTable9_FA1ECD, 0..0x80), then re-splits the notes, rebuilds the note lists and repaints.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60250 `lda xwa, (0x26aa:16)` -- the byte it steps: test note 2 of SystemTest_SplitNotesForDisplay's 0x26A8+2k array"
+  ]
+ },
+ {
+  "old": "sub_FA0940",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_StepThirdNote",
+  "header": "JumpTable_FA08BF[4] (ITEM 4, the third test note): steps the note byte (0x26AC, MIDI note + 1, 0 = empty) via EditValue_StepBitField (ByteTable9_FA1ECD, 0..0x80), then re-splits the notes, rebuilds the note lists and repaints.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60263 `lda xwa, (0x26ac:16)` -- the byte it steps: test note 3 of SystemTest_SplitNotesForDisplay's 0x26A8+2k array"
+  ]
+ },
+ {
+  "old": "sub_FA095B",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_StepFourthNote",
+  "header": "JumpTable_FA08BF[5] (ITEM 5, the fourth test note): steps the note byte (0x26AE, MIDI note + 1, 0 = empty) via EditValue_StepBitField (ByteTable9_FA1ECD, 0..0x80), then re-splits the notes, rebuilds the note lists and repaints.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60276 `lda xwa, (0x26ae:16)` -- the byte it steps: test note 4 of SystemTest_SplitNotesForDisplay's 0x26A8+2k array"
+  ]
+ },
+ {
+  "old": "JumpTable_FA09BD",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_VelocityKeyItemHandlers",
+  "header": "TEST page (screen 0x64, SX-WSA1R): soft keys 7-8 (the VELOCITY column) by ITEM cursor (0x26A7)&7: 0 TEST on/off, 1 MODE mono/poly, 2..5 the 1st..4th test velocity.\nBasis: table index (ITEM cursor) + the page's row text + each arm's operand; twin of SystemTest_NoteKeyItemHandlers.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60313 `add XBC,JumpTable_FA09BD` -- the reader in SoftKeyCols7_8_SystemTest",
+   "prom_a/wsa1_prom_a.s:60306 `ld c, (0x26a7:16)` -- selector (0x26A7) & 7, bound 5",
+   "prom_a/wsa1_prom_a.s:59995 `m_and_mi8 MB16, 0x26a7, 0xf8` -- writer: Screen_TouchSensitivityOrTest_Enter clears the item cursor (bits 0-2) when the TEST screen is newly entered",
+   "prom_a/wsa1_prom_a.s:60119 `lda xbc, (Descriptor9_FA1EBE:24)` -- writer: SoftKeyCols1to4_SystemTest (soft keys 1-4, captioned ITEM up/down) steps the bit field described by Descriptor9_FA1EBE",
+   "prom_a/wsa1_prom_a.s:60123 `call T_EditValue_StepBitField` -- ... through EditValue_StepBitField on (0x26A7)",
+   "prom_a/wsa1_prom_a.s:63527 `.byte 0x00, 0x07, 0x00, 0x05, 0x00, 0x01, 0x01, 0x01, 0x00` -- Descriptor9_FA1EBE: mask 0x07, min 0, max 5 -- the ITEM cursor is (0x26A7) bits 0-2, 0..5",
+   "prom_a/wsa1_prom_a.s:63207 `.long SoftKeyCols5_6_SystemTest` -- HandlerTable23_SystemTest slots 4/5 = SoftKeyCol5/6 run the NOTE-column handler",
+   "prom_a/wsa1_prom_a.s:63209 `.long SoftKeyCols7_8_SystemTest` -- HandlerTable23_SystemTest slots 6/7 = SoftKeyCol7/8 run the VELOCITY-column handler",
+   "prom_a/wsa1_prom_a.s:67859 `.ascii \"NOTE\"` -- DL_NoteVelocity: 'NOTE' at col 23 (over soft keys 5-6) and 'VELOCITY' at col 32 (over keys 7-8)",
+   "prom_a/wsa1_prom_a.s:67827 `.ascii \"VALUE\"` -- DL_Value: 'VALUE' at col 28, spanning keys 5-8, shown for items 0/1"
+  ]
+ },
+ {
+  "old": "JumpTable_FA09BD__FA09D5",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_VelocityKeys_SetTestOnOff",
+  "header": "JumpTable_FA09BD[0] (ITEM 0, TEST): soft keys 7-8 set/clear (0x26A7) bit 3 (TEST OFF/ON) via EditValue_SetBit, then rebuild the note lists and repaint.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60331 `lda xbc, (Descriptor3_FA1EC7:24)` -- Descriptor3_FA1EC7 = mask 0x08",
+   "prom_a/wsa1_prom_a.s:60335 `call T_EditValue_SetBit` -- EditValue_SetBit on (0x26A7)"
+  ]
+ },
+ {
+  "old": "sub_FA09EE",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_VelocityKeys_SetMonoPoly",
+  "header": "JumpTable_FA09BD[1] (ITEM 1, MODE): soft keys 7-8 set/clear (0x26A7) bit 4 (MONO/POLY) via EditValue_SetBit, then rebuild the note lists and repaint.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60341 `lda xbc, (Descriptor3_FA1ECA:24)` -- Descriptor3_FA1ECA = mask 0x10",
+   "prom_a/wsa1_prom_a.s:60345 `call T_EditValue_SetBit` -- EditValue_SetBit on (0x26A7)"
+  ]
+ },
+ {
+  "old": "sub_FA0A07",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_StepFirstVelocity",
+  "header": "JumpTable_FA09BD[2] (ITEM 2, the first test note's velocity): steps byte 0x26A9 via EditValue_StepBitField (ByteTable9_FA1ED6, 1..0x7F), then rebuilds the note lists and repaints.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60353 `lda xwa, (0x26a9:16)` -- the byte it steps: the velocity paired with note byte 0x26A8 (SystemTest_SplitNotesForDisplay_DL1 prints 0x26A9/AB/AD/AF with max 0x7F)"
+  ]
+ },
+ {
+  "old": "sub_FA0A22",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_StepSecondVelocity",
+  "header": "JumpTable_FA09BD[3] (ITEM 3, the second test note's velocity): steps byte 0x26AB via EditValue_StepBitField (ByteTable9_FA1ED6, 1..0x7F), then rebuilds the note lists and repaints.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60366 `lda xwa, (0x26ab:16)` -- the byte it steps: the velocity paired with note byte 0x26AA (SystemTest_SplitNotesForDisplay_DL1 prints 0x26A9/AB/AD/AF with max 0x7F)"
+  ]
+ },
+ {
+  "old": "sub_FA0A3D",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_StepThirdVelocity",
+  "header": "JumpTable_FA09BD[4] (ITEM 4, the third test note's velocity): steps byte 0x26AD via EditValue_StepBitField (ByteTable9_FA1ED6, 1..0x7F), then rebuilds the note lists and repaints.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60379 `lda xwa, (0x26ad:16)` -- the byte it steps: the velocity paired with note byte 0x26AC (SystemTest_SplitNotesForDisplay_DL1 prints 0x26A9/AB/AD/AF with max 0x7F)"
+  ]
+ },
+ {
+  "old": "sub_FA0A58",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_StepFourthVelocity",
+  "header": "JumpTable_FA09BD[5] (ITEM 5, the fourth test note's velocity): steps byte 0x26AF via EditValue_StepBitField (ByteTable9_FA1ED6, 1..0x7F), then rebuilds the note lists and repaints.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60392 `lda xwa, (0x26af:16)` -- the byte it steps: the velocity paired with note byte 0x26AE (SystemTest_SplitNotesForDisplay_DL1 prints 0x26A9/AB/AD/AF with max 0x7F)"
+  ]
+ },
+ {
+  "old": "JumpTable_FA0B13",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_ValueHeaderItemHandlers",
+  "header": "TEST page: picks the soft-key 5-8 heading by ITEM cursor (0x26A7)&7 -- items 0/1 (TEST, MODE) 'VALUE', items 2..5 (the test notes) 'NOTE' + 'VELOCITY'.\nBasis: table index + the two arms' display lists.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60454 `ld c, (0x26a7:16)` -- reader (callback posted by the TEST soft keys): selector (0x26A7) & 7",
+   "prom_a/wsa1_prom_a.s:60461 `add XBC,JumpTable_FA0B13` -- base JumpTable_FA0B13",
+   "prom_a/wsa1_prom_a.s:59995 `m_and_mi8 MB16, 0x26a7, 0xf8` -- writer: Screen_TouchSensitivityOrTest_Enter clears the item cursor (bits 0-2) when the TEST screen is newly entered",
+   "prom_a/wsa1_prom_a.s:60119 `lda xbc, (Descriptor9_FA1EBE:24)` -- writer: SoftKeyCols1to4_SystemTest (soft keys 1-4, captioned ITEM up/down) steps the bit field described by Descriptor9_FA1EBE",
+   "prom_a/wsa1_prom_a.s:60123 `call T_EditValue_StepBitField` -- ... through EditValue_StepBitField on (0x26A7)",
+   "prom_a/wsa1_prom_a.s:63527 `.byte 0x00, 0x07, 0x00, 0x05, 0x00, 0x01, 0x01, 0x01, 0x00` -- Descriptor9_FA1EBE: mask 0x07, min 0, max 5 -- the ITEM cursor is (0x26A7) bits 0-2, 0..5"
+  ]
+ },
+ {
+  "old": "sub_FA0B2B",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_ShowValueHeader",
+  "header": "JumpTable_FA0B13[0,1] (items TEST / MODE): if the NOTE/VELOCITY heading is up ((0x2902) bit 1) erases it, draws 'VALUE' (DL_Value) and clears the bit.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60480 `and C,0x02` -- tests (0x2902) bit 1",
+   "prom_a/wsa1_prom_a.s:60487 `lda xwa, (DL_Value:24)` -- start DL_Value (end DL_NoteVelocity): draws 'VALUE'",
+   "prom_a/wsa1_prom_a.s:60490 `and (XIX),0xfd` -- clears bit 1"
+  ]
+ },
+ {
+  "old": "sub_FA0B51",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SystemTest_ShowNoteVelocityHeader",
+  "header": "JumpTable_FA0B13[2..5] (the four test-note items): unless already up ((0x2902) bit 1) erases the heading area, draws 'NOTE' / 'VELOCITY' (DL_NoteVelocity) and sets the bit.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:60494 `and C,0x02` -- tests (0x2902) bit 1",
+   "prom_a/wsa1_prom_a.s:60501 `lda xwa, (DL_NoteVelocity:24)` -- start DL_NoteVelocity: draws 'NOTE' / 'VELOCITY'",
+   "prom_a/wsa1_prom_a.s:60504 `m_or_mi8 MBI+r4, 0, 0x02` -- sets bit 1"
+  ]
+ },
+ {
+  "old": "SeqEvt_SelectCtrlEventSlot_JumpTable_FAF410",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SeqEvt_SelectCtrlEventSlot_StatusHandlers",
+  "header": "SeqEvt_SelectCtrlEventSlot's switch on the 0xDn event status & 3 (D0 channel pressure, D1 modulation, D2 pitch bend, D3 expression): each arm loads the event's slot byte and joins the part-validity search.\nBasis: table index (status, the SeqBuf_Put*Event codes) + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:87529 `ld XIX,SeqEvt_SelectCtrlEventSlot_JumpTable_FAF410` -- the reader",
+   "prom_a/wsa1_prom_a.s:87527 `and L,0x03` -- selector = status byte (0x60F308) & 3",
+   "prom_a/wsa1_prom_a.s:87308 `; SeqEvt_ApplyCtrlEvent -- playback of a 0xDn sequencer event: validate its slot, then dispatch on status & 3 -- D0 channel pressure, D1 modulation, D2 pitch bend, D3 expression` -- SeqEvt_ApplyCtrlEvent dispatches the same (0x60F308)&3: D0 channel pressure, D1 modulation, D2 pitch bend, D3 expression",
+   "prom_a/wsa1_prom_a.s:86706 `ld a, 0xd0:opc` -- writer of the status: SeqBuf_PutChanPressureEvent records {0xD0, tick, value, slot}",
+   "prom_a/wsa1_prom_a.s:86676 `ld a, 0xd1:opc` -- SeqBuf_PutModulationEvent records {0xD1, tick, value, slot}",
+   "prom_a/wsa1_prom_a.s:86660 `ld a, 0xd2:opc` -- SeqBuf_PutPitchBendEvent records {0xD2, tick, LSB, MSB, slot} -- slot one byte later",
+   "prom_a/wsa1_prom_a.s:86690 `ld a, 0xd3:opc` -- SeqBuf_PutExpressionEvent records {0xD3, tick, value, slot}"
+  ]
+ },
+ {
+  "old": "sub_FAF420",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SeqEvt_SelectChanPressureSlot",
+  "header": "SeqEvt_SelectCtrlEventSlot_StatusHandlers[D0 & 3] (channel pressure event): L = the slot, (0x60F30B), byte +3; then the shared search accepts it only if the slot's part is 0..0x1F.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:87553 `ld l, (0x60f30b:24)` -- the slot byte it loads"
+  ]
+ },
+ {
+  "old": "sub_FAF431",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SeqEvt_SelectModulationSlot",
+  "header": "SeqEvt_SelectCtrlEventSlot_StatusHandlers[D1 & 3] (modulation event): L = the slot, (0x60F30B), byte +3; then the shared search accepts it only if the slot's part is 0..0x1F.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:87570 `ld l, (0x60f30b:24)` -- the slot byte it loads"
+  ]
+ },
+ {
+  "old": "sub_FAF442",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SeqEvt_SelectPitchBendSlot",
+  "header": "SeqEvt_SelectCtrlEventSlot_StatusHandlers[D2 & 3] (pitch bend event): L = the slot, (0x60F30C), byte +4 (two data bytes); then the shared search accepts it only if the slot's part is 0..0x1F.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:87587 `ld l, (0x60f30c:24)` -- the slot byte it loads"
+  ]
+ },
+ {
+  "old": "sub_FAF453",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SeqEvt_SelectExpressionSlot",
+  "header": "SeqEvt_SelectCtrlEventSlot_StatusHandlers[D3 & 3] (expression event): L = the slot, (0x60F30B), byte +3; then the shared search accepts it only if the slot's part is 0..0x1F.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:87604 `ld l, (0x60f30b:24)` -- the slot byte it loads"
+  ]
+ },
+ {
+  "old": "SeqEvt_ApplyCtrlEvent_JumpTable_FAF16C",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "SeqEvt_ApplyCtrlEvent_StatusHandlers",
+  "header": "SeqEvt_ApplyCtrlEvent's switch on the 0xDn event status & 3: SeqEvt_ShadowChanPressure / ShadowModulation / ShadowPitchBend / ShadowExpression.\nBasis: table index (status) + its four already-named arms.",
+  "basis": "table index + entries",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:87318 `ld XIX,SeqEvt_ApplyCtrlEvent_JumpTable_FAF16C` -- the reader, index (0x60F308) & 3",
+   "prom_a/wsa1_prom_a.s:86706 `ld a, 0xd0:opc` -- writer of the status: SeqBuf_PutChanPressureEvent records {0xD0, tick, value, slot}",
+   "prom_a/wsa1_prom_a.s:86676 `ld a, 0xd1:opc` -- SeqBuf_PutModulationEvent records {0xD1, tick, value, slot}",
+   "prom_a/wsa1_prom_a.s:86660 `ld a, 0xd2:opc` -- SeqBuf_PutPitchBendEvent records {0xD2, tick, LSB, MSB, slot} -- slot one byte later",
+   "prom_a/wsa1_prom_a.s:86690 `ld a, 0xd3:opc` -- SeqBuf_PutExpressionEvent records {0xD3, tick, value, slot}"
+  ]
+ },
+ {
+  "old": "JumpTable_FAB8B4",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "List2030_PartFieldHandlers",
+  "header": "List2030_Part00to1F_Dispatch's switch on the record CLASS (0x60F088), the byte index 0..11 in a part's first record: 0 PROGRAM CHANGE & BANK, 3 VOLUME, 5-7 effect sends, 8 PAN, 9-11 tunings.\nBasis: table index (record byte, the SysEx descriptors and MidiOut_ParamClassTable) + its named arms.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:81138 `add XBC,JumpTable_FAB8B4` -- the reader",
+   "prom_a/wsa1_prom_a.s:81132 `ld bc, (0x60f088:24)` -- selector = (0x60F088), the record CLASS = byte index in the part's first record",
+   "prom_a/wsa1_prom_a.s:81135 `cp BC,0x000b` -- bound 0..11",
+   "prom_a/wsa1_prom_a.s:72752 `.long MidiOut_ProgramChange` -- MidiOut_ParamClassTable[0], same class byte: PROGRAM CHANGE",
+   "prom_a/wsa1_prom_a.s:72756 `.long MidiIn_NullHandler` -- MidiOut_ParamClassTable[4] is the null handler: class 4 has no MIDI meaning"
+  ]
+ },
+ {
+  "old": "sub_FAB8E4",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "List2030_PartProgramChange_Apply_Call",
+  "header": "List2030_PartFieldHandlers[0] (record byte 0, PROGRAM CHANGE & BANK): `calr` the class-0 apply routine (SoundSel_ClampToProgramAndBank, then the part's sound bytes) and `jr` to the shared ret -- the shape of List2030_PartVolume_Apply_Call.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:81197 `calr sub_FAB915` -- its body: calr to the class-0 routine",
+   "prom_a/wsa1_prom_a.s:81262 `calr SoundSel_ClampToProgramAndBank` -- that routine calls SoundSel_ClampToProgramAndBank",
+   "prom_a/wsa1_prom_a.s:81290 `ld (XIY+0x1b),C` -- and writes the part's second-record +0x1B (the sound bytes, cf. CombiEditMixer_DrawSound)"
+  ]
+ },
+ {
+  "old": "sub_FAB8EE",
+  "verdict": "refuse",
+  "why_refused": "class 4 = byte 4 of the part's first record, and that byte has no SysEx descriptor (offsets 3, 5, 6.. are described, 4 is not) and MidiOut_ParamClassTable[4] is the null handler, so what the byte (and this arm) is is not established; the body (masks 0xB7 / 0x40 on (0x60F089), sub_FAB253 / sub_FAB410) does not say it either",
+  "new": "",
+  "header": "",
+  "basis": "table index not understood for this slot",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:81205 `calr sub_FABA08` -- calr sub_FABA08",
+   "prom_a/wsa1_prom_a.s:72756 `.long MidiIn_NullHandler` -- MidiOut_ParamClassTable[4] is the null handler: class 4 has no MIDI meaning"
+  ]
+ },
+ {
+  "old": "JumpTable_FAC326",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "Ctrl_CookedCellNumberHandlers",
+  "header": "Ctrl_CookedCellForNumber's switch on parameter number - 0xB1 (0xB1..0xBD): each arm loads XIY = that number's cooked control cell; numbers with no cell of their own take Ctrl_CookedCellFor_Default.\nBasis: table index (the reader's `sub BC,0xB1`) + its named arms.",
+  "basis": "table index + entries",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:82457 `sub BC,0x00b1` -- index = number - 0xB1",
+   "prom_a/wsa1_prom_a.s:82461 `add XBC,JumpTable_FAC326` -- the reader"
+  ]
+ },
+ {
+  "old": "JumpTable_FAC326_Code_Skip",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "Ctrl_CookedCellFor_Default",
+  "header": "Ctrl_CookedCellNumberHandlers' default arm (numbers 0xB2, 0xB3, 0xB5..0xB7, and out-of-range): XIY = 0x24F5, the shared cooked cell, then Ctrl_CookedCellForNumber's unlk/ret.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:82536 `lda xiy, (0x24f5:16)` -- lda XIY,0x24F5",
+   "prom_a/wsa1_prom_a.s:82459 `jrl ugt, JumpTable_FAC326_Code_Skip` -- also the out-of-range target"
+  ]
+ },
+ {
+  "old": "JumpTable_FBD25F",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CombiEditSound_PageTextHandlers",
+  "header": "COMBINATION EDIT INTERNAL SOUND / MIDI SOUND pages: draws the static text of page CombiEditSound_PageIndex (0..5, PtrTable_F1AFBD's order) on layer 0; then (0x2768) := CombiEdit_Page.\nBasis: table index + the display lists each arm runs.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:107241 `add XWA,JumpTable_FBD25F` -- the reader, bound 5",
+   "prom_a/wsa1_prom_a.s:107098 `; CombiEditSound_PageIndex: A = the INTERNAL SOUND page painter's index for the screen and CombiEdit_Page: screens 0x37 / 0xB4 pages 0 / 1 / 2` -- selector = CombiEditSound_PageIndex: screens 0x37/0xB4 pages 0/1/2 -> 0/1/2, 0xB5 pages 0/1 -> 3/4, 0x38 pages 0/1/2 -> 5/3/4",
+   "prom_b/wsa1_prom_b.s:51826 `.long CombiEditSound_PaintLevelsPage` -- PtrTable_F1AFBD, indexed by the same value: 0 Levels, 1 ControllerFilter, 2 AssignAndInputFilter, 3 MidiOut, 4 MidiOutFilter, 5 MultipleMessages",
+   "prom_a/wsa1_prom_a.s:106753 `lda xbc, (.LFBD222:24)` -- writer side: ScreenEnter_CombiEditInternalSound posts the page-text callback when CombiEdit_Page differs from (0x2768)",
+   "prom_a/wsa1_prom_a.s:106766 `lda xbc, (.LFBD302:24)` -- ... and the row-cursor callback when CombiEdit_Row differs from (0x276A)"
+  ]
+ },
+ {
+  "old": "sub_FBD277",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CombiEditSound_DrawLevelsPageText",
+  "header": "CombiEditSound_PageTextHandlers[0]: runs the page-0 display lists on layer 0 -- PAGE1/3 INTERNAL SOUND: SOUND, VOLUME, EFFECT1 SEND, PAN ... BEND RANGE, SUB OUT.\nBasis: table index + body (display-list text).",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:107269 `lda xwa, (DL_InternalSound_F18CDD:24)` -- the display-list range it draws (start operand)"
+  ]
+ },
+ {
+  "old": "sub_FBD286",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CombiEditSound_DrawControllerFilterPageText",
+  "header": "CombiEditSound_PageTextHandlers[1]: runs the page-1 display lists on layer 0 -- PAGE2/3 INTERNAL SOUND: PITCH BEND, MODULATION1/2, R.T.CREAT/CTRL X/Y, HOLD, CTRL.PEDAL, AFTER TOUCH.\nBasis: table index + body (display-list text).",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:107275 `lda xwa, (DL_InternalSound_F18DBD:24)` -- the display-list range it draws (start operand)"
+  ]
+ },
+ {
+  "old": "sub_FBD294",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CombiEditSound_DrawAssignAndInputFilterPageText",
+  "header": "CombiEditSound_PageTextHandlers[2]: runs the page-2 display lists on layer 0 -- PAGE3/3 INTERNAL SOUND: MONOPHONIC, KEY SCALING, VELOCITY OFFSET, PROGRAM CNG / BANK SELECT / VOLUME MIDI IN.\nBasis: table index + body (display-list text).",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:107281 `lda xwa, (DL_BankSelectMidiIn:24)` -- the display-list range it draws (start operand)"
+  ]
+ },
+ {
+  "old": "sub_FBD2A2",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CombiEditSound_DrawMidiOutPageText",
+  "header": "CombiEditSound_PageTextHandlers[3] (the MIDI OUT FILTER page 1 -- screen 0xB5 page 0 or 0x38 page 1): BANK SELECT, PROG CHANGE, VOLUME, PAN, EFFECT DEPTH, MIDI OUT KEY TRANSPOSE, titled 'MIDI OUT FILTER PAGE1/2' (0xB5) or 'MIDI SOUND PAGE2/3' (0x38).\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:107285 `m_cp_mi8 MB16, UI_ScreenId, 0x38` -- screen 0x38 picks the other title range",
+   "prom_a/wsa1_prom_a.s:107289 `lda xwa, (DL_MidiOutFilter_F18F36:24)` -- 0xB5: DL_MidiOutFilter_F18F36 ('MIDI OUT FILTER PAGE1/2' + the field labels)",
+   "prom_a/wsa1_prom_a.s:107295 `lda xwa, (DL_EffectDepth:24)` -- 0x38: DL_EffectDepth (field labels + 'MIDI SOUND PAGE2/3')"
+  ]
+ },
+ {
+  "old": "sub_FBD2C5",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CombiEditSound_DrawMidiOutFilterPageText",
+  "header": "CombiEditSound_PageTextHandlers[4] (MIDI OUT FILTER page 2 -- screen 0xB5 page 1 or 0x38 page 2): PITCH BEND, MODULATION1/2, R.T.CREAT/CTRL X/Y, HOLD, CTRL.PEDAL, AFTER TOUCH, titled 'MIDI OUT FILTER PAGE2/2' or 'MIDI SOUND PAGE3/3'.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:107299 `m_cp_mi8 MB16, UI_ScreenId, 0x38` -- screen 0x38 picks the other title range",
+   "prom_a/wsa1_prom_a.s:107303 `lda xwa, (DL_MidiOutFilter_F190E9:24)` -- 0xB5: DL_MidiOutFilter_F190E9",
+   "prom_a/wsa1_prom_a.s:107309 `lda xwa, (DL_Modulation1:24)` -- 0x38: DL_Modulation1"
+  ]
+ },
+ {
+  "old": "JumpTable_FBD320",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CombiEditSound_PageRowCursorHandlers",
+  "header": "COMBINATION EDIT INTERNAL SOUND / MIDI SOUND pages: moves the row highlight of page CombiEditSound_PageIndex (0..5) -- erase rect at old row (0x276A), fill rect at CombiEdit_Row, through that page's IndexMap -- then (0x276A) := CombiEdit_Row.\nBasis: table index + the arms' display lists.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:107332 `add XWA,JumpTable_FBD320` -- the reader, bound 5",
+   "prom_a/wsa1_prom_a.s:107398 `ld (0x276a:16), (CombiEdit_Row:16)` -- (0x276A) := CombiEdit_Row afterwards",
+   "prom_a/wsa1_prom_a.s:107098 `; CombiEditSound_PageIndex: A = the INTERNAL SOUND page painter's index for the screen and CombiEdit_Page: screens 0x37 / 0xB4 pages 0 / 1 / 2` -- selector = CombiEditSound_PageIndex: screens 0x37/0xB4 pages 0/1/2 -> 0/1/2, 0xB5 pages 0/1 -> 3/4, 0x38 pages 0/1/2 -> 5/3/4",
+   "prom_b/wsa1_prom_b.s:51826 `.long CombiEditSound_PaintLevelsPage` -- PtrTable_F1AFBD, indexed by the same value: 0 Levels, 1 ControllerFilter, 2 AssignAndInputFilter, 3 MidiOut, 4 MidiOutFilter, 5 MultipleMessages",
+   "prom_a/wsa1_prom_a.s:106753 `lda xbc, (.LFBD222:24)` -- writer side: ScreenEnter_CombiEditInternalSound posts the page-text callback when CombiEdit_Page differs from (0x2768)",
+   "prom_a/wsa1_prom_a.s:106766 `lda xbc, (.LFBD302:24)` -- ... and the row-cursor callback when CombiEdit_Row differs from (0x276A)",
+   "prom_b/wsa1_prom_b.s:48388 `.byte 0x0f, 0x00, 0x1b` -- DL_F19481: op 08 on (0x276A) with swi 7 0x1B (EraseRect), then op 03 on (0x2769) = CombiEdit_Row with 0x05 (FillRect)"
+  ]
+ },
+ {
+  "old": "sub_FBD338",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CombiEditSound_MoveLevelsPageRowCursor",
+  "header": "CombiEditSound_PageRowCursorHandlers[0] (PtrTable_F1AFBD[0]'s page): runs that page's row-highlight list (erase old row (0x276A), fill CombiEdit_Row) with its own row-rectangle IndexMap.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:107360 `lda xbc, (IndexMap_F19497:24)` -- the page's IndexMap (row rectangles)"
+  ]
+ },
+ {
+  "old": "sub_FBD346",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CombiEditSound_MoveControllerFilterPageRowCursor",
+  "header": "CombiEditSound_PageRowCursorHandlers[1] (PtrTable_F1AFBD[1]'s page): runs that page's row-highlight list (erase old row (0x276A), fill CombiEdit_Row) with its own row-rectangle IndexMap.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:107366 `lda xbc, (IndexMap_F1952D:24)` -- the page's IndexMap (row rectangles)"
+  ]
+ },
+ {
+  "old": "sub_FBD354",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CombiEditSound_MoveAssignAndInputFilterPageRowCursor",
+  "header": "CombiEditSound_PageRowCursorHandlers[2] (PtrTable_F1AFBD[2]'s page): runs that page's row-highlight list (erase old row (0x276A), fill CombiEdit_Row) with its own row-rectangle IndexMap.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:107372 `lda xbc, (IndexMap_F195C3:24)` -- the page's IndexMap (row rectangles)"
+  ]
+ },
+ {
+  "old": "sub_FBD362",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CombiEditSound_MoveMidiOutPageRowCursor",
+  "header": "CombiEditSound_PageRowCursorHandlers[3] (PtrTable_F1AFBD[3]'s page): runs that page's row-highlight list (erase old row (0x276A), fill CombiEdit_Row) with its own row-rectangle IndexMap.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:107378 `lda xbc, (IndexMap_F19619:24)` -- the page's IndexMap (row rectangles)"
+  ]
+ },
+ {
+  "old": "sub_FBD370",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CombiEditSound_MoveMidiOutFilterPageRowCursor",
+  "header": "CombiEditSound_PageRowCursorHandlers[4] (PtrTable_F1AFBD[4]'s page): runs that page's row-highlight list (erase old row (0x276A), fill CombiEdit_Row) with its own row-rectangle IndexMap.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:107384 `lda xbc, (IndexMap_F1966F:24)` -- the page's IndexMap (row rectangles)"
+  ]
+ },
+ {
+  "old": "sub_FBD37E",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CombiEditSound_MoveMultipleMessagesPageRowCursor",
+  "header": "CombiEditSound_PageRowCursorHandlers[5] (PtrTable_F1AFBD[5]'s page): runs that page's row-highlight list (erase old row (0x276A), fill CombiEdit_Row) with its own row-rectangle IndexMap.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:107390 `lda xbc, (IndexMap_F19705:24)` -- the page's IndexMap (row rectangles)"
+  ]
+ },
+ {
+  "old": "JumpTable_FD70C5",
+  "verdict": "refuse",
+  "why_refused": "the index is controller number n-2 of SOUND EDIT CONTROLLER page 2 (normal sound), but nothing establishes which controller each n (1..9) is -- the page's controller-name list has not been located",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:143963 `; SoundEditControllerPage2_GetRecordParam: (n, &p): p := the first tone parameter of CONTROLLER page 2 controller n's` -- index = controller number n - 2 (n = 1..9) on CONTROLLER page 2; which controller each n is, is not established",
+   "prom_a/wsa1_prom_a.s:143981 `dec 2,BC` -- dec 2,BC / cp 7: index n-2",
+   "prom_a/wsa1_prom_a.s:143976 `m_cp_mi8 MBD+r6, 0xfe, 0x00` -- (0x27F5) != 0 (drum kit) takes the other table"
+  ]
+ },
+ {
+  "old": "JumpTable_FD710A",
+  "verdict": "refuse",
+  "why_refused": "same as JumpTable_FD70C5 for a drum kit; the controller names for n are not established",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:143963 `; SoundEditControllerPage2_GetRecordParam: (n, &p): p := the first tone parameter of CONTROLLER page 2 controller n's` -- index = controller number n - 2 (n = 1..9) on CONTROLLER page 2; which controller each n is, is not established",
+   "prom_a/wsa1_prom_a.s:143981 `dec 2,BC` -- dec 2,BC / cp 7: index n-2",
+   "prom_a/wsa1_prom_a.s:143976 `m_cp_mi8 MBD+r6, 0xfe, 0x00` -- (0x27F5) != 0 (drum kit) takes the other table"
+  ]
+ },
+ {
+  "old": "sub_FD70E5",
+  "verdict": "refuse",
+  "why_refused": "one-instruction stub `p := 0x20`; it serves DIFFERENT controller numbers in the two tables (e.g. sub_FD712F is n=2 for a sound and n=3 for a drum kit), and the controller names for n are not established",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:144012 `ld (XIX),0x20` -- its whole body"
+  ]
+ },
+ {
+  "old": "sub_FD70EB",
+  "verdict": "refuse",
+  "why_refused": "one-instruction stub `p := 0x2E`; it serves DIFFERENT controller numbers in the two tables (e.g. sub_FD712F is n=2 for a sound and n=3 for a drum kit), and the controller names for n are not established",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:144015 `ld (XIX),0x2e` -- its whole body"
+  ]
+ },
+ {
+  "old": "sub_FD712F",
+  "verdict": "refuse",
+  "why_refused": "one-instruction stub `p := 0x17`; it serves DIFFERENT controller numbers in the two tables (e.g. sub_FD712F is n=2 for a sound and n=3 for a drum kit), and the controller names for n are not established",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:144052 `ld (XIX),0x17` -- its whole body"
+  ]
+ },
+ {
+  "old": "sub_FD7134",
+  "verdict": "refuse",
+  "why_refused": "one-instruction stub `p := 0x1A`; it serves DIFFERENT controller numbers in the two tables (e.g. sub_FD712F is n=2 for a sound and n=3 for a drum kit), and the controller names for n are not established",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:144055 `ld (XIX),0x1a` -- its whole body"
+  ]
+ },
+ {
+  "old": "sub_FD7139",
+  "verdict": "refuse",
+  "why_refused": "one-instruction stub `p := 0x1D`; it serves DIFFERENT controller numbers in the two tables (e.g. sub_FD712F is n=2 for a sound and n=3 for a drum kit), and the controller names for n are not established",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:144058 `ld (XIX),0x1d` -- its whole body"
+  ]
+ },
+ {
+  "old": "sub_FD713E",
+  "verdict": "refuse",
+  "why_refused": "one-instruction stub `p := 0x22`; it serves DIFFERENT controller numbers in the two tables (e.g. sub_FD712F is n=2 for a sound and n=3 for a drum kit), and the controller names for n are not established",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:144061 `ld (XIX),0x22` -- its whole body"
+  ]
+ },
+ {
+  "old": "sub_FD7143",
+  "verdict": "refuse",
+  "why_refused": "one-instruction stub `p := 0x25`; it serves DIFFERENT controller numbers in the two tables (e.g. sub_FD712F is n=2 for a sound and n=3 for a drum kit), and the controller names for n are not established",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:144064 `ld (XIX),0x25` -- its whole body"
+  ]
+ },
+ {
+  "old": "sub_FD7148",
+  "verdict": "refuse",
+  "why_refused": "one-instruction stub `p := 0x28`; it serves DIFFERENT controller numbers in the two tables (e.g. sub_FD712F is n=2 for a sound and n=3 for a drum kit), and the controller names for n are not established",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:144067 `ld (XIX),0x28` -- its whole body"
+  ]
+ },
+ {
+  "old": "sub_FD714D",
+  "verdict": "refuse",
+  "why_refused": "one-instruction stub `p := 0x2B`; it serves DIFFERENT controller numbers in the two tables (e.g. sub_FD712F is n=2 for a sound and n=3 for a drum kit), and the controller names for n are not established",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:144070 `ld (XIX),0x2b` -- its whole body"
+  ]
+ },
+ {
+  "old": "JumpTable_FD710A_Code_Skip",
+  "verdict": "refuse",
+  "why_refused": "entry [0] of the drum-kit table (n=2) AND the out-of-range default of the sound table (n=1): `p := 0x14`; controller identities not established",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:144049 `ld (XIX),0x14` -- its body"
+  ]
+ },
+ {
+  "old": "sub_FF657B",
+  "verdict": "refuse",
+  "why_refused": "reached at two indices of Dispatch_FF3D39 row 4 (MIDI FILE SAVE page 4): [131] = control 0x03 (SoftKeyCol4) and [149] = control 0x15 (one of the variant-1 held forms 0x11-0x18 round 11 refuses); its body (count (0x2730) to 8 while (0x21E8) bit 2, then request screen 0x52) is not tied to one control",
+  "new": "",
+  "header": "",
+  "basis": "two indices, ambiguous control",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:190473 `.long sub_FF657B` -- slot [131]",
+   "prom_a/wsa1_prom_a.s:190491 `.long sub_FF657B` -- slot [149]"
+  ]
+ },
+ {
+  "old": "DispatchTable_F0F0CE",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "DspEffect_OnParamEvent_BySection",
+  "header": "DspEffect_OnParamEvent's switch on DspEffect_Section (0..5) for effect-record events on the DSP EFFECT screens: sections 1..3 (a block's parameters) take DspEffect_OnParamEvent_ParamSections, 0/4/5 just repaint.\nBasis: table index + body; same naming as its siblings ScreenEnterBody_/ExitKey_/SoftKeyColN_DspEffect_BySection.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:28981 `add xbc, DispatchTable_F0F0CE` -- the reader",
+   "prom_b/wsa1_prom_b.s:28975 `ld bc, (DspEffect_Section:16)` -- selector = DspEffect_Section (0x2790)",
+   "prom_b/wsa1_prom_b.s:28978 `cp bc, 5:i3` -- bound 0..5",
+   "include/wsa1_ram.inc:511 `.equ DspEffect_Section, 0x2790` -- DspEffect_Section: 0 no block opened, 1..3 block 0..2's parameters, 4/5 block 0/2's EQ (FINDINGS-prom_b-dsp-effect-parameters.md 7.1)",
+   "prom_b/wsa1_prom_b.s:28854 `m_ld_m16m MBD+r6, 0x08, DspEffect_Section` -- writer: DspEffect_SetSection stores the argument",
+   "prom_b/wsa1_prom_b.s:28877 `m_ld_m16m MBD+r6, 0x08, DspEffect_Section` -- writer: DspEffect_SetSectionAndRepaint stores the argument",
+   "prom_b/wsa1_prom_b.s:29134 `.long ScreenEnterBody_DspEffect_Section0` -- sibling switch on the same byte, already named ..._BySection with arms _Section0 / _ParamSections / _EqSections"
+  ]
+ },
+ {
+  "old": "sub_F0F0E6",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "DspEffect_OnParamEvent_ParamSections",
+  "header": "DspEffect_OnParamEvent_BySection[1..3] (a block's parameter page is open): for an event on effect record 0x61..0x63 byte 0x17 bumps (0x2793) (the shown parameter page DspEffect_RepaintParamPage compares) and (0x2795), then falls into DspEffectEvent_RepaintAndReturn.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:29032 `cp h, 97` -- H = UiEvent_Class, 0x61..0x63 = the three effect-block records",
+   "prom_b/wsa1_prom_b.s:29036 `m_cp_mi8 MB16, UiEvent_Byte1, 0x17` -- byte index 0x17",
+   "prom_b/wsa1_prom_b.s:29038 `inc 1, (10131:16)` -- inc (0x2793)",
+   "prom_b/wsa1_prom_b.s:34455 `ld l, (10131:16)` -- DspEffect_RepaintParamPage reads (0x2793) as the shown page"
+  ]
+ },
+ {
+  "old": "StateDispatchTable_F5693F",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CycleRecordScreen_FieldIncHandlers",
+  "header": "CYCLE RECORD (screen 0x08), LCD row 2 RIGHT key (up arrow): steps the field under the cursor (0x36CE) up -- 0 CYCLE := ON, 1 START MEASURE + 1, 2 END MEASURE + 1; [3], [4] repeat [0] (no writer stores 3 or 4).\nBasis: table index (field cursor; its writers and the page's rows) + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123239 `ld xix, StateDispatchTable_F5693F` -- the reader",
+   "prom_b/wsa1_prom_b.s:122855 `calr DispatchState36CE_F56925` -- reached from LcdKeyRow2_CycleRecordScreen with bit 7 clear (right column)",
+   "prom_b/wsa1_prom_b.s:123156 `ld (14030:16), 0` -- writer: LCD row 2 LEFT key (LcdKeyRow2_CycleRecordScreen, bit 7 set) -> field 0",
+   "prom_b/wsa1_prom_b.s:123190 `ld (14030:16), 1` -- writer: LCD row 3 LEFT key -> field 1",
+   "prom_b/wsa1_prom_b.s:123216 `ld (14030:16), 2` -- writer: LCD row 4 LEFT key -> field 2",
+   "prom_b/wsa1_prom_b.s:122243 `ld (14030:16), 1` -- writer: REALTIME RECORD's LcdKeyRow2 turns CYCLE RECORD on and opens screen 0x08 with field 1",
+   "prom_b/wsa1_prom_b.s:93845 `ld (14030:16), 0` -- writer: SeqCycle_ResetSettings -> field 0",
+   "prom_b/wsa1_prom_b.s:123002 `m_cp_mi8 MB16, 0x36ce, 0x01` -- NumberPadKey_CycleRecordScreen: field 1 -> start measure (0x3622)",
+   "prom_b/wsa1_prom_b.s:123018 `ld (13858:16), wa` -- ... stores (0x3622)",
+   "prom_b/wsa1_prom_b.s:123004 `m_cp_mi8 MB16, 0x36ce, 0x02` -- field 2 -> end measure",
+   "prom_b/wsa1_prom_b.s:123035 `ld (13860:16), wa` -- ... stores (0x3624)",
+   "prom_b/wsa1_prom_b.s:74257 `.ascii \"CYCLE\"` -- field 0's row: 'CYCLE :' (IX 0x0BE3) whose OFF/ON value DL_F34FF2 draws at 0x0BED from UI_DrawScratch+7",
+   "prom_b/wsa1_prom_b.s:74260 `.ascii \"START\"` -- field 1's row: 'CYCLE START MEASURE :' (IX 0x11FB)",
+   "prom_b/wsa1_prom_b.s:74272 `.ascii \"END\"` -- field 2's row: 'CYCLE END MEASURE :' (IX 0x17EB)",
+   "prom_b/wsa1_prom_b.s:74187 `.short 0x000E, 0x0068, 0x00E3, 0x0084` -- Data_F35035+6, the field highlight rectangles indexed by the cursor: entry 0 y 0x42-0x5E (CYCLE row), 1 y 0x68-0x84 (START), 2 y 0x8E-0xAA (END)",
+   "prom_b/wsa1_prom_b.s:93834 `; SeqCycle_ResetSettings: CYCLE PLAY range (0x361E/0x3620) and CYCLE RECORD range (0x3622/0x3624) := measure 1..1,` -- SeqCycle_ResetSettings: (0x360B) bits 0/1 are the CYCLE PLAY / CYCLE RECORD switches, (0x3627)/(0x36CE) the two screens' field cursors",
+   "prom_b/wsa1_prom_b.s:74233 `.byte 0x8D` -- right column, LCD row 2: up-arrow glyph 0x8D (IX 0x0B64)",
+   "prom_b/wsa1_prom_b.s:74248 `.byte 0x8E` -- right column, LCD row 3: down-arrow glyph 0x8E (IX 0x112C)"
+  ]
+ },
+ {
+  "old": "StateDispatchTable_F56A79",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CycleRecordScreen_FieldDecHandlers",
+  "header": "CYCLE RECORD (screen 0x08), LCD row 3 RIGHT key (down arrow): steps the field under the cursor (0x36CE) down -- 0 CYCLE := OFF, 1 START MEASURE - 1, 2 END MEASURE - 1; [3], [4] repeat [0].\nBasis: table index (field cursor) + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123470 `ld xix, StateDispatchTable_F56A79` -- the reader",
+   "prom_b/wsa1_prom_b.s:122881 `calr DispatchState36CE_F56A5F` -- reached from LcdKeyRow3_CycleRecordScreen with bit 7 clear",
+   "prom_b/wsa1_prom_b.s:123156 `ld (14030:16), 0` -- writer: LCD row 2 LEFT key (LcdKeyRow2_CycleRecordScreen, bit 7 set) -> field 0",
+   "prom_b/wsa1_prom_b.s:123190 `ld (14030:16), 1` -- writer: LCD row 3 LEFT key -> field 1",
+   "prom_b/wsa1_prom_b.s:123216 `ld (14030:16), 2` -- writer: LCD row 4 LEFT key -> field 2",
+   "prom_b/wsa1_prom_b.s:122243 `ld (14030:16), 1` -- writer: REALTIME RECORD's LcdKeyRow2 turns CYCLE RECORD on and opens screen 0x08 with field 1",
+   "prom_b/wsa1_prom_b.s:93845 `ld (14030:16), 0` -- writer: SeqCycle_ResetSettings -> field 0",
+   "prom_b/wsa1_prom_b.s:123002 `m_cp_mi8 MB16, 0x36ce, 0x01` -- NumberPadKey_CycleRecordScreen: field 1 -> start measure (0x3622)",
+   "prom_b/wsa1_prom_b.s:123018 `ld (13858:16), wa` -- ... stores (0x3622)",
+   "prom_b/wsa1_prom_b.s:123004 `m_cp_mi8 MB16, 0x36ce, 0x02` -- field 2 -> end measure",
+   "prom_b/wsa1_prom_b.s:123035 `ld (13860:16), wa` -- ... stores (0x3624)",
+   "prom_b/wsa1_prom_b.s:74257 `.ascii \"CYCLE\"` -- field 0's row: 'CYCLE :' (IX 0x0BE3) whose OFF/ON value DL_F34FF2 draws at 0x0BED from UI_DrawScratch+7",
+   "prom_b/wsa1_prom_b.s:74260 `.ascii \"START\"` -- field 1's row: 'CYCLE START MEASURE :' (IX 0x11FB)",
+   "prom_b/wsa1_prom_b.s:74272 `.ascii \"END\"` -- field 2's row: 'CYCLE END MEASURE :' (IX 0x17EB)",
+   "prom_b/wsa1_prom_b.s:74187 `.short 0x000E, 0x0068, 0x00E3, 0x0084` -- Data_F35035+6, the field highlight rectangles indexed by the cursor: entry 0 y 0x42-0x5E (CYCLE row), 1 y 0x68-0x84 (START), 2 y 0x8E-0xAA (END)",
+   "prom_b/wsa1_prom_b.s:93834 `; SeqCycle_ResetSettings: CYCLE PLAY range (0x361E/0x3620) and CYCLE RECORD range (0x3622/0x3624) := measure 1..1,` -- SeqCycle_ResetSettings: (0x360B) bits 0/1 are the CYCLE PLAY / CYCLE RECORD switches, (0x3627)/(0x36CE) the two screens' field cursors",
+   "prom_b/wsa1_prom_b.s:74233 `.byte 0x8D` -- right column, LCD row 2: up-arrow glyph 0x8D (IX 0x0B64)",
+   "prom_b/wsa1_prom_b.s:74248 `.byte 0x8E` -- right column, LCD row 3: down-arrow glyph 0x8E (IX 0x112C)"
+  ]
+ },
+ {
+  "old": "sub_F56953",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CycleRecordScreen_SwitchCycleOn",
+  "header": "CycleRecordScreen_FieldIncHandlers[0] (field CYCLE): unless already on, sets the CYCLE RECORD switch (0x360B) bit 1, repaints its OFF/ON, then SeqCycle_CaptureEndCursors / SeqCycle_LocateToStart / Seq_SetTrackBeatsFromTransportB.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123291 `m_set 1, MD16, 0x360b` -- set bit 1 of (0x360B)",
+   "prom_b/wsa1_prom_b.s:123313 `ld (UI_DrawScratch+7:16), a` -- (via sub_F5696D) UI_DrawScratch+7 := that bit, the CYCLE OFF/ON readout"
+  ]
+ },
+ {
+  "old": "sub_F5698E",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CycleRecordScreen_IncStartMeasure",
+  "header": "CycleRecordScreen_FieldIncHandlers[1] (field START MEASURE): while stopped, (0x3622) + 1 up to 999, then blinks both readouts and CycleRecordScreen_OnStartMeasureChanged.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123342 `incw 1, (13858:16)` -- incw (0x3622)"
+  ]
+ },
+ {
+  "old": "sub_F56A1D",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CycleRecordScreen_IncEndMeasure",
+  "header": "CycleRecordScreen_FieldIncHandlers[2] (field END MEASURE): while stopped, (0x3624) + 1 up to 999, blinks both readouts and sets (0x3628) := 0x83 / (0x3629) as CyclePlayScreen_QueueEndMeasureChange does.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123438 `incw 1, (13860:16)` -- incw (0x3624)"
+  ]
+ },
+ {
+  "old": "sub_F56A8D",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CycleRecordScreen_SwitchCycleOff",
+  "header": "CycleRecordScreen_FieldDecHandlers[0] (field CYCLE): if on, clears the CYCLE RECORD switch (0x360B) bit 1, zeroes (0x36CA)/(0x36C6), SeqRecord_RestoreCursorBaseline, frees the record and take chains, repaints OFF/ON.\nBasis: table index + body; the same steps LcdKeyRow2_RealtimeRecordScreen takes to switch CYCLE RECORD off.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123522 `m_res 1, MD16, 0x360b` -- res bit 1 of (0x360B)"
+  ]
+ },
+ {
+  "old": "sub_F56AB1",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CycleRecordScreen_DecStartMeasure",
+  "header": "CycleRecordScreen_FieldDecHandlers[1] (field START MEASURE): while stopped, (0x3622) - 1 down to 1, blinks both readouts and sets (0x3628) := 0x83 / (0x3629).\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123553 `decw 1, (13858:16)` -- decw (0x3622)"
+  ]
+ },
+ {
+  "old": "sub_F56AF3",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CycleRecordScreen_DecEndMeasure",
+  "header": "CycleRecordScreen_FieldDecHandlers[2] (field END MEASURE): while stopped, (0x3624) - 1 down to 1, blinks both readouts and CycleRecordScreen_ApplyEndMeasure.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123588 `decw 1, (13860:16)` -- decw (0x3624)"
+  ]
+ },
+ {
+  "old": "DispatchState36CE_F56925",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CycleRecordScreen_IncField",
+  "header": "CYCLE RECORD LCD row 2 RIGHT key (up arrow): sets UI_RequestBits bit 3 and calls CycleRecordScreen_FieldIncHandlers[field cursor (0x36CE)].\nBasis: the table it reads + caller.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123239 `ld xix, StateDispatchTable_F5693F` -- reads CycleRecordScreen_FieldIncHandlers",
+   "prom_b/wsa1_prom_b.s:122855 `calr DispatchState36CE_F56925` -- its one caller, LcdKeyRow2_CycleRecordScreen, bit 7 clear"
+  ]
+ },
+ {
+  "old": "DispatchState36CE_F56A5F",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CycleRecordScreen_DecField",
+  "header": "CYCLE RECORD LCD row 3 RIGHT key (down arrow): sets UI_RequestBits bit 3 and calls CycleRecordScreen_FieldDecHandlers[field cursor (0x36CE)].\nBasis: the table it reads + caller.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123470 `ld xix, StateDispatchTable_F56A79` -- reads CycleRecordScreen_FieldDecHandlers",
+   "prom_b/wsa1_prom_b.s:122881 `calr DispatchState36CE_F56A5F` -- its one caller, LcdKeyRow3_CycleRecordScreen, bit 7 clear"
+  ]
+ },
+ {
+  "old": "Select36CE_F568AB",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CycleRecordScreen_SelectCycleField",
+  "header": "CYCLE RECORD LCD row 2 LEFT key: unless (0x3628) is set, field cursor (0x36CE) := 0 (CYCLE), old one to (0x3755), stops the blink and repaints.\nBasis: body + the page's row text + rectangle 0 of Data_F35035+6.",
+  "basis": "body + index",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123156 `ld (14030:16), 0` -- the value it stores"
+  ]
+ },
+ {
+  "old": "Select36CE_F568E9",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CycleRecordScreen_SelectStartMeasureField",
+  "header": "CYCLE RECORD LCD row 3 LEFT key: unless (0x3628) is set, field cursor (0x36CE) := 1 (CYCLE START MEASURE), old one to (0x3755), stops the blink and repaints.\nBasis: body + the page's row text + rectangle 1 of Data_F35035+6.",
+  "basis": "body + index",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123190 `ld (14030:16), 1` -- the value it stores"
+  ]
+ },
+ {
+  "old": "Select36CE_F56907",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CycleRecordScreen_SelectEndMeasureField",
+  "header": "CYCLE RECORD LCD row 4 LEFT key: unless (0x3628) is set, field cursor (0x36CE) := 2 (CYCLE END MEASURE), old one to (0x3755), stops the blink and repaints.\nBasis: body + the page's row text + rectangle 2 of Data_F35035+6.",
+  "basis": "body + index",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:123216 `ld (14030:16), 2` -- the value it stores"
+  ]
+ },
+ {
+  "old": "StateDispatchTable_F5706A",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CyclePlayScreen_FieldIncHandlers",
+  "header": "CYCLE PLAY (0x14) / CYCLE PLAY EDIT (0x26, 0x29), LCD row 2 RIGHT key (up arrow): steps the field under the cursor (0x3627) up -- 0 CYCLE := ON, 1 START + 1, 2 END + 1, 3 SOLO := ON (EDIT page); [4] repeats [0].\nBasis: table index (field cursor; its writers and the pages' rows) + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:124558 `ld xix, StateDispatchTable_F5706A` -- the reader",
+   "prom_b/wsa1_prom_b.s:124205 `calr DispatchState3627_F57050` -- reached from LcdKeyRow2_CyclePlayScreen, bit 7 clear",
+   "prom_b/wsa1_prom_b.s:125099 `calr DispatchState3627_F57050` -- and from LcdKeyRow2_CyclePlayEditScreen, bit 7 clear",
+   "prom_b/wsa1_prom_b.s:124483 `ld (13863:16), 0` -- writer: CyclePlayScreen_LcdKeyRow2 (LCD row 2 LEFT) -> field 0",
+   "prom_b/wsa1_prom_b.s:124513 `ld (13863:16), 1` -- writer: CyclePlayScreen_LcdKeyRow3 (row 3 LEFT, also on CYCLE PLAY EDIT) -> field 1",
+   "prom_b/wsa1_prom_b.s:124535 `ld (13863:16), 2` -- writer: CyclePlayScreen_LcdKeyRow4 (row 4 LEFT) -> field 2",
+   "prom_b/wsa1_prom_b.s:125265 `ld (13863:16), 3` -- writer: CyclePlayEditScreen_LcdKeyRow2 (row 2 LEFT on CYCLE PLAY EDIT) -> field 3",
+   "prom_b/wsa1_prom_b.s:124084 `ld (13863:16), 1` -- ScreenEnter_CyclePlayScreen turns 3 into 1 (CYCLE PLAY has no field 3)",
+   "prom_b/wsa1_prom_b.s:124987 `ld (13863:16), 1` -- ScreenEnter_CyclePlayEditScreen turns 0 into 1 (CYCLE PLAY EDIT has no CYCLE field)",
+   "prom_b/wsa1_prom_b.s:123797 `ld (13863:16), 1` -- writer: LcdKeyRow1_SeqPlayScreen switches CYCLE PLAY on and opens screen 0x14 with field 1",
+   "prom_b/wsa1_prom_b.s:93845 `ld (14030:16), 0` -- writer: SeqCycle_ResetSettings (and (0x3627) := 0 just before)",
+   "prom_b/wsa1_prom_b.s:74479 `.ascii \"SOLO  : \"` -- CYCLE PLAY EDIT's row-2 field: 'SOLO :' whose OFF/ON DL_F352F9 draws from DisplayListB_Stage+18 := (0x3626)",
+   "prom_b/wsa1_prom_b.s:74491 `.ascii \"CYCLE START MEASURE :\"` -- fields 1/2 rows on the EDIT page"
+  ]
+ },
+ {
+  "old": "StateDispatchTable_F571A6",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CyclePlayScreen_FieldDecHandlers",
+  "header": "CYCLE PLAY (0x14) / CYCLE PLAY EDIT (0x26, 0x29), LCD row 3 RIGHT key (down arrow): steps the field under (0x3627) down -- 0 CYCLE := OFF, 1 START - 1, 2 END - 1, 3 SOLO := OFF; [4] repeats [0].\nBasis: table index (field cursor) + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:124789 `ld xix, StateDispatchTable_F571A6` -- the reader",
+   "prom_b/wsa1_prom_b.s:124227 `calr DispatchState3627_F5718C` -- reached from LcdKeyRow3_CyclePlayScreen, bit 7 clear",
+   "prom_b/wsa1_prom_b.s:125121 `calr DispatchState3627_F5718C` -- and from LcdKeyRow3_CyclePlayEditScreen",
+   "prom_b/wsa1_prom_b.s:124483 `ld (13863:16), 0` -- writer: CyclePlayScreen_LcdKeyRow2 (LCD row 2 LEFT) -> field 0",
+   "prom_b/wsa1_prom_b.s:124513 `ld (13863:16), 1` -- writer: CyclePlayScreen_LcdKeyRow3 (row 3 LEFT, also on CYCLE PLAY EDIT) -> field 1",
+   "prom_b/wsa1_prom_b.s:124535 `ld (13863:16), 2` -- writer: CyclePlayScreen_LcdKeyRow4 (row 4 LEFT) -> field 2",
+   "prom_b/wsa1_prom_b.s:125265 `ld (13863:16), 3` -- writer: CyclePlayEditScreen_LcdKeyRow2 (row 2 LEFT on CYCLE PLAY EDIT) -> field 3",
+   "prom_b/wsa1_prom_b.s:124084 `ld (13863:16), 1` -- ScreenEnter_CyclePlayScreen turns 3 into 1 (CYCLE PLAY has no field 3)",
+   "prom_b/wsa1_prom_b.s:124987 `ld (13863:16), 1` -- ScreenEnter_CyclePlayEditScreen turns 0 into 1 (CYCLE PLAY EDIT has no CYCLE field)",
+   "prom_b/wsa1_prom_b.s:123797 `ld (13863:16), 1` -- writer: LcdKeyRow1_SeqPlayScreen switches CYCLE PLAY on and opens screen 0x14 with field 1",
+   "prom_b/wsa1_prom_b.s:93845 `ld (14030:16), 0` -- writer: SeqCycle_ResetSettings (and (0x3627) := 0 just before)",
+   "prom_b/wsa1_prom_b.s:74479 `.ascii \"SOLO  : \"` -- CYCLE PLAY EDIT's row-2 field: 'SOLO :' whose OFF/ON DL_F352F9 draws from DisplayListB_Stage+18 := (0x3626)",
+   "prom_b/wsa1_prom_b.s:74491 `.ascii \"CYCLE START MEASURE :\"` -- fields 1/2 rows on the EDIT page"
+  ]
+ },
+ {
+  "old": "sub_F5707E",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CyclePlayScreen_SwitchCycleOn",
+  "header": "CyclePlayScreen_FieldIncHandlers[0] (field CYCLE): unless on or the transport runs, sets the CYCLE PLAY switch (0x360B) bit 0, repaints OFF/ON, then SeqCycle_CaptureEndCursors / SeqCycle_LocateToStart / Seq_SetTrackBeatsFromTransportB.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:124612 `m_set 0, MD16, 0x360b` -- set bit 0 of (0x360B)"
+  ]
+ },
+ {
+  "old": "sub_F570BB",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CyclePlayScreen_IncStartMeasure",
+  "header": "CyclePlayScreen_FieldIncHandlers[1] (field START MEASURE): while stopped, (0x361E) + 1 up to 999, blinks both readouts, CyclePlayScreen_ApplyStartMeasure.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:124662 `incw 1, (13854:16)` -- incw (0x361E)"
+  ]
+ },
+ {
+  "old": "sub_F5714A",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CyclePlayScreen_IncEndMeasure",
+  "header": "CyclePlayScreen_FieldIncHandlers[2] (field END MEASURE): while stopped, (0x3620) + 1 up to 999, blinks both readouts and sets (0x3628) := 0x83 / (0x3629) as CyclePlayScreen_QueueEndMeasureChange does.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:124757 `incw 1, (13856:16)` -- incw (0x3620)"
+  ]
+ },
+ {
+  "old": "sub_F573BA",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CyclePlayEditScreen_SwitchSoloOn",
+  "header": "CyclePlayScreen_FieldIncHandlers[3] (CYCLE PLAY EDIT field SOLO): if off, (0x3626) := 1, routes notes by EditScreen_PartMask ((0x60341E)), NoteRouting_RebuildForSong, repaints the SOLO OFF/ON readout.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:125285 `ld (13862:16), 1` -- (0x3626) := 1, the byte the EDIT page prints as SOLO OFF/ON"
+  ]
+ },
+ {
+  "old": "sub_F571BA",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CyclePlayScreen_SwitchCycleOff",
+  "header": "CyclePlayScreen_FieldDecHandlers[0] (field CYCLE): if on and (0x3731) bit 2 clear, clears the CYCLE PLAY switch (0x360B) bit 0, zeroes (0x36CA)/(0x36C6), repaints OFF/ON -- the steps LcdKeyRow1_SeqPlayScreen uses to switch it off.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:124843 `m_res 0, MD16, 0x360b` -- res bit 0 of (0x360B)"
+  ]
+ },
+ {
+  "old": "sub_F571D8",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CyclePlayScreen_DecStartMeasure",
+  "header": "CyclePlayScreen_FieldDecHandlers[1] (field START MEASURE): while stopped, (0x361E) - 1 down to 1, blinks both readouts and sets (0x3628) := 0x83 / (0x3629).\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:124871 `decw 1, (13854:16)` -- decw (0x361E)"
+  ]
+ },
+ {
+  "old": "sub_F5721A",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CyclePlayScreen_DecEndMeasure",
+  "header": "CyclePlayScreen_FieldDecHandlers[2] (field END MEASURE): while stopped, (0x3620) - 1 down to 1, blinks both readouts, CyclePlayScreen_QueueEndMeasureChange.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:124906 `decw 1, (13856:16)` -- decw (0x3620)"
+  ]
+ },
+ {
+  "old": "sub_F573F3",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CyclePlayEditScreen_SwitchSoloOff",
+  "header": "CyclePlayScreen_FieldDecHandlers[3] (CYCLE PLAY EDIT field SOLO): if on, (0x3626) := 0, routes notes by the saved track mask (0x360C), NoteRouting_RebuildForSong, repaints the SOLO OFF/ON readout.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:125328 `ld (13862:16), 0` -- (0x3626) := 0"
+  ]
+ },
+ {
+  "old": "DispatchState3627_F57050",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CyclePlayScreen_IncField",
+  "header": "CYCLE PLAY / CYCLE PLAY EDIT LCD row 2 RIGHT key (up arrow): sets UI_RequestBits bit 3 and calls CyclePlayScreen_FieldIncHandlers[field cursor (0x3627)].\nBasis: the table it reads + callers.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:124558 `ld xix, StateDispatchTable_F5706A` -- reads CyclePlayScreen_FieldIncHandlers",
+   "prom_b/wsa1_prom_b.s:124205 `calr DispatchState3627_F57050` -- caller LcdKeyRow2_CyclePlayScreen",
+   "prom_b/wsa1_prom_b.s:125099 `calr DispatchState3627_F57050` -- caller LcdKeyRow2_CyclePlayEditScreen"
+  ]
+ },
+ {
+  "old": "DispatchState3627_F5718C",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "CyclePlayScreen_DecField",
+  "header": "CYCLE PLAY / CYCLE PLAY EDIT LCD row 3 RIGHT key (down arrow): sets UI_RequestBits bit 3 and calls CyclePlayScreen_FieldDecHandlers[field cursor (0x3627)].\nBasis: the table it reads + callers.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:124789 `ld xix, StateDispatchTable_F571A6` -- reads CyclePlayScreen_FieldDecHandlers",
+   "prom_b/wsa1_prom_b.s:124227 `calr DispatchState3627_F5718C` -- caller LcdKeyRow3_CyclePlayScreen",
+   "prom_b/wsa1_prom_b.s:125121 `calr DispatchState3627_F5718C` -- caller LcdKeyRow3_CyclePlayEditScreen"
+  ]
+ },
+ {
+  "old": "DispatchTable_F542D1",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "DrawbarSettingPage_RowStepHandlers",
+  "header": "DRAWBAR SETTING page: steps the signed nibble of the row under the cursor (0x28A1) by +-1 within -5..+5 -- 0 PERCUSSIVE TONE DECAY, 1 PERCUSSIVE TONE LEVEL, 2 DRAWBAR ATTACK TIME, 3 DRAWBAR RELEASE TIME -- then Drawbar_SendSettingBytes.\nBasis: table index (row cursor) + the page's row text + the nibble each arm edits.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:114942 `add xbc, DispatchTable_F542D1` -- the reader, DrawbarScreen_StepParamAtCursor",
+   "prom_b/wsa1_prom_b.s:114940 `m_mul MB16, 0x28a1, 3` -- selector = the setting page's row cursor (0x28A1), stepped 0..3 by DrawbarSettingPage_StepCursorRow",
+   "prom_b/wsa1_prom_b.s:118093 `.ascii \"PERCUSSIVE T0NE DECAY  :\"` -- row 0 (IX 0x1456)",
+   "prom_b/wsa1_prom_b.s:118096 `.ascii \"PERCUSSIVE T0NE LEVEL  :\"` -- row 1 (IX 0x179E)",
+   "prom_b/wsa1_prom_b.s:118111 `.ascii \"DRAWBAR ATTACK TIME    :\"` -- row 2 (IX 0x1AE6)",
+   "prom_b/wsa1_prom_b.s:118126 `.ascii \"DRAWBAR RELEASE TIME   :\"` -- row 3 (IX 0x1E2E)",
+   "prom_b/wsa1_prom_b.s:116247 `ld (UI_DrawScratch:16), c` -- Paint_DrawbarScreenValues_SettingPage: UI_DrawScratch := (0x2890)",
+   "prom_b/wsa1_prom_b.s:116249 `ld (UI_DrawScratch+1:16), c` -- UI_DrawScratch+1 := (0x2891)",
+   "prom_b/wsa1_prom_b.s:118189 `.short 0x146F` -- DL_DrawbarParamValues: (0x2890) low nibble at 0x146F (row 0); then high nibble at 0x17B7 (row 1), (0x2891) high nibble at 0x1AFF (row 2), low nibble at 0x1E47 (row 3)",
+   "prom_b/wsa1_prom_b.s:118274 `.byte 0x29, 0x00, 0x80, 0x00, 0x10, 0x01, 0x8f, 0x00` -- ParamCursorRects[0..3]: y 0x80/0x95/0xAA/0xBF -- the four rows top to bottom"
+  ]
+ },
+ {
+  "old": "sub_F53320",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "DrawbarSettingPage_StepPercussiveToneDecay",
+  "header": "DrawbarSettingPage_RowStepHandlers[0] (PERCUSSIVE TONE DECAY): steps (0x2890) low nibble by -1/+1 per PanelEvent_Flags bit 0 within -5..+5, then Drawbar_SendSettingBytes and a repaint.\nBasis: table index + body + the value DL_DrawbarParamValues prints on that row.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:115159 `lda xix, (10384:16)` -- the byte it edits ((0x2890) low nibble)"
+  ]
+ },
+ {
+  "old": "sub_F53381",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "DrawbarSettingPage_StepPercussiveToneLevel",
+  "header": "DrawbarSettingPage_RowStepHandlers[1] (PERCUSSIVE TONE LEVEL): steps (0x2890) high nibble by -1/+1 per PanelEvent_Flags bit 0 within -5..+5, then Drawbar_SendSettingBytes and a repaint.\nBasis: table index + body + the value DL_DrawbarParamValues prints on that row.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:115211 `lda xix, (10384:16)` -- the byte it edits ((0x2890) high nibble)"
+  ]
+ },
+ {
+  "old": "sub_F53264",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "DrawbarSettingPage_StepAttackTime",
+  "header": "DrawbarSettingPage_RowStepHandlers[2] (DRAWBAR ATTACK TIME): steps (0x2891) high nibble by -1/+1 per PanelEvent_Flags bit 0 within -5..+5, then Drawbar_SendSettingBytes and a repaint.\nBasis: table index + body + the value DL_DrawbarParamValues prints on that row.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:115057 `lda xix, (10385:16)` -- the byte it edits ((0x2891) high nibble)"
+  ]
+ },
+ {
+  "old": "sub_F532BF",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "DrawbarSettingPage_StepReleaseTime",
+  "header": "DrawbarSettingPage_RowStepHandlers[3] (DRAWBAR RELEASE TIME): steps (0x2891) low nibble by -1/+1 per PanelEvent_Flags bit 0 within -5..+5, then Drawbar_SendSettingBytes and a repaint.\nBasis: table index + body + the value DL_DrawbarParamValues prints on that row.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:115107 `lda xix, (10385:16)` -- the byte it edits ((0x2891) low nibble)"
+  ]
+ },
+ {
+  "old": "DispatchTable_F674CE",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_CursorKeyTrackKindHandlers",
+  "header": "STEP RECORD soft keys 7/8 (CURSOR '<' '>'): by track kind (0x0E63)&3 -- 1 song track StepRecord_SongTrackCursorKey, 2 master track StepRecord_MasterTrackCursorKey, 0/3 nothing.\nBasis: table index (track kind) + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150577 `ld xix, DispatchTable_F674CE` -- the reader, StepRecord_CursorKeyByTrackKind",
+   "prom_b/wsa1_prom_b.s:150572 `ld l, (3683:16)` -- selector (0x0E63) & 3",
+   "prom_b/wsa1_prom_b.s:158836 `ld (3683:16), a` -- the one writer of the track kind: StepRecord_SetEntryAndTrackKind stores Map_0E63_F6ACA7[part]",
+   "prom_b/wsa1_prom_b.s:158853 `.byte 0x02` -- Map_0E63_F6ACA7: 1 for parts 0..31 (a song track), 2 for 0x20 (the master track); kinds 0 and 3 are never stored"
+  ]
+ },
+ {
+  "old": "sub_F674DE",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_SongTrackCursorKey",
+  "header": "StepRecord_CursorKeyTrackKindHandlers[1] (song track): saves the song position, runs StepRecord_SongTrackCursorKeyHandlers[W] (1 back, 2 forward), then redraws by what moved.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150622 `ld xhl, DispatchTable_F67548` -- its table"
+  ]
+ },
+ {
+  "old": "sub_F67558",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_MasterTrackCursorKey",
+  "header": "StepRecord_CursorKeyTrackKindHandlers[2] (master track): as StepRecord_SongTrackCursorKey through StepRecord_MasterTrackCursorKeyHandlers.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150690 `ld xhl, DispatchTable_F675BB` -- its table"
+  ]
+ },
+ {
+  "old": "DispatchTable_F67548",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_SongTrackCursorKeyHandlers",
+  "header": "Song-track STEP RECORD cursor key by W & 3 (soft key 7 passes 1, key 8 passes 2): 1 StepRecord_CursorBack, 2 StepRecord_CursorForward_Veneer, 3 nothing; [0] (sub_F6A304) is reached by no caller of this path.\nBasis: table index (W from SoftKeyCol7/8_StepRecord) + its named entries.",
+  "basis": "table index + entries",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150622 `ld xhl, DispatchTable_F67548` -- the reader",
+   "prom_b/wsa1_prom_b.s:150544 `ld w, 1:opc` -- SoftKeyCol7_StepRecord passes W = 1",
+   "prom_b/wsa1_prom_b.s:150551 `ld w, 2:opc` -- SoftKeyCol8_StepRecord passes W = 2"
+  ]
+ },
+ {
+  "old": "DispatchTable_F675BB",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_MasterTrackCursorKeyHandlers",
+  "header": "Master-track STEP RECORD cursor key by W & 3: 1 StepRecord_CursorBack, 2 StepRecord_CursorForward_Veneer, 0/3 nothing.\nBasis: table index (W) + its named entries.",
+  "basis": "table index + entries",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150690 `ld xhl, DispatchTable_F675BB` -- the reader"
+  ]
+ },
+ {
+  "old": "DispatchTable_F674CE_Nop0",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_NoAction",
+  "header": "The STEP RECORD module's shared do-nothing `ret`: the entry of every unused panel code, track kind and sub-screen in its 24 dispatch tables.\nBasis: table entries (the unused indices of every step-record table).",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150746 `DispatchTable_F674CE_Nop0:` -- a lone `ret`",
+   "prom_b/wsa1_prom_b.s:150982 `.long DispatchTable_F674CE_Nop0` -- e.g. StepRecord_SubScreenButtonTable's unused sub-screens 12..17"
+  ]
+ },
+ {
+  "old": "sub_F6A304",
+  "verdict": "refuse",
+  "why_refused": "entry [0] of StepRecord_SongTrackCursorKeyHandlers, an index (W = 0) no caller of that path produces; it is a shared routine with four direct call sites (0xF68A57, 0xF68AE6, 0xF6AE74, 0xF6AFBB) that posts a {0x90, 0x7F, 0x33, 0, entry-1} timed event -- name it from its callers",
+  "new": "",
+  "header": "",
+  "basis": "index not meaningful for this entry",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:157375 `call T_TimedEventRing_Put` -- its body posts to the timed-event ring"
+  ]
+ },
+ {
+  "old": "DispatchTable_F68972",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_MainLoopService_TrackKindHandlers",
+  "header": "StepRecord_MainLoopService's switch on track kind (0x0E63)&3 while a session runs ((0x0E4E) bit 3): 1/2 (song or master track) the normal service, 0 and 3 their own arms.\nBasis: table index (track kind) + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:153547 `ld xix, DispatchTable_F68972` -- the reader",
+   "prom_b/wsa1_prom_b.s:153542 `ld l, (3683:16)` -- selector (0x0E63) & 3",
+   "prom_b/wsa1_prom_b.s:158836 `ld (3683:16), a` -- the one writer of the track kind: StepRecord_SetEntryAndTrackKind stores Map_0E63_F6ACA7[part]",
+   "prom_b/wsa1_prom_b.s:158853 `.byte 0x02` -- Map_0E63_F6ACA7: 1 for parts 0..31 (a song track), 2 for 0x20 (the master track); kinds 0 and 3 are never stored"
+  ]
+ },
+ {
+  "old": "sub_F68982",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_MainLoopService_SongOrMasterTrack",
+  "header": "StepRecord_MainLoopService_TrackKindHandlers[1, 2]: sub_F6C507 on SeqBuf_Ring; when it returns W = 0: sub_F67418 and, unless the screen is held, sub_F69CB4 / sub_F689F5.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:153580 `sub_F68982:` -- table slots [1] and [2]"
+  ]
+ },
+ {
+  "old": "sub_F689AD",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_MainLoopService_Kind3",
+  "header": "StepRecord_MainLoopService_TrackKindHandlers[3] (track kind 3, which no writer stores): when sub_F6C507 on SeqBuf_Ring returns W = 0: StepRecord_FlushSeqBufRing on sub-screen 0x12, else StepRecord_RedrawMeasureRows and the position marker.\nBasis: table index + body; cf. StepRecord_ButtonBySubScreen_Kind3.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:153599 `sub_F689AD:` -- table slot [3]"
+  ]
+ },
+ {
+  "old": "sub_F689E0",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_MainLoopService_Kind0",
+  "header": "StepRecord_MainLoopService_TrackKindHandlers[0] (track kind 0, never stored by StepRecord_SetEntryAndTrackKind): when sub_F6C507 on SeqBuf_Ring returns W = 0, only clears (0x12C0).\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:153621 `sub_F689E0:` -- table slot [0]"
+  ]
+ },
+ {
+  "old": "DispatchTable_F68FB4",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecordSub00_LcdKeyRow4_TrackKindHandlers",
+  "header": "STEP RECORD ERS (StepRecordSub00_LcdKeyRow4)'s switch on track kind (0x0E63)&3 after an erase: 1/2 (song or master track) call sub_F69CB4, 0/3 nothing.\nBasis: table index (track kind) + entries.",
+  "basis": "table index + entries",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:154515 `ld xix, DispatchTable_F68FB4` -- the reader",
+   "prom_b/wsa1_prom_b.s:154511 `ld l, (3683:16)` -- selector (0x0E63) & 3",
+   "prom_b/wsa1_prom_b.s:158836 `ld (3683:16), a` -- the one writer of the track kind: StepRecord_SetEntryAndTrackKind stores Map_0E63_F6ACA7[part]",
+   "prom_b/wsa1_prom_b.s:158853 `.byte 0x02` -- Map_0E63_F6ACA7: 1 for parts 0..31 (a song track), 2 for 0x20 (the master track); kinds 0 and 3 are never stored"
+  ]
+ },
+ {
+  "old": "sub_F69CB4",
+  "verdict": "refuse",
+  "why_refused": "entry [1]/[2] of StepRecordSub00_LcdKeyRow4_TrackKindHandlers, but it is a shared routine with many direct callers (0xF67541, 0xF675B7, 0xF6771F, 0xF689A5, 0xF68E14 ...); the table index (song or master track) is not what it does -- name it from its body/callers",
+  "new": "",
+  "header": "",
+  "basis": "shared routine, index does not name it",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:156612 `sub_F69CB4:` -- direct callers listed in its header"
+  ]
+ },
+ {
+  "old": "DispatchTable_F6953C",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_TrackKindPageEnterHandlers",
+  "header": "STEP RECORD, after an entry is done (LcdKeyRow3_StepRecordSub02/Sub05 and sub_F6CB52_Arm): opens the track kind's page -- 1 song track sub-screen 0, 2 master track sub-screen 8, 3 sub-screen 15, 0 nothing.\nBasis: table index (track kind) + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:155438 `ld xix, DispatchTable_F6953C` -- reader in LcdKeyRow3_StepRecordSub02",
+   "prom_b/wsa1_prom_b.s:163407 `ld xix, DispatchTable_F6953C` -- reader in sub_F6CB52_Arm",
+   "prom_b/wsa1_prom_b.s:163686 `ld xix, DispatchTable_F6953C` -- reader in LcdKeyRow3_StepRecordSub05",
+   "prom_b/wsa1_prom_b.s:158836 `ld (3683:16), a` -- the one writer of the track kind: StepRecord_SetEntryAndTrackKind stores Map_0E63_F6ACA7[part]",
+   "prom_b/wsa1_prom_b.s:158853 `.byte 0x02` -- Map_0E63_F6ACA7: 1 for parts 0..31 (a song track), 2 for 0x20 (the master track); kinds 0 and 3 are never stored"
+  ]
+ },
+ {
+  "old": "sub_F6954C",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_ShowSongTrackPage",
+  "header": "StepRecord_TrackKindPageEnterHandlers[1] (song track): UI_StepRecord_SubScreen := 0 and its message line (sub_F6D70C).\nBasis: table index + body; cf. StepRecord_ReturnToSongTrackPage.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:155473 `ld (UI_StepRecord_SubScreen:16), 0` -- sub-screen 0"
+  ]
+ },
+ {
+  "old": "sub_F69556",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_ShowMasterTrackPage",
+  "header": "StepRecord_TrackKindPageEnterHandlers[2] (master track): UI_StepRecord_SubScreen := 8 and its message line (sub_F6D57A).\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:155477 `ld (UI_StepRecord_SubScreen:16), 8` -- sub-screen 8"
+  ]
+ },
+ {
+  "old": "sub_F69560",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_ShowKind3Page",
+  "header": "StepRecord_TrackKindPageEnterHandlers[3] (track kind 3, never stored): UI_StepRecord_SubScreen := 15, sub_F6D5B5, (0x12C0) := 0, MsgLine_TransportState_Plus4.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:155481 `ld (UI_StepRecord_SubScreen:16), 15` -- sub-screen 15"
+  ]
+ },
+ {
+  "old": "DispatchTable_F69C24",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_TrackKindPageReturnHandlers",
+  "header": "StepRecord_ReturnToTrackKindPage's switch on track kind (0x0E63)&3: 0 the transport line, 1 song track (sub-screen 0), 2 master track (sub-screen 8), 3 sub-screen 15 -- each repaints only if the sub-screen changed.\nBasis: table index + body (its reader's header already reads the arms).",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:156501 `ld xix, DispatchTable_F69C24` -- the reader",
+   "prom_b/wsa1_prom_b.s:156489 `; StepRecord_ReturnToTrackKindPage: Unless (0x1071) bit 0: by the track kind (0x0E63) & 3 -- song track: sub-screen 0` -- reader header: song track sub-screen 0 + measure/note/velocity line; master sub-screen 8 + measure; 0 transport; 3 sub-screen 15",
+   "prom_b/wsa1_prom_b.s:158836 `ld (3683:16), a` -- the one writer of the track kind: StepRecord_SetEntryAndTrackKind stores Map_0E63_F6ACA7[part]",
+   "prom_b/wsa1_prom_b.s:158853 `.byte 0x02` -- Map_0E63_F6ACA7: 1 for parts 0..31 (a song track), 2 for 0x20 (the master track); kinds 0 and 3 are never stored"
+  ]
+ },
+ {
+  "old": "sub_F69C34",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_ReturnToSongTrackPage",
+  "header": "StepRecord_TrackKindPageReturnHandlers[1] (song track): (0x12AF) := 0xFF; on sub-screen 0 only rewrites its message line (sub_F6D710: measure, note/velocity, length), else sub-screen := 0 and sub_F6D70C.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:156541 `ld (UI_StepRecord_SubScreen:16), 0` -- sub-screen 0"
+  ]
+ },
+ {
+  "old": "sub_F69C50",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_ReturnToMasterTrackPage",
+  "header": "StepRecord_TrackKindPageReturnHandlers[2] (master track): on sub-screen 8 blanks the message line, else sub-screen := 8 and sub_F6D57A.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:156551 `ld (UI_StepRecord_SubScreen:16), 8` -- sub-screen 8"
+  ]
+ },
+ {
+  "old": "sub_F69C71",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_ReturnToKind3Page",
+  "header": "StepRecord_TrackKindPageReturnHandlers[3] (track kind 3, never stored): sub-screen := 15 (sub_F6D5B5) if not already, MsgLine_PutMeasureDigits, MsgLine_TransportState_Plus4.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:156562 `ld (UI_StepRecord_SubScreen:16), 15` -- sub-screen 15"
+  ]
+ },
+ {
+  "old": "DispatchTable_F6C272",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_TrackKindMsgLineHandlers",
+  "header": "The STEP RECORD message line by track kind (0x0E63)&3, after sub_F6C237 sets the kind's sub-screen (Map_0EF5_F6C282): 0 MsgLine_TransportState_Plus10, 1/2 MsgLine_Rhythm, 3 the measure digits + transport state.\nBasis: table index (track kind) + entries.",
+  "basis": "table index + entries",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:161975 `ld xix, DispatchTable_F6C272` -- the reader",
+   "prom_b/wsa1_prom_b.s:161965 `ld a, (3683:16)` -- selector (0x0E63)",
+   "prom_b/wsa1_prom_b.s:158836 `ld (3683:16), a` -- the one writer of the track kind: StepRecord_SetEntryAndTrackKind stores Map_0E63_F6ACA7[part]",
+   "prom_b/wsa1_prom_b.s:158853 `.byte 0x02` -- Map_0E63_F6ACA7: 1 for parts 0..31 (a song track), 2 for 0x20 (the master track); kinds 0 and 3 are never stored"
+  ]
+ },
+ {
+  "old": "sub_F6C269",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecord_PutKind3MsgLine",
+  "header": "StepRecord_TrackKindMsgLineHandlers[3] (track kind 3, never stored): MsgLine_PutMeasureDigits then MsgLine_TransportState_Plus4 -- the line StepRecord_ReturnToKind3Page also writes.\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:161981 `call MsgLine_PutMeasureDigits` -- its body"
+  ]
+ },
+ {
+  "old": "DispatchTable_F6828B",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StepRecordKind3Sub12_ButtonTable",
+  "header": "Panel-button table (slot = code & 0x1F) of the track-kind-3 STEP RECORD sub-screens 12 and 15, read by StepRecordKind3Sub12_ButtonDispatch -- the StepRecordSubNN_ButtonTable shape; unreached in this build.\nBasis: table index (panel code, round 11) + its reader.",
+  "basis": "table index + reader",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:152455 `ld xix, DispatchTable_F6828B` -- the reader StepRecordKind3Sub12_ButtonDispatch"
+  ]
+ },
+ {
+  "old": "DispatchTable_F67616",
+  "verdict": "refuse",
+  "why_refused": "a 32-slot panel-button table of the STEP RECORD module, but no instruction or pointer names it, so WHICH sub-screen's buttons it holds is not established",
+  "new": "",
+  "header": "",
+  "basis": "no reader",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150853 `DispatchTable_F67616:` -- no reader"
+  ]
+ },
+ {
+  "old": "DispatchTable_F688D0",
+  "verdict": "refuse",
+  "why_refused": "index = Map_20B9_20BA_F688E0[(UiEvent_Byte2 bits 3-4, UiEvent_Byte3 bits 3-4)] & 3; what those two 2-bit fields of the UI event are is not established",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:153401 `ld xhl, DispatchTable_F688D0` -- the reader in sub_F687ED",
+   "prom_b/wsa1_prom_b.s:153453 `Map_20B9_20BA_F688E0:` -- the 4x4 map"
+  ]
+ },
+ {
+  "old": "sub_F6A2FF",
+  "verdict": "refuse",
+  "why_refused": "only non-ret entry ([3]) of DispatchTable_F688D0, whose index is not established; also a fall-through prologue of sub_F6A304",
+  "new": "",
+  "header": "",
+  "basis": "index not understood",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:157355 `m_or_mi8 MB16, 0x0e4e, 0x20` -- or (0x0E4E),0x20 then falls into sub_F6A304"
+  ]
+ },
+ {
+  "old": "DispatchTable_F6AB92",
+  "verdict": "refuse",
+  "why_refused": "five `ret` stubs and no instruction or pointer names the table, so its index is not established",
+  "new": "",
+  "header": "",
+  "basis": "no reader",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158641 `DispatchTable_F6AB92:` -- no reader"
+  ]
+ },
+ {
+  "old": "DispatchTable_F6AB92_Ret0",
+  "verdict": "refuse",
+  "why_refused": "entry of DispatchTable_F6AB92, which has no reader; index not established",
+  "new": "",
+  "header": "",
+  "basis": "no reader",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158650 `DispatchTable_F6AB92_Ret0:` -- lone ret"
+  ]
+ },
+ {
+  "old": "DispatchTable_F6AB92_Ret1",
+  "verdict": "refuse",
+  "why_refused": "entry of DispatchTable_F6AB92, which has no reader; index not established",
+  "new": "",
+  "header": "",
+  "basis": "no reader",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158652 `DispatchTable_F6AB92_Ret1:` -- lone ret"
+  ]
+ },
+ {
+  "old": "DispatchTable_F6AB92_Ret2",
+  "verdict": "refuse",
+  "why_refused": "entry of DispatchTable_F6AB92, which has no reader; index not established",
+  "new": "",
+  "header": "",
+  "basis": "no reader",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158654 `DispatchTable_F6AB92_Ret2:` -- lone ret"
+  ]
+ },
+ {
+  "old": "DispatchTable_F6AB92_Ret3",
+  "verdict": "refuse",
+  "why_refused": "entry of DispatchTable_F6AB92, which has no reader; index not established",
+  "new": "",
+  "header": "",
+  "basis": "no reader",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158656 `DispatchTable_F6AB92_Ret3:` -- lone ret"
+  ]
+ },
+ {
+  "old": "DispatchTable_F6AB92_Ret4",
+  "verdict": "refuse",
+  "why_refused": "entry of DispatchTable_F6AB92, which has no reader; index not established",
+  "new": "",
+  "header": "",
+  "basis": "no reader",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158658 `DispatchTable_F6AB92_Ret4:` -- lone ret"
+  ]
+ },
+ {
+  "old": "DispatchTable_F6ABD2",
+  "verdict": "refuse",
+  "why_refused": "the index is the track kind (0x0E63)&3, but the reader sub_F6ABB6 is itself unnamed and the arms' common action (sub_F69CB4 / sub_F6742C / sub_F69476 for kinds 1-2) is not established, so there is no verb for the table",
+  "new": "",
+  "header": "",
+  "basis": "action not understood",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158684 `ld xix, DispatchTable_F6ABD2` -- the reader sub_F6ABB6"
+  ]
+ },
+ {
+  "old": "sub_F6ABE2",
+  "verdict": "refuse",
+  "why_refused": "entry of DispatchTable_F6ABD2; that table's action is not established (see its row)",
+  "new": "",
+  "header": "",
+  "basis": "action not understood",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158716 `sub_F6ABE2:` -- entry"
+  ]
+ },
+ {
+  "old": "sub_F6ABF5",
+  "verdict": "refuse",
+  "why_refused": "entry of DispatchTable_F6ABD2; that table's action is not established (see its row)",
+  "new": "",
+  "header": "",
+  "basis": "action not understood",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158723 `sub_F6ABF5:` -- entry"
+  ]
+ },
+ {
+  "old": "DispatchTable_F6ABD2_Nop0",
+  "verdict": "refuse",
+  "why_refused": "entry of DispatchTable_F6ABD2; that table's action is not established (see its row)",
+  "new": "",
+  "header": "",
+  "basis": "action not understood",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158731 `DispatchTable_F6ABD2_Nop0:` -- entry"
+  ]
+ },
+ {
+  "old": "DispatchTable_F5B8F8",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "Dispatch_Code80_PaintTable",
+  "header": "Dispatch_Code80_Bracketed's table: the FULL paint of each screen code 0x80..0xAF (codes 0xC0.. read entry code - 0x40), run between LCD blank and show.\nBasis: table index (screen code) + its named entries (notes/prom_b_repaint_table_names.py).",
+  "basis": "table index + entries",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:131751 `ld xiy, DispatchTable_F5B8F8` -- the reader Dispatch_Code80_Bracketed: index code - 0x80"
+  ]
+ },
+ {
+  "old": "DispatchTable_F5B9F8",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "Dispatch_Code80_RepaintFieldTable",
+  "header": "Dispatch_Code80's table: the PARTIAL (field) repaint of each screen code 0x80..0xAF (0xC0.. read entry code - 0x40).\nBasis: table index (screen code) + its named entries (notes/prom_b_repaint_table_names.py).",
+  "basis": "table index + entries",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:131852 `ld xiy, DispatchTable_F5B9F8` -- the reader Dispatch_Code80: index code - 0x80"
+  ]
+ },
+ {
+  "old": "DispatchTable_F5B8F8_Nop42",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "Dispatch_Code80_PaintNoAction",
+  "header": "Dispatch_Code80_PaintTable[0x2A]: a lone `ret` for screen codes 0xAA (power-on splash) and 0xCA (SOUND EDIT DSP EFFECT, which paints from its ENTER).\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:131814 `.long DispatchTable_F5B8F8_Nop42` -- slot 0x2A, also selector 0xCA",
+   "prom_a/wsa1_prom_a.s:38848 `; ScreenEnter_PowerOnSplash -- the +0 ENTER method of screen 0xAA, the screen PanelState_Init requests at power-on` -- screen 0xAA",
+   "prom_a/wsa1_prom_a.s:155877 `; ScreenEnter_SoundEditDspEffect: screen 0xCA's +0 ENTER. 0xCA is DSP EFFECT reached from SOUND EDIT: T_ScreenEnterBody_DspEffect (the` -- screen 0xCA"
+  ]
+ },
+ {
+  "old": "DispatchTable_F5B9F8_Nop42",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "Dispatch_Code80_RepaintFieldNoAction",
+  "header": "Dispatch_Code80_RepaintFieldTable[0x2A]: a lone `ret` for screen codes 0xAA (power-on splash) and 0xCA (SOUND EDIT DSP EFFECT).\nBasis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:131911 `.long DispatchTable_F5B9F8_Nop42` -- slot 0x2A, also selector 0xCA"
+  ]
+ }
+]

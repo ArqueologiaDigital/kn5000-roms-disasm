@@ -2066,7 +2066,7 @@ def l2_substituted_codes():
 # have a sole CONTENT reader:
 #     PtrTable_F09B7B      <- RunDisplayListBFromPointerArray
 #     DLTable_F3A58A       <- Paint_TrackMerge
-#     DispatchTable_F5B9F8 <- Dispatch_Code80
+#     Dispatch_Code80_RepaintFieldTable <- Dispatch_Code80
 # A shape that reaches 3 of 722 is not a lever.  ⚠ AND IT IS ALSO NOT FREE: two
 # of the three sole readers are themselves derived names (`Paint_TrackMerge` came
 # from the title rule, `Dispatch_Code80` is a kind plus a number that only the

@@ -1536,7 +1536,7 @@ for _tb, _n in _JT:
           cp is not None and imm + 1 == _n, "cp at %s imm %s" % (cp, imm))
     check("JumpTable_%06X: every entry is an address inside prom_a" % _tb,
           all(0xF80000 <= _le32(_tb + 4 * k) <= 0xFFFFFF for k in range(_n)))
-check("JumpTable_FAC326: LAST-ENTRY TEST -- base + 13*4 = 0xFAC35A and the "
+check("Ctrl_CookedCellNumberHandlers: LAST-ENTRY TEST -- base + 13*4 = 0xFAC35A and the "
       "bytes there are `lda XIY,0x24f4`",
       0xFAC326 + 52 == 0xFAC35A and a(0xFAC35A, 4) == bytes([0xF1, 0xF4, 0x24, 0x35]))
 check("JumpTable_FAC3BF: LAST-ENTRY TEST -- base + 13*4 = 0xFAC3F3 and the "

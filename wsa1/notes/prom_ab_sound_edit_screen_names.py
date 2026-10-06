@@ -6,9 +6,9 @@ QUESTION IT ANSWERS
   ScreenButton_SoundEditPitchTune, SoftKeyCol1_ScreenCode87, ScreenCode87_Paint ...  A screen's code is both its
   PanelScreen_VtableTable ViewB index and the selector its paints go through (Dispatch_Code80 /
   _Bracketed; FINDINGS-l7a1429-editor-pages.md 2c: codes 0xC0+k reuse entry 0xA0+k).  So the text
-  DispatchTable_F5B8F8[code] draws IS the screen's identity.  The strings below were read out of the
+  Dispatch_Code80_PaintTable[code] draws IS the screen's identity.  The strings below were read out of the
   display lists each full paint runs (header + page lists), and the shared PARTIAL-repaint routines
-  (DispatchTable_F5B9F8) corroborate the groups:
+  (Dispatch_Code80_RepaintFieldTable) corroborate the groups:
     0x8A shares its field repaint with 0x8F and 0x99 (the AMPLITUDE and FILTER LFO pages) -> PITCH LFO;
     0x88 / 0x97 share one (envelope page 1), 0x89 / 0x98 another (envelope page 2), 0x8C / 0x96 a third
     (page 2/2, KEY FOLLOW).
@@ -56,7 +56,7 @@ SCREENS = {
     0x99: ("SoundEditFilterLfo", "FILTER SOUND EDIT; LF01 LF02 LF03 LF04, LF0 WAVE, DELAY, SPEED"),
     0x9A: ("SoundEditDigitalEffect", "the DIGITAL EFFECT page (SoundEditDigitalEffect_Paint, already so named)"),
     0x9B: ("SoundEditControllerPage2", "C0NTR0LLER SOUND EDIT; PAGE2/2 AFTER TOUCH, CTRL PEDAL (SoundEditController_PaintPage2)"),
-    0x9C: ("SoundEditDigitalEffectFromMenu", "no paint of its own (DispatchTable_F5B8F8[0x9C] is the default `ret`): its ENTER calls\n"
+    0x9C: ("SoundEditDigitalEffectFromMenu", "no paint of its own (Dispatch_Code80_PaintTable[0x9C] is the default `ret`): its ENTER calls\n"
            "ScreenEnter_SoundEditDigitalEffect, which paints page 0x9A, then sends ToneMsg80_Id00(0x10); it shares 0x9A's button\n"
            "table PanelOpTable_FCFBFC and leave body; LcdKeyRow3_SoundEditMenu requests it (2026-10-04)"),
     0x9D: ("SoundEditCopy", "the COPY page (SoundEditCopy_Paint, already so named)"),

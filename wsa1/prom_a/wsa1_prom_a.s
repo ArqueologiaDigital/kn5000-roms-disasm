@@ -584,17 +584,17 @@
 	.set DL_F191F8,                               0x00F191F8
 	.set DL_F19207,                               0x00F19207
 	.set StringTable_F19238,                      0x00F19238
-	.set DL_F19481,                               0x00F19481
+	.set CombiEditSound_MoveLevelsPageRowCursor_DL,                               0x00F19481
 	.set IndexMap_F19497,                         0x00F19497
-	.set DL_F19517,                               0x00F19517
+	.set CombiEditSound_MoveControllerFilterPageRowCursor_DL,                               0x00F19517
 	.set IndexMap_F1952D,                         0x00F1952D
-	.set DL_F195AD,                               0x00F195AD
+	.set CombiEditSound_MoveAssignAndInputFilterPageRowCursor_DL,                               0x00F195AD
 	.set IndexMap_F195C3,                         0x00F195C3
-	.set DL_F19603,                               0x00F19603
+	.set CombiEditSound_MoveMidiOutPageRowCursor_DL,                               0x00F19603
 	.set IndexMap_F19619,                         0x00F19619
-	.set DL_F19659,                               0x00F19659
+	.set CombiEditSound_MoveMidiOutFilterPageRowCursor_DL,                               0x00F19659
 	.set IndexMap_F1966F,                         0x00F1966F
-	.set DL_F196EF,                               0x00F196EF
+	.set CombiEditSound_MoveMultipleMessagesPageRowCursor_DL,                               0x00F196EF
 	.set IndexMap_F19705,                         0x00F19705
 	.set CombiEdit_TakePartIndex_DL,                               0x00F19745
 	.set DL_Rd1Rd2Ud1Ud2Ed1,                      0x00F19754
@@ -60189,11 +60189,11 @@ SoftKeyCols5_6_SystemTest:
 	cp bc, 0x05:i3                                         ; FA08AD  d9 dd
 	jrl ugt, .LFA098D                                        ; FA08AF  7b db 00
 	sll bc, 0x02                                         ; FA08B2  d9 ee 02
-	add XBC,JumpTable_FA08BF                             ; FA08B5  e9 c8 bf 08 fa 00
+	add XBC,SystemTest_NoteKeyItemHandlers                             ; FA08B5  e9 c8 bf 08 fa 00
 	ld XBC,(XBC)                                         ; FA08BB  a1 21
 	jp (xbc)                                             ; FA08BD  b1 d8
 ; ---------------------------------------------------------------------
-; JumpTable_FA08BF -- 6 LE32 branch targets
+; SystemTest_NoteKeyItemHandlers -- 6 LE32 branch targets
 ;
 ; Read by: `ld C,(0x26A7) / and C,0x07 / extz / cp BC,5 / jrl UGT,0xFA098D /
 ;          sll 0x02,BC / add XBC,0x00FA08BF / ld XBC,(XBC) / jp T,XBC` at
@@ -60204,14 +60204,21 @@ SoftKeyCols5_6_SystemTest:
 ; ENTRY COUNT 6, from `cp BC,5`.  ★ base + 24 = 0xFA08D7 = the minimum entry.
 ; Evidence / Unknown: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
-JumpTable_FA08BF:
-	.long sub_FA08D7                                 ; FA08BF  [  0]
-	.long sub_FA08F0                                 ; FA08C3  [  1]
-	.long sub_FA0909                                 ; FA08C7  [  2]
-	.long sub_FA0925                                 ; FA08CB  [  3]
-	.long sub_FA0940                                 ; FA08CF  [  4]
-	.long sub_FA095B                                 ; FA08D3  [  5]
-sub_FA08D7:   ; entry: named by 1 `.long` operand, first at 0xFA08BF
+; SystemTest_NoteKeyItemHandlers: TEST page (screen 0x64, SX-WSA1R): soft keys 5-6 (the NOTE column) by ITEM cursor
+;   (0x26A7)&7: 0 TEST on/off, 1 MODE mono/poly, 2..5 the 1st..4th test note. Basis: table index (ITEM cursor,
+;   Descriptor9_FA1EBE 0..5) + the page's row text + each arm's operand. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_NoteKeyItemHandlers:
+	.long SystemTest_NoteKeys_SetTestOnOff                                 ; FA08BF  [  0]
+	.long SystemTest_NoteKeys_SetMonoPoly                                 ; FA08C3  [  1]
+	.long SystemTest_StepFirstNote                                 ; FA08C7  [  2]
+	.long SystemTest_StepSecondNote                                 ; FA08CB  [  3]
+	.long SystemTest_StepThirdNote                                 ; FA08CF  [  4]
+	.long SystemTest_StepFourthNote                                 ; FA08D3  [  5]
+; SystemTest_NoteKeys_SetTestOnOff: SystemTest_NoteKeyItemHandlers[0] (ITEM 0, TEST): soft keys 5-6 set/clear (0x26A7) bit 3 (TEST
+;   OFF/ON) via EditValue_SetBit, then rebuild the note lists and repaint. Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_NoteKeys_SetTestOnOff:   ; entry: named by 1 `.long` operand, first at 0xFA08BF
 	lda xbc, (Descriptor3_FA1EC7:24)                     ; FA08D7  f2 c7 1e fa 31
 	push XBC                                             ; FA08DC  39
 	lda xwa, (0x26a7:16)                                ; FA08DD  f1 a7 26 30
@@ -60221,7 +60228,10 @@ sub_FA08D7:   ; entry: named by 1 `.long` operand, first at 0xFA08BF
 	cp a, 0x01:i3                                          ; FA08E8  c9 d9
 	jrl nz, .LFA098D                                     ; FA08EA  7e a0 00
 	jrl .LFA0977                                         ; FA08ED  78 87 00
-sub_FA08F0:   ; entry: named by 1 `.long` operand, first at 0xFA08C3
+; SystemTest_NoteKeys_SetMonoPoly: SystemTest_NoteKeyItemHandlers[1] (ITEM 1, MODE): soft keys 5-6 set/clear (0x26A7) bit 4
+;   (MONO/POLY) via EditValue_SetBit, then rebuild the note lists and repaint. Basis: table index + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_NoteKeys_SetMonoPoly:   ; entry: named by 1 `.long` operand, first at 0xFA08C3
 	lda xbc, (Descriptor3_FA1ECA:24)                     ; FA08F0  f2 ca 1e fa 31
 	push XBC                                             ; FA08F5  39
 	lda xwa, (0x26a7:16)                                ; FA08F6  f1 a7 26 30
@@ -60231,7 +60241,10 @@ sub_FA08F0:   ; entry: named by 1 `.long` operand, first at 0xFA08C3
 	cp a, 0x01:i3                                          ; FA0901  c9 d9
 	jrl nz, .LFA098D                                     ; FA0903  7e 87 00
 	jrl .LFA0977                                         ; FA0906  78 6e 00
-sub_FA0909:   ; entry: named by 1 `.long` operand, first at 0xFA08C7
+; SystemTest_StepFirstNote: SystemTest_NoteKeyItemHandlers[2] (ITEM 2, the first test note): steps the note byte (0x26A8, MIDI note
+;   + 1, 0 = empty) via EditValue_StepBitField (ByteTable9_FA1ECD, 0..0x80), then re-splits the notes, rebuilds the
+;   note lists and repaints. Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_StepFirstNote:   ; entry: named by 1 `.long` operand, first at 0xFA08C7
 	lda xbc, (ByteTable9_FA1ECD:24)                      ; FA0909  f2 cd 1e fa 31
 	push XBC                                             ; FA090E  39
 	lda xwa, (0x26a8:16)                                ; FA090F  f1 a8 26 30
@@ -60244,7 +60257,10 @@ sub_FA0909:   ; entry: named by 1 `.long` operand, first at 0xFA08C7
 	cp a, 0x01:i3                                          ; FA091E  c9 d9
 	jrl nz, .LFA098D                                     ; FA0920  7e 6a 00
 	jr .LFA0974                                          ; FA0923  68 4f
-sub_FA0925:   ; entry: named by 1 `.long` operand, first at 0xFA08CB
+; SystemTest_StepSecondNote: SystemTest_NoteKeyItemHandlers[3] (ITEM 3, the second test note): steps the note byte (0x26AA, MIDI
+;   note + 1, 0 = empty) via EditValue_StepBitField (ByteTable9_FA1ECD, 0..0x80), then re-splits the notes, rebuilds
+;   the note lists and repaints. Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_StepSecondNote:   ; entry: named by 1 `.long` operand, first at 0xFA08CB
 	lda xbc, (ByteTable9_FA1ECD:24)                      ; FA0925  f2 cd 1e fa 31
 	push XBC                                             ; FA092A  39
 	lda xwa, (0x26aa:16)                                ; FA092B  f1 aa 26 30
@@ -60257,7 +60273,10 @@ sub_FA0925:   ; entry: named by 1 `.long` operand, first at 0xFA08CB
 	cp a, 0x01:i3                                          ; FA093A  c9 d9
 	jr nz, .LFA098D                                      ; FA093C  6e 4f
 	jr .LFA0974                                          ; FA093E  68 34
-sub_FA0940:   ; entry: named by 1 `.long` operand, first at 0xFA08CF
+; SystemTest_StepThirdNote: SystemTest_NoteKeyItemHandlers[4] (ITEM 4, the third test note): steps the note byte (0x26AC, MIDI note
+;   + 1, 0 = empty) via EditValue_StepBitField (ByteTable9_FA1ECD, 0..0x80), then re-splits the notes, rebuilds the
+;   note lists and repaints. Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_StepThirdNote:   ; entry: named by 1 `.long` operand, first at 0xFA08CF
 	lda xbc, (ByteTable9_FA1ECD:24)                      ; FA0940  f2 cd 1e fa 31
 	push XBC                                             ; FA0945  39
 	lda xwa, (0x26ac:16)                                ; FA0946  f1 ac 26 30
@@ -60270,7 +60289,10 @@ sub_FA0940:   ; entry: named by 1 `.long` operand, first at 0xFA08CF
 	cp a, 0x01:i3                                          ; FA0955  c9 d9
 	jr nz, .LFA098D                                      ; FA0957  6e 34
 	jr .LFA0974                                          ; FA0959  68 19
-sub_FA095B:   ; entry: named by 1 `.long` operand, first at 0xFA08D3
+; SystemTest_StepFourthNote: SystemTest_NoteKeyItemHandlers[5] (ITEM 5, the fourth test note): steps the note byte (0x26AE, MIDI
+;   note + 1, 0 = empty) via EditValue_StepBitField (ByteTable9_FA1ECD, 0..0x80), then re-splits the notes, rebuilds
+;   the note lists and repaints. Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_StepFourthNote:   ; entry: named by 1 `.long` operand, first at 0xFA08D3
 	lda xbc, (ByteTable9_FA1ECD:24)                      ; FA095B  f2 cd 1e fa 31
 	push XBC                                             ; FA0960  39
 	lda xwa, (0x26ae:16)                                ; FA0961  f1 ae 26 30
@@ -60310,24 +60332,31 @@ SoftKeyCols7_8_SystemTest:
 	cp bc, 0x05:i3                                         ; FA09AB  d9 dd
 	jrl ugt, .LFA0A87                                        ; FA09AD  7b d7 00
 	sll bc, 0x02                                         ; FA09B0  d9 ee 02
-	add XBC,JumpTable_FA09BD                             ; FA09B3  e9 c8 bd 09 fa 00
+	add XBC,SystemTest_VelocityKeyItemHandlers                             ; FA09B3  e9 c8 bd 09 fa 00
 	ld XBC,(XBC)                                         ; FA09B9  a1 21
 	jp (xbc)                                             ; FA09BB  b1 d8
 ; ---------------------------------------------------------------------
-; JumpTable_FA09BD -- 6 LE32 branch targets, same shape as JumpTable_FA08BF
+; SystemTest_VelocityKeyItemHandlers -- 6 LE32 branch targets, same shape as SystemTest_NoteKeyItemHandlers
 ;
 ; Read by: the `cp BC,5 / ... / add XBC,0x00FA09BD` reader at 0xFA09A0-0xFA09BC.
 ; ENTRY COUNT 6, from that `cp`.  ★ base + 24 = 0xFA09D5 = the minimum entry.
 ; Evidence / Unknown: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
-JumpTable_FA09BD:
-	.long JumpTable_FA09BD__FA09D5                                 ; FA09BD  [  0]
-	.long sub_FA09EE                                 ; FA09C1  [  1]
-	.long sub_FA0A07                                 ; FA09C5  [  2]
-	.long sub_FA0A22                                 ; FA09C9  [  3]
-	.long sub_FA0A3D                                 ; FA09CD  [  4]
-	.long sub_FA0A58                                 ; FA09D1  [  5]
-JumpTable_FA09BD__FA09D5:
+; SystemTest_VelocityKeyItemHandlers: TEST page (screen 0x64, SX-WSA1R): soft keys 7-8 (the VELOCITY column) by ITEM
+;   cursor (0x26A7)&7: 0 TEST on/off, 1 MODE mono/poly, 2..5 the 1st..4th test velocity. Basis: table index (ITEM
+;   cursor) + the page's row text + each arm's operand; twin of SystemTest_NoteKeyItemHandlers. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_VelocityKeyItemHandlers:
+	.long SystemTest_VelocityKeys_SetTestOnOff                                 ; FA09BD  [  0]
+	.long SystemTest_VelocityKeys_SetMonoPoly                                 ; FA09C1  [  1]
+	.long SystemTest_StepFirstVelocity                                 ; FA09C5  [  2]
+	.long SystemTest_StepSecondVelocity                                 ; FA09C9  [  3]
+	.long SystemTest_StepThirdVelocity                                 ; FA09CD  [  4]
+	.long SystemTest_StepFourthVelocity                                 ; FA09D1  [  5]
+; SystemTest_VelocityKeys_SetTestOnOff: SystemTest_VelocityKeyItemHandlers[0] (ITEM 0, TEST): soft keys 7-8 set/clear (0x26A7) bit 3
+;   (TEST OFF/ON) via EditValue_SetBit, then rebuild the note lists and repaint. Basis: table index + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_VelocityKeys_SetTestOnOff:
 	lda xbc, (Descriptor3_FA1EC7:24)                               ; FA09D5  f2 c7 1e fa 31
 	push XBC                                             ; FA09DA  39
 	lda xwa, (0x26a7:16)                                ; FA09DB  f1 a7 26 30
@@ -60337,7 +60366,10 @@ JumpTable_FA09BD__FA09D5:
 	cp a, 0x01:i3                                          ; FA09E6  c9 d9
 	jrl nz, .LFA0A87                                     ; FA09E8  7e 9c 00
 	jrl .LFA0A71                                         ; FA09EB  78 83 00
-sub_FA09EE:   ; entry: named by 1 `.long` operand, first at 0xFA09C1
+; SystemTest_VelocityKeys_SetMonoPoly: SystemTest_VelocityKeyItemHandlers[1] (ITEM 1, MODE): soft keys 7-8 set/clear (0x26A7) bit 4
+;   (MONO/POLY) via EditValue_SetBit, then rebuild the note lists and repaint. Basis: table index + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_VelocityKeys_SetMonoPoly:   ; entry: named by 1 `.long` operand, first at 0xFA09C1
 	lda xbc, (Descriptor3_FA1ECA:24)                     ; FA09EE  f2 ca 1e fa 31
 	push XBC                                             ; FA09F3  39
 	lda xwa, (0x26a7:16)                                ; FA09F4  f1 a7 26 30
@@ -60347,7 +60379,10 @@ sub_FA09EE:   ; entry: named by 1 `.long` operand, first at 0xFA09C1
 	cp a, 0x01:i3                                          ; FA09FF  c9 d9
 	jrl nz, .LFA0A87                                     ; FA0A01  7e 83 00
 	jrl .LFA0A71                                         ; FA0A04  78 6a 00
-sub_FA0A07:   ; entry: named by 1 `.long` operand, first at 0xFA09C5
+; SystemTest_StepFirstVelocity: SystemTest_VelocityKeyItemHandlers[2] (ITEM 2, the first test note's velocity): steps byte 0x26A9 via
+;   EditValue_StepBitField (ByteTable9_FA1ED6, 1..0x7F), then rebuilds the note lists and repaints. Basis: table index
+;   + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_StepFirstVelocity:   ; entry: named by 1 `.long` operand, first at 0xFA09C5
 	lda xbc, (ByteTable9_FA1ED6:24)                      ; FA0A07  f2 d6 1e fa 31
 	push XBC                                             ; FA0A0C  39
 	lda xwa, (0x26a9:16)                                ; FA0A0D  f1 a9 26 30
@@ -60360,7 +60395,10 @@ sub_FA0A07:   ; entry: named by 1 `.long` operand, first at 0xFA09C5
 	cp a, 0x01:i3                                          ; FA0A1C  c9 d9
 	jr nz, .LFA0A87                                      ; FA0A1E  6e 67
 	jr .LFA0A71                                          ; FA0A20  68 4f
-sub_FA0A22:   ; entry: named by 1 `.long` operand, first at 0xFA09C9
+; SystemTest_StepSecondVelocity: SystemTest_VelocityKeyItemHandlers[3] (ITEM 3, the second test note's velocity): steps byte 0x26AB via
+;   EditValue_StepBitField (ByteTable9_FA1ED6, 1..0x7F), then rebuilds the note lists and repaints. Basis: table index
+;   + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_StepSecondVelocity:   ; entry: named by 1 `.long` operand, first at 0xFA09C9
 	lda xbc, (ByteTable9_FA1ED6:24)                      ; FA0A22  f2 d6 1e fa 31
 	push XBC                                             ; FA0A27  39
 	lda xwa, (0x26ab:16)                                ; FA0A28  f1 ab 26 30
@@ -60373,7 +60411,10 @@ sub_FA0A22:   ; entry: named by 1 `.long` operand, first at 0xFA09C9
 	cp a, 0x01:i3                                          ; FA0A37  c9 d9
 	jr nz, .LFA0A87                                      ; FA0A39  6e 4c
 	jr .LFA0A71                                          ; FA0A3B  68 34
-sub_FA0A3D:   ; entry: named by 1 `.long` operand, first at 0xFA09CD
+; SystemTest_StepThirdVelocity: SystemTest_VelocityKeyItemHandlers[4] (ITEM 4, the third test note's velocity): steps byte 0x26AD via
+;   EditValue_StepBitField (ByteTable9_FA1ED6, 1..0x7F), then rebuilds the note lists and repaints. Basis: table index
+;   + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_StepThirdVelocity:   ; entry: named by 1 `.long` operand, first at 0xFA09CD
 	lda xbc, (ByteTable9_FA1ED6:24)                      ; FA0A3D  f2 d6 1e fa 31
 	push XBC                                             ; FA0A42  39
 	lda xwa, (0x26ad:16)                                ; FA0A43  f1 ad 26 30
@@ -60386,7 +60427,10 @@ sub_FA0A3D:   ; entry: named by 1 `.long` operand, first at 0xFA09CD
 	cp a, 0x01:i3                                          ; FA0A52  c9 d9
 	jr nz, .LFA0A87                                      ; FA0A54  6e 31
 	jr .LFA0A71                                          ; FA0A56  68 19
-sub_FA0A58:   ; entry: named by 1 `.long` operand, first at 0xFA09D1
+; SystemTest_StepFourthVelocity: SystemTest_VelocityKeyItemHandlers[5] (ITEM 5, the fourth test note's velocity): steps byte 0x26AF via
+;   EditValue_StepBitField (ByteTable9_FA1ED6, 1..0x7F), then rebuilds the note lists and repaints. Basis: table index
+;   + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_StepFourthVelocity:   ; entry: named by 1 `.long` operand, first at 0xFA09D1
 	lda xbc, (ByteTable9_FA1ED6:24)                      ; FA0A58  f2 d6 1e fa 31
 	push XBC                                             ; FA0A5D  39
 	lda xwa, (0x26af:16)                                ; FA0A5E  f1 af 26 30
@@ -60458,24 +60502,30 @@ ExitKey_TouchSensitivityOrTest:
 	cp bc, 0x05:i3                                         ; FA0B02  d9 dd
 	jr ugt, .LFA0B79                                         ; FA0B04  6b 73
 	sll bc, 0x02                                         ; FA0B06  d9 ee 02
-	add XBC,JumpTable_FA0B13                             ; FA0B09  e9 c8 13 0b fa 00
+	add XBC,SystemTest_ValueHeaderItemHandlers                             ; FA0B09  e9 c8 13 0b fa 00
 	ld XBC,(XBC)                                         ; FA0B0F  a1 21
 	jp (xbc)                                             ; FA0B11  b1 d8
 ; ---------------------------------------------------------------------
-; JumpTable_FA0B13 -- 6 LE32 branch targets
+; SystemTest_ValueHeaderItemHandlers -- 6 LE32 branch targets
 ;
 ; Read by: the `cp BC,5 / ... / add XBC,0x00FA0B13` reader at 0xFA0AF6-0xFA0B12.
 ; ENTRY COUNT 6, from that `cp`.  ★ base + 24 = 0xFA0B2B = the minimum entry.
 ; Evidence / Unknown: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
-JumpTable_FA0B13:
-	.long sub_FA0B2B                                 ; FA0B13  [  0]
-	.long sub_FA0B2B                                 ; FA0B17  [  1]
-	.long sub_FA0B51                                 ; FA0B1B  [  2]
-	.long sub_FA0B51                                 ; FA0B1F  [  3]
-	.long sub_FA0B51                                 ; FA0B23  [  4]
-	.long sub_FA0B51                                 ; FA0B27  [  5]
-sub_FA0B2B:   ; entry: named by 2 `.long` operands, first at 0xFA0B13
+; SystemTest_ValueHeaderItemHandlers: TEST page: picks the soft-key 5-8 heading by ITEM cursor (0x26A7)&7 -- items 0/1
+;   (TEST, MODE) 'VALUE', items 2..5 (the test notes) 'NOTE' + 'VELOCITY'. Basis: table index + the two arms' display
+;   lists. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_ValueHeaderItemHandlers:
+	.long SystemTest_ShowValueHeader                                 ; FA0B13  [  0]
+	.long SystemTest_ShowValueHeader                                 ; FA0B17  [  1]
+	.long SystemTest_ShowNoteVelocityHeader                                 ; FA0B1B  [  2]
+	.long SystemTest_ShowNoteVelocityHeader                                 ; FA0B1F  [  3]
+	.long SystemTest_ShowNoteVelocityHeader                                 ; FA0B23  [  4]
+	.long SystemTest_ShowNoteVelocityHeader                                 ; FA0B27  [  5]
+; SystemTest_ShowValueHeader: SystemTest_ValueHeaderItemHandlers[0,1] (items TEST / MODE): if the NOTE/VELOCITY heading is up ((0x2902)
+;   bit 1) erases it, draws 'VALUE' (DL_Value) and clears the bit. Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_ShowValueHeader:   ; entry: named by 2 `.long` operands, first at 0xFA0B13
 	ld C,(XIX)                                           ; FA0B2B  84 23
 	and C,0x02                                           ; FA0B2D  cb cc 02
 	jr z, .LFA0B79                                       ; FA0B30  66 47
@@ -60489,7 +60539,10 @@ sub_FA0B2B:   ; entry: named by 2 `.long` operands, first at 0xFA0B13
 	call T_DisplayList_Run_Stack                         ; FA0B48  1d 00 2e f4
 	and (XIX),0xfd                                       ; FA0B4C  84 3c fd
 	jr .LFA0B75                                          ; FA0B4F  68 24
-sub_FA0B51:   ; entry: named by 4 `.long` operands, first at 0xFA0B1B
+; SystemTest_ShowNoteVelocityHeader: SystemTest_ValueHeaderItemHandlers[2..5] (the four test-note items): unless already up ((0x2902)
+;   bit 1) erases the heading area, draws 'NOTE' / 'VELOCITY' (DL_NoteVelocity) and sets the bit. Basis: table index +
+;   body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SystemTest_ShowNoteVelocityHeader:   ; entry: named by 4 `.long` operands, first at 0xFA0B1B
 	ld C,(XIX)                                           ; FA0B51  84 23
 	and C,0x02                                           ; FA0B53  cb cc 02
 	jr nz, .LFA0B79                                      ; FA0B56  6e 21
@@ -81125,7 +81178,7 @@ List2030_TranslateToQueue2C00:
 	pop XIX                                              ; FAB892  5c
 	ret                                                  ; FAB893  0e
 ; List2030_Part00to1F_Dispatch: the 0x2030-list handler for parameter numbers 0x00-0x1F (Dispatch_By_60F080 entries 0-31: the
-;   number is the part): dispatches again on the record's CLASS (0x60F088) through JumpTable_FAB8B4 -- the sibling of
+;   number is the part): dispatches again on the record's CLASS (0x60F088) through List2030_PartFieldHandlers -- the sibling of
 ;   List2030_Part20to3F_Dispatch (Dispatch_By_60F080's own header).
 List2030_Part00to1F_Dispatch:   ; entry: named by 32 `.long` operands, first at 0xFAC8EA
 	calr ParamRecord_LoadOldByte                                      ; FAB894  1e 41 f9
@@ -81135,9 +81188,9 @@ List2030_Part00to1F_Dispatch:   ; entry: named by 32 `.long` operands, first at 
 	cp BC,0x000b                                         ; FAB8A0  d9 cf 0b 00
 	jrl ugt, .LFAB914                                        ; FAB8A4  7b 6d 00
 	sll bc, 0x02                                         ; FAB8A7  d9 ee 02
-	add XBC,JumpTable_FAB8B4                             ; FAB8AA  e9 c8 b4 b8 fa 00
+	add XBC,List2030_PartFieldHandlers                             ; FAB8AA  e9 c8 b4 b8 fa 00
 ; ---------------------------------------------------------------------
-; the reader of JumpTable_FAB8B4
+; the reader of List2030_PartFieldHandlers
 ;
 ; Called from: this is not a routine entry; it is the tail of the code that
 ;          begins at 0xFAB894.  No site names 0xFAB8B0 -- it carries a label
@@ -81145,7 +81198,7 @@ List2030_Part00to1F_Dispatch:   ; entry: named by 32 `.long` operands, first at 
 ;          opcode-anchored scan names, and that scan's `jr` rows are mostly
 ;          coincidence.
 ; Inputs:  (0x60F088), an 8-bit selector, zero-extended into BC.
-; Outputs: control transfers to JumpTable_FAB8B4[selector]; selectors above
+; Outputs: control transfers to List2030_PartFieldHandlers[selector]; selectors above
 ;          0x0B take the `jrl UGT,0xFAB914` two instructions earlier.
 ; Evidence: `cp BC,0x000b` at 0xFAB8A0 then `sll 0x02,BC`, `add XBC,0x00FAB8B4`,
 ;          `ld XBC,(XBC)`, `jp T,XBC`.
@@ -81155,7 +81208,7 @@ List2030_Part00to1F_Dispatch:   ; entry: named by 32 `.long` operands, first at 
 	ld XBC,(XBC)                                         ; FAB8B0  a1 21
 	jp (xbc)                                             ; FAB8B2  b1 d8
 ; ---------------------------------------------------------------------
-; JumpTable_FAB8B4 -- 12 LE32 branch targets
+; List2030_PartFieldHandlers -- 12 LE32 branch targets
 ;
 ; Read by: ONE site, the `add XBC,0x00FAB8B4 / ld XBC,(XBC) / jp T,XBC` at
 ;          0xFAB8AA-0xFAB8B2.  Nothing calls a table.
@@ -81180,8 +81233,12 @@ List2030_Part00to1F_Dispatch:   ; entry: named by 32 `.long` operands, first at 
 ;          taken from its own `cp BC`; both re-derived by
 ;          notes/prom_a_byte_checks.py and notes/prom_a_jumptables.py.
 ; ---------------------------------------------------------------------
-JumpTable_FAB8B4:
-	.long sub_FAB8E4                                 ; FAB8B4  [  0]
+; List2030_PartFieldHandlers: List2030_Part00to1F_Dispatch's switch on the record CLASS (0x60F088), the byte index
+;   0..11 in a part's first record: 0 PROGRAM CHANGE & BANK, 3 VOLUME, 5-7 effect sends, 8 PAN, 9-11 tunings. Basis:
+;   table index (record byte, the SysEx descriptors and MidiOut_ParamClassTable) + its named arms. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+List2030_PartFieldHandlers:
+	.long List2030_PartProgramChange_Apply_Call                                 ; FAB8B4  [  0]
 	.long .LFAB914                                   ; FAB8B8  [  1]
 	.long .LFAB914                                   ; FAB8BC  [  2]
 	.long List2030_PartVolume_Apply_Call                                 ; FAB8C0  [  3]
@@ -81193,10 +81250,14 @@ JumpTable_FAB8B4:
 	.long List2030_PartCoarseTune_Apply_Call                                 ; FAB8D8  [  9]
 	.long List2030_PartFineTune_Apply_Call                                 ; FAB8DC  [ 10]
 	.long List2030_PartBendRange_Apply_Call                                 ; FAB8E0  [ 11]
-sub_FAB8E4:   ; entry: JumpTable_FAB8B4[0], class 0
+; List2030_PartProgramChange_Apply_Call: List2030_PartFieldHandlers[0] (record byte 0, PROGRAM CHANGE & BANK): `calr`
+;   the class-0 apply routine (SoundSel_ClampToProgramAndBank, then the part's sound bytes) and `jr` to the shared ret
+;   -- the shape of List2030_PartVolume_Apply_Call. Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+List2030_PartProgramChange_Apply_Call:   ; entry: List2030_PartFieldHandlers[0], class 0
 	calr sub_FAB915                                      ; FAB8E4  1e 2e 00
 	jr .LFAB914                                          ; FAB8E7  68 2b
-; List2030_PartVolume_Apply_Call: JumpTable_FAB8B4[3]: `calr List2030_PartVolume_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+; List2030_PartVolume_Apply_Call: List2030_PartFieldHandlers[3]: `calr List2030_PartVolume_Apply / jr` to the table's shared `ret` -- the shape of class 11's
 ;   List2030_PartBendRange_Apply_Call.
 List2030_PartVolume_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8C0
 	calr List2030_PartVolume_Apply                                      ; FAB8E9  1e 11 01
@@ -81204,32 +81265,32 @@ List2030_PartVolume_Apply_Call:   ; entry: named by 1 `.long` operand, first at 
 sub_FAB8EE:   ; entry: named by 1 `.long` operand, first at 0xFAB8C4
 	calr sub_FABA08                                      ; FAB8EE  1e 17 01
 	jr .LFAB914                                          ; FAB8F1  68 21
-; List2030_PartEffect3Depth_Apply_Call: JumpTable_FAB8B4[5]: `calr List2030_PartEffect3Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+; List2030_PartEffect3Depth_Apply_Call: List2030_PartFieldHandlers[5]: `calr List2030_PartEffect3Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's
 ;   List2030_PartBendRange_Apply_Call.
 List2030_PartEffect3Depth_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8C8
 	calr List2030_PartEffect3Depth_Apply                                      ; FAB8F3  1e ba 01
 	jr .LFAB914                                          ; FAB8F6  68 1c
-; List2030_PartEffect4Depth_Apply_Call: JumpTable_FAB8B4[6]: `calr List2030_PartEffect4Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+; List2030_PartEffect4Depth_Apply_Call: List2030_PartFieldHandlers[6]: `calr List2030_PartEffect4Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's
 ;   List2030_PartBendRange_Apply_Call.
 List2030_PartEffect4Depth_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8CC
 	calr List2030_PartEffect4Depth_Apply                                      ; FAB8F8  1e c0 01
 	jr .LFAB914                                          ; FAB8FB  68 17
-; List2030_PartEffect1Depth_Apply_Call: JumpTable_FAB8B4[7]: `calr List2030_PartEffect1Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+; List2030_PartEffect1Depth_Apply_Call: List2030_PartFieldHandlers[7]: `calr List2030_PartEffect1Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's
 ;   List2030_PartBendRange_Apply_Call.
 List2030_PartEffect1Depth_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8D0
 	calr List2030_PartEffect1Depth_Apply                                      ; FAB8FD  1e c6 01
 	jr .LFAB914                                          ; FAB900  68 12
-; List2030_PartPan_Apply_Call: JumpTable_FAB8B4[8]: `calr List2030_PartPan_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+; List2030_PartPan_Apply_Call: List2030_PartFieldHandlers[8]: `calr List2030_PartPan_Apply / jr` to the table's shared `ret` -- the shape of class 11's
 ;   List2030_PartBendRange_Apply_Call.
 List2030_PartPan_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8D4
 	calr List2030_PartPan_Apply                                      ; FAB902  1e cc 01
 	jr .LFAB914                                          ; FAB905  68 0d
-; List2030_PartCoarseTune_Apply_Call: JumpTable_FAB8B4[9]: `calr List2030_PartCoarseTune_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+; List2030_PartCoarseTune_Apply_Call: List2030_PartFieldHandlers[9]: `calr List2030_PartCoarseTune_Apply / jr` to the table's shared `ret` -- the shape of class 11's
 ;   List2030_PartBendRange_Apply_Call.
 List2030_PartCoarseTune_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8D8
 	calr List2030_PartCoarseTune_Apply                                      ; FAB907  1e d2 01
 	jr .LFAB914                                          ; FAB90A  68 08
-; List2030_PartFineTune_Apply_Call: JumpTable_FAB8B4[10]: `calr List2030_PartFineTune_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+; List2030_PartFineTune_Apply_Call: List2030_PartFieldHandlers[10]: `calr List2030_PartFineTune_Apply / jr` to the table's shared `ret` -- the shape of class 11's
 ;   List2030_PartBendRange_Apply_Call.
 List2030_PartFineTune_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8DC
 	calr List2030_PartFineTune_Apply                                      ; FAB90C  1e d8 01
@@ -81309,7 +81370,7 @@ sub_FAB915:
 	unlk XIZ                                             ; FAB9FA  ee 0d
 	ret                                                  ; FAB9FC  0e
 ; List2030_PartVolume_Apply -- class 3 of a part (number 0x00-0x1F) record in the RAM 0x2030 list: write the 7-bit value into byte 3 of that part's record when it changed, and queue the change to 0x2C00
-; Evidence: JumpTable_FAB8B4[3] (reached by `calr` at 0xFAB8E9), which is indexed by the record CLASS (0x60F088); MidiOut_ParamClassTable[3], indexed by the same class byte of the same 4-byte record, is MidiOut_CC07_Volume.
+; Evidence: List2030_PartFieldHandlers[3] (reached by `calr` at 0xFAB8E9), which is indexed by the record CLASS (0x60F088); MidiOut_ParamClassTable[3], indexed by the same class byte of the same 4-byte record, is MidiOut_CC07_Volume.
 ; Body: `pushw 0x7f / calr ParamRecord_MergeFieldIfChanged / calr Queue2C00_AppendStagedIfPending` (0xFAB9FD-0xFABA03).  ParamRecord_MergeFieldIfChanged merges (0x60F089) under the pushed mask into ParamNumber_RecordPtrs[(0x60F080)] + class, compares with the old byte (0x60F08B) and only then stores, stages and ORs the mask into (0x60F083).
 ; The six siblings 0xFABAB0-0xFABAF2 are byte-identical except for the pushed mask.
 List2030_PartVolume_Apply:
@@ -81382,7 +81443,7 @@ sub_FABA08:
 	unlk XIZ                                             ; FABAAD  ee 0d
 	ret                                                  ; FABAAF  0e
 ; List2030_PartEffect3Depth_Apply -- class 5 of a part record in the 0x2030 list: write the 7-bit value into byte 5 of the part's record when it changed, and queue it to 0x2C00
-; Evidence: JumpTable_FAB8B4[5] (calr at 0xFAB8F3); MidiOut_ParamClassTable[5] on the same class byte is MidiOut_CC5D_Effect3Depth.  Body `pushw 0x7f / calr ParamRecord_MergeFieldIfChanged / calr Queue2C00_AppendStagedIfPending`, as List2030_PartVolume_Apply.
+; Evidence: List2030_PartFieldHandlers[5] (calr at 0xFAB8F3); MidiOut_ParamClassTable[5] on the same class byte is MidiOut_CC5D_Effect3Depth.  Body `pushw 0x7f / calr ParamRecord_MergeFieldIfChanged / calr Queue2C00_AppendStagedIfPending`, as List2030_PartVolume_Apply.
 List2030_PartEffect3Depth_Apply:
 	pushw 0x7f                                           ; FABAB0  0b 7f 00
 	calr ParamRecord_MergeFieldIfChanged                                          ; FABAB3  1e 81 f8
@@ -81390,7 +81451,7 @@ List2030_PartEffect3Depth_Apply:
 	popw bc                                              ; FABAB9  49
 	ret                                                  ; FABABA  0e
 ; List2030_PartEffect4Depth_Apply -- class 6 of a part record in the 0x2030 list: write the 7-bit value into byte 6 when it changed, and queue it to 0x2C00
-; Evidence: JumpTable_FAB8B4[6] (calr at 0xFAB8F8); MidiOut_ParamClassTable[6] is MidiOut_CC5E_Effect4Depth.  Body as List2030_PartVolume_Apply, mask 0x7F.
+; Evidence: List2030_PartFieldHandlers[6] (calr at 0xFAB8F8); MidiOut_ParamClassTable[6] is MidiOut_CC5E_Effect4Depth.  Body as List2030_PartVolume_Apply, mask 0x7F.
 List2030_PartEffect4Depth_Apply:
 	pushw 0x7f                                           ; FABABB  0b 7f 00
 	calr ParamRecord_MergeFieldIfChanged                                          ; FABABE  1e 76 f8
@@ -81398,7 +81459,7 @@ List2030_PartEffect4Depth_Apply:
 	popw bc                                              ; FABAC4  49
 	ret                                                  ; FABAC5  0e
 ; List2030_PartEffect1Depth_Apply -- class 7 of a part record in the 0x2030 list: write the 7-bit value into byte 7 when it changed, and queue it to 0x2C00
-; Evidence: JumpTable_FAB8B4[7] (calr at 0xFAB8FD); MidiOut_ParamClassTable[7] is MidiOut_CC5B_Effect1Depth.  Body as List2030_PartVolume_Apply, mask 0x7F.
+; Evidence: List2030_PartFieldHandlers[7] (calr at 0xFAB8FD); MidiOut_ParamClassTable[7] is MidiOut_CC5B_Effect1Depth.  Body as List2030_PartVolume_Apply, mask 0x7F.
 List2030_PartEffect1Depth_Apply:
 	pushw 0x7f                                           ; FABAC6  0b 7f 00
 	calr ParamRecord_MergeFieldIfChanged                                          ; FABAC9  1e 6b f8
@@ -81406,7 +81467,7 @@ List2030_PartEffect1Depth_Apply:
 	popw bc                                              ; FABACF  49
 	ret                                                  ; FABAD0  0e
 ; List2030_PartPan_Apply -- class 8 of a part record in the 0x2030 list: write the 7-bit value into byte 8 when it changed, and queue it to 0x2C00
-; Evidence: JumpTable_FAB8B4[8] (calr at 0xFAB902); MidiOut_ParamClassTable[8] is MidiOut_CC0A_Pan.  Body as List2030_PartVolume_Apply, mask 0x7F.
+; Evidence: List2030_PartFieldHandlers[8] (calr at 0xFAB902); MidiOut_ParamClassTable[8] is MidiOut_CC0A_Pan.  Body as List2030_PartVolume_Apply, mask 0x7F.
 List2030_PartPan_Apply:
 	pushw 0x7f                                           ; FABAD1  0b 7f 00
 	calr ParamRecord_MergeFieldIfChanged                                          ; FABAD4  1e 60 f8
@@ -81414,7 +81475,7 @@ List2030_PartPan_Apply:
 	popw bc                                              ; FABADA  49
 	ret                                                  ; FABADB  0e
 ; List2030_PartCoarseTune_Apply -- class 9 of a part record in the 0x2030 list: write the 7-bit value into byte 9 when it changed, and queue it to 0x2C00
-; Evidence: JumpTable_FAB8B4[9] (calr at 0xFAB907); MidiOut_ParamClassTable[9] is MidiOut_Rpn02_CoarseTune.  Body as List2030_PartVolume_Apply, mask 0x7F.
+; Evidence: List2030_PartFieldHandlers[9] (calr at 0xFAB907); MidiOut_ParamClassTable[9] is MidiOut_Rpn02_CoarseTune.  Body as List2030_PartVolume_Apply, mask 0x7F.
 List2030_PartCoarseTune_Apply:
 	pushw 0x7f                                           ; FABADC  0b 7f 00
 	calr ParamRecord_MergeFieldIfChanged                                          ; FABADF  1e 55 f8
@@ -81422,7 +81483,7 @@ List2030_PartCoarseTune_Apply:
 	popw bc                                              ; FABAE5  49
 	ret                                                  ; FABAE6  0e
 ; List2030_PartFineTune_Apply -- class 10 of a part record in the 0x2030 list: write the full 8-bit value into byte 0x0A when it changed, and queue it to 0x2C00
-; Evidence: JumpTable_FAB8B4[10] (calr at 0xFAB90C); MidiOut_ParamClassTable[10] is MidiOut_Rpn01_FineTune.  It is the ONLY sibling that pushes mask 0x00FF (0xFABAE7), matching MidiOut_Rpn01_FineTune's `and A,0xff` on the staged mask and the 0xFF mask KeyValueList_A00 gives key {part, 0x0A}.
+; Evidence: List2030_PartFieldHandlers[10] (calr at 0xFAB90C); MidiOut_ParamClassTable[10] is MidiOut_Rpn01_FineTune.  It is the ONLY sibling that pushes mask 0x00FF (0xFABAE7), matching MidiOut_Rpn01_FineTune's `and A,0xff` on the staged mask and the 0xFF mask KeyValueList_A00 gives key {part, 0x0A}.
 List2030_PartFineTune_Apply:
 	pushw 0xff                                           ; FABAE7  0b ff 00
 	calr ParamRecord_MergeFieldIfChanged                                          ; FABAEA  1e 4a f8
@@ -81430,7 +81491,7 @@ List2030_PartFineTune_Apply:
 	popw bc                                              ; FABAF0  49
 	ret                                                  ; FABAF1  0e
 ; List2030_PartBendRange_Apply -- class 11 of a part record in the 0x2030 list: write the 7-bit value into byte 0x0B when it changed, and queue it to 0x2C00
-; Evidence: JumpTable_FAB8B4[11] (calr at 0xFAB911); MidiOut_ParamClassTable[11] is MidiOut_Rpn00_PitchBendRange.  Body as List2030_PartVolume_Apply, mask 0x7F.
+; Evidence: List2030_PartFieldHandlers[11] (calr at 0xFAB911); MidiOut_ParamClassTable[11] is MidiOut_Rpn00_PitchBendRange.  Body as List2030_PartVolume_Apply, mask 0x7F.
 List2030_PartBendRange_Apply:
 	pushw 0x7f                                           ; FABAF2  0b 7f 00
 	calr ParamRecord_MergeFieldIfChanged                                          ; FABAF5  1e 3f f8
@@ -81576,7 +81637,7 @@ List2030_Param98_Dispatch:   ; entry: named by 1 `.long` operand, first at 0xFAC
 	ret                                                  ; FABBEA  0e
 ; List2030_Param98_ApplyProgram -- the parameter-0x98 twin of the part program-change handler sub_FAB915: stash the first value, then on the second pass write record 0x7F02's program fields and queue them to 0x2C00
 ; Evidence: same two-pass gate as sub_FAB915 (bit 4 of (0x60F021) at 0xFABBF1: pass 1 saves (0x60F089) to (0x60F0D0) and sets it, pass 2 clears it); then CombiSel_ClampToNumberAndBank (SoundSel_ClampToProgramAndBank in the part twin), ParamNumber_GetRecordPtr compared with 0x7F02 (0xFABC49-0xFABC51), and stores (XIX+1)&0x80|(0x60F185), (XIX+2)&0xC0|(0x60F186), (XIX+6..8) = value/mask/(0x60F0D0).
-; Queues {0x98,2,(0x60F186),0x3F} and {0x98,1,(0x60F185),0x7F} (0xFABC9E-0xFABCCD).  Program reading: sub_FAB915 is JumpTable_FAB8B4[0], class 0, whose outbound twin is MidiOut_ParamClassTable[0] = MidiOut_ProgramChange; and the Evt2030 handler of 0x98 class 1 runs only when SINGLE CH PROG CHANGE is COMBI (bit 3 of (0x7F32)).
+; Queues {0x98,2,(0x60F186),0x3F} and {0x98,1,(0x60F185),0x7F} (0xFABC9E-0xFABCCD).  Program reading: sub_FAB915 is List2030_PartFieldHandlers[0], class 0, whose outbound twin is MidiOut_ParamClassTable[0] = MidiOut_ProgramChange; and the Evt2030 handler of 0x98 class 1 runs only when SINGLE CH PROG CHANGE is COMBI (bit 3 of (0x7F32)).
 List2030_Param98_ApplyProgram:
 	link XIZ,0xfff8                                      ; FABBEB  ee 0c f8 ff
 	pushw hl                                             ; FABBEF  2b
@@ -82447,7 +82508,7 @@ ParamMsg_NumberForController:
 	unlk XIZ                                             ; FAC300  ee 0d
 	ret                                                  ; FAC302  0e
 ; Ctrl_CookedCellForNumber -- return in XIY the address of the cooked control value (Ctrl_Normalise's RAM bank) that feeds parameter number (XIZ+8), 0xB1..0xBD
-; Evidence: `sub BC,0x00b1 / cp BC,0x000c` at 0xFAC30E-0xFAC312 then JumpTable_FAC326; the arms load 0x24F4 (B1), 0x24FF (B4), 0x2503..0x2506 (B8..BB), 0x24F6 (BC), 0x24F2 (BD), and the default arm 0x24F5 (B2, B3, B5..B7).  All ten are listed as cooked values in Ctrl_Normalise's header.
+; Evidence: `sub BC,0x00b1 / cp BC,0x000c` at 0xFAC30E-0xFAC312 then Ctrl_CookedCellNumberHandlers; the arms load 0x24F4 (B1), 0x24FF (B4), 0x2503..0x2506 (B8..BB), 0x24F6 (BC), 0x24F2 (BD), and the default arm 0x24F5 (B2, B3, B5..B7).  All ten are listed as cooked values in Ctrl_Normalise's header.
 ; Used by the unlabelled routine at 0xFAC047, which hands each cell to the JumpTable_FAC3BF dispatcher at 0xFAC391.
 Ctrl_CookedCellForNumber:
 	link XIZ,0x0000                                      ; FAC303  ee 0c 00 00
@@ -82456,13 +82517,13 @@ Ctrl_CookedCellForNumber:
 	extz XBC                                             ; FAC30C  e9 12
 	sub BC,0x00b1                                        ; FAC30E  d9 ca b1 00
 	cp BC,0x000c                                         ; FAC312  d9 cf 0c 00
-	jrl ugt, JumpTable_FAC326_Code_Skip                                        ; FAC316  7b 71 00
+	jrl ugt, Ctrl_CookedCellFor_Default                                        ; FAC316  7b 71 00
 	sll bc, 0x02                                         ; FAC319  d9 ee 02
-	add XBC,JumpTable_FAC326                             ; FAC31C  e9 c8 26 c3 fa 00
+	add XBC,Ctrl_CookedCellNumberHandlers                             ; FAC31C  e9 c8 26 c3 fa 00
 	ld XBC,(XBC)                                         ; FAC322  a1 21
 	jp (xbc)                                             ; FAC324  b1 d8
 ; ---------------------------------------------------------------------
-; JumpTable_FAC326 -- 13 LE32 branch targets, first case 0xB1
+; Ctrl_CookedCellNumberHandlers -- 13 LE32 branch targets, first case 0xB1
 ;
 ; Read by: ONE site, the `add XBC,0x00FAC326 / ld XBC,(XBC) / jp T,XBC` at
 ;          0xFAC31C-0xFAC324.
@@ -82478,61 +82539,68 @@ Ctrl_CookedCellForNumber:
 ;          re-derived by notes/prom_a_byte_checks.py and
 ;          notes/prom_a_jumptables.py (whose selftest is this table).
 ; ---------------------------------------------------------------------
-JumpTable_FAC326:
+; Ctrl_CookedCellNumberHandlers: Ctrl_CookedCellForNumber's switch on parameter number - 0xB1 (0xB1..0xBD): each arm
+;   loads XIY = that number's cooked control cell; numbers with no cell of their own take Ctrl_CookedCellFor_Default.
+;   Basis: table index (the reader's `sub BC,0xB1`) + its named arms. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+Ctrl_CookedCellNumberHandlers:
 	.long Ctrl_CookedCellFor_B1                                 ; FAC326  [  0]
-	.long JumpTable_FAC326_Code_Skip                 ; FAC32A  [  1]
-	.long JumpTable_FAC326_Code_Skip                 ; FAC32E  [  2]
+	.long Ctrl_CookedCellFor_Default                 ; FAC32A  [  1]
+	.long Ctrl_CookedCellFor_Default                 ; FAC32E  [  2]
 	.long Ctrl_CookedCellFor_B4                                 ; FAC332  [  3]
-	.long JumpTable_FAC326_Code_Skip                 ; FAC336  [  4]
-	.long JumpTable_FAC326_Code_Skip                 ; FAC33A  [  5]
-	.long JumpTable_FAC326_Code_Skip                 ; FAC33E  [  6]
+	.long Ctrl_CookedCellFor_Default                 ; FAC336  [  4]
+	.long Ctrl_CookedCellFor_Default                 ; FAC33A  [  5]
+	.long Ctrl_CookedCellFor_Default                 ; FAC33E  [  6]
 	.long Ctrl_CookedCellFor_B8                                 ; FAC342  [  7]
 	.long Ctrl_CookedCellFor_B9                                 ; FAC346  [  8]
 	.long Ctrl_CookedCellFor_BA                                 ; FAC34A  [  9]
 	.long Ctrl_CookedCellFor_BB                                 ; FAC34E  [ 10]
 	.long Ctrl_CookedCellFor_BC                                 ; FAC352  [ 11]
 	.long Ctrl_CookedCellFor_BD                                 ; FAC356  [ 12]
-; Ctrl_CookedCellFor_B1 -- JumpTable_FAC326[0] (number 0xB1): XIY = 0x24F4, then the shared `unlk/ret` of Ctrl_CookedCellForNumber
+; Ctrl_CookedCellFor_B1 -- Ctrl_CookedCellNumberHandlers[0] (number 0xB1): XIY = 0x24F4, then the shared `unlk/ret` of Ctrl_CookedCellForNumber
 ; Evidence: `lda XIY,0x24f4` at 0xFAC35A; 0x24F4 is cooked slot 3.1 (curve 0xF89CB4, idle 0x80) in Ctrl_Normalise's slot table.
 Ctrl_CookedCellFor_B1:   ; entry: named by 1 `.long` operand, first at 0xFAC326
 	lda xiy, (0x24f4:16)                                ; FAC35A  f1 f4 24 35
 	jr .LFAC38E                                          ; FAC35E  68 2e
-; Ctrl_CookedCellFor_BC -- JumpTable_FAC326[11] (number 0xBC): XIY = 0x24F6, then the shared `unlk/ret`
+; Ctrl_CookedCellFor_BC -- Ctrl_CookedCellNumberHandlers[11] (number 0xBC): XIY = 0x24F6, then the shared `unlk/ret`
 ; Evidence: `lda XIY,0x24f6` at 0xFAC360; 0x24F6 is cooked slot 3.2 in Ctrl_Normalise's slot table.
 Ctrl_CookedCellFor_BC:   ; entry: named by 1 `.long` operand, first at 0xFAC352
 	lda xiy, (0x24f6:16)                                ; FAC360  f1 f6 24 35
 	jr .LFAC38E                                          ; FAC364  68 28
-; Ctrl_CookedCellFor_BD -- JumpTable_FAC326[12] (number 0xBD): XIY = 0x24F2, then the shared `unlk/ret`
+; Ctrl_CookedCellFor_BD -- Ctrl_CookedCellNumberHandlers[12] (number 0xBD): XIY = 0x24F2, then the shared `unlk/ret`
 ; Evidence: `lda XIY,0x24f2` at 0xFAC366; 0x24F2 is cooked slot 0.3 (the inverted raw byte) in Ctrl_Normalise's slot table.
 Ctrl_CookedCellFor_BD:   ; entry: named by 1 `.long` operand, first at 0xFAC356
 	lda xiy, (0x24f2:16)                                ; FAC366  f1 f2 24 35
 	jr .LFAC38E                                          ; FAC36A  68 22
-; Ctrl_CookedCellFor_B8 -- JumpTable_FAC326[7] (number 0xB8): XIY = 0x2503, then the shared `unlk/ret`
+; Ctrl_CookedCellFor_B8 -- Ctrl_CookedCellNumberHandlers[7] (number 0xB8): XIY = 0x2503, then the shared `unlk/ret`
 ; Evidence: `lda XIY,0x2503` at 0xFAC36C; 0x2503 is cooked slot 0.4 in Ctrl_Normalise's slot table.
 Ctrl_CookedCellFor_B8:   ; entry: named by 1 `.long` operand, first at 0xFAC342
 	lda xiy, (0x2503:16)                                ; FAC36C  f1 03 25 35
 	jr .LFAC38E                                          ; FAC370  68 1c
-; Ctrl_CookedCellFor_B9 -- JumpTable_FAC326[8] (number 0xB9): XIY = 0x2504, then the shared `unlk/ret`
+; Ctrl_CookedCellFor_B9 -- Ctrl_CookedCellNumberHandlers[8] (number 0xB9): XIY = 0x2504, then the shared `unlk/ret`
 ; Evidence: `lda XIY,0x2504` at 0xFAC372; 0x2504 is cooked slot 0.5 in Ctrl_Normalise's slot table.
 Ctrl_CookedCellFor_B9:   ; entry: named by 1 `.long` operand, first at 0xFAC346
 	lda xiy, (0x2504:16)                                ; FAC372  f1 04 25 35
 	jr .LFAC38E                                          ; FAC376  68 16
-; Ctrl_CookedCellFor_BA -- JumpTable_FAC326[9] (number 0xBA): XIY = 0x2505, then the shared `unlk/ret`
+; Ctrl_CookedCellFor_BA -- Ctrl_CookedCellNumberHandlers[9] (number 0xBA): XIY = 0x2505, then the shared `unlk/ret`
 ; Evidence: `lda XIY,0x2505` at 0xFAC378; 0x2505 is cooked slot 0.0 in Ctrl_Normalise's slot table.
 Ctrl_CookedCellFor_BA:   ; entry: named by 1 `.long` operand, first at 0xFAC34A
 	lda xiy, (0x2505:16)                                ; FAC378  f1 05 25 35
 	jr .LFAC38E                                          ; FAC37C  68 10
-; Ctrl_CookedCellFor_BB -- JumpTable_FAC326[10] (number 0xBB): XIY = 0x2506, then the shared `unlk/ret`
+; Ctrl_CookedCellFor_BB -- Ctrl_CookedCellNumberHandlers[10] (number 0xBB): XIY = 0x2506, then the shared `unlk/ret`
 ; Evidence: `lda XIY,0x2506` at 0xFAC37E; 0x2506 is cooked slot 0.1 in Ctrl_Normalise's slot table.
 Ctrl_CookedCellFor_BB:   ; entry: named by 1 `.long` operand, first at 0xFAC34E
 	lda xiy, (0x2506:16)                                ; FAC37E  f1 06 25 35
 	jr .LFAC38E                                          ; FAC382  68 0a
-; Ctrl_CookedCellFor_B4 -- JumpTable_FAC326[3] (number 0xB4): XIY = 0x24FF, then the shared `unlk/ret`
+; Ctrl_CookedCellFor_B4 -- Ctrl_CookedCellNumberHandlers[3] (number 0xB4): XIY = 0x24FF, then the shared `unlk/ret`
 ; Evidence: `lda XIY,0x24ff` at 0xFAC384; 0x24FF is cooked slot 0.2, the calibrated channel, in Ctrl_Normalise's slot table.
 Ctrl_CookedCellFor_B4:   ; entry: named by 1 `.long` operand, first at 0xFAC332
 	lda xiy, (0x24ff:16)                                ; FAC384  f1 ff 24 35
 	jr .LFAC38E                                          ; FAC388  68 04
-JumpTable_FAC326_Code_Skip:
+; Ctrl_CookedCellFor_Default: Ctrl_CookedCellNumberHandlers' default arm (numbers 0xB2, 0xB3, 0xB5..0xB7, and out-of-
+;   range): XIY = 0x24F5, the shared cooked cell, then Ctrl_CookedCellForNumber's unlk/ret. Basis: table index + body.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+Ctrl_CookedCellFor_Default:
 	lda xiy, (0x24f5:16)                                ; FAC38A  f1 f5 24 35
 .LFAC38E:
 	unlk XIZ                                             ; FAC38E  ee 0d
@@ -83130,7 +83198,7 @@ Gap_FAC8E6:
 ;          the number space of Evt2030_ClassHandlers and
 ;          MidiOut_ParamNumberTable.  What the populated entries serve:
 ;   0x00-0x1F  List2030_Part00to1F_Dispatch -- part parameters (number = the part); it
-;              dispatches again on the record's CLASS, JumpTable_FAB8B4
+;              dispatches again on the record's CLASS, List2030_PartFieldHandlers
 ;   0x20-0x3F  List2030_Part20to3F_Dispatch -- the other half of each part record
 ;              (ParamNumber_RecordPtrs, pin 3)
 ;   0x7A, 0x98, 0xA8, 0xB0 -- one handler each (0xFABB61, 0xFABBD7, 0xFABCD7,
@@ -87315,7 +87383,7 @@ SeqEvt_ApplyCtrlEvent:   ; entry: pointer-table entry
 	ld a, (0x60f308:24)
 	and A,0x03
 	sll a, 0x02
-	ld XIX,SeqEvt_ApplyCtrlEvent_JumpTable_FAF16C
+	ld XIX,SeqEvt_ApplyCtrlEvent_StatusHandlers
 	mx8_ld_rm MXL, ra_IX, rb_A, r4
 	call (xix)
 .LFAF16A:
@@ -87323,7 +87391,10 @@ SeqEvt_ApplyCtrlEvent:   ; entry: pointer-table entry
 ; --- 0xFAF16B-0xFAF16C  align (1 bytes) ---
 	.byte 0x00   ; FAF16B
 ; --- 0xFAF16C-0xFAF17C  pointer table (16 bytes) ---
-SeqEvt_ApplyCtrlEvent_JumpTable_FAF16C:
+; SeqEvt_ApplyCtrlEvent_StatusHandlers: SeqEvt_ApplyCtrlEvent's switch on the 0xDn event status & 3:
+;   SeqEvt_ShadowChanPressure / ShadowModulation / ShadowPitchBend / ShadowExpression. Basis: table index (status) +
+;   its four already-named arms. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SeqEvt_ApplyCtrlEvent_StatusHandlers:
 	.long SeqEvt_ShadowChanPressure   ; -> SeqEvt_ShadowChanPressure   ; FAF16C
 	.long SeqEvt_ShadowModulation   ; -> SeqEvt_ShadowModulation   ; FAF170
 	.long SeqEvt_ShadowPitchBend   ; -> SeqEvt_ShadowPitchBend   ; FAF174
@@ -87526,17 +87597,21 @@ SeqEvt_SelectCtrlEventSlot:
 	ld l, (0x60f308:24)
 	and L,0x03
 	sll l, 0x02
-	ld XIX,SeqEvt_SelectCtrlEventSlot_JumpTable_FAF410
+	ld XIX,SeqEvt_SelectCtrlEventSlot_StatusHandlers
 	mx8_ld_rm MXL, ra_IX, rb_L, r4
 	jp (xix)
 ; --- 0xFAF410-0xFAF420  pointer table (16 bytes) ---
-SeqEvt_SelectCtrlEventSlot_JumpTable_FAF410:
-	.long sub_FAF420   ; -> sub_FAF420   ; FAF410
-	.long sub_FAF431   ; -> sub_FAF431   ; FAF414
-	.long sub_FAF442   ; -> sub_FAF442   ; FAF418
-	.long sub_FAF453   ; -> sub_FAF453   ; FAF41C
+; SeqEvt_SelectCtrlEventSlot_StatusHandlers: SeqEvt_SelectCtrlEventSlot's switch on the 0xDn event status & 3 (D0
+;   channel pressure, D1 modulation, D2 pitch bend, D3 expression): each arm loads the event's slot byte and joins the
+;   part-validity search. Basis: table index (status, the SeqBuf_Put*Event codes) + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+SeqEvt_SelectCtrlEventSlot_StatusHandlers:
+	.long SeqEvt_SelectChanPressureSlot   ; -> SeqEvt_SelectChanPressureSlot   ; FAF410
+	.long SeqEvt_SelectModulationSlot   ; -> SeqEvt_SelectModulationSlot   ; FAF414
+	.long SeqEvt_SelectPitchBendSlot   ; -> SeqEvt_SelectPitchBendSlot   ; FAF418
+	.long SeqEvt_SelectExpressionSlot   ; -> SeqEvt_SelectExpressionSlot   ; FAF41C
 ; ---------------------------------------------------------------------
-; sub_FAF420 -- arm 0 of the 4-entry jump table at 0xFAF410
+; SeqEvt_SelectChanPressureSlot -- arm 0 of the 4-entry jump table at 0xFAF410
 ;
 ; Called from: the reader `ld XIX,0x00faf410` at 0xFAF404, through XIX/XIY.
 ;          Index: (0x60F308) & 3.
@@ -87547,13 +87622,16 @@ SeqEvt_SelectCtrlEventSlot_JumpTable_FAF410:
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FAF420:   ; entry: pointer-table entry
+; SeqEvt_SelectChanPressureSlot: SeqEvt_SelectCtrlEventSlot_StatusHandlers[D0 & 3] (channel pressure event): L = the
+;   slot, (0x60F30B), byte +3; then the shared search accepts it only if the slot's part is 0..0x1F. Basis: table
+;   index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SeqEvt_SelectChanPressureSlot:   ; entry: pointer-table entry
 	ld XIY,IdentityMap32_FAF7C7
 	ld XBC,0x00000020
 	ld l, (0x60f30b:24)
 	jr .LFAF462
 ; ---------------------------------------------------------------------
-; sub_FAF431 -- arm 1 of the 4-entry jump table at 0xFAF410
+; SeqEvt_SelectModulationSlot -- arm 1 of the 4-entry jump table at 0xFAF410
 ;
 ; Called from: the reader `ld XIX,0x00faf410` at 0xFAF404, through XIX/XIY.
 ;          Index: (0x60F308) & 3.
@@ -87564,13 +87642,16 @@ sub_FAF420:   ; entry: pointer-table entry
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FAF431:   ; entry: pointer-table entry
+; SeqEvt_SelectModulationSlot: SeqEvt_SelectCtrlEventSlot_StatusHandlers[D1 & 3] (modulation event): L = the slot,
+;   (0x60F30B), byte +3; then the shared search accepts it only if the slot's part is 0..0x1F. Basis: table index +
+;   body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SeqEvt_SelectModulationSlot:   ; entry: pointer-table entry
 	ld XIY,IdentityMap32_FAF7C7
 	ld XBC,0x00000020
 	ld l, (0x60f30b:24)
 	jr .LFAF462
 ; ---------------------------------------------------------------------
-; sub_FAF442 -- arm 2 of the 4-entry jump table at 0xFAF410
+; SeqEvt_SelectPitchBendSlot -- arm 2 of the 4-entry jump table at 0xFAF410
 ;
 ; Called from: the reader `ld XIX,0x00faf410` at 0xFAF404, through XIX/XIY.
 ;          Index: (0x60F308) & 3.
@@ -87581,13 +87662,16 @@ sub_FAF431:   ; entry: pointer-table entry
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FAF442:   ; entry: pointer-table entry
+; SeqEvt_SelectPitchBendSlot: SeqEvt_SelectCtrlEventSlot_StatusHandlers[D2 & 3] (pitch bend event): L = the slot,
+;   (0x60F30C), byte +4 (two data bytes); then the shared search accepts it only if the slot's part is 0..0x1F. Basis:
+;   table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SeqEvt_SelectPitchBendSlot:   ; entry: pointer-table entry
 	ld XIY,IdentityMap32_FAF7C7
 	ld XBC,0x00000020
 	ld l, (0x60f30c:24)
 	jr .LFAF462
 ; ---------------------------------------------------------------------
-; sub_FAF453 -- arm 3 of the 4-entry jump table at 0xFAF410
+; SeqEvt_SelectExpressionSlot -- arm 3 of the 4-entry jump table at 0xFAF410
 ;
 ; Called from: the reader `ld XIX,0x00faf410` at 0xFAF404, through XIX/XIY.
 ;          Index: (0x60F308) & 3.
@@ -87598,7 +87682,10 @@ sub_FAF442:   ; entry: pointer-table entry
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FAF453:   ; entry: pointer-table entry
+; SeqEvt_SelectExpressionSlot: SeqEvt_SelectCtrlEventSlot_StatusHandlers[D3 & 3] (expression event): L = the slot,
+;   (0x60F30B), byte +3; then the shared search accepts it only if the slot's part is 0..0x1F. Basis: table index +
+;   body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+SeqEvt_SelectExpressionSlot:   ; entry: pointer-table entry
 	ld XIY,IdentityMap32_FAF7C7
 	ld XBC,0x00000020
 	ld l, (0x60f30b:24)
@@ -87968,7 +88055,7 @@ IdentityMap32_FAF7A6:
 	.byte 0x00                                    ; FAF7C6  one byte between the two maps
 
 ; IdentityMap32_FAF7C7 -- 32 bytes, 0x00..0x1F, the same content.
-; Read by: `ld XIY,0x00FAF7C7` at 0xFAF420 (sub_FAF420, with XBC = 0x20),
+; Read by: `ld XIY,0x00FAF7C7` at 0xFAF420 (SeqEvt_SelectChanPressureSlot, with XBC = 0x20),
 ;          0xFAF431, 0xFAF442 and 0xFAF453 -- the four arms of the jump table
 ;          at 0xFAF410.
 IdentityMap32_FAF7C7:
@@ -107238,12 +107325,12 @@ CombiEditSound_PageIndex:
 	cp wa, 0x05:i3                                         ; FBD24D  d8 dd
 	jrl ugt, .LFBD2FA                                        ; FBD24F  7b a8 00
 	sll wa, 0x02                                         ; FBD252  d8 ee 02
-	add XWA,JumpTable_FBD25F                             ; FBD255  e8 c8 5f d2 fb 00
+	add XWA,CombiEditSound_PageTextHandlers                             ; FBD255  e8 c8 5f d2 fb 00
 	ld XWA,(XWA)                                         ; FBD25B  a0 20
 	jp (xwa)                                             ; FBD25D  b0 d8
 
 ; ---------------------------------------------------------------------
-; JumpTable_FBD25F -- 6 LE32 code addresses, an INLINE jump table
+; CombiEditSound_PageTextHandlers -- 6 LE32 code addresses, an INLINE jump table
 ;
 ; Read by: ONE site, `add XWA,0x00FBD25F / ld XWA,(XWA) / jp (XWA)` at
 ;          0xFBD255-0xFBD25D.
@@ -107256,32 +107343,48 @@ CombiEditSound_PageIndex:
 ; Unknown:  what the arms DO.  A jump table names its targets, not its
 ;          operations.
 ; ---------------------------------------------------------------------
-JumpTable_FBD25F:
-	.long sub_FBD277                                 ; FBD25F  [  0]
-	.long sub_FBD286                                 ; FBD263  [  1]
-	.long sub_FBD294                                 ; FBD267  [  2]
-	.long sub_FBD2A2                                 ; FBD26B  [  3]
-	.long sub_FBD2C5                                 ; FBD26F  [  4]
+; CombiEditSound_PageTextHandlers: COMBINATION EDIT INTERNAL SOUND / MIDI SOUND pages: draws the static text of page
+;   CombiEditSound_PageIndex (0..5, PtrTable_F1AFBD's order) on layer 0; then (0x2768) := CombiEdit_Page. Basis: table
+;   index + the display lists each arm runs. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CombiEditSound_PageTextHandlers:
+	.long CombiEditSound_DrawLevelsPageText                                 ; FBD25F  [  0]
+	.long CombiEditSound_DrawControllerFilterPageText                                 ; FBD263  [  1]
+	.long CombiEditSound_DrawAssignAndInputFilterPageText                                 ; FBD267  [  2]
+	.long CombiEditSound_DrawMidiOutPageText                                 ; FBD26B  [  3]
+	.long CombiEditSound_DrawMidiOutFilterPageText                                 ; FBD26F  [  4]
 	.long Draw_ReverbDepth                                 ; FBD273  [  5]
-sub_FBD277:   ; entry: named by 1 `.long` operand, first at 0xFBD25F
+; CombiEditSound_DrawLevelsPageText: CombiEditSound_PageTextHandlers[0]: runs the page-0 display lists on layer 0 --
+;   PAGE1/3 INTERNAL SOUND: SOUND, VOLUME, EFFECT1 SEND, PAN ... BEND RANGE, SUB OUT. Basis: table index + body
+;   (display-list text). (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CombiEditSound_DrawLevelsPageText:   ; entry: named by 1 `.long` operand, first at 0xFBD25F
 	lda xbc, (DL_InternalSound_F18DBD:24)                ; FBD277  f2 bd 8d f1 31
 	push XBC                                             ; FBD27C  39
 	lda xwa, (DL_InternalSound_F18CDD:24)                ; FBD27D  f2 dd 8c f1 30
 	push XWA                                             ; FBD282  38
 	jrl .LFBD2F4                                         ; FBD283  78 6e 00
-sub_FBD286:   ; entry: named by 1 `.long` operand, first at 0xFBD263
+; CombiEditSound_DrawControllerFilterPageText: CombiEditSound_PageTextHandlers[1]: runs the page-1 display lists on
+;   layer 0 -- PAGE2/3 INTERNAL SOUND: PITCH BEND, MODULATION1/2, R.T.CREAT/CTRL X/Y, HOLD, CTRL.PEDAL, AFTER TOUCH.
+;   Basis: table index + body (display-list text). (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CombiEditSound_DrawControllerFilterPageText:   ; entry: named by 1 `.long` operand, first at 0xFBD263
 	lda xbc, (DL_BankSelectMidiIn:24)                    ; FBD286  f2 84 8e f1 31
 	push XBC                                             ; FBD28B  39
 	lda xwa, (DL_InternalSound_F18DBD:24)                ; FBD28C  f2 bd 8d f1 30
 	push XWA                                             ; FBD291  38
 	jr .LFBD2F4                                          ; FBD292  68 60
-sub_FBD294:   ; entry: named by 1 `.long` operand, first at 0xFBD267
+; CombiEditSound_DrawAssignAndInputFilterPageText: CombiEditSound_PageTextHandlers[2]: runs the page-2 display lists
+;   on layer 0 -- PAGE3/3 INTERNAL SOUND: MONOPHONIC, KEY SCALING, VELOCITY OFFSET, PROGRAM CNG / BANK SELECT / VOLUME
+;   MIDI IN. Basis: table index + body (display-list text). (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CombiEditSound_DrawAssignAndInputFilterPageText:   ; entry: named by 1 `.long` operand, first at 0xFBD267
 	lda xbc, (DL_MidiOutFilter_F18F36:24)                ; FBD294  f2 36 8f f1 31
 	push XBC                                             ; FBD299  39
 	lda xwa, (DL_BankSelectMidiIn:24)                    ; FBD29A  f2 84 8e f1 30
 	push XWA                                             ; FBD29F  38
 	jr .LFBD2F4                                          ; FBD2A0  68 52
-sub_FBD2A2:   ; entry: named by 1 `.long` operand, first at 0xFBD26B
+; CombiEditSound_DrawMidiOutPageText: CombiEditSound_PageTextHandlers[3] (the MIDI OUT FILTER page 1 -- screen 0xB5
+;   page 0 or 0x38 page 1): BANK SELECT, PROG CHANGE, VOLUME, PAN, EFFECT DEPTH, MIDI OUT KEY TRANSPOSE, titled 'MIDI
+;   OUT FILTER PAGE1/2' (0xB5) or 'MIDI SOUND PAGE2/3' (0x38). Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+CombiEditSound_DrawMidiOutPageText:   ; entry: named by 1 `.long` operand, first at 0xFBD26B
 	m_cp_mi8 MB16, UI_ScreenId, 0x38                          ; FBD2A2  c1 7c 20 3f 38
 	jr z, .LFBD2B7                                       ; FBD2A7  66 0e
 	lda xbc, (DL_MidiOutFilter_F18FC8:24)                ; FBD2A9  f2 c8 8f f1 31
@@ -107295,7 +107398,11 @@ sub_FBD2A2:   ; entry: named by 1 `.long` operand, first at 0xFBD26B
 	lda xwa, (DL_EffectDepth:24)                         ; FBD2BD  f2 59 8f f1 30
 	push XWA                                             ; FBD2C2  38
 	jr .LFBD2F4                                          ; FBD2C3  68 2f
-sub_FBD2C5:   ; entry: named by 1 `.long` operand, first at 0xFBD26F
+; CombiEditSound_DrawMidiOutFilterPageText: CombiEditSound_PageTextHandlers[4] (MIDI OUT FILTER page 2 -- screen 0xB5
+;   page 1 or 0x38 page 2): PITCH BEND, MODULATION1/2, R.T.CREAT/CTRL X/Y, HOLD, CTRL.PEDAL, AFTER TOUCH, titled 'MIDI
+;   OUT FILTER PAGE2/2' or 'MIDI SOUND PAGE3/3'. Basis: table index + body. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+CombiEditSound_DrawMidiOutFilterPageText:   ; entry: named by 1 `.long` operand, first at 0xFBD26F
 	m_cp_mi8 MB16, UI_ScreenId, 0x38                          ; FBD2C5  c1 7c 20 3f 38
 	jr z, .LFBD2DA                                       ; FBD2CA  66 0e
 	lda xbc, (DL_MidiOutFilter_F191B1:24)                ; FBD2CC  f2 b1 91 f1 31
@@ -107329,12 +107436,12 @@ Draw_ReverbDepth:   ; entry: named by 1 `.long` operand, first at 0xFBD273
 	cp wa, 0x05:i3                                         ; FBD30E  d8 dd
 	jrl ugt, .LFBD390                                        ; FBD310  7b 7d 00
 	sll wa, 0x02                                         ; FBD313  d8 ee 02
-	add XWA,JumpTable_FBD320                             ; FBD316  e8 c8 20 d3 fb 00
+	add XWA,CombiEditSound_PageRowCursorHandlers                             ; FBD316  e8 c8 20 d3 fb 00
 	ld XWA,(XWA)                                         ; FBD31C  a0 20
 	jp (xwa)                                             ; FBD31E  b0 d8
 
 ; ---------------------------------------------------------------------
-; JumpTable_FBD320 -- 6 LE32 code addresses, an INLINE jump table
+; CombiEditSound_PageRowCursorHandlers -- 6 LE32 code addresses, an INLINE jump table
 ;
 ; Read by: ONE site, `add XWA,0x00FBD320 / ld XWA,(XWA) / jp (XWA)` at
 ;          0xFBD316-0xFBD31E.
@@ -107349,47 +107456,69 @@ Draw_ReverbDepth:   ; entry: named by 1 `.long` operand, first at 0xFBD273
 ; Unknown:  what the arms DO.  A jump table names its targets, not its
 ;          operations.
 ; ---------------------------------------------------------------------
-JumpTable_FBD320:
-	.long sub_FBD338                                 ; FBD320  [  0]
-	.long sub_FBD346                                 ; FBD324  [  1]
-	.long sub_FBD354                                 ; FBD328  [  2]
-	.long sub_FBD362                                 ; FBD32C  [  3]
-	.long sub_FBD370                                 ; FBD330  [  4]
-	.long sub_FBD37E                                 ; FBD334  [  5]
-sub_FBD338:   ; entry: named by 1 `.long` operand, first at 0xFBD320
+; CombiEditSound_PageRowCursorHandlers: COMBINATION EDIT INTERNAL SOUND / MIDI SOUND pages: moves the row highlight of
+;   page CombiEditSound_PageIndex (0..5) -- erase rect at old row (0x276A), fill rect at CombiEdit_Row, through that
+;   page's IndexMap -- then (0x276A) := CombiEdit_Row. Basis: table index + the arms' display lists. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_t11.json)
+CombiEditSound_PageRowCursorHandlers:
+	.long CombiEditSound_MoveLevelsPageRowCursor                                 ; FBD320  [  0]
+	.long CombiEditSound_MoveControllerFilterPageRowCursor                                 ; FBD324  [  1]
+	.long CombiEditSound_MoveAssignAndInputFilterPageRowCursor                                 ; FBD328  [  2]
+	.long CombiEditSound_MoveMidiOutPageRowCursor                                 ; FBD32C  [  3]
+	.long CombiEditSound_MoveMidiOutFilterPageRowCursor                                 ; FBD330  [  4]
+	.long CombiEditSound_MoveMultipleMessagesPageRowCursor                                 ; FBD334  [  5]
+; CombiEditSound_MoveLevelsPageRowCursor: CombiEditSound_PageRowCursorHandlers[0] (PtrTable_F1AFBD[0]'s page): runs
+;   that page's row-highlight list (erase old row (0x276A), fill CombiEdit_Row) with its own row-rectangle IndexMap.
+;   Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CombiEditSound_MoveLevelsPageRowCursor:   ; entry: named by 1 `.long` operand, first at 0xFBD320
 	lda xbc, (IndexMap_F19497:24)                        ; FBD338  f2 97 94 f1 31
 	push XBC                                             ; FBD33D  39
-	lda xwa, (DL_F19481:24)                              ; FBD33E  f2 81 94 f1 30
+	lda xwa, (CombiEditSound_MoveLevelsPageRowCursor_DL:24)                              ; FBD33E  f2 81 94 f1 30
 	push XWA                                             ; FBD343  38
 	jr .LFBD38A                                          ; FBD344  68 44
-sub_FBD346:   ; entry: named by 1 `.long` operand, first at 0xFBD324
+; CombiEditSound_MoveControllerFilterPageRowCursor: CombiEditSound_PageRowCursorHandlers[1] (PtrTable_F1AFBD[1]'s
+;   page): runs that page's row-highlight list (erase old row (0x276A), fill CombiEdit_Row) with its own row-rectangle
+;   IndexMap. Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CombiEditSound_MoveControllerFilterPageRowCursor:   ; entry: named by 1 `.long` operand, first at 0xFBD324
 	lda xbc, (IndexMap_F1952D:24)                        ; FBD346  f2 2d 95 f1 31
 	push XBC                                             ; FBD34B  39
-	lda xwa, (DL_F19517:24)                              ; FBD34C  f2 17 95 f1 30
+	lda xwa, (CombiEditSound_MoveControllerFilterPageRowCursor_DL:24)                              ; FBD34C  f2 17 95 f1 30
 	push XWA                                             ; FBD351  38
 	jr .LFBD38A                                          ; FBD352  68 36
-sub_FBD354:   ; entry: named by 1 `.long` operand, first at 0xFBD328
+; CombiEditSound_MoveAssignAndInputFilterPageRowCursor: CombiEditSound_PageRowCursorHandlers[2] (PtrTable_F1AFBD[2]'s
+;   page): runs that page's row-highlight list (erase old row (0x276A), fill CombiEdit_Row) with its own row-rectangle
+;   IndexMap. Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CombiEditSound_MoveAssignAndInputFilterPageRowCursor:   ; entry: named by 1 `.long` operand, first at 0xFBD328
 	lda xbc, (IndexMap_F195C3:24)                        ; FBD354  f2 c3 95 f1 31
 	push XBC                                             ; FBD359  39
-	lda xwa, (DL_F195AD:24)                              ; FBD35A  f2 ad 95 f1 30
+	lda xwa, (CombiEditSound_MoveAssignAndInputFilterPageRowCursor_DL:24)                              ; FBD35A  f2 ad 95 f1 30
 	push XWA                                             ; FBD35F  38
 	jr .LFBD38A                                          ; FBD360  68 28
-sub_FBD362:   ; entry: named by 1 `.long` operand, first at 0xFBD32C
+; CombiEditSound_MoveMidiOutPageRowCursor: CombiEditSound_PageRowCursorHandlers[3] (PtrTable_F1AFBD[3]'s page): runs
+;   that page's row-highlight list (erase old row (0x276A), fill CombiEdit_Row) with its own row-rectangle IndexMap.
+;   Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CombiEditSound_MoveMidiOutPageRowCursor:   ; entry: named by 1 `.long` operand, first at 0xFBD32C
 	lda xbc, (IndexMap_F19619:24)                        ; FBD362  f2 19 96 f1 31
 	push XBC                                             ; FBD367  39
-	lda xwa, (DL_F19603:24)                              ; FBD368  f2 03 96 f1 30
+	lda xwa, (CombiEditSound_MoveMidiOutPageRowCursor_DL:24)                              ; FBD368  f2 03 96 f1 30
 	push XWA                                             ; FBD36D  38
 	jr .LFBD38A                                          ; FBD36E  68 1a
-sub_FBD370:   ; entry: named by 1 `.long` operand, first at 0xFBD330
+; CombiEditSound_MoveMidiOutFilterPageRowCursor: CombiEditSound_PageRowCursorHandlers[4] (PtrTable_F1AFBD[4]'s page):
+;   runs that page's row-highlight list (erase old row (0x276A), fill CombiEdit_Row) with its own row-rectangle
+;   IndexMap. Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CombiEditSound_MoveMidiOutFilterPageRowCursor:   ; entry: named by 1 `.long` operand, first at 0xFBD330
 	lda xbc, (IndexMap_F1966F:24)                        ; FBD370  f2 6f 96 f1 31
 	push XBC                                             ; FBD375  39
-	lda xwa, (DL_F19659:24)                              ; FBD376  f2 59 96 f1 30
+	lda xwa, (CombiEditSound_MoveMidiOutFilterPageRowCursor_DL:24)                              ; FBD376  f2 59 96 f1 30
 	push XWA                                             ; FBD37B  38
 	jr .LFBD38A                                          ; FBD37C  68 0c
-sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
+; CombiEditSound_MoveMultipleMessagesPageRowCursor: CombiEditSound_PageRowCursorHandlers[5] (PtrTable_F1AFBD[5]'s
+;   page): runs that page's row-highlight list (erase old row (0x276A), fill CombiEdit_Row) with its own row-rectangle
+;   IndexMap. Basis: table index + body. (notes/naming-pilot-2026-10-06/proposals_wave11_t11.json)
+CombiEditSound_MoveMultipleMessagesPageRowCursor:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	lda xbc, (IndexMap_F19705:24)                        ; FBD37E  f2 05 97 f1 31
 	push XBC                                             ; FBD383  39
-	lda xwa, (DL_F196EF:24)                              ; FBD384  f2 ef 96 f1 30
+	lda xwa, (CombiEditSound_MoveMultipleMessagesPageRowCursor_DL:24)                              ; FBD384  f2 ef 96 f1 30
 	push XWA                                             ; FBD389  38
 .LFBD38A:
 	call T_DisplayListB_Run_Stack                        ; FBD38A  1d 04 2e f4
@@ -112961,7 +113090,7 @@ DrumMap_ResetToDefault:
 	pop XIX                                              ; FC01F0  5c
 	popw bc                                              ; FC01F1  49
 	ret                                                  ; FC01F2  0e
-; Msg0716_PostClearSoundRamAndRestageAllParts: Msg0716_PostClearSoundRamBanks posts the 6-byte link request 88 00 17 00 00 00 (sub_FC19E0, stream
+; Msg0716_PostClearSoundRamAndRestageAllParts: Msg0716_PostClearSoundRamBanks posts the 6-byte link request 88 00 17 00 00 00 (Msg0716_PostClearSoundRamRequest, stream
 ;   0) -- CPU 2's query table (request[0] bit 3), arm 0 ToneQuery_Dispatch, opcode 0x17, above its 22-opcode guard --
 ;   then Msg0716_PostRestageAllParts. The first call of SysExSession_OnAbort_Sound (T_Msg0716_PostClearSoundRamAndRestageAllParts);
 ;   SysExSession_OnEnd_Sound sends 88 00 18 in its place. What opcode 0x17 means is not established. Basis: caller +
@@ -112974,7 +113103,7 @@ Msg0716_PostClearSoundRamAndRestageAllParts:
 	calr Msg0716_PostClearSoundRamBanks                                      ; FC01F3  1e 04 00
 	calr Msg0716_PostRestageAllParts                                      ; FC01F6  1e 0d 00
 	ret                                                  ; FC01F9  0e
-; Msg0716_PostClearSoundRamBanks: XIX := 0x0716, then sub_FC19E0 builds and Msg0716_Post sends (stream 0) the link
+; Msg0716_PostClearSoundRamBanks: XIX := 0x0716, then Msg0716_PostClearSoundRamRequest builds and Msg0716_Post sends (stream 0) the link
 ;   request 88 00 17 00 00 00. On CPU 2 bit 3 of byte 0 selects ToneMsg_Dispatch's WRITE table, arm 0 =
 ;   ToneEdit_Dispatch, whose opcode-0x17 arm calls SoundRam_ClearFourBanks (the four 'WSA SOUND RAM S0..S3' flash
 ;   banks). First step of Msg0716_PostClearSoundRamAndRestageAllParts, i.e. of SysExSession_OnAbort_Sound. Basis: caller + body
@@ -112982,7 +113111,7 @@ Msg0716_PostClearSoundRamAndRestageAllParts:
 Msg0716_PostClearSoundRamBanks:
 	push XIX                                             ; FC01FA  3c
 	ld XIX,0x00000716                                    ; FC01FB  44 16 07 00 00
-	call sub_FC19E0                                      ; FC0200  1d e0 19 fc
+	call Msg0716_PostClearSoundRamRequest                                      ; FC0200  1d e0 19 fc
 	pop XIX                                              ; FC0204  5c
 	ret                                                  ; FC0205  0e
 ; Msg0716_PostRestageAllParts: Posts F0 50 92 00 (Msg0716_PostSysEx50_92) -- CPU 2's GlobalSetup_Dispatch arm 0x92
@@ -113002,7 +113131,7 @@ Msg0716_PostSysEx50_92_SaveRegs:
 	calr Msg0716_PostSysEx50_92                                          ; FC0210  1e ec 17
 	pop XIX                                              ; FC0213  5c
 	ret                                                  ; FC0214  0e
-; PartSound_RequeuePart0IfUserBank: XIX := 0x76A2 (part 0's record), E := 0, then sub_FC0227: if the bank byte (+1) is
+; PartSound_RequeuePart0IfUserBank: XIX := 0x76A2 (part 0's record), E := 0, then PartSound_RequeuePartIfUserBank: if the bank byte (+1) is
 ;   0x08..0x0F -- SoundSel_Bank's U1/U2 codes -- appends {0, 1, bank, 0x7F} and {0, 0, program, 0xFF} to Queue2E00,
 ;   the PROGRAM CHANGE & BANK pair shape of ParamImage_QueuePartFieldChange. Last step of Msg0716_PostRestageAllParts
 ;   (after CPU 2 has restaged every part). Basis: caller + body + bank codes. (notes/naming-
@@ -113013,12 +113142,16 @@ PartSound_RequeuePart0IfUserBank:
 	pushw wa                                             ; FC0217  28
 	ld XIX,0x000076a2                                    ; FC0218  44 a2 76 00 00
 	ld e, 0x00:opc                                          ; FC021D  25 00
-	call sub_FC0227                                      ; FC021F  1d 27 02 fc
+	call PartSound_RequeuePartIfUserBank                                      ; FC021F  1d 27 02 fc
 	popw wa                                              ; FC0223  48
 	popw de                                              ; FC0224  4a
 	pop XIX                                              ; FC0225  5c
 	ret                                                  ; FC0226  0e
-sub_FC0227:
+; PartSound_RequeuePartIfUserBank: (XIX = a part record, E = its part key) If the record's bank byte (+1) is
+;   0x08..0x0F (SoundSel_Bank's U1/U2 codes), appends {E, 1, bank, 0x7F} and {E, 0, program (+0), 0xFF} to Queue2E00.
+;   The body of PartSound_RequeuePart0IfUserBank, which passes part 0's record (0x76A2) and key 0. Basis: caller +
+;   body. (notes/naming-pilot-2026-10-06/proposals_wave11_a11.json)
+PartSound_RequeuePartIfUserBank:
 	ld A,(XIX+0x01)                                      ; FC0227  8c 01 21
 	cp A,0x08                                            ; FC022A  c9 cf 08
 	jr c, .LFC024E                                       ; FC022D  67 1f
@@ -115894,7 +116027,11 @@ T_F40FD8_Nop:
 	ret                                                  ; FC19DD  0e
 	ret                                                  ; FC19DE  0e
 	ret                                                  ; FC19DF  0e
-sub_FC19E0:
+; Msg0716_PostClearSoundRamRequest: Writes the CPU-2 link request 88 00 17 00 00 00 at (XIX) and posts its 6 bytes on
+;   stream 0 through Msg0716_Post_Trampoline; on CPU 2 that is ToneEdit_Dispatch opcode 0x17, SoundRam_ClearFourBanks.
+;   The body of Msg0716_PostClearSoundRamBanks, which sets XIX := 0x0716. Basis: caller + body + CPU-2 dispatch.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_a11.json)
+Msg0716_PostClearSoundRamRequest:
 	ld (XIX),0x88                                        ; FC19E0  b4 00 88
 	ld (XIX+0x01),0x00                                   ; FC19E3  bc 01 00 00
 	ld (XIX+0x02),0x17                                   ; FC19E7  bc 02 00 17
@@ -117637,7 +117774,7 @@ DrumMap_MapNoteForPart:
 ;   SoundEditDigitalEffect_Paint 0xF099F5, SoundEditDigitalEffect_RepaintField
 ;   0xF09AA5, ToneEditPage_A0_PaintResonatorIcon 0xF09AF1 (via PtrTable_F09B7B), SoundEditCopy_Paint
 ;   0xF09B9B, SoundEditCopy_RepaintField 0xF09C08, SoundEditMenu_RepaintField 0xF09CA9
-;   (DispatchTable_F5B9F8[0]) with prom_b 0xF5BF6D, and Draw_Page12EnvelopeKeyoffCurSor at 0xF5CBAD.
+;   (Dispatch_Code80_RepaintFieldTable[0]) with prom_b 0xF5BF6D, and Draw_Page12EnvelopeKeyoffCurSor at 0xF5CBAD.
 ; The DIGITAL EFFECT type is (0x27B6) = (0x27A6) & 0x0F; every per-type array
 ; below is indexed by it, and 12 entries is the extent every one of them shares.
 ; Inside the span, interpreter-B records point at the name and rectangle
@@ -119141,7 +119278,7 @@ SegmentBounds_FC516E:
 	.long DisplayList_FC5110_End                ; FC517A  [ 3]
 
 ; DisplayList_FC517E -- display list, 17 record(s), 252 bytes, interpreter B
-; Read by: SoundEditMenu_RepaintField (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09D07 and 0xF09D69, and prom_b 0xF5BF6D, whole; its inner sub-lists 0xFC51B1-0xFC51D3 (0xF09D28), 0xFC51F9-0xFC521B (0xF09D3D), 0xFC524D-0xFC526F (0xF09CD1).
+; Read by: SoundEditMenu_RepaintField (prom_b 0xF09CA9, Dispatch_Code80_RepaintFieldTable[0]) at 0xF09D07 and 0xF09D69, and prom_b 0xF5BF6D, whole; its inner sub-lists 0xFC51B1-0xFC51D3 (0xF09D28), 0xFC51F9-0xFC521B (0xF09D3D), 0xFC524D-0xFC526F (0xF09CD1).
 ; Framing: the length bytes walk from 0xFC517E and land exactly on 0xFC527A.
 DisplayList_FC517E:
 	.byte 0x07, 0x11                             ; FC517E  op 07, 17 bytes, handler 0xF31B39
@@ -119260,7 +119397,7 @@ Rects_FC5292:
 	.short 0x000D, 0x008E, 0x0117, 0x00A8      ; FC52A2  [2]
 
 ; SoundEditMenu_RepaintField_DL2 -- display list, 1 record(s), 10 bytes, interpreter A
-; Read by: SoundEditMenu_RepaintField (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09CEB and 0xF09D52 (layer 1).
+; Read by: SoundEditMenu_RepaintField (prom_b 0xF09CA9, Dispatch_Code80_RepaintFieldTable[0]) at 0xF09CEB and 0xF09D52 (layer 1).
 ; Framing: the length bytes walk from 0xFC52AA and land exactly on 0xFC52B4.
 SoundEditMenu_RepaintField_DL2:
 ; ; drawn (start operand) by SoundEditMenu_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
@@ -119269,7 +119406,7 @@ SoundEditMenu_RepaintField_DL2:
 	.set DisplayList_FC52AA_End, .            ; FC52B4  end marker: the byte after the last record
 
 ; DisplayRecordPtrs_FC52B4 -- 17 pointers, 68 bytes
-; Read by: SoundEditMenu_RepaintField (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09CFB and 0xF09D82, prom_b 0xF09E11 and 0xF09E76: XIY = this, then RunDisplayListBFromPointerArray / 0xF09AB0 with A = the field.
+; Read by: SoundEditMenu_RepaintField (prom_b 0xF09CA9, Dispatch_Code80_RepaintFieldTable[0]) at 0xF09CFB and 0xF09D82, prom_b 0xF09E11 and 0xF09E76: XIY = this, then RunDisplayListBFromPointerArray / 0xF09AB0 with A = the field.
 ; COUNT 17 is the extent to the next object of this framing; every entry lands
 ; on a list or record boundary (gen_fc4000_pages.py checks each one).
 DisplayRecordPtrs_FC52B4:
@@ -134476,7 +134613,7 @@ SoundEditCopy_OnDrumSoundNameReply:
 ; SoundEdit_OnStagingFlagsReply: (tag) Cpu2Reply_HandleNext runs it for every reply to query 0
 ;   (ToneQuery_ReplyPartStagingFlags: part record +4 & 3, bit 0 = staged) with the request's tag: Var2807 := the
 ;   flags; when bit 0 turns on (or off with bit 1 set) it sets (0x216E) to 0 (1) and bit 0x400 of *(0x213A)
-;   (sub_FDA829 / sub_FDA808); tags 0x10 / 0x08 clear Var2805, tag 7 re-runs Cpu2Query_RefreshPartSoundRecord(0), tag
+;   (PanelLed_SetCompareFlag / PanelLed_SetOrClearRequestBits); tags 0x10 / 0x08 clear Var2805, tag 7 re-runs Cpu2Query_RefreshPartSoundRecord(0), tag
 ;   9 after a change re-runs it and re-posts the screen. Basis: caller + body + CPU-2 responder. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave10_a10.json)
 SoundEdit_OnStagingFlagsReply:
@@ -134545,10 +134682,10 @@ SoundEdit_OnStagingFlagsReply:
 	jr z, .LFD2683                                       ; FD266C  66 15
 	pushw 0x00                                           ; FD266E  0b 00 00
 .LFD2671:
-	call sub_FDA829                                      ; FD2671  1d 29 a8 fd
+	call PanelLed_SetCompareFlag                                      ; FD2671  1d 29 a8 fd
 	pushw 0x01                                           ; FD2675  0b 01 00
 	pushw 0x0400                                         ; FD2678  0b 00 04
-	call sub_FDA808                                      ; FD267B  1d 08 a8 fd
+	call PanelLed_SetOrClearRequestBits                                      ; FD267B  1d 08 a8 fd
 	inc 6,XSP                                            ; FD267F  ef 66
 	jr .LFD268D                                          ; FD2681  68 0a
 .LFD2683:
@@ -151030,7 +151167,12 @@ SoundEditController_FieldCodeFromShortListPos:
 	ld A,(XBC)                                           ; FDA803  81 21
 	unlk XIZ                                             ; FDA805  ee 0d
 	ret                                                  ; FDA807  0e
-sub_FDA808:
+; PanelLed_SetOrClearRequestBits: (mask, set) LED request word (0x213A) |= mask when set = 1, else &= ~mask. (0x213A)
+;   is the sixth word PanelLed_ProcessRequests dispatches (DispatchTable_F8C2B2+0x1A; id 0x0400 -> the compare LED
+;   handler 0xF8C7AC). Both callers pass (0x0400, 1) right after PanelLed_SetCompareFlag, as CombiEdit_CompareOn sets
+;   (0x213B) bit 2 after (0x216E). Basis: callers + body + LED dispatcher. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_a11.json)
+PanelLed_SetOrClearRequestBits:
 	link XIZ,0x0000                                      ; FDA808  ee 0c 00 00
 	push XIX                                             ; FDA80C  3c
 	lda xix, (0x213a:16)                                ; FDA80D  f1 3a 21 34
@@ -151047,7 +151189,12 @@ sub_FDA808:
 	pop XIX                                              ; FDA825  5c
 	unlk XIZ                                             ; FDA826  ee 0d
 	ret                                                  ; FDA828  0e
-sub_FDA829:
+; PanelLed_SetCompareFlag: (flag) (0x216E) := 1 when flag != 0, else 0 -- the bit the LED request-0x0400 handler
+;   (0xF8C7AC) copies onto its LED, and which CombiEdit_CompareOn / CombiEdit_CompareOff set to 1 / 0 with
+;   CombiEdit_Comparing. SoundEdit_OnStagingFlagsReply passes 0 or 1 from CPU 2's staging flags, then
+;   PanelLed_SetOrClearRequestBits(0x0400, 1). Basis: caller + body + the flag's other writers and its reader.
+;   (notes/naming-pilot-2026-10-06/proposals_wave11_a11.json)
+PanelLed_SetCompareFlag:
 	link XIZ,0x0000                                      ; FDA829  ee 0c 00 00
 	ld (0x216e:16), 0x00                                 ; FDA82D  f1 6e 21 00 00
 	cp (XIZ+0x08),0x00                                   ; FDA832  8e 08 3f 00
@@ -151820,10 +151967,10 @@ sub_FDACBD:
 	pop XIY                                              ; FDACFC  5d
 .LFDACFD:
 	pushw 0x00                                           ; FDACFD  0b 00 00
-	call sub_FDA829                                      ; FDAD00  1d 29 a8 fd
+	call PanelLed_SetCompareFlag                                      ; FDAD00  1d 29 a8 fd
 	pushw 0x01                                           ; FDAD04  0b 01 00
 	pushw 0x0400                                         ; FDAD07  0b 00 04
-	call sub_FDA808                                      ; FDAD0A  1d 08 a8 fd
+	call PanelLed_SetOrClearRequestBits                                      ; FDAD0A  1d 08 a8 fd
 	pushw 0x00                                           ; FDAD0E  0b 00 00
 	call Var27A2_SetBool                                      ; FDAD11  1d 07 6b fd
 	pushw 0x00                                           ; FDAD15  0b 00 00
@@ -162805,7 +162952,7 @@ Disk_MountAndScanDirectory_LeaveOnError:
 	popw hl                                              ; FE0597  4b
 	ret                                                  ; FE0598  0e
 ; DiskLoadFile_SendSongSelectAndLoad: Unless UI_ScreenLatch is 0x49 or 0x4E, sends MIDI Song Select (F3,
-;   Disk_SelectedEntry) when MidiFilter_SongSelect bit 3 allows (DiskLoadFile_SendSongSelect -> sub_FE14E9); then
+;   Disk_SelectedEntry) when MidiFilter_SongSelect bit 3 allows (DiskLoadFile_SendSongSelect -> MidiOut_SendSongSelect); then
 ;   DiskLoad_LoadAndReportResult. The body of DiskLoadFile_Execute (which then runs Ring_InitTenOfFourteen). Basis:
 ;   caller + body. (notes/naming-pilot-2026-10-06/proposals_wave9_c9.json)
 DiskLoadFile_SendSongSelectAndLoad:
@@ -164538,7 +164685,12 @@ MidiFilePlay_OnSongSelect:
 	pop XIX                                              ; FE14E6  5c
 	pop XHL                                              ; FE14E7  5b
 	ret                                                  ; FE14E8  0e
-sub_FE14E9:
+; MidiOut_SendSongSelect: (song) When MidiFilter_SongSelect bit 3 is set: builds F3 <song & 0x7F> from
+;   MidiOut_SongSelectTemplate in its frame, sets port A's running-status mailbox (0x9B) to 0xF3, queues the 2 bytes
+;   with T_Ring601432_PutBlock and calls T_MIDI_PostSendWork (interrupts masked). DiskLoadFile_SendSongSelect calls it
+;   with Disk_SelectedEntry. Basis: caller + body + template. (notes/naming-
+;   pilot-2026-10-06/proposals_wave11_a11.json)
+MidiOut_SendSongSelect:
 	link XIZ,0xfffe                                      ; FE14E9  ee 0c fe ff
 	ld bc, (MidiOut_SongSelectTemplate:24)                                ; FE14ED  d2 06 70 fe 21
 	ld (xiz-2), bc                                       ; FE14F2  be fe 51
@@ -164560,14 +164712,14 @@ sub_FE14E9:
 .LFE151F:
 	unlk XIZ                                             ; FE151F  ee 0d
 	ret                                                  ; FE1521  0e
-; DiskLoadFile_SendSongSelect: sub_FE14E9(Disk_SelectedEntry): sends MIDI Song Select (F3, entry with bit 7 cleared,
+; DiskLoadFile_SendSongSelect: MidiOut_SendSongSelect(Disk_SelectedEntry): sends MIDI Song Select (F3, entry with bit 7 cleared,
 ;   from MidiOut_SongSelectTemplate) through Ring601432_PutBlock / MIDI_PostSendWork when MidiFilter_SongSelect bit 3
 ;   allows. DiskLoadFile_SendSongSelectAndLoad calls it before the load unless UI_ScreenLatch is 0x49 / 0x4E. Basis:
 ;   caller + body. (notes/naming-pilot-2026-10-06/proposals_wave10_a10.json)
 DiskLoadFile_SendSongSelect:
 	push 0x00                                            ; FE1522  09 00
 	m_push MB16, Disk_SelectedEntry                                  ; FE1524  c1 24 27 04
-	calr sub_FE14E9                                          ; FE1528  1e be ff
+	calr MidiOut_SendSongSelect                                          ; FE1528  1e be ff
 	popw bc                                              ; FE152B  49
 	ret                                                  ; FE152C  0e
 DiskLoadFile_SendSongSelect_Nop:
@@ -176213,7 +176365,7 @@ sub_FE6E84:
 ;          (passed 0x40000, 0xE80000 and 0x100) has returned 1.  prom_b's Table_F48C00 holds the same six after
 ;          "WSA SOUND RAM S0" and "WSA1".  What link command 0x88 does is not established.
 LinkMsg_AfterSoundRamLoad:	.byte	0x88, 0x00, 0x18, 0x00, 0x00, 0x00	; FE7000
-; MidiOut_SongSelectTemplate -- a MIDI Song Select message.  sub_FE14E9 copies the word to its frame, stores the
+; MidiOut_SongSelectTemplate -- a MIDI Song Select message.  MidiOut_SendSongSelect copies the word to its frame, stores the
 ;          song number (bit 7 cleared) over the 0x00 and queues the two bytes with T_Ring601432_PutBlock
 MidiOut_SongSelectTemplate:	.byte	0xf3, 0x00	; FE7006
 ; UiStatus_CodeByIndex -- the UI_StatusCode StatusMsg_ShowByIndex stores for each index 0-30 it is passed
@@ -199245,7 +199397,7 @@ DiskSaveFile_Page3_LcdKeyRow1:
 	pop XIX                                              ; FF793C  5c
 	pop XIZ                                              ; FF793D  5e
 	ret                                                  ; FF793E  0e
-; MidiFileDirectPlay_SaveTrackToPartMap: Register-saving call of T_BStore_TrackToPart_SaveBackup -> prom_b BStore_TrackToPart_SaveBackup -> sub_F45463, which
+; MidiFileDirectPlay_SaveTrackToPartMap: Register-saving call of T_BStore_TrackToPart_SaveBackup -> prom_b BStore_TrackToPart_SaveBackup -> BStore_TrackToPart_CopyToBackup, which
 ;   copies the 17-byte BStore_TrackToPart map (0x603422) to its backup at 0x34BC. Paint_MidiFileDirectPlay (the
 ;   screen's ENTER) runs it on a real screen change, before the player's set-up rewrites the map. Basis: caller + body
 ;   (callee read). (notes/naming-pilot-2026-10-06/proposals_wave9_d9.json)
@@ -199260,7 +199412,7 @@ MidiFileDirectPlay_SaveTrackToPartMap:
 	pop XIX                                              ; FF7949  5c
 	pop XIZ                                              ; FF794A  5e
 	ret                                                  ; FF794B  0e
-; MidiFileDirectPlay_RestoreTrackToPartMap: Register-saving call of T_BStore_TrackToPart_RestoreBackup -> prom_b BStore_TrackToPart_RestoreBackup -> sub_F45478, which
+; MidiFileDirectPlay_RestoreTrackToPartMap: Register-saving call of T_BStore_TrackToPart_RestoreBackup -> prom_b BStore_TrackToPart_RestoreBackup -> BStore_TrackToPart_CopyFromBackup, which
 ;   copies the 17-byte backup at 0x34BC back into BStore_TrackToPart (0x603422). ScreenLeave_MidiFileDirectPlay runs
 ;   it right after T_MidiFileDirectPlay_RestoreOnLeave; inverse of MidiFileDirectPlay_SaveTrackToPartMap. Basis:
 ;   caller + body (callee read) + inverse. (notes/naming-pilot-2026-10-06/proposals_wave9_d9.json)

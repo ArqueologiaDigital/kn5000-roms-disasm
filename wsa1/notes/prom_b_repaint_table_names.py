@@ -4,8 +4,8 @@
 QUESTION IT ANSWERS
   prom_a repaints a screen through two prom_b selectors with a SCREEN CODE argument
   (notes/FINDINGS-l7a1429-editor-pages.md, section 2c):
-    Dispatch_Code80_Bracketed -> DispatchTable_F5B8F8[code - 0x80]  the FULL paint (display bracket)
-    Dispatch_Code80           -> DispatchTable_F5B9F8[code - 0x80]  the PARTIAL repaint
+    Dispatch_Code80_Bracketed -> Dispatch_Code80_PaintTable[code - 0x80]  the FULL paint (display bracket)
+    Dispatch_Code80           -> Dispatch_Code80_RepaintFieldTable[code - 0x80]  the PARTIAL repaint
   both 48 entries for codes 0x80..0xAF, codes 0xC0.. reusing 0xA0.. .  Their named entries already
   follow that split (SoundEditController_PaintPage1 / _RepaintFieldPage1, SoundEditCopy_Paint /
   _RepaintField ...).  This names the rest the same way:
@@ -27,8 +27,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROM_B = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
-TABLES = [("DispatchTable_F5B8F8", "Paint", "Dispatch_Code80_Bracketed, the full paint"),
-          ("DispatchTable_F5B9F8", "RepaintField", "Dispatch_Code80, the partial repaint")]
+TABLES = [("Dispatch_Code80_PaintTable", "Paint", "Dispatch_Code80_Bracketed, the full paint"),
+          ("Dispatch_Code80_RepaintFieldTable", "RepaintField", "Dispatch_Code80, the partial repaint")]
 
 
 def plan():

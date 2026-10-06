@@ -346,7 +346,7 @@ The other writers set constants before `call KeyboardIcon_Draw`:
 The two words are named `IconOrigin_X` / `IconOrigin_Y` for that role.
 
 `TouchCurve_DrawThumbnail` is also the filler entry of the two 48-entry selector tables
-`DispatchTable_F5B8F8` / `DispatchTable_F5B9F8` (entries 1, 28, 41, 44, 46, 47, and entry 21 of the
+`Dispatch_Code80_PaintTable` / `Dispatch_Code80_RepaintFieldTable` (entries 1, 28, 41, 44, 46, 47, and entry 21 of the
 second). Those selectors have no page, and nothing here shows them being selected.
 
 ⚠ Not established: the three-way value of (0x27F5). It is 1 or 2 from `ScreenEnter_SoundEditMenu`'s

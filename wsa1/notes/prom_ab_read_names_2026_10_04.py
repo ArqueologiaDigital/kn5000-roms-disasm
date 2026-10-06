@@ -724,19 +724,19 @@ ROWS = [
      "+8 count = 0x1FF -- the 0x200-byte sequencer ring emptied, the same three stores as TimedEventRing_Discard."),
     # prom_a: the part-record field setters.  List2030_Part*_Apply's headers fix the record bytes: 3 volume, 5 / 6 / 7 effect
     # 3 / 4 / 1 depth, 8 pan, 9 coarse tune, 0x0A fine tune (8-bit), 0x0B bend range (MidiOut_ParamClassTable's classes).
-    ("FAB8E9", "List2030_PartVolume_Apply_Call", "JumpTable_FAB8B4[3]: `calr List2030_PartVolume_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+    ("FAB8E9", "List2030_PartVolume_Apply_Call", "List2030_PartFieldHandlers[3]: `calr List2030_PartVolume_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
      "List2030_PartBendRange_Apply_Call."),
-    ("FAB8F3", "List2030_PartEffect3Depth_Apply_Call", "JumpTable_FAB8B4[5]: `calr List2030_PartEffect3Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+    ("FAB8F3", "List2030_PartEffect3Depth_Apply_Call", "List2030_PartFieldHandlers[5]: `calr List2030_PartEffect3Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
      "List2030_PartBendRange_Apply_Call."),
-    ("FAB8F8", "List2030_PartEffect4Depth_Apply_Call", "JumpTable_FAB8B4[6]: `calr List2030_PartEffect4Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+    ("FAB8F8", "List2030_PartEffect4Depth_Apply_Call", "List2030_PartFieldHandlers[6]: `calr List2030_PartEffect4Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
      "List2030_PartBendRange_Apply_Call."),
-    ("FAB8FD", "List2030_PartEffect1Depth_Apply_Call", "JumpTable_FAB8B4[7]: `calr List2030_PartEffect1Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+    ("FAB8FD", "List2030_PartEffect1Depth_Apply_Call", "List2030_PartFieldHandlers[7]: `calr List2030_PartEffect1Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
      "List2030_PartBendRange_Apply_Call."),
-    ("FAB902", "List2030_PartPan_Apply_Call", "JumpTable_FAB8B4[8]: `calr List2030_PartPan_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+    ("FAB902", "List2030_PartPan_Apply_Call", "List2030_PartFieldHandlers[8]: `calr List2030_PartPan_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
      "List2030_PartBendRange_Apply_Call."),
-    ("FAB907", "List2030_PartCoarseTune_Apply_Call", "JumpTable_FAB8B4[9]: `calr List2030_PartCoarseTune_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+    ("FAB907", "List2030_PartCoarseTune_Apply_Call", "List2030_PartFieldHandlers[9]: `calr List2030_PartCoarseTune_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
      "List2030_PartBendRange_Apply_Call."),
-    ("FAB90C", "List2030_PartFineTune_Apply_Call", "JumpTable_FAB8B4[10]: `calr List2030_PartFineTune_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+    ("FAB90C", "List2030_PartFineTune_Apply_Call", "List2030_PartFieldHandlers[10]: `calr List2030_PartFineTune_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
      "List2030_PartBendRange_Apply_Call."),
     ("FB5B6A", "GmReset_PartVolume",
      "for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 3, 100 (0x64), mask 0x7F} -- every part's Volume set to the\n"
@@ -857,7 +857,7 @@ ROWS = [
     ("F5BE5A", "TouchCurve_DrawThumbnail",
      "curve = (XIZ) >> 5: 3 erases the box at IconOrigin + 1 (service 0x1B) and draws the diagonal (service 0x00,\n"
      "DrawLine); otherwise blits CurveBitmapSelector[curve], 40 x 40, at IconOrigin (service 0x03).  Also the filler\n"
-     "entry of DispatchTable_F5B8F8 / F5B9F8 at the selectors with no page."),
+     "entry of Dispatch_Code80_PaintTable / F5B9F8 at the selectors with no page."),
     ("F5BDBB", "TouchCurve_DrawCurrentSlot",
      "IconOrigin = TouchCurve_BoxOrigins[(0x27A3)] (BoxOrigins3 when (0x27F5) is 1), TouchCurve_DrawThumbnail on\n"
      "ModelingPage_Fields+5 / +8 + (0x27A3), then the slot's TouchCurve_ListPtrs list.  Called by\n"
@@ -2268,7 +2268,7 @@ ROWS = [
     ("F0F061", "DspEffect_OnParamEvent",
      "T_DspEffect_OnParamEvent, UiListB_Class00 / 20 / 60..63 / 79.  On the DSP EFFECT screens (0x39 COMBINATION EDIT, 0x66, 0xCA SOUND\n"
      "EDIT): part 0's records (class 0x00 / 0x20) repaint while DspEffect_Section is 0; the effect records go through\n"
-     "DispatchTable_F0F0CE by DspEffect_Section (0..5).  On MAIN OUT EQUALIZER (0x6B) the effect records repaint."),
+     "DspEffect_OnParamEvent_BySection by DspEffect_Section (0..5).  On MAIN OUT EQUALIZER (0x6B) the effect records repaint."),
     ("F0F0FF", "DspEffectEvent_RepaintAndReturn",
      "DspEffect_OnParamEvent's tail: UI_ScreenFlags bit 4 (repaint in place), then its popw hl / ret."),
     ("F4C3F2", "CreatorSelectController_OpenOnEvent",

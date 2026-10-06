@@ -107,9 +107,9 @@ sll 0x02,BC / add XBC,<base> / ld XBC,(XBC) / jp T,XBC
 | `JumpTable_F9D966` | 8 | `cp BC,7` @`0xF9D954` | `(0x269A)` | base+32 = `0xF9D986` = min entry |
 | `JumpTable_F9DBE6` | 8 | `cp BC,7` @`0xF9DBD4` | `(0x269A)` | base+32 = `0xF9DC06` = min entry |
 | `JumpTable_F9EC58` | 7 | `cp BC,6` @`0xF9EC47` | `(0x26A5)` | base+28 = `0xF9EC74` = min entry |
-| `JumpTable_FA08BF` | 6 | `cp BC,5` @`0xFA08AD` | `(0x26A7)&7` | base+24 = `0xFA08D7` = min entry |
-| `JumpTable_FA09BD` | 6 | `cp BC,5` | — | base+24 = `0xFA09D5` = min entry |
-| `JumpTable_FA0B13` | 6 | `cp BC,5` | — | base+24 = `0xFA0B2B` = min entry |
+| `SystemTest_NoteKeyItemHandlers` | 6 | `cp BC,5` @`0xFA08AD` | `(0x26A7)&7` | base+24 = `0xFA08D7` = min entry |
+| `SystemTest_VelocityKeyItemHandlers` | 6 | `cp BC,5` | — | base+24 = `0xFA09D5` = min entry |
+| `SystemTest_ValueHeaderItemHandlers` | 6 | `cp BC,5` | — | base+24 = `0xFA0B2B` = min entry |
 
 **The last-entry test in every row is the same and it is strong: `base + 4*n` is
 the MINIMUM value any entry holds — the table abuts its own first arm.** One

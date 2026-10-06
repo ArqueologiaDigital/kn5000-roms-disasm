@@ -1,0 +1,257 @@
+[
+ {
+  "old": "sub_FC0227",
+  "verdict": "name",
+  "new": "PartSound_RequeuePartIfUserBank",
+  "header": "(XIX = a part record, E = its part key) If the record's bank byte (+1) is 0x08..0x0F (SoundSel_Bank's U1/U2 codes), appends {E, 1, bank, 0x7F} and {E, 0, program (+0), 0xFF} to Queue2E00. The body of PartSound_RequeuePart0IfUserBank, which passes part 0's record (0x76A2) and key 0. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:113005 `; PartSound_RequeuePart0IfUserBank: XIX := 0x76A2 (part 0's record), E := 0, then sub_FC0227` -- the caller's established header",
+   "prom_a/wsa1_prom_a.s:113015 `ld e, 0x00:opc` / prom_a/wsa1_prom_a.s:113016 `call sub_FC0227` -- caller site: record and key are inputs",
+   "prom_a/wsa1_prom_a.s:113022 `ld A,(XIX+0x01)` / prom_a/wsa1_prom_a.s:113023 `cp A,0x08` / prom_a/wsa1_prom_a.s:113025 `cp A,0x10` -- only banks 0x08..0x0F",
+   "prom_a/wsa1_prom_a.s:113028 `ld w, 0x7f:opc` + prom_a/wsa1_prom_a.s:113031 `call T_Queue2E00_AppendRegs` -- {E, 1, bank, 0x7F}",
+   "prom_a/wsa1_prom_a.s:113034 `ld w, 0xff:opc` + prom_a/wsa1_prom_a.s:113036 `call T_Queue2E00_AppendRegs` -- {E, 0, program, 0xFF} (A := (XIX+0) at 0xFC0247)"
+  ]
+ },
+ {
+  "old": "sub_FC19E0",
+  "verdict": "name",
+  "new": "Msg0716_PostClearSoundRamRequest",
+  "header": "Writes the CPU-2 link request 88 00 17 00 00 00 at (XIX) and posts its 6 bytes on stream 0 through Msg0716_Post_Trampoline; on CPU 2 that is ToneEdit_Dispatch opcode 0x17, SoundRam_ClearFourBanks. The body of Msg0716_PostClearSoundRamBanks, which sets XIX := 0x0716. Basis: caller + body + CPU-2 dispatch.",
+  "basis": "caller + body + CPU-2 dispatch",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:112977 `; Msg0716_PostClearSoundRamBanks: XIX := 0x0716, then sub_FC19E0 builds and Msg0716_Post sends (stream 0) the link request 88 00 17 00 00 00` -- caller header",
+   "prom_a/wsa1_prom_a.s:112984 `ld XIX,0x00000716` / prom_a/wsa1_prom_a.s:112985 `call sub_FC19E0` -- caller site",
+   "prom_a/wsa1_prom_a.s:115898 `ld (XIX),0x88` / prom_a/wsa1_prom_a.s:115900 `ld (XIX+0x02),0x17` -- the request bytes (bytes 1, 3-5 are 0)",
+   "prom_a/wsa1_prom_a.s:115904 `ldw bc, 0x06` / prom_a/wsa1_prom_a.s:115905 `call Msg0716_Post_Trampoline` -- 6 bytes posted",
+   "prom_a/wsa1_prom_a.s:112969 `; CORRECTION (wave 10): 88 00 17 has request[0] bit 3 SET, which selects CPU 2's WRITE table` -- write arm 0 ToneEdit_Dispatch, opcode 0x17 calls SoundRam_ClearFourBanks",
+   "prom_c/field_accessors.s:902 `; SoundRam_ClearFourBanks -- 0xFC386C..0xFC39F9` -- called from ToneEdit_Dispatch, clears the four 'WSA SOUND RAM S0..S3' flash banks"
+  ]
+ },
+ {
+  "old": "sub_FDA808",
+  "verdict": "name",
+  "new": "PanelLed_SetOrClearRequestBits",
+  "header": "(mask, set) LED request word (0x213A) |= mask when set = 1, else &= ~mask. (0x213A) is the sixth word PanelLed_ProcessRequests dispatches (DispatchTable_F8C2B2+0x1A; id 0x0400 -> the compare LED handler 0xF8C7AC). Both callers pass (0x0400, 1) right after PanelLed_SetCompareFlag, as CombiEdit_CompareOn sets (0x213B) bit 2 after (0x216E). Basis: callers + body + LED dispatcher.",
+  "basis": "callers + body + LED request dispatcher",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:134549 `pushw 0x01` / prom_a/wsa1_prom_a.s:134550 `pushw 0x0400` / prom_a/wsa1_prom_a.s:134551 `call sub_FDA808` -- SoundEdit_OnStagingFlagsReply's site, right after `call sub_FDA829`",
+   "prom_a/wsa1_prom_a.s:151826 `call sub_FDA808` -- the second (unnamed) caller sub_FDACBD, same (0x0400, 1) after sub_FDA829(0)",
+   "prom_a/wsa1_prom_a.s:151036 `lda xix, (0x213a:16)` / prom_a/wsa1_prom_a.s:151037 `cp (XIZ+0x0a),0x01` -- the word and the set/clear selector",
+   "prom_a/wsa1_prom_a.s:151040 `or (XIX),BC` / prom_a/wsa1_prom_a.s:151045 `and (XIX),BC` (after `cpl BC`) -- set or clear the mask bits",
+   "prom_a/wsa1_prom_a.s:23259 `ld XIY,0x0000213a` / prom_a/wsa1_prom_a.s:23260 `ld XIX,DispatchTable_F8C2B2+0x1A` -- PanelLed_ProcessRequests serves this word",
+   "prom_a/wsa1_prom_a.s:23285 `.byte 0x00, 0x04, 0xac, 0xc7, 0xf8, 0x00  ; id=0x0400 ptr=0x00f8c7ac` -- bit 0x0400's LED handler",
+   "prom_a/wsa1_prom_a.s:110367 `m_set 2, MD16, 0x213b` -- CombiEdit_CompareOn requests the same bit (0x0400 of the word)"
+  ]
+ },
+ {
+  "old": "sub_FDA829",
+  "verdict": "name",
+  "new": "PanelLed_SetCompareFlag",
+  "header": "(flag) (0x216E) := 1 when flag != 0, else 0 -- the bit the LED request-0x0400 handler (0xF8C7AC) copies onto its LED, and which CombiEdit_CompareOn / CombiEdit_CompareOff set to 1 / 0 with CombiEdit_Comparing. SoundEdit_OnStagingFlagsReply passes 0 or 1 from CPU 2's staging flags, then PanelLed_SetOrClearRequestBits(0x0400, 1). Basis: caller + body + the flag's other writers and its reader.",
+  "basis": "caller + body + the flag's other writers and reader",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:134548 `call sub_FDA829` -- SoundEdit_OnStagingFlagsReply's site (arg 0 when staged bit 0 turns on, 1 when it turns off with bit 1 set)",
+   "prom_a/wsa1_prom_a.s:151052 `ld (0x216e:16), 0x00` / prom_a/wsa1_prom_a.s:151055 `ld (0x216e:16), 0x01` -- the whole body",
+   "prom_a/wsa1_prom_a.s:110366 `ld (0x216e:16), 0x01` (CombiEdit_CompareOn) and prom_a/wsa1_prom_a.s:110355 `ld (0x216e:16), 0x00` (CombiEdit_CompareOff) -- the only other writers besides CombiEdit_SaveOriginalForCompare (0)",
+   "prom_a/wsa1_prom_a.s:23760 `bit 0, (0x216e:16)` / prom_a/wsa1_prom_a.s:23762 `or (XIX+0x07),0x02` -- the only reader, LED handler 0xF8C7AC (v2 path: prom_a/wsa1_prom_a.s:23767 byte 6 bit 2)",
+   "prom_a/wsa1_prom_a.s:151823 `call sub_FDA829` -- unnamed caller sub_FDACBD passes 0 before the same LED request"
+  ]
+ },
+ {
+  "old": "sub_FE14E9",
+  "verdict": "name",
+  "new": "MidiOut_SendSongSelect",
+  "header": "(song) When MidiFilter_SongSelect bit 3 is set: builds F3 <song & 0x7F> from MidiOut_SongSelectTemplate in its frame, sets port A's running-status mailbox (0x9B) to 0xF3, queues the 2 bytes with T_Ring601432_PutBlock and calls T_MIDI_PostSendWork (interrupts masked). DiskLoadFile_SendSongSelect calls it with Disk_SelectedEntry. Basis: caller + body + template.",
+  "basis": "caller + body + template",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:164563 `; DiskLoadFile_SendSongSelect: sub_FE14E9(Disk_SelectedEntry): sends MIDI Song Select` -- caller header",
+   "prom_a/wsa1_prom_a.s:164569 `m_push MB16, Disk_SelectedEntry` / prom_a/wsa1_prom_a.s:164570 `calr sub_FE14E9` -- caller site",
+   "prom_a/wsa1_prom_a.s:164543 `ld bc, (MidiOut_SongSelectTemplate:24)` -- prom_a/wsa1_prom_a.s:176218 `MidiOut_SongSelectTemplate: .byte 0xf3, 0x00`",
+   "prom_a/wsa1_prom_a.s:164545 `ld a, (MidiFilter_SongSelect:16)` -- include/wsa1_ram.inc:345 bit 3 = SONG SELECT filter",
+   "prom_a/wsa1_prom_a.s:164548 `ld A,(XIZ+0x08)` / prom_a/wsa1_prom_a.s:164549 `res 0x07,A` -- the song number, bit 7 cleared",
+   "prom_a/wsa1_prom_a.s:164551 `ld (0x9b:8), 0xf3:io` -- port A's running-status mailbox (MidiOut_RunPeriodicTimeouts header, prom_a/wsa1_prom_a.s:74999)",
+   "prom_a/wsa1_prom_a.s:164556 `call T_Ring601432_PutBlock` / prom_a/wsa1_prom_a.s:164557 `call T_MIDI_PostSendWork` -- queued and sent"
+  ]
+ },
+ {
+  "old": "sub_F45463",
+  "verdict": "name",
+  "new": "BStore_TrackToPart_CopyToBackup",
+  "header": "Copies the 17-byte BStore_TrackToPart map (0x603422) to its backup at 0x34BC (ldir, C = 17). The whole body of BStore_TrackToPart_SaveBackup (calr + ret). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:96273 `; BStore_TrackToPart_SaveBackup: calr to sub_F45463 (+ ret), which copies the 17-byte BStore_TrackToPart map` -- caller header",
+   "prom_b/wsa1_prom_b.s:96278 `calr sub_F45463` -- caller site",
+   "prom_b/wsa1_prom_b.s:96292 `ld xix, 13500` (0x34BC, destination) / prom_b/wsa1_prom_b.s:96293 `ld xiy, BStore_TrackToPart` (source)",
+   "prom_b/wsa1_prom_b.s:96295 `ld c, 17:opc` / prom_b/wsa1_prom_b.s:96296 `ldir85` -- 17 bytes"
+  ]
+ },
+ {
+  "old": "sub_F45478",
+  "verdict": "name",
+  "new": "BStore_TrackToPart_CopyFromBackup",
+  "header": "Copies the 17-byte backup at 0x34BC back into BStore_TrackToPart (0x603422) (ldir, C = 17); inverse of BStore_TrackToPart_CopyToBackup and the whole body of BStore_TrackToPart_RestoreBackup. Basis: caller + body + inverse.",
+  "basis": "caller + body + inverse",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:96311 `; BStore_TrackToPart_RestoreBackup: calr to sub_F45478 (+ ret), which copies the 17-byte backup at 0x34BC back` -- caller header",
+   "prom_b/wsa1_prom_b.s:96316 `calr sub_F45478` -- caller site",
+   "prom_b/wsa1_prom_b.s:96330 `ld xiy, 13500` (0x34BC, source) / prom_b/wsa1_prom_b.s:96331 `ld xix, BStore_TrackToPart` (destination) / prom_b/wsa1_prom_b.s:96333 `ld c, 17:opc`",
+   "prom_b/wsa1_prom_b.s:96358 `jr z, sub_F45478_Return` -- NB: sub_F45478_Return (0xF454A5) is a local label of Seq_RestoreTrackMaskAndRewind, not of this routine; a sed rename of the prefix would mislabel it"
+  ]
+ },
+ {
+  "old": "sub_F49B43",
+  "verdict": "name",
+  "new": "SeqRecord_WriteModulationResetToTakeTracks",
+  "header": "Builds the modulation event {0xD1, tick (0x34B9), 0} (DE = 3) and sub_F49B7A writes it, slot byte := each track, to every track 0..16 still in the take via SeqRecord_WriteCtrlEventToTakeTrack. SeqRecord_ResetControllersAfterRingOverflow runs it for (0x34B8) bit 0, a modulation event lost to a full SeqBuf_Ring. Basis: caller + body + SeqBuf_PutModulationEvent's layout.",
+  "basis": "caller + body + encoder layout",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102315 `; SeqRecord_ResetControllersAfterRingOverflow: ... modulation 0x10 -> bit 0 ... bit 0 -> sub_F49B43 writes {0xD1, tick, 0} to every take track` -- caller header",
+   "prom_b/wsa1_prom_b.s:102332 `calr sub_F49B43` -- caller site, under `bit 0,(0x34b8)`",
+   "prom_b/wsa1_prom_b.s:102362 `ldw de, 3` / prom_b/wsa1_prom_b.s:102363 `ld (13482:16), 209` (0x34AA := 0xD1) / prom_b/wsa1_prom_b.s:102364 `ld a, (13497:16)` (tick 0x34B9) / prom_b/wsa1_prom_b.s:102366 `ld (13484:16), 0` (value 0)",
+   "prom_b/wsa1_prom_b.s:102367 `calr sub_F49B7A` -> prom_b/wsa1_prom_b.s:102423 `ld (13485:16), c` (slot := track) / prom_b/wsa1_prom_b.s:102425 `calr SeqRecord_WriteCtrlEventToTakeTrack`",
+   "prom_a/wsa1_prom_a.s:86672 `; SeqBuf_PutModulationEvent -- ... {0xD1, tick, value, slot}` -- the event layout"
+  ]
+ },
+ {
+  "old": "sub_F49B5C",
+  "verdict": "name",
+  "new": "SeqRecord_WritePitchBendResetToTakeTracks",
+  "header": "Builds the pitch-bend centre event {0xD2, tick (0x34B9), 0x00, 0x40} (DE = 4) for every take track (sub_F49BBA -> SeqRecord_WritePitchBendToTakeTrack); run by SeqRecord_ResetControllersAfterRingOverflow for (0x34B8) bit 1. As built the loop stores the track at +3 (over the 0x40) while the writer takes the track from +4 (0x34AE), so each pass writes {0xD2, tick, 0, t} to track (0x34AE). Basis: caller + body + SeqBuf_PutPitchBendEvent's layout.",
+  "basis": "caller + body + encoder layout",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102315 `; SeqRecord_ResetControllersAfterRingOverflow: ... pitch bend 0x20 -> bit 1 ... bit 1 -> sub_F49B5C {0xD2, tick, 0, 0x40}` -- caller header",
+   "prom_b/wsa1_prom_b.s:102336 `calr sub_F49B5C` -- caller site, under `bit 1,(0x34b8)`",
+   "prom_b/wsa1_prom_b.s:102382 `ldw de, 4` / prom_b/wsa1_prom_b.s:102383 `ld (13482:16), 210` (0xD2) / prom_b/wsa1_prom_b.s:102386 `ld (13484:16), 0` (LSB) / prom_b/wsa1_prom_b.s:102387 `ld (13485:16), 64` (MSB 0x40)",
+   "prom_b/wsa1_prom_b.s:102388 `calr sub_F49BBA` -> prom_b/wsa1_prom_b.s:102465 `ld (13485:16), c` -- the loop stores the track over the MSB at +3",
+   "prom_b/wsa1_prom_b.s:103340 `ld C,(XIX+HL)` with HL = DE = 4 -- SeqRecord_WritePitchBendToTakeTrack takes the track from 0x34AE, as the drain's 0xD2 arm (prom_b/wsa1_prom_b.s:102171) does",
+   "prom_a/wsa1_prom_a.s:86655 `; SeqBuf_PutPitchBendEvent -- ... {0xD2, tick, LSB, MSB, slot}` -- the event layout (slot at +4)"
+  ]
+ },
+ {
+  "old": "sub_F49BFA",
+  "verdict": "name",
+  "new": "SeqRecord_CloseAllHeldNotes",
+  "header": "For every track 0..16 still in the take, walks its held-note list (head 0x3016[2t], slots linked by +7) and closes each note at tick (0x34B9) through SeqRecord_CloseHeldNote ((0x34AC) := note, (0x34AE) := track). Run by SeqRecord_CloseHeldNotesAtCycleWrap and, for (0x34B8) bit 2, by SeqRecord_ResetControllersAfterRingOverflow. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102284 `; SeqRecord_CloseHeldNotesAtCycleWrap: ... sub_F49BFA closes every held note of every take track at that tick` -- caller header",
+   "prom_b/wsa1_prom_b.s:102299 `calr sub_F49BFA` and prom_b/wsa1_prom_b.s:102340 `calr sub_F49BFA` -- the two named callers",
+   "prom_b/wsa1_prom_b.s:102497 `xorcf A,IZ` (with scf) -- only tracks whose take bit (0x3004)/(0x3006) is set",
+   "prom_b/wsa1_prom_b.s:102508 `calr sub_F4A53E` / prom_b/wsa1_prom_b.s:102514 `calr sub_F4A56C` / prom_b/wsa1_prom_b.s:102515 `ld a, (xhl+7)` -- list head, slot address, next link",
+   "prom_b/wsa1_prom_b.s:102517 `ld a, (13497:16)` / prom_b/wsa1_prom_b.s:102520 `ld (13484:16), a` / prom_b/wsa1_prom_b.s:102522 `ld (13486:16), c` / prom_b/wsa1_prom_b.s:102525 `calr SeqRecord_CloseHeldNote` -- close at tick 0x34B9"
+  ]
+ },
+ {
+  "old": "sub_F49DE6",
+  "verdict": "name",
+  "new": "SeqRecord_SplitHeldNoteAtBeatLimit",
+  "header": "For the held note in slot (0x374C) that SeqRecord_WriteBeatMarkAndAgeHeldNotes found at 127 beats: sub_F49DF8 closes its event with duration 95 - start tick and 0x7F beats and frees the slot, sub_F49F46 rebuilds {status, tick 0, note, velocity, track} at 0x34AA, and SeqRecord_WriteNoteOn re-opens it. Basis: caller + body + SeqRecord_WriteNoteOn header.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102669 `; SeqRecord_WriteBeatMarkAndAgeHeldNotes: ... a note reaching 127 beats being split (sub_F49DE6)` -- caller header",
+   "prom_b/wsa1_prom_b.s:102742 `cp a, 127` / prom_b/wsa1_prom_b.s:102754 `call sub_F49DE6` -- caller site, beat count >= 127",
+   "prom_b/wsa1_prom_b.s:102780 `calr sub_F49DF8` -> prom_b/wsa1_prom_b.s:102808 `ld a, (xhl+2)` / prom_b/wsa1_prom_b.s:102809 `ld c, 95:opc` / prom_b/wsa1_prom_b.s:102832 `and a, 127` / prom_b/wsa1_prom_b.s:102835 `ld a, 127:opc` -- duration 95 - start, beats 0x7F written over the 0x10 0x00 placeholder",
+   "prom_b/wsa1_prom_b.s:102781 `calr sub_F49F46` -> prom_b/wsa1_prom_b.s:102951 `ld (XHL+0x00),A` (status 0x374D) / prom_b/wsa1_prom_b.s:102953 `ld (XHL+0x01),A` (tick 0) / prom_b/wsa1_prom_b.s:102959 `ld (XHL+0x04),A` (track) at 0x34AA",
+   "prom_b/wsa1_prom_b.s:102783 `calr SeqRecord_WriteNoteOn` -- prom_b/wsa1_prom_b.s:102975 its header: 'also re-opens a note split at 127 beats'"
+  ]
+ },
+ {
+  "old": "sub_F4A4E3",
+  "verdict": "name",
+  "new": "BStore_ExtendChainAtCursor_B_SaveRegs",
+  "header": "Calls T_BStore_ExtendChainAtCursor_B (a new block linked after the cursor block, cursor to its offset 5) with XWA, XBC, XDE, XHL, XIX, XIY and XIZ saved around it. SeqRecord_WriteEventToTakeTrack calls it when an event's bytes run past offset 0xFF. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:103380 `; SeqRecord_WriteEventToTakeTrack: ... continuing in a new block through sub_F4A4E3 (T_BStore_ExtendChainAtCursor_B)` -- caller header",
+   "prom_b/wsa1_prom_b.s:103463 `calr sub_F4A4E3` / prom_b/wsa1_prom_b.s:103482 `calr sub_F4A4E3` -- caller sites (and two in its unlabelled twin at 0xF4A3E2)",
+   "prom_b/wsa1_prom_b.s:103599 `push xwa` .. prom_b/wsa1_prom_b.s:103606 `call T_BStore_ExtendChainAtCursor_B` .. prom_b/wsa1_prom_b.s:103614 `ret` -- seven pushes, the call, seven pops",
+   "prom_b/wsa1_prom_b.s:108089 `; BStore_ExtendChainAtCursor_B: Allocates a block ... moves the cursor to it at offset 5` -- the callee"
+  ]
+ },
+ {
+  "old": "sub_F4A4F6",
+  "verdict": "name",
+  "new": "SeqRecord_TerminateTrackOnMemoryFull",
+  "header": "(C = a track its caller has just cleared from the take mask) (0x349F) := C, SeqRecord_TerminateTrackAtCursor (0x81 and the 0x82 end tag at the take cursor), SeqRecord_SetRecordedTracksPlaying when no track is left in the take ((0x3004) long = 0), SeqRecord_SoundAlert, (0x34D1) |= 0x30. All four callers reach it only with BStore_FreeCount = 0 and too few bytes left in the block. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102669 `; SeqRecord_WriteBeatMarkAndAgeHeldNotes: ... out of free blocks with < 9 bytes left it is dropped from the take and terminated, sub_F4A4F6` -- caller header",
+   "prom_b/wsa1_prom_b.s:102699 `cp (0x6034ba),0x0000` / prom_b/wsa1_prom_b.s:102703 `cp wa, 9` / prom_b/wsa1_prom_b.s:102727 `calr sub_F4A4F6` -- caller site after clearing the take bit; also prom_b/wsa1_prom_b.s:103031 (WriteNoteOn, `cp wa, 14` at prom_b/wsa1_prom_b.s:103012), prom_b/wsa1_prom_b.s:103431 and prom_b/wsa1_prom_b.s:103532 (WriteEventToTakeTrack and twin, DE + 8)",
+   "prom_b/wsa1_prom_b.s:103628 `ld (13471:16), c` / prom_b/wsa1_prom_b.s:103629 `call T_SeqRecord_TerminateTrackAtCursor_Veneer` -- prom_b/wsa1_prom_b.s:97041 writes 0x81, 0x82 end tag, saves the end cursor",
+   "prom_b/wsa1_prom_b.s:103630 `calr sub_F4A50E` -> prom_b/wsa1_prom_b.s:103648 `ld xwa, (12292:16)` / prom_b/wsa1_prom_b.s:103651 `call T_SeqRecord_SetRecordedTracksPlaying_Veneer` -- only when the take is empty",
+   "prom_b/wsa1_prom_b.s:103631 `calr SeqRecord_SoundAlert` / prom_b/wsa1_prom_b.s:103632 `call T_Var34D1_SetBits20_Veneer` / prom_b/wsa1_prom_b.s:103633 `or (0x34d1),0x10`"
+  ]
+ },
+ {
+  "old": "sub_F4A53E",
+  "verdict": "name",
+  "new": "SeqRecord_LoadHeldNoteListHeadTail",
+  "header": "(0x33DA) := 0x3016[2t], (0x33DB) := 0x3016[2t+1] for track t = (0x349F): the first and last held-note slots of the track's list (0 = empty), as SeqRecord_WriteNoteOn appends a slot -- head written when (0x33DA) = 0, old tail's +7 linked, new slot made the tail. Preserves BC, IY, XHL. Basis: callers + body + the list writer.",
+  "basis": "callers + body + list writer",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:103056 `calr sub_F4A53E` (SeqRecord_WriteNoteOn) -- then prom_b/wsa1_prom_b.s:103059 `ld (xhl+6), a` (prev := tail 0x33DB), prom_b/wsa1_prom_b.s:103062 `ld (xhl+7), 255`, prom_b/wsa1_prom_b.s:103072 `ld (XHL+IY),A` (head when 0x33DA = 0), prom_b/wsa1_prom_b.s:103080 `ld (xhl+7), a` (old tail -> new), prom_b/wsa1_prom_b.s:103091 `ld (xiz+1), a` (tail := new)",
+   "prom_b/wsa1_prom_b.s:102508 `calr sub_F4A53E` (sub_F49BFA) and the SeqRecord_CloseHeldNote / SeqRecord_WriteBeatMarkAndAgeHeldNotes sites -- walk from (0x33DA)",
+   "prom_b/wsa1_prom_b.s:103683 `ld xhl, 12310` (0x3016) / prom_b/wsa1_prom_b.s:103684 `ld C,(XHL+IY)` (IY = 2t) / prom_b/wsa1_prom_b.s:103685 `ld (13274:16), c` -- head",
+   "prom_b/wsa1_prom_b.s:103688 `ld C,(XIZ+0x01)` / prom_b/wsa1_prom_b.s:103689 `ld (13275:16), c` -- tail",
+   "prom_b/wsa1_prom_b.s:102975 `; SeqRecord_WriteNoteOn: ... appending it to the track's list (0x3016)` -- caller header"
+  ]
+ },
+ {
+  "old": "sub_F4A56C",
+  "verdict": "name",
+  "new": "SeqRecord_HeldNoteSlotAddress",
+  "header": "XHL := 0x305A + (HL - 1) * 8: the address of 1-based held-note slot HL (8 bytes: +0 note, +1 beats, +2 start tick, +3/+5 the note byte's cursor, +6 previous, +7 next; free list head at 0x3014). Used by SeqRecord_WriteNoteOn, SeqRecord_CloseHeldNote, SeqRecord_WriteBeatMarkAndAgeHeldNotes and the cycle-record slot opener. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102975 `; SeqRecord_WriteNoteOn: ... takes a held-note slot off the free list (0x3014) -- note, beats 0, start tick, the note byte's cursor` -- caller header naming the slot fields",
+   "prom_b/wsa1_prom_b.s:102514 `calr sub_F4A56C` / prom_b/wsa1_prom_b.s:102515 `ld a, (xhl+7)` -- a caller walking the next link",
+   "prom_b/wsa1_prom_b.s:103708 `ld qhl, 0` / prom_b/wsa1_prom_b.s:103709 `ld xwa, 12378` (0x305A) / prom_b/wsa1_prom_b.s:103710 `dec 1, xhl` / prom_b/wsa1_prom_b.s:103711 `sla xhl, 3` / prom_b/wsa1_prom_b.s:103712 `add xhl, xwa` -- the whole computation",
+   "prom_b/wsa1_prom_b.s:103131 `; SeqRecord_CloseHeldNote: ... finds its held-note slot for note (0x34AC) ... unlinks the slot and returns it to the free list (0x3014)` -- another caller's header"
+  ]
+ },
+ {
+  "old": "sub_F4ABE8",
+  "verdict": "name",
+  "new": "CycleRecord_WriteStagedEventToRecordTrack",
+  "header": "Writes the event staged at 0x36E8 ((0x36F0) bytes) into cycle record track (0x36D6): sub_F4AE15 steps back from the track's end cursor by beat marks and ticks against (0x3452) / (0x36E9), sub_F4ACB1 opens a held-note slot for a 0x9n event, sub_F4AEEE runs BStore_AppendBytes, an error -> CycleRecord_AbortMemoryFull. With (0x3731) bit 0 set and Seq_BeatTick > 0x14 (sub_F4ABFC) the walk starts at take chain 2's 0x82 tag instead, and the track's end cursor is restored after. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:102640 `; CycleRecord_WriteEventToRecordTrack: ... copies 8 bytes of the event record 0x34AA to 0x36E8 and sub_F4ABE8 writes (0x36F0) of them into track (0x36D6)'s chain` -- caller header",
+   "prom_b/wsa1_prom_b.s:102625 `calr sub_F4ABE8` (CycleRecord_WriteNoteOnToRecordTrack) / prom_b/wsa1_prom_b.s:102653 `calr sub_F4ABE8` (CycleRecord_WriteEventToRecordTrack) -- caller sites, each right after the 8-byte copy to 0x36E8",
+   "prom_b/wsa1_prom_b.s:104749 `bit 0,(0x3731)` / prom_b/wsa1_prom_b.s:104751 `cp (0x93),0x14` / prom_b/wsa1_prom_b.s:104753 `calr sub_F4ABFC` / prom_b/wsa1_prom_b.s:104756 `calr sub_F4AC81` -- the two paths",
+   "prom_b/wsa1_prom_b.s:104789 / prom_b/wsa1_prom_b.s:104830 `calr sub_F4AE15`, prom_b/wsa1_prom_b.s:104790 / prom_b/wsa1_prom_b.s:104831 `calr sub_F4ACB1`, prom_b/wsa1_prom_b.s:104791 / prom_b/wsa1_prom_b.s:104832 `calr sub_F4AEEE` -- both paths share position, slot, write",
+   "prom_b/wsa1_prom_b.s:105113 `ld xiy, 14056` (0x36E8) / prom_b/wsa1_prom_b.s:105116 `ld w, (14064:16)` (0x36F0) / prom_b/wsa1_prom_b.s:105118 `call T_BStore_AppendBytes_Veneer` -- the write",
+   "prom_b/wsa1_prom_b.s:104788 `calr CycleRecord_SetEndCursorAtTakeChain2EndTag` -- only in sub_F4ABFC; (0x3731) bit 0 is set by sub_F4B0E7 (prom_b/wsa1_prom_b.s:105363) and cleared at the cycle wrap (prom_b/wsa1_prom_b.s:98188)"
+  ]
+ },
+ {
+  "old": "sub_F77F20",
+  "verdict": "name",
+  "new": "InputStream_Refill_Copy2",
+  "header": "Disk_Flags |= 0x02 then T_DiskApi_ReadFileToWindow_Entry -- an exact copy of InputStream_Refill in the unreferenced SMF writer copy after SmfWriteCopy_SetOutputWindow, reached only through the veneer `calr / ret` at 0xF77EDF, which sits where copy D's veneer to InputStream_Refill_Copy sits (0xF77CF8). Basis: veneer position + body (exact copy) + twin.",
+  "basis": "veneer position + body (exact copy) + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:188184 `calr sub_F77F20` -- the only caller: veneer 0xF77EDF in the run after SmfWriteCopy_SetOutputWindow's ret (prom_b/wsa1_prom_b.s:188103), between the veneers to InputStream_OpenAndReadFirstBlock_Copy2 (prom_b/wsa1_prom_b.s:188182) and sub_F77F2A (prom_b/wsa1_prom_b.s:188186)",
+   "prom_b/wsa1_prom_b.s:187907 / prom_b/wsa1_prom_b.s:187909 / prom_b/wsa1_prom_b.s:187911 `calr InputStream_OpenAndReadFirstBlock_Copy / InputStream_Refill_Copy / InputStream_RefillDone_Copy` -- copy D's identical veneer trio",
+   "prom_b/wsa1_prom_b.s:188236 `or (0x21e7),0x02` / prom_b/wsa1_prom_b.s:188237 `call T_DiskApi_ReadFileToWindow_Entry` -- the whole body",
+   "prom_b/wsa1_prom_b.s:185093 InputStream_Refill and prom_b/wsa1_prom_b.s:187965 InputStream_Refill_Copy -- the same three instructions",
+   "prom_b/wsa1_prom_b.s:187960 `; InputStream_Refill_Copy: ... Basis: veneer position + body (exact copy)` -- wave-7 precedent for this basis"
+  ]
+ },
+ {
+  "old": "sub_F77F2A",
+  "verdict": "name",
+  "new": "InputStream_RefillDone_Copy2",
+  "header": "Clears Disk_Flags bit 1 and returns W = 1 -- an exact copy of InputStream_RefillDone, reached only through the veneer at 0xF77EE3 (copy D's twin veneer at 0xF77CFC calls InputStream_RefillDone_Copy). The bytes after its ret (0xF77F32-0xF77F99, holding the labels sub_F77F2A_Skip / _Return) are a separate unreached copy of SmfOut_CreateFileWithFirstWindow. Basis: veneer position + body (exact copy) + twin.",
+  "basis": "veneer position + body (exact copy) + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:188186 `calr sub_F77F2A` -- the only caller, veneer 0xF77EE3 (third of the trio after prom_b/wsa1_prom_b.s:188182 / prom_b/wsa1_prom_b.s:188184)",
+   "prom_b/wsa1_prom_b.s:187911 `calr InputStream_RefillDone_Copy` -- copy D's veneer in the same position",
+   "prom_b/wsa1_prom_b.s:188255 `and (0x21e7),0xfd` / prom_b/wsa1_prom_b.s:188256 `ld w, 1:opc` / prom_b/wsa1_prom_b.s:188257 `ret` -- the whole body",
+   "prom_b/wsa1_prom_b.s:185121 InputStream_RefillDone and prom_b/wsa1_prom_b.s:187986 InputStream_RefillDone_Copy -- the same three instructions",
+   "prom_b/wsa1_prom_b.s:188258 `xor de, de` .. prom_b/wsa1_prom_b.s:188286 `call SmfOut_WriteFirstWindow` -- the following fragment matches SmfOut_CreateFileWithFirstWindow instruction for instruction; its local labels must not inherit this name"
+  ]
+ }
+]
