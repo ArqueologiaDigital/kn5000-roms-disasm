@@ -123,7 +123,7 @@
 ;              1000 -- 99, 379, 538, 710, 711, 734, 865, 978, 979 differ by 1-5
 ;   +0x99   4  tag 90 +0..+3     PatchTable masks 0x1f, 0x1f, 0xff, 0x01
 ;   +0x9d   1  tag 60 +1         PatchTable takes bits 7:6 only
-;   +0x9e  18  tag 61 +0..+17    DSP-effect slot-0 block (DSPCfg_InitAllEntries
+;   +0x9e  18  tag 61 +0..+17    DSP-effect slot-0 block (PanelTlv_ValidateBlock0
 ;              hands tag 61 to DSPCfg_WriteAllSlots_Combined as slot 0)
 ;   +0xb0   9  tag 63 +0..+8     the block ReverbPreset_Load sends [I: reverb]
 ;   +0xb9   2  tag 65 +0, +1     DSP-effect slot 2 block

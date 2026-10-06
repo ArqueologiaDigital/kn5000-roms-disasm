@@ -512,8 +512,8 @@ PostLswLoad:
 	call	z, (VoiceParam_RestoreReverbChorus:24)
 	call	ToneGen_DispatchByMode
 	call	SwbtWr_NullRet
-	call	ToneGen_Config_InitAllEntries
-	call	ToneGen_DSPCfg_ResetAll
+	call	PanelTlv_ValidateLivePanel
+	call	PanelTlv_WriteLivePanelHeaders
 	ld	wa, 1:i3
 	call	BitMapOut_GetRenderMode_CheckBit3
 	call	SoundParam_NotifyMultipleChanges
@@ -549,8 +549,8 @@ PrePmLoad:
 PostPmLoad:
 	cp	wa, 0:i3
 	ret	lt
-	call	ToneGen_Config_InitAllChannels
-	call	ToneGen_DSPCfg_ResetAllChannels
+	call	PanelTlv_ValidatePanelMemories
+	call	PanelTlv_WritePanelMemoryHeaders
 	ret
 PrePmSave:
 	ret

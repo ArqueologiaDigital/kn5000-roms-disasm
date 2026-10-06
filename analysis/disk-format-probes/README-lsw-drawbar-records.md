@@ -58,7 +58,7 @@ All three carry the **same sixteen fields**; the ids differ by exactly `0x0400` 
 | `+7` | `0x10` | `82C0` `86C0` `8AC0` | 1 | a switch |
 | `+7` | `0x20` | `82C1` `86C1` `8AC1` | 1 | a switch |
 | `+8` | `0x0F` | `8221` `8621` `8A21` | 1 | a switch |
-| `+9` | — | *(no id)* | — | declared by the schema as a plain byte |
+| `+9` | — | *(no id)* | — | declared by the schema as a plain byte *(2026-10-06: a type-8 rule, which zeroes it on every validation)* |
 
 Descriptor addresses (identical in v7/v9/v10): tag `0x44` at `0xEDC946`..`0xEDCA6A`, tag `0x45` at
 `0xEDCBAE`..`0xEDCCBC`, tag `0x46` at `0xEDCE00`..`0xEDCF0E`. Each entry is

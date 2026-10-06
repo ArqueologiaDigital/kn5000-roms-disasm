@@ -3845,9 +3845,9 @@ Audio_ReinitToneGen:
 	push	xix
 	push	xiz
 	call	ToneGen_ApplyMaskTable
-	call	ToneGen_Config_InitAndChannels
+	call	PanelTlv_ValidateAll
 	call	ToneGen_InitAllChannelEntries_Skip
-	call	ToneGen_DSPCfg_Initialize
+	call	PanelTlv_WriteAllHeaders
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -3874,9 +3874,9 @@ Audio_ReinitToneGenAndOutput:
 	push	xix
 	push	xiz
 	call	ToneGen_ApplyMaskTable
-	call	ToneGen_Config_InitAndChannels
+	call	PanelTlv_ValidateAll
 	call	ToneGen_InitAllChannelEntries_Skip
-	call	ToneGen_DSPCfg_Initialize
+	call	PanelTlv_WriteAllHeaders
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -4017,9 +4017,9 @@ VoiceData_ExtendedParamSetup:
 	ret
 MainSysCtrl_Entry5_VoiceInit_Helper:
 	calr	Display_SetupAndPrepareRender
-	call	ToneGen_Config_InitAllEntries
+	call	PanelTlv_ValidateLivePanel
 	call	Voice_InitAllChannelEntries
-	call	ToneGen_DSPCfg_ResetAll
+	call	PanelTlv_WriteLivePanelHeaders
 	calr	MidiMsg_ParseChannelStream
 	call	MainTitle_SetBootFlag
 	jrl	Audio_FillParamBuffer
@@ -4251,9 +4251,9 @@ VoiceData_ExtendedParamSetup_Loop2:
 	push	xhl
 	push	xix
 	push	xiz
-	call	ToneGen_Config_InitAndChannels
+	call	PanelTlv_ValidateAll
 	call	ToneGen_InitAllChannelEntries_Skip
-	call	ToneGen_DSPCfg_Initialize
+	call	PanelTlv_WriteAllHeaders
 	pop	xiz
 	pop	xix
 	pop	xhl

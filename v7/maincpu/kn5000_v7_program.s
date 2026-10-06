@@ -3670,7 +3670,6 @@ SubCPU_Send_Payload_Data:	.byte	0xff
 	.set NakaStr_DataFilePck, FILETYPE_SIG_TABLE_PCK + 19
 
 
-	.set NakaData_FileScreenDispatch, Bitmap_1bit_Flash_Memory_Update + 372
 
 
 

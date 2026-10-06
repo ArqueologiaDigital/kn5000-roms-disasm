@@ -52,8 +52,6 @@ extern const char ExtDev_SndParam_MultiReg_Iterate;
 extern const char ExtDev_SndParam_Write48_Block;
 extern const char ExtDev_SndParam_Write98_Block;
 extern const char FileIO_BytecodeData;
-extern const char NakaData_FileScreenDispatch;
-extern const char NakaData_StyleBitmapPad;
 extern const char NakaData_WidgetInit1;
 extern const char FileIO_BytecodeData_Code_Loop3;
 extern const char FileIO_BytecodeData_Code_Join18;
@@ -211,6 +209,34 @@ typedef struct __attribute__((packed)) {
     uint32_t exit;              /* +26 a */
     uint32_t window;            /* +30 r */
 } naka_cls_IvScreen_t;
+
+/* -- Panel TLV schema (+0x230E..+0x2B0C; scripts/converters/panel_tlv_schema_retype.py) --
+ * The live panel (RAM 0xF9A0 = block 0, 0xFD60 = block 1) and each of the 80 panel memories (RAM
+ * 0x1ED400 + 960*n, block 0 only) are streams of [tag][len][payload] records.  A layout record says where
+ * one record sits and which rules its payload obeys.  PanelTlv_WriteRecordHeader stores tag and len at
+ * base + record_offset; PanelTlv_ValidateRecord runs the rule list over the payload, which starts at
+ * base + record_offset + 2, one PanelTlv_ApplyFieldRule call per rule.  Records chain:
+ * record_offset[i + 1] = record_offset[i] + 2 + len[i].  The last record of each block is tag 0xFF, len
+ * 0xFF with no rules: the stream's FF FF end mark. */
+typedef struct __attribute__((packed)) {
+    uint32_t record_offset;  /* of the tag byte, from the block base */
+    uint32_t field_rules;    /* SELF(list): the RULE_* list below, ended by RULES_END */
+    uint8_t  tag;
+    uint8_t  len;            /* payload bytes after the 2-byte header */
+} panel_tlv_layout_t;
+
+/* One field rule = one PanelTlv_ApplyFieldRule case, by its type byte.  `off` is a payload byte; `mask` picks
+ * the bits a rule governs, and a reset keeps the bits outside it: byte = (byte & ~mask) | dflt. */
+#define RULE_KEEP_BITS(off, mask)               0, (off), (mask)                    /* byte &= mask */
+#define RULE_CLEAR_BITS(off, mask)              1, (off), (mask)                    /* byte &= ~mask */
+#define RULE_SET_BITS(off, mask)                2, (off), (mask)                    /* byte |= mask */
+#define RULE_RANGE(off, mask, lo, hi, dflt)     3, (off), (mask), (lo), (hi), (dflt) /* outside lo..hi -> dflt */
+#define RULE_NOT_RANGE(off, mask, lo, hi, dflt) 4, (off), (mask), (lo), (hi), (dflt) /* inside lo..hi -> dflt */
+#define RULE_ONE_OF(off, mask, n, dflt, ...)    5, (off), (mask), (n), (dflt), __VA_ARGS__ /* not listed -> dflt */
+#define RULE_NONE_OF(off, mask, n, dflt, ...)   6, (off), (mask), (n), (dflt), __VA_ARGS__ /* listed -> dflt */
+#define RULE_STORE(off, value)                  7, (off), (value)                   /* byte = value */
+#define RULE_ZERO(off)                          8, (off)                            /* byte = 0 */
+#define RULES_END                               0xFF
 
 typedef struct __attribute__((packed)) {
     /* element 13 of Viewable slot 0xF4: TtlScreen (class id 0x01600034) */
@@ -979,941 +1005,79 @@ typedef struct __attribute__((packed)) {
     char TT_TEST5_str[10];
     char TT_TEST6_str[10];
     char TT_EXT_str[8];
-    uint16_t field_230e;
-    uint16_t field_2310;
-    uint16_t field_2312;
-    uint16_t field_2314;
-    uint16_t field_2316;
-    uint16_t field_2318;
-    uint16_t field_231a;
-    uint16_t field_231c;
-    uint16_t field_231e;
-    uint16_t field_2320;
-    uint16_t field_2322;
-    uint16_t field_2324;
-    uint16_t field_2326;
-    uint16_t field_2328;
-    uint16_t field_232a;
-    uint16_t field_232c;
-    uint16_t field_232e;
-    uint16_t field_2330;
-    uint16_t field_2332;
-    uint16_t field_2334;
-    uint16_t field_2336;
-    uint16_t field_2338;
-    uint16_t field_233a;
-    uint16_t field_233c;
-    uint16_t field_233e;
-    uint16_t field_2340;
-    uint16_t field_2342;
-    uint16_t field_2344;
-    uint16_t field_2346;
-    uint16_t field_2348;
-    uint16_t field_234a;
-    uint16_t field_234c;
-    uint16_t field_234e;
-    uint16_t field_2350;
-    uint16_t field_2352;
-    uint16_t field_2354;
-    uint16_t field_2356;
-    uint16_t field_2358;
-    uint16_t field_235a;
-    uint16_t field_235c;
-    uint16_t field_235e;
-    uint16_t field_2360;
-    uint16_t field_2362;
-    uint16_t field_2364;
-    uint16_t field_2366;
-    uint16_t field_2368;
-    uint16_t field_236a;
-    uint16_t field_236c;
-    uint16_t field_236e;
-    uint16_t field_2370;
-    uint16_t field_2372;
-    uint16_t field_2374;
-    uint16_t field_2376;
-    uint16_t field_2378;
-    uint16_t field_237a;
-    uint16_t field_237c;
-    uint16_t field_237e;
-    uint16_t field_2380;
-    uint16_t field_2382;
-    uint16_t field_2384;
-    uint16_t field_2386;
-    uint16_t field_2388;
-    uint16_t field_238a;
-    uint16_t field_238c;
-    uint16_t field_238e;
-    uint16_t field_2390;
-    uint16_t field_2392;
-    uint16_t field_2394;
-    uint16_t field_2396;
-    uint16_t field_2398;
-    uint16_t field_239a;
-    uint16_t field_239c;
-    uint16_t field_239e;
-    uint16_t field_23a0;
-    uint16_t field_23a2;
-    uint16_t field_23a4;
-    uint16_t field_23a6;
-    uint16_t field_23a8;
-    uint16_t field_23aa;
-    uint16_t field_23ac;
-    uint16_t field_23ae;
-    uint16_t field_23b0;
-    uint16_t field_23b2;
-    uint16_t field_23b4;
-    uint16_t field_23b6;
-    uint16_t field_23b8;
-    uint16_t field_23ba;
-    uint16_t field_23bc;
-    uint16_t field_23be;
-    uint16_t field_23c0;
-    uint16_t field_23c2;
-    uint16_t field_23c4;
-    uint16_t field_23c6;
-    uint16_t field_23c8;
-    uint16_t field_23ca;
-    uint16_t field_23cc;
-    uint16_t field_23ce;
-    uint16_t field_23d0;
-    uint32_t ptr_23d2;
-    uint16_t field_23d6;
-    uint16_t field_23d8;
-    uint16_t field_23da;
-    uint16_t field_23dc;
-    uint16_t field_23de;
-    uint16_t field_23e0;
-    uint16_t field_23e2;
-    uint16_t field_23e4;
-    uint16_t field_23e6;
-    uint16_t field_23e8;
-    uint16_t field_23ea;
-    uint16_t field_23ec;
-    uint16_t field_23ee;
-    uint16_t field_23f0;
-    uint16_t field_23f2;
-    uint16_t field_23f4;
-    uint16_t field_23f6;
-    uint16_t field_23f8;
-    uint16_t field_23fa;
-    uint16_t field_23fc;
-    uint16_t field_23fe;
-    uint16_t field_2400;
-    uint16_t field_2402;
-    uint16_t field_2404;
-    uint16_t field_2406;
-    uint16_t field_2408;
-    uint16_t field_240a;
-    uint16_t field_240c;
-    uint16_t field_240e;
-    uint16_t field_2410;
-    uint32_t ptr_2412;
-    uint16_t field_2416;
-    uint16_t field_2418;
-    uint16_t field_241a;
-    uint16_t field_241c;
-    uint16_t field_241e;
-    uint16_t field_2420;
-    uint16_t field_2422;
-    uint16_t field_2424;
-    uint16_t field_2426;
-    uint16_t field_2428;
-    uint16_t field_242a;
-    uint16_t field_242c;
-    uint16_t field_242e;
-    uint16_t field_2430;
-    uint16_t field_2432;
-    uint16_t field_2434;
-    uint16_t field_2436;
-    uint16_t field_2438;
-    uint16_t field_243a;
-    uint16_t field_243c;
-    uint16_t field_243e;
-    uint16_t field_2440;
-    uint16_t field_2442;
-    uint16_t field_2444;
-    uint16_t field_2446;
-    uint16_t field_2448;
-    uint16_t field_244a;
-    uint16_t field_244c;
-    uint16_t field_244e;
-    uint16_t field_2450;
-    uint16_t field_2452;
-    uint16_t field_2454;
-    uint16_t field_2456;
-    uint16_t field_2458;
-    uint16_t field_245a;
-    uint16_t field_245c;
-    uint16_t field_245e;
-    uint16_t field_2460;
-    uint16_t field_2462;
-    uint16_t field_2464;
-    uint16_t field_2466;
-    uint16_t field_2468;
-    uint16_t field_246a;
-    uint16_t field_246c;
-    uint16_t field_246e;
-    uint16_t field_2470;
-    uint16_t field_2472;
-    uint16_t field_2474;
-    uint16_t field_2476;
-    uint16_t field_2478;
-    uint16_t field_247a;
-    uint16_t field_247c;
-    uint16_t field_247e;
-    uint16_t field_2480;
-    uint16_t field_2482;
-    uint16_t field_2484;
-    uint16_t field_2486;
-    uint16_t field_2488;
-    uint16_t field_248a;
-    uint16_t field_248c;
-    uint16_t field_248e;
-    uint16_t field_2490;
-    uint16_t field_2492;
-    uint16_t field_2494;
-    uint16_t field_2496;
-    uint16_t field_2498;
-    uint16_t field_249a;
-    uint16_t field_249c;
-    uint16_t field_249e;
-    uint16_t field_24a0;
-    uint16_t field_24a2;
-    uint16_t field_24a4;
-    uint16_t field_24a6;
-    char str_489[2];
-    uint16_t field_24aa;
-    uint16_t field_24ac;
-    uint16_t field_24ae;
-    uint16_t field_24b0;
-    uint16_t field_24b2;
-    uint16_t field_24b4;
-    uint16_t field_24b6;
-    uint16_t field_24b8;
-    uint16_t field_24ba;
-    uint16_t field_24bc;
-    uint16_t field_24be;
-    uint16_t field_24c0;
-    uint16_t field_24c2;
-    uint16_t field_24c4;
-    uint16_t field_24c6;
-    uint16_t field_24c8;
-    uint16_t field_24ca;
-    uint16_t field_24cc;
-    uint16_t field_24ce;
-    uint16_t field_24d0;
-    uint16_t field_24d2;
-    uint16_t field_24d4;
-    uint16_t field_24d6;
-    uint16_t field_24d8;
-    uint16_t field_24da;
-    uint16_t field_24dc;
-    uint16_t field_24de;
-    uint16_t field_24e0;
-    uint16_t field_24e2;
-    uint16_t field_24e4;
-    char str_490[2];
-    uint16_t field_24e8;
-    uint16_t field_24ea;
-    uint16_t field_24ec;
-    uint16_t field_24ee;
-    uint16_t field_24f0;
-    uint16_t field_24f2;
-    uint16_t field_24f4;
-    uint16_t field_24f6;
-    uint16_t field_24f8;
-    uint16_t field_24fa;
-    uint16_t field_24fc;
-    uint16_t field_24fe;
-    uint16_t field_2500;
-    uint16_t field_2502;
-    uint16_t field_2504;
-    uint16_t field_2506;
-    uint16_t field_2508;
-    uint16_t field_250a;
-    uint16_t field_250c;
-    uint16_t field_250e;
-    uint16_t field_2510;
-    uint16_t field_2512;
-    uint16_t field_2514;
-    uint16_t field_2516;
-    uint16_t field_2518;
-    uint16_t field_251a;
-    uint16_t field_251c;
-    uint16_t field_251e;
-    uint16_t field_2520;
-    uint32_t ptr_2522;
-    uint16_t field_2526;
-    uint16_t field_2528;
-    uint16_t field_252a;
-    uint16_t field_252c;
-    uint16_t field_252e;
-    uint16_t field_2530;
-    uint16_t field_2532;
-    uint16_t field_2534;
-    uint16_t field_2536;
-    uint16_t field_2538;
-    uint16_t field_253a;
-    uint16_t field_253c;
-    uint16_t field_253e;
-    uint16_t field_2540;
-    uint16_t field_2542;
-    uint16_t field_2544;
-    uint16_t field_2546;
-    uint16_t field_2548;
-    uint16_t field_254a;
-    uint8_t pad_54[2];  /* zero padding */
-    uint16_t field_254e;
-    uint16_t field_2550;
-    uint16_t field_2552;
-    char c_str[2];
-    uint16_t field_2556;
-    uint16_t field_2558;
-    uint16_t field_255a;
-    uint16_t field_255c;
-    uint8_t pad_55[2];  /* zero padding */
-    uint16_t field_2560;
-    uint16_t field_2562;
-    uint16_t field_2564;
-    uint16_t field_2566;
-    uint16_t field_2568;
-    uint16_t field_256a;
-    uint16_t field_256c;
-    uint16_t field_256e;
-    char str_492[2];
-    uint8_t pad_56[2];  /* zero padding */
-    uint16_t field_2574;
-    uint16_t field_2576;
-    uint16_t field_2578;
-    uint32_t ptr_257a;
-    uint16_t field_257e;
-    uint16_t field_2580;
-    uint16_t field_2582;
-    uint16_t field_2584;
-    uint16_t field_2586;
-    uint16_t field_2588;
-    uint16_t field_258a;
-    uint16_t field_258c;
-    uint16_t field_258e;
-    uint16_t field_2590;
-    uint16_t field_2592;
-    uint32_t NakaData_FileScreenDispatch_ptr;
-    uint16_t field_2598;
-    uint16_t field_259a;
-    uint16_t field_259c;
-    uint16_t field_259e;
-    uint16_t field_25a0;
-    char str_493[2];
-    uint16_t field_25a4;
-    uint16_t field_25a6;
-    uint8_t pad_57[2];  /* zero padding */
-    uint16_t field_25aa;
-    uint16_t field_25ac;
-    uint16_t field_25ae;
-    char g_str[2];
-    uint16_t field_25b2;
-    uint16_t field_25b4;
-    uint16_t field_25b6;
-    uint16_t field_25b8;
-    uint16_t field_25ba;
-    uint16_t field_25bc;
-    uint16_t field_25be;
-    uint16_t field_25c0;
-    uint16_t field_25c2;
-    uint16_t field_25c4;
-    uint16_t field_25c6;
-    uint16_t field_25c8;
-    uint16_t field_25ca;
-    uint16_t field_25cc;
-    uint8_t pad_58[2];  /* zero padding */
-    uint16_t field_25d0;
-    uint16_t field_25d2;
-    uint32_t ptr_25d4;
-    uint16_t field_25d8;
-    uint16_t field_25da;
-    uint16_t field_25dc;
-    uint16_t field_25de;
-    uint16_t field_25e0;
-    uint16_t field_25e2;
-    uint16_t field_25e4;
-    uint16_t field_25e6;
-    uint16_t field_25e8;
-    uint16_t field_25ea;
-    uint16_t field_25ec;
-    uint16_t field_25ee;
-    uint16_t field_25f0;
-    uint16_t field_25f2;
-    uint16_t field_25f4;
-    uint16_t field_25f6;
-    uint16_t field_25f8;
-    uint16_t field_25fa;
-    uint16_t field_25fc;
-    uint16_t field_25fe;
-    uint32_t ptr_2600;
-    uint16_t field_2604;
-    uint16_t field_2606;
-    uint16_t field_2608;
-    uint16_t field_260a;
-    uint16_t field_260c;
-    uint16_t field_260e;
-    uint16_t field_2610;
-    uint16_t field_2612;
-    uint16_t field_2614;
-    uint16_t field_2616;
-    uint16_t field_2618;
-    uint16_t field_261a;
-    uint16_t field_261c;
-    uint16_t field_261e;
-    uint16_t field_2620;
-    uint16_t field_2622;
-    uint16_t field_2624;
-    uint16_t field_2626;
-    uint16_t field_2628;
-    uint16_t field_262a;
-    uint16_t field_262c;
-    uint16_t field_262e;
-    char str_495[2];
-    uint8_t pad_59[2];  /* zero padding */
-    uint16_t field_2634;
-    uint16_t field_2636;
-    uint16_t field_2638;
-    uint16_t field_263a;
-    uint16_t field_263c;
-    uint16_t field_263e;
-    uint16_t field_2640;
-    uint16_t field_2642;
-    uint16_t field_2644;
-    uint8_t pad_60[2];  /* zero padding */
-    uint16_t field_2648;
-    uint16_t field_264a;
-    uint16_t field_264c;
-    uint16_t field_264e;
-    uint16_t field_2650;
-    uint16_t field_2652;
-    uint16_t field_2654;
-    uint16_t field_2656;
-    uint16_t field_2658;
-    uint16_t field_265a;
-    uint16_t field_265c;
-    uint16_t field_265e;
-    char str_496[2];
-    uint16_t field_2662;
-    uint16_t field_2664;
-    uint16_t field_2666;
-    uint16_t field_2668;
-    uint16_t field_266a;
-    uint16_t field_266c;
-    uint16_t field_266e;
-    uint16_t field_2670;
-    uint16_t field_2672;
-    uint16_t field_2674;
-    uint16_t field_2676;
-    uint16_t field_2678;
-    uint16_t field_267a;
-    uint16_t field_267c;
-    uint16_t field_267e;
-    uint16_t field_2680;
-    uint16_t field_2682;
-    uint16_t field_2684;
-    uint16_t field_2686;
-    uint16_t field_2688;
-    uint16_t field_268a;
-    uint16_t field_268c;
-    uint16_t field_268e;
-    uint16_t field_2690;
-    uint16_t field_2692;
-    uint16_t field_2694;
-    uint16_t field_2696;
-    uint16_t field_2698;
-    uint16_t field_269a;
-    uint16_t field_269c;
-    uint16_t field_269e;
-    uint16_t field_26a0;
-    uint16_t field_26a2;
-    uint16_t field_26a4;
-    uint16_t field_26a6;
-    uint16_t field_26a8;
-    uint16_t field_26aa;
-    uint16_t field_26ac;
-    uint16_t field_26ae;
-    uint16_t field_26b0;
-    uint16_t field_26b2;
-    uint16_t field_26b4;
-    uint16_t field_26b6;
-    uint16_t field_26b8;
-    uint16_t field_26ba;
-    uint16_t field_26bc;
-    uint16_t field_26be;
-    uint16_t field_26c0;
-    uint16_t field_26c2;
-    uint16_t field_26c4;
-    uint16_t field_26c6;
-    uint16_t field_26c8;
-    uint16_t field_26ca;
-    uint16_t field_26cc;
-    uint16_t field_26ce;
-    uint16_t field_26d0;
-    uint16_t field_26d2;
-    uint16_t field_26d4;
-    uint16_t field_26d6;
-    uint16_t field_26d8;
-    uint16_t field_26da;
-    uint16_t field_26dc;
-    uint16_t field_26de;
-    uint16_t field_26e0;
-    uint16_t field_26e2;
-    uint16_t field_26e4;
-    uint16_t field_26e6;
-    uint16_t field_26e8;
-    uint16_t field_26ea;
-    uint16_t field_26ec;
-    uint16_t field_26ee;
-    uint16_t field_26f0;
-    uint16_t field_26f2;
-    uint8_t pad_61[2];  /* zero padding */
-    uint16_t field_26f6;
-    uint16_t field_26f8;
-    uint16_t field_26fa;
-    uint16_t field_26fc;
-    uint16_t field_26fe;
-    uint16_t field_2700;
-    uint16_t field_2702;
-    uint16_t field_2704;
-    uint16_t field_2706;
-    uint16_t field_2708;
-    uint16_t field_270a;
-    uint16_t field_270c;
-    uint16_t field_270e;
-    uint16_t field_2710;
-    uint16_t field_2712;
-    char Z_str[2];
-    uint16_t field_2716;
-    uint16_t field_2718;
-    uint16_t field_271a;
-    uint16_t field_271c;
-    uint16_t field_271e;
-    uint16_t field_2720;
-    uint16_t field_2722;
-    uint16_t field_2724;
-    uint16_t field_2726;
-    uint16_t field_2728;
-    uint16_t field_272a;
-    uint16_t field_272c;
-    uint16_t field_272e;
-    uint16_t field_2730;
-    uint8_t pad_62[2];  /* zero padding */
-    uint16_t field_2734;
-    uint16_t field_2736;
-    uint16_t field_2738;
-    uint16_t field_273a;
-    uint16_t field_273c;
-    uint16_t field_273e;
-    uint16_t field_2740;
-    uint16_t field_2742;
-    uint16_t field_2744;
-    uint8_t pad_63[2];  /* zero padding */
-    uint16_t field_2748;
-    uint16_t field_274a;
-    uint16_t field_274c;
-    uint16_t field_274e;
-    uint16_t field_2750;
-    uint16_t field_2752;
-    uint16_t field_2754;
-    uint16_t field_2756;
-    uint16_t field_2758;
-    uint16_t field_275a;
-    uint16_t field_275c;
-    uint16_t field_275e;
-    uint16_t field_2760;
-    uint16_t field_2762;
-    uint16_t field_2764;
-    uint16_t field_2766;
-    uint16_t field_2768;
-    uint16_t field_276a;
-    uint16_t field_276c;
-    uint16_t field_276e;
-    uint16_t field_2770;
-    uint16_t field_2772;
-    uint16_t field_2774;
-    uint16_t field_2776;
-    uint16_t field_2778;
-    uint16_t field_277a;
-    uint16_t field_277c;
-    uint16_t field_277e;
-    uint16_t field_2780;
-    uint16_t field_2782;
-    uint16_t field_2784;
-    uint16_t field_2786;
-    uint16_t field_2788;
-    uint16_t field_278a;
-    uint16_t field_278c;
-    uint16_t field_278e;
-    uint16_t field_2790;
-    uint16_t field_2792;
-    uint16_t field_2794;
-    uint16_t field_2796;
-    uint16_t field_2798;
-    uint16_t field_279a;
-    uint16_t field_279c;
-    uint16_t field_279e;
-    uint16_t field_27a0;
-    uint16_t field_27a2;
-    uint16_t field_27a4;
-    uint16_t field_27a6;
-    uint16_t field_27a8;
-    uint16_t field_27aa;
-    uint16_t field_27ac;
-    uint16_t field_27ae;
-    uint16_t field_27b0;
-    uint16_t field_27b2;
-    uint16_t field_27b4;
-    uint16_t field_27b6;
-    uint16_t field_27b8;
-    uint16_t field_27ba;
-    uint16_t field_27bc;
-    uint16_t field_27be;
-    uint16_t field_27c0;
-    uint16_t field_27c2;
-    uint16_t field_27c4;
-    uint16_t field_27c6;
-    uint16_t field_27c8;
-    uint16_t field_27ca;
-    uint16_t field_27cc;
-    uint16_t field_27ce;
-    uint16_t field_27d0;
-    uint16_t field_27d2;
-    uint16_t field_27d4;
-    uint16_t field_27d6;
-    uint16_t field_27d8;
-    uint16_t field_27da;
-    uint16_t field_27dc;
-    uint16_t field_27de;
-    uint16_t field_27e0;
-    uint16_t field_27e2;
-    uint16_t field_27e4;
-    uint16_t field_27e6;
-    uint16_t field_27e8;
-    uint16_t field_27ea;
-    uint16_t field_27ec;
-    uint16_t field_27ee;
-    uint16_t field_27f0;
-    uint16_t field_27f2;
-    uint16_t field_27f4;
-    uint16_t field_27f6;
-    uint16_t field_27f8;
-    uint16_t field_27fa;
-    uint16_t field_27fc;
-    uint16_t field_27fe;
-    uint16_t field_2800;
-    uint16_t field_2802;
-    uint16_t field_2804;
-    uint16_t field_2806;
-    uint16_t field_2808;
-    uint16_t field_280a;
-    uint16_t field_280c;
-    uint16_t field_280e;
-    uint16_t field_2810;
-    uint16_t field_2812;
-    uint8_t pad_64[4];  /* zero padding */
-    uint32_t ptr_2818;
-    uint16_t field_281c;
-    uint16_t field_281e;
-    uint8_t pad_65[2];  /* zero padding */
-    uint32_t ptr_2822;
-    uint16_t field_2826;
-    char str_498[2];
-    uint8_t pad_66[2];  /* zero padding */
-    uint32_t ptr_282c;
-    uint16_t field_2830;
-    char H_str[2];
-    uint8_t pad_67[2];  /* zero padding */
-    uint32_t ptr_2836;
-    uint16_t field_283a;
-    char b_str[2];
-    uint8_t pad_68[2];  /* zero padding */
-    uint32_t ptr_2840;
-    uint16_t field_2844;
-    char str_501[2];
-    uint8_t pad_69[2];  /* zero padding */
-    uint32_t ptr_284a;
-    uint16_t field_284e;
-    uint16_t field_2850;
-    uint8_t pad_70[2];  /* zero padding */
-    uint32_t ptr_2854;
-    uint16_t field_2858;
-    uint16_t field_285a;
-    uint8_t pad_71[2];  /* zero padding */
-    uint32_t ptr_285e;
-    uint16_t field_2862;
-    uint16_t field_2864;
-    uint8_t pad_72[2];  /* zero padding */
-    uint32_t ptr_2868;
-    uint32_t NakaData_StyleBitmapPad_ptr;
-    uint8_t pad_73[2];  /* zero padding */
-    uint32_t ptr_2872;
-    uint32_t ptr_2876;
-    uint8_t pad_74[2];  /* zero padding */
-    uint32_t ptr_287c;
-    uint16_t field_2880;
-    uint16_t field_2882;
-    uint8_t pad_75[2];  /* zero padding */
-    uint32_t ptr_2886;
-    uint16_t field_288a;
-    uint16_t field_288c;
-    uint8_t pad_76[2];  /* zero padding */
-    uint32_t ptr_2890;
-    uint16_t field_2894;
-    uint16_t field_2896;
-    uint8_t pad_77[2];  /* zero padding */
-    uint32_t ptr_289a;
-    uint16_t field_289e;
-    uint16_t field_28a0;
-    uint8_t pad_78[2];  /* zero padding */
-    uint32_t ptr_28a4;
-    uint16_t field_28a8;
-    uint16_t field_28aa;
-    uint8_t pad_79[2];  /* zero padding */
-    uint32_t ptr_28ae;
-    uint16_t field_28b2;
-    uint16_t field_28b4;
-    uint8_t pad_80[2];  /* zero padding */
-    uint32_t ptr_28b8;
-    uint16_t field_28bc;
-    uint16_t field_28be;
-    uint8_t pad_81[2];  /* zero padding */
-    uint32_t ptr_28c2;
-    uint16_t field_28c6;
-    uint16_t field_28c8;
-    uint8_t pad_82[2];  /* zero padding */
-    uint32_t ptr_28cc;
-    uint16_t field_28d0;
-    uint16_t field_28d2;
-    uint8_t pad_83[2];  /* zero padding */
-    uint32_t ptr_28d6;
-    uint16_t field_28da;
-    uint16_t field_28dc;
-    uint8_t pad_84[2];  /* zero padding */
-    uint32_t ptr_28e0;
-    uint16_t field_28e4;
-    uint16_t field_28e6;
-    uint8_t pad_85[2];  /* zero padding */
-    uint32_t ptr_28ea;
-    uint16_t field_28ee;
-    uint16_t field_28f0;
-    uint8_t pad_86[2];  /* zero padding */
-    uint32_t ptr_28f4;
-    uint16_t field_28f8;
-    uint16_t field_28fa;
-    uint8_t pad_87[2];  /* zero padding */
-    uint32_t ptr_28fe;
-    uint16_t field_2902;
-    uint16_t field_2904;
-    uint8_t pad_88[2];  /* zero padding */
-    uint32_t ptr_2908;
-    uint16_t field_290c;
-    uint16_t field_290e;
-    uint8_t pad_89[2];  /* zero padding */
-    uint32_t ptr_2912;
-    uint16_t field_2916;
-    uint16_t field_2918;
-    uint8_t pad_90[2];  /* zero padding */
-    uint32_t ptr_291c;
-    uint16_t field_2920;
-    uint16_t field_2922;
-    uint8_t pad_91[2];  /* zero padding */
-    uint32_t ptr_2926;
-    uint16_t field_292a;
-    uint16_t field_292c;
-    uint8_t pad_92[2];  /* zero padding */
-    uint32_t ptr_2930;
-    uint16_t field_2934;
-    uint16_t field_2936;
-    uint8_t pad_93[2];  /* zero padding */
-    uint32_t ptr_293a;
-    uint16_t field_293e;
-    uint16_t field_2940;
-    uint8_t pad_94[2];  /* zero padding */
-    uint32_t ptr_2944;
-    uint16_t field_2948;
-    uint16_t field_294a;
-    uint8_t pad_95[2];  /* zero padding */
-    uint32_t ptr_294e;
-    uint16_t field_2952;
-    uint16_t field_2954;
-    uint8_t pad_96[2];  /* zero padding */
-    uint32_t ptr_2958;
-    uint16_t field_295c;
-    uint16_t field_295e;
-    uint8_t pad_97[2];  /* zero padding */
-    uint32_t ptr_2962;
-    uint16_t field_2966;
-    uint16_t field_2968;
-    uint8_t pad_98[2];  /* zero padding */
-    uint32_t ptr_296c;
-    uint16_t field_2970;
-    uint16_t field_2972;
-    uint8_t pad_99[2];  /* zero padding */
-    uint32_t ptr_2976;
-    uint16_t field_297a;
-    uint16_t field_297c;
-    uint8_t pad_100[2];  /* zero padding */
-    uint32_t ptr_2980;
-    uint16_t field_2984;
-    uint16_t field_2986;
-    uint8_t pad_101[2];  /* zero padding */
-    uint32_t ptr_298a;
-    uint16_t field_298e;
-    uint16_t field_2990;
-    uint8_t pad_102[2];  /* zero padding */
-    uint32_t ptr_2994;
-    uint16_t field_2998;
-    uint16_t field_299a;
-    uint8_t pad_103[2];  /* zero padding */
-    uint32_t ptr_299e;
-    uint16_t field_29a2;
-    uint16_t field_29a4;
-    uint8_t pad_104[2];  /* zero padding */
-    uint32_t ptr_29a8;
-    uint16_t field_29ac;
-    uint16_t field_29ae;
-    uint8_t pad_105[2];  /* zero padding */
-    uint32_t ptr_29b2;
-    uint16_t field_29b6;
-    uint16_t field_29b8;
-    uint8_t pad_106[2];  /* zero padding */
-    uint32_t ptr_29bc;
-    uint16_t field_29c0;
-    uint16_t field_29c2;
-    uint8_t pad_107[2];  /* zero padding */
-    uint32_t ptr_29c6;
-    uint16_t field_29ca;
-    uint16_t field_29cc;
-    uint8_t pad_108[2];  /* zero padding */
-    uint32_t ptr_29d0;
-    uint16_t field_29d4;
-    uint16_t field_29d6;
-    uint8_t pad_109[2];  /* zero padding */
-    uint32_t ptr_29da;
-    uint16_t field_29de;
-    uint8_t pad_110[4];  /* zero padding */
-    uint32_t ptr_29e4;
-    uint16_t field_29e8;
-    uint16_t field_29ea;
-    uint8_t pad_111[2];  /* zero padding */
-    uint32_t ptr_29ee;
-    uint16_t field_29f2;
-    char str_502[2];
-    uint8_t pad_112[2];  /* zero padding */
-    uint32_t ptr_29f8;
-    uint16_t field_29fc;
-    char H_str_2[2];
-    uint8_t pad_113[2];  /* zero padding */
-    uint32_t ptr_2a02;
-    uint16_t field_2a06;
-    char T_str[2];
-    uint8_t pad_114[2];  /* zero padding */
-    uint32_t ptr_2a0c;
-    uint16_t field_2a10;
-    char x_str[2];
-    uint8_t pad_115[2];  /* zero padding */
-    uint32_t ptr_2a16;
-    uint16_t field_2a1a;
-    uint16_t field_2a1c;
-    uint8_t pad_116[2];  /* zero padding */
-    uint32_t ptr_2a20;
-    uint16_t field_2a24;
-    uint16_t field_2a26;
-    uint8_t pad_117[2];  /* zero padding */
-    uint32_t ptr_2a2a;
-    uint16_t field_2a2e;
-    uint16_t field_2a30;
-    uint8_t pad_118[2];  /* zero padding */
-    uint32_t ptr_2a34;
-    uint16_t field_2a38;
-    uint16_t field_2a3a;
-    uint8_t pad_119[2];  /* zero padding */
-    uint32_t ptr_2a3e;
-    uint16_t field_2a42;
-    uint16_t field_2a44;
-    uint8_t pad_120[2];  /* zero padding */
-    uint32_t ptr_2a48;
-    uint32_t ptr_2a4c;
-    uint8_t pad_121[2];  /* zero padding */
-    uint32_t ptr_2a52;
-    uint16_t field_2a56;
-    uint16_t field_2a58;
-    uint8_t pad_122[2];  /* zero padding */
-    uint32_t ptr_2a5c;
-    uint16_t field_2a60;
-    uint16_t field_2a62;
-    uint8_t pad_123[2];  /* zero padding */
-    uint32_t ptr_2a66;
-    uint16_t field_2a6a;
-    uint16_t field_2a6c;
-    uint8_t pad_124[2];  /* zero padding */
-    uint32_t ptr_2a70;
-    uint16_t field_2a74;
-    uint16_t field_2a76;
-    uint8_t pad_125[2];  /* zero padding */
-    uint32_t ptr_2a7a;
-    uint16_t field_2a7e;
-    uint16_t field_2a80;
-    uint8_t pad_126[2];  /* zero padding */
-    uint32_t ptr_2a84;
-    uint16_t field_2a88;
-    uint16_t field_2a8a;
-    uint8_t pad_127[2];  /* zero padding */
-    uint32_t ptr_2a8e;
-    uint16_t field_2a92;
-    uint16_t field_2a94;
-    uint8_t pad_128[2];  /* zero padding */
-    uint32_t ptr_2a98;
-    uint16_t field_2a9c;
-    uint16_t field_2a9e;
-    uint8_t pad_129[2];  /* zero padding */
-    uint32_t ptr_2aa2;
-    uint16_t field_2aa6;
-    uint16_t field_2aa8;
-    uint8_t pad_130[2];  /* zero padding */
-    uint32_t ptr_2aac;
-    uint16_t field_2ab0;
-    uint16_t field_2ab2;
-    uint8_t pad_131[2];  /* zero padding */
-    uint32_t ptr_2ab6;
-    uint16_t field_2aba;
-    uint16_t field_2abc;
-    uint8_t pad_132[2];  /* zero padding */
-    uint32_t ptr_2ac0;
-    uint16_t field_2ac4;
-    uint16_t field_2ac6;
-    uint8_t pad_133[2];  /* zero padding */
-    uint32_t ptr_2aca;
-    uint16_t field_2ace;
-    uint16_t field_2ad0;
-    uint8_t pad_134[2];  /* zero padding */
-    uint32_t ptr_2ad4;
-    uint16_t field_2ad8;
-    uint16_t field_2ada;
-    uint8_t pad_135[2];  /* zero padding */
-    uint32_t ptr_2ade;
-    uint16_t field_2ae2;
-    uint16_t field_2ae4;
-    uint8_t pad_136[2];  /* zero padding */
-    uint32_t ptr_2ae8;
-    uint16_t field_2aec;
-    uint16_t field_2aee;
-    uint8_t pad_137[2];  /* zero padding */
-    uint32_t ptr_2af2;
-    uint16_t field_2af6;
-    uint16_t field_2af8;
-    uint8_t pad_138[2];  /* zero padding */
-    uint32_t ptr_2afc;
-    uint16_t field_2b00;
-    uint16_t field_2b02;
-    uint8_t pad_139[2];  /* zero padding */
-    uint32_t ptr_2b06;
-    uint16_t field_2b0a;
+    /* ---------------------------------------------------------------------
+     * The 32 field-rule lists, in ROM order.  Each list is named after the first tag that
+     * uses it; the comment above it names every user.  An odd-length list carries one more
+     * 0xFF so that the next list starts at an even address.
+     * --------------------------------------------------------------------- */
+    /* PanelTlv_Rules_End: block 0 end mark (+0x3BE), block 1 end mark (+0x25E); no rules */
+    uint8_t PanelTlv_Rules_End[2];
+    /* PanelTlv_Rules_Tag78: block 0 tag 0x78 (+0x000, len 18) */
+    uint8_t PanelTlv_Rules_Tag78[102];
+    /* PanelTlv_Rules_Tag00: block 0 tags 0x00-0x0E (len 24) */
+    uint8_t PanelTlv_Rules_Tag00[42];
+    /* PanelTlv_Rules_Tag0F: block 0 tag 0x0F (+0x19A, len 24) */
+    uint8_t PanelTlv_Rules_Tag0F[50];
+    /* PanelTlv_Rules_Tag10: block 0 tags 0x10-0x12 (len 24) */
+    uint8_t PanelTlv_Rules_Tag10[64];
+    /* PanelTlv_Rules_Tag13: block 0 tag 0x13 (+0x202, len 24) */
+    uint8_t PanelTlv_Rules_Tag13[64];
+    /* PanelTlv_Rules_Tag14: block 0 tag 0x14 (+0x21C, len 24) */
+    uint8_t PanelTlv_Rules_Tag14[50];
+    /* PanelTlv_Rules_Tag15: block 0 tag 0x15 (+0x236, len 24) */
+    uint8_t PanelTlv_Rules_Tag15[62];
+    /* PanelTlv_Rules_Tag16: block 0 tag 0x16 (+0x250, len 24) */
+    uint8_t PanelTlv_Rules_Tag16[62];
+    /* PanelTlv_Rules_Tag19: block 0 tag 0x19 (+0x26A, len 24) */
+    uint8_t PanelTlv_Rules_Tag19[62];
+    /* PanelTlv_Rules_Tag44: block 0 tags 0x44-0x46 (len 10) */
+    uint8_t PanelTlv_Rules_Tag44[6];
+    /* PanelTlv_Rules_Tag47: block 0 tag 0x47 (+0x2A8, len 8) */
+    uint8_t PanelTlv_Rules_Tag47[46];
+    /* PanelTlv_Rules_Tag43: block 0 tag 0x43 (+0x2B2, len 4) */
+    uint8_t PanelTlv_Rules_Tag43[8];
+    /* PanelTlv_Rules_Tag48: block 0 tag 0x48 (+0x2B8, len 10) */
+    uint8_t PanelTlv_Rules_Tag48[46];
+    /* PanelTlv_Rules_Tag90: block 0 tag 0x90 (+0x2C4, len 6) */
+    uint8_t PanelTlv_Rules_Tag90[26];
+    /* PanelTlv_Rules_Tag60: block 0 tag 0x60 (+0x2CC, len 4) */
+    uint8_t PanelTlv_Rules_Tag60[8];
+    /* PanelTlv_Rules_Tag61: block 0 tags 0x61, 0x63-0x66 (len 24); no rules */
+    uint8_t PanelTlv_Rules_Tag61[2];
+    /* PanelTlv_Rules_Tag68: block 0 tag 0x68 (+0x354, len 10); no rules */
+    uint8_t PanelTlv_Rules_Tag68[2];
+    /* PanelTlv_Rules_Tag70: block 0 tag 0x70 (+0x360, len 8) */
+    uint8_t PanelTlv_Rules_Tag70[50];
+    /* PanelTlv_Rules_Tag72: block 0 tag 0x72 (+0x36A, len 14) */
+    uint8_t PanelTlv_Rules_Tag72[40];
+    /* PanelTlv_Rules_Tag92: block 0 tag 0x92 (+0x37A, len 14) */
+    uint8_t PanelTlv_Rules_Tag92[10];
+    /* PanelTlv_Rules_Tag71: block 0 tag 0x71 (+0x38A, len 2) */
+    uint8_t PanelTlv_Rules_Tag71[10];
+    /* PanelTlv_Rules_Tag99: block 0 tag 0x99 (+0x38E, len 30) */
+    uint8_t PanelTlv_Rules_Tag99[10];
+    /* PanelTlv_Rules_Tag80: block 0 tag 0x80 (+0x3AE, len 14) */
+    uint8_t PanelTlv_Rules_Tag80[48];
+    /* PanelTlv_Rules_Tag17: block 1 tag 0x17 (+0x000, len 24) */
+    uint8_t PanelTlv_Rules_Tag17[64];
+    /* PanelTlv_Rules_Tag18: block 1 tag 0x18 (+0x01A, len 24) */
+    uint8_t PanelTlv_Rules_Tag18[62];
+    /* PanelTlv_Rules_Tag98: block 1 tag 0x98 (+0x034, len 18) */
+    uint8_t PanelTlv_Rules_Tag98[56];
+    /* PanelTlv_Rules_Tag91: block 1 tag 0x91 (+0x048, len 10) */
+    uint8_t PanelTlv_Rules_Tag91[26];
+    /* PanelTlv_Rules_Tag93: block 1 tag 0x93 (+0x054, len 34) */
+    uint8_t PanelTlv_Rules_Tag93[112];
+    /* PanelTlv_Rules_TagC0: block 1 tags 0xC0-0xD4, 0xD7 (len 18) */
+    uint8_t PanelTlv_Rules_TagC0[38];
+    /* PanelTlv_Rules_Tag49: block 1 tag 0x49 (+0x230, len 16) */
+    uint8_t PanelTlv_Rules_Tag49[34];
+    /* PanelTlv_Rules_Tag9A: block 1 tag 0x9A (+0x242, len 26) */
+    uint8_t PanelTlv_Rules_Tag9A[22];
+    /* PanelTlv_Block0_Layout: the 46 records of block 0 (RAM 0xF9A0; and the 80 panel memories at 0x1ED400 + 960*n), read by PanelTlv_WriteBlock0Headers and PanelTlv_ValidateBlock0 (audio/tonegen_fileio_handlers.s) */
+    panel_tlv_layout_t PanelTlv_Block0_Layout[46];
+    /* PanelTlv_Block1_Layout: the 30 records of block 1 (RAM 0xFD60), read by PanelTlv_WriteBlock1Headers and PanelTlv_ValidateBlock1 (audio/tonegen_fileio_handlers.s) */
+    panel_tlv_layout_t PanelTlv_Block1_Layout[30];
     uint16_t field_2b0c;
     uint8_t pad_140[2];  /* zero padding */
     uint32_t ptr_2b10;
@@ -6553,1875 +5717,626 @@ const naka_extension_device_t naka_extension_device_data
 
     .TT_EXT_str = ALIGNED_STRING("TT_EXT"),
 
-    .field_230e = NAKA_NONE,
-
-    .field_2310 = 0x0003,
-
-    .field_2312 = 0x20FF,
-
-    .field_2314 = 0x207D,
-
-    .field_2316 = 0x0103,
-
-    .field_2318 = 0x20FF,
-
-    .field_231a = 0x207D,
-
-    .field_231c = 0x0203,
-
-    .field_231e = 0x20FF,
-
-    .field_2320 = 0x207D,
-
-    .field_2322 = 0x0303,
-
-    .field_2324 = 0x20FF,
-
-    .field_2326 = 0x207D,
-
-    .field_2328 = 0x0403,
-
-    .field_232a = 0x20FF,
-
-    .field_232c = 0x207D,
-
-    .field_232e = 0x0503,
-
-    .field_2330 = 0x20FF,
-
-    .field_2332 = 0x207D,
-
-    .field_2334 = 0x0603,
-
-    .field_2336 = 0x20FF,
-
-    .field_2338 = 0x207D,
-
-    .field_233a = 0x0703,
-
-    .field_233c = 0x20FF,
-
-    .field_233e = 0x207D,
-
-    .field_2340 = 0x0803,
-
-    .field_2342 = 0x20FF,
-
-    .field_2344 = 0x207D,
-
-    .field_2346 = 0x0903,
-
-    .field_2348 = 0x20FF,
-
-    .field_234a = 0x207D,
-
-    .field_234c = 0x0A03,
-
-    .field_234e = 0x20FF,
-
-    .field_2350 = 0x207D,
-
-    .field_2352 = 0x0B03,
-
-    .field_2354 = 0x20FF,
-
-    .field_2356 = 0x207D,
-
-    .field_2358 = 0x0C03,
-
-    .field_235a = 0x20FF,
-
-    .field_235c = 0x207D,
-
-    .field_235e = 0x0D03,
-
-    .field_2360 = 0x20FF,
-
-    .field_2362 = 0x207D,
-
-    .field_2364 = 0x0D03,
-
-    .field_2366 = 0x20FF,
-
-    .field_2368 = 0x207D,
-
-    .field_236a = 0x0F03,
-
-    .field_236c = 0x20FF,
-
-    .field_236e = 0x207D,
-
-    .field_2370 = 0x1008,
-
-    .field_2372 = 0x1108,
-
-    .field_2374 = NAKA_NONE,
-
-    .field_2376 = 0x0208,
-
-    .field_2378 = 0x0500,
-
-    .field_237a = 0x087F,
-
-    .field_237c = 0x0006,
-
-    .field_237e = 0x7F07,
-
-    .field_2380 = 0x0800,
-
-    .field_2382 = 0x007F,
-
-    .field_2384 = 0x7F09,
-
-    .field_2386 = 0x0B00,
-
-    .field_2388 = 0x007F,
-
-    .field_238a = 0x3F0C,
-
-    .field_238c = 0x0D00,
-
-    .field_238e = 0x08EF,
-
-    .field_2390 = 0x0810,
-
-    .field_2392 = 0x0812,
-
-    .field_2394 = 0x0813,
-
-    .field_2396 = 0x0814,
-
-    .field_2398 = 0x0015,
-
-    .field_239a = 0x0116,
-
-    .field_239c = 0x1708,
-
-    .field_239e = NAKA_NONE,
-
-    .field_23a0 = 0x0208,
-
-    .field_23a2 = 0x0400,
-
-    .field_23a4 = 0x00A0,
-
-    .field_23a6 = 0x7F05,
-
-    .field_23a8 = 0x0608,
-
-    .field_23aa = 0x0700,
-
-    .field_23ac = 0x007F,
-
-    .field_23ae = 0x7F08,
-
-    .field_23b0 = 0x0900,
-
-    .field_23b2 = 0x007F,
-
-    .field_23b4 = 0x7F0B,
-
-    .field_23b6 = 0x0C00,
-
-    .field_23b8 = 0x0007,
-
-    .field_23ba = 0xEF0D,
-
-    .field_23bc = 0x0E08,
-
-    .field_23be = 0x0F08,
-
-    .field_23c0 = 0x1008,
-
-    .field_23c2 = 0x1108,
-
-    .field_23c4 = 0x1208,
-
-    .field_23c6 = 0x1308,
-
-    .field_23c8 = 0x1408,
-
-    .field_23ca = 0x1508,
-
-    .field_23cc = 0x1608,
-
-    .field_23ce = 0x1708,
-
-    .field_23d0 = NAKA_NONE,
-
-    .ptr_23d2 = 0x00FF0003,
-
-    .field_23d6 = 0x15A7,
-
-    .field_23d8 = 0x0100,
-
-    .field_23da = 0x037F,
-
-    .field_23dc = 0x7F01,
-
-    .field_23de = 0x0700,
-
-    .field_23e0 = 0x0800,
-
-    .field_23e2 = 0x0202,
-
-    .field_23e4 = 0x1004,
-
-    .field_23e6 = 0x0500,
-
-    .field_23e8 = 0x087F,
-
-    .field_23ea = 0x0006,
-
-    .field_23ec = 0x7F07,
-
-    .field_23ee = 0x0800,
-
-    .field_23f0 = 0x007F,
-
-    .field_23f2 = 0x7F09,
-
-    .field_23f4 = 0x0B00,
-
-    .field_23f6 = 0x007F,
-
-    .field_23f8 = 0x3F0C,
-
-    .field_23fa = 0x0D00,
-
-    .field_23fc = 0x08EF,
-
-    .field_23fe = 0x080E,
-
-    .field_2400 = 0x080F,
-
-    .field_2402 = 0x0810,
-
-    .field_2404 = 0x0811,
-
-    .field_2406 = 0x0812,
-
-    .field_2408 = 0x0813,
-
-    .field_240a = 0x0814,
-
-    .field_240c = 0x0815,
-
-    .field_240e = 0x0816,
-
-    .field_2410 = 0xFF17,
-
-    .ptr_2412 = 0x00FF0003,
-
-    .field_2416 = 0x28A7,
-
-    .field_2418 = 0x0100,
-
-    .field_241a = 0x037F,
-
-    .field_241c = 0x7F01,
-
-    .field_241e = 0x0700,
-
-    .field_2420 = 0x0800,
-
-    .field_2422 = 0x0202,
-
-    .field_2424 = 0x1004,
-
-    .field_2426 = 0x0500,
-
-    .field_2428 = 0x087F,
-
-    .field_242a = 0x0006,
-
-    .field_242c = 0x7F07,
-
-    .field_242e = 0x0800,
-
-    .field_2430 = 0x007F,
-
-    .field_2432 = 0x7F09,
-
-    .field_2434 = 0x0B00,
-
-    .field_2436 = 0x007F,
-
-    .field_2438 = 0x3F0C,
-
-    .field_243a = 0x0D00,
-
-    .field_243c = 0x08EF,
-
-    .field_243e = 0x080E,
-
-    .field_2440 = 0x080F,
-
-    .field_2442 = 0x0810,
-
-    .field_2444 = 0x0811,
-
-    .field_2446 = 0x0812,
-
-    .field_2448 = 0x0813,
-
-    .field_244a = 0x0814,
-
-    .field_244c = 0x0815,
-
-    .field_244e = 0x0816,
-
-    .field_2450 = 0xFF17,
-
-    .field_2452 = 0x0208,
-
-    .field_2454 = 0x0400,
-
-    .field_2456 = 0x00A0,
-
-    .field_2458 = 0x7F05,
-
-    .field_245a = 0x0608,
-
-    .field_245c = 0x0700,
-
-    .field_245e = 0x007F,
-
-    .field_2460 = 0x7F08,
-
-    .field_2462 = 0x0900,
-
-    .field_2464 = 0x007F,
-
-    .field_2466 = 0x7F0B,
-
-    .field_2468 = 0x0C00,
-
-    .field_246a = 0x0007,
-
-    .field_246c = 0xEF0D,
-
-    .field_246e = 0x0E08,
-
-    .field_2470 = 0x0F08,
-
-    .field_2472 = 0x1008,
-
-    .field_2474 = 0x1108,
-
-    .field_2476 = 0x1208,
-
-    .field_2478 = 0x1308,
-
-    .field_247a = 0x1408,
-
-    .field_247c = 0x1508,
-
-    .field_247e = 0x1608,
-
-    .field_2480 = 0x1708,
-
-    .field_2482 = NAKA_NONE,
-
-    .field_2484 = 0x0004,
-
-    .field_2486 = 0xA8FF,
-
-    .field_2488 = 0x01EF,
-
-    .field_248a = 0x0100,
-
-    .field_248c = 0x037F,
-
-    .field_248e = 0x7F01,
-
-    .field_2490 = 0x0700,
-
-    .field_2492 = 0x0800,
-
-    .field_2494 = 0x0002,
-
-    .field_2496 = 0x7F05,
-
-    .field_2498 = 0x0608,
-
-    .field_249a = 0x0700,
-
-    .field_249c = 0x007F,
-
-    .field_249e = 0x7F08,
-
-    .field_24a0 = 0x0900,
-
-    .field_24a2 = 0x007F,
-
-    .field_24a4 = 0x7F0B,
-
-    .field_24a6 = 0x0C00,
-
-    .str_489 = "?",
-
-    .field_24aa = 0xEF0D,
-
-    .field_24ac = 0x0E08,
-
-    .field_24ae = 0x0F08,
-
-    .field_24b0 = 0x1008,
-
-    .field_24b2 = 0x1108,
-
-    .field_24b4 = 0x1208,
-
-    .field_24b6 = 0x1308,
-
-    .field_24b8 = 0x1408,
-
-    .field_24ba = 0x1508,
-
-    .field_24bc = 0x1608,
-
-    .field_24be = 0x1708,
-
-    .field_24c0 = NAKA_NONE,
-
-    .field_24c2 = 0x0004,
-
-    .field_24c4 = 0xA8FF,
-
-    .field_24c6 = 0x01EF,
-
-    .field_24c8 = 0x0100,
-
-    .field_24ca = 0x037F,
-
-    .field_24cc = 0x7F01,
-
-    .field_24ce = 0x0700,
-
-    .field_24d0 = 0x0800,
-
-    .field_24d2 = 0x0002,
-
-    .field_24d4 = 0x7F05,
-
-    .field_24d6 = 0x0608,
-
-    .field_24d8 = 0x0700,
-
-    .field_24da = 0x007F,
-
-    .field_24dc = 0x7F08,
-
-    .field_24de = 0x0900,
-
-    .field_24e0 = 0x007F,
-
-    .field_24e2 = 0x7F0B,
-
-    .field_24e4 = 0x0C00,
-
-    .str_490 = "?",
-
-    .field_24e8 = 0xEF0D,
-
-    .field_24ea = 0x0E08,
-
-    .field_24ec = 0x0F08,
-
-    .field_24ee = 0x1008,
-
-    .field_24f0 = 0x1108,
-
-    .field_24f2 = 0x1208,
-
-    .field_24f4 = 0x1308,
-
-    .field_24f6 = 0x1408,
-
-    .field_24f8 = 0x1508,
-
-    .field_24fa = 0x1608,
-
-    .field_24fc = 0x1708,
-
-    .field_24fe = NAKA_NONE,
-
-    .field_2500 = 0x0004,
-
-    .field_2502 = 0xA8FF,
-
-    .field_2504 = 0x01EF,
-
-    .field_2506 = 0x0100,
-
-    .field_2508 = 0x037F,
-
-    .field_250a = 0x7F01,
-
-    .field_250c = 0x0700,
-
-    .field_250e = 0x0800,
-
-    .field_2510 = 0x0002,
-
-    .field_2512 = 0x7F05,
-
-    .field_2514 = 0x0608,
-
-    .field_2516 = 0x0700,
-
-    .field_2518 = 0x007F,
-
-    .field_251a = 0x7F08,
-
-    .field_251c = 0x0900,
-
-    .field_251e = 0x007F,
-
-    .field_2520 = 0x7F0B,
-
-    .ptr_2522 = 0x00FF0C00,
-
-    .field_2526 = 0xEF0D,
-
-    .field_2528 = 0x0E08,
-
-    .field_252a = 0x0F08,
-
-    .field_252c = 0x1008,
-
-    .field_252e = 0x1108,
-
-    .field_2530 = 0x1208,
-
-    .field_2532 = 0x1308,
-
-    .field_2534 = 0x1408,
-
-    .field_2536 = 0x1508,
-
-    .field_2538 = 0x1608,
-
-    .field_253a = 0x1708,
-
-    .field_253c = NAKA_NONE,
-
-    .field_253e = 0x0700,
-
-    .field_2540 = 0x083F,
-
-    .field_2542 = 0xFF09,
-
-    .field_2544 = 0x0100,
-
-    .field_2546 = 0x031F,
-
-    .field_2548 = 0x1F01,
-
-    .field_254a = 0x1100,
-
-    .pad_54 = { 0 },
-
-    .field_254e = 0x7F02,
-
-    .field_2550 = 0x0203,
-
-    .field_2552 = 0x007F,
-
-    .c_str = "c",
-
-    .field_2556 = 0x0300,
-
-    .field_2558 = 0x03F7,
-
-    .field_255a = 0xF003,
-
-    .field_255c = 0xB000,
-
-    .pad_55 = { 0 },
-
-    .field_2560 = 0xC004,
-
-    .field_2562 = 0x0500,
-
-    .field_2564 = 0x037F,
-
-    .field_2566 = 0x7F05,
-
-    .field_2568 = 0x7900,
-
-    .field_256a = 0x0400,
-
-    .field_256c = 0x7F05,
-
-    .field_256e = 0x1C10,
-
-    .str_492 = ALIGNED_STRING(""),
-
-    .pad_56 = { 0 },
-
-    .field_2574 = 0x0880,
-
-    .field_2576 = 0x0802,
-
-    .field_2578 = 0xFF03,
-
-    .ptr_257a = 0x00FF0003,
-
-    .field_257e = 0x60F4,
-
-    .field_2580 = 0x0004,
-
-    .field_2582 = 0x9EFF,
-
-    .field_2584 = 0x60EF,
-
-    .field_2586 = 0x0100,
-
-    .field_2588 = 0x037F,
-
-    .field_258a = 0x7F01,
-
-    .field_258c = 0x0700,
-
-    .field_258e = 0x0800,
-
-    .field_2590 = 0x0002,
-
-    .field_2592 = 0xEF03,
-
-    .NakaData_FileScreenDispatch_ptr = NAKA_ADDR(NakaData_FileScreenDispatch),
-
-    .field_2598 = 0x4704,
-
-    .field_259a = 0x0500,
-
-    .field_259c = 0x000E,
-
-    .field_259e = 0x0406,
-
-    .field_25a0 = 0x0700,
-
-    .str_493 = "0",
-
-    .field_25a4 = 0x0109,
-
-    .field_25a6 = NAKA_NONE,
-
-    .pad_57 = { 0 },
-
-    .field_25aa = 0x0003,
-
-    .field_25ac = 0x0201,
-
-    .field_25ae = 0x0200,
-
-    .g_str = "g",
-
-    .field_25b2 = 0x0303,
-
-    .field_25b4 = 0x0405,
-
-    .field_25b6 = 0x05FF,
-
-    .field_25b8 = 0x2840,
-
-    .field_25ba = 0x4034,
-
-    .field_25bc = 0x584C,
-
-    .field_25be = 0x0508,
-
-    .field_25c0 = NAKA_NONE,
-
-    .field_25c2 = 0x0100,
-
-    .field_25c4 = 0x08E0,
-
-    .field_25c6 = 0x0802,
-
-    .field_25c8 = 0xFF03,
-
-    .field_25ca = NAKA_NONE,
-
-    .field_25cc = NAKA_NONE,
-
-    .pad_58 = { 0 },
-
-    .field_25d0 = 0x0007,
-
-    .field_25d2 = 0x7F01,
-
-    .ptr_25d4 = 0x00FF0203,
-
-    .field_25d8 = 0x050B,
-
-    .field_25da = 0x0304,
-
-    .field_25dc = 0x0FFF,
-
-    .field_25de = 0xFFFE,
-
-    .field_25e0 = 0x0306,
-
-    .field_25e2 = 0x01FF,
-
-    .field_25e4 = 0x02FF,
-
-    .field_25e6 = 0x0400,
-
-    .field_25e8 = 0x030F,
-
-    .field_25ea = 0x0F04,
-
-    .field_25ec = 0x0D00,
-
-    .field_25ee = 0x0307,
-
-    .field_25f0 = 0xFF05,
-
-    .field_25f2 = 0x1001,
-
-    .field_25f4 = 0x0302,
-
-    .field_25f6 = 0xFF06,
-
-    .field_25f8 = 0x1001,
-
-    .field_25fa = 0x0004,
-
-    .field_25fc = 0x0707,
-
-    .field_25fe = NAKA_NONE,
-
-    .ptr_2600 = 0x00FF0003,
-
-    .field_2604 = 0x000F,
-
-    .field_2606 = 0x0100,
-
-    .field_2608 = 0x087F,
-
-    .field_260a = 0x0002,
-
-    .field_260c = 0x4004,
-
-    .field_260e = 0x0500,
-
-    .field_2610 = 0x007F,
-
-    .field_2612 = 0x7F07,
-
-    .field_2614 = 0x0801,
-
-    .field_2616 = 0x0180,
-
-    .field_2618 = 0x8009,
-
-    .field_261a = 0x0A01,
-
-    .field_261c = 0x0180,
-
-    .field_261e = 0x800B,
-
-    .field_2620 = 0x0C01,
-
-    .field_2622 = 0x0180,
-
-    .field_2624 = 0x800D,
-
-    .field_2626 = NAKA_NONE,
-
-    .field_2628 = 0x0100,
-
-    .field_262a = 0x038F,
-
-    .field_262c = 0x0F01,
-
-    .field_262e = 0x0B00,
-
-    .str_495 = ALIGNED_STRING(""),
-
-    .pad_59 = { 0 },
-
-    .field_2634 = 0x0803,
-
-    .field_2636 = 0x0801,
-
-    .field_2638 = 0x0802,
-
-    .field_263a = 0xFF03,
-
-    .field_263c = 0x0100,
-
-    .field_263e = 0x081F,
-
-    .field_2640 = 0x081B,
-
-    .field_2642 = 0x081C,
-
-    .field_2644 = 0xFF1D,
-
-    .pad_60 = { 0 },
-
-    .field_2648 = 0x067F,
-
-    .field_264a = 0x0300,
-
-    .field_264c = 0x0001,
-
-    .field_264e = 0x0002,
-
-    .field_2650 = 0x0C01,
-
-    .field_2652 = 0x0200,
-
-    .field_2654 = 0x061C,
-
-    .field_2656 = 0x1802,
-
-    .field_2658 = 0x0001,
-
-    .field_265a = 0x0010,
-
-    .field_265c = 0xC503,
-
-    .field_265e = 0x0401,
-
-    .str_496 = "?",
-
-    .field_2662 = 0x3F05,
-
-    .field_2664 = 0x0A00,
-
-    .field_2666 = 0x0303,
-
-    .field_2668 = 0x030A,
-
-    .field_266a = 0x0200,
-
-    .field_266c = 0x0300,
-
-    .field_266e = 0xFF0C,
-
-    .field_2670 = 0x7F01,
-
-    .field_2672 = 0x0850,
-
-    .field_2674 = 0xFF0D,
-
-    .field_2676 = 0x0004,
-
-    .field_2678 = 0xA8FF,
-
-    .field_267a = 0x01EF,
-
-    .field_267c = 0x0100,
-
-    .field_267e = 0x037F,
-
-    .field_2680 = 0x7F01,
-
-    .field_2682 = 0x0700,
-
-    .field_2684 = 0x0800,
-
-    .field_2686 = 0x0202,
-
-    .field_2688 = 0x1004,
-
-    .field_268a = 0x0500,
-
-    .field_268c = 0x087F,
-
-    .field_268e = 0x0006,
-
-    .field_2690 = 0x7F07,
-
-    .field_2692 = 0x0800,
-
-    .field_2694 = 0x007F,
-
-    .field_2696 = 0x7F09,
-
-    .field_2698 = 0x0B00,
-
-    .field_269a = 0x007F,
-
-    .field_269c = 0x3F0C,
-
-    .field_269e = 0x0D00,
-
-    .field_26a0 = 0x08EF,
-
-    .field_26a2 = 0x080E,
-
-    .field_26a4 = 0x080F,
-
-    .field_26a6 = 0x0810,
-
-    .field_26a8 = 0x0811,
-
-    .field_26aa = 0x0812,
-
-    .field_26ac = 0x0813,
-
-    .field_26ae = 0x0814,
-
-    .field_26b0 = 0x0815,
-
-    .field_26b2 = 0x0816,
-
-    .field_26b4 = 0xFF17,
-
-    .field_26b6 = 0x0004,
-
-    .field_26b8 = 0xA8FF,
-
-    .field_26ba = 0x01EF,
-
-    .field_26bc = 0x0100,
-
-    .field_26be = 0x037F,
-
-    .field_26c0 = 0x7F01,
-
-    .field_26c2 = 0x0700,
-
-    .field_26c4 = 0x0800,
-
-    .field_26c6 = 0x0202,
-
-    .field_26c8 = 0x1004,
-
-    .field_26ca = 0x0500,
-
-    .field_26cc = 0x087F,
-
-    .field_26ce = 0x0006,
-
-    .field_26d0 = 0x7F07,
-
-    .field_26d2 = 0x0800,
-
-    .field_26d4 = 0x007F,
-
-    .field_26d6 = 0x7F09,
-
-    .field_26d8 = 0x0B00,
-
-    .field_26da = 0x007F,
-
-    .field_26dc = 0x3F0C,
-
-    .field_26de = 0x0E08,
-
-    .field_26e0 = 0x0F08,
-
-    .field_26e2 = 0x1008,
-
-    .field_26e4 = 0x1108,
-
-    .field_26e6 = 0x1208,
-
-    .field_26e8 = 0x1308,
-
-    .field_26ea = 0x1408,
-
-    .field_26ec = 0x1508,
-
-    .field_26ee = 0x1608,
-
-    .field_26f0 = 0x1708,
-
-    .field_26f2 = NAKA_NONE,
-
-    .pad_61 = { 0 },
-
-    .field_26f6 = 0x0340,
-
-    .field_26f8 = 0x7F01,
-
-    .field_26fa = 0x5000,
-
-    .field_26fc = 0x0800,
-
-    .field_26fe = 0x0002,
-
-    .field_2700 = 0x7103,
-
-    .field_2702 = 0x0303,
-
-    .field_2704 = 0x1070,
-
-    .field_2706 = 0x2030,
-
-    .field_2708 = 0x0508,
-
-    .field_270a = 0x0608,
-
-    .field_270c = 0x0900,
-
-    .field_270e = 0x0303,
-
-    .field_2710 = 0xFF0A,
-
-    .field_2712 = 0x6300,
-
-    .Z_str = "Z",
-
-    .field_2716 = 0xC00B,
-
-    .field_2718 = 0x0C08,
-
-    .field_271a = 0x0D08,
-
-    .field_271c = 0x0E00,
-
-    .field_271e = 0x0303,
-
-    .field_2720 = 0x030E,
-
-    .field_2722 = 0x0200,
-
-    .field_2724 = 0x0800,
-
-    .field_2726 = 0x080F,
-
-    .field_2728 = 0x0810,
-
-    .field_272a = 0xFF11,
-
-    .field_272c = 0x0108,
-
-    .field_272e = 0x0205,
-
-    .field_2730 = 0x02FF,
-
-    .pad_62 = { 0 },
-
-    .field_2734 = 0x0001,
-
-    .field_2736 = 0x0703,
-
-    .field_2738 = 0x0408,
-
-    .field_273a = 0x0508,
-
-    .field_273c = 0x0608,
-
-    .field_273e = 0x0708,
-
-    .field_2740 = 0x0808,
-
-    .field_2742 = 0x0908,
-
-    .field_2744 = NAKA_NONE,
-
-    .pad_63 = { 0 },
-
-    .field_2748 = 0x030F,
-
-    .field_274a = 0x0F00,
-
-    .field_274c = 0x0900,
-
-    .field_274e = 0x0006,
-
-    .field_2750 = 0xF001,
-
-    .field_2752 = 0x0200,
-
-    .field_2754 = 0x037F,
-
-    .field_2756 = 0x7F02,
-
-    .field_2758 = 0x7F00,
-
-    .field_275a = 0x007F,
-
-    .field_275c = 0x7F03,
-
-    .field_275e = 0x0303,
-
-    .field_2760 = 0x007F,
-
-    .field_2762 = 0x7F7F,
-
-    .field_2764 = 0x0400,
-
-    .field_2766 = 0x030F,
-
-    .field_2768 = 0x0F04,
-
-    .field_276a = 0x0C00,
-
-    .field_276c = 0x0302,
-
-    .field_276e = 0xFF05,
-
-    .field_2770 = 0x0A00,
-
-    .field_2772 = 0x0305,
-
-    .field_2774 = 0x7F06,
-
-    .field_2776 = 0x7F01,
-
-    .field_2778 = 0x0301,
-
-    .field_277a = 0xFF07,
-
-    .field_277c = 0x0300,
-
-    .field_277e = 0x0300,
-
-    .field_2780 = 0x7F08,
-
-    .field_2782 = 0x7F01,
-
-    .field_2784 = 0x0701,
-
-    .field_2786 = 0x4009,
-
-    .field_2788 = 0x0A07,
-
-    .field_278a = 0x0740,
-
-    .field_278c = 0x400B,
-
-    .field_278e = 0x0C07,
-
-    .field_2790 = 0x0740,
-
-    .field_2792 = 0x400D,
-
-    .field_2794 = 0x0E07,
-
-    .field_2796 = 0x0740,
-
-    .field_2798 = 0x400F,
-
-    .field_279a = 0x1007,
-
-    .field_279c = 0x0740,
-
-    .field_279e = 0x4011,
-
-    .field_27a0 = 0x1207,
-
-    .field_27a2 = 0x0740,
-
-    .field_27a4 = 0x4013,
-
-    .field_27a6 = 0x1407,
-
-    .field_27a8 = 0x0740,
-
-    .field_27aa = 0x4015,
-
-    .field_27ac = 0x1607,
-
-    .field_27ae = 0x0740,
-
-    .field_27b0 = 0x4017,
-
-    .field_27b2 = 0x1807,
-
-    .field_27b4 = 0xFF40,
-
-    .field_27b6 = 0x0008,
-
-    .field_27b8 = 0x0108,
-
-    .field_27ba = 0x0208,
-
-    .field_27bc = 0x0308,
-
-    .field_27be = 0x0408,
-
-    .field_27c0 = 0x0508,
-
-    .field_27c2 = 0x0608,
-
-    .field_27c4 = 0x0708,
-
-    .field_27c6 = 0x0808,
-
-    .field_27c8 = 0x0908,
-
-    .field_27ca = 0x0A08,
-
-    .field_27cc = 0x0B08,
-
-    .field_27ce = 0x0C08,
-
-    .field_27d0 = 0x0D08,
-
-    .field_27d2 = 0x0E08,
-
-    .field_27d4 = 0x0F08,
-
-    .field_27d6 = 0x1008,
-
-    .field_27d8 = 0x1108,
-
-    .field_27da = NAKA_NONE,
-
-    .field_27dc = 0x0008,
-
-    .field_27de = 0x0108,
-
-    .field_27e0 = 0x0208,
-
-    .field_27e2 = 0x0308,
-
-    .field_27e4 = 0x0408,
-
-    .field_27e6 = 0x0508,
-
-    .field_27e8 = 0x0608,
-
-    .field_27ea = 0x0708,
-
-    .field_27ec = 0x0808,
-
-    .field_27ee = 0x0908,
-
-    .field_27f0 = 0x0A08,
-
-    .field_27f2 = 0x0B08,
-
-    .field_27f4 = 0x0C08,
-
-    .field_27f6 = 0x0D08,
-
-    .field_27f8 = 0x0E08,
-
-    .field_27fa = 0x0F08,
-
-    .field_27fc = NAKA_NONE,
-
-    .field_27fe = 0x0008,
-
-    .field_2800 = 0x0108,
-
-    .field_2802 = 0x0208,
-
-    .field_2804 = 0x0308,
-
-    .field_2806 = 0x1408,
-
-    .field_2808 = 0x1508,
-
-    .field_280a = 0x1608,
-
-    .field_280c = 0x1708,
-
-    .field_280e = 0x1808,
-
-    .field_2810 = 0x1908,
-
-    .field_2812 = NAKA_NONE,
-
-    .pad_64 = { 0 },
-
-    .ptr_2818 = SELF(field_2310),
-
-    .field_281c = 0x1278,
-
-    .field_281e = 0x0014,
-
-    .pad_65 = { 0 },
-
-    .ptr_2822 = SELF(field_2376),
-
-    .field_2826 = 0x1800,
-
-    .str_498 = ".",
-
-    .pad_66 = { 0 },
-
-    .ptr_282c = SELF(field_2376),
-
-    .field_2830 = 0x1801,
-
-    .H_str = "H",
-
-    .pad_67 = { 0 },
-
-    .ptr_2836 = SELF(field_2376),
-
-    .field_283a = 0x1802,
-
-    .b_str = "b",
-
-    .pad_68 = { 0 },
-
-    .ptr_2840 = SELF(field_2376),
-
-    .field_2844 = 0x1803,
-
-    .str_501 = "|",
-
-    .pad_69 = { 0 },
-
-    .ptr_284a = SELF(field_2376),
-
-    .field_284e = 0x1804,
-
-    .field_2850 = 0x0096,
-
-    .pad_70 = { 0 },
-
-    .ptr_2854 = SELF(field_2376),
-
-    .field_2858 = 0x1805,
-
-    .field_285a = 0x00B0,
-
-    .pad_71 = { 0 },
-
-    .ptr_285e = SELF(field_2376),
-
-    .field_2862 = 0x1806,
-
-    .field_2864 = 0x00CA,
-
-    .pad_72 = { 0 },
-
-    .ptr_2868 = SELF(field_2376),
-
-    .NakaData_StyleBitmapPad_ptr = NAKA_ADDR(NakaData_StyleBitmapPad),
-
-    .pad_73 = { 0 },
-
-    .ptr_2872 = SELF(field_2376),
-
-    .ptr_2876 = 0x00FE1808,
-
-    .pad_74 = { 0 },
-
-    .ptr_287c = SELF(field_2376),
-
-    .field_2880 = 0x1809,
-
-    .field_2882 = 0x0118,
-
-    .pad_75 = { 0 },
-
-    .ptr_2886 = SELF(field_2376),
-
-    .field_288a = 0x180A,
-
-    .field_288c = 0x0132,
-
-    .pad_76 = { 0 },
-
-    .ptr_2890 = SELF(field_2376),
-
-    .field_2894 = 0x180B,
-
-    .field_2896 = 0x014C,
-
-    .pad_77 = { 0 },
-
-    .ptr_289a = SELF(field_2376),
-
-    .field_289e = 0x180C,
-
-    .field_28a0 = 0x0166,
-
-    .pad_78 = { 0 },
-
-    .ptr_28a4 = SELF(field_2376),
-
-    .field_28a8 = 0x180D,
-
-    .field_28aa = 0x0180,
-
-    .pad_79 = { 0 },
-
-    .ptr_28ae = SELF(field_2376),
-
-    .field_28b2 = 0x180E,
-
-    .field_28b4 = 0x019A,
-
-    .pad_80 = { 0 },
-
-    .ptr_28b8 = SELF(field_23a0),
-
-    .field_28bc = 0x180F,
-
-    .field_28be = 0x01B4,
-
-    .pad_81 = { 0 },
-
-    .ptr_28c2 = SELF(ptr_23d2),
-
-    .field_28c6 = 0x1810,
-
-    .field_28c8 = 0x01CE,
-
-    .pad_82 = { 0 },
-
-    .ptr_28cc = SELF(ptr_23d2),
-
-    .field_28d0 = 0x1811,
-
-    .field_28d2 = 0x01E8,
-
-    .pad_83 = { 0 },
-
-    .ptr_28d6 = SELF(ptr_23d2),
-
-    .field_28da = 0x1812,
-
-    .field_28dc = 0x0202,
-
-    .pad_84 = { 0 },
-
-    .ptr_28e0 = SELF(ptr_2412),
-
-    .field_28e4 = 0x1813,
-
-    .field_28e6 = 0x021C,
-
-    .pad_85 = { 0 },
-
-    .ptr_28ea = SELF(field_2452),
-
-    .field_28ee = 0x1814,
-
-    .field_28f0 = 0x0236,
-
-    .pad_86 = { 0 },
-
-    .ptr_28f4 = SELF(field_2484),
-
-    .field_28f8 = 0x1815,
-
-    .field_28fa = 0x0250,
-
-    .pad_87 = { 0 },
-
-    .ptr_28fe = SELF(field_24c2),
-
-    .field_2902 = 0x1816,
-
-    .field_2904 = 0x026A,
-
-    .pad_88 = { 0 },
-
-    .ptr_2908 = SELF(field_2500),
-
-    .field_290c = 0x1819,
-
-    .field_290e = 0x0284,
-
-    .pad_89 = { 0 },
-
-    .ptr_2912 = SELF(field_253e),
-
-    .field_2916 = 0x0A44,
-
-    .field_2918 = 0x0290,
-
-    .pad_90 = { 0 },
-
-    .ptr_291c = SELF(field_253e),
-
-    .field_2920 = 0x0A45,
-
-    .field_2922 = 0x029C,
-
-    .pad_91 = { 0 },
-
-    .ptr_2926 = SELF(field_253e),
-
-    .field_292a = 0x0A46,
-
-    .field_292c = 0x02A8,
-
-    .pad_92 = { 0 },
-
-    .ptr_2930 = SELF(field_2544),
-
-    .field_2934 = 0x0847,
-
-    .field_2936 = 0x02B2,
-
-    .pad_93 = { 0 },
-
-    .ptr_293a = SELF(pad_56),
-
-    .field_293e = 0x0443,
-
-    .field_2940 = 0x02B8,
-
-    .pad_94 = { 0 },
-
-    .ptr_2944 = SELF(ptr_257a),
-
-    .field_2948 = 0x0A48,
-
-    .field_294a = 0x02C4,
-
-    .pad_95 = { 0 },
-
-    .ptr_294e = SELF(pad_57),
-
-    .field_2952 = 0x0690,
-
-    .field_2954 = 0x02CC,
-
-    .pad_96 = { 0 },
-
-    .ptr_2958 = SELF(field_25c2),
-
-    .field_295c = 0x0460,
-
-    .field_295e = 0x02D2,
-
-    .pad_97 = { 0 },
-
-    .ptr_2962 = SELF(field_25ca),
-
-    .field_2966 = 0x1861,
-
-    .field_2968 = 0x02EC,
-
-    .pad_98 = { 0 },
-
-    .ptr_296c = SELF(field_25ca),
-
-    .field_2970 = 0x1863,
-
-    .field_2972 = 0x0306,
-
-    .pad_99 = { 0 },
-
-    .ptr_2976 = SELF(field_25ca),
-
-    .field_297a = 0x1864,
-
-    .field_297c = 0x0320,
-
-    .pad_100 = { 0 },
-
-    .ptr_2980 = SELF(field_25ca),
-
-    .field_2984 = 0x1865,
-
-    .field_2986 = 0x033A,
-
-    .pad_101 = { 0 },
-
-    .ptr_298a = SELF(field_25ca),
-
-    .field_298e = 0x1866,
-
-    .field_2990 = 0x0354,
-
-    .pad_102 = { 0 },
-
-    .ptr_2994 = SELF(field_25cc),
-
-    .field_2998 = 0x0A68,
-
-    .field_299a = 0x0360,
-
-    .pad_103 = { 0 },
-
-    .ptr_299e = SELF(pad_58),
-
-    .field_29a2 = 0x0870,
-
-    .field_29a4 = 0x036A,
-
-    .pad_104 = { 0 },
-
-    .ptr_29a8 = SELF(ptr_2600),
-
-    .field_29ac = 0x0E72,
-
-    .field_29ae = 0x037A,
-
-    .pad_105 = { 0 },
-
-    .ptr_29b2 = SELF(field_2628),
-
-    .field_29b6 = 0x0E92,
-
-    .field_29b8 = 0x038A,
-
-    .pad_106 = { 0 },
-
-    .ptr_29bc = SELF(pad_59),
-
-    .field_29c0 = 0x0271,
-
-    .field_29c2 = 0x038E,
-
-    .pad_107 = { 0 },
-
-    .ptr_29c6 = SELF(field_263c),
-
-    .field_29ca = 0x1E99,
-
-    .field_29cc = 0x03AE,
-
-    .pad_108 = { 0 },
-
-    .ptr_29d0 = SELF(pad_60),
-
-    .field_29d4 = 0x0E80,
-
-    .field_29d6 = 0x03BE,
-
-    .pad_109 = { 0 },
-
-    .ptr_29da = SELF(field_230e),
-
-    .field_29de = NAKA_NONE,
-
-    .pad_110 = { 0 },
-
-    .ptr_29e4 = SELF(field_2676),
-
-    .field_29e8 = 0x1817,
-
-    .field_29ea = 0x001A,
-
-    .pad_111 = { 0 },
-
-    .ptr_29ee = SELF(field_26b6),
-
-    .field_29f2 = 0x1818,
-
-    .str_502 = "4",
-
-    .pad_112 = { 0 },
-
-    .ptr_29f8 = SELF(pad_61),
-
-    .field_29fc = 0x1298,
-
-    .H_str_2 = "H",
-
-    .pad_113 = { 0 },
-
-    .ptr_2a02 = SELF(field_272c),
-
-    .field_2a06 = 0x0A91,
-
-    .T_str = "T",
-
-    .pad_114 = { 0 },
-
-    .ptr_2a0c = SELF(pad_63),
-
-    .field_2a10 = 0x2293,
-
-    .x_str = "x",
-
-    .pad_115 = { 0 },
-
-    .ptr_2a16 = SELF(field_27b6),
-
-    .field_2a1a = 0x12C0,
-
-    .field_2a1c = 0x008C,
-
-    .pad_116 = { 0 },
-
-    .ptr_2a20 = SELF(field_27b6),
-
-    .field_2a24 = 0x12C1,
-
-    .field_2a26 = 0x00A0,
-
-    .pad_117 = { 0 },
-
-    .ptr_2a2a = SELF(field_27b6),
-
-    .field_2a2e = 0x12C2,
-
-    .field_2a30 = 0x00B4,
-
-    .pad_118 = { 0 },
-
-    .ptr_2a34 = SELF(field_27b6),
-
-    .field_2a38 = 0x12C3,
-
-    .field_2a3a = 0x00C8,
-
-    .pad_119 = { 0 },
-
-    .ptr_2a3e = SELF(field_27b6),
-
-    .field_2a42 = 0x12C4,
-
-    .field_2a44 = 0x00DC,
-
-    .pad_120 = { 0 },
-
-    .ptr_2a48 = SELF(field_27b6),
-
-    .ptr_2a4c = 0x00F012C5,
-
-    .pad_121 = { 0 },
-
-    .ptr_2a52 = SELF(field_27b6),
-
-    .field_2a56 = 0x12C6,
-
-    .field_2a58 = 0x0104,
-
-    .pad_122 = { 0 },
-
-    .ptr_2a5c = SELF(field_27b6),
-
-    .field_2a60 = 0x12C7,
-
-    .field_2a62 = 0x0118,
-
-    .pad_123 = { 0 },
-
-    .ptr_2a66 = SELF(field_27b6),
-
-    .field_2a6a = 0x12C8,
-
-    .field_2a6c = 0x012C,
-
-    .pad_124 = { 0 },
-
-    .ptr_2a70 = SELF(field_27b6),
-
-    .field_2a74 = 0x12C9,
-
-    .field_2a76 = 0x0140,
-
-    .pad_125 = { 0 },
-
-    .ptr_2a7a = SELF(field_27b6),
-
-    .field_2a7e = 0x12CA,
-
-    .field_2a80 = 0x0154,
-
-    .pad_126 = { 0 },
-
-    .ptr_2a84 = SELF(field_27b6),
-
-    .field_2a88 = 0x12CB,
-
-    .field_2a8a = 0x0168,
-
-    .pad_127 = { 0 },
-
-    .ptr_2a8e = SELF(field_27b6),
-
-    .field_2a92 = 0x12CC,
-
-    .field_2a94 = 0x017C,
-
-    .pad_128 = { 0 },
-
-    .ptr_2a98 = SELF(field_27b6),
-
-    .field_2a9c = 0x12CD,
-
-    .field_2a9e = 0x0190,
-
-    .pad_129 = { 0 },
-
-    .ptr_2aa2 = SELF(field_27b6),
-
-    .field_2aa6 = 0x12CE,
-
-    .field_2aa8 = 0x01A4,
-
-    .pad_130 = { 0 },
-
-    .ptr_2aac = SELF(field_27b6),
-
-    .field_2ab0 = 0x12CF,
-
-    .field_2ab2 = 0x01B8,
-
-    .pad_131 = { 0 },
-
-    .ptr_2ab6 = SELF(field_27b6),
-
-    .field_2aba = 0x12D0,
-
-    .field_2abc = 0x01CC,
-
-    .pad_132 = { 0 },
-
-    .ptr_2ac0 = SELF(field_27b6),
-
-    .field_2ac4 = 0x12D1,
-
-    .field_2ac6 = 0x01E0,
-
-    .pad_133 = { 0 },
-
-    .ptr_2aca = SELF(field_27b6),
-
-    .field_2ace = 0x12D2,
-
-    .field_2ad0 = 0x01F4,
-
-    .pad_134 = { 0 },
-
-    .ptr_2ad4 = SELF(field_27b6),
-
-    .field_2ad8 = 0x12D3,
-
-    .field_2ada = 0x0208,
-
-    .pad_135 = { 0 },
-
-    .ptr_2ade = SELF(field_27b6),
-
-    .field_2ae2 = 0x12D4,
-
-    .field_2ae4 = 0x021C,
-
-    .pad_136 = { 0 },
-
-    .ptr_2ae8 = SELF(field_27b6),
-
-    .field_2aec = 0x12D7,
-
-    .field_2aee = 0x0230,
-
-    .pad_137 = { 0 },
-
-    .ptr_2af2 = SELF(field_27dc),
-
-    .field_2af6 = 0x1049,
-
-    .field_2af8 = 0x0242,
-
-    .pad_138 = { 0 },
-
-    .ptr_2afc = SELF(field_27fe),
-
-    .field_2b00 = 0x1A9A,
-
-    .field_2b02 = 0x025E,
-
-    .pad_139 = { 0 },
-
-    .ptr_2b06 = SELF(field_230e),
-
-    .field_2b0a = NAKA_NONE,
+    .PanelTlv_Rules_End = {
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag78 = {
+        RULE_RANGE(0, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(1, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(2, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(3, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(4, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(5, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(6, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(7, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(8, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(9, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(10, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(11, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(12, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(13, 0xFF, ' ', '}', ' '),
+        /* the firmware checks byte 13 twice and byte 14 never */
+        RULE_RANGE(13, 0xFF, ' ', '}', ' '),
+        RULE_RANGE(15, 0xFF, ' ', '}', ' '),
+        RULE_ZERO(16),
+        RULE_ZERO(17),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag00 = {
+        RULE_ZERO(2),
+        RULE_KEEP_BITS(5, 0x7F),
+        RULE_ZERO(6),
+        RULE_KEEP_BITS(7, 0x7F),
+        RULE_KEEP_BITS(8, 0x7F),
+        RULE_KEEP_BITS(9, 0x7F),
+        RULE_KEEP_BITS(11, 0x7F),
+        RULE_KEEP_BITS(12, 0x3F),
+        RULE_KEEP_BITS(13, 0xEF),
+        RULE_ZERO(16),
+        RULE_ZERO(18),
+        RULE_ZERO(19),
+        RULE_ZERO(20),
+        RULE_ZERO(21),
+        RULE_KEEP_BITS(22, 0x01),
+        RULE_ZERO(23),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag0F = {
+        RULE_ZERO(2),
+        RULE_KEEP_BITS(4, 0xA0),
+        RULE_KEEP_BITS(5, 0x7F),
+        RULE_ZERO(6),
+        RULE_KEEP_BITS(7, 0x7F),
+        RULE_KEEP_BITS(8, 0x7F),
+        RULE_KEEP_BITS(9, 0x7F),
+        RULE_KEEP_BITS(11, 0x7F),
+        RULE_KEEP_BITS(12, 0x07),
+        RULE_KEEP_BITS(13, 0xEF),
+        RULE_ZERO(14),
+        RULE_ZERO(15),
+        RULE_ZERO(16),
+        RULE_ZERO(17),
+        RULE_ZERO(18),
+        RULE_ZERO(19),
+        RULE_ZERO(20),
+        RULE_ZERO(21),
+        RULE_ZERO(22),
+        RULE_ZERO(23),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag10 = {
+        RULE_RANGE(0, 0xFF, 0, 167, 21),
+        RULE_KEEP_BITS(1, 0x7F),
+        RULE_RANGE(1, 0x7F, 0, 7, 0),
+        RULE_ZERO(2),
+        RULE_SET_BITS(4, 0x10),
+        RULE_KEEP_BITS(5, 0x7F),
+        RULE_ZERO(6),
+        RULE_KEEP_BITS(7, 0x7F),
+        RULE_KEEP_BITS(8, 0x7F),
+        RULE_KEEP_BITS(9, 0x7F),
+        RULE_KEEP_BITS(11, 0x7F),
+        RULE_KEEP_BITS(12, 0x3F),
+        RULE_KEEP_BITS(13, 0xEF),
+        RULE_ZERO(14),
+        RULE_ZERO(15),
+        RULE_ZERO(16),
+        RULE_ZERO(17),
+        RULE_ZERO(18),
+        RULE_ZERO(19),
+        RULE_ZERO(20),
+        RULE_ZERO(21),
+        RULE_ZERO(22),
+        RULE_ZERO(23),
+        RULES_END,
+    },
+
+    .PanelTlv_Rules_Tag13 = {
+        RULE_RANGE(0, 0xFF, 0, 167, 40),
+        RULE_KEEP_BITS(1, 0x7F),
+        RULE_RANGE(1, 0x7F, 0, 7, 0),
+        RULE_ZERO(2),
+        RULE_SET_BITS(4, 0x10),
+        RULE_KEEP_BITS(5, 0x7F),
+        RULE_ZERO(6),
+        RULE_KEEP_BITS(7, 0x7F),
+        RULE_KEEP_BITS(8, 0x7F),
+        RULE_KEEP_BITS(9, 0x7F),
+        RULE_KEEP_BITS(11, 0x7F),
+        RULE_KEEP_BITS(12, 0x3F),
+        RULE_KEEP_BITS(13, 0xEF),
+        RULE_ZERO(14),
+        RULE_ZERO(15),
+        RULE_ZERO(16),
+        RULE_ZERO(17),
+        RULE_ZERO(18),
+        RULE_ZERO(19),
+        RULE_ZERO(20),
+        RULE_ZERO(21),
+        RULE_ZERO(22),
+        RULE_ZERO(23),
+        RULES_END,
+    },
+
+    .PanelTlv_Rules_Tag14 = {
+        RULE_ZERO(2),
+        RULE_KEEP_BITS(4, 0xA0),
+        RULE_KEEP_BITS(5, 0x7F),
+        RULE_ZERO(6),
+        RULE_KEEP_BITS(7, 0x7F),
+        RULE_KEEP_BITS(8, 0x7F),
+        RULE_KEEP_BITS(9, 0x7F),
+        RULE_KEEP_BITS(11, 0x7F),
+        RULE_KEEP_BITS(12, 0x07),
+        RULE_KEEP_BITS(13, 0xEF),
+        RULE_ZERO(14),
+        RULE_ZERO(15),
+        RULE_ZERO(16),
+        RULE_ZERO(17),
+        RULE_ZERO(18),
+        RULE_ZERO(19),
+        RULE_ZERO(20),
+        RULE_ZERO(21),
+        RULE_ZERO(22),
+        RULE_ZERO(23),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag15 = {
+        RULE_NOT_RANGE(0, 0xFF, 168, 239, 1),
+        RULE_KEEP_BITS(1, 0x7F),
+        RULE_RANGE(1, 0x7F, 0, 7, 0),
+        RULE_ZERO(2),
+        RULE_KEEP_BITS(5, 0x7F),
+        RULE_ZERO(6),
+        RULE_KEEP_BITS(7, 0x7F),
+        RULE_KEEP_BITS(8, 0x7F),
+        RULE_KEEP_BITS(9, 0x7F),
+        RULE_KEEP_BITS(11, 0x7F),
+        RULE_KEEP_BITS(12, 0x3F),
+        RULE_KEEP_BITS(13, 0xEF),
+        RULE_ZERO(14),
+        RULE_ZERO(15),
+        RULE_ZERO(16),
+        RULE_ZERO(17),
+        RULE_ZERO(18),
+        RULE_ZERO(19),
+        RULE_ZERO(20),
+        RULE_ZERO(21),
+        RULE_ZERO(22),
+        RULE_ZERO(23),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag16 = {
+        RULE_NOT_RANGE(0, 0xFF, 168, 239, 1),
+        RULE_KEEP_BITS(1, 0x7F),
+        RULE_RANGE(1, 0x7F, 0, 7, 0),
+        RULE_ZERO(2),
+        RULE_KEEP_BITS(5, 0x7F),
+        RULE_ZERO(6),
+        RULE_KEEP_BITS(7, 0x7F),
+        RULE_KEEP_BITS(8, 0x7F),
+        RULE_KEEP_BITS(9, 0x7F),
+        RULE_KEEP_BITS(11, 0x7F),
+        RULE_KEEP_BITS(12, 0x3F),
+        RULE_KEEP_BITS(13, 0xEF),
+        RULE_ZERO(14),
+        RULE_ZERO(15),
+        RULE_ZERO(16),
+        RULE_ZERO(17),
+        RULE_ZERO(18),
+        RULE_ZERO(19),
+        RULE_ZERO(20),
+        RULE_ZERO(21),
+        RULE_ZERO(22),
+        RULE_ZERO(23),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag19 = {
+        RULE_NOT_RANGE(0, 0xFF, 168, 239, 1),
+        RULE_KEEP_BITS(1, 0x7F),
+        RULE_RANGE(1, 0x7F, 0, 7, 0),
+        RULE_ZERO(2),
+        RULE_KEEP_BITS(5, 0x7F),
+        RULE_ZERO(6),
+        RULE_KEEP_BITS(7, 0x7F),
+        RULE_KEEP_BITS(8, 0x7F),
+        RULE_KEEP_BITS(9, 0x7F),
+        RULE_KEEP_BITS(11, 0x7F),
+        RULE_KEEP_BITS(12, 0xFF),
+        RULE_KEEP_BITS(13, 0xEF),
+        RULE_ZERO(14),
+        RULE_ZERO(15),
+        RULE_ZERO(16),
+        RULE_ZERO(17),
+        RULE_ZERO(18),
+        RULE_ZERO(19),
+        RULE_ZERO(20),
+        RULE_ZERO(21),
+        RULE_ZERO(22),
+        RULE_ZERO(23),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag44 = {
+        RULE_KEEP_BITS(7, 0x3F),
+        RULE_ZERO(9),
+        RULES_END,
+    },
+
+    .PanelTlv_Rules_Tag47 = {
+        RULE_KEEP_BITS(1, 0x1F),
+        RULE_RANGE(1, 0x1F, 0, 17, 0),
+        RULE_KEEP_BITS(2, 0x7F),
+        RULE_RANGE(2, 0x7F, 0, 99, 0),
+        RULE_KEEP_BITS(3, 0xF7),
+        RULE_RANGE(3, 0xF0, 0x00, 0xB0, 0x00),
+        RULE_KEEP_BITS(4, 0xC0),
+        RULE_KEEP_BITS(5, 0x7F),
+        RULE_RANGE(5, 0x7F, 0, 121, 0),
+        RULE_NOT_RANGE(5, 0x7F, 16, 28, 0),
+        RULES_END,
+    },
+
+    .PanelTlv_Rules_Tag43 = {
+        RULE_KEEP_BITS(0, 0x80),
+        RULE_ZERO(2),
+        RULE_ZERO(3),
+        RULES_END,
+    },
+
+    .PanelTlv_Rules_Tag48 = {
+        RULE_RANGE(0, 0xFF, 0, 244, 96),
+        RULE_NOT_RANGE(0, 0xFF, 158, 239, 96),
+        RULE_KEEP_BITS(1, 0x7F),
+        RULE_RANGE(1, 0x7F, 0, 7, 0),
+        RULE_ZERO(2),
+        RULE_KEEP_BITS(3, 0xEF),
+        RULE_SET_BITS(3, 0xE0),
+        RULE_KEEP_BITS(4, 0x47),
+        RULE_KEEP_BITS(5, 0x0E),
+        RULE_KEEP_BITS(6, 0x04),
+        RULE_KEEP_BITS(7, 0x30),
+        RULE_KEEP_BITS(9, 0x01),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag90 = {
+        RULE_KEEP_BITS(0, 0x03),
+        RULE_KEEP_BITS(1, 0x02),
+        RULE_KEEP_BITS(2, 0x67),
+        RULE_KEEP_BITS(3, 0x03),
+        RULE_ONE_OF(4, 0xFF, 5, 64, 40, 52, 64, 76, 88),
+        RULE_ZERO(5),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag60 = {
+        RULE_KEEP_BITS(1, 0xE0),
+        RULE_ZERO(2),
+        RULE_ZERO(3),
+        RULES_END,
+    },
+
+    .PanelTlv_Rules_Tag61 = {
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag68 = {
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag70 = {
+        RULE_KEEP_BITS(0, 0x07),
+        RULE_KEEP_BITS(1, 0x7F),
+        RULE_RANGE(2, 0xFF, 0, 11, 5),
+        RULE_NOT_RANGE(3, 0xFF, 15, 254, 255),
+        RULE_NONE_OF(3, 0xFF, 1, 255, 2),
+        RULE_KEEP_BITS(4, 0x0F),
+        RULE_RANGE(4, 0x0F, 0, 13, 7),
+        RULE_RANGE(5, 0xFF, 1, 16, 2),
+        RULE_RANGE(6, 0xFF, 1, 16, 4),
+        RULE_KEEP_BITS(7, 0x07),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag72 = {
+        RULE_RANGE(0, 0xFF, 0, 15, 0),
+        RULE_KEEP_BITS(1, 0x7F),
+        RULE_ZERO(2),
+        RULE_KEEP_BITS(4, 0x40),
+        RULE_KEEP_BITS(5, 0x7F),
+        RULE_KEEP_BITS(7, 0x7F),
+        RULE_CLEAR_BITS(8, 0x80),
+        RULE_CLEAR_BITS(9, 0x80),
+        RULE_CLEAR_BITS(10, 0x80),
+        RULE_CLEAR_BITS(11, 0x80),
+        RULE_CLEAR_BITS(12, 0x80),
+        RULE_CLEAR_BITS(13, 0x80),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag92 = {
+        RULE_KEEP_BITS(1, 0x8F),
+        RULE_RANGE(1, 0x0F, 0, 11, 0),
+        RULES_END,
+    },
+
+    .PanelTlv_Rules_Tag71 = {
+        RULE_KEEP_BITS(0, 0x03),
+        RULE_ZERO(1),
+        RULE_ZERO(2),
+        RULE_ZERO(3),
+        RULES_END,
+    },
+
+    .PanelTlv_Rules_Tag99 = {
+        RULE_KEEP_BITS(1, 0x1F),
+        RULE_ZERO(27),
+        RULE_ZERO(28),
+        RULE_ZERO(29),
+        RULES_END,
+    },
+
+    .PanelTlv_Rules_Tag80 = {
+        RULE_KEEP_BITS(0, 0x7F),
+        RULE_NONE_OF(0, 0x03, 1, 0, 2),
+        RULE_KEEP_BITS(1, 0x0C),
+        RULE_KEEP_BITS(2, 0x1C),
+        RULE_NONE_OF(2, 0x18, 1, 0x00, 0x10),
+        RULE_KEEP_BITS(3, 0xC5),
+        RULE_CLEAR_BITS(4, 0x3F),
+        RULE_KEEP_BITS(5, 0x3F),
+        RULE_KEEP_BITS(10, 0x03),
+        RULE_RANGE(10, 0x03, 0, 2, 0),
+        RULE_RANGE(12, 0xFF, 1, 127, 80),
+        RULE_ZERO(13),
+        RULES_END,
+    },
+
+    .PanelTlv_Rules_Tag17 = {
+        RULE_NOT_RANGE(0, 0xFF, 168, 239, 1),
+        RULE_KEEP_BITS(1, 0x7F),
+        RULE_RANGE(1, 0x7F, 0, 7, 0),
+        RULE_ZERO(2),
+        RULE_SET_BITS(4, 0x10),
+        RULE_KEEP_BITS(5, 0x7F),
+        RULE_ZERO(6),
+        RULE_KEEP_BITS(7, 0x7F),
+        RULE_KEEP_BITS(8, 0x7F),
+        RULE_KEEP_BITS(9, 0x7F),
+        RULE_KEEP_BITS(11, 0x7F),
+        RULE_KEEP_BITS(12, 0x3F),
+        RULE_KEEP_BITS(13, 0xEF),
+        RULE_ZERO(14),
+        RULE_ZERO(15),
+        RULE_ZERO(16),
+        RULE_ZERO(17),
+        RULE_ZERO(18),
+        RULE_ZERO(19),
+        RULE_ZERO(20),
+        RULE_ZERO(21),
+        RULE_ZERO(22),
+        RULE_ZERO(23),
+        RULES_END,
+    },
+
+    .PanelTlv_Rules_Tag18 = {
+        RULE_NOT_RANGE(0, 0xFF, 168, 239, 1),
+        RULE_KEEP_BITS(1, 0x7F),
+        RULE_RANGE(1, 0x7F, 0, 7, 0),
+        RULE_ZERO(2),
+        RULE_SET_BITS(4, 0x10),
+        RULE_KEEP_BITS(5, 0x7F),
+        RULE_ZERO(6),
+        RULE_KEEP_BITS(7, 0x7F),
+        RULE_KEEP_BITS(8, 0x7F),
+        RULE_KEEP_BITS(9, 0x7F),
+        RULE_KEEP_BITS(11, 0x7F),
+        RULE_KEEP_BITS(12, 0x3F),
+        RULE_ZERO(14),
+        RULE_ZERO(15),
+        RULE_ZERO(16),
+        RULE_ZERO(17),
+        RULE_ZERO(18),
+        RULE_ZERO(19),
+        RULE_ZERO(20),
+        RULE_ZERO(21),
+        RULE_ZERO(22),
+        RULE_ZERO(23),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag98 = {
+        RULE_KEEP_BITS(0, 0x40),
+        RULE_RANGE(1, 0x7F, 0, 80, 0),
+        RULE_ZERO(2),
+        RULE_KEEP_BITS(3, 0x71),
+        RULE_RANGE(3, 0x70, 0x10, 0x30, 0x20),
+        RULE_ZERO(5),
+        RULE_ZERO(6),
+        RULE_KEEP_BITS(9, 0x03),
+        RULE_RANGE(10, 0xFF, 0, 99, 90),
+        RULE_KEEP_BITS(11, 0xC0),
+        RULE_ZERO(12),
+        RULE_ZERO(13),
+        RULE_KEEP_BITS(14, 0x03),
+        RULE_RANGE(14, 0x03, 0, 2, 0),
+        RULE_ZERO(15),
+        RULE_ZERO(16),
+        RULE_ZERO(17),
+        RULES_END,
+    },
+
+    .PanelTlv_Rules_Tag91 = {
+        RULE_ZERO(1),
+        RULE_ONE_OF(2, 0xFF, 2, 0, 0, 1),
+        RULE_KEEP_BITS(3, 0x07),
+        RULE_ZERO(4),
+        RULE_ZERO(5),
+        RULE_ZERO(6),
+        RULE_ZERO(7),
+        RULE_ZERO(8),
+        RULE_ZERO(9),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag93 = {
+        RULE_KEEP_BITS(0, 0x0F),
+        RULE_RANGE(0, 0x0F, 0, 9, 6),
+        RULE_KEEP_BITS(1, 0xF0),
+        RULE_KEEP_BITS(2, 0x7F),
+        RULE_RANGE(2, 0x7F, 0, 127, 127),
+        RULE_KEEP_BITS(3, 0x7F),
+        RULE_RANGE(3, 0x7F, 0, 127, 127),
+        RULE_KEEP_BITS(4, 0x0F),
+        RULE_RANGE(4, 0x0F, 0, 12, 2),
+        RULE_RANGE(5, 0xFF, 0, 10, 5),
+        RULE_RANGE(6, 0x7F, 1, 127, 1),
+        RULE_RANGE(7, 0xFF, 0, 3, 0),
+        RULE_RANGE(8, 0x7F, 1, 127, 1),
+        RULE_STORE(9, 64),
+        RULE_STORE(10, 64),
+        RULE_STORE(11, 64),
+        RULE_STORE(12, 64),
+        RULE_STORE(13, 64),
+        RULE_STORE(14, 64),
+        RULE_STORE(15, 64),
+        RULE_STORE(16, 64),
+        RULE_STORE(17, 64),
+        RULE_STORE(18, 64),
+        RULE_STORE(19, 64),
+        RULE_STORE(20, 64),
+        RULE_STORE(21, 64),
+        RULE_STORE(22, 64),
+        RULE_STORE(23, 64),
+        RULE_STORE(24, 64),
+        RULES_END,
+    },
+
+    .PanelTlv_Rules_TagC0 = {
+        RULE_ZERO(0),
+        RULE_ZERO(1),
+        RULE_ZERO(2),
+        RULE_ZERO(3),
+        RULE_ZERO(4),
+        RULE_ZERO(5),
+        RULE_ZERO(6),
+        RULE_ZERO(7),
+        RULE_ZERO(8),
+        RULE_ZERO(9),
+        RULE_ZERO(10),
+        RULE_ZERO(11),
+        RULE_ZERO(12),
+        RULE_ZERO(13),
+        RULE_ZERO(14),
+        RULE_ZERO(15),
+        RULE_ZERO(16),
+        RULE_ZERO(17),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag49 = {
+        RULE_ZERO(0),
+        RULE_ZERO(1),
+        RULE_ZERO(2),
+        RULE_ZERO(3),
+        RULE_ZERO(4),
+        RULE_ZERO(5),
+        RULE_ZERO(6),
+        RULE_ZERO(7),
+        RULE_ZERO(8),
+        RULE_ZERO(9),
+        RULE_ZERO(10),
+        RULE_ZERO(11),
+        RULE_ZERO(12),
+        RULE_ZERO(13),
+        RULE_ZERO(14),
+        RULE_ZERO(15),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Rules_Tag9A = {
+        RULE_ZERO(0),
+        RULE_ZERO(1),
+        RULE_ZERO(2),
+        RULE_ZERO(3),
+        RULE_ZERO(20),
+        RULE_ZERO(21),
+        RULE_ZERO(22),
+        RULE_ZERO(23),
+        RULE_ZERO(24),
+        RULE_ZERO(25),
+        RULES_END, 0xFF  /* to an even address */
+    },
+
+    .PanelTlv_Block0_Layout = {
+        /*  0 */ { 0x000, SELF(PanelTlv_Rules_Tag78), 0x78, 18 },
+        /*  1 */ { 0x014, SELF(PanelTlv_Rules_Tag00), 0x00, 24 },
+        /*  2 */ { 0x02E, SELF(PanelTlv_Rules_Tag00), 0x01, 24 },
+        /*  3 */ { 0x048, SELF(PanelTlv_Rules_Tag00), 0x02, 24 },
+        /*  4 */ { 0x062, SELF(PanelTlv_Rules_Tag00), 0x03, 24 },
+        /*  5 */ { 0x07C, SELF(PanelTlv_Rules_Tag00), 0x04, 24 },
+        /*  6 */ { 0x096, SELF(PanelTlv_Rules_Tag00), 0x05, 24 },
+        /*  7 */ { 0x0B0, SELF(PanelTlv_Rules_Tag00), 0x06, 24 },
+        /*  8 */ { 0x0CA, SELF(PanelTlv_Rules_Tag00), 0x07, 24 },
+        /*  9 */ { 0x0E4, SELF(PanelTlv_Rules_Tag00), 0x08, 24 },
+        /* 10 */ { 0x0FE, SELF(PanelTlv_Rules_Tag00), 0x09, 24 },
+        /* 11 */ { 0x118, SELF(PanelTlv_Rules_Tag00), 0x0A, 24 },
+        /* 12 */ { 0x132, SELF(PanelTlv_Rules_Tag00), 0x0B, 24 },
+        /* 13 */ { 0x14C, SELF(PanelTlv_Rules_Tag00), 0x0C, 24 },
+        /* 14 */ { 0x166, SELF(PanelTlv_Rules_Tag00), 0x0D, 24 },
+        /* 15 */ { 0x180, SELF(PanelTlv_Rules_Tag00), 0x0E, 24 },
+        /* 16 */ { 0x19A, SELF(PanelTlv_Rules_Tag0F), 0x0F, 24 },
+        /* 17 */ { 0x1B4, SELF(PanelTlv_Rules_Tag10), 0x10, 24 },
+        /* 18 */ { 0x1CE, SELF(PanelTlv_Rules_Tag10), 0x11, 24 },
+        /* 19 */ { 0x1E8, SELF(PanelTlv_Rules_Tag10), 0x12, 24 },
+        /* 20 */ { 0x202, SELF(PanelTlv_Rules_Tag13), 0x13, 24 },
+        /* 21 */ { 0x21C, SELF(PanelTlv_Rules_Tag14), 0x14, 24 },
+        /* 22 */ { 0x236, SELF(PanelTlv_Rules_Tag15), 0x15, 24 },
+        /* 23 */ { 0x250, SELF(PanelTlv_Rules_Tag16), 0x16, 24 },
+        /* 24 */ { 0x26A, SELF(PanelTlv_Rules_Tag19), 0x19, 24 },
+        /* 25 */ { 0x284, SELF(PanelTlv_Rules_Tag44), 0x44, 10 },
+        /* 26 */ { 0x290, SELF(PanelTlv_Rules_Tag44), 0x45, 10 },
+        /* 27 */ { 0x29C, SELF(PanelTlv_Rules_Tag44), 0x46, 10 },
+        /* 28 */ { 0x2A8, SELF(PanelTlv_Rules_Tag47), 0x47, 8 },
+        /* 29 */ { 0x2B2, SELF(PanelTlv_Rules_Tag43), 0x43, 4 },
+        /* 30 */ { 0x2B8, SELF(PanelTlv_Rules_Tag48), 0x48, 10 },
+        /* 31 */ { 0x2C4, SELF(PanelTlv_Rules_Tag90), 0x90, 6 },
+        /* 32 */ { 0x2CC, SELF(PanelTlv_Rules_Tag60), 0x60, 4 },
+        /* 33 */ { 0x2D2, SELF(PanelTlv_Rules_Tag61), 0x61, 24 },
+        /* 34 */ { 0x2EC, SELF(PanelTlv_Rules_Tag61), 0x63, 24 },
+        /* 35 */ { 0x306, SELF(PanelTlv_Rules_Tag61), 0x64, 24 },
+        /* 36 */ { 0x320, SELF(PanelTlv_Rules_Tag61), 0x65, 24 },
+        /* 37 */ { 0x33A, SELF(PanelTlv_Rules_Tag61), 0x66, 24 },
+        /* 38 */ { 0x354, SELF(PanelTlv_Rules_Tag68), 0x68, 10 },
+        /* 39 */ { 0x360, SELF(PanelTlv_Rules_Tag70), 0x70, 8 },
+        /* 40 */ { 0x36A, SELF(PanelTlv_Rules_Tag72), 0x72, 14 },
+        /* 41 */ { 0x37A, SELF(PanelTlv_Rules_Tag92), 0x92, 14 },
+        /* 42 */ { 0x38A, SELF(PanelTlv_Rules_Tag71), 0x71, 2 },
+        /* 43 */ { 0x38E, SELF(PanelTlv_Rules_Tag99), 0x99, 30 },
+        /* 44 */ { 0x3AE, SELF(PanelTlv_Rules_Tag80), 0x80, 14 },
+        /* 45 */ { 0x3BE, SELF(PanelTlv_Rules_End), 0xFF, 0xFF },
+    },
+
+    .PanelTlv_Block1_Layout = {
+        /*  0 */ { 0x000, SELF(PanelTlv_Rules_Tag17), 0x17, 24 },
+        /*  1 */ { 0x01A, SELF(PanelTlv_Rules_Tag18), 0x18, 24 },
+        /*  2 */ { 0x034, SELF(PanelTlv_Rules_Tag98), 0x98, 18 },
+        /*  3 */ { 0x048, SELF(PanelTlv_Rules_Tag91), 0x91, 10 },
+        /*  4 */ { 0x054, SELF(PanelTlv_Rules_Tag93), 0x93, 34 },
+        /*  5 */ { 0x078, SELF(PanelTlv_Rules_TagC0), 0xC0, 18 },
+        /*  6 */ { 0x08C, SELF(PanelTlv_Rules_TagC0), 0xC1, 18 },
+        /*  7 */ { 0x0A0, SELF(PanelTlv_Rules_TagC0), 0xC2, 18 },
+        /*  8 */ { 0x0B4, SELF(PanelTlv_Rules_TagC0), 0xC3, 18 },
+        /*  9 */ { 0x0C8, SELF(PanelTlv_Rules_TagC0), 0xC4, 18 },
+        /* 10 */ { 0x0DC, SELF(PanelTlv_Rules_TagC0), 0xC5, 18 },
+        /* 11 */ { 0x0F0, SELF(PanelTlv_Rules_TagC0), 0xC6, 18 },
+        /* 12 */ { 0x104, SELF(PanelTlv_Rules_TagC0), 0xC7, 18 },
+        /* 13 */ { 0x118, SELF(PanelTlv_Rules_TagC0), 0xC8, 18 },
+        /* 14 */ { 0x12C, SELF(PanelTlv_Rules_TagC0), 0xC9, 18 },
+        /* 15 */ { 0x140, SELF(PanelTlv_Rules_TagC0), 0xCA, 18 },
+        /* 16 */ { 0x154, SELF(PanelTlv_Rules_TagC0), 0xCB, 18 },
+        /* 17 */ { 0x168, SELF(PanelTlv_Rules_TagC0), 0xCC, 18 },
+        /* 18 */ { 0x17C, SELF(PanelTlv_Rules_TagC0), 0xCD, 18 },
+        /* 19 */ { 0x190, SELF(PanelTlv_Rules_TagC0), 0xCE, 18 },
+        /* 20 */ { 0x1A4, SELF(PanelTlv_Rules_TagC0), 0xCF, 18 },
+        /* 21 */ { 0x1B8, SELF(PanelTlv_Rules_TagC0), 0xD0, 18 },
+        /* 22 */ { 0x1CC, SELF(PanelTlv_Rules_TagC0), 0xD1, 18 },
+        /* 23 */ { 0x1E0, SELF(PanelTlv_Rules_TagC0), 0xD2, 18 },
+        /* 24 */ { 0x1F4, SELF(PanelTlv_Rules_TagC0), 0xD3, 18 },
+        /* 25 */ { 0x208, SELF(PanelTlv_Rules_TagC0), 0xD4, 18 },
+        /* 26 */ { 0x21C, SELF(PanelTlv_Rules_TagC0), 0xD7, 18 },
+        /* 27 */ { 0x230, SELF(PanelTlv_Rules_Tag49), 0x49, 16 },
+        /* 28 */ { 0x242, SELF(PanelTlv_Rules_Tag9A), 0x9A, 26 },
+        /* 29 */ { 0x25E, SELF(PanelTlv_Rules_End), 0xFF, 0xFF },
+    },
 
     .field_2b0c = 0xFD50,
 

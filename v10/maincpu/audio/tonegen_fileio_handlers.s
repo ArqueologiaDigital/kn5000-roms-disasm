@@ -24,32 +24,35 @@ ToneGen_IncrementWrap128_Skip:
 ToneGen_Config_AlignByte:
 	ret
 
-ToneGen_Config_InitAllEntries:
+; Validate the live panel -- block 0 at RAM 0xF9A0, block 1 at 0xFD60 -- then ToneGen_DispatchByMode.
+PanelTlv_ValidateLivePanel:
 	ld xwa, 0xf9a0
-	calr DSPCfg_InitAllEntries
+	calr PanelTlv_ValidateBlock0
 	ld xwa, 0xfd60
-	calr DSPCfg_InitAuxEntries
+	calr PanelTlv_ValidateBlock1
 	call ToneGen_DispatchByMode
 	jp SwbtWr_NullRet
 
-ToneGen_Config_InitAllChannels:
+; Validate block 0 of each of the 80 panel memories (RAM 0x1ED400 + 960*n).
+PanelTlv_ValidatePanelMemories:
 	dec 2, xsp
 	push xiz
 	ldw (xsp + 4), 0x0
 	lda xiz, (0x1ed400:24)
 
-ToneGen_Config_InitChannelLoop:
+PanelTlv_ValidatePanelMemories_Loop:
 	ld xwa, xiz
-	calr DSPCfg_InitAllEntries
+	calr PanelTlv_ValidateBlock0
 	incw 1, (xsp + 4)
 	lda xiz, (xiz+960)
 	cpw (xsp + 4), 0x50
-	jr c, ToneGen_Config_InitChannelLoop
+	jr c, PanelTlv_ValidatePanelMemories_Loop
 	pop xiz
 	inc 2, xsp
 	ret
 
-ToneGen_LookupByVoiceIndex:
+; Validate block 0 of panel memory wa, at RAM 0x1ED400 + 960*wa (wa >= 80 returns at once).
+PanelTlv_ValidatePanelMemory:
 	cp	wa, 80
 	ret	nc
 	extz	xwa
@@ -59,12 +62,13 @@ ToneGen_LookupByVoiceIndex:
 	sll	xbc, 6
 	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
-	calr	DSPCfg_InitAllEntries
+	calr	PanelTlv_ValidateBlock0
 	ret
 
-ToneGen_Config_InitAndChannels:
-	calr ToneGen_Config_InitAllEntries
-	jr ToneGen_Config_InitAllChannels
+; Validate the live panel, then the 80 panel memories.
+PanelTlv_ValidateAll:
+	calr PanelTlv_ValidateLivePanel
+	jr PanelTlv_ValidatePanelMemories
 
 ToneGen_ApplyMaskTable:
 	lda xwa, (ToneGen_ApplyMaskTable_Data:24)
@@ -90,12 +94,13 @@ ToneGen_ApplyMaskLoop:
 	inc 8, xsp
 	ret
 
-ToneGen_DSPCfg_Initialize:
-	calr ToneGen_DSPCfg_ResetAll
-	jrl ToneGen_DSPCfg_ResetAllChannels
+; Write every record header ([tag][len]) of the live panel and of the 80 panel memories.
+PanelTlv_WriteAllHeaders:
+	calr PanelTlv_WriteLivePanelHeaders
+	jrl PanelTlv_WritePanelMemoryHeaders
 MidiSysEx_ProcessBlock_Helper13:
 	lda xwa, (0xf480:16)
-	jrl DSPCfg_InitAllEntries
+	jrl PanelTlv_ValidateBlock0
 
 ToneGen_InitAllChannelEntries_Skip:
 	jr Voice_InitAllChannelEntries
@@ -157,73 +162,80 @@ Voice_CopyFromScratch:
 	lda xsp, (xsp + 10)
 	ret
 
-ToneGen_DSPCfg_ResetAll:
+; Write the record headers of the live panel: block 0 at RAM 0xF9A0, block 1 at 0xFD60.
+PanelTlv_WriteLivePanelHeaders:
 	ld xwa, 0xf9a0
-	calr DSPCfg_ResetEntryByTable
+	calr PanelTlv_WriteBlock0Headers
 	ld xwa, 0xfd60
-	jrl DSPCfg_ResetAuxEntries
+	jrl PanelTlv_WriteBlock1Headers
 
-ToneGen_DSPCfg_ResetAllChannels:
+; Write the block-0 record headers of each of the 80 panel memories (RAM 0x1ED400 + 960*n).
+PanelTlv_WritePanelMemoryHeaders:
 	dec 2, xsp
 	push xiz
 	ldw (xsp + 4), 0x0
 	lda xiz, (0x1ed400:24)
 
-ToneGen_DSPCfg_ResetChannelLoop:
+PanelTlv_WritePanelMemoryHeaders_Loop:
 	ld xwa, xiz
-	calr DSPCfg_ResetEntryByTable
+	calr PanelTlv_WriteBlock0Headers
 	incw 1, (xsp + 4)
 	lda xiz, (xiz+960)
 	cpw (xsp + 4), 0x50
-	jr c, ToneGen_DSPCfg_ResetChannelLoop
+	jr c, PanelTlv_WritePanelMemoryHeaders_Loop
 	pop xiz
 	inc 2, xsp
 	ret
 
-DSPCfg_ResetEntryByTable:
+; xwa = a block-0 base.  PanelTlv_WriteRecordHeader for each of the 46 PanelTlv_Block0_Layout records
+; (10 bytes each: index*5*2).
+PanelTlv_WriteBlock0Headers:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
 	ld iz, 0:i3
 
-DSPCfg_ResetEntryLoop:
+PanelTlv_WriteBlock0Headers_Loop:
 	ld bc, iz
 	extz xbc
 	ld xwa, xbc
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, DSPCfg_ResetEntryLoop_Data
+	ld xbc, PanelTlv_Block0_Layout
 	add xbc, xwa
 	ld xwa, (xsp + 2)
-	calr DSPCfg_CopyEntryValues
+	calr PanelTlv_WriteRecordHeader
 	inc 1, iz
 	cp iz, 0x2e
-	jr c, DSPCfg_ResetEntryLoop
+	jr c, PanelTlv_WriteBlock0Headers_Loop
 	popw iz
 	inc 4, xsp
 	ret
 
-DSPCfg_InitAllEntries:
+; xwa = a block-0 base.  PanelTlv_ValidateRecord for each of the 46 PanelTlv_Block0_Layout records; then
+; the five effect records go to DSPCfg_WriteAllSlots_Combined as slots 0..4 -- tags 0x61, 0x63, 0x65, 0x66,
+; 0x64, whose payloads sit at base + 0x2D4, 0x2EE, 0x322, 0x33C, 0x308 (spelled 0xFC74.. - 0xF9A0 below).
+PanelTlv_ValidateBlock0:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
 	ld iz, 0:i3
 
-DSPCfg_InitEntryLoop:
+PanelTlv_ValidateBlock0_Loop:
 	ld wa, iz
 	extz xwa
 	ld xde, xwa
 	sll xde, 2
 	add xde, xwa
 	add xde, xde
-	ld xbc, DSPCfg_ResetEntryLoop_Data
+	ld xbc, PanelTlv_Block0_Layout
 	add xbc, xde
 	ld xwa, (xsp + 2)
-	calr DSPCfg_Init_Entry1
+	calr PanelTlv_ValidateRecord
 	inc 1, iz
 	cp iz, 0x2e
-	jr c, DSPCfg_InitEntryLoop
+	jr c, PanelTlv_ValidateBlock0_Loop
 	lda xbc, (0xfc74:16)
 	sub xbc, 0xf9a0
 	add xbc, (xsp + 2)
@@ -253,33 +265,37 @@ DSPCfg_InitEntryLoop:
 	inc 4, xsp
 	ret
 
-DSPCfg_InitAuxEntries:
+; xwa = a block-1 base.  PanelTlv_ValidateRecord for each of the 30 PanelTlv_Block1_Layout records.
+PanelTlv_ValidateBlock1:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
 	ld iz, 0:i3
 
-; DSPCfg_InitAllEntries handler: entry 0
-DSPCfg_Init_Entry0:
+PanelTlv_ValidateBlock1_Loop:
 	ld bc, iz
 	extz xbc
 	ld xwa, xbc
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, DSPCfg_Init_Entry0_Data
+	ld xbc, PanelTlv_Block1_Layout
 	add xbc, xwa
 	ld xwa, (xsp + 2)
-	calr DSPCfg_Init_Entry1
+	calr PanelTlv_ValidateRecord
 	inc 1, iz
 	cp iz, 0x1e
-	jr c, DSPCfg_Init_Entry0
+	jr c, PanelTlv_ValidateBlock1_Loop
 	popw iz
 	inc 4, xsp
 	ret
 
-; DSPCfg_InitAllEntries handler: entry 1
-DSPCfg_Init_Entry1:
+; xwa = block base, xbc -> a layout record {u32 record_offset, u32 -> field rules, u8 tag, u8 len}
+; (PanelTlv_Block0_Layout / PanelTlv_Block1_Layout, typed as panel_tlv_layout_t in
+; ui_widgets/naka_extension_device.c).  The payload starts at base + record_offset + 2; the rules are
+; applied in order, each by PanelTlv_ApplyFieldRule, which returns the rule's length in hl, up to the 0xFF
+; that ends the list.
+PanelTlv_ValidateRecord:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
@@ -288,72 +304,82 @@ DSPCfg_Init_Entry1:
 	add (xsp + 4), xwa
 	ld xiz, (xbc + 4)
 	cp (xiz), 0xff
-	jr z, DSPCfg_Init_Setup
+	jr z, PanelTlv_ValidateRecord_Return
 
-; DSPCfg_InitAllEntries handler: entry 2
-DSPCfg_Init_Entry2:
+PanelTlv_ValidateRecord_Loop:
 	ld xwa, (xsp + 4)
 	ld xbc, xiz
-	calr DSPCfg_Init_BoundsCheck
+	calr PanelTlv_ApplyFieldRule
 	extz xhl
 	add xiz, xhl
 	cp (xiz), 0xff
-	jr nz, DSPCfg_Init_Entry2
+	jr nz, PanelTlv_ValidateRecord_Loop
 
-; DSPCfg_InitAllEntries setup before dispatch
-DSPCfg_Init_Setup:
+PanelTlv_ValidateRecord_Return:
 	pop xiz
 	inc 4, xsp
 	ret
 
-; DSPCfg_InitAllEntries bounds check and dispatch
-DSPCfg_Init_BoundsCheck:
+; xwa = record payload, xbc -> one field rule.  Byte 0 is the type; the case named below applies it and
+; returns its length in hl.  `off` is a payload byte; a reset keeps the bits outside the mask:
+;   0 {0, off, mask}                  payload[off] &= mask                          KeepBits
+;   1 {1, off, mask}                  payload[off] &= ~mask                         ClearBits
+;   2 {2, off, mask}                  payload[off] |= mask                          SetBits
+;   3 {3, off, mask, lo, hi, dflt}    (byte & mask) outside lo..hi -> dflt          ResetOutsideRange
+;   4 {4, off, mask, lo, hi, dflt}    (byte & mask) inside lo..hi -> dflt           ResetInsideRange
+;   5 {5, off, mask, n, dflt, v1..vn} (byte & mask) not among v1..vn -> dflt        ResetUnlessListed
+;   6 {6, off, mask, n, dflt, v1..vn} (byte & mask) among v1..vn -> dflt            ResetIfListed
+;   7 {7, off, value}                 payload[off] = value                          StoreByte
+;   8 {8, off}                        payload[off] = 0                              ZeroByte
+; The rule lists are PanelTlv_FieldRules (ui_widgets/extension_device_screens.s), written out with RULE_*
+; macros in ui_widgets/naka_extension_device.c.
+PanelTlv_ApplyFieldRule:
 	ld e, (xbc)
 	extz de
 	cp de, 0:i3
-	jr mi, DSPCfg_Init_Finalize
+	jr mi, PanelTlv_ApplyFieldRule_UnknownType
 	cp de, 0x8
-	jr gt, DSPCfg_Init_Finalize
+	jr gt, PanelTlv_ApplyFieldRule_UnknownType
 	add de, de
-	lda xix, (DSPCfg_Init_BoundsCheck_Data:24)
+	lda xix, (PanelTlv_ApplyFieldRule_CaseOffsets:24)
 	ld	de, (xix+de)
-	lda xix, (DSPCfg_InitDispatch:24)
+	lda xix, (PanelTlv_ApplyFieldRule_Case0:24)
 	jp	t, (xix+de)
-; DSPCfg_InitAllEntries dispatch
-DSPCfg_InitDispatch:
-	calr	DSPCfg_InitDispatchData
-	jr	DSPCfg_Init_BoundsCheck_Return
-DSPCfg_Init_BoundsCheck_Case1:
-	calr	DSPCfg_Init_BoundsCheck_Helper
-	jr	DSPCfg_Init_BoundsCheck_Return
-DSPCfg_Init_BoundsCheck_Case2:
-	calr	DSPCfg_Init_BoundsCheck_Helper2
-	jr	DSPCfg_Init_BoundsCheck_Return
-DSPCfg_Init_BoundsCheck_Case3:
-	calr	DSPCfg_Init_BoundsCheck_Helper3
-	jr	DSPCfg_Init_BoundsCheck_Return
-DSPCfg_Init_BoundsCheck_Case4:
-	calr	DSPCfg_Init_BoundsCheck_Helper4
-	jr	DSPCfg_Init_BoundsCheck_Return
-DSPCfg_Init_BoundsCheck_Case5:
-	calr	DSPCfg_Init_BoundsCheck_Helper5
-	jr	DSPCfg_Init_BoundsCheck_Return
-DSPCfg_Init_BoundsCheck_Case6:
-	calr	DSPCfg_Init_BoundsCheck_Helper6
-	jr	DSPCfg_Init_BoundsCheck_Return
-DSPCfg_Init_BoundsCheck_Case7:
-	calr	DSPCfg_Init_BoundsCheck_Helper7
-	jr	DSPCfg_Init_BoundsCheck_Return
-DSPCfg_Init_BoundsCheck_Case8:
-	calr	DSPCfg_Init_BoundsCheck_Helper8
-	jr	DSPCfg_Init_BoundsCheck_Return
+; the nine cases, by type byte, through PanelTlv_ApplyFieldRule_CaseOffsets
+PanelTlv_ApplyFieldRule_Case0:
+	calr	PanelTlv_Rule_KeepBits
+	jr	PanelTlv_ApplyFieldRule_Return
+PanelTlv_ApplyFieldRule_Case1:
+	calr	PanelTlv_Rule_ClearBits
+	jr	PanelTlv_ApplyFieldRule_Return
+PanelTlv_ApplyFieldRule_Case2:
+	calr	PanelTlv_Rule_SetBits
+	jr	PanelTlv_ApplyFieldRule_Return
+PanelTlv_ApplyFieldRule_Case3:
+	calr	PanelTlv_Rule_ResetOutsideRange
+	jr	PanelTlv_ApplyFieldRule_Return
+PanelTlv_ApplyFieldRule_Case4:
+	calr	PanelTlv_Rule_ResetInsideRange
+	jr	PanelTlv_ApplyFieldRule_Return
+PanelTlv_ApplyFieldRule_Case5:
+	calr	PanelTlv_Rule_ResetUnlessListed
+	jr	PanelTlv_ApplyFieldRule_Return
+PanelTlv_ApplyFieldRule_Case6:
+	calr	PanelTlv_Rule_ResetIfListed
+	jr	PanelTlv_ApplyFieldRule_Return
+PanelTlv_ApplyFieldRule_Case7:
+	calr	PanelTlv_Rule_StoreByte
+	jr	PanelTlv_ApplyFieldRule_Return
+PanelTlv_ApplyFieldRule_Case8:
+	calr	PanelTlv_Rule_ZeroByte
+	jr	PanelTlv_ApplyFieldRule_Return
 
-; DSPCfg_InitAllEntries finalize after dispatch
-DSPCfg_Init_Finalize:
+; a type byte above 8 counts as a 1-byte rule
+PanelTlv_ApplyFieldRule_UnknownType:
 	ld hl, 1:i3
-DSPCfg_Init_BoundsCheck_Return:
+PanelTlv_ApplyFieldRule_Return:
 	ret
-DSPCfg_InitDispatchData:
+PanelTlv_Rule_KeepBits:
 	ld	xde, xbc
 	ld	l, (xde+0x1)
 	extz	hl
@@ -361,7 +387,7 @@ DSPCfg_InitDispatchData:
 	and	(xwa+hl), c
 	ld	hl, 3:i3
 	ret
-DSPCfg_Init_BoundsCheck_Helper:
+PanelTlv_Rule_ClearBits:
 	ld	xde, xwa
 	ld	l, (xbc+0x1)
 	extz	hl
@@ -370,7 +396,7 @@ DSPCfg_Init_BoundsCheck_Helper:
 	and	(xde+hl), a
 	ld	hl, 3:i3
 	ret
-DSPCfg_Init_BoundsCheck_Helper2:
+PanelTlv_Rule_SetBits:
 	ld	xde, xbc
 	ld	l, (xde+0x1)
 	extz	hl
@@ -378,7 +404,7 @@ DSPCfg_Init_BoundsCheck_Helper2:
 	or	(xwa+hl), c
 	ld	hl, 3:i3
 	ret
-DSPCfg_Init_BoundsCheck_Helper3:
+PanelTlv_Rule_ResetOutsideRange:
 	ld	xde, xwa
 	ld	a, (xbc+0x1)
 	extz	wa
@@ -387,20 +413,20 @@ DSPCfg_Init_BoundsCheck_Helper3:
 	ld	a, l
 	and	a, (xde)
 	cp	(xbc+0x3), a
-	jr	ugt, DSPCfg_InitDispatchData_Skip
+	jr	ugt, PanelTlv_Rule_ResetOutsideRange_Reset
 	ld	a, l
 	and	a, (xde)
 	cp	(xbc+0x4), a
-	jr	nc, DSPCfg_InitDispatchData_Skip2
-DSPCfg_InitDispatchData_Skip:
+	jr	nc, PanelTlv_Rule_ResetOutsideRange_Return
+PanelTlv_Rule_ResetOutsideRange_Reset:
 	cpl	l
 	and	(xde), l
 	ld	a, (xbc+0x5)
 	or	(xde), a
-DSPCfg_InitDispatchData_Skip2:
+PanelTlv_Rule_ResetOutsideRange_Return:
 	ld	hl, 6:i3
 	ret
-DSPCfg_Init_BoundsCheck_Helper4:
+PanelTlv_Rule_ResetInsideRange:
 	ld	xde, xwa
 	ld	a, (xbc+0x1)
 	extz	wa
@@ -409,19 +435,19 @@ DSPCfg_Init_BoundsCheck_Helper4:
 	ld	a, l
 	and	a, (xde)
 	cp	(xbc+0x3), a
-	jr	ugt, DSPCfg_InitDispatchData_Skip3
+	jr	ugt, PanelTlv_Rule_ResetInsideRange_Return
 	ld	a, l
 	and	a, (xde)
 	cp	(xbc+0x4), a
-	jr	c, DSPCfg_InitDispatchData_Skip3
+	jr	c, PanelTlv_Rule_ResetInsideRange_Return
 	cpl	l
 	and	(xde), l
 	ld	a, (xbc+0x5)
 	or	(xde), a
-DSPCfg_InitDispatchData_Skip3:
+PanelTlv_Rule_ResetInsideRange_Return:
 	ld	hl, 6:i3
 	ret
-DSPCfg_Init_BoundsCheck_Helper5:
+PanelTlv_Rule_ResetUnlessListed:
 	dec	6, xsp
 	pushw	iz
 	ld	xde, xbc
@@ -440,34 +466,34 @@ DSPCfg_Init_BoundsCheck_Helper5:
 	and	h, (xwa)
 	ld	xiy, 5:i3
 	cp	ix, iz
-	jr	nc, DSPCfg_Init_BoundsCheck_Skip2
-DSPCfg_Init_BoundsCheck_Loop:
+	jr	nc, PanelTlv_Rule_ResetUnlessListed_Reset
+PanelTlv_Rule_ResetUnlessListed_Loop:
 	ld	xbc, xiy
 	add	xbc, xde
 	cp	(xbc), h
-	jr	nz, DSPCfg_Init_BoundsCheck_Skip
+	jr	nz, PanelTlv_Rule_ResetUnlessListed_Next
 	ld	a, (xsp+0x6)
-	jr	DSPCfg_Init_BoundsCheck_Join
-DSPCfg_Init_BoundsCheck_Skip:
+	jr	PanelTlv_Rule_ResetUnlessListed_Return
+PanelTlv_Rule_ResetUnlessListed_Next:
 	inc	1, ix
 	inc	1, xiy
 	cp	ix, iz
-	jr	c, DSPCfg_Init_BoundsCheck_Loop
-DSPCfg_Init_BoundsCheck_Skip2:
+	jr	c, PanelTlv_Rule_ResetUnlessListed_Loop
+PanelTlv_Rule_ResetUnlessListed_Reset:
 	cpl	l
 	and	(xwa), l
 	ld	c, (xde+0x4)
 	or	(xwa), c
 	ld	xwa, (xsp+0x2)
 	ld	a, (xwa)
-DSPCfg_Init_BoundsCheck_Join:
+PanelTlv_Rule_ResetUnlessListed_Return:
 	inc	5, a
 	ld	l, a
 	extz	hl
 	popw	iz
 	inc	6, xsp
 	ret
-DSPCfg_Init_BoundsCheck_Helper6:
+PanelTlv_Rule_ResetIfListed:
 	dec	4, xsp
 	pushw	iz
 	ld	xde, xbc
@@ -485,23 +511,23 @@ DSPCfg_Init_BoundsCheck_Helper6:
 	and	h, (xwa)
 	ld	xix, 5:i3
 	cp	iy, iz
-	jr	nc, DSPCfg_Init_BoundsCheck_Join2
-DSPCfg_InitDispatchData_Loop:
+	jr	nc, PanelTlv_Rule_ResetIfListed_Return
+PanelTlv_Rule_ResetIfListed_Loop:
 	ld	xbc, xix
 	add	xbc, xde
 	cp	(xbc), h
-	jr	nz, DSPCfg_Init_BoundsCheck_Skip3
+	jr	nz, PanelTlv_Rule_ResetIfListed_Next
 	cpl	l
 	and	(xwa), l
 	ld	c, (xde+0x4)
 	or	(xwa), c
-	jr	DSPCfg_Init_BoundsCheck_Join2
-DSPCfg_Init_BoundsCheck_Skip3:
+	jr	PanelTlv_Rule_ResetIfListed_Return
+PanelTlv_Rule_ResetIfListed_Next:
 	inc	1, iy
 	inc	1, xix
 	cp	iy, iz
-	jr	c, DSPCfg_InitDispatchData_Loop
-DSPCfg_Init_BoundsCheck_Join2:
+	jr	c, PanelTlv_Rule_ResetIfListed_Loop
+PanelTlv_Rule_ResetIfListed_Return:
 	ld	xwa, (xsp+0x2)
 	ld	l, (xwa)
 	inc	5, l
@@ -509,7 +535,7 @@ DSPCfg_Init_BoundsCheck_Join2:
 	popw	iz
 	inc	4, xsp
 	ret
-DSPCfg_Init_BoundsCheck_Helper7:
+PanelTlv_Rule_StoreByte:
 	ld	xde, xbc
 	ld	l, (xde+0x1)
 	extz	hl
@@ -517,40 +543,42 @@ DSPCfg_Init_BoundsCheck_Helper7:
 	ld	(xwa+hl), c
 	ld	hl, 3:i3
 	ret
-DSPCfg_Init_BoundsCheck_Helper8:
+PanelTlv_Rule_ZeroByte:
 	ld	c, (xbc+0x1)
 	extz	bc
 	ld	(xwa+bc), 0x00
 	ld	hl, 2:i3
 	ret
 	lda_d16	xwa, (0xf480)
-	jrl	DSPCfg_ResetEntryByTable
+	jrl	PanelTlv_WriteBlock0Headers
 
-DSPCfg_ResetAuxEntries:
+; xwa = a block-1 base.  PanelTlv_WriteRecordHeader for each of the 30 PanelTlv_Block1_Layout records.
+PanelTlv_WriteBlock1Headers:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
 	ld iz, 0:i3
 
-DSPCfg_ResetAuxEntryLoop:
+PanelTlv_WriteBlock1Headers_Loop:
 	ld bc, iz
 	extz xbc
 	ld xwa, xbc
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, DSPCfg_Init_Entry0_Data
+	ld xbc, PanelTlv_Block1_Layout
 	add xbc, xwa
 	ld xwa, (xsp + 2)
-	calr DSPCfg_CopyEntryValues
+	calr PanelTlv_WriteRecordHeader
 	inc 1, iz
 	cp iz, 0x1e
-	jr c, DSPCfg_ResetAuxEntryLoop
+	jr c, PanelTlv_WriteBlock1Headers_Loop
 	popw iz
 	inc 4, xsp
 	ret
 
-DSPCfg_CopyEntryValues:
+; xwa = block base, xbc -> a layout record: base[record_offset] = tag, base[record_offset + 1] = len.
+PanelTlv_WriteRecordHeader:
 	ld xde, xbc
 	ld xbc, (xde)
 	add xwa, xbc
@@ -855,7 +883,7 @@ ToneGen_FileIO_SaveAndSync:
 	mrib4 0x80, 0x19, 0x50, 0xfd
 	mrdb5 0x88, 0x01, 0x19, 0x52, 0xfd
 	mrdb5 0x88, 0x02, 0x19, 0x54, 0xfd
-	call ToneGen_Config_InitAllEntries
+	call PanelTlv_ValidateLivePanel
 	call ToneGen_InitAllChannelEntries_Skip
 	calr SoundParam_NotifyMultipleChanges
 	pop xiz

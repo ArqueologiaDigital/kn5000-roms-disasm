@@ -3839,7 +3839,7 @@ FileIO_ByteBlock_DemoProc1_Helper5:
 	extz	wa
 	cp	bc, 0:i3
 	jp	lt, (VoiceData_InitAndCopyParams:24)
-	jp	ToneGen_LookupByVoiceIndex
+	jp	PanelTlv_ValidatePanelMemory
 LoadRegion1_OpenSuccess_Helper:
 	ret
 LoadRegion1_OpenSuccess_Helper2:
@@ -3861,7 +3861,7 @@ BitMapOut_UpdateWidget_Finalize_Loop:
 	extz	wa
 	sll	wa, 3
 	add	wa, bc
-	call	ToneGen_LookupByVoiceIndex
+	call	PanelTlv_ValidatePanelMemory
 	inc1b_erp 251
 	cp_erpb 251, 8
 	jr c, BitMapOut_UpdateWidget_Finalize_Loop

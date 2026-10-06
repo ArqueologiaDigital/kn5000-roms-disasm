@@ -216,6 +216,11 @@ of them 166.  The script prints this sweep as check **C4** so the limitation sta
   *not* established for type 4, and tag `0x48` carries a type-3 `(0, 244, 96)` and a type-4
   `(158, 239, 96)` descriptor on the *same* byte, which the `(min, max, default)` reading cannot
   explain.  Treat the drum parts' `+0` range as **unknown**.
+  **Resolved 2026-10-06 from the code** (`PanelTlv_Rule_ResetInsideRange`, see the corrected grammar
+  in `README-lsw-panel-schema.md`): type 4 resets the field when it lies INSIDE lo..hi.  So the drum
+  parts' `RULE_NOT_RANGE(0, 0xFF, 168, 239, 1)` accepts exactly 0..167 and 240..255 -- the melodic
+  sounds and the drum kits, rejecting the 72-entry hole -- and tag `0x48`'s pair accepts 0..157 and
+  240..244 on that byte, default 96.
 * **Contradiction with an earlier note.**  `README-lsw-panel-schema.md` labels tag `0x14` "Bass"
   and tag `0x13` "Rhythm".  The corpus says tag `0x13` is the part whose sound is a bass in
   171 of 175 records, and tag `0x14` has no `+0` sound descriptor at all.  Whichever way the

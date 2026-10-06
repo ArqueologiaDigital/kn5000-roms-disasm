@@ -21,10 +21,10 @@ Each table entry is 10 bytes:
     +9  u8   PAYLOAD LEN  <- byte 1 of the record in RAM (and in the file)
 
 Consumers, all in audio/tonegen_fileio_handlers.s:
-    DSPCfg_CopyEntryValues   writes tag to base+off and len to base+off+1
-    DSPCfg_Init_Entry1       takes base+off+2 as the payload and walks the descriptor list
-    DSPCfg_ResetEntryByTable / DSPCfg_InitAllEntries   loop 46 entries over base 0xF9A0
-    DSPCfg_ResetAuxEntries   / DSPCfg_InitAuxEntries   loop 30 entries over base 0xFD60
+    PanelTlv_WriteRecordHeader   writes tag to base+off and len to base+off+1
+    PanelTlv_ValidateRecord       takes base+off+2 as the payload and walks the descriptor list
+    PanelTlv_WriteBlock0Headers / PanelTlv_ValidateBlock0   loop 46 entries over base 0xF9A0
+    PanelTlv_WriteBlock1Headers   / PanelTlv_ValidateBlock1   loop 30 entries over base 0xFD60
 
 The last entry of each table has tag=0xFF len=0xFF: that is the `FF FF` block terminator
 the .LSW parser sees.  RESOURCE_INFO_HANDLERS (kn5000_v9_program.s) defines the saved
@@ -36,6 +36,11 @@ FIELD DESCRIPTOR GRAMMAR (byte 0 = type; list ends at 0xFF)
     5,6   : n+5      -- type, offset, mask, count, <count value bytes>
     7     : 3 bytes  -- type, payload offset, default value (whole byte, no mask)
     8     : 2 bytes  -- type, payload offset (plain byte, no mask, no default)
+CORRECTED 2026-10-06 from PanelTlv_ApplyFieldRule's nine cases (the parse lengths above are right):
+    4 resets the field when it is INSIDE lo..hi (3 when outside), so "min, max" fits type 3 only;
+    5,6 are type, offset, mask, count, DEFAULT, <count values> (5: reset unless listed, 6: if listed);
+    8 sets the byte to 0.  See README-lsw-panel-schema.md and
+    scripts/converters/panel_tlv_schema_retype.py.
 
 PASS = the two tables tile 0xF9A0..0xFFC0 with no gap and no overlap, both terminators
 land where the firmware says, and every descriptor list parses to exactly the byte span

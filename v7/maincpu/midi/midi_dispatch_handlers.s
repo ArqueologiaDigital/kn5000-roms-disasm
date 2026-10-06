@@ -9654,7 +9654,7 @@ MidiChan_TimerDispatch_Data:
 	push	xhl
 	push	xix
 	push	xiz
-	call	ToneGen_DSPCfg_Initialize
+	call	PanelTlv_WriteAllHeaders
 	call	SndParam_SyncDisplayBitmap
 	pop	xiz
 	pop	xix
@@ -11259,8 +11259,8 @@ MidiSysEx_ProcessBlock_Helper:
 	push	xhl
 	push	xix
 	push	xiz
-	call	ToneGen_DSPCfg_Initialize
-	call	ToneGen_Config_InitAndChannels
+	call	PanelTlv_WriteAllHeaders
+	call	PanelTlv_ValidateAll
 	call	ToneGen_InitAllChannelEntries_Skip
 	call	ToneGen_DispatchByMode
 	ld	wa, 3:i3
@@ -11927,7 +11927,7 @@ MidiCtrl_FullReconfigure:
 	push xhl
 	push xix
 	push xiz
-	call	ToneGen_DSPCfg_Initialize
+	call	PanelTlv_WriteAllHeaders
 	call	SndParam_SyncDisplayBitmap
 	pop xiz
 	pop xix
@@ -11958,8 +11958,8 @@ SoundMode_ProcessToneAndParams:
 	push xhl
 	push xix
 	push xiz
-	call	ToneGen_DSPCfg_Initialize
-	call	ToneGen_Config_InitAllEntries
+	call	PanelTlv_WriteAllHeaders
+	call	PanelTlv_ValidateLivePanel
 	call	Voice_InitAllChannelEntries
 	call	ToneGen_DispatchByMode
 	ld wa, 3:i3

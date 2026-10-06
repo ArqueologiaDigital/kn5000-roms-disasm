@@ -3636,7 +3636,6 @@ SubCPU_Send_Payload_Data:	.byte	0xff
 ; Labels emitted as .set (exact addresses from ORG/name)
 	.set NakaStr_DataFile1of2, FILETYPE_SIG_TABLE_1 + 19
 	.set NakaStr_DataFilePck, FILETYPE_SIG_TABLE_PCK + 19
-	.set NakaData_FileScreenDispatch, Bitmap_1bit_Flash_Memory_Update + 372
 	.set EffSeqScreen_ChordTypePtr_A, ChordTypeStr_Blank_1 + 2
 	.set EffSeqScreen_ChordTypePtr_B, ChordTypeStr_Type55 + 2
 	.set NakaStr_CtrlParam9e9, ChordTypeStr_Flat13_Only + 1

@@ -397,6 +397,15 @@ hand: entry[0] is `00 00 00 00 dc 8a ed 00 78 12` (offset 0, descriptors at 0xED
 length 0x12), and the descriptor block at 0xED8B9E opens `03 00 ff 00 a7 15` -- type 3, offset +00,
 mask 0xFF, **min 0, max 167, default 21**.
 
+*(2026-10-06)* The descriptors are now read from the code that applies them, and they are C:
+`PanelTlv_ApplyFieldRule` (`audio/tonegen_fileio_handlers.s`) dispatches the type byte to nine
+`PanelTlv_Rule_*` cases, and `ui_widgets/naka_extension_device.c` holds the 32 lists as
+`PanelTlv_Rules_<tag>` (`RULE_*` macros) and both tables as `panel_tlv_layout_t PanelTlv_Block0_Layout[46]`
+/ `PanelTlv_Block1_Layout[30]` (`scripts/converters/panel_tlv_schema_retype.py`). "MIN, MAX and DEFAULT"
+holds for type 3 only: type 4 resets the field when it lies INSIDE the range, types 5/6 test membership
+in a value list, and type 8 zeroes its byte -- see `analysis/disk-format-probes/README-lsw-panel-schema.md`
+for the corrected grammar.
+
 `lsw_file_vs_firmware_schema.py` then aligns each block of a real `.LSW` against that firmware
 sequence: **37/37 tags aligned in order on every block of all seven disks, no permutation.** The
 lengths differ systematically -- all 24 sound records 24->22, tag 60 4->12, tag 61/63 24->30, tag 71

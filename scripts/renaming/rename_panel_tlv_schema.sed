@@ -1,0 +1,52 @@
+# The panel TLV schema (docs/kn-disk-file-formats.md "The framing is FIRMWARE FACT"): the live panel at
+# 0xF9A0 (block 0) / 0xFD60 (block 1) and the 80 panel memories at 0x1ED400 + 960*n are [tag][len][payload]
+# streams laid out by two ROM tables; these routines write the headers and enforce each record's field rules.
+# They were named DSPCfg_* / ToneGen_* by guess.  scripts/tools/decode_panel_tlv_schema.py decodes the tables.
+s/\bDSPCfg_ResetEntryLoop_Data\b/PanelTlv_Block0_Layout/g
+s/\bDSPCfg_Init_Entry0_Data\b/PanelTlv_Block1_Layout/g
+s/\bToneGen_Config_InitAllEntries\b/PanelTlv_ValidateLivePanel/g
+s/\bToneGen_Config_InitAllChannels\b/PanelTlv_ValidatePanelMemories/g
+s/\bToneGen_Config_InitChannelLoop\b/PanelTlv_ValidatePanelMemories_Loop/g
+s/\bToneGen_LookupByVoiceIndex\b/PanelTlv_ValidatePanelMemory/g
+s/\bToneGen_Config_InitAndChannels\b/PanelTlv_ValidateAll/g
+s/\bToneGen_DSPCfg_Initialize\b/PanelTlv_WriteAllHeaders/g
+s/\bToneGen_DSPCfg_ResetAll\b/PanelTlv_WriteLivePanelHeaders/g
+s/\bToneGen_DSPCfg_ResetAllChannels\b/PanelTlv_WritePanelMemoryHeaders/g
+s/\bToneGen_DSPCfg_ResetChannelLoop\b/PanelTlv_WritePanelMemoryHeaders_Loop/g
+s/\bDSPCfg_ResetEntryByTable\b/PanelTlv_WriteBlock0Headers/g
+s/\bDSPCfg_ResetEntryLoop\b/PanelTlv_WriteBlock0Headers_Loop/g
+s/\bDSPCfg_ResetAuxEntries\b/PanelTlv_WriteBlock1Headers/g
+s/\bDSPCfg_ResetAuxEntryLoop\b/PanelTlv_WriteBlock1Headers_Loop/g
+s/\bDSPCfg_CopyEntryValues\b/PanelTlv_WriteRecordHeader/g
+s/\bDSPCfg_InitAllEntries\b/PanelTlv_ValidateBlock0/g
+s/\bDSPCfg_InitEntryLoop\b/PanelTlv_ValidateBlock0_Loop/g
+s/\bDSPCfg_InitAuxEntries\b/PanelTlv_ValidateBlock1/g
+s/\bDSPCfg_Init_Entry0\b/PanelTlv_ValidateBlock1_Loop/g
+s/\bDSPCfg_Init_Entry1\b/PanelTlv_ValidateRecord/g
+s/\bDSPCfg_Init_Entry2\b/PanelTlv_ValidateRecord_Loop/g
+s/\bDSPCfg_Init_Setup\b/PanelTlv_ValidateRecord_Return/g
+s/\bDSPCfg_Init_BoundsCheck_Data\b/PanelTlv_ApplyFieldRule_CaseOffsets/g
+s/\bDSPCfg_Init_BoundsCheck_Return\b/PanelTlv_ApplyFieldRule_Return/g
+s/\bDSPCfg_Init_BoundsCheck_Case\([1-8]\)\b/PanelTlv_ApplyFieldRule_Case\1/g
+s/\bDSPCfg_Init_BoundsCheck\b/PanelTlv_ApplyFieldRule/g
+s/\bDSPCfg_InitDispatch\b/PanelTlv_ApplyFieldRule_Case0/g
+s/\bDSPCfg_Init_Finalize\b/PanelTlv_ApplyFieldRule_UnknownType/g
+s/\bDSPCfg_InitDispatchData\b/PanelTlv_Rule_KeepBits/g
+s/\bDSPCfg_Init_BoundsCheck_Helper\b/PanelTlv_Rule_ClearBits/g
+s/\bDSPCfg_Init_BoundsCheck_Helper2\b/PanelTlv_Rule_SetBits/g
+s/\bDSPCfg_Init_BoundsCheck_Helper3\b/PanelTlv_Rule_ResetOutsideRange/g
+s/\bDSPCfg_InitDispatchData_Skip\b/PanelTlv_Rule_ResetOutsideRange_Reset/g
+s/\bDSPCfg_InitDispatchData_Skip2\b/PanelTlv_Rule_ResetOutsideRange_Return/g
+s/\bDSPCfg_Init_BoundsCheck_Helper4\b/PanelTlv_Rule_ResetInsideRange/g
+s/\bDSPCfg_InitDispatchData_Skip3\b/PanelTlv_Rule_ResetInsideRange_Return/g
+s/\bDSPCfg_Init_BoundsCheck_Helper5\b/PanelTlv_Rule_ResetUnlessListed/g
+s/\bDSPCfg_Init_BoundsCheck_Loop\b/PanelTlv_Rule_ResetUnlessListed_Loop/g
+s/\bDSPCfg_Init_BoundsCheck_Skip\b/PanelTlv_Rule_ResetUnlessListed_Next/g
+s/\bDSPCfg_Init_BoundsCheck_Skip2\b/PanelTlv_Rule_ResetUnlessListed_Reset/g
+s/\bDSPCfg_Init_BoundsCheck_Join\b/PanelTlv_Rule_ResetUnlessListed_Return/g
+s/\bDSPCfg_Init_BoundsCheck_Helper6\b/PanelTlv_Rule_ResetIfListed/g
+s/\bDSPCfg_InitDispatchData_Loop\b/PanelTlv_Rule_ResetIfListed_Loop/g
+s/\bDSPCfg_Init_BoundsCheck_Skip3\b/PanelTlv_Rule_ResetIfListed_Next/g
+s/\bDSPCfg_Init_BoundsCheck_Join2\b/PanelTlv_Rule_ResetIfListed_Return/g
+s/\bDSPCfg_Init_BoundsCheck_Helper7\b/PanelTlv_Rule_StoreByte/g
+s/\bDSPCfg_Init_BoundsCheck_Helper8\b/PanelTlv_Rule_ZeroByte/g

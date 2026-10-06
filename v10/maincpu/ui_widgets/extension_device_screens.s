@@ -893,21 +893,24 @@ InitializeToshi_Str_TT_TEST4:		.incbin "includes/generated/naka_extension_device
 InitializeToshi_Str_TT_TEST5:		.incbin "includes/generated/naka_extension_device.bin", 0x22F2, 0xA	; "TT_TEST5"
 InitializeToshi_Str_TT_TEST6:		.incbin "includes/generated/naka_extension_device.bin", 0x22FC, 0xA	; "TT_TEST6"
 InitializeToshi_Str_TT_EXT:		.incbin "includes/generated/naka_extension_device.bin", 0x2306, 0x8	; "TT_EXT"
-	.incbin "includes/generated/naka_extension_device.bin", 0x230E, 0x506	; 1286 bytes after InitializeToshi_Str_TT_EXT's string; unnamed (they sat under its label until 2026-10-03)
-; [nakarest] naka_extension_device+0x2814  +0x2814..+0x29e0 (0xed8fe0, 460 B)
-; [nakarest] purpose not established: layout of 460 B at 0xed8fe0 not derived; readers below
-; [nakarest] Readers: source references DSPCfg_InitEntryLoop (audio/tonegen_fileio_handlers.s:
-; [nakarest] `ld xbc, DSPCfg_ResetEntryLoop_Data`), DSPCfg_ResetEntryLoop
-; [nakarest] (audio/tonegen_fileio_handlers.s: `ld xbc, DSPCfg_ResetEntryLoop_Data`).
-DSPCfg_ResetEntryLoop_Data:
-	.incbin "includes/generated/naka_extension_device.bin", 0x2814, 0x1CC
-; [nakarest] naka_extension_device+0x29e0  +0x29e0..+0x2b0c (0xed91ac, 300 B)
-; [nakarest] purpose not established: layout of 300 B at 0xed91ac not derived; readers below
-; [nakarest] Readers: source references DSPCfg_Init_Entry0 (audio/tonegen_fileio_handlers.s: `ld
-; [nakarest] xbc, DSPCfg_Init_Entry0_Data`), DSPCfg_ResetAuxEntryLoop
-; [nakarest] (audio/tonegen_fileio_handlers.s: `ld xbc, DSPCfg_Init_Entry0_Data`).
-DSPCfg_Init_Entry0_Data:
-	.incbin "includes/generated/naka_extension_device.bin", 0x29E0, 0x12C
+; PanelTlv_FieldRules -- the 32 field-rule lists of the panel TLV schema (+0x230e..+0x2814, 1286 B):
+; each list is ended by 0xFF, and by one more 0xFF when that leaves it at an odd address.  Read by
+; PanelTlv_ValidateRecord through the +4 pointer of every PanelTlv_Block0_Layout / PanelTlv_Block1_Layout
+; record; PanelTlv_ApplyFieldRule (audio/tonegen_fileio_handlers.s) decodes one rule per call, type byte
+; 0..8.  Typed in ui_widgets/naka_extension_device.c as PanelTlv_Rules_<first tag> with RULE_* macros.
+PanelTlv_FieldRules:	.incbin "includes/generated/naka_extension_device.bin", 0x230E, 0x506
+; PanelTlv_Block0_Layout -- 46 records x 10 B {u32 record_offset, u32 -> field rules, u8 tag, u8 len}:
+; where each [tag][len][payload] record of panel block 0 sits -- the live panel at RAM 0xF9A0 and each of
+; the 80 panel memories at 0x1ED400 + 960*n.  Records chain (offset[i+1] = offset[i] + 2 + len[i]); the
+; last, tag 0xFF len 0xFF at +0x3BE, is the stream's FF FF end mark.  Read by PanelTlv_WriteBlock0Headers
+; (tag, len) and PanelTlv_ValidateBlock0 (rules); typed as panel_tlv_layout_t in
+; ui_widgets/naka_extension_device.c.  See docs/kn-disk-file-formats.md, "The framing is FIRMWARE FACT".
+PanelTlv_Block0_Layout:	.incbin "includes/generated/naka_extension_device.bin", 0x2814, 0x1CC
+; PanelTlv_Block1_Layout -- 30 records x 10 B, the same shape for panel block 1 (live panel RAM 0xFD60,
+; tags 0x17, 0x18, 0x98, 0x91, 0x93, 0xC0..0xD4, 0xD7, 0x49, 0x9A; end mark at +0x25E).  Read by
+; PanelTlv_WriteBlock1Headers and PanelTlv_ValidateBlock1; typed as panel_tlv_layout_t in
+; ui_widgets/naka_extension_device.c.
+PanelTlv_Block1_Layout:	.incbin "includes/generated/naka_extension_device.bin", 0x29E0, 0x12C
 ; [nakarest] naka_extension_device+0x2b0c  +0x2b0c..+0x2b26 (0xed92d8, 26 B)
 ; [nakarest] purpose not established: layout of 26 B at 0xed92d8 not derived; readers below
 ; [nakarest] Readers: source references ToneGen_ApplyMaskTable (audio/tonegen_fileio_handlers.s:
@@ -922,19 +925,19 @@ Voice_InitChannelLoop_Data:
 	.incbin "includes/generated/naka_extension_device.bin", 0x2B26, 0x18
 ; [nakarest] naka_extension_device+0x2b3e  +0x2b3e..+0x2b6e (0xed930a, 48 B)
 ; [nakarest] purpose not established: layout of 48 B at 0xed930a not derived; readers below
-; [nakarest] Readers: source references DSPCfg_Init_BoundsCheck
+; [nakarest] Readers: source references PanelTlv_ApplyFieldRule
 ; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
-; [nakarest] (DSPCfg_Init_BoundsCheck_Data:24)`).
-DSPCfg_Init_BoundsCheck_Data:
-	.short	DSPCfg_InitDispatch - DSPCfg_InitDispatch
-	.short	DSPCfg_Init_BoundsCheck_Case1 - DSPCfg_InitDispatch
-	.short	DSPCfg_Init_BoundsCheck_Case2 - DSPCfg_InitDispatch
-	.short	DSPCfg_Init_BoundsCheck_Case3 - DSPCfg_InitDispatch
-	.short	DSPCfg_Init_BoundsCheck_Case4 - DSPCfg_InitDispatch
-	.short	DSPCfg_Init_BoundsCheck_Case5 - DSPCfg_InitDispatch
-	.short	DSPCfg_Init_BoundsCheck_Case6 - DSPCfg_InitDispatch
-	.short	DSPCfg_Init_BoundsCheck_Case7 - DSPCfg_InitDispatch
-	.short	DSPCfg_Init_BoundsCheck_Case8 - DSPCfg_InitDispatch
+; [nakarest] (PanelTlv_ApplyFieldRule_CaseOffsets:24)`).
+PanelTlv_ApplyFieldRule_CaseOffsets:
+	.short	PanelTlv_ApplyFieldRule_Case0 - PanelTlv_ApplyFieldRule_Case0
+	.short	PanelTlv_ApplyFieldRule_Case1 - PanelTlv_ApplyFieldRule_Case0
+	.short	PanelTlv_ApplyFieldRule_Case2 - PanelTlv_ApplyFieldRule_Case0
+	.short	PanelTlv_ApplyFieldRule_Case3 - PanelTlv_ApplyFieldRule_Case0
+	.short	PanelTlv_ApplyFieldRule_Case4 - PanelTlv_ApplyFieldRule_Case0
+	.short	PanelTlv_ApplyFieldRule_Case5 - PanelTlv_ApplyFieldRule_Case0
+	.short	PanelTlv_ApplyFieldRule_Case6 - PanelTlv_ApplyFieldRule_Case0
+	.short	PanelTlv_ApplyFieldRule_Case7 - PanelTlv_ApplyFieldRule_Case0
+	.short	PanelTlv_ApplyFieldRule_Case8 - PanelTlv_ApplyFieldRule_Case0
 ToneGen_FlashWriteAll_Data_3:	.incbin "includes/generated/naka_extension_device.bin", 0x2B50, 0x4
 ToneGen_FlashWriteAll_Data_4:	.incbin "includes/generated/naka_extension_device.bin", 0x2B54, 0x4
 ToneGen_FlashWriteAll_Data_5:	.incbin "includes/generated/naka_extension_device.bin", 0x2B58, 0xC

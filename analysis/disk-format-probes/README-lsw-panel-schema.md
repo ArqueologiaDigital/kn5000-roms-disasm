@@ -31,9 +31,9 @@ Signal read: two ROM tables of 10-byte entries,
 
     entry = { u32 offset_from_base ; u32 ptr_to_field_descriptor_list ; u8 TAG ; u8 PAYLOAD_LEN }
 
-Consumed by `DSPCfg_CopyEntryValues` (writes tag/len into RAM), `DSPCfg_Init_Entry1` (payload
-starts at `base+off+2`), `DSPCfg_ResetEntryByTable` / `DSPCfg_InitAllEntries` (46 entries over
-0xF9A0) and `DSPCfg_ResetAuxEntries` / `DSPCfg_InitAuxEntries` (30 entries over 0xFD60), all in
+Consumed by `PanelTlv_WriteRecordHeader` (writes tag/len into RAM), `PanelTlv_ValidateRecord` (payload
+starts at `base+off+2`), `PanelTlv_WriteBlock0Headers` / `PanelTlv_ValidateBlock0` (46 entries over
+0xF9A0) and `PanelTlv_WriteBlock1Headers` / `PanelTlv_ValidateBlock1` (30 entries over 0xFD60), all in
 `v9/maincpu/audio/tonegen_fileio_handlers.s`.
 
 Field-descriptor grammar (list ends at `0xFF`; type is byte 0):
@@ -45,6 +45,28 @@ Field-descriptor grammar (list ends at `0xFF`; type is byte 0):
 | 5,6 | n+5 | type, offset, mask, count, `count` value bytes |
 | 7 | 3 | type, payload offset, default (whole byte) |
 | 8 | 2 | type, payload offset (plain byte) |
+
+**Corrected 2026-10-06, from the code.** The handler is now fully disassembled: `PanelTlv_ApplyFieldRule`
+dispatches the type byte to nine cases (`PanelTlv_Rule_*`, `audio/tonegen_fileio_handlers.s`), each
+returning the rule's length. Three readings above change: type **4 is the inverse of type 3** -- it
+resets the field when it lies INSIDE lo..hi -- so "min, max" fits type 3 only; types **5/6 carry a
+default byte** before the `count` values (the n+5 length was right: type, offset, mask, count, default,
+values); and type **8 zeroes** the byte on every validation, it is not a "plain byte". A reset keeps
+the bits outside the mask: byte = (byte & ~mask) | default.
+
+| type | rule | effect |
+|---|---|---|
+| 0 / 1 / 2 | `{t, off, mask}` | byte &= mask / byte &= ~mask / byte \|= mask |
+| 3 | `{3, off, mask, lo, hi, dflt}` | (byte & mask) outside lo..hi -> dflt |
+| 4 | `{4, off, mask, lo, hi, dflt}` | (byte & mask) inside lo..hi -> dflt |
+| 5 | `{5, off, mask, n, dflt, v1..vn}` | (byte & mask) not among v1..vn -> dflt |
+| 6 | `{6, off, mask, n, dflt, v1..vn}` | (byte & mask) among v1..vn -> dflt |
+| 7 | `{7, off, value}` | byte = value |
+| 8 | `{8, off}` | byte = 0 |
+
+The 32 rule lists and both tables are now C (`ui_widgets/naka_extension_device.c`: `PanelTlv_Rules_<tag>`
+written with `RULE_*` macros, `PanelTlv_Block0_Layout` / `PanelTlv_Block1_Layout` as `panel_tlv_layout_t`),
+by `scripts/converters/panel_tlv_schema_retype.py`.
 
 PASS = both tables tile `0xF9A0..0xFFC0` with no gap or overlap, both `FF FF` terminators land
 where the firmware expects, and every descriptor list parses to exactly the span up to the next
@@ -146,8 +168,8 @@ different descriptor default range (168..239) — **[INFERENCE: drum-kit numbers
 | `0x92` | 0xFD1A, len 0x0E | 13 consecutive bytes read one by one by `SendEpilogue_Data` |
 | `0x91` | 0xFDA8, len 0x0A | +3 is a panel-control bit touched by `SetWall_*`, `SongBank_CheckAccompanimentMode` and `NMI_HANDLER` |
 | `0x93` | 0xFDB4, len 0x22 | 9 scalar params then **16 bytes defaulting to 0x40** (centre) — **[INFERENCE: a 16-part pan or balance array]** |
-| `0xC0..0xD4, 0xD7` | 0xFDD8..0xFF8F | 22 identical 0x12-byte records, all sharing descriptor list 0xED8F82 (18 plain bytes, no masks or defaults); never touched by an absolute address anywhere in the disassembly |
-| `0x78` | 0xF9A0, len 0x12 | 16 bytes with min/max/default 32/125/32, then 2 plain bytes. Present on the KN5000, **absent from the floppy files** |
+| `0xC0..0xD4, 0xD7` | 0xFDD8..0xFF8F | 22 identical 0x12-byte records, all sharing descriptor list 0xED8F82 (18 plain bytes, no masks or defaults); never touched by an absolute address anywhere in the disassembly. *(2026-10-06: the 18 descriptors are type 8, which ZEROES each byte on every validation -- see the corrected grammar above)* |
+| `0x78` | 0xF9A0, len 0x12 | 16 bytes with min/max/default 32/125/32, then 2 plain bytes. Present on the KN5000, **absent from the floppy files**. *(2026-10-06: the "2 plain bytes" are zeroed by type-8 rules; and the sixteen range rules check byte 13 twice and byte 14 never)* |
 
 ### The `Lsw*` name vocabulary
 
