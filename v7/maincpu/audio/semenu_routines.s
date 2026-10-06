@@ -2416,21 +2416,21 @@ SeMenu_GoToPageOnEnabledPart:
 	calr	SeMenu_LoadObjEntries
 	ldib_erp	250, 2
 	cp	(xsp+2), 0
-	jr	nz, SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Skip3
+	jr	nz, SeMenu_GoToPageOnEnabledPart_Skip2
 	ldib_erp	250, 4
-SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Skip3:
+SeMenu_GoToPageOnEnabledPart_Skip2:
 	lda	xwa, (xsp+4)
 	calr	SeMenu_ValidatePartNumber
 	ld	a, (xsp+4)
 	extz	wa
 	calr	SeMenu_IsPartEnabled
 	cp	hl, 0:i3
-	jr	z, SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Skip4
+	jr	z, SeMenu_GoToPageOnEnabledPart_Skip3
 	ld	a, (xsp+6)
 	extz	wa
 	ld	bc, 0:i3
 	jr	SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Join2
-SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Skip4:
+SeMenu_GoToPageOnEnabledPart_Skip3:
 	ldib_erp	251, 1
 	cpib_erp	250, 1
 	jr	c, SeMenu_CopyWriteUpdate_Entry7_Code_Helper_Skip6

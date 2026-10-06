@@ -21,9 +21,9 @@ SeScreenData_ListBounds:
 	.long	SeScreenData_0x4D01
 	.long	SeScreenData_0x4D34
 	.long	SeScreenData_0x4D4C
-	.long	SeScreenData_0x4D89
+	.long	SeMenu_PatchEdit_DataBlock_Records
 	.long	SeScreenData_0x4D4C
-	.long	SeScreenData_0x4D89
+	.long	SeMenu_PatchEdit_DataBlock_Records
 	.long	SeScreenData_0x4DAD
 	.long	SeScreenData_0x4DDA
 	.long	SeScreenData_0x4DEE
@@ -98,8 +98,8 @@ SeScreenData_0x4D7F:
 ; SeGfx_DrawIndexedBoundRecord draws entry WA (XIY = (XIY + 4*WA)) -- so the entries that reader
 ; uses are 7 and 8 (corrected 2026-10-02 from "table of 7", Wave 2 claims review)
 ; evidence: SeMenu_PatchEdit_DataBlock_Join+0x6 (0xF1017E)
-; (name SeScreenData_0x4D89 kept: other files use it; the object is ScreenData, see above)
-SeScreenData_0x4D89:
+; (name SeMenu_PatchEdit_DataBlock_Records kept: other files use it; the object is ScreenData, see above)
+SeMenu_PatchEdit_DataBlock_Records:
 	.long	SeScreenData_0x4D4C
 	.long	SeScreenData_0x4D4C
 	.long	SeScreenData_0x4D56
@@ -180,7 +180,7 @@ SeScreenData_0x4E68:
 ; F15A6E..F15A91  [flags:u8][len:u8][payload] records
 ; F15A6E flags=0x02 len=15
 	.byte	0x02, 0x0f, 0x61, 0x06, 0x01, 0x00, 0x20
-	.long	SeScreenData_0x0878 + 0x53
+	.long	SeMenu_DrawPartSelector_Records3 + 0x53
 	.byte	0x03, 0x00, 0x0b, 0x0b
 ; F15A7D flags=0x00 len=10
 	.byte	0x00, 0x0a, 0x62, 0x06, 0xff, 0x00, 0x20, 0x64, 0x0d, 0x02
@@ -197,14 +197,14 @@ SeScreenData_0x4E8B:
 	.long	SeScreenData_0x4E68 + 0x19
 ; 12 pointers to record-pointer tables, one per screen variant = the byte at RAM 0x670; entry -> SeGfx_DrawIndexedBoundRecord
 ; evidence: SeMenu_PatchEdit_DataBlock (0xF10146)
-SeScreenData_0x4E9B:
-; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15ACE-0xF15AFF (49 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=91% dist=8 near SeScreenData_0x4E9B+45
+SeMenu_PatchEdit_DataBlock_Records2:
+; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15ACE-0xF15AFF (49 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=91% dist=8 near SeMenu_PatchEdit_DataBlock_Records2+45
 	.long	SeScreenData_0x4D34
 	.long	SeScreenData_0x4D34
 	.long	SeScreenData_0x4D34
 	.long	SeScreenData_0x4D34
-	.long	SeScreenData_0x4D89
-	.long	SeScreenData_0x4D89
+	.long	SeMenu_PatchEdit_DataBlock_Records
+	.long	SeMenu_PatchEdit_DataBlock_Records
 	.long	SeScreenData_0x4DDA
 	.long	SeScreenData_0x4E16
 	.long	SeScreenData_0x4E54
@@ -213,19 +213,19 @@ SeScreenData_0x4E9B:
 	.long	SeScreenData_0x4E8B
 ; 12 list END pointers, one per screen variant = the byte at RAM 0x670, for the static list the code starts with `ld xiy, <start>`
 ; evidence: SeMenu_NameEdit_DataBlock1 (0xF10020)
-SeScreenData_0x4ECB:
-	.long	SeScreenData_0x46CC + 0x96
-	.long	SeScreenData_0x46CC + 0x96
-	.long	SeScreenData_0x46CC + 0x96
-	.long	SeScreenData_0x46CC + 0x96
-	.long	SeScreenData_0x4780
-	.long	SeScreenData_0x4780
-	.long	SeScreenData_0x46CC + 0x78
-	.long	SeScreenData_0x46CC + 0x78
-	.long	SeScreenData_0x46CC + 0x78
-	.long	SeScreenData_0x46CC + 0x78
-	.long	SeScreenData_0x46CC + 0x5a
-	.long	SeScreenData_0x46CC + 0x5a
+SeMenu_NameEdit_DataBlock1_Records9:
+	.long	SeMenu_NameEdit_DataBlock1_Records + 0x96
+	.long	SeMenu_NameEdit_DataBlock1_Records + 0x96
+	.long	SeMenu_NameEdit_DataBlock1_Records + 0x96
+	.long	SeMenu_NameEdit_DataBlock1_Records + 0x96
+	.long	SeMenu_NameEdit_DataBlock1_Records2
+	.long	SeMenu_NameEdit_DataBlock1_Records2
+	.long	SeMenu_NameEdit_DataBlock1_Records + 0x78
+	.long	SeMenu_NameEdit_DataBlock1_Records + 0x78
+	.long	SeMenu_NameEdit_DataBlock1_Records + 0x78
+	.long	SeMenu_NameEdit_DataBlock1_Records + 0x78
+	.long	SeMenu_NameEdit_DataBlock1_Records + 0x5a
+	.long	SeMenu_NameEdit_DataBlock1_Records + 0x5a
 ; fixed-width string table, 13 chars per entry, 168 B: the text choices of a bound op02/op07 record (its +7 pointer; +11 = chars per entry)
 ; evidence: bound op02 record 0xF164F7
 SeScreenData_0x4EFB:
@@ -246,7 +246,7 @@ TuningSys_Param_01_Data:
 	.ascii	"MONO  STEREO"
 ; static record list (37 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF15D26
 ; evidence: SeMenu_NameEdit_DataBlock2+0xA (0xF100DA)
-SeScreenData_0x4FA3:
+SeMenu_NameEdit_DataBlock2_Records:
 ; F15BA9..F16109  [flags:u8][len:u8][payload] records
 ; F15BA9 flags=0x23 len=5
 	.byte	0x23, 0x05, 0x62, 0x84, 0x00
@@ -535,7 +535,7 @@ SeScreenData_0x53EC:
 SeScreenData_0x5400:
 ; F16006 flags=0x07 len=17
 	.byte	0x07, 0x11, 0x61, 0x06, 0x7f, 0x00, 0x1c
-	.long	SeScreenData_0x2F60 + 0xc
+	.long	SeMenu_NameEditor_HighlightChar_Records2 + 0xc
 	.byte	0x03, 0x00, 0x3d, 0x00, 0x35, 0x00
 ; F16017 flags=0x07 len=17
 	.byte	0x07, 0x11, 0x00, 0x00, 0x00, 0x00, 0x1c
@@ -604,7 +604,7 @@ SeScreenData_0x54B2:
 	.byte	0x09, 0x0c, 0x6b, 0x06, 0x7f, 0x00, 0x17, 0x1c, 0x01, 0x89, 0x00, 0x03
 ; bound record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF160E6
 ; evidence: SeMenu_PresetManager_Init+0x3B (0xF0F643)
-SeScreenData_0x54BE:
+SeMenu_PresetManager_Init_Records:
 ; F160C4 flags=0x07 len=17
 	.byte	0x07, 0x11, 0x6c, 0x06, 0x03, 0x00, 0x17
 	.long	SeScreenData_0x39BE + 0x94
@@ -615,8 +615,8 @@ SeScreenData_0x54BE:
 	.byte	0x03, 0x00, 0x03, 0x01, 0x98, 0x00
 ; single bound record (op 0x03, 11 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF1612B
-SeScreenData_0x54E0:
-; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF160F0-0xF16106 (22 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=80% dist=11 near SeScreenData_0x54E0+10
+SeMenu_PresetManager_Init_Records2:
+; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF160F0-0xF16106 (22 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=80% dist=11 near SeMenu_PresetManager_Init_Records2+10
 ; F160E6 flags=0x03 len=11
 	.byte	0x03, 0x0b, 0x60, 0x06, 0x03, 0x00, 0x05
 	.long	SeScreenData_0x5503
@@ -644,7 +644,7 @@ SeScreenData_0x5503:
 	.short	13, 141, 280, 168
 ; static record list (1 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF1612B
 ; evidence: SeMenu_PresetManager_Init+0x56 (0xF0F65E)
-SeScreenData_0x551B:
+SeMenu_PresetManager_Init_Records3:
 ; F16121
 	.byte	0x1b, 0x0a, 0x0d, 0x00, 0x71, 0x00, 0x18, 0x01, 0xa8, 0x00
 ; table of 17 pointers to bound records; the code loads it into XIY and SeGfx_DrawIndexedBoundRecord draws entry WA (XIY = (XIY + 4*WA))
@@ -671,7 +671,7 @@ DrumDetailEdit_Menu_Table:
 	.long	SeScreenData_0x546A
 ; static record list (20 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF16239
 ; evidence: SeMenu_PresetManager_Load+0x17 (0xF0F6F0)
-SeScreenData_0x5569:
+SeMenu_PresetManager_Load_Records:
 ; se_setup_editor_full: 266 B at 0xF1616F, compiled from audio/sound_editor_screens/se_setup_editor_full.c
 	.incbin "includes/generated/se_setup_editor_full.bin", 0x0, 0xCA
 SeMenu_PresetManager_Load_Data:	.incbin "includes/generated/se_setup_editor_full.bin", 0xCA, 0x40
@@ -751,11 +751,11 @@ SeScreenData_0x57DB:
 	.long	SeApplyConfirm_FlaggedR2Rec
 ; static record list (1 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF163FF
 ; evidence: SeMenu_DataBlock_01+0x4B (0xF103E9)
-SeScreenData_0x57EF:
+SeMenu_DataBlock_01_Records3:
 	.byte	0x1b, 0x0a, 0x0d, 0x00, 0x4c, 0x00, 0x9a, 0x00, 0x88, 0x00
 ; table of 3 boxes {u16 x1, y1, x2, y2}, indexed by the masked value of a bound op03/04/08 record (its +7 pointer)
 ; evidence: bound op03 record 0xF163D6
-SeScreenData_0x57F9:
+SeMenu_DataBlock_01_Records4:
 	.short	13, 76, 154, 104
 	.short	13, 76, 154, 104
 	.short	13, 108, 154, 136
@@ -763,9 +763,9 @@ SeScreenData_0x57F9:
 ; evidence: SeMenu_Utility_CopyBlock+0x7E (0xF0FCD4)
 ; single bound record (op 0x02, 15 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF16459
-SeScreenData_0x5811:
+SeMenu_Utility_CopyBlock_Records2:
 	.byte	0x02, 0x0f, 0x60, 0x06, 0x20, 0x05, 0x20
-	.long	SeScreenData_0x0878 + 0x53
+	.long	SeMenu_DrawPartSelector_Records3 + 0x53
 	.byte	0x03, 0x00, 0x70, 0x1d
 ; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF16459
@@ -790,19 +790,19 @@ SeScreenData_0x5848:
 ; table of 8 pointers to bound records; the code loads it into XIY and SeGfx_DrawIndexedBoundRecord draws entry WA (XIY = (XIY + 4*WA))
 ; evidence: SeMenu_DataBlock_03+0x1D (0xF1043A), SeMenu_DataBlock_03+0x32 (0xF1044F)
 SeScreenData_0x5853:
-	.long	SeScreenData_0x5811
+	.long	SeMenu_Utility_CopyBlock_Records2
 	.long	SeScreenData_0x5820
 	.long	SeScreenData_0x582A
 	.long	SeScreenData_0x5834
 	.long	SeScreenData_0x583E
-	.long	SeScreenData_0x5873
+	.long	SeMenu_DrawEnvKeyOffFields_Records2
 	.long	SeScreenData_0x587D
 	.long	SeScreenData_0x5848
 ; bound record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF1648D
 ; evidence: SeMenu_DrawEnvKeyOffFields+0x19 (0xF0FCFA)
 ; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF16459
-SeScreenData_0x5873:
+SeMenu_DrawEnvKeyOffFields_Records2:
 	.byte	0x00, 0x0a, 0x65, 0x06, 0x7f, 0x00, 0x20, 0x74, 0x22, 0x03
 ; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF16459
@@ -810,7 +810,7 @@ SeScreenData_0x587D:
 	.byte	0x00, 0x0a, 0x66, 0x06, 0x7f, 0x00, 0x20, 0x7a, 0x22, 0x03
 ; static record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF1649B
 ; evidence: SeMenu_DrawEnvKeyOffFields+0x3D (0xF0FD1E)
-SeScreenData_0x5887:
+SeMenu_DrawEnvKeyOffFields_Records3:
 	.byte	0x20, 0x07, 0x74, 0x22, 0x20, 0x2d, 0x2d
 	.byte	0x20, 0x07, 0x7a, 0x22, 0x20, 0x2d, 0x2d
 ; bound record list (8 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF164F7
@@ -823,7 +823,7 @@ SeScreenData_0x5895:
 ; evidence: recptrs table 0xF1652F
 SeScreenData_0x58A0:
 	.byte	0x02, 0x0f, 0x62, 0x06, 0x1f, 0x00, 0x20
-	.long	SeScreenData_0x59A3
+	.long	SeMenu_NameEdit_SetupPath_Records2
 	.byte	0x03, 0x00, 0xc8, 0x10
 ; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF1652F
@@ -858,7 +858,7 @@ SeScreenData_0x58F1:
 	.byte	0x0d, 0x00, 0x8e, 0x1e
 ; single bound record (op 0x02, 15 B), read by GraphicsRender_Start
 ; evidence: SeMenu_NameEdit_HandleInput (0xF10141)
-SeScreenData_0x5900:
+SeMenu_NameEdit_CheckBit7_Records:
 	.byte	0x02, 0x0f, 0x6a, 0x06, 0x80, 0x07, 0x20
 	.long	SeScreenData_0x590F
 	.byte	0x0d, 0x00, 0x8e, 0x1e
@@ -895,11 +895,11 @@ SeScreenData_0x5951:
 	.short	164, 179, 307, 208
 ; static record list (1 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF165A9
 ; evidence: SeMenu_NameEdit_SetupPath+0x10 (0xF10110)
-SeScreenData_0x5999:
+SeMenu_NameEdit_SetupPath_Records:
 	.byte	0x1b, 0x0a, 0x0c, 0x00, 0x3b, 0x00, 0x33, 0x01, 0xd0, 0x00
 ; fixed-width string table, 3 chars per entry, 66 B: the text choices of a bound op02/op07 record (its +7 pointer; +11 = chars per entry)
 ; evidence: bound op02 record 0xF164A6
-SeScreenData_0x59A3:
+SeMenu_NameEdit_SetupPath_Records2:
 	.ascii	"OFF"
 	.ascii	"-10"
 	.ascii	"- 9"

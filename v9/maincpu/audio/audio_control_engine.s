@@ -5101,7 +5101,7 @@ ExtData_ToneParam_DispatchHandler_Skip3:
 	ld	wa, 1:i3
 	ld	bc, 7:i3
 ExtData_ToneParam_DispatchHandler_Join3:
-	calr	ExtData_ToneParam_DispatchHandler_Helper3
+	calr	ExtData_StepTlvField
 ExtData_ToneParam_DispatchHandler_Join4:
 	calr	SwbtWr_FlushAndAppendParams
 ExtData_ToneParam_DispatchHandler_Epilogue:
@@ -5359,7 +5359,7 @@ ExtData_ToneParam_MultiChannel_Skip4:
 	ld	(0x9155:16), 88
 	ld	wa, 2:i3
 	ldw	bc, 255
-	calr	ExtData_ToneParam_DispatchHandler_Helper3
+	calr	ExtData_StepTlvField
 	jr	ExtData_ToneParam_MultiChannel_Join2
 ExtData_ToneParam_MultiChannel_Skip5:
 	ld	xbc, xwa
@@ -5609,7 +5609,7 @@ ExtData_Voice_MixedHandler_Join:
 	ld	(0x9155:16), 0
 	ld	wa, 1:i3
 	ld	bc, 3:i3
-	calr	ExtData_ToneParam_DispatchHandler_Helper3
+	calr	ExtData_StepTlvField
 	calr	SwbtWr_FlushAndAppendParams
 	cp	(50632:16), 255
 	ret	nz
@@ -5662,7 +5662,7 @@ ExtData_Voice_MixedHandler_Skip2:
 	ld	wa, 1:i3
 	ldw	bc, 255
 ExtData_Voice_MixedHandler_Join2:
-	calr	ExtData_ToneParam_DispatchHandler_Helper3
+	calr	ExtData_StepTlvField
 	jr	ExtData_Voice_MixedHandler_Join3
 ExtData_Voice_MixedHandler_Skip3:
 	lda	xbc, (0xfd04:16)
@@ -6864,7 +6864,7 @@ SwbtWr_WriteParamBlock_Skip2:
 SwbtWr_WriteParamBlock_Epilogue4:
 	inc	2, xsp
 	ret
-ExtData_ToneParam_DispatchHandler_Helper3:
+ExtData_StepTlvField:
 	dec	2, xsp
 	ld	(xsp), c
 	ld	c, (0x9131:16)

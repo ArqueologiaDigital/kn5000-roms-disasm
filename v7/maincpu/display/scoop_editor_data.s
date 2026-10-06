@@ -266,14 +266,14 @@ SeAmpAmp1_OnColumn4_Join3:
 	lda	xde, (xhl+8)
 	lda	xhl, (xhl+9)
 	cp	(xsp+14), 0
-	jr	nz, SeAmpAmp1_OnColumn4_Skip5
+	jr	nz, SeAmpAmp1_OnColumn4_Skip4
 	ld	(xwa), 255
 	ld	(xbc), 0
 	ld	(xde), 50
 	ld	(xhl), 206
 	ld	a, 24:opc
 	jr	SeAmpAmp1_OnColumn4_Join4
-SeAmpAmp1_OnColumn4_Skip5:
+SeAmpAmp1_OnColumn4_Skip4:
 	ld	(xwa), 7
 	ld	(xbc), 5
 	ld	(xde), 6
@@ -2015,6 +2015,7 @@ SeMenu_EditFilterCutoff:
 	ld C, 0x4d:opc
 	jr t, .Lc_f05075
 .Lc_f0505c:
+SeMenu_EditFilterCutoff_Skip:
 	ld A,(XSP+0x0e)
 	dec 1,A
 	extz WA
@@ -2025,6 +2026,7 @@ SeMenu_EditFilterCutoff:
 	ld C,A
 	ld (XSP+0x0e),0x00
 .Lc_f05075:
+SeMenu_EditFilterCutoff_Join:
 	ld A,(XSP+0x10)
 	extz WA
 	ld E,(XSP+0x0e)
