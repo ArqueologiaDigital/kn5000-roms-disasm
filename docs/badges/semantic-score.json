@@ -1,24 +1,24 @@
 {
  "date": "2026-10-06",
- "head": "436bd404",
+ "head": "33c663d8",
  "dirty": false,
  "rules": 2,
  "entry_snapshot": "docs/coverage/dispatch-census-2026-10-06-21.json",
  "entry_snapshot_head": "a00e3f9f",
  "score": {
-  "kn5000": 86.37,
+  "kn5000": 86.45,
   "wsa1": 89.54,
-  "all": 86.08
+  "all": 86.16
  },
  "components": {
   "kn5000": {
    "bytes": {
-    "num": 9255609,
+    "num": 9256665,
     "den": 10289152,
-    "pct": 89.96
+    "pct": 89.97
    },
    "names": {
-    "num": 130989,
+    "num": 130992,
     "den": 145899,
     "pct": 89.78
    },
@@ -28,9 +28,9 @@
     "pct": 99.73
    },
    "fields": {
-    "num": 58188,
-    "den": 88171,
-    "pct": 65.99
+    "num": 58191,
+    "den": 87730,
+    "pct": 66.33
    }
   },
   "wsa1": {
@@ -57,12 +57,12 @@
   },
   "all": {
    "bytes": {
-    "num": 11241909,
+    "num": 11242965,
     "den": 12386304,
-    "pct": 90.76
+    "pct": 90.77
    },
    "names": {
-    "num": 145300,
+    "num": 145303,
     "den": 164890,
     "pct": 88.12
    },
@@ -72,22 +72,22 @@
     "pct": 99.43
    },
    "fields": {
-    "num": 58188,
-    "den": 88171,
-    "pct": 65.99
+    "num": 58191,
+    "den": 87730,
+    "pct": 66.33
    }
   }
  },
  "images": {
   "v10": {
    "names": {
-    "semantic": 39665,
+    "semantic": 39666,
     "continuation": 8743,
-    "generic": 4101,
+    "generic": 4100,
     "positional": 751
    },
    "bytes": [
-    1790530,
+    1790882,
     2097152
    ],
    "entry": [
@@ -97,13 +97,13 @@
   },
   "v9": {
    "names": {
-    "semantic": 39665,
+    "semantic": 39666,
     "continuation": 8739,
-    "generic": 4094,
+    "generic": 4093,
     "positional": 752
    },
    "bytes": [
-    1789924,
+    1790276,
     2097152
    ],
    "entry": [
@@ -113,13 +113,13 @@
   },
   "v7": {
    "names": {
-    "semantic": 39555,
+    "semantic": 39556,
     "continuation": 8417,
-    "generic": 4148,
+    "generic": 4147,
     "positional": 839
    },
    "bytes": [
-    1784128,
+    1784480,
     2097152
    ],
    "entry": [
