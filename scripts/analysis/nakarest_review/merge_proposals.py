@@ -3,7 +3,7 @@ Adds asm, size, blob and off_v10 from the inventory.  A piece check that is fals
 the slice's is marked check_on = "slice" (written with slice offsets).  A later piece that kept the slice's old label is
 renamed, because the converter moves the old label to piece 0."""
 import json, os, struct, sys
-ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 os.chdir(sys.argv[1])
 inv = {x["label"]: x for x in json.load(open("inventory.json"))}
 for n in sys.argv[2:]:

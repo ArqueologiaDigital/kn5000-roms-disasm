@@ -3,7 +3,7 @@ piece, its check is true on the v10 bytes, and every cited `file:line` `instruct
 and first operand found within 3 lines of the cited one).  Prints one row per slice; flags are ev-miss / check / size.
 Reads inventory.json from the proposals file's directory."""
 import json, os, re, struct, sys
-ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 SZ = {"uint8_t": 1, "int8_t": 1, "char": 1, "uint16_t": 2, "int16_t": 2, "uint32_t": 4, "int32_t": 4}
 def nel(d):
     n = 1

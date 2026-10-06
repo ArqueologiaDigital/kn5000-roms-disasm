@@ -2,7 +2,7 @@
 note names, its bytes, and how many placeholder / symbolic C members cover it.  Writes WORKDIR/inventory.json, the
 input of a triage batch (see README.md)."""
 import sys, re, glob, os, json, collections
-ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 WORK = os.path.abspath(sys.argv[1])
 os.chdir(ROOT)
 sys.path.insert(0, "scripts/converters")
@@ -10,7 +10,7 @@ import nakarest_c_model as M
 import importlib.util
 spec = importlib.util.spec_from_file_location("ss", "scripts/analysis/semantic_score.py")
 ss = importlib.util.module_from_spec(spec); spec.loader.exec_module(ss)
-INC = re.compile(r'^([A-Za-z_]\w*):\s*\.incbin\s+"includes/generated/(naka_\w+)\.bin",\s*(0x[0-9A-Fa-f]+),\s*(0x[0-9A-Fa-f]+)')
+INC = re.compile(r'^([A-Za-z_]\w*):\s*\.incbin\s+"includes/generated/(naka_\w+)\.bin",\s*(0x[0-9A-Fa-f]+),\s*(0x[0-9A-Fa-f]+)\s*(;.*)?$')
 cbs = {}
 out = []
 for p in sorted(glob.glob("v10/maincpu/**/*.s", recursive=True)):
