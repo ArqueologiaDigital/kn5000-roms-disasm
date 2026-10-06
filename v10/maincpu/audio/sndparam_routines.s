@@ -1317,7 +1317,7 @@ SndParam_RegisterMultiField_Data_Skip5:
 SndParam_RegisterMultiField_Data_Join2:
 	lda	xbc, (0x9704:16)
 	ldto_berp	a, 238
-	.byte 0x89, 0x06, 0xf1
+	cp	a, (xbc+6)
 	jr	nz, SndParam_RegisterMultiField_Data_Skip
 	cpw	(xsp+12), 4
 	jr	nz, SndParam_RegisterMultiField_Data_Join
@@ -1521,7 +1521,7 @@ SndParam_RegisterLinked_Data_Skip8:
 	ld	(xwa), c
 SndParam_RegisterLinked_Data_Join:
 	ld	xbc, (xsp+12)
-	.byte 0x81, 0xf5
+	cp	e, (xbc)
 	jr	nz, SndParam_RegisterLinked_Data_Skip3
 	cpw	(xsp+16), 4
 	jr	nz, SndParam_RegisterLinked_Data_Join2
@@ -1588,7 +1588,7 @@ SndParam_RegisterLinked2_Data_Loop:
 	jr	SndParam_RegisterLinked2_Data_Join4
 SndParam_RegisterLinked2_Data_Skip7:
 	inc	1, bc
-	.byte 0x9c, 0x04, 0xf1
+	cp	bc, (xix+4)
 	jr	lt, SndParam_RegisterLinked2_Data_Loop
 SndParam_RegisterLinked2_Data_Skip8:
 	ld	wa, (xix+7)
@@ -1662,7 +1662,7 @@ SndParam_RegisterLinked2_Data_Skip11:
 SndParam_RegisterLinked2_Data_Join5:
 	lda	xix, (0x9728:16)
 	ldto_berp	a, 238
-	.byte 0x8c, 0x06, 0xf1
+	cp	a, (xix+6)
 	jr	nz, SndParam_RegisterLinked2_Data_Skip
 	cpw	(xsp+12), 4
 	jr	nz, SndParam_RegisterLinked2_Data_Join
@@ -1730,7 +1730,7 @@ SndParam_RegisterSimple_Data_Join:
 SndParam_RegisterSimple_Data_Skip2:
 	inc	8, xiz
 	ld	wa, de
-	.byte 0x96, 0xf0
+	cp	wa, (xiz)
 	jr	z, SndParam_RegisterSimple_Data_Join2
 	ld	(xiz), de
 	ld	xwa, (xsp+4)
@@ -1853,7 +1853,7 @@ SndParam_RegisterChained_Data_Skip7:
 SndParam_RegisterChained_Data_Join2:
 	lda	xbc, (0x974c:16)
 	ld	wa, (xsp+4)
-	.byte 0x89, 0x06, 0xf1
+	cp	a, (xbc+6)
 	jr	z, SndParam_RegisterChained_Data_Join
 	ld	xwa, (xsp+14)
 	ld	a, (xwa)
@@ -2210,7 +2210,7 @@ SndParam_RegisterDual_Data_Loop:
 	jr	SndParam_RegisterDual_Data_Join3
 SndParam_RegisterDual_Data_Skip3:
 	inc	1, de
-	.byte 0x9c, 0x04, 0xf2
+	cp	de, (xix+4)
 	jr	lt, SndParam_RegisterDual_Data_Loop
 SndParam_RegisterDual_Data_Skip4:
 	ld	wa, (xix+7)

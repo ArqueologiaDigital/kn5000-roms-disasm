@@ -2115,7 +2115,7 @@ SetWall_MiscDataAndCode_Data_Code_Join:
 	call	SetWall_MiscDataAndCode_Data_Code_Helper
 	pop_lerp 52
 	ld	xhl, (4349:16)
-	.byte 0xb3, 0xcf
+	bit	7, (xhl)
 	jr	z, SetWall_MiscDataAndCode_Data_Code_Return
 	ld	hl, (xhl+3)
 	cp	hl, 65535

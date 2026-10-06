@@ -593,7 +593,7 @@ DSPCfg_CopyEntryValues_Loop:
 DSPCfg_CopyEntryValues_Loop2:
 	ld	xwa, (xsp+18)
 	ld	a, (xwa)
-	.byte	0x86, 0xf1
+	cp	a, (xiz)
 	jr	z, DSPCfg_CopyEntryValues_Skip2
 	cp	bc, 500
 	jr	c, DSPCfg_CopyEntryValues_Skip

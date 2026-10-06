@@ -45,7 +45,7 @@ PanelButton_DispatchChange_Loop:
 ; xwa -> a 4-byte panel event; an id of 0xFF is no event.  Append it to the event queue at (0xC039),
 ; count at RAM 0x8E8E, 16 deep; when full, mark the event 0xFF instead.
 PanelEvent_Post:
-	.byte 0x80, 0x3f, 0xff	; cp (xwa), 0xff -- an id of 0xFF is no event
+	cp	(xwa), 0xff	; an id of 0xFF is no event
 	ret	z
 	ld	c, (36494:16)
 	cp	c, 15
@@ -61,7 +61,8 @@ PanelEvent_Post:
 	extz	xix
 	add	xix, xde
 	ld	xiy, xwa
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 PanelEvent_Post_Skip:
 	ld	(xwa), 255
 	ret
@@ -148,7 +149,7 @@ PanelButton_ModeKey_Join:
 	ld	(xiz+3), 255
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData_Code_Helper
-	.byte 0x86, 0x3f, 0xff
+	cp	(xiz), 255
 	jr	nz, PanelButton_ModeKey_Skip7
 	ld	xwa, xiz
 	jr	PanelButton_ModeKey_Join3
@@ -235,22 +236,22 @@ FileIO_BytecodeData_Code_Skip13:
 	call	SeqState_GetFlags
 	and	hl, 7
 	jr	z, FileIO_BytecodeData_Code_Skip14
-	.byte 0x8e, 0x02, 0x3f, 0x07
+	cp	(xiz+2), 7
 	jr	nz, FileIO_BytecodeData_Code_Skip14
 	ld	(xiz), 255
 FileIO_BytecodeData_Code_Skip14:
 	lda	xwa, (xiz+2)
-	.byte 0x80, 0x3f, 0x09
+	cp	(xwa), 9
 	jr	nz, FileIO_BytecodeData_Code_Entry
 	cp	(9980:16), 1
 	jr	nz, FileIO_BytecodeData_Code_Entry
 	ld	(xwa), 8
 	jr	FileIO_BytecodeData_Code_Entry2
 FileIO_BytecodeData_Code_Entry:
-	.byte 0x80, 0x3f, 0x08
+	cp	(xwa), 8
 	jr	nz, FileIO_BytecodeData_Code_Skip15
 FileIO_BytecodeData_Code_Entry2:
-	.byte 0xf1, 0x6a, 0x26, 0xc8
+	bit	0, (0x266a:16)
 	jr	z, FileIO_BytecodeData_Code_Skip15
 	ld	(xwa), 10
 FileIO_BytecodeData_Code_Skip15:
@@ -265,7 +266,7 @@ FileIO_BytecodeData_Code_Skip16:
 	ld	(xiz), 255
 	jr	FileIO_BytecodeData_Code_Epilogue4
 FileIO_BytecodeData_Code_Entry3:
-	.byte 0xf1, 0x6a, 0x26, 0xb0
+	res	0, (0x266a:16)
 FileIO_BytecodeData_Code_Epilogue4:
 	pop	xiz
 	ret
@@ -279,7 +280,7 @@ PanelButton_SequencerPlay:
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 19
 	jr	z, PanelButton_SequencerPlay_Epilogue
-	.byte 0xf1, 0x21, 0x04, 0xca
+	bit	2, (0x421:16)
 	jr	nz, PanelButton_SequencerPlay_Skip2
 	ld	a, (10405:16)
 	xor	a, 1
@@ -338,7 +339,7 @@ PanelButton_PairDown_Skip:
 	extz	wa
 	call	CtrlPanel_LookupIndicatorEntry
 	lda	xbc, (xiz+2)
-	.byte 0x81, 0x3f, 0x00
+	cp	(xbc), 0
 	jr	z, PanelButton_PairDown_Skip2
 	.byte 0xe1, 0x84, 0x8e, 0xeb
 	jr	PanelButton_PairDown_Join
@@ -351,7 +352,7 @@ PanelButton_PairDown_Join:
 	ld	xwa, (36488:16)
 	and	xwa, xhl
 	jr	z, PanelButton_PairDown_Skip3
-	.byte 0xb1, 0xb9
+	set	1, (xbc)
 PanelButton_PairDown_Skip3:
 	ld	xwa, xiz
 	calr	PanelEvent_Post
@@ -373,7 +374,7 @@ PanelButton_PairUp_Skip:
 	extz	wa
 	call	CtrlPanel_LookupIndicatorEntry
 	lda	xbc, (xiz+2)
-	.byte 0x81, 0x3f, 0x00
+	cp	(xbc), 0
 	jr	z, PanelButton_PairUp_Skip2
 	.byte 0xe1, 0x88, 0x8e, 0xeb
 	jr	PanelButton_PairUp_Join
@@ -386,7 +387,7 @@ PanelButton_PairUp_Join:
 	ld	xwa, (36484:16)
 	and	xwa, xhl
 	jr	z, PanelButton_PairUp_Skip3
-	.byte 0xb1, 0xb8
+	set	0, (xbc)
 PanelButton_PairUp_Skip3:
 	ld	xwa, xiz
 	calr	PanelEvent_Post
@@ -488,7 +489,7 @@ PanelButton_SoundGroup_Skip6:
 	inc	2, xwa
 	cpib_erp	251, 2
 	jr	ule, PanelButton_SoundGroup_Skip7
-	.byte 0x80, 0x3f, 0x0c
+	cp	(xwa), 12
 	jr	z, FileIO_BytecodeData_Code_Epilogue9
 PanelButton_SoundGroup_Skip7:
 	cp_erpb	251, 15
@@ -496,7 +497,7 @@ PanelButton_SoundGroup_Skip7:
 	cp_erpb	251, 20
 	jr	nz, FileIO_BytecodeData_Code_Skip33
 FileIO_BytecodeData_Code_Entry4:
-	.byte 0x80, 0x3f, 0x0f
+	cp	(xwa), 15
 	jr	nz, FileIO_BytecodeData_Code_Epilogue9
 FileIO_BytecodeData_Code_Skip33:
 	cp_erpb	251, 16
@@ -504,7 +505,7 @@ FileIO_BytecodeData_Code_Skip33:
 	cp_erpb	251, 19
 	jr	ugt, FileIO_BytecodeData_Code_Skip34
 	ld	xwa, (xsp+2)
-	.byte 0x88, 0x02, 0x3f, 0x0f
+	cp	(xwa+2), 15
 	jr	z, FileIO_BytecodeData_Code_Epilogue9
 FileIO_BytecodeData_Code_Skip34:
 	ld	xwa, 192
@@ -554,7 +555,7 @@ PanelButton_RhythmGroup:
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 19
 	jrl	z, PanelButton_RhythmGroup_Epilogue
-	.byte 0xf1, 0xd3, 0x33, 0xc8
+	bit	0, (0x33d3:16)
 	jrl	nz, PanelButton_RhythmGroup_Epilogue
 	cp	a, 14
 	jr	nz, PanelButton_RhythmGroup_Skip
@@ -563,7 +564,7 @@ PanelButton_RhythmGroup:
 	jr	z, PanelButton_RhythmGroup_Skip
 	cp	a, 180
 	jr	nz, PanelButton_RhythmGroup_Epilogue
-	.byte 0xf1, 0xd3, 0x34, 0xc8
+	bit	0, (0x34d3:16)
 	jr	nz, PanelButton_RhythmGroup_Epilogue
 	cp	(13526:16), 12
 	jr	nc, PanelButton_RhythmGroup_Epilogue
@@ -646,7 +647,7 @@ PanelButton_PanelMemoryNumber_Skip2:
 PanelButton_PanelMemoryNumber_Skip3:
 	jr	FileIO_BytecodeData_Code_Epilogue11
 FileIO_BytecodeData_Code_Entry5:
-	.byte 0x8e, 0x02, 0x3f, 0x00
+	cp	(xiz+2), 0
 	jr	z, FileIO_BytecodeData_Code_Skip46
 	call	BitMapOut_PrepareRender_CheckBit1
 	sll	l, 3
@@ -655,7 +656,7 @@ FileIO_BytecodeData_Code_Entry5:
 	ld	a, (xiz+2)
 	call	Util_FindLowestSetBit
 	inc	1, l
-	.byte 0x8f, 0x04, 0x87
+	add	l, (xsp+4)
 	ld	(xiz+2), l
 	ld	(xiz+3), 127
 	ld	xwa, xiz
@@ -671,7 +672,7 @@ FileIO_BytecodeData_Code_Epilogue11:
 PanelButton_PanelMemoryNextBank:
 	push	xiz
 	ld	xiz, xwa
-	.byte 0x8e, 0x02, 0x3f, 0x00
+	cp	(xiz+2), 0
 	jr	z, PanelButton_PanelMemoryNextBank_Epilogue
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
@@ -734,7 +735,7 @@ PanelButton_Octave:
 	lda	xbc, (xiz+2)
 	lda	xde, (xiz+3)
 	ld	a, (xde)
-	.byte 0x81, 0xc1
+	and	a, (xbc)
 	jr	z, PanelButton_Octave_Skip
 	ld	(xbc), 64
 	jr	PanelButton_Octave_Join
@@ -753,7 +754,7 @@ PanelButton_Octave_Epilogue:
 PanelButton_AutoPlayChord:
 	push	xiz
 	ld	xiz, xwa
-	.byte 0x8e, 0x02, 0x3f, 0x00
+	cp	(xiz+2), 0
 	jr	z, PanelButton_AutoPlayChord_Epilogue
 	cp	(CURRENT_MODE:16), 19
 	jr	z, PanelButton_AutoPlayChord_Epilogue
@@ -763,7 +764,7 @@ PanelButton_AutoPlayChord:
 	jr	z, PanelButton_AutoPlayChord_Epilogue
 	ld	xwa, xiz
 	calr	PanelEvent_Post
-	.byte 0xf1, 0x1e, 0x04, 0xca
+	bit	2, (0x41e:16)
 	jr	z, PanelButton_AutoPlayChord_Skip
 	ld	xwa, 163968
 	call	SndParam_LookupReadOnly
@@ -806,7 +807,7 @@ PanelButton_PartSelect:
 PanelButton_PartSelect_Skip:
 	jr	FileIO_BytecodeData_Code_Epilogue16
 FileIO_BytecodeData_Code_Entry6:
-	.byte 0xf1, 0xe2, 0x26, 0xc8
+	bit	0, (0x26e2:16)
 	jr	nz, FileIO_BytecodeData_Code_Epilogue16
 	ld	w, 0:opc
 	extz	xwa
@@ -853,9 +854,9 @@ PanelButton_DigitalEffect:
 	cp	(CURRENT_MODE:16), 19
 	jr	z, PanelButton_DigitalEffect_Epilogue
 	calr	SndParam_ResolveSelectedPartVoice
-	.byte 0x83, 0x3f, 0x0f
+	cp	(xhl), 15
 	jr	z, PanelButton_DigitalEffect_Epilogue
-	.byte 0x83, 0x3f, 0x0c
+	cp	(xhl), 12
 	jr	z, PanelButton_DigitalEffect_Epilogue
 	ld	xwa, xiz
 	calr	PanelEvent_FillSelectedPart
@@ -887,7 +888,7 @@ PanelButton_DspEffect_Skip2:
 	ld	a, (xbc)
 	cp	a, 0:i3
 	jr	z, FileIO_BytecodeData_Code_Entry7
-	.byte 0xf1, 0x92, 0x8e, 0xbd
+	set	5, (0x8e92:16)
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 93
@@ -911,7 +912,7 @@ PanelButton_DspEffect_Join:
 	ld	(xde), 127
 	jr	FileIO_BytecodeData_Code_Join11
 FileIO_BytecodeData_Code_Entry7:
-	.byte 0xf1, 0x92, 0x8e, 0xb5
+	res	5, (0x8e92:16)
 	ld	(xbc), 0
 	ld	(xiz+3), 0
 FileIO_BytecodeData_Code_Join11:
@@ -944,7 +945,7 @@ PanelButton_DigitalReverb_Epilogue:
 PanelButton_Sustain:
 	push	xiz
 	ld	xiz, xwa
-	.byte 0xf1, 0xcd, 0x34, 0xcb
+	bit	3, (0x34cd:16)
 	jr	nz, FileIO_BytecodeData_Code_Epilogue21
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 17
@@ -952,12 +953,12 @@ PanelButton_Sustain:
 	cp	a, 19
 	jr	z, PanelButton_Sustain_Skip
 	calr	SndParam_ResolveSelectedPartVoice
-	.byte 0x83, 0x3f, 0x0f
+	cp	(xhl), 15
 	jr	nz, FileIO_BytecodeData_Code_Entry8
 PanelButton_Sustain_Skip:
 	jr	FileIO_BytecodeData_Code_Epilogue21
 FileIO_BytecodeData_Code_Entry8:
-	.byte 0xf1, 0xf9, 0x90, 0xb1
+	res	1, (0x90f9:16)
 	ld	xwa, xiz
 	calr	PanelEvent_FillSelectedPart
 	ld	xwa, xiz
@@ -977,9 +978,9 @@ PanelButton_MusicStyleArranger:
 	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	z, PanelButton_MusicStyleArranger_Epilogue
-	.byte 0x8e, 0x02, 0x3f, 0x00
+	cp	(xiz+2), 0
 	jr	z, PanelButton_MusicStyleArranger_Skip
-	.byte 0xf1, 0x52, 0x8d, 0xbb
+	set	3, (0x8d52:16)
 PanelButton_MusicStyleArranger_Skip:
 	ld	xwa, xiz
 	calr	PanelEvent_Post
@@ -1075,7 +1076,7 @@ PanelButton_Variation:
 	ld	xwa, (xsp+8)
 	lda	xbc, (xwa+2)
 	lda	xde, (xwa+3)
-	.byte 0x83, 0x3f, 0x0e
+	cp	(xhl), 14
 	jr	nc, PanelButton_Variation_Skip2
 	ldto_berp	a, 251
 	extz	wa
@@ -1083,7 +1084,7 @@ PanelButton_Variation:
 	ld	a, (xhl+wa)
 	ld	(xbc), a
 	ld	(xde), 48
-	.byte 0xf1, 0x52, 0x8d, 0xbb
+	set	3, (0x8d52:16)
 	jr	PanelButton_Variation_Join
 PanelButton_Variation_Skip:
 	jr	PanelButton_Variation_Epilogue
@@ -1273,7 +1274,7 @@ PanelAction_Event27_Epilogue:
 ;   (PART_SELECT, 0x8D3A) into byte 0. Basis: callers + body -- PanelAction_PostUnlessDemo and the other panel actions
 ;   call it on the event frame immediately before PanelEvent_Post.
 PanelEvent_FillSelectedPart:
-	.byte 0x80, 0x3f, 0x00
+	cp	(xwa), 0
 	ret	nz
 	.byte 0x88, 0x01, 0x3f, 0x03
 	ret	z
@@ -1296,7 +1297,7 @@ SndParam_ResolveSelectedPartVoice:
 	call	SndParam_LookupViaEncode
 	lda	xwa, (xsp)
 	ld	(xwa+4), l
-	.byte 0xb8, 0x02, 0x14, 0x3a, 0x8d
+	ld	(xwa+2), (0x8d3a)
 	call	SndParam_ResolveVoiceEntry
 	lda	xhl, (xsp)
 	inc	6, xsp
@@ -1332,16 +1333,23 @@ PanelAction_DispatchPedalFunction:
 	ld	xhl, (xde)
 	call	(xhl)
 	ret
+; PanelAction_PedalFn_Code40: Foot-pedal function [0] of PanelAction_PedalFunctionHandlers, the only handler that
+;   PanelAction_PedalAssignHandlerIndex gives to assignment code 0x40.  Unless the mode is 17 or (0x34CD) bit 3 is
+;   set, it sets (0x90F9) bit 1 and, for each of the up-to-16 part tags in the 0xFF-terminated list at 0x90FB whose
+;   SndParam_LookupViaEncode(tag, 0x601) is 1, posts the panel event {tag, 4, 8 if the pedal event's bytes +2 and
+;   +3 share a bit else 0, 8}.  [INFERENCE] 0x40 is MIDI CC64, so this is probably the sustain function.  Basis:
+;   table + body.
+PanelAction_PedalFn_Code40:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
 	cp	(CURRENT_MODE:16), 17
 	jr	z, FileIO_BytecodeData_Code_Epilogue33
-	.byte 0xf1, 0xcd, 0x34, 0xcb
+	bit	3, (0x34cd:16)
 	jr	nz, FileIO_BytecodeData_Code_Epilogue33
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	set	1, (0x90f9:16)
 	ld	a, (xiz+3)
-	.byte 0x8e, 0x02, 0xc1
+	and	a, (xiz+2)
 	ld	(xsp+4), 0
 	cp	a, 0:i3
 	jr	z, FileIO_BytecodeData_Code_Skip66
@@ -1375,20 +1383,20 @@ FileIO_BytecodeData_Code_Loop2:
 	calr	PanelEvent_Post
 FileIO_BytecodeData_Code_Skip67:
 	incw	1, (xsp+6)
-	.byte 0x9f, 0x06, 0x3f, 0x10, 0x00
+	cpw	(xsp+6), 16
 	jr	c, FileIO_BytecodeData_Code_Loop2
 FileIO_BytecodeData_Code_Epilogue33:
 	pop	xiz
 	inc	4, xsp
 	ret
 NakaData_WidgetInit1:
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	set	1, (0x90f9:16)
 	ld	(xwa), 72
 	ld	(xwa+1), 5
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
-	.byte 0x82, 0xc3
+	and	c, (xde)
 	jr	z, FileIO_BytecodeData_Code_Skip68
 	ld	(xde), 1
 	jr	FileIO_BytecodeData_Code_Join16
@@ -1421,9 +1429,9 @@ FileIO_BytecodeData_Code_Skip70:
 	cp	hl, 1:i3
 	jr	z, FileIO_BytecodeData_Code_Epilogue34
 	ld	a, (xiz+3)
-	.byte 0x8e, 0x02, 0xc1
+	and	a, (xiz+2)
 	jr	z, FileIO_BytecodeData_Code_Epilogue34
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	set	1, (0x90f9:16)
 	ld	(xiz), 152
 	ld	(xiz+1), 1
 	ld	xwa, 768
@@ -1467,9 +1475,9 @@ FileIO_BytecodeData_Code_Skip73:
 	cp	hl, 1:i3
 	jr	z, FileIO_BytecodeData_Code_Epilogue35
 	ld	a, (xiz+3)
-	.byte 0x8e, 0x02, 0xc1
+	and	a, (xiz+2)
 	jr	z, FileIO_BytecodeData_Code_Epilogue35
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	set	1, (0x90f9:16)
 	ld	(xiz), 152
 	ld	(xiz+1), 1
 	ld	xwa, 768
@@ -1568,7 +1576,7 @@ ExtDev_SndParam_Write98_Block:
 	lda	xbc, (xiz+2)
 	lda	xde, (xiz+3)
 	ld	a, (xde)
-	.byte 0x81, 0xc1
+	and	a, (xbc)
 	jr	z, NakaData_WidgetInit1_Code_Skip
 	ld	(xbc), 128
 	jr	NakaData_WidgetInit1_Code_Join2
@@ -1606,7 +1614,7 @@ ExtDev_SndParam_BlockA9_Var02:
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
-	.byte 0x82, 0xc3
+	and	c, (xde)
 	jr	z, NakaData_WidgetInit1_Code_Skip9
 	ld	(xde), 2
 	jr	NakaData_WidgetInit1_Code_Join6
@@ -1708,7 +1716,7 @@ ExtDev_SndParam_Write48_Block:
 	lda	xbc, (xiz+2)
 	lda	xde, (xiz+3)
 	ld	a, (xde)
-	.byte 0x81, 0xc1
+	and	a, (xbc)
 	jr	z, NakaData_WidgetInit1_Code_Skip2
 	ld	(xbc), 64
 	jr	NakaData_WidgetInit1_Code_Join3
@@ -3198,7 +3206,7 @@ MidiChanged_ProcessGroup3_Data_Target7:
 	setm	3, (xwa)
 	ret
 ExtData_VoiceParam_DispatchBytecode_Entry:
-	.byte 0xb0, 0xb3
+	res	3, (xwa)
 	ret
 MidiChanged_ProcessGroup3_Data_Target8:
 	lda	xwa, (0x8f1e:16)
@@ -3322,7 +3330,7 @@ ExtData_VoiceParam_DispatchBytecode_Entry2:
 ExtData_VoiceParam_DispatchBytecode_Entry3:
 	cp	(xwa), 15
 	jr	nz, MidiChanged_ProcessGroup2_Data_Target0_Skip
-	.byte 0xb6, 0xb8
+	set	0, (xiz)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue
 MidiChanged_ProcessGroup2_Data_Target0_Skip:
 	lda	xbc, (xiz+2)
@@ -3374,10 +3382,10 @@ MidiChanged_ProcessGroup3_Data_Target9:
 	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, MidiChanged_ProcessGroup3_Data_Target9_Entry
-	.byte 0xb6, 0xbd
+	set	5, (xiz)
 	jr	MidiChanged_ProcessGroup3_Data_Target9_Epilogue
 MidiChanged_ProcessGroup3_Data_Target9_Entry:
-	.byte 0xb6, 0xb5
+	res	5, (xiz)
 MidiChanged_ProcessGroup3_Data_Target9_Epilogue:
 	pop	xiz
 	ret
@@ -4997,7 +5005,7 @@ ExtData_ToneParam_DispatchHandler_Join:
 	jr	nz, ExtData_ToneParam_DispatchHandler_Skip4
 	ld	a, (xhl+1)
 	res	7, a
-	.byte 0x8a, 0x04, 0xf1
+	cp	a, (xde+4)
 	jr	nz, ExtData_ToneParam_DispatchHandler_Skip4
 	cp	(CURRENT_MODE:16), 13
 	jr	nz, ExtData_ToneParam_DispatchHandler_Epilogue2
@@ -6774,7 +6782,7 @@ VoiceParam_CompareAndUpdate:
 	lda	xhl, (xhl+wa)
 	ld	a, (xsp)
 	cpl	a
-	.byte 0x83, 0xc1
+	and	a, (xhl)
 	or	a, (0x9130:16)
 	ld	c, a
 	ld	a, (0x9132:16)
@@ -6808,7 +6816,7 @@ ExtData_SetTlvField:
 	lda	xhl, (xhl+wa)
 	ld	a, (xsp)
 	cpl	a
-	.byte 0x83, 0xc1
+	and	a, (xhl)
 	or	a, (0x9130:16)
 	ld	c, a
 	ld	a, (0x9132:16)
@@ -6841,7 +6849,7 @@ ExtData_ToneParam_DispatchHandler_Helper2_Epilogue:
 	ld c, (xsp)
 	cpl	c
 	ld	e, c
-	.byte 0x83, 0xc5
+	and	e, (xhl)
 	or	e, (0x9130:16)
 	ld	a, (0x9132:16)
 	cp	e, a
@@ -6873,7 +6881,7 @@ ExtData_ToneParam_AltBody_Helper:
 	ld c, (xsp)
 	cpl	c
 	ld	e, c
-	.byte 0x83, 0xc5
+	and	e, (xhl)
 	or	e, (0x9130:16)
 	ld	a, (0x9132:16)
 	cp	e, a
@@ -6910,7 +6918,7 @@ ExtData_StepTlvField:
 	extz	wa
 	lda	xhl, (xhl+wa)
 	ld e, (xhl)
-	.byte 0x87, 0xc5
+	and	e, (xsp)
 	ld	c, (0x9153:16)
 	ld	a, e
 	add	a, c
@@ -6955,7 +6963,7 @@ ExtData_Voice_CheckMode3_Helper_Helper:
 	and	a, (xhl)
 	ld	c, a
 	ld	a, (37168:16)
-	.byte 0x87, 0xc1
+	and	a, (xsp)
 	or	a, c
 	ld	(xhl), a
 	ld	(0x9132:16), a
@@ -7427,7 +7435,7 @@ VoiceData_DistributeToChannels_Join:
 	cp	xhl, 0xffffffff
 	jr	z, VoiceData_DistributeToChannels_Skip
 	ld	a, (xsp+4)
-	.byte 0x87, 0xf1
+	cp	a, (xsp)
 	jr	ugt, VoiceData_DistributeToChannels_Skip
 	extz	wa
 	ld	a, (xhl+wa)
@@ -9519,7 +9527,7 @@ MidiCtrl_Mode1_Handler:
 	ld	b, (37211:16)
 	ld	c, 129:opc
 	xor	d, d
-	.byte 0xf1, 0x5d, 0x91, 0xcf
+	bit	7, (0x915d:16)
 	jr	z, VoiceMode_ParamHandler_4_Skip
 	ld	d, 1:opc
 VoiceMode_ParamHandler_4_Skip:
@@ -9717,7 +9725,7 @@ VoiceMode3_EvType6:
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 	cpw	(37303:16), 920
 	jr	nz, VoiceMode3_DispatchTable_Code_Skip4
-	.byte 0xf1, 0x52, 0x8d, 0xbb
+	set	3, (0x8d52:16)
 VoiceMode3_DispatchTable_Code_Skip4:
 	extz	hl
 	ld	l, (37320:16)

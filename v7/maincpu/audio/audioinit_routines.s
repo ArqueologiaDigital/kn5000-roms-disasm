@@ -24,7 +24,7 @@ AudioInit_ConfigStereoVoice:
 	cp	a, 0xff
 	jr	z, AudioInit_VoiceNotConfigured
 	orw	(0xc500:16), 2
-	.byte 0xd1, 0xfc, 0xc4, 0x20
+	ld	wa, (0xc4fc:16)
 	and	wa, 0x60
 	jr	nz, AudioInit_SetDefaultLevels
 AudioInit_CheckVoiceMixFlags:
@@ -54,9 +54,9 @@ AudioInit_CheckBit5_FBF1:
 	orw	(0xc500:16), 260
 	jp	AudioInit_ConfigurePanning
 AudioInit_VoiceNotConfigured:
-	.byte 0xf1, 0x63, 0xc1, 0x00, 0xff
+	ld	(0xc163:16), 255
 	orw	(0xc500:16), 3
-	.byte 0xd1, 0xfc, 0xc4, 0x20
+	ld	wa, (0xc4fc:16)
 	and	wa, 0x60
 	jr	nz, AudioInit_RouteAndPan
 AudioInit_CheckMixFlagsAlt:
@@ -314,7 +314,7 @@ AudioInit_VoiceParamCtrl:
 	jr	z, AudioInit_CheckVoiceParamState
 	set	1, c
 AudioInit_CheckVoiceParamState:
-	.byte 0xc1, 0x63, 0xc1, 0x3f, 0xff
+	cp	(0xc163:16), 255
 	jr	nz, AudioInit_CompareAndSendMIDI
 	cp	(0xc52c:16), 255
 	jr	z, AudioInit_CheckBit2VoiceParam
@@ -371,7 +371,7 @@ AudioInit_CheckOutputFlags:
 	and	wa, 0x3
 	jrl	z, AudioInit_NoRoutingActive
 AudioInit_ProcessVoiceAssign:
-	.byte 0xc1, 0x63, 0xc1, 0x3f, 0xff
+	cp	(0xc163:16), 255
 	jr	nz, AudioInit_CheckStoredVoice
 	set	3, de
 	ldmm8	0xc52c, 0xc506
@@ -1141,19 +1141,26 @@ AudioInit_VoiceRoutingTable:
 	ret
 	ret
 	ld	(0xc162:16), 0
-	.byte 0xc1, 0x26, 0xc2, 0x3e, 0x7f, 0xc1, 0x27, 0xc2
-	.byte 0x3c, 0x01, 0xc1, 0x28, 0xc2, 0x3e, 0xfe, 0xc1
-	.byte 0x29, 0xc2, 0x3c, 0x01, 0xc1, 0x2a, 0xc2, 0x3e
-	.byte 0x7f, 0xc1, 0x2b, 0xc2, 0x3c, 0x01, 0xc1, 0x2c
-	.byte 0xc2, 0x3e, 0xfe, 0xc1, 0x2d, 0xc2, 0x3c, 0x01
-	.byte 0xc1, 0x2e, 0xc2, 0x3e, 0x7f, 0xc1, 0x2f, 0xc2
-	.byte 0x3c, 0x01, 0xc1, 0x30, 0xc2, 0x3e, 0xfe, 0xc1
-	.byte 0x31, 0xc2, 0x3c, 0x01, 0xc1, 0x32, 0xc2, 0x3e
-	.byte 0x7f, 0xc1, 0x33, 0xc2, 0x3c, 0x01, 0xc1, 0x34
-	.byte 0xc2, 0x3e, 0xfe, 0xc1, 0x35, 0xc2, 0x3c, 0x01
-	.byte 0xc1, 0x36, 0xc2, 0x3e, 0x7f, 0xc1, 0x37, 0xc2
-	.byte 0x3c, 0x01, 0xc1, 0x38, 0xc2, 0x3e, 0xfe, 0xc1
-	.byte 0x39, 0xc2, 0x3c, 0x01
+	or	(0xc226:16), 0x7f
+	and	(0xc227:16), 0x1
+	or	(0xc228:16), 0xfe
+	and	(0xc229:16), 0x1
+	or	(0xc22a:16), 0x7f
+	and	(0xc22b:16), 0x1
+	or	(0xc22c:16), 0xfe
+	and	(0xc22d:16), 0x1
+	or	(0xc22e:16), 0x7f
+	and	(0xc22f:16), 0x1
+	or	(0xc230:16), 0xfe
+	and	(0xc231:16), 0x1
+	or	(0xc232:16), 0x7f
+	and	(0xc233:16), 0x1
+	or	(0xc234:16), 0xfe
+	and	(0xc235:16), 0x1
+	or	(0xc236:16), 0x7f
+	and	(0xc237:16), 0x1
+	or	(0xc238:16), 0xfe
+	and	(0xc239:16), 0x1
 	ld	de, 0:i3
 	cp	de, 32
 	ret	nc
@@ -1163,50 +1170,50 @@ AudioInit_RefreshToneBank_Loop:
 	lda	xbc, (0xc246:16)
 	extz	xwa
 	add	xwa, xbc
-	.byte	0xb0, 0xb7
+	res	7, (xwa)
 	ld	wa, de
 	add	wa, wa
 	lda	xbc, (0xc246:16)
 	extz	xwa
 	add	xwa, xbc
-	.byte	0x80, 0x3c, 0x8f
+	and	(xwa), 0x8f
 	ld	wa, de
 	add	wa, wa
 	lda	xbc, (0xc286:16)
 	extz	xwa
 	add	xwa, xbc
-	.byte	0xb0, 0xb7
+	res	7, (xwa)
 	ld	wa, de
 	add	wa, wa
 	lda	xbc, (0xc286:16)
 	extz	xwa
 	add	xwa, xbc
-	.byte	0xb0, 0xbe
+	set	6, (xwa)
 	ld	wa, de
 	add	wa, wa
 	lda	xbc, (0xc286:16)
 	extz	xwa
 	add	xwa, xbc
-	.byte	0xb0, 0xbd
+	set	5, (xwa)
 	ld	wa, de
 	add	wa, wa
 	lda	xbc, (0xc286:16)
 	extz	xwa
 	add	xwa, xbc
-	.byte	0xb0, 0xb4
+	res	4, (xwa)
 	ld	wa, de
 	add	wa, wa
 	lda	xbc, (0xc286:16)
 	extz	xwa
 	add	xwa, xbc
-	.byte	0x80, 0x3c, 0xf1
+	and	(xwa), 0xf1
 	ld	wa, de
 	add	wa, wa
 	add	wa, 292
 	lda	xbc, (0xc163:16)
 	extz	xwa
 	add	xwa, xbc
-	.byte	0x80, 0x3c, 0x0f
+	and	(xwa), 0xf
 	inc	1, de
 	cp	de, 32
 	jr	c, AudioInit_RefreshToneBank_Loop
@@ -1380,7 +1387,7 @@ AudioInit_Pan_SetStereoLeft:
 	ld	(0xc218:16), 0
 	jr	AudioInit_Pan_CheckReverbChannel
 AudioInit_Pan_CheckMode1:
-	.byte 0xc1, 0x63, 0xc1, 0x3f, 0xff
+	cp	(0xc163:16), 255
 	jr	nz, AudioInit_Pan_CheckMode1b
 	bit	1, (0xc162:16)
 	jr	nz, AudioInit_Pan_SetStereoRight
@@ -1408,7 +1415,7 @@ AudioInit_Pan_DefaultCenter:
 AudioInit_Pan_CheckReverbChannel:
 	cp	(0xe8fa:16), 14
 	jr	ule, AudioInit_Pan_Reverb_CopyFromMain
-	.byte 0xc1, 0x63, 0xc1, 0x3f, 0xff
+	cp	(0xc163:16), 255
 	jr	nz, AudioInit_Pan_Reverb_CheckMode0
 	bit	0, (0xc162:16)
 	jr	nz, AudioInit_Pan_Reverb_Left
@@ -1419,7 +1426,7 @@ AudioInit_Pan_Reverb_Left:
 	ld	(0xc220:16), 0
 	jr	AudioInit_Pan_Done
 AudioInit_Pan_Reverb_CheckMode1:
-	.byte 0xc1, 0x63, 0xc1, 0x3f, 0xff
+	cp	(0xc163:16), 255
 	jr	nz, AudioInit_Pan_Reverb_CheckMode1b
 	bit	1, (0xc162:16)
 	jr	nz, AudioInit_Pan_Reverb_Right
@@ -1456,7 +1463,7 @@ AudioInit_CheckStereoMode:
 	ret	z
 	bit	0, (0xc162:16)
 	jr	z, AudioInit_Stereo_CheckBit1
-	.byte 0xf1, 0x64, 0xc1, 0x00, 0x00
+	ld	(0xc164:16), 0
 	jr	AudioInit_Stereo_CheckBit3
 AudioInit_Stereo_CheckBit1:
 	bit	1, (0xc162:16)
@@ -1737,7 +1744,7 @@ AudioInit_CompareVoiceConfig:
 	calr	AudioInit_QueueCommand
 	ret
 AudioInit_VoiceCompare_BothFF:
-	.byte 0xc1, 0x63, 0xc1, 0x3f, 0xff
+	cp	(0xc163:16), 255
 	jrl	nz, AudioInit_VoiceCompare_NotBothFF
 	cp	(0xc2c9:16), 255
 	jrl	nz, AudioInit_VoiceCompare_NotBothFF
@@ -1812,7 +1819,7 @@ AudioInit_VoiceCompare_LayerNext:
 	jrl	c, AudioInit_VoiceCompare_LayerLoop
 	jr	AudioInit_VoiceCompare_BuildCmd
 AudioInit_VoiceCompare_NotBothFF:
-	.byte 0xc1, 0x63, 0xc1, 0x3f, 0xff
+	cp	(0xc163:16), 255
 	jr	z, AudioInit_VoiceCompare_BuildCmd
 	cp	(0xc2c9:16), 255
 	jr	z, AudioInit_VoiceCompare_BuildCmd
@@ -1892,7 +1899,7 @@ AudioInit_ChannelMap_Loop:
 	extz	xde
 	add	xde, xbc
 	ld	wa, iz
-	.byte 0xf1, 0x6c, 0xc3, 0x31
+	lda	xbc, (0xc36c:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)

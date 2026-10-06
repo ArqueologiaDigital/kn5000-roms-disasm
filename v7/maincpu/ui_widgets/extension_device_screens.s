@@ -1034,7 +1034,7 @@ PanelAction_PedalAssignHandlerIndex:	.incbin "includes/generated/naka_extension_
 ; PanelAction_PedalFunctionHandlers -- 22 x uint32_t: code pointers, one per foot-pedal function
 ; PanelAction_DispatchPedalFunction (audio/audio_control_engine.s) maps the pedal's assignment parameter (FS1/FS2
 ; 0x2886/0x2888, FC1-4 0x288A-0x2890) through the 256-byte PanelAction_PedalAssignHandlerIndex to an index, returns if it
-; is above 22, else calls entry [index] (`sla de, 2`). [0] is the unlabelled routine right after Helper4's `ret`;
+; is above 22, else calls entry [index] (`sla de, 2`). [0] is PanelAction_PedalFn_Code40, right after its `ret`;
 ; the map never yields 12 (ExtDev_SndParam_Block48_Var02) nor 22.
 PanelAction_PedalFunctionHandlers:	.incbin "includes/generated/naka_extension_device.bin", 0x36D8, 0x58
 ; PanelButton_HelpCodeByBit -- 11 x uint8_t[8]: the 8-byte help-code maps of panel event indexes 0-7, 10, 11, 12

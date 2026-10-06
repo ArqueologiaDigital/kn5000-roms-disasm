@@ -1299,7 +1299,7 @@ PostTitle_Function_Skip:
 	jp	PsMixer_CtlTypeProc8_Return2
 	lda	xsp, (xsp-256)
 	pushw	iz
-	.byte 0xd3, 0xfd, 0x08, 0x01, 0x04
+	pushw	(xsp+264)
 	ld	iz, (xsp+264)
 	pushw	iz
 	pushw DirmdTitleFunc_Str_DirmdTitleESw_Fmtd_Fmtd@hi16

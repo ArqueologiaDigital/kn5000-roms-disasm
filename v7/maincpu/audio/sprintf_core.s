@@ -1489,7 +1489,7 @@ Sprintf_FFixed_Return:
 Sprintf_FFixed_DataTable:
 	ld	xwa, (xsp+4)
 Sprintf_FormatFFixed_Entry:
-	.byte	0x80, 0x3f, 0x00
+	cp	(xwa), 0
 	jr	nz, Sprintf_FormatFFixed_Skip
 	ld	hl, 1:i3
 	ret

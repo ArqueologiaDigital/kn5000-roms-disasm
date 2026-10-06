@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 53,688
-#   semantic names ........... 52,944 (98.6%)
+#   symbols .................. 53,689
+#   semantic names ........... 52,945 (98.6%)
 #   positional names ......... 744
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -47181,6 +47181,7 @@ PanelAction_Event27_Epilogue 00FC634E
 PanelEvent_FillSelectedPart 00FC6350
 SndParam_ResolveSelectedPartVoice 00FC6360
 PanelAction_DispatchPedalFunction 00FC63BA
+PanelAction_PedalFn_Code40 00FC63DE
 FileIO_BytecodeData_Code_Skip66 00FC6406
 FileIO_BytecodeData_Code_Loop2 00FC640B
 FileIO_BytecodeData_Code_Skip67 00FC644C

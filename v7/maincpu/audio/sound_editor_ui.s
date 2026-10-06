@@ -1001,9 +1001,9 @@ UpdSeSel_DetailedUpdate_SetDisplayState_Join5:
 	call	SeMenu_ReadObjData
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x0a, 0x3f, 0x00
+	cp	(xsp+10), 0
 	jr	nz, UpdSeSel_DetailedUpdate_Skip2
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, UpdSeSel_DetailedUpdate_Skip
 	calr	UpdSeSel_DetailedUpdate_Helper7
 	jr	UpdSeSel_DetailedUpdate_Join
@@ -1030,7 +1030,7 @@ UpdSeSel_DetailedUpdate_Skip2:
 	ld	c, (xsp+6)
 	extz	bc
 	call	SeMenu_StorePartParam
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, UpdSeSel_DetailedUpdate_Skip3
 	call	SeMenu_AdvanceSubIndex
 	cp	l, 12
@@ -1192,9 +1192,9 @@ UpdSeSel_DetailedUpdate_SetDisplayState_Join7:
 	call	SeMenu_ReadObjData
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x08, 0x3f, 0x00
+	cp	(xsp+8), 0
 	jr	nz, UpdSeSel_DetailedUpdate_Skip5
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, UpdSeSel_DetailedUpdate_Skip4
 	calr	UpdSeSel_DetailedUpdate_Helper9
 	jr	UpdSeSel_DetailedUpdate_Join2
@@ -1214,7 +1214,7 @@ UpdSeSel_DetailedUpdate_Skip5:
 	ld	c, (xsp+4)
 	extz	bc
 	call	SeMenu_StorePartParam
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, UpdSeSel_DetailedUpdate_Skip6
 	call	SeMenu_AdvanceSubIndex
 	cp	l, 6:i3
@@ -1359,9 +1359,9 @@ UpdSeSel_DetailedUpdate_SetDisplayState_Join10:
 	call	SeMenu_ReadObjData
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x08, 0x3f, 0x00
+	cp	(xsp+8), 0
 	jr	nz, UpdSeSel_DetailedUpdate_Skip9
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, UpdSeSel_DetailedUpdate_Skip8
 	calr	UpdSeSel_DetailedUpdate_Helper11
 	jr	UpdSeSel_DetailedUpdate_Join3
@@ -1505,7 +1505,7 @@ UpdSeSel_DetailedUpdate_SetDisplayState_Join11:
 	dec	6, xsp
 	lda	xwa, (xsp+4)
 	call	SeMenu_ReadObjData
-	.byte 0x8f, 0x04, 0x3f, 0x00
+	cp	(xsp+4), 0
 	jr	nz, UpdSeSel_DetailedUpdate_Skip10
 	pushw 60
 	ld	wa, 0:i3
@@ -1535,9 +1535,9 @@ UpdSeSel_DetailedUpdate_SetDisplayState_Join12:
 	call	SeMenu_ReadObjData
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x08, 0x3f, 0x00
+	cp	(xsp+8), 0
 	jr	nz, UpdSeSel_DetailedUpdate_Skip12
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, UpdSeSel_DetailedUpdate_Skip11
 	calr	UpdSeSel_DetailedUpdate_Helper13
 	jr	UpdSeSel_DetailedUpdate_Join5
@@ -1563,7 +1563,7 @@ UpdSeSel_DetailedUpdate_Skip12:
 	lda	xbc, (xsp+4)
 	ld	wa, 0:i3
 	call	SeMenu_LoadPartParam
-	.byte 0x8f, 0x04, 0x3c, 0x07
+	and	(xsp+4), 0x7
 	ld	wa, 0:i3
 	call	SeMenu_SetCurrentStep
 	call	SeMenu_ResetSubIndex
@@ -2484,7 +2484,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xd7, 0xfa, 0x04
 	lda	xwa, (xsp+2)
 	call	SeMenu_HandleMenuChange_Data
-	.byte 0x8f, 0x02, 0x3f, 0x01
+	cp	(xsp+2), 1
 	jr	nz, SeMenu_CopyWriteUpdate_Skip
 	ld	wa, 2:i3
 	call	SeMenu_ClearNotification
@@ -2494,7 +2494,7 @@ SeMenu_CopyWriteUpdate_Data:
 SeMenu_CopyWriteUpdate_Skip:
 	lda	xwa, (xsp+24)
 	call	SeMenu_ReadObjData
-	.byte 0x8f, 0x18, 0x3f, 0x00
+	cp	(xsp+24), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip2
 	pushw 62
 	ld	wa, 0:i3
@@ -2575,7 +2575,7 @@ SeMenu_CopyWriteUpdate_Join:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
 	ld	a, 13:opc
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, SeMenu_CopyWriteUpdate_Skip3
 	ld	a, 16:opc
 SeMenu_CopyWriteUpdate_Skip3:
@@ -2938,7 +2938,7 @@ SeCtr2_OnColumn7:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue2
 	ld	c, (xsp+2)
 	extz	bc
@@ -2952,7 +2952,7 @@ SeCtr2_OnColumn8:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue3
 	ld	c, (xsp+2)
 	extz	bc
@@ -2967,14 +2967,14 @@ SeCtr2_OnSideRow2:
 	lda	xbc, (xsp)
 	ld	wa, 0:i3
 	call	SeMenu_LoadPartParam
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Entry
-	.byte 0x87, 0x3f, 0x02
+	cp	(xsp), 2
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue4
 	ld	wa, 2:i3
 	jr	SeMenu_CopyWriteUpdate_Join2
 SeMenu_CopyWriteUpdate_Entry:
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue4
 	ld	wa, 1:i3
 SeMenu_CopyWriteUpdate_Join2:
@@ -2991,14 +2991,14 @@ SeCtr2_OnSideRow3:
 	lda	xbc, (xsp)
 	ld	wa, 0:i3
 	call	SeMenu_LoadPartParam
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Entry2
-	.byte 0x87, 0x3f, 0x06
+	cp	(xsp), 6
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue5
 	ld	wa, 6:i3
 	jr	SeMenu_CopyWriteUpdate_Join3
 SeMenu_CopyWriteUpdate_Entry2:
-	.byte 0x87, 0x3f, 0x05
+	cp	(xsp), 5
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue5
 	ld	wa, 5:i3
 SeMenu_CopyWriteUpdate_Join3:
@@ -3014,9 +3014,9 @@ SeCtr2_OnSwitch25:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue6
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Epilogue6
 	ldw	wa, 60
 	ld	bc, 0:i3
@@ -3029,9 +3029,9 @@ SeCtr2_OnSwitch15:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Epilogue7
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip4
 	ldw	wa, 32
 	ld	bc, 0:i3
@@ -3163,11 +3163,11 @@ SeMenuTitleFunc_DispatchSwitch:
 	ld	(xsp+6), a
 	lda	xwa, (xsp+2)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue8
 	lda	xwa, (xsp+2)
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f, 0x02, 0x3f, 0x01
+	cp	(xsp+2), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue8
 	ld	a, (xsp+6)
 	res	7, a
@@ -3204,11 +3204,11 @@ SeMenu_CopyWriteUpdate_Epilogue8:
 	ld	(xsp+10), a
 	lda	xwa, (xsp+6)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x06, 0x3f, 0x00
+	cp	(xsp+6), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue9
 	lda	xwa, (xsp+6)
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f, 0x06, 0x3f, 0x01
+	cp	(xsp+6), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue9
 	lda	xbc, (xsp)
 	ld	wa, 0:i3
@@ -3231,7 +3231,7 @@ SeMenu_CopyWriteUpdate_Epilogue8:
 	incm8	1, (xsp+4)
 	jr	SeMenu_CopyWriteUpdate_Join6
 SeMenu_CopyWriteUpdate_Entry3:
-	.byte 0x8f, 0x04, 0x3f, 0x00
+	cp	(xsp+4), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue9
 	decm8	1, (xsp+4)
 SeMenu_CopyWriteUpdate_Join6:
@@ -3257,11 +3257,11 @@ SeMenu_CopyWriteUpdate_Epilogue9:
 	ld	(xsp+8), a
 	lda	xwa, (xsp+6)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x06, 0x3f, 0x00
+	cp	(xsp+6), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue10
 	lda	xwa, (xsp+6)
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f, 0x06, 0x3f, 0x01
+	cp	(xsp+6), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue10
 	lda	xbc, (xsp+4)
 	ld	wa, 0:i3
@@ -3283,7 +3283,7 @@ SeMenu_CopyWriteUpdate_Epilogue9:
 	incw	1, (xsp+2)
 	jr	SeMenu_CopyWriteUpdate_Join7
 SeMenu_CopyWriteUpdate_Entry4:
-	.byte 0x9f, 0x02, 0x3f, 0x00, 0x00
+	cpw	(xsp+2), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue10
 	decm	1, (xsp+2)
 SeMenu_CopyWriteUpdate_Join7:
@@ -3305,11 +3305,11 @@ SeMenu_CopyWriteUpdate_Epilogue10:
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x0e, 0x3f, 0x00
+	cp	(xsp+14), 0
 	jrl	z, SeMenu_CopyWriteUpdate_Epilogue11
 	lda	xwa, (xsp+14)
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f, 0x0e, 0x3f, 0x01
+	cp	(xsp+14), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue11
 	lda	xbc, (xsp+16)
 	ld	wa, 0:i3
@@ -3364,11 +3364,11 @@ SeMenu_CopyWriteUpdate_Epilogue11:
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x0e, 0x3f, 0x00
+	cp	(xsp+14), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue12
 	lda	xwa, (xsp+14)
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f, 0x0e, 0x3f, 0x01
+	cp	(xsp+14), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue12
 	lda	xbc, (xsp+16)
 	ld	wa, 0:i3
@@ -3415,11 +3415,11 @@ SeMenu_CopyWriteUpdate_Epilogue12:
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x0e, 0x3f, 0x00
+	cp	(xsp+14), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue13
 	lda	xwa, (xsp+14)
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f, 0x0e, 0x3f, 0x01
+	cp	(xsp+14), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue13
 	lda	xbc, (xsp+16)
 	ld	wa, 0:i3
@@ -3466,11 +3466,11 @@ SeMenu_CopyWriteUpdate_Epilogue13:
 	ld	(xsp+10), a
 	lda	xwa, (xsp+4)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x04, 0x3f, 0x00
+	cp	(xsp+4), 0
 	jrl	z, SeMenu_CopyWriteUpdate_Epilogue14
 	lda	xwa, (xsp+4)
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f, 0x04, 0x3f, 0x01
+	cp	(xsp+4), 1
 	jrl	z, SeMenu_CopyWriteUpdate_Epilogue14
 	lda	xbc, (xsp+8)
 	ld	wa, 0:i3
@@ -3489,22 +3489,22 @@ SeMenu_CopyWriteUpdate_Epilogue13:
 	extz	wa
 	lda	xbc, (xsp+6)
 	call	SeMenu_LoadPartParam
-	.byte 0xbf, 0x06, 0xb7
+	res	7, (xsp+6)
 	cpib_erp	251, 0
 	jr	nz, SeMenu_CopyWriteUpdate_Entry5
-	.byte 0x8f, 0x06, 0x3f, 0x7f
+	cp	(xsp+6), 127
 	jr	nc, SeMenu_CopyWriteUpdate_Epilogue14
 	ld	a, (xsp+2)
 	add	(xsp+6), a
-	.byte 0x8f, 0x06, 0x3f, 0x7f
+	cp	(xsp+6), 127
 	jr	c, SeMenu_CopyWriteUpdate_Join8
 	ld	(xsp+6), 127
 	jr	SeMenu_CopyWriteUpdate_Join8
 SeMenu_CopyWriteUpdate_Entry5:
-	.byte 0x8f, 0x06, 0x3f, 0x00
+	cp	(xsp+6), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue14
 	ld	a, (xsp+6)
-	.byte 0x8f, 0x02, 0x81
+	add	a, (xsp+2)
 	ld	(xsp+6), a
 	cp	a, 0:i3
 	jr	ge, SeMenu_CopyWriteUpdate_Join8
@@ -3547,11 +3547,11 @@ SeMenu_CopyWriteUpdate_Epilogue14:
 	ld	(xsp+14), a
 	lda	xwa, (xsp+12)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x0c, 0x3f, 0x00
+	cp	(xsp+12), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue15
 	lda	xwa, (xsp+12)
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f, 0x0c, 0x3f, 0x01
+	cp	(xsp+12), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue15
 	lda	xbc, (xsp)
 	ldw	wa, 11
@@ -3581,14 +3581,14 @@ SeMenu_CopyWriteUpdate_Epilogue15:
 	ld	(xsp+8), a
 	lda	xwa, (xsp+2)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip8
-	.byte 0x8f, 0x08, 0x3f, 0x00
+	cp	(xsp+8), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip7
 	lda	xbc, (xsp)
 	ld	wa, 1:i3
 	call	SeMenu_LoadPartParam
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	scc	z, a
 	extz	wa
 	call	SeMenu_SetupDisplayObject_Alt2_Continue_0x21
@@ -3605,9 +3605,9 @@ SeMenu_CopyWriteUpdate_Skip7:
 SeMenu_CopyWriteUpdate_Skip8:
 	lda	xwa, (xsp+2)
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f, 0x02, 0x3f, 0x01
+	cp	(xsp+2), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue16
-	.byte 0x8f, 0x08, 0x3f, 0x00
+	cp	(xsp+8), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Epilogue16
 	lda	xwa, (xsp+6)
 	call	SeMenu_SetMode_Data_0x5
@@ -3631,9 +3631,9 @@ SeMenu_CopyWriteUpdate_Epilogue16:
 	ld	(xsp+4), a
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip10
-	.byte 0x8f, 0x04, 0x3f, 0x00
+	cp	(xsp+4), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip9
 	ldw	wa, 33
 	ld	bc, 0:i3
@@ -3645,9 +3645,9 @@ SeMenu_CopyWriteUpdate_Skip9:
 SeMenu_CopyWriteUpdate_Skip10:
 	lda	xwa, (xsp)
 	call	SeMenu_LoadPatchStatus
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	nz, SeMenu_CopyWriteUpdate_Entry6
-	.byte 0x8f, 0x04, 0x3f, 0x00
+	cp	(xsp+4), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip11
 	ld	wa, 0:i3
 	call	SeMenu_SetPatchBank
@@ -3658,11 +3658,11 @@ SeMenu_CopyWriteUpdate_Join9:
 SeMenu_CopyWriteUpdate_Skip11:
 	jr	SeMenu_CopyWriteUpdate_Epilogue17
 SeMenu_CopyWriteUpdate_Entry6:
-	.byte 0x8f, 0x04, 0x3f, 0x00
+	cp	(xsp+4), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Epilogue17
 	lda	xwa, (xsp+2)
 	call	SeMenu_SetMode_Data_0x5
-	.byte 0x9f, 0x02, 0x3f, 0x00, 0x00
+	cpw	(xsp+2), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue17
 	decm	1, (xsp+2)
 	ld	wa, (xsp+2)
@@ -3678,9 +3678,9 @@ SeMenu_CopyWriteUpdate_Epilogue17:
 	ld	(xsp+4), a
 	lda	xwa, (xsp+2)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip13
-	.byte 0x8f, 0x04, 0x3f, 0x00
+	cp	(xsp+4), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip12
 	ldw	wa, 36
 	ld	bc, 0:i3
@@ -3694,9 +3694,9 @@ SeMenu_CopyWriteUpdate_Join10:
 SeMenu_CopyWriteUpdate_Skip13:
 	lda	xwa, (xsp+2)
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f, 0x02, 0x3f, 0x01
+	cp	(xsp+2), 1
 	jr	nz, SeMenu_CopyWriteUpdate_Entry7
-	.byte 0x8f, 0x04, 0x3f, 0x00
+	cp	(xsp+4), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip14
 	ld	wa, 0:i3
 	call	SeMenu_SetCurrentStep
@@ -3707,12 +3707,12 @@ SeMenu_CopyWriteUpdate_Skip13:
 SeMenu_CopyWriteUpdate_Skip14:
 	jr	SeMenu_CopyWriteUpdate_Epilogue18
 SeMenu_CopyWriteUpdate_Entry7:
-	.byte 0x8f, 0x04, 0x3f, 0x00
+	cp	(xsp+4), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue18
 	lda	xbc, (xsp)
 	ld	wa, 0:i3
 	call	SeMenu_LoadPartParam
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue18
 	ld	wa, 0:i3
 	ld	bc, 1:i3
@@ -3730,9 +3730,9 @@ SeMenu_CopyWriteUpdate_Epilogue18:
 	ld	(xsp+4), a
 	lda	xwa, (xsp+2)
 	call	SeMenu_LoadObjEntries
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip16
-	.byte 0x8f, 0x04, 0x3f, 0x00
+	cp	(xsp+4), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip15
 	ldw	wa, 58
 	ld	bc, 0:i3
@@ -3746,14 +3746,14 @@ SeMenu_CopyWriteUpdate_Join11:
 SeMenu_CopyWriteUpdate_Skip16:
 	lda	xwa, (xsp+2)
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f, 0x02, 0x3f, 0x01
+	cp	(xsp+2), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue19
-	.byte 0x8f, 0x04, 0x3f, 0x00
+	cp	(xsp+4), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue19
 	lda	xbc, (xsp)
 	ld	wa, 0:i3
 	call	SeMenu_LoadPartParam
-	.byte 0x87, 0x3f, 0x02
+	cp	(xsp), 2
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue19
 	ld	wa, 0:i3
 	ld	bc, 2:i3
@@ -3772,22 +3772,22 @@ SeMenu_CopyWriteUpdate_Epilogue19:
 	lda	xwa, (xsp+2)
 	call	SeMenu_LoadObjEntries
 	lda	xwa, (xsp+2)
-	.byte 0x8f, 0x04, 0x3f, 0x00
+	cp	(xsp+4), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Entry8
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip17
 	ldw	wa, 59
 	ld	bc, 0:i3
 	jr	SeMenu_CopyWriteUpdate_Join12
 SeMenu_CopyWriteUpdate_Skip17:
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f, 0x02, 0x3f, 0x01
+	cp	(xsp+2), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue20
 	ldw	wa, 61
 	call	SeMenu_CopyWriteUpdate_Entry7_Code_Helper
 	jr	SeMenu_CopyWriteUpdate_Epilogue20
 SeMenu_CopyWriteUpdate_Entry8:
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip18
 	ldw	wa, 48
 	ld	bc, 0:i3
@@ -3796,7 +3796,7 @@ SeMenu_CopyWriteUpdate_Join12:
 	jr	SeMenu_CopyWriteUpdate_Epilogue20
 SeMenu_CopyWriteUpdate_Skip18:
 	call	SeMenu_LoadPatchStatus
-	.byte 0x8f, 0x02, 0x3f, 0x01
+	cp	(xsp+2), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue20
 	call	SeMenu_GetPartConfigBit3
 	cp	l, 0:i3
@@ -4003,7 +4003,7 @@ SeTonTon1_OnColumn2:
 	incm8	1, (xsp+6)
 	jr	SeMenu_CopyWriteUpdate_Join14
 SeMenu_CopyWriteUpdate_Entry9:
-	.byte 0x8f, 0x06, 0x3f, 0x00
+	cp	(xsp+6), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue22
 	decm8	1, (xsp+6)
 SeMenu_CopyWriteUpdate_Join14:
@@ -4048,7 +4048,7 @@ SeTonTon1_OnColumn3:
 	incw	1, (xsp+2)
 	jr	SeMenu_CopyWriteUpdate_Join15
 SeMenu_CopyWriteUpdate_Entry10:
-	.byte 0x9f, 0x02, 0x3f, 0x00, 0x00
+	cpw	(xsp+2), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue23
 	decm	1, (xsp+2)
 SeMenu_CopyWriteUpdate_Join15:
@@ -4253,7 +4253,7 @@ SeTonTon2_OnColumn2:
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+6)
-	.byte 0x8f, 0x06, 0x83
+	add	c, (xsp+6)
 	dec	2, c
 	extz	bc
 	call	SeMenu_BitShiftMask_End
@@ -4263,7 +4263,7 @@ SeTonTon2_OnColumn2:
 	res	7, a
 	cp	a, 0:i3
 	jr	nz, SeMenu_CopyWriteUpdate_Entry11
-	.byte 0xbf, 0x02, 0xcf
+	bit	7, (xsp+2)
 	jrl	nz, SeMenu_CopyWriteUpdate_Epilogue24
 	cpib_erp 250, 1
 	jr	nz, SeMenu_CopyWriteUpdate_Skip22
@@ -4274,7 +4274,7 @@ SeMenu_CopyWriteUpdate_Skip22:
 	inc1b_erp	250
 	jr	SeMenu_CopyWriteUpdate_Join16
 SeMenu_CopyWriteUpdate_Entry11:
-	.byte 0xbf, 0x02, 0xcf
+	bit	7, (xsp+2)
 	jr	z, SeMenu_CopyWriteUpdate_Skip23
 	resm	7, (xsp+2)
 	ldib_erp	250, 1
@@ -4285,7 +4285,7 @@ SeMenu_CopyWriteUpdate_Skip23:
 	dec1b_erp	250
 SeMenu_CopyWriteUpdate_Join16:
 	ld	a, (xsp+6)
-	.byte 0x8f, 0x06, 0x81
+	add	a, (xsp+6)
 	dec	2, a
 	ld	c, a
 	extz	bc
@@ -4298,7 +4298,7 @@ SeMenu_CopyWriteUpdate_Join16:
 	ldto_berp	a, 250
 	extz	wa
 	ld	c, (xsp+6)
-	.byte 0x8f, 0x06, 0x83
+	add	c, (xsp+6)
 	dec	2, c
 	extz	bc
 	call	SeMenu_BitShiftMask
@@ -4391,21 +4391,22 @@ SeTonTon2_OnColumn6:
 	extz	wa
 	lda	xbc, (xsp+6)
 	call	SeMenu_LoadPartParam
-	.byte 0xbf, 0x06, 0xb7, 0xc7, 0xfb, 0xd8
+	res	7, (xsp+6)
+	cpib_erp	251, 0
 	jr	nz, SeMenu_CopyWriteUpdate_Entry12
-	.byte 0x8f, 0x06, 0x3f, 0x7f
+	cp	(xsp+6), 127
 	jr	nc, SeMenu_CopyWriteUpdate_Epilogue25
 	ld	a, (xsp+4)
 	add	(xsp+6), a
-	.byte 0x8f, 0x06, 0x3f, 0x7f
+	cp	(xsp+6), 127
 	jr	c, SeMenu_CopyWriteUpdate_Join17
 	ld	(xsp+6), 127
 	jr	SeMenu_CopyWriteUpdate_Join17
 SeMenu_CopyWriteUpdate_Entry12:
-	.byte 0x8f, 0x06, 0x3f, 0x00
+	cp	(xsp+6), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue25
 	ld	a, (xsp+6)
-	.byte 0x8f, 0x04, 0x81
+	add	a, (xsp+4)
 	ld	(xsp+6), a
 	cp	a, 0:i3
 	jr	ge, SeMenu_CopyWriteUpdate_Join17
@@ -4524,7 +4525,7 @@ SeTonRan1_OnColumn3:
 	lda	xbc, (xsp+4)
 	ld	wa, 1:i3
 	call	SeMenu_LoadPartParam
-	.byte 0xbf, 0x04, 0xb7
+	res	7, (xsp+4)
 	ld	a, (xsp+6)
 	extz	wa
 	ld	c, (xsp+4)
@@ -4569,7 +4570,8 @@ SeTonRan1_OnColumn4:
 	lda	xbc, (xsp+4)
 	ld	wa, 3:i3
 	call	SeMenu_LoadPartParam
-	.byte 0xbf, 0x06, 0xb7, 0xbf, 0x04, 0xb7
+	res	7, (xsp+6)
+	res	7, (xsp+4)
 	ld	a, (xsp+8)
 	extz	wa
 	ld	e, (xsp+6)
@@ -4614,7 +4616,8 @@ SeTonRan1_OnColumn5:
 	lda	xbc, (xsp+4)
 	ld	wa, 4:i3
 	call	SeMenu_LoadPartParam
-	.byte 0xbf, 0x06, 0xb7, 0xbf, 0x04, 0xb7
+	res	7, (xsp+6)
+	res	7, (xsp+4)
 	ld	a, (xsp+8)
 	extz	wa
 	ld	e, (xsp+6)
@@ -4657,7 +4660,7 @@ SeTonRan1_OnColumn6:
 	lda	xbc, (xsp+4)
 	ld	wa, 3:i3
 	call	SeMenu_LoadPartParam
-	.byte 0xbf, 0x04, 0xb7
+	res	7, (xsp+4)
 	ld	a, (xsp+6)
 	extz	wa
 	ld	e, (xsp+4)
@@ -4760,7 +4763,7 @@ SeTonRan2_OnColumn3:
 	lda	xbc, (xsp+12)
 	ld	wa, 1:i3
 	call	SeMenu_LoadPartParam
-	.byte 0xbf, 0x0c, 0xb7
+	res	7, (xsp+12)
 	lda	xwa, (xsp+14)
 	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
@@ -4805,7 +4808,8 @@ SeTonRan2_OnColumn4:
 	lda	xbc, (xsp+12)
 	ld	wa, 3:i3
 	call	SeMenu_LoadPartParam
-	.byte 0xbf, 0x0e, 0xb7, 0xbf, 0x0c, 0xb7
+	res	7, (xsp+14)
+	res	7, (xsp+12)
 	lda	xwa, (xsp+16)
 	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
@@ -4851,7 +4855,8 @@ SeTonRan2_OnColumn5:
 	lda	xbc, (xsp+12)
 	ld	wa, 4:i3
 	call	SeMenu_LoadPartParam
-	.byte 0xbf, 0x0e, 0xb7, 0xbf, 0x0c, 0xb7
+	res	7, (xsp+14)
+	res	7, (xsp+12)
 	lda	xwa, (xsp+16)
 	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
@@ -4894,7 +4899,7 @@ SeTonRan2_OnColumn6:
 	lda	xbc, (xsp+12)
 	ld	wa, 3:i3
 	call	SeMenu_LoadPartParam
-	.byte 0xbf, 0x0c, 0xb7
+	res	7, (xsp+12)
 	lda	xwa, (xsp+14)
 	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
@@ -5003,7 +5008,7 @@ SeTonHyb1_OnColumn8:
 	call	SeMenu_LoadPartParam
 	cpib_erp 251, 0
 	jr	nz, SeMenu_CopyWriteUpdate_Entry13
-	.byte 0x8f, 0x04, 0x3f, 0x01
+	cp	(xsp+4), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue26
 	decm8	1, (xsp+4)
 	ld	c, (xsp+4)
@@ -5011,13 +5016,13 @@ SeTonHyb1_OnColumn8:
 	ld	wa, 0:i3
 	jr	SeMenu_CopyWriteUpdate_Join20
 SeMenu_CopyWriteUpdate_Entry13:
-	.byte 0x8f, 0x04, 0x3f, 0x04
+	cp	(xsp+4), 4
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue26
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
-	.byte 0x8f, 0x02, 0x3f, 0x7f
+	cp	(xsp+2), 127
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue26
 	incm8	1, (xsp+4)
 	ld	c, (xsp+4)
@@ -5059,7 +5064,7 @@ SeTonHyb1_OnColumn2:
 	incm8	1, (xsp+8)
 	jr	SeMenu_CopyWriteUpdate_Join21
 SeMenu_CopyWriteUpdate_Entry14:
-	.byte 0x8f, 0x08, 0x3f, 0x00
+	cp	(xsp+8), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue27
 	decm8	1, (xsp+8)
 SeMenu_CopyWriteUpdate_Join21:
@@ -5110,7 +5115,7 @@ SeTonHyb1_OnColumn3:
 	incw	1, (xsp+2)
 	jr	SeMenu_CopyWriteUpdate_Join22
 SeMenu_CopyWriteUpdate_Entry15:
-	.byte 0x9f, 0x02, 0x3f, 0x00, 0x00
+	cpw	(xsp+2), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue28
 	decm	1, (xsp+2)
 SeMenu_CopyWriteUpdate_Join22:
@@ -5138,7 +5143,7 @@ SeTonHyb1_OnColumn6:
 	lda	xbc, (xsp+8)
 	ld	wa, 0:i3
 	call	SeMenu_LoadPartParam
-	.byte 0x8f, 0x08, 0x3f, 0x04
+	cp	(xsp+8), 4
 	jrl	z, SeMenu_CopyWriteUpdate_Epilogue29
 	lda	xwa, (xsp+12)
 	ld	(xwa), 0
@@ -5166,9 +5171,9 @@ SeTonHyb1_OnColumn6:
 	ld	l, (xsp+22)
 	res	7, l
 	ld	a, (xsp+8)
-	.byte 0x8f, 0x08, 0x81
+	add	a, (xsp+8)
 	dec	1, a
-	.byte 0xc7, 0xe2, 0x99
+	ldfr_berp	a, 226
 	extz	wa
 	lda	xde, (xsp+12)
 	lda	xbc, (xde+wa)
@@ -5178,7 +5183,7 @@ SeTonHyb1_OnColumn6:
 	ld	a, (xbc)
 	cp	a, 127
 	jrl	nc, SeMenu_CopyWriteUpdate_Epilogue29
-	.byte 0xbf, 0x16, 0xcf
+	bit	7, (xsp+22)
 	jr	z, SeMenu_CopyWriteUpdate_Skip34
 	inc	3, a
 	jr	SeMenu_CopyWriteUpdate_Join23
@@ -5186,7 +5191,7 @@ SeMenu_CopyWriteUpdate_Skip34:
 	inc	1, a
 SeMenu_CopyWriteUpdate_Join23:
 	ld	(xde), a
-	.byte 0x82, 0x3f, 0x7f
+	cp	(xde), 127
 	jr	c, SeMenu_CopyWriteUpdate_Join24
 	ld	(xde), 127
 	jr	SeMenu_CopyWriteUpdate_Join24
@@ -5289,13 +5294,13 @@ SeMenu_CopyWriteUpdate_Skip40:
 	jr	nc, SeMenu_CopyWriteUpdate_Skip43
 	cp	(xsp+2), w
 	jr	c, SeMenu_CopyWriteUpdate_Skip41
-	.byte 0x8f, 0x04, 0x3f, 0x7f
+	cp	(xsp+4), 127
 	jr	nz, SeMenu_CopyWriteUpdate_Entry16
 SeMenu_CopyWriteUpdate_Skip41:
 	ld	b, 0:opc
 	jr	SeMenu_CopyWriteUpdate_Join26
 SeMenu_CopyWriteUpdate_Entry16:
-	.byte 0x8f, 0x08, 0xa0
+	sub	w, (xsp+8)
 	ld	a, (xsp+4)
 	add	a, w
 	cp	a, b
@@ -5433,9 +5438,9 @@ SeTonHyb1_OnSideRow4:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue30
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue30
 	ld	wa, 3:i3
 	call	SeMenu_SelectPartIfEnabled
@@ -5452,9 +5457,9 @@ SeTonHyb1_OnSideRow5:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue31
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue31
 	ld	wa, 4:i3
 	call	SeMenu_SelectPartIfEnabled
@@ -5471,9 +5476,9 @@ SeTonHyb1_OnSwitch25:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue32
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip45
 	ldw	wa, 35
 	ld	bc, 0:i3
@@ -5494,7 +5499,7 @@ SeTonHyb1_OnSwitch15:
 	call	SeMenu_SetupMenuDisplay
 	lda	xwa, (xsp)
 	call	SeMenu_LoadObjEntries
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, SeMenu_CopyWriteUpdate_Skip46
 	ldw	wa, 32
 	ld	bc, 0:i3
@@ -18596,7 +18601,7 @@ PsMspRecBnkBoxProc_OnPaintOrRepaint:
 	ld	xwa, 0x1e8a80
 	cp	(0x7e78:16), 5
 	jr	ule, MspRecBnkBox_CopyMemBlock
-	.byte 0x40, 0x90, 0x8a, 0x1e, 0x00
+	ld	xwa, 0x1e8a90
 MspRecBnkBox_CopyMemBlock:
 	pushw	16
 	push	xwa
@@ -18851,7 +18856,7 @@ AcSndArgGridBoxProc_OnIndexswUp:	; cases 29360151, 29360153
 	dec	2, a
 	extz	wa
 	lda	xbc, (xsp+12)
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x19, 0xf2, 0x32
+	ld	(0x32f2), (xbc+wa)
 	ld	d, 0:opc
 	extz	xde
 	ld	xwa, NAKA_MAINFUNC_SndArgNmGet
@@ -18919,7 +18924,7 @@ AcSndArgGridBoxProc_OnIndexswDown:	; cases 29360152, 29360154
 	dec	2, a
 	extz	wa
 	lda	xbc, (xsp+12)
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x19, 0xf2, 0x32
+	ld	(0x32f2), (xbc+wa)
 	ld	d, 0:opc
 	extz	xde
 	ld	xwa, NAKA_MAINFUNC_SndArgNmGet
@@ -19354,7 +19359,7 @@ PsParaListBoxProc_OnParaDraw:
 	jrl z, PsParaListBoxProc_Return
 	ld XWA,(XSP+0x06)
 	ld BC,(XWA+0x22)
-	.byte 0x98, 0x24, 0x49
+	muls	xbc, (xwa+36)
 	ld	a, (xde)
 	exts	wa
 	cp	wa, bc
@@ -19366,10 +19371,10 @@ PsParaListBoxProc_OnParaDraw:
 	lda	xwa, (xbc+4)
 	ld	(xsp+10), xwa
 	ld	de, (xwa)
-	.byte 0x91, 0xa2
+	sub	de, (xbc)
 	exts	xde
 	ld	xwa, (xsp+6)
-	.byte 0x98, 0x22, 0x5a
+	divs	xde, (xwa+34)
 	ld	(xsp+4), de
 	lda	xiy, (xbc+6)
 	lda	xix, (xbc+2)
@@ -19404,7 +19409,7 @@ PsParaListBoxProc_OnParaDraw:
 	inc	2, wa
 	add	(xbc), wa
 	ld	de, (xbc)
-	.byte 0x9f, 0x04, 0x82
+	add	de, (xsp+4)
 	ld	xwa, (xsp+10)
 	ld	(xwa), de
 	lda	xde, (xsp+154)
@@ -19429,7 +19434,7 @@ PsParaListBoxProc_OnParaDraw:
 	lda	xhl, (xbc+28)
 	lda	xbc, (xsp+154)
 	lda	xwa, (xsp+142)
-	.byte 0x94, 0xf5
+	cp	iy, (xix)
 	jr	nz, SndArgGrid_CheckDispatch
 	ld	xhl, (xhl)
 	push	xhl
@@ -19806,7 +19811,7 @@ StylCnvStorOkFunc_DataBlock_Loop2:
 	add	(xsp+16), wa
 	incw	1, (xsp+14)
 	ld	wa, (xsp+14)
-	.byte 0x9f, 0x04, 0xf0
+	cp	wa, (xsp+4)
 	jr	c, StylCnvStorOkFunc_DataBlock_Loop2
 StylCnvStorOkFunc_DataBlock_Skip7:
 	lda	xix, (xsp+16)
@@ -19837,7 +19842,7 @@ StylCnvStorOkFunc_DataBlock_Loop3:
 	add	(xsp+16), wa
 	incw	1, (xsp+14)
 	ld	wa, (xsp+14)
-	.byte 0x9f, 0x04, 0xf0
+	cp	wa, (xsp+4)
 	jr	c, StylCnvStorOkFunc_DataBlock_Loop3
 StylCnvStorOkFunc_DataBlock_Epilogue:
 	pop	xiz

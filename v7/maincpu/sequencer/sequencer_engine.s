@@ -9805,7 +9805,7 @@ Seq_SyncPositionAndOutputMIDITiming:
 	push XIZ
 	ld XIY,Seq_SyncPositionAndOutputMIDITiming_LocalInit
 	lda xix, (xsp + 0x04)
-	.byte 0x85, 0x10	; ldi
+	ldi85
 	ldiw
 	cp	(58092:16), 1
 	jr	nz, SeqSync_CheckDemoMode

@@ -3140,7 +3140,7 @@ SeMenu_CopyWriteUpdate_Skip4:
 	lda	xwa, (xsp+4)
 	call	SeMenu_CopyWriteUpdate_Step3_Helper16
 	ld	a, (xsp+10)
-	.byte 0x8f, 0x04, 0xf1
+	cp	a, (xsp+4)
 	jr	nz, SeMenu_CopyWriteUpdate_Epilogue6
 SeMenu_CopyWriteUpdate_Skip5:
 	ld	a, (xsp+10)
@@ -4408,7 +4408,7 @@ SeMenu_CopyWriteUpdate_Skip60:
 	cp	(xsp+6), 0
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue21
 	ld	a, (xsp+6)
-	.byte 0x8f, 0x04, 0x81
+	add	a, (xsp+4)
 	ld	(xsp+6), a
 	cp	a, 0:i3
 	jr	ge, SeMenu_CopyWriteUpdate_Skip17
@@ -4527,7 +4527,7 @@ SeTonRan1_OnColumn3:
 	lda	xbc, (xsp+4)
 	ld	wa, 1:i3
 	call	SeMenu_LoadPartParam
-	.byte 0xbf, 0x04, 0xb7
+	res	7, (xsp+4)
 	ld	a, (xsp+6)
 	extz	wa
 	ld	c, (xsp+4)
@@ -4663,7 +4663,7 @@ SeTonRan1_OnColumn6:
 	lda	xbc, (xsp+4)
 	ld	wa, 3:i3
 	call	SeMenu_LoadPartParam
-	.byte 0xbf, 0x04, 0xb7
+	res	7, (xsp+4)
 	ld	a, (xsp+6)
 	extz	wa
 	ld	e, (xsp+4)
@@ -5751,7 +5751,7 @@ SeMenu_CopyWriteUpdate_Skip73:
 	lda	xwa, (xsp+2)
 	bitm	7, (xwa)
 	jr	nz, SeMenu_CopyWriteUpdate_Skip74
-	.byte 0xb0, 0xbf
+	set	7, (xwa)
 	ld	a, (xwa)
 	ld	(xsp+16), a
 	ld	wa, 4:i3
@@ -5801,7 +5801,7 @@ SeMenu_CopyWriteUpdate_Skip76:
 	ld	c, (xwa)
 	and	c, 15
 	jr	nz, SeMenu_CopyWriteUpdate_Skip33
-	.byte 0xb0, 0xb7
+	res	7, (xwa)
 	ld	a, (xwa)
 	ld	(xsp+16), a
 	ld	wa, 4:i3
@@ -6472,7 +6472,7 @@ SeMenu_CopyWriteUpdate_Data_Skip:
 	resm	6, (xsp)
 	jr	SeMenu_CopyWriteUpdate_Data_Join
 SeMenu_CopyWriteUpdate_Entry6:
-	.byte 0xb7, 0xbe
+	set	6, (xsp)
 SeMenu_CopyWriteUpdate_Data_Join:
 	ld	c, (xsp)
 	extz	bc
@@ -19372,7 +19372,7 @@ StylCnvStorOkFunc_DataBlock_Join2:
 	extz	xix
 	div	ix, 100
 	ld	wa, bc
-	.byte 0x93, 0xa0
+	sub	wa, (xhl)
 	ld	(xsp+4), wa
 	sub	(xsp+4), iz
 	cpw	(xsp+8), 0
@@ -19485,7 +19485,7 @@ StylCnvStorOkFunc_DataBlock_Loop2:
 	add	(xsp+16), wa
 	incw	1, (xsp+14)
 	ld	wa, (xsp+14)
-	.byte 0x9f, 0x04, 0xf0
+	cp	wa, (xsp+4)
 	jr	c, StylCnvStorOkFunc_DataBlock_Loop2
 StylCnvStorOkFunc_DataBlock_Skip7:
 	lda	xix, (xsp+16)
@@ -19516,7 +19516,7 @@ StylCnvStorOkFunc_DataBlock_Loop3:
 	add	(xsp+16), wa
 	incw	1, (xsp+14)
 	ld	wa, (xsp+14)
-	.byte 0x9f, 0x04, 0xf0
+	cp	wa, (xsp+4)
 	jr	c, StylCnvStorOkFunc_DataBlock_Loop3
 StylCnvStorOkFunc_DataBlock_Epilogue:
 	pop	xiz
@@ -19560,7 +19560,7 @@ StylCnvStorOkFunc_DataBlock_Join5:
 	div	wa, 100
 	ld	iz, wa
 	ld	wa, bc
-	.byte 0x93, 0xa0
+	sub	wa, (xhl)
 	ld	(xsp+4), wa
 	ld wa, qiz
 	sub	(xsp+4), wa

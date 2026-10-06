@@ -12254,7 +12254,7 @@ AccTone_InlineBytecodeData_Code_Helper:
 	ld	(13355:16), 0
 	ret
 AccTone_JumpTableData_Data:
-	.byte 0xf1, 0x1f, 0x34, 0xc8
+	bit	0, (0x341f:16)
 	ret	z
 	call	Rhythm_SendChanPressure_Wrap
 	call	AccBuf_ResetAll4_Wrap

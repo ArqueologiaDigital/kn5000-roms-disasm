@@ -43,7 +43,7 @@ FmmWallpaperLoadFunc:
 	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	ApPostEvent
-	.byte	0xd1, 0x64, 0x84, 0x3f, 0x00, 0x00
+	cpw	(0x8464:16), 0
 	jr	ge, WPLoad_DispatchState
 	call	GetDiskSizeInfo
 	extz	hl

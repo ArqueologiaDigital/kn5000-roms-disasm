@@ -27,9 +27,9 @@ UIStateEvt_VoiceParamHandler_Skip2:
 	jr	nz, UIStateEvt_VoiceParamHandler_Entry
 	jr	UIStateEvt_VoiceParamHandler_Return
 UIStateEvt_VoiceParamHandler_Entry:
-	.byte 0xf1, 0xea, 0x10, 0xc8
+	bit	0, (0x10ea:16)
 	jr	z, UIStateEvt_VoiceParamHandler_Skip3
-	.byte 0xc1, 0xea, 0x10, 0x3c, 0xfe
+	and	(0x10ea:16), 0xfe
 	jr	UIStateEvt_VoiceParamHandler_Return
 UIStateEvt_VoiceParamHandler_Skip3:
 	and	a, w

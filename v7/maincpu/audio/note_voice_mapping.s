@@ -4143,7 +4143,7 @@ NoteMap_AddEntry_Skip4:
 	extz	wa
 	add	wa, 36
 	extz	xwa
-	.byte	0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	e, (xwa)
 	ld	a, e
 	cp	a, 255
@@ -4190,7 +4190,7 @@ NoteMap_AddEntry_Skip9:
 	extz	wa
 	add	wa, 68
 	extz	xwa
-	.byte	0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	a, (xwa)
 	ldfr_berp	a, 251
 	cp	a, 255
@@ -4205,7 +4205,7 @@ NoteMap_AddEntry_Skip6:
 	extz	wa
 	add	wa, 100
 	extz	xwa
-	.byte	0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	a, (xwa)
 	ldfr_berp	a, 251
 	cp	a, 255
@@ -13331,7 +13331,7 @@ UIParam_CallbackReturn:
 	ld	(xde), a
 	ld	wa, hl
 	add	wa, wa
-	.byte 0xf1, 0xce, 0xcd, 0x31
+	lda	xbc, (0xcdce:16)
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
@@ -13593,8 +13593,7 @@ SoundFX_Handler_2:
 	ldw	(xiz), 0x1
 	jr	SoundFX_Handler_2_LoadReg
 SoundFX_Handler_2_ClearWord:
-	.byte 0xb6, 0x02
-	.byte 0x00, 0x00
+	ldw	(xiz), 0
 SoundFX_Handler_2_LoadReg:
 	ld	hl, (xiz)
 	pop	xiz
@@ -14624,7 +14623,7 @@ ComputeNoteBitPositi_Data:
 Voice_ComputeNoteBitPosition_Skip:
 	popw	bc
 	inc	1, iy
-	.byte 0xd9, 0x1c, 0xcc
+	djnz16	bc, -52
 	or	de, 1
 	ld	c, 11:opc
 	sub	c, a
@@ -22009,7 +22008,7 @@ CalcAddrOffset_Data:
 	ld	(xsp+6), wa
 	ld	iz, 0:i3
 	ld	wa, iz
-	.byte	0x9f, 0x06, 0xf0
+	cp	wa, (xsp+6)
 	jr	nc, Seq_CalcAddrOffset_Skip2
 Seq_CalcAddrOffset_Loop:
 	calr	RingBuffer_ReadByte
@@ -22023,7 +22022,7 @@ Seq_CalcAddrOffset_Skip:
 	ld	(xwa+iz), l
 	inc	1, iz
 	ld	wa, iz
-	.byte	0x9f, 0x06, 0xf0
+	cp	wa, (xsp+6)
 	jr	c, Seq_CalcAddrOffset_Loop
 Seq_CalcAddrOffset_Skip2:
 	ld	hl, 0:i3
@@ -23296,8 +23295,7 @@ Param_SignExtendReturn_Code2:
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join
 Param_SignExtendReturn_Skip:
-	.byte 0xe9, 0xcf, 0x66
-	.byte 0x00, 0x00, 0x00
+	cp	xbc, 102
 	jrl	c, Param_SignExtendReturn_Skip2
 	sub	xbc, 102
 	ld	xwa, xbc
@@ -24661,12 +24659,12 @@ SendPartDataBlock_Data_Loop:
 	lda	xhl, (xde+12)
 	ld	a, (xhl)
 	ld	(xbc+25), a
-	.byte	0xb1, 0xb7
+	res	7, (xbc)
 	ld	a, (xhl)
 	and	a, 16
 	cp	a, 16
 	jr	nz, SendPartDataBlock_Return5_Skip
-	.byte	0xb1, 0xbf
+	set	7, (xbc)
 SendPartDataBlock_Return5_Skip:
 	ld	a, (xde+13)
 	ld	(xbc+26), a
@@ -24787,7 +24785,7 @@ HdaeRom_DataHandler_Helper:
 HdaeRom_DataHandler_Helper_Skip:
 	bit	1, (xbc)
 	jr	z, HdaeRom_DataHandler_Helper_Skip2
-	.byte	0xb3, 0xbb
+	set	3, (xhl)
 HdaeRom_DataHandler_Helper_Skip2:
 	ld	c, (xwa+18)
 	and	c, 240
@@ -25097,7 +25095,7 @@ HdaeRom_DataHandler_Helper2_Skip5:
 	cp	(xsp+4), 1
 	jr	nz, HdaeRom_DataHandler_Helper2_Entry
 	ld	xwa, (xsp+10)
-	.byte	0xb0, 0xba
+	set	2, (xwa)
 	jr	HdaeRom_DataHandler_Helper2_Join3
 HdaeRom_DataHandler_Helper2_Entry:
 	.byte	0x8f, 0x04
@@ -25105,7 +25103,7 @@ HdaeRom_DataHandler_Helper2_Entry:
 	push	sr
 	jr	nz, HdaeRom_DataHandler_Helper2_Join3
 	ld	xwa, (xsp+10)
-	.byte	0xb0, 0xbc
+	set	4, (xwa)
 HdaeRom_DataHandler_Helper2_Join3:
 	lda	xwa, (xbc+6)
 	ld	(xwa), 0
@@ -26153,7 +26151,7 @@ TmFlash_CompareStrings_Skip:
 	decm	1, (xsp+4)
 TmFlash_CompareStrings_Join:
 	ld	wa, (xsp+6)
-	.byte	0x9f, 0x04, 0xf0
+	cp	wa, (xsp+4)
 	jr	ule, TmFlash_CompareStrings_Loop
 	ld	xhl, 0:i3
 TmFlash_CompareStrings_Epilogue:
@@ -26829,7 +26827,7 @@ NumFormat_DivideAndC_Data:
 	ld	xhl, (xsp+4)
 	ld	wa, (xsp+8)
 NumFormat_DivideAndC_Data_Entry:
-	.byte	0x83, 0xf1
+	cp	a, (xhl)
 	ret	z
 	cp	(xhl+), 0
 	jr	nz, NumFormat_DivideAndC_Data_Entry

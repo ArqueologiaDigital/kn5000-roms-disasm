@@ -693,7 +693,7 @@ SMF_SysEx_CheckBlockLimit:
 	ld	bc, ix
 	ld	xix, xiy
 	ld	xiy, 4206
-	.byte 0x85, 0x11	; ldir
+	ldir85
 	call	SysEx_ReadBytesLoop_Init
 	cp	(6880:16), 255
 	jr	z, Seq_ReturnToDispatcher

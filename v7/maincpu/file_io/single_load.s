@@ -315,7 +315,7 @@ SLSrcBankList_FuncBody_Epilogue2:
 	jr	z, SLSrcBankList_FuncBody_Skip2
 	ld	a, (35168:16)
 	extz	wa
-	.byte 0xc2, 0x52, 0x09, 0xea, 0x51
+	div	wa, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	(35168:16), w
 SLSrcBankList_FuncBody_Skip2:
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)

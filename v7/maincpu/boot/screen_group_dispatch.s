@@ -34,7 +34,7 @@
 AudioDispatch_ClearVoiceFlags:
 	ld	(0xc162:16), 0
 AudioDispatch_SetBusyFlag:
-	.byte	0xd1, 0x00, 0xc5, 0x3e, 0x01, 0x00
+	orw	(0xc500:16), 0x1
 AudioVoice_Callback:
 	ld	a, (CURRENT_MODE:16)
 	extz	wa
@@ -80,14 +80,14 @@ AudioVoiceReset_Handler:
 	ld	(0xc164:16), 255
 	ld	(0xc165:16), 255
 	orw	(0xc500:16), 257
-	.byte	0xd1, 0xf8, 0xc4, 0x3c, 0xfd, 0xff
+	andw	(0xc4f8:16), 0xfffd
 	ld	a, (CURRENT_MODE:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (AudioVoiceHandler_Table:24)
 	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
-	.byte	0xf2, 0x09, 0xe5, 0xfd, 0x30
+	lda	xwa, (AudioInit_MixFallbackDefault_Code:24)
 	cp	xwa, xbc
 	ret	z
 	ld	wa, 1:i3

@@ -1314,7 +1314,7 @@ SeMenu_BitShiftMask_End_Epilogue:
 SeMenu_BitShiftMask_End_Skip3:
 	ld	a, (xsp+16)
 	sub	a, c
-	.byte 0x86, 0xf1
+	cp	a, (xiz)
 	jr	c, SeMenu_BitShiftMask_End_Loop
 	ld	a, (xsp+16)
 SeMenu_BitShiftMask_End_Join2:
@@ -3764,10 +3764,10 @@ SeMenu_ApplyPartEdit_Join21:
 	extz	wa
 	ld	(xsp+8), wa
 	ld	wa, (xsp+10)
-	.byte 0x9f, 0x06, 0xf0
+	cp	wa, (xsp+6)
 	jr	c, SeMenu_ApplyPartEdit_Skip10
 	ld	hl, (xsp+10)
-	.byte 0x9f, 0x06, 0xa3
+	sub	hl, (xsp+6)
 	ld	wa, (xsp+8)
 	mul	xwa, hl
 	ld	(xsp+8), wa
@@ -3891,7 +3891,7 @@ SeMenu_ApplyPartEdit_Skip42:
 	ld	iz, wa
 	add	iz, (xsp+8)
 	ldw	wa, 146
-	.byte 0x9f, 0x06, 0xa0
+	sub	wa, (xsp+6)
 	ld	(xsp+6), wa
 	ldw	wa, 146
 	sub	wa, (xsp+10)
@@ -4323,7 +4323,7 @@ SeMenu_ApplyPartEdit_Join13:
 	ld	wa, (xsp+12)
 	add	(xsp+16), wa
 	ldw	wa, 145
-	.byte 0x9f, 0x06, 0xa0
+	sub	wa, (xsp+6)
 	ld	(xsp+6), wa
 	ldw	wa, 145
 	sub	wa, (xsp+10)
@@ -4500,7 +4500,7 @@ SeMenu_ApplyPartEdit_Helper9:
 	sub	(xsp+8), wa
 	sub	iz, wa
 	ld	wa, (xsp+10)
-	.byte 0x9f, 0x06, 0xf0
+	cp	wa, (xsp+6)
 	jr	nz, SeMenu_ApplyPartEdit_Helper9_Skip2
 	cpw	(xsp+8), 59
 	jr	nc, SeMenu_ApplyPartEdit_Helper9_Skip
@@ -4739,12 +4739,12 @@ SeMenu_ApplyPartEdit_Helper11_Join:
 	pushw	121
 	pushm	(xsp+24)
 	pushw	97
-	.byte 0x9f, 0x1c, 0x04
+	pushw	(xsp+28)
 	call	SeMenu_DrawDottedLine
 	pushw	121
 	pushm	(xsp+22)
 	pushw	97
-	.byte 0x9f, 0x1a, 0x04
+	pushw	(xsp+26)
 	call	SeMenu_DrawDottedLine
 	lda	xsp, (xsp+24)
 	pushw	121
@@ -4889,10 +4889,10 @@ SeMenu_ApplyPartEdit_Entry4:
 	ldw	(xsp+4), 48
 	ldw	wa, 241
 SeMenu_ApplyPartEdit_Entry5:
-	.byte 0x97, 0x04
+	pushw	(xsp)
 	pushw	wa
 	ld	wa, (xsp+4)
-	.byte 0x9f, 0x06, 0xa0
+	sub	wa, (xsp+6)
 	pushw	wa
 	pushm	(xsp+10)
 	call	SeMenu_ClearRect
@@ -5023,7 +5023,7 @@ SeMenu_SelectPartAndRedraw:
 	ld	wa, 0:i3
 	calr	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
-	.byte 0x87, 0xf1
+	cp	a, (xsp)
 	jr	z, SeMenu_ApplyPartEdit_Entry5_Code_Epilogue
 	cp	(xsp+2), 1
 	jr	nz, SeMenu_ApplyPartEdit_Entry5_Code_Skip
@@ -5267,7 +5267,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip12:
 	call	SeMenu_ClearRect
 	inc	8, xsp
 	ld	a, (xsp+10)
-	.byte 0x8f, 0x04, 0xc1
+	and	a, (xsp+4)
 	jr	z, SeMenu_ApplyPartEdit_Entry5_Code_Skip13
 	pushm	(xsp+8)
 	ld	wa, qiz
@@ -6186,7 +6186,7 @@ SeMenu_ApplyPartEdit_Helper13_Skip4:
 	ld	(xsp+4), 127
 SeMenu_ApplyPartEdit_Helper13_Join:
 	ld	a, (xsp+4)
-	.byte 0x8f, 0x06, 0xf1
+	cp	a, (xsp+6)
 	jr	nc, SeMenu_ApplyPartEdit_Helper13_Skip5
 	ld	a, (xsp+6)
 	ld	(xsp+4), a
@@ -6210,7 +6210,7 @@ SeMenu_ApplyPartEdit_Helper13_Skip6:
 	cp	(xsp+4), 0
 	jr	z, SeMenu_PatchBank_Data_Skip2
 	ld	a, (xsp+4)
-	.byte 0x8f, 0x06, 0xf1
+	cp	a, (xsp+6)
 	jr	ugt, SeMenu_PatchBank_Data_Entry
 SeMenu_PatchBank_Data_Skip2:
 	ld	l, 0:opc
