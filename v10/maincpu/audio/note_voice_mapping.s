@@ -17439,6 +17439,7 @@ HdaeRom_ProcessBlock_Epilogue:
 	ret
 HdaeRom_ReadParam:
 	ret
+SwbtB2_Code63_Listener:
 	dec	4, xsp
 	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
 	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
@@ -17544,9 +17545,11 @@ HdaeRom_FinishBlock_Epilogue:
 	ret
 HdaeRom_TableEntry0:
 	ret
+SwbtB2_Code69_NopListener:
 	ret
 HdaeRom_TableEntry1:
 	ret
+SwbtB2_Code6B_NopListener:
 	ret
 HdaeRom_TableEntry2:
 	dec	4, xsp
@@ -17804,6 +17807,7 @@ HdaeRom_AltCheckResult_Skip4:
 HdaeRom_AltCheckResult_Epilogue:
 	inc	4, xsp
 	ret
+SwbtB2_Code9A_Listener:
 	dec	4, xsp
 	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
 	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)

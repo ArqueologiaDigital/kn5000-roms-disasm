@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 52,912
-#   semantic names ........... 52,077 (98.4%)
+#   symbols .................. 52,926
+#   semantic names ........... 52,091 (98.4%)
 #   positional names ......... 835
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -16539,9 +16539,11 @@ PerfMode_Handler_EvtA 00EF754B
 PerfMode_Handler_EvtA_Return 00EF7555
 PerfMode_Handler_EvtB 00EF7556
 PerfMode_Handler_EvtB_Return 00EF7560
+SwbtB2_CodeA8_Listener 00EF7561
 PerfMode_Handler_EvtB_Skip 00EF75A6
 PerfMode_Handler_EvtB_Skip2 00EF75C2
 PerfMode_Handler_EvtB_Epilogue 00EF75CE
+SwbtBank2_PostCallback 00EF75D3
 PerfMode_Handler_EvtB_Skip3 00EF7613
 PerfMode_Handler_EvtB_Skip4 00EF7619
 PerfMode_Handler_EvtB_Return2 00EF761D
@@ -17732,6 +17734,7 @@ PerfMode_ParamHandler_11_Skip17 00EFE01C
 PerfMode_ParamHandler_11_Return3 00EFE020
 SubCPU_ToneParamRet_Helper2 00EFE021
 PerfMode_ParamHandler_11_Return4 00EFE067
+SwbtB3_CodeA9_Listener3 00EFE068
 SubCPU_ToneParamRet_Helper3 00EFE075
 PerfMode_ParamHandler_11_Skip18 00EFE094
 PerfMode_ParamHandler_11_Skip19 00EFE0B3
@@ -32223,6 +32226,7 @@ AccDir_Periodic_CheckCountdown 00F5BB1A
 AccDir_Periodic_DisableAndReset 00F5BB2F
 AccDir_Periodic_Ret 00F5BB3D
 AccDir_JumpTable 00F5BB3E
+SwbtB3_CodeA8_Listener0 00F5BB40
 AccProcess_Entry 00F5BB45
 AccProcess_InlinedCode 00F5BB4A
 AccProcess_Entry_Skip5 00F5BB7D
@@ -35349,6 +35353,7 @@ AccompSeq_UpdatePosition 00F6E203
 AccompSeq_UpdatePos_Part2 00F6E215
 AccompSeq_UpdatePos_Store 00F6E21E
 AccompSeq_JumpTable 00F6E22A
+SwbtB3_CodeA9_Listener1 00F6E232
 AccompSeq_StopSequence 00F6E236
 AccompSeq_SendMidiEvent 00F6E23D
 AccompSeq_AllNotesOff 00F6E241
@@ -38145,6 +38150,7 @@ FDemo_IndicatorSetup 00F865CE
 DemoMode_Initialize 00F865DF
 FDemo_PostBannerCheck 00F86637
 Demo_SelectionEntryHandler 00F86643
+SwbtB3_CodeA9_Listener0 00F86676
 Demo_SelectEntry_NoNewButton 00F86695
 Demo_SelectEntry_PreSaveCheck 00F8669B
 Demo_SelectEntry_CheckVoiceKeys 00F866C2
@@ -40813,6 +40819,7 @@ MainTitle_UpdateAndRefresh 00F97C8B
 MainTitle_EventLoop 00F97C93
 MainTitle_EventLoopSkipInit 00F97CDD
 MainTitle_PrepareAndDispatch 00F97CE1
+SwbtB3_OnPanelEvent 00F97CF4
 CtrlPanel_HandleSingleBit 00F97D43
 CtrlPanel_HandleBit1SndParam 00F97D52
 CtrlPanel_DispatchSndParamLookup 00F97D5E
@@ -44449,6 +44456,7 @@ BitMapOut_ByteData_RenderD 00FB3D5B
 BitMapOut_ByteData_RenderD_Skip 00FB3DB6
 BitMapOut_ByteData_RenderD_Skip2 00FB3DC8
 BitMapOut_ByteData_RenderD_Epilogue 00FB3DDD
+SwbtB3_Code48_Listener 00FB3DE0
 BitMapOut_ByteData_RenderE 00FB3E1D
 BitMapOut_CheckDiskAndApply 00FB3E6A
 BitMapOut_ByteData_DiskCheck 00FB3E84
@@ -49835,9 +49843,11 @@ UIStateEvt_ChannelConfig_Data_Skip5 00FDE16A
 UIStateEvt_ChannelConfig_Data_Skip2 00FDE18A
 UIStateEvt_ChannelConfig_Data_Skip3 00FDE19D
 UIStateEvt_StubReturn 00FDE1B0
+SwbtB2_Code93_NopListener 00FDE1B1
 UIStateEvt_MuteToggle_Data 00FDE1B2
 UIStateEvt_MuteToggle_Data_Skip 00FDE1CF
 UIStateEvt_MuteToggle_Data_Join 00FDE1D5
+SwbtB2_Code71_NopListener 00FDE1DC
 AudioInit_ConfigStereoVoice 00FDE1DD
 AudioInit_CheckVoiceMixFlags 00FDE21B
 AudioInit_ClearModeRegister 00FDE234
@@ -51275,6 +51285,7 @@ HdaeRom_Entry_Epilogue 00FEA2AE
 HdaeRom_ProcessBlock 00FEA2B1
 HdaeRom_ProcessBlock_Epilogue 00FEA2F2
 HdaeRom_ReadParam 00FEA2F5
+SwbtB2_Code63_Listener 00FEA2F6
 HdaeRom_ReadParam_Epilogue 00FEA337
 HdaeRom_WriteParam 00FEA33A
 HdaeRom_WriteParam_Epilogue 00FEA37B
@@ -51283,7 +51294,9 @@ HdaeRom_CheckResult_Epilogue 00FEA3BF
 HdaeRom_FinishBlock 00FEA3C2
 HdaeRom_FinishBlock_Epilogue 00FEA403
 HdaeRom_TableEntry0 00FEA406
+SwbtB2_Code69_NopListener 00FEA407
 HdaeRom_TableEntry1 00FEA408
+SwbtB2_Code6B_NopListener 00FEA409
 HdaeRom_TableEntry2 00FEA40A
 HdaeRom_TableEntry2_Code 00FEA445
 HdaeRom_TableEntry2_Skip 00FEA45D
@@ -51308,6 +51321,7 @@ HdaeRom_AltCheckResult_Skip2 00FEA623
 HdaeRom_AltCheckResult_Skip3 00FEA63D
 HdaeRom_AltCheckResult_Skip4 00FEA655
 HdaeRom_AltCheckResult_Epilogue 00FEA666
+SwbtB2_Code9A_Listener 00FEA669
 HdaeRom_AltCheckResult_Skip 00FEA6B6
 HdaeRom_AltCheckResult_Epilogue2 00FEA6CC
 HdaeRom_AltTableEntry0 00FEA6CF

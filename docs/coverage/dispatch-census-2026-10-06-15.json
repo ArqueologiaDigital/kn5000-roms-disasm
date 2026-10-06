@@ -1,0 +1,669 @@
+{
+ "date": "2026-10-06",
+ "head": "1d18a8d5",
+ "dirty": true,
+ "images": {
+  "v10": {
+   "framed": 677,
+   "used": 671,
+   "not_used": 6,
+   "new_targets_same_image": 29,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 2,
+   "unframed_runs": 25,
+   "unframed_not_used": 3,
+   "unframed_new_targets": 2,
+   "null_control": 3,
+   "d_unresolved_sites": 0,
+   "not_used_tables": [
+    {
+     "kind": "D",
+     "addr": "0xE1E36C",
+     "name": "SndArgGridCheck_Data",
+     "entries": 7,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "numeric": 7
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE1FFB6",
+     "name": "WidgetDispatch_FDTestPtrTable",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE4A044",
+     "name": "TimeSig_ProcTable",
+     "entries": 24,
+     "pointers": 24,
+     "unused_targets": 6,
+     "blockers": {
+      "nolabel/num": 15
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEAAF14",
+     "name": "GraphicsRender_ProcessEntries_PtrTable",
+     "entries": 36,
+     "pointers": 36,
+     "unused_targets": 11,
+     "blockers": {
+      "nolabel/num": 11
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEAAFA4",
+     "name": "GraphicsRender_Start_PtrTable",
+     "entries": 12,
+     "pointers": 12,
+     "unused_targets": 4,
+     "blockers": {
+      "nolabel/num": 4
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE2EBE",
+     "name": "MidiSysEx_BlockHandlers",
+     "entries": 22,
+     "pointers": 22,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 22
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF5ADFD",
+     "name": "AccPlayMode_Dispatch_Execute_Data",
+     "entries": 7,
+     "pointers": 7,
+     "unused_targets": 7,
+     "blockers": {
+      "numeric": 5,
+      "nolabel/num": 2
+     }
+    },
+    {
+     "kind": "J",
+     "addr": "0xF5C573",
+     "name": "AccStyle_JumpTable2",
+     "entries": 6,
+     "pointers": 6,
+     "unused_targets": 1,
+     "blockers": {
+      "dataother": 1
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF5E907",
+     "name": "AccTone_LookupByProgramWrapped_Join",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    }
+   ]
+  },
+  "v9": {
+   "framed": 677,
+   "used": 671,
+   "not_used": 6,
+   "new_targets_same_image": 29,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 2,
+   "unframed_runs": 25,
+   "unframed_not_used": 3,
+   "unframed_new_targets": 2,
+   "null_control": 3,
+   "d_unresolved_sites": 0,
+   "not_used_tables": [
+    {
+     "kind": "D",
+     "addr": "0xE1E36C",
+     "name": "SndArgGridCheck_Data",
+     "entries": 7,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "numeric": 7
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE1FFB6",
+     "name": "WidgetDispatch_FDTestPtrTable",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE4A044",
+     "name": "TimeSig_ProcTable",
+     "entries": 24,
+     "pointers": 24,
+     "unused_targets": 6,
+     "blockers": {
+      "nolabel/num": 15
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEAAF14",
+     "name": "GraphicsRender_ProcessEntries_PtrTable",
+     "entries": 36,
+     "pointers": 36,
+     "unused_targets": 11,
+     "blockers": {
+      "nolabel/num": 11
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEAAFA4",
+     "name": "GraphicsRender_Start_PtrTable",
+     "entries": 12,
+     "pointers": 12,
+     "unused_targets": 4,
+     "blockers": {
+      "nolabel/num": 4
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE2EBE",
+     "name": "MidiSysEx_BlockHandlers",
+     "entries": 22,
+     "pointers": 22,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 22
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF5ADFD",
+     "name": "AccPlayMode_Dispatch_Execute_Data",
+     "entries": 7,
+     "pointers": 7,
+     "unused_targets": 7,
+     "blockers": {
+      "numeric": 5,
+      "nolabel/num": 2
+     }
+    },
+    {
+     "kind": "J",
+     "addr": "0xF5C573",
+     "name": "AccStyle_JumpTable2",
+     "entries": 6,
+     "pointers": 6,
+     "unused_targets": 1,
+     "blockers": {
+      "dataother": 1
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF5E907",
+     "name": "AccTone_LookupByProgramWrapped_Join",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    }
+   ]
+  },
+  "v7": {
+   "framed": 674,
+   "used": 665,
+   "not_used": 9,
+   "new_targets_same_image": 29,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 11,
+   "unframed_runs": 27,
+   "unframed_not_used": 6,
+   "unframed_new_targets": 1,
+   "null_control": 4,
+   "d_unresolved_sites": 0,
+   "not_used_tables": [
+    {
+     "kind": "D",
+     "addr": "0xE00178",
+     "name": "HANDLE_UPDATE_OFFSETS",
+     "entries": 8,
+     "pointers": 8,
+     "unused_targets": 7,
+     "blockers": {
+      "numeric": 8
+     }
+    },
+    {
+     "kind": "D",
+     "addr": "0xE1E36C",
+     "name": "SndArgGridCheck_Data",
+     "entries": 7,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "numeric": 7
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE1F0EC",
+     "name": "InitializeHama_Data_8",
+     "entries": 84,
+     "pointers": 84,
+     "unused_targets": 84,
+     "blockers": {
+      "numeric": 84
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE201B4",
+     "name": "SqStepTtlFunc_Data",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE20260",
+     "name": "Yoko_ApFunctionTable_127",
+     "entries": 46,
+     "pointers": 46,
+     "unused_targets": 45,
+     "blockers": {
+      "numeric": 45
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE4A064",
+     "name": "TimeSig_ProcTable",
+     "entries": 5,
+     "pointers": 5,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel/num": 1
+     }
+    },
+    {
+     "kind": "D",
+     "addr": "0xE4C0A2",
+     "name": "MspRecTtlFunc_CaseTable",
+     "entries": 7,
+     "pointers": 7,
+     "unused_targets": 3,
+     "blockers": {
+      "numeric": 6,
+      "databyte/num": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEAAF14",
+     "name": "GraphicsRender_ProcessEntries_PtrTable",
+     "entries": 36,
+     "pointers": 36,
+     "unused_targets": 11,
+     "blockers": {
+      "nolabel/num": 11
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEAAFA4",
+     "name": "GraphicsRender_Start_PtrTable",
+     "entries": 12,
+     "pointers": 12,
+     "unused_targets": 4,
+     "blockers": {
+      "nolabel/num": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEAFA6E",
+     "name": "Root_FunctionTable_100",
+     "entries": 352,
+     "pointers": 352,
+     "unused_targets": 1,
+     "blockers": {
+      "numeric": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE2D6C",
+     "name": "SeqChan_CommandHandlers",
+     "entries": 39,
+     "pointers": 39,
+     "unused_targets": 4,
+     "blockers": {
+      "nolabel": 4
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE2EBE",
+     "name": "MidiSysEx_BlockHandlers",
+     "entries": 22,
+     "pointers": 22,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 22
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF5AA05",
+     "name": "AccPlayMode_Dispatch_Execute_Data",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "nolabel/num": 1,
+      "numeric": 3
+     }
+    },
+    {
+     "kind": "J",
+     "addr": "0xF5C154",
+     "name": "AccStyle_Entry",
+     "entries": 5,
+     "pointers": 5,
+     "unused_targets": 1,
+     "blockers": {
+      "databyte": 1
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF5E503",
+     "name": "AccTone_JumpTableData",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    }
+   ]
+  },
+  "v142": {
+   "framed": 43,
+   "used": 43,
+   "not_used": 0,
+   "new_targets_same_image": 0,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "d_unresolved_sites": 0,
+   "not_used_tables": []
+  },
+  "subboot": {
+   "framed": 2,
+   "used": 2,
+   "not_used": 0,
+   "new_targets_same_image": 0,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "d_unresolved_sites": 0,
+   "not_used_tables": []
+  },
+  "tabledata": {
+   "framed": 13,
+   "used": 13,
+   "not_used": 0,
+   "new_targets_same_image": 0,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "d_unresolved_sites": 0,
+   "not_used_tables": []
+  },
+  "customdata": {
+   "framed": 0,
+   "used": 0,
+   "not_used": 0,
+   "new_targets_same_image": 0,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "d_unresolved_sites": 0,
+   "not_used_tables": []
+  },
+  "hdae5000": {
+   "framed": 68,
+   "used": 68,
+   "not_used": 0,
+   "new_targets_same_image": 0,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "d_unresolved_sites": 0,
+   "not_used_tables": []
+  },
+  "prom_a": {
+   "framed": 424,
+   "used": 421,
+   "not_used": 3,
+   "new_targets_same_image": 12,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 1,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "d_unresolved_sites": 0,
+   "not_used_tables": [
+    {
+     "kind": "A",
+     "addr": "0xF8E77C",
+     "name": "AddrTable_F8E77C",
+     "entries": 8,
+     "pointers": 8,
+     "unused_targets": 6,
+     "blockers": {
+      "midinsn/num": 3,
+      "numeric": 2,
+      "midinsn": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xF8E7A9",
+     "name": "AddrTable_F8E7A9",
+     "entries": 9,
+     "pointers": 9,
+     "unused_targets": 3,
+     "blockers": {
+      "midinsn/num": 2,
+      "numeric": 3
+     }
+    },
+    {
+     "kind": "J",
+     "addr": "0xFAA000",
+     "name": "ParamModule_PhaseVector_StaleCopy",
+     "entries": 5,
+     "pointers": 5,
+     "unused_targets": 5,
+     "blockers": {
+      "midinsn": 4,
+      "nolabel": 1
+     }
+    }
+   ]
+  },
+  "prom_b": {
+   "framed": 291,
+   "used": 284,
+   "not_used": 7,
+   "new_targets_same_image": 44,
+   "new_targets_other_image": 179,
+   "spelling_only_targets": 1,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "d_unresolved_sites": 0,
+   "not_used_tables": [
+    {
+     "kind": "A",
+     "addr": "0xF00340",
+     "name": "PtrTable_F00340",
+     "entries": 35,
+     "pointers": 33,
+     "unused_targets": 1,
+     "blockers": {
+      "midinsn/num": 7
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xF00762",
+     "name": "PtrTable_F00762",
+     "entries": 39,
+     "pointers": 37,
+     "unused_targets": 22,
+     "blockers": {
+      "midinsn/num": 31,
+      "nolabel/num": 6
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xF00C4E",
+     "name": "PtrArray_F00C4E",
+     "entries": 21,
+     "pointers": 21,
+     "unused_targets": 18,
+     "blockers": {
+      "midinsn/num": 11,
+      "nolabel/num": 7
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xF014EE",
+     "name": "PtrArray_F014EE",
+     "entries": 196,
+     "pointers": 185,
+     "unused_targets": 134,
+     "blockers": {
+      "nolabel/num": 48,
+      "midinsn/num": 135,
+      "numeric": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xF0ED50",
+     "name": "OldBuild_DLHandlerTables_Tail",
+     "entries": 39,
+     "pointers": 39,
+     "unused_targets": 12,
+     "blockers": {
+      "midinsn": 17,
+      "nolabel": 4
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xF0EE6C",
+     "name": "OldBuild_ValueGlyph_Table",
+     "entries": 29,
+     "pointers": 29,
+     "unused_targets": 19,
+     "blockers": {
+      "midinsn": 14,
+      "nolabel": 5
+     }
+    },
+    {
+     "kind": "J",
+     "addr": "0xF40000",
+     "name": "prom_b routine directory",
+     "entries": 2002,
+     "pointers": 2002,
+     "unused_targets": 19,
+     "blockers": {
+      "midinsn/num": 5,
+      "nolabel/num": 1,
+      "text": 4,
+      "databyte": 8,
+      "dataother": 1
+     }
+    }
+   ]
+  },
+  "prom_c": {
+   "framed": 47,
+   "used": 46,
+   "not_used": 1,
+   "new_targets_same_image": 5,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "d_unresolved_sites": 0,
+   "not_used_tables": [
+    {
+     "kind": "J",
+     "addr": "0xFFF0D1",
+     "name": "UNREFERENCED_TRAMPOLINES",
+     "entries": 5,
+     "pointers": 5,
+     "unused_targets": 5,
+     "blockers": {
+      "midinsn": 5
+     }
+    }
+   ]
+  }
+ }
+}

@@ -217,6 +217,7 @@ BitMapOut_ByteData_RenderD_Skip2:
 BitMapOut_ByteData_RenderD_Epilogue:
 	inc	6, xsp
 	ret
+SwbtB3_Code48_Listener:
 	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
 	ret	z

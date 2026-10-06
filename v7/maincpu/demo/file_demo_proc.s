@@ -618,6 +618,7 @@ Demo_SelectionEntryHandler:
 	ldw WA, 0x0022
 	call CtrlPanel_SetIndicatorLED
 	jrl t, Banner_Loop_Check
+SwbtB3_CodeA9_Listener0:
 	cp (SWBTWR_PAYLOAD_1:16), 0x20
 	ret NZ
 	ld	a, (SWBTWR_PAYLOAD_3:16)

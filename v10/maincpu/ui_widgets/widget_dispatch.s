@@ -6538,7 +6538,7 @@ SwbtB2_Code62_Listeners:
 	.long 0xffffffff
 ; code 0x63: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code63_Listeners:
-	.long HdaeRom_ReadParam + 1	; no label at this callback entry yet
+	.long SwbtB2_Code63_Listener
 	.long UIState_KeyScan_Dispatch
 	.long EffEdit_DSPConfigBlock
 	.long 0xffffffff
@@ -6564,7 +6564,7 @@ SwbtB2_Code68_Listeners:
 	.long 0xffffffff
 ; code 0x69: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code69_Listeners:
-	.long HdaeRom_TableEntry0 + 1	; no label at this callback entry yet
+	.long SwbtB2_Code69_NopListener
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x6A: callbacks SwbtWr_DispatchLoop calls for it
@@ -6574,7 +6574,7 @@ SwbtB2_Code6A_Listeners:
 	.long 0xffffffff
 ; code 0x6B: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code6B_Listeners:
-	.long HdaeRom_TableEntry1 + 1	; no label at this callback entry yet
+	.long SwbtB2_Code6B_NopListener
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 SwbtB2_Code6C_Listeners:	.long 0xffffffff
@@ -6590,7 +6590,7 @@ SwbtB2_Code70_Listeners:
 	.long 0xffffffff
 ; code 0x71: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code71_Listeners:
-	.long UIStateEvt_MuteToggle_Data_Join + 7	; no label at this callback entry yet
+	.long SwbtB2_Code71_NopListener
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x72: callbacks SwbtWr_DispatchLoop calls for it
@@ -6634,7 +6634,7 @@ SwbtB2_Code92_Listeners:
 	.long 0xffffffff
 ; code 0x93: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code93_Listeners:
-	.long UIStateEvt_StubReturn + 1	; no label at this callback entry yet
+	.long SwbtB2_Code93_NopListener
 	.long CharMap_ActivePreamb_LoadDRAM
 	.long UIState_KeyScan_Dispatch
 	.long Encoder_ApplySystemModeSettings
@@ -6658,7 +6658,7 @@ SwbtB2_Code99_Listeners:
 	.long 0xffffffff
 ; code 0x9A: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code9A_Listeners:
-	.long HdaeRom_AltCheckResult_Epilogue + 3	; no label at this callback entry yet
+	.long SwbtB2_Code9A_Listener
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0xA8: callbacks SwbtWr_DispatchLoop calls for it
@@ -6666,7 +6666,7 @@ SwbtB2_CodeA8_Listeners:
 	.long UIState_SwitchForMidiFlags
 	.long AccompSeq_JumpTable
 	.long AccStyle_JumpTable
-	.long PerfMode_Handler_EvtB + 11	; no label at this callback entry yet
+	.long SwbtB2_CodeA8_Listener
 	.long Demo_SelectEntry_ByteTable
 	.long UIStateEvt_MuteToggle_Data
 	.long FileIO_ErrorCodeByteBlock
@@ -6728,7 +6728,7 @@ UIState_DefaultConfig_B:	.long 0xffffffff	; codes 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 
 SwbtBank2_PostCallbacks:
 	.long Song_SendPartDataBlocks
 	.long AudioInit_ProcessModeChange
-	.long PerfMode_Handler_EvtB_Skip + 45	; no label at this callback entry yet
+	.long SwbtBank2_PostCallback
 	.long UIState_DisplayUpdate_BitmapHandler
 	.long BitMapOut_ByteData_RenderC
 	.long FDemoText_ProcessVoiceFlags
@@ -7102,7 +7102,7 @@ SwbtB3_Code46_Listeners:	.long 0xffffffff
 SwbtB3_Code47_Listeners:	.long 0xffffffff
 ; code 0x48: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_Code48_Listeners:
-	.long BitMapOut_ByteData_RenderD_Epilogue + 3	; no label at this callback entry yet
+	.long SwbtB3_Code48_Listener
 	.long 0xffffffff
 SwbtB3_Code49_Listeners:	.long 0xffffffff
 SwbtB3_Code50_Listeners:	.long 0xffffffff
@@ -7141,20 +7141,20 @@ SwbtB3_Code99_Listeners:	.long 0xffffffff
 SwbtB3_Code9A_Listeners:	.long 0xffffffff
 ; code 0xA8: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_CodeA8_Listeners:
-	.long AccDir_JumpTable + 2	; no label at this callback entry yet
+	.long SwbtB3_CodeA8_Listener0
 	.long BitMapOut_UpdateWidget_Done
-	.long MainTitle_PrepareAndDispatch + 19	; no label at this callback entry yet
+	.long SwbtB3_OnPanelEvent
 	.long 0xffffffff
 ; code 0xA9: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_CodeA9_Listeners:
-	.long Demo_SelectionEntryHandler + 51	; no label at this callback entry yet
-	.long AccompSeq_JumpTable + 8	; no label at this callback entry yet
-	.long MainTitle_PrepareAndDispatch + 19	; no label at this callback entry yet
-	.long PerfMode_ParamHandler_11_Return5 + 1	; no label at this callback entry yet
+	.long SwbtB3_CodeA9_Listener0
+	.long SwbtB3_CodeA9_Listener1
+	.long SwbtB3_OnPanelEvent
+	.long SwbtB3_CodeA9_Listener3
 	.long 0xffffffff
 ; code 0xAA: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB3_CodeAA_Listeners:
-	.long MainTitle_PrepareAndDispatch + 19	; no label at this callback entry yet
+	.long SwbtB3_OnPanelEvent
 	.long 0xffffffff
 SwbtB3_CodeAC_Listeners:	.long 0xffffffff
 SwbtB3_CodeAD_Listeners:	.long 0xffffffff

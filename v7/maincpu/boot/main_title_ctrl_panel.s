@@ -96,6 +96,7 @@ MainTitle_PrepareAndDispatch:
 	ld XBC,EVT_MAIN_LOOP_COUNT
 	ld	xde, 0:i3
 	jrl	MainTitleControl
+SwbtB3_OnPanelEvent:
 	push	xiz
 	ld	a, (SWBTWR_EVENT_TYPE:16)
 	ld	e, (SWBTWR_PAYLOAD_1:16)

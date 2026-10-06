@@ -1022,6 +1022,7 @@ AccompSeq_UpdatePos_Store:
 AccompSeq_JumpTable:
 	jp	AccompSeq_LargeCodeBlock2_Join
 	jp	AccompSeq_ProcessAfterNote_Helper
+SwbtB3_CodeA9_Listener1:
 	jp	AccompSeq_GuardedNoteOff
 
 AccompSeq_StopSequence:

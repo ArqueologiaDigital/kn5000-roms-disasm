@@ -5518,6 +5518,7 @@ UIStateEvt_ChannelConfig_Data_Skip3:
 	ret
 UIStateEvt_StubReturn:
 	ret
+SwbtB2_Code93_NopListener:
 	ret
 UIStateEvt_MuteToggle_Data:
 	ldb_d8	a, (SWBTWR_PAYLOAD_1)
@@ -5534,5 +5535,6 @@ UIStateEvt_MuteToggle_Data_Skip:
 UIStateEvt_MuteToggle_Data_Join:
 	orw	(0xc4f8:16), 4
 	ret
+SwbtB2_Code71_NopListener:
 	ret
 	.include "audio/audioinit_routines.s"

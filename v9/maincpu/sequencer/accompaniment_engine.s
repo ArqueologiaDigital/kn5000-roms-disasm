@@ -10390,6 +10390,7 @@ AccDir_Periodic_Ret:
 AccDir_JumpTable:
 	nop
 	nop
+SwbtB3_CodeA8_Listener0:
 	call	AccProcess_InlinedCode
 	ret
 

@@ -2654,6 +2654,7 @@ PerfMode_Handler_EvtB:
 	call	DisplayMode_Dispatch_Mode0_Helper2
 PerfMode_Handler_EvtB_Return:
 	ret
+SwbtB2_CodeA8_Listener:
 	push	xhl
 	push	xde
 	push	xix
@@ -2697,6 +2698,7 @@ PerfMode_Handler_EvtB_Epilogue:
 	pop	xde
 	pop	xhl
 	ret
+SwbtBank2_PostCallback:
 	bit	3, (0x0d53:16)
 	jrl	z, PerfMode_Handler_EvtB_Return2
 	call	Display_ResetDirtyFlags
@@ -12829,6 +12831,7 @@ SubCPU_ToneParamRet_Helper2:
 	call	VoiceSlot_TableSetup_Helper9
 PerfMode_ParamHandler_11_Return5:
 	ret
+SwbtB3_CodeA9_Listener3:
 	call	Display_ResetDirtyFlags
 	call	SubCPU_ToneParamRet_Helper3
 	call	Display_UpdateDirtyRegions
