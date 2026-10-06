@@ -9,7 +9,8 @@ QUESTION IT ANSWERS
   that exactly ONE screen id points at, where that screen's object has a name, becomes
   ScreenFieldList_<Screen> (the object label without T_, ScreenEnter_ / ScreenEnterBody_ / InstallPainter_ /
   Paint_, _Fwd, _Entry[_n]; a second screen with the same name gets 2, 3, ...).  Lists shared by several
-  screen ids -- the empty list most of all -- keep their address.
+  screen ids -- the empty list most of all -- keep their address.  The note goes on the label line, not
+  above it (see wsa1_display_list_drawer_names.py).
 
 RUN (from wsa1/)
   python3 notes/wsa1_screen_field_list_names.py --list

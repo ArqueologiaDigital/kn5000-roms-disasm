@@ -11,7 +11,9 @@ QUESTION IT ANSWERS
       <Drawer>_DL<k>      k = 1, 2, ... in source order, when it draws several
   Not named: lists drawn by several routines, by unnamed (sub_ / T_) routines, by routines whose own name is
   generic (_Helper7, _Data, ...), lists only ever used as an END bound, and `L + offset` references.
-  Each renamed list gets a one-line header: `; drawn (start operand) by <Drawer> -- derivative name`.
+  Each renamed list carries `; drawn (start operand) by <Drawer> -- derivative name` as a comment on its LABEL
+  line, not as a header line: a header above a label that sits inside a documented region splits the region,
+  and data_range_census.py then grades the piece by the one-line header (it cost 43 bytes of KNOWN-A once).
 
 RUN (from wsa1/)
   python3 notes/wsa1_display_list_drawer_names.py --list    # list, drawer, new name, and the counts

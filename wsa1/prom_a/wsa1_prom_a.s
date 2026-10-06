@@ -61931,8 +61931,8 @@ Descriptor9_FA1687:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_ReMapEdit_Button (its only reader: add XWA, table)
 HandlerTable23_ReMapEdit:
+; ; the 23-slot button table of Screen_ReMapEdit_Button (its only reader: add XWA, table)
 	.long SoftKeyCol1_ReMapEdit                    ; FA1690  [ 0]  SoftKeyCol1
 	.long SoftKeyCol2_ReMapEdit                    ; FA1694  [ 1]  SoftKeyCol2
 	.long SoftKeyCols3_4_ReMapEdit                 ; FA1698  [ 2]  SoftKeyCol3
@@ -62034,8 +62034,8 @@ ByteTable12_FA1706:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_SoundCombinationManager_Button
 HandlerTable23_SoundCombinationManager:
+; ; the 23-slot button table of Screen_SoundCombinationManager_Button
 	.long T_TableDefault_Ret                       ; FA1712  [ 0]  SoftKeyCol1
 	.long T_TableDefault_Ret                       ; FA1716  [ 1]  SoftKeyCol2
 	.long T_TableDefault_Ret                       ; FA171A  [ 2]  SoftKeyCol3
@@ -62072,8 +62072,8 @@ HandlerTable23_SoundCombinationManager:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_SoundGroupNaming_Button
 HandlerTable23_SoundGroupNaming:
+; ; the 23-slot button table of Screen_SoundGroupNaming_Button
 	.long SoftKeyCol1_SoundGroupNaming             ; FA176E  [ 0]  SoftKeyCol1
 	.long SoftKeyCol2_SoundGroupNaming             ; FA1772  [ 1]  SoftKeyCol2
 	.long SoftKeyCol3_SoundGroupNaming             ; FA1776  [ 2]  SoftKeyCol3
@@ -62123,8 +62123,8 @@ ByteTable5_FA17CA:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_CombinationGroupNaming_Button
 HandlerTable23_CombinationGroupNaming:
+; ; the 23-slot button table of Screen_CombinationGroupNaming_Button
 	.long SoftKeyCol1_CombinationGroupNaming       ; FA17CF  [ 0]  SoftKeyCol1
 	.long SoftKeyCol2_CombinationGroupNaming       ; FA17D3  [ 1]  SoftKeyCol2
 	.long SoftKeyCol3_CombinationGroupNaming       ; FA17D7  [ 2]  SoftKeyCol3
@@ -62174,8 +62174,8 @@ ByteTable4_FA182B:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_SoundCopy_Button
 HandlerTable23_SoundCopy:
+; ; the 23-slot button table of Screen_SoundCopy_Button
 	.long SoftKeyCol1_SoundCopy                    ; FA182F  [ 0]  SoftKeyCol1
 	.long SoftKeyCol2_SoundCopy                    ; FA1833  [ 1]  SoftKeyCol2
 	.long SoftKeyCols3_4_SoundCopy                 ; FA1837  [ 2]  SoftKeyCol3
@@ -62238,8 +62238,8 @@ ByteTable2_FA1890:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_CombinationCopy_Button
 HandlerTable23_CombinationCopy:
+; ; the 23-slot button table of Screen_CombinationCopy_Button
 	.long SoftKeyCol1_CombinationCopy              ; FA1892  [ 0]  SoftKeyCol1
 	.long SoftKeyCol2_CombinationCopy              ; FA1896  [ 1]  SoftKeyCol2
 	.long SoftKeyCols3_4_CombinationCopy           ; FA189A  [ 2]  SoftKeyCol3
@@ -62276,8 +62276,8 @@ HandlerTable23_CombinationCopy:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_DataLoadFilter_Button
 HandlerTable23_DataLoadFilter:
+; ; the 23-slot button table of Screen_DataLoadFilter_Button
 	.long SoftKeyCols1to4_DataLoadFilter           ; FA18EE  [ 0]  SoftKeyCol1
 	.long SoftKeyCols1to4_DataLoadFilter           ; FA18F2  [ 1]  SoftKeyCol2
 	.long SoftKeyCols1to4_DataLoadFilter           ; FA18F6  [ 2]  SoftKeyCol3
@@ -62314,8 +62314,8 @@ HandlerTable23_DataLoadFilter:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_MemoryProtect_Button
 HandlerTable23_MemoryProtect:
+; ; the 23-slot button table of Screen_MemoryProtect_Button
 	.long SoftKeyCols1to4_MemoryProtect            ; FA194A  [ 0]  SoftKeyCol1
 	.long SoftKeyCols1to4_MemoryProtect            ; FA194E  [ 1]  SoftKeyCol2
 	.long SoftKeyCols1to4_MemoryProtect            ; FA1952  [ 2]  SoftKeyCol3
@@ -62352,8 +62352,8 @@ HandlerTable23_MemoryProtect:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_SoundMute_Button
 HandlerTable23_SoundMute:
+; ; the 23-slot button table of Screen_SoundMute_Button
 	.long T_TableDefault_Ret                       ; FA19A6  [ 0]  SoftKeyCol1
 	.long T_TableDefault_Ret                       ; FA19AA  [ 1]  SoftKeyCol2
 	.long SoftKeyCols3to6_SoundMute                ; FA19AE  [ 2]  SoftKeyCol3
@@ -62390,8 +62390,8 @@ HandlerTable23_SoundMute:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_DrumsMapNaming_Button
 HandlerTable23_DrumsMapNaming:
+; ; the 23-slot button table of Screen_DrumsMapNaming_Button
 	.long SoftKeyCol1_DrumsMapNaming               ; FA1A02  [ 0]  SoftKeyCol1
 	.long SoftKeyCol2_DrumsMapNaming               ; FA1A06  [ 1]  SoftKeyCol2
 	.long SoftKeyCol3_DrumsMapNaming               ; FA1A0A  [ 2]  SoftKeyCol3
@@ -62948,8 +62948,8 @@ Descriptor9_FA1B8B:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_System_Button
 HandlerTable23_System:
+; ; the 23-slot button table of Screen_System_Button
 	.long T_TableDefault_Ret                       ; FA1B94  [ 0]  SoftKeyCol1
 	.long T_TableDefault_Ret                       ; FA1B98  [ 1]  SoftKeyCol2
 	.long T_TableDefault_Ret                       ; FA1B9C  [ 2]  SoftKeyCol3
@@ -62986,8 +62986,8 @@ HandlerTable23_System:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_TuneScale_Button
 HandlerTable23_TuneScale:
+; ; the 23-slot button table of Screen_TuneScale_Button
 	.long SoftKeyCol1_TuneScale                    ; FA1BF0  [ 0]  SoftKeyCol1
 	.long SoftKeyCol2_TuneScale                    ; FA1BF4  [ 1]  SoftKeyCol2
 	.long SoftKeyCol3_TuneScale                    ; FA1BF8  [ 2]  SoftKeyCol3
@@ -63054,8 +63054,8 @@ ByteTable79_FA1C5C:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_TouchSensitivityOrTest_Button in its OVERALL TOUCH SENSITIVITY mode (slots SoftKeyCols1to4_OverallTouchSensitivity)
 HandlerTable23_OverallTouchSensitivity:
+; ; the 23-slot button table of Screen_TouchSensitivityOrTest_Button in its OVERALL TOUCH SENSITIVITY mode (slots SoftKeyCols1to4_OverallTouchSensitivity)
 	.long SoftKeyCols1to4_OverallTouchSensitivity  ; FA1CAB  [ 0]  SoftKeyCol1
 	.long SoftKeyCols1to4_OverallTouchSensitivity  ; FA1CAF  [ 1]  SoftKeyCol2
 	.long SoftKeyCols1to4_OverallTouchSensitivity  ; FA1CB3  [ 2]  SoftKeyCol3
@@ -63105,8 +63105,8 @@ ByteTable9_FA1D07:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_TouchSensitivityOrTest_Button in its SYSTEM TEST mode (slots SoftKeyCols1to4_SystemTest)
 HandlerTable23_SystemTest:
+; ; the 23-slot button table of Screen_TouchSensitivityOrTest_Button in its SYSTEM TEST mode (slots SoftKeyCols1to4_SystemTest)
 	.long SoftKeyCols1to4_SystemTest               ; FA1D10  [ 0]  SoftKeyCol1
 	.long SoftKeyCols1to4_SystemTest               ; FA1D14  [ 1]  SoftKeyCol2
 	.long SoftKeyCols1to4_SystemTest               ; FA1D18  [ 2]  SoftKeyCol3
@@ -63143,8 +63143,8 @@ HandlerTable23_SystemTest:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_ControllerAssign_Button
 HandlerTable23_ControllerAssign:
+; ; the 23-slot button table of Screen_ControllerAssign_Button
 	.long SoftKeyCols1to4_ControllerAssign         ; FA1D6C  [ 0]  SoftKeyCol1
 	.long SoftKeyCols1to4_ControllerAssign         ; FA1D70  [ 1]  SoftKeyCol2
 	.long SoftKeyCols1to4_ControllerAssign         ; FA1D74  [ 2]  SoftKeyCol3
@@ -63233,8 +63233,8 @@ PtrTable3_FA1DE1:
 ; ---------------------------------------------------------------------
 ; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
 ;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
-; ; the 23-slot button table of Screen_Initial_Button
 HandlerTable23_Initial:
+; ; the 23-slot button table of Screen_Initial_Button
 	.long T_TableDefault_Ret                       ; FA1DED  [ 0]  SoftKeyCol1
 	.long T_TableDefault_Ret                       ; FA1DF1  [ 1]  SoftKeyCol2
 	.long T_TableDefault_Ret                       ; FA1DF5  [ 2]  SoftKeyCol3
@@ -63971,8 +63971,8 @@ OperandTable_FA22A0:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by TuneScale_LoadFields -- derivative name (notes/wsa1_display_list_drawer_names.py)
 TuneScale_LoadFields_DL1:
+; ; drawn (start operand) by TuneScale_LoadFields -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0b, 0x90, 0x26, 0x07, 0x00, 0x05, 0xcb, 0x22, 0xfa, 0x00    ; FA22C0
 ; ---------------------------------------------------------------------
 ; OperandTable_FA22CB -- 64 bytes, kind=operand_table
@@ -64001,8 +64001,8 @@ OperandTable_FA22CB:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by TuneScale_LoadFields -- derivative name (notes/wsa1_display_list_drawer_names.py)
 TuneScale_LoadFields_DL4:
+; ; drawn (start operand) by TuneScale_LoadFields -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1b, 0x0a, 0x09, 0x00, 0x2a, 0x00, 0x05, 0x01, 0x97, 0x00          ; FA230B
 ; ---------------------------------------------------------------------
 ; TuneScale_AdjustSelectedItem_Cases_DL -- 310 bytes, kind=display_list
@@ -64015,8 +64015,8 @@ TuneScale_LoadFields_DL4:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by TuneScale_AdjustSelectedItem_Cases -- derivative name (notes/wsa1_display_list_drawer_names.py)
 TuneScale_AdjustSelectedItem_Cases_DL:
+; ; drawn (start operand) by TuneScale_AdjustSelectedItem_Cases -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x07, 0x05, 0x1a, 0x24, 0x12, 0x07, 0x05, 0x1f, 0x24, 0x12, 0x07, 0x05, 0x24, 0x24, 0x12, 0x07  ; FA2315
 	.byte 0x05, 0x29, 0x24, 0x12, 0x07, 0x05, 0x2e, 0x24, 0x12, 0x07, 0x05, 0x33, 0x24, 0x12, 0x07, 0x05  ; FA2325
 	.byte 0x38, 0x24, 0x12, 0x07, 0x05, 0x3d, 0x24, 0x12, 0x09, 0x0a, 0x0b, 0x00, 0xbb, 0x00, 0x1c, 0x00  ; FA2335
@@ -64094,8 +64094,8 @@ OperandTable_FA2469:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by TuneScale_LoadFields -- derivative name (notes/wsa1_display_list_drawer_names.py)
 TuneScale_LoadFields_DL2:
+; ; drawn (start operand) by TuneScale_LoadFields -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x05, 0x0b, 0x40, 0x26, 0xff, 0x00, 0x07, 0x75, 0x21, 0x03, 0x80, 0x05, 0x0b, 0x41, 0x26, 0xff  ; FA2479
 	.byte 0x00, 0x07, 0x07, 0x1e, 0x03, 0x80, 0x05, 0x0b, 0x42, 0x26, 0xff, 0x00, 0x07, 0x7a, 0x21, 0x03  ; FA2489
 	.byte 0x80, 0x05, 0x0b, 0x43, 0x26, 0xff, 0x00, 0x07, 0x0c, 0x1e, 0x03, 0x80, 0x05, 0x0b, 0x44, 0x26  ; FA2499
@@ -64142,8 +64142,8 @@ DisplayList_FA2518:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by TuneScale_LoadFields -- derivative name (notes/wsa1_display_list_drawer_names.py)
 TuneScale_LoadFields_DL3:
+; ; drawn (start operand) by TuneScale_LoadFields -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1b, 0x0a, 0x0b, 0x00, 0xbb, 0x00, 0x1c, 0x00, 0xe6, 0x00          ; FA2522
 ; ---------------------------------------------------------------------
 ; DL_TouchSensitivitySystemVelocityCurve -- 255 bytes, kind=display_list
@@ -65072,8 +65072,8 @@ DL_InitialSystemResetTheTotalOrIndividualSections:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ExitKey_Initial -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ExitKey_Initial_DL:
+; ; drawn (start operand) by ExitKey_Initial -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x07, 0x0d, 0xb5, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2F57
 ; ---------------------------------------------------------------------
 ; DisplayList_FA2F64 -- 11 bytes, kind=display_list
@@ -65216,8 +65216,8 @@ DisplayList_FA30A6:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by Paint_ReMapEdit -- derivative name (notes/wsa1_display_list_drawer_names.py)
 Paint_ReMapEdit_DL:
+; ; drawn (start operand) by Paint_ReMapEdit -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x20, 0x0f, 0x93, 0x05, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x2f, 0x43, 0x4f, 0x4d, 0x42, 0x49  ; FA3221
 ; ---------------------------------------------------------------------
 ; ReMapEdit_DrawFields_DL -- 360 bytes, kind=display_list
@@ -65230,8 +65230,8 @@ Paint_ReMapEdit_DL:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ReMapEdit_DrawFields -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ReMapEdit_DrawFields_DL:
+; ; drawn (start operand) by ReMapEdit_DrawFields -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0f, 0xf3, 0x26, 0x01, 0x00, 0x20, 0xcf, 0x33, 0xfa, 0x00, 0x05, 0x00, 0x64, 0x20, 0x02  ; FA3230
 	.byte 0x0f, 0xf3, 0x26, 0x01, 0x00, 0x20, 0xcf, 0x33, 0xfa, 0x00, 0x05, 0x00, 0x79, 0x20, 0x02, 0x0f  ; FA3240
 	.byte 0x00, 0x00, 0x00, 0x00, 0x20, 0x40, 0x29, 0x00, 0x00, 0x10, 0x00, 0x0a, 0x0c, 0x02, 0x0f, 0x00  ; FA3250
@@ -65279,8 +65279,8 @@ DisplayList_FA3398:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ReMapEdit_DrawSoundSourceCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ReMapEdit_DrawSoundSourceCursor_DL:
+; ; drawn (start operand) by ReMapEdit_DrawSoundSourceCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0b, 0xf6, 0x26, 0x07, 0x00, 0x05, 0xa7, 0x34, 0xfa, 0x00    ; FA33A3
 ; ---------------------------------------------------------------------
 ; ReMapEdit_DrawSoundReMapCursor_DL -- 11 bytes, kind=display_list
@@ -65293,8 +65293,8 @@ ReMapEdit_DrawSoundSourceCursor_DL:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ReMapEdit_DrawSoundReMapCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ReMapEdit_DrawSoundReMapCursor_DL:
+; ; drawn (start operand) by ReMapEdit_DrawSoundReMapCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0b, 0xfc, 0x26, 0x07, 0x00, 0x05, 0xf1, 0x34, 0xfa, 0x00    ; FA33AE
 ; ---------------------------------------------------------------------
 ; ReMapEdit_DrawCombiSourceCursor_DL -- 11 bytes, kind=display_list
@@ -65307,8 +65307,8 @@ ReMapEdit_DrawSoundReMapCursor_DL:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ReMapEdit_DrawCombiSourceCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ReMapEdit_DrawCombiSourceCursor_DL:
+; ; drawn (start operand) by ReMapEdit_DrawCombiSourceCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0b, 0xf9, 0x26, 0x07, 0x00, 0x05, 0xa7, 0x34, 0xfa, 0x00    ; FA33B9
 ; ---------------------------------------------------------------------
 ; ReMapEdit_DrawCombiReMapCursor_DL -- 11 bytes, kind=display_list
@@ -65321,8 +65321,8 @@ ReMapEdit_DrawCombiSourceCursor_DL:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ReMapEdit_DrawCombiReMapCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ReMapEdit_DrawCombiReMapCursor_DL:
+; ; drawn (start operand) by ReMapEdit_DrawCombiReMapCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0b, 0xff, 0x26, 0x07, 0x00, 0x05, 0xf1, 0x34, 0xfa, 0x00    ; FA33C4
 ; ---------------------------------------------------------------------
 ; OperandTable_FA33CF -- 10 bytes, kind=operand_table
@@ -65421,8 +65421,8 @@ OperandTable_FA348D:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ReMapEdit_DrawSoundCombiSelector -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ReMapEdit_DrawSoundCombiSelector_DL:
+; ; drawn (start operand) by ReMapEdit_DrawSoundCombiSelector -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1b, 0x0a, 0xd6, 0x00, 0x21, 0x00, 0x32, 0x01, 0x2e, 0x00          ; FA349D
 ; ---------------------------------------------------------------------
 ; OperandTable_FA34A7 -- 64 bytes, kind=operand_table
@@ -66196,8 +66196,8 @@ DisplayList_FA3CBE:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by SoundCopy_DrawDestGroupCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 SoundCopy_DrawDestGroupCursor_DL:
+; ; drawn (start operand) by SoundCopy_DrawDestGroupCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0b, 0xa3, 0x26, 0x07, 0x00, 0x05, 0x89, 0x3e, 0xfa, 0x00    ; FA3CC9
 ; ---------------------------------------------------------------------
 ; OperandTable_FA3CD4 -- 96 bytes, kind=operand_table
@@ -66258,8 +66258,8 @@ OperandTable_FA3D3F:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by SoundCopy_DrawSourceGroupList -- derivative name (notes/wsa1_display_list_drawer_names.py)
 SoundCopy_DrawSourceGroupList_DL:
+; ; drawn (start operand) by SoundCopy_DrawSourceGroupList -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0f, 0x9f, 0x26, 0x0f, 0x00, 0x20, 0x40, 0x29, 0x00, 0x00, 0x10, 0x00, 0x22, 0x0d, 0x02  ; FA3D4F
 	.byte 0x0f, 0x9f, 0x26, 0x0f, 0x00, 0x20, 0x50, 0x29, 0x00, 0x00, 0x10, 0x00, 0x52, 0x0f, 0x02, 0x0f  ; FA3D5F
 	.byte 0x9f, 0x26, 0x0f, 0x00, 0x20, 0x60, 0x29, 0x00, 0x00, 0x10, 0x00, 0x82, 0x11, 0x02, 0x0f, 0x9f  ; FA3D6F
@@ -66407,8 +66407,8 @@ DisplayList_FA405F:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by SoundCopy_DrawDestSoundCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 SoundCopy_DrawDestSoundCursor_DL:
+; ; drawn (start operand) by SoundCopy_DrawDestSoundCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0b, 0xa2, 0x26, 0x07, 0x00, 0x05, 0xf1, 0x34, 0xfa, 0x00    ; FA406A
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4075 -- 24 bytes, kind=operand_table
@@ -66437,8 +66437,8 @@ OperandTable_FA4075:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by Paint_CombinationCopy -- derivative name (notes/wsa1_display_list_drawer_names.py)
 Paint_CombinationCopy_DL:
+; ; drawn (start operand) by Paint_CombinationCopy -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1c, 0x16, 0x41, 0x00, 0x05, 0x00, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49, 0x4f  ; FA408D
 	.byte 0x4e, 0x20, 0x43, 0x4f, 0x50, 0x59                                  ; FA409D
 ; ---------------------------------------------------------------------
@@ -66487,8 +66487,8 @@ DisplayList_FA4141:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by CombinationCopy_DrawDestGroupCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 CombinationCopy_DrawDestGroupCursor_DL:
+; ; drawn (start operand) by CombinationCopy_DrawDestGroupCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0b, 0x0e, 0x27, 0x07, 0x00, 0x05, 0x89, 0x3e, 0xfa, 0x00    ; FA414C
 ; ---------------------------------------------------------------------
 ; CombinationCopy_DrawSourceGroupList_DL -- 120 bytes, kind=display_list
@@ -66501,8 +66501,8 @@ CombinationCopy_DrawDestGroupCursor_DL:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by CombinationCopy_DrawSourceGroupList -- derivative name (notes/wsa1_display_list_drawer_names.py)
 CombinationCopy_DrawSourceGroupList_DL:
+; ; drawn (start operand) by CombinationCopy_DrawSourceGroupList -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0f, 0x0a, 0x27, 0x0f, 0x00, 0x20, 0x40, 0x29, 0x00, 0x00, 0x10, 0x00, 0x22, 0x0d, 0x02  ; FA4157
 	.byte 0x0f, 0x0a, 0x27, 0x0f, 0x00, 0x20, 0x50, 0x29, 0x00, 0x00, 0x10, 0x00, 0x52, 0x0f, 0x02, 0x0f  ; FA4167
 	.byte 0x0a, 0x27, 0x0f, 0x00, 0x20, 0x60, 0x29, 0x00, 0x00, 0x10, 0x00, 0x82, 0x11, 0x02, 0x0f, 0x0a  ; FA4177
@@ -66569,8 +66569,8 @@ DisplayList_FA4265:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by CombinationCopy_DrawDestCombiCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 CombinationCopy_DrawDestCombiCursor_DL:
+; ; drawn (start operand) by CombinationCopy_DrawDestCombiCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0b, 0x0d, 0x27, 0x07, 0x00, 0x05, 0xf1, 0x34, 0xfa, 0x00    ; FA4270
 ; ---------------------------------------------------------------------
 ; DL_DataLoadFilterSystemOverall -- 334 bytes, kind=display_list
@@ -66694,8 +66694,8 @@ DL_DataLoadFilterSystemOverall:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ExitKey_DataLoadFilter -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ExitKey_DataLoadFilter_DL1:
+; ; drawn (start operand) by ExitKey_DataLoadFilter -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0f, 0xe4, 0x7e, 0x0f, 0x00, 0x20, 0x87, 0x44, 0xfa, 0x00, 0x0b, 0x00, 0x60, 0x08, 0x02  ; FA43C9
 	.byte 0x0f, 0xe4, 0x7e, 0xf0, 0x04, 0x20, 0xb3, 0x44, 0xfa, 0x00, 0x0b, 0x00, 0xe0, 0x0a, 0x02, 0x0f  ; FA43D9
 	.byte 0x07, 0x7f, 0x04, 0x02, 0x20, 0xdf, 0x44, 0xfa, 0x00, 0x03, 0x00, 0xc0, 0x11, 0x02, 0x0f, 0x07  ; FA43E9
@@ -66714,8 +66714,8 @@ ExitKey_DataLoadFilter_DL1:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ExitKey_DataLoadFilter -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ExitKey_DataLoadFilter_DL2:
+; ; drawn (start operand) by ExitKey_DataLoadFilter -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0b, 0xa5, 0x26, 0x07, 0x00, 0x05, 0x3d, 0x44, 0xfa, 0x00    ; FA4432
 ; ---------------------------------------------------------------------
 ; OperandTable_FA443D -- 64 bytes, kind=operand_table
@@ -66744,8 +66744,8 @@ OperandTable_FA443D:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ExitKey_DataLoadFilter -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ExitKey_DataLoadFilter_DL3:
+; ; drawn (start operand) by ExitKey_DataLoadFilter -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1b, 0x0a, 0x15, 0x00, 0x34, 0x00, 0x24, 0x01, 0xbb, 0x00          ; FA447D
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4487 -- 44 bytes, kind=operand_table
@@ -66900,8 +66900,8 @@ DL_MemoryProtectSystemSound:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ExitKey_MemoryProtect -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ExitKey_MemoryProtect_DL1:
+; ; drawn (start operand) by ExitKey_MemoryProtect -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0f, 0xd6, 0x7f, 0x01, 0x00, 0x07, 0xe2, 0x44, 0xfa, 0x00, 0x03, 0x00, 0x01, 0x0e, 0x02  ; FA458F
 	.byte 0x0f, 0xd6, 0x7f, 0x02, 0x01, 0x07, 0xe2, 0x44, 0xfa, 0x00, 0x03, 0x00, 0xc9, 0x13  ; FA459F
 ; ---------------------------------------------------------------------
@@ -66915,8 +66915,8 @@ ExitKey_MemoryProtect_DL1:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ExitKey_MemoryProtect -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ExitKey_MemoryProtect_DL2:
+; ; drawn (start operand) by ExitKey_MemoryProtect -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0b, 0xa6, 0x26, 0x01, 0x00, 0x05, 0xb8, 0x45, 0xfa, 0x00    ; FA45AD
 ; ---------------------------------------------------------------------
 ; OperandTable_FA45B8 -- 16 bytes, kind=operand_table
@@ -66942,8 +66942,8 @@ OperandTable_FA45B8:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ExitKey_MemoryProtect -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ExitKey_MemoryProtect_DL3:
+; ; drawn (start operand) by ExitKey_MemoryProtect -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1b, 0x0a, 0x15, 0x00, 0x58, 0x00, 0x14, 0x01, 0x8a, 0x00          ; FA45C8
 ; ---------------------------------------------------------------------
 ; DL_SoundMuteSystemIfYouWantHeldNotesToContinue -- 226 bytes, kind=display_list
@@ -67021,8 +67021,8 @@ DL_SoundMuteSystemIfYouWantHeldNotesToContinue:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by ExitKey_SoundMute -- derivative name (notes/wsa1_display_list_drawer_names.py)
 ExitKey_SoundMute_DL:
+; ; drawn (start operand) by ExitKey_SoundMute -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0f, 0x0b, 0x7f, 0x01, 0x00, 0x07, 0xdf, 0x44, 0xfa, 0x00, 0x03, 0x00, 0x99, 0x16  ; FA46B4
 ; ---------------------------------------------------------------------
 ; DL_DrumsMapSystemMapNamingDrumsMap -- 239 bytes, kind=display_list
@@ -67551,8 +67551,8 @@ OperandTable_FA4B7D:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by DrumsMap_DrawRowCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumsMap_DrawRowCursor_DL2:
+; ; drawn (start operand) by DrumsMap_DrawRowCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0b, 0x03, 0x27, 0x0f, 0x00, 0x05, 0xaa, 0x4b, 0xfa, 0x00    ; FA4B9F
 ; ---------------------------------------------------------------------
 ; OperandTable_FA4BAA -- 128 bytes, kind=operand_table
@@ -67585,8 +67585,8 @@ OperandTable_FA4BAA:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-; ; drawn (start operand) by DrumsMap_DrawRowCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumsMap_DrawRowCursor_DL1:
+; ; drawn (start operand) by DrumsMap_DrawRowCursor -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1b, 0x0a, 0x67, 0x00, 0x2e, 0x00, 0x35, 0x01, 0xc8, 0x00          ; FA4C2A
 ; ---------------------------------------------------------------------
 ; DL_TestSystemTestModeNoteVelocity -- 229 bytes, kind=display_list
@@ -117103,8 +117103,8 @@ DigitalEffect_ValueFrames:
 	.byte 0xF9, 0x00, 0xE4, 0x00, 0x0E, 0x01, 0xE4, 0x00 ; FC40CA
 ; SoundEditDigitalEffect_Paint_DL2 -- a record (op 06, 5 bytes) inside DigitalEffect_ValueFrames,
 ;          an inner entry point or end named in the list's Read-by line
-; ; drawn (start operand) by SoundEditDigitalEffect_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
 SoundEditDigitalEffect_Paint_DL2:
+; ; drawn (start operand) by SoundEditDigitalEffect_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x05                             ; FC40D2  op 06, 5 bytes, handler 0xF31A3A
 	.byte 0x0D, 0x22, 0x8D                  ; FC40D4
 	.byte 0x06, 0x05                             ; FC40D7  op 06, 5 bytes, handler 0xF31A3A
@@ -117129,8 +117129,8 @@ DigitalEffect_Header:
 	.ascii "INTENS."                          ; FC4108
 ; SoundEditDigitalEffect_Paint_DL1 -- a record (op 23, 5 bytes) inside DigitalEffect_Header,
 ;          an inner entry point or end named in the list's Read-by line
-; ; drawn (start operand) by SoundEditDigitalEffect_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
 SoundEditDigitalEffect_Paint_DL1:
+; ; drawn (start operand) by SoundEditDigitalEffect_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x23, 0x05                             ; FC410F  op 23, 5 bytes, handler 0xF31ACE
 	.byte 0x0A, 0x32, 0x00                  ; FC4111
 	.byte 0x1C, 0x14                             ; FC4114  op 1C, 20 bytes, handler 0xF31A52
@@ -117509,8 +117509,8 @@ DigitalEffect_Values:
 	.short 13, 0x0809                        ; FC459D  entry width, +0x0D
 ; SoundEditDigitalEffect_RepaintField_DL -- a record (op 02, 15 bytes) inside DigitalEffect_Values,
 ;          an inner entry point or end named in the list's Read-by line
-; ; drawn (start operand) by SoundEditDigitalEffect_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
 SoundEditDigitalEffect_RepaintField_DL:
+; ; drawn (start operand) by SoundEditDigitalEffect_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                             ; FC45A1  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xA6, 0x27, 0x80, 0x07, 0x20, 0xD8, 0x34, 0xF0, 0x00, 0x03, 0x00, 0xBA, 0x0B ; FC45A3
 ; DLRec_FC45B0 -- a record (op 02, 15 bytes) inside DigitalEffect_Values,
@@ -118518,8 +118518,8 @@ DLRec_FC518F:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x1C, 0xF0, 0x22, 0x00, 0x00, 0x0D, 0x00, 0x69, 0x00, 0x35, 0x00 ; FC51A2
 ; SoundEditMenu_RepaintField_DL3 -- a record (op 07, 17 bytes) inside DisplayList_FC517E,
 ;          pointed at by DisplayRecordPtrs_FC52B4[15]
-; ; drawn (start operand) by SoundEditMenu_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
 SoundEditMenu_RepaintField_DL3:
+; ; drawn (start operand) by SoundEditMenu_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x07, 0x11                             ; FC51B1  op 07, 17 bytes, handler 0xF31B39
 	.byte 0xB5                              ; FC51B3
 	.ascii "'?"                               ; FC51B4
@@ -118545,8 +118545,8 @@ DLRec_FC51EC:
 	.byte 0xAD, 0x27, 0xFF, 0x00, 0x17, 0xE1, 0x00, 0x7A, 0x00, 0x02, 0x00 ; FC51EE
 ; SoundEditMenu_RepaintField_DL4 -- a record (op 07, 17 bytes) inside DisplayList_FC517E,
 ;          pointed at by DisplayRecordPtrs_FC52B4[16]
-; ; drawn (start operand) by SoundEditMenu_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
 SoundEditMenu_RepaintField_DL4:
+; ; drawn (start operand) by SoundEditMenu_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x07, 0x11                             ; FC51F9  op 07, 17 bytes, handler 0xF31B39
 	.byte 0xB6                              ; FC51FB
 	.ascii "'?"                               ; FC51FC
@@ -118577,8 +118577,8 @@ DLRec_FC5241:
 	.byte 0xB1, 0x27, 0x7F, 0x00, 0x17, 0x1C, 0x01, 0x89, 0x00, 0x03 ; FC5243
 ; SoundEditMenu_RepaintField_DL1 -- a record (op 07, 17 bytes) inside DisplayList_FC517E,
 ;          an inner entry point or end named in the list's Read-by line
-; ; drawn (start operand) by SoundEditMenu_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
 SoundEditMenu_RepaintField_DL1:
+; ; drawn (start operand) by SoundEditMenu_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x07, 0x11                             ; FC524D  op 07, 17 bytes, handler 0xF31B39
 	.byte 0xB2, 0x27, 0x03, 0x00, 0x17      ; FC524F
 	.ascii "N*"                               ; FC5254
@@ -118621,8 +118621,8 @@ Rects_FC5292:
 ; SoundEditMenu_RepaintField_DL2 -- display list, 1 record(s), 10 bytes, interpreter A
 ; Read by: SoundEditMenu_RepaintField (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09CEB and 0xF09D52 (layer 1).
 ; Framing: the length bytes walk from 0xFC52AA and land exactly on 0xFC52B4.
-; ; drawn (start operand) by SoundEditMenu_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
 SoundEditMenu_RepaintField_DL2:
+; ; drawn (start operand) by SoundEditMenu_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1B, 0x0A                             ; FC52AA  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x0D, 0x00, 0x71, 0x00, 0x18, 0x01, 0xA8, 0x00 ; FC52AC
 	.set DisplayList_FC52AA_End, .            ; FC52B4  end marker: the byte after the last record
@@ -177092,8 +177092,8 @@ EditPartSelect_DrawPartLabels:
 
 ; EditPartSelect_DrawPartLabels_DL -- 16 record(s), 240 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFE8405 and land exactly on 0xFE84F5.
-; ; drawn (start operand) by EditPartSelect_DrawPartLabels -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditPartSelect_DrawPartLabels_DL:
+; ; drawn (start operand) by EditPartSelect_DrawPartLabels -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FE8405  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xF6, 0x12, 0xFF, 0x00, 0x20, 0xF5, 0x84, 0xFE, 0x00, 0x03, 0x00, 0x59, 0x1B  ; FE8407
 	.byte 0x02, 0x0F                               ; FE8414  op 02, 15 bytes, handler 0xF31B21
@@ -178093,80 +178093,80 @@ KeyboardRuler_DrawStrip9:   ; entry: named by 3 `.long` operands, first at 0xFE8
 
 ; KeyboardRuler_DrawStrip0_DL -- 1 record(s), 12 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFE8E31 and land exactly on 0xFE8E3D.
-; ; drawn (start operand) by KeyboardRuler_DrawStrip0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 KeyboardRuler_DrawStrip0_DL:
+; ; drawn (start operand) by KeyboardRuler_DrawStrip0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0C                               ; FE8E31  op 03, 12 bytes, handler 0xF31ABE
 	.long KeyboardRuler_Strip0                   ; FE8E33  bitmap (16x129, 258 bytes)
 	.short 0x0668, 2, 129                         ; FE8E37  IX VRAM byte offset, BC columns, HL rows
 
 ; KeyboardRuler_DrawStrip1_DL -- 1 record(s), 12 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFE8E3D and land exactly on 0xFE8E49.
-; ; drawn (start operand) by KeyboardRuler_DrawStrip1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 KeyboardRuler_DrawStrip1_DL:
+; ; drawn (start operand) by KeyboardRuler_DrawStrip1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0C                               ; FE8E3D  op 03, 12 bytes, handler 0xF31ABE
 	.long KeyboardRuler_Strip1                   ; FE8E3F  bitmap (16x129, 258 bytes)
 	.short 0x0668, 2, 129                         ; FE8E43  IX VRAM byte offset, BC columns, HL rows
 
 ; KeyboardRuler_DrawStrip2_DL -- 1 record(s), 12 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFE8E49 and land exactly on 0xFE8E55.
-; ; drawn (start operand) by KeyboardRuler_DrawStrip2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 KeyboardRuler_DrawStrip2_DL:
+; ; drawn (start operand) by KeyboardRuler_DrawStrip2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0C                               ; FE8E49  op 03, 12 bytes, handler 0xF31ABE
 	.long KeyboardRuler_Strip2                   ; FE8E4B  bitmap (16x129, 258 bytes)
 	.short 0x0668, 2, 129                         ; FE8E4F  IX VRAM byte offset, BC columns, HL rows
 
 ; KeyboardRuler_DrawStrip3_DL -- 1 record(s), 12 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFE8E55 and land exactly on 0xFE8E61.
-; ; drawn (start operand) by KeyboardRuler_DrawStrip3 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 KeyboardRuler_DrawStrip3_DL:
+; ; drawn (start operand) by KeyboardRuler_DrawStrip3 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0C                               ; FE8E55  op 03, 12 bytes, handler 0xF31ABE
 	.long KeyboardRuler_Strip3                   ; FE8E57  bitmap (16x129, 258 bytes)
 	.short 0x0668, 2, 129                         ; FE8E5B  IX VRAM byte offset, BC columns, HL rows
 
 ; KeyboardRuler_DrawStrip4_DL -- 1 record(s), 12 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFE8E61 and land exactly on 0xFE8E6D.
-; ; drawn (start operand) by KeyboardRuler_DrawStrip4 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 KeyboardRuler_DrawStrip4_DL:
+; ; drawn (start operand) by KeyboardRuler_DrawStrip4 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0C                               ; FE8E61  op 03, 12 bytes, handler 0xF31ABE
 	.long KeyboardRuler_Strip4                   ; FE8E63  bitmap (16x129, 258 bytes)
 	.short 0x0668, 2, 129                         ; FE8E67  IX VRAM byte offset, BC columns, HL rows
 
 ; KeyboardRuler_DrawStrip5_DL -- 1 record(s), 12 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFE8E6D and land exactly on 0xFE8E79.
-; ; drawn (start operand) by KeyboardRuler_DrawStrip5 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 KeyboardRuler_DrawStrip5_DL:
+; ; drawn (start operand) by KeyboardRuler_DrawStrip5 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0C                               ; FE8E6D  op 03, 12 bytes, handler 0xF31ABE
 	.long KeyboardRuler_Strip5                   ; FE8E6F  bitmap (16x129, 258 bytes)
 	.short 0x0668, 2, 129                         ; FE8E73  IX VRAM byte offset, BC columns, HL rows
 
 ; KeyboardRuler_DrawStrip6_DL -- 1 record(s), 12 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFE8E79 and land exactly on 0xFE8E85.
-; ; drawn (start operand) by KeyboardRuler_DrawStrip6 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 KeyboardRuler_DrawStrip6_DL:
+; ; drawn (start operand) by KeyboardRuler_DrawStrip6 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0C                               ; FE8E79  op 03, 12 bytes, handler 0xF31ABE
 	.long KeyboardRuler_Strip6                   ; FE8E7B  bitmap (16x129, 258 bytes)
 	.short 0x0668, 2, 129                         ; FE8E7F  IX VRAM byte offset, BC columns, HL rows
 
 ; KeyboardRuler_DrawStrip7_DL -- 1 record(s), 12 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFE8E85 and land exactly on 0xFE8E91.
-; ; drawn (start operand) by KeyboardRuler_DrawStrip7 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 KeyboardRuler_DrawStrip7_DL:
+; ; drawn (start operand) by KeyboardRuler_DrawStrip7 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0C                               ; FE8E85  op 03, 12 bytes, handler 0xF31ABE
 	.long KeyboardRuler_Strip7                   ; FE8E87  bitmap (16x129, 258 bytes)
 	.short 0x0668, 2, 129                         ; FE8E8B  IX VRAM byte offset, BC columns, HL rows
 
 ; KeyboardRuler_DrawStrip8_DL -- 1 record(s), 12 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFE8E91 and land exactly on 0xFE8E9D.
-; ; drawn (start operand) by KeyboardRuler_DrawStrip8 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 KeyboardRuler_DrawStrip8_DL:
+; ; drawn (start operand) by KeyboardRuler_DrawStrip8 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0C                               ; FE8E91  op 03, 12 bytes, handler 0xF31ABE
 	.long KeyboardRuler_Strip8                   ; FE8E93  bitmap (16x129, 258 bytes)
 	.short 0x0668, 2, 129                         ; FE8E97  IX VRAM byte offset, BC columns, HL rows
 
 ; KeyboardRuler_DrawStrip9_DL -- 1 record(s), 12 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFE8E9D and land exactly on 0xFE8EA9.
-; ; drawn (start operand) by KeyboardRuler_DrawStrip9 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 KeyboardRuler_DrawStrip9_DL:
+; ; drawn (start operand) by KeyboardRuler_DrawStrip9 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x03, 0x0C                               ; FE8E9D  op 03, 12 bytes, handler 0xF31ABE
 	.long KeyboardRuler_Strip9                   ; FE8E9F  bitmap (16x129, 258 bytes)
 	.short 0x0668, 2, 129                         ; FE8EA3  IX VRAM byte offset, BC columns, HL rows
@@ -181776,8 +181776,8 @@ DrumEdit_DrawRowNote0:
 
 ; DrumEdit_DrawRowNote0_DL -- 1 record(s), 12 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEB0BC and land exactly on 0xFEB0C8.
-; ; drawn (start operand) by DrumEdit_DrawRowNote0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawRowNote0_DL:
+; ; drawn (start operand) by DrumEdit_DrawRowNote0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x0A, 0x0C                               ; FEB0BC  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x2B, 0x00, 0x03  ; FEB0BE
 ; DrumEdit_DrawRowNote1 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -181809,8 +181809,8 @@ DrumEdit_DrawRowNote1:
 
 ; DrumEdit_DrawRowNote1_DL -- 1 record(s), 12 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEB0E4 and land exactly on 0xFEB0F0.
-; ; drawn (start operand) by DrumEdit_DrawRowNote1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawRowNote1_DL:
+; ; drawn (start operand) by DrumEdit_DrawRowNote1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x0A, 0x0C                               ; FEB0E4  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x35, 0x00, 0x03  ; FEB0E6
 ; DrumEdit_DrawRowNote2 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -181842,8 +181842,8 @@ DrumEdit_DrawRowNote2:
 
 ; DrumEdit_DrawRowNote2_DL -- 1 record(s), 12 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEB10C and land exactly on 0xFEB118.
-; ; drawn (start operand) by DrumEdit_DrawRowNote2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawRowNote2_DL:
+; ; drawn (start operand) by DrumEdit_DrawRowNote2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x0A, 0x0C                               ; FEB10C  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x3F, 0x00, 0x03  ; FEB10E
 ; DrumEdit_DrawRowNote3 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -181875,8 +181875,8 @@ DrumEdit_DrawRowNote3:
 
 ; DrumEdit_DrawRowNote3_DL -- 1 record(s), 12 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEB134 and land exactly on 0xFEB140.
-; ; drawn (start operand) by DrumEdit_DrawRowNote3 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawRowNote3_DL:
+; ; drawn (start operand) by DrumEdit_DrawRowNote3 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x0A, 0x0C                               ; FEB134  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x49, 0x00, 0x03  ; FEB136
 ; DrumEdit_DrawRowNote4 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -181908,8 +181908,8 @@ DrumEdit_DrawRowNote4:
 
 ; DrumEdit_DrawRowNote4_DL -- 1 record(s), 12 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEB15C and land exactly on 0xFEB168.
-; ; drawn (start operand) by DrumEdit_DrawRowNote4 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawRowNote4_DL:
+; ; drawn (start operand) by DrumEdit_DrawRowNote4 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x0A, 0x0C                               ; FEB15C  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x53, 0x00, 0x03  ; FEB15E
 ; DrumEdit_DrawRowNote5 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -181941,8 +181941,8 @@ DrumEdit_DrawRowNote5:
 
 ; DrumEdit_DrawRowNote5_DL -- 1 record(s), 12 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEB184 and land exactly on 0xFEB190.
-; ; drawn (start operand) by DrumEdit_DrawRowNote5 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawRowNote5_DL:
+; ; drawn (start operand) by DrumEdit_DrawRowNote5 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x0A, 0x0C                               ; FEB184  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x5D, 0x00, 0x03  ; FEB186
 ; DrumEdit_DrawRowNote6 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -181974,8 +181974,8 @@ DrumEdit_DrawRowNote6:
 
 ; DrumEdit_DrawRowNote6_DL -- 1 record(s), 12 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEB1AC and land exactly on 0xFEB1B8.
-; ; drawn (start operand) by DrumEdit_DrawRowNote6 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawRowNote6_DL:
+; ; drawn (start operand) by DrumEdit_DrawRowNote6 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x0A, 0x0C                               ; FEB1AC  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x67, 0x00, 0x03  ; FEB1AE
 ; DrumEdit_DrawRowNote7 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -182007,8 +182007,8 @@ DrumEdit_DrawRowNote7:
 
 ; DrumEdit_DrawRowNote7_DL -- 1 record(s), 12 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEB1D4 and land exactly on 0xFEB1E0.
-; ; drawn (start operand) by DrumEdit_DrawRowNote7 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawRowNote7_DL:
+; ; drawn (start operand) by DrumEdit_DrawRowNote7 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x0A, 0x0C                               ; FEB1D4  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x71, 0x00, 0x03  ; FEB1D6
 ; DrumEdit_DrawRowNote8 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -182040,8 +182040,8 @@ DrumEdit_DrawRowNote8:
 
 ; DrumEdit_DrawRowNote8_DL -- 1 record(s), 12 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEB1FC and land exactly on 0xFEB208.
-; ; drawn (start operand) by DrumEdit_DrawRowNote8 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawRowNote8_DL:
+; ; drawn (start operand) by DrumEdit_DrawRowNote8 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x0A, 0x0C                               ; FEB1FC  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x7B, 0x00, 0x03  ; FEB1FE
 ; DrumEdit_DrawRowNote9 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -182073,8 +182073,8 @@ DrumEdit_DrawRowNote9:
 
 ; DrumEdit_DrawRowNote9_DL -- 1 record(s), 12 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEB224 and land exactly on 0xFEB230.
-; ; drawn (start operand) by DrumEdit_DrawRowNote9 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawRowNote9_DL:
+; ; drawn (start operand) by DrumEdit_DrawRowNote9 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x0A, 0x0C                               ; FEB224  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x85, 0x00, 0x03  ; FEB226
 ; DrumEdit_DrawRowNote10 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -182106,8 +182106,8 @@ DrumEdit_DrawRowNote10:
 
 ; DrumEdit_DrawRowNote10_DL -- 1 record(s), 12 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEB24C and land exactly on 0xFEB258.
-; ; drawn (start operand) by DrumEdit_DrawRowNote10 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawRowNote10_DL:
+; ; drawn (start operand) by DrumEdit_DrawRowNote10 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x0A, 0x0C                               ; FEB24C  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x8F, 0x00, 0x03  ; FEB24E
 ; DrumEdit_DrawRowNote11 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -182139,8 +182139,8 @@ DrumEdit_DrawRowNote11:
 
 ; DrumEdit_DrawRowNote11_DL -- 1 record(s), 12 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEB274 and land exactly on 0xFEB280.
-; ; drawn (start operand) by DrumEdit_DrawRowNote11 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawRowNote11_DL:
+; ; drawn (start operand) by DrumEdit_DrawRowNote11 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x0A, 0x0C                               ; FEB274  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x99, 0x00, 0x03  ; FEB276
 ; DrumEdit_DrawRowNames: DrumEdit_DrawRowName for rows 0..11.
@@ -184456,8 +184456,8 @@ EditScreen_EraseFieldRow:
 
 ; EditScreen_EraseFieldRow_DL -- 1 record(s), 10 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFEF78C and land exactly on 0xFEF796.
-; ; drawn (start operand) by EditScreen_EraseFieldRow -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_EraseFieldRow_DL:
+; ; drawn (start operand) by EditScreen_EraseFieldRow -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1B, 0x0A                               ; FEF78C  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x08, 0x00, 0xB2, 0x00, 0xE8, 0x00, 0xC0, 0x00  ; FEF78E
 ; EditScreen_EraseMarkerStrip -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -184487,8 +184487,8 @@ EditScreen_EraseMarkerStrip:
 
 ; EditScreen_EraseMarkerStrip_DL -- 1 record(s), 10 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFEF7AA and land exactly on 0xFEF7B4.
-; ; drawn (start operand) by EditScreen_EraseMarkerStrip -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_EraseMarkerStrip_DL:
+; ; drawn (start operand) by EditScreen_EraseMarkerStrip -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1B, 0x0A                               ; FEF7AA  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x00, 0x00, 0x21, 0x00, 0x08, 0x01, 0x27, 0x00  ; FEF7AC
 ; EditScreen_EraseHeaderRow -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -184517,8 +184517,8 @@ EditScreen_EraseHeaderRow:
 
 ; EditScreen_EraseHeaderRow_DL -- 1 record(s), 10 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFEF7C8 and land exactly on 0xFEF7D2.
-; ; drawn (start operand) by EditScreen_EraseHeaderRow -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_EraseHeaderRow_DL:
+; ; drawn (start operand) by EditScreen_EraseHeaderRow -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1B, 0x0A                               ; FEF7C8  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x00, 0x00, 0x14, 0x00, 0x08, 0x01, 0x1F, 0x00  ; FEF7CA
 ; EditScreen_EraseEditArea_Layer0: EditScreen_Mode bit 0 (DRUM EDIT) -> DrumEdit_EraseEditArea_Layer0, else NoteEdit_EraseEditArea_Layer0.  22 call sites.
@@ -184558,8 +184558,8 @@ NoteEdit_EraseEditArea:
 
 ; NoteEdit_EraseEditArea_DL -- 1 record(s), 10 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFEF7F5 and land exactly on 0xFEF7FF.
-; ; drawn (start operand) by NoteEdit_EraseEditArea -- derivative name (notes/wsa1_display_list_drawer_names.py)
 NoteEdit_EraseEditArea_DL:
+; ; drawn (start operand) by NoteEdit_EraseEditArea -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1B, 0x0A                               ; FEF7F5  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x10, 0x00, 0x29, 0x00, 0x02, 0x01, 0xAE, 0x00  ; FEF7F7
 ; DrumEdit_EraseEditArea_Layer0: LCD_CurrentLayer = 0, then falls into DrumEdit_EraseEditArea.
@@ -184591,8 +184591,8 @@ DrumEdit_EraseEditArea:
 
 ; DrumEdit_EraseEditArea_DL -- 1 record(s), 10 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFEF813 and land exactly on 0xFEF81D.
-; ; drawn (start operand) by DrumEdit_EraseEditArea -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_EraseEditArea_DL:
+; ; drawn (start operand) by DrumEdit_EraseEditArea -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1B, 0x0A                               ; FEF813  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x58, 0x00, 0x29, 0x00, 0x02, 0x01, 0xAE, 0x00  ; FEF815
 ; sub_FEF81D -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -184650,8 +184650,8 @@ EditScreen_EraseLengthCell:
 
 ; EditScreen_EraseLengthCell_DL -- 1 record(s), 10 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFEF84F and land exactly on 0xFEF859.
-; ; drawn (start operand) by EditScreen_EraseLengthCell -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_EraseLengthCell_DL:
+; ; drawn (start operand) by EditScreen_EraseLengthCell -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1B, 0x0A                               ; FEF84F  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0xA0, 0x00, 0xB2, 0x00, 0xC8, 0x00, 0xC0, 0x00  ; FEF851
 ; EditScreen_EraseEditArea_Layer1: LCD_CurrentLayer = 1, then by EditScreen_Mode bit 0 DrumEdit_ or NoteEdit_EraseEditArea.
@@ -184691,8 +184691,8 @@ EditScreen_EraseLeftColumn_Layer1:
 
 ; EditScreen_EraseLeftColumn_Layer1_DL -- 1 record(s), 10 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFEF881 and land exactly on 0xFEF88B.
-; ; drawn (start operand) by EditScreen_EraseLeftColumn_Layer1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_EraseLeftColumn_Layer1_DL:
+; ; drawn (start operand) by EditScreen_EraseLeftColumn_Layer1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1B, 0x0A                               ; FEF881  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x00, 0x00, 0x2A, 0x00, 0x16, 0x00, 0xA3, 0x00  ; FEF883
 ; EditScreen_EraseRowLabelArea: layer 0, EditScreen_EraseRowLabelArea_DL: EraseRect (0, 0x29)-(0x58, 0xA3), the left area DrumEdit_RedrawRowList redraws.
@@ -184722,8 +184722,8 @@ DisplayList_Run_Call:
 
 ; EditScreen_EraseRowLabelArea_DL -- 1 record(s), 10 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFEF89F and land exactly on 0xFEF8A9.
-; ; drawn (start operand) by EditScreen_EraseRowLabelArea -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_EraseRowLabelArea_DL:
+; ; drawn (start operand) by EditScreen_EraseRowLabelArea -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1B, 0x0A                               ; FEF89F  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x00, 0x00, 0x29, 0x00, 0x58, 0x00, 0xA3, 0x00  ; FEF8A1
 sub_FEF8A9:   ; entry: named by 1 `ld` operand, first at 0xFEF895
@@ -184958,15 +184958,15 @@ EditScreen_MeasureNumberAt0:   ; entry: named by 3 `.long` operands, first at 0x
 
 ; EditScreen_MeasureNumberAt0_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFA7A and land exactly on 0xFEFA89.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt0_DL1:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FEFA7A  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x03, 0x00, 0x20, 0x03  ; FEFA7C
 
 ; EditScreen_MeasureNumberAt0_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFA89 and land exactly on 0xFEFA93.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt0_DL2:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FEFA89  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFA8B
 	.ascii "  "                                 ; FEFA8F
@@ -184989,15 +184989,15 @@ EditScreen_MeasureNumberAt1:   ; entry: named by 2 `.long`/`ld` operands, first 
 
 ; EditScreen_MeasureNumberAt1_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFABF and land exactly on 0xFEFACE.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt1_DL1:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FEFABF  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x02, 0x00, 0x24, 0x03  ; FEFAC1
 
 ; EditScreen_MeasureNumberAt1_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFACE and land exactly on 0xFEFAD8.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt1_DL2:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FEFACE  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFAD0
 	.ascii " $"                                 ; FEFAD4
@@ -185020,15 +185020,15 @@ EditScreen_MeasureNumberAt2:   ; entry: named by 2 `.long`/`ld` operands, first 
 
 ; EditScreen_MeasureNumberAt2_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFB04 and land exactly on 0xFEFB13.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt2_DL1:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FEFB04  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x02, 0x00, 0x27, 0x03  ; FEFB06
 
 ; EditScreen_MeasureNumberAt2_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFB13 and land exactly on 0xFEFB1D.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt2_DL2:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FEFB13  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFB15
 	.ascii " '"                                 ; FEFB19
@@ -185051,15 +185051,15 @@ EditScreen_MeasureNumberAt3:   ; entry: named by 2 `.long`/`ld` operands, first 
 
 ; EditScreen_MeasureNumberAt3_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFB49 and land exactly on 0xFEFB58.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt3 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt3_DL1:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt3 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FEFB49  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x02, 0x00, 0x2A, 0x03  ; FEFB4B
 
 ; EditScreen_MeasureNumberAt3_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFB58 and land exactly on 0xFEFB62.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt3 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt3_DL2:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt3 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FEFB58  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFB5A
 	.ascii " *"                                 ; FEFB5E
@@ -185082,15 +185082,15 @@ EditScreen_MeasureNumberAt4:   ; entry: named by 2 `.long`/`ld` operands, first 
 
 ; EditScreen_MeasureNumberAt4_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFB8E and land exactly on 0xFEFB9D.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt4 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt4_DL1:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt4 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FEFB8E  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x03, 0x00, 0x29, 0x03  ; FEFB90
 
 ; EditScreen_MeasureNumberAt4_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFB9D and land exactly on 0xFEFBA7.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt4 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt4_DL2:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt4 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FEFB9D  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFB9F
 	.ascii " )"                                 ; FEFBA3
@@ -185113,15 +185113,15 @@ EditScreen_MeasureNumberAt5:   ; entry: named by 3 `.long`/`ld` operands, first 
 
 ; EditScreen_MeasureNumberAt5_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFBD3 and land exactly on 0xFEFBE2.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt5 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt5_DL1:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt5 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FEFBD3  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x02, 0x00, 0x2D, 0x03  ; FEFBD5
 
 ; EditScreen_MeasureNumberAt5_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFBE2 and land exactly on 0xFEFBEC.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt5 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt5_DL2:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt5 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FEFBE2  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFBE4
 	.ascii " -"                                 ; FEFBE8
@@ -185144,15 +185144,15 @@ EditScreen_MeasureNumberAt6:   ; entry: named by 3 `.long`/`ld` operands, first 
 
 ; EditScreen_MeasureNumberAt6_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFC18 and land exactly on 0xFEFC27.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt6 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt6_DL1:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt6 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FEFC18  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x02, 0x00, 0x30, 0x03  ; FEFC1A
 
 ; EditScreen_MeasureNumberAt6_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFC27 and land exactly on 0xFEFC31.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt6 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt6_DL2:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt6 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FEFC27  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFC29
 	.ascii " 0"                                 ; FEFC2D
@@ -185175,15 +185175,15 @@ EditScreen_MeasureNumberAt7:   ; entry: named by 3 `.long`/`ld` operands, first 
 
 ; EditScreen_MeasureNumberAt7_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFC5D and land exactly on 0xFEFC6C.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt7 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt7_DL1:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt7 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FEFC5D  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x02, 0x00, 0x33, 0x03  ; FEFC5F
 
 ; EditScreen_MeasureNumberAt7_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFC6C and land exactly on 0xFEFC76.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt7 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt7_DL2:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt7 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FEFC6C  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFC6E
 	.ascii " 3"                                 ; FEFC72
@@ -185206,15 +185206,15 @@ EditScreen_MeasureNumberAt8:   ; entry: named by 3 `.long`/`ld` operands, first 
 
 ; EditScreen_MeasureNumberAt8_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFCA2 and land exactly on 0xFEFCB1.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt8 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt8_DL1:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt8 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FEFCA2  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x02, 0x00, 0x36, 0x03  ; FEFCA4
 
 ; EditScreen_MeasureNumberAt8_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFCB1 and land exactly on 0xFEFCBB.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt8 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt8_DL2:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt8 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FEFCB1  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFCB3
 	.ascii " 6"                                 ; FEFCB7
@@ -185237,15 +185237,15 @@ EditScreen_MeasureNumberAt9:   ; entry: named by 3 `.long`/`ld` operands, first 
 
 ; EditScreen_MeasureNumberAt9_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFCE7 and land exactly on 0xFEFCF6.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt9 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt9_DL1:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt9 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FEFCE7  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x02, 0x00, 0x39, 0x03  ; FEFCE9
 
 ; EditScreen_MeasureNumberAt9_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFCF6 and land exactly on 0xFEFD00.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt9 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt9_DL2:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt9 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FEFCF6  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFCF8
 	.ascii " 9"                                 ; FEFCFC
@@ -185268,15 +185268,15 @@ EditScreen_MeasureNumberAt10:   ; entry: named by 3 `.long`/`ld` operands, first
 
 ; EditScreen_MeasureNumberAt10_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFD2C and land exactly on 0xFEFD3B.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt10 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt10_DL1:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt10 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FEFD2C  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x02, 0x00, 0x3C, 0x03  ; FEFD2E
 
 ; EditScreen_MeasureNumberAt10_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFD3B and land exactly on 0xFEFD45.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt10 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt10_DL2:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt10 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FEFD3B  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFD3D
 	.ascii " <"                                 ; FEFD41
@@ -185299,15 +185299,15 @@ EditScreen_MeasureNumberAt11:   ; entry: named by 3 `.long`/`ld` operands, first
 
 ; EditScreen_MeasureNumberAt11_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFD71 and land exactly on 0xFEFD80.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt11 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt11_DL1:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt11 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FEFD71  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x02, 0x00, 0x3F, 0x03  ; FEFD73
 
 ; EditScreen_MeasureNumberAt11_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFEFD80 and land exactly on 0xFEFD8A.
-; ; drawn (start operand) by EditScreen_MeasureNumberAt11 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_MeasureNumberAt11_DL2:
+; ; drawn (start operand) by EditScreen_MeasureNumberAt11 -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FEFD80  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFD82
 	.ascii " ?"                                 ; FEFD86
@@ -186044,8 +186044,8 @@ EditScreen_DrawTrackNumber:
 
 ; EditScreen_DrawTrackNumber_DL -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF037F and land exactly on 0xFF0389.
-; ; drawn (start operand) by EditScreen_DrawTrackNumber -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_DrawTrackNumber_DL:
+; ; drawn (start operand) by EditScreen_DrawTrackNumber -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FF037F  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x8B, 0x00, 0x02  ; FF0381
 ; EditScreen_DrawSongNumber -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -186078,8 +186078,8 @@ EditScreen_DrawSongNumber:
 
 ; EditScreen_DrawSongNumber_DL -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF03A9 and land exactly on 0xFF03B3.
-; ; drawn (start operand) by EditScreen_DrawSongNumber -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_DrawSongNumber_DL:
+; ; drawn (start operand) by EditScreen_DrawSongNumber -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FF03A9  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x9C, 0x00, 0x02  ; FF03AB
 ; EditScreen_DrawRulersAndLegend: layer 2: EditScreen_DrawMeasureStartLines, NoteEdit_DrawKeyboardRuler, Screen_DrawKitCategoryLegend.
@@ -186708,8 +186708,8 @@ EditScreen_DrawMeasure:
 
 ; EditScreen_DrawMeasure_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF09D8 and land exactly on 0xFF09E7.
-; ; drawn (start operand) by EditScreen_DrawMeasure -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_DrawMeasure_DL1:
+; ; drawn (start operand) by EditScreen_DrawMeasure -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FF09D8  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x04, 0x00, 0xF9, 0x1B  ; FF09DA
 ; The 4-character string EditScreen_DrawMeasure_DL1's op-02 record draws (string table, 4 bytes per entry, entry 0):
@@ -186720,15 +186720,15 @@ Str_EditMeasureOverflow:
 
 ; EditScreen_DrawMeasure_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF09EB and land exactly on 0xFF09F5.
-; ; drawn (start operand) by EditScreen_DrawMeasure -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_DrawMeasure_DL2:
+; ; drawn (start operand) by EditScreen_DrawMeasure -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FF09EB  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xF9, 0x1B, 0x03  ; FF09ED
 
 ; EditScreen_DrawMeasure_DL3 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF09F5 and land exactly on 0xFF0A04.
-; ; drawn (start operand) by EditScreen_DrawMeasure -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_DrawMeasure_DL3:
+; ; drawn (start operand) by EditScreen_DrawMeasure -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FF09F5  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xEA, 0x09, 0xFF, 0x00, 0x01, 0x00, 0xFC, 0x1B  ; FF09F7
 ; EditScreen_DrawBeat -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -186766,15 +186766,15 @@ EditScreen_DrawBeat:
 
 ; EditScreen_DrawBeat_DL1 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF0A39 and land exactly on 0xFF0A43.
-; ; drawn (start operand) by EditScreen_DrawBeat -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_DrawBeat_DL1:
+; ; drawn (start operand) by EditScreen_DrawBeat -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FF0A39  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xFD, 0x1B, 0x01  ; FF0A3B
 
 ; EditScreen_DrawBeat_DL2 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF0A43 and land exactly on 0xFF0A52.
-; ; drawn (start operand) by EditScreen_DrawBeat -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_DrawBeat_DL2:
+; ; drawn (start operand) by EditScreen_DrawBeat -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FF0A43  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xEA, 0x09, 0xFF, 0x00, 0x01, 0x00, 0xFE, 0x1B  ; FF0A45
 ; EditScreen_DrawTick -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -186806,8 +186806,8 @@ EditScreen_DrawTick:
 
 ; EditScreen_DrawTick_DL -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF0A71 and land exactly on 0xFF0A7B.
-; ; drawn (start operand) by EditScreen_DrawTick -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_DrawTick_DL:
+; ; drawn (start operand) by EditScreen_DrawTick -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FF0A71  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xFF, 0x1B, 0x02  ; FF0A73
 ; EditScreen_DrawCursorNote: layer 0: DrumEdit_DrawCursorNoteNumber in DRUM EDIT, NoteEdit_DrawCursorNoteName in NOTE EDIT.
@@ -186848,8 +186848,8 @@ DrumEdit_DrawCursorNoteNumber:
 
 ; DrumEdit_DrawCursorNoteNumber_DL -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF0AA9 and land exactly on 0xFF0AB3.
-; ; drawn (start operand) by DrumEdit_DrawCursorNoteNumber -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawCursorNoteNumber_DL:
+; ; drawn (start operand) by DrumEdit_DrawCursorNoteNumber -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x00, 0x0A                               ; FF0AA9  op 00, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x04, 0x1C, 0x02  ; FF0AAB
 ; NoteEdit_DrawCursorNoteName -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -186891,15 +186891,15 @@ NoteEdit_DrawCursorNoteName:
 
 ; NoteEdit_DrawCursorNoteName_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF0AEA and land exactly on 0xFF0AF9.
-; ; drawn (start operand) by NoteEdit_DrawCursorNoteName -- derivative name (notes/wsa1_display_list_drawer_names.py)
 NoteEdit_DrawCursorNoteName_DL1:
+; ; drawn (start operand) by NoteEdit_DrawCursorNoteName -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FF0AEA  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x08, 0x0B, 0xFF, 0x00, 0x02, 0x00, 0x03, 0x1C  ; FF0AEC
 
 ; NoteEdit_DrawCursorNoteName_DL2 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF0AF9 and land exactly on 0xFF0B08.
-; ; drawn (start operand) by NoteEdit_DrawCursorNoteName -- derivative name (notes/wsa1_display_list_drawer_names.py)
 NoteEdit_DrawCursorNoteName_DL2:
+; ; drawn (start operand) by NoteEdit_DrawCursorNoteName -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FF0AF9  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x22, 0x0B, 0xFF, 0x00, 0x02, 0x00, 0x05, 0x1C  ; FF0AFB
 ; ---------------------------------------------------------------------
@@ -186991,29 +186991,29 @@ EditScreen_DrawEventVelocity:
 
 ; EditScreen_DrawEventVelocity_DL2 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF0BBE and land exactly on 0xFF0BC8.
-; ; drawn (start operand) by EditScreen_DrawEventVelocity -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_DrawEventVelocity_DL2:
+; ; drawn (start operand) by EditScreen_DrawEventVelocity -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FF0BBE  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x09, 0x1C, 0x02  ; FF0BC0
 
 ; EditScreen_DrawEventVelocity_DL4 -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF0BC8 and land exactly on 0xFF0BD2.
-; ; drawn (start operand) by EditScreen_DrawEventVelocity -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_DrawEventVelocity_DL4:
+; ; drawn (start operand) by EditScreen_DrawEventVelocity -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x06, 0x0A                               ; FF0BC8  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x08, 0x1C, 0x03  ; FF0BCA
 
 ; EditScreen_DrawEventVelocity_DL1 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF0BD2 and land exactly on 0xFF0BE1.
-; ; drawn (start operand) by EditScreen_DrawEventVelocity -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_DrawEventVelocity_DL1:
+; ; drawn (start operand) by EditScreen_DrawEventVelocity -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FF0BD2  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xF0, 0x0B, 0xFF, 0x00, 0x01, 0x00, 0x08, 0x1C  ; FF0BD4
 
 ; EditScreen_DrawEventVelocity_DL3 -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF0BE1 and land exactly on 0xFF0BF0.
-; ; drawn (start operand) by EditScreen_DrawEventVelocity -- derivative name (notes/wsa1_display_list_drawer_names.py)
 EditScreen_DrawEventVelocity_DL3:
+; ; drawn (start operand) by EditScreen_DrawEventVelocity -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FF0BE1  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xF0, 0x0B, 0xFF, 0x00, 0x01, 0x00, 0x07, 0x1C  ; FF0BE3
 ; Str_v -- a one-entry string table.  Both op-02 records above point at it (+7, entry width 1), and EditScreen_DrawEventVelocity
@@ -187157,8 +187157,8 @@ NoteEdit_DrawIncNumber:
 
 ; NoteEdit_DrawIncNumber_DL -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF0D2F and land exactly on 0xFF0D3E.
-; ; drawn (start operand) by NoteEdit_DrawIncNumber -- derivative name (notes/wsa1_display_list_drawer_names.py)
 NoteEdit_DrawIncNumber_DL:
+; ; drawn (start operand) by NoteEdit_DrawIncNumber -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FF0D2F  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x65, 0x0D, 0xFF, 0x00, 0x02, 0x00, 0x13, 0x1C  ; FF0D31
 ; DrumEdit_DrawIncLabel -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -187188,8 +187188,8 @@ DrumEdit_DrawIncLabel:
 
 ; DrumEdit_DrawIncLabel_DL -- 1 record(s), 15 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF0D56 and land exactly on 0xFF0D65.
-; ; drawn (start operand) by DrumEdit_DrawIncLabel -- derivative name (notes/wsa1_display_list_drawer_names.py)
 DrumEdit_DrawIncLabel_DL:
+; ; drawn (start operand) by DrumEdit_DrawIncLabel -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x02, 0x0F                               ; FF0D56  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x65, 0x0D, 0xFF, 0x00, 0x02, 0x00, 0x0E, 0x1C  ; FF0D58
 ; ---------------------------------------------------------------------
