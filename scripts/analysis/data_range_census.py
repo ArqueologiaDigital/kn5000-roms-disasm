@@ -139,6 +139,10 @@ NOEMIT_DIRS = {".text", ".data", ".section", ".globl", ".global", ".local",
                ".cfi_startproc", ".cfi_endproc", ".end", ".list", ".nolist"}
 
 LABEL_RE = re.compile(r'^([A-Za-z_.$][\w.$@]*):')
+# One table entry on one line, `Label: .incbin "...", off, size` or `Label: .byte ...`: the shape the
+# Label+Include Compaction policy (CLAUDE.md) requires for a block of such entries.
+COMPACT_RE = re.compile(r'^[A-Za-z_.$][\w.$@]*:\s*\.(incbin|byte|short|long|ascii|asciz|string|word|'
+                        r'2byte|4byte|space|zero|fill)\b')
 NUMLABEL_RE = re.compile(r'^(\d+):')
 CTRL_RE = re.compile(r'^(call|calr|jp|jr|jrl|djnz)\b', re.I)
 IDENT_RE = re.compile(r'\b([A-Za-z_][\w.$]{2,})\b')
@@ -419,6 +423,7 @@ class DocIndex:
         self.lines = lines
         self.label = [None] * n          # index -> (line, name) or None
         self.hdr = [None] * n            # index -> (start, end) of a comment run
+        self.compact = [None] * n        # index -> the header a compact table block hangs from
         cur_label = None
         cur_hdr = None
         run_start = None
@@ -442,6 +447,19 @@ class DocIndex:
                     run_start, run_len = None, 0
                 continue
             run_start, run_len = None, 0
+            # ⚠ A COMPACT TABLE BLOCK INHERITS THE HEADER DIRECTLY ABOVE ITS FIRST ENTRY.  A block of
+            # one-line `Label: .incbin` entries, with no blank or comment line between them, is one
+            # table by the compaction policy -- e.g. the 84 widget records of one NAKA view under the
+            # [nakarest] header that lists them.  ANCHOR_SLACK alone credited only its first 6
+            # entries.  The chain is strict: it starts on the line right after the header and stops
+            # at the first line that is not such an entry, so a banner cannot leak past the block.
+            # Added 2026-10-06; v10 strict 90.03% -> 93.35%, and 25 of 25 sampled upgraded regions
+            # were described by their block's header.
+            if COMPACT_RE.match(c):
+                if i > 0 and self.compact[i - 1] is not None:
+                    self.compact[i] = self.compact[i - 1]
+                elif cur_hdr is not None and cur_hdr[1] == i:
+                    self.compact[i] = cur_hdr
             m = LABEL_RE.match(c)
             if m and not m.group(1).startswith(MARK):
                 # ⚠ ASSIGNED TO LINE i ITSELF, not only to the lines below it.
@@ -474,7 +492,8 @@ class DocIndex:
         # in the file: the FP sample found a run of 1-bit bitmaps credited to a
         # "DMA ISR event router" header belonging to a table far above them.
         anchor = lab[0] if (lab and lab[0] >= i - back) else i
-        if h and h[1] is not None and h[0] >= i - back and h[1] >= anchor - ANCHOR_SLACK:
+        if h and h[1] is not None and (h[0] >= i - back and h[1] >= anchor - ANCHOR_SLACK
+                                       or self.compact[anchor] == h):
             block = [self.lines[k].strip().lstrip("; ").rstrip()
                      for k in range(h[0], min(h[1], i + 1))]
         # comment lines immediately above the region, if any
@@ -1163,6 +1182,14 @@ def selftest():
        DocIndex(["; ---- a banner about something else", "; two lines of it",
                  "Other:", "\t.byte 1"] + ["\t.byte 2"] * 20 +
                 ["Mine:", "\t.byte 3"]).context(25)[1] == "")
+
+    blk = DocIndex(["; ---- 3 widget records of view 7", "; elements 0-2, read by ViewProc"] +
+                   ["E%d:\t.incbin \"x.bin\", %d, 2" % (k, 2 * k) for k in range(10)] +
+                   ["", "After:\t.incbin \"x.bin\", 20, 2"])
+    ck("a compact table block inherits the header above its first entry",
+       "ViewProc" in blk.context(11)[1])
+    ck("the inheritance stops at the end of the block",
+       blk.context(13)[1] == "")
 
     # the v142 splice map
     v142 = [i for i in IMAGES if i["key"] == "v142"][0]
