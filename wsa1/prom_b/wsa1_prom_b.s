@@ -146650,6 +146650,7 @@ Blink_EnableThenStop:
 ; --------------------------------------------------------------------------
 ; SequencerMedley_StopPlayback: when Medley_Playing is 1: clears it and (0x22D0); for an INT source, or FD with a NORM file: T_Medley_Stop and, unless
 ;   (0x0E48) bit 2, T_F42E98; otherwise (0x0E36) = 1 and T_Medley_NormFileCommand.  Called by LcdKeyRow3_SequencerMedley and SequencerMedley_OnLeave.
+; ⚠ CORRECTED 2026-10-06: Medley_FileType = 1 is a MIDI FILE, not a NORM file -- Medley_Stop's own header says FD + MIDI FILE -> Medley_StopMidiFile; a NORM file takes the other branch, T_Medley_NormFileCommand.
 SequencerMedley_StopPlayback:		; <- T_SequencerMedley_StopPlayback
 	m_cp_mi8 MB16, Medley_Playing, 0x01	; F66201  cp (0x0dc1),0x01
 	jr	nz, sub_F66201_Return	; F66206  jr NZ,0xf66245
