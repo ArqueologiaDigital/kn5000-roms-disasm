@@ -2551,7 +2551,7 @@ SeMenu_CopyWriteUpdate_Loop:
 	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	ld	wa, 1:i3
-	call	SeMenu_SetupPartDisplay_End_Helper
+	call	SeMenu_PostDialEnable
 	ld	wa, 0:i3
 	ldw	bc, 11
 	ld	de, 0:i3
@@ -3784,7 +3784,7 @@ SeMenu_CopyWriteUpdate_Skip17:
 	cp	(xsp+2), 1
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue20
 	ldw	wa, 61
-	call	SeMenu_CopyWriteUpdate_Entry7_Code_Helper
+	call	SeMenu_GoToPageOnEnabledPart
 	jr	SeMenu_CopyWriteUpdate_Epilogue20
 SeMenu_CopyWriteUpdate_Entry8:
 	cp	(xsp+2), 0
@@ -4226,13 +4226,13 @@ SeTonTon1_OnSwitch25:
 	cp	a, 0:i3
 	ret	nz
 	ldw	wa, 38
-	call	SeMenu_CopyWriteUpdate_Entry7_Code_Helper
+	call	SeMenu_GoToPageOnEnabledPart
 	ret
 SeTonTon1_OnSwitch15:
 	cp	a, 0:i3
 	ret	nz
 	ldw	wa, 32
-	call	SeMenu_CopyWriteUpdate_Entry7_Code_Helper
+	call	SeMenu_GoToPageOnEnabledPart
 	ld	wa, 0:i3
 	call	SeMenu_SetupMenuDisplay
 	ret
@@ -6763,7 +6763,7 @@ Scoop_SoundEditorData_Helper_Skip28:
 	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	ld	wa, 1:i3
-	call	SeMenu_SetupPartDisplay_End_Helper
+	call	SeMenu_PostDialEnable
 	ld	wa, 0:i3
 	ldw	bc, 8
 	ld	de, 0:i3
@@ -7768,7 +7768,7 @@ SeGfx_DrawBoundRecord:
 	; --- Wrapper function 3: push xwa, ld xwa=xiy, call, pop, ret ---
 	push xwa
 	ld xwa, xiy
-	call SeGfx_DrawBoundRecord_Helper
+	call GraphicsRender_StartSingleRecord
 	pop xwa
 	ret
 SeGfx_StaticOp00_FromBuf:
@@ -8867,12 +8867,13 @@ SeMenu_DrawPartLabels:
 	call SeGfx_DrawStaticList
 	ld C, 0x04:opc
 .Lc_f0f7b0:
+SeMenu_DrawPartLabels_Join:
 	ld w, (0x065e:16)
 	ld A,C
 	sla A, 0x01
 	dec 1,A
 	.byte 0xc8, 0xff
-	jr	c, SeMenu_PresetManager_Data_Entry
+	jr	c, SeMenu_DrawPartLabels_Skip
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
@@ -8882,8 +8883,8 @@ SeMenu_DrawPartLabels:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
-	jr	SeMenu_PresetManager_Data_Join2
-SeMenu_PresetManager_Data_Entry:
+	jr	SeMenu_DrawPartLabels_Join2
+SeMenu_DrawPartLabels_Skip:
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
@@ -8893,7 +8894,7 @@ SeMenu_PresetManager_Data_Entry:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
-SeMenu_PresetManager_Data_Join2:
+SeMenu_DrawPartLabels_Join2:
 	djnz8	c, -84
 	ret
 SeMenu_DrawPartRadioButtons:

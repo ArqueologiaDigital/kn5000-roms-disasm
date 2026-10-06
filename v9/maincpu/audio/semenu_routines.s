@@ -1842,7 +1842,7 @@ SeMenu_TransferPartValues_EndData_Join6:
 SeMenu_TransferPartValues_EndData_Epilogue4:
 	lda	xsp, (xsp+14)
 	ret
-SeMenu_ApplyPartEdit_Helper3:
+SeCtr2_StepPartField:
 	lda	xsp, (xsp-12)
 	push	qiz
 	ld	(xsp+10), c
@@ -2324,7 +2324,7 @@ SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6:
 	ld	a, (xde+wa)
 	ld	(xbc), a
 	ret
-SeMenu_ApplyPartEdit_Helper4_Helper:
+SeMenu_PostDialEnable:
 	extz	wa
 	jp	UI_PostDialEnable
 SeMenu_SetupPartDisplay_End_Sub:
@@ -2342,7 +2342,7 @@ SeMenu_BindDialToColumn:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	wa, 1:i3
-	calr	SeMenu_ApplyPartEdit_Helper4_Helper
+	calr	SeMenu_PostDialEnable
 	ld	c, (xsp)
 	extz	bc
 	ld	wa, 0:i3
@@ -3594,7 +3594,7 @@ SeCtr2_OnPartColumn:
 	ld	a, (xsp)
 	extz	wa
 	extz	bc
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeCtr2_StepPartField
 	ld	a, (xsp)
 	inc	4, a
 	extz	wa
@@ -4035,7 +4035,7 @@ SeMenu_ApplyPartEdit_Skip17:
 	sub	a, (xbc)
 	exts	wa
 	lda	xbc, (xsp+28)
-	calr	SeMenu_ApplyPartEdit_Helper12
+	calr	SeMenu_StoreAbsoluteValue
 	ld	a, (xsp+28)
 	extz	wa
 	ld	(xsp+8), wa
@@ -4089,7 +4089,7 @@ SeMenu_ApplyPartEdit_Helper7_Join:
 	sub	a, (xbc+1)
 	exts	wa
 	lda	xbc, (xsp+28)
-	calr	SeMenu_ApplyPartEdit_Helper12
+	calr	SeMenu_StoreAbsoluteValue
 	ld	a, (xsp+28)
 	extz	wa
 	ld	(xsp+12), wa
@@ -4143,7 +4143,7 @@ SeMenu_ApplyPartEdit_Helper7_Join2:
 	sub	a, (xbc+2)
 	exts	wa
 	lda	xbc, (xsp+28)
-	calr	SeMenu_ApplyPartEdit_Helper12
+	calr	SeMenu_StoreAbsoluteValue
 	ld	a, (xsp+28)
 	extz	wa
 	ld	(xsp+16), wa
@@ -4197,7 +4197,7 @@ SeMenu_ApplyPartEdit_Join12:
 	sub	a, (xbc+3)
 	exts	wa
 	lda	xbc, (xsp+28)
-	calr	SeMenu_ApplyPartEdit_Helper12
+	calr	SeMenu_StoreAbsoluteValue
 	ld	a, (xsp+28)
 	extz	wa
 	ld qiz, wa
@@ -4330,7 +4330,7 @@ SeMenu_ApplyPartEdit_Skip21:
 	sub	a, (xbc+3)
 	exts	wa
 	lda	xbc, (xsp+28)
-	calr	SeMenu_ApplyPartEdit_Helper12
+	calr	SeMenu_StoreAbsoluteValue
 	ld	a, (xsp+28)
 	extz	wa
 	ld qiz, wa
@@ -4554,7 +4554,7 @@ SeMenu_ApplyPartEdit_Helper9_Helper:
 	div	xwa, de
 	ld	hl, wa
 	ret
-SeMenu_ApplyPartEdit_Helper10:
+SeMenu_NoteToKeyboardX:
 	cp	a, 20
 	jr	nc, SeMenu_ApplyPartEdit_Skip24
 	ld	a, 20:opc
@@ -4603,7 +4603,7 @@ SeMenu_DrawKeyScaleGraph:
 	ld	a, (xsp+24)
 	extz	wa
 	lda	xbc, (xsp+14)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	addiw_da	(xsp+14), 48
 	ldw	(xsp+16), 48
 	ldw	(xsp+4), 48
@@ -4631,15 +4631,15 @@ SeMenu_DrawKeyScaleGraph_Skip:
 	ld	a, (xsp+24)
 	extz	wa
 	lda	xbc, (xsp+14)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	ld	a, (xsp+26)
 	extz	wa
 	lda	xbc, (xsp+16)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	addiw_da	(xsp+14), 48
 	addiw_da	(xsp+16), 48
 	addiw_da	(xsp+12), 48
@@ -4696,7 +4696,7 @@ SeMenu_ApplyPartEdit_Skip25:
 	ld	a, (xsp+18)
 	exts	wa
 	lda	xbc, (xsp+20)
-	calr	SeMenu_ApplyPartEdit_Helper12
+	calr	SeMenu_StoreAbsoluteValue
 	ldw	hl, 25
 	muls	hl, 50
 	ld	c, (xsp+20)
@@ -4793,7 +4793,7 @@ SeMenu_ApplyPartEdit_Entry3_Join4:
 	pop	xiz
 	lda	xsp, (xsp+28)
 	ret
-SeMenu_ApplyPartEdit_Helper12:
+SeMenu_StoreAbsoluteValue:
 	cp	a, 0:i3
 	jr	ge, SeMenu_ApplyPartEdit_Helper12_Skip
 	neg	a
@@ -4862,19 +4862,19 @@ SeMenu_ApplyPartEdit_Entry5:
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xsp+12)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+10)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xsp+8)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xsp+6)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	jr	SeMenu_ApplyPartEdit_Join18
 SeMenu_ApplyPartEdit_Skip28:
 	ld	a, (xsp+20)
@@ -5155,7 +5155,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join6:
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
-Scoop_SoundEditorData_Helper10:
+SeMenu_DrawFilterEqGraph:
 	lda	xsp, (xsp-12)
 	push	xiz
 	lda	xbc, (xsp+14)

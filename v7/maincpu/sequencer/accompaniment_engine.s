@@ -25283,7 +25283,7 @@ DrumVoice_NotifyEE_Helper:
 	inc	1, a
 	cp	a, 31
 	jr	nz, DrumVoice_NotifyEE_Skip20
-	calr	TimeSig_DisplayStrings_Code_Helper
+	calr	CmpNcp_ResetPatternToVari1
 	ld	a, 0:opc
 	jr	TimeSig_DisplayStrings_Code_Join4
 DrumVoice_NotifyEE_Skip20:
@@ -25321,7 +25321,7 @@ TimeSig_DisplayStrings_Code_Skip19:
 	ld	a, 17:opc
 TimeSig_DisplayStrings_Code_Return4:
 	ret
-TimeSig_DisplayStrings_Code_Helper:
+CmpNcp_ResetPatternToVari1:
 	ld	a, (64602:16)
 	and	a, 255
 	cp	a, 128
@@ -25338,7 +25338,7 @@ CmpNcp_StepSlotInGroup1:
 	inc	1, a
 	cp	a, 32
 	jr	nz, TimeSig_DisplayStrings_Code_Skip21
-	calr	TimeSig_DisplayStrings_Code_Helper
+	calr	CmpNcp_ResetPatternToVari1
 	ld	a, 4:opc
 	jr	TimeSig_DisplayStrings_Code_Loop
 TimeSig_DisplayStrings_Code_Skip21:
@@ -25381,7 +25381,7 @@ CmpNcp_StepSlotInGroup2:
 	inc	1, a
 	cp	a, 33
 	jr	nz, TimeSig_DisplayStrings_Code_Skip27
-	calr	TimeSig_DisplayStrings_Code_Helper
+	calr	CmpNcp_ResetPatternToVari1
 	ld	a, 8:opc
 	jr	TimeSig_DisplayStrings_Code_Join5
 TimeSig_DisplayStrings_Code_Skip27:
@@ -28500,7 +28500,7 @@ AccVoice_SetupSlots_DataBlock_Sub_Skip:
 	ld	a, 131:opc
 AccVoice_SetupSlots_DataBlock_Sub_Return:
 	ret
-AccVoice_SetupSlots_DataBlock_Helper7:
+AccPatch_GetEventLength:
 	ld	c, 0:opc
 	cp	a, 144
 	jr	nz, AccVoice_SetupSlots_DataBlock_Skip3
@@ -28541,7 +28541,7 @@ AccVoice_SetupSlots_DataBlock_Helper8:
 	ld	xiy, (xbc)
 	ld	a, (xiy)
 	ld	xbc, 0:i3
-	calr	AccVoice_SetupSlots_DataBlock_Helper7
+	calr	AccPatch_GetEventLength
 	ld	hl, (13686:16)
 	pushw	bc
 	calr	AccPatch_ResolveEntryAddr
@@ -29033,7 +29033,7 @@ AccVoice_SetupSlots_DataBlock_Helper19:
 	ret
 AccVoice_SetupSlots_DataBlock_Helper18_Helper:
 	ld	a, (xix)
-	calr	AccVoice_SetupSlots_DataBlock_Helper7
+	calr	AccPatch_GetEventLength
 	push	c
 	ld	xbc, 0:i3
 	pop	c
@@ -33162,18 +33162,20 @@ AccScreen_DataBlock_Code2:
 	calr	AccDraw_Secondary_Helper16
 	calr	AccScreen_RefreshScreen
 	ret
+CmpStep_OnHide:
 	push	xiz
-	calr	AccDraw_Secondary_Helper8
+	calr	CmpStep_UnblockSustainInput
 	pop	xiz
 	ret
-AccDraw_Secondary_Helper8:
+CmpStep_UnblockSustainInput:
 	call	AccDraw_Secondary_Helper8_Helper
 	ret
+CmpStep_DispatchSwitch:
 	push	xiz
-	calr	AccDraw_Secondary_Helper8_Helper2
+	calr	CmpStep_CallSwitchHandler
 	pop	xiz
 	ret
-AccDraw_Secondary_Helper8_Helper2:
+CmpStep_CallSwitchHandler:
 	ld	xix, AccDraw_SecondarySub_Handlers
 	calr	AccDraw_Secondary_Sub
 	ret

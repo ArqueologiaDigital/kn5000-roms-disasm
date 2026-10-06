@@ -74,7 +74,9 @@ def main():
         for p, items in byfile.items():
             L = open(p, "rb").read().decode("latin-1").split("\n")
             for i, r in sorted(items, key=lambda x: -x[0]):
-                h = " ".join(r["header"].split())
+                h = " ".join((r.get("header") or "").split())
+                if not h:
+                    continue                     # switch-case records usually carry no header (cases-*.json)
                 lines = ["; " + x for x in textwrap.wrap("%s: %s" % (r["new"], h), 116, subsequent_indent="  ")]
                 if lines[0] not in L[max(0, i - 6):i]:
                     L[i:i] = lines

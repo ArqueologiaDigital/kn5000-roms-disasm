@@ -36,7 +36,7 @@ SeWrtSndTitleFunc_OnHide:
 SeWrtSndTitleFunc_OnSwitchIn:
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	call	Scoop_SoundEditorData_Helper12
+	call	SeWrtSndTitleFunc_DispatchSwitch
 SeWrtSndTitleFunc_OnSwitchIn_Join:
 	ld	wa, 1:i3
 	call	AudioLock_GetCount
@@ -2239,7 +2239,7 @@ SeFilLpq1_OnColumn4_Join5:
 	ld	bc, 5:i3
 	call	SeMenu_StepParamFieldAndSend
 	cp	l, 1:i3
-	call	z, (Scoop_SoundEditorData_Helper10:24)
+	call	z, (SeMenu_DrawFilterEqGraph:24)
 	ld	wa, 6:i3
 	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+18)
@@ -2287,7 +2287,7 @@ SeFilLpq1_OnColumn4_Join6:
 	ld	bc, 4:i3
 	call	SeMenu_StepParamFieldAndSend
 	cp	l, 1:i3
-	call	z, (Scoop_SoundEditorData_Helper10:24)
+	call	z, (SeMenu_DrawFilterEqGraph:24)
 	ld	wa, 7:i3
 	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+18)
@@ -2335,7 +2335,7 @@ SeFilLpq1_OnColumn4_Join7:
 	ld	bc, 5:i3
 	call	SeMenu_StepParamFieldAndSend
 	cp	l, 1:i3
-	call	z, (Scoop_SoundEditorData_Helper10:24)
+	call	z, (SeMenu_DrawFilterEqGraph:24)
 	ldw	wa, 8
 	call	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+18)

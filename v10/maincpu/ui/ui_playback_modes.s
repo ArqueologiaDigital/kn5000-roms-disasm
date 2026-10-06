@@ -361,9 +361,16 @@ DispatchHandler_ClearActiveFlag:
 	ret
 
 PlayMode_InitFlagBlock:
-	call	PlayMode_InitFlagBlock_Helper
+	call	PlayMode_ArmStartCountdown
 	ret
-PlayMode_InitFlagBlock_Helper:
+; PlayMode_ArmStartCountdown: Once per arming ((0x0D34) = 0): sets (0x0D34) = 1, sets bit 2 of 0x28AC and loads the
+;   playback countdown (0x1144) = 10, which CDlikeSwitch_PlaybackTimer (main-loop tick) counts down -- at 5 it
+;   restarts the accompaniment and at 0 starts the transport (CDlike_ResetPlaybackState) on the medley-play titles
+;   120/122. Basis: callers + body -- PlayMode_InitFlagBlock, the activate-state case 0 of SqMdlyPlyTtlFunc and
+;   DkMdlyPlyTtlFunc, is its only caller; PlayMode_StartAndSendCommand acts only when (0x0D34) = 1 and the countdown
+;   has reached 0. Twins: SongMode_InitFlagBlock_Helper, PartFormat_InitFlagBlock_Helper,
+;   PlayModeStop_InitFlagBlock_Helper.
+PlayMode_ArmStartCountdown:
 	cp (3380:16), 0
 	jr	nz, PlayMode_InitFlagBlock_Return
 	ld	(3380:16), 1

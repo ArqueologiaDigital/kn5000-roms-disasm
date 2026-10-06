@@ -25108,10 +25108,10 @@ RhythmVariation_InlineCode_Code2:
 	ret
 AccDraw_StepNoteValue_Wrap:
 	push	xiz
-	calr	RhythmVariation_InlineCode_Sub_Helper_Helper
+	calr	AccDraw_StepNoteValue
 	pop	xiz
 	ret
-RhythmVariation_InlineCode_Sub_Helper_Helper:
+AccDraw_StepNoteValue:
 	cp	(0x3712:16), 4
 	jr	z, RhythmVariation_InlineCode_Sub_Helper_Skip
 	jr	RhythmVariation_Select_Return
@@ -25134,10 +25134,10 @@ RhythmVariation_Select_Return:
 	ret
 AccDraw_AdjustPlusNoteValue:
 	push	xiz
-	calr	RhythmVariation_Select_Helper2
+	calr	AccDraw_StepPlusNoteValue
 	pop	xiz
 	ret
-RhythmVariation_Select_Helper2:
+AccDraw_StepPlusNoteValue:
 	cp	(0x3712:16), 4
 	jr	nz, RhythmVariation_Select_Return2
 	bit	7, w
@@ -25158,10 +25158,10 @@ RhythmVariation_Select_Return2:
 	ret
 AccDraw_StepArticulation_Wrap:
 	push	xiz
-	calr	RhythmVariation_Select_Helper3
+	calr	AccDraw_StepArticulation
 	pop	xiz
 	ret
-RhythmVariation_Select_Helper3:
+AccDraw_StepArticulation:
 	cp	(0x3712:16), 4
 	jr	z, RhythmVariation_Select_Skip2
 	jr	RhythmVariation_Select_Join4
@@ -26343,7 +26343,7 @@ DrumVoice_Handler7_Code_Helper2_Helper:
 	inc	1, a
 	cp	a, 31
 	jr	nz, DrumVoice_Handler7_Code_Helper2_Skip3
-	calr	TimeSig_DisplayStrings_Code_Helper
+	calr	CmpNcp_ResetPatternToVari1
 	ld	a, 0:opc
 	jr	TimeSig_DisplayStrings_Code_Join4
 DrumVoice_Handler7_Code_Helper2_Skip3:
@@ -26381,7 +26381,7 @@ TimeSig_DisplayStrings_Code_Skip19:
 	ld	a, 17:opc
 TimeSig_DisplayStrings_Code_Return4:
 	ret
-TimeSig_DisplayStrings_Code_Helper:
+CmpNcp_ResetPatternToVari1:
 	ld	a, (0xfc5a:16)
 	and	a, 255
 	cp	a, 128
@@ -26398,7 +26398,7 @@ CmpNcp_StepSlotInGroup1:
 	inc	1, a
 	cp	a, 32
 	jr	nz, TimeSig_DisplayStrings_Code_Skip21
-	calr	TimeSig_DisplayStrings_Code_Helper
+	calr	CmpNcp_ResetPatternToVari1
 	ld	a, 4:opc
 	jr	TimeSig_DisplayStrings_Code_Loop
 TimeSig_DisplayStrings_Code_Skip21:
@@ -26441,7 +26441,7 @@ CmpNcp_StepSlotInGroup2:
 	inc	1, a
 	cp	a, 33
 	jr	nz, TimeSig_DisplayStrings_Code_Skip27
-	calr	TimeSig_DisplayStrings_Code_Helper
+	calr	CmpNcp_ResetPatternToVari1
 	ld	a, 8:opc
 	jr	TimeSig_DisplayStrings_Code_Join5
 TimeSig_DisplayStrings_Code_Skip27:
@@ -28600,7 +28600,7 @@ RhythmVoice_LoadParams:
 
 VoiceTable_InitEntry_Done:
 	calr RhythmDrum_LoadVoiceParams
-	calr RhythmVoice_LoadParams_Helper
+	calr DrumParam_CopyStyleNameAndReload
 	calr DrumParam_BuildActiveMask
 	ret
 
@@ -29092,7 +29092,7 @@ VoiceResolve_FindSlot_Return:
 	add	a, 3
 	ret
 
-RhythmVoice_LoadParams_Helper:
+DrumParam_CopyStyleNameAndReload:
 	calr Rhythm_MapChannelToDrumIndex
 	add xbc, 0x37ab
 	ld xwa, 0:i3
@@ -29542,7 +29542,7 @@ AccPatch_ResolveEntryAddr_Sub_Skip:
 	ld	a, 131:opc
 AccPatch_ResolveEntryAddr_Sub_Return:
 	ret
-AccPatch_ResolveEntryAddr_Helper7:
+AccPatch_GetEventLength:
 	ld	c, 0:opc
 	cp	a, 144
 	jr	nz, AccPatch_ResolveEntryAddr_Skip3
@@ -29583,7 +29583,7 @@ AccPatch_CopyEventToCursor:
 	ld	xiy, (xbc)
 	ld	a, (xiy)
 	ld	xbc, 0:i3
-	calr	AccPatch_ResolveEntryAddr_Helper7
+	calr	AccPatch_GetEventLength
 	ld	hl, (0x3612:16)
 	pushw	bc
 	calr	AccPatch_ResolveEntryAddr
@@ -29615,7 +29615,7 @@ AccPatch_CopyEventToCursor_Skip2:
 	sub	bc, de
 	ld	(0x343d:16), bc
 	ld	(0x343f:16), de
-	calr	AccPatch_ResolveEntryAddr_Helper9
+	calr	AccPatch_LinkNewPatternBlock
 	ld	hl, (0x3612:16)
 	calr	AccPatch_ResolveEntryAddr
 	ld	xix, xwa
@@ -29641,7 +29641,7 @@ AccPatch_ResolveEntryAddr_Join3:
 	ld	(xbc), xiy
 AccPatch_ResolveEntryAddr_Return4:
 	ret
-AccPatch_ResolveEntryAddr_Helper9:
+AccPatch_LinkNewPatternBlock:
 	cpw	(0x34d4:16), 0
 	jr	z, AccPatch_ResolveEntryAddr_Skip9
 	ldw	hl, 150
@@ -30034,7 +30034,7 @@ AccPatch_ResolveEntryAddr_Helper19:
 	ret
 AccPatch_ResolveEntryAddr_Helper18_Helper:
 	ld	a, (xix)
-	calr	AccPatch_ResolveEntryAddr_Helper7
+	calr	AccPatch_GetEventLength
 	push	c
 	ld	xbc, 0:i3
 	pop	c
@@ -33939,10 +33939,10 @@ AccDraw_Secondary_Helper:
 	ret
 CmpStep_DrawScreen:
 	push	xiz
-	calr	AccDraw_Secondary_Helper2
+	calr	CmpStep_SetupAndQueueDraw
 	pop	xiz
 	ret
-AccDraw_Secondary_Helper2:
+CmpStep_SetupAndQueueDraw:
 	cp	(PREVIOUS_TITLE:16), 182
 	jr	z, AccDraw_Secondary_Helper2_Skip
 	call	AccPlayback_InitOrUpdate
@@ -34001,10 +34001,10 @@ AccScreen_DataBlock_Code2:
 	ret
 CmpStep_OnHide:
 	push	xiz
-	calr	AccDraw_Secondary_Helper3
+	calr	CmpStep_UnblockSustainInput
 	pop	xiz
 	ret
-AccDraw_Secondary_Helper3:
+CmpStep_UnblockSustainInput:
 	call	AccScreen_DataBlock_Helper2
 	ret
 CmpStep_DispatchSwitch:

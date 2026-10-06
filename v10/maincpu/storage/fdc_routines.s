@@ -81,7 +81,12 @@ FDC_WaitReady_Skip3:
 FDC_WaitReady_Epilogue:
 	pop	xiz
 	ret
-FDC_ResultPhase_Read_Helper:
+; FDC_WaitParamByteReady: Waits until the uPD72068 main status register (0x110008) shows RQM|CB (mask 0x90 = 0x90: a
+;   command is in progress and the FDC requests the next byte); after 500 ticks of SYSTEM_TIMESTAMP it gives up and
+;   records status 1 (FDC_Set_Status). Basis: callers + body + twin -- FDC_SendParameterByte calls it before writing
+;   each parameter byte to the data register; the bootloader twin is FDC_WaitComplete (table_data, header 'Wait for
+;   the FDC parameter phase'), called by the bootloader's FDC_SendParameterByte.
+FDC_WaitParamByteReady:
 	push	xiz
 	ld	iz, (SYSTEM_TIMESTAMP:16)
 	ldw qiz, 128
@@ -789,13 +794,17 @@ FDC_SendCommandByte:
 FDC_SendParameterByte:
 	dec	2, xsp
 	ld	(xsp), a
-	calr	FDC_ResultPhase_Read_Helper
+	calr	FDC_WaitParamByteReady
 	ld	a, (xsp)
 	extz	wa
 	calr	FDC_Write_Data
 	inc	2, xsp
 	ret
-FDC_ResultPhase_Read_Helper2:
+; FDC_WriteAuxCmdByte: Drains any pending result phase (FDC_ResultPhase_Read), then writes A to the uPD72068 auxiliary
+;   command register 0x110008 (through FDC_Send_Command). Basis: callers + body + twin -- FDC_SendAuxCmd and
+;   FDC_SendAuxCmdReadResult call it after their error check; the bootloader twin with the same body is
+;   FDC_WriteAuxCmdByte.
+FDC_WriteAuxCmdByte:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_ResultPhase_Read
@@ -805,7 +814,7 @@ FDC_ResultPhase_Read_Helper2:
 	inc	2, xsp
 	ret
 ; FDC_SendAuxCmd: Checked auxiliary-command send: drains the result phase and, if no FDC error is pending, writes A to
-;   the auxiliary command register 0x110008 through FDC_ResultPhase_Read_Helper2. Basis: callers + body + twin --
+;   the auxiliary command register 0x110008 through FDC_WriteAuxCmdByte. Basis: callers + body + twin --
 ;   FDC_CMD_SEND routes the aux opcodes 0x35, 0x36 and 0x47 here (no result byte); bootloader twin FDC_SendAuxCmd.
 FDC_SendAuxCmd:
 	dec	2, xsp
@@ -815,7 +824,7 @@ FDC_SendAuxCmd:
 	jr	nz, FDC_ResultPhase_Read_Epilogue
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_ResultPhase_Read_Helper2
+	calr	FDC_WriteAuxCmdByte
 FDC_ResultPhase_Read_Epilogue:
 	inc	2, xsp
 	ret
@@ -832,7 +841,7 @@ FDC_SendAuxCmdReadResult:
 	jr	nz, FDC_ResultPhase_Read_Epilogue2
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_ResultPhase_Read_Helper2
+	calr	FDC_WriteAuxCmdByte
 	calr	FDC_Wait_Ready_Timeout
 	calr	FDC_Read_Data
 	ld	(0x8a61:16), l

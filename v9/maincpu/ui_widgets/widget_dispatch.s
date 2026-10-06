@@ -4449,27 +4449,27 @@ DspCfg_OpLetter_JumpOffsets:
 ; default (AssSwb_SwapEntriesAndDispatch itself); the other targets have no
 ; labels yet.
 DspConfig_EventDispatch_JumpOffsets:
-	.short	DSPCfg_ApplyParamStructFull_Case18 - AssSwb_SwapEntriesAndDispatch
-	.short	DSPCfg_ApplyParamStructFull_Case19 - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Chorus - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_ModulatedChorus - AssSwb_SwapEntriesAndDispatch
 	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
-	.short	DSPCfg_ApplyParamStructFull_Case21 - AssSwb_SwapEntriesAndDispatch
-	.short	DSPCfg_ApplyParamStructFull_Case22 - AssSwb_SwapEntriesAndDispatch
-	.short	DSPCfg_ApplyParamStructFull_Case23 - AssSwb_SwapEntriesAndDispatch
-	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
-	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
-	.short	DSPCfg_ApplyParamStructFull_Case26 - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Flanger - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Phaser - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Ensemble - AssSwb_SwapEntriesAndDispatch
 	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
 	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
-	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
-	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
-	.short	DSPCfg_ApplyParamStructFull_Case31 - AssSwb_SwapEntriesAndDispatch
-	.short	DSPCfg_ApplyParamStructFull_Case32 - AssSwb_SwapEntriesAndDispatch
-	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
-	.short	DSPCfg_ApplyParamStructFull_Case34 - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_SingleDelay - AssSwb_SwapEntriesAndDispatch
 	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
 	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
 	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
-	.short	DSPCfg_ApplyParamStructFull_Case38 - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Distortion - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Overdrive - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Exciter - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_ParametricEq - AssSwb_SwapEntriesAndDispatch
 ; =============================================================================
 ; DSP EFFECT PARAMETER-WRITE RECORDS  (0xEE63BA-0xEE75F5, 59 lists, 4668 bytes)
 ; =============================================================================

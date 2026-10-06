@@ -20572,7 +20572,7 @@ AppEvtHandler_Branch_013:
 	inc 1, wa
 	ld (0xf1de:16), wa
 	jrl AppEvent_Epilogue
-AppEvent_ChainDispatch1_Case3:
+AppEvent_ChainDispatch1_IncAdly:
 	ld a, (9740:16)
 	cp a, 0x60
 	jrl ge, AppEvent_Epilogue
@@ -20582,7 +20582,7 @@ AppEvent_ChainDispatch1_Case3:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 3:i3
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case4:
+AppEvent_ChainDispatch1_IncTranspose:
 	ld a, (9762:16)
 	cp a, 0x7f
 	jrl ge, AppEvent_Epilogue
@@ -20592,7 +20592,7 @@ AppEvent_ChainDispatch1_Case4:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 4:i3
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case5:
+AppEvent_ChainDispatch1_IncVelocity:
 	ld a, (0xf22e:16)
 	cp a, 0x7f
 	jrl ge, AppEvent_Epilogue
@@ -20602,7 +20602,7 @@ AppEvent_ChainDispatch1_Case5:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 5:i3
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case6:
+AppEvent_ChainDispatch1_IncMersEventType:
 	ld a, (0xf1e0:16)
 	cp a, 2:i3
 	jrl nc, AppEvent_Epilogue
@@ -20612,7 +20612,7 @@ AppEvent_ChainDispatch1_Case6:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 6:i3
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case7:
+AppEvent_ChainDispatch1_IncQtzValue:
 	ld a, (0xf1f6:16)
 	cp a, 6:i3
 	jrl nc, AppEvent_Epilogue
@@ -20622,7 +20622,7 @@ AppEvent_ChainDispatch1_Case7:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 7:i3
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case8:
+AppEvent_ChainDispatch1_IncQtzStrength:
 	ld a, (9728:16)
 	cp a, 0x64
 	jrl nc, AppEvent_Epilogue
@@ -20632,7 +20632,7 @@ AppEvent_ChainDispatch1_Case8:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x8
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case9:
+AppEvent_ChainDispatch1_IncQtzWindow:
 	ld a, (9730:16)
 	cp a, 0x64
 	jrl ge, AppEvent_Epilogue
@@ -20642,7 +20642,7 @@ AppEvent_ChainDispatch1_Case9:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x9
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case10:
+AppEvent_ChainDispatch1_IncTnNote:
 	ld a, (9750:16)
 	cp a, 0x7f
 	jrl nc, AppEvent_Epilogue
@@ -20652,7 +20652,7 @@ AppEvent_ChainDispatch1_Case10:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0xa
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case11:
+AppEvent_ChainDispatch1_IncCnNote:
 	ld a, (9816:16)
 	cp a, 0x7f
 	jrl nc, AppEvent_Epilogue
@@ -20662,7 +20662,7 @@ AppEvent_ChainDispatch1_Case11:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0xb
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case12:
+AppEvent_ChainDispatch1_IncMrgTrackA:
 	ld a, (0xf1d3:16)
 	cp a, 0x10
 	jr nc, AppEvtHandler_Branch_014
@@ -20687,7 +20687,7 @@ AppEvtHandler_Branch_017:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0xc
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case13:
+AppEvent_ChainDispatch1_IncMrgTrackB:
 	ld a, (0xf1d4:16)
 	cp a, 0x10
 	jr nc, AppEvtHandler_Branch_018
@@ -20712,7 +20712,7 @@ AppEvtHandler_Branch_021:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0xd
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case14:
+AppEvent_ChainDispatch1_IncMrgTrackC:
 	ld a, (0xf1d5:16)
 	cp a, 0x10
 	jrl nc, AppEvent_Epilogue
@@ -20722,7 +20722,7 @@ AppEvent_ChainDispatch1_Case14:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0xe
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case15:	; cases 15, 16, 17, 18, 19, 20
+AppEvent_ChainDispatch1_IncMcpParam:	; cases 15, 16, 17, 18, 19, 20
 	sub xwa, 0xf
 	cp xwa, 0x0
 	jrl c, AppEvtHandler_Branch_024
@@ -20815,7 +20815,7 @@ AppEvtHandler_Branch_024:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x14
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case21:	; cases 21, 22, 23, 24, 25, 26
+AppEvent_ChainDispatch1_IncMinsParam:	; cases 21, 22, 23, 24, 25, 26
 	sub xwa, 0x15
 	cp xwa, 0x0
 	jrl c, AppEvtHandler_Branch_027
@@ -20908,7 +20908,7 @@ AppEvtHandler_Branch_027:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x1a
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case27:	; cases 27, 28, 29, 30
+AppEvent_ChainDispatch1_IncScpParam:	; cases 27, 28, 29, 30
 	cp xwa, 0x1e
 	jr z, AppEvtHandler_Branch_031
 	cp xwa, 0x1d
@@ -20972,7 +20972,7 @@ AppEvtHandler_Branch_032:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x1e
 	jr AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case31:
+AppEvent_ChainDispatch1_IncSclrSongNo:
 	ld a, (0x2878:16)
 	cp a, 0xa
 	jr nc, AppEvent_Epilogue
@@ -21873,49 +21873,49 @@ SeqState_LabelDispatch:
 SoundData_HandlerDispatch:
 	call	PartParam_Handler_00
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case2:
+SeqState_LabelDispatch_OnTrack2:
 	call	PartParam_Handler_01
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case3:
+SeqState_LabelDispatch_OnTrack3:
 	call	PartParam_Handler_02
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case4:
+SeqState_LabelDispatch_OnTrack4:
 	call	PartParam_Handler_03
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case5:
+SeqState_LabelDispatch_OnTrack5:
 	call	PartParam_Handler_04
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case6:
+SeqState_LabelDispatch_OnTrack6:
 	call	PartParam_Handler_05
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case7:
+SeqState_LabelDispatch_OnTrack7:
 	call	PartParam_Handler_06
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case8:
+SeqState_LabelDispatch_OnTrack8:
 	call	PartParam_Handler_07
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case9:
+SeqState_LabelDispatch_OnTrack9:
 	call	PartParam_Handler_08
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case10:
+SeqState_LabelDispatch_OnTrack10:
 	call	PartParam_Handler_09
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case11:
+SeqState_LabelDispatch_OnTrack11:
 	call	PartParam_Handler_0A
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case12:
+SeqState_LabelDispatch_OnTrack12:
 	call	PartParam_Handler_0B
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case13:
+SeqState_LabelDispatch_OnTrack13:
 	call	PartParam_Handler_0C
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case14:
+SeqState_LabelDispatch_OnTrack14:
 	call	PartParam_Handler_0D
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case15:
+SeqState_LabelDispatch_OnTrack15:
 	call	PartParam_Handler_0E
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case16:
+SeqState_LabelDispatch_OnTrack16:
 	call	PartParam_Handler_0F
 	jrl	AppEvent_PopIzSkip2Ret
 AppEvent_HandleRecordState:

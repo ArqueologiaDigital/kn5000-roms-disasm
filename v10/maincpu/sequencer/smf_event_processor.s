@@ -6642,7 +6642,15 @@ SeqByteBlock_PathNormalize_Epilogue5:
 	popw	iz
 	inc	8, xsp
 	ret
-SeqByteBlock_PathNormalize_Helper7:
+; Fat_MapFilePosToSector: Fat_MapFilePosToSector(file, alloc_count, &sector, &count): maps the file's byte position
+;   (+22) to an absolute sector and the number of sectors that follow it contiguously. A file with no start cluster
+;   (+26 = 0) is the root directory: sector = volume +28 + pos / bytes-per-sector (+38). Otherwise it walks the FAT
+;   chain from the cached cluster (+42, index +46) to the cluster holding pos, extending the chain with
+;   Fat_AllocateClusters(alloc_count) when the file is writable (+3 bit 1), and measures the run
+;   (Fat_CountContiguousClusters); HL = 0, 39 (bad-cluster mark mask-8), 8 (end of chain on a read-only file) or the
+;   allocation error. Basis: callers + body -- Fat_GetSectorAtFilePos (alloc_count 1) and Fat_TransferSectorsDirect
+;   (alloc_count = sectors spanned) both describe their call as mapping the position (+22) to its sector / sector run.
+Fat_MapFilePosToSector:
 	dec	8, xsp
 	push	xiz
 	ld	xwa, (xsp+16)
@@ -6826,7 +6834,7 @@ SeqByteBlock_PathNormalize_Epilogue6:
 	inc	8, xsp
 	ret
 ; Fat_GetSectorAtFilePos: Fat_GetSectorAtFilePos(file, flags): maps the file's byte position (+22) to its sector
-;   (SeqByteBlock_PathNormalize_Helper7) and gets that sector's cache buffer with SeqStep_FileIoCheck(flags | 8) into
+;   (Fat_MapFilePosToSector) and gets that sector's cache buffer with SeqStep_FileIoCheck(flags | 8) into
 ;   the file's buffer pointer +34. HL = Helper7's error, 10 when no buffer, else the buffer's status word +20. Basis:
 ;   callers + body -- the read/write loops and the directory-create path call it before touching sector data; the
 ;   extend path first sets +22 = size (+71).
@@ -6840,7 +6848,7 @@ Fat_GetSectorAtFilePos:
 	push	xwa
 	pushw	1
 	push	xiz
-	calr	SeqByteBlock_PathNormalize_Helper7
+	calr	Fat_MapFilePosToSector
 	lda	xsp, (xsp+14)
 	ld	wa, hl
 	cp	wa, 0:i3
@@ -6870,7 +6878,7 @@ SeqByteBlock_PathNormalize_Epilogue7:
 	ret
 ; Fat_TransferSectorsDirect: Fat_TransferSectorsDirect(file, buffer, count, is_read): moves the whole-sector part of a
 ;   file read or write straight between the caller's buffer and the disk -- maps the position (+22) to its contiguous
-;   sector run (SeqByteBlock_PathNormalize_Helper7), takes a sector-cache entry (+34; SeqStep_FileIoCheck flags 0x28
+;   sector run (Fat_MapFilePosToSector), takes a sector-cache entry (+34; SeqStep_FileIoCheck flags 0x28
 ;   when the old one holds dirty data), points the entry's data pointer +12 at the caller's buffer, sets its sector
 ;   count +16 = min(count / bytes-per-sector, run), calls block op +16 (read) or +20 (write), then restores +12 and
 ;   invalidates the entry (+22 = 0). Returns HL = bytes moved; on error 0, with the status in file +6 and 0x1E53C.
@@ -6915,7 +6923,7 @@ Fat_TransferSectorsDirect_Skip:
 	push	xwa
 	pushw	hl
 	push	xiz
-	calr	SeqByteBlock_PathNormalize_Helper7
+	calr	Fat_MapFilePosToSector
 	add	xsp, 14
 	cp	hl, 0:i3
 	jr	z, SeqByteBlock_PathNormalize_Skip22

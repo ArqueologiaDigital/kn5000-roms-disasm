@@ -1345,17 +1345,19 @@ Data_InOutGridDispatch_Code:
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-InOutGridCheck_Switch2_Case1:
+InOutGridCheck_IncAutoPlayChordInput:
 	ld	xwa, 0x2101
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-InOutGridCheck_Switch2_Case2:
+InOutGridCheck_IncVelocityInputMode:
 	ld	xwa, 0x5000
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-InOutGridCheck_Switch2_Case3:
+; InOutGridCheck_IncVelocityOffsetOrFixed: VELOCITY OFFSET VALUE (Lsw 0x5001) or VELOCITY FIXED VALUE (Lsw 0x5002)
+;   row, by the VELOCITY INPUT mode in Lsw 0x5000; nothing in DIRECT mode.
+InOutGridCheck_IncVelocityOffsetOrFixed:
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
@@ -1371,22 +1373,22 @@ InOutGridCheck_Skip:
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-InOutGridCheck_Switch2_Case5:
+InOutGridCheck_IncTechniChordOutput:
 	ld	xwa, 0x2181
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-InOutGridCheck_Switch2_Case6:
+InOutGridCheck_IncTransposeOutput:
 	ld	xwa, 0x2184
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-InOutGridCheck_Switch2_Case7:
+InOutGridCheck_IncDrumPatternOutput:
 	ld	xwa, 0x2182
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-InOutGridCheck_Switch2_Case8:
+InOutGridCheck_IncAutoPlayChordOutput:
 	ld	xwa, 0x2183
 	ld	bc, 1:i3
 	ld	de, 1:i3
@@ -1421,17 +1423,19 @@ Data_InOutGridDispatch_Code_2:
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-InOutGridCheck_Switch3_Case1:
+InOutGridCheck_DecAutoPlayChordInput:
 	ld	xwa, 0x2101
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-InOutGridCheck_Switch3_Case2:
+InOutGridCheck_DecVelocityInputMode:
 	ld	xwa, 0x5000
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-InOutGridCheck_Switch3_Case3:
+; InOutGridCheck_DecVelocityOffsetOrFixed: VELOCITY OFFSET VALUE (Lsw 0x5001) or VELOCITY FIXED VALUE (Lsw 0x5002)
+;   row, by the VELOCITY INPUT mode in Lsw 0x5000; nothing in DIRECT mode.
+InOutGridCheck_DecVelocityOffsetOrFixed:
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
@@ -1447,22 +1451,22 @@ InOutGridCheck_Skip2:
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-InOutGridCheck_Switch3_Case5:
+InOutGridCheck_DecTechniChordOutput:
 	ld	xwa, 0x2181
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-InOutGridCheck_Switch3_Case6:
+InOutGridCheck_DecTransposeOutput:
 	ld	xwa, 0x2184
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-InOutGridCheck_Switch3_Case7:
+InOutGridCheck_DecDrumPatternOutput:
 	ld	xwa, 0x2182
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-InOutGridCheck_Switch3_Case8:
+InOutGridCheck_DecAutoPlayChordOutput:
 	ld	xwa, 0x2183
 	ldw	bc, 0xffff
 	ld	de, 1:i3

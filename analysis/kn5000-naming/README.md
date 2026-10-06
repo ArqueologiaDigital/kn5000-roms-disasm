@@ -21,3 +21,15 @@ and 50 to v7 (the rest sit where v7's code differs).
 `probes/rhythm_probe.py` answers what byte +976 (0x3D0) of each rhythm header in the Rhythm Data ROM holds: the
 time-signature index that `Rhythm_LoadCurrentTimeSig` copies to RAM 0x34F0. Run it from the repository root on a
 built tree. On 2026-10-06 it printed 201 rhythms: 7 for 186 of them, 6 for 13, and 9 and 11 once each.
+
+**Batches i-j** (`proposals-2026-10-06-helpers-{i,j}.json`): 53 named, 7 refused.
+
+**Switch-case pilot** (`proposals-2026-10-06-cases-{c1,c2}.json`): 20 compiled `switch` statements whose owners
+have real names. For each one the pass established first what the switched value is: an event code, an edit
+parameter number, a design-box style, a caption code, CURRENT_MODE or a DSP effect number. Then it named the
+`<Owner>_CaseN` labels of `scripts/tools/frame_switch_cases.py` after it. 224 cases named, 52 refused. The refused
+ones are switches whose value is a raw byte offset into a record of unestablished meaning, or method codes the
+firmware's own name table skips. Finding: for switches that serve several value ranges from one table,
+`frame_switch_cases.py` set N to the table index plus only the last bias subtracted, so N is not the switch value
+there (DrawDesignBox_Impl, DSPCfg_ApplyParamStructFull, GetClientBox2, DrawDesignBox_PartGroupStyle). The names now
+in the source state the right values; the remaining `_CaseN` labels of such switches need re-checking.

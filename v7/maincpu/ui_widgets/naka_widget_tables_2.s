@@ -2204,13 +2204,13 @@ Data_InOutGridDispatch_CaseTable:
 ; -----------------------------------------------------------------------------
 Data_InOutGridDispatch_CaseTable_2:
 	.short	Data_InOutGridDispatch_Code_2 - Data_InOutGridDispatch_Code_2
-	.short	InOutGridCheck_Switch3_Case1 - Data_InOutGridDispatch_Code_2
-	.short	InOutGridCheck_Switch3_Case2 - Data_InOutGridDispatch_Code_2
-	.short	InOutGridCheck_Switch3_Case3 - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_DecAutoPlayChordInput - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_DecVelocityInputMode - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_DecVelocityOffsetOrFixed - Data_InOutGridDispatch_Code_2
 	.short	MdPreset_ReturnZero2 - Data_InOutGridDispatch_Code_2
-	.short	InOutGridCheck_Switch3_Case5 - Data_InOutGridDispatch_Code_2
-	.short	InOutGridCheck_Switch3_Case6 - Data_InOutGridDispatch_Code_2
-	.short	InOutGridCheck_Switch3_Case7 - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_DecTechniChordOutput - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_DecTransposeOutput - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_DecDrumPatternOutput - Data_InOutGridDispatch_Code_2
 	.short	InOutGridCheck_Switch3_Case8 - Data_InOutGridDispatch_Code_2
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Data_InOutGridDispatch_CaseTable_3
@@ -2224,14 +2224,14 @@ Data_InOutGridDispatch_CaseTable_2:
 ; -----------------------------------------------------------------------------
 Data_InOutGridDispatch_CaseTable_3:
 	.short	Data_InOutGridDispatch_Code - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_Switch2_Case1 - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_Switch2_Case2 - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_Switch2_Case3 - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_IncAutoPlayChordInput - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_IncVelocityInputMode - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_IncVelocityOffsetOrFixed - Data_InOutGridDispatch_Code
 	.short	MdPreset_ReturnZero2 - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_Switch2_Case5 - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_Switch2_Case6 - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_Switch2_Case7 - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_Switch2_Case8 - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_IncTechniChordOutput - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_IncTransposeOutput - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_IncDrumPatternOutput - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_IncAutoPlayChordOutput - Data_InOutGridDispatch_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] InOutGridCheck_CaseTable
 ; InOutGridCheck_CaseTable -- jump table of a compiled `switch` in
@@ -2432,18 +2432,18 @@ ExcMspFunc_CaseTable:
 ; -----------------------------------------------------------------------------
 ParaLoadOpt_AudioFlagCheck_CaseTable:
 	.short	ParaLoadOpt_DispatchTable_A - ParaLoadOpt_DispatchTable_A
-	.short	ParaLoadOpt_AudioFlagCheck_Case1 - ParaLoadOpt_DispatchTable_A
-	.short	ParaLoadOpt_AudioFlagCheck_Case2 - ParaLoadOpt_DispatchTable_A
-	.short	ParaLoadOpt_AudioFlagCheck_Case3 - ParaLoadOpt_DispatchTable_A
-	.short	ParaLoadOpt_AudioFlagCheck_Case4 - ParaLoadOpt_DispatchTable_A
-	.short	ParaLoadOpt_AudioFlagCheck_Case5 - ParaLoadOpt_DispatchTable_A
-	.short	ParaLoadOpt_AudioFlagCheck_Case6 - ParaLoadOpt_DispatchTable_A
-	.short	ParaLoadOpt_AudioFlagCheck_Case7 - ParaLoadOpt_DispatchTable_A
-	.short	ParaLoadOpt_AudioFlagCheck_Case8 - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_PmemSending - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_PmemCompleted - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_SmemSending - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_SmemCompleted - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_CompSending - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_CompCompleted - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_SeqSending - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_SeqCompleted - ParaLoadOpt_DispatchTable_A
 	.short	MidiFunc_SendEvtReturnAlt - ParaLoadOpt_DispatchTable_A
 	.short	MidiFunc_SendEvtReturnAlt - ParaLoadOpt_DispatchTable_A
-	.short	ParaLoadOpt_AudioFlagCheck_Case11 - ParaLoadOpt_DispatchTable_A
-	.short	ParaLoadOpt_AudioFlagCheck_Case12 - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_MspSending - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_MspCompleted - ParaLoadOpt_DispatchTable_A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ParaLoadOpt_AudioFlagCheck_B_CaseTable
 ; ParaLoadOpt_AudioFlagCheck_B_CaseTable -- jump table of a compiled

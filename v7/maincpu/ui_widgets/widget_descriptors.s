@@ -1945,20 +1945,20 @@ SqplyVal_HandleExtraParams_CaseTable:
 ; -----------------------------------------------------------------------------
 SqedtVal_ClearDrawBuffer_CaseTable:
 	.short	SqedtVal_ParamCases - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case1 - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case2 - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case3 - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case4 - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case5 - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case6 - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case7 - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case8 - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case9 - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case10 - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case11 - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case12 - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case13 - SqedtVal_ParamCases
-	.short	SqedtVal_ClearDrawBuffer_Case14 - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_FromMeasureField - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_LastMeasureField - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_AdlyField - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_TransposeField - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_VelocityField - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_MersField - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_QuantizeValueField - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_QuantizeStrengthField - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_QuantizeWindowField - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_TnField - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_CnField - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_MergeTrackAField - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_MergeTrackBField - SqedtVal_ParamCases
+	.short	SqedtVal_ClearDrawBuffer_MergeTrackCField - SqedtVal_ParamCases
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqedtVal2_UpScrollDefault_Table
 ; SqedtVal2_UpScrollDefault_Table -- read by SqedtVal2_UpScrollDefault
@@ -2201,21 +2201,21 @@ SqedtFixProc_LocalInit_11_Tail:	.incbin "includes/generated/naka_widget_descript
 ; -----------------------------------------------------------------------------
 SqplyVal_ExtraParams_CaseTable:
 	.short	AccIll_Dispatch - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case16 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case17 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case18 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case19 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case20 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case21 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case22 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case23 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case24 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case25 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case26 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case27 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case28 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case29 - AccIll_Dispatch
-	.short	SqplyVal_ExtraParams_Case30 - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_MeasureCopyFromMeasureField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_MeasureCopyLastMeasureField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_MeasureCopyTrackBField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_MeasureCopyStartMeasureField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_MeasureCopyRepeatField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_MeasureInsertTrackAField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_MeasureInsertFromMeasureField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_MeasureInsertLastMeasureField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_MeasureInsertTrackBField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_MeasureInsertStartMeasureField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_MeasureInsertRepeatField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_SongCopyFromSongField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_SongCopyFromTrackField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_SongCopyToSongField - AccIll_Dispatch
+	.short	SqplyVal_ExtraParams_SongCopyToTrackField - AccIll_Dispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] EffectBoxProc_LocalInit
 ; EffectBoxProc_LocalInit -- initializer of a local array: EffectBoxProc
@@ -3137,14 +3137,14 @@ Sqedt_ParamDispatch_CaseTable:
 ; Sqedt_ParamDispatch_CaseTable_2[8].
 ; -----------------------------------------------------------------------------
 Sqedt_ParamDispatch_CaseTable_2:
-	.short	SqedtFunc_Switch3_Case156 - Sqedt_ParamDispatch_Code_2
-	.short	SqedtFunc_Switch3_Case157 - Sqedt_ParamDispatch_Code_2
-	.short	SqedtFunc_Switch3_Case158 - Sqedt_ParamDispatch_Code_2
+	.short	SqedtFunc_FmString_OnTitleSqqtz - Sqedt_ParamDispatch_Code_2
+	.short	SqedtFunc_FmString_OnTitleSqtrns - Sqedt_ParamDispatch_Code_2
+	.short	SqedtFunc_FmString_OnTitleSqvelocng - Sqedt_ParamDispatch_Code_2
 	.short	Sqedt_ParamDispatch_Code_2 - Sqedt_ParamDispatch_Code_2
 	.short	Sqedt_ParamDispatch_Entry - Sqedt_ParamDispatch_Code_2
-	.short	SqedtFunc_Switch3_Case161 - Sqedt_ParamDispatch_Code_2
+	.short	SqedtFunc_FmString_OnTitleSqmers - Sqedt_ParamDispatch_Code_2
 	.short	Sqedt_ParamDispatch_Entry - Sqedt_ParamDispatch_Code_2
-	.short	SqedtFunc_Switch3_Case163 - Sqedt_ParamDispatch_Code_2
+	.short	SqedtFunc_FmString_OnTitleSqmdel - Sqedt_ParamDispatch_Code_2
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_CaseTable_3
 ; Sqedt_ParamDispatch_CaseTable_3 -- jump table of a compiled `switch`
@@ -3155,14 +3155,14 @@ Sqedt_ParamDispatch_CaseTable_2:
 ; Sqedt_ParamDispatch_CaseTable_3[8].
 ; -----------------------------------------------------------------------------
 Sqedt_ParamDispatch_CaseTable_3:
-	.short	SqedtFunc_Switch2_Case156 - Sqedt_ParamDispatch_Code
-	.short	SqedtFunc_Switch2_Case157 - Sqedt_ParamDispatch_Code
-	.short	SqedtFunc_Switch2_Case158 - Sqedt_ParamDispatch_Code
+	.short	SqedtFunc_TrkString_OnTitleSqqtz - Sqedt_ParamDispatch_Code
+	.short	SqedtFunc_TrkString_OnTitleSqtrns - Sqedt_ParamDispatch_Code
+	.short	SqedtFunc_TrkString_OnTitleSqvelocng - Sqedt_ParamDispatch_Code
 	.short	Sqedt_ParamDispatch_Code - Sqedt_ParamDispatch_Code
 	.short	Sqedt_ParamDispatch_Skip - Sqedt_ParamDispatch_Code
-	.short	SqedtFunc_Switch2_Case161 - Sqedt_ParamDispatch_Code
+	.short	SqedtFunc_TrkString_OnTitleSqmers - Sqedt_ParamDispatch_Code
 	.short	Sqedt_ParamDispatch_Skip - Sqedt_ParamDispatch_Code
-	.short	SqedtFunc_Switch2_Case163 - Sqedt_ParamDispatch_Code
+	.short	SqedtFunc_TrkString_OnTitleSqmdel - Sqedt_ParamDispatch_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqedtFunc_CaseTable
 ; SqedtFunc_CaseTable -- jump table of a compiled `switch` in SqedtFunc
@@ -4133,35 +4133,35 @@ AppEvent_ChainDispatch1_CaseTable:
 	.short	APP_EVENT_HANDLER_TABLE - APP_EVENT_HANDLER_TABLE
 	.short	AppEvent_ChainDispatch1_Case1 - APP_EVENT_HANDLER_TABLE
 	.short	AppEvent_ChainDispatch1_Case2 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case3 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case4 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case5 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case6 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case7 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case8 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case9 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case10 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case11 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case12 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case13 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case14 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case15 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case15 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case15 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case15 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case15 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case15 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case21 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case21 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case21 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case21 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case21 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case21 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case27 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case27 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case27 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case27 - APP_EVENT_HANDLER_TABLE
-	.short	AppEvent_ChainDispatch1_Case31 - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncAdly - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncTranspose - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncVelocity - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMersEventType - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncQtzValue - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncQtzStrength - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncQtzWindow - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncTnNote - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncCnNote - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMrgTrackA - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMrgTrackB - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMrgTrackC - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMcpParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMcpParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMcpParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMcpParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMcpParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMcpParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMinsParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMinsParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMinsParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMinsParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMinsParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncMinsParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncScpParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncScpParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncScpParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncScpParam - APP_EVENT_HANDLER_TABLE
+	.short	AppEvent_ChainDispatch1_IncSclrSongNo - APP_EVENT_HANDLER_TABLE
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvent_SubDispatch_CaseTable
 ; AppEvent_SubDispatch_CaseTable -- jump table of a compiled `switch` in
@@ -4320,21 +4320,21 @@ AppEvent_RecordDispatch_Table:	.incbin "includes/generated/naka_widget_descripto
 ; -----------------------------------------------------------------------------
 SeqState_LabelDispatch_CaseTable:
 	.short	SoundData_HandlerDispatch - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case2 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case3 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case4 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case5 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case6 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case7 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case8 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case9 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case10 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case11 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case12 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case13 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case14 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case15 - SoundData_HandlerDispatch
-	.short	SeqState_LabelDispatch_Case16 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack2 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack3 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack4 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack5 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack6 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack7 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack8 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack9 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack10 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack11 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack12 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack13 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack14 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack15 - SoundData_HandlerDispatch
+	.short	SeqState_LabelDispatch_OnTrack16 - SoundData_HandlerDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqAccomp_SubChain_CaseTable
 ; SeqAccomp_SubChain_CaseTable -- jump table of a compiled `switch` in

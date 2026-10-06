@@ -246,7 +246,12 @@ GraphicsRender_RetStub:
 GraphicsRender_ShortByteBlock:
 	lda	xbc, (xwa+1)
 	jr	GraphicsRender_ProcessEntries
-SeGfx_DrawBoundRecord_Helper:
+; GraphicsRender_StartSingleRecord: Renders the one bound ScreenData record at XWA: sets the end pointer XBC = XWA + 1
+;   and enters GraphicsRender_Start, whose loop stops after that record. Basis: callers + body --
+;   SeGfx_DrawBoundRecord (the single-record wrapper; XIY = record) is its only caller, and SeGfx_DrawBoundList calls
+;   GraphicsRender_Start with an explicit end; GraphicsRender_ShortByteBlock is the same two instructions for the
+;   static-record renderer.
+GraphicsRender_StartSingleRecord:
 	lda	xbc, (xwa+1)
 	jr	t, GraphicsRender_Start
 

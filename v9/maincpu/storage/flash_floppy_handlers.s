@@ -4199,7 +4199,7 @@ Flash_InitBytecodeBlock_Helper9_Epilogue:
 	popw	iz
 	lda	xsp, (xsp+0x400)
 	ret
-SaveRegion6_OpenSuccess_Helper:
+FileIO_SaveRcmFromFlash:
 	lda xsp, (xsp-1036)
 	push	xiz
 	calr	Flash_InitExtMemAddrs

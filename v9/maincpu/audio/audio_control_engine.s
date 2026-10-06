@@ -3146,41 +3146,41 @@ ExtData_VoiceParam_DispatchBytecode:
 ExtData_VoiceParam_DispatchBytecode_Code:
 	setm	7, (xbc)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case14:
+ExtData_VoiceParam_DispatchBytecode_ModeCmp:
 	ld	a, 1:opc
 	jr	ExtData_VoiceParam_DispatchBytecode_Join
-ExtData_VoiceParam_DispatchBytecode_Case17:
+ExtData_VoiceParam_DispatchBytecode_ModeSndArg:
 	ld	a, 2:opc
 	jr	ExtData_VoiceParam_DispatchBytecode_Join
-ExtData_VoiceParam_DispatchBytecode_Case8:	; cases 8, 12, 13
+ExtData_VoiceParam_DispatchBytecode_ModeSeq:	; cases 8, 12, 13
 	setm	7, (xde)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case11:
+ExtData_VoiceParam_DispatchBytecode_ModeSeqReal:
 	ld	xwa, xde
 	setm	7, (xde)
 	cp	(0x26fc:16), 1
 	jr	nz, ExtData_VoiceParam_DispatchBytecode_Epilogue2
 	setm	6, (xwa)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case9:
+ExtData_VoiceParam_DispatchBytecode_ModeSeqErec:
 	setm	6, (xde)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case2:	; cases 2, 3
+ExtData_VoiceParam_DispatchBytecode_ModeSound:	; cases 2, 3
 	setm	0, (xiy)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case5:
+ExtData_VoiceParam_DispatchBytecode_ModeMidi:
 	setm	2, (xiy)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case4:
+ExtData_VoiceParam_DispatchBytecode_ModeControl:
 	setm	1, (xiy)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case6:
+ExtData_VoiceParam_DispatchBytecode_ModeDisk:
 	setm	3, (xiy)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case7:
+ExtData_VoiceParam_DispatchBytecode_ModeEntertainer:
 	setm	3, (xhl)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case18:
+ExtData_VoiceParam_DispatchBytecode_ModeOtp:
 	ld	a, 4:opc
 ExtData_VoiceParam_DispatchBytecode_Join:
 	scf
@@ -6773,12 +6773,12 @@ ExtData_SetTlvField:
 	ld	(xsp), a
 	ld	a, (0x9131:16)
 	and	a, (xsp)
-	jr	z, SwbtWr_WriteParamBlock_Epilogue2
+	jr	z, ExtData_SetTlvField_Epilogue
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
 	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 0xffffffff
-	jr	z, SwbtWr_WriteParamBlock_Epilogue2
+	jr	z, ExtData_SetTlvField_Epilogue
 	ld	a, (0x912f:16)
 	extz	wa
 	lda	xhl, (xhl+wa)
@@ -6789,13 +6789,13 @@ ExtData_SetTlvField:
 	ld	c, a
 	ld	a, (0x9132:16)
 	cp	c, a
-	jr	z, SwbtWr_WriteParamBlock_Epilogue2
+	jr	z, ExtData_SetTlvField_Epilogue
 	ld	(xhl), c
 	ld	(0x9132:16), c
 	ld	(MIDI_MSG_DATA2:16), c
 	ld	a, (xsp)
 	or	(MIDI_MSG_DATA3:16), a
-SwbtWr_WriteParamBlock_Epilogue2:
+ExtData_SetTlvField_Epilogue:
 	inc	2, xsp
 	ret
 	dec	2, xsp
@@ -11754,11 +11754,11 @@ MidiStream_CheckPartProgramAllowed_Skip2:
 	cp	c, 22
 	jr	nz, MidiStream_ExtendedDispatch_Epilogue2
 MidiStream_ExtendedDispatch_Skip6:
-	call	MidiStream_ExtendedDispatch_Helper_Helper2
+	call	MidiStream_IsDrumKitCategory
 	jr	c, MidiStream_CheckPartProgramAllowed_Skip3
 	jr	MidiStream_CheckPartProgramAllowed_Join
 MidiStream_ExtendedDispatch_Skip7:
-	call	MidiStream_ExtendedDispatch_Helper_Helper2
+	call	MidiStream_IsDrumKitCategory
 	jr	nc, MidiStream_CheckPartProgramAllowed_Skip3
 	cp	c, 15
 	jr	z, MidiStream_ExtendedDispatch_Epilogue2
@@ -11776,7 +11776,7 @@ MidiStream_ExtendedDispatch_Epilogue2:
 	popw	hl
 	pop	xix
 	ret
-MidiStream_ExtendedDispatch_Helper_Helper2:
+MidiStream_IsDrumKitCategory:
 	cp	e, 15
 	jr	nz, MidiStream_ExtendedDispatch_Helper_Helper2_Skip4
 	scf
@@ -11799,11 +11799,11 @@ MidiCC_ApplyBankSelect_Skip5:
 	ld	l, c
 	sll	hl, 1
 	cp	e, 255
-	jr	z, MidiStream_ExtendedDispatch_Skip8
+	jr	z, MidiCC_ApplyBankSelect_Skip6
 	res	7, e
 	ld	(xix+hl), e
 	jr	MidiStream_ExtendedDispatch_Join2
-MidiStream_ExtendedDispatch_Skip8:
+MidiCC_ApplyBankSelect_Skip6:
 	res	7, d
 	inc	1, xix
 	ld	(xix+hl), d

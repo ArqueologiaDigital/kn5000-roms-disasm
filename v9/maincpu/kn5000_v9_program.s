@@ -1042,7 +1042,7 @@ SeWrtMemTitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
 	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
-; evidence: Scoop_SoundEditorData_Helper12+0x1E (0xF0D7B8) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+; evidence: SeWrtSndTitleFunc_DispatchSwitch+0x1E (0xF0D7B8) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 ToneGen_ParamTable_0x216:	.incbin "includes/generated/tonegen_param_table.bin", 0x216, 0x48
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeDigEffTitleFunc_DispatchSwitch+0x38 (0xF0D800) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)

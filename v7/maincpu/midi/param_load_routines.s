@@ -74,61 +74,61 @@ ParaLoadOpt_DispatchTable_A:
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_DispatchTable_A_Join
-ParaLoadOpt_AudioFlagCheck_Case1:
+ParaLoadOpt_AudioFlagCheck_PmemSending:
 	ld	(0x024760:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_DispatchTable_A_Join
-ParaLoadOpt_AudioFlagCheck_Case2:
+ParaLoadOpt_AudioFlagCheck_PmemCompleted:
 	ld	(0x024760:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_DispatchTable_A_Join
-ParaLoadOpt_AudioFlagCheck_Case3:
+ParaLoadOpt_AudioFlagCheck_SmemSending:
 	ld	(0x024762:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_DispatchTable_A_Join
-ParaLoadOpt_AudioFlagCheck_Case4:
+ParaLoadOpt_AudioFlagCheck_SmemCompleted:
 	ld	(0x024762:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_A_Join
-ParaLoadOpt_AudioFlagCheck_Case5:
+ParaLoadOpt_AudioFlagCheck_CompSending:
 	ld	(0x024764:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_A_Join
-ParaLoadOpt_AudioFlagCheck_Case6:
+ParaLoadOpt_AudioFlagCheck_CompCompleted:
 	ld	(0x024764:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_A_Join
-ParaLoadOpt_AudioFlagCheck_Case7:
+ParaLoadOpt_AudioFlagCheck_SeqSending:
 	ld	(0x024766:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_A_Join
-ParaLoadOpt_AudioFlagCheck_Case8:
+ParaLoadOpt_AudioFlagCheck_SeqCompleted:
 	ld	(0x024766:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_A_Join
-ParaLoadOpt_AudioFlagCheck_Case11:
+ParaLoadOpt_AudioFlagCheck_MspSending:
 	ld	(0x024768:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_A_Join
-ParaLoadOpt_AudioFlagCheck_Case12:
+ParaLoadOpt_AudioFlagCheck_MspCompleted:
 	ld	(0x024768:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT

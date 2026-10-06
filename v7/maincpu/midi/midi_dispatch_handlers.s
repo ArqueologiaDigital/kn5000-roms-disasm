@@ -2821,7 +2821,7 @@ FileData_AllocLoadAndParse_Helper:
 FileData_AllocLoadAndParse_Helper_Join:
 	call	PrePmLoad
 	ld	wa, (xsp+12)
-	calr	DataBuf_CopyBulkBitfields_Large_Helper3
+	calr	FileData_ResetPanelMemoriesToDefault
 	ldw (xsp+8), 0
 	ld	wa, (xsp+12)
 	srl	wa, 3
@@ -5224,7 +5224,7 @@ DataBuf_CopyBulkBitfields_Large_Loop3:
 	calr	DSPCfg_VoiceSlotB_ExtractData
 	ld	xwa, (xsp+10)
 	ld	xbc, (xsp+6)
-	calr	DataBuf_CopyBulkBitfields_Large_Helper
+	calr	FileData_ConvertNNBlock1Fields
 	ld	wa, 0:i3
 	call	PostLswLoad
 	ld	xwa, (xsp+10)
@@ -5241,7 +5241,7 @@ FileData_ImportNNPanelMemories:
 	pushw	iz
 	call	PrePmLoad
 	ldw	wa, 24
-	calr	DataBuf_CopyBulkBitfields_Large_Helper3
+	calr	FileData_ResetPanelMemoriesToDefault
 	ld	iz, 0:i3
 DataBuf_CopyBulkBitfields_Large_Loop4:
 	ld	wa, iz
@@ -5337,7 +5337,7 @@ DataBuf_CopyBulkBitfields_Large_Loop6:
 	calr	DSPCfg_ConfigureVoiceSlotA
 	ld	xwa, 0xf980
 	ld	xbc, (xsp+2)
-	calr	DataBuf_CopyBulkBitfields_Large_Helper2
+	calr	FileData_CopyLivePartFieldsToMemory
 	incw	1, (xsp+6)
 	cpw	(xsp+6), 24
 	jrl	c, DataBuf_CopyBulkBitfields_Large_Loop5
@@ -6138,7 +6138,7 @@ DSPCfg_VoiceSlotB_ExtractData_Loop:
 	ld	a, (xhl+wa)
 	ld	(xbc+969), a
 	ret
-DataBuf_CopyBulkBitfields_Large_Helper:
+FileData_ConvertNNBlock1Fields:
 	ld	xde, xwa
 	lda	xwa, (xde+371)
 	ld	l, (xwa)
@@ -6396,7 +6396,7 @@ DSPCfg_VoiceSlotB_ExtractData_Skip:
 	ld	a, (xde+1071)
 	ld	(xbc+1591), a
 	ret
-DataBuf_CopyBulkBitfields_Large_Helper2:
+FileData_CopyLivePartFieldsToMemory:
 	ld	e, (xwa+737)
 	and	e, 48
 	andmi8	(xbc+705), 207
@@ -6552,7 +6552,7 @@ DataBuf_Data_FormatDispatch:
 	call	Mem_Copy
 	lda	xsp, (xsp+48)
 	ret
-DataBuf_CopyBulkBitfields_Large_Helper3:
+FileData_ResetPanelMemoriesToDefault:
 	dec	6, xsp
 	pushw	iz
 	ld	(xsp+6), wa
@@ -11167,7 +11167,7 @@ MidiSysEx_ProcessBlock:
 	calr	MidiSysEx_ProcessBlock_Helper9
 	calr	MidiSysEx_ProcessBlock_Helper10
 	jrl	MidiSysEx_ProcessBlock_Join
-MidiSysEx_ProcessBlock_Helper:
+MidiSysEx_ReapplyReceivedPanel:
 	push	xde
 	push	xhl
 	push	xix
@@ -11183,7 +11183,7 @@ MidiSysEx_ProcessBlock_Helper:
 	pop	xhl
 	pop	xde
 	ret
-MidiSysEx_ProcessBlock_Helper2:
+MidiSysEx_NotifySoundParamChanges:
 	push	xde
 	push	xhl
 	push	xix
@@ -11194,7 +11194,7 @@ MidiSysEx_ProcessBlock_Helper2:
 	pop	xhl
 	pop	xde
 	ret
-MidiSysEx_ProcessBlock_Helper3:
+MidiSysEx_ReinitSwbtWrOutput:
 	push	xde
 	push	xhl
 	push	xix
@@ -11225,11 +11225,11 @@ MidiSysEx_ProcessBlock_Helper3:
 MidiSysEx_ProcessBlock_Helper4:
 	bit	7, (0xbc7e:16)
 	ret	z
-	calr	MidiSysEx_ProcessBlock_Helper
+	calr	MidiSysEx_ReapplyReceivedPanel
 	calr	MidiSysEx_ProcessBlock_Helper5
-	calr	MidiSysEx_ProcessBlock_Helper2
+	calr	MidiSysEx_NotifySoundParamChanges
 	calr	MidiSysEx_ProcessBlock_Helper5
-	calr	MidiSysEx_ProcessBlock_Helper3
+	calr	MidiSysEx_ReinitSwbtWrOutput
 	calr	MidiSysEx_ProcessBlock_Helper5
 	res	7, (0xbc7e:16)
 	ret
@@ -11238,7 +11238,7 @@ MidiSysEx_ProcessBlock_Helper5:
 	ret	z
 	set	0, (4330:16)
 	ret
-MidiSysEx_ProcessBlock_Helper6:
+MidiSysEx_SendSoundRamEndCmd:
 	push	xde
 	push	xhl
 	push	xix
@@ -11257,7 +11257,7 @@ MidiSysEx_FinishSoundRamXfer:
 	ldirw
 	bit	6, (0xbc7e:16)
 	jr	z, MidiSysEx_ProcessBlock_Epilogue
-	calr	MidiSysEx_ProcessBlock_Helper6
+	calr	MidiSysEx_SendSoundRamEndCmd
 	res	6, (0xbc7e:16)
 MidiSysEx_ProcessBlock_Epilogue:
 	inc	6, xsp

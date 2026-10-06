@@ -3670,7 +3670,7 @@ DspConfig_EventDispatch:
 AssSwb_SwapEntriesAndDispatch:
 	ldw	(xsp + 4), 0xffff
 	jrl	DSPCfg_Epilogue
-DSPCfg_ApplyParamStructFull_Case31:
+DSPCfg_ApplyParamStructFull_Distortion:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xix, (xwa + 1)
@@ -3688,7 +3688,7 @@ DSPCfg_ApplyParamStructFull_Case31:
 	ld	xwa, (xsp + 60)
 	ld	(xwa), 0x0
 	jrl	DSPCfg_Epilogue
-DSPCfg_ApplyParamStructFull_Case32:
+DSPCfg_ApplyParamStructFull_Overdrive:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xix, (xwa + 1)
@@ -3706,7 +3706,7 @@ DSPCfg_ApplyParamStructFull_Case32:
 	ld	xwa, (xsp + 60)
 	ld	(xwa), 0x1
 	jrl	DSPCfg_Epilogue
-DSPCfg_ApplyParamStructFull_Case34:
+DSPCfg_ApplyParamStructFull_Exciter:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xhl, (xwa + 1)
@@ -3728,7 +3728,7 @@ DSPCfg_ApplyParamStructFull_Case34:
 	ld	xwa, (xsp + 48)
 	ld	(xwa), 0x1
 	jrl	DSPCfg_Epilogue
-DSPCfg_ApplyParamStructFull_Case38:
+DSPCfg_ApplyParamStructFull_ParametricEq:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xhl, (xwa + 1)
@@ -3779,7 +3779,7 @@ DSPCfg_ApplyParamStructFull_Case38:
 	ld	xwa, (xsp + 32)
 	ld	(xwa), e
 	jrl	DSPCfg_Epilogue
-DSPCfg_ApplyParamStructFull_Case18:
+DSPCfg_ApplyParamStructFull_Chorus:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xix, (xwa + 1)
@@ -3797,7 +3797,7 @@ DSPCfg_ApplyParamStructFull_Case18:
 	ld	xwa, (xsp + 60)
 	ld	(xwa), l
 	jrl	DSPCfg_Epilogue
-DSPCfg_ApplyParamStructFull_Case19:
+DSPCfg_ApplyParamStructFull_ModulatedChorus:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xbc, (xwa + 1)
@@ -3839,7 +3839,7 @@ DSPCfg_EventType36_ClampResult:
 	ld	c, (xsp + 48)
 	ld	(xwa + 6), c
 	jrl	DSPCfg_Epilogue
-DSPCfg_ApplyParamStructFull_Case21:
+DSPCfg_ApplyParamStructFull_Flanger:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xix, (xwa + 1)
@@ -3865,7 +3865,7 @@ DSPCfg_ApplyParamStructFull_Case21:
 	ld	xwa, (xsp + 48)
 	ld	(xwa), e
 	jrl	DSPCfg_Epilogue
-DSPCfg_ApplyParamStructFull_Case22:
+DSPCfg_ApplyParamStructFull_Phaser:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xix, (xwa + 1)
@@ -4015,7 +4015,7 @@ DSPCfg_EventType36:
 DSPCfg_EventType36_StoreTail:
 	ld	(xwa + 4), l
 	jrl	DSPCfg_Epilogue
-DSPCfg_ApplyParamStructFull_Case23:
+DSPCfg_ApplyParamStructFull_Ensemble:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xix, (xwa + 1)
@@ -4033,7 +4033,7 @@ DSPCfg_ApplyParamStructFull_Case23:
 	ld	xwa, (xsp + 60)
 	ld	(xwa), l
 	jrl	DSPCfg_Epilogue
-DSPCfg_ApplyParamStructFull_Case26:
+DSPCfg_ApplyParamStructFull_SingleDelay:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xhl, (xwa + 1)

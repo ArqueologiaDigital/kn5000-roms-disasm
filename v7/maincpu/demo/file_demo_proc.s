@@ -2742,7 +2742,7 @@ FileIO_SaveRegion6_Simple:
 	call FileIO_ReturnError
 	jr SaveRegion6_Return
 SaveRegion6_OpenSuccess:
-	call SaveRegion6_OpenSuccess_Helper				; region-specific handler
+	call FileIO_SaveRcmFromFlash				; region-specific handler
 	ld iz, hl
 	call FileIO_CloseHandle
 	cp iz, 0:i3

@@ -586,7 +586,7 @@ SeFilL241TitleFunc_SwitchHandlers:
 	.long SeFilL241_OnColumn6_Join34
 	.long SeFilL241_OnColumn6_Join35
 	.long SeFilL241_OnSideRow4
-	.long SeFilL241_OnSideRow4_Join38
+	.long SeFilL241_OnSideRow4_Join11
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
 	.long SeFilL241_OnSwitch15

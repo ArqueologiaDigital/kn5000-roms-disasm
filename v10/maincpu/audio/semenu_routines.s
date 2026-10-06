@@ -1872,7 +1872,12 @@ SeMenu_TransferPartValues_EndData_Join6:
 SeMenu_TransferPartValues_EndData_Epilogue4:
 	lda	xsp, (xsp+14)
 	ret
-SeMenu_ApplyPartEdit_Helper3:
+; SeCtr2_StepPartField: For part A (1..4) of the AFTER TOUCH controller page (SeCtr2): steps the part's 2-bit field
+;   (bits 2A-2..2A-1) of page param 12 -- C = 0: 0 -> 1 -> 3 (stays at 3); C != 0: 3 -> 1 -> 0 (stays at 0) -- then
+;   redraws the column (SeMenu_RegisterElement_Extended), stores param 12 and posts it (SeMenu_ShowConfirmDialog 59).
+;   Parts outside 1..4 do nothing. Basis: callers + body -- SeCtr2_OnPartColumn (columns 5-8 '1ST 2ND 3RD 4TH') is its
+;   only caller and its header already describes the step.
+SeCtr2_StepPartField:
 	lda	xsp, (xsp-12)
 	push	qiz
 	ld	(xsp+10), c
@@ -2360,7 +2365,10 @@ SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6:
 	ld	a, (xde+wa)
 	ld	(xbc), a
 	ret
-SeMenu_ApplyPartEdit_Helper4_Helper:
+; SeMenu_PostDialEnable: Zero-extends A and tail-jumps to UI_PostDialEnable, which posts EVT_VALEN_SET with that value
+;   (every caller passes 1: dial enabled). Basis: callers + body -- SeMenu_BindDialToColumn calls it first (its
+;   header: 'posts EVT_VALEN_SET(1)'), and two sound-editor page set-ups call it before posting their dial events.
+SeMenu_PostDialEnable:
 	extz	wa
 	jp	UI_PostDialEnable
 SeMenu_SetupPartDisplay_End_Sub:
@@ -2381,7 +2389,7 @@ SeMenu_BindDialToColumn:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	wa, 1:i3
-	calr	SeMenu_ApplyPartEdit_Helper4_Helper
+	calr	SeMenu_PostDialEnable
 	ld	c, (xsp)
 	extz	bc
 	ld	wa, 0:i3
@@ -3634,7 +3642,7 @@ SeMenu_ApplyPartEdit_AltStore_Join22:
 	inc	6, xsp
 	ret
 ; SeCtr2_OnPartColumn: SeCtr2 page column 5..8 handler for part A (1..4): steps the part's 2-bit field in page param
-;   12 through 0, 1, 3 (up for a first-bank switch, down otherwise) via SeMenu_ApplyPartEdit_Helper3, then posts dial
+;   12 through 0, 1, 3 (up for a first-bank switch, down otherwise) via SeCtr2_StepPartField, then posts dial
 ;   events with SeMenu_BindDialToColumn(A+4). Basis: callers + body -- only SeCtr2_OnColumn5..8 call it, passing
 ;   part 1..4 in WA and the bank byte in C.
 SeCtr2_OnPartColumn:
@@ -3646,7 +3654,7 @@ SeCtr2_OnPartColumn:
 	ld	a, (xsp)
 	extz	wa
 	extz	bc
-	calr	SeMenu_ApplyPartEdit_Helper3
+	calr	SeCtr2_StepPartField
 	ld	a, (xsp)
 	inc	4, a
 	extz	wa
@@ -4090,7 +4098,7 @@ SeMenu_ApplyPartEdit_Skip17:
 	sub	a, (xbc)
 	exts	wa
 	lda	xbc, (xsp+28)
-	calr	SeMenu_ApplyPartEdit_Helper12
+	calr	SeMenu_StoreAbsoluteValue
 	ld	a, (xsp+28)
 	extz	wa
 	ld	(xsp+8), wa
@@ -4144,7 +4152,7 @@ SeMenu_ApplyPartEdit_Helper7_Join:
 	sub	a, (xbc+1)
 	exts	wa
 	lda	xbc, (xsp+28)
-	calr	SeMenu_ApplyPartEdit_Helper12
+	calr	SeMenu_StoreAbsoluteValue
 	ld	a, (xsp+28)
 	extz	wa
 	ld	(xsp+12), wa
@@ -4198,7 +4206,7 @@ SeMenu_ApplyPartEdit_Helper7_Join2:
 	sub	a, (xbc+2)
 	exts	wa
 	lda	xbc, (xsp+28)
-	calr	SeMenu_ApplyPartEdit_Helper12
+	calr	SeMenu_StoreAbsoluteValue
 	ld	a, (xsp+28)
 	extz	wa
 	ld	(xsp+16), wa
@@ -4252,7 +4260,7 @@ SeMenu_ApplyPartEdit_Join12:
 	sub	a, (xbc+3)
 	exts	wa
 	lda	xbc, (xsp+28)
-	calr	SeMenu_ApplyPartEdit_Helper12
+	calr	SeMenu_StoreAbsoluteValue
 	ld	a, (xsp+28)
 	extz	wa
 	ld qiz, wa
@@ -4385,7 +4393,7 @@ SeMenu_ApplyPartEdit_Skip21:
 	sub	a, (xbc+3)
 	exts	wa
 	lda	xbc, (xsp+28)
-	calr	SeMenu_ApplyPartEdit_Helper12
+	calr	SeMenu_StoreAbsoluteValue
 	ld	a, (xsp+28)
 	extz	wa
 	ld qiz, wa
@@ -4609,7 +4617,12 @@ SeMenu_ApplyPartEdit_Helper9_Helper:
 	div	xwa, de
 	ld	hl, wa
 	ret
-SeMenu_ApplyPartEdit_Helper10:
+; SeMenu_NoteToKeyboardX: Converts MIDI note A (clamped to 20..108) to an x offset on the sound editor's keyboard
+;   picture and stores it as a word at (XBC): 28 pixels per octave from note 12 plus the key's offset in
+;   GUI_DisplayStructData_0x1110 (C 0, C# 2, D 4, D# 6, E 8, F 12 ... B 24), minus 18. Basis: callers + body --
+;   SeMenu_DrawKeyScaleGraph places its key params with it (header: 'note 20..108 -> keyboard x') and
+;   SeMenu_DrawPartRangeGraph places the range edges with it in its keyboard mode (A = 0).
+SeMenu_NoteToKeyboardX:
 	cp	a, 20
 	jr	nc, SeMenu_ApplyPartEdit_Skip24
 	ld	a, 20:opc
@@ -4636,7 +4649,7 @@ SeMenu_ApplyPartEdit_Join17:
 	ld	(xbc), hl
 	ret
 ; SeMenu_DrawKeyScaleGraph: Clears the box (48,73)-(254,121) and draws the part's keyboard graph: key params A (and
-;   A+1, A+2 unless C = 1) placed on x by SeMenu_ApplyPartEdit_Helper10 (note 20..108 -> keyboard x), slope from the
+;   A+1, A+2 unless C = 1) placed on x by SeMenu_NoteToKeyboardX (note 20..108 -> keyboard x), slope from the
 ;   signed depth in part param 10. Basis: callers + body -- SeAmpAmp2/SeAmpEnv2/SeFilFil2/SePitEnv2 column handlers
 ;   call it right after storing the edited value into param 10; the x axis is a 12-key octave table.
 SeMenu_DrawKeyScaleGraph:
@@ -4662,7 +4675,7 @@ SeMenu_DrawKeyScaleGraph:
 	ld	a, (xsp+24)
 	extz	wa
 	lda	xbc, (xsp+14)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	addiw_da	(xsp+14), 48
 	ldw	(xsp+16), 48
 	ldw	(xsp+4), 48
@@ -4690,15 +4703,15 @@ SeMenu_DrawKeyScaleGraph_Skip:
 	ld	a, (xsp+24)
 	extz	wa
 	lda	xbc, (xsp+14)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	ld	a, (xsp+26)
 	extz	wa
 	lda	xbc, (xsp+16)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	addiw_da	(xsp+14), 48
 	addiw_da	(xsp+16), 48
 	addiw_da	(xsp+12), 48
@@ -4755,7 +4768,7 @@ SeMenu_ApplyPartEdit_Skip25:
 	ld	a, (xsp+18)
 	exts	wa
 	lda	xbc, (xsp+20)
-	calr	SeMenu_ApplyPartEdit_Helper12
+	calr	SeMenu_StoreAbsoluteValue
 	ldw	hl, 25
 	muls	hl, 50
 	ld	c, (xsp+20)
@@ -4852,7 +4865,11 @@ SeMenu_ApplyPartEdit_Entry3_Join4:
 	pop	xiz
 	lda	xsp, (xsp+28)
 	ret
-SeMenu_ApplyPartEdit_Helper12:
+; SeMenu_StoreAbsoluteValue: Stores the absolute value of the signed byte A at (XBC). Basis: callers + body --
+;   SeMenu_DrawKeyScaleGraph passes the signed key-scale depth (part param 10) and uses its sign separately, and the
+;   other graph routines pass signed differences of adjacent edit bytes (e.g. `ld a, (xbc+1) / sub a, (xbc)`) to get a
+;   length.
+SeMenu_StoreAbsoluteValue:
 	cp	a, 0:i3
 	jr	ge, SeMenu_ApplyPartEdit_Helper12_Skip
 	neg	a
@@ -4925,19 +4942,19 @@ SeMenu_ApplyPartEdit_Entry5:
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xsp+12)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+10)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xsp+8)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xsp+6)
-	calr	SeMenu_ApplyPartEdit_Helper10
+	calr	SeMenu_NoteToKeyboardX
 	jr	SeMenu_ApplyPartEdit_Join18
 SeMenu_ApplyPartEdit_Skip28:
 	ld	a, (xsp+20)
@@ -5225,7 +5242,12 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join6:
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
-Scoop_SoundEditorData_Helper10:
+; SeMenu_DrawFilterEqGraph: Clears and redraws the EQUALIZER graph of the -12 dB low/high-pass filter pages: the lower
+;   box (66,117)-(233,172), peak at x = 86 + part param 4 (FREQ, 0..127), height from param 5 bits 0-6 (GAIN, 0..13)
+;   and shape from param 5 bit 7 (RANGE). Basis: callers + body -- SeFilLpq1 switches 5/6/7 (labels RANGE/FREQ/GAIN,
+;   columns 5-7) call it after storing params 5/4/5, and the Lpq1/Hpq1 page redraws call it after
+;   SeMenu_DrawFilterGraph (the -24 dB pages, which have no equalizer box, do not).
+SeMenu_DrawFilterEqGraph:
 	lda	xsp, (xsp-12)
 	push	xiz
 	lda	xbc, (xsp+14)

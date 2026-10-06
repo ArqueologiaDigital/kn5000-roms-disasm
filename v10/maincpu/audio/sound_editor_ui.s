@@ -1594,7 +1594,7 @@ UpdSeSel_DetailedUpdate_Skip13:
 	ld	wa, 0:i3
 	ld	bc, 0:i3
 	call	SeMenu_DrawFilterGraph
-	call	Scoop_SoundEditorData_Helper10
+	call	SeMenu_DrawFilterEqGraph
 	ld	wa, 1:i3
 	call	SeMenu_SetupMenuDisplay
 UpdSeSel_DetailedUpdate_Epilogue11:
@@ -1665,7 +1665,7 @@ UpdSeSel_DetailedUpdate_SetDisplayState_Join13:
 	ld	wa, 1:i3
 	ld	bc, 0:i3
 	call	SeMenu_DrawFilterGraph
-	call	Scoop_SoundEditorData_Helper10
+	call	SeMenu_DrawFilterEqGraph
 	ld	wa, 1:i3
 	jp	SeMenu_SetupMenuDisplay
 UpdSeSel_DetailedUpdate_SetDisplayState_Join14:
@@ -2553,7 +2553,7 @@ SeMenu_CopyWriteUpdate_Loop:
 	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	ld	wa, 1:i3
-	call	SeMenu_ApplyPartEdit_Helper4_Helper
+	call	SeMenu_PostDialEnable
 	ld	wa, 0:i3
 	ldw	bc, 11
 	ld	de, 0:i3
@@ -5580,7 +5580,12 @@ SeWrtMemTitleFunc_DispatchSwitch:
 SeMenu_CopyWriteUpdate_Epilogue28:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Helper12:
+; SeWrtSndTitleFunc_DispatchSwitch: Switch dispatcher of the sound editor's WRITE SOUND title (SeWrtSnd): decodes the
+;   switch event (SeTitle_DecodeSwitch) and calls entry C of the 18-entry handler table ToneGen_ParamTable_0x216 with
+;   the bank byte in A. Basis: callers + body -- SeWrtSndTitleFunc_OnSwitchIn is its only caller, and the body is the
+;   same code as SeWrtMemTitleFunc_DispatchSwitch and the other SeXxxTitleFunc_DispatchSwitch routines, differing only
+;   in the table.
+SeWrtSndTitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
@@ -6768,7 +6773,7 @@ SeMenu_CopyWriteUpdate_Data_Skip2:
 	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	ld	wa, 1:i3
-	call	SeMenu_ApplyPartEdit_Helper4_Helper
+	call	SeMenu_PostDialEnable
 	ld	wa, 0:i3
 	ldw	bc, 8
 	ld	de, 0:i3
@@ -7773,7 +7778,7 @@ SeGfx_DrawBoundRecord:
 	; --- Wrapper function 3: push xwa, ld xwa=xiy, call, pop, ret ---
 	push xwa
 	ld xwa, xiy
-	call SeGfx_DrawBoundRecord_Helper
+	call GraphicsRender_StartSingleRecord
 	pop xwa
 	ret
 SeGfx_StaticOp00_FromBuf:

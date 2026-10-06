@@ -186,33 +186,33 @@ CtrlPanel_DispatchByIndex_CaseTable:
 	.short	CtrlPanel_FrameReturn - CtrlPanel_FrameDispatchTable
 	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
 	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case26 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case27 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case28 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_ThreePixelInset - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_OnePixelShadowFrame - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_TwoPixelShadowFrame - CtrlPanel_FrameDispatchTable
 	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
 	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
 	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
 	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case26 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_ThreePixelInset - CtrlPanel_FrameDispatchTable
 	.short	CtrlPanel_FrameDispatchTable - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case35 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case36 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case37 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case38 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case39 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case40 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case41 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case42 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case43 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case44 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case45 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case46 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case47 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case48 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case49 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case50 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case51 - CtrlPanel_FrameDispatchTable
-	.short	GetClientBox2_Case52 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_LeftChevron12 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_LeftChevron16 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_LeftChevron24 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_LeftChevron32 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_LeftChevron48 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_LeftOnOffTab16 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_LeftOnOffTab24 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_LeftOnOffTab32 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_LeftOnOffTab48 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_RightChevron12 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_RightChevron16 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_RightChevron24 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_RightChevron32 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_RightChevron48 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_RightOnOffTab16 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_RightOnOffTab24 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_RightOnOffTab32 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_RightOnOffTab48 - CtrlPanel_FrameDispatchTable
 	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
 	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
 	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
@@ -243,31 +243,31 @@ CtrlPanel_FuncDispatch_CaseTable:
 	.short	GroupBox_NavUpDown - GroupBox_HandlePartChange
 	.short	GroupBox_ForwardToBoxProc - GroupBox_HandlePartChange
 	.short	GroupBox_ReturnZero - GroupBox_HandlePartChange
-	.short	GroupBoxProc_Case3 - GroupBox_HandlePartChange
-	.short	GroupBoxProc_Case4 - GroupBox_HandlePartChange
+	.short	GroupBoxProc_OnRefreshApTask - GroupBox_HandlePartChange
+	.short	GroupBoxProc_OnRefreshSwEvent - GroupBox_HandlePartChange
 	.short	GroupBoxProc_Case5 - GroupBox_HandlePartChange
 	.short	GroupBoxProc_Case6 - GroupBox_HandlePartChange
-	.short	GroupBoxProc_Case7 - GroupBox_HandlePartChange
-	.short	GroupBoxProc_Case8 - GroupBox_HandlePartChange
-	.short	GroupBoxProc_Case9 - GroupBox_HandlePartChange
-	.short	GroupBoxProc_Case10 - GroupBox_HandlePartChange
-	.short	GroupBoxProc_Case11 - GroupBox_HandlePartChange
-	.short	GroupBoxProc_Case12 - GroupBox_HandlePartChange
+	.short	GroupBoxProc_OnShow - GroupBox_HandlePartChange
+	.short	GroupBoxProc_OnHide - GroupBox_HandlePartChange
+	.short	GroupBoxProc_OnSwIn - GroupBox_HandlePartChange
+	.short	GroupBoxProc_OnSwOn - GroupBox_HandlePartChange
+	.short	GroupBoxProc_OnSwOff - GroupBox_HandlePartChange
+	.short	GroupBoxProc_OnAllPaint - GroupBox_HandlePartChange
 ; GetEditSwPoint_CaseTable -- 13 x int16: the case offsets of GetEditSwPoint's compiled switch, relative to EditSwParam_Mode0
 GetEditSwPoint_CaseTable:
 	.short	EditSwParam_TempoTable - EditSwParam_Mode0
-	.short	GetEditSwPoint_Case1 - EditSwParam_Mode0
-	.short	GetEditSwPoint_Case2 - EditSwParam_Mode0
-	.short	GetEditSwPoint_Case3 - EditSwParam_Mode0
-	.short	GetEditSwPoint_Case4 - EditSwParam_Mode0
-	.short	GetEditSwPoint_Case5 - EditSwParam_Mode0
-	.short	GetEditSwPoint_Case6 - EditSwParam_Mode0
-	.short	GetEditSwPoint_Case7 - EditSwParam_Mode0
-	.short	GetEditSwPoint_Case8 - EditSwParam_Mode0
-	.short	GetEditSwPoint_Case9 - EditSwParam_Mode0
-	.short	GetEditSwPoint_Case10 - EditSwParam_Mode0
-	.short	GetEditSwPoint_Case11 - EditSwParam_Mode0
-	.short	GetEditSwPoint_Case12 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Column2 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Column3 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Column4 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Column5 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Column6 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Column7 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Column8 - EditSwParam_Mode0
+	.short	GetEditSwPoint_RightRow1 - EditSwParam_Mode0
+	.short	GetEditSwPoint_RightRow2 - EditSwParam_Mode0
+	.short	GetEditSwPoint_RightRow3 - EditSwParam_Mode0
+	.short	GetEditSwPoint_RightRow4 - EditSwParam_Mode0
+	.short	GetEditSwPoint_RightRow5 - EditSwParam_Mode0
 ; SetWallPaper_CaseTable -- 6 x int16: the case offsets of SetWallPaper's compiled switch, relative to SetWallPaper_DispatchData
 SetWallPaper_CaseTable:
 	.short	SetWallPaper_DispatchData - SetWallPaper_DispatchData
@@ -701,22 +701,22 @@ Str_No:	.incbin "includes/generated/naka_disk_warning.bin", 0x166A, 0x4
 ; ButtonState_DispatchDSP_CaseTable -- 17 x int16: the case offsets of ButtonState_DispatchDSP's compiled switch, relative to ButtonState_DispatchDSP_InlineData
 ButtonState_DispatchDSP_CaseTable:
 	.short	ButtonState_DispatchDSP_InlineData - ButtonState_DispatchDSP_InlineData
-	.short	ButtonState_DispatchDSP_Case1 - ButtonState_DispatchDSP_InlineData
-	.short	ButtonState_DispatchDSP_Case2 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_CaptionUpChevron - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_CaptionDownChevron - ButtonState_DispatchDSP_InlineData
 	.short	ButtonState_Paint_DrawAligned - ButtonState_DispatchDSP_InlineData
-	.short	ButtonState_DispatchDSP_Case4 - ButtonState_DispatchDSP_InlineData
-	.short	ButtonState_DispatchDSP_Case5 - ButtonState_DispatchDSP_InlineData
-	.short	ButtonState_DispatchDSP_Case6 - ButtonState_DispatchDSP_InlineData
-	.short	ButtonState_DispatchDSP_Case7 - ButtonState_DispatchDSP_InlineData
-	.short	ButtonState_DispatchDSP_Case8 - ButtonState_DispatchDSP_InlineData
-	.short	ButtonState_DispatchDSP_Case9 - ButtonState_DispatchDSP_InlineData
-	.short	ButtonState_DispatchDSP_Case10 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_CaptionOn - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_CaptionOff - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_CaptionOk - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_CaptionLessThan - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_CaptionGreaterThan - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_CaptionYes - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_CaptionNo - ButtonState_DispatchDSP_InlineData
 	.short	ButtonState_Paint_DrawAligned - ButtonState_DispatchDSP_InlineData
-	.short	ButtonState_DispatchDSP_Case12 - ButtonState_DispatchDSP_InlineData
-	.short	ButtonState_DispatchDSP_Case13 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_CaptionUpTriangle - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_CaptionDownTriangle - ButtonState_DispatchDSP_InlineData
 	.short	ButtonState_Paint_DrawAligned - ButtonState_DispatchDSP_InlineData
-	.short	ButtonState_DispatchDSP_Case15 - ButtonState_DispatchDSP_InlineData
-	.short	ButtonState_DispatchDSP_Case16 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_CaptionLeftTriangle - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_CaptionRightTriangle - ButtonState_DispatchDSP_InlineData
 ; AcIndexEdit_SwitchDirCaseMap -- 17 x uint8_t: case 0-2 for the widget's instance byte (0..16)
 ; AcIndexEdit_DispatchDSP (ui/ui_widget_defs.s) reads instance +40 (PsWideESBox) or +38, bounds it 0..16,
 ; and jumps through AcIndexEdit_DispatchDSP_CaseTable: 0 = EVT_INDEXSW_DOWN if parameter bit 7 set
@@ -1146,49 +1146,49 @@ DrawIcons_PixelPairTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x
 DrawBitmapFile_Impl_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x2146, 0x4
 ; DrawPartGroup_DispatchByType_CaseTable -- 16 x int16: the case offsets of DrawPartGroup_DispatchByType's compiled switch, relative to DrawPartGroup_TableJump_DefaultCase
 DrawPartGroup_DispatchByType_CaseTable:
-	.short	DrawDesignBox_PartGroupStyle_Case24 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case25 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case26 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case27 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case28 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case29 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case30 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case31 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case32 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case33 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case34 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case35 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case36 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case37 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case38 - DrawPartGroup_TableJump_DefaultCase
-	.short	DrawDesignBox_PartGroupStyle_Case39 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_LeftChevron16 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_LeftChevron24 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_LeftChevron32 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_LeftChevron48 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_LeftOnOffTab16 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_LeftOnOffTab24 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_LeftOnOffTab32 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_LeftOnOffTab48 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_RightChevron16 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_RightChevron24 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_RightChevron32 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_RightChevron48 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_RightOnOffTab16 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_RightOnOffTab24 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_RightOnOffTab32 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_RightOnOffTab48 - DrawPartGroup_TableJump_DefaultCase
 ; Draw_DispatchByPartType_CaseTable -- 25 x int16: the case offsets of Draw_DispatchByPartType's compiled switch, relative to Draw_StyledBoxWithFrame
 Draw_DispatchByPartType_CaseTable:
 	.short	Draw_StyledBoxWithFrame - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case181 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case181 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case181 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case184 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case185 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_FramedBox - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_FramedBox - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_FramedBox - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_DropShadow1px - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_DropShadow2px - Draw_StyledBoxWithFrame
 	.short	DrawDesignBox_IconStyle - Draw_StyledBoxWithFrame
 	.short	DrawDesignBox_PartGroupStyle - Draw_StyledBoxWithFrame
 	.short	DrawDesignBox_PartGroupStyle - Draw_StyledBoxWithFrame
 	.short	DrawDesignBox_PartGroupStyle - Draw_StyledBoxWithFrame
 	.short	DrawDesignBox_PartGroupStyle - Draw_StyledBoxWithFrame
 	.short	DrawDesignBox_PartGroupStyle - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case192 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case193 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case192 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case193 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case196 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case197 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case196 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case197 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case200 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case201 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case201 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case203 - Draw_StyledBoxWithFrame
-	.short	DrawDesignBox_Impl_Case204 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Bevel1px - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Bevel2px - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Bevel1px - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Bevel2px - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_BlackEdgeBevel1px - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_BlackEdgeBevel2px - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_BlackEdgeBevel1px - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_BlackEdgeBevel2px - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_BlackEdgeBevelCorners - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_BevelCorners - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_BevelCorners - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_BevelTopCorners - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_BevelBottomCorners - Draw_StyledBoxWithFrame
 Gfx_LoadSplashBMP_Data:		.incbin "includes/generated/naka_disk_warning.bin", 0x219C, 0x4
 CaptureLcd_Str_BM:		.incbin "includes/generated/naka_disk_warning.bin", 0x21A0, 0x4	; "BM"
 CaptureLcd_Str_HKLCD_Fmt3d_BMP:	.incbin "includes/generated/naka_disk_warning.bin", 0x21A4, 0xE	; "HKLCD%03d.BMP"

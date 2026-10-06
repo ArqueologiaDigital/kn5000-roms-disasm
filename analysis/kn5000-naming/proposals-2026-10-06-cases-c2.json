@@ -1,0 +1,1597 @@
+[
+ {
+  "old": "GetClientBox2_Case26",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_ThreePixelInset",
+  "header": "styles 3 (triple frame) and 10 (rounded box, 9-pixel corners): client rect = box inset by 3 on every side",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3107 `ld xde, 3:i3` / 3108 `jr CtrlPanel_ApplyMarginLoop` -- client rect = box inset by 3",
+   "ui/ui_window_procs.s:4439-4468 DrawDesignBox_Impl style 3 draws three nested frames; ui_widgets/disk_warning_strings.s:1177 style 10 -> DrawDesignBox_PartGroupStyle, ui/ui_window_procs.s:4948 DrawPartGroup_StyleA = RoundCorner9 corner pieces 12..15",
+   "ui/ui_control_panel.s:3060 `ld wa, (xhl + 24)` / 3062 `calr GetClientBox2` -- GetClientBox passes the view's style word (+24) in WA",
+   "ui/ui_control_panel.s:3025 `ld bc, (xhl + 24)` / 3027 `call DrawDesignBox` -- BoxProc draws the same +24 word as DrawDesignBox's style argument, so WA is the design-box style code",
+   "ui/ui_control_panel.s:3078 `cp wa, 0xb` / 3080 `sub wa, 0x74` / 3085 `sub wa, 0x17` / 3090 `sub wa, 0x17` / 3093 `cp wa, 0x2a` -- table index = style for 0..11, style-0x74 for 0x80..0x88 (12..20), style-0x8B for 0xA0..0xA8 (21..29), style-0xA2 for 0xC0..0xCC (30..42); the _CaseN numbers are index+23, NOT the style",
+   "ui_widgets/disk_warning_strings.s:185 CtrlPanel_DispatchByIndex_CaseTable -- index 3 and 10 -> Case26, 4 -> Case27, 5 -> Case28, 12..29 -> Case35..Case52",
+   "ui/ui_control_panel.s:3121-3137 CtrlPanel_ApplyMarginLoop: XDE = inset; each step does left+1, top+1, right-1, bottom-1 on the rect at XIZ (+0 left, +2 top, +4 right, +6 bottom, cf. GetBoxCenter)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case27",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_OnePixelShadowFrame",
+  "header": "style 4 (frame with a 1-pixel drop shadow): right/bottom -1, then inset 1",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3195 `ld xde, 1:i3` / 3196 `decm 1, (xiz + 4)` / 3197 `ld wa, 1:i3` / 3198 `jrl CtrlPanel_SubFrameOffset` -- right-1, bottom-1, then inset 1",
+   "ui/ui_window_procs.s:4435 DrawDesignBox_Impl_Case184 (style 4) shrinks the box by 1 at right/bottom, frames it, then draws lines at right+1 and bottom+1 (4466-4499): a 1-pixel drop shadow"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case28",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_TwoPixelShadowFrame",
+  "header": "style 5 (frame with a 2-pixel drop shadow): right/bottom -2, then inset 1",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3110 `ld xde, 1:i3` / 3111 `decm 2, (xiz+4)` / 3112 `ld wa, 2:i3` / 3115 `sub (xiz + 6), wa` -- right-2, bottom-2, then inset 1",
+   "ui/ui_window_procs.s:4431 DrawDesignBox_Impl_Case185 (style 5) shrinks by 2 at right/bottom and draws two shadow frames at 4500-4535 (DrawDesignBox_4FrameCross)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case35",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_LeftChevron12",
+  "header": "style 0x80 (left piece Frame_ChevronLeft_5x12): left edge + piece width, then inset 1",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3202 `ldw wa, 0x19` -- GetFrameSPSize(0x19) = FrameDescriptorTable[25] = Frame_ChevronLeft_5x12 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `add (xiz), wa` -- left edge += piece width",
+   "case-table index 12 = style 0x80; then inset 1 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)",
+   "ui/ui_control_panel.s:3060 `ld wa, (xhl + 24)` / 3062 `calr GetClientBox2` -- GetClientBox passes the view's style word (+24) in WA",
+   "ui/ui_control_panel.s:3025 `ld bc, (xhl + 24)` / 3027 `call DrawDesignBox` -- BoxProc draws the same +24 word as DrawDesignBox's style argument, so WA is the design-box style code",
+   "ui/ui_control_panel.s:3078 `cp wa, 0xb` / 3080 `sub wa, 0x74` / 3085 `sub wa, 0x17` / 3090 `sub wa, 0x17` / 3093 `cp wa, 0x2a` -- table index = style for 0..11, style-0x74 for 0x80..0x88 (12..20), style-0x8B for 0xA0..0xA8 (21..29), style-0xA2 for 0xC0..0xCC (30..42); the _CaseN numbers are index+23, NOT the style",
+   "ui_widgets/disk_warning_strings.s:185 CtrlPanel_DispatchByIndex_CaseTable -- index 3 and 10 -> Case26, 4 -> Case27, 5 -> Case28, 12..29 -> Case35..Case52",
+   "ui/ui_control_panel.s:3121-3137 CtrlPanel_ApplyMarginLoop: XDE = inset; each step does left+1, top+1, right-1, bottom-1 on the rect at XIZ (+0 left, +2 top, +4 right, +6 bottom, cf. GetBoxCenter)",
+   "ui/ui_window_procs.s:4731 DrawDesignBox_IconStyle: style 0x80 draws piece 0x19 at the left edge, 0xA0 piece 0x14 at the right; 0x81..0x88 / 0xA1..0xA8 go to DrawDesignBox_PartGroupStyle (rounded corners + the side piece)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case36",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_LeftChevron16",
+  "header": "style 0x81 (left piece Frame_ChevronLeft_6x16): left edge + piece width, then inset 1",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3212 `ldw wa, 0x1a` -- GetFrameSPSize(0x1a) = FrameDescriptorTable[26] = Frame_ChevronLeft_6x16 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `add (xiz), wa` -- left edge += piece width",
+   "case-table index 13 = style 0x81; then inset 1 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case37",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_LeftChevron24",
+  "header": "style 0x82 (left piece Frame_ChevronLeft_8x24): left edge + piece width, then inset 1",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3222 `ldw wa, 0x1b` -- GetFrameSPSize(0x1b) = FrameDescriptorTable[27] = Frame_ChevronLeft_8x24 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `add (xiz), wa` -- left edge += piece width",
+   "case-table index 14 = style 0x82; then inset 1 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case38",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_LeftChevron32",
+  "header": "style 0x83 (left piece Frame_ChevronLeft_10x32): left edge + piece width, then inset 2",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3144 `ldw wa, 0x1c` -- GetFrameSPSize(0x1c) = FrameDescriptorTable[28] = Frame_ChevronLeft_10x32 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `add (xiz), wa` -- left edge += piece width",
+   "case-table index 15 = style 0x83; then inset 2 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case39",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_LeftChevron48",
+  "header": "style 0x84 (left piece Frame_ChevronLeft_15x48): left edge + piece width, then inset 2",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3154 `ldw wa, 0x1d` -- GetFrameSPSize(0x1d) = FrameDescriptorTable[29] = Frame_ChevronLeft_15x48 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `add (xiz), wa` -- left edge += piece width",
+   "case-table index 16 = style 0x84; then inset 2 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case40",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_LeftOnOffTab16",
+  "header": "style 0x85 (left piece Frame_OnOffTabLeft_20x16): left edge + piece width, then inset 1",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3232 `ldw wa, 0x1e` -- GetFrameSPSize(0x1e) = FrameDescriptorTable[30] = Frame_OnOffTabLeft_20x16 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `add (xiz), wa` -- left edge += piece width",
+   "case-table index 17 = style 0x85; then inset 1 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case41",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_LeftOnOffTab24",
+  "header": "style 0x86 (left piece Frame_OnOffTabLeft_24x24): left edge + piece width, then inset 1",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3237 `ldw wa, 0x1f` -- GetFrameSPSize(0x1f) = FrameDescriptorTable[31] = Frame_OnOffTabLeft_24x24 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `add (xiz), wa` -- left edge += piece width",
+   "case-table index 18 = style 0x86; then inset 1 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case42",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_LeftOnOffTab32",
+  "header": "style 0x87 (left piece Frame_OnOffTabLeft_29x32): left edge + piece width, then inset 2",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3164 `ldw wa, 0x20` -- GetFrameSPSize(0x20) = FrameDescriptorTable[32] = Frame_OnOffTabLeft_29x32 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `add (xiz), wa` -- left edge += piece width",
+   "case-table index 19 = style 0x87; then inset 2 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case43",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_LeftOnOffTab48",
+  "header": "style 0x88 (left piece Frame_OnOffTabLeft_34x48): left edge + piece width, then inset 2",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3169 `ldw wa, 0x21` -- GetFrameSPSize(0x21) = FrameDescriptorTable[33] = Frame_OnOffTabLeft_34x48 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `add (xiz), wa` -- left edge += piece width",
+   "case-table index 20 = style 0x88; then inset 2 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case44",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_RightChevron12",
+  "header": "style 0xa0 (right piece Frame_ChevronRight_5x12): right edge - piece width, then inset 1",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3207 `ldw wa, 0x14` -- GetFrameSPSize(0x14) = FrameDescriptorTable[20] = Frame_ChevronRight_5x12 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `sub (xiz + 4), wa` -- right edge -= piece width (the existing join label CtrlPanel_Frame_SubtractTopMargin / CtrlFrame_SubRightMargin both act on +4 = right)",
+   "case-table index 21 = style 0xa0; then inset 1 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case45",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_RightChevron16",
+  "header": "style 0xa1 (right piece Frame_ChevronRight_6x16): right edge - piece width, then inset 1",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3217 `ldw wa, 0x15` -- GetFrameSPSize(0x15) = FrameDescriptorTable[21] = Frame_ChevronRight_6x16 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `sub (xiz + 4), wa` -- right edge -= piece width (the existing join label CtrlPanel_Frame_SubtractTopMargin / CtrlFrame_SubRightMargin both act on +4 = right)",
+   "case-table index 22 = style 0xa1; then inset 1 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case46",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_RightChevron24",
+  "header": "style 0xa2 (right piece Frame_ChevronRight_8x24): right edge - piece width, then inset 1",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3227 `ldw wa, 0x16` -- GetFrameSPSize(0x16) = FrameDescriptorTable[22] = Frame_ChevronRight_8x24 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `sub (xiz + 4), wa` -- right edge -= piece width (the existing join label CtrlPanel_Frame_SubtractTopMargin / CtrlFrame_SubRightMargin both act on +4 = right)",
+   "case-table index 23 = style 0xa2; then inset 1 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case47",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_RightChevron32",
+  "header": "style 0xa3 (right piece Frame_ChevronRight_10x32): right edge - piece width, then inset 2",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3149 `ldw wa, 0x17` -- GetFrameSPSize(0x17) = FrameDescriptorTable[23] = Frame_ChevronRight_10x32 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `sub (xiz + 4), wa` -- right edge -= piece width (the existing join label CtrlPanel_Frame_SubtractTopMargin / CtrlFrame_SubRightMargin both act on +4 = right)",
+   "case-table index 24 = style 0xa3; then inset 2 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case48",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_RightChevron48",
+  "header": "style 0xa4 (right piece Frame_ChevronRight_15x48): right edge - piece width, then inset 2",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3159 `ldw wa, 0x18` -- GetFrameSPSize(0x18) = FrameDescriptorTable[24] = Frame_ChevronRight_15x48 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `sub (xiz + 4), wa` -- right edge -= piece width (the existing join label CtrlPanel_Frame_SubtractTopMargin / CtrlFrame_SubRightMargin both act on +4 = right)",
+   "case-table index 25 = style 0xa4; then inset 2 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case49",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_RightOnOffTab16",
+  "header": "style 0xa5 (right piece Frame_OnOffTabRight_20x16): right edge - piece width, then inset 1",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3247 `ldw wa, 0x22` -- GetFrameSPSize(0x22) = FrameDescriptorTable[34] = Frame_OnOffTabRight_20x16 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `sub (xiz + 4), wa` -- right edge -= piece width (the existing join label CtrlPanel_Frame_SubtractTopMargin / CtrlFrame_SubRightMargin both act on +4 = right)",
+   "case-table index 26 = style 0xa5; then inset 1 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case50",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_RightOnOffTab24",
+  "header": "style 0xa6 (right piece Frame_OnOffTabRight_24x24): right edge - piece width, then inset 1",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3252 `ldw wa, 0x23` -- GetFrameSPSize(0x23) = FrameDescriptorTable[35] = Frame_OnOffTabRight_24x24 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `sub (xiz + 4), wa` -- right edge -= piece width (the existing join label CtrlPanel_Frame_SubtractTopMargin / CtrlFrame_SubRightMargin both act on +4 = right)",
+   "case-table index 27 = style 0xa6; then inset 1 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case51",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_RightOnOffTab32",
+  "header": "style 0xa7 (right piece Frame_OnOffTabRight_29x32): right edge - piece width, then inset 2",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3179 `ldw wa, 0x24` -- GetFrameSPSize(0x24) = FrameDescriptorTable[36] = Frame_OnOffTabRight_29x32 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `sub (xiz + 4), wa` -- right edge -= piece width (the existing join label CtrlPanel_Frame_SubtractTopMargin / CtrlFrame_SubRightMargin both act on +4 = right)",
+   "case-table index 28 = style 0xa7; then inset 2 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "GetClientBox2_Case52",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetClientBox2_RightOnOffTab48",
+  "header": "style 0xa8 (right piece Frame_OnOffTabRight_34x48): right edge - piece width, then inset 2",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable piece",
+  "evidence": [
+   "ui/ui_control_panel.s:3184 `ldw wa, 0x25` -- GetFrameSPSize(0x25) = FrameDescriptorTable[37] = Frame_OnOffTabRight_34x48 (table_data/ui_bitmaps.s)",
+   "ui/ui_control_panel.s `call GetFrameSPSize` / `sub (xiz + 4), wa` -- right edge -= piece width (the existing join label CtrlPanel_Frame_SubtractTopMargin / CtrlFrame_SubRightMargin both act on +4 = right)",
+   "case-table index 29 = style 0xa8; then inset 2 (CtrlPanel_AfterTopMargin = 1, CtrlPanel_AfterLeftMargin = 2)"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case24",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_LeftChevron16",
+  "header": "style 0x81: rounded box with RoundCorner1 corners and the Frame_ChevronLeft_6x16 piece on the left edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:4961 corner pieces 0..3 (RoundCorner1) / `ldw (xsp + 12), 0x1a` = Frame_ChevronLeft_6x16 / -> DrawPartGroup_WithAltFlag ((xsp+16)=1, left)",
+   "case-table index 0 = style 0x81",
+   "ui/ui_window_procs.s:4388 `cpw (xsp + 72), 0xa8` / 4390 `cpw (xsp + 72), 0xa1` / 4391 `jrl ge, DrawDesignBox_PartGroupStyle` / 4398 `cp wa, 0x81` / 4399 -- DrawDesignBox_Impl enters here for styles 0x81..0x88 and 0xA1..0xA8 ((xsp+72) = the BC style argument of DrawDesignBox)",
+   "ui/ui_window_procs.s:4908 `sub wa, 0x81` / 4911 `cp wa, 7:i3` / 4913 `sub wa, 0x18` / 4914 `cp wa, 0x8` -- index 0..7 = style 0x81..0x88, 8..15 = 0xA1..0xA8; the _CaseN numbers are index+24, NOT the style",
+   "ui_widgets/disk_warning_strings.s:1148 DrawPartGroup_DispatchByType_CaseTable -- index i -> Case(24+i)",
+   "ui/ui_window_procs.s:5076-5100 DrawPartGroup_Loop: IZ, (xsp+8), (xsp+10), ERP 0xFA = the four corner pieces; (xsp+12) = the side piece; (xsp+16)=1 draws it at the left edge (DrawPartGroup_NoLeftFlag path, `add (xsp + 62), wa`), (xsp+14)=1 at the right",
+   "table_data/ui_bitmaps.s:291 FrameDescriptorTable: 0-3 RoundCorner1, 4-7 RoundCorner2, 8-11 RoundCorner5, 20-24 ChevronRight 5x12..15x48, 25-29 ChevronLeft, 30-33 OnOffTabLeft 20x16..34x48, 34-37 OnOffTabRight"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case25",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_LeftChevron24",
+  "header": "style 0x82: rounded box with RoundCorner2 corners and the Frame_ChevronLeft_8x24 piece on the left edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:4975 corner pieces 4..7 (RoundCorner2) / `ldw (xsp + 12), 0x1b` = Frame_ChevronLeft_8x24 / -> DrawPartGroup_WithAltFlag ((xsp+16)=1, left)",
+   "case-table index 1 = style 0x82"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case26",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_LeftChevron32",
+  "header": "style 0x83: rounded box with RoundCorner5 corners and the Frame_ChevronLeft_10x32 piece on the left edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:4989 corner pieces 8..11 (RoundCorner5) / `ldw (xsp + 12), 0x1c` = Frame_ChevronLeft_10x32 / -> DrawPartGroup_WithAltFlag ((xsp+16)=1, left)",
+   "case-table index 2 = style 0x83"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case27",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_LeftChevron48",
+  "header": "style 0x84: rounded box with RoundCorner5 corners and the Frame_ChevronLeft_15x48 piece on the left edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:5003 corner pieces 8..11 (RoundCorner5) / `ldw (xsp + 12), 0x1d` = Frame_ChevronLeft_15x48 / -> DrawPartGroup_WithAltFlag ((xsp+16)=1, left)",
+   "case-table index 3 = style 0x84"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case28",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_LeftOnOffTab16",
+  "header": "style 0x85: rounded box with RoundCorner1 corners and the Frame_OnOffTabLeft_20x16 piece on the left edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:5017 corner pieces 0..3 (RoundCorner1) / `ldw (xsp + 12), 0x1e` = Frame_OnOffTabLeft_20x16 / -> DrawPartGroup_WithAltFlag ((xsp+16)=1, left)",
+   "case-table index 4 = style 0x85"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case29",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_LeftOnOffTab24",
+  "header": "style 0x86: rounded box with RoundCorner2 corners and the Frame_OnOffTabLeft_24x24 piece on the left edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:5024 corner pieces 4..7 (RoundCorner2) / `ldw (xsp + 12), 0x1f` = Frame_OnOffTabLeft_24x24 / -> DrawPartGroup_WithAltFlag ((xsp+16)=1, left)",
+   "case-table index 5 = style 0x86"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case30",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_LeftOnOffTab32",
+  "header": "style 0x87: rounded box with RoundCorner5 corners and the Frame_OnOffTabLeft_29x32 piece on the left edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:5031 corner pieces 8..11 (RoundCorner5) / `ldw (xsp + 12), 0x20` = Frame_OnOffTabLeft_29x32 / -> DrawPartGroup_WithAltFlag ((xsp+16)=1, left)",
+   "case-table index 6 = style 0x87"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case31",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_LeftOnOffTab48",
+  "header": "style 0x88: rounded box with RoundCorner5 corners and the Frame_OnOffTabLeft_34x48 piece on the left edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:5038 corner pieces 8..11 (RoundCorner5) / `ldw (xsp + 12), 0x21` = Frame_OnOffTabLeft_34x48 / -> DrawPartGroup_WithAltFlag ((xsp+16)=1, left)",
+   "case-table index 7 = style 0x88"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case32",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_RightChevron16",
+  "header": "style 0xa1: rounded box with RoundCorner1 corners and the Frame_ChevronRight_6x16 piece on the right edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:4968 corner pieces 0..3 (RoundCorner1) / `ldw (xsp + 12), 0x15` = Frame_ChevronRight_6x16 / -> DrawPartGroup_WithFlag ((xsp+14)=1, right)",
+   "case-table index 8 = style 0xa1"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case33",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_RightChevron24",
+  "header": "style 0xa2: rounded box with RoundCorner2 corners and the Frame_ChevronRight_8x24 piece on the right edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:4982 corner pieces 4..7 (RoundCorner2) / `ldw (xsp + 12), 0x16` = Frame_ChevronRight_8x24 / -> DrawPartGroup_WithFlag ((xsp+14)=1, right)",
+   "case-table index 9 = style 0xa2"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case34",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_RightChevron32",
+  "header": "style 0xa3: rounded box with RoundCorner5 corners and the Frame_ChevronRight_10x32 piece on the right edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:4996 corner pieces 8..11 (RoundCorner5) / `ldw (xsp + 12), 0x17` = Frame_ChevronRight_10x32 / -> DrawPartGroup_WithFlag ((xsp+14)=1, right)",
+   "case-table index 10 = style 0xa3"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case35",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_RightChevron48",
+  "header": "style 0xa4: rounded box with RoundCorner5 corners and the Frame_ChevronRight_15x48 piece on the right edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:5010 corner pieces 8..11 (RoundCorner5) / `ldw (xsp + 12), 0x18` = Frame_ChevronRight_15x48 / -> DrawPartGroup_WithFlag ((xsp+14)=1, right)",
+   "case-table index 11 = style 0xa4"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case36",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_RightOnOffTab16",
+  "header": "style 0xa5: rounded box with RoundCorner1 corners and the Frame_OnOffTabRight_20x16 piece on the right edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:5048 corner pieces 0..3 (RoundCorner1) / `ldw (xsp + 12), 0x22` = Frame_OnOffTabRight_20x16 / -> DrawPartGroup_WithFlag ((xsp+14)=1, right)",
+   "case-table index 12 = style 0xa5"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case37",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_RightOnOffTab24",
+  "header": "style 0xa6: rounded box with RoundCorner2 corners and the Frame_OnOffTabRight_24x24 piece on the right edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:5055 corner pieces 4..7 (RoundCorner2) / `ldw (xsp + 12), 0x23` = Frame_OnOffTabRight_24x24 / -> DrawPartGroup_WithFlag ((xsp+14)=1, right)",
+   "case-table index 13 = style 0xa6"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case38",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_RightOnOffTab32",
+  "header": "style 0xa7: rounded box with RoundCorner5 corners and the Frame_OnOffTabRight_29x32 piece on the right edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:5062 corner pieces 8..11 (RoundCorner5) / `ldw (xsp + 12), 0x24` = Frame_OnOffTabRight_29x32 / -> DrawPartGroup_WithFlag ((xsp+14)=1, right)",
+   "case-table index 14 = style 0xa7"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_PartGroupStyle_Case39",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_PartGroupStyle_RightOnOffTab48",
+  "header": "style 0xa8: rounded box with RoundCorner5 corners and the Frame_OnOffTabRight_34x48 piece on the right edge",
+  "basis": "switch value meaning (design-box style code) + body + FrameDescriptorTable pieces",
+  "evidence": [
+   "ui/ui_window_procs.s:5069 corner pieces 8..11 (RoundCorner5) / `ldw (xsp + 12), 0x25` = Frame_OnOffTabRight_34x48 / -> DrawPartGroup_WithFlag ((xsp+14)=1, right)",
+   "case-table index 15 = style 0xa8"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8498 `extz bc` / 8501 `cp bc, 0xf` / 8505 SeqData_ReadFieldByIndex_CaseTable / 8513..8555 one `ld xbc, N` per case / 8557 `add xwa, xbc` / 8558 `ld l, (xwa)` -- every case is base + N",
+   "midi/midi_dispatch_handlers.s:13624-13636 field 0 `cp l, 0x27` then `sla hl, 2` into SeqData_SubDispatch_Table -- field 0 is the message command",
+   "midi/midi_dispatch_handlers.s:11551-11742 MidiPkt_ArpExtHandler_A..M read field 3 of MIDISEQ_SPARE_BUF_PTR and compare with 0, 2, 5, 8, 9, 12, 13, 19, 20 -- the transfer step",
+   "audio/dsp_config_sysex.s:26 field 11 -> SysEx_ClampVoiceIndex128; midi/midipkt_routines.s:1412 field 11 `cp l, 2:i3` -- same offset, different meaning per message type",
+   "midi/midi_dispatch_handlers.s:10041/10047/10054 fields 12/13/14 combined `sll xiz, 14` / `sll xhl, 7` -- a 7-bit-packed length",
+   "caller census (agent_c2/calls.py): 16 offsets all used; bases MIDISEQ_ACTIVE_BUF_PTR / MIDISEQ_SPARE_BUF_PTR / (0xBCB4)"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case2",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8516 `ld xbc, 2` / jr SeqData_ReadFieldByIndex_Join -- base + 2, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case3",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8519 `ld xbc, 3` / jr SeqData_ReadFieldByIndex_Join -- base + 3, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8522 `ld xbc, 4` / jr SeqData_ReadFieldByIndex_Join -- base + 4, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8525 `ld xbc, 5` / jr SeqData_ReadFieldByIndex_Join -- base + 5, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case6",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8528 `ld xbc, 6` / jr SeqData_ReadFieldByIndex_Join -- base + 6, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case7",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8531 `ld xbc, 7` / jr SeqData_ReadFieldByIndex_Join -- base + 7, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case8",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8534 `ld xbc, 8` / jr SeqData_ReadFieldByIndex_Join -- base + 8, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case9",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8537 `ld xbc, 9` / jr SeqData_ReadFieldByIndex_Join -- base + 9, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case10",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8540 `ld xbc, 10` / jr SeqData_ReadFieldByIndex_Join -- base + 10, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case11",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8543 `ld xbc, 11` / jr SeqData_ReadFieldByIndex_Join -- base + 11, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case12",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8546 `ld xbc, 12` / jr SeqData_ReadFieldByIndex_Join -- base + 12, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case13",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8549 `ld xbc, 13` / jr SeqData_ReadFieldByIndex_Join -- base + 13, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case14",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8552 `ld xbc, 14` / jr SeqData_ReadFieldByIndex_Join -- base + 14, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SeqData_ReadFieldByIndex_Case15",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a byte OFFSET 0..15 into the 16-byte MIDI message record the caller passes (MIDISEQ_ACTIVE_BUF_PTR 94x, MIDISEQ_SPARE_BUF_PTR 14x, (0xBCB4) 1x); every case is the same `ld xbc, N / add xwa, xbc / ld l, (xwa)` -- a compiled `switch(i) return p[i]` accessor. Several offsets have partial readings (field 0 = message command, index into SeqData_SubDispatch_Table when < 0x27; field 3 = transfer step, compared with 0/2/5/8/9/12/13/19/20 by MidiPkt_ArpExtHandler_A..M; field 4 = status/abort code; fields 12/13/14 = a 21-bit length in three 7-bit bytes), but others change meaning with the message type: field 11 is a voice index clamped by SysEx_ClampVoiceIndex128 in audio/dsp_config_sysex.s yet compared with 2 in MidiPkt_SysExBulkTransfer_Data; field 5 is compared with 0x7E/0x2D/0x2C/0x2B. The record is a union keyed by field 0, so an offset has no single meaning to name a case after, and the case bodies do nothing offset-specific. A name would only restate 'offset N'. The same holds for its setter twin MIDI_ReadChannelParam (which writes E to the same offsets).",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: per-message-type union)",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8555 `ld xbc, 15` / jr SeqData_ReadFieldByIndex_Join -- base + 15, nothing offset-specific"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case16",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_MeasureCopyFromMeasureField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10599 `ld xbc, EVT_GET_MCP_FM_STRING` / jr AccIll_Dispatch_Join -- item 16 asks the model for the measure-copy from-measure field string",
+   "sequencer/sequencer_ui.s:10415 SqedtVal2Proc / 10428 `cp xwa, EVT_PARA_DRAW` / 10429 `jrl z, SqedtVal2_HandleScrollEvent` -- (xsp+66) holds the event parameter XDE (10418 `ld (xsp + 66), xde`)",
+   "sequencer/sequencer_ui.s:10563 `ld xhl, (xsp + 66)` / 10566 `sub xhl, 0xf` / 10569 `cp xhl, 0xf` -- switched on the drawn item number, cases 15..30 (Case N = item N; 15 = AccIll_Dispatch, EVT_GET_MCP_TR_A_STRING)",
+   "sequencer/sequencer_ui.s:10582 AccIll_Dispatch_Join `call ApFuncCall` then EVT_CHK_CUR2 with the same item number, DrawStringLeftJustify -- each case only picks which Kubo string getter to call",
+   "shared/event_codes.s:649-664 EVT_GET_MCP_*/MINS_*/SCP_*_STRING = MT_GetMcp*/MT_GetMins*/MT_GetScp* (measure-copy / measure-insert / song-copy fields of sequencer edit)",
+   "sequencer/sequencer_ui.s:10656-10658 items 27 and 29 (song-copy from-song / to-song) additionally draw the song name (EVT_GET_F_SNG_NAME_STRING) -- consistent with the event names"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case17",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_MeasureCopyLastMeasureField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10603 `ld xbc, EVT_GET_MCP_LM_STRING` / jr AccIll_Dispatch_Join -- item 17 asks the model for the measure-copy last-measure field string"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case18",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_MeasureCopyTrackBField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10607 `ld xbc, EVT_GET_MCP_TR_B_STRING` / jr AccIll_Dispatch_Join -- item 18 asks the model for the measure-copy track B field string"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case19",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_MeasureCopyStartMeasureField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10611 `ld xbc, EVT_GET_MCP_SM_STRING` / jr AccIll_Dispatch_Join -- item 19 asks the model for the measure-copy start-measure field string"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case20",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_MeasureCopyRepeatField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10615 `ld xbc, EVT_GET_MCP_REP_STRING` / jr AccIll_Dispatch_Join -- item 20 asks the model for the measure-copy repeat count field string"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case21",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_MeasureInsertTrackAField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10619 `ld xbc, EVT_GET_MINS_TR_A_STRING` / jr AccIll_Dispatch_Join -- item 21 asks the model for the measure-insert track A field string"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case22",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_MeasureInsertFromMeasureField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10623 `ld xbc, EVT_GET_MINS_FM_STRING` / jr AccIll_Dispatch_Join -- item 22 asks the model for the measure-insert from-measure field string"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case23",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_MeasureInsertLastMeasureField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10627 `ld xbc, EVT_GET_MINS_LM_STRING` / jr AccIll_Dispatch_Join -- item 23 asks the model for the measure-insert last-measure field string"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case24",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_MeasureInsertTrackBField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10631 `ld xbc, EVT_GET_MINS_TR_B_STRING` / jr AccIll_Dispatch_Join -- item 24 asks the model for the measure-insert track B field string"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case25",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_MeasureInsertStartMeasureField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10635 `ld xbc, EVT_GET_MINS_SM_STRING` / jr AccIll_Dispatch_Join -- item 25 asks the model for the measure-insert start-measure field string"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case26",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_MeasureInsertRepeatField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10639 `ld xbc, EVT_GET_MINS_REP_STRING` / jr AccIll_Dispatch_Join -- item 26 asks the model for the measure-insert repeat count field string"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case27",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_SongCopyFromSongField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10643 `ld xbc, EVT_GET_SCP_FSNG_STRING` / jr AccIll_Dispatch_Join -- item 27 asks the model for the song-copy from-song field string"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case28",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_SongCopyFromTrackField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10647 `ld xbc, EVT_GET_SCP_FTR_STRING` / jr AccIll_Dispatch_Join -- item 28 asks the model for the song-copy from-track field string"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case29",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_SongCopyToSongField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10651 `ld xbc, EVT_GET_SCP_TSNG_STRING` / jr AccIll_Dispatch_Join -- item 29 asks the model for the song-copy to-song field string"
+  ]
+ },
+ {
+  "old": "SqplyVal_ExtraParams_Case30",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyVal_ExtraParams_SongCopyToTrackField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtVal2Proc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:10655 `ld xbc, EVT_GET_SCP_TTR_STRING` / jr AccIll_Dispatch_Join -- item 30 asks the model for the song-copy to-track field string"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_FromMeasureField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8933 `ld xbc, EVT_GET_FM_STRING` / jr SqedtVal_ParamCases_Join -- item 1 asks the model for the from-measure field string",
+   "sequencer/sequencer_ui.s:8780 SqedtValProc / 8783 `ld (xsp + 66), xde` / 8793 `cp xwa, EVT_PARA_DRAW` / 8794 `jr z, SqedtVal_HandleScrollEvent` -- (xsp+66) is the EVT_PARA_DRAW parameter",
+   "sequencer/sequencer_ui.s:8897 `ld xwa, (xsp + 66)` / 8898 `cp xwa, 0xe` / 8900 SqedtVal_ClearDrawBuffer_CaseTable -- switched on the drawn item number 0..14 (Case N = item N; 0 = SqedtVal_ParamCases, EVT_GET_TRK_STRING)",
+   "sequencer/sequencer_ui.s:8913 SqedtVal_ParamCases_Join `call ApFuncCall` then EVT_CHK_CUR with the same item, DrawStringLeftJustify -- each case only picks the Kubo string getter",
+   "shared/event_codes.s:634-648 EVT_GET_TRK/FM/LM/ADLY/TRNS/VELO/MERS/QTZ_VAL/QTZ_STR/QTZ_WIN/TN/CN/MRG_TR_A/B/C_STRING (MT_Get*String; 'Adly', 'Mers', 'Tn', 'Cn' are undecoded firmware abbreviations)"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_LastMeasureField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8938 `ld xbc, EVT_GET_LM_STRING` / jr SqedtVal_ParamCases_Join -- item 2 asks the model for the last-measure field string"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_AdlyField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8943 `ld xbc, EVT_GET_ADLY_STRING` / jr SqedtVal_ParamCases_Join -- item 3 asks the model for the 'Adly' (undecoded firmware abbreviation) field string"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_TransposeField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8948 `ld xbc, EVT_GET_TRNS_STRING` / jr SqedtVal_ParamCases_Join -- item 4 asks the model for the transpose field string"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_VelocityField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8953 `ld xbc, EVT_GET_VELO_STRING` / jr SqedtVal_ParamCases_Join -- item 5 asks the model for the velocity field string"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_MersField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8958 `ld xbc, EVT_GET_MERS_STRING` / jr SqedtVal_ParamCases_Join -- item 6 asks the model for the 'Mers' (undecoded firmware abbreviation) field string"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_QuantizeValueField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8963 `ld xbc, EVT_GET_QTZ_VAL_STRING` / jr SqedtVal_ParamCases_Join -- item 7 asks the model for the quantize value field string"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_QuantizeStrengthField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8968 `ld xbc, EVT_GET_QTZ_STR_STRING` / jr SqedtVal_ParamCases_Join -- item 8 asks the model for the quantize strength field string"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_QuantizeWindowField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8973 `ld xbc, EVT_GET_QTZ_WIN_STRING` / jr SqedtVal_ParamCases_Join -- item 9 asks the model for the quantize window field string"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_TnField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8978 `ld xbc, EVT_GET_TN_STRING` / jr SqedtVal_ParamCases_Join -- item 10 asks the model for the 'Tn' (undecoded firmware abbreviation) field string"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_CnField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8983 `ld xbc, EVT_GET_CN_STRING` / jr SqedtVal_ParamCases_Join -- item 11 asks the model for the 'Cn' (undecoded firmware abbreviation) field string"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case12",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_MergeTrackAField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8988 `ld xbc, EVT_GET_MRG_TR_A_STRING` / jr SqedtVal_ParamCases_Join -- item 12 asks the model for the merge track A field string"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case13",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_MergeTrackBField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8993 `ld xbc, EVT_GET_MRG_TR_B_STRING` / jr SqedtVal_ParamCases_Join -- item 13 asks the model for the merge track B field string"
+  ]
+ },
+ {
+  "old": "SqedtVal_ClearDrawBuffer_Case14",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtVal_ClearDrawBuffer_MergeTrackCField",
+  "header": "",
+  "basis": "switch value meaning (EVT_PARA_DRAW item number of SqedtValProc) + event code table",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8998 `ld xbc, EVT_GET_MRG_TR_C_STRING` / jr SqedtVal_ParamCases_Join -- item 14 asks the model for the merge track C field string"
+  ]
+ },
+ {
+  "old": "ButtonState_DispatchDSP_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ButtonState_DispatchDSP_CaptionUpChevron",
+  "header": "",
+  "basis": "switch value meaning (PsEditSwBox EVT_PARA_DRAW caption code) + body + caption strings / font glyphs",
+  "evidence": [
+   "ui/ui_widget_defs.s:3491 `ld xwa, ButtonState_DispatchDSP_InlineData_Str_N9b` / jr ButtonState_PaintProc_Join -- caption \"~9b\" (up chevron)",
+   "ui/ui_widget_defs.s:3086 `cp xbc, EVT_PARA_DRAW` / 3087 `jr z, PsEditSwBox_Confirm` / 3119-3122 `ld xwa, (xsp + 20)` / `ld c, a` / `calr ButtonState_PaintProc` -- PsEditSwBoxProc passes the low byte of the EVT_PARA_DRAW parameter",
+   "ui/ui_widget_defs.s:3303 `ld (xsp+296), c` / 3334 `cp (xsp+296), 0x0b` / 3336 `cp (xsp+296), 0x0e` / 3338 `cp (xsp+296), 0x03` -- codes 3, 11, 14 are drawn as two stacked captions (0x9B over 0x98, \"ON\" over \"OFF\", 0x85 over 0x81) before the switch",
+   "ui/ui_widget_defs.s:3472 `ld a, (xsp+296)` / 3476 `cp wa, 0x10` / 3479 ButtonState_DispatchDSP_CaseTable -- the switch on the caption code 0..16; 0 asks the box itself (EVT_GET_STRING), the others Strcpy a fixed caption",
+   "ui_widgets/disk_warning_strings.s:640-700 caption strings; `~XX` is the ConvertStrings escape for character 0xXX (display/graphics_text_vga.s:1990 `cp (xiz), 0x7e`)",
+   "original_ROMs/kn5000_table_data.rom Font0_Glyphs (0x945CB0, symbols/table_data_symbols_reference.txt) glyphs rendered by agent_c2: 0x9B = up chevron, 0x98 = down chevron, 0x85 = solid up triangle, 0x81 = down triangle, 0x7F = left triangle, 0x80 = right triangle (UI-symbol page of fonts 0/1/2/3/4/6, table_data/fonts.s:31)"
+  ]
+ },
+ {
+  "old": "ButtonState_DispatchDSP_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ButtonState_DispatchDSP_CaptionDownChevron",
+  "header": "",
+  "basis": "switch value meaning (PsEditSwBox EVT_PARA_DRAW caption code) + body + caption strings / font glyphs",
+  "evidence": [
+   "ui/ui_widget_defs.s:3494 `ld xwa, ButtonState_DispatchDSP_InlineData_Str_N98` / jr ButtonState_PaintProc_Join -- caption \"~98\" (down chevron)"
+  ]
+ },
+ {
+  "old": "ButtonState_DispatchDSP_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ButtonState_DispatchDSP_CaptionOn",
+  "header": "",
+  "basis": "switch value meaning (PsEditSwBox EVT_PARA_DRAW caption code) + body + caption strings / font glyphs",
+  "evidence": [
+   "ui/ui_widget_defs.s:3503 `ld xwa, NakaInst_OK` / jr ButtonState_PaintProc_Join -- caption \"ON\" (the label NakaInst_OK holds \"ON\": naka_disk_warning.bin 0x164E = 4f 4e 00)"
+  ]
+ },
+ {
+  "old": "ButtonState_DispatchDSP_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ButtonState_DispatchDSP_CaptionOff",
+  "header": "",
+  "basis": "switch value meaning (PsEditSwBox EVT_PARA_DRAW caption code) + body + caption strings / font glyphs",
+  "evidence": [
+   "ui/ui_widget_defs.s:3506 `ld xwa, ButtonState_DispatchDSP_InlineData_Str_OFF` / jr ButtonState_PaintProc_Join -- caption \"OFF\""
+  ]
+ },
+ {
+  "old": "ButtonState_DispatchDSP_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ButtonState_DispatchDSP_CaptionOk",
+  "header": "",
+  "basis": "switch value meaning (PsEditSwBox EVT_PARA_DRAW caption code) + body + caption strings / font glyphs",
+  "evidence": [
+   "ui/ui_widget_defs.s:3509 `ld xwa, ButtonState_DispatchDSP_InlineData_Str_OK` / jr ButtonState_PaintProc_Join -- caption \"OK\""
+  ]
+ },
+ {
+  "old": "ButtonState_DispatchDSP_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ButtonState_DispatchDSP_CaptionLessThan",
+  "header": "",
+  "basis": "switch value meaning (PsEditSwBox EVT_PARA_DRAW caption code) + body + caption strings / font glyphs",
+  "evidence": [
+   "ui/ui_widget_defs.s:3512 `ld xwa, ButtonState_DispatchDSP_InlineData_Str_Lt` / jr ButtonState_PaintProc_Join -- caption \"<\""
+  ]
+ },
+ {
+  "old": "ButtonState_DispatchDSP_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ButtonState_DispatchDSP_CaptionGreaterThan",
+  "header": "",
+  "basis": "switch value meaning (PsEditSwBox EVT_PARA_DRAW caption code) + body + caption strings / font glyphs",
+  "evidence": [
+   "ui/ui_widget_defs.s:3515 `ld xwa, ButtonState_DispatchDSP_InlineData_Str_Gt` / jr ButtonState_PaintProc_Join -- caption \">\""
+  ]
+ },
+ {
+  "old": "ButtonState_DispatchDSP_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ButtonState_DispatchDSP_CaptionYes",
+  "header": "",
+  "basis": "switch value meaning (PsEditSwBox EVT_PARA_DRAW caption code) + body + caption strings / font glyphs",
+  "evidence": [
+   "ui/ui_widget_defs.s:3524 `ld xwa, ButtonState_DispatchDSP_InlineData_Str_YES` / jr ButtonState_PaintProc_Join -- caption \"YES\""
+  ]
+ },
+ {
+  "old": "ButtonState_DispatchDSP_Case10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ButtonState_DispatchDSP_CaptionNo",
+  "header": "",
+  "basis": "switch value meaning (PsEditSwBox EVT_PARA_DRAW caption code) + body + caption strings / font glyphs",
+  "evidence": [
+   "ui/ui_widget_defs.s:3527 `ld xwa, Str_No` / jr ButtonState_PaintProc_Join -- caption \"NO\""
+  ]
+ },
+ {
+  "old": "ButtonState_DispatchDSP_Case12",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ButtonState_DispatchDSP_CaptionUpTriangle",
+  "header": "",
+  "basis": "switch value meaning (PsEditSwBox EVT_PARA_DRAW caption code) + body + caption strings / font glyphs",
+  "evidence": [
+   "ui/ui_widget_defs.s:3497 `ld xwa, ButtonState_DispatchDSP_InlineData_Str_N85` / jr ButtonState_PaintProc_Join -- caption \"~85\" (solid up triangle)"
+  ]
+ },
+ {
+  "old": "ButtonState_DispatchDSP_Case13",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ButtonState_DispatchDSP_CaptionDownTriangle",
+  "header": "",
+  "basis": "switch value meaning (PsEditSwBox EVT_PARA_DRAW caption code) + body + caption strings / font glyphs",
+  "evidence": [
+   "ui/ui_widget_defs.s:3500 `ld xwa, ButtonState_DispatchDSP_InlineData_Str_N81` / jr ButtonState_PaintProc_Join -- caption \"~81\" (solid down triangle)"
+  ]
+ },
+ {
+  "old": "ButtonState_DispatchDSP_Case15",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ButtonState_DispatchDSP_CaptionLeftTriangle",
+  "header": "",
+  "basis": "switch value meaning (PsEditSwBox EVT_PARA_DRAW caption code) + body + caption strings / font glyphs",
+  "evidence": [
+   "ui/ui_widget_defs.s:3518 `ld xwa, ButtonState_DispatchDSP_InlineData_Str_N7f` / jr ButtonState_PaintProc_Join -- caption \"~7f\" (solid left triangle)"
+  ]
+ },
+ {
+  "old": "ButtonState_DispatchDSP_Case16",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ButtonState_DispatchDSP_CaptionRightTriangle",
+  "header": "",
+  "basis": "switch value meaning (PsEditSwBox EVT_PARA_DRAW caption code) + body + caption strings / font glyphs",
+  "evidence": [
+   "ui/ui_widget_defs.s:3521 `ld xwa, ButtonState_DispatchDSP_InlineData_Str_N80` / jr ButtonState_PaintProc_Join -- caption \"~80\" (solid right triangle)"
+  ]
+ },
+ {
+  "old": "ExtData_VoiceParam_DispatchBytecode_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_VoiceParam_DispatchBytecode_ModeSound",
+  "header": "MD_SOUND / MD_SOUNDEDIT: sets bit 0 of LED row 11 (0x8F23)",
+  "basis": "switch value meaning (CURRENT_MODE = NAKA mode id) + body (panel LED image 0x8F18 + row)",
+  "evidence": [
+   "audio/audio_control_engine.s:3185 `setm 0, (xiy)` -- MD_SOUND / MD_SOUNDEDIT: sets bit 0 of LED row 11 (0x8F23)",
+   "audio/audio_control_engine.s:3150 `ldb_d8 a, (CURRENT_MODE)` / 3152 `dec 2, wa` / 3155 `cp wa, 16` -- switched on the current mode id 2..18; Case N = mode N (shared/ram_variables.s:9 CURRENT_MODE = NAKA_MODE_* - 0x1800000)",
+   "shared/event_codes.s:466-472, 1849-1862 NAKA_MODE_MD_*: 2 SOUND, 3 SOUNDEDIT, 4 CONTROL, 5 MIDI, 6 DISK, 7 ENTERTAINER, 8 SEQ, 9 SEQ_EREC, 10 SEQ_PLAY, 11 SEQ_REAL, 12 SEQ_EDIT, 13 SEQ_STEP, 14 CMP, 15 MSP, 16 MSP_REC, 17 SND_ARG, 18 OTP",
+   "audio/audio_control_engine.s:3134-3149 first clears row-2 bit 7, row-0 bits 1/2/4, row-10 bit 3, row-6 bits 6/7, row-11 bits 0-3 of the LED image at ENCODER_STATE_BASE (0x8F18), then the case sets the current mode's bit",
+   "audio/audio_control_engine.s:2691-2726 CtrlPanel_UpdateLEDState sends each changed byte (0x8F18 + row, row 0..14) through Set_LEDs; extensions/extension_data.s:2723-2738 Protocol_values_for_LED_rows: row 11 = MENU SOUND/CONTROL/MIDI/DISK, row 10 includes ENTERTAINER, row 6 SEQ PLAY/EASY REC/MENU, row 2 MSP MENU, row 0 COMPOSER / SOUND ARR / MUSIC STYLIST",
+   "extensions/extension_data.s:2764 ExtData_VoiceParam_DispatchBytecode_CaseTable: modes 2,3 -> Case2; 8,12,13 -> Case8; 10, 16 -> nothing; 15 -> the offset-0 body (row-2 bit 7)"
+  ]
+ },
+ {
+  "old": "ExtData_VoiceParam_DispatchBytecode_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_VoiceParam_DispatchBytecode_ModeControl",
+  "header": "MD_CONTROL: sets bit 1 of LED row 11 (0x8F23)",
+  "basis": "switch value meaning (CURRENT_MODE = NAKA mode id) + body (panel LED image 0x8F18 + row)",
+  "evidence": [
+   "audio/audio_control_engine.s:3191 `setm 1, (xiy)` -- MD_CONTROL: sets bit 1 of LED row 11 (0x8F23)"
+  ]
+ },
+ {
+  "old": "ExtData_VoiceParam_DispatchBytecode_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_VoiceParam_DispatchBytecode_ModeMidi",
+  "header": "MD_MIDI: sets bit 2 of LED row 11 (0x8F23)",
+  "basis": "switch value meaning (CURRENT_MODE = NAKA mode id) + body (panel LED image 0x8F18 + row)",
+  "evidence": [
+   "audio/audio_control_engine.s:3188 `setm 2, (xiy)` -- MD_MIDI: sets bit 2 of LED row 11 (0x8F23)"
+  ]
+ },
+ {
+  "old": "ExtData_VoiceParam_DispatchBytecode_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_VoiceParam_DispatchBytecode_ModeDisk",
+  "header": "MD_DISK: sets bit 3 of LED row 11 (0x8F23)",
+  "basis": "switch value meaning (CURRENT_MODE = NAKA mode id) + body (panel LED image 0x8F18 + row)",
+  "evidence": [
+   "audio/audio_control_engine.s:3194 `setm 3, (xiy)` -- MD_DISK: sets bit 3 of LED row 11 (0x8F23)"
+  ]
+ },
+ {
+  "old": "ExtData_VoiceParam_DispatchBytecode_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_VoiceParam_DispatchBytecode_ModeEntertainer",
+  "header": "MD_ENTERTAINER: sets bit 3 of LED row 10 (0x8F22)",
+  "basis": "switch value meaning (CURRENT_MODE = NAKA mode id) + body (panel LED image 0x8F18 + row)",
+  "evidence": [
+   "audio/audio_control_engine.s:3197 `setm 3, (xhl)` -- MD_ENTERTAINER: sets bit 3 of LED row 10 (0x8F22)"
+  ]
+ },
+ {
+  "old": "ExtData_VoiceParam_DispatchBytecode_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_VoiceParam_DispatchBytecode_ModeSeq",
+  "header": "MD_SEQ / MD_SEQ_EDIT / MD_SEQ_STEP: sets bit 7 of LED row 6 (0x8F1E)",
+  "basis": "switch value meaning (CURRENT_MODE = NAKA mode id) + body (panel LED image 0x8F18 + row)",
+  "evidence": [
+   "audio/audio_control_engine.s:3172 `setm 7, (xde)` -- MD_SEQ / MD_SEQ_EDIT / MD_SEQ_STEP: sets bit 7 of LED row 6 (0x8F1E)"
+  ]
+ },
+ {
+  "old": "ExtData_VoiceParam_DispatchBytecode_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_VoiceParam_DispatchBytecode_ModeSeqErec",
+  "header": "MD_SEQ_EREC: sets bit 6 of LED row 6 (0x8F1E)",
+  "basis": "switch value meaning (CURRENT_MODE = NAKA mode id) + body (panel LED image 0x8F18 + row)",
+  "evidence": [
+   "audio/audio_control_engine.s:3182 `setm 6, (xde)` -- MD_SEQ_EREC: sets bit 6 of LED row 6 (0x8F1E)"
+  ]
+ },
+ {
+  "old": "ExtData_VoiceParam_DispatchBytecode_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_VoiceParam_DispatchBytecode_ModeSeqReal",
+  "header": "MD_SEQ_REAL: sets bit 7 of LED row 6, and bit 6 too when (0x26FC) = 1",
+  "basis": "switch value meaning (CURRENT_MODE = NAKA mode id) + body (panel LED image 0x8F18 + row)",
+  "evidence": [
+   "audio/audio_control_engine.s:3176 `setm 7, (xde)` / `cp (0x26fc:16), 1` / `setm 6, (xwa)` -- MD_SEQ_REAL: sets bit 7 of LED row 6, and bit 6 too when (0x26FC) = 1"
+  ]
+ },
+ {
+  "old": "ExtData_VoiceParam_DispatchBytecode_Case14",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_VoiceParam_DispatchBytecode_ModeCmp",
+  "header": "MD_CMP: sets bit 1 of LED row 0 (0x8F18)",
+  "basis": "switch value meaning (CURRENT_MODE = NAKA mode id) + body (panel LED image 0x8F18 + row)",
+  "evidence": [
+   "audio/audio_control_engine.s:3166 `ld a, 1:opc` -> `scf` / `stcf a, (xiz)` -- MD_CMP: sets bit 1 of LED row 0 (0x8F18)"
+  ]
+ },
+ {
+  "old": "ExtData_VoiceParam_DispatchBytecode_Case17",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_VoiceParam_DispatchBytecode_ModeSndArg",
+  "header": "MD_SND_ARG: sets bit 2 of LED row 0 (0x8F18)",
+  "basis": "switch value meaning (CURRENT_MODE = NAKA mode id) + body (panel LED image 0x8F18 + row)",
+  "evidence": [
+   "audio/audio_control_engine.s:3169 `ld a, 2:opc` -> `stcf a, (xiz)` -- MD_SND_ARG: sets bit 2 of LED row 0 (0x8F18)"
+  ]
+ },
+ {
+  "old": "ExtData_VoiceParam_DispatchBytecode_Case18",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_VoiceParam_DispatchBytecode_ModeOtp",
+  "header": "MD_OTP: sets bit 4 of LED row 0 (0x8F18)",
+  "basis": "switch value meaning (CURRENT_MODE = NAKA mode id) + body (panel LED image 0x8F18 + row)",
+  "evidence": [
+   "audio/audio_control_engine.s:3200 `ld a, 4:opc` -> `stcf a, (xiz)` -- MD_OTP: sets bit 4 of LED row 0 (0x8F18)"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_DispatchHandler_Case3",
+  "verdict": "refuse",
+  "why_refused": "The switched value (0x912F) is a byte OFFSET inside a per-part panel record: SndParam_FetchSequencerParams copies byte 1 of each 3-byte command-stream entry to 0x912F, byte 0 (the tag, 0x00..0x19 for this handler: SoundProgram_DispatchTable) selects the record through PanelTlv_PayloadByTag, and SndParam_WriteLookupAndStore reads payload[tag][0x912F]. The cases differ only in which bit fields of that byte they set (ExtData_SetTlvField 0x80+0x7F for +3, 0x7F for +5/+7/+8/+9/+11, 0xFF for +10, the long +4 path). docs/kn-disk-file-formats.md ('Individual FIELDS attributed') establishes only +0 (voice selector), +4 ('effect bit flags', marked [INFERENCE]), +12 (MIDI channel) and +13 (mute) of the 24-byte part record, says +10 has no reader at all (yet case 10 writes it), and states 'What is still open is the human meaning of each field'. Names would only restate 'byte N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/audio_control_engine.s:4956 `ld a, (0x912f:16)` / 4957 `cp a, 22` / 4962 `cp wa, 11` / ExtData_ToneParam_DispatchHandler_CaseTable",
+   "audio/audio_control_engine.s:6670 `ld (MIDI_MSG_DATA1:16), a` / 6671 `ld (0x912f:16), a` -- SndParam_FetchSequencerParams: byte 1 of the command",
+   "audio/audio_control_engine.s:6690-6698 SndParam_WriteLookupAndStore: `calr PanelTlv_PayloadOfTag` / `ld (0x9132), (xhl+wa)` -- byte 0x912F of the tag's record",
+   "extensions/extension_data.s:2944-2966 SoundProgram_DispatchTable entries 0x00-0x19 = ExtData_ToneParam_DispatchHandler; 3234 PanelTlv_PayloadByTag 0xF9B6 + 26*tag",
+   "docs/kn-disk-file-formats.md:496 tags 0x00-0x16 = per-part records (24 B); :740-766 field table, +10 'no descriptor and no code touching it', 'What is still open is the human meaning of each field'",
+   "audio/audio_control_engine.s:4971 ExtData_ToneParam_DispatchHandler_Case3: `jrl\tExtData_Voice_CheckMode3_Helper` -- applies the masked bit fields of record byte 3"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_DispatchHandler_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switched value (0x912F) is a byte OFFSET inside a per-part panel record: SndParam_FetchSequencerParams copies byte 1 of each 3-byte command-stream entry to 0x912F, byte 0 (the tag, 0x00..0x19 for this handler: SoundProgram_DispatchTable) selects the record through PanelTlv_PayloadByTag, and SndParam_WriteLookupAndStore reads payload[tag][0x912F]. The cases differ only in which bit fields of that byte they set (ExtData_SetTlvField 0x80+0x7F for +3, 0x7F for +5/+7/+8/+9/+11, 0xFF for +10, the long +4 path). docs/kn-disk-file-formats.md ('Individual FIELDS attributed') establishes only +0 (voice selector), +4 ('effect bit flags', marked [INFERENCE]), +12 (MIDI channel) and +13 (mute) of the 24-byte part record, says +10 has no reader at all (yet case 10 writes it), and states 'What is still open is the human meaning of each field'. Names would only restate 'byte N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/audio_control_engine.s:4973 ExtData_ToneParam_DispatchHandler_Case4: `jrl\tExtData_ToneParam_DispatchHandler_Join2` -- applies the masked bit fields of record byte 4"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_DispatchHandler_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched value (0x912F) is a byte OFFSET inside a per-part panel record: SndParam_FetchSequencerParams copies byte 1 of each 3-byte command-stream entry to 0x912F, byte 0 (the tag, 0x00..0x19 for this handler: SoundProgram_DispatchTable) selects the record through PanelTlv_PayloadByTag, and SndParam_WriteLookupAndStore reads payload[tag][0x912F]. The cases differ only in which bit fields of that byte they set (ExtData_SetTlvField 0x80+0x7F for +3, 0x7F for +5/+7/+8/+9/+11, 0xFF for +10, the long +4 path). docs/kn-disk-file-formats.md ('Individual FIELDS attributed') establishes only +0 (voice selector), +4 ('effect bit flags', marked [INFERENCE]), +12 (MIDI channel) and +13 (mute) of the 24-byte part record, says +10 has no reader at all (yet case 10 writes it), and states 'What is still open is the human meaning of each field'. Names would only restate 'byte N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/audio_control_engine.s:4975 ExtData_ToneParam_DispatchHandler_Case5: `jrl\tExtData_ToneParam_DispatchHandler_Join5` -- applies the masked bit fields of record byte 5"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_DispatchHandler_Case6",
+  "verdict": "refuse",
+  "why_refused": "The switched value (0x912F) is a byte OFFSET inside a per-part panel record: SndParam_FetchSequencerParams copies byte 1 of each 3-byte command-stream entry to 0x912F, byte 0 (the tag, 0x00..0x19 for this handler: SoundProgram_DispatchTable) selects the record through PanelTlv_PayloadByTag, and SndParam_WriteLookupAndStore reads payload[tag][0x912F]. The cases differ only in which bit fields of that byte they set (ExtData_SetTlvField 0x80+0x7F for +3, 0x7F for +5/+7/+8/+9/+11, 0xFF for +10, the long +4 path). docs/kn-disk-file-formats.md ('Individual FIELDS attributed') establishes only +0 (voice selector), +4 ('effect bit flags', marked [INFERENCE]), +12 (MIDI channel) and +13 (mute) of the 24-byte part record, says +10 has no reader at all (yet case 10 writes it), and states 'What is still open is the human meaning of each field'. Names would only restate 'byte N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/audio_control_engine.s:4977 ExtData_ToneParam_DispatchHandler_Case6: `jrl\tExtData_Voice_CheckMode3_Helper_Join2` -- applies the masked bit fields of record byte 6"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_DispatchHandler_Case7",
+  "verdict": "refuse",
+  "why_refused": "The switched value (0x912F) is a byte OFFSET inside a per-part panel record: SndParam_FetchSequencerParams copies byte 1 of each 3-byte command-stream entry to 0x912F, byte 0 (the tag, 0x00..0x19 for this handler: SoundProgram_DispatchTable) selects the record through PanelTlv_PayloadByTag, and SndParam_WriteLookupAndStore reads payload[tag][0x912F]. The cases differ only in which bit fields of that byte they set (ExtData_SetTlvField 0x80+0x7F for +3, 0x7F for +5/+7/+8/+9/+11, 0xFF for +10, the long +4 path). docs/kn-disk-file-formats.md ('Individual FIELDS attributed') establishes only +0 (voice selector), +4 ('effect bit flags', marked [INFERENCE]), +12 (MIDI channel) and +13 (mute) of the 24-byte part record, says +10 has no reader at all (yet case 10 writes it), and states 'What is still open is the human meaning of each field'. Names would only restate 'byte N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/audio_control_engine.s:4979 ExtData_ToneParam_DispatchHandler_Case7: `jrl\tExtData_Voice_CheckMode3_Helper_Join3` -- applies the masked bit fields of record byte 7"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_DispatchHandler_Case8",
+  "verdict": "refuse",
+  "why_refused": "The switched value (0x912F) is a byte OFFSET inside a per-part panel record: SndParam_FetchSequencerParams copies byte 1 of each 3-byte command-stream entry to 0x912F, byte 0 (the tag, 0x00..0x19 for this handler: SoundProgram_DispatchTable) selects the record through PanelTlv_PayloadByTag, and SndParam_WriteLookupAndStore reads payload[tag][0x912F]. The cases differ only in which bit fields of that byte they set (ExtData_SetTlvField 0x80+0x7F for +3, 0x7F for +5/+7/+8/+9/+11, 0xFF for +10, the long +4 path). docs/kn-disk-file-formats.md ('Individual FIELDS attributed') establishes only +0 (voice selector), +4 ('effect bit flags', marked [INFERENCE]), +12 (MIDI channel) and +13 (mute) of the 24-byte part record, says +10 has no reader at all (yet case 10 writes it), and states 'What is still open is the human meaning of each field'. Names would only restate 'byte N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/audio_control_engine.s:4981 ExtData_ToneParam_DispatchHandler_Case8: `jrl\tExtData_Voice_CheckMode3_Helper_Join4` -- applies the masked bit fields of record byte 8"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_DispatchHandler_Case9",
+  "verdict": "refuse",
+  "why_refused": "The switched value (0x912F) is a byte OFFSET inside a per-part panel record: SndParam_FetchSequencerParams copies byte 1 of each 3-byte command-stream entry to 0x912F, byte 0 (the tag, 0x00..0x19 for this handler: SoundProgram_DispatchTable) selects the record through PanelTlv_PayloadByTag, and SndParam_WriteLookupAndStore reads payload[tag][0x912F]. The cases differ only in which bit fields of that byte they set (ExtData_SetTlvField 0x80+0x7F for +3, 0x7F for +5/+7/+8/+9/+11, 0xFF for +10, the long +4 path). docs/kn-disk-file-formats.md ('Individual FIELDS attributed') establishes only +0 (voice selector), +4 ('effect bit flags', marked [INFERENCE]), +12 (MIDI channel) and +13 (mute) of the 24-byte part record, says +10 has no reader at all (yet case 10 writes it), and states 'What is still open is the human meaning of each field'. Names would only restate 'byte N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/audio_control_engine.s:4983 ExtData_ToneParam_DispatchHandler_Case9: `jrl\tExtData_Voice_CheckMode3_Helper_Join5` -- applies the masked bit fields of record byte 9"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_DispatchHandler_Case10",
+  "verdict": "refuse",
+  "why_refused": "The switched value (0x912F) is a byte OFFSET inside a per-part panel record: SndParam_FetchSequencerParams copies byte 1 of each 3-byte command-stream entry to 0x912F, byte 0 (the tag, 0x00..0x19 for this handler: SoundProgram_DispatchTable) selects the record through PanelTlv_PayloadByTag, and SndParam_WriteLookupAndStore reads payload[tag][0x912F]. The cases differ only in which bit fields of that byte they set (ExtData_SetTlvField 0x80+0x7F for +3, 0x7F for +5/+7/+8/+9/+11, 0xFF for +10, the long +4 path). docs/kn-disk-file-formats.md ('Individual FIELDS attributed') establishes only +0 (voice selector), +4 ('effect bit flags', marked [INFERENCE]), +12 (MIDI channel) and +13 (mute) of the 24-byte part record, says +10 has no reader at all (yet case 10 writes it), and states 'What is still open is the human meaning of each field'. Names would only restate 'byte N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/audio_control_engine.s:4985 ExtData_ToneParam_DispatchHandler_Case10: `jrl\tExtData_Voice_CheckMode3_Helper_Join6` -- applies the masked bit fields of record byte 10"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_DispatchHandler_Case11",
+  "verdict": "refuse",
+  "why_refused": "The switched value (0x912F) is a byte OFFSET inside a per-part panel record: SndParam_FetchSequencerParams copies byte 1 of each 3-byte command-stream entry to 0x912F, byte 0 (the tag, 0x00..0x19 for this handler: SoundProgram_DispatchTable) selects the record through PanelTlv_PayloadByTag, and SndParam_WriteLookupAndStore reads payload[tag][0x912F]. The cases differ only in which bit fields of that byte they set (ExtData_SetTlvField 0x80+0x7F for +3, 0x7F for +5/+7/+8/+9/+11, 0xFF for +10, the long +4 path). docs/kn-disk-file-formats.md ('Individual FIELDS attributed') establishes only +0 (voice selector), +4 ('effect bit flags', marked [INFERENCE]), +12 (MIDI channel) and +13 (mute) of the 24-byte part record, says +10 has no reader at all (yet case 10 writes it), and states 'What is still open is the human meaning of each field'. Names would only restate 'byte N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/audio_control_engine.s:4987 ExtData_ToneParam_DispatchHandler_Case11: `jrl\tExtData_Voice_CheckMode3_Helper_Join7` -- applies the masked bit fields of record byte 11"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_DispatchHandler_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switched value (0x912F) is a byte OFFSET inside a per-part panel record: SndParam_FetchSequencerParams copies byte 1 of each 3-byte command-stream entry to 0x912F, byte 0 (the tag, 0x00..0x19 for this handler: SoundProgram_DispatchTable) selects the record through PanelTlv_PayloadByTag, and SndParam_WriteLookupAndStore reads payload[tag][0x912F]. The cases differ only in which bit fields of that byte they set (ExtData_SetTlvField 0x80+0x7F for +3, 0x7F for +5/+7/+8/+9/+11, 0xFF for +10, the long +4 path). docs/kn-disk-file-formats.md ('Individual FIELDS attributed') establishes only +0 (voice selector), +4 ('effect bit flags', marked [INFERENCE]), +12 (MIDI channel) and +13 (mute) of the 24-byte part record, says +10 has no reader at all (yet case 10 writes it), and states 'What is still open is the human meaning of each field'. Names would only restate 'byte N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/audio_control_engine.s:4991 ExtData_ToneParam_DispatchHandler_Case1: `ret` -- applies the masked bit fields of record byte 1 (and byte 2: cases 1, 2 return)"
+  ]
+ },
+ {
+  "old": "UIState_ProcessKeyEvent_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switched value is SWBTWR_PAYLOAD_1, the payload OFFSET of a SwbtWr event [tag, offset, value, mask] (docs/kn-disk-file-formats.md: `SwbtWr_QueuePostEvent(e = tag, d = payload offset, a = value, w = mask)`); this handler is a listener of event codes 0x00, 0x01, ... (SwbtB2_Code00_Listeners ...), the per-part record tags. Each case only tests which mask bits of byte 3 are set and calls SndParam_ApplyEventField once per bit field (0xFF for +0/+10, 0x7F for +1/+5/+7/+8/+9/+11, 0x7F unconditionally for +3, bits 0-2/3/6 for +4, bits 3/5 for +12; +2 and +6 ignored). What each byte of the 24-byte part record means is open (docs/kn-disk-file-formats.md: 'What is still open is the human meaning of each field'), and +12 is documented there as the MIDI channel while this switch treats it as two single-bit flags, so even the documented offsets do not line up cleanly. Names would only restate 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/note_voice_mapping.s:17156-17159 copies SWBTWR_EVENT_TYPE, SWBTWR_PAYLOAD_1, _2, _3 to (xsp+0..3) / 17160 `ld a, (xsp+0x1)` / 17164 `cp wa, 12` / KeyEvent_SwitchOffsets -- switched on the payload offset",
+   "ui_widgets/widget_dispatch.s:6021 SwbtB2_Code00_Listeners / 6034 SwbtB2_Code01_Listeners ... -- registered for event codes 0x00.. (record tags)",
+   "audio/note_voice_mapping.s:18046-18049 SndParam_ApplyEventField header: applies the 4-byte event with byte 3 (mask) set to each field's bits",
+   "docs/kn-disk-file-formats.md:619 '+0x0C is the MIDI channel' vs Case12 handling only bits 3 and 5",
+   "audio/note_voice_mapping.s:17189 UIState_ProcessKeyEvent_Case1: `ld\ta, (xsp+0x3)` -- tests mask bits of payload offset 1 and calls SndParam_ApplyEventField"
+  ]
+ },
+ {
+  "old": "UIState_ProcessKeyEvent_Case3",
+  "verdict": "refuse",
+  "why_refused": "The switched value is SWBTWR_PAYLOAD_1, the payload OFFSET of a SwbtWr event [tag, offset, value, mask] (docs/kn-disk-file-formats.md: `SwbtWr_QueuePostEvent(e = tag, d = payload offset, a = value, w = mask)`); this handler is a listener of event codes 0x00, 0x01, ... (SwbtB2_Code00_Listeners ...), the per-part record tags. Each case only tests which mask bits of byte 3 are set and calls SndParam_ApplyEventField once per bit field (0xFF for +0/+10, 0x7F for +1/+5/+7/+8/+9/+11, 0x7F unconditionally for +3, bits 0-2/3/6 for +4, bits 3/5 for +12; +2 and +6 ignored). What each byte of the 24-byte part record means is open (docs/kn-disk-file-formats.md: 'What is still open is the human meaning of each field'), and +12 is documented there as the MIDI channel while this switch treats it as two single-bit flags, so even the documented offsets do not line up cleanly. Names would only restate 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/note_voice_mapping.s:17209 UIState_ProcessKeyEvent_Case3: `ld\ta, (xsp+0x3)` -- tests mask bits of payload offset 3 and calls SndParam_ApplyEventField"
+  ]
+ },
+ {
+  "old": "UIState_ProcessKeyEvent_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switched value is SWBTWR_PAYLOAD_1, the payload OFFSET of a SwbtWr event [tag, offset, value, mask] (docs/kn-disk-file-formats.md: `SwbtWr_QueuePostEvent(e = tag, d = payload offset, a = value, w = mask)`); this handler is a listener of event codes 0x00, 0x01, ... (SwbtB2_Code00_Listeners ...), the per-part record tags. Each case only tests which mask bits of byte 3 are set and calls SndParam_ApplyEventField once per bit field (0xFF for +0/+10, 0x7F for +1/+5/+7/+8/+9/+11, 0x7F unconditionally for +3, bits 0-2/3/6 for +4, bits 3/5 for +12; +2 and +6 ignored). What each byte of the 24-byte part record means is open (docs/kn-disk-file-formats.md: 'What is still open is the human meaning of each field'), and +12 is documented there as the MIDI channel while this switch treats it as two single-bit flags, so even the documented offsets do not line up cleanly. Names would only restate 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/note_voice_mapping.s:17217 UIState_ProcessKeyEvent_Case4: `ld\ta, (xsp+0x3)` -- tests mask bits of payload offset 4 and calls SndParam_ApplyEventField"
+  ]
+ },
+ {
+  "old": "UIState_ProcessKeyEvent_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched value is SWBTWR_PAYLOAD_1, the payload OFFSET of a SwbtWr event [tag, offset, value, mask] (docs/kn-disk-file-formats.md: `SwbtWr_QueuePostEvent(e = tag, d = payload offset, a = value, w = mask)`); this handler is a listener of event codes 0x00, 0x01, ... (SwbtB2_Code00_Listeners ...), the per-part record tags. Each case only tests which mask bits of byte 3 are set and calls SndParam_ApplyEventField once per bit field (0xFF for +0/+10, 0x7F for +1/+5/+7/+8/+9/+11, 0x7F unconditionally for +3, bits 0-2/3/6 for +4, bits 3/5 for +12; +2 and +6 ignored). What each byte of the 24-byte part record means is open (docs/kn-disk-file-formats.md: 'What is still open is the human meaning of each field'), and +12 is documented there as the MIDI channel while this switch treats it as two single-bit flags, so even the documented offsets do not line up cleanly. Names would only restate 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/note_voice_mapping.s:17257 UIState_ProcessKeyEvent_Case5: `ld\ta, (xsp+0x3)` -- tests mask bits of payload offset 5 and calls SndParam_ApplyEventField"
+  ]
+ },
+ {
+  "old": "UIState_ProcessKeyEvent_Case7",
+  "verdict": "refuse",
+  "why_refused": "The switched value is SWBTWR_PAYLOAD_1, the payload OFFSET of a SwbtWr event [tag, offset, value, mask] (docs/kn-disk-file-formats.md: `SwbtWr_QueuePostEvent(e = tag, d = payload offset, a = value, w = mask)`); this handler is a listener of event codes 0x00, 0x01, ... (SwbtB2_Code00_Listeners ...), the per-part record tags. Each case only tests which mask bits of byte 3 are set and calls SndParam_ApplyEventField once per bit field (0xFF for +0/+10, 0x7F for +1/+5/+7/+8/+9/+11, 0x7F unconditionally for +3, bits 0-2/3/6 for +4, bits 3/5 for +12; +2 and +6 ignored). What each byte of the 24-byte part record means is open (docs/kn-disk-file-formats.md: 'What is still open is the human meaning of each field'), and +12 is documented there as the MIDI channel while this switch treats it as two single-bit flags, so even the documented offsets do not line up cleanly. Names would only restate 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/note_voice_mapping.s:17271 UIState_ProcessKeyEvent_Case7: `ld\ta, (xsp+0x3)` -- tests mask bits of payload offset 7 and calls SndParam_ApplyEventField"
+  ]
+ },
+ {
+  "old": "UIState_ProcessKeyEvent_Case8",
+  "verdict": "refuse",
+  "why_refused": "The switched value is SWBTWR_PAYLOAD_1, the payload OFFSET of a SwbtWr event [tag, offset, value, mask] (docs/kn-disk-file-formats.md: `SwbtWr_QueuePostEvent(e = tag, d = payload offset, a = value, w = mask)`); this handler is a listener of event codes 0x00, 0x01, ... (SwbtB2_Code00_Listeners ...), the per-part record tags. Each case only tests which mask bits of byte 3 are set and calls SndParam_ApplyEventField once per bit field (0xFF for +0/+10, 0x7F for +1/+5/+7/+8/+9/+11, 0x7F unconditionally for +3, bits 0-2/3/6 for +4, bits 3/5 for +12; +2 and +6 ignored). What each byte of the 24-byte part record means is open (docs/kn-disk-file-formats.md: 'What is still open is the human meaning of each field'), and +12 is documented there as the MIDI channel while this switch treats it as two single-bit flags, so even the documented offsets do not line up cleanly. Names would only restate 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/note_voice_mapping.s:17285 UIState_ProcessKeyEvent_Case8: `ld\ta, (xsp+0x3)` -- tests mask bits of payload offset 8 and calls SndParam_ApplyEventField"
+  ]
+ },
+ {
+  "old": "UIState_ProcessKeyEvent_Case9",
+  "verdict": "refuse",
+  "why_refused": "The switched value is SWBTWR_PAYLOAD_1, the payload OFFSET of a SwbtWr event [tag, offset, value, mask] (docs/kn-disk-file-formats.md: `SwbtWr_QueuePostEvent(e = tag, d = payload offset, a = value, w = mask)`); this handler is a listener of event codes 0x00, 0x01, ... (SwbtB2_Code00_Listeners ...), the per-part record tags. Each case only tests which mask bits of byte 3 are set and calls SndParam_ApplyEventField once per bit field (0xFF for +0/+10, 0x7F for +1/+5/+7/+8/+9/+11, 0x7F unconditionally for +3, bits 0-2/3/6 for +4, bits 3/5 for +12; +2 and +6 ignored). What each byte of the 24-byte part record means is open (docs/kn-disk-file-formats.md: 'What is still open is the human meaning of each field'), and +12 is documented there as the MIDI channel while this switch treats it as two single-bit flags, so even the documented offsets do not line up cleanly. Names would only restate 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/note_voice_mapping.s:17304 UIState_ProcessKeyEvent_Case9: `ld\ta, (xsp+0x3)` -- tests mask bits of payload offset 9 and calls SndParam_ApplyEventField"
+  ]
+ },
+ {
+  "old": "UIState_ProcessKeyEvent_Case10",
+  "verdict": "refuse",
+  "why_refused": "The switched value is SWBTWR_PAYLOAD_1, the payload OFFSET of a SwbtWr event [tag, offset, value, mask] (docs/kn-disk-file-formats.md: `SwbtWr_QueuePostEvent(e = tag, d = payload offset, a = value, w = mask)`); this handler is a listener of event codes 0x00, 0x01, ... (SwbtB2_Code00_Listeners ...), the per-part record tags. Each case only tests which mask bits of byte 3 are set and calls SndParam_ApplyEventField once per bit field (0xFF for +0/+10, 0x7F for +1/+5/+7/+8/+9/+11, 0x7F unconditionally for +3, bits 0-2/3/6 for +4, bits 3/5 for +12; +2 and +6 ignored). What each byte of the 24-byte part record means is open (docs/kn-disk-file-formats.md: 'What is still open is the human meaning of each field'), and +12 is documented there as the MIDI channel while this switch treats it as two single-bit flags, so even the documented offsets do not line up cleanly. Names would only restate 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/note_voice_mapping.s:17318 UIState_ProcessKeyEvent_Case10: `ld\ta, (xsp+0x3)` -- tests mask bits of payload offset 10 and calls SndParam_ApplyEventField"
+  ]
+ },
+ {
+  "old": "UIState_ProcessKeyEvent_Case11",
+  "verdict": "refuse",
+  "why_refused": "The switched value is SWBTWR_PAYLOAD_1, the payload OFFSET of a SwbtWr event [tag, offset, value, mask] (docs/kn-disk-file-formats.md: `SwbtWr_QueuePostEvent(e = tag, d = payload offset, a = value, w = mask)`); this handler is a listener of event codes 0x00, 0x01, ... (SwbtB2_Code00_Listeners ...), the per-part record tags. Each case only tests which mask bits of byte 3 are set and calls SndParam_ApplyEventField once per bit field (0xFF for +0/+10, 0x7F for +1/+5/+7/+8/+9/+11, 0x7F unconditionally for +3, bits 0-2/3/6 for +4, bits 3/5 for +12; +2 and +6 ignored). What each byte of the 24-byte part record means is open (docs/kn-disk-file-formats.md: 'What is still open is the human meaning of each field'), and +12 is documented there as the MIDI channel while this switch treats it as two single-bit flags, so even the documented offsets do not line up cleanly. Names would only restate 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/note_voice_mapping.s:17331 UIState_ProcessKeyEvent_Case11: `ld\ta, (xsp+0x3)` -- tests mask bits of payload offset 11 and calls SndParam_ApplyEventField"
+  ]
+ },
+ {
+  "old": "UIState_ProcessKeyEvent_Case12",
+  "verdict": "refuse",
+  "why_refused": "The switched value is SWBTWR_PAYLOAD_1, the payload OFFSET of a SwbtWr event [tag, offset, value, mask] (docs/kn-disk-file-formats.md: `SwbtWr_QueuePostEvent(e = tag, d = payload offset, a = value, w = mask)`); this handler is a listener of event codes 0x00, 0x01, ... (SwbtB2_Code00_Listeners ...), the per-part record tags. Each case only tests which mask bits of byte 3 are set and calls SndParam_ApplyEventField once per bit field (0xFF for +0/+10, 0x7F for +1/+5/+7/+8/+9/+11, 0x7F unconditionally for +3, bits 0-2/3/6 for +4, bits 3/5 for +12; +2 and +6 ignored). What each byte of the 24-byte part record means is open (docs/kn-disk-file-formats.md: 'What is still open is the human meaning of each field'), and +12 is documented there as the MIDI channel while this switch treats it as two single-bit flags, so even the documented offsets do not line up cleanly. Names would only restate 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value meaning (insufficient: record byte offset, field meanings open)",
+  "evidence": [
+   "audio/note_voice_mapping.s:17345 UIState_ProcessKeyEvent_Case12: `bitm\t3, (xsp+0x3)` -- tests mask bits of payload offset 12 and calls SndParam_ApplyEventField"
+  ]
+ },
+ {
+  "old": "ParaLoadOpt_AudioFlagCheck_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ParaLoadOpt_AudioFlagCheck_PmemSending",
+  "header": "data-exchange stage 1: Pmem (ExcPmemFunc) status := 1 \" SENDING \", repaint 0x57000A",
+  "basis": "switch value meaning (MIDI data-exchange stage -> TT_MDEXC status slot) + body + Exc*Func RAM addresses + status strings",
+  "evidence": [
+   "midi/param_load_routines.s:80 `ld\t(0x024760:24), 1` -- stage 1: Pmem (ExcPmemFunc) status := 1 \" SENDING \"",
+   "midi/midi_dispatch_handlers.s:10995-11005 MidiSeq_ApplyPendingParams: A = (0xBD00) & 0x7F -> `call ParaLoadOpt_AudioFlagCheck` (the _B twin gets (0xBD0C))",
+   "midi/midi_dispatch_handlers.s:10822-10829 MidiSeq_UpdateToneParam: (0xBD00) = MidiRx_ToneParam_ByteMap[field 3 of the message] -- field 3 is the transfer step (MidiPkt_ArpExtHandler_A..M compare it with 0..20)",
+   "ui_widgets/widget_dispatch.s:3263 MidiRx_ToneParam_ByteMap `.byte 0, 1, 1, 2, 3, 3, 4, 5, 5, 5, 6, 7, 7, 7, 8, 9, 9, 10, 11, 11, 11, 12` -- step 0..21 -> stage 0..12",
+   "midi/param_load_routines.s:56 `ld (0x02475a:24), a` / 61 `cp wa, 0xc` / 64 ParaLoadOpt_AudioFlagCheck_CaseTable -- switched on the stage; stage 2k-1 writes 1 and stage 2k writes 3 into status slot k, then EVT_PAINT to 0x57000A (title 0x57 = TITLE_MDEXC); 9 and 10 change nothing",
+   "midi/sysex_routines.s:154 ExcPmemFunc `lda xhl, (0x024760:24)` / 197 ExcSmemFunc 0x024762 / 240 ExcCompFunc 0x024764 / 283 ExcSeqFunc 0x024766 / 326 ExcMspFunc 0x024768 -- the five slots are the Pmem/Smem/Comp/Seq/Msp items of the data-exchange screen (EVT_GET_RAM_ADDRESS)",
+   "midi/sysex_routines.s:131-135 ExcPmemFunc prints FileTransfer_Status_Table[value]; naka_widget_tables_2.bin 0x25A00 (0xE7FD9E) = {0xE7FDCC blank, 0xE7FDC2 \" SENDING \", 0xE7FDB8 \"RECIEVING\", 0xE7FDAE \"COMPLETED\"} -- 1 = SENDING, 3 = COMPLETED (ParaLoadOpt_AudioFlagCheck_B writes 2 = RECIEVING)"
+  ]
+ },
+ {
+  "old": "ParaLoadOpt_AudioFlagCheck_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ParaLoadOpt_AudioFlagCheck_PmemCompleted",
+  "header": "data-exchange stage 2: Pmem (ExcPmemFunc) status := 3 \"COMPLETED\", repaint 0x57000A",
+  "basis": "switch value meaning (MIDI data-exchange stage -> TT_MDEXC status slot) + body + Exc*Func RAM addresses + status strings",
+  "evidence": [
+   "midi/param_load_routines.s:86 `ld\t(0x024760:24), 3` -- stage 2: Pmem (ExcPmemFunc) status := 3 \"COMPLETED\""
+  ]
+ },
+ {
+  "old": "ParaLoadOpt_AudioFlagCheck_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ParaLoadOpt_AudioFlagCheck_SmemSending",
+  "header": "data-exchange stage 3: Smem (ExcSmemFunc) status := 1 \" SENDING \", repaint 0x57000A",
+  "basis": "switch value meaning (MIDI data-exchange stage -> TT_MDEXC status slot) + body + Exc*Func RAM addresses + status strings",
+  "evidence": [
+   "midi/param_load_routines.s:92 `ld\t(0x024762:24), 1` -- stage 3: Smem (ExcSmemFunc) status := 1 \" SENDING \""
+  ]
+ },
+ {
+  "old": "ParaLoadOpt_AudioFlagCheck_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ParaLoadOpt_AudioFlagCheck_SmemCompleted",
+  "header": "data-exchange stage 4: Smem (ExcSmemFunc) status := 3 \"COMPLETED\", repaint 0x57000A",
+  "basis": "switch value meaning (MIDI data-exchange stage -> TT_MDEXC status slot) + body + Exc*Func RAM addresses + status strings",
+  "evidence": [
+   "midi/param_load_routines.s:98 `ld\t(0x024762:24), 3` -- stage 4: Smem (ExcSmemFunc) status := 3 \"COMPLETED\""
+  ]
+ },
+ {
+  "old": "ParaLoadOpt_AudioFlagCheck_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ParaLoadOpt_AudioFlagCheck_CompSending",
+  "header": "data-exchange stage 5: Comp (ExcCompFunc) status := 1 \" SENDING \", repaint 0x57000A",
+  "basis": "switch value meaning (MIDI data-exchange stage -> TT_MDEXC status slot) + body + Exc*Func RAM addresses + status strings",
+  "evidence": [
+   "midi/param_load_routines.s:104 `ld\t(0x024764:24), 1` -- stage 5: Comp (ExcCompFunc) status := 1 \" SENDING \""
+  ]
+ },
+ {
+  "old": "ParaLoadOpt_AudioFlagCheck_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ParaLoadOpt_AudioFlagCheck_CompCompleted",
+  "header": "data-exchange stage 6: Comp (ExcCompFunc) status := 3 \"COMPLETED\", repaint 0x57000A",
+  "basis": "switch value meaning (MIDI data-exchange stage -> TT_MDEXC status slot) + body + Exc*Func RAM addresses + status strings",
+  "evidence": [
+   "midi/param_load_routines.s:110 `ld\t(0x024764:24), 3` -- stage 6: Comp (ExcCompFunc) status := 3 \"COMPLETED\""
+  ]
+ },
+ {
+  "old": "ParaLoadOpt_AudioFlagCheck_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ParaLoadOpt_AudioFlagCheck_SeqSending",
+  "header": "data-exchange stage 7: Seq (ExcSeqFunc) status := 1 \" SENDING \", repaint 0x57000A",
+  "basis": "switch value meaning (MIDI data-exchange stage -> TT_MDEXC status slot) + body + Exc*Func RAM addresses + status strings",
+  "evidence": [
+   "midi/param_load_routines.s:116 `ld\t(0x024766:24), 1` -- stage 7: Seq (ExcSeqFunc) status := 1 \" SENDING \""
+  ]
+ },
+ {
+  "old": "ParaLoadOpt_AudioFlagCheck_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ParaLoadOpt_AudioFlagCheck_SeqCompleted",
+  "header": "data-exchange stage 8: Seq (ExcSeqFunc) status := 3 \"COMPLETED\", repaint 0x57000A",
+  "basis": "switch value meaning (MIDI data-exchange stage -> TT_MDEXC status slot) + body + Exc*Func RAM addresses + status strings",
+  "evidence": [
+   "midi/param_load_routines.s:122 `ld\t(0x024766:24), 3` -- stage 8: Seq (ExcSeqFunc) status := 3 \"COMPLETED\""
+  ]
+ },
+ {
+  "old": "ParaLoadOpt_AudioFlagCheck_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ParaLoadOpt_AudioFlagCheck_MspSending",
+  "header": "data-exchange stage 11: Msp (ExcMspFunc) status := 1 \" SENDING \", repaint 0x57000A",
+  "basis": "switch value meaning (MIDI data-exchange stage -> TT_MDEXC status slot) + body + Exc*Func RAM addresses + status strings",
+  "evidence": [
+   "midi/param_load_routines.s:128 `ld\t(0x024768:24), 1` -- stage 11: Msp (ExcMspFunc) status := 1 \" SENDING \""
+  ]
+ },
+ {
+  "old": "ParaLoadOpt_AudioFlagCheck_Case12",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ParaLoadOpt_AudioFlagCheck_MspCompleted",
+  "header": "data-exchange stage 12: Msp (ExcMspFunc) status := 3 \"COMPLETED\", repaint 0x57000A",
+  "basis": "switch value meaning (MIDI data-exchange stage -> TT_MDEXC status slot) + body + Exc*Func RAM addresses + status strings",
+  "evidence": [
+   "midi/param_load_routines.s:134 `ld\t(0x024768:24), 3` -- stage 12: Msp (ExcMspFunc) status := 3 \"COMPLETED\""
+  ]
+ }
+]

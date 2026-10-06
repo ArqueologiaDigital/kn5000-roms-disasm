@@ -85,7 +85,7 @@ FDC_WaitReady_Skip3:
 FDC_WaitReady_Epilogue:
 	pop XIZ
 	ret
-FDC_ResultPhase_Read_Code_Helper:
+FDC_WaitParamByteReady:
 	push XIZ
 	ld iz, (SYSTEM_TIMESTAMP:16)
 	ldw QIZ, 0x0080
@@ -781,13 +781,13 @@ FDC_SendCommandByte:
 FDC_SendParameterByte:
 	dec	2, xsp
 	ld	(xsp), a
-	calr	FDC_ResultPhase_Read_Code_Helper
+	calr	FDC_WaitParamByteReady
 	ld	a, (xsp)
 	extz	wa
 	calr	FDC_Write_Data
 	inc	2, xsp
 	ret
-FDC_ResultPhase_Read_Helper2:
+FDC_WriteAuxCmdByte:
 	dec 2,XSP
 	ld (XSP),A
 	calr FDC_ResultPhase_Read
@@ -804,7 +804,7 @@ FDC_HardwareSetup_Helper3:
 	jr	nz, FDC_ResultPhase_Read_Epilogue
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_ResultPhase_Read_Helper2
+	calr	FDC_WriteAuxCmdByte
 FDC_ResultPhase_Read_Epilogue:
 	inc	2, xsp
 	ret
@@ -816,7 +816,7 @@ FDC_HardwareSetup_Helper4:
 	jr	nz, FDC_ResultPhase_Read_Epilogue2
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_ResultPhase_Read_Helper2
+	calr	FDC_WriteAuxCmdByte
 	calr	FDC_Wait_Ready_Timeout
 	calr	FDC_Read_Data
 	ld	(0x89c5:16), l

@@ -3187,7 +3187,7 @@ Timer_ParamCompareAlt_Join7:
 Timer_ParamCompareAlt_Return4:
 	ret
 Timer_ParamLoadAndCompare_Helper:
-	call	Timer_ParamCompareAlt_Helper7
+	call	SqStep_FlushPendingParamEvents
 	xor	a, a
 	call	VoiceSlot_SaveState
 	pushdi_w	(0x367e)
@@ -4626,7 +4626,7 @@ DisplayMode_Handler_3_Skip26:
 DisplayMode_Handler_3_Return7:
 	ret
 DisplayMode_Handler_3_Helper3:
-	call	Timer_ParamCompareAlt_Helper7
+	call	SqStep_FlushPendingParamEvents
 	cp	(3429:16), 1
 	jrl	z, DisplayMode_Handler_3_Skip9
 	call	TempoRingBuf_ReadByte
@@ -6610,7 +6610,7 @@ SerialPort_ModeHandler_0_Skip:
 	jp	SerialPort_ModeHandler_0_Join
 SerialPort_ModeHandler_0_Skip2:
 	ld	(3567:16), 2
-	call	DisplayStr_BytecodeBlock_B_0x39
+	call	DisplayStr_RedrawStatusAndControlLine
 SerialPort_ModeHandler_0_Join:
 	ld	(3540:16), 0
 SerialPort_ModeHandler_0_Return:
@@ -6649,7 +6649,7 @@ SerialPort_ModeHandler_0_Skip3:
 	jp	SerialPort_ModeHandler_0_Join2
 SerialPort_ModeHandler_0_Skip4:
 	ld	(3567:16), 2
-	call	DisplayStr_BytecodeBlock_B_0x39
+	call	DisplayStr_RedrawStatusAndControlLine
 SerialPort_ModeHandler_0_Join2:
 	ld	(3540:16), 0
 SerialPort_ModeHandler_0_Return2:
@@ -6792,7 +6792,7 @@ SerialPort_ModeHandler_0_Epilogue:
 	pop	xhl
 	pop	xwa
 	ret
-Timer_ParamCompareAlt_Helper7:
+SqStep_FlushPendingParamEvents:
 	push	xwa
 	push	xhl
 	push	xbc
@@ -7621,7 +7621,7 @@ ClockConfig_Handler_0_Skip2:
 	jrl	nz, ClockConfig_Handler_0_Skip3
 	cp	(0x28be:16), 255
 	jrl	nz, ClockConfig_Handler_0_Skip3
-	call	Timer_ParamCompareAlt_Helper7
+	call	SqStep_FlushPendingParamEvents
 ClockConfig_Handler_0_Skip3:
 	and	(0x1126:16), 254
 	ldw_d16	de, (0x2875)
@@ -7662,7 +7662,7 @@ ClockConfig_Handler_0_Skip4:
 	stb_d8	(0x10fa), a
 	res	3, (0x0d54:16)
 	call	VoiceState_DataBlock2_Helper16
-	call	ClockConfig_Handler_0_Tbl2_Helper
+	call	SqStep_RestoreTrackType
 	ldw_d16	wa, (0xf1d0)
 	ld	(0x0f58:16), wa
 	call	Audio_CheckSubsystemReady
@@ -7685,16 +7685,16 @@ ClockConfig_Handler_0_Skip5:
 	call	SysInit_BytecodeBlock_Sub
 ClockConfig_Handler_0_Tbl2_Return:
 	ret
-ClockConfig_Handler_0_Tbl2_Helper:
+SqStep_RestoreTrackType:
 	cp	(0x28be:16), 255
-	jrl	z, ClockConfig_Handler_0_Return2
+	jrl	z, ClockConfig_Handler_0_Tbl2_Helper_Return3
 	call	VoiceSlot_ComputeWordIndex
 	sra	iz, 1
 	push	xix
 	ld	xix, 0xf1a0
 	ld	(xix+iz), 0x0e
 	pop	xix
-ClockConfig_Handler_0_Return2:
+ClockConfig_Handler_0_Tbl2_Helper_Return3:
 	ret
 SysEx_PeriodicDispatch:
 	ld XIY,0x00000d69
@@ -7980,9 +7980,9 @@ MemoryConfig_Handler_Table_Target2_Join:
 	ld	(0x0d6a:16), 0
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 144
-	jr	nz, MemoryConfig_Handler_Table_Target2_Skip2
+	jr	nz, MemoryConfig_Handler_Table_Target2_Sub_Skip
 	call	MemConfig_Handler_5_Code_Helper10
-MemoryConfig_Handler_Table_Target2_Skip2:
+MemoryConfig_Handler_Table_Target2_Sub_Skip:
 	call	MemConfig_Handler_5_Helper
 	call	DMA_FlagCheckWithCalls
 	call	MemConfig_Handler_5_Code_Helper11
@@ -14082,7 +14082,7 @@ DisplayStr_BytecodeBlock_B_Sub:
 	call	PerfMode_EventTable_0_Target1_Helper4
 	call	Display_UpdateRegion3
 	ret
-DisplayStr_BytecodeBlock_B_0x39:
+DisplayStr_RedrawStatusAndControlLine:
 	call	Display_UpdateRegion0
 DisplayStr_BytecodeBlock_B_Sub2:
 	call	Display_BytecodeBlock_F_Sub2
@@ -17485,7 +17485,7 @@ Scoop_EventHandler_SpecialMode_Join:
 	ld	ix, (0x28b6:16)
 	ldw	bc, 256
 	sub bc, (10428:16)
-	call	Scoop_EventHandler_SpecialMode_Helper2
+	call	SeqData_ChainCopyBytes
 	call	Scoop_SpecialMode_UpdateParams
 	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop
@@ -17496,14 +17496,14 @@ Scoop_EventHandler_SpecialMode_Loop:
 	jr	Scoop_EventHandler_SpecialMode_Join2
 Scoop_EventHandler_SpecialMode_Skip4:
 	ld	bc, (9870:16)
-	call	Scoop_EventHandler_SpecialMode_Helper2
-	call	Scoop_EventHandler_SpecialMode_Helper
+	call	SeqData_ChainCopyBytes
+	call	SeqData_ChainNextDstBlock
 	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip5
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip5:
 	ld	bc, (9872:16)
-	call	Scoop_EventHandler_SpecialMode_Helper2
+	call	SeqData_ChainCopyBytes
 	call	Scoop_SpecialMode_UpdateParams
 	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop
@@ -17520,13 +17520,13 @@ Scoop_EventHandler_SpecialMode_Join3:
 	sub bc, (10428:16)
 	ld	iy, (0x28bc:16)
 	ld	ix, (0x28b6:16)
-	call	Scoop_EventHandler_SpecialMode_Helper2
+	call	SeqData_ChainCopyBytes
 	call	Scoop_SpecialMode_UpdateParams
 	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip6
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip6:
-	call	Scoop_EventHandler_SpecialMode_Helper
+	call	SeqData_ChainNextDstBlock
 	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop2
 	jrl	Scoop_EventHandler_SpecialMode_Return
@@ -17537,13 +17537,13 @@ Scoop_EventHandler_SpecialMode_Loop2:
 Scoop_EventHandler_SpecialMode_Skip7:
 	ldw	bc, 256
 	sub	bc, 5
-	call	Scoop_EventHandler_SpecialMode_Helper2
+	call	SeqData_ChainCopyBytes
 	call	Scoop_SpecialMode_UpdateParams
 	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip8
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip8:
-	call	Scoop_EventHandler_SpecialMode_Helper
+	call	SeqData_ChainNextDstBlock
 	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop2
 	jrl	Scoop_EventHandler_SpecialMode_Return
@@ -17568,14 +17568,14 @@ Scoop_EventHandler_SpecialMode_Join5:
 	ld	ix, (0x28b6:16)
 	ldw	bc, 256
 	sub bc, (10422:16)
-	call	Scoop_EventHandler_SpecialMode_Helper2
-	call	Scoop_EventHandler_SpecialMode_Helper
+	call	SeqData_ChainCopyBytes
+	call	SeqData_ChainNextDstBlock
 	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip9
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip9:
 	ld	bc, (9870:16)
-	call	Scoop_EventHandler_SpecialMode_Helper2
+	call	SeqData_ChainCopyBytes
 	call	Scoop_SpecialMode_UpdateParams
 	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop3
@@ -17586,14 +17586,14 @@ Scoop_EventHandler_SpecialMode_Loop3:
 	jr	Scoop_EventHandler_SpecialMode_Join6
 Scoop_EventHandler_SpecialMode_Skip10:
 	ld	bc, (9872:16)
-	call	Scoop_EventHandler_SpecialMode_Helper2
-	call	Scoop_EventHandler_SpecialMode_Helper
+	call	SeqData_ChainCopyBytes
+	call	SeqData_ChainNextDstBlock
 	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip11
 	jr	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip11:
 	ld	bc, (9870:16)
-	call	Scoop_EventHandler_SpecialMode_Helper2
+	call	SeqData_ChainCopyBytes
 	call	Scoop_SpecialMode_UpdateParams
 	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop3
@@ -17614,19 +17614,19 @@ Scoop_EventHandler_SpecialMode_Join7:
 	jr	nc, Scoop_EventHandler_SpecialMode_Skip12
 	jr	Scoop_EventHandler_SpecialMode_Join8
 Scoop_EventHandler_SpecialMode_Skip12:
-	call	Scoop_EventHandler_SpecialMode_Helper2
+	call	SeqData_ChainCopyBytes
 	jr	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Join8:
 	ld	bc, (9876:16)
-	call	Scoop_EventHandler_SpecialMode_Helper2
-	call	Scoop_EventHandler_SpecialMode_Helper
+	call	SeqData_ChainCopyBytes
+	call	SeqData_ChainNextDstBlock
 	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip13
 	jr	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip13:
 	ld	bc, (9880:16)
 	sub bc, (9876:16)
-	call	Scoop_EventHandler_SpecialMode_Helper2
+	call	SeqData_ChainCopyBytes
 Scoop_EventHandler_SpecialMode_Return:
 	ret
 
@@ -17725,7 +17725,7 @@ Scoop_SpecialMode_UpdateParams_Skip:
 	ld	iy, 5:i3
 Scoop_SpecialMode_UpdateParams_Return:
 	ret
-Scoop_EventHandler_SpecialMode_Helper:
+SeqData_ChainNextDstBlock:
 	xor	xix, xix
 	ld	xix, (9850:16)
 	ld	(4349:16), xix
@@ -17747,7 +17747,7 @@ Scoop_SpecialMode_UpdateParams_Skip2:
 	ld	ix, 5:i3
 Scoop_SpecialMode_UpdateParams_Return2:
 	ret
-Scoop_EventHandler_SpecialMode_Helper2:
+SeqData_ChainCopyBytes:
 	pushw	wa
 	push	xde
 	push	xhl

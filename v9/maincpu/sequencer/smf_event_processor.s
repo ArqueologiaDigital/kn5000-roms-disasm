@@ -6614,7 +6614,7 @@ SeqByteBlock_PathNormalize_Epilogue5:
 	popw	iz
 	inc	8, xsp
 	ret
-SeqByteBlock_PathNormalize_Helper7:
+Fat_MapFilePosToSector:
 	dec	8, xsp
 	push	xiz
 	ld	xwa, (xsp+16)
@@ -6807,7 +6807,7 @@ Fat_GetSectorAtFilePos:
 	push	xwa
 	pushw	1
 	push	xiz
-	calr	SeqByteBlock_PathNormalize_Helper7
+	calr	Fat_MapFilePosToSector
 	lda	xsp, (xsp+14)
 	ld	wa, hl
 	cp	wa, 0:i3
@@ -6874,7 +6874,7 @@ Fat_TransferSectorsDirect_Skip:
 	push	xwa
 	pushw	hl
 	push	xiz
-	calr	SeqByteBlock_PathNormalize_Helper7
+	calr	Fat_MapFilePosToSector
 	add	xsp, 14
 	cp	hl, 0:i3
 	jr	z, SeqByteBlock_PathNormalize_Skip22

@@ -20372,7 +20372,10 @@ AppEvtHandler_Branch_002:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case1:
+; AppEvent_ChainDispatch1_IncFromMeasure: EVT_INC_VAL on sequencer-edit parameter 1: from-measure of the current page
+;   (the title's FM word; SqedtFunc_OnGetFmString picks it per title: 0x2610, 0x261e, 0xf1d7, 0xf1dc, 0xf1f2, 0xf229,
+;   else 0x2606).
+AppEvent_ChainDispatch1_IncFromMeasure:
 	ld a, (CURRENT_TITLE:16)
 	extz wa
 	sub wa, 0x9c
@@ -20439,7 +20442,7 @@ AppEvtHandler_Branch_006:
 	cp a, 0xa1
 	jrl z, AppEvtHandler_Branch_013
 	jrl AppEvent_Epilogue
-AppEvent_ChainDispatch1_Case2:
+AppEvent_ChainDispatch1_IncLastMeasure:
 	ld a, (CURRENT_TITLE:16)
 	extz wa
 	sub wa, 0x9c
@@ -20519,7 +20522,7 @@ AppEvtHandler_Branch_013:
 	inc 1, wa
 	ld (0xf1de:16), wa
 	jrl AppEvent_Epilogue
-AppEvent_ChainDispatch1_Case3:
+AppEvent_ChainDispatch1_IncAdly:
 	ld a, (9740:16)
 	cp a, 0x60
 	jrl ge, AppEvent_Epilogue
@@ -20529,7 +20532,7 @@ AppEvent_ChainDispatch1_Case3:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 3:i3
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case4:
+AppEvent_ChainDispatch1_IncTranspose:
 	ld a, (9762:16)
 	cp a, 0x7f
 	jrl ge, AppEvent_Epilogue
@@ -20539,7 +20542,7 @@ AppEvent_ChainDispatch1_Case4:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 4:i3
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case5:
+AppEvent_ChainDispatch1_IncVelocity:
 	ld a, (0xf22e:16)
 	cp a, 0x7f
 	jrl ge, AppEvent_Epilogue
@@ -20549,7 +20552,7 @@ AppEvent_ChainDispatch1_Case5:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 5:i3
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case6:
+AppEvent_ChainDispatch1_IncMersEventType:
 	ld a, (0xf1e0:16)
 	cp a, 2:i3
 	jrl nc, AppEvent_Epilogue
@@ -20559,7 +20562,7 @@ AppEvent_ChainDispatch1_Case6:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 6:i3
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case7:
+AppEvent_ChainDispatch1_IncQtzValue:
 	ld a, (0xf1f6:16)
 	cp a, 6:i3
 	jrl nc, AppEvent_Epilogue
@@ -20569,7 +20572,7 @@ AppEvent_ChainDispatch1_Case7:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 7:i3
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case8:
+AppEvent_ChainDispatch1_IncQtzStrength:
 	ld a, (9728:16)
 	cp a, 0x64
 	jrl nc, AppEvent_Epilogue
@@ -20579,7 +20582,7 @@ AppEvent_ChainDispatch1_Case8:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x8
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case9:
+AppEvent_ChainDispatch1_IncQtzWindow:
 	ld a, (9730:16)
 	cp a, 0x64
 	jrl ge, AppEvent_Epilogue
@@ -20589,7 +20592,7 @@ AppEvent_ChainDispatch1_Case9:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x9
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case10:
+AppEvent_ChainDispatch1_IncTnNote:
 	ld a, (9750:16)
 	cp a, 0x7f
 	jrl nc, AppEvent_Epilogue
@@ -20599,7 +20602,7 @@ AppEvent_ChainDispatch1_Case10:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0xa
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case11:
+AppEvent_ChainDispatch1_IncCnNote:
 	ld a, (9816:16)
 	cp a, 0x7f
 	jrl nc, AppEvent_Epilogue
@@ -20609,7 +20612,7 @@ AppEvent_ChainDispatch1_Case11:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0xb
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case12:
+AppEvent_ChainDispatch1_IncMrgTrackA:
 	ld a, (0xf1d3:16)
 	cp a, 0x10
 	jr nc, AppEvtHandler_Branch_014
@@ -20634,7 +20637,7 @@ AppEvtHandler_Branch_017:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0xc
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case13:
+AppEvent_ChainDispatch1_IncMrgTrackB:
 	ld a, (0xf1d4:16)
 	cp a, 0x10
 	jr nc, AppEvtHandler_Branch_018
@@ -20659,7 +20662,7 @@ AppEvtHandler_Branch_021:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0xd
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case14:
+AppEvent_ChainDispatch1_IncMrgTrackC:
 	ld a, (0xf1d5:16)
 	cp a, 0x10
 	jrl nc, AppEvent_Epilogue
@@ -20669,7 +20672,10 @@ AppEvent_ChainDispatch1_Case14:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0xe
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case15:	; cases 15, 16, 17, 18, 19, 20
+; AppEvent_ChainDispatch1_IncMcpParam: EVT_INC_VAL on sequencer-edit parameter 15: the six TT_SQMCP measure-copy
+;   fields 15..20 (track A 0xf1e9, from 0xf1ea, last 0x2628, track B 0xf1ee, start 0xf1ef, repeat 9770): an inner
+;   switch on N - 15, then all six are redrawn.
+AppEvent_ChainDispatch1_IncMcpParam:	; cases 15, 16, 17, 18, 19, 20
 	sub xwa, 0xf
 	cp xwa, 0x0
 	jrl c, AppEvtHandler_Branch_024
@@ -20762,7 +20768,10 @@ AppEvtHandler_Branch_024:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x14
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case21:	; cases 21, 22, 23, 24, 25, 26
+; AppEvent_ChainDispatch1_IncMinsParam: EVT_INC_VAL on sequencer-edit parameter 21: the six TT_SQMINS measure-insert
+;   fields 21..26 (track A 0xf1e1, from 0xf1e2, last 0x262e, track B 0xf1e6, start 0xf1e7, repeat 9776): an inner
+;   switch on N - 21, then all six are redrawn.
+AppEvent_ChainDispatch1_IncMinsParam:	; cases 21, 22, 23, 24, 25, 26
 	sub xwa, 0x15
 	cp xwa, 0x0
 	jrl c, AppEvtHandler_Branch_027
@@ -20855,7 +20864,10 @@ AppEvtHandler_Branch_027:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x1a
 	jrl AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case27:	; cases 27, 28, 29, 30
+; AppEvent_ChainDispatch1_IncScpParam: EVT_INC_VAL on sequencer-edit parameter 27: the four song-copy fields 27..30
+;   (from-song 9992, from-track 9996, to-song 9994, to-track 9998); a song change reloads its 16-char name (0x2842 /
+;   0x2852) through SeqData_CopyBlock2K.
+AppEvent_ChainDispatch1_IncScpParam:	; cases 27, 28, 29, 30
 	cp xwa, 0x1e
 	jr z, AppEvtHandler_Branch_031
 	cp xwa, 0x1d
@@ -20919,7 +20931,10 @@ AppEvtHandler_Branch_032:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x1e
 	jr AppEvtHandler_Branch_033
-AppEvent_ChainDispatch1_Case31:
+; AppEvent_ChainDispatch1_IncSclrSongNo: EVT_INC_VAL on sequencer-edit parameter 31: the song-clear song number (byte
+;   0x2878, 0..10); reloads the song's data (SeqData_CopyBlockWithLookup, SeqPart_CountActiveVoices) and redraws
+;   parameters 31..34.
+AppEvent_ChainDispatch1_IncSclrSongNo:
 	ld a, (0x2878:16)
 	cp a, 0xa
 	jr nc, AppEvent_Epilogue
@@ -20985,7 +21000,10 @@ AppEvent_InlineHandler_Skip16:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case1:
+; AppEvent_InlineHandler_DecFromMeasure: EVT_DEC_VAL on sequencer-edit parameter 1: from-measure of the current page
+;   (the title's FM word; SqedtFunc_OnGetFmString picks it per title: 0x2610, 0x261e, 0xf1d7, 0xf1dc, 0xf1f2, 0xf229,
+;   else 0x2606).
+AppEvent_InlineHandler_DecFromMeasure:
 	ld	a, (CURRENT_TITLE:16)
 	extz	wa
 	sub	wa, 156
@@ -21052,7 +21070,7 @@ AppEvent_InlineHandler_Skip:
 	cp	a, 161
 	jrl	z, AppEvent_InlineHandler_Skip20
 	jrl	SeqState_DispatchEntry
-AppEvent_InlineHandler_Case2:
+AppEvent_InlineHandler_DecLastMeasure:
 	ld	a, (CURRENT_TITLE:16)
 	extz	wa
 	sub	wa, 156
@@ -21132,7 +21150,7 @@ AppEvent_InlineHandler_Skip20:
 	inc 1, wa
 	ld (61918:16), wa
 	jrl	SeqState_DispatchEntry
-AppEvent_InlineHandler_Case3:
+AppEvent_InlineHandler_DecAdly:
 	ld	a, (9740:16)
 	cp	a, 160
 	jrl	le, SeqState_DispatchEntry
@@ -21142,7 +21160,7 @@ AppEvent_InlineHandler_Case3:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 3:i3
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case4:
+AppEvent_InlineHandler_DecTranspose:
 	ld	a, (9762:16)
 	cp	a, 129
 	jrl	le, SeqState_DispatchEntry
@@ -21152,7 +21170,7 @@ AppEvent_InlineHandler_Case4:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 4:i3
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case5:
+AppEvent_InlineHandler_DecVelocity:
 	ld	a, (0xf22e:16)
 	cp	a, 129
 	jrl	le, SeqState_DispatchEntry
@@ -21162,7 +21180,7 @@ AppEvent_InlineHandler_Case5:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 5:i3
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case6:
+AppEvent_InlineHandler_DecMersEventType:
 	ld	a, (0xf1e0:16)
 	cp	a, 0:i3
 	jrl	z, SeqState_DispatchEntry
@@ -21172,7 +21190,7 @@ AppEvent_InlineHandler_Case6:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 6:i3
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case7:
+AppEvent_InlineHandler_DecQtzValue:
 	ld	a, (0xf1f6:16)
 	cp	a, 0:i3
 	jrl	z, SeqState_DispatchEntry
@@ -21182,7 +21200,7 @@ AppEvent_InlineHandler_Case7:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 7:i3
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case8:
+AppEvent_InlineHandler_DecQtzStrength:
 	ld	a, (9728:16)
 	cp	a, 0:i3
 	jrl	z, SeqState_DispatchEntry
@@ -21192,7 +21210,7 @@ AppEvent_InlineHandler_Case8:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 8
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case9:
+AppEvent_InlineHandler_DecQtzWindow:
 	ld	a, (9730:16)
 	cp	a, 156
 	jrl	le, SeqState_DispatchEntry
@@ -21202,7 +21220,7 @@ AppEvent_InlineHandler_Case9:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 9
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case10:
+AppEvent_InlineHandler_DecTnNote:
 	ld	a, (9750:16)
 	cp	a, 0:i3
 	jrl	z, SeqState_DispatchEntry
@@ -21212,7 +21230,7 @@ AppEvent_InlineHandler_Case10:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 10
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case11:
+AppEvent_InlineHandler_DecCnNote:
 	ld	a, (9816:16)
 	cp	a, 0:i3
 	jrl	z, SeqState_DispatchEntry
@@ -21222,7 +21240,7 @@ AppEvent_InlineHandler_Case11:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 11
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case12:
+AppEvent_InlineHandler_DecMrgTrackA:
 	ld a, (61907:16)
 	cp a, 1:i3
 	jr	ule, AppEvent_InlineHandler_Skip6
@@ -21247,7 +21265,7 @@ AppEvent_InlineHandler_Entry:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 12
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case13:
+AppEvent_InlineHandler_DecMrgTrackB:
 	ld	a, (0xf1d4:16)
 	cp	a, 1:i3
 	jr	ule, AppEvent_InlineHandler_Skip8
@@ -21272,7 +21290,7 @@ AppEvent_InlineHandler_Entry2:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 13
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case14:
+AppEvent_InlineHandler_DecMrgTrackC:
 	ld	a, (0xf1d5:16)
 	cp	a, 1:i3
 	jrl	ule, SeqState_DispatchEntry
@@ -21282,7 +21300,10 @@ AppEvent_InlineHandler_Case14:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 14
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case15:	; cases 15, 16, 17, 18, 19, 20
+; AppEvent_InlineHandler_DecMcpParam: EVT_DEC_VAL on sequencer-edit parameter 15: the six TT_SQMCP measure-copy fields
+;   15..20 (track A 0xf1e9, from 0xf1ea, last 0x2628, track B 0xf1ee, start 0xf1ef, repeat 9770): an inner switch on N
+;   - 15, then all six are redrawn.
+AppEvent_InlineHandler_DecMcpParam:	; cases 15, 16, 17, 18, 19, 20
 	sub	xwa, 15
 	cp	xwa, 0
 	jrl	c, AppEvent_InlineHandler_Join5
@@ -21303,14 +21324,14 @@ AppEvent_SubDispatch_Code_2_Code:
 	jr	nz, AppEvent_InlineHandler_Join5
 	ld	(0xf1ee:16), 16
 	jr	AppEvent_InlineHandler_Join5
-AppEvent_InlineHandler_Switch4_Case16:
+AppEvent_InlineHandler_DecMcpFromMeasure:
 	ld	wa, (0xf1ea:16)
 	cp	wa, 1:i3
 	jr	ule, AppEvent_InlineHandler_Join4
 	dec	1, wa
 	ld	(0xf1ea:16), wa
 	jr	AppEvent_InlineHandler_Join4
-AppEvent_InlineHandler_Switch4_Case17:
+AppEvent_InlineHandler_DecMcpLastMeasure:
 	ld	wa, (9768:16)
 	cp	wa, 1:i3
 	jr	ule, AppEvent_InlineHandler_Skip10
@@ -21327,7 +21348,7 @@ AppEvent_InlineHandler_Join4:
 	inc 1, wa
 	ld (61932:16), wa
 	jr	AppEvent_InlineHandler_Join5
-AppEvent_InlineHandler_Switch4_Case18:
+AppEvent_InlineHandler_DecMcpTrackB:
 	ld	a, (0xf1ee:16)
 	cp	a, 1:i3
 	jr	ule, AppEvent_InlineHandler_Join5
@@ -21337,14 +21358,14 @@ AppEvent_InlineHandler_Switch4_Case18:
 	jr	nz, AppEvent_InlineHandler_Join5
 	ld	(0xf1e9:16), 16
 	jr	AppEvent_InlineHandler_Join5
-AppEvent_InlineHandler_Switch4_Case19:
+AppEvent_InlineHandler_DecMcpStartMeasure:
 	ld	wa, (0xf1ef:16)
 	cp	wa, 1:i3
 	jr	ule, AppEvent_InlineHandler_Join5
 	dec	1, wa
 	ld	(0xf1ef:16), wa
 	jr	AppEvent_InlineHandler_Join5
-AppEvent_InlineHandler_Switch4_Case20:
+AppEvent_InlineHandler_DecMcpRepeat:
 	ld	a, (9770:16)
 	cp	a, 0:i3
 	jr	z, AppEvent_InlineHandler_Join5
@@ -21375,7 +21396,10 @@ AppEvent_InlineHandler_Join5:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 20
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case21:	; cases 21, 22, 23, 24, 25, 26
+; AppEvent_InlineHandler_DecMinsParam: EVT_DEC_VAL on sequencer-edit parameter 21: the six TT_SQMINS measure-insert
+;   fields 21..26 (track A 0xf1e1, from 0xf1e2, last 0x262e, track B 0xf1e6, start 0xf1e7, repeat 9776): an inner
+;   switch on N - 21, then all six are redrawn.
+AppEvent_InlineHandler_DecMinsParam:	; cases 21, 22, 23, 24, 25, 26
 	sub	xwa, 21
 	cp	xwa, 0
 	jrl	c, AppEvent_InlineHandler_Entry3
@@ -21468,7 +21492,10 @@ AppEvent_InlineHandler_Entry3:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 26
 	jrl	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case27:	; cases 27, 28, 29, 30
+; AppEvent_InlineHandler_DecScpParam: EVT_DEC_VAL on sequencer-edit parameter 27: the four song-copy fields 27..30
+;   (from-song 9992, from-track 9996, to-song 9994, to-track 9998); a song change reloads its 16-char name (0x2842 /
+;   0x2852) through SeqData_CopyBlock2K.
+AppEvent_InlineHandler_DecScpParam:	; cases 27, 28, 29, 30
 	cp	xwa, 30
 	jr	z, AppEvent_InlineHandler_Skip14
 	cp	xwa, 29
@@ -21532,7 +21559,10 @@ AppEvent_InlineHandler_Entry4:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 30
 	jr	AppEvent_InlineHandler_Join8
-AppEvent_InlineHandler_Case31:
+; AppEvent_InlineHandler_DecSclrSongNo: EVT_DEC_VAL on sequencer-edit parameter 31: the song-clear song number (byte
+;   0x2878, 0..10); reloads the song's data (SeqData_CopyBlockWithLookup, SeqPart_CountActiveVoices) and redraws
+;   parameters 31..34.
+AppEvent_InlineHandler_DecSclrSongNo:
 	ld	a, (0x2878:16)
 	cp	a, 0:i3
 	jr	z, SeqState_DispatchEntry
@@ -21825,49 +21855,49 @@ SeqState_LabelDispatch:
 SoundData_HandlerDispatch:
 	call	PartParam_Handler_00
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case2:
+SeqState_LabelDispatch_OnTrack2:
 	call	PartParam_Handler_01
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case3:
+SeqState_LabelDispatch_OnTrack3:
 	call	PartParam_Handler_02
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case4:
+SeqState_LabelDispatch_OnTrack4:
 	call	PartParam_Handler_03
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case5:
+SeqState_LabelDispatch_OnTrack5:
 	call	PartParam_Handler_04
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case6:
+SeqState_LabelDispatch_OnTrack6:
 	call	PartParam_Handler_05
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case7:
+SeqState_LabelDispatch_OnTrack7:
 	call	PartParam_Handler_06
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case8:
+SeqState_LabelDispatch_OnTrack8:
 	call	PartParam_Handler_07
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case9:
+SeqState_LabelDispatch_OnTrack9:
 	call	PartParam_Handler_08
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case10:
+SeqState_LabelDispatch_OnTrack10:
 	call	PartParam_Handler_09
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case11:
+SeqState_LabelDispatch_OnTrack11:
 	call	PartParam_Handler_0A
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case12:
+SeqState_LabelDispatch_OnTrack12:
 	call	PartParam_Handler_0B
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case13:
+SeqState_LabelDispatch_OnTrack13:
 	call	PartParam_Handler_0C
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case14:
+SeqState_LabelDispatch_OnTrack14:
 	call	PartParam_Handler_0D
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case15:
+SeqState_LabelDispatch_OnTrack15:
 	call	PartParam_Handler_0E
 	jrl	AppEvent_PopIzSkip2Ret
-SeqState_LabelDispatch_Case16:
+SeqState_LabelDispatch_OnTrack16:
 	call	PartParam_Handler_0F
 	jrl	AppEvent_PopIzSkip2Ret
 

@@ -231,7 +231,7 @@ GraphicsRender_RetStub:
 GraphicsRender_ShortByteBlock:
 	lda	xbc, (xwa+1)
 	jr	GraphicsRender_ProcessEntries
-SeGfx_DrawBoundRecord_Helper:
+GraphicsRender_StartSingleRecord:
 	lda	xbc, (xwa+1)
 	jr	t, GraphicsRender_Start
 

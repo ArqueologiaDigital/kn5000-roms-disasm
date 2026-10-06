@@ -2752,7 +2752,7 @@ Flash_CopyBlocksToSlots:
 	cpw	(xsp+0x8), 0
 	jr	ule, Flash_StoreBaseAndInitAccPatch_Skip12
 	ld	xbc, 0:i3
-Flash_InitBytecodeBlock_Helper3_Loop:
+Flash_CopyBlocksToSlots_Loop:
 	ld	xde, xbc
 	add	xde, xix
 	ld	xwa, xbc
@@ -2762,10 +2762,10 @@ Flash_InitBytecodeBlock_Helper3_Loop:
 	inc	1, hl
 	inc	1, xbc
 	cp	hl, (xsp+0x8)
-	jr	c, Flash_InitBytecodeBlock_Helper3_Loop
+	jr	c, Flash_CopyBlocksToSlots_Loop
 Flash_StoreBaseAndInitAccPatch_Skip12:
 	ld	(xsp+6), 0
-Flash_InitBytecodeBlock_Helper3_Loop2:
+Flash_CopyBlocksToSlots_Loop2:
 	ld	c, (xsp+6)
 	extz	bc
 	sla	bc, 2
@@ -2794,7 +2794,7 @@ Flash_InitBytecodeBlock_Helper3_Loop2:
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
 	cp	hl, 0:i3
-	jr	nz, Flash_InitBytecodeBlock_Helper3_Skip
+	jr	nz, Flash_CopyBlocksToSlots_Skip
 	ld	c, (xsp+4)
 	extz	bc
 	lda	xde, (xsp+12)
@@ -2805,12 +2805,12 @@ Flash_InitBytecodeBlock_Helper3_Loop2:
 	ld	xix, (xsp+12)
 	sub	xix, 0x346800
 	cp	hl, 0:i3
-	jr	nz, Flash_InitBytecodeBlock_Helper3_Skip
+	jr	nz, Flash_CopyBlocksToSlots_Skip
 	ld	hl, 0:i3
 	cpw	(xsp+0x8), 0
-	jr	ule, Flash_InitBytecodeBlock_Helper3_Skip
+	jr	ule, Flash_CopyBlocksToSlots_Skip
 	ld	xbc, 0:i3
-Flash_InitBytecodeBlock_Helper3_Loop3:
+Flash_CopyBlocksToSlots_Loop3:
 	ld	xde, xbc
 	add	xde, xix
 	ld	xwa, xbc
@@ -2820,11 +2820,11 @@ Flash_InitBytecodeBlock_Helper3_Loop3:
 	inc	1, hl
 	inc	1, xbc
 	cp	hl, (xsp+0x8)
-	jr	c, Flash_InitBytecodeBlock_Helper3_Loop3
-Flash_InitBytecodeBlock_Helper3_Skip:
+	jr	c, Flash_CopyBlocksToSlots_Loop3
+Flash_CopyBlocksToSlots_Skip:
 	incm8	1, (xsp+0x6)
 	cp	(xsp+0x6), 50
-	jrl	c, Flash_InitBytecodeBlock_Helper3_Loop2
+	jrl	c, Flash_CopyBlocksToSlots_Loop2
 Flash_StoreBaseAndInitAccPatch_Skip13:
 	ld	xbc, (3222:16)
 	ld	xde, (FLASH_SECTION_PTR_7:16)
@@ -4349,7 +4349,7 @@ FileIO_LoadRcmToFlash:
 	popw iz
 	lda xsp, (xsp + 0x0400)
 	ret
-SaveRegion6_OpenSuccess_Helper:
+FileIO_SaveRcmFromFlash:
 	lda	xsp, (xsp-1036)
 	push	xiz
 	calr	Flash_InitExtMemAddrs
@@ -5274,7 +5274,7 @@ ToneParam_ExtendedOpsBlock_Helper_Helper:
 	ld L, 0x00:opc
 	ld de, 0:i3
 .Lc_f1919c:
-ToneParam_ExtendedOpsBlock_Helper_Helper_Loop:
+ToneParam_ExtendedOpsBlock_Helper3_Loop:
 	ld WA,DE
 	add WA,0x0060
 	ld xbc, (RHYTHM_PATTERN_BUF_PTR:16)

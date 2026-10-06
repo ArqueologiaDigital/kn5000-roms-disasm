@@ -1,0 +1,506 @@
+[
+ {
+  "old": "MidiSysEx_ProcessBlock_Helper9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiSysEx_FinishSeqXfer",
+  "header": "End-of-transfer step for the sequencer group: if bit 4 of 0xBD1A is set (the sequencer blocks were received), validates the block-0 panel records at 0xF480, inside the received current-song record (MidiSysEx_ProcessBlock_Helper13 -> PanelTlv_ValidateBlock0), resolves the part companions, restores the song selection 0xFFE3/0xFFEC saved in 0xF247/0xF248 (MidiSysEx_ProcessBlock_Helper12), sets bit 1 of 0xBD18 and clears bit 4. Basis: callers + body -- MidiSysEx_ProcessBlock (command 4, transfer done) calls it after MidiSysEx_FinishPanelXfer and MidiSysEx_FinishSoundRamXfer; bit 4 is set only by SeqChan_WriteField_Data_D, the end step (state 14) of the sequencer blocks 11-14 (current song 0xF180, song slots, event memory).",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:12061 `calr MidiSysEx_ProcessBlock_Helper9` -- MidiSysEx_ProcessBlock, between MidiSysEx_FinishSoundRamXfer (12059) and the other end-of-transfer steps",
+   "midi/midi_dispatch_handlers.s:12040 `set 4, (0xbd1a:16)` -- SeqChan_WriteField_Data_D, the only setter of bit 4",
+   "ui_widgets/widget_dispatch.s:1360 `.long SeqChan_WriteField_Data_D` -- entry 14 of SeqChan_WriteFieldHandlers (entries 3 / 6 are Data_A / Data_B, the panel and sound-RAM end steps that set bits 7 / 6)",
+   "midi/midi_dispatch_handlers.s:10275 `; MidiPkt_SetXferBlock_CurrentSong: ...` -- block 1 of the sequencer transfer is the current song record 0xF180-0xF980; step 11 starts the group",
+   "midi/midi_dispatch_handlers.s:12190 `bit 4, (0xbd1a:16)` / 12191 `ret z` -- the guard",
+   "audio/tonegen_fileio_handlers.s:106 `lda xwa, (0xf480:16)` / 107 `jrl PanelTlv_ValidateBlock0` -- MidiSysEx_ProcessBlock_Helper13 (12196)",
+   "midi/midi_dispatch_handlers.s:12197 `call PanelTlv_ResolvePartCompanions_Entry`",
+   "sequencer/seq_step_routines.s:3079 `ld a, (62023:16)` / 3080 `ld (65507:24), a` -- MidiSysEx_ProcessBlock_Helper12 (12198) restores 0xFFE3/0xFFEC from 0xF247/0xF248",
+   "midi/midi_dispatch_handlers.s:12203 `set 1, (0xbd18:16)` / 12204 `res 4, (0xbd1a:16)`",
+   "midi/midi_dispatch_handlers.s:12139 `bit 4, (0xbd1a:16)` -- MidiSysEx_FinishPanelXfer's step (Helper5) treats bit 4 as 'sequencer group also pending'"
+  ]
+ },
+ {
+  "old": "MidiTable_DispatchHelper_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTable_NullRet",
+  "header": "Empty routine (`ret`) that MidiTable_DispatchHelper calls last, after dispatching the MIDI data-transfer command and MidiSeq_UpdateAllParams. Basis: callers + body -- its only caller is that `call`; the body is a single `ret` (the tree's X_NullRet convention: AccTuning_NullRet, DpMdlySmfLyrTtl_NullRet).",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:11489 `call MidiTable_DispatchHelper_Helper` -- last call of MidiTable_DispatchHelper",
+   "midi/midi_dispatch_handlers.s:11484 `lda xbc, (SeqChan_CommandDispatch_Table:24)` / 11486 `call (xhl)` -- the caller's command dispatch",
+   "midi/midi_dispatch_handlers.s:11488 `call MidiSeq_UpdateAllParams`",
+   "midi/midi_dispatch_handlers.s:10734 `MidiTable_DispatchHelper_Helper:` / 10735 `ret` -- the whole body"
+  ]
+ },
+ {
+  "old": "PerfMode_EventTable_0_Target1_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PerfMode_IncNoteNumber",
+  "header": "Raises by 1 the note number (byte +2) of the note-on event at the song-data cursor: sets the step (0x0DF2) = +1 and runs PerfMode_EventTable_0_Target1_Helper4, which on a note track adds it (a result above 127 keeps the old note), stores it to 0x3718 and shows note name and velocity. Basis: callers + body -- PerfMode_EventTable_0_Target1 (entry 1 of the PerfMode_EventTable_0 switch) calls it when W bit 7 is clear and its twin PerfMode_DecNoteNumber when set; entry 2 is the same pair for the velocity (PerfMode_IncNoteVelocity).",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:4803 `call PerfMode_EventTable_0_Target1_Helper2` -- caller, W bit 7 clear",
+   "display/scoop_display.s:4810 `ld (3570:16), 1` / 4811 `call PerfMode_EventTable_0_Target1_Helper4` -- the body",
+   "display/scoop_display.s:1174 `.long PerfMode_EventTable_0_Target1` -- entry 1 of PerfMode_EventTable_0 (entry 2, 1175, is PerfMode_EventTable_0_Target2 whose targets are PerfMode_IncNoteVelocity and its -1 twin)",
+   "display/scoop_display.s:4801 `bit 7, w` / 4803 `call PerfMode_EventTable_0_Target1_Helper2` / 4806 `call PerfMode_EventTable_0_Target1_Helper3` -- W bit 7 clear -> Helper2, set -> Helper3",
+   "display/scoop_display.s:4824 `and a, 240` / 4825 `cp a, 144` -- PerfMode_EventTable_0_Target1_Helper4 only acts on a note-on (0x9n) event at the cursor, and only on a note track (4821 `cp (0x0d65:16), 1`)",
+   "display/scoop_display.s:4832 `ld de, 2:i3` / 4833 `call VoiceSlot_ReadParamsWithSaveRestore_Helper2` -- selects byte +2 of the event (PerfMode_IncNoteVelocity selects +3, the velocity)",
+   "display/scoop_display.s:4838 `add a, (3570:16)` / 4839 `bit 7, a` -- adds the step; a result above 127 keeps the old value",
+   "display/scoop_display.s:4843 `ld (0x3718:16), a` / 4866 `call Disp_ShowNoteNameAndVelocity` -- 0x3718 is the MIDI note number Disp_ShowNoteNameAndVelocity prints as a note name (header at 15049-15052)"
+  ]
+ },
+ {
+  "old": "PerfMode_EventTable_0_Target1_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PerfMode_DecNoteNumber",
+  "header": "Lowers by 1 the note number (byte +2) of the note-on event at the song-data cursor: sets the step (0x0DF2) = -1 (0xFF) and runs PerfMode_EventTable_0_Target1_Helper4 (a result below 0 keeps the old note), which stores the note to 0x3718 and shows note name and velocity. Basis: callers + body -- PerfMode_EventTable_0_Target1 calls it when W bit 7 is set; twin of PerfMode_IncNoteNumber.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:4806 `call PerfMode_EventTable_0_Target1_Helper3` -- caller, W bit 7 set",
+   "display/scoop_display.s:4814 `ld (3570:16), 255` / 4815 `call PerfMode_EventTable_0_Target1_Helper4` -- the body",
+   "display/scoop_display.s:1174 `.long PerfMode_EventTable_0_Target1` -- entry 1 of PerfMode_EventTable_0 (entry 2, 1175, is PerfMode_EventTable_0_Target2 whose targets are PerfMode_IncNoteVelocity and its -1 twin)",
+   "display/scoop_display.s:4801 `bit 7, w` / 4803 `call PerfMode_EventTable_0_Target1_Helper2` / 4806 `call PerfMode_EventTable_0_Target1_Helper3` -- W bit 7 clear -> Helper2, set -> Helper3",
+   "display/scoop_display.s:4824 `and a, 240` / 4825 `cp a, 144` -- PerfMode_EventTable_0_Target1_Helper4 only acts on a note-on (0x9n) event at the cursor, and only on a note track (4821 `cp (0x0d65:16), 1`)",
+   "display/scoop_display.s:4832 `ld de, 2:i3` / 4833 `call VoiceSlot_ReadParamsWithSaveRestore_Helper2` -- selects byte +2 of the event (PerfMode_IncNoteVelocity selects +3, the velocity)",
+   "display/scoop_display.s:4838 `add a, (3570:16)` / 4839 `bit 7, a` -- adds the step; a result above 127 keeps the old value",
+   "display/scoop_display.s:4843 `ld (0x3718:16), a` / 4866 `call Disp_ShowNoteNameAndVelocity` -- 0x3718 is the MIDI note number Disp_ShowNoteNameAndVelocity prints as a note name (header at 15049-15052)"
+  ]
+ },
+ {
+  "old": "PerfMode_EventTable_0_Target1_Helper8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PerfMode_StepCursorEventByte",
+  "header": "Adds the step (0x0DF2, +1 or -1) to byte (0x0DF3) of the event at the song-data cursor, keeping 0..127 (a result with bit 7 set keeps the old value), writes it back (VoiceSlot_WriteCurrentParam) and copies it to the display variable that the pointer (0x110E) names; does nothing when VoiceSlot_ReadParamsWithSaveRestore_Helper3 gives W = 0. Basis: callers + body -- PerfMode_IncNoteVelocity / PerfMode_DecNoteVelocity call it with byte 3 and 0x3717 (the velocity), PerfMode_ParamHandler_3_Helper / _Helper2 with byte 2 and 0x3721 on 0xDn events.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:5071 `call PerfMode_EventTable_0_Target1_Helper8` -- PerfMode_IncNoteVelocity, after (3570) = 1, (3571) = 3 and (4366) = 0x3717 (5056, 5057, 5068-5069)",
+   "display/scoop_display.s:5093 `call PerfMode_EventTable_0_Target1_Helper8` -- the -1 twin (PerfMode_DecNoteVelocity)",
+   "display/scoop_display.s:5002 `call PerfMode_EventTable_0_Target1_Helper8` / 4994 `ld xhl, 0x3721` -- PerfMode_ParamHandler_3_Helper, field 2 (4982)",
+   "display/scoop_display.s:5100 `call VoiceSlot_ReadParamsWithSaveRestore_Helper3` / 5101 `cp w, 0:i3` -- the guard",
+   "display/scoop_display.s:5105 `ld e, (3571:16)` / 5107 `call VoiceSlot_ReadParamsWithSaveRestore_Helper2` -- selects the event byte",
+   "display/scoop_display.s:5110 `add a, (3570:16)` / 5111 `bit 7, a` / 5113 `ld a, w` -- step, overflow keeps old",
+   "display/scoop_display.s:5115 `ld xhl, (4366:16)` / 5116 `ld (xhl), a` / 5118 `call VoiceSlot_WriteCurrentParam`"
+  ]
+ },
+ {
+  "old": "PerfMode_EventTable_0_Target2_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PerfMode_DecNoteVelocity",
+  "header": "Lowers by 1 the velocity (byte +3) of the note-on event at the song-data cursor: step (0x0DF2) = -1, field (0x0DF3) = 3, and only on a note track ((0x0D65) = 1) when the cursor's event is 0x9n at the current position it lets PerfMode_StepCursorEventByte subtract (a result below 0 keeps the old value) and store it at 0x3717, then shows note name and velocity and redraws region 3. Basis: callers + body -- PerfMode_EventTable_0_Target2 calls it when W bit 7 is set and PerfMode_IncNoteVelocity (the same body with step +1) when clear.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:5045 `call PerfMode_EventTable_0_Target2_Helper` -- caller, W bit 7 set (5040-5042: clear -> PerfMode_IncNoteVelocity)",
+   "display/scoop_display.s:5048 `; PerfMode_IncNoteVelocity: Raises by 1 the velocity (byte +3) ...` -- the twin's header already calls this routine its step -1 twin",
+   "display/scoop_display.s:5078 `ld (3570:16), 255` / 5079 `ld (3571:16), 3` -- step -1, byte 3",
+   "display/scoop_display.s:5080 `cp (0x0d65:16), 1` / 5084 `cp a, 144` -- note track, note-on event",
+   "display/scoop_display.s:5090 `ld xhl, 0x3717` / 5093 `call PerfMode_EventTable_0_Target1_Helper8` / 5094 `call Disp_ShowNoteNameAndVelocity` -- 0x3717 is the velocity printed after 'V'"
+  ]
+ },
+ {
+  "old": "PerfMode_Handler_EvtB_Helper",
+  "verdict": "refuse",
+  "why_refused": "Mechanics are clear, meaning is not. Its only caller SwbtB2_CodeA8_Listener (one of the SwbtB2_CodeA8_Listeners callbacks for panel event 0xA8) runs it when the event's arg (SWBTWR_PAYLOAD_1) is 12, in display mode 0 with bit 3 of 0x0D53 set. The body: when PAYLOAD_2 & PAYLOAD_3 & 3 is 0 it toggles bits 0/1 of a copy of PAYLOAD_2 (RH3 carry tricks), masks it with PAYLOAD_3, stores it to 0x0DC0 and runs SysEx_BytecodeDispatcher; then, when PAYLOAD_2 bits 0-1 are set, it may reset the display caches, run Scoop_SpecialMode_ParamCheckBound and SerialPort_ModeHandler_0_Sub and sends SysEx 118 (MIDI_SendSysExFromW); finally it indexes PerfMode_Handler_EvtB_Data with PAYLOAD_2/3 bits 3-4 to pick a ScoopDisp_DispatchTable_Extended handler (VoiceCtrl_CheckAndReset or nothing) and clears bit 3 of 0x0D54 and bits 1-2 of 0x10F9 when PAYLOAD_2 & 63 = 0. Event 0xA8 with arg 11 or 12 is not in the documented panel-button action table (technics-docs control-panel-protocol.md lists args 2-6, 9, 0x12, 0x14, 0x41), so which button or source posts it -- and so what the 2-bit fields mean -- is not established.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:2710 `cp (SWBTWR_PAYLOAD_1:16), 12` / 2712 `call PerfMode_Handler_EvtB_Helper` -- caller SwbtB2_CodeA8_Listener",
+   "ui_widgets/widget_dispatch.s:6555 `.long SwbtB2_CodeA8_Listener` -- a listener of panel event code 0xA8",
+   "display/scoop_display.s:2680 `bit 3, (0x0d53:16)` / 2682 `cp (0x0d65:16), 0` -- caller's guards",
+   "display/scoop_display.s:2745 `ld a, (SWBTWR_PAYLOAD_2:16)` / 2746 `and a, (SWBTWR_PAYLOAD_3:16)` / 2771 `ld (3520:16), a` / 2773 `call SysEx_BytecodeDispatcher`",
+   "display/scoop_display.s:2800 `ld w, 118:opc` / 2801 `call MIDI_SendSysExFromW`",
+   "display/scoop_display.s:2815 `ld xde, PerfMode_Handler_EvtB_Data` / 2823 `ld xhl, ScoopDisp_DispatchTable_Extended` / 2826 `call (xiy)`"
+  ]
+ },
+ {
+  "old": "PlayMode_InitFlagBlock_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PlayMode_ArmStartCountdown",
+  "header": "Once per arming ((0x0D34) = 0): sets (0x0D34) = 1, sets bit 2 of 0x28AC and loads the playback countdown (0x1144) = 10, which CDlikeSwitch_PlaybackTimer (main-loop tick) counts down -- at 5 it restarts the accompaniment and at 0 starts the transport (CDlike_ResetPlaybackState) on the medley-play titles 120/122. Basis: callers + body -- PlayMode_InitFlagBlock, the activate-state case 0 of SqMdlyPlyTtlFunc and DkMdlyPlyTtlFunc, is its only caller; PlayMode_StartAndSendCommand acts only when (0x0D34) = 1 and the countdown has reached 0. Twins: SongMode_InitFlagBlock_Helper, PartFormat_InitFlagBlock_Helper, PlayModeStop_InitFlagBlock_Helper.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:364 `call PlayMode_InitFlagBlock_Helper` -- PlayMode_InitFlagBlock",
+   "ui/ui_playback_modes.s:1485 `call PlayMode_InitFlagBlock` -- SqMdlyPlyTtl_Dispatch, case 0 of the EVT_ACTIVATE_STATE switch (1468, 1476 SqMdlyPlyTtlFunc_CaseTable); 1565 the same for DkMdlyPlyTtl",
+   "ui/ui_playback_modes.s:367 `cp (3380:16), 0` / 369 `ld (3380:16), 1` -- arm once",
+   "ui/ui_playback_modes.s:374 `or (10412:16), 4` / 375 `ld (4420:16), 10` -- PlayMode_InitFlagBlock_Helper2",
+   "boot/system_handlers.s:1218 `call CDlikeSwitch_PlaybackTimer` -- main-loop tick",
+   "ui/ui_playback_modes.s:830 `ld w, (4420:16)` / 833 `dec 1, w` / 834 `cp w, 5:i3` / 846 `call Seq_ResetAndRestartAccompaniment` / 887 `call CDlike_ResetPlaybackState` -- the countdown",
+   "ui/ui_playback_modes.s:912 `ld (SEQ_TRANSPORT_STATE:16), 1` -- CDlike_ResetPlaybackState starts the transport",
+   "ui/ui_playback_modes.s:446 `cp (3380:16), 1` / 448 `cp (4420:16), 0` -- PlayMode_StartAndSendCommand waits for it"
+  ]
+ },
+ {
+  "old": "PortConfig_Handler_0_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_SetDisplayModeFromTrack",
+  "header": "Makes the selected track (0x0D60, 1..16) the cursor track (0x0EEE) and sets the display mode (0x0D65) from that track's assignment in the TRACK ASSIGN table 0xF1A0 through PortConfig_DataTable_A: assignments 0-12 and 17-23 -> 1, 13-14 -> 0, 15 -> 2, 16 -> 3. Basis: callers + body -- SqStep_InitOnEnter calls it twice, and its header already says it 'derives the display mode (0x0D65) from the track type'; Part_LookupParam is what stores the selected track and its 0xF1A0 value.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:6953 `call PortConfig_Handler_0_Helper2` / 6967 -- SqStep_InitOnEnter",
+   "display/scoop_display.s:6934 `;   saves (0xFC5D) to 0x1128, derives the display mode (0x0D65) from the track type (PortConfig_Handler_0_Helper2), in` -- the caller's header",
+   "display/scoop_display.s:7464 `ld a, (3424:16)` / 7465 `ld (3822:16), a` -- selected track -> cursor track",
+   "display/scoop_display.s:7469 `ld xix, 0xf1a0` / 7470 `ld a, (xix+iz)` -- track assignment",
+   "display/scoop_display.s:7472 `ld xhl, PortConfig_DataTable_A` / 7474 `stb_d8 (0x0d65), a` -- mapped to the display mode",
+   "ui/ui_playback_modes.s:254 `ld xhl, 0x0000f1a0` / 261 `ld (3424:16), e` -- Part_LookupParam: (0x0D60) = track number + 1",
+   "display/scoop_display.s:10532 `ld a, (3822:16)` -- VoiceSlot_ComputeWordIndex: (0x0EEE) is the track the song-data cursor routines use"
+  ]
+ },
+ {
+  "old": "PortConfig_Handler_0_Helper4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TempoRingBuf_DiscardAll",
+  "header": "Empties the TempoRingBuf ring: reads (and so consumes) bytes with TempoRingBuf_ReadByte until it returns 0xFFFF (ring empty). Basis: callers + body -- Timer_ModeHandler_3 calls it instead of TempoRingBuf_DispatchEvents when (0x0DEF) = 18, and SqStep_InitOnEnter calls it before SeqBuf_Init when the step page is set up.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:2944 `cp (0x0def:16), 18` / 2946 `call PortConfig_Handler_0_Helper4` -- Timer_ModeHandler_3; the other branch (2949) is `call TempoRingBuf_DispatchEvents`",
+   "display/scoop_display.s:6983 `call PortConfig_Handler_0_Helper4` / 6984 `call SeqBuf_Init` -- SqStep_InitOnEnter",
+   "display/scoop_display.s:7519 `call TempoRingBuf_ReadByte` / 7521 `cp wa, 0xffff` / 7522 `jrl nz, PortConfig_Handler_0_Helper4` -- loop until empty",
+   "boot/system_handlers.s:3490 `lda xde, (0x01e753:24)` / 3491 `calr Seq_RingBuf_PeekByte` -- TempoRingBuf_ReadByte",
+   "boot/system_handlers.s:5201 `ldw hl, 0xffff` / 5207 `minc1_16 ix, 0x7ff` / 5208 `ld (xde - 8), ix` -- Seq_RingBuf_PeekByte returns 0xFFFF when empty and otherwise advances the read index"
+  ]
+ },
+ {
+  "old": "PortConfig_Handler_0_Helper6",
+  "verdict": "refuse",
+  "why_refused": "Mechanics are clear, meaning is not: it zeroes the 96 bytes at 0x0E55 (3669..3764), i.e. the three 32-byte buffers 0x0E55, 0x0E75 and 0x0E95 that OscScope_RenderBlock_Helper, SubCPU_ToneParamRet_Helper14 and _Helper15 clear one at a time and that SubCPU_ToneParamRet_Join points (4372) at. Its only caller PortConfig_Handler_0 (entry 0 of PortConfig_Select_Table, display mode 0) is a placeholder name with no header, and what the three buffers hold (display rows? per-step values?) is not established.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "display/scoop_display.s:7357 `call PortConfig_Handler_0_Helper6` -- PortConfig_Handler_0, after (3660..3664) are reset",
+   "display/scoop_display.s:7316 `.long PortConfig_Handler_0` -- entry 0 of PortConfig_Select_Table",
+   "display/scoop_display.s:7403 `ld xix, 3669` / 7404 `ldw bc, 96` / 7406 `ld (xix+), a` -- the body",
+   "display/scoop_display.s:13772 `ld xix, 3669` / 13779 `ld xix, 3701` / 13786 `ld xix, 3733` -- the same area cleared as three 32-byte buffers",
+   "display/scoop_display.s:12849 `ld xwa, 3669` / 12850 `ld (4372:16), xwa`"
+  ]
+ },
+ {
+  "old": "PortConfig_Handler_1_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Display_UpdateRegions0To4",
+  "header": "Updates display regions 0-4 in the order status bar (0), title bar (1), side panel (4), main content (3), selection highlight (2) -- each Display_UpdateRegionN redraws now or marks itself dirty. Basis: callers + body -- PortConfig_Handler_1 (entries 1 and 2 of PortConfig_Select_Table, the note-track display modes) calls it at the end of its set-up; the body is the five calls.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:7325 `call PortConfig_Handler_1_Helper` -- PortConfig_Handler_1, after VoiceSlot_TableSetup and the mode-1 helpers",
+   "display/scoop_display.s:7317 `.long PortConfig_Handler_1` / 7318 -- entries 1 and 2 of PortConfig_Select_Table (indexed by (0x0D65) & 3, 7302)",
+   "display/scoop_display.s:4347 `call Display_UpdateRegion0` / 4348 `call Display_UpdateRegion1` / 4349 `call Display_UpdateRegion4` / 4350 `call Display_UpdateRegion3` / 4351 `call Display_UpdateRegion2` -- the body",
+   "display/scoop_display.s:71 `; Display_UpdateRegion0 - Update status bar region (bit 0)` -- with 114, 135, 152, 169 for regions 1 (title bar), 3 (main content), 2 (selection highlight), 4 (side panel)"
+  ]
+ },
+ {
+  "old": "RhythmROM_PatternDisp_ReadByte_Helper",
+  "verdict": "refuse",
+  "why_refused": "Mechanics are partly clear, meaning is not. It counts the 0x81 bytes up to 0x83 in a rhythm-ROM pattern stream (RhythmROM_CountEntries, stream chosen by header byte +0x3D1; count to 0x35B3); for sections (0x34EF) = 0-3 it compares the count with AccFill_AdvanceAndCheck_Code[time-signature byte +0x0C] and returns A = 7 (or 3 with bit 1 of 0x35B0 set on a match); for sections 4-7 it recounts at +0x138/+0x13C/+0x538/+0x53C, divides and may send SysEx command 8; sections 8-15 return 0. The caller RhythmROM_PatternDisp_ReadByte has no header and its name is a placeholder; A is stored as byte +0x0D of the pattern record at (0x3560), whose meaning is not documented, and 0x81/0x83 in the rhythm-ROM stream are not identified (bar markers would be a guess).",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:22678 `calr RhythmROM_PatternDisp_ReadByte_Helper` / 22680 `ld (xix), a` -- caller stores the result at record +0x0D",
+   "sequencer/accompaniment_engine.s:22674 `ld a, (xiy+976)` / 22675 `ld (xix), a` -- record +0x0C = the time-signature byte (+976, probe in analysis/kn5000-naming/probes/rhythm_probe.py)",
+   "sequencer/accompaniment_engine.s:22770 `calr RhythmROM_CountEntries` / 22771 `ld (0x35b3:16), e`",
+   "sequencer/accompaniment_engine.s:22787 `ld xhl, AccFill_AdvanceAndCheck_Code` / 22790 `cp l, (0x35b3:16)` / 22792 `or (0x35b0:16), 2`",
+   "sequencer/accompaniment_engine.s:22826 `div wa, e` / 22831 `call MIDI_SendSysExCmd`",
+   "sequencer/accompaniment_engine.s:22879 `cp a, 0x83` / 22881 `cp a, 0x81` / 22883 `inc 1, e` -- RhythmROM_CountEntries"
+  ]
+ },
+ {
+  "old": "RhythmVariation_InlineCode_Sub_Helper_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccDraw_StepNoteValue",
+  "header": "In step mode (0x3712) = 4, steps the note value (0x3714) up (W bit 7 clear) or down (set), clamped to 1..13; other modes do nothing. Basis: callers + body -- AccDraw_StepNoteValue_Wrap (XIZ-preserving wrapper whose header already describes this) is its only caller, and AccDraw_SecondarySub_Handler03 calls that and redraws the beat block; 0x3714 is the note value Disp_ShowNoteValueFields names.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:25153 `calr RhythmVariation_InlineCode_Sub_Helper_Helper` -- AccDraw_StepNoteValue_Wrap",
+   "sequencer/accompaniment_engine.s:34279 `call AccDraw_StepNoteValue_Wrap` -- AccDraw_SecondarySub_Handler03",
+   "sequencer/accompaniment_engine.s:25157 `cp (0x3712:16), 4` -- step mode",
+   "sequencer/accompaniment_engine.s:25163 `inc 1, (0x3714:16)` / 25164 `cp (0x3714:16), 13` / 25166 `ld (0x3714:16), 13`",
+   "sequencer/accompaniment_engine.s:25169 `dec 1, (0x3714:16)` / 25170 `cp (0x3714:16), 1` / 25172 `ld (0x3714:16), 1`",
+   "display/scoop_display.s:14937 `; 0x0ED9 <- 3 chars of Tbl_NoteValueNames[((0x3714) & 15) * 4],`"
+  ]
+ },
+ {
+  "old": "RhythmVariation_Select_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccDraw_StepPlusNoteValue",
+  "header": "In step mode (0x3712) = 4, steps the '+' note-value index (0x3715) up (W bit 7 clear, max 13) or down (set, min 0); other modes do nothing. Basis: callers + body -- AccDraw_AdjustPlusNoteValue (its XIZ-preserving wrapper, header already describing this) is its only caller, from AccDraw_SecondarySub_Handler04; 0x3715 indexes Tbl_NoteValuePlusNames in Disp_ShowNoteValueFields.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:25183 `calr RhythmVariation_Select_Helper2` -- AccDraw_AdjustPlusNoteValue",
+   "sequencer/accompaniment_engine.s:34291 `call AccDraw_AdjustPlusNoteValue` -- AccDraw_SecondarySub_Handler04",
+   "sequencer/accompaniment_engine.s:25187 `cp (0x3712:16), 4`",
+   "sequencer/accompaniment_engine.s:25191 `inc 1, (0x3715:16)` / 25192 `cp (0x3715:16), 13` / 25194 `ld (0x3715:16), 13`",
+   "sequencer/accompaniment_engine.s:25197 `dec 1, (0x3715:16)` / 25198 `cp (0x3715:16), 255` / 25200 `ld (0x3715:16), 0`",
+   "display/scoop_display.s:14938 `; 0x0EDD <- 5 chars of Tbl_NoteValuePlusNames[((0x3715) & 15) * 5],`"
+  ]
+ },
+ {
+  "old": "RhythmVariation_Select_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccDraw_StepArticulation",
+  "header": "In step mode (0x3712) = 4, steps the articulation index (0x3716: TENU/NORM/STAC/CUTT) up (W bit 7 clear, max 3) or down (set, min 0); in other modes it only latches the direction in (0x372D) bit 4 (up) / bit 5 (down). Basis: callers + body -- AccDraw_StepArticulation_Wrap (header already describing this) is its only caller, from AccDraw_SecondarySub_Handler05; 0x3716 indexes Tbl_ArticulationNames.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:25212 `calr RhythmVariation_Select_Helper3` -- AccDraw_StepArticulation_Wrap",
+   "sequencer/accompaniment_engine.s:34303 `call AccDraw_StepArticulation_Wrap` -- AccDraw_SecondarySub_Handler05",
+   "sequencer/accompaniment_engine.s:25216 `cp (0x3712:16), 4`",
+   "sequencer/accompaniment_engine.s:25222 `inc 1, (0x3716:16)` / 25223 `cp (0x3716:16), 3` / 25228 `dec 1, (0x3716:16)` / 25231 `ld (0x3716:16), 0`",
+   "sequencer/accompaniment_engine.s:25237 `or (0x372d:16), 16` / 25240 `or (0x372d:16), 32` -- other modes",
+   "display/scoop_display.s:14939 `; 0x0EE3 <- 4 chars of Tbl_ArticulationNames[((0x3716) & 3) * 4]`"
+  ]
+ },
+ {
+  "old": "RhythmVoice_LoadParams_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrumParam_CopyStyleNameAndReload",
+  "header": "Copies the 16-character name of the selected channel's easy-composer style (index (0x37AB + channel), 0..9) from AccRhythm_Ram3888_Records ('8 Beat', '16 Beat', 'Dance Pop', ... 'Waltz') to the RAM text buffer 0x3888, then reloads the channel's entry (RhythmDrum_LoadVoiceParams). Basis: callers + body -- DrumParam_StepChannelStyle (EVT_ES_CMP_STYL_UP/DN) calls it after stepping the style, and its header names it as part of reloading the channel's entry; the 10 x 16-byte records are space-padded style names.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:28714 `calr RhythmVoice_LoadParams_Helper` -- end of DrumParam_StepChannelStyle (the RhythmVoice_LoadParams label is its tail)",
+   "sequencer/accompaniment_engine.s:28665 `; DrumParam_StepChannelStyle: Steps the easy-composer style index of the selected channel (0x37AB +` -- caller's header",
+   "sequencer/accompaniment_engine.s:29207 `calr Rhythm_MapChannelToDrumIndex` / 29208 `add xbc, 0x37ab` / 29210 `ld a, (xbc)` / 29211 `sll xwa, 4` -- style index * 16",
+   "sequencer/accompaniment_engine.s:29212 `ld xiy, AccRhythm_Ram3888_Records` / 29214 `ld xix, 0x3888` / 29215 `ld xbc, 0x10` / 29217 `ldir85`",
+   "sequencer/accompaniment_engine.s:29219 `calr RhythmDrum_LoadVoiceParams`",
+   "ui_widgets/widget_descriptors.s:5601 `AccRhythm_Ram3888_Records: .incbin \"includes/generated/naka_widget_descriptors.bin\", 0x192D4, 0xA0` -- bytes read: '     8 Beat     ', '    16 Beat     ', '   Dance Pop    ', '  Jazz Fusion   ', '  March/Polka   ', '     Swing      ', '     Latin      ', '    Country     ', '  Rock Ballad   ', '     Waltz      '"
+  ]
+ },
+ {
+  "old": "Rhythm_ComputeNoteAllocation_Helper",
+  "verdict": "refuse",
+  "why_refused": "Mechanics are clear, meaning is not. For channel A it reads the channel's sub-block type (Part_ReadSubBlock32; returns 0 unless it is 13), then walks the channel's events with SeqEvt_ProcessBlock_Helper until an 0xB0/0xB1 event (returns HL = (0x230C)) or 0x81/0x82/0x84 (returns 0). Its only caller Rhythm_NoteAllocBlock (placeholder name, no header) uses the result to rescale a count (`div xwa, bc`). What type 13, the 0xB0/0xB1 events and (0x230C) are is not established; its twin SeqEvt_ProcessBlock (types 13/16, counts 0x81) is unnamed for the same reason.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "sequencer/sequencer_engine.s:17684 `calr Rhythm_ComputeNoteAllocation_Helper` -- Rhythm_NoteAllocBlock, type-13 branch (17666 `cp_erpb 251, 13`)",
+   "sequencer/sequencer_engine.s:17687 `ld bc, iz` / 17688 `sub bc, hl` / 17692 `div xwa, bc` -- how the caller uses HL",
+   "sequencer/sequencer_engine.s:18378 `calr Part_ReadSubBlock32` / 18379 `cp l, 13`",
+   "sequencer/sequencer_engine.s:18393 `calr SeqEvt_ProcessBlock_Helper` / 18394 `cp l, 177` / 18396 `cp l, 176` / 18398 `cp l, 132`",
+   "sequencer/sequencer_engine.s:18412 `ld a, (8972:16)` / 18414 `ld (xsp), wa` -- the value returned on 0xB0/0xB1"
+  ]
+ },
+ {
+  "old": "SaveRegion6_OpenSuccess_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileIO_SaveRcmFromFlash",
+  "header": "Writes the custom-data flash as an .RCM file to the open handle: builds the 1 KB header from the 'H',0,'K',0 template (MSP_Default_Accompaniment), fills dwords +68..+92 with the sizes of flash sections 0-6 ((+46/+47) * 16) and +28 with the total, fails with HL = 0xFF9B when FileIO_GetDiskFreeSpace is smaller, then writes the header, sections 1-7 (NoteEventBuffer_CopyToSlot) and 0xF400 bytes of the section-7 image. HL = write result. Basis: callers + body -- FileIO_SaveRegion6_Simple (region/extension 6) calls it once the file is open for 'wb'; it is the save twin of FileIO_LoadRcmToFlash, which reads the same header and section layout.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:2761 `call SaveRegion6_OpenSuccess_Helper` -- FileIO_SaveRegion6_Simple, after FileIO_OpenWithMode (2754-2755, FileIO_SaveRegion6_Simple_Str_wb)",
+   "storage/flash_floppy_handlers.s:4108 `; FileIO_LoadRcmToFlash: Loads an .RCM file into the custom-data flash: checks the 1 KB header starts 'H',0,'K', then` -- the load twin",
+   "storage/flash_floppy_handlers.s:4230 `ld xiy, MSP_Default_Accompaniment` / 4232 `ldw bc, 512` / 4233 `ldirw` -- 1 KB header template",
+   "sequencer/composer_msp_defaults.s:105 `MSP_Default_Signature3: .byte 0x48, 0x00, 0x4b, 0x00` -- 'H',0,'K',0",
+   "storage/flash_floppy_handlers.s:4234 `ld xbc, (FLASH_SECTION_PTR_0:16)` / 4236 `ld l, (xbc+46)` / 4241 `lda xwa, (xbc+68)` -- section 0 size into header +68 (sections 1-6 follow at +72..+92)",
+   "storage/flash_floppy_handlers.s:4336 `ld (xbc+28), xwa` / 4338 `call FileIO_GetDiskFreeSpace` / 4341 `ldw hl, 0xff9b`",
+   "storage/flash_floppy_handlers.s:4345 `ld xbc, 1024` / 4346 `call FileIO_WriteByte_Impl` -- header",
+   "storage/flash_floppy_handlers.s:4351 `calr NoteEventBuffer_CopyToSlot` -- per section, then 4451 `ld xwa, (FLASH_SECTION_PTR_7:16)` / 4452 `ld xbc, 0xf400` / 4453 `call FileIO_WriteByte_Impl`"
+  ]
+ },
+ {
+  "old": "ScoopDisp_FlagSetAndDispatch_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ScoopDisp_StepMeasureForward",
+  "header": "Display mode 0: moves the song-data cursor forward to the start of the next measure -- unless the cursor's event is an end marker (0x82/0x84) it walks forward over (0x0D5D) - (0x0D5C) 0x81 events (MemConfig_Handler_1_Helper, which counts them in (0x0D58)), processes the events reached, refreshes the measure number (DisplayStr_ShowMeasureNumber_B); then clears the clock (0x0D57) and copies the beat to 0x3719. Basis: callers + body -- ScoopDisp_FlagSetAndDispatch (entry 0 of the mode-0 event table) calls it when W bit 7 is set, and the go-to-measure routine VoiceState_DataBlock2_Tbl_Helper6 calls it repeatedly while the measure (0x371A) is below the target; ScoopDisp_StepMeasureBack is the other direction.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:988 `call ScoopDisp_FlagSetAndDispatch_Helper` -- W bit 7 set (986)",
+   "display/scoop_display.s:8224 `call VoiceSlot_FlagCheck` / 8225 `cp a, 130` / 8227 `cp a, 132` -- end markers skip",
+   "display/scoop_display.s:8231 `ld a, (3421:16)` / 8232 `sub a, (3420:16)` / 8233 `call MemConfig_Handler_1_Helper`",
+   "display/scoop_display.s:8271 `cp a, 129` / 8273 `incw 1, (3416:16)` / 8274 `dec 1, (3582:16)` -- MemConfig_Handler_1_Helper counts 0x81 markers forward",
+   "display/scoop_display.s:8256 `call DisplayStr_ShowMeasureNumber_B` / 8263 `ld (3415:16), a` / 8265 `ld (0x3719:16), a`",
+   "display/scoop_display.s:1001 `.long ScoopDisp_FlagSetAndDispatch` -- entry 0 of ScoopDisp_DispatchTable_Small, the display-mode-0 event table (DisplayMode_Dispatch_Mode0, 972)",
+   "display/scoop_display.s:12249 `VoiceState_DataBlock2_Code_Skip29:` / 12250 `call VoiceState_DataBlock2_Tbl_Helper6` -- the go-to-measure routine uses Tbl_Helper6 in display mode (0x0D65) = 0",
+   "display/scoop_display.s:12332 `ld wa, (0x371a:16)` / 12333 `cp wa, (4357:16)` / 12335 `jrl ugt, VoiceState_DataBlock2_Code_Skip35` -- measure (0x371A) against the target (0x1105)",
+   "display/scoop_display.s:12339 `call ScoopDisp_FlagSetAndDispatch_Helper` / 12343 `jrl ge, VoiceState_DataBlock2_Code_Return7` -- called while the measure is below the target",
+   "display/scoop_display.s:12351 `call ScoopDisp_FlagSetAndDispatch_Helper2` / 12355 `jrl le, VoiceState_DataBlock2_Code_Return7` -- called while the measure is above the target",
+   "display/scoop_display.s:1293 `call UIDisp_DefaultInputHandler_Helper3` / 1296 `call UIDisp_DefaultInputHandler_Helper2` -- modes 1-2 twin pair; Tbl_Helper4 (12270 / 12291) uses those the same way",
+   "display/scoop_display.s:8376 `; MemConfig_SnapshotSongPosition: Saves the song position -- measure (0x371A), word (0x0D58), clock (0x0D57) and beat` -- the position variables"
+  ]
+ },
+ {
+  "old": "ScoopDisp_FlagSetAndDispatch_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ScoopDisp_StepMeasureBack",
+  "header": "Display mode 0: moves the song-data cursor back by a measure -- walks back over (0x0D5C) + (0x0D5D) 0x81 events, and (0x0D5C) more when (0x0D5C) is not 0 (MemConfig_Handler_1_Helper2), processes the events reached, refreshes the measure number (DisplayStr_ShowMeasureNumber_B), clears the clock (0x0D57) and copies the beat to 0x3719. Basis: callers + body -- ScoopDisp_FlagSetAndDispatch calls it when W bit 7 is clear, and the go-to-measure routine VoiceState_DataBlock2_Tbl_Helper6 calls it repeatedly while the measure (0x371A) is above the target; ScoopDisp_StepMeasureForward is the other direction.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:991 `call ScoopDisp_FlagSetAndDispatch_Helper2` -- W bit 7 clear",
+   "display/scoop_display.s:8286 `ld a, (3420:16)` / 8287 `add a, (3421:16)` / 8288 `call MemConfig_Handler_1_Helper2`",
+   "display/scoop_display.s:8290 `cp (0x0d5c:16), 0` / 8292 `ld a, (3420:16)` / 8293 `call MemConfig_Handler_1_Helper2`",
+   "display/scoop_display.s:8331 `call DisplayStr_ShowMeasureNumber_B` / 8335 `ld (3415:16), a` / 8337 `ld (0x3719:16), a`",
+   "display/scoop_display.s:1001 `.long ScoopDisp_FlagSetAndDispatch` -- entry 0 of ScoopDisp_DispatchTable_Small, the display-mode-0 event table (DisplayMode_Dispatch_Mode0, 972)",
+   "display/scoop_display.s:12249 `VoiceState_DataBlock2_Code_Skip29:` / 12250 `call VoiceState_DataBlock2_Tbl_Helper6` -- the go-to-measure routine uses Tbl_Helper6 in display mode (0x0D65) = 0",
+   "display/scoop_display.s:12332 `ld wa, (0x371a:16)` / 12333 `cp wa, (4357:16)` / 12335 `jrl ugt, VoiceState_DataBlock2_Code_Skip35` -- measure (0x371A) against the target (0x1105)",
+   "display/scoop_display.s:12339 `call ScoopDisp_FlagSetAndDispatch_Helper` / 12343 `jrl ge, VoiceState_DataBlock2_Code_Return7` -- called while the measure is below the target",
+   "display/scoop_display.s:12351 `call ScoopDisp_FlagSetAndDispatch_Helper2` / 12355 `jrl le, VoiceState_DataBlock2_Code_Return7` -- called while the measure is above the target",
+   "display/scoop_display.s:1293 `call UIDisp_DefaultInputHandler_Helper3` / 1296 `call UIDisp_DefaultInputHandler_Helper2` -- modes 1-2 twin pair; Tbl_Helper4 (12270 / 12291) uses those the same way",
+   "display/scoop_display.s:8376 `; MemConfig_SnapshotSongPosition: Saves the song position -- measure (0x371A), word (0x0D58), clock (0x0D57) and beat` -- the position variables"
+  ]
+ },
+ {
+  "old": "Scoop_EventHandler_SpecialMode_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqData_ChainNextDstBlock",
+  "header": "Moves the destination of a chained copy in the sequencer event memory to the next block: follows the next-block link (+3) of the block at (0x267A), stores the number in 0x289F and the block's address in (0x267A), and sets the offset IX = 5 (first data byte); when the linked block is not in use (bit 7 clear) it sets SEQ_ERROR_CODE = 11 instead. Basis: callers + body -- Scoop_EventHandler_SpecialMode, the forward copy over the 256-byte block chain, calls it after each SeqData_ChainCopyBytes that filled a destination block; Scoop_SpecialMode_UpdateParams is the same step for the source (0x267E, IY).",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:17634 `call Scoop_EventHandler_SpecialMode_Helper` -- after `call Scoop_EventHandler_SpecialMode_Helper2` (17633); six such sites",
+   "display/scoop_display.s:17864 `ld xix, (9850:16)` / 17866 `ld wa, (xix+3)` / 17867 `ld (0x289f:16), wa` -- next link of the destination block",
+   "display/scoop_display.s:17871 `add xwa, (7514:16)` / 17874 `bitm 7, (xwa)` / 17876 `ld (SEQ_ERROR_CODE:16), 11`",
+   "display/scoop_display.s:17880 `ld (9850:16), xwa` / 17881 `ld ix, 5:i3`",
+   "display/scoop_display.s:17841 `ld xiy, (9854:16)` / 17843 `ld wa, (xiy+3)` / 17859 `ld iy, 5:i3` -- the source twin Scoop_SpecialMode_UpdateParams",
+   "sequencer/sequencer_engine.s:18424 `lda xwa, (0x0b0000:24)` / 18425 `ld (7514:16), xwa` -- SeqInit_SetBaseAddress: (0x1D5A) = 0xB0000, the sequencer event memory",
+   "display/scoop_display.s:10521 `ld hl, iy` / 10524 `sla xhl, 8` / 10525 `add xhl, (7514:16)` -- VoiceSlot_UpdateCurrentPointer: block n is at (0x1D5A) + (n-1)*256",
+   "display/scoop_display.s:10510 `ld iy, (xhl+3)` / 10511 `cp iy, 0xffff` / 10515 `andmi8 (xhl), 127` -- block header: +3 = next block (0xFFFF = none), bit 7 of +0 = in use",
+   "display/scoop_display.s:9949 `sub wa, 251` -- 251 data bytes per block (data from +5)",
+   "display/scoop_display.s:17577 `ld xwa, (4349:16)` / 17578 `ld (9854:16), xwa` / 17582 `ld (0x267a:16), xwa` -- Scoop_EventHandler_SpecialMode resolves the source block (0x267E) and the destination block (0x267A)"
+  ]
+ },
+ {
+  "old": "Scoop_EventHandler_SpecialMode_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqData_ChainCopyBytes",
+  "header": "Copies BC bytes (none when BC = 0) from offset IY of the source block (0x267E) to offset IX of the destination block (0x267A) in the sequencer event memory (`ldir` (XIX+),(XIY+)) and returns IY / IX advanced by BC as block offsets. Basis: callers + body -- Scoop_EventHandler_SpecialMode calls it for each piece of its forward copy over the 256-byte block chain, stepping the blocks between pieces with SeqData_ChainNextDstBlock and Scoop_SpecialMode_UpdateParams; Scoop_SpecialMode_Setup is the backward (`lddr`) twin.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:17622 `call Scoop_EventHandler_SpecialMode_Helper2` / 17623 `call Scoop_SpecialMode_UpdateParams` -- one of twelve call sites",
+   "display/scoop_display.s:17888 `cp bc, 0:i3` -- nothing to copy",
+   "display/scoop_display.s:17890 `ld xhl, (9854:16)` / 17891 `ld xde, (9850:16)` / 17894 `add xiy, xhl` / 17895 `add xix, xde` / 17896 `ldir85`",
+   "display/scoop_display.s:17897 `sub xiy, (9854:16)` / 17898 `sub xix, (9850:16)` -- back to offsets",
+   "display/scoop_display.s:17773 `ld xhl, (9854:16)` / 17779 `lddr83` -- the backward twin Scoop_SpecialMode_Setup",
+   "sequencer/sequencer_engine.s:18424 `lda xwa, (0x0b0000:24)` / 18425 `ld (7514:16), xwa` -- SeqInit_SetBaseAddress: (0x1D5A) = 0xB0000, the sequencer event memory",
+   "display/scoop_display.s:10521 `ld hl, iy` / 10524 `sla xhl, 8` / 10525 `add xhl, (7514:16)` -- VoiceSlot_UpdateCurrentPointer: block n is at (0x1D5A) + (n-1)*256",
+   "display/scoop_display.s:10510 `ld iy, (xhl+3)` / 10511 `cp iy, 0xffff` / 10515 `andmi8 (xhl), 127` -- block header: +3 = next block (0xFFFF = none), bit 7 of +0 = in use",
+   "display/scoop_display.s:9949 `sub wa, 251` -- 251 data bytes per block (data from +5)",
+   "display/scoop_display.s:17577 `ld xwa, (4349:16)` / 17578 `ld (9854:16), xwa` / 17582 `ld (0x267a:16), xwa` -- Scoop_EventHandler_SpecialMode resolves the source block (0x267E) and the destination block (0x267A)"
+  ]
+ },
+ {
+  "old": "Scoop_SoundEditorData_Helper10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_DrawFilterEqGraph",
+  "header": "Clears and redraws the EQUALIZER graph of the -12 dB low/high-pass filter pages: the lower box (66,117)-(233,172), peak at x = 86 + part param 4 (FREQ, 0..127), height from param 5 bits 0-6 (GAIN, 0..13) and shape from param 5 bit 7 (RANGE). Basis: callers + body -- SeFilLpq1 switches 5/6/7 (labels RANGE/FREQ/GAIN, columns 5-7) call it after storing params 5/4/5, and the Lpq1/Hpq1 page redraws call it after SeMenu_DrawFilterGraph (the -24 dB pages, which have no equalizer box, do not).",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_editor_data.s:2251 `call z, (Scoop_SoundEditorData_Helper10:24)` -- switch 5 (bit 7 of param 5, 2211-2216); 2299 switch 6 (param 4, 0..127, 2264-2269); 2347 switch 7 (param 5, 0..13, 2312-2317)",
+   "kn5000_v10_program.s:540 `.long SeFilLpq1_OnColumn4_Join23` / 541 / 542 -- entries 5-7 of SeFilLpq1TitleFunc_SwitchHandlers; entry 4 (539) is SeMenu_BitShift_Stub, the label-less column",
+   "audio/sound_editor_screens/se_setup_nav_full.c:76 `.param_label_2` 'EQUALIZER' at (67,108); 77 'FREQ' at (221,176); 86/87/88 'RANGE'/'FREQ'/'GAIN' at x = 202/244/280, y = 209 -- the Lpq1/Hpq1 screen (SeMenu_Utility_CompareBlock draws it)",
+   "audio/sound_editor_ui.s:13033 `sd_quad 0x22, 66, 117, 233, 172` -- the lower (equalizer) box",
+   "audio/semenu_routines.s:5263 `pushw 171` / 5264 `pushw 232` / 5265 `pushw 118` / 5266 `pushw 67` / 5267 `call SeMenu_ClearRect` -- clears exactly that box's inside",
+   "audio/semenu_routines.s:5232 `ld wa, 4:i3` / 5233 `calr SeMenu_LoadPartParam` / 5251 `add wa, 86` -- x = 86 + param 4",
+   "audio/semenu_routines.s:5236 `ld wa, 5:i3` / 5245 `resm 7, (xsp+12)` / 5254 `add a, (xsp+12)` -- param 5 bits 0-6 doubled into the height",
+   "audio/sound_editor_ui.s:1596 `call SeMenu_DrawFilterGraph` / 1597 `call Scoop_SoundEditorData_Helper10` -- Lpq1 page refresh (popup 48); 1667-1668 the same for Hpq1 (49); 1677 the L241 refresh (50) has no such call"
+  ]
+ },
+ {
+  "old": "Scoop_SoundEditorData_Helper12",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeWrtSndTitleFunc_DispatchSwitch",
+  "header": "Switch dispatcher of the sound editor's WRITE SOUND title (SeWrtSnd): decodes the switch event (SeTitle_DecodeSwitch) and calls entry C of the 18-entry handler table ToneGen_ParamTable_0x216 with the bank byte in A. Basis: callers + body -- SeWrtSndTitleFunc_OnSwitchIn is its only caller, and the body is the same code as SeWrtMemTitleFunc_DispatchSwitch and the other SeXxxTitleFunc_DispatchSwitch routines, differing only in the table.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_editor_data.s:39 `call Scoop_SoundEditorData_Helper12` -- SeWrtSndTitleFunc_OnSwitchIn",
+   "kn5000_v10_program.s:425 `.long SeWrtSndTitleFunc_OnSwitchIn` -- method 2 of SeWrtSndTitleFunc_Methods",
+   "audio/sound_editor_ui.s:5588 `call SeTitle_DecodeSwitch` / 5596 `lda xde, (ToneGen_ParamTable_0x216:24)` / 5600 `call (xhl)`",
+   "audio/sound_editor_ui.s:5562 `SeWrtMemTitleFunc_DispatchSwitch:` / 5575 `lda xde, (SeWrtMemTitleFunc_SwitchHandlers:24)` -- the identical sibling just above",
+   "kn5000_v10_program.s:1046 `ToneGen_ParamTable_0x216: .incbin \"includes/generated/tonegen_param_table.bin\", 0x216, 0x48` -- 18 code pointers (so it is SeWrtSnd's switch-handler table, not tone-generator data)"
+  ]
+ },
+ {
+  "old": "SeGfx_DrawBoundRecord_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GraphicsRender_StartSingleRecord",
+  "header": "Renders the one bound ScreenData record at XWA: sets the end pointer XBC = XWA + 1 and enters GraphicsRender_Start, whose loop stops after that record. Basis: callers + body -- SeGfx_DrawBoundRecord (the single-record wrapper; XIY = record) is its only caller, and SeGfx_DrawBoundList calls GraphicsRender_Start with an explicit end; GraphicsRender_ShortByteBlock is the same two instructions for the static-record renderer.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:7776 `call SeGfx_DrawBoundRecord_Helper` -- SeGfx_DrawBoundRecord (7775 `ld xwa, xiy`)",
+   "audio/sound_editor_ui.s:7744 `; Single-record wrappers take the record in XIY, or -- the *_FromBuf ones -- use`",
+   "display/graphics_text_vga.s:250 `lda xbc, (xwa+1)` / 251 `jr t, GraphicsRender_Start` -- the body",
+   "display/graphics_text_vga.s:299 `ld (xsp + 54), xbc` / 305 `cp (xsp + 54), xiz` -- GraphicsRender_Start keeps XBC as the end",
+   "audio/sound_editor_ui.s:7768 `call GraphicsRender_Start` -- SeGfx_DrawBoundList passes the list end in XBC",
+   "display/graphics_text_vga.s:247 `lda xbc, (xwa+1)` / 248 `jr GraphicsRender_ProcessEntries` -- the static-list twin"
+  ]
+ },
+ {
+  "old": "SeMenu_ApplyPartEdit_Helper10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_NoteToKeyboardX",
+  "header": "Converts MIDI note A (clamped to 20..108) to an x offset on the sound editor's keyboard picture and stores it as a word at (XBC): 28 pixels per octave from note 12 plus the key's offset in GUI_DisplayStructData_0x1110 (C 0, C# 2, D 4, D# 6, E 8, F 12 ... B 24), minus 18. Basis: callers + body -- SeMenu_DrawKeyScaleGraph places its key params with it (header: 'note 20..108 -> keyboard x') and SeMenu_DrawPartRangeGraph places the range edges with it in its keyboard mode (A = 0).",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/semenu_routines.s:4665 `calr SeMenu_ApplyPartEdit_Helper10` -- SeMenu_DrawKeyScaleGraph; also 4693, 4697, 4701",
+   "audio/semenu_routines.s:4639 `;   A+1, A+2 unless C = 1) placed on x by SeMenu_ApplyPartEdit_Helper10 (note 20..108 -> keyboard x), slope from the` -- caller's header",
+   "audio/semenu_routines.s:4928 `calr SeMenu_ApplyPartEdit_Helper10` -- SeMenu_DrawPartRangeGraph (A = 0 branch)",
+   "audio/semenu_routines.s:4613 `cp a, 20` / 4618 `cp a, 108` -- clamp",
+   "audio/semenu_routines.s:4622 `sub a, 12` / 4625 `div l, 12` / 4627 `div a, 12` -- octave and key",
+   "audio/semenu_routines.s:4630 `lda xde, (GUI_DisplayStructData_0x1110:24)` / 4632 `mul l, 28` / 4634 `sub l, 18` / 4636 `ld (xbc), hl`",
+   "kn5000_v10_program.s:743 `GUI_DisplayStructData_0x1110: .incbin \"includes/generated/gui_display_struct_data.bin\", 0x1110, 0xD` -- bytes read: 0, 2, 4, 6, 8, 12, 14, 16, 18, 20, 22, 24 (a 12-key octave)"
+  ]
+ },
+ {
+  "old": "SeMenu_ApplyPartEdit_Helper12",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_StoreAbsoluteValue",
+  "header": "Stores the absolute value of the signed byte A at (XBC). Basis: callers + body -- SeMenu_DrawKeyScaleGraph passes the signed key-scale depth (part param 10) and uses its sign separately, and the other graph routines pass signed differences of adjacent edit bytes (e.g. `ld a, (xbc+1) / sub a, (xbc)`) to get a length.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/semenu_routines.s:4756 `exts wa` / 4758 `calr SeMenu_ApplyPartEdit_Helper12` -- SeMenu_DrawKeyScaleGraph; 4779 / 4788 then test the sign of the depth itself",
+   "audio/semenu_routines.s:4089 `ld a, (xbc+1)` / 4090 `sub a, (xbc)` / 4093 `calr SeMenu_ApplyPartEdit_Helper12` -- a difference; also 4147, 4201, 4255, 4388",
+   "audio/semenu_routines.s:4856 `cp a, 0:i3` / 4857 `jr ge, SeMenu_ApplyPartEdit_Helper12_Skip` / 4858 `neg a` / 4860 `ld (xbc), a` -- the body"
+  ]
+ },
+ {
+  "old": "SeMenu_ApplyPartEdit_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeCtr2_StepPartField",
+  "header": "For part A (1..4) of the AFTER TOUCH controller page (SeCtr2): steps the part's 2-bit field (bits 2A-2..2A-1) of page param 12 -- C = 0: 0 -> 1 -> 3 (stays at 3); C != 0: 3 -> 1 -> 0 (stays at 0) -- then redraws the column (SeMenu_RegisterElement_Extended), stores param 12 and posts it (SeMenu_ShowConfirmDialog 59). Parts outside 1..4 do nothing. Basis: callers + body -- SeCtr2_OnPartColumn (columns 5-8 '1ST 2ND 3RD 4TH') is its only caller and its header already describes the step.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/semenu_routines.s:3649 `calr SeMenu_ApplyPartEdit_Helper3` -- SeCtr2_OnPartColumn",
+   "audio/semenu_routines.s:3636 `; SeCtr2_OnPartColumn: SeCtr2 page column 5..8 handler for part A (1..4): steps the part's 2-bit field in page param` -- caller's header",
+   "audio/sound_editor_ui.s:14698 `sd_ctext 0x06, 19, 207*40+23, \"1ST 2ND 3RD 4TH\"` -- the SeCtr2 page's column labels (SeMenu_FilterEdit_DataBlock5_Data; page labels AFTER / TOUCH / DEPTH / FUNCTION in se_setup_ctrl_full.c)",
+   "audio/semenu_routines.s:1880 `cp (xsp+12), 1` / 1882 `cp (xsp+12), 4` -- part 1..4",
+   "audio/semenu_routines.s:1893 `ldw wa, 12` / 1894 `calr SeMenu_LoadPartParam` / 1896 `add a, (xsp+12)` / 1897 `dec 2, a` -- bit position 2A-2 in param 12",
+   "audio/semenu_routines.s:1914 `ldib_erp 250, 3` / 1926 `ldib_erp 250, 1` / 1931 `ldib_erp 250, 0` -- the 0/1/3 steps",
+   "audio/semenu_routines.s:1965 `ldw wa, 12` / 1966 `calr SeMenu_StorePartParam` / 1968 `pushw 59` / 1969 `call SeMenu_ShowConfirmDialog`"
+  ]
+ },
+ {
+  "old": "SeMenu_ApplyPartEdit_Helper4_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_PostDialEnable",
+  "header": "Zero-extends A and tail-jumps to UI_PostDialEnable, which posts EVT_VALEN_SET with that value (every caller passes 1: dial enabled). Basis: callers + body -- SeMenu_BindDialToColumn calls it first (its header: 'posts EVT_VALEN_SET(1)'), and two sound-editor page set-ups call it before posting their dial events.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/semenu_routines.s:2383 `ld wa, 1:i3` / 2384 `calr SeMenu_ApplyPartEdit_Helper4_Helper` -- SeMenu_BindDialToColumn",
+   "audio/semenu_routines.s:2377 `; SeMenu_BindDialToColumn: Points the dial at sound-editor column A (1..8): posts EVT_VALEN_SET(1),`",
+   "audio/sound_editor_ui.s:2555 `ld wa, 1:i3` / 2556 `call SeMenu_ApplyPartEdit_Helper4_Helper` -- also 6770-6771",
+   "audio/semenu_routines.s:2364 `extz wa` / 2365 `jp UI_PostDialEnable` -- the body",
+   "ui/ui_control_panel.s:2964 `UI_PostDialEnable:` / 2969 `ld xbc, EVT_VALEN_SET` / 2970 `jp ApPostEvent`"
+  ]
+ }
+]

@@ -348,9 +348,9 @@ DispatchHandler_ClearActiveFlag:
 	ret
 
 PlayMode_InitFlagBlock:
-	call	PlayMode_InitFlagBlock_Helper
+	call	PlayMode_ArmStartCountdown
 	ret
-PlayMode_InitFlagBlock_Helper:
+PlayMode_ArmStartCountdown:
 	cp (3380:16), 0
 	jr	nz, PlayMode_InitFlagBlock_Return
 	ld	(3380:16), 1

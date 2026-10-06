@@ -9218,72 +9218,72 @@ SqedtVal_ParamCases_Join:
 	pushw	0
 	pushw	255
 	jrl	SqedtVal_ParamCases_Join2
-SqedtVal_ClearDrawBuffer_Case1:
+SqedtVal_ClearDrawBuffer_FromMeasureField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_FM_STRING
 	jr	SqedtVal_ParamCases_Join
-SqedtVal_ClearDrawBuffer_Case2:
+SqedtVal_ClearDrawBuffer_LastMeasureField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_LM_STRING
 	jr	SqedtVal_ParamCases_Join
-SqedtVal_ClearDrawBuffer_Case3:
+SqedtVal_ClearDrawBuffer_AdlyField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_ADLY_STRING
 	jr	SqedtVal_ParamCases_Join
-SqedtVal_ClearDrawBuffer_Case4:
+SqedtVal_ClearDrawBuffer_TransposeField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_TRNS_STRING
 	jr	SqedtVal_ParamCases_Join
-SqedtVal_ClearDrawBuffer_Case5:
+SqedtVal_ClearDrawBuffer_VelocityField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_VELO_STRING
 	jr	SqedtVal_ParamCases_Join
-SqedtVal_ClearDrawBuffer_Case6:
+SqedtVal_ClearDrawBuffer_MersField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_MERS_STRING
 	jr	SqedtVal_ParamCases_Join
-SqedtVal_ClearDrawBuffer_Case7:
+SqedtVal_ClearDrawBuffer_QuantizeValueField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_QTZ_VAL_STRING
 	jrl	SqedtVal_ParamCases_Join
-SqedtVal_ClearDrawBuffer_Case8:
+SqedtVal_ClearDrawBuffer_QuantizeStrengthField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_QTZ_STR_STRING
 	jrl	SqedtVal_ParamCases_Join
-SqedtVal_ClearDrawBuffer_Case9:
+SqedtVal_ClearDrawBuffer_QuantizeWindowField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_QTZ_WIN_STRING
 	jrl	SqedtVal_ParamCases_Join
-SqedtVal_ClearDrawBuffer_Case10:
+SqedtVal_ClearDrawBuffer_TnField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_TN_STRING
 	jrl	SqedtVal_ParamCases_Join
-SqedtVal_ClearDrawBuffer_Case11:
+SqedtVal_ClearDrawBuffer_CnField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_CN_STRING
 	jrl	SqedtVal_ParamCases_Join
-SqedtVal_ClearDrawBuffer_Case12:
+SqedtVal_ClearDrawBuffer_MergeTrackAField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_MRG_TR_A_STRING
 	jrl	SqedtVal_ParamCases_Join
-SqedtVal_ClearDrawBuffer_Case13:
+SqedtVal_ClearDrawBuffer_MergeTrackBField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_MRG_TR_B_STRING
 	jrl	SqedtVal_ParamCases_Join
-SqedtVal_ClearDrawBuffer_Case14:
+SqedtVal_ClearDrawBuffer_MergeTrackCField:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_MRG_TR_C_STRING
@@ -10885,63 +10885,63 @@ AccIll_Dispatch_Join:
 	pushw	0
 	pushw	255
 	jrl	AccIll_Dispatch_Join2
-SqplyVal_ExtraParams_Case16:
+SqplyVal_ExtraParams_MeasureCopyFromMeasureField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MCP_FM_STRING
 	jr	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case17:
+SqplyVal_ExtraParams_MeasureCopyLastMeasureField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MCP_LM_STRING
 	jr	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case18:
+SqplyVal_ExtraParams_MeasureCopyTrackBField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MCP_TR_B_STRING
 	jr	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case19:
+SqplyVal_ExtraParams_MeasureCopyStartMeasureField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MCP_SM_STRING
 	jr	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case20:
+SqplyVal_ExtraParams_MeasureCopyRepeatField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MCP_REP_STRING
 	jr	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case21:
+SqplyVal_ExtraParams_MeasureInsertTrackAField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MINS_TR_A_STRING
 	jr	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case22:
+SqplyVal_ExtraParams_MeasureInsertFromMeasureField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MINS_FM_STRING
 	jr	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case23:
+SqplyVal_ExtraParams_MeasureInsertLastMeasureField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MINS_LM_STRING
 	jr	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case24:
+SqplyVal_ExtraParams_MeasureInsertTrackBField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MINS_TR_B_STRING
 	jrl	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case25:
+SqplyVal_ExtraParams_MeasureInsertStartMeasureField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MINS_SM_STRING
 	jrl	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case26:
+SqplyVal_ExtraParams_MeasureInsertRepeatField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MINS_REP_STRING
 	jrl	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case27:
+SqplyVal_ExtraParams_SongCopyFromSongField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_SCP_FSNG_STRING
 	jrl	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case28:
+SqplyVal_ExtraParams_SongCopyFromTrackField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_SCP_FTR_STRING
 	jrl	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case29:
+SqplyVal_ExtraParams_SongCopyToSongField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_SCP_TSNG_STRING
 	jrl	AccIll_Dispatch_Join
-SqplyVal_ExtraParams_Case30:
+SqplyVal_ExtraParams_SongCopyToTrackField:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_SCP_TTR_STRING
 	jrl	AccIll_Dispatch_Join
@@ -14241,11 +14241,11 @@ SqedtFunc:
 	cp xiz, EVT_GET_SCLR_PER_STRING
 	jrl z, SqedtFunc_CheckMode
 	cp xiz, EVT_GET_SCLR_KB_STRING
-	jrl z, SqedtFunc_Case2
+	jrl z, SqedtFunc_OnGetSclrKbString
 	cp xiz, EVT_GET_SCLR_NAME_STRING
-	jrl z, SqedtFunc_Case1
+	jrl z, SqedtFunc_OnGetSclrNameString
 	cp xiz, EVT_GET_SCLR_NO_STRING
-	jrl z, SqedtFunc_Case0
+	jrl z, SqedtFunc_OnGetSclrNoString
 	ld xwa, (xsp + 8)
 	sub xde, EVT_GET_TRK_STRING
 	cp xde, 0x0
@@ -14277,19 +14277,19 @@ Sqedt_ParamDispatch:
 Sqedt_ParamDispatch_Code:
 	ld	a, (9742:16)
 	jr	Sqedt_ParamDispatch_Join
-SqedtFunc_Switch2_Case157:
+SqedtFunc_TrkString_OnTitleSqtrns:
 	ld	a, (9756:16)
 	jr	Sqedt_ParamDispatch_Join
-SqedtFunc_Switch2_Case163:
+SqedtFunc_TrkString_OnTitleSqmdel:
 	ld	a, (61910:16)
 	jr	Sqedt_ParamDispatch_Join
-SqedtFunc_Switch2_Case161:
+SqedtFunc_TrkString_OnTitleSqmers:
 	ld	a, (61915:16)
 	jr	Sqedt_ParamDispatch_Join
-SqedtFunc_Switch2_Case156:
+SqedtFunc_TrkString_OnTitleSqqtz:
 	ld	a, (61937:16)
 	jr	Sqedt_ParamDispatch_Join
-SqedtFunc_Switch2_Case158:
+SqedtFunc_TrkString_OnTitleSqvelocng:
 	ld	a, (61992:16)
 	jr	Sqedt_ParamDispatch_Join
 Sqedt_ParamDispatch_Skip:
@@ -14314,23 +14314,23 @@ Sqedt_ParamDispatch_Code_2:
 	pushm (0x2610:16)
 	ld	xwa, Sqedt_ParamDispatch_Str
 	jr	Sqedt_ParamDispatch_Join2
-SqedtFunc_Switch3_Case157:
+SqedtFunc_FmString_OnTitleSqtrns:
 	pushm (0x261e:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_2
 	jr	Sqedt_ParamDispatch_Join2
-SqedtFunc_Switch3_Case163:
+SqedtFunc_FmString_OnTitleSqmdel:
 	pushm (0xf1d7:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_3
 	jr	Sqedt_ParamDispatch_Join2
-SqedtFunc_Switch3_Case161:
+SqedtFunc_FmString_OnTitleSqmers:
 	pushm (0xf1dc:16)
 	ld xwa, FmtStr_pct3d_4B5E
 	jr	Sqedt_ParamDispatch_Join2
-SqedtFunc_Switch3_Case156:
+SqedtFunc_FmString_OnTitleSqqtz:
 	pushm (0xf1f2:16)
 	ld xwa, Sqedt_ParamDispatch_Str_Fmt3d
 	jr	Sqedt_ParamDispatch_Join2
-SqedtFunc_Switch3_Case158:
+SqedtFunc_FmString_OnTitleSqvelocng:
 	pushm (0xf229:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_4
 	jr	Sqedt_ParamDispatch_Join2
@@ -14739,7 +14739,7 @@ Sqedt_ParamDispatch_Entry2_Join2:
 	add	xwa, xbc
 	push	xwa
 	jrl	SqedtFunc_ModeC_Entry
-SqedtFunc_Case0:
+SqedtFunc_OnGetSclrNoString:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	pushw 0x6
@@ -14753,7 +14753,7 @@ SqedtFunc_Case0:
 	jrl SqedtFunc_ModeC_Entry
 
 ; SqedtFunc dispatch case 1
-SqedtFunc_Case1:
+SqedtFunc_OnGetSclrNameString:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	pushw 0x10
@@ -14761,7 +14761,7 @@ SqedtFunc_Case1:
 	jrl SqedtFunc_ModeC
 
 ; SqedtFunc dispatch case 2
-SqedtFunc_Case2:
+SqedtFunc_OnGetSclrKbString:
 	ld XWA,(XSP+0x08)
 	ld (XSP+0x04),XWA
 	cp (0x2878:16), 0x0a

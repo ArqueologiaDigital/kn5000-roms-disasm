@@ -266,7 +266,9 @@ GroupBoxProc_Case5:
 GroupBoxProc_Case6:
 	call UIRender_RetStub2
 	jrl GroupBox_ReturnZero
-GroupBoxProc_Case3:
+; GroupBoxProc_OnRefreshApTask: EVT_REFRESH_AP_TASK: disables the dial, clears DIAL_FOCUS, InitializeTimer, then sends
+;   EVT_REFRESH_SW_EVENT to itself.
+GroupBoxProc_OnRefreshApTask:
 	ld wa, 0:i3
 	calr SetDialEnable
 	ld xwa, 0xffffffff
@@ -279,7 +281,7 @@ GroupBoxProc_Case3:
 GroupBox_NavDispatch:
 	call SendEvent
 	jr GroupBox_ReturnZero
-GroupBoxProc_Case4:
+GroupBoxProc_OnRefreshSwEvent:
 	ld iz, 0:i3
 
 GroupBox_CloseAll_Loop:
@@ -751,7 +753,7 @@ GetEditSwPoint:
 EditSwParam_Mode0:
 	ld wa, 0:i3
 	jr EditSwParam_StoreMode0
-GetEditSwPoint_Case8:
+GetEditSwPoint_RightRow1:
 	ldw wa, 0x13f
 
 EditSwParam_StoreMode0:
@@ -763,7 +765,7 @@ EditSwParam_StoreMode0:
 EditSwParam_Mode1:
 	ld wa, 0:i3
 	jr EditSwParam_StoreMode1
-GetEditSwPoint_Case9:
+GetEditSwPoint_RightRow2:
 	ldw wa, 0x13f
 
 EditSwParam_StoreMode1:
@@ -775,7 +777,7 @@ EditSwParam_StoreMode1:
 EditSwParam_Mode2:
 	ld wa, 0:i3
 	jr EditSwParam_StoreMode2
-GetEditSwPoint_Case10:
+GetEditSwPoint_RightRow3:
 	ldw wa, 0x13f
 
 EditSwParam_StoreMode2:
@@ -787,7 +789,7 @@ EditSwParam_StoreMode2:
 EditSwParam_Mode3:
 	ld wa, 0:i3
 	jr EditSwParam_Mode3_Store
-GetEditSwPoint_Case11:
+GetEditSwPoint_RightRow4:
 	ldw wa, 0x13f
 
 ; GetEditSwPoint: store mode 3 result
@@ -800,7 +802,7 @@ EditSwParam_Mode3_Store:
 EditSwParam_Mode4:
 	ld wa, 0:i3
 	jr EditSwParam_Mode4_Store
-GetEditSwPoint_Case12:
+GetEditSwPoint_RightRow5:
 	ldw wa, 0x13f
 
 ; GetEditSwPoint: store mode 4 result
@@ -812,25 +814,25 @@ EditSwParam_Mode4_Store:
 EditSwParam_TempoTable:
 	ldw	wa, 20
 	jr	GetEditSwPoint_Join
-GetEditSwPoint_Case1:
+GetEditSwPoint_Column2:
 	ldw	wa, 60
 	jr	GetEditSwPoint_Join
-GetEditSwPoint_Case2:
+GetEditSwPoint_Column3:
 	ldw	wa, 100
 	jr	GetEditSwPoint_Join
-GetEditSwPoint_Case3:
+GetEditSwPoint_Column4:
 	ldw	wa, 140
 	jr	GetEditSwPoint_Join
-GetEditSwPoint_Case4:
+GetEditSwPoint_Column5:
 	ldw	wa, 180
 	jr	GetEditSwPoint_Join
-GetEditSwPoint_Case5:
+GetEditSwPoint_Column6:
 	ldw	wa, 220
 	jr	GetEditSwPoint_Join
-GetEditSwPoint_Case6:
+GetEditSwPoint_Column7:
 	ldw	wa, 260
 	jr	GetEditSwPoint_Join
-GetEditSwPoint_Case7:
+GetEditSwPoint_Column8:
 	ldw	wa, 300
 GetEditSwPoint_Join:
 	ld	(xbc), wa

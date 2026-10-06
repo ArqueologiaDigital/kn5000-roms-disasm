@@ -4223,7 +4223,13 @@ Flash_InitBytecodeBlock_Helper9_Epilogue:
 	popw	iz
 	lda	xsp, (xsp+0x400)
 	ret
-SaveRegion6_OpenSuccess_Helper:
+; FileIO_SaveRcmFromFlash: Writes the custom-data flash as an .RCM file to the open handle: builds the 1 KB header
+;   from the 'H',0,'K',0 template (MSP_Default_Accompaniment), fills dwords +68..+92 with the sizes of flash sections
+;   0-6 ((+46/+47) * 16) and +28 with the total, fails with HL = 0xFF9B when FileIO_GetDiskFreeSpace is smaller, then
+;   writes the header, sections 1-7 (NoteEventBuffer_CopyToSlot) and 0xF400 bytes of the section-7 image. HL = write
+;   result. Basis: callers + body -- FileIO_SaveRegion6_Simple (region/extension 6) calls it once the file is open for
+;   'wb'; it is the save twin of FileIO_LoadRcmToFlash, which reads the same header and section layout.
+FileIO_SaveRcmFromFlash:
 	lda xsp, (xsp-1036)
 	push	xiz
 	calr	Flash_InitExtMemAddrs

@@ -1,0 +1,1703 @@
+[
+ {
+  "old": "AppEvent_InlineHandler_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecFromMeasure",
+  "header": "EVT_DEC_VAL on sequencer-edit parameter 1: from-measure of the current page (the title's FM word; SqedtFunc_OnGetFmString picks it per title: 0x2610, 0x261e, 0xf1d7, 0xf1dc, 0xf1f2, 0xf229, else 0x2606).",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:20054 `calr AppEvent_InlineHandler` -- ApEditSyori_OnDecVal: EVT_DEC_VAL with the same parameter number in XWA",
+   "sequencer/sequencer_ui.s:9041 `ld xbc, EVT_CUR_TO_PARAM` -- SqedtVal's up-scroll asks the value list for the parameter under the cursor ...",
+   "sequencer/sequencer_ui.s:9048 `ld xbc, EVT_INC_VAL` -- ... and posts it as XDE of EVT_INC_VAL to ApEditSyori (9047); the down-scroll posts EVT_DEC_VAL (9084)",
+   "sequencer/sequencer_ui.s:8898 `cp xwa, 0xe` -- SqedtVal draws parameter N (0..14) with case N of SqedtVal_ParamCases: 8912 EVT_GET_TRK_STRING, 8933 EVT_GET_FM_STRING ... 8998 EVT_GET_MRG_TR_C_STRING",
+   "sequencer/sequencer_ui.s:10566 `sub xhl, 0xf` -- SqedtVal2 draws parameters 15..30 with EVT_GET_MCP_TR_A_STRING .. EVT_GET_SCP_TTR_STRING",
+   "sequencer/sequencer_ui.s:10126 `cp xwa, 0x1f` -- SqedtVal3 draws parameters 31..34 (10128 `cp xwa, 0x22`) with EVT_GET_SCLR_NO/NAME/KB/PER_STRING",
+   "shared/event_codes.s:634 `.equ EVT_GET_TRK_STRING, 0x1e80016` -- MT_GetTrkString = 0x1E80016 + 0; the 31 field methods run to 664 EVT_GET_SCP_TTR_STRING = 0x1E80016 + 30",
+   "sequencer/sequencer_engine.s:20062 `SeqEvent_MainHandler:` -- EVT_PAINT redraws per title: TT_SQNOTECNG 0,1,2,10,11 (20102), TT_SQQTZ 0,1,2,7,8,9 (20195), TT_SQMCP 15..20 (20233), song copy 27..30 (20293), default 0..3 = TT_SQADVDLY (20319)",
+   "sequencer/sequencer_ui.s:14017 `SqedtFunc_OnGetFmString:` -- EVT_GET_FM_STRING formats the same per-title words",
+   "sequencer/sequencer_engine.s:20989 `ld a, (CURRENT_TITLE:16)` / 20990 `extz wa` / 20991 `sub wa, 156` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecLastMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14060 `SqedtFunc_OnGetLmString:` -- EVT_GET_LM_STRING formats the same per-title words",
+   "sequencer/sequencer_engine.s:21056 `ld a, (CURRENT_TITLE:16)` / 21057 `extz wa` / 21058 `sub wa, 156` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecAdly",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14106 `ld e, (9740:16)` -- SqedtFunc_OnGetAdlyString formats byte 9740 (EVT_GET_ADLY_STRING)",
+   "sequencer/sequencer_engine.s:21136 `ld a, (9740:16)` / 21137 `cp a, 160` / 21138 `jrl le, SeqState_DispatchEntry` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecTranspose",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14139 `ld e, (9762:16)` -- SqedtFunc_OnGetTrnsString formats byte 9762 with +/- (EVT_GET_TRNS_STRING)",
+   "sequencer/sequencer_engine.s:21146 `ld a, (9762:16)` / 21147 `cp a, 129` / 21148 `jrl le, SeqState_DispatchEntry` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecVelocity",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14163 `ld e, (0xf22e:16)` -- SqedtFunc_OnGetVeloString formats byte 0xf22e (EVT_GET_VELO_STRING)",
+   "sequencer/sequencer_engine.s:21156 `ld a, (0xf22e:16)` / 21157 `cp a, 129` / 21158 `jrl le, SeqState_DispatchEntry` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecMersEventType",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14191 `ld a, (0xf1e0:16)` -- SqedtFunc_OnGetMersString indexes the 9-char strings \"   ALL   \", \"  NOTE   \", \" CONTROL \" (Sqedt_ParamDispatch_Table_3) with byte 0xf1e0",
+   "sequencer/sequencer_engine.s:21166 `ld a, (0xf1e0:16)` / 21167 `cp a, 0:i3` / 21168 `jrl z, SeqState_DispatchEntry` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecQtzValue",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14203 `ld a, (0xf1f6:16)` -- SqedtFunc_OnGetQtzValString indexes the 15-byte note-symbol strings with byte 0xf1f6",
+   "sequencer/sequencer_engine.s:21176 `ld a, (0xf1f6:16)` / 21177 `cp a, 0:i3` / 21178 `jrl z, SeqState_DispatchEntry` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecQtzStrength",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14214 `ld a, (9728:16)` -- SqedtFunc_OnGetQtzStrString formats byte 9728",
+   "sequencer/sequencer_engine.s:21186 `ld a, (9728:16)` / 21187 `cp a, 0:i3` / 21188 `jrl z, SeqState_DispatchEntry` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecQtzWindow",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14222 `ld e, (9730:16)` -- SqedtFunc_OnGetQtzWinString formats byte 9730 with +/-",
+   "sequencer/sequencer_engine.s:21196 `ld a, (9730:16)` / 21197 `cp a, 156` / 21198 `jrl le, SeqState_DispatchEntry` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecTnNote",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14253 `ld a, (9750:16)` -- SqedtFunc_OnGetTnString looks byte 9750 up in the 9-byte note-name table (NoteEdit_FormatTempoString_Data, a misnomer)",
+   "sequencer/sequencer_engine.s:21206 `ld a, (9750:16)` / 21207 `cp a, 0:i3` / 21208 `jrl z, SeqState_DispatchEntry` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecCnNote",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14277 `ld a, (9816:16)` -- SqedtFunc_OnGetCnString looks byte 9816 up in the same note-name table",
+   "sequencer/sequencer_engine.s:21216 `ld a, (9816:16)` / 21217 `cp a, 0:i3` / 21218 `jrl z, SeqState_DispatchEntry` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case12",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecMrgTrackA",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14303 `ld a, (0xf1d3:16)` -- SqedtFunc_OnGetMrgTrAString formats byte 0xf1d3",
+   "sequencer/sequencer_engine.s:21226 `ld a, (61907:16)` / 21227 `cp a, 1:i3` / 21228 `jr ule, AppEvent_InlineHandler_Skip6` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case13",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecMrgTrackB",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14311 `ld a, (0xf1d4:16)` -- SqedtFunc_OnGetMrgTrBString formats byte 0xf1d4",
+   "sequencer/sequencer_engine.s:21251 `ld a, (0xf1d4:16)` / 21252 `cp a, 1:i3` / 21253 `jr ule, AppEvent_InlineHandler_Skip8` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case14",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecMrgTrackC",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14322 `ld a, (0xf1d5:16)` -- SqedtFunc_OnGetMrgTrCString formats byte 0xf1d5",
+   "sequencer/sequencer_engine.s:21276 `ld a, (0xf1d5:16)` / 21277 `cp a, 1:i3` / 21278 `jrl ule, SeqState_DispatchEntry` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case15",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecMcpParam",
+  "header": "EVT_DEC_VAL on sequencer-edit parameter 15: the six TT_SQMCP measure-copy fields 15..20 (track A 0xf1e9, from 0xf1ea, last 0x2628, track B 0xf1ee, start 0xf1ef, repeat 9770): an inner switch on N - 15, then all six are redrawn.",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14331 `ld a, (0xf1e9:16)` -- SqedtFunc_OnGetMcpTrAString..OnGetMcpRepString (14327-14366) format 0xf1e9, 0xf1ea, 0x2628, 0xf1ee, 0xf1ef, 9770",
+   "sequencer/sequencer_engine.s:21286 `sub xwa, 15` / 21287 `cp xwa, 0` / 21288 `jrl c, AppEvent_InlineHandler_Join5` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Switch4_Case16",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecMcpFromMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21286 `sub xwa, 15` -- inner switch of the DEC_VAL handler for parameters 15..20 (TT_SQMCP measure-copy fields); value = parameter number",
+   "sequencer/sequencer_ui.s:10566 `sub xhl, 0xf` -- SqedtVal2 draws parameter 15 + k with EVT_GET_MCP_TR_A_STRING + k (k = 0..5: TR_A, FM, LM, TR_B, SM, REP)",
+   "sequencer/sequencer_ui.s:14336 `pushm (0xf1ea:16)` -- SqedtFunc_OnGetMcpFmString formats word 0xf1ea",
+   "sequencer/sequencer_engine.s:21307 `ld wa, (0xf1ea:16)` / 21308 `cp wa, 1:i3` / 21309 `jr ule, AppEvent_InlineHandler_Join4` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Switch4_Case17",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecMcpLastMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14345 `pushm (0x2628:16)` -- SqedtFunc_OnGetMcpLmString formats word 0x2628 = 9768",
+   "sequencer/sequencer_engine.s:21314 `ld wa, (9768:16)` / 21315 `cp wa, 1:i3` / 21316 `jr ule, AppEvent_InlineHandler_Skip10` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Switch4_Case18",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecMcpTrackB",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14352 `ld a, (0xf1ee:16)` -- SqedtFunc_OnGetMcpTrBString formats byte 0xf1ee",
+   "sequencer/sequencer_engine.s:21331 `ld a, (0xf1ee:16)` / 21332 `cp a, 1:i3` / 21333 `jr ule, AppEvent_InlineHandler_Join5` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Switch4_Case19",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecMcpStartMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14357 `pushm (0xf1ef:16)` -- SqedtFunc_OnGetMcpSmString formats word 0xf1ef",
+   "sequencer/sequencer_engine.s:21341 `ld wa, (0xf1ef:16)` / 21342 `cp wa, 1:i3` / 21343 `jr ule, AppEvent_InlineHandler_Join5` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Switch4_Case20",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecMcpRepeat",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14366 `ld a, (9770:16)` -- SqedtFunc_OnGetMcpRepString formats byte 9770",
+   "sequencer/sequencer_engine.s:21348 `ld a, (9770:16)` / 21349 `cp a, 0:i3` / 21350 `jr z, AppEvent_InlineHandler_Join5` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case21",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecMinsParam",
+  "header": "EVT_DEC_VAL on sequencer-edit parameter 21: the six TT_SQMINS measure-insert fields 21..26 (track A 0xf1e1, from 0xf1e2, last 0x262e, track B 0xf1e6, start 0xf1e7, repeat 9776): an inner switch on N - 21, then all six are redrawn.",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14375 `ld a, (0xf1e1:16)` -- SqedtFunc_OnGetMinsTrAString..OnGetMinsRepString (14371-14417) format 0xf1e1, 0xf1e2, 0x262e, 0xf1e6, 0xf1e7, 9776",
+   "sequencer/sequencer_engine.s:21379 `sub xwa, 21` / 21380 `cp xwa, 0` / 21381 `jrl c, AppEvent_InlineHandler_Entry3` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case27",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecScpParam",
+  "header": "EVT_DEC_VAL on sequencer-edit parameter 27: the four song-copy fields 27..30 (from-song 9992, from-track 9996, to-song 9994, to-track 9998); a song change reloads its 16-char name (0x2842 / 0x2852) through SeqData_CopyBlock2K.",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14425 `ld a, (9992:16)` -- SqedtFunc_OnGetScpFsngString / OnGetScpFtrString (0x270c = 9996) / OnGetScpTsngString (9994) / OnGetScpTtrString (9998)",
+   "sequencer/sequencer_engine.s:21472 `cp xwa, 30` / 21473 `jr z, AppEvent_InlineHandler_Skip14` / 21474 `cp xwa, 29` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_InlineHandler_Case31",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecSclrSongNo",
+  "header": "EVT_DEC_VAL on sequencer-edit parameter 31: the song-clear song number (byte 0x2878, 0..10); reloads the song's data (SeqData_CopyBlockWithLookup, SeqPart_CountActiveVoices) and redraws parameters 31..34.",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14466 `ld a, (0x2878:16)` -- SqedtFunc_Case0 (EVT_GET_SCLR_NO_STRING) indexes \"SONG 1\"..\"SONG10\" + blank (Sqedt_ParamDispatch_Table_2) with byte 0x2878",
+   "sequencer/sequencer_engine.s:21536 `ld a, (0x2878:16)` / 21537 `cp a, 0:i3` / 21538 `jr z, SeqState_DispatchEntry` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncFromMeasure",
+  "header": "EVT_INC_VAL on sequencer-edit parameter 1: from-measure of the current page (the title's FM word; SqedtFunc_OnGetFmString picks it per title: 0x2610, 0x261e, 0xf1d7, 0xf1dc, 0xf1f2, 0xf229, else 0x2606).",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:20034 `ApEditSyori:` -- the sequencer-edit main function",
+   "sequencer/sequencer_engine.s:20037 `cp xbc, EVT_INC_VAL` -- EVT_INC_VAL -> ApEditSyori_OnIncVal; EVT_DEC_VAL (20035) -> ApEditSyori_OnDecVal",
+   "sequencer/sequencer_engine.s:20047 `ld xwa, xde` -- the switched value is the event parameter XDE",
+   "sequencer/sequencer_engine.s:20048 `calr AppEvent_ChainDispatch1` -- INC_VAL; 20054 `calr AppEvent_InlineHandler` is the DEC_VAL twin",
+   "sequencer/sequencer_ui.s:9041 `ld xbc, EVT_CUR_TO_PARAM` -- SqedtVal's up-scroll asks the value list for the parameter under the cursor ...",
+   "sequencer/sequencer_ui.s:9048 `ld xbc, EVT_INC_VAL` -- ... and posts it as XDE of EVT_INC_VAL to ApEditSyori (9047); the down-scroll posts EVT_DEC_VAL (9084)",
+   "sequencer/sequencer_ui.s:8898 `cp xwa, 0xe` -- SqedtVal draws parameter N (0..14) with case N of SqedtVal_ParamCases: 8912 EVT_GET_TRK_STRING, 8933 EVT_GET_FM_STRING ... 8998 EVT_GET_MRG_TR_C_STRING",
+   "sequencer/sequencer_ui.s:10566 `sub xhl, 0xf` -- SqedtVal2 draws parameters 15..30 with EVT_GET_MCP_TR_A_STRING .. EVT_GET_SCP_TTR_STRING",
+   "sequencer/sequencer_ui.s:10126 `cp xwa, 0x1f` -- SqedtVal3 draws parameters 31..34 (10128 `cp xwa, 0x22`) with EVT_GET_SCLR_NO/NAME/KB/PER_STRING",
+   "shared/event_codes.s:634 `.equ EVT_GET_TRK_STRING, 0x1e80016` -- MT_GetTrkString = 0x1E80016 + 0; the 31 field methods run to 664 EVT_GET_SCP_TTR_STRING = 0x1E80016 + 30",
+   "sequencer/sequencer_engine.s:20062 `SeqEvent_MainHandler:` -- EVT_PAINT redraws per title: TT_SQNOTECNG 0,1,2,10,11 (20102), TT_SQQTZ 0,1,2,7,8,9 (20195), TT_SQMCP 15..20 (20233), song copy 27..30 (20293), default 0..3 = TT_SQADVDLY (20319)",
+   "sequencer/sequencer_ui.s:14017 `SqedtFunc_OnGetFmString:` -- EVT_GET_FM_STRING formats the same per-title words",
+   "sequencer/sequencer_engine.s:20376 `ld a, (CURRENT_TITLE:16)` / 20377 `extz wa` / 20378 `sub wa, 0x9c` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncLastMeasure",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14060 `SqedtFunc_OnGetLmString:` -- EVT_GET_LM_STRING formats the same per-title words",
+   "sequencer/sequencer_engine.s:20443 `ld a, (CURRENT_TITLE:16)` / 20444 `extz wa` / 20445 `sub wa, 0x9c` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncAdly",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14106 `ld e, (9740:16)` -- SqedtFunc_OnGetAdlyString formats byte 9740 (EVT_GET_ADLY_STRING)",
+   "sequencer/sequencer_engine.s:20523 `ld a, (9740:16)` / 20524 `cp a, 0x60` / 20525 `jrl ge, AppEvent_Epilogue` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncTranspose",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14139 `ld e, (9762:16)` -- SqedtFunc_OnGetTrnsString formats byte 9762 with +/- (EVT_GET_TRNS_STRING)",
+   "sequencer/sequencer_engine.s:20533 `ld a, (9762:16)` / 20534 `cp a, 0x7f` / 20535 `jrl ge, AppEvent_Epilogue` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncVelocity",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14163 `ld e, (0xf22e:16)` -- SqedtFunc_OnGetVeloString formats byte 0xf22e (EVT_GET_VELO_STRING)",
+   "sequencer/sequencer_engine.s:20543 `ld a, (0xf22e:16)` / 20544 `cp a, 0x7f` / 20545 `jrl ge, AppEvent_Epilogue` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncMersEventType",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14191 `ld a, (0xf1e0:16)` -- SqedtFunc_OnGetMersString indexes the 9-char strings \"   ALL   \", \"  NOTE   \", \" CONTROL \" (Sqedt_ParamDispatch_Table_3) with byte 0xf1e0",
+   "sequencer/sequencer_engine.s:20553 `ld a, (0xf1e0:16)` / 20554 `cp a, 2:i3` / 20555 `jrl nc, AppEvent_Epilogue` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncQtzValue",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14203 `ld a, (0xf1f6:16)` -- SqedtFunc_OnGetQtzValString indexes the 15-byte note-symbol strings with byte 0xf1f6",
+   "sequencer/sequencer_engine.s:20563 `ld a, (0xf1f6:16)` / 20564 `cp a, 6:i3` / 20565 `jrl nc, AppEvent_Epilogue` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncQtzStrength",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14214 `ld a, (9728:16)` -- SqedtFunc_OnGetQtzStrString formats byte 9728",
+   "sequencer/sequencer_engine.s:20573 `ld a, (9728:16)` / 20574 `cp a, 0x64` / 20575 `jrl nc, AppEvent_Epilogue` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncQtzWindow",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14222 `ld e, (9730:16)` -- SqedtFunc_OnGetQtzWinString formats byte 9730 with +/-",
+   "sequencer/sequencer_engine.s:20583 `ld a, (9730:16)` / 20584 `cp a, 0x64` / 20585 `jrl ge, AppEvent_Epilogue` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncTnNote",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14253 `ld a, (9750:16)` -- SqedtFunc_OnGetTnString looks byte 9750 up in the 9-byte note-name table (NoteEdit_FormatTempoString_Data, a misnomer)",
+   "sequencer/sequencer_engine.s:20593 `ld a, (9750:16)` / 20594 `cp a, 0x7f` / 20595 `jrl nc, AppEvent_Epilogue` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncCnNote",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14277 `ld a, (9816:16)` -- SqedtFunc_OnGetCnString looks byte 9816 up in the same note-name table",
+   "sequencer/sequencer_engine.s:20603 `ld a, (9816:16)` / 20604 `cp a, 0x7f` / 20605 `jrl nc, AppEvent_Epilogue` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case12",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncMrgTrackA",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14303 `ld a, (0xf1d3:16)` -- SqedtFunc_OnGetMrgTrAString formats byte 0xf1d3",
+   "sequencer/sequencer_engine.s:20613 `ld a, (0xf1d3:16)` / 20614 `cp a, 0x10` / 20615 `jr nc, AppEvtHandler_Branch_014` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case13",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncMrgTrackB",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14311 `ld a, (0xf1d4:16)` -- SqedtFunc_OnGetMrgTrBString formats byte 0xf1d4",
+   "sequencer/sequencer_engine.s:20638 `ld a, (0xf1d4:16)` / 20639 `cp a, 0x10` / 20640 `jr nc, AppEvtHandler_Branch_018` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case14",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncMrgTrackC",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14322 `ld a, (0xf1d5:16)` -- SqedtFunc_OnGetMrgTrCString formats byte 0xf1d5",
+   "sequencer/sequencer_engine.s:20663 `ld a, (0xf1d5:16)` / 20664 `cp a, 0x10` / 20665 `jrl nc, AppEvent_Epilogue` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case15",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncMcpParam",
+  "header": "EVT_INC_VAL on sequencer-edit parameter 15: the six TT_SQMCP measure-copy fields 15..20 (track A 0xf1e9, from 0xf1ea, last 0x2628, track B 0xf1ee, start 0xf1ef, repeat 9770): an inner switch on N - 15, then all six are redrawn.",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14331 `ld a, (0xf1e9:16)` -- SqedtFunc_OnGetMcpTrAString..OnGetMcpRepString (14327-14366) format 0xf1e9, 0xf1ea, 0x2628, 0xf1ee, 0xf1ef, 9770",
+   "sequencer/sequencer_engine.s:20673 `sub xwa, 0xf` / 20674 `cp xwa, 0x0` / 20675 `jrl c, AppEvtHandler_Branch_024` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case21",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncMinsParam",
+  "header": "EVT_INC_VAL on sequencer-edit parameter 21: the six TT_SQMINS measure-insert fields 21..26 (track A 0xf1e1, from 0xf1e2, last 0x262e, track B 0xf1e6, start 0xf1e7, repeat 9776): an inner switch on N - 21, then all six are redrawn.",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14375 `ld a, (0xf1e1:16)` -- SqedtFunc_OnGetMinsTrAString..OnGetMinsRepString (14371-14417) format 0xf1e1, 0xf1e2, 0x262e, 0xf1e6, 0xf1e7, 9776",
+   "sequencer/sequencer_engine.s:20766 `sub xwa, 0x15` / 20767 `cp xwa, 0x0` / 20768 `jrl c, AppEvtHandler_Branch_027` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case27",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncScpParam",
+  "header": "EVT_INC_VAL on sequencer-edit parameter 27: the four song-copy fields 27..30 (from-song 9992, from-track 9996, to-song 9994, to-track 9998); a song change reloads its 16-char name (0x2842 / 0x2852) through SeqData_CopyBlock2K.",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14425 `ld a, (9992:16)` -- SqedtFunc_OnGetScpFsngString / OnGetScpFtrString (0x270c = 9996) / OnGetScpTsngString (9994) / OnGetScpTtrString (9998)",
+   "sequencer/sequencer_engine.s:20859 `cp xwa, 0x1e` / 20860 `jr z, AppEvtHandler_Branch_031` / 20861 `cp xwa, 0x1d` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "AppEvent_ChainDispatch1_Case31",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncSclrSongNo",
+  "header": "EVT_INC_VAL on sequencer-edit parameter 31: the song-clear song number (byte 0x2878, 0..10); reloads the song's data (SeqData_CopyBlockWithLookup, SeqPart_CountActiveVoices) and redraws parameters 31..34.",
+  "basis": "switch value meaning (sequencer-edit parameter number = EVT_GET_*_STRING index) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14466 `ld a, (0x2878:16)` -- SqedtFunc_Case0 (EVT_GET_SCLR_NO_STRING) indexes \"SONG 1\"..\"SONG10\" + blank (Sqedt_ParamDispatch_Table_2) with byte 0x2878",
+   "sequencer/sequencer_engine.s:20923 `ld a, (0x2878:16)` / 20924 `cp a, 0xa` / 20925 `jr nc, AppEvent_Epilogue` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8426 `extz bc` -- MIDI_ReadChannelParam(XWA = buffer, BC = index 0..15, E = byte)",
+   "midi/midi_dispatch_handlers.s:8438 `ld (xwa), e` -- case 0 stores E at buffer+0 (MidiChan_ParamDispatch)",
+   "midi/midi_dispatch_handlers.s:8485 `add xwa, xbc` -- every case N is `ld xbc, N` + this join: buffer[N] = E (8486 `ld (xwa), e`)",
+   "midi/midi_dispatch_handlers.s:8615 `calr MIDI_ReadChannelParam` -- the MidiChan_* / MidiSeq_* callers pass MIDISEQ_ACTIVE_BUF_PTR with small constant indices (here 5, then 0, 1, 2 after SysExRx_TrieRoot lookups); what each byte of that record means is not established",
+   "midi/midi_dispatch_handlers.s:8441 `ld xbc, 1:i3` / 8442 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case2",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8444 `ld xbc, 2:i3` / 8445 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case3",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8447 `ld xbc, 3:i3` / 8448 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8450 `ld xbc, 4:i3` / 8451 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8453 `ld xbc, 5:i3` / 8454 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case6",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8456 `ld xbc, 6:i3` / 8457 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case7",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8459 `ld xbc, 7:i3` / 8460 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case8",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8462 `ld xbc, 8` / 8463 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case9",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8465 `ld xbc, 9` / 8466 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case10",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8468 `ld xbc, 10` / 8469 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case11",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8471 `ld xbc, 11` / 8472 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case12",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8474 `ld xbc, 12` / 8475 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case13",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8477 `ld xbc, 13` / 8478 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case14",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8480 `ld xbc, 14` / 8481 `jr MIDI_ReadChannelParam_Join` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "MIDI_ReadChannelParam_Case15",
+  "verdict": "refuse",
+  "why_refused": "The switch is a compiled `buffer[index] = value` (a byte store, not a read: the owner name is wrong): every case only loads its own index N into XBC and joins `add xwa, xbc / ld (xwa), e`. The case does nothing but select offset N of a 16-byte record (MIDISEQ_ACTIVE_BUF_PTR at the callers) whose per-byte meanings are not established, so a name could only say 'offset N'.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset; no per-value meaning",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8483 `ld xbc, 15` / 8484 `MIDI_ReadChannelParam_Join:` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack2",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "audio/sound_navigation.s:488 `cp xbc, EVT_TOGGLE_TRACK_SWITCH` -- MainTrSwControl: on EVT_TOGGLE_TRACK_SWITCH (XDE = track switch, 486 `ld xwa, (xsp)`) ...",
+   "audio/sound_navigation.s:499 `call AppEvent_HandleChannelEvent` -- ... calls AppEvent_HandleChannelEvent with A = the switch index",
+   "sequencer/sequencer_engine.s:21697 `ld (xsp + 4), a` -- the index is kept at (xsp+4)",
+   "sequencer/sequencer_engine.s:21702 `inc 1, c` -- C = index + 1 (21701 `ld c, (xsp + 4)`)",
+   "sequencer/sequencer_engine.s:21708 `jrl z, SeqState_LabelDispatch` -- taken when CURRENT_TITLE = 0x89 (21707) = TT_SQTRSEL, the sequencer track-select page (shared/event_codes.s:1964)",
+   "sequencer/sequencer_engine.s:21733 `slaa de` -- on the play titles the same index is a bit of a 16-bit track mask (`and a, 0xf` 21731), so it is a track 0..15",
+   "sequencer/sequencer_engine.s:21814 `dec 1, bc` -- SeqState_LabelDispatch: value C = track number 1..16 (21817 `cp bc, 0xf`), table index = track - 1",
+   "ui/ui_playback_modes.s:254 `ld xhl, 0x0000f1a0` -- Part_LookupParam (called by PartParam_Handler_NN with C = NN): (3423) = byte 0xf1a0[NN] (the 16-entry per-track table), (3424) = NN + 1",
+   "sequencer/sequencer_engine.s:21829 `call PartParam_Handler_01` / 21830 `jrl AppEvent_PopIzSkip2Ret` -- track 2 calls PartParam_Handler_01 (C = 1)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack3",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21832 `call PartParam_Handler_02` / 21833 `jrl AppEvent_PopIzSkip2Ret` -- track 3 calls PartParam_Handler_02 (C = 2)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack4",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21835 `call PartParam_Handler_03` / 21836 `jrl AppEvent_PopIzSkip2Ret` -- track 4 calls PartParam_Handler_03 (C = 3)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack5",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21838 `call PartParam_Handler_04` / 21839 `jrl AppEvent_PopIzSkip2Ret` -- track 5 calls PartParam_Handler_04 (C = 4)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack6",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21841 `call PartParam_Handler_05` / 21842 `jrl AppEvent_PopIzSkip2Ret` -- track 6 calls PartParam_Handler_05 (C = 5)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack7",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21844 `call PartParam_Handler_06` / 21845 `jrl AppEvent_PopIzSkip2Ret` -- track 7 calls PartParam_Handler_06 (C = 6)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack8",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21847 `call PartParam_Handler_07` / 21848 `jrl AppEvent_PopIzSkip2Ret` -- track 8 calls PartParam_Handler_07 (C = 7)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack9",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21850 `call PartParam_Handler_08` / 21851 `jrl AppEvent_PopIzSkip2Ret` -- track 9 calls PartParam_Handler_08 (C = 8)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack10",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21853 `call PartParam_Handler_09` / 21854 `jrl AppEvent_PopIzSkip2Ret` -- track 10 calls PartParam_Handler_09 (C = 9)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack11",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21856 `call PartParam_Handler_0A` / 21857 `jrl AppEvent_PopIzSkip2Ret` -- track 11 calls PartParam_Handler_0A (C = 10)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case12",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack12",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21859 `call PartParam_Handler_0B` / 21860 `jrl AppEvent_PopIzSkip2Ret` -- track 12 calls PartParam_Handler_0B (C = 11)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case13",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack13",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21862 `call PartParam_Handler_0C` / 21863 `jrl AppEvent_PopIzSkip2Ret` -- track 13 calls PartParam_Handler_0C (C = 12)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case14",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack14",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21865 `call PartParam_Handler_0D` / 21866 `jrl AppEvent_PopIzSkip2Ret` -- track 14 calls PartParam_Handler_0D (C = 13)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case15",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack15",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21868 `call PartParam_Handler_0E` / 21869 `jrl AppEvent_PopIzSkip2Ret` -- track 15 calls PartParam_Handler_0E (C = 14)"
+  ]
+ },
+ {
+  "old": "SeqState_LabelDispatch_Case16",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqState_LabelDispatch_OnTrack16",
+  "header": "",
+  "basis": "switch value meaning (track number on TT_SQTRSEL) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21871 `call PartParam_Handler_0F` / 21872 `jrl AppEvent_PopIzSkip2Ret` -- track 16 calls PartParam_Handler_0F (C = 15)"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch2_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_IncAutoPlayChordInput",
+  "header": "",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1307 `sub xwa, EVT_INDEXSW_UP` -- InOutGridCheck: EVT_INDEXSW_UP / _AIC go to Data_InOutGridDispatch, EVT_INDEXSW_DOWN / _AIC to InOutGridCheck_OnIndexswDown (InOutGridCheck_CaseTable)",
+   "midi/ac_listener_handlers.s:1321 `ld xbc, EVT_GET_SELECTED_CEL` -- the focused grid's selected cell, (col<<16)|row",
+   "midi/ac_listener_handlers.s:1332 `cpw (xwa), 1` -- only column 1 (the value column); the switched value is the row (1336 `cp bc, 8`: rows 0..8)",
+   "ui_widgets/naka_midi_reverb.c:3739 `.InOutGridBox_fixedrow = ALIGNED_STRING(\" RIGHT 1 INPUT :| AUTO PLAY CHORD INPUT :| VELOCITY INPUT :| a|-| TECHNI-CHORD OUTPUT :| TRANSPOSE OUTPUT :| DRUM PATTERN OUTPUT :| AUTO PLAY CHORD OUTPUT :\"),` -- the grid's row captions: 0 RIGHT 1 INPUT, 1 AUTO PLAY CHORD INPUT, 2 VELOCITY INPUT, 3 (VELOCITY OFFSET VALUE / VELOCITY FIXED VALUE: AcInOutGrid_GetRowText_Src1/Src2_Str, naka_widget_tables_2.c:12664/12666), 4 '-', 5 TECHNI-CHORD OUTPUT, 6 TRANSPOSE OUTPUT, 7 DRUM PATTERN OUTPUT, 8 AUTO PLAY CHORD OUTPUT",
+   "midi/ac_listener_handlers.s:1480 `cp xix, 0x2183` -- InOutGridCheck_OnLswData puts Lsw 0x2183 in row 8; 0x2182 row 7, 0x2184 row 6, 0x2181 row 5, 0x5001/0x5002 row 3, 0x5000 row 2, 0x2101 row 1, 0x2100 row 0 (`ldw (xbc), N`)",
+   "midi/ac_listener_handlers.s:1470 `call MainLswAdd` -- every case adds BC (+1 here, 0xffff in the DOWN switch) to its Lsw parameter",
+   "midi/ac_listener_handlers.s:1349 `ld xwa, 0x2101` / 1350 `ld bc, 1:i3` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch2_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_IncVelocityInputMode",
+  "header": "",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "ui_widgets/naka_widget_tables_2.c:12687-12694 -- Lsw 0x5000 is shown through Data_InOutGridDispatch_PtrTable_3 / _Strings_3: 0 \" DIRECT \", 1 \" OFFSET \", 2 \"  FIX   \" (InOutGridCheck_Skip4); audio/dsp_config_sysex.s:6363-6385 applies it: 0 -> (0xc362) = 0 / (0xc363) = 255, 1 -> (0xc362) = Lsw 0x5001, 2 -> (0xc363) = Lsw 0x5002",
+   "midi/ac_listener_handlers.s:1354 `ld xwa, 0x5000` / 1355 `ld bc, 1:i3` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch2_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_IncVelocityOffsetOrFixed",
+  "header": "VELOCITY OFFSET VALUE (Lsw 0x5001) or VELOCITY FIXED VALUE (Lsw 0x5002) row, by the VELOCITY INPUT mode in Lsw 0x5000; nothing in DIRECT mode.",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1360 `call SndParam_LookupReadOnly` -- reads Lsw 0x5000: mode 1 (OFFSET) steps Lsw 0x5001, mode 2 (FIX) steps Lsw 0x5002, DIRECT does nothing",
+   "midi/ac_listener_handlers.s:1359 `ld xwa, 0x5000` / 1360 `call SndParam_LookupReadOnly` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch2_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_IncTechniChordOutput",
+  "header": "",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1375 `ld xwa, 0x2181` / 1376 `ld bc, 1:i3` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch2_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_IncTransposeOutput",
+  "header": "",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1380 `ld xwa, 0x2184` / 1381 `ld bc, 1:i3` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch2_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_IncDrumPatternOutput",
+  "header": "",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1385 `ld xwa, 0x2182` / 1386 `ld bc, 1:i3` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch2_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_IncAutoPlayChordOutput",
+  "header": "",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1390 `ld xwa, 0x2183` / 1391 `ld bc, 1:i3` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch3_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_DecAutoPlayChordInput",
+  "header": "",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1394 `InOutGridCheck_OnIndexswDown:` -- EVT_INDEXSW_DOWN / EVT_INDEXSW_DOWN_AIC (0x1c00018 / 0x1c0001a); same row decode as the UP switch (1408 `cpw (xwa), 1`, 1412 `cp bc, 8`)",
+   "midi/ac_listener_handlers.s:1421 `ldw bc, 0xffff` -- the DOWN cases add -1 to the row's Lsw parameter",
+   "midi/ac_listener_handlers.s:1425 `ld xwa, 0x2101` / 1426 `ldw bc, 0xffff` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch3_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_DecVelocityInputMode",
+  "header": "",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "ui_widgets/naka_widget_tables_2.c:12687-12694 -- Lsw 0x5000 is shown through Data_InOutGridDispatch_PtrTable_3 / _Strings_3: 0 \" DIRECT \", 1 \" OFFSET \", 2 \"  FIX   \" (InOutGridCheck_Skip4); audio/dsp_config_sysex.s:6363-6385 applies it: 0 -> (0xc362) = 0 / (0xc363) = 255, 1 -> (0xc362) = Lsw 0x5001, 2 -> (0xc363) = Lsw 0x5002",
+   "midi/ac_listener_handlers.s:1430 `ld xwa, 0x5000` / 1431 `ldw bc, 0xffff` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch3_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_DecVelocityOffsetOrFixed",
+  "header": "VELOCITY OFFSET VALUE (Lsw 0x5001) or VELOCITY FIXED VALUE (Lsw 0x5002) row, by the VELOCITY INPUT mode in Lsw 0x5000; nothing in DIRECT mode.",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1436 `call SndParam_LookupReadOnly` -- reads Lsw 0x5000: mode 1 (OFFSET) steps Lsw 0x5001, mode 2 (FIX) steps Lsw 0x5002, DIRECT does nothing",
+   "midi/ac_listener_handlers.s:1435 `ld xwa, 0x5000` / 1436 `call SndParam_LookupReadOnly` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch3_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_DecTechniChordOutput",
+  "header": "",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1451 `ld xwa, 0x2181` / 1452 `ldw bc, 0xffff` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch3_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_DecTransposeOutput",
+  "header": "",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1456 `ld xwa, 0x2184` / 1457 `ldw bc, 0xffff` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch3_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_DecDrumPatternOutput",
+  "header": "",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1461 `ld xwa, 0x2182` / 1462 `ldw bc, 0xffff` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "InOutGridCheck_Switch3_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_DecAutoPlayChordOutput",
+  "header": "",
+  "basis": "switch value meaning (MIDI IN/OUT grid row) + body (Lsw id it steps)",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1466 `ld xwa, 0x2183` / 1467 `ldw bc, 0xffff` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "SqedtFunc_Switch2_Case157",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_TrkString_OnTitleSqtrns",
+  "header": "",
+  "basis": "switch value meaning (current title id) + body (title's track byte RAM)",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13950 `call GetTitleNow` -- SqedtFunc keeps the current title id in HL",
+   "sequencer/sequencer_ui.s:13969 `sub xde, EVT_GET_TRK_STRING` -- 40-way switch on the method (SqedtFunc_CaseTable); case 0, Sqedt_ParamDispatch (13980), is EVT_GET_TRK_STRING",
+   "sequencer/sequencer_ui.s:13985 `sub hl, 156` -- inner switch on the title id 156..163 = 0x9c..0xa3 (TT_SQQTZ, TT_SQTRNS, TT_SQVELOCNG, TT_SQNOTECNG, TT_SQADVDLY, TT_SQMERS, TT_SQMCP, TT_SQMDEL; shared/event_codes.s:1975-1982) picks the title's track byte",
+   "sequencer/sequencer_ui.s:14016 `jrl Sqedt_ParamDispatch_Join8` -- the byte indexes the 5-char track names \"    1\"..\"   16\", \"  ALL\" (LongStr_1_2_3)",
+   "sequencer/sequencer_engine.s:20354 `APP_EVENT_HANDLER_TABLE:` -- the INC_VAL handler of parameter 0 steps the same per-title track byte (AppEvtHandler_Branch_002_RamPtrs), max 0x11 = ALL",
+   "sequencer/sequencer_ui.s:13999 `ld a, (9756:16)` / 14000 `jr Sqedt_ParamDispatch_Join` -- title 0x9d reads 9756"
+  ]
+ },
+ {
+  "old": "SqedtFunc_Switch2_Case163",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_TrkString_OnTitleSqmdel",
+  "header": "",
+  "basis": "switch value meaning (current title id) + body (title's track byte RAM)",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14002 `ld a, (0xf1d6:16)` / 14003 `jr Sqedt_ParamDispatch_Join` -- title 0xa3 reads 0xf1d6"
+  ]
+ },
+ {
+  "old": "SqedtFunc_Switch2_Case161",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_TrkString_OnTitleSqmers",
+  "header": "",
+  "basis": "switch value meaning (current title id) + body (title's track byte RAM)",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14005 `ld a, (0xf1db:16)` / 14006 `jr Sqedt_ParamDispatch_Join` -- title 0xa1 reads 0xf1db"
+  ]
+ },
+ {
+  "old": "SqedtFunc_Switch2_Case156",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_TrkString_OnTitleSqqtz",
+  "header": "",
+  "basis": "switch value meaning (current title id) + body (title's track byte RAM)",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14008 `ld a, (0xf1f1:16)` / 14009 `jr Sqedt_ParamDispatch_Join` -- title 0x9c reads 0xf1f1"
+  ]
+ },
+ {
+  "old": "SqedtFunc_Switch2_Case158",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_TrkString_OnTitleSqvelocng",
+  "header": "",
+  "basis": "switch value meaning (current title id) + body (title's track byte RAM)",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14011 `ld a, (0xf228:16)` / 14012 `jr Sqedt_ParamDispatch_Join` -- title 0x9e reads 0xf228"
+  ]
+ },
+ {
+  "old": "SqedtFunc_Switch3_Case157",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_FmString_OnTitleSqtrns",
+  "header": "",
+  "basis": "switch value meaning (current title id) + body (title's from-measure word RAM)",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14017 `SqedtFunc_OnGetFmString:` -- case 1 of SqedtFunc's method switch, EVT_GET_FM_STRING",
+   "sequencer/sequencer_ui.s:14021 `sub hl, 156` -- inner switch on the title id 156..163 = 0x9c..0xa3 picks the title's from-measure word (each sits right after that title's track byte: 0xf1f1/0xf1f2, 0x261c/0x261e, 0xf228/0xf229, 0xf1db/0xf1dc, 0xf1d6/0xf1d7)",
+   "sequencer/sequencer_engine.s:20378 `sub wa, 0x9c` -- the INC_VAL handler of parameter 1 steps the same per-title words, switching on CURRENT_TITLE - 0x9c the same way",
+   "sequencer/sequencer_ui.s:14036 `pushm (0x261e:16)` / 14037 `ld xwa, Sqedt_ParamDispatch_Str_2` -- title 0x9d reads 0x261e"
+  ]
+ },
+ {
+  "old": "SqedtFunc_Switch3_Case163",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_FmString_OnTitleSqmdel",
+  "header": "",
+  "basis": "switch value meaning (current title id) + body (title's from-measure word RAM)",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14040 `pushm (0xf1d7:16)` / 14041 `ld xwa, Sqedt_ParamDispatch_Str_3` -- title 0xa3 reads 0xf1d7"
+  ]
+ },
+ {
+  "old": "SqedtFunc_Switch3_Case161",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_FmString_OnTitleSqmers",
+  "header": "",
+  "basis": "switch value meaning (current title id) + body (title's from-measure word RAM)",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14044 `pushm (0xf1dc:16)` / 14045 `ld xwa, FmtStr_pct3d_4B5E` -- title 0xa1 reads 0xf1dc"
+  ]
+ },
+ {
+  "old": "SqedtFunc_Switch3_Case156",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_FmString_OnTitleSqqtz",
+  "header": "",
+  "basis": "switch value meaning (current title id) + body (title's from-measure word RAM)",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14048 `pushm (0xf1f2:16)` / 14049 `ld xwa, Sqedt_ParamDispatch_Str_Fmt3d` -- title 0x9c reads 0xf1f2"
+  ]
+ },
+ {
+  "old": "SqedtFunc_Switch3_Case158",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_FmString_OnTitleSqvelocng",
+  "header": "",
+  "basis": "switch value meaning (current title id) + body (title's from-measure word RAM)",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14052 `pushm (0xf229:16)` / 14053 `ld xwa, Sqedt_ParamDispatch_Str_4` -- title 0x9e reads 0xf229"
+  ]
+ },
+ {
+  "old": "SqedtFunc_Case0",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnGetSclrNoString",
+  "header": "EVT_GET_SCLR_NO_STRING: copies the 6-char \"SONG n\" label of song-clear song (0x2878) from Sqedt_ParamDispatch_Table_2 (blank for 10).",
+  "basis": "event code (if-chain) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13966 `cp xiz, EVT_GET_SCLR_NO_STRING` -- the value is the method code: SCLR_NO -> Case0 (13967), SCLR_NAME -> Case1 (13964/13965), SCLR_KB -> Case2 (13962/13963)",
+   "sequencer/sequencer_ui.s:10181 `ld xbc, EVT_GET_SCLR_NO_STRING` -- SqedtVal3 sends these for parameters 31..34",
+   "sequencer/sequencer_engine.s:20923 `ld a, (0x2878:16)` -- parameter 31 (EVT_INC_VAL) steps byte 0x2878 0..10 and reloads that song (SeqData_CopyBlockWithLookup, SeqPart_CountActiveVoices), then redraws 31..34",
+   "note: \"Sclr\" reads as Song CLeaR, not scale (the inference in shared/event_codes.s:684-687): title 0x90 is TT_SQSNGCLR, and its EVT_PAINT case in SeqEvent_MainHandler (SeqEvent_Dispatch) runs the same 0x2878 reload; the number strings are \"SONG 1\"..\"SONG10\"",
+   "sequencer/sequencer_ui.s:14463 `ld xwa, (xsp + 8)` / 14464 `ld (xsp + 4), xwa` / 14465 `pushw 0x6` / 14466 `ld a, (0x2878:16)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "SqedtFunc_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnGetSclrNameString",
+  "header": "",
+  "basis": "event code (if-chain) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13964 `cp xiz, EVT_GET_SCLR_NAME_STRING` -- EVT_GET_SCLR_NAME_STRING -> this case",
+   "sequencer/sequencer_ui.s:14477 `ld xwa, (xsp + 8)` / 14478 `ld (xsp + 4), xwa` / 14479 `pushw 0x10` / 14480 `lda xwa, (9706:16)` -- copies the 16 characters at 9706 (0x25ea)"
+  ]
+ },
+ {
+  "old": "SqedtFunc_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnGetSclrKbString",
+  "header": "",
+  "basis": "event code (if-chain) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13962 `cp xiz, EVT_GET_SCLR_KB_STRING` -- EVT_GET_SCLR_KB_STRING -> this case",
+   "sequencer/sequencer_ui.s:14485 `ld xwa, (xsp + 8)` / 14486 `ld (xsp + 4), xwa` / 14487 `cp (0x2878:16), 10` / 14488 `jr nz, SqedtFunc_Case2_CopyParam` -- blank when the song number is 10, else sprintf of a word"
+  ]
+ },
+ {
+  "old": "GetEditSwPoint_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetEditSwPoint_RightRow1",
+  "header": "",
+  "basis": "switch value meaning (edit-switch number) + body (screen point)",
+  "evidence": [
+   "audio/presentation_sound_nav.s:729 `GetEditSwPoint:` -- GetEditSwPoint(WA = edit-switch number, XBC = out point {x, y})",
+   "audio/presentation_sound_nav.s:732 `cp wa, 0x8c` -- 0x88..0x8c (left column, bit 7) are compared first: x = 0, y = 43/85/127/169/211",
+   "audio/presentation_sound_nav.s:742 `cp hl, 0xc` -- then a switch on 0..12; anything else gets the screen centre (160, 120)",
+   "technics-docs/ui-framework.md (GetEditSwPoint table): 0-7 are the eight button columns under the LCD (x = 20, 60 .. 300), 8-12 the side rows 1-5, RIGHT is the plain number and LEFT adds bit 7; the sound-editor stubs for them are SeXxx_OnColumn1..8 / SeXxx_OnSideRow1..5",
+   "audio/presentation_sound_nav.s:755 `ldw wa, 0x13f` / 757 `EditSwParam_StoreMode0:` -- x = 319 (right edge), y = 43: right side row 1"
+  ]
+ },
+ {
+  "old": "GetEditSwPoint_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetEditSwPoint_RightRow2",
+  "header": "",
+  "basis": "switch value meaning (edit-switch number) + body (screen point)",
+  "evidence": [
+   "audio/presentation_sound_nav.s:767 `ldw wa, 0x13f` / 769 `EditSwParam_StoreMode1:` -- x = 319 (right edge), y = 85: right side row 2"
+  ]
+ },
+ {
+  "old": "GetEditSwPoint_Case10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetEditSwPoint_RightRow3",
+  "header": "",
+  "basis": "switch value meaning (edit-switch number) + body (screen point)",
+  "evidence": [
+   "audio/presentation_sound_nav.s:779 `ldw wa, 0x13f` / 781 `EditSwParam_StoreMode2:` -- x = 319 (right edge), y = 127: right side row 3"
+  ]
+ },
+ {
+  "old": "GetEditSwPoint_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetEditSwPoint_RightRow4",
+  "header": "",
+  "basis": "switch value meaning (edit-switch number) + body (screen point)",
+  "evidence": [
+   "audio/presentation_sound_nav.s:791 `ldw wa, 0x13f` / 794 `EditSwParam_Mode3_Store:` -- x = 319 (right edge), y = 169: right side row 4"
+  ]
+ },
+ {
+  "old": "GetEditSwPoint_Case12",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetEditSwPoint_RightRow5",
+  "header": "",
+  "basis": "switch value meaning (edit-switch number) + body (screen point)",
+  "evidence": [
+   "audio/presentation_sound_nav.s:804 `ldw wa, 0x13f` / 807 `EditSwParam_Mode4_Store:` -- x = 319 (right edge), y = 211: right side row 5"
+  ]
+ },
+ {
+  "old": "GetEditSwPoint_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetEditSwPoint_Column2",
+  "header": "",
+  "basis": "switch value meaning (edit-switch number) + body (screen point)",
+  "evidence": [
+   "audio/presentation_sound_nav.s:837 `ldw (xde), 239` -- cases 0..7 share y = 239 (the bottom edge) with x = 20 + 40 * value",
+   "audio/presentation_sound_nav.s:816 `ldw wa, 60` / 817 `jr GetEditSwPoint_Join` -- x = 60, y = 239: button column 2 under the LCD"
+  ]
+ },
+ {
+  "old": "GetEditSwPoint_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetEditSwPoint_Column3",
+  "header": "",
+  "basis": "switch value meaning (edit-switch number) + body (screen point)",
+  "evidence": [
+   "audio/presentation_sound_nav.s:819 `ldw wa, 100` / 820 `jr GetEditSwPoint_Join` -- x = 100, y = 239: button column 3 under the LCD"
+  ]
+ },
+ {
+  "old": "GetEditSwPoint_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetEditSwPoint_Column4",
+  "header": "",
+  "basis": "switch value meaning (edit-switch number) + body (screen point)",
+  "evidence": [
+   "audio/presentation_sound_nav.s:822 `ldw wa, 140` / 823 `jr GetEditSwPoint_Join` -- x = 140, y = 239: button column 4 under the LCD"
+  ]
+ },
+ {
+  "old": "GetEditSwPoint_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetEditSwPoint_Column5",
+  "header": "",
+  "basis": "switch value meaning (edit-switch number) + body (screen point)",
+  "evidence": [
+   "audio/presentation_sound_nav.s:825 `ldw wa, 180` / 826 `jr GetEditSwPoint_Join` -- x = 180, y = 239: button column 5 under the LCD"
+  ]
+ },
+ {
+  "old": "GetEditSwPoint_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetEditSwPoint_Column6",
+  "header": "",
+  "basis": "switch value meaning (edit-switch number) + body (screen point)",
+  "evidence": [
+   "audio/presentation_sound_nav.s:828 `ldw wa, 220` / 829 `jr GetEditSwPoint_Join` -- x = 220, y = 239: button column 6 under the LCD"
+  ]
+ },
+ {
+  "old": "GetEditSwPoint_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetEditSwPoint_Column7",
+  "header": "",
+  "basis": "switch value meaning (edit-switch number) + body (screen point)",
+  "evidence": [
+   "audio/presentation_sound_nav.s:831 `ldw wa, 260` / 832 `jr GetEditSwPoint_Join` -- x = 260, y = 239: button column 7 under the LCD"
+  ]
+ },
+ {
+  "old": "GetEditSwPoint_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetEditSwPoint_Column8",
+  "header": "",
+  "basis": "switch value meaning (edit-switch number) + body (screen point)",
+  "evidence": [
+   "audio/presentation_sound_nav.s:834 `ldw wa, 300` / 835 `GetEditSwPoint_Join:` -- x = 300, y = 239: button column 8 under the LCD"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_Impl_Case185",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_Impl_DropShadow2px",
+  "header": "Design id 5: the rect shrunk by 2 at right/bottom, framed box, then a 2-pixel shadow (two DrawFrame_Impl bars) along the right and bottom edges.",
+  "basis": "switch value meaning (DrawDesignBox design id) + body",
+  "evidence": [
+   "ui/ui_window_procs.s:4501 `cpw (xsp + 72), 0x5` -- id 5: frames at x1+1..x1+2 and y1+1..y1+2",
+   "ui/ui_window_procs.s:4432 `lda xwa, (xsp + 62)` / 4433 `decw 1, (xwa+4)` / 4434 `decw 1, (xwa+6)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_Impl_Case184",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_Impl_DropShadow1px",
+  "header": "Design id 4: the rect shrunk by 1 at right/bottom, framed box, then a 1-pixel colour-0 shadow line along the right and bottom edges.",
+  "basis": "switch value meaning (DrawDesignBox design id) + body",
+  "evidence": [
+   "ui/ui_window_procs.s:4468 `cpw (xsp + 72), 0x4` -- id 4: two DrawLine_Impl calls at x1+1 / y1+1 with colour 0",
+   "ui/ui_window_procs.s:4436 `lda xwa, (xsp + 62)` / 4437 `decw 1, (xwa+4)` / 4438 `decw 1, (xwa+6)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_Impl_Case181",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_Impl_FramedBox",
+  "header": "Design ids 1-3: filled box and frame; 2 adds a frame inset 1 (2-pixel border), 3 a frame inset 2 (double line); also the tail of ids 4 and 5.",
+  "basis": "switch value meaning (DrawDesignBox design id) + body",
+  "evidence": [
+   "ui/ui_window_procs.s:4378 `ld (xsp + 72), bc` -- DrawDesignBox_Impl(XWA = rect, BC = design id, DE = fill colour)",
+   "ui/ui_window_procs.s:4410 `cp wa, 0xb` -- ids 0..11 index the table directly ...",
+   "ui/ui_window_procs.s:4412 `sub wa, 0xb4` -- ... ids 192..204 index it as id - 180 (4413 `cp wa, 0xc`, 4415 `cp wa, 0x18`); so table entries 1..5 are ids 1..5, not 181..185 as the labels say",
+   "ui_widgets/disk_warning_strings.s:1166-1191 -- Draw_DispatchByPartType_CaseTable: entry 1-3 -> Case181, 4 -> Case184, 5 -> Case185, 6 -> DrawDesignBox_IconStyle, 7-11 -> PartGroupStyle, 12/14 -> Case192, 13/15 -> Case193, 16/18 -> Case196, 17/19 -> Case197, 20 -> Case200, 21/22 -> Case201, 23 -> Case203, 24 -> Case204",
+   "technics-docs/table-data-rom.md (FrameDescriptorTable): frame pieces 0x28-0x33 are three sets of 5x5 bevel-corner overlays (TL, TR, BR, BL); palette 0x00 = black, 0xF8 = dark grey",
+   "ui/ui_window_procs.s:4446 `cpw (xsp + 72), 0x2` -- id 2: second frame inset by 1",
+   "ui/ui_window_procs.s:4457 `cpw (xsp + 72), 0x3` -- id 3: second frame inset by 2",
+   "ui/ui_window_procs.s:4440 `lda xwa, (xsp + 62)` / 4441 `ld bc, (xsp + 70)` / 4442 `calr DrawBox_Impl` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_Impl_Case193",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_Impl_Bevel2px",
+  "header": "Design ids 193/195: as 192/194 with a 2-pixel bevel (sets the ring count to 1 and falls into the 1-pixel case, which adds 1).",
+  "basis": "switch value meaning (DrawDesignBox design id) + body",
+  "evidence": [
+   "ui/ui_window_procs.s:4536 `ld xwa, 1:i3` / 4537 `ld (xsp + 14), xwa` / 4538 `DrawDesignBox_Impl_Case192: ; cases 192, 194` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_Impl_Case192",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_Impl_Bevel1px",
+  "header": "Design ids 192/194: filled box with a 1-pixel bevel; 192 draws top/left 0xFF and bottom/right 0xF8, 194 the reverse.",
+  "basis": "switch value meaning (DrawDesignBox design id) + body",
+  "evidence": [
+   "ui/ui_window_procs.s:4541 `cpw (xsp + 72), 0xc0` -- ids 0xc0/0xc1 take top-left 0xff, bottom-right 0xf8; others the swap (4547-4549)",
+   "ui/ui_window_procs.s:4539 `ld xwa, 1:i3` / 4540 `add (xsp + 14), xwa` / 4541 `cpw (xsp + 72), 0xc0` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_Impl_Case197",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_Impl_BlackEdgeBevel2px",
+  "header": "Design ids 197/199: 2-ring bevel, outer ring colour 7 / 0 (black), inner ring 0xFF / 0xF8; 199 swaps the sides.",
+  "basis": "switch value meaning (DrawDesignBox design id) + body",
+  "evidence": [
+   "ui/ui_window_procs.s:4620 `ld xwa, 1:i3` / 4621 `ld (xsp + 14), xwa` / 4622 `DrawDesignBox_Impl_Case196: ; cases 196, 198` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_Impl_Case196",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_Impl_BlackEdgeBevel1px",
+  "header": "Design ids 196/198: filled box with a 1-pixel bevel of 0xFF and colour 0 (black); 196 top/left light, 198 the reverse.",
+  "basis": "switch value meaning (DrawDesignBox design id) + body",
+  "evidence": [
+   "ui/ui_window_procs.s:4635 `cpw (xsp + 72), 0xc4` -- 0xc4/0xc5 vs 0xc6/0xc7 pick the edge colours per ring (4640-4676)",
+   "ui/ui_window_procs.s:4623 `ld xwa, 1:i3` / 4624 `add (xsp + 14), xwa` / 4625 `lda xwa, (xsp + 62)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_Impl_Case201",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_Impl_BevelCorners",
+  "header": "Design ids 201/202: 1-ring bevel with 5x5 corner pieces; 201 uses pieces 0x28-0x2B with 0xFF top/left and 0xF8 bottom/right, 202 (0xca) pieces 0x30-0x33 with the colours swapped.",
+  "basis": "switch value meaning (DrawDesignBox design id) + body",
+  "evidence": [
+   "ui/ui_window_procs.s:5345 `cpw (xsp + 72), 0xca` -- id 202 takes the second piece set and swaps the colours",
+   "ui/ui_window_procs.s:5345 `cpw (xsp + 72), 0xca` / 5346 `jr z, DrawPartGroup_StyleCA` / 5347 `ldw iz, 0x28` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_Impl_Case203",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_Impl_BevelTopCorners",
+  "header": "Design id 203: 0xFF/0xF8 bevel box with corner pieces 0x28/0x29 at the top corners only (bottom corners square).",
+  "basis": "switch value meaning (DrawDesignBox design id) + body",
+  "evidence": [
+   "ui/ui_window_procs.s:5566 `ldw wa, 0x28` / 5567 `ld xbc, xhl` / 5568 `ld xde, xiy` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_Impl_Case204",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_Impl_BevelBottomCorners",
+  "header": "Design id 204: 0xFF/0xF8 bevel box with corner pieces 0x2A/0x2B at the bottom corners only (top corners square).",
+  "basis": "switch value meaning (DrawDesignBox design id) + body",
+  "evidence": [
+   "ui/ui_window_procs.s:5731 `lda xbc, (xsp + 32)` / 5732 `lda xde, (xsp + 24)` / 5733 `ldw wa, 0x2a` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DrawDesignBox_Impl_Case200",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawDesignBox_Impl_BlackEdgeBevelCorners",
+  "header": "Design id 200: the 2-ring 7/0 + 0xFF/0xF8 bevel with 5x5 corner pieces 0x2C-0x2F (DrawFrameSP) at the four corners.",
+  "basis": "switch value meaning (DrawDesignBox design id) + body",
+  "evidence": [
+   "ui/ui_window_procs.s:5901 `ldw wa, 0x2c` / 5902 `ld xbc, xhl` / 5903 `ld xde, xiy` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DSPCfg_ApplyParamStructFull_Case31",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_ApplyParamStructFull_Distortion",
+  "header": "",
+  "basis": "switch value meaning (DSP effect number, struct byte 0) + DspEffectName_PtrTable",
+  "evidence": [
+   "table slot 13 of DspConfig_EventDispatch_JumpOffsets (ui_widgets/widget_dispatch.s:4397) = effect number 32",
+   "audio/dsp_config_sysex.s:4466 `ld c, (xwa)` / 4467 `ld (xsp + 6), c` / 4468 `lda xix, (xwa + 1)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DSPCfg_ApplyParamStructFull_Case32",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_ApplyParamStructFull_Overdrive",
+  "header": "",
+  "basis": "switch value meaning (DSP effect number, struct byte 0) + DspEffectName_PtrTable",
+  "evidence": [
+   "table slot 14 of DspConfig_EventDispatch_JumpOffsets (ui_widgets/widget_dispatch.s:4397) = effect number 33",
+   "audio/dsp_config_sysex.s:4484 `ld c, (xwa)` / 4485 `ld (xsp + 6), c` / 4486 `lda xix, (xwa + 1)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DSPCfg_ApplyParamStructFull_Case34",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_ApplyParamStructFull_Exciter",
+  "header": "",
+  "basis": "switch value meaning (DSP effect number, struct byte 0) + DspEffectName_PtrTable",
+  "evidence": [
+   "table slot 16 of DspConfig_EventDispatch_JumpOffsets (ui_widgets/widget_dispatch.s:4397) = effect number 35",
+   "audio/dsp_config_sysex.s:4502 `ld c, (xwa)` / 4503 `ld (xsp + 6), c` / 4504 `lda xhl, (xwa + 1)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DSPCfg_ApplyParamStructFull_Case38",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_ApplyParamStructFull_ParametricEq",
+  "header": "",
+  "basis": "switch value meaning (DSP effect number, struct byte 0) + DspEffectName_PtrTable",
+  "evidence": [
+   "table slot 20 of DspConfig_EventDispatch_JumpOffsets (ui_widgets/widget_dispatch.s:4397) = effect number 39",
+   "audio/dsp_config_sysex.s:4524 `ld c, (xwa)` / 4525 `ld (xsp + 6), c` / 4526 `lda xhl, (xwa + 1)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DSPCfg_ApplyParamStructFull_Case18",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_ApplyParamStructFull_Chorus",
+  "header": "Effect 1 (CHORUS): rewrites the record's parameter bytes in place (the path DataBuf_LoadAndDispatchFormat2 takes when (0xb7ea) = 2); the other cases do the same for their effect.",
+  "basis": "switch value meaning (DSP effect number, struct byte 0) + DspEffectName_PtrTable",
+  "evidence": [
+   "audio/dsp_config_sysex.s:4381 `ld E, (xwa+)` -- byte 0 of the parameter struct, kept at (xsp+30) (4383)",
+   "audio/dsp_config_sysex.s:4443 `dec 1, bc` -- index = byte - 1 for 1..9 (4446 `cp bc, 0x8`) ...",
+   "audio/dsp_config_sysex.s:4448 `sub bc, 0x12` -- ... or byte - 19 for 28..39 (4449 `cp bc, 0x9`, 4451 `cp bc, 0x14`); so the labels Case18/19/21/22/23/26/31/32/34/38 are values 1/2/4/5/6/9/32/33/35/39",
+   "audio/dsp_config_sysex.s:4205 `lda xbc, (DSPCfg_GetSlotCount_Data:24)` -- DSPCfg_ApplyParamStruct (the format-1 twin, same pointer) indexes the per-effect parameter-count bytes with the same byte 0 (4202) and DspFxRecListPtrTable through DSPCfg_CheckParamTableEntry (4121, <= 0x63)",
+   "ui_widgets/widget_dispatch.s:4115 `; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 91.` -- the DSP settings blocks: +0 = effect number, +1.. parameter bytes",
+   "audio/dsp_config_sysex.s:4436 `cp de, 0x1b` -- the if-chain before the switch takes 0x10..0x1b together (4438): effects 16..27 are exactly the twelve ROOM/PLATE/CONCERT/DARK/BRIGHT/WAVE REVERB 1/2",
+   "midi/midi_dispatch_handlers.s:4307 `call DSPCfg_ApplyParamStructFull` -- DataBuf_LoadAndDispatchFormat2 when (0xb7ea) = 2, on the record at buf+2",
+   "names: DspEffectName_PtrTable (ui_widgets/widget_descriptors.s:189, entry n = effect n) read from includes/generated/naka_widget_descriptors.bin: 1 CHORUS, 2 MODULATED CHORUS, 4 FLANGER, 5 PHASER, 6 ENSEMBLE, 9 SINGLE DELAY, 32 DISTORTION, 33 OVERDRIVE, 35 EXCITER, 39 PARAMETRIC EQ (also technics-docs/audio-subsystem.md 'Effect Type Name Table')",
+   "table slot 0 of DspConfig_EventDispatch_JumpOffsets (ui_widgets/widget_dispatch.s:4397) = effect number 1",
+   "audio/dsp_config_sysex.s:4575 `ld c, (xwa)` / 4576 `ld (xsp + 6), c` / 4577 `lda xix, (xwa + 1)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DSPCfg_ApplyParamStructFull_Case19",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_ApplyParamStructFull_ModulatedChorus",
+  "header": "",
+  "basis": "switch value meaning (DSP effect number, struct byte 0) + DspEffectName_PtrTable",
+  "evidence": [
+   "table slot 1 of DspConfig_EventDispatch_JumpOffsets (ui_widgets/widget_dispatch.s:4397) = effect number 2",
+   "audio/dsp_config_sysex.s:4593 `ld c, (xwa)` / 4594 `ld (xsp + 6), c` / 4595 `lda xbc, (xwa + 1)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DSPCfg_ApplyParamStructFull_Case21",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_ApplyParamStructFull_Flanger",
+  "header": "",
+  "basis": "switch value meaning (DSP effect number, struct byte 0) + DspEffectName_PtrTable",
+  "evidence": [
+   "table slot 3 of DspConfig_EventDispatch_JumpOffsets (ui_widgets/widget_dispatch.s:4397) = effect number 4",
+   "audio/dsp_config_sysex.s:4636 `ld c, (xwa)` / 4637 `ld (xsp + 6), c` / 4638 `lda xix, (xwa + 1)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DSPCfg_ApplyParamStructFull_Case22",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_ApplyParamStructFull_Phaser",
+  "header": "",
+  "basis": "switch value meaning (DSP effect number, struct byte 0) + DspEffectName_PtrTable",
+  "evidence": [
+   "table slot 4 of DspConfig_EventDispatch_JumpOffsets (ui_widgets/widget_dispatch.s:4397) = effect number 5",
+   "audio/dsp_config_sysex.s:4662 `ld c, (xwa)` / 4663 `ld (xsp + 6), c` / 4664 `lda xix, (xwa + 1)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DSPCfg_ApplyParamStructFull_Case23",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_ApplyParamStructFull_Ensemble",
+  "header": "",
+  "basis": "switch value meaning (DSP effect number, struct byte 0) + DspEffectName_PtrTable",
+  "evidence": [
+   "table slot 5 of DspConfig_EventDispatch_JumpOffsets (ui_widgets/widget_dispatch.s:4397) = effect number 6",
+   "audio/dsp_config_sysex.s:4818 `ld c, (xwa)` / 4819 `ld (xsp + 6), c` / 4820 `lda xix, (xwa + 1)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "DSPCfg_ApplyParamStructFull_Case26",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_ApplyParamStructFull_SingleDelay",
+  "header": "",
+  "basis": "switch value meaning (DSP effect number, struct byte 0) + DspEffectName_PtrTable",
+  "evidence": [
+   "table slot 8 of DspConfig_EventDispatch_JumpOffsets (ui_widgets/widget_dispatch.s:4397) = effect number 9",
+   "audio/dsp_config_sysex.s:4836 `ld c, (xwa)` / 4837 `ld (xsp + 6), c` / 4838 `lda xhl, (xwa + 1)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "GroupBoxProc_Case5",
+  "verdict": "refuse",
+  "why_refused": "The value is method code 0x01E00096, one of the three codes 0x01E00095..97 that the firmware's own MT_ name table skips (notes/event-codes-2026-10-02/research_and_verdicts.json: 'gaps at 0x95-0x97'), so it has no name; the case only calls UIRender_RetStub1 (an empty stub) and returns 0. A name would have to spell the number.",
+  "new": null,
+  "header": null,
+  "basis": "event code without a firmware name",
+  "evidence": [
+   "ui/ui_control_panel.s:3415 `sub xwa, EVT_SHOW` -- map index = event - EVT_SHOW for EVT_SHOW..+9 (3418), event - 0x1e0008b for 0x1e00095..0x1e0009e (3420-3424), event - 0x1e00091 for 0x1e000a5..0x1e000b7 (3425-3429)",
+   "ui/ui_control_panel.s:3433 `add xwa, GroupBox_EventCaseMap` -- byte map (ui_widgets/disk_warning_strings.s:238, naka_disk_warning.bin 0xE2E) -> case index -> CtrlPanel_FuncDispatch_CaseTable; the CaseN labels are the case index",
+   "audio/presentation_sound_nav.s:264 `call UIRender_RetStub1` / 265 `jrl GroupBox_ReturnZero` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "GroupBoxProc_Case6",
+  "verdict": "refuse",
+  "why_refused": "The value is method code 0x01E00097, one of the three codes 0x01E00095..97 that the firmware's own MT_ name table skips (notes/event-codes-2026-10-02/research_and_verdicts.json: 'gaps at 0x95-0x97'), so it has no name; the case only calls UIRender_RetStub2 (an empty stub) and returns 0. A name would have to spell the number.",
+  "new": null,
+  "header": null,
+  "basis": "event code without a firmware name",
+  "evidence": [
+   "ui/ui_control_panel.s:3415 `sub xwa, EVT_SHOW` -- map index = event - EVT_SHOW for EVT_SHOW..+9 (3418), event - 0x1e0008b for 0x1e00095..0x1e0009e (3420-3424), event - 0x1e00091 for 0x1e000a5..0x1e000b7 (3425-3429)",
+   "ui/ui_control_panel.s:3433 `add xwa, GroupBox_EventCaseMap` -- byte map (ui_widgets/disk_warning_strings.s:238, naka_disk_warning.bin 0xE2E) -> case index -> CtrlPanel_FuncDispatch_CaseTable; the CaseN labels are the case index",
+   "audio/presentation_sound_nav.s:267 `call UIRender_RetStub2` / 268 `jrl GroupBox_ReturnZero` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "GroupBoxProc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GroupBoxProc_OnRefreshApTask",
+  "header": "EVT_REFRESH_AP_TASK: disables the dial, clears DIAL_FOCUS, InitializeTimer, then sends EVT_REFRESH_SW_EVENT to itself.",
+  "basis": "event code (two-level switch) + body",
+  "evidence": [
+   "ui/ui_control_panel.s:3415 `sub xwa, EVT_SHOW` -- map index = event - EVT_SHOW for EVT_SHOW..+9 (3418), event - 0x1e0008b for 0x1e00095..0x1e0009e (3420-3424), event - 0x1e00091 for 0x1e000a5..0x1e000b7 (3425-3429)",
+   "ui/ui_control_panel.s:3433 `add xwa, GroupBox_EventCaseMap` -- byte map (ui_widgets/disk_warning_strings.s:238, naka_disk_warning.bin 0xE2E) -> case index -> CtrlPanel_FuncDispatch_CaseTable; the CaseN labels are the case index",
+   "decoded map (agent_c1/gen_c1.py notes): case 3 <- EVT_REFRESH_AP_TASK; 4 <- EVT_REFRESH_SW_EVENT; 5 <- 0x1e00096; 6 <- 0x1e00097; 7 <- EVT_SHOW; 8 <- EVT_HIDE; 9 <- EVT_SW_IN; 10 <- EVT_SW_ON; 11 <- EVT_SW_OFF; 12 <- EVT_ALL_PAINT (0 = GroupBox_NavUpDown, 1 = BoxProc, 2 = return 0 for the rest)",
+   "EVT_REFRESH_AP_TASK maps to this case index in GroupBox_EventCaseMap",
+   "audio/presentation_sound_nav.s:270 `ld wa, 0:i3` / 271 `calr SetDialEnable` / 272 `ld xwa, 0xffffffff` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "GroupBoxProc_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GroupBoxProc_OnRefreshSwEvent",
+  "header": "",
+  "basis": "event code (two-level switch) + body",
+  "evidence": [
+   "EVT_REFRESH_SW_EVENT maps to this case index in GroupBox_EventCaseMap",
+   "audio/presentation_sound_nav.s:283 `ld iz, 0:i3` / 285 `GroupBox_CloseAll_Loop:` / 286 `ld de, iz` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "GroupBoxProc_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GroupBoxProc_OnShow",
+  "header": "",
+  "basis": "event code (two-level switch) + body",
+  "evidence": [
+   "EVT_SHOW maps to this case index in GroupBox_EventCaseMap",
+   "ui/ui_control_panel.s:3884 `ld xwa, (xsp + 38)` / 3885 `call SetCurrentTarget` / 3886 `ldw (DIAL_ENABLE:24), 0x0000` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "GroupBoxProc_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GroupBoxProc_OnHide",
+  "header": "",
+  "basis": "event code (two-level switch) + body",
+  "evidence": [
+   "EVT_HIDE maps to this case index in GroupBox_EventCaseMap",
+   "ui/ui_control_panel.s:3918 `ld wa, 0:i3` / 3919 `calr SetDialEnable` / 3920 `ld xwa, 0xffffffff` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "GroupBoxProc_Case12",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GroupBoxProc_OnAllPaint",
+  "header": "",
+  "basis": "event code (two-level switch) + body",
+  "evidence": [
+   "EVT_ALL_PAINT maps to this case index in GroupBox_EventCaseMap",
+   "ui/ui_control_panel.s:3941 `ld xwa, (xsp + 38)` / 3942 `ld xbc, EVT_PAINT` / 3943 `ld xde, 0:i3` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "GroupBoxProc_Case10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GroupBoxProc_OnSwOn",
+  "header": "",
+  "basis": "event code (two-level switch) + body",
+  "evidence": [
+   "EVT_SW_ON maps to this case index in GroupBox_EventCaseMap",
+   "ui/ui_control_panel.s:3982 `ld xde, (xsp + 30)` / 3983 `ld xwa, (xsp + 38)` / 3984 `ld xbc, (xsp + 34)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "GroupBoxProc_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GroupBoxProc_OnSwOff",
+  "header": "",
+  "basis": "event code (two-level switch) + body",
+  "evidence": [
+   "EVT_SW_OFF maps to this case index in GroupBox_EventCaseMap",
+   "ui/ui_control_panel.s:4036 `ld xde, (xsp + 30)` / 4037 `ld xwa, (xsp + 38)` / 4038 `ld xbc, (xsp + 34)` -- the case's first instructions"
+  ]
+ },
+ {
+  "old": "GroupBoxProc_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GroupBoxProc_OnSwIn",
+  "header": "",
+  "basis": "event code (two-level switch) + body",
+  "evidence": [
+   "EVT_SW_IN maps to this case index in GroupBox_EventCaseMap",
+   "ui/ui_control_panel.s:4091 `ld xde, (xsp + 30)` / 4092 `ld xwa, (xsp + 38)` / 4093 `ld xbc, (xsp + 34)` -- the case's first instructions"
+  ]
+ }
+]

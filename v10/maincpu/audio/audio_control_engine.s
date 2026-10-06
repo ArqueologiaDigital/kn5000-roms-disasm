@@ -3162,41 +3162,53 @@ ExtData_VoiceParam_DispatchBytecode:
 ExtData_VoiceParam_DispatchBytecode_Code:
 	setm	7, (xbc)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case14:
+; ExtData_VoiceParam_DispatchBytecode_ModeCmp: MD_CMP: sets bit 1 of LED row 0 (0x8F18)
+ExtData_VoiceParam_DispatchBytecode_ModeCmp:
 	ld	a, 1:opc
 	jr	ExtData_VoiceParam_DispatchBytecode_Join
-ExtData_VoiceParam_DispatchBytecode_Case17:
+; ExtData_VoiceParam_DispatchBytecode_ModeSndArg: MD_SND_ARG: sets bit 2 of LED row 0 (0x8F18)
+ExtData_VoiceParam_DispatchBytecode_ModeSndArg:
 	ld	a, 2:opc
 	jr	ExtData_VoiceParam_DispatchBytecode_Join
-ExtData_VoiceParam_DispatchBytecode_Case8:	; cases 8, 12, 13
+; ExtData_VoiceParam_DispatchBytecode_ModeSeq: MD_SEQ / MD_SEQ_EDIT / MD_SEQ_STEP: sets bit 7 of LED row 6 (0x8F1E)
+ExtData_VoiceParam_DispatchBytecode_ModeSeq:	; cases 8, 12, 13
 	setm	7, (xde)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case11:
+; ExtData_VoiceParam_DispatchBytecode_ModeSeqReal: MD_SEQ_REAL: sets bit 7 of LED row 6, and bit 6 too when (0x26FC) =
+;   1
+ExtData_VoiceParam_DispatchBytecode_ModeSeqReal:
 	ld	xwa, xde
 	setm	7, (xde)
 	cp	(0x26fc:16), 1
 	jr	nz, ExtData_VoiceParam_DispatchBytecode_Epilogue2
 	setm	6, (xwa)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case9:
+; ExtData_VoiceParam_DispatchBytecode_ModeSeqErec: MD_SEQ_EREC: sets bit 6 of LED row 6 (0x8F1E)
+ExtData_VoiceParam_DispatchBytecode_ModeSeqErec:
 	setm	6, (xde)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case2:	; cases 2, 3
+; ExtData_VoiceParam_DispatchBytecode_ModeSound: MD_SOUND / MD_SOUNDEDIT: sets bit 0 of LED row 11 (0x8F23)
+ExtData_VoiceParam_DispatchBytecode_ModeSound:	; cases 2, 3
 	setm	0, (xiy)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case5:
+; ExtData_VoiceParam_DispatchBytecode_ModeMidi: MD_MIDI: sets bit 2 of LED row 11 (0x8F23)
+ExtData_VoiceParam_DispatchBytecode_ModeMidi:
 	setm	2, (xiy)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case4:
+; ExtData_VoiceParam_DispatchBytecode_ModeControl: MD_CONTROL: sets bit 1 of LED row 11 (0x8F23)
+ExtData_VoiceParam_DispatchBytecode_ModeControl:
 	setm	1, (xiy)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case6:
+; ExtData_VoiceParam_DispatchBytecode_ModeDisk: MD_DISK: sets bit 3 of LED row 11 (0x8F23)
+ExtData_VoiceParam_DispatchBytecode_ModeDisk:
 	setm	3, (xiy)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case7:
+; ExtData_VoiceParam_DispatchBytecode_ModeEntertainer: MD_ENTERTAINER: sets bit 3 of LED row 10 (0x8F22)
+ExtData_VoiceParam_DispatchBytecode_ModeEntertainer:
 	setm	3, (xhl)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
-ExtData_VoiceParam_DispatchBytecode_Case18:
+; ExtData_VoiceParam_DispatchBytecode_ModeOtp: MD_OTP: sets bit 4 of LED row 0 (0x8F18)
+ExtData_VoiceParam_DispatchBytecode_ModeOtp:
 	ld	a, 4:opc
 ExtData_VoiceParam_DispatchBytecode_Join:
 	scf
@@ -11930,11 +11942,11 @@ MidiStream_CheckPartProgramAllowed_Skip2:
 	cp	c, 22
 	jr	nz, MidiStream_ExtendedDispatch_Epilogue2
 MidiStream_ExtendedDispatch_Skip6:
-	call	MidiStream_ExtendedDispatch_Helper_Helper2
+	call	MidiStream_IsDrumKitCategory
 	jr	c, MidiStream_CheckPartProgramAllowed_Skip3
 	jr	MidiStream_CheckPartProgramAllowed_Join
 MidiStream_ExtendedDispatch_Skip7:
-	call	MidiStream_ExtendedDispatch_Helper_Helper2
+	call	MidiStream_IsDrumKitCategory
 	jr	nc, MidiStream_CheckPartProgramAllowed_Skip3
 	cp	c, 15
 	jr	z, MidiStream_ExtendedDispatch_Epilogue2
@@ -11952,7 +11964,11 @@ MidiStream_ExtendedDispatch_Epilogue2:
 	popw	hl
 	pop	xix
 	ret
-MidiStream_ExtendedDispatch_Helper_Helper2:
+; MidiStream_IsDrumKitCategory: Sets the carry flag when the sound category in E is 15 (drum kits), clears it
+;   otherwise. Basis: callers + body -- MidiStream_CheckPartProgramAllowed calls it for parts 15/20 (refuse when no
+;   carry: a non-drum category) and for parts 16-19, 21, 22 (refuse on carry); its header names category 15 the drum
+;   kits.
+MidiStream_IsDrumKitCategory:
 	cp	e, 15
 	jr	nz, MidiStream_ExtendedDispatch_Helper_Helper2_Skip4
 	scf

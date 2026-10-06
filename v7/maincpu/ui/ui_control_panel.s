@@ -3134,10 +3134,10 @@ CtrlPanel_DispatchByIndex:
 CtrlPanel_FrameDispatchTable:
 	ld	xde, 4:i3
 	jr	CtrlPanel_ApplyMarginLoop
-GetClientBox2_Case26:	; cases 26, 33
+GetClientBox2_ThreePixelInset:	; cases 26, 33
 	ld	xde, 3:i3
 	jr	CtrlPanel_ApplyMarginLoop
-GetClientBox2_Case28:
+GetClientBox2_TwoPixelShadowFrame:
 	ld	xde, 1:i3
 	decm	2, (xiz+4)
 	ld	wa, 2:i3
@@ -3169,27 +3169,27 @@ CtrlPanel_MarginAdjustStep:
 
 CtrlPanel_MarginDone:
 	jrl CtrlPanel_FrameReturn
-GetClientBox2_Case38:
+GetClientBox2_LeftChevron32:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x1c
 	jr CtrlFrame_AddLeftMargin
-GetClientBox2_Case47:
+GetClientBox2_RightChevron32:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x17
 	jr CtrlFrame_SubRightMargin
-GetClientBox2_Case39:
+GetClientBox2_LeftChevron48:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x1d
 	jr CtrlFrame_AddLeftMargin
-GetClientBox2_Case48:
+GetClientBox2_RightChevron48:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x18
 	jr CtrlFrame_SubRightMargin
-GetClientBox2_Case42:
+GetClientBox2_LeftOnOffTab32:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x20
@@ -3204,7 +3204,7 @@ CtrlFrame_AddLeftMargin:
 	ld wa, (xsp + 6)
 	add (xiz), wa
 	jr CtrlPanel_AfterLeftMargin
-GetClientBox2_Case51:
+GetClientBox2_RightOnOffTab32:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x24
@@ -3222,42 +3222,42 @@ CtrlFrame_SubRightMargin:
 CtrlPanel_AfterLeftMargin:
 	ld xde, 2:i3
 	jrl CtrlPanel_ApplyMarginLoop
-GetClientBox2_Case27:
+GetClientBox2_OnePixelShadowFrame:
 	ld xde, 1:i3
 	decm 1, (xiz + 4)
 	ld wa, 1:i3
 	jrl CtrlPanel_SubFrameOffset
-GetClientBox2_Case35:
+GetClientBox2_LeftChevron12:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x19
 	jr CtrlPanel_Frame_AddLeftMargin
-GetClientBox2_Case44:
+GetClientBox2_RightChevron12:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x14
 	jr CtrlPanel_Frame_SubtractTopMargin
-GetClientBox2_Case36:
+GetClientBox2_LeftChevron16:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x1a
 	jr CtrlPanel_Frame_AddLeftMargin
-GetClientBox2_Case45:
+GetClientBox2_RightChevron16:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x15
 	jr CtrlPanel_Frame_SubtractTopMargin
-GetClientBox2_Case37:
+GetClientBox2_LeftChevron24:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x1b
 	jr CtrlPanel_Frame_AddLeftMargin
-GetClientBox2_Case46:
+GetClientBox2_RightChevron24:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x16
 	jr CtrlPanel_Frame_SubtractTopMargin
-GetClientBox2_Case40:
+GetClientBox2_LeftOnOffTab16:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x1e
@@ -3272,7 +3272,7 @@ CtrlPanel_Frame_AddLeftMargin:
 	ld wa, (xsp + 6)
 	add (xiz), wa
 	jr CtrlPanel_AfterTopMargin
-GetClientBox2_Case49:
+GetClientBox2_RightOnOffTab16:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x22
@@ -3911,7 +3911,7 @@ GroupBox_StateCompare_Default:
 	ld xbc, EVT_CHANGE_MODE
 	ld xde, NAKA_MODE_MD_NORMAL
 	jrl GroupBox_NavDispatch
-GroupBoxProc_Case7:
+GroupBoxProc_OnShow:
 	ld xwa, (xsp + 38)
 	call SetCurrentTarget
 	ldw (DIAL_ENABLE:24), 0x0000
@@ -3945,7 +3945,7 @@ GroupBox_Nav_SendEventAndUpdate:
 	call UpdateScreen
 	ld wa, 0:i3
 	jrl GroupBox_DisableDisplay
-GroupBoxProc_Case8:
+GroupBoxProc_OnHide:
 	ld wa, 0:i3
 	calr SetDialEnable
 	ld xwa, 0xffffffff
@@ -3968,7 +3968,7 @@ GroupBox_Nav_ClearWidgetFlags:
 	ld xbc, (xsp + 34)
 	calr BoxProc
 	jrl GroupBox_ReturnZero
-GroupBoxProc_Case12:
+GroupBoxProc_OnAllPaint:
 	ld xwa, (xsp + 38)
 	ld xbc, EVT_PAINT
 	ld xde, 0:i3
@@ -4009,7 +4009,7 @@ GroupBox_CursorNav_UpdateScreen:
 	call UpdateScreen
 	ld wa, 0:i3
 	jrl GroupBox_DisableDisplay
-GroupBoxProc_Case10:
+GroupBoxProc_OnSwOn:
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
@@ -4063,7 +4063,7 @@ GroupBox_KeyPress_CheckRange:
 	ld xde, (xsp + 46)
 	call SetApTimer
 	jrl GroupBox_ReturnZero
-GroupBoxProc_Case11:
+GroupBoxProc_OnSwOff:
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
@@ -4118,7 +4118,7 @@ GroupBox_KeyRelease_CheckRange:
 	ld xde, (xsp + 46)
 	call KillApTimer
 	jrl GroupBox_ReturnZero
-GroupBoxProc_Case9:
+GroupBoxProc_OnSwIn:
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)

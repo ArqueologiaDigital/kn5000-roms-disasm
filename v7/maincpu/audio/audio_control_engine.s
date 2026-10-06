@@ -3047,38 +3047,38 @@ ExtData_VoiceParam_DispatchBytecode:
 ExtData_VoiceParam_DispatchBytecode_Code:
 	setm	7, (xbc)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-ExtData_VoiceParam_DispatchBytecode_Case14:
+ExtData_VoiceParam_DispatchBytecode_ModeCmp:
 	ld	a, 1:opc
 	jr	SndParamF9A541_ResBit7_Code_Join
-ExtData_VoiceParam_DispatchBytecode_Case17:
+ExtData_VoiceParam_DispatchBytecode_ModeSndArg:
 	ld	a, 2:opc
 	jr	SndParamF9A541_ResBit7_Code_Join
-ExtData_VoiceParam_DispatchBytecode_Case8:	; cases 8, 12, 13
+ExtData_VoiceParam_DispatchBytecode_ModeSeq:	; cases 8, 12, 13
 	setm	7, (xde)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-ExtData_VoiceParam_DispatchBytecode_Case11:
+ExtData_VoiceParam_DispatchBytecode_ModeSeqReal:
 	ld	xwa, xde
 	setm	7, (xde)
 	cp	(0x26fc:16), 1
 	jr	nz, SndParamF9A541_ResBit7_Code_Epilogue
 	setm	6, (xwa)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-ExtData_VoiceParam_DispatchBytecode_Case9:
+ExtData_VoiceParam_DispatchBytecode_ModeSeqErec:
 	setm	6, (xde)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-ExtData_VoiceParam_DispatchBytecode_Case2:	; cases 2, 3
+ExtData_VoiceParam_DispatchBytecode_ModeSound:	; cases 2, 3
 	setm	0, (xiy)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-ExtData_VoiceParam_DispatchBytecode_Case5:
+ExtData_VoiceParam_DispatchBytecode_ModeMidi:
 	setm	2, (xiy)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-ExtData_VoiceParam_DispatchBytecode_Case4:
+ExtData_VoiceParam_DispatchBytecode_ModeControl:
 	setm	1, (xiy)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-ExtData_VoiceParam_DispatchBytecode_Case6:
+ExtData_VoiceParam_DispatchBytecode_ModeDisk:
 	setm	3, (xiy)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-ExtData_VoiceParam_DispatchBytecode_Case7:
+ExtData_VoiceParam_DispatchBytecode_ModeEntertainer:
 	setm	3, (xhl)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
 ExtData_VoiceParam_DispatchBytecode_Case18:
@@ -11295,7 +11295,7 @@ MidiCC_ApplyBankSelect:
 	jr	nz, MidiStream_ExtendedDispatch_Helper_Skip5
 	ld	(0x95a8:16), 20
 	cp	(CURRENT_MODE:16), 14
-	jrl	z, MidiStream_ExtendedDispatch_Helper_Return
+	jrl	z, MidiStream_ExtDispatch_ModeJump3_Return
 MidiStream_ExtendedDispatch_Helper_Skip5:
 	ldw_d16	bc, (0x95a8)
 	ldw_d16	de, (0x95aa)
@@ -11305,11 +11305,11 @@ MidiStream_ExtendedDispatch_Helper_Skip5:
 	ld	l, c
 	sll	hl, 1
 	cp	e, 255
-	jr	z, MidiStream_ExtendedDispatch_Helper_Skip6
+	jr	z, MidiCC_ApplyBankSelect_Skip6
 	res	7, e
 	ld	(xix+hl), e
 	jr	MidiStream_ExtendedDispatch_Join2
-MidiStream_ExtendedDispatch_Helper_Skip6:
+MidiCC_ApplyBankSelect_Skip6:
 	res	7, d
 	inc	1, xix
 	ld	(xix+hl), d
@@ -11337,7 +11337,7 @@ MidiStream_ExtDispatch_Mode3_Data:
 	.long	MidiStream_ExtDispatch_ModeJump02
 	.long	MidiStream_ExtDispatch_ModeJump3
 MidiStream_ExtDispatch_ModeJump02:
-	jr	MidiStream_ExtendedDispatch_Helper_Join2
+	jr	MidiStream_ExtDispatch_ModeJump3_Join2
 MidiStream_ExtDispatch_ModeJump1:
 	bit	0, w
 	jr	z, MidiStream_ExtendedDispatch_Helper_Skip8
@@ -11350,16 +11350,16 @@ MidiStream_ExtDispatch_ModeJump1:
 	xor	a, a
 MidiStream_ExtendedDispatch_Helper_Skip7:
 	set	7, a
-	jr	MidiStream_ExtendedDispatch_Helper_Join2
+	jr	MidiStream_ExtDispatch_ModeJump3_Join2
 MidiStream_ExtendedDispatch_Helper_Skip8:
 	srl	a, 4
 	and	a, 15
-	jr	MidiStream_ExtendedDispatch_Helper_Join2
+	jr	MidiStream_ExtDispatch_ModeJump3_Join2
 MidiStream_ExtDispatch_ModeJump3:
 	srl	wa, 8
-MidiStream_ExtendedDispatch_Helper_Join2:
+MidiStream_ExtDispatch_ModeJump3_Join2:
 	ld	(xiz+hl), a
-MidiStream_ExtendedDispatch_Helper_Return:
+MidiStream_ExtDispatch_ModeJump3_Return:
 	ret
 	calr	MidiStream_CmdPedalNotify_Helper3
 	ret

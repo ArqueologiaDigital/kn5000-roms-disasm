@@ -3323,7 +3323,7 @@ FileData_ImportM4M6PanelMemories:
 FileData_ImportM4M6PanelMemories_Join:
 	call	PrePmLoad
 	ld	wa, (xsp+12)
-	calr	DataBuf_CopyBulkBitfields_Large_Helper3
+	calr	FileData_ResetPanelMemoriesToDefault
 	ldw (xsp+8), 0
 	ld	wa, (xsp+12)
 	srl	wa, 3
@@ -5767,7 +5767,7 @@ DataBuf_CopyBulkBitfields_Large_Loop3:
 	calr	DSPCfg_VoiceSlotB_ExtractData
 	ld	xwa, (xsp+10)
 	ld	xbc, (xsp+6)
-	calr	DataBuf_CopyBulkBitfields_Large_Helper
+	calr	FileData_ConvertNNBlock1Fields
 	ld	wa, 0:i3
 	call	PostLswLoad
 	ld	xwa, (xsp+10)
@@ -5788,7 +5788,7 @@ FileData_ImportNNPanelMemories:
 	pushw	iz
 	call	PrePmLoad
 	ldw	wa, 24
-	calr	DataBuf_CopyBulkBitfields_Large_Helper3
+	calr	FileData_ResetPanelMemoriesToDefault
 	ld	iz, 0:i3
 DataBuf_CopyBulkBitfields_Large_Loop4:
 	ld	wa, iz
@@ -5884,7 +5884,7 @@ DataBuf_CopyBulkBitfields_Large_Loop6:
 	calr	DSPCfg_ConfigureVoiceSlotA
 	ld	xwa, 0xf980
 	ld	xbc, (xsp+2)
-	calr	DataBuf_CopyBulkBitfields_Large_Helper2
+	calr	FileData_CopyLivePartFieldsToMemory
 	incw	1, (xsp+6)
 	cpw	(xsp+6), 24
 	jrl	c, DataBuf_CopyBulkBitfields_Large_Loop5
@@ -6713,7 +6713,14 @@ DSPCfg_VoiceSlotB_ExtractData_Loop:
 	ld	a, (xhl+wa)
 	ld	(xbc+969), a
 	ret
-DataBuf_CopyBulkBitfields_Large_Helper:
+; FileData_ConvertNNBlock1Fields: Last conversion step of the 'NN' (.LSW class 3) live-panel import: copies the fields
+;   that land in live-panel block 1 (0xFD60-0xFFBE) from the file record XWA into the live panel XBC = 0xF980 --
+;   masked bits into +1046/+1047/+1049/+1050 (tag 0x98's payload 0xFD96..), bytes +1066/+1068, low nibbles
+;   +1078/+1082/+1087, 15 nibble pairs +1088..+1102 from file +517..+534, bit 7 of +407 into +1069 bit 2, and the 16
+;   bytes +1056..+1071 to +1576..+1591. What the individual fields are is not identified. Basis: callers + body --
+;   FileData_ImportNNLivePanel calls it after the block-0 converters (VoiceParam_CopyBitfields_*, DSPCfg_*, whose
+;   destinations all lie below +992 = 0xFD60) and before PostLswLoad; every destination here is in block 1.
+FileData_ConvertNNBlock1Fields:
 	ld	xde, xwa
 	lda	xwa, (xde+371)
 	ld	l, (xwa)
@@ -6971,7 +6978,13 @@ DSPCfg_VoiceSlotB_ExtractData_Skip:
 	ld	a, (xde+1071)
 	ld	(xbc+1591), a
 	ret
-DataBuf_CopyBulkBitfields_Large_Helper2:
+; FileData_CopyLivePartFieldsToMemory: Copies part fields from the live panel (XWA = 0xF980) into panel memory XBC (a
+;   memory is the live block 0 without its 0x20 header, so live +n -> memory +n-32): bits 4-5 of +737 -> +705, and
+;   bytes 8-11 of the first 16 part records (0xF9B6 + 26k; bytes 8, 9 and 11 low 7 bits, byte 10 whole). Which
+;   parameters those bytes hold is not identified. Basis: callers + body -- FileData_ImportNNPanelMemories calls it
+;   for each of the 24 memories after converting the file record into it; DataBuf_TransferSlotBitfields is the same
+;   copy into a song slot (FileData_LoadAndParseType3).
+FileData_CopyLivePartFieldsToMemory:
 	ld	e, (xwa+737)
 	and	e, 48
 	andmi8	(xbc+705), 207
@@ -7136,7 +7149,11 @@ DataBuf_Data_FormatDispatch:
 	call	Mem_Copy
 	lda	xsp, (xsp+48)
 	ret
-DataBuf_CopyBulkBitfields_Large_Helper3:
+; FileData_ResetPanelMemoriesToDefault: Copies the 960-byte default panel image (SndParamRam_DefaultImage, the ROM
+;   default of live block 0 at 0xF9A0) over panel memories 0..WA-1 at 0x1ED400 + 960*j, before a foreign .LSW import
+;   converts the file's records into them. Basis: callers + body -- FileData_ImportM4M6PanelMemories (WA = 24 or 10,
+;   the class's memory count) and FileData_ImportNNPanelMemories (WA = 24) call it right after PrePmLoad.
+FileData_ResetPanelMemoriesToDefault:
 	dec	6, xsp
 	pushw	iz
 	ld	(xsp+6), wa
@@ -10731,7 +10748,10 @@ Param_SignExtendReturn_Helper3_Helper2:
 	jp	ArpQueue_SwapBuffers
 	ret
 	ret
-MidiTable_DispatchHelper_Helper:
+; MidiTable_NullRet: Empty routine (`ret`) that MidiTable_DispatchHelper calls last, after dispatching the MIDI data-
+;   transfer command and MidiSeq_UpdateAllParams. Basis: callers + body -- its only caller is that `call`; the body is
+;   a single `ret` (the tree's X_NullRet convention: AccTuning_NullRet, DpMdlySmfLyrTtl_NullRet).
+MidiTable_NullRet:
 	ret
 
 MidiChan_ClearAllStates:
@@ -11486,7 +11506,7 @@ MidiTable_DispatchHelper:
 	call	(xhl)
 	calr MidiTable_FlushArpNotes
 	call MidiSeq_UpdateAllParams
-	call MidiTable_DispatchHelper_Helper
+	call MidiTable_NullRet
 	ret
 MidiTable_FlushArpNotes:
 	; --- Helper 2: conditional A-based 3-way pointer selection (56 bytes) ---
@@ -12057,11 +12077,16 @@ MidiSysEx_ProcessBlock:
 	res	4, (0xbd18:16)
 	calr	MidiSysEx_FinishPanelXfer
 	calr	MidiSysEx_FinishSoundRamXfer
-	calr	MidiSysEx_ProcessBlock_Helper8
-	calr	MidiSysEx_ProcessBlock_Helper9
+	calr	MidiSysEx_FinishStyleImageXfer
+	calr	MidiSysEx_FinishSeqXfer
 	calr	MidiSysEx_ProcessBlock_Helper10
 	jrl	MidiSysEx_ProcessBlock_Join
-MidiSysEx_ProcessBlock_Helper:
+; MidiSysEx_ReapplyReceivedPanel: Re-applies a panel just received over MIDI: rewrites every TLV record header of the
+;   live panel and the 80 memories (PanelTlv_WriteAllHeaders), validates them (PanelTlv_ValidateAll), resolves the
+;   part companions, re-runs the tone generator set-up (ToneGen_DispatchByMode) and ORs 3 into the render-mode byte
+;   0x8D4A; XDE/XHL/XIX/XIZ preserved. Basis: callers + body -- MidiSysEx_FinishPanelXfer (end of the panel transfer
+;   group, bit 7 of 0xBD1A) calls it first; it is the same sequence SoundMode_ProcessToneAndParams opens with.
+MidiSysEx_ReapplyReceivedPanel:
 	push	xde
 	push	xhl
 	push	xix
@@ -12077,7 +12102,10 @@ MidiSysEx_ProcessBlock_Helper:
 	pop	xhl
 	pop	xde
 	ret
-MidiSysEx_ProcessBlock_Helper2:
+; MidiSysEx_NotifySoundParamChanges: Register-preserving (XDE/XHL/XIX/XIZ) call of SoundParam_NotifyMultipleChanges,
+;   the second step of finishing a received panel. Basis: callers + body -- MidiSysEx_FinishPanelXfer calls it after
+;   MidiSysEx_ReapplyReceivedPanel; its header names this step 'posts the sound-parameter changes'.
+MidiSysEx_NotifySoundParamChanges:
 	push	xde
 	push	xhl
 	push	xix
@@ -12088,7 +12116,11 @@ MidiSysEx_ProcessBlock_Helper2:
 	pop	xhl
 	pop	xde
 	ret
-MidiSysEx_ProcessBlock_Helper3:
+; MidiSysEx_ReinitSwbtWrOutput: Register-preserving (XDE/XHL/XIX/XIZ) call of SwbtWr_ReinitOutputBank then
+;   SwbtWr_CallProcessAll, the third step of finishing a received panel. Basis: callers + body --
+;   MidiSysEx_FinishPanelXfer calls it after MidiSysEx_NotifySoundParamChanges; its header names this step 're-
+;   initialises the SwbtWr output'.
+MidiSysEx_ReinitSwbtWrOutput:
 	push	xde
 	push	xhl
 	push	xix
@@ -12118,7 +12150,7 @@ MidiSysEx_ProcessBlock_Helper3:
 	ret
 ; MidiSysEx_FinishPanelXfer: End-of-transfer step for the panel group: if bit 7 of 0xBD1A is set (the panel blocks
 ;   were received), it rewrites and validates the panel TLV records of the live panel and the 80 memories, resolves
-;   the part companions and re-applies the tone generator (MidiSysEx_ProcessBlock_Helper). It then posts the sound-
+;   the part companions and re-applies the tone generator (MidiSysEx_ReapplyReceivedPanel). It then posts the sound-
 ;   parameter changes (SoundParam_NotifyMultipleChanges) and re-initialises the SwbtWr output
 ;   (SwbtWr_ReinitOutputBank, SwbtWr_CallProcessAll). After each of the three it sets bit 0 of (4330) when the
 ;   sequencer group is also pending (bit 4). Finally it clears bit 7. Basis: callers + body -- MidiSysEx_ProcessBlock
@@ -12127,11 +12159,11 @@ MidiSysEx_ProcessBlock_Helper3:
 MidiSysEx_FinishPanelXfer:
 	bit	7, (0xbd1a:16)
 	ret	z
-	calr	MidiSysEx_ProcessBlock_Helper
+	calr	MidiSysEx_ReapplyReceivedPanel
 	calr	MidiSysEx_ProcessBlock_Helper5
-	calr	MidiSysEx_ProcessBlock_Helper2
+	calr	MidiSysEx_NotifySoundParamChanges
 	calr	MidiSysEx_ProcessBlock_Helper5
-	calr	MidiSysEx_ProcessBlock_Helper3
+	calr	MidiSysEx_ReinitSwbtWrOutput
 	calr	MidiSysEx_ProcessBlock_Helper5
 	res	7, (0xbd1a:16)
 	ret
@@ -12140,7 +12172,13 @@ MidiSysEx_ProcessBlock_Helper5:
 	ret	z
 	set	0, (4330:16)
 	ret
-MidiSysEx_ProcessBlock_Helper6:
+; MidiSysEx_SendSoundRamEndCmd: Register-preserving (XDE/XHL/XIX/XIZ) call of MIDI_PitchBendData_Block, which sends
+;   the command packet {4, 0xF0, 0x50, 0x92, 0} through MIDI_SendCmdPacket / sendCOMM -- the packet that ends a sound-
+;   RAM transfer (the abort path sends it too). What the receiver does with it is not identified; the callee's name
+;   does not describe it. Basis: callers + body -- MidiSysEx_FinishSoundRamXfer calls it when the sound-RAM group (bit
+;   6 of 0xBD1A) was received; the group's abort handler SeqChan_UnhandledCmd_Join2 sends the same packet after
+;   SendPartDataBlock_DoGetError.
+MidiSysEx_SendSoundRamEndCmd:
 	push	xde
 	push	xhl
 	push	xix
@@ -12153,7 +12191,7 @@ MidiSysEx_ProcessBlock_Helper6:
 	ret
 ; MidiSysEx_FinishSoundRamXfer: End-of-transfer step for the sound-RAM group: if bit 6 of 0xBD1A is set (blocks 4-5
 ;   received: the 16-byte 'KN5000 SOUND RAM' id at 0x1E0000 and the data from 0x1E0010), it sends command packet {4,
-;   0xF0, 0x50, 0x92, 0} (MIDI_PitchBendData_Block via MidiSysEx_ProcessBlock_Helper6) and clears bit 6. It also
+;   0xF0, 0x50, 0x92, 0} (MIDI_PitchBendData_Block via MidiSysEx_SendSoundRamEndCmd) and clears bit 6. It also
 ;   copies the 6-byte MidiSysEx_BlockTemplate into its frame and never reads it. Basis: callers + body --
 ;   MidiSysEx_ProcessBlock (command 4) calls it second; bit 6 is set only by SeqChan_WriteField_Data_B, the end step
 ;   (state 6) of blocks 4-5. The abort path for the same group (MidiSysEx_BlockOp_ToPartDataAndBend) sends the same
@@ -12166,12 +12204,19 @@ MidiSysEx_FinishSoundRamXfer:
 	ldirw
 	bit	6, (0xbd1a:16)
 	jr	z, MidiSysEx_ProcessBlock_Epilogue
-	calr	MidiSysEx_ProcessBlock_Helper6
+	calr	MidiSysEx_SendSoundRamEndCmd
 	res	6, (0xbd1a:16)
 MidiSysEx_ProcessBlock_Epilogue:
 	inc	6, xsp
 	ret
-MidiSysEx_ProcessBlock_Helper8:
+; MidiSysEx_FinishStyleImageXfer: End-of-transfer step for the style-image group: if bit 5 of 0xBD1A is set (blocks of
+;   states 7-10, the style image at RHYTHM_PATTERN_BUF_A, were received) it clears 0x32F3 bit 0, runs
+;   AccPatch_MultiCallWrapper (AccPatch_EnsureStyleImageHeader rebuilds the default image unless it starts 'H', 0,
+;   'K'; then AccPatch_ClearModeFlag) and clears bit 5. Basis: callers + body -- MidiSysEx_ProcessBlock (command 4,
+;   transfer done) calls it third, after MidiSysEx_FinishPanelXfer (bit 7) and MidiSysEx_FinishSoundRamXfer (bit 6);
+;   bit 5 is set only by SeqChan_WriteField_Data_C, entry 10 of SeqChan_WriteFieldHandlers, the end of states 7-10,
+;   which MidiSysEx_BlockHandlers maps to the style image's recovery (AccDemo init).
+MidiSysEx_FinishStyleImageXfer:
 	bit	5, (0xbd1a:16)
 	ret	z
 	res	0, (0x32f3:16)
@@ -12186,7 +12231,14 @@ MidiSysEx_ProcessBlock_Helper8:
 	pop	xde
 	res	5, (0xbd1a:16)
 	ret
-MidiSysEx_ProcessBlock_Helper9:
+; MidiSysEx_FinishSeqXfer: End-of-transfer step for the sequencer group: if bit 4 of 0xBD1A is set (the sequencer
+;   blocks were received), validates the block-0 panel records at 0xF480, inside the received current-song record
+;   (MidiSysEx_ProcessBlock_Helper13 -> PanelTlv_ValidateBlock0), resolves the part companions, restores the song
+;   selection 0xFFE3/0xFFEC saved in 0xF247/0xF248 (MidiSysEx_ProcessBlock_Helper12), sets bit 1 of 0xBD18 and clears
+;   bit 4. Basis: callers + body -- MidiSysEx_ProcessBlock (command 4, transfer done) calls it after
+;   MidiSysEx_FinishPanelXfer and MidiSysEx_FinishSoundRamXfer; bit 4 is set only by SeqChan_WriteField_Data_D, the
+;   end step (state 14) of the sequencer blocks 11-14 (current song 0xF180, song slots, event memory).
+MidiSysEx_FinishSeqXfer:
 	bit	4, (0xbd1a:16)
 	ret	z
 	push	xde

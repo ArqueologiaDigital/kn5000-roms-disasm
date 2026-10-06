@@ -1852,7 +1852,7 @@ SeMenu_TransferPartValues_EndData_Join6:
 SeMenu_TransferPartValues_EndData_Epilogue4:
 	lda	xsp, (xsp+14)
 	ret
-SeMenu_ApplyPartEdit_Helper4:
+SeCtr2_StepPartField:
 	lda	xsp, (xsp-12)
 	push	qiz
 	ld	(xsp+10), c
@@ -2336,7 +2336,7 @@ SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6:
 	ld	a, (xde+wa)
 	ld	(xbc), a
 	ret
-SeMenu_SetupPartDisplay_End_Helper:
+SeMenu_PostDialEnable:
 	extz	wa
 	jp	UI_PostDialEnable
 SeMenu_SetupPartDisplay_End_Helper2:
@@ -2354,7 +2354,7 @@ SeMenu_BindDialToColumn:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	wa, 1:i3
-	calr	SeMenu_SetupPartDisplay_End_Helper
+	calr	SeMenu_PostDialEnable
 	ld	c, (xsp)
 	extz	bc
 	ld	wa, 0:i3
@@ -2408,7 +2408,7 @@ SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8_Join:
 	ret	ule
 	ld	(xbc), 0
 	ret
-SeMenu_CopyWriteUpdate_Entry7_Code_Helper:
+SeMenu_GoToPageOnEnabledPart:
 	dec	6, xsp
 	push	qiz
 	ld	(xsp+6), a
@@ -3604,7 +3604,7 @@ SeMenu_CopyWriteUpdate_Helper6:
 	ld	a, (xsp)
 	extz	wa
 	extz	bc
-	calr	SeMenu_ApplyPartEdit_Helper4
+	calr	SeCtr2_StepPartField
 	ld	a, (xsp)
 	inc	4, a
 	extz	wa

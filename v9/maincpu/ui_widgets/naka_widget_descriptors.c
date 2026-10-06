@@ -2955,7 +2955,7 @@ typedef struct __attribute__((packed)) {
     uint16_t RhythmParam_Dispatch_CaseTable[7];
     /* ---------------------------------------------------------------------
      * AccRhythm_Ram3888_Records -- 10 records x 16 bytes. The code after the
-     * label RhythmVoice_LoadParams_Helper (sequencer/accompaniment_engine.s): `ld xiy,<this>;
+     * label DrumParam_CopyStyleNameAndReload (sequencer/accompaniment_engine.s): `ld xiy,<this>;
      * add xiy,xwa; ld xix,0x3888; ld xbc,0x10; ldir` -- one record is copied
      * to RAM 0x3888. 160 = 10 x 16 is the extent to the next referenced
      * object.
