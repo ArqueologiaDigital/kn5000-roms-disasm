@@ -584,7 +584,7 @@ non-zero on failure; shifting one namespace or moving one field offset makes it 
 
 The 21 consecutive tags `C0..D4`, plus `D7`, are not an array of something new: record `0xC0+T`
 belongs to part record `T`. That is settled by a ROM POINTER TABLE, not by reading routine names.
-`VoiceData_LookupPtrByChannel` (0x00FC9E04) indexes `u32[0x00EDB264 + 4*A]`, and that table reads:
+`PanelTlv_CompanionOfPart` (0x00FC9E04) indexes `u32[0x00EDB264 + 4*A]`, and that table reads:
 
     [00]..[14]  0xFDDA, 0xFDEE, 0xFE02 ...  stride 20, one-to-one with C0..D4
     [15]        0xFF1A  == entry [10]       part 0x15 SHARES part 0x10's block
@@ -594,6 +594,15 @@ belongs to part record `T`. That is settled by a ROM POINTER TABLE, not by readi
 Verified here by dumping the table directly. The aliasing is what explains the family's shape:
 **`D5` and `D6` were never needed** because parts 0x15 and 0x16 share their neighbours' blocks, and
 tag `0x49` is the same kind of block for the style record `0x48`.
+
+*(2026-10-06)* The companions are recomputed, not just stored. On a tone-generator reinit
+(`Audio_ReinitToneGen`, `Audio_ReinitToneGenAndOutput`) the firmware runs `PanelTlv_ApplyResetMasks`,
+then `PanelTlv_ValidateAll` -- whose type-8 rules zero every byte of the `0xC0..0xD4`, `0xD7` and `0x49`
+records -- then `PanelTlv_ResolvePartCompanions`, which walks `PanelTlv_CompanionPartTags` (parts
+`0x00-0x14`, `0x17`, and the style record `0x48`), hands each record's `+0`/`+1` to
+`SndParam_ResolveVoiceEntry`, and writes the one byte it returns into the companion. (The tables these
+routines index were `Audio_InitAllDefaults_Data` / `_Data_2`; they are `PanelTlv_PayloadByTag` /
+`PanelTlv_CompanionByPart` now, `scripts/renaming/rename_panel_tlv_companions.sed`.)
 
 ⚠ It LOOKED dead, and three machine-checked negatives say why -- all three run on v7, v9 and v10:
 `SwbtWr_DispatchLoop` does `cp L,0xbf / jr UGT` before indexing its callback table, so **every event

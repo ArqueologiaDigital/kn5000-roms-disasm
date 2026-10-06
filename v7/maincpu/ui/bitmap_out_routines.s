@@ -1869,7 +1869,7 @@ BitMapOut_SaveDisplayToROM:
 BitMapOut_DetectChanges:
 	lda xsp, (xsp - 0x0a)
 	pushw iz
-	call Voice_InitAllChannelEntries
+	call PanelTlv_ResolvePartCompanions
 	calr BitMapOut_GetRenderMode
 	bit 0x00,L
 	jr nz, .Lc_fb4e26

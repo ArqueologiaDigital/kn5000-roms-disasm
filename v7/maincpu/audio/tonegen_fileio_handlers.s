@@ -68,19 +68,23 @@ PanelTlv_ValidatePanelMemory:
 PanelTlv_ValidateAll:
 	calr	PanelTlv_ValidateLivePanel
 	jr	PanelTlv_ValidatePanelMemories
-ToneGen_ApplyMaskTable:
-	lda	xwa, (ToneGen_ApplyMaskTable_Data:24)
+; AND each PanelTlv_ResetMasks entry's mask into its live-panel byte (tag 0x80 payload byte 0, tag 0x98
+; payload bytes 1, 3, 2 and 11), then BitMapOut_PrepareRender_CheckBit2(0) and fill the 16-character panel
+; name (tag 0x78's payload at 0xF9A2) with spaces.  First step of Audio_ReinitToneGen and
+; Audio_ReinitToneGenAndOutput, before PanelTlv_ValidateAll.
+PanelTlv_ApplyResetMasks:
+	lda	xwa, (PanelTlv_ResetMasks:24)
 	lda	xbc, (xwa + 4)
 	ld	xde, xwa
 	lda	xhl, (xwa + 25)
-ToneGen_ApplyMaskLoop:
+PanelTlv_ApplyResetMasks_Loop:
 	ld	xix, (xde)
 	ld	a, (xbc)
 	and	(xix), a
 	inc	5, xde
 	inc	5, xbc
 	cp	xde, xhl
-	jr	c, ToneGen_ApplyMaskLoop
+	jr	c, PanelTlv_ApplyResetMasks_Loop
 	ld	wa, 0:i3
 	call	BitMapOut_PrepareRender_CheckBit2
 	pushw	0x10
@@ -97,31 +101,37 @@ PanelTlv_WriteAllHeaders:
 SeqChan_WriteField_Data_E_Helper2:
 	lda	xwa, (0xf480:16)
 	jrl	PanelTlv_ValidateBlock0
-ToneGen_InitAllChannelEntries_Skip:
-	jr	Voice_InitAllChannelEntries
-Voice_InitAllChannelEntries:
+; a jr to PanelTlv_ResolvePartCompanions, for callers outside its calr reach
+PanelTlv_ResolvePartCompanions_Entry:
+	jr	PanelTlv_ResolvePartCompanions
+; For each of the 23 tags in PanelTlv_CompanionPartTags: the record's payload (PanelTlv_PayloadOfTag) and its
+; companion record (PanelTlv_CompanionOfPart: 0xC0 + part, or tag 0x49 for the style record 0x48); a
+; 5-byte frame {+0 offset, +1 value, +2 tag, +3 payload[0], +4 payload[1]} goes to
+; SndParam_ResolveVoiceEntry, which fills +0/+1 from the record's sound; companion[+0] = +1.  A tag without
+; a payload or a companion (0xFFFFFFFF) is skipped.
+PanelTlv_ResolvePartCompanions:
 	lda	xsp, (xsp - 14)
 	push	xiz
 	ldw	(xsp + 10), 0x0
-Voice_InitChannelLoop:
+PanelTlv_ResolvePartCompanions_Loop:
 	ld	wa, (xsp + 10)
 	extz	xwa
-	ld	xbc, Voice_InitChannelLoop_Data
+	ld	xbc, PanelTlv_CompanionPartTags
 	add	xbc, xwa
 	ld	a, (xbc)
 	ld	(xsp + 8), a
 	extz	wa
-	call	VoiceData_LookupPtrByIndex
+	call	PanelTlv_PayloadOfTag
 	ld	xiz, xhl
 	cp	xiz, 0xffffffff
-	jr	z, Voice_InitChannelNext
+	jr	z, PanelTlv_ResolvePartCompanions_Next
 	ld	a, (xsp + 8)
 	extz	wa
-	call	VoiceData_LookupPtrByChannel
+	call	PanelTlv_CompanionOfPart
 	ld	(xsp + 4), xhl
 	ld	xwa, (xsp + 4)
 	cp	xwa, 0xffffffff
-	jr	z, Voice_InitChannelNext
+	jr	z, PanelTlv_ResolvePartCompanions_Next
 	lda	xwa, (xsp + 12)
 	ld	c, (xiz)
 	ld	(xwa + 3), c
@@ -136,10 +146,10 @@ Voice_InitChannelLoop:
 	ld	xwa, (xsp + 4)
 	ld	c, (xbc + 1)
 	ld	(xwa+de), c
-Voice_InitChannelNext:
+PanelTlv_ResolvePartCompanions_Next:
 	incw	1, (xsp + 10)
 	cpw	(xsp + 10), 0x17
-	jr	c, Voice_InitChannelLoop
+	jr	c, PanelTlv_ResolvePartCompanions_Loop
 	pop	xiz
 	lda	xsp, (xsp + 14)
 	ret
@@ -847,7 +857,7 @@ ToneGen_FileIO_SaveAndSync:
 	mrdb5	0x88, 0x01, 0x19, 0x52, 0xfd
 	mrdb5	0x88, 0x02, 0x19, 0x54, 0xfd
 	call	PanelTlv_ValidateLivePanel
-	call	ToneGen_InitAllChannelEntries_Skip
+	call	PanelTlv_ResolvePartCompanions_Entry
 	calr	SoundParam_NotifyMultipleChanges
 	pop	xiz
 	inc	4, xsp

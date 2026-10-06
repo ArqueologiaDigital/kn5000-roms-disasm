@@ -3213,9 +3213,9 @@ SoundProgram_DispatchTable:
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
-; SoundProgram_DispatchTable + 0x400 (Audio_InitAllDefaults_Data in
+; SoundProgram_DispatchTable + 0x400 (PanelTlv_PayloadByTag in
 ; shared/positional_labels.s): 256 RAM addresses, indexed by the SAME command
-; byte.  VoiceData_LookupPtrByIndex (audio/audio_control_engine.s, 0xFC9DF4)
+; byte.  PanelTlv_PayloadOfTag (audio/audio_control_engine.s, 0xFC9DF4)
 ; does `sla wa, 2` / `lda xbc, (+0x400)` / `ld r, (xrr+rr)`, and
 ; SndParam_FetchSequencerParams stores the result at RAM 0x912B next to the
 ; command byte it fetched; Audio_InitAllDefaults (0xFC7C49) stores this
@@ -3223,7 +3223,10 @@ SoundProgram_DispatchTable:
 ; 0xFFFFFFFF = no RAM block for that command.  The live entries are 26 bytes
 ; apart (0xF9B6, 0xF9D0, ...) -- the same spacing as the RAM-bank table
 ; sndparam_types.h describes.
-Audio_InitAllDefaults_Data:
+; (2026-10-06) This is the panel TLV stream's tag -> payload table (docs/kn-disk-file-formats.md, "The
+; record container"): entry T = the RAM address of record T's payload.  Renamed from
+; Audio_InitAllDefaults_Data; shared/positional_labels.s holds no entry for it.
+PanelTlv_PayloadByTag:
 	.long 0x0000f9b6, 0x0000f9d0, 0x0000f9ea, 0x0000fa04, 0x0000fa1e, 0x0000fa38, 0x0000fa52, 0x0000fa6c	; [0x00]
 	.long 0x0000fa86, 0x0000faa0, 0x0000faba, 0x0000fad4, 0x0000faee, 0x0000fb08, 0x0000fb22, 0x0000fb3c	; [0x08]
 	.long 0x0000fb56, 0x0000fb70, 0x0000fb8a, 0x0000fba4, 0x0000fbbe, 0x0000fbd8, 0x0000fbf2, 0x0000fd62	; [0x10]
@@ -3257,10 +3260,13 @@ Audio_InitAllDefaults_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xf0]
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xf8]
 ; SoundProgram_DispatchTable + 0x800 (..._0x800): 32 RAM addresses, one per
-; channel 0-31: VoiceData_LookupPtrByChannel (0xFC9E04) does `cp a, 0x1f` /
+; channel 0-31: PanelTlv_CompanionOfPart (0xFC9E04) does `cp a, 0x1f` /
 ; `jr ugt` / `sla wa, 2` / `lda xbc, (+0x800)` / `ld r, (xrr+rr)`;
 ; Audio_InitAllDefaults stores the table's address at RAM 0x9182.
-Audio_InitAllDefaults_Data_2:
+; (2026-10-06) Entry T = the payload of part T's companion record, tag 0xC0 + T (parts 0x15 and 0x16 share
+; 0x10's and 0x13's; docs/kn-disk-file-formats.md, "The C0..D4 run is one companion block PER PART").
+; Renamed from Audio_InitAllDefaults_Data_2.
+PanelTlv_CompanionByPart:
 	.long 0x0000fdda, 0x0000fdee, 0x0000fe02, 0x0000fe16, 0x0000fe2a, 0x0000fe3e, 0x0000fe52, 0x0000fe66	; [0x00]
 	.long 0x0000fe7a, 0x0000fe8e, 0x0000fea2, 0x0000feb6, 0x0000feca, 0x0000fede, 0x0000fef2, 0x0000ff06	; [0x08]
 	.long 0x0000ff1a, 0x0000ff2e, 0x0000ff42, 0x0000ff56, 0x0000ff6a, 0x0000ff1a, 0x0000ff56, 0x0000ff7e	; [0x10]
@@ -3294,7 +3300,7 @@ MidiSysEx_ProcessBlock_Data:
 ; ---------------------------------------------------------------------------
 	; +0x890: one 6-byte record.  BitmapTable_ProcessEntry (0xFC8235) takes
 	; index*6 and reads +0 with `cpw (xwa), 0x50`, +2 (at +0x892) as a
-	; command byte for VoiceData_LookupPtrByIndex, and +3, +4, +5.
+	; command byte for PanelTlv_PayloadOfTag, and +3, +4, +5.
 BitmapTable_ProcessEntry_Data:
 	.short 0x0050
 BitmapTable_ProcessEntry_Data_2:
@@ -3348,7 +3354,7 @@ CtrlPanel_BuildIndicatorBitmask_Data:
 	.byte 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 	.byte 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0xff
 	; +0x8F4: 20 bytes, a channel remap read with `ld a, (xrr+rr)` by
-	; VoiceChannels_InitPanFromPreset; its result goes to VoiceData_LookupPtrByIndex.
+	; VoiceChannels_InitPanFromPreset; its result goes to PanelTlv_PayloadOfTag.
 VoiceChannels_InitPanFromPreset_Data:
 	.byte 0, 2, 1, 7, 8, 9, 10, 11, 4, 5, 6, 3, 15, 21, 21, 25, 20, 12, 13, 14
 ReverbPreset_Table:

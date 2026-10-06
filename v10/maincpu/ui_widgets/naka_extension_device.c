@@ -225,6 +225,13 @@ typedef struct __attribute__((packed)) {
     uint8_t  len;            /* payload bytes after the 2-byte header */
 } panel_tlv_layout_t;
 
+/* One entry of PanelTlv_ResetMasks (5 bytes): PanelTlv_ApplyResetMasks ANDs `mask` into the live-panel
+ * RAM byte at `address`, for each of the five entries, before it blanks the panel name (Memset 0xF9A2, ' ', 16). */
+typedef struct __attribute__((packed)) {
+    uint32_t address;
+    uint8_t  mask;
+} panel_reset_mask_t;
+
 /* One field rule = one PanelTlv_ApplyFieldRule case, by its type byte.  `off` is a payload byte; `mask` picks
  * the bits a rule governs, and a reset keeps the bits outside it: byte = (byte & ~mask) | dflt. */
 #define RULE_KEEP_BITS(off, mask)               0, (off), (mask)                    /* byte &= mask */
@@ -1078,29 +1085,11 @@ typedef struct __attribute__((packed)) {
     panel_tlv_layout_t PanelTlv_Block0_Layout[46];
     /* PanelTlv_Block1_Layout: the 30 records of block 1 (RAM 0xFD60), read by PanelTlv_WriteBlock1Headers and PanelTlv_ValidateBlock1 (audio/tonegen_fileio_handlers.s) */
     panel_tlv_layout_t PanelTlv_Block1_Layout[30];
-    uint16_t field_2b0c;
-    uint8_t pad_140[2];  /* zero padding */
-    uint32_t ptr_2b10;
-    uint16_t field_2b14;
-    uint16_t field_2b16;
-    uint8_t pad_141[2];  /* zero padding */
-    uint32_t ptr_2b1a;
-    uint16_t field_2b1e;
-    uint16_t field_2b20;
-    uint8_t pad_142[2];  /* zero padding */
-    uint16_t field_2b24;
-    uint16_t field_2b26;
-    uint16_t field_2b28;
-    uint16_t field_2b2a;
-    uint16_t field_2b2c;
-    uint16_t field_2b2e;
-    uint16_t field_2b30;
-    uint16_t field_2b32;
-    uint16_t field_2b34;
-    uint16_t field_2b36;
-    uint16_t field_2b38;
-    uint16_t field_2b3a;
-    uint16_t field_2b3c;
+    /* PanelTlv_ResetMasks: read by PanelTlv_ApplyResetMasks (audio/tonegen_fileio_handlers.s), which stops at +25; the 0xFF after it pads to an even address */
+    panel_reset_mask_t PanelTlv_ResetMasks[5];
+    uint8_t PanelTlv_ResetMasks_pad;
+    /* PanelTlv_CompanionPartTags: the 23 records whose companion PanelTlv_ResolvePartCompanions refreshes from the record's sound (+0, +1) -- parts 0x00-0x14 and 0x17 (companion 0xC0 + part, through PanelTlv_CompanionByPart) and the style record 0x48 (companion tag 0x49) */
+    uint8_t PanelTlv_CompanionPartTags[24];
     uint8_t pad_143[2];  /* zero padding */
     uint16_t field_2b40;
     uint16_t field_2b42;
@@ -6338,51 +6327,20 @@ const naka_extension_device_t naka_extension_device_data
         /* 29 */ { 0x25E, SELF(PanelTlv_Rules_End), 0xFF, 0xFF },
     },
 
-    .field_2b0c = 0xFD50,
+    .PanelTlv_ResetMasks = {
+        { 0xFD50, 0xFB },  /* block 0 tag 0x80 payload byte 0 */
+        { 0xFD97, 0x80 },  /* block 1 tag 0x98 payload byte 1 */
+        { 0xFD99, 0xFE },  /* block 1 tag 0x98 payload byte 3 */
+        { 0xFD98, 0x3F },  /* block 1 tag 0x98 payload byte 2 */
+        { 0xFDA1, 0x3F },  /* block 1 tag 0x98 payload byte 11 */
+    },
 
-    .pad_140 = { 0 },
+    .PanelTlv_ResetMasks_pad = 0xFF,
 
-    .ptr_2b10 = 0x00FD97FB,
-
-    .field_2b14 = 0x8000,
-
-    .field_2b16 = 0xFD99,
-
-    .pad_141 = { 0 },
-
-    .ptr_2b1a = 0x00FD98FE,
-
-    .field_2b1e = 0x3F00,
-
-    .field_2b20 = 0xFDA1,
-
-    .pad_142 = { 0 },
-
-    .field_2b24 = 0xFF3F,
-
-    .field_2b26 = 0x0100,
-
-    .field_2b28 = 0x0302,
-
-    .field_2b2a = 0x0504,
-
-    .field_2b2c = 0x0706,
-
-    .field_2b2e = 0x0908,
-
-    .field_2b30 = 0x0B0A,
-
-    .field_2b32 = 0x0D0C,
-
-    .field_2b34 = 0x0F0E,
-
-    .field_2b36 = 0x1110,
-
-    .field_2b38 = 0x1312,
-
-    .field_2b3a = 0x1714,
-
-    .field_2b3c = 0xFF48,
+    .PanelTlv_CompanionPartTags = {
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x17, 0x48,
+        0xFF  /* to an even address */
+    },
 
     .pad_143 = { 0 },
 

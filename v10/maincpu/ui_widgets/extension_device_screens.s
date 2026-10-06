@@ -911,18 +911,15 @@ PanelTlv_Block0_Layout:	.incbin "includes/generated/naka_extension_device.bin", 
 ; PanelTlv_WriteBlock1Headers and PanelTlv_ValidateBlock1; typed as panel_tlv_layout_t in
 ; ui_widgets/naka_extension_device.c.
 PanelTlv_Block1_Layout:	.incbin "includes/generated/naka_extension_device.bin", 0x29E0, 0x12C
-; [nakarest] naka_extension_device+0x2b0c  +0x2b0c..+0x2b26 (0xed92d8, 26 B)
-; [nakarest] purpose not established: layout of 26 B at 0xed92d8 not derived; readers below
-; [nakarest] Readers: source references ToneGen_ApplyMaskTable (audio/tonegen_fileio_handlers.s:
-; [nakarest] `lda xwa, (ToneGen_ApplyMaskTable_Data:24)`).
-ToneGen_ApplyMaskTable_Data:
-	.incbin "includes/generated/naka_extension_device.bin", 0x2B0C, 0x1A
-; [nakarest] naka_extension_device+0x2b26  +0x2b26..+0x2b3e (0xed92f2, 24 B)
-; [nakarest] purpose not established: layout of 24 B at 0xed92f2 not derived; readers below
-; [nakarest] Readers: source references Voice_InitChannelLoop (audio/tonegen_fileio_handlers.s:
-; [nakarest] `ld xbc, Voice_InitChannelLoop_Data`).
-Voice_InitChannelLoop_Data:
-	.incbin "includes/generated/naka_extension_device.bin", 0x2B26, 0x18
+; PanelTlv_ResetMasks -- 5 x {u32 RAM address, u8 mask} + one 0xFF pad: the live-panel bytes
+; PanelTlv_ApplyResetMasks ANDs on a tone-generator reinit -- 0xFD50 &= 0xFB (tag 0x80 payload byte 0),
+; 0xFD97 &= 0x80, 0xFD99 &= 0xFE, 0xFD98 &= 0x3F, 0xFDA1 &= 0x3F (tag 0x98 payload bytes 1, 3, 2, 11).
+; Typed as panel_reset_mask_t in ui_widgets/naka_extension_device.c.
+PanelTlv_ResetMasks:	.incbin "includes/generated/naka_extension_device.bin", 0x2B0C, 0x1A
+; PanelTlv_CompanionPartTags -- 23 record tags (0x00-0x14, 0x17, 0x48) + one 0xFF pad, walked by
+; PanelTlv_ResolvePartCompanions (audio/tonegen_fileio_handlers.s), which refreshes each record's
+; companion from its sound; typed in ui_widgets/naka_extension_device.c.
+PanelTlv_CompanionPartTags:	.incbin "includes/generated/naka_extension_device.bin", 0x2B26, 0x18
 ; [nakarest] naka_extension_device+0x2b3e  +0x2b3e..+0x2b6e (0xed930a, 48 B)
 ; [nakarest] purpose not established: layout of 48 B at 0xed930a not derived; readers below
 ; [nakarest] Readers: source references PanelTlv_ApplyFieldRule

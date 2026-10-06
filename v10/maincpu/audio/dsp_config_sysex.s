@@ -1106,7 +1106,7 @@ VoiceParam_SaveReverbChorus:
 VoiceParam_SaveReverbChorus_Loop:
 	ldto_berp A, 0xfb
 	extz wa
-	call VoiceData_LookupPtrByIndex
+	call PanelTlv_PayloadOfTag
 	lda xbc, (xhl + 12)
 	ld xde, xbc
 	inc 1, xde
@@ -1141,7 +1141,7 @@ VoiceParam_RestoreReverbChorus:
 VoiceParam_RestoreReverbChorus_Loop:
 	ldto_berp A, 0xfb
 	extz wa
-	call VoiceData_LookupPtrByIndex
+	call PanelTlv_PayloadOfTag
 	lda xde, (xhl + 12)
 	ld xhl, xde
 	inc 1, xhl
@@ -1301,7 +1301,7 @@ BitMapOut_MergeOutputFields:
 	ldto_berp A, 0xfb
 	ld (xbc + 9), a
 	mrdb5 0x8f, 0x04, 0x19, 0x3a, 0x8d
-	call ToneGen_InitAllChannelEntries_Skip
+	call PanelTlv_ResolvePartCompanions_Entry
 	call BitMapOut_DetectChanges
 	push xde
 	push xhl
@@ -2321,7 +2321,7 @@ DSPCfg_LookupMidiMap:
 	ld xbc, DspBlock_ObjectCode_Table
 	add xbc, xwa
 	ld a, (xbc)
-	jp VoiceData_LookupPtrByIndex
+	jp PanelTlv_PayloadOfTag
 
 DSPCfg_ExtractFieldPair:
 	ld xix, xde

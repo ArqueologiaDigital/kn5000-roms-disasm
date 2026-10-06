@@ -11261,7 +11261,7 @@ MidiSysEx_ProcessBlock_Helper:
 	push	xiz
 	call	PanelTlv_WriteAllHeaders
 	call	PanelTlv_ValidateAll
-	call	ToneGen_InitAllChannelEntries_Skip
+	call	PanelTlv_ResolvePartCompanions_Entry
 	call	ToneGen_DispatchByMode
 	ld	wa, 3:i3
 	call	BitMapOut_GetRenderMode_CheckBit3
@@ -11372,7 +11372,7 @@ MidiSysEx_ProcessBlock_Helper9:
 	push	xix
 	push	xiz
 	call	SeqChan_WriteField_Data_E_Helper2
-	call	ToneGen_InitAllChannelEntries_Skip
+	call	PanelTlv_ResolvePartCompanions_Entry
 	call	SeqChan_WriteField_Data_E_Helper
 	pop	xiz
 	pop	xix
@@ -11960,7 +11960,7 @@ SoundMode_ProcessToneAndParams:
 	push xiz
 	call	PanelTlv_WriteAllHeaders
 	call	PanelTlv_ValidateLivePanel
-	call	Voice_InitAllChannelEntries
+	call	PanelTlv_ResolvePartCompanions
 	call	ToneGen_DispatchByMode
 	ld wa, 3:i3
 	call	BitMapOut_GetRenderMode_CheckBit3
@@ -12496,7 +12496,7 @@ VoiceData_SyncLoop:
 	ld	xbc, VoiceData_SyncCodeList
 	add xbc, xwa
 	ld a, (xbc)
-	call	VoiceData_LookupPtrByIndex
+	call	PanelTlv_PayloadOfTag
 	ld c, (xhl - 1)
 	ld xwa, xhl
 	sub xwa, 0xf9a0

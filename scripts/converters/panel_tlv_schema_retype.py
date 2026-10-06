@@ -35,6 +35,12 @@ SELF(list).  Asserted before writing: the lists tile +0x230E..+0x2814 exactly wi
 byte is 0..8, every layout pointer lands on a list start, and every record chains -- offset[i+1] = offset[i] +
 2 + len[i] -- in both blocks.
 
+A second pass types the 50 bytes after the schema: +0x2B0C PanelTlv_ResetMasks, 5 x {u32 RAM address, u8 mask}
+(panel_reset_mask_t) + 0xFF, which PanelTlv_ApplyResetMasks ANDs into the live panel on a tone-generator reinit;
++0x2B26 PanelTlv_CompanionPartTags, the 23 tags (0x00-0x14, 0x17, 0x48) + 0xFF whose companion records
+PanelTlv_ResolvePartCompanions refreshes (scripts/renaming/rename_panel_tlv_companions.sed names those routines).
+`--asm` writes the matching .s headers and slice labels; each insert is skipped when already present.
+
 The values are read from the blob compiled from the unmodified C; the result must be byte-identical (`make all`,
 compare_roms.py).  The C comment gate needs `--allow '/\* zero padding \*/'`: those are the generator's notes on
 members that were bytes of the lists and tables.
@@ -311,38 +317,139 @@ TABLE_HEADERS = {
 INCBIN = '.incbin "includes/generated/naka_extension_device.bin", 0x%X, 0x%X'
 
 
+ROUTINE_HEADERS_2 = {
+    "PanelTlv_ApplyResetMasks": [
+        "; AND each PanelTlv_ResetMasks entry's mask into its live-panel byte (tag 0x80 payload byte 0, tag 0x98",
+        "; payload bytes 1, 3, 2 and 11), then BitMapOut_PrepareRender_CheckBit2(0) and fill the 16-character panel",
+        "; name (tag 0x78's payload at 0xF9A2) with spaces.  First step of Audio_ReinitToneGen and",
+        "; Audio_ReinitToneGenAndOutput, before PanelTlv_ValidateAll."],
+    "PanelTlv_ResolvePartCompanions_Entry": [
+        "; a jr to PanelTlv_ResolvePartCompanions, for callers outside its calr reach"],
+    "PanelTlv_ResolvePartCompanions": [
+        "; For each of the 23 tags in PanelTlv_CompanionPartTags: the record's payload (PanelTlv_PayloadOfTag) and its",
+        "; companion record (PanelTlv_CompanionOfPart: 0xC0 + part, or tag 0x49 for the style record 0x48); a",
+        "; 5-byte frame {+0 offset, +1 value, +2 tag, +3 payload[0], +4 payload[1]} goes to",
+        "; SndParam_ResolveVoiceEntry, which fills +0/+1 from the record's sound; companion[+0] = +1.  A tag without",
+        "; a payload or a companion (0xFFFFFFFF) is skipped."],
+    "PanelTlv_PayloadOfTag": [
+        "; a = tag -> xhl = the RAM address of that record's payload (PanelTlv_PayloadByTag[tag]; 0xFFFFFFFF = none)"],
+    "PanelTlv_CompanionOfPart": [
+        "; a = part tag -> xhl = its companion record's payload: PanelTlv_CompanionByPart[a] for a <= 0x1F, tag 0x49's",
+        "; payload (RAM 0xFF92) for the style record 0x48, else 0xFFFFFFFF"],
+}
+TABLE_HEADERS_2 = {
+    "PanelTlv_ResetMasks": (0x2B0C, 0x1A, [
+        "; PanelTlv_ResetMasks -- 5 x {u32 RAM address, u8 mask} + one 0xFF pad: the live-panel bytes",
+        "; PanelTlv_ApplyResetMasks ANDs on a tone-generator reinit -- 0xFD50 &= 0xFB (tag 0x80 payload byte 0),",
+        "; 0xFD97 &= 0x80, 0xFD99 &= 0xFE, 0xFD98 &= 0x3F, 0xFDA1 &= 0x3F (tag 0x98 payload bytes 1, 3, 2, 11).",
+        "; Typed as panel_reset_mask_t in ui_widgets/naka_extension_device.c."]),
+    "PanelTlv_CompanionPartTags": (0x2B26, 0x18, [
+        "; PanelTlv_CompanionPartTags -- 23 record tags (0x00-0x14, 0x17, 0x48) + one 0xFF pad, walked by",
+        "; PanelTlv_ResolvePartCompanions (audio/tonegen_fileio_handlers.s), which refreshes each record's",
+        "; companion from its sound; typed in ui_widgets/naka_extension_device.c."]),
+}
+ROUTINE_HEADERS_2.update({
+    "PanelTlv_PayloadByTag": [
+        "; (2026-10-06) This is the panel TLV stream's tag -> payload table (docs/kn-disk-file-formats.md, \"The",
+        "; record container\"): entry T = the RAM address of record T's payload.  Renamed from",
+        "; Audio_InitAllDefaults_Data; shared/positional_labels.s holds no entry for it."],
+    "PanelTlv_CompanionByPart": [
+        "; (2026-10-06) Entry T = the payload of part T's companion record, tag 0xC0 + T (parts 0x15 and 0x16 share",
+        "; 0x10's and 0x13's; docs/kn-disk-file-formats.md, \"The C0..D4 run is one companion block PER PART\").",
+        "; Renamed from Audio_InitAllDefaults_Data_2."],
+})
+ASM_FILES = (("audio", "tonegen_fileio_handlers.s"), ("audio", "audio_control_engine.s"),
+             ("ui_widgets", "extension_device_screens.s"), ("extensions", "extension_data.s"))
+
+
 def apply_asm(tree, apply):
-    out = []
-    p = os.path.join(ROOT, tree, "maincpu", "audio", "tonegen_fileio_handlers.s")
-    L = open(p, "rb").read().decode("latin-1").split("\n")
-    if not any(l.startswith("; xwa = a block-0 base.") for l in L):
-        n_stale = sum(1 for l in L if STALE.match(l))
-        L = [l for l in L if not STALE.match(l)]
-        for lab, hdr in ROUTINE_HEADERS.items():
-            k = L.index(lab + ":")
-            L[k:k] = hdr
-        out.append((p, L, "%d stale comments dropped, %d headers" % (n_stale, len(ROUTINE_HEADERS))))
-    p = os.path.join(ROOT, tree, "maincpu", "ui_widgets", "extension_device_screens.s")
-    L = open(p, "rb").read().decode("latin-1").split("\n")
-    if not any(l.startswith("PanelTlv_FieldRules:") for l in L):
-        for lab, (off, size, hdr) in TABLE_HEADERS.items():
-            inc = INCBIN % (off, size)
-            k = next(i for i, l in enumerate(L) if l.startswith("\t" + inc) or l == lab + ":")
-            if L[k] == lab + ":":
-                assert L[k + 1] == "\t" + inc, L[k + 1]
-                j = k
-                while L[j - 1].startswith("; [nakarest]"):
-                    j -= 1
-                L[j:k + 2] = hdr + ["%s:\t%s" % (lab, inc)]
-            else:
-                L[k:k + 1] = hdr + ["%s:\t%s" % (lab, inc)]
-        out.append((p, L, "3 slices headed and labelled"))
-    for path, lines, what in out:
-        print("  %s: %s" % (os.path.relpath(path, ROOT), what))
-        if apply:
+    files = {}
+    for d, f in ASM_FILES:
+        path = os.path.join(ROOT, tree, "maincpu", d, f)
+        files[path] = open(path, "rb").read().decode("latin-1").split("\n")
+    notes = []
+
+    def find(label):
+        hits = [(pth, i) for pth, L in files.items() for i, l in enumerate(L)
+                if l == label + ":" or l.startswith(label + ":\t")]
+        assert len(hits) == 1, (label, hits)
+        return hits[0]
+
+    # pass 1 (with ROUTINE_HEADERS): drop the stale DSPCfg comments once
+    tg = os.path.join(ROOT, tree, "maincpu", "audio", "tonegen_fileio_handlers.s")
+    n_stale = sum(1 for l in files[tg] if STALE.match(l))
+    if n_stale:
+        files[tg] = [l for l in files[tg] if not STALE.match(l)]
+        notes.append("%d stale comments dropped" % n_stale)
+    for lab, hdr in list(ROUTINE_HEADERS.items()) + list(ROUTINE_HEADERS_2.items()):
+        pth, k = find(lab)
+        L = files[pth]
+        if L[k - len(hdr):k] == hdr:
+            continue
+        L[k:k] = hdr
+        notes.append("header " + lab)
+    for lab, (off, size, hdr) in list(TABLE_HEADERS.items()) + list(TABLE_HEADERS_2.items()):
+        inc = INCBIN % (off, size)
+        pth = os.path.join(ROOT, tree, "maincpu", "ui_widgets", "extension_device_screens.s")
+        L = files[pth]
+        if "%s:\t%s" % (lab, inc) in L:
+            continue
+        k = next(i for i, l in enumerate(L) if l.startswith("\t" + inc) or l == lab + ":")
+        if L[k] == lab + ":":
+            assert L[k + 1] == "\t" + inc, L[k + 1]
+            j = k
+            while L[j - 1].startswith("; [nakarest]"):
+                j -= 1
+            L[j:k + 2] = hdr + ["%s:\t%s" % (lab, inc)]
+        else:
+            L[k:k + 1] = hdr + ["%s:\t%s" % (lab, inc)]
+        notes.append("slice " + lab)
+    print("  %s" % (", ".join(notes) or "nothing to do"))
+    if apply:
+        for path, lines in files.items():
             data = "\n".join(lines).encode("latin-1")
-            open(path + ".tmp", "wb").write(data)
-            os.replace(path + ".tmp", path)
+            if data != open(path, "rb").read():
+                open(path + ".tmp", "wb").write(data)
+                os.replace(path + ".tmp", path)
+
+
+# ------------------------------------------------- the two tables after the schema (+0x2B0C..+0x2B3E, 50 B)
+MASKS, TAGS, TAGS_END = 0x2B0C, 0x2B26, 0x2B3E
+MASK_TYPEDEF = r'''/* One entry of PanelTlv_ResetMasks (5 bytes): PanelTlv_ApplyResetMasks ANDs `mask` into the live-panel
+ * RAM byte at `address`, for each of the five entries, before it blanks the panel name (Memset 0xF9A2, ' ', 16). */
+typedef struct __attribute__((packed)) {
+    uint32_t address;
+    uint8_t  mask;
+} panel_reset_mask_t;
+'''
+
+
+def where(blocks, addr):
+    """RAM address -> 'block B tag 0xTT payload byte N'."""
+    for blk, (_, _, base, recs) in enumerate(blocks):
+        for off, _, tag, ln in recs:
+            if tag != 0xFF and base + off + 2 <= addr < base + off + 2 + ln:
+                return "block %d tag 0x%02X payload byte %d" % (blk, tag, addr - base - off - 2)
+    raise SystemExit("0x%X is in no record" % addr)
+
+
+def small_members(b, blocks):
+    masks = [(le(b, MASKS + 5 * i, 4), b[MASKS + 5 * i + 4]) for i in range(5)]
+    assert b[MASKS + 25] == 0xFF
+    rows = ["        { 0x%04X, 0x%02X },  /* %s */" % (a, m, where(blocks, a)) for a, m in masks]
+    m1 = M.NewMember("panel_reset_mask_t", "PanelTlv_ResetMasks", "[5]", 25, "{\n" + "\n".join(rows) + "\n    }",
+                     ["    /* PanelTlv_ResetMasks: read by PanelTlv_ApplyResetMasks (audio/tonegen_fileio_handlers.s),"
+                      " which stops at +25; the 0xFF after it pads to an even address */"])
+    m2 = M.NewMember("uint8_t", "PanelTlv_ResetMasks_pad", "", 1, "0xFF")
+    tags = list(b[TAGS:TAGS_END])
+    assert len(tags) == 24 and tags[23] == 0xFF and tags[:21] == list(range(21)) and tags[21:23] == [0x17, 0x48]
+    m3 = M.NewMember("uint8_t", "PanelTlv_CompanionPartTags", "[24]", 24,
+                     "{\n        " + ", ".join("0x%02X" % t for t in tags[:23]) +
+                     ",\n        0xFF  /* to an even address */\n    }",
+                     ["    /* PanelTlv_CompanionPartTags: the 23 records whose companion PanelTlv_ResolvePartCompanions"
+                      " refreshes from the record's sound (+0, +1) -- parts 0x00-0x14 and 0x17 (companion 0xC0 + part,"
+                      " through PanelTlv_CompanionByPart) and the style record 0x48 (companion tag 0x49) */"])
+    return [m1, m2], [m3]
 
 
 def main():
@@ -359,7 +466,26 @@ def main():
                     "rb").read()
         text = open(path, encoding="latin-1").read()
         if "PanelTlv_Block0_Layout" in text:
-            print("%s: already typed" % tree)
+            if "PanelTlv_ResetMasks" in text:
+                print("%s: already typed" % tree)
+                continue
+            # second pass: the reset masks and the companion tag list right after the schema
+            M.TYPE_SIZES["panel_reset_mask_t"] = 5
+            cb = M.CBlob(path)
+            blocks, _ = decode(blob)
+            a, c = small_members(blob, blocks)
+            cb.retype(MASKS, TAGS, a, blob)
+            cb.retype(TAGS, TAGS_END, c, blob)
+            k = next(i for i, l in enumerate(cb.lines) if l.startswith("/* One field rule = one PanelTlv_ApplyFieldRule"))
+            lines = MASK_TYPEDEF.rstrip("\n").split("\n") + [""]
+            cb.lines[k:k] = lines
+            for att in ("s0", "s1", "i0", "i1"):
+                setattr(cb, att, getattr(cb, att) + len(lines))
+            print("%s: +0x2B0C..+0x2B3E typed (PanelTlv_ResetMasks, PanelTlv_CompanionPartTags)" % tree)
+            if apply:
+                data = cb.render().encode("latin-1")
+                open(path + ".tmp", "wb").write(data)
+                os.replace(path + ".tmp", path)
             continue
         cb = M.CBlob(path)
         assert cb.base() == BASE

@@ -3799,9 +3799,9 @@ Audio_InitAllDefaults:
 	ld	(0x9136:16), 255
 	ld	(0x905c:16), 127
 	ld	(0x8ec7:16), 255
-	lda	xwa, (Audio_InitAllDefaults_Data:24)
+	lda	xwa, (PanelTlv_PayloadByTag:24)
 	ld	(0x9056:16), xwa
-	lda	xwa, (Audio_InitAllDefaults_Data_2:24)
+	lda	xwa, (PanelTlv_CompanionByPart:24)
 	ld	(0x90e6:16), xwa
 	lda	xbc, (0x90f1:16)
 	ld	xwa, xbc
@@ -3844,9 +3844,9 @@ Audio_ReinitToneGen:
 	push	xhl
 	push	xix
 	push	xiz
-	call	ToneGen_ApplyMaskTable
+	call	PanelTlv_ApplyResetMasks
 	call	PanelTlv_ValidateAll
-	call	ToneGen_InitAllChannelEntries_Skip
+	call	PanelTlv_ResolvePartCompanions_Entry
 	call	PanelTlv_WriteAllHeaders
 	pop	xiz
 	pop	xix
@@ -3873,9 +3873,9 @@ Audio_ReinitToneGenAndOutput:
 	push	xhl
 	push	xix
 	push	xiz
-	call	ToneGen_ApplyMaskTable
+	call	PanelTlv_ApplyResetMasks
 	call	PanelTlv_ValidateAll
-	call	ToneGen_InitAllChannelEntries_Skip
+	call	PanelTlv_ResolvePartCompanions_Entry
 	call	PanelTlv_WriteAllHeaders
 	pop	xiz
 	pop	xix
@@ -3902,9 +3902,9 @@ Audio_UpdateTempoAndReturn:
 	call	SeqTimer_UpdateTempoReg
 	jp	CompIface_SetMax
 Audio_FullReinitWithPreset:
-	lda	xwa, (Audio_InitAllDefaults_Data:24)
+	lda	xwa, (PanelTlv_PayloadByTag:24)
 	ld	(0x9056:16), xwa
-	lda	xwa, (Audio_InitAllDefaults_Data_2:24)
+	lda	xwa, (PanelTlv_CompanionByPart:24)
 	ld	(0x90e6:16), xwa
 	call	Sys_CheckPowerStableFlag
 	cp	hl, 0:i3
@@ -4018,7 +4018,7 @@ VoiceData_ExtendedParamSetup:
 MainSysCtrl_Entry5_VoiceInit_Helper:
 	calr	Display_SetupAndPrepareRender
 	call	PanelTlv_ValidateLivePanel
-	call	Voice_InitAllChannelEntries
+	call	PanelTlv_ResolvePartCompanions
 	call	PanelTlv_WriteLivePanelHeaders
 	calr	MidiMsg_ParseChannelStream
 	call	MainTitle_SetBootFlag
@@ -4060,7 +4060,7 @@ VoiceData_ExtendedParamSetup_Loop3:
 	inc	1, iz
 	cp	iz, 24
 	jr	c, VoiceData_ExtendedParamSetup_Loop3
-	call	Voice_InitAllChannelEntries
+	call	PanelTlv_ResolvePartCompanions
 	popw	iz
 	inc	8, xsp
 	ret
@@ -4252,7 +4252,7 @@ VoiceData_ExtendedParamSetup_Loop2:
 	push	xix
 	push	xiz
 	call	PanelTlv_ValidateAll
-	call	ToneGen_InitAllChannelEntries_Skip
+	call	PanelTlv_ResolvePartCompanions_Entry
 	call	PanelTlv_WriteAllHeaders
 	pop	xiz
 	pop	xix
@@ -4374,7 +4374,7 @@ BitmapTable_ProcessEntry:
 	lda	xwa, (BitmapTable_ProcessEntry_Data_2:24)
 	add	xwa, xbc
 	ld	a, (xwa)
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	ld	xiz, xhl
 	sub	xiz, 0xf9a0
 	ld	wa, (xsp + 4)
@@ -4608,7 +4608,7 @@ Audio_MainPeriodicUpdate:
 	cp	(0xbf9d:16), 255
 	ret	z
 	res	0, (0x90c9:16)
-	lda	xwa, (Audio_InitAllDefaults_Data:24)
+	lda	xwa, (PanelTlv_PayloadByTag:24)
 	ld	(0x9056:16), xwa
 	calr	Audio_SyncBufferPositions
 	push	xde
@@ -4716,7 +4716,7 @@ ExtData_ToneParam_DispatchHandler_Join:
 	call	SndParam_ApplyProgramChange
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 0xffffffff
 	jr	z, ExtData_ToneParam_DispatchHandler_Epilogue2
 	lda	xde, (xsp)
@@ -4770,7 +4770,7 @@ ExtData_ToneParam_DispatchHandler_Join2:
 	dec	6, xsp
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 0xffffffff
 	jrl	z, ExtData_ToneParam_DispatchHandler_Epilogue
 	lda	xwa, (xsp)
@@ -4975,7 +4975,7 @@ ExtData_ToneParam_AltBody_Join:
 	call	Rhythm_LookupTempoVelocity_Wrap
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 0xffffffff
 	ret	z
 	lda	xde, (0x9052:16)
@@ -5634,7 +5634,7 @@ MidiCh_IterateVolume_Forward_Skip:
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	bitm	5, (xhl+0xd)
 	jr	nz, MidiCh_IterateVolume_Forward_Skip2
 	lda_d16	xwa, (0x905f)
@@ -5679,7 +5679,7 @@ MidiCh_IterateVolume_Reverse_Skip:
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	bitm	5, (xhl+0xd)
 	jr	nz, MidiCh_IterateVolume_Reverse_Skip2
 	lda_d16	xwa, (0x905f)
@@ -5718,7 +5718,7 @@ MidiCh_IteratePan_Forward_Loop:
 	jr	nz, MidiCh_IteratePan_Forward_Skip2
 MidiCh_IteratePan_Forward_Skip:
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	bitm	4, (xhl+0xc)
 	jr	z, MidiCh_IteratePan_Forward_Skip2
 	ldmm8	0x90e2, MIDI_MSG_STATUS
@@ -5736,7 +5736,7 @@ MidiCh_IteratePan_Forward_Skip:
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	bitm	5, (xhl+0xd)
 	jr	nz, MidiCh_IteratePan_Forward_Skip2
 	lda_d16	xwa, (0x905f)
@@ -5771,7 +5771,7 @@ MidiCh_IterateExpression_Loop:
 	cp	a, 255
 	jr	z, MidiCh_IterateExpression_Epilogue
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	ld	xiz, xhl
 	cp	xiz, 0xffffffff
 	jr	z, MidiCh_IterateExpression_Skip
@@ -6019,7 +6019,7 @@ VolumeIter_ApplyParam:
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	bitm	5, (xhl + 13)
 	jr	nz, VolumeIter_AdvancePart
 	ld	a, (0x90e2:16)
@@ -6089,7 +6089,7 @@ ExprIter_ApplyParam:
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	bitm	5, (xhl + 13)
 	jr	nz, ExprIter_AdvancePart
 	ld	a, (0x90e2:16)
@@ -6130,7 +6130,7 @@ PanIter_NextPart:
 	jr	nz, MidiLoadParams_ContinueLoop
 PanIter_ApplyParam:
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	bitm	4, (xhl + 12)
 	jr	z, MidiLoadParams_ContinueLoop
 	ld	(0x90e2:16), 180
@@ -6148,7 +6148,7 @@ PanIter_ApplyParam:
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	bitm	5, (xhl + 13)
 	jr	nz, MidiLoadParams_ContinueLoop
 	ld	a, (0x90e2:16)
@@ -6185,7 +6185,7 @@ VoiceParamCC_NextPart:
 	cp	a, 0xff
 	jr	z, VoiceParamCC_Done
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	bitm	5, (xhl + 4)
 	jr	z, VoiceParamCC_AdvancePart
 	ld	(0x90e2:16), 179
@@ -6203,7 +6203,7 @@ VoiceParamCC_NextPart:
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	bitm	5, (xhl + 13)
 	jr	nz, VoiceParamCC_AdvancePart
 	ld	a, (0x90e2:16)
@@ -6315,7 +6315,7 @@ SndParam_FetchSequencerParams:
 	mrib4	0x81, 0x19, 0x8b, 0x90
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	ld	(0x908f:16), xhl
 	ld	wa, (0x9097:16)
 	ld	de, wa
@@ -6347,7 +6347,7 @@ SndParam_FetchSequencerParams:
 SndParam_WriteLookupAndStore:
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 0xffffffff
 	ret	z
 	ld	a, (0x9093:16)
@@ -6414,7 +6414,7 @@ ExtData_ToneParam_DispatchHandler_Helper:
 	jr	z, Voice_Update_Return
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 0xffffffff
 	jr	z, Voice_Update_Return
 	ld	a, (0x9093:16)
@@ -6447,7 +6447,7 @@ VoiceParam_CompareAndUpdate:
 	jr	z, VoiceParam_CompareAndUpdate_Epilogue
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 4294967295
 	jr	z, VoiceParam_CompareAndUpdate_Epilogue
 	ld	a, (37011:16)
@@ -6478,7 +6478,7 @@ ExtData_ToneParam_DispatchHandler_Helper2:
 	jr	z, ExtData_ToneParam_DispatchHandler_Helper2_Epilogue
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 4294967295
 	jr	z, ExtData_ToneParam_DispatchHandler_Helper2_Epilogue
 	ld	a, (37011:16)
@@ -6510,7 +6510,7 @@ ExtData_ToneParam_DispatchHandler_Helper2_Epilogue:
 	jr	z, SwbtWr_WriteParamBlock_Epilogue
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 0xffffffff
 	jr	z, SwbtWr_WriteParamBlock_Epilogue
 	ld	a, (0x9093:16)
@@ -6542,7 +6542,7 @@ ExtData_ToneParam_AltBody_Helper:
 	jr	z, SwbtWr_WriteParamBlock_Epilogue2
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 0xffffffff
 	jr	z, SwbtWr_WriteParamBlock_Epilogue2
 	ld	a, (0x9093:16)
@@ -6577,7 +6577,7 @@ ExtData_ToneParam_DispatchHandler_Helper3:
 	jr	z, SwbtWr_WriteParamBlock_Epilogue3
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 0xffffffff
 	jr	z, SwbtWr_WriteParamBlock_Epilogue3
 	ld	a, (0x9093:16)
@@ -6618,7 +6618,7 @@ ExtData_Voice_FullHandler_Helper2:
 	jr	z, SwbtWr_WriteParamBlock_Epilogue4
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 0xffffffff
 	jr	z, SwbtWr_WriteParamBlock_Epilogue4
 	ld	a, (0x9093:16)
@@ -6648,7 +6648,7 @@ ToneGen_ApplyVoiceParams:
 	jr	z, ToneGen_DispatchStartVoice
 	ld	a, (xsp + 4)
 	extz	wa
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 0xffffffff
 	jr	z, ToneGen_DispatchStartVoice
 	ld	a, (xsp + 2)
@@ -6681,7 +6681,7 @@ ToneGen_DispatchStartVoice:
 	bit	0, (SWBTWR_PAYLOAD_3:16)
 	jr	z, ToneGen_Dispatch_Return
 	ldw	wa, 0x90
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	ld	(xsp + 2), xhl
 	ld	xbc, (xsp + 2)
 	ld	a, (xbc)
@@ -7035,7 +7035,7 @@ MIDI_DistributeParamToChannels:
 MidiDistribute_LookupAndWrite:
 	ld	a, (xsp + 6)
 	extz	wa
-	calr	VoiceData_LookupPtrByChannel
+	calr	PanelTlv_CompanionOfPart
 	cp	xhl, 0xffffffff
 	jr	z, MidiDistribute_Fallthrough
 	ld	c, (xsp + 4)
@@ -7068,7 +7068,7 @@ VoiceData_DistributeToChannels:
 VoiceData_DistributeToChannels_Join:
 	ld	a, (xsp+6)
 	extz	wa
-	calr	VoiceData_LookupPtrByChannel
+	calr	PanelTlv_CompanionOfPart
 	cp	xhl, 0xffffffff
 	jr	z, VoiceData_DistributeToChannels_Skip
 	ld	a, (xsp+4)
@@ -7128,26 +7128,29 @@ SwbtWr_AppendFixedParamBlock:
 	ld	(xwa), 0xff
 	ld	(MIDI_MSG_DATA3:16), 0
 	ret
-VoiceData_LookupPtrByIndex:
+; a = tag -> xhl = the RAM address of that record's payload (PanelTlv_PayloadByTag[tag]; 0xFFFFFFFF = none)
+PanelTlv_PayloadOfTag:
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Audio_InitAllDefaults_Data:24)
+	lda	xbc, (PanelTlv_PayloadByTag:24)
 	ld	xhl, (xbc+wa)
 	ret
-VoiceData_LookupPtrByChannel:
+; a = part tag -> xhl = its companion record's payload: PanelTlv_CompanionByPart[a] for a <= 0x1F, tag 0x49's
+; payload (RAM 0xFF92) for the style record 0x48, else 0xFFFFFFFF
+PanelTlv_CompanionOfPart:
 	cp	a, 0x1f
-	jr	ugt, VoiceLookup_CheckRhythm
+	jr	ugt, PanelTlv_CompanionOfPart_Style
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Audio_InitAllDefaults_Data_2:24)
+	lda	xbc, (PanelTlv_CompanionByPart:24)
 	ld	xhl, (xbc+wa)
 	ret
-VoiceLookup_CheckRhythm:
+PanelTlv_CompanionOfPart_Style:
 	cp	a, 0x48
-	jr	nz, VoiceLookup_ReturnInvalid
+	jr	nz, PanelTlv_CompanionOfPart_None
 	lda	xhl, (0xff92:16)
 	ret
-VoiceLookup_ReturnInvalid:
+PanelTlv_CompanionOfPart_None:
 	ld	xhl, 0xffffffff
 	ret
 VoiceChannels_InitPanFromPreset:
@@ -7170,7 +7173,7 @@ VoicePanInit_Loop:
 	extz	wa
 	lda	xbc, (VoiceChannels_InitPanFromPreset_Data:24)
 	ld	a, (xbc+wa)
-	calr	VoiceData_LookupPtrByIndex
+	calr	PanelTlv_PayloadOfTag
 	cp	xhl, 0xffffffff
 	jr	z, ToneGen_IncrementAndExit
 	ld	c, (xhl + 13)

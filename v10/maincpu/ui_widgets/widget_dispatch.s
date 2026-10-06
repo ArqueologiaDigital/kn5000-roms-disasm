@@ -1414,7 +1414,7 @@ VoiceData_RamBlockPtrs:
 	.long 0x0000feca, 0x0000fede, 0x0000fef2, 0x0000ff06
 ; 0xFF-terminated list of object codes (0x43, 0x64, 0x65, 0x66, 0x99, 0x98, 0x93).
 ; VoiceData_SyncLoop (0xFD8C35): `ld xbc,<this>; add xbc,xwa; ld a,(xbc);
-; call VoiceData_LookupPtrByIndex` for each code until 0xFF.
+; call PanelTlv_PayloadOfTag` for each code until 0xFF.
 VoiceData_SyncCodeList:
 	.byte 0x43, 0x64, 0x65, 0x66, 0x99, 0x98, 0x93, 0xff
 ; 7 x s16 switch offsets.  SysEx_InitiateSend (0xFD8CAE): `ld_rrw ..,xix,..;
@@ -4477,7 +4477,7 @@ DspCfg_Data001_ByteTable:	.byte 0, 0, 0, 0
 ; by the same scan; purpose not established.
 DspCfg_Data002_ByteTable:	.byte 1, 1, 1, 1
 ; DSP block index 0..5 -> object code.  DSPCfg_LookupMidiMap (0xFDBFC6) passes
-; byte[block] to VoiceData_LookupPtrByIndex; DSPCfg_ResolveParamToSlot_Range49..4E
+; byte[block] to PanelTlv_PayloadOfTag; DSPCfg_ResolveParamToSlot_Range49..4E
 ; call it with the block of the 0x49xx..0x4Exx parameter id; and
 ; DSPCfg_WriteParamFull / DSPCfg_WriteAllSlots_Direct post byte[block] as the
 ; SwbtWr event code through AssswbWr.  The SwbtWr bank-2 lists of exactly

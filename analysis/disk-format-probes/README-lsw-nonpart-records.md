@@ -18,11 +18,11 @@ part (see the bottom of this file).
 Record `0xC0 + T` is the companion block of **part record `T`**. This is not a guess from a
 routine name; it is a ROM pointer table.
 
-`VoiceData_LookupPtrByChannel` (`0x00FC9E04`) is
+`PanelTlv_CompanionOfPart` (`0x00FC9E04`) is
 
 ```
     if A <= 0x1F:  return u32[0x00EDB264 + 4*A]
-    elif A == 0x48: return 0x00FF92          ; VoiceLookup_CheckRhythm, 0x00FC9E19
+    elif A == 0x48: return 0x00FF92          ; PanelTlv_CompanionOfPart_Style, 0x00FC9E19
     else: return -1
 ```
 
@@ -48,7 +48,7 @@ An 18-byte array accessed as `block[index] = value` / `value = block[index]`:
 |---|---|---|
 | write | `MIDI_DistributeParamToChannels` | `0x00FC9CF9` |
 | read | `VoiceData_DistributeToChannels` | `0x00FC9D41` |
-| bulk write at init | `Voice_InitChannelLoop` | `0x00FC4CF6` |
+| bulk write at init | `PanelTlv_ResolvePartCompanions_Loop` | `0x00FC4CF6` |
 | index bound | `ApplyProgramChangeAs_DoLookupRe` | `0x00FEE770` |
 
 Both accessors take the same 4-byte descriptor `{ u8 part_tag, u8 ?, u8 index, u8 value }`
@@ -58,7 +58,7 @@ off the message bus and forwards `(tag, index, value)`. The writers' callers are
 (`0x00F98F77`), `MainVariSet`, `MIDI_SetupChannelParams` (`0x00FCA2CD`). The reader is
 called from `FileIO_BytecodeData` (`0x00FC5CB1`, `0x00FC5D63`).
 
-At boot, `Voice_InitChannelLoop` walks the 23 tags of the ROM list at `0x00ED92F2`
+At boot, `PanelTlv_ResolvePartCompanions_Loop` walks the 23 tags of the ROM list at `0x00ED92F2`
 (`00 01 … 14 17 48 FF`) and, for each, does
 
 ```
@@ -116,12 +116,12 @@ validation (`PanelTlv_Rule_ZeroByte`); see the corrected grammar in `README-lsw-
 
 | tag | span (len) | what it is | evidence |
 |---|---|---|---|
-| `78` | `0xF9A0` (`0x12`) | **16-character ASCII name of the currently selected Music Stylist style**, then 2 plain bytes. | **[CODE]** `EffectMode_DisplayPresetName` (`v9/maincpu/ui/ui_mode_handlers.s:432`) picks a record out of `STYLEREC_PTRTABLE_C2C5` (`0x986000`) / `_DEFAULT` (`0x987000`) by the current selection at `0x8D56`, then `EffectMode_DisplayName_Render` does `Strncpy(0xF9A2, rec+43, 0x10)`. `ToneGen_ApplyMaskTable` blank-fills it with `Memset(0xF9A2, 0x20, 0x10)`, matching the descriptor `min=32 max=125 default=32` ×16. Note this record is **absent from the floppy `.LSW` files**. |
+| `78` | `0xF9A0` (`0x12`) | **16-character ASCII name of the currently selected Music Stylist style**, then 2 plain bytes. | **[CODE]** `EffectMode_DisplayPresetName` (`v9/maincpu/ui/ui_mode_handlers.s:432`) picks a record out of `STYLEREC_PTRTABLE_C2C5` (`0x986000`) / `_DEFAULT` (`0x987000`) by the current selection at `0x8D56`, then `EffectMode_DisplayName_Render` does `Strncpy(0xF9A2, rec+43, 0x10)`. `PanelTlv_ApplyResetMasks` blank-fills it with `Memset(0xF9A2, 0x20, 0x10)`, matching the descriptor `min=32 max=125 default=32` ×16. Note this record is **absent from the floppy `.LSW` files**. |
 | `43` | `0xFC52` (`0x04`) | one bit at `+0` mask `0x80`, two plain bytes | **[NAME]** `BitMapOut_RestoreExtra_CheckDataBit`, `BitMapOut_CopyAuxTable_Check`; callback `HdaeRom_AltTableEntry9` |
 | `44` `45` `46` | `0xFC24/30/3C` (`0x0A`) | three identical records: one 6-bit field at `+7` (`0x3F`) and a plain byte at `+9` | **[CODE]** all three share descriptor list `0xED8D0A`; touched by `FDemoText_SyncPreset_DirectCopy`, `AcPresCtrl_DefaultCase`, `BitMapOut_RefreshDisplay_UpdateRegs`, `BitMapOut_CalcDisplayMetrics`; all three subscribe `UIState_KeyScan_Dispatch` + `FDemoText_ByteData_VoiceProbeC` |
 | `47` | `0xFC48` (`0x08`) | 4 ranged fields: `+1` 0..17, `+2` 0..99, `+3` 0..176 (mask `0xF0`), `+5` 0..121 and 16..28 | **[CODE]** descriptor list `0xED8D10`; `BitMapOut_RestoreFull_CheckEnd`, `BitMapOut_RestoreExtra_CheckCtrlBit`, `BitMapOut_PartialRestore` |
 | `48` | `0xFC58` (`0x0A`) | **style/rhythm selection + tempo** (already documented) — `+0/+1` 11-bit style number, `+5/+6` accompaniment pedal/run flag bytes (`+5` alone: 59 reads and 58 read-modify-writes, the most-hammered field in the area), `+8` u16 tempo | **[CODE]** `SeqTimer_PostTempoUpdate` posts `(e=0x48,d=8)`; 22 of the 64 event sites are tag `0x48` |
-| `49` | `0xFF90` (`0x10`) | **the `0x48` record's companion block**, 16 slots | **[CODE]** `VoiceLookup_CheckRhythm` returns `0xFF92` for tag `0x48`; the writer hard-codes bound `0x0F`; `DrumVoice_Handler7` and `RhythmVariation_InlineCode` write `+15` |
+| `49` | `0xFF90` (`0x10`) | **the `0x48` record's companion block**, 16 slots | **[CODE]** `PanelTlv_CompanionOfPart_Style` returns `0xFF92` for tag `0x48`; the writer hard-codes bound `0x0F`; `DrumVoice_Handler7` and `RhythmVariation_InlineCode` write `+15` |
 | `60` | `0xFC6C` (`0x04`) | 3-bit field at `+1` (mask `0xE0`) + 2 plain bytes | **[NAME]** `BitMapOut_RestoreExtra_CheckLevelBit` / `CheckExpBit`, `EffectMode_UpdateBitFlags`, `VoiceData_SyncLoop` |
 | `61` `63` `65` `66` `64` | `0xFC72/8C/C0/DA/A6` (`0x18` each) | **five 24-byte effect/DSP parameter blocks**, no field descriptors at all (empty list `0xED8D96`) — they are opaque blobs pushed whole. `PanelTlv_ValidateBlock0` hands them to `DSPCfg_WriteAllSlots_Combined` as **slots 0,1,2,3,4** in the order `61→0, 63→1, 65→2, 66→3, 64→4`. | **[CODE]** `v9/maincpu/audio/tonegen_fileio_handlers.s:228-248`. `0x63` and `0x64` each have a loop that walks all 24 bytes and calls `AssswbWr(tag, i, byte, 0xFF)` — `ReverbPreset_Load/SendLoop` (`0x00FC9F9F`) for `0x63` and `EQPreset_Load/SendLoop` (`0x00FC9FF7`) for `0x64`, then `SoundParam_NotifyChange(0x4002)` / `(0x4006)`. `SysEx_ApplyVoiceParam_49` writes `0x61`, `SysEx_ApplyVoiceParam_4B` writes `0x63`. **[INFERENCE]** `0x63` = reverb block, `0x64` = EQ block (the routine names and the two distinct notify ids); `0x61`/`0x65`/`0x66` = the other three DSP slots. Falsifier: change one byte of `0x64` on hardware and listen for an EQ change, not a reverb change. |
 | `68` | `0xFCF4` (`0x0A`) | opaque, no descriptors | **[NAME]** `BitMapOut_CopyAuxTable_Loop/Check`; callback `HdaeRom_TableEntry0` |
