@@ -136,7 +136,7 @@ SPANS = [
          objs=[("rec", 0xF3DCBB + 15 * i) for i in range(24)] +
               [("tab", 0xF3DE23, 3, 1)],
          end=0xF3DE26,
-         anchor="DL_F3DE26, a converted display-list span header; and the "
+         anchor="Paint_StepRecord_DL3, a converted display-list span header; and the "
                 "3-byte table start 0xF3DE23 is named by the converted records "
                 "at 0xF3D3C3, 0xF3D3E1 and 0xF3D3FF as well as by all 24 "
                 "records here"),

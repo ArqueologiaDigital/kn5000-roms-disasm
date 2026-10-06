@@ -127,7 +127,7 @@ def selftest():
         print("  %-62s %-22s %s" % (desc, str(got)[:22], "OK" if good else "FAIL want %r" % (want,)))
 
     ck("DL_<Word> labels found", len(rows) > 30, True)
-    ck("the LAST one in address order", rows[-1][1], "DL_F54705")
+    ck("the LAST one in address order", rows[-1][1], "Paint_DrawbarScreenLayout_Unchanged_DL1")
     ck("  and it is at 0xF54705, in the f4f000 region", hex(rows[-1][0]), "0xf54705")
     ck("  and it is a placeholder, so it carries no text", rows[-1][3], [])
     ck("  and it is classified", verdict(rows[-1][2], rows[-1][3]) in

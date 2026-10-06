@@ -6,7 +6,7 @@ QUESTION IT ANSWERS
   ScreenCode0E_Handler, ...) because notes/prom_b_screen0e_button_names.py named its button tables
   before anything said what the screen shows.  Its paint says it:
     * prom_a 0xF81ACB returns at once unless (UI_ScreenId) = 0x0E; otherwise it runs the header list
-      DL_F3CF09 = "STEP RECORD:" / "TRACK:", or DL_F3CF32 = "MASTER STEP RECORD" when (0x0E63) = 2
+      Paint_StepRecord_DL2 = "STEP RECORD:" / "TRACK:", or DL_F3CF32 = "MASTER STEP RECORD" when (0x0E63) = 2
       (0x0E63 is 1 for song tracks 0..31 and 2 for track 0x20, through Map_0E63_F6ACA7), and then the
       page list StepSelectAddrTable_F3D089 picks for UI_Screen0E_SubScreen.  Those 19 page lists are
       the step editor's fields and soft keys: "MEAS NOTE VEL LENGTH PHRS CURSOR", "MIX ERS CTL REST",

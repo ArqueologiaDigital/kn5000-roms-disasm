@@ -286,7 +286,7 @@ prom_a's `ParamImage_SanitizeAll` calls `T_DspEffect_SanitizeBlock` on records 0
 - Last, byte 22 must name one of the algorithm's parameters (descriptor byte +3), or it gets the
   default.
 - Byte 21 above 99 becomes 35, and byte 23 above 1 becomes 0.
-  - Byte 23 is the block's on/off. `DL_F14432` prints `EFF1` / `EFF2` / `REV` / `EQ1` / `EQ2`, or
+  - Byte 23 is the block's on/off. `EffectEditor_PaintJob2_DL1` prints `EFF1` / `EFF2` / `REV` / `EQ1` / `EQ2`, or
     `----` in place of each, from bit 0 of 0x7659 / 0x7679 / 0x7699 / 0x7659 / 0x7699. Those are byte 23
     of blocks 97 / 98 / 99 / 97 / 99, so `EQ1` shows block 0's switch and `EQ2` shows block 2's. That
     is the same pairing as sections 4 and 5 in 7.1.

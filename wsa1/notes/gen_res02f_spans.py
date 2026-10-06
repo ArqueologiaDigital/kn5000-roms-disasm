@@ -252,7 +252,7 @@ def render_span1(b, htb):
     cap = (b[o + 4] >> (b[o + 5] & 7)) + 1
     out = []
     out.append("\n; ------------------------------------------------------------------\n")
-    out.append("; DL_F02FF7 -- ONE interpreter-B display-list record, %d bytes, and the\n"
+    out.append("; UiPaint_Ordinals_DL3 -- ONE interpreter-B display-list record, %d bytes, and the\n"
                "; %d-byte operand array it names.  Together they tile 0x%06X-0x%06X and\n"
                "; end on 0x%06X, the first byte of the interpreter-B display list below.\n"
                % (ln, TAB1_END - TAB1, REC1, TAB1_END - 1, TAB1_END))
@@ -274,7 +274,7 @@ def render_span1(b, htb):
                "; That also answers what UiPaint_Ordinals' own header records as open:\n"
                "; \"what thunk T_DLB_Handler_Array8 does with 0xF02FF7 after the last paint\".\n")
     out.append("; ------------------------------------------------------------------\n")
-    out.append("DL_F02FF7:\t\t; renamed from Data_F02FF7 -- nothing referenced that label\n")
+    out.append("UiPaint_Ordinals_DL3:\t\t; renamed from Data_F02FF7 -- nothing referenced that label\n")
     out += V2.render_b(b, REC1, op, ln, htb)
     out.append("\n; ------------------------------------------------------------------\n")
     out.append("; DLTable_F03002 -- %d entries of %d bytes (%d bytes).\n"
@@ -290,7 +290,7 @@ def render_span1(b, htb):
                "; and then `swi 7` runs with A = the record's +0x06 = 0x05.\n")
     out.append("; So X0 and X1 are the constant columns and Y0/Y1 are the stepping ones:\n"
                "; five extents 26 wide and 13 tall, 37 rows apart, all in the SAME x range\n"
-               "; 8..34 that DL_F02FED (op 0x1B = LCD_Svc_1B_EraseRect, named in prom_a --\n"
+               "; 8..34 that UiPaint_Ordinals_DL2 (op 0x1B = LCD_Svc_1B_EraseRect, named in prom_a --\n"
                "; notes/FINDINGS-prom_b-graphics-veneers.md) clears over the whole y range\n"
                "; 0x49..0xC5 immediately before this record runs.  ⚠ What service 0x05\n"
                "; itself draws into that extent is NOT asserted here; the tree records it\n"

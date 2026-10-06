@@ -29,7 +29,7 @@ TWO SMALL NON-TABLE PIECES, EACH WITH ITS OWN EVIDENCE
       next record (DL_F143AF) independently names as its string table's start.
       Two independent facts pinning the same boundary.
     * 0xF146A6-0xF146B1 (11 B): one ordinary interpreter-B record, op 0x08,
-      handler 0xF31B57 (the same handler DL_F1441C/DL_F14427 already use two
+      handler 0xF31B57 (the same handler EffectEditor_PaintJob1_DL2/EffectEditor_PaintJob1_DL1 already use two
       records earlier in this very span) -- self-framing at exactly 11 bytes
       (op/len says so), and its OWN +0x07 field names 0x00F146B1, the address
       immediately following it, as an 8-byte-stride array.  Never reached by
@@ -193,7 +193,7 @@ def render_segments(b, hta, segs):
         elif kind == "brecord":
             op, ln = extra
             out.append("; 0x%06X-0x%06X: one self-framing interpreter-B record (op 0x%02X,\n"
-                       "; handler 0xF31B57, the same handler DL_F1441C/DL_F14427 already use),\n"
+                       "; handler 0xF31B57, the same handler EffectEditor_PaintJob1_DL2/EffectEditor_PaintJob1_DL1 already use),\n"
                        "; not reached by any known call shape -- accepted because its own\n"
                        "; length byte and its own +0x07 field (naming the table right after\n"
                        "; it) are both self-checking.\n" % (s, e - 1, op))

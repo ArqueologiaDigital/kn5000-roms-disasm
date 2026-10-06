@@ -149,7 +149,7 @@ def main():
 
     # a code line whose one NUMBER became the NAME of an equate with exactly that value
     # (scripts/converters/symbolize_wsa1_rom_addresses.py --apply): `.long 0x00FB22C8` ->
-    # `.long SysExCmd_ResetSession`, `ld xiy, 16531727` -> `ld xiy, DLRec_FC410F`,
+    # `.long SysExCmd_ResetSession`, `ld xiy, 16531727` -> `ld xiy, SoundEditDigitalEffect_Paint_DL1`,
     # `lda xix, (16579800:24)` -> `lda xix, (StepValues_FCFCD8:24)`.  The equate is read from the
     # working tree's own `.set NAME, VALUE` lines; the byte gate checks the value is the encoded one.
     EQU = re.compile(r"^\s*\.set\s+([A-Za-z_]\w*)\s*,\s*(0x[0-9A-Fa-f]+|\d+)\s*(?:;.*)?$")

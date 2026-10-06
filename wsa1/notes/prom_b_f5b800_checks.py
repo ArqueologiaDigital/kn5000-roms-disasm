@@ -145,8 +145,8 @@ for a in (0xF5BAE5, 0xF5BB8E):
     check("(0x2540) <- 1 at 0x%06X" % a, gb(a, 5), b"\xf1\x40\x25\x00\x01")
 
 # the draw/erase pair: same four operand words, different op
-check("DL_F02FD9 op and length", gb(0xF02FD9, 2), b"\x05\x0a")
-check("DL_F02FE3 op and length", gb(0xF02FE3, 2), b"\x1b\x0a")
+check("UiPaint_Solo_DL1 op and length", gb(0xF02FD9, 2), b"\x05\x0a")
+check("UiPaint_Solo_DL2 op and length", gb(0xF02FE3, 2), b"\x1b\x0a")
 check("their four operand words are identical",
       gb(0xF02FD9 + 2, 8), gb(0xF02FE3 + 2, 8))
 check("and those words are 8, 0x21, 0x28, 0x2C",

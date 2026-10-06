@@ -3,7 +3,7 @@
 all six found inside ONE COVER-R1 block: 0xF3B3B2-0xF3B7C3.
 
 QUESTION IT ANSWERS
-    That block already held DL_F3B3DA (closed by gen_prom_b_f3b3da_module.py,
+    That block already held Paint_TrackAssign_DL1 (closed by gen_prom_b_f3b3da_module.py,
     landing on Data_F3B5A9) and, past this fix's far end, an already-real
     DL_F3B7C3. Between those two lie SEVEN round-1 Data_Fxxxxxx objects, each
     immediately followed by its own tiny `.incbin`. Six of the seven are the

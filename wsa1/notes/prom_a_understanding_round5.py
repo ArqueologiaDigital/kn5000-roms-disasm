@@ -591,7 +591,7 @@ def dups(verbose=False):
     # address is a named data label plus a `sub_` label on the same object, not a
     # duplicate routine.  (b) A group whose NAMED member's label sits at a
     # different address from the first instruction under it is a DATA label
-    # (DisplayList_FF0D2F, DisplayList_FEB0BC) whose bytes a linear decode happens
+    # (NoteEdit_DrawIncNumber_DL, DrumEdit_DrawRowNote0_DL) whose bytes a linear decode happens
     # to print as instructions; comparing those compares display-list records.
     at = first_addr_comment(S_A)
     real = [g for g in mixed if len({x[1] for x in g}) > 1

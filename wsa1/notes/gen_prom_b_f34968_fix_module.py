@@ -19,7 +19,7 @@ QUESTION IT ANSWERS
   check all 4,097 already-framed records with zero disagreements) is
   `("fixed", 8)` -- an exact match, not a "close enough". The same
   op/handler/length combination already appears verbatim at 5+ other
-  sites in this file (e.g. `DL_F0D99C` at line 19897), each spelled
+  sites in this file (e.g. `SysexProgressBar_DrawDots_DL` at line 19897), each spelled
   `.byte 0x0E, 0x08` + 3 `.short` fields -- the identical shape applied
   here.
 

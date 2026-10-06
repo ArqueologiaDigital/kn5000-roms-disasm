@@ -504,10 +504,10 @@ ROWS = [
     # prom_a 0xFEF7D2-0xFEF86C: an interpreter-A record's opcode IS the SWI 7 service it calls (FINDINGS-ui-display-list.md:
     # the bound 0x24 is one past the last service), so op 0x1B with four words is LCD_Svc_1B_EraseRect (x0, y0, x1, y1).
     ("FEF7E6", "NoteEdit_EraseEditArea",
-     "runs DisplayList_FEF7F5, one op-0x1B record: LCD_Svc_1B_EraseRect (0x10, 0x29)-(0x102, 0xAE)."),
+     "runs NoteEdit_EraseEditArea_DL, one op-0x1B record: LCD_Svc_1B_EraseRect (0x10, 0x29)-(0x102, 0xAE)."),
     ("FEF7E1", "NoteEdit_EraseEditArea_Layer0", "LCD_CurrentLayer = 0, then falls into NoteEdit_EraseEditArea."),
     ("FEF804", "DrumEdit_EraseEditArea",
-     "runs DisplayList_FEF813: LCD_Svc_1B_EraseRect (0x58, 0x29)-(0x102, 0xAE): NOTE EDIT's area from x = 0x58."),
+     "runs DrumEdit_EraseEditArea_DL: LCD_Svc_1B_EraseRect (0x58, 0x29)-(0x102, 0xAE): NOTE EDIT's area from x = 0x58."),
     ("FEF7FF", "DrumEdit_EraseEditArea_Layer0", "LCD_CurrentLayer = 0, then falls into DrumEdit_EraseEditArea."),
     ("FEF7D2", "EditScreen_EraseEditArea_Layer0",
      "EditScreen_Mode bit 0 (DRUM EDIT) -> DrumEdit_EraseEditArea_Layer0, else NoteEdit_EraseEditArea_Layer0.  22 call sites."),
@@ -516,10 +516,10 @@ ROWS = [
     # prom_a 0xFF0989-0xFF0A7A: the NOTE / DRUM EDIT position readouts.  Each stores a value to the interpreter-B
     # source variable 0x26B0 and runs a one-record list that draws it (op 06: digits; op 02: a string-table entry).
     ("FF0989", "EditScreen_DrawMeasure",
-     "layer 0; EditCursor_Measure below 1000 is drawn as a number (DisplayList_FF09EB), otherwise the string '***.'\n"
-     "(DisplayList_FF09D8, string table entry 0 at 0xFF09E7)."),
-    ("FF0A04", "EditScreen_DrawBeat", "layer 0; EditCursor_Beat + 1 to 0x26B0, DisplayList_FF0A39 (op 06, digits)."),
-    ("FF0A52", "EditScreen_DrawTick", "layer 0; EditCursor_Tick to 0x26B0, DisplayList_FF0A71 (op 06, digits)."),
+     "layer 0; EditCursor_Measure below 1000 is drawn as a number (EditScreen_DrawMeasure_DL2), otherwise the string '***.'\n"
+     "(EditScreen_DrawMeasure_DL1, string table entry 0 at 0xFF09E7)."),
+    ("FF0A04", "EditScreen_DrawBeat", "layer 0; EditCursor_Beat + 1 to 0x26B0, EditScreen_DrawBeat_DL1 (op 06, digits)."),
+    ("FF0A52", "EditScreen_DrawTick", "layer 0; EditCursor_Tick to 0x26B0, EditScreen_DrawTick_DL (op 06, digits)."),
     # prom_a 0xFEB03D-0xFEB280: the left column of NOTE / DRUM EDIT, x 0..0x16, twelve 10-pixel rows from y = 0x2A.
     ("FEB07A", "DrumEdit_DrawRowNotes",
      "layer 0, then DrumEdit_DrawRowNote0 .. DrumEdit_DrawRowNote11.  Called by DrumEdit_RedrawRowList only when EditScreen_Mode\n"
@@ -528,7 +528,7 @@ ROWS = [
      "LCD_Svc_05_FillRect x 0..0x16, y = (0x601F73) * 10 + 0x2A .. +8: one 10-pixel row of the left column.  Called\n"
      "between EditScreen_EraseLeftColumn_Layer1 and the DRUM EDIT row numbers by the three column redraws."),
     ("FEF86D", "EditScreen_EraseLeftColumn_Layer1",
-     "layer 1, DisplayList_FEF881: LCD_Svc_1B_EraseRect (0, 0x2A)-(0x16, 0xA3) -- the twelve rows' column.  Called by\n"
+     "layer 1, EditScreen_EraseLeftColumn_Layer1_DL: LCD_Svc_1B_EraseRect (0, 0x2A)-(0x16, 0xA3) -- the twelve rows' column.  Called by\n"
      "NoteEdit_DrawKeyboardRuler and the column redraws."),
     ("FEB0A4", "DrumEdit_DrawRowNote0",
      "(0x601F71) + 0 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
@@ -1460,9 +1460,9 @@ ROWS = [
     ("FF0A7B", "EditScreen_DrawCursorNote",
      "layer 0: DrumEdit_DrawCursorNoteNumber in DRUM EDIT, NoteEdit_DrawCursorNoteName in NOTE EDIT."),
     ("FF0A8F", "DrumEdit_DrawCursorNoteNumber",
-     "(0x26B0) = EditCursor_Note and DisplayList_FF0AA9 run through T_DisplayListB_Run: the note as a number."),
+     "(0x26B0) = EditCursor_Note and DrumEdit_DrawCursorNoteNumber_DL run through T_DisplayListB_Run: the note as a number."),
     ("FF0AB3", "NoteEdit_DrawCursorNoteName",
-     "EditCursor_Note split by `div A,0x0C`: the octave through DisplayList_FF0AEA, the note through NoteNames."),
+     "EditCursor_Note split by `div A,0x0C`: the octave through NoteEdit_DrawCursorNoteName_DL1, the note through NoteNames."),
     ("FEA12D", "EditScreen_RedrawEditArea",
      "with (0x601F58) bit 7: erase layer 1, EditScreen_FillSelectedEventBar, LCD_DrawVRuleLeft_OrNothing; otherwise erase layer 0 and\n"
      "redraw the events (EditScreen_DrawVisibleNotesExceptSelected) first."),
@@ -1717,9 +1717,9 @@ ROWS = [
      "layer 2: Paint_DrumEdit or Paint_NoteEdit, then EditScreen_DrawTrackNumber, _DrawSongNumber,\n"
      "_DrawRowGuides and _DrawGridLines."),
     ("FF035E", "EditScreen_DrawTrackNumber",
-     "(0x26B0) = EditScreen_Part + 1 through DisplayList_FF037F -- the TRACK value of 'NOTE EDIT  TRACK  SONG'."),
+     "(0x26B0) = EditScreen_Part + 1 through EditScreen_DrawTrackNumber_DL -- the TRACK value of 'NOTE EDIT  TRACK  SONG'."),
     ("FF0389", "EditScreen_DrawSongNumber",
-     "(0x26B0) = BStore_CurrentBank + 1 through DisplayList_FF03A9 -- the SONG value."),
+     "(0x26B0) = BStore_CurrentBank + 1 through EditScreen_DrawSongNumber_DL -- the SONG value."),
     ("FF03B3", "EditScreen_DrawRulersAndLegend",
      "layer 2: EditScreen_DrawMeasureStartLines, NoteEdit_DrawKeyboardRuler, Screen_DrawKitCategoryLegend."),
     ("FF07C5", "EditScreen_DrawMeasureStartLines",
@@ -1754,8 +1754,8 @@ ROWS = [
      "(0x26B0) as 1 + 3 digits (thousands at text cell 0x1C0C, the rest at 0x1C0D), or 3 digits below 1000."),
     ("FF0C9B", "EditScreen_DrawLengthFrom10000", "(0x26B0) as 2 + 3 digits (cells 0x1C0C / 0x1C0E)."),
     ("FF0D03", "EditScreen_DrawInc", "layer 0: DrumEdit_DrawIncLabel in DRUM EDIT, NoteEdit_DrawIncNumber in NOTE EDIT."),
-    ("FF0D17", "NoteEdit_DrawIncNumber", "EditField_Inc through DisplayList_FF0D2F (a number)."),
-    ("FF0D3E", "DrumEdit_DrawIncLabel", "EditField_Inc through DisplayList_FF0D56 and TickLabels (a label)."),
+    ("FF0D17", "NoteEdit_DrawIncNumber", "EditField_Inc through NoteEdit_DrawIncNumber_DL (a number)."),
+    ("FF0D3E", "DrumEdit_DrawIncLabel", "EditField_Inc through DrumEdit_DrawIncLabel_DL and TickLabels (a label)."),
     ("FEF938", "EditScreen_DrawBeatNumbers",
      "layer 0, row y 0x18: at each beat column that is not a measure start (EditScreen_BeatTable entry 0) the\n"
      "beat's number within its measure (Digits_FEF999, restarting at 1 after each start), x = 24 x column + 0x0D\n"
@@ -1773,17 +1773,17 @@ ROWS = [
     ("FEF8BE", "EditScreen_PaintLayer1", "layer 1: EditScreen_RedrawCursorLayer."),
     ("FEF8CA", "EditScreen_PaintLayer2", "layer 2: EditScreen_PaintStaticLayer, EditScreen_DrawRulersAndLegend."),
     ("FEF778", "EditScreen_EraseFieldRow",
-     "layer 0, DisplayList_FEF78C: EraseRect (8, 0xB2)-(0xE8, 0xC0), the value row at the bottom."),
+     "layer 0, EditScreen_EraseFieldRow_DL: EraseRect (8, 0xB2)-(0xE8, 0xC0), the value row at the bottom."),
     ("FEF796", "EditScreen_EraseMarkerStrip",
-     "layer 1, DisplayList_FEF7AA: EraseRect (0, 0x21)-(0x108, 0x27), the strip the cursor tick marker (y 0x22) and\n"
+     "layer 1, EditScreen_EraseMarkerStrip_DL: EraseRect (0, 0x21)-(0x108, 0x27), the strip the cursor tick marker (y 0x22) and\n"
      "the data-end marker (y 0x21) are drawn in."),
     ("FEF7B4", "EditScreen_EraseHeaderRow",
-     "layer 0, DisplayList_FEF7C8: EraseRect (0, 0x14)-(0x108, 0x1F), the beat-number row (y 0x18)."),
+     "layer 0, EditScreen_EraseHeaderRow_DL: EraseRect (0, 0x14)-(0x108, 0x1F), the beat-number row (y 0x18)."),
     ("FEF83B", "EditScreen_EraseLengthCell",
-     "layer 0, DisplayList_FEF84F: EraseRect (0xA0, 0xB2)-(0xC8, 0xC0).  Called by EditScreen_DrawEventLength /\n"
+     "layer 0, EditScreen_EraseLengthCell_DL: EraseRect (0xA0, 0xB2)-(0xC8, 0xC0).  Called by EditScreen_DrawEventLength /\n"
      "_DrawNewNoteLength."),
     ("FEF88B", "EditScreen_EraseRowLabelArea",
-     "layer 0, DisplayList_FEF89F: EraseRect (0, 0x29)-(0x58, 0xA3), the left area DrumEdit_RedrawRowList redraws."),
+     "layer 0, EditScreen_EraseRowLabelArea_DL: EraseRect (0, 0x29)-(0x58, 0xA3), the left area DrumEdit_RedrawRowList redraws."),
     ("FE9762", "EditScreen_InsertSelectedEventAtCursor",
      "copies the selected event's bytes +2..+5 (note, velocity, length) to 0x601F18..0x601F1B, backs onto its tag,\n"
      "runs sub_FE9983 (EditScreen_SaveTrackCursor, BStore_DirEntry = part + 1, T_F42F04 -- whose effect is not read\n"
@@ -1807,7 +1807,7 @@ ROWS = [
      "0x28, 0x29 or 0x30 -- the User 1 / User 2 / Ext codes of KitCategoryLegend_SelectByKitCode -- else 0xFF.\n"
      "Called by EditScreen_EnterDrumEdit."),
     ("FE83DC", "EditPartSelect_DrawPartLabels",
-     "the 16 bytes at 0x603422 copied to DisplayListB_Stage, then DisplayList_FE8405 with PartLabels_FE84F5.  Called\n"
+     "the 16 bytes at 0x603422 copied to DisplayListB_Stage, then EditPartSelect_DrawPartLabels_DL with PartLabels_FE84F5.  Called\n"
      "by ShowScreen_NoteEditPartSelect / _DrumEditPartSelect."),
     ("FE87DD", "EditPartSelect_SelectUiPart",
      "(0x0DB5) bit 0 cleared; the first part set in the mask (0x1336) (up to 17) maps through 0x603422 and\n"
@@ -2413,14 +2413,14 @@ ROWS = [
      "record of RecordArray_F1A037 (one record per part, stride from the array).  Basis: body."),
     ("FBF92F", "CombiEditConfigure_DrawMidiSettings",
      "CONFIGURE page 0 (CombiEdit_Page): byte 13 of the 8 parts from (0x276B) -- BASIC CHANNEL, LOCAL CONTROL, MIDI\n"
-     "OUT / IN SETTING (SysEx PART descriptors, offset 13) -- into UI_DrawScratch, drawn by DL_F1A2AD with\n"
+     "OUT / IN SETTING (SysEx PART descriptors, offset 13) -- into UI_DrawScratch, drawn by CombiEditConfigure_DrawMidiSettings_DL with\n"
      "StringTable_F1A515.  Basis: table (descriptor match) + the page switch at 0xFBF904."),
     ("FBF971", "CombiEditConfigure_DrawKeyLayers",
      "CONFIGURE page 1: the second records of parts 0..7 (0x20..0x27), bytes 7 / 8 -- KEY LAYER LOW / HIGH -- each\n"
      "divided by 3 into an x position of the keyboard bar (Record_F1AAEC).  Basis: table (descriptor match)."),
     ("FBFA4D", "CombiEditConfigure_DrawVelocityLayers",
      "CONFIGURE page 2: the second records of parts 0..7, bytes 9 / 10 -- VELOCITY LAYER LOW / HIGH -- into\n"
-     "UI_DrawScratch, drawn by DL_F1A7AF.  Basis: table (descriptor match)."),
+     "UI_DrawScratch, drawn by CombiEditConfigure_DrawVelocityLayers_DL.  Basis: table (descriptor match)."),
     # the sequencer's MIDI system-message side: Song Position Pointer, Song Select, stop and the slot controller reset
     ("F4466D", "Seq_LocateToSongPosition",
      "from the sequencer tick (sub_F44582): when MidiIn_SongPositionHi bit 7 is set -- MidiIn_SongPosition stored a\n"
@@ -2617,7 +2617,7 @@ PLACED = [
      "its display list.  Basis: table (descriptor match of every byte it reads)."),
     ("FBD593", "CombiEditSound_PaintControllerFilterPage",
      "PtrTable_F1AFBD[1]: second record bytes 11-14 -- the CONTROLLER INTERNAL FILTER bits -- into UI_DrawScratch, drawn\n"
-     "by DL_F19818.  Basis: table (descriptor match)."),
+     "by CombiEditSound_PaintControllerFilterPage_DL.  Basis: table (descriptor match)."),
     ("FBD5E8", "CombiEditSound_PaintAssignAndInputFilterPage",
      "PtrTable_F1AFBD[2]: ASSIGN MODE (second record 6), KEY SCALING (first record 12), VELOCITY OFFSET (second 5) and the\n"
      "MIDI INPUT FILTER bytes (second 15, 16).  Basis: table (descriptor match)."),
@@ -2626,7 +2626,7 @@ PLACED = [
      "KEY TRANSPOSE (second 23), the last field blinking when CombiEdit_Row is 5.  Basis: table (descriptor match)."),
     ("FBD784", "CombiEditSound_PaintMidiOutFilterPage",
      "PtrTable_F1AFBD[4]: second record bytes 19-22 -- the MIDI OUTPUT FILTER bits -- into UI_DrawScratch, drawn by\n"
-     "DL_F1995A.  Basis: table (descriptor match)."),
+     "CombiEditSound_PaintMidiOutFilterPage_DL.  Basis: table (descriptor match)."),
     ("FBD7D9", "CombiEditSound_PaintMultipleMessagesPage",
      "PtrTable_F1AFBD[5]: first record bytes 14-21 -- MIDI MULTIPLE MESSAGES OUTPUT (PROGRAM CHANGE, BANK SELECT, VOLUME,\n"
      "PANPOT, CHORUS DEPTH, REVERB DEPTH) -- copied to UI_DrawScratch, the first blinking when CombiEdit_Row is 0.\n"

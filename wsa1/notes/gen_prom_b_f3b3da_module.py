@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Splice DL_F3B3DA -- the "TRACK ASSIGN" screen's display list -- which this
+"""Splice Paint_TrackAssign_DL1 -- the "TRACK ASSIGN" screen's display list -- which this
 file ALREADY NAMES AND CITES (round 7's entrypoints work, prom_b/wsa1_prom_b.s
 around "Screen object F43140") but never converted, because the citation names
 the display list's START without ever closing the `.incbin` that held it --
@@ -100,7 +100,7 @@ def build_dl_text(b):
         raise SystemExit("display list does not frame end to end")
     out = ["\n; ------------------------------------------------------------------\n",
            "; 0x%06X-0x%06X -- %d display-list records, %d bytes -- interpreter A\n"
-           "; DL_F3B3DA, the \"TRACK ASSIGN\" screen -- ALREADY NAMED AND CITED\n"
+           "; Paint_TrackAssign_DL1, the \"TRACK ASSIGN\" screen -- ALREADY NAMED AND CITED\n"
            "; elsewhere in this file (search \"draws display list 0xF3B3DA\"),\n"
            "; from a real `ld XIY,0x00F3B3DA` immediate inside 0xF7E440 (still\n"
            "; .incbin).  Its first 13 bytes had been folded into Data_F3B3B2\n"
@@ -109,7 +109,7 @@ def build_dl_text(b):
            "; notes/gen_prom_b_f3b3da_module.py\n"
            % (DL_START, DL_END - 1, len(recs), DL_END - DL_START),
            "; ------------------------------------------------------------------\n"]
-    out.append("DL_F3B3DA:\n")
+    out.append("Paint_TrackAssign_DL1:\n")
     out += DL.render(b, recs, hta, set())
     return out, recs
 

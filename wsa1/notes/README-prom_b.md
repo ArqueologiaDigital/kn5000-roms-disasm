@@ -1554,7 +1554,7 @@ record is `03 0B` → `HTBL_B[3]` = `0xF31B57`, which does `sla 0x03,HL` before
 `(mask >> shift) + 1 = 16` the record would allow. The four words of the
 selected entry go to `(0x2530)`, `(0x2532)`, `(0x2534)`, `(0x2536)` = X0, Y0,
 X1, Y1, so X is the constant pair and Y the stepping one: five 26×13 extents 37
-rows apart, in the same x range `DL_F02FED` (op `0x1B` = `LCD_Svc_1B_EraseRect`)
+rows apart, in the same x range `UiPaint_Ordinals_DL2` (op `0x1B` = `LCD_Svc_1B_EraseRect`)
 clears over the whole y range just before it. `T_DLB_Handler_Array8` is `jp 0xF31B57`, so
 `ld XIY,0x00F02FF7 / call 0xF4181C` at `0xF5BBA1` hands the record straight to
 its handler — which answers what `UiPaint_Ordinals`' own header records as open.

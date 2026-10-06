@@ -159,7 +159,7 @@ def region_F03F81(d, say):
         F5C73D  jr 0xF5C744
         F5C73F  ld XIX,0x00F03FF3      <- list end, variant 2
         F5C744  call 0xF417F0          <- T_DisplayList_Run (interpreter A)
-      The routine names the start AND BOTH ends.  0xF0402E is also DL_F0402E
+      The routine names the start AND BOTH ends.  0xF0402E is also TouchCurve_DrawCurrentSlot_DL2
       ("entered at"); 0xF03F77 is also the `ends used` of the preceding list,
       and 0xF5D568 loads it as an end as well.
     Tiling: op/len from 0xF03F77 lands EXACTLY on 0xF0402E after 18 records --
@@ -185,7 +185,7 @@ def region_F04D14(d, say):
       (1) the reader at 0xF5CE93 runs the list 0xF04CDE..0xF04CE8
           (`ld XIY,0x00F04CDE ; ld XIX,0x00F04CE8 ; call 0xF417F0`), so
           0xF04CE8 is the first byte AFTER that list;
-      (2) DL_F33B81 is an interpreter-B op 03 whose +0x07 operand is
+      (2) Draw_ToneTemplateLevelKeyTune_DL5 is an interpreter-B op 03 whose +0x07 operand is
           0x00F04CE8 -- "array of 8-byte entries", the READER's element size.
     Anchor (mid): the reader at 0xF5C979 does `ld XIY,0x00F04D10` and calls
       0xF41830, so 0xF04D10 is a RECORD START named by code.  Independently the
@@ -266,7 +266,7 @@ def region_F05792(d, say):
         four words are (0x000E, 0x004D, 0x0100, 0x00C9), EXACTLY the bounding
         box of the five rectangles that follow it;
       * those 40 bytes carry the signature of the THREE rect arrays that ARE
-        externally typed in this ROM (0xF04CE8 via DL_F33B81, 0xF05475 via the
+        externally typed in this ROM (0xF04CE8 via Draw_ToneTemplateLevelKeyTune_DL5, 0xF05475 via the
         op-03 at 0xF053FC, DLTable_F031C9 via the record at 0xF030E6): five
         entries, x1 and x2 constant, y stepping 0x20, entry[0] == entry[1];
       * the 3-byte table is "1st","1st","2nd","3rd","4th" -- five entries whose

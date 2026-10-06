@@ -581,7 +581,7 @@ def main():
                   sorted({v in starts for v in vals[1:]}), [True])
         check("the two tables end exactly on Chars_F0D99A",
               "0x%06X" % (0xF0D942 + 22 * 4), "0x%06X" % 0xF0D99A)
-        check("Chars_F0D99A leaves 0 bytes before DL_F0D99C",
+        check("Chars_F0D99A leaves 0 bytes before SysexProgressBar_DrawDots_DL",
               0xF0D99C - (0xF0D99A + 2), 0)
         # span 3: the word array seam, the pointer table, the five arrays
         arr = [w16(b, 0xF2B41F + i * 2) for i in range(8)]

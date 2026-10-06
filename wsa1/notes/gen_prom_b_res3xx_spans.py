@@ -233,7 +233,7 @@ def block1(d):
 ; still `.incbin`.  The layout below is that description, emitted.
 ; Verify: python3 notes/gen_prom_b_res3xx_spans.py --selftest
 ; ------------------------------------------------------------------
-DL_F286A2:"""
+C0mbinati0nM0de_RepaintPage1Fields_DL:"""
     out = hdr.split("\n")
     out += emit_record(d, 0xF286A2, "string table")
     out.append("")
@@ -384,7 +384,7 @@ def block5(d):
            "; the loop test `cp XIX,XIY / jr ULE` ends the list -- the machine draws",
            "; the record and stops.",
            "; The other edge is an immediate too: 0xF3B651 is the XIX of the",
-           "; interpreter-A call at 0xF7E8C3, i.e. the exclusive end of DL_F3B611.",
+           "; interpreter-A call at 0xF7E8C3, i.e. the exclusive end of Paint_TrackLabels9To16_DL.",
            "; Verify: python3 notes/gen_prom_b_res3xx_spans.py --selftest",
            "; ------------------------------------------------------------------",
            "DL_F3B651:"]
@@ -446,8 +446,8 @@ def selftest():
     for site, opc, target, what in [
         (0xF7E799, LD_XIY, 0xF3B651, "span 5 list start"),
         (0xF7E79E, LD_XIX, 0xF3B65B, "span 5 list END -> record is 10 bytes"),
-        (0xF7E8BE, LD_XIY, 0xF3B611, "DL_F3B611 start"),
-        (0xF7E8C3, LD_XIX, 0xF3B651, "span 5 start is also DL_F3B611's end"),
+        (0xF7E8BE, LD_XIY, 0xF3B611, "Paint_TrackLabels9To16_DL start"),
+        (0xF7E8C3, LD_XIX, 0xF3B651, "span 5 start is also Paint_TrackLabels9To16_DL's end"),
         (0xF7E775, LD_XIY, 0xF3A43E, "span 4 record -> handler 0xF41820"),
         (0xF7E77E, LD_XIY, 0xF3A433, "span 4 neighbour -> handler 0xF4181C"),
         (0xF7E64C, LD_XIX, 0xF3A433, "0xF3A433 is a list end elsewhere"),

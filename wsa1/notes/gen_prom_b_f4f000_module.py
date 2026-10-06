@@ -869,16 +869,16 @@ def structure():
         0xF54305: ("DL_Flag2896b4_Clear", None),
         0xF54311: ("DL_DrawbarScaleStrip", None),
         0xF54331: ("DL_DrawbarFootageScale", None),
-        0xF543B0: ("DL_F543B0", None),
-        0xF543C4: ("DL_F543C4", None),
+        0xF543B0: ("Paint_DrawbarScreenLayout_DL2", None),
+        0xF543C4: ("Paint_DrawbarScreenLayout_DL1", None),
         0xF543D6: ("DL_DrawbarTitle", None),
         0xF54416: ("DL_PercussiveToneHeader", None),
         0xF544AD: ("DL_SoundEditBar", None),
         0xF544EB: ("DL_DrawbarSettingPage", None),
         0xF54668: ("DL_DrawbarParamValues", None),
         0xF546C4: ("DL_ParamCursorBar", None),
-        0xF546FA: ("DL_F546FA", None),
-        0xF54705: ("DL_F54705", None),
+        0xF546FA: ("Paint_DrawbarScreenLayout_Unchanged_DL2", None),
+        0xF54705: ("Paint_DrawbarScreenLayout_Unchanged_DL1", None),
     }
     for s, (name, _f) in DLNAME.items():
         LABELS[s] = name
@@ -1073,7 +1073,7 @@ def structure():
     objc(0xF54710, "ParamCursorRect_Single",
         "ParamCursorRect_Single -- one 8-byte entry, words 0x000B 0x0045",
         "          0x008D 0x0050",
-        "Read by: DL_F546FA and DL_F54705, both with mask 0x00 -- so the entry",
+        "Read by: Paint_DrawbarScreenLayout_Unchanged_DL2 and Paint_DrawbarScreenLayout_Unchanged_DL1, both with mask 0x00 -- so the entry",
         "         index is always 0 and this array has exactly one entry.",
         "Evidence: the two records carry 0x00F54710 at +7 and 0x00 at +4;",
         "          0xF54710 + 8 = 0xF54718, where Bitmap_F54718 begins.")
@@ -1883,7 +1883,7 @@ def main():
         sem = [v for a, v in LABELS.items() if not v.startswith("sub_")]
         # ⚠ The goal metric (notes/wave7_documentation_metrics.py) counts any
         # label that is not `sub_` + six hex as SEMANTIC.  That is a loophole a
-        # lane can walk through by renaming sub_F543B0 to DL_F543B0, so this
+        # lane can walk through by renaming sub_F543B0 to Paint_DrawbarScreenLayout_DL2, so this
         # split is reported too: a PLACEHOLDER name is the address in a
         # different dress and states nothing.
         ph = [v for v in sem if re.match(r"^(DL|Table)_[0-9A-F]{6}$", v)]

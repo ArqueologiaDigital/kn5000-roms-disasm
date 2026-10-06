@@ -1525,13 +1525,13 @@
 	.set	sub_FC25A8, 0xFC25A8
 	.set	DigitalEffect_Frame, 0xFC4000
 	.set	DigitalEffect_Frame_End, 0xFC40B4
-	.set	DLRec_FC40D2, 0xFC40D2
+	.set	SoundEditDigitalEffect_Paint_DL2, 0xFC40D2
 	.set	DigitalEffect_Header, 0xFC40F0
-	.set	DLRec_FC410F, 0xFC410F
+	.set	SoundEditDigitalEffect_Paint_DL1, 0xFC410F
 	.set	DigitalEffect_Header_End, 0xFC420F
 	.set	DigitalEffect_ParamLabelLists, 0xFC4532
 	.set	DigitalEffect_Values, 0xFC4592
-	.set	DLRec_FC45A1, 0xFC45A1
+	.set	SoundEditDigitalEffect_RepaintField_DL, 0xFC45A1
 	.set	DLRec_FC45BF, 0xFC45BF
 	.set	DLRec_FC45CA, 0xFC45CA
 	.set	DigitalEffect_ParamValueLists, 0xFC45D5
@@ -1558,14 +1558,14 @@
 	.set	SoundEditCopy_DrumFieldRecords, 0xFC4FB6
 	.set	DisplayList_FC5110_End, 0xFC512E
 	.set	DisplayList_FC517E, 0xFC517E
-	.set	DLRec_FC51B1, 0xFC51B1
+	.set	SoundEditMenu_RepaintField_DL3, 0xFC51B1
 	.set	DLRec_FC51D3, 0xFC51D3
-	.set	DLRec_FC51F9, 0xFC51F9
+	.set	SoundEditMenu_RepaintField_DL4, 0xFC51F9
 	.set	DLRec_FC521B, 0xFC521B
-	.set	DLRec_FC524D, 0xFC524D
+	.set	SoundEditMenu_RepaintField_DL1, 0xFC524D
 	.set	DLRec_FC526F, 0xFC526F
 	.set	DisplayList_FC517E_End, 0xFC527A
-	.set	DisplayList_FC52AA, 0xFC52AA
+	.set	SoundEditMenu_RepaintField_DL2, 0xFC52AA
 	.set	DisplayList_FC52AA_End, 0xFC52B4
 	.set	NoteRouting_PhaseVector, 0xFC5400
 	.set	NoteRouting_RebuildIfPending, 0xFC546A
@@ -5832,7 +5832,8 @@ DL_M0delingSoundEditToneDriver:
 	.short 0x0091
 	.short 0x0136
 	.short 0x00A8
-DL_F02064:
+; ; drawn (start operand) by ToneEditPage_A0_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A0_Paint_DL1:
 	.byte 0x20, 0x05	; op 20, 5 bytes -> handler 0xF31A3A
 	.short 0x1728
 	.ascii ":"
@@ -6178,7 +6179,8 @@ DL_F02295:
 ;   entered at: 0xF022F7, 0xF02329, 0xF0245F, 0xF02469, 0xF02671, 0xF027AF, 0xF02942, 0xF02A46, 0xF02B47, 0xF02D08, 0xF02DFB, 0xF02EF9, 0xF02F22
 ;   ends used:  0xF02329, 0xF0245F, 0xF02469, 0xF02671, 0xF027AF, 0xF02942, 0xF02A46, 0xF02B47, 0xF02D08, 0xF02DFB, 0xF02F22, 0xF02F2C, 0xF02F36
 ; ------------------------------------------------------------------
-DL_F022F7:
+; ; drawn (start operand) by Draw_ToneTemplateLevelKeyTune -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_ToneTemplateLevelKeyTune_DL2:
 	.byte 0x20, 0x05	; op 20, 5 bytes -> handler 0xF31A3A
 	.short 0x174F
 	.ascii ":"
@@ -6359,7 +6361,8 @@ DL_ToneTemplateLevelKeyTune:
 	.short 0x001F
 	.short 0x0134
 	.short 0x0032
-DL_F0245F:
+; ; drawn (start operand) by Draw_ToneTemplateLevelKeyTune -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_ToneTemplateLevelKeyTune_DL1:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x000B
 	.short 0x008B
@@ -7669,7 +7672,8 @@ DL_Page33ResoMode:
 	.short 0x0091
 	.short 0x0135
 	.short 0x00CF
-DL_F02F22:
+; ; drawn (start operand) by UiPaint_Ordinals -- derivative name (notes/wsa1_display_list_drawer_names.py)
+UiPaint_Ordinals_DL1:
 	.byte 0x06, 0x05	; op 06, 5 bytes -> handler 0xF31A3A
 	.short 0x0B90
 	.byte 0x10	; character codes below 0x20
@@ -7738,7 +7742,7 @@ DL_F02F36:
 ;   (notes/promb-2026-09-25/dl_pointer_tables.py).
 ; --------------------------------------------------------------------------
 DLRecordPtrs_F02F52:
-	.long	DL_F02F22	; F02F52  [0]
+	.long	UiPaint_Ordinals_DL1	; F02F52  [0]
 	.long	DL_F02F36	; F02F56  [1]
 	.long	DL_F02F36 + 0x7	; F02F5A  [2]
 	.long	DL_F02F36 + 0xE	; F02F5E  [3]
@@ -7859,12 +7863,13 @@ DL_Solo:
 ;
 ; ★ It is the DRAW half of a draw/erase pair.  Its four operand words --
 ;   0x0008, 0x0021, 0x0028, 0x002C -- are BYTE-FOR-BYTE the same four words as
-;   DL_F02FE3's op-0x1B record ten bytes further on, and UiPaint_Solo runs
+;   UiPaint_Solo_DL2's op-0x1B record ten bytes further on, and UiPaint_Solo runs
 ;   exactly one of the two: op 0x05 on layer 0 when (0x27A2) is non-zero, op
 ;   0x1B on layer 1 when it is zero.  Same rectangle, two different ops, two
 ;   different layers.
 ; ------------------------------------------------------------------
-DL_F02FD9:
+; ; drawn (start operand) by UiPaint_Solo -- derivative name (notes/wsa1_display_list_drawer_names.py)
+UiPaint_Solo_DL1:
 	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
 	.short 0x0008
 	.short 0x0021
@@ -7876,13 +7881,15 @@ DL_F02FD9:
 ;   entered at: 0xF02FE3, 0xF02FED
 ;   ends used:  0xF02FED, 0xF02FF7
 ; ------------------------------------------------------------------
-DL_F02FE3:
+; ; drawn (start operand) by UiPaint_Solo -- derivative name (notes/wsa1_display_list_drawer_names.py)
+UiPaint_Solo_DL2:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0008
 	.short 0x0021
 	.short 0x0028
 	.short 0x002C
-DL_F02FED:
+; ; drawn (start operand) by UiPaint_Ordinals -- derivative name (notes/wsa1_display_list_drawer_names.py)
+UiPaint_Ordinals_DL2:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0008
 	.short 0x0049
@@ -7924,7 +7931,7 @@ DL_F02FED:
 ; ==== end of the superseded round-1 header ====
 
 ; ------------------------------------------------------------------
-; DL_F02FF7 -- ONE interpreter-B display-list record, 11 bytes, and the
+; UiPaint_Ordinals_DL3 -- ONE interpreter-B display-list record, 11 bytes, and the
 ; 40-byte operand array it names.  Together they tile 0xF02FF7-0xF03029 and
 ; end on 0xF0302A, the first byte of the interpreter-B display list below.
 ;
@@ -7945,7 +7952,8 @@ DL_F02FED:
 ; That also answers what UiPaint_Ordinals' own header records as open:
 ; "what thunk T_DLB_Handler_Array8 does with 0xF02FF7 after the last paint".
 ; ------------------------------------------------------------------
-DL_F02FF7:		; renamed from Data_F02FF7 -- nothing referenced that label
+; ; drawn (start operand) by UiPaint_Ordinals -- derivative name (notes/wsa1_display_list_drawer_names.py)
+UiPaint_Ordinals_DL3:		; renamed from Data_F02FF7 -- nothing referenced that label
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x27A3	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
@@ -7966,7 +7974,7 @@ DL_F02FF7:		; renamed from Data_F02FF7 -- nothing referenced that label
 ; and then `swi 7` runs with A = the record's +0x06 = 0x05.
 ; So X0 and X1 are the constant columns and Y0/Y1 are the stepping ones:
 ; five extents 26 wide and 13 tall, 37 rows apart, all in the SAME x range
-; 8..34 that DL_F02FED (op 0x1B = LCD_Svc_1B_EraseRect, named in prom_a --
+; 8..34 that UiPaint_Ordinals_DL2 (op 0x1B = LCD_Svc_1B_EraseRect, named in prom_a --
 ; notes/FINDINGS-prom_b-graphics-veneers.md) clears over the whole y range
 ; 0x49..0xC5 immediately before this record runs.  ⚠ What service 0x05
 ; itself draws into that extent is NOT asserted here; the tree records it
@@ -8037,7 +8045,8 @@ DL_OriginalStringCylinderCone:
 	.short 0x0008	; +0x0B -> BC: bytes per entry
 	.short 0x00C1	; +0x0D -> (0x2530)
 	.short 0x00C3	; +0x0F -> (0x2532)
-DL_F0306E:
+; ; drawn (start operand) by ToneEditPage_A0_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A0_Paint_DL2:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short ModelingPage_Fields+8	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
@@ -8261,7 +8270,7 @@ DL_F03169:
 ;   8..19 (`cp A,0x14 / jr NC` at 0xF5CB2A, `cp A,8 / jr C` at 0xF5CB2F), so A
 ;   = 18 and 19 read entry 19 / 20; the one-record site takes A + 13 for A =
 ;   2..5 and 7 (`add A,0x0d` at 0xF5CB5E), so A = 7 reads entry 20.  Entries
-;   19 and 20 would be the first bytes of DL_F031BF, which the same routine
+;   19 and 20 would be the first bytes of ToneEditPage_A0_RepaintField_DL, which the same routine
 ;   runs as a list at 0xF5CB68 -- so either those values of A do not occur or
 ;   the reads are garbage; entries 0..7 are read by neither site.
 ; --------------------------------------------------------------------------
@@ -8272,12 +8281,12 @@ DLRecordPtrs_F03173:
 	.long	DL_F030E6	; F0317F  [3]
 	.long	DL_F030E6	; F03183  [4]
 	.long	DL_F030E6	; F03187  [5]
-	.long	DL_F0306E	; F0318B  [6]
-	.long	DL_F0306E	; F0318F  [7]
-	.long	DL_F0306E	; F03193  [8]
-	.long	DL_F0306E + 0x1E	; F03197  [9]
-	.long	DL_F0306E + 0x3C	; F0319B  [10]
-	.long	DL_F0306E + 0x5A	; F0319F  [11]
+	.long	ToneEditPage_A0_Paint_DL2	; F0318B  [6]
+	.long	ToneEditPage_A0_Paint_DL2	; F0318F  [7]
+	.long	ToneEditPage_A0_Paint_DL2	; F03193  [8]
+	.long	ToneEditPage_A0_Paint_DL2 + 0x1E	; F03197  [9]
+	.long	ToneEditPage_A0_Paint_DL2 + 0x3C	; F0319B  [10]
+	.long	ToneEditPage_A0_Paint_DL2 + 0x5A	; F0319F  [11]
 	.long	DL_F030E6	; F031A3  [12]
 	.long	DL_F030E6	; F031A7  [13]
 	.long	DL_F030E6	; F031AB  [14]
@@ -8293,7 +8302,8 @@ DLRecordPtrs_F03173:
 ;   entered at: 0xF031BF
 ;   ends used:  0xF031C9
 ; ------------------------------------------------------------------
-DL_F031BF:
+; ; drawn (start operand) by ToneEditPage_A0_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A0_RepaintField_DL:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x000E
 	.short 0x003E
@@ -8471,7 +8481,8 @@ DL_P0siti0n:
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x1239	; +0x07 -> IX
 	.byte 0x01	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
-DL_F03455:
+; ; drawn (start operand) by ToneEditPage_A3_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A3_RepaintField_DL:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
@@ -8541,9 +8552,9 @@ DLText_FixMove:
 ; --------------------------------------------------------------------------
 DLBRecordPtrs_F03480:
 	.long	DL_P0siti0n	; F03480  [0]
-	.long	DL_F03455	; F03484  [1]
-	.long	DL_F03455 + 0x19	; F03488  [2]
-	.long	DL_F03455 + 0x19	; F0348C  [3]
+	.long	ToneEditPage_A3_RepaintField_DL	; F03484  [1]
+	.long	ToneEditPage_A3_RepaintField_DL + 0x19	; F03488  [2]
+	.long	ToneEditPage_A3_RepaintField_DL + 0x19	; F0348C  [3]
 	.long	DL_P0siti0n	; F03490  [4]
 	.long	DL_P0siti0n + 0xA	; F03494  [5]
 
@@ -8554,7 +8565,8 @@ DLBRecordPtrs_F03480:
 ;   entered at: 0xF03498, 0xF034AD
 ;   ends used:  0xF034C6
 ; ------------------------------------------------------------------
-DL_F03498:
+; ; drawn (start operand) by ToneEditPage_A4_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A4_Paint_DL:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
 	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -8570,7 +8582,8 @@ DL_F03498:
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x1196	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
-DL_F034AD:
+; ; drawn (start operand) by ToneEditPage_A4_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A4_RepaintField_DL:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
 	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -8621,9 +8634,9 @@ DL_F034AD:
 ;   at 0xF5CD2C.
 ; --------------------------------------------------------------------------
 DLBRecordPtrs_F034C6:
-	.long	DL_F03498	; F034C6  [0]
-	.long	DL_F03498 + 0xB	; F034CA  [1]
-	.long	DL_F034AD	; F034CE  [2]
+	.long	ToneEditPage_A4_Paint_DL	; F034C6  [0]
+	.long	ToneEditPage_A4_Paint_DL + 0xB	; F034CA  [1]
+	.long	ToneEditPage_A4_RepaintField_DL	; F034CE  [2]
 ; --------------------------------------------------------------------------
 ; DLText_OffOn -- 0xF034D2-0xF034D7, 2 entries of 3 bytes, text drawn by
 ;   LCD_Svc_20_DrawText8x10.  Read by the interpreter-B op-0x02 records at
@@ -8658,7 +8671,8 @@ DLText_OffOn_F034D8:
 ;   entered at: 0xF034DE, 0xF034E8, 0xF03522
 ;   ends used:  0xF03502, 0xF0353C, 0xF0355D
 ; ------------------------------------------------------------------
-DL_F034DE:
+; ; drawn (start operand) by ToneEditPage_A5_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A5_Paint_DL:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
 	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -8666,7 +8680,8 @@ DL_F034DE:
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x1866	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
-DL_F034E8:
+; ; drawn (start operand) by ToneEditPage_A5_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A5_RepaintField_DL1:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
 	.short ModelingPage_Fields+10	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -8706,7 +8721,8 @@ DL_F034E8:
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x1D3E	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
-DL_F03522:
+; ; drawn (start operand) by ToneEditPage_A5_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A5_RepaintField_DL2:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
 	.short ModelingPage_Fields+11	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -8779,15 +8795,15 @@ DL_F03522:
 ;   (notes/promb-2026-09-25/dl_pointer_tables.py).
 ; --------------------------------------------------------------------------
 DLRecordPtrs_F0355D:
-	.long	DL_F03522 + 0x30	; F0355D  [0]
-	.long	DL_F034DE	; F03561  [1]
-	.long	DL_F034E8	; F03565  [2]
-	.long	DL_F034E8 + 0x1A	; F03569  [3]
-	.long	DL_F034E8 + 0x25	; F0356D  [4]
-	.long	DL_F034E8 + 0x30	; F03571  [5]
-	.long	DL_F03522	; F03575  [6]
-	.long	DL_F03522 + 0x1A	; F03579  [7]
-	.long	DL_F03522 + 0x25	; F0357D  [8]
+	.long	ToneEditPage_A5_RepaintField_DL2 + 0x30	; F0355D  [0]
+	.long	ToneEditPage_A5_Paint_DL	; F03561  [1]
+	.long	ToneEditPage_A5_RepaintField_DL1	; F03565  [2]
+	.long	ToneEditPage_A5_RepaintField_DL1 + 0x1A	; F03569  [3]
+	.long	ToneEditPage_A5_RepaintField_DL1 + 0x25	; F0356D  [4]
+	.long	ToneEditPage_A5_RepaintField_DL1 + 0x30	; F03571  [5]
+	.long	ToneEditPage_A5_RepaintField_DL2	; F03575  [6]
+	.long	ToneEditPage_A5_RepaintField_DL2 + 0x1A	; F03579  [7]
+	.long	ToneEditPage_A5_RepaintField_DL2 + 0x25	; F0357D  [8]
 
 ; === END COVER-R1 0xF0355D-0xF03581 ===
 
@@ -8861,7 +8877,8 @@ DLTable_F035BA:
 ;   entered at: 0xF035CA
 ;   ends used:  0xF03617
 ; ------------------------------------------------------------------
-DL_F035CA:
+; ; drawn (start operand) by ToneEditPage_A6_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A6_Paint_DL:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
 	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -8945,10 +8962,10 @@ Data_F03617:
 ;     7-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x35, 0xF0, 0x00	; F03620  top 3 bytes of the entry at F0361F = 0x00F035D5
-	.long	DL_F035CA + 0x16	; F03623  entry 3
-	.long	DL_F035CA + 0x21	; F03627  entry 4
-	.long	DL_F035CA + 0x2C	; F0362B  entry 5
-	.long	DL_F035CA + 0x37	; F0362F  entry 6
+	.long	ToneEditPage_A6_Paint_DL + 0x16	; F03623  entry 3
+	.long	ToneEditPage_A6_Paint_DL + 0x21	; F03627  entry 4
+	.long	ToneEditPage_A6_Paint_DL + 0x2C	; F0362B  entry 5
+	.long	ToneEditPage_A6_Paint_DL + 0x37	; F0362F  entry 6
 
 ; === END COVER-R1 0xF03617-0xF03633 ===
 
@@ -8957,7 +8974,8 @@ Data_F03617:
 ;   entered at: 0xF03633, 0xF036A3
 ;   ends used:  0xF036C2
 ; ------------------------------------------------------------------
-DL_F03633:
+; ; drawn (start operand) by ToneEditPage_A7_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A7_Paint_DL1:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
 	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -9022,7 +9040,8 @@ DL_F03633:
 	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D52	; +0x0D -> IX
-DL_F036A3:
+; ; drawn (start operand) by ToneEditPage_A7_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A7_Paint_DL2:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
 	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
@@ -9079,17 +9098,17 @@ DL_F036A3:
 ;   start (notes/promb-2026-09-25/dl_pointer_tables.py).
 ; --------------------------------------------------------------------------
 DLRecordPtrs_F036C2:
-	.long	DL_F036A3 + 0x14	; F036C2  [0]
-	.long	DL_F036A3	; F036C6  [1]
-	.long	DL_F036A3 + 0xA	; F036CA  [2]
-	.long	DL_F03633 + 0x1A	; F036CE  [3]
-	.long	DL_F03633 + 0xB	; F036D2  [4]
-	.long	DL_F03633 + 0x29	; F036D6  [5]
-	.long	DL_F03633	; F036DA  [6]
-	.long	DL_F03633 + 0x52	; F036DE  [7]
-	.long	DL_F03633 + 0x43	; F036E2  [8]
-	.long	DL_F03633 + 0x61	; F036E6  [9]
-	.long	DL_F03633 + 0x38	; F036EA  [10]
+	.long	ToneEditPage_A7_Paint_DL2 + 0x14	; F036C2  [0]
+	.long	ToneEditPage_A7_Paint_DL2	; F036C6  [1]
+	.long	ToneEditPage_A7_Paint_DL2 + 0xA	; F036CA  [2]
+	.long	ToneEditPage_A7_Paint_DL1 + 0x1A	; F036CE  [3]
+	.long	ToneEditPage_A7_Paint_DL1 + 0xB	; F036D2  [4]
+	.long	ToneEditPage_A7_Paint_DL1 + 0x29	; F036D6  [5]
+	.long	ToneEditPage_A7_Paint_DL1	; F036DA  [6]
+	.long	ToneEditPage_A7_Paint_DL1 + 0x52	; F036DE  [7]
+	.long	ToneEditPage_A7_Paint_DL1 + 0x43	; F036E2  [8]
+	.long	ToneEditPage_A7_Paint_DL1 + 0x61	; F036E6  [9]
+	.long	ToneEditPage_A7_Paint_DL1 + 0x38	; F036EA  [10]
 
 
 ; ------------------------------------------------------------------
@@ -10621,13 +10640,15 @@ DL_F03FF3:	; the reader's other list end
 ;   entered at: 0xF0402E, 0xF04038
 ;   ends used:  0xF04038, 0xF04042
 ; ------------------------------------------------------------------
-DL_F0402E:
+; ; drawn (start operand) by TouchCurve_DrawCurrentSlot -- derivative name (notes/wsa1_display_list_drawer_names.py)
+TouchCurve_DrawCurrentSlot_DL2:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x00D6
 	.short 0x0046
 	.short 0x0107
 	.short 0x00E1
-DL_F04038:
+; ; drawn (start operand) by TouchCurve_DrawCurrentSlot -- derivative name (notes/wsa1_display_list_drawer_names.py)
+TouchCurve_DrawCurrentSlot_DL1:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x00D6
 	.short 0x0046
@@ -11317,7 +11338,8 @@ DL_Page22KeyFollowEnvelopeKeyFollowTouchAtk:
 	.short 0x00DB
 	.short 0x013C
 	.short 0x00E8
-DL_F04560:
+; ; drawn (start operand) by Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL1:
 	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
 	.short 0x002F
 	.short 0x0061
@@ -11937,7 +11959,8 @@ DL_Through:
 	.short 0x004C
 	.short 0x00E9
 	.short 0x0083
-DL_F049D3:
+; ; drawn (start operand) by Draw_Page12EnvelopeKeyoffCurSor -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Page12EnvelopeKeyoffCurSor_DL1:
 	.byte 0x11, 0x0A	; op 11, 10 bytes -> handler 0xF31A75
 	.short 0x0032
 	.short 0x0066
@@ -11960,7 +11983,8 @@ DL_Keyoff:
 	.short 0x00C3
 	.short 0x0097
 	.ascii "KEYOFF"
-DL_F049F3:
+; ; drawn (start operand) by Draw_Keyoff -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Keyoff_DL3:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x00C3
 	.short 0x003A
@@ -12301,7 +12325,8 @@ DL_Page22KeyFollowEnvelopeKeyFollowTouchAttack:
 	.short 0x0027
 	.short 0x0132
 	.short 0x0034
-DL_F04CA9:
+; ; drawn (start operand) by Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_DL1:
 	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
 	.short 0x002F
 	.short 0x0061
@@ -12393,7 +12418,8 @@ DLTable_LowHigh:
 ;   entered at: 0xF04CDE
 ;   ends used:  0xF04CE8
 ; ------------------------------------------------------------------
-DL_F04CDE:
+; ; drawn (start operand) by SoundEditModelingToneTemplate_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditModelingToneTemplate_RepaintField_DL:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x000B
 	.short 0x004A
@@ -12718,7 +12744,8 @@ Data_F04E32:
 ;   entered at: 0xF04E42
 ;   ends used:  0xF04E93
 ; ------------------------------------------------------------------
-DL_F04E42:
+; ; drawn (start operand) by Draw_FilterBandPassLowHighCutoff -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_FilterBandPassLowHighCutoff_DL:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
 	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0xE0	; +0x04 AND mask
@@ -12800,12 +12827,12 @@ DL_F04E42:
 ;   (notes/promb-2026-09-25/dl_pointer_tables.py).
 ; --------------------------------------------------------------------------
 DLRecordPtrs_F04E93:
-	.long	DL_F04E42	; F04E93  [0]
-	.long	DL_F04E42 + 0xB	; F04E97  [1]
-	.long	DL_F04E42 + 0x15	; F04E9B  [2]
-	.long	DL_F04E42 + 0x24	; F04E9F  [3]
-	.long	DL_F04E42 + 0x33	; F04EA3  [4]
-	.long	DL_F04E42 + 0x42	; F04EA7  [5]
+	.long	Draw_FilterBandPassLowHighCutoff_DL	; F04E93  [0]
+	.long	Draw_FilterBandPassLowHighCutoff_DL + 0xB	; F04E97  [1]
+	.long	Draw_FilterBandPassLowHighCutoff_DL + 0x15	; F04E9B  [2]
+	.long	Draw_FilterBandPassLowHighCutoff_DL + 0x24	; F04E9F  [3]
+	.long	Draw_FilterBandPassLowHighCutoff_DL + 0x33	; F04EA3  [4]
+	.long	Draw_FilterBandPassLowHighCutoff_DL + 0x42	; F04EA7  [5]
 
 ; === END COVER-R1 0xF04E93-0xF04EAB ===
 
@@ -12814,7 +12841,8 @@ DLRecordPtrs_F04E93:
 ;   entered at: 0xF04EAB
 ;   ends used:  0xF04F20
 ; ------------------------------------------------------------------
-DL_F04EAB:
+; ; drawn (start operand) by Draw_Page12EnvelopeKeyoffCurSor -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Page12EnvelopeKeyoffCurSor_DL2:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
 	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -12948,7 +12976,8 @@ DLBoxes_F04F22:
 ;   entered at: 0xF04F32
 ;   ends used:  0xF04F46
 ; ------------------------------------------------------------------
-DL_F04F32:
+; ; drawn (start operand) by SoundEditEnvelope1_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditEnvelope1_RepaintField_DL:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x003D
 	.short 0x00BD
@@ -12989,12 +13018,12 @@ Data_F04F46:
 ;     11-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x4E, 0xF0, 0x00	; F04F57  top 3 bytes of the entry at F04F56 = 0x00F04ED6
-	.long	DL_F04EAB + 0x36	; F04F5A  entry 5
-	.long	DL_F04EAB + 0x40	; F04F5E  entry 6
-	.long	DL_F04EAB + 0x4B	; F04F62  entry 7
-	.long	DL_F04EAB + 0x55	; F04F66  entry 8
-	.long	DL_F04EAB + 0x60	; F04F6A  entry 9
-	.long	DL_F04EAB + 0xB	; F04F6E  entry 10
+	.long	Draw_Page12EnvelopeKeyoffCurSor_DL2 + 0x36	; F04F5A  entry 5
+	.long	Draw_Page12EnvelopeKeyoffCurSor_DL2 + 0x40	; F04F5E  entry 6
+	.long	Draw_Page12EnvelopeKeyoffCurSor_DL2 + 0x4B	; F04F62  entry 7
+	.long	Draw_Page12EnvelopeKeyoffCurSor_DL2 + 0x55	; F04F66  entry 8
+	.long	Draw_Page12EnvelopeKeyoffCurSor_DL2 + 0x60	; F04F6A  entry 9
+	.long	Draw_Page12EnvelopeKeyoffCurSor_DL2 + 0xB	; F04F6E  entry 10
 
 ; === END COVER-R1 0xF04F46-0xF04F72 ===
 
@@ -13003,7 +13032,8 @@ Data_F04F46:
 ;   entered at: 0xF04F72
 ;   ends used:  0xF04FFD
 ; ------------------------------------------------------------------
-DL_F04F72:
+; ; drawn (start operand) by Draw_Page12LevelTouchCurveLevel -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Page12LevelTouchCurveLevel_DL:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
 	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -13133,8 +13163,8 @@ Data_F04FFD:
 ;     13-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x4F, 0xF0, 0x00	; F05026  top 3 bytes of the entry at F05025 = 0x00F04FD1
-	.long	DL_F04F72 + 0x6A	; F05029  entry 11
-	.long	DL_F04F72 + 0x75	; F0502D  entry 12
+	.long	Draw_Page12LevelTouchCurveLevel_DL + 0x6A	; F05029  entry 11
+	.long	Draw_Page12LevelTouchCurveLevel_DL + 0x75	; F0502D  entry 12
 
 ; --------------------------------------------------------------------------
 ; Data_F05031 -- 4 bytes, EMITTED AS DATA (not promoted to code).
@@ -13270,7 +13300,8 @@ DLRecordPtrs_F0509B:
 ;   entered at: 0xF050AB
 ;   ends used:  0xF050F1
 ; ------------------------------------------------------------------
-DL_F050AB:
+; ; drawn (start operand) by SoundEditAmpEnvelope1_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditAmpEnvelope1_Paint_DL1:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
 	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -13350,8 +13381,8 @@ Data_F050F1:
 ;     7-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x50, 0xF0, 0x00	; F05102  top 3 bytes of the entry at F05101 = 0x00F050D3
-	.long	DL_F050AB + 0x32	; F05105  entry 5
-	.long	DL_F050AB + 0x3C	; F05109  entry 6
+	.long	SoundEditAmpEnvelope1_Paint_DL1 + 0x32	; F05105  entry 5
+	.long	SoundEditAmpEnvelope1_Paint_DL1 + 0x3C	; F05109  entry 6
 
 ; === END COVER-R1 0xF050F1-0xF0510D ===
 
@@ -13360,7 +13391,8 @@ Data_F050F1:
 ;   entered at: 0xF0510D
 ;   ends used:  0xF05182
 ; ------------------------------------------------------------------
-DL_F0510D:
+; ; drawn (start operand) by Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL2:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
 	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -13481,16 +13513,16 @@ DLText_AttackDecayRelease:
 ;   indexes by A and does not bound it.
 ; --------------------------------------------------------------------------
 DLBRecordPtrs_F0519A:
-	.long	DL_F0510D	; F0519A  [0]
-	.long	DL_F0510D + 0xB	; F0519E  [1]
-	.long	DL_F0510D + 0x16	; F051A2  [2]
-	.long	DL_F0510D + 0x25	; F051A6  [3]
-	.long	DL_F0510D + 0x34	; F051AA  [4]
-	.long	DL_F0510D + 0x43	; F051AE  [5]
-	.long	DL_F0510D + 0x4E	; F051B2  [6]
-	.long	DL_F0510D + 0x59	; F051B6  [7]
-	.long	DL_F0510D + 0x64	; F051BA  [8]
-	.long	DL_F0510D + 0x64	; F051BE  [9]
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL2	; F0519A  [0]
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL2 + 0xB	; F0519E  [1]
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL2 + 0x16	; F051A2  [2]
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL2 + 0x25	; F051A6  [3]
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL2 + 0x34	; F051AA  [4]
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL2 + 0x43	; F051AE  [5]
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL2 + 0x4E	; F051B2  [6]
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL2 + 0x59	; F051B6  [7]
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL2 + 0x64	; F051BA  [8]
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL2 + 0x64	; F051BE  [9]
 
 ; === END COVER-R1 0xF05182-0xF051C2 ===
 
@@ -13499,7 +13531,8 @@ DLBRecordPtrs_F0519A:
 ;   entered at: 0xF051C2
 ;   ends used:  0xF05286
 ; ------------------------------------------------------------------
-DL_F051C2:
+; ; drawn (start operand) by Draw_KeyDeToneKeyScalingShift -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_KeyDeToneKeyScalingShift_DL:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
 	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -13676,13 +13709,15 @@ Data_F05286:
 ;   entered at: 0xF0535E, 0xF05368
 ;   ends used:  0xF05368, 0xF05372
 ; ------------------------------------------------------------------
-DL_F0535E:
+; ; drawn (start operand) by SoundEditPitchTune_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditPitchTune_RepaintField_DL1:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x000D
 	.short 0x004C
 	.short 0x00A6
 	.short 0x00C8
-DL_F05368:
+; ; drawn (start operand) by SoundEditPitchTune_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditPitchTune_RepaintField_DL2:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x00B5
 	.short 0x0043
@@ -13717,19 +13752,19 @@ Data_F05372:
 ;     17-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x51, 0xF0, 0x00	; F0537F  top 3 bytes of the entry at F0537E = 0x00F051D8
-	.long	DL_F051C2 + 0x25	; F05382  entry 4
-	.long	DL_F051C2 + 0x30	; F05386  entry 5
-	.long	DL_F051C2 + 0x3B	; F0538A  entry 6
-	.long	DL_F051C2 + 0x4A	; F0538E  entry 7
-	.long	DL_F051C2 + 0x55	; F05392  entry 8
-	.long	DL_F051C2 + 0x60	; F05396  entry 9
-	.long	DL_F051C2 + 0x6F	; F0539A  entry 10
-	.long	DL_F051C2 + 0x7A	; F0539E  entry 11
-	.long	DL_F051C2 + 0x85	; F053A2  entry 12
-	.long	DL_F051C2 + 0xB9	; F053A6  entry 13
-	.long	DL_F051C2 + 0x94	; F053AA  entry 14
-	.long	DL_F051C2 + 0xA3	; F053AE  entry 15
-	.long	DL_F051C2 + 0x94	; F053B2  entry 16
+	.long	Draw_KeyDeToneKeyScalingShift_DL + 0x25	; F05382  entry 4
+	.long	Draw_KeyDeToneKeyScalingShift_DL + 0x30	; F05386  entry 5
+	.long	Draw_KeyDeToneKeyScalingShift_DL + 0x3B	; F0538A  entry 6
+	.long	Draw_KeyDeToneKeyScalingShift_DL + 0x4A	; F0538E  entry 7
+	.long	Draw_KeyDeToneKeyScalingShift_DL + 0x55	; F05392  entry 8
+	.long	Draw_KeyDeToneKeyScalingShift_DL + 0x60	; F05396  entry 9
+	.long	Draw_KeyDeToneKeyScalingShift_DL + 0x6F	; F0539A  entry 10
+	.long	Draw_KeyDeToneKeyScalingShift_DL + 0x7A	; F0539E  entry 11
+	.long	Draw_KeyDeToneKeyScalingShift_DL + 0x85	; F053A2  entry 12
+	.long	Draw_KeyDeToneKeyScalingShift_DL + 0xB9	; F053A6  entry 13
+	.long	Draw_KeyDeToneKeyScalingShift_DL + 0x94	; F053AA  entry 14
+	.long	Draw_KeyDeToneKeyScalingShift_DL + 0xA3	; F053AE  entry 15
+	.long	Draw_KeyDeToneKeyScalingShift_DL + 0x94	; F053B2  entry 16
 
 ; === END COVER-R1 0xF05372-0xF053B6 ===
 
@@ -13768,7 +13803,8 @@ DL_F053B6:
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x22A1	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
-DL_F053E3:
+; ; drawn (start operand) by SoundEditLfo_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditLfo_RepaintField_DL2:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
 	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
@@ -13886,7 +13922,7 @@ Data_F05445:
 	.byte	0x53, 0xF0, 0x00	; F05446  top 3 bytes of the entry at F05445 = 0x00F053FC
 	.long	DL_F053B6 + 0x23	; F05449  entry 1
 	.long	DL_F053B6 + 0x19	; F0544D  entry 2
-	.long	DL_F053E3	; F05451  entry 3
+	.long	SoundEditLfo_RepaintField_DL2	; F05451  entry 3
 	.long	DL_F053B6	; F05455  entry 4
 
 ; --------------------------------------------------------------------------
@@ -13961,7 +13997,8 @@ DLBoxes_F05475:
 ;   entered at: 0xF0549D, 0xF054A7
 ;   ends used:  0xF054A7, 0xF054B1
 ; ------------------------------------------------------------------
-DL_F0549D:
+; ; drawn (start operand) by SoundEditLfo_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditLfo_RepaintField_DL1:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x00B6
 	.short 0x003E
@@ -14662,19 +14699,22 @@ DL_ClrP0siti0nAbcInsDelAA:
 	.short 0x00DE
 	.short 0x0112
 	.short 0x00DE
-DL_F05A2E:
+; ; drawn (start operand) by Draw_Write -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Write_DL2:
 	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
 	.short 0x004D
 	.short 0x003B
 	.short 0x0105
 	.short 0x0051
-DL_F05A38:
+; ; drawn (start operand) by Draw_Write -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Write_DL1:
 	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
 	.short 0x004D
 	.short 0x003B
 	.short 0x00E5
 	.short 0x0051
-DL_F05A42:
+; ; drawn (start operand) by Draw_Write -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Write_DL3:
 	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
 	.short 0x004D
 	.short 0x003B
@@ -14728,13 +14768,15 @@ DL_F05A84:
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long DLBoxes_F05AB4	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
-DL_F05AA0:
+; ; drawn (start operand) by SoundEditNaming_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditNaming_RepaintField_DL2:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0051
 	.short 0x003E
 	.short 0x0101
 	.short 0x004F
-DL_F05AAA:
+; ; drawn (start operand) by SoundEditNaming_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditNaming_RepaintField_DL1:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0020
 	.short 0x0067
@@ -15352,7 +15394,8 @@ DL_F060DA:
 	.short 0x00CC
 	.short 0x00FB
 	.short 0x00E9
-DL_F060E4:
+; ; drawn (start operand) by SoundEditToneLayerKeyLayer_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditToneLayerKeyLayer_Paint_DL1:
 	.byte 0x06, 0x0D	; op 06, 13 bytes -> handler 0xF31A3A
 	.short 0x04BD
 	.ascii "KEY LAYER"
@@ -15409,7 +15452,8 @@ DL_F060E4:
 	.short 0x0044
 	.short 0x0132
 	.short 0x005E
-DL_F06154:
+; ; drawn (start operand) by SoundEditToneLayerVelocityLayer_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditToneLayerVelocityLayer_Paint_DL1:
 	.byte 0x06, 0x12	; op 06, 18 bytes -> handler 0xF31A3A
 	.short 0x055B
 	.ascii "VELOCITY LAYER"
@@ -15840,7 +15884,8 @@ DL_Parallel:
 	.short 0x0060
 	.short 0x00B5
 	.short 0x0060
-DL_F064E5:
+; ; drawn (start operand) by Draw_Serial -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Serial_DL2:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
 	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -15855,7 +15900,8 @@ DL_F064E5:
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2297	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
-DL_F064F9:
+; ; drawn (start operand) by ToneEditPage_A8_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A8_RepaintField_DL1:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
@@ -15872,7 +15918,8 @@ DL_F064F9:
 	.long DLText_OffOn_F034D8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229D	; +0x0D -> IX
-DL_F06517:
+; ; drawn (start operand) by ToneEditPage_A8_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A8_RepaintField_DL2:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
@@ -15897,7 +15944,8 @@ DL_F06517:
 	.long DLText_OffOn_F034D8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2292	; +0x0D -> IX
-DL_F06544:
+; ; drawn (start operand) by ToneEditPage_A8_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ToneEditPage_A8_RepaintField_DL3:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short ModelingPage_Fields+10	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
@@ -15947,7 +15995,8 @@ Data_F06562:
 ;   entered at: 0xF06576
 ;   ends used:  0xF06587, 0xF06598
 ; ------------------------------------------------------------------
-DL_F06576:
+; ; drawn (start operand) by Draw_Serial -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Serial_DL1:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
@@ -16017,17 +16066,17 @@ DLText_OffMainSub1To3:
 ;   reader indexes by A and does not bound it.
 ; --------------------------------------------------------------------------
 DLBRecordPtrs_F065AC:
-	.long	DL_F064E5	; F065AC  [0]
-	.long	DL_F064E5 + 0xA	; F065B0  [1]
-	.long	DL_F064F9	; F065B4  [2]
-	.long	DL_F06517	; F065B8  [3]
-	.long	DL_F06517 + 0x1E	; F065BC  [4]
-	.long	DL_F06517 + 0x1E	; F065C0  [5]
-	.long	DL_F06517 + 0x1E	; F065C4  [6]
-	.long	DL_F06517 + 0x1E	; F065C8  [7]
-	.long	DL_F06517 + 0x1E	; F065CC  [8]
-	.long	DL_F06517 + 0x1E	; F065D0  [9]
-	.long	DL_F06544	; F065D4  [10]
+	.long	Draw_Serial_DL2	; F065AC  [0]
+	.long	Draw_Serial_DL2 + 0xA	; F065B0  [1]
+	.long	ToneEditPage_A8_RepaintField_DL1	; F065B4  [2]
+	.long	ToneEditPage_A8_RepaintField_DL2	; F065B8  [3]
+	.long	ToneEditPage_A8_RepaintField_DL2 + 0x1E	; F065BC  [4]
+	.long	ToneEditPage_A8_RepaintField_DL2 + 0x1E	; F065C0  [5]
+	.long	ToneEditPage_A8_RepaintField_DL2 + 0x1E	; F065C4  [6]
+	.long	ToneEditPage_A8_RepaintField_DL2 + 0x1E	; F065C8  [7]
+	.long	ToneEditPage_A8_RepaintField_DL2 + 0x1E	; F065CC  [8]
+	.long	ToneEditPage_A8_RepaintField_DL2 + 0x1E	; F065D0  [9]
+	.long	ToneEditPage_A8_RepaintField_DL3	; F065D4  [10]
 	.long	Data_F06562	; F065D8  [11]
 	.long	Data_F06562 + 0xA	; F065DC  [12]
 
@@ -17548,7 +17597,7 @@ SoundEditController_PaintPage1:
 	call	SoundEditController_PaintHeader	; F09800  call 0xf098b8
 	call	T_F42E18	; F09804  call 0xf42e18
 	ld	(LCD_CurrentLayer:16), 0	; F09808  ld (0x2540),0x00
-	ld	xiy, DL_F32D2C	; F0980D  ld XIY,0x00f32d2c
+	ld	xiy, SoundEditController_PaintPage1_DL	; F0980D  ld XIY,0x00f32d2c
 	ld	xix, DL_Page22AfterTouchCtrlPedal	; F09812  ld XIX,0x00f32e71
 	call	T_DisplayList_Run	; F09817  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F0981B  ld (0x2540),0x00
@@ -17633,7 +17682,7 @@ SoundEditController_PaintHeader_Skip:
 	call	T_DisplayList_Run	; F098E3  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F098E7  ld (0x2540),0x00
 	ld	xiy, DL_1st2nd	; F098EC  ld XIY,0x00f32d03
-	ld	xix, DL_F32D2C	; F098F1  ld XIX,0x00f32d2c
+	ld	xix, SoundEditController_PaintPage1_DL	; F098F1  ld XIX,0x00f32d2c
 	call	T_DisplayList_Run	; F098F6  call 0xf417f0
 SoundEditController_PaintHeader_Return:
 	ret	; F098FA  ret
@@ -17661,14 +17710,14 @@ SoundEditController_RepaintFieldPage1:
 	jr	SoundEditController_PaintHeader_Return2	; F0990D  jr T,0xf09960
 SoundEditController_PaintHeader_Skip2:
 	ld	(LCD_CurrentLayer:16), 1	; F0990F  ld (0x2540),0x01
-	ld	xiy, DL_F33362	; F09914  ld XIY,0x00f33362
-	ld	xix, DL_F3338A	; F09919  ld XIX,0x00f3338a
+	ld	xiy, SoundEditController_RepaintFieldPage1_DL1	; F09914  ld XIY,0x00f33362
+	ld	xix, SoundEditController_RepaintFieldPage1_DL2	; F09919  ld XIX,0x00f3338a
 	call	T_DisplayList_Run	; F0991E  call 0xf417f0
 	ld	a, 0:opc	; F09922  ld A,0x00
 	jr	SoundEditController_PaintHeader_Join	; F09924  jr T,0xf09952
 SoundEditController_PaintHeader_Skip3:
 	ld	(LCD_CurrentLayer:16), 1	; F09926  ld (0x2540),0x01
-	ld	xiy, DL_F3338A	; F0992B  ld XIY,0x00f3338a
+	ld	xiy, SoundEditController_RepaintFieldPage1_DL2	; F0992B  ld XIY,0x00f3338a
 	ld	xix, Data_F33394	; F09930  ld XIX,0x00f33394
 	call	T_DisplayList_Run	; F09935  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F09939  ld (0x2540),0x00
@@ -17706,14 +17755,14 @@ SoundEditController_RepaintFieldPage2:
 	jr	SoundEditController_PaintHeader_Return3	; F09973  jr T,0xf099c6
 SoundEditController_PaintHeader_Skip4:
 	ld	(LCD_CurrentLayer:16), 1	; F09975  ld (0x2540),0x01
-	ld	xiy, DL_F334FE	; F0997A  ld XIY,0x00f334fe
+	ld	xiy, SoundEditController_RepaintFieldPage2_DL	; F0997A  ld XIY,0x00f334fe
 	ld	xix, DLRecordPtrs_F33508	; F0997F  ld XIX,0x00f33508
 	call	T_DisplayList_Run	; F09984  call 0xf417f0
 	ld	a, 0:opc	; F09988  ld A,0x00
 	jr	SoundEditController_PaintHeader_Return3	; F0998A  jr T,0xf099c6
 SoundEditController_PaintHeader_Skip5:
 	ld	(LCD_CurrentLayer:16), 1	; F0998C  ld (0x2540),0x01
-	ld	xiy, DL_F334FE	; F09991  ld XIY,0x00f334fe
+	ld	xiy, SoundEditController_RepaintFieldPage2_DL	; F09991  ld XIY,0x00f334fe
 	ld	xix, DLRecordPtrs_F33508	; F09996  ld XIX,0x00f33508
 	call	T_DisplayList_Run	; F0999B  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F0999F  ld (0x2540),0x00
@@ -17776,7 +17825,7 @@ SoundEditDigitalEffect_Paint:
 	ld	(ModelingPage_Fields+16:16), a	; F099FC  ld (0x27b6),A
 	cp	a, 10	; F09A00  cp A,0x0a
 	jr	nz, sub_F099C7_Skip2	; F09A03  jr NZ,0xf09a0c
-	ld	xiy, DLRec_FC410F	; F09A05  ld XIY,0x00fc410f
+	ld	xiy, SoundEditDigitalEffect_Paint_DL1	; F09A05  ld XIY,0x00fc410f
 	jr	sub_F099C7_Join	; F09A0A  jr T,0xf09a11
 sub_F099C7_Skip2:
 	ld	xiy, DigitalEffect_Header	; F09A0C  ld XIY,0x00fc40f0
@@ -17801,7 +17850,7 @@ sub_F099C7_Join:
 	ld	a, (ModelingPage_Fields+16:16)	; F09A4F  ld A,(0x27b6)
 	cp	a, 10	; F09A53  cp A,0x0a
 	jr	nz, sub_F099C7_Skip3	; F09A56  jr NZ,0xf09a5f
-	ld	xiy, DLRec_FC40D2	; F09A58  ld XIY,0x00fc40d2
+	ld	xiy, SoundEditDigitalEffect_Paint_DL2	; F09A58  ld XIY,0x00fc40d2
 	jr	sub_F099C7_Join2	; F09A5D  jr T,0xf09a64
 sub_F099C7_Skip3:
 	ld	xiy, DigitalEffect_Frame_End	; F09A5F  ld XIY,0x00fc40b4
@@ -17851,7 +17900,7 @@ SoundEditDigitalEffect_RepaintField:
 	mx_ld_rm MXL, ra_IZ, ra_BC, 5	; F09ABB  ld XIY,(XIZ+BC)
 	jr	sub_F099C7_Join4	; F09AC0  jr T,0xf09ad7
 sub_F099C7_Skip5:
-	ld	xiy, DLRec_FC45A1	; F09AC2  ld XIY,0x00fc45a1
+	ld	xiy, SoundEditDigitalEffect_RepaintField_DL	; F09AC2  ld XIY,0x00fc45a1
 	ld	xix, DLRec_FC45BF	; F09AC7  ld XIX,0x00fc45bf
 	call	T_DisplayListB_Run	; F09ACC  call 0xf417f4
 	jr	sub_F099C7_Return	; F09AD0  jr T,0xf09ae0
@@ -18131,14 +18180,14 @@ SoundEditMenu_RepaintField:
 	cp	a, 13	; F09CC6  cp A,0x0d
 	jrl	c, sub_F09C63_Skip9	; F09CC9  jrl C,0xf09d82
 	ld	(LCD_CurrentLayer:16), 0	; F09CCC  ld (0x2540),0x00
-	ld	xiy, DLRec_FC524D	; F09CD1  ld XIY,0x00fc524d
+	ld	xiy, SoundEditMenu_RepaintField_DL1	; F09CD1  ld XIY,0x00fc524d
 	ld	xix, DLRec_FC526F	; F09CD6  ld XIX,0x00fc526f
 	call	T_DisplayListB_Run	; F09CDB  call 0xf417f4
 	call	sub_F09DED	; F09CDF  call 0xf09ded
 	jrl	sub_F09C63_Return2	; F09CE3  jrl T,0xf09d90
 sub_F09C63_Skip3:
 	ld	(LCD_CurrentLayer:16), 1	; F09CE6  ld (0x2540),0x01
-	ld	xiy, DisplayList_FC52AA	; F09CEB  ld XIY,0x00fc52aa
+	ld	xiy, SoundEditMenu_RepaintField_DL2	; F09CEB  ld XIY,0x00fc52aa
 	ld	xix, DisplayList_FC52AA_End	; F09CF0  ld XIX,0x00fc52b4
 	call	T_DisplayList_Run	; F09CF5  call 0xf417f0
 	ld	a, 0:opc	; F09CF9  ld A,0x00
@@ -18156,19 +18205,19 @@ sub_F09C63_Skip5:
 	jrl	sub_F09C63_Return2	; F09D20  jrl T,0xf09d90
 sub_F09C63_Skip6:
 	ld	(LCD_CurrentLayer:16), 0	; F09D23  ld (0x2540),0x00
-	ld	xiy, DLRec_FC51B1	; F09D28  ld XIY,0x00fc51b1
+	ld	xiy, SoundEditMenu_RepaintField_DL3	; F09D28  ld XIY,0x00fc51b1
 	ld	xix, DLRec_FC51D3	; F09D2D  ld XIX,0x00fc51d3
 	call	T_DisplayListB_Run	; F09D32  call 0xf417f4
 	jr	sub_F09C63_Return2	; F09D36  jr T,0xf09d90
 sub_F09C63_Skip7:
 	ld	(LCD_CurrentLayer:16), 0	; F09D38  ld (0x2540),0x00
-	ld	xiy, DLRec_FC51F9	; F09D3D  ld XIY,0x00fc51f9
+	ld	xiy, SoundEditMenu_RepaintField_DL4	; F09D3D  ld XIY,0x00fc51f9
 	ld	xix, DLRec_FC521B	; F09D42  ld XIX,0x00fc521b
 	call	T_DisplayListB_Run	; F09D47  call 0xf417f4
 	jr	sub_F09C63_Return2	; F09D4B  jr T,0xf09d90
 sub_F09C63_Skip8:
 	ld	(LCD_CurrentLayer:16), 1	; F09D4D  ld (0x2540),0x01
-	ld	xiy, DisplayList_FC52AA	; F09D52  ld XIY,0x00fc52aa
+	ld	xiy, SoundEditMenu_RepaintField_DL2	; F09D52  ld XIY,0x00fc52aa
 	ld	xix, DisplayList_FC52AA_End	; F09D57  ld XIX,0x00fc52b4
 	call	T_DisplayList_Run	; F09D5C  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F09D60  ld (0x2540),0x00
@@ -25050,7 +25099,8 @@ DL_F0CA4D:
 ; ------------------------------------------------------------------
 ; 0xF0CA5C-0xF0CA6A -- 1 records, 15 bytes -- interpreter B
 ; ------------------------------------------------------------------
-DL_F0CA5C:
+; ; drawn (start operand) by MidiTotalMode_PaintSingleChannel -- derivative name (notes/wsa1_display_list_drawer_names.py)
+MidiTotalMode_PaintSingleChannel_DL:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short 0x2740	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -25873,7 +25923,8 @@ DL_F0D019:
 ; ------------------------------------------------------------------
 ; 0xF0D023-0xF0D02C -- 1 records, 10 bytes -- interpreter A or B: NO SITE NAMES THIS LIST and both implied lengths fit
 ; ------------------------------------------------------------------
-DL_F0D023:
+; ; drawn (start operand) by MidiOutProgramChange_PaintBankLsb -- derivative name (notes/wsa1_display_list_drawer_names.py)
+MidiOutProgramChange_PaintBankLsb_DL:
 	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
 	.short 0x2740
 	.short 0x00FF
@@ -25883,7 +25934,8 @@ DL_F0D023:
 ; ------------------------------------------------------------------
 ; 0xF0D02D-0xF0D035 -- 1 records, 9 bytes -- interpreter A
 ; ------------------------------------------------------------------
-DL_F0D02D:
+; ; drawn (start operand) by MidiOutProgramChange_PaintBankSelect -- derivative name (notes/wsa1_display_list_drawer_names.py)
+MidiOutProgramChange_PaintBankSelect_DL:
 	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
 	.short 0x1374
 	.ascii "     "
@@ -26775,7 +26827,8 @@ DL_SystemExclusivePleaseWait:
 ;     per row and HL is the row.  Two rows of one byte is exactly the 2 bytes
 ;     the tables leave.
 ; ==================================================================
-DL_F0D7E2:
+; ; drawn (start operand) by Paint_SysPartMidiSoundCombination -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SysPartMidiSoundCombination_DL:
 	.byte 0x07, 0x13	; op 07, 19 bytes -> handler 0xF31A3A
 	.short 0x151F
 	.ascii "SYS,PART&MIDI :"
@@ -26892,7 +26945,8 @@ Chars_F0D99A:
 ;   entered at: 0xF0D99C
 ;   ends used:  0xF0D9A4
 ; ------------------------------------------------------------------
-DL_F0D99C:
+; ; drawn (start operand) by SysexProgressBar_DrawDots -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SysexProgressBar_DrawDots_DL:
 	.byte 0x0E, 0x08	; op 0E, 8 bytes -> handler 0xF31A9F
 	.short 0x0FA4
 	.short 0x0020
@@ -31352,7 +31406,7 @@ EffectEditor_PaintJob0_Resume:
 sub_F0F788_Join2:
 	lda	xbc, (DL_F1408A:24)	; F0F8A5  lda XBC,0xf1408a
 	push	xbc	; F0F8AA  push XBC
-	lda	xwa, (DL_F13F3C:24)	; F0F8AB  lda XWA,0xf13f3c
+	lda	xwa, (EffectEditor_PaintJob0_DL1:24)	; F0F8AB  lda XWA,0xf13f3c
 	push	xwa	; F0F8B0  push XWA
 	lda	xiy, (sub_F0F8A3_Resume:24)	; F0F8B1  lda XIY,0xf0f8b9
 	push	xiy	; F0F8B6  push XIY
@@ -31366,13 +31420,13 @@ sub_F0F8A3_Resume:
 	jr	z, sub_F0F788_Skip10	; F0F8C8  jr Z,0xf0f8d8
 	lda	xbc, (DL_F14329:24)	; F0F8CA  lda XBC,0xf14329
 	push	xbc	; F0F8CF  push XBC
-	lda	xwa, (DL_F142AB:24)	; F0F8D0  lda XWA,0xf142ab
+	lda	xwa, (EffectEditor_PaintJob0_DL2:24)	; F0F8D0  lda XWA,0xf142ab
 	push	xwa	; F0F8D5  push XWA
 	jr	sub_F0F788_Join3	; F0F8D6  jr T,0xf0f8e4
 sub_F0F788_Skip10:
-	lda	xbc, (DL_F142AB:24)	; F0F8D8  lda XBC,0xf142ab
+	lda	xbc, (EffectEditor_PaintJob0_DL2:24)	; F0F8D8  lda XBC,0xf142ab
 	push	xbc	; F0F8DD  push XBC
-	lda	xwa, (DL_F142A1:24)	; F0F8DE  lda XWA,0xf142a1
+	lda	xwa, (EffectEditor_PaintJob0_DL3:24)	; F0F8DE  lda XWA,0xf142a1
 	push	xwa	; F0F8E3  push XWA
 sub_F0F788_Join3:
 	lda	xiy, (sub_F0F8B9_Resume:24)	; F0F8E4  lda XIY,0xf0f8ec
@@ -31420,7 +31474,7 @@ sub_F0F788_Join4:
 	ld	c, (UI_DrawScratch:16)	; F0F930  ld C,(0x2640)
 	cp	c, 3:i3	; F0F934  cp C,3
 	jr	nc, sub_F0F788_Skip11	; F0F936  jr NC,0xf0f949
-	lda	xbc, (DL_F14427:24)	; F0F938  lda XBC,0xf14427
+	lda	xbc, (EffectEditor_PaintJob1_DL1:24)	; F0F938  lda XBC,0xf14427
 	push	xbc	; F0F93D  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0F93E  call 0xf42e0c
 	inc	1, (UI_DrawScratch:16)	; F0F942  inc 1,(0x2640)
@@ -31431,7 +31485,7 @@ sub_F0F788_Skip11:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F94F  cp (0x2798),0x00
 	jr	nz, sub_F0F788_Skip13	; F0F954  jr NZ,0xf0f9ba
 	ld	(xix), 1	; F0F956  ld (XIX),0x01
-	lda	xbc, (DL_F1441C:24)	; F0F959  lda XBC,0xf1441c
+	lda	xbc, (EffectEditor_PaintJob1_DL2:24)	; F0F959  lda XBC,0xf1441c
 	push	xbc	; F0F95E  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0F95F  call 0xf42e0c
 	ld	(xix), 0	; F0F963  ld (XIX),0x00
@@ -31448,31 +31502,31 @@ sub_F0F788_Skip11:
 	cp	a, 2:i3	; F0F985  cp A,2
 	jr	z, sub_F0F788_Skip12	; F0F987  jr Z,0xf0f99e
 	ld	(xix), 0	; F0F989  ld (XIX),0x00
-	lda	xbc, (DL_F1435B:24)	; F0F98C  lda XBC,0xf1435b
+	lda	xbc, (EffectEditor_PaintJob1_DL3:24)	; F0F98C  lda XBC,0xf1435b
 	push	xbc	; F0F991  push XBC
 	lda	xwa, (DL_F14329:24)	; F0F992  lda XWA,0xf14329
 	push	xwa	; F0F997  push XWA
 	call	T_DisplayList_Run_Stack	; F0F998  call 0xf42e00
 	inc	8, xsp	; F0F99C  inc 0,XSP
 sub_F0F788_Skip12:
-	lda	xbc, (DL_F1441C:24)	; F0F99E  lda XBC,0xf1441c
+	lda	xbc, (EffectEditor_PaintJob1_DL2:24)	; F0F99E  lda XBC,0xf1441c
 	push	xbc	; F0F9A3  push XBC
-	lda	xwa, (DL_F143EF:24)	; F0F9A4  lda XWA,0xf143ef
+	lda	xwa, (EffectEditor_PaintJob1_DL4:24)	; F0F9A4  lda XWA,0xf143ef
 	push	xwa	; F0F9A9  push XWA
 	call	T_DisplayListB_Run_Stack	; F0F9AA  call 0xf42e04
-	lda	xbc, (DL_F145D9:24)	; F0F9AE  lda XBC,0xf145d9
+	lda	xbc, (EffectEditor_PaintJob1_DL5:24)	; F0F9AE  lda XBC,0xf145d9
 	push	xbc	; F0F9B3  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0F9B4  call 0xf42e0c
 	jr	sub_F0F788_Join5	; F0F9B8  jr T,0xf0f9da
 sub_F0F788_Skip13:
 	ld	(xix), 1	; F0F9BA  ld (XIX),0x01
-	lda	xbc, (DL_F1435B:24)	; F0F9BD  lda XBC,0xf1435b
+	lda	xbc, (EffectEditor_PaintJob1_DL3:24)	; F0F9BD  lda XBC,0xf1435b
 	push	xbc	; F0F9C2  push XBC
 	call	T_DisplayList_RunOne_Stack	; F0F9C3  call 0xf42e08
 	ld	(xix), 0	; F0F9C7  ld (XIX),0x00
 	lda	xbc, (DL_F143AF:24)	; F0F9CA  lda XBC,0xf143af
 	push	xbc	; F0F9CF  push XBC
-	lda	xwa, (DL_F1435B:24)	; F0F9D0  lda XWA,0xf1435b
+	lda	xwa, (EffectEditor_PaintJob1_DL3:24)	; F0F9D0  lda XWA,0xf1435b
 	push	xwa	; F0F9D5  push XWA
 	call	T_DisplayList_Run_Stack	; F0F9D6  call 0xf42e00
 sub_F0F788_Join5:
@@ -31504,16 +31558,16 @@ EffectEditor_PaintJob2:
 	m_res 2, MD16, 0x2799	; F0F9F7  res 2,(0x2799)
 	calr	sub_F0FD2F	; F0F9FB  calr 0xf0fd2f
 	ld	(LCD_CurrentLayer:16), 0	; F0F9FE  ld (0x2540),0x00
-	lda	xbc, (DL_F14432 + 0x4B:24)	; F0FA03  lda XBC,0xf1447d
+	lda	xbc, (EffectEditor_PaintJob2_DL1 + 0x4B:24)	; F0FA03  lda XBC,0xf1447d
 	push	xbc	; F0FA08  push XBC
-	lda	xwa, (DL_F14432:24)	; F0FA09  lda XWA,0xf14432
+	lda	xwa, (EffectEditor_PaintJob2_DL1:24)	; F0FA09  lda XWA,0xf14432
 	push	xwa	; F0FA0E  push XWA
 	call	T_DisplayListB_Run_Stack	; F0FA0F  call 0xf42e04
 	pushw	0	; F0FA13  push 0x0000
 	pushw	96	; F0FA16  push 0x0060
 	call	T_IndexedTable_GetByte	; F0FA19  call 0xf42c90
 	ld	(xix), a	; F0FA1D  ld (XIX),A
-	lda	xbc, (DL_F143E0:24)	; F0FA1F  lda XBC,0xf143e0
+	lda	xbc, (EffectEditor_PaintJob2_DL2:24)	; F0FA1F  lda XBC,0xf143e0
 	push	xbc	; F0FA24  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0FA25  call 0xf42e0c
 	ld	c, (xix)	; F0FA29  ld C,(XIX)
@@ -31521,7 +31575,7 @@ EffectEditor_PaintJob2:
 	inc	8, xsp	; F0FA2D  inc 0,XSP
 	cp	c, 0:i3	; F0FA2F  cp C,0
 	jr	nz, sub_F0F788_Skip14	; F0FA31  jr NZ,0xf0fa41
-	lda	xbc, (DL_F140B2:24)	; F0FA33  lda XBC,0xf140b2
+	lda	xbc, (EffectEditor_PaintJob2_DL3:24)	; F0FA33  lda XBC,0xf140b2
 	push	xbc	; F0FA38  push XBC
 	lda	xwa, (DL_F1408A:24)	; F0FA39  lda XWA,0xf1408a
 	push	xwa	; F0FA3E  push XWA
@@ -31529,7 +31583,7 @@ EffectEditor_PaintJob2:
 sub_F0F788_Skip14:
 	lda	xbc, (DL_F140E4:24)	; F0FA41  lda XBC,0xf140e4
 	push	xbc	; F0FA46  push XBC
-	lda	xwa, (DL_F140B2:24)	; F0FA47  lda XWA,0xf140b2
+	lda	xwa, (EffectEditor_PaintJob2_DL3:24)	; F0FA47  lda XWA,0xf140b2
 	push	xwa	; F0FA4C  push XWA
 sub_F0F788_Join6:
 	call	T_DisplayList_Run_Stack	; F0FA4D  call 0xf42e00
@@ -31544,7 +31598,7 @@ sub_F0F788_Join6:
 	push	h	; F0FA6C  push H
 	call	T_IndexedTable_GetByte	; F0FA6E  call 0xf42c90
 	ld	(xix), a	; F0FA72  ld (XIX),A
-	lda	xbc, (DL_F145EA:24)	; F0FA74  lda XBC,0xf145ea
+	lda	xbc, (EffectEditor_PaintJob2_DL4:24)	; F0FA74  lda XBC,0xf145ea
 	push	xbc	; F0FA79  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0FA7A  call 0xf42e0c
 	ld	c, h	; F0FA7E  ld C,H
@@ -31567,7 +31621,7 @@ sub_F0F788_Skip15:
 	pushw	0	; F0FAAC  push 0x0000
 	call	T_IndexedTable_GetByte	; F0FAAF  call 0xf42c90
 	ld	(xix), a	; F0FAB3  ld (XIX),A
-	lda	xbc, (DL_F1459C:24)	; F0FAB5  lda XBC,0xf1459c
+	lda	xbc, (EffectEditor_PaintJob2_DL5:24)	; F0FAB5  lda XBC,0xf1459c
 	push	xbc	; F0FABA  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0FABB  call 0xf42e0c
 	inc	8, xsp	; F0FABF  inc 0,XSP
@@ -31577,7 +31631,7 @@ sub_F0F788_Skip16:
 	push	h	; F0FAC6  push H
 	call	T_IndexedTable_GetByte	; F0FAC8  call 0xf42c90
 	ld	(xix), a	; F0FACC  ld (XIX),A
-	lda	xbc, (DL_F14617:24)	; F0FACE  lda XBC,0xf14617
+	lda	xbc, (EffectEditor_PaintJob2_DL6:24)	; F0FACE  lda XBC,0xf14617
 	push	xbc	; F0FAD3  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0FAD4  call 0xf42e0c
 	pushw	5	; F0FAD8  push 0x0005
@@ -31604,7 +31658,7 @@ sub_F0F788_Skip17:
 sub_F0F788_Skip18:
 	ld	(xix), 1	; F0FB0E  ld (XIX),0x01
 sub_F0F788_Join7:
-	lda	xbc, (DL_F145A6:24)	; F0FB11  lda XBC,0xf145a6
+	lda	xbc, (EffectEditor_PaintJob2_DL7:24)	; F0FB11  lda XBC,0xf145a6
 	push	xbc	; F0FB16  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0FB17  call 0xf42e0c
 	pop	xiy	; F0FB1B  pop XIY
@@ -31614,7 +31668,7 @@ sub_F0F788_Skip19:
 	push	h	; F0FB21  push H
 	call	T_IndexedTable_GetByte	; F0FB23  call 0xf42c90
 	ld	(xix), a	; F0FB27  ld (XIX),A
-	lda	xbc, (DL_F14617:24)	; F0FB29  lda XBC,0xf14617
+	lda	xbc, (EffectEditor_PaintJob2_DL6:24)	; F0FB29  lda XBC,0xf14617
 	push	xbc	; F0FB2E  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0FB2F  call 0xf42e0c
 	pushw	0	; F0FB33  push 0x0000
@@ -31641,19 +31695,19 @@ sub_F0F788_Skip20:
 	pushw	0	; F0FB69  push 0x0000
 	call	T_IndexedTable_GetByte	; F0FB6C  call 0xf42c90
 	ld	(xix), a	; F0FB70  ld (XIX),A
-	lda	xbc, (DL_F1459C:24)	; F0FB72  lda XBC,0xf1459c
+	lda	xbc, (EffectEditor_PaintJob2_DL5:24)	; F0FB72  lda XBC,0xf1459c
 	push	xbc	; F0FB77  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0FB78  call 0xf42e0c
 	inc	8, xsp	; F0FB7C  inc 0,XSP
 sub_F0F788_Skip21:
-	lda	xbc, (DL_F14608:24)	; F0FB7E  lda XBC,0xf14608
+	lda	xbc, (EffectEditor_PaintJob2_DL8:24)	; F0FB7E  lda XBC,0xf14608
 	push	xbc	; F0FB83  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0FB84  call 0xf42e0c
 	pop	xiy	; F0FB88  pop XIY
 sub_F0F788_Skip22:
 	ld	(xix), 6	; F0FB89  ld (XIX),0x06
 sub_F0F788_Join8:
-	lda	xbc, (DL_F145F9:24)	; F0FB8C  lda XBC,0xf145f9
+	lda	xbc, (EffectEditor_PaintJob2_DL9:24)	; F0FB8C  lda XBC,0xf145f9
 	push	xbc	; F0FB91  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0FB92  call 0xf42e0c
 	pop	xiy	; F0FB96  pop XIY
@@ -31683,9 +31737,9 @@ sub_F0F788_Skip24:
 	call	T_IndexedTable_GetByte	; F0FBD0  call 0xf42c90
 	extz	xix	; F0FBD4  extz XIX
 	ld	(xix+1), a	; F0FBD6  ld (XIX+0x01),A
-	lda	xbc, (DL_F145B5 + 0x1E:24)	; F0FBD9  lda XBC,0xf145d3
+	lda	xbc, (EffectEditor_PaintJob2_DL10 + 0x1E:24)	; F0FBD9  lda XBC,0xf145d3
 	push	xbc	; F0FBDE  push XBC
-	lda	xwa, (DL_F145B5:24)	; F0FBDF  lda XWA,0xf145b5
+	lda	xwa, (EffectEditor_PaintJob2_DL10:24)	; F0FBDF  lda XWA,0xf145b5
 	push	xwa	; F0FBE4  push XWA
 	call	T_DisplayListB_Run_Stack	; F0FBE5  call 0xf42e04
 	inc	8, xsp	; F0FBE9  inc 0,XSP
@@ -31735,9 +31789,9 @@ sub_F0F788_Skip25:
 sub_F0F788_Join10:
 	extz	xix	; F0FC69  extz XIX
 	ld	(xix+7), 1	; F0FC6B  ld (XIX+0x07),0x01
-	lda	xbc, (DL_F1449F + 0x7E:24)	; F0FC6F  lda XBC,0xf1451d
+	lda	xbc, (EffectEditor_PaintJob2_DL11 + 0x7E:24)	; F0FC6F  lda XBC,0xf1451d
 	push	xbc	; F0FC74  push XBC
-	lda	xwa, (DL_F1449F:24)	; F0FC75  lda XWA,0xf1449f
+	lda	xwa, (EffectEditor_PaintJob2_DL11:24)	; F0FC75  lda XWA,0xf1449f
 	push	xwa	; F0FC7A  push XWA
 	call	T_DisplayListB_Run_Stack	; F0FC7B  call 0xf42e04
 	inc	8, xsp	; F0FC7F  inc 0,XSP
@@ -31752,11 +31806,11 @@ sub_F0F788_Join10:
 	pop	xiy	; F0FC9C  pop XIY
 	cp	a, 0:i3	; F0FC9D  cp A,0
 	jr	nz, sub_F0F788_Skip26	; F0FC9F  jr NZ,0xf0fca9
-	lda	xbc, (DL_F1449F + 0xB7:24)	; F0FCA1  lda XBC,0xf14556
+	lda	xbc, (EffectEditor_PaintJob2_DL11 + 0xB7:24)	; F0FCA1  lda XBC,0xf14556
 	push	xbc	; F0FCA6  push XBC
 	jr	sub_F0F788_Join11	; F0FCA7  jr T,0xf0fcaf
 sub_F0F788_Skip26:
-	lda	xbc, (DL_F1449F + 0xAB:24)	; F0FCA9  lda XBC,0xf1454a
+	lda	xbc, (EffectEditor_PaintJob2_DL11 + 0xAB:24)	; F0FCA9  lda XBC,0xf1454a
 	push	xbc	; F0FCAE  push XBC
 sub_F0F788_Join11:
 	call	T_DisplayList_RunOne_Stack	; F0FCAF  call 0xf42e08
@@ -31793,9 +31847,9 @@ sub_F0F788_Skip27:
 	call	T_IndexedTable_GetByte	; F0FD0B  call 0xf42c90
 	extz	xix	; F0FD0F  extz XIX
 	ld	(xix+3), a	; F0FD11  ld (XIX+0x03),A
-	lda	xbc, (DL_F1459C:24)	; F0FD14  lda XBC,0xf1459c
+	lda	xbc, (EffectEditor_PaintJob2_DL5:24)	; F0FD14  lda XBC,0xf1459c
 	push	xbc	; F0FD19  push XBC
-	lda	xwa, (DL_F14562:24)	; F0FD1A  lda XWA,0xf14562
+	lda	xwa, (EffectEditor_PaintJob2_DL12:24)	; F0FD1A  lda XWA,0xf14562
 	push	xwa	; F0FD1F  push XWA
 	call	T_DisplayListB_Run_Stack	; F0FD20  call 0xf42e04
 	inc	8, xsp	; F0FD24  inc 0,XSP
@@ -32075,7 +32129,7 @@ EffectEditor_PaintJob4:
 ;          0xF0FF55) into a 70-byte frame and patches the copy from the four
 ;          bytes (0x2640) (0x2641) (0x2642) (0x2643): x = 6*v+67 for the first
 ;          two, y = 135-v for the last two (the offsets are in the template's
-;          header).  With (0x2540) = 2 it then runs DL_F14297 -- op 0x1B,
+;          header).  With (0x2540) = 2 it then runs EqGraph_Draw_DL -- op 0x1B,
 ;          LCD_Svc_1B_EraseRect over (63,85)-(228,138), the graph box.  If
 ;          IndexedTable_GetByte(23, (0x2797)+97) returns 0, or (0x207C) is
 ;          0x6B, it runs DL_F1428D -- op 0x11, the line (63,111)-(228,111),
@@ -32187,7 +32241,7 @@ EqGraph_Draw_Join2:
 	ld	(xix+36), hl	; F1002E  ld (XIX+0x24),HL
 EqGraph_Draw_Skip3:
 	ld	(LCD_CurrentLayer:16), 2	; F10031  ld (0x2540),0x02
-	lda	xbc, (DL_F14297:24)	; F10036  lda XBC,0xf14297
+	lda	xbc, (EqGraph_Draw_DL:24)	; F10036  lda XBC,0xf14297
 	push	xbc	; F1003B  push XBC
 	call	T_DisplayList_RunOne_Stack	; F1003C  call 0xf42e08
 	pushw	23	; F10040  push 0x0017
@@ -34169,7 +34223,7 @@ EffectEditor_PaintJob5_Resume3:
 EffectEditor_PaintJob5_Resume4:
 	inc	8, xsp	; F10E2E  inc 0,XSP
 EffectEditor_PaintJob5_Join:
-	lda	xbc, (DL_F1417C:24)	; F10E30  lda XBC,0xf1417c
+	lda	xbc, (EffectEditor_PaintJob5_Common_DL1:24)	; F10E30  lda XBC,0xf1417c
 	push	xbc	; F10E35  push XBC
 	lda	xwa, (DL_F14168:24)	; F10E36  lda XWA,0xf14168
 	push	xwa	; F10E3B  push XWA
@@ -34190,9 +34244,9 @@ EffectEditor_PaintJob5_Resume6:
 	push	xbc	; F10E63  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F10E64  call 0xf42e0c
 	ld	(LCD_CurrentLayer:16), 2	; F10E68  ld (0x2540),0x02
-	lda	xbc, (DL_F14186:24)	; F10E6D  lda XBC,0xf14186
+	lda	xbc, (EffectEditor_PaintJob5_Common_DL2:24)	; F10E6D  lda XBC,0xf14186
 	push	xbc	; F10E72  push XBC
-	lda	xwa, (DL_F1417C:24)	; F10E73  lda XWA,0xf1417c
+	lda	xwa, (EffectEditor_PaintJob5_Common_DL1:24)	; F10E73  lda XWA,0xf1417c
 	push	xwa	; F10E78  push XWA
 	lda	xiy, (EffectEditor_PaintJob5_Resume7:24)	; F10E79  lda XIY,0xf10e81
 	push	xiy	; F10E7E  push XIY
@@ -34200,7 +34254,7 @@ EffectEditor_PaintJob5_Resume6:
 EffectEditor_PaintJob5_Resume7:
 	lda	xbc, (DL_F141D3:24)	; F10E81  lda XBC,0xf141d3
 	push	xbc	; F10E86  push XBC
-	lda	xwa, (DL_F14186:24)	; F10E87  lda XWA,0xf14186
+	lda	xwa, (EffectEditor_PaintJob5_Common_DL2:24)	; F10E87  lda XWA,0xf14186
 	push	xwa	; F10E8C  push XWA
 	lda	xiy, (EffectEditor_PaintJob5_Resume8:24)	; F10E8D  lda XIY,0xf10e95
 	push	xiy	; F10E92  push XIY
@@ -34234,7 +34288,7 @@ EffectEditor_PaintJob6:
 	m_ld_m16m MB16, Effect_Algorithm, UI_DrawScratch	; F10EC1  ld (0x2640),(0x2796)
 	lda	xbc, (DL_F146F0:24)	; F10EC7  lda XBC,0xf146f0
 	push	xbc	; F10ECC  push XBC
-	lda	xwa, (DL_F146E1:24)	; F10ECD  lda XWA,0xf146e1
+	lda	xwa, (EffectEditor_PaintJob6_DL:24)	; F10ECD  lda XWA,0xf146e1
 	push	xwa	; F10ED2  push XWA
 	call	T_DisplayListB_Run_Stack	; F10ED3  call 0xf42e04
 	inc	8, xsp	; F10ED7  inc 0,XSP
@@ -37316,7 +37370,7 @@ sub_F1245A_Join:
 ;   frequency strings) and (0x2642)/(0x2643) through DLBTable_F15C93, 49
 ;   entries "-12.0" .. "+12.0" in 0.5 dB steps -- whose entry 24, "  0.0",
 ;   gives y = 135-24 = 111, exactly the line DL_F1428D draws from (63,111) to
-;   (228,111) with op 0x11.  DL_F14297 (op 0x1B, EraseRect) clears
+;   (228,111) with op 0x11.  EqGraph_Draw_DL (op 0x1B, EraseRect) clears
 ;   (63,85)-(228,138), the graph's box, before the template runs.
 ; Pre-patch words are the template's own defaults and are kept as they are.
 ; Re-derived by python3 notes/promb-2026-09-25/effect_descriptor_pool.py
@@ -40592,7 +40646,8 @@ DL_F13F32:
 	.byte 0x20, 0x0A	; op 20, 10 bytes -> handler 0xF31A3A
 	.short 0x10C7
 	.ascii "BYPASS"
-DL_F13F3C:
+; ; drawn (start operand) by EffectEditor_PaintJob0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob0_DL1:
 	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
 	.short 0x0500
 	.byte 0x10	; character codes below 0x20
@@ -40819,7 +40874,8 @@ DL_F140A8:
 ; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
 ; --splice
 ; ------------------------------------------------------------------
-DL_F140B2:
+; ; drawn (start operand) by EffectEditor_PaintJob2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob2_DL3:
 	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
 	.short 0x0074
 	.short 0x005B
@@ -40930,13 +40986,15 @@ DL_F14172:
 	.short 0x001E
 	.short 0x0107
 	.short 0x003E
-DL_F1417C:
+; ; drawn (start operand) by EffectEditor_PaintJob5_Common -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob5_Common_DL1:
 	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
 	.short 0x0037
 	.short 0x0044
 	.short 0x0109
 	.short 0x00C7
-DL_F14186:
+; ; drawn (start operand) by EffectEditor_PaintJob5_Common -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob5_Common_DL2:
 	.byte 0x20, 0x08	; op 20, 8 bytes -> handler 0xF31A3A
 	.short 0x200F
 	.ascii "ITEM"
@@ -41101,19 +41159,22 @@ DL_F1428D:
 	.short 0x006F
 	.short 0x00E4
 	.short 0x006F
-DL_F14297:
+; ; drawn (start operand) by EqGraph_Draw -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EqGraph_Draw_DL:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x003F
 	.short 0x0055
 	.short 0x00E4
 	.short 0x008A
-DL_F142A1:
+; ; drawn (start operand) by EffectEditor_PaintJob0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob0_DL3:
 	.byte 0x22, 0x0A	; op 22, 10 bytes -> handler 0xF31A75
 	.short 0x000D
 	.short 0x0032
 	.short 0x0105
 	.short 0x00B9
-DL_F142AB:
+; ; drawn (start operand) by EffectEditor_PaintJob0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob0_DL2:
 	.byte 0x17, 0x0C	; op 17, 12 bytes -> handler 0xF31A52
 	.short 0x002C
 	.short 0x00B2
@@ -41219,7 +41280,8 @@ DL_F14329:
 	.short 0x00DB
 	.short 0x0132
 	.short 0x00E8
-DL_F1435B:
+; ; drawn (start operand) by EffectEditor_PaintJob1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob1_DL3:
 	.byte 0x0E, 0x08	; op 0E, 8 bytes -> handler 0xF31A9F
 	.short 0x2008
 	.short 0x0028
@@ -41302,22 +41364,24 @@ DL_F143C0:
 ; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
 ; --splice
 ; ------------------------------------------------------------------
-DL_F143E0:
+; ; drawn (start operand) by EffectEditor_PaintJob2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob2_DL2:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long DL_F1449F + 0x7E	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL11 + 0x7E	; +0x07 -> XIY: string table
 	.short 0x0008	; +0x0B -> BC: bytes per entry
 	.short 0x050E	; +0x0D -> IX
-DL_F143EF:
+; ; drawn (start operand) by EffectEditor_PaintJob1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob1_DL4:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long DL_F1449F + 0x90	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL11 + 0x90	; +0x07 -> XIY: string table
 	.short 0x0001	; +0x0B -> BC: bytes per entry
 	.short 0x0B40	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -41325,7 +41389,7 @@ DL_F143EF:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long DL_F1449F + 0x8F	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL11 + 0x8F	; +0x07 -> XIY: string table
 	.short 0x0001	; +0x0B -> BC: bytes per entry
 	.short 0x1180	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -41333,30 +41397,33 @@ DL_F143EF:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long DL_F1449F + 0x8E	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL11 + 0x8E	; +0x07 -> XIY: string table
 	.short 0x0001	; +0x0B -> BC: bytes per entry
 	.short 0x17C0	; +0x0D -> IX
-DL_F1441C:
+; ; drawn (start operand) by EffectEditor_PaintJob1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob1_DL2:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long DL_F1449F + 0x93	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
-DL_F14427:
+	.long EffectEditor_PaintJob2_DL11 + 0x93	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+; ; drawn (start operand) by EffectEditor_PaintJob1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob1_DL1:
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
-	.long DL_F1449F + 0x93	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
-DL_F14432:
+	.long EffectEditor_PaintJob2_DL11 + 0x93	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+; ; drawn (start operand) by EffectEditor_PaintJob2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob2_DL1:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short 0x7659	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long DL_F14432 + 0x4B	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL1 + 0x4B	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x0B73	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -41364,7 +41431,7 @@ DL_F14432:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long DL_F14432 + 0x53	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL1 + 0x53	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x1138	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -41372,7 +41439,7 @@ DL_F14432:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long DL_F14432 + 0x5B	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL1 + 0x5B	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x17B1	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -41380,7 +41447,7 @@ DL_F14432:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long DL_F14432 + 0x61	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL1 + 0x61	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0B78	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -41388,7 +41455,7 @@ DL_F14432:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long DL_F14432 + 0x67	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL1 + 0x67	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x17AD	; +0x0D -> IX
 
@@ -41427,7 +41494,8 @@ DL_F14432:
 ; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
 ; --splice
 ; ------------------------------------------------------------------
-DL_F1449F:
+; ; drawn (start operand) by EffectEditor_PaintJob2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob2_DL11:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -41476,7 +41544,7 @@ DL_F1449F:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL6 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x00E6	; +0x0D -> (0x2530)
 	.short 0x004B	; +0x0F -> (0x2532)
@@ -41485,7 +41553,7 @@ DL_F1449F:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL6 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x00E6	; +0x0D -> (0x2530)
 	.short 0x0070	; +0x0F -> (0x2532)
@@ -41494,7 +41562,7 @@ DL_F1449F:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL6 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x00EC	; +0x0D -> (0x2530)
 	.short 0x0091	; +0x0F -> (0x2532)
@@ -41538,7 +41606,8 @@ DL_F1449F:
 ; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
 ; --splice
 ; ------------------------------------------------------------------
-DL_F14562:
+; ; drawn (start operand) by EffectEditor_PaintJob2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob2_DL12:
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -41560,7 +41629,7 @@ DL_F14562:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL6 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x00E6	; +0x0D -> (0x2530)
 	.short 0x00AC	; +0x0F -> (0x2532)
@@ -41569,11 +41638,12 @@ DL_F14562:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL6 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x00E6	; +0x0D -> (0x2530)
 	.short 0x00B8	; +0x0F -> (0x2532)
-DL_F1459C:
+; ; drawn (start operand) by EffectEditor_PaintJob2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob2_DL5:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -41581,22 +41651,24 @@ DL_F1459C:
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x228A	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
-DL_F145A6:
+; ; drawn (start operand) by EffectEditor_PaintJob2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob2_DL7:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long DL_F145B5 + 0x1E	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL10 + 0x1E	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x228A	; +0x0D -> IX
-DL_F145B5:
+; ; drawn (start operand) by EffectEditor_PaintJob2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob2_DL10:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long DL_F145B5 + 0x1E	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL10 + 0x1E	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2293	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -41604,7 +41676,7 @@ DL_F145B5:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL6 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x2298	; +0x0D -> IX
 
@@ -41623,17 +41695,19 @@ DL_F145B5:
 ; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
 ; --splice
 ; ------------------------------------------------------------------
-DL_F145D9:
+; ; drawn (start operand) by EffectEditor_PaintJob1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob1_DL5:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long DL_F14617 + 0xA	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL6 + 0xA	; +0x07 -> XIY: string table
 	.short 0x0008	; +0x0B -> BC: bytes per entry
 	.short 0x004E	; +0x0D -> (0x2530)
 	.short 0x00D1	; +0x0F -> (0x2532)
-DL_F145EA:
+; ; drawn (start operand) by EffectEditor_PaintJob2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob2_DL4:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -41642,25 +41716,28 @@ DL_F145EA:
 	.long EffectNames_F147AC	; +0x07 -> XIY: string table
 	.short 0x0010	; +0x0B -> BC: bytes per entry
 	.short 0x228F	; +0x0D -> IX
-DL_F145F9:
+; ; drawn (start operand) by EffectEditor_PaintJob2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob2_DL9:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL6 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x22A8	; +0x0D -> IX
-DL_F14608:
+; ; drawn (start operand) by EffectEditor_PaintJob2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob2_DL8:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long DL_F14617 + 0x22	; +0x07 -> XIY: string table
+	.long EffectEditor_PaintJob2_DL6 + 0x22	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A2	; +0x0D -> IX
-DL_F14617:
+; ; drawn (start operand) by EffectEditor_PaintJob2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob2_DL6:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -41744,7 +41821,7 @@ DL_F1469B:
 
 ; --- 0xF146A6-0xF146E0: not converted ---
 ; 0xF146A6-0xF146B0: one self-framing interpreter-B record (op 0x08,
-; handler 0xF31B57, the same handler DL_F1441C/DL_F14427 already use),
+; handler 0xF31B57, the same handler EffectEditor_PaintJob1_DL2/EffectEditor_PaintJob1_DL1 already use),
 ; not reached by any known call shape -- accepted because its own
 ; length byte and its own +0x07 field (naming the table right after
 ; it) are both self-checking.
@@ -41773,7 +41850,8 @@ DL_F146A6:
 ; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
 ; --splice
 ; ------------------------------------------------------------------
-DL_F146E1:
+; ; drawn (start operand) by EffectEditor_PaintJob6 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+EffectEditor_PaintJob6_DL:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -41859,15 +41937,15 @@ DL_F14712:
 ;   MAXIMAL: the byte before 0xF147AC is 0x00 and the byte at
 ;   0xF14FAC is 0x02, neither printable.
 ; Read by: the +0x07 string-table fields of five interpreter-B
-;   records -- three op-07 records in DL_F1449F, op-02 records at
-;   DL_F145EA and DL_F146E1 -- which are the only byte-scan hits (4-byte
+;   records -- three op-07 records in EffectEditor_PaintJob2_DL11, op-02 records at
+;   EffectEditor_PaintJob2_DL4 and EffectEditor_PaintJob6_DL -- which are the only byte-scan hits (4-byte
 ;   windows inside 0xF144A6-0xF146E8); no INSTRUCTION in prom_a or prom_b
 ;   spells 0x00F147AC.  (Until 2026-09-25 this line concluded that what
 ;   indexes the table was unknown; the note below is how it was found.)
 ; ⚠ CORRECTED 2026-09-25 (lane promb): those five "windows" are the `+0x07`
 ;   table fields of five interpreter-B string-table records that have since
-;   been typed -- three op-07 records in DL_F1449F (sources (0x2640),
-;   (0x2641), (0x2642)), and op-02 records at DL_F145EA and DL_F146E1
+;   been typed -- three op-07 records in EffectEditor_PaintJob2_DL11 (sources (0x2640),
+;   (0x2641), (0x2642)), and op-02 records at EffectEditor_PaintJob2_DL4 and EffectEditor_PaintJob6_DL
 ;   (source (0x2640)).  Every one masks its source with 0x7F and gives 0x0010
 ;   as the entry width, so the index is 0..127 over 16-byte entries: this
 ;   table's shape, and its readers.
@@ -47498,14 +47576,15 @@ DL_F18C12:
 	.byte 0x1b, 0x01, 0x4b, 0x00, 0x35, 0x01, 0x55, 0x00	; +2  '..K.5.U.'
 
 ; --------------------------------------------------------------------------
-; DL_F18C1C -- display list, 0xF18C1C-0xF18C68 (77 bytes)
+; CombiEditSound_PageIndex_DL -- display list, 0xF18C1C-0xF18C68 (77 bytes)
 ; Interpreter: A.  10 records, framed by their own length bytes; the walk
 ;              consumes 0xF18C1C-0xF18C68 exactly.
 ; Text it draws: 'ITEM'; 'VALUE'
 ; Evidence: 10 records, interpreter A, named by a push pair whose framing
 ;           walk lands on the end address
 ; --------------------------------------------------------------------------
-DL_F18C1C:
+; ; drawn (start operand) by CombiEditSound_PageIndex -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PageIndex_DL:
 	.byte 0x20, 0x08	; F18C1C  op 20, 8 bytes -> handler 0xF31A3A
 	.short 0x200F		; +2  IX (screen position)
 	.ascii "ITEM"	; +4
@@ -48425,12 +48504,13 @@ DL_F19772:
 	.byte 0x03, 0x00, 0xae, 0x14	; +11  '....'
 
 ; --------------------------------------------------------------------------
-; DL_F19781 -- display list, 0xF19781-0xF1978F (15 bytes)
+; CombiEditSound_PaintLevelsPage_DL3 -- display list, 0xF19781-0xF1978F (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19781-0xF1978F exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19781:
+; ; drawn (start operand) by CombiEditSound_PaintLevelsPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintLevelsPage_DL3:
 	.byte 0x02, 0x0f	; F19781  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
@@ -48438,12 +48518,13 @@ DL_F19781:
 	.byte 0x03, 0x00, 0xc3, 0x14	; +11  '....'
 
 ; --------------------------------------------------------------------------
-; DL_F19790 -- display list, 0xF19790-0xF1979E (15 bytes)
+; CombiEditSound_PaintLevelsPage_DL8 -- display list, 0xF19790-0xF1979E (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19790-0xF1979E exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19790:
+; ; drawn (start operand) by CombiEditSound_PaintLevelsPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintLevelsPage_DL8:
 	.byte 0x02, 0x0f	; F19790  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x03, 0x00, 0x20	; +4  mask, shift, swi 7 function
@@ -48474,72 +48555,78 @@ DL_OffMainSub1Sub2Sub3Eff2:
 	.byte 0x04, 0x00, 0x42, 0x1c	; +11  '..B.'
 
 ; --------------------------------------------------------------------------
-; DL_F197AE -- display list, 0xF197AE-0xF197B7 (10 bytes)
+; CombiEditSound_PaintLevelsPage_DL1 -- display list, 0xF197AE-0xF197B7 (10 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF197AE-0xF197B7 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F197AE:
+; ; drawn (start operand) by CombiEditSound_PaintLevelsPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintLevelsPage_DL1:
 	.byte 0x00, 0x0a	; F197AE  op 00, 10 bytes -> handler 0xF31BA1
 	.short 0x2640		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
 	.byte 0x2e, 0x12, 0x03	; +7  '...'
 
 ; --------------------------------------------------------------------------
-; DL_F197B8 -- display list, 0xF197B8-0xF197C1 (10 bytes)
+; CombiEditSound_PaintLevelsPage_DL2 -- display list, 0xF197B8-0xF197C1 (10 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF197B8-0xF197C1 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F197B8:
+; ; drawn (start operand) by CombiEditSound_PaintLevelsPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintLevelsPage_DL2:
 	.byte 0x00, 0x0a	; F197B8  op 00, 10 bytes -> handler 0xF31BA1
 	.short 0x2640		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
 	.byte 0x43, 0x12, 0x03	; +7  'C..'
 
 ; --------------------------------------------------------------------------
-; DL_F197C2 -- display list, 0xF197C2-0xF197CB (10 bytes)
+; CombiEditSound_PaintLevelsPage_DL4 -- display list, 0xF197C2-0xF197CB (10 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF197C2-0xF197CB exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F197C2:
+; ; drawn (start operand) by CombiEditSound_PaintLevelsPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintLevelsPage_DL4:
 	.byte 0x00, 0x0a	; F197C2  op 00, 10 bytes -> handler 0xF31BA1
 	.short 0x2640		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
 	.byte 0x43, 0x17, 0x03	; +7  'C..'
 
 ; --------------------------------------------------------------------------
-; DL_F197CC -- display list, 0xF197CC-0xF197D6 (11 bytes)
+; CombiEditSound_PaintLevelsPage_DL5 -- display list, 0xF197CC-0xF197D6 (11 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF197CC-0xF197D6 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F197CC:
+; ; drawn (start operand) by CombiEditSound_PaintLevelsPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintLevelsPage_DL5:
 	.byte 0x05, 0x0b	; F197CC  op 05, 11 bytes -> handler 0xF31BD7
 	.short 0x2640		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
 	.long 0x4002172E	; +7  -> 0x4002172E
 
 ; --------------------------------------------------------------------------
-; DL_F197D7 -- display list, 0xF197D7-0xF197E1 (11 bytes)
+; CombiEditSound_PaintLevelsPage_DL6 -- display list, 0xF197D7-0xF197E1 (11 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF197D7-0xF197E1 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F197D7:
+; ; drawn (start operand) by CombiEditSound_PaintLevelsPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintLevelsPage_DL6:
 	.byte 0x05, 0x0b	; F197D7  op 05, 11 bytes -> handler 0xF31BD7
 	.short 0x2640		; +2  RAM variable
 	.byte 0xff, 0x00, 0x20	; +4  mask, shift, swi 7 function
 	.long 0x800319AD	; +7  -> 0x800319AD
 
 ; --------------------------------------------------------------------------
-; DL_F197E2 -- display list, 0xF197E2-0xF197EB (10 bytes)
+; CombiEditSound_PaintLevelsPage_DL7 -- display list, 0xF197E2-0xF197EB (10 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF197E2-0xF197EB exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F197E2:
+; ; drawn (start operand) by CombiEditSound_PaintLevelsPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintLevelsPage_DL7:
 	.byte 0x00, 0x0a	; F197E2  op 00, 10 bytes -> handler 0xF31BA1
 	.short 0x2640		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
@@ -48594,12 +48681,13 @@ StringTable_OffMainSub1Sub2Sub3Eff2:
 	.byte 0x20, 0x2d, 0x2d, 0x20   ; F19814  [7]  ' -- '
 
 ; --------------------------------------------------------------------------
-; DL_F19818 -- display list, 0xF19818-0xF198AD (150 bytes)
+; CombiEditSound_PaintControllerFilterPage_DL -- display list, 0xF19818-0xF198AD (150 bytes)
 ; Interpreter: B.  10 records, framed by their own length bytes; the walk
 ;              consumes 0xF19818-0xF198AD exactly.
 ; Evidence: 10 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19818:
+; ; drawn (start operand) by CombiEditSound_PaintControllerFilterPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintControllerFilterPage_DL:
 	.byte 0x02, 0x0f	; F19818  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x40, 0x06, 0x20	; +4  mask, shift, swi 7 function
@@ -48665,12 +48753,13 @@ DL_F198AE:
 	.byte 0x03, 0x00, 0xbc, 0x0f	; +11  '....'
 
 ; --------------------------------------------------------------------------
-; DL_F198BD -- display list, 0xF198BD-0xF198CB (15 bytes)
+; CombiEditSound_PaintAssignAndInputFilterPage_DL1 -- display list, 0xF198BD-0xF198CB (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF198BD-0xF198CB exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F198BD:
+; ; drawn (start operand) by CombiEditSound_PaintAssignAndInputFilterPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintAssignAndInputFilterPage_DL1:
 	.byte 0x02, 0x0f	; F198BD  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x08, 0x03, 0x20	; +4  mask, shift, swi 7 function
@@ -48678,24 +48767,26 @@ DL_F198BD:
 	.byte 0x03, 0x00, 0x3c, 0x12	; +11  '..<.'
 
 ; --------------------------------------------------------------------------
-; DL_F198CC -- display list, 0xF198CC-0xF198D6 (11 bytes)
+; CombiEditSound_PaintAssignAndInputFilterPage_DL2 -- display list, 0xF198CC-0xF198D6 (11 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF198CC-0xF198D6 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F198CC:
+; ; drawn (start operand) by CombiEditSound_PaintAssignAndInputFilterPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintAssignAndInputFilterPage_DL2:
 	.byte 0x05, 0x0b	; F198CC  op 05, 11 bytes -> handler 0xF31BD7
 	.short 0x2640		; +2  RAM variable
 	.byte 0xff, 0x00, 0x20	; +4  mask, shift, swi 7 function
 	.long 0x180214BC	; +7  -> 0x180214BC
 
 ; --------------------------------------------------------------------------
-; DL_F198D7 -- display list, 0xF198D7-0xF198E5 (15 bytes)
+; CombiEditSound_PaintAssignAndInputFilterPage_DL3 -- display list, 0xF198D7-0xF198E5 (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF198D7-0xF198E5 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F198D7:
+; ; drawn (start operand) by CombiEditSound_PaintAssignAndInputFilterPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintAssignAndInputFilterPage_DL3:
 	.byte 0x02, 0x0f	; F198D7  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x10, 0x04, 0x20	; +4  mask, shift, swi 7 function
@@ -48703,12 +48794,13 @@ DL_F198D7:
 	.byte 0x03, 0x00, 0x3c, 0x17	; +11  '..<.'
 
 ; --------------------------------------------------------------------------
-; DL_F198E6 -- display list, 0xF198E6-0xF198F4 (15 bytes)
+; CombiEditSound_PaintAssignAndInputFilterPage_DL4 -- display list, 0xF198E6-0xF198F4 (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF198E6-0xF198F4 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F198E6:
+; ; drawn (start operand) by CombiEditSound_PaintAssignAndInputFilterPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintAssignAndInputFilterPage_DL4:
 	.byte 0x02, 0x0f	; F198E6  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x80, 0x07, 0x20	; +4  mask, shift, swi 7 function
@@ -48716,12 +48808,13 @@ DL_F198E6:
 	.byte 0x03, 0x00, 0xbc, 0x19	; +11  '....'
 
 ; --------------------------------------------------------------------------
-; DL_F198F5 -- display list, 0xF198F5-0xF19903 (15 bytes)
+; CombiEditSound_PaintAssignAndInputFilterPage_DL5 -- display list, 0xF198F5-0xF19903 (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF198F5-0xF19903 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F198F5:
+; ; drawn (start operand) by CombiEditSound_PaintAssignAndInputFilterPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintAssignAndInputFilterPage_DL5:
 	.byte 0x02, 0x0f	; F198F5  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x04, 0x02, 0x20	; +4  mask, shift, swi 7 function
@@ -48729,12 +48822,13 @@ DL_F198F5:
 	.byte 0x03, 0x00, 0x3c, 0x1c	; +11  '..<.'
 
 ; --------------------------------------------------------------------------
-; DL_F19904 -- display list, 0xF19904-0xF19912 (15 bytes)
+; CombiEditSound_PaintMidiOutPage_DL1 -- display list, 0xF19904-0xF19912 (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19904-0xF19912 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19904:
+; ; drawn (start operand) by CombiEditSound_PaintMidiOutPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMidiOutPage_DL1:
 	.byte 0x02, 0x0f	; F19904  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x10, 0x04, 0x20	; +4  mask, shift, swi 7 function
@@ -48742,12 +48836,13 @@ DL_F19904:
 	.byte 0x03, 0x00, 0x2f, 0x12	; +11  '../.'
 
 ; --------------------------------------------------------------------------
-; DL_F19913 -- display list, 0xF19913-0xF19921 (15 bytes)
+; CombiEditSound_PaintMidiOutPage_DL3 -- display list, 0xF19913-0xF19921 (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19913-0xF19921 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19913:
+; ; drawn (start operand) by CombiEditSound_PaintMidiOutPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMidiOutPage_DL3:
 	.byte 0x02, 0x0f	; F19913  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x80, 0x07, 0x20	; +4  mask, shift, swi 7 function
@@ -48755,12 +48850,13 @@ DL_F19913:
 	.byte 0x03, 0x00, 0xaf, 0x14	; +11  '....'
 
 ; --------------------------------------------------------------------------
-; DL_F19922 -- display list, 0xF19922-0xF19930 (15 bytes)
+; CombiEditSound_PaintMidiOutPage_DL5 -- display list, 0xF19922-0xF19930 (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19922-0xF19930 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19922:
+; ; drawn (start operand) by CombiEditSound_PaintMidiOutPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMidiOutPage_DL5:
 	.byte 0x02, 0x0f	; F19922  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x04, 0x02, 0x20	; +4  mask, shift, swi 7 function
@@ -48768,12 +48864,13 @@ DL_F19922:
 	.byte 0x03, 0x00, 0x43, 0x12	; +11  '..C.'
 
 ; --------------------------------------------------------------------------
-; DL_F19931 -- display list, 0xF19931-0xF1993F (15 bytes)
+; CombiEditSound_PaintMidiOutPage_DL2 -- display list, 0xF19931-0xF1993F (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19931-0xF1993F exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19931:
+; ; drawn (start operand) by CombiEditSound_PaintMidiOutPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMidiOutPage_DL2:
 	.byte 0x02, 0x0f	; F19931  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x10, 0x04, 0x20	; +4  mask, shift, swi 7 function
@@ -48781,12 +48878,13 @@ DL_F19931:
 	.byte 0x03, 0x00, 0xc3, 0x14	; +11  '....'
 
 ; --------------------------------------------------------------------------
-; DL_F19940 -- display list, 0xF19940-0xF1994E (15 bytes)
+; CombiEditSound_PaintMidiOutPage_DL4 -- display list, 0xF19940-0xF1994E (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19940-0xF1994E exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19940:
+; ; drawn (start operand) by CombiEditSound_PaintMidiOutPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMidiOutPage_DL4:
 	.byte 0x02, 0x0f	; F19940  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
@@ -48794,24 +48892,26 @@ DL_F19940:
 	.byte 0x03, 0x00, 0x43, 0x17	; +11  '..C.'
 
 ; --------------------------------------------------------------------------
-; DL_F1994F -- display list, 0xF1994F-0xF19959 (11 bytes)
+; CombiEditSound_PaintMidiOutPage_DL6 -- display list, 0xF1994F-0xF19959 (11 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF1994F-0xF19959 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F1994F:
+; ; drawn (start operand) by CombiEditSound_PaintMidiOutPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMidiOutPage_DL6:
 	.byte 0x05, 0x0b	; F1994F  op 05, 11 bytes -> handler 0xF31BD7
 	.short 0x2640		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
 	.long 0x40021AAB	; +7  -> 0x40021AAB
 
 ; --------------------------------------------------------------------------
-; DL_F1995A -- display list, 0xF1995A-0xF199EF (150 bytes)
+; CombiEditSound_PaintMidiOutFilterPage_DL -- display list, 0xF1995A-0xF199EF (150 bytes)
 ; Interpreter: B.  10 records, framed by their own length bytes; the walk
 ;              consumes 0xF1995A-0xF199EF exactly.
 ; Evidence: 10 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F1995A:
+; ; drawn (start operand) by CombiEditSound_PaintMidiOutFilterPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMidiOutFilterPage_DL:
 	.byte 0x02, 0x0f	; F1995A  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x40, 0x06, 0x20	; +4  mask, shift, swi 7 function
@@ -48877,24 +48977,26 @@ DL_F199F0:
 	.byte 0x03, 0x00, 0x2f, 0x12	; +11  '../.'
 
 ; --------------------------------------------------------------------------
-; DL_F199FF -- display list, 0xF199FF-0xF19A08 (10 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL1 -- display list, 0xF199FF-0xF19A08 (10 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF199FF-0xF19A08 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F199FF:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL1:
 	.byte 0x00, 0x0a	; F199FF  op 00, 10 bytes -> handler 0xF31BA1
 	.short 0x2640		; +2  RAM variable
 	.byte 0xff, 0x00, 0x20	; +4  mask, shift, swi 7 function
 	.byte 0x2f, 0x12, 0x03	; +7  '/..'
 
 ; --------------------------------------------------------------------------
-; DL_F19A09 -- display list, 0xF19A09-0xF19A17 (15 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL5 -- display list, 0xF19A09-0xF19A17 (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19A09-0xF19A17 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19A09:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL5:
 	.byte 0x02, 0x0f	; F19A09  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2642		; +2  RAM variable
 	.byte 0x03, 0x00, 0x20	; +4  mask, shift, swi 7 function
@@ -48902,24 +49004,26 @@ DL_F19A09:
 	.byte 0x03, 0x00, 0xaf, 0x14	; +11  '....'
 
 ; --------------------------------------------------------------------------
-; DL_F19A18 -- display list, 0xF19A18-0xF19A21 (10 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL4 -- display list, 0xF19A18-0xF19A21 (10 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19A18-0xF19A21 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19A18:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL4:
 	.byte 0x00, 0x0a	; F19A18  op 00, 10 bytes -> handler 0xF31BA1
 	.short 0x2642		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
 	.byte 0xaf, 0x14, 0x03	; +7  '...'
 
 ; --------------------------------------------------------------------------
-; DL_F19A22 -- display list, 0xF19A22-0xF19A30 (15 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL3 -- display list, 0xF19A22-0xF19A30 (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19A22-0xF19A30 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19A22:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL3:
 	.byte 0x02, 0x0f	; F19A22  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2641		; +2  RAM variable
 	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
@@ -48927,24 +49031,26 @@ DL_F19A22:
 	.byte 0x03, 0x00, 0x2f, 0x17	; +11  '../.'
 
 ; --------------------------------------------------------------------------
-; DL_F19A31 -- display list, 0xF19A31-0xF19A3A (10 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL2 -- display list, 0xF19A31-0xF19A3A (10 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19A31-0xF19A3A exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19A31:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL2:
 	.byte 0x00, 0x0a	; F19A31  op 00, 10 bytes -> handler 0xF31BA1
 	.short 0x2641		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
 	.byte 0x2f, 0x17, 0x03	; +7  '/..'
 
 ; --------------------------------------------------------------------------
-; DL_F19A3B -- display list, 0xF19A3B-0xF19A49 (15 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL6 -- display list, 0xF19A3B-0xF19A49 (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19A3B-0xF19A49 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19A3B:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL6:
 	.byte 0x02, 0x0f	; F19A3B  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x00, 0x00, 0x20	; +4  mask, shift, swi 7 function
@@ -48952,12 +49058,13 @@ DL_F19A3B:
 	.byte 0x05, 0x00, 0xae, 0x19	; +11  '....'
 
 ; --------------------------------------------------------------------------
-; DL_F19A4A -- display list, 0xF19A4A-0xF19A58 (15 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL8 -- display list, 0xF19A4A-0xF19A58 (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19A4A-0xF19A58 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19A4A:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL8:
 	.byte 0x02, 0x0f	; F19A4A  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2643		; +2  RAM variable
 	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
@@ -48965,24 +49072,26 @@ DL_F19A4A:
 	.byte 0x03, 0x00, 0x43, 0x12	; +11  '..C.'
 
 ; --------------------------------------------------------------------------
-; DL_F19A59 -- display list, 0xF19A59-0xF19A62 (10 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL7 -- display list, 0xF19A59-0xF19A62 (10 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19A59-0xF19A62 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19A59:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL7:
 	.byte 0x00, 0x0a	; F19A59  op 00, 10 bytes -> handler 0xF31BA1
 	.short 0x2643		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
 	.byte 0x43, 0x12, 0x03	; +7  'C..'
 
 ; --------------------------------------------------------------------------
-; DL_F19A63 -- display list, 0xF19A63-0xF19A71 (15 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL9 -- display list, 0xF19A63-0xF19A71 (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19A63-0xF19A71 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19A63:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL9:
 	.byte 0x02, 0x0f	; F19A63  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2644		; +2  RAM variable
 	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
@@ -48990,12 +49099,13 @@ DL_F19A63:
 	.byte 0x03, 0x00, 0xc3, 0x14	; +11  '....'
 
 ; --------------------------------------------------------------------------
-; DL_F19A72 -- display list, 0xF19A72-0xF19A80 (15 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL10 -- display list, 0xF19A72-0xF19A80 (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19A72-0xF19A80 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19A72:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL10:
 	.byte 0x02, 0x0f	; F19A72  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2644		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
@@ -49003,12 +49113,13 @@ DL_F19A72:
 	.byte 0x03, 0x00, 0xc3, 0x14	; +11  '....'
 
 ; --------------------------------------------------------------------------
-; DL_F19A81 -- display list, 0xF19A81-0xF19A8F (15 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL12 -- display list, 0xF19A81-0xF19A8F (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19A81-0xF19A8F exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19A81:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL12:
 	.byte 0x02, 0x0f	; F19A81  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2646		; +2  RAM variable
 	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
@@ -49016,24 +49127,26 @@ DL_F19A81:
 	.byte 0x03, 0x00, 0x43, 0x17	; +11  '..C.'
 
 ; --------------------------------------------------------------------------
-; DL_F19A90 -- display list, 0xF19A90-0xF19A99 (10 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL11 -- display list, 0xF19A90-0xF19A99 (10 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19A90-0xF19A99 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19A90:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL11:
 	.byte 0x00, 0x0a	; F19A90  op 00, 10 bytes -> handler 0xF31BA1
 	.short 0x2646		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
 	.byte 0x43, 0x17, 0x03	; +7  'C..'
 
 ; --------------------------------------------------------------------------
-; DL_F19A9A -- display list, 0xF19A9A-0xF19AA8 (15 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL14 -- display list, 0xF19A9A-0xF19AA8 (15 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19A9A-0xF19AA8 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19A9A:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL14:
 	.byte 0x02, 0x0f	; F19A9A  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2645		; +2  RAM variable
 	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
@@ -49041,12 +49154,13 @@ DL_F19A9A:
 	.byte 0x03, 0x00, 0xc3, 0x19	; +11  '....'
 
 ; --------------------------------------------------------------------------
-; DL_F19AA9 -- display list, 0xF19AA9-0xF19AB2 (10 bytes)
+; CombiEditSound_PaintMultipleMessagesPage_DL13 -- display list, 0xF19AA9-0xF19AB2 (10 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF19AA9-0xF19AB2 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F19AA9:
+; ; drawn (start operand) by CombiEditSound_PaintMultipleMessagesPage -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditSound_PaintMultipleMessagesPage_DL13:
 	.byte 0x00, 0x0a	; F19AA9  op 00, 10 bytes -> handler 0xF31BA1
 	.short 0x2645		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
@@ -49544,24 +49658,26 @@ DL_VelocityLayer:
 	.byte 0xc7, 0x00, 0x2f, 0x00, 0xc7, 0x00, 0xc1, 0x00	; +2  '../.....'
 
 ; --------------------------------------------------------------------------
-; DL_F1A019 -- display list, 0xF1A019-0xF1A02C (20 bytes)
+; ExitKey_CombiEditConfigure_DL2 -- display list, 0xF1A019-0xF1A02C (20 bytes)
 ; Interpreter: A.  2 records, framed by their own length bytes; the walk
 ;              consumes 0xF1A019-0xF1A02C exactly.
 ; Evidence: 2 records, interpreter A, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F1A019:
+; ; drawn (start operand) by ExitKey_CombiEditConfigure -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ExitKey_CombiEditConfigure_DL2:
 	.byte 0x1b, 0x0a	; F1A019  op 1B, 10 bytes -> handler 0xF31A75
 	.byte 0x8b, 0x00, 0x1f, 0x00, 0x07, 0x01, 0xc1, 0x00	; +2  '........'
 	.byte 0x1b, 0x0a	; F1A023  op 1B, 10 bytes -> handler 0xF31A75
 	.byte 0x7d, 0x00, 0xc7, 0x00, 0x14, 0x01, 0xee, 0x00	; +2  '}.......'
 
 ; --------------------------------------------------------------------------
-; DL_F1A02D -- display list, 0xF1A02D-0xF1A036 (10 bytes)
+; ExitKey_CombiEditConfigure_DL1 -- display list, 0xF1A02D-0xF1A036 (10 bytes)
 ; Interpreter: A.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF1A02D-0xF1A036 exactly.
 ; Evidence: 1 records, interpreter A, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F1A02D:
+; ; drawn (start operand) by ExitKey_CombiEditConfigure -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ExitKey_CombiEditConfigure_DL1:
 	.byte 0x1b, 0x0a	; F1A02D  op 1B, 10 bytes -> handler 0xF31A75
 	.byte 0x12, 0x01, 0x43, 0x00, 0x36, 0x01, 0xab, 0x00	; +2  '..C.6...'
 
@@ -49650,12 +49766,13 @@ DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8:
 	.byte 0x04, 0x00, 0x21, 0x1c	; +11  '..!.'
 
 ; --------------------------------------------------------------------------
-; DL_F1A137 -- display list, 0xF1A137-0xF1A14C (22 bytes)
+; CombiEditConfigure_RepaintMarkedSounds_DL4 -- display list, 0xF1A137-0xF1A14C (22 bytes)
 ; Interpreter: B.  2 records, framed by their own length bytes; the walk
 ;              consumes 0xF1A137-0xF1A14C exactly.
 ; Evidence: 2 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F1A137:
+; ; drawn (start operand) by CombiEditConfigure_RepaintMarkedSounds -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditConfigure_RepaintMarkedSounds_DL4:
 	.byte 0x08, 0x0b	; F1A137  op 08, 11 bytes -> handler 0xF31B57
 	.short 0x2643		; +2  RAM variable
 	.byte 0x0f, 0x00, 0x1b	; +4  mask, shift, swi 7 function
@@ -49666,7 +49783,7 @@ DL_F1A137:
 	.long IndexMap_F1A18D	; +7  -> IndexMap_F1A18D
 
 ; --------------------------------------------------------------------------
-; DL_F1A14D -- display list, 0xF1A14D-0xF1A157 (11 bytes)
+; CombiEditConfigure_RepaintMarkedSounds_DL3 -- display list, 0xF1A14D-0xF1A157 (11 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF1A14D-0xF1A157 exactly.
 ; Evidence: 1 record, well-formed as interpreter B by FORMAT; interpreter
@@ -49687,31 +49804,34 @@ DL_F1A137:
 ;                  0xF1A137 -- one past the last byte that run's interpreter
 ;                  reads.  No mechanism is invented for it.
 ; --------------------------------------------------------------------------
-DL_F1A14D:
+; ; drawn (start operand) by CombiEditConfigure_RepaintMarkedSounds -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditConfigure_RepaintMarkedSounds_DL3:
 	.byte 0x08, 0x0b	; F1A14D  op 08, 11 bytes -> handler 0xF31B57
 	.short 0x2768		; +2  RAM variable
 	.byte 0x03, 0x00, 0x1b	; +4  mask, shift, swi 7 function
 	.long IndexMap_F1A1D5	; +7  -> IndexMap_F1A1D5
 
 ; --------------------------------------------------------------------------
-; DL_F1A158 -- display list, 0xF1A158-0xF1A162 (11 bytes)
+; ExitKey_CombiEditConfigure_DL3 -- display list, 0xF1A158-0xF1A162 (11 bytes)
 ; Interpreter: B.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF1A158-0xF1A162 exactly.
 ; Evidence: 1 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F1A158:
+; ; drawn (start operand) by ExitKey_CombiEditConfigure -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ExitKey_CombiEditConfigure_DL3:
 	.byte 0x03, 0x0b	; F1A158  op 03, 11 bytes -> handler 0xF31B57
 	.short 0x2767		; +2  RAM variable
 	.byte 0x03, 0x00, 0x05	; +4  mask, shift, swi 7 function
 	.long IndexMap_F1A1D5	; +7  -> IndexMap_F1A1D5
 
 ; --------------------------------------------------------------------------
-; DL_F1A163 -- display list, 0xF1A163-0xF1A178 (22 bytes)
+; CombiEditConfigure_RepaintMarkedSounds_DL2 -- display list, 0xF1A163-0xF1A178 (22 bytes)
 ; Interpreter: B.  2 records, framed by their own length bytes; the walk
 ;              consumes 0xF1A163-0xF1A178 exactly.
 ; Evidence: 2 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F1A163:
+; ; drawn (start operand) by CombiEditConfigure_RepaintMarkedSounds -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditConfigure_RepaintMarkedSounds_DL2:
 	.byte 0x08, 0x0b	; F1A163  op 08, 11 bytes -> handler 0xF31B57
 	.short 0x2641		; +2  RAM variable
 	.byte 0x07, 0x00, 0x1b	; +4  mask, shift, swi 7 function
@@ -49722,22 +49842,24 @@ DL_F1A163:
 	.long IndexMap_F1A1ED	; +7  -> IndexMap_F1A1ED
 
 ; --------------------------------------------------------------------------
-; DL_F1A179 -- display list, 0xF1A179-0xF1A182 (10 bytes)
+; CombiEditConfigure_RepaintMarkedSounds_DL1 -- display list, 0xF1A179-0xF1A182 (10 bytes)
 ; Interpreter: A.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF1A179-0xF1A182 exactly.
 ; Evidence: 1 records, interpreter A, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F1A179:
+; ; drawn (start operand) by CombiEditConfigure_RepaintMarkedSounds -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditConfigure_RepaintMarkedSounds_DL1:
 	.byte 0x1b, 0x0a	; F1A179  op 1B, 10 bytes -> handler 0xF31A75
 	.byte 0x1b, 0x01, 0x22, 0x00, 0x35, 0x01, 0x2c, 0x00	; +2  '..".5.,.'
 
 ; --------------------------------------------------------------------------
-; DL_F1A183 -- display list, 0xF1A183-0xF1A18C (10 bytes)
+; CombiEditConfigure_RepaintMarkedSounds_DL5 -- display list, 0xF1A183-0xF1A18C (10 bytes)
 ; Interpreter: A.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF1A183-0xF1A18C exactly.
 ; Evidence: 1 records, interpreter A, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F1A183:
+; ; drawn (start operand) by CombiEditConfigure_RepaintMarkedSounds -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditConfigure_RepaintMarkedSounds_DL5:
 	.byte 0x05, 0x0a	; F1A183  op 05, 10 bytes -> handler 0xF31A75
 	.byte 0x1b, 0x01, 0x22, 0x00, 0x35, 0x01, 0x2c, 0x00	; +2  '..".5.,.'
 
@@ -49837,12 +49959,13 @@ StringTable_Pt1Pt2Pt3Pt4Pt5Pt6Pt7:
 	.byte 0x50, 0x33, 0x32, 0x3a   ; F1A2A9  [31]  'P32:'
 
 ; --------------------------------------------------------------------------
-; DL_F1A2AD -- display list, 0xF1A2AD-0xF1A514 (616 bytes)
+; CombiEditConfigure_DrawMidiSettings_DL -- display list, 0xF1A2AD-0xF1A514 (616 bytes)
 ; Interpreter: B.  40 records, framed by their own length bytes; the walk
 ;              consumes 0xF1A2AD-0xF1A514 exactly.
 ; Evidence: 40 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F1A2AD:
+; ; drawn (start operand) by CombiEditConfigure_DrawMidiSettings -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditConfigure_DrawMidiSettings_DL:
 	.byte 0x02, 0x0f	; F1A2AD  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
@@ -50094,12 +50217,13 @@ StringTable_F1A51F:
 	.byte 0x31, 0x36   ; F1A53D  [15]  '16'
 
 ; --------------------------------------------------------------------------
-; DL_F1A53F -- display list, 0xF1A53F-0xF1A62E (240 bytes)
+; CombiEditConfigure_DrawKeyLayers_DL -- display list, 0xF1A53F-0xF1A62E (240 bytes)
 ; Interpreter: B.  16 records, framed by their own length bytes; the walk
 ;              consumes 0xF1A53F-0xF1A62E exactly.
 ; Evidence: 16 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F1A53F:
+; ; drawn (start operand) by CombiEditConfigure_DrawKeyLayers -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditConfigure_DrawKeyLayers_DL:
 	.byte 0x02, 0x0f	; F1A53F  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
@@ -50328,12 +50452,13 @@ MidiNoteNames:
 	.byte 0x47, 0x20, 0x38   ; F1A7AC  note 127  G8  
 
 ; --------------------------------------------------------------------------
-; DL_F1A7AF -- display list, 0xF1A7AF-0xF1A84E (160 bytes)
+; CombiEditConfigure_DrawVelocityLayers_DL -- display list, 0xF1A7AF-0xF1A84E (160 bytes)
 ; Interpreter: B.  16 records, framed by their own length bytes; the walk
 ;              consumes 0xF1A7AF-0xF1A84E exactly.
 ; Evidence: 16 records, interpreter B, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F1A7AF:
+; ; drawn (start operand) by CombiEditConfigure_DrawVelocityLayers -- derivative name (notes/wsa1_display_list_drawer_names.py)
+CombiEditConfigure_DrawVelocityLayers_DL:
 	.byte 0x00, 0x0a	; F1A7AF  op 00, 10 bytes -> handler 0xF31BA1
 	.short 0x2640		; +2  RAM variable
 	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
@@ -50439,12 +50564,13 @@ DL_F1A859:
 	.byte 0x17, 0x00, 0x7c, 0x00, 0x28, 0x01, 0xc6, 0x00	; +2  '..|.(...'
 
 ; --------------------------------------------------------------------------
-; DL_F1A8EF -- display list, 0xF1A8EF-0xF1A8F8 (10 bytes)
+; ExitKey_Effect2OutputConflict_DL -- display list, 0xF1A8EF-0xF1A8F8 (10 bytes)
 ; Interpreter: A.  1 record, framed by their own length bytes; the walk
 ;              consumes 0xF1A8EF-0xF1A8F8 exactly.
 ; Evidence: 1 records, interpreter A, named by its call site's thunk
 ; --------------------------------------------------------------------------
-DL_F1A8EF:
+; ; drawn (start operand) by ExitKey_Effect2OutputConflict -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ExitKey_Effect2OutputConflict_DL:
 	.byte 0x1b, 0x0a	; F1A8EF  op 1B, 10 bytes -> handler 0xF31A75
 	.byte 0x15, 0x00, 0x7a, 0x00, 0x2c, 0x01, 0xca, 0x00	; +2  '..z.,...'
 
@@ -55177,13 +55303,15 @@ DL_F2808C:
 	.short 0x009D
 	.short 0x0117
 	.short 0x00A9
-DL_F28331:
+; ; drawn (start operand) by Paint_SoundMode_DeadCopy -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SoundMode_DeadCopy_DL:
 	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
 	.short 0x0006
 	.short 0x0021
 	.short 0x0138
 	.short 0x0072
-DL_F2833B:
+; ; drawn (start operand) by Paint_SoundMode -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SoundMode_DL:
 	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
 	.short 0x0036
 	.short 0x008D
@@ -55218,13 +55346,15 @@ DL_Drawbar:
 	.short 0x001E
 	.short 0x004C
 	.short 0x002E
-DL_F28373:
+; ; drawn (start operand) by Paint_Drawbar -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_Drawbar_DL1:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0000
 	.short 0x001E
 	.short 0x004F
 	.short 0x0031
-DL_F2837D:
+; ; drawn (start operand) by Paint_Drawbar -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_Drawbar_DL2:
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long Data_F2843D
 	.short 0x05F1
@@ -55675,7 +55805,8 @@ DLText_PanL64CtrR63:
 ; still `.incbin`.  The layout below is that description, emitted.
 ; Verify: python3 notes/gen_prom_b_res3xx_spans.py --selftest
 ; ------------------------------------------------------------------
-DL_F286A2:
+; ; drawn (start operand) by C0mbinati0nM0de_RepaintPage1Fields -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_RepaintPage1Fields_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short UI_DrawScratch+5	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
@@ -56180,7 +56311,8 @@ DL_F28930:
 	.short 0x0DB1
 	.short 0x0003
 	.short 0x0018
-DL_F28938:
+; ; drawn (start operand) by Paint_C0mbinati0nM0dePage1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_C0mbinati0nM0dePage1_DL1:
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long Data_F2843D
 	.short 0x05F1
@@ -56768,7 +56900,8 @@ DL_F28938:
 	.short 0x0024
 	.short 0x0135
 	.short 0x006F
-DL_F28DF3:
+; ; drawn (start operand) by Paint_C0mbinati0nM0dePage1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_C0mbinati0nM0dePage1_DL2:
 	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
 	.short 0x002E
 	.short 0x0083
@@ -56789,7 +56922,8 @@ DL_F28DF3:
 	.short 0x0097
 	.short 0x0112
 	.short 0x00A4
-DL_F28E1B:
+; ; drawn (start operand) by Paint_C0mbinati0nM0dePage1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_C0mbinati0nM0dePage1_DL3:
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long Data_F2843D
 	.short 0x05F1
@@ -57154,7 +57288,8 @@ DL_F28E1B:
 	.short 0x0024
 	.short 0x0135
 	.short 0x006F
-DL_F29121:
+; ; drawn (start operand) by Paint_C0mbinati0nM0dePage1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_C0mbinati0nM0dePage1_DL4:
 	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
 	.short 0x0036
 	.short 0x008D
@@ -57866,19 +58001,22 @@ DL_F29686:
 	.short 0x009A
 	.short 0x0025
 	.short 0x00A2
-DL_F296AE:
+; ; drawn (start operand) by C0mbinati0nM0de_HighlightSoundRow -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_HighlightSoundRow_DL:
 	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
 	.short 0x0007
 	.short 0x0021
 	.short 0x0025
 	.short 0x0029
-DL_F296B8:
+; ; drawn (start operand) by C0mbinati0nM0de_HighlightIntRow -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_HighlightIntRow_DL:
 	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
 	.short 0x0007
 	.short 0x0048
 	.short 0x0025
 	.short 0x0050
-DL_F296C2:
+; ; drawn (start operand) by C0mbinati0nM0de_HighlightPanRow -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_HighlightPanRow_DL:
 	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
 	.short 0x0007
 	.short 0x006F
@@ -57994,7 +58132,8 @@ DL_F29765:
 	.long 0x00002661	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0F71	; +0x0D -> IX
-DL_F29783:
+; ; drawn (start operand) by Paint_C0mbinati0nM0dePage2Sound1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_C0mbinati0nM0dePage2Sound1_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x76DF	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -58121,7 +58260,8 @@ DLText_PartCodes:
 ;   entered at: 0xF29863, 0xF29880, 0xF2989D, 0xF298BA, 0xF298D7, 0xF298F4, 0xF29911, 0xF2992E
 ;   ends used:  0xF29880, 0xF2989D, 0xF298BA, 0xF298D7, 0xF298F4, 0xF29911, 0xF2992E, 0xF29944
 ; ------------------------------------------------------------------
-DL_F29863:
+; ; drawn (start operand) by Paint_C0mbinati0nM0dePage2Sound2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_C0mbinati0nM0dePage2Sound2_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x771F	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58139,7 +58279,8 @@ DL_F29863:
 	.short 0x0034	; +0x07 -> (0x2530)
 	.short 0x003A	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F29880:
+; ; drawn (start operand) by Paint_C0mbinati0nM0dePage2Sound3 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_C0mbinati0nM0dePage2Sound3_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x775F	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58157,7 +58298,8 @@ DL_F29880:
 	.short 0x005C	; +0x07 -> (0x2530)
 	.short 0x003A	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F2989D:
+; ; drawn (start operand) by Paint_C0mbinati0nM0dePage2Sound4 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_C0mbinati0nM0dePage2Sound4_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x779F	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58175,7 +58317,8 @@ DL_F2989D:
 	.short 0x0084	; +0x07 -> (0x2530)
 	.short 0x003A	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F298BA:
+; ; drawn (start operand) by Paint_C0mbinati0nM0dePage2Sound5 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_C0mbinati0nM0dePage2Sound5_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x77DF	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58193,7 +58336,8 @@ DL_F298BA:
 	.short 0x00AC	; +0x07 -> (0x2530)
 	.short 0x003A	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F298D7:
+; ; drawn (start operand) by Paint_C0mbinati0nM0dePage2Sound6 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_C0mbinati0nM0dePage2Sound6_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x781F	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58211,7 +58355,8 @@ DL_F298D7:
 	.short 0x00D4	; +0x07 -> (0x2530)
 	.short 0x003A	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F298F4:
+; ; drawn (start operand) by Paint_C0mbinati0nM0dePage2Sound7 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_C0mbinati0nM0dePage2Sound7_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x785F	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58229,7 +58374,8 @@ DL_F298F4:
 	.short 0x00FC	; +0x07 -> (0x2530)
 	.short 0x003A	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F29911:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart8Sound -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart8Sound_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x789F	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58247,7 +58393,8 @@ DL_F29911:
 	.short 0x0124	; +0x07 -> (0x2530)
 	.short 0x003A	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F2992E:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart1Int -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart1Int_DL:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x76AF	; +0x02 source variable, 16-bit address
 	.byte 0x20	; +0x04 AND mask
@@ -58301,7 +58448,8 @@ DLTable_F29954:
 ;   entered at: 0xF29964
 ;   ends used:  0xF2997A
 ; ------------------------------------------------------------------
-DL_F29964:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart2Int -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart2Int_DL:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x76EF	; +0x02 source variable, 16-bit address
 	.byte 0x20	; +0x04 AND mask
@@ -58355,7 +58503,8 @@ DLTable_F2998A:
 ;   entered at: 0xF2999A
 ;   ends used:  0xF299B0
 ; ------------------------------------------------------------------
-DL_F2999A:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart3Int -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart3Int_DL:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x772F	; +0x02 source variable, 16-bit address
 	.byte 0x20	; +0x04 AND mask
@@ -58409,7 +58558,8 @@ DLTable_F299C0:
 ;   entered at: 0xF299D0
 ;   ends used:  0xF299E6
 ; ------------------------------------------------------------------
-DL_F299D0:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart4Int -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart4Int_DL:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x776F	; +0x02 source variable, 16-bit address
 	.byte 0x20	; +0x04 AND mask
@@ -58463,7 +58613,8 @@ DLTable_F299F6:
 ;   entered at: 0xF29A06
 ;   ends used:  0xF29A1C
 ; ------------------------------------------------------------------
-DL_F29A06:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart5Int -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart5Int_DL:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x77AF	; +0x02 source variable, 16-bit address
 	.byte 0x20	; +0x04 AND mask
@@ -58517,7 +58668,8 @@ DLTable_F29A2C:
 ;   entered at: 0xF29A3C
 ;   ends used:  0xF29A52
 ; ------------------------------------------------------------------
-DL_F29A3C:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart6Int -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart6Int_DL:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x77EF	; +0x02 source variable, 16-bit address
 	.byte 0x20	; +0x04 AND mask
@@ -58571,7 +58723,8 @@ DLTable_F29A62:
 ;   entered at: 0xF29A72
 ;   ends used:  0xF29A88
 ; ------------------------------------------------------------------
-DL_F29A72:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart7Int -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart7Int_DL:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x782F	; +0x02 source variable, 16-bit address
 	.byte 0x20	; +0x04 AND mask
@@ -58625,7 +58778,8 @@ DLTable_F29A98:
 ;   entered at: 0xF29AA8
 ;   ends used:  0xF29ABE
 ; ------------------------------------------------------------------
-DL_F29AA8:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart8Int -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart8Int_DL:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x786F	; +0x02 source variable, 16-bit address
 	.byte 0x20	; +0x04 AND mask
@@ -58679,7 +58833,8 @@ DLTable_F29ACE:
 ;   entered at: 0xF29ADE, 0xF29AEF, 0xF29B00, 0xF29B11, 0xF29B22, 0xF29B33, 0xF29B44, 0xF29B55, 0xF29B66, 0xF29B72, 0xF29B7E, 0xF29B8A, 0xF29B96, 0xF29BA2, 0xF29BAE, 0xF29BBA
 ;   ends used:  0xF29AEF, 0xF29B00, 0xF29B11, 0xF29B22, 0xF29B33, 0xF29B44, 0xF29B55, 0xF29B66, 0xF29B72, 0xF29B7E, 0xF29B8A, 0xF29B96, 0xF29BA2, 0xF29BAE, 0xF29BBA, 0xF29BC6
 ; ------------------------------------------------------------------
-DL_F29ADE:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart1Pan -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart1Pan_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x76AA	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58689,7 +58844,8 @@ DL_F29ADE:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x000A	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
-DL_F29AEF:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart2Pan -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart2Pan_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x76EA	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58699,7 +58855,8 @@ DL_F29AEF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0032	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
-DL_F29B00:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart3Pan -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart3Pan_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x772A	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58709,7 +58866,8 @@ DL_F29B00:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x005A	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
-DL_F29B11:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart4Pan -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart4Pan_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x776A	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58719,7 +58877,8 @@ DL_F29B11:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0082	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
-DL_F29B22:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart5Pan -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart5Pan_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x77AA	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58729,7 +58888,8 @@ DL_F29B22:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x00AA	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
-DL_F29B33:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart6Pan -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart6Pan_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x77EA	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58739,7 +58899,8 @@ DL_F29B33:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x00D2	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
-DL_F29B44:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart7Pan -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart7Pan_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x782A	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58749,7 +58910,8 @@ DL_F29B44:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x00FA	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
-DL_F29B55:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart8Pan -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart8Pan_DL:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x786A	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58759,7 +58921,8 @@ DL_F29B55:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0122	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
-DL_F29B66:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart1Vol -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart1Vol_DL:
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
 	.short 0x76A5	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58768,7 +58931,8 @@ DL_F29B66:
 	.short 0x000A	; +0x07 -> (0x2530)
 	.short 0x00A7	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F29B72:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart2Vol -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart2Vol_DL:
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
 	.short 0x76E5	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58777,7 +58941,8 @@ DL_F29B72:
 	.short 0x0032	; +0x07 -> (0x2530)
 	.short 0x00A7	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F29B7E:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart3Vol -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart3Vol_DL:
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
 	.short 0x7725	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58786,7 +58951,8 @@ DL_F29B7E:
 	.short 0x005A	; +0x07 -> (0x2530)
 	.short 0x00A7	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F29B8A:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart4Vol -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart4Vol_DL:
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
 	.short 0x7765	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58795,7 +58961,8 @@ DL_F29B8A:
 	.short 0x0082	; +0x07 -> (0x2530)
 	.short 0x00A7	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F29B96:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart5Vol -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart5Vol_DL:
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
 	.short 0x77A5	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58804,7 +58971,8 @@ DL_F29B96:
 	.short 0x00AA	; +0x07 -> (0x2530)
 	.short 0x00A7	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F29BA2:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart6Vol -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart6Vol_DL:
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
 	.short 0x77E5	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58813,7 +58981,8 @@ DL_F29BA2:
 	.short 0x00D2	; +0x07 -> (0x2530)
 	.short 0x00A7	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F29BAE:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart7Vol -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart7Vol_DL:
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
 	.short 0x7825	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -58822,7 +58991,8 @@ DL_F29BAE:
 	.short 0x00FA	; +0x07 -> (0x2530)
 	.short 0x00A7	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
-DL_F29BBA:
+; ; drawn (start operand) by C0mbinati0nM0de_DrawPart8Vol -- derivative name (notes/wsa1_display_list_drawer_names.py)
+C0mbinati0nM0de_DrawPart8Vol_DL:
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
 	.short 0x7865	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -59783,7 +59953,8 @@ BITMAP_ICON_F29BC6_16:
 ; from 0xF2AC50 lands with ZERO DRIFT on 0xF2ADD2, where the already-
 ; converted DL_CombinationGroupMenuReMap1 begins.
 ; ------------------------------------------------------------------
-DL_F2AC50:
+; ; drawn (start operand) by Draw_CombinationGroupMenuReMap1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_CombinationGroupMenuReMap1_DL:
 	.byte 0x1C, 0x1C	; op 1C, 28 bytes -> handler 0xF31A52
 	.short 0x0035
 	.short 0x0005
@@ -60182,7 +60353,8 @@ DL_CombinationGroupMenuReMap1:
 ; and every opcode resolves to a documented interpreter-A handler.
 ; notes/gen_prom_b_selfframing_incbin_module.py
 ; ------------------------------------------------------------------
-DL_F2AF81:
+; ; drawn (start operand) by Draw_SoundGroupMenuReMap1ReMap2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_SoundGroupMenuReMap1ReMap2_DL:
 	.byte 0x1C, 0x0B	; op 1C, 11 bytes -> handler 0xF31A52
 	.short 0x0055
 	.short 0x0005
@@ -61388,13 +61560,15 @@ DL_GroupCombiDisplayHoldGr0up:
 ;   entered at: 0xF2BA0C, 0xF2BA16, 0xF2BA20, 0xF2BA50, 0xF2BA5A, 0xF2BA64, 0xF2BA73, 0xF2BB03
 ;   ends used:  0xF2BA16, 0xF2BA20, 0xF2BA50, 0xF2BA5A, 0xF2BA64, 0xF2BA73, 0xF2BAD3, 0xF2BB03, 0xF2BB0D
 ; ------------------------------------------------------------------
-DL_F2BA0C:
+; ; drawn (start operand) by DisplayHold_DrawHoldHighlight -- derivative name (notes/wsa1_display_list_drawer_names.py)
+DisplayHold_DrawHoldHighlight_DL1:
 	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
 	.short 0x00FE
 	.short 0x00D4
 	.short 0x0139
 	.short 0x00EC
-DL_F2BA16:
+; ; drawn (start operand) by DisplayHold_DrawHoldHighlight -- derivative name (notes/wsa1_display_list_drawer_names.py)
+DisplayHold_DrawHoldHighlight_DL2:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x00FE
 	.short 0x00D4
@@ -61430,13 +61604,15 @@ DL_Drum:
 	.short 0x00E1
 	.short 0x007A
 	.short 0x00EC
-DL_F2BA50:
+; ; drawn (start operand) by Paint_Drum -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_Drum_DL1:
 	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
 	.short 0x0057
 	.short 0x00E1
 	.short 0x0079
 	.short 0x00EC
-DL_F2BA5A:
+; ; drawn (start operand) by Paint_Drum -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_Drum_DL2:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0057
 	.short 0x00E1
@@ -61662,13 +61838,15 @@ DL_Usr1:
 	.short 0x00E1
 	.short 0x002A
 	.short 0x00EC
-DL_F2BD48:
+; ; drawn (start operand) by BankLegend_DrawUser -- derivative name (notes/wsa1_display_list_drawer_names.py)
+BankLegend_DrawUser_DL3:
 	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
 	.short 0x0007
 	.short 0x00E1
 	.short 0x0029
 	.short 0x00EC
-DL_F2BD52:
+; ; drawn (start operand) by BankLegend_DrawUser -- derivative name (notes/wsa1_display_list_drawer_names.py)
+BankLegend_DrawUser_DL2:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0007
 	.short 0x00E1
@@ -61709,13 +61887,15 @@ DL_Usr2:
 	.short 0x00E1
 	.short 0x0052
 	.short 0x00EC
-DL_F2BD96:
+; ; drawn (start operand) by BankLegend_DrawUser -- derivative name (notes/wsa1_display_list_drawer_names.py)
+BankLegend_DrawUser_DL1:
 	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
 	.short 0x002F
 	.short 0x00E1
 	.short 0x0051
 	.short 0x00EC
-DL_F2BDA0:
+; ; drawn (start operand) by BankLegend_DrawUser -- derivative name (notes/wsa1_display_list_drawer_names.py)
+BankLegend_DrawUser_DL4:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x002F
 	.short 0x00E1
@@ -61726,7 +61906,8 @@ DL_F2BDA0:
 	.short 0x00E1
 	.short 0x00A1
 	.short 0x00EC
-DL_F2BDB4:
+; ; drawn (start operand) by GroupCombiDisplayHold_DrawNumberRange -- derivative name (notes/wsa1_display_list_drawer_names.py)
+GroupCombiDisplayHold_DrawNumberRange_DL2:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short UI_DrawScratch+2	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
@@ -61735,7 +61916,8 @@ DL_F2BDB4:
 	.long 0x00002661	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D12	; +0x0D -> IX
-DL_F2BDC3:
+; ; drawn (start operand) by GroupCombiDisplayHold_DrawNumberRange -- derivative name (notes/wsa1_display_list_drawer_names.py)
+GroupCombiDisplayHold_DrawNumberRange_DL1:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short UI_DrawScratch+2	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
@@ -61744,7 +61926,8 @@ DL_F2BDC3:
 	.long 0x00002661	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D16	; +0x0D -> IX
-DL_F2BDD2:
+; ; drawn (start operand) by GroupCombiDisplayHold_DrawNumberRange -- derivative name (notes/wsa1_display_list_drawer_names.py)
+GroupCombiDisplayHold_DrawNumberRange_DL3:
 	.byte 0x06, 0x05	; op 06, 5 bytes -> handler 0xF31A3A
 	.short 0x1D15
 	.ascii "-"
@@ -61763,7 +61946,8 @@ DL_F2BDD2:
 	.short 0x00B7
 	.short 0x004D
 	.short 0x00C5
-DL_F2BDF5:
+; ; drawn (start operand) by GroupDisplayHold_ClearNameSlots -- derivative name (notes/wsa1_display_list_drawer_names.py)
+GroupDisplayHold_ClearNameSlots_DL:
 	.byte 0x0E, 0x08	; op 0E, 8 bytes -> handler 0xF31A9F
 	.short 0x05A3
 	.short 0x0010
@@ -61981,7 +62165,8 @@ DL_SineWaveCheckCheckMode1SineWaveRomCheck:
 ;   and slot 0xF42E0C is T_DisplayListB_RunOne_Stack -- one record, no end
 ;   pointer, so no framing walk reaches this byte from anywhere.
 ; ------------------------------------------------------------------
-DLRec_F2C9C2:
+; ; drawn (start operand) by Paint_SineWaveCheckMode -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SineWaveCheckMode_DL1:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x2881	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
@@ -62009,7 +62194,8 @@ DLArray_F2C9CD:
 ; ------------------------------------------------------------------
 ; 0xF2CA0D-0xF2CA14 -- 1 records, 8 bytes -- interpreter A
 ; ------------------------------------------------------------------
-DL_F2CA0D:
+; ; drawn (start operand) by Paint_SineWaveCheckMode -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SineWaveCheckMode_DL3:
 	.byte 0x0E, 0x08	; op 0E, 8 bytes -> handler 0xF31A9F
 	.short 0x0645
 	.short 0x001E
@@ -62021,7 +62207,8 @@ DL_F2CA0D:
 ;   and slot 0xF42E0C is T_DisplayListB_RunOne_Stack -- one record, no end
 ;   pointer, so no framing walk reaches this byte from anywhere.
 ; ------------------------------------------------------------------
-DLRec_F2CA15:
+; ; drawn (start operand) by Paint_SineWaveCheckMode -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SineWaveCheckMode_DL2:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x76A7	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
@@ -62038,7 +62225,8 @@ DLRec_F2CA15:
 ;   and slot 0xF42E0C is T_DisplayListB_RunOne_Stack -- one record, no end
 ;   pointer, so no framing walk reaches this byte from anywhere.
 ; ------------------------------------------------------------------
-DLRec_F2CA26:
+; ; drawn (start operand) by Paint_SineWaveCheckMode -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SineWaveCheckMode_DL4:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x76A8	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
@@ -62055,7 +62243,8 @@ DLRec_F2CA26:
 ;   and slot 0xF42E0C is T_DisplayListB_RunOne_Stack -- one record, no end
 ;   pointer, so no framing walk reaches this byte from anywhere.
 ; ------------------------------------------------------------------
-DLRec_F2CA37:
+; ; drawn (start operand) by Paint_SineWaveCheckMode -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SineWaveCheckMode_DL5:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x76A9	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
@@ -68375,7 +68564,8 @@ DL_F3294B:
 	.long DLText_CtrLRRdm	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1C52	; +0x0D -> IX
-DL_F32987:
+; ; drawn (start operand) by SoundEditToneLayerPanning_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditToneLayerPanning_RepaintField_DL2:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x27A3	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
@@ -68570,7 +68760,8 @@ DLText_NonLegChord:
 ;   entered at: 0xF32A7D
 ;   ends used:  0xF32A87
 ; ------------------------------------------------------------------
-DL_F32A7D:
+; ; drawn (start operand) by SoundEditToneLayerPanning_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditToneLayerPanning_RepaintField_DL1:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x000D
 	.short 0x004C
@@ -68638,7 +68829,8 @@ DLBoxes_F32AAF:
 ;   entered at: 0xF32AD7
 ;   ends used:  0xF32B1E
 ; ------------------------------------------------------------------
-DL_F32AD7:
+; ; drawn (start operand) by SoundEditToneLayerKeyLayer_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditToneLayerKeyLayer_Paint_DL2:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -68706,8 +68898,8 @@ Data_F32B1E:
 ;     5-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x2A, 0xF3, 0x00	; F32B27  top 3 bytes of the entry at F32B26 = 0x00F32AD7
-	.long	DL_F32AD7 + 0x1E	; F32B2A  entry 3
-	.long	DL_F32AD7 + 0x2D	; F32B2E  entry 4
+	.long	SoundEditToneLayerKeyLayer_Paint_DL2 + 0x1E	; F32B2A  entry 3
+	.long	SoundEditToneLayerKeyLayer_Paint_DL2 + 0x2D	; F32B2E  entry 4
 
 ; === END COVER-R1 0xF32B1E-0xF32B32 ===
 
@@ -68763,7 +68955,8 @@ Data_F32B3C:
 ;   entered at: 0xF32B64
 ;   ends used:  0xF32B97
 ; ------------------------------------------------------------------
-DL_F32B64:
+; ; drawn (start operand) by SoundEditToneLayerVelocityLayer_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditToneLayerVelocityLayer_Paint_DL2:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
 	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -68832,11 +69025,11 @@ DL_F32B64:
 ;   (notes/promb-2026-09-25/dl_pointer_tables.py).
 ; --------------------------------------------------------------------------
 DLRecordPtrs_F32B97:
-	.long	DL_F32B64 + 0x28	; F32B97  [0]
-	.long	DL_F32B64 + 0xA	; F32B9B  [1]
-	.long	DL_F32B64	; F32B9F  [2]
-	.long	DL_F32B64 + 0x14	; F32BA3  [3]
-	.long	DL_F32B64 + 0x1E	; F32BA7  [4]
+	.long	SoundEditToneLayerVelocityLayer_Paint_DL2 + 0x28	; F32B97  [0]
+	.long	SoundEditToneLayerVelocityLayer_Paint_DL2 + 0xA	; F32B9B  [1]
+	.long	SoundEditToneLayerVelocityLayer_Paint_DL2	; F32B9F  [2]
+	.long	SoundEditToneLayerVelocityLayer_Paint_DL2 + 0x14	; F32BA3  [3]
+	.long	SoundEditToneLayerVelocityLayer_Paint_DL2 + 0x1E	; F32BA7  [4]
 
 ; === END COVER-R1 0xF32B97-0xF32BAB ===
 
@@ -68845,7 +69038,8 @@ DLRecordPtrs_F32B97:
 ;   entered at: 0xF32BAB
 ;   ends used:  0xF32C02
 ; ------------------------------------------------------------------
-DL_F32BAB:
+; ; drawn (start operand) by Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_DL2:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
 	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -68934,10 +69128,10 @@ Data_F32C02:
 ;     bytes of that entry inside the span stay `.byte`
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x2B, 0xF3, 0x00	; F32C0F  top 3 bytes of the entry at F32C0E = 0x00F32BD0
-	.long	DL_F32BAB + 0x30	; F32C12  entry 4
-	.long	DL_F32BAB + 0x3B	; F32C16  entry 5
-	.long	DL_F32BAB + 0x46	; F32C1A  entry 6
-	.long	DL_F32BAB + 0x46	; F32C1E  entry 7
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_DL2 + 0x30	; F32C12  entry 4
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_DL2 + 0x3B	; F32C16  entry 5
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_DL2 + 0x46	; F32C1A  entry 6
+	.long	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_DL2 + 0x46	; F32C1E  entry 7
 	.byte	0xF1, 0x2B, 0xF3	; F32C22  past the array: 0xF1 trailing bytes
 
 ; --------------------------------------------------------------------------
@@ -69093,7 +69287,8 @@ DL_1st2nd:
 	.short 0x00DC
 	.short 0x00F3
 	.short 0x00E8
-DL_F32D2C:
+; ; drawn (start operand) by SoundEditController_PaintPage1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditController_PaintPage1_DL:
 	.byte 0x06, 0x0B	; op 06, 11 bytes -> handler 0xF31A3A
 	.short 0x0110
 	.ascii "PAGE1/2"
@@ -69514,7 +69709,7 @@ ControllerSwitchStateText:
 ; Read by: 13 interpreter-B op-0x02 records (DL_F32F43 and on: mask 0x3F,
 ;   width 13 at +0x0B) and UiText_CopyLabel13_To_22F0 (0xF5B800: `and
 ;   A,0x3F / mul A,13 / ld XIY,this` then a 13-byte copy to 0x22F0).  The
-;   0x3F mask is the 64-entry bound; 64 x 13 ends exactly at DL_F33362.
+;   0x3F mask is the 64-entry bound; 64 x 13 ends exactly at SoundEditController_RepaintFieldPage1_DL1.
 ; --------------------------------------------------------------------------
 ControllerDestinationNames:
 	.ascii	"-------------"	; F33022  [0]
@@ -69589,7 +69784,8 @@ ControllerDestinationNames:
 ;   entered at: 0xF33362, 0xF3338A
 ;   ends used:  0xF3338A, 0xF33394
 ; ------------------------------------------------------------------
-DL_F33362:
+; ; drawn (start operand) by SoundEditController_RepaintFieldPage1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditController_RepaintFieldPage1_DL1:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x000B
 	.short 0x0044
@@ -69610,7 +69806,8 @@ DL_F33362:
 	.short 0x0069
 	.short 0x0134
 	.short 0x007E
-DL_F3338A:
+; ; drawn (start operand) by SoundEditController_RepaintFieldPage1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditController_RepaintFieldPage1_DL2:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0015
 	.short 0x0097
@@ -69795,7 +69992,8 @@ DLBoxes_F334AE:
 ;   entered at: 0xF334FE
 ;   ends used:  0xF33508
 ; ------------------------------------------------------------------
-DL_F334FE:
+; ; drawn (start operand) by SoundEditController_RepaintFieldPage2 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditController_RepaintFieldPage2_DL:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x004C
 	.short 0x0024
@@ -70306,7 +70504,8 @@ DLRecordPtrs_F3380E:
 ;   entered at: 0xF33836
 ;   ends used:  0xF33840
 ; ------------------------------------------------------------------
-DL_F33836:
+; ; drawn (start operand) by SoundEditAmpLevel1_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditAmpLevel1_RepaintField_DL:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x000D
 	.short 0x004C
@@ -70357,7 +70556,8 @@ DLBoxes_F33840:
 ;   entered at: 0xF33858
 ;   ends used:  0xF338A5
 ; ------------------------------------------------------------------
-DL_F33858:
+; ; drawn (start operand) by SoundEditAmpEnvelope1_Paint -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditAmpEnvelope1_Paint_DL2:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x20	; +0x04 AND mask
@@ -70440,8 +70640,8 @@ Data_F338A5:
 ;     9-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x38, 0xF3, 0x00	; F338BE  top 3 bytes of the entry at F338BD = 0x00F338D3
-	.long	DL_F33858 + 0x37	; F338C1  entry 7
-	.long	DL_F33858 + 0x42	; F338C5  entry 8
+	.long	SoundEditAmpEnvelope1_Paint_DL2 + 0x37	; F338C1  entry 7
+	.long	SoundEditAmpEnvelope1_Paint_DL2 + 0x42	; F338C5  entry 8
 
 ; === END COVER-R1 0xF338A5-0xF338C9 ===
 
@@ -70450,7 +70650,8 @@ Data_F338A5:
 ;   entered at: 0xF338C9, 0xF338DD, 0xF338EB, 0xF338F6
 ;   ends used:  0xF338DD, 0xF338EB, 0xF338F6, 0xF3391E
 ; ------------------------------------------------------------------
-DL_F338C9:
+; ; drawn (start operand) by Draw_Keyoff -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Keyoff_DL1:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
 	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -70465,7 +70666,8 @@ DL_F338C9:
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x227A	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
-DL_F338DD:
+; ; drawn (start operand) by Draw_Keyoff -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_Keyoff_DL2:
 	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
 	.short 0x2274
 	.ascii " --"
@@ -70678,7 +70880,8 @@ Data_F33A1B:
 ;   entered at: 0xF33A3F
 ;   ends used:  0xF33A49
 ; ------------------------------------------------------------------
-DL_F33A3F:
+; ; drawn (start operand) by SoundEditModelingDriverWaveform_RepaintField -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SoundEditModelingDriverWaveform_RepaintField_DL:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x003D
 	.short 0x0076
@@ -70724,7 +70927,8 @@ Data_F33A49:
 ;   entered at: 0xF33A71, 0xF33B09, 0xF33B81
 ;   ends used:  0xF33ABD, 0xF33B45, 0xF33B8C
 ; ------------------------------------------------------------------
-DL_F33A71:
+; ; drawn (start operand) by Draw_ToneTemplateLevelKeyTune -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_ToneTemplateLevelKeyTune_DL3:
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
 	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -70829,7 +71033,8 @@ DL_F33A71:
 	.short 0x00B7	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
-DL_F33B09:
+; ; drawn (start operand) by Draw_ToneTemplateLevelKeyTune -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_ToneTemplateLevelKeyTune_DL4:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short ModelingPage_Fields+14	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
@@ -70894,7 +71099,8 @@ DL_F33B09:
 	.long 0x00002320	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x1C50	; +0x0D -> IX
-DL_F33B81:
+; ; drawn (start operand) by Draw_ToneTemplateLevelKeyTune -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Draw_ToneTemplateLevelKeyTune_DL5:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x27A3	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
@@ -70933,14 +71139,14 @@ Data_F33B8C:
 ;     19-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x3A, 0xF3, 0x00	; F33BB5  top 3 bytes of the entry at F33BB4 = 0x00F33AD6
-	.long	DL_F33A71 + 0x72	; F33BB8  entry 11
-	.long	DL_F33A71 + 0x7E	; F33BBC  entry 12
-	.long	DL_F33A71 + 0x8B	; F33BC0  entry 13
-	.long	DL_F33B09	; F33BC4  entry 14
-	.long	DL_F33B09 + 0x1E	; F33BC8  entry 15
-	.long	DL_F33B09 + 0x3C	; F33BCC  entry 16
-	.long	DL_F33B09 + 0x5A	; F33BD0  entry 17
-	.long	DL_F33B81	; F33BD4  entry 18
+	.long	Draw_ToneTemplateLevelKeyTune_DL3 + 0x72	; F33BB8  entry 11
+	.long	Draw_ToneTemplateLevelKeyTune_DL3 + 0x7E	; F33BBC  entry 12
+	.long	Draw_ToneTemplateLevelKeyTune_DL3 + 0x8B	; F33BC0  entry 13
+	.long	Draw_ToneTemplateLevelKeyTune_DL4	; F33BC4  entry 14
+	.long	Draw_ToneTemplateLevelKeyTune_DL4 + 0x1E	; F33BC8  entry 15
+	.long	Draw_ToneTemplateLevelKeyTune_DL4 + 0x3C	; F33BCC  entry 16
+	.long	Draw_ToneTemplateLevelKeyTune_DL4 + 0x5A	; F33BD0  entry 17
+	.long	Draw_ToneTemplateLevelKeyTune_DL5	; F33BD4  entry 18
 
 ; === END COVER-R1 0xF33B8C-0xF33BD8 ===
 
@@ -78647,7 +78853,8 @@ DL_F3987A:
 ;   entered at: 0xF3998E
 ;   ends used:  0xF399C1
 ; ------------------------------------------------------------------
-DL_F3998E:
+; ; drawn (start operand) by Paint_SongClear -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SongClear_DL3:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short 0x0000	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
@@ -78799,7 +79006,8 @@ DL_SongClearKbSongS0ngAll:
 	.short 0x0094
 	.short 0x0133
 	.short 0x00A3
-DL_F39A73:
+; ; drawn (start operand) by Paint_SongClear -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SongClear_DL1:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0027
 	.short 0x0044
@@ -78979,13 +79187,15 @@ DL_SongClearKbSongAttenti0n:
 	.short 0x0061
 	.short 0x0110
 	.short 0x00DC
-DL_F39BF8:
+; ; drawn (start operand) by Paint_SongClear -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SongClear_DL4:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0011
 	.short 0x0028
 	.short 0x010C
 	.short 0x0051
-DL_F39C02:
+; ; drawn (start operand) by Paint_SongClear -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SongClear_DL6:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short 0x0000	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
@@ -79973,7 +80183,8 @@ DL_TrackAssignPresetsTechnicsSetUp1116:
 	.short 0x00DA
 	.short 0x00E3
 	.short 0x00E9
-DL_F3A40D:
+; ; drawn (start operand) by Paint_TrackAssignPresets -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_TrackAssignPresets_DL2:
 	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
 	.short 0x001E
 	.short 0x0087
@@ -79999,7 +80210,8 @@ DL_All:
 	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
 	.short 0x15BC
 	.ascii "  ALL "
-DL_F3A429:
+; ; drawn (start operand) by Paint_TrackAssignPresets -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_TrackAssignPresets_DL1:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
 	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -80285,7 +80497,8 @@ DLTable_F3A58A:
 ;   entered at: 0xF3A5AA, 0xF3A5E9, 0xF3A66E, 0xF3A6AB
 ;   ends used:  0xF3A5E9, 0xF3A66E, 0xF3A6AB, 0xF3A6CE, 0xF3A6D9
 ; ------------------------------------------------------------------
-DL_F3A5AA:
+; ; drawn (start operand) by Paint_TrackMerge -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_TrackMerge_DL:
 	.byte 0x06, 0x07	; op 06, 7 bytes -> handler 0xF31A3A
 	.short 0x0BB3
 	.ascii "YES"
@@ -80368,7 +80581,8 @@ DL_MeasureDeleteTrackFirstMeasure:
 	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x47
 	.short 0x0030
-DL_F3A66E:
+; ; drawn (start operand) by Paint_MeasureDelete -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_MeasureDelete_DL:
 	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
 	.short 0x11CF
 	.byte 0x11	; character codes below 0x20
@@ -80784,7 +80998,8 @@ DL_MeasureEraseTrackFirstMeasure:
 	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x46
 	.short 0x0030
-DL_F3A99D:
+; ; drawn (start operand) by Paint_MeasureErase -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_MeasureErase_DL:
 	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
 	.short 0x0BB7
 	.byte 0x11	; character codes below 0x20
@@ -81222,7 +81437,8 @@ DL_QuantizeTrackStrengthFirstMeasure:
 	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x3B
 	.short 0x005C
-DL_F3ACB3:
+; ; drawn (start operand) by Paint_Quantize -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_Quantize_DL:
 	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
 	.short 0x11CF
 	.byte 0x11	; character codes below 0x20
@@ -81586,7 +81802,8 @@ DL_N0teChangeTargetNoteTrack:
 	.short 0x004F
 	.short 0x00B3
 	.short 0x0078
-DL_F3AFAF:
+; ; drawn (start operand) by Paint_N0teChange -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_N0teChange_DL1:
 	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
 	.short 0x180C
 	.ascii "OK"
@@ -81785,7 +82002,8 @@ DLText_OctavesMinus2To8:
 ;   entered at: 0xF3B0C3, 0xF3B102, 0xF3B1E3
 ;   ends used:  0xF3B102, 0xF3B1A6, 0xF3B1E3, 0xF3B211, 0xF3B21C
 ; ------------------------------------------------------------------
-DL_F3B0C3:
+; ; drawn (start operand) by Paint_N0teChange -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_N0teChange_DL2:
 	.byte 0x06, 0x07	; op 06, 7 bytes -> handler 0xF31A3A
 	.short 0x17BB
 	.ascii "YES"
@@ -81998,7 +82216,8 @@ DLBoxes_F3B21C:
 ;   entered at: 0xF3B244, 0xF3B26C, 0xF3B294, 0xF3B33C, 0xF3B379
 ;   ends used:  0xF3B26C, 0xF3B294, 0xF3B33C, 0xF3B379, 0xF3B3A7, 0xF3B3B2
 ; ------------------------------------------------------------------
-DL_F3B244:
+; ; drawn (start operand) by Paint_SongClear -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SongClear_DL2:
 	.byte 0x1C, 0x07	; op 1C, 7 bytes -> handler 0xF31A52
 	.short 0x00E8
 	.short 0x0057
@@ -82011,7 +82230,8 @@ DL_F3B244:
 	.short 0x00F0
 	.short 0x0056
 	.ascii "100%"
-DL_F3B26C:
+; ; drawn (start operand) by Paint_SongClear -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_SongClear_DL5:
 	.byte 0x1C, 0x07	; op 1C, 7 bytes -> handler 0xF31A52
 	.short 0x00D2
 	.short 0x0039
@@ -82086,7 +82306,8 @@ DL_AdvanceDelayTrackFirstMeasure:
 	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x40
 	.short 0x0032
-DL_F3B33C:
+; ; drawn (start operand) by Paint_AdvanceDelay -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_AdvanceDelay_DL:
 	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
 	.short 0x11CF
 	.byte 0x11	; character codes below 0x20
@@ -82203,7 +82424,7 @@ DLBoxes_F3B3B2:
 
 ; ------------------------------------------------------------------
 ; 0xF3B3DA-0xF3B5A8 -- 53 display-list records, 463 bytes -- interpreter A
-; DL_F3B3DA, the "TRACK ASSIGN" screen -- ALREADY NAMED AND CITED
+; Paint_TrackAssign_DL1, the "TRACK ASSIGN" screen -- ALREADY NAMED AND CITED
 ; elsewhere in this file (search "draws display list 0xF3B3DA"),
 ; from a real `ld XIY,0x00F3B3DA` immediate inside 0xF7E440 (still
 ; .incbin).  Its first 13 bytes had been folded into DLBoxes_F3B3B2
@@ -82211,7 +82432,8 @@ DLBoxes_F3B3B2:
 ; lands with ZERO DRIFT on Data_F3B5A9, already committed below.
 ; notes/gen_prom_b_f3b3da_module.py
 ; ------------------------------------------------------------------
-DL_F3B3DA:
+; ; drawn (start operand) by Paint_TrackAssign -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_TrackAssign_DL1:
 	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
 	.short 0x00C0
 	.ascii "SONG"
@@ -82427,7 +82649,8 @@ DL_F3B3DA:
 ; Formerly Data_F3B5A9 -- that was the LEADING BYTES of this list, not a
 ; separate object.  Zero-drift walk, notes/gen_prom_b_oversized_round3_module.py
 ; ------------------------------------------------------------------
-DL_F3B5A9:
+; ; drawn (start operand) by Paint_TrackAssign -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_TrackAssign_DL2:
 	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
 	.short 0x1ED5
 	.ascii "ASSIGN"
@@ -82454,7 +82677,8 @@ DL_F3B5A9:
 ; Formerly Data_F3B5D1 -- that was the LEADING BYTES of this list, not a
 ; separate object.  Zero-drift walk, notes/gen_prom_b_oversized_round3_module.py
 ; ------------------------------------------------------------------
-DL_F3B5D1:
+; ; drawn (start operand) by Paint_TrackLabels1To8 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_TrackLabels1To8_DL:
 	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
 	.short 0x0A07
 	.ascii "TR 1"
@@ -82486,7 +82710,8 @@ DL_F3B5D1:
 ; Formerly Data_F3B611 -- that was the LEADING BYTES of this list, not a
 ; separate object.  Zero-drift walk, notes/gen_prom_b_oversized_round3_module.py
 ; ------------------------------------------------------------------
-DL_F3B611:
+; ; drawn (start operand) by Paint_TrackLabels9To16 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_TrackLabels9To16_DL:
 	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
 	.short 0x0A07
 	.ascii "TR 9"
@@ -82549,7 +82774,7 @@ DL_F3B611:
 ; the loop test `cp XIX,XIY / jr ULE` ends the list -- the machine draws
 ; the record and stops.
 ; The other edge is an immediate too: 0xF3B651 is the XIX of the
-; interpreter-A call at 0xF7E8C3, i.e. the exclusive end of DL_F3B611.
+; interpreter-A call at 0xF7E8C3, i.e. the exclusive end of Paint_TrackLabels9To16_DL.
 ; Verify: python3 notes/gen_prom_b_res3xx_spans.py --selftest
 ; ------------------------------------------------------------------
 DL_F3B651:
@@ -82956,7 +83181,8 @@ DL_TrackAssignChangeAttention:
 	.short 0x0044
 	.short 0x00D0
 	.short 0x0044
-DL_F3BA91:
+; ; drawn (start operand) by Paint_TrackAssign -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_TrackAssign_DL3:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -83215,7 +83441,8 @@ DL_MeasureC0pyFromTrackToTrack:
 	.short 0x003F
 	.short 0x00AB
 	.short 0x0086
-DL_F3BC93:
+; ; drawn (start operand) by Paint_MeasureC0py -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_MeasureC0py_DL:
 	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
 	.short 0x063C
 	.ascii "OK"
@@ -83517,7 +83744,8 @@ DL_MeasureInsertFromTrackToTrack:
 	.short 0x003F
 	.short 0x00AB
 	.short 0x0086
-DL_F3BEBF:
+; ; drawn (start operand) by Paint_MeasureInsert -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_MeasureInsert_DL:
 	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
 	.short 0x05EC
 	.ascii "OK"
@@ -83872,7 +84100,8 @@ DL_AllAll:
 	.byte 0x07, 0x0C	; op 07, 12 bytes -> handler 0xF31A3A
 	.short 0x1350
 	.ascii "  ALL   "
-DL_F3C15D:
+; ; drawn (start operand) by S0ngC0py_DrawFromSong -- derivative name (notes/wsa1_display_list_drawer_names.py)
+S0ngC0py_DrawFromSong_DL2:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short 0x0000	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
@@ -83881,7 +84110,8 @@ DL_F3C15D:
 	.long 0x000012F8	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0DA0	; +0x0D -> IX
-DL_F3C16C:
+; ; drawn (start operand) by S0ngC0py_DrawToSong -- derivative name (notes/wsa1_display_list_drawer_names.py)
+S0ngC0py_DrawToSong_DL:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short 0x0000	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
@@ -83890,7 +84120,8 @@ DL_F3C16C:
 	.long 0x000012FE	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0DB1	; +0x0D -> IX
-DL_F3C17B:
+; ; drawn (start operand) by S0ngC0py_DrawTracks -- derivative name (notes/wsa1_display_list_drawer_names.py)
+S0ngC0py_DrawTracks_DL:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short DisplayListB_Stage+14	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -83917,7 +84148,8 @@ DL_F3C17B:
 ; and every opcode resolves to a documented interpreter-A handler.
 ; notes/gen_prom_b_selfframing_incbin_module.py
 ; ------------------------------------------------------------------
-DL_F3C199:
+; ; drawn (start operand) by S0ngC0py_DrawFromSong -- derivative name (notes/wsa1_display_list_drawer_names.py)
+S0ngC0py_DrawFromSong_DL1:
 	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
 	.short 0x12F6
 	.short 0x000F
@@ -84086,7 +84318,8 @@ DL_S0ngSelectNameKbS0ngName:
 	.short 0x00BA
 	.short 0x013C
 	.short 0x00BF
-DL_F3C31E:
+; ; drawn (start operand) by S0ngSelectName_DrawValues -- derivative name (notes/wsa1_display_list_drawer_names.py)
+S0ngSelectName_DrawValues_DL:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short 0x0000	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
@@ -84326,7 +84559,8 @@ DL_ACurrentTrackWillBeClearedAutomaticaly:
 	.short 0x0098
 	.short 0x0122
 	.short 0x00E9
-DL_F3C530:
+; ; drawn (start operand) by Paint_S0ngC0py -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_S0ngC0py_DL:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short DisplayListB_Stage+17	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
@@ -84713,7 +84947,8 @@ DL_FirstS0ngLastS0ng:
 ; and every opcode resolves to a documented interpreter-A handler.
 ; notes/gen_prom_b_selfframing_incbin_module.py
 ; ------------------------------------------------------------------
-DL_F3C7AD:
+; ; drawn (start operand) by SequencerMedley_DrawPlayState -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SequencerMedley_DrawPlayState_DL4:
 	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
 	.long 0x000F1305
 	.short 0x2305
@@ -84730,7 +84965,8 @@ DL_F3C7AD:
 ;   entered at: 0xF3C7C3
 ;   ends used:  0xF3C7CD
 ; ------------------------------------------------------------------
-DL_F3C7C3:
+; ; drawn (start operand) by SequencerMedley_DrawSourceBox -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SequencerMedley_DrawSourceBox_DL:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0024
 	.short 0x00D4
@@ -84753,7 +84989,8 @@ DL_F3C7C3:
 ; and every opcode resolves to a documented interpreter-A handler.
 ; notes/gen_prom_b_selfframing_incbin_module.py
 ; ------------------------------------------------------------------
-DL_F3C7CD:
+; ; drawn (start operand) by SequencerMedley_DrawFileTypeBox -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SequencerMedley_DrawFileTypeBox_DL:
 	.byte 0x08, 0x0B	; op 08, 11 bytes -> handler 0xF31A3A
 	.short 0x1304
 	.byte 0x0F, 0x00, 0x1B	; character codes below 0x20
@@ -84795,7 +85032,8 @@ Data_F3C7E3:
 ;   entered at: 0xF3C86B
 ;   ends used:  0xF3C873
 ; ------------------------------------------------------------------
-DL_F3C86B:
+; ; drawn (start operand) by SequencerMedley_DrawPlayState -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SequencerMedley_DrawPlayState_DL1:
 	.byte 0x0E, 0x08	; op 0E, 8 bytes -> handler 0xF31A9F
 	.short 0x05CC
 	.short 0x0021
@@ -84807,7 +85045,8 @@ DL_F3C86B:
 ; Formerly Data_F3C873 -- that was the LEADING BYTES of this list, not a
 ; separate object.  Zero-drift walk, notes/gen_prom_b_oversized_round4_module.py
 ; ------------------------------------------------------------------
-DL_F3C873:
+; ; drawn (start operand) by SequencerMedley_DrawPlayState -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SequencerMedley_DrawPlayState_DL2:
 	.byte 0x07, 0x15	; op 07, 21 bytes -> handler 0xF31A3A
 	.short 0x05CC
 	.ascii "N0W PLAYING S0NG "
@@ -84826,7 +85065,8 @@ DL_F3C873:
 ;   entered at: 0xF3C89D, 0xF3C8A7
 ;   ends used:  0xF3C8A7, 0xF3C947
 ; ------------------------------------------------------------------
-DL_F3C89D:
+; ; drawn (start operand) by SequencerMedley_DrawPlayState -- derivative name (notes/wsa1_display_list_drawer_names.py)
+SequencerMedley_DrawPlayState_DL3:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
 	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
@@ -85614,7 +85854,8 @@ DL_F3CEE2:
 	.short 0x00DF
 	.short 0x009B
 	.short 0x00DF
-DL_F3CF09:
+; ; drawn (start operand) by Paint_StepRecord -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_StepRecord_DL2:
 	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x34
 	.short 0x002D
@@ -85697,7 +85938,8 @@ DL_F3CF57:
 	.short 0x00AF
 	.short 0x00FA
 	.short 0x00C3
-DL_F3CFC6:
+; ; drawn (start operand) by Paint_StepRecord -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_StepRecord_DL1:
 	.byte 0x08, 0x11	; op 08, 17 bytes -> handler 0xF31A3A
 	.short 0x1138
 	.ascii "Are You Sure?"
@@ -85835,7 +86077,7 @@ StepSelectAddrTable_F3D089:
 	.long DL_F3CE47	; [15] cond0 start[15]
 	.long DL_F3CF57	; [16] cond0 start[16]
 	.long DL_F3CE47	; [17] cond0 start[17]
-	.long DL_F3CFC6	; [18] cond0 start[18]
+	.long Paint_StepRecord_DL1	; [18] cond0 start[18]
 	.long DL_F3CA8C	; [19] cond0 end[ 0]
 	.long DL_F3DF6A	; [20] cond0 end[ 1]
 	.long DL_F3CCF1	; [21] cond0 end[ 2]
@@ -85852,8 +86094,8 @@ StepSelectAddrTable_F3D089:
 	.long DL_F3CEE2	; [32] cond0 end[13]
 	.long DL_F3CEE2	; [33] cond0 end[14]
 	.long DL_F3CEE2	; [34] cond0 end[15]
-	.long DL_F3CFC6	; [35] cond0 end[16]
-	.long DL_F3CF09	; [36] cond0 end[17]
+	.long Paint_StepRecord_DL1	; [35] cond0 end[16]
+	.long Paint_StepRecord_DL2	; [36] cond0 end[17]
 	.long DL_StepRecordTrackTrackClrMeas	; [37] cond0 end[18]
 	.long DL_F3C992	; [38] cond2 start[ 0]
 	.long DL_F3E2EB	; [39] cond2 start[ 1]
@@ -85873,7 +86115,7 @@ StepSelectAddrTable_F3D089:
 	.long DL_F3CE47	; [53] cond2 start[15]
 	.long DL_F3CF57	; [54] cond2 start[16]
 	.long DL_F3CE47	; [55] cond2 start[17]
-	.long DL_F3CFC6	; [56] cond2 start[18]
+	.long Paint_StepRecord_DL1	; [56] cond2 start[18]
 	.long DL_F3CA8C	; [57] cond2 end[ 0]
 	.long DL_F3E2EB + 0x78	; [58] cond2 end[ 1]
 	.long DL_F3CCF1	; [59] cond2 end[ 2]
@@ -85890,8 +86132,8 @@ StepSelectAddrTable_F3D089:
 	.long DL_F3CEE2	; [70] cond2 end[13]
 	.long DL_F3CEE2	; [71] cond2 end[14]
 	.long DL_F3CEE2	; [72] cond2 end[15]
-	.long DL_F3CFC6	; [73] cond2 end[16]
-	.long DL_F3CF09	; [74] cond2 end[17]
+	.long Paint_StepRecord_DL1	; [73] cond2 end[16]
+	.long Paint_StepRecord_DL2	; [74] cond2 end[17]
 	.long DL_StepRecordTrackTrackClrMeas	; [75] cond2 end[18]
 
 ; ------------------------------------------------------------------
@@ -87160,7 +87402,7 @@ Data_F3DC21:
 ;                    lane promB4, notes/gen_prom_b_promB4_operand_arrays.py
 ; ==================================================================
 ;
-; Right edge anchored on DL_F3DE26, a converted display-list span header;
+; Right edge anchored on Paint_StepRecord_DL3, a converted display-list span header;
 ; and the 3-byte table start 0xF3DE23 is named by the converted records at
 ; 0xF3D3C3, 0xF3D3E1 and 0xF3D3FF as well as by all 24 records here.
 ;
@@ -87413,7 +87655,8 @@ DLTable_F3DE23:
 ;   entered at: 0xF3DE26
 ;   ends used:  0xF3DEB2
 ; ------------------------------------------------------------------
-DL_F3DE26:
+; ; drawn (start operand) by Paint_StepRecord -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_StepRecord_DL3:
 	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
 	.short 0x0005
 	.short 0x00D2
@@ -109093,7 +109336,7 @@ Table_F4EF40:
 ;
 ; NAMING.  118 labels: 76 carry a semantic name and 42 stay `sub_XXXXXX` with
 ; the gap stated.  Of the semantic ones 71 state a MECHANISM and 5 are
-; placeholders (DL_F543B0 DL_F543C4 DL_F546FA DL_F54705 Table_F542A4).  Every
+; placeholders (Paint_DrawbarScreenLayout_DL2 Paint_DrawbarScreenLayout_DL1 Paint_DrawbarScreenLayout_Unchanged_DL2 Paint_DrawbarScreenLayout_Unchanged_DL1 Table_F542A4).  Every
 ; header carries an Evidence: line.
 ;
 ; ⚠ FIVE CORRECTIONS to notes/prom_b_f4f000_layout.py's committed HOLES text
@@ -113965,13 +114208,13 @@ Paint_DrawbarScreenLayout:
 	ld	(xix), 0	; F5373A  ld (XIX),0x00
 	lda	xbc, (DL_DrawbarTitle:24)	; F5373D  lda XBC,0xf543d6
 	push	xbc	; F53742  push XBC
-	lda	xwa, (DL_F543C4:24)	; F53743  lda XWA,0xf543c4
+	lda	xwa, (Paint_DrawbarScreenLayout_DL1:24)	; F53743  lda XWA,0xf543c4
 	push	xwa	; F53748  push XWA
 	call	T_DisplayList_Run_Stack	; F53749  call 0xf42e00
 	ld	(xix), 1	; F5374D  ld (XIX),0x01
 	lda	xbc, (DL_DrawbarTitle:24)	; F53750  lda XBC,0xf543d6
 	push	xbc	; F53755  push XBC
-	lda	xwa, (DL_F543C4:24)	; F53756  lda XWA,0xf543c4
+	lda	xwa, (Paint_DrawbarScreenLayout_DL1:24)	; F53756  lda XWA,0xf543c4
 	push	xwa	; F5375B  push XWA
 	call	T_DisplayList_Run_Stack	; F5375C  call 0xf42e00
 	inc	8, xsp	; F53760  inc 0,XSP
@@ -113979,15 +114222,15 @@ Paint_DrawbarScreenLayout:
 	m_cp_mi8 MB16, 0x289e, 0x00	; F53764  cp (0x289e),0x00
 	jr	nz, PaintAllDrawbars_Skip	; F53769  jr NZ,0xf537b8
 	ld	(xix), 0	; F5376B  ld (XIX),0x00
-	lda	xbc, (DL_F543B0:24)	; F5376E  lda XBC,0xf543b0
+	lda	xbc, (Paint_DrawbarScreenLayout_DL2:24)	; F5376E  lda XBC,0xf543b0
 	push	xbc	; F53773  push XBC
 	lda	xwa, (DL_DrawbarFootageScale:24)	; F53774  lda XWA,0xf54331
 	push	xwa	; F53779  push XWA
 	call	T_DisplayList_Run_Stack	; F5377A  call 0xf42e00
 	ld	(xix), 1	; F5377E  ld (XIX),0x01
-	lda	xbc, (DL_F543C4:24)	; F53781  lda XBC,0xf543c4
+	lda	xbc, (Paint_DrawbarScreenLayout_DL1:24)	; F53781  lda XBC,0xf543c4
 	push	xbc	; F53786  push XBC
-	lda	xwa, (DL_F543B0:24)	; F53787  lda XWA,0xf543b0
+	lda	xwa, (Paint_DrawbarScreenLayout_DL2:24)	; F53787  lda XWA,0xf543b0
 	push	xwa	; F5378C  push XWA
 	call	T_DisplayList_Run_Stack	; F5378D  call 0xf42e00
 	lda	xbc, (DL_DrawbarFootageScale:24)	; F53791  lda XBC,0xf54331
@@ -114015,9 +114258,9 @@ Paint_DrawbarScreenLayout_Unchanged:
 	ld	(xix), 1	; F537CD  ld (XIX),0x01
 	m_cp_mi8 MB16, 0x289e, 0x00	; F537D0  cp (0x289e),0x00
 	jr	nz, PaintAllDrawbars_Skip2	; F537D5  jr NZ,0xf537e5
-	lda	xbc, (DL_F54705:24)	; F537D7  lda XBC,0xf54705
+	lda	xbc, (Paint_DrawbarScreenLayout_Unchanged_DL1:24)	; F537D7  lda XBC,0xf54705
 	push	xbc	; F537DC  push XBC
-	lda	xwa, (DL_F546FA:24)	; F537DD  lda XWA,0xf546fa
+	lda	xwa, (Paint_DrawbarScreenLayout_Unchanged_DL2:24)	; F537DD  lda XWA,0xf546fa
 	push	xwa	; F537E2  push XWA
 	jr	PaintAllDrawbars_Join2	; F537E3  jr T,0xf53817
 PaintAllDrawbars_Skip2:
@@ -114033,7 +114276,7 @@ PaintAllDrawbars_Skip2:
 	inc	8, xsp	; F53809  inc 0,XSP
 	lda	xbc, (ParamCursorRect_Single:24)	; F5380B  lda XBC,0xf54710
 	push	xbc	; F53810  push XBC
-	lda	xwa, (DL_F54705:24)	; F53811  lda XWA,0xf54705
+	lda	xwa, (Paint_DrawbarScreenLayout_Unchanged_DL1:24)	; F53811  lda XWA,0xf54705
 	push	xwa	; F53816  push XWA
 PaintAllDrawbars_Join2:
 	call	T_DisplayListB_Run_Stack	; F53817  call 0xf42e04
@@ -115757,21 +116000,22 @@ DL_DrawbarFootageScale:
 	.ascii "1/3"	; +6
 
 ; --------------------------------------------------------------------------
-; DL_F543B0 -- a UI display list, 2 records, 0xF543B0-0xF543C3
+; Paint_DrawbarScreenLayout_DL2 -- a UI display list, 2 records, 0xF543B0-0xF543C3
 ; Run by: `lda XWA,0xf543b0` at 0xF53787 with END 0xF543C4 pushed just
 ;         before it, then `call` at 0xF5378D -> interpreter A
 ; Evidence: the records above are framed by their own length bytes, and the
 ;           walk consumes 0xF543B0-0xF543C3 exactly -- a miscount anywhere
 ;           would end somewhere else.
 ; --------------------------------------------------------------------------
-DL_F543B0:
+; ; drawn (start operand) by Paint_DrawbarScreenLayout -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_DrawbarScreenLayout_DL2:
 	.byte 0x05, 0x0a	; F543B0  op 05, 10 bytes -> handler 0xF31A75
 	.byte 0x0e, 0x00, 0x58, 0x00, 0x36, 0x01, 0x67, 0x00	; +2  '..X.6.g.'
 	.byte 0x05, 0x0a	; F543BA  op 05, 10 bytes -> handler 0xF31A75
 	.byte 0x0d, 0x00, 0x6b, 0x00, 0x37, 0x01, 0xe8, 0x00	; +2  '..k.7...'
 
 ; --------------------------------------------------------------------------
-; DL_F543C4 -- a UI display list, 2 records, 0xF543C4-0xF543D5
+; Paint_DrawbarScreenLayout_DL1 -- a UI display list, 2 records, 0xF543C4-0xF543D5
 ; Run by: `lda XWA,0xf543c4` at 0xF53743 with END 0xF543D6 pushed just
 ;         before it, then `call` at 0xF53749 -> interpreter A; `lda
 ;         XWA,0xf543c4` at 0xF53756 with END 0xF543D6 pushed just before it,
@@ -115780,7 +116024,8 @@ DL_F543B0:
 ;           walk consumes 0xF543C4-0xF543D5 exactly -- a miscount anywhere
 ;           would end somewhere else.
 ; --------------------------------------------------------------------------
-DL_F543C4:
+; ; drawn (start operand) by Paint_DrawbarScreenLayout -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_DrawbarScreenLayout_DL1:
 	.byte 0x1b, 0x0a	; F543C4  op 1B, 10 bytes -> handler 0xF31A75
 	.byte 0xa7, 0x00, 0x1b, 0x00, 0x3f, 0x01, 0x53, 0x00	; +2  '....?.S.'
 	.byte 0x0e, 0x08	; F543CE  op 0E, 8 bytes -> handler 0xF31A9F
@@ -116103,14 +116348,15 @@ ParamCursorRects:
 	.byte 0x29, 0x00, 0xbf, 0x00, 0x10, 0x01, 0xce, 0x00   ; F546F2  ).......
 
 ; --------------------------------------------------------------------------
-; DL_F546FA -- a UI display list, 1 record, 0xF546FA-0xF54704
+; Paint_DrawbarScreenLayout_Unchanged_DL2 -- a UI display list, 1 record, 0xF546FA-0xF54704
 ; Run by: `lda XWA,0xf546fa` at 0xF537DD with END 0xF54705 pushed just
 ;         before it, then `call` at 0xF53805 -> interpreter B
 ; Evidence: the records above are framed by their own length bytes, and the
 ;           walk consumes 0xF546FA-0xF54704 exactly -- a miscount anywhere
 ;           would end somewhere else.
 ; --------------------------------------------------------------------------
-DL_F546FA:
+; ; drawn (start operand) by Paint_DrawbarScreenLayout_Unchanged -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_DrawbarScreenLayout_Unchanged_DL2:
 	.byte 0x08, 0x0b	; F546FA  op 08, 11 bytes -> handler 0xF31B57
 	.short 0x2640		; +2  RAM variable
 	.byte 0x00, 0x00	; +4  mask, shift
@@ -116120,14 +116366,15 @@ DL_F546FA:
 ; --- 0xF54705-0xF5470F  dl (11 bytes) ---
 
 ; --------------------------------------------------------------------------
-; DL_F54705 -- a UI display list, 1 record, 0xF54705-0xF5470F
+; Paint_DrawbarScreenLayout_Unchanged_DL1 -- a UI display list, 1 record, 0xF54705-0xF5470F
 ; Run by: `lda XWA,0xf54705` at 0xF53811 with END 0xF54710 pushed just
 ;         before it, then `call` at 0xF53817 -> interpreter B
 ; Evidence: the records above are framed by their own length bytes, and the
 ;           walk consumes 0xF54705-0xF5470F exactly -- a miscount anywhere
 ;           would end somewhere else.
 ; --------------------------------------------------------------------------
-DL_F54705:
+; ; drawn (start operand) by Paint_DrawbarScreenLayout_Unchanged -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_DrawbarScreenLayout_Unchanged_DL1:
 	.byte 0x03, 0x0b	; F54705  op 03, 11 bytes -> handler 0xF31B57
 	.short 0x2640		; +2  RAM variable
 	.byte 0x00, 0x00	; +4  mask, shift
@@ -116139,7 +116386,7 @@ DL_F54705:
 ; --------------------------------------------------------------------------
 ; ParamCursorRect_Single -- one 8-byte entry, words 0x000B 0x0045
 ;           0x008D 0x0050
-; Read by: DL_F546FA and DL_F54705, both with mask 0x00 -- so the entry
+; Read by: Paint_DrawbarScreenLayout_Unchanged_DL2 and Paint_DrawbarScreenLayout_Unchanged_DL1, both with mask 0x00 -- so the entry
 ;          index is always 0 and this array has exactly one entry.
 ; Evidence: the two records carry 0x00F54710 at +7 and 0x00 at +4;
 ;           0xF54710 + 8 = 0xF54718, where Bitmap_F54718 begins.
@@ -124998,7 +125245,8 @@ DL_MidiFileSaveFileNaming:
 ;    SAVE : FILE SELECTION`, `DEL`. prom_a 0xFF5CDC names 0xF58A41 as the
 ;    END of the span above it.
 ; --------------------------------------------------------------------------
-DL_F58A41:
+; ; drawn (start operand) by ScreenEnter_MidiFileSave_Page0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ScreenEnter_MidiFileSave_Page0_DL:
 	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
 	.short 0x04FA
 	.ascii "SAVE"
@@ -125258,7 +125506,8 @@ DL_LoadSingleSoundDiskGr0upSingleFileBankS0undGr0up:
 	.short 0x00E3
 	.short 0x0139
 	.short 0x00E3
-DL_F58C49:
+; ; drawn (start operand) by ScreenEnter_L0adSingleS0und_Page1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ScreenEnter_L0adSingleS0und_Page1_DL:
 	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
 	.short 0x00AB
 	.short 0x0049
@@ -125455,7 +125704,8 @@ DL_LoadSingleSoundDiskGr0upSingleFileBankS0und:
 	.short 0x00E3
 	.short 0x0139
 	.short 0x00E3
-DL_F58DF0:
+; ; drawn (start operand) by ScreenEnter_L0adSingleS0und_Page0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ScreenEnter_L0adSingleS0und_Page0_DL:
 	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
 	.short 0x00AB
 	.short 0x0049
@@ -125822,7 +126072,8 @@ DL_LoadSingleCombinationDiskGr0upSingleUser1FileBankUser1C0mbi:
 	.short 0x00E3
 	.short 0x0139
 	.short 0x00E3
-DL_F590C9:
+; ; drawn (start operand) by ScreenEnter_L0adSingleC0mbination_Page0 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ScreenEnter_L0adSingleC0mbination_Page0_DL:
 	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
 	.short 0x00AB
 	.short 0x0049
@@ -126001,7 +126252,8 @@ DL_F5920E:
 	.short 0x054A
 	.ascii "DEL  "
 	.byte 0x11	; character codes below 0x20
-DL_F59218:
+; ; drawn (start operand) by ScreenEnter_MidiFileSave_Page1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ScreenEnter_MidiFileSave_Page1_DL1:
 	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
 	.short 0x054A
 	.ascii "SAVE "
@@ -126095,7 +126347,8 @@ DL_MidiFileSaveFileSelecti0n:
 	.short 0x00BC
 	.short 0x0132
 	.short 0x00CB
-DL_F59301:
+; ; drawn (start operand) by ScreenEnter_MidiFileSave_Page1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ScreenEnter_MidiFileSave_Page1_DL2:
 	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
 	.short 0x0044
 	.short 0x0013
@@ -126216,7 +126469,8 @@ DL_ToS0ngNumberL0adAsGm:
 	.short 0x00BC
 	.short 0x0132
 	.short 0x00CB
-DL_F593E9:
+; ; drawn (start operand) by Paint_MidiFileL0ad -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_MidiFileL0ad_DL:
 	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
 	.short 0x0044
 	.short 0x0013
@@ -126380,7 +126634,8 @@ DL_Stop:
 	.short 0x054A
 	.ascii "STOP "
 	.byte 0x11	; character codes below 0x20
-DL_F5950D:
+; ; drawn (start operand) by Paint_MidiFileDirectPlay -- derivative name (notes/wsa1_display_list_drawer_names.py)
+Paint_MidiFileDirectPlay_DL:
 	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
 	.short 0x0044
 	.short 0x0018
@@ -126740,7 +126995,8 @@ DL_ComposerLoad:
 ;   Evidence: every entry above is a STACK-VENEER call site (notes/prom_b_dl_stack_sites.py);
 ;     the record length bytes walk from the start to the end exactly.
 ; --------------------------------------------------------------------------
-DL_F59915:
+; ; drawn (start operand) by ScreenEnter_MidiFileSave_Page1 -- derivative name (notes/wsa1_display_list_drawer_names.py)
+ScreenEnter_MidiFileSave_Page1_DL3:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short 0x2731	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
@@ -129623,8 +129879,8 @@ DispatchTable_F5B9F8:
 ;          DisplayList_Run, which slot 0xF417F0 names.  The branch is
 ;          `cp (0x27A2),0x00 / jr Z,0xF5BAE5`.
 ; ★ The two overlays draw the SAME RECTANGLE with different ops on different
-;          layers: DL_F02FD9 is `op 05` with operands 0x0008, 0x0021, 0x0028,
-;          0x002C, and DL_F02FE3 is `op 1B` with those four words byte for
+;          layers: UiPaint_Solo_DL1 is `op 05` with operands 0x0008, 0x0021, 0x0028,
+;          0x002C, and UiPaint_Solo_DL2 is `op 1B` with those four words byte for
 ;          byte.  So the (0x27A2) branch is a two-state indicator, not two
 ;          unrelated drawings.
 ; Why the name: the only human-readable thing this routine paints
@@ -129643,17 +129899,17 @@ UiPaint_Solo:		; <- T_UiPaint_Solo
 	push	xiz	; F5BABE  push XIZ
 	ld	(LCD_CurrentLayer:16), 0	; F5BABF  ld (0x2540),0x00
 	ld	xiy, DL_Solo	; F5BAC4  ld XIY,0x00f02fb2
-	ld	xix, DL_F02FD9	; F5BAC9  ld XIX,0x00f02fd9
+	ld	xix, UiPaint_Solo_DL1	; F5BAC9  ld XIX,0x00f02fd9
 	call	T_DisplayList_Run	; F5BACE  call 0xf417f0
 	m_cp_mi8 MB16, 0x27a2, 0x00	; F5BAD2  cp (0x27a2),0x00
 	jr	z, UiPaint_Solo_Skip	; F5BAD7  jr Z,0xf5bae5
-	ld	xiy, DL_F02FD9	; F5BAD9  ld XIY,0x00f02fd9
-	ld	xix, DL_F02FE3	; F5BADE  ld XIX,0x00f02fe3
+	ld	xiy, UiPaint_Solo_DL1	; F5BAD9  ld XIY,0x00f02fd9
+	ld	xix, UiPaint_Solo_DL2	; F5BADE  ld XIX,0x00f02fe3
 	jr	UiPaint_Solo_Join	; F5BAE3  jr T,0xf5baf4
 UiPaint_Solo_Skip:
 	ld	(LCD_CurrentLayer:16), 1	; F5BAE5  ld (0x2540),0x01
-	ld	xiy, DL_F02FE3	; F5BAEA  ld XIY,0x00f02fe3
-	ld	xix, DL_F02FED	; F5BAEF  ld XIX,0x00f02fed
+	ld	xiy, UiPaint_Solo_DL2	; F5BAEA  ld XIY,0x00f02fe3
+	ld	xix, UiPaint_Ordinals_DL2	; F5BAEF  ld XIX,0x00f02fed
 UiPaint_Solo_Join:
 	call	T_DisplayList_Run	; F5BAF4  call 0xf417f0
 	pop	xiz	; F5BAF8  pop XIZ
@@ -129735,14 +129991,14 @@ UiPaint_Ordinals:		; <- T_UiPaint_Ordinals
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BB07  cp (0x27f5),0x01
 	jr	nz, UiPaint_Ordinals_Skip	; F5BB0C  jr NZ,0xf5bb25
 	ld	(LCD_CurrentLayer:16), 0	; F5BB0E  ld (0x2540),0x00
-	ld	xiy, DL_F02F22	; F5BB13  ld XIY,0x00f02f22
-	ld	xix, DL_F02F22 + 0xA	; F5BB18  ld XIX,0x00f02f2c
+	ld	xiy, UiPaint_Ordinals_DL1	; F5BB13  ld XIY,0x00f02f22
+	ld	xix, UiPaint_Ordinals_DL1 + 0xA	; F5BB18  ld XIX,0x00f02f2c
 	call	T_DisplayList_Run	; F5BB1D  call 0xf417f0
 	ld	c, 2:opc	; F5BB21  ld C,0x02
 	jr	UiPaint_Ordinals_Join	; F5BB23  jr T,0xf5bb3a
 UiPaint_Ordinals_Skip:
 	ld	(LCD_CurrentLayer:16), 0	; F5BB25  ld (0x2540),0x00
-	ld	xiy, DL_F02F22	; F5BB2A  ld XIY,0x00f02f22
+	ld	xiy, UiPaint_Ordinals_DL1	; F5BB2A  ld XIY,0x00f02f22
 	ld	xix, DL_F02F36	; F5BB2F  ld XIX,0x00f02f36
 	call	T_DisplayList_Run	; F5BB34  call 0xf417f0
 	ld	c, 4:opc	; F5BB38  ld C,0x04
@@ -129776,10 +130032,10 @@ UiPaint_Ordinals_Skip2:
 UiPaint_Ordinals_Join2:
 	djnz8	c, -84	; F5BB8B  djnz C,0xf5bb3a
 	ld	(LCD_CurrentLayer:16), 1	; F5BB8E  ld (0x2540),0x01
-	ld	xiy, DL_F02FED	; F5BB93  ld XIY,0x00f02fed
-	ld	xix, DL_F02FF7	; F5BB98  ld XIX,0x00f02ff7
+	ld	xiy, UiPaint_Ordinals_DL2	; F5BB93  ld XIY,0x00f02fed
+	ld	xix, UiPaint_Ordinals_DL3	; F5BB98  ld XIX,0x00f02ff7
 	call	T_DisplayList_Run	; F5BB9D  call 0xf417f0
-	ld	xiy, DL_F02FF7	; F5BBA1  ld XIY,0x00f02ff7
+	ld	xiy, UiPaint_Ordinals_DL3	; F5BBA1  ld XIY,0x00f02ff7
 	call	T_DLB_Handler_Array8	; F5BBA6  call 0xf4181c
 	pop	xiz	; F5BBAA  pop XIZ
 	pop	xiy	; F5BBAB  pop XIY
@@ -130119,14 +130375,14 @@ TouchCurve_DrawCurrentSlot:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BDBB  cp (0x27f5),0x01
 	jr	nz, sub_F5BDBB_Skip4	; F5BDC0  jr NZ,0xf5bdd7
 	ld	(LCD_CurrentLayer:16), 0	; F5BDC2  ld (0x2540),0x00
-	ld	xiy, DL_F04038	; F5BDC7  ld XIY,0x00f04038
+	ld	xiy, TouchCurve_DrawCurrentSlot_DL1	; F5BDC7  ld XIY,0x00f04038
 	ld	xix, DL_TouchCurve_0	; F5BDCC  ld XIX,0x00f04042
 	call	T_DisplayList_Run	; F5BDD1  call 0xf417f0
 	jr	sub_F5BDBB_Join	; F5BDD5  jr T,0xf5bdea
 sub_F5BDBB_Skip4:
 	ld	(LCD_CurrentLayer:16), 0	; F5BDD7  ld (0x2540),0x00
-	ld	xiy, DL_F0402E	; F5BDDC  ld XIY,0x00f0402e
-	ld	xix, DL_F04038	; F5BDE1  ld XIX,0x00f04038
+	ld	xiy, TouchCurve_DrawCurrentSlot_DL2	; F5BDDC  ld XIY,0x00f0402e
+	ld	xix, TouchCurve_DrawCurrentSlot_DL1	; F5BDE1  ld XIX,0x00f04038
 	call	T_DisplayList_Run	; F5BDE6  call 0xf417f0
 sub_F5BDBB_Join:
 	xor	xwa, xwa	; F5BDEA  xor XWA,XWA
@@ -130376,7 +130632,7 @@ ToneEditPage_A0_Paint:
 	call	Draw_ToneDriverResonator	; F5BFCB  call 0xf5c360
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BFCF  cp (0x27f5),0x01
 	jr	z, sub_F5BFBD_Skip	; F5BFD4  jr Z,0xf5bfe4
-	ld	xiy, DL_F02064	; F5BFD6  ld XIY,0x00f02064
+	ld	xiy, ToneEditPage_A0_Paint_DL1	; F5BFD6  ld XIY,0x00f02064
 	ld	xix, DL_ResonatorDriverOnOffGroup	; F5BFDB  ld XIX,0x00f020aa
 	call	T_DisplayList_Run	; F5BFE0  call 0xf417f0
 sub_F5BFBD_Skip:
@@ -130402,8 +130658,8 @@ sub_F5BFBD_Skip2:
 	ld	xiy, DL_OriginalStringCylinderCone	; F5C024  ld XIY,0x00f0302a
 	ld	xix, DL_OriginalStringCylinderCone + 0x22	; F5C029  ld XIX,0x00f0304c
 	call	T_DisplayListB_Run	; F5C02E  call 0xf417f4
-	ld	xiy, DL_F0306E	; F5C032  ld XIY,0x00f0306e
-	ld	xix, DL_F0306E + 0x3C	; F5C037  ld XIX,0x00f030aa
+	ld	xiy, ToneEditPage_A0_Paint_DL2	; F5C032  ld XIY,0x00f0306e
+	ld	xix, ToneEditPage_A0_Paint_DL2 + 0x3C	; F5C037  ld XIX,0x00f030aa
 	call	T_DisplayListB_Run	; F5C03C  call 0xf417f4
 	ld	xiy, DL_F030E6	; F5C040  ld XIY,0x00f030e6
 	ld	xix, DL_F03107	; F5C045  ld XIX,0x00f03107
@@ -130459,7 +130715,7 @@ ToneEditPage_A4_Paint:
 	call	UiPaint_Solo	; F5C0EE  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C0F2  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5C0F6  ld (0x2540),0x00
-	ld	xiy, DL_F03498	; F5C0FB  ld XIY,0x00f03498
+	ld	xiy, ToneEditPage_A4_Paint_DL	; F5C0FB  ld XIY,0x00f03498
 	ld	xix, DLBRecordPtrs_F034C6	; F5C100  ld XIX,0x00f034c6
 	call	T_DisplayListB_Run	; F5C105  call 0xf417f4
 	ret	; F5C109  ret
@@ -130474,7 +130730,7 @@ ToneEditPage_A5_Paint:
 	call	UiPaint_Solo	; F5C124  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C128  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5C12C  ld (0x2540),0x00
-	ld	xiy, DL_F034DE	; F5C131  ld XIY,0x00f034de
+	ld	xiy, ToneEditPage_A5_Paint_DL	; F5C131  ld XIY,0x00f034de
 	ld	xix, DLRecordPtrs_F0355D	; F5C136  ld XIX,0x00f0355d
 	call	T_DisplayListB_Run	; F5C13B  call 0xf417f4
 	call	sub_F5C144	; F5C13F  call 0xf5c144
@@ -130518,7 +130774,7 @@ ToneEditPage_A6_Paint:
 	call	UiPaint_Solo	; F5C18C  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C190  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5C194  ld (0x2540),0x00
-	ld	xiy, DL_F035CA	; F5C199  ld XIY,0x00f035ca
+	ld	xiy, ToneEditPage_A6_Paint_DL	; F5C199  ld XIY,0x00f035ca
 	ld	xix, Data_F03617	; F5C19E  ld XIX,0x00f03617
 	call	T_DisplayListB_Run	; F5C1A3  call 0xf417f4
 	call	sub_F5C144	; F5C1A7  call 0xf5c144
@@ -130530,19 +130786,19 @@ ToneEditPage_A7_Paint:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C1B4  cp (0x27f5),0x01
 	jr	z, sub_F5C144_Skip	; F5C1B9  jr Z,0xf5c1de
 	ld	xiy, DL_MutingKeyFollowSlopeRange	; F5C1BB  ld XIY,0x00f02dfb
-	ld	xix, DL_F02F22	; F5C1C0  ld XIX,0x00f02f22
+	ld	xix, UiPaint_Ordinals_DL1	; F5C1C0  ld XIX,0x00f02f22
 	call	T_DisplayList_Run	; F5C1C5  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F5C1C9  ld (0x2540),0x00
-	ld	xiy, DL_F03633	; F5C1CE  ld XIY,0x00f03633
+	ld	xiy, ToneEditPage_A7_Paint_DL1	; F5C1CE  ld XIY,0x00f03633
 	ld	xix, DLRecordPtrs_F036C2	; F5C1D3  ld XIX,0x00f036c2
 	call	T_DisplayListB_Run	; F5C1D8  call 0xf417f4
 	jr	sub_F5C144_Join	; F5C1DC  jr T,0xf5c1ff
 sub_F5C144_Skip:
 	ld	xiy, DL_Page33ResoMode	; F5C1DE  ld XIY,0x00f02ef9
-	ld	xix, DL_F02F22	; F5C1E3  ld XIX,0x00f02f22
+	ld	xix, UiPaint_Ordinals_DL1	; F5C1E3  ld XIX,0x00f02f22
 	call	T_DisplayList_Run	; F5C1E8  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F5C1EC  ld (0x2540),0x00
-	ld	xiy, DL_F036A3	; F5C1F1  ld XIY,0x00f036a3
+	ld	xiy, ToneEditPage_A7_Paint_DL2	; F5C1F1  ld XIY,0x00f036a3
 	ld	xix, DLRecordPtrs_F036C2	; F5C1F6  ld XIX,0x00f036c2
 	call	T_DisplayListB_Run	; F5C1FB  call 0xf417f4
 sub_F5C144_Join:
@@ -130559,15 +130815,15 @@ Draw_Serial:
 	ld	xiy, DL_Serial	; F5C219  ld XIY,0x00f064a9
 	ld	xix, DL_Parallel	; F5C21E  ld XIX,0x00f064c6
 	call	T_DisplayList_Run	; F5C223  call 0xf417f0
-	ld	xiy, DL_F06576	; F5C227  ld XIY,0x00f06576
-	ld	xix, DL_F06576 + 0x11	; F5C22C  ld XIX,0x00f06587
+	ld	xiy, Draw_Serial_DL1	; F5C227  ld XIY,0x00f06576
+	ld	xix, Draw_Serial_DL1 + 0x11	; F5C22C  ld XIX,0x00f06587
 	call	T_DisplayListB_Run	; F5C231  call 0xf417f4
 	jr	sub_F5C144_Join2	; F5C235  jr T,0xf5c253
 sub_F5C144_Skip2:
 	ld	xiy, DL_Parallel	; F5C237  ld XIY,0x00f064c6
-	ld	xix, DL_F064E5	; F5C23C  ld XIX,0x00f064e5
+	ld	xix, Draw_Serial_DL2	; F5C23C  ld XIX,0x00f064e5
 	call	T_DisplayList_Run	; F5C241  call 0xf417f0
-	ld	xiy, DL_F06576	; F5C245  ld XIY,0x00f06576
+	ld	xiy, Draw_Serial_DL1	; F5C245  ld XIY,0x00f06576
 	ld	xix, DLText_OffMainSub1To3	; F5C24A  ld XIX,0x00f06598
 	call	T_DisplayListB_Run	; F5C24F  call 0xf417f4
 sub_F5C144_Join2:
@@ -130575,7 +130831,7 @@ sub_F5C144_Join2:
 	ld	xiy, DL_EffectBlockEff1Eff2RevMain	; F5C258  ld XIY,0x00f06224
 	ld	xix, DL_F06481	; F5C25D  ld XIX,0x00f06481
 	call	T_DisplayList_Run	; F5C262  call 0xf417f0
-	ld	xiy, DL_F064E5	; F5C266  ld XIY,0x00f064e5
+	ld	xiy, Draw_Serial_DL2	; F5C266  ld XIY,0x00f064e5
 	ld	xix, Data_F06562	; F5C26B  ld XIX,0x00f06562
 	call	T_DisplayListB_Run	; F5C270  call 0xf417f4
 	call	sub_F5C27D	; F5C274  call 0xf5c27d
@@ -130612,15 +130868,15 @@ Draw_ToneTemplateLevelKeyTune:
 	call	Draw_M0delingSoundEditToneDriver	; F5C2A8  call 0xf5c338
 	call	Draw_ToneDriverResonator	; F5C2AC  call 0xf5c360
 	ld	xiy, DL_ToneTemplateLevelKeyTune	; F5C2B0  ld XIY,0x00f02329
-	ld	xix, DL_F0245F	; F5C2B5  ld XIX,0x00f0245f
+	ld	xix, Draw_ToneTemplateLevelKeyTune_DL1	; F5C2B5  ld XIX,0x00f0245f
 	call	T_DisplayList_Run	; F5C2BA  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C2BE  cp (0x27f5),0x01
 	jr	z, sub_F5C27D_Skip2	; F5C2C3  jr Z,0xf5c2e6
 	ld	(LCD_CurrentLayer:16), 0	; F5C2C5  ld (0x2540),0x00
-	ld	xiy, DL_F0245F	; F5C2CA  ld XIY,0x00f0245f
+	ld	xiy, Draw_ToneTemplateLevelKeyTune_DL1	; F5C2CA  ld XIY,0x00f0245f
 	ld	xix, DL_DriverDriverWaveformReso	; F5C2CF  ld XIX,0x00f02469
 	call	T_DisplayList_Run	; F5C2D4  call 0xf417f0
-	ld	xiy, DL_F022F7	; F5C2D8  ld XIY,0x00f022f7
+	ld	xiy, Draw_ToneTemplateLevelKeyTune_DL2	; F5C2D8  ld XIY,0x00f022f7
 	ld	xix, DL_ToneTemplateLevelKeyTune	; F5C2DD  ld XIX,0x00f02329
 	call	T_DisplayList_Run	; F5C2E2  call 0xf417f0
 sub_F5C27D_Skip2:
@@ -130629,18 +130885,18 @@ sub_F5C27D_Skip2:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C2EE  cp (0x27f5),0x01
 	jr	z, sub_F5C27D_Skip3	; F5C2F3  jr Z,0xf5c308
 	ld	(LCD_CurrentLayer:16), 0	; F5C2F5  ld (0x2540),0x00
-	ld	xiy, DL_F33A71	; F5C2FA  ld XIY,0x00f33a71
+	ld	xiy, Draw_ToneTemplateLevelKeyTune_DL3	; F5C2FA  ld XIY,0x00f33a71
 	ld	xix, Data_F33B8C	; F5C2FF  ld XIX,0x00f33b8c
 	call	T_DisplayListB_Run	; F5C304  call 0xf417f4
 sub_F5C27D_Skip3:
 	ld	(LCD_CurrentLayer:16), 0	; F5C308  ld (0x2540),0x00
-	ld	xiy, DL_F33A71	; F5C30D  ld XIY,0x00f33a71
-	ld	xix, DL_F33A71 + 0x4C	; F5C312  ld XIX,0x00f33abd
+	ld	xiy, Draw_ToneTemplateLevelKeyTune_DL3	; F5C30D  ld XIY,0x00f33a71
+	ld	xix, Draw_ToneTemplateLevelKeyTune_DL3 + 0x4C	; F5C312  ld XIX,0x00f33abd
 	call	T_DisplayListB_Run	; F5C317  call 0xf417f4
-	ld	xiy, DL_F33B09	; F5C31B  ld XIY,0x00f33b09
-	ld	xix, DL_F33B09 + 0x3C	; F5C320  ld XIX,0x00f33b45
+	ld	xiy, Draw_ToneTemplateLevelKeyTune_DL4	; F5C31B  ld XIY,0x00f33b09
+	ld	xix, Draw_ToneTemplateLevelKeyTune_DL4 + 0x3C	; F5C320  ld XIX,0x00f33b45
 	call	T_DisplayListB_Run	; F5C325  call 0xf417f4
-	ld	xiy, DL_F33B81	; F5C329  ld XIY,0x00f33b81
+	ld	xiy, Draw_ToneTemplateLevelKeyTune_DL5	; F5C329  ld XIY,0x00f33b81
 	ld	xix, Data_F33B8C	; F5C32E  ld XIX,0x00f33b8c
 	call	T_DisplayListB_Run	; F5C333  call 0xf417f4
 	ret	; F5C337  ret
@@ -130660,7 +130916,7 @@ sub_F5C27D_Skip3:
 Draw_M0delingSoundEditToneDriver:
 	ld	(LCD_CurrentLayer:16), 0	; F5C338  ld (0x2540),0x00
 	ld	xiy, DL_M0delingSoundEditToneDriver	; F5C33D  ld XIY,0x00f01f96
-	ld	xix, DL_F02064	; F5C342  ld XIX,0x00f02064
+	ld	xix, ToneEditPage_A0_Paint_DL1	; F5C342  ld XIX,0x00f02064
 	call	T_DisplayList_Run	; F5C347  call 0xf417f0
 	ret	; F5C34B  ret
 
@@ -130897,7 +131153,7 @@ Draw_KeyDeToneKeyScalingShift:
 	call	UiPaint_Solo	; F5C4E3  call 0xf5bab8
 	call	sub_F5C39C	; F5C4E7  call 0xf5c39c
 	ld	(LCD_CurrentLayer:16), 0	; F5C4EB  ld (0x2540),0x00
-	ld	xiy, DL_F051C2	; F5C4F0  ld XIY,0x00f051c2
+	ld	xiy, Draw_KeyDeToneKeyScalingShift_DL	; F5C4F0  ld XIY,0x00f051c2
 	ld	xix, Data_F05286	; F5C4F5  ld XIX,0x00f05286
 	call	T_DisplayListB_Run	; F5C4FA  call 0xf417f4
 	ret	; F5C4FE  ret
@@ -131121,7 +131377,7 @@ sub_F5C5A5_Join:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C6F7  cp (0x27f5),0x01
 	jr	z, sub_F5C5A5_Skip3	; F5C6FC  jr Z,0xf5c713
 	ld	(LCD_CurrentLayer:16), 0	; F5C6FE  ld (0x2540),0x00
-	ld	xiy, DL_F04F72	; F5C703  ld XIY,0x00f04f72
+	ld	xiy, Draw_Page12LevelTouchCurveLevel_DL	; F5C703  ld XIY,0x00f04f72
 	ld	xix, Data_F04FFD	; F5C708  ld XIX,0x00f04ffd
 	call	T_DisplayListB_Run	; F5C70D  call 0xf417f4
 	jr	sub_F5C5A5_Return	; F5C711  jr T,0xf5c726
@@ -131150,7 +131406,7 @@ sub_F5C727:
 	ld	xiy, DL_F03F77	; F5C72C  ld XIY,0x00f03f77
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C731  cp (0x27f5),0x01
 	jr	z, sub_F5C727_Skip	; F5C736  jr Z,0xf5c73f
-	ld	xix, DL_F0402E	; F5C738  ld XIX,0x00f0402e
+	ld	xix, TouchCurve_DrawCurrentSlot_DL2	; F5C738  ld XIX,0x00f0402e
 	jr	sub_F5C727_Join	; F5C73D  jr T,0xf5c744
 sub_F5C727_Skip:
 	ld	xix, DL_F03FF3	; F5C73F  ld XIX,0x00f03ff3
@@ -131219,12 +131475,12 @@ sub_F5C772_Join:
 	ld	(LCD_CurrentLayer:16), 0	; F5C7F4  ld (0x2540),0x00
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C7F9  cp (0x27f5),0x01
 	jr	z, sub_F5C772_Skip2	; F5C7FE  jr Z,0xf5c810
-	ld	xiy, DL_F050AB	; F5C800  ld XIY,0x00f050ab
+	ld	xiy, SoundEditAmpEnvelope1_Paint_DL1	; F5C800  ld XIY,0x00f050ab
 	ld	xix, Data_F050F1	; F5C805  ld XIX,0x00f050f1
 	call	T_DisplayListB_Run	; F5C80A  call 0xf417f4
 	jr	sub_F5C772_Return	; F5C80E  jr T,0xf5c822
 sub_F5C772_Skip2:
-	ld	xiy, DL_F33858	; F5C810  ld XIY,0x00f33858
+	ld	xiy, SoundEditAmpEnvelope1_Paint_DL2	; F5C810  ld XIY,0x00f33858
 	ld	xix, Data_F338A5	; F5C815  ld XIX,0x00f338a5
 	call	T_DisplayListB_Run	; F5C81A  call 0xf417f4
 	call	Draw_Keyoff	; F5C81E  call 0xf5c823
@@ -131250,20 +131506,20 @@ Draw_Keyoff:
 	ld	a, (ModelingPage_Fields:16)	; F5C828  ld A,(0x27a6)
 	and	a, 32	; F5C82C  and A,0x20
 	jr	z, Draw_Keyoff_Skip	; F5C82F  jr Z,0xf5c854
-	ld	xiy, DL_F338C9	; F5C831  ld XIY,0x00f338c9
-	ld	xix, DL_F338DD	; F5C836  ld XIX,0x00f338dd
+	ld	xiy, Draw_Keyoff_DL1	; F5C831  ld XIY,0x00f338c9
+	ld	xix, Draw_Keyoff_DL2	; F5C836  ld XIX,0x00f338dd
 	call	T_DisplayListB_Run	; F5C83B  call 0xf417f4
 	ld	(LCD_CurrentLayer:16), 2	; F5C83F  ld (0x2540),0x02
 	ld	xiy, DL_Keyoff	; F5C844  ld XIY,0x00f049dd
-	ld	xix, DL_F049F3	; F5C849  ld XIX,0x00f049f3
+	ld	xix, Draw_Keyoff_DL3	; F5C849  ld XIX,0x00f049f3
 	call	T_DisplayList_Run	; F5C84E  call 0xf417f0
 	jr	Draw_Keyoff_Return	; F5C852  jr T,0xf5c875
 Draw_Keyoff_Skip:
-	ld	xiy, DL_F338DD	; F5C854  ld XIY,0x00f338dd
+	ld	xiy, Draw_Keyoff_DL2	; F5C854  ld XIY,0x00f338dd
 	ld	xix, DL_F338EB	; F5C859  ld XIX,0x00f338eb
 	call	T_DisplayList_Run	; F5C85E  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 2	; F5C862  ld (0x2540),0x02
-	ld	xiy, DL_F049F3	; F5C867  ld XIY,0x00f049f3
+	ld	xiy, Draw_Keyoff_DL3	; F5C867  ld XIY,0x00f049f3
 	ld	xix, DL_Page12EnvelopeKeyoffCurSor	; F5C86C  ld XIX,0x00f049fd
 	call	T_DisplayList_Run	; F5C871  call 0xf417f0
 Draw_Keyoff_Return:
@@ -131271,10 +131527,10 @@ Draw_Keyoff_Return:
 Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk:
 	call	sub_F5C727	; F5C876  call 0xf5c727
 	ld	xiy, DL_Page22KeyFollowEnvelopeKeyFollowTouchAtk	; F5C87A  ld XIY,0x00f04415
-	ld	xix, DL_F04560	; F5C87F  ld XIX,0x00f04560
+	ld	xix, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL1	; F5C87F  ld XIX,0x00f04560
 	call	T_DisplayList_Run	; F5C884  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 2	; F5C888  ld (0x2540),0x02
-	ld	xiy, DL_F04560	; F5C88D  ld XIY,0x00f04560
+	ld	xiy, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL1	; F5C88D  ld XIY,0x00f04560
 	ld	xix, DL_F04574	; F5C892  ld XIX,0x00f04574
 	call	T_DisplayList_Run	; F5C897  call 0xf417f0
 	call	sub_F5BFBD	; F5C89B  call 0xf5bfbd
@@ -131284,7 +131540,7 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk:
 	call	UiPaint_Solo	; F5C8AF  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C8B3  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5C8B7  ld (0x2540),0x00
-	ld	xiy, DL_F0510D	; F5C8BC  ld XIY,0x00f0510d
+	ld	xiy, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk_DL2	; F5C8BC  ld XIY,0x00f0510d
 	ld	xix, DLText_AttackDecayRelease	; F5C8C1  ld XIX,0x00f05182
 	call	T_DisplayListB_Run	; F5C8C6  call 0xf417f4
 	ret	; F5C8CA  ret
@@ -131461,14 +131717,14 @@ sub_F5C94B_Skip5:
 	call	UiPaint_Ordinals	; F5CA85  call 0xf5bb00
 	call	sub_F5C94B	; F5CA89  call 0xf5c94b
 	ld	(LCD_CurrentLayer:16), 0	; F5CA8D  ld (0x2540),0x00
-	ld	xiy, DL_F04E42	; F5CA92  ld XIY,0x00f04e42
+	ld	xiy, Draw_FilterBandPassLowHighCutoff_DL	; F5CA92  ld XIY,0x00f04e42
 	ld	xix, DLRecordPtrs_F04E93	; F5CA97  ld XIX,0x00f04e93
 	call	T_DisplayListB_Run	; F5CA9C  call 0xf417f4
 	ret	; F5CAA0  ret
 Draw_Through:
 	call	sub_F5C929	; F5CAA1  call 0xf5c929
 	ld	xiy, DL_Through	; F5CAA5  ld XIY,0x00f049bc
-	ld	xix, DL_F049D3	; F5CAAA  ld XIX,0x00f049d3
+	ld	xix, Draw_Page12EnvelopeKeyoffCurSor_DL1	; F5CAAA  ld XIX,0x00f049d3
 	call	T_DisplayList_Run	; F5CAAF  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5CAB3  cp (0x27f5),0x01
 	jr	z, sub_F5C94B_Skip6	; F5CAB8  jr Z,0xf5cabe
@@ -131504,13 +131760,13 @@ Draw_Page12EnvelopeKeyoffCurSor:
 	call	T_DisplayList_Run	; F5CAE7  call 0xf417f0
 	call	sub_F5BFBD	; F5CAEB  call 0xf5bfbd
 	ld	(LCD_CurrentLayer:16), 2	; F5CAEF  ld (0x2540),0x02
-	ld	xiy, DL_F049D3	; F5CAF4  ld XIY,0x00f049d3
+	ld	xiy, Draw_Page12EnvelopeKeyoffCurSor_DL1	; F5CAF4  ld XIY,0x00f049d3
 	ld	xix, DL_Keyoff + 0xA	; F5CAF9  ld XIX,0x00f049e7
 	call	T_DisplayList_Run	; F5CAFE  call 0xf417f0
 	call	UiPaint_Solo	; F5CB02  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5CB06  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5CB0A  ld (0x2540),0x00
-	ld	xiy, DL_F04EAB	; F5CB0F  ld XIY,0x00f04eab
+	ld	xiy, Draw_Page12EnvelopeKeyoffCurSor_DL2	; F5CB0F  ld XIY,0x00f04eab
 	ld	xix, Data_F04F20	; F5CB14  ld XIX,0x00f04f20
 	call	T_DisplayListB_Run	; F5CB19  call 0xf417f4
 	ret	; F5CB1D  ret
@@ -131546,7 +131802,7 @@ Draw_Page12EnvelopeKeyoffCurSor_Skip:
 	jr	Draw_Page12EnvelopeKeyoffCurSor_Join	; F5CB61  jr T,0xf5cbca
 Draw_Page12EnvelopeKeyoffCurSor_Skip2:
 	ld	(LCD_CurrentLayer:16), 1	; F5CB63  ld (0x2540),0x01
-	ld	xiy, DL_F031BF	; F5CB68  ld XIY,0x00f031bf
+	ld	xiy, ToneEditPage_A0_RepaintField_DL	; F5CB68  ld XIY,0x00f031bf
 	ld	xix, DLTable_F031C9	; F5CB6D  ld XIX,0x00f031c9
 	call	T_DisplayList_Run	; F5CB72  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 1	; F5CB76  ld (0x2540),0x01
@@ -131636,7 +131892,7 @@ SoundEditModelingDriverWaveform_RepaintField:
 	jr	sub_F5CBD9_Return2	; F5CC45  jr T,0xf5cc63
 sub_F5CBD9_Skip4:
 	ld	(LCD_CurrentLayer:16), 1	; F5CC47  ld (0x2540),0x01
-	ld	xiy, DL_F33A3F	; F5CC4C  ld XIY,0x00f33a3f
+	ld	xiy, SoundEditModelingDriverWaveform_RepaintField_DL	; F5CC4C  ld XIY,0x00f33a3f
 	ld	xix, Data_F33A49	; F5CC51  ld XIX,0x00f33a49
 	call	T_DisplayList_Run	; F5CC56  call 0xf417f0
 	ld	xiy, DL_F338EB	; F5CC5A  ld XIY,0x00f338eb
@@ -131713,8 +131969,8 @@ ToneEditPage_A3_RepaintField:
 	cp	a, 1:i3	; F5CCF6  cp A,1
 	jr	nz, sub_F5CC64_Skip2	; F5CCF8  jr NZ,0xf5cd0f
 	ld	(LCD_CurrentLayer:16), 0	; F5CCFA  ld (0x2540),0x00
-	ld	xiy, DL_F03455	; F5CCFF  ld XIY,0x00f03455
-	ld	xix, DL_F03455 + 0x19	; F5CD04  ld XIX,0x00f0346e
+	ld	xiy, ToneEditPage_A3_RepaintField_DL	; F5CCFF  ld XIY,0x00f03455
+	ld	xix, ToneEditPage_A3_RepaintField_DL + 0x19	; F5CD04  ld XIX,0x00f0346e
 	call	T_DisplayListB_Run	; F5CD09  call 0xf417f4
 	jr	sub_F5CC64_Return	; F5CD0D  jr T,0xf5cd1d
 sub_F5CC64_Skip2:
@@ -131728,7 +131984,7 @@ ToneEditPage_A4_RepaintField:
 	cp	a, 2:i3	; F5CD1E  cp A,2
 	jr	nz, sub_F5CC64_Skip3	; F5CD20  jr NZ,0xf5cd37
 	ld	(LCD_CurrentLayer:16), 0	; F5CD22  ld (0x2540),0x00
-	ld	xiy, DL_F034AD	; F5CD27  ld XIY,0x00f034ad
+	ld	xiy, ToneEditPage_A4_RepaintField_DL	; F5CD27  ld XIY,0x00f034ad
 	ld	xix, DLBRecordPtrs_F034C6	; F5CD2C  ld XIX,0x00f034c6
 	call	T_DisplayListB_Run	; F5CD31  call 0xf417f4
 	jr	sub_F5CC64_Return2	; F5CD35  jr T,0xf5cd45
@@ -131757,14 +132013,14 @@ sub_F5CC64_Skip4:
 	jr	sub_F5CC64_Join2	; F5CD6D  jr T,0xf5cd99
 sub_F5CC64_Skip5:
 	ld	(LCD_CurrentLayer:16), 0	; F5CD6F  ld (0x2540),0x00
-	ld	xiy, DL_F034E8	; F5CD74  ld XIY,0x00f034e8
-	ld	xix, DL_F034E8 + 0x1A	; F5CD79  ld XIX,0x00f03502
+	ld	xiy, ToneEditPage_A5_RepaintField_DL1	; F5CD74  ld XIY,0x00f034e8
+	ld	xix, ToneEditPage_A5_RepaintField_DL1 + 0x1A	; F5CD79  ld XIX,0x00f03502
 	call	T_DisplayListB_Run	; F5CD7E  call 0xf417f4
 	jr	sub_F5CC64_Return3	; F5CD82  jr T,0xf5cda7
 sub_F5CC64_Skip6:
 	ld	(LCD_CurrentLayer:16), 0	; F5CD84  ld (0x2540),0x00
-	ld	xiy, DL_F03522	; F5CD89  ld XIY,0x00f03522
-	ld	xix, DL_F03522 + 0x1A	; F5CD8E  ld XIX,0x00f0353c
+	ld	xiy, ToneEditPage_A5_RepaintField_DL2	; F5CD89  ld XIY,0x00f03522
+	ld	xix, ToneEditPage_A5_RepaintField_DL2 + 0x1A	; F5CD8E  ld XIX,0x00f0353c
 	call	T_DisplayListB_Run	; F5CD93  call 0xf417f4
 	jr	sub_F5CC64_Return3	; F5CD97  jr T,0xf5cda7
 sub_F5CC64_Join2:
@@ -131814,19 +132070,19 @@ ToneEditPage_A8_RepaintField:
 	jr	sub_F5CC64_Join3	; F5CE0D  jr T,0xf5ce39
 sub_F5CC64_Skip9:
 	ld	(LCD_CurrentLayer:16), 0	; F5CE0F  ld (0x2540),0x00
-	ld	xiy, DL_F064F9	; F5CE14  ld XIY,0x00f064f9
-	ld	xix, DL_F06517	; F5CE19  ld XIX,0x00f06517
+	ld	xiy, ToneEditPage_A8_RepaintField_DL1	; F5CE14  ld XIY,0x00f064f9
+	ld	xix, ToneEditPage_A8_RepaintField_DL2	; F5CE19  ld XIX,0x00f06517
 	call	T_DisplayListB_Run	; F5CE1E  call 0xf417f4
 	jr	sub_F5CC64_Return4	; F5CE22  jr T,0xf5ce64
 sub_F5CC64_Skip10:
 	ld	(LCD_CurrentLayer:16), 0	; F5CE24  ld (0x2540),0x00
-	ld	xiy, DL_F06517	; F5CE29  ld XIY,0x00f06517
-	ld	xix, DL_F06517 + 0x1E	; F5CE2E  ld XIX,0x00f06535
+	ld	xiy, ToneEditPage_A8_RepaintField_DL2	; F5CE29  ld XIY,0x00f06517
+	ld	xix, ToneEditPage_A8_RepaintField_DL2 + 0x1E	; F5CE2E  ld XIX,0x00f06535
 	call	T_DisplayListB_Run	; F5CE33  call 0xf417f4
 	jr	sub_F5CC64_Return4	; F5CE37  jr T,0xf5ce64
 sub_F5CC64_Join3:
 	ld	(LCD_CurrentLayer:16), 0	; F5CE39  ld (0x2540),0x00
-	ld	xiy, DL_F06544	; F5CE3E  ld XIY,0x00f06544
+	ld	xiy, ToneEditPage_A8_RepaintField_DL3	; F5CE3E  ld XIY,0x00f06544
 	ld	xix, Data_F06562	; F5CE43  ld XIX,0x00f06562
 	call	T_DisplayListB_Run	; F5CE48  call 0xf417f4
 	call	sub_F5BF8A	; F5CE4C  call 0xf5bf8a
@@ -131857,7 +132113,7 @@ SoundEditModelingToneTemplate_RepaintField:
 	jr	sub_F5CC64_Return5	; F5CE8C  jr T,0xf5ceb1
 sub_F5CC64_Skip12:
 	ld	(LCD_CurrentLayer:16), 1	; F5CE8E  ld (0x2540),0x01
-	ld	xiy, DL_F04CDE	; F5CE93  ld XIY,0x00f04cde
+	ld	xiy, SoundEditModelingToneTemplate_RepaintField_DL	; F5CE93  ld XIY,0x00f04cde
 	ld	xix, DLTable_F04CE8	; F5CE98  ld XIX,0x00f04ce8
 	call	T_DisplayList_Run	; F5CE9D  call 0xf417f0
 	ld	a, 0:opc	; F5CEA1  ld A,0x00
@@ -131874,14 +132130,14 @@ SoundEditPitchTune_RepaintField:
 	cp	a, 0:i3	; F5CEB7  cp A,0
 	jr	nz, sub_F5CC64_Join4	; F5CEB9  jr NZ,0xf5cee7
 	ld	(LCD_CurrentLayer:16), 1	; F5CEBB  ld (0x2540),0x01
-	ld	xiy, DL_F0535E	; F5CEC0  ld XIY,0x00f0535e
-	ld	xix, DL_F05368	; F5CEC5  ld XIX,0x00f05368
+	ld	xiy, SoundEditPitchTune_RepaintField_DL1	; F5CEC0  ld XIY,0x00f0535e
+	ld	xix, SoundEditPitchTune_RepaintField_DL2	; F5CEC5  ld XIX,0x00f05368
 	call	T_DisplayList_Run	; F5CECA  call 0xf417f0
 	ld	a, 0:opc	; F5CECE  ld A,0x00
 	jr	sub_F5CC64_Join4	; F5CED0  jr T,0xf5cee7
 sub_F5CC64_Skip14:
 	ld	(LCD_CurrentLayer:16), 1	; F5CED2  ld (0x2540),0x01
-	ld	xiy, DL_F05368	; F5CED7  ld XIY,0x00f05368
+	ld	xiy, SoundEditPitchTune_RepaintField_DL2	; F5CED7  ld XIY,0x00f05368
 	ld	xix, Data_F05372	; F5CEDC  ld XIX,0x00f05372
 	call	T_DisplayList_Run	; F5CEE1  call 0xf417f0
 	ld	a, 13:opc	; F5CEE5  ld A,0x0d
@@ -131905,15 +132161,15 @@ SoundEditLfo_RepaintField:
 	jrl	sub_F5CC64_Join5	; F5CF0B  jrl T,0xf5cf95
 sub_F5CC64_Skip15:
 	ld	(LCD_CurrentLayer:16), 1	; F5CF0E  ld (0x2540),0x01
-	ld	xiy, DL_F0549D	; F5CF13  ld XIY,0x00f0549d
+	ld	xiy, SoundEditLfo_RepaintField_DL1	; F5CF13  ld XIY,0x00f0549d
 	ld	xix, DL_F054A7	; F5CF18  ld XIX,0x00f054a7
 	call	T_DisplayList_Run	; F5CF1D  call 0xf417f0
 	call	sub_F5CFA4	; F5CF21  call 0xf5cfa4
 	jrl	sub_F5CC64_Return6	; F5CF25  jrl T,0xf5cfa3
 sub_F5CC64_Skip16:
 	ld	(LCD_CurrentLayer:16), 0	; F5CF28  ld (0x2540),0x00
-	ld	xiy, DL_F053E3	; F5CF2D  ld XIY,0x00f053e3
-	ld	xix, DL_F053E3 + 0x19	; F5CF32  ld XIX,0x00f053fc
+	ld	xiy, SoundEditLfo_RepaintField_DL2	; F5CF2D  ld XIY,0x00f053e3
+	ld	xix, SoundEditLfo_RepaintField_DL2 + 0x19	; F5CF32  ld XIX,0x00f053fc
 	call	T_DisplayListB_Run	; F5CF37  call 0xf417f4
 	jr	sub_F5CC64_Return6	; F5CF3B  jr T,0xf5cfa3
 sub_F5CC64_Skip17:
@@ -131927,7 +132183,7 @@ sub_F5CC64_Skip18:
 	jr	sub_F5CC64_Return6	; F5CF56  jr T,0xf5cfa3
 sub_F5CC64_Skip19:
 	ld	(LCD_CurrentLayer:16), 1	; F5CF58  ld (0x2540),0x01
-	ld	xiy, DL_F0549D	; F5CF5D  ld XIY,0x00f0549d
+	ld	xiy, SoundEditLfo_RepaintField_DL1	; F5CF5D  ld XIY,0x00f0549d
 	ld	xix, DL_F054A7	; F5CF62  ld XIX,0x00f054a7
 	call	T_DisplayList_Run	; F5CF67  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F5CF6B  ld (0x2540),0x00
@@ -132002,7 +132258,7 @@ sub_F5CFA4_Join:
 	jr	sub_F5CFA4_Join2	; F5D013  jr T,0xf5d024
 sub_F5CFA4_Skip3:
 	ld	(LCD_CurrentLayer:16), 1	; F5D015  ld (0x2540),0x01
-	ld	xiy, DL_F33836	; F5D01A  ld XIY,0x00f33836
+	ld	xiy, SoundEditAmpLevel1_RepaintField_DL	; F5D01A  ld XIY,0x00f33836
 	ld	xix, DLBoxes_F33840	; F5D01F  ld XIX,0x00f33840
 sub_F5CFA4_Join2:
 	call	T_DisplayList_Run	; F5D024  call 0xf417f0
@@ -132109,7 +132365,7 @@ SoundEditEnvelope1_RepaintField:
 	cp	a, 0:i3	; F5D126  cp A,0
 	jr	nz, sub_F5CFA4_Skip10	; F5D128  jr NZ,0xf5d13f
 	ld	(LCD_CurrentLayer:16), 1	; F5D12A  ld (0x2540),0x01
-	ld	xiy, DL_F04F32	; F5D12F  ld XIY,0x00f04f32
+	ld	xiy, SoundEditEnvelope1_RepaintField_DL	; F5D12F  ld XIY,0x00f04f32
 	ld	xix, Data_F04F46	; F5D134  ld XIX,0x00f04f46
 	call	T_DisplayList_Run	; F5D139  call 0xf417f0
 	ld	a, 0:opc	; F5D13D  ld A,0x00
@@ -132198,20 +132454,20 @@ Draw_Write:
 	call	T_DisplayList_Run	; F5D205  call 0xf417f0
 sub_F5D199_Skip3:
 	ld	xiy, DL_SoundEditS0undNaming	; F5D209  ld XIY,0x00f05850
-	ld	xix, DL_F05A2E	; F5D20E  ld XIX,0x00f05a2e
+	ld	xix, Draw_Write_DL2	; F5D20E  ld XIX,0x00f05a2e
 	call	T_DisplayList_Run	; F5D213  call 0xf417f0
 	jr	sub_F5D199_Join2	; F5D217  jr T,0xf5d227
 sub_F5D199_Skip4:
 	ld	xiy, DL_ClrP0siti0nAbcInsDelAA	; F5D219  ld XIY,0x00f0587c
-	ld	xix, DL_F05A2E	; F5D21E  ld XIX,0x00f05a2e
+	ld	xix, Draw_Write_DL2	; F5D21E  ld XIX,0x00f05a2e
 	call	T_DisplayList_Run	; F5D223  call 0xf417f0
 sub_F5D199_Join2:
 	m_cp_mi8 MB16, ModelingPage_Fields+2, 0x10	; F5D227  cp (0x27a8),0x10
 	jr	z, sub_F5D199_Skip5	; F5D22C  jr Z,0xf5d257
 	m_cp_mi8 MB16, ModelingPage_Fields+2, 0x02	; F5D22E  cp (0x27a8),0x02
 	jr	z, sub_F5D199_Skip6	; F5D233  jr Z,0xf5d279
-	ld	xiy, DL_F05A38	; F5D235  ld XIY,0x00f05a38
-	ld	xix, DL_F05A42	; F5D23A  ld XIX,0x00f05a42
+	ld	xiy, Draw_Write_DL1	; F5D235  ld XIY,0x00f05a38
+	ld	xix, Draw_Write_DL3	; F5D23A  ld XIX,0x00f05a42
 	call	T_DisplayList_Run	; F5D23F  call 0xf417f0
 	ld	xiy, DL_F05A68	; F5D243  ld XIY,0x00f05a68
 	ld	xix, DL_F05A84	; F5D248  ld XIX,0x00f05a84
@@ -132219,8 +132475,8 @@ sub_F5D199_Join2:
 	call	sub_F5D3C6	; F5D251  call 0xf5d3c6
 	jr	sub_F5D199_Return	; F5D255  jr T,0xf5d299
 sub_F5D199_Skip5:
-	ld	xiy, DL_F05A2E	; F5D257  ld XIY,0x00f05a2e
-	ld	xix, DL_F05A38	; F5D25C  ld XIX,0x00f05a38
+	ld	xiy, Draw_Write_DL2	; F5D257  ld XIY,0x00f05a2e
+	ld	xix, Draw_Write_DL1	; F5D25C  ld XIX,0x00f05a38
 	call	T_DisplayList_Run	; F5D261  call 0xf417f0
 	ld	xiy, DL_F05A4C	; F5D265  ld XIY,0x00f05a4c
 	ld	xix, DL_F05A68	; F5D26A  ld XIX,0x00f05a68
@@ -132228,11 +132484,11 @@ sub_F5D199_Skip5:
 	call	sub_F5D3C6	; F5D273  call 0xf5d3c6
 	jr	sub_F5D199_Return	; F5D277  jr T,0xf5d299
 sub_F5D199_Skip6:
-	ld	xiy, DL_F05A42	; F5D279  ld XIY,0x00f05a42
+	ld	xiy, Draw_Write_DL3	; F5D279  ld XIY,0x00f05a42
 	ld	xix, DL_F05A4C	; F5D27E  ld XIX,0x00f05a4c
 	call	T_DisplayList_Run	; F5D283  call 0xf417f0
 	ld	xiy, DL_F05A84	; F5D287  ld XIY,0x00f05a84
-	ld	xix, DL_F05AA0	; F5D28C  ld XIX,0x00f05aa0
+	ld	xix, SoundEditNaming_RepaintField_DL2	; F5D28C  ld XIX,0x00f05aa0
 	call	T_DisplayListB_Run	; F5D291  call 0xf417f4
 	call	sub_F5D3C6	; F5D295  call 0xf5d3c6
 sub_F5D199_Return:
@@ -132286,7 +132542,7 @@ SoundEditNaming_RepaintField:
 	jr	z, sub_F5D199_Skip12	; F5D31D  jr Z,0xf5d384
 sub_F5D199_Skip8:
 	ld	(LCD_CurrentLayer:16), 1	; F5D31F  ld (0x2540),0x01
-	ld	xiy, DL_F05AAA	; F5D324  ld XIY,0x00f05aaa
+	ld	xiy, SoundEditNaming_RepaintField_DL1	; F5D324  ld XIY,0x00f05aaa
 	ld	xix, DLBoxes_F05AB4	; F5D329  ld XIX,0x00f05ab4
 	call	T_DisplayList_Run	; F5D32E  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F5D332  ld (0x2540),0x00
@@ -132307,7 +132563,7 @@ sub_F5D199_Join4:
 	jr	sub_F5D199_Return2	; F5D360  jr T,0xf5d3c5
 sub_F5D199_Skip11:
 	ld	(LCD_CurrentLayer:16), 1	; F5D362  ld (0x2540),0x01
-	ld	xiy, DL_F05AA0	; F5D367  ld XIY,0x00f05aa0
+	ld	xiy, SoundEditNaming_RepaintField_DL2	; F5D367  ld XIY,0x00f05aa0
 	ld	xix, DLBoxes_F05AB4	; F5D36C  ld XIX,0x00f05ab4
 	call	T_DisplayList_Run	; F5D371  call 0xf417f0
 	ld	xiy, DL_F05A4C + 0x11	; F5D375  ld XIY,0x00f05a5d
@@ -132316,7 +132572,7 @@ sub_F5D199_Skip11:
 	jr	sub_F5D199_Return2	; F5D382  jr T,0xf5d3c5
 sub_F5D199_Skip12:
 	ld	(LCD_CurrentLayer:16), 1	; F5D384  ld (0x2540),0x01
-	ld	xiy, DL_F05AA0	; F5D389  ld XIY,0x00f05aa0
+	ld	xiy, SoundEditNaming_RepaintField_DL2	; F5D389  ld XIY,0x00f05aa0
 	ld	xix, DLBoxes_F05AB4	; F5D38E  ld XIX,0x00f05ab4
 	call	T_DisplayList_Run	; F5D393  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F5D397  ld (0x2540),0x00
@@ -132501,12 +132757,12 @@ sub_F5D4A7_Return:
 SoundEditToneLayerKeyLayer_Paint:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit	; F5D4C3  call 0xf5c4b8
 	ld	(LCD_CurrentLayer:16), 0	; F5D4C7  ld (0x2540),0x00
-	ld	xiy, DL_F060E4	; F5D4CC  ld XIY,0x00f060e4
-	ld	xix, DL_F06154	; F5D4D1  ld XIX,0x00f06154
+	ld	xiy, SoundEditToneLayerKeyLayer_Paint_DL1	; F5D4CC  ld XIY,0x00f060e4
+	ld	xix, SoundEditToneLayerVelocityLayer_Paint_DL1	; F5D4D1  ld XIX,0x00f06154
 	call	T_DisplayList_Run	; F5D4D6  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 2	; F5D4DA  ld (0x2540),0x02
 	ld	xiy, DL_F060DA	; F5D4DF  ld XIY,0x00f060da
-	ld	xix, DL_F060E4	; F5D4E4  ld XIX,0x00f060e4
+	ld	xix, SoundEditToneLayerKeyLayer_Paint_DL1	; F5D4E4  ld XIX,0x00f060e4
 	call	T_DisplayList_Run	; F5D4E9  call 0xf417f0
 	ldw	(IconOrigin_X:16), 47	; F5D4ED  ld (0x2350),0x002f
 	ldw	(IconOrigin_Y:16), 51	; F5D4F3  ld (0x2352),0x0033
@@ -132514,7 +132770,7 @@ SoundEditToneLayerKeyLayer_Paint:
 	call	UiPaint_Solo	; F5D4FD  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5D501  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5D505  ld (0x2540),0x00
-	ld	xiy, DL_F32AD7	; F5D50A  ld XIY,0x00f32ad7
+	ld	xiy, SoundEditToneLayerKeyLayer_Paint_DL2	; F5D50A  ld XIY,0x00f32ad7
 	ld	xix, Data_F32B1E	; F5D50F  ld XIX,0x00f32b1e
 	call	T_DisplayListB_Run	; F5D514  call 0xf417f4
 	ret	; F5D518  ret
@@ -132522,17 +132778,17 @@ SoundEditToneLayerKeyLayer_Paint:
 SoundEditToneLayerVelocityLayer_Paint:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit	; F5D519  call 0xf5c4b8
 	ld	(LCD_CurrentLayer:16), 0	; F5D51D  ld (0x2540),0x00
-	ld	xiy, DL_F06154	; F5D522  ld XIY,0x00f06154
+	ld	xiy, SoundEditToneLayerVelocityLayer_Paint_DL1	; F5D522  ld XIY,0x00f06154
 	ld	xix, DL_EffectBlockEff1Eff2RevMain	; F5D527  ld XIX,0x00f06224
 	call	T_DisplayList_Run	; F5D52C  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 2	; F5D530  ld (0x2540),0x02
 	ld	xiy, DL_F060DA	; F5D535  ld XIY,0x00f060da
-	ld	xix, DL_F060E4	; F5D53A  ld XIX,0x00f060e4
+	ld	xix, SoundEditToneLayerKeyLayer_Paint_DL1	; F5D53A  ld XIX,0x00f060e4
 	call	T_DisplayList_Run	; F5D53F  call 0xf417f0
 	call	UiPaint_Solo	; F5D543  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5D547  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5D54B  ld (0x2540),0x00
-	ld	xiy, DL_F32B64	; F5D550  ld XIY,0x00f32b64
+	ld	xiy, SoundEditToneLayerVelocityLayer_Paint_DL2	; F5D550  ld XIY,0x00f32b64
 	ld	xix, DLRecordPtrs_F32B97	; F5D555  ld XIX,0x00f32b97
 	call	T_DisplayListB_Run	; F5D55A  call 0xf417f4
 	ret	; F5D55E  ret
@@ -132587,10 +132843,10 @@ SoundEditFilterEnvelope2_Paint:
 ; --------------------------------------------------------------------------
 Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack:
 	ld	xiy, DL_Page22KeyFollowEnvelopeKeyFollowTouchAttack	; F5D5C8  ld XIY,0x00f04b6c
-	ld	xix, DL_F04CA9	; F5D5CD  ld XIX,0x00f04ca9
+	ld	xix, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_DL1	; F5D5CD  ld XIX,0x00f04ca9
 	call	T_DisplayList_Run	; F5D5D2  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 2	; F5D5D6  ld (0x2540),0x02
-	ld	xiy, DL_F04CA9	; F5D5DB  ld XIY,0x00f04ca9
+	ld	xiy, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_DL1	; F5D5DB  ld XIY,0x00f04ca9
 	ld	xix, DLTable_ABCDEFGHIJKLMNOPQRSU	; F5D5E0  ld XIX,0x00f04cbd
 	call	T_DisplayList_Run	; F5D5E5  call 0xf417f0
 	call	sub_F5BFBD	; F5D5E9  call 0xf5bfbd
@@ -132600,7 +132856,7 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack:
 	call	UiPaint_Solo	; F5D5FD  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5D601  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5D605  ld (0x2540),0x00
-	ld	xiy, DL_F32BAB	; F5D60A  ld XIY,0x00f32bab
+	ld	xiy, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_DL2	; F5D60A  ld XIY,0x00f32bab
 	ld	xix, Data_F32C02	; F5D60F  ld XIX,0x00f32c02
 	call	T_DisplayListB_Run	; F5D614  call 0xf417f4
 	ret	; F5D618  ret
@@ -132624,7 +132880,7 @@ SoundEditToneLayerPanning_RepaintField:
 	jr	c, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip3	; F5D636  jr C,0xf5d69d
 	ld	(LCD_CurrentLayer:16), 0	; F5D638  ld (0x2540),0x00
 	ld	xiy, DL_F3294B	; F5D63D  ld XIY,0x00f3294b
-	ld	xix, DL_F32987	; F5D642  ld XIX,0x00f32987
+	ld	xix, SoundEditToneLayerPanning_RepaintField_DL2	; F5D642  ld XIX,0x00f32987
 	call	T_DisplayListB_Run	; F5D647  call 0xf417f4
 	call	sub_F5D497	; F5D64B  call 0xf5d497
 	jr	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Return	; F5D64F  jr T,0xf5d6ab
@@ -132637,7 +132893,7 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip:
 	jr	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Return	; F5D668  jr T,0xf5d6ab
 Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip2:
 	ld	(LCD_CurrentLayer:16), 1	; F5D66A  ld (0x2540),0x01
-	ld	xiy, DL_F32A7D	; F5D66F  ld XIY,0x00f32a7d
+	ld	xiy, SoundEditToneLayerPanning_RepaintField_DL1	; F5D66F  ld XIY,0x00f32a7d
 	ld	xix, DLBoxes_F32A87	; F5D674  ld XIX,0x00f32a87
 	call	T_DisplayList_Run	; F5D679  call 0xf417f0
 	ld	a, 0:opc	; F5D67D  ld A,0x00
@@ -132646,7 +132902,7 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip2:
 	cp	d, 0:i3	; F5D684  cp D,0
 	jr	z, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip3	; F5D686  jr Z,0xf5d69d
 	ld	(LCD_CurrentLayer:16), 0	; F5D688  ld (0x2540),0x00
-	ld	xiy, DL_F32987	; F5D68D  ld XIY,0x00f32987
+	ld	xiy, SoundEditToneLayerPanning_RepaintField_DL2	; F5D68D  ld XIY,0x00f32987
 	ld	xix, Data_F32992	; F5D692  ld XIX,0x00f32992
 	call	T_DisplayListB_Run	; F5D697  call 0xf417f4
 	jr	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Return	; F5D69B  jr T,0xf5d6ab
@@ -132748,7 +133004,7 @@ sub_F5D77F_Skip:
 	call	T_DisplayList_Run	; F5D7AA  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F5D7AE  ld (0x2540),0x00
 	ld	xiy, DL_1st2nd	; F5D7B3  ld XIY,0x00f32d03
-	ld	xix, DL_F32D2C	; F5D7B8  ld XIX,0x00f32d2c
+	ld	xix, SoundEditController_PaintPage1_DL	; F5D7B8  ld XIX,0x00f32d2c
 	call	T_DisplayList_Run	; F5D7BD  call 0xf417f0
 sub_F5D77F_Return:
 	ret	; F5D7C1  ret
@@ -195763,11 +196019,11 @@ Paint_TrackAssign_Skip2:
 	calr	LCD_ScreenRedraw_Begin	; F7E47B  calr 0xf7e2d9
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7E47E  cp (0x207e),0x00
 	jr	nz, Paint_TrackAssign_Skip4	; F7E483  jr NZ,0xf7e4ac
-	ld	xiy, DL_F3B3DA	; F7E485  ld XIY,0x00f3b3da
-	ld	xix, DL_F3B5A9	; F7E48A  ld XIX,0x00f3b5a9
+	ld	xiy, Paint_TrackAssign_DL1	; F7E485  ld XIY,0x00f3b3da
+	ld	xix, Paint_TrackAssign_DL2	; F7E48A  ld XIX,0x00f3b5a9
 	call	T_DisplayList_Run	; F7E48F  call 0xf417f0
-	ld	xiy, DL_F3B5A9	; F7E493  ld XIY,0x00f3b5a9
-	ld	xix, DL_F3B5D1	; F7E498  ld XIX,0x00f3b5d1
+	ld	xiy, Paint_TrackAssign_DL2	; F7E493  ld XIY,0x00f3b5a9
+	ld	xix, Paint_TrackLabels1To8_DL	; F7E498  ld XIX,0x00f3b5d1
 	call	T_DisplayList_Run	; F7E49D  call 0xf417f0
 Paint_TrackAssign_Skip3:
 	calr	sub_F7E788	; F7E4A1  calr 0xf7e788
@@ -195777,7 +196033,7 @@ Paint_TrackAssign_Skip3:
 Paint_TrackAssign_Skip4:
 	ld	(LCD_CurrentLayer:16), 0	; F7E4AC  ld (0x2540),0x00
 	ld	xiy, DL_TrackAssignChangeAttention	; F7E4B1  ld XIY,0x00f3b99d
-	ld	xix, DL_F3BA91	; F7E4B6  ld XIX,0x00f3ba91
+	ld	xix, Paint_TrackAssign_DL3	; F7E4B6  ld XIX,0x00f3ba91
 	call	T_DisplayList_Run	; F7E4BB  call 0xf417f0
 	ld	a, (3075:16)	; F7E4BF  ld A,(0x0c03)
 	ld	(DisplayListB_Stage:16), a	; F7E4C3  ld (0x12f6),A
@@ -195792,7 +196048,7 @@ Paint_TrackAssign_Skip4:
 	pop	xix	; F7E4DE  pop XIX
 	ld	a, (3078:16)	; F7E4DF  ld A,(0x0c06)
 	ld	(DisplayListB_Stage+2:16), a	; F7E4E3  ld (0x12f8),A
-	ld	xiy, DL_F3BA91	; F7E4E7  ld XIY,0x00f3ba91
+	ld	xiy, Paint_TrackAssign_DL3	; F7E4E7  ld XIY,0x00f3ba91
 	ld	xix, DL_AfterT0uchSettingSelectWhetherOrNotAfter	; F7E4EC  ld XIX,0x00f3bab9
 	call	T_DisplayListB_Run	; F7E4F1  call 0xf417f4
 	calr	LCD_ScreenRedraw_End	; F7E4F5  calr 0xf7e2e7
@@ -196408,25 +196664,25 @@ Paint_TrackAssignPresets_Skip:
 	jr	nz, Paint_TrackAssignPresets_Skip2	; F7E617  jr NZ,0xf7e62b
 	call	LCD_ScreenRedraw_Begin	; F7E619  call 0xf7e2d9
 	ld	xiy, DL_TrackAssignPresetsTechnicsSetUp1116	; F7E61D  ld XIY,0x00f3a2bf
-	ld	xix, DL_F3A40D	; F7E622  ld XIX,0x00f3a40d
+	ld	xix, Paint_TrackAssignPresets_DL2	; F7E622  ld XIX,0x00f3a40d
 	call	T_DisplayList_Run	; F7E627  call 0xf417f0
 Paint_TrackAssignPresets_Skip2:
 	ld	(LCD_CurrentLayer:16), 0	; F7E62B  ld (0x2540),0x00
 	m_cp_mi8 MB16, 0x0dfe, 0x0a	; F7E630  cp (0x0dfe),0x0a
 	jr	nz, Paint_TrackAssignPresets_Skip3	; F7E635  jr NZ,0xf7e647
 	ld	xiy, DL_All	; F7E637  ld XIY,0x00f3a41f
-	ld	xix, DL_F3A429	; F7E63C  ld XIX,0x00f3a429
+	ld	xix, Paint_TrackAssignPresets_DL1	; F7E63C  ld XIX,0x00f3a429
 	call	T_DisplayList_Run	; F7E641  call 0xf417f0
 	jr	Paint_TrackAssignPresets_Join	; F7E645  jr T,0xf7e663
 Paint_TrackAssignPresets_Skip3:
-	ld	xiy, DL_F3A429	; F7E647  ld XIY,0x00f3a429
+	ld	xiy, Paint_TrackAssignPresets_DL1	; F7E647  ld XIY,0x00f3a429
 	ld	xix, Data_F3A433	; F7E64C  ld XIX,0x00f3a433
 	call	T_DisplayListB_Run	; F7E651  call 0xf417f4
 	ld	xiy, DL_S0ng	; F7E655  ld XIY,0x00f3a417
 	ld	xix, DL_All	; F7E65A  ld XIX,0x00f3a41f
 	call	T_DisplayList_Run	; F7E65F  call 0xf417f0
 Paint_TrackAssignPresets_Join:
-	ld	xiy, DL_F3A40D	; F7E663  ld XIY,0x00f3a40d
+	ld	xiy, Paint_TrackAssignPresets_DL2	; F7E663  ld XIY,0x00f3a40d
 	ld	xix, DL_S0ng	; F7E668  ld XIX,0x00f3a417
 	call	T_DisplayList_Run	; F7E66D  call 0xf417f0
 	call	sub_F7E770	; F7E671  call 0xf7e770
@@ -197311,8 +197567,8 @@ sub_F7E852_Join:
 Paint_TrackLabels1To8:
 	ld	(LCD_CurrentLayer:16), 0	; F7E89F  ld (0x2540),0x00
 	calr	sub_F7E39F_Nop	; F7E8A4  calr 0xf7e2d8
-	ld	xiy, DL_F3B5D1	; F7E8A7  ld XIY,0x00f3b5d1
-	ld	xix, DL_F3B611	; F7E8AC  ld XIX,0x00f3b611
+	ld	xiy, Paint_TrackLabels1To8_DL	; F7E8A7  ld XIY,0x00f3b5d1
+	ld	xix, Paint_TrackLabels9To16_DL	; F7E8AC  ld XIX,0x00f3b611
 	call	T_DisplayList_Run	; F7E8B1  call 0xf417f0
 	ret	; F7E8B5  ret
 
@@ -197330,7 +197586,7 @@ Paint_TrackLabels1To8:
 Paint_TrackLabels9To16:
 	ld	(LCD_CurrentLayer:16), 0	; F7E8B6  ld (0x2540),0x00
 	calr	sub_F7E39F_Nop	; F7E8BB  calr 0xf7e2d8
-	ld	xiy, DL_F3B611	; F7E8BE  ld XIY,0x00f3b611
+	ld	xiy, Paint_TrackLabels9To16_DL	; F7E8BE  ld XIY,0x00f3b611
 	ld	xix, DL_F3B651	; F7E8C3  ld XIX,0x00f3b651
 	call	T_DisplayList_Run	; F7E8C8  call 0xf417f0
 	ret	; F7E8CC  ret
@@ -198089,7 +198345,7 @@ Paint_SongClear:
 	ldw	(9830:16), 65535	; F7EAFC  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7EB02  ld (0x266a),0xffff
 	ld	xiy, DL_SongClearKbSongS0ngAll	; F7EB08  ld XIY,0x00f399d5
-	ld	xix, DL_F39A73	; F7EB0D  ld XIX,0x00f39a73
+	ld	xix, Paint_SongClear_DL1	; F7EB0D  ld XIX,0x00f39a73
 	call	T_DisplayList_Run	; F7EB12  call 0xf417f0
 Paint_SongClear_Skip:
 	ld	a, (3586:16)	; F7EB16  ld A,(0x0e02)
@@ -198102,20 +198358,20 @@ Paint_SongClear_Skip:
 	ld	a, (3633:16)	; F7EB2F  ld A,(0x0e31)
 	ld	(DisplayListB_Stage+7:16), a	; F7EB33  ld (0x12fd),A
 Paint_SongClear_Skip2:
-	ld	xiy, DL_F39A73	; F7EB37  ld XIY,0x00f39a73
+	ld	xiy, Paint_SongClear_DL1	; F7EB37  ld XIY,0x00f39a73
 	ld	xix, DL_SongClearKbSongAttenti0n	; F7EB3C  ld XIX,0x00f39a7d
 	call	T_DisplayList_Run	; F7EB41  call 0xf417f0
 	m_cp_mi8 MB16, 0x0e02, 0x0a	; F7EB45  cp (0x0e02),0x0a
 	jr	nz, Paint_SongClear_Skip3	; F7EB4A  jr NZ,0xf7eb5c
-	ld	xiy, DL_F3B244	; F7EB4C  ld XIY,0x00f3b244
-	ld	xix, DL_F3B26C	; F7EB51  ld XIX,0x00f3b26c
+	ld	xiy, Paint_SongClear_DL2	; F7EB4C  ld XIY,0x00f3b244
+	ld	xix, Paint_SongClear_DL5	; F7EB51  ld XIX,0x00f3b26c
 	call	T_DisplayList_Run	; F7EB56  call 0xf417f0
 	jr	Paint_SongClear_Join	; F7EB5A  jr T,0xf7ebcf
 Paint_SongClear_Skip3:
 	ld	xiy, DL_SongClearKbSongS0ngAll	; F7EB5C  ld XIY,0x00f399d5
-	ld	xix, DL_F39A73	; F7EB61  ld XIX,0x00f39a73
+	ld	xix, Paint_SongClear_DL1	; F7EB61  ld XIX,0x00f39a73
 	call	T_DisplayList_Run	; F7EB66  call 0xf417f0
-	ld	xiy, DL_F3998E	; F7EB6A  ld XIY,0x00f3998e
+	ld	xiy, Paint_SongClear_DL3	; F7EB6A  ld XIY,0x00f3998e
 	ld	xix, Data_F399C1	; F7EB6F  ld XIX,0x00f399c1
 	call	T_DisplayListB_Run	; F7EB74  call 0xf417f4
 	jr	Paint_SongClear_Join	; F7EB78  jr T,0xf7ebcf
@@ -198123,23 +198379,23 @@ Paint_SongClear_Skip4:
 	m_bit 4, MD16, UI_ScreenFlags	; F7EB7A  bit 4,(0x2095)
 	jr	nz, Paint_SongClear_Skip5	; F7EB7E  jr NZ,0xf7eb8e
 	ld	xiy, DL_SongClearKbSongAttenti0n	; F7EB80  ld XIY,0x00f39a7d
-	ld	xix, DL_F39BF8	; F7EB85  ld XIX,0x00f39bf8
+	ld	xix, Paint_SongClear_DL4	; F7EB85  ld XIX,0x00f39bf8
 	call	T_DisplayList_Run	; F7EB8A  call 0xf417f0
 Paint_SongClear_Skip5:
-	ld	xiy, DL_F39BF8	; F7EB8E  ld XIY,0x00f39bf8
-	ld	xix, DL_F39C02	; F7EB93  ld XIX,0x00f39c02
+	ld	xiy, Paint_SongClear_DL4	; F7EB8E  ld XIY,0x00f39bf8
+	ld	xix, Paint_SongClear_DL6	; F7EB93  ld XIX,0x00f39c02
 	call	T_DisplayList_Run	; F7EB98  call 0xf417f0
 	m_cp_mi8 MB16, 0x0e02, 0x0a	; F7EB9C  cp (0x0e02),0x0a
 	jr	nz, Paint_SongClear_Skip6	; F7EBA1  jr NZ,0xf7ebb3
-	ld	xiy, DL_F3B26C	; F7EBA3  ld XIY,0x00f3b26c
+	ld	xiy, Paint_SongClear_DL5	; F7EBA3  ld XIY,0x00f3b26c
 	ld	xix, DL_AdvanceDelayTrackFirstMeasure	; F7EBA8  ld XIX,0x00f3b294
 	call	T_DisplayList_Run	; F7EBAD  call 0xf417f0
 	jr	Paint_SongClear_Join	; F7EBB1  jr T,0xf7ebcf
 Paint_SongClear_Skip6:
 	ld	xiy, DL_SongClearKbSongAttenti0n	; F7EBB3  ld XIY,0x00f39a7d
-	ld	xix, DL_F39BF8	; F7EBB8  ld XIX,0x00f39bf8
+	ld	xix, Paint_SongClear_DL4	; F7EBB8  ld XIX,0x00f39bf8
 	call	T_DisplayList_Run	; F7EBBD  call 0xf417f0
-	ld	xiy, DL_F39C02	; F7EBC1  ld XIY,0x00f39c02
+	ld	xiy, Paint_SongClear_DL6	; F7EBC1  ld XIY,0x00f39c02
 	ld	xix, DL_TrackClearAttenti0nUsing	; F7EBC6  ld XIX,0x00f39c35
 	call	T_DisplayListB_Run	; F7EBCB  call 0xf417f4
 Paint_SongClear_Join:
@@ -199179,7 +199435,7 @@ Paint_TrackMerge_Skip:
 	call	T_DisplayList_Run	; F7EE5D  call 0xf417f0
 	jr	Paint_TrackMerge_Join	; F7EE61  jr T,0xf7ee7f
 Paint_TrackMerge_Skip2:
-	ld	xiy, DL_F3A5AA	; F7EE63  ld XIY,0x00f3a5aa
+	ld	xiy, Paint_TrackMerge_DL	; F7EE63  ld XIY,0x00f3a5aa
 	ld	xix, DL_MeasureDeleteTrackFirstMeasure	; F7EE68  ld XIX,0x00f3a5e9
 	call	T_DisplayList_Run	; F7EE6D  call 0xf417f0
 	ld	xiy, DL_AreYouSure	; F7EE71  ld XIY,0x00f3a461
@@ -199639,11 +199895,11 @@ Paint_MeasureDelete:
 Paint_MeasureDelete_Skip:
 	calr	LCD_ScreenRedraw_Begin	; F7EFA2  calr 0xf7e2d9
 	ld	xiy, DL_MeasureDeleteTrackFirstMeasure	; F7EFA5  ld XIY,0x00f3a5e9
-	ld	xix, DL_F3A66E	; F7EFAA  ld XIX,0x00f3a66e
+	ld	xix, Paint_MeasureDelete_DL	; F7EFAA  ld XIX,0x00f3a66e
 	call	T_DisplayList_Run	; F7EFAF  call 0xf417f0
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7EFB3  cp (0x207e),0x00
 	jr	nz, Paint_MeasureDelete_Skip2	; F7EFB8  jr NZ,0xf7efcc
-	ld	xiy, DL_F3A66E	; F7EFBA  ld XIY,0x00f3a66e
+	ld	xiy, Paint_MeasureDelete_DL	; F7EFBA  ld XIY,0x00f3a66e
 	ld	xix, DL_LastMeasure	; F7EFBF  ld XIX,0x00f3a6ab
 	call	T_DisplayList_Run	; F7EFC4  call 0xf417f0
 	jr	Paint_MeasureDelete_Join	; F7EFC8  jr T,0xf7efe8
@@ -200342,11 +200598,11 @@ Paint_MeasureErase_Skip:
 	calr	LCD_ScreenRedraw_Begin	; F7F27A  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7F27D  ld (0x2540),0x00
 	ld	xiy, DL_MeasureEraseTrackFirstMeasure	; F7F282  ld XIY,0x00f3a8f5
-	ld	xix, DL_F3A99D	; F7F287  ld XIX,0x00f3a99d
+	ld	xix, Paint_MeasureErase_DL	; F7F287  ld XIX,0x00f3a99d
 	call	T_DisplayList_Run	; F7F28C  call 0xf417f0
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7F290  cp (0x207e),0x00
 	jr	nz, Paint_MeasureErase_Skip2	; F7F295  jr NZ,0xf7f2a7
-	ld	xiy, DL_F3A99D	; F7F297  ld XIY,0x00f3a99d
+	ld	xiy, Paint_MeasureErase_DL	; F7F297  ld XIY,0x00f3a99d
 	ld	xix, DL_F3A9DA	; F7F29C  ld XIX,0x00f3a9da
 	call	T_DisplayList_Run	; F7F2A1  call 0xf417f0
 	jr	Paint_MeasureErase_Join	; F7F2A5  jr T,0xf7f2c3
@@ -201142,11 +201398,11 @@ Paint_Quantize_Skip:
 	calr	LCD_ScreenRedraw_Begin	; F7F5A8  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7F5AB  ld (0x2540),0x00
 	ld	xiy, DL_QuantizeTrackStrengthFirstMeasure	; F7F5B0  ld XIY,0x00f3abdb
-	ld	xix, DL_F3ACB3	; F7F5B5  ld XIX,0x00f3acb3
+	ld	xix, Paint_Quantize_DL	; F7F5B5  ld XIX,0x00f3acb3
 	call	T_DisplayList_Run	; F7F5BA  call 0xf417f0
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7F5BE  cp (0x207e),0x00
 	jr	nz, Paint_Quantize_Skip2	; F7F5C3  jr NZ,0xf7f5d5
-	ld	xiy, DL_F3ACB3	; F7F5C5  ld XIY,0x00f3acb3
+	ld	xiy, Paint_Quantize_DL	; F7F5C5  ld XIY,0x00f3acb3
 	ld	xix, DL_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F5CA  ld XIX,0x00f3acf0
 	call	T_DisplayList_Run	; F7F5CF  call 0xf417f0
 	jr	Paint_Quantize_Join	; F7F5D3  jr T,0xf7f5f1
@@ -203455,11 +203711,11 @@ Paint_AdvanceDelay_Join:
 	calr	LCD_ScreenRedraw_Begin	; F7FF65  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7FF68  ld (0x2540),0x00
 	ld	xiy, DL_AdvanceDelayTrackFirstMeasure	; F7FF6D  ld XIY,0x00f3b294
-	ld	xix, DL_F3B33C	; F7FF72  ld XIX,0x00f3b33c
+	ld	xix, Paint_AdvanceDelay_DL	; F7FF72  ld XIX,0x00f3b33c
 	call	T_DisplayList_Run	; F7FF77  call 0xf417f0
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7FF7B  cp (0x207e),0x00
 	jr	nz, Paint_AdvanceDelay_Skip2	; F7FF80  jr NZ,0xf7ff92
-	ld	xiy, DL_F3B33C	; F7FF82  ld XIY,0x00f3b33c
+	ld	xiy, Paint_AdvanceDelay_DL	; F7FF82  ld XIY,0x00f3b33c
 	ld	xix, DL_F3B379	; F7FF87  ld XIX,0x00f3b379
 	call	T_DisplayList_Run	; F7FF8C  call 0xf417f0
 	jr	Paint_AdvanceDelay_Join2	; F7FF90  jr T,0xf7ffae

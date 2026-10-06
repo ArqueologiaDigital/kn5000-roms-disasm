@@ -107,7 +107,7 @@ TABLES = [
      "; PartLabels_FE84F5 -- 37 three-character labels, \"P 1\" .. \"P32\"\n"
      "; Read by: the display list at 0xFE8405, whose 16 records all carry this\n"
      ";          address as their SOURCE field and 0x20/0x0003 as their COUNT\n"
-     ";          and STRIDE -- see DisplayList_FE8405 below.  So 32 entries and\n"
+     ";          and STRIDE -- see EditPartSelect_DrawPartLabels_DL below.  So 32 entries and\n"
      ";          a 3-byte stride are the READER'S, in a field the interpreter\n"
      ";          reads, not an extent.\n"
      "; ENTRY COUNT 37 is 32 from the reader plus an EXTENT of five more: the\n"

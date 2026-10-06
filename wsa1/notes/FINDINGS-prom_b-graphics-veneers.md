@@ -69,14 +69,14 @@ opcode 0x00) despite the two 0x00 bytes.
 The display-list census had `0xF02FD9` only as an **end** ("ends used" for
 `DL_F02FB2`) and its ten bytes sat in an `.incbin`. `UiPaint_Solo` loads
 `ld XIY,0x00F02FD9 / ld XIX,0x00F02FE3` and calls `DisplayList_Run`, so it is
-also a **start**. Those ten bytes are now converted as `DL_F02FD9`.
+also a **start**. Those ten bytes are now converted as `UiPaint_Solo_DL1`.
 
-Its four operand words are **byte-for-byte** those of `DL_F02FE3` ten bytes
+Its four operand words are **byte-for-byte** those of `UiPaint_Solo_DL2` ten bytes
 later:
 
 ```
-DL_F02FD9   op 05  len 0x0A   0x0008 0x0021 0x0028 0x002C
-DL_F02FE3   op 1B  len 0x0A   0x0008 0x0021 0x0028 0x002C
+UiPaint_Solo_DL1   op 05  len 0x0A   0x0008 0x0021 0x0028 0x002C
+UiPaint_Solo_DL2   op 1B  len 0x0A   0x0008 0x0021 0x0028 0x002C
 ```
 
 and `UiPaint_Solo` runs **exactly one of the two**: op 0x05 on layer 0 when
@@ -181,7 +181,7 @@ so a listing it emits is guaranteed to rebuild the range it came from:
     python3 notes/llvm_roundtrip_autoforce.py b 0xF5B800 0xB6  --quiet
     python3 notes/llvm_roundtrip_autoforce.py b 0xF5BAB8 0x12F --quiet
 
-The `DL_F02FD9` record was emitted by hand in the same `.byte`/`.short` style
+The `UiPaint_Solo_DL1` record was emitted by hand in the same `.byte`/`.short` style
 the surrounding display-list blocks use; its ten bytes are covered by the byte
 gate like everything else.
 

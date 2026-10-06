@@ -26,7 +26,7 @@ EditScreen_EraseFieldRow:
         ld XIX,0x00FEF796       ; list end
         call 0xF417F0           ; DisplayList_Run
         ret
-DisplayList_FEF78C:             ; <- the data, 10 bytes, then code again
+EditScreen_EraseFieldRow_DL:             ; <- the data, 10 bytes, then code again
         .byte 0x1B, 0x0A        ; op 1B, 10 bytes, handler 0xF31A75
         .byte 0x08, 0x00, 0xB2, 0x00, 0xE8, 0x00, 0xC0, 0x00
 EditScreen_EraseMarkerStrip:
